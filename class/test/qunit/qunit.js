@@ -1,5 +1,5 @@
 //we probably have to have this only describing where the tests are
-include
+steal
  .apps("jquery/class")  //load your app
- .plugins('jmvc/test/qunit')  //load qunit
+ .plugins('steal/test/qunit')  //load qunit
  .then("class")

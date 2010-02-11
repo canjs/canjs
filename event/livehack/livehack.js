@@ -1,4 +1,4 @@
-include.apps('jquery').then(function(){
+steal.apps('jquery').then(function(){
 	var liveHandler = null, event = jQuery.event;
 	(function(){
 		var add =  jQuery.event.add;

@@ -1,2 +1,2 @@
-include.plugins('view');
-include('view_helpers');
+steal.plugins('view');
+steal('view_helpers');

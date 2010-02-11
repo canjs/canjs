@@ -20,7 +20,7 @@ Jaml.Node = function(tagName) {
   /**
    * @property children
    * @type Array
-   * Array of rendered child nodes that will be included as this node's innerHTML
+   * Array of rendered child nodes that will be steald as this node's innerHTML
    */
   this.children = [];
 };

@@ -1,5 +1,5 @@
 
-include.plugins("jquery").then(function($){
+steal.plugins("jquery").then(function($){
 
 	/**
  *  @add jQuery.fn
@@ -76,7 +76,7 @@ include.plugins("jquery").then(function($){
 		
 		//change this url?
 		if (url.match(/^\/\//)) {
-			url = include.root.join( url.substr(2) ) //can include be removed?
+			url = steal.root.join( url.substr(2) ) //can steal be removed?
 		}
 		var id = toId(url)
 		var suffix = url.match(/\.[^.]+$/),
@@ -99,6 +99,6 @@ include.plugins("jquery").then(function($){
 	$.View.preload = function(id, renderer){
 		$.View.cached[id] = renderer
 	}
-	//need to know how to get and "write to production" so it can be included
+	//need to know how to get and "write to production" so it can be steald
 	
 })

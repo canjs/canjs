@@ -306,7 +306,7 @@ $.extend($.View.Helpers.prototype, {
 	 */
     img_tag: function(image_location, options){
 		options = options || {};
-		options.src = include.root.join("resources/images/"+image_location);
+		options.src = steal.root.join("resources/images/"+image_location);
 		return this.single_tag_for('img', options);
 	}
 	

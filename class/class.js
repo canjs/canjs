@@ -2,7 +2,7 @@
 // This is a modified version of John Resig's class
 // It provides class level inheritence and callbacks.
 
-include.plugin("jquery").then(function(){
+steal.plugin("jquery").then(function(){
   var initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/,
       callback = function(f_names){
 		//process args

@@ -1,4 +1,4 @@
-include.plugins('jquery/class','jquery/lang').then(function(){
+steal.plugins('jquery/class','jquery/lang').then(function(){
 /**
  * @tag core
  * Controllers organize event handlers through the power of <b>[jQuery.fn.delegate|event delegation]</b>. 
@@ -80,7 +80,7 @@ functions on [jQuery.fn]. The "#todos" element is known as the <b>delegated</b> 
 <h3>Action Types</h3>
 <p>Controller uses actions to match function names and attach events.  
 By default, Controller will match [jQuery.Controller.Action.Event|Event] and [jQuery.Controller.Action.Subscribe|Subscribe] actions. 
-To match other actions, include their plugins.</p>
+To match other actions, steal their plugins.</p>
 <table>
 	<tr>
 		<th>Action</th><th>Events</th><th>Example</th><th>Description</th>
@@ -192,10 +192,10 @@ jQuery.Class.extend("jQuery.Controller",
 		//if(!this.modelName)
 		//    this.modelName = jQuery.String.isSingular(this.underscoreName) ? this.underscoreName : jQuery.String.singularize(this.underscoreName)
 
-		//if(include.getPath().match(/(.*?)controllers/)){
-		//    this._path = include.getPath().match(/(.*?)controllers/)[1]+"controllers";
+		//if(steal.getPath().match(/(.*?)controllers/)){
+		//    this._path = steal.getPath().match(/(.*?)controllers/)[1]+"controllers";
 		//}else{
-		//    this._path = include.getPath()+"/"
+		//    this._path = steal.getPath()+"/"
 		//}
 		
 		var controller = this;

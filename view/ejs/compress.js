@@ -2,6 +2,6 @@
 
 var compressPage = 'ejs/ejs.html';
 var outputFolder = 'ejs';
-load("jmvc/compress/compress.js")
+load("steal/compress/compress.js")
 var compress = new Steal.Compress([compressPage, outputFolder]);
 compress.init();

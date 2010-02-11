@@ -1,4 +1,4 @@
-include.apps('jquery').then(function($){
+steal.apps('jquery').then(function($){
     
 	$.event.special["default"] = {add: function( handler, data, namespaces, handlers){
 		var func =  function(ev){

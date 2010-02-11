@@ -1,4 +1,4 @@
-include.apps('jquery').then(function(){
+steal.apps('jquery').then(function(){
 
 var breaker = /^(?:(.*?)\s)?(\w+)$/
 var processors = {};

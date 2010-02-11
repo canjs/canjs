@@ -1,5 +1,5 @@
-include.plugins('lang');
-include('view');
+steal.plugins('lang');
+steal('view');
 
 
-if(jQuery.Controller) include.plugins('controller/view');
+if(jQuery.Controller) steal.plugins('controller/view');

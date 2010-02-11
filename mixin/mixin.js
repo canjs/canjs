@@ -1,4 +1,4 @@
-include.apps('jquery').then(function($){
+steal.apps('jquery').then(function($){
 	/**
 	 * Mixes in other plugins by name and optional arguments
 	 * 

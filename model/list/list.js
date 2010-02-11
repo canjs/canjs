@@ -1,4 +1,4 @@
-include.plugins('jquery/model').then(function(){
+steal.plugins('jquery/model').then(function(){
 
 $.Class.extend("jQuery.ModelList",{
     init : function(instances){

@@ -1,4 +1,4 @@
-include.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(){
+steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(){
 	//modify live
 	//steal the live handler ....
 	

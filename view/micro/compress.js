@@ -2,6 +2,6 @@
 
 var compressPage = 'micro/micro.html';
 var outputFolder = 'micro';
-load("jmvc/compress/compress.js")
+load("steal/compress/compress.js")
 var compress = new Steal.Compress([compressPage, outputFolder]);
 compress.init();

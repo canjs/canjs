@@ -128,7 +128,7 @@ timeRemaining is a good example of wrapping your model's raw data with more usef
 You can validate your model's attributes with another plugin.  See [validation].
  */
 console.log("models")
-include.plugins('jquery','jquery/class','jquery/lang','jmvc/openajax').then(function(){
+steal.plugins('jquery','jquery/class','jquery/lang','steal/openajax').then(function(){
 console.log("def")
 jQuery.Class.extend("jQuery.Model",
 /* @Static*/
@@ -328,7 +328,7 @@ jQuery.Class.extend("jQuery.Model",
      * @param {optional:String|Number|Boolean} value the value you want to set.
      */
     attr : function(attribute, value) {
-        //if (MVC.Array.include(this.Class._associations, attribute))
+        //if (MVC.Array.steal(this.Class._associations, attribute))
         //  this._setAssociation(attribute, value);
         //else
         var cap = jQuery.String.capitalize(attribute);
@@ -379,7 +379,7 @@ jQuery.Class.extend("jQuery.Model",
 			}
             
         }
-        //if (!(MVC.Array.include(this._properties,property))) this._properties.push(property);  
+        //if (!(MVC.Array.steal(this._properties,property))) this._properties.push(property);  
         
         this.Class.addAttr(property, type  );
     },
@@ -528,7 +528,7 @@ jQuery.fn.models = function(){
     //var reg = new RegExp( "("+models.join(")_([^ ]+)|(")+")_([^ ]+)", "g")
 	var ret = []
     this.each(function(){
-		//check if element's class name includes a model
+		//check if element's class name steals a model
 		var match;
         while( match = reg.exec(this.className)  ){
             var m = jQuery.Model.models[ match[1] ]

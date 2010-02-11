@@ -1,4 +1,4 @@
-include.apps('jmvc/openajax').then(function(){
+steal.apps('steal/openajax').then(function(){
 
 /**
  * jQuery hashchange 1.0.0

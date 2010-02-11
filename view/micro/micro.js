@@ -1,4 +1,4 @@
-include.plugins('jquery/view').then(function(){
+steal.plugins('jquery/view').then(function(){
 // Simple JavaScript Templating
 // John Resig - http://ejohn.org/ - MIT Licensed
 

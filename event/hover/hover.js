@@ -1,4 +1,4 @@
-include.apps('jquery','jquery/event/livehack').then(function(){
+steal.apps('jquery','jquery/event/livehack').then(function(){
 	var $ = jQuery,
 		event = jQuery.event, 
 		handle  = event.handle,
