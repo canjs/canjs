@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>history</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+        </style>
+	</head>
+	<body>
+	    <h1>Welcome to JavaScriptMVC 3.0!</h1>
+        <ul>
+            <li>Include plugins and files in <i>jquery/event/history/history.js</i>.</li>
+            <li>Change to production mode by changing <i>development</i> to <i>production</i> in this file.</li>
+        </ul>
+        <div id="testHistory">
+            <h2>Delegating</h2>
+            <div id="history1">
+                make history with me
+            </div>
+            <h2><a href="#" id="off">Turn OFF Above</a></h2>
+        </div>		
+		<script type='text/javascript' 
+                src='../../../jmvc/include.js?include[app]=jquery/event/history&include[env]=development'
+                package='main.js'
+                compress='false'>   
+        </script>
+        <script type='text/javascript'>
+            $.Controller.extend('subscribeTest',{
+                onDocument: true
+            },
+            {
+                "history.subscribe1.index subscribe": function(called, data){
+                    alert("subscribe1");
+                }
+            });
+            
+            var subscribeController = new subscribeTest($("#testSubscribe")[0]);
+            
+            $("#off").bind("click",function(){
+               subscribeController.destroy(); 
+            })
+        </script>		
+	</body>
+</html>

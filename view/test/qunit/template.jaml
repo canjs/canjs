@@ -1,0 +1,3 @@
+(function(data) {
+  h1(data.message);
+})
