@@ -127,9 +127,7 @@ timeRemaining is a good example of wrapping your model's raw data with more usef
 <h2>Validations</h2>
 You can validate your model's attributes with another plugin.  See [validation].
  */
-console.log("models")
 steal.plugins('jquery','jquery/class','jquery/lang','steal/openajax').then(function(){
-console.log("def")
 jQuery.Class.extend("jQuery.Model",
 /* @Static*/
 {
