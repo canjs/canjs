@@ -78,42 +78,25 @@ $.fn.extend({
    }
 });
 
-function isHashchangeEventSupported(eventName) {
-    var el = document.documentElement;
-    eventName = 'on' + eventName;
-    var isSupported = (eventName in el);
-    if (!isSupported) {
-      el.setAttribute(eventName, 'return;');
-      isSupported = typeof el[eventName] == 'function';
-    }
-    el = null;
-    return isSupported;
+function isHashchangeEventSupported() {
+   var el = window;
+   var eventName = 'onhashchange';
+   var isSupported = (eventName in el);
+   if (!isSupported) {
+      try {
+         el.setAttribute(eventName, 'return;');
+         isSupported = typeof el[eventName] == 'function';
+      } catch(e) {}
+   }
+   el = null;
+   return isSupported;
 }
 
-if(isHashchangeEventSupported("hashchange")){
-   $.extend({
-          History : {
-             fireInitialChange: true,
-             init: function() {
-                if($.History.fireInitialChange)
-                   $.event.trigger('hashchange');
-         },
-         
-         add: function(hash) {
-            location.hash = formatHash(hash);
-         },
+$.support.hashchange = isHashchangeEventSupported();
 
-         replace: function(hash) {
-            var path = location.href.split('#')[0] + formatHash(hash);
-            location.replace(path);
-         }
-      }
-   });
-   return;
-}
-
-// IE 8 introduces the hashchange event natively - so nothing more to do
-if ($.browser.msie && document.documentMode && document.documentMode >= 8) {
+//For browsers that support hashchange natively, we don't have to poll for hash changes
+if ($.support.hashchange) {
+   $.support.hashchange = true
    $.extend({
       History : {
          fireInitialChange: true,
@@ -258,7 +241,30 @@ function updateIEFrame(hash) {
 })(jQuery);
  
  (function($) {
-     /**
+
+ var rsplit = function(string, regex) {
+	var result = regex.exec(string),retArr = new Array(), first_idx, last_idx, first_bit;
+	while (result != null)
+	{
+		first_idx = result.index; last_idx = regex.lastIndex;
+		if ((first_idx) != 0)
+		{
+			first_bit = string.substring(0,first_idx);
+			retArr.push(string.substring(0,first_idx));
+			string = string.slice(first_idx);
+		}		
+		retArr.push(result[0]);
+		string = string.slice(result[0].length);
+		result = regex.exec(string);	
+	}
+	if (! string == '')
+	{
+		retArr.push(string);
+	}
+	return retArr;
+ }	 
+	 
+	 /**
   * !class jQuery.Path
   * Provides functional access to the given path (usually initialized from location.href)
   */
@@ -311,7 +317,7 @@ function updateIEFrame(hash) {
          var pair = parts[i].split('=');
          if(pair.length != 2) continue;
          var key = decodeURIComponent(pair[0]), value = decodeURIComponent(pair[1]);
-         var key_components = jQuery.String.rsplit(key,/\[[^\]]*\]/);
+         var key_components = rsplit(key,/\[[^\]]*\]/);         
          
          if( key_components.length > 1 ) {
              var last = key_components.length - 1;
