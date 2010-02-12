@@ -43,7 +43,7 @@
 			right = match[2].replace(/\#|&/g,'-').replace(/\//g, '~')+right;
 		}
 //		return left+encodeURIComponent( right);
-		return left + right;
+        return left + right;
 
 	}
 // break
@@ -61,9 +61,7 @@
 			if($.fixture[settings.fixture])
 				settings.fixture = $.fixture[settings.fixture]
 			else{
-//				settings.url = steal.root.join('test/fixtures/' + settings.fixture)
-				var appName = window.location.href.match(/^((http[s]?|file):\/)?\/?([^:\/\s]+)(:\d+)?\/(\w+)*\//)[5];
-				settings.url = '/' + appName + 'test/fixtures/' + settings.fixture;
+				settings.url = steal.root.join('test/fixtures/' + settings.fixture)
 				settings.type = "GET"
 				return ajax(settings);
 			}
@@ -84,9 +82,7 @@
 		} 
 		var settings = jQuery.extend(true, settings, jQuery.extend(true, {}, jQuery.ajaxSettings, settings));
 		
-//		settings.url = steal.root.join('test/fixtures/'+func(settings)); // convert settings
-		var appName = window.location.href.match(/^((http[s]?|file):\/)?\/?([^:\/\s]+)(:\d+)?\/(\w+)*\//)[5];
-		settings.url = '/' + appName + '/test/fixtures/'+func(settings); // convert settings
+		settings.url = steal.root.join('test/fixtures/'+func(settings)); // convert settings
 		settings.data = null;
 		settings.type = 'GET';
 		return ajax(settings);		
