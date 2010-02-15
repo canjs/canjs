@@ -343,13 +343,13 @@ var basic = (jQuery.Controller.basicProcessor =function(el, event, selector, cb)
 		var jq = jQuery()
 		jq.selector = selector;
 		jq.context = el;
-		jq.live(event, function(){ cb.apply(null, [jQuery(this)].concat( Array.prototype.slice.call(arguments, 0) )) });
+		jq.live(event, function(){ return cb.apply(null, [jQuery(this)].concat( Array.prototype.slice.call(arguments, 0) )) });
 		return function(){
 		    var ev = event;
 		    jq.die(ev);
 		}
 	}else{
-		jQuery(el).bind(event, function(){ cb.apply(null, [jQuery(this)].concat( Array.prototype.slice.call(arguments, 0) )) });
+		jQuery(el).bind(event, function(){ return cb.apply(null, [jQuery(this)].concat( Array.prototype.slice.call(arguments, 0) )) });
 		return function(){
 			var element = el;
 		    jQuery(element).unbind(event);
