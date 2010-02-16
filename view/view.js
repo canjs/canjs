@@ -1,4 +1,5 @@
-
+if(window.jQuery && jQuery.Controller)
+	steal.plugins("jquery/controller/view")
 steal.plugins("jquery").then(function($){
 
 	/**
@@ -92,7 +93,7 @@ steal.plugins("jquery").then(function($){
 	$.View.register = function(info){
 		types["."+info.suffix] = info
 	};
-	
+	$.View.ext = ".ejs"
 	$.View.registerScript = function(type, id, src){
 		return "$.View.preload("+id+","+types["."+type].script(id, src)+");";
 	};
