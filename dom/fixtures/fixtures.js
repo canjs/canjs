@@ -61,7 +61,11 @@
 			if($.fixture[settings.fixture])
 				settings.fixture = $.fixture[settings.fixture]
 			else{
-				settings.url = steal.root.join('test/fixtures/' + settings.fixture)
+				var url =  settings.fixture;
+				if(/^\/\//.test(url)){
+					url = steal.root.join(settings.fixture.substr(2))
+				}
+				settings.url = url
 				settings.type = "GET"
 				return ajax(settings);
 			}

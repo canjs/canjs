@@ -112,7 +112,7 @@ If you don't understand how the callback works, you might want to check out
 [jQuery.Model.static.wrapMany wrapMany] and [jQuery.Class.static.callback callback].
 <h3>el.models</h3>
 [jQuery.fn.models models] is a jQuery helper that returns model instances.  It uses
-the jQuery's elements' classNames to find matching model instances.  For example:
+the jQuery's elements' shortNames to find matching model instances.  For example:
 @codestart html
 &lt;div class='task task_5'> ... &lt;/div>
 @codeend
@@ -127,7 +127,8 @@ timeRemaining is a good example of wrapping your model's raw data with more usef
 <h2>Validations</h2>
 You can validate your model's attributes with another plugin.  See [validation].
  */
-steal.plugins('jquery','jquery/class','jquery/lang','steal/openajax').then(function(){
+steal.plugins('jquery','jquery/class','jquery/lang','steal/openajax','jquery/model/store').then(function(){
+	
 jQuery.Class.extend("jQuery.Model",
 /* @Static*/
 {
@@ -137,10 +138,10 @@ jQuery.Class.extend("jQuery.Model",
 		this.attributes= {};  //list of all attributes ever given to this model
         this.defaultAttributes= {};  //list of attributes and values you want right away
         this._associations = [];
-        if(!this.className) return;
+        if(this.fullName.substr(0,7) == "jQuery." ) return;
         this.underscoredName =  jQuery.String.underscore(this.fullName.replace(".","_"))
         jQuery.Model.models[this.underscoredName] = this;
-        this.store = new this.storeType(this);
+		this.store = new this.storeType(this);
 	},
     /**
      * Finds objects in this class
@@ -466,7 +467,7 @@ jQuery.Class.extend("jQuery.Model",
      * @codestart
      * new Todo({id: 5}).identity() //-> 'todo_5'
      * @codeend
-     * Typically this is used in an element's className property so you can find all elements
+     * Typically this is used in an element's shortName property so you can find all elements
      * for a model with [jQuery.Model.prototype.elements elements].
      * @return {String}
      */
@@ -528,7 +529,7 @@ jQuery.fn.models = function(){
     this.each(function(){
 		//check if element's class name steals a model
 		var match;
-        while( match = reg.exec(this.className)  ){
+        while( match = reg.exec(this.shortName)  ){
             var m = jQuery.Model.models[ match[1] ]
             if(m){
                 var inst = m.store.findOne( m.escapeIdentity ? decodeURIComponent( match[2] ) : match[2] )

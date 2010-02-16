@@ -85,7 +85,7 @@ jQuery.Native.extend('String',
      * @param {String} pattern What the string might end with
      * @return {Boolean} true if the string ends wtih pattern, false if otherwise
      */
-	ends_with : function(s, pattern) {
+	endsWith : function(s, pattern) {
 	    var d = s.length - pattern.length;
 	    return d >= 0 && s.lastIndexOf(pattern) === d;
 	},
