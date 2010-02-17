@@ -233,7 +233,20 @@ jQuery.Class.extend("jQuery.Controller",
 			
 		 }
 		
-			
+		//calculate actions
+		this.actions = {};
+		var convertedName, act, parts, c = this, replacer = /\{([^\}]+)\}/g, b = c.breaker;
+		for (funcName in this.prototype) {
+			convertedName = funcName.replace(replacer, function(whole, inside){
+				//convert inside to type
+				return jQuery.Class.getObject(inside, c).toString()
+			})
+			parts = convertedName.match( b)
+			act = c.processors[parts[2]] || ($.inArray(parts[2], c.listensTo ) > -1 && c.basicProcessor) || ( parts[1] && c.basicProcessor) ;
+			if(act){
+				this.actions[funcName] = {action: act, parts: parts}
+			}
+		}
 		
 	},
 	breaker : /^(?:(.*?)\s)?([\w\.]+)$/,
@@ -258,7 +271,13 @@ jQuery.Class.extend("jQuery.Controller",
 		this.element = jQuery(element).addClass(this.Class.underscoreFullName );
 		$.data(element,this.Class.underscoreFullName, this)
 		this._actions = {};
-		 for(funcName in this){
+		for(funcName in c.actions){
+			var ready = c.actions[funcName]
+			cb = this.callback(funcName)
+			this._actions[funcName] = ready.action(element, ready.parts[2], ready.parts[1], cb, this)
+		}
+		 
+		 /*for(funcName in this){
 			//replace {} with args names
 			convertedName = funcName.replace(/\{([^\}]+)\}/g, function(whole, inside){
 				//convert inside to type
@@ -270,7 +289,7 @@ jQuery.Class.extend("jQuery.Controller",
 				cb = this.callback(funcName)
 				this._actions[funcName] = act(element, parts[2], parts[1], cb, this);
 			}
-		}
+		}*/
 		/**
 		 * @attribute called
 		 * String name of current function being called on controller instance.  This is 
