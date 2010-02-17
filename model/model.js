@@ -529,7 +529,7 @@ jQuery.fn.models = function(){
     this.each(function(){
 		//check if element's class name steals a model
 		var match;
-        while( match = reg.exec(this.shortName)  ){
+        while( match = reg.exec(this.className)  ){
             var m = jQuery.Model.models[ match[1] ]
             if(m){
                 var inst = m.store.findOne( m.escapeIdentity ? decodeURIComponent( match[2] ) : match[2] )
