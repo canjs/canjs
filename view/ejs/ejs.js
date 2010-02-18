@@ -439,7 +439,7 @@ EJS.Helpers.prototype = {
     /**
      * Renders a new view.  If data is passed in, uses that to render the view.
      * @param {Object} options standard options passed to a new view.
-     * @param {optional:Object} data
+     * @param {Object} [optional] data
      * @return {String}
      */
 	view: function(options, data, helpers){

@@ -324,7 +324,7 @@ jQuery.Class.extend("jQuery.Model",
     /**
      * Gets or sets an attribute on the model.
      * @param {String} attribute the attribute you want to set or get
-     * @param {optional:String|Number|Boolean} value the value you want to set.
+     * @param {String_Number_Boolean} [opt1] value the value you want to set.
      */
     attr : function(attribute, value) {
         //if (MVC.Array.steal(this.Class._associations, attribute))
@@ -393,7 +393,7 @@ jQuery.Class.extend("jQuery.Model",
     },
     /**
      * Gets or sets a list of attributes
-     * @param {optional:Object} attributes if present, the list of attributes to send
+     * @param {Object} [opt2] attributes if present, the list of attributes to send
      * @return {Object} the curent attributes of the model
      */
     attrs : function(attributes) {
@@ -418,7 +418,7 @@ jQuery.Class.extend("jQuery.Model",
     isNew : function(){ return this[this.Class.id] == null; },
     /**
      * Saves the instance
-     * @param {optional:Function} callbacks onComplete function or object of callbacks
+     * @param {Function} [opt3] callbacks onComplete function or object of callbacks
      */
     save: function(success,error){
         var result;
@@ -443,7 +443,7 @@ jQuery.Class.extend("jQuery.Model",
     },
     /**
      * Destroys the instance
-     * @param {optional:Function} callback or object of callbacks
+     * @param {Function} [opt4] callback or object of callbacks
      */
     destroy : function(success, error){
         this.Class.destroy(this[this.Class.id], this.callback(["destroyed",success]), error);
@@ -490,7 +490,7 @@ jQuery.Class.extend("jQuery.Model",
     /**
      * Publishes to open ajax hub
      * @param {String} event
-     * @param {optional:Object} data if missing, uses the instance in {data: this}
+     * @param {Object} [opt6] data if missing, uses the instance in {data: this}
      */
     publish : function(event, data){
         this.Class.publish(event, data|| this);

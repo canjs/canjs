@@ -23,11 +23,11 @@ jQuery.Controller.prototype.
  * @codeend
  * @plugin controller/view
  * @return {String} the rendered result of the view.
- * @param {optional:String} view The view you are going to render.  If a view isn't explicity given
+ * @param {String} [optional1] view The view you are going to render.  If a view isn't explicity given
  * this function will try to guess at the correct view as show in the example code above.
- * @param {optional:Object} data data to be provided to the view.  If not present, the controller instance 
+ * @param {Object} [optional2] data data to be provided to the view.  If not present, the controller instance 
  * is used.
- * @param {optional:Object} myhelpers an object of helpers that will be available in the view.  If not present
+ * @param {Object} [optional3] myhelpers an object of helpers that will be available in the view.  If not present
  * this controller class's "Helpers" property will be used.
  *
  */
@@ -45,9 +45,9 @@ view = function(view, data, myhelpers) {
         //calculate view
         
         if(typeof view == "string") {
-			if(view.substr(0,2) == "//" ) //leave where it is
-                view// = view.substr(2)
-            else{
+			if(view.substr(0,2) == "//" ){ //leave where it is
+                
+            }else{
                 view = "//"+new steal.File( '../views/'+ 
                     (jQuery.String.steal(view,'/') ? view : controller_name+'/'+view)
                     ).joinFrom(path)+jQuery.View.ext

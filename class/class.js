@@ -241,9 +241,9 @@ steal.plugin("jquery").then(function(){
      * //With just a className
      * $.Class.extend('Task')
      * @codeend
-     * @param {optional:String} className the classes name (used for classes w/ introspection)
-     * @param {optional:Object} klass the new classes static/class functions
-     * @param {optional:Object} proto the new classes prototype functions
+     * @param {String} [optional1] className the classes name (used for classes w/ introspection)
+     * @param {Object} [optional2] klass the new classes static/class functions
+     * @param {Object} [optional3] proto the new classes prototype functions
      * @return {jQuery.Class} returns the new class
      */
     extend = function(className, types, klass, proto) {

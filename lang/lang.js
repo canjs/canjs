@@ -243,7 +243,7 @@ jQuery.Native.extend('Number',
      * Changes a number to a string, but steals preceeding zeros.
      * @param {Object} number the number to be converted
      * @param {Object} length the number of zeros
-     * @param {optional:Object} radix the numeric base (defaults to base 10);
+     * @param {Object} [optional] radix the numeric base (defaults to base 10);
      * @return {String} 
      */
     to_padded_string: function(n, len, radix) {

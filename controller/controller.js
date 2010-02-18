@@ -185,8 +185,8 @@ jQuery.Class.extend("jQuery.Controller",
 	 */
 	init : function(){
 		if(!this.shortName  || this.fullName == "jQuery.Controller") return;
-		this.underscoreFullName = this.fullName.replace(/\./g,'_').replace(/_?controllers?/i,"").toLowerCase();
-		this.underscoreShortName = this.shortName.replace(/\./g,'_').replace(/_?controllers?/i,"").toLowerCase();
+		this.underscoreFullName = $.String.underscore(this.fullName.replace(/\./g,'_').replace(/_?controllers?/i,""));
+		this.underscoreShortName = $.String.underscore(this.shortName.replace(/\./g,'_').replace(/_?controllers?/i,""));
 		this.underscoreControllerName = this.shortName.replace(/\./g,'_').replace(/_?controllers?/i,"");
 		
 		var val, act;
