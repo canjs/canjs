@@ -77,9 +77,12 @@ steal.plugins("jquery").then(function($){
 		
 		//change this url?
 		if (url.match(/^\/\//)) {
+			var id = toId(url.substr(2))
 			url = steal.root.join( url.substr(2) ) //can steal be removed?
+		}else{
+			var id = toId(url)
 		}
-		var id = toId(url)
+		
 		var suffix = url.match(/\.[^.]+$/),
 			type = types[suffix], el
 		
@@ -95,10 +98,12 @@ steal.plugins("jquery").then(function($){
 	};
 	$.View.ext = ".ejs"
 	$.View.registerScript = function(type, id, src){
-		return "$.View.preload("+id+","+types["."+type].script(id, src)+");";
+		return "$.View.preload('"+id+"',"+types["."+type].script(id, src)+");";
 	};
 	$.View.preload = function(id, renderer){
-		$.View.cached[id] = renderer
+		$.View.cached[id] = function(data, helpers){
+			return renderer.call(data, data, helpers)
+		}
 	}
 	//need to know how to get and "write to production" so it can be steald
 	

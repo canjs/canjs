@@ -510,12 +510,12 @@ EJS.Helpers.prototype = {
 			return this.renderer(id, text);
 		},
 		script : function(id, src){
-			 return "function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: text}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}}";     
+			 return "function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}}";     
 		},
 		renderer : function(id, text){
 			var ejs = new EJS({text: text, name: id})
-			return function(data){
-				return ejs.render.apply(ejs, arguments)
+			return function(data, helpers){
+				return ejs.render.call(ejs, data, helpers)
 			}
 		}
 	})
