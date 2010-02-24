@@ -195,13 +195,6 @@ jQuery.Class.extend("jQuery.Model",
      * The name of the id field.  Defaults to 'id'.  Change this if it is something different.
      */
     id : 'id', //if null, maybe treat as an array?
-
-    hasMany: function(){
-        this._associations.push(['hasMany'].concat($.makeArray(arguments)))
-    },
-    belongTo: function(){
-        this._associations.push(['hasMany'].concat($.makeArray(arguments)))
-    },
     /**
      * Adds an attribute to the list of attributes for this class.
      * @hide
@@ -381,15 +374,6 @@ jQuery.Class.extend("jQuery.Model",
         //if (!(MVC.Array.steal(this._properties,property))) this._properties.push(property);  
         
         this.Class.addAttr(property, type  );
-    },
-    _setAssociation : function(association, values) {
-        this[association] = function(){
-            if(! MVC.String.isSingular(association ) ) association = MVC.String.singularize(association);
-            var associated_class = window[MVC.String.classize(association)];
-            if(!associated_class) return values;
-            return associated_class.createManyAsExisting(values);
-        }
-        
     },
     /**
      * Gets or sets a list of attributes

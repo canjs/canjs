@@ -68,7 +68,7 @@ jQuery.Native.extend('String',
      * @return {String} a string with the first character capitalized, and everything else lowercased
      */
 	capitalize : function(s) {
-		return s.charAt(0).toUpperCase()+s.substr(1).toLowerCase();
+		return s.charAt(0).toUpperCase()+s.substr(1);
 	},
     /**
      * Returns if a string has another string inside it.
@@ -100,6 +100,7 @@ jQuery.Native.extend('String',
      */
 	camelize: function(s){
 		var parts = s.split(/_|-/);
+		parts[0] = parts[0].charAt(0).toLowerCase()+parts[0].substr(1);
 		for(var i = 1; i < parts.length; i++)
 			parts[i] = jQuery.String.capitalize(parts[i]);
 		return parts.join('');
