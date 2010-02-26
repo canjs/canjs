@@ -17,7 +17,7 @@ steal.plugins('jquery').then(function($){
 	}
 	
 	
-	$.fn.oldWidth = function(v){
+	$.fn.outerWidth = function(v){
 		if(typeof v == 'number'){
 			//subtract border and padding
 			var val = 0, el = this[0]
