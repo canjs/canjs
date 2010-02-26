@@ -48,6 +48,8 @@ steal.plugins("jquery").then(function($){
      *  abc
      */
     "html"]
+	
+	
 	var convert = function(func_name) {
 		var old = jQuery.fn[func_name];
 
@@ -64,6 +66,22 @@ steal.plugins("jquery").then(function($){
 			return old.apply(this, args);
 		}
 	}
+	var hookup = function(){
+		if(this.getAttribute){
+			var id = this.getAttribute('data-view-id')
+			if(jQuery.View.hookups[id]){
+				jQuery.View.hookups[id](this, id);
+				delete jQuery.View.hookups[id]
+			}
+		}
+	}
+	
+	
+	jQuery.fn.hookupView = function(){
+		this.each(hookup)
+		this.find("[data-view-id]").each(hookup)
+		return this;
+	}
 	for(var i=0; i < funcs.length; i++){
 		convert(funcs[i]);
 	}
@@ -71,10 +89,9 @@ steal.plugins("jquery").then(function($){
 	var toId = function(src){
 		return src.replace(/[\/\.]/g,"_")
 	}
-	$.View= function(){
+	$.View= function(url, data, helpers, hookup){
 		//check path for suffix
-		var args = $.makeArray(arguments), url = args.shift();
-		
+
 		//change this url?
 		if (url.match(/^\/\//)) {
 			var id = toId(url.substr(2))
@@ -88,9 +105,12 @@ steal.plugins("jquery").then(function($){
 		
 		var renderer = $.View.cached[id] ? $.View.cached[id] : ( (el = document.getElementById(id) ) ? type.renderer(id, el.innerHTML) : type.get(id, url) );
 		if($.View.cache)  $.View.cached[id] = renderer;
-		
-		return renderer.apply(type,args)
+		if(!hookup)
+			return renderer.call(type,data,helpers)
+		else
+			return jQuery( renderer.call(type,data,helpers) ).hookupView();
 	};
+	$.View.hookups = {};
 	$.View.cached = {}
 	$.View.cache = true;
 	$.View.register = function(info){

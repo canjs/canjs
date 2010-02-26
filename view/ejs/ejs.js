@@ -159,14 +159,22 @@ EJS.Scanner = function(source, left, right) {
 	this.stag = null;
 	this.lines = 0;
 };
-
+var id =0;
 EJS.Scanner.to_text = function(input){
+	var myid;
 	if(input == null || input === undefined)
         return '';
     if(input instanceof Date)
 		return input.toDateString();
+	if(input.hookup){
+		myid = (++id);
+		jQuery.View.hookups[myid] = input.hookup;
+	}
+	if(input.nodeName || input.jQuery){
+		throw "elements in views are not supported"
+	}
 	if(input.toString) 
-        return input.toString();
+        return input.toString(myid);
 	return '';
 };
 

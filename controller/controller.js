@@ -242,7 +242,7 @@ jQuery.Class.extend("jQuery.Controller",
 				return jQuery.Class.getObject(inside, c).toString()
 			})
 			parts = convertedName.match( b)
-			act = c.processors[parts[2]] || ($.inArray(parts[2], c.listensTo ) > -1 && c.basicProcessor) || ( parts[1] && c.basicProcessor) ;
+			act = parts && ( c.processors[parts[2]] || ($.inArray(parts[2], c.listensTo ) > -1 && c.basicProcessor) || ( parts[1] && c.basicProcessor) );
 			if(act){
 				this.actions[funcName] = {action: act, parts: parts}
 			}
