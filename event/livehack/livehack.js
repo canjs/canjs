@@ -55,6 +55,12 @@ steal.apps('jquery').then(function(){
 		}
 		return handlers;
 	}
+	/**
+	 * 
+	 * @param {Array} types llist of types that will delegate here
+	 * @param {Object} startingEvent the first event to start listening to
+	 * @param {Object} onFirst a function to call 
+	 */
 	event.setupHelper = function(types, startingEvent, onFirst){
 		if(!onFirst) {
 			onFirst = startingEvent;
@@ -107,7 +113,8 @@ steal.apps('jquery').then(function(){
 		$.each(types, function(){
 			event.special[this] = {
 				add:  add,
-				remove: remove
+				remove: remove,
+				setup : function(){}
 			}
 		})
 	}

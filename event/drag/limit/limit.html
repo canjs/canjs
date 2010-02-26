@@ -38,15 +38,14 @@
 	    	<div class='handle'>handle</div>
 			<div class='handle'>handle</div>
 	    </div>
-		
-		
 		<script type='text/javascript' 
-                src='../../../steal/steal.js?steal[app]=jquery/event/drag&steal[env]=development'>   
+                src='../../../../steal/steal.js?steal[app]=jquery/event/drag/limit&steal[env]=development'
+                package='main.js'
+                compress='false'>   
         </script>
 		<script type='text/javascript'>
 			$("#ondoc .handle").live("dragstart", function(ev, drag){
-				//console.log("dragstart", this, ev, drag)
-				//drag.vertical();
+				drag.limit($("#ondoc"))
 			})
 			$("#ondoc .handle").live("dragmove", function(ev, drag){
 				//console.log("dragmove",this, ev, drag)
@@ -69,5 +68,7 @@
 			})
 			
 		</script>
+		
+		
 	</body>
 </html>

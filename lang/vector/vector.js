@@ -1,6 +1,6 @@
 steal(function(){
-    
-    
+    var getSetZero = function(v){ return v !== undefined ? (this.array[0] = v) : this.array[0] }
+    var getSetOne = function(v){ return v !== undefined ? (this.array[1] = v) : this.array[1] }
 /**
  * @constructor
  * A vector class
@@ -79,24 +79,24 @@ jQuery.Vector.prototype =
      * Returns the 2nd value of the vector
      * @return {Number}
      */
-    x : function(){ return this.array[0] },
-    width : function(){ return this.array[0] },
+    x : getSetZero,
+    width : getSetZero,
     /**
      * Returns the first value of the vector
      * @return {Number}
      */
-    y : function(){ return this.array[1] },
-	height : function(){ return this.array[1] },
+    y : getSetOne,
+	height : getSetOne,
     /**
      * Same as x()
      * @return {Number}
      */
-    top : function(){ return this.array[1] },
+    top : getSetOne,
     /**
      * same as y()
      * @return {Number}
      */
-    left : function(){ return this.array[0] },
+    left : getSetZero,
     /**
      * returns (x,y)
      * @return {String}

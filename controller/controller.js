@@ -359,26 +359,38 @@ jQuery.Class.extend("jQuery.Controller",
 
 jQuery.Controller.processors = {};
 var basic = (jQuery.Controller.basicProcessor =function(el, event, selector, cb){
+	var func = function(){ 
+		//console.log(event, arguments)
+		return cb.apply(null, [jQuery(this)].concat( Array.prototype.slice.call(arguments, 0) )) 
+	}
 	if(selector){
 		var jq = jQuery()
 		jq.selector = selector;
 		jq.context = el;
-		jq.live(event, function(){ return cb.apply(null, [jQuery(this)].concat( Array.prototype.slice.call(arguments, 0) )) });
+		jq.live(event,func );
 		return function(){
-		    var ev = event;
-		    jq.die(ev);
+		    jq.die(event, func);
 		}
 	}else{
-		jQuery(el).bind(event, function(){ return cb.apply(null, [jQuery(this)].concat( Array.prototype.slice.call(arguments, 0) )) });
+		jQuery(el).bind(event, func);
 		return function(){
-			var element = el;
-		    jQuery(element).unbind(event);
+		    jQuery(el).unbind(event, func);
 		}
 	}
 })
-
 jQuery.each(["change","click","contextmenu","dblclick","keydown","keyup","keypress","mousedown","mousemove","mouseout","mouseover","mouseup","reset","windowresize","resize","windowscroll","scroll","select","submit","dblclick","focus","blur","load","unload","ready","hashchange"], function(i ,v){
 	jQuery.Controller.processors[v] = basic;
+})
+var windowEvent = function(el, event, selector, cb){
+	var func = function(){ return cb.apply(null, [jQuery(this)].concat( Array.prototype.slice.call(arguments, 0) )) }
+	jQuery(window).bind(event.replace(/window/,""), func);
+	return function(){
+	    jQuery(el).unbind(event.replace(/window/,""), func);
+	}
+}
+
+jQuery.each(["windowresize","windowscroll"], function(i ,v){
+	jQuery.Controller.processors[v] = windowEvent;
 })
 
 

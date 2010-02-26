@@ -45,7 +45,7 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 		   
 		   if(mover.current || !isLeftButton) return;
 		   
-		   //event.preventDefault();
+		   event.preventDefault();
 		   //stop selection, but allow things to be focused
 		   this.noSelection()
 		   
@@ -159,27 +159,37 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 		draw: function(pointer, event){
 			// only drag if we haven't been cancelled;
             if(this._cancelled) return;
-    
-            var dragged_element_page_offset = this.movingElement.offsetv();          // where the drag element is in relation to the page, at this moment
-            var dragged_element_css_offset = this.currentDelta();                   // the position as defined by the drag element's left + top css attributes
-            var dragged_element_position_vector =                                   // the vector between the movingElement's page and css positions
-                dragged_element_page_offset.minus(dragged_element_css_offset);
-    
-            this.required_css_position = 
-                pointer                                                             // where the mouse is at the moment
-                    .minus(dragged_element_position_vector)
-                    .minus(this.mouseElementPosition);                         // the offset between the mouse pointer and the representative that the user asked for
-    
+            this._location =  pointer.minus(this.mouseElementPosition);                              // the offset between the mouse pointer and the representative that the user asked for
+    		// position = mouse - (dragOffset - dragTopLeft) - mousePosition
             this.move( event );
-            /**
-             * Set the drag to only allow horizontal dragging
-             */
-            if(!this._cancelled && !this._horizontal)    this.movingElement.css("top", this.required_css_position.top() + "px");
-            if(!this._cancelled && !this._vertical)      this.movingElement.css("left", this.required_css_position.left() + "px");
+			this.position(this._location);
 
             //fill in
 			if(!this._only && this.constructor.responder)
 				this.constructor.responder.show(pointer, this, event);  
+		},
+		/**
+         * Set the drag to only allow horizontal dragging
+         */
+		position : function(offsetPositionv){  //should draw it on the page
+			var dragged_element_page_offset = this.movingElement.offsetv();          // the drag element's current page location
+            
+			var dragged_element_css_offset = this.currentDelta();                   //  the drag element's current left + top css attributes
+            
+			var dragged_element_position_vector =                                   // the vector between the movingElement's page and css positions
+                dragged_element_page_offset.minus(dragged_element_css_offset);      // this can be thought of as the original offset
+			
+			this.required_css_position = offsetPositionv.minus(dragged_element_position_vector)
+			
+			
+			var css = {}
+			if(!this._cancelled && !this._horizontal) {
+				css.top =  this.required_css_position.top() + "px"
+			}
+			if(!this._cancelled && !this._vertical){
+				css.left = this.required_css_position.left() + "px"
+			}
+			this.movingElement.css(css);
 		},
 		move : function(event){
 			if(this.callbacks[this.constructor.lowerName+"move"]) this.callbacks[this.constructor.lowerName+"move"].call(this.element, event, this  );
@@ -234,14 +244,15 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 		 */
 		ghost: function() {
 			// create a ghost by cloning the source element and attach the clone to the dom after the source element
-			var ghost = this.movingElement.clone();
+			var ghost = this.movingElement.clone().css('position','absolute');
 			this.movingElement.after(ghost);
 			ghost.width(this.movingElement.width())
 				.height(this.movingElement.height())
-				.css('position','absolute')
+				
 			// store the original element and make the ghost the dragged element
 			this.movingElement = ghost;
 			this._removeMovingElement = true;
+			return ghost;
 		},
 		/**
 		 * Use a representative element, instead of the movingElement.
