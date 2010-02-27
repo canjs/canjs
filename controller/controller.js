@@ -269,7 +269,9 @@ jQuery.Class.extend("jQuery.Controller",
 		element = element.jquery ? element[0] : element;
 		//needs to go through prototype, and attach events to this instance
 		this.element = jQuery(element).addClass(this.Class.underscoreFullName );
-		$.data(element,this.Class.underscoreFullName, this)
+		
+		//$.data(element,this.Class.underscoreFullName, this)
+		( jQuery.data(element,"controllers") || jQuery.data(element,"controllers",{}) )[this.Class.underscoreFullName] = this;
 		this._actions = {};
 		for(funcName in c.actions){
 			var ready = c.actions[funcName]
@@ -325,8 +327,11 @@ jQuery.Class.extend("jQuery.Controller",
 		delete this._actions;
 		this._destroyed = true;
 		//clear element
-		$.removeData(this.element[0],this.Class.underscoreFullName)
+
 		var controllers = this.element.data("controllers");
+		if(controllers && controllers[this.Class.underscoreFullName])
+			delete controllers[this.Class.underscoreFullName];
+		
 		this.element = null;
 	},
 	/**
@@ -404,6 +409,23 @@ $.fn.mixin = function(){
 		
 	})
 }
-
+jQuery.fn.controllers = function(){
+    var controllerNames = jQuery.Array.from(arguments), 
+	   instances = [], 
+	   controllers, 
+	   cname;
+    //check if arguments
+	this.each(function(){
+		controllers= jQuery.data(this, "controllers")
+		if(!controllers) return;
+		for(var cname in controllers){
+			instances.push(controllers[cname])
+		}
+	})
+	return instances;
+};
+jQuery.fn.controller = function(){
+	return this.controllers.apply(this, arguments)[0];
+};
 
 })

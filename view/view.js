@@ -66,6 +66,7 @@ steal.plugins("jquery").then(function($){
 			return old.apply(this, args);
 		}
 	}
+	
 	var hookup = function(){
 		if(this.getAttribute){
 			var id = this.getAttribute('data-view-id')
@@ -111,6 +112,13 @@ steal.plugins("jquery").then(function($){
 			return jQuery( renderer.call(type,data,helpers) ).hookupView();
 	};
 	$.View.hookups = {};
+	
+	var id = 0;
+	$.View.hookup = function(cb){
+		var myid = (++id);
+		jQuery.View.hookups[myid] = cb;
+		return myid;
+	}
 	$.View.cached = {}
 	$.View.cache = true;
 	$.View.register = function(info){
