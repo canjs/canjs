@@ -182,14 +182,14 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 			this.required_css_position = offsetPositionv.minus(dragged_element_position_vector)
 			
 			
-			var css = {}
+
+			var style = this.movingElement[0].style;
 			if(!this._cancelled && !this._horizontal) {
-				css.top =  this.required_css_position.top() + "px"
+				style.top =  this.required_css_position.top() + "px"
 			}
 			if(!this._cancelled && !this._vertical){
-				css.left = this.required_css_position.left() + "px"
+				style.left = this.required_css_position.left() + "px"
 			}
-			this.movingElement.css(css);
 		},
 		move : function(event){
 			if(this.callbacks[this.constructor.lowerName+"move"]) this.callbacks[this.constructor.lowerName+"move"].call(this.element, event, this  );
