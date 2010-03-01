@@ -201,12 +201,7 @@ jQuery.Class.extend("jQuery.Controller",
 		
 		var controller = this;
 		
-		/**
-		 * @attribute onDocument
-		 * Set to true if you want to automatically attach this element to the documentElement.
-		 */
-		if(this.onDocument)
-			new this(document.documentElement);
+		
 
 		 
 		 
@@ -237,6 +232,7 @@ jQuery.Class.extend("jQuery.Controller",
 		this.actions = {};
 		var convertedName, act, parts, c = this, replacer = /\{([^\}]+)\}/g, b = c.breaker;
 		for (funcName in this.prototype) {
+			if(funcName == "constructor") continue;
 			convertedName = funcName.replace(replacer, function(whole, inside){
 				//convert inside to type
 				return jQuery.Class.getObject(inside, c).toString()
@@ -247,6 +243,13 @@ jQuery.Class.extend("jQuery.Controller",
 				this.actions[funcName] = {action: act, parts: parts}
 			}
 		}
+		
+		/**
+		 * @attribute onDocument
+		 * Set to true if you want to automatically attach this element to the documentElement.
+		 */
+		if(this.onDocument)
+			new this(document.documentElement);
 		
 	},
 	breaker : /^(?:(.*?)\s)?([\w\.]+)$/,
@@ -363,11 +366,14 @@ jQuery.Class.extend("jQuery.Controller",
 
 
 jQuery.Controller.processors = {};
-var basic = (jQuery.Controller.basicProcessor =function(el, event, selector, cb){
+var basic = (jQuery.Controller.basicProcessor =function(el, event, selector, cb, controller){
 	var func = function(){ 
-		//console.log(event, arguments)
 		return cb.apply(null, [jQuery(this)].concat( Array.prototype.slice.call(arguments, 0) )) 
 	}
+	if(controller.onDocument){ //prepend underscore name if necessary
+		selector = selector ? controller.underscoreShortName +" "+selector : controller.underscoreShortName
+	}
+
 	if(selector){
 		var jq = jQuery()
 		jq.selector = selector;
@@ -375,11 +381,13 @@ var basic = (jQuery.Controller.basicProcessor =function(el, event, selector, cb)
 		jq.live(event,func );
 		return function(){
 		    jq.die(event, func);
+			el = conroller = jq = null;
 		}
 	}else{
 		jQuery(el).bind(event, func);
 		return function(){
 		    jQuery(el).unbind(event, func);
+			el = controller = null;
 		}
 	}
 })
@@ -394,7 +402,7 @@ var windowEvent = function(el, event, selector, cb){
 	}
 }
 
-jQuery.each(["windowresize","windowscroll"], function(i ,v){
+jQuery.each(["windowresize","windowscroll","load"], function(i ,v){
 	jQuery.Controller.processors[v] = windowEvent;
 })
 

@@ -451,7 +451,7 @@ EJS.Helpers.prototype = {
 	view: function(options, data, helpers){
         if(!helpers) helpers = this._extras
 		if(!data) data = this._data;
-		return new EJS(options).render(data, helpers);
+		return $.View(options, data, helpers)  //new EJS(options).render(data, helpers);
 	},
     /**
      * For a given value, tries to create a human representation.
