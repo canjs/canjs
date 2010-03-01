@@ -1,9 +1,4 @@
-steal.plugins()
-     .resources()
-     .models()
-     .controllers()
-     .views()
-     .then(function(){
+steal(function(){
      
         /**
           * Cookie plugin
