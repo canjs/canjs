@@ -14,7 +14,7 @@ steal.plugins('jquery/controller','jquery/view').then(function($){
                 
             }else{
                 view = "//"+new steal.File( '../views/'+ 
-                    (jQuery.String.steal(view,'/') ? view : controller_name+'/'+view)
+                    (jQuery.String.include(view,'/') ? view : controller_name+'/'+view)
                     ).joinFrom(path)+jQuery.View.ext
             }
         }else if(!view) {
