@@ -11,10 +11,6 @@ steal.plugin("jquery").then(function(){
 		if(!jQuery.isArray(f_names)) 
 			f_names = [f_names];
 		
-		//check names ... should only be in development
-		//for(f =0; f < f_names.length; f++ )
-		//	if(typeof f_names[f] == "string" &&  typeof this[f_names[f]] != 'function')
-		//		 throw 'There is no function named '+f_names[f]+'. ';
 		self = this;
 		return function(){
 			var cur = args.concat(jQuery.makeArray(arguments)), isString
@@ -55,9 +51,9 @@ steal.plugin("jquery").then(function(){
         var oldOptions = oldClass.OPTIONS || {};
         var newOptions = jQuery.extend(true, {}, oldOptions, this.defaults, options);
         //for each newOption, write on class:
-        this.OPTIONS = newOptions;
-        for(var name in this.OPTIONS){
-            this[name] = this.OPTIONS[name]
+        //this.OPTIONS = newOptions;
+        for(var name in newOptions){
+            this[name] = newOptions[name]
         }
         /*var args = [];
 		var current = this.args || [];
@@ -85,20 +81,32 @@ steal.plugin("jquery").then(function(){
   
   /**
    * @constructor jQuery.Class
-   * @plugin lang/class
+   * @plugin jquery/class
    * @tag core
-   * Class provides simple simulated inheritance in JavaScript. 
+   * Class provides simulated inheritance in JavaScript. 
    * It is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Class] 
    * Inheritance library.  Besides prototypal inheritance, it adds a few important features:
    * <ul>
    *     <li>Static inheritance</li>
-   *     <li>Class initialization callbacks</li>
    *     <li>Introspection</li>
+   *     <li>Ad-Hoc Polymorphism</li>
    *     <li>Easy callback function creation</li>
    * </ul>
+   * <h2>Definitions</h2>
+   * Classes have <b>static</b> and <b>prototype</b> properties and
+   * methods:
+   * @codestart
+   * //STATIC
+   * MyClass.staticProperty  //shared property
+   * 
+   * //PROTOTYPE
+   * myclass = new MyClass()
+   * myclass.prototypeMethod() //instance method
+   * @codeend
+   * 
    * <h2>Examples</h2>
    * <h3>Basic example</h3>
-   * Creates a class with a className (used for introspection), static, and prototype members:
+   * Creates a class with a shortName (for introspection), static, and prototype members:
    * @codestart
    * jQuery.Class.extend('Monster',
    * /* @static *|
@@ -116,7 +124,7 @@ steal.plugin("jquery").then(function(){
    * dragon = new Monster('dragon')
    * hydra.name        // -> hydra
    * Monster.count     // -> 2
-   * Monster.className // -> 'Monster'
+   * Monster.shortName // -> 'Monster'
    * @codeend
    * Notice that the prototype init function is called when a new instance of Monster is created.
    * <h3>Static property inheritance</h3>
@@ -126,9 +134,11 @@ steal.plugin("jquery").then(function(){
    * {
    *     staticMethod : function(){ return 1;}
    * },{})
+   * 
    * First.extend("Second",{
    *     staticMethod : function(){ return this._super()+1;}
    * },{})
+   * 
    * Second.staticMethod() // -> 2
    * @codeend
    * <h3 id='introspection'>Introspection</h3>
@@ -138,7 +148,7 @@ steal.plugin("jquery").then(function(){
    * an object's name, so the developer must provide a name.  Class fixes this by taking a String name for the class.
    * @codestart
    * $.Class.extend("MyOrg.MyClass",{},{})
-   * MyOrg.MyClass.className //-> 'MyClass'
+   * MyOrg.MyClass.shortName //-> 'MyClass'
    * MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
    * @codeend
    * <h3>Construtors</h3>
@@ -152,11 +162,22 @@ steal.plugin("jquery").then(function(){
    *   init: function(){} //prototype constructor
    * })
    * @codeend
-   * The static constructor is called after
-   * a class has been created, but before [jQuery.Class.static.extended|extended] is called on its base class.  
-   * This is a good place to add introspection and similar class setup code.
+   * <p>The static constructor is called after
+   * a class has been created.  
+   * This is a good place to add introspection and similar class setup code.</p>
    * 
-   * The prototype constructor is called whenever a new instance of the class is created.
+   * <p>The prototype constructor is called whenever a new instance of the class is created.
+   * </p>
+   * 
+   * 
+   * <h3 id='ad-hoc'>Ad-Hoc Polymorphism</h3>
+   * <p>Ad-Hoc Polymorphism allows you to create parameterized, temporary 
+   *    classes.  This is a technique commonly used in Static languages where
+   *    you might create map of Strings to Integers like:
+   * @codestart text
+   * Hash<string, int> hash = new Hash<string, int>()
+   * @codeend
+   * With 
    * 
    * 
    * @init Creating a new instance of an object that has extended jQuery.Class 
@@ -241,9 +262,9 @@ steal.plugin("jquery").then(function(){
      * //With just a className
      * $.Class.extend('Task')
      * @codeend
-     * @param {String} [optional1] className the classes name (used for classes w/ introspection)
-     * @param {Object} [optional2] klass the new classes static/class functions
-     * @param {Object} [optional3] proto the new classes prototype functions
+     * @param {String} [className]  the classes name (used for classes w/ introspection)
+     * @param {Object} [klass]  the new classes static/class functions
+     * @param {Object} [proto]  the new classes prototype functions
      * @return {jQuery.Class} returns the new class
      */
     extend = function(className, types, klass, proto) {

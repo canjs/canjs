@@ -76,7 +76,7 @@ jQuery.Native.extend('String',
      * @param {String} pattern String that we are looking for
      * @return {Boolean} true if the string has pattern, false if otherwise
      */
-	steal : function(s, pattern){
+	include : function(s, pattern){
 		return s.indexOf(pattern) > -1;
 	},
     /**
@@ -166,7 +166,7 @@ jQuery.Native.extend('Array',
 	 * @param {Object} item an item that is matched with ==
 	 * @return {Boolean}
 	 */
-    steal: function(a, item){
+    include: function(a, item){
 		for(var i=0; i< a.length; i++){
 			if(a[i] == item) return true;
 		}
@@ -209,13 +209,13 @@ jQuery.Native.extend('Function',
 	 * to is the second argument.  Additional params are added to the callback function.
 	 * @codestart
 	 * //basic example
-	 * var callback1 = jQuery.Function.bind(function(){alert(this.library)}, {library: "steal"});
+	 * var callback1 = jQuery.Function.bind(function(){alert(this.library)}, {library: "include"});
 	 * //shows with prepended args
 	 * var callback2 = jQuery.Function.bind(
 	 *     function(version, os){
 	 *         alert(this.library+", "+version+", "+os);
 	 *     },
-	 *     {library: "steal"},
+	 *     {library: "include"},
 	 *     "1.5")
 	 * @codeend
 	 * @param {Function} f The function that is being bound.
@@ -241,7 +241,7 @@ jQuery.Native.extend('Number',
 /* @static*/
 {
     /**
-     * Changes a number to a string, but steals preceeding zeros.
+     * Changes a number to a string, but includes preceeding zeros.
      * @param {Object} number the number to be converted
      * @param {Object} length the number of zeros
      * @param {Object} [optional] radix the numeric base (defaults to base 10);
