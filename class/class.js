@@ -51,10 +51,10 @@ steal.plugin("jquery").then(function(){
         var oldOptions = oldClass.OPTIONS || {};
         var newOptions = jQuery.extend(true, {}, oldOptions, this.defaults, options);
         //for each newOption, write on class:
-        //this.OPTIONS = newOptions;
-        for(var name in newOptions){
+        this.OPTIONS = newOptions;
+        /*for(var name in newOptions){
             this[name] = newOptions[name]
-        }
+        }*/
         /*var args = [];
 		var current = this.args || [];
 		for(var i =0; i  < current.length; i++){

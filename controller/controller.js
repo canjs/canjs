@@ -214,10 +214,15 @@ jQuery.Class.extend("jQuery.Controller",
 					allCreated = true;;
 				this.each(function(){
 				//check if created
-					var plugin = $.data(this,pluginname);
+					var controllers = jQuery.data(this,"controllers"),
+						plugin = controllers && controllers[pluginname];
+					
+					
 					if(plugin){
 						if(isMethod)
 							plugin[meth].apply(plugin, args.slice(1))
+						else if(plugin.update)
+							plugin.update.apply(plugin, args)
 					}else{
 						allCreated = false;
 						controller.newInstance.apply(controller, [this].concat(args))
@@ -235,7 +240,7 @@ jQuery.Class.extend("jQuery.Controller",
 			if(funcName == "constructor") continue;
 			convertedName = funcName.replace(replacer, function(whole, inside){
 				//convert inside to type
-				return jQuery.Class.getObject(inside, c).toString()
+				return jQuery.Class.getObject(inside, c.OPTIONS).toString()
 			})
 			parts = convertedName.match( b)
 			act = parts && ( c.processors[parts[2]] || ($.inArray(parts[2], c.listensTo ) > -1 && c.basicProcessor) || ( parts[1] && c.basicProcessor) );
@@ -267,7 +272,7 @@ jQuery.Class.extend("jQuery.Controller",
 	 * </ol>  
 	 * @param {HTMLElement} element the element this instance operates on.
 	 */
-	setup: function(element){
+	setup: function(element, options){
 		var funcName, convertedName, func, a, act, c = this.Class, b = c.breaker, cb;
 		element = element.jquery ? element[0] : element;
 		//needs to go through prototype, and attach events to this instance
@@ -282,19 +287,7 @@ jQuery.Class.extend("jQuery.Controller",
 			this._actions[funcName] = ready.action(element, ready.parts[2], ready.parts[1], cb, this)
 		}
 		 
-		 /*for(funcName in this){
-			//replace {} with args names
-			convertedName = funcName.replace(/\{([^\}]+)\}/g, function(whole, inside){
-				//convert inside to type
-				return jQuery.Class.getObject(inside, c).toString()
-			})
-			var parts = convertedName.match( b)
-			act = c.processors[parts[2]] || ($.inArray(parts[2], c.listensTo ) > -1 && c.basicProcessor) || ( parts[1] && c.basicProcessor) ;// uses event by default if 2 parts
-			if(act){
-				cb = this.callback(funcName)
-				this._actions[funcName] = act(element, parts[2], parts[1], cb, this);
-			}
-		}*/
+
 		/**
 		 * @attribute called
 		 * String name of current function being called on controller instance.  This is 
@@ -302,6 +295,7 @@ jQuery.Class.extend("jQuery.Controller",
 		 * @hide
 		 */
 		this.called = "init";
+		this.options = $.extend( $.extend(true,{}, this.Class.OPTIONS  ), options)
 		/**
 		 * @attribute element
 		 * The controller instance's delegated element.  This is set by [jQuery.Controller.prototype.init init].
@@ -314,7 +308,9 @@ jQuery.Class.extend("jQuery.Controller",
 		 */
 		return this.element;
 	},
-	
+	update : function(options){
+		$.extend(this.options, options)
+	},
 	/**
 	 * Removes all actions on this instance.
 	 */
