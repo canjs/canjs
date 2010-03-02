@@ -28,8 +28,10 @@ extend = function(d, s){
     for(var n in s){
         if(s.hasOwnProperty(n))  d[n] = s[n]
     }
+},
+isArray = function(arr){
+	  return Object.prototype.toString.call(arr) === "[object Array]"
 }
-
 
 EJS = function( options ){
 	options = typeof options == "string" ? {view: options} : options
@@ -167,10 +169,19 @@ EJS.Scanner.to_text = function(input){
 		return input.toDateString();
 	if(input.hookup){
 		myid = $.View.hookup(input.hookup);
+		return  "data-view-id='"+myid+"'"
+	}
+	if(isArray(input)){
+		myid = $.View.hookup(function(){
+			for(var i = 0 ; i < input.length; i++)
+				input[i].hookup.apply(this, arguments)
+		});
+		return  "data-view-id='"+myid+"'"
 	}
 	if(input.nodeName || input.jQuery){
 		throw "elements in views are not supported"
 	}
+	
 	if(input.toString) 
         return input.toString(myid);
 	return '';

@@ -256,9 +256,13 @@ jQuery.Class.extend("jQuery.Controller",
 		if(this.onDocument)
 			new this(document.documentElement);
 		
+		this.hookup = function(el){
+			return new c(el);
+		}
 	},
 	breaker : /^(?:(.*?)\s)?([\w\.]+)$/,
-	listensTo : []//,
+	listensTo : []//
+
 	//actions : [] //list of action types
 },
 /* @Prototype */
