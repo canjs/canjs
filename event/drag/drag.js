@@ -53,10 +53,14 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 		   this._mousemove = bind(this, this.mousemove);
 		   this._mouseup =   bind(this, this.mouseup);
 		   
-		   event.data.element = element;
-		   
-		   jQuery(document).bind('mousemove.specialDrag', event.data,this._mousemove);
-		   jQuery(document).bind('mouseup.specialDrag', event.data,this._mouseup);
+		   //event.data.element = element;
+		   var data = {
+		   		selector: event.handleObj.selector, 
+				delegate: event.liveFired || element,
+				element: element
+			}
+		   jQuery(document).bind('mousemove.specialDrag',data ,this._mousemove);
+		   jQuery(document).bind('mouseup.specialDrag', data,this._mouseup);
 		},
 		noSelection : function(){
 			document.documentElement.onselectstart = function() { return false; }; 

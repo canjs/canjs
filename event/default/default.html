@@ -8,18 +8,35 @@
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
+			.clickme {
+				padding: 5px; margin: 5px;
+				border: dashed 1px red;
+				width: 100px;
+			}
         </style>
 	</head>
 	<body>
-	    <div>
+	    <p>The body is listening to a "count" event and calling preventDefault if the target is ClickMe1
+			and it has over 5 clicks.
+		</p>
+		<p>Click "ClickMe1" and "ClickMe2".  You should see ClickMe1 stop counting.</p>
+		<div>
 	        
             <div id='wrap1'>
-                <div id="clickme1" class='clickme'>ClickMe</div>
+                <div id="clickme1" class='clickme'>ClickMe1</div>
             </div>
             <div id='wrap2'>
-                <div class='clickme'>ClickMe</a>
+                <div class='clickme'>ClickMe2</a>
             </div>
         </div>
+		
+		<div id="test1">
+		  Didn't work
+		</div>
+		<div id="test2">
+		  Worked (Didn't Change)
+		</div>
+		
 		<script type='text/javascript' 
                 src='../../../steal/steal.js?steal[app]=jquery/event/default&steal[env]=development'
                 package='main.js'
@@ -27,16 +44,18 @@
         </script>
         <script type='text/javascript'>
             var count1 = 1;
-            $("#wrap1").bind("default.hide", function(){
-                $(this).find(".clickme").text("Clicks"+count1++);
+            $("#wrap1").bind("default.count", function(){
+                $(this).find(".clickme").text("ClickMe1 Clicks"+count1++);
             })
 			
             var count2 = 1;
-            $("#wrap2").bind("default.hide.me.a", function(){
-                $(this).find(".clickme").text("Clicks"+count2++);               
+            $("#wrap2").bind("default.count", function(){
+                $(this).find(".clickme").text("ClickeMe2 Clicks"+count2++);               
             })
-            $(document.body).bind("hide", function(ev){
-                if(ev.target.id == "clickme1"){
+			
+			
+            $(document.body).bind("count", function(ev){
+                if(ev.target.id == "clickme1" && count1 > 5){
                     console.log("stopping and preventing")
                     ev.stopPropagation()
                     ev.preventDefault()
@@ -44,8 +63,19 @@
                     
             })
             $(".clickme").click(function(){
-                $(this).trigger("hide")
+                $(this).trigger("count")
             })
+			
+			
+			
+			$("#test1").live("a.b", function(){
+		       $("#test1").html("Worked Changed")
+		    })
+		    $("#test1").live("a.c", function(){
+		       $("#test2").html("Failed")
+		    })
+		    $("#test1").trigger("a.b")
+			
         </script>
 	</body>
 </html>
