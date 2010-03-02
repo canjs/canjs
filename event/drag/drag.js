@@ -159,10 +159,10 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 		draw: function(pointer, event){
 			// only drag if we haven't been cancelled;
             if(this._cancelled) return;
-            this._location =  pointer.minus(this.mouseElementPosition);                              // the offset between the mouse pointer and the representative that the user asked for
+            this.location =  pointer.minus(this.mouseElementPosition);                              // the offset between the mouse pointer and the representative that the user asked for
     		// position = mouse - (dragOffset - dragTopLeft) - mousePosition
             this.move( event );
-			this.position(this._location);
+			this.position(this.location);
 
             //fill in
 			if(!this._only && this.constructor.responder)
