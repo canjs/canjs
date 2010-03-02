@@ -1,42 +1,42 @@
 steal.plugins('jquery/class','jquery/lang').then(function(){
 /**
  * @tag core
- * Controllers organize event handlers through the power of <b>[jQuery.fn.delegate|event delegation]</b>. 
+ * @plugin jquery/controllers
+ * Controllers organize event handlers using event delegation. 
  * If something happens in your application (a user click or a [jQuery.Model|Model] instance being updated), 
  * a controller should respond to it. 
  * <h3>Benefits</h3>
  * <ul>
- *     <li><i>Controllers let you know where your code is!</i><p>
- *         Controllers force you to group events and label your html in specific ways.  The result is that
- *         if an event happens on the page, you know exactly where to find the code for that event.</p></li>
- *     <li><i>Controllers are inheritable.</i><p>
- *         Package, inherit, and reuse your widgets.</p></li>
- *     <li><i>Don't attach event handlers, make rules.</i><p>
- *         Controllers use event delegation.</p></li>
+ *     <li><p><i>Know your code.</i></p>
+ *     		Group events and label your html in repeatable ways so it's easy to find your code.</li>
+ *     <li><p><i>Controllers are inheritable.</i></p>
+ *         Package, inherit, and reuse your widgets.</li>
+ *     <li><p><i>Write less.</i></p>
+ *         Controllers take care of setup / teardown automatically.</li>
  * </ul>
  * <h3>Example</h3>
  * @codestart
 //Instead of:
 $(function(){
-  $('#tasks').click(someCallbackFunction1)
-  $('#tasks .task').click(someCallbackFunction2)
-  $('#tasks .task .delete').click(someCallbackFunction3)
+  $('#tabs').click(someCallbackFunction1)
+  $('#tabs .tab').click(someCallbackFunction2)
+  $('#tabs .delete click').click(someCallbackFunction3)
 });
 
 //do this
-$.Controller.extend('TasksController',{
-  'click': function(){...},
-  '.task click' : function(){...},
-  '.task .delete' : function(){...}
+$.Controller.extend('Tabs',{
+  click: function(){...},
+  '.tab click' : function(){...},
+  '.delete click' : function(){...}
 })
-$().tasks_controller();
+$('#tabs').tabs();
 @codeend
  * <h2>Using Controllers</h2>
  * <p>A Controller is just a list of functions that get called back when the appropriate event happens.  
  * The name of the function provides a description of when the function should be called.  By naming your functions in the correct way,
- * Controller recognizes them as <b>[jQuery.Controller.Action Actions]</b> and hook them up in the correct way.</p>
+ * Controller recognizes them as an <b>Action</b> and hook them up in the correct way.</p>
  * 
- * <p>The 'hook up' happens when you create a [jQuery.Controller.prototype.init|new controller instance].</p>
+ * <p>The 'hook up' happens when you create a [jQuery.Controller.prototype.setup|new controller instance].</p>
  * 
  * <p>Lets look at a very basic example.  
  * Lets say you have a list of todos and a button you want to click to create more.

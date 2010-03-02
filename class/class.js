@@ -175,13 +175,25 @@ steal.plugin("jquery").then(function(){
    *    classes.  This is a technique commonly used in Static languages where
    *    you might create map of Strings to Integers like:
    * @codestart text
-   * Hash<string, int> hash = new Hash<string, int>()
+   * Hash&lt;string, int> hash = new Hash&lt;string, int>()
    * @codeend
-   * With 
-   * 
+   * With Class, Ad-Hoc Polymorphism is used to configure Classs.
+   * Here's a simplistic example:
+   * @codestart
+   * $.Class.extend("Request",
+   * {
+   *    init : function(url){
+   *       $.getScript(this.Class.OPTIONS.domain+"/"+url)  
+   *    }
+   * });
+   * var JMVCRequestor = Request({domain: "http://javascriptmvc.com"})
+   * new JMVCRequestor("jmvc.js");
+   * @codeend
+   * Ad-Hoc techniques are used a lot with Controller to customize and
+   * combine widgets.
    * 
    * @init Creating a new instance of an object that has extended jQuery.Class 
-        calls the init prototype function and returns a new instance of the class.
+   *     calls the init prototype function and returns a new instance of the class.
    * 
    */
   
@@ -246,7 +258,22 @@ steal.plugin("jquery").then(function(){
   jQuery.Class.callback = callback;
   
   
-  jQuery.Class.getObject = getObject;
+  jQuery.Class.
+  
+  /**
+   *   @function getObject 
+   *   Gets an object from a String.
+   *   If the object or namespaces the string represent do not
+   *   exist it will create them.  
+   *   @codestart
+   *   Foo = {Bar: {Zar: {"Ted"}}}
+   *   $.Class.getobject("Foo.Bar.Zar") //-> "Ted"
+   *   @codeend
+   *   @param {String} objectName the object you want to get
+   *   @param {Object} [current=window] the object you want to look in.
+   *   @return {Object} the object you are looking for.
+   */
+  getObject = getObject;
   
   // Create a new Class that inherits from the current class.
   
