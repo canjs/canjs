@@ -434,7 +434,7 @@ var basic = (jQuery.Controller.basicProcessor =function(el, event, selector, cb,
 		return bind(el, event, shifter(cb))
 	}
 })
-jQuery.each(["change","click","contextmenu","dblclick","keydown","keyup","keypress","mousedown","mousemove","mouseout","mouseover","mouseup","reset","windowresize","resize","windowscroll","scroll","select","submit","dblclick","focus","blur","load","unload","ready","hashchange"], function(i ,v){
+jQuery.each(["change","click","contextmenu","dblclick","keydown","keyup","keypress","mousedown","mousemove","mouseout","mouseover","mouseup","reset","windowresize","resize","windowscroll","scroll","select","submit","dblclick","focusin","focusout","load","unload","ready","hashchange"], function(i ,v){
 	jQuery.Controller.processors[v] = basic;
 })
 var windowEvent = function(el, event, selector, cb){
