@@ -139,7 +139,7 @@ jQuery.Class.extend("jQuery.Model",
         this.defaultAttributes= {};  //list of attributes and values you want right away
         this._associations = [];
         if(this.fullName.substr(0,7) == "jQuery." ) return;
-        this.underscoredName =  jQuery.String.underscore(this.fullName.replace(".","_"))
+        this.underscoredName =  jQuery.String.underscore(this.fullName.replace(/\./g,"_"))
         jQuery.Model.models[this.underscoredName] = this;
 		this.store = new this.storeType(this);
 	},
@@ -209,12 +209,12 @@ jQuery.Class.extend("jQuery.Model",
     },
     models : {},
     /**
-     * Publishes to open ajax hub.  Always adds the fullName.event
+     * Publishes to open ajax hub.  Always adds the shortName.event
      * @param {Object} event
      * @param {Object} data
      */
     publish : function(event, data){
-        OpenAjax.hub.publish(   jQuery.String.underscore(this.fullName) + "."+event, data);
+        OpenAjax.hub.publish(   jQuery.String.underscore(this.shortName) + "."+event, data);
     },
     /**
      * Guesses at the type of an object.  This is useful when you want to know more than just typeof.
@@ -456,7 +456,7 @@ jQuery.Class.extend("jQuery.Model",
      * @return {String}
      */
     identity : function(){
-        return jQuery.String.underscore(this.Class.fullName.replace(".","_"))+'_'+(this.Class.escapeIdentity ? encodeURIComponent(this[this.Class.id]) : this[this.Class.id]);
+        return jQuery.String.underscore(this.Class.fullName.replace(/\./g,"_"))+'_'+(this.Class.escapeIdentity ? encodeURIComponent(this[this.Class.id]) : this[this.Class.id]);
     },
 	/**
 	 * Returns elements that represent this model instance.  For this to work, your element's should
