@@ -188,7 +188,7 @@ EJS.Scanner.to_text = function(input){
 	}
 	
 	if(input.toString) 
-        return !!myid ? input.toString(myid) : input.toString();
+        return myid ? input.toString(myid) : input.toString();
 	return '';
 };
 
