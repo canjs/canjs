@@ -2352,6 +2352,7 @@ if ( !jQuery.support.changeBubbles ) {
 }
 
 function trigger( type, elem, args ) {
+	args[0].liveFired = null;
 	args[0].type = type;
 	return jQuery.event.handle.apply( elem, args );
 }
