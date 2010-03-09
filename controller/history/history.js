@@ -102,8 +102,7 @@ steal.plugins('jquery/controller/subscribe','jquery/event/hashchange').then(func
 
 
 	jQuery(function($) {
-	   $(window).hashchange(function() {
-		   
+	   $(window).bind('hashchange',function() {
 		   var path = new $.Path(location.href);
 		   var data = $.Path.get_data(path);
 		   var folders = path.folder() || 'index';
@@ -117,7 +116,6 @@ steal.plugins('jquery/controller/subscribe','jquery/event/hashchange').then(func
 		  
 	      OpenAjax.hub.publish("history."+folders.replace("/","."), data);
 	   });
-	
 	   $.History.init();
 	});
 

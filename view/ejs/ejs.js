@@ -430,13 +430,7 @@ EJS.config( {cache: true, type: '<', ext: '.ejs' } );
 
 
 
-/**
- * @constructor
- * By adding functions to EJS.Helpers.prototype, those functions will be available in the 
- * views.
- * @init Creates a view helper.  This function is called internally.  You should never call it.
- * @param {Object} data The data passed to the view.  Helpers have access to it through this._data
- */
+
 EJS.Helpers = function(data, extras){
 	this._data = data;
     this._extras = extras;
@@ -444,23 +438,13 @@ EJS.Helpers = function(data, extras){
 };
 /* @prototype*/
 EJS.Helpers.prototype = {
-    /**
-     * Renders a new view.  If data is passed in, uses that to render the view.
-     * @param {Object} options standard options passed to a new view.
-     * @param {Object} [optional] data
-     * @return {String}
-     */
+
 	view: function(options, data, helpers){
         if(!helpers) helpers = this._extras
 		if(!data) data = this._data;
 		return $.View(options, data, helpers)  //new EJS(options).render(data, helpers);
 	},
-    /**
-     * For a given value, tries to create a human representation.
-     * @param {Object} input the value being converted.
-     * @param {Object} null_text what text should be present if input == null or undefined, defaults to ''
-     * @return {String} 
-     */
+
 	to_text: function(input, null_text) {
 	    if(input == null || input === undefined) return null_text || '';
 	    if(input instanceof Date) return input.toDateString();

@@ -23,7 +23,7 @@ $.fn.extend({
      * @codestart
      * $('form').formParams() //-> { foo:{bar:2, ced: 4} }
      * @codeend
-     * @param {optional:Boolean} numAsString true if all values should be left as strings
+     * @param {Boolean} [numAsString] true if all values should be left as strings
      * @return {Object} An object of name-value pairs.
      */
     formParams: function(numAsString) {

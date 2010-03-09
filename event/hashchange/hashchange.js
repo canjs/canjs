@@ -58,7 +58,6 @@ function formatHash(hash) {
 }
    
 $.fn.extend({
-   hashchange: function(callback) { return this.bind('hashchange', callback) },
    openOnClick: function(href) {
       if (href === undefined || href.length == 0)
          href = '#';
@@ -93,7 +92,7 @@ if ($.support.hashchange) {
          fireInitialChange: true,
          init: function() {
             if($.History.fireInitialChange)
-               $.event.trigger('hashchange');
+               $(window).trigger('hashchange');
          },
          
          add: function(hash) {
@@ -133,7 +132,7 @@ $.extend({
             setInterval(checkHash, 100); //id like this to wait for load
          
          if($.History.fireInitialChange)
-            $.event.trigger('hashchange');
+            $(window).trigger('hashchange');
       },
       
       add: function(hash) {
@@ -157,7 +156,7 @@ function checkHash() {
    var hash = location.hash;
    if (hash != curHash) {
       curHash = hash;
-      $.event.trigger('hashchange');
+      $(window).trigger('hashchange');
    }
 }
 
@@ -167,7 +166,7 @@ function checkHashIE() {
    if (hash != curHash) {
       updateIEFrame(hash);
       curHash = hash;
-      $.event.trigger('hashchange');
+      $(window).trigger('hashchange');
       return
    }
    
@@ -182,7 +181,7 @@ function checkHashIE() {
       if (location.hash != hash)
          location.hash = hash;
       curHash = hash;
-      $.event.trigger('hashchange');
+      $(window).trigger('hashchange');
    }
 }
 
