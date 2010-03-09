@@ -34,12 +34,18 @@ isArray = function(arr){
 }
 
 EJS = function( options ){
+	if(this.constructor != EJS){
+		var ejs = new EJS(options);
+		return function(data, helpers){
+			return ejs.render(data, helpers)
+		};
+	}
+	
 	options = typeof options == "string" ? {view: options} : options
     this.set_options(options);
-	if(options.precompiled){
+	if(typeof options == "function"){
 		this.template = {};
-		this.template.process = options.precompiled;
-		EJS.update(this.name, this);
+		this.template.process = options;
 		return;
 	}
     if(options.element)
@@ -77,12 +83,11 @@ EJS = function( options ){
 
 	template.compile(options, this.name);
 
-	
-	EJS.update(this.name, this);
 	this.template = template;
 };
 /* @Prototype*/
 EJS.prototype = {
+	constructor: EJS,
 	/**
 	 * Renders an object with extra view helpers attached to the view.
 	 * @param {Object} object data to be rendered
@@ -419,20 +424,6 @@ EJS.config = function(options){
 	EJS.cache = options.cache != null ? options.cache : EJS.cache;
 	EJS.type = options.type != null ? options.type : EJS.type;
 	EJS.ext = options.ext != null ? options.ext : EJS.ext;
-	
-	var templates_directory = EJS.templates_directory || {}; //nice and private container
-	EJS.templates_directory = templates_directory;
-	EJS.get = function(path, cache){
-		if(cache == false) return null;
-		if(templates_directory[path]) return templates_directory[path];
-  		return null;
-	};
-	
-	EJS.update = function(path, template) { 
-		if(path == null) return;
-		templates_directory[path] = template ;
-	};
-	
 	EJS.INVALID_PATH =  -1;
 };
 EJS.config( {cache: true, type: '<', ext: '.ejs' } );
@@ -527,7 +518,7 @@ EJS.Helpers.prototype = {
 			return this.renderer(id, text);
 		},
 		script : function(id, src){
-			 return "function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}}";     
+			 return "EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";     
 		},
 		renderer : function(id, text){
 			var ejs = new EJS({text: text, name: id})
