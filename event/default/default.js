@@ -1,13 +1,17 @@
 steal.apps('jquery').then(function($){
     
-	$.event.special["default"] = {add: function( handler, data, namespaces, handlers){
-		var func =  function(ev){
-			ev._defaultActions.push({element: this, handler: handler, event: ev})
-		}
-		func.types = handler.types;
-		return func;
-	},
-	setup : function(){return true}}
+	$.event.special["default"] = {
+		add: function( handleObj){
+			//jQuery.event.add( this, handleObj.origType, jQuery.extend({}, handleObj, {handler: liveHandler}) );
+			
+			var origHandler = handleObj.handler;
+			handleObj.origHandler = origHandler;
+			handleObj.handler = function(ev){
+				ev._defaultActions.push({element: this, handler: origHandler, event: ev})
+			}
+		},
+		setup : function(){return true}
+	}
 	
 	/*
 	 * var add = $.event.add;
@@ -20,28 +24,34 @@ steal.apps('jquery').then(function($){
 	}
 	 * 
 	 */
-
+	//return;
     var oldTrigger = $.event.trigger;
     $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
         //always need to convert here so we know if we have default actions
-        
+        var type = event.type || event
 		//should need to trigger just on this event
 		
         if ( !bubbling ) {
-			var type = event.type || event
-            event = typeof event === "object" ?
+			event = typeof event === "object" ?
 				// jQuery.Event object
 				event[$.expando] ? event :
 				// Object literal
 				jQuery.extend( jQuery.Event(type), event ) :
 				// Just the event type (string)
 				jQuery.Event(type);
+
+			if ( type.indexOf("!") >= 0 ) {
+				event.type = type = type.slice(0, -1);
+				event.exclusive = true;
+			}
             event._defaultActions = []; //set depth for possibly reused events
         }
 		
 		var defaultGetter = jQuery.Event("default."+event.type);
+		defaultGetter.target = elem;
 		defaultGetter.stopPropagation();
 		defaultGetter._defaultActions = event._defaultActions;
+		defaultGetter.exclusive = true;
 		if(elem)
 			oldTrigger.call($.event, defaultGetter, [defaultGetter], elem, true)
         oldTrigger.call($.event, event, data, elem, bubbling); //tail recursive

@@ -1,28 +1,6 @@
 steal.apps('jquery').then(function(){
 	var liveHandler = null, event = jQuery.event;
-	(function(){
-		var add =  jQuery.event.add;
-		jQuery.event.add = function(el, event, handler, data){
-			if(data.selector == "stealing" && !event)
-				liveHandler = handler;
-			else
-				add.apply(this, arguments)
-		}
-		var f = function(){}, d = {selector: "stealing"}
-		jQuery.event.add(document, "live",f,d);
-		jQuery.event.remove(document, "live",f,d);
-		jQuery.event.add = add;
-	})();
 	
-	
-	//hack live to provide what we need
-	event.special.live.add = function( proxy, data, namespaces, live ) {
-				jQuery.extend( proxy, data || {} );
-				proxy.guid += data.selector + data.live; 
-				data.liveProxy = proxy;
-				jQuery.event.add( this, data.live, liveHandler, data ); 
-				
-	}
 	
 	/**
 	 * Finds event handlers of a given type on an element.
@@ -36,27 +14,31 @@ steal.apps('jquery').then(function(){
 		
 		if(selector){
 			if( !events.live) return [];
-			var live = events.live, handlers = []
-			
-			for(var ev in live){
-				if(  live[ev].selector == selector    &&  $.inArray(live[ev].live, types  ) !== -1 )
-					handlers.push(live[ev].data.liveProxy)
-			}
-			
-		}else{
-			for(var ev in events){
-				if( $.inArray(ev, types  ) !== -1 ){
-					var evtype = events[ev]
-					for(var guid in evtype) handlers.push(evtype[guid])
+			var live = events.live, handlers = [];
+
+			for (var t = 0; t < live.length; t++) {
+				var liver = live[t];
+				if(  liver.selector == selector &&  $.inArray(liver.origType, types  ) !== -1 ){
+					handlers.push(liver.origHandler || liver.handler)
 				}
-					
 			}
+		}else{
+			for(var t =0; t< types.length; t++){
+				var typeHandlers = events[types[t]];
+				if(!typeHandlers) continue;
+				
+				for(var h = 0; h <typeHandlers.length; h++ ){
+					if(typeHandlers[h].selector == selector)
+						handlers.push(typeHandlers[h].origHandler || typeHandlers[h].handler)
+				}
+			}
+			
 			
 		}
 		return handlers;
 	}
 	/**
-	 * 
+	 * Only attaches one 
 	 * @param {Array} types llist of types that will delegate here
 	 * @param {Object} startingEvent the first event to start listening to
 	 * @param {Object} onFirst a function to call 
@@ -66,23 +48,17 @@ steal.apps('jquery').then(function(){
 			onFirst = startingEvent;
 			startingEvent = null;
 		}
-		var add = function(fn, data, namespaces , handlers){
-			var selector = data ? data.selector : "";
+		var add = function(handleObj){
+			
+			var selector = handleObj.selector || "";
 			if (selector) {
 				var bySelector = event.find(this, types, selector);
-				
 				if (!bySelector.length) {
-					var jq = $();
-					jq.selector = selector
-					jq.context = this;
-					jq.live(startingEvent, {
-						selector: selector,
-						delegate: this
-					}, onFirst)
+					$(this).delegate(selector,startingEvent, onFirst );
 				}
 			}
 			else {
-				var bySelector = event.find(this, types, selector);
+				//var bySelector = event.find(this, types, selector);
 				event.add(this, startingEvent, onFirst, {
 					selector: selector,
 					delegate: this
@@ -90,17 +66,12 @@ steal.apps('jquery').then(function(){
 			}
 			
 		}
-		var remove = function(data, namespaces, fn){
-			var selector = data ? data.selector : "";
+		var remove = function(handleObj){
+			var selector = handleObj.selector || ""
 			if (selector) {
+				var bySelector = event.find(this, types, selector);
 				if (!bySelector.length) {
-					var jq = $();
-					jq.selector = selector
-					jq.context = this;
-					jq.die(startingEvent, {
-						selector: selector,
-						delegate: this
-					}, onFirst)
+					$(this).undelegate(selector,startingEvent, onFirst );
 				}
 			}
 			else {

@@ -1,4 +1,25 @@
-steal.plugins('jquery/class','jquery/lang').then(function(){
+steal.plugins('jquery/class','jquery/lang','jquery/event/destroyed').then(function($){
+//helpers
+var bind = function(el, ev, callback){
+	$(el).bind(ev, callback)
+	return function(){
+		$(el).unbind(ev, callback);
+		el = ev = callback = null;
+	}
+}
+var delegate = function(el, selector, ev, callback){
+	$(el).delegate(selector, ev, callback)
+	return function(){
+		$(el).undelegate(selector, ev, callback);
+		el = ev = callback = selector = null;
+	}
+}
+//wraps 'this' and makes it the first argument
+var shifter = function(cb){ 
+	return function(){
+		cb.apply(null, [$(this)].concat(Array.prototype.slice.call(arguments, 0)))
+	}
+}
 /**
  * @tag core
  * @plugin jquery/controllers
@@ -284,11 +305,12 @@ jQuery.Class.extend("jQuery.Controller",
 		
 		//$.data(element,this.Class.underscoreFullName, this)
 		( jQuery.data(element,"controllers") || jQuery.data(element,"controllers",{}) )[this.Class.underscoreFullName] = this;
-		this._actions = {};
+		
+		this._bindings = [];
 		for(funcName in c.actions){
 			var ready = c.actions[funcName]
 			cb = this.callback(funcName)
-			this._actions[funcName] = ready.action(element, ready.parts[2], ready.parts[1], cb, this)
+			this._bindings.push( ready.action(element, ready.parts[2], ready.parts[1], cb, this) )
 		}
 		 
 
@@ -299,7 +321,14 @@ jQuery.Class.extend("jQuery.Controller",
 		 * @hide
 		 */
 		this.called = "init";
+		/**
+		 * @attribute options
+		 * Options is automatically merged from this.Class.OPTIONS and the 2nd argument
+		 * passed to a controller.
+		 */
 		this.options = $.extend( $.extend(true,{}, this.Class.OPTIONS  ), options)
+		//setup to be destroyed ...
+		this.bind('destroyed', 'destroy')
 		/**
 		 * @attribute element
 		 * The controller instance's delegated element.  This is set by [jQuery.Controller.prototype.init init].
@@ -312,6 +341,36 @@ jQuery.Class.extend("jQuery.Controller",
 		 */
 		return this.element;
 	},
+	/**
+	 * Bind attaches event handlers that will be released whent he widget is destroyed.
+	 * <br/>
+	 * Examples:
+	 * @codestart
+	 * // calls somethingClicked(el,ev)
+	 * this.bind('click','somethingClicked') 
+	 * 
+	 * // calls function when the window si clicked
+	 * this.bind(window, 'click', function(){
+	 *   //do something
+	 * })
+	 * @codeend
+	 * @param {HTMLElement} [el=this.element] 
+	 * @param {String} eventName
+	 * @param {Function_String} func A callback function or the name of a function on "this".
+	 * @return {Integer} The id of the binding in this._bindings
+	 */
+	bind : function(el, eventName, func){
+		if(typeof el == 'string'){
+			func = eventName;
+			eventName = el;
+			el = this.element
+		}
+		if(typeof func == 'string'){
+			func = shifter(this.callback(func))
+		}
+		this._bindings.push( bind(el, eventName, func ) )
+		return this._bindings.length;
+	},
 	update : function(options){
 		$.extend(this.options, options)
 	},
@@ -322,9 +381,8 @@ jQuery.Class.extend("jQuery.Controller",
 		if(this._destroyed) throw this.Class.shortName+" controller instance has already been deleted";
 		
 		var self = this;
-		jQuery.each(this._actions, function(key, value){
-			var func = self._actions[key];
-			if(typeof func == "function") func(self.element[0]);
+		jQuery.each(this._bindings, function(key, value){
+			if(typeof value == "function") value(self.element[0]);
 		});
 		
 		delete this._actions;
@@ -367,31 +425,16 @@ jQuery.Class.extend("jQuery.Controller",
 
 jQuery.Controller.processors = {};
 var basic = (jQuery.Controller.basicProcessor =function(el, event, selector, cb, controller){
-	var func = function(){ 
-		return cb.apply(null, [jQuery(this)].concat( Array.prototype.slice.call(arguments, 0) )) 
-	}
 	if(controller.onDocument){ //prepend underscore name if necessary
 		selector = selector ? controller.underscoreShortName +" "+selector : controller.underscoreShortName
 	}
-
 	if(selector){
-		var jq = jQuery()
-		jq.selector = selector;
-		jq.context = el;
-		jq.live(event,func );
-		return function(){
-		    jq.die(event, func);
-			el = conroller = jq = null;
-		}
+		return delegate(el, selector, event, shifter(cb))
 	}else{
-		jQuery(el).bind(event, func);
-		return function(){
-		    jQuery(el).unbind(event, func);
-			el = controller = null;
-		}
+		return bind(el, event, shifter(cb))
 	}
 })
-jQuery.each(["change","click","contextmenu","dblclick","keydown","keyup","keypress","mousedown","mousemove","mouseout","mouseover","mouseup","reset","windowresize","resize","windowscroll","scroll","select","submit","dblclick","focus","blur","load","unload","ready","hashchange"], function(i ,v){
+jQuery.each(["change","click","contextmenu","dblclick","keydown","keyup","keypress","mousedown","mousemove","mouseout","mouseover","mouseup","reset","windowresize","resize","windowscroll","scroll","select","submit","dblclick","focusin","focusout","load","unload","ready","hashchange"], function(i ,v){
 	jQuery.Controller.processors[v] = basic;
 })
 var windowEvent = function(el, event, selector, cb){

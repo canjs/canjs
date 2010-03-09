@@ -45,28 +45,33 @@
         </script>
 		<script type='text/javascript'>
 			$("#ondoc .handle").live("dragstart", function(ev, drag){
-				//console.log("dragstart", this, ev, drag)
+				console.log("dragstart", this, ev, drag)
+				drag.vertical();
+			})
+			$("#internal .handle").bind("dragstart", function(ev, drag){
+				console.log("dragstart", this, ev, drag)
 				//drag.vertical();
 			})
+			
 			$("#ondoc .handle").live("dragmove", function(ev, drag){
-				//console.log("dragmove",this, ev, drag)
+				console.log("dragmove",this, ev, drag)
 			})
 			$("#ondoc .handle").live("dragend", function(ev, drag){
-				//console.log("dragend",this, ev, drag)
+				console.log("dragend",this, ev, drag)
 			})
 			$("#ondoc .handle").live("mouesdown", function(){
-				//console.log("mousedowned")
+				console.log("mousedowned")
 			})
 			
 			//do internal
 			
-			var jq = $()
+			/*var jq = $()
 			jq.context = document.getElementById("internal")
 			jq.selector = ".handle"
 			
 			jq.live("dragstart",function(ev, drag){
 				console.log("internal works")
-			})
+			})*/
 			
 		</script>
 	</body>

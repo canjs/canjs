@@ -4,8 +4,8 @@ steal.apps('jquery','jquery/event/livehack').then(function(){
 		handle  = event.handle,
 		onmouseenter = function(ev){
 			//now start checking mousemoves to update location
-			var delegate = ev.data.delegate;
-			var selector = ev.data.selector;
+			var delegate = ev.liveFired || ev.currentTarget;
+			var selector = ev.handleObj.selector;
 			var loc = {
 					pageX : ev.pageX,
 					pageY : ev.pageY

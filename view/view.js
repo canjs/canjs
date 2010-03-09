@@ -101,8 +101,15 @@ steal.plugins("jquery").then(function($){
 			var id = toId(url)
 		}
 		
-		var suffix = url.match(/\.[^.]+$/),
-			type = types[suffix], el
+		var suffix = url.match(/\.[\w\d]+$/),
+			type, 
+			el
+		if(!suffix){
+			suffix = $.View.ext;
+			url = url+$.View.ext
+		}
+		
+		type = types[suffix];
 		
 		var renderer = $.View.cached[id] ? $.View.cached[id] : ( (el = document.getElementById(id) ) ? type.renderer(id, el.innerHTML) : type.get(id, url) );
 		if($.View.cache)  $.View.cached[id] = renderer;
