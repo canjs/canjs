@@ -8,22 +8,40 @@
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
+			#clickToDestroy {
+				padding: 5px; border: solid 1px;
+			}
         </style>
 	</head>
 	<body>
-	    <div id='clickToDestroy'>Click to destory me</div>
+	    <div id='clickToDestroy'>Click Below to destory me</div>
 		<div id='change'>You haven't destroyed him yet</div>
 		<script type='text/javascript' 
-                src='../../../steal/steal.js?steal[app]=jquery/event/destroyed&steal[env]=development'
+                src='../../../steal/steal.js'
                 package='main.js'
                 compress='false'>   
         </script>
 		<script type='text/javascript'>
-			$("#clickToDestroy").bind("destroyed", function(){
-				$("#change").html("destroyed :)")
-			}).bind("click", function(){
-				$(this).remove()
+			steal.plugins('jquery/event/destroyed','jquery/controller').then(function(){
+				function des(){
+					console.log("removing the first one")
+					$("#change").html("destroyed :)")
+				}
+				$("#clickToDestroy").bind("destroyed", des)
+				$("#change").bind("click", function(){
+					$("#clickToDestroy").remove()
+				})
+				$.Controller.extend("Something",{
+					click : function(){
+						alert('destroy me')
+					}
+				})
+				
+				$("#clickToDestroy").something();
 			})
+			steal.start();
+			
+			
 		</script>
 	</body>
 </html>

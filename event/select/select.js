@@ -31,27 +31,28 @@ steal.plugins('jquery','jquery/destroyed').then(function($){
 	$.event.special.selectin = {
 		add : function(handleObj){
 			if(handleObj.selector){
-				$(this).delegate(handleObj.selector,"xfocus", focusin)
-				$(this).delegate(handleObj.selector,"xblur", focusout)
+				$(this).delegate(handleObj.selector,"focusbubble", focusin)
+				$(this).delegate(handleObj.selector,"blurbubble", focusout)
 			}else{
-				$(this).bind("xfocus", focusin).
-						bind("xblur", focusout)
+				$(this).bind("focusbubble", focusin).
+						bind("blurbubble", focusout)
 			}
 		},
 		remove : function(handleObj){
 			if(handleObj.selector){
-				$(this).undelegate(handleObj.selector,"xfocus", focusin)
-				$(this).undelegate(handleObj.selector,"xblur", focusout)
+				$(this).undelegate(handleObj.selector,"focusbubble", focusin)
+				$(this).undelegate(handleObj.selector,"blurbubble", focusout)
 			}else{
-				$(this).unbind("xfocus", focusin).
-						unbind("xblur", focusout)
+				$(this).unbind("focusbubble", focusin).
+						unbind("blurbubble", focusout)
 			}
 		}
 	}
+
 	document.addEventListener('focus', function(ev){
-		$(ev.target).trigger("xfocus")
+		jQuery.event.trigger( 'focusbubble', null, ev.target )
 	},true);
 	document.addEventListener('blur', function(ev){
-		$(ev.target).trigger("xblur")
+		jQuery.event.trigger( 'blurbubble', null, ev.target )
 	},true);
 })

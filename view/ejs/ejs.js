@@ -1,14 +1,18 @@
 steal.plugins('jquery/view').then(function(){
    
 var rsplit = function(string, regex) {
-	var result = regex.exec(string),retArr = new Array(), first_idx, last_idx, first_bit;
+	var result = regex.exec(string),
+		retArr = [], 
+		first_idx, 
+		last_idx, 
+		first_bit;
 	while (result != null)
 	{
 		first_idx = result.index; last_idx = regex.lastIndex;
 		if ((first_idx) != 0)
 		{
 			first_bit = string.substring(0,first_idx);
-			retArr.push(string.substring(0,first_idx));
+			retArr.push(first_bit);
 			string = string.slice(first_idx);
 		}		
 		retArr.push(result[0]);

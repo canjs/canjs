@@ -4,7 +4,9 @@ steal.plugins('jquery/controller','jquery/view').then(function($){
 	}
 	
 	var calculatePosition = function(Class, view, action_name){
-		var path = jQuery.String.underscore( Class.fullName.replace(/\./g,"/").replace("/"+Class.shortName,"") ).replace("/Controllers",""),
+		var slashes = Class.fullName.replace(/\./g,"/"), 
+		    hasControllers = slashes.indexOf("/Controllers/"+Class.shortName) != -1
+			path = jQuery.String.underscore( slashes.replace("/Controllers/"+Class.shortName,"") ),
 			controller_name = Class.underscoreShortName;
 			
         //calculate view
@@ -13,13 +15,13 @@ steal.plugins('jquery/controller','jquery/view').then(function($){
 			if(view.substr(0,2) == "//" ){ //leave where it is
                 
             }else{
-                view = "//"+new steal.File( '../views/'+ 
-                    (jQuery.String.include(view,'/') ? view : controller_name+'/'+view)
+                view = "//"+new steal.File( 'views/'+ 
+                    (jQuery.String.include(view,'/') ? view : ( hasControllers ? controller_name+'/' : "")+view)
                     ).joinFrom(path)+jQuery.View.ext
             }
         }else if(!view) {
             view = "//"+new steal.File(
-                '../views/'+controller_name+'/'+action_name.replace(/\.|#/g, '').replace(/ /g,'_')
+                'views/'+( hasControllers ? controller_name+'/' : "")+action_name.replace(/\.|#/g, '').replace(/ /g,'_')
                 ).joinFrom(path)+jQuery.View.ext;
         }
 		return view

@@ -65,6 +65,20 @@ steal.plugins("jquery").then(function($){
 			
 			return old.apply(this, args);
 		}
+		jQuery.fn["$"+func_name] = function(){
+			var args = arguments;
+			
+			if(arguments.length > 1 && typeof arguments[0] == "string" 
+               && (typeof arguments[1] == 'object' || typeof arguments[1] == 'function')
+               && !arguments[1].nodeType && !arguments[1].jquery
+               ){
+				args = [ $.View.apply($.View, $.makeArray(arguments)) ];
+			}
+			args[0] = $(args[0])
+			var res = old.apply(this, args);
+			args[0].hookupView();
+			return res;
+		}
 	}
 	
 	var hookup = function(){
