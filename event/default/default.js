@@ -1,10 +1,13 @@
 steal.apps('jquery').then(function($){
-    
+    var types = {
+		
+	}
 	$.event.special["default"] = {
 		add: function( handleObj){
 			//jQuery.event.add( this, handleObj.origType, jQuery.extend({}, handleObj, {handler: liveHandler}) );
 			
 			var origHandler = handleObj.handler;
+			types[handleObj.namespace] = true;
 			handleObj.origHandler = origHandler;
 			handleObj.handler = function(ev){
 				ev._defaultActions.push({element: this, handler: origHandler, event: ev})
@@ -30,6 +33,10 @@ steal.apps('jquery').then(function($){
         //always need to convert here so we know if we have default actions
         var type = event.type || event
 		//should need to trigger just on this event
+		//shortcut if we never listened for a default of this type
+		if(!types[type]){
+			 return oldTrigger.call($.event, event, data, elem, bubbling)
+		}
 		
         if ( !bubbling ) {
 			event = typeof event === "object" ?
@@ -74,4 +81,12 @@ steal.apps('jquery').then(function($){
             event._defaultActions = null; //set to null so everyone else on this element ignores it
         }
     }
+	$.fn.triggerOne = function(type, data){
+		if ( this[0] ) {
+			var event = jQuery.Event( type );
+			event.stopPropagation();
+			jQuery.event.trigger( event, data, this[0] );
+			return event.result;
+		}
+	}
 });

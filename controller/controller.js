@@ -327,8 +327,9 @@ jQuery.Class.extend("jQuery.Controller",
 		 * passed to a controller.
 		 */
 		this.options = $.extend( $.extend(true,{}, this.Class.OPTIONS  ), options)
-		//setup to be destroyed ...
-		this.bind('destroyed', 'destroy')
+		//setup to be destroyed ... don't bind b/c we don't want to remove it
+		this.element.bind('destroyed', this.callback('destroy'))
+		//this.bind('destroyed', 'destroy')
 		/**
 		 * @attribute element
 		 * The controller instance's delegated element.  This is set by [jQuery.Controller.prototype.init init].
