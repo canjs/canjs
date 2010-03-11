@@ -417,7 +417,8 @@ jQuery.Class.extend("jQuery.Controller",
 		OpenAjax.hub.publish.apply(OpenAjax.hub, arguments);
 	},
 	//tells callback to set called on this.  I hate this.
-	_set_called : true
+	_set_called : true,
+	init : function(){}
 });
 
 

@@ -2545,12 +2545,15 @@ jQuery.each(["live", "die"], function( i, name ) {
 });
 
 function liveHandler( event ) {
+	if( event.liveFired === this ){
+		return;
+	}
 	var stop, maxLevel, elems = [], selectors = [],
 		related, match, handleObj, elem, j, i, l, data, close,
 		events = jQuery.data( this, "events" );
 
 	// Make sure we avoid non-left-click bubbling in Firefox (#3861)
-	if ( event.liveFired === this || !events || !events.live || event.button && event.type === "click" ) {
+	if ( !events || !events.live || event.button && event.type === "click" ) {
 		return;
 	}
 
