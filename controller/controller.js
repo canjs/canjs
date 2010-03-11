@@ -17,7 +17,7 @@ var delegate = function(el, selector, ev, callback){
 //wraps 'this' and makes it the first argument
 var shifter = function(cb){ 
 	return function(){
-		cb.apply(null, [$(this)].concat(Array.prototype.slice.call(arguments, 0)))
+		return cb.apply(null, [$(this)].concat(Array.prototype.slice.call(arguments, 0)))
 	}
 }
 /**

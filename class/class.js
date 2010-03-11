@@ -13,14 +13,21 @@ steal.plugin("jquery").then(function(){
 		
 		self = this;
 		return function(){
-			var cur = args.concat(jQuery.makeArray(arguments)), isString
-			for(f =0; f < f_names.length; f++){
-                if(!f_names[f]) continue;
+			var cur = args.concat(jQuery.makeArray(arguments)), isString, length = f_names.length;
+			for(f =0; f < length; f++){
+                if(!f_names[f]) 
+					continue;
                 isString = typeof f_names[f] == "string";
-                if(isString && self._set_called) self.called = f_names[f];
+                if(isString && self._set_called) 
+					self.called = f_names[f];
                 cur = (isString ? self[f_names[f]] : f_names[f]).apply(self, cur);
-				if(!cur) 					      cur = [];
-				else if( !jQuery.isArray(cur) || cur._use_call) cur = [cur]
+				if(f < length- 1){
+					if(!cur){
+						cur = [];
+					}else if( !jQuery.isArray(cur) || cur._use_call) {
+						cur = [cur]
+					}
+				}
 			}
 			return cur;
         }

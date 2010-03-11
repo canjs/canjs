@@ -81,12 +81,12 @@ steal.apps('jquery').then(function($){
             event._defaultActions = null; //set to null so everyone else on this element ignores it
         }
     }
-	$.fn.triggerOne = function(type, data){
+	$.fn.triggerDefault = function(type, data){
 		if ( this[0] ) {
 			var event = jQuery.Event( type );
 			event.stopPropagation();
 			jQuery.event.trigger( event, data, this[0] );
-			return event.result;
+			return !event.isDefaultPrevented();
 		}
 	}
 });
