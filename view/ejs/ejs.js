@@ -497,7 +497,8 @@ EJS.Helpers.prototype = {
 		get : function(id, url){
 			var text = $.ajax({
 					async: false,
-					url: url
+					url: url,
+					dataType: "text"
 				}).responseText
 			return this.renderer(id, text);
 		},
