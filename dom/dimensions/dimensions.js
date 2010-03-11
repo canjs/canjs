@@ -1,11 +1,13 @@
 steal.plugins('jquery').then(function($){
-	var oldHeight = $.fn.outerHeight,
-		oldWidth = $.fn.outerWidth;
-	var weird = /button|select/i
-	var getPaddingAndBorder ={}, 
+	//var oldHeight = $.fn.outerHeight,
+	//	oldWidth = $.fn.outerWidth;
+	var weird = /button|select/i,
+		getPaddingAndBorder ={}, 
 	    checks  = {
 			width: ["Left", "Right"],
-			height: ['Top','Bottom']
+			height: ['Top','Bottom'],
+			oldHeight : $.fn.outerHeight,
+			oldWidth : $.fn.outerWidth
 		}
 	
 	$.each({width: "Width", height: "Height"},function(lower, Upper){
@@ -28,7 +30,7 @@ steal.plugins('jquery').then(function($){
 				this[lower](v-getPaddingAndBorder[lower](this[0]))
 				return this;
 			}else{
-				return oldHeight.call(this, v)
+				return checks["old"+Upper].call(this, v)
 			}
 		}
 		
