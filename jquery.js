@@ -6122,8 +6122,10 @@ jQuery.offset = {
 		if ( jQuery.isFunction( options ) ) {
 			options = options.call( elem, i, curOffset );
 		}
-
-		var props = {
+		//JMVC Changed
+		var props = !curElem.is(":visible") && !curOffset.top && !curOffset.left ?  
+		{ top : options.top, left: options.left }
+		: {
 			top:  (options.top  - curOffset.top)  + curTop,
 			left: (options.left - curOffset.left) + curLeft
 		};

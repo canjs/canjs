@@ -88,5 +88,6 @@ steal.apps('jquery').then(function($){
 			jQuery.event.trigger( event, data, this[0] );
 			return !event.isDefaultPrevented();
 		}
+		return true;
 	}
 });
