@@ -6116,14 +6116,14 @@ jQuery.offset = {
 		}
 		var curElem   = jQuery( elem ),
 			curOffset = curElem.offset(),
-			curTop    = parseInt( jQuery.curCSS( elem, "top",  true ), 10 ) || 0,
-			curLeft   = parseInt( jQuery.curCSS( elem, "left", true ), 10 ) || 0;
+			curTop    = parseInt( jQuery.curCSS( elem, "top",  true ), 10 ) ,
+			curLeft   = parseInt( jQuery.curCSS( elem, "left", true ), 10 ) ;
 
 		if ( jQuery.isFunction( options ) ) {
 			options = options.call( elem, i, curOffset );
 		}
 		//JMVC Changed
-		var props = !curElem.is(":visible") && !curOffset.top && !curOffset.left ?  
+		var props = (!curElem.is(":visible") && !curOffset.top && !curOffset.left) || isNaN(curTop) || isNaN(curLeft) ?  
 		{ top : options.top, left: options.left }
 		: {
 			top:  (options.top  - curOffset.top)  + curTop,
