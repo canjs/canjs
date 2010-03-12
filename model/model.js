@@ -133,16 +133,17 @@ jQuery.Class.extend("jQuery.Model",
 /* @Static*/
 {
 	storeType: jQuery.Store,
-	init: function(){
+	setup: function(){
 		this.validations = [];
 		this.attributes= {};  //list of all attributes ever given to this model
         this.defaultAttributes= {};  //list of attributes and values you want right away
-        this._associations = [];
+        this.associations = {};
         if(this.fullName.substr(0,7) == "jQuery." ) return;
         this.underscoredName =  jQuery.String.underscore(this.fullName.replace(/\./g,"_"))
         jQuery.Model.models[this.underscoredName] = this;
 		this.store = new this.storeType(this);
 	},
+	init : function(){},
     /**
      * Finds objects in this class
      * @param {Object} id the id of a object
@@ -202,7 +203,9 @@ jQuery.Class.extend("jQuery.Model",
      * @param {String} type
      */
     addAttr : function(property, type){
-        if(! this.attributes[property])
+        if(this.associations[property])
+			return;
+		if(! this.attributes[property])
             this.attributes[property] = type;
         if(! this.defaultAttributes[property])
             this.defaultAttributes[property] = null;

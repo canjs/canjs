@@ -1,10 +1,10 @@
 steal.plugins('jquery/model').then(function($){
 	
 	$.Model.belongsTo = function(type, name){
-		name = name || $.String.camelize(type.shortName)
+		name = name //|| $.String.camelize(type.shortName)
 		var cap = $.String.capitalize(name),
 			set = function(v){
-				return this[name] = (v == v.Class ? v : type.wrap(v))
+				return this[name] = (v == v.Class ? v : $.Class.getObject(type).wrap(v))
 			},
 			get = function(){
 				return this[name];
@@ -19,15 +19,18 @@ steal.plugins('jquery/model').then(function($){
 		if(!this.prototype["get"+cap]){
 			this.prototype["get"+cap] = get
 		}
+		this.associations[name] = {
+			belongsTo: type
+		};
 		return this;
 	}
 	$.Model.hasMany = function(type, name){
-		name = name || $.String.camelize(type.shortName)+"s"
+		name = name //|| $.String.camelize(type.shortName)+"s"
 		
 		var cap = $.String.capitalize(name)
 		if(!this.prototype["set"+cap]){
 			this.prototype["set"+cap] = function(v){
-				return this[name] = (v == v.Class ? v : type.wrapMany(v))
+				return this[name] = (v == v.Class ? v : $.Class.getObject(type).wrapMany(v))
 			}
 		}
 		if(!this.prototype["get"+cap]){
@@ -35,6 +38,9 @@ steal.plugins('jquery/model').then(function($){
 				return this[name];
 			}
 		}
+		this.associations[name] = {
+			hasMany: type
+		};
 		return this;
 	}
 })
