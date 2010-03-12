@@ -1,5 +1,9 @@
-steal.plugins('jquery','jquery/destroyed').then(function($){
+steal.plugins('jquery').then(function($){
 	//return;
+	
+	
+	
+	
 	var currentSelected = null, 
 		currentTimer, 
 		pieces,
@@ -27,32 +31,42 @@ steal.plugins('jquery','jquery/destroyed').then(function($){
 				$(currentSelected).trigger('selectout');
 				currentSelected = null;
 			}, 100)
-		};
+		}, 
+		focusBubble = 'focusin',
+		blurBubble = 'focusout';
+		
+		
+	if(document.addEventListener){
+		document.addEventListener('focus', function(ev){
+			jQuery.event.trigger( 'focusbubble', null, ev.target )
+		},true);
+		document.addEventListener('blur', function(ev){
+			jQuery.event.trigger( 'blurbubble', null, ev.target )
+		},true);
+		focusBubble = 'focusbubble',
+		blurBubble = 'blurbubble';
+	}
+		
 	$.event.special.selectin = {
 		add : function(handleObj){
 			if(handleObj.selector){
-				$(this).delegate(handleObj.selector,"focusbubble", focusin)
-				$(this).delegate(handleObj.selector,"blurbubble", focusout)
+				$(this).delegate(handleObj.selector,focusBubble, focusin)
+				$(this).delegate(handleObj.selector,blurBubble, focusout)
 			}else{
-				$(this).bind("focusbubble", focusin).
-						bind("blurbubble", focusout)
+				$(this).bind(focusBubble, focusin).
+						bind(blurBubble, focusout)
 			}
 		},
 		remove : function(handleObj){
 			if(handleObj.selector){
-				$(this).undelegate(handleObj.selector,"focusbubble", focusin)
-				$(this).undelegate(handleObj.selector,"blurbubble", focusout)
+				$(this).undelegate(handleObj.selector,focusBubble, focusin)
+				$(this).undelegate(handleObj.selector,blurBubble, focusout)
 			}else{
-				$(this).unbind("focusbubble", focusin).
-						unbind("blurbubble", focusout)
+				$(this).unbind(focusBubble, focusin).
+						unbind(blurBubble, focusout)
 			}
 		}
 	}
-
-	document.addEventListener('focus', function(ev){
-		jQuery.event.trigger( 'focusbubble', null, ev.target )
-	},true);
-	document.addEventListener('blur', function(ev){
-		jQuery.event.trigger( 'blurbubble', null, ev.target )
-	},true);
+	
+	
 })
