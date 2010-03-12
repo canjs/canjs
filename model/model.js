@@ -497,8 +497,8 @@ jQuery.Class.extend("jQuery.Model",
  */
 jQuery.fn.models = function(){
   	var models = [], n, m;
-    if(arguments.length){
-        models = jQuery.makeArray(arguments).map(function(arg){  return typeof arg == "string" ? arg : arg.underscoredName  })
+    if(arguments.length){ // change from Paulp
+		$.map(jQuery.makeArray(arguments), function(arg){  return typeof arg == "string" ? arg : arg.underscoredName  })
     }else{
         for(n in jQuery.Model.models){
             models.push(n)
