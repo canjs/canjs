@@ -2299,7 +2299,7 @@ if ( !jQuery.support.changeBubbles ) {
 	jQuery.event.special.change = {
 		filters: {
 			focusout: testChange, 
-
+			beforedeactivate: testChange, //JMVC Changed
 			click: function( e ) {
 				var elem = e.target, type = elem.type;
 
