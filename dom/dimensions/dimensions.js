@@ -9,6 +9,34 @@ steal.plugins('jquery').then(function($){
 			oldHeight : $.fn.outerHeight,
 			oldWidth : $.fn.outerWidth
 		}
+	var getComputedStyle = document.defaultView && document.defaultView.getComputedStyle,
+	rupper = /([A-Z])/g,
+	rdashAlpha = /-([a-z])/ig,
+	fcamelCase = function( all, letter ) {
+		return letter.toUpperCase();
+	},
+	getStyle  = function(elem){
+		if (getComputedStyle) {
+			return getComputedStyle(elem, null);
+		}
+		else if (elem.currentStyle) {
+			return elem.currentStyle
+		}
+	}
+	$.curStyles = function(el, styles){
+		var currentS = getStyle(el);
+		for(var name in styles){
+			if(getComputedStyle){
+				name = name.replace( rupper, "-$1" ).toLowerCase();
+				styles[name] = currentS.getPropertyValue( name )
+			}else{
+				var camelCase = name.replace(rdashAlpha, fcamelCase);
+				styles[name] = currentS[ name ] || currentS[ camelCase ];
+
+			}
+		}
+		return styles;
+	}
 	
 	$.each({width: "Width", height: "Height"},function(lower, Upper){
 		
@@ -16,9 +44,15 @@ steal.plugins('jquery').then(function($){
 		getPaddingAndBorder[lower] = function(el){
 			var val =0;
 			if(!weird.test(el.nodeName)){
+				//make what to check for ....
+				var myChecks = {};
 				$.each(checks[lower], function(){
-					val += parseFloat(jQuery.curCSS( el, "padding" + this, true)) || 0;
-					val += parseFloat(jQuery.curCSS( el, "border" + this + "Width", true)) || 0;
+					myChecks["padding" + this] = true;
+					myChecks["border" + this + "Width"] = true;
+				})
+				$.curStyles(el, myChecks)
+				$.each(myChecks, function(name, value){
+					val += (parseFloat(value) || 0);
 				})
 			}
 			return val;
