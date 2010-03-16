@@ -186,10 +186,20 @@ jQuery.Class.extend("jQuery.Model",
      */
     wrapMany : function(instances){
         if(!instances) return null;
-        var res = [];
+        var res = [], raw = instances, isArray = $.isArray(instances), length, i=0;
 		res._use_call = true; //so we don't call next function with all of these
-        for(var i =0 ; i < instances.length; i++)
-            res.push( this.wrap(instances[i]) );  
+        if(!isArray)
+			raw = instances.data;
+		length = raw.length;
+		for(; i < length; i++){
+			res.push( this.wrap(raw[i]) ); 
+		}
+		if (!isArray) { //push other stuff onto array
+			for (var prop in instances) {
+				if (instances.hasOwnProperty(prop) && prop !== 'data') 
+					res[prop] = instances.prop;
+			}
+		}
 		return res;
     },
     /**

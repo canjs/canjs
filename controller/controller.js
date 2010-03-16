@@ -256,7 +256,7 @@ jQuery.Class.extend("jQuery.Controller",
 		
 		//calculate actions
 		this.actions = {};
-		var convertedName, act, parts, c = this, replacer = /\{([^\}]+)\}/g, b = c.breaker;
+		var convertedName, act, parts, c = this, replacer = /\{([^\}]+)\}/g, b = c.breaker, funcName;
 		for (funcName in this.prototype) {
 			if(funcName == "constructor") continue;
 			convertedName = funcName.replace(replacer, function(whole, inside){
@@ -427,7 +427,7 @@ jQuery.Class.extend("jQuery.Controller",
 
 jQuery.Controller.processors = {};
 var basic = (jQuery.Controller.basicProcessor =function(el, event, selector, cb, controller){
-	if(controller.onDocument){ //prepend underscore name if necessary
+	if(controller.onDocument && controller.shortName !== "Main"){ //prepend underscore name if necessary
 		selector = selector ? controller.underscoreShortName +" "+selector : controller.underscoreShortName
 	}
 	if(selector){
