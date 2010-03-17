@@ -7,8 +7,8 @@ steal.plugins('jquery/model').then(function(){
 					this[name].backup();
 				}
 				if("hasMany" in association){
-					 $.each(this[name] || [], function(idx, note){
-		               note.backup();
+					 $.each(this[name] || [], function(idx, model){
+		               model.backup();
 		           });
 				}
 		   }
@@ -23,8 +23,10 @@ steal.plugins('jquery/model').then(function(){
 		   //go through attrs and compare ...
 		   var current = this.attrs();
 		   for(var name in current){
+		   	    if(name === 'errors') continue;
+				if(isNaN(current[name]) && isNaN(this._backupStore[name])) continue;
 		   		if(current[name] !== this._backupStore[name])
-					return true;
+				    return true;
 		   }
 		   for(var name in this.Class.associations){
 		   		var association = this.Class.associations[name];
@@ -35,7 +37,7 @@ steal.plugins('jquery/model').then(function(){
 				if("hasMany" in association){
 					if(this[name]){
 						for(var i =0 ; i < this[name].length; i++){
-							if(this[name][i] && this[name][i].backup())
+							if(this[name][i] && this[name][i].isDirty())
 								return true;
 						}
 					}	
