@@ -66,6 +66,7 @@
 					url = steal.root.join(settings.fixture.substr(2))
 				}
 				settings.url = url
+				settings.data = null;
 				settings.type = "GET"
 				return ajax(settings);
 			}
