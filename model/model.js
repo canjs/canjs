@@ -491,7 +491,10 @@ jQuery.Class.extend("jQuery.Model",
      */
     publish : function(event, data){
         this.Class.publish(event, data|| this);
-    }
+    },
+	hookup : function(el){
+		$(el).addClass($.String.underscore(this.Class.shortName)+" "+this.identity())
+	}
 });
 
 

@@ -74,6 +74,8 @@ steal.apps('jquery').then(function($){
             ) {
 			//put event back
 			event.type = "default."+event.type;
+			event.currentTarget = event.liveFired;
+			event.liveFired = null;
 			for(var i = 0 ; i < event._defaultActions.length; i++){
 				var a  = event._defaultActions[i];
 				a.handler.call(a.element, event)
@@ -83,7 +85,7 @@ steal.apps('jquery').then(function($){
     }
 	$.fn.triggerDefault = function(type, data){
 		if ( this[0] ) {
-			var event = jQuery.Event( type );
+			var event = $.Event( type );
 			event.stopPropagation();
 			jQuery.event.trigger( event, data, this[0] );
 			return !event.isDefaultPrevented();

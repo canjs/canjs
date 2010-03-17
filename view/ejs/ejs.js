@@ -177,13 +177,15 @@ EJS.Scanner.to_text = function(input){
     if(input instanceof Date)
 		return input.toDateString();
 	if(input.hookup){
-		myid = $.View.hookup(input.hookup);
+		myid = $.View.hookup(function(el, id){
+			input.hookup.call(input,el, id )
+		});
 		return  "data-view-id='"+myid+"'"
 	}
 	if(isArray(input)){
-		myid = $.View.hookup(function(){
+		myid = $.View.hookup(function(el, id){
 			for(var i = 0 ; i < input.length; i++)
-				input[i].hookup.apply(this, arguments)
+				input[i].hookup.call(input[i], el, id)
 		});
 		return  "data-view-id='"+myid+"'"
 	}
