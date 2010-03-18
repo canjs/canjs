@@ -1,3 +1,7 @@
+steal(function(){
+	
+
+
 // Several of the methods in this plugin use code adapated from Prototype
 //  Prototype JavaScript framework, version 1.6.0.1
 //  (c) 2005-2007 Sam Stephenson
@@ -53,10 +57,8 @@ jQuery.Native.set_prototype = function(class_name, property_name, func){
 	};
 };
 
-
 /* 
- * @class jQuery.Native.String
- * @alias jQuery.String
+ * @class jQuery.String
  * When not in no-conflict mode, JMVC adds the following helpers to string
  */
 jQuery.Native.extend('String', 
@@ -67,7 +69,7 @@ jQuery.Native.extend('String',
      * @param {String} s the string to be lowercased.
      * @return {String} a string with the first character capitalized, and everything else lowercased
      */
-	capitalize : function(s) {
+	capitalize : function(s, cache) {
 		return s.charAt(0).toUpperCase()+s.substr(1);
 	},
     /**
@@ -153,8 +155,7 @@ jQuery.Native.extend('String',
 //Date Helpers, probably should be moved into its own class
 
 /* 
- * @class jQuery.Native.Array
- * @alias jQuery.Array
+ * @class jQuery.Array
  * When not in no-conflict mode, JMVC adds the following helpers to array
  */
 jQuery.Native.extend('Array',
@@ -197,8 +198,7 @@ jQuery.Array.
     }
 
 /* 
- * @class jQuery.Native.Function
- * @alias jQuery.Function
+ * @class jQuery.Function
  * When not in no-conflict mode, JMVC adds the following helpers to function
  */
 jQuery.Native.extend('Function', 
@@ -233,8 +233,7 @@ jQuery.Native.extend('Function',
 	params: jQuery.Function.params
 });
 /* 
- * @class jQuery.Native.Number
- * @alias jQuery.Number
+ * @class jQuery.Number
  * When not in no-conflict mode, JMVC adds the following helpers to number
  */
 jQuery.Native.extend('Number', 
@@ -257,7 +256,5 @@ jQuery.Native.extend('Number',
     }
 })
 
-jQuery.Native.Array = jQuery.Array
-jQuery.Native.Function = jQuery.Function
-jQuery.Native.Number = jQuery.Number
-jQuery.Native.String = jQuery.String
+
+})

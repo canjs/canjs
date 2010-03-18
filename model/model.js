@@ -128,7 +128,9 @@ timeRemaining is a good example of wrapping your model's raw data with more usef
 You can validate your model's attributes with another plugin.  See [validation].
  */
 steal.plugins('jquery','jquery/class','jquery/lang','steal/openajax','jquery/model/store').then(function(){
-	
+//a cache for attribute capitalization ... slowest part of inti.
+var capitalize = $.String.capitalize;
+
 jQuery.Class.extend("jQuery.Model",
 /* @Static*/
 {
@@ -197,7 +199,7 @@ jQuery.Class.extend("jQuery.Model",
 		if (!isArray) { //push other stuff onto array
 			for (var prop in instances) {
 				if (instances.hasOwnProperty(prop) && prop !== 'data') 
-					res[prop] = instances.prop;
+					res[prop] = instances[prop];
 			}
 		}
 		return res;
@@ -333,13 +335,11 @@ jQuery.Class.extend("jQuery.Model",
      * @param {String_Number_Boolean} [opt1] value the value you want to set.
      */
     attr : function(attribute, value) {
-        //if (MVC.Array.steal(this.Class._associations, attribute))
-        //  this._setAssociation(attribute, value);
-        //else
-        var cap = jQuery.String.capitalize(attribute);
-        if(typeof value != "undefined")
+        var cap = capitalize(attribute),
+			get = "get"+cap;
+        if(value !== undefined)
             this._setProperty(attribute, value, cap);
-		return this["get"+cap]? this["get"+cap]() : this[attribute];
+		return this[get]? this[get]() : this[attribute];
     },
     /**
      * Checks if there is a set_<i>property</i> value.  If it returns true, lets it handle; otherwise
@@ -353,8 +353,11 @@ jQuery.Class.extend("jQuery.Model",
         if(this[funcName] && ! (value = this[funcName](value)) ) return;
 		
         //add to cache, this should probably check that the id isn't changing.  If it does, should update the cache
-        var old = this[property], type = this.Class.attributes[property] || this.Class.guessType(value)
-		
+        var old = this[property], type = this.Class.attributes[property];
+		if(!type){
+			type =  this.Class.guessType(value);
+			this.Class.addAttr(property, type  );
+		}
 		if (value == null) 
 			this[property] = null;
 		else {
@@ -386,7 +389,7 @@ jQuery.Class.extend("jQuery.Model",
         }
         //if (!(MVC.Array.steal(this._properties,property))) this._properties.push(property);  
         
-        this.Class.addAttr(property, type  );
+       
     },
     /**
      * Gets or sets a list of attributes
@@ -394,14 +397,15 @@ jQuery.Class.extend("jQuery.Model",
      * @return {Object} the curent attributes of the model
      */
     attrs : function(attributes) {
-        if(!attributes){
+        var key;
+		if(!attributes){
             attributes = {};
             var cas = this.Class.attributes;
-            for(var attr in cas){
-                if(cas.hasOwnProperty(attr) ) attributes[attr] = this.attr(attr);
+            for(key in cas){
+                if(cas.hasOwnProperty(key) ) attributes[key] = this.attr(key);
             }
         }else{
-            for(var key in attributes){ 
+            for(key in attributes){ 
     			if(attributes.hasOwnProperty(key)) 
     				this.attr(key, attributes[key]);
     		}

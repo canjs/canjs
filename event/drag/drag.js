@@ -77,7 +77,7 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 				
 				//cache callbacks
 				var cbs = {
-					dragstart : event.find(e.data.delegate, ["dragstart"],e.data.selector)[0],
+					draginit : event.find(e.data.delegate, ["draginit"],e.data.selector)[0],
 					dragover: event.find(e.data.delegate, ["dragover"],e.data.selector)[0],
 					dragmove: event.find(e.data.delegate, ["dragmove"],e.data.selector)[0],
 					dragout: event.find(e.data.delegate, ["dragout"],e.data.selector)[0],
@@ -148,8 +148,8 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 				this.constructor.responder.compile(event, this);
 		},
 		callStart : function(element, event){
-			if(this.callbacks[this.constructor.lowerName+"start"]) 
-				this.callbacks[this.constructor.lowerName+"start"].call(element, event, this  );
+			if(this.callbacks[this.constructor.lowerName+"init"]) 
+				this.callbacks[this.constructor.lowerName+"init"].call(element, event, this  );
 		},
 		/**
 		 * Returns the position of the movingElement by taking its top and left.
@@ -166,6 +166,7 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 			this.location =  pointer.minus(this.mouseElementPosition);                              // the offset between the mouse pointer and the representative that the user asked for
     		// position = mouse - (dragOffset - dragTopLeft) - mousePosition
             this.move( event );
+			if(this._cancelled) return;
 			if(!event.isDefaultPrevented())
 				this.position(this.location);
 
@@ -204,6 +205,7 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 		 * @param {Event} event a mouseup event signalling drag/drop has completed
 		 */
 		end : function(event){
+			if(this._cancelled) return;
 			if(!this._only && this.constructor.responder)
 				this.constructor.responder.end(event, this);
 	
@@ -240,7 +242,8 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 		cancel: function() {
 			this._cancelled = true;
 			this.end(this.event);
-			jQuery.Respond.clear();
+			if(!this._only && this.constructor.responder)
+				this.constructor.responder.clear(pointer, this, event);  
 			var mover = this.constructor;
 			mover.current = null;
 		},
@@ -332,7 +335,7 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 	
 	
 
-	event.setupHelper( ['dragstart','dragover','dragmove','dragout', 'dragend'], "mousedown", function(e){
+	event.setupHelper( ['draginit','dragover','dragmove','dragout', 'dragend'], "mousedown", function(e){
 		$.Drag.mousedown.call($.Drag, e, this)
 		
 	} )
