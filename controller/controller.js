@@ -372,6 +372,19 @@ jQuery.Class.extend("jQuery.Controller",
 		this._bindings.push( bind(el, eventName, func ) )
 		return this._bindings.length;
 	},
+	delegate : function(el, selector, eventName, func){
+		if(typeof el == 'string'){
+			func = eventName;
+			eventName = selector;
+			selector = el
+			el = this.element
+		}
+		if(typeof func == 'string'){
+			func = shifter(this.callback(func))
+		}
+		this._bindings.push( delegate(el,selector, eventName, func ) )
+		return this._bindings.length;
+	},
 	update : function(options){
 		$.extend(this.options, options)
 	},

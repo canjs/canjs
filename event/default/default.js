@@ -9,8 +9,8 @@ steal.apps('jquery').then(function($){
 			var origHandler = handleObj.handler;
 			types[handleObj.namespace] = true;
 			handleObj.origHandler = origHandler;
-			handleObj.handler = function(ev){
-				ev._defaultActions.push({element: this, handler: origHandler, event: ev})
+			handleObj.handler = function(ev, data){
+				ev._defaultActions.push({element: this, handler: origHandler, event: ev, data: data})
 			}
 		},
 		setup : function(){return true}
@@ -60,7 +60,7 @@ steal.apps('jquery').then(function($){
 		defaultGetter._defaultActions = event._defaultActions;
 		defaultGetter.exclusive = true;
 		if(elem)
-			oldTrigger.call($.event, defaultGetter, [defaultGetter], elem, true)
+			oldTrigger.call($.event, defaultGetter, [defaultGetter, data], elem, true)
         oldTrigger.call($.event, event, data, elem, bubbling); //tail recursive
         //fire if there are default actions to run && 
         //        we have not prevented default &&
@@ -78,7 +78,7 @@ steal.apps('jquery').then(function($){
 			event.liveFired = null;
 			for(var i = 0 ; i < event._defaultActions.length; i++){
 				var a  = event._defaultActions[i];
-				a.handler.call(a.element, event)
+				a.handler.call(a.element, event, a.data)
             }
             event._defaultActions = null; //set to null so everyone else on this element ignores it
         }
