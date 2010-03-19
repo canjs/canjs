@@ -79,7 +79,7 @@
                         settings.success.apply(null, settings.fixture(settings, "success")  )
                     if(settings.complete)
                         settings.complete.apply(null, settings.fixture(settings, "complete")  )
-                }, 13)
+                }, 100)
             
                 
             
