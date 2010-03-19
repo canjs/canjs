@@ -128,7 +128,7 @@ $.extend({
             updateIEFrame(location.hash);
             setInterval(checkHashIE, 100);
          }
-         else if(!$.browser.rhino)
+         else if(!navigator.userAgent.match(/Rhino/))
             setInterval(checkHash, 100); //id like this to wait for load
          
          if($.History.fireInitialChange)
