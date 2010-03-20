@@ -211,21 +211,22 @@
       // This polling loop checks every $.hashchangeDelay milliseconds to see if
       // location.hash has changed, and triggers the 'hashchange' event on
       // window when necessary.
-      (function loopy(){
-        var hash = get_fragment(),
-          history_hash = get_history( last_hash );
-        
-        if ( hash !== last_hash ) {
-          set_history( last_hash = hash, history_hash );
-          
-          $(window).trigger( str_hashchange );
-          
-        } else if ( history_hash !== last_hash ) {
-          window[ str_location ][ str_href ] = window[ str_location ][ str_href ].replace( /#.*/, '' ) + '#' + history_hash;
-        }
-        
-        timeout_id = setTimeout( loopy, $[ str_hashchange + 'Delay' ] );
-      })();
+      if(!navigator.userAgent.match(/Rhino/))
+	      (function loopy(){
+	        var hash = get_fragment(),
+	          history_hash = get_history( last_hash );
+	        
+	        if ( hash !== last_hash ) {
+	          set_history( last_hash = hash, history_hash );
+	          
+	          $(window).trigger( str_hashchange );
+	          
+	        } else if ( history_hash !== last_hash ) {
+	          window[ str_location ][ str_href ] = window[ str_location ][ str_href ].replace( /#.*/, '' ) + '#' + history_hash;
+	        }
+	        
+	        timeout_id = setTimeout( loopy, $[ str_hashchange + 'Delay' ] );
+	      })();
     };
     
     // Stop the polling loop, but only if an IE6/7 Iframe wasn't created. In
