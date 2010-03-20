@@ -24,14 +24,15 @@ steal.plugins('jquery').then(function($){
 		}
 	}
 	$.curStyles = function(el, styles){
-		var currentS = getStyle(el);
+		var currentS = getStyle(el), oldName;
 		for(var name in styles){
+			oldName = name;
 			if(getComputedStyle){
 				name = name.replace( rupper, "-$1" ).toLowerCase();
-				styles[name] = currentS.getPropertyValue( name )
+				styles[oldName] = currentS.getPropertyValue( name )
 			}else{
 				var camelCase = name.replace(rdashAlpha, fcamelCase);
-				styles[name] = currentS[ name ] || currentS[ camelCase ];
+				styles[oldName] = currentS[ name ] || currentS[ camelCase ];
 
 			}
 		}
@@ -41,7 +42,7 @@ steal.plugins('jquery').then(function($){
 	$.each({width: "Width", height: "Height"},function(lower, Upper){
 		
 		//used to get the padding and border for an element in a given direction
-		getPaddingAndBorder[lower] = function(el){
+		getPaddingAndBorder[lower] = function(el, margin){
 			var val =0;
 			if(!weird.test(el.nodeName)){
 				//make what to check for ....
@@ -49,6 +50,8 @@ steal.plugins('jquery').then(function($){
 				$.each(checks[lower], function(){
 					myChecks["padding" + this] = true;
 					myChecks["border" + this + "Width"] = true;
+					if(margin)
+						myChecks["margin" + this] = true;
 				})
 				$.curStyles(el, myChecks)
 				$.each(myChecks, function(name, value){
@@ -59,9 +62,9 @@ steal.plugins('jquery').then(function($){
 		}
 		
 		//getter / setter
-		$.fn["outer"+Upper] =  function(v){
+		$.fn["outer"+Upper] =  function(v, margin){
 			if(typeof v == 'number'){
-				this[lower](v-getPaddingAndBorder[lower](this[0]))
+				this[lower](v-getPaddingAndBorder[lower](this[0], margin))
 				return this;
 			}else{
 				return checks["old"+Upper].call(this, v)

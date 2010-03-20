@@ -393,7 +393,7 @@ jQuery.Class.extend("jQuery.Controller",
 	 */
 	destroy: function(){
 		if(this._destroyed) throw this.Class.shortName+" controller instance has already been deleted";
-		
+		this.element.removeClass(this.Class.underscoreFullName );
 		var self = this;
 		jQuery.each(this._bindings, function(key, value){
 			if(typeof value == "function") value(self.element[0]);
