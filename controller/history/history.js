@@ -116,7 +116,7 @@ steal.plugins('jquery/controller/subscribe','jquery/event/hashchange').then(func
 		  
 	      OpenAjax.hub.publish("history."+folders.replace("/","."), data);
 	   });
-	   $.History.init();
+	   $(window).trigger('hashchange')
 	});
 
 
