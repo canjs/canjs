@@ -167,7 +167,67 @@
             }
 
             
-        }
+        },
+		//used to make lists
+		"-make" : function(type, count, make){
+			//make all items now ....
+			var items = []
+			for(var i = 0 ; i < (count); i++){
+				var num = i;
+				var item =  make(i)
+				if(!item.id){
+					item.id =  num;
+				}
+				items.push(item)
+			}
+			$.fixture["-"+type[0]] = function(settings){
+				
+				
+				var retArr = items.slice(0);
+	
+				
+				$.each((settings.data.order || []).reverse(), function(i, name){
+					var split = name.split(" ");
+					retArr = retArr.sort(function(a, b){
+						if(split[1].toUpperCase() != "ASC")
+							return a[split[0]] < b[split[0]]
+						else
+							return a[split[0]] > b[split[0]]
+					})
+				})
+				var offset = settings.data.offset || 0;
+				var  limit = settings.data.limit || (count - offset)
+				
+				var i =0;
+				for(var param in settings.data){
+					if(param.indexOf("_id") != -1){
+						while(i < retArr.length){
+							if(settings.data[param] != retArr[i][param]){
+								retArr.splice(i, 1)
+							}else{
+								i++;
+							}
+						}
+					}	
+				}
+				
+				
+				return [{
+					"count": retArr.length,
+					"limit": settings.data.limit,
+					"offset": settings.data.offset,
+					"data" : retArr.slice(offset,offset+ limit)
+				}]
+			}
+			$.fixture["-" + type[1]] = function(settings){
+				for(var i = 0 ; i < (count); i++){
+					if(settings.data.id == items[i].id){
+						return [items[i]]
+					}
+				}
+			}
+			$.fixture["~"+type[0]] = items;
+		}
     })
 
     

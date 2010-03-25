@@ -22,9 +22,12 @@ steal.plugins('jquery').then(function($){
 		else if (elem.currentStyle) {
 			return elem.currentStyle
 		}
-	}
+	},
+	rnumpx = /^-?\d+(?:px)?$/i,
+	rnum = /^-?\d/;
+	
 	$.curStyles = function(el, styles){
-		var currentS = getStyle(el), oldName;
+		var currentS = getStyle(el), oldName, val, style = el.style;
 		for(var name in styles){
 			oldName = name;
 			if(getComputedStyle){
@@ -33,6 +36,21 @@ steal.plugins('jquery').then(function($){
 			}else{
 				var camelCase = name.replace(rdashAlpha, fcamelCase);
 				styles[oldName] = currentS[ name ] || currentS[ camelCase ];
+
+				
+				if ( !rnumpx.test( styles[oldName] ) && rnum.test( styles[oldName] ) ) { //convert to px
+				// Remember the original values
+					var left = style.left, rsLeft = el.runtimeStyle.left;
+	
+					// Put in the new values to get a computed value out
+					el.runtimeStyle.left = el.currentStyle.left;
+					style.left = camelCase === "fontSize" ? "1em" : (styles[oldName] || 0);
+					styles[oldName] = style.pixelLeft + "px";
+	
+					// Revert the changed values
+					style.left = left;
+					el.runtimeStyle.left = rsLeft;
+				}
 
 			}
 		}
