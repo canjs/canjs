@@ -456,7 +456,7 @@ var windowEvent = function(el, event, selector, cb){
 	var func = function(){ return cb.apply(null, [jQuery(this)].concat( Array.prototype.slice.call(arguments, 0) )) }
 	jQuery(window).bind(event.replace(/window/,""), func);
 	return function(){
-	    jQuery(el).unbind(event.replace(/window/,""), func);
+	    jQuery(window).unbind(event.replace(/window/,""), func);
 	}
 }
 
