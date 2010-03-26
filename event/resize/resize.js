@@ -7,7 +7,7 @@ steal.apps('jquery').then(function($){
 			handleObj.origHandler = origHandler;
 			var resizeCount = 0, windowWidth, windowHeight;
 			handleObj.handler = function(ev, data){
-			    if(resizeCount == 0){
+			    if(resizeCount === 0){
 			        windowWidth = $(window).width();
 				    windowHeight = $(window).height();
 			    }								
@@ -16,7 +16,7 @@ steal.apps('jquery').then(function($){
 			         handleObj.origHandler.call(this, ev, data);
 					 resizeCount--;
 			    }
-			    if(resizeCount ==  0){
+			    if(resizeCount ===  0){
 			        if($(window).width() != windowWidth || $(window).height() != windowHeight) {
 					    $(window).trigger("resize");
 				    }
