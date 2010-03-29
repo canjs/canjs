@@ -281,7 +281,7 @@ jQuery.Class.extend("jQuery.Controller",
 			return new c(el);
 		}
 	},
-	breaker : /^(?:(.*?)\s)?([\w\.]+)$/,
+	breaker : /^(?:(.*?)\s)?([\w\.\:]+)$/,
 	listensTo : []//
 
 	//actions : [] //list of action types

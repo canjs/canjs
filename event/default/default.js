@@ -74,7 +74,7 @@ steal.apps('jquery').then(function($){
             ) {
 			//put event back
 			event.type = "default."+event.type;
-			event.currentTarget = event.liveFired;
+			event.currentTarget = event.liveFired || event.currentTarget;
 			event.liveFired = null;
 			for(var i = 0 ; i < event._defaultActions.length; i++){
 				var a  = event._defaultActions[i];

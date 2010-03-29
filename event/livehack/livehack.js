@@ -10,6 +10,10 @@ steal.apps('jquery').then(function(){
 	 */
 	event.find  = function(el, types, selector){
 		var events = $.data(el, "events"), handlers = [];
+		
+		
+		
+		
 		if(!events) return handlers;
 		
 		if(selector){
@@ -24,12 +28,22 @@ steal.apps('jquery').then(function(){
 			}
 		}else{
 			for(var t =0; t< types.length; t++){
-				var typeHandlers = events[types[t]];
-				if(!typeHandlers) continue;
+				var type = types[t], 
+					typeHandlers,
+					all = type.indexOf(".") < 0,
+					namespaces,
+					namespace; 
+				if ( !all ) {
+					namespaces = type.split(".");
+					type = namespaces.shift();
+					namespace = new RegExp("(^|\\.)" + namespaces.slice(0).sort().join("\\.(?:.*\\.)?") + "(\\.|$)");
+				}
+				typeHandlers = ( events[type] || [] ).slice(0)
 				
 				for(var h = 0; h <typeHandlers.length; h++ ){
-					if(typeHandlers[h].selector == selector)
-						handlers.push(typeHandlers[h].origHandler || typeHandlers[h].handler)
+					var handle = typeHandlers[h];
+					if(handle.selector == selector && (all || namespace.test( handle.namespace ))  )
+						handlers.push(handle.origHandler || handle.handler)
 				}
 			}
 			

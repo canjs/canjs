@@ -1,14 +1,8 @@
 steal.plugins('jquery').then(function($){
-	//return;
-	
-	
-	
-	
 	var currentSelected = null, 
 		currentTimer, 
 		pieces,
 		focusin = function(ev){
-
 			clearTimeout(currentTimer);
 			ev.stopPropagation(); //prevent others from handling focusin
 			var so = $.Event('selectout');
@@ -19,7 +13,7 @@ steal.plugins('jquery').then(function($){
 			var si = $.Event('selectin');
 			si.relatedTarget = currentSelected;
 			si.byFocus = true;
-			$(this).trigger(si );
+			$(ev.target).trigger(si );
 			currentSelected = null;
 
 		},
@@ -67,6 +61,5 @@ steal.plugins('jquery').then(function($){
 			}
 		}
 	}
-	
 	
 })
