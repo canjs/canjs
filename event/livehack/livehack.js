@@ -56,9 +56,13 @@ steal.apps('jquery').then(function(){
 			return false;
 		}else{
 			//add default ?
-			return event.find(this[0], $.isArray(events) ? events : [events]).length == 0;
+			return event.find(this[0], $.isArray(events) ? events : [events]).length > 0;
 		}
-		
+	}
+	$.fn.triggerHandled = function(event, data){
+		event = ( typeof event == "string" ? $.Event(event) : event);
+		this.trigger(event, data)
+		return event.handled
 	}
 	/**
 	 * Only attaches one 
