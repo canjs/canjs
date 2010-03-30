@@ -1,4 +1,5 @@
 steal.apps('jquery','jquery/event/livehack').then(function(){
+	jQuery.hoverTimers = jQuery.hoverTimers || [];
 	var $ = jQuery,
 		event = jQuery.event, 
 		handle  = event.handle,
@@ -14,7 +15,13 @@ steal.apps('jquery','jquery/event/livehack').then(function(){
 				timer, 
 				entered = this, 
 				called = false,
-				lastEv = ev;
+				lastEv = ev, 
+				delay = 100;
+			var hovered = {
+				setDelay: function(time){
+					delay = time;
+				}
+			}
 			$(entered).bind("mousemove.specialMouseEnter", {}, function(ev){
 				dist += Math.pow( ev.pageX-loc.pageX, 2 ) + Math.pow( ev.pageY-loc.pageY, 2 ); 
 				loc = {
@@ -33,24 +40,29 @@ steal.apps('jquery','jquery/event/livehack').then(function(){
 			})
 			timer = setTimeout(function(){
 				//check that we aren't moveing around
-				
 				if(dist < 10 && $(entered).queue().length == 0){
-					//trigger mouseenter
 					$.each(event.find(delegate, ["hoverenter"], selector), function(){
-						this.call(entered, lastEv)
+						this.call(entered, lastEv, hovered)
 					})
 					called = true;
 					$(entered).unbind("mousemove.specialMouseEnter")
 					
 				}else{
 					dist = 0;
-					timer = setTimeout(arguments.callee, 100)
+					timer = setTimeout(arguments.callee, delay)
 				}
 				
 				
-			}, 100)
+			}, delay)
+			$.each(event.find(delegate, ["hoverinit"], selector), function(){
+				this.call(entered, ev, hovered)
+			})
+			while(jQuery.hoverTimers.length)
+				clearTimeout(jQuery.hoverTimers.shift());
+				
+			jQuery.hoverTimers.push(timer)
 		};
-		event.setupHelper( ["hoverenter","hoverleave","hovermove"], "mouseenter", onmouseenter )
+		event.setupHelper( ["hoverinit", "hoverenter","hoverleave","hovermove"], "mouseenter", onmouseenter )
 		
 
 	
