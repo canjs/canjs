@@ -51,6 +51,15 @@ steal.apps('jquery').then(function(){
 		}
 		return handlers;
 	}
+	$.fn.respondsTo = function(events){
+		if(!this.length){
+			return false;
+		}else{
+			//add default ?
+			return event.find(this[0], $.isArray(events) ? events : [events]).length == 0;
+		}
+		
+	}
 	/**
 	 * Only attaches one 
 	 * @param {Array} types llist of types that will delegate here
