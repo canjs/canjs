@@ -11,7 +11,7 @@ steal.apps('jquery').then(function($){
 			handleObj.origHandler = origHandler;
 			handleObj.handler = function(ev, data){
 				if(!ev._defaultActions) ev._defaultActions = [];
-				ev._defaultActions.push({element: this, handler: origHandler, event: ev, data: data})
+				ev._defaultActions.push({element: this, handler: origHandler, event: ev, data: data, currentTarget: ev.currentTarget})
 			}
 		},
 		setup : function(){return true}
@@ -61,17 +61,15 @@ steal.apps('jquery').then(function($){
             ( ( event.isPropagationStopped() ) ||
               ( !elem.parentNode && !elem.ownerDocument ) )
               
-            ) {
+            ) {			
 			//put event back
-			
+			event.type = "default."+event.type;
+			//event.currentTarget = event.liveFired || event.currentTarget;
+			event.liveFired = null;
 			for(var i = 0 ; i < event._defaultActions.length; i++){
 				var a  = event._defaultActions[i];
-				a.event.target = event.target;
-				a.event.type = "default."+event.type;
-				a.event.liveFired = null;
-				a.event.namespace = null;
-				console.log(a.event.currentTarget, a)
-				a.handler.call(a.element, a.event, a.data)
+				event.currentTarget = a.currentTarget;
+				a.handler.call(a.element, event, a.data)
             }
             event._defaultActions = null; //set to null so everyone else on this element ignores it
         }
