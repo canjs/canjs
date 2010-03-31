@@ -1,10 +1,20 @@
 steal.plugins('jquery/class','jquery/lang','jquery/event/destroyed').then(function($){
 //helpers
 var bind = function(el, ev, callback){
-	$(el).bind(ev, callback)
+	var wrappedCallback;
+	if(ev.indexOf(">") == 0){
+		ev = ev.substr(1);
+		wrappedCallback = function(event){
+			if(event.target === el)
+				callback.apply(null, arguments)
+		}
+	}
+	$(el).bind(ev, wrappedCallback || callback)
+	// if ev name has >, change the name and bind
+	// in the wrapped callback, check that the element matches the actual element
 	return function(){
-		$(el).unbind(ev, callback);
-		el = ev = callback = null;
+		$(el).unbind(ev, wrappedCallback || callback);
+		el = ev = callback = wrappedCallback = null;
 	}
 }
 var delegate = function(el, selector, ev, callback){
@@ -281,7 +291,7 @@ jQuery.Class.extend("jQuery.Controller",
 			return new c(el);
 		}
 	},
-	breaker : /^(?:(.*?)\s)?([\w\.\:]+)$/,
+	breaker : /^(?:(.*?)\s)?([\w\.\:>]+)$/,
 	listensTo : []//
 
 	//actions : [] //list of action types
