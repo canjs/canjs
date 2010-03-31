@@ -22,7 +22,7 @@ steal.then(function(){
 			result = res[i]
 			if (rooted[result.selector]) {
 				res[i].selector = rooted[res[i].selector];
-				if(result.elem.parentNode !== this[0].parentNode) { // no match
+				if(result.elem.parentNode !== context) { // no match
 					res.splice(i,1);
 					continue;
 				}

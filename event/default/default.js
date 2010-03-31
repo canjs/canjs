@@ -63,12 +63,15 @@ steal.apps('jquery').then(function($){
               
             ) {
 			//put event back
-			event.type = "default."+event.type;
-			event.currentTarget = event.liveFired || event.currentTarget;
-			event.liveFired = null;
+			
 			for(var i = 0 ; i < event._defaultActions.length; i++){
 				var a  = event._defaultActions[i];
-				a.handler.call(a.element, event, a.data)
+				a.event.target = event.target;
+				a.event.type = "default."+event.type;
+				a.event.liveFired = null;
+				a.event.namespace = null;
+				console.log(a.event.currentTarget, a)
+				a.handler.call(a.element, a.event, a.data)
             }
             event._defaultActions = null; //set to null so everyone else on this element ignores it
         }
