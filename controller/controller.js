@@ -6,7 +6,7 @@ var bind = function(el, ev, callback){
 		ev = ev.substr(1);
 		wrappedCallback = function(event){
 			if(event.target === el)
-				callback.apply(null, arguments)
+				callback.apply(this, arguments)
 		}
 	}
 	$(el).bind(ev, wrappedCallback || callback)
