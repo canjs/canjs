@@ -1,38 +1,34 @@
 steal.then(function(){
-	// el.find('li').closest([">li a"], this.element)
+	//adds open selector support to closest, but only on 1 element
 	var oldClosest = jQuery.fn.closest;
-	jQuery.fn.closest = function(selectors){
-		var rooted = {}, res, me, thing, i, j, selector, self = this, rootedIsEmpty = true, cleanArray = function(arr){
-			return jQuery.grep(arr, function(n, i){
-				return (n);
-			});
-		}
+	jQuery.fn.closest = function(selectors, context){
+		var rooted = {}, res, result, thing, i, j, selector, rootedIsEmpty = true;
+		
 		$.each(selectors, function(i, selector){
 		    if(selector.indexOf(">") == 0 ){
-				if(selector.indexOf(" ") != -1) throw "no!"
-				rooted[selector.substr(1)] = selector;
-				selectors[i] = selector.substr(1);
+				if(selector.indexOf(" ") != -1){
+					throw " closest does not work with > followed by spaces!"
+				}
+				rooted[( selectors[i] = selector.substr(1)  )] = selector;
 				rootedIsEmpty = false;
 			}
 		})
 		
-		res = oldClosest.apply(this, arguments);
+		res = oldClosest.call(this, selectors, context);
 		
 		if(rootedIsEmpty) return res;
-		
-		for (i = 0; i < res.length; i++) {
-			me = res[i]
-			if (rooted[me.selector]) {
-				if(me.elem.parentNode !== self[0].parentNode) { // no match
-					res[i] = null;
-				} else {
-					res[i].selector = rooted[me.selector];
+		i =0;
+		while(i < res.length){
+			result = res[i]
+			if (rooted[result.selector]) {
+				res[i].selector = rooted[res[i].selector];
+				if(result.elem.parentNode !== this[0].parentNode) { // no match
+					res.splice(i,1);
+					continue;
 				}
 			}
+			i++;
 		}
-		
-		res = cleanArray(res)
-		
 		return res;
 	}
 })

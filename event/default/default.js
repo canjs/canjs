@@ -10,23 +10,13 @@ steal.apps('jquery').then(function($){
 			types[handleObj.namespace] = true;
 			handleObj.origHandler = origHandler;
 			handleObj.handler = function(ev, data){
+				if(!ev._defaultActions) ev._defaultActions = [];
 				ev._defaultActions.push({element: this, handler: origHandler, event: ev, data: data})
 			}
 		},
 		setup : function(){return true}
 	}
 	
-	/*
-	 * var add = $.event.add;
-	
-	$.event.add = function(elem, types, handler, data){
-		//check if types has default.
-		
-		
-		add.apply($.event, arguments)
-	}
-	 * 
-	 */
 	//return;
     var oldTrigger = $.event.trigger;
     $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
