@@ -1,7 +1,7 @@
 // provides very simple storage
 // var store = new jQuery.Store();
 // when its being extended, it should make a new simplestore
-
+steal.then(function(){
 /**
  * Provides simple storage for elements.  Replace this store with Gears!
  */
@@ -65,4 +65,5 @@ jQuery.Class.extend("jQuery.Store",
     isEmpty: function() {
 		return !this.find().length;
 	}
+});
 });
