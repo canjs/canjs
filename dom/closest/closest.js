@@ -2,14 +2,16 @@ steal.then(function(){
 	//adds open selector support to closest, but only on 1 element
 	var oldClosest = jQuery.fn.closest;
 	jQuery.fn.closest = function(selectors, context){
-		var rooted = {}, res, result, thing, i, j, selector, rootedIsEmpty = true, selector;
+		var rooted = {}, res, result, thing, i, j, selector, rootedIsEmpty = true, selector, selectorsArr = selectors;
+		if(typeof selectors == "string") selectorsArr = [selectors];
 		
-		$.each(selectors, function(i, selector){
+		$.each(selectorsArr, function(i, selector){
 		    if(selector.indexOf(">") == 0 ){
 				if(selector.indexOf(" ") != -1){
 					throw " closest does not work with > followed by spaces!"
 				}
-				rooted[( selectors[i] = selector.substr(1)  )] = selector;
+				rooted[( selectorsArr[i] = selector.substr(1)  )] = selector;
+				if(typeof selectors == "string") selectors = selector.substr(1);
 				rootedIsEmpty = false;
 			}
 		})
