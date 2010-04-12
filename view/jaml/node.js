@@ -1,5 +1,6 @@
 /**
  * @constructor
+ * @init
  * @param {String} tagName The tag name this node represents (e.g. 'p', 'div', etc)
  */
 Jaml.Node = function(tagName) {

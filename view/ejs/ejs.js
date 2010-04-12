@@ -1,4 +1,4 @@
-steal.plugins('jquery/view').then(function(){
+steal.plugins('jquery/view').then(function($){
    
 var rsplit = function(string, regex) {
 	var result = regex.exec(string),
@@ -37,7 +37,7 @@ isArray = function(arr){
 	  return Object.prototype.toString.call(arr) === "[object Array]"
 }
 
-EJS = function( options ){
+var EJS = function( options ){
 	if(this.constructor != EJS){
 		var ejs = new EJS(options);
 		return function(data, helpers){
@@ -89,6 +89,125 @@ EJS = function( options ){
 
 	this.template = template;
 };
+/**
+ * @constructor jQuery.View.EJS
+ * @plugin view
+ * Ejs provides <a href="http://www.ruby-doc.org/stdlib/libdoc/erb/rdoc/">ERB</a> 
+ * style client side templates.  Use them with controllers to easily build html and inject
+ * it into the DOM.
+ * <h3>Example</h3>
+ * The following generates a list of tasks:
+ * @codestart html
+ * &lt;ul>
+ * &lt;% for(var i = 0; i < tasks.length; i++){ %>
+ *     &lt;li class="task &lt;%= tasks[i].identity %>">&lt;%= tasks[i].name %>&lt;/li>
+ * &lt;% } %>
+ * &lt;/ul>
+ * @codeend
+ * For the following examples, we assume this view is in <i>'views\tasks\list.ejs'</i>
+ * <h2>Use</h2>
+ * There are 2 common ways to use Views: 
+ * <ul>
+ *     <li>Controller's [jQuery.Controller.prototype.view view function]</li>
+ *     <li>The jQuery Helpers: [jQuery.fn.after after], 
+ *                             [jQuery.fn.append append], 
+ *                             [jQuery.fn.before before], 
+ *                             [jQuery.fn.before html], 
+ *                             [jQuery.fn.before prepend], 
+ *                             [jQuery.fn.before replace], and 
+ *                             [jQuery.fn.before text].</li>
+ * </ul>
+ * <h3>Render</h3>
+ * Render is the preferred way of rendering a view.  You can find all the options for render in 
+ * its [jQuery.Controller.prototype.render documentation], but here is a brief example of rendering the 
+ * <i>list.ejs</i> view from a controller:
+ * @codestart
+ * $.Controller.extend("TasksController",{
+ *     init : function(el){
+ *         Task.findAll({},this.callback('list'))
+ *     },
+ *     list : function(tasks){
+ *         this.<b>render</b>({view: "tasks/list",    //which controller and view file
+ *                                             //  render would guess this by default
+ *                      html: this.element,    //what jQuery modifier you want to perform
+ *                                             //  on which element
+ *                      data: {tasks: tasks}}) //the data that gets passed to the view
+ *     }
+ * })
+ * @codeend
+ * 
+ * <h3>jQuery Helpers</h3>
+ * View modifies a number of jQuery insertion methods to allow view insertion.  You can find more 
+ * details on the helpers documentation pages <i>(linked above)</i>.
+ * The following are a few examples:
+ * @codestart
+ * $("#tasks").html({view: "views/tasks/list", data: {tasks: tasks}})
+ * $("#tasks").before({view: "views/tasks/welcome"});
+ * @codeend
+ * 
+ * <h2>Including Views</h2>
+ * Include can package processed views in the production file.  After loading the include plugin, you
+ * can use [include.static.views] wrapped in an include callback function.  Because included views are already
+ * processed, they don't rely on eval.  Here's how to include them:
+ * @codestart
+ * include.plugins('view','controller')
+ * include.controllers('tasks');
+ * include(function(){
+ *   include.views('views/tasks/show');
+ * })
+ * @codeend
+ * Read more about [include.static.views include.views].
+ * <h2>View Helpers</h2>
+ * View Helpers create html code.  View by default only comes with 
+ * [jQuery.View.Helpers.prototype.view view] and [jQuery.View.Helpers.prototype.to_text to_text].
+ * You can include more with the view/helpers plugin.  But, you can easily make your own!
+ * Learn how in the [jQuery.View.Helpers Helpers] page.
+ * 
+ * @init Creates a new view
+ * @tag core
+ * @param {Object} options A hash with the following options
+ * <table class="options">
+				<tbody><tr><th>Option</th><th>Default</th><th>Description</th></tr>
+				<tr>
+					<td>url</td>
+					<td>&nbsp;</td>
+					<td>loads the template from a file.  This path should be relative to <i>[jQuery.root]</i>.
+					</td>
+				</tr>
+				<tr>
+					<td>text</td>
+					<td>&nbsp;</td>
+					<td>uses the provided text as the template. Example:<br/><code>new View({text: '&lt;%=user%>'})</code>
+					</td>
+				</tr>
+				<tr>
+					<td>element</td>
+					<td>&nbsp;</td>
+					<td>loads a template from the innerHTML or value of the element.
+					</td>
+				</tr>
+				<tr>
+					<td>type</td>
+					<td>'<'</td>
+					<td>type of magic tags.  Options are '&lt;' or '['
+					</td>
+				</tr>
+				<tr>
+					<td>name</td>
+					<td>the element ID or url </td>
+					<td>an optional name that is used for caching.
+					</td>
+				</tr>
+				<tr>
+					<td>cache</td>
+					<td>true in production mode, false in other modes</td>
+					<td>true to cache template.
+					</td>
+				</tr>
+				
+			</tbody></table>
+ */
+$.View.EJS = EJS;
 /* @Prototype*/
 EJS.prototype = {
 	constructor: EJS,
@@ -500,6 +619,7 @@ EJS.Helpers.prototype = {
 
 	$.View.register({
 		suffix : "ejs",
+		//returns a function that renders the view
 		get : function(id, url){
 			var text = $.ajax({
 					async: false,
