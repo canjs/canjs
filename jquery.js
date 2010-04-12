@@ -6291,3 +6291,16 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 window.jQuery = window.$ = jQuery;
 
 })(window);
+
+
+/**
+ * @Constructor jQuery
+ * @init blah
+ */
+
+//
+/**
+ * @Constructor jQuery.fn
+ * @init blah
+ */
+//

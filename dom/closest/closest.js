@@ -2,7 +2,8 @@ steal.then(function(){
 	//adds open selector support to closest, but only on 1 element
 	var oldClosest = jQuery.fn.closest;
 	jQuery.fn.closest = function(selectors, context){
-		var rooted = {}, res, result, thing, i, j, selector, rootedIsEmpty = true, selector;
+		var rooted = {}, res, result, thing, i, j, selector, matchEl, 
+			rootedIsEmpty = true, selector, nbrParents;
 		if(typeof selectors == "string") selectors = [selectors];
 		$.each(selectors, function(i, selector){
 		    if(selector.indexOf(">") == 0 ){
@@ -23,9 +24,15 @@ steal.then(function(){
 			if (rooted[selector] !== undefined) {
 				result.selector = rooted[selector];
 				rooted[selector] = false;
-				if(typeof result.selector !== "string"  || result.elem.parentNode !== context ){
-					res.splice(i,1);
-						continue;
+				if(typeof result.selector !== "string"){
+				  nbrParents = selector.match(/>/g).length;
+				  matchEl = result.elem;
+				  for(j = 0; j<nbrParents.length; j++)
+				  	matchEl = result.elem
+				  if (matchEl !== context) {
+				  	res.splice(i, 1);
+				  	continue;
+				  }
 				}
 			}
 			i++;
