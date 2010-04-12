@@ -3,7 +3,7 @@ steal.then(function(){
 	var oldClosest = jQuery.fn.closest;
 	jQuery.fn.closest = function(selectors, context){
 		var rooted = {}, res, result, thing, i, j, selector, rootedIsEmpty = true, selector;
-		
+		if(typeof selectors == "string") selectors = [selectors];
 		$.each(selectors, function(i, selector){
 		    if(selector.indexOf(">") == 0 ){
 				if(selector.indexOf(" ") != -1){
