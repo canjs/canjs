@@ -7,6 +7,8 @@ var bind = function(el, ev, callback){
 		wrappedCallback = function(event){
 			if(event.target === el)
 				callback.apply(this, arguments)
+			else
+				event.handled = false;
 		}
 	}
 	$(el).bind(ev, wrappedCallback || callback)
@@ -353,21 +355,29 @@ jQuery.Class.extend("jQuery.Controller",
 		return this.element;
 	},
 	/**
-	 * Bind attaches event handlers that will be released whent he widget is destroyed.
+	 * Bind attaches event handlers that will be removed when the controller is removed.  
+	 * This is a good way to attach to an element not in the controller's element.
 	 * <br/>
-	 * Examples:
+	 * <h3>Examples:</h3>
 	 * @codestart
-	 * // calls somethingClicked(el,ev)
-	 * this.bind('click','somethingClicked') 
+	 * init : function(){
+	 *    // calls somethingClicked(el,ev)
+	 *    this.bind('click','somethingClicked') 
 	 * 
-	 * // calls function when the window si clicked
-	 * this.bind(window, 'click', function(){
-	 *   //do something
-	 * })
+	 *    // calls function when the window is clicked
+	 *    this.bind(window, 'click', function(ev){
+	 *      //do something
+	 *    })
+	 * },
+	 * somethingClicked : function(el, ev){
+	 * 		
+	 * }
 	 * @codeend
-	 * @param {HTMLElement} [el=this.element] 
-	 * @param {String} eventName
-	 * @param {Function_String} func A callback function or the name of a function on "this".
+	 * @param {HTMLElement|jQuery.fn} [element=this.element] element the element to be bound
+	 * @param {String} eventName The event to listen for.
+	 * @param {Function|String} func A callback function or the String name of a controller function.  If a controller
+	 * function name is given, the controller function is called back with the bound element and event as the first
+	 * and second parameter.  Otherwise the function is called back like a normal bind.
 	 * @return {Integer} The id of the binding in this._bindings
 	 */
 	bind : function(el, eventName, func){
@@ -382,12 +392,30 @@ jQuery.Class.extend("jQuery.Controller",
 		this._bindings.push( bind(el, eventName, func ) )
 		return this._bindings.length;
 	},
-	delegate : function(el, selector, eventName, func){
-		if(typeof el == 'string'){
+	/**
+	 * Delegate will delegate on an elememt and will be undelegated when the controller is removed.
+	 * This is a good way to delegate on elements not in a controller's element.<br/>
+	 * <h3>Example:</h3>
+	 * @codestart
+	 * // calls function when the any 'a.foo' is clicked.
+	 * this.delegate(document.documentElement,'a.foo', 'click', function(ev){
+	 *   //do something
+	 * })
+	 * @codeend
+	 * @param {HTMLElement|jQuery.fn} [element=this.element] element
+	 * @param {String} selector the css selector
+	 * @param {String} eventName 
+	 * @param {Function|String} func A callback function or the String name of a controller function.  If a controller
+	 * function name is given, the controller function is called back with the bound element and event as the first
+	 * and second parameter.  Otherwise the function is called back like a normal bind.
+	 * @return {Integer} The id of the binding in this._bindings
+	 */
+	delegate : function(element, selector, eventName, func){
+		if(typeof element == 'string'){
 			func = eventName;
 			eventName = selector;
-			selector = el
-			el = this.element
+			selector = element
+			element = this.element
 		}
 		if(typeof func == 'string'){
 			func = shifter(this.callback(func))
@@ -395,11 +423,33 @@ jQuery.Class.extend("jQuery.Controller",
 		this._bindings.push( delegate(el,selector, eventName, func ) )
 		return this._bindings.length;
 	},
+	/**
+	 * Called if an controller's jQuery helper is called on an element that already has a controller instance
+	 * of the same type.  Extends this.options with the options passed in.  If you overwrite this, you might want to call
+	 * this._super.
+	 * <h3>Examples</h3>
+	 * @codestart
+	 * $.Controller.extend("Thing",{
+	 * init : function(el, options){
+	 *    alert('init')
+	 * },
+	 * update : function(options){
+	 *    this._super(options);
+	 *    alert('update')
+	 * }
+	 * });
+	 * $('#myel').thing(); // alerts init
+	 * $('#myel').thing(); // alerts update
+	 * @codeend
+	 * @param {Object} options
+	 */
 	update : function(options){
 		$.extend(this.options, options)
 	},
 	/**
-	 * Removes all actions on this instance.
+	 * Destroy unbinds and undelegates all actions on this controller, and prevents any memory leaks.  This is called automatically
+	 * if the element is removed.
+	 * 
 	 */
 	destroy: function(){
 		if(this._destroyed) throw this.Class.shortName+" controller instance has already been deleted";
@@ -420,13 +470,14 @@ jQuery.Class.extend("jQuery.Controller",
 		this.element = null;
 	},
 	/**
-	 * Queries from the controller's delegated element.
+	 * Queries from the controller's element.
 	 * @codestart
 	 * ".destroy_all click" : function(){
 	 *    this.find(".todos").remove();
 	 * }
 	 * @codeend
 	 * @param {String} selector selection string
+	 * @return {jQuery.fn} returns the matched elements
 	 */
 	find: function(selector){
 		return this.element.find(selector);
@@ -441,6 +492,9 @@ jQuery.Class.extend("jQuery.Controller",
 	},
 	//tells callback to set called on this.  I hate this.
 	_set_called : true,
+	/**
+	 * This function does nothing.  It's here to provide an init for Class to call back.
+	 */
 	init : function(){}
 });
 
@@ -473,7 +527,9 @@ var windowEvent = function(el, event, selector, cb){
 jQuery.each(["windowresize","windowscroll","load"], function(i ,v){
 	jQuery.Controller.processors[v] = windowEvent;
 })
-
+/**
+ *  @add jQuery.fn
+ */
 
 $.fn.mixin = function(){
 	//create a bunch of controllers
@@ -485,6 +541,10 @@ $.fn.mixin = function(){
 		
 	})
 }
+/**
+ * Gets all controllers in the jQuery element.
+ * @return {Array} an array of controller instances.
+ */
 jQuery.fn.controllers = function(){
     var controllerNames = jQuery.Array.from(arguments), 
 	   instances = [], 
@@ -500,6 +560,10 @@ jQuery.fn.controllers = function(){
 	})
 	return instances;
 };
+/**
+ * Gets all controllers in the jQuery element.
+ * @return {jQuery.Controller} the first controller.
+ */
 jQuery.fn.controller = function(){
 	return this.controllers.apply(this, arguments)[0];
 };

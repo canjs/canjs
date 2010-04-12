@@ -1,3 +1,7 @@
+steal.plugins('jquery','jquery/class','jquery/lang','steal/openajax','jquery/model/store').then(function(){
+//a cache for attribute capitalization ... slowest part of inti.
+var capitalize = $.String.capitalize;
+
 /**
  * @tag core
  * Models wrap an application's data layer.  In large applications, a model is critical for:
@@ -127,9 +131,7 @@ timeRemaining is a good example of wrapping your model's raw data with more usef
 <h2>Validations</h2>
 You can validate your model's attributes with another plugin.  See [validation].
  */
-steal.plugins('jquery','jquery/class','jquery/lang','steal/openajax','jquery/model/store').then(function(){
-//a cache for attribute capitalization ... slowest part of inti.
-var capitalize = $.String.capitalize;
+
 
 jQuery.Class.extend("jQuery.Model",
 /* @Static*/
