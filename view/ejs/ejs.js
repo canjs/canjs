@@ -79,7 +79,7 @@ var EJS = function( options ){
         }catch(e){}
 
 		if(this.text == null){
-            throw( {type: 'EJS', message: 'There is no template at '+url}  );
+            throw( {type: 'jQuery.View.EJS', message: 'There is no template at '+url}  );
 		}
 		//this.name = url;
 	}
@@ -339,7 +339,7 @@ EJS.Scanner.prototype = {
 		   	try{
 	         	block(token, this);
 		 	}catch(e){
-				throw {type: 'EJS.Scanner', line: this.lines};
+				throw {type: 'jQuery.View.EJS.Scanner', line: this.lines};
 			}
        }
 	 }
@@ -475,7 +475,7 @@ EJS.Compiler.prototype = {
 							}
 							break;
 						case scanner.left_equal:
-							buff.push(insert_cmd + "(EJS.Scanner.to_text(" + content + ")))");
+							buff.push(insert_cmd + "(jQuery.View.EJS.Scanner.to_text(" + content + ")))");
 							break;
 					}
 					scanner.stag = null;
@@ -629,7 +629,7 @@ EJS.Helpers.prototype = {
 			return this.renderer(id, text);
 		},
 		script : function(id, src){
-			 return "EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";     
+			 return "jQuery.View.EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";     
 		},
 		renderer : function(id, text){
 			var ejs = new EJS({text: text, name: id})
