@@ -5,9 +5,11 @@ var bind = function(el, ev, callback){
 	if(ev.indexOf(">") == 0){
 		ev = ev.substr(1);
 		wrappedCallback = function(event){
-			if(event.target === el)
+			if (event.target === el) {
 				callback.apply(this, arguments)
-			else
+				event.handled = true;
+			}
+			else if (!event.handled) 
 				event.handled = false;
 		}
 	}
