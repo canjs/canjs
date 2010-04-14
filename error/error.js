@@ -9,7 +9,7 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 			textarea_title: "Damn It!",
 			close_time: 10,
 			url: 'https://damnit.jupiterit.com',
-			prompt_text: "Something just went wrong.  Please describe" +
+			prompt_text: "Something just went wrong.  Please describe " +
 			"your most recent actions and let us know what " +
 			"happened. We'll fix the problem.",
 			prompt_user: true,
@@ -53,18 +53,14 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 				};
 			},
 			create_dom: function(error){
-				if ($('#_application_error').length) 
-					return;
+				if ($('#_application_error').length) return;
 				var div = $('<div />').attr('id', '_application_error').css({
 					position: $.browser.mozilla ? 'fixed' : 'absolute',
 					bottom: '0px',
 					left: '0px',
 					margin: '0px'
 				})
-				var title = $('<div />').css({
-					background: 'url(' + steal.root.path + '/jquery/error/background.png) scroll repeat-x center top',
-					font: 'bold 10pt verdana',
-					color: 'white',
+				var title = $('<div />').addClass('ui-corner-top').addClass('ui-state-error').css({
 					padding: '0px 5px 0px 10px'
 				})
 				
@@ -79,16 +75,16 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 				}).click($.ApplicationError.send).html('Close')
 				var span = $('<span />').attr('id', '_error_seconds').css({
 					'float': 'right',
-					'font-size': '10pt'
+					'font-size': '8pt'
 				}).after(this.textarea_title);
 				
 				title.append(a).append(span).append('<span>' + this.textarea_title + '</span>');
 				
-				var form = $('<form />').attr('id', '_error_form').submit($.ApplicationError.send).css({
+				var form = $('<form />').attr('id', '_error_form').addClass('ui-state-highlight ')
+				.submit($.ApplicationError.send).css({
 					padding: 0,
 					margin: 0,
-					font: 'normal 8pt verdana',
-					backgroundColor: '#FAE8CD'
+					font: 'normal 8pt verdana'
 				});
 				
 				var form_div = $('<div />').css({
@@ -96,15 +92,15 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 					width: 300,
 					'margin-left': $.browser.msie ? 5 : 10,
 				}).html(this.prompt_text)
-				var input = $('<input />').attr({
+				var input = $('<button />').addClass('ui-button').addClass('ui-state-default')
+					.addClass('ui-widget').addClass('ui-state-default').addClass('ui-corner-all')
+					.addClass('ui-button-text-only').css({
+						'float': 'right',
+						margin: '17px 5px 0px 0px'
+					}).append('<span>Send</span>')
+				var input2 = $('<input />').attr({
 					type: 'submit',
 					value: 'Send'
-				}).css({
-					'font-size': '10pt',
-					'float': 'right',
-					margin: '17px 5px 0px 0px',
-					width: 60,
-					padding: 5
 				})
 				var textarea = $('<textarea />').css({
 					width: 335,
@@ -148,7 +144,7 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 				var cont = $('#_application_error'), width;
 				if (!cont.length) 
 					return;
-				width = $(document.body).width();
+				width = $(document.body).outerWidth(true);
 				cont.width(width);
 				$('#_error_text').width(width - 400);
 			},
@@ -225,5 +221,6 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 			$.ApplicationError.notify(e);
 			return false;
 		})
+		$('head').append('<link rel="stylesheet" href="'+steal.root.path+'/phui/smoothness/jquery-ui-1.7.2.custom.css" type="text/css" />');
 	}
 })
