@@ -15,19 +15,48 @@
 				height: 50px;
 				border: dashed 1px green;
 				cursor : pointer;
+                background-color: white;
+            }
+            #dropout {
+                padding: 20px;
+                border: solid 1px blue;
+            }
+            .over {
+                background-color: yellow;
             }
         </style>
 	</head>
 	<body>
 	    <div class='handle'></div>
         <div class='handle'></div>
-        <div class='drop'></div>
+        <div id='dropout'>
+            <div class='drop'></div>
+            <div class='drop'></div>
+        </div>
+        <a href="javascript://" id='undelegate'>undelegate</a>
 		<script type='text/javascript' 
                 src='../../../steal/steal.js?steal[app]=jquery/event/drop'>   
         </script>
         <script script='type/javascript'>
             $('.handle').live("draginit", function(){})
-            $('.drop').live("dropover", function(){})
+            $('#dropout').delegate(".drop","dropover", function(){
+                $(this).addClass('over')
+            }).delegate(".drop","dropout", function(){
+                $(this).removeClass('over')
+            }).
+            
+            bind('dropover', function(){
+                $(this).addClass('over')
+            }).
+            bind('dropout', function(){
+                $(this).removeClass('over')
+            })
+            $("#undelegate").click(function(){
+                console.log($('#dropout').data('events'))
+                $('#dropout').undelegate(".drop","dropover");
+                $('#dropout').undelegate(".drop","dropout");
+                console.log($('#dropout').data('events'))
+            })
         </script>
 	</body>
 </html>
