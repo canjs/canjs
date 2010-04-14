@@ -65,7 +65,7 @@ steal.apps('jquery').then(function(){
 		return event.handled
 	}
 	/**
-	 * Only attaches one 
+	 * Only attaches one event handler for all types ...
 	 * @param {Array} types llist of types that will delegate here
 	 * @param {Object} startingEvent the first event to start listening to
 	 * @param {Object} onFirst a function to call 
