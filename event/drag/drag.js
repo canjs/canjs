@@ -12,10 +12,7 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 				return method.apply(object, args2);  
 			};  
 		},
-        event = jQuery.event, handle  = event.handle;
-		
-        
-        
+		event = jQuery.event, handle  = event.handle;
 		
 		
 	$.Drag = function(){}
@@ -55,7 +52,7 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 		   
 		   //event.data.element = element;
 		   var data = {
-		   		selector: event.handleObj.selector, 
+				selector: event.handleObj.selector, 
 				delegate: event.liveFired || element,
 				element: element
 			}
@@ -162,28 +159,28 @@ steal.apps('jquery','jquery/lang/vector','jquery/event/livehack').then(function(
 		//draws the position of the dragmove object
 		draw: function(pointer, event){
 			// only drag if we haven't been cancelled;
-            if(this._cancelled) return;
+			if(this._cancelled) return;
 			this.location =  pointer.minus(this.mouseElementPosition);                              // the offset between the mouse pointer and the representative that the user asked for
-    		// position = mouse - (dragOffset - dragTopLeft) - mousePosition
-            this.move( event );
+			// position = mouse - (dragOffset - dragTopLeft) - mousePosition
+			this.move( event );
 			if(this._cancelled) return;
 			if(!event.isDefaultPrevented())
 				this.position(this.location);
 
-            //fill in
+			//fill in
 			if(!this._only && this.constructor.responder)
 				this.constructor.responder.show(pointer, this, event);  
 		},
 		/**
-         * Set the drag to only allow horizontal dragging
-         */
+		 * Set the drag to only allow horizontal dragging
+		 */
 		position : function(offsetPositionv){  //should draw it on the page
 			var dragged_element_page_offset = this.movingElement.offsetv();          // the drag element's current page location
-            
+			
 			var dragged_element_css_offset = this.currentDelta();                   //  the drag element's current left + top css attributes
-            
+			
 			var dragged_element_position_vector =                                   // the vector between the movingElement's page and css positions
-                dragged_element_page_offset.minus(dragged_element_css_offset);      // this can be thought of as the original offset
+				dragged_element_page_offset.minus(dragged_element_css_offset);      // this can be thought of as the original offset
 			
 			this.required_css_position = offsetPositionv.minus(dragged_element_position_vector)
 			

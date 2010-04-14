@@ -51,6 +51,45 @@ steal.apps('jquery').then(function(){
 		}
 		return handlers;
 	}
+    event.findBySelector = function(el, types){
+        var events = $.data(el, "events"), 
+            selectors = {}, 
+            add = function(selector, event, handler){
+                var select = selectors[selector] ||  (selectors[selector] = {}),
+                    events = select[event] || (select[event] = []);
+                events.push(handler)
+            };
+
+		if(!events) return selectors;
+		//first check live:
+        $.each(events.live||[],function(i, live){
+            if($.inArray(live.origType, types  ) !== -1){
+                add(live.selector, live.origType,live.origHandler || live.handler )
+            }
+        })
+        //then check straight binds
+        
+		for(var t =0; t< types.length; t++){
+			var type = types[t], 
+				typeHandlers,
+				all = type.indexOf(".") < 0,
+				namespaces,
+				namespace; 
+			if ( !all ) {
+				namespaces = type.split(".");
+				type = namespaces.shift();
+				namespace = new RegExp("(^|\\.)" + namespaces.slice(0).sort().join("\\.(?:.*\\.)?") + "(\\.|$)");
+			}
+			typeHandlers = ( events[type] || [] ).slice(0)
+			
+			for(var h = 0; h <typeHandlers.length; h++ ){
+				var handle = typeHandlers[h];
+				if(!handle.selector && (all || namespace.test( handle.namespace ))  )
+					add("", type, handle.origHandler || handle.handler )
+			}
+		}
+		return selectors;
+    }
 	$.fn.respondsTo = function(events){
 		if(!this.length){
 			return false;
