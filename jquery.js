@@ -1948,10 +1948,9 @@ jQuery.event = {
 					event.handler = handleObj.handler;
 					event.data = handleObj.data;
 					event.handleObj = handleObj;
-					var ret = handleObj.handler.apply( this, arguments );
-					if(handleObj.handler !== liveHandler){
-						event.handled = true;
-					}
+					var oldHandle = event.handled
+						ret = handleObj.handler.apply( this, arguments );
+					event.handled = event.handled ===null || handleObj.handler === liveHandler  ? oldHandle : true
 					if ( ret !== undefined ) {
 						event.result = ret;
 						if ( ret === false ) {
@@ -2609,9 +2608,9 @@ function liveHandler( event ) {
 		event.currentTarget = match.elem;
 		event.data = match.handleObj.data;
 		event.handleObj = match.handleObj;
-
+		var oldHandle = event.handled;
 		ret = match.handleObj.origHandler.apply( match.elem, arguments );
-		event.handled = true;
+		event.handled = event.handled === null ? oldHandle : true;
 		if ( ret === false || event.isPropagationStopped() ) {
 			maxLevel = match.level;
 
