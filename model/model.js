@@ -178,7 +178,10 @@ jQuery.Class.extend("jQuery.Model",
     wrap : function(attributes){
         
 		if(!attributes) return null;
-        if(attributes.attributes) attributes = attributes.attributes; //in case rails
+        if(attributes.attributes) 
+			attributes = attributes.attributes; //in case rails 2.0
+		if(this.singularName && attributes[this.singularName])
+			attributes = attributes[this.singularName];
         var inst = new this(attributes);
 
 		return inst;
@@ -407,10 +410,14 @@ jQuery.Class.extend("jQuery.Model",
                 if(cas.hasOwnProperty(key) ) attributes[key] = this.attr(key);
             }
         }else{
-            for(key in attributes){ 
-    			if(attributes.hasOwnProperty(key)) 
+            var idName = this.Class.id;
+			for(key in attributes){ 
+    			if(attributes.hasOwnProperty(key) && key != idName) 
     				this.attr(key, attributes[key]);
     		}
+			if(idName in attributes){
+				this.attr(idName, attributes[idName]);
+			}
             
         }
         return attributes;
