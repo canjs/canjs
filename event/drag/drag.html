@@ -44,11 +44,11 @@
                 src='../../../steal/steal.js?steal[app]=jquery/event/drag&steal[env]=development'>   
         </script>
 		<script type='text/javascript'>
-			$("#ondoc .handle").live("dragstart", function(ev, drag){
+			$("#ondoc .handle").live("draginit", function(ev, drag){
 				console.log("dragstart", this, ev, drag)
 				drag.vertical();
 			})
-			$("#internal .handle").bind("dragstart", function(ev, drag){
+			$("#internal .handle").bind("draginit", function(ev, drag){
 				console.log("dragstart", this, ev, drag)
 				//drag.vertical();
 			})
