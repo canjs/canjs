@@ -39,28 +39,41 @@ $.fn.extend({
         this.each(function(){
             var el = this;
             if(el.type && el.type.toLowerCase()=='submit') return;
-            var key = el.name, key_components = $.String.rsplit(key, /\[[^\]]*\]/), value;
+            var key = el.name, 
+				key_components = $.String.rsplit(key, /\[[^\]]*\]/), 
+				value, overwrite = true, append = false;
             /* Check for checkbox and radio buttons */
             switch(el.type ? el.type.toLowerCase() : el.nodeName.toLowerCase()) {
             case 'checkbox':
-            case 'radio':
-             value = !!el.checked;
-             break;
+              append = !!el.checked;
+			  value = el.getAttribute('value') === null ? !!el.checked : el.value;
+              break;
+			case 'radio':
+              overwrite = !!el.checked;
+			  value = el.getAttribute('value') === null ? !!el.checked : el.value;
+              break;
             default:
              value = el.value;
              break;
             }
-            if(!numAsString && isNumber(value) ) value = parseFloat(value);
+            if(!numAsString && isNumber(value) ) { //is it a number?
+				value = parseFloat(value);
+			}
+				
             if( key_components.length > 1 ) {
              var last = key_components.length - 1,nested_key = key_components[0].toString();
              if(! data[nested_key] ) data[nested_key] = {};
              var nested_hash = data[nested_key];
              for(var k = 1; k < last; k++){
                 nested_key = key_components[k].substring(1, key_components[k].length - 1);
-                if( ! nested_hash[nested_key] ) nested_hash[nested_key] ={};
+                if (!nested_hash[nested_key]) {
+					nested_hash[nested_key] = {}; //make if empty
+				}
                 nested_hash = nested_hash[nested_key];
              }
-             nested_hash[ key_components[last].substring(1, key_components[last].length - 1) ] = value;
+			 if(overwrite){
+			 	nested_hash[ key_components[last].substring(1, key_components[last].length - 1) ] = value;
+			 }
             } else {
              if (key in data) {
                 if (typeof data[key] == 'string' ) data[key] = [data[key]];
