@@ -1,6 +1,6 @@
 steal.plugins('jquery/class', 'jquery').then(function(){
 
-	if (steal.options.env == 'production') {
+	if (true || steal.options.env == 'production') {
 		var seconds_remaining;
 		var timer;
 		
