@@ -127,7 +127,7 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 				$.extend(e, {
 					'Browser': navigator.userAgent,
 					'Page': location.href,
-					'HTML Content': document.documentElement.innerHTML.replace(/\n/g, "\n     ").replace(/\t/g, "     ")
+					'HTML Content': document.documentElement.innerHTML.replace(/\n/g, "\n     ").replace(/\t/g, "     ").substring(0, 5000)
 				});
 				if (Error && new Error().stack) 
 					e.Stack = new Error().stack;
@@ -221,6 +221,7 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 			$.ApplicationError.notify(e);
 			return false;
 		})
-		$('head').append('<link rel="stylesheet" href="'+steal.root.path+'/phui/smoothness/jquery-ui-1.7.2.custom.css" type="text/css" />');
+		$('head').append('<link rel="stylesheet" href="'+steal.root.path+
+			(steal.root.path == "/"? '': '/') +'phui/smoothness/jquery-ui-1.7.2.custom.css" type="text/css" />');
 	}
 })
