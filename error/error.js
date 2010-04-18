@@ -34,7 +34,7 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 					}, description = $('#_error_text');
 					params.error.subject = error.subject;
 					if (description.length) 
-						error['User Description'] = description.value;
+						error['User Description'] = description.val();
 					if ($.ApplicationError.prompt_user) {
 						$.ApplicationError.pause_count_down();
 						document.body.removeChild($('#_application_error')[0]);
