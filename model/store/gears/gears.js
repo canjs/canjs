@@ -1,9 +1,14 @@
 // provides very simple storage
 // var store = new jQuery.Store();
 // when its being extended, it should make a new simplestore
-steal.then('init',function(){
+steal.plugins('jquery/model/store').then('init',function(){
+if(typeof google == 'undefined'){
+	//return jQuery.Store.Gears;
+}else{
+	var db = google.gears.factory.create('beta.database');
+}
 
-var db = google.gears.factory.create('beta.database');
+
 
 
 var typeConversions  = {
@@ -29,7 +34,14 @@ var findOne = function(inst, func){
 	rs.close();
 	return res;
 }
-
+var tableExists  = function(table){
+	db.close();
+	db.open('model');
+	var rs = db.execute("SELECT name FROM sqlite_master WHERE name=?",[table]);
+	var res = rs.isValidRow();
+	rs.close();
+	return res;
+}
 var insert = function(db, inst){
 	//we need to check this isn't already here ...
 	if(inst.id && findOne(inst)){
@@ -69,7 +81,10 @@ jQuery.Class.extend("jQuery.Store.Gears",
 	 * @param {Object} klass
 	 */
     init: function(klass){
-        this.storingClass = klass;
+        if(typeof db == 'undefined'){
+			return;
+		}
+		this.storingClass = klass;
 		this.created = false;
 		
 		//overwrite findAll
@@ -119,6 +134,10 @@ jQuery.Class.extend("jQuery.Store.Gears",
 		}
 		if(!navigator.onLine) return;
 		//lets check if there are changes
+		if(!tableExists(this.storingClass.underscoredName)){
+			return;
+		}
+		
 		db.close();
 		db.open('model');
 		var rs = db.execute('select * from '+this.storingClass.underscoredName+" WHERE gearsStatus is NOT NULL");

@@ -3,23 +3,59 @@
 <html lang="en">
 	<head>
 		<title>view</title>
-        <style type='text/css'>
-            body {font-family: verdana}
-            .error {border: solid 1px red;}
-            .error_text { color: red; font-size: 10px;}
-            td {padding: 3px;}
-        </style>
+		<link type="text/css" href="../../ex/style.css" rel="stylesheet" />
+		<style>
+			.out {
+				border: dashed 1px blue;
+			}
+			.temp{
+				border: dashed 1px red;
+			}
+		</style>
 	</head>
 	<body>
-	    <h1>Welcome to JavaScriptMVC 3.0!</h1>
-        <ul>
-            <li>Include plugins and files in <i>jquery/view/view.js</i>.</li>
-            <li>Change to production mode by changing <i>development</i> to <i>production</i> in this file.</li>
-        </ul>
+	    <h1 class='view'>View</h1>
+		<h2>JAML</h2>
+		<pre><code class='javascript'>$("#jaml").html("template.jaml",{message: "Hello World"})</code></pre>
+		<pre class='temp' id='temp'><code>function(data) {
+  h3(data.message);
+}</code></pre>
+		<div id='jaml' class='out'></div>
+		<h2>EJS</h2>
+		<pre><code class='javascript'>$("#ejs").html("template.ejs",{message: "Hello World"})</code></pre>
+		<pre class='temp'>&lt;h1><%= message %>&lt;/h1></pre>
+		<div id='ejs' class='out'></div>
+		<h2>MICRO</h2>
+		<pre><code class='javascript'>$("#micro").html("template.micro",{message: "Hello World"})</code></pre>
+		<pre class='temp'>&lt;h1>{%= message %}&lt;/h1></pre>
+		<div id='micro'  class='out'></div>
 		<script type='text/javascript' 
-                src='../../steal/steal.js?steal[app]=jquery/view&steal[env]=development'
-                package='main.js'
-                compress='false'>   
+                src='../../steal/steal.js'>   
         </script>
+		<script type='text/javascript'>
+			steal.plugins('jquery/view/jaml','jquery/view/micro','jquery/view/ejs').then(function(){
+				$.each(["micro","ejs","jaml"], function(){
+					$("#"+this).html("test/qunit/template."+this,{"message" :"Hello World"})
+				})
+			}).then("//jmvcdoc/resources/highlight",
+			'//jmvcdoc/resources/languages/javascript',
+			'//jmvcdoc/resources/languages/www',
+function(){
+	 var names = []
+	 $("code").each(function(){
+			names.push( this.parentNode.className)
+			
+		})
+	 hljs.initHighlighting();
+	$(function(){
+		$.each($("code"),function(i){
+			
+			this.parentNode.className = names[i];
+		})
+	})
+		
+	
+}).start();
+		</script>
 	</body>
 </html>
