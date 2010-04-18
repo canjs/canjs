@@ -420,7 +420,7 @@ jQuery.Class.extend("jQuery.Controller",
 		if(typeof func == 'string'){
 			func = shifter(this.callback(func))
 		}
-		this._bindings.push( delegate(el,selector, eventName, func ) )
+		this._bindings.push( delegate(element,selector, eventName, func ) )
 		return this._bindings.length;
 	},
 	/**

@@ -1,4 +1,4 @@
-steal(function(){
+steal.plugins("jquery/view").then(function(){
 	
 
 
@@ -54,16 +54,16 @@ $.View.register({
 				async: false,
 				url: url
 			}).responseText
-		this.renderer(id, text)
+		return this.renderer(id, text)
 	},
 	script : function(id, str){
 		return "((function(){ Jaml.register("+id+", "+str+"); return function(data){return Jaml.render("+id+", data)} })())"
 	},
 	renderer : function(id, text){
-		func = eval("("+text+")");
-		Jaml.register(url, func);
+		var func = eval("("+text+")");
+		Jaml.register(id, func);
 		return function(data){
-			return Jaml.render(url, data)
+			return Jaml.render(id, data)
 		}
 	}
 })

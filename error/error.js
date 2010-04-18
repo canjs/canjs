@@ -188,7 +188,7 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 			}
 		};
 		
-		$.ApplicationError.start_count_down();
+		//$.ApplicationError.start_count_down();
 		
 		var oldCB = jQuery.Class.callback;
 		jQuery.Class.callback = function(f_names){

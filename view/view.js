@@ -132,7 +132,11 @@ steal.plugins("jquery").then(function($){
 	 *  <li>[Jaml] - A functional approach to JS templates.</li>
 	 *  <li>[Micro] - A very lightweight template similar to EJS.</li>
 	 * </ul>
+	 * @iframe /jquery/view/view.html 800
 	 * @tag core
+	 * 
+	 * 
+	 * 
 	 * @init blah
 	 * @param {String} url
 	 * @param {Object} data
