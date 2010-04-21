@@ -8,7 +8,7 @@ load('steal/test/helpers.js')
 _S.clear();
 
 load("steal/compress/compress.js")
-new steal.Compress('jquery/view/test/compression/dev.html','jquery/view/test/compression');
+new steal.Compress(['jquery/view/test/compression/dev.html','jquery/view/test/compression']);
 _S.clear();
 
 
