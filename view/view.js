@@ -54,7 +54,7 @@ steal.plugins("jquery").then(function($){
 		var old = jQuery.fn[func_name];
 
 		jQuery.fn[func_name] = function() {
-			var args = arguments;
+			var args = arguments, res;
 			
 			if(arguments.length > 1 && typeof arguments[0] == "string" 
                && (typeof arguments[1] == 'object' || typeof arguments[1] == 'function')
@@ -62,21 +62,14 @@ steal.plugins("jquery").then(function($){
                ){
 				args = [ $.View.apply($.View, $.makeArray(arguments)) ];
 			}
-			
-			return old.apply(this, args);
-		}
-		jQuery.fn["$"+func_name] = function(){
-			var args = arguments;
-			
-			if(arguments.length > 1 && typeof arguments[0] == "string" 
-               && (typeof arguments[1] == 'object' || typeof arguments[1] == 'function')
-               && !arguments[1].nodeType && !arguments[1].jquery
-               ){
-				args = [ $.View.apply($.View, $.makeArray(arguments)) ];
+			for(var hasHookups in jQuery.View.hookups);
+			if(hasHookups){
+				args[0] = $(args[0])
 			}
-			args[0] = $(args[0])
-			var res = old.apply(this, args);
-			args[0].hookupView();
+			res = old.apply(this, args)
+			if(hasHookups){
+				args[0].hookupView()
+			}
 			return res;
 		}
 	}
@@ -86,7 +79,8 @@ steal.plugins("jquery").then(function($){
 			var id = this.getAttribute('data-view-id')
 			if(jQuery.View.hookups[id]){
 				jQuery.View.hookups[id](this, id);
-				delete jQuery.View.hookups[id]
+				delete jQuery.View.hookups[id];
+				this.removeAttribute('data-view-id')
 			}
 		}
 	}
@@ -217,7 +211,7 @@ steal.plugins("jquery").then(function($){
 	 * @attribute ext
 	 * The default suffix to use if none is provided in the view's url.  This is set to .ejs by default.
 	 */
-	$.View.ext = ".ejs"
+	$.View.ext = ".ejs";
 
 	$.View.registerScript = function(type, id, src){
 		return "$.View.preload('"+id+"',"+types["."+type].script(id, src)+");";

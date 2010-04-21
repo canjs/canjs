@@ -1,29 +1,34 @@
-module("Class");
+module("Model test", { 
+	setup: function(){
+        var ids = 0;
+	    $.Model.extend("Person",{
+			init : function(){
+				
+			},
+			findAll : function(params, success, error){
+				success("findAll");
+			},
+			findOne : function(params, success, error){
+				success("findOne");
+			},
+			create : function(params, success, error){
+				success({zoo: "zed", id: (++ids)},"create");
+			},
+			destroy : function(id, success, error){
+				success("destroy");
+			},
+			update : function(id, attrs, success, error){
+				success({zoo: "monkeys"},"update");
+			}
+		},{
+			
+		})
+	}
+})
+
 
 test("CRUD", function(){
-    var ids = 0;
-    $.Model.extend("Person",{
-		init : function(){
-			
-		},
-		findAll : function(params, success, error){
-			success("findAll");
-		},
-		findOne : function(params, success, error){
-			success("findOne");
-		},
-		create : function(params, success, error){
-			success({zoo: "zed", id: (++ids)},"create");
-		},
-		destroy : function(id, success, error){
-			success("destroy");
-		},
-		update : function(id, attrs, success, error){
-			success({zoo: "monkeys"},"update");
-		}
-	},{
-		
-	})
+   
 	
 	
 	
@@ -45,8 +50,11 @@ test("CRUD", function(){
 		equals(inst, person, "we get back the same instance");
 		equals(person.zoo, "monkeys", "updated to monkeys zoo!  This tests that you callback with the attrs")
 	})
-	
-	
-	//equals(person.update)
-	
+})
+test("hookup and model", function(){
+	var div = $("<div/>")
+	var p = new Person({foo: "bar2"});
+	p.hookup( div[0] );
+	ok(div[0].className == "person")
+	equals(p, div.model() )
 })

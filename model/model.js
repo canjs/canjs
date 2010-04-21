@@ -1,4 +1,4 @@
-steal.plugins('jquery','jquery/class','jquery/lang','steal/openajax','jquery/model/store').then(function(){
+steal.plugins('jquery','jquery/class','jquery/lang','steal/openajax').then(function(){
 //a cache for attribute capitalization ... slowest part of inti.
 var capitalize = $.String.capitalize;
 
@@ -145,31 +145,10 @@ jQuery.Class.extend("jQuery.Model",
         if(this.fullName.substr(0,7) == "jQuery." ) return;
         this.underscoredName =  jQuery.String.underscore(this.fullName.replace(/\./g,"_"))
         jQuery.Model.models[this.underscoredName] = this;
-		this.store = new this.storeType(this);
+		if(this.storeType)
+			this.store = new this.storeType(this);
 	},
 	init : function(){},
-    /**
-     * Finds objects in this class
-     * @param {Object} id the id of a object
-     * @param {Object} params params passed to the 
-     * @param {Object} callbacks a single onComplete callback or a hash of callbacks
-     * @return {Model} will return instances of the model if syncronous
-     */
-    find : function(id, params, success, error){
-		if(!params)  params = {};
-        if(typeof params == 'function') {
-            error = success;
-			success = params;
-			params = {};
-        }
-        if(id == 'all'){
-            return this.wrapMany( this.findAll(params, success, error)  );
-        }else{
-            if((typeof params[this.id] == 'undefined') && id != 'first')
-                params[this.id] = id;
-            return this.wrap( this.findOne(id == 'first'? null : params, success, error) );
-        }
-    },
     /**
      * Used to create an existing object from attributes
      * @param {Object} attributes
@@ -381,7 +360,7 @@ jQuery.Class.extend("jQuery.Model",
 			}
 		}
         
-        if(property == this.Class.id && this[property]){
+        if(property == this.Class.id && this[property] && this.Class.store){
 			if(this.Class.store){
 				if(!old){
                 	this.Class.store.create(this);
@@ -506,7 +485,10 @@ jQuery.Class.extend("jQuery.Model",
         this.Class.publish(event, data|| this);
     },
 	hookup : function(el){
-		$(el).addClass($.String.underscore(this.Class.shortName)+" "+this.identity())
+		var shortName = $.String.underscore(this.Class.shortName),
+			$el = $(el).addClass(shortName),
+			models  = $.data(el, "models") || $.data(el, "models", {});
+		models[shortName] = this;
 	}
 });
 
@@ -521,35 +503,16 @@ jQuery.Class.extend("jQuery.Model",
  * @param {jQuery.Model} model if present only returns models of the provided type.
  * @return {Array} returns an array of model instances that are represented by the contained elements.
  */
-jQuery.fn.models = function(){
-  	var models = [], n, m;
-    if(arguments.length){ // change from Paulp
-		$.map(jQuery.makeArray(arguments), function(arg){  return typeof arg == "string" ? arg : arg.underscoredName  })
-    }else{
-        for(n in jQuery.Model.models){
-            models.push(n)
-        }
-    }
-    //get names
-	//for(m=0; m< models.length; m++){
-	//	models[m] = jQuery.String.underscore(models[m].fullName.replace(".","_"))
-	//}
-    //make regexp
-    var reg = new RegExp( "("+models.join("|")+")_([^ ]+)", "g")
-    
-    //var reg = new RegExp( "("+models.join(")_([^ ]+)|(")+")_([^ ]+)", "g")
+jQuery.fn.models = function(type){
+  	//get it from the data
+	
 	var ret = []
     this.each(function(){
-		//check if element's class name steals a model
-		var match;
-        while( match = reg.exec(this.className)  ){
-            var m = jQuery.Model.models[ match[1] ]
-            if(m){
-                var inst = m.store.findOne( m.escapeIdentity ? decodeURIComponent( match[2] ) : match[2] )
-                if(inst) ret.push(inst)
-            }
-        }
-        reg.lastIndex = 0
+		var models = $.data(this,"models") || {};
+		for(var name in models){
+			//check type
+			ret.push(models[name])
+		}
     });
     return jQuery.unique( ret );
 }
