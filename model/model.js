@@ -438,7 +438,7 @@ jQuery.Class.extend("jQuery.Model",
         this.Class.destroy(this[this.Class.id], this.callback(["destroyed",success]), error);
     },
     destroyed : function(){
-        this.Class.store.destroy(this[this.Class.id]);
+        if(this.Class.store) this.Class.store.destroy(this[this.Class.id]);
         this.publish("destroyed",this)
         return [this];
     },
