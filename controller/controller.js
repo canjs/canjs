@@ -569,7 +569,9 @@ jQuery.fn.controllers = function(){
 		controllers= jQuery.data(this, "controllers")
 		if(!controllers) return;
 		for(var cname in controllers){
-			instances.push(controllers[cname])
+			var c = controllers[cname];
+			if(!controllerNames.length || jQuery.inArray(c.Class.underscoreShortName, controllerNames) > -1)
+				instances.push(c);
 		}
 	})
 	return instances;
