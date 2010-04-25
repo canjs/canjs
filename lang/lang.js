@@ -35,27 +35,9 @@ extend = function(class_name, source){
 	var dest = jQuery[class_name];
 	for (var property in source){
 		dest[property] = source[property];
-		if(jQuery.conflict){
-			window[class_name][property] = source[property];
-			if(typeof source[property] == 'function'){
-				var names = jQuery.Function.params(source[property]);
-    			if( names.length == 0) continue;
-				//var first_arg = names[0];
-				//if( first_arg.match(class_name.substr(0,1).toLowerCase()  ) || (first_arg == 'func' && class_name == 'Function' )  ){
-					jQuery.Native.set_prototype(class_name, property, source[property]);
-				//}
-			}
-		}
 	}
 };
-jQuery.Native.set_prototype = function(class_name, property_name, func){
-	if(!func) func = jQuery[class_name][property_name];
-    window[class_name].prototype[property_name] = function(){
-		var args = [this];
-		for (var i = 0, length = arguments.length; i < length; i++) args.push(arguments[i]);
-		return func.apply(this,args  );
-	};
-};
+
 
 /* 
  * @class jQuery.String
@@ -174,28 +156,8 @@ jQuery.Native.extend('Array',
 		return false;
 	}
 });
-jQuery.Array.
-    /**
-     * Creates an array from another object.  Typically, this is used to give arguments array like properties.
-     * @param {Object} iterable an array like object with a length property.
-     * @return {Array}
-     */
-	from= function(iterable){
-		 if (!iterable) return [];
-		var results = [];
-	    for (var i = 0, length = iterable.length; i < length; i++)
-	      results.push(iterable[i]);
-	    return results;
-	}
-jQuery.Array.
-    /**
-     * Returns if the object is an array
-     * @param {Object} array a possible array object
-     * @return {Boolean}
-     */
-    is = function(array){
-        return Object.prototype.toString.call(a) === '[object Array]';
-    }
+
+
 
 /* 
  * @class jQuery.Function
@@ -223,38 +185,16 @@ jQuery.Native.extend('Function',
 	 * @return {Function} the wrapping function.
 	 */
     bind: function(f, obj) {
-	  var args = jQuery.Array.from(arguments);
+	  var args = jQuery.makeArray(arguments);
 	  args.shift();args.shift();
 	  var __method = f, object = arguments[1];
 	  return function() {
-	    return __method.apply(object, args.concat(jQuery.Array.from(arguments) )  );
+	    return __method.apply(object, args.concat(jQuery.makeArray(arguments) )  );
 	  }
 	},
 	params: jQuery.Function.params
 });
-/* 
- * @class jQuery.Number
- * When not in no-conflict mode, JMVC adds the following helpers to number
- */
-jQuery.Native.extend('Number', 
-/* @static*/
-{
-    /**
-     * Changes a number to a string, but includes preceeding zeros.
-     * @param {Object} number the number to be converted
-     * @param {Object} length the number of zeros
-     * @param {Object} [optional] radix the numeric base (defaults to base 10);
-     * @return {String} 
-     */
-    to_padded_string: function(n, len, radix) {
-        var string = n.toString(radix || 10);
-        var ret = '', needed = len - string.length;
-        
-        for(var i = 0 ; i < needed; i++) 
-            ret += '0';
-        return ret + string;
-    }
-})
+
 
 
 })

@@ -1,36 +1,41 @@
 steal.plugins('jquery/class','jquery/lang','jquery/event/destroyed').then(function($){
-//helpers
-var bind = function(el, ev, callback){
+//helpers that return a function that will unbind themselves
+var bind = function( el, ev, callback ){
 	var wrappedCallback;
 	if(ev.indexOf(">") == 0){
 		ev = ev.substr(1);
 		wrappedCallback = function(event){
 			if(event.target === el)
-				callback.apply(this, arguments)
+				callback.apply(this, arguments);
 			else
 				event.handled = null;
 		}
 	}
-	$(el).bind(ev, wrappedCallback || callback)
+	$(el).bind(ev, wrappedCallback || callback);
 	// if ev name has >, change the name and bind
 	// in the wrapped callback, check that the element matches the actual element
 	return function(){
 		$(el).unbind(ev, wrappedCallback || callback);
 		el = ev = callback = wrappedCallback = null;
 	}
-}
-var delegate = function(el, selector, ev, callback){
-	$(el).delegate(selector, ev, callback)
+},
+delegate = function(el, selector, ev, callback){
+	$(el).delegate(selector, ev, callback);
 	return function(){
 		$(el).undelegate(selector, ev, callback);
 		el = ev = callback = selector = null;
 	}
-}
+},
 //wraps 'this' and makes it the first argument
-var shifter = function(cb){ 
+shifter = function(cb){ 
 	return function(){
-		return cb.apply(null, [$(this)].concat(Array.prototype.slice.call(arguments, 0)))
+		return cb.apply(null, [$(this)].concat(Array.prototype.slice.call(arguments, 0)));
 	}
+},
+dotsReg = /\./g,
+controllersReg = /_?controllers?/i
+underscoreAndRemoveController = function(className){
+	return $.String.underscore(className.replace(dotsReg,'_').replace(controllersReg,""));
 }
 /**
  * @tag core
@@ -205,10 +210,11 @@ jQuery.Class.extend("jQuery.Controller",
 /* @Static*/
 {
 	/**
-	 * Does 2 things:
+	 * Does 3 things:
 	 * <ol>
-	 *     <li>Creates a jQuery helper for this controller</li>
-	 *     <li> and attaches this element to the documentElement if onDocument is true</li>
+	 *     <li>Creates a jQuery helper for this controller.</li>
+	 *     <li>Calculates and caches which functions listen for events.</li>
+	 *     <li> and attaches this element to the documentElement if onDocument is true.</li>
 	 * </ol>   
 	 * <h3>jQuery Helper Naming Examples</h3>
 	 * @codestart
@@ -218,67 +224,63 @@ jQuery.Class.extend("jQuery.Controller",
 	 */
 	init : function(){
 		if(!this.shortName  || this.fullName == "jQuery.Controller") return;
-		this.underscoreFullName = $.String.underscore(this.fullName.replace(/\./g,'_').replace(/_?controllers?/i,""));
-		this.underscoreShortName = $.String.underscore(this.shortName.replace(/\./g,'_').replace(/_?controllers?/i,""));
-		this.underscoreControllerName = this.shortName.replace(/\./g,'_').replace(/_?controllers?/i,"");
+		this.underscoreFullName = underscoreAndRemoveController(this.fullName);
+		this.underscoreShortName = underscoreAndRemoveController(this.shortName);
 		
-		var val, act;
-		//if(!this.modelName)
-		//    this.modelName = jQuery.String.isSingular(this.underscoreName) ? this.underscoreName : jQuery.String.singularize(this.underscoreName)
-
-		//if(steal.getPath().match(/(.*?)controllers/)){
-		//    this._path = steal.getPath().match(/(.*?)controllers/)[1]+"controllers";
-		//}else{
-		//    this._path = steal.getPath()+"/"
-		//}
+		var val, 
+			processor,
+			controller = this,
+			pluginname = this.underscoreFullName;
 		
-		var controller = this;
-		
-		
-
-		 
-		 
-		 var pluginname = this.underscoreFullName;
-		 if(!jQuery.fn[pluginname]) {
+		//create jQuery plugin
+		if(!jQuery.fn[pluginname]) {
 			jQuery.fn[pluginname] = function(options){
 				var args = $.makeArray(arguments), 
 					isMethod = typeof options == "string" && typeof controller.prototype[options] == "function",
-					meth = args[0],
-					allCreated = true;;
+					meth = args[0];
 				this.each(function(){
-				//check if created
+					//check if created
 					var controllers = jQuery.data(this,"controllers"),
 						plugin = controllers && controllers[pluginname];
 					
 					
-					if(plugin){
-						if(isMethod)
+					if( plugin ) {
+						if( isMethod ) {
 							plugin[meth].apply(plugin, args.slice(1))
-						else if(plugin.update)
-							plugin.update.apply(plugin, args)
+						}
+						else if( plugin.update ) {
+							plugin.update.apply(plugin, args) //call the plugin's update method
+						}
 					}else{
-						allCreated = false;
 						controller.newInstance.apply(controller, [this].concat(args))
 					}
 				})
 				return this;
 			}
-			
-		 }
+		}
 		
-		//calculate actions
+		//calculate and cache actions
 		this.actions = {};
-		var convertedName, act, parts, c = this, replacer = /\{([^\}]+)\}/g, b = c.breaker, funcName;
-		for (funcName in this.prototype) {
-			if(funcName == "constructor") continue;
+		var convertedName, 
+			parts, 
+			c = this, 
+			replacer = /\{([^\}]+)\}/g, 
+			b = c.breaker, 
+			funcName;
+		for( funcName in this.prototype ) {
+			if( funcName == "constructor" ) { continue; }
 			convertedName = funcName.replace(replacer, function(whole, inside){
 				//convert inside to type
-				return jQuery.Class.getObject(inside, c.OPTIONS).toString()
+				return jQuery.Class.getObject(inside, c.OPTIONS).toString(); //gets the value in options
 			})
-			parts = convertedName.match( b)
-			act = parts && ( c.processors[parts[2]] || ($.inArray(parts[2], c.listensTo ) > -1 && c.basicProcessor) || ( parts[1] && c.basicProcessor) );
-			if(act){
-				this.actions[funcName] = {action: act, parts: parts}
+			parts = convertedName.match( b) //parts of the action string
+			//get processor if it responds to event type
+			processor = parts && 
+					(	c.processors[parts[2]] || //if the 2nd part is a processor, use that processor
+						($.inArray(parts[2], c.listensTo ) > -1 && c.basicProcessor) ||  //if it is in listens to, use basic processor
+					( parts[1] && c.basicProcessor) );
+			if(processor){
+				this.actions[funcName] = {action: processor, parts: parts}
 			}
 		}
 		
@@ -288,10 +290,9 @@ jQuery.Class.extend("jQuery.Controller",
 		 */
 		if(this.onDocument)
 			new this(document.documentElement);
-		
-		this.hookup = function(el){
-			return new c(el);
-		}
+	},
+	hookup : function(el){
+		return new this(el);
 	},
 	breaker : /^(?:(.*?)\s)?([\w\.\:>]+)$/,
 	listensTo : []//
@@ -310,15 +311,25 @@ jQuery.Class.extend("jQuery.Controller",
 	 * @param {HTMLElement} element the element this instance operates on.
 	 */
 	setup: function(element, options){
-		var funcName, convertedName, func, a, act, c = this.Class, b = c.breaker, cb;
+		var funcName, 
+			convertedName, 
+			func, 
+			a, 
+			act, 
+			c = this.Class, 
+			b = c.breaker, 
+			cb;
 		element = element.jquery ? element[0] : element;
-		//needs to go through prototype, and attach events to this instance
+		
+		//set element and className on element
 		this.element = jQuery(element).addClass(this.Class.underscoreFullName );
 		
-		//$.data(element,this.Class.underscoreFullName, this)
+		//set in data
 		( jQuery.data(element,"controllers") || jQuery.data(element,"controllers",{}) )[this.Class.underscoreFullName] = this;
 		
+		//adds bindings
 		this._bindings = [];
+		
 		for(funcName in c.actions){
 			var ready = c.actions[funcName]
 			cb = this.callback(funcName)
@@ -452,7 +463,9 @@ jQuery.Class.extend("jQuery.Controller",
 	 * 
 	 */
 	destroy: function(){
-		if(this._destroyed) throw this.Class.shortName+" controller instance has already been deleted";
+		if( this._destroyed ) {
+			throw this.Class.shortName+" controller instance has already been deleted";
+		}
 		this.element.removeClass(this.Class.underscoreFullName );
 		var self = this;
 		jQuery.each(this._bindings, function(key, value){
@@ -461,7 +474,6 @@ jQuery.Class.extend("jQuery.Controller",
 		
 		delete this._actions;
 		this._destroyed = true;
-		//clear element
 
 		var controllers = this.element.data("controllers");
 		if(controllers && controllers[this.Class.underscoreFullName])
@@ -499,11 +511,9 @@ jQuery.Class.extend("jQuery.Controller",
 });
 
 
-//lets add the processors :
-
-
+//processors respond to an event
 jQuery.Controller.processors = {};
-var basic = (jQuery.Controller.basicProcessor =function(el, event, selector, cb, controller){
+var basic = (jQuery.Controller.basicProcessor = function( el, event, selector, cb, controller ) {
 	if(controller.onDocument && controller.shortName !== "Main"){ //prepend underscore name if necessary
 		selector = selector ? controller.underscoreShortName +" "+selector : controller.underscoreShortName
 	}
@@ -516,11 +526,11 @@ var basic = (jQuery.Controller.basicProcessor =function(el, event, selector, cb,
 jQuery.each(["change","click","contextmenu","dblclick","keydown","keyup","keypress","mousedown","mousemove","mouseout","mouseover","mouseup","reset","windowresize","resize","windowscroll","scroll","select","submit","dblclick","focusin","focusout","load","unload","ready","hashchange","mouseenter","mouseleave"], function(i ,v){
 	jQuery.Controller.processors[v] = basic;
 })
-var windowEvent = function(el, event, selector, cb){
-	var func = function(){ return cb.apply(null, [jQuery(this)].concat( Array.prototype.slice.call(arguments, 0) )) }
+var windowEvent = function( el, event, selector, cb ) {
+	var func = shifter(cb);
 	jQuery(window).bind(event.replace(/window/,""), func);
 	return function(){
-	    jQuery(window).unbind(event.replace(/window/,""), func);
+		jQuery(window).unbind(event.replace(/window/,""), func);
 	}
 }
 
@@ -546,11 +556,11 @@ $.fn.mixin = function(){
  * @return {Array} an array of controller instances.
  */
 jQuery.fn.controllers = function(){
-    var controllerNames = jQuery.Array.from(arguments), 
+	var controllerNames = jQuery.makeArray(arguments), 
 	   instances = [], 
 	   controllers, 
 	   cname;
-    //check if arguments
+	//check if arguments
 	this.each(function(){
 		controllers= jQuery.data(this, "controllers")
 		if(!controllers) return;
