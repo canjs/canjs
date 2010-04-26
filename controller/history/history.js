@@ -133,10 +133,7 @@ $.extend($.Controller.prototype, {
     */
    redirectTo: function(options){
 	   var point = this._get_history_point(options);
-      $.History.add(point);
-//      location.hash = point;
-//	   var location = window.location.href.split('#')[0];   
-//	   window.location = location + point;
+      location.hash = point;
    },
    /**
     * Redirects to another page by replacing current URL with the given one.  This
@@ -146,7 +143,7 @@ $.extend($.Controller.prototype, {
     */
    replaceWith: function(options){
 	   var point = this._get_history_point(options);
-      $.History.replace(point);
+      location.replace(location.href.split('#')[0] + point);
    },
    /**
     * Adds history point to browser history.
@@ -156,8 +153,7 @@ $.extend($.Controller.prototype, {
     */
    history_add : function(options, data) {
 	   var point = this._get_history_point(options);
-      $.History.add(point);
-//	   MVC.History.add(point, data)
+      location.hash = point;
    },
    /**
     * Creates a history point from given options. Resultant history point is like #controller/action&param1=value1
