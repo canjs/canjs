@@ -535,7 +535,7 @@ var windowEvent = function( el, event, selector, cb ) {
 	}
 }
 
-jQuery.each(["windowresize","windowscroll","load","ready"], function(i ,v){
+jQuery.each(["windowresize","windowscroll","load","ready","unload","hashchange"], function(i ,v){
 	jQuery.Controller.processors[v] = windowEvent;
 })
 jQuery.Controller.processors.ready = function( el, event, selector, cb){
