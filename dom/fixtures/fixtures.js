@@ -87,7 +87,7 @@
 		} 
 		var settings = jQuery.extend(true, settings, jQuery.extend(true, {}, jQuery.ajaxSettings, settings));
 		
-		settings.url = steal.root.join(steal.root.joinCurrent()+'/fixtures/'+func(settings)); // convert settings
+		settings.url = steal.root.join('test/fixtures/'+func(settings)); // convert settings
 		settings.data = null;
 		settings.type = 'GET';
 		return ajax(settings);		

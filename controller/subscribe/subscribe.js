@@ -1,4 +1,4 @@
-steal.apps('jquery','jquery/controller','steal/openajax').then(function(){
+steal.plugins('jquery','jquery/controller','steal/openajax').then(function(){
     
     var subscribe = (jQuery.Controller.subscribeProcessor = function(el, event, selector, cb, controller){
         var controller = controller; 
