@@ -17,6 +17,7 @@ $.Model.extend("jQuery.Model.JsonRest",
             dataType: 'json',
             data: params,
             success: this.callback(['wrapMany',success]),
+            error: error,
             fixture: true
         })
     },
@@ -47,6 +48,7 @@ $.Model.extend("jQuery.Model.JsonRest",
             type: 'delete',
             dataType: 'text',
             success: success,
+            error: error,
             fixture: "-restDestroy"
         })
     },
