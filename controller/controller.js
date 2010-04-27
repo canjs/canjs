@@ -514,8 +514,9 @@ jQuery.Class.extend("jQuery.Controller",
 //processors respond to an event
 jQuery.Controller.processors = {};
 var basic = (jQuery.Controller.basicProcessor = function( el, event, selector, cb, controller ) {
-	if(controller.onDocument && controller.shortName !== "Main"){ //prepend underscore name if necessary
-		selector = selector ? controller.underscoreShortName +" "+selector : controller.underscoreShortName
+	var c = controller.Class;
+	if(c.onDocument && c.shortName !== "Main"){ //prepend underscore name if necessary
+		selector = selector ? c.underscoreShortName +" "+selector : c.underscoreShortName
 	}
 	if(selector){
 		return delegate(el, selector, event, shifter(cb))
