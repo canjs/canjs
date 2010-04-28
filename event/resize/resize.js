@@ -1,6 +1,13 @@
 steal.plugins('jquery').then(function($){
-	var resizeCount = 0, windowWidth, windowHeight;
-	
+	var resizeCount = 0, 
+		win = $(window),
+		windowWidth = win.width(), 
+		windowHeight = win.height(), 
+		timer;
+	/**
+	 * Noramalizes resize events across browsers.
+	 * @param {Object} handleObj
+	 */
 	$.event.special["resize"] = {
 		add: function(handleObj){
 			//jQuery.event.add( this, handleObj.origType, jQuery.extend({}, handleObj, {handler: liveHandler}) );
@@ -8,20 +15,22 @@ steal.plugins('jquery').then(function($){
 			var origHandler = handleObj.handler;
 			handleObj.origHandler = origHandler;
 			
-			handleObj.handler = function(ev, data){
-			    if(resizeCount === 0){
-			        windowWidth = $(window).width();
-				    windowHeight = $(window).height();
-			    }								
-			    if((this !== window) || resizeCount === 0){
+			handleObj.handler = function(ev, data){							
+			    if((this !== window) || (resizeCount === 0 && !ev.originalEvent)){
 				     resizeCount++;
 			         handleObj.origHandler.call(this, ev, data);
 					 resizeCount--;
 			    }
-			    if(resizeCount ===  0){
-			        if($(window).width() != windowWidth || $(window).height() != windowHeight) {
-					    $(window).trigger("resize");
-				    }
+			    var width = win.width();
+				var height = win.height();
+				if(resizeCount ===  0 && (width != windowWidth ||height != windowHeight)){
+					windowWidth = width;
+					windowHeight = height;
+					clearTimeout(timer)
+					timer = setTimeout(function(){
+						win.triggerHandler("resize");
+					},1)
+			        
 			    }					
 			}
 		},
