@@ -116,7 +116,10 @@ steal.plugins('jquery/controller/subscribe','jquery/event/hashchange').then(func
 		  
 	      OpenAjax.hub.publish("history."+folders.replace("/","."), data);
 	   });
-	   $(window).trigger('hashchange')
+	   setTimeout(function(){
+	   	$(window).trigger('hashchange')
+	   },1) //immediately after ready
+	   
 	});
 
 
@@ -190,7 +193,7 @@ $.extend($.Controller.prototype, {
     * Provides current window.location parameters as object properties.
     * @plugin 'dom/history'
     */
-   path_data :function() {
+   pathData :function() {
 	   return $.Path.get_data(this.path());
    }
 });

@@ -515,7 +515,7 @@ jQuery.Class.extend("jQuery.Controller",
 jQuery.Controller.processors = {};
 var basic = (jQuery.Controller.basicProcessor = function( el, event, selector, cb, controller ) {
 	if(controller.onDocument && controller.shortName !== "Main"){ //prepend underscore name if necessary
-		selector = selector ? "#"+controller.underscoreShortName +" "+selector : controller.underscoreShortName
+		selector = selector ? controller.underscoreShortName +" "+selector : controller.underscoreShortName
 	}
 	if(selector){
 		return delegate(el, selector, event, shifter(cb))
@@ -534,9 +534,12 @@ var windowEvent = function( el, event, selector, cb ) {
 	}
 }
 
-jQuery.each(["windowresize","windowscroll","load"], function(i ,v){
+jQuery.each(["windowresize","windowscroll","load","ready"], function(i ,v){
 	jQuery.Controller.processors[v] = windowEvent;
 })
+jQuery.Controller.processors.ready = function( el, event, selector, cb){
+	$(shifter(cb)); //cant really unbind
+}
 /**
  *  @add jQuery.fn
  */
