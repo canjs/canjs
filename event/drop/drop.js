@@ -6,14 +6,17 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 	//somehow need to keep track of elements with selectors on them.  When element is removed, somehow we need to know that
 	//
 	
-	
-	
+	var eventNames = ["dropover","dropped","dropout","dropinit","dropmove","dropend"];
+	//register each event as a basicProcessor
+	$.each(eventNames,function(){
+		jQuery.Controller.processors[this] = jQuery.Controller.basicProcessor;
+	})
 	
 	$.Drop = function(callbacks, element){
 		jQuery.extend(this,callbacks);
 		this.element = element;
 	}
-	$.each(["dropover","dropon","dropout","dropinit","dropmove","dropend"], function(){
+	$.each(eventNames, function(){
 			event.special[this] = {
 				add : function(handleObj){
 					//add this element to the compiles list
@@ -97,27 +100,27 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		/**
 		 * Gets all elements that are droppable, adds them
 		 */
-		compile : function(event){
+		compile : function(event, drag){
 			var el, drops, selector, sels;
 			this.last_active = [];
 			for(var i=0; i < this._elements.length; i++){ //for each element
 				el = this._elements[i]
-				var drops = $.event.findBySelector(el, ["dropover","dropon","dropout","dropinit","dropmove","dropend"])
+				var drops = $.event.findBySelector(el, eventNames)
 
 				for(selector in drops){ //find the selectors
 					sels = selector ? jQuery(selector, el) : [el];
 					for(var e= 0; e < sels.length; e++){ //for each found element, create a drop point
 						jQuery.removeData(sels[e],"offset");
-						this.add(sels[e], new this(drops[selector]));
+						this.add(sels[e], new this(drops[selector]), event, drag);
 					}
 				}
 			}
 			
 		},
-		add: function(element, callbacks, event) {
+		add: function(element, callbacks, event, drag) {
 			element = jQuery(element);
 			var responder = new $.Drop(callbacks, element);
-			responder.callHandlers(this.lowerName+'init', element[0], event)
+			responder.callHandlers(this.lowerName+'init', element[0], event, drag)
 			if(!responder._canceled){
 				this._responders.push(responder);
 			}
@@ -140,7 +143,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 					 
 			}
 			
-			affected.sort(this.sortByDeepestChild);
+			affected.sort(this.sortByDeepestChild); //we should only trigger on lowest children
 			event.stopRespondPropagate = function(){
 				propagate = false;
 			}
@@ -179,11 +182,11 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 			for(var r =0; r<this._responders.length; r++){
 				this._responders[r].callHandlers(this.lowerName+'end', null, event, moveable);
 			}
-			//go through the actives
+			//go through the actives ... if you are over one, call dropped on it
 			for(var i = 0; i < this.last_active.length; i++){
 				la = this.last_active[i]
 				if( this.isAffected(event.vector(), moveable, la)  && la[this.endName]){
-					la[this.endName](la.element, event, la, moveable)
+					la.callHandlers(this.endName, null, event, moveable);
 				}
 			}
 			
@@ -220,7 +223,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		 * Prevents this drop from being dropped on.
 		 */
 		cancel : function(){
-			this._cancel = true;
+			this._canceled = true;
 		}
 	} )
 });

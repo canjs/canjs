@@ -186,13 +186,20 @@
 				var retArr = items.slice(0);
 	
 				
-				$.each((settings.data.order || []).reverse(), function(i, name){
+				$.each((settings.data.order || []).slice(0).reverse(), function(i, name){
 					var split = name.split(" ");
 					retArr = retArr.sort(function(a, b){
 						if(split[1].toUpperCase() != "ASC")
 							return a[split[0]] < b[split[0]]
 						else
 							return a[split[0]] > b[split[0]]
+					})
+				})
+				$.each((settings.data.group || []).slice(0).reverse(), function(i, name){
+					var split = name.split(" ");
+					retArr = retArr.sort(function(a, b){
+
+						return a[split[0]] > b[split[0]]
 					})
 				})
 				var offset = settings.data.offset || 0;
