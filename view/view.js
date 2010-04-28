@@ -47,7 +47,13 @@ steal.plugins("jquery").then(function($){
      *  @tag view
      *  abc
      */
-    "html"]
+    "html",
+	/**
+     *  @function replaceWith
+     *  @tag view
+     *  abc
+     */
+	"replaceWith"]
 	
 	
 	var convert = function(func_name) {
