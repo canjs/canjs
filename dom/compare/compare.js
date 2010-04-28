@@ -1,4 +1,4 @@
-steal.apps('jquery').then(function($){
+steal.plugins('jquery').then(function($){
 	/**
 	 * @function compare
 	 * Compares the position of two nodes and returns at bitmask detailing how they are positioned 

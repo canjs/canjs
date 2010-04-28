@@ -486,7 +486,7 @@ jQuery.Class.extend("jQuery.Model",
     },
 	hookup : function(el){
 		var shortName = $.String.underscore(this.Class.shortName),
-			$el = $(el).addClass(shortName),
+			$el = $(el).addClass(shortName).addClass(this.identity()),
 			models  = $.data(el, "models") || $.data(el, "models", {});
 		models[shortName] = this;
 	}

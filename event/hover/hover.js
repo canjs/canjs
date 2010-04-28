@@ -1,4 +1,4 @@
-steal.apps('jquery','jquery/event/livehack').then(function(){
+steal.plugins('jquery','jquery/event/livehack').then(function(){
 	jQuery.hoverTimers = jQuery.hoverTimers || [];
 	var $ = jQuery,
 		event = jQuery.event, 
