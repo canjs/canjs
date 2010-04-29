@@ -32,7 +32,7 @@
 			settings.data = jQuery.param(settings.data);
 		
         if(settings.data && settings.type.toLowerCase() == "get") 
-            url += ($.String.steal(url,'?') ? '&' : '?') + settings.data
+            url += ($.String.include(url,'?') ? '&' : '?') + settings.data
 
         match = url.match(/^(?:https?:\/\/[^\/]*)?\/?([^\?]*)\??(.*)?/);
 		left = match[1];
@@ -207,7 +207,7 @@
 				
 				var i =0;
 				for(var param in settings.data){
-					if(param.indexOf("_id") != -1){
+					if(param.indexOf("Id") != -1){
 						while(i < retArr.length){
 							if(settings.data[param] != retArr[i][param]){
 								retArr.splice(i, 1)
