@@ -174,7 +174,7 @@
 			var items = []
 			for(var i = 0 ; i < (count); i++){
 				var num = i;
-				var item =  make(i)
+				var item =  make(i, items)
 				if(!item.id){
 					item.id =  num;
 				}
