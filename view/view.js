@@ -209,6 +209,7 @@ steal.plugins("jquery").then(function($){
 	$.View.register = function(info){
 		types["."+info.suffix] = info;
 	};
+	$.View.types = types;
 	/**
 	 * @attribute ext
 	 * The default suffix to use if none is provided in the view's url.  This is set to .ejs by default.
