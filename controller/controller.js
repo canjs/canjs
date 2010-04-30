@@ -603,14 +603,7 @@ jQuery.fn.controllers = function(){
 * @return {jQuery.Controller} the first controller.
 */
 jQuery.fn.controller = function (controller) {
-    var controllers = this.controllers.apply(this, arguments), c;
-    if (controller) {
-        $(controllers).each(function () {
-            if (this.Class == controller) return (c = this);
-        })
-        return c;
-    }
-    return controllers[0];
+    return this.controllers.apply(this, arguments)[0];
 };
 
 })
