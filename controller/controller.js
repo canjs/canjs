@@ -576,12 +576,21 @@ jQuery.fn.controllers = function(){
 	})
 	return instances;
 };
+
 /**
- * Gets all controllers in the jQuery element.
- * @return {jQuery.Controller} the first controller.
- */
-jQuery.fn.controller = function(){
-	return this.controllers.apply(this, arguments)[0];
+* Gets a controller in the jQuery element.  With no arguments, returns the first one found.
+* @param {Object} controller (optional) if exists, the first controller instance with this class type will be returned.
+* @return {jQuery.Controller} the first controller.
+*/
+jQuery.fn.controller = function (controller) {
+    var controllers = this.controllers.apply(this, arguments), c;
+    if (controller) {
+        $(controllers).each(function () {
+            if (this.Class == controller) return (c = this);
+        })
+        return c;
+    }
+    return controllers[0];
 };
 
 })
