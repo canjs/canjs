@@ -515,7 +515,7 @@ jQuery.Class.extend("jQuery.Controller",
 jQuery.Controller.processors = {};
 var basic = (jQuery.Controller.basicProcessor = function( el, event, selector, cb, controller ) {
 	var c = controller.Class;
-	if(c.onDocument && c.shortName !== "Main"){ //prepend underscore name if necessary
+	if(c.onDocument && (c.shortName !== "Main"|| c.shortName !== "MainController")){ //prepend underscore name if necessary
 		selector = selector ? c.underscoreShortName +" "+selector : c.underscoreShortName
 	}
 	if(selector){
