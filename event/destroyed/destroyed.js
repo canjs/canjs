@@ -1,4 +1,11 @@
+/**
+ * @add jQuery.event.special static
+ */
 steal.plugins('jquery').then(function($){
+	/**
+	 * @attribute destroyed
+	 * Provides a destroyed event
+	 */
 	$.event.special["destroyed"] = {
 		remove: function( handleObj){
 			//call the handler

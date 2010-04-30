@@ -1,3 +1,4 @@
+
 steal.plugins('jquery','jquery/lang/vector','jquery/event/livehack').then(function($){
 	//modify live
 	//steal the live handler ....
@@ -326,8 +327,41 @@ steal.plugins('jquery','jquery/lang/vector','jquery/event/livehack').then(functi
 		}
 	});
 	
-
-	event.setupHelper( ['dragdown','draginit','dragover','dragmove','dragout', 'dragend'], "mousedown", function(e){
+	/**
+	 * @add jQuery.event.special static
+	 */
+	event.setupHelper( [
+		/**
+		 * @attribute dragdown
+		 * When the drag starts
+		 */
+		'dragdown',
+		/**
+		 * @attribute draginit
+		 * When the drag starts
+		 */
+		'draginit',
+		/**
+		 * @attribute dragover
+		 * When the drag starts
+		 */
+		'dragover',
+		/**
+		 * @attribute dragmove
+		 * When the drag starts
+		 */
+		'dragmove',
+		/**
+		 * @attribute dragout
+		 * When the drag starts
+		 */
+		'dragout', 
+		/**
+		 * @attribute dragend
+		 * When the drag starts
+		 */
+		'dragend'
+		], "mousedown", function(e){
 		$.Drag.mousedown.call($.Drag, e, this)
 		
 	} )

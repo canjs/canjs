@@ -1,7 +1,14 @@
 steal.plugins('jquery').then(function($){
-    var types = {
+    /**
+	 * @add jQuery.event.special static
+	 */
+	var types = {
 		
 	}
+	/**
+	 * @attribute default
+	 * Adds default events
+	 */
 	$.event.special["default"] = {
 		add: function( handleObj){
 			//jQuery.event.add( this, handleObj.origType, jQuery.extend({}, handleObj, {handler: liveHandler}) );
