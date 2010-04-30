@@ -1,4 +1,4 @@
-module("subscribe")
+module("controller")
 test("subscribe testing works", function(){
 	
 	var ta = $("<div/>").appendTo( $("#qunit-test-area") )
@@ -47,14 +47,14 @@ test("subscribe testing works", function(){
 	
 	ta.remove();
 	
-	//ta.trigger("click")
-	//OpenAjax.hub.publish("a.b",{})
-	//equals(clicks,2, "Clicks stopped")
-	//equals(subscribes,2, "Subscribes stopped")
+	ta.trigger("click")
+	OpenAjax.hub.publish("a.b",{})
+	equals(clicks,2, "Clicks stopped")
+	equals(subscribes,2, "Subscribes stopped")
 })
 
-module("document and main controllers")
-test("events", function(){
+
+test("document and main controllers", function(){
 	var a = $("<div id='test'><span/></div>").appendTo($("#qunit-test-area")),
 		a_inner = a.find('span'),
 		b = $("<div><span/></div>").appendTo($("#qunit-test-area")),

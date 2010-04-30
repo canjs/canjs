@@ -1,4 +1,4 @@
 steal
   .plugins("qunit")
-  .apps("offline")
+  .plugins("offline")
   .then("tests/basic")

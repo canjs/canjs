@@ -1,4 +1,4 @@
 steal
   .plugins("funcunit/qunit")
-  .apps("closest")
+  .plugins("closest")
   .then("tests/basic")

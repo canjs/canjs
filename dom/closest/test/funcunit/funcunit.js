@@ -1,3 +1,3 @@
 steal
- .apps("funcunit/functional")
+ .plugins("funcunit/functional")
  .then("tests/basic")

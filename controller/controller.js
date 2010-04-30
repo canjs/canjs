@@ -352,7 +352,16 @@ jQuery.Class.extend("jQuery.Controller",
 		this.options = $.extend( $.extend(true,{}, this.Class.OPTIONS  ), options)
 		//setup to be destroyed ... don't bind b/c we don't want to remove it
 		//this.element.bind('destroyed', this.callback('destroy'))
-		this.bind('destroyed', 'destroy')
+		var destroyCB = shifter(this.callback("destroy"))
+		this.element.bind("destroyed", destroyCB);
+		this._bindings.push( function(el){
+			destroyCB.removed = true;
+			$(element).unbind("destroyed", destroyCB);
+			
+		} )
+		
+		
+		//this.bind('destroyed', 'destroy')
 		/**
 		 * @attribute element
 		 * The controller instance's delegated element.  This is set by [jQuery.Controller.prototype.init init].
@@ -462,18 +471,19 @@ jQuery.Class.extend("jQuery.Controller",
 	 * if the element is removed.
 	 * 
 	 */
-	destroy: function(){
+	destroy: function(ev){
 		if( this._destroyed ) {
 			throw this.Class.shortName+" controller instance has already been deleted";
 		}
+		this._destroyed = true;
 		this.element.removeClass(this.Class.underscoreFullName );
 		var self = this;
 		jQuery.each(this._bindings, function(key, value){
 			if(typeof value == "function") value(self.element[0]);
 		});
-		
+
 		delete this._actions;
-		this._destroyed = true;
+
 
 		var controllers = this.element.data("controllers");
 		if(controllers && controllers[this.Class.underscoreFullName])
@@ -515,8 +525,8 @@ jQuery.Class.extend("jQuery.Controller",
 jQuery.Controller.processors = {};
 var basic = (jQuery.Controller.basicProcessor = function( el, event, selector, cb, controller ) {
 	var c = controller.Class;
-	if(c.onDocument && (c.shortName !== "Main"|| c.shortName !== "MainController")){ //prepend underscore name if necessary
-		selector = selector ? c.underscoreShortName +" "+selector : c.underscoreShortName
+	if(c.onDocument && (c.shortName !== "Main"&& c.shortName !== "MainController")){ //prepend underscore name if necessary
+		selector = selector ? "#"+c.underscoreShortName +" "+selector : "#"+c.underscoreShortName
 	}
 	if(selector){
 		return delegate(el, selector, event, shifter(cb))
@@ -555,6 +565,16 @@ $.fn.mixin = function(){
 		
 	})
 }
+var isAControllerOf = function(instance, controllers){
+	for(var i =0; i < controllers.length; i++){
+		if(typeof controllers[i] == 'string' ? 
+			instance.Class.underscoreShortName == controllers[i] :
+			instance instanceof controllers[i]){
+			return true;
+		}
+	}
+	return false;
+}
 /**
  * Gets all controllers in the jQuery element.
  * @return {Array} an array of controller instances.
@@ -570,7 +590,7 @@ jQuery.fn.controllers = function(){
 		if(!controllers) return;
 		for(var cname in controllers){
 			var c = controllers[cname];
-			if(!controllerNames.length || jQuery.inArray(c.Class.underscoreShortName, controllerNames) > -1)
+			if(   !controllerNames.length || isAControllerOf(c, controllerNames))
 				instances.push(c);
 		}
 	})

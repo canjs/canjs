@@ -9,7 +9,7 @@ steal.plugins('jquery').then(function($){
 	$.event.special["destroyed"] = {
 		remove: function( handleObj){
 			//call the handler
-			if(handleObj.removed) return;
+			if(handleObj.removed || handleObj.handler.removed) return;
 			var event = jQuery.Event( "destroyed" );
 			event.preventDefault();
 			event.stopPropagation(); 

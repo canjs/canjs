@@ -1,6 +1,6 @@
 //we probably have to have this only describing where the tests are
 steal
- .apps("jquery/controller/subscribe")  //load your app
+ .plugins("jquery/controller/subscribe")  //load your app
  .plugins('funcunit/qunit')  //load qunit
  .then("subscribe_test")
  
