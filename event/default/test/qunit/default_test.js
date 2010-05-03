@@ -1,4 +1,4 @@
-module("default")
+module("default events")
 test("namespaced with same function", function(){
 
 	var count = 0 ,  func = function(){
@@ -19,13 +19,13 @@ test("triggering defaults", function(){
 	
 	
 	var count1 = 0, defaultNum, touchNum, num = 0;;
-    $("#wrap1").bind("default.touch", function(){
-        count1++;
+	$("#wrap1").bind("default.touch", function(){
+		count1++;
 		defaultNum = (++num)
-    })
+	})
 	$("#wrap1").bind("touch", function(){
 		touchNum = (++num)
-    })
+	})
 	$("#touchme1").trigger("touch")
 	equals(1, count1, "trigger default event")
 	equals(1, touchNum, "default called second")
@@ -40,21 +40,21 @@ test("triggering defaults", function(){
 	equals(1, count1, "default event not called")
 	equals(3, touchNum, "touch called again")
 	
-    /*var count2 = 0;
-    $("#wrap2").bind("default.hide.me.a", function(){
-        count2++;               
-    })
-    $(document.body).bind("hide", function(ev){
-        if(ev.target.id == "clickme1"){
-            console.log("stopping and preventing")
-            ev.stopPropagation()
-            ev.preventDefault()
-        }
-            
-    })
-    $(".clickme").click(function(){
-        $(this).trigger("hide")
-    })*/
+	var count2 = 0;
+	$("#wrap2").bind("default.hide.me.a", function(){
+		count2++;               
+	})
+	$(document.body).bind("hide", function(ev){
+		if(ev.target.id == "clickme1"){
+			console.log("stopping and preventing")
+			ev.stopPropagation()
+			ev.preventDefault()
+		}
+			
+	})
+	$(".clickme").click(function(){
+		$(this).trigger("hide")
+	})
 	
 	
 	
@@ -65,7 +65,10 @@ test("triggering defaults", function(){
 test("live on default events", function(){
 	
 	$("#qunit-test-area").html("//jquery/event/default/test/qunit/html.micro",{})
-	var bw = $("#bigwrapper"), count1 = 0, count2 = 0 , count3 = 0;;
+	var bw = $("#bigwrapper"), 
+		count1 = 0, 
+		count2 = 0, 
+		count3 = 0;
 	var jq = $();
 	jq.context = bw[0];
 	jq.selector = "#wrap1"
@@ -81,12 +84,10 @@ test("live on default events", function(){
 		count2++;
 	});
 	
-	/*var jq3 = $();
-	jq3.context = bw[0];
-	jq3.selector = "#wrap2"
-	jq3.live("default.somethingElse", function(){
+
+	bw.delegate("#wrap2","default.somethingElse",function(){
 		count3++;
-	});*/
+	})
 	
 	
 	$("#touchme1").trigger("touch")
@@ -95,8 +96,8 @@ test("live on default events", function(){
 	$("#touchme2").trigger("touching")
 	equals(count2,1,  "doing touching")
 	
-	//$("#touchme3").trigger("somethingElse")
-	//equals(count3,1,  "delegated live somethingElse")
+	$("#touchme2").trigger("somethingElse")
+	equals(count3,1,  "delegated live somethingElse")
 	
 	
 	

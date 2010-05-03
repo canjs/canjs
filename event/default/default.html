@@ -13,69 +13,69 @@
 				border: dashed 1px red;
 				width: 100px;
 			}
+			ul li {
+				float: left;
+				border: solid 1px red;
+				padding: 5px;
+				list-style: none;
+			}
+			ul { margin: 0px; padding: 0px;}
+			.tab {
+				clear: both;
+				border: solid 1px black;
+				padding: 10px;
+			}
         </style>
 	</head>
 	<body>
-	    <p>The body is listening to a "count" event and calling preventDefault if the target is ClickMe1
-			and it has over 5 clicks.
-		</p>
-		<p>Click "ClickMe1" and "ClickMe2".  You should see ClickMe1 stop counting.</p>
-		<div>
-	        
-            <div id='wrap1'>
-                <div id="clickme1" class='clickme'>ClickMe1</div>
-            </div>
-            <div id='wrap2'>
-                <div class='clickme'>ClickMe2</a>
-            </div>
-        </div>
-		
-		<div id="test1">
-		  Didn't work
+	    <h1>Default Events</h1>
+		<p>A tabs widget that doesn't let you continue until the first part is complete.</p>
+		<div id='tabs'>
+			<ul>
+				<li><a href='#first'>Part 1</a></li>
+				<li><a href='#second'>Part 2</a></li>
+			</ul>
+			<div id='first' class='tab'>
+				<input type='checkbox' id='complete'/> Check to complete this part.
+			</div>
+			<div id='second' class='tab'>
+				You completed part 1
+			</div>
 		</div>
-		<div id="test2">
-		  Worked (Didn't Change)
-		</div>
-		
+			
 		<script type='text/javascript' 
-                src='../../../steal/steal.js?steal[app]=jquery/event/default&steal[env]=development'
-                package='main.js'
-                compress='false'>   
+                src='../../../steal/steal.js'>   
         </script>
         <script type='text/javascript'>
-            var count1 = 1;
-            $("#wrap1").bind("default.count", function(){
-                $(this).find(".clickme").text("ClickMe1 Clicks"+count1++);
-            })
+		   steal.plugins("jquery/controller",'jquery/event/default').then(function($){
+			$.Controller.extend("Tabs",{
+				init : function(){
+					this.find(".tab:gt(0)").hide();
+				},
+				"li click" : function(el, ev){
+					ev.preventDefault();
+					if(!el.hasClass('active') && this.sub(el).triggerDefault("show")){
+						this.sub(this.find(".active").removeClass("active")).hide();
+						el.addClass("active")	
+					}
+				},
+				sub : function(el){
+					return $(el.find("a").attr("href"))
+				},
+				".tab default.show" : function(el){
+					el.show();
+				}
+			})
 			
-            var count2 = 1;
-            $("#wrap2").bind("default.count", function(){
-                $(this).find(".clickme").text("ClickeMe2 Clicks"+count2++);               
-            })
+			$("#tabs").tabs();
+			$("#second").bind("show",function(ev){
+				if(! $("#complete")[0].checked ){
+					ev.preventDefault();
+				}
+			})
 			
-			
-            $(document.body).bind("count", function(ev){
-                if(ev.target.id == "clickme1" && count1 > 5){
-                    console.log("stopping and preventing")
-                    ev.stopPropagation()
-                    ev.preventDefault()
-                }
-                    
-            })
-            $(".clickme").click(function(){
-                $(this).trigger("count")
-            })
-			
-			
-			
-			$("#test1").live("a.b", function(){
-		       $("#test1").html("Worked Changed")
-		    })
-		    $("#test1").live("a.c", function(){
-		       $("#test2").html("Failed")
-		    })
-		    $("#test1").trigger("a.b")
-			
+		   }).start();
+		   
         </script>
 	</body>
 </html>
