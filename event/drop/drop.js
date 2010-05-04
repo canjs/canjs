@@ -5,13 +5,44 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		};
 	//somehow need to keep track of elements with selectors on them.  When element is removed, somehow we need to know that
 	//
-	
-	var eventNames = ["dropover","dropped","dropout","dropinit","dropmove","dropend"];
+	/**
+	 * @add jQuery.event.special static
+	 */
+	var eventNames = [
+	/**
+	 * @attribute dropover
+	 */
+	"dropover",
+	/**
+	 * @attribute dropon
+	 */
+	"dropon",
+	/**
+	 * @attribute dropout
+	 */
+	"dropout",
+	/**
+	 * @attribute dropinit
+	 */
+	"dropinit",
+	/**
+	 * @attribute dropmove
+	 */
+	"dropmove",
+	/**
+	 * @attribute dropend
+	 */
+	"dropend"];
 	//register each event as a basicProcessor
-	$.each(eventNames,function(){
-		jQuery.Controller.processors[this] = jQuery.Controller.basicProcessor;
-	})
+	if($.Controller){
+		$.each(eventNames,function(){
+			$.Controller.processors[this] = jQuery.Controller.basicProcessor;
+		})
+	}
 	
+	/**
+	 * @class jQuery.Drop
+	 */
 	$.Drop = function(callbacks, element){
 		jQuery.extend(this,callbacks);
 		this.element = element;
@@ -40,7 +71,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		_elements: [], //elements that are listening for drops
 		_responders: [], //potential drop points
 		last_active: [],
-		endName: "dropped",
+		endName: "dropon",
 		addElement : function(el){
 			//check other elements
 			for(var i =0; i < this._elements.length ; i++  ){

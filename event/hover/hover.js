@@ -62,7 +62,15 @@ steal.plugins('jquery','jquery/event/livehack').then(function(){
 				
 			jQuery.hoverTimers.push(timer)
 		};
-		event.setupHelper( ["hoverinit", "hoverenter","hoverleave","hovermove"], "mouseenter", onmouseenter )
+		
+		/**
+		 * @add jQuery.event.special static
+		 */
+		event.setupHelper( [
+		/**
+		 * @attribute hoverinit
+		 */
+		"hoverinit", "hoverenter","hoverleave","hovermove"], "mouseenter", onmouseenter )
 		
 
 	

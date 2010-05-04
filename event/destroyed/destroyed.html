@@ -1,45 +1,23 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-            "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 	<head>
-		<title>destroyed</title>
-        <style type='text/css'>
-            body {font-family: verdana}
-            .error {border: solid 1px red;}
-            .error_text { color: red; font-size: 10px;}
-            td {padding: 3px;}
-			#clickToDestroy {
-				padding: 5px; border: solid 1px;
-			}
-        </style>
+		<title>destroyed demo</title>
+        <style type='text/css'>#clickToDestroy { padding: 5px; border: solid 1px;width: 200px;}</style>
 	</head>
 	<body>
-	    <div id='clickToDestroy'>Click Below to destory me</div>
-		<div id='change'>You haven't destroyed him yet</div>
-		<script type='text/javascript' 
-                src='../../../steal/steal.js'
-                package='main.js'
-                compress='false'>   
+	    <div id='clickToDestroy'>Click Below to destroy me</div>
+		<a id='change' href="javascript://">Click here!</div>
+		<script type='text/javascript' src='../../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins('jquery/event/destroyed','jquery/controller').then(function(){
-				function des(){
-					console.log("removing the first one")
+			steal.plugins('jquery/event/destroyed').then(function(){
+				$("#clickToDestroy").bind("destroyed", function(){
 					$("#change").html("destroyed :)")
-				}
-				$("#clickToDestroy").bind("destroyed", des)
+				})
 				$("#change").bind("click", function(){
 					$("#clickToDestroy").remove()
 				})
-				$.Controller.extend("Something",{
-					click : function(){
-						alert('destroy me')
-					}
-				})
-				
-				$("#clickToDestroy").something();
-			})
-			steal.start();
+			}).start();
 			
 			
 		</script>
