@@ -25,7 +25,7 @@ steal.plugins('jquery').then(function($){
 	 * <h2>Example</h2>
 	 * <p>Lets look at how you could build a simple tabs widget with default events.</p>
 	 * @iframe jquery/event/default/default.html 200
-	 * @demo /jquery/event/default/default.html
+	 * @demo jquery/event/default/default.html
 	 * <p>The code that prevents the <i>Part 2</i> tab from showing is:</p>
 	 * @codestart
 $("#second").bind("show",function(ev){
