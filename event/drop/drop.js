@@ -11,28 +11,43 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 	var eventNames = [
 	/**
 	 * @attribute dropover
+	 * Called when a drag is moved over this drop.
+	 * <p>Drop events are covered in more detail in [jQuery.Drop].</p>
 	 */
 	"dropover",
 	/**
 	 * @attribute dropon
+	 * Called when a drag is dropped on a drop element.
+	 * <p>Drop events are covered in more detail in [jQuery.Drop].</p>
 	 */
 	"dropon",
 	/**
 	 * @attribute dropout
+	 * Called when a drag is moved out of this drop.
+	 * <p>Drop events are covered in more detail in [jQuery.Drop].</p>
 	 */
 	"dropout",
 	/**
 	 * @attribute dropinit
+	 * Called when a drag motion starts and the drop elements are initialized.
+	 * <p>Drop events are covered in more detail in [jQuery.Drop].</p>
 	 */
 	"dropinit",
 	/**
 	 * @attribute dropmove
+	 * Called when a drag is moved over a drop.
+	 * <p>Drop events are covered in more detail in [jQuery.Drop].</p>
 	 */
 	"dropmove",
 	/**
 	 * @attribute dropend
+	 * Called when the drag is done for this drop.
+	 * <p>Drop events are covered in more detail in [jQuery.Drop].</p>
 	 */
 	"dropend"];
+	
+	
+	
 	//register each event as a basicProcessor
 	if($.Controller){
 		$.each(eventNames,function(){
@@ -42,6 +57,28 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 	
 	/**
 	 * @class jQuery.Drop
+	 * Provides drop events as a special event to jQuery.  Just by binding a drop event, the callback function
+	 * will be called back when the appropriate event happens.
+	 * <h2>Events</h2>
+	 * All drop events are called with the native event, an instance of drop, and the drag.  Here are the available drop 
+	 * events.
+	 * <ul>
+	 * 	<li><code>dropinit</code> - the drag motion is started, drop positions are calculated.</li>
+	 *  <li><code>dropover</code> - a drag moves over a drop event.</li>
+	 *  <li><code>dropout</code> - a drag moves out of the drop.</li>
+	 *  <li><code>dropmove</code> - a drag is moved over a drop.</li>
+	 *  <li><code>dropon</code> - a drag is released over a drop.</li>
+	 *  <li><code>dropend</code> - the drag motion has completed.</li>
+	 * </ul>
+	 * <h2>Examples</h2>
+	 * Here's how to listen for when a drag moves over a drop:
+	 * @codestart
+	 * $('.drop').live("dropover", function(ev, drop, drag){
+	 *   $(this).addClass("drop-over")
+	 * })
+	 * @codeend
+	 * A bit more complex example:
+	 * @iframe jquery/event/drop/drop.html
 	 */
 	$.Drop = function(callbacks, element){
 		jQuery.extend(this,callbacks);
@@ -226,6 +263,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		},
 		/**
 		 * Called after dragging has stopped.
+		 * @hide
 		 */
 		clear : function(){
 		  

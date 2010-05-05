@@ -399,27 +399,32 @@ steal.plugins('jquery','jquery/lang/vector','jquery/event/livehack').then(functi
 		'dragdown',
 		/**
 		 * @attribute draginit
-		 * Called when the drag starts
+		 * Called when the drag starts.
+		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
 		 */
 		'draginit',
 		/**
 		 * @attribute dragover
-		 * Called when the drag is over a drop
+		 * Called when the drag is over a drop.
+		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
 		 */
 		'dragover',
 		/**
 		 * @attribute dragmove
-		 * Called when the drag is moved
+		 * Called when the drag is moved.
+		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
 		 */
 		'dragmove',
 		/**
 		 * @attribute dragout
-		 * When the drag leaves a drop point
+		 * When the drag leaves a drop point.
+		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
 		 */
 		'dragout', 
 		/**
 		 * @attribute dragend
-		 * Called when the drag is done
+		 * Called when the drag is done.
+		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
 		 */
 		'dragend'
 		], "mousedown", function(e){

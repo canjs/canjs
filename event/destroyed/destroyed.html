@@ -5,11 +5,13 @@
         <style type='text/css'>#clickToDestroy { padding: 5px; border: solid 1px;width: 200px;}</style>
 	</head>
 	<body>
-	    <div id='clickToDestroy'>Click Below to destroy me</div>
-		<a id='change' href="javascript://">Click here!</div>
-		<script type='text/javascript' src='../../../steal/steal.js'>   
-        </script>
-		<script type='text/javascript'>
+		<div id='demo-html'>
+			<div id='clickToDestroy'>Click Below to destroy me</div>
+			<a id='change' href="javascript://">Click here!</div>
+		</div>
+	    
+		<script type='text/javascript' src='../../../steal/steal.js'></script>
+		<script type='text/javascript' id='demo-script'>
 			steal.plugins('jquery/event/destroyed').then(function(){
 				$("#clickToDestroy").bind("destroyed", function(){
 					$("#change").html("destroyed :)")

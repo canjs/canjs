@@ -70,7 +70,19 @@ steal.plugins('jquery','jquery/event/livehack').then(function(){
 		/**
 		 * @attribute hoverinit
 		 */
-		"hoverinit", "hoverenter","hoverleave","hovermove"], "mouseenter", onmouseenter )
+		"hoverinit", 
+		/**
+		 * @attribute hoverenter
+		 */
+		"hoverenter",
+		/**
+		 * @attribute hoverleave
+		 */
+		"hoverleave",
+		/**
+		 * @attribute hovermove
+		 */
+		"hovermove"], "mouseenter", onmouseenter )
 		
 
 	
