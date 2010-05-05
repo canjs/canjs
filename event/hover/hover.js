@@ -1,5 +1,5 @@
 steal.plugins('jquery','jquery/event/livehack').then(function(){
-	jQuery.hoverTimers = jQuery.hoverTimers || [];
+	jQuery.hover = {};
 	var $ = jQuery,
 		event = jQuery.event, 
 		handle  = event.handle,
@@ -16,10 +16,14 @@ steal.plugins('jquery','jquery/event/livehack').then(function(){
 				entered = this, 
 				called = false,
 				lastEv = ev, 
-				delay = 100;
+				distance = jQuery.hover.distance || 10, 
+				delay = jQuery.hover.delay || 100;
 			var hovered = {
-				setDelay: function(time){
+				delay: function(time){
 					delay = time;
+				},
+				distance: function(d){
+					distance = d;
 				}
 			}
 			$(entered).bind("mousemove.specialMouseEnter", {}, function(ev){
@@ -40,7 +44,7 @@ steal.plugins('jquery','jquery/event/livehack').then(function(){
 			})
 			timer = setTimeout(function(){
 				//check that we aren't moveing around
-				if(dist < 10 && $(entered).queue().length == 0){
+				if(dist < distance && $(entered).queue().length == 0){
 					$.each(event.find(delegate, ["hoverenter"], selector), function(){
 						this.call(entered, lastEv, hovered)
 					})
@@ -57,10 +61,6 @@ steal.plugins('jquery','jquery/event/livehack').then(function(){
 			$.each(event.find(delegate, ["hoverinit"], selector), function(){
 				this.call(entered, ev, hovered)
 			})
-			while(jQuery.hoverTimers.length)
-				clearTimeout(jQuery.hoverTimers.shift());
-				
-			jQuery.hoverTimers.push(timer)
 		};
 		
 		/**
