@@ -117,9 +117,10 @@ var EJS = function( options ){
  *                             [jQuery.fn.before replace], and 
  *                             [jQuery.fn.before text].</li>
  * </ul>
- * <h3>Render</h3>
- * Render is the preferred way of rendering a view.  You can find all the options for render in 
- * its [jQuery.Controller.prototype.render documentation], but here is a brief example of rendering the 
+ * <h3>View</h3>
+ * jQuery.Controller.prototype.view is the preferred way of rendering a view.  
+ * You can find all the options for render in 
+ * its [jQuery.Controller.prototype.view documentation], but here is a brief example of rendering the 
  * <i>list.ejs</i> view from a controller:
  * @codestart
  * $.Controller.extend("TasksController",{
@@ -127,44 +128,21 @@ var EJS = function( options ){
  *         Task.findAll({},this.callback('list'))
  *     },
  *     list : function(tasks){
- *         this.<b>render</b>({view: "tasks/list",    //which controller and view file
- *                                             //  render would guess this by default
- *                      html: this.element,    //what jQuery modifier you want to perform
- *                                             //  on which element
- *                      data: {tasks: tasks}}) //the data that gets passed to the view
+ *         this.element.html(
+ *         	this.view("list", {tasks: tasks})
+ *        )
  *     }
  * })
  * @codeend
  * 
- * <h3>jQuery Helpers</h3>
- * View modifies a number of jQuery insertion methods to allow view insertion.  You can find more 
- * details on the helpers documentation pages <i>(linked above)</i>.
- * The following are a few examples:
- * @codestart
- * $("#tasks").html({view: "views/tasks/list", data: {tasks: tasks}})
- * $("#tasks").before({view: "views/tasks/welcome"});
- * @codeend
  * 
- * <h2>Including Views</h2>
- * Include can package processed views in the production file.  After loading the include plugin, you
- * can use [include.static.views] wrapped in an include callback function.  Because included views are already
- * processed, they don't rely on eval.  Here's how to include them:
- * @codestart
- * include.plugins('view','controller')
- * include.controllers('tasks');
- * include(function(){
- *   include.views('views/tasks/show');
- * })
- * @codeend
- * Read more about [include.static.views include.views].
  * <h2>View Helpers</h2>
- * View Helpers create html code.  View by default only comes with 
- * [jQuery.View.Helpers.prototype.view view] and [jQuery.View.Helpers.prototype.to_text to_text].
+ * View Helpers return html code.  View by default only comes with 
+ * [jQuery.View.EJS.Helpers.prototype.view view] and [jQuery.View.Helpers.prototype.to_text to_text].
  * You can include more with the view/helpers plugin.  But, you can easily make your own!
- * Learn how in the [jQuery.View.Helpers Helpers] page.
+ * Learn how in the [jQuery.View.EJS.Helpers Helpers] page.
  * 
  * @init Creates a new view
- * @tag core
  * @param {Object} options A hash with the following options
  * <table class="options">
 				<tbody><tr><th>Option</th><th>Default</th><th>Description</th></tr>
@@ -555,7 +533,13 @@ EJS.config( {cache: true, type: '<', ext: '.ejs' } );
 
 
 
-
+/**
+ * @constructor jQuery.View.EJS.Helpers
+ * By adding functions to jQuery.View.EJS.Helpers.prototype, those functions will be available in the 
+ * views.
+ * @init Creates a view helper.  This function is called internally.  You should never call it.
+ * @param {Object} data The data passed to the view.  Helpers have access to it through this._data
+ */
 EJS.Helpers = function(data, extras){
 	this._data = data;
     this._extras = extras;
@@ -563,13 +547,17 @@ EJS.Helpers = function(data, extras){
 };
 /* @prototype*/
 EJS.Helpers.prototype = {
-
-	view: function(options, data, helpers){
+	/**
+	 * Renders a partial view.  This is deprecated in favor of <code>$.View()</code>.
+	 */
+	view: function(url, data, helpers){
         if(!helpers) helpers = this._extras
 		if(!data) data = this._data;
-		return $.View(options, data, helpers)  //new EJS(options).render(data, helpers);
+		return $.View(url, data, helpers)  //new EJS(options).render(data, helpers);
 	},
-
+	/**
+	 * Converts response to text.
+	 */
 	to_text: function(input, null_text) {
 	    if(input == null || input === undefined) return null_text || '';
 	    if(input instanceof Date) return input.toDateString();

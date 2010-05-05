@@ -48,13 +48,6 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 	
 	
 	
-	//register each event as a basicProcessor
-	if($.Controller){
-		$.each(eventNames,function(){
-			$.Controller.processors[this] = jQuery.Controller.basicProcessor;
-		})
-	}
-	
 	/**
 	 * @class jQuery.Drop
 	 * Provides drop events as a special event to jQuery.  Just by binding a drop event, the callback function

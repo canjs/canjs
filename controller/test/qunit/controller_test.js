@@ -101,3 +101,20 @@ test("document and main controllers", function(){
 	a.remove();
 	b.remove();
 })
+
+
+test("bind to any special", function(){
+	jQuery.event.special.crazyEvent = {
+		
+	}
+	var called = false;
+	jQuery.Controller.extend("WeirdBind",{
+		crazyEvent : function(){
+			called = true;
+		}
+	})
+	var a = $("<div id='crazy'></div>").appendTo($("#qunit-test-area"))
+	a.weird_bind();
+	a.trigger("crazyEvent")
+	ok(called, "heard the trigger")
+})

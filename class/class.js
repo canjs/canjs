@@ -87,6 +87,7 @@ steal.plugin("jquery").then(function(){
    * @constructor jQuery.Class
    * @plugin jquery/class
    * @tag core
+   * @download dist/jquery.class.js
    * Class provides simulated inheritance in JavaScript. 
    * It is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Class] 
    * Inheritance library.  Besides prototypal inheritance, it adds a few important features:

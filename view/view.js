@@ -132,15 +132,21 @@ steal.plugins("jquery").then(function($){
 	 *  <li>[Jaml] - A functional approach to JS templates.</li>
 	 *  <li>[Micro] - A very lightweight template similar to EJS.</li>
 	 * </ul>
-	 * @iframe /jquery/view/view.html 800
+	 * <h2>Compressing Views with Steal</h2>
+	 * Steal can package processed views in the production file. Because 'stolen' views are already
+	 * processed, they don't rely on eval.  Here's how to steal them:
+	 * @codestart
+	 * steal.views('//views/tasks/show.ejs');
+	 * @codeend
+	 * Read more about [steal.static.views steal.views].
+	 * <h2>Example</h2>
+	 * @iframe jquery/view/view.html 700
 	 * @tag core
 	 * 
-	 * 
-	 * 
 	 * @init blah
-	 * @param {String} url
-	 * @param {Object} data
-	 * @param {Object} [helpers] 
+	 * @param {String} url asd fa
+	 * @param {Object} data asdf af
+	 * @param {Object} [helpers] da fadsd f
 	 * @return {String} The result of the view.
 	 */
 	$.View= function(url, data, helpers){
