@@ -12,6 +12,7 @@ steal.plugins('jquery').then(function($){
 	 * </p>
 	 * <h2>Example</h2>
 	 * @iframe jquery/event/destroyed/destroyed.html 150
+	 * @demo /jquery/event/destroyed/destroyed.html 
 	 */
 	$.event.special["destroyed"] = {
 		remove: function( handleObj){
