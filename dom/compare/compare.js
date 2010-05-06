@@ -1,11 +1,18 @@
+/**
+ *  @add jQuery.fn
+ */
 steal.plugins('jquery').then(function($){
 	/**
 	 * @function compare
-	 * Compares the position of two nodes and returns at bitmask detailing how they are positioned 
+	 * @parent dom
+	 * @download dist/jquery.compare.js
+	 * Compares the position of two nodes and returns a bitmask detailing how they are positioned 
 	 * relative to each other.  You can expect it to return the same results as 
 	 * [http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-compareDocumentPosition | compareDocumentPosition].
 	 * Parts of this documentation and source come from [http://ejohn.org/blog/comparing-document-position | John Resig].
-	 * @plugin dom/position
+	 * <h2>Demo</h2>
+	 * @demo jquery/dom/compare/compare.html
+	 * @plugin dom/compare
 	 * @param {HTMLElement} a the first node
 	 * @param {HTMLElement} b the second node
 	 * @return {Number} A bitmap with the following digit values:

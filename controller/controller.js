@@ -661,11 +661,13 @@ var isAControllerOf = function(instance, controllers){
 	}
 	return false;
 }
+jQuery.fn.
 /**
+ * @function controllers
  * Gets all controllers in the jQuery element.
  * @return {Array} an array of controller instances.
  */
-jQuery.fn.controllers = function(){
+controllers = function(){
 	var controllerNames = jQuery.makeArray(arguments), 
 	   instances = [], 
 	   controllers, 
@@ -682,13 +684,14 @@ jQuery.fn.controllers = function(){
 	})
 	return instances;
 };
-
+jQuery.fn.
 /**
+* @function controller
 * Gets a controller in the jQuery element.  With no arguments, returns the first one found.
 * @param {Object} controller (optional) if exists, the first controller instance with this class type will be returned.
 * @return {jQuery.Controller} the first controller.
 */
-jQuery.fn.controller = function (controller) {
+controller = function (controller) {
     return this.controllers.apply(this, arguments)[0];
 };
 

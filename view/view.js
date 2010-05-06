@@ -106,23 +106,22 @@ steal.plugins("jquery").then(function($){
 	}
 	/**
 	 * @constructor jQuery.View
+	 * @tag core
 	 * View provides a uniform interface for using templates in JavaScriptMVC.  When templates 
 	 * [jQuery.View.static.register register] themselves, you are able to:
 	 * <ul>
-	 * 	<li>Compress your views with [steal.static.views].</li>
+	 * 	
 	 *  <li>Use views with jQuery extensions [jQuery.fn.after after], [jQuery.fn.append append],
 	 *  	[jQuery.fn.before before], [jQuery.fn.html html], [jQuery.fn.prepend prepend],
 	 *      [jQuery.fn.replace replace], [jQuery.fn.text text] like:
-	 *      @codestart
-	 *      $('.foo').html("//path/to/view.ejs",{})
-	 *      @codeend
+@codestart
+$('.foo').html("//path/to/view.ejs",{})
+@codeend
 	 *  </li>
-	 *  <li>
-	 *  	Use the [jQuery.Controller.prototype.view controller/view] plugin.
-	 *  </li>
-	 *  <li>
-	 *  	Hookup plugins on elements after render.
-	 *  </li>
+	 *  <li>Compress your views with [steal.static.views].</li>
+	 *  <li>Use the [jQuery.Controller.prototype.view controller/view] plugin to auto-magically
+	 *  lookup views.</li>
+	 *  <li>Hookup Controllers and other code on elements after render.</li>
 	 *  
 	 * </ul>
 	 * 
@@ -132,22 +131,36 @@ steal.plugins("jquery").then(function($){
 	 *  <li>[Jaml] - A functional approach to JS templates.</li>
 	 *  <li>[Micro] - A very lightweight template similar to EJS.</li>
 	 * </ul>
-	 * <h2>Compressing Views with Steal</h2>
+	 * @iframe jquery/view/view.html 700
+
+	 * 
+	 * 
+	 * <h2>Compress Views with Steal</h2>
 	 * Steal can package processed views in the production file. Because 'stolen' views are already
 	 * processed, they don't rely on eval.  Here's how to steal them:
 	 * @codestart
 	 * steal.views('//views/tasks/show.ejs');
 	 * @codeend
 	 * Read more about [steal.static.views steal.views].
-	 * <h2>Example</h2>
-	 * @iframe jquery/view/view.html 700
-	 * @tag core
-	 * 
-	 * @init blah
-	 * @param {String} url asd fa
-	 * @param {Object} data asdf af
-	 * @param {Object} [helpers] da fadsd f
-	 * @return {String} The result of the view.
+	 * <h2>Hooking up controllers</h2>
+	 * After drawing some html, you often want to add other widgets and plugins inside that html.
+	 * View makes this easy.  You just have to return the Contoller class you want to be hooked up.
+@codestart
+&lt;ul &lt;%= Phui.Tabs%>>...&lt;ul>
+@codeend
+You can even hook up multiple controllers:
+@codestart
+&lt;ul &lt;%= [Phui.Tabs, Phui.Filler]%>>...&lt;ul>
+@codeend
+	 * @init Looks up a template, processes it, caches it, then renders the template
+	 * with data and optional helpers.
+@codestart
+$.View("//myplugin/views/init.ejs",{message: "Hello World"})
+@codeend
+	 * @param {String} url The url or id of an element to use as the template's source.
+	 * @param {Object} data The data to be passed to the view.
+	 * @param {Object} [helpers] Optional helper functions the view might use.
+	 * @return {String} The rendered result of the view.
 	 */
 	$.View= function(url, data, helpers){
 		var id = toId(url);

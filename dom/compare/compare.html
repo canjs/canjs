@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>Compare</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            div {
+            	border: solid 1px black;
+				margin: 5px;
+				padding: 5px;
+				font-size: 12px;
+            }
+			.red {
+				background-color: red;
+			}
+			.green {
+				background-color: green;
+			}
+        </style>
+	</head>
+	<body>
+<p>Click 2 elements to compare them.</p>
+<pre>
+<code>$('.red').compare($('.green')) = <span id='result'></span></code>
+</pre>
+<div id="demo-html">
+<div>
+	A
+	<div>A.1</div>
+	<div>A.2</div>
+</div>
+<div>
+	B
+</div>
+</div>
+		<script type='text/javascript' 
+                src='../../../steal/steal.js?jquery/dom/compare/compare.js'>   
+        </script>
+<script id="demo-source" type='text/javascript'>
+var placing = 'red'
+//on click, set red and green and compare positions
+$('div').click(function(ev){
+  var next = placing == 'red' ? 'green' : 'red';
+  $('.'+placing).removeClass(placing)
+  $(this).addClass(placing) 
+  placing = next
+  ev.stopPropagation();
+  //don't worry about repeat queries for simple example
+  if($('.green').length){
+    $("#result").text(  $('.red').compare($('.green')) )
+  }
+})
+</script>
+	</body>
+</html>

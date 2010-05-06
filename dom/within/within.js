@@ -1,3 +1,6 @@
+/**
+ *  @add jQuery.fn
+ */
 steal.plugins('jquery').then(function($){
    var withinBox = function(x, y, left, top, width, height ){
         return (y >= top &&
@@ -7,6 +10,7 @@ steal.plugins('jquery').then(function($){
     } 
 /**
  * @function within
+ * @parent dom
  * Returns if the elements are within the position
  * @param {Object} x
  * @param {Object} y

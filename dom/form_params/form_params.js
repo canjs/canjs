@@ -1,17 +1,20 @@
+/**
+ *  @add jQuery.fn
+ */
 steal.plugins("jquery",'jquery/lang/rsplit').then(function($) {
 var isNumber = function(value) {
    if(typeof value == 'number') return true;
    if(typeof value != 'string') return false;
    return value.match(/^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/);
 };
-/**
- *  @add jQuery.fn
- */
 
 $.fn.extend({
     /**
-     * Returns an object of name-value pairs that represents values in a form.  
-     * It is able to nest values whose element's name has square brackets. <br/>
+     * @parent dom
+     * @download dist/jquery.form_params.js
+     * @plugin jquery/dom/form_params
+     * <p>Returns an object of name-value pairs that represents values in a form.  
+     * It is able to nest values whose element's name has square brackets. </p>
      * Example html:
      * @codestart html
      * &lt;form>
@@ -23,6 +26,9 @@ $.fn.extend({
      * @codestart
      * $('form').formParams() //-> { foo:{bar:2, ced: 4} }
      * @codeend
+     * 
+     * @demo jquery/dom/form_params/form_params.html
+     * 
      * @param {Boolean} [numAsString] true if all values should be left as strings
      * @return {Object} An object of name-value pairs.
      */

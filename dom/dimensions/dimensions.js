@@ -1,6 +1,9 @@
+/**
+ *  @add jQuery.fn
+ */
 steal.plugins('jquery').then(function($) {
-    //var oldHeight = $.fn.outerHeight,
-    //	oldWidth = $.fn.outerWidth;
+
+
     var weird = /button|select/i,
 		getBoxes = {},
 	    checks = {
@@ -59,7 +62,35 @@ steal.plugins('jquery').then(function($) {
         return styles;
     }
 
-    $.each({ width: "Width", height: "Height" }, function(lower, Upper) {
+    $.each({ 
+	/*
+	 * @function outerWidth
+	 * @parent dom
+	 * Lets you set the outer height on an object
+	 * @param {Number} [height] 
+	 */
+	width: 
+	/*
+	 * @function innerWidth
+	 * @parent dom
+	 * Lets you set the inner height on an object
+	 * @param {Number} [height] 
+	 */
+	"Width", 
+	/*
+	 * @function outerHeight
+	 * @parent dom
+	 * Lets you set the outer width on an object
+	 * @param {Number} [height] 
+	 */
+	height: 
+	/*
+	 * @function innerHeight
+	 * @parent dom
+	 * Lets you set the outer width on an object
+	 * @param {Number} [height] 
+	 */
+	"Height" }, function(lower, Upper) {
 
         //used to get the padding and border for an element in a given direction
         getBoxes[lower] = function(el, boxes) {

@@ -1,5 +1,15 @@
+/**
+ *  @add jQuery.fn
+ */
 steal.then(function(){
-	//adds open selector support to closest, but only on 1 element
+	/**
+	 * @function closest
+	 * @parent dom
+	 * Overwrites closest to allow open > selectors.  This allows controller actions such as:
+	 * @codestart
+	 * ">li click" : function(el, ev){ ... }
+	 * @codeend
+	 */
 	var oldClosest = jQuery.fn.closest;
 	jQuery.fn.closest = function(selectors, context){
 		var rooted = {}, res, result, thing, i, j, selector, rootedIsEmpty = true, selector, selectorsArr = selectors;
