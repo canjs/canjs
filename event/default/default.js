@@ -7,6 +7,7 @@ steal.plugins('jquery').then(function($){
 	}
 	/**
 	 * @attribute default
+	 * @parent specialevents
 	 * Allows you to perform default actions as a result of an event.
 	 * <p>
 	 * Event based APIs are a powerful way of exposing functionality of your widgets.  It also fits in 

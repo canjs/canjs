@@ -50,6 +50,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 	
 	/**
 	 * @class jQuery.Drop
+	 * @parent specialevents
 	 * Provides drop events as a special event to jQuery.  Just by binding a drop event, the callback function
 	 * will be called back when the appropriate event happens.
 	 * <h2>Events</h2>

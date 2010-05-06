@@ -4,6 +4,7 @@
 steal.plugins('jquery').then(function($){
 	/**
 	 * @attribute destroyed
+	 * @parent specialevents
 	 * Provides a destroyed event on an element.
 	 * <p>
 	 * The destroyed event does not bubble and is called when the element
@@ -11,8 +12,7 @@ steal.plugins('jquery').then(function($){
 	 * replaceWith, etc. 
 	 * </p>
 	 * <h2>Example</h2>
-	 * @iframe jquery/event/destroyed/destroyed.html 150
-	 * @demo /jquery/event/destroyed/destroyed.html 
+	 * @demo jquery/event/destroyed/destroyed.html 
 	 */
 	$.event.special["destroyed"] = {
 		remove: function( handleObj){

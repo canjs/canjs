@@ -20,70 +20,32 @@
         </style>
 	</head>
 	<body>
-	    <h2>Delegating</h2>
-		<div class='hover'>
-			hover me
-			<div>abc</div>
-			def
-		</div>
-		<div class='hover'>
-			hover me
-			<div>abc</div>
-			def
-		</div>
-        <h2>Bound Directly</h2>
-		<div class='hovers'>
-	    	hover me
-			<div>abc</div>
-			def
-		</div>
-		<div class='hovers'>
-			hover me
-			<div>abc</div>
-			def
-		</div>
-		<h2><a href="#" id="off">Turn OFF Above</a></h2>
-		<div class='myhover'>hover this</div>
-		
+<div id='demo-html'>
+<h4>Delegating</h4>
+<div class='hover'>hover me</div>
+<div class='hover'>hover me</div>
+<h4>Bound Directly</h4>
+<div class='hovers'>hover me for a second</div>
+<div class='hovers'>hover me for a second</div>
+</div>
 		<script type='text/javascript' 
-                src='../../../steal/steal.js?steal[app]=jquery/event/hover&steal[env]=development'
-                package='main.js'
-                compress='false'>   
+                src='../../../steal/steal.js?steal[app]=jquery/event/hover&steal[env]=development'>   
         </script>
-		<script type='text/javascript'>
-			jQuery.hover.delay = 400;
-			var add = function(ev){
-				$(this).addClass("hoverstate")	
-			},
-			remove = function(ev){
-				$(this).removeClass("hoverstate")
-			}
-			$('.hover').live('hoverenter',add)
-			$('.hover').live('hoverleave', remove)
-			
-			$('.hovers').bind('hoverinit',function(ev, hovered){
-				hovered.delay(2000)
-			})
-			$('.hovers').bind('hoverenter',add)
-			$('.hovers').bind('hoverleave', remove)
-			
-			
-			$('.myhover').live('hoverenter',add);
-			$('.myhover').live('hoverleave', remove)
-			
-			
-			$("#off").bind("click",function(){
-				$('.hover').die('hoverenter',add )
-				$('.hover').die('hoverleave', remove)
-				
-				$('.hovers').unbind('hoverenter',add)
-				$('.hovers').unbind('hoverleave', remove)
-				
-			})
-			//$('.hover').live('mouseenter', function(){
-			//	console.log("mouseeneter")
-			//	$(this).css("backgroundColor","red")
-			//})
-		</script>
+<script type='text/javascript' id='demo-source'>
+var add = function(ev){
+	$(this).addClass("hoverstate")	
+},
+remove = function(ev){
+	$(this).removeClass("hoverstate")
+}
+$('.hover').live('hoverenter',add)
+$('.hover').live('hoverleave', remove)
+
+$('.hovers').bind('hoverinit',function(ev, hovered){
+	hovered.delay(1000)
+})
+$('.hovers').bind('hoverenter',add)
+$('.hovers').bind('hoverleave', remove)
+</script>
 	</body>
 </html>

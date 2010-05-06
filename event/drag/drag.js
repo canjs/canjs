@@ -16,6 +16,7 @@ steal.plugins('jquery','jquery/lang/vector','jquery/event/livehack').then(functi
 		
 	/**
 	 * @class jQuery.Drag
+	 * @parent specialevents
 	 * Provides drag events as a special event to jQuery.  
 	 * A jQuery.Drag instance is created on a drag and passed
 	 * as a parameter to the drag callback functions.

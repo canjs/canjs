@@ -8,12 +8,14 @@ steal.plugins('jquery').then(function($){
 		windowHeight = win.height(), 
 		timer;
 	/**
+	 * @attribute resize
+	 * @parent specialevents
 	 * Normalizes resize events cross browser.
 	 * <p>This only allows native resize events on the window and prevents them from being called 
 	 * indefinitely.
 	 * </p>
 	 */
-	$.event.special["resize"] = {
+	$.event.special.resize = {
 		add: function(handleObj){
 			//jQuery.event.add( this, handleObj.origType, jQuery.extend({}, handleObj, {handler: liveHandler}) );
 			
