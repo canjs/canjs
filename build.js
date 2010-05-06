@@ -7,7 +7,13 @@ var i, fileName, cmd,
 	"event/drag",
 	"event/hover",
 	"model",
-	"view/ejs"
+	"view/ejs", 
+	"closest",
+	"compare",
+	"dimensions",
+	"fixtures",
+	"form_params",
+	"within"
 ]
 
 
