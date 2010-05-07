@@ -19,30 +19,23 @@
         <div id="testHistory">
             <h2>Delegating</h2>
             <div id="history1">
-                make history with me
+                make <a href='#subscribe1'>history</a> with me
             </div>
             <h2><a href="#" id="off">Turn OFF Above</a></h2>
-        </div>		
+        </div>	
 		<script type='text/javascript' 
                 src='../../../steal/steal.js?steal[app]=jquery/event/history&steal[env]=development'
                 package='main.js'
                 compress='false'>   
         </script>
         <script type='text/javascript'>
-            $.Controller.extend('subscribeTest',{
-                onDocument: true
-            },
-            {
-                "history.subscribe1.index subscribe": function(called, data){
-                    alert("subscribe1");
-                }
-            });
-            
-            var subscribeController = new subscribeTest($("#testSubscribe")[0]);
-            
-            $("#off").bind("click",function(){
-               subscribeController.destroy(); 
-            })
-        </script>		
+			$(document).ready(function($) {
+				$.History.fireInitialChange = false; // Set before calling init function.
+				$.History.init(); 
+				$(document.body).hashchange(function() {
+					alert("Got hashchange event: " + location.hash);
+				});
+			}); 
+        </script>
 	</body>
 </html>

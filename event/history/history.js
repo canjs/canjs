@@ -1,4 +1,4 @@
-steal.plugins('steal/openajax').then(function(){
+steal.plugins('jquery', 'steal/openajax').then(function(){
 
 /**
  * jQuery hashchange 1.0.0
