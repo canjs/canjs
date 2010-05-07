@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>hover</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+        </style>
+	</head>
+	<body>
+		<div id="history_demo">
+			<a href="#first&param=I">First</a>
+			<a href="#second&param=love">Second</a>
+			<a href="#third&param=jmvc!">Third</a>
+		</div>
+        <script type='text/javascript' 
+                src='../../../steal/steal.js?steal[app]=jquery/controller/history&steal[env]=development'
+                package='main.js'
+                compress='false'>   
+        </script>
+        <script type='text/javascript'>
+            $.Controller.extend('HistoryDemoController',{
+            },
+            {
+			    "history.first.index subscribe" : function(called, data) {
+					alert("First[param] : " + data.param);
+				},
+
+			    "history.second.index subscribe" : function(called, data) {
+					alert("Second[param] : " + data.param);
+				},
+				
+			    "history.third.index subscribe" : function(called, data) {
+					alert("Third[param] : " + data.param);
+				}				
+            });
+            
+            $("#history_demo").history_demo();
+        </script>
+    </body>
+</html>
