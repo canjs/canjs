@@ -1,2 +1,2 @@
-_args = ["install","http://github.com/pinhook/javascriptmvc/","jquery"];
-load("steal/plugin")
+_args = ["http://github.com/pinhook/javascriptmvc/","jquery"];
+load("steal/scripts/get")
