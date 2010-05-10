@@ -19,6 +19,6 @@ var i, fileName, cmd,
 
 for(i=0; i<plugins.length; i++){
 	fileName = "jquery."+plugins[i].replace("/", ".")+".js";
-	cmd = "steal\\js steal/compress/plugin.js jquery/"+plugins[i]+" jquery/dist/"+fileName;
+	cmd = "steal\\js steal/scripts/pluginify jquery/"+plugins[i]+" jquery/dist/"+fileName;
 	runCommand(	"cmd", "/C", cmd)
 }
