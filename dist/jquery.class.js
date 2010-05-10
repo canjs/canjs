@@ -2,93 +2,91 @@
 
 (function($){
 
-  var initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/,
-      callback = function(f_names){
+	var initializing = false, 
+		fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/,
+	  	callback = function(f_names){
 		//process args
-		var args = jQuery.makeArray(arguments), f, self;
-        f_names = args.shift();
-		if(!jQuery.isArray(f_names)) 
-			f_names = [f_names];
-		
-		self = this;
-		return function(){
-			var cur = args.concat(jQuery.makeArray(arguments)), isString, length = f_names.length;
-			for(f =0; f < length; f++){
-                if(!f_names[f]) 
-					continue;
-                isString = typeof f_names[f] == "string";
-                if(isString && self._set_called) 
-					self.called = f_names[f];
-                cur = (isString ? self[f_names[f]] : f_names[f]).apply(self, cur);
-				if(f < length- 1){
-					if(!cur){
-						cur = [];
-					}else if( !jQuery.isArray(cur) || cur._use_call) {
-						cur = [cur]
+			var args = jQuery.makeArray(arguments), 
+				f, 
+				self;
+			f_names = args.shift();
+			if( !jQuery.isArray(f_names) ) {
+				f_names = [f_names];
+			}
+
+			self = this;
+			return function(){
+				var cur = args.concat(jQuery.makeArray(arguments)), 
+					isString, 
+					length = f_names.length;
+				
+				for( f =0; f < length; f++ ) {
+					if( !f_names[f] ) {
+						continue;
+					}
+					isString = typeof f_names[f] == "string";
+					if( isString && self._set_called ) {
+						self.called = f_names[f];
+					}
+					cur = ( isString ? self[f_names[f]] : f_names[f] ).apply(self, cur);
+					if( f < length- 1 ){
+						if( !cur ){
+							cur = [];
+						}else if( !jQuery.isArray(cur) || cur._use_call ) {
+							cur = [cur]
+						}
 					}
 				}
+				return cur;
 			}
-			return cur;
-        }
-    },
-	newInstance = function(){
-        initializing = true;
-        var inst = new this();
-        initializing = false;
-		if ( inst.setup )
-            inst.setup.apply(inst, arguments);
-        if ( inst.init )
-            inst.init.apply(inst, arguments);
-        return inst;
-    },
-    rawInstance = function(){
-        initializing = true;
-        var inst = new this();
-        initializing = false;
-        return inst;
-    },
-    /**
-     * Copy and overwrite options from old class
-     * @param {Object} oldClass
-     * @param {Object} options
-     */
-	setup = function(oldClass, options){
-		//clone current args and add
-        var oldOptions = oldClass.OPTIONS || {};
-        var newOptions = jQuery.extend(true, {}, oldOptions, this.defaults, options);
-        //for each newOption, write on class:
-        this.OPTIONS = newOptions;
-        /*for(var name in newOptions){
-            this[name] = newOptions[name]
-        }*/
-        /*var args = [];
-		var current = this.args || [];
-		for(var i =0; i  < current.length; i++){
-			args[i] = current[i];
-		}
-		for(var i =0; i  < arguments.length; i++){
-			args.push(arguments[i])
-		}
-		this.ARGS = args;*/
-	},
-	toString = function(){
-		return this.className || Object.prototype.toString.call(this)
-	},
-	id = 1,
-    getObject = function(objectName, current){
-        var current = current || window,
-            parts = objectName.split(/\./)
-        for(var i =0; i < parts.length; i++){
-            current = current[parts[i]] || ( current[parts[i]] = {} )
-        }
-		return current;
-    };
+		},
+		newInstance = function(){
+			initializing = true;
+			var inst = new this();
+			initializing = false;
+			if ( inst.setup )
+				inst.setup.apply(inst, arguments);
+			if ( inst.init )
+				inst.init.apply(inst, arguments);
+			return inst;
+		},
+		rawInstance = function(){
+			initializing = true;
+			var inst = new this();
+			initializing = false;
+			return inst;
+		},
+		/**
+		 * Copy and overwrite options from old class
+		 * @param {Object} oldClass
+		 * @param {Object} options
+		 */
+		setup = function(oldClass, options){
+			//clone current args and add
+			var oldOptions = oldClass.OPTIONS || {},
+				newOptions = jQuery.extend(true, {}, oldOptions, this.defaults, options);
+			//for each newOption, write on class:
+			this.OPTIONS = newOptions;
+		},
+		toString = function(){
+			return this.className || Object.prototype.toString.call(this)
+		},
+		id = 1,
+		getObject = function(objectName, current){
+			var current = current || window,
+				parts = objectName.split(/\./)
+			for(var i =0; i < parts.length; i++){
+				current = current[parts[i]] || ( current[parts[i]] = {} )
+			}
+			return current;
+		};
   // The base Class implementation (does nothing)
   
   /**
    * @constructor jQuery.Class
    * @plugin jquery/class
    * @tag core
+   * @download dist/jquery.class.js
    * Class provides simulated inheritance in JavaScript. 
    * It is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Class] 
    * Inheritance library.  Besides prototypal inheritance, it adds a few important features:
@@ -205,10 +203,10 @@
   
   jQuery.Class = 
   /* @Static*/
-      function(){ 
-          if(arguments.length) this.extend.apply(this, arguments)
-      };
-      
+	  function(){ 
+		  if(arguments.length) this.extend.apply(this, arguments)
+	  };
+	  
   /**
    * @function callback
    * Returns a callback function for a function on this Class.
@@ -284,84 +282,84 @@
   // Create a new Class that inherits from the current class.
   
   jQuery.Class.
-    /**
-     * Extends a class with new static and prototype functions.  There are a variety of ways
-     * to use extend:
-     * @codestart
-     * //with className, static and prototype functions
-     * $.Class.extend('Task',{ STATIC },{ PROTOTYPE })
-     * //with just classname and prototype functions
-     * $.Class.extend('Task',{ PROTOTYPE })
-     * //With just a className
-     * $.Class.extend('Task')
-     * @codeend
-     * @param {String} [className]  the classes name (used for classes w/ introspection)
-     * @param {Object} [klass]  the new classes static/class functions
-     * @param {Object} [proto]  the new classes prototype functions
-     * @return {jQuery.Class} returns the new class
-     */
-    extend = function(className, types, klass, proto) {
-    if(typeof className != 'string'){
-        proto = klass;
-        klass = types;
+	/**
+	 * Extends a class with new static and prototype functions.  There are a variety of ways
+	 * to use extend:
+	 * @codestart
+	 * //with className, static and prototype functions
+	 * $.Class.extend('Task',{ STATIC },{ PROTOTYPE })
+	 * //with just classname and prototype functions
+	 * $.Class.extend('Task',{ PROTOTYPE })
+	 * //With just a className
+	 * $.Class.extend('Task')
+	 * @codeend
+	 * @param {String} [className]  the classes name (used for classes w/ introspection)
+	 * @param {Object} [klass]  the new classes static/class functions
+	 * @param {Object} [proto]  the new classes prototype functions
+	 * @return {jQuery.Class} returns the new class
+	 */
+	extend = function(className, types, klass, proto) {
+	if(typeof className != 'string'){
+		proto = klass;
+		klass = types;
 		types = className;
-        className = null;
-    }
+		className = null;
+	}
 	if(!$.isArray(types)){
-        proto = klass;
-        klass = types;
-    }
-    if(!proto){
-        proto = klass;
-        klass = null;
-    }
-    
-    
-    
-    proto = proto || {};
-    var _super_class = this;
-    var _super = this.prototype;
-    // Instantiate a base class (but only create the instance,
-    // don't run the init constructor)
-    initializing = true;
-    var prototype = new this();
-    initializing = false;
-    // Copy the properties over onto the new prototype
-    for (var name in proto) {
-      // Check if we're overwriting an existing function
-      prototype[name] = typeof proto[name] == "function" &&
-        typeof _super[name] == "function" && fnTest.test(proto[name]) ?
-        (function(name, fn){
-          return function() {
-            var tmp = this._super;
-           
-            // Add a new ._super() method that is the same method
-            // but on the super-class
-            this._super = _super[name];
-           
-            // The method only need to be bound temporarily, so we
-            // remove it when we're done executing
-            var ret = fn.apply(this, arguments);       
-            this._super = tmp;
-           
-            return ret;
-          };
-        })(name, proto[name]) :
-        proto[name];
-    }
+		proto = klass;
+		klass = types;
+	}
+	if(!proto){
+		proto = klass;
+		klass = null;
+	}
+	
+	
+	
+	proto = proto || {};
+	var _super_class = this;
+	var _super = this.prototype;
+	// Instantiate a base class (but only create the instance,
+	// don't run the init constructor)
+	initializing = true;
+	var prototype = new this();
+	initializing = false;
+	// Copy the properties over onto the new prototype
+	for (var name in proto) {
+	  // Check if we're overwriting an existing function
+	  prototype[name] = typeof proto[name] == "function" &&
+		typeof _super[name] == "function" && fnTest.test(proto[name]) ?
+		(function(name, fn){
+		  return function() {
+			var tmp = this._super;
+		   
+			// Add a new ._super() method that is the same method
+			// but on the super-class
+			this._super = _super[name];
+		   
+			// The method only need to be bound temporarily, so we
+			// remove it when we're done executing
+			var ret = fn.apply(this, arguments);       
+			this._super = tmp;
+		   
+			return ret;
+		  };
+		})(name, proto[name]) :
+		proto[name];
+	}
 	
 	//calculate class properties once:
 	var staticProps = {
 		/**
-	     * @function newInstance
-	     * Creates a new instance of the class.  This method is useful for creating new instances
-	     * with arbitrary parameters.
-	     * <h3>Example</h3>
-	     * @codestart
-	     * $.Class.extend("MyClass",{},{})
-	     * var mc = MyClass.newInstance.apply(null, new Array(parseInt(Math.random()*10,10))
-	     * @codeend
-	     */
+		 * @function newInstance
+		 * Creates a new instance of the class.  This method is useful for creating new instances
+		 * with arbitrary parameters.
+		 * <h3>Example</h3>
+		 * @codestart
+		 * $.Class.extend("MyClass",{},{})
+		 * var mc = MyClass.newInstance.apply(null, new Array(parseInt(Math.random()*10,10))
+		 * @codeend
+		 */
 		newInstance : newInstance,
 		rawInstance : rawInstance,
 		extend : arguments.callee,
@@ -369,38 +367,38 @@
 	};
 	
 	//copy properties from current class to static
-    for(var name in this){
-        if(this.hasOwnProperty(name) && 
-            name != 'prototype'&& 
-            name != 'OPTIONS' &&
-            name != 'defaults' &&
-            name != 'getObject'){
-            staticProps[name] = this[name];
-        }
-    }
+	for(var name in this){
+		if(this.hasOwnProperty(name) && 
+			name != 'prototype'&& 
+			name != 'OPTIONS' &&
+			name != 'defaults' &&
+			name != 'getObject'){
+			staticProps[name] = this[name];
+		}
+	}
 	//do inheritence
 	for (var name in klass) {
-      staticProps[name] = typeof klass[name] == "function" &&
-        typeof staticProps[name] == "function" && fnTest.test(klass[name]) ?
-        (function(name, fn){
-          return function() {
-            var tmp = this._super;
-            this._super = _super_class[name];
-            var ret = fn.apply(this, arguments);       
-            this._super = tmp;
-            return ret;
-          };
-        })(name, klass[name]) :
-        klass[name];
+	  staticProps[name] = typeof klass[name] == "function" &&
+		typeof staticProps[name] == "function" && fnTest.test(klass[name]) ?
+		(function(name, fn){
+		  return function() {
+			var tmp = this._super;
+			this._super = _super_class[name];
+			var ret = fn.apply(this, arguments);       
+			this._super = tmp;
+			return ret;
+		  };
+		})(name, klass[name]) :
+		klass[name];
 	};
 	var shortName, fullName, namespace;
 	
 	if (className) {
-	  	var current = window
-        var parts = className.split(/\./)
-        for(var i =0; i < parts.length-1; i++){
-            current = current[parts[i]] || ( current[parts[i]] = {} )
-        }
+		var current = window
+		var parts = className.split(/\./)
+		for(var i =0; i < parts.length-1; i++){
+			current = current[parts[i]] || ( current[parts[i]] = {} )
+		}
 		namespace = current;
 		shortName = parts[parts.length - 1];
 		fullName = className;
@@ -410,17 +408,17 @@
 	makeClass= function(options){
 		// The dummy class constructor
 		function Class() {
-	      // All construction is actually done in the init method
-	      if(initializing) return;
+		  // All construction is actually done in the init method
+		  if(initializing) return;
 		  
 		  if(this.constructor !== Class && arguments.length){  //we are being called w/o new
-		  	  return makeClass.apply(null, arguments)
+			  return makeClass.apply(null, arguments)
 		  } else {												//we are being called w/ new
-		  	 //this.id = (++id);
+			 //this.id = (++id);
 			 if(this.setup) this.setup.apply(this, arguments);
 			 if(this.init)  this.init.apply(this, arguments);
 		  }
-	    }
+		}
 		// A buffer class to protect 'Global' prototype functions.  
 		// Add to this for one-off specific functionality
 		function Buffer(){};
@@ -428,42 +426,42 @@
 		var buff = new Buffer();
 		
 		// Populate with prototype object ... however, I change it!!
-	    Class.prototype = buff; //need another version of this ...
-	    
+		Class.prototype = buff; //need another version of this ...
+		
 		// Add static methods
 		for(var name in staticProps){
-	        if(staticProps.hasOwnProperty(name) && 
-              name != 'prototype' && 
-              name != 'constructor'){
-	            Class[name] = staticProps[name];
-	        }
-	    }
+			if(staticProps.hasOwnProperty(name) && 
+			  name != 'prototype' && 
+			  name != 'constructor'){
+				Class[name] = staticProps[name];
+			}
+		}
 		
 		//Provide a reference to this class
-	    Class.prototype.Class = Class; //only changing buff prototype
+		Class.prototype.Class = Class; //only changing buff prototype
 		Class.prototype.constructor = Class; //only buff prototype
-	    // Enforce the constructor to be what we expect
-	    Class.constructor = Class;
-	    //Class.id = (++id);
+		// Enforce the constructor to be what we expect
+		Class.constructor = Class;
+		//Class.id = (++id);
 		
 		
-        Class.namespace = namespace;
-        Class.shortName = shortName
-        /**
-         * @attribute fullName 
-         * The full name of the class, including namespace, provided for introspection purposes.
-         * @codestart
-         * $.Class.extend("MyOrg.MyClass",{},{})
-         * MyOrg.MyClass.className //-> 'MyClass'
-         * MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
-         * @codeend
-         */
-        Class.fullName = fullName;
+		Class.namespace = namespace;
+		Class.shortName = shortName
+		/**
+		 * @attribute fullName 
+		 * The full name of the class, including namespace, provided for introspection purposes.
+		 * @codestart
+		 * $.Class.extend("MyOrg.MyClass",{},{})
+		 * MyOrg.MyClass.className //-> 'MyClass'
+		 * MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
+		 * @codeend
+		 */
+		Class.fullName = fullName;
 		
 		
 		Class.setup.apply(Class, [_super_class].concat( $.makeArray(arguments) ));
 
-	    if(Class.init) Class.init(Class);
+		if(Class.init) Class.init(Class);
 
 		return Class;
 	}
@@ -472,53 +470,53 @@
 	var initClass = makeClass();
 	if(current && shortName)
 		current[shortName] = initClass;
-    
-    /* @Prototype*/
-    
+	
+	/* @Prototype*/
+	
 	
 	
 	
 	
 	return initClass;
-    /* @function init
-     * Called with the same arguments as new Class(arguments ...) when a new instance is created.
-     * @codestart
-     * $.Class.extend("MyClass",
-     * {
-     *    init: function(val){
-     *       this.val = val;
-     *    }
-     * })
-     * var mc = new MyClass("Check Check")
-     * mc.val //-> 'Check Check'
-     * @codeend
-     */
-    //Breaks up code
-    /**
-     * @attribute Class
-     * Access to the static properties of the instance's class.
-     * @codestart
-     * $.Class.extend("MyClass", {classProperty : true}, {});
-     * var mc2 = new MyClass();
-     * mc.Class.classProperty = true;
-     * var mc2 = new mc.Class(); //creates a new MyClass
-     * @codeend
-     */
+	/* @function init
+	 * Called with the same arguments as new Class(arguments ...) when a new instance is created.
+	 * @codestart
+	 * $.Class.extend("MyClass",
+	 * {
+	 *    init: function(val){
+	 *       this.val = val;
+	 *    }
+	 * })
+	 * var mc = new MyClass("Check Check")
+	 * mc.val //-> 'Check Check'
+	 * @codeend
+	 */
+	//Breaks up code
+	/**
+	 * @attribute Class
+	 * Access to the static properties of the instance's class.
+	 * @codestart
+	 * $.Class.extend("MyClass", {classProperty : true}, {});
+	 * var mc2 = new MyClass();
+	 * mc.Class.classProperty = true;
+	 * var mc2 = new mc.Class(); //creates a new MyClass
+	 * @codeend
+	 */
   };
   
   
   jQuery.Class.prototype = {
-      /**
-       * @function callback
-       * Returns a callback function.  This does the same thing as and is described better in [jQuery.Class.static.callback].
-       * The only difference is this callback works
-       * on a instance instead of a class.
-       * @param {String|Array} fname If a string, it represents the function to be called.  
-       * If it is an array, it will call each function in order and pass the return value of the prior function to the
-       * next function.
-       * @return {Function} the callback function
-       */
-      callback : callback
+	  /**
+	   * @function callback
+	   * Returns a callback function.  This does the same thing as and is described better in [jQuery.Class.static.callback].
+	   * The only difference is this callback works
+	   * on a instance instead of a class.
+	   * @param {String|Array} fname If a string, it represents the function to be called.  
+	   * If it is an array, it will call each function in order and pass the return value of the prior function to the
+	   * next function.
+	   * @return {Function} the callback function
+	   */
+	  callback : callback
   }
   
 

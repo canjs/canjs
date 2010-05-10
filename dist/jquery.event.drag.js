@@ -232,6 +232,45 @@ jQuery.fn.makePositioned = function() {
 		}
 		return handlers;
 	}
+    event.findBySelector = function(el, types){
+        var events = $.data(el, "events"), 
+            selectors = {}, 
+            add = function(selector, event, handler){
+                var select = selectors[selector] ||  (selectors[selector] = {}),
+                    events = select[event] || (select[event] = []);
+                events.push(handler)
+            };
+
+		if(!events) return selectors;
+		//first check live:
+        $.each(events.live||[],function(i, live){
+            if($.inArray(live.origType, types  ) !== -1){
+                add(live.selector, live.origType,live.origHandler || live.handler )
+            }
+        })
+        //then check straight binds
+        
+		for(var t =0; t< types.length; t++){
+			var type = types[t], 
+				typeHandlers,
+				all = type.indexOf(".") < 0,
+				namespaces,
+				namespace; 
+			if ( !all ) {
+				namespaces = type.split(".");
+				type = namespaces.shift();
+				namespace = new RegExp("(^|\\.)" + namespaces.slice(0).sort().join("\\.(?:.*\\.)?") + "(\\.|$)");
+			}
+			typeHandlers = ( events[type] || [] ).slice(0)
+			
+			for(var h = 0; h <typeHandlers.length; h++ ){
+				var handle = typeHandlers[h];
+				if(!handle.selector && (all || namespace.test( handle.namespace ))  )
+					add("", type, handle.origHandler || handle.handler )
+			}
+		}
+		return selectors;
+    }
 	$.fn.respondsTo = function(events){
 		if(!this.length){
 			return false;
@@ -246,7 +285,7 @@ jQuery.fn.makePositioned = function() {
 		return event.handled
 	}
 	/**
-	 * Only attaches one 
+	 * Only attaches one event handler for all types ...
 	 * @param {Array} types llist of types that will delegate here
 	 * @param {Object} startingEvent the first event to start listening to
 	 * @param {Object} onFirst a function to call 
@@ -312,115 +351,93 @@ jQuery.fn.makePositioned = function() {
 	
 	
 	
-	var $ = jQuery, 
-		bind = function(object, method){  
+	var bind = function(object, method){  
 			var args = Array.prototype.slice.call(arguments, 2);  
 			return function() {  
 				var args2 = [this].concat(args, $.makeArray( arguments ));  
 				return method.apply(object, args2);  
 			};  
 		},
-        event = jQuery.event, handle  = event.handle;
+		event = $.event, handle  = event.handle;
 		
-        
-        
-		
-		
+	/**
+	 * @class jQuery.Drag
+	 * @parent specialevents
+	 * Provides drag events as a special event to jQuery.  
+	 * A jQuery.Drag instance is created on a drag and passed
+	 * as a parameter to the drag callback functions.
+	 * <h2>Drag Events</h2>
+	 * The drag plugin allows you to listen to the following events:
+	 * <ul>
+	 * 	<li><code>dragdown</code> - the mouse cursor is pressed down</li>
+	 *  <li><code>draginit</code> - the drag motion is started</li>
+	 *  <li><code>dragmove</code> - the drag is moved</li>
+	 *  <li><code>dragend</code> - the drag has ended</li>
+	 *  <li><code>dragover</code> - the drag is over a drop point</li>
+	 *  <li><code>dragout</code> - the drag moved out of a drop point</li>
+	 * </ul>
+	 * <p>Just by binding or delegating on one of these events, you make
+	 * the element dragable.  You can change the behavior of the drag
+	 * by calling methods on the drag object passed to the callback.
+	 * <h2>Examples</h2>
+	 * Here's a quick example:
+	 * @codestart
+	 * //makes the drag vertical
+	 * $(".drags").live("draginit", function(event, drag){
+	 *   drag.vertical();
+	 * })
+	 * //gets the position of the drag and uses that to set the width
+	 * //of an element
+	 * $(".resize").live("dragmove",function(event, drag){
+	 *   $(this).width(drag.position.left() - $(this).offset().left   )
+	 * })
+	 * @codeend
+	 * Now lets see some real examples:
+	 * @iframe jquery/event/drag/drag.html 1000
+	 */
 	$.Drag = function(){}
 	
-	
+	/**
+	 * @Static
+	 */
 	$.extend($.Drag,
 	{
 		lowerName: "drag",
-		destroy : function(element){
-			var dragData = this.getData(element);
-			dragData.callbacks[this.event] = null;
-			var cb = ""
-			for(cb in dragData.callbacks)
-				break;
-			if(!cb)
-				dragData.destroy();
-		},
+		current : null,
 		/**
 		 * Called when someone mouses down on a draggable object.
 		 * Gathers all callback functions and creates a new Draggable.
+		 * @hide
 		 */
-		mousedown : function(event, element){
-	
-		   var isLeftButton = event.button == 0 || event.button == 1;
-	
-		   var mover = this;
-		   
-		   if(mover.current || !isLeftButton) return;
-		   
-		   event.preventDefault();
-		   //stop selection, but allow things to be focused
-		   this.noSelection()
-		   
-		   this._firstMove = true;
-		   this._mousemove = bind(this, this.mousemove);
-		   this._mouseup =   bind(this, this.mouseup);
-		   
-		   //event.data.element = element;
-		   var data = {
-		   		selector: event.handleObj.selector, 
-				delegate: event.liveFired || element,
-				element: element
-			}
-		   jQuery(document).bind('mousemove.specialDrag',data ,this._mousemove);
-		   jQuery(document).bind('mouseup.specialDrag', data,this._mouseup);
-		},
-		noSelection : function(){
-			document.documentElement.onselectstart = function() { return false; }; 
-			document.documentElement.unselectable = "on"; 
-			jQuery(document.documentElement).css('-moz-user-select', 'none'); 
-		},
-		selection : function(){
-			document.documentElement.onselectstart = function() { }; 
-			document.documentElement.unselectable = "off"; 
-			jQuery(document.documentElement).css('-moz-user-select', ''); 
-		},
-		mousemove : function(docEl, e, eventData){
-			if(this._firstMove){ //create new drag
-				
-				//cache callbacks
-				var cbs = {
-					draginit : event.find(e.data.delegate, ["draginit"],e.data.selector)[0],
-					dragover: event.find(e.data.delegate, ["dragover"],e.data.selector)[0],
-					dragmove: event.find(e.data.delegate, ["dragmove"],e.data.selector)[0],
-					dragout: event.find(e.data.delegate, ["dragout"],e.data.selector)[0],
-					dragend: event.find(e.data.delegate, ["dragend"],e.data.selector)[0]
-				};
-				//(jQuery.data(e.data.delegate,"drag") || jQuery.data(e.data.delegate,"drag",{}) )[e.data.selector]
-				
-				//var callbacks = this.getData(eventData.delegatedElement).callbacks;
-				this.current = new this();
-				this.current.init.call(this.current,e.data.element, e, cbs)
-				this._firstMove = false;
-			}
-			if(!this.current){ //we've removed it ourself ... kill everything ...
-				jQuery(document).unbind('mousemove.specialDrag', this._mousemove);
-				jQuery(document).unbind('mouseup.specialDrag', this._mouseup);
-				return;
-			}
+		mousedown : function(ev, element){
+			var isLeftButton = ev.button == 0 || ev.button == 1;
+			if( !isLeftButton || this.current) return; //only allows 1 drag at a time, but in future could allow more
 			
-			var pointer = e.vector();
-			if(this.current._start_position && mover.current._start_position.equals(pointer)) return;
-			//e.preventDefault();
-			this.current.draw(pointer, e); //update draw
-			//return false;
-		},
-		mouseup : function(docEl, event){
-			//if there is a current, we should call its dragstop
-			var mover = this;
-			var current = mover.current;
-			if(current /*&& current.moved*/){
-				current.end(event);
-			}
-			mover.current = null;
-			jQuery(document).unbind('mousemove', this._mousemove);
-			jQuery(document).unbind('mouseup', this._mouseup);
-			this.selection()
+			ev.preventDefault();
+			//create Drag
+			var drag = new $.Drag(), 
+			delegate = ev.liveFired || element,
+			selector = ev.handleObj.selector,
+			self = this;
+			this.current = drag;
+			drag.setup({
+				element: element,
+				delegate: ev.liveFired || element,
+				selector: ev.handleObj.selector,
+				moved: false,
+				callbacks: {
+					dragdown: event.find(delegate, ["dragdown"], selector)[0],
+					draginit: event.find(delegate, ["draginit"], selector)[0],
+					dragover: event.find(delegate, ["dragover"], selector)[0],
+					dragmove: event.find(delegate, ["dragmove"], selector)[0],
+					dragout: event.find(delegate, ["dragout"], selector)[0],
+					dragend: event.find(delegate, ["dragend"], selector)[0]
+				},
+				destroyed : function(){
+					self.current = null;
+				}
+			}, ev)
+		   		   
 		}
 	})
 	
@@ -428,17 +445,80 @@ jQuery.fn.makePositioned = function() {
 	
 	
 	
-	
+	/**
+	 * @Prototype
+	 */
 	$.extend($.Drag.prototype , {
-		init :  function( element, event,callbacks){
-			element = jQuery(element);
-			this.callbacks = callbacks;
-			var startElement = (this.movingElement = (this.element = jQuery(element)));         //the element that has been clicked on
+		setup : function(options, ev){
+			this.noSelection();
+			$.extend(this,options);
+			this.element = $(this.element);
+			this.event = ev;
+			this.moved = false;
+			this.allowOtherDrags = false;
+			var mousemove = bind(this, this.mousemove);
+			var mouseup =   bind(this, this.mouseup);
+			this._mousemove = mousemove;
+			this._mouseup = mouseup;
+			$(document).bind('mousemove' ,mousemove);
+			$(document).bind('mouseup',mouseup);
+			this.callDown(this.element, ev)
+		},
+		/**
+		 * Unbinds listeners and allows other drags ...
+		 * @hide
+		 */
+		destroy  : function(){
+			$(document).unbind('mousemove', this._mousemove);
+			$(document).unbind('mouseup', this._mouseup);
+			if(!this.moved){
+				this.event = this.element = null;
+			}
+			this.selection();
+			this.destroyed();
+		},
+		mousemove : function(docEl, ev){
+			if(!this.moved){
+				this.init(this.element, ev)
+				this.moved= true;
+			}
+			
+			var pointer = ev.vector();
+			if (this._start_position && this._start_position.equals(pointer)) {
+				return;
+			}
+			//e.preventDefault();
+			
+			this.draw(pointer, ev);
+		},
+		mouseup : function(docEl,event){
+			//if there is a current, we should call its dragstop
+			if(this.moved){
+				this.end(event);
+			}
+			this.destroy();
+		},
+		noSelection : function(){
+			document.documentElement.onselectstart = function() { return false; }; 
+			document.documentElement.unselectable = "on"; 
+			$(document.documentElement).css('-moz-user-select', 'none'); 
+		},
+		selection : function(){
+			document.documentElement.onselectstart = function() { }; 
+			document.documentElement.unselectable = "off"; 
+			$(document.documentElement).css('-moz-user-select', ''); 
+		},
+		init :  function( element, event){
+			element = $(element);
+			var startElement = (this.movingElement = (this.element = $(element)));         //the element that has been clicked on
 													//if a mousemove has come after the click
 			this._cancelled = false;                //if the drag has been cancelled
 			this.event = event;
 			this.mouseStartPosition = event.vector(); //where the mouse is located
-			
+			/**
+			 * @attribute mouseElementPosition
+			 * The position of start of the cursor on the element
+			 */
 			this.mouseElementPosition = this.mouseStartPosition.minus( this.element.offsetv() ); //where the mouse is on the Element
 	
 			this.callStart(element, event);
@@ -455,43 +535,54 @@ jQuery.fn.makePositioned = function() {
 			if(!this._only && this.constructor.responder)
 				this.constructor.responder.compile(event, this);
 		},
+		callDown : function(element, event){
+			if(this.callbacks[this.constructor.lowerName+"down"]) 
+				this.callbacks[this.constructor.lowerName+"down"].call(element, event, this  );
+		},
 		callStart : function(element, event){
 			if(this.callbacks[this.constructor.lowerName+"init"]) 
 				this.callbacks[this.constructor.lowerName+"init"].call(element, event, this  );
 		},
 		/**
 		 * Returns the position of the movingElement by taking its top and left.
+		 * @hide
 		 * @return {Vector}
 		 */
 		currentDelta: function() {
-			return new jQuery.Vector( parseInt( this.movingElement.css('left') ) || 0 , 
+			return new $.Vector( parseInt( this.movingElement.css('left') ) || 0 , 
 								parseInt( this.movingElement.css('top') )  || 0 )  ;
 		},
 		//draws the position of the dragmove object
 		draw: function(pointer, event){
 			// only drag if we haven't been cancelled;
-            if(this._cancelled) return;
+			if(this._cancelled) return;
+			/**
+			 * @attribute location
+			 * The location of where the element should be in the page.  This 
+			 * takes into account the start position of the cursor on the element.
+			 */
 			this.location =  pointer.minus(this.mouseElementPosition);                              // the offset between the mouse pointer and the representative that the user asked for
-    		// position = mouse - (dragOffset - dragTopLeft) - mousePosition
-            this.move( event );
+			// position = mouse - (dragOffset - dragTopLeft) - mousePosition
+			this.move( event );
 			if(this._cancelled) return;
 			if(!event.isDefaultPrevented())
 				this.position(this.location);
 
-            //fill in
+			//fill in
 			if(!this._only && this.constructor.responder)
 				this.constructor.responder.show(pointer, this, event);  
 		},
 		/**
-         * Set the drag to only allow horizontal dragging
-         */
+		 * @hide
+		 * Set the drag to only allow horizontal dragging
+		 */
 		position : function(offsetPositionv){  //should draw it on the page
 			var dragged_element_page_offset = this.movingElement.offsetv();          // the drag element's current page location
-            
+			
 			var dragged_element_css_offset = this.currentDelta();                   //  the drag element's current left + top css attributes
-            
+			
 			var dragged_element_position_vector =                                   // the vector between the movingElement's page and css positions
-                dragged_element_page_offset.minus(dragged_element_css_offset);      // this can be thought of as the original offset
+				dragged_element_page_offset.minus(dragged_element_css_offset);      // this can be thought of as the original offset
 			
 			this.required_css_position = offsetPositionv.minus(dragged_element_position_vector)
 			
@@ -510,6 +601,7 @@ jQuery.fn.makePositioned = function() {
 		},
 		/**
 		 * Called on drag up
+		 * @hide
 		 * @param {Event} event a mouseup event signalling drag/drop has completed
 		 */
 		end : function(event){
@@ -521,11 +613,14 @@ jQuery.fn.makePositioned = function() {
 				this.callbacks[this.constructor.lowerName+"end"].call(this.element, event, this  );
 	
 			if(this._revert){
+				var self= this;
 				this.movingElement.animate(
 					{
 						top: this.startPosition.top()+"px",
 						left: this.startPosition.left()+"px"},
-						jQuery.Function.bind(this.cleanup, this)
+						function(){
+							self.cleanup.apply(self, arguments)
+						}
 				)
 			}
 			else
@@ -534,34 +629,36 @@ jQuery.fn.makePositioned = function() {
 		},
 		/**
 		 * Cleans up drag element after drag drop.
+		 * @hide
 		 */
 		cleanup : function(){
 			this.movingElement.css({zIndex: ""})
-			if (this.movingElement != this.element)
+			if (this.movingElement[0] !== this.element[0])
 				this.movingElement.css({ display: 'none' });
 			if(this._removeMovingElement)
 				this.movingElement.remove();
 				
-			
+			this.movingElement = this.element = this.event = null;
 		},
 		/**
-		 * Stops from running.
+		 * Stops drag drop from running.
 		 */
 		cancel: function() {
 			this._cancelled = true;
-			this.end(this.event);
+			//this.end(this.event);
 			if(!this._only && this.constructor.responder)
-				this.constructor.responder.clear(pointer, this, event);  
-			var mover = this.constructor;
-			mover.current = null;
+				this.constructor.responder.clear(this.event.vector(), this, this.event);  
+			this.destroy();
+			
 		},
 		/**
 		 * Clones the element and uses it as the moving element.
+		 * @return {jQuery.fn} the ghost
 		 */
-		ghost: function() {
+		ghost: function(loc) {
 			// create a ghost by cloning the source element and attach the clone to the dom after the source element
 			var ghost = this.movingElement.clone().css('position','absolute');
-			this.movingElement.after(ghost);
+			(loc ? $(loc) : this.movingElement ).after(ghost);
 			ghost.width(this.movingElement.width())
 				.height(this.movingElement.height())
 				
@@ -582,7 +679,7 @@ jQuery.fn.makePositioned = function() {
 	
 			var p = this.mouseStartPosition;
 	
-			this.movingElement = jQuery(element);
+			this.movingElement = $(element);
 			this.movingElement.css({
 				top: (p.y() - this._offsetY) + "px",
 				left: (p.x() - this._offsetX) + "px",
@@ -590,7 +687,7 @@ jQuery.fn.makePositioned = function() {
 				position: 'absolute'
 			}).show();
 	
-			this.mouseElementPosition = new jQuery.Vector(this._offsetX, this._offsetY)
+			this.mouseElementPosition = new $.Vector(this._offsetX, this._offsetY)
 		},
 		/**
 		 * Makes the movingElement go back to its original position after drop.
@@ -623,7 +720,7 @@ jQuery.fn.makePositioned = function() {
 		 */
 		scrolls : function(elements){
 			for(var i = 0 ; i < elements.length; i++){
-				this.constructor.responder._responders.push( new jQuery.Scrollable(elements[i]) )
+				this.constructor.responder._responders.push( new $.Scrollable(elements[i]) )
 			}
 		},
 		/**
@@ -634,25 +731,55 @@ jQuery.fn.makePositioned = function() {
 		}
 	});
 	
-	/*function trigger( type, elem, args ) {
-		args[0].type = type;
-		return jQuery.event.handle.apply( elem, args );
-	}*/
-	
-	
-	
-	
-
-	event.setupHelper( ['draginit','dragover','dragmove','dragout', 'dragend'], "mousedown", function(e){
+	/**
+	 * @add jQuery.event.special static
+	 */
+	event.setupHelper( [
+		/**
+		 * @attribute dragdown
+		 * Listens for when a drag movement has started on a mousedown.
+		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
+		 * @codestart
+		 * $(".handles").live("dragdown", function(ev, drag){})
+		 * @codeend
+		 */
+		'dragdown',
+		/**
+		 * @attribute draginit
+		 * Called when the drag starts.
+		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
+		 */
+		'draginit',
+		/**
+		 * @attribute dragover
+		 * Called when the drag is over a drop.
+		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
+		 */
+		'dragover',
+		/**
+		 * @attribute dragmove
+		 * Called when the drag is moved.
+		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
+		 */
+		'dragmove',
+		/**
+		 * @attribute dragout
+		 * When the drag leaves a drop point.
+		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
+		 */
+		'dragout', 
+		/**
+		 * @attribute dragend
+		 * Called when the drag is done.
+		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
+		 */
+		'dragend'
+		], "mousedown", function(e){
 		$.Drag.mousedown.call($.Drag, e, this)
 		
 	} )
 	
 	
-
-	//$("#dragmetoo").bind("dragstart", function(){
-	//	console.log("calledback")
-	//})
 
 
 

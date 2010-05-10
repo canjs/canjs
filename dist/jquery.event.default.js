@@ -2,9 +2,42 @@
 
 (function($){
 
-    var types = {
+    /**
+	 * @add jQuery.event.special static
+	 */
+	var types = {
 		
 	}
+	/**
+	 * @attribute default
+	 * @parent specialevents
+	 * Allows you to perform default actions as a result of an event.
+	 * <p>
+	 * Event based APIs are a powerful way of exposing functionality of your widgets.  It also fits in 
+	 * quite nicely with how the DOM works.
+	 * </p>
+	 * <p>
+	 * Like default events in normal functions (e.g. submitting a form), synthetic default events run after
+	 * all event handlers have been triggered and no event handler has called
+	 * preventDefault or returned false.
+	 * </p>
+	 * <p>To listen for a default event, just prefix the event with default.</p>
+	 * @codestart
+	 * $("div").bind("default.show", function(ev){ ... });
+	 * $("ul").delegate("li","default.activate", function(ev){ ... });
+	 * @codeend
+	 * <h2>Example</h2>
+	 * <p>Lets look at how you could build a simple tabs widget with default events.</p>
+	 * @demo jquery/event/default/default.html
+	 * <p>The code that prevents the <i>Part 2</i> tab from showing is:</p>
+	 * @codestart
+$("#second").bind("show",function(ev){
+  if(! $("#complete")[0].checked ){
+    ev.preventDefault();
+  }
+})
+	 * @codeend
+	 */
 	$.event.special["default"] = {
 		add: function( handleObj){
 			//jQuery.event.add( this, handleObj.origType, jQuery.extend({}, handleObj, {handler: liveHandler}) );
@@ -47,14 +80,14 @@
             event._defaultActions = []; //set depth for possibly reused events
         }
 		
-		var defaultGetter = jQuery.Event("default."+event.type);
+		var defaultGetter = jQuery.Event("default."+event.type), res;
 		defaultGetter.target = elem;
 		defaultGetter.stopPropagation();
 		defaultGetter._defaultActions = event._defaultActions;
 		defaultGetter.exclusive = true;
 		if(elem)
 			oldTrigger.call($.event, defaultGetter, [defaultGetter, data], elem, true)
-        oldTrigger.call($.event, event, data, elem, bubbling); //tail recursive
+        res = oldTrigger.call($.event, event, data, elem, bubbling); //tail recursive
         //fire if there are default actions to run && 
         //        we have not prevented default &&
         //        propagation has been stopped or we are at the document element
@@ -77,7 +110,7 @@
             event._defaultActions = null; //set to null so everyone else on this element ignores it
         }
     }
-	$.fn.triggerDefault = function(type, data){
+	$.fn.triggerHandlerDefault = function(type, data){
 		if ( this[0] ) {
 			var event = $.Event( type );
 			event.stopPropagation();
@@ -86,6 +119,17 @@
 		}
 		return true;
 	}
+	$.fn.triggerDefault = function(type, data){
+		if ( this[0] ) {
+			var event = $.Event( type );
+			jQuery.event.trigger( event, data, this[0] );
+			return !event.isDefaultPrevented();
+		}
+		return true;
+	}
+	
+	
+	
 
 })(jQuery);
 

@@ -4,8 +4,8 @@
 
 
 	/**
- *  @add jQuery.fn
- */
+	 *  @add jQuery.fn
+	 */
     var funcs = [
     /**
      *  @function prepend
@@ -48,14 +48,20 @@
      *  @tag view
      *  abc
      */
-    "html"]
+    "html",
+	/**
+     *  @function replaceWith
+     *  @tag view
+     *  abc
+     */
+	"replaceWith"]
 	
 	
 	var convert = function(func_name) {
 		var old = jQuery.fn[func_name];
 
 		jQuery.fn[func_name] = function() {
-			var args = arguments;
+			var args = arguments, res;
 			
 			if(arguments.length > 1 && typeof arguments[0] == "string" 
                && (typeof arguments[1] == 'object' || typeof arguments[1] == 'function')
@@ -63,21 +69,14 @@
                ){
 				args = [ $.View.apply($.View, $.makeArray(arguments)) ];
 			}
-			
-			return old.apply(this, args);
-		}
-		jQuery.fn["$"+func_name] = function(){
-			var args = arguments;
-			
-			if(arguments.length > 1 && typeof arguments[0] == "string" 
-               && (typeof arguments[1] == 'object' || typeof arguments[1] == 'function')
-               && !arguments[1].nodeType && !arguments[1].jquery
-               ){
-				args = [ $.View.apply($.View, $.makeArray(arguments)) ];
+			for(var hasHookups in jQuery.View.hookups);
+			if(hasHookups){
+				args[0] = $(args[0])
 			}
-			args[0] = $(args[0])
-			var res = old.apply(this, args);
-			args[0].hookupView();
+			res = old.apply(this, args)
+			if(hasHookups){
+				args[0].hookupView()
+			}
 			return res;
 		}
 	}
@@ -87,7 +86,8 @@
 			var id = this.getAttribute('data-view-id')
 			if(jQuery.View.hookups[id]){
 				jQuery.View.hookups[id](this, id);
-				delete jQuery.View.hookups[id]
+				delete jQuery.View.hookups[id];
+				this.removeAttribute('data-view-id')
 			}
 		}
 	}
@@ -105,16 +105,70 @@
 	var toId = function(src){
 		return src.replace(/[\/\.]/g,"_")
 	}
-	$.View= function(url, data, helpers, hookup){
-		//check path for suffix
+	/**
+	 * @constructor jQuery.View
+	 * @tag core
+	 * View provides a uniform interface for using templates in JavaScriptMVC.  When templates 
+	 * [jQuery.View.static.register register] themselves, you are able to:
+	 * <ul>
+	 * 	
+	 *  <li>Use views with jQuery extensions [jQuery.fn.after after], [jQuery.fn.append append],
+	 *  	[jQuery.fn.before before], [jQuery.fn.html html], [jQuery.fn.prepend prepend],
+	 *      [jQuery.fn.replace replace], [jQuery.fn.text text] like:
+@codestart
+$('.foo').html("//path/to/view.ejs",{})
+@codeend
+	 *  </li>
+	 *  <li>Compress your views with [steal.static.views].</li>
+	 *  <li>Use the [jQuery.Controller.prototype.view controller/view] plugin to auto-magically
+	 *  lookup views.</li>
+	 *  <li>Hookup Controllers and other code on elements after render.</li>
+	 *  
+	 * </ul>
+	 * 
+	 * <h2>Supported Templates</h2>
+	 * <ul>
+	 * 	<li>[jQuery.View.EJS EJS] - provides an ERB like syntax: <code>&lt;%= %&gt;</code></li>
+	 *  <li>[Jaml] - A functional approach to JS templates.</li>
+	 *  <li>[Micro] - A very lightweight template similar to EJS.</li>
+	 * </ul>
+	 * @iframe jquery/view/view.html 700
+
+	 * 
+	 * 
+	 * <h2>Compress Views with Steal</h2>
+	 * Steal can package processed views in the production file. Because 'stolen' views are already
+	 * processed, they don't rely on eval.  Here's how to steal them:
+	 * @codestart
+	 * steal.views('//views/tasks/show.ejs');
+	 * @codeend
+	 * Read more about [steal.static.views steal.views].
+	 * <h2>Hooking up controllers</h2>
+	 * After drawing some html, you often want to add other widgets and plugins inside that html.
+	 * View makes this easy.  You just have to return the Contoller class you want to be hooked up.
+@codestart
+&lt;ul &lt;%= Phui.Tabs%>>...&lt;ul>
+@codeend
+You can even hook up multiple controllers:
+@codestart
+&lt;ul &lt;%= [Phui.Tabs, Phui.Filler]%>>...&lt;ul>
+@codeend
+	 * @init Looks up a template, processes it, caches it, then renders the template
+	 * with data and optional helpers.
+@codestart
+$.View("//myplugin/views/init.ejs",{message: "Hello World"})
+@codeend
+	 * @param {String} url The url or id of an element to use as the template's source.
+	 * @param {Object} data The data to be passed to the view.
+	 * @param {Object} [helpers] Optional helper functions the view might use.
+	 * @return {String} The rendered result of the view.
+	 */
+	$.View= function(url, data, helpers){
+		var id = toId(url);
 
 		//change this url?
-		if (url.match(/^\/\//)) {
-			var id = toId(url.substr(2))
-			url = steal.root.join( url.substr(2) ) //can steal be removed?
-		}else{
-			var id = toId(url)
-		}
+		if (url.match(/^\/\//))
+			url = steal.root.join( url.substr(2) ); //can steal be removed?
 		
 		var suffix = url.match(/\.[\w\d]+$/),
 			type, 
@@ -128,25 +182,60 @@
 		
 		var renderer = $.View.cached[id] ? $.View.cached[id] : ( (el = document.getElementById(id) ) ? type.renderer(id, el.innerHTML) : type.get(id, url) );
 		if($.View.cache)  $.View.cached[id] = renderer;
-		if(!hookup)
-			return renderer.call(type,data,helpers)
-		else
-			return jQuery( renderer.call(type,data,helpers) ).hookupView();
+
+		return renderer.call(type,data,helpers)
 	};
+	/* @Static */
 	$.View.hookups = {};
 	
 	var id = 0;
+	/**
+	 * @function hookup
+	 * Registers a hookup function
+	 * @param {Object} cb
+	 */
 	$.View.hookup = function(cb){
 		var myid = (++id);
 		jQuery.View.hookups[myid] = cb;
 		return myid;
 	}
-	$.View.cached = {}
+	/**
+	 * @attribute cached
+	 * Cached are put in this object
+	 */
+	$.View.cached = {};
+	/**
+	 * @attribute cache
+	 * Should the views be cached or reloaded from the server. Defaults to true.
+	 */
 	$.View.cache = true;
+	/**
+	 * @function register
+	 * Registers a template engine to be used with view helpers and compression.  
+	 * @param {Object} info a object of method and properties that enable template integration:
+	 * <ul>
+	 * 		<li>suffix - the view extension.  EX: 'ejs'</li>
+	 * 		<li>get(id, url) - a function that returns the 'render' function of processed template.  <b>get</b>
+	 * 			function is called with an id for the template and the url where the view can be loaded.
+	 * 			The returned function's signiture should look like:
+	 * 			<pre>renderer(data, helpers)</pre>
+	 * 		</li>
+	 * 		<li>script(id, src) - a function that returns a string that when evaluated returns a function that can be 
+	 * 			used as the render (i.e. have func.call(data, data, helpers) called on it).</li>
+	 * 		<li>renderer(id, text) - a function that takes the id of the template and the text of the template and
+	 * 			returns a render function.</li>
+	 * </ul>
+	 */
 	$.View.register = function(info){
-		types["."+info.suffix] = info
+		types["."+info.suffix] = info;
 	};
-	$.View.ext = ".ejs"
+	$.View.types = types;
+	/**
+	 * @attribute ext
+	 * The default suffix to use if none is provided in the view's url.  This is set to .ejs by default.
+	 */
+	$.View.ext = ".ejs";
+
 	$.View.registerScript = function(type, id, src){
 		return "$.View.preload('"+id+"',"+types["."+type].script(id, src)+");";
 	};
@@ -202,7 +291,7 @@ isArray = function(arr){
 	  return Object.prototype.toString.call(arr) === "[object Array]"
 }
 
-EJS = function( options ){
+var EJS = function( options ){
 	if(this.constructor != EJS){
 		var ejs = new EJS(options);
 		return function(data, helpers){
@@ -244,7 +333,7 @@ EJS = function( options ){
         }catch(e){}
 
 		if(this.text == null){
-            throw( {type: 'EJS', message: 'There is no template at '+url}  );
+            throw( {type: 'jQuery.View.EJS', message: 'There is no template at '+url}  );
 		}
 		//this.name = url;
 	}
@@ -254,6 +343,103 @@ EJS = function( options ){
 
 	this.template = template;
 };
+/**
+ * @constructor jQuery.View.EJS
+ * @plugin view
+ * Ejs provides <a href="http://www.ruby-doc.org/stdlib/libdoc/erb/rdoc/">ERB</a> 
+ * style client side templates.  Use them with controllers to easily build html and inject
+ * it into the DOM.
+ * <h3>Example</h3>
+ * The following generates a list of tasks:
+ * @codestart html
+ * &lt;ul>
+ * &lt;% for(var i = 0; i < tasks.length; i++){ %>
+ *     &lt;li class="task &lt;%= tasks[i].identity %>">&lt;%= tasks[i].name %>&lt;/li>
+ * &lt;% } %>
+ * &lt;/ul>
+ * @codeend
+ * For the following examples, we assume this view is in <i>'views\tasks\list.ejs'</i>
+ * <h2>Use</h2>
+ * There are 2 common ways to use Views: 
+ * <ul>
+ *     <li>Controller's [jQuery.Controller.prototype.view view function]</li>
+ *     <li>The jQuery Helpers: [jQuery.fn.after after], 
+ *                             [jQuery.fn.append append], 
+ *                             [jQuery.fn.before before], 
+ *                             [jQuery.fn.before html], 
+ *                             [jQuery.fn.before prepend], 
+ *                             [jQuery.fn.before replace], and 
+ *                             [jQuery.fn.before text].</li>
+ * </ul>
+ * <h3>View</h3>
+ * jQuery.Controller.prototype.view is the preferred way of rendering a view.  
+ * You can find all the options for render in 
+ * its [jQuery.Controller.prototype.view documentation], but here is a brief example of rendering the 
+ * <i>list.ejs</i> view from a controller:
+ * @codestart
+ * $.Controller.extend("TasksController",{
+ *     init : function(el){
+ *         Task.findAll({},this.callback('list'))
+ *     },
+ *     list : function(tasks){
+ *         this.element.html(
+ *         	this.view("list", {tasks: tasks})
+ *        )
+ *     }
+ * })
+ * @codeend
+ * 
+ * 
+ * <h2>View Helpers</h2>
+ * View Helpers return html code.  View by default only comes with 
+ * [jQuery.View.EJS.Helpers.prototype.view view] and [jQuery.View.Helpers.prototype.to_text to_text].
+ * You can include more with the view/helpers plugin.  But, you can easily make your own!
+ * Learn how in the [jQuery.View.EJS.Helpers Helpers] page.
+ * 
+ * @init Creates a new view
+ * @param {Object} options A hash with the following options
+ * <table class="options">
+				<tbody><tr><th>Option</th><th>Default</th><th>Description</th></tr>
+				<tr>
+					<td>url</td>
+					<td>&nbsp;</td>
+					<td>loads the template from a file.  This path should be relative to <i>[jQuery.root]</i>.
+					</td>
+				</tr>
+				<tr>
+					<td>text</td>
+					<td>&nbsp;</td>
+					<td>uses the provided text as the template. Example:<br/><code>new View({text: '&lt;%=user%>'})</code>
+					</td>
+				</tr>
+				<tr>
+					<td>element</td>
+					<td>&nbsp;</td>
+					<td>loads a template from the innerHTML or value of the element.
+					</td>
+				</tr>
+				<tr>
+					<td>type</td>
+					<td>'<'</td>
+					<td>type of magic tags.  Options are '&lt;' or '['
+					</td>
+				</tr>
+				<tr>
+					<td>name</td>
+					<td>the element ID or url </td>
+					<td>an optional name that is used for caching.
+					</td>
+				</tr>
+				<tr>
+					<td>cache</td>
+					<td>true in production mode, false in other modes</td>
+					<td>true to cache template.
+					</td>
+				</tr>
+				
+			</tbody></table>
+ */
+$.View.EJS = EJS;
 /* @Prototype*/
 EJS.prototype = {
 	constructor: EJS,
@@ -385,7 +571,7 @@ EJS.Scanner.prototype = {
 		   	try{
 	         	block(token, this);
 		 	}catch(e){
-				throw {type: 'EJS.Scanner', line: this.lines};
+				throw {type: 'jQuery.View.EJS.Scanner', line: this.lines};
 			}
        }
 	 }
@@ -521,7 +707,7 @@ EJS.Compiler.prototype = {
 							}
 							break;
 						case scanner.left_equal:
-							buff.push(insert_cmd + "(EJS.Scanner.to_text(" + content + ")))");
+							buff.push(insert_cmd + "(jQuery.View.EJS.Scanner.to_text(" + content + ")))");
 							break;
 					}
 					scanner.stag = null;
@@ -601,7 +787,13 @@ EJS.config( {cache: true, type: '<', ext: '.ejs' } );
 
 
 
-
+/**
+ * @constructor jQuery.View.EJS.Helpers
+ * By adding functions to jQuery.View.EJS.Helpers.prototype, those functions will be available in the 
+ * views.
+ * @init Creates a view helper.  This function is called internally.  You should never call it.
+ * @param {Object} data The data passed to the view.  Helpers have access to it through this._data
+ */
 EJS.Helpers = function(data, extras){
 	this._data = data;
     this._extras = extras;
@@ -609,13 +801,17 @@ EJS.Helpers = function(data, extras){
 };
 /* @prototype*/
 EJS.Helpers.prototype = {
-
-	view: function(options, data, helpers){
+	/**
+	 * Renders a partial view.  This is deprecated in favor of <code>$.View()</code>.
+	 */
+	view: function(url, data, helpers){
         if(!helpers) helpers = this._extras
 		if(!data) data = this._data;
-		return $.View(options, data, helpers)  //new EJS(options).render(data, helpers);
+		return $.View(url, data, helpers)  //new EJS(options).render(data, helpers);
 	},
-
+	/**
+	 * Converts response to text.
+	 */
 	to_text: function(input, null_text) {
 	    if(input == null || input === undefined) return null_text || '';
 	    if(input instanceof Date) return input.toDateString();
@@ -665,6 +861,7 @@ EJS.Helpers.prototype = {
 
 	$.View.register({
 		suffix : "ejs",
+		//returns a function that renders the view
 		get : function(id, url){
 			var text = $.ajax({
 					async: false,
@@ -674,7 +871,7 @@ EJS.Helpers.prototype = {
 			return this.renderer(id, text);
 		},
 		script : function(id, src){
-			 return "EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";     
+			 return "jQuery.View.EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";     
 		},
 		renderer : function(id, text){
 			var ejs = new EJS({text: text, name: id})
