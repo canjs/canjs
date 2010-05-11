@@ -271,8 +271,7 @@ EJS.Scanner.to_text = function(input){
 	var myid;
 	if(input == null || input === undefined)
         return '';
-	if(typeof input == 'function')
-		return  "data-view-id='"+$.View.hookup(input)+"'";
+	
     if(input instanceof Date)
 		return input.toDateString();
 	if(input.hookup){
@@ -281,6 +280,9 @@ EJS.Scanner.to_text = function(input){
 		});
 		return  "data-view-id='"+myid+"'"
 	}
+	if(typeof input == 'function')
+		return  "data-view-id='"+$.View.hookup(input)+"'";
+		
 	if(isArray(input)){
 		myid = $.View.hookup(function(el, id){
 			for(var i = 0 ; i < input.length; i++){
