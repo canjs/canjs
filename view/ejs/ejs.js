@@ -271,6 +271,8 @@ EJS.Scanner.to_text = function(input){
 	var myid;
 	if(input == null || input === undefined)
         return '';
+	if(typeof input == 'function')
+		return  "data-view-id='"+$.View.hookup(input)+"'";
     if(input instanceof Date)
 		return input.toDateString();
 	if(input.hookup){
@@ -281,8 +283,9 @@ EJS.Scanner.to_text = function(input){
 	}
 	if(isArray(input)){
 		myid = $.View.hookup(function(el, id){
-			for(var i = 0 ; i < input.length; i++)
-				input[i].hookup.call(input[i], el, id)
+			for(var i = 0 ; i < input.length; i++){
+				input[i].hookup ? input[i].hookup( el, id) : input[i](el, id)
+			}
 		});
 		return  "data-view-id='"+myid+"'"
 	}
@@ -563,6 +566,18 @@ EJS.Helpers.prototype = {
 	    if(input instanceof Date) return input.toDateString();
 		if(input.toString) return input.toString().replace(/\n/g, '<br />').replace(/''/g, "'");
 		return '';
+	},
+	/**
+	 * Makes a plugin
+	 * @param {String} name the plugin name
+	 */
+	plugin : function(name){
+		var args = $.makeArray(arguments),
+			widget = args.shift();
+		return function(el){
+			var jq = $(el)
+			jq[widget].apply(jq, args);
+		}
 	}
 };
     EJS.newRequest = function(){
