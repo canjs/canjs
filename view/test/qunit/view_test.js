@@ -11,3 +11,9 @@ test("view testing works", function(){
 		ok( /helloworld\s*/.test( $("#qunit-test-area").text()),  "hello world present for "+this)
 	})
 })
+test("plugin in ejs", function(){
+	$("#qunit-test-area").html("");
+	$("#qunit-test-area").html("plugin.ejs",{})
+	ok(/something/.test( $("#something").text()),"something has something");
+	//$("#qunit-test-area").html("");
+})
