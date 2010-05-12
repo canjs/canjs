@@ -312,6 +312,7 @@ $.
 		settings.type = 'GET';
 		return ajax(settings);		
 	}
+	$.fixture["-timeout"] = 100
 	$.fixture["-handleFunction"] = function(settings){
 		if (typeof settings.fixture == "string" && $.fixture[settings.fixture]) {
 			settings.fixture = $.fixture[settings.fixture]
@@ -322,7 +323,7 @@ $.
                         settings.success.apply(null, settings.fixture(settings, "success")  )
                     if(settings.complete)
                         settings.complete.apply(null, settings.fixture(settings, "complete")  )
-                }, 100)
+                }, $.fixture["-timeout"])
             return true;
 		}
 		return false;
