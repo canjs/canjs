@@ -207,7 +207,7 @@ $.ajax({
 @param {Number} count the number of items to create
 @param {Function} make a function that will return json data representing the object.
  */
-		"-make" : function(type, count, make){
+		"-make" : function(types, count, make){
 			//make all items now ....
 			var items = []
 			for(var i = 0 ; i < (count); i++){
