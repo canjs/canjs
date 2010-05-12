@@ -5,21 +5,21 @@
  */
 Jaml.Node = function(tagName) {
   /**
-   * @property tagName
+   * @attribute tagName
    * @type String
    * This node's current tag
    */
   this.tagName = tagName;
   
   /**
-   * @property attributes
+   * @attribute attributes
    * @type Object
    * Sets of attributes on this node (e.g. 'cls', 'id', etc)
    */
   this.attributes = {};
   
   /**
-   * @property children
+   * @attribute children
    * @type Array
    * Array of rendered child nodes that will be steald as this node's innerHTML
    */
@@ -131,7 +131,7 @@ Jaml.Node.prototype = {
   },
   
   /**
-   * @property selfClosingTags
+   * @attribute selfClosingTags
    * @type Array
    * An array of all tags that should be self closing
    */

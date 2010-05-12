@@ -12,7 +12,7 @@
  */
 Jaml.Template = function(tpl) {
   /**
-   * @property tpl
+   * @attribute tpl
    * @type Function
    * The function this template was created from
    */
