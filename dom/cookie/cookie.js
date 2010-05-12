@@ -1,6 +1,6 @@
 steal(function(){
      
-        /**
+        /** @documentjs-ignore
           * Cookie plugin
           *
           * Copyright (c) 2006 Klaus Hartl (stilbuero.de)
