@@ -337,7 +337,9 @@ jQuery.Class.extend("jQuery.Controller",
 				return this;
 			}
 		}
-		
+		if(!$.isArray(this.listensTo)){
+			throw "listensTo is not an array in "+this.fullName
+		}
 		//calculate and cache actions
 		this.actions = {};
 		var convertedName, 
@@ -345,7 +347,8 @@ jQuery.Class.extend("jQuery.Controller",
 			c = this, 
 			replacer = /\{([^\}]+)\}/g, 
 			b = c.breaker, 
-			funcName;
+			funcName, 
+			event;
 		for( funcName in this.prototype ) {
 			if( funcName == "constructor" ) { continue; }
 			convertedName = funcName.replace(replacer, function(whole, inside){
@@ -353,12 +356,13 @@ jQuery.Class.extend("jQuery.Controller",
 				return jQuery.Class.getObject(inside, c.OPTIONS).toString(); //gets the value in options
 			})
 			parts = convertedName.match( b) //parts of the action string
+			event = parts && parts[2].replace(/^(default\.)|(>)/,"")
 			//get processor if it responds to event type
 			processor = parts && 
-					(	c.processors[parts[2]] || //if the 2nd part is a processor, use that processor
-						($.inArray(parts[2], c.listensTo ) > -1 && c.basicProcessor) ||  //if it is in listens to, use basic processor
+					(	c.processors[event] || //if the 2nd part is a processor, use that processor
+						($.inArray(event, c.listensTo ) > -1 && c.basicProcessor) ||  //if it is in listens to, use basic processor
 					( parts[1] && c.basicProcessor) || 
-					($.event.special[parts[2]] && c.basicProcessor)
+					($.event.special[event] && c.basicProcessor)
 					);
 			if(processor){
 				this.actions[funcName] = {action: processor, parts: parts}
