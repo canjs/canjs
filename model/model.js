@@ -140,7 +140,7 @@ jQuery.Class.extend("jQuery.Model",
 	setup: function(){
 		this.validations = [];
 		this.attributes= {};  //list of all attributes ever given to this model
-        this.defaultAttributes= {};  //list of attributes and values you want right away
+        this.defaultAttributes= this.defaultAttributes || {};   //list of attributes and values you want right away
         this.associations = {};
         if(this.fullName.substr(0,7) == "jQuery." ) return;
         this.underscoredName =  jQuery.String.underscore(this.fullName.replace(/\./g,"_"))
