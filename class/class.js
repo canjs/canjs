@@ -403,6 +403,10 @@ steal.plugin("jquery").then(function(){
 		namespace = current;
 		shortName = parts[parts.length - 1];
 		fullName = className;
+		
+		//@steal-remove-start
+		steal.dev.isHappyName(className)
+		//@steal-remove-end
 	}
 	
 	var makeClass;

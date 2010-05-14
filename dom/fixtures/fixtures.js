@@ -299,9 +299,18 @@ $.
 			if(/^\/\//.test(url)){
 				url = steal.root.join(settings.fixture.substr(2))
 			}
+			//@steal-remove-start
+			steal.dev.log("looking for fixture in "+url)
+			//@steal-remove-end
+			
 			settings.url = url
 			settings.data = null;
 			settings.type = "GET"
+			if(!settings.error){
+				settings.error = function(xhr, error, message){
+					throw "fixtures.js Error "+error+" "+message;
+				}
+			}
 			return ajax(settings);
 			
 		}

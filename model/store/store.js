@@ -1,11 +1,11 @@
 // provides very simple storage
 // var store = new jQuery.Store();
 // when its being extended, it should make a new simplestore
-steal.then(function(){
+steal.plugins('jquery/model/store').then(function(){
 /**
  * Provides simple storage for elements.  Replace this store with Gears!
  */
-jQuery.Class.extend("jQuery.Store",
+jQuery.Class.extend("jQuery.Model.Store",
 /* @prototype */
 {
 	/**

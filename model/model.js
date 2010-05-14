@@ -136,7 +136,7 @@ You can validate your model's attributes with another plugin.  See [validation].
 jQuery.Class.extend("jQuery.Model",
 /* @Static*/
 {
-	storeType: jQuery.Store,
+	storeType: null,
 	setup: function(){
 		this.validations = [];
 		this.attributes= {};  //list of all attributes ever given to this model
