@@ -629,8 +629,14 @@ EJS.Helpers.prototype = {
 			var text = $.ajax({
 					async: false,
 					url: url,
-					dataType: "text"
+					dataType: "text",
+					error : function(){
+						throw "ejs.js ERROR: There is no template or an empty template at "+url;
+					}
 				}).responseText
+			if(!text.match(/[^\s]/)){
+				throw "ejs.js ERROR: There is no template or an empty template at "+url;
+			}
 			return this.renderer(id, text);
 		},
 		script : function(id, src){
