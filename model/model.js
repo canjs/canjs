@@ -420,6 +420,10 @@ jQuery.Class.extend("jQuery.Model",
         //this.is_new_record = this.Class.new_record_func;
         return true;
     },
+	/**
+	 * Called by save after a new instance is created.  Publishes 'created'.
+	 * @param {Object} attrs
+	 */
     created : function(attrs){
         this.attrs(attrs)
         this.publish("created", this)
