@@ -441,6 +441,10 @@ jQuery.Class.extend("jQuery.Model",
     destroy : function(success, error){
         this.Class.destroy(this[this.Class.id], this.callback(["destroyed",success]), error);
     },
+	/**
+	 * Called after an instance is destroyed.  Publishes
+	 * "shortName.destroyed"
+	 */
     destroyed : function(){
         if(this.Class.store) this.Class.store.destroy(this[this.Class.id]);
         this.publish("destroyed",this)
