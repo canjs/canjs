@@ -1,7 +1,7 @@
 /**
  *  @add jQuery.fn
  */
-steal.plugins('jquery').then(function($) {
+steal.plugins('jquery/dom').then(function($) {
 
 
     var weird = /button|select/i,

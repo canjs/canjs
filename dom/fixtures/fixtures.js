@@ -1,4 +1,4 @@
-steal.plugins('jquery').then(function($){
+steal.plugins('jquery/dom').then(function($){
 	if(jQuery.browser.rhino){
         print("\nWARNING! The Fixture Plugin Is Included!!!!!!\n")
     }

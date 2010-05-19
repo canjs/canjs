@@ -1,7 +1,7 @@
 /**
  *  @add jQuery.fn
  */
-steal.plugins('jquery').then(function($){
+steal.plugins('jquery/dom').then(function($){
 	/**
 	 * @function compare
 	 * @parent dom

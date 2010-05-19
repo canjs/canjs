@@ -1,4 +1,4 @@
-steal.plugins('jquery').then(function(){
+steal.plugins('jquery/event').then(function(){
 	var liveHandler = null, event = jQuery.event;
 	
 	

@@ -6292,14 +6292,4 @@ window.jQuery = window.$ = jQuery;
 })(window);
 
 
-/**
- * @Constructor jQuery
- * @init blah
- */
 
-//
-/**
- * @Constructor jQuery.fn
- * @init blah
- */
-//

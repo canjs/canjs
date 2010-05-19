@@ -1,4 +1,4 @@
-steal.plugins('jquery').then('gears',function($){
+steal.plugins('jquery/event').then('gears',function($){
 	
 	
 	

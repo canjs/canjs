@@ -1,7 +1,7 @@
 /**
  * @add jQuery.event.special static
  */
-steal.plugins('jquery').then(function($){
+steal.plugins('jquery/event').then(function($){
 	/**
 	 * @attribute destroyed
 	 * @parent specialevents

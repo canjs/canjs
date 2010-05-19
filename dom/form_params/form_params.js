@@ -1,7 +1,7 @@
 /**
  *  @add jQuery.fn
  */
-steal.plugins("jquery",'jquery/lang/rsplit').then(function($) {
+steal.plugins("jquery/dom",'jquery/lang/rsplit').then(function($) {
 var isNumber = function(value) {
    if(typeof value == 'number') return true;
    if(typeof value != 'string') return false;

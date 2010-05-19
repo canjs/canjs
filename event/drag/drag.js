@@ -1,5 +1,5 @@
 
-steal.plugins('jquery','jquery/lang/vector','jquery/event/livehack').then(function($){
+steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(function($){
 	//modify live
 	//steal the live handler ....
 	

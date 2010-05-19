@@ -1,4 +1,4 @@
-steal.plugins('jquery','jquery/event/livehack').then(function($){
+steal.plugins('jquery/event','jquery/event/livehack').then(function($){
 	/**
 	 * @constructor jQuery.Hover
 	 * Provides delegatable hover events.
