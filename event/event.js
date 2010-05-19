@@ -8,7 +8,3 @@ JavaScriptMVC adds a bunch of useful jQuery extensions for the dom.  Check them 
  */
 steal.plugins('jquery')
 
-/**
- * @class jQuery.event.special
- */
-// as fasf sa
