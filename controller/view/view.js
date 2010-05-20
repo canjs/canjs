@@ -5,7 +5,7 @@ steal.plugins('jquery/controller','jquery/view').then(function($){
 	
 	var calculatePosition = function(Class, view, action_name){
 		var slashes = Class.fullName.replace(/\./g,"/"), 
-		    hasControllers = slashes.indexOf("/Controllers/"+Class.shortName) != -1
+		    hasControllers = slashes.indexOf("/Controllers/"+Class.shortName) != -1,
 			path = jQuery.String.underscore( slashes.replace("/Controllers/"+Class.shortName,"") ),
 			controller_name = Class.underscoreShortName;
 			
