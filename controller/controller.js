@@ -33,7 +33,7 @@ shifter = function(cb){
 	}
 },
 dotsReg = /\./g,
-controllersReg = /_?controllers?/ig
+controllersReg = /_?controllers?/ig,
 underscoreAndRemoveController = function(className){
 	return $.String.underscore(className.replace(dotsReg,'_').replace(controllersReg,""));
 }
