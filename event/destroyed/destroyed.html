@@ -13,8 +13,8 @@
 		<script type='text/javascript' src='../../../steal/steal.js?jquery/event/destroyed/destroyed.js'></script>
 		<script type='text/javascript' id='demo-source'>
 $("#clickToDestroy").bind("destroyed", function(){
-	$("#change").html("destroyed :)")
-}).data("testData",5)
+	$("#change").html("destroyed with "+$(this).data("testData"))
+}).data("testData","joy :)")
 $("#change").bind("click", function(){
 	$("#clickToDestroy").remove()
 })

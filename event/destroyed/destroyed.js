@@ -5,13 +5,21 @@ steal.plugins('jquery/event').then(function($){
 	/**
 	 * @attribute destroyed
 	 * @parent specialevents
+	 * @download jquery/dist/jquery.event.destroyed.js
 	 * Provides a destroyed event on an element.
 	 * <p>
-	 * The destroyed event does not bubble and is called when the element
+	 * The destroyed event \ is called when the element
 	 * is removed as a result of jQuery DOM manipulators like remove, html,
-	 * replaceWith, etc. 
+	 * replaceWith, etc. Destroyed events do not bubble, so make sure you don't use live or delegate with destroyed
+	 * events.
 	 * </p>
-	 * <h2>Example</h2>
+	 * <h2>Quick Example</h2>
+	 * @codestart
+	 * $(".foo").bind("destroyed", function(){
+	 *    //clean up code
+	 * })
+	 * @codeend
+	 * <h2>Demo</h2>
 	 * @demo jquery/event/destroyed/destroyed.html 
 	 */
 	$.event.special["destroyed"] = {
