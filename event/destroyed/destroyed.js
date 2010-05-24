@@ -29,4 +29,13 @@ steal.plugins('jquery/event').then(function($){
 			
 		}
 	}
+	var oldClean = jQuery.cleanData
+	
+	jQuery.cleanData= function( elems ) {
+		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
+			jQuery.event.remove( elem, 'destroyed' );
+		}
+		oldClean(elems)
+	}
+	
 })

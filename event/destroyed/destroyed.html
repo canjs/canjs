@@ -14,7 +14,7 @@
 		<script type='text/javascript' id='demo-source'>
 $("#clickToDestroy").bind("destroyed", function(){
 	$("#change").html("destroyed :)")
-})
+}).data("testData",5)
 $("#change").bind("click", function(){
 	$("#clickToDestroy").remove()
 })
