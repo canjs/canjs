@@ -8,7 +8,7 @@ steal.plugins('jquery/event').then(function($){
 	 * @download jquery/dist/jquery.event.destroyed.js
 	 * Provides a destroyed event on an element.
 	 * <p>
-	 * The destroyed event \ is called when the element
+	 * The destroyed event is called when the element
 	 * is removed as a result of jQuery DOM manipulators like remove, html,
 	 * replaceWith, etc. Destroyed events do not bubble, so make sure you don't use live or delegate with destroyed
 	 * events.

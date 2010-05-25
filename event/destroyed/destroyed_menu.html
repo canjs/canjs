@@ -30,12 +30,11 @@
 	destroyed special event.
 </p>
 <div id='demo-html'>
-	
-	<a href='javascript://' class='context'>Show Menu 1</a>
-	<a href='javascript://' class='context'>Show Menu 2</a>
-	<a href='javascript://' class='context'>Show Menu 3</a>
-	<br/>
-	<a id='remove' href="javascript://">Remove a "Show Menu"</div>
+<a href='javascript://' class='context'>Show Menu 1</a>
+<a href='javascript://' class='context'>Show Menu 2</a>
+<a href='javascript://' class='context'>Show Menu 3</a>
+<br/>
+<a id='remove' href="javascript://">Remove a "Show Menu"</div>
 </div>
 	    
 		<script type='text/javascript' src='../../../steal/steal.js?jquery/event/destroyed/destroyed.js'></script>
@@ -57,10 +56,10 @@ jQuery.fn.reusemenu = function(options){
   //take out the hide handler when we
   //no longer have the ul
   ul.bind("destroyed", function(){
-    $(document.body).unbind("click",hideHandler )	 
+    $(document).unbind("click",hideHandler )	 
   })
 
-  $(document.body).click(hideHandler)	  
+  $(document).click(hideHandler)	  
   
   //for each menu 
   this.each(function(){
