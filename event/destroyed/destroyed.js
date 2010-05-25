@@ -19,8 +19,10 @@ steal.plugins('jquery/event').then(function($){
 	 *    //clean up code
 	 * })
 	 * @codeend
-	 * <h2>Demo</h2>
+	 * <h2>Quick Demo</h2>
 	 * @demo jquery/event/destroyed/destroyed.html 
+	 * <h2>More Involved Demo</h2>
+	 * @demo jquery/event/destroyed/destroyed_menu.html 
 	 */
 	$.event.special["destroyed"] = {
 		remove: function( handleObj){
