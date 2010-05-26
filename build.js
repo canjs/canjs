@@ -7,9 +7,15 @@ var i, fileName, cmd,
 	"event/default",
 	"event/destroyed",
 	"event/drag",
-	{plugin: "event/drag/limit", exclude: ["jquery/lang/vector/vector.js", "jquery/event/livehack/livehack.js", "jquery/event/drag/drag.js"]},
-	{plugin: "event/drag/scroll", exclude: ["jquery/dom/within/within.js", "jquery/dom/compare/compare.js", "jquery/event/drop/drop.js","jquery/lang/vector/vector.js", "jquery/event/livehack/livehack.js", "jquery/event/drag/drag.js"]},
-	"event/drop",
+	{
+		plugin: "event/drag/limit", 
+		exclude: ["jquery/lang/vector/vector.js", "jquery/event/livehack/livehack.js", "jquery/event/drag/drag.js"]},
+	{
+		plugin: "event/drag/scroll", 
+		exclude: ["jquery/dom/within/within.js", "jquery/dom/compare/compare.js", "jquery/event/drop/drop.js","jquery/lang/vector/vector.js", "jquery/event/livehack/livehack.js", "jquery/event/drag/drag.js"]},
+	{
+		plugin: "event/drop",
+		exclude: ["jquery/lang/vector/vector.js", "jquery/event/livehack/livehack.js", "jquery/event/drag/drag.js"]},
 	"event/hover",
 	"model",
 	"view/ejs", 

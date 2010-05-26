@@ -51,7 +51,7 @@
 	<div class='handle'>drag me out of bounds</div>
 </div>
 
-<h2>Drag Representitive</h2>
+<h2>Drag Representative</h2>
 <div id='repdrag' class='handle'>Drag a Representative</div>
 <div id='representative' style='display: none'>I represent You</div>
 
@@ -92,7 +92,7 @@ $("#revert").bind("draginit",function(ev, drag){drag.revert()})
 //limit
 $("#container").delegate(".handle","draginit",function(ev, drag){drag.limit( $("#container") )})
 
-//representitive
+//representative
 $("#repdrag").bind("draginit",function(ev, drag){drag.representative($("#representative"),50,30)})
 
 //horizontal

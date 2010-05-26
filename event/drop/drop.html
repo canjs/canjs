@@ -10,16 +10,12 @@
 				border: dashed 1px red;
 				cursor : pointer;
 			}
-            .drop {
+            .dropout, .dropmove, .cancel {
                 width: 200px;
 				height: 50px;
 				border: dashed 1px green;
 				cursor : pointer;
                 background-color: white;
-            }
-            #dropout {
-                padding: 20px;
-                border: solid 1px blue;
             }
             .over {
                 background-color: yellow;
@@ -27,41 +23,44 @@
         </style>
 	</head>
 	<body>
-		<h2>Drop Demo</h2>
-	    <div class='handle'>Drag Me</div>
-        <div class='handle'>Drag Me</div>
-        <div id='dropout'>
-            <div class='drop'></div>
-            <div class='drop'></div>
-        </div>
-        <a href="javascript://" id='undelegate'>undelegate</a>
+<div  id='demo-html'>
+<h2>Drop Demo</h2>
+<div class='handle'>Drag Me</div>
+<h2>Dropout/Dropover</h2>
+<div id='dropout'>
+    <div class='dropout'></div>
+</div>
+<h2>Dropmove/Dropon</h2>
+<div class='dropmove'></div>
+<a href="javascript://" id='undelegate'>undelegate</a>
+</div>
 		<script type='text/javascript' 
                 src='../../../steal/steal.js?steal[app]=jquery/event/drop'>   
         </script>
-        <script script='type/javascript'>
-            //make drags
-			$('.handle').live("draginit", function(){})
+		<script type='text/javascript' id='demo-source'>
+//make drags
+$('.handle').live("draginit", function(){})
 			
-			//add drop events
-            $('#dropout')
-				.delegate(".drop","dropover", function(){
-	                $(this).addClass('over')
-	            })
-				.delegate(".drop","dropout", function(){
-	                $(this).removeClass('over')
-	            })
-				.bind('dropover', function(){
-	                $(this).addClass('over')
-	            })
-				.bind('dropout', function(){
-	                $(this).removeClass('over')
-	            })
-				
-			//turn off drops
-            $("#undelegate").click(function(){
-                $('#dropout').undelegate(".drop","dropover");
-                $('#dropout').undelegate(".drop","dropout");
-            })
+//add dropout/dropover
+$('#dropout')
+	.delegate(".dropout","dropover", function(){ $(this).addClass('over') })
+	.delegate(".dropout","dropout", function(){ $(this).removeClass('over') })
+	
+//add dropmove/dropon
+$('.dropmove')
+	.bind('dropmove', function(){
+        var random = Math.floor( Math.random()*4)-1,
+            color = ['red', 'blue', 'green', 'purple'][random]
+        $(this).css('background-color', color)
+    })
+	.bind('dropon', function(){
+        $(this).text("Dropped on!")
+    })
+	
+//turn off drops
+$("#undelegate").click(function(){
+    $('#dropout').undelegate(".dropout","dropout");
+})
         </script>
 	</body>
 </html>

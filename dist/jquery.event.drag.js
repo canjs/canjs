@@ -2,8 +2,8 @@
 
 (function($){
 
-    var getSetZero = function(v){ return v !== undefined ? (this.array[0] = v) : this.array[0] }
-    var getSetOne = function(v){ return v !== undefined ? (this.array[1] = v) : this.array[1] }
+	var getSetZero = function(v){ return v !== undefined ? (this.array[0] = v) : this.array[0] },
+		getSetOne = function(v){ return v !== undefined ? (this.array[1] = v) : this.array[1] }
 /**
  * @constructor
  * A vector class
@@ -13,166 +13,160 @@
  * @codeend
  * 
  */
-
 jQuery.Vector = function(){
-    this.update( jQuery.makeArray(arguments) );
+	this.update( jQuery.makeArray(arguments) );
 };
 jQuery.Vector.prototype = 
 /* @Prototype*/
 {
-    /**
-     * Applys the function to every item in the vector.  Returns the new vector.
-     * @param {Function} f
-     * @return {jQuery.Vector} new vector class.
-     */
-    app: function(f){
-          var newArr = [];
-          
-          for(var i=0; i < this.array.length; i++)
-              newArr.push( f(  this.array[i] ) );
-          var vec = new jQuery.Vector();
-          return vec.update(newArr);
-    },
-    /**
-     * Adds two vectors together.  Example:
-     * @codestart
-     * new Vector(1,2).plus(2,3) //-> &lt;3,5>
-     * new Vector(3,5).plus(new Vector(4,5)) //-> &lt;7,10>
-     * @codeend
-     * @return {jQuery.Vector}
-     */
-    plus: function(){
-        var args = arguments[0] instanceof jQuery.Vector ? 
-                 arguments[0].array : 
-                 jQuery.makeArray(arguments), 
-            arr=this.array.slice(0), 
-            vec = new jQuery.Vector();
-        for(var i=0; i < args.length; i++)
-            arr[i] = (arr[i] ? arr[i] : 0) + args[i];
-        return vec.update(arr);
-    },
-    /**
-     * Like plus but subtracts 2 vectors
-     * @return {jQuery.Vector}
-     */
-    minus: function(){
-         var args = arguments[0] instanceof jQuery.Vector ? 
-                 arguments[0].array : 
-                 jQuery.makeArray(arguments), 
-             arr=this.array.slice(0), vec = new jQuery.Vector();
-         for(var i=0; i < args.length; i++)
-            arr[i] = (arr[i] ? arr[i] : 0) - args[i];
-         return vec.update(arr);
-    },
-    /**
-     * Returns the current vector if it is equal to the vector passed in.  
-     * False if otherwise.
-     * @return {jQuery.Vector}
-     */
-    equals : function(){
-        var args = arguments[0] instanceof jQuery.Vector ? 
-                 arguments[0].array : 
-                 jQuery.makeArray(arguments), 
-             arr=this.array.slice(0), vec = new jQuery.Vector();
-         for(var i=0; i < args.length; i++)
-            if(arr[i] != args[i]) return null;
-         return vec.update(arr);
-    },
-    /*
-     * Returns the 2nd value of the vector
-     * @return {Number}
-     */
-    x : getSetZero,
-    width : getSetZero,
-    /**
-     * Returns the first value of the vector
-     * @return {Number}
-     */
-    y : getSetOne,
+	/**
+	 * Applys the function to every item in the vector.  Returns the new vector.
+	 * @param {Function} f
+	 * @return {jQuery.Vector} new vector class.
+	 */
+	app: function(f){
+		  var newArr = [];
+		  
+		  for(var i=0; i < this.array.length; i++)
+			  newArr.push( f(  this.array[i] ) );
+		  var vec = new jQuery.Vector();
+		  return vec.update(newArr);
+	},
+	/**
+	 * Adds two vectors together.  Example:
+	 * @codestart
+	 * new Vector(1,2).plus(2,3) //-> &lt;3,5>
+	 * new Vector(3,5).plus(new Vector(4,5)) //-> &lt;7,10>
+	 * @codeend
+	 * @return {jQuery.Vector}
+	 */
+	plus: function(){
+		var args = arguments[0] instanceof jQuery.Vector ? 
+				 arguments[0].array : 
+				 jQuery.makeArray(arguments), 
+			arr=this.array.slice(0), 
+			vec = new jQuery.Vector();
+		for(var i=0; i < args.length; i++)
+			arr[i] = (arr[i] ? arr[i] : 0) + args[i];
+		return vec.update(arr);
+	},
+	/**
+	 * Like plus but subtracts 2 vectors
+	 * @return {jQuery.Vector}
+	 */
+	minus: function(){
+		 var args = arguments[0] instanceof jQuery.Vector ? 
+				 arguments[0].array : 
+				 jQuery.makeArray(arguments), 
+			 arr=this.array.slice(0), vec = new jQuery.Vector();
+		 for(var i=0; i < args.length; i++)
+			arr[i] = (arr[i] ? arr[i] : 0) - args[i];
+		 return vec.update(arr);
+	},
+	/**
+	 * Returns the current vector if it is equal to the vector passed in.  
+	 * False if otherwise.
+	 * @return {jQuery.Vector}
+	 */
+	equals : function(){
+		var args = arguments[0] instanceof jQuery.Vector ? 
+				 arguments[0].array : 
+				 jQuery.makeArray(arguments), 
+			 arr=this.array.slice(0), vec = new jQuery.Vector();
+		 for(var i=0; i < args.length; i++)
+			if(arr[i] != args[i]) return null;
+		 return vec.update(arr);
+	},
+	/*
+	 * Returns the 2nd value of the vector
+	 * @return {Number}
+	 */
+	x : getSetZero,
+	width : getSetZero,
+	/**
+	 * Returns the first value of the vector
+	 * @return {Number}
+	 */
+	y : getSetOne,
 	height : getSetOne,
-    /**
-     * Same as x()
-     * @return {Number}
-     */
-    top : getSetOne,
-    /**
-     * same as y()
-     * @return {Number}
-     */
-    left : getSetZero,
-    /**
-     * returns (x,y)
-     * @return {String}
-     */
-    toString: function(){
-        return "("+this.array[0]+","+this.array[1]+")";
-    },
-    /**
-     * Replaces the vectors contents
-     * @param {Object} array
-     */
-    update: function(array){
-        if(this.array){
-            for(var i =0; i < this.array.length; i++) delete this.array[i];
-        }
-        this.array = array;
-        for(var i =0; i < array.length; i++) this[i]= this.array[i];
-        return this;
-    }
+	/**
+	 * Same as x()
+	 * @return {Number}
+	 */
+	top : getSetOne,
+	/**
+	 * same as y()
+	 * @return {Number}
+	 */
+	left : getSetZero,
+	/**
+	 * returns (x,y)
+	 * @return {String}
+	 */
+	toString: function(){
+		return "("+this.array[0]+","+this.array[1]+")";
+	},
+	/**
+	 * Replaces the vectors contents
+	 * @param {Object} array
+	 */
+	update: function(array){
+		if(this.array){
+			for(var i =0; i < this.array.length; i++) delete this.array[i];
+		}
+		this.array = array;
+		for(var i =0; i < array.length; i++) this[i]= this.array[i];
+		return this;
+	}
 };
 
 jQuery.Event.prototype.vector = function(){
-    if(this.originalEvent.synthetic){
-        var doc = document.documentElement, body = document.body;
-        return  new jQuery.Vector(this.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
-                                  this.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0));
-    }else{
-        return new jQuery.Vector(this.pageX, this.pageY);
-    }
+	if(this.originalEvent.synthetic){
+		var doc = document.documentElement, body = document.body;
+		return  new jQuery.Vector(this.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
+								  this.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0));
+	}else{
+		return new jQuery.Vector(this.pageX, this.pageY);
+	}
 }
 
-
-
-
-
 jQuery.fn.offsetv = function() {
-  if(this[0] == window)
-  	return new jQuery.Vector(window.pageXOffset ? window.pageXOffset : document.documentElement.scrollLeft,
-                              window.pageYOffset ? window.pageYOffset : document.documentElement.scrollTop)
-  var offset = this.offset();
-  return new jQuery.Vector(offset.left, offset.top);
+	if(this[0] == window){
+		return new jQuery.Vector(window.pageXOffset ? window.pageXOffset : document.documentElement.scrollLeft,
+							  window.pageYOffset ? window.pageYOffset : document.documentElement.scrollTop)
+	}else{
+		var offset = this.offset();
+ 		 return new jQuery.Vector(offset.left, offset.top);
+	}
 };
 
 jQuery.fn.dimensionsv = function(){
 	if(this[0] == window)
 		return new jQuery.Vector(this.width(), this.height());
 	else
-    	return new jQuery.Vector(this.outerWidth(), this.outerHeight());
+		return new jQuery.Vector(this.outerWidth(), this.outerHeight());
 }
 jQuery.fn.centerv = function(){
-    return this.offsetv().plus( this.dimensionsv().app(function(u){return u /2;})  )
+	return this.offsetv().plus( this.dimensionsv().app(function(u){return u /2;})  )
 }
 
-
-
 jQuery.fn.makePositioned = function() {
-  return this.each(function(){
-        var that = jQuery(this);
-        var pos = that.css('position');
+	return this.each(function(){
+		var that = jQuery(this);
+		var pos = that.css('position');
 
-        if (!pos || pos == 'static') {
-            var style = { position: 'relative' };
+		if (!pos || pos == 'static') {
+			var style = { position: 'relative' };
 
-            if (window.opera) {
-                style.top = '0px';
-                style.left = '0px';
-            }
-
-            that.css(style);
-        }
-  });
+			if (window.opera) {
+				style.top = '0px';
+				style.left = '0px';
+			}
+			that.css(style);
+		}
+	});
 };
-    
+	
 
 })(jQuery);
 
@@ -180,35 +174,12 @@ jQuery.fn.makePositioned = function() {
 
 (function($){
 
-	var liveHandler = null, event = jQuery.event;
-	
-	
-	/**
-	 * Finds event handlers of a given type on an element.
-	 * @param {Object} el
-	 * @param {Object} types
-	 * @param {Object} selector
-	 */
-	event.find  = function(el, types, selector){
-		var events = $.data(el, "events"), handlers = [];
-		
-		
-		
-		
-		if(!events) return handlers;
-		
-		if(selector){
-			if( !events.live) return [];
-			var live = events.live, handlers = [];
 
-			for (var t = 0; t < live.length; t++) {
-				var liver = live[t];
-				if(  liver.selector == selector &&  $.inArray(liver.origType, types  ) !== -1 ){
-					handlers.push(liver.origHandler || liver.handler)
-				}
-			}
-		}else{
-			for(var t =0; t< types.length; t++){
+	var event = jQuery.event,
+		
+		//helper that finds handlers by type and calls back a function, this is basically handle
+		findHelper = function(events, types, callback){
+			for( var t =0; t< types.length; t++ ) {
 				var type = types[t], 
 					typeHandlers,
 					all = type.indexOf(".") < 0,
@@ -219,58 +190,84 @@ jQuery.fn.makePositioned = function() {
 					type = namespaces.shift();
 					namespace = new RegExp("(^|\\.)" + namespaces.slice(0).sort().join("\\.(?:.*\\.)?") + "(\\.|$)");
 				}
-				typeHandlers = ( events[type] || [] ).slice(0)
+				typeHandlers = ( events[type] || [] ).slice(0);
 				
-				for(var h = 0; h <typeHandlers.length; h++ ){
+				for( var h = 0; h <typeHandlers.length; h++ ) {
 					var handle = typeHandlers[h];
-					if(handle.selector == selector && (all || namespace.test( handle.namespace ))  )
-						handlers.push(handle.origHandler || handle.handler)
+					if( !handle.selector && (all || namespace.test( handle.namespace ))  ){
+						callback(type, handle.origHandler || handle.handler);
+					}
 				}
 			}
-			
-			
+		}
+	
+	/**
+	 * Finds event handlers of a given type on an element.
+	 * @param {HTMLElement} el
+	 * @param {Array} types an array of event names
+	 * @param {String} [selector] optional selector
+	 * @return {Array} an array of event handlers
+	 */
+	event.find  = function(el, types, selector){
+		var events = $.data(el, "events"), 
+			handlers = [];
+
+		if( !events ) {
+			return handlers;
+		}
+		
+		if( selector ) {
+			if (!events.live) { 
+				return [];
+			}
+			var live = events.live;
+
+			for ( var t = 0; t < live.length; t++ ) {
+				var liver = live[t];
+				if(  liver.selector === selector &&  $.inArray(liver.origType, types  ) !== -1 ) {
+					handlers.push(liver.origHandler || liver.handler);
+				}
+			}
+		}else{
+			// basically re-create handler's logic
+			findHelper(events, types, function(type, handler){
+				handlers.push(handler);
+			})
 		}
 		return handlers;
 	}
-    event.findBySelector = function(el, types){
-        var events = $.data(el, "events"), 
-            selectors = {}, 
-            add = function(selector, event, handler){
-                var select = selectors[selector] ||  (selectors[selector] = {}),
-                    events = select[event] || (select[event] = []);
-                events.push(handler)
-            };
+	/**
+	 * Finds 
+	 * @param {HTMLElement} el
+	 * @param {Array} types
+	 */
+	event.findBySelector = function(el, types){
+		var events = $.data(el, "events"), 
+			selectors = {}, 
+			//adds a handler for a given selector and event
+			add = function(selector, event, handler){
+				var select = selectors[selector] ||  (selectors[selector] = {}),
+					events = select[event] || (select[event] = []);
+				events.push(handler);
+			};
 
-		if(!events) return selectors;
-		//first check live:
-        $.each(events.live||[],function(i, live){
-            if($.inArray(live.origType, types  ) !== -1){
-                add(live.selector, live.origType,live.origHandler || live.handler )
-            }
-        })
-        //then check straight binds
-        
-		for(var t =0; t< types.length; t++){
-			var type = types[t], 
-				typeHandlers,
-				all = type.indexOf(".") < 0,
-				namespaces,
-				namespace; 
-			if ( !all ) {
-				namespaces = type.split(".");
-				type = namespaces.shift();
-				namespace = new RegExp("(^|\\.)" + namespaces.slice(0).sort().join("\\.(?:.*\\.)?") + "(\\.|$)");
-			}
-			typeHandlers = ( events[type] || [] ).slice(0)
-			
-			for(var h = 0; h <typeHandlers.length; h++ ){
-				var handle = typeHandlers[h];
-				if(!handle.selector && (all || namespace.test( handle.namespace ))  )
-					add("", type, handle.origHandler || handle.handler )
-			}
+		if ( !events ) {
+			return selectors;
 		}
+		//first check live:
+		$.each( events.live||[] , function(i, live) {
+			if( $.inArray(live.origType, types  ) !== -1 ) {
+				add( live.selector, live.origType, live.origHandler || live.handler );
+			}
+		})
+		//then check straight binds
+		
+		findHelper(events, types, function(type, handler){
+			add("", type, handler);
+		})
+		
 		return selectors;
-    }
+	}
 	$.fn.respondsTo = function(events){
 		if(!this.length){
 			return false;
@@ -281,8 +278,8 @@ jQuery.fn.makePositioned = function() {
 	}
 	$.fn.triggerHandled = function(event, data){
 		event = ( typeof event == "string" ? $.Event(event) : event);
-		this.trigger(event, data)
-		return event.handled
+		this.trigger(event, data);
+		return event.handled;
 	}
 	/**
 	 * Only attaches one event handler for all types ...
@@ -309,12 +306,12 @@ jQuery.fn.makePositioned = function() {
 				event.add(this, startingEvent, onFirst, {
 					selector: selector,
 					delegate: this
-				})
+				});
 			}
 			
 		}
 		var remove = function(handleObj){
-			var selector = handleObj.selector || ""
+			var selector = handleObj.selector || "";
 			if (selector) {
 				var bySelector = event.find(this, types, selector);
 				if (!bySelector.length) {
@@ -325,7 +322,7 @@ jQuery.fn.makePositioned = function() {
 				event.remove(this, startingEvent, onFirst, {
 					selector: selector,
 					delegate: this
-				})
+				});
 			}
 		}
 		$.each(types, function(){
@@ -333,12 +330,9 @@ jQuery.fn.makePositioned = function() {
 				add:  add,
 				remove: remove,
 				setup : function(){}
-			}
-		})
+			};
+		});
 	}
-	
-	
-	
 
 })(jQuery);
 
