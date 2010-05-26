@@ -210,7 +210,7 @@ $.ajax({
 @param {Number} count the number of items to create
 @param {Function} make a function that will return json data representing the object.
  */
-		"-make" : function(type, count, make){
+		"-make" : function(types, count, make){
 			//make all items now ....
 			var items = []
 			for(var i = 0 ; i < (count); i++){
@@ -294,34 +294,27 @@ $.
 		if (!settings.fixture) {
 			return ajax.apply($, arguments);
 		}
-		else if (typeof settings.fixture == "string") {
-			if($.fixture[settings.fixture])
-				settings.fixture = $.fixture[settings.fixture]
-			else{
-				var url =  settings.fixture;
-				if(/^\/\//.test(url)){
-					url = steal.root.join(settings.fixture.substr(2))
-				}
-				settings.url = url
-				settings.data = null;
-				settings.type = "GET"
-				return ajax(settings);
-			}
+		if($.fixture["-handleFunction"](settings)){
+			return;
 		}
-		if (typeof settings.fixture == "function") {
+		if (typeof settings.fixture == "string") {
+			var url =  settings.fixture;
+			if(/^\/\//.test(url)){
+				url = steal.root.join(settings.fixture.substr(2))
+			}
 			
-            
-                setTimeout(function(){
-                    if(settings.success)
-                        settings.success.apply(null, settings.fixture(settings, "success")  )
-                    if(settings.complete)
-                        settings.complete.apply(null, settings.fixture(settings, "complete")  )
-                }, 100)
-            
-                
-            
-            return;
-		} 
+			
+			settings.url = url
+			settings.data = null;
+			settings.type = "GET"
+			if(!settings.error){
+				settings.error = function(xhr, error, message){
+					throw "fixtures.js Error "+error+" "+message;
+				}
+			}
+			return ajax(settings);
+			
+		}
 		var settings = jQuery.extend(true, settings, jQuery.extend(true, {}, jQuery.ajaxSettings, settings));
 		
 		settings.url = steal.root.join('test/fixtures/'+func(settings)); // convert settings
@@ -329,7 +322,22 @@ $.
 		settings.type = 'GET';
 		return ajax(settings);		
 	}
-	
+	$.fixture["-timeout"] = 100
+	$.fixture["-handleFunction"] = function(settings){
+		if (typeof settings.fixture == "string" && $.fixture[settings.fixture]) {
+			settings.fixture = $.fixture[settings.fixture]
+		}
+		if (typeof settings.fixture == "function") {
+                setTimeout(function(){
+                    if(settings.success)
+                        settings.success.apply(null, settings.fixture(settings, "success")  )
+                    if(settings.complete)
+                        settings.complete.apply(null, settings.fixture(settings, "complete")  )
+                }, $.fixture["-timeout"])
+            return true;
+		}
+		return false;
+	}
 	
 	var get = $.get;
 $.

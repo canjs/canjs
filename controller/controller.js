@@ -40,7 +40,7 @@ underscoreAndRemoveController = function(className){
 /**
  * @tag core
  * @plugin jquery/controller
- * @download dist/jquery.controller.js
+ * @download jquery/dist/jquery.controller.js
  * 
  * <p><img src='jmvc/images/controller.png' class='component'/>Controllers organize event handlers using event delegation. 
  * If something happens in your application (a user click or a [jQuery.Model|Model] instance being updated), 

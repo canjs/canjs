@@ -63,7 +63,7 @@
         return '"' + string + '"';
     };
     
-    $.toJSON = function(o, compact)
+    $.toJSON = function(o, compact, names, indent)
     {
         var type = typeof(o);
         
@@ -89,7 +89,7 @@
         {
             var ret = [];
             for (var i = 0; i < o.length; i++) {
-                ret.push( $.toJSON(o[i], compact) );
+                ret.push( $.toJSON(o[i], compact, names) );
             }
             if (compact)
                 return "[" + ret.join(",") + "]";
@@ -105,7 +105,11 @@
         // It's probably an object, then.
         var ret = [];
         for (var k in o) {
-            var name;
+            if(names && ($.inArray(k, names) === -1) ){
+				continue;
+			}
+			
+			var name;
             type = typeof(k);
             
             if (type == "number")
@@ -115,7 +119,7 @@
             else
                 continue;  //skip non-string or number keys
             
-            var val = $.toJSON(o[k], compact);
+            var val = $.toJSON(o[k], compact, names);
             if (typeof(val) != "string") {
                 // skip non-serializable values
                 continue;
@@ -126,7 +130,7 @@
             else
                 ret.push(name + ": " + val);
         }
-        return "{" + ret.join(", ") + "}";
+        return "{" + ret.join(", \n") + "}";
     };
     
     $.compactJSON = function(o)

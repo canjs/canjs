@@ -1,5 +1,20 @@
 steal.plugins("jquery/event/drop").then(function($){ //needs drop to determine if respondable
 
+/**
+ * @add jQuery.Drag prototype
+ */
+$.Drag.prototype.
+	/**
+	 * Will scroll elements with a scroll bar as the drag moves to borders.
+	 * @plugin jquery/event/drag/scroll
+	 * @download jquery/dist/jquery.event.drag.scroll.js
+	 * @param {jQuery} elements to scroll.  The window can be in this array.
+	 */
+	scrolls = function(elements){
+		for(var i = 0 ; i < elements.length; i++){
+			this.constructor.responder._responders.push( new $.Scrollable(elements[i]) )
+		}
+	},
 	
 $.Scrollable = function(element){
 	this.element = jQuery(element);

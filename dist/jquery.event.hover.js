@@ -2,35 +2,12 @@
 
 (function($){
 
-	var liveHandler = null, event = jQuery.event;
-	
-	
-	/**
-	 * Finds event handlers of a given type on an element.
-	 * @param {Object} el
-	 * @param {Object} types
-	 * @param {Object} selector
-	 */
-	event.find  = function(el, types, selector){
-		var events = $.data(el, "events"), handlers = [];
-		
-		
-		
-		
-		if(!events) return handlers;
-		
-		if(selector){
-			if( !events.live) return [];
-			var live = events.live, handlers = [];
 
-			for (var t = 0; t < live.length; t++) {
-				var liver = live[t];
-				if(  liver.selector == selector &&  $.inArray(liver.origType, types  ) !== -1 ){
-					handlers.push(liver.origHandler || liver.handler)
-				}
-			}
-		}else{
-			for(var t =0; t< types.length; t++){
+	var event = jQuery.event,
+		
+		//helper that finds handlers by type and calls back a function, this is basically handle
+		findHelper = function(events, types, callback){
+			for( var t =0; t< types.length; t++ ) {
 				var type = types[t], 
 					typeHandlers,
 					all = type.indexOf(".") < 0,
@@ -41,58 +18,84 @@
 					type = namespaces.shift();
 					namespace = new RegExp("(^|\\.)" + namespaces.slice(0).sort().join("\\.(?:.*\\.)?") + "(\\.|$)");
 				}
-				typeHandlers = ( events[type] || [] ).slice(0)
+				typeHandlers = ( events[type] || [] ).slice(0);
 				
-				for(var h = 0; h <typeHandlers.length; h++ ){
+				for( var h = 0; h <typeHandlers.length; h++ ) {
 					var handle = typeHandlers[h];
-					if(handle.selector == selector && (all || namespace.test( handle.namespace ))  )
-						handlers.push(handle.origHandler || handle.handler)
+					if( !handle.selector && (all || namespace.test( handle.namespace ))  ){
+						callback(type, handle.origHandler || handle.handler);
+					}
 				}
 			}
-			
-			
+		}
+	
+	/**
+	 * Finds event handlers of a given type on an element.
+	 * @param {HTMLElement} el
+	 * @param {Array} types an array of event names
+	 * @param {String} [selector] optional selector
+	 * @return {Array} an array of event handlers
+	 */
+	event.find  = function(el, types, selector){
+		var events = $.data(el, "events"), 
+			handlers = [];
+
+		if( !events ) {
+			return handlers;
+		}
+		
+		if( selector ) {
+			if (!events.live) { 
+				return [];
+			}
+			var live = events.live;
+
+			for ( var t = 0; t < live.length; t++ ) {
+				var liver = live[t];
+				if(  liver.selector === selector &&  $.inArray(liver.origType, types  ) !== -1 ) {
+					handlers.push(liver.origHandler || liver.handler);
+				}
+			}
+		}else{
+			// basically re-create handler's logic
+			findHelper(events, types, function(type, handler){
+				handlers.push(handler);
+			})
 		}
 		return handlers;
 	}
-    event.findBySelector = function(el, types){
-        var events = $.data(el, "events"), 
-            selectors = {}, 
-            add = function(selector, event, handler){
-                var select = selectors[selector] ||  (selectors[selector] = {}),
-                    events = select[event] || (select[event] = []);
-                events.push(handler)
-            };
+	/**
+	 * Finds 
+	 * @param {HTMLElement} el
+	 * @param {Array} types
+	 */
+	event.findBySelector = function(el, types){
+		var events = $.data(el, "events"), 
+			selectors = {}, 
+			//adds a handler for a given selector and event
+			add = function(selector, event, handler){
+				var select = selectors[selector] ||  (selectors[selector] = {}),
+					events = select[event] || (select[event] = []);
+				events.push(handler);
+			};
 
-		if(!events) return selectors;
-		//first check live:
-        $.each(events.live||[],function(i, live){
-            if($.inArray(live.origType, types  ) !== -1){
-                add(live.selector, live.origType,live.origHandler || live.handler )
-            }
-        })
-        //then check straight binds
-        
-		for(var t =0; t< types.length; t++){
-			var type = types[t], 
-				typeHandlers,
-				all = type.indexOf(".") < 0,
-				namespaces,
-				namespace; 
-			if ( !all ) {
-				namespaces = type.split(".");
-				type = namespaces.shift();
-				namespace = new RegExp("(^|\\.)" + namespaces.slice(0).sort().join("\\.(?:.*\\.)?") + "(\\.|$)");
-			}
-			typeHandlers = ( events[type] || [] ).slice(0)
-			
-			for(var h = 0; h <typeHandlers.length; h++ ){
-				var handle = typeHandlers[h];
-				if(!handle.selector && (all || namespace.test( handle.namespace ))  )
-					add("", type, handle.origHandler || handle.handler )
-			}
+		if ( !events ) {
+			return selectors;
 		}
+		//first check live:
+		$.each( events.live||[] , function(i, live) {
+			if( $.inArray(live.origType, types  ) !== -1 ) {
+				add( live.selector, live.origType, live.origHandler || live.handler );
+			}
+		})
+		//then check straight binds
+		
+		findHelper(events, types, function(type, handler){
+			add("", type, handler);
+		})
+		
 		return selectors;
-    }
+	}
 	$.fn.respondsTo = function(events){
 		if(!this.length){
 			return false;
@@ -103,8 +106,8 @@
 	}
 	$.fn.triggerHandled = function(event, data){
 		event = ( typeof event == "string" ? $.Event(event) : event);
-		this.trigger(event, data)
-		return event.handled
+		this.trigger(event, data);
+		return event.handled;
 	}
 	/**
 	 * Only attaches one event handler for all types ...
@@ -131,12 +134,12 @@
 				event.add(this, startingEvent, onFirst, {
 					selector: selector,
 					delegate: this
-				})
+				});
 			}
 			
 		}
 		var remove = function(handleObj){
-			var selector = handleObj.selector || ""
+			var selector = handleObj.selector || "";
 			if (selector) {
 				var bySelector = event.find(this, types, selector);
 				if (!bySelector.length) {
@@ -147,7 +150,7 @@
 				event.remove(this, startingEvent, onFirst, {
 					selector: selector,
 					delegate: this
-				})
+				});
 			}
 		}
 		$.each(types, function(){
@@ -155,12 +158,9 @@
 				add:  add,
 				remove: remove,
 				setup : function(){}
-			}
-		})
+			};
+		});
 	}
-	
-	
-	
 
 })(jQuery);
 

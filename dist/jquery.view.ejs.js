@@ -164,12 +164,6 @@ $.View("//myplugin/views/init.ejs",{message: "Hello World"})
 	 * @return {String} The rendered result of the view.
 	 */
 	$.View= function(url, data, helpers){
-		var id = toId(url);
-
-		//change this url?
-		if (url.match(/^\/\//))
-			url = steal.root.join( url.substr(2) ); //can steal be removed?
-		
 		var suffix = url.match(/\.[\w\d]+$/),
 			type, 
 			el
@@ -177,7 +171,13 @@ $.View("//myplugin/views/init.ejs",{message: "Hello World"})
 			suffix = $.View.ext;
 			url = url+$.View.ext
 		}
-		
+
+        var id = toId(url);
+
+        //change this url?
+        if (url.match(/^\/\//))
+            url = steal.root.join(url.substr(2)); //can steal be removed?
+
 		type = types[suffix];
 		
 		var renderer = $.View.cached[id] ? $.View.cached[id] : ( (el = document.getElementById(id) ) ? type.renderer(id, el.innerHTML) : type.get(id, url) );
@@ -525,6 +525,7 @@ EJS.Scanner.to_text = function(input){
 	var myid;
 	if(input == null || input === undefined)
         return '';
+	
     if(input instanceof Date)
 		return input.toDateString();
 	if(input.hookup){
@@ -533,10 +534,14 @@ EJS.Scanner.to_text = function(input){
 		});
 		return  "data-view-id='"+myid+"'"
 	}
+	if(typeof input == 'function')
+		return  "data-view-id='"+$.View.hookup(input)+"'";
+		
 	if(isArray(input)){
 		myid = $.View.hookup(function(el, id){
-			for(var i = 0 ; i < input.length; i++)
-				input[i].hookup.call(input[i], el, id)
+			for(var i = 0 ; i < input.length; i++){
+				input[i].hookup ? input[i].hookup( el, id) : input[i](el, id)
+			}
 		});
 		return  "data-view-id='"+myid+"'"
 	}
@@ -817,6 +822,18 @@ EJS.Helpers.prototype = {
 	    if(input instanceof Date) return input.toDateString();
 		if(input.toString) return input.toString().replace(/\n/g, '<br />').replace(/''/g, "'");
 		return '';
+	},
+	/**
+	 * Makes a plugin
+	 * @param {String} name the plugin name
+	 */
+	plugin : function(name){
+		var args = $.makeArray(arguments),
+			widget = args.shift();
+		return function(el){
+			var jq = $(el)
+			jq[widget].apply(jq, args);
+		}
 	}
 };
     EJS.newRequest = function(){
@@ -866,8 +883,14 @@ EJS.Helpers.prototype = {
 			var text = $.ajax({
 					async: false,
 					url: url,
-					dataType: "text"
+					dataType: "text",
+					error : function(){
+						throw "ejs.js ERROR: There is no template or an empty template at "+url;
+					}
 				}).responseText
+			if(!text.match(/[^\s]/)){
+				throw "ejs.js ERROR: There is no template or an empty template at "+url;
+			}
 			return this.renderer(id, text);
 		},
 		script : function(id, src){

@@ -163,12 +163,6 @@ $.View("//myplugin/views/init.ejs",{message: "Hello World"})
 	 * @return {String} The rendered result of the view.
 	 */
 	$.View= function(url, data, helpers){
-		var id = toId(url);
-
-		//change this url?
-		if (url.match(/^\/\//))
-			url = steal.root.join( url.substr(2) ); //can steal be removed?
-		
 		var suffix = url.match(/\.[\w\d]+$/),
 			type, 
 			el
@@ -176,7 +170,13 @@ $.View("//myplugin/views/init.ejs",{message: "Hello World"})
 			suffix = $.View.ext;
 			url = url+$.View.ext
 		}
-		
+
+        var id = toId(url);
+
+        //change this url?
+        if (url.match(/^\/\//))
+            url = steal.root.join(url.substr(2)); //can steal be removed?
+
 		type = types[suffix];
 		
 		var renderer = $.View.cached[id] ? $.View.cached[id] : ( (el = document.getElementById(id) ) ? type.renderer(id, el.innerHTML) : type.get(id, url) );
