@@ -1,5 +1,19 @@
+/**
+ * @add jQuery.Drag prototype
+ */
+
 steal.plugins('jquery/event/drag').then(function($){
-	$.Drag.prototype.limit = function(container){
+	
+	
+	$.Drag.prototype.
+	/**
+	 * @function limit
+	 * @plugin jquery/event/drag/limit
+	 * @download jquery/dist/jquery.event.drag.limit.js
+	 * limits the drag to a containing element
+	 * @param {jQuery} container
+	 */
+	limit = function(container){
 		//on draws ... make sure this happens
 		this._limit = {
 			offset: container.offsetv(),
