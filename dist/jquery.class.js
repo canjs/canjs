@@ -402,6 +402,8 @@
 		namespace = current;
 		shortName = parts[parts.length - 1];
 		fullName = className;
+		
+		
 	}
 	
 	var makeClass;

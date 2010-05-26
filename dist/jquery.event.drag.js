@@ -361,11 +361,15 @@ jQuery.fn.makePositioned = function() {
 		event = $.event, handle  = event.handle;
 		
 	/**
-	 * @class jQuery.Drag
+	 * @constructor jQuery.Drag
 	 * @parent specialevents
-	 * Provides drag events as a special event to jQuery.  
+	 * @plugin jquery/event/drag
+	 * @download jquery/dist/jquery.event.drag.js
+	 * Provides drag events as a special events to jQuery.  
 	 * A jQuery.Drag instance is created on a drag and passed
-	 * as a parameter to the drag callback functions.
+	 * as a parameter to the drag event callbacks.  By calling
+	 * methods on the drag event, you can alter the drag's
+	 * behavior.
 	 * <h2>Drag Events</h2>
 	 * The drag plugin allows you to listen to the following events:
 	 * <ul>
@@ -379,7 +383,7 @@ jQuery.fn.makePositioned = function() {
 	 * <p>Just by binding or delegating on one of these events, you make
 	 * the element dragable.  You can change the behavior of the drag
 	 * by calling methods on the drag object passed to the callback.
-	 * <h2>Examples</h2>
+	 * <h3>Example</h3>
 	 * Here's a quick example:
 	 * @codestart
 	 * //makes the drag vertical
@@ -392,8 +396,31 @@ jQuery.fn.makePositioned = function() {
 	 *   $(this).width(drag.position.left() - $(this).offset().left   )
 	 * })
 	 * @codeend
-	 * Now lets see some real examples:
-	 * @iframe jquery/event/drag/drag.html 1000
+	 * <h2>Drag Object</h2>
+	 * <p>The drag object is passed after the event to drag 
+	 * event callback functions.  By calling methods
+	 * and changing the properties of the drag object,
+	 * you can alter how the drag behaves.
+	 * </p>
+	 * <p>The drag properties and methods:</p>
+	 * <ul>
+	 * 	<li><code>[jQuery.Drag.prototype.cancel cancel]</code> - stops the drag motion from happening</li>
+	 *  <li><code>[jQuery.Drag.prototype.ghost ghost]</code> - copys the draggable and drags the cloned element</li>
+	 *  <li><code>[jQuery.Drag.prototype.horizontal horizontal]</code> - limits the scroll to horizontal movement</li>
+	 *  <li><code>[jQuery.Drag.prototype.location location]</code> - where the drag should be on the screen</li>
+	 *  <li><code>[jQuery.Drag.prototype.mouseElementPosition mouseElementPosition]</code> - where the mouse should be on the drag</li>
+	 *  <li><code>[jQuery.Drag.prototype.only only]</code> - only have drags, no drops</li>
+	 *  <li><code>[jQuery.Drag.prototype.representative representative]</code> - move another element in place of this element</li>
+	 *  <li><code>[jQuery.Drag.prototype.revert revert]</code> - animate the drag back to its position</li>
+	 *  <li><code>[jQuery.Drag.prototype.vertical vertical]</code> - limit the drag to vertical movement</li>
+	 *  <li><code>[jQuery.Drag.prototype.limit limit]</code> - limit the drag within an element (*limit plugin)</li>
+	 *  <li><code>[jQuery.Drag.prototype.scrolls scrolls]</code> - scroll scrollable areas when dragging near their boundries (*scroll plugin)</li>
+	 * </ul>
+	 * <h2>Demo</h2>
+	 * Now lets see some examples:
+	 * @demo jquery/event/drag/drag.html 1000
+	 * @init
+	 * The constructor is never called directly.
 	 */
 	$.Drag = function(){}
 	
@@ -714,15 +741,7 @@ jQuery.fn.makePositioned = function() {
 			this._horizontal = true;
 		},
 		
-		/**
-		 * Will scroll elements with a scroll bar as the drag moves to borders.
-		 * @param {jQuery} elements
-		 */
-		scrolls : function(elements){
-			for(var i = 0 ; i < elements.length; i++){
-				this.constructor.responder._responders.push( new $.Scrollable(elements[i]) )
-			}
-		},
+		
 		/**
 		 * Respondables will not be alerted to this drag.
 		 */

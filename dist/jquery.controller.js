@@ -402,6 +402,8 @@
 		namespace = current;
 		shortName = parts[parts.length - 1];
 		fullName = className;
+		
+		
 	}
 	
 	var makeClass;
@@ -734,14 +736,24 @@ jQuery.Native.extend('Function',
 	/**
 	 * @attribute destroyed
 	 * @parent specialevents
+	 * @download jquery/dist/jquery.event.destroyed.js
 	 * Provides a destroyed event on an element.
 	 * <p>
-	 * The destroyed event does not bubble and is called when the element
+	 * The destroyed event is called when the element
 	 * is removed as a result of jQuery DOM manipulators like remove, html,
-	 * replaceWith, etc. 
+	 * replaceWith, etc. Destroyed events do not bubble, so make sure you don't use live or delegate with destroyed
+	 * events.
 	 * </p>
-	 * <h2>Example</h2>
+	 * <h2>Quick Example</h2>
+	 * @codestart
+	 * $(".foo").bind("destroyed", function(){
+	 *    //clean up code
+	 * })
+	 * @codeend
+	 * <h2>Quick Demo</h2>
 	 * @demo jquery/event/destroyed/destroyed.html 
+	 * <h2>More Involved Demo</h2>
+	 * @demo jquery/event/destroyed/destroyed_menu.html 
 	 */
 	$.event.special["destroyed"] = {
 		remove: function( handleObj){
@@ -758,6 +770,15 @@ jQuery.Native.extend('Function',
 			
 		}
 	}
+	var oldClean = jQuery.cleanData
+	
+	jQuery.cleanData= function( elems ) {
+		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
+			jQuery.event.remove( elem, 'destroyed' );
+		}
+		oldClean(elems)
+	}
+	
 
 })(jQuery);
 
@@ -799,14 +820,14 @@ shifter = function(cb){
 	}
 },
 dotsReg = /\./g,
-controllersReg = /_?controllers?/i
+controllersReg = /_?controllers?/ig
 underscoreAndRemoveController = function(className){
 	return $.String.underscore(className.replace(dotsReg,'_').replace(controllersReg,""));
 }
 /**
  * @tag core
  * @plugin jquery/controller
- * @download dist/jquery.controller.js
+ * @download jquery/dist/jquery.controller.js
  * 
  * <p><img src='jmvc/images/controller.png' class='component'/>Controllers organize event handlers using event delegation. 
  * If something happens in your application (a user click or a [jQuery.Model|Model] instance being updated), 
@@ -1103,7 +1124,9 @@ jQuery.Class.extend("jQuery.Controller",
 				return this;
 			}
 		}
-		
+		if(!$.isArray(this.listensTo)){
+			throw "listensTo is not an array in "+this.fullName
+		}
 		//calculate and cache actions
 		this.actions = {};
 		var convertedName, 
@@ -1111,7 +1134,8 @@ jQuery.Class.extend("jQuery.Controller",
 			c = this, 
 			replacer = /\{([^\}]+)\}/g, 
 			b = c.breaker, 
-			funcName;
+			funcName, 
+			event;
 		for( funcName in this.prototype ) {
 			if( funcName == "constructor" ) { continue; }
 			convertedName = funcName.replace(replacer, function(whole, inside){
@@ -1119,12 +1143,13 @@ jQuery.Class.extend("jQuery.Controller",
 				return jQuery.Class.getObject(inside, c.OPTIONS).toString(); //gets the value in options
 			})
 			parts = convertedName.match( b) //parts of the action string
+			event = parts && parts[2].replace(/^(default\.)|(>)/,"")
 			//get processor if it responds to event type
 			processor = parts && 
-					(	c.processors[parts[2]] || //if the 2nd part is a processor, use that processor
-						($.inArray(parts[2], c.listensTo ) > -1 && c.basicProcessor) ||  //if it is in listens to, use basic processor
+					(	c.processors[event] || //if the 2nd part is a processor, use that processor
+						($.inArray(event, c.listensTo ) > -1 && c.basicProcessor) ||  //if it is in listens to, use basic processor
 					( parts[1] && c.basicProcessor) || 
-					($.event.special[parts[2]] && c.basicProcessor)
+					($.event.special[event] && c.basicProcessor)
 					);
 			if(processor){
 				this.actions[funcName] = {action: processor, parts: parts}
