@@ -402,6 +402,8 @@
 		namespace = current;
 		shortName = parts[parts.length - 1];
 		fullName = className;
+		
+		
 	}
 	
 	var makeClass;
@@ -1055,11 +1057,11 @@ You can validate your model's attributes with another plugin.  See [validation].
 jQuery.Class.extend("jQuery.Model",
 /* @Static*/
 {
-	storeType: jQuery.Store,
+	storeType: null,
 	setup: function(){
 		this.validations = [];
 		this.attributes= {};  //list of all attributes ever given to this model
-        this.defaultAttributes= {};  //list of attributes and values you want right away
+        this.defaultAttributes= this.defaultAttributes || {};   //list of attributes and values you want right away
         this.associations = {};
         if(this.fullName.substr(0,7) == "jQuery." ) return;
         this.underscoredName =  jQuery.String.underscore(this.fullName.replace(/\./g,"_"))
@@ -1339,6 +1341,10 @@ jQuery.Class.extend("jQuery.Model",
         //this.is_new_record = this.Class.new_record_func;
         return true;
     },
+	/**
+	 * Called by save after a new instance is created.  Publishes 'created'.
+	 * @param {Object} attrs
+	 */
     created : function(attrs){
         this.attrs(attrs)
         this.publish("created", this)
@@ -1356,6 +1362,10 @@ jQuery.Class.extend("jQuery.Model",
     destroy : function(success, error){
         this.Class.destroy(this[this.Class.id], this.callback(["destroyed",success]), error);
     },
+	/**
+	 * Called after an instance is destroyed.  Publishes
+	 * "shortName.destroyed"
+	 */
     destroyed : function(){
         if(this.Class.store) this.Class.store.destroy(this[this.Class.id]);
         this.publish("destroyed",this)
