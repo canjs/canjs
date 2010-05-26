@@ -1,10 +1,8 @@
 var i, fileName, cmd, 
 	plugins = [
-	"class", 
-	"controller",
-	"event/default",
-	"event/destroyed",
-	"event/drag",
+	{plugin: "event/drag/limit", exclude: ["jquery/lang/vector/vector.js", "jquery/event/livehack/livehack.js", "jquery/event/drag/drag.js"]},
+	{plugin: "event/drag/scroll", exclude: ["jquery/dom/within/within.js", "jquery/dom/compare/compare.js", "jquery/event/drop/drop.js","jquery/lang/vector/vector.js", "jquery/event/livehack/livehack.js", "jquery/event/drag/drag.js"]},
+	"event/drop",
 	"event/hover",
 	"model",
 	"view/ejs", 
@@ -17,9 +15,18 @@ var i, fileName, cmd,
 ]
 
 
+var plugin, exclude;
 for(i=0; i<plugins.length; i++){
-	fileName = "jquery."+plugins[i].replace("/", ".")+".js";
-	print(fileName)
-	cmd = "steal\\js steal/scripts/pluginify jquery/"+plugins[i]+" jquery/dist/"+fileName;
+	plugin = plugins[i];
+	exclude = [];
+	if (typeof plugin != "string") {
+		plugin = plugins[i].plugin;
+		exclude = plugins[i].exclude;
+	}
+	fileName = "jquery."+plugin.replace(/\//g, ".")+".js";
+	print("***"+fileName)
+	cmd = "js steal/scripts/pluginify.js jquery/"+plugin+" -destination jquery/dist/"+fileName;
+	if(exclude.length)
+		cmd += " -exclude "+exclude;
 	runCommand(	"cmd", "/C", cmd)
 }
