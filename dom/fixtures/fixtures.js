@@ -13,7 +13,21 @@ steal.plugins('jquery/dom').then(function($){
 	//    function ... uses this function to convert true, some name
 	//   
 	
-	var ajax = $.ajax;
+	var ajax = $.ajax,
+		xhr = {
+			abort: $.noop,
+			getAllResponseHeaders: function () { return ""; },
+			getResponseHeader: function () { return ""; },
+			open: $.noop,
+			overrideMimeType: $.noop,
+			readyState: 4,
+			responseText: "",
+			responseXML: null,
+			send: $.noop,
+			setRequestHeader: $.noop,
+			status: 200,
+			statusText: "OK"
+		};
 
 // break
 /**
@@ -153,27 +167,33 @@ $.ajax({
 		"-restUpdate": function(settings,cbType){
             switch(cbType){
                 case "success": 
-                    return [jQuery.extend({id: parseInt(settings.url)}, settings.data)]
+                    return [$.extend({id: parseInt(settings.url)}, settings.data), "success", $.extend({}, xhr)]
                 case "complete":
-                    return [{ responseText: ""}, "success"]
+                    return [$.extend({}, xhr), "success"]
             }
         },
 		/**
          * Provides a rest destroy fixture function
          */
-        "-restDestroy" : function(){return [true]},
+        "-restDestroy" : function(settings, cbType){
+            switch(cbType){
+                case "success":
+                    return [true, "success", $.extend({}, xhr)]
+                case "complete":
+                    return [$.extend({}, xhr), "success"]
+            }
+        },
 		/**
          * Provides a rest create fixture function
          */
         "-restCreate" : function(settings, cbType){
             switch(cbType){
                 case "success": 
-                    return [{id: parseInt(Math.random()*1000)}];
+                    return [{id: parseInt(Math.random()*1000)}, "success", $.extend({}, xhr)];
                 case "complete":
-                    return [{
-                                responseText: "",
+                    return [$.extend({
                                 getResponseHeader: function(){ return "/blah/"+parseInt(Math.random()*1000) }
-                            }, "success"]
+                            }, xhr), "success"]
             }
 
             
