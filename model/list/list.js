@@ -1,6 +1,6 @@
 steal.plugins('jquery/model').then(function(){
 
-$.Class.extend("jQuery.ModelList",{
+$.Class.extend("jQuery.Model.List",{
     init : function(instances){
         this.length = 0;
         Array.prototype.push.apply( this, instances );
@@ -27,12 +27,6 @@ $.Class.extend("jQuery.ModelList",{
     },
     isOne : function(){
         return this.length == 1;
-    },
-    destroy : function(success, error){
-        Entry.run(this.map(function(inst){return inst.destroyCMD()}),
-                  success, 
-                  error
-        )
     }
 })
 
