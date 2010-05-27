@@ -22,7 +22,7 @@ steal.plugins('jquery/event','jquery/event/livehack').then(function($){
 @codestart
 $('#menu').delegate(".option","hoverenter",function(){
   $(this).addClass("hovering");
-}).delegate(".option","hoverenter",function(){
+}).delegate(".option","hoverleave",function(){
   $(this).removeClass("hovering");
 })
 @codeend
