@@ -17,6 +17,10 @@
 				cursor : pointer;
                 background-color: white;
             }
+            #dropout {
+                padding: 20px;
+                border: solid 1px blue;
+            }
             .over {
                 background-color: yellow;
             }
@@ -28,11 +32,13 @@
 <div class='handle'>Drag Me</div>
 <h2>Dropout/Dropover</h2>
 <div id='dropout'>
-    <div class='dropout'></div>
+  <div class='dropout'></div>
+  <div class='dropout'></div>
 </div>
+<a href="javascript://" id='undelegate'>undelegate</a>
 <h2>Dropmove/Dropon</h2>
 <div class='dropmove'></div>
-<a href="javascript://" id='undelegate'>undelegate</a>
+<span>Drop Count <span class='count'>0</span></span>
 </div>
 		<script type='text/javascript' 
                 src='../../../steal/steal.js?steal[app]=jquery/event/drop'>   
@@ -43,24 +49,24 @@ $('.handle').live("draginit", function(){})
 			
 //add dropout/dropover
 $('#dropout')
-	.delegate(".dropout","dropover", function(){ $(this).addClass('over') })
-	.delegate(".dropout","dropout", function(){ $(this).removeClass('over') })
+  .delegate(".dropout","dropover", function(){ $(this).addClass('over') })
+  .delegate(".dropout","dropout", function(){ $(this).removeClass('over') })
 	
-//add dropmove/dropon
-$('.dropmove')
-	.bind('dropmove', function(){
-        var random = Math.floor( Math.random()*4)-1,
-            color = ['red', 'blue', 'green', 'purple'][random]
-        $(this).css('background-color', color)
-    })
-	.bind('dropon', function(){
-        $(this).text("Dropped on!")
-    })
-	
-//turn off drops
+//turn off dropout/dropover
 $("#undelegate").click(function(){
+    $('#dropout').undelegate(".dropout","dropover");
     $('#dropout').undelegate(".dropout","dropout");
 })
+	
+//add dropmove/dropon
+var count = 0
+$('.dropmove')
+  .bind('dropmove', function(){
+    $('.count').text(count++)
+  })
+  .bind('dropon', function(){
+    $(this).text("Dropped on!")
+  })
         </script>
 	</body>
 </html>
