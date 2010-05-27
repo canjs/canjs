@@ -213,7 +213,8 @@ jQuery.Class.extend("jQuery.Model",
      * @param {Object} data
      */
     publish : function(event, data){
-        OpenAjax.hub.publish(   jQuery.String.underscore(this.shortName) + "."+event, data);
+        steal.dev.log("Model.js - publishing " + jQuery.String.underscore(this.shortName) + "." + event)
+		OpenAjax.hub.publish(   jQuery.String.underscore(this.shortName) + "."+event, data);
     },
     /**
      * Guesses at the type of an object.  This is useful when you want to know more than just typeof.
