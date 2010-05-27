@@ -32,17 +32,22 @@
                 src='../../../steal/steal.js?steal[app]=jquery/event/hover&steal[env]=development'>   
         </script>
 <script type='text/javascript' id='demo-source'>
+// adds a hover class
 var add = function(ev){
-	$(this).addClass("hoverstate")	
+  $(this).addClass("hoverstate")	
 },
+
+// removes a hover class
 remove = function(ev){
-	$(this).removeClass("hoverstate")
+  $(this).removeClass("hoverstate")
 }
+
+// delegate on hover
 $('.hover').live('hoverenter',add)
 $('.hover').live('hoverleave', remove)
 
 $('.hovers').bind('hoverinit',function(ev, hovered){
-	hovered.delay(1000)
+  hovered.delay(1000)
 })
 $('.hovers').bind('hoverenter',add)
 $('.hovers').bind('hoverleave', remove)
