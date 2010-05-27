@@ -21,9 +21,9 @@ steal.plugins('jquery/event','jquery/event/livehack').then(function($){
  * the element, and removes the class on hoverleave.
 @codestart
 $('#menu').delegate(".option","hoverenter",function(){
-$(this).addClass("hovering");
+  $(this).addClass("hovering");
 }).delegate(".option","hoverenter",function(){
-$(this).removeClass("hovering");
+  $(this).removeClass("hovering");
 })
 @codeend
  * <h2>Configuring Distance and Delay</h2>
