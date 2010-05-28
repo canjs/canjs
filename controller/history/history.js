@@ -1,26 +1,5 @@
-steal.plugins('jquery/controller/subscribe','jquery/event/hashchange').then(function($){
-	var rsplit = function(string, regex) {
-		var result = regex.exec(string),retArr = new Array(), first_idx, last_idx, first_bit;
-		while (result != null)
-		{
-			first_idx = result.index; last_idx = regex.lastIndex;
-			if ((first_idx) != 0)
-			{
-				first_bit = string.substring(0,first_idx);
-				retArr.push(string.substring(0,first_idx));
-				string = string.slice(first_idx);
-			}		
-			retArr.push(result[0]);
-			string = string.slice(result[0].length);
-			result = regex.exec(string);	
-		}
-		if (! string == '')
-		{
-			retArr.push(string);
-		}
-		return retArr;
-	}
-	
+steal.plugins('jquery/controller/subscribe','jquery/event/hashchange','jquery/lang/rsplit').then(function($){
+
 	$.Path = function(path) {
 		this.path = path;
 	};
@@ -71,7 +50,7 @@ steal.plugins('jquery/controller/subscribe','jquery/event/hashchange').then(func
 			var pair = parts[i].split('=');
 			if(pair.length != 2) continue;
 			var key = decodeURIComponent(pair[0]), value = decodeURIComponent(pair[1]);
-			var key_components = rsplit(key,/\[[^\]]*\]/);
+			var key_components = $.String.rsplit(key,/\[[^\]]*\]/);
 			
 			if( key_components.length > 1 ) {
 				var last = key_components.length - 1;

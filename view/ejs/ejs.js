@@ -1,31 +1,6 @@
-steal.plugins('jquery/view').then(function($){
+steal.plugins('jquery/view','jquery/lang/rsplit').then(function($){
    
-var rsplit = function(string, regex) {
-	var result = regex.exec(string),
-		retArr = [], 
-		first_idx, 
-		last_idx, 
-		first_bit;
-	while (result != null)
-	{
-		first_idx = result.index; last_idx = regex.lastIndex;
-		if ((first_idx) != 0)
-		{
-			first_bit = string.substring(0,first_idx);
-			retArr.push(first_bit);
-			string = string.slice(first_idx);
-		}		
-		retArr.push(result[0]);
-		string = string.slice(result[0].length);
-		result = regex.exec(string);	
-	}
-	if (! string == '')
-	{
-		retArr.push(string);
-	}
-	return retArr;
-},
-chop =  function(string){
+var chop =  function(string){
     return string.substr(0, string.length - 1);
 },
 extend = function(d, s){
@@ -305,7 +280,7 @@ EJS.Scanner.prototype = {
 	 var regex = this.SplitRegexp;
 	 if (! this.source == '')
 	 {
-	 	 var source_split = rsplit(this.source, /\n/);
+	 	 var source_split = $.String.rsplit(this.source, /\n/);
 	 	 for(var i=0; i<source_split.length; i++) {
 		 	 var item = source_split[i];
 			 this.scanline(item, regex, block);
@@ -314,7 +289,7 @@ EJS.Scanner.prototype = {
   },
   scanline: function(line, regex, block) {
 	 this.lines++;
-	 var line_split = rsplit(line, regex);
+	 var line_split = $.String.rsplit(line, regex);
  	 for(var i=0; i<line_split.length; i++) {
 	   var token = line_split[i];
        if (token != null) {
@@ -649,3 +624,4 @@ EJS.Helpers.prototype = {
 		}
 	})
 });
+
