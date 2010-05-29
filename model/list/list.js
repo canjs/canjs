@@ -8,9 +8,10 @@ $.Class.extend("jQuery.Model.List",{
     push: [].push,
 	sort: [].sort,
 	splice: [].splice,
-    slice : function(){
+	slice: [].slice,
+    /*slice : function(){
         Array.prototype.slice.apply( this, arguments )
-    },
+    },*/
     match : function(property, value){
         return this.grep(function(inst){
             return inst[property] == value;
