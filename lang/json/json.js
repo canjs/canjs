@@ -24,13 +24,17 @@
         json-serializble:
             The *thing* to be converted.
      **/
-    $.toJSON = function(o, replacer, recurse)
+    $.toJSON = function(o, replacer, space, recurse)
     {
         if (typeof(JSON) == 'object' && JSON.stringify)
-            return JSON.stringify(o, replacer);
+            return JSON.stringify(o, replacer, space);
 
         if (!recurse && $.isFunction(replacer))
             o = replacer("", o);
+
+        if (typeof space == "number")
+            space = "          ".substring(0, space);
+        space = (typeof space == "string") ? space.substring(0, 10) : "";
         
         var type = typeof(o);
     
@@ -49,7 +53,7 @@
         if (type == 'object')
         {
             if (typeof o.toJSON == "function") 
-                return $.toJSON( o.toJSON(), replacer, true );
+                return $.toJSON( o.toJSON(), replacer, space, true );
             
             if (o.constructor === Date)
             {
@@ -81,15 +85,17 @@
 
             var process = ($.isFunction(replacer)) ?
                 function (k, v) { return replacer(k, v); } :
-                function (k, v) { return v; };
+                function (k, v) { return v; },
+                nl = (space) ? "\n" : "",
+                sp = (space) ? " " : "";
 
             if (o.constructor === Array) 
             {
                 var ret = [];
                 for (var i = 0; i < o.length; i++)
-                    ret.push( $.toJSON( process(i, o[i]), replacer, true ) || "null" );
+                    ret.push(( $.toJSON( process(i, o[i]), replacer, space, true ) || "null" ).replace(/^/gm, space));
 
-                return "[" + ret.join(",") + "]";
+                return "[" + nl + ret.join("," + nl) + nl + "]";
             }
         
             var pairs = [], proplist;
@@ -113,15 +119,15 @@
                 else
                     continue;  //skip non-string or number keys
             
-                val = $.toJSON( process(k, o[k]), replacer, true );
+                val = $.toJSON( process(k, o[k]), replacer, space, true );
             
                 if (typeof val == "undefined")
                     continue;  //skip pairs where the value is a function.
             
-                pairs.push(name + ":" + val);
+                pairs.push((name + ":" + sp + val).replace(/^/gm, space));
             }
 
-            return "{" + pairs.join(", ") + "}";
+            return "{" + nl + pairs.join("," + nl) + nl + "}";
         }
     };
 
