@@ -24,17 +24,21 @@
         json-serializble:
             The *thing* to be converted.
      **/
-    $.toJSON = function(o)
+    $.toJSON = function(o, replacer, recurse)
     {
         if (typeof(JSON) == 'object' && JSON.stringify)
-            return JSON.stringify(o);
+            return JSON.stringify(o, replacer);
+
+        if (!recurse && $.isFunction(replacer)) {
+            o = replacer("", o);
+        }
         
         var type = typeof(o);
     
         if (o === null)
             return "null";
     
-        if (type == "undefined")
+        if (type == "undefined" || type == "function")
             return undefined;
         
         if (type == "number" || type == "boolean")
@@ -46,7 +50,7 @@
         if (type == 'object')
         {
             if (typeof o.toJSON == "function") 
-                return $.toJSON( o.toJSON() );
+                return $.toJSON( o.toJSON(), replacer, true );
             
             if (o.constructor === Date)
             {
@@ -76,19 +80,37 @@
                              '.' + milli + 'Z"'; 
             }
 
+            var process = ($.isFunction(replacer)) ?
+                    function (k, v) { return replacer(k, v); } :
+                    function (k, v) { return v; };
+
             if (o.constructor === Array) 
             {
                 var ret = [];
                 for (var i = 0; i < o.length; i++)
-                    ret.push( $.toJSON(o[i]) || "null" );
+                    ret.push( $.toJSON( process(i, o[i]), replacer, true ) || "null" );
 
                 return "[" + ret.join(",") + "]";
             }
         
-            var pairs = [];
+            var pairs = [], proplist;
+            if ($.isArray(replacer)) {
+                proplist = $.map(replacer, function (v) {
+                    switch (typeof v) {
+                    case 'string':
+                        return v;
+                    case 'number':
+                        return v + "";
+                    default:
+                        return null;
+                    }
+                });
+            }
             for (var k in o) {
-                var name;
-                var type = typeof k;
+                var name, val, type = typeof k;
+
+                if (proplist && $.inArray(k + "", proplist) == -1)
+                    continue;
 
                 if (type == "number")
                     name = '"' + k + '"';
@@ -97,10 +119,10 @@
                 else
                     continue;  //skip non-string or number keys
             
-                if (typeof o[k] == "function") 
-                    continue;  //skip pairs where the value is a function.
+                val = $.toJSON( process(k, o[k]), replacer, true );
             
-                var val = $.toJSON(o[k]);
+                if (typeof val == "undefined")
+                    continue;  //skip pairs where the value is a function.
             
                 pairs.push(name + ":" + val);
             }
