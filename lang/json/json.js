@@ -29,9 +29,8 @@
         if (typeof(JSON) == 'object' && JSON.stringify)
             return JSON.stringify(o, replacer);
 
-        if (!recurse && $.isFunction(replacer)) {
+        if (!recurse && $.isFunction(replacer))
             o = replacer("", o);
-        }
         
         var type = typeof(o);
     
@@ -81,8 +80,8 @@
             }
 
             var process = ($.isFunction(replacer)) ?
-                    function (k, v) { return replacer(k, v); } :
-                    function (k, v) { return v; };
+                function (k, v) { return replacer(k, v); } :
+                function (k, v) { return v; };
 
             if (o.constructor === Array) 
             {
@@ -96,14 +95,9 @@
             var pairs = [], proplist;
             if ($.isArray(replacer)) {
                 proplist = $.map(replacer, function (v) {
-                    switch (typeof v) {
-                    case 'string':
-                        return v;
-                    case 'number':
-                        return v + "";
-                    default:
-                        return null;
-                    }
+                    return (typeof v == "string" || typeof v == "number") ?
+                        v + "" :
+                        null;
                 });
             }
             for (var k in o) {
