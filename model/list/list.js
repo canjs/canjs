@@ -6,12 +6,11 @@ $.Class.extend("jQuery.Model.List",{
         Array.prototype.push.apply( this, instances );
     },
     push: [].push,
-	sort: [].sort,
-	splice: [].splice,
-	slice: [].slice,
-    /*slice : function(){
+    sort: [].sort,
+    splice: [].splice,
+    slice : function(){
         Array.prototype.slice.apply( this, arguments )
-    },*/
+    },
     match : function(property, value){
         return this.grep(function(inst){
             return inst[property] == value;
