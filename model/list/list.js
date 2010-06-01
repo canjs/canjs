@@ -6,8 +6,8 @@ $.Class.extend("jQuery.Model.List",{
         Array.prototype.push.apply( this, instances );
     },
     push: [].push,
-	sort: [].sort,
-	splice: [].splice,
+    sort: [].sort,
+    splice: [].splice,
     slice : function(){
         Array.prototype.slice.apply( this, arguments )
     },
