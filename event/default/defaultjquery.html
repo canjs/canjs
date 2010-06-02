@@ -52,6 +52,8 @@
         </script>
 <script id="demo-source" type='text/javascript'>
 // create a tabs plugin
+// this is code written by a widget developer, and provides an event based 
+// tabs API
 $.fn.tabs = function(){
 
   // finds the tab from the tab button
@@ -95,6 +97,8 @@ $.fn.tabs = function(){
 };
 
 // create tabs widget
+// this is code written by an application developer using the tabs API
+// this code is usually in a separate file from the tabs widget code
 $("#tabs").tabs();
 
 // listen on the second tab for show

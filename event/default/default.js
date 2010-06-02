@@ -26,6 +26,20 @@ var types = {}, rnamespaces= /\.(.*)$/;
  * <h2>Example</h2>
  * <p>Lets look at how you could build a simple tabs widget with default events.
  * First with just jQuery:</p>
+ * <p>
+ * Default events are useful in cases where you want to provide an event based 
+ * API for users of your widgets.  Users can simply listen to your synthetic events and 
+ * prevent your default functionality by calling preventDefault.  
+ * </p>
+ * <p>
+ * In the example below, the tabs widget provides a show event.  Users of the 
+ * tabs widget simply listen for show, and if they wish for some reason, call preventDefault 
+ * to avoid showing the tab.
+ * </p>
+ * <p>
+ * In this case, the application developer doesn't want to show the second 
+ * tab until the checkbox is checked. 
+ * </p>
  * @demo jquery/event/default/defaultjquery.html
  * <p>Lets see how we would build this with JavaScriptMVC:</p>
  * @demo jquery/event/default/default.html
