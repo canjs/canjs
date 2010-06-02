@@ -2,8 +2,9 @@
  * @add jQuery.event.special static
  */
 steal.plugins('jquery/event').then(function($){
+
 //cache default types for performance
-var types = {};
+var types = {}, rnamespaces= /\.(.*)$/;
 /**
  * @attribute default
  * @parent specialevents
@@ -31,8 +32,12 @@ var types = {};
  */
 $.event.special["default"] = {
 	add: function( handleObj){
+		//save the type
+		types[handleObj.namespace.replace(rnamespaces,"")] = true;
+		
+		//move the handler ...
 		var origHandler = handleObj.handler;
-		types[handleObj.namespace] = true;
+		
 		handleObj.origHandler = origHandler;
 		handleObj.handler = function(ev, data){
 			if(!ev._defaultActions) ev._defaultActions = [];
@@ -49,9 +54,9 @@ $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
     var type = event.type || event
 	//should need to trigger just on this event
 	//shortcut if we never listened for a default of this type
-	if(!types[type]){
-		 return oldTrigger.call($.event, event, data, elem, bubbling)
-	}
+	//if(!types[type]){
+	//	 return oldTrigger.call($.event, event, data, elem, bubbling)
+	//}
 	
     if ( !bubbling ) {
 		event = typeof event === "object" ?
@@ -100,7 +105,8 @@ $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
         ) {			
 		
 		// put event back
-		event.type = "default."+event.type;
+		event.namespace= event.type;
+		event.type = "default";
 		event.liveFired = null;
 		
 		// call each event handler
@@ -144,6 +150,9 @@ triggerDefaults = function(type, data){
 	}
 	return true;
 }
+	
+	
+	
 	
 	
 	
