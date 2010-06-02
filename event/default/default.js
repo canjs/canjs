@@ -8,6 +8,8 @@ var types = {}, rnamespaces= /\.(.*)$/;
 /**
  * @attribute default
  * @parent specialevents
+ * @plugin jquery/event/default
+ * @download jquery/dist/jquery.event.default.js
  * Allows you to perform default actions as a result of an event.
  * <p>
  * Event based APIs are a powerful way of exposing functionality of your widgets.  It also fits in 
@@ -23,6 +25,11 @@ var types = {}, rnamespaces= /\.(.*)$/;
  * $("div").bind("default.show", function(ev){ ... });
  * $("ul").delegate("li","default.activate", function(ev){ ... });
  * @codeend
+ * <p>
+ * The default plugin also adds the [jQuery.fn.triggerDefault triggerDefault] and [jQuery.fn.triggerDefaults triggerDefaults] methods.  These are used to trigger 
+ * an event and report back whether preventDefault was called on the event.  The only difference is [jQuery.fn.triggerDefault triggerDefault] 
+ * doesn't bubble.
+ * </p>
  * <h2>Example</h2>
  * <p>Lets look at how you could build a simple tabs widget with default events.
  * First with just jQuery:</p>
@@ -143,6 +150,10 @@ $.fn.
  * default action was prevented.  This is the same as triggerDefaults, but 
  * the event doesn't bubble.  Use these methods to easily determine if default was 
  * prevented, and proceed accordingly.
+ * 
+ * <p>Widget developers might use this method to perform additional logic if an event 
+ * handler doesn't prevent the default action.  For example, a tabs widget might 
+ * hide the currently shown tab if the application developer doesn't prevent default.</p>
  * @param {Object} type The type of event to trigger.
  * @param {Object} type The type of event to trigger.
  * @param {Object} data Some data to pass to callbacks listening to this 
