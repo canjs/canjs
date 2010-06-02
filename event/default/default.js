@@ -127,7 +127,8 @@ $.fn.
  * returns whether or not the event's default action was prevented.  
  * If true, the default action was not prevented.  If false, the 
  * default action was prevented.  This is the same as triggerDefaults, but 
- * the event doesn't bubble.
+ * the event doesn't bubble.  Use these methods to easily determine if default was 
+ * prevented, and proceed accordingly.
  * @param {Object} type The type of event to trigger.
  * @param {Object} type The type of event to trigger.
  * @param {Object} data Some data to pass to callbacks listening to this 
@@ -147,7 +148,8 @@ $.fn.
  * Triggers the event and returns whether or not the event's 
  * default action was prevented.  If true, the default action was not 
  * prevented.  If false, the default action was prevented.  This is the same 
- * as triggerDefault, but the event bubbles.
+ * as triggerDefault, but the event bubbles.  Use these methods to easily determine if default was 
+ * prevented, and proceed accordingly.
  * @param {Object} type The type of event to trigger.
  * @param {Object} data Some data to pass to callbacks listening to this 
  * event.
