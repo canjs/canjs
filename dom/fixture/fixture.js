@@ -140,7 +140,14 @@ $.ajax({
 	<code>"beforeSend"</code>, <code>"success"</code>, <code>"complete"</code>, 
    <code>"error"</code></li>
 </ul>
-and should return an array of arguments for the callback.
+and should return an array of arguments for the callback.<br/><br/>
+<div class='whisper'>PRO TIP: 
+Dynamic fixtures are awesome for performance testing.  Want to see what 
+10000 files does to your app's performance?  Make a fixture that returns 10000 items.
+
+What to see what the app feels like when a request takes 5 seconds to return?  Set
+[jQuery.fixture.delay] to 5000.
+</div>
 <h2>Helpers</h2>
 <p>The fixture plugin comes with a few ready-made dynamic fixtures and 
 fixture helpers:</p>
@@ -226,7 +233,7 @@ $.fixture.make(["messages","message"],1000, function(i, messages){
   return {
     subject: "This is message "+i,
     body: "Here is some text for this message",
-    date: Math.floor( new Date().getTime() )
+    date: Math.floor( new Date().getTime() ),
     parentId : i < 100 ? null : Math.floor(Math.random()*i)
   }
 })
