@@ -123,9 +123,15 @@ $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
  */
 $.fn.
 /**
- * abc
- * @param {Object} type
- * @param {Object} data
+ * Triggers the event, stops the event from propagating through the DOM, and 
+ * returns whether or not the event's default action was prevented.  
+ * If true, the default action was not prevented.  If false, the 
+ * default action was prevented.  This is the same as triggerDefaults, but 
+ * the event doesn't bubble.
+ * @param {Object} type The type of event to trigger.
+ * @param {Object} type The type of event to trigger.
+ * @param {Object} data Some data to pass to callbacks listening to this 
+ * event.
  */
 triggerDefault = function(type, data){
 	if ( this[0] ) {
@@ -138,9 +144,13 @@ triggerDefault = function(type, data){
 }
 $.fn.
 /**
- * def
- * @param {Object} type
- * @param {Object} data
+ * Triggers the event and returns whether or not the event's 
+ * default action was prevented.  If true, the default action was not 
+ * prevented.  If false, the default action was prevented.  This is the same 
+ * as triggerDefault, but the event bubbles.
+ * @param {Object} type The type of event to trigger.
+ * @param {Object} data Some data to pass to callbacks listening to this 
+ * event.
  */
 triggerDefaults = function(type, data){
 	if ( this[0] ) {
