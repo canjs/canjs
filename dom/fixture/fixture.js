@@ -145,12 +145,12 @@ and should return an array of arguments for the callback.
 <p>The fixture plugin comes with a few ready-made dynamic fixtures and 
 fixture helpers:</p>
 <ul>
-<li>[jQuery.fixture.-make] - creates fixtures for findAll, findOne.</li>
+<li>[jQuery.fixture.make] - creates fixtures for findAll, findOne.</li>
 <li>[jQuery.fixture.-restCreate] - a fixture for restful creates.</li>
 <li>[jQuery.fixture.-restDestroy] - a fixture for restful updates.</li>
 <li>[jQuery.fixture.-restUpdate] - a fixture for restful destroys.</li>
 </ul>
-
+@demo jquery/dom/fixture/fixture.html
  * @init
  * Takes an ajax settings and returns a url to look for a fixture.  Overwrite this if you want a custom lookup method.
  * @param {Object} settings
@@ -222,7 +222,7 @@ $.extend($.fixture, {
 Used to make fixtures for findAll / findOne style requests.
 @codestart
 //makes a threaded list of messages
-$.fixture["-make"](["messages","message"],1000, function(i, messages){
+$.fixture.make(["messages","message"],1000, function(i, messages){
   return {
     subject: "This is message "+i,
     body: "Here is some text for this message",
@@ -247,7 +247,7 @@ $.ajax({
 @param {Number} count the number of items to create
 @param {Function} make a function that will return json data representing the object.
  */
-	"-make" : function(types, count, make){
+	make : function(types, count, make){
 		// make all items
 		var items = ($.fixture["~"+types[0]] = []);
 		for(var i = 0 ; i < (count); i++){
@@ -408,7 +408,7 @@ $.
 		return ajax(settings);		
 	}
 	
-	
+	$.extend($.ajax, ajax)
 
 $.
 	/**
@@ -449,6 +449,8 @@ $.
 	 */
 	post= function( url, data, callback, type, fixture ) {
 		if ( jQuery.isFunction( data ) ) {
+			fixture = type;
+			type = callback;
 			callback = data;
 			data = {};
 		}
