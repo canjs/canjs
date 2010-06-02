@@ -213,7 +213,9 @@ jQuery.Class.extend("jQuery.Model",
      * @param {Object} data
      */
     publish : function(event, data){
+        //@steal-remove-start
         steal.dev.log("Model.js - publishing " + jQuery.String.underscore(this.shortName) + "." + event)
+        //@steal-remove-end
 		OpenAjax.hub.publish(   jQuery.String.underscore(this.shortName) + "."+event, data);
     },
     /**
