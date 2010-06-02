@@ -2,11 +2,14 @@
 
 (function($){
 
+
 //cache default types for performance
-var types = {};
+var types = {}, rnamespaces= /\.(.*)$/;
 /**
  * @attribute default
  * @parent specialevents
+ * @plugin jquery/event/default
+ * @download jquery/dist/jquery.event.default.js
  * Allows you to perform default actions as a result of an event.
  * <p>
  * Event based APIs are a powerful way of exposing functionality of your widgets.  It also fits in 
@@ -22,17 +25,40 @@ var types = {};
  * $("div").bind("default.show", function(ev){ ... });
  * $("ul").delegate("li","default.activate", function(ev){ ... });
  * @codeend
+ * <p>
+ * The default plugin also adds the [jQuery.fn.triggerDefault triggerDefault] and [jQuery.fn.triggerDefaults triggerDefaults] methods.  These are used to trigger 
+ * an event and report back whether preventDefault was called on the event.  The only difference is [jQuery.fn.triggerDefault triggerDefault] 
+ * doesn't bubble.
+ * </p>
  * <h2>Example</h2>
  * <p>Lets look at how you could build a simple tabs widget with default events.
  * First with just jQuery:</p>
+ * <p>
+ * Default events are useful in cases where you want to provide an event based 
+ * API for users of your widgets.  Users can simply listen to your synthetic events and 
+ * prevent your default functionality by calling preventDefault.  
+ * </p>
+ * <p>
+ * In the example below, the tabs widget provides a show event.  Users of the 
+ * tabs widget simply listen for show, and if they wish for some reason, call preventDefault 
+ * to avoid showing the tab.
+ * </p>
+ * <p>
+ * In this case, the application developer doesn't want to show the second 
+ * tab until the checkbox is checked. 
+ * </p>
  * @demo jquery/event/default/defaultjquery.html
  * <p>Lets see how we would build this with JavaScriptMVC:</p>
  * @demo jquery/event/default/default.html
  */
 $.event.special["default"] = {
 	add: function( handleObj){
+		//save the type
+		types[handleObj.namespace.replace(rnamespaces,"")] = true;
+		
+		//move the handler ...
 		var origHandler = handleObj.handler;
-		types[handleObj.namespace] = true;
+		
 		handleObj.origHandler = origHandler;
 		handleObj.handler = function(ev, data){
 			if(!ev._defaultActions) ev._defaultActions = [];
@@ -49,9 +75,9 @@ $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
     var type = event.type || event
 	//should need to trigger just on this event
 	//shortcut if we never listened for a default of this type
-	if(!types[type]){
-		 return oldTrigger.call($.event, event, data, elem, bubbling)
-	}
+	//if(!types[type]){
+	//	 return oldTrigger.call($.event, event, data, elem, bubbling)
+	//}
 	
     if ( !bubbling ) {
 		event = typeof event === "object" ?
@@ -100,7 +126,8 @@ $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
         ) {			
 		
 		// put event back
-		event.type = "default."+event.type;
+		event.namespace= event.type;
+		event.type = "default";
 		event.liveFired = null;
 		
 		// call each event handler
@@ -117,9 +144,20 @@ $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
  */
 $.fn.
 /**
- * abc
- * @param {Object} type
- * @param {Object} data
+ * Triggers the event, stops the event from propagating through the DOM, and 
+ * returns whether or not the event's default action was prevented.  
+ * If true, the default action was not prevented.  If false, the 
+ * default action was prevented.  This is the same as triggerDefaults, but 
+ * the event doesn't bubble.  Use these methods to easily determine if default was 
+ * prevented, and proceed accordingly.
+ * 
+ * <p>Widget developers might use this method to perform additional logic if an event 
+ * handler doesn't prevent the default action.  For example, a tabs widget might 
+ * hide the currently shown tab if the application developer doesn't prevent default.</p>
+ * @param {Object} type The type of event to trigger.
+ * @param {Object} type The type of event to trigger.
+ * @param {Object} data Some data to pass to callbacks listening to this 
+ * event.
  */
 triggerDefault = function(type, data){
 	if ( this[0] ) {
@@ -132,9 +170,14 @@ triggerDefault = function(type, data){
 }
 $.fn.
 /**
- * def
- * @param {Object} type
- * @param {Object} data
+ * Triggers the event and returns whether or not the event's 
+ * default action was prevented.  If true, the default action was not 
+ * prevented.  If false, the default action was prevented.  This is the same 
+ * as triggerDefault, but the event bubbles.  Use these methods to easily determine if default was 
+ * prevented, and proceed accordingly.
+ * @param {Object} type The type of event to trigger.
+ * @param {Object} data Some data to pass to callbacks listening to this 
+ * event.
  */
 triggerDefaults = function(type, data){
 	if ( this[0] ) {
@@ -144,6 +187,9 @@ triggerDefaults = function(type, data){
 	}
 	return true;
 }
+	
+	
+	
 	
 	
 	

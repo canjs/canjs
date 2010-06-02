@@ -22,7 +22,7 @@ var i, fileName, cmd,
 	"dom/closest",
 	"dom/compare",
 	"dom/dimensions",
-	"dom/fixtures",
+	"dom/fixture",
 	"dom/form_params",
 	"dom/within"
 ]

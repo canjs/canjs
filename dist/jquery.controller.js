@@ -820,7 +820,7 @@ shifter = function(cb){
 	}
 },
 dotsReg = /\./g,
-controllersReg = /_?controllers?/ig
+controllersReg = /_?controllers?/ig,
 underscoreAndRemoveController = function(className){
 	return $.String.underscore(className.replace(dotsReg,'_').replace(controllersReg,""));
 }
@@ -1143,7 +1143,7 @@ jQuery.Class.extend("jQuery.Controller",
 				return jQuery.Class.getObject(inside, c.OPTIONS).toString(); //gets the value in options
 			})
 			parts = convertedName.match( b) //parts of the action string
-			event = parts && parts[2].replace(/^(default\.)|(>)/,"")
+			event = parts && parts[2].replace(/^(>?default\.)|(>)/,"")
 			//get processor if it responds to event type
 			processor = parts && 
 					(	c.processors[event] || //if the 2nd part is a processor, use that processor
