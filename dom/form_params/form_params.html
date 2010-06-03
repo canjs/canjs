@@ -34,13 +34,24 @@
 steal.plugins('jquery/dom/form_params','jquery/lang/json').start()
 </script>
 <script type='text/javascript' id="demo-source">
+// updates the JSON text
 var update = function(){
+  
+  // get form data 
   var json = $('#fp').formParams(),
+  
+      //convert it to JSON
       jsonString = $.toJSON( json );
+  
+  // show JSON
   $("#result").text( jsonString )
 }
+
+// listen for changes and update
 $('#fp').change(update);
-update(); //show the result right away
+
+// show json right away
+update(); 
 </script>
 	</body>
 </html>
