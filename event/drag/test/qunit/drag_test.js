@@ -4,13 +4,17 @@ asyncTest("Compare cases", function(){
 			"<div id='drop' style='border:1px solid yellow;width:20px;height:20px;position:absolute;left:30px;top:30px;background-color:yellow;'></div>");
 	
 	$('#drag').live("draginit", function(){})
+		.live("dragover", function(){
+			$(this).css('background-color', 'black').addClass("dragover")
+		})
 	$('#drop').live("dropover", function(){ 
-		$(this).css('background-color', 'blue').addClass("dropover") 
+		$(this).css('background-color', 'blue').addClass("dropover")
 	})
 	  
 	new Synthetic("drag", {duration: 1}).send($("#drag")[0], $("#drop")[0]);
 	setTimeout(function(){
 		ok($("#drop").hasClass("dropover"), "Drop worked correctly")
+		ok($("#drag").hasClass("dragover"), "Drag worked correctly")
 		$("#drag").remove();
 		$("#drop").remove();
 		start()
