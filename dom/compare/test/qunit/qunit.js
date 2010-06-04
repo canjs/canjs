@@ -2,4 +2,4 @@
 steal
  .plugins("jquery/dom/compare")  //load your app
  .plugins('funcunit/qunit')  //load qunit
- .then("compare")
+ .then("compare_test")

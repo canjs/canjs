@@ -2,7 +2,7 @@
             "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 	<head>
-		<title>Compare</title>
+		<title>Compare Element Positions</title>
         <style type='text/css'>
             body {font-family: verdana}
             div {
@@ -16,6 +16,19 @@
 			}
 			.green {
 				background-color: green;
+			}
+			.hide {
+				display: none;
+			}
+			h3 {
+				margin: 20px 0px 0px 0px;
+			}
+			th {
+				padding: 0px 5px;
+				color: gray;
+			}
+			td {
+				padding: 0px 5px;
 			}
         </style>
 	</head>
@@ -34,6 +47,18 @@
 	B
 </div>
 </div>
+<h3 class='hide'>Key</h3>
+<table class='hide'>
+	<tr><th>Bits</th><th>Number</th><th>Meaning</th></tr>
+	<tr><td>000000</td><td>0</td><td>Elements are identical.</td></tr>
+	<tr><td>000001</td><td>1</td><td>The nodes are in different documents (or one is outside of a document).</td></tr>
+	<tr><td>000010</td><td>2</td><td>Node B precedes Node A.</td></tr>
+	<tr><td>000100</td><td>4</td><td>Node A precedes Node B.</td></tr>
+	<tr><td>001000</td><td>8</td><td>Node B contains Node A.</td></tr>
+	<tr><td>010000</td><td>16</td><td>Node A contains Node B.</td></tr>
+	
+</table>
+
 		<script type='text/javascript' 
                 src='../../../steal/steal.js?jquery/dom/compare/compare.js'>   
         </script>
@@ -51,6 +76,13 @@ $('div').click(function(ev){
     $("#result").text(  $('.red').compare($('.green')) )
   }
 })
+</script>
+<script type='text/javascript'>
+	$(function(){
+		if(window.parent == window){
+			$('.hide').show()
+		}
+	})
 </script>
 	</body>
 </html>
