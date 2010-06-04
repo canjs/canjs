@@ -12,6 +12,7 @@ steal.plugins('jquery/dom').then(function($){
  * Parts of this documentation and source come from [http://ejohn.org/blog/comparing-document-position | John Resig].
  * <h2>Demo</h2>
  * @demo jquery/dom/compare/compare.html
+ * @test jquery/dom/compare/qunit.html
  * @plugin dom/compare
  * @param {HTMLElement} a the first node
  * @param {HTMLElement} b the second node
