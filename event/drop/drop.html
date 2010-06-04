@@ -51,6 +51,8 @@ $('.handle').live("draginit", function(){})
 $('#dropout')
   .delegate(".dropout","dropover", function(){ $(this).addClass('over') })
   .delegate(".dropout","dropout", function(){ $(this).removeClass('over') })
+  .bind("dropover", function(){ $(this).addClass('over') })
+  .bind("dropout", function(){ $(this).removeClass('over') });
 	
 //turn off dropout/dropover
 $("#undelegate").click(function(){
