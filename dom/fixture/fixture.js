@@ -9,6 +9,7 @@ var ajax = $.ajax,
  * @constructor jQuery.fixture
  * @plugin jquery/dom/fixture
  * @download jquery/dist/jquery.fixture.js
+ * @test jquery/dom/fixture/qunit.html
  * @parent dom
  * 
  * Fixtures simulate AJAX responses by overwriting 
@@ -194,9 +195,9 @@ $.extend($.fixture, {
 	"-restUpdate": function(settings,cbType){
         switch(cbType){
             case "success": 
-                return [$.extend({id: parseInt(settings.url)}, settings.data), "success", $.extend({}, $.fixture.xhr)]
+                return [$.extend({id: parseInt(settings.url)}, settings.data), "success", $.fixture.xhr()]
             case "complete":
-                return [$.extend({}, $.fixture.xhr), "success"]
+                return [$.fixture.xhr(), "success"]
         }
     },
 	/**
@@ -205,9 +206,9 @@ $.extend($.fixture, {
     "-restDestroy" : function(settings, cbType){
         switch(cbType){
             case "success":
-                return [true, "success", $.extend({}, $.fixture.xhr)]
+                return [true, "success", $.fixture.xhr()]
             case "complete":
-                return [$.extend({}, $.fixture.xhr), "success"]
+                return [$.fixture.xhr(), "success"]
         }
     },
 	/**
@@ -216,11 +217,11 @@ $.extend($.fixture, {
     "-restCreate" : function(settings, cbType){
         switch(cbType){
             case "success": 
-                return [{id: parseInt(Math.random()*1000)}, "success", $.extend({}, $.fixture.xhr)];
+                return [{id: parseInt(Math.random()*1000)}, "success", $.fixture.xhr()];
             case "complete":
-                return [$.extend({
-                            getResponseHeader: function(){ return "/blah/"+parseInt(Math.random()*1000) }
-                        }, $.fixture.xhr), "success"]
+                return [ $.fixture.xhr({
+                            getResponseHeader: function(){ return settings.url+"/"+parseInt(Math.random()*1000) }
+                        }) , "success"]
         }
 
         
@@ -326,19 +327,48 @@ $.ajax({
 		}
 		
 	},
-	xhr : {
-		abort: $.noop,
-		getAllResponseHeaders: function () { return ""; },
-		getResponseHeader: function () { return ""; },
-		open: $.noop,
-		overrideMimeType: $.noop,
-		readyState: 4,
-		responseText: "",
-		responseXML: null,
-		send: $.noop,
-		setRequestHeader: $.noop,
-		status: 200,
-		statusText: "OK"
+	/**
+	 * Use $.fixture.xhr to create an object that looks like an xhr object. 
+	 * <h3>Example</h3>
+	 * The following example shows how the -restCreate fixture uses xhr to return 
+	 * a simulated xhr object:
+@codestart
+"-restCreate" : function(settings, cbType){
+  switch(cbType){
+    case "success": 
+      return [
+        {id: parseInt(Math.random()*1000)}, 
+        "success", 
+        $.fixture.xhr()];
+    case "complete":
+      return [ 
+        $.fixture.xhr({
+          getResponseHeader: function(){ 
+            return settings.url+"/"+parseInt(Math.random()*1000);
+          }
+        }),
+        "success"];
+  }
+}
+@codeend
+	 * @param {Object} [xhr] properties that you want to overwrite
+	 * @return {Object} an object that looks like a successful XHR object.
+	 */
+	xhr : function(xhr){
+		return $.extend({},{
+			abort: $.noop,
+			getAllResponseHeaders: function () { return ""; },
+			getResponseHeader: function () { return ""; },
+			open: $.noop,
+			overrideMimeType: $.noop,
+			readyState: 4,
+			responseText: "",
+			responseXML: null,
+			send: $.noop,
+			setRequestHeader: $.noop,
+			status: 200,
+			statusText: "OK"
+		},xhr);
 	}
 })
 /**

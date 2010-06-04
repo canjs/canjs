@@ -6,6 +6,7 @@ steal.plugins('jquery/event').then(function($){
 	 * @attribute destroyed
 	 * @parent specialevents
 	 * @download jquery/dist/jquery.event.destroyed.js
+	 * @test jquery/event/destroyed/qunit.html
 	 * Provides a destroyed event on an element.
 	 * <p>
 	 * The destroyed event is called when the element

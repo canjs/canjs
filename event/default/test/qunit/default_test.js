@@ -7,7 +7,7 @@ test("namespaced with same function", function(){
 	$("#qunit-test-area").html("<div id='one'>hey</div>")
 	$("#one").bind("foo.bar", func).bind("foo.zar", func)
 	$("#one").trigger("foo.bar")
-	equals(1, count)
+	equals(1, count,"jquery seems ok")
 })
 
 
@@ -57,7 +57,7 @@ test("triggering defaults", function(){
 	})
 	
 	
-	
+	$("#qunit-test-area").html("")
 })
 
 
@@ -100,5 +100,5 @@ test("live on default events", function(){
 	equals(count3,1,  "delegated live somethingElse")
 	
 	
-	
+	$("#qunit-test-area").html("")
 })
