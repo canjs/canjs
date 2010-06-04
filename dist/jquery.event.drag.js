@@ -359,6 +359,7 @@ jQuery.fn.makePositioned = function() {
 	 * @parent specialevents
 	 * @plugin jquery/event/drag
 	 * @download jquery/dist/jquery.event.drag.js
+	 * @test jquery/event/drag/qunit.html
 	 * Provides drag events as a special events to jQuery.  
 	 * A jQuery.Drag instance is created on a drag and passed
 	 * as a parameter to the drag event callbacks.  By calling
