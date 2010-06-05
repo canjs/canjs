@@ -408,6 +408,7 @@ jQuery.Class.extend("jQuery.Controller",
 	 */
 	_getAction : function(methodName, options){
 		//if we don't have a controller instance, we'll break this guy up later
+		this._parameterReplacer.lastIndex = 0;
 		if(!options && this._parameterReplacer.test(methodName)){
 			return null;
 		}
