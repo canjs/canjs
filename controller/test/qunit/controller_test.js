@@ -4,7 +4,7 @@ test("subscribe testing works", function(){
 	var ta = $("<div/>").appendTo( $("#qunit-test-area") )
 	
 	ta.html("click here")
-	ok(true,"an assert is run")
+
 	var clicks = 0, destroys = 0;
 	var subscribes = 0;
 	$.Controller.extend("MyTest",{
@@ -23,7 +23,6 @@ test("subscribe testing works", function(){
 	ta.my_test();
 	ta.trigger("click")
 	equals(clicks,1, "can listen to clicks")
-	
 	
 	OpenAjax.hub.publish("a.b",{})
 	equals(subscribes,1, "can subscribe")
@@ -118,3 +117,18 @@ test("bind to any special", function(){
 	a.trigger("crazyEvent")
 	ok(called, "heard the trigger")
 })
+
+test("parameterized actions", function(){
+	var called = false;
+	jQuery.Controller.extend("WeirderBind",{
+		"{parameterized}" : function(){
+			called = true;
+		}
+	})
+	var a = $("<div id='crazy'></div>").appendTo($("#qunit-test-area"))
+	a.weirder_bind({parameterized: "sillyEvent"});
+	a.trigger("sillyEvent")
+	ok(called, "heard the trigger")
+	
+})
+
