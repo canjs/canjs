@@ -386,8 +386,8 @@ jQuery.Class.extend("jQuery.Controller",
 	_parameterReplacer : /\{([^\}]+)\}/g,
 	/**
 	 * @hide
-	 * @params {String} methodName a prototype function
-	 * @returns {Boolean} truthy if an action or not
+	 * @param {String} methodName a prototype function
+	 * @return {Boolean} truthy if an action or not
 	 */
 	_isAction : function(methodName){
 		if( this._actionMatcher.test(methodName) ){

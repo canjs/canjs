@@ -34,7 +34,7 @@ $.fn.extend({
 	 * 
 	 * @demo jquery/dom/form_params/form_params.html
 	 * 
-	 * @param {Boolean} [convert] true if number and boolean like strings should be converted.  Defaults to true.
+	 * @param {Boolean} [convert] True if strings that look like numbers and booleans should be converted.  Defaults to true.
 	 * @return {Object} An object of name-value pairs.
 	 */
 	formParams: function(convert) {

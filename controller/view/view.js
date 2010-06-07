@@ -105,26 +105,5 @@ view = function(view, data, myhelpers) {
         return jQuery.View(view, data, helpers); //what about controllers in other folders?
 };
 
-jQuery.Controller.prototype.
-
-$view = function(view, data, myhelpers) {
-		//shift args if no view is provided
-        if(typeof view != "string" && !myhelpers){
-            myhelpers = data;
-            data = view;
-            view = null;
-        }
-        //guess from controller name
-		view = calculatePosition(this.Class, view, this.called)
-        
-        //calculate data
-        data = data || this;
-        
-        //calculate helpers
-        var helpers = calculateHelpers.call(this, myhelpers)
-        
-		
-        return jQuery.View(view, data, helpers, true); //what about controllers in other folders?
-}
 	
-})
+});
