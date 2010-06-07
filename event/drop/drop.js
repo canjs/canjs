@@ -53,6 +53,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 	 * @parent specialevents
 	 * @plugin jquery/event/drop
 	 * @download jquery/dist/jquery.event.drop.js
+	 * @test jquery/event/drag/qunit.html
 	 * 
 	 * Provides drop events as a special event to jQuery.  
 	 * By binding to a drop event, the callback functions will be 

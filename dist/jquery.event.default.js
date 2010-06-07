@@ -10,6 +10,7 @@ var types = {}, rnamespaces= /\.(.*)$/;
  * @parent specialevents
  * @plugin jquery/event/default
  * @download jquery/dist/jquery.event.default.js
+ * @test jquery/event/default/qunit.html
  * Allows you to perform default actions as a result of an event.
  * <p>
  * Event based APIs are a powerful way of exposing functionality of your widgets.  It also fits in 
