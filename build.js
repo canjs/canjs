@@ -36,7 +36,7 @@ for(i=0; i<plugins.length; i++){
 		plugin = plugins[i].plugin;
 		exclude = plugins[i].exclude;
 	}
-	fileName = "jquery."+plugin.replace(/\//g, ".").replace(/dom\./, "")+".js";
+	fileName = "jquery."+plugin.replace(/\//g, ".").replace(/dom\./, "").replace(/\_/, "")+".js";
 	fileDest = "jquery/dist/"+fileName
 	cmd = "js steal/scripts/pluginify.js jquery/"+plugin+" -destination "+fileDest;
 	if(exclude.length)
