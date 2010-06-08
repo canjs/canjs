@@ -95,7 +95,7 @@ $.fn.extend({
 				if(write){
 					current[lastPart].push(value);
 				}
-			}else{
+			}else if(write || !current[lastPart]){
 				current[lastPart] = write ? value : undefined;
 			}
 			
