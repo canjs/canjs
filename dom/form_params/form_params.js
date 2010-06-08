@@ -1,7 +1,7 @@
 /**
  *  @add jQuery.fn
  */
-steal.plugins("jquery/dom",'jquery/lang/rsplit').then(function($) {
+steal.plugins("jquery/dom").then(function($) {
 var radioCheck = /radio|checkbox/i,
 	keyBreaker = /[^\[\]]+/g,
 	numberMatcher = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
@@ -64,9 +64,6 @@ $.fn.extend({
 				write = !isRadioCheck || !!el.checked, //overwrite the value
 				append = false, //make an array of values
 				lastPart;   
-			
-			// we want true / false for checkboxes
-
 			
 			if( convert ) { 
 				if(isNumber(value)){
