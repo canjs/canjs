@@ -88,14 +88,14 @@ $.fn.extend({
 			lastPart = parts[parts.length - 1];
 			
 			//now we are on the last part, set the value
-			if( lastPart in current && isRadioCheck){
+			if( lastPart in current && el.type.toLowerCase() === "checkbox"){
 				if( !$.isArray(current[lastPart]) ){
 					current[lastPart] = current[lastPart] === undefined ? [] : [ current[lastPart] ];
 				}
 				if(write){
 					current[lastPart].push(value);
 				}
-			}else{
+			}else if(write || !current[lastPart]){
 				current[lastPart] = write ? value : undefined;
 			}
 			
