@@ -1,23 +1,7 @@
 module("dimensions");
 
 
-test("curStyles", function(){
-	$("#qunit-test-area").html("//jquery/dom/dimensions/test/qunit/curStyles.micro",{})
 
-	var res = $.curStyles( $("#styled")[0], 
-	   ["padding-left",
-		'position',
-		'display',
-		"margin-top", 
-		"borderTopWidth",
-		"float"] );
-	equals(res.borderTopWidth, "2px","border top");
-	equals(res.display, "block","display");
-	equals(res.cssFloat, "left","float");
-	equals(res.marginTop, "10px","margin top");
-	equals(res.paddingLeft, "5px","padding left");
-	equals(res.position, "relative","position");
-})
 
 test("outerHeight and width",function(){
 	$("#qunit-test-area").html("//jquery/dom/dimensions/test/qunit/curStyles.micro",{})

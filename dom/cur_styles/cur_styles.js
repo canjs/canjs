@@ -85,10 +85,29 @@ $.curStyles = function(el, styles) {
 $.fn.
 /**
  * @parent dom
- * Used to rapidly get a bunch of computed styles from an element.
+ * @plugin jquery/dom/cur_styles
+ * @download jquery/dist/jquery.curstyles.js
+ * @test jquery/dom/cur_styles/qunit.html
+ * Use curStyles to rapidly get a bunch of computed styles from an element.
+ * <h3>Quick Example</h3>
  * @codestart
- * $("#foo").curStyles('float','display') //-> Object
+ * $("#foo").curStyles('float','display') //-> 
+ * // {
+ * //  cssFloat: "left", display: "block"
+ * // }
  * @codeend
+ * <h2>Use</h2>
+ * <p>An element's <b>computed</b> style is the current calculated style of the property.
+ * This is different than the values on <code>element.style</code> as
+ * <code>element.style</code> doesn't reflect styles provided by css or the browser's default
+ * css properties.</p>
+ * <p>Getting computed values individually is expensive! This plugin lets you get all
+ * the style properties you need all at once.</p>
+ * <h2>Demo</h2>
+ * <p>The following demo illustrates the performance improvement curStyle provides by providing
+ * a faster 'height' jQuery function called 'fastHeight'.</p>
+ * @demo jquery/dom/cur_styles/cur_styles.html
+ * @param {String} style pass style names as arguments 
  * @return {Object} an object of style:value pairs
  */
 curStyles = function(){
