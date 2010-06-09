@@ -1,6 +1,28 @@
 
-steal.plugins('jquery/dom').then(function($) {
-
+steal.plugins('jquery/dom/cur_styles').then(function($) {
+/**
+ * @page dimensions dimensions
+ * @parent dom
+ * <h1>jquery/dom/dimensions <span class="Constructor type">Plugin</span></h1>
+ * The dimensions plugin adds support for setting+animating inner+outer height and widths.
+ * <h3>Quick Examples</h3>
+@codestart
+$('#foo').outerWidth(100).innerHeight(50);
+$('#bar').animate({outerWidth: 500});
+@codeend
+ * <h2>Use</h2>
+ * <p>When writing reusable plugins, you often want to 
+ * set or animate an element's dimensions that include its padding,
+ * border, or margin.  This is especially important in plugins that
+ * allow custom styling.
+ * The dimensions plugin overwrites [jQuery.fn.outerHeight outerHeight],
+ * [jQuery.fn.outerWidth outerWidth], [jQuery.fn.innerHeight innerHeight] 
+ * and [jQuery.fn.innerWidth innerWidth]
+ * to let you set and animate these properties.
+ * </p>
+ * <h2>Demo</h2>
+ * @demo jquery/dom/dimensions/dimensions.html
+ */
 
 var weird = /button|select/i, //margin is inside border
 	getBoxes = {},
@@ -11,83 +33,7 @@ var weird = /button|select/i, //margin is inside border
         oldOuterWidth: $.fn.outerWidth,
         oldInnerWidth: $.fn.innerWidth,
         oldInnerHeight: $.fn.innerHeight
-    },
-	getComputedStyle = document.defaultView && document.defaultView.getComputedStyle,
-	rupper = /([A-Z])/g,
-	rdashAlpha = /-([a-z])/ig,
-	fcamelCase = function(all, letter) {
-	    return letter.toUpperCase();
-	},
-	getStyle = function(elem) {
-	    if (getComputedStyle) {
-	        return getComputedStyle(elem, null);
-	    }
-	    else if (elem.currentStyle) {
-	        return elem.currentStyle
-	    }
-	},
-	rfloat = /float/i,
-	rnumpx = /^-?\d+(?:px)?$/i,
-	rnum = /^-?\d/;
-/**
- * @function jQuery.curStyles
- * @param {HTMLElement} el
- * @param {Array} styles An array of style names like <code>['marginTop','borderLeft']</code>
- * @return {Object} an object of style:value pairs.  Style names are camelCase.
- */
-$.curStyles = function(el, styles) {
-    var currentS = getStyle(el), 
-				   oldName, 
-				   val, 
-				   style = el.style,
-				   results = {},
-				   i=0,
-				   name;
-    
-	for(; i < styles.length; i++){
-		name = styles[i];
-        oldName = name.replace(rdashAlpha, fcamelCase);
-		
-		if ( rfloat.test( name ) ) {
-			name = jQuery.support.cssFloat ? "float" : "styleFloat";
-			oldName = "cssFloat"
-		}
-		
-        if (getComputedStyle) {
-            name = name.replace(rupper, "-$1").toLowerCase();
-            val = currentS.getPropertyValue(name);
-			if ( name === "opacity" && val === "" ) {
-				val = "1";
-			}
-			results[oldName] = val;
-        } else {
-            var camelCase = name.replace(rdashAlpha, fcamelCase);
-            results[oldName] = currentS[name] || currentS[camelCase];
-
-
-            if (!rnumpx.test(results[oldName]) && rnum.test(results[oldName])) { //convert to px
-                // Remember the original values
-                var left = style.left, 
-					rsLeft = el.runtimeStyle.left;
-
-                // Put in the new values to get a computed value out
-                el.runtimeStyle.left = el.currentStyle.left;
-                style.left = camelCase === "fontSize" ? "1em" : (results[oldName] || 0);
-                results[oldName] = style.pixelLeft + "px";
-
-                // Revert the changed values
-                style.left = left;
-                el.runtimeStyle.left = rsLeft;
-            }
-
-        }
-    }
-	
-    return results;
-};
-$.fn.curStyles = function(){
-	return $.curStyles(this[0], $.makeArray(arguments))
-}
+    };
 /**
  *  @add jQuery.fn
  */
@@ -95,28 +41,42 @@ $.each({
 
 /*
  * @function outerWidth
- * @parent dom
+ * @parent dimensions
  * Lets you set the outer height on an object
  * @param {Number} [height] 
+ * @param {Boolean} [includeMargin]
  */
 width: 
 /*
  * @function innerWidth
- * @parent dom
- * Lets you set the inner height on an object
+ * @parent dimensions
+ * Lets you set the inner height of an object
  * @param {Number} [height] 
  */
 "Width", 
 /*
  * @function outerHeight
- * @parent dom
- * Lets you set the outer width on an object
- * @param {Number} [height] 
+ * @parent dimensions
+ * Lets you set the outer height of an object where: <br/> 
+ * <code>outerHeight = height + padding + border + (margin)</code>.  
+ * @codestart
+ * $("#foo").outerHeight(100); //sets outer height
+ * $("#foo").outerHeight(100, true); //uses margins
+ * $("#foo").outerHeight(); //returns outer height
+ * $("#foo").outerHeight(true); //returns outer height with margins
+ * @codeend
+ * When setting the outerHeight, it adjusts the height of the element.
+ * @param {Number|Boolean} [height] If a number is provided -> sets the outer height of the object.<br/>
+ * If true is given ->  returns the outer height and includes margins.<br/>
+ * If no value is given -> returns the outer height without margin.
+ * @param {Boolean} [includeMargin] Makes setting the outerHeight adjust for margin.
+ * @return {jQuery|Number} If you are setting the value, returns the jQuery wrapped elements.
+ * Otherwise, returns outerHeight in pixels.
  */
 height: 
 /*
  * @function innerHeight
- * @parent dom
+ * @parent dimensions
  * Lets you set the outer width on an object
  * @param {Number} [height] 
  */
@@ -132,7 +92,7 @@ height:
                 var direction = this;
                 $.each(boxes, function(name, val) {
                     if (val)
-                        myChecks.push(name + direction);
+                        myChecks.push(name + direction+ (name == 'border' ? "Width" : "") );
                 })
             })
             $.each($.curStyles(el, myChecks), function(name, value) {
@@ -164,6 +124,13 @@ height:
         if (fx.state == 0) {
             fx.start = $(fx.elem)[lower]();
             fx.end = fx.end - getBoxes[lower](fx.elem,{padding: true, border: true});
+        }
+        fx.elem.style[lower] = (fx.pos * (fx.end - fx.start) + fx.start) + "px"
+    }
+	$.fx.step["inner" + Upper] = function(fx) {
+        if (fx.state == 0) {
+            fx.start = $(fx.elem)[lower]();
+            fx.end = fx.end - getBoxes[lower](fx.elem,{padding: true});
         }
         fx.elem.style[lower] = (fx.pos * (fx.end - fx.start) + fx.start) + "px"
     }
