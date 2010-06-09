@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>Form Params</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            #inner {
+            	height: 100%;
+				width: 100%;
+				background-color: red;
+            }
+			#block {
+				width: 200px;
+				height: 200px;
+				padding: 0 40px 40px 0;
+				margin: 0 10px 10px 0;
+				background-color: blue;
+				border-right: solid 20px green;
+				border-bottom: solid 20px green;
+			}
+			#wrapper {
+				border: dashed 1px gray;
+				float: left;
+				clear: left;
+				background-color: yellow;
+			}
+			#height {
+				font-size: 14pt;
+				color: #800000;
+			}
+			#innerHeight {
+				font-size: 14pt;
+				color: #000080;
+			}
+			#outerHeight {
+				font-size: 14pt;
+				color: #008000;
+			}
+        </style>
+	</head>
+	<body>
+<div>
+	Width: <input id='height'/><br/>
+	Inner: <input id='innerHeight'/><br/>
+	Outer: <input id='outerHeight'/><br/>
+</div>
+	<br/>
+<div id="demo-html">
+
+	
+	
+<div id='wrapper'>
+	<div id='block'>
+		<div id='inner'>
+
+		</div>
+	</div>
+</div>
+</div>
+<div style='clear: both'>
+	Padding: <input id='paddingRight'/><br/>
+	Border: <input id='borderRightWidth'/><br/>
+	Margin: <input id='marginRight'/><br/>
+</div>
+		<script type='text/javascript' 
+                src='../../../steal/steal.js'>   
+        </script>
+<script type='text/javascript'>
+	steal.plugins('jquery/dom/dimensions').start()
+</script>
+<script type='text/javascript' id="demo-source">
+	var set = function(){
+		$("#outerHeight").val( $('#block').outerHeight() )  
+		$("#innerHeight").val( $('#block').innerHeight() ) 
+		$("#height").val( $('#block').height() );
+		var res = $('#block').curStyles("paddingRight","borderRightWidth","marginRight")
+		for(var name in res){
+			$("#"+name).val( parseInt(res[name])  )
+		}
+	}
+	set();
+	
+	$("#height, #outerHeight, #innerHeight").change(function(ev){
+		$('#block')[ev.target.id]( parseInt( $(ev.target).val() ) )
+		set();
+	})
+</script>
+	</body>
+</html>

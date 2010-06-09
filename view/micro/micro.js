@@ -38,7 +38,11 @@ steal.plugins('jquery/view').then(function(){
 		get : function(id, url){
 			var text = $.ajax({
 					async: false,
-					url: url
+					url: url,
+					dataType: "text",
+					error : function(){
+						throw "micro.js ERROR: There is no template or an empty template at "+url;
+					}
 				}).responseText
 			return this.renderer(id, text);
 			
