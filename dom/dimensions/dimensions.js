@@ -12,7 +12,7 @@ $('#bar').animate({outerWidth: 500});
 @codeend
  * <h2>Use</h2>
  * <p>When writing reusable plugins, you often want to 
- * set or animate an element's dimensions that include its padding,
+ * set or animate an element's width and height that include its padding,
  * border, or margin.  This is especially important in plugins that
  * allow custom styling.
  * The dimensions plugin overwrites [jQuery.fn.outerHeight outerHeight],

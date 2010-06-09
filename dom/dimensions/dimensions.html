@@ -49,18 +49,18 @@
 	
 <div id="demo-html">
 <p>Adjust The red box's layout properties.</p>
-<label>Width</label> <input id='width'/><br/>
+<label>  Width</label> <input id='width'/><br/>
 <label>+ Padding </label> <input id='paddingRight'/><br/>
-<label> = Inner</label> <input id='innerWidth'/><br/>
+<label>= Inner</label> <input id='innerWidth'/><br/>
 <label>+ Border</label> <input id='borderRightWidth'/><br/>
 <label>= Outer</label> <input id='outerWidth'/><br/>
-<label> Margin</label> <input id='marginRight'/><br/>
+<label>  Margin</label> <input id='marginRight'/><br/>
 <br/>
 	
 <div id='wrapper'>
 	<div id='block'>
 		<div id='inner'>
-	Adjust My Layout Properties
+			Adjust My Layout Properties
 		</div>
 	</div>
 </div>
@@ -73,46 +73,61 @@
 	steal.plugins('jquery/dom/dimensions').start()
 </script>
 <script type='text/javascript' id="demo-source">
-	var set = function(){
-		$("#outerWidth").val( $('#block').outerWidth() ) ;
-		$("#innerWidth").val( $('#block').innerWidth() ) ;
-		$("#width").val( $('#block').width() );
-		var res = $('#block').curStyles("paddingRight","borderRightWidth","marginRight")
-		for(var name in res){
-			$("#"+name).val( parseInt(res[name])  )
-		}
-	}
-	set();
-	var update = function(ev){
-		var name = ev.target.id;
-		var val = parseInt( $(ev.target).val() );
-		var otherName = name.replace(/width|right/i, function(part, i){
-			var other = {Width: "Height", Right: "Bottom"}
-			return i == 0 ? "height" : other[part];
-		});
-		var block = $('#block');
-
-		if(block[name]){
-			block[name]( val )[otherName](val)
-		}else{
-			var css = {};
-			css[name] = val+"px"
-			css[otherName] = val+"px"
-			block.css(css)
-		}
-		
-		
-		set();
-	};
-	var timer;
-	$("input").live('change',update)
+// sets the values in the input boxes
+var set = function() {
 	
-	$("input").live('keyup',function(ev){
-		clearTimeout(timer)
-		timer = setTimeout(function(){
-			update(ev)
-		},1000)
+	var block =  $('#block');
+	
+	//get with .fn helpers
+	$("#outerWidth, #innerWidth, #width").each(function(){
+		$(this).val( block[this.id]() )
 	})
+	
+	//use curStyles
+	$.each($('#block').curStyles("paddingRight",
+		"borderRightWidth",
+		"marginRight"), function(name, val){
+			$("#"+name).val( parseInt(val)  )
+	});
+}
+set();
+
+// updates the dimensions of the block
+var update = function( ev ){
+	var name = ev.target.id,
+		val = parseInt( $(ev.target).val() ),
+		opposite = {Width: "Height", Right: "Bottom"},
+		// the opposite dimension name
+		otherName = name.replace(/width|right/i, function(part, i){
+			return i == 0 ? "height" : opposite[part];
+		}),
+		block = $('#block'),
+		css = {};
+
+
+	if( block[name] ){ 
+		// set with innerHeight, outerHeight, etc
+		block[name]( val )[otherName](val)
+	}else{
+		// set as css property
+		css[name] = val+"px"
+		css[otherName] = val+"px"
+		block.css(css)
+	}
+
+	set();
+};
+
+// call update on change or after  
+// typing has stopped for a second
+var timer;
+$("input").live('change',update)
+$("input").live('keyup',function(ev){
+	clearTimeout(timer)
+	timer = setTimeout(function(){
+		update(ev)
+	},1400)
+})
 </script>
 	</body>
 </html>
