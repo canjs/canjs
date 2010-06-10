@@ -30,7 +30,7 @@ steal.plugins('jquery/dom/cur_styles').start()
 <script type='text/javascript' id="demo-source">
 
 $.fn.fastHeight = function(){
-	var sum = this[0].offsetHeight;
+	var sum = this[0] && this[0].offsetHeight;
 	$.each(this.curStyles(
 		"borderTopWidth",
 		"borderBottomWidth",
