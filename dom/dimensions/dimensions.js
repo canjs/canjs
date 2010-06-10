@@ -119,21 +119,22 @@ height:
             return checks["oldInner" + Upper].call(this, v)
         }
     }
-    //provides animation
-    $.fx.step["outer" + Upper] = function(fx) {
-        if (fx.state == 0) {
-            fx.start = $(fx.elem)[lower]();
-            fx.end = fx.end - getBoxes[lower](fx.elem,{padding: true, border: true});
-        }
-        fx.elem.style[lower] = (fx.pos * (fx.end - fx.start) + fx.start) + "px"
-    }
-	$.fx.step["inner" + Upper] = function(fx) {
-        if (fx.state == 0) {
-            fx.start = $(fx.elem)[lower]();
-            fx.end = fx.end - getBoxes[lower](fx.elem,{padding: true});
-        }
-        fx.elem.style[lower] = (fx.pos * (fx.end - fx.start) + fx.start) + "px"
-    }
+    //provides animations
+	var animate = function(boxes){
+		return function(fx){
+			if (fx.state == 0) {
+	            fx.start = $(fx.elem)[lower]();
+	            fx.end = fx.end - getBoxes[lower](fx.elem,boxes);
+	        }
+	        fx.elem.style[lower] = (fx.pos * (fx.end - fx.start) + fx.start) + "px"
+		}
+	}
+    $.fx.step["outer" + Upper] = animate({padding: true, border: true})
+	
+	$.fx.step["outer" + Upper+"Margin"] =  animate({padding: true, border: true, margin: true})
+	
+	$.fx.step["inner" + Upper] = animate({padding: true})
+
 })
 
 })
