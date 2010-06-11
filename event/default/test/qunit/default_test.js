@@ -1,4 +1,4 @@
-module("default events")
+module("jquery/event/default")
 test("namespaced with same function", function(){
 
 	var count = 0 ,  func = function(){

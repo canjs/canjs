@@ -1,4 +1,4 @@
-module("dimensions");
+module("jquery/dom/dimensions");
 
 
 

@@ -1,4 +1,4 @@
-module("dom compare")
+module("jquery/dom/compare")
 test("Compare cases", function(){
     $(document.body).append("<div id='outer'><div class='first'></div><div class='second'></div>")
     var outer = $("#outer"), 

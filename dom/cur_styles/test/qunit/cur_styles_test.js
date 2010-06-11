@@ -1,4 +1,4 @@
-module("curStyles");
+module("jquery/dom/curStyles");
 
 
 test("reading", function(){

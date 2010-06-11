@@ -1,4 +1,4 @@
-module("form params")
+module("jquery/dom/form_params")
 test("with a form", function(){
 
 	$("#qunit-test-area").html("//jquery/dom/form_params/test/qunit/basics.micro",{})

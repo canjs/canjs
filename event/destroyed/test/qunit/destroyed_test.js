@@ -1,4 +1,4 @@
-module("destroyed")
+module("jquery/event/destroyed")
 test("removing an element", function(){
 	var div = $("<div/>").data("testData",5)
 	div.appendTo($("#qunit-test-area"))

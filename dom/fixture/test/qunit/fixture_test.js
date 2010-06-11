@@ -1,4 +1,4 @@
-module("fixtures");
+module("jquery/dom/fixture");
 
 
 test("static fixtures", function(){

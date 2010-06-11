@@ -1,4 +1,4 @@
-module("Class");
+module("jquery/class");
 
 test("Creating", function(){
         
