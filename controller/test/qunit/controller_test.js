@@ -1,4 +1,4 @@
-module("controller")
+module("jquery/controller")
 test("subscribe testing works", function(){
 	
 	var ta = $("<div/>").appendTo( $("#qunit-test-area") )

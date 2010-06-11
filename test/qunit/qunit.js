@@ -1,6 +1,8 @@
 //we probably have to have this only describing where the tests are
 steal.plugins(	
 'jquery/class/test/qunit',
+'jquery/controller/test/qunit',
+
 'jquery/dom/compare/test/qunit',
 'jquery/dom/cur_styles/test/qunit',
 'jquery/dom/dimensions/test/qunit',
