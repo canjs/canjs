@@ -69,15 +69,15 @@ var initializing = false,
 * @constructor jQuery.Class
 * @plugin jquery/class
 * @tag core
-* @download dist/jquery.class.js
+* @download dist/jquery/jquery.class.js
 * Class provides simulated inheritance in JavaScript. 
 * It is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Class] 
 * Inheritance library.  Besides prototypal inheritance, it adds a few important features:
 * <ul>
 *     <li>Static inheritance</li>
 *     <li>Introspection</li>
-*     <li>Ad-Hoc Polymorphism</li>
 *     <li>Easy callback function creation</li>
+*     <li>Namespaces</li>
 * </ul>
 * <h2>Definitions</h2>
 * Classes have <b>static</b> and <b>prototype</b> properties and
@@ -155,6 +155,15 @@ var initializing = false,
 * 
 * <p>The prototype constructor is called whenever a new instance of the class is created.
 * </p>
+* <h2>Use</h2>
+* <p>[jQuery.Controller] and [jQuery.Model] use $.Class to bridge the gap between
+* jQuery's functional programming style and Object Oriented Programming. </p>
+* <p>JavaScript's prototypal inheritence is extremely powerful, but limited
+* in a few critical ways.  Class patches these problems but conforms to
+* how constructor functions work in every way possible.
+* </p>
+* <p></p>
+* 
 * 
 * @init Creating a new instance of an object that has extended jQuery.Class 
 *     calls the init prototype function and returns a new instance of the class.
