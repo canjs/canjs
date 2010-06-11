@@ -94,6 +94,7 @@ $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
 			event.exclusive = true;
 		}
         event._defaultActions = []; //set depth for possibly reused events
+        console.log(event.type)
     }
 	
 	var defaultGetter = jQuery.Event("default."+event.type), 

@@ -1,63 +1,30 @@
 steal.plugins('jquery/view','jquery/lang/rsplit').then(function($){
-   
+
+//helpers we use 
 var chop =  function(string){
-    return string.substr(0, string.length - 1);
-},
-extend = function(d, s){
-    for(var n in s){
-        if(s.hasOwnProperty(n))  d[n] = s[n]
-    }
-},
-isArray = function(arr){
-	  return Object.prototype.toString.call(arr) === "[object Array]"
-}
+	    return string.substr(0, string.length - 1);
+	},
+	extend = $.extend,
+	isArray = $.isArray
 
 var EJS = function( options ){
+	//returns a renderer
 	if(this.constructor != EJS){
 		var ejs = new EJS(options);
 		return function(data, helpers){
 			return ejs.render(data, helpers)
 		};
 	}
-	
-	options = typeof options == "string" ? {view: options} : options
-    this.set_options(options);
+
+	//if a function, set func as template func	
 	if(typeof options == "function"){
 		this.template = {};
 		this.template.process = options;
 		return;
 	}
-    if(options.element)
-	{
-		if(typeof options.element == 'string'){
-			var name = options.element
-			options.element = document.getElementById(  options.element )
-			if(options.element == null) throw name+'does not exist!'
-		}
-		if(options.element.value){
-			this.text = options.element.value
-		}else{
-			this.text = options.element.innerHTML
-		}
-		this.name = options.element.id
-		this.type = '['
-	}else if(options.url){
-        options.url = EJS.endExt(options.url, this.extMatch);
-		this.name = this.name ? this.name : options.url;
-        var url = options.url
-        //options.view = options.absolute_url || options.view || options.;
-		var template = EJS.get(this.name /*url*/, this.cache);
-		if (template) return template;
-	    if (template == EJS.INVALID_PATH) return null;
-        try{
-            this.text = EJS.request( url+(this.cache ? '' : '?'+Math.random() ));
-        }catch(e){}
+	//set options on self
+	$.extend(this, EJS.options,options)
 
-		if(this.text == null){
-            throw( {type: 'jQuery.View.EJS', message: 'There is no template at '+url}  );
-		}
-		//this.name = url;
-	}
 	var template = new EJS.Compiler(this.text, this.type);
 
 	template.compile(options, this.name);
@@ -176,51 +143,11 @@ EJS.prototype = {
 		var v = new EJS.Helpers(object, extra_helpers || {});
 		return this.template.process.call(object, object,v);
 	},
-    update : function(element, options){
-        if(typeof element == 'string'){
-			element = document.getElementById(element)
-		}
-		if(options == null){
-			_template = this;
-			return function(object){
-				EJS.prototype.update.call(_template, element, object)
-			}
-		}
-		if(typeof options == 'string'){
-			params = {}
-			params.url = options
-			_template = this;
-			params.onComplete = function(request){
-				var object = eval( request.responseText )
-				EJS.prototype.update.call(_template, element, object)
-			}
-			EJS.ajax_request(params)
-		}else
-		{
-			element.innerHTML = this.render(options)
-		}
-    },
 	out : function(){
 		return this.template.out;
-	},
-    /**
-     * Sets options on this view to be rendered with.
-     * @param {Object} options
-     */
-	set_options : function(options){
-        this.type = options.type || EJS.type;
-		this.cache = options.cache != null ? options.cache : EJS.cache;
-		this.text = options.text || null;
-		this.name =  options.name || null;
-		this.ext = options.ext || EJS.ext;
-		this.extMatch = new RegExp(this.ext.replace(/\./, '\.'));
 	}
 };
-EJS.endExt = function(path, match){
-	if(!path) return null;
-	match.lastIndex = 0
-	return path+ (match.test(path) ? '' : this.ext )
-}
+
 
 
 
@@ -236,7 +163,14 @@ EJS.Scanner = function(source, left, right) {
          left_equal: 		left+'%=',
          left_comment: 	left+'%#'})
 
-	this.SplitRegexp = left=='[' ? /(\[%%)|(%%\])|(\[%=)|(\[%#)|(\[%)|(%\]\n)|(%\])|(\n)/ : new RegExp('('+this.double_left+')|(%%'+this.double_right+')|('+this.left_equal+')|('+this.left_comment+')|('+this.left_delimiter+')|('+this.right_delimiter+'\n)|('+this.right_delimiter+')|(\n)') ;
+	this.SplitRegexp = (left=='[' ? /(\[%%)|(%%\])|(\[%=)|(\[%#)|(\[%)|(%\]\n)|(%\])|(\n)/ : 
+			new RegExp('('+this.double_left+
+			')|(%%'+this.double_right+
+			')|('+this.left_equal+
+			')|('+this.left_comment+
+			')|('+this.left_delimiter+
+			')|('+this.right_delimiter+
+			'\n)|('+this.right_delimiter+')|(\n)') );
 	
 	this.source = source;
 	this.stag = null;
@@ -377,17 +311,17 @@ EJS.Compiler.prototype = {
   compile: function(options, name) {
   	options = options || {};
 	this.out = '';
-	var put_cmd = "___ViewO.push(";
-	var insert_cmd = put_cmd;
-	var buff = new EJS.Buffer(this.pre_cmd, this.post_cmd);		
-	var content = '';
-	var clean = function(content)
-	{
-	    content = content.replace(/\\/g, '\\\\');
-        content = content.replace(/\n/g, '\\n');
-        content = content.replace(/"/g,  '\\"');
-        return content;
-	};
+	var put_cmd = "___ViewO.push(",
+		insert_cmd = put_cmd,
+		buff = new EJS.Buffer(this.pre_cmd, this.post_cmd),
+		content = '',
+		clean = function(content)
+		{
+		    content = content.replace(/\\/g, '\\\\');
+	        content = content.replace(/\n/g, '\\n');
+	        content = content.replace(/"/g,  '\\"');
+	        return content;
+		};
 	this.scanner.scan(function(token, scanner) {
 		if (scanner.stag == null)
 		{
@@ -402,8 +336,7 @@ EJS.Compiler.prototype = {
 				case scanner.left_equal:
 				case scanner.left_comment:
 					scanner.stag = token;
-					if (content.length > 0)
-					{
+					if( content.length > 0 ) {
 						buff.push(put_cmd + '"' + clean(content) + '")');
 					}
 					content = '';
@@ -447,44 +380,24 @@ EJS.Compiler.prototype = {
 			}
 		}
 	});
-	if (content.length > 0)
+	if ( content.length > 0 )
 	{
-		// Chould be content.dump in Ruby
+		// Should be content.dump in Ruby
 		buff.push(put_cmd + '"' + clean(content) + '")');
 	}
 	buff.close();
 	this.out = buff.script + ";";
 	var to_be_evaled = '/*'+name+'*/this.process = function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {'+this.out+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}};";
-	
-	try{
-		eval(to_be_evaled);
-	}catch(e){
-		if(typeof JSLINT != 'undefined'){
-			JSLINT(this.out);
-			for(var i = 0; i < JSLINT.errors.length; i++){
-				var error = JSLINT.errors[i];
-				if(error.reason != "Unnecessary semicolon."){
-					error.line++;
-					var e = new Error();
-					e.lineNumber = error.line;
-					e.message = error.reason;
-					if(options.view)
-						e.fileName = options.view;
-					throw e;
-				}
-			}
-		}else{
-			throw e;
-		}
-	}
+
+	eval(to_be_evaled);
   }
 };
 
 
 //type, cache, folder
 /**
+ * @attribute options
  * Sets default options for all views
- * @param {Object} options Set view with the following options
  * <table class="options">
 				<tbody><tr><th>Option</th><th>Default</th><th>Description</th></tr>
 				<tr>
@@ -502,13 +415,12 @@ EJS.Compiler.prototype = {
 	</tbody></table>
  * 
  */
-EJS.config = function(options){
-	EJS.cache = options.cache != null ? options.cache : EJS.cache;
-	EJS.type = options.type != null ? options.type : EJS.type;
-	EJS.ext = options.ext != null ? options.ext : EJS.ext;
-	EJS.INVALID_PATH =  -1;
-};
-EJS.config( {cache: true, type: '<', ext: '.ejs' } );
+EJS.options = {
+	cache : true,
+	type: '<',
+	ext: '.ejs'
+}
+EJS.INVALID_PATH =  -1;
 
 
 
@@ -556,45 +468,7 @@ EJS.Helpers.prototype = {
 		}
 	}
 };
-    EJS.newRequest = function(){
-	   var factories = [function() { return new ActiveXObject("Msxml2.XMLHTTP"); },function() { return new XMLHttpRequest(); },function() { return new ActiveXObject("Microsoft.XMLHTTP"); }];
-	   for(var i = 0; i < factories.length; i++) {
-	        try {
-	            var request = factories[i]();
-	            if (request != null)  return request;
-	        }
-	        catch(e) { continue;}
-	   }
-	}
-	
-	EJS.request = function(path){
-	   var request = new EJS.newRequest()
-	   request.open("GET", path, false);
-	   
-	   try{request.send(null);}
-	   catch(e){return null;}
-	   
-	   if ( request.status == 404 || request.status == 2 ||(request.status == 0 && request.responseText == '') ) return null;
-	   
-	   return request.responseText
-	}
-	EJS.ajax_request = function(params){
-		params.method = ( params.method ? params.method : 'GET')
-		
-		var request = new EJS.newRequest();
-		request.onreadystatechange = function(){
-			if(request.readyState == 4){
-				if(request.status == 200){
-					params.onComplete(request)
-				}else
-				{
-					params.onComplete(request)
-				}
-			}
-		}
-		request.open(params.method, params.url)
-		request.send(null)
-	}
+    
 
 	$.View.register({
 		suffix : "ejs",

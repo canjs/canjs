@@ -464,7 +464,7 @@ jQuery.Class.extend("jQuery.Controller",
 		 * Options is automatically merged from this.Class.OPTIONS and the 2nd argument
 		 * passed to a controller.
 		 */
-		this.options = $.extend( $.extend(true,{}, this.Class.OPTIONS  ), options);
+		this.options = $.extend( $.extend(true,{}, this.Class.defaults  ), options);
 		
 		//go through the cached list of actions and use the processor to bind
 		for(funcName in this.Class.actions){

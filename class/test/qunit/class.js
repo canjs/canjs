@@ -68,43 +68,6 @@ test("new instance",function(){
 
 test("Ad-Hoc Polymorphism", function(){
 	
-	Animal.extend("Human",
-    {
-        defaults : {
-            COUNTRY : "US"    
-        }
-    },
-    {
-		talk: function(){
-			return "Hello"
-		}
-	})
 	
-	$.Class.extend("Trainer",{
-		init : function(){
-			this.trained = new this.Class.TRAINING()
-		},
-		giveTreat : function(){
-			return this.trained.talk();
-		}
-	})
-	
-	var DogTrainer = Trainer({TRAINING: Dog});
-	equals( new DogTrainer().giveTreat(), "Woof","Dog Trainer gets Woof");
-	DogTrainer.somethingStatic = 1;
-	var HumanTrainer = Trainer({TRAINING: Human});
-	HumanTrainer.somethingStatic = 2;
-	var dog_trainer =  new DogTrainer();
-	var human_trainer =  new HumanTrainer();
-
-	equals( dog_trainer.giveTreat(), "Woof","Dog Trainer gets Woof");
-	equals(human_trainer.giveTreat(),"Hello", "Human Trainer get Hello");
-	
-	equals( DogTrainer.somethingStatic, 1,"Dog Trainer gets Woof");
-	equals(HumanTrainer.somethingStatic,2, "Human Trainer get Hello");
-	
-	//test defaults
-    equals(Human.COUNTRY, "US", "Normal Default Set");
-    equals(Human({COUNTRY: "Mexico"}).COUNTRY, "Mexico", "Got Mexico");
 	
 })
