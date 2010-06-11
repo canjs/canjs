@@ -38,6 +38,8 @@ test("subscribe testing works", function(){
 	ta.trigger("click")
 	equals(clicks,1, "No longer listening")
 	
+	
+	
 	ta.my_test();
 	ta.trigger("click")
 	OpenAjax.hub.publish("a.b",{})

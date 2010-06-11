@@ -4,6 +4,3 @@ steal
  .plugins('funcunit/qunit','jquery/view/micro')  //load qunit
  .then("default_test")
  
-if(steal.browser.rhino){
-  steal.plugins('funcunit/qunit/env')
-}

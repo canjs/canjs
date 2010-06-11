@@ -43,10 +43,14 @@ jQuery.fn.compare = function(b){ //usually
 		return this[0].compareDocumentPosition(b);
 	}
 	if(this[0] == document && b != document) return 8;
-	var number = (this[0] !== b && this[0].contains(b) && 16) + (this[0] != b && b.contains(this[0]) && 8);
+	var number = (this[0] !== b && this[0].contains(b) && 16) + (this[0] != b && b.contains(this[0]) && 8),
+		docEl = document.documentElement;
 	if(this[0].sourceIndex){
 		number += (this[0].sourceIndex < b.sourceIndex && 4)
 		number += (this[0].sourceIndex > b.sourceIndex && 2)
+		number += (this[0].ownerDocument !== b.ownerDocument ||
+			(this[0] != docEl && this[0].sourceIndex <= 0 ) ||
+			(b != docEl && b.sourceIndex <= 0 )) && 1
 	}else{
 		var range = document.createRange(), 
 			sourceRange = document.createRange(),
@@ -54,8 +58,7 @@ jQuery.fn.compare = function(b){ //usually
 		range.selectNode(this[0]);
 		sourceRange.selectNode(b);
 		compare = range.compareBoundaryPoints(Range.START_TO_START, sourceRange);
-		number += (compare === -1 && 4)
-		number += (compare === 1 && 2)
+		
 	}
 
 	return number;

@@ -128,10 +128,13 @@ steal.plugins('jquery/event').then(function(){
 			}
 			else {
 				//var bySelector = event.find(this, types, selector);
-				event.add(this, startingEvent, onFirst, {
-					selector: selector,
-					delegate: this
-				});
+				if(!event.find(this, types, selector).length){
+					event.add(this, startingEvent, onFirst, {
+						selector: selector,
+						delegate: this
+					});
+				}
+				
 			}
 			
 		}
@@ -144,10 +147,12 @@ steal.plugins('jquery/event').then(function(){
 				}
 			}
 			else {
-				event.remove(this, startingEvent, onFirst, {
-					selector: selector,
-					delegate: this
-				});
+				if (!event.find(this, types, selector).length) {
+					event.remove(this, startingEvent, onFirst, {
+						selector: selector,
+						delegate: this
+					});
+				}
 			}
 		}
 		$.each(types, function(){

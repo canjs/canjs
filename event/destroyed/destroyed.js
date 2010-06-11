@@ -36,9 +36,8 @@ steal.plugins('jquery/event').then(function($){
 			handleObj.handler.call( this, event )
 			
 		},
-		setup : function(handleObj){
-			
-		}
+		setup : function(){},
+		teardown : function(){}
 	}
 	var oldClean = jQuery.cleanData
 	
