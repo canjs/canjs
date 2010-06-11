@@ -281,6 +281,16 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 		move : function(event){
 			if(this.callbacks[this.constructor.lowerName+"move"]) this.callbacks[this.constructor.lowerName+"move"].call(this.element, event, this  );
 		},
+		over : function(event, drop){
+			if(this.callbacks[this.constructor.lowerName+"over"]) {
+				this.callbacks[this.constructor.lowerName+"over"].call(this.element, event, this, drop  );
+			}
+		},
+		out : function(event, drop){
+			if(this.callbacks[this.constructor.lowerName+"out"]) {
+				this.callbacks[this.constructor.lowerName+"out"].call(this.element, event, this, drop  );
+			}
+		},
 		/**
 		 * Called on drag up
 		 * @hide

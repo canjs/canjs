@@ -156,29 +156,6 @@ var initializing = false,
 * <p>The prototype constructor is called whenever a new instance of the class is created.
 * </p>
 * 
-* 
-* <h3 id='ad-hoc'>Ad-Hoc Polymorphism</h3>
-* <p>Ad-Hoc Polymorphism allows you to create parameterized, temporary 
-*    classes.  This is a technique commonly used in Static languages where
-*    you might create map of Strings to Integers like:
-* @codestart text
-* Hash&lt;string, int> hash = new Hash&lt;string, int>()
-* @codeend
-* With Class, Ad-Hoc Polymorphism is used to configure Classs.
-* Here's a simplistic example:
-* @codestart
-* $.Class.extend("Request",
-* {
-*    init : function(url){
-*       $.getScript(this.Class.OPTIONS.domain+"/"+url)  
-*    }
-* });
-* var JMVCRequestor = Request({domain: "http://javascriptmvc.com"})
-* new JMVCRequestor("jmvc.js");
-* @codeend
-* Ad-Hoc techniques are used a lot with Controller to customize and
-* combine widgets.
-* 
 * @init Creating a new instance of an object that has extended jQuery.Class 
 *     calls the init prototype function and returns a new instance of the class.
 * 

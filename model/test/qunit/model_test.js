@@ -1,4 +1,4 @@
-module("Model test", { 
+module("jquery/model", { 
 	setup: function(){
         var ids = 0;
 	    $.Model.extend("Person",{
@@ -53,8 +53,9 @@ test("CRUD", function(){
 })
 test("hookup and model", function(){
 	var div = $("<div/>")
-	var p = new Person({foo: "bar2"});
+	var p = new Person({foo: "bar2", id: 5});
 	p.hookup( div[0] );
-	ok(div[0].className == "person")
-	equals(p, div.model() )
+	ok(div.hasClass("person"), "has person");
+	ok(div.hasClass("person_5"), "has person_5");
+	equals(p, div.model(),"gets model" )
 })

@@ -10,5 +10,10 @@ steal.plugins(
 'jquery/dom/form_params/test/qunit',
 'jquery/event/default/test/qunit',
 'jquery/event/destroyed/test/qunit',
-'jquery/event/hover/test/qunit'
-				)
+'jquery/event/hover/test/qunit',
+'jquery/event/drag/test/qunit',
+
+'jquery/model/test/qunit',
+
+'jquery/view/test/qunit'
+)

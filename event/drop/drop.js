@@ -150,6 +150,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		 * @param {Object} event
 		 */
 		deactivate: function(responder, mover, event) {
+			mover.out(event, responder)
 			responder.callHandlers(this.lowerName+'out',responder.element[0], event, mover)
 		}, 
 		/**
@@ -160,8 +161,9 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		 * @param {Object} event
 		 */
 		activate: function(responder, mover, event) { //this is where we should call over
+			mover.over(event, responder)
 			//this.last_active = responder;
-			responder.callHandlers(this.lowerName+'over',responder.element[0], event, mover)
+			responder.callHandlers(this.lowerName+'over',responder.element[0], event, mover);
 		},
 		move : function(responder, mover, event){
 			responder.callHandlers(this.lowerName+'move',responder.element[0], event, mover)
