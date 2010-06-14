@@ -66,8 +66,55 @@ test("new instance",function(){
     equals(6, d.hairs);
 })
 
-test("Ad-Hoc Polymorphism", function(){
+
+test("namespaces",function(){
+	var fb = $.Class.extend("Foo.Bar")
+	ok(Foo.Bar === fb, "returns class")
+	equals(fb.shortName, "Bar", "short name is right");
+	equals(fb.fullName, "Foo.Bar","fullName is right")
 	
+})
+
+test("setups", function(){
+	var order = 0,
+		staticSetup,
+		staticSetupArgs,
+		staticInit,
+		staticInitArgs,
+		protoSetup,
+		protoInitArgs,
+		protoInit,
+		staticProps = {
+			setup : function(){
+				staticSetup = ++order;
+				staticSetupArgs = arguments;
+				return ["something"]
+			},
+			init : function(){
+				staticInit = ++order;
+				staticInitArgs = arguments;
+			}
+		},
+		protoProps = {
+			setup : function(name){
+				protoSetup = ++order;
+				return ["Ford: "+name];
+			},
+			init : function(){
+				protoInit = ++order;
+				protoInitArgs = arguments;
+			}
+		}
+	$.Class.extend("Car",staticProps,protoProps);
 	
+	var geo = new Car("geo");
+	equals(staticSetup, 1);
+	equals(staticInit, 2);
+	equals(protoSetup, 3);
+	equals(protoInit, 4);
 	
+	same($.makeArray(staticInitArgs), ["something"] )
+	same($.makeArray(protoInitArgs),["Ford: geo"] )
+	
+	same($.makeArray(staticSetupArgs),[$.Class, "Car",staticProps, protoProps] ,"static construct")
 })

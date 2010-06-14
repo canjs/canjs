@@ -34,6 +34,7 @@ var initializing = false,
 	 */
 	setup = function(oldClass, options){
 		this.defaults = $.extend(true, {},oldClass.defaults, this.defaults);
+		return arguments;
 	},
 	toString = function(){
 		return this.className || Object.prototype.toString.call(this)
@@ -70,7 +71,9 @@ var initializing = false,
 * @plugin jquery/class
 * @tag core
 * @download dist/jquery/jquery.class.js
-* Class provides simulated inheritance in JavaScript. 
+* @test jquery/class/qunit.html
+* Class provides simulated inheritance in JavaScript. Use $.Class to bridge the gap between
+* jQuery's functional programming style and Object Oriented Programming.
 * It is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Class] 
 * Inheritance library.  Besides prototypal inheritance, it adds a few important features:
 * <ul>
@@ -138,32 +141,61 @@ var initializing = false,
 * MyOrg.MyClass.shortName //-> 'MyClass'
 * MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
 * @codeend
+* The fullName (with namespaces) and the shortName (without namespaces) are added to the Class's
+* static properties.
 * <h3>Construtors</h3>
-* Class uses static and class initialization constructor functions.  
+* <p>Class provides static and prototype initialization functions.  These
+* come in two flavors - setup and init.</p>
 * @codestart
 * $.Class.extend("MyClass",
 * {
+*   setup: function(){} //static setup
 *   init: function(){} //static constructor
 * },
 * {
+*   setup: function(){} //prototype setup
 *   init: function(){} //prototype constructor
 * })
 * @codeend
-* <p>The static constructor is called after
-* a class has been created.  
-* This is a good place to add introspection and similar class setup code.</p>
+* <h4>Setup</h4>
+* <p>Setup functions are called before init functions.  Static setup functions are passed
+* the base class followed by arguments passed to the extend function.
+* Prototype static functions are passed the Class constructor function arguments.</p>
+* <p>If a setup function return an array, that array will be used as the arguments
+* for the following init method.  This provides setup functions the ability to normalize 
+* arguments passed to the init constructors.  They are also excellent places
+* to put setup code you want to almost always run.</p>
+* <p>
+* The following is similar to how [jQuery.Controller.prototype.setup]
+* makes sure init is always called with a jQuery element and merged options
+* even if it is passed an
+* element and no second parameter.
+* </p>
+* @codestart
+* $.Class.extend("jQuery.Controller",{
+*   ...
+* },{
+*   setup : function(el, options){
+*     ...
+*     return [$(el), 
+*             $.extend(true, 
+*                this.Class.defaults,
+*                options || {} ) ]
+*   }
+* })
+* @codeend
+* Typically, you won't need to make or overwrite setup functions.
+* <h4>Init</h4>
+* 
+* <p>Init functions are called after setup functions.
+* Typically, they receive the same arguments as their preceeding setup function. 
+* </p>
+
 * 
 * <p>The prototype constructor is called whenever a new instance of the class is created.
 * </p>
-* <h2>Use</h2>
-* <p>[jQuery.Controller] and [jQuery.Model] use $.Class to bridge the gap between
-* jQuery's functional programming style and Object Oriented Programming. </p>
-* <p>JavaScript's prototypal inheritence is extremely powerful, but limited
-* in a few critical ways.  Class patches these problems but conforms to
-* how constructor functions work in every way possible.
-* </p>
-* <p></p>
-* 
+* <h2>Demo</h2>
+* @demo jquery/class/class.html
 * 
 * @init Creating a new instance of an object that has extended jQuery.Class 
 *     calls the init prototype function and returns a new instance of the class.
@@ -331,11 +363,17 @@ $.extend($.Class,{
 		  if(initializing) return;
 		  
 		  if(this.constructor !== Class && arguments.length){  //we are being called w/o new
-			  return makeClass.apply(null, arguments)
+			  return this.extend.apply(this, arguments)
 		  } else {												//we are being called w/ new
 			 //this.id = (++id);
-			 if(this.setup) this.setup.apply(this, arguments);
-			 if(this.init)  this.init.apply(this, arguments);
+			 var args;
+			 if(this.setup) {
+			 	args = this.setup.apply(this, arguments);
+			 }
+			 if(this.init){
+			 	  this.init.apply(this, $.isArray(args) ? args : arguments);
+			 }
+			 
 		  }
 		}
 		for(var name in this){
@@ -410,12 +448,12 @@ $.extend($.Class,{
 		Class.fullName = fullName;
 		
 		
-		Class.setup.apply(Class, [_super_class].concat( $.makeArray(arguments) ));
+		var args = Class.setup.apply(Class, [_super_class].concat( $.makeArray(arguments) ));
 	
-		if(Class.init) Class.init(Class);
-		
-		
-		
+		if(Class.init) {
+			Class.init.apply(Class, args || []);
+		}
+
 		/* @Prototype*/
 		
 		
@@ -425,7 +463,32 @@ $.extend($.Class,{
 		
 		
 		return Class;
-		/* @function init
+		/** 
+		 * @function setup
+		 * Called with the same arguments as new Class(arguments ...) when a new instance is created.
+		 * @codestart
+		 * $.Class.extend("MyClass",
+		 * {
+		 *    setup: function(val){
+		 *       this.val = val;
+		 *    }
+		 * })
+		 * var mc = new MyClass("Check Check")
+		 * mc.val //-> 'Check Check'
+		 * @codeend
+		 * 
+		 * <div class='whisper'>PRO TIP: 
+		 * Setup functions are used to normalize constructor arguments and provide a place for
+		 * setup code that extending classes don't have to remember to call _super to
+		 * run.
+		 * </div>
+		 * 
+		 * @return {Array|undefined} If an array is return, [jQuery.Class.prototype.init] is 
+		 * called with those arguments; otherwise, the original arguments are used.
+		 */
+		//break up
+		/** 
+		 * @function init
 		 * Called with the same arguments as new Class(arguments ...) when a new instance is created.
 		 * @codestart
 		 * $.Class.extend("MyClass",
@@ -441,13 +504,23 @@ $.extend($.Class,{
 		//Breaks up code
 		/**
 		 * @attribute Class
-		 * Access to the static properties of the instance's class.
+		 * References the static properties of the instance's class.
+		 * <h3>Quick Example</h3>
 		 * @codestart
+		 * // a class with a static classProperty property
 		 * $.Class.extend("MyClass", {classProperty : true}, {});
-		 * var mc2 = new MyClass();
-		 * mc.Class.classProperty = true;
-		 * var mc2 = new mc.Class(); //creates a new MyClass
+		 * 
+		 * // a new instance of myClass
+		 * var mc1 = new MyClass();
+		 * 
+		 * //
+		 * mc1.Class.classProperty = false;
+		 * 
+		 * // creates a new MyClass
+		 * var mc2 = new mc.Class();
 		 * @codeend
+		 * Getting static properties via the Class property, such as it's 
+		 * [jQuery.Class.static.fullName fullName] is very common.
 		 */
 	}
 

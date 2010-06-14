@@ -470,32 +470,33 @@ EJS.Helpers.prototype = {
 };
     
 
-	$.View.register({
-		suffix : "ejs",
-		//returns a function that renders the view
-		get : function(id, url){
-			var text = $.ajax({
-					async: false,
-					url: url,
-					dataType: "text",
-					error : function(){
-						throw "ejs.js ERROR: There is no template or an empty template at "+url;
-					}
-				}).responseText
-			if(!text.match(/[^\s]/)){
-				throw "ejs.js ERROR: There is no template or an empty template at "+url;
-			}
-			return this.renderer(id, text);
-		},
-		script : function(id, src){
-			 return "jQuery.View.EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";     
-		},
-		renderer : function(id, text){
-			var ejs = new EJS({text: text, name: id})
-			return function(data, helpers){
-				return ejs.render.call(ejs, data, helpers)
-			}
+$.View.register({
+	suffix : "ejs",
+	//returns a function that renders the view
+	get : function(id, url){
+		var text = $.ajax({
+				async: false,
+				url: url,
+				dataType: "text",
+				error : function(){
+					throw "ejs.js ERROR: There is no template or an empty template at "+url;
+				}
+			}).responseText
+		if(!text.match(/[^\s]/)){
+			throw "ejs.js ERROR: There is no template or an empty template at "+url;
 		}
-	})
+		return this.renderer(id, text);
+	},
+	script : function(id, src){
+		 return "jQuery.View.EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";     
+	},
+	renderer : function(id, text){
+		var ejs = new EJS({text: text, name: id})
+		return function(data, helpers){
+			return ejs.render.call(ejs, data, helpers)
+		}
+	}
+})
+	
 });
 
