@@ -116,5 +116,11 @@ test("setups", function(){
 	same($.makeArray(staticInitArgs), ["something"] )
 	same($.makeArray(protoInitArgs),["Ford: geo"] )
 	
-	same($.makeArray(staticSetupArgs),[$.Class, "Car",staticProps, protoProps] ,"static construct")
+	same($.makeArray(staticSetupArgs),[$.Class, "Car",staticProps, protoProps] ,"static construct");
+	
+	
+	//now see if staticSetup gets called again ...
+	Car.extend("Truck");
+	equals(staticSetup, 5, "Static setup is called if overwriting");
+	
 })

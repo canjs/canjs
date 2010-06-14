@@ -11,31 +11,9 @@ var initializing = false,
 	fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/,
   	
 
-	newInstance = function(){
-		initializing = true;
-		var inst = new this();
-		initializing = false;
-		if ( inst.setup )
-			inst.setup.apply(inst, arguments);
-		if ( inst.init )
-			inst.init.apply(inst, arguments);
-		return inst;
-	},
-	rawInstance = function(){
-		initializing = true;
-		var inst = new this();
-		initializing = false;
-		return inst;
-	},
-	/**
-	 * Copy and overwrite options from old class
-	 * @param {Object} oldClass
-	 * @param {Object} options
-	 */
-	setup = function(oldClass, options){
-		this.defaults = $.extend(true, {},oldClass.defaults, this.defaults);
-		return arguments;
-	},
+	
+	
+	
 	toString = function(){
 		return this.className || Object.prototype.toString.call(this)
 	},
@@ -78,13 +56,15 @@ var initializing = false,
 * Inheritance library.  Besides prototypal inheritance, it adds a few important features:
 * <ul>
 *     <li>Static inheritance</li>
+*     <li>Namespaces</li>
 *     <li>Introspection</li>
 *     <li>Easy callback function creation</li>
-*     <li>Namespaces</li>
 * </ul>
-* <h2>Definitions</h2>
-* Classes have <b>static</b> and <b>prototype</b> properties and
-* methods:
+* <h2>Static v. Prototype</h2>
+* <p>Before learning about Class, it's important to
+* understand the difference between 
+* a class's <b>static</b> and <b>prototype</b> properties.
+* </p>
 * @codestart
 * //STATIC
 * MyClass.staticProperty  //shared property
@@ -93,34 +73,63 @@ var initializing = false,
 * myclass = new MyClass()
 * myclass.prototypeMethod() //instance method
 * @codeend
+* <p>A static (or class) property is on the Class constructor
+* function itself
+* and can be thought of being shared by all instances of the Class.
+* Prototype propertes are available only on instances of the Class. 
+* </p>
+* <h2>A Basic Class</h2>
+* <p>The following creates a Monster class with a 
+* name (for introspection), static, and prototype members.
+* Every time a monster instance is created, the static 
+* count is incremented.
 * 
-* <h2>Examples</h2>
-* <h3>Basic example</h3>
-* Creates a class with a shortName (for introspection), static, and prototype members:
+* </p>
 * @codestart
-* jQuery.Class.extend('Monster',
+* $.Class.extend('Monster',
 * /* @static *|
 * {
 *   count: 0
 * },
 * /* @prototype *|
 * {
-*   init : function(name){
+*   init: function(name){
+*     
+*     // saves name on the monster instance
 *     this.name = name;
-*     this.Class.count++
+*     
+*     // increments count
+*     this.Class.count++;
+*   },
+*   eat : function( smallChildren ){
+*     this.health += smallChildren
 *   }
-* })
-* hydra = new Monster('hydra')
-* dragon = new Monster('dragon')
+* });
+* 
+* hydra = new Monster('hydra');
+* 
+* dragon = new Monster('dragon');
+* 
 * hydra.name        // -> hydra
 * Monster.count     // -> 2
 * Monster.shortName // -> 'Monster'
 * @codeend
-* Notice that the prototype init function is called when a new instance of Monster is created.
+* 
+* <p>
+* Notice that the prototype <b>init</b> function is called when a new instance of Monster is created.
+* </p>
+* <h2>Inheritance</h2>
+* <p>When a class is extended, all static and prototype properties are available on the new class.
+* If you overwrite a function, you can call the base class's function by calling 
+* <code>this._super</code>.  Lets
+* </p>
+* @codestart
+* Monster.extend("");
+* @codeend
 * <h3>Static property inheritance</h3>
 * Demonstrates inheriting a class property.
 * @codestart
-* jQuery.Class.extend("First",
+* $.Class.extend("First",
 * {
 *     staticMethod : function(){ return 1;}
 * },{})
@@ -145,7 +154,10 @@ var initializing = false,
 * static properties.
 * <h3>Construtors</h3>
 * <p>Class provides static and prototype initialization functions.  These
-* come in two flavors - setup and init.</p>
+* come in two flavors - setup and init.  Setup is called before init and
+* can be used to 'normalize' init's arguments.  Typically, your
+* classes will have init functions.
+* </p>
 * @codestart
 * $.Class.extend("MyClass",
 * {
@@ -318,6 +330,43 @@ $.extend($.Class,{
 		return current;
 	},
 	/**
+	 * @function newInstance
+	 * Creates a new instance of the class.  This method is useful for creating new instances
+	 * with arbitrary parameters.
+	 * <h3>Example</h3>
+	 * @codestart
+	 * $.Class.extend("MyClass",{},{})
+	 * var mc = MyClass.newInstance.apply(null, new Array(parseInt(Math.random()*10,10))
+	 * @codeend
+	 */
+	newInstance: function(){
+		initializing = true;
+		var inst = new this();
+		initializing = false;
+		if ( inst.setup )
+			inst.setup.apply(inst, arguments);
+		if ( inst.init )
+			inst.init.apply(inst, arguments);
+		return inst;
+	},
+	/**
+	 * Copy and overwrite options from old class
+	 * @param {Object} oldClass
+	 * @param {String} fullName
+	 * @param {Object} staticProps
+	 * @param {Object} protoProps
+	 */
+	setup: function(oldClass, fullName){
+		this.defaults = $.extend(true, {},oldClass.defaults, this.defaults);
+		return arguments;
+	},
+	rawInstance: function(){
+		initializing = true;
+		var inst = new this();
+		initializing = false;
+		return inst;
+	},
+	/**
 	 * Extends a class with new static and prototype functions.  There are a variety of ways
 	 * to use extend:
 	 * @codestart
@@ -384,22 +433,7 @@ $.extend($.Class,{
 				Class[name] = this[name];
 			}
 		}
-		$.extend(Class,{
-			/**
-			 * @function newInstance
-			 * Creates a new instance of the class.  This method is useful for creating new instances
-			 * with arbitrary parameters.
-			 * <h3>Example</h3>
-			 * @codestart
-			 * $.Class.extend("MyClass",{},{})
-			 * var mc = MyClass.newInstance.apply(null, new Array(parseInt(Math.random()*10,10))
-			 * @codeend
-			 */
-			newInstance : newInstance,
-			rawInstance : rawInstance,
-			extend : arguments.callee,
-			setup : setup
-		});
+
 
 		
 		
