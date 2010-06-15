@@ -250,7 +250,27 @@ var initializing = false,
 * foo.sum //-> 6
 * @codeend
 * <h2>Callbacks</h2>
-* <p>Similar to jQuery's proxy method, Classes</p>
+* <p>Similar to jQuery's proxy method, Class provides a 
+* [jQuery.Class.static.callback callback]
+* function that returns a callback to a method that will always
+* have
+* <code>this</code> set to the class or instance of the class.
+* </p>
+* The following example uses this.callback to make sure 
+* <code>this.name</code> is available in <code>show</code>.
+* @codestart
+$.Class.extend("Todo",{
+  init : function(name){ this.name = name }
+  get : function(){
+    $.get("/stuff",this.callback('show'))
+  },
+  show : function(txt){
+    alert(this.name+txt)
+  }
+})
+new Todo("Trash").get()
+* @codeend
+* <p>Callback is available as a static and prototype method.</p>
 * <h2>Demo</h2>
 * @demo jquery/class/class.html
 * 
@@ -339,10 +359,11 @@ $.extend($.Class,{
 				func;
 			
 			for(; f < length; f++ ) {
-				if( !funcs[f] ) {
+				func = funcs[f];
+				if( !func ) {
 					continue;
 				}
-				func = funcs[f];
+				
 				isString = typeof func == "string";
 				if( isString && self._set_called ) {
 					self.called = func;
@@ -386,6 +407,7 @@ $.extend($.Class,{
 	 * $.Class.extend("MyClass",{},{})
 	 * var mc = MyClass.newInstance.apply(null, new Array(parseInt(Math.random()*10,10))
 	 * @codeend
+	 * @return {class} instance of the class
 	 */
 	newInstance: function(){
 		var inst = this.rawInstance(),
