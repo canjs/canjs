@@ -36,7 +36,7 @@ var initializing = false,
 			newProps[name];
 		}
 	};
-// The base Class implementation (does nothing)
+
 
 /**
 * @constructor jQuery.Class
@@ -327,7 +327,8 @@ $.extend($.Class,{
 			var cur = args.concat(jQuery.makeArray(arguments)), 
 				isString, 
 				length = funcs.length,
-				f =0, func;
+				f =0, 
+				func;
 			
 			for(; f < length; f++ ) {
 				if( !funcs[f] ) {
@@ -361,7 +362,7 @@ $.extend($.Class,{
 	*/
 	getObject: function(objectName, current){
 		var current = current || window,
-			parts = objectName.split(/\./)
+			parts = objectName  ? objectName.split(/\./) :[];
 		for(var i =0; i < parts.length; i++){
 			current = current[parts[i]] || ( current[parts[i]] = {} )
 		}
@@ -378,13 +379,14 @@ $.extend($.Class,{
 	 * @codeend
 	 */
 	newInstance: function(){
-		initializing = true;
-		var inst = new this();
-		initializing = false;
-		if ( inst.setup )
-			inst.setup.apply(inst, arguments);
-		if ( inst.init )
-			inst.init.apply(inst, arguments);
+		var inst = this.rawInstance(),
+			args;
+		if ( inst.setup ) {
+			args = inst.setup.apply(inst, arguments);
+		}
+		if ( inst.init ) {
+			inst.init.apply(inst, $.isArray(args) ? args : arguments);
+		}
 		return inst;
 	},
 	/**
@@ -421,92 +423,83 @@ $.extend($.Class,{
 	 * @return {jQuery.Class} returns the new class
 	 */
 	extend: function(fullName, klass, proto) {
-		
+		// figure out what was passed
 		if(typeof fullName != 'string'){
 			proto = klass;
 			klass = fullName;
 			fullName = null;
 		}
-		
 		if(!proto){
 			proto = klass;
 			klass = null;
 		}
 		
 		proto = proto || {};
-		var _super_class = this;
-		var _super = this.prototype;
+		var _super_class = this,
+			_super = this.prototype,
+			name,
+			shortName, 
+			namespace,
+			prototype;
+			
 		// Instantiate a base class (but only create the instance,
 		// don't run the init constructor)
 		initializing = true;
-		var prototype = new this();
+		prototype = new this();
 		initializing = false;
 		// Copy the properties over onto the new prototype
 		inheritProps(proto, _super, prototype);
 		
 		// The dummy class constructor
 		function Class() {
-		  // All construction is actually done in the init method
-		  if(initializing) return;
-		  
-		  if(this.constructor !== Class && arguments.length){  //we are being called w/o new
-			  return this.extend.apply(this, arguments)
-		  } else {												//we are being called w/ new
-			 var args;
-			 if(this.setup) {
-			 	args = this.setup.apply(this, arguments);
-			 }
-			 if(this.init){
-			 	  this.init.apply(this, $.isArray(args) ? args : arguments);
-			 }
-			 
-		  }
+			// All construction is actually done in the init method
+			if(initializing) return;
+			
+			if(this.constructor !== Class && arguments.length){  //we are being called w/o new
+				return this.extend.apply(this, arguments)
+			} else {												//we are being called w/ new
+				return this.Class.newInstance.apply(this.Class,arguments)
+			}
 		}
-		for(var name in this){
+		// Copy old stuff onto class
+		for(name in this){
 			if(this.hasOwnProperty(name) && 
-				name != 'prototype'&& 
-				name != 'defaults' &&
-				name != 'getObject'){
+				$.inArray(name,['prototype','defaults','getObject']) == -1){
 				Class[name] = this[name];
 			}
 		}
-
-
 		
+		// do static inheritence
+		inheritProps(klass, this, Class);
 		
-		//copy properties from current class to static
-		
-		
-		//do static inheritence
-		inheritProps(klass, this, Class)
-		
-
-		var shortName, 
-			namespace;
-		
+		// do namespace stuff
 		if (fullName) {
-			var current = window
-			var parts = fullName.split(/\./)
-			for(var i =0; i < parts.length-1; i++){
-				current = current[parts[i]] || ( current[parts[i]] = {} )
-			}
-			namespace = current;
-			shortName = parts[parts.length - 1];
 			
+			var parts = fullName.split(/\./),
+				shortName =  parts.pop();
+				current = $.Class.getObject(parts.join('.')),
+				namespace = current;
+
 			//@steal-remove-start
 			steal.dev.isHappyName(fullName)
 			//@steal-remove-end
+			
+			current[shortName] = Class;
 		}
 		
-		Class.prototype = prototype;
-		//Provide a reference to this class
-		Class.prototype.Class = Class; //only changing buff prototype
-		Class.prototype.constructor = Class; //only buff prototype
-		// Enforce the constructor to be what we expect
-		Class.constructor = Class;
+		//set things that can't be overwritten
+		$.extend(Class,{
+			prototype: prototype,
+			namespace: namespace,
+			shortName: shortName,
+			constructor: Class,
+			fullName: fullName
+		});
 		
-		Class.namespace = namespace;
-		Class.shortName = shortName
+		//make sure our prototype looks nice
+		Class.prototype.Class = Class.prototype.constructor =Class;
+
+
 		/**
 		 * @attribute fullName 
 		 * The full name of the class, including namespace, provided for introspection purposes.
@@ -516,9 +509,7 @@ $.extend($.Class,{
 		 * MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
 		 * @codeend
 		 */
-		Class.fullName = fullName;
-		
-		
+
 		var args = Class.setup.apply(Class, [_super_class].concat( $.makeArray(arguments) ));
 	
 		if(Class.init) {
@@ -526,12 +517,6 @@ $.extend($.Class,{
 		}
 
 		/* @Prototype*/
-		
-		
-		if(shortName){
-			current[shortName] = Class;
-		}
-		
 		
 		return Class;
 		/** 
