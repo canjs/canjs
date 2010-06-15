@@ -159,7 +159,8 @@ steal.plugins('jquery/event').then(function(){
 			event.special[this] = {
 				add:  add,
 				remove: remove,
-				setup : function(){}
+				setup : function(){},
+				teardown : function(){}
 			};
 		});
 	}

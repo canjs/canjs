@@ -4,11 +4,11 @@ test("view testing works", function(){
 	
 	$.each(["micro","ejs","jaml"], function(){
 		$("#qunit-test-area").html("");
-		ok($("#qunit-test-area").children().length == 0, "Empty To Start")
+		ok($("#qunit-test-area").children().length == 0,this+ ": Empty To Start")
 		
 		$("#qunit-test-area").html("//jquery/view/test/qunit/template."+this,{"message" :"helloworld"})
-		ok($("#qunit-test-area").find('h3').length, "h3 written for "+this)
-		ok( /helloworld\s*/.test( $("#qunit-test-area").text()),  "hello world present for "+this)
+		ok($("#qunit-test-area").find('h3').length, this+": h3 written for ")
+		ok( /helloworld\s*/.test( $("#qunit-test-area").text()), this+": hello world present for ")
 	})
 })
 test("plugin in ejs", function(){

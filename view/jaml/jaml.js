@@ -60,7 +60,8 @@ $.View.register({
 		return "((function(){ Jaml.register("+id+", "+str+"); return function(data){return Jaml.render("+id+", data)} })())"
 	},
 	renderer : function(id, text){
-		var func = eval("("+text+")");
+		var func;
+		eval("func = ("+text+")");
 		Jaml.register(id, func);
 		return function(data){
 			return Jaml.render(id, data)
