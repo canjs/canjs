@@ -360,8 +360,9 @@ $.extend($.Class,{
 	*/
 	getObject: function(objectName, current){
 		var current = current || window,
-			parts = objectName  ? objectName.split(/\./) :[];
-		for(var i =0; i < parts.length; i++){
+			parts = objectName  ? objectName.split(/\./) :[],
+			i=0;
+		for(; i < parts.length; i++){
 			current = current[parts[i]] || ( current[parts[i]] = {} )
 		}
 		return current;
@@ -395,7 +396,7 @@ $.extend($.Class,{
 	 * @param {Object} protoProps
 	 */
 	setup: function(oldClass, fullName){
-		this.defaults = $.extend(true, {},oldClass.defaults, this.defaults);
+		this.defaults = $.extend(true, {}, oldClass.defaults, this.defaults);
 		return arguments;
 	},
 	rawInstance: function(){
@@ -432,8 +433,6 @@ $.extend($.Class,{
 			klass = null;
 		}
 		
-
-
 		proto = proto || {};
 		var _super_class = this,
 			_super = this.prototype,
@@ -584,7 +583,7 @@ $.extend($.Class,{
 
 
 
-jQuery.Class.prototype = {
+jQuery.Class.prototype. 
   /**
    * @function callback
    * Returns a callback function.  This does the same thing as and is described better in [jQuery.Class.static.callback].
@@ -595,8 +594,8 @@ jQuery.Class.prototype = {
    * next function.
    * @return {Function} the callback function
    */
-  callback : jQuery.Class.callback
-}
+  callback = jQuery.Class.callback;
+
   
 
 })(jQuery);

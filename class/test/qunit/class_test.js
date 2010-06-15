@@ -123,4 +123,24 @@ test("setups", function(){
 	Car.extend("Truck");
 	equals(staticSetup, 5, "Static setup is called if overwriting");
 	
+});
+
+test("callback", function(){
+	var curVal = 0;
+	$.Class.extend("Car",{
+		show : function(value){
+			equals(curVal, value)
+		}
+	},{
+		show : function(value){
+			
+		}
+	})
+	var cb = Car.callback('show');
+	curVal = 1;
+	cb(1)
+	
+	curVal = 2;
+	var cb2 = Car.callback('show',2)
+	cb2();
 })

@@ -2,4 +2,4 @@
 steal
  .plugins("jquery/class")  //load your app
  .plugins('funcunit/qunit')  //load qunit
- .then("class")
+ .then("class_test")

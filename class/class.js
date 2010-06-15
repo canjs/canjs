@@ -1,7 +1,7 @@
 //jQuery.Class 
 // This is a modified version of John Resig's class
 // http://ejohn.org/blog/simple-javascript-inheritance/
-// It provides class level inheritence and callbacks.
+// It provides class level inheritance and callbacks.
 
 steal.plugin("jquery").then(function($){
 
@@ -237,13 +237,20 @@ var initializing = false,
 * 
 * <p>Init functions are called after setup functions.
 * Typically, they receive the same arguments 
-* as their preceding setup function.  The following
-* 
+* as their preceding setup function.  The Foo class's <code>init</code> method
+* gets called in the following example:
 * </p>
-*
-* 
-* <p>The prototype constructor is called whenever a new instance of the class is created.
-* </p>
+* @codestart
+* $.Class.Extend("Foo", {
+*   init : function( arg1, arg2, arg3){
+*     this.sum = arg1+arg2+arg3;
+*   }
+* })
+* var foo = new Foo(1,2,3);
+* foo.sum //-> 6
+* @codeend
+* <h2>Callbacks</h2>
+* <p>Similar to jQuery's proxy method, Classes</p>
 * <h2>Demo</h2>
 * @demo jquery/class/class.html
 * 
@@ -323,7 +330,8 @@ $.extend($.Class,{
 		}
 	
 		self = this;
-		return function(){
+		
+		return function class_cb(){
 			var cur = args.concat(jQuery.makeArray(arguments)), 
 				isString, 
 				length = funcs.length,
@@ -362,8 +370,9 @@ $.extend($.Class,{
 	*/
 	getObject: function(objectName, current){
 		var current = current || window,
-			parts = objectName  ? objectName.split(/\./) :[];
-		for(var i =0; i < parts.length; i++){
+			parts = objectName  ? objectName.split(/\./) :[],
+			i=0;
+		for(; i < parts.length; i++){
 			current = current[parts[i]] || ( current[parts[i]] = {} )
 		}
 		return current;
@@ -397,7 +406,7 @@ $.extend($.Class,{
 	 * @param {Object} protoProps
 	 */
 	setup: function(oldClass, fullName){
-		this.defaults = $.extend(true, {},oldClass.defaults, this.defaults);
+		this.defaults = $.extend(true, {}, oldClass.defaults, this.defaults);
 		return arguments;
 	},
 	rawInstance: function(){
@@ -469,7 +478,7 @@ $.extend($.Class,{
 			}
 		}
 		
-		// do static inheritence
+		// do static inheritance
 		inheritProps(klass, this, Class);
 		
 		// do namespace stuff
@@ -487,7 +496,7 @@ $.extend($.Class,{
 			current[shortName] = Class;
 		}
 		
-		//set things that can't be overwritten
+		// set things that can't be overwritten
 		$.extend(Class,{
 			prototype: prototype,
 			namespace: namespace,
@@ -586,7 +595,7 @@ $.extend($.Class,{
 
 
 
-jQuery.Class.prototype = {
+jQuery.Class.prototype. 
   /**
    * @function callback
    * Returns a callback function.  This does the same thing as and is described better in [jQuery.Class.static.callback].
@@ -597,7 +606,7 @@ jQuery.Class.prototype = {
    * next function.
    * @return {Function} the callback function
    */
-  callback : jQuery.Class.callback
-}
+  callback = jQuery.Class.callback;
+
   
 })();
