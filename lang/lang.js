@@ -44,11 +44,11 @@ $.String =
      * @return {String} a the camelized string
      */
 	camelize: function(s){
-		var parts = s.split(this.regexps.undHash),
+		var parts = s.split(this.regs.undHash),
 			i = 1;
 		parts[0] = parts[0].charAt(0).toLowerCase()+parts[0].substr(1);
 		for(; i < parts.length; i++)
-			parts[i] = jQuery.String.capitalize(parts[i]);
+			parts[i] = this.capitalize(parts[i]);
 		return parts.join('');
 	},
     /**
@@ -57,10 +57,10 @@ $.String =
      * @return {String}
      */
 	classize: function(s){
-		var parts = s.split(this.regexps.undHash),
+		var parts = s.split(this.regs.undHash),
 			i=0;
 		for(; i < parts.length; i++)
-			parts[i] = jQuery.String.capitalize(parts[i]);
+			parts[i] = this.capitalize(parts[i]);
 		return parts.join('');
 	},
     /**
@@ -72,14 +72,14 @@ $.String =
      * @return {String}
      */
 	niceName: function(s){
-		var parts = s.split(this.regexps.undHash),
+		var parts = s.split(this.regs.undHash),
 			i = 0;
 		for(; i < parts.length; i++)
-			parts[i] = jQuery.String.capitalize(parts[i]);
+			parts[i] = this.capitalize(parts[i]);
 		return parts.join(' ');
 	},
 
-    regexps : {
+    regs : {
         undHash: /_|-/,
 		colons : /::/,
         words: /([A-Z]+)([A-Z][a-z])/g,
@@ -87,7 +87,7 @@ $.String =
         dash : /([a-z\d])([A-Z])/g
     },
     underscore : function(s){
-        var regs = this.regexps;
+        var regs = this.regs;
         return s.replace(regs.colons, '/').
                  replace(regs.words,'$1_$2').
                  replace(regs.lowerUpper,'$1_$2').

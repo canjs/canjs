@@ -235,13 +235,40 @@ var initializing = false,
 * 
 * <p>Init functions are called after setup functions.
 * Typically, they receive the same arguments 
-* as their preceding setup function.  The following
-* 
+* as their preceding setup function.  The Foo class's <code>init</code> method
+* gets called in the following example:
 * </p>
-*
-* 
-* <p>The prototype constructor is called whenever a new instance of the class is created.
+* @codestart
+* $.Class.Extend("Foo", {
+*   init : function( arg1, arg2, arg3){
+*     this.sum = arg1+arg2+arg3;
+*   }
+* })
+* var foo = new Foo(1,2,3);
+* foo.sum //-> 6
+* @codeend
+* <h2>Callbacks</h2>
+* <p>Similar to jQuery's proxy method, Class provides a 
+* [jQuery.Class.static.callback callback]
+* function that returns a callback to a method that will always
+* have
+* <code>this</code> set to the class or instance of the class.
 * </p>
+* The following example uses this.callback to make sure 
+* <code>this.name</code> is available in <code>show</code>.
+* @codestart
+$.Class.extend("Todo",{
+  init : function(name){ this.name = name }
+  get : function(){
+    $.get("/stuff",this.callback('show'))
+  },
+  show : function(txt){
+    alert(this.name+txt)
+  }
+})
+new Todo("Trash").get()
+* @codeend
+* <p>Callback is available as a static and prototype method.</p>
 * <h2>Demo</h2>
 * @demo jquery/class/class.html
 * 
@@ -321,7 +348,8 @@ $.extend($.Class,{
 		}
 	
 		self = this;
-		return function(){
+		
+		return function class_cb(){
 			var cur = args.concat(jQuery.makeArray(arguments)), 
 				isString, 
 				length = funcs.length,
@@ -329,10 +357,11 @@ $.extend($.Class,{
 				func;
 			
 			for(; f < length; f++ ) {
-				if( !funcs[f] ) {
+				func = funcs[f];
+				if( !func ) {
 					continue;
 				}
-				func = funcs[f];
+				
 				isString = typeof func == "string";
 				if( isString && self._set_called ) {
 					self.called = func;
@@ -376,6 +405,7 @@ $.extend($.Class,{
 	 * $.Class.extend("MyClass",{},{})
 	 * var mc = MyClass.newInstance.apply(null, new Array(parseInt(Math.random()*10,10))
 	 * @codeend
+	 * @return {class} instance of the class
 	 */
 	newInstance: function(){
 		var inst = this.rawInstance(),
@@ -468,7 +498,7 @@ $.extend($.Class,{
 			}
 		}
 		
-		// do static inheritence
+		// do static inheritance
 		inheritProps(klass, this, Class);
 		
 		// do namespace stuff
@@ -484,7 +514,7 @@ $.extend($.Class,{
 			current[shortName] = Class;
 		}
 		
-		//set things that can't be overwritten
+		// set things that can't be overwritten
 		$.extend(Class,{
 			prototype: prototype,
 			namespace: namespace,

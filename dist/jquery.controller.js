@@ -235,13 +235,40 @@ var initializing = false,
 * 
 * <p>Init functions are called after setup functions.
 * Typically, they receive the same arguments 
-* as their preceding setup function.  The following
-* 
+* as their preceding setup function.  The Foo class's <code>init</code> method
+* gets called in the following example:
 * </p>
-*
-* 
-* <p>The prototype constructor is called whenever a new instance of the class is created.
+* @codestart
+* $.Class.Extend("Foo", {
+*   init : function( arg1, arg2, arg3){
+*     this.sum = arg1+arg2+arg3;
+*   }
+* })
+* var foo = new Foo(1,2,3);
+* foo.sum //-> 6
+* @codeend
+* <h2>Callbacks</h2>
+* <p>Similar to jQuery's proxy method, Class provides a 
+* [jQuery.Class.static.callback callback]
+* function that returns a callback to a method that will always
+* have
+* <code>this</code> set to the class or instance of the class.
 * </p>
+* The following example uses this.callback to make sure 
+* <code>this.name</code> is available in <code>show</code>.
+* @codestart
+$.Class.extend("Todo",{
+  init : function(name){ this.name = name }
+  get : function(){
+    $.get("/stuff",this.callback('show'))
+  },
+  show : function(txt){
+    alert(this.name+txt)
+  }
+})
+new Todo("Trash").get()
+* @codeend
+* <p>Callback is available as a static and prototype method.</p>
 * <h2>Demo</h2>
 * @demo jquery/class/class.html
 * 
@@ -321,7 +348,8 @@ $.extend($.Class,{
 		}
 	
 		self = this;
-		return function(){
+		
+		return function class_cb(){
 			var cur = args.concat(jQuery.makeArray(arguments)), 
 				isString, 
 				length = funcs.length,
@@ -329,10 +357,11 @@ $.extend($.Class,{
 				func;
 			
 			for(; f < length; f++ ) {
-				if( !funcs[f] ) {
+				func = funcs[f];
+				if( !func ) {
 					continue;
 				}
-				func = funcs[f];
+				
 				isString = typeof func == "string";
 				if( isString && self._set_called ) {
 					self.called = func;
@@ -376,6 +405,7 @@ $.extend($.Class,{
 	 * $.Class.extend("MyClass",{},{})
 	 * var mc = MyClass.newInstance.apply(null, new Array(parseInt(Math.random()*10,10))
 	 * @codeend
+	 * @return {class} instance of the class
 	 */
 	newInstance: function(){
 		var inst = this.rawInstance(),
@@ -468,7 +498,7 @@ $.extend($.Class,{
 			}
 		}
 		
-		// do static inheritence
+		// do static inheritance
 		inheritProps(klass, this, Class);
 		
 		// do namespace stuff
@@ -484,7 +514,7 @@ $.extend($.Class,{
 			current[shortName] = Class;
 		}
 		
-		//set things that can't be overwritten
+		// set things that can't be overwritten
 		$.extend(Class,{
 			prototype: prototype,
 			namespace: namespace,
@@ -604,54 +634,23 @@ jQuery.Class.prototype.
 
 (function($){
 
-	
-
-
 // Several of the methods in this plugin use code adapated from Prototype
 //  Prototype JavaScript framework, version 1.6.0.1
 //  (c) 2005-2007 Sam Stephenson
-
-jQuery.String = {};
-jQuery.String.strip = function(string){
-	return string.replace(/^\s+/, '').replace(/\s+$/, '');
-};
-
-
-jQuery.Function = {};
-jQuery.Function.params = function(func){
-	var ps = func.toString().match(/^[\s\(]*function[^(]*\((.*?)\)/)[1].split(",");
-	if( ps.length == 1 && !ps[0]) return [];
-	for(var i = 0; i < ps.length; i++) ps[i] = jQuery.String.strip(ps[i]);
-	return ps;
-};
-
-/**
- * @class jQuery.Native
- */
-jQuery.Native ={};
-jQuery.Native.
-/**
- * 
- * @param {Object} class_name
- * @param {Object} source
- */
-extend = function(class_name, source){
-	if(!jQuery[class_name]) jQuery[class_name] = {};
-	var dest = jQuery[class_name];
-	for (var property in source){
-		dest[property] = source[property];
-	}
-};
-
-
 /* 
  * @class jQuery.String
- * When not in no-conflict mode, JMVC adds the following helpers to string
  */
-jQuery.Native.extend('String', 
+$.String = 
 /* @Static*/
 {
-    /*
+	/*
+     * @function strip
+     * @param {String} s returns a string with leading and trailing whitespace removed.
+     */
+	strip : function(string){
+		return string.replace(/^\s+/, '').replace(/\s+$/, '');
+	},
+    /**
      * Capitalizes a string
      * @param {String} s the string to be lowercased.
      * @return {String} a string with the first character capitalized, and everything else lowercased
@@ -659,15 +658,7 @@ jQuery.Native.extend('String',
 	capitalize : function(s, cache) {
 		return s.charAt(0).toUpperCase()+s.substr(1);
 	},
-    /**
-     * Returns if a string has another string inside it.
-     * @param {String} string String that is being scanned
-     * @param {String} pattern String that we are looking for
-     * @return {Boolean} true if the string has pattern, false if otherwise
-     */
-	include : function(s, pattern){
-		return s.indexOf(pattern) > -1;
-	},
+
     /**
      * Returns if string ends with another string
      * @param {String} s String that is being scanned
@@ -688,10 +679,11 @@ jQuery.Native.extend('String',
      * @return {String} a the camelized string
      */
 	camelize: function(s){
-		var parts = s.split(/_|-/);
+		var parts = s.split(this.regs.undHash),
+			i = 1;
 		parts[0] = parts[0].charAt(0).toLowerCase()+parts[0].substr(1);
-		for(var i = 1; i < parts.length; i++)
-			parts[i] = jQuery.String.capitalize(parts[i]);
+		for(; i < parts.length; i++)
+			parts[i] = this.capitalize(parts[i]);
 		return parts.join('');
 	},
     /**
@@ -700,13 +692,14 @@ jQuery.Native.extend('String',
      * @return {String}
      */
 	classize: function(s){
-		var parts = s.split(/_|-/);
-		for(var i = 0; i < parts.length; i++)
-			parts[i] = jQuery.String.capitalize(parts[i]);
+		var parts = s.split(this.regs.undHash),
+			i=0;
+		for(; i < parts.length; i++)
+			parts[i] = this.capitalize(parts[i]);
 		return parts.join('');
 	},
     /**
-     * Like [jQuery.Native.String.static.classize|classize], but a space separates each 'word'
+     * Like [jQuery.String.static.classize|classize], but a space separates each 'word'
      * @codestart
      * jQuery.String.niceName("one_two") //-> "One Two"
      * @codeend
@@ -714,92 +707,28 @@ jQuery.Native.extend('String',
      * @return {String}
      */
 	niceName: function(s){
-		var parts = s.split(/_|-/);
-		for(var i = 0; i < parts.length; i++)
-			parts[i] = jQuery.String.capitalize(parts[i]);
+		var parts = s.split(this.regs.undHash),
+			i = 0;
+		for(; i < parts.length; i++)
+			parts[i] = this.capitalize(parts[i]);
 		return parts.join(' ');
 	},
-    /*
-     * @function strip
-     * @param {String} s returns a string with leading and trailing whitespace removed.
-     */
-	strip : jQuery.String.strip,
-    regexps : {
-        colons : /::/,
+
+    regs : {
+        undHash: /_|-/,
+		colons : /::/,
         words: /([A-Z]+)([A-Z][a-z])/g,
         lowerUpper : /([a-z\d])([A-Z])/g,
         dash : /([a-z\d])([A-Z])/g
     },
     underscore : function(s){
-        var regs = jQuery.String.regexps;
+        var regs = this.regs;
         return s.replace(regs.colons, '/').
                  replace(regs.words,'$1_$2').
                  replace(regs.lowerUpper,'$1_$2').
                  replace(regs.dash,'_').toLowerCase()
     }
-});
-
-//Date Helpers, probably should be moved into its own class
-
-/* 
- * @class jQuery.Array
- * When not in no-conflict mode, JMVC adds the following helpers to array
- */
-jQuery.Native.extend('Array',
-/* @static*/
-{ 
-	/**
-	 * Searchs an array for item.  Returns if item is in it.
-	 * @param {Object} array
-	 * @param {Object} item an item that is matched with ==
-	 * @return {Boolean}
-	 */
-    include: function(a, item){
-		for(var i=0; i< a.length; i++){
-			if(a[i] == item) return true;
-		}
-		return false;
-	}
-});
-
-
-
-/* 
- * @class jQuery.Function
- * When not in no-conflict mode, JMVC adds the following helpers to function
- */
-jQuery.Native.extend('Function', 
-/* @static*/
-{
-	/**
-	 * Binds a function to another object.  The object the function is binding
-	 * to is the second argument.  Additional params are added to the callback function.
-	 * @codestart
-	 * //basic example
-	 * var callback1 = jQuery.Function.bind(function(){alert(this.library)}, {library: "include"});
-	 * //shows with prepended args
-	 * var callback2 = jQuery.Function.bind(
-	 *     function(version, os){
-	 *         alert(this.library+", "+version+", "+os);
-	 *     },
-	 *     {library: "include"},
-	 *     "1.5")
-	 * @codeend
-	 * @param {Function} f The function that is being bound.
-	 * @param {Object} obj The object you want to bind to.
-	 * @return {Function} the wrapping function.
-	 */
-    bind: function(f, obj) {
-	  var args = jQuery.makeArray(arguments);
-	  args.shift();args.shift();
-	  var __method = f, object = arguments[1];
-	  return function() {
-	    return __method.apply(object, args.concat(jQuery.makeArray(arguments) )  );
-	  }
-	},
-	params: jQuery.Function.params
-});
-
+};
 
 
 
@@ -832,7 +761,7 @@ jQuery.Native.extend('Function',
 	 * <h2>More Involved Demo</h2>
 	 * @demo jquery/event/destroyed/destroyed_menu.html 
 	 */
-	$.event.special["destroyed"] = {
+	/*$.event.special["destroyed"] = {
 		remove: function( handleObj){
 			//call the handler
 			if(handleObj.removed || handleObj.handler.removed) return;
@@ -843,14 +772,15 @@ jQuery.Native.extend('Function',
 			handleObj.handler.call( this, event )
 			
 		},
-		setup : function(){},
-		teardown : function(){}
-	}
+		setup : $.noop,
+		teardown : $.noop
+	}*/
 	var oldClean = jQuery.cleanData
 	
-	jQuery.cleanData= function( elems ) {
+	$.cleanData= function( elems ) {
 		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
-			jQuery.event.remove( elem, 'destroyed' );
+			$(elem).triggerHandler("destroyed")
+			//$.event.remove( elem, 'destroyed' );
 		}
 		oldClean(elems)
 	}
@@ -863,16 +793,18 @@ jQuery.Native.extend('Function',
 (function($){
 
 
-//helpers that return a function that will unbind themselves
+// ------- helpers  ------
+/**
+ * Binds an element, returns a function that unbinds
+ */
 var bind = function( el, ev, callback ){
 	var wrappedCallback;
 	//this is for events like >click.
 	if(ev.indexOf(">") == 0){
 		ev = ev.substr(1);
 		wrappedCallback = function(event){
-			if(event.target === el)
-				callback.apply(this, arguments);
-			else
+			event.target === el ? 
+				callback.apply(this, arguments) :
 				event.handled = null;
 		}
 	}
@@ -884,7 +816,9 @@ var bind = function( el, ev, callback ){
 		el = ev = callback = wrappedCallback = null;
 	}
 },
-
+/**
+ * Binds an element, returns a function that unbinds
+ */
 delegate = function(el, selector, ev, callback){
 	$(el).delegate(selector, ev, callback);
 	return function(){
@@ -892,21 +826,33 @@ delegate = function(el, selector, ev, callback){
 		el = ev = callback = selector = null;
 	}
 },
-//wraps 'this' with jquery and makes it the first argument
-shifter = function(cb){ 
+binder = function(el, ev, callback, selector){
+	return selector ? delegate(el, selector, ev, callback)
+		: bind(el, ev,callback)
+}
+/**
+ * moves 'this' to the first argument 
+ */
+shifter = function shifter(cb){ 
 	return function(){
 		return cb.apply(null, [$(this)].concat(Array.prototype.slice.call(arguments, 0)));
 	}
 },
-
+// matches dots
 dotsReg = /\./g,
-
+// matches controller
 controllersReg = /_?controllers?/ig,
-
 //used to remove the controller from the name
 underscoreAndRemoveController = function(className){
 	return $.String.underscore(className.replace(dotsReg,'_').replace(controllersReg,""));
-}
+},
+// checks if it looks like an action
+actionMatcher = /[^\w]/,
+// gets jus the event
+eventCleaner = /^(>?default\.)|(>)/,
+// handles parameterized action names
+parameterReplacer = /\{([^\}]+)\}/g,
+breaker = /^(?:(.*?)\s)?([\w\.\:>]+)$/ ;
 /**
  * @tag core
  * @plugin jquery/controller
@@ -1155,7 +1101,7 @@ $(".special").foo({name: "value2"})
 $(".special").foo("bar","something I want to pass")
 @codeend
  */
-jQuery.Class.extend("jQuery.Controller",
+$.Class.extend("jQuery.Controller",
 /* @Static*/
 {
 	/**
@@ -1176,39 +1122,37 @@ jQuery.Class.extend("jQuery.Controller",
 		if( !this.shortName  || this.fullName == "jQuery.Controller" ){
 			return;
 		}
-		//cache the underscored names
-		this.underscoreFullName = underscoreAndRemoveController(this.fullName);
-		this.underscoreShortName = underscoreAndRemoveController(this.shortName);
+		// cache the underscored names
+		this._fullName = underscoreAndRemoveController(this.fullName);
+		this._shortName = underscoreAndRemoveController(this.shortName);
 		
 		var val, 
 			processor,
 			controller = this,
-			pluginname = this.underscoreFullName,
+			pluginname = this._fullName,
 			funcName;
 		
-		//create jQuery plugin
-		if(!jQuery.fn[pluginname]) {
-			jQuery.fn[pluginname] = function(options){
+		// create jQuery plugin
+		if(!$.fn[pluginname]) {
+			$.fn[pluginname] = function(options){
 				
 				var args = $.makeArray(arguments), 
 					//if the arg is a method on this controller
-					isMethod = typeof options == "string" && typeof controller.prototype[options] == "function",
+					isMethod = typeof options == "string" && 
+						$.isFunction(controller.prototype[options]),
 					meth = args[0];
 				this.each(function(){
 					//check if created
-					var controllers = jQuery.data(this,"controllers"),
+					var controllers = $.data(this,"controllers"),
 						//plugin is actually the controller instance
 						plugin = controllers && controllers[pluginname];
 					
 					if( plugin ) {
-						if( isMethod ) {
-							//call a method on the controller with the remaining args
-							plugin[meth].apply(plugin, args.slice(1))
-						}
-						else if( plugin.update ) {
-							//call the update function with all args
-							plugin.update.apply(plugin, args) //call the plugin's update method
-						}
+						isMethod ? 
+							// call a method on the controller with the remaining args
+							plugin[meth].apply(plugin, args.slice(1)) :
+							// call the plugin's update method
+							plugin.update.apply(plugin, args)
 					}else{
 						//create a new controller instance
 						controller.newInstance.apply(controller, [this].concat(args))
@@ -1218,20 +1162,18 @@ jQuery.Class.extend("jQuery.Controller",
 				return this;
 			}
 		}
-		//make sure listensTo isn't crazy
-		if(!$.isArray(this.listensTo)){
-			throw "listensTo is not an array in "+this.fullName
-		}
-		//calculate and cache actions
+		
+		// make sure listensTo is an array
+		
+		
+		// calculate and cache actions
 		this.actions = {};
 
 		for( funcName in this.prototype ) {
-			if( funcName == "constructor" || !$.isFunction(this.prototype[funcName]) ) { 
+			if(  !$.isFunction(this.prototype[funcName]) ) { 
 				continue; 
 			}
-			if(this._isAction(funcName)){
-				this.actions[funcName] = this._getAction(funcName);
-			}
+			this._isAction(funcName) && (this.actions[funcName] = this._getAction(funcName));
 		}
 		
 		/**
@@ -1244,21 +1186,19 @@ jQuery.Class.extend("jQuery.Controller",
 	hookup : function(el){
 		return new this(el);
 	},
-	_actionMatcher : /[^\w]/,
-	_eventCleaner : /^(>?default\.)|(>)/,
-	_parameterReplacer : /\{([^\}]+)\}/g,
+	
 	/**
 	 * @hide
 	 * @param {String} methodName a prototype function
 	 * @return {Boolean} truthy if an action or not
 	 */
 	_isAction : function(methodName){
-		if( this._actionMatcher.test(methodName) ){
+		if( actionMatcher.test(methodName) ){
 			return true;
 		}else{
-			var cleanedEvent = methodName.replace(this._eventCleaner,"");
+			var cleanedEvent = methodName.replace(eventCleaner,"");
 			return $.inArray( cleanedEvent, this.listensTo ) > -1 ||
-				$.event.special[cleanedEvent]	|| jQuery.Controller.processors[cleanedEvent]
+				$.event.special[cleanedEvent]	|| $.Controller.processors[cleanedEvent]
 		}
 			   
 	},
@@ -1271,30 +1211,31 @@ jQuery.Class.extend("jQuery.Controller",
 	 */
 	_getAction : function(methodName, options){
 		//if we don't have a controller instance, we'll break this guy up later
-		this._parameterReplacer.lastIndex = 0;
-		if(!options && this._parameterReplacer.test(methodName)){
+		parameterReplacer.lastIndex = 0;
+		if(!options && parameterReplacer.test(methodName)){
 			return null;
 		}
 		var convertedName = options ? 
-			methodName.replace(this._parameterReplacer, function(whole, inside){
+			methodName.replace(parameterReplacer, function(whole, inside){
 				//convert inside to type
-				return jQuery.Class.getObject(inside, options).toString(); //gets the value in options
+				return $.Class.getObject(inside, options).toString(); //gets the value in options
 			}) : methodName,
-			parts = convertedName.match( this.breaker),
+			parts = convertedName.match( breaker),
 			event = parts[2],
-			processor = this.processors[event] || this.basicProcessor;
-			
+			processor = this.processors[event] || basicProcessor;
 		return {processor: processor, parts: parts};
 	},
-	breaker : /^(?:(.*?)\s)?([\w\.\:>]+)$/,
 	/**
 	 * @attribute processors
 	 * A has of eventName : function pairs that Controller uses to hook 
 	 */
 	processors : {},
-	listensTo : []//
-
-	//actions : [] //list of action types
+	/**
+	 * @attribute listensTo
+	 * A list of special events this controller listens too.  You only need to add event names that
+	 * are whole words (ie have no special characters).
+	 */
+	listensTo : []
 },
 /* @Prototype */
 {
@@ -1309,16 +1250,18 @@ jQuery.Class.extend("jQuery.Controller",
 	 */
 	setup: function(element, options){
 		var funcName, 
-			cb;
+			cb,
+			ready,
+			cls = this.Class;
 		
 		//want the raw element here
 		element = element.jquery ? element[0] : element;
 		
 		//set element and className on element
-		this.element = jQuery(element).addClass(this.Class.underscoreFullName );
+		this.element = $(element).addClass(cls._fullName );
 		
 		//set in data
-		( jQuery.data(element,"controllers") || jQuery.data(element,"controllers",{}) )[this.Class.underscoreFullName] = this;
+		( $.data(element,"controllers") || $.data(element,"controllers",{}) )[cls._fullName] = this;
 		
 		//adds bindings
 		this._bindings = [];
@@ -1327,22 +1270,19 @@ jQuery.Class.extend("jQuery.Controller",
 		 * Options is automatically merged from this.Class.OPTIONS and the 2nd argument
 		 * passed to a controller.
 		 */
-		this.options = $.extend( $.extend(true,{}, this.Class.defaults  ), options);
+		this.options = $.extend( $.extend(true,{}, cls.defaults  ), options);
 		
 		//go through the cached list of actions and use the processor to bind
-		for(funcName in this.Class.actions){
-			var ready = this.Class.actions[funcName]
-			//if null, it's because it has a parameterized action.
-			if(!ready){
-				ready = this.Class._getAction(funcName, this.options)
-			}
+		for(funcName in cls.actions){
+			ready = cls.actions[funcName] || cls._getAction(funcName, this.options);
+
 			this._bindings.push( 
 				ready.processor(element, 
 					ready.parts[2], 
 					ready.parts[1], 
 					this.callback(funcName), 
 					this) 
-				)
+				);
 		}
 		 
 
@@ -1361,9 +1301,8 @@ jQuery.Class.extend("jQuery.Controller",
 		this._bindings.push( function(el){
 			destroyCB.removed = true;
 			$(element).unbind("destroyed", destroyCB);
-			
 		})
-		
+
 		/**
 		 * @attribute element
 		 * The controller instance's delegated element.  This is set by [jQuery.Controller.prototype.init init].
@@ -1408,10 +1347,13 @@ jQuery.Class.extend("jQuery.Controller",
 			eventName = el;
 			el = this.element
 		}
+		return this._binder(el, eventName, func)
+	},
+	_binder : function(el, eventName, func, selector){
 		if(typeof func == 'string'){
 			func = shifter(this.callback(func))
 		}
-		this._bindings.push( bind(el, eventName, func ) )
+		this._bindings.push( binder(el, eventName, func, selector ) )
 		return this._bindings.length;
 	},
 	/**
@@ -1439,11 +1381,7 @@ jQuery.Class.extend("jQuery.Controller",
 			selector = element
 			element = this.element
 		}
-		if(typeof func == 'string'){
-			func = shifter(this.callback(func))
-		}
-		this._bindings.push( delegate(element,selector, eventName, func ) )
-		return this._bindings.length;
+		return this._binder(el, eventName, func, selector)
 	},
 	/**
 	 * Called if an controller's jQuery helper is called on an element that already has a controller instance
@@ -1475,21 +1413,23 @@ jQuery.Class.extend("jQuery.Controller",
 	 */
 	destroy: function(ev){
 		if( this._destroyed ) {
-			throw this.Class.shortName+" controller instance has already been deleted";
+			throw this.Class.shortName+" controller instance has been deleted";
 		}
+		var self = this, 
+			fname = this.Class._fullName;
 		this._destroyed = true;
-		this.element.removeClass(this.Class.underscoreFullName );
-		var self = this;
-		jQuery.each(this._bindings, function(key, value){
-			if(typeof value == "function") value(self.element[0]);
+		this.element.removeClass( fname );
+		
+		$.each(this._bindings, function(key, value){
+			if($.isFunction(value)) value(self.element[0]);
 		});
 
 		delete this._actions;
 
 
 		var controllers = this.element.data("controllers");
-		if(controllers && controllers[this.Class.underscoreFullName])
-			delete controllers[this.Class.underscoreFullName];
+		if(controllers && controllers[fname])
+			delete controllers[fname];
 		
 		this.element = null;
 	},
@@ -1506,20 +1446,8 @@ jQuery.Class.extend("jQuery.Controller",
 	find: function(selector){
 		return this.element.find(selector);
 	},
-	/**
-	 * Publishes a message to OpenAjax.hub.
-	 * @param {String} message Message name, ex: "Something.Happened".
-	 * @param {Object} data The data sent.
-	 */
-	publish: function(){
-		OpenAjax.hub.publish.apply(OpenAjax.hub, arguments);
-	},
 	//tells callback to set called on this.  I hate this.
-	_set_called : true,
-	/**
-	 * This function does nothing.  It's here to provide an init for Class to call back.
-	 */
-	init : function(){}
+	_set_called : true
 });
 
 
@@ -1529,38 +1457,31 @@ jQuery.Class.extend("jQuery.Controller",
 
 
 //the basic processor that binds events
-jQuery.Controller.basicProcessor = function( el, event, selector, cb, controller ) {
+var basicProcessor = function( el, event, selector, cb, controller ) {
 	var c = controller.Class;
 	
 	// document controllers use their name as an ID prefix.
-	if(c.onDocument && (c.shortName !== "Main"&& c.shortName !== "MainController")){ //prepend underscore name if necessary
-		selector = selector ? "#"+c.underscoreShortName +" "+selector : "#"+c.underscoreShortName
+	if(c.onDocument && !/^Main(Controller)?$/.test(c.shortName)){ //prepend underscore name if necessary
+		selector = selector ? "#"+c._shortName +" "+selector : "#"+c._shortName
 	}
-	
-	if(selector){
-		return delegate(el, selector, event, shifter(cb))
-	}else{
-		return bind(el, event, shifter(cb))
-	}
-}
-//set commong events to be processed as a basicProcessor
-jQuery.each(["change","click","contextmenu","dblclick","keydown","keyup","keypress","mousedown","mousemove","mouseout","mouseover","mouseup","reset","windowresize","resize","windowscroll","scroll","select","submit","dblclick","focusin","focusout","load","unload","ready","hashchange","mouseenter","mouseleave"], function(i ,v){
-	jQuery.Controller.processors[v] = jQuery.Controller.basicProcessor ;
-})
+	return binder(el, event, shifter(cb), selector);
+},
+processors = $.Controller.processors,
+
 //a window event only happens on the window
-var windowEvent = function( el, event, selector, cb ) {
-	var func = shifter(cb);
-	jQuery(window).bind(event.replace(/window/,""), func);
-	return function(){
-		jQuery(window).unbind(event.replace(/window/,""), func);
-	}
+windowEvent = function( el, event, selector, cb ) {
+	return binder(window, event.replace(/window/,""), shifter(cb))
 }
 
-jQuery.each(["windowresize","windowscroll","load","ready","unload","hashchange"], function(i ,v){
-	jQuery.Controller.processors[v] = windowEvent;
+//set commong events to be processed as a basicProcessor
+$.each("change click contextmenu dblclick keydown keyup keypress mousedown mousemove mouseout mouseover mouseup reset windowresize resize windowscroll scroll select submit dblclick focusin focusout load unload ready hashchange mouseenter mouseleave".split(" "), function(i ,v){
+	processors[v] = basicProcessor ;
+})
+$.each(["windowresize","windowscroll","load","ready","unload","hashchange"], function(i ,v){
+	processors[v] = windowEvent;
 })
 //the ready processor happens on the document
-jQuery.Controller.processors.ready = function( el, event, selector, cb){
+processors.ready = function( el, event, selector, cb){
 	$(shifter(cb)); //cant really unbind
 }
 /**
@@ -1582,27 +1503,27 @@ $.fn.mixin = function(){
 var isAControllerOf = function(instance, controllers){
 	for(var i =0; i < controllers.length; i++){
 		if(typeof controllers[i] == 'string' ? 
-			instance.Class.underscoreShortName == controllers[i] :
+			instance.Class._shortName == controllers[i] :
 			instance instanceof controllers[i]){
 			return true;
 		}
 	}
 	return false;
 }
-jQuery.fn.
+$.fn.
 /**
  * @function controllers
  * Gets all controllers in the jQuery element.
  * @return {Array} an array of controller instances.
  */
 controllers = function(){
-	var controllerNames = jQuery.makeArray(arguments), 
+	var controllerNames = $.makeArray(arguments), 
 	   instances = [], 
 	   controllers, 
 	   cname;
 	//check if arguments
 	this.each(function(){
-		controllers= jQuery.data(this, "controllers")
+		controllers= $.data(this, "controllers")
 		if(!controllers) return;
 		for(var cname in controllers){
 			var c = controllers[cname];
@@ -1612,7 +1533,7 @@ controllers = function(){
 	})
 	return instances;
 };
-jQuery.fn.
+$.fn.
 /**
 * @function controller
 * Gets a controller in the jQuery element.  With no arguments, returns the first one found.
