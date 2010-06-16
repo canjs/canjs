@@ -21,22 +21,28 @@ var i, fileName, cmd,
 	"view/ejs", 
 	"dom/closest",
 	"dom/compare",
-	"dom/dimensions",
+	{
+		plugin: "dom/dimensions",
+		fileName: "jquery.dimensions.etc.js"
+	},
 	"dom/fixture",
 	"dom/form_params",
-	"dom/within"
+	"dom/within", 
+	"dom/cur_styles"
 ]
 
 
-var plugin, exclude, fileDest;
+var plugin, exclude, fileDest, fileName;
 for(i=0; i<plugins.length; i++){
 	plugin = plugins[i];
 	exclude = [];
+	fileName = null;
 	if (typeof plugin != "string") {
-		plugin = plugins[i].plugin;
-		exclude = plugins[i].exclude;
+		fileName = plugin.fileName;
+		exclude = plugin.exclude || [];
+		plugin = plugin.plugin;
 	}
-	fileName = "jquery."+plugin.replace(/\//g, ".").replace(/dom\./, "").replace(/\_/, "")+".js";
+	fileName = fileName || "jquery."+plugin.replace(/\//g, ".").replace(/dom\./, "").replace(/\_/, "")+".js";
 	fileDest = "jquery/dist/"+fileName
 	cmd = "js steal/scripts/pluginify.js jquery/"+plugin+" -destination "+fileDest;
 	if(exclude.length)
