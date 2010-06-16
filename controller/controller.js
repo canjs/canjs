@@ -1,6 +1,9 @@
 steal.plugins('jquery/class','jquery/lang','jquery/event/destroyed').then(function($){
 
-//helpers that return a function that will unbind themselves
+// ------- helpers  ------
+/**
+ * Binds an element, returns a function that unbinds
+ */
 var bind = function( el, ev, callback ){
 	var wrappedCallback;
 	//this is for events like >click.
@@ -21,7 +24,9 @@ var bind = function( el, ev, callback ){
 		el = ev = callback = wrappedCallback = null;
 	}
 },
-
+/**
+ * Binds an element, returns a function that unbinds
+ */
 delegate = function(el, selector, ev, callback){
 	$(el).delegate(selector, ev, callback);
 	return function(){
@@ -29,17 +34,18 @@ delegate = function(el, selector, ev, callback){
 		el = ev = callback = selector = null;
 	}
 },
-//wraps 'this' with jquery and makes it the first argument
-shifter = function(cb){ 
+/**
+ * moves 'this' to the first argument 
+ */
+shifter = function shifter(cb){ 
 	return function(){
 		return cb.apply(null, [$(this)].concat(Array.prototype.slice.call(arguments, 0)));
 	}
 },
-
+// matches dots
 dotsReg = /\./g,
-
+// matches controller
 controllersReg = /_?controllers?/ig,
-
 //used to remove the controller from the name
 underscoreAndRemoveController = function(className){
 	return $.String.underscore(className.replace(dotsReg,'_').replace(controllersReg,""));
@@ -313,7 +319,7 @@ jQuery.Class.extend("jQuery.Controller",
 		if( !this.shortName  || this.fullName == "jQuery.Controller" ){
 			return;
 		}
-		//cache the underscored names
+		// cache the underscored names
 		this.underscoreFullName = underscoreAndRemoveController(this.fullName);
 		this.underscoreShortName = underscoreAndRemoveController(this.shortName);
 		
@@ -323,7 +329,7 @@ jQuery.Class.extend("jQuery.Controller",
 			pluginname = this.underscoreFullName,
 			funcName;
 		
-		//create jQuery plugin
+		// create jQuery plugin
 		if(!jQuery.fn[pluginname]) {
 			jQuery.fn[pluginname] = function(options){
 				
