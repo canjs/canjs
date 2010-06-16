@@ -25,7 +25,7 @@ steal.plugins('jquery/event').then(function($){
 	 * <h2>More Involved Demo</h2>
 	 * @demo jquery/event/destroyed/destroyed_menu.html 
 	 */
-	$.event.special["destroyed"] = {
+	/*$.event.special["destroyed"] = {
 		remove: function( handleObj){
 			//call the handler
 			if(handleObj.removed || handleObj.handler.removed) return;
@@ -36,14 +36,15 @@ steal.plugins('jquery/event').then(function($){
 			handleObj.handler.call( this, event )
 			
 		},
-		setup : function(){},
-		teardown : function(){}
-	}
+		setup : $.noop,
+		teardown : $.noop
+	}*/
 	var oldClean = jQuery.cleanData
 	
-	jQuery.cleanData= function( elems ) {
+	$.cleanData= function( elems ) {
 		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
-			jQuery.event.remove( elem, 'destroyed' );
+			$(elem).triggerHandler("destroyed")
+			//$.event.remove( elem, 'destroyed' );
 		}
 		oldClean(elems)
 	}

@@ -117,7 +117,10 @@ test("bind to any special", function(){
 	var a = $("<div id='crazy'></div>").appendTo($("#qunit-test-area"))
 	a.weird_bind();
 	a.trigger("crazyEvent")
-	ok(called, "heard the trigger")
+	ok(called, "heard the trigger");
+	
+	$("#qunit-test-area").html("")
+	
 })
 
 test("parameterized actions", function(){
@@ -132,5 +135,20 @@ test("parameterized actions", function(){
 	a.trigger("sillyEvent")
 	ok(called, "heard the trigger")
 	
+	$("#qunit-test-area").html("")
 })
 
+test("windowresize", function(){
+	var called = false;
+	jQuery.Controller.extend("WindowBind",{
+		"windowresize" : function(){
+			called = true;
+		}
+	})
+	$("#qunit-test-area").html("<div id='weird'>")
+	$("#weird").window_bind();
+	$(window).trigger('resize')
+	ok(called,"got window resize event");
+	
+	$("#qunit-test-area").html("")
+})
