@@ -152,3 +152,19 @@ test("windowresize", function(){
 	
 	$("#qunit-test-area").html("")
 })
+
+// this.delegate(this.cached.header.find('tr'), "th", "mousemove", "th_mousemove"); 
+test("delegate", function(){
+	var called = false;
+	jQuery.Controller.extend("DelegateTest",{
+		click: function(){}
+	})
+	var els = $("<div><span><a href='#'>click me</a></span></div>").appendTo($("#qunit-test-area"))
+	var c = els.delegate_test();
+	c.controller().delegate(els.find("span"), "a", "click", function(){
+		called = true;
+	})
+	els.find("a").trigger('click')
+	ok(called, "delegate works")
+	$("#qunit-test-area").html("")
+})
