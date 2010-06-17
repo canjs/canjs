@@ -51,7 +51,7 @@ steal.plugins('jquery/view').then(function(){
 			return "function(obj){"+MicroTemplate(str).body+"}";
 		}
 	})
-	
+	jQuery.View.ext = ".micro"
 	
 
 });

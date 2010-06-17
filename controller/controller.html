@@ -57,10 +57,10 @@
 $.Controller.extend("Tabs",{
   
   // initialize widget
-  init : function(){
+  init : function(el){
     
     // activate the first tab
-    this.element.children("li:first").addClass('active')
+    $(el).children("li:first").addClass('active')
     
     // hide the other tabs
     var tab = this.tab;
