@@ -4,6 +4,13 @@ var i, fileName, cmd,
 	plugins = [
 	"class", 
 	"controller",
+	{
+		plugin: "controller/subscribe", 
+		exclude: ["jquery/controller/controller.js",
+				  "jquery/class/class.js",
+				  "jquery/lang/lang.js",
+				  "jquery/event/destroyed/destroyed.js",
+				  "jquery/controller/controller.js"]},
 	"event/default",
 	"event/destroyed",
 	"event/drag",
