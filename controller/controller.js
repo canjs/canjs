@@ -591,7 +591,7 @@ $.Class.extend("jQuery.Controller",
 			selector = element
 			element = this.element
 		}
-		return this._binder(el, eventName, func, selector)
+		return this._binder(element, eventName, func, selector)
 	},
 	/**
 	 * Called if an controller's jQuery helper is called on an element that already has a controller instance
