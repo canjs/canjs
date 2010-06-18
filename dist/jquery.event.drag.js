@@ -303,10 +303,13 @@ jQuery.fn.makePositioned = function() {
 			}
 			else {
 				//var bySelector = event.find(this, types, selector);
-				event.add(this, startingEvent, onFirst, {
-					selector: selector,
-					delegate: this
-				});
+				if(!event.find(this, types, selector).length){
+					event.add(this, startingEvent, onFirst, {
+						selector: selector,
+						delegate: this
+					});
+				}
+				
 			}
 			
 		}
@@ -319,17 +322,20 @@ jQuery.fn.makePositioned = function() {
 				}
 			}
 			else {
-				event.remove(this, startingEvent, onFirst, {
-					selector: selector,
-					delegate: this
-				});
+				if (!event.find(this, types, selector).length) {
+					event.remove(this, startingEvent, onFirst, {
+						selector: selector,
+						delegate: this
+					});
+				}
 			}
 		}
 		$.each(types, function(){
 			event.special[this] = {
 				add:  add,
 				remove: remove,
-				setup : function(){}
+				setup : function(){},
+				teardown : function(){}
 			};
 		});
 	}
@@ -620,6 +626,16 @@ jQuery.fn.makePositioned = function() {
 		},
 		move : function(event){
 			if(this.callbacks[this.constructor.lowerName+"move"]) this.callbacks[this.constructor.lowerName+"move"].call(this.element, event, this  );
+		},
+		over : function(event, drop){
+			if(this.callbacks[this.constructor.lowerName+"over"]) {
+				this.callbacks[this.constructor.lowerName+"over"].call(this.element, event, this, drop  );
+			}
+		},
+		out : function(event, drop){
+			if(this.callbacks[this.constructor.lowerName+"out"]) {
+				this.callbacks[this.constructor.lowerName+"out"].call(this.element, event, this, drop  );
+			}
 		},
 		/**
 		 * Called on drag up

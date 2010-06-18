@@ -4,6 +4,13 @@ var i, fileName, cmd,
 	plugins = [
 	"class", 
 	"controller",
+	{
+		plugin: "controller/subscribe", 
+		exclude: ["jquery/controller/controller.js",
+				  "jquery/class/class.js",
+				  "jquery/lang/lang.js",
+				  "jquery/event/destroyed/destroyed.js",
+				  "jquery/controller/controller.js"]},
 	"event/default",
 	"event/destroyed",
 	"event/drag",
@@ -17,26 +24,37 @@ var i, fileName, cmd,
 		plugin: "event/drop",
 		exclude: ["jquery/lang/vector/vector.js", "jquery/event/livehack/livehack.js", "jquery/event/drag/drag.js"]},
 	"event/hover",
-	"model",
+	{
+		plugin: "model", 
+		exclude: ["jquery/class/class.js",
+				  "jquery/lang/lang.js",
+				  "jquery/event/destroyed/destroyed.js",
+				  "steal/openajax/openajax.js"]},
 	"view/ejs", 
 	"dom/closest",
 	"dom/compare",
-	"dom/dimensions",
+	{
+		plugin: "dom/dimensions",
+		fileName: "jquery.dimensions.etc.js"
+	},
 	"dom/fixture",
 	"dom/form_params",
-	"dom/within"
+	"dom/within", 
+	"dom/cur_styles"
 ]
 
 
-var plugin, exclude, fileDest;
+var plugin, exclude, fileDest, fileName;
 for(i=0; i<plugins.length; i++){
 	plugin = plugins[i];
 	exclude = [];
+	fileName = null;
 	if (typeof plugin != "string") {
-		plugin = plugins[i].plugin;
-		exclude = plugins[i].exclude;
+		fileName = plugin.fileName;
+		exclude = plugin.exclude || [];
+		plugin = plugin.plugin;
 	}
-	fileName = "jquery."+plugin.replace(/\//g, ".").replace(/dom\./, "").replace(/\_/, "")+".js";
+	fileName = fileName || "jquery."+plugin.replace(/\//g, ".").replace(/dom\./, "").replace(/\_/, "")+".js";
 	fileDest = "jquery/dist/"+fileName
 	cmd = "js steal/scripts/pluginify.js jquery/"+plugin+" -destination "+fileDest;
 	if(exclude.length)

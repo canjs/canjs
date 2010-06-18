@@ -7,7 +7,8 @@ steal.plugins('jquery/controller','jquery/view').then(function($){
 		var slashes = Class.fullName.replace(/\./g,"/"), 
 		    hasControllers = slashes.indexOf("/Controllers/"+Class.shortName) != -1,
 			path = jQuery.String.underscore( slashes.replace("/Controllers/"+Class.shortName,"") ),
-			controller_name = Class.underscoreShortName;
+			controller_name = Class._shortName,
+			suffix  =  (typeof view == "string" && view.match(/\.[\w\d]+$/)) || jQuery.View.ext;
 			
         //calculate view
         
@@ -16,13 +17,13 @@ steal.plugins('jquery/controller','jquery/view').then(function($){
                 
             }else{
                 view = "//"+new steal.File( 'views/'+ 
-                    (jQuery.String.include(view,'/') ? view : ( hasControllers ? controller_name+'/' : "")+view)
-                    ).joinFrom(path)+jQuery.View.ext
+                    (view.indexOf('/') !== -1 ? view : ( hasControllers ? controller_name+'/' : "")+view)
+                    ).joinFrom(path)+suffix;
             }
         }else if(!view) {
             view = "//"+new steal.File(
                 'views/'+( hasControllers ? controller_name+'/' : "")+action_name.replace(/\.|#/g, '').replace(/ /g,'_')
-                ).joinFrom(path)+jQuery.View.ext;
+                ).joinFrom(path)+suffix;
         }
 		return view
 	}

@@ -131,10 +131,13 @@
 			}
 			else {
 				//var bySelector = event.find(this, types, selector);
-				event.add(this, startingEvent, onFirst, {
-					selector: selector,
-					delegate: this
-				});
+				if(!event.find(this, types, selector).length){
+					event.add(this, startingEvent, onFirst, {
+						selector: selector,
+						delegate: this
+					});
+				}
+				
 			}
 			
 		}
@@ -147,17 +150,20 @@
 				}
 			}
 			else {
-				event.remove(this, startingEvent, onFirst, {
-					selector: selector,
-					delegate: this
-				});
+				if (!event.find(this, types, selector).length) {
+					event.remove(this, startingEvent, onFirst, {
+						selector: selector,
+						delegate: this
+					});
+				}
 			}
 		}
 		$.each(types, function(){
 			event.special[this] = {
 				add:  add,
 				remove: remove,
-				setup : function(){}
+				setup : function(){},
+				teardown : function(){}
 			};
 		});
 	}

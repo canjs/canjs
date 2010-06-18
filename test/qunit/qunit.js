@@ -2,6 +2,7 @@
 steal.plugins(	
 'jquery/class/test/qunit',
 'jquery/controller/test/qunit',
+'jquery/controller/view/test/qunit',
 
 'jquery/dom/compare/test/qunit',
 'jquery/dom/cur_styles/test/qunit',

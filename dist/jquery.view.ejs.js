@@ -3,149 +3,53 @@
 (function($){
 
 
-	/**
-	 *  @add jQuery.fn
-	 */
-    var funcs = [
-    /**
-     *  @function prepend
-     *  @tag view
-     *  abc
-     */
-    "prepend",
-    /**
-     *  @function append
-     *  @tag view
-     *  abc
-     */
-    "append",
-    /**
-     *  @function after
-     *  @tag view
-     *  abc
-     */
-    "after",
-    /**
-     *  @function before
-     *  @tag view
-     *  abc
-     */
-    "before",
-    /**
-     *  @function replace
-     *  @tag view
-     *  abc
-     */
-    "replace",
-    /**
-     *  @function text
-     *  @tag view
-     *  abc
-     */
-    "text",
-    /**
-     *  @function html
-     *  @tag view
-     *  abc
-     */
-    "html",
-	/**
-     *  @function replaceWith
-     *  @tag view
-     *  abc
-     */
-	"replaceWith"]
-	
-	
-	var convert = function(func_name) {
-		var old = jQuery.fn[func_name];
+// converts to an ok dom id
+var toId = function(src){
+	return src.replace(/[\/\.]/g,"_")
+},
+// used for hookup ids
+id = 0;
 
-		jQuery.fn[func_name] = function() {
-			var args = arguments, res;
-			
-			if(arguments.length > 1 && typeof arguments[0] == "string" 
-               && (typeof arguments[1] == 'object' || typeof arguments[1] == 'function')
-               && !arguments[1].nodeType && !arguments[1].jquery
-               ){
-				args = [ $.View.apply($.View, $.makeArray(arguments)) ];
-			}
-			for(var hasHookups in jQuery.View.hookups);
-			if(hasHookups){
-				args[0] = $(args[0])
-			}
-			res = old.apply(this, args)
-			if(hasHookups){
-				args[0].hookupView()
-			}
-			return res;
-		}
-	}
-	
-	var hookup = function(){
-		if(this.getAttribute){
-			var id = this.getAttribute('data-view-id')
-			if(jQuery.View.hookups[id]){
-				jQuery.View.hookups[id](this, id);
-				delete jQuery.View.hookups[id];
-				this.removeAttribute('data-view-id')
-			}
-		}
-	}
-	
-	
-	jQuery.fn.hookupView = function(){
-		this.each(hookup)
-		this.find("[data-view-id]").each(hookup)
-		return this;
-	}
-	for(var i=0; i < funcs.length; i++){
-		convert(funcs[i]);
-	}
-	var types = {};
-	var toId = function(src){
-		return src.replace(/[\/\.]/g,"_")
-	}
-	/**
-	 * @constructor jQuery.View
-	 * @tag core
-	 * View provides a uniform interface for using templates in JavaScriptMVC.  When templates 
-	 * [jQuery.View.static.register register] themselves, you are able to:
-	 * <ul>
-	 * 	
-	 *  <li>Use views with jQuery extensions [jQuery.fn.after after], [jQuery.fn.append append],
-	 *  	[jQuery.fn.before before], [jQuery.fn.html html], [jQuery.fn.prepend prepend],
-	 *      [jQuery.fn.replace replace], [jQuery.fn.text text] like:
+/**
+ * @constructor jQuery.View
+ * @tag core
+ * View provides a uniform interface for using templates in JavaScriptMVC.  When templates 
+ * [jQuery.View.static.register register] themselves, you are able to:
+ * <ul>
+ * 	
+ *  <li>Use views with jQuery extensions [jQuery.fn.after after], [jQuery.fn.append append],
+ *  	[jQuery.fn.before before], [jQuery.fn.html html], [jQuery.fn.prepend prepend],
+ *      [jQuery.fn.replace replace], [jQuery.fn.text text] like:
 @codestart
 $('.foo').html("//path/to/view.ejs",{})
 @codeend
-	 *  </li>
-	 *  <li>Compress your views with [steal.static.views].</li>
-	 *  <li>Use the [jQuery.Controller.prototype.view controller/view] plugin to auto-magically
-	 *  lookup views.</li>
-	 *  <li>Hookup Controllers and other code on elements after render.</li>
-	 *  
-	 * </ul>
-	 * 
-	 * <h2>Supported Templates</h2>
-	 * <ul>
-	 * 	<li>[jQuery.View.EJS EJS] - provides an ERB like syntax: <code>&lt;%= %&gt;</code></li>
-	 *  <li>[Jaml] - A functional approach to JS templates.</li>
-	 *  <li>[Micro] - A very lightweight template similar to EJS.</li>
-	 * </ul>
-	 * @iframe jquery/view/view.html 700
+ *  </li>
+ *  <li>Compress your views with [steal.static.views].</li>
+ *  <li>Use the [jQuery.Controller.prototype.view controller/view] plugin to auto-magically
+ *  lookup views.</li>
+ *  <li>Hookup Controllers and other code on elements after render.</li>
+ *  
+ * </ul>
+ * 
+ * <h2>Supported Templates</h2>
+ * <ul>
+ * 	<li>[jQuery.View.EJS EJS] - provides an ERB like syntax: <code>&lt;%= %&gt;</code></li>
+ *  <li>[Jaml] - A functional approach to JS templates.</li>
+ *  <li>[Micro] - A very lightweight template similar to EJS.</li>
+ * </ul>
+ * @iframe jquery/view/view.html 700
 
-	 * 
-	 * 
-	 * <h2>Compress Views with Steal</h2>
-	 * Steal can package processed views in the production file. Because 'stolen' views are already
-	 * processed, they don't rely on eval.  Here's how to steal them:
-	 * @codestart
-	 * steal.views('//views/tasks/show.ejs');
-	 * @codeend
-	 * Read more about [steal.static.views steal.views].
-	 * <h2>Hooking up controllers</h2>
-	 * After drawing some html, you often want to add other widgets and plugins inside that html.
-	 * View makes this easy.  You just have to return the Contoller class you want to be hooked up.
+ * 
+ * <h2>Compress Views with Steal</h2>
+ * Steal can package processed views in the production file. Because 'stolen' views are already
+ * processed, they don't rely on eval.  Here's how to steal them:
+ * @codestart
+ * steal.views('//views/tasks/show.ejs');
+ * @codeend
+ * Read more about [steal.static.views steal.views].
+ * <h2>Hooking up controllers</h2>
+ * After drawing some html, you often want to add other widgets and plugins inside that html.
+ * View makes this easy.  You just have to return the Contoller class you want to be hooked up.
 @codestart
 &lt;ul &lt;%= Phui.Tabs%>>...&lt;ul>
 @codeend
@@ -153,62 +57,87 @@ You can even hook up multiple controllers:
 @codestart
 &lt;ul &lt;%= [Phui.Tabs, Phui.Filler]%>>...&lt;ul>
 @codeend
-	 * @init Looks up a template, processes it, caches it, then renders the template
-	 * with data and optional helpers.
+ * @init Looks up a template, processes it, caches it, then renders the template
+ * with data and optional helpers.
 @codestart
 $.View("//myplugin/views/init.ejs",{message: "Hello World"})
 @codeend
-	 * @param {String} url The url or id of an element to use as the template's source.
-	 * @param {Object} data The data to be passed to the view.
-	 * @param {Object} [helpers] Optional helper functions the view might use.
-	 * @return {String} The rendered result of the view.
-	 */
-	$.View= function(url, data, helpers){
-		var suffix = url.match(/\.[\w\d]+$/),
-			type, 
-			el
-		if(!suffix){
-			suffix = $.View.ext;
-			url = url+$.View.ext
-		}
-
-        var id = toId(url);
-
-        //change this url?
-        if (url.match(/^\/\//))
-            url = steal.root.join(url.substr(2)); //can steal be removed?
-
-		type = types[suffix];
-		
-		var renderer = $.View.cached[id] ? $.View.cached[id] : ( (el = document.getElementById(id) ) ? type.renderer(id, el.innerHTML) : type.get(id, url) );
-		if($.View.cache)  $.View.cached[id] = renderer;
-
-		return renderer.call(type,data,helpers)
-	};
-	/* @Static */
-	$.View.hookups = {};
+ * @param {String} url The url or id of an element to use as the template's source.
+ * @param {Object} data The data to be passed to the view.
+ * @param {Object} [helpers] Optional helper functions the view might use.
+ * @return {String} The rendered result of the view.
+ */
+$.View= function(url, data, helpers){
+	var suffix = url.match(/\.[\w\d]+$/),
+		type, 
+		el,
+		url,
+		id,
+		renderer;
 	
-	var id = 0;
+	//if there is no suffix, add one
+	if(!suffix){
+		suffix = $.View.ext;
+		url = url+$.View.ext
+	}
+	
+	//convert to a unique and valid id
+	id = toId(url);
+
+	//if a absolute path, use steal to get it
+	if (url.match(/^\/\//)){
+		url = steal.root.join(url.substr(2)); //can steal be removed?
+	}
+		
+	//get the template engine
+	type = $.View.types[suffix];
+	
+	//get the renderer function
+	var renderer = 
+		$.View.cached[id] ? 		// is it cached?
+			$.View.cached[id] : 	// use the cached version
+			( (el = document.getElementById(id) ) ?  //is it in the document?
+				type.renderer(id, el.innerHTML) :	 //use the innerHTML of the elemnt
+				type.get(id, url) 					 //do an ajax request for it
+			);
+						
+	//if we should cache templates
+	if ($.View.cache) {
+		$.View.cached[id] = renderer;
+	}
+	return renderer.call(type,data,helpers)
+};
+
+/* @Static */
+$.extend($.View, {
+	/**
+	 * @attribute hookups
+	 * @hide
+	 * A list of pending 'hookups'
+	 */
+	hookups: {},
 	/**
 	 * @function hookup
-	 * Registers a hookup function
-	 * @param {Object} cb
+	 * Registers a hookup function to be called back after the html is put on the page
+	 * @param {Function} cb a callback function to be called with the element
+	 * @param {Number} the hookup number
 	 */
-	$.View.hookup = function(cb){
-		var myid = (++id);
+	hookup: function(cb){
+		var myid = ++id;
 		jQuery.View.hookups[myid] = cb;
 		return myid;
-	}
+	},
 	/**
 	 * @attribute cached
+	 * @hide
 	 * Cached are put in this object
 	 */
-	$.View.cached = {};
+	cached : {},
 	/**
 	 * @attribute cache
 	 * Should the views be cached or reloaded from the server. Defaults to true.
 	 */
-	$.View.cache = true;
+	cache: true,
 	/**
 	 * @function register
 	 * Registers a template engine to be used with view helpers and compression.  
@@ -226,26 +155,150 @@ $.View("//myplugin/views/init.ejs",{message: "Hello World"})
 	 * 			returns a render function.</li>
 	 * </ul>
 	 */
-	$.View.register = function(info){
-		types["."+info.suffix] = info;
-	};
-	$.View.types = types;
+	register: function(info){
+		this.types["."+info.suffix] = info;
+	},
+	types: {},
 	/**
 	 * @attribute ext
-	 * The default suffix to use if none is provided in the view's url.  This is set to .ejs by default.
+	 * The default suffix to use if none is provided in the view's url.  
+	 * This is set to .ejs by default.
 	 */
-	$.View.ext = ".ejs";
-
-	$.View.registerScript = function(type, id, src){
-		return "$.View.preload('"+id+"',"+types["."+type].script(id, src)+");";
-	};
-	$.View.preload = function(id, renderer){
+	ext: ".ejs",
+	/**
+	 * @hide 
+	 * @param {Object} type
+	 * @param {Object} id
+	 * @param {Object} src
+	 */
+	registerScript: function( type, id, src ) {
+		return "$.View.preload('"+id+"',"+$.View.types["."+type].script(id, src)+");";
+	},
+	/**
+	 * @hide
+	 * Called by a production script to pre-load a renderer function
+	 * into the view cache.
+	 * @param {String} id
+	 * @param {Function} renderer
+	 */
+	preload: function(id, renderer){
 		$.View.cached[id] = function(data, helpers){
 			return renderer.call(data, data, helpers)
 		}
 	}
-	//need to know how to get and "write to production" so it can be steald
 	
+})
+
+
+//---- ADD jQUERY HELPERS -----
+/**
+ *  @add jQuery.fn
+ */
+var funcs = [
+/**
+ *  @function prepend
+ *  @tag view
+ *  abc
+ */
+"prepend",
+/**
+ *  @function append
+ *  @tag view
+ *  abc
+ */
+"append",
+/**
+ *  @function after
+ *  @tag view
+ *  abc
+ */
+"after",
+/**
+ *  @function before
+ *  @tag view
+ *  abc
+ */
+"before",
+/**
+ *  @function replace
+ *  @tag view
+ *  abc
+ */
+"replace",
+/**
+ *  @function text
+ *  @tag view
+ *  abc
+ */
+"text",
+/**
+ *  @function html
+ *  @tag view
+ *  abc
+ */
+"html",
+/**
+ *  @function replaceWith
+ *  @tag view
+ *  abc
+ */
+"replaceWith"],
+
+//converts
+convert = function(func_name) {
+	var old = jQuery.fn[func_name];
+
+	jQuery.fn[func_name] = function() {
+		var args = arguments, 
+			res,
+			hasHookup,
+			secArgType = typeof arguments[1];
+		
+		//check if a template
+		if(typeof arguments[0] == "string" 
+		   && (secArgType == 'object' || secArgType == 'function')
+		   && !arguments[1].nodeType && !arguments[1].jquery
+		   ){
+			args = [ $.View.apply($.View, $.makeArray(arguments)) ];
+		}
+		
+		//check if there are new hookups
+		for(var hasHookups in jQuery.View.hookups){};
+		
+		//if there are hookups, get jQuery object
+		if(hasHookups){
+			args[0] = $(args[0])
+		}
+		res = old.apply(this, args)
+		
+		//now hookup hookups
+		if(hasHookups){
+			hookupView(args[0])
+		}
+		return res;
+	}
+},
+hookupView = function(els){
+	els.each(hookup)
+	els.find("[data-view-id]").each(hookup)
+	return this;
+},
+hookup = function(){
+	if(this.getAttribute){
+		var id = this.getAttribute('data-view-id')
+		if(jQuery.View.hookups[id]){
+			jQuery.View.hookups[id](this, id);
+			delete jQuery.View.hookups[id];
+			this.removeAttribute('data-view-id')
+		}
+	}
+}
+	
+//go through helper funcs and convert
+for(var i=0; i < funcs.length; i++){
+	convert(funcs[i]);
+}
+
 
 })(jQuery);
 
@@ -253,54 +306,23 @@ $.View("//myplugin/views/init.ejs",{message: "Hello World"})
 
 (function($){
 
-	
-
-
 // Several of the methods in this plugin use code adapated from Prototype
 //  Prototype JavaScript framework, version 1.6.0.1
 //  (c) 2005-2007 Sam Stephenson
-
-jQuery.String = {};
-jQuery.String.strip = function(string){
-	return string.replace(/^\s+/, '').replace(/\s+$/, '');
-};
-
-
-jQuery.Function = {};
-jQuery.Function.params = function(func){
-	var ps = func.toString().match(/^[\s\(]*function[^(]*\((.*?)\)/)[1].split(",");
-	if( ps.length == 1 && !ps[0]) return [];
-	for(var i = 0; i < ps.length; i++) ps[i] = jQuery.String.strip(ps[i]);
-	return ps;
-};
-
-/**
- * @class jQuery.Native
- */
-jQuery.Native ={};
-jQuery.Native.
-/**
- * 
- * @param {Object} class_name
- * @param {Object} source
- */
-extend = function(class_name, source){
-	if(!jQuery[class_name]) jQuery[class_name] = {};
-	var dest = jQuery[class_name];
-	for (var property in source){
-		dest[property] = source[property];
-	}
-};
-
-
 /* 
  * @class jQuery.String
- * When not in no-conflict mode, JMVC adds the following helpers to string
  */
-jQuery.Native.extend('String', 
+$.String = 
 /* @Static*/
 {
-    /*
+	/*
+     * @function strip
+     * @param {String} s returns a string with leading and trailing whitespace removed.
+     */
+	strip : function(string){
+		return string.replace(/^\s+/, '').replace(/\s+$/, '');
+	},
+    /**
      * Capitalizes a string
      * @param {String} s the string to be lowercased.
      * @return {String} a string with the first character capitalized, and everything else lowercased
@@ -308,15 +330,7 @@ jQuery.Native.extend('String',
 	capitalize : function(s, cache) {
 		return s.charAt(0).toUpperCase()+s.substr(1);
 	},
-    /**
-     * Returns if a string has another string inside it.
-     * @param {String} string String that is being scanned
-     * @param {String} pattern String that we are looking for
-     * @return {Boolean} true if the string has pattern, false if otherwise
-     */
-	include : function(s, pattern){
-		return s.indexOf(pattern) > -1;
-	},
+
     /**
      * Returns if string ends with another string
      * @param {String} s String that is being scanned
@@ -337,10 +351,11 @@ jQuery.Native.extend('String',
      * @return {String} a the camelized string
      */
 	camelize: function(s){
-		var parts = s.split(/_|-/);
+		var parts = s.split(this.regs.undHash),
+			i = 1;
 		parts[0] = parts[0].charAt(0).toLowerCase()+parts[0].substr(1);
-		for(var i = 1; i < parts.length; i++)
-			parts[i] = jQuery.String.capitalize(parts[i]);
+		for(; i < parts.length; i++)
+			parts[i] = this.capitalize(parts[i]);
 		return parts.join('');
 	},
     /**
@@ -349,13 +364,14 @@ jQuery.Native.extend('String',
      * @return {String}
      */
 	classize: function(s){
-		var parts = s.split(/_|-/);
-		for(var i = 0; i < parts.length; i++)
-			parts[i] = jQuery.String.capitalize(parts[i]);
+		var parts = s.split(this.regs.undHash),
+			i=0;
+		for(; i < parts.length; i++)
+			parts[i] = this.capitalize(parts[i]);
 		return parts.join('');
 	},
     /**
-     * Like [jQuery.Native.String.static.classize|classize], but a space separates each 'word'
+     * Like [jQuery.String.static.classize|classize], but a space separates each 'word'
      * @codestart
      * jQuery.String.niceName("one_two") //-> "One Two"
      * @codeend
@@ -363,92 +379,28 @@ jQuery.Native.extend('String',
      * @return {String}
      */
 	niceName: function(s){
-		var parts = s.split(/_|-/);
-		for(var i = 0; i < parts.length; i++)
-			parts[i] = jQuery.String.capitalize(parts[i]);
+		var parts = s.split(this.regs.undHash),
+			i = 0;
+		for(; i < parts.length; i++)
+			parts[i] = this.capitalize(parts[i]);
 		return parts.join(' ');
 	},
-    /*
-     * @function strip
-     * @param {String} s returns a string with leading and trailing whitespace removed.
-     */
-	strip : jQuery.String.strip,
-    regexps : {
-        colons : /::/,
+
+    regs : {
+        undHash: /_|-/,
+		colons : /::/,
         words: /([A-Z]+)([A-Z][a-z])/g,
         lowerUpper : /([a-z\d])([A-Z])/g,
         dash : /([a-z\d])([A-Z])/g
     },
     underscore : function(s){
-        var regs = jQuery.String.regexps;
+        var regs = this.regs;
         return s.replace(regs.colons, '/').
                  replace(regs.words,'$1_$2').
                  replace(regs.lowerUpper,'$1_$2').
                  replace(regs.dash,'_').toLowerCase()
     }
-});
-
-//Date Helpers, probably should be moved into its own class
-
-/* 
- * @class jQuery.Array
- * When not in no-conflict mode, JMVC adds the following helpers to array
- */
-jQuery.Native.extend('Array',
-/* @static*/
-{ 
-	/**
-	 * Searchs an array for item.  Returns if item is in it.
-	 * @param {Object} array
-	 * @param {Object} item an item that is matched with ==
-	 * @return {Boolean}
-	 */
-    include: function(a, item){
-		for(var i=0; i< a.length; i++){
-			if(a[i] == item) return true;
-		}
-		return false;
-	}
-});
-
-
-
-/* 
- * @class jQuery.Function
- * When not in no-conflict mode, JMVC adds the following helpers to function
- */
-jQuery.Native.extend('Function', 
-/* @static*/
-{
-	/**
-	 * Binds a function to another object.  The object the function is binding
-	 * to is the second argument.  Additional params are added to the callback function.
-	 * @codestart
-	 * //basic example
-	 * var callback1 = jQuery.Function.bind(function(){alert(this.library)}, {library: "include"});
-	 * //shows with prepended args
-	 * var callback2 = jQuery.Function.bind(
-	 *     function(version, os){
-	 *         alert(this.library+", "+version+", "+os);
-	 *     },
-	 *     {library: "include"},
-	 *     "1.5")
-	 * @codeend
-	 * @param {Function} f The function that is being bound.
-	 * @param {Object} obj The object you want to bind to.
-	 * @return {Function} the wrapping function.
-	 */
-    bind: function(f, obj) {
-	  var args = jQuery.makeArray(arguments);
-	  args.shift();args.shift();
-	  var __method = f, object = arguments[1];
-	  return function() {
-	    return __method.apply(object, args.concat(jQuery.makeArray(arguments) )  );
-	  }
-	},
-	params: jQuery.Function.params
-});
-
+};
 
 
 
@@ -458,28 +410,35 @@ jQuery.Native.extend('Function',
 
 (function($){
 
-	jQuery.Native.extend('String',{
-		rsplit : function(string, regex) {
-			var result = regex.exec(string),retArr = [], first_idx, last_idx;
-			while (result != null)
+	/**
+	 * @add jQuery.String static
+	 */
+	$.String.
+	/**
+	 * Splits a string with a regex correctly cross browser
+	 * @param {Object} string
+	 * @param {Object} regex
+	 */
+	rsplit = function(string, regex) {
+		var result = regex.exec(string),retArr = [], first_idx, last_idx;
+		while (result != null)
+		{
+			first_idx = result.index; last_idx = regex.lastIndex;
+			if (first_idx != 0)
 			{
-				first_idx = result.index; last_idx = regex.lastIndex;
-				if (first_idx != 0)
-				{
-					retArr.push(string.substring(0,first_idx));
-					string = string.slice(first_idx);
-				}		
-				retArr.push(result[0]);
-				string = string.slice(result[0].length);
-				result = regex.exec(string);	
-			}
-			if (string != '')
-			{
-				retArr.push(string);
-			}
-			return retArr;
+				retArr.push(string.substring(0,first_idx));
+				string = string.slice(first_idx);
+			}		
+			retArr.push(result[0]);
+			string = string.slice(result[0].length);
+			result = regex.exec(string);	
 		}
-	})
+		if (string != '')
+		{
+			retArr.push(string);
+		}
+		return retArr;
+	}
 
 })(jQuery);
 
@@ -487,65 +446,32 @@ jQuery.Native.extend('Function',
 
 (function($){
 
-   
+
+//helpers we use 
 var chop =  function(string){
-    return string.substr(0, string.length - 1);
-},
-extend = function(d, s){
-    for(var n in s){
-        if(s.hasOwnProperty(n))  d[n] = s[n]
-    }
-},
-isArray = function(arr){
-	  return Object.prototype.toString.call(arr) === "[object Array]"
-}
+	    return string.substr(0, string.length - 1);
+	},
+	extend = $.extend,
+	isArray = $.isArray
 
 var EJS = function( options ){
+	//returns a renderer
 	if(this.constructor != EJS){
 		var ejs = new EJS(options);
 		return function(data, helpers){
 			return ejs.render(data, helpers)
 		};
 	}
-	
-	options = typeof options == "string" ? {view: options} : options
-    this.set_options(options);
+
+	//if a function, set func as template func	
 	if(typeof options == "function"){
 		this.template = {};
 		this.template.process = options;
 		return;
 	}
-    if(options.element)
-	{
-		if(typeof options.element == 'string'){
-			var name = options.element
-			options.element = document.getElementById(  options.element )
-			if(options.element == null) throw name+'does not exist!'
-		}
-		if(options.element.value){
-			this.text = options.element.value
-		}else{
-			this.text = options.element.innerHTML
-		}
-		this.name = options.element.id
-		this.type = '['
-	}else if(options.url){
-        options.url = EJS.endExt(options.url, this.extMatch);
-		this.name = this.name ? this.name : options.url;
-        var url = options.url
-        //options.view = options.absolute_url || options.view || options.;
-		var template = EJS.get(this.name /*url*/, this.cache);
-		if (template) return template;
-	    if (template == EJS.INVALID_PATH) return null;
-        try{
-            this.text = EJS.request( url+(this.cache ? '' : '?'+Math.random() ));
-        }catch(e){}
+	//set options on self
+	$.extend(this, EJS.options,options)
 
-		if(this.text == null){
-            throw( {type: 'jQuery.View.EJS', message: 'There is no template at '+url}  );
-		}
-		//this.name = url;
-	}
 	var template = new EJS.Compiler(this.text, this.type);
 
 	template.compile(options, this.name);
@@ -664,51 +590,11 @@ EJS.prototype = {
 		var v = new EJS.Helpers(object, extra_helpers || {});
 		return this.template.process.call(object, object,v);
 	},
-    update : function(element, options){
-        if(typeof element == 'string'){
-			element = document.getElementById(element)
-		}
-		if(options == null){
-			_template = this;
-			return function(object){
-				EJS.prototype.update.call(_template, element, object)
-			}
-		}
-		if(typeof options == 'string'){
-			params = {}
-			params.url = options
-			_template = this;
-			params.onComplete = function(request){
-				var object = eval( request.responseText )
-				EJS.prototype.update.call(_template, element, object)
-			}
-			EJS.ajax_request(params)
-		}else
-		{
-			element.innerHTML = this.render(options)
-		}
-    },
 	out : function(){
 		return this.template.out;
-	},
-    /**
-     * Sets options on this view to be rendered with.
-     * @param {Object} options
-     */
-	set_options : function(options){
-        this.type = options.type || EJS.type;
-		this.cache = options.cache != null ? options.cache : EJS.cache;
-		this.text = options.text || null;
-		this.name =  options.name || null;
-		this.ext = options.ext || EJS.ext;
-		this.extMatch = new RegExp(this.ext.replace(/\./, '\.'));
 	}
 };
-EJS.endExt = function(path, match){
-	if(!path) return null;
-	match.lastIndex = 0
-	return path+ (match.test(path) ? '' : this.ext )
-}
+
 
 
 
@@ -724,7 +610,14 @@ EJS.Scanner = function(source, left, right) {
          left_equal: 		left+'%=',
          left_comment: 	left+'%#'})
 
-	this.SplitRegexp = left=='[' ? /(\[%%)|(%%\])|(\[%=)|(\[%#)|(\[%)|(%\]\n)|(%\])|(\n)/ : new RegExp('('+this.double_left+')|(%%'+this.double_right+')|('+this.left_equal+')|('+this.left_comment+')|('+this.left_delimiter+')|('+this.right_delimiter+'\n)|('+this.right_delimiter+')|(\n)') ;
+	this.SplitRegexp = (left=='[' ? /(\[%%)|(%%\])|(\[%=)|(\[%#)|(\[%)|(%\]\n)|(%\])|(\n)/ : 
+			new RegExp('('+this.double_left+
+			')|(%%'+this.double_right+
+			')|('+this.left_equal+
+			')|('+this.left_comment+
+			')|('+this.left_delimiter+
+			')|('+this.right_delimiter+
+			'\n)|('+this.right_delimiter+')|(\n)') );
 	
 	this.source = source;
 	this.stag = null;
@@ -865,17 +758,17 @@ EJS.Compiler.prototype = {
   compile: function(options, name) {
   	options = options || {};
 	this.out = '';
-	var put_cmd = "___ViewO.push(";
-	var insert_cmd = put_cmd;
-	var buff = new EJS.Buffer(this.pre_cmd, this.post_cmd);		
-	var content = '';
-	var clean = function(content)
-	{
-	    content = content.replace(/\\/g, '\\\\');
-        content = content.replace(/\n/g, '\\n');
-        content = content.replace(/"/g,  '\\"');
-        return content;
-	};
+	var put_cmd = "___ViewO.push(",
+		insert_cmd = put_cmd,
+		buff = new EJS.Buffer(this.pre_cmd, this.post_cmd),
+		content = '',
+		clean = function(content)
+		{
+		    content = content.replace(/\\/g, '\\\\');
+	        content = content.replace(/\n/g, '\\n');
+	        content = content.replace(/"/g,  '\\"');
+	        return content;
+		};
 	this.scanner.scan(function(token, scanner) {
 		if (scanner.stag == null)
 		{
@@ -890,8 +783,7 @@ EJS.Compiler.prototype = {
 				case scanner.left_equal:
 				case scanner.left_comment:
 					scanner.stag = token;
-					if (content.length > 0)
-					{
+					if( content.length > 0 ) {
 						buff.push(put_cmd + '"' + clean(content) + '")');
 					}
 					content = '';
@@ -935,44 +827,24 @@ EJS.Compiler.prototype = {
 			}
 		}
 	});
-	if (content.length > 0)
+	if ( content.length > 0 )
 	{
-		// Chould be content.dump in Ruby
+		// Should be content.dump in Ruby
 		buff.push(put_cmd + '"' + clean(content) + '")');
 	}
 	buff.close();
 	this.out = buff.script + ";";
 	var to_be_evaled = '/*'+name+'*/this.process = function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {'+this.out+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}};";
-	
-	try{
-		eval(to_be_evaled);
-	}catch(e){
-		if(typeof JSLINT != 'undefined'){
-			JSLINT(this.out);
-			for(var i = 0; i < JSLINT.errors.length; i++){
-				var error = JSLINT.errors[i];
-				if(error.reason != "Unnecessary semicolon."){
-					error.line++;
-					var e = new Error();
-					e.lineNumber = error.line;
-					e.message = error.reason;
-					if(options.view)
-						e.fileName = options.view;
-					throw e;
-				}
-			}
-		}else{
-			throw e;
-		}
-	}
+
+	eval(to_be_evaled);
   }
 };
 
 
 //type, cache, folder
 /**
+ * @attribute options
  * Sets default options for all views
- * @param {Object} options Set view with the following options
  * <table class="options">
 				<tbody><tr><th>Option</th><th>Default</th><th>Description</th></tr>
 				<tr>
@@ -990,13 +862,12 @@ EJS.Compiler.prototype = {
 	</tbody></table>
  * 
  */
-EJS.config = function(options){
-	EJS.cache = options.cache != null ? options.cache : EJS.cache;
-	EJS.type = options.type != null ? options.type : EJS.type;
-	EJS.ext = options.ext != null ? options.ext : EJS.ext;
-	EJS.INVALID_PATH =  -1;
-};
-EJS.config( {cache: true, type: '<', ext: '.ejs' } );
+EJS.options = {
+	cache : true,
+	type: '<',
+	ext: '.ejs'
+}
+EJS.INVALID_PATH =  -1;
 
 
 
@@ -1044,73 +915,36 @@ EJS.Helpers.prototype = {
 		}
 	}
 };
-    EJS.newRequest = function(){
-	   var factories = [function() { return new ActiveXObject("Msxml2.XMLHTTP"); },function() { return new XMLHttpRequest(); },function() { return new ActiveXObject("Microsoft.XMLHTTP"); }];
-	   for(var i = 0; i < factories.length; i++) {
-	        try {
-	            var request = factories[i]();
-	            if (request != null)  return request;
-	        }
-	        catch(e) { continue;}
-	   }
-	}
-	
-	EJS.request = function(path){
-	   var request = new EJS.newRequest()
-	   request.open("GET", path, false);
-	   
-	   try{request.send(null);}
-	   catch(e){return null;}
-	   
-	   if ( request.status == 404 || request.status == 2 ||(request.status == 0 && request.responseText == '') ) return null;
-	   
-	   return request.responseText
-	}
-	EJS.ajax_request = function(params){
-		params.method = ( params.method ? params.method : 'GET')
-		
-		var request = new EJS.newRequest();
-		request.onreadystatechange = function(){
-			if(request.readyState == 4){
-				if(request.status == 200){
-					params.onComplete(request)
-				}else
-				{
-					params.onComplete(request)
-				}
-			}
-		}
-		request.open(params.method, params.url)
-		request.send(null)
-	}
+    
 
-	$.View.register({
-		suffix : "ejs",
-		//returns a function that renders the view
-		get : function(id, url){
-			var text = $.ajax({
-					async: false,
-					url: url,
-					dataType: "text",
-					error : function(){
-						throw "ejs.js ERROR: There is no template or an empty template at "+url;
-					}
-				}).responseText
-			if(!text.match(/[^\s]/)){
-				throw "ejs.js ERROR: There is no template or an empty template at "+url;
-			}
-			return this.renderer(id, text);
-		},
-		script : function(id, src){
-			 return "jQuery.View.EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";     
-		},
-		renderer : function(id, text){
-			var ejs = new EJS({text: text, name: id})
-			return function(data, helpers){
-				return ejs.render.call(ejs, data, helpers)
-			}
+$.View.register({
+	suffix : "ejs",
+	//returns a function that renders the view
+	get : function(id, url){
+		var text = $.ajax({
+				async: false,
+				url: url,
+				dataType: "text",
+				error : function(){
+					throw "ejs.js ERROR: There is no template or an empty template at "+url;
+				}
+			}).responseText
+		if(!text.match(/[^\s]/)){
+			throw "ejs.js ERROR: There is no template or an empty template at "+url;
 		}
-	})
+		return this.renderer(id, text);
+	},
+	script : function(id, src){
+		 return "jQuery.View.EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";     
+	},
+	renderer : function(id, text){
+		var ejs = new EJS({text: text, name: id})
+		return function(data, helpers){
+			return ejs.render.call(ejs, data, helpers)
+		}
+	}
+})
+	
 
 })(jQuery);
 

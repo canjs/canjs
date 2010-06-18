@@ -1,7 +1,7 @@
 //jQuery.Class 
 // This is a modified version of John Resig's class
 // http://ejohn.org/blog/simple-javascript-inheritance/
-// It provides class level inheritence and callbacks.
+// It provides class level inheritance and callbacks.
 
 steal.plugin("jquery").then(function($){
 
@@ -36,7 +36,7 @@ var initializing = false,
 			newProps[name];
 		}
 	};
-// The base Class implementation (does nothing)
+
 
 /**
 * @constructor jQuery.Class
@@ -237,13 +237,40 @@ var initializing = false,
 * 
 * <p>Init functions are called after setup functions.
 * Typically, they receive the same arguments 
-* as their preceding setup function.  The following
-* 
+* as their preceding setup function.  The Foo class's <code>init</code> method
+* gets called in the following example:
 * </p>
-*
-* 
-* <p>The prototype constructor is called whenever a new instance of the class is created.
+* @codestart
+* $.Class.Extend("Foo", {
+*   init : function( arg1, arg2, arg3){
+*     this.sum = arg1+arg2+arg3;
+*   }
+* })
+* var foo = new Foo(1,2,3);
+* foo.sum //-> 6
+* @codeend
+* <h2>Callbacks</h2>
+* <p>Similar to jQuery's proxy method, Class provides a 
+* [jQuery.Class.static.callback callback]
+* function that returns a callback to a method that will always
+* have
+* <code>this</code> set to the class or instance of the class.
 * </p>
+* The following example uses this.callback to make sure 
+* <code>this.name</code> is available in <code>show</code>.
+* @codestart
+$.Class.extend("Todo",{
+  init : function(name){ this.name = name }
+  get : function(){
+    $.get("/stuff",this.callback('show'))
+  },
+  show : function(txt){
+    alert(this.name+txt)
+  }
+})
+new Todo("Trash").get()
+* @codeend
+* <p>Callback is available as a static and prototype method.</p>
 * <h2>Demo</h2>
 * @demo jquery/class/class.html
 * 
@@ -323,17 +350,20 @@ $.extend($.Class,{
 		}
 	
 		self = this;
-		return function(){
+		
+		return function class_cb(){
 			var cur = args.concat(jQuery.makeArray(arguments)), 
 				isString, 
 				length = funcs.length,
-				f =0, func;
+				f =0, 
+				func;
 			
 			for(; f < length; f++ ) {
-				if( !funcs[f] ) {
+				func = funcs[f];
+				if( !func ) {
 					continue;
 				}
-				func = funcs[f];
+				
 				isString = typeof func == "string";
 				if( isString && self._set_called ) {
 					self.called = func;
@@ -361,8 +391,9 @@ $.extend($.Class,{
 	*/
 	getObject: function(objectName, current){
 		var current = current || window,
-			parts = objectName.split(/\./)
-		for(var i =0; i < parts.length; i++){
+			parts = objectName  ? objectName.split(/\./) :[],
+			i=0;
+		for(; i < parts.length; i++){
 			current = current[parts[i]] || ( current[parts[i]] = {} )
 		}
 		return current;
@@ -376,15 +407,17 @@ $.extend($.Class,{
 	 * $.Class.extend("MyClass",{},{})
 	 * var mc = MyClass.newInstance.apply(null, new Array(parseInt(Math.random()*10,10))
 	 * @codeend
+	 * @return {class} instance of the class
 	 */
 	newInstance: function(){
-		initializing = true;
-		var inst = new this();
-		initializing = false;
-		if ( inst.setup )
-			inst.setup.apply(inst, arguments);
-		if ( inst.init )
-			inst.init.apply(inst, arguments);
+		var inst = this.rawInstance(),
+			args;
+		if ( inst.setup ) {
+			args = inst.setup.apply(inst, arguments);
+		}
+		if ( inst.init ) {
+			inst.init.apply(inst, $.isArray(args) ? args : arguments);
+		}
 		return inst;
 	},
 	/**
@@ -395,7 +428,7 @@ $.extend($.Class,{
 	 * @param {Object} protoProps
 	 */
 	setup: function(oldClass, fullName){
-		this.defaults = $.extend(true, {},oldClass.defaults, this.defaults);
+		this.defaults = $.extend(true, {}, oldClass.defaults, this.defaults);
 		return arguments;
 	},
 	rawInstance: function(){
@@ -421,92 +454,83 @@ $.extend($.Class,{
 	 * @return {jQuery.Class} returns the new class
 	 */
 	extend: function(fullName, klass, proto) {
-		
+		// figure out what was passed
 		if(typeof fullName != 'string'){
 			proto = klass;
 			klass = fullName;
 			fullName = null;
 		}
-		
 		if(!proto){
 			proto = klass;
 			klass = null;
 		}
 		
 		proto = proto || {};
-		var _super_class = this;
-		var _super = this.prototype;
+		var _super_class = this,
+			_super = this.prototype,
+			name,
+			shortName, 
+			namespace,
+			prototype;
+			
 		// Instantiate a base class (but only create the instance,
 		// don't run the init constructor)
 		initializing = true;
-		var prototype = new this();
+		prototype = new this();
 		initializing = false;
 		// Copy the properties over onto the new prototype
 		inheritProps(proto, _super, prototype);
 		
 		// The dummy class constructor
 		function Class() {
-		  // All construction is actually done in the init method
-		  if(initializing) return;
-		  
-		  if(this.constructor !== Class && arguments.length){  //we are being called w/o new
-			  return this.extend.apply(this, arguments)
-		  } else {												//we are being called w/ new
-			 var args;
-			 if(this.setup) {
-			 	args = this.setup.apply(this, arguments);
-			 }
-			 if(this.init){
-			 	  this.init.apply(this, $.isArray(args) ? args : arguments);
-			 }
-			 
-		  }
+			// All construction is actually done in the init method
+			if(initializing) return;
+			
+			if(this.constructor !== Class && arguments.length){  //we are being called w/o new
+				return this.extend.apply(this, arguments)
+			} else {												//we are being called w/ new
+				return this.Class.newInstance.apply(this.Class,arguments)
+			}
 		}
-		for(var name in this){
+		// Copy old stuff onto class
+		for(name in this){
 			if(this.hasOwnProperty(name) && 
-				name != 'prototype'&& 
-				name != 'defaults' &&
-				name != 'getObject'){
+				$.inArray(name,['prototype','defaults','getObject']) == -1){
 				Class[name] = this[name];
 			}
 		}
-
-
 		
+		// do static inheritance
+		inheritProps(klass, this, Class);
 		
-		//copy properties from current class to static
-		
-		
-		//do static inheritence
-		inheritProps(klass, this, Class)
-		
-
-		var shortName, 
-			namespace;
-		
+		// do namespace stuff
 		if (fullName) {
-			var current = window
-			var parts = fullName.split(/\./)
-			for(var i =0; i < parts.length-1; i++){
-				current = current[parts[i]] || ( current[parts[i]] = {} )
-			}
-			namespace = current;
-			shortName = parts[parts.length - 1];
 			
+			var parts = fullName.split(/\./),
+				shortName =  parts.pop();
+				current = $.Class.getObject(parts.join('.')),
+				namespace = current;
+
 			//@steal-remove-start
 			steal.dev.isHappyName(fullName)
 			//@steal-remove-end
+			
+			current[shortName] = Class;
 		}
 		
-		Class.prototype = prototype;
-		//Provide a reference to this class
-		Class.prototype.Class = Class; //only changing buff prototype
-		Class.prototype.constructor = Class; //only buff prototype
-		// Enforce the constructor to be what we expect
-		Class.constructor = Class;
+		// set things that can't be overwritten
+		$.extend(Class,{
+			prototype: prototype,
+			namespace: namespace,
+			shortName: shortName,
+			constructor: Class,
+			fullName: fullName
+		});
 		
-		Class.namespace = namespace;
-		Class.shortName = shortName
+		//make sure our prototype looks nice
+		Class.prototype.Class = Class.prototype.constructor =Class;
+
+
 		/**
 		 * @attribute fullName 
 		 * The full name of the class, including namespace, provided for introspection purposes.
@@ -516,9 +540,7 @@ $.extend($.Class,{
 		 * MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
 		 * @codeend
 		 */
-		Class.fullName = fullName;
-		
-		
+
 		var args = Class.setup.apply(Class, [_super_class].concat( $.makeArray(arguments) ));
 	
 		if(Class.init) {
@@ -526,12 +548,6 @@ $.extend($.Class,{
 		}
 
 		/* @Prototype*/
-		
-		
-		if(shortName){
-			current[shortName] = Class;
-		}
-		
 		
 		return Class;
 		/** 
@@ -601,7 +617,7 @@ $.extend($.Class,{
 
 
 
-jQuery.Class.prototype = {
+jQuery.Class.prototype. 
   /**
    * @function callback
    * Returns a callback function.  This does the same thing as and is described better in [jQuery.Class.static.callback].
@@ -612,7 +628,7 @@ jQuery.Class.prototype = {
    * next function.
    * @return {Function} the callback function
    */
-  callback : jQuery.Class.callback
-}
+  callback = jQuery.Class.callback;
+
   
 })();
