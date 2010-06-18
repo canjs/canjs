@@ -43,7 +43,7 @@ $.fn.extend({
 
 		   return jQuery( jQuery.makeArray(this[0].elements) ).getParams(convert);
 	   }
-	   return jQuery("input, textarea, select", this[0]).getParams(convert);
+	   return jQuery("input[name], textarea[name], select[name]", this[0]).getParams(convert);
 	},
 	getParams : function(convert){
 		var data = {},
