@@ -1,18 +1,25 @@
-module("associations")
-
-$.Model.extend("MyTest.Person");
-$.Model.extend("MyTest.Loan");
-$.Model.extend("MyTest.Issues");
-
-$.Model.extend("MyTest.Customer",
-{
-	init : function(){
-		this.belongsTo(MyTest.Person)
-		this.hasMany(MyTest.Loan,"loans")
-		this.hasMany(MyTest.Issues,"issues")
+module("jquery/model/associations",{
+	setup : function(){
+		
+		$.Model.extend("MyTest.Person");
+		$.Model.extend("MyTest.Loan");
+		$.Model.extend("MyTest.Issues");
+		
+		$.Model.extend("MyTest.Customer",
+		{
+			init : function(){
+				this.belongsTo("MyTest.Person")
+				this.hasMany("MyTest.Loan")
+				this.hasMany("MyTest.Issues")
+			}
+		},
+		{});
+		
+		
 	}
-},
-{});
+})
+
+
 
 
 

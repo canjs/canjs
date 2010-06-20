@@ -2,9 +2,6 @@ module("jquery/model", {
 	setup: function(){
         var ids = 0;
 	    $.Model.extend("Person",{
-			init : function(){
-				
-			},
 			findAll : function(params, success, error){
 				success("findAll");
 			},
@@ -29,9 +26,6 @@ module("jquery/model", {
 
 test("CRUD", function(){
    
-	
-	
-	
 	Person.findAll({}, function(response){
 		equals("findAll", response)
 	})
@@ -58,4 +52,11 @@ test("hookup and model", function(){
 	ok(div.hasClass("person"), "has person");
 	ok(div.hasClass("person_5"), "has person_5");
 	equals(p, div.model(),"gets model" )
+})
+test("guess type", function(){
+   equals("array", $.Model.guessType( [] )  );
+   equals("date", $.Model.guessType( new Date() )  );
+   equals("boolean", $.Model.guessType( true )  );
+   equals("number", $.Model.guessType( "1" )  );
+   equals("string", $.Model.guessType( "a" )  );
 })

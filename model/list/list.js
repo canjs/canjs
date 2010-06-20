@@ -3,7 +3,7 @@ steal.plugins('jquery/model').then(function(){
 $.Class.extend("jQuery.Model.List",{
     init : function(instances){
         this.length = 0;
-        Array.prototype.push.apply( this, instances );
+        Array.prototype.push.apply( this, instances || [] );
     },
     push: [].push,
     sort: [].sort,

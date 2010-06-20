@@ -734,7 +734,7 @@ jQuery.fn.makePositioned = function() {
 		 *    drag.revert()
 		 * }
 		 * @codeend
-		 * @param {optional:Boolean} val optional, set to false if you don't want to revert.
+		 * @param {Boolean} [val] optional, set to false if you don't want to revert.
 		 */
 		revert : function(val){
 			this._revert = val == null ? true : val;

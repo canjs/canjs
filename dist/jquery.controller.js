@@ -637,6 +637,15 @@ jQuery.Class.prototype.
 // Several of the methods in this plugin use code adapated from Prototype
 //  Prototype JavaScript framework, version 1.6.0.1
 //  (c) 2005-2007 Sam Stephenson
+
+var regs = {
+        undHash: /_|-/,
+		colons : /::/,
+        words: /([A-Z]+)([A-Z][a-z])/g,
+        lowerUpper : /([a-z\d])([A-Z])/g,
+        dash : /([a-z\d])([A-Z])/g
+    };
+
 /* 
  * @class jQuery.String
  */
@@ -679,7 +688,7 @@ $.String =
      * @return {String} a the camelized string
      */
 	camelize: function(s){
-		var parts = s.split(this.regs.undHash),
+		var parts = s.split(regs.undHash),
 			i = 1;
 		parts[0] = parts[0].charAt(0).toLowerCase()+parts[0].substr(1);
 		for(; i < parts.length; i++)
@@ -692,7 +701,7 @@ $.String =
      * @return {String}
      */
 	classize: function(s){
-		var parts = s.split(this.regs.undHash),
+		var parts = s.split(regs.undHash),
 			i=0;
 		for(; i < parts.length; i++)
 			parts[i] = this.capitalize(parts[i]);
@@ -707,22 +716,15 @@ $.String =
      * @return {String}
      */
 	niceName: function(s){
-		var parts = s.split(this.regs.undHash),
+		var parts = s.split(regs.undHash),
 			i = 0;
 		for(; i < parts.length; i++)
 			parts[i] = this.capitalize(parts[i]);
 		return parts.join(' ');
 	},
 
-    regs : {
-        undHash: /_|-/,
-		colons : /::/,
-        words: /([A-Z]+)([A-Z][a-z])/g,
-        lowerUpper : /([a-z\d])([A-Z])/g,
-        dash : /([a-z\d])([A-Z])/g
-    },
+    
     underscore : function(s){
-        var regs = this.regs;
         return s.replace(regs.colons, '/').
                  replace(regs.words,'$1_$2').
                  replace(regs.lowerUpper,'$1_$2').
@@ -858,7 +860,7 @@ breaker = /^(?:(.*?)\s)?([\w\.\:>]+)$/ ;
  * @plugin jquery/controller
  * @download jquery/dist/jquery.controller.js
  * 
- * <p><img src='jmvc/images/controller.png' class='component'/>Controllers organize event handlers using event delegation. 
+ * <p>Controllers organize event handlers using event delegation. 
  * If something happens in your application (a user click or a [jQuery.Model|Model] instance being updated), 
  * a controller should respond to it. </p>
  * 
@@ -872,23 +874,22 @@ breaker = /^(?:(.*?)\s)?([\w\.\:>]+)$/ ;
  *         Controllers take care of setup / teardown auto-magically.</li>
  * </ul>
  * <h2>Basic Example</h2>
-Controllers organize jQuery code into resuable, inheritable, and extendable widgets.  So ...
+Controllers organize jQuery code into resuable, inheritable, and extendable widgets.  So instead of
 @codestart
-// instead of something like:
 $(function(){
   $('#tabs').click(someCallbackFunction1)
   $('#tabs .tab').click(someCallbackFunction2)
   $('#tabs .delete click').click(someCallbackFunction3)
 });
-
-// do this
+@codeend
+do this
+@codestart
 $.Controller.extend('Tabs',{
   click: function(){...},
   '.tab click' : function(){...},
   '.delete click' : function(){...}
 })
 $('#tabs').tabs();
-// isn't that nice?
 @codeend
 <h2>Tabs Example</h2>
 @demo jquery/controller/controller.html
@@ -1381,7 +1382,7 @@ $.Class.extend("jQuery.Controller",
 			selector = element
 			element = this.element
 		}
-		return this._binder(el, eventName, func, selector)
+		return this._binder(element, eventName, func, selector)
 	},
 	/**
 	 * Called if an controller's jQuery helper is called on an element that already has a controller instance

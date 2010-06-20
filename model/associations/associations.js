@@ -1,10 +1,10 @@
 steal.plugins('jquery/model').then(function($){
 	
 	$.Model.belongsTo = function(type, name){
-		name = name //|| $.String.camelize(type.shortName)
+		name = name || $.String.camelize( type.match(/\w+$/)[0] );
 		var cap = $.String.capitalize(name),
 			set = function(v){
-				return this[name] = (v == v.Class ? v : $.Class.getObject(type).wrap(v))
+				return ( this[name] = (v == v.Class ? v : $.Class.getObject(type).wrap(v)) )
 			},
 			get = function(){
 				return this[name];
@@ -25,7 +25,7 @@ steal.plugins('jquery/model').then(function($){
 		return this;
 	}
 	$.Model.hasMany = function(type, name){
-		name = name //|| $.String.camelize(type.shortName)+"s"
+		name = name || $.String.camelize( type.match(/\w+$/)[0] )+"s";
 		
 		var cap = $.String.capitalize(name)
 		if(!this.prototype["set"+cap]){

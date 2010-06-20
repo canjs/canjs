@@ -156,7 +156,6 @@ $.fn.
  * handler doesn't prevent the default action.  For example, a tabs widget might 
  * hide the currently shown tab if the application developer doesn't prevent default.</p>
  * @param {Object} type The type of event to trigger.
- * @param {Object} type The type of event to trigger.
  * @param {Object} data Some data to pass to callbacks listening to this 
  * event.
  */

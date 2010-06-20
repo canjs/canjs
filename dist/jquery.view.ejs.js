@@ -309,6 +309,15 @@ for(var i=0; i < funcs.length; i++){
 // Several of the methods in this plugin use code adapated from Prototype
 //  Prototype JavaScript framework, version 1.6.0.1
 //  (c) 2005-2007 Sam Stephenson
+
+var regs = {
+        undHash: /_|-/,
+		colons : /::/,
+        words: /([A-Z]+)([A-Z][a-z])/g,
+        lowerUpper : /([a-z\d])([A-Z])/g,
+        dash : /([a-z\d])([A-Z])/g
+    };
+
 /* 
  * @class jQuery.String
  */
@@ -351,7 +360,7 @@ $.String =
      * @return {String} a the camelized string
      */
 	camelize: function(s){
-		var parts = s.split(this.regs.undHash),
+		var parts = s.split(regs.undHash),
 			i = 1;
 		parts[0] = parts[0].charAt(0).toLowerCase()+parts[0].substr(1);
 		for(; i < parts.length; i++)
@@ -364,7 +373,7 @@ $.String =
      * @return {String}
      */
 	classize: function(s){
-		var parts = s.split(this.regs.undHash),
+		var parts = s.split(regs.undHash),
 			i=0;
 		for(; i < parts.length; i++)
 			parts[i] = this.capitalize(parts[i]);
@@ -379,22 +388,15 @@ $.String =
      * @return {String}
      */
 	niceName: function(s){
-		var parts = s.split(this.regs.undHash),
+		var parts = s.split(regs.undHash),
 			i = 0;
 		for(; i < parts.length; i++)
 			parts[i] = this.capitalize(parts[i]);
 		return parts.join(' ');
 	},
 
-    regs : {
-        undHash: /_|-/,
-		colons : /::/,
-        words: /([A-Z]+)([A-Z][a-z])/g,
-        lowerUpper : /([a-z\d])([A-Z])/g,
-        dash : /([a-z\d])([A-Z])/g
-    },
+    
     underscore : function(s){
-        var regs = this.regs;
         return s.replace(regs.colons, '/').
                  replace(regs.words,'$1_$2').
                  replace(regs.lowerUpper,'$1_$2').

@@ -1,6 +1,7 @@
 steal.plugins('jquery','jquery/class','jquery/lang','steal/openajax').then(function(){
 //a cache for attribute capitalization ... slowest part of inti.
-var capitalize = $.String.capitalize;
+var capitalize = $.String.capitalize,
+	underscore = $.String.underscore;
 
 /**
  * @tag core
@@ -136,34 +137,36 @@ You can validate your model's attributes with another plugin.  See [validation].
 jQuery.Class.extend("jQuery.Model",
 /* @Static*/
 {
-	storeType: null,
 	setup: function(){
+		// clear everything that shouldn't be reused
 		this.validations = [];
 		this.attributes= {};  //list of all attributes ever given to this model
-        this.defaultAttributes= this.defaultAttributes || {};   //list of attributes and values you want right away
+        this.defaults= this.defaults || {};   //list of attributes and values you want right away
         this.associations = {};
-        if(this.fullName.substr(0,7) == "jQuery." ) return;
-        this.underscoredName =  jQuery.String.underscore(this.fullName.replace(/\./g,"_"))
-        jQuery.Model.models[this.underscoredName] = this;
-		if(this.storeType)
+        this._fullName =  underscore(this.fullName.replace(/\./g,"_"));
+		
+		if( this.fullName.substr(0,7) == "jQuery." ) {
+			return;
+		}
+        jQuery.Model.models[this._fullName] = this;
+		if( this.storeType ){
 			this.store = new this.storeType(this);
+		}
+			
 	},
-	init : function(){},
     /**
      * Used to create an existing object from attributes
      * @param {Object} attributes
      * @return {Model} an instance of the model
      */
     wrap : function(attributes){
-        
-		if(!attributes) return null;
-        if(attributes.attributes) 
-			attributes = attributes.attributes; //in case rails 2.0
-		if(this.singularName && attributes[this.singularName])
-			attributes = attributes[this.singularName];
-        var inst = new this(attributes);
-
-		return inst;
+		if(!attributes) {
+			return null;
+		}
+		return new this(
+			// checks for properties in an object (like rails 2.0 gives);
+			attributes[this.singularName] || attributes.attributes || attributes
+		);
     },
     /**
      * Creates many instances
@@ -172,21 +175,25 @@ jQuery.Class.extend("jQuery.Model",
      */
     wrapMany : function(instances){
         if(!instances) return null;
-        var res = [], raw = instances, isArray = $.isArray(instances), length, i=0;
+        var res = new (this.List || Array), 
+			arr = $.isArray(instances)
+			raw = arr ? instances : instances.data, 
+			length = raw.length, 
+			i=0;
 		res._use_call = true; //so we don't call next function with all of these
-        if(!isArray)
-			raw = instances.data;
-		length = raw.length;
+
 		for(; i < length; i++){
 			res.push( this.wrap(raw[i]) ); 
 		}
-		if (!isArray) { //push other stuff onto array
+		if (!arr) { //push other stuff onto array
 			for (var prop in instances) {
-				if (instances.hasOwnProperty(prop) && prop !== 'data') 
+				if (prop !== 'data') {
 					res[prop] = instances[prop];
+				}
+					
 			}
 		}
-		return res;
+		return res; //model list?
     },
     /**
      * The name of the id field.  Defaults to 'id'.  Change this if it is something different.
@@ -203,8 +210,9 @@ jQuery.Class.extend("jQuery.Model",
 			return;
 		if(! this.attributes[property])
             this.attributes[property] = type;
-        if(! this.defaultAttributes[property])
-            this.defaultAttributes[property] = null;
+        if(! this.defaults[property])
+            this.defaults[property] = null;
+		return type
     },
     models : {},
     /**
@@ -214,9 +222,9 @@ jQuery.Class.extend("jQuery.Model",
      */
     publish : function(event, data){
         //@steal-remove-start
-        steal.dev.log("Model.js - publishing " + jQuery.String.underscore(this.shortName) + "." + event)
+        steal.dev.log("Model.js - publishing " + underscore(this.shortName) + "." + event)
         //@steal-remove-end
-		OpenAjax.hub.publish(   jQuery.String.underscore(this.shortName) + "."+event, data);
+		OpenAjax.hub.publish(   underscore(this.shortName) + "."+event, data);
     },
     /**
      * Guesses at the type of an object.  This is useful when you want to know more than just typeof.
@@ -227,7 +235,7 @@ jQuery.Class.extend("jQuery.Model",
 	    if(typeof object != 'string'){
 	        if(object == null) return typeof object;
 	        if( object.constructor == Date ) return 'date';
-	        if(object.constructor == Array) return 'array';
+	        if($.isArray(object)) return 'array';
 	        return typeof object;
 	    }
 		if(object == "") return 'string';
@@ -236,21 +244,32 @@ jQuery.Class.extend("jQuery.Model",
 	    if(!isNaN(object)) return 'number'
 	    return typeof object;
 	},
+	converters : {
+		"date" : function(val){
+			return this._parseDate(value)
+		},
+		"number" : function(val){
+			return parseFloat(val)
+		},
+		"boolean" : function(val){
+			return Boolean(val)
+		}
+	},
     /**
      * Implement this function!
      * Create is called by save to create a new instance.  If you want to be able to call save on an instance
      * you have to implement create.
      */
-    create : function(attributes, success, error){
-        throw "Implement Create"
+    create : function(attrs, success, error){
+        throw "Model: Implement Create"
     },
     /**
      * Implement this function!
      * Update is called by save to update an instance.  If you want to be able to call save on an instance
      * you have to implement update.
      */
-    update : function(id, attributes, success, error){
-        throw "JMVC--! You Must Implement "+this.fullName+"'s \"update\" Function !--"
+    update : function(id, attrs, success, error){
+        throw "Model: You Must Implement "+this.fullName+"'s \"update\" Function !--"
     },
     /**
      * Implement this function!
@@ -259,7 +278,7 @@ jQuery.Class.extend("jQuery.Model",
      * @param {String|Number} id the id of the instance you want destroyed
      */
     destroy : function(id, success, error){
-        throw "JMVC--! You Must Implement "+this.fullName+"'s \"destroy\" Function !--"
+        throw "Model: You Must Implement "+this.fullName+"'s \"destroy\" Function !--"
     },
 	/**
 	 * Turns a string into a date
@@ -267,11 +286,9 @@ jQuery.Class.extend("jQuery.Model",
 	 * @return {Date} a date
 	 */
 	_parseDate : function(str){
-        if(typeof str == "string"){
-            return Date.parse(str) == NaN ? null : Date.parse(str)
-        }else
-            return str
-
+        return typeof str == "string" ?  
+			(Date.parse(str) == NaN ? null : Date.parse(str)) :
+			str
 	}
 },
 /* @Prototype*/
@@ -281,8 +298,7 @@ jQuery.Class.extend("jQuery.Model",
      * @param {Object} attributes a hash of attributes
      */
     init : function(attributes){
-        //this._properties = [];
-        this.attrs(this.Class.defaultAttributes || {});
+        this.attrs(this.Class.defaults);
         this.attrs(attributes);
         /**
          * @attribute errors
@@ -303,7 +319,6 @@ jQuery.Class.extend("jQuery.Model",
     },
     valid : function() {
         for(var attr in this.errors)
-            if(this.errors.hasOwnProperty(attr))
                 return false;
         return true;
     },
@@ -313,8 +328,7 @@ jQuery.Class.extend("jQuery.Model",
     validate : function(){
         this.errors = {};
         var self = this;
-        if(this.Class.validations)
-            jQuery.each(this.Class.validations, function(i, func) { func.call(self) });
+        $.each(this.Class.validations || [], function(i, func) { func.call(self) });
     },
     /**
      * Gets or sets an attribute on the model.
@@ -336,47 +350,28 @@ jQuery.Class.extend("jQuery.Model",
      * @param {Object} value
      */
     _setProperty : function(property, value, capitalized) {
-		var funcName = "set"+capitalized;
+		var funcName = "set"+capitalized,
+			old = this[property], 
+			Class = this.Class,
+			type = Class.attributes[property] || Class.addAttr(property, Class.guessType(value)  ),
+			converter = Class.converters[type],
+			val;
+		
         if(this[funcName] && ! (value = this[funcName](value)) ) return;
 		
-        //add to cache, this should probably check that the id isn't changing.  If it does, should update the cache
-        var old = this[property], type = this.Class.attributes[property];
-		if(!type){
-			type =  this.Class.guessType(value);
-			this.Class.addAttr(property, type  );
-		}
-		if (value == null) 
-			this[property] = null;
-		else {
-			switch (type) {
-				case "date":
-					this[property] = this.Class._parseDate(value);
-					break;
-				case "number":
-					this[property] = parseFloat(value);
-					break;
-				case "boolean":
-					this[property] = Boolean(value);
-					break;
-				default:
-					this[property] = value
-			}
-		}
+        //convert to value
+		val = this[property] = value == null ? null :
+			(converter ? converter.call(Class,value) : value)
+		
         
-        if(property == this.Class.id && this[property] && this.Class.store){
-			if(this.Class.store){
-				if(!old){
-                	this.Class.store.create(this);
-	            }else if(old != this[property]){
-	                this.Class.store.destroy(old);
-	                this.Class.store.create(this);
-	            }
-			}
-            
+        if(property == Class.id && val != null && Class.store){
+			if(!old){
+            	Class.store.create(this);
+            }else if(old != val){
+                Class.store.destroy(old);
+                Class.store.create(this);
+            }
         }
-        //if (!(MVC.Array.steal(this._properties,property))) this._properties.push(property);  
-        
-       
     },
     /**
      * Gets or sets a list of attributes
@@ -387,14 +382,13 @@ jQuery.Class.extend("jQuery.Model",
         var key;
 		if(!attributes){
             attributes = {};
-            var cas = this.Class.attributes;
-            for(key in cas){
-                if(cas.hasOwnProperty(key) ) attributes[key] = this.attr(key);
+            for(key in this.Class.attributes){
+                attributes[key] = this.attr(key);
             }
         }else{
             var idName = this.Class.id;
 			for(key in attributes){ 
-    			if(attributes.hasOwnProperty(key) && key != idName) 
+    			if(key != idName) 
     				this.attr(key, attributes[key]);
     		}
 			if(idName in attributes){
@@ -413,10 +407,12 @@ jQuery.Class.extend("jQuery.Model",
      * @param {Function} [opt3] callbacks onComplete function or object of callbacks
      */
     save: function(success,error){
-        var result;
         this.validate();
-        if(!this.valid()) return false;
-        result = this.isNew() ? 
+		
+        if(!this.valid()){
+			return false;
+		}
+        this.isNew() ? 
             this.Class.create(this.attrs(), this.callback(['created', success]), error) : 
             this.Class.update(this[this.Class.id], this.attrs(), this.callback(['updated', success]), error);
 
@@ -449,19 +445,19 @@ jQuery.Class.extend("jQuery.Model",
 	 * "shortName.destroyed"
 	 */
     destroyed : function(){
-        if(this.Class.store) this.Class.store.destroy(this[this.Class.id]);
+        if(this.Class.store){
+			this.Class.store.destroy(this[this.Class.id]);
+		}
         this.publish("destroyed",this)
         return [this];
     },
-    _resetAttrs : function(attributes) {
-        this._clear();
-    },
+	/*
     _clear : function() {
-        var cas = this.Class.defaultAttributes;
+        var cas = this.Class.defaults;
         for(var attr in cas){
             if(cas.hasOwnProperty(attr) ) this[attr] = null;
         }
-    },
+    },*/
     /**
      * Returns a unique identifier for the model instance.  For example:
      * @codestart
@@ -472,7 +468,9 @@ jQuery.Class.extend("jQuery.Model",
      * @return {String}
      */
     identity : function(){
-        return jQuery.String.underscore(this.Class.fullName.replace(/\./g,"_"))+'_'+(this.Class.escapeIdentity ? encodeURIComponent(this[this.Class.id]) : this[this.Class.id]);
+        var id = this[this.Class.id]
+		return underscore(this.Class.fullName.replace(/\./g,"_"))+'_'+
+			(this.Class.escapeIdentity ? encodeURIComponent(id) : id);
     },
 	/**
 	 * Returns elements that represent this model instance.  For this to work, your element's should
@@ -484,8 +482,8 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {String|jQuery|element} context - 
 	 */
     elements : function(context){
-	  	return typeof context == "string" ? jQuery(context+" ."+this.identity()) : 
-		 jQuery("."+this.identity(), context);
+	  	return typeof context == "string" ? $(context+" ."+this.identity()) : 
+		 $("."+this.identity(), context);
     },
     /**
      * Publishes to open ajax hub
@@ -496,7 +494,7 @@ jQuery.Class.extend("jQuery.Model",
         this.Class.publish(event, data|| this);
     },
 	hookup : function(el){
-		var shortName = $.String.underscore(this.Class.shortName),
+		var shortName = underscore(this.Class.shortName),
 			$el = $(el).addClass(shortName).addClass(this.identity()),
 			models  = $.data(el, "models") || $.data(el, "models", {});
 		models[shortName] = this;
@@ -514,20 +512,25 @@ jQuery.Class.extend("jQuery.Model",
  * @param {jQuery.Model} model if present only returns models of the provided type.
  * @return {Array} returns an array of model instances that are represented by the contained elements.
  */
-jQuery.fn.models = function(type){
+$.fn.models = function(type){
   	//get it from the data
 	
-	var ret = []
+	var collection = [],
+		kind,
+		ret;
     this.each(function(){
-		var models = $.data(this,"models") || {};
-		for(var name in models){
-			//check type
-			ret.push(models[name])
-		}
+		$.each($.data(this,"models") || {},function(name, instance){
+			//either null or the list type shared by all classes
+			kind = kind === undefined ? instance.Class.List || null :  
+				(instance.Class.List === kind ? kind : null)
+			collection.push(instance)
+		})
     });
-    return jQuery.unique( ret );
+	ret = new (kind || $.Model.list || Array)()
+	ret.push.apply(ret, $.unique( collection ))
+    return ret;
 }
-jQuery.fn.model = function(){
+$.fn.model = function(){
     return this.models.apply(this,arguments)[0];
 }
 });
