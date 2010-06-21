@@ -42,7 +42,7 @@
             return "null";
     
         if (type == "undefined" || type == "function")
-            return undefined;
+            return "undefined";
         
         if (type == "number" || type == "boolean")
             return o + "";
