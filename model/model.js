@@ -246,7 +246,7 @@ jQuery.Class.extend("jQuery.Model",
 	},
 	converters : {
 		"date" : function(val){
-			return this._parseDate(value)
+			return this._parseDate(val)
 		},
 		"number" : function(val){
 			return parseFloat(val)
