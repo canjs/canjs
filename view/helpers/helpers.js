@@ -1,10 +1,10 @@
-(function($){
+steal.plugins('jquery/view/ejs').then(function($){
 // JavaScriptMVC framework and server, 1.1.22
 //  - built on 2008/05/07 19:44
 /**
  * @add jQuery.View.Helpers Prototype additions
  */
-$.extend($.View.Helpers.prototype, {
+$.extend($.View.EJS.Helpers.prototype, {
     // treyk 06/11/2009 - Pulled from old MVC.Date plugin for now.  Will look for a suitable jQuery Date plugin
 	 month_names: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
    
@@ -312,28 +312,28 @@ $.extend($.View.Helpers.prototype, {
 	
 });
 
-$.View.Helpers.prototype.text_tag = $.View.Helpers.prototype.text_area_tag;
+$.View.EJS.Helpers.prototype.text_tag = $.View.EJS.Helpers.prototype.text_area_tag;
 
 // Private variables (in the (function($){})(jQuery) scope)   
 var data = {};
 var name = 0;
 
-$.View.Helpers.link_data = function(store){
+$.View.EJS.Helpers.link_data = function(store){
 	var functionName = name++;
 	data[functionName] = store;	
 	return "_data='"+functionName+"'";
 };
-$.View.Helpers.get_data = function(el){
+$.View.EJS.Helpers.get_data = function(el){
 	if(!el) return null;
 	var dataAt = el.getAttribute('_data');
 	if(!dataAt) return null;
 	return data[parseInt(dataAt)];
 };
-$.View.Helpers.prototype.link_data = function(store){
-	return $.View.Helpers.link_data(store)
+$.View.EJS.Helpers.prototype.link_data = function(store){
+	return $.View.EJS.Helpers.link_data(store)
 };
-$.View.Helpers.prototype.get_data = function(el){
-	return $.View.Helpers.get_data(el)
+$.View.EJS.Helpers.prototype.get_data = function(el){
+	return $.View.EJS.Helpers.get_data(el)
 };
 
 })(jQuery);
