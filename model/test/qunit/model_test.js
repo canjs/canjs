@@ -18,7 +18,9 @@ module("jquery/model", {
 				success({zoo: "monkeys"},"update");
 			}
 		},{
-			
+			prettyName : function(){
+				return "Mr. "+this.name;
+			}
 		})
 	}
 })
@@ -59,4 +61,11 @@ test("guess type", function(){
    equals("boolean", $.Model.guessType( true )  );
    equals("number", $.Model.guessType( "1" )  );
    equals("string", $.Model.guessType( "a" )  );
+})
+
+test("wrapMany", function(){
+	var people = Person.wrapMany([
+		{id: 1, name: "Justin"}
+	])
+	equals(people[0].prettyName(),"Mr. Justin","wraps wrapping works")
 })
