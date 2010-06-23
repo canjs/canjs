@@ -122,11 +122,12 @@ height:
         }
     };
 	$.fn[lower] = function(v){
-		if(v === undefined && this[0] !== window){
-			 return this[0] ? this[0]["offset"+Upper] -  getBoxes[lower](this[0], {padding: true, border: true}) : 0;
-		}else{
-			return checks["old" + Upper].call(this, v)	
-		}
+        var dim;
+        if (v === undefined && this[0] !== window && (dim = this[0]["offset" + Upper] )) {
+            return this[0] ? dim - getBoxes[lower](this[0], { padding: true, border: true }) : 0;
+        } else {
+            return checks["old" + Upper].call(this, v)
+        }
 	};
     //provides animations
 	var animate = function(boxes){
