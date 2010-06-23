@@ -136,7 +136,7 @@
      **/
     $.evalJSON = function(src)
     {
-        if (typeof(JSON) == 'object' && JSON.parse)
+        if (typeof(JSON) == 'object' && JSON.parse && src)
             return JSON.parse(src);
         return eval("(" + src + ")");
     };
@@ -146,7 +146,7 @@
     **/
     $.secureEvalJSON = function(src)
     {
-        if (typeof(JSON) == 'object' && JSON.parse)
+        if (typeof(JSON) == 'object' && JSON.parse && src)
             return JSON.parse(src);
         
         var filtered = src;
