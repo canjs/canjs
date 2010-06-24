@@ -123,8 +123,11 @@ height:
     };
 	$.fn[lower] = function(v){
         var dim;
-        if (v === undefined && this[0] !== window && (dim = this[0]["offset" + Upper] )) {
-            return this[0] ? dim - getBoxes[lower](this[0], { padding: true, border: true }) : 0;
+        if (v === undefined 
+			&& this[0] 
+			&& this[0] !== window 
+			&& (dim = this[0]["offset" + Upper] )) {
+            return dim - getBoxes[lower](this[0], { padding: true, border: true });
         } else {
             return checks["old" + Upper].call(this, v)
         }
