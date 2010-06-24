@@ -26,16 +26,16 @@ $('#bar').animate({outerWidth: 500});
 
 var weird = /button|select/i, //margin is inside border
 	getBoxes = {},
-    checks = {
-        width: ["Left", "Right"],
-        height: ['Top', 'Bottom'],
-        oldOuterHeight: $.fn.outerHeight,
-        oldOuterWidth: $.fn.outerWidth,
-        oldInnerWidth: $.fn.innerWidth,
-        oldInnerHeight: $.fn.innerHeight,
+	checks = {
+		width: ["Left", "Right"],
+		height: ['Top', 'Bottom'],
+		oldOuterHeight: $.fn.outerHeight,
+		oldOuterWidth: $.fn.outerWidth,
+		oldInnerWidth: $.fn.innerWidth,
+		oldInnerHeight: $.fn.innerHeight,
 		oldHeight : $.fn.height,
 		oldWidth: $.fn.width
-    };
+	};
 /**
  *  @add jQuery.fn
  */
@@ -84,65 +84,65 @@ height:
  */
 "Height" }, function(lower, Upper) {
 
-    //used to get the padding and border for an element in a given direction
-    getBoxes[lower] = function(el, boxes) {
-        var val = 0;
-        if (!weird.test(el.nodeName)) {
-            //make what to check for ....
-            var myChecks = [];
-            $.each(checks[lower], function() {
-                var direction = this;
-                $.each(boxes, function(name, val) {
-                    if (val)
-                        myChecks.push(name + direction+ (name == 'border' ? "Width" : "") );
-                })
-            })
-            $.each($.curStyles(el, myChecks), function(name, value) {
-                val += (parseFloat(value) || 0);
-            })
-        }
-        return val;
-    }
+	//used to get the padding and border for an element in a given direction
+	getBoxes[lower] = function(el, boxes) {
+		var val = 0;
+		if (!weird.test(el.nodeName)) {
+			//make what to check for ....
+			var myChecks = [];
+			$.each(checks[lower], function() {
+				var direction = this;
+				$.each(boxes, function(name, val) {
+					if (val)
+						myChecks.push(name + direction+ (name == 'border' ? "Width" : "") );
+				})
+			})
+			$.each($.curStyles(el, myChecks), function(name, value) {
+				val += (parseFloat(value) || 0);
+			})
+		}
+		return val;
+	}
 
-    //getter / setter
-    $.fn["outer" + Upper] = function(v, margin) {
-        if (typeof v == 'number') {
-            this[lower](v - getBoxes[lower](this[0], {padding: true, border: true, margin: margin}))
-            return this;
-        } else {
-            return checks["oldOuter" + Upper].call(this, v)
-        }
-    };
-    $.fn["inner" + Upper] = function(v) {
-        if (typeof v == 'number') {
-            this[lower](v - getBoxes[lower](this[0], { padding: true }))
-            return this;
-        } else {
-            return checks["oldInner" + Upper].call(this, v)
-        }
-    };
+	//getter / setter
+	$.fn["outer" + Upper] = function(v, margin) {
+		if (typeof v == 'number') {
+			this[lower](v - getBoxes[lower](this[0], {padding: true, border: true, margin: margin}))
+			return this;
+		} else {
+			return checks["oldOuter" + Upper].call(this, v)
+		}
+	};
+	$.fn["inner" + Upper] = function(v) {
+		if (typeof v == 'number') {
+			this[lower](v - getBoxes[lower](this[0], { padding: true }))
+			return this;
+		} else {
+			return checks["oldInner" + Upper].call(this, v)
+		}
+	};
 	$.fn[lower] = function(v){
-        var dim;
-        if (v === undefined 
+		var dim;
+		if (v === undefined 
 			&& this[0] 
 			&& this[0] !== window 
 			&& (dim = this[0]["offset" + Upper] )) {
-            return dim - getBoxes[lower](this[0], { padding: true, border: true });
-        } else {
-            return checks["old" + Upper].call(this, v)
-        }
+			return dim - getBoxes[lower](this[0], { padding: true, border: true });
+		} else {
+			return checks["old" + Upper].call(this, v)
+		}
 	};
-    //provides animations
+	//provides animations
 	var animate = function(boxes){
 		return function(fx){
 			if (fx.state == 0) {
-	            fx.start = $(fx.elem)[lower]();
-	            fx.end = fx.end - getBoxes[lower](fx.elem,boxes);
-	        }
-	        fx.elem.style[lower] = (fx.pos * (fx.end - fx.start) + fx.start) + "px"
+				fx.start = $(fx.elem)[lower]();
+				fx.end = fx.end - getBoxes[lower](fx.elem,boxes);
+			}
+			fx.elem.style[lower] = (fx.pos * (fx.end - fx.start) + fx.start) + "px"
 		}
 	}
-    $.fx.step["outer" + Upper] = animate({padding: true, border: true})
+	$.fx.step["outer" + Upper] = animate({padding: true, border: true})
 	
 	$.fx.step["outer" + Upper+"Margin"] =  animate({padding: true, border: true, margin: true})
 	
