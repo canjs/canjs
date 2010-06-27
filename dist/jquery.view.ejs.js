@@ -321,7 +321,7 @@ var regs = {
 /* 
  * @class jQuery.String
  */
-$.String = 
+var str = ($.String = 
 /* @Static*/
 {
 	/*
@@ -364,7 +364,7 @@ $.String =
 			i = 1;
 		parts[0] = parts[0].charAt(0).toLowerCase()+parts[0].substr(1);
 		for(; i < parts.length; i++)
-			parts[i] = this.capitalize(parts[i]);
+			parts[i] = str.capitalize(parts[i]);
 		return parts.join('');
 	},
     /**
@@ -376,7 +376,7 @@ $.String =
 		var parts = s.split(regs.undHash),
 			i=0;
 		for(; i < parts.length; i++)
-			parts[i] = this.capitalize(parts[i]);
+			parts[i] = str.capitalize(parts[i]);
 		return parts.join('');
 	},
     /**
@@ -391,7 +391,7 @@ $.String =
 		var parts = s.split(regs.undHash),
 			i = 0;
 		for(; i < parts.length; i++)
-			parts[i] = this.capitalize(parts[i]);
+			parts[i] = str.capitalize(parts[i]);
 		return parts.join(' ');
 	},
 
@@ -402,7 +402,7 @@ $.String =
                  replace(regs.lowerUpper,'$1_$2').
                  replace(regs.dash,'_').toLowerCase()
     }
-};
+});
 
 
 

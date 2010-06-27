@@ -1,3 +1,4 @@
+
 module("jquery/model/list")
 
 test("hookup with list", function(){
@@ -21,4 +22,5 @@ test("hookup with list", function(){
 	var models = div.children().models();
 	ok(models.Class === Person.List, "correct type");
 	models.destroy();
+
 })

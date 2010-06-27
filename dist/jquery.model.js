@@ -144,7 +144,6 @@ jQuery.Class.extend("jQuery.Model",
 		// clear everything that shouldn't be reused
 		this.validations = [];
 		this.attributes= {};  //list of all attributes ever given to this model
-        this.defaults= this.defaults || {};   //list of attributes and values you want right away
         this.associations = {};
         this._fullName =  underscore(this.fullName.replace(/\./g,"_"));
 		
@@ -157,6 +156,11 @@ jQuery.Class.extend("jQuery.Model",
 		}
 			
 	},
+	/**
+	 * @attribute defaults
+	 * An object of default values to be set on all instances.
+	 */
+	defaults : {},
     /**
      * Used to create an existing object from attributes
      * @param {Object} attributes
@@ -168,7 +172,7 @@ jQuery.Class.extend("jQuery.Model",
 		}
 		return new this(
 			// checks for properties in an object (like rails 2.0 gives);
-			attributes[this.singularName] || attribute.attributes || attributes
+			attributes[this.singularName] || attributes.attributes || attributes
 		);
     },
     /**
@@ -178,7 +182,7 @@ jQuery.Class.extend("jQuery.Model",
      */
     wrapMany : function(instances){
         if(!instances) return null;
-        var res = [], 
+        var res = new (this.List || Array), 
 			arr = $.isArray(instances)
 			raw = arr ? instances : instances.data, 
 			length = raw.length, 
@@ -211,10 +215,7 @@ jQuery.Class.extend("jQuery.Model",
     addAttr : function(property, type){
         if(this.associations[property])
 			return;
-		if(! this.attributes[property])
-            this.attributes[property] = type;
-        if(! this.defaults[property])
-            this.defaults[property] = null;
+		this.attributes[property] || ( this.attributes[property] = type );
 		return type
     },
     models : {},
@@ -225,7 +226,10 @@ jQuery.Class.extend("jQuery.Model",
      */
     publish : function(event, data){
         
-		OpenAjax.hub.publish(   underscore(this.shortName) + "."+event, data);
+		if( window.OpenAjax ){
+			OpenAjax.hub.publish(   underscore(this.shortName) + "."+event, data);
+		}
+		
     },
     /**
      * Guesses at the type of an object.  This is useful when you want to know more than just typeof.
@@ -256,6 +260,8 @@ jQuery.Class.extend("jQuery.Model",
 			return Boolean(val)
 		}
 	},
+	findAll : function(params, success, error){},
+	findOne : function(id, params, success, error){},
     /**
      * Implement this function!
      * Create is called by save to create a new instance.  If you want to be able to call save on an instance
@@ -270,7 +276,7 @@ jQuery.Class.extend("jQuery.Model",
      * you have to implement update.
      */
     update : function(id, attrs, success, error){
-        throw "Model: You Must Implement "+this.fullName+"'s \"update\" Function !--"
+        throw "Model: Implement "+this.fullName+"'s \"update\"!"
     },
     /**
      * Implement this function!
@@ -279,7 +285,7 @@ jQuery.Class.extend("jQuery.Model",
      * @param {String|Number} id the id of the instance you want destroyed
      */
     destroy : function(id, success, error){
-        throw "Model: You Must Implement "+this.fullName+"'s \"destroy\" Function !--"
+        throw "Model: Implement "+this.fullName+"'s \"destroy\"!"
     },
 	/**
 	 * Turns a string into a date
@@ -299,8 +305,7 @@ jQuery.Class.extend("jQuery.Model",
      * @param {Object} attributes a hash of attributes
      */
     init : function(attributes){
-        //this._properties = [];
-        this.attrs(this.Class.defaults);
+        this.Class.defaults && this.attrs(this.Class.defaults);
         this.attrs(attributes);
         /**
          * @attribute errors
@@ -425,7 +430,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * Called by save after a new instance is created.  Publishes 'created'.
 	 * @param {Object} attrs
 	 */
-    created : function(attrs){
+    /*created : function(attrs){
         this.attrs(attrs)
         this.publish("created", this)
         return [this].concat($.makeArray(arguments));
@@ -434,7 +439,7 @@ jQuery.Class.extend("jQuery.Model",
         this.attrs(attrs)
 		this.publish("updated", this)
         return [this].concat($.makeArray(arguments));
-    },
+    },*/
     /**
      * Destroys the instance
      * @param {Function} [opt4] callback or object of callbacks
@@ -446,13 +451,13 @@ jQuery.Class.extend("jQuery.Model",
 	 * Called after an instance is destroyed.  Publishes
 	 * "shortName.destroyed"
 	 */
-    destroyed : function(){
+    /*destroyed : function(){
         if(this.Class.store){
 			this.Class.store.destroy(this[this.Class.id]);
 		}
         this.publish("destroyed",this)
         return [this];
-    },
+    },*/
 	/*
     _clear : function() {
         var cas = this.Class.defaults;
@@ -471,7 +476,7 @@ jQuery.Class.extend("jQuery.Model",
      */
     identity : function(){
         var id = this[this.Class.id]
-		return underscore(this.Class.fullName.replace(/\./g,"_"))+'_'+
+		return this.Class._fullName+'_'+
 			(this.Class.escapeIdentity ? encodeURIComponent(id) : id);
     },
 	/**
@@ -484,8 +489,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {String|jQuery|element} context - 
 	 */
     elements : function(context){
-	  	return typeof context == "string" ? $(context+" ."+this.identity()) : 
-		 $("."+this.identity(), context);
+		return $("."+this.identity(), context);
     },
     /**
      * Publishes to open ajax hub
@@ -497,13 +501,22 @@ jQuery.Class.extend("jQuery.Model",
     },
 	hookup : function(el){
 		var shortName = underscore(this.Class.shortName),
-			$el = $(el).addClass(shortName).addClass(this.identity()),
 			models  = $.data(el, "models") || $.data(el, "models", {});
+		$(el).addClass(shortName+" "+this.identity())
 		models[shortName] = this;
 	}
 });
 
-
+$.each(["created","updated","destroyed"],function(i, funcName){
+	$.Model.prototype[funcName] = function(attrs){
+		if(funcName === 'destroyed' && this.Class.store){
+			this.Class.store.destroy(this[this.Class.id]);
+		}
+		attrs && this.attrs(attrs)
+        this.publish(funcName, this)
+        return [this].concat($.makeArray(arguments));
+	}
+})
 
 /**
  *  @add jQuery.fn
@@ -517,15 +530,20 @@ jQuery.Class.extend("jQuery.Model",
 $.fn.models = function(type){
   	//get it from the data
 	
-	var ret = []
+	var collection = [],
+		kind,
+		ret;
     this.each(function(){
-		var models = $.data(this,"models") || {};
-		for(var name in models){
-			//check type
-			ret.push(models[name])
-		}
+		$.each($.data(this,"models") || {},function(name, instance){
+			//either null or the list type shared by all classes
+			kind = kind === undefined ? instance.Class.List || null :  
+				(instance.Class.List === kind ? kind : null)
+			collection.push(instance)
+		})
     });
-    return $.unique( ret );
+	ret = new (kind || $.Model.list || Array)()
+	ret.push.apply(ret, $.unique( collection ))
+    return ret;
 }
 $.fn.model = function(){
     return this.models.apply(this,arguments)[0];

@@ -9,18 +9,18 @@ var capitalize = $.String.capitalize,
  * <ul>
  * 	<li>Abstracting service dependencies inside the model, making it so
  *      Controllers + Views don't care where data comes from.</li>
- *  <li>Providing helper functions that make manipulating and abstracting raw service data much easier.</li>
+ *  <li>Providing helper functions that make manipulating and abstracting raw service data easier.</li>
  * </ul>
  * This is done in two ways:
  * <ul>
- *     <li>Requesting data from and <span class='highlight'>interacting with services</span></li>
- *     <li><span class='highlight'>Wraping service data</span> with a domain-specific representation</li>
+ *     <li>Requesting data from and interacting with services</li>
+ *     <li>Converting or wrapping raw service data into a more useful form.</li>
  * </ul>
  * 
- * <h2>Using Models</h2>
+ * <h2>Basic Use</h2>
  * 
- * The [jQuery.Model] class provides basic functionality you need to organize your application's data layer.
- * First, let's consider doing Ajax <b>without</b> a model.  In our imaginary app, you:
+ * The [jQuery.Model] class provides a basic skeleton to organize pieces of your application's data layer.
+ * First, consider doing Ajax <b>without</b> a model.  In our imaginary app, you:
  * <ul>
  *   <li>retrieve a list of tasks</li>
  *   <li>display the number of days remaining for each task</li>
@@ -28,9 +28,10 @@ var capitalize = $.String.capitalize,
  * </ul>
  * Let's see how that might look without a model:
 @codestart
-$.Controller.extend("TasksController",{onDocument: true},
+$.Controller.extend("MyApp.Controllers.Tasks",{onDocument: true},
 {
-  load : function(){
+  // get tasks when the page is ready 
+  ready : function(){
     $.get('/tasks.json', this.callback('gotTasks'), 'json')
   },
 *  /* 
@@ -39,16 +40,19 @@ $.Controller.extend("TasksController",{onDocument: true},
   gotTasks : function(json){ 
     for(var i =0; i < json.length; i++){
       var taskJson = json[i];
+      
       //calculate time remaining
-      var time_remaining = new Date() - new Date(taskJson.due_date);
+      var remaininTime = new Date() - new Date(taskJson.due_date);
+      
       //append some html
-      this.element.append("&lt;div class='task' taskid='"+taskJson.id+"'>"+
-	                     "&lt;label>"+taskJson.name+"&lt;/label>"+
-	                     "Due Date = "+time_remaining+"&lt;/div>")
-	}
+      $("#tasks").append("&lt;div class='task' taskid='"+taskJson.id+"'>"+
+                          "&lt;label>"+taskJson.name+"&lt;/label>"+
+                          "Due Date = "+remaininTime+"&lt;/div>")
+    }
   },
-  click : function(el){
-    $.post('/task_complete',{id: el.attr('taskid')}, function(){
+  // when a task is complete, get the id, make a request, remove it
+  ".task click" : function(el){
+    $.post('/task_complete',{id: el.attr('data-taskid')}, function(){
       el.remove();
     })
   }
@@ -57,26 +61,26 @@ $.Controller.extend("TasksController",{onDocument: true},
 This code might seem fine for right now, but what if:
 <ul>
 	<li>The service changes?</li>
-	<li>You want to use the remaining time for other uses?</li>
-	<li>Multiple elements have the same data?</li>
+	<li>Other parts of the app want to calculate <code>remaininTime</code>?</li>
+	<li>Other parts of the app want to get tasks?</li>
+	<li>The same task is represented multiple palces on the page?</li>
 </ul>
 The solution is of course a strong model layer.  Lets look at what a
-a good model does for a controller before we learn how to make one.  I've highlighted
-some of the key functionality we need to build:
+a good model does for a controller before we learn how to make one:
 @codestart
-$.Controller.extend("TasksController",{onDocument: true},
+$.Controller.extend("MyApp.Controllers.Tasks",{onDocument: true},
 {
-	load : function(){
-	  <b>Task.findAll</b>({},this.callback('list'))
-	},
-	list : function(tasks){
-	  this.render({data: {tasks: tasks}});
-	},
-	click : function(el){
-        <b>el.models</b>()[0].<b>complete</b>(function(){
-          el.remove();
-      });
-	}
+  load : function(){
+    Task.findAll({},this.callback('list'))
+  },
+  list : function(tasks){
+    $("#tasks").html(this.view(tasks))
+  },
+  ".task click" : function(el){
+    el.models()[0].complete(function(){
+      el.remove();
+    });
+  }
 })
 @codeend
 In views/tasks/list.ejs
@@ -94,17 +98,17 @@ also made our controller completely understandable.  Now lets take a look at the
 @codestart
 $.Model.extend("Task",
 {
-    findAll : function(params,success){
-        $.get("/tasks.json", params, this.callback(["wrapMany",success]),"json");
-    }
+	findAll : function(params,success){
+		$.get("/tasks.json", params, this.callback(["wrapMany",success]),"json");
+	}
 },
 {
-    timeRemaining : function(){
-        return new Date() - new Date(this.due_date)
-    },
-    complete : function(success){
-        $.get("/task_complete", {id: this.id }, success,"json");
-    }
+	timeRemaining : function(){
+		return new Date() - new Date(this.due_date)
+	},
+	complete : function(success){
+		$.get("/task_complete", {id: this.id }, success,"json");
+	}
 })
 @codeend
 There, much better!  Now you have a single place where you can organize Ajax functionality and
@@ -141,25 +145,29 @@ jQuery.Class.extend("jQuery.Model",
 		// clear everything that shouldn't be reused
 		this.validations = [];
 		this.attributes= {};  //list of all attributes ever given to this model
-        this.defaults= this.defaults || {};   //list of attributes and values you want right away
-        this.associations = {};
-        this._fullName =  underscore(this.fullName.replace(/\./g,"_"));
+		this.associations = {};
+		this._fullName =  underscore(this.fullName.replace(/\./g,"_"));
 		
 		if( this.fullName.substr(0,7) == "jQuery." ) {
 			return;
 		}
-        jQuery.Model.models[this._fullName] = this;
+		jQuery.Model.models[this._fullName] = this;
 		if( this.storeType ){
 			this.store = new this.storeType(this);
 		}
 			
 	},
-    /**
-     * Used to create an existing object from attributes
-     * @param {Object} attributes
-     * @return {Model} an instance of the model
-     */
-    wrap : function(attributes){
+	/**
+	 * @attribute defaults
+	 * An object of default values to be set on all instances.
+	 */
+	defaults : {},
+	/**
+	 * Used to create an existing object from attributes
+	 * @param {Object} attributes
+	 * @return {Model} an instance of the model
+	 */
+	wrap : function(attributes){
 		if(!attributes) {
 			return null;
 		}
@@ -167,16 +175,16 @@ jQuery.Class.extend("jQuery.Model",
 			// checks for properties in an object (like rails 2.0 gives);
 			attributes[this.singularName] || attributes.attributes || attributes
 		);
-    },
-    /**
-     * Creates many instances
-     * @param {Array} instancesRawData an array of raw name - value pairs.
-     * @return {Array} an array of instances of the model
-     */
-    wrapMany : function(instances){
-        if(!instances) return null;
-        var res = new (this.List || Array), 
-			arr = $.isArray(instances)
+	},
+	/**
+	 * Creates many instances
+	 * @param {Array} instancesRawData an array of raw name - value pairs.
+	 * @return {Array} an array of instances of the model
+	 */
+	wrapMany : function(instances){
+		if(!instances) return null;
+		var res = new (this.List || Array), 
+			arr = $.isArray(instances),
 			raw = arr ? instances : instances.data, 
 			length = raw.length, 
 			i=0;
@@ -194,59 +202,59 @@ jQuery.Class.extend("jQuery.Model",
 			}
 		}
 		return res; //model list?
-    },
-    /**
-     * The name of the id field.  Defaults to 'id'.  Change this if it is something different.
-     */
-    id : 'id', //if null, maybe treat as an array?
-    /**
-     * Adds an attribute to the list of attributes for this class.
-     * @hide
-     * @param {String} property
-     * @param {String} type
-     */
-    addAttr : function(property, type){
-        if(this.associations[property])
+	},
+	/**
+	 * The name of the id field.  Defaults to 'id'.  Change this if it is something different.
+	 */
+	id : 'id', //if null, maybe treat as an array?
+	/**
+	 * Adds an attribute to the list of attributes for this class.
+	 * @hide
+	 * @param {String} property
+	 * @param {String} type
+	 */
+	addAttr : function(property, type){
+		if(this.associations[property])
 			return;
-		if(! this.attributes[property])
-            this.attributes[property] = type;
-        if(! this.defaults[property])
-            this.defaults[property] = null;
+		this.attributes[property] || ( this.attributes[property] = type );
 		return type
-    },
-    models : {},
-    /**
-     * Publishes to open ajax hub.  Always adds the shortName.event
-     * @param {Object} event
-     * @param {Object} data
-     */
-    publish : function(event, data){
-        //@steal-remove-start
-        steal.dev.log("Model.js - publishing " + underscore(this.shortName) + "." + event)
-        //@steal-remove-end
-		OpenAjax.hub.publish(   underscore(this.shortName) + "."+event, data);
-    },
-    /**
-     * Guesses at the type of an object.  This is useful when you want to know more than just typeof.
-     * @param {Object} object the object you want to test.
-     * @return {String} one of string, object, date, array, boolean, number, function
-     */
-   	guessType : function(object){
-	    if(typeof object != 'string'){
-	        if(object == null) return typeof object;
-	        if( object.constructor == Date ) return 'date';
-	        if($.isArray(object)) return 'array';
-	        return typeof object;
-	    }
+	},
+	models : {},
+	/**
+	 * Publishes to open ajax hub.  Always adds the shortName.event
+	 * @param {Object} event
+	 * @param {Object} data
+	 */
+	publish : function(event, data){
+		//@steal-remove-start
+		steal.dev.log("Model.js - publishing " + underscore(this.shortName) + "." + event)
+		//@steal-remove-end
+		if( window.OpenAjax ){
+			OpenAjax.hub.publish(   underscore(this.shortName) + "."+event, data);
+		}
+		
+	},
+	/**
+	 * Guesses at the type of an object.  This is useful when you want to know more than just typeof.
+	 * @param {Object} object the object you want to test.
+	 * @return {String} one of string, object, date, array, boolean, number, function
+	 */
+	guessType : function(object){
+		if(typeof object != 'string'){
+			if(object == null) return typeof object;
+			if( object.constructor == Date ) return 'date';
+			if($.isArray(object)) return 'array';
+			return typeof object;
+		}
 		if(object == "") return 'string';
-	    //check if true or false
-	    if(object == 'true' || object == 'false') return 'boolean';
-	    if(!isNaN(object)) return 'number'
-	    return typeof object;
+		//check if true or false
+		if(object == 'true' || object == 'false') return 'boolean';
+		if(!isNaN(object)) return 'number'
+		return typeof object;
 	},
 	converters : {
 		"date" : function(val){
-			return this._parseDate(value)
+			return this._parseDate(val)
 		},
 		"number" : function(val){
 			return parseFloat(val)
@@ -255,101 +263,103 @@ jQuery.Class.extend("jQuery.Model",
 			return Boolean(val)
 		}
 	},
-    /**
-     * Implement this function!
-     * Create is called by save to create a new instance.  If you want to be able to call save on an instance
-     * you have to implement create.
-     */
-    create : function(attrs, success, error){
-        throw "Model: Implement Create"
-    },
-    /**
-     * Implement this function!
-     * Update is called by save to update an instance.  If you want to be able to call save on an instance
-     * you have to implement update.
-     */
-    update : function(id, attrs, success, error){
-        throw "Model: You Must Implement "+this.fullName+"'s \"update\" Function !--"
-    },
-    /**
-     * Implement this function!
-     * Destroy is called by destroy to remove an instance.  If you want to be able to call destroy on an instance
-     * you have to implement update.
-     * @param {String|Number} id the id of the instance you want destroyed
-     */
-    destroy : function(id, success, error){
-        throw "Model: You Must Implement "+this.fullName+"'s \"destroy\" Function !--"
-    },
+	findAll : function(params, success, error){},
+	findOne : function(id, params, success, error){},
+	/**
+	 * Implement this function!
+	 * Create is called by save to create a new instance.  If you want to be able to call save on an instance
+	 * you have to implement create.
+	 */
+	create : function(attrs, success, error){
+		throw "Model: Implement Create"
+	},
+	/**
+	 * Implement this function!
+	 * Update is called by save to update an instance.  If you want to be able to call save on an instance
+	 * you have to implement update.
+	 */
+	update : function(id, attrs, success, error){
+		throw "Model: Implement "+this.fullName+"'s \"update\"!"
+	},
+	/**
+	 * Implement this function!
+	 * Destroy is called by destroy to remove an instance.  If you want to be able to call destroy on an instance
+	 * you have to implement update.
+	 * @param {String|Number} id the id of the instance you want destroyed
+	 */
+	destroy : function(id, success, error){
+		throw "Model: Implement "+this.fullName+"'s \"destroy\"!"
+	},
 	/**
 	 * Turns a string into a date
 	 * @param {String} str a string representation of a date
 	 * @return {Date} a date
 	 */
 	_parseDate : function(str){
-        return typeof str == "string" ?  
+		return typeof str == "string" ?  
 			(Date.parse(str) == NaN ? null : Date.parse(str)) :
 			str
 	}
 },
 /* @Prototype*/
 {   
-    /**
-     * Creates, but does not save a new instance of this class
-     * @param {Object} attributes a hash of attributes
-     */
-    init : function(attributes){
-        this.attrs(this.Class.defaults);
-        this.attrs(attributes);
-        /**
-         * @attribute errors
-         * A hash of errors for this model instance.
-         */
-        this.errors = {};
-    },
-    /**
-     * Sets the attributes on this instance and calls save.
-     * @param {Object} attrs the model's attributes
-     * @param {Function} success
-     * @param {Function} error
-     */
-    update : function(attrs, success, error)
-    {
-        this.attrs(attrs);
-        return this.save(success, error); //on success, we should 
-    },
-    valid : function() {
-        for(var attr in this.errors)
-                return false;
-        return true;
-    },
+	/**
+	 * Creates, but does not save a new instance of this class
+	 * @param {Object} attributes a hash of attributes
+	 */
+	init : function(attributes){
+		this.Class.defaults && this.attrs(this.Class.defaults);
+		this.attrs(attributes);
+		/**
+		 * @attribute errors
+		 * A hash of errors for this model instance.
+		 */
+		this.errors = {};
+	},
+	/**
+	 * Sets the attributes on this instance and calls save.
+	 * @param {Object} attrs the model's attributes
+	 * @param {Function} success
+	 * @param {Function} error
+	 */
+	update : function(attrs, success, error)
+	{
+		this.attrs(attrs);
+		return this.save(success, error); //on success, we should 
+	},
+	valid : function() {
+		for(var attr in this.errors)
+				return false;
+		return true;
+	},
    /**
-    * Validates this model instance (usually called by [jQuery.Model.prototype.save|save])
-    */
-    validate : function(){
-        this.errors = {};
-        var self = this;
-        $.each(this.Class.validations || [], function(i, func) { func.call(self) });
-    },
-    /**
-     * Gets or sets an attribute on the model.
-     * @param {String} attribute the attribute you want to set or get
-     * @param {String_Number_Boolean} [opt1] value the value you want to set.
-     */
-    attr : function(attribute, value) {
-        var cap = capitalize(attribute),
+	* Validates this model instance (usually called by [jQuery.Model.prototype.save|save])
+	*/
+	validate : function(){
+		this.errors = {};
+		var self = this;
+		$.each(this.Class.validations || [], function(i, func) { func.call(self) });
+	},
+	/**
+	 * Gets or sets an attribute on the model.
+	 * @param {String} attribute the attribute you want to set or get
+	 * @param {String_Number_Boolean} [opt1] value the value you want to set.
+	 */
+	attr : function(attribute, value) {
+		var cap = capitalize(attribute),
 			get = "get"+cap;
-        if(value !== undefined)
-            this._setProperty(attribute, value, cap);
+		if(value !== undefined)
+			this._setProperty(attribute, value, cap);
 		return this[get]? this[get]() : this[attribute];
-    },
-    /**
-     * Checks if there is a set_<i>property</i> value.  If it returns true, lets it handle; otherwise
-     * saves it.
-     * @hide
-     * @param {Object} property
-     * @param {Object} value
-     */
-    _setProperty : function(property, value, capitalized) {
+	},
+	/**
+	 * Checks if there is a set_<i>property</i> value.  If it returns true, lets it handle; otherwise
+	 * saves it.
+	 * @hide
+	 * @param {Object} property
+	 * @param {Object} value
+	 */
+	_setProperty : function(property, value, capitalized) {
 		var funcName = "set"+capitalized,
 			old = this[property], 
 			Class = this.Class,
@@ -357,121 +367,92 @@ jQuery.Class.extend("jQuery.Model",
 			converter = Class.converters[type],
 			val;
 		
-        if(this[funcName] && ! (value = this[funcName](value)) ) return;
+		if(this[funcName] && ! (value = this[funcName](value)) ) return;
 		
-        //convert to value
+		//convert to value
 		val = this[property] = value == null ? null :
 			(converter ? converter.call(Class,value) : value)
 		
-        
-        if(property == Class.id && val != null && Class.store){
+		
+		if(property == Class.id && val != null && Class.store){
 			if(!old){
-            	Class.store.create(this);
-            }else if(old != val){
-                Class.store.destroy(old);
-                Class.store.create(this);
-            }
-        }
-    },
-    /**
-     * Gets or sets a list of attributes
-     * @param {Object} [opt2] attributes if present, the list of attributes to send
-     * @return {Object} the curent attributes of the model
-     */
-    attrs : function(attributes) {
-        var key;
+				Class.store.create(this);
+			}else if(old != val){
+				Class.store.destroy(old);
+				Class.store.create(this);
+			}
+		}
+	},
+	/**
+	 * Gets or sets a list of attributes
+	 * @param {Object} [opt2] attributes if present, the list of attributes to send
+	 * @return {Object} the curent attributes of the model
+	 */
+	attrs : function(attributes) {
+		var key;
 		if(!attributes){
-            attributes = {};
-            for(key in this.Class.attributes){
-                attributes[key] = this.attr(key);
-            }
-        }else{
-            var idName = this.Class.id;
+			attributes = {};
+			for(key in this.Class.attributes){
+				attributes[key] = this.attr(key);
+			}
+		}else{
+			var idName = this.Class.id;
 			for(key in attributes){ 
-    			if(key != idName) 
-    				this.attr(key, attributes[key]);
-    		}
+				if(key != idName) 
+					this.attr(key, attributes[key]);
+			}
 			if(idName in attributes){
 				this.attr(idName, attributes[idName]);
 			}
-            
-        }
-        return attributes;
-    },
-    /**
-     * Returns if the instance is a new object
-     */
-    isNew : function(){ return this[this.Class.id] == null; },
-    /**
-     * Saves the instance
-     * @param {Function} [opt3] callbacks onComplete function or object of callbacks
-     */
-    save: function(success,error){
-        this.validate();
+			
+		}
+		return attributes;
+	},
+	/**
+	 * Returns if the instance is a new object
+	 */
+	isNew : function(){ return this[this.Class.id] == null; },
+	/**
+	 * Saves the instance
+	 * @param {Function} [opt3] callbacks onComplete function or object of callbacks
+	 */
+	save: function(success,error){
+		this.validate();
 		
-        if(!this.valid()){
+		if(!this.valid()){
 			return false;
 		}
-        this.isNew() ? 
-            this.Class.create(this.attrs(), this.callback(['created', success]), error) : 
-            this.Class.update(this[this.Class.id], this.attrs(), this.callback(['updated', success]), error);
+		this.isNew() ? 
+			this.Class.create(this.attrs(), this.callback(['created', success]), error) : 
+			this.Class.update(this[this.Class.id], this.attrs(), this.callback(['updated', success]), error);
 
-        //this.is_new_record = this.Class.new_record_func;
-        return true;
-    },
+		//this.is_new_record = this.Class.new_record_func;
+		return true;
+	},
+
 	/**
-	 * Called by save after a new instance is created.  Publishes 'created'.
-	 * @param {Object} attrs
+	 * Destroys the instance
+	 * @param {Function} [opt4] callback or object of callbacks
 	 */
-    created : function(attrs){
-        this.attrs(attrs)
-        this.publish("created", this)
-        return [this].concat($.makeArray(arguments));
-    },
-    updated : function(attrs){
-        this.attrs(attrs)
-		this.publish("updated", this)
-        return [this].concat($.makeArray(arguments));
-    },
-    /**
-     * Destroys the instance
-     * @param {Function} [opt4] callback or object of callbacks
-     */
-    destroy : function(success, error){
-        this.Class.destroy(this[this.Class.id], this.callback(["destroyed",success]), error);
-    },
+	destroy : function(success, error){
+		this.Class.destroy(this[this.Class.id], this.callback(["destroyed",success]), error);
+	},
+
+
 	/**
-	 * Called after an instance is destroyed.  Publishes
-	 * "shortName.destroyed"
+	 * Returns a unique identifier for the model instance.  For example:
+	 * @codestart
+	 * new Todo({id: 5}).identity() //-> 'todo_5'
+	 * @codeend
+	 * Typically this is used in an element's shortName property so you can find all elements
+	 * for a model with [jQuery.Model.prototype.elements elements].
+	 * @return {String}
 	 */
-    destroyed : function(){
-        if(this.Class.store){
-			this.Class.store.destroy(this[this.Class.id]);
-		}
-        this.publish("destroyed",this)
-        return [this];
-    },
-	/*
-    _clear : function() {
-        var cas = this.Class.defaults;
-        for(var attr in cas){
-            if(cas.hasOwnProperty(attr) ) this[attr] = null;
-        }
-    },*/
-    /**
-     * Returns a unique identifier for the model instance.  For example:
-     * @codestart
-     * new Todo({id: 5}).identity() //-> 'todo_5'
-     * @codeend
-     * Typically this is used in an element's shortName property so you can find all elements
-     * for a model with [jQuery.Model.prototype.elements elements].
-     * @return {String}
-     */
-    identity : function(){
-        var id = this[this.Class.id]
-		return underscore(this.Class.fullName.replace(/\./g,"_"))+'_'+
+	identity : function(){
+		var id = this[this.Class.id]
+		return this.Class._fullName+'_'+
 			(this.Class.escapeIdentity ? encodeURIComponent(id) : id);
-    },
+	},
 	/**
 	 * Returns elements that represent this model instance.  For this to work, your element's should
 	 * us the [jQuery.Model.prototype.identity identity] function in their class name.  Example:
@@ -481,27 +462,53 @@ jQuery.Class.extend("jQuery.Model",
 	 * This function should only rarely be used.  It breaks the architecture.
 	 * @param {String|jQuery|element} context - 
 	 */
-    elements : function(context){
-	  	return typeof context == "string" ? $(context+" ."+this.identity()) : 
-		 $("."+this.identity(), context);
-    },
-    /**
-     * Publishes to open ajax hub
-     * @param {String} event
-     * @param {Object} [opt6] data if missing, uses the instance in {data: this}
-     */
-    publish : function(event, data){
-        this.Class.publish(event, data|| this);
-    },
+	elements : function(context){
+		return $("."+this.identity(), context);
+	},
+	/**
+	 * Publishes to open ajax hub
+	 * @param {String} event
+	 * @param {Object} [opt6] data if missing, uses the instance in {data: this}
+	 */
+	publish : function(event, data){
+		this.Class.publish(event, data|| this);
+	},
 	hookup : function(el){
 		var shortName = underscore(this.Class.shortName),
-			$el = $(el).addClass(shortName).addClass(this.identity()),
 			models  = $.data(el, "models") || $.data(el, "models", {});
+		$(el).addClass(shortName+" "+this.identity())
 		models[shortName] = this;
 	}
 });
 
-
+$.each([
+/**
+ * @function created
+ * Called by save after a new instance is created.  Publishes 'created'.
+ * @param {Object} attrs
+ */
+"created",
+/**
+ * @function destroyed
+ * Called by save after an instance is updated.  Publishes 'updated'.
+ * @param {Object} attrs
+ */
+"updated",
+/**
+ * @function destroyed
+ * Called after an instance is destroyed.  Publishes
+ * "shortName.destroyed"
+ */
+"destroyed"],function(i, funcName){
+	$.Model.prototype[funcName] = function(attrs){
+		if(funcName === 'destroyed' && this.Class.store){
+			this.Class.store.destroy(this[this.Class.id]);
+		}
+		attrs && this.attrs(attrs)
+		this.publish(funcName, this)
+		return [this].concat($.makeArray(arguments));
+	}
+})
 
 /**
  *  @add jQuery.fn
@@ -513,24 +520,24 @@ jQuery.Class.extend("jQuery.Model",
  * @return {Array} returns an array of model instances that are represented by the contained elements.
  */
 $.fn.models = function(type){
-  	//get it from the data
+	//get it from the data
 	
 	var collection = [],
 		kind,
 		ret;
-    this.each(function(){
+	this.each(function(){
 		$.each($.data(this,"models") || {},function(name, instance){
 			//either null or the list type shared by all classes
 			kind = kind === undefined ? instance.Class.List || null :  
 				(instance.Class.List === kind ? kind : null)
 			collection.push(instance)
 		})
-    });
+	});
 	ret = new (kind || $.Model.list || Array)()
 	ret.push.apply(ret, $.unique( collection ))
-    return ret;
+	return ret;
 }
 $.fn.model = function(){
-    return this.models.apply(this,arguments)[0];
+	return this.models.apply(this,arguments)[0];
 }
 });
