@@ -15,5 +15,10 @@ test("plugin in ejs", function(){
 	$("#qunit-test-area").html("");
 	$("#qunit-test-area").html("//jquery/view/test/qunit/plugin.ejs",{})
 	ok(/something/.test( $("#something").text()),"something has something");
-	//$("#qunit-test-area").html("");
+	$("#qunit-test-area").html("");
+})
+test("nested plugins", function(){
+	$("#qunit-test-area").html("");
+	$("#qunit-test-area").html("//jquery/view/test/qunit/nested_plugin.ejs",{})
+	ok(/something/.test( $("#something").text()),"something has something");
 })

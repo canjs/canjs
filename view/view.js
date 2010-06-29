@@ -8,7 +8,7 @@ var toId = function(src){
 	return src.replace(/[\/\.]/g,"_")
 },
 // used for hookup ids
-id = 0;
+id = 1;
 
 /**
  * @constructor jQuery.View
@@ -279,20 +279,28 @@ convert = function(func_name) {
 	}
 },
 hookupView = function(els){
-	els.each(hookup)
-	els.find("[data-view-id]").each(hookup)
-	return this;
-},
-hookup = function(){
-	if(this.getAttribute){
-		var id = this.getAttribute('data-view-id')
-		if(jQuery.View.hookups[id]){
-			jQuery.View.hookups[id](this, id);
-			delete jQuery.View.hookups[id];
-			this.removeAttribute('data-view-id')
+	//remove all hookups
+	var hooks = jQuery.View.hookups,
+		hookupEls,
+		len, 
+		i=0, 
+		id,
+		func;
+	jQuery.View.hookups = {};
+	hookupEls = els.add("[data-view-id]", els);
+	len = hookupEls.length;
+	for(; i< len; i++){
+		if(hookupEls[i].getAttribute 
+		    && (id = hookupEls[i].getAttribute('data-view-id'))
+			&& (func =hooks[id] ) ){
+			func(hookupEls[i], id);
+			delete hooks[id];
+			hookupEls[i].removeAttribute('data-view-id')
 		}
 	}
-}
+	//copy remaining hooks back
+	$.extend(jQuery.View.hookups, hooks);
+};
 	
 //go through helper funcs and convert
 for(var i=0; i < funcs.length; i++){
