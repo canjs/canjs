@@ -1,6 +1,5 @@
-(function($){
-// JavaScriptMVC framework and server, 1.1.22
-//  - built on 2008/05/07 19:44
+steal.plugins('jquery/view/ejs').then(function($){
+
 /**
  * @add jQuery.View.Helpers Prototype additions
  */
@@ -336,4 +335,4 @@ $.View.Helpers.prototype.get_data = function(el){
 	return $.View.Helpers.get_data(el)
 };
 
-})(jQuery);
+});
