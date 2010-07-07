@@ -102,6 +102,7 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 			selector = ev.handleObj.selector,
 			self = this;
 			this.current = drag;
+
 			drag.setup({
 				element: element,
 				delegate: ev.liveFired || element,
@@ -119,7 +120,6 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 					self.current = null;
 				}
 			}, ev)
-		   		   
 		}
 	})
 	
@@ -213,6 +213,7 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 			this.startPosition = startElement != this.movingElement ? this.movingElement.offsetv() : this.currentDelta();
 	
 			this.movingElement.makePositioned();
+			this.oldZIndex = this.movingElement.css('zIndex');
 			this.movingElement.css('zIndex',1000);
 			if(!this._only && this.constructor.responder)
 				this.constructor.responder.compile(event, this);
@@ -324,7 +325,7 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 		 * @hide
 		 */
 		cleanup : function(){
-			this.movingElement.css({zIndex: ""})
+			this.movingElement.css({zIndex: this.oldZIndex});
 			if (this.movingElement[0] !== this.element[0])
 				this.movingElement.css({ display: 'none' });
 			if(this._removeMovingElement)
