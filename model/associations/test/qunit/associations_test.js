@@ -14,8 +14,6 @@ module("jquery/model/associations",{
 			}
 		},
 		{});
-		
-		
 	}
 })
 
@@ -50,6 +48,4 @@ test("associations testing works", function(){
 	equals(c.loans.length, 2);
 	
 	equals(c.loans[0].Class, MyTest.Loan);
-	
-	
 })
