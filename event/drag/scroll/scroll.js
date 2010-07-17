@@ -114,7 +114,6 @@ $.extend($.Scrollable.prototype,{
 					 pageX:   ev.pageX,
 					 pageY:   ev.pageY}))
 		//drag_element.synthetic('mousemove',{clientX: x, clientY: y, screenX: sx, screenY: sy})
-		//new MVC.Synthetic("mousemove",{clientX: x, clientY: y} ).send(drag_element); //don't need to change position as it is screen
 	}
 })
 

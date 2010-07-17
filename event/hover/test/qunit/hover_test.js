@@ -20,7 +20,7 @@ test("hovering", function(){
 	var off = hover.offset();
 	
 	//add a mouseenter, and 2 mouse moves
-	new Synthetic("mouseover",{pageX: off.top, pageY: off.left}).send(hover[0]);
+	Syn("mouseover",{pageX: off.top, pageY: off.left}, hover[0])
 	ok(hoverinits, 'hoverinit');
 	ok(hoverenters === 0,"hoverinit hasn't been called");
 	stop(1000);
@@ -29,18 +29,18 @@ test("hovering", function(){
 		ok(hoverenters === 1,"hoverenter has been called");
 		
 		ok(hoverleaves === 0,"hoverleave hasn't been called");
-		new Synthetic("mouseout",{pageX: off.top, pageY: off.left}).send(hover[0]);
+		Syn("mouseout",{pageX: off.top, pageY: off.left},hover[0]);
 		
 		ok(hoverleaves === 1,"hoverleave has been called");
 		
 		delay = 30;
 		
-		new Synthetic("mouseover",{pageX: off.top, pageY: off.left}).send(hover[0]);
+		Syn("mouseover",{pageX: off.top, pageY: off.left},hover[0]);
 		ok(hoverinits === 2, 'hoverinit');
 		
 		setTimeout(function(){
 			
-			new Synthetic("mouseout",{pageX: off.top, pageY: off.left}).send(hover[0]);
+			Syn("mouseout",{pageX: off.top, pageY: off.left},hover[0]);
 			
 			
 			setTimeout(function(){
