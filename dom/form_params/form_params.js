@@ -53,7 +53,7 @@ $.fn.extend({
 		this.each(function(){
 			var el = this;
 			//if we are submit, ignore
-			if (el.type && el.type.toLowerCase() == 'submit') {
+			if ( (el.type && el.type.toLowerCase() == 'submit') || !el.name ) {
 				return;
 			}
 			

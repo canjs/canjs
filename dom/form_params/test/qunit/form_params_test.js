@@ -35,3 +35,9 @@ test("just strings",function(){
 	same(formParams.params.five,['2','3'],"five is right");
 	$("#qunit-test-area").html('')
 })
+
+test("missing names",function(){
+	$("#qunit-test-area").html("//jquery/dom/form_params/test/qunit/checkbox.micro",{});
+	var formParams =  $("#qunit-test-area form").formParams() ;
+	ok(true, "does not break")
+})
