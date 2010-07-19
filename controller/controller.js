@@ -36,7 +36,7 @@ delegate = function(el, selector, ev, callback){
 binder = function(el, ev, callback, selector){
 	return selector ? delegate(el, selector, ev, callback)
 		: bind(el, ev,callback)
-}
+},
 /**
  * moves 'this' to the first argument 
  */
