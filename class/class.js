@@ -507,7 +507,7 @@ $.extend($.Class,{
 		if (fullName) {
 			
 			var parts = fullName.split(/\./),
-				shortName =  parts.pop();
+				shortName =  parts.pop(),
 				current = $.Class.getObject(parts.join('.')),
 				namespace = current;
 
