@@ -15,8 +15,6 @@
  */
 (function( window, undefined ) {
 
-(function() {
-
 // Define a local copy of jQuery
 var jQuery = function( selector, context ) {
 		// The jQuery object is actually just the init constructor 'enhanced'
@@ -834,7 +832,7 @@ function doScrollCheck() {
 // Expose jQuery to the global object
 window.jQuery = window.$ = jQuery;
 
-})();
+
 (function() {
 
 	jQuery.support = {};

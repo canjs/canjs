@@ -133,9 +133,11 @@ $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
 		
 		// call each event handler
 		for(var i = 0 ; i < event._defaultActions.length; i++){
-			var a  = event._defaultActions[i];
+			var a  = event._defaultActions[i],
+				oldHandle = event.handled;
 			event.currentTarget = a.currentTarget;
-			a.handler.call(a.element, event, a.data)
+			a.handler.call(a.element, event, a.data);
+			event.handled = event.handled === null ? oldHandle : true;
         }
         event._defaultActions = null; //set to null so everyone else on this element ignores it
     }
