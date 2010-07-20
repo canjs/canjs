@@ -3,7 +3,7 @@ steal.plugins('jquery/view/ejs').then(function($){
 /**
  * @add jQuery.View.Helpers Prototype additions
  */
-$.extend($.View.Helpers.prototype, {
+$.extend($.View.EJS.Helpers.prototype, {
     // treyk 06/11/2009 - Pulled from old MVC.Date plugin for now.  Will look for a suitable jQuery Date plugin
 	 month_names: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
    
