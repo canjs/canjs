@@ -90,7 +90,7 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 				var form_div = $('<div />').css({
 					'float': 'left',
 					width: 300,
-					'margin-left': $.browser.msie ? 5 : 10,
+					'margin-left': $.browser.msie ? 5 : 10
 				}).html(this.prompt_text)
 				var input = $('<button />').addClass('ui-button').addClass('ui-state-default')
 					.addClass('ui-widget').addClass('ui-state-default').addClass('ui-corner-all')
