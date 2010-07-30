@@ -504,7 +504,7 @@ $.each([
 		if(funcName === 'destroyed' && this.Class.store){
 			this.Class.store.destroy(this[this.Class.id]);
 		}
-		attrs && this.attrs(attrs)
+		attrs && this.attrs( attrs.attrs ? attrs.attrs() : attrs );
 		this.publish(funcName, this)
 		return [this].concat($.makeArray(arguments));
 	}
