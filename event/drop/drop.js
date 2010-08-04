@@ -56,8 +56,8 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 	 * @test jquery/event/drag/qunit.html
 	 * 
 	 * Provides drop events as a special event to jQuery.  
-	 * By binding to a drop event, the callback functions will be 
-	 * called when during various phases of the drag event.
+	 * By binding to a drop event, the your callback functions will be 
+	 * called during the corresponding phase of drag.
 	 * <h2>Drop Events</h2>
 	 * All drop events are called with the native event, an instance of drop, and the drag.  Here are the available drop 
 	 * events:
