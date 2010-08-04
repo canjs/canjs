@@ -1,4 +1,4 @@
-steal.plugins('jquery','jquery/controller','steal/openajax').then(function(){
+steal.plugins('jquery','jquery/controller','jquery/lang/openajax').then(function(){
 	
 	/**
      * Adds open ajax subscribing to controllers.

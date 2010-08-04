@@ -92,3 +92,39 @@ test("dragging an element", function(){
 
 	
 })
+
+test("drag position", function(){
+	var div = $("<div>"+
+			"<div id='drag'></div>"+
+			"<div id='midpoint'></div>"+
+			"<div id='drop'></div>"+
+			"</div>");
+	
+	div.appendTo($("#qunit-test-area"));
+	var basicCss = {
+		width: "20px",
+		height: "20px",
+		position: "absolute",
+		border: "solid 1px black"
+	}
+	$("#drag").css(basicCss).css({top: "0px", left: "0px", zIndex: 1000, backgroundColor: "red"})
+	$("#midpoint").css(basicCss).css({top: "0px", left: "30px"})
+	$("#drop").css(basicCss).css({top: "30px", left: "30px"});
+	
+	
+	var drags = {}, drops ={};
+	
+	$('#drag').live("draginit", function(){
+		drags.draginit = true;
+	})
+	var offset = $('#drag').offset();
+
+	stop();
+	
+	Syn.drag("+20 +20","drag", function(){
+		var offset2 = $('#drag').offset();
+		equals(offset.top+20, offset2.top, "top")
+		equals(offset.left+20, offset2.left, "left")
+		start();
+	})
+})
