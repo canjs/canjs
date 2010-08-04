@@ -1,4 +1,4 @@
-steal.plugins('jquery','jquery/class','jquery/lang','steal/openajax').then(function(){
+steal.plugins('jquery','jquery/class','jquery/lang','jquery/lang/openajax').then(function(){
 //a cache for attribute capitalization ... slowest part of inti.
 var capitalize = $.String.capitalize,
 	underscore = $.String.underscore;
