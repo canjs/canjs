@@ -1,2 +1,5 @@
-_args = ["http://github.com/pinhook/javascriptmvc/","jquery"];
-load("steal/scripts/get")
+load('steal/rhino/steal.js')
+
+steal('//steal/get/get', function(s){
+	s.get("http://github.com/pinhook/javascriptmvc/","jquery");
+})
