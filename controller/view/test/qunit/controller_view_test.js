@@ -2,7 +2,7 @@ module("jquery/controller/view")
 test("this.view", function(){
 	
 	$.Controller.extend("jquery.Controller.View.Test.Qunit",{
-		init : function(){
+		init: function() {
 			this.element.html(this.view())
 		}
 	})

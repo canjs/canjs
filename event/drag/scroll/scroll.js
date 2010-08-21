@@ -20,35 +20,35 @@ $.Scrollable = function(element){
 	this.element = jQuery(element);
 }
 $.extend($.Scrollable.prototype,{
-	init : function(element){
+	init: function( element ) {
 		this.element = jQuery(element);
 	},
-	callHandlers : function(method, el, ev, drag){
+	callHandlers: function( method, el, ev, drag ) {
 		this[method](el || this.element[0], ev, this, drag)
 	},
-	dropover: function(){
+	dropover: function() {
 		
 	},
-	dropon: function(){
+	dropon: function() {
 		this.clear_timeout();
 	}, 
-	dropout : function(){
+	dropout: function() {
 		this.clear_timeout();
 	},
-	dropinit: function(){
+	dropinit: function() {
 		
 	},
-	dropend : function(){},
-	clear_timeout : function(){
+	dropend: function() {},
+	clear_timeout: function() {
 		if(this.interval){
 			clearTimeout(this.interval)
 			this.interval = null;
 		}
 	},
-	distance : function(diff){
+	distance: function( diff ) {
 		return (30 - diff) / 2;
 	},
-	dropmove: function(el, ev, drop, drag){
+	dropmove: function( el, ev, drop, drag ) {
 		
 		//if we were about to call a move, clear it.
 		this.clear_timeout();
@@ -101,7 +101,7 @@ $.extend($.Scrollable.prototype,{
 	 * @param {Number} x the mouse position
 	 * @param {Number} y the mouse position
 	 */
-	move : function(scroll_element, drag_element, dx, dy, ev/*, x,y,sx, sy*/){
+	move: function( scroll_element, drag_element, dx, dy, ev/*, x,y,sx, sy*/ ) {
 		scroll_element.scrollTop( scroll_element.scrollTop() + dy);
 		scroll_element.scrollLeft(scroll_element.scrollLeft() + dx);
 		

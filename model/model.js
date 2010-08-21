@@ -31,13 +31,13 @@ var capitalize = $.String.capitalize,
 $.Controller.extend("MyApp.Controllers.Tasks",{onDocument: true},
 {
   // get tasks when the page is ready 
-  ready : function(){
+  ready: function() {
     $.get('/tasks.json', this.callback('gotTasks'), 'json')
   },
 *  /* 
 *   * assume json is an array like [{name: "trash", due_date: 1247111409283}, ...]
 *   *|
-  gotTasks : function(json){ 
+  gotTasks: function( json ) { 
     for(var i =0; i < json.length; i++){
       var taskJson = json[i];
       
@@ -51,7 +51,7 @@ $.Controller.extend("MyApp.Controllers.Tasks",{onDocument: true},
     }
   },
   // when a task is complete, get the id, make a request, remove it
-  ".task click" : function(el){
+  ".task click" : function( el ) {
     $.post('/task_complete',{id: el.attr('data-taskid')}, function(){
       el.remove();
     })
@@ -70,13 +70,13 @@ a good model does for a controller before we learn how to make one:
 @codestart
 $.Controller.extend("MyApp.Controllers.Tasks",{onDocument: true},
 {
-  load : function(){
+  load: function() {
     Task.findAll({},this.callback('list'))
   },
-  list : function(tasks){
+  list: function( tasks ) {
     $("#tasks").html(this.view(tasks))
   },
-  ".task click" : function(el){
+  ".task click" : function( el ) {
     el.models()[0].complete(function(){
       el.remove();
     });
@@ -98,15 +98,15 @@ also made our controller completely understandable.  Now lets take a look at the
 @codestart
 $.Model.extend("Task",
 {
-	findAll : function(params,success){
+	findAll: function( params,success ) {
 		$.get("/tasks.json", params, this.callback(["wrapMany",success]),"json");
 	}
 },
 {
-	timeRemaining : function(){
+	timeRemaining: function() {
 		return new Date() - new Date(this.due_date)
 	},
-	complete : function(success){
+	complete: function( success ) {
 		$.get("/task_complete", {id: this.id }, success,"json");
 	}
 })
@@ -141,7 +141,7 @@ You can validate your model's attributes with another plugin.  See [validation].
 jQuery.Class.extend("jQuery.Model",
 /* @Static*/
 {
-	setup: function(){
+	setup: function() {
 		// clear everything that shouldn't be reused
 		this.validations = [];
 		this.attributes= {};  //list of all attributes ever given to this model
@@ -167,7 +167,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {Object} attributes
 	 * @return {Model} an instance of the model
 	 */
-	wrap : function(attributes){
+	wrap: function( attributes ) {
 		if(!attributes) {
 			return null;
 		}
@@ -181,7 +181,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {Array} instancesRawData an array of raw name - value pairs.
 	 * @return {Array} an array of instances of the model
 	 */
-	wrapMany : function(instances){
+	wrapMany: function( instances ) {
 		if(!instances) return null;
 		var res = new (this.List || Array), 
 			arr = $.isArray(instances),
@@ -213,7 +213,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {String} property
 	 * @param {String} type
 	 */
-	addAttr : function(property, type){
+	addAttr: function( property, type ) {
 		if(this.associations[property])
 			return;
 		this.attributes[property] || ( this.attributes[property] = type );
@@ -225,7 +225,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {Object} event
 	 * @param {Object} data
 	 */
-	publish : function(event, data){
+	publish: function( event, data ) {
 		//@steal-remove-start
 		steal.dev.log("Model.js - publishing " + underscore(this.shortName) + "." + event)
 		//@steal-remove-end
@@ -239,7 +239,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {Object} object the object you want to test.
 	 * @return {String} one of string, object, date, array, boolean, number, function
 	 */
-	guessType : function(object){
+	guessType: function( object ) {
 		if(typeof object != 'string'){
 			if(object == null) return typeof object;
 			if( object.constructor == Date ) return 'date';
@@ -253,24 +253,24 @@ jQuery.Class.extend("jQuery.Model",
 		return typeof object;
 	},
 	converters : {
-		"date" : function(val){
+		"date" : function( val ) {
 			return this._parseDate(val)
 		},
-		"number" : function(val){
+		"number" : function( val ) {
 			return parseFloat(val)
 		},
-		"boolean" : function(val){
+		"boolean" : function( val ) {
 			return Boolean(val)
 		}
 	},
-	findAll : function(params, success, error){},
-	findOne : function(id, params, success, error){},
+	findAll: function( params, success, error ) {},
+	findOne: function( id, params, success, error ) {},
 	/**
 	 * Implement this function!
 	 * Create is called by save to create a new instance.  If you want to be able to call save on an instance
 	 * you have to implement create.
 	 */
-	create : function(attrs, success, error){
+	create: function( attrs, success, error ) {
 		throw "Model: Implement Create"
 	},
 	/**
@@ -278,7 +278,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * Update is called by save to update an instance.  If you want to be able to call save on an instance
 	 * you have to implement update.
 	 */
-	update : function(id, attrs, success, error){
+	update: function( id, attrs, success, error ) {
 		throw "Model: Implement "+this.fullName+"'s \"update\"!"
 	},
 	/**
@@ -287,7 +287,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * you have to implement update.
 	 * @param {String|Number} id the id of the instance you want destroyed
 	 */
-	destroy : function(id, success, error){
+	destroy: function( id, success, error ) {
 		throw "Model: Implement "+this.fullName+"'s \"destroy\"!"
 	},
 	/**
@@ -295,7 +295,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {String} str a string representation of a date
 	 * @return {Date} a date
 	 */
-	_parseDate : function(str){
+	_parseDate: function( str ) {
 		return typeof str == "string" ?  
 			(Date.parse(str) == NaN ? null : Date.parse(str)) :
 			str
@@ -307,7 +307,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * Creates, but does not save a new instance of this class
 	 * @param {Object} attributes a hash of attributes
 	 */
-	init : function(attributes){
+	init: function( attributes ) {
 		this.Class.defaults && this.attrs(this.Class.defaults);
 		this.attrs(attributes);
 		/**
@@ -322,12 +322,11 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {Function} success
 	 * @param {Function} error
 	 */
-	update : function(attrs, success, error)
-	{
+	update: function( attrs, success, error ) {
 		this.attrs(attrs);
 		return this.save(success, error); //on success, we should 
 	},
-	valid : function() {
+	valid: function() {
 		for(var attr in this.errors)
 				return false;
 		return true;
@@ -335,7 +334,7 @@ jQuery.Class.extend("jQuery.Model",
    /**
 	* Validates this model instance (usually called by [jQuery.Model.prototype.save|save])
 	*/
-	validate : function(){
+	validate: function() {
 		this.errors = {};
 		var self = this;
 		$.each(this.Class.validations || [], function(i, func) { func.call(self) });
@@ -345,7 +344,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {String} attribute the attribute you want to set or get
 	 * @param {String_Number_Boolean} [opt1] value the value you want to set.
 	 */
-	attr : function(attribute, value) {
+	attr: function( attribute, value ) {
 		var cap = capitalize(attribute),
 			get = "get"+cap;
 		if(value !== undefined)
@@ -359,7 +358,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {Object} property
 	 * @param {Object} value
 	 */
-	_setProperty : function(property, value, capitalized) {
+	_setProperty: function( property, value, capitalized ) {
 		var funcName = "set"+capitalized,
 			old = this[property], 
 			Class = this.Class,
@@ -388,7 +387,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {Object} [opt2] attributes if present, the list of attributes to send
 	 * @return {Object} the curent attributes of the model
 	 */
-	attrs : function(attributes) {
+	attrs: function( attributes ) {
 		var key;
 		if(!attributes){
 			attributes = {};
@@ -411,12 +410,12 @@ jQuery.Class.extend("jQuery.Model",
 	/**
 	 * Returns if the instance is a new object
 	 */
-	isNew : function(){ return this[this.Class.id] == null; },
+	isNew: function() { return this[this.Class.id] == null; },
 	/**
 	 * Saves the instance
 	 * @param {Function} [opt3] callbacks onComplete function or object of callbacks
 	 */
-	save: function(success,error){
+	save: function( success,error ) {
 		this.validate();
 		
 		if(!this.valid()){
@@ -434,7 +433,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * Destroys the instance
 	 * @param {Function} [opt4] callback or object of callbacks
 	 */
-	destroy : function(success, error){
+	destroy: function( success, error ) {
 		this.Class.destroy(this[this.Class.id], this.callback(["destroyed",success]), error);
 	},
 
@@ -448,7 +447,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * for a model with [jQuery.Model.prototype.elements elements].
 	 * @return {String}
 	 */
-	identity : function(){
+	identity: function() {
 		var id = this[this.Class.id]
 		return this.Class._fullName+'_'+
 			(this.Class.escapeIdentity ? encodeURIComponent(id) : id);
@@ -462,7 +461,7 @@ jQuery.Class.extend("jQuery.Model",
 	 * This function should only rarely be used.  It breaks the architecture.
 	 * @param {String|jQuery|element} context - 
 	 */
-	elements : function(context){
+	elements: function( context ) {
 		return $("."+this.identity(), context);
 	},
 	/**
@@ -470,10 +469,10 @@ jQuery.Class.extend("jQuery.Model",
 	 * @param {String} event
 	 * @param {Object} [opt6] data if missing, uses the instance in {data: this}
 	 */
-	publish : function(event, data){
+	publish: function( event, data ) {
 		this.Class.publish(event, data|| this);
 	},
-	hookup : function(el){
+	hookup: function( el ) {
 		var shortName = underscore(this.Class.shortName),
 			models  = $.data(el, "models") || $.data(el, "models", {});
 		$(el).addClass(shortName+" "+this.identity())

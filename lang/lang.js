@@ -21,7 +21,7 @@ var str = ($.String =
      * @function strip
      * @param {String} s returns a string with leading and trailing whitespace removed.
      */
-	strip : function(string){
+	strip: function( string ) {
 		return string.replace(/^\s+/, '').replace(/\s+$/, '');
 	},
     /**
@@ -29,7 +29,7 @@ var str = ($.String =
      * @param {String} s the string to be lowercased.
      * @return {String} a string with the first character capitalized, and everything else lowercased
      */
-	capitalize : function(s, cache) {
+	capitalize: function( s, cache ) {
 		return s.charAt(0).toUpperCase()+s.substr(1);
 	},
 
@@ -39,7 +39,7 @@ var str = ($.String =
      * @param {String} pattern What the string might end with
      * @return {Boolean} true if the string ends wtih pattern, false if otherwise
      */
-	endsWith : function(s, pattern) {
+	endsWith: function( s, pattern ) {
 	    var d = s.length - pattern.length;
 	    return d >= 0 && s.lastIndexOf(pattern) === d;
 	},
@@ -52,7 +52,7 @@ var str = ($.String =
      * @param {String} s
      * @return {String} a the camelized string
      */
-	camelize: function(s){
+	camelize: function( s ) {
 		var parts = s.split(regs.undHash),
 			i = 1;
 		parts[0] = parts[0].charAt(0).toLowerCase()+parts[0].substr(1);
@@ -65,7 +65,7 @@ var str = ($.String =
      * @param {String} s
      * @return {String}
      */
-	classize: function(s){
+	classize: function( s ) {
 		var parts = s.split(regs.undHash),
 			i=0;
 		for(; i < parts.length; i++)
@@ -80,7 +80,7 @@ var str = ($.String =
      * @param {String} s
      * @return {String}
      */
-	niceName: function(s){
+	niceName: function( s ) {
 		var parts = s.split(regs.undHash),
 			i = 0;
 		for(; i < parts.length; i++)
@@ -89,7 +89,7 @@ var str = ($.String =
 	},
 
     
-    underscore : function(s){
+    underscore: function( s ) {
         return s.replace(regs.colons, '/').
                  replace(regs.words,'$1_$2').
                  replace(regs.lowerUpper,'$1_$2').

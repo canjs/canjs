@@ -42,7 +42,7 @@ steal.plugins('jquery/event').then(function($){
 	}
 		
 	$.event.special.selectin = {
-		add : function(handleObj){
+		add: function( handleObj ) {
 			if(handleObj.selector){
 				$(this).delegate(handleObj.selector,focusBubble, focusin)
 				$(this).delegate(handleObj.selector,blurBubble, focusout)
@@ -51,7 +51,7 @@ steal.plugins('jquery/event').then(function($){
 						bind(blurBubble, focusout)
 			}
 		},
-		remove : function(handleObj){
+		remove: function( handleObj ) {
 			if(handleObj.selector){
 				$(this).undelegate(handleObj.selector,focusBubble, focusin)
 				$(this).undelegate(handleObj.selector,blurBubble, focusout)

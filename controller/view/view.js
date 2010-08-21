@@ -66,7 +66,7 @@ jQuery.Controller.prototype.
  * If data is not provided, it uses the controller instance as data.
  * @codestart
  * TasksController = $.Controller.extend('TasksController',{
- *   click : function(el){
+ *   click: function( el ) {
  *     // renders with views/tasks/click.ejs
  *     el.html( this.view() ) 
  *     // renders with views/tasks/under.ejs

@@ -87,7 +87,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 	}
 	$.each(eventNames, function(){
 			event.special[this] = {
-				add : function(handleObj){
+				add: function( handleObj ) {
 					//add this element to the compiles list
 					var el = $(this), current = (el.data("dropEventCount") || 0);
 					el.data("dropEventCount",  current+1   )
@@ -95,7 +95,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 						$.Drop.addElement(this);
 					}
 				},
-				remove : function(){
+				remove: function() {
 					var el = $(this), current = (el.data("dropEventCount") || 0);
 					el.data("dropEventCount",  current-1   )
 					if(current<=1){
@@ -110,14 +110,14 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		_responders: [], //potential drop points
 		last_active: [],
 		endName: "dropon",
-		addElement : function(el){
+		addElement: function( el ) {
 			//check other elements
 			for(var i =0; i < this._elements.length ; i++  ){
 				if(el ==this._elements[i]) return;
 			}
 			this._elements.push(el);
 		},
-		removeElement : function(el){
+		removeElement: function( el ) {
 			 for(var i =0; i < this._elements.length ; i++  ){
 				if(el == this._elements[i]){
 					this._elements.splice(i,1)
@@ -129,7 +129,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		* @hide
 		* For a list of affected drops, sorts them by which is deepest in the DOM first.
 		*/ 
-		sortByDeepestChild: function(a, b) {
+		sortByDeepestChild: function( a, b ) {
 			var compare = a.element.compare(b.element);
 			if(compare & 16 || compare & 4) return 1;
 			if(compare & 8 || compare & 2) return -1;
@@ -139,7 +139,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		 * @hide
 		 * Tests if a drop is within the point.
 		 */
-		isAffected: function(point, moveable, responder) {
+		isAffected: function( point, moveable, responder ) {
 			return ((responder.element != moveable.element) && (responder.element.within(point[0], point[1], responder).length == 1));
 		},
 		/**
@@ -149,7 +149,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		 * @param {Object} drag
 		 * @param {Object} event
 		 */
-		deactivate: function(responder, mover, event) {
+		deactivate: function( responder, mover, event ) {
 			mover.out(event, responder)
 			responder.callHandlers(this.lowerName+'out',responder.element[0], event, mover)
 		}, 
@@ -160,18 +160,18 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		 * @param {Object} drag
 		 * @param {Object} event
 		 */
-		activate: function(responder, mover, event) { //this is where we should call over
+		activate: function( responder, mover, event ) { //this is where we should call over
 			mover.over(event, responder)
 			//this.last_active = responder;
 			responder.callHandlers(this.lowerName+'over',responder.element[0], event, mover);
 		},
-		move : function(responder, mover, event){
+		move: function( responder, mover, event ) {
 			responder.callHandlers(this.lowerName+'move',responder.element[0], event, mover)
 		},
 		/**
 		 * Gets all elements that are droppable, adds them
 		 */
-		compile : function(event, drag){
+		compile: function( event, drag ) {
 			var el, drops, selector, sels;
 			this.last_active = [];
 			for(var i=0; i < this._elements.length; i++){ //for each element
@@ -188,7 +188,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 			}
 			
 		},
-		add: function(element, callbacks, event, drag) {
+		add: function( element, callbacks, event, drag ) {
 			element = jQuery(element);
 			var responder = new $.Drop(callbacks, element);
 			responder.callHandlers(this.lowerName+'init', element[0], event, drag)
@@ -196,7 +196,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 				this._responders.push(responder);
 			}
 		},
-		show : function(point, moveable, event){
+		show: function( point, moveable, event ) {
 			var element = moveable.element;
 			if(!this._responders.length) return;
 			
@@ -248,7 +248,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 				if(!propagate) return;
 			}
 		},
-		end : function(event, moveable){
+		end: function( event, moveable ) {
 			var responder, la;
 			for(var r =0; r<this._responders.length; r++){
 				this._responders[r].callHandlers(this.lowerName+'end', null, event, moveable);
@@ -268,7 +268,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		 * Called after dragging has stopped.
 		 * @hide
 		 */
-		clear : function(){
+		clear: function() {
 		  
 		  this._responders = [];
 		}
@@ -276,7 +276,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 	$.Drag.responder = $.Drop;
 	
 	$.extend($.Drop.prototype,{
-		callHandlers : function(method, el, ev, drag){
+		callHandlers: function( method, el, ev, drag ) {
 			var length = this[method] ? this[method].length : 0
 			for(var i =0; i < length; i++){
 				this[method][i].call(el || this.element[0], ev, this, drag)
@@ -285,16 +285,16 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		/**
 		 * Caches positions of draggable elements.  This should be called in dropinit.  For example:
 		 * @codestart
-		 * dropinit : function(el, ev, drop){ drop.cache_position() }
+		 * dropinit: function( el, ev, drop ) { drop.cache_position() }
 		 * @codeend
 		 */
-		cache: function(value){
+		cache: function( value ) {
 			this._cache = value != null ? value : true;
 		},
 		/**
 		 * Prevents this drop from being dropped on.
 		 */
-		cancel : function(){
+		cancel: function() {
 			this._canceled = true;
 		}
 	} )

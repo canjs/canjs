@@ -7,7 +7,7 @@ steal.plugins('jquery/dom').then(function(){
 	 * @parent dom
 	 * Overwrites closest to allow open > selectors.  This allows controller actions such as:
 	 * @codestart
-	 * ">li click" : function(el, ev){ ... }
+	 * ">li click" : function( el, ev ) { ... }
 	 * @codeend
 	 */
 	var oldClosest = jQuery.fn.closest;

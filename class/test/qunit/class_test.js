@@ -5,12 +5,12 @@ test("Creating", function(){
     jQuery.Class.extend("Animal",
     {
         count: 0,
-        test : function(){
+        test: function() {
             return this.match ? true : false
         }
     },
     {
-        init : function(){
+        init: function() {
             this.Class.count++;
             this.eyes = false;
         }
@@ -21,10 +21,10 @@ test("Creating", function(){
         match : /abc/
     },
     {
-        init: function(){
+        init: function() {
             this._super();
         },
-		talk : function(){
+		talk: function() {
 			return "Woof";
 		}
     });
@@ -33,13 +33,13 @@ test("Creating", function(){
         count : 0
     },
     {
-        init : function(hairs){
+        init: function( hairs ) {
             this._super();
             this.hairs = hairs;
             this.setEyes();
             
         },
-        setEyes : function(){
+        setEyes: function() {
             this.eyes = true;
         }
     });
@@ -85,22 +85,22 @@ test("setups", function(){
 		protoInitArgs,
 		protoInit,
 		staticProps = {
-			setup : function(){
+			setup: function() {
 				staticSetup = ++order;
 				staticSetupArgs = arguments;
 				return ["something"]
 			},
-			init : function(){
+			init: function() {
 				staticInit = ++order;
 				staticInitArgs = arguments;
 			}
 		},
 		protoProps = {
-			setup : function(name){
+			setup: function( name ) {
 				protoSetup = ++order;
 				return ["Ford: "+name];
 			},
-			init : function(){
+			init: function() {
 				protoInit = ++order;
 				protoInitArgs = arguments;
 			}
@@ -128,11 +128,11 @@ test("setups", function(){
 test("callback", function(){
 	var curVal = 0;
 	$.Class.extend("Car",{
-		show : function(value){
+		show: function( value ) {
 			equals(curVal, value)
 		}
 	},{
-		show : function(value){
+		show: function( value ) {
 			
 		}
 	})

@@ -29,25 +29,25 @@ steal.plugins('jquery/view').then(function(){
 
 	$.View.register({
 		suffix : "micro",
-		renderer : function(id, text){
+		renderer: function( id, text ) {
 			var mt = MicroTemplate(text)
 			return function(data){
 				return mt(data)
 			}
 		},
-		get : function(id, url){
+		get: function( id, url ) {
 			var text = $.ajax({
 					async: false,
 					url: url,
 					dataType: "text",
-					error : function(){
+					error: function() {
 						throw "micro.js ERROR: There is no template or an empty template at "+url;
 					}
 				}).responseText
 			return this.renderer(id, text);
 			
 		},
-		script : function(id, str){
+		script: function( id, str ) {
 			return "function(obj){"+MicroTemplate(str).body+"}";
 		}
 	})

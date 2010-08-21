@@ -110,7 +110,7 @@ $.ajax({
   url:      "tasks",
   data:     {id: 5},
   dataType: "json",
-  fixture: function(settings, callbackType){
+  fixture: function( settings, callbackType ) {
     var xhr = {responseText: "{id:"+settings.data.id+"}"}
     switch(callbackType){
       case "success": 
@@ -192,7 +192,7 @@ $.extend($.fixture, {
     /**
      * Provides a rest update fixture function
      */
-	"-restUpdate": function(settings,cbType){
+	"-restUpdate": function( settings,cbType ) {
         switch(cbType){
             case "success": 
                 return [$.extend({id: parseInt(settings.url)}, settings.data), "success", $.fixture.xhr()]
@@ -203,7 +203,7 @@ $.extend($.fixture, {
 	/**
      * Provides a rest destroy fixture function
      */
-    "-restDestroy" : function(settings, cbType){
+    "-restDestroy" : function( settings, cbType ) {
         switch(cbType){
             case "success":
                 return [true, "success", $.fixture.xhr()]
@@ -214,13 +214,13 @@ $.extend($.fixture, {
 	/**
      * Provides a rest create fixture function
      */
-    "-restCreate" : function(settings, cbType){
+    "-restCreate" : function( settings, cbType ) {
         switch(cbType){
             case "success": 
                 return [{id: parseInt(Math.random()*1000)}, "success", $.fixture.xhr()];
             case "complete":
                 return [ $.fixture.xhr({
-                            getResponseHeader: function(){ return settings.url+"/"+parseInt(Math.random()*1000) }
+                            getResponseHeader: function() { return settings.url+"/"+parseInt(Math.random()*1000) }
                         }) , "success"]
         }
 
@@ -248,14 +248,14 @@ $.ajax({
      parentId: 5},
    },
    fixture: "-messages",
-   success: function(messages){  ... }
+   success: function( messages ) {  ... }
 });
 @codeend
 @param {Array} types An array of the fixture names
 @param {Number} count the number of items to create
 @param {Function} make a function that will return json data representing the object.
  */
-	make : function(types, count, make){
+	make: function( types, count, make ) {
 		// make all items
 		var items = ($.fixture["~"+types[0]] = []);
 		for(var i = 0 ; i < (count); i++){
@@ -333,7 +333,7 @@ $.ajax({
 	 * The following example shows how the -restCreate fixture uses xhr to return 
 	 * a simulated xhr object:
 @codestart
-"-restCreate" : function(settings, cbType){
+"-restCreate" : function( settings, cbType ) {
   switch(cbType){
     case "success": 
       return [
@@ -343,7 +343,7 @@ $.ajax({
     case "complete":
       return [ 
         $.fixture.xhr({
-          getResponseHeader: function(){ 
+          getResponseHeader: function() { 
             return settings.url+"/"+parseInt(Math.random()*1000);
           }
         }),
@@ -354,7 +354,7 @@ $.ajax({
 	 * @param {Object} [xhr] properties that you want to overwrite
 	 * @return {Object} an object that looks like a successful XHR object.
 	 */
-	xhr : function(xhr){
+	xhr: function( xhr ) {
 		return $.extend({},{
 			abort: $.noop,
 			getAllResponseHeaders: function () { return ""; },

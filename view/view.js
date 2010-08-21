@@ -122,7 +122,7 @@ $.extend($.View, {
 	 * @param {Function} cb a callback function to be called with the element
 	 * @param {Number} the hookup number
 	 */
-	hookup: function(cb){
+	hookup: function( cb ) {
 		var myid = ++id;
 		jQuery.View.hookups[myid] = cb;
 		return myid;
@@ -155,7 +155,7 @@ $.extend($.View, {
 	 * 			returns a render function.</li>
 	 * </ul>
 	 */
-	register: function(info){
+	register: function( info ) {
 		this.types["."+info.suffix] = info;
 	},
 	types: {},
@@ -181,7 +181,7 @@ $.extend($.View, {
 	 * @param {String} id
 	 * @param {Function} renderer
 	 */
-	preload: function(id, renderer){
+	preload: function( id, renderer ) {
 		$.View.cached[id] = function(data, helpers){
 			return renderer.call(data, data, helpers)
 		}

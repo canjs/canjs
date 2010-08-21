@@ -26,7 +26,7 @@ steal.plugins('jquery/event').then(function($){
 	 * @demo jquery/event/destroyed/destroyed_menu.html 
 	 */
 	/*$.event.special["destroyed"] = {
-		remove: function( handleObj){
+		remove: function( handleObj ) {
 			//call the handler
 			if(handleObj.removed || handleObj.handler.removed) return;
 			var event = jQuery.Event( "destroyed" );

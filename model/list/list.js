@@ -17,12 +17,12 @@ var push =[].push,
  * Used as a store or for ajax methods that involve multiple instances.  A sort of ACL.
  */
 $.Class.extend("jQuery.Model.List",{
-    init : function(instances){
+    init: function( instances ) {
         this.length = 0;
 		this._data = {};
         this.push.apply(this, $.makeArray(instances || [] ) );
     },
-    push: function(){
+    push: function() {
 		var first = this.length;
 		push.apply(this, arguments)
 		var id,
@@ -32,7 +32,7 @@ $.Class.extend("jQuery.Model.List",{
 		}
 	},
     sort: [].sort,
-    splice: function(index, howMany){
+    splice: function( index, howMany ) {
 		var args = $.makeArray(arguments),
 			id = (this[0] && this[0].Class.id);;
 		index = args.shift();
@@ -47,27 +47,27 @@ $.Class.extend("jQuery.Model.List",{
 		}
 		return splice.apply(this, arguments)
 	},
-    slice : function(){
+    slice: function() {
         return Array.prototype.slice.apply( this, arguments )
     },
-    match : function(property, value){
+    match: function( property, value ) {
         return this.grep(function(inst){
             return inst[property] == value;
         })
     },
-    each : function(callback, args){
+    each: function( callback, args ) {
         return $.each( this, callback, args );
     },
-    grep : function(callback, args){
+    grep: function( callback, args ) {
         return $.grep( this, callback, args );
     },
-    map : function(callback, args){
+    map: function( callback, args ) {
         return $.map( this, callback, args );
     },
 	/**
 	 * Gets by ID
 	 */
-	get : function(){
+	get: function() {
 		if(!this.length){
 			return [];
 		}
@@ -90,7 +90,7 @@ $.Class.extend("jQuery.Model.List",{
 		}
 		return new this.Class(list)
 	},
-	remove : function(args){
+	remove: function( args ) {
 		if(!this.length){
 			return [];
 		}
@@ -125,10 +125,10 @@ $.Class.extend("jQuery.Model.List",{
 		}
 		return new this.Class(list);
 	},
-	publish : function(name, data){
+	publish: function( name, data ) {
 		OpenAjax.hub.publish(this.Class.shortName+"."+name, data)
 	},
-	elements : function(context){
+	elements: function( context ) {
 		var jq = $();
 		this.each(function(){
 			jq.add("."+this.identity(), context)

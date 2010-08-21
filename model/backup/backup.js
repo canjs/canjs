@@ -11,7 +11,7 @@ steal.plugins('jquery/model').then(function(){
 		 * The plugin also adds an [jQuery.Model.prototype.isDirty isDirty]
 		 * method for checking if it is dirty.
 		 */
-		backup : function(){
+		backup: function() {
 			for(var name in this.Class.associations){
 				var association = this.Class.associations[name];
 				if("belongsTo" in association){
@@ -26,7 +26,7 @@ steal.plugins('jquery/model').then(function(){
 			this._backupStore = $.extend(true, {},this.attrs());
 		},
 	   
-	   _backup: function(){
+	   _backup: function() {
 		   this._backupStore = $.extend(true, {},this.attrs());
 	   },
 	   /**
@@ -35,7 +35,7 @@ steal.plugins('jquery/model').then(function(){
 	    * through associations too.
 	    * @return {Boolean}
 	    */
-	   isDirty: function(){
+	   isDirty: function() {
 			if(!this._backupStore) return false;
 			//go through attrs and compare ...
 			var current = this.attrs(),
@@ -73,7 +73,7 @@ steal.plugins('jquery/model').then(function(){
 		 * restores this istance to its backup data.
 		 * @return {model} the instance (for chaining)
 		 */
-		restore: function(){
+		restore: function() {
 			this.attrs(this._backupStore);   
 			return this;
 		}

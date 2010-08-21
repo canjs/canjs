@@ -88,7 +88,7 @@ var initializing = false,
 * },
 * /* @prototype *|
 * {
-*   init: function(name){
+*   init: function( name ) {
 *     
 *     // saves name on the monster instance
 *     this.name = name;
@@ -99,10 +99,10 @@ var initializing = false,
 *     // increments count
 *     this.Class.count++;
 *   },
-*   eat : function( smallChildren ){
+*   eat: function( smallChildren ){
 *     this.health += smallChildren;
 *   },
-*   fight : function(){
+*   fight: function() {
 *     this.health -= 2;
 *   }
 * });
@@ -132,10 +132,10 @@ var initializing = false,
 * </p>
 * @codestart
 * Monster.extend("SeaMonster",{
-*   eat : function(smallChildren){
+*   eat: function( smallChildren ) {
 *     this._super(smallChildren / 2);
 *   },
-*   fight : function(){
+*   fight: function() {
 *     this.health -= 1;
 *   }
 * });
@@ -149,11 +149,11 @@ var initializing = false,
 * @codestart
 * $.Class.extend("First",
 * {
-*     staticMethod : function(){ return 1;}
+*     staticMethod: function() { return 1;}
 * },{})
 * 
 * First.extend("Second",{
-*     staticMethod : function(){ return this._super()+1;}
+*     staticMethod: function() { return this._super()+1;}
 * },{})
 * 
 * Second.staticMethod() // -> 2
@@ -196,12 +196,12 @@ var initializing = false,
 * @codestart
 * $.Class.extend("MyClass",
 * {
-*   setup: function(){} //static setup
-*   init: function(){} //static constructor
+*   setup: function() {} //static setup
+*   init: function() {} //static constructor
 * },
 * {
-*   setup: function(){} //prototype setup
-*   init: function(){} //prototype constructor
+*   setup: function() {} //prototype setup
+*   init: function() {} //prototype constructor
 * })
 * @codeend
 * 
@@ -223,7 +223,7 @@ var initializing = false,
 * $.Class.extend("jQuery.Controller",{
 *   ...
 * },{
-*   setup : function(el, options){
+*   setup: function( el, options ) {
 *     ...
 *     return [$(el), 
 *             $.extend(true, 
@@ -242,7 +242,7 @@ var initializing = false,
 * </p>
 * @codestart
 * $.Class.Extend("Foo", {
-*   init : function( arg1, arg2, arg3){
+*   init: function( arg1, arg2, arg3 ) {
 *     this.sum = arg1+arg2+arg3;
 *   }
 * })
@@ -260,11 +260,11 @@ var initializing = false,
 * <code>this.name</code> is available in <code>show</code>.
 * @codestart
 $.Class.extend("Todo",{
-  init : function(name){ this.name = name }
-  get : function(){
+  init: function( name ) { this.name = name }
+  get: function() {
     $.get("/stuff",this.callback('show'))
   },
-  show : function(txt){
+  show: function( txt ) {
     alert(this.name+txt)
   }
 })
@@ -291,11 +291,11 @@ $.extend($.Class,{
 	* The callback function ensures that 'this' is set appropriately.  
 	* @codestart
 	* $.Class.extend("MyClass",{
-	*     getData : function(){
+	*     getData: function() {
 	*         this.showing = null;
 	*         $.get("data.json",this.callback('gotData'),'json')
 	*     },
-	*     gotData : function(data){
+	*     gotData: function( data ) {
 	*         this.showing = data;
 	*     }
 	* },{});
@@ -305,10 +305,10 @@ $.extend($.Class,{
 	* Additional arguments to callback will fill in arguments on the returning function.
 	* @codestart
 	* $.Class.extend("MyClass",{
-	*    getData : function(<b>callback</b>){
+	*    getData: function( <b>callback</b> ) {
 	*      $.get("data.json",this.callback('process',<b>callback</b>),'json');
 	*    },
-	*    process : function(<b>callback</b>, jsonData){ //callback is added as first argument
+	*    process: function( <b>callback</b>, jsonData ) { //callback is added as first argument
 	*        jsonData.processed = true;
 	*        callback(jsonData);
 	*    }
@@ -321,11 +321,11 @@ $.extend($.Class,{
 	* to eliminate currying initial arguments.
 	* @codestart
 	* $.Class.extend("MyClass",{
-	*    getData : function(callback){
+	*    getData: function( callback ) {
 	*      //calls process, then callback with value from process
 	*      $.get("data.json",this.callback(['process2',callback]),'json') 
 	*    },
-	*    process2 : function(type,jsonData){
+	*    process2: function( type,jsonData ) {
 	*        jsonData.processed = true;
 	*        return [jsonData];
 	*    }
@@ -337,7 +337,7 @@ $.extend($.Class,{
 	* next function.
 	* @return {Function} the callback function.
 	*/
-	callback: function(funcs){
+	callback: function( funcs ) {
 			
 		//args that should be curried
 		var args = jQuery.makeArray(arguments), 
@@ -389,7 +389,7 @@ $.extend($.Class,{
 	*   @param {Object} [current=window] the object you want to look in.
 	*   @return {Object} the object you are looking for.
 	*/
-	getObject: function(objectName, current){
+	getObject: function( objectName, current ) {
 		var current = current || window,
 			parts = objectName  ? objectName.split(/\./) :[],
 			i=0;
@@ -409,7 +409,7 @@ $.extend($.Class,{
 	 * @codeend
 	 * @return {class} instance of the class
 	 */
-	newInstance: function(){
+	newInstance: function() {
 		var inst = this.rawInstance(),
 			args;
 		if ( inst.setup ) {
@@ -427,11 +427,11 @@ $.extend($.Class,{
 	 * @param {Object} staticProps
 	 * @param {Object} protoProps
 	 */
-	setup: function(oldClass, fullName){
+	setup: function( oldClass, fullName ) {
 		this.defaults = $.extend(true, {}, oldClass.defaults, this.defaults);
 		return arguments;
 	},
-	rawInstance: function(){
+	rawInstance: function() {
 		initializing = true;
 		var inst = new this();
 		initializing = false;
@@ -453,7 +453,7 @@ $.extend($.Class,{
 	 * @param {Object} [proto]  the new classes prototype functions
 	 * @return {jQuery.Class} returns the new class
 	 */
-	extend: function(fullName, klass, proto) {
+	extend: function( fullName, klass, proto ) {
 		// figure out what was passed
 		if(typeof fullName != 'string'){
 			proto = klass;
@@ -556,7 +556,7 @@ $.extend($.Class,{
 		 * @codestart
 		 * $.Class.extend("MyClass",
 		 * {
-		 *    setup: function(val){
+		 *    setup: function( val ) {
 		 *       this.val = val;
 		 *    }
 		 * })
@@ -580,7 +580,7 @@ $.extend($.Class,{
 		 * @codestart
 		 * $.Class.extend("MyClass",
 		 * {
-		 *    init: function(val){
+		 *    init: function( val ) {
 		 *       this.val = val;
 		 *    }
 		 * })

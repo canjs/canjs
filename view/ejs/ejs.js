@@ -66,10 +66,10 @@ var EJS = function( options ){
  * <i>list.ejs</i> view from a controller:
  * @codestart
  * $.Controller.extend("TasksController",{
- *     init : function(el){
+ *     init: function( el ) {
  *         Task.findAll({},this.callback('list'))
  *     },
- *     list : function(tasks){
+ *     list: function( tasks ) {
  *         this.element.html(
  *         	this.view("list", {tasks: tasks})
  *        )
@@ -137,13 +137,13 @@ EJS.prototype = {
 	 * @param {Object} extra_helpers an object with additonal view helpers
 	 * @return {String} returns the result of the string
 	 */
-    render : function(object, extra_helpers){
+    render: function( object, extra_helpers ) {
         object = object || {};
         this._extra_helpers = extra_helpers;
 		var v = new EJS.Helpers(object, extra_helpers || {});
 		return this.template.process.call(object, object,v);
 	},
-	out : function(){
+	out: function() {
 		return this.template.out;
 	}
 };
@@ -210,7 +210,7 @@ EJS.Scanner.to_text = function(input){
 };
 
 EJS.Scanner.prototype = {
-  scan: function(block) {
+  scan: function( block ) {
 	 var regex = this.SplitRegexp;
 	 if (! this.source == '')
 	 {
@@ -221,7 +221,7 @@ EJS.Scanner.prototype = {
 		 }
 	 }
   },
-  scanline: function(line, regex, block) {
+  scanline: function( line, regex, block ) {
 	 this.lines++;
 	 var line_split = $.String.rsplit(line, regex);
  	 for(var i=0; i<line_split.length; i++) {
@@ -250,7 +250,7 @@ EJS.Buffer = function(pre_cmd, post_cmd) {
 };
 EJS.Buffer.prototype = {
 	
-  push: function(cmd) {
+  push: function( cmd ) {
 	this.line.push(cmd);
   },
 
@@ -308,7 +308,7 @@ EJS.Compiler = function(source, left) {
 	this.out = '';
 };
 EJS.Compiler.prototype = {
-  compile: function(options, name) {
+  compile: function( options, name ) {
   	options = options || {};
 	this.out = '';
 	var put_cmd = "___ViewO.push(",
@@ -441,7 +441,7 @@ EJS.Helpers.prototype = {
 	/**
 	 * Renders a partial view.  This is deprecated in favor of <code>$.View()</code>.
 	 */
-	view: function(url, data, helpers){
+	view: function( url, data, helpers ) {
         if(!helpers) helpers = this._extras
 		if(!data) data = this._data;
 		return $.View(url, data, helpers)  //new EJS(options).render(data, helpers);
@@ -449,7 +449,7 @@ EJS.Helpers.prototype = {
 	/**
 	 * Converts response to text.
 	 */
-	to_text: function(input, null_text) {
+	to_text: function( input, null_text ) {
 	    if(input == null || input === undefined) return null_text || '';
 	    if(input instanceof Date) return input.toDateString();
 		if(input.toString) return input.toString().replace(/\n/g, '<br />').replace(/''/g, "'");
@@ -459,7 +459,7 @@ EJS.Helpers.prototype = {
 	 * Makes a plugin
 	 * @param {String} name the plugin name
 	 */
-	plugin : function(name){
+	plugin: function( name ) {
 		var args = $.makeArray(arguments),
 			widget = args.shift();
 		return function(el){
@@ -473,12 +473,12 @@ EJS.Helpers.prototype = {
 $.View.register({
 	suffix : "ejs",
 	//returns a function that renders the view
-	get : function(id, url){
+	get: function( id, url ) {
 		var text = $.ajax({
 				async: false,
 				url: url,
 				dataType: "text",
-				error : function(){
+				error: function() {
 					throw "ejs.js ERROR: There is no template or an empty template at "+url;
 				}
 			}).responseText
@@ -487,10 +487,10 @@ $.View.register({
 		}
 		return this.renderer(id, text);
 	},
-	script : function(id, src){
+	script: function( id, src ) {
 		 return "jQuery.View.EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {"+new EJS({text: src}).out()+" return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";     
 	},
-	renderer : function(id, text){
+	renderer: function( id, text ) {
 		var ejs = new EJS({text: text, name: id})
 		return function(data, helpers){
 			return ejs.render.call(ejs, data, helpers)

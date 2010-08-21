@@ -1567,7 +1567,7 @@ klass:                              for (;;) {
     function prefix(s, f) {
         var x = symbol(s, 150);
         reserveName(x);
-        x.nud = (typeof f === 'function') ? f : function () {
+        x.nud = (typeof f === 'function') ? f: function () {
             if (option.plusplus && (this.id === '++' || this.id === '--')) {
                 warning("Unexpected use of '{a}'.", this, this.id);
             }
@@ -1603,7 +1603,7 @@ klass:                              for (;;) {
     function infix(s, f, p) {
         var x = symbol(s, p);
         reserveName(x);
-        x.led = (typeof f === 'function') ? f : function (left) {
+        x.led = (typeof f === 'function') ? f: function (left) {
             nonadjacent(prevtoken, token);
             nonadjacent(token, nexttoken);
             return [this.id, left, parse(p)];
@@ -1673,7 +1673,7 @@ klass:                              for (;;) {
     function bitwise(s, f, p) {
         var x = symbol(s, p);
         reserveName(x);
-        x.led = (typeof f === 'function') ? f : function (left) {
+        x.led = (typeof f === 'function') ? f: function (left) {
             if (option.bitwise) {
                 warning("Unexpected use of '{a}'.", this, this.id);
             }
