@@ -5,7 +5,7 @@ steal.plugins("jquery").then(function($){
 
 // converts to an ok dom id
 var toId = function(src){
-	return src.replace(/[\/\.]/g,"_")
+	return src.replace(/^\/\//,"").replace(/[\/\.]/g,"_")
 },
 // used for hookup ids
 id = 1;
