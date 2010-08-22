@@ -1,5 +1,5 @@
 module("offline test", { 
-	setup: function(){
+	setup: function() {
         S.open("offline.html");
 	}
 })

@@ -37,7 +37,7 @@ $.fn.extend({
 	 * @param {Boolean} [convert] True if strings that look like numbers and booleans should be converted.  Defaults to true.
 	 * @return {Object} An object of name-value pairs.
 	 */
-	formParams: function(convert) {
+	formParams: function( convert ) {
 	   var data = {};
 	   if(this[0].nodeName.toLowerCase() == 'form' && this[0].elements){
 
@@ -45,7 +45,7 @@ $.fn.extend({
 	   }
 	   return jQuery("input[name], textarea[name], select[name]", this[0]).getParams(convert);
 	},
-	getParams : function(convert){
+	getParams: function( convert ) {
 		var data = {},
 			current,
 			convert = convert === undefined ? true : convert;

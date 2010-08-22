@@ -90,9 +90,9 @@ $(function(){
 do this
 @codestart
 $.Controller.extend('Tabs',{
-  click: function(){...},
-  '.tab click' : function(){...},
-  '.delete click' : function(){...}
+  click: function() {...},
+  '.tab click' : function() {...},
+  '.delete click' : function() {...}
 })
 $('#tabs').tabs();
 @codeend
@@ -125,13 +125,13 @@ $('#tabs').tabs();
 To add a mousover effect and create todos, your controller might look like:
 @codestart
 $.Controller.extend('Todos',{
-  ".todo mouseover" : function(el, ev){
+  ".todo mouseover" : function( el, ev ) {
 	  el.css("backgroundColor","red")
   },
-  ".todo mouseout" : function(el, ev){
+  ".todo mouseout" : function( el, ev ) {
 	  el.css("backgroundColor","")
   },
-  ".create click" : function(){
+  ".create click" : function() {
 	  this.find("ol").append("&lt;li class='todo'>New Todo&lt;/li>"); 
   }
 })
@@ -166,7 +166,7 @@ just need to add the function to the listensTo property.  Here's how:
 $.Controller.extend("MyShow",{
   listensTo: ["show"]
 },{
-  show : function(el, ev){
+  show: function( el, ev ) {
     el.show();
   }
 })
@@ -181,7 +181,7 @@ For most actions, the first two parameters are always:
 	<li>ev - the jQuery wrapped DOM event.</li>
 </ul>
 @codestart
-".something click" : function(el, ev){
+".something click" : function( el, ev ) {
    el.slideUp()
    ev.stopDelegation();  //stops this event from delegating to any other
 						 // delegated events for this delegated element.
@@ -205,13 +205,13 @@ property to true.</p>
 $.Controller.extend('TodosController',
 {onDocument: true},
 {
-  ".todo mouseover" : function(el, ev){ //matches #todos .todo
+  ".todo mouseover" : function( el, ev ) { //matches #todos .todo
       el.css("backgroundColor","red")
   },
-  ".todo mouseout" : function(el, ev){ //matches #todos .todo
+  ".todo mouseout" : function( el, ev ) { //matches #todos .todo
       el.css("backgroundColor","")
   },
-  ".create click" : function(){        //matches #todos .create
+  ".create click" : function() {        //matches #todos .create
       this.find("ol").append("&lt;li class='todo'>New Todo&lt;/li>"); 
   }
 })
@@ -224,10 +224,10 @@ necessary Element Controllers.</p>
 $.Controller.extend('SidebarController',
 {onDocument: true},
 {
-  <b>ready</b> : function(){
+  <b>ready</b> : function() {
       $(".slider").slider_controller()
   },
-  "a.tag click" : function(){..}
+  "a.tag click" : function() {..}
 })
 @codeend
 <h3>MainControllers</h3>
@@ -250,7 +250,7 @@ setup functionality for your widget. </p>
 @codestart
 $.Controller.extend("SpecialController",
 {
-  init : function(el, message){
+  init: function( el, message ) {
      this.element.html(message)
   }
 })
@@ -323,7 +323,7 @@ $.Class.extend("jQuery.Controller",
 	 * "Controllers.Task" -> $().controllers_task()
 	 * @codeend
 	 */
-	init : function(){
+	init: function() {
 		// if you didn't provide a name, or are controller, don't do anything
 		if( !this.shortName  || this.fullName == "jQuery.Controller" ){
 			return;
@@ -393,7 +393,7 @@ $.Class.extend("jQuery.Controller",
 		if(this.onDocument)
 			new this(document.documentElement);
 	},
-	hookup : function(el){
+	hookup: function( el ) {
 		return new this(el);
 	},
 	
@@ -402,7 +402,7 @@ $.Class.extend("jQuery.Controller",
 	 * @param {String} methodName a prototype function
 	 * @return {Boolean} truthy if an action or not
 	 */
-	_isAction : function(methodName){
+	_isAction: function( methodName ) {
 		if( actionMatcher.test(methodName) ){
 			return true;
 		}else{
@@ -419,7 +419,7 @@ $.Class.extend("jQuery.Controller",
 	 * @return {Object} null or the processor and pre-split parts.  
 	 * The processor is what does the binding/subscribing.
 	 */
-	_getAction : function(methodName, options){
+	_getAction: function( methodName, options ) {
 		//if we don't have a controller instance, we'll break this guy up later
 		parameterReplacer.lastIndex = 0;
 		if(!options && parameterReplacer.test(methodName)){
@@ -437,7 +437,7 @@ $.Class.extend("jQuery.Controller",
 	},
 	/**
 	 * @attribute processors
-	 * A has of eventName : function pairs that Controller uses to hook 
+	 * A has of eventName: function pairs that Controller uses to hook 
 	 */
 	processors : {},
 	/**
@@ -458,7 +458,7 @@ $.Class.extend("jQuery.Controller",
 	 * </ol>  
 	 * @param {HTMLElement} element the element this instance operates on.
 	 */
-	setup: function(element, options){
+	setup: function( element, options ) {
 		var funcName, 
 			cb,
 			ready,
@@ -518,7 +518,7 @@ $.Class.extend("jQuery.Controller",
 		 * The controller instance's delegated element.  This is set by [jQuery.Controller.prototype.init init].
 		 * It is a jQuery wrapped element.
 		 * @codestart
-		 * ".something click" : function(){
+		 * ".something click" : function() {
 		 *    this.element.css("color","red")
 		 * }
 		 * @codeend
@@ -531,7 +531,7 @@ $.Class.extend("jQuery.Controller",
 	 * <br/>
 	 * <h3>Examples:</h3>
 	 * @codestart
-	 * init : function(){
+	 * init: function() {
 	 *    // calls somethingClicked(el,ev)
 	 *    this.bind('click','somethingClicked') 
 	 * 
@@ -540,7 +540,7 @@ $.Class.extend("jQuery.Controller",
 	 *      //do something
 	 *    })
 	 * },
-	 * somethingClicked : function(el, ev){
+	 * somethingClicked: function( el, ev ) {
 	 * 		
 	 * }
 	 * @codeend
@@ -551,7 +551,7 @@ $.Class.extend("jQuery.Controller",
 	 * and second parameter.  Otherwise the function is called back like a normal bind.
 	 * @return {Integer} The id of the binding in this._bindings
 	 */
-	bind : function(el, eventName, func){
+	bind: function( el, eventName, func ) {
 		if(typeof el == 'string'){
 			func = eventName;
 			eventName = el;
@@ -559,7 +559,7 @@ $.Class.extend("jQuery.Controller",
 		}
 		return this._binder(el, eventName, func)
 	},
-	_binder : function(el, eventName, func, selector){
+	_binder: function( el, eventName, func, selector ) {
 		if(typeof func == 'string'){
 			func = shifter(this.callback(func))
 		}
@@ -584,7 +584,7 @@ $.Class.extend("jQuery.Controller",
 	 * and second parameter.  Otherwise the function is called back like a normal bind.
 	 * @return {Integer} The id of the binding in this._bindings
 	 */
-	delegate : function(element, selector, eventName, func){
+	delegate: function( element, selector, eventName, func ) {
 		if(typeof element == 'string'){
 			func = eventName;
 			eventName = selector;
@@ -600,10 +600,10 @@ $.Class.extend("jQuery.Controller",
 	 * <h3>Examples</h3>
 	 * @codestart
 	 * $.Controller.extend("Thing",{
-	 * init : function(el, options){
+	 * init: function( el, options ) {
 	 *    alert('init')
 	 * },
-	 * update : function(options){
+	 * update: function( options ) {
 	 *    this._super(options);
 	 *    alert('update')
 	 * }
@@ -613,7 +613,7 @@ $.Class.extend("jQuery.Controller",
 	 * @codeend
 	 * @param {Object} options
 	 */
-	update : function(options){
+	update: function( options ) {
 		$.extend(this.options, options)
 	},
 	/**
@@ -621,7 +621,7 @@ $.Class.extend("jQuery.Controller",
 	 * if the element is removed.
 	 * 
 	 */
-	destroy: function(ev){
+	destroy: function( ev ) {
 		if( this._destroyed ) {
 			throw this.Class.shortName+" controller instance has been deleted";
 		}
@@ -646,14 +646,14 @@ $.Class.extend("jQuery.Controller",
 	/**
 	 * Queries from the controller's element.
 	 * @codestart
-	 * ".destroy_all click" : function(){
+	 * ".destroy_all click" : function() {
 	 *    this.find(".todos").remove();
 	 * }
 	 * @codeend
 	 * @param {String} selector selection string
 	 * @return {jQuery.fn} returns the matched elements
 	 */
-	find: function(selector){
+	find: function( selector ) {
 		return this.element.find(selector);
 	},
 	//tells callback to set called on this.  I hate this.

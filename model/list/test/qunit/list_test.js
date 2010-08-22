@@ -1,10 +1,10 @@
 
 module("jquery/model/list", {
-	setup : function(){
+	setup: function() {
 		$.Model.extend("Person")
 	
 		$.Model.List.extend("Person.List",{
-			destroy : function(){
+			destroy: function() {
 				equals(this.length, 20,  "Got 20 people")
 			}
 		});

@@ -15,7 +15,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} options
      * @param {Object} checked
      */
-	check_box_tag: function(name, value, options, checked){
+	check_box_tag: function( name, value, options, checked ) {
         options = options || {};
         if(checked) options.checked = "checked";
         return this.input_field_tag(name, value, 'checkbox', options);
@@ -26,7 +26,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} value
      * @param {Object} html_options
      */
-    date_tag: function(name, value , html_options) {
+    date_tag: function( name, value , html_options ) {
 	    if(! (value instanceof Date)) value = new Date();
        
 		var years = [], months = [], days =[];
@@ -48,7 +48,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} html_options
      * @param {Object} interval - specified in minutes
      */
-	time_tag: function(name, value, html_options, interval) {	
+	time_tag: function( name, value, html_options, interval ) {	
 		var times = [];
 		
 		if (interval == null || interval == 0)
@@ -69,7 +69,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} value
      * @param {Object} html_options
      */
-	file_tag: function(name, value, html_options) {
+	file_tag: function( name, value, html_options ) {
 	    return this.input_field_tag(name+'[file]', value , 'file', html_options);
 	},
     /**
@@ -77,7 +77,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} url_for_options
      * @param {Object} html_options
      */
-	form_tag: function(url_for_options, html_options) {
+	form_tag: function( url_for_options, html_options ) {
 	    html_options = html_options  || {};
 		if(html_options.multipart == true) {
 	        html_options.method = 'post';
@@ -96,7 +96,7 @@ $.extend($.View.EJS.Helpers.prototype, {
 	 * @param {Object} value
 	 * @param {Object} html_options
 	 */
-    hidden_field_tag: function(name, value, html_options) { 
+    hidden_field_tag: function( name, value, html_options ) { 
 	    return this.input_field_tag(name, value, 'hidden', html_options); 
 	},
     /**
@@ -106,7 +106,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} inputType
      * @param {Object} html_options
      */
-	input_field_tag: function(name, value , inputType, html_options) {
+	input_field_tag: function( name, value , inputType, html_options ) {
 	    html_options = html_options || {};
 	    html_options.id  = html_options.id  || name;
 	    html_options.value = value || '';
@@ -119,7 +119,7 @@ $.extend($.View.EJS.Helpers.prototype, {
 	 * @param {Object} text
 	 * @param {Object} html_options
 	 */
-	label_tag: function(text, html_options) {
+	label_tag: function( text, html_options ) {
 		html_options = html_options || {};
 		return this.start_tag_for('label', html_options) + text + this.tag_end('label');
 	},
@@ -129,7 +129,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} url
      * @param {Object} html_options
      */
-	link_to: function(name, url, html_options) {
+	link_to: function( name, url, html_options ) {
 	    if(!name) var name = 'null';
 	    if(!html_options) var html_options = {};
 		this.set_confirm(html_options);
@@ -143,7 +143,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} url
      * @param {Object} html_options
      */
-    link_to_if: function(condition, name, url, html_options) {
+    link_to_if: function( condition, name, url, html_options ) {
 		return this.link_to_unless((!condition), name, url, html_options);
 	},
     /**
@@ -153,7 +153,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} url
      * @param {Object} html_options
      */
-    link_to_unless: function(condition, name, url, html_options){
+    link_to_unless: function( condition, name, url, html_options ) {
         if(condition) return name;
         return this.link_to(name, url, html_options);
     },
@@ -161,7 +161,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @plugin view/helpers
      * @param {Object} html_options
      */
-	set_confirm: function(html_options){
+	set_confirm: function( html_options ) {
 		if(html_options.confirm){
 			html_options.onclick = html_options.onclick || '';
 			html_options.onclick = html_options.onclick+
@@ -176,7 +176,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} html_options
      * @param {Object} post
      */
-	submit_link_to: function(name, options, html_options, post){
+	submit_link_to: function( name, options, html_options, post ) {
 		if(!name) var name = 'null';
 	    if(!html_options) html_options = {};
 		html_options.type = 'submit';
@@ -191,7 +191,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} value
      * @param {Object} html_options
      */
-	password_field_tag: function(name, value, html_options) { return this.input_field_tag(name, value, 'password', html_options); },
+	password_field_tag: function( name, value, html_options ) { return this.input_field_tag(name, value, 'password', html_options); },
 	/**
 	 * @plugin view/helpers
 	 * @param {Object} name
@@ -199,7 +199,7 @@ $.extend($.View.EJS.Helpers.prototype, {
 	 * @param {Object} choices
 	 * @param {Object} html_options
 	 */
-    select_tag: function(name, value, choices, html_options) {     
+    select_tag: function( name, value, choices, html_options ) {     
 	    html_options = html_options || {};
 	    html_options.id  = html_options.id  || name;
 	    //html_options.value = value;
@@ -226,19 +226,19 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} tag
      * @param {Object} html_options
      */
-	single_tag_for: function(tag, html_options) { return this.tag(tag, html_options, '/>');},
+	single_tag_for: function( tag, html_options ) { return this.tag(tag, html_options, '/>');},
 	/**
 	 * @plugin view/helpers
 	 * @param {Object} tag
 	 * @param {Object} html_options
 	 */
-    start_tag_for: function(tag, html_options)  { return this.tag(tag, html_options); },
+    start_tag_for: function( tag, html_options ) { return this.tag(tag, html_options); },
 	/**
 	 * @plugin view/helpers
 	 * @param {Object} name
 	 * @param {Object} html_options
 	 */
-    submit_tag: function(name, html_options) {  
+    submit_tag: function( name, html_options ) {  
 	    html_options = html_options || {};
 	    html_options.type = html_options.type  || 'submit';
 	    html_options.value = name || 'Submit';
@@ -250,7 +250,7 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @param {Object} html_options
      * @param {Object} end
      */
-	tag: function(tag, html_options, end) {
+	tag: function( tag, html_options, end ) {
 	    end = end || '>';
 	    var txt = ' ';
 	    for(var attr in html_options) { 
@@ -270,14 +270,14 @@ $.extend($.View.EJS.Helpers.prototype, {
      * @plugin view/helpers
      * @param {Object} tag
      */
-	tag_end: function(tag)             { return '</'+tag+'>'; },
+	tag_end: function( tag ) { return '</'+tag+'>'; },
 	/**
 	 * @plugin view/helpers
 	 * @param {Object} name
 	 * @param {Object} value
 	 * @param {Object} html_options
 	 */
-    text_area_tag: function(name, value, html_options) { 
+    text_area_tag: function( name, value, html_options ) { 
 	    html_options = html_options || {};
 	    html_options.id  = html_options.id  || name;
 	    html_options.name  = html_options.name  || name;
@@ -297,13 +297,13 @@ $.extend($.View.EJS.Helpers.prototype, {
 	 * @param {Object} value
 	 * @param {Object} html_options
 	 */
-    text_field_tag: function(name, value, html_options) { return this.input_field_tag(name, value, 'text', html_options); },
+    text_field_tag: function( name, value, html_options ) { return this.input_field_tag(name, value, 'text', html_options); },
 	/**
 	 * @plugin view/helpers
 	 * @param {Object} image_location
 	 * @param {Object} options
 	 */
-    img_tag: function(image_location, options){
+    img_tag: function( image_location, options ) {
 		options = options || {};
 		options.src = steal.root.join("resources/images/"+image_location);
 		return this.single_tag_for('img', options);

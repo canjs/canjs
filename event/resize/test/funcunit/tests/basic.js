@@ -1,5 +1,5 @@
 module("resize test", { 
-	setup: function(){
+	setup: function() {
         S.open("resize.html");
 	}
 })

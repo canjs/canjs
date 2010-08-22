@@ -19,7 +19,7 @@ Jaml = function() {
      * @param {String} name The name of the template
      * @param {Function} template The template function
      */
-    register: function(name, template) {
+    register: function(name, template ) {
       this.templates[name] = template;
     },
     
@@ -28,7 +28,7 @@ Jaml = function() {
      * @param {String} name The name of the template to render
      * @param {Object} data Optional data object
      */
-    render: function(name, data) {
+    render: function(name, data ) {
       var template = this.templates[name],
           renderer = new Jaml.Template(template);
           
@@ -40,7 +40,7 @@ Jaml = function() {
      * @param {String} name The name of the helper
      * @param {Function} helperFn The helper function
      */
-    registerHelper: function(name, helperFn) {
+    registerHelper: function(name, helperFn ) {
       this.helpers[name] = helperFn;
     }
   };
@@ -49,17 +49,17 @@ Jaml = function() {
 
 $.View.register({
 	suffix : "jaml",
-	get : function(id, url){
+	get: function(id, url ) {
 		var text = $.ajax({
 				async: false,
 				url: url
 			}).responseText
 		return this.renderer(id, text)
 	},
-	script : function(id, str){
+	script: function(id, str ) {
 		return "((function(){ Jaml.register("+id+", "+str+"); return function(data){return Jaml.render("+id+", data)} })())"
 	},
-	renderer : function(id, text){
+	renderer: function(id, text ) {
 		var func;
 		eval("func = ("+text+")");
 		Jaml.register(id, func);

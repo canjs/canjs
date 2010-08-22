@@ -12,7 +12,7 @@ jQuery.Class.extend("jQuery.Model.Store",
 	 * 
 	 * @param {Object} klass
 	 */
-    init: function(klass){
+    init: function( klass ) {
 		this._data = {};
         this.storing_class = klass;
 	},
@@ -20,14 +20,14 @@ jQuery.Class.extend("jQuery.Model.Store",
 	 * 
 	 * @param {Object} id
 	 */
-    findOne: function(id){
+    findOne: function( id ) {
         return id ? this._data[id] : null;
 	},
 	/**
 	 * 
 	 * @param {Object} obj
 	 */
-    create: function(obj){
+    create: function( obj ) {
 		var id = obj[obj.Class.id];
 		this._data[id] = obj;
 	},
@@ -35,7 +35,7 @@ jQuery.Class.extend("jQuery.Model.Store",
 	 * 
 	 * @param {Object} id
 	 */
-    destroy: function(id){
+    destroy: function( id ) {
 		delete this._data[id];
 	},
     /**
@@ -43,7 +43,7 @@ jQuery.Class.extend("jQuery.Model.Store",
      * @param {Function} f
      * @return {Array}
      */
-    find : function(f){
+    find: function( f ) {
         var instances = [];
         for(var id in this._data){
             var inst = this._data[id];
@@ -55,7 +55,7 @@ jQuery.Class.extend("jQuery.Model.Store",
     /**
      * Clears instances
      */
-    clear : function(){
+    clear: function() {
         this._data = {};
     },
     /**

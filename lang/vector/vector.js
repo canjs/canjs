@@ -21,7 +21,7 @@ jQuery.Vector.prototype =
 	 * @param {Function} f
 	 * @return {jQuery.Vector} new vector class.
 	 */
-	app: function(f){
+	app: function( f ) {
 		  var newArr = [];
 		  
 		  for(var i=0; i < this.array.length; i++)
@@ -37,7 +37,7 @@ jQuery.Vector.prototype =
 	 * @codeend
 	 * @return {jQuery.Vector}
 	 */
-	plus: function(){
+	plus: function() {
 		var args = arguments[0] instanceof jQuery.Vector ? 
 				 arguments[0].array : 
 				 jQuery.makeArray(arguments), 
@@ -51,7 +51,7 @@ jQuery.Vector.prototype =
 	 * Like plus but subtracts 2 vectors
 	 * @return {jQuery.Vector}
 	 */
-	minus: function(){
+	minus: function() {
 		 var args = arguments[0] instanceof jQuery.Vector ? 
 				 arguments[0].array : 
 				 jQuery.makeArray(arguments), 
@@ -65,7 +65,7 @@ jQuery.Vector.prototype =
 	 * False if otherwise.
 	 * @return {jQuery.Vector}
 	 */
-	equals : function(){
+	equals: function() {
 		var args = arguments[0] instanceof jQuery.Vector ? 
 				 arguments[0].array : 
 				 jQuery.makeArray(arguments), 
@@ -100,14 +100,14 @@ jQuery.Vector.prototype =
 	 * returns (x,y)
 	 * @return {String}
 	 */
-	toString: function(){
+	toString: function() {
 		return "("+this.array[0]+","+this.array[1]+")";
 	},
 	/**
 	 * Replaces the vectors contents
 	 * @param {Object} array
 	 */
-	update: function(array){
+	update: function( array ) {
 		if(this.array){
 			for(var i =0; i < this.array.length; i++) delete this.array[i];
 		}

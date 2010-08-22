@@ -16,7 +16,7 @@ steal.plugins('jquery/event').then(function($){
 	 * </p>
 	 */
 	$.event.special.resize = {
-		add: function(handleObj){
+		add: function( handleObj ) {
 			//jQuery.event.add( this, handleObj.origType, jQuery.extend({}, handleObj, {handler: liveHandler}) );
 			
 			var origHandler = handleObj.handler;
@@ -42,7 +42,7 @@ steal.plugins('jquery/event').then(function($){
 			}
 		},
 		
-		setup: function(){
+		setup: function() {
 			return this !== window;
 		}
 	}

@@ -1,24 +1,24 @@
 module("jquery/model", { 
-	setup: function(){
+	setup: function() {
         var ids = 0;
 	    $.Model.extend("Person",{
-			findAll : function(params, success, error){
+			findAll: function( params, success, error ) {
 				success("findAll");
 			},
-			findOne : function(params, success, error){
+			findOne: function( params, success, error ) {
 				success("findOne");
 			},
-			create : function(params, success, error){
+			create: function( params, success, error ) {
 				success({zoo: "zed", id: (++ids)},"create");
 			},
-			destroy : function(id, success, error){
+			destroy: function( id, success, error ) {
 				success("destroy");
 			},
-			update : function(id, attrs, success, error){
+			update: function( id, attrs, success, error ) {
 				success({zoo: "monkeys"},"update");
 			}
 		},{
-			prettyName : function(){
+			prettyName: function() {
 				return "Mr. "+this.name;
 			}
 		})

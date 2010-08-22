@@ -13,7 +13,7 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 			"your most recent actions and let us know what " +
 			"happened. We'll fix the problem.",
 			prompt_user: true,
-			generate_content: function(params){
+			generate_content: function( params ) {
 				var content = [];
 				// intentionally put HTML Content at the end
 				for (var attr in params) {
@@ -24,10 +24,10 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 					content.push('HTML Content' + ':\n     ' + params['HTML Content']);
 				return content.join('\n');
 			},
-			config: function(params){
+			config: function( params ) {
 				$.extend($.ApplicationError, params);
 			},
-			create_send_function: function(error){
+			create_send_function: function( error ) {
 				$.ApplicationError.send = function(ev){
 					var params = {
 						error: {}
@@ -52,7 +52,7 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 					})
 				};
 			},
-			create_dom: function(error){
+			create_dom: function( error ) {
 				if ($('#_application_error').length) return;
 				var div = $('<div />').attr('id', '_application_error').css({
 					position: $.browser.mozilla ? 'fixed' : 'absolute',
@@ -122,7 +122,7 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 				$(document.body).append(div);
 				this.set_width();
 			},
-			notify: function(e){
+			notify: function( e ) {
 				e = $.ApplicationError.transform_error(e);
 				$.extend(e, {
 					'Browser': navigator.userAgent,
@@ -140,7 +140,7 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 					this.send();
 				return false;
 			},
-			set_width: function(){
+			set_width: function() {
 				var cont = $('#_application_error'), width;
 				if (!cont.length) 
 					return;
@@ -148,11 +148,11 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 				cont.width(width);
 				$('#_error_text').width(width - 400);
 			},
-			transform_error: function(error){
+			transform_error: function( error ) {
 				if (typeof error == 'string') {
 					var old = error;
 					error = {
-						toString: function(){
+						toString: function() {
 							return old;
 						}
 					};
@@ -168,7 +168,7 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 				}
 				return error;
 			},
-			count_down: function(){
+			count_down: function() {
 				seconds_remaining--;
 				$('#_error_seconds').html('This will close in ' + seconds_remaining + ' seconds.');
 				if (seconds_remaining == 0) {
@@ -176,12 +176,12 @@ steal.plugins('jquery/class', 'jquery').then(function(){
 					$.ApplicationError.send();
 				}
 			},
-			start_count_down: function(){
+			start_count_down: function() {
 				seconds_remaining = this.close_time;
 				$('#_error_seconds').html('This will close in ' + seconds_remaining + ' seconds.');
 				timer = setInterval($.ApplicationError.count_down, 1000);
 			},
-			pause_count_down: function(){
+			pause_count_down: function() {
 				clearInterval(timer);
 				timer = null;
 				$('#_error_seconds').html('');

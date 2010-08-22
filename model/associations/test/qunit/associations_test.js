@@ -1,5 +1,5 @@
 module("jquery/model/associations",{
-	setup : function(){
+	setup: function() {
 		
 		$.Model.extend("MyTest.Person");
 		$.Model.extend("MyTest.Loan");
@@ -7,7 +7,7 @@ module("jquery/model/associations",{
 		
 		$.Model.extend("MyTest.Customer",
 		{
-			init : function(){
+			init: function() {
 				this.belongsTo("MyTest.Person")
 				this.hasMany("MyTest.Loan")
 				this.hasMany("MyTest.Issues")

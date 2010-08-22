@@ -27,7 +27,7 @@ Jaml.Template.prototype = {
    * @param {Object} data Optional data object
    * @return {String} The rendered HTML string
    */
-  render: function(data) {
+  render: function(data ) {
     data = data || {};
     
     //the 'data' argument can come in two flavours - array or non-array. Normalise it

@@ -8,13 +8,13 @@ test("subscribe testing works", function(){
 	var clicks = 0, destroys = 0;
 	var subscribes = 0;
 	$.Controller.extend("MyTest",{
-		click : function(){
+		click: function() {
 			clicks++
 		},
-		"a.b subscribe" : function(){
+		"a.b subscribe" : function() {
 			subscribes++
 		},
-		destroy : function(){
+		destroy: function() {
 			
 			this._super()
 			destroys++;
@@ -66,10 +66,10 @@ test("document and main controllers", function(){
 		main_inner_clicks = 0;
 
 	$.Controller.extend("TestController", { onDocument: true }, {
-		click : function(){
+		click: function() {
 			doc_outer_clicks++;
 		},
-		"span click" : function(){
+		"span click" : function() {
 			doc_inner_clicks++;
 		}
 	})
@@ -85,10 +85,10 @@ test("document and main controllers", function(){
 	$(document.documentElement).controller('test').destroy();
 
 	$.Controller.extend("MainController", { onDocument: true }, {
-		click : function(){
+		click: function() {
 			main_outer_clicks++;
 		},
-		"span click" : function(){
+		"span click" : function() {
 			main_inner_clicks++;
 		}
 	})
@@ -110,7 +110,7 @@ test("bind to any special", function(){
 	}
 	var called = false;
 	jQuery.Controller.extend("WeirdBind",{
-		crazyEvent : function(){
+		crazyEvent: function() {
 			called = true;
 		}
 	})
@@ -126,7 +126,7 @@ test("bind to any special", function(){
 test("parameterized actions", function(){
 	var called = false;
 	jQuery.Controller.extend("WeirderBind",{
-		"{parameterized}" : function(){
+		"{parameterized}" : function() {
 			called = true;
 		}
 	})
@@ -141,7 +141,7 @@ test("parameterized actions", function(){
 test("windowresize", function(){
 	var called = false;
 	jQuery.Controller.extend("WindowBind",{
-		"windowresize" : function(){
+		"windowresize" : function() {
 			called = true;
 		}
 	})
@@ -157,7 +157,7 @@ test("windowresize", function(){
 test("delegate", function(){
 	var called = false;
 	jQuery.Controller.extend("DelegateTest",{
-		click: function(){}
+		click: function() {}
 	})
 	var els = $("<div><span><a href='#'>click me</a></span></div>").appendTo($("#qunit-test-area"))
 	var c = els.delegate_test();

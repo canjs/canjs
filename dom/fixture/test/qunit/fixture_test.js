@@ -12,7 +12,7 @@ test("static fixtures", function(){
 			$.ajax({
 				url: "something",
 				dataType: "json",
-				success : function(data){
+				success: function( data ) {
 					equals(data.sweet,"ness","$.ajax works");
 					start();
 				},
@@ -38,7 +38,7 @@ test("dynamic fixtures",function(){
 			$.ajax({
 				url: "something",
 				dataType: "json",
-				success : function(data){
+				success: function( data ) {
 					equals(data.sweet,"ness","$.ajax works");
 					start();
 				},

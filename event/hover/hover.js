@@ -91,7 +91,7 @@ $.extend(jQuery.Hover.prototype,{
 	 * @param {Number} delay the number of milliseconds used to determine a hover
 	 * 
 	 */
-	delay: function(delay){
+	delay: function( delay ) {
 		this._delay = delay;
 	},
 	/**
@@ -99,7 +99,7 @@ $.extend(jQuery.Hover.prototype,{
 	 * only be used in hoverinit.
 	 * @param {Number} distance the max distance in pixels a mouse can move to be considered a hover
 	 */
-	distance: function(distance){
+	distance: function( distance ) {
 		this._distance = distance;
 	}
 })

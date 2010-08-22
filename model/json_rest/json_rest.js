@@ -3,14 +3,14 @@ steal.plugins("jquery/model").then(function($){
     
 $.Model.extend("jQuery.Model.JsonRest",
 {
-    setup: function(){
+    setup: function() {
         if(!this.shortName) return;
         this.singularName =  jQuery.String.underscore( this.shortName);
         this.pluralName = this.singularName+"s";
         this._super();
     },
     
-    findAll : function(params, success, error){
+    findAll: function( params, success, error ) {
         $.ajax({
             url: '/'+this.pluralName+'.json',
             type: 'get',
@@ -21,7 +21,7 @@ $.Model.extend("jQuery.Model.JsonRest",
             fixture: true
         })
     },
-    update : function(id, attrs, success, error){
+    update: function( id, attrs, success, error ) {
         var params = {};
         for(var n in attrs)
             params[this.singularName+"["+n+"]"] = attrs[n];
@@ -36,13 +36,13 @@ $.Model.extend("jQuery.Model.JsonRest",
             
         })
     },
-    updateResponse : function(success, error, xhr, status){
+    updateResponse: function( success, error, xhr, status ) {
         if (/\w+/.test(xhr.responseText)) {
             return error( eval('('+xhr.responseText+')') );
         }
         success({})
     },
-    destroy : function(id, success, error){
+    destroy: function( id, success, error ) {
         $.ajax({
             url: '/'+this.pluralName+'/'+id+'.json',
             type: 'delete',
@@ -52,7 +52,7 @@ $.Model.extend("jQuery.Model.JsonRest",
             fixture: "-restDestroy"
         })
     },
-    create : function(attrs, success, error){
+    create: function( attrs, success, error ) {
         var params = {};
         for(var n in attrs)
             params[this.singularName+"["+n+"]"] = attrs[n];
@@ -65,7 +65,7 @@ $.Model.extend("jQuery.Model.JsonRest",
             fixture: "-restCreate"
         })
     },
-    createResponse : function(success, error, xhr, status){
+    createResponse: function( success, error, xhr, status ) {
         if(status != "success") error(xhr, status)
         
         if (/\w+/.test(xhr.responseText)) {

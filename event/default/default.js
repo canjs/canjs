@@ -53,7 +53,7 @@ var types = {}, rnamespaces= /\.(.*)$/;
  * @demo jquery/event/default/default.html
  */
 $.event.special["default"] = {
-	add: function( handleObj){
+	add: function( handleObj ) {
 		//save the type
 		types[handleObj.namespace.replace(rnamespaces,"")] = true;
 		
@@ -66,7 +66,7 @@ $.event.special["default"] = {
 			ev._defaultActions.push({element: this, handler: origHandler, event: ev, data: data, currentTarget: ev.currentTarget})
 		}
 	},
-	setup : function(){return true}
+	setup: function() {return true}
 }
 
 // overwrite trigger to allow default types

@@ -31,7 +31,7 @@ Jaml.Node.prototype = {
    * Adds attributes to this node
    * @param {Object} attrs Object containing key: value pairs of node attributes
    */
-  setAttributes: function(attrs) {
+  setAttributes: function(attrs ) {
     for (var key in attrs) {
       //convert cls to class
       var mappedKey = key == 'cls' ? 'class' : key;
@@ -44,7 +44,7 @@ Jaml.Node.prototype = {
    * Adds a child string to this node. This can be called as often as needed to add children to a node
    * @param {String} childText The text of the child node
    */
-  addChild: function(childText) {
+  addChild: function(childText ) {
     this.children.push(childText);
   },
   
@@ -53,7 +53,7 @@ Jaml.Node.prototype = {
    * @param {Number} lpad Amount of whitespace to add to the left of the string (defaults to 0)
    * @return {String} The rendered node
    */
-  render: function(lpad) {
+  render: function(lpad ) {
     lpad = lpad || 0;
     
     var node      = [],
@@ -112,7 +112,7 @@ Jaml.Node.prototype = {
    * @param {Number} amount The number of whitespace characters to add
    * @return {String} A padding string
    */
-  getPadding: function(amount) {
+  getPadding: function(amount ) {
     return new Array(amount + 1).join(" ");
   },
   

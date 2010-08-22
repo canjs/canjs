@@ -1,5 +1,5 @@
 module("closest test", { 
-	setup: function(){
+	setup: function() {
         S.open("closest.html");
 	}
 })
