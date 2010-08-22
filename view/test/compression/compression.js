@@ -1,5 +1,9 @@
-steal.plugins('jquery/view/ejs').
-      views("//jquery/view/test/compression/test.ejs").
-	  then(function($){
-			$("#content").html("//jquery/view/test/compression/test.ejs",{})
-})
+steal.plugins('jquery/view/ejs')
+     .views('relative.ejs', 
+	 		'//jquery/view/test/compression/absolute.ejs')
+	 .then(function(){
+	 	$(function(){
+	 		$("#target").append($.View('//jquery/view/test/compression/relative', {} ))
+	 					.append($.View('//jquery/view/test/compression/absolute', {} ))
+		})
+	 })

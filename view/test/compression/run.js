@@ -4,23 +4,30 @@
  * Tests compressing a very basic page and one that is using steal
  */
 
-load('steal/test/helpers.js')
-_S.clear();
-
-load('steal/file/file.js');
-new steal.File("jquery/view/test/compression/test.ejs").save("<h1>Hello World</h1>");
-_S.clear();
-
-load("steal/compress/compress.js")
-new steal.Compress(['jquery/view/test/compression/dev.html','jquery/view/test/compression']);
-_S.clear();
-_S.remove("jquery/view/test/compression/test.ejs")
-
-
-steal = {env: "production"};
-
-_S.open('jquery/view/test/compression/dev.html')
-_S.ok(  /hello world/i.test( $("#content").text() ), "hello world not in page!" );
-
-_S.clear();
-_S.remove("jquery/view/test/compression/production.js")
+load('steal/rhino/steal.js')
+steal('//steal/test/test', function(s){
+	
+	new steal.File("jquery/view/test/compression/absolute.ejs").save("<h1>Absolute</h1>");
+	new steal.File("jquery/view/test/compression/relative.ejs").save("<h1>Relative</h1>");
+	s.test.clear();
+	
+	load("steal/rhino/steal.js");
+	steal.plugins('steal/build','steal/build/scripts','steal/build/styles',function(){
+		steal.build('jquery/view/test/compression/compression.html',{to: 'jquery/view/test/compression'});
+	});
+	
+	s.test.clear();
+	s.test.remove("jquery/view/test/compression/absolute.ejs")
+	s.test.remove("jquery/view/test/compression/relative.ejs")
+	
+	
+	steal = {env: "production"};
+	
+	s.test.open('jquery/view/test/compression/compression.html')
+	s.test.ok(  /Relative/i.test( $(document.body).text() ), "Relative not in page!" );
+	s.test.ok(  /Absolute/i.test( $(document.body).text() ), "Absolute not in page!" );
+	
+	s.test.clear();
+	s.test.remove("jquery/view/test/compression/production.js")
+	
+});
