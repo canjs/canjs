@@ -2,7 +2,7 @@
 module("jquery/view")
 test("view testing works", function(){
 	
-	$.each(["micro","ejs","jaml"], function(){
+	$.each(["micro","ejs","jaml", "tmpl"], function(){
 		$("#qunit-test-area").html("");
 		ok($("#qunit-test-area").children().length == 0,this+ ": Empty To Start")
 		
