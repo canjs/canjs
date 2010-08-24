@@ -74,12 +74,7 @@ var oldTrigger = $.event.trigger;
 $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
     //always need to convert here so we know if we have default actions
     var type = event.type || event
-	//should need to trigger just on this event
-	//shortcut if we never listened for a default of this type
-	//if(!types[type]){
-	//	 return oldTrigger.call($.event, event, data, elem, bubbling)
-	//}
-	
+
     if ( !bubbling ) {
 		event = typeof event === "object" ?
 			// jQuery.Event object
