@@ -1,4 +1,4 @@
-if ( window. jQuery && jQuery. Controller ) {
+if ( window.jQuery && jQuery.Controller ) {
 	steal.plugins("jquery/controller/view")
 }
 steal.plugins("jquery").then(function( $ ) {
@@ -72,7 +72,7 @@ steal.plugins("jquery").then(function( $ ) {
 			type, el, url, id, renderer;
 
 		//if there is no suffix, add one
-		if (! suffix ) {
+		if (!suffix ) {
 			suffix = $.View.ext;
 			url = url + $.View.ext
 		}
@@ -81,7 +81,7 @@ steal.plugins("jquery").then(function( $ ) {
 		id = toId(url);
 
 		//if a absolute path, use steal to get it
-		if ( url. match(/^\/\// )) {
+		if ( url.match(/^\/\//) ) {
 			url = steal.root.join(url.substr(2)); //can steal be removed?
 		}
 
@@ -98,7 +98,7 @@ steal.plugins("jquery").then(function( $ ) {
 		);
 
 		//if we should cache templates
-		if ( $. View. cache ) {
+		if ( $.View.cache ) {
 			$.View.cached[id] = renderer;
 		}
 		return renderer.call(type, data, helpers)
@@ -197,12 +197,12 @@ steal.plugins("jquery").then(function( $ ) {
 				res, hasHookup, secArgType = typeof arguments[1];
 
 			//check if a template
-			if ( typeof arguments[ 0 ] == "string" && (secArgType == 'object' || secArgType == 'function') && !arguments[1].nodeType && !arguments[1].jquery) {
+			if ( typeof arguments[0] == "string" && (secArgType == 'object' || secArgType == 'function') && !arguments[1].nodeType && !arguments[1].jquery ) {
 				args = [$.View.apply($.View, $.makeArray(arguments))];
 			}
 
 			//check if there are new hookups
-			for ( var hasHookups in jQuery. View. hookups ) {};
+			for ( var hasHookups in jQuery.View.hookups ) {};
 
 			//if there are hookups, get jQuery object
 			if ( hasHookups ) {
@@ -226,7 +226,7 @@ steal.plugins("jquery").then(function( $ ) {
 			hookupEls = els.add("[data-view-id]", els);
 			len = hookupEls.length;
 			for (; i < len; i++ ) {
-				if ( hookupEls[ i ].getAttribute && (id = hookupEls[i].getAttribute('data-view-id')) && (func = hooks[id])) {
+				if ( hookupEls[i].getAttribute && (id = hookupEls[i].getAttribute('data-view-id')) && (func = hooks[id]) ) {
 					func(hookupEls[i], id);
 					delete hooks[id];
 					hookupEls[i].removeAttribute('data-view-id')
@@ -289,7 +289,7 @@ steal.plugins("jquery").then(function( $ ) {
 		"replaceWith"];
 
 	//go through helper funcs and convert
-	for ( var i = 0; i < funcs. length; i++ ) {
+	for ( var i = 0; i < funcs.length; i++ ) {
 		convert(funcs[i]);
 	}
 

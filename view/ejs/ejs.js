@@ -8,7 +8,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		isArray = $.isArray,
 		EJS = function( options ) {
 			//returns a renderer
-			if ( this. constructor != EJS ) {
+			if ( this.constructor != EJS ) {
 				var ejs = new EJS(options);
 				return function( data, helpers ) {
 					return ejs.render(data, helpers)
@@ -176,7 +176,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		if ( input == null || input === undefined ) return '';
 
 		if ( input instanceof Date ) return input.toDateString();
-		if ( input. hookup ) {
+		if ( input.hookup ) {
 			myid = $.View.hookup(function( el, id ) {
 				input.hookup.call(input, el, id)
 			});
@@ -184,28 +184,28 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		}
 		if ( typeof input == 'function' ) return "data-view-id='" + $.View.hookup(input) + "'";
 
-		if ( isArray( input )) {
+		if ( isArray(input) ) {
 			myid = $.View.hookup(function( el, id ) {
-				for ( var i = 0; i < input. length; i++ ) {
+				for ( var i = 0; i < input.length; i++ ) {
 					input[i].hookup ? input[i].hookup(el, id) : input[i](el, id)
 				}
 			});
 			return "data-view-id='" + myid + "'"
 		}
-		if ( input. nodeName || input. jQuery ) {
+		if ( input.nodeName || input.jQuery ) {
 			throw "elements in views are not supported"
 		}
 
-		if ( input. toString ) return myid ? input.toString(myid) : input.toString();
+		if ( input.toString ) return myid ? input.toString(myid) : input.toString();
 		return '';
 	};
 
 	EJS.Scanner.prototype = {
 		scan: function( block ) {
 			var regex = this.SplitRegexp;
-			if (! this. source == '' ) {
+			if (!this.source == '' ) {
 				var source_split = $.String.rsplit(this.source, /\n/);
-				for ( var i = 0; i < source_split. length; i++ ) {
+				for ( var i = 0; i < source_split.length; i++ ) {
 					var item = source_split[i];
 					this.scanline(item, regex, block);
 				}
@@ -214,7 +214,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		scanline: function( line, regex, block ) {
 			this.lines++;
 			var line_split = $.String.rsplit(line, regex);
-			for ( var i = 0; i < line_split. length; i++ ) {
+			for ( var i = 0; i < line_split.length; i++ ) {
 				var token = line_split[i];
 				if ( token != null ) {
 					try {
@@ -236,7 +236,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		this.script = "";
 		this.pre_cmd = pre_cmd;
 		this.post_cmd = post_cmd;
-		for ( var i = 0; i < this. pre_cmd. length; i++ ) {
+		for ( var i = 0; i < this.pre_cmd.length; i++ ) {
 			this.push(pre_cmd[i]);
 		}
 	};
@@ -253,8 +253,8 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		},
 
 		close: function() {
-			if ( this. line. length > 0 ) {
-				for ( var i = 0; i < this. post_cmd. length; i++ ) {
+			if ( this.line.length > 0 ) {
+				for ( var i = 0; i < this.post_cmd.length; i++ ) {
 					this.push(pre_cmd[i]);
 				}
 				this.script = this.script + this.line.join('; ');
@@ -273,10 +273,10 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 				source = source.replace(/\r\n/g, "\n");
 				source = source.replace(/\r/g, "\n");
 				this.source = source;
-			} else if ( source. innerHTML ) {
+			} else if ( source.innerHTML ) {
 				this.source = source.innerHTML;
 			}
-			if ( typeof this. source != 'string' ) {
+			if ( typeof this.source != 'string' ) {
 				this.source = "";
 			}
 		}
@@ -310,7 +310,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 					return content;
 				};
 			this.scanner.scan(function( token, scanner ) {
-				if ( scanner. stag == null ) {
+				if ( scanner.stag == null ) {
 					switch ( token ) {
 					case '\n':
 						content = content + "\n";
@@ -322,7 +322,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 					case scanner.left_equal:
 					case scanner.left_comment:
 						scanner.stag = token;
-						if ( content. length > 0 ) {
+						if ( content.length > 0 ) {
 							buff.push(put_cmd + '"' + clean(content) + '")');
 						}
 						content = '';
@@ -338,9 +338,9 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 				else {
 					switch ( token ) {
 					case scanner.right_delimiter:
-						switch ( scanner. stag ) {
+						switch ( scanner.stag ) {
 						case scanner.left_delimiter:
-							if ( content[ content. length - 1 ] == '\n') {
+							if ( content[content.length - 1] == '\n' ) {
 								content = chop(content);
 								buff.push(content);
 								buff.cr();
@@ -365,7 +365,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 					}
 				}
 			});
-			if ( content. length > 0 ) {
+			if ( content.length > 0 ) {
 				// Should be content.dump in Ruby
 				buff.push(put_cmd + '"' + clean(content) + '")');
 			}
@@ -425,8 +425,8 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		 * Renders a partial view.  This is deprecated in favor of <code>$.View()</code>.
 		 */
 		view: function( url, data, helpers ) {
-			if (! helpers ) helpers = this._extras
-			if (! data ) data = this._data;
+			if (!helpers ) helpers = this._extras
+			if (!data ) data = this._data;
 			return $.View(url, data, helpers) //new EJS(options).render(data, helpers);
 		},
 		/**
@@ -435,7 +435,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		to_text: function( input, null_text ) {
 			if ( input == null || input === undefined ) return null_text || '';
 			if ( input instanceof Date ) return input.toDateString();
-			if ( input. toString ) return input.toString().replace(/\n/g, '<br />').replace(/''/g, "'");
+			if ( input.toString ) return input.toString().replace(/\n/g, '<br />').replace(/''/g, "'");
 			return '';
 		},
 		/**
@@ -465,7 +465,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 					throw "ejs.js ERROR: There is no template or an empty template at " + url;
 				}
 			}).responseText
-			if (! text. match(/[^\s]/ )) {
+			if (!text.match(/[^\s]/) ) {
 				throw "ejs.js ERROR: There is no template or an empty template at " + url;
 			}
 			return this.renderer(id, text);

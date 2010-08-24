@@ -12,11 +12,11 @@ steal.plugins('jquery/controller', 'jquery/view').then(function( $ ) {
 
 		//calculate view
 		if ( typeof view == "string" ) {
-			if ( view. substr( 0, 2 ) == "//") { //leave where it is
+			if ( view.substr(0, 2) == "//" ) { //leave where it is
 			} else {
 				view = "//" + new steal.File('views/' + (view.indexOf('/') !== -1 ? view : (hasControllers ? controller_name + '/' : "") + view)).joinFrom(path) + suffix;
 			}
-		} else if (! view ) {
+		} else if (!view ) {
 			view = "//" + new steal.File('views/' + (hasControllers ? controller_name + '/' : "") + action_name.replace(/\.|#/g, '').replace(/ /g, '_')).joinFrom(path) + suffix;
 		}
 		return view
@@ -24,20 +24,20 @@ steal.plugins('jquery/controller', 'jquery/view').then(function( $ ) {
 	var calculateHelpers = function( myhelpers ) {
 		var helpers = {};
 		if ( myhelpers ) {
-			if ( jQuery. isArray( myhelpers )) for ( var h = 0; h < myhelpers. length; h++ ) jQuery.extend(helpers, myhelpers[h]);
+			if ( jQuery.isArray(myhelpers) ) for ( var h = 0; h < myhelpers.length; h++ ) jQuery.extend(helpers, myhelpers[h]);
 			else jQuery.extend(helpers, myhelpers);
 		} else {
-			if ( this. _default_helpers ) helpers = this._default_helpers
+			if ( this._default_helpers ) helpers = this._default_helpers
 			//load from name
 			var current = window;
 			var parts = this.Class.fullName.split(/\./);
-			for ( var i = 0; i < parts. length; i++ ) {
-				if ( typeof current. Helpers == 'object' ) {
+			for ( var i = 0; i < parts.length; i++ ) {
+				if ( typeof current.Helpers == 'object' ) {
 					jQuery.extend(helpers, current.Helpers);
 				}
 				current = current[parts[i]];
 			}
-			if ( typeof current. Helpers == 'object' ) {
+			if ( typeof current.Helpers == 'object' ) {
 				jQuery.extend(helpers, current.Helpers);
 			}
 			this._default_helpers = helpers;
@@ -80,7 +80,7 @@ steal.plugins('jquery/controller', 'jquery/view').then(function( $ ) {
 	 */
 	view = function( view, data, myhelpers ) {
 		//shift args if no view is provided
-		if ( typeof view != "string" && ! myhelpers ) {
+		if ( typeof view != "string" && !myhelpers ) {
 			myhelpers = data;
 			data = view;
 			view = null;

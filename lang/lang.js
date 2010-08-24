@@ -53,7 +53,7 @@ steal.plugins('jquery').then(function( $ ) {
 			var parts = s.split(regs.undHash),
 				i = 1;
 			parts[0] = parts[0].charAt(0).toLowerCase() + parts[0].substr(1);
-			for (; i < parts. length; i++ )
+			for (; i < parts.length; i++ )
 			parts[i] = str.capitalize(parts[i]);
 			return parts.join('');
 		},
@@ -65,7 +65,7 @@ steal.plugins('jquery').then(function( $ ) {
 		classize: function( s ) {
 			var parts = s.split(regs.undHash),
 				i = 0;
-			for (; i < parts. length; i++ )
+			for (; i < parts.length; i++ )
 			parts[i] = str.capitalize(parts[i]);
 			return parts.join('');
 		},
@@ -80,7 +80,7 @@ steal.plugins('jquery').then(function( $ ) {
 		niceName: function( s ) {
 			var parts = s.split(regs.undHash),
 				i = 0;
-			for (; i < parts. length; i++ )
+			for (; i < parts.length; i++ )
 			parts[i] = str.capitalize(parts[i]);
 			return parts.join(' ');
 		},

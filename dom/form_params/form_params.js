@@ -39,7 +39,7 @@ steal.plugins("jquery/dom").then(function( $ ) {
 		 */
 		formParams: function( convert ) {
 			var data = {};
-			if ( this[ 0 ].nodeName.toLowerCase() == 'form' && this[0].elements) {
+			if ( this[0].nodeName.toLowerCase() == 'form' && this[0].elements ) {
 
 				return jQuery(jQuery.makeArray(this[0].elements)).getParams(convert);
 			}
@@ -53,7 +53,7 @@ steal.plugins("jquery/dom").then(function( $ ) {
 				var el = this,
 					type = el.type && el.type.toLowerCase();
 				//if we are submit, ignore
-				if (( type == 'submit' ) || !el.name) {
+				if ((type == 'submit') || !el.name ) {
 					return;
 				}
 
@@ -68,7 +68,7 @@ steal.plugins("jquery/dom").then(function( $ ) {
 					lastPart;
 
 				if ( convert ) {
-					if ( isNumber( value )) {
+					if ( isNumber(value) ) {
 						value = parseFloat(value);
 					} else if ( value === 'true' || value === 'false' ) {
 						value = Boolean(value);
@@ -78,8 +78,8 @@ steal.plugins("jquery/dom").then(function( $ ) {
 
 				// go through and create nested objects
 				current = data;
-				for ( var i = 0; i < parts. length - 1; i++ ) {
-					if (! current[ parts[ i ]]) {
+				for ( var i = 0; i < parts.length - 1; i++ ) {
+					if (!current[parts[i]] ) {
 						current[parts[i]] = {}
 					}
 					current = current[parts[i]];
@@ -88,13 +88,13 @@ steal.plugins("jquery/dom").then(function( $ ) {
 
 				//now we are on the last part, set the value
 				if ( lastPart in current && type === "checkbox" ) {
-					if (! $. isArray( current[ lastPart ])) {
+					if (!$.isArray(current[lastPart]) ) {
 						current[lastPart] = current[lastPart] === undefined ? [] : [current[lastPart]];
 					}
 					if ( write ) {
 						current[lastPart].push(value);
 					}
-				} else if ( write || ! current[ lastPart ]) {
+				} else if ( write || !current[lastPart] ) {
 					current[lastPart] = write ? value : undefined;
 				}
 

@@ -5,7 +5,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	var bind = function( el, ev, callback ) {
 		var wrappedCallback;
 		//this is for events like >click.
-		if ( ev. indexOf(">" ) == 0) {
+		if ( ev.indexOf(">") == 0 ) {
 			ev = ev.substr(1);
 			wrappedCallback = function( event ) {
 				event.target === el ? callback.apply(this, arguments) : event.handled = null;
@@ -320,7 +320,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		 */
 		init: function() {
 			// if you didn't provide a name, or are controller, don't do anything
-			if (! this. shortName || this. fullName == "jQuery.Controller" ) {
+			if (!this.shortName || this.fullName == "jQuery.Controller" ) {
 				return;
 			}
 			// cache the underscored names
@@ -332,7 +332,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 				funcName;
 
 			// create jQuery plugin
-			if (! $. fn[ pluginname ]) {
+			if (!$.fn[pluginname] ) {
 				$.fn[pluginname] = function( options ) {
 
 					var args = $.makeArray(arguments),
@@ -363,15 +363,15 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 
 			// make sure listensTo is an array
 			//@steal-remove-start
-			if (! $. isArray( this. listensTo )) {
+			if (!$.isArray(this.listensTo) ) {
 				throw "listensTo is not an array in " + this.fullName;
 			}
 			//@steal-remove-end
 			// calculate and cache actions
 			this.actions = {};
 
-			for ( funcName in this. prototype ) {
-				if (! $. isFunction( this. prototype[ funcName ])) {
+			for ( funcName in this.prototype ) {
+				if (!$.isFunction(this.prototype[funcName]) ) {
 					continue;
 				}
 				this._isAction(funcName) && (this.actions[funcName] = this._getAction(funcName));
@@ -381,7 +381,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			 * @attribute onDocument
 			 * Set to true if you want to automatically attach this element to the documentElement.
 			 */
-			if ( this. onDocument ) new this(document.documentElement);
+			if ( this.onDocument ) new this(document.documentElement);
 		},
 		hookup: function( el ) {
 			return new this(el);
@@ -393,7 +393,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		 * @return {Boolean} truthy if an action or not
 		 */
 		_isAction: function( methodName ) {
-			if ( actionMatcher. test( methodName )) {
+			if ( actionMatcher.test(methodName) ) {
 				return true;
 			} else {
 				var cleanedEvent = methodName.replace(eventCleaner, "");
@@ -411,7 +411,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		_getAction: function( methodName, options ) {
 			//if we don't have a controller instance, we'll break this guy up later
 			parameterReplacer.lastIndex = 0;
-			if (! options && parameterReplacer. test( methodName )) {
+			if (!options && parameterReplacer.test(methodName) ) {
 				return null;
 			}
 			var convertedName = options ? methodName.replace(parameterReplacer, function( whole, inside ) {
@@ -473,7 +473,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			this.options = $.extend($.extend(true, {}, cls.defaults), options);
 
 			//go through the cached list of actions and use the processor to bind
-			for ( funcName in cls. actions ) {
+			for ( funcName in cls.actions ) {
 				ready = cls.actions[funcName] || cls._getAction(funcName, this.options);
 
 				this._bindings.push(
@@ -607,7 +607,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		 * 
 		 */
 		destroy: function( ev ) {
-			if ( this. _destroyed ) {
+			if ( this._destroyed ) {
 				throw this.Class.shortName + " controller instance has been deleted";
 			}
 			var self = this,
@@ -616,14 +616,14 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			this.element.removeClass(fname);
 
 			$.each(this._bindings, function( key, value ) {
-				if ( $. isFunction( value )) value(self.element[0]);
+				if ( $.isFunction(value) ) value(self.element[0]);
 			});
 
 			delete this._actions;
 
 
 			var controllers = this.element.data("controllers");
-			if ( controllers && controllers[ fname ]) delete controllers[fname];
+			if ( controllers && controllers[fname] ) delete controllers[fname];
 
 			this.element = null;
 		},
@@ -653,7 +653,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		var c = controller.Class;
 
 		// document controllers use their name as an ID prefix.
-		if ( c. onDocument && !/^Main(Controller)?$/. test( c. shortName )) { //prepend underscore name if necessary
+		if ( c.onDocument && !/^Main(Controller)?$/.test(c.shortName) ) { //prepend underscore name if necessary
 			selector = selector ? "#" + c._shortName + " " + selector : "#" + c._shortName
 		}
 		return binder(el, event, shifter(cb), selector);
@@ -684,7 +684,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			//create a bunch of controllers
 			var controllers = $.makeArray(arguments);
 			return this.each(function() {
-				for ( var i = 0; i < controllers. length; i++ ) {
+				for ( var i = 0; i < controllers.length; i++ ) {
 					new controllers[i](this)
 				}
 
@@ -693,8 +693,8 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		//used to determine if a controller instance is one of controllers
 		//controllers can be strings or classes
 		var isAControllerOf = function( instance, controllers ) {
-		for ( var i = 0; i < controllers. length; i++ ) {
-			if ( typeof controllers[ i ] == 'string' ? instance.Class._shortName == controllers[i] : instance instanceof controllers[i]) {
+		for ( var i = 0; i < controllers.length; i++ ) {
+			if ( typeof controllers[i] == 'string' ? instance.Class._shortName == controllers[i] : instance instanceof controllers[i] ) {
 				return true;
 			}
 		}
@@ -713,10 +713,10 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		//check if arguments
 		this.each(function() {
 			controllers = $.data(this, "controllers")
-			if (! controllers ) return;
+			if (!controllers ) return;
 			for ( var cname in controllers ) {
 				var c = controllers[cname];
-				if (! controllerNames. length || isAControllerOf( c, controllerNames )) instances.push(c);
+				if (!controllerNames.length || isAControllerOf(c, controllerNames) ) instances.push(c);
 			}
 		})
 		return instances;

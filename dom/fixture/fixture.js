@@ -168,12 +168,12 @@ steal.plugins('jquery/dom').then(function( $ ) {
 			match, left, right;
 		url = url.replace(/%2F/g, "~").replace(/%20/g, "_");
 
-		if ( settings. data && settings. processData && typeof settings. data !== "string" ) {
+		if ( settings.data && settings.processData && typeof settings.data !== "string" ) {
 			settings.data = jQuery.param(settings.data);
 		}
 
 
-		if ( settings. data && settings. type. toLowerCase( ) == "get") {
+		if ( settings.data && settings.type.toLowerCase() == "get" ) {
 			url += ($.String.include(url, '?') ? '&' : '?') + settings.data;
 		}
 
@@ -181,7 +181,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		left = match[1];
 
 		right = settings.type ? '.' + settings.type.toLowerCase() : '.post';
-		if ( match[ 2 ]) {
+		if ( match[2] ) {
 			left += '/';
 			right = match[2].replace(/\#|&/g, '-').replace(/\//g, '~') + right;
 		}
@@ -264,10 +264,10 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		make: function( types, count, make ) {
 			// make all items
 			var items = ($.fixture["~" + types[0]] = []);
-			for ( var i = 0; i < ( count ); i++) {
+			for ( var i = 0; i < (count); i++ ) {
 				//call back provided make
 				var item = make(i, items)
-				if (! item. id ) {
+				if (!item.id ) {
 					item.id = i;
 				}
 				items.push(item)
@@ -283,7 +283,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 				$.each((settings.data.order || []).slice(0).reverse(), function( i, name ) {
 					var split = name.split(" ");
 					retArr = retArr.sort(function( a, b ) {
-						if ( split[ 1 ].toUpperCase() != "ASC") return a[split[0]] < b[split[0]];
+						if ( split[1].toUpperCase() != "ASC" ) return a[split[0]] < b[split[0]];
 						else return a[split[0]] > b[split[0]];
 					});
 				});
@@ -302,10 +302,10 @@ steal.plugins('jquery/dom').then(function( $ ) {
 					i = 0;
 
 				//filter results if someone added an attr like parentId
-				for ( var param in settings. data ) {
-					if ( param. indexOf("Id" ) != -1) {
-						while ( i < retArr. length ) {
-							if ( settings. data[ param ] != retArr[i][param]) {
+				for ( var param in settings.data ) {
+					if ( param.indexOf("Id") != -1 ) {
+						while ( i < retArr.length ) {
+							if ( settings.data[param] != retArr[i][param] ) {
 								retArr.splice(i, 1)
 							} else {
 								i++;
@@ -323,8 +323,8 @@ steal.plugins('jquery/dom').then(function( $ ) {
 				}]
 			}
 			$.fixture["-" + types[1]] = function( settings ) {
-				for ( var i = 0; i < ( count ); i++) {
-					if ( settings. data. id == items[ i ].id) {
+				for ( var i = 0; i < (count); i++ ) {
+					if ( settings.data.id == items[i].id ) {
 						return [items[i]]
 					}
 				}
@@ -392,15 +392,15 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 */
 	$.fixture.delay = 200
 	$.fixture["-handleFunction"] = function( settings ) {
-		if ( typeof settings. fixture == "string" && $. fixture[ settings. fixture ]) {
+		if ( typeof settings.fixture == "string" && $.fixture[settings.fixture] ) {
 			settings.fixture = $.fixture[settings.fixture]
 		}
-		if ( typeof settings. fixture == "function" ) {
+		if ( typeof settings.fixture == "function" ) {
 			setTimeout(function() {
-				if ( settings. success ) {
+				if ( settings.success ) {
 					settings.success.apply(null, settings.fixture(settings, "success"))
 				}
-				if ( settings. complete ) {
+				if ( settings.complete ) {
 					settings.complete.apply(null, settings.fixture(settings, "complete"))
 				}
 			}, $.fixture.delay);
@@ -421,15 +421,15 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 */
 	ajax = function( settings ) {
 		var func = $.fixture
-		if (! settings. fixture ) {
+		if (!settings.fixture ) {
 			return ajax.apply($, arguments);
 		}
-		if ( $. fixture["-handleFunction" ](settings)) {
+		if ( $.fixture["-handleFunction"](settings) ) {
 			return;
 		}
-		if ( typeof settings. fixture == "string" ) {
+		if ( typeof settings.fixture == "string" ) {
 			var url = settings.fixture;
-			if (/^\/\//. test( url )) {
+			if (/^\/\//.test(url) ) {
 				url = steal.root.join(settings.fixture.substr(2))
 			}
 			//@steal-remove-start
@@ -438,7 +438,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 			settings.url = url
 			settings.data = null;
 			settings.type = "GET"
-			if (! settings. error ) {
+			if (!settings.error ) {
 				settings.error = function( xhr, error, message ) {
 					throw "fixtures.js Error " + error + " " + message;
 				}
@@ -467,7 +467,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 */
 	get = function( url, data, callback, type, fixture ) {
 		// shift arguments if data argument was ommited
-		if ( jQuery. isFunction( data )) {
+		if ( jQuery.isFunction(data) ) {
 			fixture = type;
 			type = callback;
 			callback = data;
@@ -494,7 +494,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 * @param {Object} fixture
 	 */
 	post = function( url, data, callback, type, fixture ) {
-		if ( jQuery. isFunction( data )) {
+		if ( jQuery.isFunction(data) ) {
 			fixture = type;
 			type = callback;
 			callback = data;

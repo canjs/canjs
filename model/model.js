@@ -150,11 +150,11 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			this.associations = {};
 			this._fullName = underscore(this.fullName.replace(/\./g, "_"));
 
-			if ( this. fullName. substr( 0, 7 ) == "jQuery.") {
+			if ( this.fullName.substr(0, 7) == "jQuery." ) {
 				return;
 			}
 			jQuery.Model.models[this._fullName] = this;
-			if ( this. storeType ) {
+			if ( this.storeType ) {
 				this.store = new this.storeType(this);
 			}
 
@@ -170,7 +170,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		 * @return {Model} an instance of the model
 		 */
 		wrap: function( attributes ) {
-			if (! attributes ) {
+			if (!attributes ) {
 				return null;
 			}
 			return new this(
@@ -183,7 +183,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		 * @return {Array} an array of instances of the model
 		 */
 		wrapMany: function( instances ) {
-			if (! instances ) return null;
+			if (!instances ) return null;
 			var res = new(this.List || Array),
 				arr = $.isArray(instances),
 				raw = arr ? instances : instances.data,
@@ -193,7 +193,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			for (; i < length; i++ ) {
 				res.push(this.wrap(raw[i]));
 			}
-			if (! arr ) { //push other stuff onto array
+			if (!arr ) { //push other stuff onto array
 				for ( var prop in instances ) {
 					if ( prop !== 'data' ) {
 						res[prop] = instances[prop];
@@ -215,7 +215,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		 * @param {String} type
 		 */
 		addAttr: function( property, type ) {
-			if ( this. associations[ property ]) return;
+			if ( this.associations[property] ) return;
 			this.attributes[property] || (this.attributes[property] = type);
 			return type
 		},
@@ -229,7 +229,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			//@steal-remove-start
 			steal.dev.log("Model.js - publishing " + underscore(this.shortName) + "." + event)
 			//@steal-remove-end
-			if ( window. OpenAjax ) {
+			if ( window.OpenAjax ) {
 				OpenAjax.hub.publish(underscore(this.shortName) + "." + event, data);
 			}
 
@@ -242,14 +242,14 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		guessType: function( object ) {
 			if ( typeof object != 'string' ) {
 				if ( object == null ) return typeof object;
-				if ( object. constructor == Date ) return 'date';
-				if ( $. isArray( object )) return 'array';
+				if ( object.constructor == Date ) return 'date';
+				if ( $.isArray(object) ) return 'array';
 				return typeof object;
 			}
 			if ( object == "" ) return 'string';
 			//check if true or false
 			if ( object == 'true' || object == 'false' ) return 'boolean';
-			if (! isNaN( object )) return 'number'
+			if (!isNaN(object) ) return 'number'
 			return typeof object;
 		},
 		converters: {
@@ -327,7 +327,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			return this.save(success, error); //on success, we should 
 		},
 		valid: function() {
-			for ( var attr in this. errors )
+			for ( var attr in this.errors )
 			return false;
 			return true;
 		},
@@ -367,14 +367,14 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 				converter = Class.converters[type],
 				val;
 
-			if ( this[ funcName ] && !(value = this[funcName](value))) return;
+			if ( this[funcName] && !(value = this[funcName](value)) ) return;
 
 			//convert to value
 			val = this[property] = value == null ? null : (converter ? converter.call(Class, value) : value)
 
 
-			if ( property == Class. id && val != null && Class. store ) {
-				if (! old ) {
+			if ( property == Class.id && val != null && Class.store ) {
+				if (!old ) {
 					Class.store.create(this);
 				} else if ( old != val ) {
 					Class.store.destroy(old);
@@ -389,9 +389,9 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		 */
 		attrs: function( attributes ) {
 			var key;
-			if (! attributes ) {
+			if (!attributes ) {
 				attributes = {};
-				for ( key in this. Class. attributes ) {
+				for ( key in this.Class.attributes ) {
 					attributes[key] = this.attr(key);
 				}
 			} else {
@@ -419,7 +419,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		save: function( success, error ) {
 			this.validate();
 
-			if (! this. valid( )) {
+			if (!this.valid() ) {
 				return false;
 			}
 			this.isNew() ? this.Class.create(this.attrs(), this.callback(['created', success]), error) : this.Class.update(this[this.Class.id], this.attrs(), this.callback(['updated', success]), error);
@@ -498,7 +498,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 	 */
 	"destroyed"], function( i, funcName ) {
 		$.Model.prototype[funcName] = function( attrs ) {
-			if ( funcName === 'destroyed' && this. Class. store ) {
+			if ( funcName === 'destroyed' && this.Class.store ) {
 				this.Class.store.destroy(this[this.Class.id]);
 			}
 			attrs && typeof attrs == 'object' && this.attrs(attrs.attrs ? attrs.attrs() : attrs);

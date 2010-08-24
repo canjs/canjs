@@ -279,7 +279,7 @@ steal.plugin("jquery").then(function( $ ) {
 	 */
 
 	jQuery.Class = function() {
-		if ( arguments. length ) this.extend.apply(this, arguments)
+		if ( arguments.length ) this.extend.apply(this, arguments)
 	};
 
 	/* @Static*/
@@ -344,7 +344,7 @@ steal.plugin("jquery").then(function( $ ) {
 
 			funcs = args.shift();
 
-			if (! jQuery. isArray( funcs )) {
+			if (!jQuery.isArray(funcs) ) {
 				funcs = [funcs];
 			}
 
@@ -358,12 +358,12 @@ steal.plugin("jquery").then(function( $ ) {
 
 				for (; f < length; f++ ) {
 					func = funcs[f];
-					if (! func ) {
+					if (!func ) {
 						continue;
 					}
 
 					isString = typeof func == "string";
-					if ( isString && self. _set_called ) {
+					if ( isString && self._set_called ) {
 						self.called = func;
 					}
 					cur = (isString ? self[func] : func).apply(self, cur || []);
@@ -391,7 +391,7 @@ steal.plugin("jquery").then(function( $ ) {
 			var current = current || window,
 				parts = objectName ? objectName.split(/\./) : [],
 				i = 0;
-			for (; i < parts. length; i++ ) {
+			for (; i < parts.length; i++ ) {
 				current = current[parts[i]] || (current[parts[i]] = {})
 			}
 			return current;
@@ -410,10 +410,10 @@ steal.plugin("jquery").then(function( $ ) {
 		newInstance: function() {
 			var inst = this.rawInstance(),
 				args;
-			if ( inst. setup ) {
+			if ( inst.setup ) {
 				args = inst.setup.apply(inst, arguments);
 			}
-			if ( inst. init ) {
+			if ( inst.init ) {
 				inst.init.apply(inst, $.isArray(args) ? args : arguments);
 			}
 			return inst;
@@ -458,7 +458,7 @@ steal.plugin("jquery").then(function( $ ) {
 				klass = fullName;
 				fullName = null;
 			}
-			if (! proto ) {
+			if (!proto ) {
 				proto = klass;
 				klass = null;
 			}
@@ -482,7 +482,7 @@ steal.plugin("jquery").then(function( $ ) {
 				// All construction is actually done in the init method
 				if ( initializing ) return;
 
-				if ( this. constructor !== Class && arguments. length ) { //we are being called w/o new
+				if ( this.constructor !== Class && arguments.length ) { //we are being called w/o new
 					return this.extend.apply(this, arguments)
 				} else { //we are being called w/ new
 					return this.Class.newInstance.apply(this.Class, arguments)
@@ -490,7 +490,7 @@ steal.plugin("jquery").then(function( $ ) {
 			}
 			// Copy old stuff onto class
 			for ( name in this ) {
-				if ( this. hasOwnProperty( name ) && $.inArray(name, ['prototype', 'defaults', 'getObject']) == -1) {
+				if ( this.hasOwnProperty(name) && $.inArray(name, ['prototype', 'defaults', 'getObject']) == -1 ) {
 					Class[name] = this[name];
 				}
 			}
@@ -537,7 +537,7 @@ steal.plugin("jquery").then(function( $ ) {
 
 			var args = Class.setup.apply(Class, [_super_class].concat($.makeArray(arguments)));
 
-			if ( Class. init ) {
+			if ( Class.init ) {
 				Class.init.apply(Class, args || []);
 			}
 

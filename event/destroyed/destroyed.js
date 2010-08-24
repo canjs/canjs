@@ -30,7 +30,7 @@ steal.plugins('jquery/event').then(function( $ ) {
 
 	$.cleanData = function( elems ) {
 		for ( var i = 0, elem;
-		( elem = elems[ i ]) != null; i++) {
+		(elem = elems[i]) != null; i++ ) {
 			$(elem).triggerHandler("destroyed")
 			//$.event.remove( elem, 'destroyed' );
 		}

@@ -43,9 +43,9 @@ steal.plugins('jquery/model').then(function() {
 		 */
 		find: function( f ) {
 			var instances = [];
-			for ( var id in this. _data ) {
+			for ( var id in this._data ) {
 				var inst = this._data[id];
-				if (! f || f( inst )) instances.push(inst);
+				if (!f || f(inst) ) instances.push(inst);
 			}
 			return instances;
 		},
