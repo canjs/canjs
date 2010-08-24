@@ -6,6 +6,7 @@ test("this.view", function(){
 			this.element.html(this.view())
 		}
 	})
+	jQuery.View.ext = ".micro";
 	$("#qunit-test-area").append("<div id='cont_view'/>");
 	
 	new jquery.Controller.View.Test.Qunit( $('#cont_view') );
