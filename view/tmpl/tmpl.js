@@ -136,7 +136,7 @@ steal.plugins('jquery/view').then(function(){
 					url: url,
 					dataType: "text",
 					error: function() {
-						throw "jquery-tmpl.js ERROR: There is no template or an empty template at "+url;
+						throw "tmpl.js ERROR: There is no template or an empty template at "+url;
 					}
 				}).responseText
 			return this.renderer(id, text);
