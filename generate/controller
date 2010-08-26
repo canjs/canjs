@@ -1,0 +1,21 @@
+if (_args.length < 1) {
+	print("USAGE : steal/js steal/generate/controller YourController")
+	print("EX    : steal/js steal/generate/model Cookbook.Controllers.Recipe");
+	print("      > cookbook/controller/recipe.js")
+	print();
+	quit();
+}
+
+load('steal/rhino/steal.js');
+
+steal(	'//steal/generate/generate',
+		'//steal/generate/system',	
+function(steal){
+	var md = steal.generate.convert(_args[0]);
+	
+	md.appPath =  md.path.replace(/\/controllers$/,"");
+
+	steal.generate("jquery/generate/templates/controller",md.appPath,md)
+	
+});
+

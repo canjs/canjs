@@ -1,0 +1,45 @@
+module("Model: <%= name %>")
+
+test("findAll", function(){
+	stop(2000);
+	<%= name %>.findAll({}, function(<%= plural %>){
+		start()
+		ok(<%= plural %>)
+        ok(<%= plural %>.length)
+        ok(<%= plural %>[0].name)
+        ok(<%= plural %>[0].description)
+	});
+	
+})
+
+test("create", function(){
+	stop(2000);
+	new <%= name %>({name: "dry cleaning", description: "take to street corner"}).save(function(<%= underscore %>){
+		start();
+		ok(<%= underscore %>);
+        ok(<%= underscore %>.id);
+        equals(<%= underscore %>.name,"dry cleaning")
+        <%= underscore %>.destroy()
+	})
+})
+test("update" , function(){
+	stop();
+	new <%= name %>({name: "cook dinner", description: "chicken"}).
+            save(function(<%= underscore %>){
+            	equals(<%= underscore %>.description,"chicken");
+        		<%= underscore %>.update({description: "steak"},function(<%= underscore %>){
+        			start()
+        			equals(<%= underscore %>.description,"steak");
+        			<%= underscore %>.destroy();
+        		})
+            })
+
+});
+test("destroy", function(){
+	stop(2000);
+	new <%= name %>({name: "mow grass", description: "use riding mower"}).
+            destroy(function(<%= underscore %>){
+            	start();
+            	ok( true ,"Destroy called" )
+            })
+})
