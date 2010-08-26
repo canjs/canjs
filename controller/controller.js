@@ -439,7 +439,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		listensTo: []
 	},
 	/** 
-	 * /@Prototype
+	 * @Prototype
 	 */
 	{
 		/**
