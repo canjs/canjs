@@ -9,7 +9,7 @@ if (_args.length < 1) {
 
 load('steal/rhino/steal.js');
 
-steal.plugins(	'//steal/generate/generate',
+steal(	'//steal/generate/generate',
 		'//steal/generate/system',	
 function(steal){
 	var md = steal.generate.convert(_args[0]);
