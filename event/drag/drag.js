@@ -95,7 +95,7 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 			var isLeftButton = ev.button == 0 || ev.button == 1;
 			if( !isLeftButton || this.current) return; //only allows 1 drag at a time, but in future could allow more
 			
-			ev.preventDefault();
+			//ev.preventDefault();
 			//create Drag
 			var drag = new $.Drag(), 
 			delegate = ev.liveFired || element,
@@ -132,7 +132,7 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 	 */
 	$.extend($.Drag.prototype , {
 		setup: function( options, ev ) {
-			this.noSelection();
+			//this.noSelection();
 			$.extend(this,options);
 			this.element = $(this.element);
 			this.event = ev;
@@ -144,7 +144,10 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 			this._mouseup = mouseup;
 			$(document).bind('mousemove' ,mousemove);
 			$(document).bind('mouseup',mouseup);
-			this.callEvents('down',this.element, ev)
+			
+			if(! this.callEvents('down',this.element, ev) ){
+				ev.preventDefault();
+			}
 		},
 		/**
 		 * Unbinds listeners and allows other drags ...
@@ -156,7 +159,7 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 			if(!this.moved){
 				this.event = this.element = null;
 			}
-			this.selection();
+			//this.selection();
 			this.destroyed();
 		},
 		mousemove: function( docEl, ev ) {
@@ -224,6 +227,7 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 			for(var i=0; i  < cbs.length; i++){
 				cbs[i].call(element, event, this, drop)
 			}
+			return cbs.length
 		},
 		/**
 		 * Returns the position of the movingElement by taking its top and left.
@@ -416,7 +420,13 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 	event.setupHelper( [
 		/**
 		 * @attribute dragdown
-		 * Listens for when a drag movement has started on a mousedown.
+		 * <p>Listens for when a drag movement has started on a mousedown.
+		 * If you listen to this, the mousedown's default event (preventing
+		 * text selection) is not prevented.  You are responsible for calling it
+		 * if you want it (you probably do).  </p>
+		 * <p><b>Why might you not want it?</b></p>
+		 * <p>You might want it if you want to allow text selection on element
+		 * within the drag element.  Typically these are input elements.</p>
 		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
 		 * @codestart
 		 * $(".handles").live("dragdown", function(ev, drag){})

@@ -11,6 +11,9 @@
 				border: dashed 1px red;
 				cursor : pointer;
 			}
+			.big {
+				height: 100px;
+			}
 			#container {
 				padding: 20px;
 				border: dashed 2px green;
@@ -66,6 +69,11 @@
 		<li>7</li><li>8</li><li>9</li></ul>
 </div>
 </div>
+<h2>Allow Text Selection</h2>
+<div id='form-drag' class='handle big'>
+	<p>I should be able to drag on this</p>
+	<input type='text' value='I can be clicked on'/>
+</div>
 		<script type='text/javascript' src='../../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
@@ -76,7 +84,7 @@ steal.plugins("jquery/event/drag",
 		
 }).start()
 		</script>
-		<script type='text/javascript' id='demo-source'>
+	<script type='text/javascript' id='demo-source'>
 //drag with bind
 $("#drag").bind("draginit",function(){})
 
@@ -100,6 +108,15 @@ $("#horizontal").bind("draginit",function(ev, drag){drag.horizontal()})
 
 //scrolls
 $("#scroll-drag").bind("draginit",function(ev, drag){drag.scrolls( $("#scrollarea") )})
+
+// allow form elements to be selected
+$("#form-drag").bind("dragdown",function(ev, drag){
+	if(ev.target.nodeName.toLowerCase() == 'input'){
+		drag.cancel();
+	}else{
+		ev.preventDefault();
+	}
+})
 </script>
 	</body>
 </html>

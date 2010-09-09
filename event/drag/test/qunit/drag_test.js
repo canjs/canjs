@@ -1,4 +1,23 @@
-module("jquery/event/drag")
+module("jquery/event/drag",{
+	makePoints : function(){
+		var div = $("<div>"+
+			"<div id='drag'></div>"+
+			"<div id='midpoint'></div>"+
+			"<div id='drop'></div>"+
+			"</div>");
+	
+		div.appendTo($("#qunit-test-area"));
+		var basicCss = {
+			width: "20px",
+			height: "20px",
+			position: "absolute",
+			border: "solid 1px black"
+		}
+		$("#drag").css(basicCss).css({top: "0px", left: "0px", zIndex: 1000, backgroundColor: "red"})
+		$("#midpoint").css(basicCss).css({top: "0px", left: "30px"})
+		$("#drop").css(basicCss).css({top: "30px", left: "30px"});
+	}
+})
 test("dragging an element", function(){
 	var div = $("<div>"+
 			"<div id='drag'></div>"+
@@ -94,22 +113,7 @@ test("dragging an element", function(){
 })
 
 test("drag position", function(){
-	var div = $("<div>"+
-			"<div id='drag'></div>"+
-			"<div id='midpoint'></div>"+
-			"<div id='drop'></div>"+
-			"</div>");
-	
-	div.appendTo($("#qunit-test-area"));
-	var basicCss = {
-		width: "20px",
-		height: "20px",
-		position: "absolute",
-		border: "solid 1px black"
-	}
-	$("#drag").css(basicCss).css({top: "0px", left: "0px", zIndex: 1000, backgroundColor: "red"})
-	$("#midpoint").css(basicCss).css({top: "0px", left: "30px"})
-	$("#drop").css(basicCss).css({top: "30px", left: "30px"});
+	this.makePoints();
 	
 	
 	var drags = {}, drops ={};
@@ -127,4 +131,59 @@ test("drag position", function(){
 		equals(offset.left+20, offset2.left, "left")
 		start();
 	})
+});
+
+test("dragdown" , function(){
+	var div = $("<div>"+
+			"<div id='dragger'>"+
+				"<p>Place to drag</p>"+
+				"<input type='text' id='draginp' />"+
+				"<input type='text' id='dragnoprevent' />"+
+			"</div>"+
+			"</div>");
+	
+	$("#qunit-test-area").html(div);
+	$("#dragger").css({
+		position: "absolute",
+		backgroundColor : "blue",
+		border: "solid 1px black",
+		top: "0px",
+		left: "0px",
+		width: "200px",
+		height: "200px"
+	})
+	var draginpfocused = false,
+		dragnopreventfocused = false;
+	
+	$('#draginp').focus(function(){
+		draginpfocused = true;
+	})
+	$('#dragnoprevent').focus(function(){
+		dragnopreventfocused = true;
+	})
+	
+	$('#dragger').bind("dragdown", function(ev, drag){
+		if(ev.target.id == 'draginp'){
+			drag.cancel();
+		}else{
+			ev.preventDefault();
+		}
+	})
+	var offset = $('#dragger').offset();
+
+	stop();
+	Syn.drag("+20 +20","draginp", function(){
+		var offset2 = $('#dragger').offset();
+		equals(offset.top, offset2.top, "top")
+		equals(offset.left, offset2.left, "left")
+		
+	}).drag("+20 +20","dragnoprevent", function(){
+		var offset2 = $('#dragger').offset();
+		equals(offset.top+20, offset2.top, "top")
+		equals(offset.left+20, offset2.left, "left")
+		ok(draginpfocused, "First input was allowed to be focused correctly");
+		ok(!dragnopreventfocused, "Second input was not allowed to focus");
+		start();
+	})
+
 })
