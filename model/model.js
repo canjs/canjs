@@ -1,7 +1,7 @@
 steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').then(function() {
 	//a cache for attribute capitalization ... slowest part of inti.
-	var capitalize = $.String.capitalize,
-		underscore = $.String.underscore;
+	var underscore = $.String.underscore,
+		classize = $.String.classize;
 
 	/**
 	 * @tag core
@@ -347,7 +347,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		 * @param {String_Number_Boolean} [opt1] value the value you want to set.
 		 */
 		attr: function( attribute, value ) {
-			var cap = capitalize(attribute),
+			var cap = classize(attribute),
 				get = "get" + cap;
 			if ( value !== undefined ) this._setProperty(attribute, value, cap);
 			return this[get] ? this[get]() : this[attribute];
