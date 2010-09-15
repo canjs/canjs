@@ -303,7 +303,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 
 				//filter results if someone added an attr like parentId
 				for ( var param in settings.data ) {
-					if ( param.indexOf("Id") != -1 ) {
+					if ( param.indexOf("Id") != -1 ||  param.indexOf("_id") != -1) {
 						while ( i < retArr.length ) {
 							if ( settings.data[param] != retArr[i][param] ) {
 								retArr.splice(i, 1)
