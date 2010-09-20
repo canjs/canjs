@@ -154,8 +154,8 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 				return;
 			}
 			jQuery.Model.models[this._fullName] = this;
-			if ( this.storeType ) {
-				this.store = new this.storeType(this, this.fullName);
+			if ( this.listType ) {
+				this.list = new this.listType([]);
 			}
 
 		},
@@ -373,12 +373,12 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			val = this[property] = value == null ? null : (converter ? converter.call(Class, value) : value)
 
 
-			if ( property == Class.id && val != null && Class.store ) {
+			if ( property == Class.id && val != null && Class.list ) {
 				if (!old ) {
-					Class.store.add(this);
+					Class.list.push(this);
 				} else if ( old != val ) {
-					Class.store.remove(old);
-					Class.store.add(this);
+					Class.list.remove(old);
+					Class.list.push(this);
 				}
 			}
 		},
@@ -498,8 +498,8 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 	 */
 	"destroyed"], function( i, funcName ) {
 		$.Model.prototype[funcName] = function( attrs ) {
-			if ( funcName === 'destroyed' && this.Class.store ) {
-				this.Class.store.remove(this[this.Class.id]);
+			if ( funcName === 'destroyed' && this.Class.list ) {
+				this.Class.list.remove(this[this.Class.id]);
 			}
 			attrs && typeof attrs == 'object' && this.attrs(attrs.attrs ? attrs.attrs() : attrs);
 			this.publish(funcName, this)

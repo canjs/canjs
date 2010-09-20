@@ -1,5 +1,5 @@
 <%%for(var i = 0; i < <%=plural%>.length ; i++){%>
     <tr <%%= <%=plural%>[i]%>>
-        <%%= view('views/<%= underscore%>/show',<%=plural%>[i])%>
+        <%%= view('//<%= appPath %>/views/<%= underscore%>/show',<%=plural%>[i])%>
     </tr>
 <%%}%>
