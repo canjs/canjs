@@ -13,7 +13,7 @@
  * It is also influenced heavily by MochiKit's serializeJSON, which is 
  * copyrighted 2005 by Bob Ippolito.
  */
- steal.then(function(){
+ steal.plugins('jquery').then(function(){
 (function($) {
     /** jQuery.toJSON( json-serializble )
         Converts the given argument into a JSON respresentation.

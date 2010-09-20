@@ -1,7 +1,13 @@
 steal.plugins('jquery/model').then(function($){
 
-var push =[].push,
-	splice = [].splice,
+var modifiers = {
+		push: [].push,
+		pop: [].pop,
+		shift: [].shift,
+		unshift: [].unshift,
+		splice: [].splice,
+		sort : [].sort
+	},
 	add = function(data, inst){
 		var id = inst.Class.id;
 		data[inst[id]] = inst;
@@ -14,7 +20,12 @@ var push =[].push,
 		}
 	}
 /**
- * Used as a store or for ajax methods that involve multiple instances.  A sort of ACL.
+ * Model lists are useful for:
+ * <ul>
+ * 	<li> Adding Ajax/Service requests for multiple model instances<li>
+ *  <li> Storing and retrieving multiple instances </li>
+ *  <li> Rapid lookup of an instance </li>
+ * </ul>
  */
 $.Class.extend("jQuery.Model.List",{
     init: function( instances ) {
@@ -22,57 +33,35 @@ $.Class.extend("jQuery.Model.List",{
 		this._data = {};
         this.push.apply(this, $.makeArray(instances || [] ) );
     },
-    push: function() {
-		var first = this.length;
-		push.apply(this, arguments)
-		var id,
-			inst = this[0] && this[0].Class.id
-		for(var i=first; i < this.length;i++){
-			add(this._data, this[i])
-		}
-	},
-    sort: [].sort,
-    splice: function( index, howMany ) {
-		var args = $.makeArray(arguments),
-			id = (this[0] && this[0].Class.id);;
-		index = args.shift();
-		howMany = args.shift() || 0;
-
-		//remove index-> how many
-		for(var i=index; i < index+howMany; i++){
-			delete this._data[this[i][id]];
-		}
-		for(var i=0; i < args.length;i++){
-			add(this._data, args[i]);
-		}
-		return splice.apply(this, arguments)
-	},
     slice: function() {
-        return Array.prototype.slice.apply( this, arguments )
+        return new this.Class( Array.prototype.slice.apply( this, arguments ) );
     },
     match: function( property, value ) {
-        return this.grep(function(inst){
+        return  this.grep(function(inst){
             return inst[property] == value;
-        })
-    },
-    each: function( callback, args ) {
-        return $.each( this, callback, args );
+        });
     },
     grep: function( callback, args ) {
-        return $.grep( this, callback, args );
+        return new this.Class( $.grep( this, callback, args ) );
     },
-    map: function( callback, args ) {
-        return $.map( this, callback, args );
-    },
+	_makeData : function(){
+		var data = this._data = {};
+		this.each(function(i, inst){
+			data[inst[inst.Class.id]] = inst;
+		})
+	},
 	/**
 	 * Gets by ID
 	 */
 	get: function() {
 		if(!this.length){
-			return [];
+			return new this.Class([]);
+		}
+		if(this._changed){
+			this._makeData();
 		}
 		var list = [],
-			underscored = this[0].Class.underscoredName,
+			underscored = this[0].Class._fullName,
 			test = new RegExp(underscored+"_([^ ]+)"),
 			matches,
 			val
@@ -95,7 +84,7 @@ $.Class.extend("jQuery.Model.List",{
 			return [];
 		}
 		var list = [],
-			underscored = this[0].Class.underscoredName,
+			underscored = this[0].Class._fullName,
 			idName = this[0].Class.id,
 			test = new RegExp(underscored+"_([^ ]+)"),
 			matches,
@@ -136,9 +125,14 @@ $.Class.extend("jQuery.Model.List",{
 		return jq;
 	}
 });
+$.each(modifiers, function(name, func){
+	$.Model.List.prototype[name] = function(){
+		this._changed = true;
+		return func.apply( this, arguments );
+	}
+})
 
-
-$.each(['each','grep','map'], function(i, name){
+$.each(['each','map'], function(i, name){
 	$.Model.List.prototype[name] = function(callback, args){
 		return $[name]( this, callback, args );
 	}
