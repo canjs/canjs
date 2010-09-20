@@ -1,7 +1,7 @@
 if (_args.length < 1) {
-	print("USAGE : steal/js steal/generate/model ClassName Type")
+	print("USAGE : steal/js jquery/generate/model ClassName Type")
 	print("TYPES : JsonRest\n")
-	print("EX    : steal/js steal/generate/model Cashnet.Models.Customer");
+	print("EX    : steal/js jquery/generate/model Cashnet.Models.Customer");
 	print("      > cashnet/models/customer.js")
 	print();
 	quit();
