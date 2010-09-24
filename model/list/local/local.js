@@ -1,6 +1,6 @@
 steal.plugins('jquery/dom/cookie','jquery/model/list').then(function($){
 
-$.Model.List.extend("$.Model.List.Local",
+$.Model.List.extend("jQuery.Model.List.Local",
 {
 	retrieve : function(name){
 		// each also needs what they are referencd by ?

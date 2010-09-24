@@ -248,8 +248,12 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			}
 			if ( object == "" ) return 'string';
 			//check if true or false
-			if ( object == 'true' || object == 'false' ) return 'boolean';
-			if (!isNaN(object) ) return 'number'
+			if (object == 'true' || object == 'false') {
+				return 'boolean';
+			}
+			if (!isNaN(object) && (+object) !== Infinity) {
+				return 'number';
+			}
 			return typeof object;
 		},
 		converters: {
