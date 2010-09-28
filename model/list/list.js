@@ -62,18 +62,18 @@ $.Class.extend("jQuery.Model.List",{
 		}
 		var list = [],
 			underscored = this[0].Class._fullName,
+			idName = this[0].Class.id,
 			test = new RegExp(underscored+"_([^ ]+)"),
 			matches,
-			val
-
+			val,
+			args = getArgs(arguments);
 		
-		args = getArgs(arguments)
 		for(var i =0; i < args.length; i++){
 			if(args[i].nodeName && 
 				(matches = args[i].className.match(test) )){
 				val = this._data[matches[1]]
 			}else{
-				val =  this._data[args[i]]
+				val =  this._data[typeof args[i] == 'string' ? args[i] : args[i][idName] ]
 			}
 			val && list.push(val)
 		}
@@ -100,7 +100,10 @@ $.Class.extend("jQuery.Model.List",{
 			for(var a =0; a< args.length; a++){
 				var id = (args[a].nodeName && 
 							(matches = args[a].className.match(test) ) &&
-							matches[1]) || args[a]
+							matches[1]) || 
+							( typeof args[a] == 'string' ? 
+								args[a] :
+								args[a][idName] );
 				if(inst[idName] == id){
 					list.push.apply(list, this.splice(i, 1) );
 					args.splice(a,1);
