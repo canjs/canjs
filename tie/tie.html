@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>tie</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+			
+			#sliderWrapper {
+				border: solid 1px gray;
+				width: 300px;
+				height: 30px;
+			}
+			.phui_slider {
+				width: 30px;
+				height: 30px;
+				background-color: green;
+			}
+        </style>
+	</head>
+	<body>
+		
+		<div id='sliderWrapper'><div id='age1'></div></div>
+
+		<input type='text' id='age2' />
+
+		<textarea id='age3'></textarea>
+		
+		
+		<select id='age4'>
+			<option value='1'>1</option>
+			<option value='2'>2</option>
+			<option value='3'>3</option>
+			<option value='4'>4</option>
+			<option value='5'>5</option>
+			<option value='6'>6</option>
+			<option value='7'>7</option>
+			<option value='8'>8</option>
+			<option value='9'>9</option>
+			<option value='10'>10</option>
+		</select>
+		
+		
+		<script type='text/javascript' 
+                src='../../steal/steal.js'>   
+        </script>
+		<script type='text/javascript'>
+			steal.plugins('jquery/model','jquery/tie','phui/slider').start()
+		</script>
+		<script type='text/javascript'>
+			
+			$.Model.extend("Person",{
+				setAge : function(age, success, error){
+					age =  +(age);
+					if(isNaN(age) || !isFinite(age) || age < 1 || age > 10){
+						error()
+					}else{
+						return age;
+					}
+				}
+			});
+			
+			person = new Person({age: 1});
+			$("#age1").phui_slider({interval: 1, min: 1, max: 10});
+			
+			$("#age1, #age2, #age3, #age4").tie(person,"age")
+		</script>
+	</body>
+</html>

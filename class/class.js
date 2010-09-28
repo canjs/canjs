@@ -507,7 +507,9 @@ steal.plugin("jquery").then(function( $ ) {
 					namespace = current;
 
 				//@steal-remove-start
-				steal.dev.isHappyName(fullName)
+				if(!Class.nameOk){
+					steal.dev.isHappyName(fullName)
+				}
 				//@steal-remove-end
 				current[shortName] = Class;
 			}

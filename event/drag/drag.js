@@ -260,7 +260,9 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 		},
 		/**
 		 * @hide
-		 * Set the drag to only allow horizontal dragging
+		 * Set the drag to only allow horizontal dragging.
+		 * 
+		 * @param {Object} offsetPositionv the position of the element (not the mouse)
 		 */
 		position: function( offsetPositionv ) {  //should draw it on the page
 			var dragged_element_page_offset = this.movingElement.offsetv();          // the drag element's current page location

@@ -68,4 +68,15 @@ test("wrapMany", function(){
 		{id: 1, name: "Justin"}
 	])
 	equals(people[0].prettyName(),"Mr. Justin","wraps wrapping works")
+});
+
+test("binding", 1,function(){
+	var inst = new Person({foo: "bar"});
+	
+	inst.bind("foo", function(){
+		ok(true,"updated")	
+	});
+	
+	inst.attr("foo","baz");
+	
 })

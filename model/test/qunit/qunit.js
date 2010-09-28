@@ -2,4 +2,4 @@
 steal
  .plugins("jquery/model")  //load your app
  .plugins('funcunit/qunit')  //load qunit
- .then("model_test")
+ .then("model_test").plugins("jquery/model/associations/test/qunit")

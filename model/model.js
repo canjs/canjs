@@ -143,21 +143,39 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 	 * @Static
 	 */
 	{
-		setup: function() {
+		setup: function(superClass) {
 			// clear everything that shouldn't be reused
 			this.validations = [];
-			this.attributes = {}; //list of all attributes ever given to this model
-			this.associations = {};
+			//we do not inherit attributes (or associations)
+			if(!this.attributes || this.attributes.doNotInhert){
+				this.attributes = {};
+			}
+			this.attributes.doNotInherit = true;
+			
+			if(!this.associations ||  this.associations.doNotInhert){
+				this.associations = {};
+			}
+			this.associations.doNotInherit = true;
+			
+			//add missing converters
+			if(superClass.convert != this.convert){
+				this.convert = $.extend(superClass.convert, this.convert);
+			}
+			
+			
 			this._fullName = underscore(this.fullName.replace(/\./g, "_"));
 
 			if ( this.fullName.substr(0, 7) == "jQuery." ) {
 				return;
 			}
+			
+			//add this to the collection of models
 			jQuery.Model.models[this._fullName] = this;
+			
 			if ( this.listType ) {
 				this.list = new this.listType([]);
 			}
-
+			
 		},
 		/**
 		 * @attribute defaults
@@ -252,9 +270,13 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			if (!isNaN(object) ) return 'number'
 			return typeof object;
 		},
-		converters: {
-			"date": function( val ) {
-				return this._parseDate(val)
+		/**
+		 * An object of name-function pairs that are used to convert to the name type.
+		 * @param {Object} val
+		 */
+		convert: {
+			"date": function( str ) {
+				return typeof str == "string" ? (Date.parse(str) == NaN ? null : Date.parse(str)) : str
 			},
 			"number": function( val ) {
 				return parseFloat(val)
@@ -289,32 +311,29 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		 */
 		destroy: function( id, success, error ) {
 			throw "Model: Implement " + this.fullName + "'s \"destroy\"!"
-		},
-		/**
-		 * Turns a string into a date
-		 * @param {String} str a string representation of a date
-		 * @return {Date} a date
-		 */
-		_parseDate: function( str ) {
-			return typeof str == "string" ? (Date.parse(str) == NaN ? null : Date.parse(str)) : str
-		}
+		}		
 	},
 	/**
 	 * @Prototype
 	 */
-	{
+	{	
 		/**
 		 * Creates, but does not save a new instance of this class
 		 * @param {Object} attributes a hash of attributes
 		 */
-		init: function( attributes ) {
+		setup: function( attributes ) {
+			// so we know not to fire events
+			this._initializing = true;
+			
 			this.Class.defaults && this.attrs(this.Class.defaults);
+			
 			this.attrs(attributes);
 			/**
 			 * @attribute errors
 			 * A hash of errors for this model instance.
 			 */
 			this.errors = {};
+			delete this._initializing;
 		},
 		/**
 		 * Sets the attributes on this instance and calls save.
@@ -346,11 +365,20 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		 * @param {String} attribute the attribute you want to set or get
 		 * @param {String_Number_Boolean} [opt1] value the value you want to set.
 		 */
-		attr: function( attribute, value ) {
+		attr: function( attribute, value, success, error ) {
 			var cap = classize(attribute),
 				get = "get" + cap;
-			if ( value !== undefined ) this._setProperty(attribute, value, cap);
+			if (value !== undefined) {
+				this._setProperty(attribute, value, success, error, cap);
+			}
 			return this[get] ? this[get]() : this[attribute];
+		},
+		/**
+		 * 
+		 */
+		bind : function(){
+			var wrapped = $(this);
+			wrapped.bind.apply(wrapped, arguments);
 		},
 		/**
 		 * Checks if there is a set_<i>property</i> value.  If it returns true, lets it handle; otherwise
@@ -359,28 +387,60 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		 * @param {Object} property
 		 * @param {Object} value
 		 */
-		_setProperty: function( property, value, capitalized ) {
-			var funcName = "set" + capitalized,
-				old = this[property],
-				Class = this.Class,
+		_setProperty: function( property, value, success, error, capitalized ) {
+			// the potential setter name
+			var setName = "set" + capitalized,
+				//the old value
+				old = this[property];
+
+			// if the setter returns nothing, do not set
+			// we might want to indicate if this was set ok
+			if (this[setName] && 
+				(value = this[setName](		value, 
+											this.callback('_updateProperty',property, value, old, success), 
+											error)) === undefined ) {
+				return ;
+			}
+			this._updateProperty(property, value, old )
+		},
+		/**
+		 * Triggers events when a property has been updated
+		 * @hide
+		 * @param {Object} property
+		 * @param {Object} value
+		 * @param {Object} old
+		 * @param {Object} success
+		 */
+		_updateProperty : function(property, value, old, success){
+			var Class = this.Class,
+				val,
+				old,
 				type = Class.attributes[property] || Class.addAttr(property, Class.guessType(value)),
-				converter = Class.converters[type],
-				val;
+				//the converter
+				converter = Class.convert[type];
+				
+			val = this[property] = 
+				( value == null ?  //if the value is null or undefined
+					null : 	      // it should be null
+					(converter ? 
+						converter.call(Class, value) : //convert it to something useful
+						value) )					   //just return it
 
-			if ( this[funcName] && !(value = this[funcName](value)) ) return;
-
-			//convert to value
-			val = this[property] = value == null ? null : (converter ? converter.call(Class, value) : value)
-
-
+			//if this class has a global list, add / remove from the list.
 			if ( property == Class.id && val != null && Class.list ) {
+				// if we didn't have an old id, add ourselves
 				if (!old ) {
 					Class.list.push(this);
 				} else if ( old != val ) {
+					// if our id has changed ... well this should be ok
 					Class.list.remove(old);
 					Class.list.push(this);
 				}
 			}
+			if(old !== val && !this._initializing){
+				$(this).triggerHandler(property, val);
+			}
+			success && success(this)
 		},
 		/**
 		 * Gets or sets a list of attributes
@@ -396,8 +456,11 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 				}
 			} else {
 				var idName = this.Class.id;
+				//always set the id last
 				for ( key in attributes ) {
-					if ( key != idName ) this.attr(key, attributes[key]);
+					if (key != idName) {
+						this.attr(key, attributes[key]);
+					}
 				}
 				if ( idName in attributes ) {
 					this.attr(idName, attributes[idName]);
@@ -410,7 +473,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		 * Returns if the instance is a new object
 		 */
 		isNew: function() {
-			return this[this.Class.id] == null;
+			return this[this.Class.id] == null; //if null or undefined
 		},
 		/**
 		 * Saves the instance
@@ -500,6 +563,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		$.Model.prototype[funcName] = function( attrs ) {
 			if ( funcName === 'destroyed' && this.Class.list ) {
 				this.Class.list.remove(this[this.Class.id]);
+				$(this).triggerHandler("destroyed")
 			}
 			attrs && typeof attrs == 'object' && this.attrs(attrs.attrs ? attrs.attrs() : attrs);
 			this.publish(funcName, this)
