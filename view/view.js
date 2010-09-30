@@ -62,14 +62,19 @@ steal.plugins("jquery").then(function( $ ) {
 	 * @codestart
 	 * $.View("//myplugin/views/init.ejs",{message: "Hello World"})
 	 * @codeend
-	 * @param {String} url The url or id of an element to use as the template's source.
+	 * @param {String} view The url or id of an element to use as the template's source.
 	 * @param {Object} data The data to be passed to the view.
 	 * @param {Object} [helpers] Optional helper functions the view might use.
 	 * @return {String} The rendered result of the view.
 	 */
-	$.View = function( url, data, helpers ) {
-		var suffix = url.match(/\.[\w\d]+$/),
-			type, el, url, id, renderer;
+	$.View = function( view, data, helpers ) {
+		var suffix = view.match(/\.[\w\d]+$/),
+			type, 
+			el, 
+			url, 
+			id, 
+			renderer,
+			url = view;
 
 		//if there is no suffix, add one
 		if (!suffix ) {
@@ -92,7 +97,7 @@ steal.plugins("jquery").then(function( $ ) {
 		var renderer =
 		$.View.cached[id] ? // is it cached?
 		$.View.cached[id] : // use the cached version
-		((el = document.getElementById(id)) ? //is it in the document?
+		((el = document.getElementById(view)) ? //is it in the document?
 		type.renderer(id, el.innerHTML) : //use the innerHTML of the elemnt
 		type.get(id, url) //do an ajax request for it
 		);

@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>Grid / Encapsulate Demo</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            
+        </style>
+	</head>
+	<body>
+		<h1>Model Grid Demo</h1>
+		<p>This demonstrates how encapsulating Ajax functionality in
+			models makes your code more reusable.  The same grid 
+			widget uses two different models.
+		</p>
+		<h2>Recipe Grid</h2>
+	    <div id='recipes'></div>
+		<h2>Work Item Grid</h2>
+		<div id='workItems'></div>
+<script type='text/javascript' 
+        src='../../steal/steal.js'>   
+</script>
+<script type='text/javascript'>
+	steal.plugins('jquery/model',
+		'jquery/controller',
+		'jquery/dom/form_params',
+		'jquery/dom/fixture',
+		'jquery/view/ejs').start()
+</script>
+<script type='text/ejs' id='listView'>
+	<table cellspacing='0px'>
+	<thead>
+	<tr>
+	    <% for(var attr in model.attributes){%>
+	        <% if(attr == 'id') continue;%>
+	        <th><%= attr%> </th>    
+	    <%}%>
+	    <th>Options</th>
+	</tr>
+	</thead>
+	<tbody>
+		<% for(var i =0; i < items.length;i++){ %>
+			<tr <%= items[i] %>>
+				<%= view('itemView',{item: items[i], model : model})%>
+			</tr>
+		<%} %>
+	    
+	</tbody>
+</table>
+</script>
+<script type='text/ejs' id='itemView'>
+	<%for(var attribute in model.attributes){%>
+	    <%if(attribute == 'id') continue;%>
+	    <td class='<%= attribute %>'>
+	            <input type="text" value="<%= item[attribute]%>" name="<%= attribute%>"/>
+	    </td>
+	<%}%>
+	<td>
+	    <input type='submit' value='Update' class='update'/>
+	    <a href='javascript://' class='cancel'>cancel</a>
+	</td>
+</script>
+<script type='text/javascript'>   
+	$.Controller.extend("Grid",{
+		init : function(){
+			this.options.model.findAll({},this.callback('list'))
+		},
+		list : function(items){
+			this.element.html("listView", {model : this.options.model, items: items})
+		},
+		".update click" : function(el){
+			var tr =  el.closest('tr')
+				item = tr.model();
+			el.val("updating ...").attr("disabled", true)
+			item.update(tr.formParams(), this.callback('updated'));
+		},
+		".cancel click" : function(el){
+			var tr =  el.closest('tr')
+				item = tr.model();
+			tr.html('itemView',{model : this.options.model, item: item})
+		},
+		updated : function(item){
+			item.elements(this.element).html('itemView',
+				{model : this.options.model, item: item})
+		}
+	})
+	$.fixture.make(["recipes","recipe"],10, function(i, messages){
+		return {
+			title: "Recipe "+i,
+			instructions: "Here are some instructions"
+		}
+	})
+	$.Model.extend("Recipe",{
+		findAll : function(params, success, error){
+			$.get("/recipes.json",{},this.callback(['wrapMany',success]),"json","-recipes")
+		},
+		update : function(id, attrs, success, error){
+			$.post("/recipes.json",{},success,'json',function(){
+				return [attrs]
+			})
+		}
+	},{});
+	$.fixture.make(["workitems","workitem"],10, function(i, messages){
+		return {
+			task: "item "+i,
+			instructions: "Here are some instructions",
+			assignedTo : i%2? "Brian" : "Justin"
+		}
+	})
+	$.Model.extend("WorkItem",{
+		findAll : function(params, success, error){
+			$.get("/recipes.json",{},this.callback(['wrapMany',success]),"json","-workitems")
+		},
+		update : function(id, attrs, success, error){
+			$.post("/recipes.json",{},success,'json',function(){
+				return [attrs]
+			})
+		}
+	},{});
+	
+	$("#recipes").grid({model: Recipe})
+	
+	$("#workItems").grid({model: WorkItem})
+</script>
+	</body>
+</html>

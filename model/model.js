@@ -147,15 +147,13 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			// clear everything that shouldn't be reused
 			this.validations = [];
 			//we do not inherit attributes (or associations)
-			if(!this.attributes || this.attributes.doNotInhert){
+			if(!this.attributes || superClass.attributes === this.attributes){
 				this.attributes = {};
 			}
-			this.attributes.doNotInherit = true;
 			
-			if(!this.associations ||  this.associations.doNotInhert){
+			if(!this.associations || superClass.associations === this.associations){
 				this.associations = {};
 			}
-			this.associations.doNotInherit = true;
 			
 			//add missing converters
 			if(superClass.convert != this.convert){
@@ -448,7 +446,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		},
 		/**
 		 * Gets or sets a list of attributes
-		 * @param {Object} [opt2] attributes if present, the list of attributes to send
+		 * @param {Object} [attributes]  if present, the list of attributes to send
 		 * @return {Object} the curent attributes of the model
 		 */
 		attrs: function( attributes ) {
@@ -599,7 +597,13 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		ret.push.apply(ret, $.unique(collection))
 		return ret;
 	}
-	$.fn.model = function() {
-		return this.models.apply(this, arguments)[0];
+	$.fn.model = function(type) {
+		if(type && type instanceof $.Model){
+			type.hookup(this[0]);
+			return this;
+		}else{
+			return this.models.apply(this, arguments)[0];
+		}
+		
 	}
 });
