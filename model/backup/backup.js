@@ -24,6 +24,7 @@ steal.plugins('jquery/model').then(function(){
 				}
 			}
 			this._backupStore = $.extend(true, {},this.attrs());
+			return this;
 		},
 	   
 	   _backup: function() {

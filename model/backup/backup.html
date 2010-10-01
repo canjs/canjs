@@ -2,7 +2,7 @@
             "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 	<head>
-		<title>Model Events Demo</title>
+		<title>Model Backup Demo</title>
         <style type='text/css'>
             body {font-family: verdana}
             li {border: solid 1px gray; padding: 5px; width: 250px;}
@@ -11,27 +11,23 @@
         </style>
 	</head>
 	<body>
-		<h1>Model Events Demo</h1>
-		<p>This demo shows listening to model update events.
-		Clicking on a person's name will show a form to update
-		their birthday.  Change the birthday and 'blur' the 
-		input to update their listed age.</p>
-		<div id='update'></div>
-		<h2>Direct Binding</h2>
-		<p>The following list binds directly to "birthday" events.</p>
+		<h1>Model Backup Demo</h1>
+		<p>This demo shows backing up and restoring model instances.
+		Click the names to change birthdays.  After changing some birthdays,
+		click RESTORE.  
+		</p>
+		
 		<div id='contacts1'></div>
-		
-		
-		<h2>Subscribing</h2>
-		<p>The following list subscribes to "contact.updated" events.</p>
-		<div id='contacts2'></div>
+		<div id='update'></div>
+		<a href='javascript://' id='restore'>RESTORE</a>
 <script type='text/javascript' 
-        src='../../steal/steal.js'>   
+        src='../../../steal/steal.js'>   
 </script>
 <script type='text/javascript'>
 steal.plugins('jquery/model',
 		'jquery/dom/fixture',
-		'jquery/model/list').start()
+		'jquery/model/list',
+		'jquery/model/backup').start()
 </script>
 <script type='text/javascript'>   
 
@@ -80,7 +76,10 @@ $.Model.extend("Contact",{
 
 });
 
-makeList1 = function(contacts){
+
+
+// List 1
+Contact.findAll({},function(contacts){
   var contactsEl = $('#contacts1');
   $.each(contacts, function(i, contact){
     var li = $('<li>')
@@ -91,43 +90,17 @@ makeList1 = function(contacts){
     contact.bind("birthday", function(){
       li.html(contact.name+" "+this.ageThisYear()+
               " <a>Show</a>");
-    })
+    }).backup();
   })
   
   contactsEl.delegate("li","click", function(){
 	 makeAgeUpdate( $(this).closest('.contact').model() );
   });
-};
-makeList2 = function(contacts){
-  var contactsEl = $('#contacts2'),
-  	html = [], 
-	contact;
-	
-  for(var i =0; i < contacts.length;i++){
-  	contact = contacts[i]
-	html.push("<li class='contact ",
-		contact.identity(),"'>",
-		contact.name+" "+contact.ageThisYear()+
-                    " <a>Show</a>",
-		"</li>")
-  }
-  contactsEl.html(html.join(""))
-  
-  OpenAjax.hub.subscribe("contact.updated", function(called, contact){
-  	 contact.elements(contactsEl)
-	        .html(contact.name+" "+contact.ageThisYear()+
-              " <a>Show</a>");
+  $("#restore").click(function(){
+  	contacts.each(function(){
+		this.restore()
+	})
   })
-  
-  contactsEl.delegate("li","click", function(){
-	 makeAgeUpdate( contacts.get(this)[0] );
-  });
-}
-
-// List 1
-Contact.findAll({},function(contacts){
-  makeList1(contacts);
-  makeList2(contacts)
 });
 
 

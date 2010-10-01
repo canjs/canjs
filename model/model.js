@@ -381,6 +381,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		bind : function(){
 			var wrapped = $(this);
 			wrapped.bind.apply(wrapped, arguments);
+			return this;
 		},
 		/**
 		 * Checks if there is a set_<i>property</i> value.  If it returns true, lets it handle; otherwise
@@ -565,8 +566,8 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		$.Model.prototype[funcName] = function( attrs ) {
 			if ( funcName === 'destroyed' && this.Class.list ) {
 				this.Class.list.remove(this[this.Class.id]);
-				$(this).triggerHandler("destroyed")
 			}
+			$(this).triggerHandler(funcName)
 			attrs && typeof attrs == 'object' && this.attrs(attrs.attrs ? attrs.attrs() : attrs);
 			this.publish(funcName, this)
 			return [this].concat($.makeArray(arguments));
