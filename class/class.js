@@ -38,7 +38,7 @@ steal.plugin("jquery").then(function( $ ) {
 
 
 	/**
-	 * @constructor jQuery.Class
+	 * @class jQuery.Class
 	 * @plugin jquery/class
 	 * @tag core
 	 * @download dist/jquery/jquery.class.js

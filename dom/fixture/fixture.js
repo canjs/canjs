@@ -5,7 +5,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		post = $.post;
 
 	/**
-	 * @constructor jQuery.fixture
+	 * @class jQuery.fixture
 	 * @plugin jquery/dom/fixture
 	 * @download jquery/dist/jquery.fixture.js
 	 * @test jquery/dom/fixture/qunit.html

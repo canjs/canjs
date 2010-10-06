@@ -11,7 +11,7 @@ steal.plugins("jquery").then(function( $ ) {
 		id = 1;
 
 	/**
-	 * @constructor jQuery.View
+	 * @class jQuery.View
 	 * @tag core
 	 * View provides a uniform interface for using templates in JavaScriptMVC.  When templates 
 	 * [jQuery.View.static.register register] themselves, you are able to:
@@ -57,7 +57,8 @@ steal.plugins("jquery").then(function( $ ) {
 	 * @codestart
 	 * &lt;ul &lt;%= [Phui.Tabs, Phui.Filler]%>>...&lt;ul>
 	 * @codeend
-	 * @init Looks up a template, processes it, caches it, then renders the template
+	 * @constructor 
+	 * Looks up a template, processes it, caches it, then renders the template
 	 * with data and optional helpers.
 	 * @codestart
 	 * $.View("//myplugin/views/init.ejs",{message: "Hello World"})

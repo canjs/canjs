@@ -46,7 +46,7 @@ steal.plugins('jquery/controller', 'jquery/view').then(function( $ ) {
 	}
 
 	/**
-	 * @add jQuery.Controller Prototype
+	 * @add jQuery.Controller.prototype
 	 */
 
 	jQuery.Controller.prototype.

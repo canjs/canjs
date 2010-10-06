@@ -1,6 +1,6 @@
 steal.plugins('jquery/event','jquery/event/livehack').then(function($){
 /**
- * @constructor jQuery.Hover
+ * @class jQuery.Hover
  * @plugin jquery/event/hover
  * @download jquery/dist/jquery.event.hover.js
  * Provides delegate-able hover events.
@@ -56,7 +56,7 @@ steal.plugins('jquery/event','jquery/event/livehack').then(function($){
  * <h2>Demo</h2>
  * @demo jquery/event/hover/hover.html
  * @parent specialevents
- * @init Creates a new hover.  This is never
+ * @constructor Creates a new hover.  This is never
  * called directly.
  */
 jQuery.Hover = function(){
@@ -160,7 +160,7 @@ var $ = jQuery,
 	};
 		
 /**
- * @add jQuery.event.special static
+ * @add jQuery.event.special
  */
 event.setupHelper( [
 /**

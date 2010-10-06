@@ -2,7 +2,7 @@ steal.plugins('jquery/model').then(function(){
 	//allows you to backup and restore a model instance
 	
 	/**
-	 * @add jQuery.Model prototype
+	 * @add jQuery.Model.prototype
 	 */
 	$.extend($.Model.prototype,{
 		/**

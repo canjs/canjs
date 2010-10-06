@@ -2,7 +2,7 @@ steal.then(function(){
 	var getSetZero = function(v){ return v !== undefined ? (this.array[0] = v) : this.array[0] },
 		getSetOne = function(v){ return v !== undefined ? (this.array[1] = v) : this.array[1] }
 /**
- * @constructor
+ * @class
  * A vector class
  * @init creates a new vector instance from the arguments.  Example:
  * @codestart

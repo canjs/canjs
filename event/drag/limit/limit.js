@@ -1,5 +1,5 @@
 /**
- * @add jQuery.Drag prototype
+ * @add jQuery.Drag.prototype
  */
 
 steal.plugins('jquery/event/drag').then(function($){

@@ -15,7 +15,7 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 		event = $.event, handle  = event.handle;
 		
 	/**
-	 * @constructor jQuery.Drag
+	 * @class jQuery.Drag
 	 * @parent specialevents
 	 * @plugin jquery/event/drag
 	 * @download jquery/dist/jquery.event.drag.js
@@ -74,7 +74,7 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 	 * <h2>Demo</h2>
 	 * Now lets see some examples:
 	 * @demo jquery/event/drag/drag.html 1000
-	 * @init
+	 * @constructor
 	 * The constructor is never called directly.
 	 */
 	$.Drag = function(){}
@@ -417,7 +417,7 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 	});
 	
 	/**
-	 * @add jQuery.event.special static
+	 * @add jQuery.event.special
 	 */
 	event.setupHelper( [
 		/**

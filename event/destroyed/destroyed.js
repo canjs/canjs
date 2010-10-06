@@ -1,5 +1,5 @@
 /**
- * @add jQuery.event.special static
+ * @add jQuery.event.special
  */
 steal.plugins('jquery/event').then(function( $ ) {
 	/**

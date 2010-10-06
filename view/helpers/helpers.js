@@ -1,7 +1,7 @@
 steal.plugins('jquery/view/ejs').then(function($){
 
 /**
- * @add jQuery.View.Helpers Prototype additions
+ * @add jQuery.View.Helpers.prototype
  */
 $.extend($.View.EJS.Helpers.prototype, {
     // treyk 06/11/2009 - Pulled from old MVC.Date plugin for now.  Will look for a suitable jQuery Date plugin

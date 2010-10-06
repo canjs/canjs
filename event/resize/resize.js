@@ -1,6 +1,6 @@
 steal.plugins('jquery/event').then(function($){
 	/**
-	 * @add jQuery.event.special static
+	 * @add jQuery.event.special
 	 */
 	var resizeCount = 0, 
 		win = $(window),

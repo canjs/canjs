@@ -2,7 +2,7 @@ steal.plugins('jquery/controller/subscribe',
 	'jquery/event/hashchange').then(function($){
 
 /**
- * @constructor
+ * @class
  * The controller history plugin adds browser hash (#) based history support.
  * This class itself helps break up parts of the hash of the url
  * @init 

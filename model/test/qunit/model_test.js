@@ -79,4 +79,8 @@ test("binding", 1,function(){
 	
 	inst.attr("foo","baz");
 	
-})
+});
+
+
+
+

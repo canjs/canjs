@@ -144,8 +144,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 	 */
 	{
 		setup: function(superClass) {
-			// clear everything that shouldn't be reused
-			this.validations = [];
+
 			//we do not inherit attributes (or associations)
 			if(!this.attributes || superClass.attributes === this.attributes){
 				this.attributes = {};
@@ -153,6 +152,9 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			
 			if(!this.associations || superClass.associations === this.associations){
 				this.associations = {};
+			}
+			if(!this.validations || superClass.validations === this.validations){
+				this.validations = {};
 			}
 			
 			//add missing converters
@@ -330,11 +332,6 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			this.Class.defaults && this.attrs(this.Class.defaults);
 			
 			this.attrs(attributes);
-			/**
-			 * @attribute errors
-			 * A hash of errors for this model instance.
-			 */
-			this.errors = {};
 			delete this._initializing;
 		},
 		/**
@@ -347,20 +344,44 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			this.attrs(attrs);
 			return this.save(success, error); //on success, we should 
 		},
-		valid: function() {
-			for ( var attr in this.errors )
-			return false;
-			return true;
-		},
 		/**
-		 * Validates this model instance (usually called by [jQuery.Model.prototype.save|save])
+		 * Runs the validations on this model.  You can
+		 * also pass it an array of attributes to run only those attributes.
+		 * It returns nothing if there are no errors, or an object
+		 * of errors by attribute.
 		 */
-		validate: function() {
-			this.errors = {};
-			var self = this;
-			$.each(this.Class.validations || [], function( i, func ) {
-				func.call(self)
+		errors: function(attrs) {
+			if(attrs){
+				attrs = $.isArray(attrs) ? attrs : $.makeArray(arguments);
+			}
+			var errors = {},
+				self = this,
+				addErrors = function(attr, funcs){
+					$.each(funcs, function(i, func){
+						var res = func.call(self);
+						if(res){
+							if(!errors.hasOwnProperty(attr)){
+								errors[attr] = [];
+							}
+							   
+							errors[attr].push(res);
+						}
+						
+					})
+				};
+
+			$.each(attrs || this.Class.validations || {}, function( attr, funcs ) {
+				if(typeof attr == 'number'){
+					attr = funcs;
+					funcs = self.Class.validations[attr];
+				}
+				addErrors(attr, funcs || [])
 			});
+		
+			for(var attr in errors){
+				return errors;
+			}
+			return null;
 		},
 		/**
 		 * Gets or sets an attribute on the model.
@@ -372,15 +393,21 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 				get = "get" + cap;
 			if (value !== undefined) {
 				this._setProperty(attribute, value, success, error, cap);
+				return this;
 			}
 			return this[get] ? this[get]() : this[attribute];
 		},
 		/**
 		 * 
 		 */
-		bind : function(){
+		bind: function(){
 			var wrapped = $(this);
 			wrapped.bind.apply(wrapped, arguments);
+			return this;
+		},
+		unbind: function(){
+			var wrapped = $(this);
+			wrapped.unbind.apply(wrapped, arguments);
 			return this;
 		},
 		/**
@@ -394,17 +421,22 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			// the potential setter name
 			var setName = "set" + capitalized,
 				//the old value
-				old = this[property];
+				old = this[property],
+				self = this,
+				errorCallback = function(errors){
+					error && error.call(self,errors);
+					$(self).triggerHandler("error."+property, errors);
+				};
 
 			// if the setter returns nothing, do not set
 			// we might want to indicate if this was set ok
 			if (this[setName] && 
 				(value = this[setName](		value, 
-											this.callback('_updateProperty',property, value, old, success), 
-											error)) === undefined ) {
+											this.callback('_updateProperty',property, value, old, success, errorCallback), 
+											errorCallback)) === undefined ) {
 				return ;
 			}
-			this._updateProperty(property, value, old )
+			this._updateProperty(property, value, old, success, errorCallback )
 		},
 		/**
 		 * Triggers events when a property has been updated
@@ -414,13 +446,14 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		 * @param {Object} old
 		 * @param {Object} success
 		 */
-		_updateProperty : function(property, value, old, success){
+		_updateProperty : function(property, value, old, success, errorCallback){
 			var Class = this.Class,
 				val,
 				old,
 				type = Class.attributes[property] || Class.addAttr(property, Class.guessType(value)),
 				//the converter
-				converter = Class.convert[type];
+				converter = Class.convert[type],
+				errors = null;
 				
 			val = this[property] = 
 				( value == null ?  //if the value is null or undefined
@@ -429,6 +462,22 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 						converter.call(Class, value) : //convert it to something useful
 						value) )					   //just return it
 
+			
+			//validate (only if not initializing, this is for performance)
+			if(!this._initializing){
+				errors = this.errors(property);
+			}
+			
+			if(errors){
+				errorCallback(errors)
+			}else{
+				if(old !== val && !this._initializing){
+					$(this).triggerHandler(property, val);
+				}
+				success && success(this);
+				
+			}
+			
 			//if this class has a global list, add / remove from the list.
 			if ( property == Class.id && val != null && Class.list ) {
 				// if we didn't have an old id, add ourselves
@@ -440,10 +489,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 					Class.list.push(this);
 				}
 			}
-			if(old !== val && !this._initializing){
-				$(this).triggerHandler(property, val);
-			}
-			success && success(this)
+			
 		},
 		/**
 		 * Gets or sets a list of attributes
@@ -483,9 +529,9 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		 * @param {Function} [opt3] callbacks onComplete function or object of callbacks
 		 */
 		save: function( success, error ) {
-			this.validate();
 
-			if (!this.valid() ) {
+			if (this.errors() ) {
+				//needs to send errors
 				return false;
 			}
 			this.isNew() ? this.Class.create(this.attrs(), this.callback(['created', success]), error) : this.Class.update(this[this.Class.id], this.attrs(), this.callback(['updated', success]), error);

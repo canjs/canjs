@@ -31,7 +31,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			this.template = template;
 		};
 	/**
-	 * @constructor jQuery.View.EJS
+	 * @class jQuery.View.EJS
 	 * @plugin view
 	 * Ejs provides <a href="http://www.ruby-doc.org/stdlib/libdoc/erb/rdoc/">ERB</a> 
 	 * style client side templates.  Use them with controllers to easily build html and inject
@@ -83,7 +83,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 * You can include more with the view/helpers plugin.  But, you can easily make your own!
 	 * Learn how in the [jQuery.View.EJS.Helpers Helpers] page.
 	 * 
-	 * @init Creates a new view
+	 * @constructor Creates a new view
 	 * @param {Object} options A hash with the following options
 	 * <table class="options">
 	 * 				<tbody><tr><th>Option</th><th>Default</th><th>Description</th></tr>
@@ -409,10 +409,10 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 
 
 	/**
-	 * @constructor jQuery.View.EJS.Helpers
+	 * @class jQuery.View.EJS.Helpers
 	 * By adding functions to jQuery.View.EJS.Helpers.prototype, those functions will be available in the 
 	 * views.
-	 * @init Creates a view helper.  This function is called internally.  You should never call it.
+	 * @constructor Creates a view helper.  This function is called internally.  You should never call it.
 	 * @param {Object} data The data passed to the view.  Helpers have access to it through this._data
 	 */
 	EJS.Helpers = function( data, extras ) {

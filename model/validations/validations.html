@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>Model Events Demo</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            li {border: solid 1px gray; padding: 5px; width: 250px;}
+			li a {color: red; font-weight: bold;}
+			p {width: 400px;}
+        </style>
+	</head>
+	<body>
+		<h1>Model Events Demo</h1>
+		<p>This demo shows listening to model update events.
+		Clicking on a person's name will show a form to update
+		their birthday.  Change the birthday and 'blur' the 
+		input to update their listed age.</p>
+		<div id='update'></div>
+		<h2>Direct Binding</h2>
+		<p>The following list binds directly to "birthday" events.</p>
+		<div id='contacts1'></div>
+		
+		
+		<h2>Subscribing</h2>
+		<p>The following list subscribes to "contact.updated" events.</p>
+		<div id='contacts2'></div>
+<script type='text/javascript' 
+        src='../../../steal/steal.js'>   
+</script>
+<script type='text/javascript'>
+steal.plugins('jquery/model',
+		'jquery/dom/fixture',
+		'jquery/model/list',
+		'jquery/model/validations').start()
+</script>
+<script type='text/javascript'>   
+
+$.Model.extend("Contact",{
+	init : function(){
+		this.validates("birthday",function(){
+			if(this.birthday > new Date){
+				return "your birthday needs to be in the past"
+			}
+		})
+	},
+	attributes : { 
+		birthday : 'date'
+	},
+	convert : {
+		date : function(raw){
+			if(typeof raw == 'string'){
+				var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
+				return new Date( +matches[1], 
+				                 (+matches[2])-1, 
+				                 +matches[3] )
+			}else if(raw instanceof Date){
+				return raw;
+			}
+		}
+	},
+	findAll : function(params, success, error){
+		$.get("/recipes.json",
+			{},
+			this.callback(['wrapMany',success]),
+			"json",
+			function(){
+				return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
+					 {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10'},
+					 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
+			})
+	},
+	update : function(id, attrs, success, error){
+		$.post("/recipes.json",{},success,'json',function(){
+			return [attrs]
+		})
+	}
+},{
+	ageThisYear : function(){
+		return new Date().getFullYear() - 
+		      this.birthday.getFullYear()
+	},
+	getBirthday : function(){
+		return ""+this.birthday.getFullYear()+
+			"-"+(this.birthday.getMonth()+1)+
+			"-"+this.birthday.getDate();
+	}
+
+});
+
+// List 1
+Contact.findAll({},function(contacts){
+  var contactsEl = $('#contacts1');
+  $.each(contacts, function(i, contact){
+    var li = $('<li>')
+              .model(contact)
+              .html(contact.name+" "+contact.ageThisYear()+
+                    " <a>Show</a>")
+              .appendTo(contactsEl);
+    contact.bind("birthday", function(){
+      li.html(contact.name+" "+this.ageThisYear()+
+              " <a>Show</a>");
+    })
+  })
+  
+  contactsEl.delegate("li","click", function(){
+	 makeAgeUpdate( $(this).closest('.contact').model() );
+  });
+});
+
+
+
+makeAgeUpdate = function(contact){
+	var updater = $("#update")
+	updater.children().remove();
+	updater.append("<span>" +contact.name+"'s birthday</span>")
+	$('<input/>').val(contact.attr("birthday")).change(function(){
+		
+		
+		contact.attr("birthday", this.value , function(){
+			$('#error').hide();
+		}, function(){
+			$('#error').show();
+		})
+	}).appendTo(updater);
+	updater.append("<div id='error' style='display:none'>error!<div>");
+}
+
+
+</script>
+	</body>
+</html>
