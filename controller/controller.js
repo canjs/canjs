@@ -58,21 +58,29 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 * @plugin jquery/controller
 	 * @download jquery/dist/jquery.controller.js
 	 * 
-	 * <p>Controllers organize event handlers using event delegation. 
+	 * Controllers organize event handlers using event delegation. 
 	 * If something happens in your application (a user click or a [jQuery.Model|Model] instance being updated), 
-	 * a controller should respond to it. </p>
+	 * a controller should respond to it.
 	 * 
-	 * <h2 class='spaced'>Benefits</h2>
-	 * <ul>
-	 *     <li><p><i>Know your code.</i></p>
-	 *     		Group events and label your html in repeatable ways so it's easy to find your code.</li>
-	 *     <li><p><i>Controllers are inheritable.</i></p>
-	 *         Package, inherit, and reuse your widgets.</li>
-	 *     <li><p><i>Write less.</i></p>
-	 *         Controllers take care of setup / teardown auto-magically.</li>
-	 * </ul>
-	 * <h2>Basic Example</h2>
+	 * ## Benefits
+	 * 
+	 *  - <i>Know your code.</i>
+	 *    
+	 *    Group events and label your html in repeatable ways so it's easy to find your code.
+	 *  
+	 *  - <i>Controllers are inheritable.</i>
+	 *         
+	 *    Package, inherit, and reuse your widgets.
+	 *    
+	 *  - <i>Write less.</i>
+	 *         
+	 *    Controllers take care of setup / teardown auto-magically.
+	 * 
+	 * 
+	 * ## Basic Example
+	 * 
 	 * Controllers organize jQuery code into resuable, inheritable, and extendable widgets.  So instead of
+	 * 
 	 * @codestart
 	 * $(function(){
 	 *   $('#tabs').click(someCallbackFunction1)
@@ -80,7 +88,9 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 *   $('#tabs .delete click').click(someCallbackFunction3)
 	 * });
 	 * @codeend
+	 * 
 	 * do this
+	 * 
 	 * @codestart
 	 * $.Controller.extend('Tabs',{
 	 *   click: function() {...},
@@ -89,22 +99,26 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 * })
 	 * $('#tabs').tabs();
 	 * @codeend
-	 * <h2>Tabs Example</h2>
+	 * 
+	 * ## Tabs Example
+	 * 
 	 * @demo jquery/controller/controller.html
 	 * 
-	 * <h2>Using Controllers</h2>
-	 * <p>A Controller is mostly a list of functions that get called back when specific events happen.  
+	 * 
+	 * ## Using Controllers
+	 * 
+	 * 
+	 * A Controller is mostly a list of functions that get called back when specific events happen.  
 	 * A function's name provides a description of when the function should be called.  
 	 * By naming your functions like "<b>selector</b> <b>event</b>", 
 	 * Controller recognizes them as an <b>Action</b> and binds them appropriately.  
-	 * </p>
 	 * 
-	 * <p>The event binding happens when you create a [jQuery.Controller.prototype.setup|new controller instance].
-	 * </p>
+	 * The event binding happens when you create a [jQuery.Controller.prototype.setup|new controller instance].
 	 * 
-	 * <p>Lets look at a very basic example - 
-	 *  a list of todos and a button you want to click to create a new todo.
-	 * Your HTML might look like:</p>
+	 * Lets look at a very basic example - 
+	 * a list of todos and a button you want to click to create a new todo.
+	 * Your HTML might look like:
+	 * 
 	 * @codestart html
 	 * &lt;div id='todos'>
 	 * 	&lt;ol>
@@ -115,7 +129,9 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 * 	&lt;a class="create">Create&lt;/a>
 	 * &lt;/div>
 	 * @codeend
+	 * 
 	 * To add a mousover effect and create todos, your controller might look like:
+	 * 
 	 * @codestart
 	 * $.Controller.extend('Todos',{
 	 *   ".todo mouseover" : function( el, ev ) {
@@ -129,8 +145,10 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 *   }
 	 * })
 	 * @codeend
+	 * 
 	 * Now that you've created the controller class, you've must attach the event handlers on the '#todos' div by
 	 * creating [jQuery.Controller.prototype.init|a new controller instance].  There are 2 ways of doing this.
+	 * 
 	 * @codestart
 	 * //1. Create a new controller directly:
 	 * new Todos($('#todos'));
@@ -141,20 +159,21 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 * As you've likely noticed, when the [jQuery.Controller.static.init|controller class is created], it creates helper
 	 * functions on [jQuery.fn]. The "#todos" element is known as the <b>controller</b> element.
 	 * 
-	 * <h3>Event Handler Matching</h3>
+	 * ### Event Handler Matching
+	 * 
 	 * With the exception of subscribe actions, controller uses jQuery.fn.bind or jQuery.fn.delegate to 
 	 * attach event handlers.  Controller uses the following rules to determine if a function name is
 	 * an event handler:
 	 * 
-	 * <ul>
-	 * 	<li>Does the function name contain a selector?  Ex: <code>"a.foo click"</code></li>
-	 * 	<li>Does the function name match an event in jQuery.event.special? Ex: <code>"mouseenter"</code></li>
-	 * 	<li>Does the function name match a standard event name? Ex: <code>"click"</code></li>
-	 * 	<li>Does the function name match a value in the controller's static listensTo array? Ex: <code>"activate"</code></li>
-	 * </ul>
-	 * In general, Controller will know automatically when to bind event handler functions except for one case 
-	 * - event names without selectors that are not in $.event.special.  But to correct for this, you
+	 *  - Does the function name contain a selector?  Ex: <code>"a.foo click"</code>
+	 *  - Does the function name match an event in jQuery.event.special? Ex: <code>"mouseenter"</code>
+	 *  - Does the function name match a standard event name? Ex: <code>"click"</code>
+	 *  - Does the function name match a value in the controller's static listensTo array? Ex: <code>"activate"</code>
+	 * 
+	 * In general, Controller will know automatically when to bind event handler functions except for 
+	 * one case - event names without selectors that are not in $.event.special.  But to correct for this, you
 	 * just need to add the function to the listensTo property.  Here's how:
+	 * 
 	 * @codestart
 	 * $.Controller.extend("MyShow",{
 	 *   listensTo: ["show"]
@@ -167,12 +186,13 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 * @codeend
 	 * 
 	 * 
-	 * <h3>Callback Parameters</h3>
+	 * ### Callback Parameters
+	 * 
 	 * For most actions, the first two parameters are always:
-	 * <ul>
-	 * 	<li>el - the jQuery wrapped element.</li>
-	 * 	<li>ev - the jQuery wrapped DOM event.</li>
-	 * </ul>
+	 * 
+	 * - el : the jQuery wrapped element.
+	 * - ev : the jQuery wrapped DOM event.
+	 * 
 	 * @codestart
 	 * ".something click" : function( el, ev ) {
 	 *    el.slideUp()
@@ -186,14 +206,15 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 * If the action provides different parameters, they are in each action's documentation.
 	 * 
 	 * 
-	 * <h2>Document Controllers</h2>
-	 * <p>
+	 * ## Document Controllers
+	 * 
 	 * Document Controllers delegate on the documentElement.  You don't have to attach an instance as this will be done
 	 * for you when the controller class is created.  Document Controllers, with the exception of MainControllers,
 	 * add an implicit '#CONTROLLERNAME' before every selector.
-	 * </p>
-	 * <p>To create a document controller, you just have to set the controller's [jQuery.Controller.static.onDocument static onDocument]
-	 * property to true.</p> 
+	 * 
+	 * To create a document controller, you just have to set the controller's [jQuery.Controller.static.onDocument static onDocument]
+	 * property to true.
+	 * 
 	 * @codestart
 	 * $.Controller.extend('TodosController',
 	 * {onDocument: true},
@@ -209,10 +230,12 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 *   }
 	 * })
 	 * @codeend
-	 * <p>DocumentControllers are typically used for page layout and functionality that is 
+	 * 
+	 * DocumentControllers are typically used for page layout and functionality that is 
 	 * extremely unlikely to be repeated such as a SidebarController.  
 	 * Often, a Document Controller's <b>"ready"</b> event will be used to create
-	 * necessary Element Controllers.</p>
+	 * necessary Element Controllers.
+	 * 
 	 * @codestart
 	 * $.Controller.extend('SidebarController',
 	 * {onDocument: true},
@@ -223,9 +246,12 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 *   "a.tag click" : function() {..}
 	 * })
 	 * @codeend
-	 * <h3>MainControllers</h3>
-	 * <p>MainControllers are documentControllers that do not add '#CONTROLLERNAME' before every selector.  This controller
-	 * should only be used for page wide functionality and setup.</p>
+	 * 
+	 * ### MainControllers 
+	 * 
+	 * MainControllers are documentControllers that do not add '#CONTROLLERNAME' before every selector.  This controller
+	 * should only be used for page wide functionality and setup.
+	 * 
 	 * @codestart
 	 * $.Controller.extend("MainController",{
 	 *   hasActiveElement : document.activeElement || false
@@ -236,10 +262,14 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 *   }
 	 * })
 	 * @codeend
-	 * <h2>Controller Initialization</h2>
-	 * <p>It can be extremely useful to overwrite [jQuery.Controller.prototype.init Controller.prototype.init] with 
-	 * setup functionality for your widget. </p>
-	 * <p>In the following example, I create a controller that when created, will put a message as the content of the element:</p>
+	 * 
+	 * ## Controller Initialization
+	 * 
+	 * It can be extremely useful to overwrite [jQuery.Controller.prototype.init Controller.prototype.init] with 
+	 * setup functionality for your widget.
+	 * 
+	 * In the following example, I create a controller that when created, will put a message as the content of the element:
+	 * 
 	 * @codestart
 	 * $.Controller.extend("SpecialController",
 	 * {
@@ -249,20 +279,29 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 * })
 	 * $(".special").special("Hello World")
 	 * @codeend
-	 * <h2>Removing Controllers</h2>
+	 * 
+	 * ## Removing Controllers
+	 * 
 	 * Controller removal is built into jQuery.  So to remove a controller, you just have to remove its element:
+	 * 
 	 * @codestart
 	 * $(".special_controller").remove()
 	 * $("#containsControllers").html("")
 	 * @codeend
-	 * <p>It's important to note that if you use raw DOM methods (<code>innerHTML, removeChild</code>), the controllers won't be destroyed.</p>
-	 * <p>If you just want to remove controller functionality, call destroy on the controller instance:</p>
+	 * 
+	 * It's important to note that if you use raw DOM methods (<code>innerHTML, removeChild</code>), the controllers won't be destroyed.
+	 * 
+	 * If you just want to remove controller functionality, call destroy on the controller instance:
+	 * 
 	 * @codestart
 	 * $(".special_controller").controller().destroy()
 	 * @codeend
-	 * <h2>Accessing Controllers</h2>
-	 * <p>Often you need to get a reference to a controller, there are a few ways of doing that.  For the 
-	 * following example, we assume there are 2 elements with <code>className="special"</code>.</p>
+	 * 
+	 * ## Accessing Controllers
+	 * 
+	 * Often you need to get a reference to a controller, there are a few ways of doing that.  For the 
+	 * following example, we assume there are 2 elements with <code>className="special"</code>.
+	 * 
 	 * @codestart
 	 * //creates 2 foo controllers
 	 * $(".special").foo()
@@ -286,9 +325,11 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 * $(".special").data("controllers")["FooController"] //-> foo
 	 * @codeend
 	 * 
-	 * <h2>Calling methods on Controllers</h2>
+	 * ## Calling methods on Controllers
+	 * 
 	 * Once you have a reference to an element, you can call methods on it.  However, Controller has
 	 * a few shortcuts:
+	 * 
 	 * @codestart
 	 * //creates foo controller
 	 * $(".special").foo({name: "value"})
