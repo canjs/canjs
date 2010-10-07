@@ -56,3 +56,9 @@ test("remove", function(){
 	ok(res.length, "got something array like")
 	equals(res[0].id, "a1")
 })
+
+
+test("list from wrapMany", function(){
+	var people = Person.wrapMany([{id: 1}, {id: 2}]);
+	ok(people.destroy, "we can destroy a list")
+})

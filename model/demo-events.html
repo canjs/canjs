@@ -43,9 +43,9 @@ $.Model.extend("Contact",{
 		date : function(raw){
 			if(typeof raw == 'string'){
 				var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
-				return new Date( +matches[1], 
+				return new Date( matches[1], 
 				                 (+matches[2])-1, 
-				                 +matches[3] )
+				                 matches[3] )
 			}else if(raw instanceof Date){
 				return raw;
 			}

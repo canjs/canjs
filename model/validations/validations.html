@@ -11,20 +11,16 @@
         </style>
 	</head>
 	<body>
-		<h1>Model Events Demo</h1>
-		<p>This demo shows listening to model update events.
-		Clicking on a person's name will show a form to update
+		<h1>Model Validations Demo</h1>
+		<p>This demo demonstrates using validations to prevent
+		a person's birthday from being in the future.</p>
+		<p>Clicking a person's name will show a form to update
 		their birthday.  Change the birthday and 'blur' the 
 		input to update their listed age.</p>
-		<div id='update'></div>
-		<h2>Direct Binding</h2>
-		<p>The following list binds directly to "birthday" events.</p>
+		
 		<div id='contacts1'></div>
+		<div id='update'></div>
 		
-		
-		<h2>Subscribing</h2>
-		<p>The following list subscribes to "contact.updated" events.</p>
-		<div id='contacts2'></div>
 <script type='text/javascript' 
         src='../../../steal/steal.js'>   
 </script>
@@ -38,7 +34,7 @@ steal.plugins('jquery/model',
 
 $.Model.extend("Contact",{
 	init : function(){
-		this.validates("birthday",function(){
+		this.validate("birthday",function(){
 			if(this.birthday > new Date){
 				return "your birthday needs to be in the past"
 			}
@@ -113,14 +109,14 @@ Contact.findAll({},function(contacts){
 makeAgeUpdate = function(contact){
 	var updater = $("#update")
 	updater.children().remove();
-	updater.append("<span>" +contact.name+"'s birthday</span>")
+	updater.append("<span>" +contact.name+"'s birthday </span>")
 	$('<input/>').val(contact.attr("birthday")).change(function(){
 		
 		
 		contact.attr("birthday", this.value , function(){
 			$('#error').hide();
-		}, function(){
-			$('#error').show();
+		}, function(errors){
+			$('#error').html(errors.birthday[0]).show();
 		})
 	}).appendTo(updater);
 	updater.append("<div id='error' style='display:none'>error!<div>");

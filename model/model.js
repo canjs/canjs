@@ -1,4 +1,4 @@
-steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').then(function() {
+steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	//a cache for attribute capitalization ... slowest part of inti.
 	var underscore = $.String.underscore,
 		classize = $.String.classize;
@@ -6,27 +6,29 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 	/**
 	 * @tag core
 	 * Models wrap an application's data layer.  In large applications, a model is critical for:
-	 * <ul>
-	 * 	<li>Abstracting service dependencies inside the model, making it so
-	 *      Controllers + Views don't care where data comes from.</li>
-	 *  <li>Providing helper functions that make manipulating and abstracting raw service data easier.</li>
-	 * </ul>
-	 * This is done in two ways:
-	 * <ul>
-	 *     <li>Requesting data from and interacting with services</li>
-	 *     <li>Converting or wrapping raw service data into a more useful form.</li>
-	 * </ul>
 	 * 
-	 * <h2>Basic Use</h2>
+	 *  - Encapsulating services so controllers + views don't care where data comes from.
+	 *    
+	 *  - Providing helper functions that make manipulating and abstracting raw service data easier.
+	 * 
+	 * This is done in two ways:
+	 * 
+	 *  - Requesting data from and interacting with services
+	 *  
+	 *  - Converting or wrapping raw service data into a more useful form.
+	 * 
+	 * 
+	 * ## Basic Use
 	 * 
 	 * The [jQuery.Model] class provides a basic skeleton to organize pieces of your application's data layer.
 	 * First, consider doing Ajax <b>without</b> a model.  In our imaginary app, you:
-	 * <ul>
-	 *   <li>retrieve a list of tasks</li>
-	 *   <li>display the number of days remaining for each task</li>
-	 *   <li>mark tasks as complete after users click them</li>
-	 * </ul>
+	 * 
+	 *  - retrieve a list of tasks</li>
+	 *  - display the number of days remaining for each task
+	 *  - mark tasks as complete after users click them
+	 * 
 	 * Let's see how that might look without a model:
+	 * 
 	 * @codestart
 	 * $.Controller.extend("MyApp.Controllers.Tasks",{onDocument: true},
 	 * {
@@ -58,15 +60,17 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 	 *   }
 	 * })
 	 * @codeend
+	 * 
 	 * This code might seem fine for right now, but what if:
-	 * <ul>
-	 * 	<li>The service changes?</li>
-	 * 	<li>Other parts of the app want to calculate <code>remaininTime</code>?</li>
-	 * 	<li>Other parts of the app want to get tasks?</li>
-	 * 	<li>The same task is represented multiple palces on the page?</li>
-	 * </ul>
+	 * 
+	 *  - The service changes?
+	 *  - Other parts of the app want to calculate <code>remaininTime</code>?
+	 * 	- Other parts of the app want to get tasks?</li>
+	 * 	- The same task is represented multiple palces on the page?
+	 * 
 	 * The solution is of course a strong model layer.  Lets look at what a
 	 * a good model does for a controller before we learn how to make one:
+	 * 
 	 * @codestart
 	 * $.Controller.extend("MyApp.Controllers.Tasks",{onDocument: true},
 	 * {
@@ -83,7 +87,9 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 	 *   }
 	 * })
 	 * @codeend
+	 * 
 	 * In views/tasks/list.ejs
+	 * 
 	 * @codestart html
 	 * &lt;% for(var i =0; i &lt; tasks.length; i++){ %>
 	 * &lt;div class='task &lt;%= tasks[i].<b>identity</b>() %>'>
@@ -95,6 +101,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 	 * 
 	 * Isn't that better!  Granted, some of the improvement comes because we used a view, but we've
 	 * also made our controller completely understandable.  Now lets take a look at the model:
+	 * 
 	 * @codestart
 	 * $.Model.extend("Task",
 	 * {
@@ -111,29 +118,42 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 	 * 	}
 	 * })
 	 * @codeend
+	 * 
 	 * There, much better!  Now you have a single place where you can organize Ajax functionality and
 	 * wrap the data that it returned.  Lets go through each bolded item in the controller and view.<br/>
 	 * 
-	 * <h3>Task.findAll</h3>
+	 * ### Task.findAll
+	 * 
 	 * The findAll function requests data from "/tasks.json".  When the data is returned, it it is run through
 	 * the "wrapMany" function before being passed to the success callback.<br/>
 	 * If you don't understand how the callback works, you might want to check out 
 	 * [jQuery.Model.static.wrapMany wrapMany] and [jQuery.Class.static.callback callback].
-	 * <h3>el.models</h3>
+	 * 
+	 * ### el.models
+	 * 
 	 * [jQuery.fn.models models] is a jQuery helper that returns model instances.  It uses
 	 * the jQuery's elements' shortNames to find matching model instances.  For example:
+	 * 
 	 * @codestart html
 	 * &lt;div class='task task_5'> ... &lt;/div>
 	 * @codeend
+	 * 
 	 * It knows to return a task with id = 5.
-	 * <h3>complete</h3>
+	 * 
+	 * ### complete
+	 * 
 	 * This should be pretty obvious.
-	 * <h3>identity</h3>
+	 * 
+	 * ### identity
+	 * 
 	 * [jQuery.Model.prototype.identity Identity] returns a unique identifier that [jQuery.fn.models] can use
 	 * to retrieve your model instance.
-	 * <h3>timeRemaining</h3>
+	 * 
+	 * ### timeRemaining
+	 * 
 	 * timeRemaining is a good example of wrapping your model's raw data with more useful functionality.
-	 * <h2>Validations</h2>
+	 * ## Validations
+	 * 
 	 * You can validate your model's attributes with another plugin.  See [validation].
 	 */
 
@@ -178,12 +198,67 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			
 		},
 		/**
+		 * @attribute attributes
+		 * Attributes contains a list of properties and their types
+		 * for this model.  You can use this in conjunction with 
+		 * [jQuery.Model.static.convert] to provide automatic 
+		 * [model-typeconversion type conversion].  
+		 * 
+		 * The following converts dueDates to JavaScript dates:
+		 * 
+		 * @codestart
+		 * $.Model.extend("Contact",{
+		 *   attributes : { 
+		 *     birthday : 'date'
+		 *   },
+		 *   convert : {
+		 *     date : function(raw){
+		 *       if(typeof raw == 'string'){
+		 *         var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
+		 *         return new Date( matches[1], 
+		 * 	                (+matches[2])-1, 
+		 *                 matches[3] )
+		 *       }else if(raw instanceof Date){
+		 *           return raw;
+		 *       }
+		 *     }
+		 *   }
+		 * },{})
+		 * @codeend
+		 */
+		attributes : {},
+		/**
 		 * @attribute defaults
-		 * An object of default values to be set on all instances.
+		 * An object of default values to be set on all instances.  This 
+		 * is useful if you want some value to be present when new instances are created.
+		 * 
+		 * @codestart
+		 * $.Model.extend("Recipe",{
+		 *   defaults : {
+		 *     createdAt : new Date();
+		 *   }
+		 * },{})
+		 * 
+		 * var recipe = new Recipe();
+		 * 
+		 * recipe.createdAt //-> date
+		 * 
+		 * @codeend
 		 */
 		defaults: {},
 		/**
-		 * Used to create an existing object from attributes
+		 * Wrap is used to create a new instance from data returned from the server.
+		 * It is very similar to doing <code> new Model(attributes) </code> 
+		 * except that wrap will check if the data passed has an
+		 * 
+		 * - attributes,
+		 * - data, or
+		 * - <i>singularName</i>
+		 * 
+		 * property.  If it does, it will use that objects attributes.
+		 * 
+		 * Wrap is really a convience method for servers that don't return just attributes.
+		 * 
 		 * @param {Object} attributes
 		 * @return {Model} an instance of the model
 		 */
@@ -193,18 +268,42 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			}
 			return new this(
 			// checks for properties in an object (like rails 2.0 gives);
-			attributes[this.singularName] || attributes.attributes || attributes);
+			attributes[this.singularName] || attributes.data || attributes.attributes || attributes);
 		},
 		/**
-		 * Creates many instances
+		 * Takes raw data from the server, and returns an array of model instances.
+		 * Each item in the raw array becomes an instance of a model class.
+		 * 
+		 * @codestart
+		 * $.Model.extend("Recipe",{
+		 *   helper : function(){
+		 *     return i*i;
+		 *   }
+		 * })
+		 * 
+		 * var recipes = Recipe.wrapMany([{id: 1},{id: 2}])
+		 * recipes[0].helper() //-> 1
+		 * @codeend
+		 * 
+		 * If an array is not passed to wrapMany, it will look in the object's .data
+		 * property.  
+		 * 
+		 * For example:
+		 * 
+		 * @codestart
+		 * var recipes = Recipe.wrapMany({data: [{id: 1},{id: 2}]})
+		 * recipes[0].helper() //-> 1
+		 * @codeend
+		 * 
 		 * @param {Array} instancesRawData an array of raw name - value pairs.
-		 * @return {Array} an array of instances of the model
+		 * @return {Array} a JavaScript array of instances or a [jQuery.Model.List list] of instances
+		 *  if the model list plugin has been included.
 		 */
-		wrapMany: function( instances ) {
-			if (!instances ) return null;
-			var res = new(this.List || Array),
-				arr = $.isArray(instances),
-				raw = arr ? instances : instances.data,
+		wrapMany: function( instancesRawData ) {
+			if (!instancesRawData ) return null;
+			var res = new(this.List || $.Model.List || Array),
+				arr = $.isArray(instancesRawData),
+				raw = arr ? instancesRawData : instancesRawData.data,
 				length = raw.length,
 				i = 0;
 			res._use_call = true; //so we don't call next function with all of these
@@ -212,17 +311,25 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 				res.push(this.wrap(raw[i]));
 			}
 			if (!arr ) { //push other stuff onto array
-				for ( var prop in instances ) {
+				for ( var prop in instancesRawData ) {
 					if ( prop !== 'data' ) {
-						res[prop] = instances[prop];
+						res[prop] = instancesRawData[prop];
 					}
 
 				}
 			}
-			return res; //model list?
+			return res; 
 		},
 		/**
-		 * The name of the id field.  Defaults to 'id'.  Change this if it is something different.
+		 * The name of the id field.  Defaults to 'id'. Change this if it is something different.
+		 * 
+		 * For example, it's common in .NET to use iD.  Your model might look like:
+		 * 
+		 * @codestart
+		 * $.Model.extend("Friends",{
+		 *   id: "iD"
+		 * },{});
+		 * @codeend
 		 */
 		id: 'id',
 		//if null, maybe treat as an array?
@@ -239,9 +346,16 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		},
 		models: {},
 		/**
-		 * Publishes to open ajax hub.  Always adds the shortName.event
-		 * @param {Object} event
-		 * @param {Object} data
+		 * If OpenAjax is available,
+		 * publishes to OpenAjax.hub.  Always adds the shortName.event.
+		 * 
+		 * @codestart
+		 * // publishes contact.completed
+		 * Namespace.Contact.publish("completed",contact);
+		 * @codeend
+		 * 
+		 * @param {String} event The event name to publish
+		 * @param {Object} data The data to publish
 		 */
 		publish: function( event, data ) {
 			//@steal-remove-start
@@ -253,7 +367,9 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 
 		},
 		/**
-		 * Guesses at the type of an object.  This is useful when you want to know more than just typeof.
+		 * @hide
+		 * Guesses the type of an object.  This is what sets the type if not provided in 
+		 * [jQuery.Model.static.attributes].
 		 * @param {Object} object the object you want to test.
 		 * @return {String} one of string, object, date, array, boolean, number, function
 		 */
@@ -275,8 +391,11 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 			return typeof object;
 		},
 		/**
-		 * An object of name-function pairs that are used to convert to the name type.
-		 * @param {Object} val
+		 * @attribute convert
+		 * @type Object
+		 * An object of name-function pairs that are used to convert attributes.
+		 * Check out [jQuery.Model.static.attributes] or [model-typeconversion type conversion]
+		 * for examples.
 		 */
 		convert: {
 			"date": function( str ) {
@@ -289,8 +408,6 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 				return Boolean(val)
 			}
 		},
-		findAll: function( params, success, error ) {},
-		findOne: function( id, params, success, error ) {},
 		/**
 		 * Implement this function!
 		 * Create is called by save to create a new instance.  If you want to be able to call save on an instance
@@ -315,7 +432,25 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 		 */
 		destroy: function( id, success, error ) {
 			throw "Model: Implement " + this.fullName + "'s \"destroy\"!"
-		}		
+		},
+		/**
+		 * Implement this function!
+		 * @param {Object} params
+		 * @param {Function} success
+		 * @param {Function} error
+		 */
+		findAll : function(params, success, error) {
+			
+		},
+		/**
+		 * Implement this function!
+		 * @param {Object} params
+		 * @param {Function} success
+		 * @param {Function} error
+		 */
+		findOne : function(params, success, error){
+			
+		}
 	},
 	/**
 	 * @Prototype
@@ -640,7 +775,7 @@ steal.plugins('jquery', 'jquery/class', 'jquery/lang', 'jquery/lang/openajax').t
 				collection.push(instance)
 			})
 		});
-		ret = new(kind || $.Model.list || Array)()
+		ret = new(kind || $.Model.List || Array)()
 		ret.push.apply(ret, $.unique(collection))
 		return ret;
 	}
