@@ -12,10 +12,13 @@
         </style>
 	</head>
 	<body>
+		<div id="demo-instructions">
 		<h1>Model Associations Demo</h1>
 		<p>This demo shows how you can setup associations.</p>
-		<div id='contacts'></div>
-
+		</div>
+<div id="demo-html">
+<div id='contacts'></div>
+</div>
 		
 <script type='text/javascript' 
         src='../../../steal/steal.js'>   
@@ -26,18 +29,26 @@ steal.plugins('jquery/model',
 		'jquery/model/list',
 		'jquery/model/associations').start()
 </script>
-<script type='text/javascript'>   
-var convertDate =  function(raw){
-	if(typeof raw == 'string'){
-		var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
-		return new Date( +matches[1], 
-		                 (+matches[2])-1, 
-		                 +matches[3] )
-	}else if(raw instanceof Date){
-		return raw;
-	}
-};
-
+<script type='text/javascript'>
+	var convertDate =  function(raw){
+		if(typeof raw == 'string'){
+			var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
+			return new Date( +matches[1], 
+			                 (+matches[2])-1, 
+			                 +matches[3] )
+		}else if(raw instanceof Date){
+			return raw;
+		}
+	};
+	CONTACT_FIXTURE = function(){
+				return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20',
+							tasks : [{id: 1, title: "write up model layer", due: "2010-10-5"}]},
+					 {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10',
+					 		tasks : [{id: 2, title: "write up funcunit", due: "2009-5-1"}, {id: 3, title: "test funcunit", due: "2010-3-15"}]},
+					 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
+			}
+</script>
+<script type='text/javascript'  id="demo-source">   
 $.Model.extend("Task",{
 	convert : {
 		date :convertDate
@@ -63,17 +74,9 @@ $.Model.extend("Contact",{
 		date :convertDate
 	},
 	findAll : function(params, success, error){
-		$.get("/recipes.json",
-			{},
+		$.get("/recipes.json",{},
 			this.callback(['wrapMany',success]),
-			"json",
-			function(){
-				return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20',
-							tasks : [{id: 1, title: "write up model layer", due: "2010-10-5"}]},
-					 {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10',
-					 		tasks : [{id: 2, title: "write up funcunit", due: "2009-5-1"}, {id: 3, title: "test funcunit", due: "2010-3-15"}]},
-					 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
-			})
+			"json",CONTACT_FIXTURE)
 	}
 },{
 	ageThisYear : function(){
@@ -104,12 +107,6 @@ Contact.findAll({},function(contacts){
 	ul.appendTo(li)
   });
 });
-
-$("#destroyAll").click(function(){
-	$("#contacts input:checked").closest(".contact").models().destroyAll();
-})
-
-
 
 </script>
 	</body>

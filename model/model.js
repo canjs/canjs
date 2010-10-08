@@ -323,11 +323,11 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		/**
 		 * The name of the id field.  Defaults to 'id'. Change this if it is something different.
 		 * 
-		 * For example, it's common in .NET to use iD.  Your model might look like:
+		 * For example, it's common in .NET to use Id.  Your model might look like:
 		 * 
 		 * @codestart
 		 * $.Model.extend("Friends",{
-		 *   id: "iD"
+		 *   id: "Id"
 		 * },{});
 		 * @codeend
 		 */

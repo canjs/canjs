@@ -11,15 +11,18 @@
         </style>
 	</head>
 	<body>
+		<div id="demo-instructions">
 		<h1>Model Backup Demo</h1>
-		<p>This demo shows backing up and restoring model instances.
-		Click the names to change birthdays.  After changing some birthdays,
-		click RESTORE.  
-		</p>
-		
-		<div id='contacts1'></div>
-		<div id='update'></div>
-		<a href='javascript://' id='restore'>RESTORE</a>
+			<p>This demo shows backing up and restoring model instances.
+			Click the names to change birthdays.  After changing some birthdays,
+			click RESTORE.  
+			</p>
+		</div>
+<div id="demo-html">
+<div id='contacts'></div>
+<div id='update'></div>
+<a href='javascript://' id='restore'>RESTORE</a>
+</div>
 <script type='text/javascript' 
         src='../../../steal/steal.js'>   
 </script>
@@ -29,8 +32,7 @@ steal.plugins('jquery/model',
 		'jquery/model/list',
 		'jquery/model/backup').start()
 </script>
-<script type='text/javascript'>   
-
+<script type='text/javascript'>  
 $.Model.extend("Contact",{
 	attributes : { 
 		birthday : 'date'
@@ -75,36 +77,6 @@ $.Model.extend("Contact",{
 	}
 
 });
-
-
-
-// List 1
-Contact.findAll({},function(contacts){
-  var contactsEl = $('#contacts1');
-  $.each(contacts, function(i, contact){
-    var li = $('<li>')
-              .model(contact)
-              .html(contact.name+" "+contact.ageThisYear()+
-                    " <a>Show</a>")
-              .appendTo(contactsEl);
-    contact.bind("birthday", function(){
-      li.html(contact.name+" "+this.ageThisYear()+
-              " <a>Show</a>");
-    }).backup();
-  })
-  
-  contactsEl.delegate("li","click", function(){
-	 makeAgeUpdate( $(this).closest('.contact').model() );
-  });
-  $("#restore").click(function(){
-  	contacts.each(function(){
-		this.restore()
-	})
-  })
-});
-
-
-
 makeAgeUpdate = function(contact){
 	var updater = $("#update")
 	updater.children().remove();
@@ -115,8 +87,40 @@ makeAgeUpdate = function(contact){
 		})
 	}).appendTo(updater)
 }
-
-
+$('#contacts').delegate("li","click", function(){
+	 makeAgeUpdate( $(this).closest('.contact').model() );
+  });
+</script>
+<script type='text/javascript'>   
+Contact.findAll({},function(contacts){
+  var contactsEl = $('#contacts');
+  $.each(contacts, function(i, contact){
+    
+	// add the contact to the page
+	var li = $('<li>')
+              .model(contact)
+              .html(contact.name+" "+
+			  		contact.ageThisYear()+
+                    " <a>Show</a>")
+              .appendTo(contactsEl);
+    
+	// listen for changes in birthday
+	contact.bind("birthday", function(){
+      li.html(contact.name+" "+this.ageThisYear()+
+              " <a>Show</a>");
+    })
+	
+	// backup the contact
+	contact.backup();
+  })
+  
+  // on restore, update all contacts
+  $("#restore").click(function(){
+  	contacts.each(function(){
+		this.restore()
+	})
+  })
+});
 </script>
 	</body>
 </html>
