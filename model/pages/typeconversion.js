@@ -1,5 +1,5 @@
 /**
-@page model-typeconversion Type Conversion
+@page jquery.model.typeconversion Type Conversion
 @parent jQuery.Model
 
 # Type Conversion
@@ -27,11 +27,38 @@ a string.
 @demo jquery/model/demo-setter.html
 
 
-## Way 2:
+## Way 2: Convert
 
 If you have a lot of dates, Setters won't scale well. 
 Instead, you can set the type of 
 an attribute and provide a function to convert that type.
 
+The following sets the birthday attribute to "date" and provides a date conversion function:
 
+@codestart
+$.Model.extend("Contact",
+{
+  attributes : { 
+    birthday : 'date'
+  },
+  convert : {
+    date : function(raw){
+      if(typeof raw == 'string'){
+        var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
+        return new Date( matches[1], 
+                        (+matches[2])-1, 
+                         matches[3] )
+      }else if(raw instanceof Date){
+        return raw;
+      }
+    }
+  },
+  findAll : function( ... ){ ... }
+},
+{
+  // No prototype properties necessary
+})
+@codeend
+
+@demo jquery/model/demo-convert.html
  */

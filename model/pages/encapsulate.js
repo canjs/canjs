@@ -1,5 +1,5 @@
 /*
-@page encapsulate Service Encapsulation
+@page jquery.model.encapsulate Service Encapsulation
 @parent jQuery.Model
 
 <h1>Service / Ajax Encapsulation</h1>

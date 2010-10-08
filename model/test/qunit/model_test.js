@@ -70,17 +70,34 @@ test("wrapMany", function(){
 	equals(people[0].prettyName(),"Mr. Justin","wraps wrapping works")
 });
 
-test("binding", 1,function(){
+test("binding", 2,function(){
 	var inst = new Person({foo: "bar"});
 	
-	inst.bind("foo", function(){
+	inst.bind("foo", function(ev, val){
 		ok(true,"updated")	
+		equals(val, "baz", "values match")
 	});
 	
 	inst.attr("foo","baz");
 	
 });
 
-
+test("error binding", 1, function(){
+	$.Model.extend("School",{
+	   setName : function(name, success, error){
+	     if(!name){
+	        error("no name");
+	     }
+	     return error;
+	   }
+	})
+	var school = new School();
+	school.bind("error.name", function(ev, error){
+		equals(error, "no name", "error message provided")
+	})
+	school.attr("name","");
+	
+	
+})
 
 

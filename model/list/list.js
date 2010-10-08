@@ -1,13 +1,6 @@
 steal.plugins('jquery/model').then(function($){
 
-var modifiers = {
-		push: [].push,
-		pop: [].pop,
-		shift: [].shift,
-		unshift: [].unshift,
-		splice: [].splice,
-		sort : [].sort
-	},
+var 
 	add = function(data, inst){
 		var id = inst.Class.id;
 		data[inst[id]] = inst;
@@ -20,12 +13,80 @@ var modifiers = {
 		}
 	}
 /**
+ * @parent jQuery.Model
  * Model lists are useful for:
- * <ul>
- * 	<li> Adding Ajax/Service requests for multiple model instances<li>
- *  <li> Storing and retrieving multiple instances </li>
- *  <li> Rapid lookup of an instance </li>
- * </ul>
+ * 
+ *  - Adding helpers for multiple model instances.
+ *  - Faster HTML inserts.
+ *  - Storing and retrieving multiple instances.
+ *  
+ * ## List Helpers
+ * 
+ * It's pretty common to deal with multiple items at a time.
+ * List helpers provide methods for multiple model instances.
+ * 
+ * For example, if we wanted to be able to destroy multiple
+ * contacts, we could add a destroyAll method to a Contact
+ * list:
+ * 
+ * @codestart
+ * $.Model.List.extend("Contact.List",{
+ *   destroyAll : function(){
+ *     $.post("/destroy",
+ *       this.map(function(contact){
+ *         return contact.id
+ *       }),
+ *       this.callback('destroyed'),
+ *       'json')
+ *   },
+ *   destroyed : function(){
+ *     this.each(function(){
+ *       this.destroyed();
+ *     })
+ *   }
+ * });
+ * @codeend
+ * 
+ * The following demo illustrates this.  Check
+ * multiple Contacts and click "DESTROY ALL"
+ * 
+ * @demo jquery/model/list/list.html
+ * 
+ * ## Faster Inserts
+ * 
+ * The 'easy' way to add a model to an element is simply inserting
+ * the model into the view like:
+ * 
+ * @codestart xml
+ * &lt;div &lt;%= task %>> A task &lt;/div>
+ * @codeend
+ * 
+ * And then you can use [jQuery.fn.models $('.task').models()].
+ * 
+ * This pattern is fast enough for 90% of all widgets.  But it
+ * does require an extra query.  Lists help you avoid this.
+ * 
+ * The [jQuery.Model.List.get get] method takes elements and
+ * uses their className to return matched instances in the list.
+ * 
+ * To use get, your elements need to have the instance's 
+ * identity in their className.  So to setup a div to reprsent
+ * a task, you would have the following in a view:
+ * 
+ * @codestart xml
+ * &lt;div class='task &lt;%= task.identity() %>'> A task &lt;/div>
+ * @codeend
+ * 
+ * Then, with your model list, you could use get to get a list of
+ * tasks:
+ * 
+ * @codestart
+ * taskList.get($('.task'))
+ * @codeend
+ * 
+ * The following demonstrates how to use this technique:
+ * 
+ * @demo jquery/model/list/list-insert.html
  */
 $.Class.extend("jQuery.Model.List",{
     init: function( instances ) {
@@ -33,14 +94,30 @@ $.Class.extend("jQuery.Model.List",{
 		this._data = {};
         this.push.apply(this, $.makeArray(instances || [] ) );
     },
+	/**
+	 * Slice works just like an array's slice, except this
+	 * returns another instance of this model list's class.
+	 */
     slice: function() {
         return new this.Class( Array.prototype.slice.apply( this, arguments ) );
     },
+	/**
+	 * Returns a list of all instances who's property matches
+	 * the given value.
+	 * @param {String} property the property to match
+	 * @param {Object} value the value the property must equal
+	 */
     match: function( property, value ) {
         return  this.grep(function(inst){
             return inst[property] == value;
         });
     },
+	/**
+	 * Returns a 
+	 * @param {Function} callback the function to call back.  This
+	 * function has the same call pattern as what jQuery.grep provides.
+	 * @param {Object} args
+	 */
     grep: function( callback, args ) {
         return new this.Class( $.grep( this, callback, args ) );
     },
@@ -51,7 +128,7 @@ $.Class.extend("jQuery.Model.List",{
 		})
 	},
 	/**
-	 * Gets by ID
+	 * Gets a list of elements by ID or element.
 	 */
 	get: function() {
 		if(!this.length){
@@ -79,6 +156,11 @@ $.Class.extend("jQuery.Model.List",{
 		}
 		return new this.Class(list)
 	},
+	/**
+	 * Removes instances from this list by id or by an
+	 * element.
+	 * @param {Object} args
+	 */
 	remove: function( args ) {
 		if(!this.length){
 			return [];
@@ -120,7 +202,12 @@ $.Class.extend("jQuery.Model.List",{
 	publish: function( name, data ) {
 		OpenAjax.hub.publish(this.Class.shortName+"."+name, data)
 	},
+	/**
+	 * Gets all the elements that represent this list.
+	 * @param {Object} context
+	 */
 	elements: function( context ) {
+		// TODO : this can probably be done with 1 query.
 		var jq = $();
 		this.each(function(){
 			jq.add("."+this.identity(), context)
@@ -128,6 +215,40 @@ $.Class.extend("jQuery.Model.List",{
 		return jq;
 	}
 });
+
+var modifiers = {
+	/**
+	 * @function push
+	 * Pushs an instance onto the list
+	 */
+	push: [].push,
+	/**
+	 * @function pop
+	 * Pops the last instance off the list
+	 */
+	pop: [].pop,
+	/**
+	 * @function shift
+	 * Shifts the first instance off the list
+	 */
+	shift: [].shift,
+	/**
+	 * @function unshift
+	 * Adds an instance to the start of the list.
+	 */
+	unshift: [].unshift,
+	/**
+	 * @function splice
+	 * Splices items from the list
+	 */
+	splice: [].splice,
+	/**
+	 * @function sort
+	 * sorts the list
+	 */
+	sort : [].sort
+}
+
 $.each(modifiers, function(name, func){
 	$.Model.List.prototype[name] = function(){
 		this._changed = true;
@@ -135,7 +256,20 @@ $.each(modifiers, function(name, func){
 	}
 })
 
-$.each(['each','map'], function(i, name){
+$.each([
+/**
+ * @function each
+ * Iterates through the list, calling callback on each item in the list.
+ * @param {Function}  callback 
+ */
+'each',
+/**
+ * @function map
+ * Iterates through the list, calling callback on each item in the list.
+ * It returns an array of the items each call to callback returned.
+ * @param {Function}  callback 
+ */
+'map'], function(i, name){
 	$.Model.List.prototype[name] = function(callback, args){
 		return $[name]( this, callback, args );
 	}

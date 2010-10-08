@@ -70,7 +70,18 @@ test("validatesLengthOf", function(){
 })
 
 test("validatesPresenceOf", function(){
+	$.Model.extend("Task",{
+		init : function(){
+			this.validatePresenceOf("dueDate")
+		}
+	},{});
 	
+	var task = new Task(),
+		errors = task.errors();
+	
+	ok(errors)
+	ok(errors.dueDate)
+	equals(errors.dueDate[0], "can't be empty" , "right message")
 })
 
 test("validatesRangeOf", function(){

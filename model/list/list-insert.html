@@ -101,29 +101,34 @@ $.Model.List.extend("Contact.List",{
 
 // Draw a list of contacts
 Contact.findAll({},function(contacts){
-  var contactsEl = $('#contacts');
-  $.each(contacts, function(i, contact){
-    var li = $('<li>')
-              .model(contact)
-              .html("<input type='checkbox'/> "+
-			  		contact.name+" "+
-					contact.ageThisYear()+
-                    " <a>Show</a>")
-              .appendTo(contactsEl);
-    // on destroyed, remove elements
-	contact.bind("destroyed", function(){
-      li.remove();
-    })
-  });
+	var contactsEl = $('#contacts'),
+		html = [], 
+		contact;
+	
+	for(var i =0; i < contacts.length;i++){
+		contact = contacts[i];
+		html.push("<li class='contact ",
+					contact.identity(),"'>",
+					"<input type='checkbox'/> ",
+					contact.name," ",
+					contact.ageThisYear(),
+		        " <a>Show</a></li>")
+		contact.bind("destroyed", function(){
+	      this.elements().remove();
+	    })
+	}
+	contactsEl.html(html.join(""))
+	
+	$("#destroyAll").click(function(){
+		// use the list to get all contacts
+		contacts.get( $("#contacts input:checked").closest(".contact") )
+			// destroy them
+			.destroyAll();
+	})
+  
 });
 
-$("#destroyAll").click(function(){
-	//get all checked input model instances
-	$("#contacts input:checked").closest(".contact")
-		.models()
-		// destroy them
-		.destroyAll();
-})
+
 </script>
 	</body>
 </html>

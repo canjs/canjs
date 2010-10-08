@@ -344,6 +344,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			this.attributes[property] || (this.attributes[property] = type);
 			return type
 		},
+		// a collection of all models
 		models: {},
 		/**
 		 * If OpenAjax is available,
@@ -457,7 +458,18 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 */
 	{	
 		/**
-		 * Creates, but does not save a new instance of this class
+		 * Setup is called when a new model instance is created.
+		 * It adds default attributes, then whatever attributes
+		 * are passed to the class.
+		 * Setup should never be called directly.
+		 * 
+		 * @codestart
+		 * $.Model.extend("Recipe")
+		 * var recipe = new Recipe({foo: "bar"});
+		 * recipe.foo //-> "bar"
+		 * recipe.attr("foo") //-> "bar"
+		 * @codeend
+		 * 
 		 * @param {Object} attributes a hash of attributes
 		 */
 		setup: function( attributes ) {
@@ -471,9 +483,21 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		},
 		/**
 		 * Sets the attributes on this instance and calls save.
+		 * The instance needs to have an id.  It will use
+		 * the instance class's [jQuery.Model.static.update update]
+		 * method.
+		 * 
+		 * @codestart
+		 * recipe.update({name: "chicken"}, success, error);
+		 * @codeend
+		 * 
+		 * If OpenAjax.hub is available, the model will also
+		 * publish a "<i>modelName</i>.updated" message with
+		 * the updated instance.
+		 * 
 		 * @param {Object} attrs the model's attributes
-		 * @param {Function} success
-		 * @param {Function} error
+		 * @param {Function} success called if a successful update
+		 * @param {Function} error called if there's an error
 		 */
 		update: function( attrs, success, error ) {
 			this.attrs(attrs);
@@ -484,6 +508,22 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * also pass it an array of attributes to run only those attributes.
 		 * It returns nothing if there are no errors, or an object
 		 * of errors by attribute.
+		 * 
+		 * To use validations, it's suggested you use the 
+		 * model/validations plugin.
+		 * 
+		 * @codestart
+		 * $.Model.extend("Task",{
+		 *   init : function(){
+		 *     this.validatePresenceOf("dueDate")
+		 *   }
+		 * },{});
+		 * 
+		 * var task = new Task(),
+		 *     errors = task.errors()
+		 * 
+		 * errors.dueDate[0] //-> "can't be empty"
+		 * @codeend
 		 */
 		errors: function(attrs) {
 			if(attrs){
@@ -519,9 +559,69 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			return null;
 		},
 		/**
-		 * Gets or sets an attribute on the model.
+		 * Gets or sets an attribute on the model using setters and 
+		 * getters if available.
+		 * 
+		 * @codestart
+		 * $.Model.extend("Recipe")
+		 * var recipe = new Recipe();
+		 * recipe.attr("foo","bar")
+		 * recipe.foo //-> "bar"
+		 * recipe.attr("foo") //-> "bar"
+		 * @codeend
+		 * 
+		 * ## Setters
+		 * 
+		 * If you add a set<i>AttributeName</i> method on your model,
+		 * it will be used to set the value.  The set method is called
+		 * with the value and is expected to return the converted value.
+		 * 
+		 * @codestart
+		 * $.Model.extend("Recipe",{
+		 *   setCreatedAt : function(raw){
+		 *     return Date.parse(raw)
+		 *   }
+		 * })
+		 * var recipe = new Recipe();
+		 * recipe.attr("createdAt","Dec 25, 1995")
+		 * recipe.createAt //-> Date
+		 * @codeend
+		 * 
+		 * ## Asynchronous Setters
+		 * 
+		 * Sometimes, you want to perform an ajax request when 
+		 * you set a property.  You can do this with setters too.
+		 * 
+		 * To do this, your setter should return undefined and
+		 * call success with the converted value.  For example:
+		 * 
+		 * @codestart
+		 * $.Model.extend("Recipe",{
+		 *   setTitle : function(title, success, error){
+		 *     $.post(
+		 *       "recipe/update/"+this.id+"/title",
+		 *       title,
+		 *       function(){
+		 *         success(title);
+		 *       },
+		 *       "json")
+		 *   }
+		 * })
+		 * 
+		 * recipe.attr("title","fish")
+		 * @codeend
+		 * 
+		 * ## Events
+		 * 
+		 * When you use attr, it can also trigger events.  This is
+		 * covered in [jQuery.Model.prototype.bind].
+		 * 
 		 * @param {String} attribute the attribute you want to set or get
-		 * @param {String_Number_Boolean} [opt1] value the value you want to set.
+		 * @param {String|Number|Boolean} [value] value the value you want to set.
+		 * @param {Function} [success] an optional success callback.  
+		 * 			This gets called if the attribute was successful.
+		 * @param {Function} [error] an optional success callback.  
+		 * 			The error function is called with validation errors.
 		 */
 		attr: function( attribute, value, success, error ) {
 			var cap = classize(attribute),
@@ -533,14 +633,55 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			return this[get] ? this[get]() : this[attribute];
 		},
 		/**
+		 * Binds to events on this model instance.  Typically 
+		 * you'll bind to an attribute name.  Handler will be called
+		 * every time the attribute value changes.  For example:
 		 * 
+		 * @codestart
+		 * $.Model.extend("School")
+		 * var school = new School();
+		 * school.bind("address", function(ev, address){
+		 *   alert('address changed to '+address);
+		 * })
+		 * school.attr("address","1124 Park St");
+		 * @codeend
+		 * 
+		 * You can also bind to attribute errors.
+		 * 
+		 * @codestart
+		 * $.Model.extend("School",{
+		 *   setName : function(name, success, error){
+		 *     if(!name){
+		 *        error("no name");
+		 *     }
+		 *     return error;
+		 *   }
+		 * })
+		 * var school = new School();
+		 * school.bind("error.name", function(ev, mess){
+		 *    mess // -> "no name";
+		 * })
+		 * school.attr("name","");
+		 * @codeend
+		 * 
+		 * You can also bind to created, updated, and destroyed events.
+		 * 
+		 * @param {String} eventType the name of the event.
+		 * @param {Function} handler
 		 */
-		bind: function(){
+		bind: function(eventType, handler){
 			var wrapped = $(this);
 			wrapped.bind.apply(wrapped, arguments);
 			return this;
 		},
-		unbind: function(){
+		/**
+		 * Unbinds an event handler from this instance.
+		 * Read [jQuery.Model.prototype.bind] for 
+		 * more information.
+		 * @param {String} eventType
+		 * @param {Function} handler
+		 */
+		unbind: function(eventType, handler){
 			var wrapped = $(this);
 			wrapped.unbind.apply(wrapped, arguments);
 			return this;
@@ -627,9 +768,18 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			
 		},
 		/**
-		 * Gets or sets a list of attributes
+		 * Gets or sets a list of attributes. 
+		 * Each attribute is set with [jQuery.Model.prototype.attr attr].
+		 * 
+		 * @codestart
+		 * recipe.attrs({
+		 *   name: "ice water",
+		 *   instructions : "put water in a glass"
+		 * })
+		 * @codeend
+		 * 
 		 * @param {Object} [attributes]  if present, the list of attributes to send
-		 * @return {Object} the curent attributes of the model
+		 * @return {Object} the current attributes of the model
 		 */
 		attrs: function( attributes ) {
 			var key;
@@ -660,8 +810,20 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			return this[this.Class.id] == null; //if null or undefined
 		},
 		/**
-		 * Saves the instance
-		 * @param {Function} [opt3] callbacks onComplete function or object of callbacks
+		 * Saves the instance if there are no errors.  
+		 * If the instance is new, [jQuery.Model.static.create] is
+		 * called; otherwise, [jQuery.Model.static.update] is
+		 * called.
+		 * 
+		 * @codestart
+		 * recipe.save(success, error);
+		 * @codeend
+		 * 
+		 * If OpenAjax.hub is available, after a successful create or update, 
+		 * "<i>modelName</i>.created" or "<i>modelName</i>.updated" is published.
+		 * 
+		 * @param {Function} [success] called if a successful save.
+		 * @param {Function} [error] called if the save was not successful.
 		 */
 		save: function( success, error ) {
 
@@ -676,8 +838,19 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		},
 
 		/**
-		 * Destroys the instance
-		 * @param {Function} [opt4] callback or object of callbacks
+		 * Destroys the instance by calling 
+		 * [jQuery.Model.static.destroy] with the id of the instance.
+		 * 
+		 * @codestart
+		 * recipe.destroy(success, error);
+		 * @codeend
+		 * 
+		 * If OpenAjax.hub is available, after a successful
+		 * destroy "<i>modelName</i>.destroyed" is published
+		 * with the model instance.
+		 * 
+		 * @param {Function} [success] called if a successful destroy
+		 * @param {Function} [error] called if an unsuccessful destroy
 		 */
 		destroy: function( success, error ) {
 			this.Class.destroy(this[this.Class.id], this.callback(["destroyed", success]), error);
@@ -728,18 +901,21 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	$.each([
 	/**
 	 * @function created
+	 * @hide
 	 * Called by save after a new instance is created.  Publishes 'created'.
 	 * @param {Object} attrs
 	 */
 	"created",
 	/**
-	 * @function destroyed
+	 * @function updated
+	 * @hide
 	 * Called by save after an instance is updated.  Publishes 'updated'.
 	 * @param {Object} attrs
 	 */
 	"updated",
 	/**
 	 * @function destroyed
+	 * @hide
 	 * Called after an instance is destroyed.  Publishes
 	 * "shortName.destroyed"
 	 */
@@ -761,8 +937,16 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	// break
 	/**
 	 * @function models
-	 * @param {jQuery.Model} model if present only returns models of the provided type.
-	 * @return {Array} returns an array of model instances that are represented by the contained elements.
+	 * Returns a list of models.  If the models are of the same
+	 * type, and have a [jQuery.Model.List], it will return 
+	 * the models wrapped with the list.
+	 * 
+	 * @codestart
+	 * $(".recipes").models() //-> [recipe, ...]
+	 * @codeend
+	 * 
+	 * @param {jQuery.Class} [type] if present only returns models of the provided type.
+	 * @return {Array|jQuery.Model.List} returns an array of model instances that are represented by the contained elements.
 	 */
 	$.fn.models = function( type ) {
 		//get it from the data
@@ -779,6 +963,13 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		ret.push.apply(ret, $.unique(collection))
 		return ret;
 	}
+	/**
+	 * @function model
+	 * 
+	 * Returns the first model instance found from [jQuery.fn.models].
+	 * 
+	 * @param {Object} type
+	 */
 	$.fn.model = function(type) {
 		if(type && type instanceof $.Model){
 			type.hookup(this[0]);
