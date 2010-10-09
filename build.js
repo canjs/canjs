@@ -24,12 +24,6 @@ var i, fileName, cmd,
 		plugin: "event/drop",
 		exclude: ["jquery/lang/vector/vector.js", "jquery/event/livehack/livehack.js", "jquery/event/drag/drag.js"]},
 	"event/hover",
-	{
-		plugin: "model", 
-		exclude: ["jquery/class/class.js",
-				  "jquery/lang/lang.js",
-				  "jquery/event/destroyed/destroyed.js",
-				  "jquery/lang/openajax/openajax.js"]},
 	"view/ejs", 
 	"dom/closest",
 	"dom/compare",
@@ -40,7 +34,58 @@ var i, fileName, cmd,
 	"dom/fixture",
 	"dom/form_params",
 	"dom/within", 
-	"dom/cur_styles"
+	"dom/cur_styles",
+	"model",
+	{
+		plugin: "model/associations",
+		exclude: ["jquery/class/class.js",
+				  "jquery/lang/lang.js",
+				  "jquery/event/destroyed/destroyed.js",
+				  "jquery/lang/openajax/openajax.js",
+				  "jquery/model/model.js"]
+	},
+	{
+		plugin: "model/backup",
+		exclude: ["jquery/class/class.js",
+				  "jquery/lang/lang.js",
+				  "jquery/event/destroyed/destroyed.js",
+				  "jquery/lang/openajax/openajax.js",
+				  "jquery/model/model.js"]
+	},
+	{
+		plugin: "model/list",
+		exclude: ["jquery/class/class.js",
+				  "jquery/lang/lang.js",
+				  "jquery/event/destroyed/destroyed.js",
+				  "jquery/lang/openajax/openajax.js",
+				  "jquery/model/model.js"]
+	},
+	{
+		plugin: "model/list/cookie",
+		exclude: ["jquery/class/class.js",
+				  "jquery/lang/lang.js",
+				  "jquery/event/destroyed/destroyed.js",
+				  "jquery/lang/openajax/openajax.js",
+				  "jquery/model/model.js",
+				  "jquery/model/list/list.js"]
+	},
+	{
+		plugin: "model/list/local",
+		exclude: ["jquery/class/class.js",
+				  "jquery/lang/lang.js",
+				  "jquery/event/destroyed/destroyed.js",
+				  "jquery/lang/openajax/openajax.js",
+				  "jquery/model/model.js",
+				  "jquery/model/list/list.js"]
+	},
+	{
+		plugin: "model/validations",
+		exclude: ["jquery/class/class.js",
+				  "jquery/lang/lang.js",
+				  "jquery/event/destroyed/destroyed.js",
+				  "jquery/lang/openajax/openajax.js",
+				  "jquery/model/model.js"]
+	}
 ]
 
 
