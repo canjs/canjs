@@ -54,7 +54,7 @@ $.extend($.Model, {
     * Validates each of the specified attributes with the given function.  See [validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Function} validateProc Function used to validate each given attribute. Returns true for valid and false otherwise. Function is called in the instance context and takes the value to validate
-    * @param {optional:Object} options Options for the validations.  Valid options include 'message' and 'testIf'.
+    * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     */
    validate: validate,
 
@@ -65,7 +65,7 @@ $.extend($.Model, {
     * matching it against the regular expression provided.  See [validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {RegExp} regexp Regular expression used to match for validation
-    * @param {optional:Object} options Options for the validations.  Valid options include 'message' and 'testIf'.
+    * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     *
     */
    validateFormatOf: function(attrNames, regexp, options) {
@@ -85,7 +85,7 @@ $.extend($.Model, {
     * array.   See [validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Array} inArray Array of options to test for inclusion
-    * @param {optional:Object} options Options for the validations.  Valid options include 'message' and 'testIf'.
+    * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     * 
     */
    validateInclusionOf: function(attrNames, inArray, options) {
@@ -105,7 +105,7 @@ $.extend($.Model, {
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Number} min Minimum length (inclusive)
     * @param {Number} max Maximum length (inclusive)
-    * @param {optional:Object} options Options for the validations.  Valid options include 'message' and 'testIf'.
+    * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     *
     */
    validateLengthOf: function(attrNames, min, max, options) {
@@ -122,7 +122,7 @@ $.extend($.Model, {
     * @parent jquery.model.validations
     * Validates that the specified attributes are not blank.  See [validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
-    * @param {optional:Object} options Options for the validations.  Valid options include 'message' and 'testIf'.
+    * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     *
     */
    validatePresenceOf: function(attrNames, options) {
@@ -139,7 +139,7 @@ $.extend($.Model, {
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Number} low Minimum value (inclusive)
     * @param {Number} hi Maximum value (inclusive)
-    * @param {optional:Object} options Options for the validations.  Valid options include 'message' and 'testIf'.
+    * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     *
     */
    validateRangeOf: function(attrNames, low, hi, options) {
