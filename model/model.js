@@ -5,6 +5,10 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 
 	/**
 	 * @tag core
+	 * @download jquery/dist/jquery.model.js
+	 * @test jquery/model/qunit.html
+	 * @plugin jquery/model
+	 * 
 	 * Models wrap an application's data layer.  In large applications, a model is critical for:
 	 * 
 	 *  - Encapsulating services so controllers + views don't care where data comes from.

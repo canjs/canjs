@@ -1,5 +1,43 @@
 //allows you to backup and restore a model instance
 steal.plugins('jquery/model').then(function(){
+
+/**
+@page jquery.model.backup Backup / Restore
+@parent jQuery.Model
+@plugin jquery/model/backup
+@test jquery/model/backup/qunit.html
+@download jquery/dist/jquery.model.backup.js
+
+You can backup and restore instance data with the jquery/model/backup
+plugin.
+
+To backup a model instance call [jQuery.Model.prototype.backup backup] like:
+
+@codestart
+var recipe = new Recipe({name: "cheese"});
+recipe.backup()
+@codeend
+
+You can check if the instance is dirty with [jQuery.Model.prototype.isDirty isDirty]:
+
+@codestart
+recipe.name = 'blah'
+recipe.isDirty() //-> true
+@codeend
+
+Finally, you can restore the original attributes with 
+[jQuery.Model.prototype.backup backup].
+
+@codestart
+recipe.restore();
+recipe.name //-> "cheese"
+@codeend
+
+See this in action:
+
+@demo jquery/model/backup/backup.html
+ */
+
 	// a helper to iterate through the associations
 	var associations = function(instance, func){
 		var name, 
@@ -100,39 +138,5 @@ steal.plugins('jquery/model').then(function(){
 	   
    })
 })
-/**
-@page jquery.model.backup Backup / Restore
-@parent jQuery.Model
-@plugin jquery/model/backup
-@test jquery/model/backup/qunit.html
-@download jquery/dist/jquery.model.backup.js
 
-You can backup and restore instance data with the jquery/model/backup
-plugin.
 
-To backup a model instance call [jQuery.Model.prototype.backup backup] like:
-
-@codestart
-var recipe = new Recipe({name: "cheese"});
-recipe.backup()
-@codeend
-
-You can check if the instance is dirty with [jQuery.Model.prototype.isDirty isDirty]:
-
-@codestart
-recipe.name = 'blah'
-recipe.isDirty() //-> true
-@codeend
-
-Finally, you can restore the original attributes with 
-[jQuery.Model.prototype.backup backup].
-
-@codestart
-recipe.restore();
-recipe.name //-> "cheese"
-@codeend
-
-See this in action:
-
-@demo jquery/model/backup/backup.html
- */

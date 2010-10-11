@@ -1,4 +1,88 @@
 steal.plugins('jquery/model').then(function($){
+/**
+@page jquery.model.associations Associations
+@parent jQuery.Model
+@download jquery/dist/jquery.model.associations.js
+@test jquery/model/associations/qunit.html
+@plugin jquery/model/associations
+
+For efficiency, you often want to get data for related 
+records at the same time. The jquery.model.assocations.js 
+plugin lets you do this.
+
+Lets say we wanted to list tasks for contacts. When we request our contacts, 
+the JSON data will come back like:
+
+@codestart
+[
+ {'id': 1,
+  'name' : 'Justin Meyer',
+  'birthday': '1982-10-20',
+  'tasks' : [
+    {'id': 1, 
+     'title': "write up model layer", 
+     'due': "2010-10-5" },
+    {'id': 1, 
+     'title': "document models", 
+     'due': "2010-10-8"}]},
+  ...
+]
+@codeend
+
+We want to be able to do something like:
+
+@codestart
+var tasks = contact.attr("tasks");
+
+tasks[0].due //-> date
+@codeend
+
+Basically, we want <code>attr("tasks")</code> to
+return a list of task instances.
+
+Associations let you do this.  Here's how:
+
+First, create a Task model:
+
+@codestart
+$.Model.extend("Task",{
+  convert : {
+    date : function(date){ ... }
+  },
+  attributes : {
+    due : 'date'
+  }
+},{
+  weeksPastDue : function(){
+    return Math.round( (new Date() - this.due) /
+          (1000*60*60*24*7 ) );
+  }
+})
+@codeend
+
+Then create a Contact model that 'hasMany' tasks:
+
+@codestart
+$.Model.extend("Contact",{
+  associations : {
+    hasMany : "Task"
+  },
+  ...
+},{
+  ...
+});
+@codeend
+
+Here's a demo of this in action:
+
+@demo jquery/model/associations/associations.html
+
+You can customize associations with
+the [jQuery.Model.static.belongsTo belongsTo]
+and [jQuery.Model.static.belongsTo hasMany] methods.
+ */
+
+
 	//overwrite model's setup to provide associations
 	
 	var oldSetup = $.Model.setup,
@@ -100,88 +184,8 @@ steal.plugins('jquery/model').then(function($){
 		};
 		return this;
 	}
+
+
+
 })
-/**
-@page jquery.model.associations Associations
-@parent jQuery.Model
-@download jquery/dist/jquery.model.associations.js
-@test jquery/model/associations/qunit.html
-@plugin jquery/model/associations
 
-# Model Associations
-
-For efficiency, you often want to get data for related 
-records at the same time. The jquery.model.assocations.js 
-plugin lets you do this.
-
-Lets say we wanted to list tasks for contacts. When we request our contacts, 
-the JSON data will come back like:
-
-@codestart
-[
- {'id': 1,
-  'name' : 'Justin Meyer',
-  'birthday': '1982-10-20',
-  'tasks' : [
-    {'id': 1, 
-     'title': "write up model layer", 
-     'due': "2010-10-5" },
-    {'id': 1, 
-     'title': "document models", 
-     'due': "2010-10-8"}]},
-  ...
-]
-@codeend
-
-We want to be able to do something like:
-
-@codestart
-var tasks = contact.attr("tasks");
-
-tasks[0].due //-> date
-@codeend
-
-Basically, we want <code>attr("tasks")</code> to
-return a list of task instances.
-
-Associations let you do this.  Here's how:
-
-First, create a Task model:
-
-@codestart
-$.Model.extend("Task",{
-  convert : {
-    date : function(date){ ... }
-  },
-  attributes : {
-    due : 'date'
-  }
-},{
-  weeksPastDue : function(){
-    return Math.round( (new Date() - this.due) /
-          (1000*60*60*24*7 ) );
-  }
-})
-@codeend
-
-Then create a Contact model that 'hasMany' tasks:
-
-@codestart
-$.Model.extend("Contact",{
-  associations : {
-    hasMany : "Task"
-  },
-  ...
-},{
-  ...
-});
-@codeend
-
-Here's a demo of this in action:
-
-@demo jquery/model/associations/associations.html
-
-You can customize associations with
-the [jQuery.Model.static.belongsTo belongsTo]
-and [jQuery.Model.static.belongsTo hasMany] methods.
- */
