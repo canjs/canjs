@@ -2,10 +2,30 @@ steal.plugins('jquery/model').then(function($){
 /*
 @page jquery.model.validations Validations
 @plugin jquery/mode/validations
+@download jquery/dist/jquery.model.validations.js
+@test jquery/model/validations/qunit.html
 @parent jQuery.Model
 
-Finally, in many apps, it's important to validate data before sending it to the server. 
+In many apps, it's important to validate data before sending it to the server. 
 The jquery/model/validations plugin provides validations on models.
+
+## Example
+
+To use validations, you need to call a validate method on the Model class.
+The best place to do this is in a Class's init function.
+
+@codestart
+$.Model.extend("Contact",{
+	init : function(){
+		// validates that birthday is in the future
+		this.validate("birthday",function(){
+			if(this.birthday > new Date){
+				return "your birthday needs to be in the past"
+			}
+		})
+	}
+},{});
+@codeend
 
 ## Demo
 

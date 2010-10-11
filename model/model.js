@@ -386,7 +386,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			if (object == 'true' || object == 'false') {
 				return 'boolean';
 			}
-			if (!isNaN(object) && (+object) !== Infinity) {
+			if (!isNaN(object) && isFinite(+object) ) {
 				return 'number';
 			}
 			return typeof object;

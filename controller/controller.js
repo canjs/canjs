@@ -57,6 +57,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 * @tag core
 	 * @plugin jquery/controller
 	 * @download jquery/dist/jquery.controller.js
+	 * @test jquery/controller/qunit.html
 	 * 
 	 * Controllers organize event handlers using event delegation. 
 	 * If something happens in your application (a user click or a [jQuery.Model|Model] instance being updated), 

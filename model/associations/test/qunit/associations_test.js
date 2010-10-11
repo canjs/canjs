@@ -21,7 +21,7 @@ module("jquery/model/associations",{
 
 
 
-test("associations testing works", function(){
+test("associations work", function(){
 	var c = new MyTest.Customer({
 		id: 5,
 		person : {

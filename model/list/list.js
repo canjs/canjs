@@ -1,7 +1,6 @@
 steal.plugins('jquery/model').then(function($){
 
-var 
-	add = function(data, inst){
+var add = function(data, inst){
 		var id = inst.Class.id;
 		data[inst[id]] = inst;
 	},
@@ -14,6 +13,9 @@ var
 	}
 /**
  * @parent jQuery.Model
+ * @download jquery/dist/jquery.model.list.js
+ * @test jquery/model/list/qunit.html
+ * @plugin jquery/model/list
  * Model lists are useful for:
  * 
  *  - Adding helpers for multiple model instances.
@@ -88,7 +90,11 @@ var
  * 
  * @demo jquery/model/list/list-insert.html
  */
-$.Class.extend("jQuery.Model.List",{
+$.Class.extend("jQuery.Model.List",
+/**
+ * @Prototype
+ */
+{
     init: function( instances ) {
         this.length = 0;
 		this._data = {};
@@ -113,7 +119,7 @@ $.Class.extend("jQuery.Model.List",{
         });
     },
 	/**
-	 * Returns a 
+	 * Returns a model list of elements where callback returns true.
 	 * @param {Function} callback the function to call back.  This
 	 * function has the same call pattern as what jQuery.grep provides.
 	 * @param {Object} args

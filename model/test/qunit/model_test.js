@@ -61,6 +61,9 @@ test("guess type", function(){
    equals("boolean", $.Model.guessType( true )  );
    equals("number", $.Model.guessType( "1" )  );
    equals("string", $.Model.guessType( "a" )  );
+   
+   equals("string", $.Model.guessType( "1e234234324234" ) );
+   equals("string", $.Model.guessType( "-1e234234324234" ) );
 })
 
 test("wrapMany", function(){

@@ -11,30 +11,41 @@
         </style>
 	</head>
 	<body>
+<div id="demo-instructions">
 		<h1>Model Events Demo</h1>
 		<p>This demo shows listening to model update events.
 		Clicking on a person's name will show a form to update
 		their birthday.  Change the birthday and 'blur' the 
 		input to update their listed age.</p>
-		<div id='update'></div>
-		<h2>Direct Binding</h2>
-		<p>The following list binds directly to "birthday" events.</p>
-		<div id='contacts1'></div>
-		
-		
-		<h2>Subscribing</h2>
-		<p>The following list subscribes to "contact.updated" events.</p>
-		<div id='contacts2'></div>
+</div>
+<div id="demo-html">
+<div id='update'></div>
+
+<h2>Direct Binding</h2>
+<p>
+   The following list binds 
+   directly to "birthday" events.
+</p>
+<div id='contacts1'></div>
+
+<h2>Subscribing</h2>
+<p>
+   The following list subscribes
+   to "contact.updated" events.
+</p>
+<div id='contacts2'></div>
+</div>
 <script type='text/javascript' 
         src='../../steal/steal.js'>   
 </script>
 <script type='text/javascript'>
 steal.plugins('jquery/model',
 		'jquery/dom/fixture',
-		'jquery/model/list').start()
+		'jquery/model/list',
+		'jquery/lang/openajax').start()
 </script>
-<script type='text/javascript'>   
 
+<script type='text/javascript'>
 $.Model.extend("Contact",{
 	attributes : { 
 		birthday : 'date'
@@ -77,8 +88,38 @@ $.Model.extend("Contact",{
 			"-"+(this.birthday.getMonth()+1)+
 			"-"+this.birthday.getDate();
 	}
-
 });
+
+drawList1 = function(contact){
+	return  $('<li>')
+              .model(contact)
+              .html(contact.name+" "+contact.ageThisYear()+
+                    " <a>Show</a>")
+              .appendTo(contactsEl)
+};
+
+$('#contacts1').delegate("li","click", function(){
+	makeAgeUpdate( $(this).closest('.contact').model() );
+});
+$('#contacts2').delegate("li","click", function(){
+	makeAgeUpdate( contacts.get(this)[0] );
+});
+  
+makeAgeUpdate = function(contact){
+	var updater = $("#update")
+	updater.children().remove();
+	updater.append(contact.name+"'s birthday")
+	$('<input/>').val(contact.attr("birthday")).change(function(){
+		contact.update({
+			'birthday': this.value
+		})
+	}).appendTo(updater)
+}
+</script>
+
+<script type='text/javascript'>   
+
+
 
 makeList1 = function(contacts){
   var contactsEl = $('#contacts1');
@@ -94,9 +135,6 @@ makeList1 = function(contacts){
     })
   })
   
-  contactsEl.delegate("li","click", function(){
-	 makeAgeUpdate( $(this).closest('.contact').model() );
-  });
 };
 makeList2 = function(contacts){
   var contactsEl = $('#contacts2'),
@@ -113,16 +151,17 @@ makeList2 = function(contacts){
   }
   contactsEl.html(html.join(""))
   
-  OpenAjax.hub.subscribe("contact.updated", function(called, contact){
-  	 contact.elements(contactsEl)
-	        .html(contact.name+" "+contact.ageThisYear()+
-              " <a>Show</a>");
-  })
   
-  contactsEl.delegate("li","click", function(){
-	 makeAgeUpdate( contacts.get(this)[0] );
-  });
+  
+  
 }
+
+OpenAjax.hub.subscribe("contact.updated", function(called, contact){
+	 contact.elements(contactsEl)
+        .html(contact.name+" "+contact.ageThisYear()+
+          " <a>Show</a>");
+})
+
 
 // List 1
 Contact.findAll({},function(contacts){
@@ -132,16 +171,7 @@ Contact.findAll({},function(contacts){
 
 
 
-makeAgeUpdate = function(contact){
-	var updater = $("#update")
-	updater.children().remove();
-	updater.append(contact.name+"'s birthday")
-	$('<input/>').val(contact.attr("birthday")).change(function(){
-		contact.update({
-			'birthday': this.value
-		})
-	}).appendTo(updater)
-}
+
 
 
 </script>

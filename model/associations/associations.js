@@ -17,12 +17,12 @@ steal.plugins('jquery/model').then(function($){
 		delete this.associations.hasMany;
 		delete this.associations.belongsTo;
 	}
-	/**
-	 * @add jQuery.Model.static
-	 */
+
 	
 	$.Model.
 	/**
+	 * @function jQuery.Model.static.belongsTo
+	 * @parent jquery.model.associations
 	 * @plugin jquery/model/associations
 	 * Use to convert values on attribute <i>name</i> to
 	 * instances of model <i>type</i>.
@@ -63,6 +63,8 @@ steal.plugins('jquery/model').then(function($){
 	}
 	$.Model.
 	/**
+	 * @function jQuery.Model.static.hasMany
+	 * @parent jquery.model.associations
 	 * @plugin jquery/model/associations
 	 * Converts values on attribute <i>name</i> to
 	 * instances of model <i>type</i>.
@@ -102,6 +104,10 @@ steal.plugins('jquery/model').then(function($){
 /**
 @page jquery.model.associations Associations
 @parent jQuery.Model
+@download jquery/dist/jquery.model.associations.js
+@test jquery/model/associations/qunit.html
+@plugin jquery/model/associations
+
 # Model Associations
 
 For efficiency, you often want to get data for related 
