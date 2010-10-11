@@ -2,7 +2,7 @@
             "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 	<head>
-		<title>Model Events Demo</title>
+		<title>Model Validations Demo</title>
         <style type='text/css'>
             body {font-family: verdana}
             li {border: solid 1px gray; padding: 5px; width: 250px;}
@@ -88,9 +88,9 @@ $.Model.extend("Contact",{
 
 });
 
-makeAgeUpdate = function(contact){
+makeAgeUpdater = function(contact){
 	var updater = $("#update")
-	updater.children().remove();
+	updater.html("");
 	updater.append("<span>" +contact.name+"'s birthday </span>")
 	$('<input/>').val(contact.attr("birthday")).change(function(){
 		
@@ -124,7 +124,7 @@ Contact.findAll({},function(contacts){
   })
   
   contactsEl.delegate("li","click", function(){
-	 makeAgeUpdate( $(this).closest('.contact').model() );
+	 makeAgeUpdater( $(this).closest('.contact').model() );
   });
 });
 </script>

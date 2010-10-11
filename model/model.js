@@ -206,7 +206,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * Attributes contains a list of properties and their types
 		 * for this model.  You can use this in conjunction with 
 		 * [jQuery.Model.static.convert] to provide automatic 
-		 * [model-typeconversion type conversion].  
+		 * [jquery.model.typeconversion type conversion].  
 		 * 
 		 * The following converts dueDates to JavaScript dates:
 		 * 
@@ -399,7 +399,8 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @attribute convert
 		 * @type Object
 		 * An object of name-function pairs that are used to convert attributes.
-		 * Check out [jQuery.Model.static.attributes] or [model-typeconversion type conversion]
+		 * Check out [jQuery.Model.static.attributes] or 
+		 * [jquery.model.typeconversion type conversion]
 		 * for examples.
 		 */
 		convert: {

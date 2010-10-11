@@ -14,13 +14,21 @@
     <li>Backup / Restore</li>
     <li>Validations</li>
 </ul>
-
-
+<h2>Downloads</h2>
+<ul>
+	<li><a href='http://v3.javascriptmvc.com/jquery/dist/jquery.model.js'>jquery.model.js</a></li>
+	<li><a href='http://v3.javascriptmvc.com/jquery/dist/jquery.model.associations.js'>jquery.model.associations.js</a></li>
+	<li><a href='http://v3.javascriptmvc.com/jquery/dist/jquery.model.backup.js'>jquery.model.backup.js</a></li>
+	<li><a href='http://v3.javascriptmvc.com/jquery/dist/jquery.model.list.js'>jquery.model.list.js</a></li>
+	<li><a href='http://v3.javascriptmvc.com/jquery/dist/jquery.model.cookie.js'>jquery.model.list.cookie.js</a></li>
+	<li><a href='http://v3.javascriptmvc.com/jquery/dist/jquery.model.validations.js'>jquery.model.validations.js</a></li>
+</ul>
 <h2>Overview</h2>
 
-
-
-<p>Complex JavaScript applications are mostly about making it easy to create, read, update, and delete (CRUD) data.  But, being so close to the UI, most JavaScript developers ignore the data layer and focus on making animated drag-drop effects.  
+<p>Complex JavaScript applications are mostly about making it easy to create, 
+read, update, and delete (CRUD) data.  But being so close to the UI, 
+most JavaScript developers ignore the data layer and focus on 
+making animated drag-drop effects.  
 </p>
 <p>We're doing ourselves a disservice! A strong Model layer can make an architecture infinitely more robust, reusable, and maintainable. 
 </p>
@@ -64,7 +72,8 @@ Instead, model encapsulates (wraps) this request so you call it like:
 Contact.findAll({type: 'old'}, successCallback);
 </code></pre>
 <p>
-This might seem like unnecessary overhead, but by encapsulating your application data, your application benefits in two significant ways:
+This might seem like unnecessary overhead, but by encapsulating your 
+application's data, your application benefits in two significant ways:
 </p>
 
 <h3>Benefit 1: Localized Changes</h3>
@@ -87,10 +96,12 @@ different models for the same widget.
 </p>
 <h3>Encapsulation Demo</h3>
 
-<p>The Grid demo shows using two different models with the same widget.</p>
+<p><a href='http://v3.javascriptmvc.com/jquery/model/demo-encapsulate.html'>The encapsulation demo</a> shows using two different models with the same widget.</p>
 <h3>How to Encapsulate</h3>
 <p>
-Think of models as a contract for creating, reading, updating, and deleting data.  By filling out a model, you can pass that model to a widget and the widget will use the model as a proxy for your data.  
+Think of models as a contract for creating, reading, updating, and deleting data.  
+By filling out a model, you can pass that model to a widget and the 
+widget will use the model as a proxy for your data.  
 </p>
 <p>
 The following chart shows the methods most models provide:
@@ -142,8 +153,9 @@ AND all the other magic Model provides.  Lets see how we might fill out the
   // We'll learn about this soon!
 });</code></pre>
 
-<p>Well, that would be annoying to write out every time.  Fortunately, models have
-the wrapMany method which will make it easier:</p>
+<p>Well, that would be annoying to write out every time.  Fortunately, 
+models have
+the <a href='http://v3.javascriptmvc.com/index.html#&who=jQuery.Model.static.wrapMany'>wrapMany</a> method which will make it easier:</p>
 <pre><code>  findAll : function(params, success, error){
     $.get('/contacts.json',
       params, 
@@ -153,7 +165,9 @@ the wrapMany method which will make it easier:</p>
       'json');
   }
 </code></pre>
-<p>Model is based off JavaScriptMVC's <code>jQuery.Class</code>. It's callback allows us to pipe
+<p>Model is based off JavaScriptMVC's 
+<a href='http://jupiterjs.com/news/a-simple-powerful-lightweight-class-for-jquery'><code>jQuery.Class</code></a>. It's 
+<a href='http://v3.javascriptmvc.com/index.html#&who=jQuery.Class.static.callback'>callback method</a> allows us to pipe
 wrapMany into the success handler and make our code even shorter:</p>
 <pre><code>  findAll : function(params, success, error){
     $.get('/contacts.json',
@@ -170,22 +184,28 @@ wrapMany into the success handler and make our code even shorter:</p>
   }
   $('#contacts').html( html.join('') );
 });</code></pre>
-<p>Read JavaScriptMVC's documentation on how to fill out the other CRUD methods
+<p>Read JavaScriptMVC's <a href='http://v3.javascriptmvc.com/index.html#&who=jquery.model.encapsulate'>
+	encapsulation documentation</a> on how to fill out the other CRUD methods
 of the CRUD-Contract.  Once this is done, you'll get all the following magic.</p>
 <h2>Type Conversion</h2>
 <p>By creating instances of Contact with the data from the server, it
 lets us wrap and manipulate the data into a more usable format.
 </p>
 <p>
-    You notice that each Contact has a birthday that the server sends  back like:
-    <code>'1982-10-20'</code>.  A string representation of a date
-     is not terribly convient.  We can use our model to convert it to something closer to
+    You notice that the server sends back Contact birthdays like:
+    <code>'1982-10-20'</code>.  
+	A string representation of dates
+     is not terribly convient.  
+	 We can use our model to convert it to something closer to
      <code>new Date(1982,10,20)</code>.  We can do this in two ways:
     
 </p>
+
 <h3>Way 1: Setters</h3>
-<p>In Contact Model, you can add a setBirthday method that will convert the raw
-data passed from the server to a format more useful for JavaScript:  </p>
+<p>In our Contact model, we can add a setBirthday method 
+that will convert the raw
+data passed from the server to a 
+format more useful for JavaScript:  </p>
 <pre><code>$.Model.extend("Contact",
 {
   findAll : function( ... ){ ... }
@@ -202,8 +222,9 @@ data passed from the server to a format more useful for JavaScript:  </p>
     }
   }
 })</code></pre>
-<p>A setter function takes the raw data and returns the JavaScript friendly
-value.</p>
+<p>The <code>setBirthday</code> setter function takes the 
+raw string date, parses it returns the JavaScript friendly
+date.</p>
 <h3>Way 2: Attributes and Converters</h3>
 <p>If you have a lot of dates, <B>Setters</B> won't scale well.  Instead, you can
 set the type of an attribute and provide a function to convert that type.</p>
@@ -231,6 +252,12 @@ conversion function:</p>
 {
   // No prototype properties necessary
 })</code></pre>
+<p>This technique uses a Model's 
+<a href='http://v3.javascriptmvc.com/index.html#&who=jQuery.Model.static.attributes'>
+	attributes</a> and 
+	<a href='http://v3.javascriptmvc.com/index.html#&who=jQuery.Model.static.convert'>
+		convert</a> properties.</p>
+
 <p>Now our recipe instances will have a nice <code>Date</code> 
 birthday property. 
 We can use it to list how old each person will be this year:
@@ -277,16 +304,26 @@ Contact.findAll({},function(contacts){
   }
   $('#contacts').html( html.join('') );
 });</code></pre>
+
+<p>Now that we are showing contacts on the page, lets do something with them.
+  First, we'll need a way to get back our models from the page.  For this we'll use ...  
+</p>
+
 <h2>DOM Helper Functions</h2>
 <p>It's common practice with jQuery to put additional data 'on' html elements
-with jQuery.data.  It's a great technique because you can remove the elements
+with 
+<a href='http://api.jquery.com/jQuery.data/'>jQuery.data</a>.  
+It's a great technique because you can remove the elements
 and jQuery will clean the data (letting the Garbage Collector do its work).  
-
 </p>
-<p>Model supports this with the <code>model</code> and <code>models</code> helpers.
+<p>Model supports something similar with the 
+<code>model</code> and <code>models</code> helpers.
 They let us set and retrieve model instances on elements.
 </p>
-<p>For example, we could rewrite our contact list with a <code>DELETE</code> link like:</p>
+<p>For example, lets say we wanted to let developer delete contacts like
+in the <a href='http://v3.javascriptmvc.com/jquery/model/demo-dom.html'>
+	Model DOM Demo</a>.</p>
+<p>First, we'll add a <code>DELETE</code> link like:</p>
 <pre><code>Contact.findAll({},function(contacts){
   var contactsEl = $('#contacts');
   for(var i =0; i < contacts.length; i++){
@@ -302,7 +339,7 @@ will look like:</p>
 <pre><code>&lt;li class='contact contact_5'> ... &lt;/li></code></pre>
 <p>When someone clicks on <code>DELETE</code>, we want to remove that contact.  
 We implement it like:</p>
-<pre><code>$("#contact a").live('click', function(){
+<pre><code>$("#contacts a").live('click', function(){
   //get the element for this recipe
   var contactEl = $(this).closest('.contact')
   
@@ -318,16 +355,19 @@ We implement it like:</p>
 <p>This assumes we've filled out <code>Contact.destroy</code>.  
 </p>
 <p>There's one more very useful DOM helper: <code>contact.elements()</code>.
-Elements returns the elements that have a particular model instance.
+<a href='http://v3.javascriptmvc.com/index.html#&who=jQuery.Model.prototype.elements'>Elements</a> returns the elements that 
+have a particular model instance.
 We'll see how this helps us in the next section.
 </p>
+
+
 <h2>Events</h2>
 <p>Consider the case where we have two representations of the 
 same recipe data on the page.  Maybe when we click a contact,
 we show additional information on the page, like an input to change the
 contact's birthday.
 </p>
-<p>See this in action in the <a href=''>event demo</a>.</p>
+<p>See this in action in the <a href='http://v3.javascriptmvc.com/jquery/model/demo-events.html'>events demo</a>.</p>
 <p>When the birthday is updated, we want the list's contact
 display to also update it's age.  Model provides two ways of doing this.</p>
 
@@ -342,7 +382,7 @@ item in the list:</p>
     var li = $('&lt;li>')
               .model(contact)
               .html(contact.ageThisYear()+
-                    " &lt;a>DELETE&lt;/a>")
+                    " &lt;a>Show&lt;/a>")
               .appendTo(contactsEl);
     contact.bind("birthday", function(){
       li.html(this.ageThisYear()+
@@ -362,7 +402,7 @@ following does roughly the same thing:</p>
     var li = $('&lt;li>')
               .model(contact)
               .html(contact.ageThisYear()+
-                    " &lt;a>DELETE&lt;/a>")
+                    " &lt;a>Show&lt;/a>")
               .appendTo(contactsEl);
   });
   
@@ -380,11 +420,13 @@ method to retrieve all elements that represent the updated contact.
 This is an extra DOM query, and slower than than "Way 1".  
 Why would we do this?  We'll see in the next section.
 </p>
+
+
 <h2>Lists</h2>
 <p>In complex apps, we're often dealing with lists of data items.  A
-user might want to select multiple contact and delete them.
-	The jQuery.Model.List plugin provides model list capabilities.
-	These are useful in 2 ways:
+user might want to select multiple contacts and delete them.
+	The <a href='http://v3.javascriptmvc.com/index.html#&who=jQuery.Model.List'>jQuery.Model.List</a> plugin provides model list capabilities.
+	Lists are useful in 2 ways:
 </p>
 <h3>Way 1: Faster Inserts</h3>
 <p>Remember how we originally inserted content into our page like:
@@ -404,50 +446,56 @@ be neglagible.  But, when performance matters, we've got you covered.
 and slower lookup.</p>
 
 <pre><code>Contact.findAll({},function(contacts){
-  var contactsEl = $('#contacts2'),
+  var contactsEl = $('#contacts'),
   	html = [], 
 	contact;
 	
+  // collect contact html
   for(var i =0; i < contacts.length;i++){
   	contact = contacts[i]
 	html.push("&lt;li class='contact ",
-		contact.identity(),"'>",
+		contact.identity(), // add the identity
+		"'>",
 		contact.name+" "+contact.ageThisYear()+
-                    " &lt;a>Show</a>",
+                " &lt;a>Show&lt;/a>",
 		"&lt;/li>")
   }
+  // insert contacts html
   contactsEl.html(html.join(""))
   
-  OpenAjax.hub.subscribe(
-    "contact.updated", 
-    function(called, contact){
-        contact.elements(contactsEl)
-          .html(contact.name+" "+contact.ageThisYear()+
-              " &lt;a>Show&lt;/a>");
-    })
-  
   contactsEl.delegate("li","click", function(){
-	 makeAgeUpdate( contacts.get(this)[0] );
+	 // use the contacts list to get the
+	 // contact from the clicked element
+	 var contact = contacts.get(this)[0];
+	 
+	 makeAgeUpdater( contact );
   });
 
 });</code></pre>
+<p>You can see this in action in the 
+<a href='http://v3.javascriptmvc.com/jquery/model/list/list-insert.html'>list insert</a> demo.</p>
 <p>There are two important things to notice in this example.</p>
 <p>First, contacts is a Model.List and no longer a simple array.
 This allows us to call <code>contacts.get(this)[0]</code> to
 get a contact for a given element.  We're using this technique
 because we can't use <code>model()</code>.</p>
 <p>
-	Second, we used the <code>identity</code> to provide a unique
+	Second, we used the 
+	<a href='http://v3.javascriptmvc.com/index.html#&who=jQuery.Model.prototype.identity'><code>identity</code></a> 
+	method to provide a unique
 	identifier that
-	 <code>elements</code> and <code>contacts.get</code> use.
+ <code>contacts.get</code> uses to find the right contact.
 </p>
 
 <h3>Way 2 : List Helpers</h3>
 <p>We can use lists to add helper functions for multiple instances.  Lets
-say we wanted to add checkboxes to each contact.  And, at the 
+say we wanted to add checkboxes to each contact.  And at the 
 bottom of the list, we'll add a "DELETE ALL" button that will delete all checked
-instances.  Model lists make this easy.</p>
-<p>First, lets make a Model List for Contacts:</p>
+instances.  You can see this in the 
+<a href='http://v3.javascriptmvc.com/jquery/model/list/list-insert.html'>list helper demo</a>.</p>
+
+<p>The following makes a model list for contacts with a <code>destroyAll</code> helper:</p>
+
 <pre><code>$.Model.List.extend("Contact.List",{
   destroyAll : function(){
     $.post("/destroy",
@@ -465,17 +513,23 @@ instances.  Model lists make this easy.</p>
 });</code></pre>
 <p>Now we can hook up our "DELETE ALL" button like this:</p>
 <pre><code>$("#destroyAll").click(function(){
-	$("#contacts input:checked").closest(".contact")
-	  .models()
-	  .destroyAll();
+  $("#contacts input:checked").closest(".contact")
+    .models()
+    .destroyAll();
 })</code></pre>
 <p>The <code>models</code> helper returns a contact list with our destroyAll method on it.</p>
 <h2>Local Storage</h2>
 <p>Lists can also serialize and save themselves for local storage.  Currently, 
-there are two storage types - Cookie and Local.  Local uses HTML5 localStorage and 
+there are two storage types - 
+<a href='http://v3.javascriptmvc.com/index.html#&who=jQuery.Model.List.Cookie'>Cookie</a> 
+and 
+<a href='http://v3.javascriptmvc.com/index.html#&who=jQuery.Model.List.Local'>Local</a>.  Local uses HTML5 localStorage and 
 is not available in all browsers.   
 </p>
-<p>In the Cookie List demo, you can create contacts that are saved between page requests.</p>
+<p>In the 
+
+<a href='http://v3.javascriptmvc.com/jquery/model/list/cookie/cookie.html'>Cookie List demo</a>
+, you can create contacts that are saved between page requests.</p>
 <p>This is accomplished by creating a $.Model.List.Cookie class like the following</p>
 <pre><code>$.Model.List.Cookie.extend("Contact.List");</code></pre>
 <p>Then when the page is loaded, we use it to retrieve existing contacts.
@@ -491,27 +545,28 @@ contacts.each(function(){
 
 // when a new cookie is crated
 $("#contact").submit(function(ev){
-	ev.preventDefault();
-	var data = $(this).formParams();
+  ev.preventDefault();
+  var data = $(this).formParams();
 	
-	// gives it a random id
-	data.id = +new Date();
-	var contact = new Contact(data);
+  // gives it a random id
+  data.id = +new Date();
+  var contact = new Contact(data);
 	
-	//add it to the list of contacts 
-	contacts.push(contact);
+  //add it to the list of contacts 
+  contacts.push(contact);
 	
-	//store the current list
-	contacts.store("contacts");
+  //store the current list
+  contacts.store("contacts");
 	
-	//show the contact
-	addContact(contact);
+  //show the contact
+  addContact(contact);
 })
 </code></pre>
 <h2>Associations</h2>
 <p>For efficiency, you often want to get data
  for related records at the same time.  The 
- jquery.model.assocations.js plugin lets you do this.
+ <a href='http://v3.javascriptmvc.com/index.html#&who=jquery.model.associations'>jquery.model.assocations</a> 
+ plugin lets you do this.
 </p>
 <p>Lets say we wanted to list tasks for each of our contacts.
 When we request our contacts, the JSON data will come back like:</p>
@@ -574,12 +629,15 @@ have many Tasks.</p>
     ul.appendTo(li)
   });
 });</code></pre>
+<p>See this in action with the 
+<a href='http://v3.javascriptmvc.com/jquery/model/associations/associations.html'>
+	associations demo</a>.</p>
 <h2>Backup / Restore</h2>
 <p>Sometimes you want to let a user make changes to 
 data and then let them restore the original data.  
-The jquery.model.restore plugin enables this functionality.
+The <a href='http://v3.javascriptmvc.com/index.html#&who=jquery.model.backup'>jquery.model.backup</a> plugin enables this functionality.
 </p>
-<p>In the restore demo, we backup each contact like:</p>
+<p>In the <a href='http://v3.javascriptmvc.com/jquery/model/backup/backup.html'>backup demo</a>, we backup each contact like:</p>
 <pre><code>Contact.findAll({},function(contacts){
   var contactsEl = $('#contacts');
   $.each(contacts, function(i, contact){
@@ -590,7 +648,8 @@ The jquery.model.restore plugin enables this functionality.
 });</code></pre>
 
 <p>To restore the contacts, we listen for click
-and call restore on each contact:</p>
+and call 
+<a href='http://v3.javascriptmvc.com/index.html#&who=jQuery.Model.prototype.restore'>restore</a> on each contact:</p>
 
 <pre><code>$("#restore").click(function(){
   contacts.each(function(){
@@ -601,9 +660,10 @@ and call restore on each contact:</p>
 
 <h2>Validations</h2>
 <p>Finally, in many apps, it's important to validate data
-before sending it to the server.  The jquery.model.validations
+before sending it to the server.  The 
+<a href='http://v3.javascriptmvc.com/index.html#&who=jquery.model.validations'>jquery.model.validations</a>
 plugin provides validations on models.</p>
-<p>In the validation's demo, we validate that the
+<p>In the <a href='http://v3.javascriptmvc.com/jquery/model/validations/validations.html'>validations demo</a>, we validate that the
 contact can not have a birthday in the future.  This
 is done by adding validations in the Contact class's 
 <code>init</code>
@@ -623,51 +683,53 @@ method:</p>
 we can provide success and error callbacks that will
 show or hide an error message:</p>
 
-<pre><code>contact.attr("birthday", this.value , function(){
-  ('#error').hide();
-}, function(errors){
-  $('#error').html(errors.birthday[0]).show();
-})</code></pre>
+<pre><code>contact.attr("birthday", this.value , 
+  function(){
+    // on success, hide the error div
+    $('#error').hide();
+  }, 
+  function(errors){
+    // on error, show the error
+    $('#error').html(errors.birthday[0]).show();
+  })</code></pre>
 
 <h2>Conclusion</h2>
 <p>
 	Model is probably the least understood part
 	of JavaScriptMVC's toolset.  This is understandable.
-	People understand the need to unbind event handlers (Controller)
+	People get the need to unbind event handlers (Controller)
 	and the utility of client side templates (view), but
-	a model on the client ... that's crazy talk!	
+	a model on the client ... that's crazy!	
 	
 </p>
 <p>
-	This is because most developers are 
-	unfamiliar with treating the server as a provider
-	of raw data services - Thin Server Architecture.  
-	Model is based around this idea.
+	This is likely due to 
+	unfamiliarity with treating the server as a provider
+	of raw data services - the idea behind Thin Server Architecture.  
+	Model is based around this concept.
 	If you're unfamiliar with approach, please check out
 	
 	<a href='http://www.youtube.com/watch?v=XMkIZZ7dBng'>
 		this video</a>.
 </p>
 <p>
-	Now assuming Thin Server Architecture makes sense to you,
+	Assuming Thin Server Architecture makes sense to you,
 	Model is awesome at what it does - 
 	flexibly encapsulating
 	an Ajax application's data layer.
 </p>
 <p>
-	We often work alongside the server teams and rarely have the luxury of
-	a 'final' service API to work from.  Model 
+	We often work alongside server teams and rarely have the luxury of
+	a complete service API.  Model 
 	insulates our widgets from the underlying AJAX requests. 
 	It is a contract we pass to our widgets, allowing them to 
 	manipulate services through a proxy.
 </p>
 <p>If the services change, we only have to update the model layer.</p>
 <h3>Data Pipelining</h3>
-<p>Model has a ton of functionality.  This can make it seem complex.
-But typically, we only use it's primary feaure:</p>
-<ul>
-	<li>Wrapping service data with helper functions.</li>
-</ul>
+<p>There's one feature of model that deserves special attention -
+its ability to wrap service data with helper functions.</p>
+
 <p>This provides what we call "<b>data pipelining</b>", which basically 
 means avoiding unnecessary data transformations.
 </p>
@@ -675,10 +737,15 @@ means avoiding unnecessary data transformations.
 database and transform
 it for the client.  A good example is converting a birthday into an age.
 </p>
-<p>This adds unecessary complexity to the server.  At some point,
+<p>But, this adds unecessary complexity to the server.  At some point,
 the client might want other values derived from a birthday.
 The server will need to constantly adjust to provide them.
 </p>
-<p>Model make it easy to avoid this complexity.  Your server
+<p>Model makes it easy to avoid this craziness.  Your server
 sends raw data, essentially a JSON dump of the database and the client
 is left to extract the information it needs.</p>
+<h3>Conclusion's conclusion</h3>
+<p> Model has, of course, a lot of other benefits.  It
+ forms the backbone of most of our apps and enables the thinest of servers.
+ We hope you will find it as useful as we have.  
+</p>

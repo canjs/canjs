@@ -99,15 +99,13 @@ drawList1 = function(contact){
 };
 
 $('#contacts1').delegate("li","click", function(){
-	makeAgeUpdate( $(this).closest('.contact').model() );
+	makeAgeUpdater( $(this).closest('.contact').model() );
 });
-$('#contacts2').delegate("li","click", function(){
-	makeAgeUpdate( contacts.get(this)[0] );
-});
+
   
-makeAgeUpdate = function(contact){
+makeAgeUpdater = function(contact){
 	var updater = $("#update")
-	updater.children().remove();
+	updater.html("");
 	updater.append(contact.name+"'s birthday")
 	$('<input/>').val(contact.attr("birthday")).change(function(){
 		contact.update({
@@ -152,12 +150,14 @@ makeList2 = function(contacts){
   contactsEl.html(html.join(""))
   
   
-  
+  $('#contacts2').delegate("li","click", function(){
+	makeAgeUpdater( contacts.get(this)[0] );
+  });
   
 }
 
 OpenAjax.hub.subscribe("contact.updated", function(called, contact){
-	 contact.elements(contactsEl)
+	 contact.elements($('#contacts2'))
         .html(contact.name+" "+contact.ageThisYear()+
           " <a>Show</a>");
 })
