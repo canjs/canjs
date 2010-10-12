@@ -7,15 +7,14 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		extend = $.extend,
 		isArray = $.isArray,
 		EJS = function( options ) {
-			//returns a renderer
+			//returns a renderer function
 			if ( this.constructor != EJS ) {
 				var ejs = new EJS(options);
 				return function( data, helpers ) {
 					return ejs.render(data, helpers)
 				};
 			}
-
-			//if a function, set func as template func	
+			
 			if ( typeof options == "function" ) {
 				this.template = {};
 				this.template.process = options;
@@ -29,10 +28,14 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			template.compile(options, this.name);
 
 			this.template = template;
-		};
+		},
+		defaultSplitter = /(\[%%)|(%%\])|(\[%=)|(\[%#)|(\[%)|(%\]\n)|(%\])|(\n)/;
 	/**
-	 * @class jQuery.View.EJS
-	 * @plugin view
+	 * @class jQuery.EJS
+	 * @plugin jquery/view/ejs
+	 * @parent jQuery.View
+	 * @download jquery/dist/jquery.view.ejs.js
+	 * @test jquery/view/ejs/qunit.html
 	 * Ejs provides <a href="http://www.ruby-doc.org/stdlib/libdoc/erb/rdoc/">ERB</a> 
 	 * style client side templates.  Use them with controllers to easily build html and inject
 	 * it into the DOM.
@@ -79,9 +82,9 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 * 
 	 * <h2>View Helpers</h2>
 	 * View Helpers return html code.  View by default only comes with 
-	 * [jQuery.View.EJS.Helpers.prototype.view view] and [jQuery.View.Helpers.prototype.to_text to_text].
+	 * [jQuery.EJS.Helpers.prototype.view view] and [jQuery.EJS.Helpers.prototype.text text].
 	 * You can include more with the view/helpers plugin.  But, you can easily make your own!
-	 * Learn how in the [jQuery.View.EJS.Helpers Helpers] page.
+	 * Learn how in the [jQuery.EJS.Helpers Helpers] page.
 	 * 
 	 * @constructor Creates a new view
 	 * @param {Object} options A hash with the following options
@@ -126,7 +129,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 * 				
 	 * 			</tbody></table>
 	 */
-	$.View.EJS = EJS;
+	$.EJS = EJS;
 	/** 
 	 * @Prototype
 	 */
@@ -138,10 +141,10 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		 * @param {Object} extra_helpers an object with additonal view helpers
 		 * @return {String} returns the result of the string
 		 */
-		render: function( object, extra_helpers ) {
+		render: function( object, extraHelpers ) {
 			object = object || {};
-			this._extra_helpers = extra_helpers;
-			var v = new EJS.Helpers(object, extra_helpers || {});
+			this._extra_helpers = extraHelpers;
+			var v = new EJS.Helpers(object, extraHelpers || {});
 			return this.template.process.call(object, object, v);
 		},
 		out: function() {
@@ -150,39 +153,24 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	};
 
 
-
-
-
-	/* @Static*/
-	EJS.Scanner = function( source, left, right ) {
-
-		extend(this, {
-			left_delimiter: left + '%',
-			right_delimiter: '%' + right,
-			double_left: left + '%%',
-			double_right: '%%' + right,
-			left_equal: left + '%=',
-			left_comment: left + '%#'
-		})
-
-		this.SplitRegexp = (left == '[' ? /(\[%%)|(%%\])|(\[%=)|(\[%#)|(\[%)|(%\]\n)|(%\])|(\n)/ : new RegExp('(' + this.double_left + ')|(%%' + this.double_right + ')|(' + this.left_equal + ')|(' + this.left_comment + ')|(' + this.left_delimiter + ')|(' + this.right_delimiter + '\n)|(' + this.right_delimiter + ')|(\n)'));
-
-		this.source = source;
-		this.stag = null;
-		this.lines = 0;
-	};
-	EJS.Scanner.to_text = function( input ) {
+	// given a value in <%= %> do something with it
+	EJS.text = function( input ) {
 		var myid;
-		if ( input == null || input === undefined ) return '';
-
-		if ( input instanceof Date ) return input.toDateString();
+		if (input == null || input === undefined) {
+			return '';
+		}
+		if (input instanceof Date) {
+			return input.toDateString();
+		}
 		if ( input.hookup ) {
 			myid = $.View.hookup(function( el, id ) {
 				input.hookup.call(input, el, id)
 			});
 			return "data-view-id='" + myid + "'"
 		}
-		if ( typeof input == 'function' ) return "data-view-id='" + $.View.hookup(input) + "'";
+		if (typeof input == 'function') {
+			return "data-view-id='" + $.View.hookup(input) + "'";
+		}
 
 		if ( isArray(input) ) {
 			myid = $.View.hookup(function( el, id ) {
@@ -196,13 +184,51 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			throw "elements in views are not supported"
 		}
 
-		if ( input.toString ) return myid ? input.toString(myid) : input.toString();
+		if (input.toString) {
+			return myid ? input.toString(myid) : input.toString();
+		}
 		return '';
 	};
 
+
+	/* @Static*/
+	
+	// used to break text into tolkens
+	EJS.Scanner = function( source, left, right ) {
+		
+		// add these properties to the scanner
+		extend(this, {
+			leftDelimiter: left + '%',
+			rightDelimiter: '%' + right,
+			doubleLeft: left + '%%',
+			doubleRight: '%%' + right,
+			leftEqual: left + '%=',
+			leftComment: left + '%#'
+		});
+		
+		
+		// make a regexp that can split on these token
+		this.splitRegexp = (left == '[' ? 
+							defaultSplitter 
+							: new RegExp("("+
+								[this.doubleLeft,
+								 this.doubleRight,
+								 this.leftEqual, 
+								 this.leftComment,
+								 this.leftDelimiter,
+								 this.rightDelimiter + '\n',
+								 this.rightDelimiter,
+								 '\n'].join(")|(")+")") )
+							
+		this.source = source;
+		this.lines = 0;
+	};
+	
+
 	EJS.Scanner.prototype = {
+		// calls block with each token
 		scan: function( block ) {
-			var regex = this.SplitRegexp;
+			var regex = this.splitRegexp;
 			if (!this.source == '' ) {
 				var source_split = $.String.rsplit(this.source, /\n/);
 				for ( var i = 0; i < source_split.length; i++ ) {
@@ -213,15 +239,16 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		},
 		scanline: function( line, regex, block ) {
 			this.lines++;
-			var line_split = $.String.rsplit(line, regex);
+			var line_split = $.String.rsplit(line, regex),
+				token;
 			for ( var i = 0; i < line_split.length; i++ ) {
-				var token = line_split[i];
+				token = line_split[i];
 				if ( token != null ) {
 					try {
 						block(token, this);
 					} catch (e) {
 						throw {
-							type: 'jQuery.View.EJS.Scanner',
+							type: 'jQuery.EJS.Scanner',
 							line: this.lines
 						};
 					}
@@ -230,56 +257,47 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		}
 	};
 
-
+	// a line and script buffer
+	// we use this so we know line numbers when there
+	// is an error.  
+	// pre and post are setup and teardown for the buffer
 	EJS.Buffer = function( pre_cmd, post_cmd ) {
-		this.line = new Array();
-		this.script = "";
-		this.pre_cmd = pre_cmd;
+		this.line = [];
+		this.script = [];
 		this.post_cmd = post_cmd;
-		for ( var i = 0; i < this.pre_cmd.length; i++ ) {
-			this.push(pre_cmd[i]);
-		}
+		
+		// add the pre commands to the first line
+		this.push.apply(this, pre_cmd);
 	};
 	EJS.Buffer.prototype = {
-
-		push: function( cmd ) {
-			this.line.push(cmd);
+		//need to maintain your own semi-colons (for performance)
+		push: function( ) {
+			this.line.push.apply(this.line, arguments);
 		},
 
 		cr: function() {
-			this.script = this.script + this.line.join('; ');
-			this.line = new Array();
-			this.script = this.script + "\n";
+			this.script.push( this.line.join(''), "\n");
+			this.line = [];
 		},
-
+		//returns the script too
 		close: function() {
 			if ( this.line.length > 0 ) {
-				for ( var i = 0; i < this.post_cmd.length; i++ ) {
-					this.push(pre_cmd[i]);
-				}
-				this.script = this.script + this.line.join('; ');
+				this.script.push(this.line.join(''))
 				line = null;
 			}
+			this.post_cmd.length && this.push.apply(this, this.post_cmd)
+			
+			this.script.push(";"); //makes sure we always have an ending /
+			return this.script.join("")
 		}
 
 	};
-
+	// compiles a template
 	EJS.Compiler = function( source, left ) {
-		this.pre_cmd = ['var ___ViewO = [];'];
-		this.post_cmd = new Array();
-		this.source = ' ';
-		if ( source != null ) {
-			if ( typeof source == 'string' ) {
-				source = source.replace(/\r\n/g, "\n");
-				source = source.replace(/\r/g, "\n");
-				this.source = source;
-			} else if ( source.innerHTML ) {
-				this.source = source.innerHTML;
-			}
-			if ( typeof this.source != 'string' ) {
-				this.source = "";
-			}
-		}
+		//normalize line endings
+		this.source = source.replace(/\r\n/g, "\n")
+							.replace(/\r/g, "\n");
+
 		left = left || '<';
 		var right = '>';
 		switch ( left ) {
@@ -297,38 +315,49 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	};
 	EJS.Compiler.prototype = {
 		compile: function( options, name ) {
+			
 			options = options || {};
+			
 			this.out = '';
-			var put_cmd = "___ViewO.push(",
+			
+			var put_cmd = "___v1ew.push(",
 				insert_cmd = put_cmd,
-				buff = new EJS.Buffer(this.pre_cmd, this.post_cmd),
+				buff = new EJS.Buffer(['var ___v1ew = [];'], []),
 				content = '',
 				clean = function( content ) {
-					content = content.replace(/\\/g, '\\\\');
-					content = content.replace(/\n/g, '\\n');
-					content = content.replace(/"/g, '\\"');
-					return content;
-				};
+					return content.replace(/\\/g, '\\\\')
+									  .replace(/\n/g, '\\n')
+									  .replace(/"/g, '\\"');
+				},
+				put = function(content){
+					buff.push(put_cmd , '"' , clean(content) , '");');
+				}
+				startTag = null;
+			
 			this.scanner.scan(function( token, scanner ) {
-				if ( scanner.stag == null ) {
+				// if we don't have a start pair
+				if ( startTag == null ) {
 					switch ( token ) {
 					case '\n':
 						content = content + "\n";
-						buff.push(put_cmd + '"' + clean(content) + '");');
+						put(content);
+						//buff.push(put_cmd , '"' , clean(content) , '");');
 						buff.cr();
 						content = '';
 						break;
-					case scanner.left_delimiter:
-					case scanner.left_equal:
-					case scanner.left_comment:
-						scanner.stag = token;
+					case scanner.leftDelimiter:
+					case scanner.leftEqual:
+					case scanner.leftComment:
+						startTag = token;
 						if ( content.length > 0 ) {
-							buff.push(put_cmd + '"' + clean(content) + '")');
+							put(content);
 						}
 						content = '';
 						break;
-					case scanner.double_left:
-						content = content + scanner.left_delimiter;
+					
+					// replace <%% with <%
+					case scanner.doubleLeft:
+						content = content + scanner.leftDelimiter;
 						break;
 					default:
 						content = content + token;
@@ -337,27 +366,27 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 				}
 				else {
 					switch ( token ) {
-					case scanner.right_delimiter:
-						switch ( scanner.stag ) {
-						case scanner.left_delimiter:
+					case scanner.rightDelimiter:
+						switch ( startTag ) {
+						case scanner.leftDelimiter:
 							if ( content[content.length - 1] == '\n' ) {
 								content = chop(content);
-								buff.push(content);
+								buff.push(content,";");
 								buff.cr();
 							}
 							else {
-								buff.push(content);
+								buff.push(content,";");
 							}
 							break;
-						case scanner.left_equal:
-							buff.push(insert_cmd + "(jQuery.View.EJS.Scanner.to_text(" + content + ")))");
+						case scanner.leftEqual:
+							buff.push(insert_cmd , "(jQuery.EJS.text(" , content , ")));");
 							break;
 						}
-						scanner.stag = null;
+						startTag = null;
 						content = '';
 						break;
-					case scanner.double_right:
-						content = content + scanner.right_delimiter;
+					case scanner.doubleRight:
+						content = content + scanner.rightDelimiter;
 						break;
 					default:
 						content = content + token;
@@ -367,13 +396,10 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			});
 			if ( content.length > 0 ) {
 				// Should be content.dump in Ruby
-				buff.push(put_cmd + '"' + clean(content) + '")');
+				buff.push(put_cmd , '"' , clean(content) + '");');
 			}
-			buff.close();
-			this.out = buff.script + ";";
-			var to_be_evaled = '/*' + name + '*/this.process = function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {' + this.out + " return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}};";
-
-			eval(to_be_evaled);
+			this.out = '/*' + name + '*/  try { with(_VIEW) { with (_CONTEXT) {' + buff.close() + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}";
+			this.process = new Function("_CONTEXT","_VIEW",this.out)
 		}
 	};
 
@@ -404,13 +430,13 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		type: '<',
 		ext: '.ejs'
 	}
-	EJS.INVALID_PATH = -1;
+
 
 
 
 	/**
-	 * @class jQuery.View.EJS.Helpers
-	 * By adding functions to jQuery.View.EJS.Helpers.prototype, those functions will be available in the 
+	 * @class jQuery.EJS.Helpers
+	 * By adding functions to jQuery.EJS.Helpers.prototype, those functions will be available in the 
 	 * views.
 	 * @constructor Creates a view helper.  This function is called internally.  You should never call it.
 	 * @param {Object} data The data passed to the view.  Helpers have access to it through this._data
@@ -422,23 +448,6 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	}; /* @prototype*/
 	EJS.Helpers.prototype = {
 		/**
-		 * Renders a partial view.  This is deprecated in favor of <code>$.View()</code>.
-		 */
-		view: function( url, data, helpers ) {
-			if (!helpers ) helpers = this._extras
-			if (!data ) data = this._data;
-			return $.View(url, data, helpers) //new EJS(options).render(data, helpers);
-		},
-		/**
-		 * Converts response to text.
-		 */
-		to_text: function( input, null_text ) {
-			if ( input == null || input === undefined ) return null_text || '';
-			if ( input instanceof Date ) return input.toDateString();
-			if ( input.toString ) return input.toString().replace(/\n/g, '<br />').replace(/''/g, "'");
-			return '';
-		},
-		/**
 		 * Makes a plugin
 		 * @param {String} name the plugin name
 		 */
@@ -449,6 +458,14 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 				var jq = $(el)
 				jq[widget].apply(jq, args);
 			}
+		},
+		/**
+		 * Renders a partial view.  This is deprecated in favor of <code>$.View()</code>.
+		 */
+		view: function( url, data, helpers ) {
+			helpers = helpers || this._extras
+			data = data || this._data;
+			return $.View(url, data, helpers) //new EJS(options).render(data, helpers);
 		}
 	};
 
@@ -456,24 +473,11 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	$.View.register({
 		suffix: "ejs",
 		//returns a function that renders the view
-		get: function( id, url ) {
-			var text = $.ajax({
-				async: false,
-				url: url,
-				dataType: "text",
-				error: function() {
-					throw "ejs.js ERROR: There is no template or an empty template at " + url;
-				}
-			}).responseText
-			if (!text.match(/[^\s]/) ) {
-				throw "ejs.js ERROR: There is no template or an empty template at " + url;
-			}
-			return this.renderer(id, text);
-		},
+		
 		script: function( id, src ) {
-			return "jQuery.View.EJS(function(_CONTEXT,_VIEW) { try { with(_VIEW) { with (_CONTEXT) {" + new EJS({
-				text: src
-			}).out() + " return ___ViewO.join('');}}}catch(e){e.lineNumber=null;throw e;}})";
+			return "jQuery.EJS(function(_CONTEXT,_VIEW) { " + 
+				new EJS({ text: src}).out() + 
+				" })";
 		},
 		renderer: function( id, text ) {
 			var ejs = new EJS({
