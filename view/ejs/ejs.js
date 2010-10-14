@@ -1,3 +1,4 @@
+/*jslint evil: true */
 steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 
 	//helpers we use 
@@ -265,7 +266,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		// calls block with each token
 		scan: function( block ) {
 			var regex = this.splitRegexp;
-			if (!this.source == '' ) {
+			if ( this.source ) {
 				var source_split = $.String.rsplit(this.source, /\n/);
 				for ( var i = 0; i < source_split.length; i++ ) {
 					var item = source_split[i];
@@ -321,7 +322,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 
 			if ( this.line.length > 0 ) {
 				this.script.push(this.line.join(''));
-				line = null; // this?
+				this.line = [];
 			}
 
 			stub = this.post_cmd.length && this.push.apply(this, this.post_cmd);
