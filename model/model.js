@@ -672,7 +672,8 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * You can also bind to created, updated, and destroyed events.
 		 * 
 		 * @param {String} eventType the name of the event.
-		 * @param {Function} handler
+		 * @param {Function} handler a function to call back when an event happens on this model.
+		 * @return {model} the model instance for chaining
 		 */
 		bind: function(eventType, handler){
 			var wrapped = $(this);

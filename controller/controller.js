@@ -665,7 +665,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 
 
 			var controllers = this.element.data("controllers");
-			if (controllers && controllers[fname]) {
+			if ( controllers && controllers[fname] ) {
 				delete controllers[fname];
 			}
 			$(this).triggerHandler("destroyed"); //in case we want to know if the controller is removed
@@ -736,7 +736,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		}
 		//used to determine if a controller instance is one of controllers
 		//controllers can be strings or classes
-	var isAControllerOf = function( instance, controllers ) {
+		var isAControllerOf = function( instance, controllers ) {
 		for ( var i = 0; i < controllers.length; i++ ) {
 			if ( typeof controllers[i] == 'string' ? instance.Class._shortName == controllers[i] : instance instanceof controllers[i] ) {
 				return true;
@@ -760,7 +760,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			if (!controllers ) return;
 			for ( var cname in controllers ) {
 				var c = controllers[cname];
-				if (!controllerNames.length || isAControllerOf(c, controllerNames)) {
+				if (!controllerNames.length || isAControllerOf(c, controllerNames) ) {
 					instances.push(c);
 				}
 			}
