@@ -85,7 +85,12 @@ var i, fileName, cmd,
 				  "jquery/event/destroyed/destroyed.js",
 				  "jquery/lang/openajax/openajax.js",
 				  "jquery/model/model.js"]
-	}
+	},
+	"view",
+	"view/ejs",
+	"view/jaml",
+	"view/micro",
+	"view/tmpl"
 ]
 
 
