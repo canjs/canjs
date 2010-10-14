@@ -1,7 +1,7 @@
 steal.plugins('jquery/controller', 'jquery/view').then(function( $ ) {
 	jQuery.Controller.getFolder = function() {
-		return jQuery.String.underscore(this.fullName.replace(/\./g, "/")).replace("/Controllers", "")
-	}
+		return jQuery.String.underscore(this.fullName.replace(/\./g, "/")).replace("/Controllers", "");
+	};
 
 	var calculatePosition = function( Class, view, action_name ) {
 		var slashes = Class.fullName.replace(/\./g, "/"),
@@ -19,15 +19,23 @@ steal.plugins('jquery/controller', 'jquery/view').then(function( $ ) {
 		} else if (!view ) {
 			view = "//" + new steal.File('views/' + (hasControllers ? controller_name + '/' : "") + action_name.replace(/\.|#/g, '').replace(/ /g, '_')).joinFrom(path) + suffix;
 		}
-		return view
-	}
+		return view;
+	};
 	var calculateHelpers = function( myhelpers ) {
 		var helpers = {};
 		if ( myhelpers ) {
-			if ( jQuery.isArray(myhelpers) ) for ( var h = 0; h < myhelpers.length; h++ ) jQuery.extend(helpers, myhelpers[h]);
-			else jQuery.extend(helpers, myhelpers);
+			if ( jQuery.isArray(myhelpers) ) {
+				for ( var h = 0; h < myhelpers.length; h++ ) {
+					jQuery.extend(helpers, myhelpers[h]);
+				}
+			}
+			else {
+				jQuery.extend(helpers, myhelpers);
+			}
 		} else {
-			if ( this._default_helpers ) helpers = this._default_helpers
+			if ( this._default_helpers ) {
+				helpers = this._default_helpers;
+			}
 			//load from name
 			var current = window;
 			var parts = this.Class.fullName.split(/\./);
@@ -43,7 +51,7 @@ steal.plugins('jquery/controller', 'jquery/view').then(function( $ ) {
 			this._default_helpers = helpers;
 		}
 		return helpers;
-	}
+	};
 
 	/**
 	 * @add jQuery.Controller.prototype
@@ -86,13 +94,13 @@ steal.plugins('jquery/controller', 'jquery/view').then(function( $ ) {
 			view = null;
 		}
 		//guess from controller name
-		view = calculatePosition(this.Class, view, this.called)
+		view = calculatePosition(this.Class, view, this.called);
 
 		//calculate data
 		data = data || this;
 
 		//calculate helpers
-		var helpers = calculateHelpers.call(this, myhelpers)
+		var helpers = calculateHelpers.call(this, myhelpers);
 
 
 		return jQuery.View(view, data, helpers); //what about controllers in other folders?
