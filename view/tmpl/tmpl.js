@@ -149,7 +149,8 @@ steal.plugins('jquery/view').then(function(){
 			}
 		},
 		script: function( id, str ) {
-			return "function(data){return jQuery.render('"+str+"', data)}";
+			var tmpl = $.tmpl(str).toString();
+			return "function(data){return ("+tmpl+").call(jQuery, jQuery, data); }";
 		}
 	})
 	jQuery.View.ext = ".tmpl"

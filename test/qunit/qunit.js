@@ -15,8 +15,7 @@ steal.plugins(
 'jquery/event/drag/test/qunit',
 
 'jquery/model/test/qunit',
-'jquery/model/associations/test/qunit',
-'jquery/model/list/test/qunit',
 
-'jquery/view/test/qunit'
+'jquery/view/test/qunit',
+	'jquery/view/ejs/test/qunit'
 )

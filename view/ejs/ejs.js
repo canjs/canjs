@@ -32,10 +32,13 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		defaultSplitter = /(\[%%)|(%%\])|(\[%=)|(\[%#)|(\[%)|(%\]\n)|(%\])|(\n)/;
 	/**
 	 * @class jQuery.EJS
+	 * 
 	 * @plugin jquery/view/ejs
 	 * @parent jQuery.View
 	 * @download jquery/dist/jquery.view.ejs.js
 	 * @test jquery/view/ejs/qunit.html
+	 * 
+	 * 
 	 * Ejs provides <a href="http://www.ruby-doc.org/stdlib/libdoc/erb/rdoc/">ERB</a> 
 	 * style client side templates.  Use them with controllers to easily build html and inject
 	 * it into the DOM.
@@ -79,6 +82,20 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 * })
 	 * @codeend
 	 * 
+	 * ## Hooking up controllers
+	 * 
+	 * After drawing some html, you often want to add other widgets and plugins inside that html.
+	 * View makes this easy.  You just have to return the Contoller class you want to be hooked up.
+	 * 
+	 * @codestart
+	 * &lt;ul &lt;%= Phui.Tabs%>>...&lt;ul>
+	 * @codeend
+	 * 
+	 * You can even hook up multiple controllers:
+	 * 
+	 * @codestart
+	 * &lt;ul &lt;%= [Phui.Tabs, Phui.Filler]%>>...&lt;ul>
+	 * @codeend
 	 * 
 	 * <h2>View Helpers</h2>
 	 * View Helpers return html code.  View by default only comes with 
@@ -151,10 +168,38 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			return this.template.out;
 		}
 	};
+	/* @Static */
 
-
-	// given a value in <%= %> do something with it
-	EJS.text = function( input ) {
+	
+	EJS.
+	/**
+	 * Used to convert what's in &lt;%= %> magic tags to a string
+	 * to be inserted in the rendered output.
+	 * 
+	 * Typically, it's a string, and the string is just inserted.  However,
+	 * if it's a function or an object with a hookup method, it can potentially be 
+	 * be ran on the element after it's inserted into the page.
+	 * 
+	 * This is a very nice way of adding functionality through the view.
+	 * Usually this is done with [jQuery.EJS.Helpers.prototype.plugin]
+	 * but the following fades in the div element after it has been inserted:
+	 * 
+	 * @codestart
+	 * &lt;%= function(el){$(el).fadeIn()} %>
+	 * @codeend
+	 * 
+	 * @param {String|Object|Function} input the value in between the
+	 * write majic tags: &lt;%= %>
+	 * @return {String} returns the content to be added to the rendered
+	 * output.  The content is different depending on the type:
+	 * 
+	 *   * string - a bac
+	 *   * foo - bar
+	 */
+	text = function( input ) {
+		if(typeof input == 'string'){
+			return input;
+		}
 		var myid;
 		if (input == null || input === undefined) {
 			return '';
@@ -191,7 +236,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	};
 
 
-	/* @Static*/
+	
 	
 	// used to break text into tolkens
 	EJS.Scanner = function( source, left, right ) {
@@ -398,8 +443,10 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 				// Should be content.dump in Ruby
 				buff.push(put_cmd , '"' , clean(content) + '");');
 			}
-			this.out = '/*' + name + '*/  try { with(_VIEW) { with (_CONTEXT) {' + buff.close() + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}";
-			this.process = new Function("_CONTEXT","_VIEW",this.out)
+			var template = buff.close()
+			this.out = '/*' + name + '*/  try { with(_VIEW) { with (_CONTEXT) {' + template + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}";
+			//use eval instead of creating a function, b/c it is easier to debug
+			eval('this.process = (function(_CONTEXT,_VIEW){'+this.out+'})'); //new Function("_CONTEXT","_VIEW",this.out)
 		}
 	};
 
@@ -436,6 +483,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 
 	/**
 	 * @class jQuery.EJS.Helpers
+	 * @parent jQuery.EJS
 	 * By adding functions to jQuery.EJS.Helpers.prototype, those functions will be available in the 
 	 * views.
 	 * @constructor Creates a view helper.  This function is called internally.  You should never call it.

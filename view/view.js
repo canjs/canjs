@@ -114,8 +114,10 @@ steal.plugins("jquery").then(function( $ ) {
 	 * 
 	 * ## Compress Views with Steal
 	 * 
-	 * Steal can package processed views in the production file. Because 'stolen' views are already
-	 * processed, they don't rely on eval. Here's how to steal them:
+	 * Steal can package processed views in the production 
+	 * file. Because 'stolen' views are already
+	 * processed, they don't rely on eval and are much faster. Here's 
+	 * how to steal them:
 	 * 
 	 * @codestart
 	 * steal.views('//views/tasks/show.ejs');
@@ -123,36 +125,37 @@ steal.plugins("jquery").then(function( $ ) {
 	 * 
 	 * Read more about [steal.static.views steal.views].
 	 * 
-	 * ## Hooking up controllers
 	 * 
-	 * After drawing some html, you often want to add other widgets and plugins inside that html.
-	 * View makes this easy.  You just have to return the Contoller class you want to be hooked up.
-	 * 
-	 * @codestart
-	 * &lt;ul &lt;%= Phui.Tabs%>>...&lt;ul>
-	 * @codeend
-	 * 
-	 * You can even hook up multiple controllers:
-	 * 
-	 * @codestart
-	 * &lt;ul &lt;%= [Phui.Tabs, Phui.Filler]%>>...&lt;ul>
-	 * @codeend
-	 * 
-	 * @constructor 
+	 * <h2>$.View</h2>
 	 * 
 	 * Looks up a template, processes it, caches it, then renders the template
 	 * with data and optional helpers.
+	 * 
+	 * With [stealjs StealJS], views are typically bundled in the production build.
+	 * This makes it ok to use views synchronously like:
 	 * 
 	 * @codestart
 	 * $.View("//myplugin/views/init.ejs",{message: "Hello World"})
 	 * @codeend
 	 * 
+	 * If you aren't using StealJS, it's best to use views asynchronously like:
+	 * 
+	 * @codestart
+	 * $.View("//myplugin/views/init.ejs",{message: "Hello World"}, function(result){
+	 *   // do something with result
+	 * })
+	 * @codeend
+	 * 
 	 * @param {String} view The url or id of an element to use as the template's source.
 	 * @param {Object} data The data to be passed to the view.
-	 * @param {Object} [helpers] Optional helper functions the view might use.
+	 * @param {Object} [helpers] Optional helper functions the view might use. Not all
+	 * templates support helpers.
+	 * @param {Object} [callback] Optional callback function.  If present, the template is 
+	 * retrieved asynchronously.  This is a good idea if you aren't compressing the templates
+	 * into your view.
 	 * @return {String} The rendered result of the view.
 	 */
-	var $view = $.View = function( view, data, helpers ) {
+	var $view = $.View = function( view, data, helpers, callback ) {
 		var suffix = view.match(/\.[\w\d]+$/),
 			type, 
 			el, 
@@ -160,7 +163,10 @@ steal.plugins("jquery").then(function( $ ) {
 			id, 
 			renderer,
 			url = view;
-
+		if(typeof helpers === 'function'){
+			callback = helpers;
+			helpers = undefined;
+		}
 		//if there is no suffix, add one
 		if (!suffix ) {
 			suffix = $.View.ext;
@@ -184,29 +190,55 @@ steal.plugins("jquery").then(function( $ ) {
 			$.View.cached[id] : // use the cached version
 			((el = document.getElementById(view)) ? //is it in the document?
 				type.renderer(id, el.innerHTML) : //use the innerHTML of the elemnt
-				get(type, id, url) //do an ajax request for it
+				get(type, id, url, data, helpers, callback) //do an ajax request for it
 		);
-
-		//if we should cache templates
-		if ( $.View.cache ) {
-			$.View.cached[id] = renderer;
-		}
-		return renderer.call(type, data, helpers)
+		// we won't always get a renderer (if async ajax)
+		return renderer && render(renderer,type, id, data, helpers, callback)
 	},
-		get = function(type, id, url){
-			var text = $.ajax({
-				async: false,
-				url: url,
-				dataType: "text",
-				error: function() {
-					throw "$.View ERROR: There is no template or an empty template at " + url;
-				}
-			}).responseText
+		// caches the template, renders the content, and calls back if it should
+		render = function(renderer, type, id, data, helpers, callback){
+			var res;
+			if ( $.View.cache ) {
+				$.View.cached[id] = renderer;
+			}
+			res =  renderer.call(type, data, helpers)
+			callback && callback(res)
+			return res;
+		},
+		// makes sure there's a template
+		checkText = function(text,url){
 			if (!text.match(/[^\s]/) ) {
 				throw "$.View ERROR: There is no template or an empty template at " + url;
 			}
-			return type.renderer(id, text);
-		};
+		},
+		// gets a template, if there's a callback, renders and calls back its;ef
+		get = function(type, id, url, data, helpers, callback){
+			if(callback){
+				$.ajax({
+					url: url,
+					dataType: "text",
+					error: function() {
+						checkText("", url)
+					},
+					success : function(text){
+						checkText(text, url)
+						render(type.renderer(id, text), type, id, data, helpers, callback)
+					}
+				})
+			}else{
+				var text = $.ajax({
+						async: false,
+						url: url,
+						dataType: "text",
+						error: function() {
+							checkText("", url)
+						}
+					}).responseText
+				checkText(text, url)
+				return type.renderer(id, text);
+			}
+			
+		}
 
 
 	$.extend($.View, {
@@ -289,20 +321,42 @@ steal.plugins("jquery").then(function( $ ) {
 
 
 	//---- ADD jQUERY HELPERS -----
-	var
+	
 	//converts jquery functions to use views	
-	convert = function( func_name ) {
+	var convert = function( func_name ) {
 		var old = jQuery.fn[func_name];
 
 		jQuery.fn[func_name] = function() {
-			var args = arguments,
-				res, hasHookup, secArgType = typeof arguments[1];
+			var args = $.makeArray(arguments),
+				res, 
+				hasHookup,
+				callbackNum, 
+				callback,
+				self = this;
 
 			//check if a template
-			if ( typeof arguments[0] == "string" && (secArgType == 'object' || secArgType == 'function') && !arguments[1].nodeType && !arguments[1].jquery ) {
-				args = [$.View.apply($.View, $.makeArray(arguments))];
+			if ( isTemplate(args) ) {
+				
+				// if we should operate async
+				if( ( callbackNum = getCallback(args) ) ){
+					callback = args[callbackNum];
+					args[callbackNum] = function(result){
+						modify.call(self,[result], old)
+						callback.call(self, result);
+					}
+					$.View.apply($.View, args);
+					return this;
+				}
+				
+				//otherwise do the template now
+				args = [$.View.apply($.View, args)];
 			}
-
+			
+			return modify.call(this, args, old);
+		}
+	},
+		// modifies the html of the element
+		modify = function( args, old){
 			//check if there are new hookups
 			for ( var hasHookups in jQuery.View.hookups ) {};
 
@@ -317,8 +371,22 @@ steal.plugins("jquery").then(function( $ ) {
 				hookupView(args[0])
 			}
 			return res;
-		}
-	},
+		},
+		
+		// returns true or false if the args indicate a template is being used
+		isTemplate = function(args){
+			var secArgType = typeof args[1];
+			
+			return typeof args[0] == "string" 
+				&& (secArgType == 'object' || secArgType == 'function') 
+				&& !args[1].nodeType && !args[1].jquery
+		},
+		//returns the callback if there is one (for async view use)
+		getCallback  = function(args){
+			return typeof args[3] === 'function' ?
+					3 : 
+					typeof args[2] === 'function' && 2
+		},
 		hookupView = function( els ) {
 			//remove all hookups
 			var hooks = jQuery.View.hookups,

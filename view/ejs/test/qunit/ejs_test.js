@@ -23,15 +23,15 @@ module("jquery/view/ejs, rendering",{
 	}
 })
 test("render with left bracket", function(){
-	var compiled = new $.View.EJS({text: this.squareBrackets, type: '['}).render({animals: this.animals})
+	var compiled = new $.EJS({text: this.squareBrackets, type: '['}).render({animals: this.animals})
 	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders with bracket")
 })
 test("render with with", function(){
-	var compiled = new $.View.EJS({text: this.squareBracketsNoThis, type: '['}).render({animals: this.animals}) ;
+	var compiled = new $.EJS({text: this.squareBracketsNoThis, type: '['}).render({animals: this.animals}) ;
 	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders bracket with no this")
 })
 test("default carrot", function(){
-	var compiled = new $.View.EJS({text: this.angleBracketsNoThis}).render({animals: this.animals}) ;
+	var compiled = new $.EJS({text: this.angleBracketsNoThis}).render({animals: this.animals}) ;
 
 	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>")
 })
@@ -40,7 +40,7 @@ test("render with double angle", function(){
 			  "<ul><% animals.each(function(animal){%>" +
 	               "<li><%= animal %></li>" + 
 		      "<%});%></ul>";
-	var compiled = new $.View.EJS({text: text}).render({animals: this.animals}) ;
+	var compiled = new $.EJS({text: text}).render({animals: this.animals}) ;
 	equals(compiled, "<% replace_me %><ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "works")
 });
 
@@ -49,6 +49,14 @@ test("comments", function(){
 			  "<ul><% animals.each(function(animal){%>" +
 	               "<li><%= animal %></li>" + 
 		      "<%});%></ul>";
-	var compiled = new $.View.EJS({text: text}).render({animals: this.animals}) ;
+	var compiled = new $.EJS({text: text}).render({animals: this.animals}) ;
 	equals(compiled,"<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>" )
+});
+
+test("multi line", function(){
+	var text = "a \n b \n c",
+		result = new $.EJS({text: text}).render({}) ;
+		
+	equals(result, text)
 })
+//test("multi line sourc")
