@@ -1,15 +1,15 @@
+/*global OpenAjax: true */
 steal.plugins('jquery', 'jquery/controller', 'jquery/lang/openajax').then(function() {
 
 	/**
 	 * Adds open ajax subscribing to controllers.
 	 */
 	jQuery.Controller.processors.subscribe = function( el, event, selector, cb, controller ) {
-		var controller = controller;
 		var subscription = OpenAjax.hub.subscribe(selector, cb);
 		return function() {
 			var sub = subscription;
 			OpenAjax.hub.unsubscribe(sub);
-		}
+		};
 	};
 
 	/**
@@ -23,5 +23,5 @@ steal.plugins('jquery', 'jquery/controller', 'jquery/lang/openajax').then(functi
 	 */
 	jQuery.Controller.prototype.publish = function() {
 		OpenAjax.hub.publish.apply(OpenAjax.hub, arguments);
-	}
-})
+	};
+});

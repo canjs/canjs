@@ -2,5 +2,16 @@
 
 load("steal/rhino/steal.js");
 steal.plugins('steal/clean',function(){
-	steal.clean('<%= path %>/<%= application_name %>.html',{indent_size: 1, indent_char: '\t'});
+	steal.clean('<%= path %>/<%= application_name %>.html',{
+		indent_size: 1, 
+		indent_char: '\t', 
+		jslint : true,
+		ignore: /jquery\/jquery.js/
+		predefined: {
+			steal: true, 
+			jQuery: true, 
+			$ : true,
+			window : true
+			}
+	});
 });

@@ -11,17 +11,17 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			if ( this.constructor != EJS ) {
 				var ejs = new EJS(options);
 				return function( data, helpers ) {
-					return ejs.render(data, helpers)
+					return ejs.render(data, helpers);
 				};
 			}
-			
+
 			if ( typeof options == "function" ) {
 				this.template = {};
 				this.template.process = options;
 				return;
 			}
 			//set options on self
-			$.extend(this, EJS.options, options)
+			$.extend(this, EJS.options, options);
 
 			var template = new EJS.Compiler(this.text, this.type);
 
@@ -76,7 +76,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 *     },
 	 *     list: function( tasks ) {
 	 *         this.element.html(
-	 *         	this.view("list", {tasks: tasks})
+	 *          this.view("list", {tasks: tasks})
 	 *        )
 	 *     }
 	 * })
@@ -106,45 +106,45 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 * @constructor Creates a new view
 	 * @param {Object} options A hash with the following options
 	 * <table class="options">
-	 * 				<tbody><tr><th>Option</th><th>Default</th><th>Description</th></tr>
-	 * 				<tr>
-	 * 					<td>url</td>
-	 * 					<td>&nbsp;</td>
-	 * 					<td>loads the template from a file.  This path should be relative to <i>[jQuery.root]</i>.
-	 * 					</td>
-	 * 				</tr>
-	 * 				<tr>
-	 * 					<td>text</td>
-	 * 					<td>&nbsp;</td>
-	 * 					<td>uses the provided text as the template. Example:<br/><code>new View({text: '&lt;%=user%>'})</code>
-	 * 					</td>
-	 * 				</tr>
-	 * 				<tr>
-	 * 					<td>element</td>
-	 * 					<td>&nbsp;</td>
-	 * 					<td>loads a template from the innerHTML or value of the element.
-	 * 					</td>
-	 * 				</tr>
-	 * 				<tr>
-	 * 					<td>type</td>
-	 * 					<td>'<'</td>
-	 * 					<td>type of magic tags.  Options are '&lt;' or '['
-	 * 					</td>
-	 * 				</tr>
-	 * 				<tr>
-	 * 					<td>name</td>
-	 * 					<td>the element ID or url </td>
-	 * 					<td>an optional name that is used for caching.
-	 * 					</td>
-	 * 				</tr>
-	 * 				<tr>
-	 * 					<td>cache</td>
-	 * 					<td>true in production mode, false in other modes</td>
-	 * 					<td>true to cache template.
-	 * 					</td>
-	 * 				</tr>
-	 * 				
-	 * 			</tbody></table>
+	 *     <tbody><tr><th>Option</th><th>Default</th><th>Description</th></tr>
+	 *     <tr>
+	 *      <td>url</td>
+	 *      <td>&nbsp;</td>
+	 *      <td>loads the template from a file.  This path should be relative to <i>[jQuery.root]</i>.
+	 *      </td>
+	 *     </tr>
+	 *     <tr>
+	 *      <td>text</td>
+	 *      <td>&nbsp;</td>
+	 *      <td>uses the provided text as the template. Example:<br/><code>new View({text: '&lt;%=user%>'})</code>
+	 *      </td>
+	 *     </tr>
+	 *     <tr>
+	 *      <td>element</td>
+	 *      <td>&nbsp;</td>
+	 *      <td>loads a template from the innerHTML or value of the element.
+	 *      </td>
+	 *     </tr>
+	 *     <tr>
+	 *      <td>type</td>
+	 *      <td>'<'</td>
+	 *      <td>type of magic tags.  Options are '&lt;' or '['
+	 *      </td>
+	 *     </tr>
+	 *     <tr>
+	 *      <td>name</td>
+	 *      <td>the element ID or url </td>
+	 *      <td>an optional name that is used for caching.
+	 *      </td>
+	 *     </tr>
+	 *     <tr>
+	 *      <td>cache</td>
+	 *      <td>true in production mode, false in other modes</td>
+	 *      <td>true to cache template.
+	 *      </td>
+	 *     </tr>
+	 *     
+	 *    </tbody></table>
 	 */
 	$.EJS = EJS;
 	/** 
@@ -170,7 +170,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	};
 	/* @Static */
 
-	
+
 	EJS.
 	/**
 	 * Used to convert what's in &lt;%= %> magic tags to a string
@@ -197,14 +197,14 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 *   * foo - bar
 	 */
 	text = function( input ) {
-		if(typeof input == 'string'){
+		if ( typeof input == 'string' ) {
 			return input;
 		}
 		var myid;
-		if (input == null || input === undefined) {
+		if ( input == null || input === undefined ) {
 			return '';
 		}
-		if (input instanceof Date) {
+		if ( input instanceof Date ) {
 			return input.toDateString();
 		}
 		if ( input.hookup ) {
@@ -213,7 +213,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			});
 			return "data-view-id='" + myid + "'"
 		}
-		if (typeof input == 'function') {
+		if ( typeof input == 'function' ) {
 			return "data-view-id='" + $.View.hookup(input) + "'";
 		}
 
@@ -229,18 +229,18 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			throw "elements in views are not supported"
 		}
 
-		if (input.toString) {
+		if ( input.toString ) {
 			return myid ? input.toString(myid) : input.toString();
 		}
 		return '';
 	};
 
 
-	
-	
+
+
 	// used to break text into tolkens
 	EJS.Scanner = function( source, left, right ) {
-		
+
 		// add these properties to the scanner
 		extend(this, {
 			leftDelimiter: left + '%',
@@ -250,25 +250,15 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			leftEqual: left + '%=',
 			leftComment: left + '%#'
 		});
-		
-		
+
+
 		// make a regexp that can split on these token
-		this.splitRegexp = (left == '[' ? 
-							defaultSplitter 
-							: new RegExp("("+
-								[this.doubleLeft,
-								 this.doubleRight,
-								 this.leftEqual, 
-								 this.leftComment,
-								 this.leftDelimiter,
-								 this.rightDelimiter + '\n',
-								 this.rightDelimiter,
-								 '\n'].join(")|(")+")") )
-							
+		this.splitRegexp = (left == '[' ? defaultSplitter : new RegExp("(" + [this.doubleLeft, this.doubleRight, this.leftEqual, this.leftComment, this.leftDelimiter, this.rightDelimiter + '\n', this.rightDelimiter, '\n'].join(")|(") + ")"))
+
 		this.source = source;
 		this.lines = 0;
 	};
-	
+
 
 	EJS.Scanner.prototype = {
 		// calls block with each token
@@ -310,18 +300,18 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		this.line = [];
 		this.script = [];
 		this.post_cmd = post_cmd;
-		
+
 		// add the pre commands to the first line
 		this.push.apply(this, pre_cmd);
 	};
 	EJS.Buffer.prototype = {
 		//need to maintain your own semi-colons (for performance)
-		push: function( ) {
+		push: function() {
 			this.line.push.apply(this.line, arguments);
 		},
 
 		cr: function() {
-			this.script.push( this.line.join(''), "\n");
+			this.script.push(this.line.join(''), "\n");
 			this.line = [];
 		},
 		//returns the script too
@@ -331,7 +321,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 				line = null;
 			}
 			this.post_cmd.length && this.push.apply(this, this.post_cmd)
-			
+
 			this.script.push(";"); //makes sure we always have an ending /
 			return this.script.join("")
 		}
@@ -340,8 +330,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	// compiles a template
 	EJS.Compiler = function( source, left ) {
 		//normalize line endings
-		this.source = source.replace(/\r\n/g, "\n")
-							.replace(/\r/g, "\n");
+		this.source = source.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
 		left = left || '<';
 		var right = '>';
@@ -360,25 +349,23 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	};
 	EJS.Compiler.prototype = {
 		compile: function( options, name ) {
-			
+
 			options = options || {};
-			
+
 			this.out = '';
-			
+
 			var put_cmd = "___v1ew.push(",
 				insert_cmd = put_cmd,
 				buff = new EJS.Buffer(['var ___v1ew = [];'], []),
 				content = '',
 				clean = function( content ) {
-					return content.replace(/\\/g, '\\\\')
-									  .replace(/\n/g, '\\n')
-									  .replace(/"/g, '\\"');
+					return content.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
 				},
-				put = function(content){
-					buff.push(put_cmd , '"' , clean(content) , '");');
+				put = function( content ) {
+					buff.push(put_cmd, '"', clean(content), '");');
 				}
 				startTag = null;
-			
+
 			this.scanner.scan(function( token, scanner ) {
 				// if we don't have a start pair
 				if ( startTag == null ) {
@@ -399,8 +386,8 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 						}
 						content = '';
 						break;
-					
-					// replace <%% with <%
+
+						// replace <%% with <%
 					case scanner.doubleLeft:
 						content = content + scanner.leftDelimiter;
 						break;
@@ -416,15 +403,15 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 						case scanner.leftDelimiter:
 							if ( content[content.length - 1] == '\n' ) {
 								content = chop(content);
-								buff.push(content,";");
+								buff.push(content, ";");
 								buff.cr();
 							}
 							else {
-								buff.push(content,";");
+								buff.push(content, ";");
 							}
 							break;
 						case scanner.leftEqual:
-							buff.push(insert_cmd , "(jQuery.EJS.text(" , content , ")));");
+							buff.push(insert_cmd, "(jQuery.EJS.text(", content, ")));");
 							break;
 						}
 						startTag = null;
@@ -441,12 +428,12 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			});
 			if ( content.length > 0 ) {
 				// Should be content.dump in Ruby
-				buff.push(put_cmd , '"' , clean(content) + '");');
+				buff.push(put_cmd, '"', clean(content) + '");');
 			}
 			var template = buff.close()
 			this.out = '/*' + name + '*/  try { with(_VIEW) { with (_CONTEXT) {' + template + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}";
 			//use eval instead of creating a function, b/c it is easier to debug
-			eval('this.process = (function(_CONTEXT,_VIEW){'+this.out+'})'); //new Function("_CONTEXT","_VIEW",this.out)
+			eval('this.process = (function(_CONTEXT,_VIEW){' + this.out + '})'); //new Function("_CONTEXT","_VIEW",this.out)
 		}
 	};
 
@@ -493,7 +480,8 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		this._data = data;
 		this._extras = extras;
 		extend(this, extras);
-	}; /* @prototype*/
+	};
+	/* @prototype*/
 	EJS.Helpers.prototype = {
 		/**
 		 * Makes a plugin
@@ -521,11 +509,10 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	$.View.register({
 		suffix: "ejs",
 		//returns a function that renders the view
-		
 		script: function( id, src ) {
-			return "jQuery.EJS(function(_CONTEXT,_VIEW) { " + 
-				new EJS({ text: src}).out() + 
-				" })";
+			return "jQuery.EJS(function(_CONTEXT,_VIEW) { " + new EJS({
+				text: src
+			}).out() + " })";
 		},
 		renderer: function( id, text ) {
 			var ejs = new EJS({
