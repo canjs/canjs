@@ -17,6 +17,12 @@
 			.temp{
 				border: dashed 1px red;
 			}
+			h2 {
+				font-size: 1em;
+				font-weight: bold;
+				color: green;
+			}
+			h3 {font-size: 0.95em;}
 		</style>
 	</head>
 	<body>
@@ -34,16 +40,26 @@
 		<pre><code class='javascript'>$("#micro").html("template.micro",{message: "Hello World"})</code></pre>
 		<pre class='temp'>&lt;h3>{%= message %}&lt;/h3></pre>
 		<div id='micro'  class='out'></div>
+		<h2>TMPL</h2>
+		<pre><code class='javascript'>$("#tmpl").html("template.tmpl",{message: "Hello World"})</code></pre>
+		<pre class='temp'>&lt;h3>{%= message %}&lt;/h3></pre>
+		<div id='tmpl'  class='out'></div>
 		<script type='text/javascript' src='../../steal/steal.js'>   
         </script>
-		<script type='text/javascript'>
-			steal.plugins('jquery/view/jaml','jquery/view/micro','jquery/view/ejs').then(function(){
-				$.each(["micro","ejs","jaml"], function(){
-					$("#"+this).html("test/qunit/template."+this,{"message" :"Hello World"})
-				})
-			}).then("//jmvcdoc/resources/highlight",
-			'//jmvcdoc/resources/languages/javascript',
-			'//jmvcdoc/resources/languages/www',
+<script type='text/javascript'>
+steal.plugins('jquery/view/jaml',
+	'jquery/view/micro',
+	'jquery/view/ejs',
+	'jquery/view/tmpl')
+	.then(function(){
+		
+	$.each(["micro","ejs","jaml",'tmpl'], function(){
+		$("#"+this).html("test/qunit/template."+this,{"message" :"Hello World"})
+	})
+	
+})	.then("//jmvcdoc/resources/highlight",
+		'//jmvcdoc/resources/languages/javascript',
+		'//jmvcdoc/resources/languages/www',
 function(){
 	 var names = []
 	 $("code").each(function(){
@@ -53,7 +69,6 @@ function(){
 	 hljs.initHighlighting();
 	$(function(){
 		$.each($("code"),function(i){
-			
 			this.parentNode.className = names[i];
 		})
 	})

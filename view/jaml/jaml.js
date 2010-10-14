@@ -4,10 +4,33 @@ steal.plugins("jquery/view").then(function(){
 
 /**
  * @class Jaml
+ * @plugin jquery/view/jaml
+ * @parent jQuery.View
  * @author Ed Spencer (http://edspencer.net)
- * Jaml is a simple JavaScript library which makes HTML generation easy and pleasurable.
- * Examples: http://edspencer.github.com/jaml
- * Introduction: http://edspencer.net/2009/11/jaml-beautiful-html-generation-for-javascript.html
+ * Jaml is a simple JavaScript library which makes 
+ * HTML generation easy and pleasurable.
+ * 
+ * Instead of magic tags, Jaml is pure JS.  It looks like:
+ * 
+ * @codestart
+ * function(data) {
+ *   h3(data.message);
+ * }
+ * @codeend
+ * 
+ * Jaml is integrated into jQuery.View so you can use it like:
+ * 
+ * @codestart
+ * $("#foo").html('//app/views/template.jaml',{});
+ * @codeend
+ * 
+ * ## Use
+ * 
+ * For more info check out:
+ * 
+ *  - [http://edspencer.net/2009/11/jaml-beautiful-html-generation-for-javascript.html introduction]
+ *  - [http://edspencer.github.com/jaml examples]
+ * 
  */
 Jaml = function() {
   return {
@@ -49,13 +72,6 @@ Jaml = function() {
 
 $.View.register({
 	suffix : "jaml",
-	get: function(id, url ) {
-		var text = $.ajax({
-				async: false,
-				url: url
-			}).responseText
-		return this.renderer(id, text)
-	},
 	script: function(id, str ) {
 		return "((function(){ Jaml.register("+id+", "+str+"); return function(data){return Jaml.render("+id+", data)} })())"
 	},

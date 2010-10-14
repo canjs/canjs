@@ -1,3 +1,25 @@
+// jQuery Templating Plugin
+// Copyright 2010, John Resig
+// Dual licensed under the MIT or GPL Version 2 licenses.
+
+/**
+ * @class jQuery.tmpl
+ * @parent jQuery.View
+ * @plugin jquery/view/tmpl
+ * Provides basic templating with magic tags that look like:
+ * @codestart
+ * ${value}
+ * @codeend
+ * [jQuery.View] integrates jQuery.tmpl templates into
+ * your build process.  You can use a jQuery.tmpl like:
+ * 
+ * @codestart
+ * $('#area').html('//path/to/template.tmpl',{ data });
+ * @codeend
+ * 
+ * For more information on jQuery.tmpl read 
+ * [http://api.jquery.com/category/plugins/templates/ it's documentation].
+ */
 steal.plugins('jquery/view').then(function(){
 		// Override the DOM manipulation function
 	var oldManip = jQuery.fn.domManip;
@@ -58,11 +80,7 @@ steal.plugins('jquery/view').then(function(){
 		// You can stick pre-built template functions here
 		templates: {},
 
-		/*
-		 * For example, someone could do:
-		 *   jQuery.templates.foo = jQuery.tmpl("some long templating string");
-		 *   $("#test").append("foo", data);
-		 */
+	
 
 		tmplcmd: {
 			each: {
@@ -129,18 +147,6 @@ steal.plugins('jquery/view').then(function(){
 			return function(data){
 				return jQuery.render( text, data );
 			}
-		},
-		get: function( id, url ) {
-			var text = $.ajax({
-					async: false,
-					url: url,
-					dataType: "text",
-					error: function() {
-						throw "tmpl.js ERROR: There is no template or an empty template at "+url;
-					}
-				}).responseText
-			return this.renderer(id, text);
-			
 		},
 		script: function( id, str ) {
 			return "function(data){return jQuery.render('"+str+"', data)}";

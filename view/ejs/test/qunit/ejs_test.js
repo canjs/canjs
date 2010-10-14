@@ -1,4 +1,54 @@
-module("ejs")
-test("ejs testing works", function(){
-	ok(true,"an assert is run")
+module("jquery/view/ejs, rendering",{
+	setup : function(){
+
+		this.animals = ['sloth', 'bear', 'monkey']
+		if(!this.animals.each){
+			this.animals.each = function(func){
+				for(var i =0; i < this.length; i++){
+					func(this[i])
+				}
+			}
+		}
+		
+		this.squareBrackets = "<ul>[% this.animals.each(function(animal){%]" +
+		               "<li>[%= animal %]</li>" + 
+			      "[%});%]</ul>"
+	    this.squareBracketsNoThis = "<ul>[% animals.each(function(animal){%]" +
+		               "<li>[%= animal %]</li>" + 
+			      "[%});%]</ul>"
+	    this.angleBracketsNoThis  = "<ul><% animals.each(function(animal){%>" +
+		               "<li><%= animal %></li>" + 
+			      "<%});%></ul>";
+
+	}
+})
+test("render with left bracket", function(){
+	var compiled = new $.View.EJS({text: this.squareBrackets, type: '['}).render({animals: this.animals})
+	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders with bracket")
+})
+test("render with with", function(){
+	var compiled = new $.View.EJS({text: this.squareBracketsNoThis, type: '['}).render({animals: this.animals}) ;
+	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders bracket with no this")
+})
+test("default carrot", function(){
+	var compiled = new $.View.EJS({text: this.angleBracketsNoThis}).render({animals: this.animals}) ;
+
+	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>")
+})
+test("render with double angle", function(){
+	var text = "<%% replace_me %>"+
+			  "<ul><% animals.each(function(animal){%>" +
+	               "<li><%= animal %></li>" + 
+		      "<%});%></ul>";
+	var compiled = new $.View.EJS({text: text}).render({animals: this.animals}) ;
+	equals(compiled, "<% replace_me %><ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "works")
+});
+
+test("comments", function(){
+	var text = "<%# replace_me %>"+
+			  "<ul><% animals.each(function(animal){%>" +
+	               "<li><%= animal %></li>" + 
+		      "<%});%></ul>";
+	var compiled = new $.View.EJS({text: text}).render({animals: this.animals}) ;
+	equals(compiled,"<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>" )
 })
