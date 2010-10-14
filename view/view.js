@@ -1,11 +1,11 @@
 if ( window.jQuery && jQuery.Controller ) {
-	steal.plugins("jquery/controller/view")
+	steal.plugins("jquery/controller/view");
 }
 steal.plugins("jquery").then(function( $ ) {
 
 	// converts to an ok dom id
 	var toId = function( src ) {
-		return src.replace(/^\/\//, "").replace(/[\/\.]/g, "_")
+		return src.replace(/^\/\//, "").replace(/[\/\.]/g, "_");
 	},
 		// used for hookup ids
 		id = 1;
@@ -22,7 +22,7 @@ steal.plugins("jquery").then(function( $ ) {
 	 * 
 	 * <ul>
 	 *  <li>Use views with jQuery extensions [jQuery.fn.after after], [jQuery.fn.append append],
-	 *  	[jQuery.fn.before before], [jQuery.fn.html html], [jQuery.fn.prepend prepend],
+	 *   [jQuery.fn.before before], [jQuery.fn.html html], [jQuery.fn.prepend prepend],
 	 *      [jQuery.fn.replace replace], [jQuery.fn.replaceWith replaceWith], [jQuery.fn.text text] like:
 	 * @codestart
 	 * $('.foo').html("//path/to/view.ejs",{})
@@ -155,22 +155,20 @@ steal.plugins("jquery").then(function( $ ) {
 	 * into your view.
 	 * @return {String} The rendered result of the view.
 	 */
-	var $view = $.View = function( view, data, helpers, callback ) {
+
+	var $view, render, checkText, get;
+
+	$view = $.View = function( view, data, helpers, callback ) {
 		var suffix = view.match(/\.[\w\d]+$/),
-			type, 
-			el, 
-			url, 
-			id, 
-			renderer,
-			url = view;
-		if(typeof helpers === 'function'){
+			type, el, id, renderer, url = view;
+		if ( typeof helpers === 'function' ) {
 			callback = helpers;
 			helpers = undefined;
 		}
 		//if there is no suffix, add one
 		if (!suffix ) {
 			suffix = $.View.ext;
-			url = url + $.View.ext
+			url = url + $.View.ext;
 		}
 
 		//convert to a unique and valid id
@@ -185,60 +183,60 @@ steal.plugins("jquery").then(function( $ ) {
 		type = $.View.types[suffix];
 
 		//get the renderer function
-		var renderer =
+		renderer =
 		$.View.cached[id] ? // is it cached?
-			$.View.cached[id] : // use the cached version
-			((el = document.getElementById(view)) ? //is it in the document?
-				type.renderer(id, el.innerHTML) : //use the innerHTML of the elemnt
-				get(type, id, url, data, helpers, callback) //do an ajax request for it
+		$.View.cached[id] : // use the cached version
+		((el = document.getElementById(view)) ? //is it in the document?
+		type.renderer(id, el.innerHTML) : //use the innerHTML of the elemnt
+		get(type, id, url, data, helpers, callback) //do an ajax request for it
 		);
 		// we won't always get a renderer (if async ajax)
-		return renderer && render(renderer,type, id, data, helpers, callback)
-	},
-		// caches the template, renders the content, and calls back if it should
-		render = function(renderer, type, id, data, helpers, callback){
-			var res;
-			if ( $.View.cache ) {
-				$.View.cached[id] = renderer;
-			}
-			res =  renderer.call(type, data, helpers)
-			callback && callback(res)
-			return res;
-		},
-		// makes sure there's a template
-		checkText = function(text,url){
-			if (!text.match(/[^\s]/) ) {
-				throw "$.View ERROR: There is no template or an empty template at " + url;
-			}
-		},
-		// gets a template, if there's a callback, renders and calls back its;ef
-		get = function(type, id, url, data, helpers, callback){
-			if(callback){
-				$.ajax({
-					url: url,
-					dataType: "text",
-					error: function() {
-						checkText("", url)
-					},
-					success : function(text){
-						checkText(text, url)
-						render(type.renderer(id, text), type, id, data, helpers, callback)
-					}
-				})
-			}else{
-				var text = $.ajax({
-						async: false,
-						url: url,
-						dataType: "text",
-						error: function() {
-							checkText("", url)
-						}
-					}).responseText
-				checkText(text, url)
-				return type.renderer(id, text);
-			}
-			
+		return renderer && render(renderer, type, id, data, helpers, callback);
+	};
+	// caches the template, renders the content, and calls back if it should
+	render = function( renderer, type, id, data, helpers, callback ) {
+		var res, stub;
+		if ( $.View.cache ) {
+			$.View.cached[id] = renderer;
 		}
+		res = renderer.call(type, data, helpers);
+		stub = callback && callback(res);
+		return res;
+	};
+	// makes sure there's a template
+	checkText = function( text, url ) {
+		if (!text.match(/[^\s]/) ) {
+			throw "$.View ERROR: There is no template or an empty template at " + url;
+		}
+	};
+	// gets a template, if there's a callback, renders and calls back its;ef
+	get = function( type, id, url, data, helpers, callback ) {
+		if ( callback ) {
+			$.ajax({
+				url: url,
+				dataType: "text",
+				error: function() {
+					checkText("", url);
+				},
+				success: function( text ) {
+					checkText(text, url);
+					render(type.renderer(id, text), type, id, data, helpers, callback);
+				}
+			});
+		} else {
+			var text = $.ajax({
+				async: false,
+				url: url,
+				dataType: "text",
+				error: function() {
+					checkText("", url);
+				}
+			}).responseText;
+			checkText(text, url);
+			return type.renderer(id, text);
+		}
+
+	};
 
 
 	$.extend($.View, {
@@ -277,11 +275,11 @@ steal.plugins("jquery").then(function( $ ) {
 		 * @param {Object} info a object of method and properties 
 		 * that enable template integration:
 		 * <ul>
-		 * 		<li>suffix - the view extension.  EX: 'ejs'</li>
-		 * 		<li>script(id, src) - a function that returns a string that when evaluated returns a function that can be 
-		 * 			used as the render (i.e. have func.call(data, data, helpers) called on it).</li>
-		 * 		<li>renderer(id, text) - a function that takes the id of the template and the text of the template and
-		 * 			returns a render function.</li>
+		 *   <li>suffix - the view extension.  EX: 'ejs'</li>
+		 *   <li>script(id, src) - a function that returns a string that when evaluated returns a function that can be 
+		 *    used as the render (i.e. have func.call(data, data, helpers) called on it).</li>
+		 *   <li>renderer(id, text) - a function that takes the id of the template and the text of the template and
+		 *    returns a render function.</li>
 		 * </ul>
 		 */
 		register: function( info ) {
@@ -313,154 +311,157 @@ steal.plugins("jquery").then(function( $ ) {
 		 */
 		preload: function( id, renderer ) {
 			$.View.cached[id] = function( data, helpers ) {
-				return renderer.call(data, data, helpers)
-			}
+				return renderer.call(data, data, helpers);
+			};
 		}
 
-	})
+	});
 
 
 	//---- ADD jQUERY HELPERS -----
-	
 	//converts jquery functions to use views	
-	var convert = function( func_name ) {
+	var convert, modify, isTemplate, getCallback, hookupView, funcs;
+
+	convert = function( func_name ) {
 		var old = jQuery.fn[func_name];
 
 		jQuery.fn[func_name] = function() {
 			var args = $.makeArray(arguments),
-				res, 
-				hasHookup,
-				callbackNum, 
-				callback,
-				self = this;
+				callbackNum, callback, self = this;
 
 			//check if a template
 			if ( isTemplate(args) ) {
-				
+
 				// if we should operate async
-				if( ( callbackNum = getCallback(args) ) ){
+				if ((callbackNum = getCallback(args))) {
 					callback = args[callbackNum];
-					args[callbackNum] = function(result){
-						modify.call(self,[result], old)
+					args[callbackNum] = function( result ) {
+						modify.call(self, [result], old);
 						callback.call(self, result);
-					}
+					};
 					$.View.apply($.View, args);
 					return this;
 				}
-				
+
 				//otherwise do the template now
 				args = [$.View.apply($.View, args)];
 			}
-			
+
 			return modify.call(this, args, old);
+		};
+	};
+	// modifies the html of the element
+	modify = function( args, old ) {
+		var res, stub;
+
+		//check if there are new hookups
+		for ( var hasHookups in jQuery.View.hookups ) {
+			// Having arbitrary code in here makes JSLint pass
+			if ( true ) {
+				stub = true;
+			}
 		}
-	},
-		// modifies the html of the element
-		modify = function( args, old){
-			//check if there are new hookups
-			for ( var hasHookups in jQuery.View.hookups ) {};
 
-			//if there are hookups, get jQuery object
-			if ( hasHookups ) {
-				args[0] = $(args[0])
-			}
-			res = old.apply(this, args)
+		//if there are hookups, get jQuery object
+		if ( hasHookups ) {
+			args[0] = $(args[0]);
+		}
+		res = old.apply(this, args);
 
-			//now hookup hookups
-			if ( hasHookups ) {
-				hookupView(args[0])
+		//now hookup hookups
+		if ( hasHookups ) {
+			hookupView(args[0]);
+		}
+		return res;
+	};
+
+	// returns true or false if the args indicate a template is being used
+	isTemplate = function( args ) {
+		var secArgType = typeof args[1];
+
+		return typeof args[0] == "string" && (secArgType == 'object' || secArgType == 'function') && !args[1].nodeType && !args[1].jquery;
+	};
+
+	//returns the callback if there is one (for async view use)
+	getCallback = function( args ) {
+		return typeof args[3] === 'function' ? 3 : typeof args[2] === 'function' && 2;
+	};
+
+	hookupView = function( els ) {
+		//remove all hookups
+		var hooks = jQuery.View.hookups,
+			hookupEls, len, i = 0,
+			id, func;
+		jQuery.View.hookups = {};
+		hookupEls = els.add("[data-view-id]", els);
+		len = hookupEls.length;
+		for (; i < len; i++ ) {
+			if ( hookupEls[i].getAttribute && (id = hookupEls[i].getAttribute('data-view-id')) && (func = hooks[id]) ) {
+				func(hookupEls[i], id);
+				delete hooks[id];
+				hookupEls[i].removeAttribute('data-view-id');
 			}
-			return res;
-		},
-		
-		// returns true or false if the args indicate a template is being used
-		isTemplate = function(args){
-			var secArgType = typeof args[1];
-			
-			return typeof args[0] == "string" 
-				&& (secArgType == 'object' || secArgType == 'function') 
-				&& !args[1].nodeType && !args[1].jquery
-		},
-		//returns the callback if there is one (for async view use)
-		getCallback  = function(args){
-			return typeof args[3] === 'function' ?
-					3 : 
-					typeof args[2] === 'function' && 2
-		},
-		hookupView = function( els ) {
-			//remove all hookups
-			var hooks = jQuery.View.hookups,
-				hookupEls, len, i = 0,
-				id, func;
-			jQuery.View.hookups = {};
-			hookupEls = els.add("[data-view-id]", els);
-			len = hookupEls.length;
-			for (; i < len; i++ ) {
-				if ( hookupEls[i].getAttribute && (id = hookupEls[i].getAttribute('data-view-id')) && (func = hooks[id]) ) {
-					func(hookupEls[i], id);
-					delete hooks[id];
-					hookupEls[i].removeAttribute('data-view-id')
-				}
-			}
-			//copy remaining hooks back
-			$.extend(jQuery.View.hookups, hooks);
-		},
-		/**
-		 *  @add jQuery.fn
-		 */
-		funcs = [
-		/**
-		 *  @function prepend
-		 *  @parent jQuery.View
-		 *  abc
-		 */
-		"prepend",
-		/**
-		 *  @function append
-		 *  @parent jQuery.View
-		 *  abc
-		 */
-		"append",
-		/**
-		 *  @function after
-		 *  @parent jQuery.View
-		 *  abc
-		 */
-		"after",
-		/**
-		 *  @function before
-		 *  @parent jQuery.View
-		 *  abc
-		 */
-		"before",
-		/**
-		 *  @function replace
-		 *  @parent jQuery.View
-		 *  abc
-		 */
-		"replace",
-		/**
-		 *  @function text
-		 *  @parent jQuery.View
-		 *  abc
-		 */
-		"text",
-		/**
-		 *  @function html
-		 *  @parent jQuery.View
-		 *  abc
-		 */
-		"html",
-		/**
-		 *  @function replaceWith
-		 *  @parent jQuery.View
-		 *  abc
-		 */
-		"replaceWith"];
+		}
+		//copy remaining hooks back
+		$.extend(jQuery.View.hookups, hooks);
+	};
+
+	/**
+	 *  @add jQuery.fn
+	 */
+	funcs = [
+	/**
+	 *  @function prepend
+	 *  @parent jQuery.View
+	 *  abc
+	 */
+	"prepend",
+	/**
+	 *  @function append
+	 *  @parent jQuery.View
+	 *  abc
+	 */
+	"append",
+	/**
+	 *  @function after
+	 *  @parent jQuery.View
+	 *  abc
+	 */
+	"after",
+	/**
+	 *  @function before
+	 *  @parent jQuery.View
+	 *  abc
+	 */
+	"before",
+	/**
+	 *  @function replace
+	 *  @parent jQuery.View
+	 *  abc
+	 */
+	"replace",
+	/**
+	 *  @function text
+	 *  @parent jQuery.View
+	 *  abc
+	 */
+	"text",
+	/**
+	 *  @function html
+	 *  @parent jQuery.View
+	 *  abc
+	 */
+	"html",
+	/**
+	 *  @function replaceWith
+	 *  @parent jQuery.View
+	 *  abc
+	 */
+	"replaceWith"];
 
 	//go through helper funcs and convert
 	for ( var i = 0; i < funcs.length; i++ ) {
 		convert(funcs[i]);
 	}
 
-})
+});

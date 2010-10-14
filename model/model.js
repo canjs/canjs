@@ -167,39 +167,39 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * @Static
 	 */
 	{
-		setup: function(superClass) {
+		setup: function( superClass ) {
 
 			//we do not inherit attributes (or associations)
-			if(!this.attributes || superClass.attributes === this.attributes){
+			if (!this.attributes || superClass.attributes === this.attributes ) {
 				this.attributes = {};
 			}
-			
-			if(!this.associations || superClass.associations === this.associations){
+
+			if (!this.associations || superClass.associations === this.associations ) {
 				this.associations = {};
 			}
-			if(!this.validations || superClass.validations === this.validations){
+			if (!this.validations || superClass.validations === this.validations ) {
 				this.validations = {};
 			}
-			
+
 			//add missing converters
-			if(superClass.convert != this.convert){
+			if ( superClass.convert != this.convert ) {
 				this.convert = $.extend(superClass.convert, this.convert);
 			}
-			
-			
+
+
 			this._fullName = underscore(this.fullName.replace(/\./g, "_"));
 
 			if ( this.fullName.substr(0, 7) == "jQuery." ) {
 				return;
 			}
-			
+
 			//add this to the collection of models
 			jQuery.Model.models[this._fullName] = this;
-			
+
 			if ( this.listType ) {
 				this.list = new this.listType([]);
 			}
-			
+
 		},
 		/**
 		 * @attribute attributes
@@ -230,7 +230,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * },{})
 		 * @codeend
 		 */
-		attributes : {},
+		attributes: {},
 		/**
 		 * @attribute defaults
 		 * An object of default values to be set on all instances.  This 
@@ -322,7 +322,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 
 				}
 			}
-			return res; 
+			return res;
 		},
 		/**
 		 * The name of the id field.  Defaults to 'id'. Change this if it is something different.
@@ -387,7 +387,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			}
 			if ( object == "" ) return 'string';
 			//check if true or false
-			if (object == 'true' || object == 'false') {
+			if ( object == 'true' || object == 'false' ) {
 				return 'boolean';
 			}
 			if (!isNaN(object) && isFinite(+object) ) {
@@ -445,8 +445,8 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @param {Function} success
 		 * @param {Function} error
 		 */
-		findAll : function(params, success, error) {
-			
+		findAll: function( params, success, error ) {
+
 		},
 		/**
 		 * Implement this function!
@@ -454,14 +454,14 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @param {Function} success
 		 * @param {Function} error
 		 */
-		findOne : function(params, success, error){
-			
+		findOne: function( params, success, error ) {
+
 		}
 	},
 	/**
 	 * @Prototype
 	 */
-	{	
+	{
 		/**
 		 * Setup is called when a new model instance is created.
 		 * It adds default attributes, then whatever attributes
@@ -480,9 +480,9 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		setup: function( attributes ) {
 			// so we know not to fire events
 			this._initializing = true;
-			
+
 			this.Class.defaults && this.attrs(this.Class.defaults);
-			
+
 			this.attrs(attributes);
 			delete this._initializing;
 		},
@@ -530,35 +530,35 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * errors.dueDate[0] //-> "can't be empty"
 		 * @codeend
 		 */
-		errors: function(attrs) {
-			if(attrs){
+		errors: function( attrs ) {
+			if ( attrs ) {
 				attrs = $.isArray(attrs) ? attrs : $.makeArray(arguments);
 			}
 			var errors = {},
 				self = this,
-				addErrors = function(attr, funcs){
-					$.each(funcs, function(i, func){
+				addErrors = function( attr, funcs ) {
+					$.each(funcs, function( i, func ) {
 						var res = func.call(self);
-						if(res){
-							if(!errors.hasOwnProperty(attr)){
+						if ( res ) {
+							if (!errors.hasOwnProperty(attr) ) {
 								errors[attr] = [];
 							}
-							   
+
 							errors[attr].push(res);
 						}
-						
+
 					})
 				};
 
 			$.each(attrs || this.Class.validations || {}, function( attr, funcs ) {
-				if(typeof attr == 'number'){
+				if ( typeof attr == 'number' ) {
 					attr = funcs;
 					funcs = self.Class.validations[attr];
 				}
 				addErrors(attr, funcs || [])
 			});
-		
-			for(var attr in errors){
+
+			for ( var attr in errors ) {
 				return errors;
 			}
 			return null;
@@ -631,7 +631,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		attr: function( attribute, value, success, error ) {
 			var cap = classize(attribute),
 				get = "get" + cap;
-			if (value !== undefined) {
+			if ( value !== undefined ) {
 				this._setProperty(attribute, value, success, error, cap);
 				return this;
 			}
@@ -675,7 +675,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @param {Function} handler a function to call back when an event happens on this model.
 		 * @return {model} the model instance for chaining
 		 */
-		bind: function(eventType, handler){
+		bind: function( eventType, handler ) {
 			var wrapped = $(this);
 			wrapped.bind.apply(wrapped, arguments);
 			return this;
@@ -687,7 +687,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @param {String} eventType
 		 * @param {Function} handler
 		 */
-		unbind: function(eventType, handler){
+		unbind: function( eventType, handler ) {
 			var wrapped = $(this);
 			wrapped.unbind.apply(wrapped, arguments);
 			return this;
@@ -705,20 +705,17 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 				//the old value
 				old = this[property],
 				self = this,
-				errorCallback = function(errors){
-					error && error.call(self,errors);
-					$(self).triggerHandler("error."+property, errors);
+				errorCallback = function( errors ) {
+					error && error.call(self, errors);
+					$(self).triggerHandler("error." + property, errors);
 				};
 
 			// if the setter returns nothing, do not set
 			// we might want to indicate if this was set ok
-			if (this[setName] && 
-				(value = this[setName](		value, 
-											this.callback('_updateProperty',property, value, old, success, errorCallback), 
-											errorCallback)) === undefined ) {
-				return ;
+			if ( this[setName] && (value = this[setName](value, this.callback('_updateProperty', property, value, old, success, errorCallback), errorCallback)) === undefined ) {
+				return;
 			}
-			this._updateProperty(property, value, old, success, errorCallback )
+			this._updateProperty(property, value, old, success, errorCallback)
 		},
 		/**
 		 * Triggers events when a property has been updated
@@ -728,38 +725,32 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @param {Object} old
 		 * @param {Object} success
 		 */
-		_updateProperty : function(property, value, old, success, errorCallback){
+		_updateProperty: function( property, value, old, success, errorCallback ) {
 			var Class = this.Class,
-				val,
-				old,
-				type = Class.attributes[property] || Class.addAttr(property, Class.guessType(value)),
+				val, old, type = Class.attributes[property] || Class.addAttr(property, Class.guessType(value)),
 				//the converter
 				converter = Class.convert[type],
 				errors = null;
-				
-			val = this[property] = 
-				( value == null ?  //if the value is null or undefined
-					null : 	      // it should be null
-					(converter ? 
-						converter.call(Class, value) : //convert it to something useful
-						value) )					   //just return it
 
-			
+			val = this[property] = (value == null ? //if the value is null or undefined
+			null : // it should be null
+			(converter ? converter.call(Class, value) : //convert it to something useful
+			value)) //just return it
 			//validate (only if not initializing, this is for performance)
-			if(!this._initializing){
+			if (!this._initializing ) {
 				errors = this.errors(property);
 			}
-			
-			if(errors){
+
+			if ( errors ) {
 				errorCallback(errors)
-			}else{
-				if(old !== val && !this._initializing){
+			} else {
+				if ( old !== val && !this._initializing ) {
 					$(this).triggerHandler(property, val);
 				}
 				success && success(this);
-				
+
 			}
-			
+
 			//if this class has a global list, add / remove from the list.
 			if ( property == Class.id && val != null && Class.list ) {
 				// if we didn't have an old id, add ourselves
@@ -771,7 +762,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 					Class.list.push(this);
 				}
 			}
-			
+
 		},
 		/**
 		 * Gets or sets a list of attributes. 
@@ -798,7 +789,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 				var idName = this.Class.id;
 				//always set the id last
 				for ( key in attributes ) {
-					if (key != idName) {
+					if ( key != idName ) {
 						this.attr(key, attributes[key]);
 					}
 				}
@@ -833,7 +824,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 */
 		save: function( success, error ) {
 
-			if (this.errors() ) {
+			if ( this.errors() ) {
 				//needs to send errors
 				return false;
 			}
@@ -976,13 +967,13 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * 
 	 * @param {Object} type
 	 */
-	$.fn.model = function(type) {
-		if(type && type instanceof $.Model){
+	$.fn.model = function( type ) {
+		if ( type && type instanceof $.Model ) {
 			type.hookup(this[0]);
 			return this;
-		}else{
+		} else {
 			return this.models.apply(this, arguments)[0];
 		}
-		
+
 	}
 });
