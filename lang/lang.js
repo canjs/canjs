@@ -13,7 +13,9 @@ steal.plugins('jquery').then(function( $ ) {
 	/** 
 	 * @class jQuery.String
 	 */
-	var str = ($.String = /* @Static*/ {
+	var str = ($.String =
+	/* @Static*/
+	{
 		/**
 		 * @function strip
 		 * @param {String} s returns a string with leading and trailing whitespace removed.
@@ -53,8 +55,10 @@ steal.plugins('jquery').then(function( $ ) {
 			var parts = s.split(regs.undHash),
 				i = 1;
 			parts[0] = parts[0].charAt(0).toLowerCase() + parts[0].substr(1);
-			for (; i < parts.length; i++ )
-			parts[i] = str.capitalize(parts[i]);
+			for (; i < parts.length; i++ ) {
+				parts[i] = str.capitalize(parts[i]);
+			}
+
 			return parts.join('');
 		},
 		/**
@@ -65,8 +69,10 @@ steal.plugins('jquery').then(function( $ ) {
 		classize: function( s ) {
 			var parts = s.split(regs.undHash),
 				i = 0;
-			for (; i < parts.length; i++ )
-			parts[i] = str.capitalize(parts[i]);
+			for (; i < parts.length; i++ ) {
+				parts[i] = str.capitalize(parts[i]);
+			}
+
 			return parts.join('');
 		},
 		/**
@@ -80,8 +86,10 @@ steal.plugins('jquery').then(function( $ ) {
 		niceName: function( s ) {
 			var parts = s.split(regs.undHash),
 				i = 0;
-			for (; i < parts.length; i++ )
-			parts[i] = str.capitalize(parts[i]);
+			for (; i < parts.length; i++ ) {
+				parts[i] = str.capitalize(parts[i]);
+			}
+
 			return parts.join(' ');
 		},
 
@@ -94,11 +102,8 @@ steal.plugins('jquery').then(function( $ ) {
 		 * @return {String} the underscored string
 		 */
 		underscore: function( s ) {
-			return s.replace(regs.colons, '/').
-			replace(regs.words, '$1_$2').
-			replace(regs.lowerUpper, '$1_$2').
-			replace(regs.dash, '_').toLowerCase()
+			return s.replace(regs.colons, '/').replace(regs.words, '$1_$2').replace(regs.lowerUpper, '$1_$2').replace(regs.dash, '_').toLowerCase();
 		}
 	});
 
-})
+});

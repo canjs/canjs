@@ -2,6 +2,7 @@
 // This is a modified version of John Resig's class
 // http://ejohn.org/blog/simple-javascript-inheritance/
 // It provides class level inheritance and callbacks.
+//@steal-clean
 steal.plugin("jquery").then(function( $ ) {
 
 	// if we are initializing a new class
@@ -507,7 +508,7 @@ steal.plugin("jquery").then(function( $ ) {
 					namespace = current;
 
 				//@steal-remove-start
-				if(!Class.nameOk){
+				if (!Class.nameOk ) {
 					steal.dev.isHappyName(fullName)
 				}
 				//@steal-remove-end
