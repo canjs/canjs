@@ -201,7 +201,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			return input;
 		}
 		var myid;
-		if ( input == null || input === undefined ) {
+		if ( input === null || input === undefined ) {
 			return '';
 		}
 		if ( input instanceof Date ) {
@@ -209,9 +209,9 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		}
 		if ( input.hookup ) {
 			myid = $.View.hookup(function( el, id ) {
-				input.hookup.call(input, el, id)
+				input.hookup.call(input, el, id);
 			});
-			return "data-view-id='" + myid + "'"
+			return "data-view-id='" + myid + "'";
 		}
 		if ( typeof input == 'function' ) {
 			return "data-view-id='" + $.View.hookup(input) + "'";
@@ -220,13 +220,14 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		if ( isArray(input) ) {
 			myid = $.View.hookup(function( el, id ) {
 				for ( var i = 0; i < input.length; i++ ) {
-					input[i].hookup ? input[i].hookup(el, id) : input[i](el, id)
+					var stub;
+					stub = input[i].hookup ? input[i].hookup(el, id) : input[i](el, id);
 				}
 			});
-			return "data-view-id='" + myid + "'"
+			return "data-view-id='" + myid + "'";
 		}
 		if ( input.nodeName || input.jQuery ) {
-			throw "elements in views are not supported"
+			throw "elements in views are not supported";
 		}
 
 		if ( input.toString ) {
@@ -253,7 +254,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 
 
 		// make a regexp that can split on these token
-		this.splitRegexp = (left == '[' ? defaultSplitter : new RegExp("(" + [this.doubleLeft, this.doubleRight, this.leftEqual, this.leftComment, this.leftDelimiter, this.rightDelimiter + '\n', this.rightDelimiter, '\n'].join(")|(") + ")"))
+		this.splitRegexp = (left == '[' ? defaultSplitter : new RegExp("(" + [this.doubleLeft, this.doubleRight, this.leftEqual, this.leftComment, this.leftDelimiter, this.rightDelimiter + '\n', this.rightDelimiter, '\n'].join(")|(") + ")"));
 
 		this.source = source;
 		this.lines = 0;
@@ -278,7 +279,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 				token;
 			for ( var i = 0; i < line_split.length; i++ ) {
 				token = line_split[i];
-				if ( token != null ) {
+				if ( token !== null ) {
 					try {
 						block(token, this);
 					} catch (e) {
@@ -316,14 +317,17 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		},
 		//returns the script too
 		close: function() {
+			var stub;
+
 			if ( this.line.length > 0 ) {
-				this.script.push(this.line.join(''))
-				line = null;
+				this.script.push(this.line.join(''));
+				line = null; // this?
 			}
-			this.post_cmd.length && this.push.apply(this, this.post_cmd)
+
+			stub = this.post_cmd.length && this.push.apply(this, this.post_cmd);
 
 			this.script.push(";"); //makes sure we always have an ending /
-			return this.script.join("")
+			return this.script.join("");
 		}
 
 	};
@@ -342,7 +346,6 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			break;
 		default:
 			throw left + ' is not a supported deliminator';
-			break;
 		}
 		this.scanner = new EJS.Scanner(this.source, left, right);
 		this.out = '';
@@ -363,12 +366,12 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 				},
 				put = function( content ) {
 					buff.push(put_cmd, '"', clean(content), '");');
-				}
+				},
 				startTag = null;
 
 			this.scanner.scan(function( token, scanner ) {
 				// if we don't have a start pair
-				if ( startTag == null ) {
+				if ( startTag === null ) {
 					switch ( token ) {
 					case '\n':
 						content = content + "\n";
@@ -430,7 +433,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 				// Should be content.dump in Ruby
 				buff.push(put_cmd, '"', clean(content) + '");');
 			}
-			var template = buff.close()
+			var template = buff.close();
 			this.out = '/*' + name + '*/  try { with(_VIEW) { with (_CONTEXT) {' + template + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}";
 			//use eval instead of creating a function, b/c it is easier to debug
 			eval('this.process = (function(_CONTEXT,_VIEW){' + this.out + '})'); //new Function("_CONTEXT","_VIEW",this.out)
@@ -463,7 +466,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		cache: true,
 		type: '<',
 		ext: '.ejs'
-	}
+	};
 
 
 
@@ -491,17 +494,17 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			var args = $.makeArray(arguments),
 				widget = args.shift();
 			return function( el ) {
-				var jq = $(el)
+				var jq = $(el);
 				jq[widget].apply(jq, args);
-			}
+			};
 		},
 		/**
 		 * Renders a partial view.  This is deprecated in favor of <code>$.View()</code>.
 		 */
 		view: function( url, data, helpers ) {
-			helpers = helpers || this._extras
+			helpers = helpers || this._extras;
 			data = data || this._data;
-			return $.View(url, data, helpers) //new EJS(options).render(data, helpers);
+			return $.View(url, data, helpers); //new EJS(options).render(data, helpers);
 		}
 	};
 
@@ -518,11 +521,10 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			var ejs = new EJS({
 				text: text,
 				name: id
-			})
+			});
 			return function( data, helpers ) {
-				return ejs.render.call(ejs, data, helpers)
-			}
+				return ejs.render.call(ejs, data, helpers);
+			};
 		}
-	})
-
+	});
 });
