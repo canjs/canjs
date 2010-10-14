@@ -309,11 +309,13 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			if (!instancesRawData ) {
 				return null;
 			}
-			var res = new(this.List || $.Model.List || Array)(),
+			var listType = this.List || $.Model.List || Array,
+				res = new listType(),
 				arr = $.isArray(instancesRawData),
 				raw = arr ? instancesRawData : instancesRawData.data,
 				length = raw.length,
 				i = 0;
+
 			res._use_call = true; //so we don't call next function with all of these
 			for (; i < length; i++ ) {
 				res.push(this.wrap(raw[i]));
@@ -975,7 +977,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	$.fn.models = function( type ) {
 		//get it from the data
 		var collection = [],
-			kind, ret;
+			kind, ret, retType;
 		this.each(function() {
 			$.each($.data(this, "models") || {}, function( name, instance ) {
 				//either null or the list type shared by all classes
@@ -983,7 +985,10 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 				collection.push(instance);
 			});
 		});
-		ret = new(kind || $.Model.List || Array)();
+
+		retType = kind || $.Model.List() || Array;
+		ret = new retType();
+
 		ret.push.apply(ret, $.unique(collection));
 		return ret;
 	};
