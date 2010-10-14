@@ -12,10 +12,10 @@ steal.plugins('jquery/lang').then(function( $ ) {
 		var result = regex.exec(string),
 			retArr = [],
 			first_idx, last_idx;
-		while ( result != null ) {
+		while ( result !== null ) {
 			first_idx = result.index;
 			last_idx = regex.lastIndex;
-			if ( first_idx != 0 ) {
+			if ( first_idx !== 0 ) {
 				retArr.push(string.substring(0, first_idx));
 				string = string.slice(first_idx);
 			}
@@ -23,9 +23,9 @@ steal.plugins('jquery/lang').then(function( $ ) {
 			string = string.slice(result[0].length);
 			result = regex.exec(string);
 		}
-		if ( string != '' ) {
+		if ( string !== '' ) {
 			retArr.push(string);
 		}
 		return retArr;
-	}
-})
+	};
+});
