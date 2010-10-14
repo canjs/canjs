@@ -4,13 +4,19 @@
 steal.plugins("jquery/dom").then(function( $ ) {
 	var radioCheck = /radio|checkbox/i,
 		keyBreaker = /[^\[\]]+/g,
-		numberMatcher = /^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$/
+		numberMatcher = /^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/;
 
-		isNumber = function( value ) {
-			if ( typeof value == 'number' ) return true;
-			if ( typeof value != 'string' ) return false;
-			return value.match(numberMatcher);
-		};
+	var isNumber = function( value ) {
+		if ( typeof value == 'number' ) {
+			return true;
+		}
+
+		if ( typeof value != 'string' ) {
+			return false;
+		}
+
+		return value.match(numberMatcher);
+	};
 
 	$.fn.extend({
 		/**
@@ -38,7 +44,6 @@ steal.plugins("jquery/dom").then(function( $ ) {
 		 * @return {Object} An object of name-value pairs.
 		 */
 		formParams: function( convert ) {
-			var data = {};
 			if ( this[0].nodeName.toLowerCase() == 'form' && this[0].elements ) {
 
 				return jQuery(jQuery.makeArray(this[0].elements)).getParams(convert);
@@ -47,7 +52,9 @@ steal.plugins("jquery/dom").then(function( $ ) {
 		},
 		getParams: function( convert ) {
 			var data = {},
-				current, convert = convert === undefined ? true : convert;
+				current;
+
+			convert = convert === undefined ? true : convert;
 
 			this.each(function() {
 				var el = this,
@@ -62,8 +69,6 @@ steal.plugins("jquery/dom").then(function( $ ) {
 					isRadioCheck = radioCheck.test(el.type),
 					parts = key.match(keyBreaker),
 					write = !isRadioCheck || !! el.checked,
-					//overwrite the value
-					append = false,
 					//make an array of values
 					lastPart;
 
@@ -80,7 +85,7 @@ steal.plugins("jquery/dom").then(function( $ ) {
 				current = data;
 				for ( var i = 0; i < parts.length - 1; i++ ) {
 					if (!current[parts[i]] ) {
-						current[parts[i]] = {}
+						current[parts[i]] = {};
 					}
 					current = current[parts[i]];
 				}
@@ -98,7 +103,7 @@ steal.plugins("jquery/dom").then(function( $ ) {
 					current[lastPart] = write ? value : undefined;
 				}
 
-			})
+			});
 			return data;
 		}
 	});
