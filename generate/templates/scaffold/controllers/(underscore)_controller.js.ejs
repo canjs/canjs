@@ -1,3 +1,5 @@
+/*global confirm: true */
+
 /**
  * @tag controllers, home
  * Displays a table of <%= plural %>.	 Lets the user 
@@ -17,7 +19,7 @@ $.Controller.extend('<%=name.replace("Models","Controllers")%>',
  */
  load: function(){
 	if(!$("#<%= underscore %>").length){
-	 $(document.body).append($('<div/>').attr('id','<%= underscore %>'))
+	 $(document.body).append($('<div/>').attr('id','<%= underscore %>'));
 		 <%= name %>.findAll({}, this.callback('list'));
  	}
  },

@@ -24,7 +24,7 @@ $.Model.extend('<%=name%>',
 			success: this.callback(['wrapMany',success]),
 			error: error,
 			fixture: "//<%= appPath %>/fixtures/<%= plural %>.json.get" //calculates the fixture path from the url and type.
-		})
+		});
 	},
 	/**
 	 * Updates a <%= underscore %>'s data.
@@ -42,7 +42,7 @@ $.Model.extend('<%=name%>',
 			success: success,
 			error: error,
 			fixture: "-restUpdate" //uses $.fixture.restUpdate for response.
-		})
+		});
 	},
 	/**
  	 * Destroys a <%= underscore %>'s data.
@@ -58,7 +58,7 @@ $.Model.extend('<%=name%>',
 			success: success,
 			error: error,
 			fixture: "-restDestroy" // uses $.fixture.restDestroy for response.
-		})
+		});
 	},
 	/**
 	 * Creates a <%= underscore %>.
@@ -75,7 +75,7 @@ $.Model.extend('<%=name%>',
 			error: error,
 			data: attrs,
 			fixture: "-restCreate" //uses $.fixture.restCreate for response.
-		})
+		});
 	}
 },
 /* @Prototype */

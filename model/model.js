@@ -986,7 +986,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			});
 		});
 
-		retType = kind || $.Model.List() || Array;
+		retType = kind || $.Model.List || Array;
 		ret = new retType();
 
 		ret.push.apply(ret, $.unique(collection));
