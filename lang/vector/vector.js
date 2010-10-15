@@ -4,7 +4,7 @@ steal.then(function(){
 /**
  * @class
  * A vector class
- * @init creates a new vector instance from the arguments.  Example:
+ * @constructor creates a new vector instance from the arguments.  Example:
  * @codestart
  * new jQuery.Vector(1,2)
  * @codeend

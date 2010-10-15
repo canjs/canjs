@@ -156,7 +156,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 * <li>[jQuery.fixture.-restUpdate] - a fixture for restful destroys.</li>
 	 * </ul>
 	 * @demo jquery/dom/fixture/fixture.html
-	 * @init
+	 * @constructor
 	 * Takes an ajax settings and returns a url to look for a fixture.  Overwrite this if you want a custom lookup method.
 	 * @param {Object} settings
 	 * @return {String} the url that will be used for the fixture

@@ -5,7 +5,7 @@ steal.plugins('jquery/controller/subscribe',
  * @class
  * The controller history plugin adds browser hash (#) based history support.
  * This class itself helps break up parts of the hash of the url
- * @init 
+ * @constructor 
  * Takes a url and extracts information out of it.
  * @param {Object} path
  */
