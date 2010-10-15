@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v1.4.3pre
+ * jQuery JavaScript Library v1.4.3
  * http://jquery.com/
  *
  * Copyright 2010, John Resig
@@ -11,7 +11,7 @@
  * Copyright 2010, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Thu Oct 14 12:09:16 2010 -0500
+ * Date: Fri Oct 15 00:36:22 2010 -0500
  */
 (function( window, undefined ) {
 
@@ -211,7 +211,7 @@ jQuery.fn = jQuery.prototype = {
 	selector: "",
 
 	// The current version of jQuery being used
-	jquery: "1.4.3pre",
+	jquery: "1.4.4pre",
 
 	// The default length of a jQuery object is 0
 	length: 0,
@@ -5552,14 +5552,14 @@ jQuery.extend({
 						delete window[ jsonp ];
 					} catch( jsonpError ) {}
 				}
+
+				data = tmp;
+				jQuery.handleSuccess( s, xhr, status, data );
+				jQuery.handleComplete( s, xhr, status, data );
 				
 				if ( head ) {
 					head.removeChild( script );
 				}
-				
-				data = tmp;
-				jQuery.handleSuccess( s, xhr, status, data );
-				jQuery.handleComplete( s, xhr, status, data );
 			};
 		}
 
@@ -6550,14 +6550,17 @@ if ( "getBoundingClientRect" in document.documentElement ) {
 
 		try {
 			box = elem.getBoundingClientRect();
-
-		} catch(e) {
-			return { top: 0, left: 0 };
-		}
+		} catch(e) {}
 
 		var doc = elem.ownerDocument,
-			body = doc.body,
-			docElem = doc.documentElement,
+			docElem = doc.documentElement;
+
+		// Make sure we're not dealing with a disconnected DOM node
+		if ( !box || !jQuery.contains( docElem, elem ) ) {
+			return box || { top: 0, left: 0 };
+		}
+
+		var body = doc.body,
 			win = getWindow(doc),
 			clientTop  = docElem.clientTop  || body.clientTop  || 0,
 			clientLeft = docElem.clientLeft || body.clientLeft || 0,
