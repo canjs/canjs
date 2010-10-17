@@ -13,8 +13,9 @@ steal('//steal/generate/generate','//steal/generate/system',function(steal){
 		path: path, 
 		application_name: path.match(/[^\/]*$/)[0],
 		current_path: steal.File.cwdURL(),
-		path_to_steal : new steal.File(_args[1]).pathToRoot(true)
+			path_to_steal : new steal.File(path).pathToRoot()
 	}, steal.system)
 	
-	steal.generate.render("jquery/generate/templates/page.ejs", _args[1], data)
+	var to = path+"/"+_args[1];
+	steal.generate.render("jquery/generate/templates/page.ejs", to, data)
 });
