@@ -162,20 +162,20 @@
 			event.special[this] = {
 				add:  add,
 				remove: remove,
-				setup : function(){},
-				teardown : function(){}
+				setup: function() {},
+				teardown: function() {}
 			};
 		});
 	}
 
-})(jQuery);
+})(true);
 
 // jquery/event/hover/hover.js
 
 (function($){
 
 /**
- * @constructor jQuery.Hover
+ * @class jQuery.Hover
  * @plugin jquery/event/hover
  * @download jquery/dist/jquery.event.hover.js
  * Provides delegate-able hover events.
@@ -194,13 +194,13 @@
  * <h3>Quick Example</h3>
  * The following listens for hoverenter and adds a class to style
  * the element, and removes the class on hoverleave.
-@codestart
-$('#menu').delegate(".option","hoverenter",function(){
-  $(this).addClass("hovering");
-}).delegate(".option","hoverleave",function(){
-  $(this).removeClass("hovering");
-})
-@codeend
+ * @codestart
+ * $('#menu').delegate(".option","hoverenter",function(){
+ *   $(this).addClass("hovering");
+ * }).delegate(".option","hoverleave",function(){
+ *   $(this).removeClass("hovering");
+ * })
+ * @codeend
  * <h2>Configuring Distance and Delay</h2>
  * <p>An element is hovered when the mouse
  *   moves less than a certain distance in 
@@ -220,18 +220,18 @@ $('#menu').delegate(".option","hoverenter",function(){
  * @codeend
  * <p>Or you can adjust delay and distance for
  * an individual element in hoverenter:</p>
-@codestart
-$(".option").live("hoverinit", function(ev, hover){
-//set the distance to 10px
-hover.distance(10)
-//set the delay to 200ms
-hover.delay(10)
-})
-@codeend
+ * @codestart
+ * $(".option").live("hoverinit", function(ev, hover){
+ * //set the distance to 10px
+ * hover.distance(10)
+ * //set the delay to 200ms
+ * hover.delay(10)
+ * })
+ * @codeend
  * <h2>Demo</h2>
  * @demo jquery/event/hover/hover.html
  * @parent specialevents
- * @init Creates a new hover.  This is never
+ * @constructor Creates a new hover.  This is never
  * called directly.
  */
 jQuery.Hover = function(){
@@ -266,7 +266,7 @@ $.extend(jQuery.Hover.prototype,{
 	 * @param {Number} delay the number of milliseconds used to determine a hover
 	 * 
 	 */
-	delay: function(delay){
+	delay: function( delay ) {
 		this._delay = delay;
 	},
 	/**
@@ -274,7 +274,7 @@ $.extend(jQuery.Hover.prototype,{
 	 * only be used in hoverinit.
 	 * @param {Number} distance the max distance in pixels a mouse can move to be considered a hover
 	 */
-	distance: function(distance){
+	distance: function( distance ) {
 		this._distance = distance;
 	}
 })
@@ -335,7 +335,7 @@ var $ = jQuery,
 	};
 		
 /**
- * @add jQuery.event.special static
+ * @add jQuery.event.special
  */
 event.setupHelper( [
 /**
@@ -343,14 +343,14 @@ event.setupHelper( [
  * Listen for hoverinit events to configure
  * [jQuery.Hover.prototype.delay] and [jQuery.Hover.prototype.distance]
  * for the current element.  Hoverinit is called on mouseenter.
-@codestart
-$(".option").live("hoverinit", function(ev, hover){
-   //set the distance to 10px
-   hover.distance(10)
-   //set the delay to 200ms
-   hover.delay(10)
-})
-@codeend
+ * @codestart
+ * $(".option").live("hoverinit", function(ev, hover){
+ *    //set the distance to 10px
+ *    hover.distance(10)
+ *    //set the delay to 200ms
+ *    hover.delay(10)
+ * })
+ * @codeend
  */
 "hoverinit", 
 /**
@@ -358,39 +358,39 @@ $(".option").live("hoverinit", function(ev, hover){
  * Hoverenter events are called when the mouses less 
  * than [jQuery.Hover.prototype.distance] pixels in 
  * [jQuery.Hover.prototype.delay] milliseconds.
-@codestart
-$(".option").live("hoverenter", function(ev, hover){
-   $(this).addClass("hovering");
-})
-@codeend
+ * @codestart
+ * $(".option").live("hoverenter", function(ev, hover){
+ *    $(this).addClass("hovering");
+ * })
+ * @codeend
  */
 "hoverenter",
 /**
  * @attribute hoverleave
  * Called when the mouse leaves an element that has been
  * hovered.
-@codestart
-$(".option").live("hoverleave", function(ev, hover){
-   $(this).removeClass("hovering");
-})
-@codeend
+ * @codestart
+ * $(".option").live("hoverleave", function(ev, hover){
+ *    $(this).removeClass("hovering");
+ * })
+ * @codeend
  */
 "hoverleave",
 /**
  * @attribute hovermove
  * Called when the mouse moves on an element that 
  * has been hovered.
-@codestart
-$(".option").live("hovermove", function(ev, hover){
-   //not sure why you would want to listen for this
-   //but we provide it just in case
-})
-@codeend
+ * @codestart
+ * $(".option").live("hovermove", function(ev, hover){
+ *    //not sure why you would want to listen for this
+ *    //but we provide it just in case
+ * })
+ * @codeend
  */
 "hovermove"], "mouseenter", onmouseenter )
 		
 
 	
 
-})(jQuery);
+})(true);
 

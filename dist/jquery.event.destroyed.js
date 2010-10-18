@@ -25,30 +25,18 @@
 	 * <h2>More Involved Demo</h2>
 	 * @demo jquery/event/destroyed/destroyed_menu.html 
 	 */
-	/*$.event.special["destroyed"] = {
-		remove: function( handleObj){
-			//call the handler
-			if(handleObj.removed || handleObj.handler.removed) return;
-			var event = jQuery.Event( "destroyed" );
-			event.preventDefault();
-			event.stopPropagation(); 
-			handleObj.removed = true;
-			handleObj.handler.call( this, event )
-			
-		},
-		setup : $.noop,
-		teardown : $.noop
-	}*/
+
 	var oldClean = jQuery.cleanData
-	
-	$.cleanData= function( elems ) {
-		for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
+
+	$.cleanData = function( elems ) {
+		for ( var i = 0, elem;
+		(elem = elems[i]) != null; i++ ) {
 			$(elem).triggerHandler("destroyed")
 			//$.event.remove( elem, 'destroyed' );
 		}
 		oldClean(elems)
 	}
-	
 
-})(jQuery);
+
+})(true);
 

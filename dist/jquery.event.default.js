@@ -53,7 +53,7 @@ var types = {}, rnamespaces= /\.(.*)$/;
  * @demo jquery/event/default/default.html
  */
 $.event.special["default"] = {
-	add: function( handleObj){
+	add: function( handleObj ) {
 		//save the type
 		types[handleObj.namespace.replace(rnamespaces,"")] = true;
 		
@@ -66,7 +66,7 @@ $.event.special["default"] = {
 			ev._defaultActions.push({element: this, handler: origHandler, event: ev, data: data, currentTarget: ev.currentTarget})
 		}
 	},
-	setup : function(){return true}
+	setup: function() {return true}
 }
 
 // overwrite trigger to allow default types
@@ -74,12 +74,7 @@ var oldTrigger = $.event.trigger;
 $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
     //always need to convert here so we know if we have default actions
     var type = event.type || event
-	//should need to trigger just on this event
-	//shortcut if we never listened for a default of this type
-	//if(!types[type]){
-	//	 return oldTrigger.call($.event, event, data, elem, bubbling)
-	//}
-	
+
     if ( !bubbling ) {
 		event = typeof event === "object" ?
 			// jQuery.Event object
@@ -133,9 +128,11 @@ $.event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
 		
 		// call each event handler
 		for(var i = 0 ; i < event._defaultActions.length; i++){
-			var a  = event._defaultActions[i];
+			var a  = event._defaultActions[i],
+				oldHandle = event.handled;
 			event.currentTarget = a.currentTarget;
-			a.handler.call(a.element, event, a.data)
+			a.handler.call(a.element, event, a.data);
+			event.handled = event.handled === null ? oldHandle : true;
         }
         event._defaultActions = null; //set to null so everyone else on this element ignores it
     }
@@ -194,5 +191,5 @@ triggerDefaults = function(type, data){
 	
 	
 
-})(jQuery);
+})(true);
 
