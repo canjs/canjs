@@ -7,20 +7,19 @@
 load('steal/rhino/steal.js')
 steal('//steal/test/test', function(s){
 	
-	new steal.File("jquery/view/test/compression/absolute.ejs").save("<h1>Absolute</h1>");
-	new steal.File("jquery/view/test/compression/relative.ejs").save("<h1>Relative</h1>");
-	new steal.File("jquery/view/test/compression/tmplTest.tmpl").save("<h1>${message}</h1>");
+	steal.File("jquery/view/test/compression/views/absolute.ejs").save("<h1>Absolute</h1>");
+	steal.File("jquery/view/test/compression/views/relative.ejs").save("<h1>Relative</h1>");
+	steal.File("jquery/view/test/compression/views/tmplTest.tmpl").save("<h1>${message}</h1>");
 	s.test.clear();
 	
 	load("steal/rhino/steal.js");
 	steal.plugins('steal/build','steal/build/scripts','steal/build/styles',function(){
 		steal.build('jquery/view/test/compression/compression.html',{to: 'jquery/view/test/compression'});
 	});
-	
 	s.test.clear();
-	s.test.remove("jquery/view/test/compression/absolute.ejs")
-	s.test.remove("jquery/view/test/compression/relative.ejs")
-	s.test.remove("jquery/view/test/compression/tmplTest.tmpl")
+	s.test.remove("jquery/view/test/compression/views/absolute.ejs")
+	s.test.remove("jquery/view/test/compression/views/relative.ejs")
+	s.test.remove("jquery/view/test/compression/views/tmplTest.tmpl")
 	
 	
 	steal = {env: "production"};
