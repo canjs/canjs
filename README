@@ -8,7 +8,7 @@ A.  How to get (and contribute) JMVC
   
   2.  Fork ....
            http://github.com/jupiterjs/steal     and 
-           http://github.com/jupiterjs/javascriptmvc
+           http://github.com/jupiterjs/jquerymx
   
   3.  Add steal and javascriptmvc as submodules of your project...
            git submodule add git@github.com:_YOU_/steal.git steal
