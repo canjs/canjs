@@ -129,13 +129,13 @@
 	 * View makes this easy.  You just have to return the Contoller class you want to be hooked up.
 	 * 
 	 * @codestart
-	 * &lt;ul &lt;%= Phui.Tabs%>>...&lt;ul>
+	 * &lt;ul &lt;%= Mxui.Tabs%>>...&lt;ul>
 	 * @codeend
 	 * 
 	 * You can even hook up multiple controllers:
 	 * 
 	 * @codestart
-	 * &lt;ul &lt;%= [Phui.Tabs, Phui.Filler]%>>...&lt;ul>
+	 * &lt;ul &lt;%= [Mxui.Tabs, Mxui.Filler]%>>...&lt;ul>
 	 * @codeend
 	 * 
 	 * @constructor 
