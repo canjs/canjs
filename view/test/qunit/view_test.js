@@ -63,3 +63,8 @@ test("caching works", function(){
 		
 	})
 })
+test("hookup", function(){
+	$("#qunit-test-area").html("");
+	
+	$("#qunit-test-area").html("//jquery/view/test/qunit/hookup.ejs",{})
+})
