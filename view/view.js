@@ -323,9 +323,9 @@ steal.plugins("jquery").then(function( $ ) {
 	var convert, modify, isTemplate, getCallback, hookupView, funcs;
 
 	convert = function( func_name ) {
-		var old = jQuery.fn[func_name];
+		var old = $.fn[func_name];
 
-		jQuery.fn[func_name] = function() {
+		$.fn[func_name] = function() {
 			var args = $.makeArray(arguments),
 				callbackNum, callback, self = this;
 
@@ -352,7 +352,7 @@ steal.plugins("jquery").then(function( $ ) {
 	};
 	// modifies the html of the element
 	modify = function( args, old ) {
-		var res, stub;
+		var res, stub, hooks;
 
 		//check if there are new hookups
 		for ( var hasHookups in jQuery.View.hookups ) {
@@ -361,13 +361,15 @@ steal.plugins("jquery").then(function( $ ) {
 
 		//if there are hookups, get jQuery object
 		if ( hasHookups ) {
+			hooks = $.View.hookups;
+			$.View.hookups = {};
 			args[0] = $(args[0]);
 		}
 		res = old.apply(this, args);
 
 		//now hookup hookups
 		if ( hasHookups ) {
-			hookupView(args[0]);
+			hookupView(args[0], hooks);
 		}
 		return res;
 	};
@@ -384,12 +386,14 @@ steal.plugins("jquery").then(function( $ ) {
 		return typeof args[3] === 'function' ? 3 : typeof args[2] === 'function' && 2;
 	};
 
-	hookupView = function( els ) {
+	hookupView = function( els , hooks) {
 		//remove all hookups
-		var hooks = jQuery.View.hookups,
-			hookupEls, len, i = 0,
+		var hookupEls, 
+			len, i = 0,
 			id, func;
-		jQuery.View.hookups = {};
+		els = els.filter(function(){
+			return this.nodeType != 3; //filter out text nodes
+		})
 		hookupEls = els.add("[data-view-id]", els);
 		len = hookupEls.length;
 		for (; i < len; i++ ) {
@@ -400,7 +404,7 @@ steal.plugins("jquery").then(function( $ ) {
 			}
 		}
 		//copy remaining hooks back
-		$.extend(jQuery.View.hookups, hooks);
+		$.extend($.View.hookups, hooks);
 	};
 
 	/**
