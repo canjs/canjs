@@ -46,16 +46,16 @@ It's impossible to expect a single template engine to meet everyone's needs.
 	I've yet to encounter a template that does't provide:
 </p>
 <ul>
-	<li>A way of loading templates (typically from elements or files)</li>
+	<li>A way of loading templates (typically from HTMLElement or files)</li>
 	<li>A way of caching processed templates.</li>
 	<li>An interface to render the template with arbitrary data.</li>
 </ul>
 <h4>Fact 3: Very few people are familiar with 
 the complexities of using templates</h4>
 <p>There's more than just syntax and magic tag preference that goes
-into a templating system, consider:</p>
+into a templating system.  Consider:</p>
 <ul>
-	<li>How can I build and share plugin that uses templates?</li>
+	<li>How can I build and share plugins that uses templates?</li>
 	<li>How can I share templates across pages / apps?</li>
 	<li>How can I organize template files?</li>
 </ul>
@@ -104,12 +104,12 @@ This code:</p>
 		<pre><code>&lt;h2>&lt;%= message %>&lt;/h2></code></pre>
 	</li>
 	<li>
-		<p>renders it with {message: 'hello world'}, resulting in:</p>
+		<p>Renders it with {message: 'hello world'}, resulting in:</p>
 		<pre><code>"&lt;h2>hello world&lt;/h2>"</code></pre>
 	</li>
 	<li>
 		<p>Inserts the result into the foo element.  Foo might look like:</p>
-		<pre><code>&lt;div id='foo'>"&lt;h2>hello world&lt;/h2>&lt;/div></code></pre>
+		<pre><code>&lt;div id='foo'>&lt;h2>hello world&lt;/h2>&lt;/div></code></pre>
 	</li>
 </ol>
 
@@ -155,20 +155,23 @@ Render with this template like:
 <p>If you're making heavy use of templates, 
 you want to organize them in files so they can be reused between pages and
 applications.</p>
-<p>But, this organization would come at a high price if the browser would have 
+<p>But, this organization would come at a high price if the browser has 
 to retrieve each template individually.  The additional HTTP requests would slow 
 down your app.
 </p>
 
 <p>
-Use <a href='htttp://stealjs.com'>StealJS</a> to build templates into your production files.  
+Fortunately, <a href='htttp://stealjs.com'>StealJS</a> can build templates 
+into your production files.  
 You just have to point to the view file like:
 </p> 
 
 <pre><code>steal.views('path/to/the/view.ejs');
 </pre></code>
 <p>This will pre-process the view and insert it into a compressed single file with
-your other code.</p>
+your other JS code.</p>
+<p><i>Note:  Steal 1.1 will even let you <b>not</b> load the view engine in 
+production if all your templates are packaged.</i></p>
 <h3>
 Asynchronous
 </h3> 
@@ -196,10 +199,10 @@ Just Render Templates
 </h3> 
 
 <p>
-Sometimes, you just want to get the result of a rendered template without inserting it, you can do this with $.view:
+Sometimes, you just want to get the result of a rendered template without inserting it, you can do this with $.View:
 </p> 
 
-<pre><code>var out = $.view('path/to/template.jaml',{});
+<pre><code>var out = $.View('path/to/template.jaml',{});
 </pre></code>
 
 <h3>Preloading Templates</h3> 
@@ -208,7 +211,7 @@ Sometimes, you just want to get the result of a rendered template without insert
 You can preload templates asynchronously like:
 </p> 
 
-<pre><code>$.view('path/to/template.jaml',{}, function(){});</pre></code>
+<pre><code>$.View('path/to/template.jaml',{}, function(){});</pre></code>
 <p>
 When it comes time to use them in your app, they will be ready for the user.
 </p> 
@@ -249,7 +252,9 @@ Integrating into $.View (and StealJS's build process) is easy, you just have to 
 	},
 	script: function( id, text ) {
 		var tmpl = $.tmpl(text).toString();
-		return "function(data){return ("+tmpl+").call(jQuery, jQuery, data); }";
+		return "function(data){return ("+
+			tmpl+
+			").call(jQuery, jQuery, data); }";
 	}
 })</pre></code>
 
@@ -269,7 +274,7 @@ Here's what each property does:</p>
 </p>
 <p> This is exactly what jQuery.View is!  It's a tool so future template 
 engines don't have to worry about loading, caching, and bundling templates.</p>
-<p>Even better, as their is a uniform template API, it enables plugin authors
+<p>Even better, as it is a uniform template API, it enables plugin authors
 to write widgets that accept arbitrary template types.</p>
 
 <p>I personally feel like this would be a good canidate for jQuery an
@@ -284,7 +289,6 @@ widget by passing it a template:
 });</code></pre>
 <p>P.S. This is actual code from our
 <a href='http://github.com/jupiterjs/srchr'>JavaScriptMVC version of Srchr</a>.
+Read about it <a href='http://jupiterjs.com/news/organizing-a-jquery-application'>here</a>.
 We customize search results panels with a Model used to retrieve
-searches and a view to output the results.
-
-</p>
+searches and a view to output the results.</p>

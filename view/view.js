@@ -15,118 +15,167 @@ steal.plugins("jquery").then(function( $ ) {
 	 * @tag core
 	 * @plugin jquery/view
 	 * @test jquery/view/qunit.html
+	 * @download dist/jquery.view.js
 	 * 
 	 * View provides a uniform interface for using templates with 
 	 * jQuery. When template engines [jQuery.View.register register] 
 	 * themselves, you are able to:
 	 * 
-	 * <ul>
-	 *  <li>Use views with jQuery extensions [jQuery.fn.after after], [jQuery.fn.append append],
+	 *  - Use views with jQuery extensions [jQuery.fn.after after], [jQuery.fn.append append],
 	 *   [jQuery.fn.before before], [jQuery.fn.html html], [jQuery.fn.prepend prepend],
-	 *      [jQuery.fn.replace replace], [jQuery.fn.replaceWith replaceWith], [jQuery.fn.text text] like:
-	 * @codestart
-	 * $('.foo').html("//path/to/view.ejs",{})
-	 * @codeend
-	 *  </li>
-	 *  <li>Compress processed views with [steal.static.views].</li>
-	 *  <li>Use the [jQuery.Controller.prototype.view controller/view] plugin to auto-magically
-	 *  lookup views.</li>
-	 *  <li>Hookup jquery plugins directly in the template.</li>
+	 *      [jQuery.fn.replace replace], [jQuery.fn.replaceWith replaceWith], [jQuery.fn.text text].
+	 *  - Template loading from html elements and external files.
+	 *  - Synchronous and asynchronous template loading.
+	 *  - Template caching.
+	 *  - Bundling of processed templates in production builds.
+	 *  - Hookup jquery plugins directly in the template.
 	 *  
-	 * </ul>
+	 * ## Use
+	 * 
+	 * 
+	 * When using views, you're almost always wanting to insert the results 
+	 * of a rendered template into the page. jQuery.View overwrites the 
+	 * jQuery modifiers so using a view is as easy as: 
+	 * 
+	 *     $("#foo").html('mytemplate.ejs',{message: 'hello world'})
+	 *
+	 * This code:
+	 * 
+	 *  - Loads the template a 'mytemplate.ejs'. It might look like:
+	 *    <pre><code>&lt;h2>&lt;%= message %>&lt;/h2></pre></code>
+	 *  
+	 *  - Renders it with {message: 'hello world'}, resulting in:
+	 *    <pre><code>&lt;div id='foo'>"&lt;h2>hello world&lt;/h2>&lt;/div></pre></code>
+	 *  
+	 *  - Inserts the result into the foo element. Foo might look like:
+	 *    <pre><code>&lt;div id='foo'>&lt;h2>hello world&lt;/h2>&lt;/div></pre></code>
+	 * 
+	 * ## jQuery Modifiers
+	 * 
+	 * You can use a template with the following jQuery modifiers:
+	 * 
+	 * <table>
+	 * <tr><td>[jQuery.fn.after after]</td><td> <code>$('#bar').after('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.after append] </td><td>  <code>$('#bar').append('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.after before] </td><td> <code>$('#bar').before('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.after html] </td><td> <code>$('#bar').html('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.after prepend] </td><td> <code>$('#bar').prepend('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.after replace] </td><td> <code>$('#bar').replace('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.after replaceWith] </td><td> <code>$('#bar').replaceWidth('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.after text] </td><td> <code>$('#bar').text('temp.jaml',{});</code></td></tr>
+	 * </table>
+	 * 
+	 * You always have to pass a string and an object (or function) for the jQuery modifier 
+	 * to user a template.
+	 * 
+	 * ## Template Locations
+	 * 
+	 * View can load from script tags or from files. 
+	 * 
+	 * ## From Script Tags
+	 * 
+	 * To load from a script tag, create a script tag with your template and an id like: 
+	 * 
+	 * <pre><code>&lt;script type='text/ejs' id='recipes'>
+	 * &lt;% for(var i=0; i &lt; recipes.length; i++){ %>
+	 *   &lt;li>&lt;%=recipes[i].name %>&lt;/li>
+	 * &lt;%} %>
+	 * &lt;/script></code></pre>
+	 * 
+	 * Render with this template like: 
+	 * 
+	 * @codestart
+	 * $("#foo").html('recipes',recipeData)
+	 * @codeend
+	 * 
+	 * Notice we passed the id of the element we want to render.
+	 * 
+	 * ## From File
+	 * 
+	 * You can pass the path of a template file location like:
+	 * 
+	 *     $("#foo").html('templates/recipes.ejs',recipeData)
+	 * 
+	 * However, you typically want to make the template work from whatever page they 
+	 * are called from.  To do this, use // to look up templates from JMVC root:
+	 * 
+	 *     $("#foo").html('//app/views/recipes.ejs',recipeData)
+	 *     
+	 * Finally, the [jQuery.Controller.prototype.view controller/view] plugin can make looking
+	 * up a thread (and adding helpers) even easier:
+	 * 
+	 *     $("#foo").html( this.view('recipes', recipeData) )
+	 * 
+	 * ## Packaging Templates
+	 * 
+	 * If you're making heavy use of templates, you want to organize 
+	 * them in files so they can be reused between pages and applications.
+	 * 
+	 * But, this organization would come at a high price 
+	 * if the browser has to 
+	 * retrieve each template individually. The additional 
+	 * HTTP requests would slow down your app. 
+	 * 
+	 * Fortunately, [steal.static.views steal.views] can build templates 
+	 * into your production files. You just have to point to the view file like: 
+	 * 
+	 *     steal.views('path/to/the/view.ejs');
+     *
+	 * ## Asynchronous
+	 * 
+	 * By default, retrieving requests is done synchronously. This is 
+	 * fine because StealJS packages view templates with your JS download. 
+	 * 
+	 * However, some people might not be using StealJS or want to delay loading 
+	 * templates until necessary. If you have the need, you can 
+	 * provide a callback paramter like: 
+	 * 
+	 *     $("#foo").html('recipes',recipeData, function(result){
+	 *       this.fadeIn()
+	 *     });
+	 * 
+	 * The callback function will be called with the result of the 
+	 * rendered template and 'this' will be set to the original jQuery object.
+	 * 
+	 * ## Just Render Templates
+	 * 
+	 * Sometimes, you just want to get the result of a rendered 
+	 * template without inserting it, you can do this with $.View: 
+	 * 
+	 *     var out = $.View('path/to/template.jaml',{});
+	 *     
+     * ## Preloading Templates
+	 * 
+	 * You can preload templates asynchronously like:
+	 * 
+	 *     $.View('path/to/template.jaml',{}, function(){});
 	 * 
 	 * ## Supported Template Engines
 	 * 
 	 * JavaScriptMVC comes with the following template languages:
 	 * 
-	 *  - [jQuery.EJS EJS] - provides an ERB like syntax: <code>&lt;%= %&gt;</code>
-	 *  - [Jaml] - A functional approach to JS templates.
-	 *  - [Micro] - A very lightweight template similar to EJS.
-	 *  - [jQuery.tmpl] - A very lightweight template similar to EJS.
+	 *   - EmbeddedJS
+	 *     <pre><code>&lt;h2>&lt;%= message %>&lt;/h2></code></pre>
+	 *     
+	 *   - JAML
+	 *     <pre><code>h2(data.message);</code></pre>
+	 *     
+	 *   - Micro
+	 *     <pre><code>&lt;h2>{%= message %}&lt;/h2></code></pre>
+	 *     
+	 *   - jQuery.Tmpl
+	 *     <pre><code>&lt;h2>${message}&lt;/h2></code></pre>
+
 	 * 
-	 * There are 3rd party plugins that provide other template
-	 * languages.
+	 * The popular <a href='http://awardwinningfjords.com/2010/08/09/mustache-for-javascriptmvc-3.html'>Mustache</a> 
+	 * template engine is supported in a 2nd party plugin.
 	 * 
-	 * ## Use
+	 * ## Using other Template Engines
 	 * 
-	 * Views provide client side templating.  When you use a view, you're
-	 * almost always wanting to insert the rendered content into the page.
+	 * It's easy to integrate your favorite template into $.View and Steal.  Read 
+	 * how in [jQuery.View.register].
 	 * 
-	 * For this reason, the most common way to use a views is through
-	 * jQuery modifier functions like [jQuery.fn.html html].  The view
-	 * plugin overwrites these functions so you can render a view and
-	 * insert its contents into the page with one convenient step.
-	 * 
-	 * The following renders the EJS template at 
-	 * <code>//app/view/template.ejs</code> with the second parameter used as data.
-	 * It inserts the result of the template into the 
-	 * <code>'#foo'</code> element.
-	 * 
-	 * @codestart
-	 * $('#foo').html('//app/view/template.ejs',
-	 *                {message: "hello world"})
-	 * @codeend
-	 * 
-	 * <code>//app/view/template.ejs</code> might look like:
-	 * 
-	 * @codestart xml
-	 * &lt;h2>&lt;%= message %>&lt;/h2>&lt;/div>
-	 * @codeend
-	 * 
-	 * The resulting output would be:
-	 * 
-	 * @codestart xml
-	 * &lt;div id='foo'>&lt;h2>hello world&lt;/h2>&lt;/div>
-	 * @codeend
-	 * 
-	 * The specifics of each templating languages are covered in their
-	 * individual documentation pages.
-	 * 
-	 * ### Template Locations
-	 * 
-	 * In the example above, we used 
-	 * <code>//app/view/template.ejs</code> as the location of
-	 * our template file. Using // at the start of a path
-	 * references the template from the root JavaScriptMVC directory.
-	 * 
-	 * If there is no // at the start of the path, the view is looked up
-	 * relative to the current page.
-	 * 
-	 * It's recommended that you use paths rooted from the JavaScriptMVC
-	 * directory.  This will make your code less likely to change.
-	 * 
-	 * You can also use the [jQuery.Controller.prototype.view controller/view]
-	 * plugin to make looking up templates a little easier.
-	 * 
-	 * ### Using $.View
-	 * 
-	 * Sometimes you want to get the string result of a view and not
-	 * insert it into the page right away.  Nested templates are a good
-	 * example of this.  For this, you can use $.View.  The following
-	 * iterates through a list of contacts, and inserts the result of a
-	 * sub template in each:
-	 * 
-	 * @codestart xml
-	 * &lt;% for(var i =0 ; i < contacts.length; i++) { %>
-	 *   &lt;%= $.View("//contacts/contact.ejs",contacts[i]) %>
-	 * &lt;% } %>
-	 * @codeend
-	 * 
-	 * ## Compress Views with Steal
-	 * 
-	 * Steal can package processed views in the production 
-	 * file. Because 'stolen' views are already
-	 * processed, they don't rely on eval and are much faster. Here's 
-	 * how to steal them:
-	 * 
-	 * @codestart
-	 * steal.views('//views/tasks/show.ejs');
-	 * @codeend
-	 * 
-	 * Read more about [steal.static.views steal.views].
-	 * 
-	 * 
-	 * <h2>$.View</h2>
+	 * @constructor
 	 * 
 	 * Looks up a template, processes it, caches it, then renders the template
 	 * with data and optional helpers.
@@ -141,7 +190,8 @@ steal.plugins("jquery").then(function( $ ) {
 	 * If you aren't using StealJS, it's best to use views asynchronously like:
 	 * 
 	 * @codestart
-	 * $.View("//myplugin/views/init.ejs",{message: "Hello World"}, function(result){
+	 * $.View("//myplugin/views/init.ejs",
+	 *        {message: "Hello World"}, function(result){
 	 *   // do something with result
 	 * })
 	 * @codeend
@@ -272,7 +322,33 @@ steal.plugins("jquery").then(function( $ ) {
 		 * @function register
 		 * Registers a template engine to be used with 
 		 * view helpers and compression.  
+		 * 
+		 * ## Example
+		 * 
+		 * @codestart
+		 * $.View.register({
+		 * 	suffix : "tmpl",
+		 * 	renderer: function( id, text ) {
+		 * 		return function(data){
+		 * 			return jQuery.render( text, data );
+		 * 		}
+		 * 	},
+		 * 	script: function( id, text ) {
+		 * 		var tmpl = $.tmpl(text).toString();
+		 * 		return "function(data){return ("+
+		 * 		  	tmpl+
+		 * 			").call(jQuery, jQuery, data); }";
+		 * 	}
+		 * })
+		 * @codeend
+		 * Here's what each property does:
+		 * 
+ 		 *    * suffix - files that use this suffix will be processed by this template engine
+ 		 *    * renderer - returns a function that will render the template provided by text
+ 		 *    * script - returns a string form of the processed template function.
+		 * 
 		 * @param {Object} info a object of method and properties 
+		 * 
 		 * that enable template integration:
 		 * <ul>
 		 *   <li>suffix - the view extension.  EX: 'ejs'</li>
