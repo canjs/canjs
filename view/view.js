@@ -356,10 +356,7 @@ steal.plugins("jquery").then(function( $ ) {
 
 		//check if there are new hookups
 		for ( var hasHookups in jQuery.View.hookups ) {
-			// Having arbitrary code in here makes JSLint pass
-			if ( true ) {
-				stub = true;
-			}
+			break;
 		}
 
 		//if there are hookups, get jQuery object
