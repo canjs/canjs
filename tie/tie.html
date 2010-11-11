@@ -19,12 +19,17 @@
 				height: 30px;
 				background-color: green;
 			}
+			.rating .selected {
+				font-size: 20px;
+				font-weight: bold;
+				color: red;
+			}
         </style>
 	</head>
 	<body>
 		
 		<div id='sliderWrapper'><div id='age1'></div></div>
-
+		<div id='rating'></div>
 		<input type='text' id='age2' />
 
 		<textarea id='age3'></textarea>
@@ -48,7 +53,7 @@
                 src='../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal.plugins('jquery/model','jquery/tie','mxui/slider').start()
+			steal.plugins('jquery/model','jquery/tie').start()
 		</script>
 		<script type='text/javascript'>
 			
@@ -63,10 +68,35 @@
 				}
 			});
 			
+			$.Controller.extend("Rating",{
+				init : function(){
+					var html = [];
+					for(var i =0; i < 10; i++){
+						html.push("<a href='javascript://'>"+(i+1)+".</a>")
+					}
+					this.element.html(html.join(" "))
+				},
+				val : function(num){
+					var selected = this.element.find(".selected");
+					if(num){
+						selected.removeClass("selected");
+						this.element.find("a:contains("+num+".)")
+							.addClass("selected")
+					}else{
+						return selected.text();
+					}
+				},
+				"a click" : function(el){
+					this.element.find(".selected").removeClass('selected');
+					el.addClass('selected');
+					this.element.trigger("change",el.text())
+				}
+			})
+			
 			person = new Person({age: 1});
 			//$("#age1").mxui_slider({interval: 1, min: 1, max: 10});
-			
-			$("#age1, #age2, #age3, #age4").tie(person,"age")
+			$("#rating").rating();
+			$("#age1, #age2, #age3, #age4, #rating").tie(person,"age")
 		</script>
 	</body>
 </html>
