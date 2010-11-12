@@ -272,7 +272,7 @@
 	 * <h2>Demo</h2>
 	 * @demo jquery/class/class.html
 	 *
-	 * @init Creating a new instance of an object that has extended jQuery.Class
+	 * @constructor Creating a new instance of an object that has extended jQuery.Class
 	 *     calls the init prototype function and returns a new instance of the class.
 	 *
 	 */
@@ -622,7 +622,7 @@
 
 
 
-})(true);
+})(jQuery);
 
 // jquery/lang/lang.js
 
@@ -642,7 +642,9 @@
 	/** 
 	 * @class jQuery.String
 	 */
-	var str = ($.String = /* @Static*/ {
+	var str = ($.String =
+	/* @Static*/
+	{
 		/**
 		 * @function strip
 		 * @param {String} s returns a string with leading and trailing whitespace removed.
@@ -682,8 +684,10 @@
 			var parts = s.split(regs.undHash),
 				i = 1;
 			parts[0] = parts[0].charAt(0).toLowerCase() + parts[0].substr(1);
-			for (; i < parts.length; i++ )
-			parts[i] = str.capitalize(parts[i]);
+			for (; i < parts.length; i++ ) {
+				parts[i] = str.capitalize(parts[i]);
+			}
+
 			return parts.join('');
 		},
 		/**
@@ -694,8 +698,10 @@
 		classize: function( s ) {
 			var parts = s.split(regs.undHash),
 				i = 0;
-			for (; i < parts.length; i++ )
-			parts[i] = str.capitalize(parts[i]);
+			for (; i < parts.length; i++ ) {
+				parts[i] = str.capitalize(parts[i]);
+			}
+
 			return parts.join('');
 		},
 		/**
@@ -709,8 +715,10 @@
 		niceName: function( s ) {
 			var parts = s.split(regs.undHash),
 				i = 0;
-			for (; i < parts.length; i++ )
-			parts[i] = str.capitalize(parts[i]);
+			for (; i < parts.length; i++ ) {
+				parts[i] = str.capitalize(parts[i]);
+			}
+
 			return parts.join(' ');
 		},
 
@@ -723,15 +731,12 @@
 		 * @return {String} the underscored string
 		 */
 		underscore: function( s ) {
-			return s.replace(regs.colons, '/').
-			replace(regs.words, '$1_$2').
-			replace(regs.lowerUpper, '$1_$2').
-			replace(regs.dash, '_').toLowerCase()
+			return s.replace(regs.colons, '/').replace(regs.words, '$1_$2').replace(regs.lowerUpper, '$1_$2').replace(regs.dash, '_').toLowerCase();
 		}
 	});
 
 
-})(true);
+})(jQuery);
 
 // jquery/event/destroyed/destroyed.js
 
@@ -761,19 +766,19 @@
 	 * @demo jquery/event/destroyed/destroyed_menu.html 
 	 */
 
-	var oldClean = jQuery.cleanData
+	var oldClean = jQuery.cleanData;
 
 	$.cleanData = function( elems ) {
 		for ( var i = 0, elem;
-		(elem = elems[i]) != null; i++ ) {
-			$(elem).triggerHandler("destroyed")
+		(elem = elems[i]) !== undefined; i++ ) {
+			$(elem).triggerHandler("destroyed");
 			//$.event.remove( elem, 'destroyed' );
 		}
-		oldClean(elems)
-	}
+		oldClean(elems);
+	};
 
 
-})(true);
+})(jQuery);
 
 // jquery/controller/controller.js
 
@@ -785,11 +790,15 @@
 	var bind = function( el, ev, callback ) {
 		var wrappedCallback;
 		//this is for events like >click.
-		if ( ev.indexOf(">") == 0 ) {
+		if ( ev.indexOf(">") === 0 ) {
 			ev = ev.substr(1);
 			wrappedCallback = function( event ) {
-				event.target === el ? callback.apply(this, arguments) : event.handled = null;
-			}
+				if ( event.target === el ) {
+					callback.apply(this, arguments);
+				} else {
+					event.handled = null;
+				}
+			};
 		}
 		$(el).bind(ev, wrappedCallback || callback);
 		// if ev name has >, change the name and bind
@@ -797,7 +806,7 @@
 		return function() {
 			$(el).unbind(ev, wrappedCallback || callback);
 			el = ev = callback = wrappedCallback = null;
-		}
+		};
 	},
 		// Binds an element, returns a function that unbinds
 		delegate = function( el, selector, ev, callback ) {
@@ -805,10 +814,10 @@
 			return function() {
 				$(el).undelegate(selector, ev, callback);
 				el = ev = callback = selector = null;
-			}
+			};
 		},
 		binder = function( el, ev, callback, selector ) {
-			return selector ? delegate(el, selector, ev, callback) : bind(el, ev, callback)
+			return selector ? delegate(el, selector, ev, callback) : bind(el, ev, callback);
 		},
 		/**
 		 * moves 'this' to the first argument 
@@ -816,7 +825,7 @@
 		shifter = function shifter(cb) {
 			return function() {
 				return cb.apply(null, [$(this)].concat(Array.prototype.slice.call(arguments, 0)));
-			}
+			};
 		},
 		// matches dots
 		dotsReg = /\./g,
@@ -832,7 +841,8 @@
 		eventCleaner = /^(>?default\.)|(>)/,
 		// handles parameterized action names
 		parameterReplacer = /\{([^\}]+)\}/g,
-		breaker = /^(?:(.*?)\s)?([\w\.\:>]+)$/;
+		breaker = /^(?:(.*?)\s)?([\w\.\:>]+)$/,
+		basicProcessor;
 	/**
 	 * @tag core
 	 * @plugin jquery/controller
@@ -902,12 +912,12 @@
 	 * 
 	 * @codestart html
 	 * &lt;div id='todos'>
-	 * 	&lt;ol>
-	 * 	  &lt;li class="todo">Laundry&lt;/li>
-	 * 	  &lt;li class="todo">Dishes&lt;/li>
-	 * 	  &lt;li class="todo">Walk Dog&lt;/li>
-	 * 	&lt;/ol>
-	 * 	&lt;a class="create">Create&lt;/a>
+	 *  &lt;ol>
+	 *    &lt;li class="todo">Laundry&lt;/li>
+	 *    &lt;li class="todo">Dishes&lt;/li>
+	 *    &lt;li class="todo">Walk Dog&lt;/li>
+	 *  &lt;/ol>
+	 *  &lt;a class="create">Create&lt;/a>
 	 * &lt;/div>
 	 * @codeend
 	 * 
@@ -916,13 +926,13 @@
 	 * @codestart
 	 * $.Controller.extend('Todos',{
 	 *   ".todo mouseover" : function( el, ev ) {
-	 * 	  el.css("backgroundColor","red")
+	 *    el.css("backgroundColor","red")
 	 *   },
 	 *   ".todo mouseout" : function( el, ev ) {
-	 * 	  el.css("backgroundColor","")
+	 *    el.css("backgroundColor","")
 	 *   },
 	 *   ".create click" : function() {
-	 * 	  this.find("ol").append("&lt;li class='todo'>New Todo&lt;/li>"); 
+	 *    this.find("ol").append("&lt;li class='todo'>New Todo&lt;/li>"); 
 	 *   }
 	 * })
 	 * @codeend
@@ -978,7 +988,7 @@
 	 * ".something click" : function( el, ev ) {
 	 *    el.slideUp()
 	 *    ev.stopDelegation();  //stops this event from delegating to any other
-	 * 						 // delegated events for this delegated element.
+	 *                          // delegated events for this delegated element.
 	 *    ev.preventDefault();  //prevents the default action from happening.
 	 *    ev.stopPropagation(); //stops the event from going to other elements.
 	 * }
@@ -1149,9 +1159,9 @@
 			this._fullName = underscoreAndRemoveController(this.fullName);
 			this._shortName = underscoreAndRemoveController(this.shortName);
 
-			var val, processor, controller = this,
+			var controller = this,
 				pluginname = this._fullName,
-				funcName;
+				funcName, forLint;
 
 			// create jQuery plugin
 			if (!$.fn[pluginname] ) {
@@ -1168,19 +1178,22 @@
 							plugin = controllers && controllers[pluginname];
 
 						if ( plugin ) {
-							isMethod ?
-							// call a method on the controller with the remaining args
-							plugin[meth].apply(plugin, args.slice(1)) :
-							// call the plugin's update method
-							plugin.update.apply(plugin, args)
+							if ( isMethod ) {
+								// call a method on the controller with the remaining args
+								plugin[meth].apply(plugin, args.slice(1));
+							} else {
+								// call the plugin's update method
+								plugin.update.apply(plugin, args);
+							}
+
 						} else {
 							//create a new controller instance
-							controller.newInstance.apply(controller, [this].concat(args))
+							controller.newInstance.apply(controller, [this].concat(args));
 						}
-					})
+					});
 					//always return the element
 					return this;
-				}
+				};
 			}
 
 			// make sure listensTo is an array
@@ -1192,14 +1205,18 @@
 				if (!$.isFunction(this.prototype[funcName]) ) {
 					continue;
 				}
-				this._isAction(funcName) && (this.actions[funcName] = this._getAction(funcName));
+				if ( this._isAction(funcName) ) {
+					this.actions[funcName] = this._getAction(funcName);
+				}
 			}
 
 			/**
 			 * @attribute onDocument
 			 * Set to true if you want to automatically attach this element to the documentElement.
 			 */
-			if ( this.onDocument ) new this(document.documentElement);
+			if ( this.onDocument ) {
+				forLint = new controller(document.documentElement);
+			}
 		},
 		hookup: function( el ) {
 			return new this(el);
@@ -1215,7 +1232,7 @@
 				return true;
 			} else {
 				var cleanedEvent = methodName.replace(eventCleaner, "");
-				return $.inArray(cleanedEvent, this.listensTo) > -1 || $.event.special[cleanedEvent] || $.Controller.processors[cleanedEvent]
+				return $.inArray(cleanedEvent, this.listensTo) > -1 || $.event.special[cleanedEvent] || $.Controller.processors[cleanedEvent];
 			}
 
 		},
@@ -1270,7 +1287,7 @@
 		 * @param {HTMLElement} element the element this instance operates on.
 		 */
 		setup: function( element, options ) {
-			var funcName, cb, ready, cls = this.Class;
+			var funcName, ready, cls = this.Class;
 
 			//want the raw element here
 			element = element.jquery ? element[0] : element;
@@ -1309,12 +1326,12 @@
 
 			//setup to be destroyed ... don't bind b/c we don't want to remove it
 			//this.element.bind('destroyed', this.callback('destroy'))
-			var destroyCB = shifter(this.callback("destroy"))
+			var destroyCB = shifter(this.callback("destroy"));
 			this.element.bind("destroyed", destroyCB);
 			this._bindings.push(function( el ) {
 				destroyCB.removed = true;
 				$(element).unbind("destroyed", destroyCB);
-			})
+			});
 
 			/**
 			 * @attribute element
@@ -1344,7 +1361,7 @@
 		 *    })
 		 * },
 		 * somethingClicked: function( el, ev ) {
-		 * 		
+		 *   
 		 * }
 		 * @codeend
 		 * @param {HTMLElement|jQuery.fn} [element=this.element] element the element to be bound
@@ -1358,15 +1375,15 @@
 			if ( typeof el == 'string' ) {
 				func = eventName;
 				eventName = el;
-				el = this.element
+				el = this.element;
 			}
-			return this._binder(el, eventName, func)
+			return this._binder(el, eventName, func);
 		},
 		_binder: function( el, eventName, func, selector ) {
 			if ( typeof func == 'string' ) {
-				func = shifter(this.callback(func))
+				func = shifter(this.callback(func));
 			}
-			this._bindings.push(binder(el, eventName, func, selector))
+			this._bindings.push(binder(el, eventName, func, selector));
 			return this._bindings.length;
 		},
 		/**
@@ -1391,10 +1408,10 @@
 			if ( typeof element == 'string' ) {
 				func = eventName;
 				eventName = selector;
-				selector = element
-				element = this.element
+				selector = element;
+				element = this.element;
 			}
-			return this._binder(element, eventName, func, selector)
+			return this._binder(element, eventName, func, selector);
 		},
 		/**
 		 * Called if an controller's jQuery helper is called on an element that already has a controller instance
@@ -1417,7 +1434,7 @@
 		 * @param {Object} options
 		 */
 		update: function( options ) {
-			$.extend(this.options, options)
+			$.extend(this.options, options);
 		},
 		/**
 		 * Destroy unbinds and undelegates all actions on this controller, and prevents any memory leaks.  This is called automatically
@@ -1434,14 +1451,16 @@
 			this.element.removeClass(fname);
 
 			$.each(this._bindings, function( key, value ) {
-				if ( $.isFunction(value) ) value(self.element[0]);
+				if ( $.isFunction(value) ) {
+					value(self.element[0]);
+				}
 			});
 
 			delete this._actions;
 
 
 			var controllers = this.element.data("controllers");
-			if (controllers && controllers[fname]) {
+			if ( controllers && controllers[fname] ) {
 				delete controllers[fname];
 			}
 			$(this).triggerHandler("destroyed"); //in case we want to know if the controller is removed
@@ -1469,49 +1488,51 @@
 	//processors do the binding.  They return a function that
 	//unbinds when called.
 	//the basic processor that binds events
-	var basicProcessor = function( el, event, selector, cb, controller ) {
+	basicProcessor = function( el, event, selector, cb, controller ) {
 		var c = controller.Class;
 
 		// document controllers use their name as an ID prefix.
 		if ( c.onDocument && !/^Main(Controller)?$/.test(c.shortName) ) { //prepend underscore name if necessary
-			selector = selector ? "#" + c._shortName + " " + selector : "#" + c._shortName
+			selector = selector ? "#" + c._shortName + " " + selector : "#" + c._shortName;
 		}
 		return binder(el, event, shifter(cb), selector);
-	},
-		processors = $.Controller.processors,
+	};
+
+	var processors = $.Controller.processors,
 
 		//a window event only happens on the window
 		windowEvent = function( el, event, selector, cb ) {
-			return binder(window, event.replace(/window/, ""), shifter(cb))
-		}
+			return binder(window, event.replace(/window/, ""), shifter(cb));
+		};
 
-		//set commong events to be processed as a basicProcessor
-		$.each("change click contextmenu dblclick keydown keyup keypress mousedown mousemove mouseout mouseover mouseup reset windowresize resize windowscroll scroll select submit dblclick focusin focusout load unload ready hashchange mouseenter mouseleave".split(" "), function( i, v ) {
-			processors[v] = basicProcessor;
-		})
-		$.each(["windowresize", "windowscroll", "load", "ready", "unload", "hashchange"], function( i, v ) {
-			processors[v] = windowEvent;
-		})
-		//the ready processor happens on the document
-		processors.ready = function( el, event, selector, cb ) {
-			$(shifter(cb)); //cant really unbind
-		}
-		/**
-		 *  @add jQuery.fn
-		 */
+	//set commong events to be processed as a basicProcessor
+	$.each("change click contextmenu dblclick keydown keyup keypress mousedown mousemove mouseout mouseover mouseup reset windowresize resize windowscroll scroll select submit dblclick focusin focusout load unload ready hashchange mouseenter mouseleave".split(" "), function( i, v ) {
+		processors[v] = basicProcessor;
+	});
+	$.each(["windowresize", "windowscroll", "load", "ready", "unload", "hashchange"], function( i, v ) {
+		processors[v] = windowEvent;
+	});
+	//the ready processor happens on the document
+	processors.ready = function( el, event, selector, cb ) {
+		$(shifter(cb)); //cant really unbind
+	};
+	/**
+	 *  @add jQuery.fn
+	 */
 
-		$.fn.mixin = function() {
-			//create a bunch of controllers
-			var controllers = $.makeArray(arguments);
-			return this.each(function() {
-				for ( var i = 0; i < controllers.length; i++ ) {
-					new controllers[i](this)
-				}
+	$.fn.mixin = function() {
+		//create a bunch of controllers
+		var controllers = $.makeArray(arguments),
+			forLint;
+		return this.each(function() {
+			for ( var i = 0; i < controllers.length; i++ ) {
+				forLint = new controllers[i](this);
+			}
 
-			})
-		}
-		//used to determine if a controller instance is one of controllers
-		//controllers can be strings or classes
+		});
+	};
+	//used to determine if a controller instance is one of controllers
+	//controllers can be strings or classes
 	var isAControllerOf = function( instance, controllers ) {
 		for ( var i = 0; i < controllers.length; i++ ) {
 			if ( typeof controllers[i] == 'string' ? instance.Class._shortName == controllers[i] : instance instanceof controllers[i] ) {
@@ -1519,41 +1540,42 @@
 			}
 		}
 		return false;
-	}
-	$.fn.
+	};
+
 	/**
 	 * @function controllers
 	 * Gets all controllers in the jQuery element.
 	 * @return {Array} an array of controller instances.
 	 */
-	controllers = function() {
+	$.fn.controllers = function() {
 		var controllerNames = $.makeArray(arguments),
 			instances = [],
-			controllers, cname;
+			controllers;
 		//check if arguments
 		this.each(function() {
-			controllers = $.data(this, "controllers")
-			if (!controllers ) return;
+			controllers = $.data(this, "controllers");
+			if (!controllers ) {
+				return;
+			}
 			for ( var cname in controllers ) {
 				var c = controllers[cname];
-				if (!controllerNames.length || isAControllerOf(c, controllerNames)) {
+				if (!controllerNames.length || isAControllerOf(c, controllerNames) ) {
 					instances.push(c);
 				}
 			}
-		})
+		});
 		return instances;
 	};
-	$.fn.
 	/**
 	 * @function controller
 	 * Gets a controller in the jQuery element.  With no arguments, returns the first one found.
 	 * @param {Object} controller (optional) if exists, the first controller instance with this class type will be returned.
 	 * @return {jQuery.Controller} the first controller.
 	 */
-	controller = function( controller ) {
+	$.fn.controller = function( controller ) {
 		return this.controllers.apply(this, arguments)[0];
 	};
 
 
-})(true);
+})(jQuery);
 

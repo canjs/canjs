@@ -272,7 +272,7 @@
 	 * <h2>Demo</h2>
 	 * @demo jquery/class/class.html
 	 *
-	 * @init Creating a new instance of an object that has extended jQuery.Class
+	 * @constructor Creating a new instance of an object that has extended jQuery.Class
 	 *     calls the init prototype function and returns a new instance of the class.
 	 *
 	 */
@@ -622,5 +622,5 @@
 
 
 
-})(true);
+})(jQuery);
 

@@ -168,7 +168,7 @@
 		});
 	}
 
-})(true);
+})(jQuery);
 
 // jquery/event/hover/hover.js
 
@@ -392,5 +392,5 @@ event.setupHelper( [
 
 	
 
-})(true);
+})(jQuery);
 

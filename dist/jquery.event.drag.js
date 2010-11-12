@@ -7,7 +7,7 @@
 /**
  * @class
  * A vector class
- * @init creates a new vector instance from the arguments.  Example:
+ * @constructor creates a new vector instance from the arguments.  Example:
  * @codestart
  * new jQuery.Vector(1,2)
  * @codeend
@@ -168,7 +168,7 @@ jQuery.fn.makePositioned = function() {
 };
 	
 
-})(true);
+})(jQuery);
 
 // jquery/event/livehack/livehack.js
 
@@ -340,7 +340,7 @@ jQuery.fn.makePositioned = function() {
 		});
 	}
 
-})(true);
+})(jQuery);
 
 // jquery/event/drag/drag.js
 
@@ -820,5 +820,5 @@ jQuery.fn.makePositioned = function() {
 
 
 
-})(true);
+})(jQuery);
 

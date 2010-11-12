@@ -191,5 +191,5 @@ triggerDefaults = function(type, data){
 	
 	
 
-})(true);
+})(jQuery);
 

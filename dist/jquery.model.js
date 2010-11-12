@@ -272,7 +272,7 @@
 	 * <h2>Demo</h2>
 	 * @demo jquery/class/class.html
 	 *
-	 * @init Creating a new instance of an object that has extended jQuery.Class
+	 * @constructor Creating a new instance of an object that has extended jQuery.Class
 	 *     calls the init prototype function and returns a new instance of the class.
 	 *
 	 */
@@ -622,7 +622,7 @@
 
 
 
-})(true);
+})(jQuery);
 
 // jquery/lang/lang.js
 
@@ -642,7 +642,9 @@
 	/** 
 	 * @class jQuery.String
 	 */
-	var str = ($.String = /* @Static*/ {
+	var str = ($.String =
+	/* @Static*/
+	{
 		/**
 		 * @function strip
 		 * @param {String} s returns a string with leading and trailing whitespace removed.
@@ -682,8 +684,10 @@
 			var parts = s.split(regs.undHash),
 				i = 1;
 			parts[0] = parts[0].charAt(0).toLowerCase() + parts[0].substr(1);
-			for (; i < parts.length; i++ )
-			parts[i] = str.capitalize(parts[i]);
+			for (; i < parts.length; i++ ) {
+				parts[i] = str.capitalize(parts[i]);
+			}
+
 			return parts.join('');
 		},
 		/**
@@ -694,8 +698,10 @@
 		classize: function( s ) {
 			var parts = s.split(regs.undHash),
 				i = 0;
-			for (; i < parts.length; i++ )
-			parts[i] = str.capitalize(parts[i]);
+			for (; i < parts.length; i++ ) {
+				parts[i] = str.capitalize(parts[i]);
+			}
+
 			return parts.join('');
 		},
 		/**
@@ -709,8 +715,10 @@
 		niceName: function( s ) {
 			var parts = s.split(regs.undHash),
 				i = 0;
-			for (; i < parts.length; i++ )
-			parts[i] = str.capitalize(parts[i]);
+			for (; i < parts.length; i++ ) {
+				parts[i] = str.capitalize(parts[i]);
+			}
+
 			return parts.join(' ');
 		},
 
@@ -723,21 +731,18 @@
 		 * @return {String} the underscored string
 		 */
 		underscore: function( s ) {
-			return s.replace(regs.colons, '/').
-			replace(regs.words, '$1_$2').
-			replace(regs.lowerUpper, '$1_$2').
-			replace(regs.dash, '_').toLowerCase()
+			return s.replace(regs.colons, '/').replace(regs.words, '$1_$2').replace(regs.lowerUpper, '$1_$2').replace(regs.dash, '_').toLowerCase();
 		}
 	});
 
 
-})(true);
+})(jQuery);
 
 // jquery/model/model.js
 
 (function($){
 
-	//a cache for attribute capitalization ... slowest part of inti.
+	//a cache for attribute capitalization ... slowest part of init.
 	var underscore = $.String.underscore,
 		classize = $.String.classize;
 
@@ -778,7 +783,7 @@
 	 *   ready: function() {
 	 *     $.get('/tasks.json', this.callback('gotTasks'), 'json')
 	 *   },
-	 *  /* 
+	 *  |* 
 	 *   * assume json is an array like [{name: "trash", due_date: 1247111409283}, ...]
 	 *   *|
 	 *  gotTasks: function( json ) { 
@@ -807,8 +812,8 @@
 	 * 
 	 *  - The service changes?
 	 *  - Other parts of the app want to calculate <code>remaininTime</code>?
-	 * 	- Other parts of the app want to get tasks?</li>
-	 * 	- The same task is represented multiple palces on the page?
+	 *  - Other parts of the app want to get tasks?</li>
+	 *  - The same task is represented multiple palces on the page?
 	 * 
 	 * The solution is of course a strong model layer.  Lets look at what a
 	 * a good model does for a controller before we learn how to make one:
@@ -847,17 +852,17 @@
 	 * @codestart
 	 * $.Model.extend("Task",
 	 * {
-	 * 	findAll: function( params,success ) {
-	 * 		$.get("/tasks.json", params, this.callback(["wrapMany",success]),"json");
-	 * 	}
+	 *  findAll: function( params,success ) {
+	 *   $.get("/tasks.json", params, this.callback(["wrapMany",success]),"json");
+	 *  }
 	 * },
 	 * {
-	 * 	timeRemaining: function() {
-	 * 		return new Date() - new Date(this.due_date)
-	 * 	},
-	 * 	complete: function( success ) {
-	 * 		$.get("/task_complete", {id: this.id }, success,"json");
-	 * 	}
+	 *  timeRemaining: function() {
+	 *   return new Date() - new Date(this.due_date)
+	 *  },
+	 *  complete: function( success ) {
+	 *   $.get("/task_complete", {id: this.id }, success,"json");
+	 *  }
 	 * })
 	 * @codeend
 	 * 
@@ -905,39 +910,39 @@
 	 * @Static
 	 */
 	{
-		setup: function(superClass) {
+		setup: function( superClass ) {
 
 			//we do not inherit attributes (or associations)
-			if(!this.attributes || superClass.attributes === this.attributes){
+			if (!this.attributes || superClass.attributes === this.attributes ) {
 				this.attributes = {};
 			}
-			
-			if(!this.associations || superClass.associations === this.associations){
+
+			if (!this.associations || superClass.associations === this.associations ) {
 				this.associations = {};
 			}
-			if(!this.validations || superClass.validations === this.validations){
+			if (!this.validations || superClass.validations === this.validations ) {
 				this.validations = {};
 			}
-			
+
 			//add missing converters
-			if(superClass.convert != this.convert){
+			if ( superClass.convert != this.convert ) {
 				this.convert = $.extend(superClass.convert, this.convert);
 			}
-			
-			
+
+
 			this._fullName = underscore(this.fullName.replace(/\./g, "_"));
 
 			if ( this.fullName.substr(0, 7) == "jQuery." ) {
 				return;
 			}
-			
+
 			//add this to the collection of models
 			jQuery.Model.models[this._fullName] = this;
-			
+
 			if ( this.listType ) {
 				this.list = new this.listType([]);
 			}
-			
+
 		},
 		/**
 		 * @attribute attributes
@@ -958,7 +963,7 @@
 		 *       if(typeof raw == 'string'){
 		 *         var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
 		 *         return new Date( matches[1], 
-		 * 	                (+matches[2])-1, 
+		 *                  (+matches[2])-1, 
 		 *                 matches[3] )
 		 *       }else if(raw instanceof Date){
 		 *           return raw;
@@ -968,7 +973,7 @@
 		 * },{})
 		 * @codeend
 		 */
-		attributes : {},
+		attributes: {},
 		/**
 		 * @attribute defaults
 		 * An object of default values to be set on all instances.  This 
@@ -1042,12 +1047,16 @@
 		 *  if the model list plugin has been included.
 		 */
 		wrapMany: function( instancesRawData ) {
-			if (!instancesRawData ) return null;
-			var res = new(this.List || $.Model.List || Array),
+			if (!instancesRawData ) {
+				return null;
+			}
+			var listType = this.List || $.Model.List || Array,
+				res = new listType(),
 				arr = $.isArray(instancesRawData),
 				raw = arr ? instancesRawData : instancesRawData.data,
 				length = raw.length,
 				i = 0;
+
 			res._use_call = true; //so we don't call next function with all of these
 			for (; i < length; i++ ) {
 				res.push(this.wrap(raw[i]));
@@ -1060,7 +1069,7 @@
 
 				}
 			}
-			return res; 
+			return res;
 		},
 		/**
 		 * The name of the id field.  Defaults to 'id'. Change this if it is something different.
@@ -1082,9 +1091,13 @@
 		 * @param {String} type
 		 */
 		addAttr: function( property, type ) {
-			if ( this.associations[property] ) return;
-			this.attributes[property] || (this.attributes[property] = type);
-			return type
+			var stub;
+
+			if ( this.associations[property] ) {
+				return;
+			}
+			stub = this.attributes[property] || (this.attributes[property] = type);
+			return type;
 		},
 		// a collection of all models
 		models: {},
@@ -1116,14 +1129,22 @@
 		 */
 		guessType: function( object ) {
 			if ( typeof object != 'string' ) {
-				if ( object == null ) return typeof object;
-				if ( object.constructor == Date ) return 'date';
-				if ( $.isArray(object) ) return 'array';
+				if ( object === null ) {
+					return typeof object;
+				}
+				if ( object.constructor == Date ) {
+					return 'date';
+				}
+				if ( $.isArray(object) ) {
+					return 'array';
+				}
 				return typeof object;
 			}
-			if ( object == "" ) return 'string';
+			if ( object === "" ) {
+				return 'string';
+			}
 			//check if true or false
-			if (object == 'true' || object == 'false') {
+			if ( object == 'true' || object == 'false' ) {
 				return 'boolean';
 			}
 			if (!isNaN(object) && isFinite(+object) ) {
@@ -1141,13 +1162,13 @@
 		 */
 		convert: {
 			"date": function( str ) {
-				return typeof str == "string" ? (Date.parse(str) == NaN ? null : Date.parse(str)) : str
+				return typeof str === "string" ? (isNaN(Date.parse(str)) ? null : Date.parse(str)) : str;
 			},
 			"number": function( val ) {
-				return parseFloat(val)
+				return parseFloat(val);
 			},
 			"boolean": function( val ) {
-				return Boolean(val)
+				return Boolean(val);
 			}
 		},
 		/**
@@ -1156,7 +1177,7 @@
 		 * you have to implement create.
 		 */
 		create: function( attrs, success, error ) {
-			throw "Model: Implement Create"
+			throw "Model: Implement Create";
 		},
 		/**
 		 * Implement this function!
@@ -1164,7 +1185,7 @@
 		 * you have to implement update.
 		 */
 		update: function( id, attrs, success, error ) {
-			throw "Model: Implement " + this.fullName + "'s \"update\"!"
+			throw "Model: Implement " + this.fullName + "'s \"update\"!";
 		},
 		/**
 		 * Implement this function!
@@ -1173,7 +1194,7 @@
 		 * @param {String|Number} id the id of the instance you want destroyed
 		 */
 		destroy: function( id, success, error ) {
-			throw "Model: Implement " + this.fullName + "'s \"destroy\"!"
+			throw "Model: Implement " + this.fullName + "'s \"destroy\"!";
 		},
 		/**
 		 * Implement this function!
@@ -1181,8 +1202,8 @@
 		 * @param {Function} success
 		 * @param {Function} error
 		 */
-		findAll : function(params, success, error) {
-			
+		findAll: function( params, success, error ) {
+
 		},
 		/**
 		 * Implement this function!
@@ -1190,14 +1211,14 @@
 		 * @param {Function} success
 		 * @param {Function} error
 		 */
-		findOne : function(params, success, error){
-			
+		findOne: function( params, success, error ) {
+
 		}
 	},
 	/**
 	 * @Prototype
 	 */
-	{	
+	{
 		/**
 		 * Setup is called when a new model instance is created.
 		 * It adds default attributes, then whatever attributes
@@ -1214,11 +1235,13 @@
 		 * @param {Object} attributes a hash of attributes
 		 */
 		setup: function( attributes ) {
+			var stub;
+
 			// so we know not to fire events
 			this._initializing = true;
-			
-			this.Class.defaults && this.attrs(this.Class.defaults);
-			
+
+			stub = this.Class.defaults && this.attrs(this.Class.defaults);
+
 			this.attrs(attributes);
 			delete this._initializing;
 		},
@@ -1266,36 +1289,38 @@
 		 * errors.dueDate[0] //-> "can't be empty"
 		 * @codeend
 		 */
-		errors: function(attrs) {
-			if(attrs){
+		errors: function( attrs ) {
+			if ( attrs ) {
 				attrs = $.isArray(attrs) ? attrs : $.makeArray(arguments);
 			}
 			var errors = {},
 				self = this,
-				addErrors = function(attr, funcs){
-					$.each(funcs, function(i, func){
+				addErrors = function( attr, funcs ) {
+					$.each(funcs, function( i, func ) {
 						var res = func.call(self);
-						if(res){
-							if(!errors.hasOwnProperty(attr)){
+						if ( res ) {
+							if (!errors.hasOwnProperty(attr) ) {
 								errors[attr] = [];
 							}
-							   
+
 							errors[attr].push(res);
 						}
-						
-					})
+
+					});
 				};
 
 			$.each(attrs || this.Class.validations || {}, function( attr, funcs ) {
-				if(typeof attr == 'number'){
+				if ( typeof attr == 'number' ) {
 					attr = funcs;
 					funcs = self.Class.validations[attr];
 				}
-				addErrors(attr, funcs || [])
+				addErrors(attr, funcs || []);
 			});
-		
-			for(var attr in errors){
-				return errors;
+
+			for ( var attr in errors ) {
+				if ( errors.hasOwnProperty(attr) ) {
+					return errors;
+				}
 			}
 			return null;
 		},
@@ -1360,14 +1385,14 @@
 		 * @param {String} attribute the attribute you want to set or get
 		 * @param {String|Number|Boolean} [value] value the value you want to set.
 		 * @param {Function} [success] an optional success callback.  
-		 * 			This gets called if the attribute was successful.
+		 *    This gets called if the attribute was successful.
 		 * @param {Function} [error] an optional success callback.  
-		 * 			The error function is called with validation errors.
+		 *    The error function is called with validation errors.
 		 */
 		attr: function( attribute, value, success, error ) {
 			var cap = classize(attribute),
 				get = "get" + cap;
-			if (value !== undefined) {
+			if ( value !== undefined ) {
 				this._setProperty(attribute, value, success, error, cap);
 				return this;
 			}
@@ -1408,9 +1433,10 @@
 		 * You can also bind to created, updated, and destroyed events.
 		 * 
 		 * @param {String} eventType the name of the event.
-		 * @param {Function} handler
+		 * @param {Function} handler a function to call back when an event happens on this model.
+		 * @return {model} the model instance for chaining
 		 */
-		bind: function(eventType, handler){
+		bind: function( eventType, handler ) {
 			var wrapped = $(this);
 			wrapped.bind.apply(wrapped, arguments);
 			return this;
@@ -1422,7 +1448,7 @@
 		 * @param {String} eventType
 		 * @param {Function} handler
 		 */
-		unbind: function(eventType, handler){
+		unbind: function( eventType, handler ) {
 			var wrapped = $(this);
 			wrapped.unbind.apply(wrapped, arguments);
 			return this;
@@ -1440,20 +1466,18 @@
 				//the old value
 				old = this[property],
 				self = this,
-				errorCallback = function(errors){
-					error && error.call(self,errors);
-					$(self).triggerHandler("error."+property, errors);
+				errorCallback = function( errors ) {
+					var stub;
+					stub = error && error.call(self, errors);
+					$(self).triggerHandler("error." + property, errors);
 				};
 
 			// if the setter returns nothing, do not set
 			// we might want to indicate if this was set ok
-			if (this[setName] && 
-				(value = this[setName](		value, 
-											this.callback('_updateProperty',property, value, old, success, errorCallback), 
-											errorCallback)) === undefined ) {
-				return ;
+			if ( this[setName] && (value = this[setName](value, this.callback('_updateProperty', property, value, old, success, errorCallback), errorCallback)) === undefined ) {
+				return;
 			}
-			this._updateProperty(property, value, old, success, errorCallback )
+			this._updateProperty(property, value, old, success, errorCallback);
 		},
 		/**
 		 * Triggers events when a property has been updated
@@ -1463,40 +1487,35 @@
 		 * @param {Object} old
 		 * @param {Object} success
 		 */
-		_updateProperty : function(property, value, old, success, errorCallback){
+		_updateProperty: function( property, value, old, success, errorCallback ) {
 			var Class = this.Class,
-				val,
-				old,
-				type = Class.attributes[property] || Class.addAttr(property, Class.guessType(value)),
+				val, type = Class.attributes[property] || Class.addAttr(property, Class.guessType(value)),
 				//the converter
 				converter = Class.convert[type],
-				errors = null;
-				
-			val = this[property] = 
-				( value == null ?  //if the value is null or undefined
-					null : 	      // it should be null
-					(converter ? 
-						converter.call(Class, value) : //convert it to something useful
-						value) )					   //just return it
+				errors = null,
+				stub;
 
-			
+			val = this[property] = (value === null ? //if the value is null or undefined
+			null : // it should be null
+			(converter ? converter.call(Class, value) : //convert it to something useful
+			value)); //just return it
 			//validate (only if not initializing, this is for performance)
-			if(!this._initializing){
+			if (!this._initializing ) {
 				errors = this.errors(property);
 			}
-			
-			if(errors){
-				errorCallback(errors)
-			}else{
-				if(old !== val && !this._initializing){
+
+			if ( errors ) {
+				errorCallback(errors);
+			} else {
+				if ( old !== val && !this._initializing ) {
 					$(this).triggerHandler(property, val);
 				}
-				success && success(this);
-				
+				stub = success && success(this);
+
 			}
-			
+
 			//if this class has a global list, add / remove from the list.
-			if ( property == Class.id && val != null && Class.list ) {
+			if ( property == Class.id && val !== null && Class.list ) {
 				// if we didn't have an old id, add ourselves
 				if (!old ) {
 					Class.list.push(this);
@@ -1506,7 +1525,7 @@
 					Class.list.push(this);
 				}
 			}
-			
+
 		},
 		/**
 		 * Gets or sets a list of attributes. 
@@ -1527,13 +1546,15 @@
 			if (!attributes ) {
 				attributes = {};
 				for ( key in this.Class.attributes ) {
-					attributes[key] = this.attr(key);
+					if ( this.Class.attributes.hasOwnProperty(key) ) {
+						attributes[key] = this.attr(key);
+					}
 				}
 			} else {
 				var idName = this.Class.id;
 				//always set the id last
 				for ( key in attributes ) {
-					if (key != idName) {
+					if ( key != idName ) {
 						this.attr(key, attributes[key]);
 					}
 				}
@@ -1548,7 +1569,7 @@
 		 * Returns if the instance is a new object
 		 */
 		isNew: function() {
-			return this[this.Class.id] == null; //if null or undefined
+			return (this[this.Class.id] === undefined); //if null or undefined
 		},
 		/**
 		 * Saves the instance if there are no errors.  
@@ -1567,12 +1588,13 @@
 		 * @param {Function} [error] called if the save was not successful.
 		 */
 		save: function( success, error ) {
+			var stub;
 
-			if (this.errors() ) {
+			if ( this.errors() ) {
 				//needs to send errors
 				return false;
 			}
-			this.isNew() ? this.Class.create(this.attrs(), this.callback(['created', success]), error) : this.Class.update(this[this.Class.id], this.attrs(), this.callback(['updated', success]), error);
+			stub = this.isNew() ? this.Class.create(this.attrs(), this.callback(['created', success]), error) : this.Class.update(this[this.Class.id], this.attrs(), this.callback(['updated', success]), error);
 
 			//this.is_new_record = this.Class.new_record_func;
 			return true;
@@ -1608,7 +1630,7 @@
 		 * @return {String}
 		 */
 		identity: function() {
-			var id = this[this.Class.id]
+			var id = this[this.Class.id];
 			return this.Class._fullName + '_' + (this.Class.escapeIdentity ? encodeURIComponent(id) : id);
 		},
 		/**
@@ -1634,7 +1656,7 @@
 		hookup: function( el ) {
 			var shortName = underscore(this.Class.shortName),
 				models = $.data(el, "models") || $.data(el, "models", {});
-			$(el).addClass(shortName + " " + this.identity())
+			$(el).addClass(shortName + " " + this.identity());
 			models[shortName] = this;
 		}
 	});
@@ -1662,15 +1684,17 @@
 	 */
 	"destroyed"], function( i, funcName ) {
 		$.Model.prototype[funcName] = function( attrs ) {
+			var stub;
+
 			if ( funcName === 'destroyed' && this.Class.list ) {
 				this.Class.list.remove(this[this.Class.id]);
 			}
-			$(this).triggerHandler(funcName)
-			attrs && typeof attrs == 'object' && this.attrs(attrs.attrs ? attrs.attrs() : attrs);
-			this.publish(funcName, this)
+			$(this).triggerHandler(funcName);
+			stub = attrs && typeof attrs == 'object' && this.attrs(attrs.attrs ? attrs.attrs() : attrs);
+			this.publish(funcName, this);
 			return [this].concat($.makeArray(arguments));
-		}
-	})
+		};
+	});
 
 	/**
 	 *  @add jQuery.fn
@@ -1692,18 +1716,21 @@
 	$.fn.models = function( type ) {
 		//get it from the data
 		var collection = [],
-			kind, ret;
+			kind, ret, retType;
 		this.each(function() {
 			$.each($.data(this, "models") || {}, function( name, instance ) {
 				//either null or the list type shared by all classes
-				kind = kind === undefined ? instance.Class.List || null : (instance.Class.List === kind ? kind : null)
-				collection.push(instance)
-			})
+				kind = kind === undefined ? instance.Class.List || null : (instance.Class.List === kind ? kind : null);
+				collection.push(instance);
+			});
 		});
-		ret = new(kind || $.Model.List || Array)()
-		ret.push.apply(ret, $.unique(collection))
+
+		retType = kind || $.Model.List || Array;
+		ret = new retType();
+
+		ret.push.apply(ret, $.unique(collection));
 		return ret;
-	}
+	};
 	/**
 	 * @function model
 	 * 
@@ -1711,15 +1738,15 @@
 	 * 
 	 * @param {Object} type
 	 */
-	$.fn.model = function(type) {
-		if(type && type instanceof $.Model){
+	$.fn.model = function( type ) {
+		if ( type && type instanceof $.Model ) {
 			type.hookup(this[0]);
 			return this;
-		}else{
+		} else {
 			return this.models.apply(this, arguments)[0];
 		}
-		
-	}
 
-})(true);
+	};
+
+})(jQuery);
 
