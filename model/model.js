@@ -318,7 +318,11 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 				raw = arr ? instancesRawData : instancesRawData.data,
 				length = raw.length,
 				i = 0;
-
+			//@steal-remove-start
+			if (! length ) {
+				steal.dev.warn("model.js wrapMany has no data.  If you're trying to wrap 1 item, use wrap. ")
+			}
+			//@steal-remove-end
 			res._use_call = true; //so we don't call next function with all of these
 			for (; i < length; i++ ) {
 				res.push(this.wrap(raw[i]));
