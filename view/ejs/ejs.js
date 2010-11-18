@@ -1,5 +1,11 @@
 /*jslint evil: true */
+
+
+
 steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
+	var myEval = function(script){
+			eval(script);
+		}
 
 	//helpers we use 
 	var chop = function( string ) {
@@ -435,12 +441,12 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 				buff.push(put_cmd, '"', clean(content) + '");');
 			}
 			var template = buff.close();
-			this.out = '/*' + name + '*/  try { with(_VIEW) { with (_CONTEXT) {' + template + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}";
+			this.out = 'try { with(_VIEW) { with (_CONTEXT) {' + template + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}";
 			//use eval instead of creating a function, b/c it is easier to debug
-			eval('this.process = (function(_CONTEXT,_VIEW){' + this.out + '})'); //new Function("_CONTEXT","_VIEW",this.out)
+			myEval.call(this,'this.process = (function(_CONTEXT,_VIEW){' + this.out + '});\r\n//@ sourceURL='+name+".js")
 		}
 	};
-
+	
 
 	//type, cache, folder
 	/**
