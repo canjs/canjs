@@ -1,7 +1,4 @@
-// jquery/view/view.js
-
-(function($){
-
+(function( $ ) {
 
 	// converts to an ok dom id
 	var toId = function( src ) {
@@ -541,13 +538,8 @@
 		convert(funcs[i]);
 	}
 
-
 })(jQuery);
-
-// jquery/lang/lang.js
-
-(function($){
-
+(function( $ ) {
 	// Several of the methods in this plugin use code adapated from Prototype
 	//  Prototype JavaScript framework, version 1.6.0.1
 	//  (c) 2005-2007 Sam Stephenson
@@ -655,13 +647,8 @@
 		}
 	});
 
-
 })(jQuery);
-
-// jquery/lang/rsplit/rsplit.js
-
-(function($){
-
+(function( $ ) {
 	/**
 	 * @add jQuery.String.static
 	 */
@@ -691,13 +678,8 @@
 		}
 		return retArr;
 	};
-
 })(jQuery);
-
-// jquery/view/ejs/ejs.js
-
-(function($){
-
+(function( $ ) {
 
 	//helpers we use 
 	var chop = function( string ) {
@@ -1226,6 +1208,4 @@
 			};
 		}
 	});
-
-})(jQuery);
-
+})(jQuery)

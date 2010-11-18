@@ -1,7 +1,4 @@
-// jquery/event/destroyed/destroyed.js
-
-(function($){
-
+(function( $ ) {
 	/**
 	 * @attribute destroyed
 	 * @parent specialevents
@@ -37,6 +34,4 @@
 		oldClean(elems);
 	};
 
-
-})(jQuery);
-
+})(jQuery)

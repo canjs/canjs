@@ -1,8 +1,10 @@
+// load('jquery/build.js')
+
 load('steal/rhino/steal.js')
 
 var i, fileName, cmd, 
 	plugins = [
-	"class", 
+	"class" , 
 	"controller",
 	{
 		plugin: "controller/subscribe", 
@@ -94,7 +96,7 @@ var i, fileName, cmd,
 ]
 
 
-steal('//steal/build/pluginify', function(s){
+steal.plugins('steal/build/pluginify').then( function(s){
 var plugin, exclude, fileDest, fileName;
 	for(i=0; i<plugins.length; i++){
 		plugin = plugins[i];
@@ -107,15 +109,24 @@ var plugin, exclude, fileDest, fileName;
 		}
 		fileName = fileName || "jquery."+plugin.replace(/\//g, ".").replace(/dom\./, "").replace(/\_/, "")+".js";
 		fileDest = "jquery/dist/"+fileName
-		steal.pluginify("jquery/"+plugin,{
+		s.build.pluginify("jquery/"+plugin,{
 			nojquery: true,
 			destination: fileDest,
-			packagejquery: true,
 			exclude: exclude.length? exclude: false
 		})
+		
+		
+		var outBaos = new java.io.ByteArrayOutputStream();
+		var output = new java.io.PrintStream(outBaos);
+		runCommand("java", "-jar", "steal/build/scripts/compiler.jar", "--compilation_level", "SIMPLE_OPTIMIZATIONS", "--warning_level", "QUIET", "--js", fileDest, {
+			output: output
+		});
+		
+		var minFileDest = fileDest.replace(".js", ".min.js")
+		new steal.File(minFileDest).save(outBaos.toString());
 	}
 })
-
+/*
 for (i = 0; i < plugins.length; i++) {
 	plugin = plugins[i];
 	exclude = [];
@@ -137,4 +148,4 @@ for (i = 0; i < plugins.length; i++) {
 	var minFileDest = fileDest.replace(".js", ".min.js")
 	new steal.File(minFileDest).save(outBaos.toString());
 	print("***" + fileName + " pluginified and compressed")
-}
+}*/

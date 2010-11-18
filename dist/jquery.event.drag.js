@@ -1,7 +1,4 @@
-// jquery/lang/vector/vector.js
-
-(function($){
-
+(function(){
 	var getSetZero = function(v){ return v !== undefined ? (this.array[0] = v) : this.array[0] },
 		getSetOne = function(v){ return v !== undefined ? (this.array[1] = v) : this.array[1] }
 /**
@@ -167,13 +164,8 @@ jQuery.fn.makePositioned = function() {
 	});
 };
 	
-
 })(jQuery);
-
-// jquery/event/livehack/livehack.js
-
-(function($){
-
+(function(){
 
 	var event = jQuery.event,
 		
@@ -339,13 +331,8 @@ jQuery.fn.makePositioned = function() {
 			};
 		});
 	}
-
 })(jQuery);
-
-// jquery/event/drag/drag.js
-
 (function($){
-
 	//modify live
 	//steal the live handler ....
 	
@@ -819,6 +806,4 @@ jQuery.fn.makePositioned = function() {
 	
 
 
-
-})(jQuery);
-
+})(jQuery)

@@ -169,8 +169,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * @Static
 	 */
 	{
-		setup: function( superClass ) {
-
+		setup: function( superClass , stat, proto) {
 			//we do not inherit attributes (or associations)
 			if (!this.attributes || superClass.attributes === this.attributes ) {
 				this.attributes = {};
@@ -201,7 +200,11 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			if ( this.listType ) {
 				this.list = new this.listType([]);
 			}
-
+			//@steal-remove-start
+			if (! proto ) {
+				steal.dev.warn("model.js "+this.fullName+" has no static properties.  You probably need  ,{} ")
+			}
+			//@steal-remove-end
 		},
 		/**
 		 * @attribute attributes

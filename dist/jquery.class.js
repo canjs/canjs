@@ -1,7 +1,4 @@
-// jquery/class/class.js
-
-(function($){
-
+(function( $ ) {
 
 	// if we are initializing a new class
 	var initializing = false,
@@ -505,7 +502,11 @@
 					current = $.Class.getObject(parts.join('.')),
 					namespace = current;
 
-				
+				//@steal-remove-start
+				if (!Class.nameOk ) {
+					steal.dev.isHappyName(fullName)
+				}
+				//@steal-remove-end
 				current[shortName] = Class;
 			}
 
@@ -621,6 +622,4 @@
 	callback = jQuery.Class.callback;
 
 
-
-})(jQuery);
-
+})(jQuery)

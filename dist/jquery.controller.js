@@ -1,7 +1,4 @@
-// jquery/class/class.js
-
-(function($){
-
+(function( $ ) {
 
 	// if we are initializing a new class
 	var initializing = false,
@@ -505,7 +502,11 @@
 					current = $.Class.getObject(parts.join('.')),
 					namespace = current;
 
-				
+				//@steal-remove-start
+				if (!Class.nameOk ) {
+					steal.dev.isHappyName(fullName)
+				}
+				//@steal-remove-end
 				current[shortName] = Class;
 			}
 
@@ -621,13 +622,8 @@
 	callback = jQuery.Class.callback;
 
 
-
 })(jQuery);
-
-// jquery/lang/lang.js
-
-(function($){
-
+(function( $ ) {
 	// Several of the methods in this plugin use code adapated from Prototype
 	//  Prototype JavaScript framework, version 1.6.0.1
 	//  (c) 2005-2007 Sam Stephenson
@@ -735,13 +731,8 @@
 		}
 	});
 
-
 })(jQuery);
-
-// jquery/event/destroyed/destroyed.js
-
-(function($){
-
+(function( $ ) {
 	/**
 	 * @attribute destroyed
 	 * @parent specialevents
@@ -777,13 +768,8 @@
 		oldClean(elems);
 	};
 
-
 })(jQuery);
-
-// jquery/controller/controller.js
-
-(function($){
-
+(function( $ ) {
 
 	// ------- helpers  ------
 	// Binds an element, returns a function that unbinds
@@ -1197,7 +1183,11 @@
 			}
 
 			// make sure listensTo is an array
-			
+			//@steal-remove-start
+			if (!$.isArray(this.listensTo) ) {
+				throw "listensTo is not an array in " + this.fullName;
+			}
+			//@steal-remove-end
 			// calculate and cache actions
 			this.actions = {};
 
@@ -1576,6 +1566,4 @@
 		return this.controllers.apply(this, arguments)[0];
 	};
 
-
-})(jQuery);
-
+})(jQuery)

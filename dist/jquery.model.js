@@ -1,7 +1,4 @@
-// jquery/class/class.js
-
-(function($){
-
+(function( $ ) {
 
 	// if we are initializing a new class
 	var initializing = false,
@@ -505,7 +502,11 @@
 					current = $.Class.getObject(parts.join('.')),
 					namespace = current;
 
-				
+				//@steal-remove-start
+				if (!Class.nameOk ) {
+					steal.dev.isHappyName(fullName)
+				}
+				//@steal-remove-end
 				current[shortName] = Class;
 			}
 
@@ -621,13 +622,8 @@
 	callback = jQuery.Class.callback;
 
 
-
 })(jQuery);
-
-// jquery/lang/lang.js
-
-(function($){
-
+(function( $ ) {
 	// Several of the methods in this plugin use code adapated from Prototype
 	//  Prototype JavaScript framework, version 1.6.0.1
 	//  (c) 2005-2007 Sam Stephenson
@@ -735,13 +731,8 @@
 		}
 	});
 
-
 })(jQuery);
-
-// jquery/model/model.js
-
-(function($){
-
+(function() {
 	//a cache for attribute capitalization ... slowest part of init.
 	var underscore = $.String.underscore,
 		classize = $.String.classize;
@@ -1114,7 +1105,9 @@
 		 * @param {Object} data The data to publish
 		 */
 		publish: function( event, data ) {
-			
+			//@steal-remove-start
+			steal.dev.log("Model.js - publishing " + underscore(this.shortName) + "." + event);
+			//@steal-remove-end
 			if ( window.OpenAjax ) {
 				OpenAjax.hub.publish(underscore(this.shortName) + "." + event, data);
 			}
@@ -1747,6 +1740,4 @@
 		}
 
 	};
-
-})(jQuery);
-
+})(jQuery)

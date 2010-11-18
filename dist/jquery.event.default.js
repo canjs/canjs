@@ -1,7 +1,4 @@
-// jquery/event/default/default.js
-
 (function($){
-
 
 //cache default types for performance
 var types = {}, rnamespaces= /\.(.*)$/;
@@ -190,6 +187,4 @@ triggerDefaults = function(type, data){
 	
 	
 	
-
-})(jQuery);
-
+})(jQuery)
