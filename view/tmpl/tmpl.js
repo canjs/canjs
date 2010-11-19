@@ -509,7 +509,7 @@ steal.plugins('jquery/view').then(function(){
 		suffix : "tmpl",
 		renderer: function( id, text ) {
 			return function(data){
-				return jQuery.tmpl( text, data);
+				return $.tmpl( text, data);
 				//$(text).tmpl(data);//jQuery.render( text, data );
 			}
 		},
