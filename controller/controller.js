@@ -468,10 +468,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			if (!options && parameterReplacer.test(methodName) ) {
 				return null;
 			}
-			var convertedName = options ? methodName.replace(parameterReplacer, function( whole, inside ) {
-				//convert inside to type
-				return $.Class.getObject(inside, options).toString(); //gets the value in options
-			}) : methodName,
+			var convertedName = options ? $.String.sub(methodName, options) : methodName,
 				parts = convertedName.match(breaker),
 				event = parts[2],
 				processor = this.processors[event] || basicProcessor;

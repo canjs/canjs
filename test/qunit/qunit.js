@@ -1,5 +1,5 @@
 //we probably have to have this only describing where the tests are
-steal.plugins(	
+steal('//jquery/lang/lang_test').plugins(	
 'jquery/class/test/qunit',
 'jquery/controller/test/qunit',
 'jquery/controller/view/test/qunit',
@@ -13,6 +13,8 @@ steal.plugins(
 'jquery/event/destroyed/test/qunit',
 'jquery/event/hover/test/qunit',
 'jquery/event/drag/test/qunit',
+
+
 
 'jquery/model/test/qunit',
 

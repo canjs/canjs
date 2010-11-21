@@ -103,4 +103,32 @@ test("error binding", 1, function(){
 	
 })
 
-
+test("auto methods",function(){
+	var School = $.Model.extend("Jquery.Model.Models.School",{
+	   findAll : steal.root.join("jquery/model/test")+"/{type}.json",
+	   findOne : steal.root.join("jquery/model/test")+"/{id}.json",
+	   create : steal.root.join("jquery/model/test")+"/create.json",
+	   update : steal.root.join("jquery/model/test")+"/update{id}.json"
+	},{})
+	stop(5000);
+	School.findAll({type:"schools"}, function(schools){
+		ok(schools,"findAll Got some data back");
+		equals(schools[0].Class.shortName,"School","there are schools")
+		
+		School.findOne({id : "4"}, function(school){
+			ok(school,"findOne Got some data back");
+			equals(school.Class.shortName,"School","a single school");
+			
+			
+			new School({name: "Highland"}).save(function(){
+				equals(this.name,"Highland","create gets the right name")
+				this.update({name: "LHS"}, function(){
+					equals(this.name,"LHS","create gets the right name")
+					start();
+				})
+			})
+			
+		})
+		
+	})
+})
