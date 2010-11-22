@@ -18,10 +18,10 @@ function(steal){
 	
 	for(var i=0; i< parts.length;i++){
 		part = parts[i];
-		if(part[0] !== part[0].toUpperCase()){
+		if( part[0] !== part[0].toUpperCase() ){
 			print("! Warning: "+part+" should probably be capitalized.  JavaScriptMVC likes capital namespaces and class names.")
 		}
-		parts[i] = part.toLowerCase();
+		parts[i] = steal.generate.underscore(part);
 	}
 	// check folders
 	var folder = parts.slice(0, parts.length-1).join("/");
