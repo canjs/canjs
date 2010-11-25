@@ -1,6 +1,3 @@
-if ( window.jQuery && jQuery.Controller ) {
-	steal.plugins("jquery/controller/view");
-}
 steal.plugins("jquery").then(function( $ ) {
 
 	// converts to an ok dom id
