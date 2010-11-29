@@ -14,7 +14,7 @@ to <code>new Date(1982,10,20)</code>. We can do this in two ways:
 
 The [jQuery.Model.prototype.attrs attrs]
 and [jQuery.Model.prototype.attr attr] function look for
-a <code>set<b>ATTRNAME</b> function to handle setting the
+a <code>set<b>ATTRNAME</b></code> function to handle setting the
 date property.  
 
 By providing a function that takes the raw data and returns
