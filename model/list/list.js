@@ -156,7 +156,7 @@ $.Class.extend("jQuery.Model.List",
 				(matches = args[i].className.match(test) )){
 				val = this._data[matches[1]]
 			}else{
-				val =  this._data[typeof args[i] == 'string' || typeof args[a] == 'number'? args[i] : args[i][idName] ]
+				val =  this._data[typeof args[i] == 'string' || typeof args[i] == 'number'? args[i] : args[i][idName] ]
 			}
 			val && list.push(val)
 		}
