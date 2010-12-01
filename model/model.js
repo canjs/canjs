@@ -940,10 +940,15 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			return attributes;
 		},
 		/**
-		 * Returns if the instance is a new object
+		 * Returns if the instance is a new object.  This is essentially if the
+		 * id is null or undefined.
+		 * 
+		 *     new Recipe({id: 1}).isNew() //-> false
+		 * @return {Boolean} false if an id is set, true if otherwise.
 		 */
 		isNew: function() {
-			return (this[this.Class.id] === undefined); //if null or undefined
+			var id = this[this.Class.id];
+			return (id === undefined || id === null); //if null or undefined
 		},
 		/**
 		 * Saves the instance if there are no errors.  
