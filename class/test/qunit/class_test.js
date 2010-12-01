@@ -162,3 +162,12 @@ test("callback error", 1,function(){
 		ok(true, "Error was thrown")
 	}
 })
+
+test("Creating without extend", function(){
+	$.Class("Bar",{
+		ok : function(){
+			ok(true, "ok called")
+		}
+	});
+	new Bar().ok();
+})
