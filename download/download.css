@@ -14,6 +14,7 @@
 
 #plugins .dl_btn_container{
 	background: url(btn.png);
+	border: none;
 	color: #fff;
 	font-size: 2em;
 	float: right;
