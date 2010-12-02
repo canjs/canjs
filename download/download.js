@@ -11,8 +11,13 @@
 				$.proxy($.Downloader.changeHandler, $.Downloader));
 		},
 		changeHandler: function(ev){
+			var $target = $(ev.target);
+			// if they unclicked, ignore it
+			if(!$target.attr('checked')) {
+				return;
+			}
 		 	this.dependencies = [];
-		 	var $form = $(ev.target).closest('form'),
+		 	var $form = $target.closest('form'),
 				params = $form.formParams(), i;
 			for(i=0; i<params.plugins.length; i++){
 				this._pushPlugins(this._getDependencies(params.plugins[i]));
