@@ -132,3 +132,12 @@ test("auto methods",function(){
 		
 	})
 })
+
+test("isNew", function(){
+	var p = new Person();
+	ok(p.isNew(), "nothing provided is new");
+	var p2 = new Person({id: null})
+	ok(p2.isNew(), "null id is new");
+	var p3 = new Person({id: 0})
+	ok(!p3.isNew(), "0 is not new");
+})
