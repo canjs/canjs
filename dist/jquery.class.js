@@ -345,10 +345,11 @@
 			}
 
 			self = this;
-
+			
 			return function class_cb() {
 				var cur = args.concat(jQuery.makeArray(arguments)),
-					isString, length = funcs.length,
+					isString, 
+					length = funcs.length,
 					f = 0,
 					func;
 
@@ -502,11 +503,7 @@
 					current = $.Class.getObject(parts.join('.')),
 					namespace = current;
 
-				//@steal-remove-start
-				if (!Class.nameOk ) {
-					steal.dev.isHappyName(fullName)
-				}
-				//@steal-remove-end
+				
 				current[shortName] = Class;
 			}
 
