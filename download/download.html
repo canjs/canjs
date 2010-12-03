@@ -7,18 +7,9 @@
 		<link rel="stylesheet" type='text/css' href='download.css' />
 	</head>
 	<body>
-		<p>Choose the plugins you want as standalone scripts, then hit submit.  You'll be given a 
-		zip file that includes each plugin with all its dependencies packaged up, and a minified version.  To use them, 
-		include jQuery in your page, then include the plugin file.</p>
 		
-        
 		<div id="plugins">
 
-			<div class="form-header">
-		
-				<h1>Plugins</h1>
-			
-			</div>
 		
 			<form type="POST" action="http://jmvcsite.heroku.com/pluginify" id="pluginForm">
 			
@@ -120,7 +111,7 @@
 					<div class="desc">A storeable list of model instances</div>
 				</div>
 
-				<div class="plugin">
+				<!--<div class="plugin">
 					
 					<input name="plugins[]" value="jquery/model/list/local/local.js" type="checkbox">
 					<label>jquery/model/list/local/local.js</label>
@@ -146,7 +137,7 @@
 					<input name="plugins[]" value="jquery/model/service/yql/yql.js" type="checkbox">
 					<label>jquery/model/service/yql/yql.js</label>
 					<div class="desc">Basic wrapper for YQL services</div>
-				</div>
+				</div>-->
 
 				<div class="plugin">
 
@@ -235,12 +226,12 @@
 					<div class="desc">Normalizes resize events cross browser</div>
 				</div>
 
-				<div class="plugin">
+				<!--<div class="plugin">
 					
 					<input name="plugins[]" value="jquery/event/select/select.js" type="checkbox">
 					<label>jquery/event/select/select.js</label>
 					<div class="desc">An event that fires when some element is selected by the user (lasso)</div>
-				</div>
+				</div>-->
 			</div>
 			
 			
@@ -403,13 +394,13 @@
 					
 					<input name="plugins[]" value="jquery/tie/tie.js" type="checkbox">
 					<label>jquery/tie/tie.js</label>
-					<div class="desc">Ties controls together when a change occurs</div>
+					<div class="desc">Bi-direction binding between Controllers and Models.</div>
 				</div>
 				
 				
 			</div>
 			
-			<input class="dl_btn_container" type="submit" value="Submit">
+			<input class="dl_btn_container" type="submit" value="Download">
 			
 		</form>
 		<script type='text/javascript' src='../jquery.js'></script>

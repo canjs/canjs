@@ -1,16 +1,3 @@
-#plugins{
-	width: 600px;
-}
-
-#plugins h1{
-	float: left;
-}
-
-#plugins .form-header{
-	margin: 0px 0px 20px;
-	overflow: auto;
-	width: 100%;
-}
 
 #plugins .dl_btn_container{
 	background: url(btn.png);

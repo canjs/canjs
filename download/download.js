@@ -69,5 +69,8 @@
 		 }
 	};
 	$(document).ready($.Downloader.ready);
-	
+	$("a.down",top.document.documentElement).click(function(ev){
+		ev.preventDefault();
+		$('form')[0].submit();
+	})
 })()
