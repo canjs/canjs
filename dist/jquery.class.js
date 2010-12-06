@@ -275,7 +275,9 @@
 	 */
 
 	jQuery.Class = function() {
-		if ( arguments.length ) this.extend.apply(this, arguments)
+		if (arguments.length) {
+			jQuery.Class.extend.apply(jQuery.Class, arguments);
+		}
 	};
 
 	/* @Static*/
