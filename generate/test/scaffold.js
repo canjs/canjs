@@ -41,12 +41,14 @@ steal('//steal/test/test', function(s){
 	
 	s.test.test("scaffold unit tests", function(t){
 		
+		load("steal/rhino/utils.js")
 		load('steal/rhino/steal.js');
 		load('funcunit/loader.js');
 		FuncUnit.load('cookbook/qunit.html');
 	});
 	
 	s.test.test("scaffold functional tests", function(){
+		load("steal/rhino/utils.js")
 		load('steal/rhino/steal.js');
 		load('funcunit/loader.js');
 		FuncUnit.load('cookbook/funcunit.html');
