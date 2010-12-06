@@ -514,8 +514,8 @@ steal.plugins('jquery/view').then(function(){
 			}
 		},
 		script: function( id, str ) {
-			var tmpl = $.tmpl(str).toString();
-			return "function(data){return ("+tmpl+").call(jQuery, jQuery, data); }";
+			var tmpl = $.template( null, str );
+			return "function(data){return ("+tmpl+").call(jQuery, jQuery, {data: data}).join(''); }";
 		}
 	})
 	jQuery.View.ext = ".tmpl"
