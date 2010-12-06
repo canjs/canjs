@@ -84,7 +84,12 @@ steal.plugins('steal/build/pluginify','steal/build/apps','steal/build/scripts').
 			continue;
 		}
 		var content = readFile(path);
-		content = "("+s.build.pluginify.getFunction(content)+")(jQuery)";
+		var funcContent = s.build.pluginify.getFunction(content);
+		if(typeof funcContent ==  "undefined"){
+			content = "";
+		} else {
+			content = "("+s.build.pluginify.getFunction(content)+")(jQuery);";
+		}
 		var out = path.replace(/\/\w+\.js/,"").replace(/\//g,".")
 		print("  "+out+"");
 		s.File("jquery/dist/standalone/"+out+".js").save(content);
