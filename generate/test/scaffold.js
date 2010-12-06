@@ -31,7 +31,8 @@ steal('//steal/test/test', function(s){
 		new steal.File('cookbook/test/funcunit/funcunit.js').save( funcunitContent );
 
 		t.clear();
-		t.open('cookbook/cookbook.html')
+		print('trying to open ...')
+		t.open('cookbook/cookbook.html', false)
 		t.ok(Cookbook.Controllers.Recipe, "Recipe Controller")
 		t.ok(Cookbook.Models.Recipe, "Recipe Controller")
 		t.clear();
@@ -46,13 +47,15 @@ steal('//steal/test/test', function(s){
 		FuncUnit.load('cookbook/qunit.html');
 	});
 	
-	s.test.test("scaffold functional tests", function(){
+	s.test.test("scaffold functional tests", function(t){
 		load('steal/rhino/steal.js');
 		load('funcunit/loader.js');
 		FuncUnit.load('cookbook/funcunit.html');
+		
 	});
 	
 	s.test.test("documentjs", function(t){
+		t.clear();
 		load('steal/rhino/steal.js');
 		_args = ['cookbook/cookbook.html']
 		load("documentjs/documentjs.js");
@@ -60,6 +63,7 @@ steal('//steal/test/test', function(s){
 	});
 	
 	s.test.test("compress", function(t){
+		t.clear();
 		load("cookbook/scripts/build.js")
 		
 		var cookbookPage = readFile('cookbook/cookbook.html').
@@ -67,7 +71,7 @@ steal('//steal/test/test', function(s){
 		new steal.File('cookbook/cookbook.html').save( cookbookPage );
 		
 		t.clear();
-		t.open('cookbook/cookbook.html')
+		t.open('cookbook/cookbook.html', false)
 		t.ok(Cookbook.Controllers.Recipe, "Recipe Controller")
 		t.ok(Cookbook.Models.Recipe, "Recipe Controller")
 		t.clear();
