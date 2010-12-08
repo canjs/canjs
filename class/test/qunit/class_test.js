@@ -170,4 +170,11 @@ test("Creating without extend", function(){
 		}
 	});
 	new Bar().ok();
+	
+	Bar("Foo",{
+		dude : function(){
+			ok(true, "dude called")
+		}
+	});
+	new Foo().dude(true);
 })

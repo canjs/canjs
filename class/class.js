@@ -493,7 +493,7 @@ steal.plugins("jquery").then(function( $ ) {
 				if ( initializing ) return;
 
 				if ( this.constructor !== Class && arguments.length ) { //we are being called w/o new
-					return this.extend.apply(this, arguments)
+					return arguments.callee.extend.apply(arguments.callee, arguments)
 				} else { //we are being called w/ new
 					return this.Class.newInstance.apply(this.Class, arguments)
 				}
