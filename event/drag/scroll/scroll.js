@@ -60,7 +60,7 @@ $.extend($.Scrollable.prototype,{
 			location_object = $(el == document.documentElement ? window : el),
 		
 		//get the dimension and location of that object
-			dimensions = location_object.dimensionsv(),
+			dimensions = location_object.dimensionsv('outer'),
 			position = location_object.offsetv(),
 		
 		//how close our mouse is to the boundries

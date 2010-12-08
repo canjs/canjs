@@ -1,8 +1,8 @@
-steal.then(function(){
+steal.then(function($){
 	var getSetZero = function(v){ return v !== undefined ? (this.array[0] = v) : this.array[0] },
 		getSetOne = function(v){ return v !== undefined ? (this.array[1] = v) : this.array[1] }
 /**
- * @class
+ * @class jQuery.Vector
  * A vector class
  * @constructor creates a new vector instance from the arguments.  Example:
  * @codestart
@@ -10,10 +10,10 @@ steal.then(function(){
  * @codeend
  * 
  */
-jQuery.Vector = function(){
-	this.update( jQuery.makeArray(arguments) );
+$.Vector = function(){
+	this.update( $.makeArray(arguments) );
 };
-jQuery.Vector.prototype = 
+$.Vector.prototype = 
 /* @Prototype*/
 {
 	/**
@@ -26,7 +26,7 @@ jQuery.Vector.prototype =
 		  
 		  for(var i=0; i < this.array.length; i++)
 			  newArr.push( f(  this.array[i] ) );
-		  var vec = new jQuery.Vector();
+		  var vec = new $.Vector();
 		  return vec.update(newArr);
 	},
 	/**
@@ -35,14 +35,14 @@ jQuery.Vector.prototype =
 	 * new Vector(1,2).plus(2,3) //-> &lt;3,5>
 	 * new Vector(3,5).plus(new Vector(4,5)) //-> &lt;7,10>
 	 * @codeend
-	 * @return {jQuery.Vector}
+	 * @return {$.Vector}
 	 */
 	plus: function() {
-		var args = arguments[0] instanceof jQuery.Vector ? 
+		var args = arguments[0] instanceof $.Vector ? 
 				 arguments[0].array : 
-				 jQuery.makeArray(arguments), 
+				 $.makeArray(arguments), 
 			arr=this.array.slice(0), 
-			vec = new jQuery.Vector();
+			vec = new $.Vector();
 		for(var i=0; i < args.length; i++)
 			arr[i] = (arr[i] ? arr[i] : 0) + args[i];
 		return vec.update(arr);
@@ -52,10 +52,10 @@ jQuery.Vector.prototype =
 	 * @return {jQuery.Vector}
 	 */
 	minus: function() {
-		 var args = arguments[0] instanceof jQuery.Vector ? 
+		 var args = arguments[0] instanceof $.Vector ? 
 				 arguments[0].array : 
-				 jQuery.makeArray(arguments), 
-			 arr=this.array.slice(0), vec = new jQuery.Vector();
+				 $.makeArray(arguments), 
+			 arr=this.array.slice(0), vec = new $.Vector();
 		 for(var i=0; i < args.length; i++)
 			arr[i] = (arr[i] ? arr[i] : 0) - args[i];
 		 return vec.update(arr);
@@ -66,10 +66,10 @@ jQuery.Vector.prototype =
 	 * @return {jQuery.Vector}
 	 */
 	equals: function() {
-		var args = arguments[0] instanceof jQuery.Vector ? 
+		var args = arguments[0] instanceof $.Vector ? 
 				 arguments[0].array : 
-				 jQuery.makeArray(arguments), 
-			 arr=this.array.slice(0), vec = new jQuery.Vector();
+				 $.makeArray(arguments), 
+			 arr=this.array.slice(0), vec = new $.Vector();
 		 for(var i=0; i < args.length; i++)
 			if(arr[i] != args[i]) return null;
 		 return vec.update(arr);
@@ -117,51 +117,34 @@ jQuery.Vector.prototype =
 	}
 };
 
-jQuery.Event.prototype.vector = function(){
+$.Event.prototype.vector = function(){
 	if(this.originalEvent.synthetic){
 		var doc = document.documentElement, body = document.body;
-		return  new jQuery.Vector(this.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
+		return  new $.Vector(this.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
 								  this.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0));
 	}else{
-		return new jQuery.Vector(this.pageX, this.pageY);
+		return new $.Vector(this.pageX, this.pageY);
 	}
 }
 
-jQuery.fn.offsetv = function() {
+$.fn.offsetv = function() {
 	if(this[0] == window){
-		return new jQuery.Vector(window.pageXOffset ? window.pageXOffset : document.documentElement.scrollLeft,
+		return new $.Vector(window.pageXOffset ? window.pageXOffset : document.documentElement.scrollLeft,
 							  window.pageYOffset ? window.pageYOffset : document.documentElement.scrollTop)
 	}else{
 		var offset = this.offset();
- 		 return new jQuery.Vector(offset.left, offset.top);
+ 		 return new $.Vector(offset.left, offset.top);
 	}
 };
 
-jQuery.fn.dimensionsv = function(){
-	if(this[0] == window)
-		return new jQuery.Vector(this.width(), this.height());
+$.fn.dimensionsv = function(which){
+	if(this[0] == window || !which)
+		return new $.Vector(this.width(), this.height());
 	else
-		return new jQuery.Vector(this.outerWidth(), this.outerHeight());
-}
-jQuery.fn.centerv = function(){
-	return this.offsetv().plus( this.dimensionsv().app(function(u){return u /2;})  )
+		return new $.Vector(this[which+"Width"](), this[which+"Width"]());
 }
 
-jQuery.fn.makePositioned = function() {
-	return this.each(function(){
-		var that = jQuery(this);
-		var pos = that.css('position');
 
-		if (!pos || pos == 'static') {
-			var style = { position: 'relative' };
 
-			if (window.opera) {
-				style.top = '0px';
-				style.left = '0px';
-			}
-			that.css(style);
-		}
-	});
-};
 	
 })

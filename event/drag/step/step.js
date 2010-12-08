@@ -12,12 +12,13 @@ steal.plugins('jquery/event/drag','jquery/dom/cur_styles').then(function($){
 	 * @function step
 	 * @plugin jquery/event/drag/step
 	 * @download jquery/dist/jquery.event.drag.step.js
-	 * makes the drag move in steps
+	 * makes the drag move in steps of amount pixels.
 	 * @codestart
 	 * drag.step({x: 5}, $('foo'))
 	 * @codeend
 	 * @param {number} amount
 	 * @param {jQuery} container
+	 * @return {jQuery.Drag} the drag
 	 */
 	step = function(amount, container){
 		//on draws ... make sure this happens
@@ -33,6 +34,7 @@ steal.plugins('jquery/event/drag','jquery/dom/cur_styles').then(function($){
 			top = parseInt( styles.borderLeftWidth ) + parseInt( styles.paddingLeft );
 		
 		this._step.offset =  container.offsetv().plus(left, top);
+		return this;
 	};
 	
 	
@@ -40,16 +42,15 @@ steal.plugins('jquery/event/drag','jquery/dom/cur_styles').then(function($){
 	$.Drag.prototype.position = function(offsetPositionv){
 		//adjust required_css_position accordingly
 		if(this._step){
-			var movingSize = this.movingElement.dimensionsv(),
+			var movingSize = this.movingElement.dimensionsv('outer'),
 			    lot = this._step.offset.top(),
 				lof = this._step.offset.left();
 			
-			//console.log(round(offsetPositionv.left() - lof,  this._step.x))
 			if(this._step.x){
-				offsetPositionv.left(  lof + round(offsetPositionv.left() - lof,  this._step.x) )
+				offsetPositionv.left(  Math.round( lof + round(offsetPositionv.left() - lof,  this._step.x)) )
 			}
 			if(this._step.y){
-				offsetPositionv.top(  lot + round(offsetPositionv.top() - lot,  this._step.y) )
+				offsetPositionv.top(  Math.round( lot + round(offsetPositionv.top() - lot,  this._step.y)) )
 			}
 		}
 		

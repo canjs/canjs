@@ -216,11 +216,24 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 			
 			this.startPosition = startElement != this.movingElement ? this.movingElement.offsetv() : this.currentDelta();
 	
-			this.movingElement.makePositioned();
+			this.makePositioned(this.movingElement);
 			this.oldZIndex = this.movingElement.css('zIndex');
 			this.movingElement.css('zIndex',1000);
 			if(!this._only && this.constructor.responder)
 				this.constructor.responder.compile(event, this);
+		},
+		makePositioned: function(that) {
+			var pos = that.css('position');
+			
+			if (!pos || pos == 'static') {
+				var style = { position: 'relative' };
+			
+				if (window.opera) {
+					style.top = '0px';
+					style.left = '0px';
+				}
+				that.css(style);
+			}
 		},
 		callEvents: function( type, element, event, drop ) {
 			var cbs = this.callbacks[this.constructor.lowerName+type];
@@ -259,22 +272,24 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 				this.constructor.responder.show(pointer, this, event);  
 		},
 		/**
-		 * @hide
-		 * Set the drag to only allow horizontal dragging.
+		 * Sets the position of this drag.  
 		 * 
-		 * @param {Object} offsetPositionv the position of the element (not the mouse)
+		 * The limit and scroll plugins
+		 * overwrite this to make sure the drag follows a particular path.
+		 * 
+		 * @param {jQuery.Vector} newOffsetv the position of the element (not the mouse)
 		 */
-		position: function( offsetPositionv ) {  //should draw it on the page
-			var dragged_element_page_offset = this.movingElement.offsetv();          // the drag element's current page location
+		position: function( newOffsetv ) {  //should draw it on the page
 			
-			var dragged_element_css_offset = this.currentDelta();                   //  the drag element's current left + top css attributes
+			var dragged_element_css_offset = this.currentDelta(),  //  the drag element's current left + top css attributes
 			
-			var dragged_element_position_vector =                                   // the vector between the movingElement's page and css positions
-				dragged_element_page_offset.minus(dragged_element_css_offset);      // this can be thought of as the original offset
+				dragged_element_position_vector =                  // the vector between the movingElement's page and css positions
+				this.movingElement.offsetv().minus(dragged_element_css_offset);      // this can be thought of as the original offset
 			
-			this.required_css_position = offsetPositionv.minus(dragged_element_position_vector)
+			this.required_css_position = newOffsetv.minus(dragged_element_position_vector)
 			
-			
+			this.offsetv = newOffsetv;
+			//dragged_element vector can probably be cached.
 
 			var style = this.movingElement[0].style;
 			if(!this._cancelled && !this._horizontal) {
