@@ -48,7 +48,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		controllersReg = /_?controllers?/ig,
 		//used to remove the controller from the name
 		underscoreAndRemoveController = function( className ) {
-			return $.String.underscore(className.replace(dotsReg, '_').replace(controllersReg, ""));
+			return $.String.underscore(className.replace("jQuery.","").replace(dotsReg, '_').replace(controllersReg, ""));
 		},
 		// checks if it looks like an action
 		actionMatcher = /[^\w]/,

@@ -1,8 +1,20 @@
 steal.plugins('jquery/controller').then(function($){
-	
-$.Controller.extend("Tie",{
-	nameOk : true
-},{
+
+/**
+ * @core
+ * @class jQuery.Tie
+ * 
+ * The $.fn.tie plugin binds form elements and controllers with 
+ * models and vice versa.  The result is that a change in 
+ * a model will automatically update the form element or controller
+ * AND a change event on the element will update the model.
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+$.Controller.extend("jQuery.Tie",{
 	init : function(el, inst, attr, type){
 		// if there's a controller
 		if(!type){
@@ -21,6 +33,9 @@ $.Controller.extend("Tie",{
 		this.attr = attr;
 		this.inst = inst;
 		this.bind(inst, attr, "attrChanged");
+		
+		//destroy this controller if the model instance is destroyed
+		this.bind(inst, "destroyed", "destroy");
 		
 		var value = inst.attr(attr);
 		//set the value
@@ -50,7 +65,7 @@ $.Controller.extend("Tie",{
 		}
 	},
 	change : function(el, ev, val){
-		if(!this.type){
+		if(!this.type && val === undefined){
 			val = this.element.val();
 		}
 		
