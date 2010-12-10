@@ -89,7 +89,7 @@ $.fn.
 /**
  * @parent dom
  * @plugin jquery/dom/cur_styles
- * @download jquery/dist/jquery.curstyles.js
+ * @download http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/dom/cur_styles/cur_styles.js
  * @test jquery/dom/cur_styles/qunit.html
  * Use curStyles to rapidly get a bunch of computed styles from an element.
  * <h3>Quick Example</h3>

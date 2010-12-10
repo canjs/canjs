@@ -2,7 +2,7 @@ steal.plugins('jquery/event','jquery/event/livehack').then(function($){
 /**
  * @class jQuery.Hover
  * @plugin jquery/event/hover
- * @download jquery/dist/jquery.event.hover.js
+ * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/event/hover/hover.js
  * Provides delegate-able hover events.
  * <p>
  * 	A hover happens when the mouse stops moving 

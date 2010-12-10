@@ -11,7 +11,7 @@ steal.plugins('jquery/event/drag','jquery/dom/cur_styles').then(function($){
 	/**
 	 * @function step
 	 * @plugin jquery/event/drag/step
-	 * @download jquery/dist/jquery.event.drag.step.js
+	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/event/drag/step/step.js
 	 * makes the drag move in steps of amount pixels.
 	 * @codestart
 	 * drag.step({x: 5}, $('foo'))

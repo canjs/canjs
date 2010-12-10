@@ -9,7 +9,7 @@ var types = {}, rnamespaces= /\.(.*)$/;
  * @attribute default
  * @parent specialevents
  * @plugin jquery/event/default
- * @download jquery/dist/jquery.event.default.js
+ * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/event/default/default.js
  * @test jquery/event/default/qunit.html
  * Allows you to perform default actions as a result of an event.
  * <p>

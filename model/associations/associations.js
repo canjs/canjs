@@ -2,7 +2,7 @@ steal.plugins('jquery/model').then(function($){
 /**
 @page jquery.model.associations Associations
 @parent jQuery.Model
-@download jquery/dist/jquery.model.associations.js
+@download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/associations/associations.js
 @test jquery/model/associations/qunit.html
 @plugin jquery/model/associations
 

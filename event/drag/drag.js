@@ -18,7 +18,7 @@ steal.plugins('jquery/event','jquery/lang/vector','jquery/event/livehack').then(
 	 * @class jQuery.Drag
 	 * @parent specialevents
 	 * @plugin jquery/event/drag
-	 * @download jquery/dist/jquery.event.drag.js
+	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/event/drag/drag.js
 	 * @test jquery/event/drag/qunit.html
 	 * Provides drag events as a special events to jQuery.  
 	 * A jQuery.Drag instance is created on a drag and passed

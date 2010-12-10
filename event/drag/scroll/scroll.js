@@ -7,7 +7,7 @@ $.Drag.prototype.
 	/**
 	 * Will scroll elements with a scroll bar as the drag moves to borders.
 	 * @plugin jquery/event/drag/scroll
-	 * @download jquery/dist/jquery.event.drag.scroll.js
+	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/event/drag/scroll/scroll.js
 	 * @param {jQuery} elements to scroll.  The window can be in this array.
 	 */
 	scrolls = function(elements){

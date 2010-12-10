@@ -5,7 +5,7 @@ steal.plugins('jquery/event').then(function( $ ) {
 	/**
 	 * @attribute destroyed
 	 * @parent specialevents
-	 * @download jquery/dist/jquery.event.destroyed.js
+	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/dom/destroyed/destroyed.js
 	 * @test jquery/event/destroyed/qunit.html
 	 * Provides a destroyed event on an element.
 	 * <p>

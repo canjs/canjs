@@ -6,7 +6,7 @@ steal.plugins('jquery/model').then(function(){
 @parent jQuery.Model
 @plugin jquery/model/backup
 @test jquery/model/backup/qunit.html
-@download jquery/dist/jquery.model.backup.js
+@download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/backup/backup.js
 
 You can backup and restore instance data with the jquery/model/backup
 plugin.

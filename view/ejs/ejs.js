@@ -42,7 +42,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 * 
 	 * @plugin jquery/view/ejs
 	 * @parent jQuery.View
-	 * @download jquery/dist/jquery.view.ejs.js
+	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/view/ejs/ejs.js
 	 * @test jquery/view/ejs/qunit.html
 	 * 
 	 * 

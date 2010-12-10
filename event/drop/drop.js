@@ -52,7 +52,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 	 * @class jQuery.Drop
 	 * @parent specialevents
 	 * @plugin jquery/event/drop
-	 * @download jquery/dist/jquery.event.drop.js
+	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/event/drop/drop.js
 	 * @test jquery/event/drag/qunit.html
 	 * 
 	 * Provides drop events as a special event to jQuery.  

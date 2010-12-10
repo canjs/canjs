@@ -5,7 +5,7 @@ steal.plugins('jquery/dom').then(function($){
 /**
  * @function compare
  * @parent dom
- * @download jquery/dist/jquery.compare.js
+ * @download http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/dom/compare/compare.js 
  * Compares the position of two nodes and returns a bitmask detailing how they are positioned 
  * relative to each other.  You can expect it to return the same results as 
  * [http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-compareDocumentPosition | compareDocumentPosition].

@@ -5,7 +5,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	/**
 	 * @class jQuery.fixture
 	 * @plugin jquery/dom/fixture
-	 * @download jquery/dist/jquery.fixture.js
+	 * @download http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/dom/fixture/fixture.js
 	 * @test jquery/dom/fixture/qunit.html
 	 * @parent dom
 	 * 

@@ -61,7 +61,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	/**
 	 * @tag core
 	 * @plugin jquery/controller
-	 * @download jquery/dist/jquery.controller.js
+	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/controller/controller.js
 	 * @test jquery/controller/qunit.html
 	 * 
 	 * Controllers organize event handlers using event delegation. 

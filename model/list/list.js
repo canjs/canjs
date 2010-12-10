@@ -13,7 +13,7 @@ var add = function(data, inst){
 	}
 /**
  * @parent jQuery.Model
- * @download jquery/dist/jquery.model.list.js
+ * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/list/list.js
  * @test jquery/model/list/qunit.html
  * @plugin jquery/model/list
  * Model lists are useful for:

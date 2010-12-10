@@ -5,7 +5,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	/**
 	 * @class jQuery.Model
 	 * @tag core
-	 * @download jquery/dist/jquery.model.js
+	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/model.js
 	 * @test jquery/model/qunit.html
 	 * @plugin jquery/model
 	 * 
@@ -452,6 +452,31 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * var recipes = Recipe.wrapMany({data: [{id: 1},{id: 2}]})
 		 * recipes[0].helper() //-> 1
 		 * @codeend
+		 * 
+		 * Often wrapMany is used with this.callback inside a model's [jQuery.Model.static.findAll findAll]
+		 * method like:
+		 * 
+		 *     findAll : function(params, success, error){
+		 *       $.get('/url',
+		 *             params,
+		 *             this.callback(['wrapMany',success]) )
+		 *     }
+		 * 
+		 * If you are having problems getting your model to callback success correctly,
+		 * make sure a request is being made (with firebug's net tab).  Also, you 
+		 * might not use this.callback and instead do:
+		 * 
+		 *     findAll : function(params, success, error){
+		 *       self = this;
+		 *       $.get('/url',
+		 *             params,
+		 *             function(data){
+		 *               var wrapped = self.wrapMany(data);
+		 *               success(data)
+		 *             })
+		 *     }
+		 * 
+		 * ## API
 		 * 
 		 * @param {Array} instancesRawData an array of raw name - value pairs.
 		 * @return {Array} a JavaScript array of instances or a [jQuery.Model.List list] of instances
@@ -1015,11 +1040,26 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		/**
 		 * Returns elements that represent this model instance.  For this to work, your element's should
 		 * us the [jQuery.Model.prototype.identity identity] function in their class name.  Example:
-		 * @codestart html
-		 * <div class='todo <%= todo.identity() %>'> ... </div>
-		 * @codeend
-		 * This function should only rarely be used.  It breaks the architecture.
-		 * @param {String|jQuery|element} context - 
+		 * 
+		 *     <div class='todo <%= todo.identity() %>'> ... </div>
+		 * 
+		 * This also works if you hooked up the model:
+		 * 
+		 *     <div <%= todo %>> ... </div>
+		 *     
+		 * Typically, you'll use this as a response of an OpenAjax message:
+		 * 
+		 *     "todo.destroyed subscribe": function(called, todo){
+		 *       todo.elements(this.element).remove();
+		 *     }
+		 * 
+		 * ## API
+		 * 
+		 * @param {String|jQuery|element} context If provided, only elements inside this element
+		 * that represent this model will be returned.
+		 * 
+		 * @return {jQuery} Returns a jQuery wrapped nodelist of elements that have this model instances
+		 *  identity in their class name.
 		 */
 		elements: function( context ) {
 			return $("." + this.identity(), context);
