@@ -141,7 +141,7 @@ $.fn.dimensionsv = function(which){
 	if(this[0] == window || !which)
 		return new $.Vector(this.width(), this.height());
 	else
-		return new $.Vector(this[which+"Width"](), this[which+"Width"]());
+		return new $.Vector(this[which+"Width"](), this[which+"Height"]());
 }
 
 
