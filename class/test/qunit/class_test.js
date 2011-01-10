@@ -1,3 +1,4 @@
+console.log("class ...");
 module("jquery/class");
 
 test("Creating", function(){

@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>selection</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+        </style>
+	</head>
+	<body>
+	    <textarea>012
+456</textarea>
+		<input text='text' value='0123456789'/>
+		<p id='1'>0123456789</p>
+		
+		<div id='2'>012<div>3<span>4</span>5</div></div>
+		
+		<script type='text/javascript' 
+                src='../../../steal/steal.js?jquery/dom/selection,development'>   
+        </script>
+		<script type='text/javascript'>
+			setTimeout(function(){
+				$('textarea').selection(1,5);
+				$('input').selection(1,5);
+				
+				$('#1').selection(1,5);
+				
+				$('#2').selection(1,5)
+			},100)
+		</script>
+	</body>
+</html>
