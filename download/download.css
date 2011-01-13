@@ -52,7 +52,7 @@ body {
 
 #plugins .plugin{
 	float: right;
-	padding: 0px 0px 18px 0px;
+	padding: 0px;
 	overflow: auto;
 	width: 422px;
 	

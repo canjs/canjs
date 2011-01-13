@@ -9,6 +9,18 @@
 				});
 			$('#pluginForm').delegate("input[type=checkbox]", "change", 
 				$.proxy($.Downloader.changeHandler, $.Downloader));
+				
+			// append css if necessary
+			if(location.search && /csspath/.test(location.search)){
+				var path = location.search.split("=")[1];
+				var headID = document.getElementsByTagName("head")[0],
+					cssNode = document.createElement('link');
+				cssNode.type = 'text/css';
+				cssNode.rel = 'stylesheet';
+				cssNode.href = path;
+				cssNode.media = 'screen';
+				headID.appendChild(cssNode);
+			}
 		},
 		changeHandler: function(ev){
 			var $target = $(ev.target);
