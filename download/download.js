@@ -48,8 +48,7 @@
 		 	var dep, i, index;
 		 	for(i=0; i<dependencies.length; i++){
 				dep = dependencies[i];
-				index = this.dependencies.indexOf(dep);
-				if(index != -1) {
+				if(!$.inArray(dep, this.dependencies)) {
 					this.dependencies.splice(index, 1);
 				}
 				this.dependencies.push(dep);
