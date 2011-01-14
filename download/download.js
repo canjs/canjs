@@ -21,6 +21,17 @@
 				cssNode.media = 'screen';
 				headID.appendChild(cssNode);
 			}
+			
+			$.Downloader.setupWordbreaks();
+		},
+		// inject <wbr> characters in labels
+		setupWordbreaks: function(){
+			var text, newText;
+			$(".plugin label").each(function(i){
+				text = $(this).text();
+				newText = text.replace(/\//g, "<wbr>/")
+				$(this).html(newText);
+			})
 		},
 		changeHandler: function(ev){
 			var $target = $(ev.target);
