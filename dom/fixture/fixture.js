@@ -1,7 +1,7 @@
 steal.plugins('jquery/dom').then(function( $ ) {
 
 	var ajax = $.ajax,
-        typeTest = /^script$|^json$|^test$|^jsonp$/;
+        typeTest = /^(script|json|test|jsonp)$/;
 
 	/**
 	 * @class jQuery.fixture
