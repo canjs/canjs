@@ -1,6 +1,7 @@
 steal.plugins('jquery/dom').then(function( $ ) {
 
-	var ajax = $.ajax;
+	var ajax = $.ajax,
+        typeTest = /^script$|^json$|^test$|^jsonp$/;
 
 	/**
 	 * @class jQuery.fixture
@@ -473,6 +474,14 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	get = function( url, data, callback, type, fixture ) {
 		// shift arguments if data argument was ommited
 		if ( jQuery.isFunction(data) ) {
+            if(!typeTest.test(type||"")){
+                fixture = type;
+                type = callback;
+            }
+            callback = data;
+            data = null;
+        }
+		if ( jQuery.isFunction(data) ) {
 			fixture = type;
 			type = callback;
 			callback = data;
@@ -500,11 +509,13 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 */
 	post = function( url, data, callback, type, fixture ) {
 		if ( jQuery.isFunction(data) ) {
-			fixture = type;
-			type = callback;
-			callback = data;
-			data = {};
-		}
+            if(!typeTest.test(type||"")){
+                fixture = type;
+                type = callback;
+            }
+            callback = data;
+            data = {};
+        }
 
 		return jQuery.ajax({
 			type: "POST",
