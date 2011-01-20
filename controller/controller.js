@@ -48,7 +48,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		controllersReg = /_?controllers?/ig,
 		//used to remove the controller from the name
 		underscoreAndRemoveController = function( className ) {
-			return $.String.underscore(className.replace("jQuery.","").replace(dotsReg, '_').replace(controllersReg, ""));
+			return $.String.underscore(className.replace("jQuery.", "").replace(dotsReg, '_').replace(controllersReg, ""));
 		},
 		// checks if it looks like an action
 		actionMatcher = /[^\w]/,
@@ -367,11 +367,13 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			this.actions = {};
 
 			for ( funcName in this.prototype ) {
-				if (!$.isFunction(this.prototype[funcName]) ) {
-					continue;
-				}
-				if ( this._isAction(funcName) ) {
-					this.actions[funcName] = this._getAction(funcName);
+				if ( this.prototype.hasOwnProperty(funcName) ) {
+					if (!$.isFunction(this.prototype[funcName]) ) {
+						continue;
+					}
+					if ( this._isAction(funcName) ) {
+						this.actions[funcName] = this._getAction(funcName);
+					}
 				}
 			}
 
@@ -435,7 +437,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		 *          //selector - the left of the selector
 		 *          //cb - the function to call
 		 *          //controller - the binding controller
-		 * 	     };
+		 *       };
 		 * 
 		 * This would bind anything like: "foo~3242 myprocessor".
 		 * 
@@ -469,7 +471,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		 *     $("#el1").message(); //writes "Hello World"
 		 *     $("#el12").message({message: "hi"}); //writes hi
 		 */
-		defaults : {}
+		defaults: {}
 	},
 	/** 
 	 * @Prototype
@@ -549,10 +551,11 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 
 			//go through the cached list of actions and use the processor to bind
 			for ( funcName in cls.actions ) {
-				ready = cls.actions[funcName] || cls._getAction(funcName, this.options);
-
-				this._bindings.push(
-				ready.processor(element, ready.parts[2], ready.parts[1], this.callback(funcName), this));
+				if ( cls.actions.hasOwnProperty(funcName) ) {
+					ready = cls.actions[funcName] || cls._getAction(funcName, this.options);
+					this._bindings.push(
+					ready.processor(element, ready.parts[2], ready.parts[1], this.callback(funcName), this));
+				}
 			}
 
 
@@ -734,12 +737,13 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		 *     
 		 * ### API
 		 */
-		destroy: function( ) {
+		destroy: function() {
 			if ( this._destroyed ) {
 				throw this.Class.shortName + " controller instance has been deleted";
 			}
 			var self = this,
-				fname = this.Class._fullName;
+				fname = this.Class._fullName,
+				controllers;
 			this._destroyed = true;
 			this.element.removeClass(fname);
 
@@ -752,7 +756,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			delete this._actions;
 
 
-			var controllers = this.element.data("controllers");
+			controllers = this.element.data("controllers");
 			if ( controllers && controllers[fname] ) {
 				delete controllers[fname];
 			}
@@ -826,8 +830,8 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	};
 	//used to determine if a controller instance is one of controllers
 	//controllers can be strings or classes
-	var isAControllerOf = function( instance, controllers ) {
-		for ( var i = 0; i < controllers.length; i++ ) {
+	var i, isAControllerOf = function( instance, controllers ) {
+		for ( i = 0; i < controllers.length; i++ ) {
 			if ( typeof controllers[i] == 'string' ? instance.Class._shortName == controllers[i] : instance instanceof controllers[i] ) {
 				return true;
 			}
@@ -846,14 +850,18 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			controllers;
 		//check if arguments
 		this.each(function() {
+			var c, cname;
+
 			controllers = $.data(this, "controllers");
 			if (!controllers ) {
 				return;
 			}
-			for ( var cname in controllers ) {
-				var c = controllers[cname];
-				if (!controllerNames.length || isAControllerOf(c, controllerNames) ) {
-					instances.push(c);
+			for ( cname in controllers ) {
+				if ( controllers.hasOwnProperty(cname) ) {
+					c = controllers[cname];
+					if (!controllerNames.length || isAControllerOf(c, controllerNames) ) {
+						instances.push(c);
+					}
 				}
 			}
 		});
