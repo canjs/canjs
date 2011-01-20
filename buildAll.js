@@ -92,6 +92,7 @@ steal.plugins('steal/build/pluginify','steal/build/apps','steal/build/scripts').
 		}
 		var out = path.replace(/\/\w+\.js/,"").replace(/\//g,".")
 		print("  "+out+"");
+		content = steal.build.builders.scripts.clean(content);
 		s.File("jquery/dist/standalone/"+out+".js").save(content);
 		s.File("jquery/dist/standalone/"+out+".min.js").save(compressor(content));
 	}
