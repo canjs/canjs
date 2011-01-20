@@ -208,6 +208,11 @@ steal.plugins("jquery").then(function( $ ) {
 	$view = $.View = function( view, data, helpers, callback ) {
 		var suffix = view.match(/\.[\w\d]+$/),
 			type, el, id, renderer, url = view;
+                // if we have an inline template, derive the suffix from the 'text/???' part
+                // this only supports '<script></script>' tags
+                if ( el = document.getElementById(view)) {
+                  suffix = el.type.match(/\/[\d\w]+$/)[0].replace(/^\//, '.');
+                }
 		if ( typeof helpers === 'function' ) {
 			callback = helpers;
 			helpers = undefined;
