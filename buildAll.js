@@ -90,7 +90,8 @@ steal.plugins('steal/build/pluginify','steal/build/apps','steal/build/scripts').
 		} else {
 			content = "("+s.build.pluginify.getFunction(content)+")(jQuery);";
 		}
-		var out = path.replace(/\/\w+\.js/,"").replace(/\//g,".")
+		var out = path.replace(/\/\w+\.js/,"").replace(/\//g,".");
+		content = steal.build.builders.scripts.clean(content);
 		print("  "+out+"");
 		content = steal.build.builders.scripts.clean(content);
 		s.File("jquery/dist/standalone/"+out+".js").save(content);
