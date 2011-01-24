@@ -367,13 +367,11 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			this.actions = {};
 
 			for ( funcName in this.prototype ) {
-				if ( this.prototype.hasOwnProperty(funcName) ) {
-					if (!$.isFunction(this.prototype[funcName]) ) {
-						continue;
-					}
-					if ( this._isAction(funcName) ) {
-						this.actions[funcName] = this._getAction(funcName);
-					}
+				if (!$.isFunction(this.prototype[funcName]) ) {
+					continue;
+				}
+				if ( this._isAction(funcName) ) {
+					this.actions[funcName] = this._getAction(funcName);
 				}
 			}
 
