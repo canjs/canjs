@@ -444,12 +444,64 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		 * The processor must return a function that when called, 
 		 * unbinds the event handler.
 		 * 
+		 * Controller already has processors for the following events:
+		 * 
+		 *   - change 
+		 *   - click 
+		 *   - contextmenu 
+		 *   - dblclick 
+		 *   - focusin
+		 *   - focusout
+		 *   - keydown 
+		 *   - keyup 
+		 *   - keypress 
+		 *   - mousedown 
+		 *   - mouseenter
+		 *   - mouseleave
+		 *   - mousemove 
+		 *   - mouseout 
+		 *   - mouseover 
+		 *   - mouseup 
+		 *   - reset 
+		 *   - resize 
+		 *   - scroll 
+		 *   - select 
+		 *   - submit  
+		 * 
+		 * The following processors always listen on the window or document:
+		 * 
+		 *   - windowresize
+		 *   - windowscroll
+		 *   - load
+		 *   - unload
+		 *   - hashchange
+		 *   - ready
+		 *   
+		 * Which means anytime the window is resized, the following controller will listen to it:
+		 *  
+		 *     $.Controller('Sized',{
+		 *       windowresize : function(){
+		 *         this.element.width(this.element.parent().width() / 2);
+		 *       }
+		 *     });
+		 *     
+		 *     $('.foo').sized();
 		 */
 		processors: {},
 		/**
 		 * @attribute listensTo
 		 * A list of special events this controller listens too.  You only need to add event names that
 		 * are whole words (ie have no special characters).
+		 * 
+		 *     $.Controller('TabPanel',{
+		 *       listensTo : ['show']
+		 *     },{
+		 *       'show' : function(){
+		 *         this.element.show();
+		 *       }
+		 *     })
+		 *     
+		 *     $('.foo').tab_panel().trigger("show");
 		 */
 		listensTo: [],
 		/**
@@ -803,10 +855,10 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		};
 
 	//set commong events to be processed as a basicProcessor
-	$.each("change click contextmenu dblclick keydown keyup keypress mousedown mousemove mouseout mouseover mouseup reset windowresize resize windowscroll scroll select submit dblclick focusin focusout load unload ready hashchange mouseenter mouseleave".split(" "), function( i, v ) {
+	$.each("change click contextmenu dblclick keydown keyup keypress mousedown mousemove mouseout mouseover mouseup reset resize scroll select submit focusin focusout mouseenter mouseleave".split(" "), function( i, v ) {
 		processors[v] = basicProcessor;
 	});
-	$.each(["windowresize", "windowscroll", "load", "ready", "unload", "hashchange"], function( i, v ) {
+	$.each(["windowresize", "windowscroll", "load", "unload", "hashchange"], function( i, v ) {
 		processors[v] = windowEvent;
 	});
 	//the ready processor happens on the document

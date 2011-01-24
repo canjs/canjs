@@ -300,7 +300,17 @@ steal.plugins("jquery").then(function( $ ) {
 		hookups: {},
 		/**
 		 * @function hookup
-		 * Registers a hookup function to be called back after the html is put on the page
+		 * Registers a hookup function that can be called back after the html is 
+		 * put on the page.  Typically this is handled by the template engine.  Currently
+		 * only EJS supports this functionality.
+		 * 
+		 *     var id = $.View.hookup(function(el){
+		 *            //do something with el
+		 *         }),
+		 *         html = "<div data-view-id='"+id+"'>"
+		 *     $('.foo').html(html);
+		 * 
+		 * 
 		 * @param {Function} cb a callback function to be called with the element
 		 * @param {Number} the hookup number
 		 */
