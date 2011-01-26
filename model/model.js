@@ -177,10 +177,15 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 				fixture: fixture
 			});
 		},
-		fixture = function(){
-			return "//"+$.String.underscore( this.fullName )
+		//guesses at a fixture name
+		fixture = function(extra){
+			var u = underscore( this.shortName ),
+				f = "-"+u+(extra||"");
+			return $.fixture && $.fixture[f] ? f : 
+				"//"+underscore( this.fullName )
 						.replace(/\.models\..*/,"")
-						.replace(/\./g,"/")+"/fixtures/"+$.String.underscore( this.shortName )
+						.replace(/\./g,"/")+"/fixtures/"+u+
+						(extra || "")+".json";
 		},
 		addId = function(attrs, id){
 			attrs = attrs || {};
@@ -282,11 +287,11 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 */
 		findAll: function( str ) {
 			return function(params, success, error){
-				ajax(str, 
+				ajax(str || this.shortName+"s.json", 
 					params, 
 					this.callback(['wrapMany',success]), 
 					error, 
-					fixture.call(this)+"s.json",
+					fixture.call(this,"s"),
 					"get");
 			};
 		},
@@ -302,7 +307,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 					params, 
 					this.callback(['wrap',success]), 
 					error, 
-					fixture.call(this)+".json",
+					fixture.call(this),
 					"get");
 			};
 		}
@@ -350,7 +355,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			}
 			//@steal-remove-end
 			for(var name in ajaxMethods){
-				if(typeof this[name] === 'string'){
+				if(typeof this[name] !== 'function'){
 					this[name] = ajaxMethods[name](this[name]);
 				}
 			}
@@ -937,6 +942,8 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * })
 		 * @codeend
 		 * 
+		 * This can be used nicely with [jquery.model.events].
+		 * 
 		 * @param {Object} [attributes]  if present, the list of attributes to send
 		 * @return {Object} the current attributes of the model
 		 */
@@ -1065,9 +1072,23 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			return $("." + this.identity(), context);
 		},
 		/**
-		 * Publishes to open ajax hub
-		 * @param {String} event
-		 * @param {Object} [opt6] data if missing, uses the instance in {data: this}
+		 * Publishes to OpenAjax.hub
+		 * 
+		 *     $.Model('Task', {
+		 *       complete : function(cb){
+		 *         var self = this;
+		 *         $.post('/task/'+this.id,
+		 *           {complete : true},
+		 *           function(){
+		 *             self.attr('completed', true);
+		 *             self.publish('completed');
+		 *           })
+		 *       }
+		 *     })
+		 *     
+		 *     
+		 * @param {String} event The event type.  The model's short name will be automatically prefixed.
+		 * @param {Object} [data] if missing, uses the instance in {data: this}
 		 */
 		publish: function( event, data ) {
 			this.Class.publish(event, data || this);
@@ -1098,8 +1119,11 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	/**
 	 * @function destroyed
 	 * @hide
-	 * Called after an instance is destroyed.  Publishes
-	 * "shortName.destroyed"
+	 * Called after an instance is destroyed.  
+	 *   - Publishes "shortName.destroyed".
+	 *   - Triggers a "destroyed" event on this model.
+	 *   - Removes the model from the global list if its used.
+	 * 
 	 */
 	"destroyed"], function( i, funcName ) {
 		$.Model.prototype[funcName] = function( attrs ) {
@@ -1153,9 +1177,24 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	/**
 	 * @function model
 	 * 
-	 * Returns the first model instance found from [jQuery.fn.models].
+	 * Returns the first model instance found from [jQuery.fn.models] or
+	 * sets the model instance on an element.
 	 * 
-	 * @param {Object} type
+	 *     //gets an instance
+	 *     ".edit click" : function(el) {
+	 *       el.closest('.todo').model().destroy()
+	 *     },
+	 *     // sets an instance
+	 *     list : function(items){
+	 *        var el = this.element;
+	 *        $.each(item, function(item){
+	 *          $('<div/>').model(item)
+	 *            .appendTo(el)
+	 *        })
+	 *     }
+	 * 
+	 * @param {Object} [type] The type of model to return.  If a model instance is provided
+	 * it will add the model to the element.
 	 */
 	$.fn.model = function( type ) {
 		if ( type && type instanceof $.Model ) {

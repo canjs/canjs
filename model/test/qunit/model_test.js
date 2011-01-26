@@ -104,6 +104,8 @@ test("error binding", 1, function(){
 })
 
 test("auto methods",function(){
+	//turn off fixtures
+	$.fixture.on = false;
 	var School = $.Model.extend("Jquery.Model.Models.School",{
 	   findAll : steal.root.join("jquery/model/test")+"/{type}.json",
 	   findOne : steal.root.join("jquery/model/test")+"/{id}.json",
@@ -123,8 +125,10 @@ test("auto methods",function(){
 			new School({name: "Highland"}).save(function(){
 				equals(this.name,"Highland","create gets the right name")
 				this.update({name: "LHS"}, function(){
-					equals(this.name,"LHS","create gets the right name")
 					start();
+					equals(this.name,"LHS","create gets the right name")
+					
+					$.fixture.on = true;
 				})
 			})
 			
@@ -140,4 +144,30 @@ test("isNew", function(){
 	ok(p2.isNew(), "null id is new");
 	var p3 = new Person({id: 0})
 	ok(!p3.isNew(), "0 is not new");
+});
+test("findAll string", function(){
+	$.fixture.on = false;
+	$.Model("Test.Thing",{
+		findAll : steal.root.join("jquery/model/test/qunit/findAll.json")
+	},{});
+	stop();
+	Test.Thing.findAll({},function(things){
+		equals(things.length, 1, "got an array");
+		equals(things[0].id, 1, "an array of things");
+		start();
+		$.fixture.on = true;
+	})
+})
+test("Empty uses fixtures", function(){
+	$.Model("Test.Things");
+	$.fixture.make("thing", 10, function(i){
+		return {
+			id: i
+		}
+	});
+	stop();
+	Test.Thing.findAll({}, function(things){
+		start();
+		equals(things.length, 10,"got 10 things")
+	})
 })
