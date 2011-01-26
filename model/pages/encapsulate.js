@@ -126,7 +126,7 @@ should look like:
       update : "/tasks/{id}.json"
     },{})
 
-<b>Note</b> Even if your server doesn't respond with service data
+<b>Note:</b> Even if your server doesn't respond with service data
 in the same way, it's likely that $.Model will be able to figure it out.
 
 ##  Implement Service Methods

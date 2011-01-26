@@ -11,7 +11,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * 
 	 * Models wrap an application's data layer.  In large applications, a model is critical for:
 	 * 
-	 *  - Encapsulating services so controllers + views don't care where data comes from.
+	 *  - [jquery.model.encapsulate Encapsulating] services so controllers + views don't care where data comes from.
 	 *    
 	 *  - Providing helper functions that make manipulating and abstracting raw service data easier.
 	 * 
@@ -58,9 +58,11 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 *   },
 	 *   // when a task is complete, get the id, make a request, remove it
 	 *   ".task click" : function( el ) {
-	 *     $.post('/task_complete',{id: el.attr('data-taskid')}, function(){
-	 *       el.remove();
-	 *     })
+	 *     $.post('/tasks/'+el.attr('data-taskid')+'.json',
+	 *     	 {complete: true}, 
+	 *       function(){
+	 *         el.remove();
+	 *       })
 	 *   }
 	 * })
 	 * @codeend
@@ -85,7 +87,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 *     $("#tasks").html(this.view(tasks))
 	 *   },
 	 *   ".task click" : function( el ) {
-	 *     el.models()[0].complete(function(){
+	 *     el.model().update({complete: true},function(){
 	 *       el.remove();
 	 *     });
 	 *   }
@@ -96,7 +98,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * 
 	 * @codestart html
 	 * &lt;% for(var i =0; i &lt; tasks.length; i++){ %>
-	 * &lt;div class='task &lt;%= tasks[i].<b>identity</b>() %>'>
+	 * &lt;div &lt;%= tasks[i] %>>
 	 *    &lt;label>&lt;%= tasks[i].name %>&lt;/label>
 	 *    &lt;%= tasks[i].<b>timeRemaining</b>() %>
 	 * &lt;/div>
@@ -109,16 +111,12 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * @codestart
 	 * $.Model.extend("Task",
 	 * {
-	 *  findAll: function( params,success ) {
-	 *   $.get("/tasks.json", params, this.callback(["wrapMany",success]),"json");
-	 *  }
+	 *  findAll: "/tasks.json",
+	 *  update: "/tasks/{id}.json"
 	 * },
 	 * {
 	 *  timeRemaining: function() {
 	 *   return new Date() - new Date(this.due_date)
-	 *  },
-	 *  complete: function( success ) {
-	 *   $.get("/task_complete", {id: this.id }, success,"json");
 	 *  }
 	 * })
 	 * @codeend
@@ -133,32 +131,84 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * If you don't understand how the callback works, you might want to check out 
 	 * [jQuery.Model.static.wrapMany wrapMany] and [jQuery.Class.static.callback callback].
 	 * 
-	 * ### el.models
+	 * ### el.model
 	 * 
-	 * [jQuery.fn.models models] is a jQuery helper that returns model instances.  It uses
-	 * the jQuery's elements' shortNames to find matching model instances.  For example:
+	 * [jQuery.fn.model] is a jQuery helper that returns a model instance from an element.  The 
+	 * list.ejs template assings tasks to elements with the following line:
 	 * 
 	 * @codestart html
-	 * &lt;div class='task task_5'> ... &lt;/div>
+	 * &lt;div &lt;%= tasks[i] %>> ... &lt;/div>
 	 * @codeend
-	 * 
-	 * It knows to return a task with id = 5.
-	 * 
-	 * ### complete
-	 * 
-	 * This should be pretty obvious.
-	 * 
-	 * ### identity
-	 * 
-	 * [jQuery.Model.prototype.identity Identity] returns a unique identifier that [jQuery.fn.models] can use
-	 * to retrieve your model instance.
 	 * 
 	 * ### timeRemaining
 	 * 
-	 * timeRemaining is a good example of wrapping your model's raw data with more useful functionality.
-	 * ## Validations
+	 * timeRemaining is an example of wrapping your model's raw data with more useful functionality.
 	 * 
-	 * You can validate your model's attributes with another plugin.  See [validation].
+	 * ## Other Good Stuff
+	 * 
+	 * This is just a tiny taste of what models can do.  Check out these other features:
+	 * 
+	 * ### [jquery.model.encapsulate Encapsulation]
+	 * 
+	 * Learn how to connect to services.
+	 * 
+	 *     $.Model("Task",{
+	 *       findAll : "/tasks.json",    
+	 *       findOne : "/tasks/{id}.json", 
+	 *       create : "/tasks.json",
+	 *       update : "/tasks/{id}.json"
+	 *     },{})
+	 * 
+	 * ### [jquery.model.typeconversion Type Conversion]
+	 * 
+	 * Convert data like "10-20-1982" into new Date(1982,9,20) auto-magically:
+	 * 
+	 *     $.Model("Task",{
+	 *       attributes : {birthday : "date"}
+	 *       convert : {
+	 *         date : function(raw){ ... }
+	 *       }
+	 *     },{})
+	 * 
+	 * ### [jQuery.Model.List]
+	 * 
+	 * Learn how to handle multiple instances with ease.
+	 * 
+	 *     $.Model.List.extend("Task.List",{
+	 *       destroyAll : function(){
+	 *         var ids = this.map(function(c){ return c.id });
+	 *         $.post("/destroy",
+	 *           ids,
+	 *           this.callback('destroyed'),
+	 *           'json')
+	 *       },
+	 *       destroyed : function(){
+	 *         this.each(function(){ this.destroyed() });
+	 *       }
+	 *     });
+	 *     
+	 *     ".destroyAll click" : function(){
+	 *       this.find('.destroy:checked')
+	 *           .closest('.task')
+	 *           .models()
+	 *           .destroyAll();
+	 *     }
+	 * 
+	 * ### [jquery.model.validations Validations]
+	 * 
+	 * Validate your model's attributes.
+	 * 
+	 *     $.Model.extend("Contact",{
+	 *     init : function(){
+	 *         this.validate("birthday",function(){
+	 *             if(this.birthday > new Date){
+	 *                 return "your birthday needs to be in the past"
+	 *             }
+	 *         })
+	 *     }
+	 *     ,{});
+	 *     
+	 *     
 	 */
 	
 	//helper stuff for later.
