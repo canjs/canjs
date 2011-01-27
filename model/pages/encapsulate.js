@@ -121,10 +121,22 @@ should look like:
       create : "/tasks.json",
       
       // task.update({name: 'justin'})
-	  // -> POST /tasks/5.json name=justin
+	  // -> PUT /tasks/5.json name=justin
 	  // <- {}
-      update : "/tasks/{id}.json"
+      update : "/tasks/{id}.json",
+      
+      // task.destroy()
+	  // -> DESTROY /tasks/5.json
+	  // <- {}
+      destroy : "/tasks/{id}.json"
     },{})
+
+You can change the HTTP request type by putting a GET, POST, DELETE, PUT like:
+
+    $.Model("Todo",{
+      destroy: "POST /task/delete/{id}.json
+    },{})
+
 
 <b>Note:</b> Even if your server doesn't respond with service data
 in the same way, it's likely that $.Model will be able to figure it out.

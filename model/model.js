@@ -214,16 +214,35 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	//helper stuff for later.
 	var underscore = $.String.underscore,
 		classize = $.String.classize,
-		ajax = function(str, attrs, success, error, fixture, type){
+		reqType = /GET|POST|PUT|DELETE/i
+		ajax = function(ajaxOb, attrs, success, error, fixture, type){
+			var dataType = "json",
+				src = "",
+				tmp;
+			if(typeof ajaxOb == "string"){
+				var sp = ajaxOb.indexOf(" ")
+				if( sp > 2 && sp <7){
+					tmp = ajaxOb.substr(0,sp);
+					if(reqType.test(tmp)){
+						type = tmp;
+					}else{
+						dataType = tmp;
+					}
+					src = ajaxOb.substr(sp+1)
+				}else{
+					src = ajaxOb;
+				}
+			}
 			attrs = $.extend({},attrs)
-			var url = $.String.sub(str, attrs, true)
+			
+			var url = $.String.sub(src, attrs, true)
 			$.ajax({
 				url : url,
 				data : attrs,
 				success : success,
 				error: error,
 				type : type || "post",
-				dataType : "json",
+				dataType : dataType,
 				fixture: fixture
 			});
 		},
@@ -252,90 +271,206 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	     * @Static
 	     */
 		{
-
-		/**
-		 * Create is used to create a model instance on the server.  By implementing 
-		 * create along with the rest of the [jquery.model.services service api], your models provide an abstract
-		 * API for services.  
-		 * 
-		 * Create is called by save to create a new instance.  If you want to be able to call save on an instance
-		 * you have to implement create.
-		 * 
-		 * The easist way to implement create is to just give it the url to post data to:
-		 * 
-		 *     $.Model("Recipe",{
-		 *       create: "/recipes"
-		 *     },{})
-		 *     
-		 * This lets you create a recipe like:
-		 *  
-		 *     new Recipe({name: "hot dog"}).save(function(){
-		 *       this.name //this is the new recipe
-		 *     }).save(callback)
-		 *  
-		 * You can also implement create by yourself.  You just need to call success back with
-		 * an object that contains the id of the new instance and any other properties that should be
-		 * set on the instance.
-		 *  
-		 * For example, the following code makes a request 
-		 * to '/recipes.json?name=hot+dog' and gets back
-		 * something that looks like:
-		 *  
-		 *     { 
-		 *       id: 5,
-		 *       createdAt: 2234234329
-		 *     }
-		 * 
-		 * The code looks like:
-		 * 
-		 *     $.Model("Recipe", {
-		 *       create : function(attrs, success, error){
-		 *         $.post("/recipes.json",attrs, success,"json");
-		 *       }
-		 *     },{})
-		 * 
-		 * ## API
-		 * 
-		 * @param {Object} attrs Attributes on the model instance
-		 * @param {Function} success the callback function, it must be called with an object 
-		 * that has the id of the new instance and any other attributes the service needs to add.
-		 * @param {Function} error a function to callback if something goes wrong.  
-		 */
 		create: function(str  ) {
+			/**
+			 * @function create
+			 * Create is used to create a model instance on the server.  By implementing 
+			 * create along with the rest of the [jquery.model.services service api], your models provide an abstract
+			 * API for services.  
+			 * 
+			 * Create is called by save to create a new instance.  If you want to be able to call save on an instance
+			 * you have to implement create.
+			 * 
+			 * The easist way to implement create is to just give it the url to post data to:
+			 * 
+			 *     $.Model("Recipe",{
+			 *       create: "/recipes"
+			 *     },{})
+			 *     
+			 * This lets you create a recipe like:
+			 *  
+			 *     new Recipe({name: "hot dog"}).save(function(){
+			 *       this.name //this is the new recipe
+			 *     }).save(callback)
+			 *  
+			 * You can also implement create by yourself.  You just need to call success back with
+			 * an object that contains the id of the new instance and any other properties that should be
+			 * set on the instance.
+			 *  
+			 * For example, the following code makes a request 
+			 * to '/recipes.json?name=hot+dog' and gets back
+			 * something that looks like:
+			 *  
+			 *     { 
+			 *       id: 5,
+			 *       createdAt: 2234234329
+			 *     }
+			 * 
+			 * The code looks like:
+			 * 
+			 *     $.Model("Recipe", {
+			 *       create : function(attrs, success, error){
+			 *         $.post("/recipes.json",attrs, success,"json");
+			 *       }
+			 *     },{})
+			 * 
+			 * ## API
+			 * 
+			 * @param {Object} attrs Attributes on the model instance
+			 * @param {Function} success(attrs) the callback function, it must be called with an object 
+			 * that has the id of the new instance and any other attributes the service needs to add.
+			 * @param {Function} error a function to callback if something goes wrong.  
+			 */
 			return function(attrs, success, error){
 				ajax(str, attrs, success, error, "-restCreate")
 			};
 		},
-		/**
-		 * Implement this function!
-		 * Update is called by save to update an instance.  If you want to be able to call save on an instance
-		 * you have to implement update.
-		 */
 		update: function( str ) {
+			/**
+			 * @function update
+			 * Update is used to update a model instance on the server.  By implementing 
+			 * update along with the rest of the [jquery.model.services service api], your models provide an abstract
+			 * API for services.  
+			 * 
+			 * Update is called by [jQuery.Model.prototype.save] or [jQuery.Model.prototype.update] 
+			 * on an existing model instance.  If you want to be able to call save on an instance
+			 * you have to implement update.
+			 * 
+			 * The easist way to implement update is to just give it the url to put data to:
+			 * 
+			 *     $.Model("Recipe",{
+			 *       create: "/recipes/{id}"
+			 *     },{})
+			 *     
+			 * This lets you update a recipe like:
+			 *  
+			 *     // PUT /recipes/5 {name: "Hot Dog"}
+			 *     recipe.update({name: "Hot Dog"},
+			 *       function(){
+			 *         this.name //this is the updated recipe
+			 *       })
+			 *  
+			 * If your server doesn't use PUT, you can change it to post like:
+			 * 
+			 *     $.Model("Recipe",{
+			 *       create: "POST /recipes/{id}"
+			 *     },{})
+			 * 
+			 * Your server should send back an object with any new attributes the model 
+			 * should have.  For example if your server udpates the "updatedAt" property, it
+			 * should send back something like:
+			 * 
+			 *     // PUT /recipes/4 {name: "Food"} ->
+			 *     {
+			 *       updatedAt : "10-20-2011"
+			 *     }
+			 * 
+			 * You can also implement create by yourself.  You just need to call success back with
+			 * an object that contains any properties that should be
+			 * set on the instance.
+			 *  
+			 * For example, the following code makes a request 
+			 * to '/recipes/5.json?name=hot+dog' and gets back
+			 * something that looks like:
+			 *  
+			 *     { 
+			 *       updatedAt: "10-20-2011"
+			 *     }
+			 * 
+			 * The code looks like:
+			 * 
+			 *     $.Model("Recipe", {
+			 *       update : function(id, attrs, success, error){
+			 *         $.post("/recipes/"+id+".json",attrs, success,"json");
+			 *       }
+			 *     },{})
+			 * 
+			 * ## API
+			 * 
+			 * @param {String} id the id of the model instance
+			 * @param {Object} attrs Attributes on the model instance
+			 * @param {Function} success(attrs) the callback function, it must be called with an object 
+			 * that has the id of the new instance and any other attributes the service needs to add.
+			 * @param {Function} error a function to callback if something goes wrong.  
+			 */
 			return function(id, attrs, success, error){
-				ajax(str, addId.call(this,attrs, id), success, error, "-restUpdate")
+				ajax(str, addId.call(this,attrs, id), success, error, "-restUpdate","put")
 			}
 		},
-		/**
-		 * Implement this function!
-		 * Destroy is called by destroy to remove an instance.  If you want to be able to call destroy on an instance
-		 * you have to implement update.
-		 * @param {String|Number} id the id of the instance you want destroyed
-		 */
 		destroy: function( str ) {
+			/**
+			 * @function destroy
+			 * Destroy is used to remove a model instance from the server. By implementing 
+			 * destroy along with the rest of the [jquery.model.services service api], your models provide an abstract
+			 * service API.
+			 * 
+			 * You can implement destroy with a string like:
+			 * 
+			 *     $.Model("Thing",{
+			 *       destroy : "POST /thing/destroy/{id}"
+			 *     })
+			 * 
+			 * Or you can implement destroy manually like:
+			 * 
+			 *     $.Model("Thing",{
+			 *       destroy : function(id, success, error){
+			 *         $.post("/thing/destroy/"+id,{}, success);
+			 *       }
+			 *     })
+			 * 
+			 * You just have to call success if the destroy was successful.
+			 * 
+			 * @param {String|Number} id the id of the instance you want destroyed
+			 * @param {Function} success the callback function, it must be called with an object 
+			 * that has the id of the new instance and any other attributes the service needs to add.
+			 * @param {Function} error a function to callback if something goes wrong.  
+			 */
 			return function( id, success, error ) {
 				var attrs = {};
 				attrs[this.id] = id;
-				ajax(str, attrs, success, error, "-restDestroy")
+				ajax(str, attrs, success, error, "-restDestroy","delete")
 			}
 		},
-		/**
-		 * Implement this function!
-		 * @param {Object} params
-		 * @param {Function} success
-		 * @param {Function} error
-		 */
+		
 		findAll: function( str ) {
+			/**
+			 * @function findAll
+			 * FindAll is used to retrive a model instances from the server. By implementing 
+			 * findAll along with the rest of the [jquery.model.services service api], your models provide an abstract
+			 * service API.
+			 * 
+			 * You can implement findAll with a string:
+			 * 
+			 *     $.Model("Thing",{
+			 *       findAll : "/things.json"
+			 *     },{})
+			 * 
+			 * Or you can implement it yourself.  To implement it yourself, success must be called back
+			 * with an array of model instances.  Typically, [jQuery.Model.static.wrapMany wrapMany] is used
+			 * to convert a JSON array of attributes to an array of instances.  For example:
+			 * 
+			 *     $.Model("Thing",{
+			 *       findAll : function(params, success, error){
+			 *         var self = this;
+			 *         $.get("/things.json",
+			 *           params,
+			 *           function(data){
+			 *             self.wrapMany(data)
+			 *           },
+			 *           "json")
+			 *       }
+			 *     },{})
+			 *  
+			 * [jQuery.Model.static.wrapMany WrapMany] can handle creating instances even if your data isn't
+			 * a 'perfect' array of attributes.
+			 * 
+			 * ## API
+			 * 
+			 * @param {Object} params data to refine the results.  An example might be passing {limit : 20} to
+			 * limit the number of items retrieved.
+			 * @param {Function} success(items) called with an array (or Model.List) of model instances.
+			 * @param {Function} error
+			 */
 			return function(params, success, error){
 				ajax(str || this.shortName+"s.json", 
 					params, 
@@ -345,13 +480,46 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 					"get");
 			};
 		},
-		/**
-		 * Implement this function!
-		 * @param {Object} params
-		 * @param {Function} success
-		 * @param {Function} error
-		 */
 		findOne: function( str ) {
+			/**
+			 * @function findOne
+			 * FindOne is used to retrive a model instances from the server. By implementing 
+			 * findOne along with the rest of the [jquery.model.services service api], your models provide an abstract
+			 * service API.
+			 * 
+			 * You can implement findAll with a string:
+			 * 
+			 *     $.Model("Thing",{
+			 *       findOne : "/things/{id}.json"
+			 *     },{})
+			 * 
+			 * Or you can implement it yourself.  To implement it yourself, success must be called back
+			 * with an array of model instances.  Typically, [jQuery.Model.static.wrap wrap] is used
+			 * to convert a JSON array of attributes to an array of instances.  For example:
+			 * 
+			 *     $.Model("Thing",{
+			 *       findOne : function(params, success, error){
+			 *         var self = this,
+			 *             id = params.id;
+			 *         delete params.id;
+			 *         $.get("/things/"+id+".json",
+			 *           params,
+			 *           function(data){
+			 *             self.wrap(data)
+			 *           },
+			 *           "json")
+			 *       }
+			 *     },{})
+			 *  
+			 * [jQuery.Model.static.wrap Wrap] can handle creating instances even if your data isn't
+			 * a 'perfect' object of attributes.
+			 * 
+			 * ## API
+			 * 
+			 * @param {Object} params data to refine the results. This is often something like {id: 5}.
+			 * @param {Function} success(item) called with a model instance
+			 * @param {Function} error
+			 */
 			return function(params, success, error){
 				ajax(str, 
 					params, 
@@ -388,6 +556,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 
 
 			this._fullName = underscore(this.fullName.replace(/\./g, "_"));
+			this._shortName = underscore(this.shortName);
 
 			if ( this.fullName.substr(0, 7) == "jQuery." ) {
 				return;
@@ -610,10 +779,10 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 */
 		publish: function( event, data ) {
 			//@steal-remove-start
-			steal.dev.log("Model.js - publishing " + underscore(this.shortName) + "." + event);
+			steal.dev.log("Model.js - publishing " + this._shortName + "." + event);
 			//@steal-remove-end
 			if ( window.OpenAjax ) {
-				OpenAjax.hub.publish(underscore(this.shortName) + "." + event, data);
+				OpenAjax.hub.publish(this._shortName + "." + event, data);
 			}
 
 		},
@@ -1144,7 +1313,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			this.Class.publish(event, data || this);
 		},
 		hookup: function( el ) {
-			var shortName = underscore(this.Class.shortName),
+			var shortName = this.Class._shortName,
 				models = $.data(el, "models") || $.data(el, "models", {});
 			$(el).addClass(shortName + " " + this.identity());
 			models[shortName] = this;
