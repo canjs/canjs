@@ -3,11 +3,16 @@
 // http://ejohn.org/blog/simple-javascript-inheritance/
 // It provides class level inheritance and callbacks.
 //@steal-clean
-steal.plugins("jquery").then(function( $ ) {
+steal.plugins("jquery","jquery/lang").then(function( $ ) {
 
 	// if we are initializing a new class
 	var initializing = false,
-
+		makeArray = $.makeArray,
+		isFunction = $.isFunction,
+		isArray = $.isArray,
+		concatArgs = function(arr, args){
+			return arr.concat(makeArray(args));
+		},
 		// tests if we can get super in .toString()
 		fnTest = /xyz/.test(function() {
 			xyz;
@@ -18,7 +23,9 @@ steal.plugins("jquery").then(function( $ ) {
 			addTo = addTo || newProps
 			for ( var name in newProps ) {
 				// Check if we're overwriting an existing function
-				addTo[name] = typeof newProps[name] == "function" && typeof oldProps[name] == "function" && fnTest.test(newProps[name]) ? (function( name, fn ) {
+				addTo[name] = isFunction(newProps[name]) && 
+							  isFunction(oldProps[name]) && 
+							  fnTest.test(newProps[name]) ? (function( name, fn ) {
 					return function() {
 						var tmp = this._super,
 							ret;
@@ -35,7 +42,7 @@ steal.plugins("jquery").then(function( $ ) {
 					};
 				})(name, newProps[name]) : newProps[name];
 			}
-		};
+		},
 
 
 	/**
@@ -44,7 +51,7 @@ steal.plugins("jquery").then(function( $ ) {
 	 * @tag core
 	 * @download dist/jquery/jquery.class.js
 	 * @test jquery/class/qunit.html
-	 * Class provides simulated inheritance in JavaScript. Use $.Class to bridge the gap between
+	 * Class provides simulated inheritance in JavaScript. Use clss to bridge the gap between
 	 * jQuery's functional programming style and Object Oriented Programming.
 	 * It is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Class]
 	 * Inheritance library.  Besides prototypal inheritance, it includes a few important features:
@@ -279,14 +286,14 @@ steal.plugins("jquery").then(function( $ ) {
 	 *
 	 */
 
-	jQuery.Class = function() {
+	clss = $.Class = function() {
 		if (arguments.length) {
-			jQuery.Class.extend.apply(jQuery.Class, arguments);
+			clss.extend.apply(clss, arguments);
 		}
 	};
 
 	/* @Static*/
-	$.extend($.Class, {
+	$.extend(clss, {
 		/**
 		 * @function callback
 		 * Returns a callback function for a function on this Class.
@@ -342,25 +349,25 @@ steal.plugins("jquery").then(function( $ ) {
 		callback: function( funcs ) {
 
 			//args that should be curried
-			var args = jQuery.makeArray(arguments),
+			var args = makeArray(arguments),
 				self;
 
 			funcs = args.shift();
 
-			if (!jQuery.isArray(funcs) ) {
+			if (!isArray(funcs) ) {
 				funcs = [funcs];
 			}
 
 			self = this;
 			//@steal-remove-start
 			for( var i =0; i< funcs.length;i++ ) {
-				if(typeof funcs[i] == "string" && typeof this[funcs[i]] !== 'function'){
+				if(typeof funcs[i] == "string" && !isFunction(this[funcs[i]])){
 					throw ("class.js "+( this.fullName || this.Class.fullName)+" does not have a "+funcs[i]+"method!");
 				}
 			}
 			//@steal-remove-end
 			return function class_cb() {
-				var cur = args.concat(jQuery.makeArray(arguments)),
+				var cur = concatArgs(args, arguments),
 					isString, 
 					length = funcs.length,
 					f = 0,
@@ -378,7 +385,7 @@ steal.plugins("jquery").then(function( $ ) {
 					}
 					cur = (isString ? self[func] : func).apply(self, cur || []);
 					if ( f < length - 1 ) {
-						cur = !jQuery.isArray(cur) || cur._use_call ? [cur] : cur
+						cur = !isArray(cur) || cur._use_call ? [cur] : cur
 					}
 				}
 				return cur;
@@ -397,15 +404,7 @@ steal.plugins("jquery").then(function( $ ) {
 		 *   @param {Object} [current=window] the object you want to look in.
 		 *   @return {Object} the object you are looking for.
 		 */
-		getObject: function( objectName, current ) {
-			var current = current || window,
-				parts = objectName ? objectName.split(/\./) : [],
-				i = 0;
-			for (; i < parts.length; i++ ) {
-				current = current[parts[i]] || (current[parts[i]] = {})
-			}
-			return current;
-		},
+		getObject: $.String.getObject,
 		/**
 		 * @function newInstance
 		 * Creates a new instance of the class.  This method is useful for creating new instances
@@ -424,7 +423,7 @@ steal.plugins("jquery").then(function( $ ) {
 				args = inst.setup.apply(inst, arguments);
 			}
 			if ( inst.init ) {
-				inst.init.apply(inst, $.isArray(args) ? args : arguments);
+				inst.init.apply(inst, isArray(args) ? args : arguments);
 			}
 			return inst;
 		},
@@ -513,7 +512,7 @@ steal.plugins("jquery").then(function( $ ) {
 
 				var parts = fullName.split(/\./),
 					shortName = parts.pop(),
-					current = $.Class.getObject(parts.join('.')),
+					current = clss.getObject(parts.join('.'), window, true),
 					namespace = current;
 
 				//@steal-remove-start
@@ -550,7 +549,7 @@ steal.plugins("jquery").then(function( $ ) {
 			 * @codeend
 			 */
 
-			var args = Class.setup.apply(Class, [_super_class].concat($.makeArray(arguments)));
+			var args = Class.setup.apply(Class, concatArgs([_super_class],arguments));
 
 			if ( Class.init ) {
 				Class.init.apply(Class, args || []);
@@ -625,7 +624,7 @@ steal.plugins("jquery").then(function( $ ) {
 
 
 
-	jQuery.Class.prototype.
+	clss.prototype.
 	/**
 	 * @function callback
 	 * Returns a callback function.  This does the same thing as and is described better in [jQuery.Class.static.callback].
@@ -636,7 +635,7 @@ steal.plugins("jquery").then(function( $ ) {
 	 * next function.
 	 * @return {Function} the callback function
 	 */
-	callback = jQuery.Class.callback;
+	callback = clss.callback;
 
 
 })();

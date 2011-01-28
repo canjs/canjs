@@ -2,6 +2,72 @@
 
 steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	
+	//helper stuff for later.  Eventually, might not need jQuery.
+	var underscore = $.String.underscore,
+		classize = $.String.classize,
+		isArray = $.isArray,
+		makeArray = $.makeArray,
+		extend = $.extend,
+		each = $.each,
+		reqType = /GET|POST|PUT|DELETE/i,
+		ajax = function(ajaxOb, attrs, success, error, fixture, type){
+			var dataType = "json",
+				src = "",
+				tmp;
+			if(typeof ajaxOb == "string"){
+				var sp = ajaxOb.indexOf(" ")
+				if( sp > 2 && sp <7){
+					tmp = ajaxOb.substr(0,sp);
+					if(reqType.test(tmp)){
+						type = tmp;
+					}else{
+						dataType = tmp;
+					}
+					src = ajaxOb.substr(sp+1)
+				}else{
+					src = ajaxOb;
+				}
+			}
+			attrs = extend({},attrs)
+			
+			var url = $.String.sub(src, attrs, true)
+			$.ajax({
+				url : url,
+				data : attrs,
+				success : success,
+				error: error,
+				type : type || "post",
+				dataType : dataType,
+				fixture: fixture
+			});
+		},
+		//guesses at a fixture name
+		fixture = function(extra){
+			var u = underscore( this.shortName ),
+				f = "-"+u+(extra||"");
+			return $.fixture && $.fixture[f] ? f : 
+				"//"+underscore( this.fullName )
+						.replace(/\.models\..*/,"")
+						.replace(/\./g,"/")+"/fixtures/"+u+
+						(extra || "")+".json";
+		},
+		addId = function(attrs, id){
+			attrs = attrs || {};
+			var identity = this.id;
+			if(attrs[identity] && attrs[identity] !== id){
+				attrs["new"+$.String.capitalize(id)] = attrs[identity];
+				delete attrs[identity];
+			}
+			attrs[identity] = id;
+			return attrs;
+		},
+		getList = function(type){
+			var listType = type || $.Model.List || Array;
+			return new listType();
+		},
+		getId = function(inst){
+			return inst[inst.Class.id]
+		};
 	/**
 	 * @class jQuery.Model
 	 * @tag core
@@ -210,61 +276,6 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 *     
 	 *     
 	 */
-	
-	//helper stuff for later.
-	var underscore = $.String.underscore,
-		classize = $.String.classize,
-		reqType = /GET|POST|PUT|DELETE/i
-		ajax = function(ajaxOb, attrs, success, error, fixture, type){
-			var dataType = "json",
-				src = "",
-				tmp;
-			if(typeof ajaxOb == "string"){
-				var sp = ajaxOb.indexOf(" ")
-				if( sp > 2 && sp <7){
-					tmp = ajaxOb.substr(0,sp);
-					if(reqType.test(tmp)){
-						type = tmp;
-					}else{
-						dataType = tmp;
-					}
-					src = ajaxOb.substr(sp+1)
-				}else{
-					src = ajaxOb;
-				}
-			}
-			attrs = $.extend({},attrs)
-			
-			var url = $.String.sub(src, attrs, true)
-			$.ajax({
-				url : url,
-				data : attrs,
-				success : success,
-				error: error,
-				type : type || "post",
-				dataType : dataType,
-				fixture: fixture
-			});
-		},
-		//guesses at a fixture name
-		fixture = function(extra){
-			var u = underscore( this.shortName ),
-				f = "-"+u+(extra||"");
-			return $.fixture && $.fixture[f] ? f : 
-				"//"+underscore( this.fullName )
-						.replace(/\.models\..*/,"")
-						.replace(/\./g,"/")+"/fixtures/"+u+
-						(extra || "")+".json";
-		},
-		addId = function(attrs, id){
-			attrs = attrs || {};
-			if(attrs[this.id]){
-				attrs["new"+$.String.capitalize(this.id)] = attrs[this.id];
-				delete attrs[this.id];
-			}
-			attrs[this.id] = id;
-			return attrs;
-		},
 		// methods that we'll weave into model if provided
 		ajaxMethods = 
 		/** 
@@ -535,23 +546,19 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 
 
 
-	jQuery.Class.extend("jQuery.Model",	{
+	jQuery.Class("jQuery.Model",	{
 		setup: function( superClass , stat, proto) {
 			//we do not inherit attributes (or associations)
-			if (!this.attributes || superClass.attributes === this.attributes ) {
-				this.attributes = {};
-			}
-
-			if (!this.associations || superClass.associations === this.associations ) {
-				this.associations = {};
-			}
-			if (!this.validations || superClass.validations === this.validations ) {
-				this.validations = {};
-			}
+			var self=this;
+			each(["attributes","associations","validations"],function(i,name){
+				if (!self[name] || superClass[name] === self[name] ) {
+					self[name] = {};
+				}
+			})
 
 			//add missing converters
 			if ( superClass.convert != this.convert ) {
-				this.convert = $.extend(superClass.convert, this.convert);
+				this.convert = extend(superClass.convert, this.convert);
 			}
 
 
@@ -563,7 +570,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			}
 
 			//add this to the collection of models
-			jQuery.Model.models[this._fullName] = this;
+			//jQuery.Model.models[this._fullName] = this;
 
 			if ( this.listType ) {
 				this.list = new this.listType([]);
@@ -710,9 +717,8 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			if (!instancesRawData ) {
 				return null;
 			}
-			var listType = this.List || $.Model.List || Array,
-				res = new listType(),
-				arr = $.isArray(instancesRawData),
+			var res = getList(this.List),
+				arr = isArray(instancesRawData),
 				raw = arr ? instancesRawData : instancesRawData.data,
 				length = raw.length,
 				i = 0;
@@ -760,6 +766,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			if ( this.associations[property] ) {
 				return;
 			}
+			
 			stub = this.attributes[property] || (this.attributes[property] = type);
 			return type;
 		},
@@ -786,37 +793,8 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			}
 
 		},
-		/**
-		 * @hide
-		 * Guesses the type of an object.  This is what sets the type if not provided in 
-		 * [jQuery.Model.static.attributes].
-		 * @param {Object} object the object you want to test.
-		 * @return {String} one of string, object, date, array, boolean, number, function
-		 */
-		guessType: function( object ) {
-			if ( typeof object != 'string' ) {
-				if ( object === null ) {
-					return typeof object;
-				}
-				if ( object.constructor == Date ) {
-					return 'date';
-				}
-				if ( $.isArray(object) ) {
-					return 'array';
-				}
-				return typeof object;
-			}
-			if ( object === "" ) {
-				return 'string';
-			}
-			//check if true or false
-			if ( object == 'true' || object == 'false' ) {
-				return 'boolean';
-			}
-			if (!isNaN(object) && isFinite(+object) ) {
-				return 'number';
-			}
-			return typeof object;
+		guessType : function(){
+			return "string"
 		},
 		/**
 		 * @attribute convert
@@ -858,15 +836,10 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @param {Object} attributes a hash of attributes
 		 */
 		setup: function( attributes ) {
-			var stub;
-
 			// so we know not to fire events
-			this._initializing = true;
-
-			stub = this.Class.defaults && this.attrs(this.Class.defaults);
-
-			this.attrs(attributes);
-			delete this._initializing;
+			this._init = true;
+			this.attrs(extend({},this.Class.defaults,attributes));
+			delete this._init;
 		},
 		/**
 		 * Sets the attributes on this instance and calls save.
@@ -914,12 +887,12 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 */
 		errors: function( attrs ) {
 			if ( attrs ) {
-				attrs = $.isArray(attrs) ? attrs : $.makeArray(arguments);
+				attrs = isArray(attrs) ? attrs : makeArray(arguments);
 			}
 			var errors = {},
 				self = this,
 				addErrors = function( attr, funcs ) {
-					$.each(funcs, function( i, func ) {
+					each(funcs, function( i, func ) {
 						var res = func.call(self);
 						if ( res ) {
 							if (!errors.hasOwnProperty(attr) ) {
@@ -932,7 +905,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 					});
 				};
 
-			$.each(attrs || this.Class.validations || {}, function( attr, funcs ) {
+			each(attrs || this.Class.validations || {}, function( attr, funcs ) {
 				if ( typeof attr == 'number' ) {
 					attr = funcs;
 					funcs = self.Class.validations[attr];
@@ -1123,14 +1096,15 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			(converter ? converter.call(Class, value) : //convert it to something useful
 			value)); //just return it
 			//validate (only if not initializing, this is for performance)
-			if (!this._initializing ) {
+			if (!this._init ) {
 				errors = this.errors(property);
 			}
 
 			if ( errors ) {
+				//get an array of errors
 				errorCallback(errors);
 			} else {
-				if ( old !== val && !this._initializing ) {
+				if ( old !== val && !this._init ) {
 					$(this).triggerHandler(property, val);
 				}
 				stub = success && success(this);
@@ -1198,7 +1172,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @return {Boolean} false if an id is set, true if otherwise.
 		 */
 		isNew: function() {
-			var id = this[this.Class.id];
+			var id = getId(this);
 			return (id === undefined || id === null); //if null or undefined
 		},
 		/**
@@ -1218,16 +1192,9 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @param {Function} [error] called if the save was not successful.
 		 */
 		save: function( success, error ) {
-			var stub;
-
-			if ( this.errors() ) {
-				//needs to send errors
-				return false;
-			}
-			stub = this.isNew() ? this.Class.create(this.attrs(), this.callback(['created', success]), error) : this.Class.update(this[this.Class.id], this.attrs(), this.callback(['updated', success]), error);
-
-			//this.is_new_record = this.Class.new_record_func;
-			return true;
+			this.isNew() ?
+				this.Class.create(this.attrs(), this.callback(['created', success]), error) : 
+				this.Class.update(getId(this), this.attrs(), this.callback(['updated', success]), error);
 		},
 
 		/**
@@ -1246,7 +1213,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @param {Function} [error] called if an unsuccessful destroy
 		 */
 		destroy: function( success, error ) {
-			this.Class.destroy(this[this.Class.id], this.callback(["destroyed", success]), error);
+			this.Class.destroy(getId(this), this.callback(["destroyed", success]), error);
 		},
 
 
@@ -1260,7 +1227,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @return {String}
 		 */
 		identity: function() {
-			var id = this[this.Class.id];
+			var id = getId(this);
 			return this.Class._fullName + '_' + (this.Class.escapeIdentity ? encodeURIComponent(id) : id);
 		},
 		/**
@@ -1320,7 +1287,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		}
 	});
 
-	$.each([
+	each([
 	/**
 	 * @function created
 	 * @hide
@@ -1349,12 +1316,12 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			var stub;
 
 			if ( funcName === 'destroyed' && this.Class.list ) {
-				this.Class.list.remove(this[this.Class.id]);
+				this.Class.list.remove(getId(this));
 			}
 			$(this).triggerHandler(funcName);
 			stub = attrs && typeof attrs == 'object' && this.attrs(attrs.attrs ? attrs.attrs() : attrs);
 			this.publish(funcName, this);
-			return [this].concat($.makeArray(arguments));
+			return [this].concat(makeArray(arguments));
 		};
 	});
 
@@ -1380,15 +1347,16 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		var collection = [],
 			kind, ret, retType;
 		this.each(function() {
-			$.each($.data(this, "models") || {}, function( name, instance ) {
+			each($.data(this, "models") || {}, function( name, instance ) {
 				//either null or the list type shared by all classes
-				kind = kind === undefined ? instance.Class.List || null : (instance.Class.List === kind ? kind : null);
+				kind = kind === undefined ? 
+					instance.Class.List || null : 
+					(instance.Class.List === kind ? kind : null);
 				collection.push(instance);
 			});
 		});
 
-		retType = kind || $.Model.List || Array;
-		ret = new retType();
+		ret = getList(kind);
 
 		ret.push.apply(ret, $.unique(collection));
 		return ret;

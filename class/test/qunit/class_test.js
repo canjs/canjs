@@ -46,7 +46,7 @@ test("Creating", function(){
     new Dog();
     new Animal();
     new Animal();
-    ajax = new Ajax(1000);
+    var ajax = new Ajax(1000);
         
     equals(2, Animal.count, "right number of animals");
     equals(1, Dog.count, "right number of animals")

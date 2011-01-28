@@ -1,3 +1,4 @@
+//string helpers
 steal.plugins('jquery').then(function( $ ) {
 	// Several of the methods in this plugin use code adapated from Prototype
 	//  Prototype JavaScript framework, version 1.6.0.1
@@ -10,15 +11,19 @@ steal.plugins('jquery').then(function( $ ) {
 		dash: /([a-z\d])([A-Z])/g,
 		replacer: /\{([^\}]+)\}/g
 	},
-		getObject = function( objectName, currentin, remove ) {
+		getObject = function( objectName, currentin, add ) {
 			var current = currentin || window,
 				parts = objectName ? objectName.split(/\./) : [],
-				ret, i = 0;
+				ret, 
+				i = 0;
 			for (; i < parts.length - 1 && current; i++ ) {
-				current = current[parts[i]];
+				current = current[parts[i]] || ( add && (current[parts[i]] = {}) );
 			}
-			ret = current[parts[i]];
-			if ( remove ) {
+			if(parts.length == 0){
+				return currentin;
+			}
+			ret = current[parts[i]] || ( add && (current[parts[i]] = {}) );
+			if ( add === false ) {
 				delete current[parts[i]];
 			}
 			return ret;
@@ -28,6 +33,7 @@ steal.plugins('jquery').then(function( $ ) {
 		 * @class jQuery.String
 		 */
 		str = ($.String = {
+			getObject : getObject,
 			/**
 			 * @function strip
 			 * @param {String} s returns a string with leading and trailing whitespace removed.
@@ -127,7 +133,7 @@ steal.plugins('jquery').then(function( $ ) {
 			sub: function( s, data, remove ) {
 				return s.replace(regs.replacer, function( whole, inside ) {
 					//convert inside to type
-					return getObject(inside, data, remove).toString(); //gets the value in options
+					return getObject(inside, data, !remove).toString(); //gets the value in options
 				});
 			}
 		});

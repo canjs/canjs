@@ -23,6 +23,8 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			el = ev = callback = wrappedCallback = null;
 		};
 	},
+		makeArray = $.makeArray,
+		isFunction = $.isFunction,
 		// Binds an element, returns a function that unbinds
 		delegate = function( el, selector, ev, callback ) {
 			$(el).delegate(selector, ev, callback);
@@ -328,9 +330,9 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			if (!$.fn[pluginname] ) {
 				$.fn[pluginname] = function( options ) {
 
-					var args = $.makeArray(arguments),
+					var args = makeArray(arguments),
 						//if the arg is a method on this controller
-						isMethod = typeof options == "string" && $.isFunction(controller.prototype[options]),
+						isMethod = typeof options == "string" && isFunction(controller.prototype[options]),
 						meth = args[0];
 					this.each(function() {
 						//check if created
@@ -367,7 +369,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			this.actions = {};
 
 			for ( funcName in this.prototype ) {
-				if (!$.isFunction(this.prototype[funcName]) ) {
+				if (!isFunction(this.prototype[funcName]) ) {
 					continue;
 				}
 				if ( this._isAction(funcName) ) {
@@ -798,14 +800,12 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			this.element.removeClass(fname);
 
 			$.each(this._bindings, function( key, value ) {
-				if ( $.isFunction(value) ) {
+				if ( isFunction(value) ) {
 					value(self.element[0]);
 				}
 			});
 
 			delete this._actions;
-
-
 			controllers = this.element.data("controllers");
 			if ( controllers && controllers[fname] ) {
 				delete controllers[fname];
@@ -867,17 +867,6 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 *  @add jQuery.fn
 	 */
 
-	$.fn.mixin = function() {
-		//create a bunch of controllers
-		var controllers = $.makeArray(arguments),
-			forLint;
-		return this.each(function() {
-			for ( var i = 0; i < controllers.length; i++ ) {
-				forLint = new controllers[i](this);
-			}
-
-		});
-	};
 	//used to determine if a controller instance is one of controllers
 	//controllers can be strings or classes
 	var i, isAControllerOf = function( instance, controllers ) {
@@ -895,7 +884,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	 * @return {Array} an array of controller instances.
 	 */
 	$.fn.controllers = function() {
-		var controllerNames = $.makeArray(arguments),
+		var controllerNames = makeArray(arguments),
 			instances = [],
 			controllers;
 		//check if arguments

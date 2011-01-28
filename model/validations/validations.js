@@ -60,7 +60,7 @@ var validate = function(attrNames, options, proc) {
 		}
 		self.validations[attrName].push(function(){
 			var res = proc.call(this, this[attrName]);
-			return  options.message || res;
+			return res === undefined ? undefined : (options.message || res);
 		})
 	});
    

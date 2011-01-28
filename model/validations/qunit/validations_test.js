@@ -81,7 +81,23 @@ test("validatesPresenceOf", function(){
 	
 	ok(errors)
 	ok(errors.dueDate)
-	equals(errors.dueDate[0], "can't be empty" , "right message")
+	equals(errors.dueDate[0], "can't be empty" , "right message");
+	
+	task = new Task({dueDate : "yes"});
+	errors = task.errors();;
+	
+	ok(!errors, "no errors "+typeof errors);
+	
+	$.Model.extend("Task",{
+		init : function(){
+			this.validatePresenceOf("dueDate",{message : "You must have a dueDate"})
+		}
+	},{});
+	
+	task = new Task({dueDate : "yes"});
+	errors = task.errors();;
+	
+	ok(!errors, "no errors "+typeof errors);
 })
 
 test("validatesRangeOf", function(){

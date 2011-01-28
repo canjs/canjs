@@ -219,8 +219,8 @@ steal.plugins("jquery").then(function( $ ) {
 		}
 		//if there is no suffix, add one
 		if (!suffix ) {
-			suffix = $.View.ext;
-			url = url + $.View.ext;
+			suffix = $view.ext;
+			url = url + $view.ext;
 		}
 
 		//convert to a unique and valid id
@@ -232,12 +232,12 @@ steal.plugins("jquery").then(function( $ ) {
 		}
 
 		//get the template engine
-		type = $.View.types[suffix];
+		type = $view.types[suffix];
 
 		//get the renderer function
 		renderer =
-		$.View.cached[id] ? // is it cached?
-		$.View.cached[id] : // use the cached version
+		$view.cached[id] ? // is it cached?
+		$view.cached[id] : // use the cached version
 		((el = document.getElementById(view)) ? //is it in the document?
 		type.renderer(id, el.innerHTML) : //use the innerHTML of the elemnt
 		get(type, id, url, data, helpers, callback) //do an ajax request for it
@@ -248,8 +248,8 @@ steal.plugins("jquery").then(function( $ ) {
 	// caches the template, renders the content, and calls back if it should
 	render = function( renderer, type, id, data, helpers, callback ) {
 		var res, stub;
-		if ( $.View.cache ) {
-			$.View.cached[id] = renderer;
+		if ( $view.cache ) {
+			$view.cached[id] = renderer;
 		}
 		res = renderer.call(type, data, helpers);
 		stub = callback && callback(res);
@@ -291,7 +291,7 @@ steal.plugins("jquery").then(function( $ ) {
 	};
 
 
-	$.extend($.View, {
+	$.extend($view, {
 		/**
 		 * @attribute hookups
 		 * @hide
@@ -388,7 +388,7 @@ steal.plugins("jquery").then(function( $ ) {
 		 * @param {Object} src
 		 */
 		registerScript: function( type, id, src ) {
-			return "$.View.preload('" + id + "'," + $.View.types["." + type].script(id, src) + ");";
+			return "$.View.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
 		},
 		/**
 		 * @hide
@@ -398,7 +398,7 @@ steal.plugins("jquery").then(function( $ ) {
 		 * @param {Function} renderer
 		 */
 		preload: function( id, renderer ) {
-			$.View.cached[id] = function( data, helpers ) {
+			$view.cached[id] = function( data, helpers ) {
 				return renderer.call(data, data, helpers);
 			};
 		}
@@ -427,12 +427,12 @@ steal.plugins("jquery").then(function( $ ) {
 						modify.call(self, [result], old);
 						callback.call(self, result);
 					};
-					$.View.apply($.View, args);
+					$view.apply($view, args);
 					return this;
 				}
 
 				//otherwise do the template now
-				args = [$.View.apply($.View, args)];
+				args = [$view.apply($view, args)];
 			}
 
 			return modify.call(this, args, old);
@@ -443,14 +443,14 @@ steal.plugins("jquery").then(function( $ ) {
 		var res, stub, hooks;
 
 		//check if there are new hookups
-		for ( var hasHookups in jQuery.View.hookups ) {
+		for ( var hasHookups in $view.hookups ) {
 			break;
 		}
 
 		//if there are hookups, get jQuery object
 		if ( hasHookups ) {
-			hooks = $.View.hookups;
-			$.View.hookups = {};
+			hooks = $view.hookups;
+			$view.hookups = {};
 			args[0] = $(args[0]);
 		}
 		res = old.apply(this, args);
@@ -492,7 +492,7 @@ steal.plugins("jquery").then(function( $ ) {
 			}
 		}
 		//copy remaining hooks back
-		$.extend($.View.hookups, hooks);
+		$.extend($view.hookups, hooks);
 	};
 
 	/**
