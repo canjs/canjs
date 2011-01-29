@@ -4,6 +4,8 @@ var getWindow = function( element ) {
 	return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
 },
 getSelection = function(el){
+	var start,
+		end;
 	// use selectionStart if we can
 	if (el.selectionStart !== undefined) {
 		// this is for opera, so we don't have to focus to type how we think we would
@@ -14,7 +16,31 @@ getSelection = function(el){
 			return {start: el.value.length, end: el.value.length};
 		}
 		return  {start: el.selectionStart, end: el.selectionEnd}
-	}else{
+	} else if (getWindow(el).getSelection){
+		//go through ranges and see if this element is part of a range selected
+		var selection = getWindow(el).getSelection(),
+			count = selection.rangeCount,
+			range;
+		
+		for(var i =0; i < count; i++){
+			range = selection.getRangeAt(i);
+			var started = $.contains(el, range.startContainer),
+				ended = $.contains(el, range.endContainer);
+			
+			if(started || ended){
+				var res = children([el], function(el, data){
+					if(el === range.startContainer){
+						start = data.len+range.startOffset
+					}
+					if(el === range.endContainer){
+						end = data.len+range.endOffset
+					}
+				});
+				return {start: start||0, end: end === undefined ? res.len : end}
+			}
+		}
+		
+	} else{
 
 		try {
 			//try 2 different methods that work differently (IE breaks depending on type)
@@ -80,10 +106,10 @@ select = function( el, start, end ) {
 			range = doc.createRange(),
 			ranges = [start,  end !== undefined ? end : start];
         
+		// 
 		getCharElement([el],ranges);
 		range.setStart(ranges[0].el, ranges[0].count);
 		range.setEnd(ranges[1].el, ranges[1].count);
-		console.log("after ..")
         //sel.removeAllRanges();
         sel.addRange(range);
 	}
@@ -103,27 +129,45 @@ replaceWithLess = function(start, len, range, el){
 			};;
 	}
 },
-getCharElement = function( elems , range, len ) {
+//given elements and a [start,stop] range
+//returns the elements and positions of the element
+getCharElement = function( elems , range ) {
+	children(elems, function(elem, data){
+		var len = data.len+elem.nodeValue.length;
+		if(typeof range[0] === 'number' && range[0] < len){
+				range[0] = {
+					el: el,
+					count: range[0] - data.len
+				};
+		}
+		if(typeof range[1] === 'number' && range[1] <= len){
+				range[1] = {
+					el: el,
+					count: range[1] - data.len
+				};;
+		}
+	})
+},
+children = function(elems, func, data){
 	var elem,
-		start;
-	
-	len = len || 0;
-	console.log("iterate",elems)
+		data = data || {str : [], len: 0},
+		type, 
+		len;
 	for ( var i = 0; elems[i]; i++ ) {
 		elem = elems[i];
-		console.log(elem)
-		// Get the text from text nodes and CDATA nodes
-		if ( elem.nodeType === 3 || elem.nodeType === 4 ) {
-			start = len
-			len += elem.nodeValue.length;
-			//check if len is now greater than what's in counts
-			replaceWithLess(start, len, range, elem ) 
+		type = elem.nodeType
+		if ( type === 3 || type === 4 ) {
+			
+			len = elem.nodeValue.length || 0
+			func(elem, data);
+			data.str.push(elem.nodeValue)
+			data.len += len;
 		// Traverse everything else, except comment nodes
-		} else if ( elem.nodeType !== 8 ) {
-			len = getCharElement( elem.childNodes, range, len );
+		} else if ( type !== 8 ) {
+			children( elem.childNodes, func, data );
 		}
 	}
-	return len;
+	return data;
 };
 
 $.fn.selection = function(start, end){
