@@ -13,7 +13,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		extend = $.extend,
 		isArray = $.isArray,
 		clean = function( content ) {
-				return content.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
+				return content.replace(/\\/g, '\\\\').replace(/\r/g, '\\n').replace(/\n/g, '\\n').replace(/"/g, '\\"');
 		},
 		EJS = function( options ) {
 			//returns a renderer function
