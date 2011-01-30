@@ -13,7 +13,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		extend = $.extend,
 		isArray = $.isArray,
 		clean = function( content ) {
-				return content.replace(/\\/g, '\\\\').replace(/\r/g, '\\n').replace(/\n/g, '\\n').replace(/"/g, '\\"');
+				return content.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
 		},
 		EJS = function( options ) {
 			//returns a renderer function
@@ -261,6 +261,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	},
 	// compiles a template
 	compile = function( source, left, name ) {
+		source = source.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 		//normalize line endings
 		left = left || '<';
 		var put_cmd = "___v1ew.push(",
