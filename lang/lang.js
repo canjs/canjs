@@ -131,10 +131,19 @@ steal.plugins('jquery').then(function( $ ) {
 			 * @param {Object} data
 			 */
 			sub: function( s, data, remove ) {
-				return s.replace(regs.replacer, function( whole, inside ) {
+				var obs = [];
+				obs.push(s.replace(regs.replacer, function( whole, inside ) {
 					//convert inside to type
-					return getObject(inside, data, !remove).toString(); //gets the value in options
-				});
+					var ob = getObject(inside, data, !remove),
+						type = typeof ob;
+					if((type === 'object' || type === 'function') && type !== null){
+						obs.push(ob);
+						return "";
+					}else{
+						return ""+ob;
+					}
+				}));
+				return obs.length <= 1 ? obs[0] : obs;
 			}
 		});
 
