@@ -41,7 +41,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		 */
 		shifter = function shifter(cb) {
 			return function() {
-				return cb.apply(null, [$(this)].concat(Array.prototype.slice.call(arguments, 0)));
+				return cb.apply(null, [this.nodeName ? $(this) : this].concat(Array.prototype.slice.call(arguments, 0)));
 			};
 		},
 		// matches dots
@@ -417,12 +417,14 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 				return null;
 			}
 			var convertedName = options ? $.String.sub(methodName, options) : methodName,
-				parts = convertedName.match(breaker),
+				arr = $.isArray(convertedName),
+				parts = (arr ? convertedName[1]  :convertedName).match(breaker),
 				event = parts[2],
 				processor = this.processors[event] || basicProcessor;
 			return {
 				processor: processor,
-				parts: parts
+				parts: parts,
+				delegate : arr ? [convertedName[0]] : undefined
 			};
 		},
 		/**
@@ -606,7 +608,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 				if ( cls.actions.hasOwnProperty(funcName) ) {
 					ready = cls.actions[funcName] || cls._getAction(funcName, this.options);
 					this._bindings.push(
-					ready.processor(element, ready.parts[2], ready.parts[1], this.callback(funcName), this));
+					ready.processor(ready.delegate || element, ready.parts[2], ready.parts[1], this.callback(funcName), this));
 				}
 			}
 
