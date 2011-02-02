@@ -19,6 +19,10 @@ test("swipe event", function(){
 	
 	$("#outer").bind("swipe",function(){
 		ok(true,"swip called");
+	}).bind("swipeleft", function(){
+		ok(false, "swipe left")
+	}).bind("swiperight", function(){
+		ok(true, "swiperight")
 	});
 	stop();
 	Syn.drag("+50 +0","outer", function(){

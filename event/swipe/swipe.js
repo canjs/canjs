@@ -48,11 +48,12 @@ $.event.setupHelper( ["swipe"], touchStartEvent, function(ev){
 						Math.abs( start.coords[0] - stop.coords[0]) > 30 &&
 						Math.abs( start.coords[1] - stop.coords[1]) < 75 ) {
 					
+					var direction = start.coords[0] > stop.coords[0] ? "swipeleft" : "swiperight";
 					//trigger swipe events on this guy
-					$.each($.event.find(delegate, ["swipe"], selector), function(){
+					$.each($.event.find(delegate, ["swipe",direction], selector), function(){
 						this.call(entered, ev, {start : start, end: stop})
 					})
-
+				
 				}
 			}
 			start = stop = undefined;
