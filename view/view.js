@@ -208,14 +208,19 @@ steal.plugins("jquery").then(function( $ ) {
 	$view = $.View = function( view, data, helpers, callback ) {
 		var suffix = view.match(/\.[\w\d]+$/),
 			type, el, id, renderer, url = view;
+                // if we have an inline template, derive the suffix from the 'text/???' part
+                // this only supports '<script></script>' tags
+                if ( el = document.getElementById(view)) {
+                  suffix = el.type.match(/\/[\d\w]+$/)[0].replace(/^\//, '.');
+                }
 		if ( typeof helpers === 'function' ) {
 			callback = helpers;
 			helpers = undefined;
 		}
 		//if there is no suffix, add one
 		if (!suffix ) {
-			suffix = $.View.ext;
-			url = url + $.View.ext;
+			suffix = $view.ext;
+			url = url + $view.ext;
 		}
 
 		//convert to a unique and valid id
@@ -223,16 +228,21 @@ steal.plugins("jquery").then(function( $ ) {
 
 		//if a absolute path, use steal to get it
 		if ( url.match(/^\/\//) ) {
-			url = steal.root.join(url.substr(2)); //can steal be removed?
+			if (typeof steal === "undefined") {
+				url = "/"+url.substr(2);
+			}
+			else {
+				url = steal.root.join(url.substr(2));
+			}
 		}
 
 		//get the template engine
-		type = $.View.types[suffix];
+		type = $view.types[suffix];
 
 		//get the renderer function
 		renderer =
-		$.View.cached[id] ? // is it cached?
-		$.View.cached[id] : // use the cached version
+		$view.cached[id] ? // is it cached?
+		$view.cached[id] : // use the cached version
 		((el = document.getElementById(view)) ? //is it in the document?
 		type.renderer(id, el.innerHTML) : //use the innerHTML of the elemnt
 		get(type, id, url, data, helpers, callback) //do an ajax request for it
@@ -243,8 +253,8 @@ steal.plugins("jquery").then(function( $ ) {
 	// caches the template, renders the content, and calls back if it should
 	render = function( renderer, type, id, data, helpers, callback ) {
 		var res, stub;
-		if ( $.View.cache ) {
-			$.View.cached[id] = renderer;
+		if ( $view.cache ) {
+			$view.cached[id] = renderer;
 		}
 		res = renderer.call(type, data, helpers);
 		stub = callback && callback(res);
@@ -286,7 +296,7 @@ steal.plugins("jquery").then(function( $ ) {
 	};
 
 
-	$.extend($.View, {
+	$.extend($view, {
 		/**
 		 * @attribute hookups
 		 * @hide
@@ -295,7 +305,17 @@ steal.plugins("jquery").then(function( $ ) {
 		hookups: {},
 		/**
 		 * @function hookup
-		 * Registers a hookup function to be called back after the html is put on the page
+		 * Registers a hookup function that can be called back after the html is 
+		 * put on the page.  Typically this is handled by the template engine.  Currently
+		 * only EJS supports this functionality.
+		 * 
+		 *     var id = $.View.hookup(function(el){
+		 *            //do something with el
+		 *         }),
+		 *         html = "<div data-view-id='"+id+"'>"
+		 *     $('.foo').html(html);
+		 * 
+		 * 
 		 * @param {Function} cb a callback function to be called with the element
 		 * @param {Number} the hookup number
 		 */
@@ -373,7 +393,7 @@ steal.plugins("jquery").then(function( $ ) {
 		 * @param {Object} src
 		 */
 		registerScript: function( type, id, src ) {
-			return "$.View.preload('" + id + "'," + $.View.types["." + type].script(id, src) + ");";
+			return "$.View.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
 		},
 		/**
 		 * @hide
@@ -383,7 +403,7 @@ steal.plugins("jquery").then(function( $ ) {
 		 * @param {Function} renderer
 		 */
 		preload: function( id, renderer ) {
-			$.View.cached[id] = function( data, helpers ) {
+			$view.cached[id] = function( data, helpers ) {
 				return renderer.call(data, data, helpers);
 			};
 		}
@@ -412,12 +432,12 @@ steal.plugins("jquery").then(function( $ ) {
 						modify.call(self, [result], old);
 						callback.call(self, result);
 					};
-					$.View.apply($.View, args);
+					$view.apply($view, args);
 					return this;
 				}
 
 				//otherwise do the template now
-				args = [$.View.apply($.View, args)];
+				args = [$view.apply($view, args)];
 			}
 
 			return modify.call(this, args, old);
@@ -428,14 +448,14 @@ steal.plugins("jquery").then(function( $ ) {
 		var res, stub, hooks;
 
 		//check if there are new hookups
-		for ( var hasHookups in jQuery.View.hookups ) {
+		for ( var hasHookups in $view.hookups ) {
 			break;
 		}
 
 		//if there are hookups, get jQuery object
 		if ( hasHookups ) {
-			hooks = $.View.hookups;
-			$.View.hookups = {};
+			hooks = $view.hookups;
+			$view.hookups = {};
 			args[0] = $(args[0]);
 		}
 		res = old.apply(this, args);
@@ -477,7 +497,7 @@ steal.plugins("jquery").then(function( $ ) {
 			}
 		}
 		//copy remaining hooks back
-		$.extend($.View.hookups, hooks);
+		$.extend($view.hookups, hooks);
 	};
 
 	/**

@@ -2,12 +2,27 @@ steal.plugins('jquery/controller/subscribe',
 	'jquery/event/hashchange').then(function($){
 
 /**
- * @class
- * The controller history plugin adds browser hash (#) based history support.
- * This class itself helps break up parts of the hash of the url
- * @constructor 
- * Takes a url and extracts information out of it.
- * @param {Object} path
+ * @page jquery.controller.history History Events
+ * @parent jQuery.Controller
+ * @plugin jquery/controller/history
+ * The jquery/controller/history plugin adds 
+ * browser hash (#) based history support.
+ * 
+ * Typically you subscribe to a history event in your controllers:
+ * 
+ *     $.Controller("MyHistory",{
+ *       "history.pagename subscribe" : function(called, data){
+ *         //called when hash = #pagename
+ *       }
+ *     })
+ * 
+ * The following shows hash values and 
+ * the corresponding published message and data.
+ * 
+ *     "#foo=bar" -> "history.index" {foo: bar}
+ *     "#foo/bar" -> "history.foo.bar" {}
+ *     "#foo&bar=baz" -> "history.foo" {bar: baz}
+ *     
  */
 
 var keyBreaker = /([^\[\]]+)|(\[\])/g;

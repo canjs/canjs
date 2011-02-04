@@ -168,3 +168,41 @@ test("delegate", function(){
 	ok(called, "delegate works")
 	$("#qunit-test-area").html("")
 })
+
+test("inherit", function(){
+	var called = false;
+	$.Controller.extend( "Parent", {
+		click: function(){
+			called = true;
+		}
+	})
+	Parent.extend( "Child", {
+		
+	})
+	var els = $("<div><span><a href='#'>click me</a></span></div>").appendTo($("#qunit-test-area"))
+	els.child();
+	els.find("a").trigger('click')
+	ok(called, "inherited the click method")
+	$("#qunit-test-area").html("")
+});
+
+test("objects in action", function(){
+	$.Controller('Thing',{
+		"{item} someEvent" : function(thing, ev){
+			ok(true, "called");
+			equals(ev.type, "someEvent","correct event")
+			equals(this.Class.fullName, "Thing", "This is a controller isntance")
+			equals(thing.name,"Justin","Raw, not jQuery wrapped thing")
+		}
+	});
+	
+	var thing1 = {name: "Justin"};
+	
+	var ta = $("<div/>").appendTo( $("#qunit-test-area") )
+	ta.thing({item : thing1});
+	
+	$(thing1).trigger("someEvent");
+	
+	$("#qunit-test-area").html("");
+	
+})

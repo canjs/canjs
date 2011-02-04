@@ -5,14 +5,16 @@
 steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	var myEval = function(script){
 			eval(script);
-		}
-
-	//helpers we use 
-	var chop = function( string ) {
-		return string.substr(0, string.length - 1);
-	},
+		},
+		chop = function( string ) {
+			return string.substr(0, string.length - 1);
+		},
+		rSplit = $.String.rsplit,
 		extend = $.extend,
 		isArray = $.isArray,
+		clean = function( content ) {
+				return content.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
+		},
 		EJS = function( options ) {
 			//returns a renderer function
 			if ( this.constructor != EJS ) {
@@ -21,22 +23,16 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 					return ejs.render(data, helpers);
 				};
 			}
-
+			//so we can set the processor
 			if ( typeof options == "function" ) {
 				this.template = {};
 				this.template.process = options;
 				return;
 			}
 			//set options on self
-			$.extend(this, EJS.options, options);
-
-			var template = new EJS.Compiler(this.text, this.type);
-
-			template.compile(options, this.name);
-
-			this.template = template;
-		},
-		defaultSplitter = /(\[%%)|(%%\])|(\[%=)|(\[%#)|(\[%)|(%\]\n)|(%\])|(\n)/;
+			extend(this, EJS.options, options);
+			this.template = compile(this.text, this.type, this.name);
+		};
 	/**
 	 * @class jQuery.EJS
 	 * 
@@ -170,9 +166,6 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			this._extra_helpers = extraHelpers;
 			var v = new EJS.Helpers(object, extraHelpers || {});
 			return this.template.process.call(object, object, v);
-		},
-		out: function() {
-			return this.template.out;
 		}
 	};
 	/* @Static */
@@ -207,107 +200,165 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		if ( typeof input == 'string' ) {
 			return input;
 		}
-		var myid;
 		if ( input === null || input === undefined ) {
 			return '';
 		}
-		if ( input instanceof Date ) {
-			return input.toDateString();
-		}
-		if ( input.hookup ) {
-			myid = $.View.hookup(function( el, id ) {
+		var hook = 
+			(input.hookup && function( el, id ) {
 				input.hookup.call(input, el, id);
-			});
-			return "data-view-id='" + myid + "'";
-		}
-		if ( typeof input == 'function' ) {
-			return "data-view-id='" + $.View.hookup(input) + "'";
-		}
-
-		if ( isArray(input) ) {
-			myid = $.View.hookup(function( el, id ) {
+			}) 
+			||
+			(typeof input == 'function' && input)
+			||
+			(isArray(input) && function( el, id ) {
 				for ( var i = 0; i < input.length; i++ ) {
 					var stub;
 					stub = input[i].hookup ? input[i].hookup(el, id) : input[i](el, id);
 				}
 			});
-			return "data-view-id='" + myid + "'";
+		if(hook){
+			return "data-view-id='" + $.View.hookup(hook) + "'";
 		}
-		if ( input.nodeName || input.jQuery ) {
-			throw "elements in views are not supported";
-		}
-
-		if ( input.toString ) {
-			return myid ? input.toString(myid) : input.toString();
-		}
-		return '';
+		return input.toString ? input.toString() : "";
 	};
 
-
-
-
-	// used to break text into tolkens
-	EJS.Scanner = function( source, left, right ) {
-
-		// add these properties to the scanner
-		extend(this, {
-			leftDelimiter: left + '%',
-			rightDelimiter: '%' + right,
-			doubleLeft: left + '%%',
-			doubleRight: '%%' + right,
-			leftEqual: left + '%=',
-			leftComment: left + '%#'
-		});
-
-
-		// make a regexp that can split on these token
-		this.splitRegexp = (left == '[' ? defaultSplitter : new RegExp("(" + [this.doubleLeft, this.doubleRight, this.leftEqual, this.leftComment, this.leftDelimiter, this.rightDelimiter + '\n', this.rightDelimiter, '\n'].join(")|(") + ")"));
-
-		this.source = source;
-		this.lines = 0;
-	};
-
-
-	EJS.Scanner.prototype = {
-		// calls block with each token
-		scan: function( block ) {
-			var regex = this.splitRegexp;
-			if ( this.source ) {
-				var source_split = $.String.rsplit(this.source, /\n/);
-				for ( var i = 0; i < source_split.length; i++ ) {
-					var item = source_split[i];
-					this.scanline(item, regex, block);
-				}
+	//returns something you can call scan on
+	var scan = function(scanner, source, block ) {
+		var source_split = rSplit(source, /\n/),
+			i=0;
+		for (; i < source_split.length; i++ ) {
+			scanline(scanner,  source_split[i], block);
+		}
+		
+	},
+	scanline= function(scanner,  line, block ) {
+		scanner.lines++;
+		var line_split = rSplit(line, scanner.splitter),
+			token;
+		for ( var i = 0; i < line_split.length; i++ ) {
+			token = line_split[i];
+			if ( token !== null ) {
+				block(token, scanner);
 			}
-		},
-		scanline: function( line, regex, block ) {
-			this.lines++;
-			var line_split = $.String.rsplit(line, regex),
-				token;
-			for ( var i = 0; i < line_split.length; i++ ) {
-				token = line_split[i];
-				if ( token !== null ) {
-					try {
-						block(token, this);
-					} catch (e) {
-						throw {
-							type: 'jQuery.EJS.Scanner',
-							line: this.lines
-						};
+		}
+	},
+	makeScanner = function(left, right){
+		var scanner = {};
+		extend(scanner, {
+			left: left + '%',
+			right: '%' + right,
+			dLeft: left + '%%',
+			dRight: '%%' + right,
+			eLeft: left + '%=',
+			cmnt: left + '%#',
+			scan : scan,
+			lines : 0
+		});
+		scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eLeft, 
+		scanner.cmnt, scanner.left, scanner.right + '\n', scanner.right, '\n'].join(")|(").
+			replace(/\[/g,"\\[").replace(/\]/g,"\\]") + ")");
+		return scanner;
+	},
+	// compiles a template
+	compile = function( source, left, name ) {
+		source = source.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+		//normalize line endings
+		left = left || '<';
+		var put_cmd = "___v1ew.push(",
+			insert_cmd = put_cmd,
+			buff = new EJS.Buffer(['var ___v1ew = [];'], []),
+			content = '',
+			put = function( content ) {
+				buff.push(put_cmd, '"', clean(content), '");');
+			},
+			startTag = null,
+			empty = function(){
+				content = ''
+			};
+		
+		scan( makeScanner(left, left === '[' ? ']' : '>') , 
+			source||"", 
+			function( token, scanner ) {
+				// if we don't have a start pair
+				if ( startTag === null ) {
+					switch ( token ) {
+					case '\n':
+						content = content + "\n";
+						put(content);
+						buff.cr();
+						empty();
+						break;
+					case scanner.left:
+					case scanner.eLeft:
+					case scanner.cmnt:
+						startTag = token;
+						if ( content.length > 0 ) {
+							put(content);
+						}
+						empty();
+						break;
+
+						// replace <%% with <%
+					case scanner.dLeft:
+						content += scanner.left;
+						break;
+					default:
+						content +=  token;
+						break;
 					}
 				}
-			}
+				else {
+					switch ( token ) {
+					case scanner.right:
+						switch ( startTag ) {
+						case scanner.left:
+							if ( content[content.length - 1] == '\n' ) {
+								content = chop(content);
+								buff.push(content, ";");
+								buff.cr();
+							}
+							else {
+								buff.push(content, ";");
+							}
+							break;
+						case scanner.eLeft:
+							buff.push(insert_cmd, "(jQuery.EJS.text(", content, ")));");
+							break;
+						}
+						startTag = null;
+						empty();
+						break;
+					case scanner.dRight:
+						content += scanner.right;
+						break;
+					default:
+						content += token;
+						break;
+					}
+				}
+			})
+		if ( content.length > 0 ) {
+			// Should be content.dump in Ruby
+			buff.push(put_cmd, '"', clean(content) + '");');
 		}
+		var template = buff.close(),
+			out = {
+				out : 'try { with(_VIEW) { with (_CONTEXT) {' + template + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}"
+			};
+		//use eval instead of creating a function, b/c it is easier to debug
+		myEval.call(out,'this.process = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL='+name+".js");
+		return out;
 	};
+
 
 	// a line and script buffer
 	// we use this so we know line numbers when there
 	// is an error.  
 	// pre and post are setup and teardown for the buffer
-	EJS.Buffer = function( pre_cmd, post_cmd ) {
+	EJS.Buffer = function( pre_cmd, post ) {
 		this.line = [];
 		this.script = [];
-		this.post_cmd = post_cmd;
+		this.post = post;
 
 		// add the pre commands to the first line
 		this.push.apply(this, pre_cmd);
@@ -331,120 +382,12 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 				this.line = [];
 			}
 
-			stub = this.post_cmd.length && this.push.apply(this, this.post_cmd);
+			stub = this.post.length && this.push.apply(this, this.post);
 
 			this.script.push(";"); //makes sure we always have an ending /
 			return this.script.join("");
 		}
 
-	};
-	// compiles a template
-	EJS.Compiler = function( source, left ) {
-		//normalize line endings
-		this.source = source.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-
-		left = left || '<';
-		var right = '>';
-		switch ( left ) {
-		case '[':
-			right = ']';
-			break;
-		case '<':
-			break;
-		default:
-			throw left + ' is not a supported deliminator';
-		}
-		this.scanner = new EJS.Scanner(this.source, left, right);
-		this.out = '';
-	};
-	EJS.Compiler.prototype = {
-		compile: function( options, name ) {
-
-			options = options || {};
-
-			this.out = '';
-
-			var put_cmd = "___v1ew.push(",
-				insert_cmd = put_cmd,
-				buff = new EJS.Buffer(['var ___v1ew = [];'], []),
-				content = '',
-				clean = function( content ) {
-					return content.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
-				},
-				put = function( content ) {
-					buff.push(put_cmd, '"', clean(content), '");');
-				},
-				startTag = null;
-
-			this.scanner.scan(function( token, scanner ) {
-				// if we don't have a start pair
-				if ( startTag === null ) {
-					switch ( token ) {
-					case '\n':
-						content = content + "\n";
-						put(content);
-						//buff.push(put_cmd , '"' , clean(content) , '");');
-						buff.cr();
-						content = '';
-						break;
-					case scanner.leftDelimiter:
-					case scanner.leftEqual:
-					case scanner.leftComment:
-						startTag = token;
-						if ( content.length > 0 ) {
-							put(content);
-						}
-						content = '';
-						break;
-
-						// replace <%% with <%
-					case scanner.doubleLeft:
-						content = content + scanner.leftDelimiter;
-						break;
-					default:
-						content = content + token;
-						break;
-					}
-				}
-				else {
-					switch ( token ) {
-					case scanner.rightDelimiter:
-						switch ( startTag ) {
-						case scanner.leftDelimiter:
-							if ( content[content.length - 1] == '\n' ) {
-								content = chop(content);
-								buff.push(content, ";");
-								buff.cr();
-							}
-							else {
-								buff.push(content, ";");
-							}
-							break;
-						case scanner.leftEqual:
-							buff.push(insert_cmd, "(jQuery.EJS.text(", content, ")));");
-							break;
-						}
-						startTag = null;
-						content = '';
-						break;
-					case scanner.doubleRight:
-						content = content + scanner.rightDelimiter;
-						break;
-					default:
-						content = content + token;
-						break;
-					}
-				}
-			});
-			if ( content.length > 0 ) {
-				// Should be content.dump in Ruby
-				buff.push(put_cmd, '"', clean(content) + '");');
-			}
-			var template = buff.close();
-			this.out = 'try { with(_VIEW) { with (_CONTEXT) {' + template + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}";
-			//use eval instead of creating a function, b/c it is easier to debug
-			myEval.call(this,'this.process = (function(_CONTEXT,_VIEW){' + this.out + '});\r\n//@ sourceURL='+name+".js")
-		}
 	};
 	
 
@@ -470,7 +413,6 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 * 
 	 */
 	EJS.options = {
-		cache: true,
 		type: '<',
 		ext: '.ejs'
 	};
@@ -522,7 +464,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		script: function( id, src ) {
 			return "jQuery.EJS(function(_CONTEXT,_VIEW) { " + new EJS({
 				text: src
-			}).out() + " })";
+			}).template.out + " })";
 		},
 		renderer: function( id, text ) {
 			var ejs = new EJS({
