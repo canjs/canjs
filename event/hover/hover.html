@@ -8,7 +8,7 @@
             .error {border: solid 1px red;}
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
-			.hover, .hovers {
+			.hover, .hovers, .hoverleave {
 				border: solid 1px green;
 			}
 			.hoverstate {
@@ -27,6 +27,8 @@
 <h4>Bound Directly</h4>
 <div class='hovers'>hover me for a second</div>
 <div class='hovers'>hover me for a second</div>
+<h4>HoverLeave</h4>
+<div class='hoverleave'>Leave and don't return for a half second</div>
 </div>
 		<script type='text/javascript' 
                 src='../../../steal/steal.js?steal[app]=jquery/event/hover&steal[env]=development'>   
@@ -51,6 +53,10 @@ $('.hovers').bind('hoverinit',function(ev, hovered){
 })
 $('.hovers').bind('hoverenter',add)
 $('.hovers').bind('hoverleave', remove)
+
+$('.hoverleave').bind('hoverinit',function(ev, hovered){
+	hovered.leave(500)
+}).bind('hoverenter',add).bind('hoverleave', remove)
 </script>
 	</body>
 </html>
