@@ -32,8 +32,8 @@ steal.plugins('jquery/event/drag', 'jquery/dom/cur_styles').then(function( $ ) {
 		this._step = amount;
 
 		var styles = container.curStyles("borderTopWidth", "paddingTop", "borderLeftWidth", "paddingLeft");
-		var left = parseInt(styles.borderTopWidth) + parseInt(styles.paddingTop),
-			top = parseInt(styles.borderLeftWidth) + parseInt(styles.paddingLeft);
+		var top = parseInt(styles.borderTopWidth) + parseInt(styles.paddingTop),
+			left = parseInt(styles.borderLeftWidth) + parseInt(styles.paddingLeft);
 
 		this._step.offset = container.offsetv().plus(left, top);
 		this._step.center = center;
