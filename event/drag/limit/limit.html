@@ -56,7 +56,9 @@
 			$("#ondoc .handle").live("mouesdown", function(){
 				//console.log("mousedowned")
 			})
-			
+			$("#internal").delegate(".handle","draginit", function(ev, drag){
+				drag.limit($("#internal"), true)
+			})
 			//do internal
 			
 			var jq = $()
