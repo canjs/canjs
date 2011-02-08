@@ -21,7 +21,7 @@ var supportTouch = "ontouchend" in document,
 /**
  * @add jQuery.event.special
  */
-$.event.setupHelper( ["swipe"], touchStartEvent, function(ev){
+$.event.setupHelper( ["swipe",'swipeleft','swiperight'], touchStartEvent, function(ev){
 	//listen to mouseup
 	var start = data(ev),
 		stop,
