@@ -117,6 +117,11 @@ var event = $.event,
 		//now start checking mousemoves to update location
 		var delegate = ev.liveFired || ev.currentTarget;
 		var selector = ev.handleObj.selector;
+		//prevents another mouseenter until current has run its course
+		if($.data(delegate,"_hover"+selector)){
+			return;
+		}
+		$.data(delegate,"_hover"+selector, true)
 		var loc = {
 				pageX : ev.pageX,
 				pageY : ev.pageY
@@ -132,8 +137,7 @@ var event = $.event,
 				$.each(event.find(delegate, ["hoverleave"], selector), function(){
 					this.call(enteredEl, ev, hover)
 				})
-				$(enteredEl).unbind("mouseleave",mouseleave)
-				$(enteredEl).unbind("mousemove",mouseenter)
+				cleanUp();
 			},
 			mouseenter = function(ev){
 				clearTimeout(leaveTimer);
@@ -156,8 +160,14 @@ var event = $.event,
 							callHoverLeave();
 						}, hover._leave)
 					}
-					
+				}else{
+					cleanUp();
 				}
+			},
+			cleanUp = function(){
+				$(enteredEl).unbind("mouseleave",mouseleave)
+				$(enteredEl).unbind("mousemove",mouseenter);
+				$.removeData(delegate,"_hover"+selector)
 			};
 		
 		$(enteredEl).bind("mousemove",mouseenter).bind("mouseleave", mouseleave);
@@ -172,6 +182,7 @@ var event = $.event,
 					this.call(enteredEl, lastEv, hover)
 				})
 				hovered = true;
+				return;
 			}else{
 				dist = 0;
 				timer = setTimeout(arguments.callee, hover._delay)
