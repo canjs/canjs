@@ -12,7 +12,7 @@ steal('//steal/test/test', function(s){
 	s.test.test("templates" , function(t){
 		
 		
-//		steal.File("jquery/view/test/compression/views/absolute.ejs").save("<h1>Absolute</h1>");
+		steal.File("jquery/view/test/compression/views/absolute.ejs").save("<h1>Absolute</h1>");
 		steal.File("jquery/view/test/compression/views/relative.ejs").save("<h1>Relative</h1>");
 //		steal.File("jquery/view/test/compression/views/tmplTest.tmpl").save("<h1>${message}</h1>");
 		s.test.clear();
@@ -31,7 +31,7 @@ steal('//steal/test/test', function(s){
 		steal = {env: "production"};
 		
 		s.test.open('jquery/view/test/compression/compression.html')
-//		s.test.ok(  /Absolute/i.test( $(document.body).text() ), "Absolute not in page!" );
+		s.test.ok(  /Absolute/i.test( $(document.body).text() ), "Absolute not in page!" );
 		s.test.ok(  /Relative/i.test( $(document.body).text() ), "Relative not in page!" );
 //		s.test.ok(  /Jquery Tmpl/i.test( $(document.body).text() ), "Jquery Tmpl not in page!" );
 		
