@@ -393,7 +393,7 @@ steal.plugins("jquery").then(function( $ ) {
 		 * @param {Object} src
 		 */
 		registerScript: function( type, id, src ) {
-			return "$.View.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
+			return "steal.plugins('jquery/view/ejs').then(function($){\n$.View.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");\n})";
 		},
 		/**
 		 * @hide
