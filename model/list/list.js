@@ -1,16 +1,17 @@
 steal.plugins('jquery/model').then(function($){
 
-var add = function(data, inst){
-		var id = inst.Class.id;
-		data[inst[id]] = inst;
-	},
-	getArgs = function(args){
-		if(args[0] !== undefined && args[0].length && typeof args[0] != 'string'){
+var getArgs = function(args){
+		if(args[0] && ( $.isArray(args[0])  )   ){
 			return args[0]
-		}else{
+		}else if(args[0] instanceof $.Model.List){
+			return $.makeArray(args[0])
+		}
+		else{
 			return $.makeArray(args)
 		}
-	}
+	},
+	//used for namespacing
+	id = 0
 /**
  * @parent jQuery.Model
  * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/list/list.js
@@ -95,9 +96,12 @@ $.Class.extend("jQuery.Model.List",
  * @Prototype
  */
 {
-    init: function( instances ) {
+    init: function( instances , noEvents) {
         this.length = 0;
+		// a cache for quick lookup by id
 		this._data = {};
+		//a namespace so we can remove all events bound by this list
+		this._namespace = ".list"+(++id),
         this.push.apply(this, $.makeArray(instances || [] ) );
     },
 	/**
@@ -203,7 +207,12 @@ $.Class.extend("jQuery.Model.List",
 				i++;
 			}
 		}
-		return new this.Class(list);
+		var ret = new this.Class(list);
+		if(ret.length){
+			$([this]).trigger("remove",[ret])
+		}
+		
+		return ret;
 	},
 	publish: function( name, data ) {
 		OpenAjax.hub.publish(this.Class.shortName+"."+name, data)
@@ -214,20 +223,147 @@ $.Class.extend("jQuery.Model.List",
 	 */
 	elements: function( context ) {
 		// TODO : this can probably be done with 1 query.
-		var jq = $();
-		this.each(function(){
-			jq.add("."+this.identity(), context)
-		})
-		return jq;
+		return $(
+			this.map(function(item){return "."+item.identity()}).join(','),
+			context
+			);
+	},
+	model : function(){
+		return this.Class.namespace
+	},
+	/**
+	 * Finds items and adds them to this list.  This uses [jQuery.Model.static.findAll]
+	 * to find items with the params passed.
+	 * 
+	 * @param {Object} params options to refind the returned items
+	 * @param {Function} success called with the list
+	 * @param {Object} error
+	 */
+	findAll : function(params, success, error){
+		var self = this;
+		this.model().findAll(params,function(items){
+			self.push(items);
+			success && success(self)
+		},error)
+	},
+	/**
+	 * Destroys all items in this list.  This will use the Model's 
+	 * [jQuery.Model.static.destroyAll] method if it exists, otherwise it will fall back to
+	 * [jQuery.model.static.destroy].
+	 * 
+	 * @param {Function} success
+	 * @param {Function} error
+	 */
+	destroyAll : function(success, error){
+		var gId = function(item){ return item[item.Class.id]}
+			ids = this.map(gId),
+			model = this.model(),
+			self = this,
+			items = this.slice(0, this.length),
+			destroy = function(){
+				this.destroyed();
+			};
+		
+		if(model.destroyAll){
+			model.destroyAll(ids, function(){
+				$.each(items, destroy)//success(self); //should call back with the destroyed elements (not removed)
+			});
+		}else{
+			this.each(function(i, item){
+				model.destroy(gId(item), function(){
+					item.destroyed()
+				})
+			});
+		}
+	},
+	/**
+	 * Listens for an events on this list.  The only useful events are:
+	 * 
+	 *   . add - when new items are added
+	 *   . update - when an item is updated
+	 *   . remove - when items are removed from the list (typically because they are destroyed).
+	 *    
+	 * ## Listen for items being added 
+	 *  
+	 *     list.bind('add', function(ev, newItems){
+	 *     
+	 *     })
+	 *     
+	 * ## Listen for items being removed
+	 * 
+	 *     list.bind('remove',function(ev, removedItems){
+	 *     
+	 *     })
+	 *     
+	 * ## Listen for an item being updated
+	 * 
+	 *     list.bind('update',function(ev, updatedItem){
+	 *     
+	 *     })
+	 */
+	bind : function(){
+		if(this.__events__ === undefined){
+			this.bindings(this);
+			// we should probably remove destroyed models here
+		}
+		$.fn.bind.apply($([this]),arguments);
+		return this;
+	},
+	/**
+	 * Unbinds an event on this list.  Once all events are unbound,
+	 * unbind stops listening to all elements in the collection.
+	 * 
+	 *     list.unbind("update") //unbinds all update events
+	 */
+	unbind : function(){
+		$.fn.unbind.apply($([this]),arguments);
+		if(this.__events__ === undefined){
+			//console.log("unbinding all")
+			$(this).unbind(this._namespace)
+		}
+		return this;
+	},
+	// listens to destroyed and updated on instances so when an item is
+	//  updated - updated is called on model
+	//  destroyed - it is removed from the list
+	bindings : function(items){
+		var self= this;
+		$(items).bind("destroyed"+this._namespace, function(){ 
+			//remove from me
+			self.remove(this); //triggers the remove event
+		}).bind("updated"+this._namespace, function(){
+			$([self]).trigger("update", this)
+		});
+	},
+	/**
+	 * @function push
+	 * Adds a instance or instances to the list
+	 * 
+	 *     list.push(new Recipe({id: 5, name: "Water"}))
+	 */
+	push: function(){
+		var args = getArgs(arguments),
+			self = this;
+		//listen to events on this only if someone is listening on us, this means remove won't
+		//be called if we aren't listening for removes
+		if(this.__events__ !== undefined){
+			this.bindings(args);
+		}
+		
+		this._changed = true;
+		var res = push.apply( this, args )
+		//do this first so we could prevent?
+		if(args.length){
+			$([this]).trigger("add",[args]);
+		}
+		
+		return res;
 	}
 });
 
-var modifiers = {
-	/**
-	 * @function push
-	 * Pushs an instance onto the list
-	 */
-	push: [].push,
+var push = [].push,
+	modifiers = {
+
 	/**
 	 * @function pop
 	 * Pops the last instance off the list
@@ -252,7 +388,8 @@ var modifiers = {
 	 * @function sort
 	 * sorts the list
 	 */
-	sort : [].sort
+	sort : [].sort//,
+	//slice : [].slice
 }
 
 $.each(modifiers, function(name, func){

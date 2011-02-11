@@ -20,7 +20,7 @@ steal.plugins('jquery/event/drag', 'jquery/dom/cur_styles').then(function( $ ) {
 	 * @param {jQuery} container
 	 * @return {jQuery.Drag} the drag
 	 */
-	step = function( amount, container ) {
+	step = function( amount, container, center ) {
 		//on draws ... make sure this happens
 		if ( typeof amount == 'number' ) {
 			amount = {
@@ -32,10 +32,11 @@ steal.plugins('jquery/event/drag', 'jquery/dom/cur_styles').then(function( $ ) {
 		this._step = amount;
 
 		var styles = container.curStyles("borderTopWidth", "paddingTop", "borderLeftWidth", "paddingLeft");
-		var left = parseInt(styles.borderTopWidth) + parseInt(styles.paddingTop),
-			top = parseInt(styles.borderLeftWidth) + parseInt(styles.paddingLeft);
+		var top = parseInt(styles.borderTopWidth) + parseInt(styles.paddingTop),
+			left = parseInt(styles.borderLeftWidth) + parseInt(styles.paddingLeft);
 
 		this._step.offset = container.offsetv().plus(left, top);
+		this._step.center = center;
 		return this;
 	};
 
@@ -44,9 +45,11 @@ steal.plugins('jquery/event/drag', 'jquery/dom/cur_styles').then(function( $ ) {
 	$.Drag.prototype.position = function( offsetPositionv ) {
 		//adjust required_css_position accordingly
 		if ( this._step ) {
-			var movingSize = this.movingElement.dimensionsv('outer'),
-				lot = this._step.offset.top(),
-				lof = this._step.offset.left();
+			var step = this._step,
+				center = step.center && step.center.toLowerCase(),
+				movingSize = this.movingElement.dimensionsv('outer'),
+				lot = step.offset.top()- (center && center != 'x' ? movingSize.height() / 2 : 0),
+				lof = step.offset.left() - (center && center != 'y' ? movingSize.width() / 2 : 0);
 
 			if ( this._step.x ) {
 				offsetPositionv.left(Math.round(lof + round(offsetPositionv.left() - lof, this._step.x)))

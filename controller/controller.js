@@ -3,7 +3,8 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	// ------- helpers  ------
 	// Binds an element, returns a function that unbinds
 	var bind = function( el, ev, callback ) {
-		var wrappedCallback;
+		var wrappedCallback,
+			binder = el.bind && el.unbind ? el : $(el);
 		//this is for events like >click.
 		if ( ev.indexOf(">") === 0 ) {
 			ev = ev.substr(1);
@@ -15,11 +16,11 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 				}
 			};
 		}
-		$(el).bind(ev, wrappedCallback || callback);
+		binder.bind(ev, wrappedCallback || callback);
 		// if ev name has >, change the name and bind
 		// in the wrapped callback, check that the element matches the actual element
 		return function() {
-			$(el).unbind(ev, wrappedCallback || callback);
+			binder.unbind(ev, wrappedCallback || callback);
 			el = ev = callback = wrappedCallback = null;
 		};
 	},
@@ -424,7 +425,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			return {
 				processor: processor,
 				parts: parts,
-				delegate : arr ? [convertedName[0]] : undefined
+				delegate : arr ? convertedName[0] : undefined
 			};
 		},
 		/**

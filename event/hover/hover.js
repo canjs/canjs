@@ -59,14 +59,15 @@ steal.plugins('jquery/event','jquery/event/livehack').then(function($){
  * @constructor Creates a new hover.  This is never
  * called directly.
  */
-jQuery.Hover = function(){
-	this._delay =  jQuery.Hover.delay;
-	this._distance = jQuery.Hover.distance;
+$.Hover = function(){
+	this._delay =  $.Hover.delay;
+	this._distance = $.Hover.distance;
+	this._leave = $.Hover.leave
 };
 /**
  * @Static
  */
-$.extend(jQuery.Hover,{
+$.extend($.Hover,{
 	/**
 	 * @attribute delay
 	 * A hover is  activated if it moves less than distance in this time.
@@ -78,13 +79,14 @@ $.extend(jQuery.Hover,{
 	 * A hover is activated if it moves less than this distance in delay time.
 	 * Set this value as a global default.
 	 */
-	distance: 10
+	distance: 10,
+	leave : 0
 })
 
 /**
  * @Prototype
  */
-$.extend(jQuery.Hover.prototype,{
+$.extend($.Hover.prototype,{
 	/**
 	 * Sets the delay for this hover.  This method should
 	 * only be used in hoverinit.
@@ -93,6 +95,7 @@ $.extend(jQuery.Hover.prototype,{
 	 */
 	delay: function( delay ) {
 		this._delay = delay;
+		return this;
 	},
 	/**
 	 * Sets the distance for this hover.  This method should
@@ -101,60 +104,89 @@ $.extend(jQuery.Hover.prototype,{
 	 */
 	distance: function( distance ) {
 		this._distance = distance;
+		return this;
+	},
+	leave : function(leave){
+		this._leave = leave;
+		return this;
 	}
 })
-var $ = jQuery,
-	event = jQuery.event, 
+var event = $.event, 
 	handle  = event.handle,
 	onmouseenter = function(ev){
 		//now start checking mousemoves to update location
 		var delegate = ev.liveFired || ev.currentTarget;
 		var selector = ev.handleObj.selector;
+		//prevents another mouseenter until current has run its course
+		if($.data(delegate,"_hover"+selector)){
+			return;
+		}
+		$.data(delegate,"_hover"+selector, true)
 		var loc = {
 				pageX : ev.pageX,
 				pageY : ev.pageY
 			}, 
 			dist = 0, 
 			timer, 
-			entered = this, 
-			called = false,
+			enteredEl = this, 
+			hovered = false,
 			lastEv = ev, 
-			hover = new jQuery.Hover();
-
-		$(entered).bind("mousemove.specialMouseEnter", {}, function(ev){
-			dist += Math.pow( ev.pageX-loc.pageX, 2 ) + Math.pow( ev.pageY-loc.pageY, 2 ); 
-			loc = {
-				pageX : ev.pageX,
-				pageY : ev.pageY
-			}
-			lastEv = ev
-		}).bind("mouseleave.specialMouseLeave",{}, function(ev){
-			clearTimeout(timer);
-			if(called){
+			hover = new $.Hover(),
+			leaveTimer,
+			callHoverLeave = function(){
 				$.each(event.find(delegate, ["hoverleave"], selector), function(){
-					this.call(entered, ev)
+					this.call(enteredEl, ev, hover)
 				})
-			}
-			$(entered).unbind("mouseleave.specialMouseLeave")
-		})
+				cleanUp();
+			},
+			mouseenter = function(ev){
+				clearTimeout(leaveTimer);
+				dist += Math.pow( ev.pageX-loc.pageX, 2 ) + Math.pow( ev.pageY-loc.pageY, 2 ); 
+				loc = {
+					pageX : ev.pageX,
+					pageY : ev.pageY
+				}
+				lastEv = ev
+			},
+			mouseleave = function(ev){
+				clearTimeout(timer);
+				// go right away
+				if(hovered){
+					if(hover._leave === 0){
+						callHoverLeave();
+					}else{
+						clearTimeout(leaveTimer);
+						leaveTimer = setTimeout(function(){
+							callHoverLeave();
+						}, hover._leave)
+					}
+				}else{
+					cleanUp();
+				}
+			},
+			cleanUp = function(){
+				$(enteredEl).unbind("mouseleave",mouseleave)
+				$(enteredEl).unbind("mousemove",mouseenter);
+				$.removeData(delegate,"_hover"+selector)
+			};
+		
+		$(enteredEl).bind("mousemove",mouseenter).bind("mouseleave", mouseleave);
 		$.each(event.find(delegate, ["hoverinit"], selector), function(){
-			this.call(entered, ev, hover)
+			this.call(enteredEl, ev, hover)
 		})
+		
 		timer = setTimeout(function(){
 			//check that we aren't moveing around
-			if(dist < hover._distance && $(entered).queue().length == 0){
+			if(dist < hover._distance && $(enteredEl).queue().length == 0){
 				$.each(event.find(delegate, ["hoverenter"], selector), function(){
-					this.call(entered, lastEv, hover)
+					this.call(enteredEl, lastEv, hover)
 				})
-				called = true;
-				$(entered).unbind("mousemove.specialMouseEnter")
-				
+				hovered = true;
+				return;
 			}else{
 				dist = 0;
 				timer = setTimeout(arguments.callee, hover._delay)
 			}
-			
-			
 		}, hover._delay)
 		
 	};
