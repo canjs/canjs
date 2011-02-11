@@ -4,7 +4,8 @@
 
 <h1>Service / Ajax Encapsulation</h1>
 
-Models encapsulate your application's raw data.  
+Models encapsulate your application's raw data.  This promotes reuse and provide a 
+standard interface for widgets to talk to services.
 
 The majority of the time, the raw data comes from 
 services your server provides.  For example, 
@@ -62,7 +63,8 @@ The Grid demo shows using two different models with the same widget.
 
 ## How to Encapsulate
 
-Think of models as a contract for creating, reading, updating, and deleting data.  
+Think of models as a contract for creating, reading, updating, and deleting data. 
+ 
 By filling out a model, you can pass that model to a widget and the widget will use 
 the model as a proxy for your data.  
 
@@ -70,7 +72,7 @@ The following chart shows the methods most models provide:
 
 <table>
     <tr>
-        <td>Create</td><td><pre>Contact.create(attrs, success, error</pre></td>
+        <td>Create</td><td><pre>Contact.create(attrs, success, error)</pre></td>
     </tr>
     <tr>
         <td>Read</td><td><pre>Contact.findAll(params,success,error)
@@ -85,7 +87,66 @@ Contact.findOne(params, success, error)</pre></td>
 </table>
 
 By filling out these methods, you get the benefits of encapsulation, 
-AND all the other magic Model provides.  Lets see how we might fill out the
+AND all the other magic Model provides.  
+
+There are two ways to fill out these methods:
+
+  - providing service urls
+  - implementing the method
+  
+## Using Service URLS
+
+If your server is REST-ish, you can simply provide
+urls to your services.  
+
+The following shows filling out a 
+Task model's urls.  For each method it shows calling the function,
+how the service request is made, and what the server's response
+should look like:
+
+    $.Model("Task",{
+    
+      // Task.findAll({foo: "bar"})
+	  // -> GET /tasks.json?foo=bar
+	  // <- [{id: 1, name: "foo"},{ ... }]
+      findAll : "/tasks.json",    
+      
+      // Task.findOne({id: 5})
+	  // -> GET /tasks/5.json
+      findOne : "/tasks/{id}.json", 
+      
+      // new Task({name: 'justin'}).save()
+	  // -> POST /tasks.json id=5
+	  // <- {id : 5}
+      create : "/tasks.json",
+      
+      // task.update({name: 'justin'})
+	  // -> PUT /tasks/5.json name=justin
+	  // <- {}
+      update : "/tasks/{id}.json",
+      
+      // task.destroy()
+	  // -> DESTROY /tasks/5.json
+	  // <- {}
+      destroy : "/tasks/{id}.json"
+    },{})
+
+You can change the HTTP request type by putting a GET, POST, DELETE, PUT like:
+
+    $.Model("Todo",{
+      destroy: "POST /task/delete/{id}.json
+    },{})
+
+
+<b>Note:</b> Even if your server doesn't respond with service data
+in the same way, it's likely that $.Model will be able to figure it out.
+
+##  Implement Service Methods
+
+If providing a url doesn't work for you, you might need to fill out the
+service method yourself.  
+
+Lets see how we might fill out the
 <code>Contact.findAll</code> function:
 
 @codestart

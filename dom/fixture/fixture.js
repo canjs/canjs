@@ -1,6 +1,7 @@
 steal.plugins('jquery/dom').then(function( $ ) {
 
-	var ajax = $.ajax;
+	var ajax = $.ajax,
+        typeTest = /^(script|json|test|jsonp)$/;
 
 	/**
 	 * @class jQuery.fixture
@@ -233,7 +234,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		/**
 		 * Used to make fixtures for findAll / findOne style requests.
 		 * @codestart
-		 * //makes a threaded list of messages
+		 * //makes a nested list of messages
 		 * $.fixture.make(["messages","message"],1000, function(i, messages){
 		 *   return {
 		 *     subject: "This is message "+i,
@@ -255,11 +256,18 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		 *    success: function( messages ) {  ... }
 		 * });
 		 * @codeend
-		 * @param {Array} types An array of the fixture names
+		 * @param {Array|String} types An array of the fixture names or the singular fixture name.
+		 * If an array, the first item is the plural fixture name (prefixed with -) and the second
+		 * item is the singular name.  If a string, it's assumed to be the singular fixture name.  Make
+		 * will simply add s to the end of it for the plural name.
 		 * @param {Number} count the number of items to create
-		 * @param {Function} make a function that will return json data representing the object.
+		 * @param {Function} make a function that will return json data representing the object.  The
+		 * make function is called back with the id and the current array of items.
 		 */
 		make: function( types, count, make ) {
+			if(typeof types === "string"){
+				types = [types+"s",types ]
+			}
 			// make all items
 			var items = ($.fixture["~" + types[0]] = []);
 			for ( var i = 0; i < (count); i++ ) {
@@ -381,7 +389,17 @@ steal.plugins('jquery/dom').then(function( $ ) {
 				status: 200,
 				statusText: "OK"
 			}, xhr);
-		}
+		},
+		/**
+		 * @attribute on
+		 * On lets you programatically turn off fixtures.  This is mostly used for testing.
+		 * 
+		 *     $.fixture.on = false
+		 *     Task.findAll({}, function(){
+		 *       $.fixture.on = true;
+		 *     })
+		 */
+		on : true
 	});
 	/**
 	 * @attribute delay
@@ -426,7 +444,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 */
 	ajax = function( settings ) {
 		var func = $.fixture;
-		if (!settings.fixture ) {
+		if (!settings.fixture || ! $.fixture.on ) {
 			return ajax.apply($, arguments);
 		}
 		if ( $.fixture["-handleFunction"](settings) ) {
@@ -473,6 +491,14 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	get = function( url, data, callback, type, fixture ) {
 		// shift arguments if data argument was ommited
 		if ( jQuery.isFunction(data) ) {
+            if(!typeTest.test(type||"")){
+                fixture = type;
+                type = callback;
+            }
+            callback = data;
+            data = null;
+        }
+		if ( jQuery.isFunction(data) ) {
 			fixture = type;
 			type = callback;
 			callback = data;
@@ -500,11 +526,13 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 */
 	post = function( url, data, callback, type, fixture ) {
 		if ( jQuery.isFunction(data) ) {
-			fixture = type;
-			type = callback;
-			callback = data;
-			data = {};
-		}
+            if(!typeTest.test(type||"")){
+                fixture = type;
+                type = callback;
+            }
+            callback = data;
+            data = {};
+        }
 
 		return jQuery.ajax({
 			type: "POST",

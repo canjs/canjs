@@ -55,16 +55,7 @@ test("hookup and model", function(){
 	ok(div.hasClass("person_5"), "has person_5");
 	equals(p, div.model(),"gets model" )
 })
-test("guess type", function(){
-   equals("array", $.Model.guessType( [] )  );
-   equals("date", $.Model.guessType( new Date() )  );
-   equals("boolean", $.Model.guessType( true )  );
-   equals("number", $.Model.guessType( "1" )  );
-   equals("string", $.Model.guessType( "a" )  );
-   
-   equals("string", $.Model.guessType( "1e234234324234" ) );
-   equals("string", $.Model.guessType( "-1e234234324234" ) );
-})
+
 
 test("wrapMany", function(){
 	var people = Person.wrapMany([
@@ -104,11 +95,13 @@ test("error binding", 1, function(){
 })
 
 test("auto methods",function(){
+	//turn off fixtures
+	$.fixture.on = false;
 	var School = $.Model.extend("Jquery.Model.Models.School",{
 	   findAll : steal.root.join("jquery/model/test")+"/{type}.json",
 	   findOne : steal.root.join("jquery/model/test")+"/{id}.json",
 	   create : steal.root.join("jquery/model/test")+"/create.json",
-	   update : steal.root.join("jquery/model/test")+"/update{id}.json"
+	   update : "POST "+steal.root.join("jquery/model/test")+"/update{id}.json"
 	},{})
 	stop(5000);
 	School.findAll({type:"schools"}, function(schools){
@@ -123,8 +116,10 @@ test("auto methods",function(){
 			new School({name: "Highland"}).save(function(){
 				equals(this.name,"Highland","create gets the right name")
 				this.update({name: "LHS"}, function(){
-					equals(this.name,"LHS","create gets the right name")
 					start();
+					equals(this.name,"LHS","create gets the right name")
+					
+					$.fixture.on = true;
 				})
 			})
 			
@@ -140,4 +135,30 @@ test("isNew", function(){
 	ok(p2.isNew(), "null id is new");
 	var p3 = new Person({id: 0})
 	ok(!p3.isNew(), "0 is not new");
+});
+test("findAll string", function(){
+	$.fixture.on = false;
+	$.Model("Test.Thing",{
+		findAll : steal.root.join("jquery/model/test/qunit/findAll.json")
+	},{});
+	stop();
+	Test.Thing.findAll({},function(things){
+		equals(things.length, 1, "got an array");
+		equals(things[0].id, 1, "an array of things");
+		start();
+		$.fixture.on = true;
+	})
+})
+test("Empty uses fixtures", function(){
+	$.Model("Test.Things");
+	$.fixture.make("thing", 10, function(i){
+		return {
+			id: i
+		}
+	});
+	stop();
+	Test.Thing.findAll({}, function(things){
+		start();
+		equals(things.length, 10,"got 10 things")
+	})
 })

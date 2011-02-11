@@ -9,6 +9,29 @@
 				});
 			$('#pluginForm').delegate("input[type=checkbox]", "change", 
 				$.proxy($.Downloader.changeHandler, $.Downloader));
+				
+			// append css if necessary
+			if(location.search && /csspath/.test(location.search)){
+				var path = location.search.split("=")[1];
+				var headID = document.getElementsByTagName("head")[0],
+					cssNode = document.createElement('link');
+				cssNode.type = 'text/css';
+				cssNode.rel = 'stylesheet';
+				cssNode.href = path;
+				cssNode.media = 'screen';
+				headID.appendChild(cssNode);
+			}
+			
+			$.Downloader.setupWordbreaks();
+		},
+		// inject <wbr> characters in labels
+		setupWordbreaks: function(){
+			var text, newText;
+			$(".plugin label").each(function(i){
+				text = $(this).text();
+				newText = text.replace(/\//g, "<wbr>/")
+				$(this).html(newText);
+			})
 		},
 		changeHandler: function(ev){
 			var $target = $(ev.target);
@@ -36,8 +59,7 @@
 		 	var dep, i, index;
 		 	for(i=0; i<dependencies.length; i++){
 				dep = dependencies[i];
-				index = this.dependencies.indexOf(dep);
-				if(index != -1) {
+				if(!$.inArray(dep, this.dependencies)) {
 					this.dependencies.splice(index, 1);
 				}
 				this.dependencies.push(dep);

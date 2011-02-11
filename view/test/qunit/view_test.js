@@ -68,3 +68,13 @@ test("hookup", function(){
 	
 	$("#qunit-test-area").html("//jquery/view/test/qunit/hookup.ejs",{}); //makes sure no error happens
 })
+
+test("inline templates other than 'tmpl' like ejs", function(){
+        $("#qunit-test-area").html("");
+
+        $("#qunit-test-area").html($('<script type="test/ejs" id="test_ejs"><span id="new_name"><%= name %></span></script>'));
+
+        $("#qunit-test-area").html('test_ejs', {name: 'Henry'});
+        equal( $("#new_name").text(), 'Henry');
+	$("#qunit-test-area").html("");
+})
