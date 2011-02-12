@@ -1,6 +1,6 @@
 steal.plugins("jquery/event/drop",
 	'funcunit/qunit',
-	'funcunit/synthetic').then(function(){
+	'funcunit/syn').then(function(){
 
 module("jquery/event/drag",{
 	makePoints : function(){

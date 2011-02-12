@@ -1,23 +1,43 @@
 //we probably have to have this only describing where the tests are
-steal('//jquery/lang/lang_test').plugins(	
-'jquery/class/test/qunit',
-'jquery/controller/test/qunit',
-'jquery/controller/view/test/qunit',
-
-'jquery/dom/compare/test/qunit',
-'jquery/dom/cur_styles/test/qunit',
-'jquery/dom/dimensions/test/qunit',
-'jquery/dom/fixture/test/qunit',
-'jquery/dom/form_params/test/qunit',
-'jquery/event/default/test/qunit',
-'jquery/event/destroyed/test/qunit',
-'jquery/event/hover/test/qunit',
-'jquery/event/drag/test/qunit',
-
-
-
-'jquery/model/test/qunit',
-
-'jquery/view/test/qunit',
+(function(){
+	var isReady,
+		stateAfterScript;
+	
+steal.plugins('jquery')
+	.then(
+	function($){
+		$(function(){
+			isReady = true;
+		})
+	},
+	'//jquery/lang/lang_test',
+	 '//jquery/class/class_test',
+	 '//jquery/event/drag/drag_test')
+.plugins(
+	'jquery/controller/test/qunit',
+	'jquery/controller/view/test/qunit',
+	
+	'jquery/dom/compare/test/qunit',
+	'jquery/dom/cur_styles/test/qunit',
+	'jquery/dom/dimensions/test/qunit',
+	'jquery/dom/fixture/test/qunit',
+	'jquery/dom/form_params/test/qunit',
+	'jquery/event/default/test/qunit',
+	'jquery/event/destroyed/test/qunit',
+	'jquery/event/hover/test/qunit',
+	'jquery/model/test/qunit',
+	'jquery/view/test/qunit',
 	'jquery/view/ejs/test/qunit'
-)
+).then(function(){
+	console.log("isReady", isReady)
+	stateAfterScript = isReady;
+	module('jquery v steal');
+	
+	
+	test("jquery isn't ready", function(){
+		ok(!stateAfterScript, "jQuery isn't ready yet")
+	})
+	
+});
+
+})()
