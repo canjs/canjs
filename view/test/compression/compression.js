@@ -4,7 +4,7 @@ steal.plugins('jquery/view/ejs', 'jquery/view/ejs', 'jquery/view/tmpl')
 			'tmplTest.tmpl')
 	 .then(function(){
 	 	$(document).ready(function(){
-	 		$("#target").append('views/relative.ejs', {})
+	 		$("#target").append('//jquery/view/test/compression/views/relative.ejs', {})
 	 					.append($.View('//jquery/view/test/compression/views/absolute.ejs', {} ))
 	 					.append($.View('//jquery/view/test/compression/views/tmplTest.tmpl', {message: "Jquery Tmpl"} ))
 		})
