@@ -23,9 +23,9 @@ steal('//steal/test/test', function(s){
 			steal.build('jquery/view/test/compression/compression.html',{to: 'jquery/view/test/compression'});
 		});
 		s.test.clear();
-		s.test.remove("jquery/view/test/compression/views/absolute.ejs")
-		s.test.remove("jquery/view/test/compression/views/relative.ejs")
-		s.test.remove("jquery/view/test/compression/views/tmplTest.tmpl")
+//		s.test.remove("jquery/view/test/compression/views/absolute.ejs")
+//		s.test.remove("jquery/view/test/compression/views/relative.ejs")
+//		s.test.remove("jquery/view/test/compression/views/tmplTest.tmpl")
 		
 		
 		steal = {env: "production"};
@@ -36,7 +36,7 @@ steal('//steal/test/test', function(s){
 		s.test.ok(  /Jquery Tmpl/i.test( $(document.body).text() ), "Jquery Tmpl not in page!" );
 		
 		s.test.clear();
-		s.test.remove("jquery/view/test/compression/production.js")
+//		s.test.remove("jquery/view/test/compression/production.js")
 			
 	})
 	

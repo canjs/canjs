@@ -222,6 +222,11 @@ steal.plugins("jquery").then(function( $ ) {
 			suffix = $view.ext;
 			url = url + $view.ext;
 		}
+		
+		if (typeof steal !== "undefined") {
+			// convert to a path relative to steal's root, so production paths work
+			url = "//"+new steal.File(url).normalize();
+		}
 
 		//convert to a unique and valid id
 		id = toId(url);
