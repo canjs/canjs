@@ -517,7 +517,7 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 
 				//@steal-remove-start
 				if (!Class.nameOk ) {
-					steal.dev.isHappyName(fullName)
+					//steal.dev.isHappyName(fullName)
 				}
 				if(current[shortName]){
 					steal.dev.warn("class.js There's already something called "+fullName)

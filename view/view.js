@@ -556,7 +556,8 @@ steal.plugins("jquery").then(function( $ ) {
 	 *  @parent jQuery.View
 	 *  abc
 	 */
-	"replaceWith"];
+	"replaceWith", 
+	"val"];
 
 	//go through helper funcs and convert
 	for ( var i = 0; i < funcs.length; i++ ) {
