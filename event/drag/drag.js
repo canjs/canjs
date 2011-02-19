@@ -417,7 +417,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 		 * @param {Boolean} [val] optional, set to false if you don't want to revert.
 		 */
 		revert: function( val ) {
-			this._revert = val === null ? true : val;
+			this._revert = val === undefined ? true : val;
 		},
 		/**
 		 * Isolates the drag to vertical movement.
