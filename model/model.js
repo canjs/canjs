@@ -67,7 +67,20 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		},
 		getId = function(inst){
 			return inst[inst.Class.id]
-		};
+		},
+		unique = function(items){
+	        var collect = [];
+	        for(var i=0; i < items.length; i++){
+	            if(!items[i]["__u Nique"]){
+	                collect.push(items[i]);
+	                items[i]["__u Nique"] = true;
+	            }
+	        }
+	        for(i=0; i< collect.length; i++){
+	            delete collect[i]["__u Nique"];
+	        }
+	        return collect;
+	    };
 	/**
 	 * @class jQuery.Model
 	 * @tag core
@@ -1358,7 +1371,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 
 		ret = getList(kind);
 
-		ret.push.apply(ret, $.unique(collection));
+		ret.push.apply(ret, unique(collection));
 		return ret;
 	};
 	/**
