@@ -228,12 +228,7 @@ steal.plugins("jquery").then(function( $ ) {
 
 		//if a absolute path, use steal to get it
 		if ( url.match(/^\/\//) ) {
-			if (typeof steal === "undefined") {
-				url = "/"+url.substr(2);
-			}
-			else {
-				url = steal.root.join(url.substr(2));
-			}
+			url = steal.root.mapJoin(url.substr(2));
 		}
 
 		//get the template engine
