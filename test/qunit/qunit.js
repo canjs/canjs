@@ -1,5 +1,5 @@
 //we probably have to have this only describing where the tests are
-steal('//jquery/lang/lang_test').plugins(	
+steal('//jquery/lang/lang_test','//jquery/dom/fixture/fixture_test').plugins(	
 'jquery/class/test/qunit',
 'jquery/controller/test/qunit',
 'jquery/controller/view/test/qunit',
@@ -7,7 +7,7 @@ steal('//jquery/lang/lang_test').plugins(
 'jquery/dom/compare/test/qunit',
 'jquery/dom/cur_styles/test/qunit',
 'jquery/dom/dimensions/test/qunit',
-'jquery/dom/fixture/test/qunit',
+
 'jquery/dom/form_params/test/qunit',
 'jquery/event/default/test/qunit',
 'jquery/event/destroyed/test/qunit',

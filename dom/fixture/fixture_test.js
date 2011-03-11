@@ -1,5 +1,8 @@
-module("jquery/dom/fixture");
+steal
+ .plugins("jquery/dom/fixture")  //load your app
+ .plugins('funcunit/qunit').then(function(){
 
+module("jquery/dom/fixture");
 
 test("static fixtures", function(){
 	stop();
@@ -47,4 +50,30 @@ test("dynamic fixtures",function(){
 			
 		},"json",fix);
 	},'json',fix);
-})
+});
+
+test("fixture function", function(){
+	
+	stop();
+	var url = steal.root.join("jquery/dom/fixture/fixtures/foo.json");
+	$.fixture(url,"//jquery/dom/fixture/fixtures/foobar.json" );
+	
+	$.get(url,function(data){
+		equals(data.sweet,"ner","url passed works");
+		
+		$.fixture(url,null );
+		
+		$.get(url,function(data){ 
+		
+			equals(data.a,"b","removed");
+			start();
+			
+		},'json')
+		
+		
+		
+	},"json");
+
+});
+
+});
