@@ -1,7 +1,38 @@
 steal.plugins('jquery/dom').then(function( $ ) {
 
 	var ajax = $.ajax,
-        typeTest = /^(script|json|test|jsonp)$/;
+        typeTest = /^(script|json|test|jsonp)$/,
+		// a list of 'overwrite' settings object
+		overwrites = [],
+		// checks if an overwrite matches ajax settings
+		isTheSame = function(settings, overwrite){
+			for(var prop in overwrite){
+				if(prop === 'fixture'){
+					continue;
+				}
+				if(overwrite[prop] !== settings[prop]){
+					return false;
+				}
+			}
+			return true;
+		},
+		// returns the index of an overwrite function
+		find = function(settings){
+			for(var i =0; i < overwrites.length; i++){
+				if(isTheSame(settings, overwrites[i])){
+					return i;
+				}
+			}
+			return -1;
+		},
+		// overwrites the settings fixture if an overwrite matches
+		overwrite = function(settings){
+			var index = find(settings);
+			if(index > -1){
+				settings.fixture = overwrites[index].fixture;
+			}
+
+		}; // by url
 
 	/**
 	 * @class jQuery.fixture
@@ -162,7 +193,30 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 * @param {Object} settings
 	 * @return {String} the url that will be used for the fixture
 	 */
-	$.fixture = function( settings ) {
+	$.fixture = function( settings , fixture) {
+		// if we provide a fixture ...
+		if(fixture !== undefined){
+			if(typeof settings == 'string'){
+				// handle url strings
+				settings  ={
+					url : settings
+				};
+			}
+			//handle removing
+			if(fixture == null){
+				var index = find(settings);
+				if(index >= -1){
+					return overwrites.splice(index,1)
+				}
+				return 
+			}
+			
+			settings.fixture = fixture;
+			overwrites.push(settings)
+			return;
+		}
+		
+		
 		var url = settings.url,
 			match, left, right;
 		url = url.replace(/%2F/g, "~").replace(/%20/g, "_");
@@ -444,6 +498,10 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 */
 	ajax = function( settings ) {
 		var func = $.fixture;
+		
+		//lets look for the fixture setting ...
+		overwrite(settings);
+		
 		if (!settings.fixture || ! $.fixture.on ) {
 			return ajax.apply($, arguments);
 		}
