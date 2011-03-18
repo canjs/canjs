@@ -1,17 +1,53 @@
 steal.plugins('jquery/event').then(function($){
 	var keymap = {},
 		reverseKeyMap = {};
-		
-	$.event.keymap = function(map){
-		keymap = map;
-		reverseKeyMap = {};
+	
+	/**
+	 * @function jQuery.event.key
+	 * @parent specialevents
+	 * 
+	 * Key gives you a string representation of the key pressed.  The following
+	 * listens to and prevents backspaces being pressed in inputs:
+	 * 
+	 * $("input").keypress(function(ev){
+	 *   if(ev.key() == '\b') {
+	 *    ev.preventDefault();
+	 *   }
+	 * });
+	 * 
+	 * ## Keys
+	 * 
+	 * The following describes the key values returned by [jQuery.Event.prototype.key].
+	 * 
+	 *  . \b - backspace
+	 *  . \t - tab
+	 *  . \r - enter key
+	 *  . shift, ctrl, alt
+	 *  . pause-break, caps, escape, num-lock, scroll-loc, print
+	 *  . page-up, page-down, end, home, left, up, right, down, insert, delete
+	 *  . ' ' - space
+	 *  . 0-9 - number key pressed
+	 *  . a-z - alpha key pressed
+	 *  . num0-9 - number pad key pressed
+	 *  . / ; : = , - . / ` [ \\ ] ' "
+	 *  . f1-12 - function keys pressed
+	 *  
+	 * ## Alternate maps.
+	 * 
+	 * You can pass jQuery.event.key other keys or overwrite names:
+	 * 
+	 *     $.event.key({"~" : 177});
+	 * 
+	 * @param {Object} map
+	 */
+	$.event.key = function(map){
+		$.extend(keymap, map);
 		for(var name in map){
 			reverseKeyMap[map[name]] = name;
 		}
 	};
 	
-	
-	$.event.keymap({
+	$.event.key({
 		//backspace
 		'\b':'8',
 		
