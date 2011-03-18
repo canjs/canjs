@@ -305,7 +305,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * Create is called by save to create a new instance.  If you want to be able to call save on an instance
 			 * you have to implement create.
 			 * 
-			 * The easist way to implement create is to just give it the url to post data to:
+			 * The easiest way to implement create is to just give it the url to post data to:
 			 * 
 			 *     $.Model("Recipe",{
 			 *       create: "/recipes"
