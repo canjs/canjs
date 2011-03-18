@@ -128,7 +128,6 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 	 */
 	$.extend($.Drag.prototype, {
 		setup: function( options, ev ) {
-			//this.noSelection();
 			$.extend(this, options);
 			this.element = $(this.element);
 			this.event = ev;
@@ -142,7 +141,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 			$(document).bind('mouseup', mouseup);
 
 			if (!this.callEvents('down', this.element, ev) ) {
-				ev.preventDefault();
+			    this.noSelection(this.delegate);
 			}
 		},
 		/**
@@ -155,7 +154,8 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 			if (!this.moved ) {
 				this.event = this.element = null;
 			}
-			//this.selection();
+
+            this.selection(this.delegate);
 			this.destroyed();
 		},
 		mousemove: function( docEl, ev ) {
@@ -178,18 +178,47 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 			}
 			this.destroy();
 		},
-		noSelection: function() {
+
+        /**
+         * noSelection method turns off text selection during a drag event.
+         * This method is called by default unless a event is listening to the 'dragdown' event.
+         *
+         *  ## Example
+         *
+         *      $('div.drag').bind('dragdown', function(elm,event,drag){
+         *          drag.noSelection();
+         *      });
+         *      
+         * @param elm
+         */
+		noSelection: function(elm) {
+            this.selectionDisabled = true;
+            
 			document.documentElement.onselectstart = function() {
 				return false;
 			};
 			document.documentElement.unselectable = "on";
-			$(document.documentElement).css('-moz-user-select', 'none');
+			$(elm).css('-moz-user-select', '-moz-none');
 		},
-		selection: function() {
-			document.documentElement.onselectstart = function() {};
-			document.documentElement.unselectable = "off";
-			$(document.documentElement).css('-moz-user-select', '');
+
+        /**
+         * selection method turns on text selection that was previously turned off during the drag event.
+         * This method is called by default in 'destroy' unless a event is listening to the 'dragdown' event.
+         * 
+         *  ## Example
+         *
+         *      $('div.drag').bind('dragdown', function(elm,event,drag){
+         *          drag.noSelection();
+         *      });
+         */
+		selection: function(elm) {
+            if(this.selectionDisabled){
+                document.documentElement.onselectstart = function() {};
+                document.documentElement.unselectable = "off";
+                $(elm).css('-moz-user-select', '');
+            }
 		},
+
 		init: function( element, event ) {
 			element = $(element);
 			var startElement = (this.movingElement = (this.element = $(element))); //the element that has been clicked on
