@@ -189,16 +189,17 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
          *          drag.noSelection();
          *      });
          *      
-         * @param elm
+         * @param [elm] an element to prevent selection on.  Defaults to the dragable element.
          */
 		noSelection: function(elm) {
-            this.selectionDisabled = true;
+            elm = elm || this.delegate
             
 			document.documentElement.onselectstart = function() {
 				return false;
 			};
 			document.documentElement.unselectable = "on";
-			$(elm).css('-moz-user-select', '-moz-none');
+			this.selectionDisabled = (this.selectionDisabled ? this.selectionDisabled.add(elm) : $(elm));
+			this.selectionDisabled.css('-moz-user-select', '-moz-none');
 		},
 
         /**
@@ -215,7 +216,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
             if(this.selectionDisabled){
                 document.documentElement.onselectstart = function() {};
                 document.documentElement.unselectable = "off";
-                $(elm).css('-moz-user-select', '');
+                this.selectionDisabled.css('-moz-user-select', '');
             }
 		},
 
@@ -411,6 +412,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 
 			// store the original element and make the ghost the dragged element
 			this.movingElement = ghost;
+			this.noSelection(ghost)
 			this._removeMovingElement = true;
 			return ghost;
 		},
@@ -433,7 +435,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 				display: 'block',
 				position: 'absolute'
 			}).show();
-
+			this.noSelection(this.movingElement)
 			this.mouseElementPosition = new $.Vector(this._offsetX, this._offsetY);
 		},
 		/**
