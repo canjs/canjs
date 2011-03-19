@@ -142,7 +142,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		 * Tests if a drop is within the point.
 		 */
 		isAffected: function( point, moveable, responder ) {
-			return ((responder.element != moveable.element) && (responder.element.within(point[0], point[1], responder).length == 1));
+			return ((responder.element != moveable.element) && (responder.element.within(point[0], point[1], responder._cache).length == 1));
 		},
 		/**
 		 * @hide
