@@ -1,12 +1,52 @@
-steal.plugins('jquery').then(function($){
-
-var getWindow = function( element ) {
-	return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
+steal.plugins('jquery','jquery/dom/range').then(function($){
+var convertType = function(type){
+	return  type.replace(/([a-z])([a-z]+)/gi, function(all,first,  next){
+			  return first+next.toLowerCase()	
+			}).replace(/_/g,"");
+},
+reverse = function(type){
+	return type.replace(/^([a-z]+)_TO_([a-z]+)/i, function(all, first, last){
+		return last+"_TO_"+first;
+	});
+},
+getWindow = function( element ) {
+	return element ? element.ownerDocument.defaultView || element.ownerDocument.parentWindow : window
+},
+// A helper that uses range to abstract out getting the current start and endPos.
+getElementsSelection = function(el, win){
+	var current = $.Range.current(el).clone(),
+		entireElement = $.Range(el).select(el);
+	if(!current.overlaps(entireElement)){
+		return null;
+	}
+	// we need to check if it starts before our element ...
+	if(current.compare("START_TO_START", entireElement) < 1){
+		startPos = 0;
+		// we should move current ...
+		current.move("START_TO_START",entireElement);
+	}else{
+		fromElementToCurrent =entireElement.clone();
+		fromElementToCurrent.move("END_TO_START", current);
+		startPos = fromElementToCurrent.toString().length
+	}
+	
+	// now we need to make sure current isn't to the right of us ...
+	if(current.compare("END_TO_END", entireElement) >= 0){
+		endPos = entireElement.toString().length
+	}else{
+		endPos = startPos+current.toString().length
+	}
+	return {
+		start: startPos,
+		end : endPos
+	};
 },
 getSelection = function(el){
-	// use selectionStart if we can
+	// use selectionStart if we can.
+	var win = getWindow(el);
+	
 	if (el.selectionStart !== undefined) {
-		// this is for opera, so we don't have to focus to type how we think we would
+
 		if(document.activeElement 
 		 	&& document.activeElement != el 
 			&& el.selectionStart == el.selectionEnd 
@@ -14,10 +54,14 @@ getSelection = function(el){
 			return {start: el.value.length, end: el.value.length};
 		}
 		return  {start: el.selectionStart, end: el.selectionEnd}
-	}else{
+	} else if(win.getSelection){
+		return getElementsSelection(el, win)
+	} else{
 
 		try {
-			//try 2 different methods that work differently (IE breaks depending on type)
+			//try 2 different methods that work differently
+			// one should only work for input elements, but sometimes doesn't
+			// I don't know why this is, or what to detect
 			if (el.nodeName.toLowerCase() == 'input') {
 				var real = getWindow(el).document.selection.createRange(), r = el.createTextRange();
 				r.setEndPoint("EndToStart", real);
@@ -29,27 +73,27 @@ getSelection = function(el){
 				}
 			}
 			else {
-				var real = getWindow(el).document.selection.createRange(), r = real.duplicate(), r2 = real.duplicate(), r3 = real.duplicate();
-				r2.collapse();
-				r3.collapse(false);
+				var res = getElementsSelection(el,win)
+				if(!res){
+					return res;
+				}
+				// we have to clean up for ie's textareas
+				var current = $.Range.current().clone(),
+					r2 = current.clone().collapse().range,
+					r3 = current.clone().collapse(false).range;
+				
 				r2.moveStart('character', -1)
 				r3.moveStart('character', -1)
-				//select all of our element
-				r.moveToElementText(el)
-				//now move our endpoint to the end of our real range
-				r.setEndPoint('EndToEnd', real);
-				var start = r.text.length - real.text.length, end = r.text.length;
-				if (start != 0 && r2.text == "") {
-					start += 2;
+				// if we aren't at the start, but previous is empty, we are at start of newline
+				if (res.startPos != 0 && r2.text == "") {
+					res.startPos += 2;
 				}
-				if (end != 0 && r3.text == "") {
-					end += 2;
+				// do a similar thing for the end of the textarea
+				if (res.endPos != 0 && r3.text == "") {
+					res.endPos += 2;
 				}
-				//if we aren't at the start, but previous is empty, we are at start of newline
-				return {
-					start: start,
-					end: end
-				}
+				
+				return res
 			}
 		}catch(e){
 			return {start: el.value.length, end: el.value.length};
@@ -63,6 +107,7 @@ select = function( el, start, end ) {
             el.focus();
             el.setSelectionRange(start, start);
 		} else {
+			el.select();
 			el.selectionStart = start;
 			el.selectionEnd = end;
 		}
@@ -79,16 +124,28 @@ select = function( el, start, end ) {
 			sel = win.getSelection(),
 			range = doc.createRange(),
 			ranges = [start,  end !== undefined ? end : start];
-        
 		getCharElement([el],ranges);
 		range.setStart(ranges[0].el, ranges[0].count);
 		range.setEnd(ranges[1].el, ranges[1].count);
-		console.log("after ..")
-        //sel.removeAllRanges();
+		
+		// removeAllRanges is suprisingly necessary for webkit ... BOOO!
+        sel.removeAllRanges();
         sel.addRange(range);
+		
+	} else if(win.document.body.createTextRange){ //IE's weirdness
+		var range = document.body.createTextRange();
+		range.moveToElementText(el);
+		range.collapse()
+		range.moveStart('character', start)
+		range.moveEnd('character', end !== undefined ? end : start)
+        range.select();
 	}
 
 },
+/*
+ * If one of the range values is within start and len, replace the range
+ * value with the element and its offset.
+ */
 replaceWithLess = function(start, len, range, el){
 	if(typeof range[0] === 'number' && range[0] < len){
 			range[0] = {
@@ -108,10 +165,8 @@ getCharElement = function( elems , range, len ) {
 		start;
 	
 	len = len || 0;
-	console.log("iterate",elems)
 	for ( var i = 0; elems[i]; i++ ) {
 		elem = elems[i];
-		console.log(elem)
 		// Get the text from text nodes and CDATA nodes
 		if ( elem.nodeType === 3 || elem.nodeType === 4 ) {
 			start = len
@@ -125,7 +180,11 @@ getCharElement = function( elems , range, len ) {
 	}
 	return len;
 };
-
+/**
+ * Gets or sets the current text selection
+ * @param {Object} start
+ * @param {Object} end
+ */
 $.fn.selection = function(start, end){
 	if(start !== undefined){
 		return this.each(function(){
@@ -134,7 +193,7 @@ $.fn.selection = function(start, end){
 	}else{
 		return getSelection(this[0])
 	}
-}
+};
 // for testing
 $.fn.selection.getCharElement = getCharElement;
 

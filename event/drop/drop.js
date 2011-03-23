@@ -83,8 +83,9 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 	 */
 	$.Drop = function(callbacks, element){
 		jQuery.extend(this,callbacks);
-		this.element = element;
+		this.element = $(element);
 	}
+	// add the elements ...
 	$.each(eventNames, function(){
 			event.special[this] = {
 				add: function( handleObj ) {
@@ -103,24 +104,25 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 					}
 				}
 			}
-	})
+	});
+	
 	$.extend($.Drop,{
 		lowerName: "drop",
-		_elements: [], //elements that are listening for drops
-		_responders: [], //potential drop points
+		_rootElements: [], //elements that are listening for drops
+		_elements: $(),    //elements that can be dropped on
 		last_active: [],
 		endName: "dropon",
 		addElement: function( el ) {
 			//check other elements
-			for(var i =0; i < this._elements.length ; i++  ){
-				if(el ==this._elements[i]) return;
+			for(var i =0; i < this._rootElements.length ; i++  ){
+				if(el ==this._rootElements[i]) return;
 			}
-			this._elements.push(el);
+			this._rootElements.push(el);
 		},
 		removeElement: function( el ) {
-			 for(var i =0; i < this._elements.length ; i++  ){
-				if(el == this._elements[i]){
-					this._elements.splice(i,1)
+			 for(var i =0; i < this._rootElements.length ; i++  ){
+				if(el == this._rootElements[i]){
+					this._rootElements.splice(i,1)
 					return;
 				}
 			}
@@ -140,7 +142,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		 * Tests if a drop is within the point.
 		 */
 		isAffected: function( point, moveable, responder ) {
-			return ((responder.element != moveable.element) && (responder.element.within(point[0], point[1], responder).length == 1));
+			return ((responder.element != moveable.element) && (responder.element.within(point[0], point[1], responder._cache).length == 1));
 		},
 		/**
 		 * @hide
@@ -169,60 +171,145 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 			responder.callHandlers(this.lowerName+'move',responder.element[0], event, mover)
 		},
 		/**
-		 * Gets all elements that are droppable, adds them
+		 * Gets all elements that are droppable and adds them to a list.
+		 * 
+		 * This should be called if and when new drops are added to the page
+		 * during the motion of a single drag.
+		 * 
+		 * This is called by default when a drag motion starts.
+		 * 
+		 * ## Use
+		 * 
+		 * After adding an element or drop, call compile.
+		 * 
+		 * $("#midpoint").bind("dropover",function(){
+		 * 		// when a drop hovers over midpoint,
+		 *      // make drop a drop.
+		 * 		$("#drop").bind("dropover", function(){
+		 * 			
+		 * 		});
+		 * 		$.Drop.compile();
+		 * 	});
 		 */
 		compile: function( event, drag ) {
-			var el, drops, selector, sels;
-			this.last_active = [];
-			for(var i=0; i < this._elements.length; i++){ //for each element
-				el = this._elements[i]
+			// if we called compile w/o a current drag
+			if(!this.dragging && !drag){
+				return;
+			}else if(!this.dragging){
+				this.dragging = drag;
+				this.last_active = [];
+				this._elements = $();
+			}
+			var el, 
+				drops, 
+				selector, 
+				sels, 
+				newEls = [],
+				dragging = this.dragging;
+			
+			
+			for(var i=0; i < this._rootElements.length; i++){ //for each element
+				el = this._rootElements[i]
 				var drops = $.event.findBySelector(el, eventNames)
 
+				
 				for(selector in drops){ //find the selectors
 					sels = selector ? jQuery(selector, el) : [el];
 					for(var e= 0; e < sels.length; e++){ //for each found element, create a drop point
-						jQuery.removeData(sels[e],"offset");
-						this.add(sels[e], new this(drops[selector]), event, drag);
+						if( this.addCallbacks(sels[e], drops[selector], dragging) ){
+							newEls.push(sels[e])
+						};
 					}
 				}
 			}
-			
+			// once all callbacks are added, call init on everything ...
+			this.add(newEls, event, dragging)
 		},
-		add: function( element, callbacks, event, drag ) {
-			element = jQuery(element);
-			var responder = new $.Drop(callbacks, element);
-			responder.callHandlers(this.lowerName+'init', element[0], event, drag)
-			if(!responder._canceled){
-				this._responders.push(responder);
+		// adds the drag callbacks object to the element or merges other callbacks ...
+		// returns true or false if the element is new ...
+		// onlyNew lets only new elements add themselves
+		addCallbacks : function(el, callbacks, onlyNew){
+			
+			var origData = $.data(el,"_dragData");
+			if(!origData){
+				$.data(el,"_dragData", new $.Drop(callbacks, el));
+				//this._elements.push(el);
+				return true;
+			}else if(!onlyNew){
+				var origCbs = origData;
+				// merge data
+				for(var eventName in callbacks){
+					origCbs[eventName] = origCbs[eventName] ?
+							origCbs[eventName].concat(callbacks[eventName]) :
+							callbacks[eventName];
+				}
+				return false;
 			}
+		},
+		// calls init on each element's drags. 
+		// if its cancelled it's removed
+		// adds to the current elements ...
+		add: function( newEls, event, drag , dragging) {
+			var i = 0,
+				drop;
+			
+			while(i < newEls.length){
+				drop = $.data(newEls[i],"_dragData");
+				drop.callHandlers(this.lowerName+'init', newEls[i], event, drag)
+				if(drop._canceled){
+					newEls.splice(i,1)
+				}else{
+					i++;
+				}
+			}
+			this._elements.push.apply(this._elements, newEls)
 		},
 		show: function( point, moveable, event ) {
 			var element = moveable.element;
-			if(!this._responders.length) return;
+			if(!this._elements.length) return;
 			
 			var respondable, 
 				affected = [], 
 				propagate = true, 
-				i,j, la, toBeActivated, aff, 
-				oldLastActive = this.last_active;
-				
-			for(var d =0 ; d < this._responders.length; d++ ){
-				
-				if(this.isAffected(point, moveable, this._responders[d])){
-					affected.push(this._responders[d]);  
+				i = 0, 
+				j, 
+				la, 
+				toBeActivated, 
+				aff, 
+				oldLastActive = this.last_active,
+				responders = [],
+				self = this,
+				drag;
+			
+			//what's still affected ... we can also move element out here
+			while( i < this._elements.length){
+				drag = $.data(this._elements[i],"_dragData");
+				if (!drag) {
+					this._elements.splice(i, 1)
 				}
-					 
+				else {
+					i++;
+					if (self.isAffected(point, moveable, drag)) {
+						affected.push(drag);
+					}
+				}
 			}
+			
+
 			
 			affected.sort(this.sortByDeepestChild); //we should only trigger on lowest children
 			event.stopRespondPropagate = function(){
 				propagate = false;
 			}
-			//deactivate everything in last_active that isn't active
+			
 			toBeActivated = affected.slice();
+
+			// all these will be active
 			this.last_active = affected;
+			
+			//deactivate everything in last_active that isn't active
 			for (j = 0; j < oldLastActive.length; j++) {
-				la = oldLastActive[j]
+				la = oldLastActive[j];
 				i = 0;
 				while((aff = toBeActivated[i])){
 					if(la == aff){
@@ -249,9 +336,9 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 			}
 		},
 		end: function( event, moveable ) {
-			var responder, la;
-			for(var r =0; r<this._responders.length; r++){
-				this._responders[r].callHandlers(this.lowerName+'end', null, event, moveable);
+			var responder, la, endName = this.lowerName+'end';
+			for(var r =0; r<this._elements.length; r++){
+				$.data(this._elements[r],"_dragData").callHandlers(endName, null, event, moveable);
 			}
 			//go through the actives ... if you are over one, call dropped on it
 			for(var i = 0; i < this.last_active.length; i++){
@@ -269,8 +356,12 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		 * @hide
 		 */
 		clear: function() {
-		  
-		  this._responders = [];
+		  this._elements.each(function(){
+		  	$.removeData(this,"_dragData")
+		  })
+		  this._elements = $();
+		  delete this.dragging;
+		  //this._responders = [];
 		}
 	})
 	$.Drag.responder = $.Drop;
