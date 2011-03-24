@@ -35,6 +35,14 @@
 		<script type='text/javascript'>
 			$('#swipe').bind('swipe', function(){
 				console.log('swipe1')
+			}).bind("swiperight", function(){
+				console.log('right')
+			}).bind('swipeleft', function(){
+				console.log('left')
+			}).bind('swipeup', function(){
+				console.log('up')
+			}).bind('swipedown', function(){
+				console.log('down')
 			})
 			$('#swipes').delegate('li','swipe', function(){
 				console.log('swipe2')

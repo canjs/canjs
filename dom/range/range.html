@@ -14,6 +14,9 @@
 			.end {
 				border-right: solid 3px red;
 			}
+			.parent {
+				outline: dotted 2px gray;
+			}
 			#box {
 				width: 400px;
 			}
@@ -33,6 +36,7 @@
 		<script type='text/javascript'>
 			var curStart = $(),
 				curEnd = $(),
+				curParent = $(),
 				htmlEl = function(el){
 					return el.nodeType === 3 || el.nodeType === 4 ?
 						el.parentNode : el;
@@ -42,12 +46,15 @@
 				var start = range.start(),
 					end = range.end();
 				curStart.removeClass('start');
-				curEnd.removeClass('end')
+				curEnd.removeClass('end');
+				curParent.removeClass('parent')
 				var starter = htmlEl(start.container);
-				var ender = htmlEl(end.container);
+				var ender = htmlEl(end.container),
+					parenter = range.parent();
 				
 				curStart = $(starter).addClass('start');
 				curEnd = $(ender).addClass('end');
+				curParent = $(parenter).addClass('parent')
 				$("#info").html("startOffset = "+start.offset+"\nendOffset = "+end.offset)
 			})
 		</script>
