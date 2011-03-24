@@ -42,10 +42,10 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			});
 		},
 		//guesses at a fixture name
-		fixture = function(extra){
+		fixture = function(extra, or){
 			var u = underscore( this.shortName ),
 				f = "-"+u+(extra||"");
-			return $.fixture && $.fixture[f] ? f : 
+			return $.fixture && $.fixture[f] ? f : or ||
 				"//"+underscore( this.fullName )
 						.replace(/\.models\..*/,"")
 						.replace(/\./g,"/")+"/fixtures/"+u+
@@ -418,7 +418,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function(id, attrs, success, error){
-				ajax(str, addId.call(this,attrs, id), success, error, "-restUpdate","put")
+				ajax(str, addId.call(this,attrs, id), success, error, fixture.call(this,"Update","-restUpdate"),"put")
 			}
 		},
 		destroy: function( str ) {
