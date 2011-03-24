@@ -14,6 +14,14 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		isArray = $.isArray,
 		clean = function( content ) {
 				return content.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
+		}
+		// from prototype  http://www.prototypejs.org/
+		escapeHTML = function(content){
+			return content.replace(/&/g,'&amp;')
+					.replace(/</g,'&lt;')
+					.replace(/>/g,'&gt;')
+					.replace(/"/g, '&#34;')
+					.replace(/'/g, "&#39;")
 		},
 		EJS = function( options ) {
 			//returns a renderer function
@@ -221,7 +229,14 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		}
 		return input.toString ? input.toString() : "";
 	};
-
+	EJS.clean = function(text){
+		//return sanatized text
+		if(typeof text == 'string'){
+			return escapeHTML(text)
+		}else{
+			return "";
+		}
+	}
 	//returns something you can call scan on
 	var scan = function(scanner, source, block ) {
 		var source_split = rSplit(source, /\n/),
@@ -251,10 +266,11 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			dRight: '%%' + right,
 			eLeft: left + '%=',
 			cmnt: left + '%#',
+			cleanLeft: left+"%~",
 			scan : scan,
 			lines : 0
 		});
-		scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eLeft, 
+		scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eLeft, scanner.cleanLeft,
 		scanner.cmnt, scanner.left, scanner.right + '\n', scanner.right, '\n'].join(")|(").
 			replace(/\[/g,"\\[").replace(/\]/g,"\\]") + ")");
 		return scanner;
@@ -290,6 +306,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 						break;
 					case scanner.left:
 					case scanner.eLeft:
+					case scanner.cleanLeft:
 					case scanner.cmnt:
 						startTag = token;
 						if ( content.length > 0 ) {
@@ -320,6 +337,9 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 							else {
 								buff.push(content, ";");
 							}
+							break;
+						case scanner.cleanLeft : 
+							buff.push(insert_cmd, "(jQuery.EJS.clean(", content, ")));");
 							break;
 						case scanner.eLeft:
 							buff.push(insert_cmd, "(jQuery.EJS.text(", content, ")));");
