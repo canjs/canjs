@@ -21,7 +21,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 					.replace(/</g,'&lt;')
 					.replace(/>/g,'&gt;')
 					.replace(/"/g, '&#34;')
-					.replace(/'/g, "&#39;")
+					.replace(/'/g, "&#39;");
 		},
 		EJS = function( options ) {
 			//returns a renderer function
@@ -53,8 +53,11 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 * Ejs provides <a href="http://www.ruby-doc.org/stdlib/libdoc/erb/rdoc/">ERB</a> 
 	 * style client side templates.  Use them with controllers to easily build html and inject
 	 * it into the DOM.
-	 * <h3>Example</h3>
+	 * 
+	 * ###  Example
+	 * 
 	 * The following generates a list of tasks:
+	 * 
 	 * @codestart html
 	 * &lt;ul>
 	 * &lt;% for(var i = 0; i < tasks.length; i++){ %>
@@ -62,37 +65,53 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 * &lt;% } %>
 	 * &lt;/ul>
 	 * @codeend
-	 * For the following examples, we assume this view is in <i>'views\tasks\list.ejs'</i>
-	 * <h2>Use</h2>
-	 * There are 2 common ways to use Views: 
-	 * <ul>
-	 *     <li>Controller's [jQuery.Controller.prototype.view view function]</li>
-	 *     <li>The jQuery Helpers: [jQuery.fn.after after], 
-	 *                             [jQuery.fn.append append], 
-	 *                             [jQuery.fn.before before], 
-	 *                             [jQuery.fn.before html], 
-	 *                             [jQuery.fn.before prepend], 
-	 *                             [jQuery.fn.before replace], and 
-	 *                             [jQuery.fn.before text].</li>
-	 * </ul>
-	 * <h3>View</h3>
-	 * jQuery.Controller.prototype.view is the preferred way of rendering a view.  
-	 * You can find all the options for render in 
-	 * its [jQuery.Controller.prototype.view documentation], but here is a brief example of rendering the 
-	 * <i>list.ejs</i> view from a controller:
-	 * @codestart
-	 * $.Controller.extend("TasksController",{
-	 *     init: function( el ) {
-	 *         Task.findAll({},this.callback('list'))
-	 *     },
-	 *     list: function( tasks ) {
-	 *         this.element.html(
-	 *          this.view("list", {tasks: tasks})
-	 *        )
-	 *     }
-	 * })
-	 * @codeend
 	 * 
+	 * For the following examples, we assume this view is in <i>'views\tasks\list.ejs'</i>.
+	 * 
+	 * 
+	 * ## Use
+	 * 
+	 * ### Loading and Rendering EJS:
+	 * 
+	 * You should use EJS through the helper functions [jQuery.View] provides such as:
+	 * 
+	 *   - [jQuery.fn.after after]
+	 *   - [jQuery.fn.append append]
+	 *   - [jQuery.fn.before before]
+	 *   - [jQuery.fn.html html], 
+	 *   - [jQuery.fn.prepend prepend],
+	 *   - [jQuery.fn.replaceWith replaceWith], and 
+	 *   - [jQuery.fn.text text].
+	 * 
+	 * or [jQuery.Controller.prototype.view].
+	 * 
+	 * ### Syntax
+	 * 
+	 * EJS uses 5 types of tags:
+	 * 
+	 *   - <code>&lt;% CODE %&gt;</code> - Runs JS Code.
+	 *     For example:
+	 *     
+	 *         <% alert('hello world') %>
+	 *     
+	 *   - <code>&lt;%= CODE %&gt;</code> - Runs JS Code and writes the result into the result of the template.
+	 *     For example:
+	 *     
+	 *         <h1><%= 'hello world' %></h1>
+	 *        
+	 *   - <code>&lt;%~ CODE %&gt;</code> - Runs JS Code and writes the _escaped_ result into the result of the template.
+	 *     For example:
+	 *     
+	 *         <%~ 'hello world' %>
+	 *         
+	 *   - <code>&lt;%%= CODE %&gt;</code> - Writes <%= CODE %> to the result of the template.  This is very useful for generators.
+	 *     
+	 *         <%%= 'hello world' %>
+	 *         
+	 *   - <code>&lt;%# CODE %&gt;</code> - Used for comments.  This does nothing.
+	 *     
+	 *         <%# 'hello world' %>
+	 *        
 	 * ## Hooking up controllers
 	 * 
 	 * After drawing some html, you often want to add other widgets and plugins inside that html.
@@ -456,7 +475,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	/* @prototype*/
 	EJS.Helpers.prototype = {
 		/**
-		 * Makes a plugin
+		 * Hooks up a jQuery plugin on.
 		 * @param {String} name the plugin name
 		 */
 		plugin: function( name ) {
