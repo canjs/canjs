@@ -61,7 +61,7 @@ test("multi line", function(){
 })
 
 test("escapedContent", function(){
-	var text = "<span><%~ tags %></span><label>&amp;</label><input value='<%~ quotes %>'>";
+	var text = "<span><%~ tags %></span><label>&amp;</label><input value='<%~ quotes %>'/>";
 	var compiled = new $.EJS({text: text}).render({tags: "foo < bar < car > zar > poo",
 							quotes : "I use 'quote' fingers \"a lot\""}) ;
 	
