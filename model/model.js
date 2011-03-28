@@ -31,7 +31,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			attrs = extend({},attrs)
 			
 			var url = $.String.sub(src, attrs, true)
-			$.ajax({
+			return $.ajax({
 				url : url,
 				data : attrs,
 				success : success,
