@@ -462,6 +462,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * FindAll is used to retrive a model instances from the server. By implementing 
 			 * findAll along with the rest of the [jquery.model.services service api], your models provide an abstract
 			 * service API.
+			 * findAll returns a deferred ($.Deferred)
 			 * 
 			 * You can implement findAll with a string:
 			 * 
@@ -469,24 +470,20 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 *       findAll : "/things.json"
 			 *     },{})
 			 * 
-			 * Or you can implement it yourself.  To implement it yourself, success must be called back
-			 * with an array of model instances.  Typically, [jQuery.Model.static.wrapMany wrapMany] is used
-			 * to convert a JSON array of attributes to an array of instances.  For example:
+			 * Or you can implement it yourself.  The 'dataType' attribute is used to convert a JSON array of attributes
+			 * to an array of instances.  For example:
 			 * 
 			 *     $.Model("Thing",{
 			 *       findAll : function(params, success, error){
-			 *         var self = this;
-			 *         $.get("/things.json",
-			 *           params,
-			 *           function(data){
-			 *             self.wrapMany(data)
-			 *           },
-			 *           "json")
+			 *         return $.ajax({
+			 *         	 url: '/things.json',
+			 *           type: 'get',
+			 *           dataType: 'json models',
+			 *           data: params,
+			 *           success: success,
+			 *           error: error})
 			 *       }
 			 *     },{})
-			 *  
-			 * [jQuery.Model.static.wrapMany WrapMany] can handle creating instances even if your data isn't
-			 * a 'perfect' array of attributes.
 			 * 
 			 * ## API
 			 * 
@@ -496,12 +493,13 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * @param {Function} error
 			 */
 			return function(params, success, error){
-				ajax(str || this.shortName+"s.json", 
+				return ajax(str || this.shortName+"s.json", 
 					params, 
-					this.callback(['wrapMany',success]), 
+					success, 
 					error, 
 					fixture.call(this,"s"),
-					"get");
+					"get",
+					"json "+this._shortName+".models");
 			};
 		},
 		findOne: function( str ) {
