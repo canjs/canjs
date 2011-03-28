@@ -10,8 +10,8 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		extend = $.extend,
 		each = $.each,
 		reqType = /GET|POST|PUT|DELETE/i,
-		ajax = function(ajaxOb, attrs, success, error, fixture, type){
-			var dataType = "json",
+		ajax = function(ajaxOb, attrs, success, error, fixture, type, dataType){
+			var dataType = dataType || "json",
 				src = "",
 				tmp;
 			if(typeof ajaxOb == "string"){
