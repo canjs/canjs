@@ -1348,3 +1348,4 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * model.  This prevents the need for every widget to be configured with the ajax functionality
 	 * necessary to make a request to your services.
 	 */
+});
