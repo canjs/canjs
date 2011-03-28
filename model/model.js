@@ -645,60 +645,15 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			attributes[this.singularName] || attributes.data || attributes.attributes || attributes);
 		},
 		/**
-		 * Takes raw data from the server, and returns an array of model instances.
+		 * Models is an AJAX converter used to convert raw data from the server, and return an array of model instances.
 		 * Each item in the raw array becomes an instance of a model class.
-		 * 
-		 * @codestart
-		 * $.Model.extend("Recipe",{
-		 *   helper : function(){
-		 *     return i*i;
-		 *   }
-		 * })
-		 * 
-		 * var recipes = Recipe.wrapMany([{id: 1},{id: 2}])
-		 * recipes[0].helper() //-> 1
-		 * @codeend
-		 * 
-		 * If an array is not passed to wrapMany, it will look in the object's .data
-		 * property.  
-		 * 
-		 * For example:
-		 * 
-		 * @codestart
-		 * var recipes = Recipe.wrapMany({data: [{id: 1},{id: 2}]})
-		 * recipes[0].helper() //-> 1
-		 * @codeend
-		 * 
-		 * Often wrapMany is used with this.callback inside a model's [jQuery.Model.static.findAll findAll]
-		 * method like:
-		 * 
-		 *     findAll : function(params, success, error){
-		 *       $.get('/url',
-		 *             params,
-		 *             this.callback(['wrapMany',success]) )
-		 *     }
-		 * 
-		 * If you are having problems getting your model to callback success correctly,
-		 * make sure a request is being made (with firebug's net tab).  Also, you 
-		 * might not use this.callback and instead do:
-		 * 
-		 *     findAll : function(params, success, error){
-		 *       self = this;
-		 *       $.get('/url',
-		 *             params,
-		 *             function(data){
-		 *               var wrapped = self.wrapMany(data);
-		 *               success(data)
-		 *             })
-		 *     }
-		 * 
-		 * ## API
+		 * This method can be overwritten within the model
 		 * 
 		 * @param {Array} instancesRawData an array of raw name - value pairs.
 		 * @return {Array} a JavaScript array of instances or a [jQuery.Model.List list] of instances
 		 *  if the model list plugin has been included.
 		 */
-		wrapMany: function( instancesRawData ) {
+		models: function( instancesRawData ) {
 			if (!instancesRawData ) {
 				return null;
 			}
@@ -709,12 +664,12 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 				i = 0;
 			//@steal-remove-start
 			if (! length ) {
-				steal.dev.warn("model.js wrapMany has no data.  If you're trying to wrap 1 item, use wrap. ")
+				steal.dev.warn("model.js models has no data.  If you have one item, use model")
 			}
 			//@steal-remove-end
 			res._use_call = true; //so we don't call next function with all of these
 			for (; i < length; i++ ) {
-				res.push(this.wrap(raw[i]));
+				res.push(this.model(raw[i]));
 			}
 			if (!arr ) { //push other stuff onto array
 				for ( var prop in instancesRawData ) {
