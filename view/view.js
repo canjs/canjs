@@ -207,49 +207,70 @@ steal.plugins("jquery").then(function( $ ) {
 	};
 
 	$view = $.View = function( view, data, helpers, callback ) {
-		var suffix = view.match(/\.[\w\d]+$/),
-			type, el, id, renderer, url = view;
-                // if we have an inline template, derive the suffix from the 'text/???' part
-                // this only supports '<script></script>' tags
-                if ( el = document.getElementById(view)) {
-                  suffix = el.type.match(/\/[\d\w]+$/)[0].replace(/^\//, '.');
-                }
-		if ( typeof helpers === 'function' ) {
-			callback = helpers;
-			helpers = undefined;
-		}
-		//if there is no suffix, add one
-		if (!suffix ) {
-			suffix = $view.ext;
-			url = url + $view.ext;
-		}
-
-		//convert to a unique and valid id
-		id = toId(url);
-
-		//if a absolute path, use steal to get it
-		if ( url.match(/^\/\//) ) {
-			if (typeof steal === "undefined") {
-				url = "/"+url.substr(2);
-			}
-			else {
-				url = steal.root.join(url.substr(2));
+		var deferreds = [];
+		
+		for(var prop in data) {
+			if(isDeferred(data[prop])) {
+				deferreds.push(data[prop]);
 			}
 		}
-
-		//get the template engine
-		type = $view.types[suffix];
-
-		//get the renderer function
-		renderer =
-		$view.cached[id] ? // is it cached?
-		$view.cached[id] : // use the cached version
-		((el = document.getElementById(view)) ? //is it in the document?
-		type.renderer(id, el.innerHTML) : //use the innerHTML of the elemnt
-		get(type, id, url, data, helpers, callback) //do an ajax request for it
-		);
-		// we won't always get a renderer (if async ajax)
-		return renderer && render(renderer, type, id, data, helpers, callback);
+		
+		if(deferreds.length) { // does data contain any deferreds?
+			$.when.apply($, deferreds).then(function() {
+				var objs = $.makeArray(arguments)
+				for(var prop in data) {
+					if(isDeferred(data[prop])) {
+						data[prop] = objs.shift();
+					}
+				}
+				$view(view, data, helpers, callback); // this does not work as is...
+			});
+		}
+		else {
+			var suffix = view.match(/\.[\w\d]+$/),
+				type, el, id, renderer, url = view;
+	                // if we have an inline template, derive the suffix from the 'text/???' part
+	                // this only supports '<script></script>' tags
+	                if ( el = document.getElementById(view)) {
+	                  suffix = el.type.match(/\/[\d\w]+$/)[0].replace(/^\//, '.');
+	                }
+			if ( typeof helpers === 'function' ) {
+				callback = helpers;
+				helpers = undefined;
+			}
+			//if there is no suffix, add one
+			if (!suffix ) {
+				suffix = $view.ext;
+				url = url + $view.ext;
+			}
+	
+			//convert to a unique and valid id
+			id = toId(url);
+	
+			//if a absolute path, use steal to get it
+			if ( url.match(/^\/\//) ) {
+				if (typeof steal === "undefined") {
+					url = "/"+url.substr(2);
+				}
+				else {
+					url = steal.root.join(url.substr(2));
+				}
+			}
+	
+			//get the template engine
+			type = $view.types[suffix];
+	
+			//get the renderer function
+			renderer =
+			$view.cached[id] ? // is it cached?
+			$view.cached[id] : // use the cached version
+			((el = document.getElementById(view)) ? //is it in the document?
+			type.renderer(id, el.innerHTML) : //use the innerHTML of the elemnt
+			get(type, id, url, data, helpers, callback) //do an ajax request for it
+			);
+			// we won't always get a renderer (if async ajax)
+			return renderer && render(renderer, type, id, data, helpers, callback);
+		}
 	};
 	// caches the template, renders the content, and calls back if it should
 	render = function( renderer, type, id, data, helpers, callback ) {
