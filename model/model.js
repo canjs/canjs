@@ -598,6 +598,14 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 					this[name] = ajaxMethods[name](this[name]);
 				}
 			}
+			
+			//add ajax converters
+			var converters = {};
+			converters["* "+this._shortName+".models"] = this.callback('models');
+			converters["* "+this._shortName+".model"] = this.callback('model');
+			$.ajaxSetup({
+				converters : converters
+			});				
 		},
 		/**
 		 * @attribute attributes
