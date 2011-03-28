@@ -202,7 +202,9 @@ steal.plugins("jquery").then(function( $ ) {
 	 * @return {String} The rendered result of the view.
 	 */
 
-	var $view, render, checkText, get;
+	var $view, render, checkText, getisDeferred = function(obj){
+		return $.isFunction(obj.promise) // check if obj is a $.Deferred
+	};
 
 	$view = $.View = function( view, data, helpers, callback ) {
 		var suffix = view.match(/\.[\w\d]+$/),
