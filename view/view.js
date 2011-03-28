@@ -202,7 +202,7 @@ steal.plugins("jquery").then(function( $ ) {
 	 * @return {String} The rendered result of the view.
 	 */
 
-	var $view, render, checkText, getisDeferred = function(obj){
+	var $view, render, checkText, get, isDeferred = function(obj){
 		return $.isFunction(obj.promise) // check if obj is a $.Deferred
 	};
 
