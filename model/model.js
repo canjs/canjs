@@ -509,15 +509,13 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * findOne along with the rest of the [jquery.model.services service api], your models provide an abstract
 			 * service API.
 			 * 
-			 * You can implement findAll with a string:
+			 * You can implement findOne with a string:
 			 * 
 			 *     $.Model("Thing",{
 			 *       findOne : "/things/{id}.json"
 			 *     },{})
 			 * 
-			 * Or you can implement it yourself.  To implement it yourself, success must be called back
-			 * with an array of model instances.  Typically, [jQuery.Model.static.wrap wrap] is used
-			 * to convert a JSON array of attributes to an array of instances.  For example:
+			 * Or you can implement it yourself. 
 			 * 
 			 *     $.Model("Thing",{
 			 *       findOne : function(params, success, error){
@@ -526,15 +524,10 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 *         delete params.id;
 			 *         $.get("/things/"+id+".json",
 			 *           params,
-			 *           function(data){
-			 *             self.wrap(data)
-			 *           },
-			 *           "json")
+			 *           success,
+			 *           "json model")
 			 *       }
 			 *     },{})
-			 *  
-			 * [jQuery.Model.static.wrap Wrap] can handle creating instances even if your data isn't
-			 * a 'perfect' object of attributes.
 			 * 
 			 * ## API
 			 * 
@@ -543,12 +536,13 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * @param {Function} error
 			 */
 			return function(params, success, error){
-				ajax(str, 
+				return ajax(str,
 					params, 
-					this.callback(['wrap',success]), 
+					success,
 					error, 
 					fixture.call(this),
-					"get");
+					"get",
+					"json "+this._shortName+".model");
 			};
 		}
 	};
