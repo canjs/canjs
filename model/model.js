@@ -630,41 +630,13 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 */
 		attributes: {},
 		/**
-		 * @attribute defaults
-		 * An object of default values to be set on all instances.  This 
-		 * is useful if you want some value to be present when new instances are created.
-		 * 
-		 * @codestart
-		 * $.Model.extend("Recipe",{
-		 *   defaults : {
-		 *     createdAt : new Date();
-		 *   }
-		 * },{})
-		 * 
-		 * var recipe = new Recipe();
-		 * 
-		 * recipe.createdAt //-> date
-		 * 
-		 * @codeend
-		 */
-		defaults: {},
-		/**
-		 * Wrap is used to create a new instance from data returned from the server.
-		 * It is very similar to doing <code> new Model(attributes) </code> 
-		 * except that wrap will check if the data passed has an
-		 * 
-		 * - attributes,
-		 * - data, or
-		 * - <i>singularName</i>
-		 * 
-		 * property.  If it does, it will use that objects attributes.
-		 * 
-		 * Wrap is really a convience method for servers that don't return just attributes.
+		 * Model is an AJAX converter used to convert raw data from the server, and return an instance of a model class.
+		 * This method can be overwritten within the model
 		 * 
 		 * @param {Object} attributes
 		 * @return {Model} an instance of the model
 		 */
-		wrap: function( attributes ) {
+		model: function( attributes ) {
 			if (!attributes ) {
 				return null;
 			}
