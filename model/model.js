@@ -784,7 +784,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			return type;
 		},
 		// a collection of all models
-		models: {},
+		_models: {},
 		/**
 		 * If OpenAjax is available,
 		 * publishes to OpenAjax.hub.  Always adds the shortName.event.
@@ -1421,4 +1421,3 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * model.  This prevents the need for every widget to be configured with the ajax functionality
 	 * necessary to make a request to your services.
 	 */
-});
