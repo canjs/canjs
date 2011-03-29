@@ -179,3 +179,21 @@ test("Creating without extend", function(){
 	});
 	new Foo().dude(true);
 })
+
+test("Super in derived when parent doesn't have init", function(){
+	$.Class.extend("Parent",{
+	});
+	
+	Parent.extend("Derived",{
+		init : function(){
+			this._super();
+		}
+	});
+
+	try {
+		new Derived();
+		ok(true, "Can call super in init safely")
+	} catch (e) {
+		ok(false, "Failed to call super in init with error: " + e)
+	}
+})
