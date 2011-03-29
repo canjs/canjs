@@ -4,41 +4,14 @@ steal.plugins('jquery/event').then(function($){
 	
 	/**
 	 * @function jQuery.event.key
-	 * @parent specialevents
+	 * @parent jQuery.Event.prototype.key
 	 * 
-	 * Key gives you a string representation of the key pressed.  The following
-	 * listens to and prevents backspaces being pressed in inputs:
-	 * 
-	 * $("input").keypress(function(ev){
-	 *   if(ev.key() == '\b') {
-	 *    ev.preventDefault();
-	 *   }
-	 * });
-	 * 
-	 * ## Keys
-	 * 
-	 * The following describes the key values returned by [jQuery.Event.prototype.key].
-	 * 
-	 *  . \b - backspace
-	 *  . \t - tab
-	 *  . \r - enter key
-	 *  . shift, ctrl, alt
-	 *  . pause-break, caps, escape, num-lock, scroll-loc, print
-	 *  . page-up, page-down, end, home, left, up, right, down, insert, delete
-	 *  . ' ' - space
-	 *  . 0-9 - number key pressed
-	 *  . a-z - alpha key pressed
-	 *  . num0-9 - number pad key pressed
-	 *  . / ; : = , - . / ` [ \\ ] ' "
-	 *  . f1-12 - function keys pressed
-	 *  
-	 * ## Alternate maps.
-	 * 
-	 * You can pass jQuery.event.key other keys or overwrite names:
+	 * Allows you to set alternate key maps or overwrite existing key codes.
+	 * For example::
 	 * 
 	 *     $.event.key({"~" : 177});
 	 * 
-	 * @param {Object} map
+	 * @param {Object} map A map of character - keycode pairs.
 	 */
 	$.event.key = function(map){
 		$.extend(keymap, map);
@@ -102,8 +75,43 @@ steal.plugins('jquery/event').then(function($){
 		'f7':'118','f8':'119','f9':'120','f10':'121','f11':'122','f12':'123'
 	});
 	
-	// reverse ...
-	jQuery.Event.prototype.key  = function(event){
+	/**
+	 * @parent specialevents
+	 * @plugin jquery/event/key
+	 * 
+	 * Returns a string representation of the key pressed.  The following
+	 * listens to and prevents backspaces being pressed in inputs:
+	 * 
+	 *     $("input").keypress(function(ev){
+	 *       if(ev.key() == '\b') {
+	 *        ev.preventDefault();
+	 *       }
+	 *     });
+	 * 
+	 * ## Keys
+	 * 
+	 * The following describes the key values returned by [jQuery.Event.prototype.key].
+	 * 
+	 *  - \b - backspace
+	 *  - \t - tab
+	 *  - \r - enter key
+	 *  - shift, ctrl, alt
+	 *  - pause-break, caps, escape, num-lock, scroll-loc, print
+	 *  - page-up, page-down, end, home, left, up, right, down, insert, delete
+	 *  - ' ' - space
+	 *  - 0-9 - number key pressed
+	 *  - a-z - alpha key pressed
+	 *  - num0-9 - number pad key pressed
+	 *  - / ; : = , - . / ` [ \\ ] ' "
+	 *  - f1-12 - function keys pressed
+	 *  
+	 * ## Alternate keys
+	 * 
+	 * Use [jQuery.event.key] to set alternate key mappings for other locales.
+	 *  
+	 * @return {String} The string representation of of the key pressed.
+	 */
+	jQuery.Event.prototype.key  = function(){
 		var event = this,
 			keycode;
 	

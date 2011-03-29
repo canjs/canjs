@@ -119,7 +119,7 @@ $.extend($.Range.prototype,{
 		}
 	},
 	parent : function(){
-		return this.range.parentElement
+		return this.range.parentElement || this.range.commonAncestorContainer
 	}
 	
 });

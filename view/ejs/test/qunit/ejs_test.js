@@ -59,4 +59,16 @@ test("multi line", function(){
 		
 	equals(result, text)
 })
+
+test("escapedContent", function(){
+	var text = "<span><%~ tags %></span><label>&amp;</label><input value='<%~ quotes %>'/>";
+	var compiled = new $.EJS({text: text}).render({tags: "foo < bar < car > zar > poo",
+							quotes : "I use 'quote' fingers \"a lot\""}) ;
+	
+	var div = $('<div/>').html(compiled)
+	equals(div.find('span').text(), "foo < bar < car > zar > poo" );
+	equals(div.find('input').val(), "I use 'quote' fingers \"a lot\"" )
+	equals(div.find('label').html(), "&amp;" )
+	
+})
 //test("multi line sourc")
