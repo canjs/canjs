@@ -80,6 +80,24 @@ steal
 		ok(tie._destroyed, "Tie is destroyed")
 	})
 	
+	test("removing html element removes the tie", function() {
+		var person1 = new Person({age: 5});
+		var inp = $("<div/>").appendTo( $("#qunit-test-area") );
+		
+		$.Controller("Foo",{
+			val : function(value) {}
+		});
+		
+		inp.foo().tie(person1,"age");
+		var foo = inp.controller('foo'),
+			tie = inp.controller('tie');
+
+		inp.remove(); // crashes here
+		
+		ok(foo._destroyed, "Foo is destroyed");
+		ok(tie._destroyed, "Tie is destroyed")
+	});
+	
 	test("tie on a specific controller", function(){});
 	
 	test("no controller with val, only listen", function(){
