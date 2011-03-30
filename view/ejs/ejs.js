@@ -253,7 +253,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		if(typeof text == 'string'){
 			return escapeHTML(text)
 		}else{
-			return "";
+			return EJS.text(text);
 		}
 	}
 	//returns something you can call scan on
