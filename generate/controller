@@ -1,7 +1,7 @@
 if (_args.length < 1) {
-	print("USAGE : steal/js steal/generate/controller YourController")
-	print("EX    : steal/js steal/generate/model Cookbook.Controllers.Recipe");
-	print("      > cookbook/controller/recipe.js")
+	print("USAGE : steal/js steal/generate/controller Company.Widget")
+	print("EX    : steal/js steal/generate/controller Company.WidgetName");
+	print("      > company/widget_name/widget_name.js")
 	print();
 	quit();
 }
@@ -11,11 +11,10 @@ load('steal/rhino/steal.js');
 steal(	'//steal/generate/generate',
 		'//steal/generate/system',	
 function(steal){
-	var md = steal.generate.convert(_args[0]);
-	
-	md.appPath =  md.path.replace(/\/controllers$/,"");
-
-	steal.generate("jquery/generate/templates/controller",md.appPath,md)
+	var md = steal.generate.convert(_args[0]),
+		path =  _args[0].toLowerCase().replace('.',"/");
+	md.path_to_steal = new steal.File(path).pathToRoot()
+	steal.generate("jquery/generate/templates/controller",md.path+"/"+md.underscore,md)
 	
 });
 

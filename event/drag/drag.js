@@ -128,7 +128,6 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 	 */
 	$.extend($.Drag.prototype, {
 		setup: function( options, ev ) {
-			//this.noSelection();
 			$.extend(this, options);
 			this.element = $(this.element);
 			this.event = ev;
@@ -142,7 +141,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 			$(document).bind('mouseup', mouseup);
 
 			if (!this.callEvents('down', this.element, ev) ) {
-				ev.preventDefault();
+			    this.noSelection(this.delegate);
 			}
 		},
 		/**
@@ -155,7 +154,8 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 			if (!this.moved ) {
 				this.event = this.element = null;
 			}
-			//this.selection();
+
+            this.selection(this.delegate);
 			this.destroyed();
 		},
 		mousemove: function( docEl, ev ) {
@@ -178,18 +178,48 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 			}
 			this.destroy();
 		},
-		noSelection: function() {
+
+        /**
+         * noSelection method turns off text selection during a drag event.
+         * This method is called by default unless a event is listening to the 'dragdown' event.
+         *
+         *  ## Example
+         *
+         *      $('div.drag').bind('dragdown', function(elm,event,drag){
+         *          drag.noSelection();
+         *      });
+         *      
+         * @param [elm] an element to prevent selection on.  Defaults to the dragable element.
+         */
+		noSelection: function(elm) {
+            elm = elm || this.delegate
+            
 			document.documentElement.onselectstart = function() {
 				return false;
 			};
 			document.documentElement.unselectable = "on";
-			$(document.documentElement).css('-moz-user-select', 'none');
+			this.selectionDisabled = (this.selectionDisabled ? this.selectionDisabled.add(elm) : $(elm));
+			this.selectionDisabled.css('-moz-user-select', '-moz-none');
 		},
-		selection: function() {
-			document.documentElement.onselectstart = function() {};
-			document.documentElement.unselectable = "off";
-			$(document.documentElement).css('-moz-user-select', '');
+
+        /**
+         * selection method turns on text selection that was previously turned off during the drag event.
+         * This method is called by default in 'destroy' unless a event is listening to the 'dragdown' event.
+         * 
+         *  ## Example
+         *
+         *      $('div.drag').bind('dragdown', function(elm,event,drag){
+         *          drag.noSelection();
+         *      });
+         */
+		selection: function(elm) {
+            if(this.selectionDisabled){
+                document.documentElement.onselectstart = function() {};
+                document.documentElement.unselectable = "off";
+                this.selectionDisabled.css('-moz-user-select', '');
+            }
 		},
+
 		init: function( element, event ) {
 			element = $(element);
 			var startElement = (this.movingElement = (this.element = $(element))); //the element that has been clicked on
@@ -382,6 +412,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 
 			// store the original element and make the ghost the dragged element
 			this.movingElement = ghost;
+			this.noSelection(ghost)
 			this._removeMovingElement = true;
 			return ghost;
 		},
@@ -404,7 +435,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 				display: 'block',
 				position: 'absolute'
 			}).show();
-
+			this.noSelection(this.movingElement)
 			this.mouseElementPosition = new $.Vector(this._offsetX, this._offsetY);
 		},
 		/**
@@ -417,7 +448,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 		 * @param {Boolean} [val] optional, set to false if you don't want to revert.
 		 */
 		revert: function( val ) {
-			this._revert = val === null ? true : val;
+			this._revert = val === undefined ? true : val;
 		},
 		/**
 		 * Isolates the drag to vertical movement.

@@ -42,10 +42,10 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			});
 		},
 		//guesses at a fixture name
-		fixture = function(extra){
+		fixture = function(extra, or){
 			var u = underscore( this.shortName ),
 				f = "-"+u+(extra||"");
-			return $.fixture && $.fixture[f] ? f : 
+			return $.fixture && $.fixture[f] ? f : or ||
 				"//"+underscore( this.fullName )
 						.replace(/\.models\..*/,"")
 						.replace(/\./g,"/")+"/fixtures/"+u+
@@ -67,7 +67,20 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		},
 		getId = function(inst){
 			return inst[inst.Class.id]
-		};
+		},
+		unique = function(items){
+	        var collect = [];
+	        for(var i=0; i < items.length; i++){
+	            if(!items[i]["__u Nique"]){
+	                collect.push(items[i]);
+	                items[i]["__u Nique"] = true;
+	            }
+	        }
+	        for(i=0; i< collect.length; i++){
+	            delete collect[i]["__u Nique"];
+	        }
+	        return collect;
+	    };
 	/**
 	 * @class jQuery.Model
 	 * @tag core
@@ -292,7 +305,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * Create is called by save to create a new instance.  If you want to be able to call save on an instance
 			 * you have to implement create.
 			 * 
-			 * The easist way to implement create is to just give it the url to post data to:
+			 * The easiest way to implement create is to just give it the url to post data to:
 			 * 
 			 *     $.Model("Recipe",{
 			 *       create: "/recipes"
@@ -405,7 +418,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function(id, attrs, success, error){
-				ajax(str, addId.call(this,attrs, id), success, error, "-restUpdate","put")
+				ajax(str, addId.call(this,attrs, id), success, error, fixture.call(this,"Update","-restUpdate"),"put")
 			}
 		},
 		destroy: function( str ) {
@@ -1358,7 +1371,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 
 		ret = getList(kind);
 
-		ret.push.apply(ret, $.unique(collection));
+		ret.push.apply(ret, unique(collection));
 		return ret;
 	};
 	/**

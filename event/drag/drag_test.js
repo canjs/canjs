@@ -1,6 +1,6 @@
 steal.plugins("jquery/event/drop",
 	'funcunit/qunit',
-	'funcunit/syn').then(function(){
+	'funcunit/syn').then("//jquery/event/drop/drop_test",function(){
 
 module("jquery/event/drag",{
 	makePoints : function(){
@@ -28,8 +28,7 @@ test("dragging an element", function(){
 			"<div id='midpoint'></div>"+
 			"<div id='drop'></div>"+
 			"</div>");
-	
-	div.appendTo($("#qunit-test-area"));
+	$("#qunit-test-area").html(div);
 	var basicCss = {
 		width: "20px",
 		height: "20px",

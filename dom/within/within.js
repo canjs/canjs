@@ -16,20 +16,24 @@ steal.plugins('jquery/dom').then(function($){
  * @param {Object} y
  * @param {Object} cache
  */
-$.fn.within= function(x, y, cache) {
+$.fn.within= function(x, y, useOffsetCache) {
     var ret = []
     this.each(function(){
         var q = jQuery(this);
 
-        if(this == document.documentElement) return ret.push(this);
+        if (this == document.documentElement) {
+			return ret.push(this);
+		}
+        var offset = useOffsetCache ? 
+						jQuery.data(this,"offsetCache") || jQuery.data(this,"offsetCache", q.offset()) : 
+						q.offset();
 
-        var offset = cache ? jQuery.data(this,"offset", q.offset()) : q.offset();
+        var res =  withinBox(x, y,  offset.left, offset.top,
+                                    this.offsetWidth, this.offsetHeight );
 
-        var res =  withinBox(x, y, 
-                                      offset.left, offset.top,
-                                      this.offsetWidth, this.offsetHeight );
-
-        if(res) ret.push(this);
+        if (res) {
+			ret.push(this);
+		}
     });
     
     return this.pushStack( jQuery.unique( ret ), "within", x+","+y );

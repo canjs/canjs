@@ -15,13 +15,41 @@ var supportTouch = "ontouchend" in document,
 		};
 	};
 
-
-
-
 /**
- * @add jQuery.event.special
+ * @class jQuery.event.swipe
+ * @parent specialevents
+ * @plugin jquery/event/swipe
+ * 
+ * Swipe provides cross browser swipe events.  On mobile devices, swipe uses touch events.  On desktop browsers,
+ * swipe uses mouseevents.
+ *
+ * A swipe happens when a touch or drag moves 
  */
-$.event.setupHelper( ["swipe",'swipeleft','swiperight'], touchStartEvent, function(ev){
+var swipe = $.event.swipe = {
+	/**
+	 * @attribute delay
+	 * Delay is the upper limit of time the swipe motion can take in milliseconds.  This defaults to 1000.
+	 * 
+	 * A user must perform the swipe motion in this much time.
+	 */
+	delay : 500,
+	/**
+	 * @attribute max
+	 * The maximum distance the pointer must travel in pixels.  The default is 75 pixels.
+	 */
+	max : 75,
+	/**
+	 * @attribute min
+	 * The minimum distance the pointer must travel in pixesl.  The default is 30 pixels.
+	 */
+	min : 30
+};
+
+
+$.event.setupHelper( [
+
+
+"swipe",'swipeleft','swiperight','swipeup','swipedown'], touchStartEvent, function(ev){
 	//listen to mouseup
 	var start = data(ev),
 		stop,
@@ -44,13 +72,23 @@ $.event.setupHelper( ["swipe",'swipeleft','swiperight'], touchStartEvent, functi
 		.one(touchStopEvent, function(event){
 			$(this).unbind( touchMoveEvent, moveHandler );
 			if ( start && stop ) {
-				if ( stop.time - start.time < 1000 && 
-						Math.abs( start.coords[0] - stop.coords[0]) > 30 &&
-						Math.abs( start.coords[1] - stop.coords[1]) < 75 ) {
+				var deltaX = Math.abs(start.coords[0] - stop.coords[0]),
+					deltaY = Math.abs(start.coords[1] - stop.coords[1]),
+					distance = Math.sqrt(deltaX*deltaX+deltaY*deltaY);
+				
+				if ( stop.time - start.time < swipe.delay && distance > swipe.min ) {
 					
-					var direction = start.coords[0] > stop.coords[0] ? "swipeleft" : "swiperight";
+					var events = ['swipe']
+					if( deltaX > swipe.min &&  deltaY < swipe.min) {
+						events.push( start.coords[0] > stop.coords[0] ? "swipeleft" : "swiperight" );
+					}else if(deltaY > swipe.min && deltaX < swipe.min){
+						events.push( start.coords[0] > stop.coords[0] ? "swipedown" : "swipeup" );
+					}
+
+					
+					
 					//trigger swipe events on this guy
-					$.each($.event.find(delegate, ["swipe",direction], selector), function(){
+					$.each($.event.find(delegate, events, selector), function(){
 						this.call(entered, ev, {start : start, end: stop})
 					})
 				
