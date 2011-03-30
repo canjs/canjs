@@ -32,7 +32,30 @@ steal.plugins('jquery/dom').then(function( $ ) {
 				settings.fixture = overwrites[index].fixture;
 			}
 
-		}; // by url
+		},
+		/**
+		 * Makes an attempt to guess where the id is at in the url and returns it.
+		 * @param {Object} settings
+		 */
+		getId = function(settings){
+        	var id = settings.data.id;
+
+			if(id === undefined){
+                settings.url.replace(/\/(\d+)(\/|$)/g, function(all, num){
+                    id = num;
+                });
+            }
+			
+            if(id === undefined){
+                id = settings.url.replace(/\/(\w+)(\/|$)/g, function(all, num){
+                    if(num != 'update'){
+                        id = num;
+                    }
+                })
+            }
+
+			return id;
+		};
 
 	/**
 	 * @class jQuery.fixture
@@ -241,7 +264,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		return left + right;
 	};
 
-	$.extend($.fixture, {
+	$.extend($.fixture, {	
 		/**
 		 * Provides a rest update fixture function
 		 */
@@ -249,12 +272,13 @@ steal.plugins('jquery/dom').then(function( $ ) {
 			switch ( cbType ) {
 			case "success":
 				return [$.extend({
-					id: parseInt(settings.url, 10)
+					id: getId(settings)
 				}, settings.data), "success", $.fixture.xhr()];
 			case "complete":
 				return [$.fixture.xhr(), "success"];
 			}
 		},
+		
 		/**
 		 * Provides a rest destroy fixture function
 		 */
@@ -266,6 +290,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 				return [$.fixture.xhr(), "success"];
 			}
 		},
+		
 		/**
 		 * Provides a rest create fixture function
 		 */
@@ -282,9 +307,8 @@ steal.plugins('jquery/dom').then(function( $ ) {
 					}
 				}), "success"];
 			}
-
-
 		},
+		
 		/**
 		 * Used to make fixtures for findAll / findOne style requests.
 		 * @codestart
@@ -330,25 +354,6 @@ steal.plugins('jquery/dom').then(function( $ ) {
 							return items[i];
 						}
 					}
-				},
-				getId = function(settings){
-                	var id = settings.data.id;
-
-					if(id === undefined){
-	                    settings.url.replace(/\/(\d+)[\/$]/g, function(all, num){
-	                        id = num;
-	                    });
-	                }
-					
-	                if(id === undefined){
-	                    id = settings.url.replace(/\/(\w+)[\/$]/g, function(all, num){
-	                        if(num != 'update'){
-	                            id = num;
-	                        }
-	                    })
-	                }
-					
-					return id;
 				};
 				
 			for ( var i = 0; i < (count); i++ ) {
