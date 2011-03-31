@@ -199,32 +199,48 @@ steal.plugins("jquery").then(function( $ ) {
 	 * @param {Object} [callback] Optional callback function.  If present, the template is 
 	 * retrieved asynchronously.  This is a good idea if you aren't compressing the templates
 	 * into your view.
-	 * @return {String} The rendered result of the view.
+	 * @return {String} The rendered result of the view or if deferreds are passed, a deferred that will contain
+	 * the rendered result of the view.
 	 */
 
-	var $view, render, checkText, get, isDeferred = function(obj){
-		return $.isFunction(obj.promise) // check if obj is a $.Deferred
-	};
+	var $view, render, checkText, get, 
+		isDeferred = function(obj){
+			return $.isFunction(obj.promise) // check if obj is a $.Deferred
+		};
 
 	$view = $.View = function( view, data, helpers, callback ) {
 		var deferreds = [];
-		
-		for(var prop in data) {
-			if(isDeferred(data[prop])) {
-				deferreds.push(data[prop]);
+		// handles a deferred or an object with deferreds in it.
+		if(isDeferred(data)){
+			deferreds = [data]
+		}else{
+			for(var prop in data) {
+				if(isDeferred(data[prop])) {
+					deferreds.push(data[prop]);
+				}
 			}
 		}
 		
+		
 		if(deferreds.length) { // does data contain any deferreds?
-			$.when.apply($, deferreds).then(function() {
+			var deferred = $.Deferred();
+			
+			
+			$.when.apply($, deferreds).then(function(resolved) {
 				var objs = $.makeArray(arguments)
-				for(var prop in data) {
-					if(isDeferred(data[prop])) {
-						data[prop] = objs.shift();
+				if (isDeferred(data)) {
+					data = resolved;
+				}
+				else {
+					for (var prop in data) {
+						if (isDeferred(data[prop])) {
+							data[prop] = objs.shift();
+						}
 					}
 				}
-				$view(view, data, helpers, callback); // this does not work as is...
+				deferred.resolve( $view(view, data, helpers, callback) ); // this does not work as is...
 			});
+			return deferred.promise();
 		}
 		else {
 			var suffix = view.match(/\.[\w\d]+$/),
@@ -442,7 +458,10 @@ steal.plugins("jquery").then(function( $ ) {
 
 		$.fn[func_name] = function() {
 			var args = $.makeArray(arguments),
-				callbackNum, callback, self = this;
+				callbackNum, 
+				callback, 
+				self = this,
+				result;
 
 			//check if a template
 			if ( isTemplate(args) ) {
@@ -457,9 +476,17 @@ steal.plugins("jquery").then(function( $ ) {
 					$view.apply($view, args);
 					return this;
 				}
-
+				result = $view.apply($view, args);
+				if(!isDeferred( result ) ){
+					args = [result];
+				}else{
+					result.done(function(res){
+						modify.call(self, [res], old);
+					})
+					return this;
+				}
 				//otherwise do the template now
-				args = [$view.apply($view, args)];
+				
 			}
 
 			return modify.call(this, args, old);

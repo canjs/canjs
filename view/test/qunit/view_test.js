@@ -77,4 +77,54 @@ test("inline templates other than 'tmpl' like ejs", function(){
         $("#qunit-test-area").html('test_ejs', {name: 'Henry'});
         equal( $("#new_name").text(), 'Henry');
 	$("#qunit-test-area").html("");
+});
+
+test("object of deferreds", function(){
+	var foo = $.Deferred(),
+		bar = $.Deferred();
+	stop();
+	$.View("//jquery/view/test/qunit/deferreds.ejs",{
+		foo : foo.promise(),
+		bar : bar
+	}).then(function(result){
+		equals(result, "FOO and BAR");
+		start();
+	});
+	setTimeout(function(){
+		foo.resolve("FOO");
+	},100);
+	bar.resolve("BAR");
+	
+});
+
+test("deferred", function(){
+	var foo = $.Deferred();
+	stop();
+	$.View("//jquery/view/test/qunit/deferred.ejs",foo).then(function(result){
+		equals(result, "FOO");
+		start();
+	});
+	setTimeout(function(){
+		foo.resolve({
+			foo: "FOO"
+		});
+	},100);
+	
+});
+
+
+test("modifier with a deferred", function(){
+	$("#qunit-test-area").html("");
+	stop();
+	
+	var foo = $.Deferred();
+	$("#qunit-test-area").html("//jquery/view/test/qunit/deferred.ejs", foo );
+	setTimeout(function(){
+		foo.resolve({
+			foo: "FOO"
+		});
+		start();
+		equals($("#qunit-test-area").html(), "FOO", "worked!");
+	},100);
+
 })

@@ -80,7 +80,28 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	            delete collect[i]["__u Nique"];
 	        }
 	        return collect;
-	    };
+	    },
+		// makes a deferred request
+		makeRequest = function(self, type, success, error, method){
+			var deferred = $.Deferred(),
+				resolve = function(data){
+					self[method || type+"d"](data);
+					deferred.resolveWith(self,[self, data, type]);
+				},
+				reject = function(data){
+					deferred.rejectWith(self, [data])
+				},
+				args = [self.attrs(), resolve, reject];
+			if(type !== 'create'){
+				args.unshift(getId(self))
+			}
+			deferred.then(success);
+			deferred.fail(error);
+			
+			self.Class[type].apply(self.Class, args);
+				
+			return deferred.promise();
+		};
 	/**
 	 * @class jQuery.Model
 	 * @tag core
@@ -160,7 +181,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * $.Controller.extend("MyApp.Controllers.Tasks",{onDocument: true},
 	 * {
 	 *   load: function() {
-	 *     Task.findAll({},this.callback('list'))
+	 *     Task.({},this.callback('list'))
 	 *   },
 	 *   list: function( tasks ) {
 	 *     $("#tasks").html(this.view(tasks))
@@ -592,9 +613,10 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			}
 			
 			//add ajax converters
-			var converters = {};
-			converters["* "+this._shortName+".models"] = this.callback('models');
-			converters["* "+this._shortName+".model"] = this.callback('model');
+			var converters = {},
+				convertName = "* "+this._shortName+".model";
+			converters[convertName+"s"] = this.callback('models');
+			converters[convertName] = this.callback('model');
 			$.ajaxSetup({
 				converters : converters
 			});				
@@ -630,6 +652,26 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 */
 		attributes: {},
 		/**
+		 * @function wrap
+		 * 
+		 * 
+		 * Wrap is used to create a new instance from data returned from the server.
+		 * It is very similar to doing <code> new Model(attributes) </code> 
+		 * except that wrap will check if the data passed has an
+		 * 
+		 * - attributes,
+		 * - data, or
+		 * - <i>singularName</i>
+		 * 
+		 * property.  If it does, it will use that objects attributes.
+		 * 
+		 * Wrap is really a convience method for servers that don't return just attributes.
+		 * 
+		 * @param {Object} attributes
+		 * @return {Model} an instance of the model
+		 */
+		// wrap place holder
+		/**
 		 * Model is an AJAX converter used to convert raw data from the server, and return an instance of a model class.
 		 * This method can be overwritten within the model
 		 * 
@@ -644,6 +686,62 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			// checks for properties in an object (like rails 2.0 gives);
 			attributes[this.singularName] || attributes.data || attributes.attributes || attributes);
 		},
+		/**
+		 * @function wrapMany
+		 * Takes raw data from the server, and returns an array of model instances.
+		 * Each item in the raw array becomes an instance of a model class.
+		 * 
+		 * @codestart
+		 * $.Model.extend("Recipe",{
+		 *   helper : function(){
+		 *     return i*i;
+		 *   }
+		 * })
+		 * 
+		 * var recipes = Recipe.wrapMany([{id: 1},{id: 2}])
+		 * recipes[0].helper() //-> 1
+		 * @codeend
+		 * 
+		 * If an array is not passed to wrapMany, it will look in the object's .data
+		 * property.  
+		 * 
+		 * For example:
+		 * 
+		 * @codestart
+		 * var recipes = Recipe.wrapMany({data: [{id: 1},{id: 2}]})
+		 * recipes[0].helper() //-> 1
+		 * @codeend
+		 * 
+		 * Often wrapMany is used with this.callback inside a model's [jQuery.Model.static.findAll findAll]
+		 * method like:
+		 * 
+		 *     findAll : function(params, success, error){
+		 *       $.get('/url',
+		 *             params,
+		 *             this.callback(['wrapMany',success]) )
+		 *     }
+		 * 
+		 * If you are having problems getting your model to callback success correctly,
+		 * make sure a request is being made (with firebug's net tab).  Also, you 
+		 * might not use this.callback and instead do:
+		 * 
+		 *     findAll : function(params, success, error){
+		 *       self = this;
+		 *       $.get('/url',
+		 *             params,
+		 *             function(data){
+		 *               var wrapped = self.wrapMany(data);
+		 *               success(data)
+		 *             })
+		 *     }
+		 * 
+		 * ## API
+		 * 
+		 * @param {Array} instancesRawData an array of raw name - value pairs.
+		 * @return {Array} a JavaScript array of instances or a [jQuery.Model.List list] of instances
+		 *  if the model list plugin has been included.
+		 */
+		// wrapMany placeholder
 		/**
 		 * Models is an AJAX converter used to convert raw data from the server, and return an array of model instances.
 		 * Each item in the raw array becomes an instance of a model class.
@@ -1132,9 +1230,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @param {Function} [error] called if the save was not successful.
 		 */
 		save: function( success, error ) {
-			this.isNew() ?
-				this.Class.create(this.attrs(), this.callback(['created', success]), error) : 
-				this.Class.update(getId(this), this.attrs(), this.callback(['updated', success]), error);
+			return makeRequest(this, this.isNew()  ? 'create' : 'update' , success, error);
 		},
 
 		/**
@@ -1153,9 +1249,9 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @param {Function} [error] called if an unsuccessful destroy
 		 */
 		destroy: function( success, error ) {
-			this.Class.destroy(getId(this), this.callback(["destroyed", success]), error);
+			return makeRequest(this, 'destroy' , success, error , 'destroyed');
 		},
-
+		
 
 		/**
 		 * Returns a unique identifier for the model instance.  For example:
@@ -1226,6 +1322,10 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			models[shortName] = this;
 		}
 	});
+	// map wrapMany
+	$.Model.wrapMany = $.Model.models;
+	$.Model.wrap = $.Model.model;
+
 
 	each([
 	/**
@@ -1261,7 +1361,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			$(this).triggerHandler(funcName);
 			stub = attrs && typeof attrs == 'object' && this.attrs(attrs.attrs ? attrs.attrs() : attrs);
 			this.publish(funcName, this);
-			return [this].concat(makeArray(arguments));
+			return [this].concat(makeArray(arguments)); // return like this for this.callback chains
 		};
 	});
 
