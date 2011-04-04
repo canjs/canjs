@@ -493,6 +493,14 @@ steal.plugins("jquery").then(function( $ ) {
 		//copy remaining hooks back
 		$.extend($view.hookups, hooks);
 	};
+	
+	
+	$.fn.hookup = function(){
+		var hooks = $view.hookups;
+		$view.hookups = {};
+		hookupView(this, hooks);
+		return this;
+	};
 
 	/**
 	 *  @add jQuery.fn
