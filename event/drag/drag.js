@@ -81,6 +81,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 	$.extend($.Drag, {
 		lowerName: "drag",
 		current: null,
+		distance: 0,
 		/**
 		 * Called when someone mouses down on a draggable object.
 		 * Gathers all callback functions and creates a new Draggable.
@@ -104,6 +105,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 				delegate: ev.liveFired || element,
 				selector: ev.handleObj.selector,
 				moved: false,
+				distance: this.distance,
 				callbacks: {
 					dragdown: event.find(delegate, ["dragdown"], selector),
 					draginit: event.find(delegate, ["draginit"], selector),
@@ -119,10 +121,6 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 		}
 	});
 
-
-
-
-
 	/**
 	 * @Prototype
 	 */
@@ -137,6 +135,8 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 				mouseup = bind(this, this.mouseup);
 			this._mousemove = mousemove;
 			this._mouseup = mouseup;
+			this._distance = options.distance ? options.distance : 0;
+			
 			$(document).bind('mousemove', mousemove);
 			$(document).bind('mouseup', mouseup);
 
@@ -160,6 +160,11 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 		},
 		mousemove: function( docEl, ev ) {
 			if (!this.moved ) {
+				
+				if(!this.mouseDistanceMet(ev, this.event, this._distance)){
+					return false;
+				}
+				
 				this.init(this.element, ev);
 				this.moved = true;
 			}
@@ -171,12 +176,24 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 			//e.preventDefault();
 			this.draw(pointer, ev);
 		},
+		
 		mouseup: function( docEl, event ) {
 			//if there is a current, we should call its dragstop
 			if ( this.moved ) {
 				this.end(event);
 			}
 			this.destroy();
+		},
+		
+		/**
+		 * Determines if the mouse distance has met the distance threshold option.
+		 * @param {Object} mouseDownEvent
+		 * @param {Object} event
+		 * @param {Object} distance
+		 */
+		mouseDistanceMet: function(mouseDownEvent, event, distance) {
+			return (Math.max(Math.abs(mouseDownEvent.pageX - event.pageX),
+				Math.abs(mouseDownEvent.pageY - event.pageY)) >= distance);
 		},
 
         /**
@@ -469,6 +486,14 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 		 */
 		only: function( only ) {
 			return (this._only = (only === undefined ? true : only));
+		},
+		
+		/**
+		 * Sets the distance from the mouse before the item begins dragging.
+		 * @param {Object} val
+		 */
+		distance:function(val){
+			this._distance = val;
 		}
 	});
 
@@ -524,8 +549,4 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 		$.Drag.mousedown.call($.Drag, e, this);
 
 	});
-
-
-
-
 });
