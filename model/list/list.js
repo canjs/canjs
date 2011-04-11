@@ -353,7 +353,7 @@ $.Class.extend("jQuery.Model.List",
 		this._changed = true;
 		var res = push.apply( this, args )
 		//do this first so we could prevent?
-		if(args.length){
+		if( this.__events__ && args.length ){
 			$([this]).trigger("add",[args]);
 		}
 		
