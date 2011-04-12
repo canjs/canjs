@@ -1,5 +1,5 @@
 steal
- .plugins("jquery/dom/fixture")  //load your app
+ .plugins("jquery/dom/fixture", "jquery/model")
  .plugins('funcunit/qunit').then(function(){
 
 module("jquery/dom/fixture");
@@ -112,6 +112,36 @@ test("fixtures with converters", function(){
 	});
 })
 
-
+test("$.fixture.make fixtures",function(){
+	stop();
+	$.fixture.make('thing', 1000, function(i){
+		return {
+			id: i,
+			name: "thing "+i
+		}
+	}, 
+	function(item, settings){
+		if(settings.data.searchText){
+			var regex = new RegExp("^"+settings.data.searchText)
+			return regex.test(item.name);
+		}
+	})
+	$.ajax({
+		url: "things",
+		type: "json",
+		data: {
+			offset: 100,
+			limit: 50,
+			order: ["name ASC"],
+			searchText: "thing 2"
+		},
+		fixture: "-things",
+		success: function(things){
+			equals(things.data[0].name, "thing 29", "first item is correct")
+			equals(things.data.length, 11, "there are 11 items")
+			start();
+		}
+	})
+});
 
 });

@@ -438,7 +438,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		 *   data:{ 
 		 *      offset: 100, 
 		 *      limit: 50, 
-		 *      order: "date ASC",
+		 *      order: ["date ASC"],
 		 *      parentId: 5},
 		 *    },
 		 *    fixture: "-messages",
@@ -452,8 +452,20 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		 * @param {Number} count the number of items to create
 		 * @param {Function} make a function that will return json data representing the object.  The
 		 * make function is called back with the id and the current array of items.
+		 * @param {Function} filter (optional) a function used to further filter results. Used for to simulate 
+		 * server params like searchText or startDate.  The function should return true if the item passes the filter, 
+		 * false otherwise.  For example:
+		 * 
+		 * @codestart
+		 * function(item, settings){
+			  if(settings.data.searchText){
+				  var regex = new RegExp("^"+settings.data.searchText)
+				  return regex.test(item.name);
+		      }
+		 * }
+		 * @codeend
 		 */
-		make: function( types, count, make ) {
+		make: function( types, count, make, filter ) {
 			if(typeof types === "string"){
 				types = [types+"s",types ]
 			}
@@ -518,6 +530,18 @@ steal.plugins('jquery/dom').then(function( $ ) {
 							} else {
 								i++;
 							}
+						}
+					}
+				}
+				
+				
+				if( filter ) {
+					i = 0;
+					while (i < retArr.length) {
+						if (!filter(retArr[i], settings)) {
+							retArr.splice(i, 1);
+						} else {
+							i++;
 						}
 					}
 				}
