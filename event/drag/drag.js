@@ -16,17 +16,13 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 	 * @plugin jquery/event/drag
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/event/drag/drag.js
 	 * @test jquery/event/drag/qunit.html
-	 * 
 	 * Provides drag events as a special events to jQuery.  
 	 * A jQuery.Drag instance is created on a drag and passed
 	 * as a parameter to the drag event callbacks.  By calling
 	 * methods on the drag event, you can alter the drag's
 	 * behavior.
-	 * 
-	 * ## Drag Events
-	 * 
+	 * <h2>Drag Events</h2>
 	 * The drag plugin allows you to listen to the following events:
-	 * 
 	 * <ul>
 	 *  <li><code>dragdown</code> - the mouse cursor is pressed down</li>
 	 *  <li><code>draginit</code> - the drag motion is started</li>
@@ -35,33 +31,29 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 	 *  <li><code>dragover</code> - the drag is over a drop point</li>
 	 *  <li><code>dragout</code> - the drag moved out of a drop point</li>
 	 * </ul>
-	 * 
-	 * Just by binding or delegating on one of these events, you make
+	 * <p>Just by binding or delegating on one of these events, you make
 	 * the element dragable.  You can change the behavior of the drag
 	 * by calling methods on the drag object passed to the callback.
-	 * 
-	 * ### Example
+	 * <h3>Example</h3>
 	 * Here's a quick example:
-	 * 
-	 *     //makes the drag vertical
-	 *     $(".drags").live("draginit", function(event, drag){
-	 *       drag.vertical();
-	 *     })
-	 *     //gets the position of the drag and uses that to set the width
-	 *     //of an element
-	 *     $(".resize").live("dragmove",function(event, drag){
-	 *       $(this).width(drag.position.left() - $(this).offset().left   )
-	 *     })
-	 * 
-	 * ## Drag Object
-	 * 
-	 * The drag object is passed after the event to drag 
+	 * @codestart
+	 * //makes the drag vertical
+	 * $(".drags").live("draginit", function(event, drag){
+	 *   drag.vertical();
+	 * })
+	 * //gets the position of the drag and uses that to set the width
+	 * //of an element
+	 * $(".resize").live("dragmove",function(event, drag){
+	 *   $(this).width(drag.position.left() - $(this).offset().left   )
+	 * })
+	 * @codeend
+	 * <h2>Drag Object</h2>
+	 * <p>The drag object is passed after the event to drag 
 	 * event callback functions.  By calling methods
 	 * and changing the properties of the drag object,
 	 * you can alter how the drag behaves.
-	 * 
-	 * The drag properties and methods:
-	 * 
+	 * </p>
+	 * <p>The drag properties and methods:</p>
 	 * <ul>
 	 *  <li><code>[jQuery.Drag.prototype.cancel cancel]</code> - stops the drag motion from happening</li>
 	 *  <li><code>[jQuery.Drag.prototype.ghost ghost]</code> - copys the draggable and drags the cloned element</li>
@@ -75,9 +67,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 	 *  <li><code>[jQuery.Drag.prototype.limit limit]</code> - limit the drag within an element (*limit plugin)</li>
 	 *  <li><code>[jQuery.Drag.prototype.scrolls scrolls]</code> - scroll scrollable areas when dragging near their boundries (*scroll plugin)</li>
 	 * </ul>
-	 * 
-	 * ## Demo
-	 * 
+	 * <h2>Demo</h2>
 	 * Now lets see some examples:
 	 * @demo jquery/event/drag/drag.html 1000
 	 * @constructor
@@ -130,7 +120,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 			}, ev);
 		}
 	});
-
+	
 	/**
 	 * @Prototype
 	 */
@@ -170,8 +160,8 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 		},
 		mousemove: function( docEl, ev ) {
 			if (!this.moved ) {
-				
-				if(!this.mouseDistanceMet(ev, this.event, this._distance)){
+				var dist = Math.pow( ev.pageX - this.event.pageX, 2 ) + Math.pow( ev.pageY - this.event.pageY, 2 );
+				if(dist < this._distance){
 					return false;
 				}
 				
@@ -193,17 +183,6 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 				this.end(event);
 			}
 			this.destroy();
-		},
-		
-		/**
-		 * Determines if the mouse distance has met the distance threshold option.
-		 * @param {Object} mouseDownEvent
-		 * @param {Object} event
-		 * @param {Object} distance
-		 */
-		mouseDistanceMet: function(mouseDownEvent, event, distance) {
-			return (Math.max(Math.abs(mouseDownEvent.pageX - event.pageX),
-				Math.abs(mouseDownEvent.pageY - event.pageY)) >= distance);
 		},
 
         /**
@@ -500,10 +479,15 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 		
 		/**
 		 * Sets the distance from the mouse before the item begins dragging.
-		 * @param {Object} val
+		 * @param {Number} val
 		 */
 		distance:function(val){
-			this._distance = val;
+			if(val !== undefined){
+				this._distance = val;
+				return this;
+			}else{
+				return this._distance
+			}
 		}
 	});
 
