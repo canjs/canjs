@@ -4,7 +4,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	// Binds an element, returns a function that unbinds
 	var bind = function( el, ev, callback ) {
 		var wrappedCallback,
-			binder = el.bind && el.unbind ? el : $(el);
+			binder = el.bind && el.unbind ? el : $(isFunction(el) ? [el] : el);
 		//this is for events like >click.
 		if ( ev.indexOf(">") === 0 ) {
 			ev = ev.substr(1);
