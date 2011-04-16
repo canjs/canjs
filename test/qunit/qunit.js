@@ -23,4 +23,4 @@ steal('//jquery/lang/lang_test',
 
 'jquery/view/test/qunit',
 	'jquery/view/ejs/test/qunit'
-)
+).then('integration')

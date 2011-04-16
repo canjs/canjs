@@ -150,10 +150,9 @@ test("update deferred", function(){
 test("destroy deferred", function(){
 	
 	$.Model("Person",{
-		destroy : function(id, attrs, success, error){
+		destroy : function(id, success, error){
 			return $.ajax({
 				url : "/people/"+id,
-				data : attrs,
 				type : 'post',
 				dataType : "json",
 				fixture: function(){
@@ -317,7 +316,7 @@ test("Model events" , function(){
 			success(attrs)
 		},
 		destroy : function(id, success){
-			success(attrs)
+			success()
 		}
 	},{});
 	
