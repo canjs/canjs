@@ -92,9 +92,15 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 					deferred.rejectWith(self, [data])
 				},
 				args = [self.attrs(), resolve, reject];
-			if(type !== 'create'){
+				
+			if(type == 'destroy'){
+				args.shift();
+			}	
+				
+			if(type !== 'create' ){
 				args.unshift(getId(self))
-			}
+			} 
+			
 			deferred.then(success);
 			deferred.fail(error);
 			
