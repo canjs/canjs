@@ -1494,6 +1494,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			$(this).triggerHandler(funcName);
 			stub = attrs && typeof attrs == 'object' && this.attrs(attrs.attrs ? attrs.attrs() : attrs);
 			this.publish(funcName, this);
+			$([this.Class]).triggerHandler(funcName, this);
 			return [this].concat(makeArray(arguments)); // return like this for this.callback chains
 		};
 	});

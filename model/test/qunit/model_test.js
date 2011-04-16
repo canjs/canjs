@@ -307,4 +307,49 @@ test("Empty uses fixtures", function(){
 	})
 });
 
-
+test("Model events" , function(){
+	var order = 0;
+	$.Model("Test.Event",{
+		create : function(attrs, success){
+			success({id: 1})
+		},
+		update : function(id, attrs, success){
+			success(attrs)
+		},
+		destroy : function(id, success){
+			success(attrs)
+		}
+	},{});
+	
+	stop();
+	$([Test.Event]).bind('created',function(ev, passedItem){
+		
+		ok(this === Test.Event, "got model")
+		ok(passedItem === item, "got instance")
+		equals(++order, 1, "order");
+		passedItem.update({});
+		
+	}).bind('updated', function(ev, passedItem){
+		equals(++order, 2, "order");
+		ok(this === Test.Event, "got model")
+		ok(passedItem === item, "got instance")
+		
+		passedItem.destroy({});
+		
+	}).bind('destroyed', function(ev, passedItem){
+		equals(++order, 3, "order");
+		ok(this === Test.Event, "got model")
+		ok(passedItem === item, "got instance")
+		
+		start();
+		
+	})
+	
+	var item = new Test.Event();
+	item.save();
+	
+	
+	
+	
+	
+});
