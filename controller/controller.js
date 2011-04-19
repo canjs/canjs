@@ -417,7 +417,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			if (!options && parameterReplacer.test(methodName) ) {
 				return null;
 			}
-			var convertedName = options ? $.String.sub(methodName, options) : methodName,
+			var convertedName = options ? $.String.sub(methodName, [options, window]) : methodName,
 				arr = $.isArray(convertedName),
 				parts = (arr ? convertedName[1]  :convertedName).match(breaker),
 				event = parts[2],

@@ -9,24 +9,49 @@ steal.plugins('jquery').then(function( $ ) {
 		words: /([A-Z]+)([A-Z][a-z])/g,
 		lowerUpper: /([a-z\d])([A-Z])/g,
 		dash: /([a-z\d])([A-Z])/g,
-		replacer: /\{([^\}]+)\}/g
+		replacer: /\{([^\}]+)\}/g,
+		dot: /\./
 	},
-		getObject = function( objectName, currentin, add ) {
-			var current = currentin || window,
-				parts = objectName ? objectName.split(/\./) : [],
+		getNext = function(current, nextPart, add){
+			return current[nextPart] || ( add && (current[nextPart] = {}) );
+		},
+		isContainer = function(current){
+			var type = typeof current;
+			return type && (  type == 'function' || type == 'object' );
+		},
+		getObject = function( objectName, roots, add ) {
+			
+			var parts = objectName ? objectName.split(regs.dot) : [],
+				length =  parts.length,
+				currents = $.isArray(roots) ? roots : [roots || window],
+				current,
 				ret, 
-				i = 0;
-			for (; i < parts.length - 1 && current; i++ ) {
-				current = current[parts[i]] || ( add && (current[parts[i]] = {}) );
+				i,
+				j,
+				type;
+			
+			if(length == 0){
+				return currents[0];
 			}
-			if(parts.length == 0){
-				return currentin;
+			while(current = currents.shift()){
+				for (i =0; i < length - 1 && isContainer(current); i++ ) {
+					current = getNext(current, parts[i], add);
+				}
+				if( isContainer(current) ) {
+					
+					ret = getNext(current, parts[i], add); 
+					
+					if( ret !== undefined ) {
+						
+						if ( add === false ) {
+							delete current[parts[i]];
+						}
+						return ret;
+						
+					}
+					
+				}
 			}
-			ret = current[parts[i]] || ( add && (current[parts[i]] = {}) );
-			if ( add === false ) {
-				delete current[parts[i]];
-			}
-			return ret;
 		},
 
 		/** 
@@ -127,8 +152,10 @@ steal.plugins('jquery').then(function( $ ) {
 			 * from data.
 			 *     $.String.sub("foo {bar}",{bar: "far"})
 			 *     //-> "foo far"
-			 * @param {String} s
-			 * @param {Object} data
+			 * @param {String} s The string to replace
+			 * @param {Object} data The data to be used to look for properties.  If it's an array, multiple
+			 * objects can be used.
+			 * @param {Boolean} [remove] if a match is found, remove the property from the object
 			 */
 			sub: function( s, data, remove ) {
 				var obs = [];
