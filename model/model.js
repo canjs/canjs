@@ -111,7 +111,15 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		// a quick way to tell if it's an object and not some string
 		isObject = function(obj){
 			return typeof obj === 'object' && obj !== null && obj;
-		};
+		},
+		$method = function(name){
+			return function( eventType, handler ) {
+				$.fn[name].apply($([this]), arguments);
+				return this;
+			}
+		},
+		bind = $method('bind'),
+		unbind = $method('unbind');
 	/**
 	 * @class jQuery.Model
 	 * @tag core
@@ -990,7 +998,9 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			"boolean": function( val ) {
 				return Boolean(val);
 			}
-		}
+		},
+		bind: bind,
+		unbind: unbind
 	},
 	/**
 	 * @Prototype
@@ -1208,11 +1218,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @param {Function} handler a function to call back when an event happens on this model.
 		 * @return {model} the model instance for chaining
 		 */
-		bind: function( eventType, handler ) {
-			var wrapped = $(this);
-			wrapped.bind.apply(wrapped, arguments);
-			return this;
-		},
+		bind: bind,
 		/**
 		 * Unbinds an event handler from this instance.
 		 * Read [jQuery.Model.prototype.bind] for 
@@ -1220,11 +1226,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * @param {String} eventType
 		 * @param {Function} handler
 		 */
-		unbind: function( eventType, handler ) {
-			var wrapped = $(this);
-			wrapped.unbind.apply(wrapped, arguments);
-			return this;
-		},
+		unbind: unbind,
 		/**
 		 * Checks if there is a set_<i>property</i> value.  If it returns true, lets it handle; otherwise
 		 * saves it.
@@ -1244,9 +1246,10 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 					$(self).triggerHandler("error." + property, errors);
 				};
 
-			// if the setter returns nothing, do not set
-			// we might want to indicate if this was set ok
-			if ( this[setName] && (value = this[setName](value, this.callback('_updateProperty', property, value, old, success, errorCallback), errorCallback)) === undefined ) {
+			// provides getter / setters
+			// 
+			if ( this[setName] && 
+				(value = this[setName](value, this.callback('_updateProperty', property, value, old, success, errorCallback), errorCallback)) === undefined ) {
 				return;
 			}
 			this._updateProperty(property, value, old, success, errorCallback);

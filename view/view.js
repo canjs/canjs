@@ -203,31 +203,53 @@ steal.plugins("jquery").then(function( $ ) {
 	 * the rendered result of the view.
 	 */
 
-	var $view, render, checkText, get, 
+	var $view, render, checkText, get, getRenderer
 		isDeferred = function(obj){
 			return obj && $.isFunction(obj.promise) // check if obj is a $.Deferred
+		},
+		// gets an array of deferreds from an object
+		// this only goes one level deep
+		getDeferreds =  function(data){
+			var deferreds = [];
+		
+			// pull out deferreds
+			if(isDeferred(data)){
+				return [data]
+			}else{
+				for(var prop in data) {
+					if(isDeferred(data[prop])) {
+						deferreds.push(data[prop]);
+					}
+				}
+			}
+			return deferreds;
 		};
 
 	$view = $.View = function( view, data, helpers, callback ) {
-		var deferreds = [];
-		// handles a deferred or an object with deferreds in it.
-		if(isDeferred(data)){
-			deferreds = [data]
-		}else{
-			for(var prop in data) {
-				if(isDeferred(data[prop])) {
-					deferreds.push(data[prop]);
-				}
-			}
+		if ( typeof helpers === 'function' ) {
+			callback = helpers;
+			helpers = undefined;
 		}
+		
+		// see if we got passed any deferreds
+		var deferreds = getDeferreds(data);
 		
 		
 		if(deferreds.length) { // does data contain any deferreds?
+			
+			// the deferred that resolves into the rendered content ...
 			var deferred = $.Deferred();
 			
+			// add the view request to the list of deferreds
+			deferreds.push(get(view, true))
 			
+			// wait for the view and all deferreds to finish
 			$.when.apply($, deferreds).then(function(resolved) {
-				var objs = $.makeArray(arguments)
+				var objs = $.makeArray(arguments),
+					renderer = objs.pop()[0],
+					result; //get the view render function
+				
+				// make data look like the resolved deferreds
 				if (isDeferred(data)) {
 					data = resolved;
 				}
@@ -238,65 +260,34 @@ steal.plugins("jquery").then(function( $ ) {
 						}
 					}
 				}
-				deferred.resolve( $view(view, data, helpers, callback) ); // this does not work as is...
+				result = renderer(data, helpers);
+				
+				//resolve with the rendered view
+				deferred.resolve( result ); // this does not work as is...
+				callback && callback(result);
 			});
+			// return the deferred ....
 			return deferred.promise();
 		}
 		else {
-			var suffix = view.match(/\.[\w\d]+$/),
-				type, el, id, renderer, url = view;
-	                // if we have an inline template, derive the suffix from the 'text/???' part
-	                // this only supports '<script></script>' tags
-	                if ( el = document.getElementById(view)) {
-	                  suffix = el.type.match(/\/[\d\w]+$/)[0].replace(/^\//, '.');
-	                }
-			if ( typeof helpers === 'function' ) {
-				callback = helpers;
-				helpers = undefined;
+
+			var response,
+				async = typeof callback === "function",
+				deferred = get(view, async);
+			
+			if(async){
+				response = deferred;
+				deferred.done(function(renderer){
+					callback(renderer(data, helpers))
+				})
+			} else {
+				deferred.done(function(renderer){
+					response = renderer(data, helpers);
+				});
 			}
-			//if there is no suffix, add one
-			if (!suffix ) {
-				suffix = $view.ext;
-				url = url + $view.ext;
-			}
-	
-			//convert to a unique and valid id
-			id = toId(url);
-	
-			//if a absolute path, use steal to get it
-			if ( url.match(/^\/\//) ) {
-				if (typeof steal === "undefined") {
-					url = "/"+url.substr(2);
-				}
-				else {
-					url = steal.root.join(url.substr(2));
-				}
-			}
-	
-			//get the template engine
-			type = $view.types[suffix];
-	
-			//get the renderer function
-			renderer =
-			$view.cached[id] ? // is it cached?
-			$view.cached[id] : // use the cached version
-			((el = document.getElementById(view)) ? //is it in the document?
-			type.renderer(id, el.innerHTML) : //use the innerHTML of the elemnt
-			get(type, id, url, data, helpers, callback) //do an ajax request for it
-			);
-			// we won't always get a renderer (if async ajax)
-			return renderer && render(renderer, type, id, data, helpers, callback);
+			
+			return response;
 		}
-	};
-	// caches the template, renders the content, and calls back if it should
-	render = function( renderer, type, id, data, helpers, callback ) {
-		var res, stub;
-		if ( $view.cache ) {
-			$view.cached[id] = renderer;
-		}
-		res = renderer.call(type, data, helpers);
-		stub = callback && callback(res);
-		return res;
 	};
 	// makes sure there's a template
 	checkText = function( text, url ) {
@@ -304,36 +295,85 @@ steal.plugins("jquery").then(function( $ ) {
 			throw "$.View ERROR: There is no template or an empty template at " + url;
 		}
 	};
-	// gets a template, if there's a callback, renders and calls back its;ef
-	get = function( type, id, url, data, helpers, callback ) {
-		if ( callback ) {
-			$.ajax({
+	get = function(url , async){
+		return $.ajax({
 				url: url,
-				dataType: "text",
-				error: function() {
-					checkText("", url);
-				},
-				success: function( text ) {
-					checkText(text, url);
-					render(type.renderer(id, text), type, id, data, helpers, callback);
+				dataType : "view",
+				async : async
+		});
+	};
+	
+	// you can request a view renderer (a function you pass data to and get html)
+	$.ajaxTransport("view", function(options, orig){
+		var view = orig.url,
+			suffix = view.match(/\.[\w\d]+$/),
+			type, el, id, renderer, url = view,
+			jqXHR,
+			response = function(text){
+				var func = type.renderer(id, text);
+				if ( $view.cache ) {
+					$view.cached[id] = func;
 				}
-			});
-		} else {
-			var text = $.ajax({
-				async: false,
-				url: url,
-				dataType: "text",
-				error: function() {
-					checkText("", url);
-				}
-			}).responseText;
-			checkText(text, url);
-			return type.renderer(id, text);
+				return {
+					view: func
+				};
+			};
+			
+        // if we have an inline template, derive the suffix from the 'text/???' part
+        // this only supports '<script></script>' tags
+        if ( el = document.getElementById(view)) {
+          suffix = el.type.match(/\/[\d\w]+$/)[0].replace(/^\//, '.');
+        }
+		
+		//if there is no suffix, add one
+		if (!suffix ) {
+			suffix = $view.ext;
+			url = url + $view.ext;
 		}
 
-	};
+		//convert to a unique and valid id
+		id = toId(url);
 
+		//if a absolute path, use steal to get it
+		if ( url.match(/^\/\//) ) {
+			if (typeof steal === "undefined") {
+				url = "/"+url.substr(2);
+			}
+			else {
+				url = steal.root.join(url.substr(2));
+			}
+		}
 
+		//get the template engine
+		type = $view.types[suffix];
+
+		return {
+			send : function(headers, callback){
+				if($view.cached[id]){
+					return callback( 200, "success", {view: $view.cached[id]} );
+				} else if( el  ) {
+					callback( 200, "success", response(el.innerHTML) );
+				} else {
+					jqXHR = $.ajax({
+						async : orig.async,
+						url: url,
+						dataType: "text",
+						error: function() {
+							checkText("", url);
+							callback(404);
+						},
+						success: function( text ) {
+							checkText(text, url);
+							callback(200, "success", response(text) )
+						}
+					});
+				}
+			},
+			abort : function(){
+				jqXHR && jqXHR.abort();
+			}
+		}
+	})
 	$.extend($view, {
 		/**
 		 * @attribute hookups

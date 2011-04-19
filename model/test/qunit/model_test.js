@@ -207,6 +207,42 @@ test("wrapMany", function(){
 	equals(people[0].prettyName(),"Mr. Justin","wraps wrapping works")
 });
 
+
+
+test("async setters", function(){
+	
+	/*
+	$.Model("Test.AsyncModel",{
+		setName : function(newVal, success, error){
+			
+			
+			setTimeout(function(){
+				success(newVal)
+			}, 100)
+		}
+	});
+	
+	var model = new Test.AsyncModel({
+		name : "justin"
+	});
+	equals(model.name, "justin","property set right away")
+	
+	//makes model think it is no longer new
+	model.id = 1;
+	
+	var count = 0;
+	
+	model.bind('name', function(ev, newName){
+		equals(newName, "Brian",'new name');
+		equals(++count, 1, "called once");
+		ok(new Date() - now > 0, "time passed")
+		start();
+	})
+	var now = new Date();
+	model.attr('name',"Brian");
+	stop();*/
+})
+
 test("binding", 2,function(){
 	var inst = new Person({foo: "bar"});
 	
