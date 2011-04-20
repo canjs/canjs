@@ -51,42 +51,44 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 	 * @tag core
 	 * @download dist/jquery/jquery.class.js
 	 * @test jquery/class/qunit.html
+	 * 
 	 * Class provides simulated inheritance in JavaScript. Use clss to bridge the gap between
-	 * jQuery's functional programming style and Object Oriented Programming.
-	 * It is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Class]
+	 * jQuery's functional programming style and Object Oriented Programming. It 
+	 * is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Class]
 	 * Inheritance library.  Besides prototypal inheritance, it includes a few important features:
-	 * <ul>
-	 *     <li>Static inheritance</li>
-	 *     <li>Introspection</li>
-	 *     <li>Namespaces</li>
-	 *     <li>Setup and initialization methods</li>
-	 *     <li>Easy callback function creation</li>
-	 * </ul>
-	 * <h2>Static v. Prototype</h2>
-	 * <p>Before learning about Class, it's important to
+	 * 
+	 *   - Static inheritance
+	 *   - Introspection
+	 *   - Namespaces
+	 *   - Setup and initialization methods
+	 *   - Easy callback function creation
+	 * 
+	 * 
+	 * ## Static v. Prototype
+	 * 
+	 * Before learning about Class, it's important to
 	 * understand the difference between
-	 * a class's <b>static</b> and <b>prototype</b> properties.
-	 * </p>
-	 * @codestart
-	 * //STATIC
-	 * MyClass.staticProperty  //shared property
-	 *
-	 * //PROTOTYPE
-	 * myclass = new MyClass()
-	 * myclass.prototypeMethod() //instance method
-	 * @codeend
-	 * <p>A static (or class) property is on the Class constructor
+	 * a class's __static__ and __prototype__ properties.
+	 * 
+	 *     //STATIC
+	 *     MyClass.staticProperty  //shared property
+	 *     
+	 *     //PROTOTYPE
+	 *     myclass = new MyClass()
+	 *     myclass.prototypeMethod() //instance method
+	 * 
+	 * A static (or class) property is on the Class constructor
 	 * function itself
-	 * and can be thought of being shared by all instances of the Class.
-	 * Prototype propertes are available only on instances of the Class.
-	 * </p>
-	 * <h2>A Basic Class</h2>
-	 * <p>The following creates a Monster class with a
+	 * and can be thought of being shared by all instances of the 
+	 * Class. Prototype propertes are available only on instances of the Class.
+	 * 
+	 * ## A Basic Class
+	 * 
+	 * The following creates a Monster class with a
 	 * name (for introspection), static, and prototype members.
 	 * Every time a monster instance is created, the static
 	 * count is incremented.
 	 *
-	 * </p>
 	 * @codestart
 	 * $.Class.extend('Monster',
 	 * /* @static *|
@@ -128,48 +130,52 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 	 *
 	 * @codeend
 	 *
-	 * <p>
+	 * 
 	 * Notice that the prototype <b>init</b> function is called when a new instance of Monster is created.
-	 * </p>
-	 * <h2>Inheritance</h2>
-	 * <p>When a class is extended, all static and prototype properties are available on the new class.
+	 * 
+	 * 
+	 * ## Inheritance
+	 * 
+	 * When a class is extended, all static and prototype properties are available on the new class.
 	 * If you overwrite a function, you can call the base class's function by calling
 	 * <code>this._super</code>.  Lets create a SeaMonster class.  SeaMonsters are less
 	 * efficient at eating small children, but more powerful fighters.
-	 * </p>
-	 * @codestart
-	 * Monster.extend("SeaMonster",{
-	 *   eat: function( smallChildren ) {
-	 *     this._super(smallChildren / 2);
-	 *   },
-	 *   fight: function() {
-	 *     this.health -= 1;
-	 *   }
-	 * });
-	 *
-	 * lockNess = new SeaMonster('Lock Ness');
-	 * lockNess.eat(4);   //health = 12
-	 * lockNess.fight();  //health = 11
-	 * @codeend
-	 * <h3>Static property inheritance</h3>
+	 * 
+	 * 
+	 *     Monster.extend("SeaMonster",{
+	 *       eat: function( smallChildren ) {
+	 *         this._super(smallChildren / 2);
+	 *       },
+	 *       fight: function() {
+	 *         this.health -= 1;
+	 *       }
+	 *     });
+	 *     
+	 *     lockNess = new SeaMonster('Lock Ness');
+	 *     lockNess.eat(4);   //health = 12
+	 *     lockNess.fight();  //health = 11
+	 * 
+	 * ### Static property inheritance
+	 * 
 	 * You can also inherit static properties in the same way:
-	 * @codestart
-	 * $.Class.extend("First",
-	 * {
-	 *     staticMethod: function() { return 1;}
-	 * },{})
+	 * 
+	 *     $.Class.extend("First",
+	 *     {
+	 *         staticMethod: function() { return 1;}
+	 *     },{})
 	 *
-	 * First.extend("Second",{
-	 *     staticMethod: function() { return this._super()+1;}
-	 * },{})
+	 *     First.extend("Second",{
+	 *         staticMethod: function() { return this._super()+1;}
+	 *     },{})
 	 *
-	 * Second.staticMethod() // -> 2
-	 * @codeend
-	 * <h2>Namespaces</h2>
-	 * <p>Namespaces are a good idea! We encourage you to namespace all of your code.
+	 *     Second.staticMethod() // -> 2
+	 * 
+	 * ## Namespaces
+	 * 
+	 * Namespaces are a good idea! We encourage you to namespace all of your code.
 	 * It makes it possible to drop your code into another app without problems.
 	 * Making a namespaced class is easy:
-	 * </p>
+	 * 
 	 * @codestart
 	 * $.Class.extend("MyNamespace.MyClass",{},{});
 	 *
@@ -428,14 +434,33 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 			return inst;
 		},
 		/**
-		 * Copy and overwrite options from old class
-		 * @param {Object} oldClass
-		 * @param {String} fullName
-		 * @param {Object} staticProps
-		 * @param {Object} protoProps
+		 * Setup gets called on the inherting class with the base class followed by the
+		 * inheriting class's raw properties.
+		 * 
+		 * Setup will deeply extend a static defaults property on the base class with 
+		 * properties on the base class.  For example:
+		 * 
+		 *     $.Class("MyBase",{
+		 *       defaults : {
+		 *         foo: 'bar'
+		 *       }
+		 *     },{})
+		 * 
+		 *     MyBase("Inheriting",{
+		 *       defaults : {
+		 *         newProp : 'newVal'
+		 *       }
+		 *     },{}
+		 *     
+		 *     Inheriting.defaults -> {foo: 'bar', 'newProp': 'newVal'}
+		 * 
+		 * @param {Object} baseClass the base class that is being inherited from
+		 * @param {String} fullName the name of the new class
+		 * @param {Object} staticProps the static properties of the new class
+		 * @param {Object} protoProps the prototype properties of the new class
 		 */
-		setup: function( oldClass, fullName ) {
-			this.defaults = $.extend(true, {}, oldClass.defaults, this.defaults);
+		setup: function( baseClass, fullName ) {
+			this.defaults = $.extend(true, {}, baseClass.defaults, this.defaults);
 			return arguments;
 		},
 		rawInstance: function() {
@@ -559,17 +584,28 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 			return Class;
 			/** 
 			 * @function setup
-			 * Called with the same arguments as new Class(arguments ...) when a new instance is created.
-			 * @codestart
-			 * $.Class.extend("MyClass",
-			 * {
-			 *    setup: function( val ) {
-			 *       this.val = val;
-			 *    }
-			 * })
-			 * var mc = new MyClass("Check Check")
-			 * mc.val //-> 'Check Check'
-			 * @codeend
+			 * If a setup method is provided, it is called when a new 
+			 * instances is created.  It gets passed the same arguments that
+			 * were given to the Class constructor function (<code> new Class( arguments ... )</code>).
+			 * 
+			 *     $.Class("MyClass",
+			 *     {
+			 *        setup: function( val ) {
+			 *           this.val = val;
+			 *         }
+			 *     })
+			 *     var mc = new MyClass("Check Check")
+			 *     mc.val //-> 'Check Check'
+			 * 
+			 * Setup is called before [jQuery.Class.prototype.init init].  If setup 
+			 * return an array, those arguments will be used for init. 
+			 * 
+			 *     $.Class("jQuery.Controller",{
+			 *       setup : function(htmlElement, rawOptions){
+			 *         return [$(htmlElement), 
+			 *                   $.extend({}, this.Class.defaults, rawOptions )] 
+			 *       }
+			 *     })
 			 * 
 			 * <div class='whisper'>PRO TIP: 
 			 * Setup functions are used to normalize constructor arguments and provide a place for
@@ -577,23 +613,38 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 			 * run.
 			 * </div>
 			 * 
+			 * Setup is not defined on $.Class itself, so calling super in inherting classes
+			 * will break.  Don't do the following:
+			 * 
+			 *     $.Class("Thing",{
+			 *       setup : function(){
+			 *         this._super(); // breaks!
+			 *       }
+			 *     })
+			 * 
 			 * @return {Array|undefined} If an array is return, [jQuery.Class.prototype.init] is 
 			 * called with those arguments; otherwise, the original arguments are used.
 			 */
 			//break up
 			/** 
 			 * @function init
-			 * Called with the same arguments as new Class(arguments ...) when a new instance is created.
-			 * @codestart
-			 * $.Class.extend("MyClass",
-			 * {
-			 *    init: function( val ) {
-			 *       this.val = val;
-			 *    }
-			 * })
-			 * var mc = new MyClass("Check Check")
-			 * mc.val //-> 'Check Check'
-			 * @codeend
+			 * If an <code>init</code> method is provided, it gets called when a new instance
+			 * is created.  Init gets called after [jQuery.Class.prototype.setup setup], typically with the 
+			 * same arguments passed to the Class 
+			 * constructor: (<code> new Class( arguments ... )</code>).  
+			 * 
+			 *     $.Class("MyClass",
+			 *     {
+			 *        init: function( val ) {
+			 *           this.val = val;
+			 *        }
+			 *     })
+			 *     var mc = new MyClass(1)
+			 *     mc.val //-> 1
+			 * 
+			 * [jQuery.Class.prototype.setup Setup] is able to modify the arguments passed to init.  Read
+			 * about it there.
+			 * 
 			 */
 			//Breaks up code
 			/**
