@@ -3,7 +3,8 @@ steal('//jquery/class/class_test',
 	  '//jquery/lang/lang_test',
 	  '//jquery/dom/fixture/fixture_test',
 	  '//jquery/event/drag/drag_test',
-	  '//jquery/event/key/key_test').plugins(	
+	  '//jquery/event/key/key_test',
+	  '//jquery/tie/tie_test').plugins(	
 'jquery/controller/test/qunit',
 'jquery/controller/view/test/qunit',
 
