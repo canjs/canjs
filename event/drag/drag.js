@@ -384,8 +384,8 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 				zIndex: this.oldZIndex
 			});
 			if ( this.movingElement[0] !== this.element[0] && 
-				!this.movingElement.has(this.element[0]) && 
-				!this.element.has(this.movingElement[0])) {
+				!this.movingElement.has(this.element[0]).length && 
+				!this.element.has(this.movingElement[0]).length ) {
 				this.movingElement.css({
 					display: 'none'
 				});
