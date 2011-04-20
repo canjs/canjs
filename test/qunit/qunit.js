@@ -1,9 +1,9 @@
 //we probably have to have this only describing where the tests are
-steal('//jquery/lang/lang_test',
+steal('//jquery/class/class_test',
+	  '//jquery/lang/lang_test',
 	  '//jquery/dom/fixture/fixture_test',
 	  '//jquery/event/drag/drag_test',
 	  '//jquery/event/key/key_test').plugins(	
-'jquery/class/test/qunit',
 'jquery/controller/test/qunit',
 'jquery/controller/view/test/qunit',
 

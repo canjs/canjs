@@ -1,4 +1,7 @@
-console.log("class ...");
+steal
+ .plugins("jquery/class")  //load your app
+ .plugins('funcunit/qunit').then(function(){
+
 module("jquery/class");
 
 test("Creating", function(){
@@ -199,3 +202,5 @@ test("Super in derived when parent doesn't have init", function(){
 		ok(false, "Failed to call super in init with error: " + e)
 	}
 })*/
+
+});
