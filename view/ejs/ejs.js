@@ -283,13 +283,14 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			right: '%' + right,
 			dLeft: left + '%%',
 			dRight: '%%' + right,
+			eeLeft : left + '%==',
 			eLeft: left + '%=',
 			cmnt: left + '%#',
 			cleanLeft: left+"%~",
 			scan : scan,
 			lines : 0
 		});
-		scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eLeft, scanner.cleanLeft,
+		scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eeLeft, scanner.eLeft, scanner.cleanLeft,
 		scanner.cmnt, scanner.left, scanner.right + '\n', scanner.right, '\n'].join(")|(").
 			replace(/\[/g,"\\[").replace(/\]/g,"\\]") + ")");
 		return scanner;
@@ -325,6 +326,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 						break;
 					case scanner.left:
 					case scanner.eLeft:
+					case scanner.eeLeft:
 					case scanner.cleanLeft:
 					case scanner.cmnt:
 						startTag = token;
@@ -361,6 +363,9 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 							buff.push(insert_cmd, "(jQuery.EJS.clean(", content, ")));");
 							break;
 						case scanner.eLeft:
+							buff.push(insert_cmd, "(jQuery.EJS.text(", content, ")));");
+							break;
+						case scanner.eeLeft:
 							buff.push(insert_cmd, "(jQuery.EJS.text(", content, ")));");
 							break;
 						}

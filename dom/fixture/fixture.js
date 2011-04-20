@@ -164,6 +164,10 @@ steal.plugins('jquery/dom').then(function( $ ) {
                     }
                 })
             }
+			
+			if(id === undefined || typeof id != "number"){ // if still not set, guess a random number
+                id = Math.round(Math.random()*1000)
+            }
 
 			return id;
 		};
@@ -395,9 +399,9 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		 * Provides a rest update fixture function
 		 */
 		"-restUpdate": function( settings ) {
-			return [$.extend({
+			return [{
 					id: getId(settings)
-				}),{
+				},{
 					location: settings.url+"/"+getId(settings)
 				}];
 		},
@@ -413,11 +417,12 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		 * Provides a rest create fixture function
 		 */
 		"-restCreate": function( settings, cbType ) {
-			return [$.extend({
-					id: getId(settings)
-				}),{
-					location: settings.url+"/"+parseInt(Math.random() * 100000, 10)
-				}];
+			var id = parseInt(Math.random() * 100000, 10);
+			return [{
+						id: id
+					},{
+						location: settings.url+"/"+id	
+					}];
 		},
 		
 		/**
