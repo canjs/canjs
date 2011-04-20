@@ -370,7 +370,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			this.actions = {};
 
 			for ( funcName in this.prototype ) {
-				if (!isFunction(this.prototype[funcName]) ) {
+				if (funcName == 'constructor' || !isFunction(this.prototype[funcName]) ) {
 					continue;
 				}
 				if ( this._isAction(funcName) ) {
@@ -803,9 +803,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			this.element.removeClass(fname);
 
 			$.each(this._bindings, function( key, value ) {
-				if ( isFunction(value) ) {
-					value(self.element[0]);
-				}
+				value(self.element[0]);
 			});
 
 			delete this._actions;
