@@ -82,7 +82,7 @@ $.event.setupHelper( [
 					if( deltaX > swipe.min &&  deltaY < swipe.min) {
 						events.push( start.coords[0] > stop.coords[0] ? "swipeleft" : "swiperight" );
 					}else if(deltaY > swipe.min && deltaX < swipe.min){
-						events.push( start.coords[0] > stop.coords[0] ? "swipedown" : "swipeup" );
+						events.push( start.coords[1] < stop.coords[1] ? "swipedown" : "swipeup" );
 					}
 
 					
