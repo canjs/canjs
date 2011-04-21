@@ -131,7 +131,7 @@ test("$.fixture.make fixtures",function(){
 		type: "json",
 		data: {
 			offset: 100,
-			limit: 50,
+			limit: 200,
 			order: ["name ASC"],
 			searchText: "thing 2"
 		},

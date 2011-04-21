@@ -505,10 +505,22 @@ steal.plugins('jquery/dom').then(function( $ ) {
 					var split = name.split(" ");
 					retArr = retArr.sort(function( a, b ) {
 						if ( split[1].toUpperCase() !== "ASC" ) {
-							return a[split[0]] < b[split[0]];
+							if( a[split[0]] < b[split[0]] ) {
+								return 1;
+							} else if(a[split[0]] == b[split[0]]){
+								return 0
+							} else {
+								return -1;
+							}
 						}
 						else {
-							return a[split[0]] > b[split[0]];
+							if( a[split[0]] < b[split[0]] ) {
+								return -1;
+							} else if(a[split[0]] == b[split[0]]){
+								return 0
+							} else {
+								return 1;
+							}
 						}
 					});
 				});
