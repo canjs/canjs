@@ -12,7 +12,9 @@ test("type some things", function(){
 	}).keyup(function(ev){
 		keyup = ev.key();
 	});
+	
 	stop();
+	
 	Syn.key("a","key", function(){
 		equals(keydown, "a","keydown");
 		equals(keypress,"a","keypress");

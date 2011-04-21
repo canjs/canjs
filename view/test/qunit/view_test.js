@@ -71,7 +71,7 @@ test("caching works", function(){
 			var lap2 = new Date - first ,
 				lap1 =  first-startT;
 				
-			ok(lap2 < lap1, "faster this time "+(lap1 - lap2) )
+			ok( lap1 - lap2 > -20, "faster this time "+(lap1 - lap2) )
 			
 			start();
 			$("#qunit-test-area").html("");
