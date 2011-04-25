@@ -165,7 +165,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
                 })
             }
 			
-			if(id === undefined || typeof id != "number"){ // if still not set, guess a random number
+			if(id === undefined){ // if still not set, guess a random number
                 id = Math.round(Math.random()*1000)
             }
 
