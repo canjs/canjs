@@ -43,6 +43,7 @@
 			
 			$('#ul').delegate("li", "show",function(ev){
 				console.log("cb")
+				
 				var p = $(this).children("p"),
 					original = p.text();
 				
@@ -54,11 +55,15 @@
 					ev.resume();	
 				},2000)
 				
+			}).delegate("li", 'show', function(){
+				console.log("cb2")
 			})
 			
 			$('#wrapper').bind('show', function(){
 				console.log('wrapper')
 			})
+			
+			$('')
 		</script>
 	</body>
 </html>

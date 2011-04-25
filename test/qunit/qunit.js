@@ -5,9 +5,13 @@ steal('//jquery/class/class_test',
 	  '//jquery/dom/cur_styles/cur_styles_test',
 	  '//jquery/lang/lang_test',
 	  '//jquery/dom/fixture/fixture_test',
+	  '//jquery/event/default/default_test',
 	  '//jquery/event/drag/drag_test',
 	  '//jquery/event/key/key_test',
-	  '//jquery/tie/tie_test').plugins(	
+	  '//jquery/tie/tie_test'
+	  
+	  
+	  ).plugins(	
 
 'jquery/controller/view/test/qunit',
 
@@ -16,7 +20,7 @@ steal('//jquery/class/class_test',
 'jquery/dom/dimensions/test/qunit',
 
 'jquery/dom/form_params/test/qunit',
-'jquery/event/default/test/qunit',
+
 'jquery/event/destroyed/test/qunit',
 'jquery/event/hover/test/qunit',
 
@@ -27,4 +31,5 @@ steal('//jquery/class/class_test',
 
 'jquery/view/test/qunit',
 	'jquery/view/ejs/test/qunit'
-).then('integration')
+).then('integration',
+	   '//jquery/event/default/default_pause_test')
