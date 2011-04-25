@@ -27,13 +27,13 @@ steal.plugins('jquery').then(function( $ ) {
 				current,
 				ret, 
 				i,
-				j,
+				c = 0,
 				type;
 			
 			if(length == 0){
 				return currents[0];
 			}
-			while(current = currents.shift()){
+			while(current = currents[c++]){
 				for (i =0; i < length - 1 && isContainer(current); i++ ) {
 					current = getNext(current, parts[i], add);
 				}

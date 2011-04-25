@@ -48,6 +48,8 @@ test("default and pause with live", function(){
 			setTimeout(function(){
 				start();
 				same(order,['show','default'])
+				$("#foo").die("show");
+				$("#foo").die("default.show");
 			},30)
 		},50)
 	});
@@ -56,5 +58,40 @@ test("default and pause with live", function(){
 	$("#foo").trigger("show")
 	
 });
+
+
+test("triggerAsync", function(){
+	$("#qunit-test-area").html("<div id='foo'>hello</div>")
+	
+	var order = [];
+	stop();
+	
+	$("#foo").live("default.show", function(){
+		order.push("default")
+	});
+	$("#foo").live("show", function(ev){
+		order.push('show')
+		ev.pause();
+		setTimeout(function(){
+			ev.resume();
+			setTimeout(function(){
+				start();
+				same(order,['show','default','async'])
+			},30)
+		},50)
+	});
+	
+	
+	$("#foo").triggerAsync("show", function(){
+		order.push("async")
+	})
+});
+
+test("triggerAsync with nothing", function(){
+	$("#fool").triggerAsync("show", function(){
+		ok(true)
+	})
+});
+
 
 });

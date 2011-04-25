@@ -110,7 +110,12 @@ $event.special["default"] = {
 				a.handler.call(a.element, event, a.data);
 				event.handled = event.handled === null ? oldHandle : true;
 	        }
-	        event._defaultActions = null; //set to null so everyone else on this element ignores it
+	        
+			event._defaultActions = null; //set to null so everyone else on this element ignores it
+	        
+			if(event._success){
+				event._success();
+			}
 	    }
 	}
 }
@@ -145,7 +150,9 @@ $event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
 	oldTrigger.call($.event, event, data, elem, bubbling);
 	checkAndRunDefaults(event, elem);
 	
-}
+};
+
+
 /**
  * @add jQuery.fn
  */
@@ -193,7 +200,30 @@ triggerDefaults = function(type, data){
 	}
 	return true;
 }
+
+$.fn.
+/**
+ * Triggers an event and calls success if the event is complete
+ * @param {Object} type
+ * @param {Object} data
+ * @param {Object} success
+ * @param {Object} prevented
+ */
+triggerAsync = function(type, data, success, prevented){
+	if(typeof data == 'function'){
+		success = data;
+		data = undefined;
+	}
 	
+	if ( this[0] ) {
+		var event = $.Event( type );
+		//event._success= success;
+		jQuery.event.trigger( {type: type, _success: success}, data, this[0]  );
+	} else{
+		success.call(this);
+	}
+	return this;
+}
 	
 	
 	

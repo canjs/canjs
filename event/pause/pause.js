@@ -42,7 +42,7 @@ $.Event.prototype.resume = function(){
 	if(!this.isPropagationStopped()){
 		if(el.parentNode){
 			// resume trigger like this so default doesn't get confused
-			$.event.trigger( this, this.data, el.parentNode , true);
+			$.event.trigger( this, [this], el.parentNode , true);
 		} else if($.event.special['default']){ 
 		
 			$.event.special['default'].checkAndRunDefaults(this,el)
