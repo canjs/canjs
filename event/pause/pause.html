@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>swipe</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+			#swipe {
+				width: 500px;
+				height: 100px;
+				background-color: green;
+			}
+			li {
+				border: solid 5px green;
+				width: 200px;
+			}
+        </style>
+	</head>
+	<body>
+	    <a href='javascript://' id='show'>show</a>
+		
+		<div id='wrapper'>
+			<ul id='ul'>
+				<li>
+					<p>Hello</p>
+					<ul>
+						<li><p id='foo'>Foo Bar</p></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		
+		<script type='text/javascript' 
+                src='../../../steal/steal.js?jquery/event/pause'>   
+        </script>
+		<script type='text/javascript'>
+			$('#show').bind('click', function(){
+				$('#foo').trigger('show')
+			});
+			
+			$('#ul').delegate("li", "show",function(ev){
+				console.log("cb")
+				
+				var p = $(this).children("p"),
+					original = p.text();
+				
+				p.text('pausing ...');
+				ev.pause();
+				
+				setTimeout(function(){
+					p.text(original);
+					ev.resume();	
+				},2000)
+				
+			}).delegate("li", 'show', function(){
+				console.log("cb2")
+			})
+			
+			$('#wrapper').bind('show', function(){
+				console.log('wrapper')
+			})
+			
+			$('')
+		</script>
+	</body>
+</html>
