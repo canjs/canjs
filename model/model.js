@@ -31,7 +31,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			attrs = extend({},attrs)
 			
 			var url = $.String.sub(src, attrs, true)
-			$.ajax({
+			return $.ajax({
 				url : url,
 				data : attrs,
 				success : success,
@@ -346,7 +346,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function(attrs, success, error){
-				ajax(str, attrs, success, error, "-restCreate")
+				return ajax(str, attrs, success, error, "-restCreate")
 			};
 		},
 		update: function( str ) {
@@ -418,7 +418,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function(id, attrs, success, error){
-				ajax(str, addId.call(this,attrs, id), success, error, fixture.call(this,"Update","-restUpdate"),"put")
+				return ajax(str, addId.call(this,attrs, id), success, error, fixture.call(this,"Update","-restUpdate"),"put")
 			}
 		},
 		destroy: function( str ) {
@@ -452,7 +452,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			return function( id, success, error ) {
 				var attrs = {};
 				attrs[this.id] = id;
-				ajax(str, attrs, success, error, "-restDestroy","delete")
+				return ajax(str, attrs, success, error, "-restDestroy","delete")
 			}
 		},
 		
@@ -496,7 +496,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * @param {Function} error
 			 */
 			return function(params, success, error){
-				ajax(str || this.shortName+"s.json", 
+				return ajax(str || this.shortName+"s.json", 
 					params, 
 					this.callback(['wrapMany',success]), 
 					error, 
@@ -545,7 +545,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * @param {Function} error
 			 */
 			return function(params, success, error){
-				ajax(str, 
+				return ajax(str, 
 					params, 
 					this.callback(['wrap',success]), 
 					error, 
