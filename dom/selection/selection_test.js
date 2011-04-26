@@ -1,3 +1,6 @@
+steal
+  .plugins("funcunit/qunit", "jquery/dom/selection").then(function(){
+  	
 module("jquery/dom/selection");
 
 test("getCharElement", function(){
@@ -32,4 +35,6 @@ test("getCharElement", function(){
 		
 		start();
 	},1000)
+});
+
 });
