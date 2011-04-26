@@ -34,17 +34,20 @@ steal.plugins('jquery/dom/range','jquery/controller','jquery/event/livehack').th
 				 startRange = null;
 			},
 			mouseup =  function(moveev){
-				cleanUp();
+				
 				if(!ready){
+					cleanUp();
 					return 
 				}
-				$.each(event.find(delegate, ["selectionEnding"], selector), function(){
+				$.each(event.find(delegate, ["selectionMoving"], selector), function(){
 					this.call(el, moveev, range)
 				});
-				var range = getRange(ev);
+				var range = getRange(moveev);
+				cleanUp();
 				$.each(event.find(delegate, ["selectionEnd"], selector), function(){
 					this.call(el, ev, range);
 				});
+				
 			},
 			mousemove = function(moveev){
 				// safari keeps triggering moves even if we haven't moved
@@ -65,17 +68,22 @@ steal.plugins('jquery/dom/range','jquery/controller','jquery/event/livehack').th
 			},
 			start = function(){
 				ready = true;
-
+				var startEv = event.selection.preventDefault ? $.Event('selectionStart') : ev;
+				startEv.target = startEv.target || ev.target;
 				$.each(event.find(delegate, ["selectionStart"], selector), function(){
-					this.call(el, ev, startRange)
+					this.call(el, startEv, startRange)
 				});
 				
+				if(event.selection.preventDefault && startEv.isDefaultPrevented()){
+					ready = false;
+					cleanUp();
+				}
 			},
 			moveTimer;
 			
 		if(event.selection.preventDefault){
 			ev.preventDefault();
-			moveTimer = setTimeout(start, event.selection.delay)
+			moveTimer = setTimeout(start, event.selection.delay);
 		} else {
 			start();
 		}

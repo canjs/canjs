@@ -39,7 +39,7 @@ $.Range = function(range){
 			this.select(range)
 		}
 		
-	} else if (range.clientX || range.pageX) {
+	} else if (range.clientX || range.pageX || range.left) {
 		this.rangeFromPoint(range)
 	} else {
 		this.range = range;
@@ -67,6 +67,13 @@ var bisect = function(el, start, end){
 
 $.extend($.Range.prototype,{
 	rangeFromPoint : function(point){
+		var clientX = point.clientX, clientY = point.clientY
+		if(!clientX){
+			var off = scrollOffset();
+			clientX = (off.pageX || off.left || 0 ) - off.left;
+			clientY = (off.pageY || off.top || 0 ) - off.top;
+		}
+		
 		// it's some text node in this range ...
 		var parent = document.elementFromPoint(point.clientX, point.clientY);
 		
@@ -103,8 +110,13 @@ $.extend($.Range.prototype,{
 				previous = range;
 			}
 		});
-		previous.start(previous.toString().length);
-		this.range = previous.range;
+		if(previous){
+			previous.start(previous.toString().length);
+			this.range = previous.range;
+		}else{
+			this.range = $.Range(parent).range
+		}
+		
 	},
 	
 	window : function(){
@@ -138,8 +150,13 @@ $.extend($.Range.prototype,{
 		}
 		return false;
 	},
+	/**
+	 * Collapses a range
+	 * @param {Boolean} [toStart] true if to the start of the range, false if to the end.  Defaults to false.
+	 * @return {Range} returns the range for chaining.
+	 */
 	collapse : function(toStart){
-		this.range.collapse(toStart);
+		this.range.collapse(toStart === undefined ? true : toStart);
 		return this;
 	},
 	toString : function(){
@@ -165,6 +182,8 @@ $.extend($.Range.prototype,{
 			if (this.range.setStart) {
 				if(typeof set == 'number'){
 					this.range.setStart(this.range.startContainer, set)
+				} else if(typeof set == 'string') {
+					this.range.setStart(this.range.startContainer, this.range.startOffset+ parseInt(set,10) );
 				} else {
 					this.range.setStart(set.container, set.offset)
 				}
@@ -209,10 +228,22 @@ $.extend($.Range.prototype,{
 	parent : function(){
 		return this.range.parentElement || this.range.commonAncestorContainer
 	},
-	rect : function(){
-		return this.range.getBoundingClientRect();
+	rect : function(from){
+		var rect = this.range.getBoundingClientRect()
+		if(from === 'page'){
+			var off = scrollOffset();
+			rect = $.extend({}, rect);
+			rect.top += off.top;
+			rect.left += off.left;
+		}
+		return rect;
 	},
-	rects : function(){
+	/**
+	 * Returns client rects
+	 * @param {String} [from] how the rects coordinates should be given (viewport or page).  Provide 'page' for 
+	 * rect coordinates from the page.
+	 */
+	rects : function(from){
 		var rects = $.makeArray( this.range.getClientRects() ).sort(function(rect1, rect2){
 			return  rect2.width*rect2.height - rect1.width*rect1.height;
 		}),
@@ -240,6 +271,16 @@ $.extend($.Range.prototype,{
 			
 		}
 		// safari will be return overlapping ranges ...
+		if(from == 'page'){
+			var off = scrollOffset();
+			return $.map(rects, function(item){
+				var i = $.extend({}, item)
+				i.top += off.top;
+				i.left += off.left;
+				return i;
+			})
+		}
+		
 		
 		return rects;
 	}
@@ -323,36 +364,54 @@ $.extend($.Range.prototype,{
 
 // helpers 
 
-var iterate = function( elems , cb) {
-	var elem,
-		start;
-	for ( var i = 0; elems[i]; i++ ) {
+var iterate = function(elems, cb){
+	var elem, start;
+	for (var i = 0; elems[i]; i++) {
 		elem = elems[i];
 		// Get the text from text nodes and CDATA nodes
-		if ( elem.nodeType === 3 || elem.nodeType === 4 ) {
-			if(cb(elem) === false){
+		if (elem.nodeType === 3 || elem.nodeType === 4) {
+			if (cb(elem) === false) {
 				return false;
 			}
-		// Traverse everything else, except comment nodes
-		} else if ( elem.nodeType !== 8 ) {
-			if(iterate( elem.childNodes, cb) === false){
-				return false;
-			}
+			// Traverse everything else, except comment nodes
 		}
+		else 
+			if (elem.nodeType !== 8) {
+				if (iterate(elem.childNodes, cb) === false) {
+					return false;
+				}
+			}
 	}
-},
-within = function(rect, point){
+}, within = function(rect, point){
+
+	return rect.left <= point.clientX && rect.left + rect.width >= point.clientX &&
+	rect.top <= point.clientY &&
+	rect.top + rect.height >= point.clientY
+}, withinRect = function(outer, inner){
+	return within(outer, {
+		clientX: inner.left,
+		clientY: inner.top
+	}) && //top left
+	within(outer, {
+		clientX: inner.left + inner.width,
+		clientY: inner.top
+	}) && //top right
+	within(outer, {
+		clientX: inner.left,
+		clientY: inner.top + inner.height
+	}) && //bottom left
+	within(outer, {
+		clientX: inner.left + inner.width,
+		clientY: inner.top + inner.height
+	}) //bottom right
+}, scrollOffset = function( win){
+	var win = win ||window;
+		doc = win.document.documentElement, body = win.document.body;
 	
-	return rect.left <= point.clientX && rect.left+rect.width >= point.clientX &&
-					  rect.top <= point.clientY && rect.top+rect.height >= point.clientY
-},
-withinRect = function(outer, inner){
-	return  within(outer, {clientX: inner.left, clientY: inner.top}) && //top left
-			within(outer, {clientX: inner.left+inner.width, clientY: inner.top}) && //top right
-			within(outer, {clientX: inner.left, clientY: inner.top+inner.height}) && //bottom left
-			within(outer, {clientX: inner.left+inner.width, clientY: inner.top+inner.height})    //bottom right
-	
-	
+	return {
+		left: (doc && doc.scrollLeft || body && body.scrollLeft || 0) + (doc.clientLeft || 0),
+		top: (doc && doc.scrollTop || body && body.scrollTop || 0) + (doc.clientTop || 0)
+	};
 };
 
 
