@@ -41,13 +41,17 @@
 			}
 		 	this.dependencies = [];
 		 	var $form = $target.closest('form'),
-				params = $form.formParams(), i;
+				params = $form.formParams(), i, queryVal;
 			for(i=0; i<params.plugins.length; i++){
 				this._pushPlugins(this._getDependencies(params.plugins[i]));
 			}
 			$('#pluginForm input[type=checkbox]').attr('checked', false);
 			for(i=0; i<this.dependencies.length; i++){
-				$('input[value='+this.dependencies[i]+']').attr('checked', true);
+				queryVal = this.dependencies[i]
+					.replace(new RegExp("/", "g"), "\\/")
+					.replace(new RegExp("\\.", "g"), "\\.");
+				$('input[value='+queryVal+']')
+					.attr('checked', true);
 			}
 		 },
 		 /**
