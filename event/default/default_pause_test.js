@@ -76,6 +76,7 @@ test("triggerAsync", function(){
 			ev.resume();
 			setTimeout(function(){
 				start();
+				$("#foo").die()
 				same(order,['show','default','async'])
 			},30)
 		},50)

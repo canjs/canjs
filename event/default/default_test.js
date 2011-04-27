@@ -124,7 +124,7 @@ test("default and live order", function(){
 	$("#foo").trigger("show")
 	
 	same(order, ['show','default'],"show then default")
-	
+	$("#foo").die()
 });
 
 
