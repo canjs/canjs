@@ -75,7 +75,7 @@ $.extend($.Range.prototype,{
 		}
 		
 		// it's some text node in this range ...
-		var parent = document.elementFromPoint(point.clientX, point.clientY);
+		var parent = document.elementFromPoint(clientX, clientY);
 		
 		//typically it will be 'on' text
 		for(var n=0; n < parent.childNodes.length; n++){
@@ -89,8 +89,8 @@ $.extend($.Range.prototype,{
 				
 				for(var i = 1; i < length+1; i++){
 					var rect = range.end(i).rect();
-					if(rect.left <= point.clientX && rect.left+rect.width >= point.clientX &&
-					  rect.top <= point.clientY && rect.top+rect.height >= point.clientY ){
+					if(rect.left <= clientX && rect.left+rect.width >= clientX &&
+					  rect.top <= clientY && rect.top+rect.height >= clientY ){
 						range.start(i-1); 
 						this.range = range.range;
 						return; 	
