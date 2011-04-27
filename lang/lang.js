@@ -56,8 +56,11 @@ steal.plugins('jquery').then(function( $ ) {
 
 		/** 
 		 * @class jQuery.String
+		 * 
+		 * A collection of useful string helpers.
+		 * 
 		 */
-		str = ($.String = {
+		str = $.String = $.extend( $.String || {} , {
 			getObject : getObject,
 			/**
 			 * @function strip
