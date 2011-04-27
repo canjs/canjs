@@ -1,8 +1,65 @@
+
+steal.plugins('jquery/event').then(function($){
+
+$.fn.
+/**
+ * @function jQuery.fn.triggerAsync
+ * @plugin jquery/event/default
+ * @parent jquery.event.pause
+ * 
+ * Triggers an event and calls success when the event has finished propagating through the DOM and
+ * preventDefault is not called.
+ * 
+ *     $('#panel').triggerAsync('show', function(){
+ *       $('#panel').show();
+ *     })
+ * 
+ * You can also provide a callback that gets called if preventDefault was called on the event:
+ * 
+ *     $('#panel').triggerAsync('show', function(){
+ *       $('#panel').show();
+ *     },function(){
+ *       $('#other').addClass('error');
+ *     })
+ * 
+ * triggerAsync is designed to work with the [jquery.event.pause] plugin although it is defined in 
+ * <code>jquery/event/default</code>
+ * 
+ * ## API
+ * 
+ * 
+ * @param {String} type The type of event
+ * @param {Object} data The data for the event
+ * @param {Function} success(event) a callback function
+ * @param {Function} prevented(event) called if preventDefault is called on the 
+ */
+triggerAsync = function(type, data, success, prevented){
+	if(typeof data == 'function'){
+		success = data;
+		data = undefined;
+	}
+	
+	if ( this[0] ) {
+		var event = $.Event( type ),
+			old = event.preventDefault;
+		
+		event.preventDefault = function(){
+			old.apply(this, arguments);
+			prevented && prevented(this)
+		}
+		//event._success= success;
+		jQuery.event.trigger( {type: type, _success: success}, data, this[0]  );
+	} else{
+		success.call(this);
+	}
+	return this;
+}
+	
+
+
 /**
  * @add jQuery.event.special
  */
-steal.plugins('jquery/event').then(function($){
-
 //cache default types for performance
 var types = {}, rnamespaces= /\.(.*)$/, $event = $.event;
 /**
@@ -12,44 +69,41 @@ var types = {}, rnamespaces= /\.(.*)$/, $event = $.event;
  * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/event/default/default.js
  * @test jquery/event/default/qunit.html
  * Allows you to perform default actions as a result of an event.
- * <p>
+ * 
  * Event based APIs are a powerful way of exposing functionality of your widgets.  It also fits in 
  * quite nicely with how the DOM works.
- * </p>
- * <p>
+ * 
+ * 
  * Like default events in normal functions (e.g. submitting a form), synthetic default events run after
  * all event handlers have been triggered and no event handler has called
  * preventDefault or returned false.
- * </p>
- * <p>To listen for a default event, just prefix the event with default.</p>
- * @codestart
- * $("div").bind("default.show", function(ev){ ... });
- * $("ul").delegate("li","default.activate", function(ev){ ... });
- * @codeend
- * <p>
- * The default plugin also adds the [jQuery.fn.triggerDefault triggerDefault] and [jQuery.fn.triggerDefaults triggerDefaults] methods.  These are used to trigger 
- * an event and report back whether preventDefault was called on the event.  The only difference is [jQuery.fn.triggerDefault triggerDefault] 
- * doesn't bubble.
- * </p>
- * <h2>Example</h2>
- * <p>Lets look at how you could build a simple tabs widget with default events.
- * First with just jQuery:</p>
- * <p>
+ * 
+ * To listen for a default event, just prefix the event with default.
+ * 
+ *     $("div").bind("default.show", function(ev){ ... });
+ *     $("ul").delegate("li","default.activate", function(ev){ ... });
+ * 
+ * 
+ * ## Example
+ * 
+ * Lets look at how you could build a simple tabs widget with default events.
+ * First with just jQuery:
+ * 
  * Default events are useful in cases where you want to provide an event based 
  * API for users of your widgets.  Users can simply listen to your synthetic events and 
  * prevent your default functionality by calling preventDefault.  
- * </p>
- * <p>
+ * 
  * In the example below, the tabs widget provides a show event.  Users of the 
  * tabs widget simply listen for show, and if they wish for some reason, call preventDefault 
  * to avoid showing the tab.
- * </p>
- * <p>
+ * 
  * In this case, the application developer doesn't want to show the second 
  * tab until the checkbox is checked. 
- * </p>
+ * 
  * @demo jquery/event/default/defaultjquery.html
- * <p>Lets see how we would build this with JavaScriptMVC:</p>
+ * 
+ * Lets see how we would build this with JavaScriptMVC:
+ * 
  * @demo jquery/event/default/default.html
  */
 $event.special["default"] = {
@@ -114,7 +168,7 @@ $event.special["default"] = {
 			event._defaultActions = null; //set to null so everyone else on this element ignores it
 	        
 			if(event._success){
-				event._success();
+				event._success(event);
 			}
 	    }
 	}
@@ -151,80 +205,6 @@ $event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
 	checkAndRunDefaults(event, elem);
 	
 };
-
-
-/**
- * @add jQuery.fn
- */
-$.fn.
-/**
- * Triggers the event, stops the event from propagating through the DOM, and 
- * returns whether or not the event's default action was prevented.  
- * If true, the default action was not prevented.  If false, the 
- * default action was prevented.  This is the same as triggerDefaults, but 
- * the event doesn't bubble.  Use these methods to easily determine if default was 
- * prevented, and proceed accordingly.
- * 
- * <p>Widget developers might use this method to perform additional logic if an event 
- * handler doesn't prevent the default action.  For example, a tabs widget might 
- * hide the currently shown tab if the application developer doesn't prevent default.</p>
- * @param {Object} type The type of event to trigger.
- * @param {Object} data Some data to pass to callbacks listening to this 
- * event.
- */
-triggerDefault = function(type, data){
-	if ( this[0] ) {
-		var event = $.Event( type );
-		event.stopPropagation();
-		jQuery.event.trigger( event, data, this[0] );
-		return !event.isDefaultPrevented();
-	}
-	return true;
-}
-$.fn.
-/**
- * Triggers the event and returns whether or not the event's 
- * default action was prevented.  If true, the default action was not 
- * prevented.  If false, the default action was prevented.  This is the same 
- * as triggerDefault, but the event bubbles.  Use these methods to easily determine if default was 
- * prevented, and proceed accordingly.
- * @param {Object} type The type of event to trigger.
- * @param {Object} data Some data to pass to callbacks listening to this 
- * event.
- */
-triggerDefaults = function(type, data){
-	if ( this[0] ) {
-		var event = $.Event( type );
-		jQuery.event.trigger( event, data, this[0] );
-		return !event.isDefaultPrevented();
-	}
-	return true;
-}
-
-$.fn.
-/**
- * Triggers an event and calls success if the event is complete
- * @param {Object} type
- * @param {Object} data
- * @param {Object} success
- * @param {Object} prevented
- */
-triggerAsync = function(type, data, success, prevented){
-	if(typeof data == 'function'){
-		success = data;
-		data = undefined;
-	}
-	
-	if ( this[0] ) {
-		var event = $.Event( type );
-		//event._success= success;
-		jQuery.event.trigger( {type: type, _success: success}, data, this[0]  );
-	} else{
-		success.call(this);
-	}
-	return this;
-}
-	
 	
 	
 	
