@@ -35,9 +35,15 @@ $.Range = function(range){
 		}else{
 			this.range = this.win.document.body.createTextRange()
 		}
-	}else{
+		if(range){
+			this.select(range)
+		}
+		
+	} else if (range.clientX || range.pageX || range.left) {
+		this.rangeFromPoint(range)
+	} else {
 		this.range = range;
-	}
+	} 
 };
 $.Range.current = function(el){
 	var win = getWindow(el)
@@ -47,7 +53,72 @@ $.Range.current = function(el){
 		return  new $.Range( win.document.selection.createRange() );
 	}
 };
+
+var bisect = function(el, start, end){
+	//split the start and end ... figure out who is touching ...
+	if(end-start == 1){
+		return 
+	}
+	
+	
+	
+}
+
+
 $.extend($.Range.prototype,{
+	rangeFromPoint : function(point){
+		var clientX = point.clientX, clientY = point.clientY
+		if(!clientX){
+			var off = scrollOffset();
+			clientX = (off.pageX || off.left || 0 ) - off.left;
+			clientY = (off.pageY || off.top || 0 ) - off.top;
+		}
+		
+		// it's some text node in this range ...
+		var parent = document.elementFromPoint(clientX, clientY);
+		
+		//typically it will be 'on' text
+		for(var n=0; n < parent.childNodes.length; n++){
+			var node = parent.childNodes[n];
+			if(node.nodeType === 3 || node.nodeType === 4){
+				var range = $.Range(node),
+					length = range.toString().length;
+				
+				
+				// now lets start moving the end until the boundingRect is within our range
+				
+				for(var i = 1; i < length+1; i++){
+					var rect = range.end(i).rect();
+					if(rect.left <= clientX && rect.left+rect.width >= clientX &&
+					  rect.top <= clientY && rect.top+rect.height >= clientY ){
+						range.start(i-1); 
+						this.range = range.range;
+						return; 	
+					}
+				}
+			}
+		}
+		
+		// if not 'on' text, recursively go through and find out when we shift to next
+		// 'line'
+		var previous;
+		iterate(parent.childNodes, function(textNode){
+			var range = $.Range(textNode);
+			if(range.rect().top > point.clientY){
+				return false;
+			}else{
+				previous = range;
+			}
+		});
+		if(previous){
+			previous.start(previous.toString().length);
+			this.range = previous.range;
+		}else{
+			this.range = $.Range(parent).range
+		}
+		
+	},
+	
 	window : function(){
 		return this.win || window;
 	},
@@ -79,47 +150,139 @@ $.extend($.Range.prototype,{
 		}
 		return false;
 	},
+	/**
+	 * Collapses a range
+	 * @param {Boolean} [toStart] true if to the start of the range, false if to the end.  Defaults to false.
+	 * @return {Range} returns the range for chaining.
+	 */
 	collapse : function(toStart){
-		this.range.collapse(toStart);
+		this.range.collapse(toStart === undefined ? true : toStart);
 		return this;
 	},
 	toString : function(){
 		return typeof this.range.text == "string"  ? this.range.text : this.range.toString();
 	},
-	start : function(){
-		if(this.range.startContainer){
-			return {
-				container : this.range.startContainer,
-				offset : this.range.startOffset
+	start : function(set){
+		if(set === undefined){
+			if(this.range.startContainer){
+				return {
+					container : this.range.startContainer,
+					offset : this.range.startOffset
+				}
+			}else{
+				var start = this.clone().collapse().parent();
+				var startRange = $.Range(start).select(start).collapse();
+				startRange.move("END_TO_START", this);
+				return {
+					container : start,
+					offset : startRange.toString().length
+				}
 			}
-		}else{
-			var start = this.clone().collapse().parent();
-			var startRange = $.Range(start).select(start).collapse();
-			startRange.move("END_TO_START", this);
-			return {
-				container : start,
-				offset : startRange.toString().length
+		} else {
+			if (this.range.setStart) {
+				if(typeof set == 'number'){
+					this.range.setStart(this.range.startContainer, set)
+				} else if(typeof set == 'string') {
+					this.range.setStart(this.range.startContainer, this.range.startOffset+ parseInt(set,10) );
+				} else {
+					this.range.setStart(set.container, set.offset)
+				}
+			} else {
+				throw 'todo'
 			}
+			return this;
 		}
+		
+		
 	},
-	end : function(){
-		if(this.range.startContainer){
-			return {
-				container : this.range.endContainer,
-				offset : this.range.endOffset
+	end : function(set){
+		if (set === undefined) {
+			if (this.range.startContainer) {
+				return {
+					container: this.range.endContainer,
+					offset: this.range.endOffset
+				}
 			}
-		}else{
-			var end = this.clone().collapse(false).parent();
-			var endRange = $.Range(end).select(end).collapse();
-			endRange.move("END_TO_END", this);
-			return {
-				container : end,
-				offset : endRange.toString().length
+			else {
+				var end = this.clone().collapse(false).parent();
+				var endRange = $.Range(end).select(end).collapse();
+				endRange.move("END_TO_END", this);
+				return {
+					container: end,
+					offset: endRange.toString().length
+				}
 			}
+		} else {
+			if (this.range.setEnd) {
+				if(typeof set == 'number'){
+					this.range.setEnd(this.range.endContainer, set)
+				} else {
+					this.range.setEnd(set.container, set.offset)
+				}
+			} else {
+				throw 'todo'
+			}
+			return this;
 		}
 	},
 	parent : function(){
 		return this.range.parentElement || this.range.commonAncestorContainer
+	},
+	rect : function(from){
+		var rect = this.range.getBoundingClientRect()
+		if(from === 'page'){
+			var off = scrollOffset();
+			rect = $.extend({}, rect);
+			rect.top += off.top;
+			rect.left += off.left;
+		}
+		return rect;
+	},
+	/**
+	 * Returns client rects
+	 * @param {String} [from] how the rects coordinates should be given (viewport or page).  Provide 'page' for 
+	 * rect coordinates from the page.
+	 */
+	rects : function(from){
+		var rects = $.makeArray( this.range.getClientRects() ).sort(function(rect1, rect2){
+			return  rect2.width*rect2.height - rect1.width*rect1.height;
+		}),
+			i=0,j,
+			len = rects.length;
+		//return rects;
+		//rects are sorted, largest to smallest	
+		while(i < rects.length){
+			var cur = rects[i],
+				found = false;
+			
+			j = i+1;
+			for(j = i+1; j < rects.length; j++){
+				if( withinRect(cur, rects[j] ) ) {
+					found = rects[j];
+					break;
+				}
+			}
+			if(found){
+				rects.splice(i,1)
+			}else{
+				i++;
+			}
+			
+			
+		}
+		// safari will be return overlapping ranges ...
+		if(from == 'page'){
+			var off = scrollOffset();
+			return $.map(rects, function(item){
+				var i = $.extend({}, item)
+				i.top += off.top;
+				i.left += off.left;
+				return i;
+			})
+		}
+		
+		
+		return rects;
 	}
 	
 });
@@ -199,6 +362,57 @@ $.extend($.Range.prototype,{
 })();
 
 
+// helpers 
+
+var iterate = function(elems, cb){
+	var elem, start;
+	for (var i = 0; elems[i]; i++) {
+		elem = elems[i];
+		// Get the text from text nodes and CDATA nodes
+		if (elem.nodeType === 3 || elem.nodeType === 4) {
+			if (cb(elem) === false) {
+				return false;
+			}
+			// Traverse everything else, except comment nodes
+		}
+		else 
+			if (elem.nodeType !== 8) {
+				if (iterate(elem.childNodes, cb) === false) {
+					return false;
+				}
+			}
+	}
+}, within = function(rect, point){
+
+	return rect.left <= point.clientX && rect.left + rect.width >= point.clientX &&
+	rect.top <= point.clientY &&
+	rect.top + rect.height >= point.clientY
+}, withinRect = function(outer, inner){
+	return within(outer, {
+		clientX: inner.left,
+		clientY: inner.top
+	}) && //top left
+	within(outer, {
+		clientX: inner.left + inner.width,
+		clientY: inner.top
+	}) && //top right
+	within(outer, {
+		clientX: inner.left,
+		clientY: inner.top + inner.height
+	}) && //bottom left
+	within(outer, {
+		clientX: inner.left + inner.width,
+		clientY: inner.top + inner.height
+	}) //bottom right
+}, scrollOffset = function( win){
+	var win = win ||window;
+		doc = win.document.documentElement, body = win.document.body;
+	
+	return {
+		left: (doc && doc.scrollLeft || body && body.scrollLeft || 0) + (doc.clientLeft || 0),
+		top: (doc && doc.scrollTop || body && body.scrollTop || 0) + (doc.clientTop || 0)
+	};
+};
 
 
 
