@@ -318,7 +318,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		 * @param {Function} make a function that will return json data representing the object.  The
 		 * make function is called back with the id and the current array of items.
 		 */
-		make: function( types, count, make ) {
+		make: function( types, count, make, filter ) {
 			if(typeof types === "string"){
 				types = [types+"s",types ]
 			}
@@ -402,6 +402,17 @@ steal.plugins('jquery/dom').then(function( $ ) {
 							} else {
 								i++;
 							}
+						}
+					}
+				}
+				
+				if( filter ) {
+					i = 0;
+					while (i < retArr.length) {
+						if (!filter(retArr[i], settings)) {
+							retArr.splice(i, 1);
+						} else {
+							i++;
 						}
 					}
 				}
