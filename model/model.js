@@ -1118,7 +1118,8 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 				errorCallback(errors);
 			} else {
 				if ( old !== val && !this._init ) {
-					$(this).triggerHandler(property, val);
+					$(this).triggerHandler(property, [val]);
+					$(this).triggerHandler("updated.attr", [property,val, old]); // this is for 3.1
 				}
 				stub = success && success(this);
 
