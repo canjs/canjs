@@ -1,8 +1,0 @@
-<div id="bigwrapper">
-	<div id='wrap1'>
-	    <div id="touchme1">ClickMe</div>
-	</div>
-	<div id='wrap2'>
-	    <div id='touchme2'>ClickMe</a>
-	</div>
-</div>

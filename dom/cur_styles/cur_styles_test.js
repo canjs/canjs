@@ -1,8 +1,13 @@
+steal
+ .plugins("jquery/dom/dimensions",'jquery/view/micro')  //load your app
+ .plugins('funcunit/qunit').then(function(){
+
 module("jquery/dom/curStyles");
 
 
 test("reading", function(){
-	$("#qunit-test-area").html("//jquery/dom/cur_styles/test/qunit/curStyles.micro",{})
+	
+	$("#qunit-test-area").html("//jquery/dom/cur_styles/test/curStyles.micro",{})
 
 	var res = $.curStyles( $("#styled")[0], 
 	   ["padding-left",
@@ -18,5 +23,7 @@ test("reading", function(){
 	equals(res.paddingLeft, "5px","padding left");
 	equals(res.position, "relative","position");
 	$("#qunit-test-area").html("")
+});
+
 })
 

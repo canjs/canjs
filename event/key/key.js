@@ -1,7 +1,7 @@
 steal.plugins('jquery/event').then(function($){
 	var keymap = {},
 		reverseKeyMap = {};
-	
+		
 	/**
 	 * @function jQuery.event.key
 	 * @parent jQuery.Event.prototype.key
@@ -113,21 +113,40 @@ steal.plugins('jquery/event').then(function($){
 	 */
 	jQuery.Event.prototype.key  = function(){
 		var event = this,
-			keycode;
+			keycode,
+			test = /\w/;
 	
+		var key_Key =   reverseKeyMap[(event.keyCode || event.which)+""],
+			char_Key =  String.fromCharCode(event.keyCode || event.which),
+			key_Char =  event.charCode && reverseKeyMap[event.charCode+""],
+			char_Char = event.charCode && String.fromCharCode(event.charCode);
+		
+		if( char_Char && test.test(char_Char) ) {
+			return char_Char.toLowerCase()
+		}
+		if( key_Char && test.test(key_Char) ) {
+			return char_Char.toLowerCase()
+		}
+		if( char_Key && test.test(char_Key) ) {
+			return char_Key.toLowerCase()
+		}
+		if( key_Key && test.test(key_Key) ) {
+			return key_Key.toLowerCase()
+		}
+		//console.log(this.type, key_Key, char_Key, key_Char, char_Char);
 		//if IE
-		if ($.browser.msie){
+		//if ($.browser.msie){
 			if (event.type == 'keypress'){
 				return event.keyCode ? String.fromCharCode(event.keyCode) : String.fromCharCode(event.which)
-			} else if (event.type == 'keydown') {
+			} /*else if (event.type == 'keydown') {
 				// IE only recognizes the backspace and delete keys in the keydown event, not keypress
 				keycode = reverseKeyMap[event.keyCode];
 				
 				if (keycode === '\b' || keycode === 'delete'){
 					return keycode;
 				}
-			}
-		}
+			} */
+		//}
 		
 		
 		if (!event.keyCode && event.which) {

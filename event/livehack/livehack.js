@@ -91,6 +91,8 @@ steal.plugins('jquery/event').then(function() {
 
 		return selectors;
 	};
+	event.supportTouch = "ontouchend" in document;
+	
 	$.fn.respondsTo = function( events ) {
 		if (!this.length ) {
 			return false;
