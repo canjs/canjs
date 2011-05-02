@@ -1,3 +1,5 @@
+steal.plugins('funcunit/qunit','jquery/event/default').then(function(){
+
 module("jquery/event/default")
 test("namespaced with same function", function(){
 
@@ -13,9 +15,10 @@ test("namespaced with same function", function(){
 
 test("triggering defaults", function(){
 
-	$("#qunit-test-area").html("//jquery/event/default/test/qunit/html.micro",{})
+	$("#qunit-test-area").html(
 	
-	
+	"<div id='bigwrapper'><div id='wrap1'><div id='touchme1'>ClickMe</div></div>"+
+	"<div id='wrap2'><div id='touchme2'>ClickMe</a></div></div>")
 	
 	
 	var count1 = 0, defaultNum, touchNum, num = 0;;
@@ -64,7 +67,10 @@ test("triggering defaults", function(){
 
 test("live on default events", function(){
 	
-	$("#qunit-test-area").html("//jquery/event/default/test/qunit/html.micro",{})
+	$("#qunit-test-area").html(
+	
+	"<div id='bigwrapper'><div id='wrap1'><div id='touchme1'>ClickMe</div></div>"+
+	"<div id='wrap2'><div id='touchme2'>ClickMe</a></div></div>")
 	var bw = $("#bigwrapper"), 
 		count1 = 0, 
 		count2 = 0, 
@@ -101,4 +107,25 @@ test("live on default events", function(){
 	
 	
 	$("#qunit-test-area").html("")
-})
+});
+
+
+test("default and live order", function(){
+	var order = [];
+	$("#qunit-test-area").html("<div id='foo'></div>")
+	
+	$("#foo").live("default.show", function(){
+		order.push("default")
+	});
+	$("#foo").live("show", function(){
+		order.push("show")
+	});
+	
+	$("#foo").trigger("show")
+	
+	same(order, ['show','default'],"show then default")
+	$("#foo").die()
+});
+
+
+});

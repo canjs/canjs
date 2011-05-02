@@ -11,8 +11,10 @@ $.Drag.prototype.
 	 * @param {jQuery} elements to scroll.  The window can be in this array.
 	 */
 	scrolls = function(elements){
+		var elements = $(elements);
+		
 		for(var i = 0 ; i < elements.length; i++){
-			this.constructor.responder._responders.push( new $.Scrollable(elements[i]) )
+			this.constructor.responder._elements.push( elements.eq(i).data("_dropData", new $.Scrollable(elements[i]) )[0] )
 		}
 	},
 	

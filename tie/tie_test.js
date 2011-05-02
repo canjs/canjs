@@ -1,6 +1,6 @@
 steal
   .plugins("funcunit/qunit", "jquery/tie",'jquery/model')
-  .then("tie_test").then(function(){
+  .then(function(){
   	
 	
 	module("jquery/tie",{
@@ -78,7 +78,26 @@ steal
 		person1.attr("age",7)
 		ok(!foo._destroyed, "Foo is not destroyed");
 		ok(tie._destroyed, "Tie is destroyed")
+		console.log("done")
 	})
+	
+	test("removing html element removes the tie", function() {
+		var person1 = new Person({age: 5});
+		var inp = $("<div/>").appendTo( $("#qunit-test-area") );
+		
+		$.Controller("Foo",{
+			val : function(value) {}
+		});
+		
+		inp.foo().tie(person1,"age");
+		var foo = inp.controller('foo'),
+			tie = inp.controller('tie');
+
+		inp.remove(); // crashes here
+		
+		ok(foo._destroyed, "Foo is destroyed");
+		ok(tie._destroyed, "Tie is destroyed")
+	});
 	
 	test("tie on a specific controller", function(){});
 	

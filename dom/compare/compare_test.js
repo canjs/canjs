@@ -1,3 +1,7 @@
+steal
+ .plugins("jquery/dom/compare")  //load your app
+ .plugins('funcunit/qunit').then(function(){
+
 module("jquery/dom/compare")
 test("Compare cases", function(){
     $(document.body).append("<div id='outer'><div class='first'></div><div class='second'></div>")
@@ -16,4 +20,6 @@ test("Compare cases", function(){
     equals(first.compare(second), 4, "A sibling elements");
     equals(second.compare(first), 2, "A sibling elements");
     outer.remove()
-})
+});
+
+});

@@ -508,10 +508,11 @@ steal.plugins('jquery/view').then(function(){
 	$.View.register({
 		suffix : "tmpl",
 		renderer: function( id, text ) {
+			var tmpl = $.template( null, text );
 			return function(data){
-				return $.tmpl( text, data);
+				return tmpl.call($, $, {data: data}).join('');
 				//$(text).tmpl(data);//jQuery.render( text, data );
-			}
+			};
 		},
 		script: function( id, str ) {
 			var tmpl = $.template( null, str );
