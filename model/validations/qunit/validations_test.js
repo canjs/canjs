@@ -61,13 +61,42 @@ test("validatesFormatOf", function(){
 });
 
 test("validatesInclusionOf", function(){
+	Person.validateInclusionOf("thing", ["yes", "no", "maybe"]);
+
+	ok(!new Person({thing: "yes"}).errors(),"no errors");
+
+	var errors = new Person({thing: "foobar"}).errors();
+
+	ok(errors, "there are errors");
+	equals(errors.thing.length,1,"one error on thing");
+
+	equals(errors.thing[0],"is not a valid option (perhaps out of range)","basic message");
+
+	Person.validateInclusionOf("otherThing", ["yes", "no", "maybe"],{message: "not a valid option"});
 	
+	var errors2 = new Person({thing: "yes", otherThing: "maybe not"}).errors();
 	
-})
+	equals(errors2.otherThing[0],"not a valid option", "can supply a custom message");
+});
 
 test("validatesLengthOf", function(){
+	Person.validateLengthOf("thing", 2, 5);
+
+	ok(!new Person({thing: "yes"}).errors(),"no errors");
 	
-})
+	var errors = new Person({thing: "foobar"}).errors();
+
+	ok(errors, "there are errors");
+	equals(errors.thing.length,1,"one error on thing");
+
+	equals(errors.thing[0],"is too long (max=5)","basic message");
+
+	Person.validateLengthOf("otherThing", 2, 5, {message: "invalid length"});
+
+	var errors2 = new Person({thing: "yes", otherThing: "too long"}).errors();
+
+	equals(errors2.otherThing[0],"invalid length", "can supply a custom message");
+});
 
 test("validatesPresenceOf", function(){
 	$.Model.extend("Task",{
@@ -101,7 +130,22 @@ test("validatesPresenceOf", function(){
 })
 
 test("validatesRangeOf", function(){
-	
-})
+	Person.validateRangeOf("thing", 2, 5);
+
+	ok(!new Person({thing: 4}).errors(),"no errors");
+
+	var errors = new Person({thing: 6}).errors();
+
+	ok(errors, "there are errors")
+	equals(errors.thing.length,1,"one error on thing");
+
+	equals(errors.thing[0],"is out of range [2,5]","basic message");
+
+	Person.validateRangeOf("otherThing", 2, 5, {message: "value out of range"});
+
+	var errors2 = new Person({thing: 4, otherThing: 6}).errors();
+
+	equals(errors2.otherThing[0],"value out of range", "can supply a custom message");
+});
 
 })
