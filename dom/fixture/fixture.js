@@ -82,7 +82,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 					}
 					
 					// make sure we provide a response type that matches the first datatype (typically json)
-					if(!response[2][next]){
+					if(!response[2] || !response[2][next]){
 						var tmp = {}
 						tmp[next] = response[2];
 						response[2] = tmp;
@@ -711,7 +711,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	};
 	
     /**
-  	 * @page jquery.fixture.organizing Organizing Fixtures
+  	 * @page jquery.fixture.0organizing Organizing Fixtures
   	 * @parent jQuery.fixture
 	 * 
 	 * The __best__ way of organizing fixtures is to have a 'fixtures.js' file that steals
@@ -770,5 +770,31 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 *     }
 	 * 
 	 */
-	
+	//
+	/**
+	 * @add jQuery.fixture
+	 */
+	//
+	/**
+	 * @page jquery.fixture.1errors Simulating Errors
+	 * @parent jQuery.fixture
+	 * 
+	 * The following simulates an unauthorized request 
+	 * to <code>/foo</code>.
+	 * 
+	 *     $.fixture("/foo", function(){
+	 * 		return [401,"{type: 'unauthorized'}"]
+	 * 	   });
+	 * 
+	 * This could be received by the following Ajax request:
+	 * 
+	 *     $.ajax({
+	 *       url: '/foo',
+	 *       error : function(jqXhr, status, statusText){
+	 *         // status === 'error'
+	 *         // statusText === "{type: 'unauthorized'}"
+	 *       }
+	 *     })
+	 * 
+	 */
 });
