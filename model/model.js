@@ -1292,7 +1292,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			}
 
 			//if this class has a global list, add / remove from the list.
-			if ( property == Class.id && val !== null && Class.list ) {
+			if ( property === Class.id && val !== null && Class.list ) {
 				// if we didn't have an old id, add ourselves
 				if (!old ) {
 					Class.list.push(this);
