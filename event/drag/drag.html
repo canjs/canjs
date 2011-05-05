@@ -113,8 +113,6 @@ $("#scroll-drag").bind("draginit",function(ev, drag){drag.scrolls( $("#scrollare
 $("#form-drag").bind("dragdown",function(ev, drag){
 	if(ev.target.nodeName.toLowerCase() == 'input'){
 		drag.cancel();
-	}else{
-		ev.preventDefault();
 	}
 })
 </script>
