@@ -76,15 +76,11 @@
 </div>
 		<script type='text/javascript' src='../../../steal/steal.js'>   
         </script>
-		<script type='text/javascript'>
+		<script type='text/javascript' id='demo-source'>
 steal.plugins("jquery/event/drag",
 	"jquery/event/drag/scroll",
 	"jquery/event/drag/limit").then(function($){
 	
-		
-}).start()
-		</script>
-	<script type='text/javascript' id='demo-source'>
 //drag with bind
 $("#drag").bind("draginit",function(){})
 
@@ -117,6 +113,8 @@ $("#form-drag").bind("dragdown",function(ev, drag){
 		ev.preventDefault();
 	}
 })
-</script>
+		
+})
+		</script>
 	</body>
 </html>

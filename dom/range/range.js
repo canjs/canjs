@@ -41,6 +41,10 @@ $.Range = function(range){
 		
 	} else if (range.clientX || range.pageX || range.left) {
 		this.rangeFromPoint(range)
+	} else if (range.originalEvent && range.originalEvent.touches && range.originalEvent.touches.length) {
+		this.rangeFromPoint(range.originalEvent.touches[0])
+	} else if (range.originalEvent && range.originalEvent.changedTouches && range.originalEvent.changedTouches.length) {
+		this.rangeFromPoint(range.originalEvent.changedTouches[0])
 	} else {
 		this.range = range;
 	} 
@@ -229,7 +233,27 @@ $.extend($.Range.prototype,{
 		return this.range.parentElement || this.range.commonAncestorContainer
 	},
 	rect : function(from){
-		var rect = this.range.getBoundingClientRect()
+		var rect = this.range.getBoundingClientRect();
+		// collapsed ranges don't provide meaningful bounding client rect in safari
+		// so we'll uncollapse it and get the dimensions
+		if(!rect.left && !rect.top){
+			var range = this.clone(),
+				end = range.end(),
+				start = range.start(),
+				correction = 0;
+			if (start.offset > 0) {
+				range.start(start.offset - 1);
+				rect = range.range.getBoundingClientRect();
+				correction = rect.width;
+			}
+			else if(end.offset < end.container.length - 1){
+				range.end(end.offset+1)
+				rect = range.range.getBoundingClientRect();
+			}
+			rect = $.extend({}, rect);
+			rect.left += correction;
+			rect.width = 0;
+		}
 		if(from === 'page'){
 			var off = scrollOffset();
 			rect = $.extend({}, rect);
@@ -414,6 +438,6 @@ var iterate = function(elems, cb){
 	};
 };
 
-
+$("<div id='rect' />").appendTo(document.body)
 
 });
