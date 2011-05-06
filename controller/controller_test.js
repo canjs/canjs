@@ -1,3 +1,8 @@
+steal
+ .plugins("jquery/controller",'jquery/controller/subscribe')  //load your app
+ .plugins('funcunit/qunit')  //load qunit
+ .then(function(){
+ 	
 module("jquery/controller")
 test("subscribe testing works", function(){
 	
@@ -205,4 +210,6 @@ test("objects in action", function(){
 	
 	$("#qunit-test-area").html("");
 	
-})
+});
+
+});

@@ -14,8 +14,21 @@ test("$.String.sub", function(){
 	
 });
 
+test("$.String.sub double", function(){
+	equals($.String.sub("{b} {d}",[{b: "c", d: "e"}]),"c e");
+})
+
 test("String.underscore", function(){
 	equals($.String.underscore("Foo.Bar.ZarDar"),"foo.bar.zar_dar")
 })
+
+
+test("$.String.getObject", function(){
+	var obj = $.String.getObject("foo", [{a: 1}, {foo: 'bar'}]);
+	
+	equals(obj,'bar', 'got bar')
+});
+
+
 	
 });

@@ -46,7 +46,135 @@ test("CRUD", function(){
 		equals(inst, person, "we get back the same instance");
 		equals(person.zoo, "monkeys", "updated to monkeys zoo!  This tests that you callback with the attrs")
 	})
-})
+});
+
+test("findAll deferred", function(){
+	$.Model.extend("Person",{
+		findAll : function(params, success, error){
+			return $.ajax({
+				url : "/people",
+				data : params,
+				dataType : "json person.models",
+				fixture: "//jquery/model/test/people.json"
+			})
+		}
+	},{});
+	stop();
+	var people = Person.findAll({});
+	people.then(function(people){
+		equals(people.length, 1, "we got a person back");
+		equals(people[0].name, "Justin", "Got a name back");
+		equals(people[0].Class.shortName, "Person", "got a class back");
+		start();
+	})
+});
+
+test("findOne deferred", function(){
+	$.Model.extend("Person",{
+		findOne : function(params, success, error){
+			return $.ajax({
+				url : "/people/5",
+				data : params,
+				dataType : "json person.model",
+				fixture: "//jquery/model/test/person.json"
+			})
+		}
+	},{});
+	stop();
+	var person = Person.findOne({});
+	person.then(function(person){
+		equals(person.name, "Justin", "Got a name back");
+		equals(person.Class.shortName, "Person", "got a class back");
+		start();
+	})
+});
+
+test("save deferred", function(){
+	
+	$.Model("Person",{
+		create : function(attrs, success, error){
+			return $.ajax({
+				url : "/people",
+				data : attrs,
+				type : 'post',
+				dataType : "json",
+				fixture: function(){
+					return [{id: 5}]
+				},
+				success : success
+			})
+		}
+	},{});
+	
+	var person = new Person({name: "Justin"}),
+		personD = person.save();
+	
+	stop();
+	personD.then(function(person){
+		start()
+		equals(person.id, 5, "we got an id")
+		
+	});
+	
+});
+
+test("update deferred", function(){
+	
+	$.Model("Person",{
+		update : function(id, attrs, success, error){
+			return $.ajax({
+				url : "/people/"+id,
+				data : attrs,
+				type : 'post',
+				dataType : "json",
+				fixture: function(){
+					return [{thing: "er"}]
+				},
+				success : success
+			})
+		}
+	},{});
+	
+	var person = new Person({name: "Justin", id:5}),
+		personD = person.save();
+	
+	stop();
+	personD.then(function(person){
+		start()
+		equals(person.thing, "er", "we got updated")
+		
+	});
+	
+});
+
+test("destroy deferred", function(){
+	
+	$.Model("Person",{
+		destroy : function(id, success, error){
+			return $.ajax({
+				url : "/people/"+id,
+				type : 'post',
+				dataType : "json",
+				fixture: function(){
+					return [{thing: "er"}]
+				},
+				success : success
+			})
+		}
+	},{});
+	
+	var person = new Person({name: "Justin", id:5}),
+		personD = person.destroy();
+	
+	stop();
+	personD.then(function(person){
+		start()
+		equals(person.thing, "er", "we got destroyed")
+		
+	});
+});
+
+
 test("hookup and model", function(){
 	var div = $("<div/>")
 	var p = new Person({foo: "bar2", id: 5});
@@ -78,6 +206,42 @@ test("wrapMany", function(){
 	])
 	equals(people[0].prettyName(),"Mr. Justin","wraps wrapping works")
 });
+
+
+
+test("async setters", function(){
+	
+	/*
+	$.Model("Test.AsyncModel",{
+		setName : function(newVal, success, error){
+			
+			
+			setTimeout(function(){
+				success(newVal)
+			}, 100)
+		}
+	});
+	
+	var model = new Test.AsyncModel({
+		name : "justin"
+	});
+	equals(model.name, "justin","property set right away")
+	
+	//makes model think it is no longer new
+	model.id = 1;
+	
+	var count = 0;
+	
+	model.bind('name', function(ev, newName){
+		equals(newName, "Brian",'new name');
+		equals(++count, 1, "called once");
+		ok(new Date() - now > 0, "time passed")
+		start();
+	})
+	var now = new Date();
+	model.attr('name',"Brian");
+	stop();*/
+})
 
 test("binding", 2,function(){
 	var inst = new Person({foo: "bar"});
@@ -176,4 +340,51 @@ test("Empty uses fixtures", function(){
 		start();
 		equals(things.length, 10,"got 10 things")
 	})
-})
+});
+
+test("Model events" , function(){
+	var order = 0;
+	$.Model("Test.Event",{
+		create : function(attrs, success){
+			success({id: 1})
+		},
+		update : function(id, attrs, success){
+			success(attrs)
+		},
+		destroy : function(id, success){
+			success()
+		}
+	},{});
+	
+	stop();
+	$([Test.Event]).bind('created',function(ev, passedItem){
+		
+		ok(this === Test.Event, "got model")
+		ok(passedItem === item, "got instance")
+		equals(++order, 1, "order");
+		passedItem.update({});
+		
+	}).bind('updated', function(ev, passedItem){
+		equals(++order, 2, "order");
+		ok(this === Test.Event, "got model")
+		ok(passedItem === item, "got instance")
+		
+		passedItem.destroy({});
+		
+	}).bind('destroyed', function(ev, passedItem){
+		equals(++order, 3, "order");
+		ok(this === Test.Event, "got model")
+		ok(passedItem === item, "got instance")
+		
+		start();
+		
+	})
+	
+	var item = new Test.Event();
+	item.save();
+	
+	
+	
+	
+	
+});

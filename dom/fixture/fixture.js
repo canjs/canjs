@@ -1,25 +1,136 @@
 steal.plugins('jquery/dom').then(function( $ ) {
 
-	var ajax = $.ajax,
-        typeTest = /^(script|json|test|jsonp)$/,
+	// the pre-filter needs to re-route the url
+	$.ajaxPrefilter( function( settings, originalOptions, jqXHR ) {
+	  	// if fixtures are on
+		if(! $.fixture.on) {
+			return;
+		}
+		
+		// add the fixture option if programmed in
+		overwrite(settings);
+		
+		// if we don't have a fixture, do nothing
+		if(!settings.fixture){
+			return;
+		}
+		
+		//if referencing something else, update the fixture option
+		if ( typeof settings.fixture === "string" && $.fixture[settings.fixture] ) {
+			settings.fixture = $.fixture[settings.fixture];
+		}
+		
+		// if a string, we just point to the right url
+		if ( typeof settings.fixture == "string" ) {
+			var url = settings.fixture;
+			
+			if (/^\/\//.test(url) ) {
+				url = steal.root.join(settings.fixture.substr(2));
+			}
+			//@steal-remove-start
+			steal.dev.log("looking for fixture in " + url);
+			//@steal-remove-end
+			settings.url = url;
+			settings.data = null;
+			settings.type = "GET";
+			if (!settings.error ) {
+				settings.error = function( xhr, error, message ) {
+					throw "fixtures.js Error " + error + " " + message;
+				};
+			}
+
+		}else {
+			//@steal-remove-start
+			steal.dev.log("using a dynamic fixture for " + settings.url);
+			//@steal-remove-end
+			
+			//it's a function ... add the fixture datatype so our fixture transport handles it
+			// TODO: make everything go here for timing and other fun stuff
+			settings.dataTypes.splice(0,0,"fixture")
+		}
+		
+	});
+		
+	
+	$.ajaxTransport( "fixture", function( s, original ) {
+
+		// remove the fixture from the datatype
+		s.dataTypes.shift();
+		
+		//we'll return the result of the next data type
+		var next = s.dataTypes[0],
+			timeout;
+		
+		return {
+		
+			send: function( headers , callback ) {
+				
+				// callback after a timeout
+				timeout = setTimeout(function() {
+					
+					// get the callback data from the fixture function
+					var response = s.fixture(original, s, headers);
+					
+					// normalize the fixture data into a response
+					if(!$.isArray(response)){
+						var tmp = [{}];
+						tmp[0][next] = response
+						response = tmp;
+					}
+					if(typeof response[0] != 'number'){
+						response.unshift(200,"success")
+					}
+					
+					// make sure we provide a response type that matches the first datatype (typically json)
+					if(!response[2][next]){
+						var tmp = {}
+						tmp[next] = response[2];
+						response[2] = tmp;
+					}
+					
+					// pass the fixture data back to $.ajax
+					callback.apply(null, response );
+				}, $.fixture.delay);
+			},
+			
+			abort: function() {
+				clearTimeout(timeout)
+			}
+		};
+		
+	});
+
+
+
+	var typeTest = /^(script|json|test|jsonp)$/,
 		// a list of 'overwrite' settings object
 		overwrites = [],
 		// checks if an overwrite matches ajax settings
-		isTheSame = function(settings, overwrite){
+		isSimilar = function(settings, overwrite, exact){
+			
+			settings = $.extend({}, settings)
+			
 			for(var prop in overwrite){
 				if(prop === 'fixture'){
-					continue;
-				}
-				if(overwrite[prop] !== settings[prop]){
+					
+				} else if(overwrite[prop] !== settings[prop]){
 					return false;
+				}
+				if(exact){
+					delete settings[prop]
+				}
+			}
+			if(exact){
+				for(var name in settings){
+					return false
 				}
 			}
 			return true;
 		},
 		// returns the index of an overwrite function
-		find = function(settings){
+		find = function(settings, exact){
 			for(var i =0; i < overwrites.length; i++){
-				if(isTheSame(settings, overwrites[i])){
+				if(isSimilar(settings, overwrites[i], exact)){
 					return i;
 				}
 			}
@@ -32,7 +143,34 @@ steal.plugins('jquery/dom').then(function( $ ) {
 				settings.fixture = overwrites[index].fixture;
 			}
 
-		}; // by url
+		},
+		/**
+		 * Makes an attempt to guess where the id is at in the url and returns it.
+		 * @param {Object} settings
+		 */
+		getId = function(settings){
+        	var id = settings.data.id;
+
+			if(id === undefined){
+                settings.url.replace(/\/(\d+)(\/|$)/g, function(all, num){
+                    id = num;
+                });
+            }
+			
+            if(id === undefined){
+                id = settings.url.replace(/\/(\w+)(\/|$)/g, function(all, num){
+                    if(num != 'update'){
+                        id = num;
+                    }
+                })
+            }
+			
+			if(id === undefined){ // if still not set, guess a random number
+                id = Math.round(Math.random()*1000)
+            }
+
+			return id;
+		};
 
 	/**
 	 * @class jQuery.fixture
@@ -51,12 +189,13 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 * They are a great technique when you want to develop JavaScript 
 	 * independently of the backend. 
 	 * 
-	 * <h3>Quick Example</h3>
-	 * <p>Instead of making a request to <code>/tasks.json</code>,
-	 *    $.ajax will look in <code>fixtures/tasks.json</code>.
-	 *    It's expected that a static <code>fixtures/tasks.json</code> 
-	 *    file exists relative to the current page. 
-	 * </p>
+	 * ### Quick Example
+	 * 
+	 * Instead of making a request to <code>/tasks.json</code>,
+	 * $.ajax will look in <code>fixtures/tasks.json</code>.
+	 * It's expected that a static <code>fixtures/tasks.json</code> 
+	 * file exists relative to the current page. 
+	 * 
 	 * @codestart
 	 * $.ajax({url: "/tasks.json",
 	 *   dataType: "json",
@@ -64,7 +203,9 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 *   fixture: "fixtures/tasks.json",
 	 *   success: myCallback});
 	 * @codeend
-	 * <h2>Using Fixtures</h2>
+	 * 
+	 * ## Using Fixtures
+	 * 
 	 * To enable fixtures, you must add this plugin to your page and 
 	 * set the fixture property.  
 	 * 
@@ -77,92 +218,99 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 * $.get (  url, data, callback, type, FIXTURE_VALUE )
 	 * $.post(  url, data, callback, type, FIXTURE_VALUE )
 	 * @codeend
-	 * <h3>Turning Off Fixtures</h3>
-	 * <p>To turn off fixtures, simply remove the fixture plugin from 
+	 * 
+	 * ## Turning Off Fixtures
+	 * 
+	 * To turn off fixtures, simply remove the fixture plugin from 
 	 *  your page.  The Ajax methods will ignore <code>FIXTURE_VALUE</code>
 	 *  and revert to their normal behavior.  If you want to ignore a single
 	 *  fixture, we suggest commenting it out.
-	 * </p>
+	 * 
 	 * <div class='whisper'>
 	 * PRO TIP:  Don't worry about leaving the fixture values in your source.  
 	 * They don't take up many characters and won't impact how jQuery makes
 	 * requests.  They can be useful even after the service they simulate
 	 * is created.
 	 * </div>
-	 * <h2>Types of Fixtures</h2>
-	 * <p>There are 2 types of fixtures</p>
-	 * <ul>
-	 *  <li><b>Static</b> - the response is in a file.
-	 *  </li>
-	 *  <li>
-	 *   <b>Dynamic</b> - the response is generated by a function.
-	 *  </li>
-	 * </ul>
-	 * There are different ways to lookup static and dynamic fixtures.
-	 * <h3>Static Fixtures</h3>
-	 * Static fixture locations can be calculated:
-	 * @codestart
-	 * // looks in test/fixtures/tasks/1.get
-	 * $.ajax({type:"get", 
-	 *        url: "tasks/1", 
-	 *        fixture: true}) 
-	 * @codeend
-	 * Or provided:
-	 * @codestart
-	 * // looks in fixtures/tasks1.json relative to page
-	 * $.ajax({type:"get", 
-	 *        url: "tasks/1", 
-	 *        fixture: "fixtures/task1.json"})
 	 * 
-	 * // looks in fixtures/tasks1.json relative to jmvc root
-	 * // this assumes you are using steal
-	 * $.ajax({type:"get", 
-	 *        url: "tasks/1", 
-	 *        fixture: "//fixtures/task1.json"})` 
-	 * @codeend
+	 * ## Types of Fixtures
+	 * 
+	 * There are 2 types of fixtures:
+	 *   - __Static__ - the response is in a file.
+	 *   - __Dynamic__ - the response is generated by a function.
+	 * 
+	 * There are different ways to lookup static and dynamic fixtures.
+	 * 
+	 * ### Static Fixtures
+	 * 
+	 * Static fixture locations can be calculated:
+	 * 
+	 *     // looks in test/fixtures/tasks/1.get
+	 *     $.ajax({type:"get", 
+	 *            url: "tasks/1", 
+	 *            fixture: true}) 
+	 * 
+	 * Or provided:
+	 * 
+	 * 
+	 * // looks in fixtures/tasks1.json relative to page
+	 *     $.ajax({type:"get", 
+	 *            url: "tasks/1", 
+	 *            fixture: "fixtures/task1.json"})
+	 *     
+	 *     // looks in fixtures/tasks1.json relative to jmvc root
+	 *     // this assumes you are using steal
+	 *     $.ajax({type:"get", 
+	 *            url: "tasks/1", 
+	 *            fixture: "//fixtures/task1.json"})` 
+	 * 
+	 * 
 	 * <div class='whisper'>
 	 *   PRO TIP: Use provided fixtures.  It's easier to understand what it is going.
 	 *   Also, create a fixtures folder in your app to hold your fixtures.
 	 * </div>
-	 * <h3>Dynamic Fixtures</h3>
-	 * <p>Dynamic Fixtures are functions that return the arguments the $.ajax callbacks 
-	 *   (<code>beforeSend</code>, <code>success</code>, <code>complete</code>, 
-	 *    <code>error</code>) expect.  </p>
-	 * <p>For example, the "<code>success</code>" of a json request is called with 
-	 * <code>[data, textStatus, XMLHttpRequest].</p>
-	 * <p>There are 2 ways to lookup dynamic fixtures.<p>
-	 * They can provided:
-	 * @codestart
-	 * //just use a function as the fixture property
-	 * $.ajax({
-	 *   type:     "get", 
-	 *   url:      "tasks",
-	 *   data:     {id: 5},
-	 *   dataType: "json",
-	 *   fixture: function( settings, callbackType ) {
-	 *     var xhr = {responseText: "{id:"+settings.data.id+"}"}
-	 *     switch(callbackType){
-	 *       case "success": 
-	 *         return [{id: settings.data.id},"success",xhr]
-	 *       case "complete":
-	 *         return [xhr,"success"]
-	 *     }
-	 *   }
-	 * })
-	 * @codeend
-	 * Or found by name on $.fixture:
-	 * @codestart
-	 * // add your function on $.fixture
-	 * // We use -FUNC by convention
-	 * $.fixture["-myGet"] = function(settings, cbType){...}
 	 * 
-	 * // reference it
-	 * $.ajax({
-	 *   type:"get", 
-	 *   url: "tasks/1", 
-	 *   dataType: "json", 
-	 *   fixture: "-myGet"})
-	 * @codeend
+	 * ### Dynamic Fixtures
+	 * 
+	 * Dynamic Fixtures are functions that return the arguments the $.ajax callbacks 
+	 * (<code>beforeSend</code>, <code>success</code>, <code>complete</code>, 
+	 * <code>error</code>) expect. 
+	 *    
+	 * For example, the "<code>success</code>" of a json request is called with 
+	 * <code>[data, textStatus, XMLHttpRequest].
+	 * 
+	 * There are 2 ways to lookup dynamic fixtures. They can provided:
+	 * 
+	 *     //just use a function as the fixture property
+	 *     $.ajax({
+	 *       type:     "get", 
+	 *       url:      "tasks",
+	 *       data:     {id: 5},
+	 *       dataType: "json",
+	 *       fixture: function( settings, callbackType ) {
+	 *         var xhr = {responseText: "{id:"+settings.data.id+"}"}
+	 *         switch(callbackType){
+	 *           case "success": 
+	 *             return [{id: settings.data.id},"success",xhr]
+	 *           case "complete":
+	 *             return [xhr,"success"]
+	 *         }
+	 *       }
+	 *     })
+	 * 
+	 * Or found by name on $.fixture:
+	 * 
+	 *     // add your function on $.fixture
+	 *     // We use -FUNC by convention
+	 *     $.fixture["-myGet"] = function(settings, cbType){...}
+	 * 
+	 *     // reference it
+	 *     $.ajax({
+	 *       type:"get", 
+	 *       url: "tasks/1", 
+	 *       dataType: "json", 
+	 *       fixture: "-myGet"})
+	 * 
 	 * <p>Dynamic fixture functions are called with:</p>
 	 * <ul>
 	 * <li> settings - the settings data passed to <code>$.ajax()</code>
@@ -178,15 +326,19 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 * What to see what the app feels like when a request takes 5 seconds to return?  Set
 	 * [jQuery.fixture.delay] to 5000.
 	 * </div>
-	 * <h2>Helpers</h2>
-	 * <p>The fixture plugin comes with a few ready-made dynamic fixtures and 
+	 * 
+	 * ## Helpers
+	 * 
+	 * The fixture plugin comes with a few ready-made dynamic fixtures and 
 	 * fixture helpers:</p>
+	 * 
 	 * <ul>
 	 * <li>[jQuery.fixture.make] - creates fixtures for findAll, findOne.</li>
 	 * <li>[jQuery.fixture.-restCreate] - a fixture for restful creates.</li>
 	 * <li>[jQuery.fixture.-restDestroy] - a fixture for restful updates.</li>
 	 * <li>[jQuery.fixture.-restUpdate] - a fixture for restful destroys.</li>
 	 * </ul>
+	 * 
 	 * @demo jquery/dom/fixture/fixture.html
 	 * @constructor
 	 * Takes an ajax settings and returns a url to look for a fixture.  Overwrite this if you want a custom lookup method.
@@ -202,12 +354,13 @@ steal.plugins('jquery/dom').then(function( $ ) {
 					url : settings
 				};
 			}
-			//handle removing
+			
+			//handle removing.  An exact match if fixture was provided, otherwise, anything similar
+			var index = find(settings, !!fixture);
+			if(index >= -1){
+				overwrites.splice(index,1)
+			}
 			if(fixture == null){
-				var index = find(settings);
-				if(index >= -1){
-					return overwrites.splice(index,1)
-				}
 				return 
 			}
 			
@@ -241,50 +394,37 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		return left + right;
 	};
 
-	$.extend($.fixture, {
+	$.extend($.fixture, {	
 		/**
 		 * Provides a rest update fixture function
 		 */
-		"-restUpdate": function( settings, cbType ) {
-			switch ( cbType ) {
-			case "success":
-				return [$.extend({
-					id: parseInt(settings.url, 10)
-				}, settings.data), "success", $.fixture.xhr()];
-			case "complete":
-				return [$.fixture.xhr(), "success"];
-			}
+		"-restUpdate": function( settings ) {
+			return [{
+					id: getId(settings)
+				},{
+					location: settings.url+"/"+getId(settings)
+				}];
 		},
+		
 		/**
 		 * Provides a rest destroy fixture function
 		 */
 		"-restDestroy": function( settings, cbType ) {
-			switch ( cbType ) {
-			case "success":
-				return [true, "success", $.fixture.xhr()];
-			case "complete":
-				return [$.fixture.xhr(), "success"];
-			}
+			return {};
 		},
+		
 		/**
 		 * Provides a rest create fixture function
 		 */
 		"-restCreate": function( settings, cbType ) {
-			switch ( cbType ) {
-			case "success":
-				return [{
-					id: parseInt(Math.random() * 1000, 10)
-				}, "success", $.fixture.xhr()];
-			case "complete":
-				return [$.fixture.xhr({
-					getResponseHeader: function() {
-						return settings.url + "/" + parseInt(Math.random() * 1000, 10);
-					}
-				}), "success"];
-			}
-
-
+			var id = parseInt(Math.random() * 100000, 10);
+			return [{
+						id: id
+					},{
+						location: settings.url+"/"+id	
+					}];
 		},
+		
 		/**
 		 * Used to make fixtures for findAll / findOne style requests.
 		 * @codestart
@@ -303,7 +443,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		 *   data:{ 
 		 *      offset: 100, 
 		 *      limit: 50, 
-		 *      order: "date ASC",
+		 *      order: ["date ASC"],
 		 *      parentId: 5},
 		 *    },
 		 *    fixture: "-messages",
@@ -317,6 +457,18 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		 * @param {Number} count the number of items to create
 		 * @param {Function} make a function that will return json data representing the object.  The
 		 * make function is called back with the id and the current array of items.
+		 * @param {Function} filter (optional) a function used to further filter results. Used for to simulate 
+		 * server params like searchText or startDate.  The function should return true if the item passes the filter, 
+		 * false otherwise.  For example:
+		 * 
+		 * @codestart
+		 * function(item, settings){
+			  if(settings.data.searchText){
+				  var regex = new RegExp("^"+settings.data.searchText)
+				  return regex.test(item.name);
+		      }
+		 * }
+		 * @codeend
 		 */
 		make: function( types, count, make, filter ) {
 			if(typeof types === "string"){
@@ -330,25 +482,6 @@ steal.plugins('jquery/dom').then(function( $ ) {
 							return items[i];
 						}
 					}
-				},
-				getId = function(settings){
-                	var id = settings.data.id;
-
-					if(id === undefined){
-	                    settings.url.replace(/\/(\d+)[\/$]/g, function(all, num){
-	                        id = num;
-	                    });
-	                }
-					
-	                if(id === undefined){
-	                    id = settings.url.replace(/\/(\w+)[\/$]/g, function(all, num){
-	                        if(num != 'update'){
-	                            id = num;
-	                        }
-	                    })
-	                }
-					
-					return id;
 				};
 				
 			for ( var i = 0; i < (count); i++ ) {
@@ -372,10 +505,22 @@ steal.plugins('jquery/dom').then(function( $ ) {
 					var split = name.split(" ");
 					retArr = retArr.sort(function( a, b ) {
 						if ( split[1].toUpperCase() !== "ASC" ) {
-							return a[split[0]] < b[split[0]];
+							if( a[split[0]] < b[split[0]] ) {
+								return 1;
+							} else if(a[split[0]] == b[split[0]]){
+								return 0
+							} else {
+								return -1;
+							}
 						}
 						else {
-							return a[split[0]] > b[split[0]];
+							if( a[split[0]] < b[split[0]] ) {
+								return -1;
+							} else if(a[split[0]] == b[split[0]]){
+								return 0
+							} else {
+								return 1;
+							}
 						}
 					});
 				});
@@ -395,7 +540,9 @@ steal.plugins('jquery/dom').then(function( $ ) {
 
 				//filter results if someone added an attr like parentId
 				for ( var param in settings.data ) {
-					if ( param.indexOf("Id") != -1 || param.indexOf("_id") != -1 ) {
+					i=0;
+					if ( settings.data[param] && // don't do this if the value of the param is null (ignore it)
+						(param.indexOf("Id") != -1 || param.indexOf("_id") != -1) ) {
 						while ( i < retArr.length ) {
 							if ( settings.data[param] != retArr[i][param] ) {
 								retArr.splice(i, 1);
@@ -464,7 +611,9 @@ steal.plugins('jquery/dom').then(function( $ ) {
 		},
 		/**
 		 * Use $.fixture.xhr to create an object that looks like an xhr object. 
-		 * <h3>Example</h3>
+		 * 
+		 * ## Example
+		 * 
 		 * The following example shows how the -restCreate fixture uses xhr to return 
 		 * a simulated xhr object:
 		 * @codestart
@@ -554,54 +703,6 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	/**
 	 *  @add jQuery
 	 */
-	// break
-	$.
-	/**
-	 * Adds the fixture option to settings. If present, loads from fixture location instead
-	 * of provided url.  This is useful for simulating ajax responses before the server is done.
-	 * @param {Object} settings
-	 */
-	ajax = function( settings ) {
-		var func = $.fixture;
-		
-		//lets look for the fixture setting ...
-		overwrite(settings);
-		
-		if (!settings.fixture || ! $.fixture.on ) {
-			return ajax.apply($, arguments);
-		}
-		if ( $.fixture["-handleFunction"](settings) ) {
-			return;
-		}
-		if ( typeof settings.fixture == "string" ) {
-			var url = settings.fixture;
-			if (/^\/\//.test(url) ) {
-				url = steal.root.join(settings.fixture.substr(2));
-			}
-			//@steal-remove-start
-			steal.dev.log("looking for fixture in " + url);
-			//@steal-remove-end
-			settings.url = url;
-			settings.data = null;
-			settings.type = "GET";
-			if (!settings.error ) {
-				settings.error = function( xhr, error, message ) {
-					throw "fixtures.js Error " + error + " " + message;
-				};
-			}
-			return ajax(settings);
-
-		}
-		settings = jQuery.extend(true, settings, jQuery.extend(true, {}, jQuery.ajaxSettings, settings));
-
-		settings.url = steal.root.join('test/fixtures/' + func(settings)); // convert settings
-		settings.data = null;
-		settings.type = 'GET';
-		return ajax(settings);
-	};
-
-	$.extend($.ajax, ajax);
-
 	$.
 	/**
 	 * Adds a fixture param.  

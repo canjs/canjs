@@ -4,7 +4,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 	// Binds an element, returns a function that unbinds
 	var bind = function( el, ev, callback ) {
 		var wrappedCallback,
-			binder = el.bind && el.unbind ? el : $(el);
+			binder = el.bind && el.unbind ? el : $(isFunction(el) ? [el] : el);
 		//this is for events like >click.
 		if ( ev.indexOf(">") === 0 ) {
 			ev = ev.substr(1);
@@ -370,7 +370,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			this.actions = {};
 
 			for ( funcName in this.prototype ) {
-				if (!isFunction(this.prototype[funcName]) ) {
+				if (funcName == 'constructor' || !isFunction(this.prototype[funcName]) ) {
 					continue;
 				}
 				if ( this._isAction(funcName) ) {
@@ -417,7 +417,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			if (!options && parameterReplacer.test(methodName) ) {
 				return null;
 			}
-			var convertedName = options ? $.String.sub(methodName, options) : methodName,
+			var convertedName = options ? $.String.sub(methodName, [options, window]) : methodName,
 				arr = $.isArray(convertedName),
 				parts = (arr ? convertedName[1]  :convertedName).match(breaker),
 				event = parts[2],
@@ -803,9 +803,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			this.element.removeClass(fname);
 
 			$.each(this._bindings, function( key, value ) {
-				if ( isFunction(value) ) {
-					value(self.element[0]);
-				}
+				value(self.element[0]);
 			});
 
 			delete this._actions;

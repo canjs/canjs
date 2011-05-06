@@ -191,4 +191,44 @@ test("dragdown" , function(){
 
 })
 
+test("dragging child element (a handle)" , function(){
+	var div = $("<div>"+
+			"<div id='dragger'>"+
+				"<div id='dragged'>Place to drag</div>"+
+			"</div>"+
+			"</div>");
+	
+	$("#qunit-test-area").html(div);
+	$("#dragger").css({
+		position: "absolute",
+		backgroundColor : "blue",
+		border: "solid 1px black",
+		top: "0px",
+		left: "0px",
+		width: "200px",
+		height: "200px"
+	});
+
+	var dragged = $('#dragged');
+		
+	$('#dragger').bind("draginit", function(ev, drag){
+		drag.only();
+		drag.representative(dragged);
+	})
+	
+	stop();
+
+	var offset = $('#dragger').offset();
+
+	Syn.drag("+20 +20","dragged", function() {
+		var offset2 = $('#dragger').offset();
+		equals(offset.top, offset2.top, "top")
+		equals(offset.left, offset2.left, "left")
+
+		ok(dragged.is(':visible'), "Handle should be visible");
+
+		start();
+	});
+});
+
 });

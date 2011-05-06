@@ -65,7 +65,7 @@ steal.plugins("jquery/dom").then(function( $ ) {
 				}
 
 				var key = el.name,
-					value = $.fn.val.call([el]) || $.data(el, "value"),
+					value = $.data(el, "value") || $.fn.val.call([el]),
 					isRadioCheck = radioCheck.test(el.type),
 					parts = key.match(keyBreaker),
 					write = !isRadioCheck || !! el.checked,

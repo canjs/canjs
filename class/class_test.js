@@ -1,8 +1,10 @@
+
 //we probably have to have this only describing where the tests are
 steal
  .plugins("jquery/class")  //load your app
  .plugins('funcunit/qunit')  //load qunit
  .then(function(){
+
 module("jquery/class");
 
 test("Creating", function(){
@@ -183,4 +185,27 @@ test("Creating without extend", function(){
 	});
 	new Foo().dude(true);
 })
-})
+
+
+
+/* Not sure I want to fix this yet.
+test("Super in derived when parent doesn't have init", function(){
+	$.Class("Parent",{
+	});
+	
+	Parent("Derived",{
+		init : function(){
+			this._super();
+		}
+	});
+
+	try {
+		new Derived();
+		ok(true, "Can call super in init safely")
+	} catch (e) {
+		ok(false, "Failed to call super in init with error: " + e)
+	}
+})*/
+
+});
+

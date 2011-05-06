@@ -78,6 +78,25 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 	 * @codeend
 	 * A bit more complex example:
 	 * @demo jquery/event/drop/drop.html 1000
+	 * 
+	 * 
+	 * 
+	 * ## How it works
+	 * 
+	 *   1. When you bind on a drop event, it adds that element to the list of rootElements.
+	 *      RootElements might be drop points, or might have delegated drop points in them.
+	 * 
+	 *   2. When a drag motion is started, each rootElement is queried for the events listening on it.
+	 *      These events might be delegated events so we need to query for the drop elements.
+	 *   
+	 *   3. With each drop element, we add a Drop object with all the callbacks for that element.
+	 *      Each element might have multiple event provided by different rootElements.  We merge
+	 *      callbacks into the Drop object if there is an existing Drop object.
+	 *      
+	 *   4. Once Drop objects have been added to all elements, we go through them and call draginit
+	 *      if available.
+	 *      
+	 * 
 	 * @constructor
 	 * The constructor is never called directly.
 	 */
@@ -112,6 +131,8 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		_elements: $(),    //elements that can be dropped on
 		last_active: [],
 		endName: "dropon",
+		// adds an element as a 'root' element
+		// this element might have events that we need to respond to
 		addElement: function( el ) {
 			//check other elements
 			for(var i =0; i < this._rootElements.length ; i++  ){
@@ -198,31 +219,41 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 			}else if(!this.dragging){
 				this.dragging = drag;
 				this.last_active = [];
-				this._elements = $();
+				//this._elements = $();
 			}
 			var el, 
 				drops, 
 				selector, 
-				sels, 
+				dropResponders, 
 				newEls = [],
 				dragging = this.dragging;
 			
-			
+			// go to each root element and look for drop elements
 			for(var i=0; i < this._rootElements.length; i++){ //for each element
 				el = this._rootElements[i]
+				
+				// gets something like {"": ["dropinit"], ".foo" : ["dropover","dropmove"] }
 				var drops = $.event.findBySelector(el, eventNames)
 
-				
-				for(selector in drops){ //find the selectors
-					sels = selector ? jQuery(selector, el) : [el];
-					for(var e= 0; e < sels.length; e++){ //for each found element, create a drop point
-						if( this.addCallbacks(sels[e], drops[selector], dragging) ){
-							newEls.push(sels[e])
+				// get drop elements by selector
+				for(selector in drops){ 
+					
+					
+					dropResponders = selector ? jQuery(selector, el) : [el];
+					
+					// for each drop element
+					for(var e= 0; e < dropResponders.length; e++){ 
+						
+						// add the callbacks to the element's Data
+						// there already might be data, so we merge it
+						if( this.addCallbacks(dropResponders[e], drops[selector], dragging) ){
+							newEls.push(dropResponders[e])
 						};
 					}
 				}
 			}
 			// once all callbacks are added, call init on everything ...
+			// todo ... init could be called more than once?
 			this.add(newEls, event, dragging)
 		},
 		// adds the drag callbacks object to the element or merges other callbacks ...
@@ -230,9 +261,9 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		// onlyNew lets only new elements add themselves
 		addCallbacks : function(el, callbacks, onlyNew){
 			
-			var origData = $.data(el,"_dragData");
+			var origData = $.data(el,"_dropData");
 			if(!origData){
-				$.data(el,"_dragData", new $.Drop(callbacks, el));
+				$.data(el,"_dropData", new $.Drop(callbacks, el));
 				//this._elements.push(el);
 				return true;
 			}else if(!onlyNew){
@@ -254,7 +285,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 				drop;
 			
 			while(i < newEls.length){
-				drop = $.data(newEls[i],"_dragData");
+				drop = $.data(newEls[i],"_dropData");
 				drop.callHandlers(this.lowerName+'init', newEls[i], event, drag)
 				if(drop._canceled){
 					newEls.splice(i,1)
@@ -280,10 +311,11 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 				responders = [],
 				self = this,
 				drag;
-			
+				
 			//what's still affected ... we can also move element out here
 			while( i < this._elements.length){
-				drag = $.data(this._elements[i],"_dragData");
+				drag = $.data(this._elements[i],"_dropData");
+				
 				if (!drag) {
 					this._elements.splice(i, 1)
 				}
@@ -338,7 +370,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		end: function( event, moveable ) {
 			var responder, la, endName = this.lowerName+'end';
 			for(var r =0; r<this._elements.length; r++){
-				$.data(this._elements[r],"_dragData").callHandlers(endName, null, event, moveable);
+				$.data(this._elements[r],"_dropData").callHandlers(endName, null, event, moveable);
 			}
 			//go through the actives ... if you are over one, call dropped on it
 			for(var i = 0; i < this.last_active.length; i++){
@@ -357,7 +389,7 @@ steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then
 		 */
 		clear: function() {
 		  this._elements.each(function(){
-		  	$.removeData(this,"_dragData")
+		  	$.removeData(this,"_dropData")
 		  })
 		  this._elements = $();
 		  delete this.dragging;

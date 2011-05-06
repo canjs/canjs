@@ -363,6 +363,9 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 						case scanner.eeLeft:
 							buff.push(insert_cmd, "(jQuery.EJS.text(", content, ")));");
 							break;
+						case scanner.eeLeft:
+							buff.push(insert_cmd, "(jQuery.EJS.text(", content, ")));");
+							break;
 						}
 						startTag = null;
 						empty();
