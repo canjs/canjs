@@ -11,7 +11,8 @@ var getArgs = function(args){
 		}
 	},
 	//used for namespacing
-	id = 0
+	id = 0,
+	expando = jQuery.expando;
 /**
  * @parent jQuery.Model
  * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/list/list.js
@@ -302,7 +303,7 @@ $.Class.extend("jQuery.Model.List",
 	 *     })
 	 */
 	bind : function(){
-		if(this.__events__ === undefined){
+		if(this[expando] === undefined){
 			this.bindings(this);
 			// we should probably remove destroyed models here
 		}
@@ -317,7 +318,7 @@ $.Class.extend("jQuery.Model.List",
 	 */
 	unbind : function(){
 		$.fn.unbind.apply($([this]),arguments);
-		if(this.__events__ === undefined){
+		if(this[expando] === undefined){
 			//console.log("unbinding all")
 			$(this).unbind(this._namespace)
 		}
@@ -346,14 +347,14 @@ $.Class.extend("jQuery.Model.List",
 			self = this;
 		//listen to events on this only if someone is listening on us, this means remove won't
 		//be called if we aren't listening for removes
-		if(this.__events__ !== undefined){
+		if(this[expando] !== undefined){
 			this.bindings(args);
 		}
 		
 		this._changed = true;
 		var res = push.apply( this, args )
 		//do this first so we could prevent?
-		if(args.length){
+		if( this[expando] && args.length ){
 			$([this]).trigger("add",[args]);
 		}
 		

@@ -17,7 +17,7 @@ For example, the following controller:
       }
     })
     
-creates a <code>jQuery.fn.my_tabs</code> method that you can use like:
+creates a <code>jQuery.fn.my_widget</code> method that you can use like:
 
     // create my_widget on each .thing
     $(".thing").my_widget({message : "Hello"}) 

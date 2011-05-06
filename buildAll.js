@@ -75,6 +75,7 @@ steal.plugins('steal/build/pluginify','steal/build/apps','steal/build/scripts').
 		}
 	})
 	
+	steal.File("jquery/dist/standalone").mkdir();
 	steal.File("jquery/dist/standalone/dependencies.json").save($.toJSON(files));
 	//get each file ...
 	print("Creating jquery/dist/standalone/")

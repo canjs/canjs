@@ -35,7 +35,7 @@ $.Controller.extend("jQuery.Tie",{
 		this.bind(inst, attr, "attrChanged");
 		
 		//destroy this controller if the model instance is destroyed
-		this.bind(inst, "destroyed", "destroy");
+		this.bind(inst, "destroyed", "modelDestroyed");
 		
 		var value = inst.attr(attr);
 		//set the value
@@ -55,6 +55,9 @@ $.Controller.extend("jQuery.Tie",{
 			this.setVal(val);
 			this.lastValue = val;
 		}
+	},
+	modelDestroyed : function(){
+		this.destroy()
 	},
 	setVal : function(val){
 		if (this.type) {
@@ -77,7 +80,12 @@ $.Controller.extend("jQuery.Tie",{
 	},
 	destroy : function(){
 		this.inst = null;
-		this._super();
+		if(! this._destroyed ){
+			// assume it's because of the https://github.com/jupiterjs/jquerymx/pull/20
+			// problem and don't throw an error
+			this._super();
+		}
+		
 	}
 });
 

@@ -9,8 +9,8 @@
             .error_text { color: red; font-size: 10px;}
             td {padding: 3px;}
 			.handle {
-				width: 60px;
-				height: 40px;
+				width: 98px;
+				height: 38px;
 				border: dashed 1px red;
 				cursor : pointer;
 			}
@@ -23,38 +23,45 @@
 				margin-top: 50px;
 			}
 			#ondoc {
-				border: solid 5px red;
-				padding: 20px;
-				height: 300px;
-				width: 600px;
-				margin: 10px;
+				border: solid 5px green;
+				padding: 0px;
+				height: 240px;
+				width: 420px;
+				
+			}
+			#demo-html{
+				padding: 30px 0px 0px 30px;
 			}
         </style>
 	</head>
 	<body>
 
-		
-		<div id="ondoc">
-	    	<div id='handle' class='handle'>handle</div>
-			<div id='handle2' class='handle'>handle</div>
-			<div id='handle3' class='handle'>handle</div>
-	    </div>
+<div id='demo-html'>
+<div id="ondoc">
+	<div id='handle' class='handle'>top left</div>
+	<div id='handle2' class='handle'>horizontal</div>
+	<div id='handle3' class='handle'>vertical</div>
+	<div id='handle4' class='handle'>horizontal vertical</div>
+</div>
+</div>
 		<script type='text/javascript' 
-                src='../../../../steal/steal.js?steal[app]=jquery/event/drag/step&steal[env]=development'
-                package='main.js'
-                compress='false'>   
+                src='../../../../steal/steal.js?jquery/event/drag/step'>   
         </script>
-		<script type='text/javascript'>
-			$("#ondoc #handle").live("draginit", function(ev, drag){
-				drag.step(40,$("#ondoc"))
-			})
-			$("#ondoc #handle2").live("draginit", function(ev, drag){
-				drag.step(40,$("#ondoc"),"x")
-			})
-			$("#ondoc #handle3").live("draginit", function(ev, drag){
-				drag.step(40,$("#ondoc"),"y")
-			})
-		</script>
+<script type='text/javascript' id='demo-source'>
+$("#ondoc")
+  .delegate('#handle',"draginit", function(ev, drag){
+	drag.step(40,$("#ondoc"))
+  })
+  .delegate('#handle2',"draginit", function(ev, drag){
+	drag.step(40,$("#ondoc"),"x")
+  })
+  .delegate('#handle3',"draginit", function(ev, drag){
+	drag.step(40,$("#ondoc"),"y")
+  })
+  .delegate('#handle4',"draginit", function(ev, drag){
+	drag.step(40,$("#ondoc"),"xy")
+  })
+</script>
 		
 		
 	</body>

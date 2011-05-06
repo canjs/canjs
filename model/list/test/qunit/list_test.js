@@ -61,4 +61,41 @@ test("remove", function(){
 test("list from wrapMany", function(){
 	var people = Person.wrapMany([{id: 1}, {id: 2}]);
 	ok(people.destroy, "we can destroy a list")
+});
+
+test("events - add", 4, function(){
+	var list = new Person.List;
+	list.bind("add", function(ev, items){
+		ok(1, "add called");
+		equals(items.length, 1, "we get an array")
+	});
+	
+	var person = new Person({id: 1, name: "alex"});
+	
+	
+	list.push(person);
+	
+	// check that we are listening to updates on person ...
+	
+	ok( $(person).data("events"), "person has events" );
+	
+	list.unbind("add");
+	
+	ok( !$(person).data("events"), "person has no events" );
+	
+});
+
+test("events - update", function(){
+	var list = new Person.List;
+	list.bind("update", function(ev, updated){
+		ok(1, "update called");
+		ok(person === updated, "we get the person back");
+		
+		equals(updated.name, "Alex", "got the right name")
+	});
+	
+	var person = new Person({id: 1, name: "justin"});
+	list.push(person);
+	
+	person.updated({name: "Alex"})
 })
