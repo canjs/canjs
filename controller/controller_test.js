@@ -146,7 +146,7 @@ test("parameterized actions", function(){
 test("windowresize", function(){
 	var called = false;
 	jQuery.Controller.extend("WindowBind",{
-		"windowresize" : function() {
+		"{window} resize" : function() {
 			called = true;
 		}
 	})
@@ -211,5 +211,17 @@ test("objects in action", function(){
 	$("#qunit-test-area").html("");
 	
 });
+
+test("dot",function(){
+	$.Controller("Dot",{
+		"foo.bar" : function(){
+			ok(true,'called')
+		}
+	});
+	
+	var ta = $("<div/>").appendTo( $("#qunit-test-area") );
+	ta.dot().trigger("foo.bar");
+	$("#qunit-test-area").html("");
+})
 
 });
