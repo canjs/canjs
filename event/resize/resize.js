@@ -95,7 +95,7 @@ steal.plugins('jquery/event').then(function( $ ) {
 						windowHeight = height;
 						clearTimeout(timer)
 						timer = setTimeout(function() {
-							win.triggerHandler("resize");
+							win.trigger("resize");
 						}, 1);
 
 					}
