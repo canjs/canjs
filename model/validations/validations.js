@@ -147,7 +147,7 @@ $.extend($.Model, {
     */
    validatePresenceOf: function(attrNames, options) {
       validate.call(this, attrNames, options, function(value) {
-         if(typeof value == 'undefined' || value == "")
+         if(typeof value == 'undefined' || value == "" || value === null)
             return "can't be empty";
       });
    },
