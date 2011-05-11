@@ -11,6 +11,21 @@ load('steal/rhino/steal.js');
 steal(	'//steal/generate/generate',
 		'//steal/generate/system',	
 function(steal){
+	var upper = function(parts){
+		for(var i =0; i < parts.length; i++){
+			parts[i] = parts[i].charAt(0).toUpperCase()+parts[i].substr(1)
+		}
+		return parts
+	}
+	
+	if(_args[0].charAt(0) !== _args[0].charAt(0).toUpperCase()){
+		var caps = upper( _args[0].split(/_|-/) ).join(''),
+			name = upper(caps.split("/")).join('.');
+		
+		print("  Creating "+name);
+		_args[0] = name;
+	}
+	
 	var md = steal.generate.convert(_args[0]),
 		path =  _args[0].toLowerCase().replace('.',"/");
 	md.path_to_steal = new steal.File(path).pathToRoot()
