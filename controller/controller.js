@@ -839,7 +839,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		var c = controller.Class;
 
 		// document controllers use their name as an ID prefix.
-		if ( c.onDocument && !/^Main(Controller)?$/.test(c.shortName) ) { //prepend underscore name if necessary
+		if ( c.onDocument && !/^Main(Controller)?$/.test(c.shortName) && el === controller.element[0]) { //prepend underscore name if necessary
 			selector = selector ? "#" + c._shortName + " " + selector : "#" + c._shortName;
 		}
 		return binder(el, event, shifter(cb), selector);
