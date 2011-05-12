@@ -223,6 +223,14 @@ steal.plugins("jquery").then(function( $ ) {
 				}
 			}
 			return deferreds;
+		},
+		// gets the useful part of deferred
+		// this is for Models and $.ajax that give arrays
+		usefulPart = function(resolved){
+			return $.isArray(resolved) && 
+					resolved.length ===3 && 
+					resolved[1] === 'success' ?
+						resolved[0] : resolved
 		};
 
 	$view = $.View = function( view, data, helpers, callback ) {
@@ -251,12 +259,12 @@ steal.plugins("jquery").then(function( $ ) {
 				
 				// make data look like the resolved deferreds
 				if (isDeferred(data)) {
-					data = resolved;
+					data = usefulPart(resolved);
 				}
 				else {
 					for (var prop in data) {
 						if (isDeferred(data[prop])) {
-							data[prop] = objs.shift();
+							data[prop] = usefulPart(objs.shift());
 						}
 					}
 				}

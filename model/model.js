@@ -517,7 +517,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 *         return $.ajax({
 			 *         	 url: '/things.json',
 			 *           type: 'get',
-			 *           dataType: 'json models',
+			 *           dataType: 'json thing.models',
 			 *           data: params,
 			 *           success: success,
 			 *           error: error})
@@ -561,10 +561,10 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 *         var self = this,
 			 *             id = params.id;
 			 *         delete params.id;
-			 *         $.get("/things/"+id+".json",
+			 *         return $.get("/things/"+id+".json",
 			 *           params,
 			 *           success,
-			 *           "json model")
+			 *           "json thing.model")
 			 *       }
 			 *     },{})
 			 * 
