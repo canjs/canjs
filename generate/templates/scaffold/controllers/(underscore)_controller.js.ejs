@@ -15,7 +15,7 @@ $.Controller.extend('<%=name.replace("Models","Controllers")%>',
  /**
  * When the page loads, gets all <%= plural %> to be displayed.
  */
- load: function(){
+ "{window} load": function(){
 	if(!$("#<%= underscore %>").length){
 	 $(document.body).append($('<div/>').attr('id','<%= underscore %>'));
 		 <%= name %>.findAll({}, this.callback('list'));
