@@ -59,6 +59,21 @@ test("basic range", function(){
 		console.log(rects)
 	});
 
+	test("multiline rects", function(){
+		$("#qunit-test-area")
+			.html("<pre id='1'><code>&lt;script type='text/ejs' id='recipes'>\n"+
+				"&lt;% for(var i=0; i &lt; recipes.length; i++){ %>\n"+
+				"  &lt;li>&lt;%=recipes[i].name %>&lt;/li>\n"+
+				"&lt;%} %>\n"+
+				"&lt;/script></code></pre>");
+		$('#1').selection(3,56);
+		var range = $.Range.current(),
+			rects = range.rects();
+		equals(rects.length, 2, "2 rects found")	
+		ok(rects[1].width, "rect has width")
+		console.log(rects)
+	});
+
 	test("compare", function(){
 		$("#qunit-test-area")
 			.html("<p id='1'>012<span>34</span>56789</p>");
