@@ -2,17 +2,19 @@
 @page jquery.controller.listening Listening To Events
 @parent jQuery.Controller
 
-Controllers organize event handlers and make listening to 
-events really easy.
+Controllers make creating and tearing down event handlers extremely
+easy.  The tearingdown of event handlers is especially important
+in preventing memory leaks in long lived applications.
 
 ## Automatic Binding
 
 When a [jQuery.Controller.prototype.setup new controller is created],
-contoller checks its methods for functions that are named like
-an event handler.  It automatically binds these functions to the 
-controller's [jQuery.Controller.prototype.element element] with event delegation.  When
+contoller checks its prototype methods for functions that are named like 
+event handlers.  It binds these functions to the 
+controller's [jQuery.Controller.prototype.element element] with 
+event delegation.  When
 the controller is destroyed (or it's element is removed from the page), controller
-will unbind all its event handlers automatically.
+will unbind its event handlers automatically.
 
 For example, each of the following controller's functions will automatically
 bound:
@@ -20,14 +22,14 @@ bound:
     $.Controller("Crazy",{
     
       // listens to all clicks on this element
-      "click" : function(){},
+      "click" : function(el, ev){},
       
       // listens to all mouseovers on 
       // li elements withing this controller
-      "li mouseover" : function(){}
+      "li mouseover" : function(el, ev){}
       
       // listens to the window being resized
-      "windowresize" : function(){}
+      "{window} resize" : function(window, ev){}
     })
 
 Controller will bind function names with spaces, standard DOM events, and 
@@ -37,7 +39,8 @@ In general, Controller will know automatically when to bind event handler functi
 one case - event names without selectors that are not in $.event.special.
 
 But to correct for this, you just need to add the 
-function to the listensTo property.  Here's how:
+function to the [jQuery.Controller.static.listensTo listensTo] 
+property.  Here's how:
 
 	 $.Controller.extend("MyShow",{
 	   listensTo: ["show"]
@@ -65,31 +68,106 @@ as parameters.  <b>this</b> refers to the controller instance.  For example:
       }
     })
 
-## Parameterized Event Bindings
+## Templated Event Bindings
 
-Controller lets you parameterize event names and selectors.  The following 
-makes 2 buttons.  One says hello on click, the other on mouseenter.
+One of Controller's most powerful features is templated event 
+handlers.  You can parameterize the event name,
+the selector, or event the root element.
 
-    $.Controller("Hello",{
-      "{helloEvent}" : function(){
-        alert('hello')
+### Templating event names and selectors:
+
+Often, you want to make a widget's behavior 
+configurable. A common example is configuring which event
+a menu should show a sub-menu (ex: on click or mouseenter).  The 
+following controller lets you configure when a menu should show 
+sub-menus:
+
+The following makes two buttons.  One says hello on click, 
+the other on a 'tap' event.
+
+    $.Controller("Menu",{
+      "li {showEvent}" : function(el){
+        el.children('ul').show()
       }
     })
     
-    $("#clickMe").hello({helloEvent : "click"});
-    $("#touchMe").hello({helloEvent : "mouseenter"});
+    $("#clickMe").menu({showEvent : "click"});
+    $("#touchMe").menu({showEvent : "mouseenter"});
 
-You can parameterize any part of the method name.  The following makes two
-lists.  One listens for clicks on divs, the other on lis.
+$.Controller replaces value in <code>{}</code> with 
+values in a 
+controller's [jQuery.Controller.prototype.options options]. This means
+we can easily provide a default <code>showEvent</code> value and create
+a menu without providing a value like:
 
-    $.Controller("List",{
-      "{listItem} click" : function(){
-        //do something!
+    $.Controller("Menu",
+    {
+      defaults : {
+        showEvent : "click"
+      }
+    },
+    {
+      "li {showEvent}" : function(el){
+        el.children('ul').show()
+      }
+    });
+    
+    $("#clickMe").menu(); //defaults to using click
+
+Sometimes, we might might want to configure our widget to 
+use different elements.  The following makes the menu widget's
+<code>button</code> elements configurable:
+
+    $.Controller("Menu",{
+      "{button} {showEvent}" : function(el){
+        el.children('ul').show()
       }
     })
+
+    $('#buttonMenu').menu({button: "button"});
+
+### Templating the root element.
+
+Finally, controller lets you bind to objects outside 
+of the [jQuery.Controller.prototype.element controller's element].
+
+The following listens to clicks on the window:
+
+    $.Controller("HideOnClick",{
+      "{window} click" : function(){
+        this.element.hide()
+      }
+    })
+
+The following listens to Todos being created:
+
+    $.Controller("NewTodos",{
+      "{App.Models.Todo} created" : function(Todo, ev, newTodo){
+        this.element.append("newTodos.ejs", newTodo)
+      }
+    });
+
+But instead of making NewTodos only work with the Todo model,
+we can make it configurable:
+
+    $.Controller("Newbie",{
+      "{model} created" : function(Model, ev, newItem){
+        this.element.append(this.options.view, newItem)
+      }
+    });
+
+    $('#newItems').newbie({
+      model: App.Models.Todo,
+      view: "newTodos.ejs"
+    })
     
-    $("#divs").list({listItem : "div"});
-    $("#lis").list({listItem : "li"});
+### How Templated events work
+
+When looking up a value to replace <code>{}</code>,
+controller first looks up the item in the options, then it looks
+up the value in the window object.  It does not use eval to look up the
+object.  Instead it uses [jQuery.String.getObject].
+
 
 ## Subscribing to OpenAjax messages and custom bindings
 
