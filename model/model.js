@@ -152,10 +152,10 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * Let's see how that might look without a model:
 	 * 
 	 * @codestart
-	 * $.Controller.extend("MyApp.Controllers.Tasks",{onDocument: true},
+	 * $.Controller("Tasks",
 	 * {
 	 *   // get tasks when the page is ready 
-	 *   ready: function() {
+	 *   init: function() {
 	 *     $.get('/tasks.json', this.callback('gotTasks'), 'json')
 	 *   },
 	 *  |* 
@@ -196,23 +196,23 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * a good model does for a controller before we learn how to make one:
 	 * 
 	 * @codestart
-	 * $.Controller.extend("MyApp.Controllers.Tasks",{onDocument: true},
+	 * $.Controller("Tasks",
 	 * {
-	 *   load: function() {
-	 *     Task.({},this.callback('list'))
+	 *   init: function() {
+	 *     Task.findAll({}, this.callback('tasks'));
 	 *   },
-	 *   list: function( tasks ) {
-	 *     $("#tasks").html(this.view(tasks))
+	 *   list : function(todos){
+	 *     this.element.html("tasks.ejs", todos );
 	 *   },
 	 *   ".task click" : function( el ) {
 	 *     el.model().update({complete: true},function(){
 	 *       el.remove();
 	 *     });
 	 *   }
-	 * })
+	 * });
 	 * @codeend
 	 * 
-	 * In views/tasks/list.ejs
+	 * In tasks.ejs
 	 * 
 	 * @codestart html
 	 * &lt;% for(var i =0; i &lt; tasks.length; i++){ %>
@@ -227,7 +227,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * also made our controller completely understandable.  Now lets take a look at the model:
 	 * 
 	 * @codestart
-	 * $.Model.extend("Task",
+	 * $.Model("Task",
 	 * {
 	 *  findAll: "/tasks.json",
 	 *  update: "/tasks/{id}.json"
@@ -239,15 +239,16 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * })
 	 * @codeend
 	 * 
-	 * There, much better!  Now you have a single place where you can organize Ajax functionality and
-	 * wrap the data that it returned.  Lets go through each bolded item in the controller and view.<br/>
+	 * Much better!  Now you have a single place where you 
+	 * can organize Ajax functionality and
+	 * wrap the data that it returned.  Lets go through 
+	 * each bolded item in the controller and view.
 	 * 
 	 * ### Task.findAll
 	 * 
-	 * The findAll function requests data from "/tasks.json".  When the data is returned, it it is run through
-	 * the "wrapMany" function before being passed to the success callback.<br/>
-	 * If you don't understand how the callback works, you might want to check out 
-	 * [jQuery.Model.static.wrapMany wrapMany] and [jQuery.Class.static.callback callback].
+	 * The findAll function requests data from "/tasks.json".  When the data is returned, 
+	 * it converted by the [jQuery.Model.static.models models] function before being 
+	 * passed to the success callback.
 	 * 
 	 * ### el.model
 	 * 
@@ -292,7 +293,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * 
 	 * Learn how to handle multiple instances with ease.
 	 * 
-	 *     $.Model.List.extend("Task.List",{
+	 *     $.Model.List("Task.List",{
 	 *       destroyAll : function(){
 	 *         var ids = this.map(function(c){ return c.id });
 	 *         $.post("/destroy",
@@ -316,7 +317,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * 
 	 * Validate your model's attributes.
 	 * 
-	 *     $.Model.extend("Contact",{
+	 *     $.Model("Contact",{
 	 *     init : function(){
 	 *         this.validate("birthday",function(){
 	 *             if(this.birthday > new Date){
@@ -649,7 +650,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * The following converts dueDates to JavaScript dates:
 		 * 
 		 * @codestart
-		 * $.Model.extend("Contact",{
+		 * $.Model("Contact",{
 		 *   attributes : { 
 		 *     birthday : 'date'
 		 *   },
@@ -671,6 +672,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		attributes: {},
 		/**
 		 * @function wrap
+		 * @hide
 		 * @tag deprecated
 		 * __warning__ : wrap is deprecated in favor of [jQuery.Model.static.model].  They 
 		 * provide the same functionality; however, model works better with Deferreds.
@@ -768,6 +770,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		},
 		/**
 		 * @function wrapMany
+		 * @hide
 		 * @tag deprecated
 		 * 
 		 * __warning__ : wrapMany is deprecated in favor of [jQuery.Model.static.models].  They 
@@ -776,7 +779,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * $.Model.wrapMany converts a raw array of JavaScript Objects into an array (or [jQuery.Model.List $.Model.List]) of model instances.
 		 * 
 		 *     // a Recipe Model wi
-		 *     $.Model.extend("Recipe",{
+		 *     $.Model("Recipe",{
 		 *       squareId : function(){
 		 *         return this.id*this.id;
 		 *       }
@@ -931,7 +934,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * For example, it's common in .NET to use Id.  Your model might look like:
 		 * 
 		 * @codestart
-		 * $.Model.extend("Friends",{
+		 * $.Model("Friends",{
 		 *   id: "Id"
 		 * },{});
 		 * @codeend
@@ -1013,7 +1016,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * Setup should never be called directly.
 		 * 
 		 * @codestart
-		 * $.Model.extend("Recipe")
+		 * $.Model("Recipe")
 		 * var recipe = new Recipe({foo: "bar"});
 		 * recipe.foo //-> "bar"
 		 * recipe.attr("foo") //-> "bar"
@@ -1059,7 +1062,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * model/validations plugin.
 		 * 
 		 * @codestart
-		 * $.Model.extend("Task",{
+		 * $.Model("Task",{
 		 *   init : function(){
 		 *     this.validatePresenceOf("dueDate")
 		 *   }
@@ -1111,7 +1114,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * getters if available.
 		 * 
 		 * @codestart
-		 * $.Model.extend("Recipe")
+		 * $.Model("Recipe")
 		 * var recipe = new Recipe();
 		 * recipe.attr("foo","bar")
 		 * recipe.foo //-> "bar"
@@ -1125,7 +1128,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * with the value and is expected to return the converted value.
 		 * 
 		 * @codestart
-		 * $.Model.extend("Recipe",{
+		 * $.Model("Recipe",{
 		 *   setCreatedAt : function(raw){
 		 *     return Date.parse(raw)
 		 *   }
@@ -1144,7 +1147,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * call success with the converted value.  For example:
 		 * 
 		 * @codestart
-		 * $.Model.extend("Recipe",{
+		 * $.Model("Recipe",{
 		 *   setTitle : function(title, success, error){
 		 *     $.post(
 		 *       "recipe/update/"+this.id+"/title",
@@ -1186,7 +1189,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * every time the attribute value changes.  For example:
 		 * 
 		 * @codestart
-		 * $.Model.extend("School")
+		 * $.Model("School")
 		 * var school = new School();
 		 * school.bind("address", function(ev, address){
 		 *   alert('address changed to '+address);
@@ -1197,7 +1200,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		 * You can also bind to attribute errors.
 		 * 
 		 * @codestart
-		 * $.Model.extend("School",{
+		 * $.Model("School",{
 		 *   setName : function(name, success, error){
 		 *     if(!name){
 		 *        error("no name");
@@ -1579,7 +1582,8 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 * @page jquery.model.services Service APIs
 	 * @parent jQuery.Model
 	 * 
-	 * Models provide an abstract API for connecting to your Services.  By implementing static:
+	 * Models provide an abstract API for connecting to your Services.  
+	 * By implementing static:
 	 * 
 	 *  - [jQuery.Model.static.findAll] 
 	 *  - [jQuery.Model.static.findOne] 
@@ -1587,8 +1591,58 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 	 *  - [jQuery.Model.static.update] 
 	 *  - [jQuery.Model.static.destroy]
 	 *  
-	 * You can pass a model class to widgets and the widgets can interface with the
-	 * model.  This prevents the need for every widget to be configured with the ajax functionality
-	 * necessary to make a request to your services.
+	 * You can find more details on how to implement each method.
+	 * Typically, you can just use templated service urls. But if you need to
+	 * implement these methods yourself, the following
+	 * is a useful quick reference:
+	 * 
+	 * ### create(attrs, success([attrs]), error()) -> deferred
+	 *  
+	 *  - <code>attrs</code> - an Object of attribute / value pairs
+	 *  - <code>success([attrs])</code> - Create calls success when the request has completed 
+	 *    successfully.  Success can be called back with an object that represents
+	 *    additional properties that will be set on the instance. For example, the server might 
+	 *    send back an updatedAt date.
+	 *  - <code>error</code> - Create should callback error if an error happens during the request
+	 *  - <code>deferred</code> - A deferred that gets resolved to any additional attrs
+	 *    that might need to be set on the model instance.
+	 * 
+	 * 
+	 * ### findAll( params, success(items), error) -> deferred
+	 * 
+	 * 
+	 *  - <code>params</code> - an Object that filters the items returned
+	 *  - <code>success(items)</code> - success should be called with an Array of Model instances.
+	 *  - <code>error</code> - called if an error happens during the request
+	 *  - <code>deferred</code> - A deferred that gets resolved to the list of items
+	 *          
+	 * ### findOne(params, success(items), error) -> deferred
+	 *          
+	 *  - <code>params</code> - an Object that filters the item returned
+	 *  - <code>success(item)</code> - success should be called with a model instance.
+	 *  - <code>error</code> - called if an error happens during the request
+	 *  - <code>deferred</code> - A deferred that gets resolved to a model instance
+	 *        
+	 * ### update(id, attrs, success([attrs]), error()) -> deferred
+	 *  
+	 *  - <code>id</code> - the id of the instance you are updating
+	 *  - <code>attrs</code> - an Object of attribute / value pairs
+	 *  - <code>success([attrs])</code> - Call success when the request has completed 
+	 *    successfully.  Success can be called back with an object that represents
+	 *    additional properties that will be set on the instance. For example, the server might 
+	 *    send back an updatedAt date.
+	 *  - <code>error</code> - Callback error if an error happens during the request
+	 *  - <code>deferred</code> - A deferred that gets resolved to any additional attrs
+	 *      that might need to be set on the model instance.
+	 *     
+	 * ### destroy(id, success([attrs]), error()) -> deferred
+	 *  
+	 *  - <code>id</code> - the id of the instance you are destroying
+	 *  - <code>success([attrs])</code> - Calls success when the request has completed 
+	 *      successfully.  Success can be called back with an object that represents
+	 *      additional properties that will be set on the instance. 
+	 *  - <code>error</code> - Create should callback error if an error happens during the request
+	 *  - <code>deferred</code> - A deferred that gets resolved to any additional attrs
+	 *      that might need to be set on the model instance.
 	 */
 });
