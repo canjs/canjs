@@ -177,33 +177,41 @@ $event.special["default"] = {
 // overwrite trigger to allow default types
 var oldTrigger = $event.trigger,
 	triggerDefault = $event.special['default'].triggerDefault,
-	checkAndRunDefaults = $event.special['default'].checkAndRunDefaults;
-$event.trigger =  function defaultTriggerer( event, data, elem, bubbling){
-    //always need to convert here so we know if we have default actions
-    var type = event.type || event
-
-    if ( !bubbling ) {
-		event = typeof event === "object" ?
-			// jQuery.Event object
-			event[$.expando] ? event :
-			// Object literal
-			jQuery.extend( jQuery.Event(type), event ) :
-			// Just the event type (string)
-			jQuery.Event(type);
-
-		if ( type.indexOf("!") >= 0 ) {
-			event.type = type = type.slice(0, -1);
-			event.exclusive = true;
+	checkAndRunDefaults = $event.special['default'].checkAndRunDefaults,
+	oldData = jQuery._data;
+	
+$._data = function(elem, name, data){
+	// always need to supply a function to call for handle
+	if(!data && name === "handle"){
+		var func = oldData.apply(this, arguments);
+		return function(e){
+			// Discard the second event of a jQuery.event.trigger() and
+			// when an event is called after a page has unloaded
+			return typeof jQuery !== "undefined" && (!e || jQuery.event.triggered !== e.type) ?
+				jQuery.event.handle.apply( this, arguments ) :
+				undefined;
 		}
-        event._defaultActions = []; //set depth for possibly reused events
-    }
+	}
+	return oldData.apply(this, arguments)
+}
+
+$event.trigger =  function defaultTriggerer( event, data, elem, onlyHandlers){
+	// Event object or event type
+	var type = event.type || event,
+		namespaces = [],
+
+	// Caller can pass in an Event, Object, or just an event type string
+	event = typeof event === "object" ?
+		// jQuery.Event object
+		event[ jQuery.expando ] ? event :
+		// Object literal
+		new jQuery.Event( type, event ) :
+		// Just the event type (string)
+		new jQuery.Event( type );
+		
+    event._defaultActions = []; //set depth for possibly reused events
 	
-	
-	
-	triggerDefault(event, elem);
-	oldTrigger.call($.event, event, data, elem, bubbling);
-	checkAndRunDefaults(event, elem);
-	
+	oldTrigger.call($.event, event, data, elem, onlyHandlers);
 };
 	
 	
