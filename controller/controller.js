@@ -64,6 +64,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			return $.data(el, "controllers", data)
 		};
 	/**
+	 * @class jQuery.Controller
 	 * @tag core
 	 * @plugin jquery/controller
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/controller/controller.js

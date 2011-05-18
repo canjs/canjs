@@ -61,6 +61,15 @@ steal.plugins('jquery').then(function( $ ) {
 		 * 
 		 */
 		str = $.String = $.extend( $.String || {} , {
+			/**
+			 * @function
+			 * Gets an object from a string.
+			 * @param {String} name the name of the object to look for
+			 * @param {Array} [roots] an array of root objects to look for the name
+			 * @param {Boolean} [add] true to add missing objects to 
+			 *  the path. false to remove found properties. undefined to 
+			 *  not modify the root object
+			 */
 			getObject : getObject,
 			/**
 			 * Capitalizes a string
