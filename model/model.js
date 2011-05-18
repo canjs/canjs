@@ -763,7 +763,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			}
 			return new this(
 				// checks for properties in an object (like rails 2.0 gives);
-				isObject(attributes[this.singularName]) || 
+				isObject(attributes[this._shortName]) ||
 				isObject(attributes.data) || 
 				isObject(attributes.attributes) || 
 				attributes);
