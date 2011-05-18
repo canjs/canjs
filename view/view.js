@@ -205,7 +205,7 @@ steal.plugins("jquery").then(function( $ ) {
 
 	var $view, render, checkText, get, getRenderer
 		isDeferred = function(obj){
-			return obj && $.isFunction(obj.promise) // check if obj is a $.Deferred
+			return obj && $.isFunction(obj.always) // check if obj is a $.Deferred
 		},
 		// gets an array of deferreds from an object
 		// this only goes one level deep
