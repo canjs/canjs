@@ -87,7 +87,7 @@ steal.plugins('jquery/dom/range','jquery/controller','jquery/event/livehack').th
 			start = function(){
 				ready = true;
 				var startEv = event.selection.preventDefault ? $.Event('selectionStart') : ev;
-				startEv.target = startEv.target || ev.target;
+				var startEv = $.extend(ev, startEv)
 				$.each(event.find(delegate, ["selectionStart"], selector), function(){
 					this.call(el, startEv, startRange)
 				});
