@@ -567,7 +567,7 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 			var funcName, ready, cls = this.Class;
 
 			//want the raw element here
-			element = element[0] || element;
+			element = element.jquery ? element[0] : element;
 
 			//set element and className on element
 			this.element = $(element).addClass(cls._fullName);

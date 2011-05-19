@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>selection</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+			.resizable {border: solid 1px red;
+			
+			}
+			body  {
+				margin: 0px;
+				padding: 0px;
+			}
+			h1 {
+				border: solid 2px green;
+			}
+			#content {
+				border: solid 2px red;
+			}
+			#out {
+				padding: 10px;
+			}
+			#split {
+				border: solid 1px gray;
+			}
+			h3 {
+				background-color: yellow;
+				padding: 0px;
+				margin: 0px;
+			}
+			.top {
+				border: dotted 1px orange;
+			}
+			
+        </style>
+		<link type="text/css" href="../../../mxui/data/grid/grid.css" rel="stylesheet" />
+	</head>
+	<body>
+		<div id='out'>
+			<h1>Here is some content that can fold over the page strangely</h1>
+			<div id='content'>
+				Some more content
+				<div id='split'>
+					<div class='panel' style="width:200px;position:absolute;left:0;" id='leftPanel'>
+						<h3>I am above the splitter.</h3>
+						<div id='vsplit'>
+							<div class='top'>
+								TOP
+							</div>
+							<div class='bottom'>
+								Bottom
+							</div>
+						</div>
+					</div>
+					<div class='panel' style="width:200px;position:absolute;left:200;">
+						<div id='forever'></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type='text/javascript' 
+                src='../../../steal/steal.js'>   
+
+			
+			
+        </script>
+		<script type='text/ejs' id='rowEjs'>
+			<td><%= name %></td>
+			<td><%= birthday %></td>
+			<td><%= foo %></td>
+		</script>
+		<script type='text/javascript'>
+				steal.plugins('mxui/data/grid','mxui/layout/split',
+					'jquery/dom/fixture').then(function(){
+		
+		$('#content').mxui_layout_fill({
+			parent : $(document.body)
+		})
+		
+		
+		$('#split').mxui_layout_fill({
+			parent : $('#content')
+		}).mxui_layout_split({ direction: "vertical", panelClass: "panel" })
+		
+		
+		$('#vsplit').mxui_layout_fill({
+			parent : $('#leftPanel')
+		}).mxui_layout_split({ direction: "horizontal" });
+		
+		
+			
+			$.Model('Thing',{
+				attributes : {birthday: "date"}
+			},{})
+			$.fixture.make('thing', 1000, function(i){
+				return {
+					id: i,
+					name : "thing "+i,
+					birthday : Math.round(new Date()*Math.random()),
+					foo : "bar"
+				}
+			})
+			
+			
+			
+			// we need to also provide the grid with data ...
+
+			var paramsScroll = new Mxui.Data({limit : 50, offset: 0})
+			
+			// Forever Scroll
+			$("#forever").mxui_data_grid({
+				model : Thing,
+				params : paramsScroll,
+				columns: {
+					name: "Name",
+					birthday: "Birthday",
+					foo : "Thisisaverylongtitle"
+				},
+				row : "rowEjs",
+				offsetEmpties: false
+			})
+			
+			$("#forever .scrollBody").bind("scroll", function(){
+				if(this.clientHeight+this.scrollTop + 70 >= this.scrollHeight && !paramsScroll.updating){
+					
+					paramsScroll.attr('offset', paramsScroll.offset + 30)
+				}
+			})
+		
+		
+	}).start()
+			
+		</script>
+	</body>
+</html>

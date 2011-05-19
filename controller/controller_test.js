@@ -224,4 +224,16 @@ test("dot",function(){
 	$("#qunit-test-area").html("");
 })
 
+// HTMLFormElement[0] breaks
+test("the right element", 1, function(){
+	$.Controller('FormTester',{
+		init : function(){
+			equals(this.element[0].nodeName.toLowerCase(), "form" )
+		}
+	})
+	$("<form><input name='one'/></form>").appendTo( $("#qunit-test-area") )
+		.form_tester();
+	$("#qunit-test-area").html("")
+})
+
 });
