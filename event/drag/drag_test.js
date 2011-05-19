@@ -184,7 +184,9 @@ test("dragdown" , function(){
 		var offset2 = $('#dragger').offset();
 		equals(offset.top+20, offset2.top, "top")
 		equals(offset.left+20, offset2.left, "left")
-		ok(draginpfocused, "First input was allowed to be focused correctly");
+		// IE doesn't respect preventDefault on text inputs (http://www.quirksmode.org/dom/events/click.html)
+		if(!$.browser.msie)
+			ok(draginpfocused, "First input was allowed to be focused correctly");
 		//ok(!dragnopreventfocused, "Second input was not allowed to focus");
 		start();
 	})

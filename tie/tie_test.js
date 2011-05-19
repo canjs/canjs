@@ -78,7 +78,6 @@ steal
 		person1.attr("age",7)
 		ok(!foo._destroyed, "Foo is not destroyed");
 		ok(tie._destroyed, "Tie is destroyed")
-		console.log("done")
 	})
 	
 	test("removing html element removes the tie", function() {
