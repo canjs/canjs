@@ -44,6 +44,11 @@ steal.plugins('jquery/event').then(function( $ ) {
 	 * an element with the first resize event 
 	 * handler.  There it will move the event in the opposite direction, calling the element's
 	 * children's resize event handlers.
+	 *
+	 * If your intent is to call resize without bubbling and only trigger child element's handlers,
+	 * use the following:
+	 *
+	 *     $("#foo").trigger("resize", false);
 	 * 
 	 * ## Stopping Children Updates
 	 * 
@@ -106,9 +111,10 @@ steal.plugins('jquery/event').then(function( $ ) {
 				if ( resizeCount === 0 ) {
 					// prevent others from doing what we are about to do
 					resizeCount++;
-
+					var where = data === false ? ev.target : this
+					console.log(where, data);
 					//trigger all this element's handlers
-					$.event.handle.call(this, ev);
+					$.event.handle.call(where, ev);
 					if ( ev.isPropagationStopped() ) {
 						resizeCount--;
 						return;
@@ -121,7 +127,7 @@ steal.plugins('jquery/event').then(function( $ ) {
 						child, sub;
 
 					// if index == -1 it's the window
-					while (++index < length && (child = resizers[index]) && (isWindow || $.contains(this, child)) ) {
+					while (++index < length && (child = resizers[index]) && (isWindow || $.contains(where, child)) ) {
 
 						// call the event
 						$.event.handle.call(child, ev);
