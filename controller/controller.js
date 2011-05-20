@@ -1,5 +1,4 @@
 steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(function( $ ) {
-
 	// ------- helpers  ------
 	// Binds an element, returns a function that unbinds
 	var bind = function( el, ev, callback ) {

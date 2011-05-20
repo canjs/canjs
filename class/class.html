@@ -61,10 +61,8 @@
 </div>
 <script type='text/javascript'>DEMO_HTML = document.getElementById('demo-html').innerHTML</script>
 <script type='text/javascript' src='../../steal/steal.js'></script>
-<script type='text/javascript'>
-	steal.plugins('jquery/controller/history').start();
-</script>
 <script type='text/javascript' id="demo-source">
+	steal.plugins('jquery/controller/history').then(function(){
 $.Controller.extend("Tabs",{
   init : function(){
     this.element.children("li:first").addClass('active')
@@ -104,6 +102,7 @@ Tabs.extend("HistoryTabs",{
 //adds the controller to the element
 $("#tabs1").tabs();
 $("#tabs2").history_tabs();
+})
 </script>
     </body>
 </html>
