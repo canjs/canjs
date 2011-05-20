@@ -113,13 +113,14 @@ $.Event.prototype.resume = function(){
 		this.liveFired = undefined;
 		
 		liveHandler.call(el, this, cur );
+		el = cur;
 	}
 	if(this.isImmediatePropagationStopped()){
 		return false;
 	}
 	
 	if(!this.isPropagationStopped()){
-		$.event.trigger(this, [this.handleObj], cur, false);
+		$.event.trigger(this, [this.handleObj], el, false);
 	}
 	
 };
