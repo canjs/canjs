@@ -119,7 +119,7 @@ $.Event.prototype.resume = function(){
 	}
 	
 	if(!this.isPropagationStopped()){
-		$.event.trigger(this, [this], cur, false);
+		$.event.trigger(this, [this.handleObj], cur, false);
 	}
 	
 };

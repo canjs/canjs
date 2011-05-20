@@ -29,7 +29,7 @@ test("basics",3, function(){
 		
 		setTimeout(function(){
 			ev.resume();	
-		},50)
+		},100)
 		
 	})
 	
