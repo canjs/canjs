@@ -1,19 +1,10 @@
 steal.plugins("jquery").then(function(){
 	
 var $event = $.event, 
-	oldTrigger = $event.trigger,
-	isEvent = function(e){
-		return e && e.isDefaultPrevented && typeof e.isDefaultPrevented === "function"
-	};
-$.event.handle = function( curHandler, myevent ) {
-	var args = $.makeArray( arguments ), event;
-	if (isEvent(curHandler) && isEvent(myevent)) {
-		curHandler = args.shift();
-		event = myevent;
-	} else {
-		event = curHandler;
-		curHandler = null;
-	}
+	oldTrigger = $event.trigger;
+// a copy of $'s handle function that goes until it finds 
+$.event.handle = function( event ) {
+	var args = $.makeArray( arguments );
 	// Event object or event type
 	var type = event.type || event,
 		namespaces = [],
@@ -54,10 +45,8 @@ $.event.handle = function( curHandler, myevent ) {
 	
 	for ( var j = 0, l = handlers.length; j < l; j++ ) {
 		var handleObj = handlers[ j ];
-		if( curHandler ){
-			if(curHandler === handleObj){
-				curHandler = undefined;
-			}
+		if( event.firstPass ){
+			event.firstPass = false;
 			continue;
 		}
 
