@@ -119,6 +119,9 @@ $.Event.prototype.resume = function(){
 		return false;
 	}
 	
+	// skip the event the first pass because we've already handled it
+	this.firstPass = true;
+	
 	if(!this.isPropagationStopped()){
 		$.event.trigger(this, [this.handleObj], el, false);
 	}
