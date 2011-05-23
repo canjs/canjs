@@ -2,7 +2,7 @@
             "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 	<head>
-		<title>selection</title>
+		<title>Resize Demo Page</title>
         <style type='text/css'>
             body {font-family: verdana}
             .error {border: solid 1px red;}
@@ -25,11 +25,11 @@
 				padding: 10px;
 			}
 			#split {
-				border: solid 1px gray;
+				border: solid 2px BLUE;
 			}
 			h3 {
 				background-color: yellow;
-				padding: 0px;
+				padding: 10px;
 				margin: 0px;
 			}
 			.top {
@@ -41,25 +41,35 @@
 	</head>
 	<body>
 		<div id='out'>
-			<h1>Here is some content that can fold over the page strangely</h1>
+			<h1>My Application's Title (it's long so it will wrap)</h1>
 			<div id='content'>
-				Some more content
+				<span>Some Buttons For Folders and Files</span>
 				<div id='split'>
-					<div class='panel' style="width:200px;position:absolute;left:0;" id='leftPanel'>
-						<h3>I am above the splitter.</h3>
+					<div class='panel' style="width:100px;position:absolute;">
+							<h3>Folders:</h3>
+							<ul>
+								<li>Folder One</li>
+								<li>Folder Two</li>
+								<li>Folder Three</li>
+								<li>Folder Four</li>
+								<li>Folder Five</li>
+								<li>Folder Six</li>
+								<li>Folder Seven</li>
+							</ul>
+					</div>
+					<div class='panel' style="width:300px;position:absolute;" id='leftPanel'>
 						<div id='vsplit'>
-							<div class='top'>
-								TOP
+							<div class='top' style='height: 300px'>
+								<div id='forever'></div>
 							</div>
-							<div class='bottom'>
-								Bottom
+							<div class='bottom' style='height: 100px'>
+								Here are some file details
 							</div>
 						</div>
 					</div>
-					<div class='panel' style="width:200px;position:absolute;left:200;">
-						<div id='forever'></div>
-					</div>
+					
 				</div>
+				<span>A footer</span>
 			</div>
 		</div>
 		<script type='text/javascript' 
