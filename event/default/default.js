@@ -1,5 +1,5 @@
 
-steal.plugins('jquery/event').then(function($){
+steal.plugins('jquery/event', 'jquery/event/handle').then(function($){
 
 $.fn.
 /**
