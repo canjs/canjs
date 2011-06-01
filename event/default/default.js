@@ -150,7 +150,9 @@ $event.special["default"] = {
 	          ( !elem.parentNode && !elem.ownerDocument ) )
 	          
 	        ) {			
-			
+			var origNamespace = event.namespace,
+				origType = event.type,
+				origLiveFired = event.liveFired;
 			// put event back
 			event.namespace= event.type;
 			event.type = "default";
@@ -170,6 +172,11 @@ $event.special["default"] = {
 			if(event._success){
 				event._success(event);
 			}
+			
+			event.namespace= origNamespace;
+			event.type = origType;
+			event.liveFired = origLiveFired;
+			
 	    }
 	}
 }
