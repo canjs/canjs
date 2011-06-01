@@ -1,227 +1,227 @@
+steal.plugins('jquery/event/livehack', 'jquery/event/handle').then(function($){
 
-steal.plugins('jquery/event').then(function($){
-
-$.fn.
-/**
- * @function jQuery.fn.triggerAsync
- * @plugin jquery/event/default
- * @parent jquery.event.pause
- * 
- * Triggers an event and calls success when the event has finished propagating through the DOM and
- * preventDefault is not called.
- * 
- *     $('#panel').triggerAsync('show', function(){
- *       $('#panel').show();
- *     })
- * 
- * You can also provide a callback that gets called if preventDefault was called on the event:
- * 
- *     $('#panel').triggerAsync('show', function(){
- *       $('#panel').show();
- *     },function(){
- *       $('#other').addClass('error');
- *     })
- * 
- * triggerAsync is designed to work with the [jquery.event.pause] plugin although it is defined in 
- * <code>jquery/event/default</code>
- * 
- * ## API
- * 
- * 
- * @param {String} type The type of event
- * @param {Object} data The data for the event
- * @param {Function} success(event) a callback function
- * @param {Function} prevented(event) called if preventDefault is called on the 
- */
-triggerAsync = function(type, data, success, prevented){
-	if(typeof data == 'function'){
-		success = data;
-		data = undefined;
-	}
-	
-	if ( this[0] ) {
-		var event = $.Event( type ),
-			old = event.preventDefault;
-		
-		event.preventDefault = function(){
-			old.apply(this, arguments);
-			prevented && prevented(this)
-		}
-		//event._success= success;
-		jQuery.event.trigger( {type: type, _success: success}, data, this[0]  );
-	} else{
-		success.call(this);
-	}
-	return this;
-}
-	
-
+var current,
+	rnamespaces = /\.(.*)$/,
+	returnFalse = function(){return false},
+	returnTrue = function(){return true};
 
 /**
- * @add jQuery.event.special
- */
-//cache default types for performance
-var types = {}, rnamespaces= /\.(.*)$/, $event = $.event;
-/**
- * @attribute default
+ * @page jquery.event.pause Pause-Resume
+ * @plugin jquery/event/pause
  * @parent specialevents
- * @plugin jquery/event/default
- * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/event/default/default.js
- * @test jquery/event/default/qunit.html
- * Allows you to perform default actions as a result of an event.
+ * The jquery/event/pause plugin adds the ability to pause and 
+ * resume events. 
  * 
- * Event based APIs are a powerful way of exposing functionality of your widgets.  It also fits in 
- * quite nicely with how the DOM works.
+ *     $('#todos').bind('show', function(ev){
+ *       ev.pause();
+ *       
+ *       $(this).load('todos.html', function(){
+ *         ev.resume();
+ *       });
+ *     })
+ * 
+ * When an event is paused, stops calling other event handlers for the 
+ * event (similar to event.stopImmediatePropagation() ).  But when 
+ * resume is called on the event, it will begin calling events on event handlers
+ * after the 'paused' event handler.
  * 
  * 
- * Like default events in normal functions (e.g. submitting a form), synthetic default events run after
- * all event handlers have been triggered and no event handler has called
- * preventDefault or returned false.
- * 
- * To listen for a default event, just prefix the event with default.
- * 
- *     $("div").bind("default.show", function(ev){ ... });
- *     $("ul").delegate("li","default.activate", function(ev){ ... });
- * 
+ * Pause-able events complement the [jQuery.event.special.default default]
+ * events plugin, providing the ability to easy create widgets with 
+ * an asynchronous API.  
  * 
  * ## Example
  * 
- * Lets look at how you could build a simple tabs widget with default events.
- * First with just jQuery:
+ * Consider a basic tabs widget that:
  * 
- * Default events are useful in cases where you want to provide an event based 
- * API for users of your widgets.  Users can simply listen to your synthetic events and 
- * prevent your default functionality by calling preventDefault.  
+ *   - trigger's a __show__ event on panels when they are to be displayed
+ *   - shows the panel after the show event.
+ *   
+ * The sudo code for this controller might look like:
  * 
- * In the example below, the tabs widget provides a show event.  Users of the 
- * tabs widget simply listen for show, and if they wish for some reason, call preventDefault 
- * to avoid showing the tab.
+ *     $.Controller('Tabs',{
+ *       ".button click" : function( el ){
+ *         var panel = this.getPanelFromButton( el );
+ *         panel.triggerAsync('show', function(){
+ *           panel.show();
+ *         })
+ *       }
+ *     })
+ *     
+ * Someone using this plugin would be able to delay the panel showing until ready:
  * 
- * In this case, the application developer doesn't want to show the second 
- * tab until the checkbox is checked. 
+ *     $('#todos').bind('show', function(ev){
+ *       ev.pause();
+ *       
+ *       $(this).load('todos.html', function(){
+ *         ev.resume();
+ *       });
+ *     })
  * 
- * @demo jquery/event/default/defaultjquery.html
+ * Or prevent the panel from showing at all:
  * 
- * Lets see how we would build this with JavaScriptMVC:
+ *     $('#todos').bind('show', function(ev){
+ *       if(! isReady()){
+ *         ev.preventDefault();
+ *       }
+ *     })
+ *     
+ * ## Limitations
  * 
- * @demo jquery/event/default/default.html
+ * The element and event handler that the <code>pause</code> is within can not be removed before 
+ * resume is called.
+ * 
+ * ## Big Example
+ * 
+ * The following example shows a tabs widget where the user is prompted to save, ignore, or keep editing
+ * a tab when a new tab is clicked.
+ * 
+ * @demo jquery/event/pause/pause.html
+ * 
+ * It's a long, but great example of how to do some pretty complex state management with JavaScriptMVC.
+ * 
  */
-$event.special["default"] = {
-	add: function( handleObj ) {
-		//save the type
-		types[handleObj.namespace.replace(rnamespaces,"")] = true;
-		
-		//move the handler ...
-		var origHandler = handleObj.handler;
-		
-		handleObj.origHandler = origHandler;
-		handleObj.handler = function(ev, data){
-			if(!ev._defaultActions) ev._defaultActions = [];
-			ev._defaultActions.push({element: this, handler: origHandler, event: ev, data: data, currentTarget: ev.currentTarget})
-		}
-	},
-	setup: function() {return true},
-	triggerDefault : function(event, elem){
-		
-		var defaultGetter = jQuery.Event("default."+event.type);
-			
-		$.extend(defaultGetter,{
-			target: elem,
-			_defaultActions: event._defaultActions,
-			exclusive : true
-		});
-		
-		defaultGetter.stopPropagation();
-	
-		//default events only work on elements
-		if(elem){
-			$event.handle.call(elem, defaultGetter);
-		}
-	},
-	checkAndRunDefaults : function(event, elem){
-		//fire if there are default actions to run && 
-	    //        we have not prevented default &&
-	    //        propagation has been stopped or we are at the document element
-	    //        we have reached the document
-		if (!event.isDefaultPrevented() &&
-		    (!event.isPaused || !event.isPaused()) &&  // no paused function or it's not paused
-	         event._defaultActions  &&
-	        ( ( event.isPropagationStopped() ) ||
-	          ( !elem.parentNode && !elem.ownerDocument ) )
-	          
-	        ) {			
-			var origNamespace = event.namespace,
-				origType = event.type,
-				origLiveFired = event.liveFired;
-			// put event back
-			event.namespace= event.type;
-			event.type = "default";
-			event.liveFired = null;
-			
-			// call each event handler
-			for(var i = 0 ; i < event._defaultActions.length; i++){
-				var a  = event._defaultActions[i],
-					oldHandle = event.handled;
-				event.currentTarget = a.currentTarget;
-				a.handler.call(a.element, event, a.data);
-				event.handled = event.handled === null ? oldHandle : true;
-	        }
-	        
-			event._defaultActions = null; //set to null so everyone else on this element ignores it
-	        
-			if(event._success){
-				event._success(event);
-			}
-			
-			event.namespace= origNamespace;
-			event.type = origType;
-			event.liveFired = origLiveFired;
-			
-	    }
-	}
-}
+$.Event.prototype.isPaused = returnFalse
 
-// overwrite trigger to allow default types
-var oldTrigger = $event.trigger,
-	triggerDefault = $event.special['default'].triggerDefault,
-	checkAndRunDefaults = $event.special['default'].checkAndRunDefaults,
-	oldData = jQuery._data;
-	
-$._data = function(elem, name, data){
-	// always need to supply a function to call for handle
-	if(!data && name === "handle"){
-		var func = oldData.apply(this, arguments);
-		return function(e){
-			// Discard the second event of a jQuery.event.trigger() and
-			// when an event is called after a page has unloaded
-			return typeof jQuery !== "undefined" && (!e || jQuery.event.triggered !== e.type) ?
-				jQuery.event.handle.apply( this, arguments ) :
-				undefined;
-		}
-	}
-	return oldData.apply(this, arguments)
-}
-
-$event.trigger =  function defaultTriggerer( event, data, elem, onlyHandlers){
-	// Event object or event type
-	var type = event.type || event,
-		namespaces = [],
-
-	// Caller can pass in an Event, Object, or just an event type string
-	event = typeof event === "object" ?
-		// jQuery.Event object
-		event[ jQuery.expando ] ? event :
-		// Object literal
-		new jQuery.Event( type, event ) :
-		// Just the event type (string)
-		new jQuery.Event( type );
-		
-    event._defaultActions = []; //set depth for possibly reused events
-	
-	oldTrigger.call($.event, event, data, elem, onlyHandlers);
+/**
+ * @function
+ * @parent jquery.event.pause
+ * Pauses an event (to be resumed later);
+ */
+$.Event.prototype.pause = function(){
+	current = this;
+	this.stopImmediatePropagation();
+	this.isPaused = returnTrue;
 };
+/**
+ * @function
+ * @parent jquery.event.pause
+ * 
+ * Resumes an event
+ */
+$.Event.prototype.resume = function(){
+	this.isPaused = this.isImmediatePropagationStopped = this.isPropagationStopped = returnFalse;
 	
+	var el = this.liveFired || this.currentTarget || this.target,
+		defult = $.event.special['default'], 
+		oldType = this.type;
 	
+	// if we were in a 'live' -> run our liveHandler
+	if(this.handleObj.origHandler){
+		var cur = this.currentTarget;
+		this.currentTarget = this.liveFired;
+		this.liveFired = undefined;
+		
+		liveHandler.call(el, this, cur );
+		el = cur;
+	}
+	if(this.isImmediatePropagationStopped()){
+		return false;
+	}
 	
+	// skip the event the first pass because we've already handled it
+	this.firstPass = true;
 	
+	if(!this.isPropagationStopped()){
+		$.event.trigger(this, [this.handleObj], el, false);
+	}
+	
+};
+
+
+function liveHandler( event, after ) {
+	var stop, maxLevel, related, match, handleObj, elem, j, i, l, data, close, namespace, ret,
+		elems = [],
+		selectors = [],
+		events = jQuery._data( this, "events" );
+
+	// Make sure we avoid non-left-click bubbling in Firefox (#3861) and disabled elements in IE (#6911)
+	if ( event.liveFired === this || !events || !events.live || event.target.disabled || event.button && event.type === "click" ) {
+		return;
+	}
+
+	if ( event.namespace ) {
+		namespace = new RegExp("(^|\\.)" + event.namespace.split(".").join("\\.(?:.*\\.)?") + "(\\.|$)");
+	}
+
+	event.liveFired = this;
+
+	var live = events.live.slice(0);
+
+	for ( j = 0; j < live.length; j++ ) {
+		handleObj = live[j];
+
+		if ( handleObj.origType.replace( rnamespaces, "" ) === event.type ) {
+			selectors.push( handleObj.selector );
+
+		} else {
+			live.splice( j--, 1 );
+		}
+	}
+
+	match = jQuery( event.target ).closest( selectors, event.currentTarget );
+
+	for ( i = 0, l = match.length; i < l; i++ ) {
+		close = match[i];
+
+		for ( j = 0; j < live.length; j++ ) {
+			handleObj = live[j];
+
+			if ( close.selector === handleObj.selector && (!namespace || namespace.test( handleObj.namespace )) && !close.elem.disabled ) {
+				elem = close.elem;
+				related = null;
+
+				// Those two events require additional checking
+				if ( handleObj.preType === "mouseenter" || handleObj.preType === "mouseleave" ) {
+					event.type = handleObj.preType;
+					related = jQuery( event.relatedTarget ).closest( handleObj.selector )[0];
+
+					// Make sure not to accidentally match a child element with the same selector
+					if ( related && jQuery.contains( elem, related ) ) {
+						related = elem;
+					}
+				}
+
+				if ( !related || related !== elem ) {
+					elems.push({ elem: elem, handleObj: handleObj, level: close.level });
+				}
+			}
+		}
+	}
+
+	for ( i = 0, l = elems.length; i < l; i++ ) {
+		match = elems[i];
+		// inserted to only call elements after this point ...
+		if(after) {
+			if(after === match.elem){
+				after = undefined;
+			}
+			continue;
+		}
+
+		if ( maxLevel && match.level > maxLevel ) {
+			break;
+		}
+
+		event.currentTarget = match.elem;
+		event.data = match.handleObj.data;
+		event.handleObj = match.handleObj;
+
+		ret = match.handleObj.origHandler.apply( match.elem, arguments );
+
+		if ( ret === false || event.isPropagationStopped() ) {
+			maxLevel = match.level;
+
+			if ( ret === false ) {
+				stop = false;
+			}
+			if ( event.isImmediatePropagationStopped() ) {
+				break;
+			}
+		}
+	}
+
+	return stop;
+}
+
 });
