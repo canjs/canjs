@@ -135,6 +135,24 @@ $event.special["default"] = {
 	
 		//default events only work on elements
 		if(elem){
+			// Event object or event type
+			var type = defaultGetter.type || event, namespaces = [], exclusive;
+			
+			if (type.indexOf("!") >= 0) {
+				// Exclusive events trigger only for the exact event (no namespaces)
+				type = type.slice(0, -1);
+				exclusive = true;
+			}
+			
+			if (type.indexOf(".") >= 0) {
+				// Namespaced trigger; create a regexp to match event type in handle()
+				namespaces = type.split(".");
+				type = namespaces.shift();
+				namespaces.sort();
+			}
+			defaultGetter.type = type;
+			defaultGetter.exclusive = exclusive;
+			
 			$event.handle.call(elem, defaultGetter);
 		}
 	},
