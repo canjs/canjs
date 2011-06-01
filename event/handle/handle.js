@@ -1,7 +1,13 @@
 steal.plugins("jquery").then(function(){
 	
 var $event = $.event, 
-	oldTrigger = $event.trigger;
+	oldTrigger = $event.trigger, 
+	isElement = function(o){
+		return (
+			typeof HTMLElement === "object" ? o instanceof HTMLElement : //DOM2
+			typeof o === "object" && o.nodeType === 1 && typeof o.nodeName==="string"
+		) || (o === window) || (o === document);
+	};
 // a copy of $'s handle function that goes until it finds 
 $.event.handle = function( event ) {
 	var args = $.makeArray( arguments );
@@ -37,8 +43,14 @@ $.event.handle = function( event ) {
 	event.currentTarget = this;
 
 	// JMVC CHANGED
-	var oldType = type;
-	if (event.type !== "default" && $event.special['default']) {
+	var oldType = type, 
+		// run if default is included
+		runDefault = event.type !== "default" && $event.special['default'] && 
+		// and its an original event
+		!event.originalEvent && 
+		// and its an element 
+		isElement(event.target);
+	if (runDefault) {
 		$event.special['default'].triggerDefault(event, this);
 	}
 	event.type = oldType;
@@ -77,7 +89,7 @@ $.event.handle = function( event ) {
 	}
 	
 	// JMVC CHANGED
-	if (event.type !== "default" && $event.special['default']) {
+	if (runDefault) {
 		$event.special['default'].checkAndRunDefaults(event, this);
 	}
 	return event.result;
