@@ -37,7 +37,7 @@ jQuery.fn.compare = function(b){ //usually
 	}
 	if (window.HTMLElement) { //make sure we aren't coming from XUL element
 		var s = HTMLElement.prototype.toString.call(b)
-		if (s == '[xpconnect wrapped native prototype]' || s == '[object XULElement]') return null;
+		if (s == '[xpconnect wrapped native prototype]' || s == '[object XULElement]' || s === '[object Window]') return null;
 	}
 	if(this[0].compareDocumentPosition){
 		return this[0].compareDocumentPosition(b);
