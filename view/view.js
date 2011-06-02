@@ -418,6 +418,7 @@ steal.plugins("jquery").then(function( $ ) {
 		 * @codestart
 		 * $.View.register({
 		 * 	suffix : "tmpl",
+		 *  plugin : "jquery/view/tmpl",
 		 * 	renderer: function( id, text ) {
 		 * 		return function(data){
 		 * 			return jQuery.render( text, data );
@@ -433,6 +434,7 @@ steal.plugins("jquery").then(function( $ ) {
 		 * @codeend
 		 * Here's what each property does:
 		 * 
+ 		 *    * plugin - the location of the plugin
  		 *    * suffix - files that use this suffix will be processed by this template engine
  		 *    * renderer - returns a function that will render the template provided by text
  		 *    * script - returns a string form of the processed template function.
@@ -441,6 +443,7 @@ steal.plugins("jquery").then(function( $ ) {
 		 * 
 		 * that enable template integration:
 		 * <ul>
+		 *   <li>plugin - the location of the plugin.  EX: 'jquery/view/ejs'</li>
 		 *   <li>suffix - the view extension.  EX: 'ejs'</li>
 		 *   <li>script(id, src) - a function that returns a string that when evaluated returns a function that can be 
 		 *    used as the render (i.e. have func.call(data, data, helpers) called on it).</li>
@@ -450,6 +453,16 @@ steal.plugins("jquery").then(function( $ ) {
 		 */
 		register: function( info ) {
 			this.types["." + info.suffix] = info;
+			
+			if(window.steal){
+				steal.type(info.suffix+" view js", function(options, orig, success, error){
+					var type = $view.types["." + options.type],
+						id = toId(options.rootSrc);
+					
+					options.text = type.script(id, options.text )
+					success();
+				})
+			}
 		},
 		types: {},
 		/**
@@ -482,7 +495,17 @@ steal.plugins("jquery").then(function( $ ) {
 		}
 
 	});
-
+	if(window.steal){
+		steal.type("view js", function(options, orig, success, error){
+			var type = $view.types["." + options.type],
+				id = toId(options.rootSrc);
+			
+			options.text = "steal.plugins('"+(type.plugin || "jquery/view/"+options.type)+
+			    "').then(function($){"+
+				"$.View.preload('" + id + "'," + options.text + ");\n})";
+			success();
+		})
+	}
 
 	//---- ADD jQUERY HELPERS -----
 	//converts jquery functions to use views	
