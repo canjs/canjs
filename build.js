@@ -16,6 +16,8 @@ var i, fileName, cmd,
 	"event/default",
 	"event/destroyed",
 	"event/drag",
+	"event/pause",
+	"event/resize",
 	{
 		plugin: "event/drag/limit", 
 		exclude: ["jquery/lang/vector/vector.js", "jquery/event/livehack/livehack.js", "jquery/event/drag/drag.js"]},
