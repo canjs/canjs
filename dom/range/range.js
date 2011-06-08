@@ -39,7 +39,7 @@ $.Range = function(range){
 			this.select(range)
 		}
 		
-	} else if (range.clientX != null || range.pageX != null || range.left != null) {
+	} else if (range.clientX || range.pageX || range.left) {
 		this.rangeFromPoint(range)
 	} else if (range.originalEvent && range.originalEvent.touches && range.originalEvent.touches.length) {
 		this.rangeFromPoint(range.originalEvent.touches[0])
