@@ -1,5 +1,5 @@
 
-steal.plugins('jquery/event').then(function($){
+steal.plugins('jquery/event', 'jquery/event/handle').then(function($){
 
 $.fn.
 /**
@@ -135,6 +135,24 @@ $event.special["default"] = {
 	
 		//default events only work on elements
 		if(elem){
+			// Event object or event type
+			var type = defaultGetter.type || event, namespaces = [], exclusive;
+			
+			if (type.indexOf("!") >= 0) {
+				// Exclusive events trigger only for the exact event (no namespaces)
+				type = type.slice(0, -1);
+				exclusive = true;
+			}
+			
+			if (type.indexOf(".") >= 0) {
+				// Namespaced trigger; create a regexp to match event type in handle()
+				namespaces = type.split(".");
+				type = namespaces.shift();
+				namespaces.sort();
+			}
+			defaultGetter.type = type;
+			defaultGetter.exclusive = exclusive;
+			
 			$event.handle.call(elem, defaultGetter);
 		}
 	},
@@ -150,7 +168,9 @@ $event.special["default"] = {
 	          ( !elem.parentNode && !elem.ownerDocument ) )
 	          
 	        ) {			
-			
+			var origNamespace = event.namespace,
+				origType = event.type,
+				origLiveFired = event.liveFired;
 			// put event back
 			event.namespace= event.type;
 			event.type = "default";
@@ -170,6 +190,11 @@ $event.special["default"] = {
 			if(event._success){
 				event._success(event);
 			}
+			
+			event.namespace= origNamespace;
+			event.type = origType;
+			event.liveFired = origLiveFired;
+			
 	    }
 	}
 }
