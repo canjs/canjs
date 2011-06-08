@@ -29,7 +29,8 @@ bisect = function(el, start, end){
 	if(end-start == 1){
 		return 
 	}
-}
+},
+support = {};
 /**
  * @Class jQuery.Range
  * @parent dom
@@ -41,12 +42,12 @@ bisect = function(el, start, end){
  * 
  * Returns a jQuery range object.
  * 
- * @param {TextRange|Node|Point} [range] An object specifiying a 
+ * @param {TextRange|HTMLElement|Point} [range] An object specifiying a 
  * range.  Depending on the object, the selected text will be different.  $.Range supports the
  * following types 
  * 
  *   - __undefined or null__ - returns a range with nothing selected
- *   - __Node__ - returns a range with the node's text selected
+ *   - __HTMLElement__ - returns a range with the node's text selected
  *   - __Point__ - returns a range at the point on the screen.  The point can be specified like:
  *         
  *         //client coordinates
@@ -78,7 +79,7 @@ $.Range = function(range){
 		}
 		
 	} else if (range.clientX || range.pageX || range.left) {
-		this.rangeFromPoint(range)
+		this.moveToPoint(range)
 	} else {
 		this.range = range;
 	} 
@@ -86,7 +87,7 @@ $.Range = function(range){
 /**
  * @static
  */
-//
+$.Range.
 /**
  * Gets the current range.
  * 
@@ -95,7 +96,7 @@ $.Range = function(range){
  * @param {HTMLElement} [el] an optional element used to get selection for a given window.
  * @return {jQuery.Range} a jQuery.Range wrapped range.
  */
-$.Range.current = function(el){
+current = function(el){
 	var win = getWindow(el),
 		selection;
 	if(win.getSelection){
@@ -109,14 +110,22 @@ $.Range.current = function(el){
 
 
 
-$.extend($.Range.prototype,{
-	rangeFromPoint : function(point){
+$.extend($.Range.prototype,
+/** @prototype **/
+{
+	moveToPoint : function(point){
 		var clientX = point.clientX, clientY = point.clientY
 		if(!clientX){
 			var off = scrollOffset();
-			clientX = (off.pageX || off.left || 0 ) - off.left;
-			clientY = (off.pageY || off.top || 0 ) - off.top;
+			clientX = (point.pageX || point.left || 0 ) - off.left;
+			clientY = (point.pageY || point.top || 0 ) - off.top;
 		}
+		if(support.moveToPoint){
+			this.range = $.Range().range
+			this.range.moveToPoint(clientX, clientY);
+			return this;
+		}
+		
 		
 		// it's some text node in this range ...
 		var parent = document.elementFromPoint(clientX, clientY);
@@ -288,8 +297,8 @@ $.extend($.Range.prototype,{
 				}
 			}
 			else {
-				var end = this.clone().collapse(false).parent();
-				var endRange = $.Range(end).select(end).collapse();
+				var end = this.clone().collapse(false).parent(),
+					endRange = $.Range(end).select(end).collapse();
 				endRange.move("END_TO_END", this);
 				return {
 					container: end,
@@ -310,10 +319,29 @@ $.extend($.Range.prototype,{
 		}
 	},
 	/**
-	 * returns the most common ancestor element of the endpoints in the range.
+	 * Returns the most common ancestor element of 
+	 * the endpoints in the range. This will return text elements if the range is
+	 * within a text element.
 	 */
 	parent : function(){
-		return this.range.parentElement || this.range.commonAncestorContainer
+		if(this.range.commonAncestorContainer){
+			return this.range.commonAncestorContainer;
+		} else {
+			
+			var parentElement = this.range.parentElement(),
+				range = this.range;
+			
+			// IE's parentElement will always give an element, we want text ranges
+			iterate(parentElement.childNodes, function(txtNode){
+				if($.Range(txtNode).range.inRange( range ) ){
+					// swap out the parentElement
+					parentElement = txtNode;
+					return false;
+				}
+			});
+			
+			return parentElement;
+		}	
 	},
 	/**
 	 * Returns the bounding rectangle of this range.
@@ -439,19 +467,53 @@ $.extend($.Range.prototype,{
 	var cloneFunc = range.cloneRange ? "cloneRange" : "duplicate",
 		selectFunc = range.selectNodeContents ? "selectNodeContents" : "moveToElementText";
 	
+	fn.
 	/**
 	 * Clones the range and returns a new $.Range object.
 	 */
-	fn.clone = function(){
+	clone = function(){
 		return $.Range( this.range[cloneFunc]() );
 	};
 	
+	fn.
 	/**
-	 * Selects an element with this range
+	 * Selects an element with this range.  If nothing is provided, makes the current
+	 * range appear as if the user has selected it.
+	 * 
+	 * This works with text nodes.
+	 * 
 	 * @param {HTMLElement} el
 	 */
-	fn.select = function(el){
-		this.range[selectFunc](el);
+	select = range.selectNodeContents ? function(el){
+		if(!el){
+			this.window().getSelection().addRange(this.range);
+		}else {
+			this.range.selectNodeContents(el);
+		}
+		return this;
+	} : function(el){
+		if(!el){
+			this.range.select()
+		} else if(el.nodeType === 3){
+			//select this node in the element ...
+			var parent = el.parentNode,
+				start = 0,
+				end;
+			iterate(parent.childNodes, function(txtNode){
+				if(txtNode === el){
+					end = start + txtNode.nodeValue.length;
+					return false;
+				} else {
+					start = start + txtNode.nodeValue.length
+				}
+			})
+			this.range.moveToElementText(parent);
+			
+			this.range.moveEnd('character', end - this.range.text.length)
+			this.range.moveStart('character', start);
+		} else { 
+			this.range.moveToElementText(el);
+		}
 		return this;
 	};
 	
@@ -517,6 +579,10 @@ scrollOffset = function( win){
 		top: (doc && doc.scrollTop || body && body.scrollTop || 0) + (doc.clientTop || 0)
 	};
 };
+
+// support
+
+support.moveToPoint = !!$.Range().range.moveToPoint
 
 
 
