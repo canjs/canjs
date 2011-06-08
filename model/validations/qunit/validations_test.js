@@ -22,23 +22,28 @@ test("models can validate, events, callbacks", 11,function(){
 	equals(errors.age[0], "it's a date type", "error message is right");
 	
 	task.bind("error.age", function(ev, errs){
-		ok(this === task, "we get task back");
+		ok(this === task, "we get task back by binding");
 		
 		ok(errs, "There are errors");
 		equals(errs.age.length, 1, "there is one error");
 		equals(errs.age[0], "it's a date type", "error message is right");
 	})
 	
-	task.attr("age","blah")
+	task.attr("age","blah");
+	
+	
 	
 	task.unbind("error.age");
+	
+	
 	task.attr("age", "blaher", function(){}, function(errs){
-		ok(this === task, "we get task back");
+		ok(this === task, "we get task back in error handler");
 		
 		ok(errs, "There are errors");
 		equals(errs.age.length, 1, "there is one error");
 		equals(errs.age[0], "it's a date type", "error message is right");
-	})
+	});
+	
 })
 
 test("validatesFormatOf", function(){
@@ -148,4 +153,4 @@ test("validatesRangeOf", function(){
 	equals(errors2.otherThing[0],"value out of range", "can supply a custom message");
 });
 
-})
+});
