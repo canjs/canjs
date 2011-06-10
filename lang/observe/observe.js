@@ -130,6 +130,33 @@ $.Class('jQuery.Observe',{
 			obj[prop] =  isObject(val) ?  val.serialize() : val ;
 		}
 		return obj;
+	},
+	merge : function(props, remove){
+		// copy
+		props = $.extend({}, props);
+		for(var prop in this._data){
+			var curVal = this._data[prop],
+				newVal = props[prop];
+			
+			// if we are merging ...
+			if(newVal === undefined){
+				remove && this.removeAttr(prop);
+				continue;
+			}
+			if(isObject(curVal) && isObject(newVal) ){
+				curVal.merge(newVal)
+			} else if( curVal != newVal ){
+				this._set(prop, newVal)
+			} else {
+				
+			}
+			delete props[prop];
+		}
+		// add remaining props
+		for (var prop in props) {
+			newVal = props[prop];
+			this._set(prop, newVal)
+		}
 	}
 })
 
@@ -138,6 +165,7 @@ jQuery.Observe('jQuery.Observe.List', {
 		this.length = 0;
 		this._namespace = ".list"+(++id);
         this.push.apply(this, $.makeArray(instances || [] ) );
+		this._data = this;
 	},
 	push: function(){
 		var args = getArgs(arguments),
@@ -162,6 +190,47 @@ jQuery.Observe('jQuery.Observe.List', {
 			arr.push( isObject(this[i]) ?  this[i].serialize() : this[i] );
 		}
 		return arr;
+	},
+	splice : function(index, count){
+		var args = $.makeArray(arguments);
+
+		for(var i=0; i < args.length; i++){
+			var val = args[i];
+			if(isObject(val)){
+				args[i] = hookup(val, index+i, this)
+			} 
+		}
+		if(count === undefined){
+			args[1] = this.length - index;
+		}
+		var removed = [].splice.apply(this, args);
+		if(count > 0){
+			$([this]).trigger("change",["*","remove",removed]);
+		}
+		if(args.length > 2){
+			$([this]).trigger("change",["*","remove",args.slice(2)]);
+		}
+		return removed;
+	},
+	merge : function(props, remove){
+		// copy
+		props = $.extend({}, props);
+		var arr = [].slice.call( this, 0 )
+		for(var prop =0; prop < props.length; prop++) {
+			var curVal =  this[prop],
+				newVal = props[prop];
+			
+			if(isObject(curVal) && isObject(newVal) ){
+				curVal.merge(newVal)
+			} else if( curVal != newVal ){
+				this._set(prop, newVal)
+			} else {
+				
+			}
+		}
+		if(remove){
+			this.splice(props.length)
+		}
 	}
 })
 

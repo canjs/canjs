@@ -112,5 +112,38 @@ test("remove attr", function(){
 	equals(undefined,  state.attr("properties") );
 });
 
+test("merge", function(){
+	var state = new $.Observe({
+		properties : {
+		  foo: "bar",
+		  brand: [],
+		  model : [],
+		  price : []
+		}
+	});
+	
+	state.bind("change", function(ev, attr, how, newVal){
+		equals(attr, "properties.foo")
+		equals(newVal, "bad")
+	})
+	
+	state.merge({
+		properties : {
+		  foo: "bar",
+		  brand: [],
+		  model : [],
+		  price : []
+		}
+	})
+	
+	state.merge({
+		properties : {
+		  foo: "bad",
+		  brand: [],
+		  model : [],
+		  price : []
+		}
+	})
+})
 	
 });
