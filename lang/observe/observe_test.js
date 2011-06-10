@@ -154,6 +154,12 @@ test("merge", function(){
 		}
 	});
 	
+});
+
+test("empty get", function(){
+	var state = new $.Observe({});
+	
+	equals(state.attr('foo.bar'), undefined)
 })
 	
 });

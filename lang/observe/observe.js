@@ -81,7 +81,7 @@ $.Class('jQuery.Observe',{
 		var parts = isArray(attr) ? attr : attr.split("."),
 			current = this._data[ parts.shift() ];
 		if(parts.length){
-			return current._get(parts)
+			return current ? current._get(parts) : undefined
 		} else {
 			return current;
 		}
@@ -144,7 +144,7 @@ $.Class('jQuery.Observe',{
 				continue;
 			}
 			if(isObject(curVal) && isObject(newVal) ){
-				curVal.merge(newVal)
+				curVal.merge(newVal, remove)
 			} else if( curVal != newVal ){
 				this._set(prop, newVal)
 			} else {
@@ -221,7 +221,7 @@ jQuery.Observe('jQuery.Observe.List', {
 				newVal = props[prop];
 			
 			if(isObject(curVal) && isObject(newVal) ){
-				curVal.merge(newVal)
+				curVal.merge(newVal, remove)
 			} else if( curVal != newVal ){
 				this._set(prop, newVal)
 			} else {
