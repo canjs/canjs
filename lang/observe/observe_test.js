@@ -116,9 +116,7 @@ test("merge", function(){
 	var state = new $.Observe({
 		properties : {
 		  foo: "bar",
-		  brand: [],
-		  model : [],
-		  price : []
+		  brand: []
 		}
 	});
 	
@@ -130,20 +128,32 @@ test("merge", function(){
 	state.merge({
 		properties : {
 		  foo: "bar",
-		  brand: [],
-		  model : [],
-		  price : []
+		  brand: []
 		}
 	})
 	
 	state.merge({
 		properties : {
 		  foo: "bad",
-		  brand: [],
-		  model : [],
-		  price : []
+		  brand: []
 		}
-	})
+	});
+	
+	state.unbind("change");
+	
+	state.bind("change", function(ev, attr, how, newVal){
+		equals(attr, "properties.brand")
+		equals(how,"add")
+		same(newVal, ["bad"])
+	});
+	
+	state.merge({
+		properties : {
+		  foo: "bad",
+		  brand: ["bad"]
+		}
+	});
+	
 })
 	
 });

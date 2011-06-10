@@ -87,7 +87,7 @@ $.Class('jQuery.Observe',{
 		}
 	},
 	_set : function(attr, value){
-		var parts = isArray(attr) ? attr : attr.split("."),
+		var parts = isArray(attr) ? attr : (""+attr).split("."),
 			prop = parts.shift() ,
 			current = this._data[ prop ];
 		
@@ -214,9 +214,9 @@ jQuery.Observe('jQuery.Observe.List', {
 	},
 	merge : function(props, remove){
 		// copy
-		props = $.extend({}, props);
-		var arr = [].slice.call( this, 0 )
-		for(var prop =0; prop < props.length; prop++) {
+		var props = props.slice(0),
+			len = Math.min(props.length, this.length);
+		for(var prop =0; prop < len; prop++) {
 			var curVal =  this[prop],
 				newVal = props[prop];
 			
@@ -228,9 +228,13 @@ jQuery.Observe('jQuery.Observe.List', {
 				
 			}
 		}
-		if(remove){
+		if(props.length > this.length){
+			// add in the remaining props
+			this.push(props.slice(this.length))
+		} else if(props.length < this.length && remove){
 			this.splice(props.length)
 		}
+		//remove those props didn't get too
 	}
 })
 
