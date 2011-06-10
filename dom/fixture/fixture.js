@@ -516,7 +516,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 			};
             // findOne
 			$.fixture["-" + types[1]] = function( settings ) {
-				return [findOne(settings.data.id)];
+				return [findOne(settings.data.id !== undefined ? settings.data.id : settings.data)];
 			};
             // update
             $.fixture["-" + types[1]+"Update"] = function( settings, cbType ) {
