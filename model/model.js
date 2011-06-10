@@ -28,7 +28,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 					src = ajaxOb;
 				}
 			}
-			attrs = extend({},attrs)
+			typeof attrs == "object" && (attrs =  extend({},attrs))
 			
 			var url = $.String.sub(src, attrs, true)
 			return $.ajax({
