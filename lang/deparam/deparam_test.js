@@ -28,6 +28,17 @@ test("Nested deparam",function(){
 	var data = $.String.deparam("a[0]=1&a[1]=2");
 	equals(data.a[0],1)
 	equals(data.a[1],2)
+});
+
+
+test("deparam an array", function(){
+	var data = $.String.deparam("a[0]=1&a[1]=2");
+	
+	ok($.isArray(data.a), "is array")
+	
+	equals(data.a[0],1)
+	equals(data.a[1],2)
 })
+
 	
 })
