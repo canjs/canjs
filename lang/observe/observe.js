@@ -71,7 +71,7 @@ $.Class('jQuery.Observe',{
 			current = this._data[ prop ];
 		
 		if(parts.length){
-			return current._get(parts)
+			return current.removeAttr(parts)
 		} else {
 			delete this._data[prop];
 			$([this]).trigger("change", [prop, "remove", current]);
@@ -133,7 +133,7 @@ $.Class('jQuery.Observe',{
 	},
 	merge : function(props, remove){
 		// copy
-		props = $.extend({}, props);
+		props = $.extend(true, {}, props);
 		for(var prop in this._data){
 			var curVal = this._data[prop],
 				newVal = props[prop];

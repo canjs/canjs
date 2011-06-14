@@ -160,6 +160,22 @@ test("empty get", function(){
 	var state = new $.Observe({});
 	
 	equals(state.attr('foo.bar'), undefined)
+});
+
+test("merge deep array ", function(){
+	var state = new $.Observe({});
+	var arr = [{
+			foo: "bar"
+		}],
+		thing = {
+			arr: arr
+		};
+	
+	state.merge({
+		thing: thing
+	}, true);
+	
+	ok(thing.arr === arr, "thing unmolested");
 })
 	
 });
