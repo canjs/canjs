@@ -23,6 +23,7 @@ steal.plugins("jquery").then(function( $ ) {
 	 *   [jQuery.fn.replaceWith replaceWith], [jQuery.fn.text text].
 	 *  - Template loading from html elements and external files.
 	 *  - Synchronous and asynchronous template loading.
+	 *  - Deferred Rendering.
 	 *  - Template caching.
 	 *  - Bundling of processed templates in production builds.
 	 *  - Hookup jquery plugins directly in the template.
@@ -133,6 +134,19 @@ steal.plugins("jquery").then(function( $ ) {
 	 * The callback function will be called with the result of the 
 	 * rendered template and 'this' will be set to the original jQuery object.
 	 * 
+	 * ## Deferreds (3.0.6)
+	 * 
+	 * If you pass deferreds to $.View or any of the jQuery 
+	 * modifiers, the view will wait until all deferreds resolve before 
+	 * rendering the view.  This makes it a one-liner to make a request and 
+	 * use the result to render a template. 
+	 * 
+	 * The following makes a request for todos in parallel with the 
+	 * todos.ejs template.  Once todos and template have been loaded, it with
+	 * render the view with the todos.
+	 * 
+	 *     $('#todos').html("todos.ejs",Todo.findAll());
+	 * 
 	 * ## Just Render Templates
 	 * 
 	 * Sometimes, you just want to get the result of a rendered 
@@ -144,7 +158,7 @@ steal.plugins("jquery").then(function( $ ) {
 	 * 
 	 * You can preload templates asynchronously like:
 	 * 
-	 *     $.View('path/to/template.jaml',{}, function(){});
+	 *     $.get('path/to/template.jaml',{},function(){},'view');
 	 * 
 	 * ## Supported Template Engines
 	 * 
@@ -205,7 +219,7 @@ steal.plugins("jquery").then(function( $ ) {
 
 	var $view, render, checkText, get, getRenderer
 		isDeferred = function(obj){
-			return obj && $.isFunction(obj.promise) // check if obj is a $.Deferred
+			return obj && $.isFunction(obj.always) // check if obj is a $.Deferred
 		},
 		// gets an array of deferreds from an object
 		// this only goes one level deep
@@ -223,6 +237,14 @@ steal.plugins("jquery").then(function( $ ) {
 				}
 			}
 			return deferreds;
+		},
+		// gets the useful part of deferred
+		// this is for Models and $.ajax that give arrays
+		usefulPart = function(resolved){
+			return $.isArray(resolved) && 
+					resolved.length ===3 && 
+					resolved[1] === 'success' ?
+						resolved[0] : resolved
 		};
 
 	$view = $.View = function( view, data, helpers, callback ) {
@@ -251,12 +273,12 @@ steal.plugins("jquery").then(function( $ ) {
 				
 				// make data look like the resolved deferreds
 				if (isDeferred(data)) {
-					data = resolved;
+					data = usefulPart(resolved);
 				}
 				else {
 					for (var prop in data) {
 						if (isDeferred(data[prop])) {
-							data[prop] = objs.shift();
+							data[prop] = usefulPart(objs.shift());
 						}
 					}
 				}
@@ -292,6 +314,7 @@ steal.plugins("jquery").then(function( $ ) {
 	// makes sure there's a template
 	checkText = function( text, url ) {
 		if (!text.match(/[^\s]/) ) {
+			steal.dev.log("There is no template or an empty template at " + url)
 			throw "$.View ERROR: There is no template or an empty template at " + url;
 		}
 	};

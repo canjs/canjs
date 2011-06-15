@@ -256,7 +256,7 @@ $.Class.extend("jQuery.Model.List",
 	 * @param {Function} error
 	 */
 	destroyAll : function(success, error){
-		var gId = function(item){ return item[item.Class.id]}
+		var gId = function(item){ return item[item.Class.id]},
 			ids = this.map(gId),
 			model = this.model(),
 			self = this,
@@ -359,6 +359,11 @@ $.Class.extend("jQuery.Model.List",
 		}
 		
 		return res;
+	},
+	serialize : function(){
+		return this.map(function(item){
+			item.serialize()
+		});
 	}
 });
 

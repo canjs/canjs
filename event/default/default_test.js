@@ -128,4 +128,22 @@ test("default and live order", function(){
 });
 
 
+test("type on objects", function(){
+	var ev = $.Event('updated'),
+		obj = {foo: 'bar'};
+		
+	$(obj).trigger(ev)
+
+	equals(ev.type, 'updated')
+});
+
+test("namespace on objects", function(){
+	var ev = $.Event('updated.ns'),
+		obj = {foo: 'bar'};
+		
+	$(obj).trigger(ev)
+	equals(ev.namespace, 'ns')
+});
+
+
 });

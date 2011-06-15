@@ -26,8 +26,7 @@
 <script type='text/javascript'>
 steal.plugins('jquery/model',
 		'jquery/dom/fixture',
-		'jquery/model/list',
-		'jquery/model/associations').start()
+		'jquery/model/list').start()
 </script>
 <script type='text/javascript'>
 	var convertDate =  function(raw){
@@ -65,10 +64,8 @@ $.Model.extend("Task",{
 
 $.Model.extend("Contact",{
 	attributes : { 
-		birthday : 'date'
-	},
-	associations : {
-		hasMany : "Task"
+		birthday : 'date',
+		tasks: "Task.models"
 	},
 	convert : {
 		date :convertDate
@@ -101,9 +98,13 @@ Contact.findAll({},function(contacts){
               .html(contact.name+" "+contact.ageThisYear())
               .appendTo(contactsEl);
 	var ul =$("<ul>");
-	contact.attr('tasks').each(function(){
-		ul.append('<li>'+this.title+" "+this.weeksPastDue()+'</li>')
-	})
+	var tasks = contact.attr('tasks')
+	if(tasks){
+		tasks.each(function(){
+			ul.append('<li>'+this.title+" "+this.weeksPastDue()+'</li>')
+		})
+	}
+		
 	ul.appendTo(li)
   });
 });

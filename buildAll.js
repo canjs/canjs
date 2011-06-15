@@ -41,7 +41,7 @@ steal.plugins('steal/build/pluginify','steal/build/apps','steal/build/scripts').
 					var depend = stl.dependencies[d];
 					if(!steals[depend.path]){
 						steals[depend.path] = true;
-						print("  " + depend.path);
+						print("123  " + depend.path);
 						//depends(depend, steals);
 					}
 					
@@ -70,7 +70,9 @@ steal.plugins('steal/build/pluginify','steal/build/apps','steal/build/scripts').
 		if(stl.dependencies){
 			for (var d = 0; d < stl.dependencies.length; d++) {
 				var depend = stl.dependencies[d];
-				dependencies.push(depend.path);
+				if (depend.path !== "jquery/jquery.js") {
+					dependencies.push(depend.path);
+				}
 			}
 		}
 	})

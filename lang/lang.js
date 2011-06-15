@@ -7,7 +7,7 @@ steal.plugins('jquery').then(function( $ ) {
 		undHash: /_|-/,
 		colons: /::/,
 		words: /([A-Z]+)([A-Z][a-z])/g,
-		lowerUpper: /([a-z\d])([A-Z])/g,
+		lowUp: /([a-z\d])([A-Z])/g,
 		dash: /([a-z\d])([A-Z])/g,
 		replacer: /\{([^\}]+)\}/g,
 		dot: /\./
@@ -61,32 +61,23 @@ steal.plugins('jquery').then(function( $ ) {
 		 * 
 		 */
 		str = $.String = $.extend( $.String || {} , {
+			/**
+			 * @function
+			 * Gets an object from a string.
+			 * @param {String} name the name of the object to look for
+			 * @param {Array} [roots] an array of root objects to look for the name
+			 * @param {Boolean} [add] true to add missing objects to 
+			 *  the path. false to remove found properties. undefined to 
+			 *  not modify the root object
+			 */
 			getObject : getObject,
 			/**
-			 * @function strip
-			 * @param {String} s returns a string with leading and trailing whitespace removed.
-			 */
-			strip: function( string ) {
-				return string.replace(/^\s+/, '').replace(/\s+$/, '');
-			},
-			/**
 			 * Capitalizes a string
-			 * @param {String} s the string to be lowercased.
-			 * @return {String} a string with the first character capitalized, and everything else lowercased
+			 * @param {String} s the string.
+			 * @return {String} a string with the first character capitalized.
 			 */
 			capitalize: function( s, cache ) {
 				return s.charAt(0).toUpperCase() + s.substr(1);
-			},
-
-			/**
-			 * Returns if string ends with another string
-			 * @param {String} s String that is being scanned
-			 * @param {String} pattern What the string might end with
-			 * @return {Boolean} true if the string ends wtih pattern, false if otherwise
-			 */
-			endsWith: function( s, pattern ) {
-				var d = s.length - pattern.length;
-				return d >= 0 && s.lastIndexOf(pattern) === d;
 			},
 			/**
 			 * Capitalizes a string from something undercored. Examples:
@@ -98,28 +89,22 @@ steal.plugins('jquery').then(function( $ ) {
 			 * @return {String} a the camelized string
 			 */
 			camelize: function( s ) {
-				var parts = s.split(regs.undHash),
-					i = 1;
-				parts[0] = parts[0].charAt(0).toLowerCase() + parts[0].substr(1);
-				for (; i < parts.length; i++ ) {
-					parts[i] = str.capitalize(parts[i]);
-				}
-
-				return parts.join('');
+				s = str.classize(s);
+				return s.charAt(0).toLowerCase() + s.substr(1);
 			},
 			/**
 			 * Like camelize, but the first part is also capitalized
 			 * @param {String} s
 			 * @return {String} the classized string
 			 */
-			classize: function( s ) {
+			classize: function( s , join) {
 				var parts = s.split(regs.undHash),
 					i = 0;
 				for (; i < parts.length; i++ ) {
 					parts[i] = str.capitalize(parts[i]);
 				}
 
-				return parts.join('');
+				return parts.join(join || '');
 			},
 			/**
 			 * Like [jQuery.String.classize|classize], but a space separates each 'word'
@@ -130,13 +115,7 @@ steal.plugins('jquery').then(function( $ ) {
 			 * @return {String} the niceName
 			 */
 			niceName: function( s ) {
-				var parts = s.split(regs.undHash),
-					i = 0;
-				for (; i < parts.length; i++ ) {
-					parts[i] = str.capitalize(parts[i]);
-				}
-
-				return parts.join(' ');
+				str.classize(parts[i],' ');
 			},
 
 			/**
@@ -148,13 +127,14 @@ steal.plugins('jquery').then(function( $ ) {
 			 * @return {String} the underscored string
 			 */
 			underscore: function( s ) {
-				return s.replace(regs.colons, '/').replace(regs.words, '$1_$2').replace(regs.lowerUpper, '$1_$2').replace(regs.dash, '_').toLowerCase();
+				return s.replace(regs.colons, '/').replace(regs.words, '$1_$2').replace(regs.lowUp, '$1_$2').replace(regs.dash, '_').toLowerCase();
 			},
 			/**
-			 * Returns a string with {param} replaced with parameters
-			 * from data.
+			 * Returns a string with {param} replaced values from data.
+			 * 
 			 *     $.String.sub("foo {bar}",{bar: "far"})
 			 *     //-> "foo far"
+			 *     
 			 * @param {String} s The string to replace
 			 * @param {Object} data The data to be used to look for properties.  If it's an array, multiple
 			 * objects can be used.
@@ -164,7 +144,7 @@ steal.plugins('jquery').then(function( $ ) {
 				var obs = [];
 				obs.push(s.replace(regs.replacer, function( whole, inside ) {
 					//convert inside to type
-					var ob = getObject(inside, data, !remove),
+					var ob = getObject(inside, data, typeof remove == 'boolean' ? !remove : remove),
 						type = typeof ob;
 					if((type === 'object' || type === 'function') && type !== null){
 						obs.push(ob);

@@ -10,6 +10,7 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 		makeArray = $.makeArray,
 		isFunction = $.isFunction,
 		isArray = $.isArray,
+		extend = $.extend,
 		concatArgs = function(arr, args){
 			return arr.concat(makeArray(args));
 		},
@@ -17,8 +18,10 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 		fnTest = /xyz/.test(function() {
 			xyz;
 		}) ? /\b_super\b/ : /.*/,
-
 		// overwrites an object with methods, sets up _super
+		// newProps - new properties
+		// oldProps - where the old properties might be
+		// addTo - what we are adding to
 		inheritProps = function( newProps, oldProps, addTo ) {
 			addTo = addTo || newProps
 			for ( var name in newProps ) {
@@ -299,7 +302,7 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 	};
 
 	/* @Static*/
-	$.extend(clss, {
+	extend(clss, {
 		/**
 		 * @function callback
 		 * Returns a callback function for a function on this Class.
@@ -460,7 +463,7 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 		 * @param {Object} protoProps the prototype properties of the new class
 		 */
 		setup: function( baseClass, fullName ) {
-			this.defaults = $.extend(true, {}, baseClass.defaults, this.defaults);
+			this.defaults = extend(true, {}, baseClass.defaults, this.defaults);
 			return arguments;
 		},
 		rawInstance: function() {
@@ -524,12 +527,12 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 			}
 			// Copy old stuff onto class
 			for ( name in this ) {
-				if ( this.hasOwnProperty(name) && $.inArray(name, ['prototype', 'defaults', 'getObject']) == -1 ) {
+				if ( this.hasOwnProperty(name) ) {
 					Class[name] = this[name];
 				}
 			}
 
-			// do static inheritance
+			// copy new props on class
 			inheritProps(klass, this, Class);
 
 			// do namespace stuff
@@ -552,7 +555,7 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 			}
 
 			// set things that can't be overwritten
-			$.extend(Class, {
+			extend(Class, {
 				prototype: prototype,
 				namespace: namespace,
 				shortName: shortName,

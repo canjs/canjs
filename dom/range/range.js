@@ -2,6 +2,15 @@ steal.plugins('jquery','jquery/dom/compare').then(function($){
 // TODOS ...
 // Ad
 
+/**
+ * @function jQuery.fn.range
+ * 
+ * Returns a jQuery.Range.
+ */
+$.fn.range = function(){
+	return $.Range(this[0])
+}
+
 var convertType = function(type){
 	return  type.replace(/([a-z])([a-z]+)/gi, function(all,first,  next){
 			  return first+next.toLowerCase()	
@@ -14,18 +23,48 @@ reverse = function(type){
 },
 getWindow = function( element ) {
 	return element ? element.ownerDocument.defaultView || element.ownerDocument.parentWindow : window
-};
-
-
+},
+bisect = function(el, start, end){
+	//split the start and end ... figure out who is touching ...
+	if(end-start == 1){
+		return 
+	}
+},
+support = {};
 /**
  * @Class jQuery.Range
  * @parent dom
- * A range helper for jQuery
- * @param {Object} range
+ * @tag alpha
+ * 
+ * Provides text range helpers for creating, moving, and comparing ranges.
+ * 
+ * @constructor
+ * 
+ * Returns a jQuery range object.
+ * 
+ * @param {TextRange|HTMLElement|Point} [range] An object specifiying a 
+ * range.  Depending on the object, the selected text will be different.  $.Range supports the
+ * following types 
+ * 
+ *   - __undefined or null__ - returns a range with nothing selected
+ *   - __HTMLElement__ - returns a range with the node's text selected
+ *   - __Point__ - returns a range at the point on the screen.  The point can be specified like:
+ *         
+ *         //client coordinates
+ *         {clientX: 200, clientY: 300}
+ *         
+ *         //page coordinates
+ *         {pageX: 200, pageY: 300} 
+ *         {top: 200, left: 300}
+ *         
+ *   - __TextRange__ a raw text range object.
  */
 $.Range = function(range){
 	if(this.constructor !== $.Range){
 		return new $.Range(range);
+	}
+	if(range && range.jquery){
+		range = range[0];
 	}
 	// create one
 	if(!range || range.nodeType){
@@ -40,43 +79,57 @@ $.Range = function(range){
 		}
 		
 	} else if (range.clientX != null || range.pageX != null || range.left != null) {
-		this.rangeFromPoint(range)
+		this.moveToPoint(range)
 	} else if (range.originalEvent && range.originalEvent.touches && range.originalEvent.touches.length) {
-		this.rangeFromPoint(range.originalEvent.touches[0])
+		this.moveToPoint(range.originalEvent.touches[0])
 	} else if (range.originalEvent && range.originalEvent.changedTouches && range.originalEvent.changedTouches.length) {
-		this.rangeFromPoint(range.originalEvent.changedTouches[0])
+		this.moveToPoint(range.originalEvent.changedTouches[0])
 	} else {
 		this.range = range;
 	} 
 };
-$.Range.current = function(el){
-	var win = getWindow(el)
+/**
+ * @static
+ */
+$.Range.
+/**
+ * Gets the current range.
+ * 
+ *     $.Range.current() //-> jquery.range
+ * 
+ * @param {HTMLElement} [el] an optional element used to get selection for a given window.
+ * @return {jQuery.Range} a jQuery.Range wrapped range.
+ */
+current = function(el){
+	var win = getWindow(el),
+		selection;
 	if(win.getSelection){
-		return new $.Range( win.getSelection().getRangeAt(0) )
+		selection = win.getSelection()
+		return new $.Range( selection.rangeCount ? selection.getRangeAt(0) : win.document.createRange())
 	}else{
 		return  new $.Range( win.document.selection.createRange() );
 	}
 };
 
-var bisect = function(el, start, end){
-	//split the start and end ... figure out who is touching ...
-	if(end-start == 1){
-		return 
-	}
-	
-	
-	
-}
 
 
-$.extend($.Range.prototype,{
-	rangeFromPoint : function(point){
+
+$.extend($.Range.prototype,
+/** @prototype **/
+{
+	moveToPoint : function(point){
 		var clientX = point.clientX, clientY = point.clientY
 		if(!clientX){
 			var off = scrollOffset();
-			clientX = (off.pageX || off.left || 0 ) - off.left;
-			clientY = (off.pageY || off.top || 0 ) - off.top;
+			clientX = (point.pageX || point.left || 0 ) - off.left;
+			clientY = (point.pageY || point.top || 0 ) - off.top;
 		}
+		if(support.moveToPoint){
+			this.range = $.Range().range
+			this.range.moveToPoint(clientX, clientY);
+			return this;
+		}
+		
 		
 		// it's some text node in this range ...
 		var parent = document.elementFromPoint(clientX, clientY);
@@ -146,7 +199,13 @@ $.extend($.Range.prototype,{
 	},
 	/**
 	 * Return true if any portion of these two ranges overlap.
-	 * @param {Object} elRange
+	 * 
+	 *     var foo = document.getElementById('foo');
+	 *     
+	 *     $.Range(foo.childNodes[0]).compare(foo.childNodes[1]) //-> false
+	 * 
+	 * @param {jQuery.Range} elRange
+	 * @return {Boolean} true if part of the ranges overlap, false if otherwise.
 	 */
 	overlaps : function(elRange){
 		if(elRange.nodeType){
@@ -174,7 +233,11 @@ $.extend($.Range.prototype,{
 	},
 	/**
 	 * Collapses a range
-	 * @param {Boolean} [toStart] true if to the start of the range, false if to the end.  Defaults to false.
+	 * 
+	 *     $('#foo').range().collapse()
+	 * 
+	 * @param {Boolean} [toStart] true if to the start of the range, false if to the
+	 *  end.  Defaults to false.
 	 * @return {Range} returns the range for chaining.
 	 */
 	collapse : function(toStart){
@@ -184,6 +247,32 @@ $.extend($.Range.prototype,{
 	toString : function(){
 		return typeof this.range.text == "string"  ? this.range.text : this.range.toString();
 	},
+	/**
+	 * Gets or sets the start of the range.
+	 * 
+	 * If a value is not provided, start returns the range's starting container and offset like:
+	 * 
+	 *     $('#foo').range().start() //-> {container: fooElement, offset: 0 } 
+	 * 
+	 * If a set value is provided, it can set the range.  The start of the range is set differently
+	 * depending on the type of set value:
+	 * 
+	 *   - __Object__ - an object with the new starting container and offset is provided like
+	 *     
+	 *         $.Range().start({container:  $('#foo')[0], offset: 20})
+	 *   
+	 *   - __Number__ - the new offset value.  The container is kept the same.
+	 *   
+	 *   - __String__ - adjusts the offset by converting the string offset to a number and adding it to the current
+	 *     offset.  For example, the following moves the offset forward four characters:
+	 *                  
+	 *         $('#foo').range().start("+4")
+	 * 
+	 * 
+	 * @param {Object|String|Number} [set] a set value if setting the start of the range or nothing if reading it.
+	 * @return {jQuery.Range|Object} if setting the start, the range is returned for chaining, otherwise, the 
+	 *   start offset and container are returned.
+	 */
 	start : function(set){
 		if(set === undefined){
 			if(this.range.startContainer){
@@ -217,6 +306,10 @@ $.extend($.Range.prototype,{
 		
 		
 	},
+	/**
+	 * Sets or gets the end of the range.  It takes similar options as [jQuery.Range.prototype.get].
+	 * @param {Object} [set]
+	 */
 	end : function(set){
 		if (set === undefined) {
 			if (this.range.startContainer) {
@@ -226,8 +319,8 @@ $.extend($.Range.prototype,{
 				}
 			}
 			else {
-				var end = this.clone().collapse(false).parent();
-				var endRange = $.Range(end).select(end).collapse();
+				var end = this.clone().collapse(false).parent(),
+					endRange = $.Range(end).select(end).collapse();
 				endRange.move("END_TO_END", this);
 				return {
 					container: end,
@@ -247,9 +340,40 @@ $.extend($.Range.prototype,{
 			return this;
 		}
 	},
+	/**
+	 * Returns the most common ancestor element of 
+	 * the endpoints in the range. This will return text elements if the range is
+	 * within a text element.
+	 */
 	parent : function(){
-		return this.range.parentElement || this.range.commonAncestorContainer
+		if(this.range.commonAncestorContainer){
+			return this.range.commonAncestorContainer;
+		} else {
+			
+			var parentElement = this.range.parentElement(),
+				range = this.range;
+			
+			// IE's parentElement will always give an element, we want text ranges
+			iterate(parentElement.childNodes, function(txtNode){
+				if($.Range(txtNode).range.inRange( range ) ){
+					// swap out the parentElement
+					parentElement = txtNode;
+					return false;
+				}
+			});
+			
+			return parentElement;
+		}	
 	},
+	/**
+	 * Returns the bounding rectangle of this range.
+	 * 
+	 * @param {String} [from] - where the coordinates should be 
+	 * positioned from.  By default, coordinates are given from the client viewport.
+	 * But if 'page' is given, they are provided relative to the page.
+	 * 
+	 * @return {TextRectangle} - The client rects.
+	 */
 	rect : function(from){
 		var rect = this.range.getBoundingClientRect();
 		// console.log("rect", this)
@@ -400,27 +524,63 @@ $.extend($.Range.prototype,{
 	var cloneFunc = range.cloneRange ? "cloneRange" : "duplicate",
 		selectFunc = range.selectNodeContents ? "selectNodeContents" : "moveToElementText";
 	
+	fn.
 	/**
 	 * Clones the range and returns a new $.Range object.
 	 */
-	fn.clone = function(){
+	clone = function(){
 		return $.Range( this.range[cloneFunc]() );
 	};
 	
+	fn.
 	/**
-	 * Selects an element with this range
+	 * Selects an element with this range.  If nothing is provided, makes the current
+	 * range appear as if the user has selected it.
+	 * 
+	 * This works with text nodes.
+	 * 
 	 * @param {HTMLElement} el
 	 */
-	fn.select = function(el){
-		this.range[selectFunc](el);
+	select = range.selectNodeContents ? function(el){
+		if(!el){
+			this.window().getSelection().addRange(this.range);
+		}else {
+			this.range.selectNodeContents(el);
+		}
+		return this;
+	} : function(el){
+		if(!el){
+			this.range.select()
+		} else if(el.nodeType === 3){
+			//select this node in the element ...
+			var parent = el.parentNode,
+				start = 0,
+				end;
+			iterate(parent.childNodes, function(txtNode){
+				if(txtNode === el){
+					end = start + txtNode.nodeValue.length;
+					return false;
+				} else {
+					start = start + txtNode.nodeValue.length
+				}
+			})
+			this.range.moveToElementText(parent);
+			
+			this.range.moveEnd('character', end - this.range.text.length)
+			this.range.moveStart('character', start);
+		} else { 
+			this.range.moveToElementText(el);
+		}
 		return this;
 	};
 	
 })();
 
 
-// helpers 
+// helpers  -----------------
 
+// iterates through a list of elements, calls cb on every text node
+// if cb returns false, exits the iteration
 var iterate = function(elems, cb){
 	var elem, start;
 	for (var i = 0; elems[i]; i++) {
@@ -440,19 +600,25 @@ var iterate = function(elems, cb){
 				}
 			}
 	}
-}, supportWhitespace,
+
+}, 
+supportWhitespace,
 isWhitespace = function(el){
 	if(supportWhitespace == null){
 		supportWhitespace = 'isElementContentWhitespace' in el;
 	}
 	return (supportWhitespace? el.isElementContentWhitespace : 
 			(el.nodeType === 3 && '' == el.data.trim()));
-}, within = function(rect, point){
+}, 
+// if a point is within a rectangle
+within = function(rect, point){
 
 	return rect.left <= point.clientX && rect.left + rect.width >= point.clientX &&
 	rect.top <= point.clientY &&
 	rect.top + rect.height >= point.clientY
-}, withinRect = function(outer, inner){
+}, 
+// if a rectangle is within another rectangle
+withinRect = function(outer, inner){
 	return within(outer, {
 		clientX: inner.left,
 		clientY: inner.top
@@ -469,7 +635,9 @@ isWhitespace = function(el){
 		clientX: inner.left + inner.width,
 		clientY: inner.top + inner.height
 	}) //bottom right
-}, scrollOffset = function( win){
+}, 
+// gets the scroll offset from a window
+scrollOffset = function( win){
 	var win = win ||window;
 		doc = win.document.documentElement, body = win.document.body;
 	
@@ -479,6 +647,9 @@ isWhitespace = function(el){
 	};
 };
 
-$("<div id='rect' />").appendTo(document.body)
+
+
+support.moveToPoint = !!$.Range().range.moveToPoint
+
 
 });

@@ -1,5 +1,5 @@
 steal.plugins('jquery/dom').then(function( $ ) {
-
+	
 	// the pre-filter needs to re-route the url
 	$.ajaxPrefilter( function( settings, originalOptions, jqXHR ) {
 	  	// if fixtures are on
@@ -82,7 +82,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 					}
 					
 					// make sure we provide a response type that matches the first datatype (typically json)
-					if(!response[2][next]){
+					if(!response[2] || !response[2][next]){
 						var tmp = {}
 						tmp[next] = response[2];
 						response[2] = tmp;
@@ -179,59 +179,35 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 * @test jquery/dom/fixture/qunit.html
 	 * @parent dom
 	 * 
-	 * Fixtures simulate AJAX responses by overwriting 
-	 * [jQuery.ajax $.ajax], 
-	 * [jQuery.get $.get], and 
-	 * [jQuery.post $.post].  
-	 * Instead of making a request to a server, fixtures simulate 
-	 * the repsonse with a file or function.
-	 * 
-	 * They are a great technique when you want to develop JavaScript 
+	 * Fixtures simulate AJAX responses.  Instead of making 
+	 * a request to a server, fixtures simulate 
+	 * the response with a file or function. They are a great technique when you want to develop JavaScript 
 	 * independently of the backend. 
 	 * 
-	 * ### Quick Example
+	 * ### Two Quick Examples
 	 * 
-	 * Instead of making a request to <code>/tasks.json</code>,
-	 * $.ajax will look in <code>fixtures/tasks.json</code>.
-	 * It's expected that a static <code>fixtures/tasks.json</code> 
-	 * file exists relative to the current page. 
+	 * There are two common ways of using fixtures.  The first is to 
+	 * map Ajax requests to another file or function.  The following 
+	 * intercepts requests to <code>/tasks.json</code> and directs them 
+	 * to <code>fixtures/tasks.json</code>:
 	 * 
-	 * @codestart
-	 * $.ajax({url: "/tasks.json",
-	 *   dataType: "json",
-	 *   type: "get",
-	 *   fixture: "fixtures/tasks.json",
-	 *   success: myCallback});
-	 * @codeend
+	 *     $.fixture("/tasks.json","fixtures/tasks.json");
+	 *     
+	 * You can also add a fixture option directly to $.ajax like:
 	 * 
-	 * ## Using Fixtures
+	 *     $.ajax({url: "/tasks.json",
+	 *       dataType: "json",
+	 *       type: "get",
+	 *       fixture: "fixtures/tasks.json",
+	 *       success: myCallback
+	 *     });
 	 * 
-	 * To enable fixtures, you must add this plugin to your page and 
-	 * set the fixture property.  
+	 * The first technique keeps fixture logic out of your Ajax 
+	 * requests.  However, if your service urls are changing __a lot__ 
+	 * the second technique means you only have to change the service
+	 * url in one spot.
 	 * 
-	 * The fixture property is set as ...
-	 * @codestart
-	 * //... a property with $.ajax
-	 * $.ajax({fixture: FIXTURE_VALUE})
 	 * 
-	 * //... a parameter in $.get and $.post
-	 * $.get (  url, data, callback, type, FIXTURE_VALUE )
-	 * $.post(  url, data, callback, type, FIXTURE_VALUE )
-	 * @codeend
-	 * 
-	 * ## Turning Off Fixtures
-	 * 
-	 * To turn off fixtures, simply remove the fixture plugin from 
-	 *  your page.  The Ajax methods will ignore <code>FIXTURE_VALUE</code>
-	 *  and revert to their normal behavior.  If you want to ignore a single
-	 *  fixture, we suggest commenting it out.
-	 * 
-	 * <div class='whisper'>
-	 * PRO TIP:  Don't worry about leaving the fixture values in your source.  
-	 * They don't take up many characters and won't impact how jQuery makes
-	 * requests.  They can be useful even after the service they simulate
-	 * is created.
-	 * </div>
 	 * 
 	 * ## Types of Fixtures
 	 * 
@@ -243,32 +219,22 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 * 
 	 * ### Static Fixtures
 	 * 
-	 * Static fixture locations can be calculated:
+	 * Static fixtures use an alternate url as the response of the Ajax request.
 	 * 
-	 *     // looks in test/fixtures/tasks/1.get
-	 *     $.ajax({type:"get", 
-	 *            url: "tasks/1", 
-	 *            fixture: true}) 
-	 * 
-	 * Or provided:
-	 * 
-	 * 
-	 * // looks in fixtures/tasks1.json relative to page
+	 *     // looks in fixtures/tasks1.json relative to page
+	 *     $.fixture("tasks/1", "fixtures/task1.json");
+	 *     
 	 *     $.ajax({type:"get", 
 	 *            url: "tasks/1", 
 	 *            fixture: "fixtures/task1.json"})
 	 *     
 	 *     // looks in fixtures/tasks1.json relative to jmvc root
 	 *     // this assumes you are using steal
+	 *     $.fixture("tasks/1", "//fixtures/task1.json");
+	 *     
 	 *     $.ajax({type:"get", 
 	 *            url: "tasks/1", 
 	 *            fixture: "//fixtures/task1.json"})` 
-	 * 
-	 * 
-	 * <div class='whisper'>
-	 *   PRO TIP: Use provided fixtures.  It's easier to understand what it is going.
-	 *   Also, create a fixtures folder in your app to hold your fixtures.
-	 * </div>
 	 * 
 	 * ### Dynamic Fixtures
 	 * 
@@ -366,32 +332,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 			
 			settings.fixture = fixture;
 			overwrites.push(settings)
-			return;
 		}
-		
-		
-		var url = settings.url,
-			match, left, right;
-		url = url.replace(/%2F/g, "~").replace(/%20/g, "_");
-
-		if ( settings.data && settings.processData && typeof settings.data !== "string" ) {
-			settings.data = jQuery.param(settings.data);
-		}
-
-
-		if ( settings.data && settings.type.toLowerCase() == "get" ) {
-			url += ($.String.include(url, '?') ? '&' : '?') + settings.data;
-		}
-
-		match = url.match(/^(?:https?:\/\/[^\/]*)?\/?([^\?]*)\??(.*)?/);
-		left = match[1];
-
-		right = settings.type ? '.' + settings.type.toLowerCase() : '.post';
-		if ( match[2] ) {
-			left += '/';
-			right = match[2].replace(/\#|&/g, '-').replace(/\//g, '~') + right;
-		}
-		return left + right;
 	};
 
 	$.extend($.fixture, {	
@@ -541,7 +482,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 				//filter results if someone added an attr like parentId
 				for ( var param in settings.data ) {
 					i=0;
-					if ( settings.data[param] && // don't do this if the value of the param is null (ignore it)
+					if ( settings.data[param] != undefined && // don't do this if the value of the param is null (ignore it)
 						(param.indexOf("Id") != -1 || param.indexOf("_id") != -1) ) {
 						while ( i < retArr.length ) {
 							if ( settings.data[param] != retArr[i][param] ) {
@@ -574,7 +515,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 			};
             // findOne
 			$.fixture["-" + types[1]] = function( settings ) {
-				return [findOne(settings.data.id)];
+				return [findOne(settings.data.id !== undefined ? settings.data.id : settings.data)];
 			};
             // update
             $.fixture["-" + types[1]+"Update"] = function( settings, cbType ) {
@@ -767,4 +708,92 @@ steal.plugins('jquery/dom').then(function( $ ) {
 			fixture: fixture
 		});
 	};
+	
+    /**
+  	 * @page jquery.fixture.0organizing Organizing Fixtures
+  	 * @parent jQuery.fixture
+	 * 
+	 * The __best__ way of organizing fixtures is to have a 'fixtures.js' file that steals
+	 * <code>jquery/dom/fixture</code> and defines all your fixtures.  For example,
+	 * if you have a 'todo' application, you might 
+	 * have <code>todo/fixtures/fixtures.js</code> look like:
+	 * 
+	 *     steal({
+	 *             path: '//jquery/dom/fixture.js',
+	 *             ignore: true
+	 *           })
+	 *           .then(function(){
+	 *       
+	 *       $.fixture({
+	 *           type: 'get',  
+	 *           url: '/services/todos.json'
+	 *         },
+	 *         '//todo/fixtures/todos.json');
+	 *         
+	 *       $.fixture({
+	 *           type: 'post',  
+	 *           url: '/services/todos.json'
+	 *         },
+	 *         function(settings){
+	 *         	return {id: Math.random(), 
+	 *                  name: settings.data.name}
+	 *         });
+	 *         
+	 *     })
+	 * 
+	 * __Notice__: We used steal's ignore option to prevent 
+	 * loading the fixture plugin in production.
+	 * 
+	 * Finally, we steal <code>todo/fixtures/fixtures.js</code> in the 
+	 * app file (<code>todo/todo.js</code>) like:
+	 * 
+	 * 
+	 *     steal({path: '//todo/fixtures/fixtures.js',ignore: true});
+	 *     
+	 *     //start of your app's steals
+	 *     steal.plugins( ... )
+	 * 
+	 * We typically keep it a one liner so it's easy to comment out.
+	 * 
+	 * ## Switching Between Sets of Fixtures
+	 * 
+	 * If you are using fixtures for testing, you often want to use different
+	 * sets of fixtures.  You can add something like the following to your fixtures.js file:
+	 * 
+	 *     if( /fixtureSet1/.test( window.location.search) ){
+	 *       $.fixture("/foo","//foo/fixtures/foo1.json');
+	 *     } else if(/fixtureSet2/.test( window.location.search)){
+	 *       $.fixture("/foo","//foo/fixtures/foo1.json');
+	 *     } else {
+	 *       // default fixtures (maybe no fixtures)
+	 *     }
+	 * 
+	 */
+	//
+	/**
+	 * @add jQuery.fixture
+	 */
+	//
+	/**
+	 * @page jquery.fixture.1errors Simulating Errors
+	 * @parent jQuery.fixture
+	 * 
+	 * The following simulates an unauthorized request 
+	 * to <code>/foo</code>.
+	 * 
+	 *     $.fixture("/foo", function(){
+	 * 		return [401,"{type: 'unauthorized'}"]
+	 * 	   });
+	 * 
+	 * This could be received by the following Ajax request:
+	 * 
+	 *     $.ajax({
+	 *       url: '/foo',
+	 *       error : function(jqXhr, status, statusText){
+	 *         // status === 'error'
+	 *         // statusText === "{type: 'unauthorized'}"
+	 *       }
+	 *     })
+	 * 
+	 */
 });

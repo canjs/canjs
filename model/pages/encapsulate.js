@@ -2,8 +2,6 @@
 @page jquery.model.encapsulate Service Encapsulation
 @parent jQuery.Model
 
-<h1>Service / Ajax Encapsulation</h1>
-
 Models encapsulate your application's raw data.  This promotes reuse and provide a 
 standard interface for widgets to talk to services.
 
@@ -29,18 +27,14 @@ The server might return something like:
 In most jQuery code, you'll see something like the following to retrieve contacts
 data:
 
-@codestart
-$.get('/contacts.json',
-      {type: 'tasty'}, 
-      successCallback,
-      'json')</code></pre>
-@codeend
+    $.get('/contacts.json',
+          {type: 'tasty'}, 
+          successCallback,
+          'json')
 
 Instead, model encapsulates (wraps) this request so you call it like:
 
-@codestart
-Contact.findAll({type: 'old'}, successCallback);
-@codeend
+    Contact.findAll({type: 'old'}, successCallback);
 
 And instead of raw data, findAll returns contact instances that let you do things like:
 
@@ -91,10 +85,10 @@ AND all the other magic Model provides.
 
 There are two ways to fill out these methods:
 
-  - providing service urls
+  - providing templated service urls
   - implementing the method
   
-## Using Service URLS
+## Using Templated Service URLS
 
 If your server is REST-ish, you can simply provide
 urls to your services.  
@@ -137,17 +131,27 @@ You can change the HTTP request type by putting a GET, POST, DELETE, PUT like:
       destroy: "POST /task/delete/{id}.json
     },{})
 
-
 <b>Note:</b> Even if your server doesn't respond with service data
-in the same way, it's likely that $.Model will be able to figure it out.
+in the same way, it's likely that $.Model will be able to figure it out. If not,
+you can probably 
+overwrite [jQuery.Model.static.models models] 
+or [jQuery.Model.static.model model]. If that doesn't work, you can
+always implement it yourself.
 
 ##  Implement Service Methods
 
-If providing a url doesn't work for you, you might need to fill out the
-service method yourself.  
+If providing a url doesn't work for you, you
+might need to fill out the
+service method yourself. Before doing this, it's good
+to have an understanding of jQuery's Ajax converters and
+deferreds. 
+
+
+
+
 
 Lets see how we might fill out the
-<code>Contact.findAll</code> function:
+<code>Contact.findAll</code> function to work with JSONP:
 
 @codestart
 $.Model.extend('Contact',
@@ -155,23 +159,10 @@ $.Model.extend('Contact',
   findAll : function(params, success, error){
   
     // do the ajax request
-    $.get('/contacts.json',
+    return $.get('/contacts.jsonp',
       params, 
-      function( json ){ 
-        
-        // on success, create new Contact
-        // instances for each contact
-        var wrapped = [];
-        
-        for(var i =0; i< json.length;i++){
-          wrapped.push( new Contact(json[i] ) );
-        }
-        
-        //call success with the contacts
-        success( wrapped );
-        
-      },
-      'json');
+      success,
+      'jsonp contact.models');
   }
 },
 {
@@ -180,31 +171,7 @@ $.Model.extend('Contact',
 });
 @codeend
 
-Well, that would be annoying to write out every time.  Fortunately, models have
-the wrapMany method which will make it easier:
 
-@codestart
-findAll : function(params, success, error){
-    $.get('/contacts.json',
-      params, 
-      function( json ){ 
-        success(Contact.wrapMany(json));		
-      },
-      'json');
-  }
-@codeend
-
-Model is based off JavaScriptMVC's <code>jQuery.Class</code>. It's callback allows us to pipe
-wrapMany into the success handler and make our code even shorter:
-
-@codestart
-findAll : function(params, success, error){
-    $.get('/contacts.json',
-    params, 
-    this.callback(['wrapMany', success]),
-    'json')
-  }
-@codeend
 
 If we wanted to make a list of contacts, we could do it like:
 

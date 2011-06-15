@@ -1,4 +1,4 @@
-steal.plugins('jquery/event/livehack').then(function($){
+steal.plugins('jquery/event/livehack', 'jquery/event/handle').then(function($){
 
 var current,
 	rnamespaces = /\.(.*)$/,
@@ -103,7 +103,8 @@ $.Event.prototype.resume = function(){
 	this.isPaused = this.isImmediatePropagationStopped = this.isPropagationStopped = returnFalse;
 	
 	var el = this.liveFired || this.currentTarget || this.target,
-		defult = $.event.special['default'];
+		defult = $.event.special['default'], 
+		oldType = this.type;
 	
 	// if we were in a 'live' -> run our liveHandler
 	if(this.handleObj.origHandler){
@@ -112,39 +113,27 @@ $.Event.prototype.resume = function(){
 		this.liveFired = undefined;
 		
 		liveHandler.call(el, this, cur );
-		
-		// set back so live isn't called by anyone else
-		//this.liveFired = el;
+		el = cur;
 	}
 	if(this.isImmediatePropagationStopped()){
 		return false;
 	}
-	// now run handle until our event
-	handle.call(el, this.handleObj, this )
-
-	//trigger default stuff ...
-	if(defult){
-		defult.triggerDefault(this,el)
-	}
-
+	
+	// skip the event the first pass because we've already handled it
+	this.firstPass = true;
+	
 	if(!this.isPropagationStopped()){
-		if(el.parentNode){
-			// resume trigger like this so default doesn't get confused
-			$.event.trigger( this, [this], el.parentNode , true);
-		} else if(defult){ 
-		
-			defult.checkAndRunDefaults(this,el)
-		}
-		
+		$.event.trigger(this, [this.handleObj], el, false);
 	}
+	
 };
 
-// A copy of live, used to do live after the current element
-function liveHandler( event , after) {
+
+function liveHandler( event, after ) {
 	var stop, maxLevel, related, match, handleObj, elem, j, i, l, data, close, namespace, ret,
 		elems = [],
 		selectors = [],
-		events = $._data( this, "events" );
+		events = jQuery._data( this, "events" );
 
 	// Make sure we avoid non-left-click bubbling in Firefox (#3861) and disabled elements in IE (#6911)
 	if ( event.liveFired === this || !events || !events.live || event.target.disabled || event.button && event.type === "click" ) {
@@ -170,7 +159,7 @@ function liveHandler( event , after) {
 		}
 	}
 
-	match = $( event.target ).closest( selectors, event.currentTarget );
+	match = jQuery( event.target ).closest( selectors, event.currentTarget );
 
 	for ( i = 0, l = match.length; i < l; i++ ) {
 		close = match[i];
@@ -185,7 +174,12 @@ function liveHandler( event , after) {
 				// Those two events require additional checking
 				if ( handleObj.preType === "mouseenter" || handleObj.preType === "mouseleave" ) {
 					event.type = handleObj.preType;
-					related = $( event.relatedTarget ).closest( handleObj.selector )[0];
+					related = jQuery( event.relatedTarget ).closest( handleObj.selector )[0];
+
+					// Make sure not to accidentally match a child element with the same selector
+					if ( related && jQuery.contains( elem, related ) ) {
+						related = elem;
+					}
 				}
 
 				if ( !related || related !== elem ) {
@@ -197,7 +191,6 @@ function liveHandler( event , after) {
 
 	for ( i = 0, l = elems.length; i < l; i++ ) {
 		match = elems[i];
-		
 		// inserted to only call elements after this point ...
 		if(after) {
 			if(after === match.elem){
@@ -205,7 +198,7 @@ function liveHandler( event , after) {
 			}
 			continue;
 		}
-		
+
 		if ( maxLevel && match.level > maxLevel ) {
 			break;
 		}
@@ -230,69 +223,5 @@ function liveHandler( event , after) {
 
 	return stop;
 }
-// a copy of $'s handle function that goes until it finds 
-function handle( curHandler,  event ) {
-	var all, handlers, namespaces, namespace_re, events,
-		namespace_sort = [],
-		args = $.makeArray( arguments );
-	curHandler = args.shift();
-	event = args[0] = $.event.fix( event || window.event );
-	event.currentTarget = this;
-
-	// Namespaced event handlers
-	all = event.type.indexOf(".") < 0 && !event.exclusive;
-
-	if ( !all ) {
-		namespaces = event.type.split(".");
-		event.type = namespaces.shift();
-		namespace_sort = namespaces.slice(0).sort();
-		namespace_re = new RegExp("(^|\\.)" + namespace_sort.join("\\.(?:.*\\.)?") + "(\\.|$)");
-	}
-
-	event.namespace = event.namespace || namespace_sort.join(".");
-
-	events = $._data(this, "events");
-
-	handlers = (events || {})[ event.type ];
-
-	if ( events && handlers ) {
-		// Clone the handlers to prevent manipulation
-		handlers = handlers.slice(0);
-
-		for ( var j = 0, l = handlers.length; j < l; j++ ) {
-			var handleObj = handlers[ j ];
-			if( curHandler ){
-				if(curHandler === handleObj){
-					curHandler = undefined;
-				}
-				continue;
-			}
-			// Filter the functions by class
-			if ( all || namespace_re.test( handleObj.namespace ) ) {
-				// Pass in a reference to the handler function itself
-				// So that we can later remove it
-				event.handler = handleObj.handler;
-				event.data = handleObj.data;
-				event.handleObj = handleObj;
-
-				var ret = handleObj.handler.apply( this, args );
-
-				if ( ret !== undefined ) {
-					event.result = ret;
-					if ( ret === false ) {
-						event.preventDefault();
-						event.stopPropagation();
-					}
-				}
-
-				if ( event.isImmediatePropagationStopped() ) {
-					break;
-				}
-			}
-		}
-	}
-
-	return event.result;
-};
 
 });

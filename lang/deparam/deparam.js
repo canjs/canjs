@@ -50,7 +50,8 @@ steal.plugins('jquery').then(function($){
 				for ( var j = 0; j < parts.length - 1; j++ ) {
 					var part = parts[j];
 					if (!current[part] ) {
-						current[part] = digitTest.test(part) || parts[j+1] == "[]" ? [] : {}
+						// if what we are pointing to looks like an array
+						current[part] = digitTest.test(parts[j+1]) || parts[j+1] == "[]" ? [] : {}
 					}
 					current = current[part];
 				}

@@ -180,23 +180,22 @@ $.Controller("Modal",{
 $.Controller("Saver",{
 	listensTo : ['hide']
 },{
-	"hide" : function(el, ev){
-		if(el.hasClass('dirty')){
+	"hide": function(el, ev){
+		if (el.hasClass('dirty')) {
 			ev.pause()
-			$('#modal').modal(
-			{
+			$('#modal').modal({
 				yes: function(){
 					var save = $('<span>Saving</span>').appendTo(el);
-					$.post("/update",el.serialize(), function(){
+					$.post("/update", el.serialize(), function(){
 						save.remove();
 						el.trigger('set');
 						ev.resume();
-					} )
+					})
 				},
-				no : function(){
+				no: function(){
 					ev.resume();
 				},
-				cancel : function(){
+				cancel: function(){
 					ev.preventDefault();
 					ev.resume();
 				}
