@@ -181,9 +181,45 @@ getCharElement = function( elems , range, len ) {
 	return len;
 };
 /**
- * Gets or sets the current text selection
- * @param {Object} start
- * @param {Object} end
+ * @parent dom
+ * @tag beta
+ * 
+ * Gets or sets the current text selection.
+ * 
+ * ## Getting
+ * 
+ * Gets the current selection in the context of an element.  For example:
+ * 
+ *     $('textarea').selection() // -> { .... }
+ *     
+ * returns an object with:
+ * 
+ *   - __start__ - The number of characters from the start of the element to the start of the selection.
+ *   _ __end__ - The number of characters from teh start of the element to the end of the selection.
+ *   _ __range__ - A [jQuery.Range] that represents the current selection.
+ * 
+ * This lets you do:
+ * 
+ *     var textarea = $('textarea')
+ *       selection = textarea.selection(),
+ *       selected = textarea.val().substr(selection.start, selection.end);
+ *       
+ *     alert('You selected '+selected+'.');
+ *     
+ * Selection works with all elements.  If you want to get selection information on the page:
+ * 
+ *     $(document.body).selection();
+ *     
+ * ## Setting
+ * 
+ * By providing a start and end offset, you can select text within a given element.
+ * 
+ *     $('#rte').selection(30, 40)
+ * 
+ * @param {Number} [start] - Start of the range
+ * @param {Number} [end] - End of the range
+ * @return {Object|jQuery} - returns the selection information or the jQuery collection for
+ * chaining.
  */
 $.fn.selection = function(start, end){
 	if(start !== undefined){

@@ -22,7 +22,12 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 			return method.apply(object, args2);
 		};
 	},
-		event = $.event;
+
+		event = $.event,
+		clearSelection = window.getSelection ? function(){
+				window.getSelection().removeAllRanges()
+			} : function(){};
+	// var handle = event.handle; //unused
 	/**
 	 * @class jQuery.Drag
 	 * @parent specialevents
@@ -161,6 +166,8 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 
 			if (!this.callEvents('down', this.element, ev) ) {
 			    this.noSelection(this.delegate);
+				//this is for firefox
+				clearSelection();
 			}
 		},
 		/**
@@ -313,6 +320,7 @@ steal.plugins('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').the
 			if ( this._cancelled ) {
 				return;
 			}
+			clearSelection();
 			/**
 			 * @attribute location
 			 * The location of where the element should be in the page.  This 

@@ -1,16 +1,16 @@
 module("jquery/model/associations",{
 	setup: function() {
 		
-		$.Model.extend("MyTest.Person");
-		$.Model.extend("MyTest.Loan");
-		$.Model.extend("MyTest.Issues");
+		$.Model("MyTest.Person");
+		$.Model("MyTest.Loan");
+		$.Model("MyTest.Issue");
 		
 		$.Model.extend("MyTest.Customer",
 		{
-			init: function() {
-				this.belongsTo("MyTest.Person")
-				this.hasMany("MyTest.Loan")
-				this.hasMany("MyTest.Issues")
+			attributes : {
+				person : "MyTest.Person.model",
+				loans : "MyTest.Loan.models",
+				issues : "MyTest.Issue.models"
 			}
 		},
 		{});

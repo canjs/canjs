@@ -383,8 +383,7 @@ test("Model events" , function(){
 	var item = new Test.Event();
 	item.save();
 	
-	
-	
-	
-	
 });
+
+
+

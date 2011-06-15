@@ -144,4 +144,27 @@ test("$.fixture.make fixtures",function(){
 	})
 });
 
+test("simulating an error", function(){
+	var st = '{type: "unauthorized"}';
+	
+	$.fixture("/foo", function(){
+		return [401,st]
+	});
+	stop();
+	
+	$.ajax({
+		url : "/foo",
+		success : function(){
+			ok(false, "success called");
+			start();
+		},
+		error : function(jqXHR, status, statusText){
+			ok(true, "error called");
+			equals(statusText, st);
+			start();
+		}
+	})
+})
+
+
 });

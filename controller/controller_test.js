@@ -146,7 +146,7 @@ test("parameterized actions", function(){
 test("windowresize", function(){
 	var called = false;
 	jQuery.Controller.extend("WindowBind",{
-		"windowresize" : function() {
+		"{window} resize" : function() {
 			called = true;
 		}
 	})
@@ -211,5 +211,29 @@ test("objects in action", function(){
 	$("#qunit-test-area").html("");
 	
 });
+
+test("dot",function(){
+	$.Controller("Dot",{
+		"foo.bar" : function(){
+			ok(true,'called')
+		}
+	});
+	
+	var ta = $("<div/>").appendTo( $("#qunit-test-area") );
+	ta.dot().trigger("foo.bar");
+	$("#qunit-test-area").html("");
+})
+
+// HTMLFormElement[0] breaks
+test("the right element", 1, function(){
+	$.Controller('FormTester',{
+		init : function(){
+			equals(this.element[0].nodeName.toLowerCase(), "form" )
+		}
+	})
+	$("<form><input name='one'/></form>").appendTo( $("#qunit-test-area") )
+		.form_tester();
+	$("#qunit-test-area").html("")
+})
 
 });

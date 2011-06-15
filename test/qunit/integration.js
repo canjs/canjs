@@ -1,6 +1,15 @@
-steal.plugins('funcunit/qunit','jquery/model','jquery/controller').then(function(){
+steal.plugins('funcunit/qunit',
+	'jquery/model',
+	'jquery/controller',
+	'jquery/view/ejs',
+	'jquery/dom/fixture')
+	.then(function(){
 	
-module('integration');
+module('integration',{
+	setup : function(){
+		$("#qunit-test-area").html("")
+	}
+});
 
 test("controller can listen to model instances and model classes", function(){
 	
@@ -36,6 +45,25 @@ test("controller can listen to model instances and model classes", function(){
 		
 	inst.save();
 	stop();
+})
+
+
+test("Model and Views", function(){
+	stop();
+	
+	$.Model("Test.Thing",{
+		findOne : "/thing"
+	},{})
+	
+	$.fixture("/thing","//jquery/test/thing.json")
+	
+	var res = $.View("//jquery/test/template.ejs",
+		Test.Thing.findOne());
+		
+	res.done(function(resolved){
+		equals(resolved,"foo","works")
+		start()
+	})
 })
 	
 })

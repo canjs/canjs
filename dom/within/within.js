@@ -12,11 +12,11 @@ steal.plugins('jquery/dom').then(function($){
  * @function within
  * @parent dom
  * Returns if the elements are within the position
- * @param {Object} x
- * @param {Object} y
- * @param {Object} cache
+ * @param {Number} left the position 
+ * @param {Number} top
+ * @param {Boolean} [useOffsetCache]
  */
-$.fn.within= function(x, y, useOffsetCache) {
+$.fn.within= function(left, top, useOffsetCache) {
     var ret = []
     this.each(function(){
         var q = jQuery(this);
@@ -28,7 +28,7 @@ $.fn.within= function(x, y, useOffsetCache) {
 						jQuery.data(this,"offsetCache") || jQuery.data(this,"offsetCache", q.offset()) : 
 						q.offset();
 
-        var res =  withinBox(x, y,  offset.left, offset.top,
+        var res =  withinBox(left, top,  offset.left, offset.top,
                                     this.offsetWidth, this.offsetHeight );
 
         if (res) {
@@ -36,7 +36,7 @@ $.fn.within= function(x, y, useOffsetCache) {
 		}
     });
     
-    return this.pushStack( jQuery.unique( ret ), "within", x+","+y );
+    return this.pushStack( jQuery.unique( ret ), "within", left+","+top );
 }
 
 

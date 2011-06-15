@@ -148,4 +148,8 @@ test("modifier with a deferred", function(){
 		equals($("#qunit-test-area").html(), "FOO", "worked!");
 	},100);
 
-})
+});
+
+/*test("bad url", function(){
+	$.View("//asfdsaf/sadf.ejs")
+});*/
