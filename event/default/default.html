@@ -52,16 +52,24 @@
         </script>
 <script id="demo-source" type='text/javascript'>
 steal.plugins("jquery/controller",'jquery/event/default').then(function($){
-$.Controller.extend("Tabs",{
+$.Controller("Tabs",{
 	init : function(){
 		this.find("li:first").addClass('active')
 		this.find(".tab:gt(0)").hide();
 	},
 	"li click" : function(el, ev){
 		ev.preventDefault();
-		if(!el.hasClass('active') && this.sub(el).triggerDefaults("show")){
-			this.sub(this.find(".active").removeClass("active")).hide();
-			el.addClass("active")	
+		
+		if(!el.hasClass('active') ) {
+			
+			var ev = $.Event('show');
+			this.sub(el).trigger(ev);
+			
+		    if ( ! ev.isDefaultPrevented() ) {
+			
+				this.sub(this.find(".active").removeClass("active")).hide();
+				el.addClass("active");
+			}
 		}
 	},
 	sub : function(el){
@@ -79,7 +87,7 @@ $("#second").bind("show",function(ev){
 	}
 })
 
-}).start();
+});
 </script>
 	</body>
 </html>

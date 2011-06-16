@@ -25,13 +25,6 @@
 <script type='text/javascript' 
         src='../../steal/steal.js'>   
 </script>
-<script type='text/javascript'>
-	steal.plugins('jquery/model',
-		'jquery/controller',
-		'jquery/dom/form_params',
-		'jquery/dom/fixture',
-		'jquery/view/ejs').start()
-</script>
 <script type='text/ejs' id='listView'>
 	<table cellspacing='0px'>
 	<thead>
@@ -66,6 +59,15 @@
 	</td>
 </script>
 <script type='text/javascript'>
+
+</script>
+<script type='text/javascript' id="demo-source"> 
+steal.plugins('jquery/model',
+	'jquery/controller',
+	'jquery/dom/form_params',
+	'jquery/dom/fixture',
+	'jquery/view/ejs').then(function(){
+
 // Use fixtures to make 4 recipes
 $.fixture.make(["recipes","recipe"],4, function(i, messages){
 	return {
@@ -81,8 +83,8 @@ $.fixture.make(["workitems","workitem"],4, function(i, messages){
 		assignedTo : i%2? "Brian" : "Justin"
 	}
 })
-</script>
-<script type='text/javascript' id="demo-source">   
+
+ 
 // A grid widget
 $.Controller.extend("Grid",{
 	// when added to an element, use the model
@@ -154,6 +156,8 @@ $("#recipes").grid({model: Recipe});
 
 // Add a grid with workitems
 $("#workItems").grid({model: WorkItem});
+
+});
 </script>
 	</body>
 </html>

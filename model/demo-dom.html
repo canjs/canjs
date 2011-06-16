@@ -21,17 +21,15 @@
 <script type='text/javascript' 
         src='../../steal/steal.js'>   
 </script>
-<script type='text/javascript'>
-steal.plugins('jquery/model',
-		'jquery/dom/fixture').start()
-</script>
-<script type='text/javascript'>
+<script type='text/javascript'  id="demo-source">
+steal.plugins('jquery/model','jquery/dom/fixture').then(function(){
+
 CONTACTS = [{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
 			 {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10'},
 			 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]
 CONTACTS_FIXTURE =  function(){
-				return [CONTACTS];
-			};
+	return [CONTACTS];
+};
 			
 // A contact model
 $.Model.extend("Contact",{
@@ -66,8 +64,7 @@ $.Model.extend("Contact",{
 	}
 
 });
-</script>
-<script type='text/javascript' id="demo-source">   
+
 Contact.findAll({},function(contacts){
   var contactsEl = $('#contacts');
   for(var i =0; i < contacts.length; i++){
@@ -89,8 +86,9 @@ $("#contacts a").live('click', function(){
                       contactEl.remove();
                     })
 		  
-})
+});
 
+});
 </script>
 	</body>
 </html>

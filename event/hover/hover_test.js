@@ -1,3 +1,8 @@
+steal
+ .plugins("jquery/event/hover",'funcunit/syn')  //load your app
+ .plugins('funcunit/qunit')
+ .then(function(){
+
 module("jquery/dom/hover")
 
 test("hovering", function(){
@@ -52,4 +57,6 @@ test("hovering", function(){
 		},10)
 		
 	},30)
-})
+});
+
+});

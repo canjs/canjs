@@ -25,7 +25,7 @@ steal.plugins('jquery/event/drag', 'jquery/dom/cur_styles').then(function( $ ) {
 		this._limit = {
 			offset: container.offsetv().plus(paddingBorder),
 			size: container.dimensionsv(),
-			center : center
+			center : center === true ? 'both' : center
 		};
 		return this;
 	};

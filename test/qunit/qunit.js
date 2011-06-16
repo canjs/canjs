@@ -12,11 +12,15 @@ steal.plugins('jquery').then(function($){
 	  '//jquery/controller/controller_test',
 	  '//jquery/dom/compare/compare_test',
 	  '//jquery/dom/cur_styles/cur_styles_test',
+	  '//jquery/dom/dimensions/dimensions_test',
+	  '//jquery/dom/form_params/form_params_test',
 	  '//jquery/lang/lang_test',
 	  '//jquery/lang/deparam/deparam_test',
 	  '//jquery/dom/fixture/fixture_test',
 	  '//jquery/event/default/default_test',
+	  '//jquery/event/destroyed/destroyed_test',
 	  '//jquery/event/drag/drag_test',
+	  '//jquery/event/hover/hover_test',
 	  '//jquery/event/key/key_test',
 	  '//jquery/tie/tie_test'
 	  
@@ -27,14 +31,8 @@ steal.plugins('jquery').then(function($){
 
 
 
-'jquery/dom/dimensions/test/qunit',
+	
 
-'jquery/dom/form_params/test/qunit',
-
-'jquery/event/hover/test/qunit',
-
-	'jquery/event/destroyed/test/qunit',
-	'jquery/event/hover/test/qunit',
 	'jquery/model/test/qunit',
 	'jquery/view/test/qunit',
 	'jquery/view/ejs/test/qunit'

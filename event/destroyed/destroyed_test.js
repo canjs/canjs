@@ -1,3 +1,8 @@
+steal
+ .plugins("jquery/event/destroyed")  //load your app
+ .plugins('funcunit/qunit') 
+ .then(function(){
+
 module("jquery/event/destroyed")
 test("removing an element", function(){
 	var div = $("<div/>").data("testData",5)
@@ -9,4 +14,6 @@ test("removing an element", function(){
 	})
 	div.remove();
 	ok(destroyed, "destroyed called")
-})
+});
+
+});
