@@ -20,9 +20,10 @@
 			<a class="object-list-test">Fifth</a>
 			<a class="nested-object-test">Sixth</a>
 		</div>
-	<script type='text/javascript' src='../../../steal/steal.js?steal[app]=jquery/controller/history&steal[env]=development'>   
+	<script type='text/javascript' src='../../../steal/steal.js'>   
 	</script>
 	<script type='text/javascript'>
+steal.plugins('jquery/controller/history').then(function(){
 	    $.Controller.extend('HistoryDemoController',{
 	    },
 	    {
@@ -121,6 +122,7 @@
 	    });
 	    
 	    $("#history_demo").history_demo();
+});
         </script>
     </body>
 </html>

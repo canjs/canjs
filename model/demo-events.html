@@ -38,14 +38,14 @@
 <script type='text/javascript' 
         src='../../steal/steal.js'>   
 </script>
+
 <script type='text/javascript'>
+	
 steal.plugins('jquery/model',
 		'jquery/dom/fixture',
 		'jquery/model/list',
-		'jquery/lang/openajax').start()
-</script>
-
-<script type='text/javascript'>
+		'jquery/lang/openajax').then(function(){
+			
 $.Model.extend("Contact",{
 	attributes : { 
 		birthday : 'date'
@@ -112,12 +112,7 @@ makeAgeUpdater = function(contact){
 			'birthday': this.value
 		})
 	}).appendTo(updater)
-}
-</script>
-
-<script type='text/javascript'>   
-
-
+}; 
 
 makeList1 = function(contacts){
   var contactsEl = $('#contacts1');
@@ -172,7 +167,7 @@ Contact.findAll({},function(contacts){
 
 
 
-
+});
 
 </script>
 	</body>

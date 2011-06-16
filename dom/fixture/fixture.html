@@ -15,12 +15,9 @@
 </div>
 <script type='text/javascript'  
         src='../../../steal/steal.js'></script>
-<script type='text/javascript'>
-steal.plugins('jquery/dom/fixture','jquery/dom/form_params').start()
-</script>
-
 <script type='text/javascript' id="demo-source">
-
+steal.plugins('jquery/dom/fixture','jquery/dom/form_params')
+	.then(function(){
 // gets content from a fixture
 $.get("/messages.php",
   function(html){
@@ -135,7 +132,7 @@ var messagesHTML = function(json){
 }
 
 
-
+});
 
 
 </script>
