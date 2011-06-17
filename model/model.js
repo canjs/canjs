@@ -458,7 +458,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function(id, attrs, success, error){
-				return ajax(str, addId.call(this,attrs, id), success, error, "-restUpdate","put")
+				return ajax(str, addId.call(this,attrs, id), success, error, fixture.call(this,"Update","-restUpdate"),"put")
 			}
 		},
 		destroy: function( str ) {
