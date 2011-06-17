@@ -253,7 +253,7 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		if(typeof text == 'string'){
 			return escapeHTML(text)
 		}else{
-			return "";
+			return EJS.text(text);
 		}
 	}
 	//returns something you can call scan on
@@ -286,11 +286,10 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			eeLeft : left + '%==',
 			eLeft: left + '%=',
 			cmnt: left + '%#',
-			cleanLeft: left+"%~",
 			scan : scan,
 			lines : 0
 		});
-		scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eeLeft, scanner.eLeft, scanner.cleanLeft,
+		scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eeLeft, scanner.eLeft,
 		scanner.cmnt, scanner.left, scanner.right + '\n', scanner.right, '\n'].join(")|(").
 			replace(/\[/g,"\\[").replace(/\]/g,"\\]") + ")");
 		return scanner;
@@ -327,7 +326,6 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 					case scanner.left:
 					case scanner.eLeft:
 					case scanner.eeLeft:
-					case scanner.cleanLeft:
 					case scanner.cmnt:
 						startTag = token;
 						if ( content.length > 0 ) {
@@ -359,10 +357,10 @@ steal.plugins('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 								buff.push(content, ";");
 							}
 							break;
-						case scanner.cleanLeft : 
+						case scanner.eLeft : 
 							buff.push(insert_cmd, "(jQuery.EJS.clean(", content, ")));");
 							break;
-						case scanner.eLeft:
+						case scanner.eeLeft:
 							buff.push(insert_cmd, "(jQuery.EJS.text(", content, ")));");
 							break;
 						case scanner.eeLeft:

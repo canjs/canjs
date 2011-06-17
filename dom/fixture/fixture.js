@@ -494,7 +494,6 @@ steal.plugins('jquery/dom').then(function( $ ) {
 					}
 				}
 				
-				
 				if( filter ) {
 					i = 0;
 					while (i < retArr.length) {

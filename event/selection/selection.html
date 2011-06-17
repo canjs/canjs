@@ -38,9 +38,13 @@
 		
 		
 		<script type='text/javascript' 
-                src='../../../steal/steal.js?jquery/event/selection'>   
+                src='../../../steal/steal.js'>  
 			
-			(function(){
+		</script> 
+			
+		<script type='text/javascript'>  
+			
+			steal.plugins('jquery/event/selection').then(function(){
 				$.event.selection.preventDefault = true;
 				
 				var selection = $("<div/>").css({
@@ -78,7 +82,7 @@
 						selection.show();
 					};
 				
-				$(document.body).bind('mousedown', function(){
+				$(document.body).bind('touchstart mousedown', function(){
 					selection.hide();
 				})
 				.bind('selectionStart', function(ev, range){
@@ -91,11 +95,8 @@
 					highlight(range);
 				})
 				
-			})();
+			});
 			
         </script>
-		<script type='text/javascript'>
-			
-		</script>
 	</body>
 </html>
