@@ -1,14 +1,5 @@
-(function(){
-	var isReady,
-		stateAfterScript;
-
-
 //we probably have to have this only describing where the tests are
-steal.plugins('jquery').then(function($){
-		$(function(){
-			isReady = true;
-		})
-	},'//jquery/class/class_test',
+steal('//jquery/class/class_test',
 	  '//jquery/controller/controller_test',
 	  '//jquery/dom/compare/compare_test',
 	  '//jquery/dom/cur_styles/cur_styles_test',
@@ -31,25 +22,15 @@ steal.plugins('jquery').then(function($){
 
 'jquery/dom/form_params/test/qunit',
 
+'jquery/event/destroyed/test/qunit',
 'jquery/event/hover/test/qunit',
 
-	'jquery/event/destroyed/test/qunit',
-	'jquery/event/hover/test/qunit',
-	'jquery/model/test/qunit',
-	'jquery/view/test/qunit',
+
+
+
+'jquery/model/test/qunit',
+
+'jquery/view/test/qunit',
 	'jquery/view/ejs/test/qunit'
 ).then('integration',
-	   '//jquery/event/default/default_pause_test',function(){
-
-	stateAfterScript = isReady;
-	module('jquery v steal');
-
-
-	test("jquery isn't ready", function(){
-		ok(!stateAfterScript, "jQuery isn't ready yet")
-	})
-
-});
-
-
-})();
+	   '//jquery/event/default/default_pause_test')

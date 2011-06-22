@@ -359,7 +359,12 @@ steal.plugins("jquery").then(function( $ ) {
 
 		//if a absolute path, use steal to get it
 		if ( url.match(/^\/\//) ) {
-			url = steal.root.mapJoin(url.substr(2));
+			if (typeof steal === "undefined") {
+				url = "/"+url.substr(2);
+			}
+			else {
+				url = steal.root.join(url.substr(2));
+			}
 		}
 
 		//get the template engine
@@ -489,7 +494,7 @@ steal.plugins("jquery").then(function( $ ) {
 		 * @param {Object} src
 		 */
 		registerScript: function( type, id, src ) {
-			return "steal.plugins('jquery/view/ejs').then(function($){\n$.View.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");\n})";
+			return "$.View.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
 		},
 		/**
 		 * @hide
@@ -605,25 +610,6 @@ steal.plugins("jquery").then(function( $ ) {
 		}
 		//copy remaining hooks back
 		$.extend($view.hookups, hooks);
-	};
-	
-	/**
-	 *  @add jQuery.fn
-	 *  @parent jQuery.View
-	 *  Called on a jQuery collection that was rendered with $.View with pending hookups.  $.View can render a 
-	 *  template with hookups, but not actually perform the hookup, because it returns a string without actual DOM 
-	 *  elements to hook up to.  So hookup performs the hookup and clears the pending hookups, preventing errors in 
-	 *  future templates.
-	 *  
-	 * @codestart
-	 * $($.View('//views/recipes.ejs',recipeData)).hookup()
-	 * @codeend
-	 */
-	$.fn.hookup = function(){
-		var hooks = $view.hookups;
-		$view.hookups = {};
-		hookupView(this, hooks);
-		return this;
 	};
 
 	/**
