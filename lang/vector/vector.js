@@ -129,12 +129,6 @@ steal.plugins('jquery').then(function($){
 			var doc = document.documentElement,
 				body = document.body;
 			return new $.Vector(this.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), this.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0));
-		} else if (this.originalEvent && this.originalEvent.touches && this.originalEvent.touches.length) {
-			var touch = this.originalEvent.touches[0];
-			return new $.Vector(touch.pageX, touch.pageY);
-		} else if (this.originalEvent && this.originalEvent.changedTouches && this.originalEvent.changedTouches.length) {
-			var touch = this.originalEvent.changedTouches[0];
-			return new $.Vector(touch.pageX, touch.pageY);
 		} else {
 			return new $.Vector(this.pageX, this.pageY);
 		}
