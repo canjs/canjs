@@ -1,4 +1,3 @@
-/*
 @page jquery.model.encapsulate Service Encapsulation
 @parent jQuery.Model
 
@@ -184,7 +183,3 @@ Contact.findAll({},function(contacts){
   $('#contacts').html( html.join('') );
 });
 @codeend
-
-
- */
-//s

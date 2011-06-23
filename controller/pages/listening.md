@@ -1,4 +1,3 @@
-/**
 @page jquery.controller.listening Listening To Events
 @parent jQuery.Controller
 
@@ -188,5 +187,3 @@ The [jQuery.Controller.prototype.bind] and [jQuery.Controller.prototype.delegate
 methods let you listen to events on other elements.  These event handlers will
 be unbound when the controller instance is destroyed.
 
- */
-//

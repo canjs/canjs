@@ -1,8 +1,7 @@
-/*
 @page jquery.model.deferreds Deferreds
 @parent jQuery.Model
 
-Models (and also views) work 
+Models (and views) work 
 with [http://api.jquery.com/category/deferred-object/ jQuery.Deferred]. If
 you properly fill out a model's [jquery.model.services service API], asynchronous
 requests done via the model will return a jQuery.Deferred.
@@ -47,5 +46,3 @@ The following creates a task, updates it, and destroys it:
       })
       
     });
-
-*/

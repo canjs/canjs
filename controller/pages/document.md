@@ -1,4 +1,3 @@
-/**
 @page jquery.controller.documentcontrollers Document Controllers
 @parent jQuery.Controller
 
@@ -61,5 +60,3 @@ $.Controller.extend("MainController",{
   }
 })
 @codeend
- */
-//

@@ -51,7 +51,7 @@ steal.plugins("jquery","jquery/lang").then(function( $ ) {
 	/**
 	 * @class jQuery.Class
 	 * @plugin jquery/class
-	 * @tag core
+	 * @parent jquerymx
 	 * @download dist/jquery/jquery.class.js
 	 * @test jquery/class/qunit.html
 	 * 

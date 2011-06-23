@@ -1,6 +1,6 @@
 /**
  * @page specialevents Special Events
- * @tag core
+ * @parent jquerymx
  * JavaScriptMVC provides a bunch of useful special events.  Find out more info on the left.  The following is a 
  * brief summary:
  * 
