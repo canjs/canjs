@@ -1,4 +1,3 @@
-/**
 @page jquery.controller.plugin The generated jQuery plugin
 @parent jQuery.Controller
 
@@ -100,5 +99,3 @@ You can overwrite the Controller's default name by setting a static pluginName p
     { ... })
     
     $("#tabs").tabs()
- */
-//

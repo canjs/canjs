@@ -122,7 +122,7 @@ steal.plugins('jquery/class', 'jquery/lang').then(function() {
 		unbind = $method('unbind');
 	/**
 	 * @class jQuery.Model
-	 * @tag core
+	 * @parent jquerymx
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/model.js
 	 * @test jquery/model/qunit.html
 	 * @plugin jquery/model

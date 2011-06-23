@@ -9,7 +9,7 @@ steal.plugins("jquery").then(function( $ ) {
 
 	/**
 	 * @class jQuery.View
-	 * @tag core
+	 * @parent jquerymx
 	 * @plugin jquery/view
 	 * @test jquery/view/qunit.html
 	 * @download dist/jquery.view.js
