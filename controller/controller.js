@@ -29,10 +29,11 @@ steal.plugins('jquery/class', 'jquery/lang', 'jquery/event/destroyed').then(func
 		Str = $.String,
 		// Binds an element, returns a function that unbinds
 		delegate = function( el, selector, ev, callback ) {
-			$(el).delegate(selector, ev, callback);
+			var binder = el.delegate && el.undelegate ? el : $(isFunction(el) ? [el] : el)
+			binder.delegate(selector, ev, callback);
 			return function() {
-				$(el).undelegate(selector, ev, callback);
-				el = ev = callback = selector = null;
+				binder.undelegate(selector, ev, callback);
+				binder = el = ev = callback = selector = null;
 			};
 		},
 		binder = function( el, ev, callback, selector ) {

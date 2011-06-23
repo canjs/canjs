@@ -5,25 +5,25 @@ var isArray =  $.isArray,
 		return typeof obj === 'object' && obj !== null && obj;
 	},
 	each = $.each,
-hookup = function(val, prop, parent){
-	
-	if(isArray(val)){
-		 val = new $.Observe.List( val )
-	} else {
-		 val = new $.Observe( val )
-	}
-	
-	//listen to all changes and send upwards
-	val.bind("change"+parent._namespace, function(ev, attr, how, val, old ) {
-		var args = $.makeArray(arguments),
-			ev= args.shift();
-		args[0] = prop+ (args[0] != "*" ? "."+args[0] : ""); // change the attr
-		$([parent]).triggerHandler(ev, args);
-	});
-	
-	return val;
-},
-getArgs = function(args){
+	hookup = function(val, prop, parent){
+		
+		if(isArray(val)){
+			 val = new $.Observe.List( val )
+		} else {
+			 val = new $.Observe( val )
+		}
+		
+		//listen to all changes and send upwards
+		val.bind("change"+parent._namespace, function(ev, attr, how, val, old ) {
+			var args = $.makeArray(arguments),
+				ev= args.shift();
+			args[0] = prop+ (args[0] != "*" ? "."+args[0] : ""); // change the attr
+			$([parent]).triggerHandler(ev, args);
+		});
+		
+		return val;
+	},
+	getArgs = function(args){
 		if(args[0] && ( $.isArray(args[0])  )   ){
 			return args[0]
 		}
@@ -34,7 +34,7 @@ getArgs = function(args){
 	push = [].push,
 	id = 0;
 	
-var count = 0;
+
 // add - property added
 // remove - property removed
 // set - property value changed
