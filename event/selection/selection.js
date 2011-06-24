@@ -5,37 +5,20 @@ steal.plugins('jquery/dom/range','jquery/controller','jquery/event/livehack').th
 
 	var event = $.event;
 	
-	var supportTouch = "ontouchend" in document,
-		scrollEvent = "touchmove scroll",
-		touchStartEvent = supportTouch ? "touchstart" : "mousedown",
-		touchStopEvent = supportTouch ? "touchend" : "mouseup",
-		touchMoveEvent = supportTouch ? "touchmove" : "mousemove",
-		coords = function(event){
-			var d = event.originalEvent.touches ?
-				event.originalEvent.touches[ 0 ] :
-				event;
-			return {
-					pageX: d.pageX, 
-					pageY: d.pageY
-			};
-		};
-	
-	
 	event.selection = {
 		delay : 300,
 		preventDefault : event.supportTouch
 	};
 	
-	event.setupHelper( ["selectionStart","selectionEnd","selectionEnding","selectionMoving","selectionMove"], touchStartEvent, function(ev){
+	event.setupHelper( ["selectionStart","selectionEnd","selectionEnding","selectionMoving","selectionMove"], "mousedown", function(ev){
 		//now start checking mousemoves to update location
 		var delegate = ev.liveFired || ev.currentTarget,
 			selector = ev.handleObj.selector,
-			startXY = coords(ev),
 			ready = false,
 			el = this,
 			startRange = $.Range(ev),
-			getRange = function(rangeev){
-				var range = $.Range(rangeev),
+			getRange = function(ev){
+				var range = $.Range(ev),
 					pos = startRange.compare("START_TO_START", range),
 					entire;
 				if(pos == -1 || pos == 0){
@@ -45,8 +28,8 @@ steal.plugins('jquery/dom/range','jquery/controller','jquery/event/livehack').th
 				}
 			},
 			cleanUp = function(){
-				$(delegate).unbind(touchMoveEvent, mousemove)
-				   .unbind(touchStopEvent,mouseup);
+				$(delegate).unbind('mousemove', mousemove)
+				   .unbind('mouseup',mouseup);
 				 clearTimeout(moveTimer);
 				 startRange = null;
 			},
@@ -67,9 +50,8 @@ steal.plugins('jquery/dom/range','jquery/controller','jquery/event/livehack').th
 				
 			},
 			mousemove = function(moveev){
-				var moveXY = coords(moveev);
 				// safari keeps triggering moves even if we haven't moved
-				if(moveXY.pageX == startXY.pageX && moveXY.pageY == startXY.pageY){
+				if(moveev.clientX == ev.clientX && moveev.clientY == ev.clientY){
 					return;
 				}
 				
@@ -107,7 +89,8 @@ steal.plugins('jquery/dom/range','jquery/controller','jquery/event/livehack').th
 		}
 		
 		
-		$(delegate).bind(touchMoveEvent, mousemove)
-				   .bind(touchStopEvent, mouseup)
+		$(delegate).bind('mousemove', mousemove)
+				   .bind('mouseup',mouseup)
 	});
+	
 });

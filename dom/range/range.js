@@ -143,19 +143,9 @@ $.extend($.Range.prototype,
 				
 				
 				// now lets start moving the end until the boundingRect is within our range
-				var div = $("<div />").appendTo(document.body);
+				
 				for(var i = 1; i < length+1; i++){
-					var rect = range.start(i-1).end(i).rect();
-						var rect2 = range.start(i-1).end(i).rect('page');
-					// div.css({
-					// 					position:"absolute",
-					// 					left:rect2.left,
-					// 					top:rect2.top,
-					// 					width:rect2.width,
-					// 					height:rect2.height,
-					// 					backgroundColor:"red",
-					// 					opacity:0.5
-					// 				})
+					var rect = range.end(i).rect();
 					if(rect.left <= clientX && rect.left+rect.width >= clientX &&
 					  rect.top <= clientY && rect.top+rect.height >= clientY ){
 						range.start(i-1); 
@@ -169,27 +159,19 @@ $.extend($.Range.prototype,
 		// if not 'on' text, recursively go through and find out when we shift to next
 		// 'line'
 		var previous;
-		// console.log("children", parent.childNodes)
 		iterate(parent.childNodes, function(textNode){
-			// console.log(textNode)
-			var range = $.Range(textNode),
-				rect = range.rect(),
-				prevRect = previous && previous.rect();
-			if(rect.top > point.clientY){
-				// console.log(textNode, previous)
+			var range = $.Range(textNode);
+			if(range.rect().top > point.clientY){
 				return false;
 			}else{
-				// console.log("prev", range)
 				previous = range;
 			}
 		});
 		if(previous){
 			previous.start(previous.toString().length);
 			this.range = previous.range;
-			// console.log("set", this.range, previous.rect(), point)
 		}else{
 			this.range = $.Range(parent).range
-			// console.log("set2", this.range)
 		}
 		
 	},
@@ -375,35 +357,13 @@ $.extend($.Range.prototype,
 	 * @return {TextRectangle} - The client rects.
 	 */
 	rect : function(from){
-		var rect = this.range.getBoundingClientRect();
-		// console.log("rect", this)
-		// collapsed ranges don't provide meaningful bounding client rect in safari
-		// so we'll uncollapse it and get the dimensions
-		if((!rect.left && !rect.top)){
-			var range = this.clone(),
-				end = range.end(),
-				start = range.start(),
-				correction = 0;
-			if (start.offset > 1) {
-				range.start(start.offset - 2);
-				rect = range.range.getBoundingClientRect();
-				correction = rect.width;
-			}
-			else if(end.offset < end.container.length - 1){
-				range.end(end.offset+1)
-				rect = range.range.getBoundingClientRect();
-			}
-			rect = $.extend({}, rect);
-			rect.left += correction;
-			rect.width = 0;
-		}
-			
+		var rect = this.range.getBoundingClientRect()
 		if(from === 'page'){
 			var off = scrollOffset();
 			rect = $.extend({}, rect);
 			rect.top += off.top;
 			rect.left += off.left;
-		}	
+		}
 		return rect;
 	},
 	/**
@@ -412,34 +372,21 @@ $.extend($.Range.prototype,
 	 * rect coordinates from the page.
 	 */
 	rects : function(from){
-		var unsortedRects = $.makeArray( this.range.getClientRects() ),
-			i=0,j,
-			len = unsortedRects.length;
-		
-		var rects = unsortedRects.sort(function(rect1, rect2){
+		var rects = $.makeArray( this.range.getClientRects() ).sort(function(rect1, rect2){
 			return  rect2.width*rect2.height - rect1.width*rect1.height;
-		});
-		
-		i=0;
-		// remove zero width ones first
-		while(i < rects.length){
-			if(!rects[i].width){
-				rects.splice(i,1);
-			} else {
-				i++;
-			}
-		}
+		}),
+			i=0,j,
+			len = rects.length;
 		//return rects;
 		//rects are sorted, largest to smallest	
-		var cur, found;
-		i=0;
 		while(i < rects.length){
-			cur = rects[i];
-			found = false;
+			var cur = rects[i],
+				found = false;
 			
+			j = i+1;
 			for(j = i+1; j < rects.length; j++){
 				if( withinRect(cur, rects[j] ) ) {
-					found = true;
+					found = rects[j];
 					break;
 				}
 			}
@@ -586,8 +533,7 @@ var iterate = function(elems, cb){
 	for (var i = 0; elems[i]; i++) {
 		elem = elems[i];
 		// Get the text from text nodes and CDATA nodes
-		if ((elem.nodeType === 3 || elem.nodeType === 4) && (!isWhitespace(elem))) {
-			// console.log(elem, isWhitespace(elem))
+		if (elem.nodeType === 3 || elem.nodeType === 4) {
 			if (cb(elem) === false) {
 				return false;
 			}
@@ -609,6 +555,7 @@ isWhitespace = function(el){
 	}
 	return (supportWhitespace? el.isElementContentWhitespace : 
 			(el.nodeType === 3 && '' == el.data.trim()));
+
 }, 
 // if a point is within a rectangle
 within = function(rect, point){
@@ -646,7 +593,6 @@ scrollOffset = function( win){
 		top: (doc && doc.scrollTop || body && body.scrollTop || 0) + (doc.clientTop || 0)
 	};
 };
-
 
 
 support.moveToPoint = !!$.Range().range.moveToPoint
