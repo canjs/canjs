@@ -3,6 +3,7 @@ steal.plugins('jquery/view/ejs', 'jquery/view/ejs', 'jquery/view/tmpl')
 	 	  '//jquery/view/test/compression/views/absolute.ejs',
 		  'views/tmplTest.tmpl',
 		function(){
+
 	 	$(document).ready(function(){
 	 		$("#target").append('//jquery/view/test/compression/views/relative.ejs', {})
 	 					.append($.View('//jquery/view/test/compression/views/absolute.ejs', {} ))

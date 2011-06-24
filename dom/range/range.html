@@ -24,18 +24,16 @@
 	</head>
 	<body>
 		<div id='box'>
-		<div></div>
 		<h1>The Range Plugin</h1>
 		<p>Select a range of text on the page and get useful info about it!</p>
 		<p>We'll figure out what to do with form elements later.</p>
 		<pre id='info'></pre>
 		</div>
 		<script type='text/javascript' 
-                src='../../../steal/steal.js'>   
+                src='../../../steal/steal.js?jquery/dom/range'>   
 			
         </script>
 		<script type='text/javascript'>
-			steal.plugins('jquery/dom/range').then(function(){
 			var curStart = $(),
 				curEnd = $(),
 				curParent = $(),
@@ -43,19 +41,21 @@
 					return el.nodeType === 3 || el.nodeType === 4 ?
 						el.parentNode : el;
 				};
-			$('body').bind('mousedown touchstart', function(ev){
-					var range = $.Range(ev);
-					console.log(range);
-					console.log(range.start())
-					console.log(range.start().offset)
-				})
-				var range, sourceRange, compare;
-				range = document.createRange();
-				range.selectNode(document.getElementsByTagName("div")[0]);
-				sourceRange = document.createRange();
-				sourceRange.selectNode(document.getElementsByTagName("div")[1]);
-				compare = range.compareBoundaryPoints(Range.START_TO_END, sourceRange);
-				console.log(compare)
+			$('body').mouseup(function(){
+				var range = $.Range.current();
+				var start = range.start(),
+					end = range.end();
+				curStart.removeClass('start');
+				curEnd.removeClass('end');
+				curParent.removeClass('parent')
+				var starter = htmlEl(start.container);
+				var ender = htmlEl(end.container),
+					parenter = range.parent();
+				
+				curStart = $(starter).addClass('start');
+				curEnd = $(ender).addClass('end');
+				curParent = $(parenter).addClass('parent')
+				$("#info").html("startOffset = "+start.offset+"\nendOffset = "+end.offset)
 			})
 		</script>
 	</body>

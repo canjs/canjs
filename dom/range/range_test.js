@@ -1,4 +1,3 @@
-
 steal
   .plugins("funcunit/qunit", "jquery/dom/range", "jquery/dom/selection").then(function(){
   	
@@ -12,8 +11,6 @@ test("basic range", function(){
 	equals(range.start().offset, 1, "start is 1")
 	equals(range.end().offset, 5, "end is 5")
 });
-
-	
 
 
 test('jQuery helper', function(){
