@@ -1,4 +1,4 @@
-steal.plugins('jquery/view/ejs', 'jquery/view/ejs', 'jquery/view/tmpl')
+steal.plugins('jquery/view/ejs', 'jquery/view/tmpl')
 	.then('views/relative.ejs',
 	 	  '//jquery/view/test/compression/views/absolute.ejs',
 		  'views/tmplTest.tmpl',

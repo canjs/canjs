@@ -4,7 +4,7 @@
  * Tests compressing a very basic page and one that is using steal
  */
 
-load('steal/rhino/steal.js')
+load('steal/rhino/rhino.js')
 steal('//steal/test/test', function(s){
 	
 	s.test.module("jquery/view/compression")
@@ -18,7 +18,7 @@ steal('//steal/test/test', function(s){
 		steal.File("jquery/view/test/compression/views/tmplTest.tmpl").save("<h1>${message}</h1>");
 		s.test.clear();
 		
-		load("steal/rhino/steal.js");
+		load("steal/rhino/rhino.js");
 		steal.plugins('steal/build','steal/build/scripts','steal/build/styles',function(){
 			steal.build('jquery/view/test/compression/compression.html',{to: 'jquery/view/test/compression'});
 		});
