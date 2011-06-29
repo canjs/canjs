@@ -32,7 +32,7 @@ steal.plugins('jquery/lang/observe').then(function(){
 		delegate :  function(attr, event, cb){
 			var delegates = $.data(this, "_observe_delegates") ||
 				$.data(this, "_observe_delegates", []);
-				
+			attr = $.trim(attr);
 			delegates.push({
 				attr : attr,
 				parts : attr.split('.'),
