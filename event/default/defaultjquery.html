@@ -77,15 +77,14 @@ $.fn.tabs = function(){
         
 
     if( // not active button
-	    !el.hasClass('active') && 
-		// default wasn't prevented
-        sub(el).triggerDefaults("show")){
-			
-	  // remove active and hide old active	
-      sub(tab.find(".active").removeClass("active")).hide();
-	  
-	  //mark as active
-      el.addClass("active");
+	    !el.hasClass('active')) {
+			sub(el).triggerAsync('show', function(){
+				// remove active and hide old active	
+			    sub(tab.find(".active").removeClass("active")).hide();
+				
+				//mark as active
+			    el.addClass("active");
+			})
     }
   })
     

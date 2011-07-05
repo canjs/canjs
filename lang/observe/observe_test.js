@@ -1,4 +1,4 @@
-steal.plugins('funcunit/qunit','jquery/lang/observe').then(function(){
+steal.plugins('funcunit/qunit','jquery/lang/observe/delegate').then(function(){
 	
 module('jquery/lang/observe')
 
@@ -178,4 +178,4 @@ test("merge deep array ", function(){
 	ok(thing.arr === arr, "thing unmolested");
 })
 	
-});
+}).then('delegate/delegate_test');

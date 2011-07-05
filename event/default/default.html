@@ -59,9 +59,12 @@ $.Controller.extend("Tabs",{
 	},
 	"li click" : function(el, ev){
 		ev.preventDefault();
-		if(!el.hasClass('active') && this.sub(el).triggerDefaults("show")){
-			this.sub(this.find(".active").removeClass("active")).hide();
-			el.addClass("active")	
+		var self = this;
+		if(!el.hasClass('active')){
+			this.sub(el).triggerAsync('show', function(){
+				self.sub(self.find(".active").removeClass("active")).hide();
+				el.addClass("active");
+			})
 		}
 	},
 	sub : function(el){
