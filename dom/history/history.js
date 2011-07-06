@@ -32,10 +32,8 @@ steal.plugins('jquery/lang/observe',
 			timer = setTimeout(func, time || 1);
 		}
 	},
-	curParams;
-	
-	// update the state object
-	$(window).bind('hashchange', throttle(function(){
+	curParams,
+	setState = function(){
 		
 		var hash = window.location.hash.substr(2); // everything after #!
 			//deparam it
@@ -43,7 +41,11 @@ steal.plugins('jquery/lang/observe',
 			curParams = props;
 			$.route.state.merge(props, true);
 		
-	}));
+	};
+	
+	// update the state object
+	$(window).bind('hashchange', throttle(setState));
+	$(setState);
 	// update the page
 	$.route.state.bind("change", throttle( function(){
 		// param and change the hash if necessary
