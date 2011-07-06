@@ -1,6 +1,5 @@
-steal
- .plugins("jquery/dom/fixture", "jquery/model")
- .plugins('funcunit/qunit').then(function(){
+steal("jquery/dom/fixture", "jquery/model")
+ .then('funcunit/qunit').then(function(){
 
 module("jquery/dom/fixture");
 

@@ -1,4 +1,4 @@
-steal.plugins('funcunit/qunit','jquery/lang').then(function(){
+steal('funcunit/qunit','jquery/lang').then(function(){
 	
 module("jquery/lang")
 

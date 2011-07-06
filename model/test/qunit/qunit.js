@@ -1,9 +1,9 @@
 //we probably have to have this only describing where the tests are
-steal
- .plugins("jquery/model","jquery/dom/fixture")  //load your app
- .plugins('funcunit/qunit')  //load qunit
- .then("model_test","associations_test")
- .plugins(
+steal("jquery/model","jquery/dom/fixture")  //load your app
+ .then('funcunit/qunit')  //load qunit
+ .then("./model_test.js","./associations_test.js")
+ .then(
 	"jquery/model/backup/qunit",
 	"jquery/model/list/test/qunit"
-	).then("//jquery/model/validations/qunit/validations_test")
+  )
+  .then("jquery/model/validations/qunit/validations_test.js")

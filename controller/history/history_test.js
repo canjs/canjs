@@ -1,4 +1,4 @@
-steal.plugins('funcunit/qunit','jquery/controller/history').then(function($){
+steal('funcunit/qunit','jquery/controller/history').then(function($){
 	
 module("jquery/controller/history",{
 	setup: function(){

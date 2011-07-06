@@ -1,4 +1,4 @@
-steal.plugins('jquery/dom').then(function( $ ) {
+steal('jquery/dom').then(function( $ ) {
 	
 	// the pre-filter needs to re-route the url
 	$.ajaxPrefilter( function( settings, originalOptions, jqXHR ) {
@@ -617,7 +617,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 * the success and complete handlers are called.  This only sets
 	 * functional fixtures.  By default, the delay is 200ms.
 	 * @codestart
-	 * steal.plugins('jquery/dom/fixtures').then(function(){
+	 * steal('jquery/dom/fixtures').then(function(){
 	 *   $.fixture.delay = 1000;
 	 * })
 	 * @codeend
@@ -752,7 +752,7 @@ steal.plugins('jquery/dom').then(function( $ ) {
 	 *     steal({path: '//todo/fixtures/fixtures.js',ignore: true});
 	 *     
 	 *     //start of your app's steals
-	 *     steal.plugins( ... )
+	 *     steal( ... )
 	 * 
 	 * We typically keep it a one liner so it's easy to comment out.
 	 * 

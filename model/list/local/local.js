@@ -1,4 +1,4 @@
-steal.plugins('jquery/dom/cookie','jquery/model/list').then(function($){
+steal('jquery/dom/cookie','jquery/model/list').then(function($){
 /**
  * @plugin jquery/model/list/local
  * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/list/local/local.js

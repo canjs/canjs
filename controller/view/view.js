@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller', 'jquery/view').then(function( $ ) {
+steal('jquery/controller', 'jquery/view').then(function( $ ) {
 	jQuery.Controller.getFolder = function() {
 		return jQuery.String.underscore(this.fullName.replace(/\./g, "/")).replace("/Controllers", "");
 	};

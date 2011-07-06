@@ -1,5 +1,4 @@
-steal
- .plugins("jquery/dom/dimensions",
+steal("jquery/dom/dimensions",
  	'jquery/view/micro',
  	'funcunit/qunit').then(function(){
 

@@ -1,7 +1,7 @@
 /**
  *  @add jQuery.fn
  */
-steal.plugins('jquery/dom').then(function($){
+steal('jquery/dom').then(function($){
    var withinBox = function(x, y, left, top, width, height ){
         return (y >= top &&
                 y <  top + height &&

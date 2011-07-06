@@ -1,6 +1,5 @@
-steal
- .plugins("jquery/event/destroyed")  //load your app
- .plugins('funcunit/qunit') 
+steal("jquery/event/destroyed")  //load your app
+ .then('funcunit/qunit') 
  .then(function(){
 
 module("jquery/event/destroyed")

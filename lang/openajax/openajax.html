@@ -13,7 +13,7 @@
 
 <script type='text/javascript' src='../../../steal/steal.js'></script>
 <script type='text/javascript' id="demo-source">
-steal.plugins("jquery/lang/openajax").then(function($){
+steal("jquery/lang/openajax").then(function($){
  	OpenAjax.hub.subscribe('todo.*.updated', function(){
 		console.log('yes')
 	});

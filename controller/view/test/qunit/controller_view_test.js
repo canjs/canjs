@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller/view','jquery/view/micro','funcunit/qunit')  //load qunit
+steal('jquery/controller/view','jquery/view/micro','funcunit/qunit')  //load qunit
  .then(function(){
 	
 	module("jquery/controller/view");

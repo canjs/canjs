@@ -1,5 +1,5 @@
 /*global OpenAjax: true */
-steal.plugins('jquery/controller', 'jquery/lang/openajax').then(function() {
+steal('jquery/controller', 'jquery/lang/openajax').then(function() {
 
 	/**
 	 * @function jQuery.Controller.static.processors.subscribe

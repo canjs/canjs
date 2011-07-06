@@ -1,4 +1,4 @@
-steal.plugins('jquery','jquery/dom/compare').then(function($){
+steal('jquery','jquery/dom/compare').then(function($){
 // TODOS ...
 // Ad
 

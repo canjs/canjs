@@ -1,4 +1,4 @@
-steal.plugins('jquery/event/livehack', 'jquery/event/handle').then(function($){
+steal('jquery/event/livehack', 'jquery/event/handle').then(function($){
 
 var current,
 	rnamespaces = /\.(.*)$/,

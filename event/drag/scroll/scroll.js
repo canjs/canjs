@@ -1,4 +1,4 @@
-steal.plugins("jquery/event/drop").then(function($){ //needs drop to determine if respondable
+steal("jquery/event/drop").then(function($){ //needs drop to determine if respondable
 
 /**
  * @add jQuery.Drag.prototype

@@ -1,4 +1,4 @@
-steal.plugins('jquery/lang/json').then(function() {
+steal('jquery/lang/json').then(function() {
     // break
     /**
      * @function jQuery.cookie

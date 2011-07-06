@@ -7,7 +7,7 @@ load('steal/rhino/steal.js')
 // get dependency graph
 // generate single script
 
-steal.plugins('steal/build/pluginify','steal/build/apps','steal/build/scripts').then( function(s){
+steal('steal/build/pluginify','steal/build/apps','steal/build/scripts').then( function(s){
 	var ignore = /\.\w+|test|generate|dist|qunit|fixtures|pages/
 	
 	var plugins = [];
@@ -25,7 +25,7 @@ steal.plugins('steal/build/pluginify','steal/build/apps','steal/build/scripts').
 	// tell it to load all plugins into this page
 	rhinoLoader = {
 		callback: function( s ) {
-			s.plugins.apply(s,plugins);
+			s.apply(s,plugins);
 		}
 	};
 	

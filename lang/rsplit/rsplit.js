@@ -1,4 +1,4 @@
-steal.plugins('jquery/lang').then(function( $ ) {
+steal('jquery/lang').then(function( $ ) {
 	/**
 	 * @add jQuery.String
 	 */

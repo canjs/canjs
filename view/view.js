@@ -1,4 +1,4 @@
-steal.plugins("jquery").then(function( $ ) {
+steal("jquery").then(function( $ ) {
 
 	// converts to an ok dom id
 	var toId = function( src ) {
@@ -528,7 +528,7 @@ steal.plugins("jquery").then(function( $ ) {
 			var type = $view.types["." + options.type],
 				id = toId(options.rootSrc);
 			
-			options.text = "steal.plugins('"+(type.plugin || "jquery/view/"+options.type)+
+			options.text = "steal('"+(type.plugin || "jquery/view/"+options.type)+
 			    "').then(function($){"+
 				"$.View.preload('" + id + "'," + options.text + ");\n})";
 			success();
