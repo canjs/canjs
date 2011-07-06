@@ -9,11 +9,11 @@ if (_args.length < 1) {
 
 
 
-load('steal/rhino/steal.js');
+load('steal/rhino/rhino.js');
 
-steal(	'//steal/generate/generate',
-		'//steal/generate/system',
-		'//steal/generate/inflector'	,	
+steal(	'steal/generate',
+		'steal/generate/system.js',
+		'steal/generate/inflector.js'	,	
 function(steal){
 	var md = steal.generate.convert(_args[0]);
 	
