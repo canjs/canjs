@@ -1,5 +1,5 @@
 @page jquerymx jQueryMX
-@tag home
+@parent index 0
 
 jQueryMX is a collection of mega-useful jQuery plugins. The 
 following highlights its core plugins.  

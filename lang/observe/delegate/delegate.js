@@ -19,7 +19,7 @@ steal('jquery/lang/observe').then(function(){
 	},
 		delegate = function(event, prop, how, value, current){
 			var props = prop.split("."),
-				delegates = $([this]).data("_observe_delegates") || [];
+				delegates = $.data(this,"_observe_delegates") || [];
 			
 			for(var i =0; i < delegates.length; i++){
 				if(matches(delegates[i], props)){
@@ -30,6 +30,7 @@ steal('jquery/lang/observe').then(function(){
 		
 	$.extend($.Observe.prototype,{
 		delegate :  function(attr, event, cb){
+			attr = $.trim(attr);
 			var delegates = $.data(this, "_observe_delegates") ||
 				$.data(this, "_observe_delegates", []);
 				
