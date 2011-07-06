@@ -45,7 +45,8 @@ steal.plugins('jquery/lang/observe',
 	
 	// update the state object
 	$(window).bind('hashchange', throttle(setState));
-	$(setState);
+	setState();
+	
 	// update the page
 	$.route.state.bind("change", throttle( function(){
 		// param and change the hash if necessary
