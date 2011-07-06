@@ -6,10 +6,10 @@ if (_args.length < 1) {
 	quit();
 }
 
-load('steal/rhino/steal.js');
+load('steal/rhino/rhino.js');
 
-steal(	'//steal/generate/generate',
-		'//steal/generate/system',	
+steal(	'steal/generate',
+		'steal/generate/system.js',	
 function(steal){
 	var upper = function(parts){
 		for(var i =0; i < parts.length; i++){
