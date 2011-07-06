@@ -1,4 +1,4 @@
-steal.plugins('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then(function($){
+steal('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then(function($){
 	var event = $.event, 
 		callHanders = function(){
 			

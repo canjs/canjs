@@ -1,6 +1,5 @@
-steal
- .plugins("jquery/controller",'jquery/controller/subscribe')  //load your app
- .plugins('funcunit/qunit')  //load qunit
+steal("jquery/controller",'jquery/controller/subscribe')  //load your app
+ .then('funcunit/qunit')  //load qunit
  .then(function(){
  	
 module("jquery/controller")

@@ -51,7 +51,7 @@
                 src='../../../steal/steal.js'>   
         </script>
 <script id="demo-source" type='text/javascript'>
-steal.plugins("jquery/controller",'jquery/event/default').then(function($){
+steal("jquery/controller",'jquery/event/default').then(function($){
 $.Controller("Tabs",{
 	init : function(){
 		this.find("li:first").addClass('active')

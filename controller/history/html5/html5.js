@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller/subscribe').then(function($){
+steal('jquery/controller/subscribe').then(function($){
 
   var hasHistoryManagementSupport = !!(window.history && history.pushState);
   

@@ -1,4 +1,4 @@
-steal.plugins('funcunit/qunit','jquery/event/default').then(function(){
+steal('funcunit/qunit','jquery/event/default').then(function(){
 
 module("jquery/event/default")
 test("namespaced with same function", function(){

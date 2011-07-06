@@ -1,5 +1,5 @@
-steal.plugins('funcunit/qunit')
- .plugins("jquery/model/backup").then(function(){
+steal('funcunit/qunit')
+ .then("jquery/model/backup").then(function(){
  	
 	
 module("jquery/model/backup",{

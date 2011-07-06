@@ -1,7 +1,7 @@
 /**
  *  @add jQuery.fn
  */
-steal.plugins("jquery/dom").then(function( $ ) {
+steal("jquery/dom").then(function( $ ) {
 	var radioCheck = /radio|checkbox/i,
 		keyBreaker = /[^\[\]]+/g,
 		numberMatcher = /^[\-+]?[0-9]*\.?[0-9]+([eE][\-+]?[0-9]+)?$/;

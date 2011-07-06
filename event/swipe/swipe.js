@@ -1,4 +1,4 @@
-steal.plugins('jquery/event/livehack').then(function($){
+steal('jquery/event/livehack').then(function($){
 var supportTouch = "ontouchend" in document,
 	scrollEvent = "touchmove scroll",
 	touchStartEvent = supportTouch ? "touchstart" : "mousedown",

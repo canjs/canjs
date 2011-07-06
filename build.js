@@ -98,7 +98,7 @@ var i, fileName, cmd,
 ]
 
 
-steal.plugins('steal/build/pluginify').then( function(s){
+steal('steal/build/pluginify').then( function(s){
 var plugin, exclude, fileDest, fileName;
 	for(i=0; i<plugins.length; i++){
 		plugin = plugins[i];

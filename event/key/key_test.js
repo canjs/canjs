@@ -1,4 +1,4 @@
-steal.plugins('funcunit/qunit','funcunit/syn','jquery/event/key').then(function(){
+steal('funcunit/qunit','funcunit/syn','jquery/event/key').then(function(){
 	
 module('jquery/event/key');
 

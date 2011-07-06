@@ -19,7 +19,7 @@ steal('//steal/test/test', function(s){
 		s.test.clear();
 		
 		load("steal/rhino/rhino.js");
-		steal.plugins('steal/build','steal/build/scripts','steal/build/styles',function(){
+		steal('steal/build','steal/build/scripts','steal/build/styles',function(){
 			steal.build('jquery/view/test/compression/compression.html',{to: 'jquery/view/test/compression'});
 		});
 		s.test.clear();

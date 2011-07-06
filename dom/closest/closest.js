@@ -1,7 +1,7 @@
 /**
  *  @add jQuery.fn
  */
-steal.plugins('jquery/dom').then(function(){
+steal('jquery/dom').then(function(){
 	/**
 	 * @function closest
 	 * @parent dom

@@ -1,4 +1,4 @@
-steal.plugins('funcunit/qunit','jquery/model/validations').then(function(){
+steal('funcunit/qunit','jquery/model/validations').then(function(){
 
 module("jquery/model/validations",{
 	setup : function(){

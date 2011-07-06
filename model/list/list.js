@@ -1,4 +1,4 @@
-steal.plugins('jquery/model').then(function($){
+steal('jquery/model').then(function($){
 
 var getArgs = function(args){
 		if(args[0] && ( $.isArray(args[0])  )   ){

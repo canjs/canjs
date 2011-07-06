@@ -1,4 +1,4 @@
-steal.plugins('jquery/event').then(function( $ ) {
+steal('jquery/event').then(function( $ ) {
 	/**
 	 * @add jQuery.event.special
 	 */

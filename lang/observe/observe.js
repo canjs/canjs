@@ -1,4 +1,4 @@
-steal.plugins('jquery/class').then(function(){
+steal('jquery/class').then(function(){
 
 var isArray =  $.isArray,
 	isObject = function(obj){

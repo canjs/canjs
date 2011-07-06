@@ -1,4 +1,4 @@
-steal.plugins('jquery','jquery/dom/range').then(function($){
+steal('jquery','jquery/dom/range').then(function($){
 var convertType = function(type){
 	return  type.replace(/([a-z])([a-z]+)/gi, function(all,first,  next){
 			  return first+next.toLowerCase()	

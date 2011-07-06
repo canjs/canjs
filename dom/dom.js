@@ -70,4 +70,4 @@ Text range utilities.
     
 
 */
-steal.plugins('jquery');
+steal('jquery');

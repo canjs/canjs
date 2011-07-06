@@ -1,4 +1,4 @@
-steal.plugins('jquery/controller/subscribe',
+steal('jquery/controller/subscribe',
 	'jquery/event/hashchange',
 	'jquery/lang/deparam').then(function($){
 

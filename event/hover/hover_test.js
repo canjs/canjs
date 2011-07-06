@@ -1,6 +1,5 @@
-steal
- .plugins("jquery/event/hover",'funcunit/syn')  //load your app
- .plugins('funcunit/qunit')
+steal("jquery/event/hover",'funcunit/syn')  //load your app
+ .then('funcunit/qunit')
  .then(function(){
 
 module("jquery/dom/hover")

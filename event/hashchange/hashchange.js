@@ -68,7 +68,7 @@
 //         extra awesomeness that BBQ provides. This plugin will be included as
 //         part of jQuery BBQ, but also be available separately.
 
-steal.plugins('jquery').then(function($){
+steal('jquery').then(function($){
   '$:nomunge'; // Used by YUI compressor.
   
   // Method / object references.

@@ -1,4 +1,4 @@
-steal.plugins('jquery/lang/observe').then(function(){
+steal('jquery/lang/observe').then(function(){
 	
 	
 	var matches = function(delegate, props){

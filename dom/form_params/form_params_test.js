@@ -1,6 +1,5 @@
-steal
- .plugins("jquery/dom/form_params")  //load your app
- .plugins('funcunit/qunit','jquery/view/micro')  //load qunit
+steal("jquery/dom/form_params")  //load your app
+ .then('funcunit/qunit','jquery/view/micro')  //load qunit
  .then(function(){
 
 module("jquery/dom/form_params")

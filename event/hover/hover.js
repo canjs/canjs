@@ -1,4 +1,4 @@
-steal.plugins('jquery/event','jquery/event/livehack').then(function($){
+steal('jquery/event','jquery/event/livehack').then(function($){
 /**
  * @class jQuery.Hover
  * @plugin jquery/event/hover

@@ -1,5 +1,5 @@
 //allows you to backup and restore a model instance
-steal.plugins('jquery/model').then(function($){
+steal('jquery/model').then(function($){
 var isArray = $.isArray,
 	propCount = function(obj){
 		var count = 0;
