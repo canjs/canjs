@@ -1,6 +1,6 @@
 // load('jquery/build.js')
 
-load('steal/rhino/steal.js')
+load('steal/rhino/rhino.js')
 
 var i, fileName, cmd, 
 	plugins = [
