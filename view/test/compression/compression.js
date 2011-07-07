@@ -1,7 +1,7 @@
 steal('jquery/view/ejs', 'jquery/view/tmpl')
-	.then('views/relative.ejs',
-	 	  '//jquery/view/test/compression/views/absolute.ejs',
-		  'views/tmplTest.tmpl',
+	.then('./views/relative.ejs',
+	 	  'jquery/view/test/compression/views/absolute.ejs',
+		  './views/tmplTest.tmpl',
 		function(){
 
 	 	$(document).ready(function(){
