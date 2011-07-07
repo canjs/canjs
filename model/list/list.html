@@ -25,12 +25,10 @@
 <script type='text/javascript' 
         src='../../../steal/steal.js'>   
 </script>
-<script type='text/javascript'>
+<script type='text/javascript' id="demo-source">   
 steal('jquery/model',
 		'jquery/dom/fixture',
-		'jquery/model/list').start()
-</script>
-<script type='text/javascript'>
+		'jquery/model/list').then(function(){
 	$.Model.extend("Contact",{
 	attributes : { 
 		birthday : 'date'
@@ -78,8 +76,6 @@ steal('jquery/model',
 DESTROYFIXTURE = function(){
 				return [true]
 			}
-</script>
-<script type='text/javascript' id="demo-source">   
 $.Model.List.extend("Contact.List",{
 	destroyAll : function(){
 		$.post("/destroy",
@@ -123,6 +119,8 @@ $("#destroyAll").click(function(){
 		.models()
 		// destroy them
 		.destroyAll();
+})
+
 })
 </script>
 	</body>

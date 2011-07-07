@@ -36,10 +36,7 @@
 <script type='text/javascript'>
 steal('jquery/model',
 		'jquery/model/list/cookie',
-		'jquery/dom/form_params').start()
-</script>
-<script type='text/javascript'>   
-
+		'jquery/dom/form_params').then(function(){
 $.Model.extend("Contact",{
 	attributes : { 
 		birthday : 'date'
@@ -107,10 +104,7 @@ $(function(){
 		addContact(contact);
 	})
 })
-
-
-
-
+})
 
 </script>
 	</body>

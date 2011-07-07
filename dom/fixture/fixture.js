@@ -1,5 +1,4 @@
 steal('jquery/dom').then(function( $ ) {
-	
 	// the pre-filter needs to re-route the url
 	$.ajaxPrefilter( function( settings, originalOptions, jqXHR ) {
 	  	// if fixtures are on
