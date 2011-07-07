@@ -18,8 +18,8 @@ steal('steal/test', function(s){
 		
 		load('steal/rhino/rhino.js');
 		var cookbookContent = readFile('cookbook/cookbook.js')
-				+".then('./models/recipe.js')"
-		    	+".then('./controllers/recipe_controller.js";
+				+"\n.then('./models/recipe.js')"
+		    	+"\n.then('./controllers/recipe_controller.js')";
 		new steal.File('cookbook/cookbook.js').save( cookbookContent );
 		
 		var qunitContent = readFile('cookbook/test/qunit/qunit.js').

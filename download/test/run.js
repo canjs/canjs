@@ -8,7 +8,7 @@ steal('steal/test', function( s ) {
 	s.test.module("jquery/download")
 	
 	s.test.test("controller", function(){
-		load('steal/rhino/steal.js')
+		load('steal/rhino/rhino.js')
 		s.test.open('jquery/download/test/controllerpage.html')
 		s.test.ok(MyController, "Controller was loaded")
 		s.test.clear();

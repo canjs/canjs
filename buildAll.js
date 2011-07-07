@@ -1,6 +1,6 @@
 // load('jquery/build.js')
 
-load('steal/rhino/steal.js')
+load('steal/rhino/rhino.js')
 
 
 // load every plugin in a single app
