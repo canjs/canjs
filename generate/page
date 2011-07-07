@@ -7,7 +7,7 @@ if (_args.length < 2) {
 
 load('steal/rhino/rhino.js');
 
-steal('steal/generate/generate','steal/generate/system.js',function(steal){
+steal('steal/generate','steal/generate/system.js',function(steal){
 	var path =  _args[0].toLowerCase().replace('.',"/")
 	var	data = steal.extend({
 		path: path, 

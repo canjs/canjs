@@ -2,8 +2,8 @@
 /**
  * Tests compressing a very basic page and one that is using steal
  */
-load('steal/rhino/steal.js')
-steal('//steal/test/test', function( s ) {
+load('steal/rhino/rhino.js')
+steal('steal/test', function( s ) {
 	STEALPRINT = false;
 	s.test.module("jquery/download")
 	
