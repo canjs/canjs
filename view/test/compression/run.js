@@ -5,7 +5,7 @@
  */
 
 load('steal/rhino/rhino.js')
-steal('//steal/test/test', function(s){
+steal('steal/test', function(s){
 	
 	s.test.module("jquery/view/compression")
 	STEALPRINT = false;
