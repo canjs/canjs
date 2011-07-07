@@ -634,8 +634,13 @@ steal('jquery/class', 'jquery/lang').then(function() {
 			//add ajax converters
 			var converters = {},
 				convertName = "* "+this._shortName+".model";
-			converters[convertName+"s"] = this.models = this.callback(this.models);
-			converters[convertName] = this.model = this.callback(this.model);
+				
+			converters[convertName+"s"] = this.callback('models');
+			converters[convertName] = this.callback('model');	
+				
+			//converters[convertName+"s"] = this.models = this.callback(this.models);
+			//converters[convertName] = this.model = this.callback(this.model);
+			
 			$.ajaxSetup({
 				converters : converters
 			});				
