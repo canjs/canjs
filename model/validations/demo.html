@@ -18,14 +18,12 @@
 <script type='text/javascript' 
         src='../../../steal/steal.js'>   
 </script>
-<script type='text/javascript'>
+<script type='text/javascript'  id="demo-source">   
 steal('jquery/model',
 		'jquery/dom/fixture',
 		'jquery/model/list',
 		'jquery/model/validations',
-		'jquery/controller').start()
-</script>
-<script type='text/javascript'  id="demo-source">   
+		'jquery/controller').then(function(){
 
 $.Model.extend("Contact",{
 	init : function(){
@@ -99,7 +97,7 @@ $.Controller("ErrorReport",
 	}
 });
 
-
+})
 
 
 </script>

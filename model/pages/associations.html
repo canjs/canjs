@@ -21,14 +21,12 @@
 </div>
 		
 <script type='text/javascript' 
-        src='../../../steal/steal.js'>   
+        src='../../../steal/steal.js'>
 </script>
-<script type='text/javascript'>
+<script type='text/javascript'  id="demo-source">
 steal('jquery/model',
 		'jquery/dom/fixture',
-		'jquery/model/list').start()
-</script>
-<script type='text/javascript'>
+		'jquery/model/list').then(function(){
 	var convertDate =  function(raw){
 		if(typeof raw == 'string'){
 			var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
@@ -46,8 +44,6 @@ steal('jquery/model',
 					 		tasks : [{id: 2, title: "write up funcunit", due: "2009-5-1"}, {id: 3, title: "test funcunit", due: "2010-3-15"}]},
 					 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
 			}
-</script>
-<script type='text/javascript'  id="demo-source">   
 $.Model.extend("Task",{
 	convert : {
 		date :convertDate
@@ -108,7 +104,7 @@ Contact.findAll({},function(contacts){
 	ul.appendTo(li)
   });
 });
-
+})
 </script>
 	</body>
 </html>

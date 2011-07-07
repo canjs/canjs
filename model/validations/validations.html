@@ -26,13 +26,11 @@
 <script type='text/javascript' 
         src='../../../steal/steal.js'>   
 </script>
-<script type='text/javascript'>
+<script type='text/javascript'  id="demo-source">   
 steal('jquery/model',
 		'jquery/dom/fixture',
 		'jquery/model/list',
-		'jquery/model/validations').start()
-</script>
-<script type='text/javascript'>
+		'jquery/model/validations').then(function(){
 	CONVERSIONS = {
 		date : function(raw){
 			if(typeof raw == 'string'){
@@ -50,8 +48,6 @@ steal('jquery/model',
 					 {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10'},
 					 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
 			}
-</script>
-<script type='text/javascript'  id="demo-source">   
 
 $.Model.extend("Contact",{
 	init : function(){
@@ -103,11 +99,6 @@ makeAgeUpdater = function(contact){
 	}).appendTo(updater);
 	updater.append("<div id='error' style='display:none'><div>");
 }
-
-
-</script>
-
-<script type='text/javascript'>
 	// List 1
 Contact.findAll({},function(contacts){
   var contactsEl = $('#contacts1');
@@ -127,6 +118,7 @@ Contact.findAll({},function(contacts){
 	 makeAgeUpdater( $(this).closest('.contact').model() );
   });
 });
+})
 </script>
 	</body>
 </html>

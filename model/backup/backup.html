@@ -30,9 +30,7 @@
 steal('jquery/model',
 		'jquery/dom/fixture',
 		'jquery/model/list',
-		'jquery/model/backup').start()
-</script>
-<script type='text/javascript'>  
+		'jquery/model/backup').then(function(){
 $.Model.extend("Contact",{
 	attributes : { 
 		birthday : 'date'
@@ -90,8 +88,6 @@ makeAgeUpdater = function(contact){
 $('#contacts').delegate("li","click", function(){
 	 makeAgeUpdater( $(this).closest('.contact').model() );
   });
-</script>
-<script type='text/javascript'>   
 Contact.findAll({},function(contacts){
   var contactsEl = $('#contacts');
   $.each(contacts, function(i, contact){
@@ -121,6 +117,7 @@ Contact.findAll({},function(contacts){
 	})
   })
 });
+})
 </script>
 	</body>
 </html>

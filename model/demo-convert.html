@@ -22,10 +22,8 @@
 <script type='text/javascript' 
         src='../../steal/steal.js'>   
 </script>
-<script type='text/javascript'>
-steal('jquery/model').start()
-</script>
 <script type='text/javascript' id="demo-source">   
+steal('jquery/model').then(function(){
 $.Model.extend("Contact",{
   attributes : { 
     // labels birthday a date
@@ -68,6 +66,7 @@ Contact.findAll( {}, function( contacts ){
   }
   $('#contacts').html( html.join('') );
 });
+})
 </script>
     </body>
 </html>

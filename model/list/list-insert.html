@@ -25,13 +25,11 @@
 <script type='text/javascript' 
         src='../../../steal/steal.js'>   
 </script>
-<script type='text/javascript'>
+<script type='text/javascript' id="demo-source">   
 steal('jquery/model',
 		'jquery/dom/fixture',
 		'jquery/model/list',
-		'jquery/lang/openajax').start()
-</script>
-<script type='text/javascript'>
+		'jquery/lang/openajax').then(function(){
 $.Model.extend("Contact",{
 	attributes : { 
 		birthday : 'date'
@@ -99,8 +97,6 @@ makeAgeUpdater = function(contact){
           .html(contact.name+" "+contact.ageThisYear()+
               " <a>Show</a>");
     })
-</script>
-<script type='text/javascript' id="demo-source">   
 Contact.findAll({},function(contacts){
   var contactsEl = $('#contacts'),
   	html = [], 
@@ -128,6 +124,7 @@ Contact.findAll({},function(contacts){
 
 });
 
+})
 
 </script>
 	</body>
