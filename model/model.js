@@ -1007,8 +1007,14 @@ steal('jquery/class', 'jquery/lang').then(function() {
 				return Boolean(val);
 			},
 			"default" : function(val, error, type){
-				var construct = $.String.getObject(type)
-				return construct ? construct(val) : val;
+				var construct = $.String.getObject(type), 
+					context = window, realType;
+				if(type.indexOf(".") >= 0){
+					realType = type.substring(0, type.lastIndexOf(".model"));
+					context = $.String.getObject(realType);
+				}
+				return typeof construct == "function" ? 
+					construct.call(context, val) : val;
 			}
 		},
 		serialize : {
