@@ -548,11 +548,9 @@ steal.plugins("jquery").then(function( $ ) {
 					})
 					return this;
 				}
-				//otherwise do the template now
-				
 			}
-
 			return modify.call(this, args, old);
+			 
 		};
 	};
 	// modifies the html of the element
@@ -565,7 +563,7 @@ steal.plugins("jquery").then(function( $ ) {
 		}
 
 		//if there are hookups, get jQuery object
-		if ( hasHookups ) {
+		if ( hasHookups && args[0]) {
 			hooks = $view.hookups;
 			$view.hookups = {};
 			args[0] = $(args[0]);
@@ -573,7 +571,7 @@ steal.plugins("jquery").then(function( $ ) {
 		res = old.apply(this, args);
 
 		//now hookup hookups
-		if ( hasHookups ) {
+		if ( hooks /* && args.length*/ ) {
 			hookupView(args[0], hooks);
 		}
 		return res;

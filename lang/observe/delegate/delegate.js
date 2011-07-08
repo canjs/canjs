@@ -44,6 +44,8 @@ steal.plugins('jquery/lang/observe').then(function(){
 			return this;
 		},
 		undelegate : function(attr, event, cb){
+			attr = $.trim(attr);
+			
 			var i =0,
 				delegates = $.data(this, "_observe_delegates") || [],
 				delegate;
