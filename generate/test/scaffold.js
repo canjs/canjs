@@ -40,27 +40,27 @@ steal('steal/test', function(s){
 	
 	//now see if unit and functional run
 	
-	s.test.test("scaffold unit tests", function(t){
-		
-		load('steal/rhino/rhino.js');
-		load('funcunit/loader.js');
-		FuncUnit.load('cookbook/qunit.html');
-	});
-	
-	s.test.test("scaffold functional tests", function(t){
-		load('steal/rhino/rhino.js');
-		load('funcunit/loader.js');
-		FuncUnit.load('cookbook/funcunit.html');
-		
-	});
-	
-	s.test.test("documentjs", function(t){
-		t.clear();
-		load('steal/rhino/rhino.js');
-		_args = ['cookbook/cookbook.html']
-		load("documentjs/documentjs.js");
-		DocumentJS('cookbook/cookbook.html');
-	});
+//	s.test.test("scaffold unit tests", function(t){
+//		
+//		load('steal/rhino/rhino.js');
+//		load('funcunit/loader.js');
+//		FuncUnit.load('cookbook/qunit.html');
+//	});
+//	
+//	s.test.test("scaffold functional tests", function(t){
+//		load('steal/rhino/rhino.js');
+//		load('funcunit/loader.js');
+//		FuncUnit.load('cookbook/funcunit.html');
+//		
+//	});
+//	
+//	s.test.test("documentjs", function(t){
+//		t.clear();
+//		load('steal/rhino/rhino.js');
+//		_args = ['cookbook/cookbook.html']
+//		load("documentjs/documentjs.js");
+//		DocumentJS('cookbook/cookbook.html');
+//	});
 	
 	s.test.test("compress", function(t){
 		t.clear();
@@ -79,7 +79,7 @@ steal('steal/test', function(s){
 	
 	
 	//print("-- cleanup --");
-	s.File("cookbook").removeDir();
+//	s.File("cookbook").removeDir();
 
 })
 
