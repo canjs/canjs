@@ -334,13 +334,12 @@ steal('jquery/dom').then(function( $ ) {
 			
 			//handle removing.  An exact match if fixture was provided, otherwise, anything similar
 			var index = find(settings, !!fixture);
-			if(index >= -1){
+			if(index > -1){
 				overwrites.splice(index,1)
 			}
 			if(fixture == null){
 				return 
 			}
-			
 			settings.fixture = fixture;
 			overwrites.push(settings)
 		}
