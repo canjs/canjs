@@ -150,6 +150,18 @@ steal('jquery/dom').then(function( $ ) {
 		getId = function(settings){
         	var id = settings.data.id;
 
+			if(id === undefined && typeof settings.data === "number") {
+				id = settings.data;
+			}
+
+			/*
+			Check for id in params(if query string)
+			If this is just a string representation of an id, parse
+			if(id === undefined && typeof settings.data === "string") {
+				id = settings.data;
+			}
+			//*/
+
 			if(id === undefined){
                 settings.url.replace(/\/(\d+)(\/|$)/g, function(all, num){
                     id = num;
@@ -515,7 +527,8 @@ steal('jquery/dom').then(function( $ ) {
 			};
             // findOne
 			$.fixture["-" + types[1]] = function( settings ) {
-				return [findOne(settings.data.id !== undefined ? settings.data.id : settings.data)];
+				var item = findOne(getId(settings));
+				return item ? [item] : [];
 			};
             // update
             $.fixture["-" + types[1]+"Update"] = function( settings, cbType ) {
