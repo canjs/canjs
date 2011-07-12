@@ -2,20 +2,22 @@
             "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 	<head>
-		<title>Form Params</title>
+		<title>Jquery.Dom.Route</title>
         <style type='text/css'>
             body {font-family: verdana}
-            
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
         </style>
 	</head>
 	<body>
+	    <h1>Jquery.Dom.Route Demo</h1>
+		<div id='route'></div>
 		<script type='text/javascript' 
-                src='../../../steal/steal.js'>   
+                src='../../steal/steal.js?jquery/dom/route'>
         </script>
 		<script type='text/javascript'>
-			steal.plugins('jquery/dom/history').then(function(){
-				
-			})
+			$('#route').jquery/dom_route();
 		</script>
 	</body>
 </html>
