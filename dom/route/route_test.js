@@ -1,6 +1,6 @@
 steal.plugins('funcunit/qunit').then('history',function(){
 	
-module("jquery/dom/history")
+module("jquery/dom/route")
 
 test("param", function(){
 	
