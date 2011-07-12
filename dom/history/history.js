@@ -1,6 +1,6 @@
-steal.plugins('jquery/lang/observe',
+steal('jquery/lang/observe',
 	'jquery/event/hashchange',
-	'jquery/lang/deparam').then(function($){
+	'jquery/lang/deparam', function($){
 	
 	var routes = [],
 		globalDefaults;
