@@ -27,6 +27,13 @@ test("$.String.getObject", function(){
 	var obj = $.String.getObject("foo", [{a: 1}, {foo: 'bar'}]);
 	
 	equals(obj,'bar', 'got bar')
+	
+	
+	// test null data
+	
+	var obj = $.String.getObject("foo", [{a: 1}, {foo: 0}]);
+	
+	equals(obj,0, 'got 0 (falsey stuff)')
 });
 
 
