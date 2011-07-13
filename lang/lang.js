@@ -13,7 +13,7 @@ steal('jquery').then(function( $ ) {
 		dot: /\./
 	},
 		getNext = function(current, nextPart, add){
-			return current[nextPart] || ( add && (current[nextPart] = {}) );
+			return current[nextPart] !== undefined ? current[nextPart] : ( add && (current[nextPart] = {}) );
 		},
 		isContainer = function(current){
 			var type = typeof current;

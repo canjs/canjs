@@ -1010,7 +1010,7 @@ steal('jquery/class', 'jquery/lang').then(function() {
 				var construct = $.String.getObject(type), 
 					context = window, realType;
 				if(type.indexOf(".") >= 0){
-					realType = type.substring(0, type.lastIndexOf(".model"));
+					realType = type.substring(0, type.lastIndexOf("."));
 					context = $.String.getObject(realType);
 				}
 				return typeof construct == "function" ? 
