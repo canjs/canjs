@@ -362,7 +362,7 @@ $.Class.extend("jQuery.Model.List",
 	},
 	serialize : function(){
 		return this.map(function(item){
-			item.serialize()
+			return item.serialize()
 		});
 	}
 });
