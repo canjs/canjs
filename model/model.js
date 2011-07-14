@@ -766,6 +766,9 @@ steal('jquery/class', 'jquery/lang').then(function() {
 			if (!attributes ) {
 				return null;
 			}
+			if( attributes instanceof this){
+				attributes = attributes.serialize();
+			}
 			return new this(
 				// checks for properties in an object (like rails 2.0 gives);
 				isObject(attributes[this._shortName]) ||
@@ -911,7 +914,8 @@ steal('jquery/class', 'jquery/lang').then(function() {
 			}
 			var res = getList(this.List),
 				arr = isArray(instancesRawData),
-				raw = arr ? instancesRawData : instancesRawData.data,
+				ml = ($.Model.List && instancesRawData instanceof $.Model.List),
+				raw = arr ? instancesRawData : (ml ? instancesRawData.serialize() : instancesRawData.data),
 				length = raw.length,
 				i = 0;
 			//@steal-remove-start
