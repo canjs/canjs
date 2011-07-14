@@ -446,7 +446,6 @@ steal('jquery/dom').then(function( $ ) {
 			}
 			//set plural fixture for findAll
 			$.fixture["-" + types[0]] = function( settings ) {
-
 				//copy array of items
 				var retArr = items.slice(0);
 
@@ -561,6 +560,15 @@ steal('jquery/dom').then(function( $ ) {
 				items.push(item);
 				return $.fixture["-restCreate"](settings, cbType)
 			};
+			
+			
+			return {
+				getId: getId,
+				findOne : findOne,
+				find : function(settings){
+					return findOne( getId(settings) );
+				}
+			}
 		},
 		/**
 		 * Use $.fixture.xhr to create an object that looks like an xhr object. 
