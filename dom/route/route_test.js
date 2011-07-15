@@ -1,4 +1,4 @@
-steal.plugins('funcunit/qunit').then('history',function(){
+steal('funcunit/qunit').then('./history.js',function(){
 	
 module("jquery/dom/route")
 
