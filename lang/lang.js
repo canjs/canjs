@@ -115,7 +115,7 @@ steal('jquery').then(function( $ ) {
 			 * @return {String} the niceName
 			 */
 			niceName: function( s ) {
-				str.classize(s,' ');
+				return str.classize(s,' ');
 			},
 
 			/**
