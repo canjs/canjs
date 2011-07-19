@@ -363,7 +363,7 @@ steal("jquery").then(function( $ ) {
 				url = "/"+url.substr(2);
 			}
 			else {
-				url = steal.root.join(url.substr(2));
+				url = steal.root.mapJoin(url.substr(2));
 			}
 		}
 
