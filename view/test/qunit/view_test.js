@@ -145,6 +145,12 @@ test("modifier with a deferred", function(){
 
 });
 
+test("jQuery.fn.hookup", function(){
+	$("#qunit-test-area").html("");
+	var els = $($.View("//jquery/view/test/qunit/hookup.ejs",{})).hookup();
+	$("#qunit-test-area").html(els); //makes sure no error happens
+})
+
 /*test("bad url", function(){
 	$.View("//asfdsaf/sadf.ejs")
 });*/
