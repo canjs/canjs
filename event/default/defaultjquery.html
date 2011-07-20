@@ -48,8 +48,9 @@
     
             
 <script type='text/javascript' 
-        src='../../../steal/steal.js?jquery/event/default'
-		id="demo-source">   
+        src='../../../steal/steal.js'></script>
+<script type='text/javascript' id="demo-source">
+steal('jquery/event/default').then(function(){
 // create a tabs plugin
 // this is code written by a widget developer, and provides an event based 
 // tabs API
@@ -65,7 +66,6 @@ $.fn.tabs = function(){
     
   //set the first tab button as active
   tab.find("li:first").addClass('active')
-    
   //hide all the other tabs
   tab.find(".tab:gt(0)").hide();
     
@@ -109,6 +109,7 @@ $("#second").bind("show",function(ev){
     ev.preventDefault();
   }
 });
+})
 </script>
 
 
