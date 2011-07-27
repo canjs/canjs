@@ -93,7 +93,7 @@ steal("jquery","jquery/lang").then(function( $ ) {
 	 * count is incremented.
 	 *
 	 * @codestart
-	 * $.Class.extend('Monster',
+	 * $.Class('Monster',
 	 * /* @static *|
 	 * {
 	 *   count: 0
@@ -145,7 +145,7 @@ steal("jquery","jquery/lang").then(function( $ ) {
 	 * efficient at eating small children, but more powerful fighters.
 	 * 
 	 * 
-	 *     Monster.extend("SeaMonster",{
+	 *     Monster("SeaMonster",{
 	 *       eat: function( smallChildren ) {
 	 *         this._super(smallChildren / 2);
 	 *       },
@@ -162,7 +162,7 @@ steal("jquery","jquery/lang").then(function( $ ) {
 	 * 
 	 * You can also inherit static properties in the same way:
 	 * 
-	 *     $.Class.extend("First",
+	 *     $.Class("First",
 	 *     {
 	 *         staticMethod: function() { return 1;}
 	 *     },{})
@@ -180,7 +180,7 @@ steal("jquery","jquery/lang").then(function( $ ) {
 	 * Making a namespaced class is easy:
 	 * 
 	 * @codestart
-	 * $.Class.extend("MyNamespace.MyClass",{},{});
+	 * $.Class("MyNamespace.MyClass",{},{});
 	 *
 	 * new MyNamespace.MyClass()
 	 * @codeend
@@ -210,7 +210,7 @@ steal("jquery","jquery/lang").then(function( $ ) {
 	 *
 	 * </div>
 	 * @codestart
-	 * $.Class.extend("MyClass",
+	 * $.Class("MyClass",
 	 * {
 	 *   setup: function() {} //static setup
 	 *   init: function() {} //static constructor
@@ -221,78 +221,117 @@ steal("jquery","jquery/lang").then(function( $ ) {
 	 * })
 	 * @codeend
 	 *
-	 * <h3>Setup</h3>
-	 * <p>Setup functions are called before init functions.  Static setup functions are passed
+	 * ### Setup
+	 * 
+	 * Setup functions are called before init functions.  Static setup functions are passed
 	 * the base class followed by arguments passed to the extend function.
-	 * Prototype static functions are passed the Class constructor function arguments.</p>
-	 * <p>If a setup function returns an array, that array will be used as the arguments
+	 * Prototype static functions are passed the Class constructor 
+	 * function arguments.
+	 * 
+	 * If a setup function returns an array, that array will be used as the arguments
 	 * for the following init method.  This provides setup functions the ability to normalize
 	 * arguments passed to the init constructors.  They are also excellent places
-	 * to put setup code you want to almost always run.</p>
-	 * <p>
+	 * to put setup code you want to almost always run.
+	 * 
+	 * 
 	 * The following is similar to how [jQuery.Controller.prototype.setup]
 	 * makes sure init is always called with a jQuery element and merged options
 	 * even if it is passed a raw
 	 * HTMLElement and no second parameter.
-	 * </p>
-	 * @codestart
-	 * $.Class.extend("jQuery.Controller",{
-	 *   ...
-	 * },{
-	 *   setup: function( el, options ) {
-	 *     ...
-	 *     return [$(el),
-	 *             $.extend(true,
-	 *                this.Class.defaults,
-	 *                options || {} ) ]
-	 *   }
-	 * })
-	 * @codeend
+	 * 
+	 *     $.Class("jQuery.Controller",{
+	 *       ...
+	 *     },{
+	 *       setup: function( el, options ) {
+	 *         ...
+	 *         return [$(el),
+	 *                 $.extend(true,
+	 *                    this.Class.defaults,
+	 *                    options || {} ) ]
+	 *       }
+	 *     })
+	 * 
 	 * Typically, you won't need to make or overwrite setup functions.
-	 * <h3>Init</h3>
+	 * 
+	 * ### Init
 	 *
-	 * <p>Init functions are called after setup functions.
+	 * Init functions are called after setup functions.
 	 * Typically, they receive the same arguments
 	 * as their preceding setup function.  The Foo class's <code>init</code> method
 	 * gets called in the following example:
-	 * </p>
-	 * @codestart
-	 * $.Class.Extend("Foo", {
-	 *   init: function( arg1, arg2, arg3 ) {
-	 *     this.sum = arg1+arg2+arg3;
-	 *   }
-	 * })
-	 * var foo = new Foo(1,2,3);
-	 * foo.sum //-> 6
-	 * @codeend
-	 * <h2>Callbacks</h2>
-	 * <p>Similar to jQuery's proxy method, Class provides a
+	 * 
+	 *     $.Class("Foo", {
+	 *       init: function( arg1, arg2, arg3 ) {
+	 *         this.sum = arg1+arg2+arg3;
+	 *       }
+	 *     })
+	 *     var foo = new Foo(1,2,3);
+	 *     foo.sum //-> 6
+	 * 
+	 * ## Callbacks
+	 * 
+	 * Similar to jQuery's proxy method, Class provides a
 	 * [jQuery.Class.static.callback callback]
 	 * function that returns a callback to a method that will always
 	 * have
 	 * <code>this</code> set to the class or instance of the class.
-	 * </p>
+	 * 
+	 * 
 	 * The following example uses this.callback to make sure
 	 * <code>this.name</code> is available in <code>show</code>.
-	 * @codestart
-	 * $.Class.extend("Todo",{
-	 *   init: function( name ) { this.name = name }
-	 *   get: function() {
-	 *     $.get("/stuff",this.callback('show'))
-	 *   },
-	 *   show: function( txt ) {
-	 *     alert(this.name+txt)
-	 *   }
-	 * })
-	 * new Todo("Trash").get()
-	 * @codeend
-	 * <p>Callback is available as a static and prototype method.</p>
-	 * <h2>Demo</h2>
+	 * 
+	 *     $.Class("Todo",{
+	 *       init: function( name ) { 
+	 *       	this.name = name 
+	 *       },
+	 *       get: function() {
+	 *         $.get("/stuff",this.callback('show'))
+	 *       },
+	 *       show: function( txt ) {
+	 *         alert(this.name+txt)
+	 *       }
+	 *     })
+	 *     new Todo("Trash").get()
+	 * 
+	 * Callback is available as a static and prototype method.
+	 * 
+	 * ##  Demo
+	 * 
 	 * @demo jquery/class/class.html
-	 *
-	 * @constructor Creating a new instance of an object that has extended jQuery.Class
-	 *     calls the init prototype function and returns a new instance of the class.
-	 *
+	 * 
+	 * 
+	 * ## Constructor
+	 * 
+	 * To create a Class call:
+	 * 
+	 *     $.Class( [NAME , STATIC,] PROTOTYPE ) -> Class
+	 * 
+	 * <div class='params'>
+	 *   <div class='param'><label>NAME</label><code>{optional:String}</code>
+	 *   <p>If provided, this sets the shortName and fullName of the 
+	 *      class and adds it and any necessary namespaces to the 
+	 *      window object.</p>
+	 *   </div>
+	 *   <div class='param'><label>STATIC</label><code>{optional:Object}</code>
+	 *   <p>If provided, this creates static properties and methods
+	 *   on the class.</p>
+	 *   </div>
+	 *   <div class='param'><label>PROTOTYPE</label><code>{Object}</code>
+	 *   <p>Creates prototype methods on the class.</p>
+	 *   </div>
+	 * </div>
+	 * 
+	 * When a Class is created, the static setup and init methods are called.
+	 * 
+	 * To create an instance of a Class, call:
+	 * 
+	 *     new Class([args ... ]) -> instance
+	 * 
+	 * The created instance will have all the 
+	 * prototype properties and methods defined by the PROTOTYPE object.
+	 * 
+	 * When an instance is created, the prototype setup and init methods 
+	 * are called.
 	 */
 
 	clss = $.Class = function() {

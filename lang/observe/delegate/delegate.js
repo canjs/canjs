@@ -1,4 +1,4 @@
-steal('jquery/lang/observe').then(function(){
+steal('jquery/lang/observe',function(){
 	
 	
 	var matches = function(delegate, props){
@@ -6,6 +6,8 @@ steal('jquery/lang/observe').then(function(){
 		var parts = delegate.parts,
 			len = parts.length,
 			i =0;
+		
+		// if the event matches
 		for(i; i< len; i++){
 			if(parts[i] == "**") {
 				return true;
@@ -22,13 +24,24 @@ steal('jquery/lang/observe').then(function(){
 				delegates = $.data(this,"_observe_delegates") || [];
 			
 			for(var i =0; i < delegates.length; i++){
-				if(matches(delegates[i], props)){
+				if(matches(delegates[i], props, how)){
 					delegates[i].callback.apply(this.attr(prop), arguments);
 				}
 			}
 		};
 		
 	$.extend($.Observe.prototype,{
+		/**
+		 * listens for changes in a child from the parent
+		 * 
+		 * observe.delegate("foo.bar","change", function(){
+		 *   // foo.bar has been added, set, or removed
+		 * });
+		 * 
+		 * @param {String} attr
+		 * @param {String} event
+		 * @param {Function} cb
+		 */
 		delegate :  function(attr, event, cb){
 			attr = $.trim(attr);
 			var delegates = $.data(this, "_observe_delegates") ||
@@ -37,7 +50,8 @@ steal('jquery/lang/observe').then(function(){
 			delegates.push({
 				attr : attr,
 				parts : attr.split('.'),
-				callback : cb
+				callback : cb,
+				event: event
 			});
 			if(delegates.length === 1){
 				this.bind("change",delegate)

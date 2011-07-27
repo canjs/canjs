@@ -15,6 +15,7 @@ var isArray =  $.isArray,
 		
 		//listen to all changes and send upwards
 		val.bind("change"+parent._namespace, function(ev, attr, how, val, old ) {
+			// trigger the type on this ...
 			var args = $.makeArray(arguments),
 				ev= args.shift();
 			args[0] = prop+ (args[0] != "*" ? "."+args[0] : ""); // change the attr
@@ -101,10 +102,12 @@ $.Class('jQuery.Observe',{
 			
 			
 			if(value !== current){
+				
+				var changeType = this._data.hasOwnProperty(prop) ? "set" : "add";
 
 				this._data[prop] = isObject(value) ? hookup(value, prop, this) : value;
 				
-				$([this]).trigger("change", [prop, "set", value, current])
+				$([this]).trigger("change", [prop, changeType, value, current])
 				
 				if(current && current.unbind){
 					current.unbind("change"+this._namespace)

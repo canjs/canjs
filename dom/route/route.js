@@ -5,6 +5,11 @@ steal('jquery/lang/observe',
 	var routes = [],
 		globalDefaults;
 	
+	/**
+	 * @parent dom
+	 * @class jQuery.route
+	 * @param {Object} data
+	 */
 	$.route = {
 		param: function(data){
 			return $.param(data);
@@ -12,16 +17,21 @@ steal('jquery/lang/observe',
 		deparam: function(url){
 			return $.String.deparam( url );
 		},
+		/**
+		 * An $.Observable that represents the state of the 
+		 * history.
+		 */
 		state: new $.Observe({}),
 		/**
 		 * $.route.route("", {type: "videos"});
 		 * $.route.route("{type}");
 		 * 
-		 * @param {Object} name
-		 * @param {Object} defaults
+		 * @param {String} url
+		 * @param {Object} [defaults]
 		 */
-		route : function(name, defaults){
-			
+		route : function(url, defaults){
+			// add route in a form that can be easily figured out
+			// 
 		}
 	}
 	
