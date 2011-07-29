@@ -199,7 +199,7 @@ steal('jquery/class', 'jquery/lang').then(function() {
 	 * $.Controller("Tasks",
 	 * {
 	 *   init: function() {
-	 *     Task.findAll({}, this.callback('tasks'));
+	 *     Task.findAll({}, this.callback('list'));
 	 *   },
 	 *   list : function(todos){
 	 *     this.element.html("tasks.ejs", todos );
