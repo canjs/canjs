@@ -161,7 +161,7 @@ $.event.handle = function( event ) {
 			// and its an element 
 			isElement(event.target);
 	if (runDefault) {
-		$event.special['default'].triggerDefault(event, this);
+		$event.special['default'].triggerDefault(event, this, args[1]);
 	}
 	event.type = oldType;
 	

@@ -8,7 +8,7 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 			hasControllers = slashes.indexOf("/Controllers/" + Class.shortName) != -1,
 			path = jQuery.String.underscore(slashes.replace("/Controllers/" + Class.shortName, "")),
 			controller_name = Class._shortName,
-			suffix = (typeof view == "string" && view.match(/\.[\w\d]+$/)) || jQuery.View.ext;
+	        suffix = (typeof view == "string" && /\.[\w\d]+$/.test(view)) ? "" : jQuery.View.ext;
 
 		//calculate view
 		if ( typeof view == "string" ) {
