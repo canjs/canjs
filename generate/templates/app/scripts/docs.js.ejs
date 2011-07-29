@@ -2,5 +2,7 @@
 
 load('steal/rhino/rhino.js');
 steal("documentjs").then(function(){
-	DocumentJS('<%= path %>/<%= application_name %>.html');
+	DocumentJS('<%= path %>/<%= application_name %>.html', {
+		markdown : ['<%= application_name %>']
+	});
 });

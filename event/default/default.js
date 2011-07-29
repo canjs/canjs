@@ -121,7 +121,7 @@ $event.special["default"] = {
 		}
 	},
 	setup: function() {return true},
-	triggerDefault : function(event, elem){
+	triggerDefault : function(event, elem, data){
 		
 		var defaultGetter = jQuery.Event("default."+event.type);
 			
@@ -153,7 +153,7 @@ $event.special["default"] = {
 			defaultGetter.type = type;
 			defaultGetter.exclusive = exclusive;
 			
-			$event.handle.call(elem, defaultGetter);
+			$event.handle.call(elem, defaultGetter, data);
 		}
 	},
 	checkAndRunDefaults : function(event, elem){
