@@ -1,10 +1,24 @@
 steal('jquery/event/livehack', 'jquery/event/handle').then(function($){
 
+
 var current,
 	rnamespaces = /\.(.*)$/,
 	returnFalse = function(){return false},
 	returnTrue = function(){return true};
 
+/**
+ * @function
+ * @parent jquery.event.pause
+ * Pauses an event (to be resumed later);
+ */
+//
+/**
+ * @function
+ * @parent jquery.event.pause
+ * 
+ * Resumes an event
+ */
+//
 /**
  * @page jquery.event.pause Pause-Resume
  * @plugin jquery/event/pause
@@ -83,22 +97,13 @@ var current,
  */
 $.Event.prototype.isPaused = returnFalse
 
-/**
- * @function
- * @parent jquery.event.pause
- * Pauses an event (to be resumed later);
- */
+
 $.Event.prototype.pause = function(){
 	current = this;
 	this.stopImmediatePropagation();
 	this.isPaused = returnTrue;
 };
-/**
- * @function
- * @parent jquery.event.pause
- * 
- * Resumes an event
- */
+
 $.Event.prototype.resume = function(){
 	this.isPaused = this.isImmediatePropagationStopped = this.isPropagationStopped = returnFalse;
 	

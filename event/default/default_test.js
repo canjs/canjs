@@ -146,4 +146,23 @@ test("namespace on objects", function(){
 });
 
 
+test("default events with argument", function(){
+
+	$("#qunit-test-area").html(
+	"<div id='touchme'></div>")
+	
+	
+	var arg = "foobar", touchArg, defaultArg;
+	$("#touchme").bind("default.touch", function(e, data){
+		defaultArg = data;
+	})
+	$("#touchme").bind("touch", function(e, data){
+		touchArg = data;
+	})
+	$("#touchme").trigger("touch", arg)
+	equals(touchArg, arg, "standard event got args")
+	equals(defaultArg, arg, "default event got args")
+});
+
+
 });

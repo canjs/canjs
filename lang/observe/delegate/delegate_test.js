@@ -1,4 +1,4 @@
-steal('funcunit/qunit','jquery/lang/observe').then(function(){
+steal('funcunit/qunit','jquery/lang/observe',function(){
 
 
 module('jquery/lang/observe/delegate')

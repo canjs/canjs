@@ -110,6 +110,7 @@ test("validatesPresenceOf", function(){
 		}
 	},{});
 	
+    //test for undefined
 	var task = new Task(),
 		errors = task.errors();
 	
@@ -117,6 +118,23 @@ test("validatesPresenceOf", function(){
 	ok(errors.dueDate)
 	equals(errors.dueDate[0], "can't be empty" , "right message");
 	
+    //test for null
+	task = new Task({dueDate: null});
+    errors = task.errors();
+	
+	ok(errors)
+	ok(errors.dueDate)
+	equals(errors.dueDate[0], "can't be empty" , "right message");
+
+    //test for ""
+	task = new Task({dueDate: ""});
+    errors = task.errors();
+	
+	ok(errors)
+	ok(errors.dueDate)
+	equals(errors.dueDate[0], "can't be empty" , "right message");
+
+	//Affirmative test
 	task = new Task({dueDate : "yes"});
 	errors = task.errors();;
 	
