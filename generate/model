@@ -49,17 +49,27 @@ function(steal){
 	if(steal.Inflector.singularize(md.underscore) !== md.underscore){
 		print("! Warning: Model names should be singular.  I don't think "+md.underscore+" is singular!")	
 	}
+	try{
+		// steal this model in models.js
+		steal.generate.insertSteal(md.appPath+"/models/models.js", "./"+md.underscore+".js");
+		
+		// steal this model's unit test in qunit.js
+		steal.generate.insertSteal(md.appPath+"/test/qunit/qunit.js", "./"+md.underscore+"_test.js");
+	} catch (e) {
+		if(e.type && e.type == "DUPLICATE"){
+			print("! Error: This model was already created!")	
+			quit();
+		}
+	}
+	// $.fixture.make for this model in fixtures.js
 
 	// generate the files
 	steal.generate("jquery/generate/templates/model", md.appPath, md)
 	
-	// steal this model in models.js
-	steal.generate.insertSteal(md.appPath+"/models/models.js", md.plural);
-	
-	// steal this model's unit test in qunit.js
-	steal.generate.insertSteal(md.appPath+"/test/qunit/qunit.js", md.plural+"_test.js");
-	return;
-	// $.fixture.make for this model in fixtures.js
-	steal.generate.insertSteal(md.appPath+"/fixtures/fixtures.js", "$.fixtures.make");
+	var text = readFile("jquery/generate/templates/fixturemake.ejs");
+	var fixturetext = new steal.EJS({
+		text: text
+	}).render(md);
+	steal.generate.insertCode(md.appPath+"/fixtures/fixtures.js", fixturetext);
 	
 });

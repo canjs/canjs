@@ -1,3 +1,5 @@
+steal('jquery/model', function(){
+
 /**
  * @parent index
  * Wraps backend <%=underscore%> services.  Enables 
@@ -12,7 +14,13 @@ $.Model.extend('<%=name%>',
 	/**
  	 * Retrieves <%= plural %> data from your backend services.
  	 */
-	findAll: "GET /<%= plural %>.json"
+	findAll: "/<%= plural %>.json",
+  	findOne : "/<%= plural %>/{id}.json", 
+  	create : "/<%= plural %>.json",
+ 	update : "/<%= plural %>/{id}.json",
+  	destroy : "/<%= plural %>/{id}.json"
 },
 /* @Prototype */
 {});
+
+})
