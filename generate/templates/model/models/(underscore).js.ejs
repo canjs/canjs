@@ -1,0 +1,18 @@
+/**
+ * @parent index
+ * Wraps backend <%=underscore%> services.  Enables 
+ * [<%=name%>.static.findAll retrieving],
+ * [<%=name%>.static.update updating],
+ * [<%=name%>.static.destroy destroying], and
+ * [<%=name%>.static.create creating] <%= plural %>.
+ */
+$.Model.extend('<%=name%>',
+/* @Static */
+{
+	/**
+ 	 * Retrieves <%= plural %> data from your backend services.
+ 	 */
+	findAll: "GET /<%= plural %>.json"
+},
+/* @Prototype */
+{});
