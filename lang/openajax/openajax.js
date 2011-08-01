@@ -24,7 +24,7 @@ if(!window["OpenAjax"]){
 	/**
 	* @class OpenAjax
 	* Use OpenAjax.hub to publish and subscribe to messages.
- 	*/
+	*/
 	OpenAjax = new function(){
 		var t = true;
 		var f = false;
