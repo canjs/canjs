@@ -1,0 +1,26 @@
+steal('jquery/model', function(){
+
+/**
+ * @parent index
+ * Wraps backend <%=underscore%> services.  Enables 
+ * [<%=name%>.static.findAll retrieving],
+ * [<%=name%>.static.update updating],
+ * [<%=name%>.static.destroy destroying], and
+ * [<%=name%>.static.create creating] <%= plural %>.
+ */
+$.Model.extend('<%=name%>',
+/* @Static */
+{
+	/**
+ 	 * Retrieves <%= plural %> data from your backend services.
+ 	 */
+	findAll: "/<%= plural %>.json",
+  	findOne : "/<%= plural %>/{id}.json", 
+  	create : "/<%= plural %>.json",
+ 	update : "/<%= plural %>/{id}.json",
+  	destroy : "/<%= plural %>/{id}.json"
+},
+/* @Prototype */
+{});
+
+})
