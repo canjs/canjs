@@ -1,7 +1,11 @@
 module("jquery/model/associations",{
 	setup: function() {
 		
-		$.Model("MyTest.Person");
+		$.Model("MyTest.Person", {
+			serialize: function() {
+				return "My name is " + this.name;
+			}
+		});
 		$.Model("MyTest.Loan");
 		$.Model("MyTest.Issue");
 		
@@ -20,7 +24,10 @@ module("jquery/model/associations",{
 					type : 'post',
 					dataType : "json",
 					fixture: function(){
-						return [{loansAttr: attrs.loans}]
+						return [{
+							loansAttr: attrs.loans,
+							personAttr: attrs.person
+						}]
 					},
 					success : success
 				})
@@ -28,11 +35,7 @@ module("jquery/model/associations",{
 		},
 		{});
 	}
-})
-
-
-
-
+});
 
 test("associations work", function(){
 	var c = new MyTest.Customer({
@@ -61,8 +64,28 @@ test("associations work", function(){
 	equals(c.loans.length, 2);
 	
 	equals(c.loans[0].Class, MyTest.Loan);
-})
+});
 
+test("Model association serialize on save", function(){
+	var c = new MyTest.Customer({
+		id: 5,
+		person : {
+			id: 1,
+			name: "thecountofzero"
+		},
+		issues : [],
+		loans : []
+	}),
+	cSave = c.save();
+	
+	stop();
+	cSave.then(function(customer){
+		start()
+		equals(customer.personAttr, "My name is thecountofzero", "serialization works");
+		
+	});
+	
+});
 
 test("Model.List association serialize on save", function(){
 	var c = new MyTest.Customer({
@@ -95,4 +118,4 @@ test("Model.List association serialize on save", function(){
 		
 	});
 	
-})
+});
