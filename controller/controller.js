@@ -578,10 +578,13 @@ steal('jquery/class', 'jquery/lang', 'jquery/event/destroyed', function( $ ) {
 			element = element.jquery ? element[0] : element;
 
 			//set element and className on element
-			this.element = $(element).addClass(cls._fullName);
+			var pluginname = cls.pluginName || cls._fullName;
+
+			//set element and className on element
+			this.element = $(element).addClass(pluginname);
 
 			//set in data
-			(data(element) || data(element, {}))[cls._fullName] = this;
+			(data(element) || data(element, {}))[pluginname] = this;
 
 			//adds bindings
 			this._bindings = [];
@@ -808,7 +811,7 @@ steal('jquery/class', 'jquery/lang', 'jquery/event/destroyed', function( $ ) {
 				throw this.Class.shortName + " controller instance has been deleted";
 			}
 			var self = this,
-				fname = this.Class._fullName,
+				fname = this.Class.pluginName || this.Class._fullName,
 				controllers;
 			this._destroyed = true;
 			this.element.removeClass(fname);
