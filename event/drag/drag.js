@@ -171,7 +171,7 @@ steal('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack').then(functi
 		},
 		mousemove: function( docEl, ev ) {
 			if (!this.moved ) {
-				var dist = Math.pow( ev.pageX - this.event.pageX, 2 ) + Math.pow( ev.pageY - this.event.pageY, 2 );
+				var dist = Math.sqrt( Math.pow( ev.pageX - this.event.pageX, 2 ) + Math.pow( ev.pageY - this.event.pageY, 2 ));
 				if(dist < this._distance){
 					return false;
 				}
