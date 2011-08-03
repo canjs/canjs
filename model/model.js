@@ -91,7 +91,7 @@ steal('jquery/class', 'jquery/lang').then(function() {
 				reject = function(data){
 					deferred.rejectWith(self, [data])
 				},
-				args = [self.attrs(), resolve, reject];
+				args = [self.serialize(), resolve, reject];
 				
 			if(type == 'destroy'){
 				args.shift();
