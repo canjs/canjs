@@ -811,10 +811,10 @@ steal('jquery/class', 'jquery/lang', 'jquery/event/destroyed', function( $ ) {
 				throw this.Class.shortName + " controller instance has been deleted";
 			}
 			var self = this,
-				fname = this.Class._fullName,
+				fname = this.Class.pluginName || this.Class._fullName,
 				controllers;
 			this._destroyed = true;
-			this.element.removeClass(this.Class.pluginName || fname);
+			this.element.removeClass(fname);
 
 			$.each(this._bindings, function( key, value ) {
 				value(self.element[0]);
