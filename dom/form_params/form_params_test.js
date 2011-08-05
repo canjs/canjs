@@ -2,6 +2,10 @@ steal("jquery/dom/form_params")  //load your app
  .then('funcunit/qunit','jquery/view/micro')  //load qunit
  .then(function(){
 
+$.ajaxSetup({
+	cache : false
+});
+     
 module("jquery/dom/form_params")
 test("with a form", function(){
 
@@ -13,7 +17,7 @@ test("with a form", function(){
 	ok(formParams.params.three === 3,"three is right");
 	same(formParams.params.four,["4","1"],"four is right");
 	same(formParams.params.five,[2,3],"five is right");
-	
+	ok(typeof formParams.id == 'undefined', "Id value is empty");
 	
 });
 
@@ -26,7 +30,7 @@ test("with true false", function(){
 	ok(formParams.bar.abc === true, "form bar is true");
 	ok(formParams.bar.def === true, "form def is true");
 	ok(formParams.bar.ghi === undefined, "form def is undefined");
-
+	ok(formParams.wrong === false, "'false' should become false");
 });
 
 test("just strings",function(){

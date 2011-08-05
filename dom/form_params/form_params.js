@@ -75,10 +75,14 @@ steal("jquery/dom").then(function( $ ) {
 				if ( convert ) {
 					if ( isNumber(value) ) {
 						value = parseFloat(value);
-					} else if ( value === 'true' || value === 'false' ) {
-						value = Boolean(value);
+					} else if ( value === 'true') {
+						value = Boolean(1);
+					} else if ( value === 'false' ) {
+						value = Boolean(0);
 					}
-
+					if(value === '') {
+						value = undefined;
+					}
 				}
 
 				// go through and create nested objects
