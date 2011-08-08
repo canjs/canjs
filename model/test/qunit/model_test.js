@@ -398,17 +398,10 @@ test("serialize", function(){
 			}
 		}
 	},{});
-	stop()
-	$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
-		equals(originalOptions.data.createdAt, "feb", "serialized")
-		jqXHR.abort();
-		start()
-	});
 	var d = new Date();
 	d.setMonth(1)
-	var t = new Task({
+	equals(new Task({
 		createdAt: d
-	})
-	t.save();
+	}).serialize().createdAt, "feb", "serialized")
 });
 
