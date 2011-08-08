@@ -1,5 +1,6 @@
 steal('jquery/class', 'jquery/lang', 'jquery/event/destroyed', function( $ ) {
-	// ------- helpers  ------
+	// ------- HELPER FUNCTIONS  ------
+	
 	// Binds an element, returns a function that unbinds
 	var bind = function( el, ev, callback ) {
 		var wrappedCallback,
@@ -26,6 +27,7 @@ steal('jquery/class', 'jquery/lang', 'jquery/event/destroyed', function( $ ) {
 		isFunction = $.isFunction,
 		extend = $.extend,
 		Str = $.String,
+		
 		// Binds an element, returns a function that unbinds
 		delegate = function( el, selector, ev, callback ) {
 			var binder = el.delegate && el.undelegate ? el : $(isFunction(el) ? [el] : el)
@@ -35,12 +37,13 @@ steal('jquery/class', 'jquery/lang', 'jquery/event/destroyed', function( $ ) {
 				binder = el = ev = callback = selector = null;
 			};
 		},
+		
+		// calls bind or unbind depending if there is a selector
 		binder = function( el, ev, callback, selector ) {
 			return selector ? delegate(el, selector, ev, callback) : bind(el, ev, callback);
 		},
-		/**
-		 * moves 'this' to the first argument 
-		 */
+		
+		// moves 'this' to the first argument, wraps it with jQuery if it's an element
 		shifter = function shifter(context, name) {
 			var method = typeof name == "string" ? context[name] : name;
 			return function() {
@@ -414,19 +417,41 @@ steal('jquery/class', 'jquery/lang', 'jquery/event/destroyed', function( $ ) {
 		},
 		/**
 		 * @hide
+		 * This takes a method name and the options passed to a controller
+		 * and tries to return the data necessary to pass to a processor
+		 * (something that binds things).
+		 * 
+		 * For performance reasons, this called twice.  First, it is called when 
+		 * the Controller class is created.  If the methodName is templated
+		 * like : "{window} foo", it returns null.  If it is not templated
+		 * it returns event binding data.
+		 * 
+		 * The resulting data is added to this.actions.
+		 * 
+		 * When a controller instance is created, _action is called again, but only
+		 * on templated actions.  
+		 * 
 		 * @param {Object} methodName the method that will be bound
 		 * @param {Object} [options] first param merged with class default options
 		 * @return {Object} null or the processor and pre-split parts.  
 		 * The processor is what does the binding/subscribing.
 		 */
 		_action: function( methodName, options ) {
-			//if we don't have a controller instance, we'll break this guy up later
+			// reset the test index
 			parameterReplacer.lastIndex = 0;
+			
+			//if we don't have options (a controller instance), we'll run this later
 			if (!options && parameterReplacer.test(methodName) ) {
 				return null;
 			}
+			// If we have options, run sub to replace templates "{}" with a value from the options
+			// or the window
 			var convertedName = options ? Str.sub(methodName, [options, window]) : methodName,
+				
+				// If a "{}" resolves to an object, convertedName will be an array
 				arr = isArray(convertedName),
+				
+				// get the parts of the function = [convertedName, delegatePart, eventPart]
 				parts = (arr ? convertedName[1] : convertedName).match(breaker),
 				event = parts[2],
 				processor = processors[event] || basicProcessor;
@@ -810,18 +835,24 @@ steal('jquery/class', 'jquery/lang', 'jquery/event/destroyed', function( $ ) {
 			var self = this,
 				fname = this.Class._fullName,
 				controllers;
+			
+			// mark as destroyed
 			this._destroyed = true;
+			
+			// remove the className
 			this.element.removeClass(fname);
 
+			// unbind bindings
 			$.each(this._bindings, function( key, value ) {
 				value(self.element[0]);
 			});
-
+			// clean up
 			delete this._actions;
 
 			delete this.element.data("controllers")[fname];
 			
 			$(this).triggerHandler("destroyed"); //in case we want to know if the controller is removed
+			
 			this.element = null;
 		},
 		/**

@@ -8,7 +8,7 @@ if (!_args[0]) {
 load('steal/rhino/rhino.js');
 
 steal('steal/generate','steal/generate/system.js',function(steal){
-	var path =  _args[0].toLowerCase().replace('.',"/"),
+	var path =  _args[0].toLowerCase().replace(/\./g,"/"),
 		data = steal.extend({
 			path: path, 
 			application_name: path.match(/[^\/]*$/)[0],

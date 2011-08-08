@@ -1548,13 +1548,20 @@ steal('jquery/class', 'jquery/lang').then(function() {
 	"destroyed"], function( i, funcName ) {
 		$.Model.prototype[funcName] = function( attrs ) {
 			var stub;
-
+			
+			// remove from the list if instance is destroyed
 			if ( funcName === 'destroyed' && this.Class.list ) {
 				this.Class.list.remove(getId(this));
 			}
+			
+			// update attributes if attributes have been passed
 			stub = attrs && typeof attrs == 'object' && this.attrs(attrs.attrs ? attrs.attrs() : attrs);
+			
+			// call event on the instance
 			$(this).triggerHandler(funcName);
 			this.publish(funcName, this);
+			
+			// call event on the instance's Class
 			$([this.Class]).triggerHandler(funcName, this);
 			return [this].concat(makeArray(arguments)); // return like this for this.callback chains
 		};

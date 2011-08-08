@@ -491,7 +491,7 @@ steal('jquery/dom').then(function( $ ) {
 				//filter results if someone added an attr like parentId
 				for ( var param in settings.data ) {
 					i=0;
-					if ( settings.data[param] != undefined && // don't do this if the value of the param is null (ignore it)
+					if ( settings.data[param] !== undefined && // don't do this if the value of the param is null (ignore it)
 						(param.indexOf("Id") != -1 || param.indexOf("_id") != -1) ) {
 						while ( i < retArr.length ) {
 							if ( settings.data[param] != retArr[i][param] ) {
@@ -569,6 +569,23 @@ steal('jquery/dom').then(function( $ ) {
 					return findOne( getId(settings) );
 				}
 			}
+		},
+		rand : function(arr, num){
+			if(typeof arr == 'number'){
+				return Math.floor(Math.random() * arr)
+			}
+			var rand = arguments.callee;
+			// get a random set
+			if(num === undefined){
+				rand(arr, rand(arr.length))
+			}
+			// get a random selection of arr
+			var res = [];
+			arr = arr.slice(0);
+			for(var i=0; i < num; i++){
+				res.push(arr.splice( rand(arr.length), 1  )[0])
+			}
+			return res;
 		},
 		/**
 		 * Use $.fixture.xhr to create an object that looks like an xhr object. 

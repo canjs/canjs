@@ -5,7 +5,9 @@
 //@steal-clean
 steal("jquery","jquery/lang").then(function( $ ) {
 
-	// if we are initializing a new class
+	// =============== HELPERS =================
+
+	    // if we are initializing a new class
 	var initializing = false,
 		makeArray = $.makeArray,
 		isFunction = $.isFunction,
@@ -14,14 +16,16 @@ steal("jquery","jquery/lang").then(function( $ ) {
 		concatArgs = function(arr, args){
 			return arr.concat(makeArray(args));
 		},
+		
 		// tests if we can get super in .toString()
 		fnTest = /xyz/.test(function() {
 			xyz;
 		}) ? /\b_super\b/ : /.*/,
+		
 		// overwrites an object with methods, sets up _super
-		// newProps - new properties
-		// oldProps - where the old properties might be
-		// addTo - what we are adding to
+		//   newProps - new properties
+		//   oldProps - where the old properties might be
+		//   addTo - what we are adding to
 		inheritProps = function( newProps, oldProps, addTo ) {
 			addTo = addTo || newProps
 			for ( var name in newProps ) {
@@ -400,13 +404,17 @@ steal("jquery","jquery/lang").then(function( $ ) {
 			var args = makeArray(arguments),
 				self;
 
+			// get the functions to callback
 			funcs = args.shift();
 
+			// if there is only one function, make funcs into an array
 			if (!isArray(funcs) ) {
 				funcs = [funcs];
 			}
-
+			
+			// keep a reference to us in self
 			self = this;
+			
 			//@steal-remove-start
 			for( var i =0; i< funcs.length;i++ ) {
 				if(typeof funcs[i] == "string" && !isFunction(this[funcs[i]])){
@@ -415,23 +423,30 @@ steal("jquery","jquery/lang").then(function( $ ) {
 			}
 			//@steal-remove-end
 			return function class_cb() {
+				// add the arguments after the curried args
 				var cur = concatArgs(args, arguments),
 					isString, 
 					length = funcs.length,
 					f = 0,
 					func;
-
+				
+				// go through each function to call back
 				for (; f < length; f++ ) {
 					func = funcs[f];
 					if (!func ) {
 						continue;
 					}
-
+					
+					// set called with the name of the function on self (this is how this.view works)
 					isString = typeof func == "string";
 					if ( isString && self._set_called ) {
 						self.called = func;
 					}
+					
+					// call the function
 					cur = (isString ? self[func] : func).apply(self, cur || []);
+					
+					// pass the result to the next function (if there is a next function)
 					if ( f < length - 1 ) {
 						cur = !isArray(cur) || cur._use_call ? [cur] : cur
 					}
@@ -465,11 +480,15 @@ steal("jquery","jquery/lang").then(function( $ ) {
 		 * @return {class} instance of the class
 		 */
 		newInstance: function() {
+			// get a raw instance objet (init is not called)
 			var inst = this.rawInstance(),
 				args;
+				
+			// call setup if there is a setup
 			if ( inst.setup ) {
 				args = inst.setup.apply(inst, arguments);
 			}
+			// call init if there is an init, if setup returned args, use those as the arguments
 			if ( inst.init ) {
 				inst.init.apply(inst, isArray(args) ? args : arguments);
 			}
@@ -502,13 +521,16 @@ steal("jquery","jquery/lang").then(function( $ ) {
 		 * @param {Object} protoProps the prototype properties of the new class
 		 */
 		setup: function( baseClass, fullName ) {
+			// set defaults as the merger of the parent defaults and this object's defaults
 			this.defaults = extend(true, {}, baseClass.defaults, this.defaults);
 			return arguments;
 		},
 		rawInstance: function() {
+			// prevent running init
 			initializing = true;
 			var inst = new this();
 			initializing = false;
+			// allow running init
 			return inst;
 		},
 		/**
@@ -528,7 +550,7 @@ steal("jquery","jquery/lang").then(function( $ ) {
 		 * @return {jQuery.Class} returns the new class
 		 */
 		extend: function( fullName, klass, proto ) {
-			// figure out what was passed
+			// figure out what was passed and normalize it
 			if ( typeof fullName != 'string' ) {
 				proto = klass;
 				klass = fullName;
@@ -549,16 +571,17 @@ steal("jquery","jquery/lang").then(function( $ ) {
 			initializing = true;
 			prototype = new this();
 			initializing = false;
+			
 			// Copy the properties over onto the new prototype
 			inheritProps(proto, _super, prototype);
 
 			// The dummy class constructor
-
 			function Class() {
 				// All construction is actually done in the init method
 				if ( initializing ) return;
 
-				if ( this.constructor !== Class && arguments.length ) { //we are being called w/o new
+				// we are being called w/o new, we are extending
+				if ( this.constructor !== Class && arguments.length ) { 
 					return arguments.callee.extend.apply(arguments.callee, arguments)
 				} else { //we are being called w/ new
 					return this.Class.newInstance.apply(this.Class, arguments)
@@ -571,7 +594,7 @@ steal("jquery","jquery/lang").then(function( $ ) {
 				}
 			}
 
-			// copy new props on class
+			// copy new static props on class
 			inheritProps(klass, this, Class);
 
 			// do namespace stuff
@@ -605,7 +628,6 @@ steal("jquery","jquery/lang").then(function( $ ) {
 			//make sure our prototype looks nice
 			Class.prototype.Class = Class.prototype.constructor = Class;
 
-
 			/**
 			 * @attribute fullName 
 			 * The full name of the class, including namespace, provided for introspection purposes.
@@ -616,8 +638,10 @@ steal("jquery","jquery/lang").then(function( $ ) {
 			 * @codeend
 			 */
 
+			// call the class setup
 			var args = Class.setup.apply(Class, concatArgs([_super_class],arguments));
-
+			
+			// call the class init
 			if ( Class.init ) {
 				Class.init.apply(Class, args || []);
 			}
