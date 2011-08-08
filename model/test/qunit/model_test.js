@@ -386,4 +386,29 @@ test("Model events" , function(){
 });
 
 
+test("serialize", function(){
+	$.Model("Task",{
+		attributes: {
+			createdAt: "date"
+		},
+		serialize: {
+			date: function(d){
+				var months = ["jan", "feb", "mar"]
+				return months[d.getMonth()]
+			}
+		}
+	},{});
+	stop()
+	$.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+		equals(originalOptions.data.createdAt, "feb", "serialized")
+		jqXHR.abort();
+		start()
+	});
+	var d = new Date();
+	d.setMonth(1)
+	var t = new Task({
+		createdAt: d
+	})
+	t.save();
+});
 
