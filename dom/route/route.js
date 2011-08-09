@@ -28,11 +28,11 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/deparam', '
 	 * 
 	 * Create changes in the route data like:
 	 * 
-	 *     $.route.data.attr('type','video');
+	 *     $.route.attr('type','video');
 	 * 
 	 * Listen to changes in the route data like
 	 * 
-	 * $.route.data.delegate('type','add',function(ev, newVal, oldVal){
+	 * $.route.delegate('type','add',function(ev, newVal, oldVal){
 	 * 
 	 * })
 	 * 
@@ -130,6 +130,7 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/deparam', '
 			return $.String.deparam(url);
 		},
 		/**
+		 * @hide
 		 * A $.Observe that represents the state of the 
 		 * history.
 		 */
@@ -177,6 +178,12 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/deparam', '
 		}
 	});
 
+	$.each(['bind','unbind','delegate','undelegate','attr','attrs','removeAttr'], function(i, name){
+		$route[name] = function(){
+			return $route.data[name].apply($route.data, arguments)
+		}
+	})
+
 	var throttle = function( func, time ) {
 		var timer;
 		return function() {
@@ -190,7 +197,7 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/deparam', '
 			//deparam it
 			var props = $route.deparam(hash);
 			curParams = props;
-			$route.data.attrs(props, true);
+			$route.attrs(props, true);
 
 		};
 
