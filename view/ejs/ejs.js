@@ -94,15 +94,15 @@ steal('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 *     
 	 *         <% alert('hello world') %>
 	 *     
-	 *   - <code>&lt;%= CODE %&gt;</code> - Runs JS Code and writes the result into the result of the template.
+	 *   - <code>&lt;%= CODE %&gt;</code> - Runs JS Code and writes the _escaped_ result into the result of the template.
 	 *     For example:
 	 *     
 	 *         <h1><%= 'hello world' %></h1>
-	 *        
-	 *   - <code>&lt;%~ CODE %&gt;</code> - Runs JS Code and writes the _escaped_ result into the result of the template.
+	 *         
+	 *   - <code>&lt;%== CODE %&gt;</code> - Runs JS Code and writes the _unescaped_ result into the result of the template.
 	 *     For example:
 	 *     
-	 *         <%~ 'hello world' %>
+	 *         <h1><%== '<span>hello world</span>' %></h1>
 	 *         
 	 *   - <code>&lt;%%= CODE %&gt;</code> - Writes <%= CODE %> to the result of the template.  This is very useful for generators.
 	 *     
