@@ -251,8 +251,10 @@ steal('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	EJS.clean = function(text){
 		//return sanatized text
 		if(typeof text == 'string'){
-			return escapeHTML(text)
-		}else{
+			return escapeHTML(text);
+		} else if(typeof text == 'number') {
+			return text;
+		} else {
 			return "";
 		}
 	}
