@@ -51,12 +51,14 @@ var isArray =  $.isArray,
 	},
 	sendCollection = function(){
 		var len = collecting.length,
+			items = collecting.slice(0),
 			cur;
+		collecting = null;
 		for(var i =0; i < len; i++){
-			cur = collecting[i];
+			cur = items[i];
 			$(cur.t).trigger(cur.ev, cur.args)
 		}
-		collecting = null
+		
 	};
 	
 
@@ -65,7 +67,7 @@ var isArray =  $.isArray,
 // set - property value changed
 /**
  * @class jQuery.Observe
- * 
+ * @parent jquerymx.lang
  * Provides observable behavior on JSON-like data structures.
  * 
  *     new $.Observe({ 
@@ -86,7 +88,11 @@ var isArray =  $.isArray,
  * @param {Object} obj a JavaScript Object that will be 
  * converted to an observable
  */
-$.Class('jQuery.Observe',{
+$.Class('jQuery.Observe',
+/**
+ * @prototype
+ */
+{
 	init : function(obj){
 		this._namespace = ".observe"+(++id);
 		var self = this;
@@ -242,10 +248,16 @@ $.Class('jQuery.Observe',{
 })
 /**
  * @class jQuery.Observe.List
- * @inhert jQuery.Observe
+ * @inherits jQuery.Observe
+ * @parent jQuery.Observe
  * An observable list
+ * 
  */
-jQuery.Observe('jQuery.Observe.List', {
+jQuery.Observe('jQuery.Observe.List', 
+/**
+ * @prototype
+ */
+{
 	init : function(instances){
 		this.length = 0;
 		this._namespace = ".list"+(++id);
