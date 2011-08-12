@@ -255,7 +255,7 @@ steal('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		} else if(typeof text == 'number') {
 			return text;
 		} else {
-			return "";
+			return EJS.text(text);
 		}
 	}
 	//returns something you can call scan on
