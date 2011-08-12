@@ -3,6 +3,7 @@ steal('jquery').then(function($){
 		getSetOne = function(v){ return v !== undefined ? (this.array[1] = v) : this.array[1] }
 /**
  * @class jQuery.Vector
+ * @parent jquerymx.lang
  * A vector class
  * @constructor creates a new vector instance from the arguments.  Example:
  * @codestart
