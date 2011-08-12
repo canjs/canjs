@@ -15,6 +15,17 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/deparam', '
 		},
 		escapeHTML = function( content ) {
 			return content.replace(/"/g, '&#34;').replace(/'/g, "&#39;");
+		},
+		// if a route matches the data provided
+		matchesData = function(route, data){
+			var count = 0;
+			for ( var i = 0; i < route.names.length; i++ ) {
+				if (!data.hasOwnProperty(route.names[i]) ) {
+					return 0;
+				}
+				count++;
+			}
+			return count;
 		};
 
 	/**
@@ -74,28 +85,30 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/deparam', '
 		param: function( data ) {
 			// see what data is provided ...
 			// check if it matches the names in any routes ...
+			// get the one with the most matches
+			var route,
+				matches = -1,
+				temp,
+				matchCount;
 			for ( var name in $route.routes ) {
-				var route = $route.routes[name],
-					ok = true;
-
-				// check if data has props
-				for ( var i = 0; i < route.names.length; i++ ) {
-					if (!data.hasOwnProperty(route.names[i]) ) {
-						ok = false;
-						break;
-					}
+				
+				var temp = $route.routes[name],
+					matchCount = matchesData(temp, data);
+				if( matchCount > matches ){
+					route = temp;
+					matches = matchCount
 				}
-				if ( ok ) {
-					// create url ...
-					var cpy = $.extend({}, data);
+			}
+			if ( route ) {
+				// create url ...
+				var cpy = $.extend({}, data);
 
-					var res = route.route.replace(matcher, function( whole, name ) {
-						delete cpy[name];
-						return data[name] === route.defaults[name] ? "" : data[name];
-					});
-					var after = $.param(cpy);
-					return res + (after ? "&" + after : "")
-				}
+				var res = route.route.replace(matcher, function( whole, name ) {
+					delete cpy[name];
+					return data[name] === route.defaults[name] ? "" : data[name];
+				});
+				var after = $.param(cpy);
+				return res + (after ? "&" + after : "")
 			}
 			return $.param(data);
 		},

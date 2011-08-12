@@ -73,6 +73,18 @@ test("precident", function(){
 		"jQuery.Controller" );
 })
 
+test("precident2", function(){
+	$.route.routes = {};
+	$.route(":type",{who: "index"});
+	$.route(":type/:id");
+	
+	equal( $.route.param({
+			type : "foo",
+			id: "bar"
+		}),
+		"foo/bar" );
+})
+
 test("linkTo", function(){
 	var res = $.route.link("Hello",{foo: "bar"});
 })
