@@ -1,3 +1,8 @@
+/**
+ * @page jquerymx.lang Language Helpers
+ * @parent jquerymx
+ * JavaScriptMVC has a number of language helpers.
+ */
 //string helpers
 steal('jquery').then(function( $ ) {
 	// Several of the methods in this plugin use code adapated from Prototype
@@ -56,6 +61,7 @@ steal('jquery').then(function( $ ) {
 
 		/** 
 		 * @class jQuery.String
+		 * @parent jquerymx.lang
 		 * 
 		 * A collection of useful string helpers.
 		 * 
@@ -156,5 +162,4 @@ steal('jquery').then(function( $ ) {
 				return obs.length <= 1 ? obs[0] : obs;
 			}
 		});
-
 });
