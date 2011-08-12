@@ -94,15 +94,15 @@ steal('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 *     
 	 *         <% alert('hello world') %>
 	 *     
-	 *   - <code>&lt;%= CODE %&gt;</code> - Runs JS Code and writes the result into the result of the template.
+	 *   - <code>&lt;%= CODE %&gt;</code> - Runs JS Code and writes the _escaped_ result into the result of the template.
 	 *     For example:
 	 *     
 	 *         <h1><%= 'hello world' %></h1>
-	 *        
-	 *   - <code>&lt;%~ CODE %&gt;</code> - Runs JS Code and writes the _escaped_ result into the result of the template.
+	 *         
+	 *   - <code>&lt;%== CODE %&gt;</code> - Runs JS Code and writes the _unescaped_ result into the result of the template.
 	 *     For example:
 	 *     
-	 *         <%~ 'hello world' %>
+	 *         <h1><%== '<span>hello world</span>' %></h1>
 	 *         
 	 *   - <code>&lt;%%= CODE %&gt;</code> - Writes <%= CODE %> to the result of the template.  This is very useful for generators.
 	 *     
@@ -251,8 +251,10 @@ steal('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	EJS.clean = function(text){
 		//return sanatized text
 		if(typeof text == 'string'){
-			return escapeHTML(text)
-		}else{
+			return escapeHTML(text);
+		} else if(typeof text == 'number') {
+			return text;
+		} else {
 			return "";
 		}
 	}
@@ -286,12 +288,11 @@ steal('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 			eeLeft : left + '%==',
 			eLeft: left + '%=',
 			cmnt: left + '%#',
-			cleanLeft: left+"%~",
 			scan : scan,
 			lines : 0
 		});
-		scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eeLeft, scanner.eLeft, scanner.cleanLeft,
-		scanner.cmnt, scanner.left, scanner.right + '\n', scanner.right, '\n'].join(")|(").
+		scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eeLeft, scanner.eLeft, 
+			scanner.cmnt, scanner.left, scanner.right + '\n', scanner.right, '\n'].join(")|(").
 			replace(/\[/g,"\\[").replace(/\]/g,"\\]") + ")");
 		return scanner;
 	},
@@ -327,7 +328,6 @@ steal('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 					case scanner.left:
 					case scanner.eLeft:
 					case scanner.eeLeft:
-					case scanner.cleanLeft:
 					case scanner.cmnt:
 						startTag = token;
 						if ( content.length > 0 ) {
@@ -359,11 +359,8 @@ steal('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 								buff.push(content, ";");
 							}
 							break;
-						case scanner.cleanLeft : 
-							buff.push(insert_cmd, "(jQuery.EJS.clean(", content, ")));");
-							break;
 						case scanner.eLeft:
-							buff.push(insert_cmd, "(jQuery.EJS.text(", content, ")));");
+							buff.push(insert_cmd, "(jQuery.EJS.clean(", content, ")));");
 							break;
 						case scanner.eeLeft:
 							buff.push(insert_cmd, "(jQuery.EJS.text(", content, ")));");
