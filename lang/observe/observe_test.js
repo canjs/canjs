@@ -112,7 +112,7 @@ test("remove attr", function(){
 	equals(undefined,  state.attr("properties") );
 });
 
-test("merge", function(){
+test("attrs", function(){
 	var state = new $.Observe({
 		properties : {
 		  foo: "bar",
@@ -125,14 +125,14 @@ test("merge", function(){
 		equals(newVal, "bad")
 	})
 	
-	state.merge({
+	state.attrs({
 		properties : {
 		  foo: "bar",
 		  brand: []
 		}
 	})
 	
-	state.merge({
+	state.attrs({
 		properties : {
 		  foo: "bad",
 		  brand: []
@@ -147,7 +147,7 @@ test("merge", function(){
 		same(newVal, ["bad"])
 	});
 	
-	state.merge({
+	state.attrs({
 		properties : {
 		  foo: "bad",
 		  brand: ["bad"]
@@ -162,7 +162,7 @@ test("empty get", function(){
 	equals(state.attr('foo.bar'), undefined)
 });
 
-test("merge deep array ", function(){
+test("attrs deep array ", function(){
 	var state = new $.Observe({});
 	var arr = [{
 			foo: "bar"
@@ -171,11 +171,21 @@ test("merge deep array ", function(){
 			arr: arr
 		};
 	
-	state.merge({
+	state.attrs({
 		thing: thing
 	}, true);
 	
 	ok(thing.arr === arr, "thing unmolested");
 })
+	
+test("attrs sends events after it is done", function(){
+	var state = new $.Observe({foo: 1, bar: 2})
+	state.bind('change', function(){
+		equals(state.attr('foo'), -1, "foo set");
+		equals(state.attr('bar'), -2, "bar set")
+	})
+	state.attrs({foo: -1, bar: -2});
+})
+	
 	
 }).then('./delegate/delegate_test.js');

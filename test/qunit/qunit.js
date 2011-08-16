@@ -13,6 +13,7 @@ steal('jquery').then(function(){
 	  'jquery/dom/cur_styles/cur_styles_test.js',
 	  'jquery/dom/dimensions/dimensions_test.js',
 	  'jquery/dom/form_params/form_params_test.js',
+	  'jquery/dom/route/route_test.js',
 	  'jquery/lang/lang_test.js',
 	  'jquery/lang/deparam/deparam_test.js',
 	  'jquery/dom/fixture/fixture_test.js',

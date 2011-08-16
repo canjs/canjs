@@ -386,4 +386,22 @@ test("Model events" , function(){
 });
 
 
+test("serialize", function(){
+	$.Model("Task",{
+		attributes: {
+			createdAt: "date"
+		},
+		serialize: {
+			date: function(d){
+				var months = ["jan", "feb", "mar"]
+				return months[d.getMonth()]
+			}
+		}
+	},{});
+	var d = new Date();
+	d.setMonth(1)
+	equals(new Task({
+		createdAt: d
+	}).serialize().createdAt, "feb", "serialized")
+});
 

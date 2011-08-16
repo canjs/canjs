@@ -50,7 +50,7 @@ var isArray = $.isArray,
 		return obj;
 	};
 /**
-@page jquery.model.backup Backup / Restore
+@page jquerymx.model.backup Backup / Restore
 @parent jQuery.Model
 @plugin jquery/model/backup
 @test jquery/model/backup/qunit.html
@@ -89,8 +89,7 @@ See this in action:
 	$.extend($.Model.prototype,{
 		/**
 		 * @function jQuery.Model.prototype.backup
-		 * @plugin jquery/model/backup
-		 * @parent jquery.model.backup
+		 * @parent jquerymx.model.backup
 		 * Backs up an instance of a model, so it can be restored later.
 		 * The plugin also adds an [jQuery.Model.prototype.isDirty isDirty]
 		 * method for checking if it is dirty.
@@ -103,7 +102,7 @@ See this in action:
 	   /**
 	    * @function jQuery.Model.prototype.isDirty
 	    * @plugin jquery/model/backup
-	    * @parent jquery.model.backup
+	    * @parent jquerymx.model.backup
 	    * Returns if the instance needs to be saved.  This will go
 	    * through associations too.
 	    * @return {Boolean} true if there are changes, false if otherwise
@@ -118,7 +117,6 @@ See this in action:
 		},
 		/**
 		 * @function jQuery.Model.prototype.restore
-		 * @plugin jquery/model/backup
 		 * @parent jquery.model.backup
 		 * restores this instance to its backup data.
 		 * @return {model} the instance (for chaining)
