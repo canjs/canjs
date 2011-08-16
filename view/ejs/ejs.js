@@ -507,7 +507,8 @@ steal('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		//returns a function that renders the view
 		script: function( id, src ) {
 			return "jQuery.EJS(function(_CONTEXT,_VIEW) { " + new EJS({
-				text: src
+				text: src,
+				name: id
 			}).template.out + " })";
 		},
 		renderer: function( id, text ) {

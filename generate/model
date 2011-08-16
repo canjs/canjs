@@ -11,16 +11,6 @@ steal(	'steal/generate',
 		'steal/generate/inflector.js',
 function(steal){
 
-	var folder = _args[0].replace(/\/\w+$/, "")
-	if(!folder){
-		print("! Error: Models need to be part of an app");
-		quit();
-	}
-	if(!steal.File(folder).exists()){
-		print("! Error: folder "+folder+" does not exist!");
-		quit();
-	}
-
 	var upper = function(parts){
 		for(var i =0; i < parts.length; i++){
 			parts[i] = parts[i].charAt(0).toUpperCase()+parts[i].substr(1)
@@ -38,6 +28,17 @@ function(steal){
 	
 	var md = steal.generate.convert(_args[0]),
 		path =  _args[0].toLowerCase().replace('.',"/");
+	
+	var folder = md.path.replace(/\/\w+$/, "")
+	if(!folder){
+		print("! Error: Models need to be part of an app");
+		quit();
+	}
+	if(!steal.File(folder).exists()){
+		print("! Error: folder "+folder+" does not exist!");
+		quit();
+	}
+	
 	md.path_to_steal = new steal.File(path).pathToRoot();
 	md.appPath =  md.path.replace(/\/models$/,"");
 	
