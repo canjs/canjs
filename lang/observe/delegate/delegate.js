@@ -1,6 +1,6 @@
 steal('jquery/lang/observe',function(){
 	
-	
+	// tells if the parts part of a delegate matches the broken up props of the event
 	var matches = function(delegate, props){
 		//check props parts are the same or 
 		var parts = delegate.parts,
@@ -19,13 +19,21 @@ steal('jquery/lang/observe',function(){
 		}
 		return len === props.length;
 	},
-		delegate = function(event, prop, how, value, current){
+		delegate = function(event, prop, how, newVal, oldVal){
 			var props = prop.split("."),
-				delegates = $.data(this,"_observe_delegates") || [];
+				delegates = $.data(this,"_observe_delegates") || [],
+				delegate;
 			
 			for(var i =0; i < delegates.length; i++){
-				if(matches(delegates[i], props, how)){
-					delegates[i].callback.apply(this.attr(prop), arguments);
+				// check delegate.event
+				delegate = delegates[i];
+				
+				if(  delegate.event === 'change' && matches(delegate, props) ){
+					delegate.callback.apply(this.attr(prop), arguments);
+				} else if(delegate.event === how && matches(delegate, props) ){
+					delegate.callback.apply(this.attr(prop), [event,newVal, oldVal]);
+				} else if(delegate.event === 'set' && how == 'add' && matches(delegates[i], props)) {
+					delegate.callback.apply(this.attr(prop), [event,newVal, oldVal]);
 				}
 			}
 		};
