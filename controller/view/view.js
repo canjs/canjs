@@ -3,13 +3,18 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 		return jQuery.String.underscore(this.fullName.replace(/\./g, "/")).replace("/Controllers", "");
 	};
 
-	var calculatePosition = function( Class, view, action_name ) {
-		var slashes = Class.fullName.replace(/\./g, "/"),
-			hasControllers = slashes.indexOf("/Controllers/" + Class.shortName) != -1,
-			path = jQuery.String.underscore(slashes.replace("/Controllers/" + Class.shortName, "")),
-			controller_name = Class._shortName,
-	        suffix = (typeof view == "string" && /\.[\w\d]+$/.test(view)) ? "" : jQuery.View.ext;
+	jQuery.Controller._calculatePosition = function( Class, view, action_name ) {
+		
+		var classParts = Class.fullName.split('.'),
+			classPartsWithoutPrefix = classParts.slice(0);
+			classPartsWithoutPrefix.splice(0, 2); // Remove prefix (usually 2 elements)
 
+		var classPartsWithoutPrefixSlashes = classPartsWithoutPrefix.join('/'),
+			hasControllers = (classParts.length > 2) && classParts[1] == 'Controllers',
+			path = hasControllers? jQuery.String.underscore(classParts[0]): jQuery.String.underscore(classParts.join("/")),
+			controller_name = classPartsWithoutPrefix.join('/').toLowerCase(),
+			suffix = (typeof view == "string" && /\.[\w\d]+$/.test(view)) ? "" : jQuery.View.ext;
+			
 		//calculate view
 		if ( typeof view == "string" ) {
 			if ( view.substr(0, 2) == "//" ) { //leave where it is
@@ -94,7 +99,7 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 			view = null;
 		}
 		//guess from controller name
-		view = calculatePosition(this.Class, view, this.called);
+		view = jQuery.Controller._calculatePosition(this.Class, view, this.called);
 
 		//calculate data
 		data = data || this;

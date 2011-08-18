@@ -35,5 +35,12 @@ steal('jquery/controller/view','jquery/view/micro','funcunit/qunit')  //load qun
 		
 		ok(/Hello World/i.test($('#suffix_test_cont_view').text()),"view rendered")
 	});
+	
+	test("complex paths nested inside a controller directory", function(){
+		$.Controller.extend("Myproject.Controllers.Foo.Bar");
+		
+		var path = jQuery.Controller._calculatePosition(Myproject.Controllers.Foo.Bar, "init.ejs", "init")
+		equals(path, "//myproject/views/foo/bar/init.ejs", "view path is correct")
+	})
 });
 
