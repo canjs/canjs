@@ -54,12 +54,12 @@ steal("jquery").then(function( $ ) {
 	 * 
 	 * <table>
 	 * <tr><td>[jQuery.fn.after after]</td><td> <code>$('#bar').after('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after append] </td><td>  <code>$('#bar').append('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after before] </td><td> <code>$('#bar').before('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after html] </td><td> <code>$('#bar').html('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after prepend] </td><td> <code>$('#bar').prepend('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after replaceWith] </td><td> <code>$('#bar').replaceWidth('temp.jaml',{});</code></td></tr>
-	 * <tr><td>[jQuery.fn.after text] </td><td> <code>$('#bar').text('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.append append] </td><td>  <code>$('#bar').append('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.before before] </td><td> <code>$('#bar').before('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.html html] </td><td> <code>$('#bar').html('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.prepend prepend] </td><td> <code>$('#bar').prepend('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.replaceWith replaceWith] </td><td> <code>$('#bar').replaceWidth('temp.jaml',{});</code></td></tr>
+	 * <tr><td>[jQuery.fn.text text] </td><td> <code>$('#bar').text('temp.jaml',{});</code></td></tr>
 	 * </table>
 	 * 
 	 * You always have to pass a string and an object (or function) for the jQuery modifier 
@@ -659,43 +659,115 @@ steal("jquery").then(function( $ ) {
 	/**
 	 *  @function prepend
 	 *  @parent jQuery.View
-	 *  abc
+	 *  
+	 *  Extending the original [http://api.jquery.com/prepend/ jQuery().prepend()]
+	 *  to render [jQuery.View] templates inserted at the beginning of each element in the set of matched elements.
+	 *  
+	 *  	$('#test').prepend('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  
+	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
+	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  @param {Object} [data] The data to render the view with.
+	 *  If rendering a view template this parameter always has to be present
+	 *  (use the empty object initializer {} for no data).
 	 */
 	"prepend",
 	/**
 	 *  @function append
 	 *  @parent jQuery.View
-	 *  abc
+	 *  
+	 *  Extending the original [http://api.jquery.com/append/ jQuery().append()]
+	 *  to render [jQuery.View] templates inserted at the end of each element in the set of matched elements.
+	 *  
+	 *  	$('#test').append('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  
+	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
+	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  @param {Object} [data] The data to render the view with.
+	 *  If rendering a view template this parameter always has to be present
+	 *  (use the empty object initializer {} for no data).
 	 */
 	"append",
 	/**
 	 *  @function after
 	 *  @parent jQuery.View
-	 *  abc
+	 *  
+	 *  Extending the original [http://api.jquery.com/after/ jQuery().after()]
+	 *  to render [jQuery.View] templates inserted after each element in the set of matched elements.
+	 *  
+	 *  	$('#test').after('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  
+	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
+	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  @param {Object} [data] The data to render the view with.
+	 *  If rendering a view template this parameter always has to be present
+	 *  (use the empty object initializer {} for no data).
 	 */
 	"after",
 	/**
 	 *  @function before
 	 *  @parent jQuery.View
-	 *  abc
+	 *  
+	 *  Extending the original [http://api.jquery.com/before/ jQuery().before()]
+	 *  to render [jQuery.View] templates inserted before each element in the set of matched elements.
+	 *  
+	 *  	$('#test').before('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  
+	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
+	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  @param {Object} [data] The data to render the view with.
+	 *  If rendering a view template this parameter always has to be present
+	 *  (use the empty object initializer {} for no data).
 	 */
 	"before",
 	/**
 	 *  @function text
 	 *  @parent jQuery.View
-	 *  abc
+	 *  
+	 *  Extending the original [http://api.jquery.com/text/ jQuery().text()]
+	 *  to render [jQuery.View] templates as the content of each matched element.
+	 *  Unlike [jQuery.fn.html] jQuery.fn.text also works with XML, escaping the provided
+	 *  string as necessary.
+	 *  
+	 *  	$('#test').text('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  
+	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
+	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  @param {Object} [data] The data to render the view with.
+	 *  If rendering a view template this parameter always has to be present
+	 *  (use the empty object initializer {} for no data).
 	 */
 	"text",
 	/**
 	 *  @function html
 	 *  @parent jQuery.View
-	 *  abc
+	 *  
+	 *  Extending the original [http://api.jquery.com/html/ jQuery().html()]
+	 *  to render [jQuery.View] templates as the content of each matched element.
+	 *  
+	 *  	$('#test').html('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  
+	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
+	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  @param {Object} [data] The data to render the view with.
+	 *  If rendering a view template this parameter always has to be present
+	 *  (use the empty object initializer {} for no data).
 	 */
 	"html",
 	/**
 	 *  @function replaceWith
 	 *  @parent jQuery.View
-	 *  abc
+	 *  
+	 *  Extending the original [http://api.jquery.com/replaceWith/ jQuery().replaceWith()]
+	 *  to render [jQuery.View] templates replacing each element in the set of matched elements.
+	 *  
+	 *  	$('#test').replaceWith('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  
+	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
+	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  @param {Object} [data] The data to render the view with.
+	 *  If rendering a view template this parameter always has to be present
+	 *  (use the empty object initializer {} for no data).
 	 */
 	"replaceWith", 
 	"val"];
