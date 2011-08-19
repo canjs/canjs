@@ -466,6 +466,34 @@ steal('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 	 * @parent jQuery.EJS
 	 * By adding functions to jQuery.EJS.Helpers.prototype, those functions will be available in the 
 	 * views.
+	 * 
+	 * ### Creating your own view helpers:
+	 * 
+	 * The following helper converts a given string to uppercase:
+	 * 
+	 * 	$.EJS.Helpers.prototype.toUpper = function(params)
+	 * 	{
+	 * 		return params.toUpperCase();
+	 * 	}
+	 * 
+	 * Use it like this in any EJS template:
+	 * 
+	 * 	<%= toUpper('javascriptmvc') %>
+	 * 
+	 * 
+	 * To access the current element return a function that takes the element as a parameter:
+	 * 
+	 * 	$.EJS.Helpers.prototype.upperHtml = function(params)
+	 * 	{
+	 * 		return function(el) {
+	 * 			$(el).html(params.toUpperCase());
+	 * 		}
+	 * 	}
+	 * 
+	 * In your EJS view call the helper on an element tag:
+	 * 
+	 * 	<div <%= upperHtml('javascriptmvc') %>></div>
+	 * 
 	 * @constructor Creates a view helper.  This function is called internally.  You should never call it.
 	 * @param {Object} data The data passed to the view.  Helpers have access to it through this._data
 	 */
