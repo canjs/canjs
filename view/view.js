@@ -217,7 +217,7 @@ steal("jquery").then(function( $ ) {
 	 * the rendered result of the view.
 	 */
 
-	var $view, render, checkText, get, getRenderer
+	var $view, render, checkText, get, getRenderer,
 		isDeferred = function(obj){
 			return obj && $.isFunction(obj.always) // check if obj is a $.Deferred
 		},
@@ -537,7 +537,7 @@ steal("jquery").then(function( $ ) {
 
 	//---- ADD jQUERY HELPERS -----
 	//converts jquery functions to use views	
-	var convert, modify, isTemplate, getCallback, hookupView, funcs;
+	var convert, modify, isTemplate, isHTML, getCallback, hookupView, funcs;
 
 	convert = function( func_name ) {
 		var old = $.fn[func_name];
@@ -585,8 +585,8 @@ steal("jquery").then(function( $ ) {
 			break;
 		}
 
-		//if there are hookups, get jQuery object
-		if ( hasHookups && args[0]) {
+		// if there are hookups and we have HTML content, get jQuery object
+		if ( hasHookups && isHTML( args[0] ) ) {
 			hooks = $view.hookups;
 			$view.hookups = {};
 			args[0] = $(args[0]);
@@ -605,6 +605,11 @@ steal("jquery").then(function( $ ) {
 		var secArgType = typeof args[1];
 
 		return typeof args[0] == "string" && (secArgType == 'object' || secArgType == 'function') && !args[1].nodeType && !args[1].jquery;
+	};
+
+	// returns whether the argument is an HTML string (the way jQuery does it)
+	isHTML = function( str ) {
+	  return typeof str == "string" && ( str.charAt(0) === "<" && str.charAt( str.length - 1 ) === ">" && str.length >= 3 );
 	};
 
 	//returns the callback if there is one (for async view use)
