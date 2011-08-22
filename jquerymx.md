@@ -1,8 +1,70 @@
 @page jquerymx jQueryMX
 @parent index 0
 
-jQueryMX is a collection of mega-useful jQuery plugins. The 
-following highlights its core plugins.  
+jQueryMX is a collection of useful jQuery libraries that provide 
+the missing functionality necessary to 
+implement and organize large-scale jQuery applications. 
+
+Every part of jQueryMX can be used stand-alone which keeps your 
+app super light.  $.Model, $.View, and $.Controller are only 7kb minified and gzipped.  This
+includs their $.String, $.Class, and destroyed-event dependencies.
+
+If you are using [steal], simply steal the plugin you need like:
+
+    steal('jquery/controller', function(){
+      $.Controller('Tabs');
+    })
+    
+Or, use the [http://javascriptmvc.com/builder.html download builder] to select 
+the files you need.
+
+jQueryMX is divided into four core areas:
+
+  - DOM Helpers
+  - Language Helpers
+  - Special events
+  - Model, View, Controller and Class
+ 
+The following highlights this functionality.
+
+## DOM Helpers
+
+[dom DOM helpers] extend jQuery with extra functionality for 
+manipulating the DOM. For example, [dimensions] lets you set the 
+outer width and height of elements like:
+
+    $('#foo').outerWidth(500);
+    
+THe following are the other dom plugins:
+
+  - [jQuery.cookie Cookie] - Set and get cookie values.
+  - [jQuery.fixture Fixture - Simulate Ajax responses.
+  - [jQuery.fn.closest Closest] - Use the open child selector in event delegation.
+  - [jQuery.fn.compare Compare] - Compare the location of two elements rapidly.
+  - [jQuery.fn.curStyles CurStyles] - Get multiple css properties quickly.
+  - [jQuery.formParams FormParams] - Serializes a form into a JSON-like object.
+  - [jQuery.fn.selection Selection] - Gets or sets the current text selection.
+  - [jQuery.fn.within Within] - Returns elements that have a point within their boundaries.
+  - [jQuery.Range Range] - Text range utilities.
+  - [jQuery.route] Route - Routes for history-enabled ajax apps.
+
+## Language Helpers
+
+
+
+## Special Events
+
+jQueryMX comes packed with jQuery [specialevents special events] and event helpers.
+
+  - Drag - Delegatable drag events.
+  - Drop - Delegatable drop events.
+  - Hover - Delegatable hover events.
+  - Destroyed - Know when an element is removed from the page.
+  - Resize - Listen to resize events on any element.
+  - Swipe - Delegatable swipe events.
+  - Key - Get the character from a key event.
+  - Default - Provide default behaviors for events.
+  - Pause-Resume - Pause and resume event propagation.
 
 ## $.Class
 
@@ -268,32 +330,8 @@ Finally, this makes it very easy to create widgets that work with any model:
     $("#tasks").list({ model: Task, view: 'tasks.ejs' });
     $("#people").list({model: Person, view: 'people.ejs' });
 
-## DOM Helpers
 
-jQueryMX is loaded with tons of useful [dom DOM helper] jQuery plugins:
 
-  - Dimensions - Set and animate the inner and outer height and width of elements.
-  - Cookie - Set and get cookie values.
-  - Fixture - Simulate Ajax responses.
-  - Compare - Compare the location of two elements rapidly.
-  - CurStyles - Get multiple css properties quickly.
-  - FormParams - Serializes a form into a JSON-like object.
-  - Selection - Gets or sets the current text selection.
-  - Within - Returns elements that have a point within their boundaries.
-  - Range - Text range utilities.
 
-## Special Events
-
-jQueryMX comes packed with jQuery [specialevents special events] and event helpers.
-
-  - Drag - Delegatable drag events.
-  - Drop - Delegatable drop events.
-  - Hover - Delegatable hover events.
-  - Destroyed - Know when an element is removed from the page.
-  - Resize - Listen to resize events on any element.
-  - Swipe - Delegatable swipe events.
-  - Key - Get the character from a key event.
-  - Default - Provide default behaviors for events.
-  - Pause-Resume - Pause and resume event propagation.
   
   

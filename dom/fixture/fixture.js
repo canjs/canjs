@@ -1,5 +1,31 @@
 steal('jquery/dom').then(function( $ ) {
+	
+	
+	/**
+	 * @page jquery.fixture.1errors Simulating Errors
+	 * @parent jQuery.fixture
+	 * 
+	 * The following simulates an unauthorized request 
+	 * to <code>/foo</code>.
+	 * 
+	 *     $.fixture("/foo", function(){
+	 * 		return [401,"{type: 'unauthorized'}"]
+	 * 	   });
+	 * 
+	 * This could be received by the following Ajax request:
+	 * 
+	 *     $.ajax({
+	 *       url: '/foo',
+	 *       error : function(jqXhr, status, statusText){
+	 *         // status === 'error'
+	 *         // statusText === "{type: 'unauthorized'}"
+	 *       }
+	 *     })
+	 * 
+	 */
+	
 	// the pre-filter needs to re-route the url
+	
 	$.ajaxPrefilter( function( settings, originalOptions, jqXHR ) {
 	  	// if fixtures are on
 		if(! $.fixture.on) {
@@ -678,6 +704,7 @@ steal('jquery/dom').then(function( $ ) {
 		return false;
 	};
 
+	//
 	/**
 	 *  @add jQuery
 	 */
@@ -804,33 +831,6 @@ steal('jquery/dom').then(function( $ ) {
 	 *     } else {
 	 *       // default fixtures (maybe no fixtures)
 	 *     }
-	 * 
-	 */
-	//
-	/**
-	 * @add jQuery.fixture
-	 */
-	//
-	/**
-	 * @page jquery.fixture.1errors Simulating Errors
-	 * @parent jQuery.fixture
-	 * 
-	 * The following simulates an unauthorized request 
-	 * to <code>/foo</code>.
-	 * 
-	 *     $.fixture("/foo", function(){
-	 * 		return [401,"{type: 'unauthorized'}"]
-	 * 	   });
-	 * 
-	 * This could be received by the following Ajax request:
-	 * 
-	 *     $.ajax({
-	 *       url: '/foo',
-	 *       error : function(jqXhr, status, statusText){
-	 *         // status === 'error'
-	 *         // statusText === "{type: 'unauthorized'}"
-	 *       }
-	 *     })
 	 * 
 	 */
 });
