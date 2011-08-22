@@ -149,7 +149,14 @@ test("jQuery.fn.hookup", function(){
 	$("#qunit-test-area").html("");
 	var els = $($.View("//jquery/view/test/qunit/hookup.ejs",{})).hookup();
 	$("#qunit-test-area").html(els); //makes sure no error happens
-})
+});
+
+test("non-HTML content in hookups", function(){
+	$("#qunit-test-area").html("<textarea></textarea>");
+	$.View.hookup(function(){});
+	$("#qunit-test-area textarea").val("asdf");
+	equals($("#qunit-test-area textarea").val(), "asdf");
+});
 
 /*test("bad url", function(){
 	$.View("//asfdsaf/sadf.ejs")
