@@ -8,16 +8,44 @@ steal('jquery/model', function(){
  * [<%=name%>.static.destroy destroying], and
  * [<%=name%>.static.create creating] <%= plural %>.
  */
-$.Model.extend('<%=name%>',
+$.Model('<%=name%>',
 /* @Static */
 {
 	/**
  	 * Retrieves <%= plural %> data from your backend services.
+ 	 * @param {Object} params params that might refine your results.
+ 	 * @param {Function} success a callback function that returns wrapped <%=underscore%> objects.
+ 	 * @param {Function} error a callback function for an error in the ajax request.
  	 */
 	findAll: "/<%= plural %>.json",
+	/**
+ 	 * Retrieves <%= underscore %>'s data from your backend services.
+ 	 * @param {Object} params params that might refine your results (it should include an id for findOne).
+ 	 * @param {Function} success a callback function that returns wrapped <%=underscore%> objects.
+ 	 * @param {Function} error a callback function for an error in the ajax request.
+ 	 */
   	findOne : "/<%= plural %>/{id}.json", 
+	/**
+	 * Creates a <%= underscore %>.
+	 * @param {Object} attrs A <%= underscore %>'s attributes.
+	 * @param {Function} success a callback function that indicates a successful create.  The data that comes back must have an ID property.
+	 * @param {Function} error a callback that should be called with an object of errors.
+	 */
   	create : "/<%= plural %>.json",
+	/**
+	 * Updates a <%= underscore %>'s data.
+	 * @param {String} id A unique id representing your <%= underscore %>.
+	 * @param {Object} attrs Data to update your <%= underscore %> with.
+	 * @param {Function} success a callback function that indicates a successful update.
+ 	 * @param {Function} error a callback that should be called with an object of errors.
+     */
  	update : "/<%= plural %>/{id}.json",
+	/**
+ 	 * Destroys a <%= underscore %>'s data.
+ 	 * @param {String} id A unique id representing your <%= underscore %>.
+	 * @param {Function} success a callback function that indicates a successful destroy.
+ 	 * @param {Function} error a callback that should be called with an object of errors.
+	 */
   	destroy : "/<%= plural %>/{id}.json"
 },
 /* @Prototype */

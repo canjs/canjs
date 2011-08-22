@@ -76,12 +76,14 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 	 *     el.html( this.view() ) 
 	 *     // renders with views/tasks/under.ejs
 	 *     el.after( this.view("under", [1,2]) );
+	 *     // renders with views/tasks/under.micro 
+	 *     el.after( this.view("under.micro", [1,2]) );
 	 *     // renders with views/shared/top.ejs
 	 *     el.before( this.view("shared/top", {phrase: "hi"}) );
 	 *   }
 	 * })
 	 * @codeend
-	 * @plugin controller/view
+	 * @plugin jquery/controller/view
 	 * @return {String} the rendered result of the view.
 	 * @param {String} [optional1] view The view you are going to render.  If a view isn't explicity given
 	 * this function will try to guess at the correct view as show in the example code above.
