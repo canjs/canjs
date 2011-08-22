@@ -217,7 +217,7 @@ steal("jquery").then(function( $ ) {
 	 * the rendered result of the view.
 	 */
 
-	var $view, render, checkText, get, getRenderer
+	var $view, render, checkText, get, getRenderer,
 		isDeferred = function(obj){
 			return obj && $.isFunction(obj.always) // check if obj is a $.Deferred
 		},
