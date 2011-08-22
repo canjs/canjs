@@ -2,15 +2,65 @@ steal('jquery/model/list',function($){
 
 
 var isArray = $.isArray,
+	// essentially returns an object that has all the must have comparisons ...
+	// must haves, do not return true when provided undefined
+	cleanSet = function(obj, compares){
+		var copy = $.extend({}, obj);
+		for(var prop in copy) {
+			var compare = compares[prop] === undefined ? compares["*"] : compares[prop];
+			if( same(copy[prop], undefined, compare ) ) {
+				delete copy[prop]
+			}
+		}
+		return copy;
+	},
 	propCount = function(obj){
 		var count = 0;
 		for(var prop in obj) count++;
 		return count;
 	}
-$.Object = {}
-var same = $.Object.same = function(a, b, deep){
+$.Object = {};
+
+var compareMethods = {
+	"null" : function(){
+		return true;
+	},
+	i : function(a, b){
+		return (""+a).toLowerCase() == (""+b).toLowerCase()
+	}
+}
+/**
+ * Returns if two objects are the same.  It takes a compares object that
+ * can be used to make comparisons:
+ * @param {Object} a
+ * @param {Object} b
+ * @param {Object} [compares] an object that indicates how to compare specific properties. 
+ * Typically this is a name / value pair
+ * 
+ *     $.Object.same({name: "Justin"},{name: "JUSTIN"},{name: "i"})
+ *     
+ * There are two compare functions that you can specify with a string:
+ * 
+ *   - 'i' - ignores case
+ *   - null - ignores this property
+ * 
+ * @param {Object} deep used internally
+ */
+var same = $.Object.same = function(a, b, compares, deep){
 	var aType = typeof a,
-		aArray = isArray(a);
+		aArray = isArray(a),
+		comparesType = typeof compares,
+		compare;
+	
+	if(comparesType == 'string' || compares === null ){
+		compares = compareMethods[compares];
+		comparesType = 'function'
+	}
+	if(comparesType == 'function'){
+		return compares(a, b)
+	} 
+	compares = compares || {};
+	
 	if(deep === -1){
 		return aType === 'object' || a === b;
 	}
@@ -25,20 +75,28 @@ var same = $.Object.same = function(a, b, deep){
 			return false;
 		}
 		for(var i =0; i < a.length; i ++){
-			if(!same(a[i],b[i])){
+			compare = compares[i] === undefined ? compares["*"] : compares[i]
+			if(!same(a[i],b[i], compare )){
 				return false;
 			}
 		};
 		return true;
 	} else if(aType === "object" || aType === 'function'){
-		var count = 0;
+		var bCopy = $.extend({}, b);
 		for(var prop in a){
-			if(!same(a[prop],b[prop], deep === false ? -1 : undefined )){
+			compare = compares[prop] === undefined ? compares["*"] : compares[prop];
+			if(!same(a[prop],b[prop], compare , deep === false ? -1 : undefined )){
 				return false;
 			}
-			count++;
+			delete bCopy[prop];
 		}
-		return count === propCount(b)
+		// go through bCopy props ... if there is no compare .. return false
+		for(prop in bCopy){
+			if(compares[prop] === undefined || !same(undefined,b[prop], compares[prop] , deep === false ? -1 : undefined )){
+				return false;
+			}
+		}
+		return true;
 	} 
 	return false;
 };
@@ -48,7 +106,7 @@ var same = $.Object.same = function(a, b, deep){
  * @param {Object} checkSet
  * @param {Object} sets
  */
-$.Object.subsets = function(checkSet, sets){
+$.Object.subsets = function(checkSet, sets, compares){
 	var len = sets.length,
 		subsets = [],
 		checkPropCount = propCount(checkSet),
@@ -57,30 +115,39 @@ $.Object.subsets = function(checkSet, sets){
 	for(var i =0; i < len; i++){
 		//check this subset
 		var set = sets[i];
-		if( $.Object.subset(checkSet, set, checkPropCount) ){
+		if( $.Object.subset(checkSet, set, compares, checkPropCount) ){
 			subsets.push(set)
 		}
 	}
 	return subsets;
 };
-$.Object.subset = function(checkSet, set, checkPropCount){
-	var setPropCount =0;
+/**
+ * Compares if checkSet is a subset of set
+ * @param {Object} checkSet
+ * @param {Object} set
+ * @param {Object} compares
+ * @param {Object} checkPropCount
+ */
+$.Object.subset = function(subset, set, compares, subsetPropCount){
+	// go through set {type: 'folder'} and make sure every property
+	// is in subset {type: 'folder', parentId :5}
+	// then make sure that set has fewer properties
+	// make sure we are only checking 'important' properties
+	// in subset (ones that have to have a value)
 	
-	checkPropCount = checkPropCount !== undefined ?
-			checkPropCount : propCount(checkSet);
+	var setPropCount =0,
+		compares = compares || {};
+	
+	//subsetPropCount = subsetPropCount !== undefined ?
+	//		subsetPropCount : propCount( cleanSet(subset, compares) );
 			
 	for(var prop in set){
-		setPropCount++;
-		
-		if( setPropCount > checkPropCount ){
-			break;
-		}
-		if(checkSet[prop] !== set[prop]){
-			setPropCount = Infinity;
-			break;
+
+		if(! same(subset[prop], set[prop], compares[prop] )  ){
+			return false;
 		} 
 	}
-	return setPropCount <= checkPropCount;
+	return true;
 }
 
 $.Class('jQuery.Model.Store',
@@ -91,6 +158,42 @@ $.Class('jQuery.Model.Store',
 		 */
 		this.sets = [];
 		this.data = {};
+		// listen on create and add ... listen on destroy and remove
+		
+		this.namespace.bind('destroyed', this.callback('remove'))
+	},
+	// this is mostly unnecessary
+	remove : function(id){
+		if(id.id !== undefined){
+			id = id.id;
+		}
+		var item = this.data[id];
+		if(!item){
+			return;
+		}
+		// need to unbind?  Of course lists should cause this to happen
+		delete this.data[id];
+		// go through sets ... 
+		
+		/*var sets  = this.sets.slice(0),
+			report = ["Store - removing from "];
+		for(var i=0; i < sets.length; i++){
+			var set = sets[i],
+				removed;
+			
+			if(set.list){
+				removed = set.list.remove(item)
+			}
+			
+			if(removed.length) {
+				report.push(set.params, "; ");
+			}
+		}
+		if(report.length > 1) {
+			console.log.apply(console, report);
+		} else {
+			console.log("Store - Items to remove, but no matches")
+		}*/
 	},
 	id: "id",
 	/**
@@ -121,7 +224,8 @@ $.Class('jQuery.Model.Store',
 		}
 		// go through sets and add to them ...
 		//   slice so that if in callback, the number of sets increases, you are ok
-		var sets  = this.sets.slice(0)
+		var sets  = this.sets.slice(0),
+			report = ["Store - adding "];
 		for(var i=0; i < sets.length; i++){
 			var set = sets[i],
 				itemsForSet = [];
@@ -132,9 +236,15 @@ $.Class('jQuery.Model.Store',
 					itemsForSet.push(item)
 				}
 			}
-			console.log("pushing", itemsForSet.length, "to", set.params)
-			set.list.push(itemsForSet); // this is triggering 'add'
-			
+			if(itemsForSet.length) {
+				report.push(itemsForSet.length,"to", set.params, "; ");
+				set.list.push(itemsForSet);
+			}
+		}
+		if(report.length > 1) {
+			console.log.apply(console, report);
+		} else {
+			console.log("Store - Got new items, but no matches")
 		}
 		
 		// check if item would be added to set
@@ -177,10 +287,14 @@ $.Class('jQuery.Model.Store',
 			
 			// in fixtures we ignore null, I don't want to now
 			if ( paramValue !== undefined && item[param] !== undefined 
-				 && item[param] != paramValue) {
+				 && !this._compare(param, item[param] ,paramValue) ) {
 				return false;
 			}
 		}
+	},
+	compare : {},
+	_compare : function(prop, itemData, paramData){
+		return same(itemData, paramData, this.compare[prop]) //this.compare[prop] ? this.compare[prop](itemData, paramData) :  itemData == paramData;
 	},
 	/**
 	 * Sorts the object in place
@@ -220,7 +334,11 @@ $.Class('jQuery.Model.Store',
 		
 		return items.slice(offset, offset + limit);
 	},
+	get : function(id){
+		return this.data[id];
+	},
 	findOne : function(id, success, error){
+		//console.log("findOne ", id)
 		if(this.data[id]){
 			// check if it is a deferred or not
 			if(this.data[id].isRejected){
@@ -245,26 +363,44 @@ $.Class('jQuery.Model.Store',
 	 * @param {Boolean} register registers this list as owning some content, but does not 
 	 * actually do the request ...
 	 */
-	findAll : function(params, register){
+	findAll : function(params, register, ready){
 		// find the first set that is the same
 		//   or is a subset with a def
-		var parentLoadedSet;
+		var parentLoadedSet,
+			self = this,
+			list,
+			cb = function(){
+				ready(list)
+			};
+			
+		if(typeof  register === 'function' ){
+			ready = register;
+			register = false;
+		}
+		ready  = ready || function(){};
 		
 		for(var i =0; i < this.sets.length; i++){
 			var set = this.sets[i];
-			if( $.Object.subset(params, set.params) && set.def ){
+			if( $.Object.subset(params, set.params, this.compare)  ){
 				parentLoadedSet = set;
-				
-				if( $.Object.same( set.params, params) ){
+				//console.log($.Object.same( set.params, params), set.params, params );
+				if( $.Object.same( set.params, params, this.compare) ){
 					
 					// what if it's not loaded
 					if(!set.def){
+						console.log("Store - a listening list, but not loaded", params, ready);
 						var def = this.namespace.findAll(params);
 						set.def = def;
 						def.done(function(items){
-							console.log("adding items from findALL", params, items.length)
+							//console.log("adding items from findALL", params, items.length)
 							self.add(items, params)
+							cb();;
 						})
+					} else {
+						console.log("Store - already loaded exact match",params, ready);
+						list = set.list;
+						setTimeout(cb, 1);
+						//ready && ready(set.list);
 					}
 					
 					return set.list;
@@ -278,8 +414,7 @@ $.Class('jQuery.Model.Store',
 		var sameSet = {
 				params: $.extend({},params),
 				list: list
-			},
-			self = this;
+			};
 			
 		this.sets.push(sameSet);
 		
@@ -293,19 +428,21 @@ $.Class('jQuery.Model.Store',
 				
 			} else if( parentLoadedSet.def.isResolved() ){
 				// add right away
+				console.log("Store - already loaded parent set",params);
 				var items = self.findAllCached(params);
 					//list.reset();
-					list.push(items);
-				
+				list.push(items);
+				setTimeout(cb, 1);;
 			} else {
 				// this will be filled when add is called ...
 				parentLoadedSet.def.done(function(){
+					console.log("Store - already loading parent set, waiting for it to return",params, ready);
 					var items = self.findAllCached(params);
 					//list.reset();
 					list.push(items);
+					cb();
 				})
 			}
-			
 			
 		} else {
 			
@@ -315,11 +452,13 @@ $.Class('jQuery.Model.Store',
 				
 			} else {
 				// we need to load it
+				console.log("Store - loading data for the first time", params, ready);
 				var def = this.namespace.findAll(params);
 				sameSet.def = def;
+				
 				def.done(function(items){
-					console.log("adding items from findALL", params, items.length)
-					self.add(items, params)
+					self.add(items, params);
+					cb();//ready && ready(sameSet.list);
 				})
 				
 			}
@@ -332,7 +471,7 @@ $.Class('jQuery.Model.Store',
 		
 		// check later if no one is listening ...
 		setTimeout(function(){
-			console.log('unbinding ...?')
+			//console.log('unbinding ...?')
 			/*if(!list.bound){
 				this.sets = $.grep(this.sets, function(set){ set !== sameSet});
 				// we need to remove these items too ... (unless we are a superset)
@@ -361,98 +500,6 @@ $.Class('jQuery.Model.Store',
 		return list;
 	}
 },{});
-
-
-/*
-Item.findAll({parentId: 6, limit: 20, offset: 40, sort: ["name desc"]})
-// invalidate search
-$.Store('Item.Store',{
-	add : function(params, items){
-		this.contains.push(params)
-		this.merge(items)
-	},
-	has : function(params){
-		// go through contains
-		
-		// if there's a match
-		
-		// run a findAll on the items in the store
-		// using the rules
-	},
-	created : function(item){
-		// add item to store
-		// update listeners
-		this._updatedListeners(item, "created")
-	},
-	_updateListeners : function(item, event){
-		// go through listeners ...
-		// listeners that had params that 
-		//   matched the item ->
-		//   call listener "created"
-	},
-	findAll : function(){
-		// go through every item
-		
-		// check the rules and get the 
-		// current set
-		return theCurrentSet
-	}
-},{
-	search : function(item, params){
-		if(item.name.indexOf(params.search) > 0){
-			return true;
-		}
-	},
-	search : false,
-	sort : function(){
-		
-	}
-})
-
-Item.store.created(item)
-
-$.Model('Item',{
-	findAll : function(params, success){
-		var res = Item.Store.has(params);
-		if (res) {
-			success(res)
-		} else {
-			$.get('/items.json',params, function(items){
-				Item.Store.add(params, items)
-			})
-		}
-		
-	}
-})
-
-$.Controller('Accounts',{
-	
-})
-// what about loading folders?
-$.Controller('Folders',{
-	".folder clicks" : function(){
-		var list = new Item.List({
-			parentId: folder.id,
-			type: "file"
-		})	.findAll()
-		$("#grid").grid({list: list.files()})
-	}
-})
-
-$.Controller('Grid',{
-	"{list} change" : function(){
-		this.options.list.findAll();
-	},
-	"{list} add" : function(){
-		//render them
-	},
-	"{list} remove" : function(){
-		// remove it
-	},
-	"{list} updated": function(){
-		
-	}
-})*/
 
 
 });
