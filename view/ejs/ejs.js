@@ -14,7 +14,7 @@ steal('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
 		isArray = $.isArray,
 		clean = function( content ) {
 				return content.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
-		}
+		},
 		// from prototype  http://www.prototypejs.org/
 		escapeHTML = function(content){
 			return content.replace(/&/g,'&amp;')
