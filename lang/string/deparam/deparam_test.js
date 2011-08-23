@@ -1,4 +1,4 @@
-steal('funcunit/qunit','jquery/lang/deparam').then(function(){
+steal('funcunit/qunit','./deparam').then(function(){
 	
 module('jquery/lang/deparam')
 

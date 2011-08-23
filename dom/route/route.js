@@ -1,4 +1,4 @@
-steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/deparam', 'jquery/lang/observe/delegate', function( $ ) {
+steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/deparam', 'jquery/lang/observe/delegate', function( $ ) {
 
 	var globalDefaults, matcher = /\:([\w\.]+)/g,
 		makeProps = function( props ) {

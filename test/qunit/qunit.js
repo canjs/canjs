@@ -15,7 +15,6 @@ steal('jquery').then(function(){
 	  'jquery/dom/form_params/form_params_test.js',
 	  'jquery/dom/route/route_test.js',
 	  'jquery/lang/lang_test.js',
-	  'jquery/lang/deparam/deparam_test.js',
 	  'jquery/dom/fixture/fixture_test.js',
 	  'jquery/event/default/default_test.js',
 	  'jquery/event/destroyed/destroyed_test.js',

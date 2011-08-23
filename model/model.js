@@ -1,6 +1,6 @@
 /*global OpenAjax: true */
 
-steal('jquery/class', 'jquery/lang').then(function() {
+steal('jquery/class', 'jquery/lang/string', function() {
 	
 	//helper stuff for later.  Eventually, might not need jQuery.
 	var underscore = $.String.underscore,

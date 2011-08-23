@@ -3,7 +3,7 @@
 // http://ejohn.org/blog/simple-javascript-inheritance/
 // It provides class level inheritance and callbacks.
 //@steal-clean
-steal("jquery","jquery/lang").then(function( $ ) {
+steal("jquery","jquery/lang/string",function( $ ) {
 
 	// =============== HELPERS =================
 

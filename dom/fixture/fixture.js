@@ -280,7 +280,7 @@ steal('jquery/dom').then(function( $ ) {
 	 * <code>error</code>) expect. 
 	 *    
 	 * For example, the "<code>success</code>" of a json request is called with 
-	 * <code>[data, textStatus, XMLHttpRequest].
+	 * <code>[data, textStatus, XMLHttpRequest]</code>.
 	 * 
 	 * There are 2 ways to lookup dynamic fixtures. They can provided:
 	 * 
@@ -333,14 +333,12 @@ steal('jquery/dom').then(function( $ ) {
 	 * ## Helpers
 	 * 
 	 * The fixture plugin comes with a few ready-made dynamic fixtures and 
-	 * fixture helpers:</p>
+	 * fixture helpers:
 	 * 
-	 * <ul>
-	 * <li>[jQuery.fixture.make] - creates fixtures for findAll, findOne.</li>
-	 * <li>[jQuery.fixture.-restCreate] - a fixture for restful creates.</li>
-	 * <li>[jQuery.fixture.-restDestroy] - a fixture for restful updates.</li>
-	 * <li>[jQuery.fixture.-restUpdate] - a fixture for restful destroys.</li>
-	 * </ul>
+	 *  - [jQuery.fixture.make] - creates fixtures for findAll, findOne.
+	 *  - [jQuery.fixture.-restCreate] - a fixture for restful creates.
+	 *  - [jQuery.fixture.-restDestroy] - a fixture for restful updates.
+	 *  - [jQuery.fixture.-restUpdate] - a fixture for restful destroys.
 	 * 
 	 * @demo jquery/dom/fixture/fixture.html
 	 * @constructor

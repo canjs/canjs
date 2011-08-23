@@ -1,4 +1,4 @@
-steal('jquery/class', 'jquery/lang', 'jquery/event/destroyed', function( $ ) {
+steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( $ ) {
 	// ------- HELPER FUNCTIONS  ------
 	
 	// Binds an element, returns a function that unbinds
