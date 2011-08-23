@@ -46,11 +46,7 @@ THe following are the other dom plugins:
   - [jQuery.fn.selection Selection] - Gets or sets the current text selection.
   - [jQuery.fn.within Within] - Returns elements that have a point within their boundaries.
   - [jQuery.Range Range] - Text range utilities.
-  - [jQuery.route] Route - Routes for history-enabled ajax apps.
-
-## Language Helpers
-
-
+  - [jQuery.route] - Routes for history-enabled ajax apps.
 
 ## Special Events
 
@@ -65,6 +61,18 @@ jQueryMX comes packed with jQuery [specialevents special events] and event helpe
   - Key - Get the character from a key event.
   - Default - Provide default behaviors for events.
   - Pause-Resume - Pause and resume event propagation.
+
+
+## Language Helpers
+
+Language helpers make it easy to perform various functions on
+JavaScript data.  
+
+  - [jQuery.Object Object] - compare objects and sets
+  - [jQuery.Observe Observe] - Listen to changes in JS Objects and Arrays
+  - [jQuery.String String] - String helpers
+  - [jQuery.toJSON toJSON] - create and convert JSON strings
+  - [jQuery.Vector Vector] - vector math
 
 ## $.Class
 

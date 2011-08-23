@@ -2,7 +2,7 @@
 
 
 
-steal('jquery/view', 'jquery/lang/rsplit').then(function( $ ) {
+steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 	var myEval = function(script){
 			eval(script);
 		},
