@@ -1,34 +1,7 @@
 steal('jquery/model/list','jquery/lang/object',function($){
 
+var same = $.Object.same;
 
-var isArray = $.isArray,
-	// essentially returns an object that has all the must have comparisons ...
-	// must haves, do not return true when provided undefined
-	cleanSet = function(obj, compares){
-		var copy = $.extend({}, obj);
-		for(var prop in copy) {
-			var compare = compares[prop] === undefined ? compares["*"] : compares[prop];
-			if( same(copy[prop], undefined, compare ) ) {
-				delete copy[prop]
-			}
-		}
-		return copy;
-	},
-	propCount = function(obj){
-		var count = 0;
-		for(var prop in obj) count++;
-		return count;
-	}
-$.Object = {};
-
-var compareMethods = {
-	"null" : function(){
-		return true;
-	},
-	i : function(a, b){
-		return (""+a).toLowerCase() == (""+b).toLowerCase()
-	}
-}
 
 $.Class('jQuery.Model.Store',
 {
@@ -41,6 +14,31 @@ $.Class('jQuery.Model.Store',
 		// listen on create and add ... listen on destroy and remove
 		
 		this.namespace.bind('destroyed', this.callback('remove'))
+		this.namespace.bind('updated', this.callback('updated'))
+	},
+	updated : function(ev, item){
+		// go through lists and remove this guy if he is in the list and should not be ...
+		var sets  = this.sets.slice(0),
+			report = ["Store - updating "];
+			
+		for(var i=0; i < sets.length; i++){
+			var set = sets[i],
+				inSet = this.filter(item, set.params) !== false,
+				inList = set.list.get(item)[0];
+			
+			if(inSet && !inList){
+				report.push("adding to", set.params, "; ");
+				set.list.push(item)
+			} else if(!inSet && inList) {
+				report.push("removing from", set.params, "; ");
+				set.list.remove(item.id)
+			}
+		}
+		if(report.length > 1) {
+			console.log.apply(console, report);
+		} else {
+			console.log("Store - Updated, but no changes")
+		}
 	},
 	// this is mostly unnecessary
 	remove : function(id){
