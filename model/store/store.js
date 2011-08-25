@@ -6,6 +6,9 @@ var same = $.Object.same;
 $.Class('jQuery.Model.Store',
 {
 	init : function(){
+		if(this.fullName === 'jQuery.Model.Store'){
+			return;
+		}
 		/**
 		 * which sets are represented in this store ...
 		 */
@@ -277,7 +280,11 @@ $.Class('jQuery.Model.Store',
 					} else {
 						console.log("Store - already loaded exact match",params, ready);
 						list = set.list;
-						setTimeout(cb, 1);
+						if(set.def.isResolved()){
+							setTimeout(cb, 1);
+						} else {
+							set.def.done(cb);
+						}
 						//ready && ready(set.list);
 					}
 					
