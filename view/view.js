@@ -537,7 +537,7 @@ steal("jquery").then(function( $ ) {
 
 	//---- ADD jQUERY HELPERS -----
 	//converts jquery functions to use views	
-	var convert, modify, isTemplate, getCallback, hookupView, funcs;
+	var convert, modify, isTemplate, isHTML, getCallback, hookupView, funcs;
 
 	convert = function( func_name ) {
 		var old = $.fn[func_name];
@@ -576,6 +576,7 @@ steal("jquery").then(function( $ ) {
 			 
 		};
 	};
+
 	// modifies the html of the element
 	modify = function( args, old ) {
 		var res, stub, hooks;
@@ -586,7 +587,7 @@ steal("jquery").then(function( $ ) {
 		}
 
 		//if there are hookups, get jQuery object
-		if ( hasHookups && args[0]) {
+		if ( hasHookups && args[0] && isHTML( args[0] ) ) {
 			hooks = $view.hookups;
 			$view.hookups = {};
 			args[0] = $(args[0]);
@@ -605,6 +606,21 @@ steal("jquery").then(function( $ ) {
 		var secArgType = typeof args[1];
 
 		return typeof args[0] == "string" && (secArgType == 'object' || secArgType == 'function') && !args[1].nodeType && !args[1].jquery;
+	};
+
+	// returns whether the argument is some sort of HTML data
+	isHTML = function( arg ) {
+	  if ( arg.jquery || arg.nodeType === 1 ) {
+	    // if jQuery object or DOM node we're good
+	    return true;
+    } else if ( typeof arg === "string" ) {
+      // if string, do a quick sanity check that we're HTML
+	    arg = arg.trim();
+	    return arg[0] === "<" && arg[arg.length - 1] === ">" && arg.length >= 3;
+    } else {
+      // don't know what you are
+      return false;
+    }
 	};
 
 	//returns the callback if there is one (for async view use)
