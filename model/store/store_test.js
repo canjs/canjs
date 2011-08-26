@@ -125,7 +125,7 @@ test("Store Remove", function(){
 	var list = Item.Store.findAll({parentId: 1}),
 		len = 0,
 		first;
-	stop();
+	stop(2000);
 	list.bind("add", function(ev, items){
 		ok(items.length, "there should be items");
 		len = items.length;
@@ -138,6 +138,61 @@ test("Store Remove", function(){
 		start();
 	})
 });
+
+test("Store Update", function(){
+	$.fixture.make('item',40, function(i){
+		return {
+			name: "Name "+i,
+			parentId: i%4+1
+		}
+	})
+	
+	$.Model('Item',{},{});
+	$.Model.List('Item.List');
+	$.Model.Store('Item.Store',{
+		compare : {
+			count : null
+		}
+	},{});
+	
+	var list1 = Item.Store.findAll({parentId: 1}),
+		list2 = Item.Store.findAll({parentId: 2}),
+		len = 0,
+		first;
+		
+	stop(2000);
+	var def1 = $.Deferred(),
+		def2 = $.Deferred(),
+		first,
+		updating;
+		
+	list1.bind("add", function(ev, items){
+		console.log("1 added")
+		def1.resolve(true)
+		first = items[0]
+	});
+	list1.bind("remove", function(ev, items){
+		console.log("1 removed")
+		equals(items[0].id, first.id, "first removed")
+	})
+	list2.bind("add", function(ev, items){
+		console.log("2 added")
+		if(!updating){
+			def2.resolve(true);
+		} else {
+			equals(items[0].id, first.id, "item added to second list")
+			start();
+		}
+	});
+	
+	$.when(def1, def2).then(function(){
+		console.log('both ready')
+		updating = true;
+		first.updated({parentId: 2})
+	});
+	
+});
+
 
 
 });
