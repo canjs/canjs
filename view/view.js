@@ -615,7 +615,7 @@ steal("jquery").then(function( $ ) {
 	    return true;
     } else if ( typeof arg === "string" ) {
       // if string, do a quick sanity check that we're HTML
-	    arg = arg.trim();
+	    arg = $.trim(arg);
 	    return arg[0] === "<" && arg[arg.length - 1] === ">" && arg.length >= 3;
     } else {
       // don't know what you are
