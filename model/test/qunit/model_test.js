@@ -415,3 +415,11 @@ test("removeAttr test", function(){
 	equals(attrs.foo, undefined, "attrs removed");
 });
 
+test("identity should replace spaces with underscores", function(){
+	$.Model("Task",{},{});
+	t = new Task({
+		id: "id with spaces"
+	});
+	equals(t.identity(), "task_id_with_spaces")
+});
+
