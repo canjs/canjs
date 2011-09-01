@@ -1208,6 +1208,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			}
 			return this[get] ? this[get]() : this[attribute];
 		},
+		
 		/**
 		 * Binds to events on this model instance.  Typically 
 		 * you'll bind to an attribute name.  Handler will be called
@@ -1337,6 +1338,38 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			}
 
 		},
+		
+		/**
+		 * Removes an attribute from the list existing of attributes. 
+		 * Each attribute is set with [jQuery.Model.prototype.attr attr].
+		 * 
+		 * @codestart
+		 * recipe.removeAttr('name')
+		 * @codeend
+		 * 
+		 * @param {Object} [attribute]  the attribute to remove
+		 */
+		removeAttr: function(attr){
+			var old = this[attr],
+				deleted = false;
+			
+			//- pop it off the object
+			if(this[attr]){
+				delete this[attr];
+			}
+			
+			//- pop it off the Class attributes collection
+			if(this.Class.attributes[attr]){
+				delete this.Class.attributes[attr];
+				deleted = true;
+			}
+			
+			//- trigger the update
+			if (!this._init && deleted && old) {
+				$(this).triggerHandler("updated.attr", [attr, null, old]);
+			}
+		},
+		
 		/**
 		 * Gets or sets a list of attributes. 
 		 * Each attribute is set with [jQuery.Model.prototype.attr attr].
