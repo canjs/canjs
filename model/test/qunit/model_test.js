@@ -405,3 +405,11 @@ test("serialize", function(){
 	}).serialize().createdAt, "feb", "serialized")
 });
 
+test("identity should replace spaces with underscores", function(){
+	$.Model("Task",{},{});
+	t = new Task({
+		id: "id with spaces"
+	});
+	equals(t.identity(), "task_id_with_spaces")
+});
+

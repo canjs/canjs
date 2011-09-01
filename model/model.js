@@ -1458,7 +1458,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 */
 		identity: function() {
 			var id = getId(this);
-			return this.Class._fullName + '_' + (this.Class.escapeIdentity ? encodeURIComponent(id) : id);
+			return (this.Class._fullName + '_' + (this.Class.escapeIdentity ? encodeURIComponent(id) : id)).replace(/ /g, '_');
 		},
 		/**
 		 * Returns elements that represent this model instance.  For this to work, your element's should
