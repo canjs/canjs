@@ -3,14 +3,8 @@
 
 
 steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
-	var myEval = function(script, name){
-			try {
-				eval(script);
-			} catch(e){
-				// any template error is swallowed by jquery unless we explicitly do something with it
-				debugger;
-				console.error("EJS Error in "+name+": "+e.message);
-			}
+	var myEval = function(script){
+			eval(script);
 		},
 		chop = function( string ) {
 			return string.substr(0, string.length - 1);
@@ -393,7 +387,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 				out : 'try { with(_VIEW) { with (_CONTEXT) {' + template + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}"
 			};
 		//use eval instead of creating a function, b/c it is easier to debug
-		myEval.call(out,'this.process = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL='+name+".js", name);
+		myEval.call(out,'this.process = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL='+name+".js");
 		return out;
 	};
 
