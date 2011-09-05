@@ -68,6 +68,13 @@ Text range utilities.
 
     $('#copy').range() //-> text range that has copy selected
     
+## [jQuery.route]
+
+Hash routes mapped to an [jQuery.Observe $.Observe].
+
+	$.route(':type',{type: 'videos'})
+    $.route.delegate('type','set', function(){ ... })
+    $.route.attr('type','images');
 
 */
 steal('jquery');
