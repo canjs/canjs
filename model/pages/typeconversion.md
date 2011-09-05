@@ -64,11 +64,11 @@ $.Model.extend("Contact",
 
 # Serialization
 
-Serialization occurs before model is saved. This allows you to prepare your model's attributes before they're sent to the server.
+Serialization occurs before the model is saved. This allows you to prepare your model's attributes before they're sent to the server.
 
 By default every attribute will be passed through the 'default' serialization method that will return the value if the property holds a primitive value (string, number, ...), or it will call the "serialize" method if the property holds an object with the "serialize" method set.
 
-You can set serialization methods similar to the convert methods:
+You can set the serialization methods similar to the convert methods:
 
 @codestart
 $.Model.extend("Contact",
@@ -88,7 +88,7 @@ $.Model.extend("Contact",
 })
 @codeend
 
-This code will format 'birthday' attribute as '2011-11-24' before it will be sent to the server.
+This code will format the 'birthday' attribute as '2011-11-24' before it will be sent to the server.
 
 */
 
