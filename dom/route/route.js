@@ -26,7 +26,8 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 				count++;
 			}
 			return count;
-		};
+		},
+		onready = true;
 
 	/**
 	 * @class jQuery.route
@@ -133,7 +134,7 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 	 * 
 	 * @param {String} url
 	 * @param {Object} [defaults]
-	 * @return {undefined}
+	 * @return {$.route}
 	 */
 	var $route = $.route = function( url, defaults ) {
 		// add route in a form that can be easily figured out
@@ -152,6 +153,7 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 			defaults: defaults || {},
 			length: url.split('/').length
 		}
+		return $route;
 	};
 
 	$.extend($route, {
@@ -232,9 +234,17 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 		/**
 		 * Indicates that all routes have been added
 		 * and sets $.route.data based upon the routes.
+		 * @param {Boolean} [start]
+		 * @return 
 		 */
-		ready: function() {
-			setState();
+		ready: function(val) {
+			if( val === false ){
+				onready = false;
+			}
+			if( val === true || onready === true ){
+				setState();
+			}
+			return $route;
 		},
 		/**
 		 * Returns a url from the options
@@ -270,6 +280,11 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 			return window.location.hash == "#!" + $route.param(options)
 		}
 	});
+	// onready
+	$(function(){
+		$.route.ready();
+	});
+	
 
 	$.each(['bind','unbind','delegate','undelegate','attr','attrs','removeAttr'], function(i, name){
 		$route[name] = function(){
@@ -284,7 +299,8 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 			timer = setTimeout(func, time || 1);
 		}
 	},
-		curParams, setState = function() {
+		curParams, 
+		setState = function() {
 
 			var hash = window.location.hash.substr(2); // everything after #!
 			//deparam it

@@ -1,7 +1,37 @@
 /**
  * @page jquerymx.lang Language Helpers
  * @parent jquerymx
- * JavaScriptMVC has a number of language helpers.
+ * JavaScriptMVC has several lightweight language helper plugins.
+ * 
+ * ## Object
+ * 
+ * Methods useful for comparing Objects. For example, if two
+ * objects are the same:
+ * 
+ *     $.Object.same({foo: "bar"}, {foo: "bar"});
+ *     
+ * ## Observe
+ * 
+ * Makes an Object's properties observable:
+ * 
+ *     var person = new $.Observe({ name: "Justin" })
+ *     person.bind('change', function(){ ... })
+ *     person.attr('name', "Brian");
+ *     
+ * ## String
+ * 
+ * String helpers capitalize, underscore, and perform similar manipulations
+ * on strings.  They can also lookup a value in an object:
+ * 
+ *    $.String.getObject("foo.bar",{foo: {bar: "car"}})
+ * 
+ * ## toJSON
+ * 
+ * Used to create or consume JSON strings.
+ * 
+ * ## Vector
+ * 
+ * Used for vector math.
  */
 //string helpers
 steal('jquery').then(function( $ ) {
@@ -71,7 +101,8 @@ steal('jquery').then(function( $ ) {
 			 * @function
 			 * Gets an object from a string.
 			 * @param {String} name the name of the object to look for
-			 * @param {Array} [roots] an array of root objects to look for the name
+			 * @param {Array} [roots] an array of root objects to look for the 
+			 *   name.  If roots is not provided, the window is used.
 			 * @param {Boolean} [add] true to add missing objects to 
 			 *  the path. false to remove found properties. undefined to 
 			 *  not modify the root object

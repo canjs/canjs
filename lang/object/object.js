@@ -23,18 +23,80 @@ var isArray = $.isArray,
  * @class jQuery.Object
  * @parent jquerymx.lang
  * 
+ * Object contains several helper methods that 
+ * help compare objects.
+ * 
+ * ## same
+ * 
+ * Returns true if two objects are similar.
+ * 
+ *     $.Object.same({foo: "bar"} , {bar: "foo"}) //-> false
+ *   
+ * ## subset
+ * 
+ * Returns true if an object is a set of another set.
+ * 
+ *     $.Object.subset({}, {foo: "bar"} ) //-> true
+ * 
+ * ## subsets
+ * 
+ * Returns the subsets of an object
+ * 
+ *     $.Object.subsets({userId: 20},
+ *                      [
+ *                       {userId: 20, limit: 30},
+ *                       {userId: 5},
+ *                       {}
+ *                      ]) 
+ *              //->    [{userId: 20, limit: 30}]
  */
 $.Object = {};
 
-
-
 /**
  * @function same
- * Returns if two objects are the same.  It takes a compares object that
- * can be used to make comparisons:
- * @param {Object} a
- * @param {Object} b
- * @param {Object} [compares] an object that indicates how to compare specific properties. 
+ * Returns if two objects are the same.  It takes an optional compares object that
+ * can be used to make comparisons.
+ * 
+ * This function does not work with objects that create circular references.
+ * 
+ * ## Examples
+ * 
+ *     $.Object.same({name: "Justin"},
+ *                   {name: "JUSTIN"}) //-> false
+ *     
+ *     // ignore the name property
+ *     $.Object.same({name: "Brian"},
+ *                   {name: "JUSTIN"},
+ *                   {name: null})      //-> true
+ *     
+ *     // ignore case
+ *     $.Object.same({name: "Justin"},
+ *                   {name: "JUSTIN"},
+ *                   {name: "i"})      //-> true
+ *     
+ *     // deep rule
+ *     $.Object.same({ person : { name: "Justin" } },
+ *                   { person : { name: "JUSTIN" } },
+ *                   { person : { name: "i"      } }) //-> true
+ *                   
+ *     // supplied compare function
+ *     $.Object.same({age: "Thirty"},
+ *                   {age: 30},
+ *                   {age: function( a, b ){
+ *                           if( a == "Thirty" ) { 
+ *                             a = 30
+ *                           }
+ *                           if( b == "Thirty" ) {
+ *                             b = 30
+ *                           }
+ *                           return a === b;
+ *                         }})      //-> true
+ * ## API
+ * 
+ * @param {Object} a an object to compare
+ * @param {Object} b an object to compare
+ * @param {Object} [compares] an object that indicates how to 
+ * compare specific properties. 
  * Typically this is a name / value pair
  * 
  *     $.Object.same({name: "Justin"},{name: "JUSTIN"},{name: "i"})
@@ -44,7 +106,7 @@ $.Object = {};
  *   - 'i' - ignores case
  *   - null - ignores this property
  * 
- * @param {Object} deep used internally
+ * @param {Object} [deep] used internally
  */
 var same = $.Object.same = function(a, b, compares, deep){
 	var aType = typeof a,
@@ -127,10 +189,10 @@ $.Object.subsets = function(checkSet, sets, compares){
  * Compares if checkSet is a subset of set
  * @param {Object} checkSet
  * @param {Object} set
- * @param {Object} compares
- * @param {Object} checkPropCount
+ * @param {Object} [compares]
+ * @param {Object} [checkPropCount]
  */
-$.Object.subset = function(subset, set, compares, subsetPropCount){
+$.Object.subset = function(subset, set, compares){
 	// go through set {type: 'folder'} and make sure every property
 	// is in subset {type: 'folder', parentId :5}
 	// then make sure that set has fewer properties
@@ -139,9 +201,6 @@ $.Object.subset = function(subset, set, compares, subsetPropCount){
 	
 	var setPropCount =0,
 		compares = compares || {};
-	
-	//subsetPropCount = subsetPropCount !== undefined ?
-	//		subsetPropCount : propCount( cleanSet(subset, compares) );
 			
 	for(var prop in set){
 
