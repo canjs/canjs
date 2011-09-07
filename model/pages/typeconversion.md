@@ -61,4 +61,36 @@ $.Model.extend("Contact",
 @codeend
 
 @demo jquery/model/demo-convert.html
+
+# Serialization
+
+Serialization occurs before the model is saved. This allows you to prepare your model's attributes before they're sent to the server.
+
+By default every attribute will be passed through the 'default' serialization method that will return the value if the property holds a primitive value (string, number, ...), or it will call the "serialize" method if the property holds an object with the "serialize" method set.
+
+You can set the serialization methods similar to the convert methods:
+
+@codestart
+$.Model.extend("Contact",
+{
+  attributes : { 
+    birthday : 'date'
+  },
+  serialize : {
+    date : function( val, type ){
+      return val.getYear() + "-" + (val.getMonth() + 1) + "-" + val.getDate(); 
+    }
+  },
+  findAll : function( ... ){ ... }
+},
+{
+  // No prototype properties necessary
+})
+@codeend
+
+This code will format the 'birthday' attribute as '2011-11-24' before it will be sent to the server.
+
+*/
+
+
  */
