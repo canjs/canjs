@@ -205,6 +205,7 @@ steal('jquery').then(function( $ ) {
 					}
 				}));
 				return obs.length <= 1 ? obs[0] : obs;
-			}
+			},
+			_regs : regs
 		});
 });
