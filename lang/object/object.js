@@ -108,7 +108,7 @@ $.Object = {};
  * 
  * @param {Object} [deep] used internally
  */
-var same = $.Object.same = function(a, b, compares, deep){
+var same = $.Object.same = function(a, b, compares, aParent, bParent, deep){
 	var aType = typeof a,
 		aArray = isArray(a),
 		comparesType = typeof compares,
@@ -119,7 +119,7 @@ var same = $.Object.same = function(a, b, compares, deep){
 		comparesType = 'function'
 	}
 	if(comparesType == 'function'){
-		return compares(a, b)
+		return compares(a, b, aParent, bParent)
 	} 
 	compares = compares || {};
 	
@@ -138,7 +138,7 @@ var same = $.Object.same = function(a, b, compares, deep){
 		}
 		for(var i =0; i < a.length; i ++){
 			compare = compares[i] === undefined ? compares["*"] : compares[i]
-			if(!same(a[i],b[i], compare )){
+			if(!same(a[i],b[i], a, b, compare )){
 				return false;
 			}
 		};
@@ -147,14 +147,15 @@ var same = $.Object.same = function(a, b, compares, deep){
 		var bCopy = $.extend({}, b);
 		for(var prop in a){
 			compare = compares[prop] === undefined ? compares["*"] : compares[prop];
-			if(!same(a[prop],b[prop], compare , deep === false ? -1 : undefined )){
+			if(! same( a[prop], b[prop], compare , a, b, deep === false ? -1 : undefined )){
 				return false;
 			}
 			delete bCopy[prop];
 		}
 		// go through bCopy props ... if there is no compare .. return false
 		for(prop in bCopy){
-			if(compares[prop] === undefined || !same(undefined,b[prop], compares[prop] , deep === false ? -1 : undefined )){
+			if( compares[prop] === undefined || 
+			    ! same( undefined, b[prop], compares[prop] , a, b, deep === false ? -1 : undefined )){
 				return false;
 			}
 		}
@@ -178,7 +179,7 @@ $.Object.subsets = function(checkSet, sets, compares){
 	for(var i =0; i < len; i++){
 		//check this subset
 		var set = sets[i];
-		if( $.Object.subset(checkSet, set, compares, checkPropCount) ){
+		if( $.Object.subset(checkSet, set, compares) ){
 			subsets.push(set)
 		}
 	}
@@ -204,7 +205,7 @@ $.Object.subset = function(subset, set, compares){
 			
 	for(var prop in set){
 
-		if(! same(subset[prop], set[prop], compares[prop] )  ){
+		if(! same(subset[prop], set[prop], compares[prop], subset, set )  ){
 			return false;
 		} 
 	}

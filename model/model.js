@@ -647,32 +647,52 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		},
 		/**
 		 * @attribute attributes
-		 * Attributes contains a list of properties and their types
-		 * for this model.  You can use this in conjunction with 
+		 * Attributes contains a map of attribute names/types.  
+		 * You can use this in conjunction with 
 		 * [jQuery.Model.static.convert] to provide automatic 
-		 * [jquery.model.typeconversion type conversion].  
+		 * [jquery.model.typeconversion type conversion] (including
+		 * associations).  
 		 * 
 		 * The following converts dueDates to JavaScript dates:
 		 * 
-		 * @codestart
-		 * $.Model("Contact",{
-		 *   attributes : { 
-		 *     birthday : 'date'
-		 *   },
-		 *   convert : {
-		 *     date : function(raw){
-		 *       if(typeof raw == 'string'){
-		 *         var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
-		 *         return new Date( matches[1], 
-		 *                  (+matches[2])-1, 
-		 *                 matches[3] )
-		 *       }else if(raw instanceof Date){
-		 *           return raw;
+		 * 
+		 *     $.Model("Contact",{
+		 *       attributes : { 
+		 *         birthday : 'date'
+		 *       },
+		 *       convert : {
+		 *         date : function(raw){
+		 *           if(typeof raw == 'string'){
+		 *             var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
+		 *             return new Date( matches[1], 
+		 *                      (+matches[2])-1, 
+		 *                     matches[3] )
+		 *           }else if(raw instanceof Date){
+		 *               return raw;
+		 *           }
+		 *         }
 		 *       }
+		 *     },{})
+		 * 
+		 * ## Associations
+		 * 
+		 * Attribute type values can also represent the name of a 
+		 * function.  The most common case this is used is for
+		 * associated data. 
+		 * 
+		 * For example, a Deliverable might have many tasks and 
+		 * an owner (which is a Person).  The attributes property might
+		 * look like:
+		 * 
+		 *     attributes : {
+		 *       tasks : "App.Models.Task.models"
+		 *       owner: "App.Models.Person.model"
 		 *     }
-		 *   }
-		 * },{})
-		 * @codeend
+		 * 
+		 * This points tasks and owner properties to use 
+		 * <code>Task.models</code> and <code>Person.model</code>
+		 * to convert the raw data into an array of Tasks and a Person.
+		 * 
 		 */
 		attributes: {},
 		/**
