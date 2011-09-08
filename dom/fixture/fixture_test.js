@@ -239,6 +239,38 @@ test("fixture function gets id", function(){
 		start();
 		ok(data.id)
 	},'json')
+});
+
+test("replacing and removing a fixture", function(){
+	var url = steal.root.join("jquery/dom/fixture/fixtures/remove.json")
+	$.fixture("GET "+url, function(){
+		return {weird: "ness!"}
+	})
+	stop();
+	$.get(url,{}, function(json){
+		equals(json.weird,"ness!","fixture set right")
+		
+		$.fixture("GET "+url, function(){
+			return {weird: "ness?"}
+		})
+		
+		$.get(url,{}, function(json){
+			equals(json.weird,"ness?","fixture set right");
+			
+			$.fixture("GET "+url, null )
+			
+			$.get(url,{}, function(json){
+				equals(json.weird,"ness","fixture set right");
+
+				start();
+			});
+			
+			
+		},'json')
+		
+		
+		
+	},'json')
 })
 
 

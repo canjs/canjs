@@ -48,7 +48,7 @@ steal('jquery/dom',
 
 		}else {
 			//@steal-remove-start
-			steal.dev.log("using a dynamic fixture for " + settings.url);
+			steal.dev.log("using a dynamic fixture for " +settings.type+" "+ settings.url);
 			//@steal-remove-end
 			
 			//it's a function ... add the fixture datatype so our fixture transport handles it
