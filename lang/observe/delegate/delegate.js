@@ -1,5 +1,9 @@
 steal('jquery/lang/observe',function(){
 	
+	/**
+	 * @add jQuery.Observe.prototype
+	 */
+	
 	// tells if the parts part of a delegate matches the broken up props of the event
 	var matches = function(delegate, props){
 		//check props parts are the same or 
@@ -40,11 +44,81 @@ steal('jquery/lang/observe',function(){
 		
 	$.extend($.Observe.prototype,{
 		/**
-		 * listens for changes in a child from the parent
+		 * Listen for changes in a child attribute from the parent. The child attribute
+		 * does not have to exist.
 		 * 
-		 * observe.delegate("foo.bar","change", function(){
-		 *   // foo.bar has been added, set, or removed
-		 * });
+		 *     
+		 *     // create an observable
+		 *     var observe = new $.Observe({
+		 *       foo : {
+		 *         bar : "Hello World"
+		 *       }
+		 *     })
+		 *     
+		 *     //listen to changes on a property
+		 *     observe.delegate("foo.bar","change", function(ev, prop, how, newVal, oldVal){
+		 *       // foo.bar has been added, set, or removed
+		 *     });
+		 * 
+		 *     // change the property
+		 *     observe.attr('foo.bar',"Goodbye Cruel World")
+		 * 
+		 * ## Types of events
+		 * 
+		 * Delegate lets you listen to add, set, remove, and change events on property.
+		 * 
+		 * __add__
+		 * 
+		 * An add event is fired when a new property has been added.
+		 * 
+		 *     var o = new $.Observe({});
+		 *     o.delegate("name","add", function(ev, value){
+		 *       // called once
+		 *       $('#name').show()
+		 *     })
+		 *     o.attr('name',"Justin")
+		 *     o.attr('name',"Brian");
+		 *     
+		 * Listening to add events is useful for 'setup' functionality (in this case
+		 * showing the <code>#name</code> element.
+		 * 
+		 * __set__
+		 * 
+		 * Set events are fired when a property takes on a new value.  set events are
+		 * always fired after an add.
+		 * 
+		 *     o.delegate("name","set", function(ev, value){
+		 *       // called twice
+		 *       $('#name').text(value)
+		 *     })
+		 *     o.attr('name',"Justin")
+		 *     o.attr('name',"Brian");
+		 * 
+		 * __remove__
+		 * 
+		 * Remove events are fired after a property is removed.
+		 * 
+		 *     o.delegate("name","remove", function(ev){
+		 *       // called once
+		 *       $('#name').text(value)
+		 *     })
+		 *     o.attr('name',"Justin");
+		 *     o.removeAttr('name');
+		 * 
+		 * ## Wildcards - matching multiple properties
+		 * 
+		 * Sometimes, you want to know when any property within some part 
+		 * of an observe has changed. Delegate lets you use wildcards to 
+		 * match any property name.  The following listens for any change
+		 * on an attribute of the params attribute:
+		 * 
+		 *     var o = $.Observe({
+		 *       params : {
+		 *         limit : 100,
+		 *         offset: 0
+		 *       }
+		 *     })
+		 *     o.delegate('params.*',
 		 * 
 		 * @param {String} attr
 		 * @param {String} event
