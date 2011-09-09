@@ -37,11 +37,11 @@ $.Class('jQuery.Model.Store',
 				set.list.remove(item.id)
 			}
 		}
-		if(report.length > 1) {
+		/*if(report.length > 1) {
 			console.log.apply(console, report);
 		} else {
 			console.log("Store - Updated, but no changes")
-		}
+		}*/
 	},
 	// this is mostly unnecessary
 	remove : function(id){
@@ -122,11 +122,12 @@ $.Class('jQuery.Model.Store',
 				set.list.push(itemsForSet);
 			}
 		}
-		if(report.length > 1) {
+		
+		/*if(report.length > 1) {
 			console.log.apply(console, report);
 		} else {
 			console.log("Store - Got new items, but no matches")
-		}
+		}*/
 		
 		// check if item would be added to set
 		
@@ -269,16 +270,17 @@ $.Class('jQuery.Model.Store',
 					
 					// what if it's not loaded
 					if(!set.def){
-						console.log("Store - a listening list, but not loaded", params, ready);
+						//console.log("Store - a listening list, but not loaded", params, ready);
 						var def = this.namespace.findAll(params);
 						set.def = def;
 						def.done(function(items){
 							//console.log("adding items from findALL", params, items.length)
+							list = items;
 							self.add(items, params)
 							cb();;
 						})
 					} else {
-						console.log("Store - already loaded exact match",params, ready);
+						//console.log("Store - already loaded exact match",params, ready);
 						list = set.list;
 						if(set.def.isResolved()){
 							setTimeout(cb, 1);
@@ -313,7 +315,7 @@ $.Class('jQuery.Model.Store',
 				
 			} else if( parentLoadedSet.def.isResolved() ){
 				// add right away
-				console.log("Store - already loaded parent set",params);
+				//console.log("Store - already loaded parent set",params);
 				var items = self.findAllCached(params);
 					//list.reset();
 				list.push(items);
@@ -321,7 +323,7 @@ $.Class('jQuery.Model.Store',
 			} else {
 				// this will be filled when add is called ...
 				parentLoadedSet.def.done(function(){
-					console.log("Store - already loading parent set, waiting for it to return",params, ready);
+					//console.log("Store - already loading parent set, waiting for it to return",params, ready);
 					var items = self.findAllCached(params);
 					//list.reset();
 					list.push(items);
@@ -337,7 +339,7 @@ $.Class('jQuery.Model.Store',
 				
 			} else {
 				// we need to load it
-				console.log("Store - loading data for the first time", params, ready);
+				//console.log("Store - loading data for the first time", params, ready);
 				var def = this.namespace.findAll(params);
 				sameSet.def = def;
 				
