@@ -25,8 +25,6 @@ $.fn.
  * triggerAsync is designed to work with the [jquery.event.pause] plugin although it is defined in 
  * <code>jquery/event/default</code>
  * 
- * ## API
- * 
  * 
  * @param {String} type The type of event
  * @param {Object} data The data for the event

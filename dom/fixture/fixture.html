@@ -16,16 +16,20 @@
 <script type='text/javascript'  
         src='../../../steal/steal.js'></script>
 <script type='text/javascript' id="demo-source">
-steal('jquery/dom/fixture','jquery/dom/form_params')
-	.then(function(){
+steal('jquery/dom/fixture',
+      'jquery/dom/form_params',
+	  function(){
+
+$.fixture("/messages.php",
+	'fixtures/messages.html')	
+
 // gets content from a fixture
 $.get("/messages.php",
   function(html){
     // put the result in content
     $('#content').html(html)
   }, 
-  'text',
-  'fixtures/messages.html');
+  'text');
 
 
 // makes 20 messages in a fixture

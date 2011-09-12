@@ -44,6 +44,7 @@ steal('jquery/lang/observe',function(){
 		
 	$.extend($.Observe.prototype,{
 		/**
+		 * @plugin jquery/lang/observe/delegate
 		 * Listen for changes in a child attribute from the parent. The child attribute
 		 * does not have to exist.
 		 * 
@@ -113,16 +114,36 @@ steal('jquery/lang/observe',function(){
 		 * on an attribute of the params attribute:
 		 * 
 		 *     var o = $.Observe({
-		 *       params : {
+		 *       options : {
 		 *         limit : 100,
-		 *         offset: 0
+		 *         offset: 0,
+		 *         params : {
+		 *           parentId: 5
+		 *         }
 		 *       }
 		 *     })
-		 *     o.delegate('params.*',
+		 *     o.delegate('options.*','change', function(){
+		 *       alert('1');
+		 *     })
+		 *     o.delegate('options.**','change', function(){
+		 *       alert('2');
+		 *     })
+		 *     
+		 *     // alerts 1
+		 *     // alerts 2
+		 *     o.attr('options.offset',100)
+		 *     
+		 *     // alerts 2
+		 *     o.attr('options.params.parentId',6);
 		 * 
-		 * @param {String} attr
-		 * @param {String} event
-		 * @param {Function} cb
+		 * Using a single wildcard (<code>*</code>) matches single level
+		 * properties.  Using a double wildcard (<code>**</code>) matches
+		 * any deep property.
+		 * 
+		 * @param {String} attr the attribute you want to listen for changes in.
+		 * @param {String} event the event name
+		 * @param {Function} cb the callback handler
+		 * @return {jQuery.Delegate} the delegate for chaining
 		 */
 		delegate :  function(attr, event, cb){
 			attr = $.trim(attr);
@@ -140,6 +161,17 @@ steal('jquery/lang/observe',function(){
 			}
 			return this;
 		},
+		/**
+		 * @plugin jquery/lang/observe/delegate
+		 * Removes a delegate event handler.
+		 * 
+		 *   observe.undelegate("name","set", function(){ ... })
+		 * 
+		 * @param {String} attr the attribute name of the object you want to undelegate from.
+		 * @param {String} event the event name
+		 * @param {Function} cb the callback handler
+		 * @return {jQuery.Delegate} the delegate for chaining
+		 */
 		undelegate : function(attr, event, cb){
 			attr = $.trim(attr);
 			

@@ -91,7 +91,6 @@ $.Object = {};
  *                           }
  *                           return a === b;
  *                         }})      //-> true
- * ## API
  * 
  * @param {Object} a an object to compare
  * @param {Object} b an object to compare
