@@ -177,14 +177,13 @@ steal('jquery/dom',
 		};
 
 	/**
-	 * @class jQuery.fixture
+	 * @function jQuery.fixture
 	 * @plugin jquery/dom/fixture
 	 * @download http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/dom/fixture/fixture.js
 	 * @test jquery/dom/fixture/qunit.html
 	 * @parent dom
 	 * 
-	 * Fixtures simulate AJAX responses.  Instead of making 
-	 * a request to a server, fixtures simulate 
+	 * <code>$.fixture</code> intercepts a AJAX request and simulates
 	 * the response with a file or function. They are a great technique 
 	 * when you want to develop JavaScript 
 	 * independently of the backend. 
@@ -202,7 +201,7 @@ steal('jquery/dom',
 	 * a function.  The following intercepts updating tasks at
 	 * <code>/tasks/ID.json</code> and responds with updated data:
 	 * 
-	 *     $.fixture("/tasks/{id}.json", function(original, settings, headers){
+	 *     $.fixture("PUT /tasks/{id}.json", function(original, settings, headers){
 	 *        return { updatedAt : new Date().getTime() }
 	 *     })
 	 * 
@@ -352,10 +351,28 @@ steal('jquery/dom',
 	 * [jQuery.fixture.delay] to 5000.
 	 * 
 	 * @demo jquery/dom/fixture/fixture.html
-	 * @constructor
-	 * Takes an ajax settings and returns a url to look for a fixture.  Overwrite this if you want a custom lookup method.
-	 * @param {Object} settings
-	 * @return {String} the url that will be used for the fixture
+	 * 
+	 * @param {Object|String} settings Configures the AJAX requests the fixture should 
+	 * intercept.  If an __object__ is passed, the object's properties and values
+	 * are matched against the settings passed to $.ajax.  
+	 * 
+	 * If a __string__ is passed, it can be used to match the url and type. Urls
+	 * can be templated, using <code>{NAME}</code> as wildcards.  
+	 * 
+	 * @param {Function|String} fixture The response to use for the AJAX 
+	 * request. If a __string__ url is passed, the ajax request is redirected
+	 * to the url. If a __function__ is provided, it looks like:
+	 * 
+	 *     fixture( originalSettings, settings, headers	)
+	 *     
+	 * where:
+	 * 
+	 *   - originalSettings - the orignal settings passed to $.ajax
+	 *   - settings - the settings after all filters have run
+	 *   - headers - request headers
+	 *   
+	 * If __null__ is passed, and there is a fixture at settings, that fixture will be removed,
+	 * allowing the AJAX request to behave normally.
 	 */
 	var $fixture = $.fixture = function( settings , fixture ){
 		// if we provide a fixture ...
@@ -458,30 +475,32 @@ steal('jquery/dom',
 		},
 		
 		/**
+		 * @function jQuery.fixture.make
+		 * @parent jQuery.fixture
 		 * Used to make fixtures for findAll / findOne style requests.
-		 * @codestart
-		 * //makes a nested list of messages
-		 * $.fixture.make(["messages","message"],1000, function(i, messages){
-		 *   return {
-		 *     subject: "This is message "+i,
-		 *     body: "Here is some text for this message",
-		 *     date: Math.floor( new Date().getTime() ),
-		 *     parentId : i < 100 ? null : Math.floor(Math.random()*i)
-		 *   }
-		 * })
-		 * //uses the message fixture to return messages limited by offset, limit, order, etc.
-		 * $.ajax({
-		 *   url: "messages",
-		 *   data:{ 
-		 *      offset: 100, 
-		 *      limit: 50, 
-		 *      order: ["date ASC"],
-		 *      parentId: 5},
-		 *    },
-		 *    fixture: "-messages",
-		 *    success: function( messages ) {  ... }
-		 * });
-		 * @codeend
+		 * 
+		 *     //makes a nested list of messages
+		 *     $.fixture.make(["messages","message"],1000, function(i, messages){
+		 *       return {
+		 *         subject: "This is message "+i,
+		 *         body: "Here is some text for this message",
+		 *         date: Math.floor( new Date().getTime() ),
+		 *         parentId : i < 100 ? null : Math.floor(Math.random()*i)
+		 *       }
+		 *     })
+		 *     //uses the message fixture to return messages limited by offset, limit, order, etc.
+		 *     $.ajax({
+		 *       url: "messages",
+		 *       data:{ 
+		 *          offset: 100, 
+		 *          limit: 50, 
+		 *          order: ["date ASC"],
+		 *          parentId: 5},
+		 *        },
+		 *        fixture: "-messages",
+		 *        success: function( messages ) {  ... }
+		 *     });
+		 * 
 		 * @param {Array|String} types An array of the fixture names or the singular fixture name.
 		 * If an array, the first item is the plural fixture name (prefixed with -) and the second
 		 * item is the singular name.  If a string, it's assumed to be the singular fixture name.  Make
@@ -493,14 +512,14 @@ steal('jquery/dom',
 		 * server params like searchText or startDate.  The function should return true if the item passes the filter, 
 		 * false otherwise.  For example:
 		 * 
-		 * @codestart
-		 * function(item, settings){
-			  if(settings.data.searchText){
-				  var regex = new RegExp("^"+settings.data.searchText)
-				  return regex.test(item.name);
-		      }
-		 * }
-		 * @codeend
+		 * 
+		 *     function(item, settings){
+		 *       if(settings.data.searchText){
+		 * 	       var regex = new RegExp("^"+settings.data.searchText)
+		 * 	      return regex.test(item.name);
+		 *       }
+		 *     }
+		 * 
 		 */
 		make: function( types, count, make, filter ) {
 			if(typeof types === "string"){
@@ -652,6 +671,9 @@ steal('jquery/dom',
 			}
 		},
 		/**
+		 * @function jQuery.fixture.rand
+		 * @parent jQuery.fixture
+		 * 
 		 * Creates random integers or random arrays of 
 		 * other arrays. 
 		 * 
@@ -677,7 +699,6 @@ steal('jquery/dom',
 		 *     // pick between 2 and 3 items at random
 		 *     rand(["j","m","v","c"],2,3)
 		 *     
-		 * ## API
 		 * 
 		 * @param {Array|Number} arr An array of items to select from.
 		 * If a number is provided, a random number is returned.
@@ -778,7 +799,8 @@ steal('jquery/dom',
 		on : true
 	});
 	/**
-	 * @attribute delay
+	 * @attribute $.fixture.delay
+	 * @parent $.fixture
 	 * Sets the delay in milliseconds between an ajax request is made and
 	 * the success and complete handlers are called.  This only sets
 	 * functional fixtures.  By default, the delay is 200ms.

@@ -8,11 +8,11 @@ test("with a form", function(){
 	$("#qunit-test-area").html("//jquery/dom/form_params/test/basics.micro",{})
 	
 	var formParams =  $("#qunit-test-area form").formParams() ;
-	ok(formParams.params.one === 1,"one is right");
-	ok(formParams.params.two === 2,"two is right");
-	ok(formParams.params.three === 3,"three is right");
+	ok(formParams.params.one === "1","one is right");
+	ok(formParams.params.two === "2","two is right");
+	ok(formParams.params.three === "3","three is right");
 	same(formParams.params.four,["4","1"],"four is right");
-	same(formParams.params.five,[2,3],"five is right");
+	same(formParams.params.five,["2","3"],"five is right");
 	
 	
 });
@@ -21,7 +21,7 @@ test("with a form", function(){
 test("with true false", function(){
 	$("#qunit-test-area").html("//jquery/dom/form_params/test/truthy.micro",{});
 	
-	var formParams =  $("#qunit-test-area form").formParams();
+	var formParams =  $("#qunit-test-area form").formParams(true);
 	ok(formParams.foo === undefined, "foo is undefined")
 	ok(formParams.bar.abc === true, "form bar is true");
 	ok(formParams.bar.def === true, "form def is true");

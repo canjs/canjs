@@ -378,7 +378,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 *       }
 			 *     },{})
 			 * 
-			 * ## API
 			 * 
 			 * @param {Object} attrs Attributes on the model instance
 			 * @param {Function} success(attrs) the callback function, it must be called with an object 
@@ -449,7 +448,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 *       }
 			 *     },{})
 			 * 
-			 * ## API
 			 * 
 			 * @param {String} id the id of the model instance
 			 * @param {Object} attrs Attributes on the model instance
@@ -525,7 +523,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 *       }
 			 *     },{})
 			 * 
-			 * ## API
 			 * 
 			 * @param {Object} params data to refine the results.  An example might be passing {limit : 20} to
 			 * limit the number of items retrieved.
@@ -569,7 +566,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 *       }
 			 *     },{})
 			 * 
-			 * ## API
 			 * 
 			 * @param {Object} params data to refine the results. This is often something like {id: 5}.
 			 * @param {Function} success(item) called with a model instance
@@ -776,7 +772,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 *       }
 		 *     },{})
 		 *     
-		 * ## API
 		 * 
 		 * @param {Object} attributes An object of name-value pairs or an object that has a 
 		 *  data, attributes, or 'shortName' property that maps to an object of name-value pairs.
@@ -849,7 +844,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 *             'json')
 		 *     }
 		 * 
-		 * ## API
 		 * 
 		 * @param {Array} instancesRawData an array of raw name - value pairs like
 		 * 
@@ -1529,7 +1523,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 *       todo.elements(this.element).remove();
 		 *     }
 		 * 
-		 * ## API
 		 * 
 		 * @param {String|jQuery|element} context If provided, only elements inside this element
 		 * that represent this model will be returned.

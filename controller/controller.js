@@ -591,7 +591,6 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		 * 
 		 * Setup does the event binding described in [jquery.controller.listening Listening To Events].
 		 * 
-		 * ## API
 		 * @param {HTMLElement} element the element this instance operates on.
 		 * @param {Object} [options] option values for the controller.  These get added to
 		 * this.options.
@@ -828,8 +827,7 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		 * added like:
 		 * 
 		 *     $("#changed").change_text("destroy");
-		 *     
-		 * ### API
+		 * 
 		 */
 		destroy: function() {
 			if ( this._destroyed ) {
