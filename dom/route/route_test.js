@@ -86,7 +86,10 @@ test("precident2", function(){
 })
 
 test("linkTo", function(){
-	var res = $.route.link("Hello",{foo: "bar"});
+    $.route.routes = {};
+    $.route(":foo");
+    var res = $.route.link("Hello",{foo: "bar", baz: 'foo'});
+    equal( res, '<a href="#!bar&baz=foo" >Hello</a>');
 })
 
 })
