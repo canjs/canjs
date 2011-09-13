@@ -6,6 +6,8 @@ function( $ ) {
 	var // RegEx used to match route variables of the type ':name'.
         // Any word character or a period is matched.
         matcher = /\:([\w\.]+)/g,
+        // Regular expression for identifying &amp;key=value lists.
+        paramsMatcher = /^(?:&[\w\.]+=[\w\.]*)+/,
         // Converts a JS Object into a list of parameters that can be 
         // inserted into an html element tag.
 		makeProps = function( props ) {
@@ -32,7 +34,7 @@ function( $ ) {
 			var count = 0;
 			for ( var i = 0; i < route.names.length; i++ ) {
 				if (!data.hasOwnProperty(route.names[i]) ) {
-					return 0;
+					return -1;
 				}
 				count++;
 			}
@@ -238,7 +240,7 @@ function( $ ) {
          * @return {String} The route URL and &amp; separated parameters.
 		 */
 		param: function( data ) {
-			// Check if the provided data keys matches the names in any routes;
+			// Check if the provided data keys match the names in any routes;
 			// get the one with the most matches.
 			var route,
 				matches = -1,
@@ -265,7 +267,7 @@ function( $ ) {
 				return res + (after ? "&" + after : "")
 			}
             // If no route was found there is no hash URL, only paramters.
-			return $.param(data);
+			return $.isEmptyObject(data) ? "" : "&" + $.param(data);
 		},
 		/**
 		 * Populate the JS data object from a given URL.
@@ -291,11 +293,13 @@ function( $ ) {
                     parts = url.match(route.test),
                     // start will contain the full mathced string; parts contain the variable values.
 					start = parts.shift(),
-                    // The remainder will be the &amp; separated key/value pairs at the end of the URL.
-					remainder = url.substr(start.length + 1),
-                    // obj becomes the deparameterized JS object with values in remainder extended with the defaults.
-					obj = $.extend(true, remainder ? $.String.deparam(remainder) : {}, route.defaults);
-                
+                    // The remainder will be the &amp;key=value list at the end of the URL.
+					remainder = url.substr(start.length),
+                    // If there is a remainder and it contains a &amp;key=value list deparam it.
+                    obj = (remainder && paramsMatcher.test(remainder)) ? $.String.deparam( remainder.slice(1) ) : {};
+
+                // Add the default values for this route
+				obj = $.extend(true, {}, route.defaults, obj);
                 // Overwrite each of the default values in obj with those in parts if that part is not empty.
 				for ( var p = 0; p < parts.length; p++ ) {
 					if ( parts[p] ) {
@@ -304,8 +308,8 @@ function( $ ) {
 				}
 				return obj;
 			}
-            // If no route was matched it is parsed as a &amp; separated list of key/value pairs.
-			return $.String.deparam(url);
+            // If no route was matched it is parsed as a &amp;key=value list.
+			return paramsMatcher.test(url) ? $.String.deparam( url.slice(1) ) : {};
 		},
 		/**
 		 * @hide
@@ -411,7 +415,7 @@ function( $ ) {
 
 	// If the $.route.data changes, update the hash.
     // Using .serialize() retrieves the raw data contained in the observable.
-    // This function is throttled.
+    // This function is throttled so it only updates once even if multiple values changed.
 	$route.data.bind("change", throttle(function() {
 		window.location.hash = "#!" + $route.param($route.data.serialize())
 	}));
