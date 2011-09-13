@@ -85,11 +85,11 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 	 * @codeend
 	 * @plugin jquery/controller/view
 	 * @return {String} the rendered result of the view.
-	 * @param {String} [optional1] view The view you are going to render.  If a view isn't explicity given
+	 * @param {String} [view]  The view you are going to render.  If a view isn't explicity given
 	 * this function will try to guess at the correct view as show in the example code above.
-	 * @param {Object} [optional2] data data to be provided to the view.  If not present, the controller instance 
+	 * @param {Object} [data]  data to be provided to the view.  If not present, the controller instance 
 	 * is used.
-	 * @param {Object} [optional3] myhelpers an object of helpers that will be available in the view.  If not present
+	 * @param {Object} [myhelpers] an object of helpers that will be available in the view.  If not present
 	 * this controller class's "Helpers" property will be used.
 	 *
 	 */

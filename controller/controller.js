@@ -74,6 +74,7 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 	 * @plugin jquery/controller
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/controller/controller.js
 	 * @test jquery/controller/qunit.html
+	 * @inherits jQuery.Class
 	 * 
 	 * jQuery.Controller helps create organized, memory-leak free, rapidly performing
 	 * jQuery widgets.  Its extreme flexibility allows it to serve as both
@@ -87,37 +88,36 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 	 * down auto-magically. Read about [http://jupiterjs.com/news/writing-the-perfect-jquery-plugin 
 	 * the theory behind controller] and 
 	 * a [http://jupiterjs.com/news/organize-jquery-widgets-with-jquery-controller walkthrough of its features]
-	 * on Jupiter's blog.
+	 * on Jupiter's blog.  The [mvc.controller MVC in JavaScriptMVC tutorial] also has a great walkthrough.
 	 * 
-	 * Controllers make heavy use of event delegation, so make sure you understand it before using them.
+	 * Controller inherits from [jQuery.Class $.Class] and makes heavy use of 
+	 * [http://api.jquery.com/delegate/ event delegation]. Make sure 
+	 * you understand these concepts before using it.
 	 * 
 	 * ## Basic Example
 	 * 
 	 * Instead of
 	 * 
-	 * @codestart
-	 * $(function(){
-	 *   $('#tabs').click(someCallbackFunction1)
-	 *   $('#tabs .tab').click(someCallbackFunction2)
-	 *   $('#tabs .delete click').click(someCallbackFunction3)
-	 * });
-	 * @codeend
+	 * 
+	 *     $(function(){
+	 *       $('#tabs').click(someCallbackFunction1)
+	 *       $('#tabs .tab').click(someCallbackFunction2)
+	 *       $('#tabs .delete click').click(someCallbackFunction3)
+	 *     });
 	 * 
 	 * do this
 	 * 
-	 * @codestart
-	 * $.Controller('Tabs',{
-	 *   click: function() {...},
-	 *   '.tab click' : function() {...},
-	 *   '.delete click' : function() {...}
-	 * })
-	 * $('#tabs').tabs();
-	 * @codeend
+	 *     $.Controller('Tabs',{
+	 *       click: function() {...},
+	 *       '.tab click' : function() {...},
+	 *       '.delete click' : function() {...}
+	 *     })
+	 *     $('#tabs').tabs();
+	 * 
 	 * 
 	 * ## Tabs Example
 	 * 
 	 * @demo jquery/controller/controller.html
-	 * 
 	 * 
 	 * ## Using Controller
 	 * 
@@ -316,11 +316,10 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 	 */
 	{
 		/**
-		 * Does 3 things:
+		 * Does 2 things:
 		 * <ol>
 		 *     <li>Creates a jQuery helper for this controller.</li>
 		 *     <li>Calculates and caches which functions listen for events.</li>
-		 *     <li> and attaches this element to the documentElement if onDocument is true.</li>
 		 * </ol>   
 		 * <h3>jQuery Helper Naming Examples</h3>
 		 * @codestart
@@ -328,7 +327,7 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		 * "Controllers.Task" -> $().controllers_task()
 		 * @codeend
 		 */
-		init: function() {
+		setup: function() {
 			// if you didn't provide a name, or are controller, don't do anything
 			if (!this.shortName || this.fullName == "jQuery.Controller" ) {
 				return;
@@ -338,6 +337,18 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 			this._shortName = underscoreAndRemoveController(this.shortName);
 
 			var controller = this,
+				/**
+				 * @attribute pluginName
+				 * Setting the <code>pluginName</code> property allows you
+				 * to change the jQuery plugin helper name from its 
+				 * default value.
+				 * 
+				 *     $.Controller("Mxui.Layout.Fill",{
+				 *       pluginName: "fillWith"
+				 *     },{});
+				 *     
+				 *     $("#foo").fillWith();
+				 */
 				pluginname = this.pluginName || this._fullName,
 				funcName, forLint;
 
@@ -388,14 +399,6 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 				if ( this._isAction(funcName) ) {
 					this.actions[funcName] = this._action(funcName);
 				}
-			}
-
-			/**
-			 * @attribute onDocument
-			 * Set to true if you want to automatically attach this element to the documentElement.
-			 */
-			if ( this.onDocument ) {
-				forLint = new controller(document.documentElement);
 			}
 		},
 		hookup: function( el ) {
@@ -504,19 +507,12 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		 *   - select 
 		 *   - submit  
 		 * 
-		 * The following processors always listen on the window or document:
+		 * Listen to events on the document or window 
+		 * with templated event handlers:
 		 * 
-		 *   - windowresize
-		 *   - windowscroll
-		 *   - load
-		 *   - unload
-		 *   - hashchange
-		 *   - ready
-		 *   
-		 * Which means anytime the window is resized, the following controller will listen to it:
-		 *  
+		 *
 		 *     $.Controller('Sized',{
-		 *       windowresize : function(){
+		 *       "{window} resize" : function(){
 		 *         this.element.width(this.element.parent().width() / 2);
 		 *       }
 		 *     });
@@ -526,7 +522,8 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		processors: {},
 		/**
 		 * @attribute listensTo
-		 * A list of special events this controller listens too.  You only need to add event names that
+		 * An array of special events this controller 
+		 * listens too.  You only need to add event names that
 		 * are whole words (ie have no special characters).
 		 * 
 		 *     $.Controller('TabPanel',{
@@ -538,6 +535,7 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		 *     })
 		 *     
 		 *     $('.foo').tab_panel().trigger("show");
+		 * 
 		 */
 		listensTo: [],
 		/**
@@ -558,6 +556,9 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		 *     
 		 *     $("#el1").message(); //writes "Hello World"
 		 *     $("#el12").message({message: "hi"}); //writes hi
+		 *     
+		 * In [jQuery.Controller.prototype.setup setup] the options passed to the controller
+		 * are merged with defaults.  This is not a deep merge.
 		 */
 		defaults: {}
 	},
@@ -568,19 +569,19 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		/**
 		 * Setup is where most of controller's magic happens.  It does the following:
 		 * 
-		 * ### Sets this.element
+		 * ### 1. Sets this.element
 		 * 
 		 * The first parameter passed to new Controller(el, options) is expected to be 
 		 * an element.  This gets converted to a jQuery wrapped element and set as
 		 * [jQuery.Controller.prototype.element this.element].
 		 * 
-		 * ### Adds the controller's name to the element's className.
+		 * ### 2. Adds the controller's name to the element's className.
 		 * 
 		 * Controller adds it's plugin name to the element's className for easier 
 		 * debugging.  For example, if your Controller is named "Foo.Bar", it adds
 		 * "foo_bar" to the className.
 		 * 
-		 * ### Saves the controller in $.data
+		 * ### 3. Saves the controller in $.data
 		 * 
 		 * A reference to the controller instance is saved in $.data.  You can find 
 		 * instances of "Foo.Bar" like: 
@@ -591,10 +592,11 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		 * 
 		 * Setup does the event binding described in [jquery.controller.listening Listening To Events].
 		 * 
-		 * ## API
 		 * @param {HTMLElement} element the element this instance operates on.
 		 * @param {Object} [options] option values for the controller.  These get added to
-		 * this.options.
+		 * this.options and merged with [jQuery.Controller.static.defaults defaults].
+		 * @return {Array} return an array if you wan to change what init is called with. By
+		 * default it is called with the element and options passed to the controller.
 		 */
 		setup: function( element, options ) {
 			var funcName, ready, cls = this.Class;
@@ -824,12 +826,15 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		 *         this._super(); //Always call this!
 		 *     })
 		 * 
+		 * Make sure you always call <code>_super</code> when overwriting
+		 * controller's destroy event.  The base destroy functionality unbinds
+		 * all event handlers the controller has created.
+		 * 
 		 * You could call destroy manually on an element with ChangeText
 		 * added like:
 		 * 
 		 *     $("#changed").change_text("destroy");
-		 *     
-		 * ### API
+		 * 
 		 */
 		destroy: function() {
 			if ( this._destroyed ) {
@@ -882,12 +887,6 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 	//unbinds when called.
 	//the basic processor that binds events
 	basicProcessor = function( el, event, selector, methodName, controller ) {
-		var c = controller.Class;
-
-		// document controllers use their name as an ID prefix.
-		if ( c.onDocument && !/^Main(Controller)?$/.test(c.shortName) && el === controller.element[0]) { //prepend underscore name if necessary
-			selector = selector ? "#" + c._shortName + " " + selector : "#" + c._shortName;
-		}
 		return binder(el, event, shifter(controller, methodName), selector);
 	};
 

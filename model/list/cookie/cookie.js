@@ -57,7 +57,7 @@ $.Model.List.extend("jQuery.Model.List.Cookie",
 		// each also needs what they are referencd by ?
 		var props = $.cookie( name ) || {type : null, ids : []},
 			instances = [],
-			Class = props.type ? $.Class.getObject(props.type) :  null;
+			Class = props.type ? $.String.getObject(props.type) :  null;
 		for(var i =0; i < props.ids.length;i++){
 			var identity = props.ids[i],
 				instanceData = $.cookie( identity );

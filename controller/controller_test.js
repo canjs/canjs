@@ -59,54 +59,6 @@ test("subscribe testing works", function(){
 })
 
 
-test("document and main controllers", function(){
-	var a = $("<div id='test'><span/></div>").appendTo($("#qunit-test-area")),
-		a_inner = a.find('span'),
-		b = $("<div><span/></div>").appendTo($("#qunit-test-area")),
-		b_inner = b.find('span'),
-		doc_outer_clicks = 0,
-		doc_inner_clicks = 0,
-		main_outer_clicks = 0,
-		main_inner_clicks = 0;
-
-	$.Controller.extend("TestController", { onDocument: true }, {
-		click: function() {
-			doc_outer_clicks++;
-		},
-		"span click" : function() {
-			doc_inner_clicks++;
-		}
-	})
-
-	a_inner.trigger("click");
-	equals(doc_outer_clicks,1,"document controller handled (no-selector) click inside listening element");
-	equals(doc_inner_clicks,1,"document controller handled (selector) click inside listening element");
-
-	b_inner.trigger("click");
-	equals(doc_outer_clicks,1,"document controller ignored (no-selector) click outside listening element");
-	equals(doc_inner_clicks,1,"document controller ignored (selector) click outside listening element");
-
-	$(document.documentElement).controller('test').destroy();
-
-	$.Controller.extend("MainController", { onDocument: true }, {
-		click: function() {
-			main_outer_clicks++;
-		},
-		"span click" : function() {
-			main_inner_clicks++;
-		}
-	})
-
-	b_inner.trigger("click");
-	equals(main_outer_clicks,1,"main controller handled (no-selector) click");
-	equals(main_inner_clicks,1,"main controller handled (selector) click");
-
-	$(document.documentElement).controller('main').destroy();
-
-	a.remove();
-	b.remove();
-})
-
 
 test("bind to any special", function(){
 	jQuery.event.special.crazyEvent = {

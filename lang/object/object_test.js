@@ -80,7 +80,26 @@ test("subset compare", function(){
 		{foo: null, bar: null, kind : null} ), 
 		
 		"ignores nulls" );
-})
+});
+
+test("searchText", function(){
+	var item = {
+			id: 1,
+			name: "thinger"
+		},
+		searchText = {
+			searchText : "foo"
+		},
+		compare = {
+			searchText : function(items, paramsText, itemr, params){
+				equals(item,itemr);
+				equals(searchText, params)
+				return true;
+			}
+		};
+		
+	ok( $.Object.subset( item, searchText, compare ), "searchText" );
+});
 
 
 });

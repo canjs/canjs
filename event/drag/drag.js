@@ -114,7 +114,7 @@ steal('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack',function( $ 
 				delegate: ev.liveFired || element,
 				selector: ev.handleObj.selector,
 				moved: false,
-				distance: this.distance,
+				_distance: this.distance,
 				callbacks: {
 					dragdown: event.find(delegate, ["dragdown"], selector),
 					draginit: event.find(delegate, ["draginit"], selector),
@@ -145,6 +145,8 @@ steal('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack',function( $ 
 			this._mousemove = mousemove;
 			this._mouseup = mouseup;
 			this._distance = options.distance ? options.distance : 0;
+			
+			this.mouseStartPosition = ev.vector(); //where the mouse is located
 			
 			$(document).bind('mousemove', mousemove);
 			$(document).bind('mouseup', mouseup);
@@ -243,7 +245,7 @@ steal('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack',function( $ 
 			//if a mousemove has come after the click
 			this._cancelled = false; //if the drag has been cancelled
 			this.event = event;
-			this.mouseStartPosition = event.vector(); //where the mouse is located
+			
 			/**
 			 * @attribute mouseElementPosition
 			 * The position of start of the cursor on the element
@@ -259,7 +261,7 @@ steal('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack',function( $ 
 			}
 			//if they set something else as the element
 			this.startPosition = startElement != this.movingElement ? this.movingElement.offsetv() : this.currentDelta();
-
+			console.log(this.startPosition, this.movingElement)
 			this.makePositioned(this.movingElement);
 			this.oldZIndex = this.movingElement.css('zIndex');
 			this.movingElement.css('zIndex', 1000);
@@ -442,7 +444,9 @@ steal('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack',function( $ 
 			var ghost = this.movingElement.clone().css('position', 'absolute');
 			(loc ? $(loc) : this.movingElement).after(ghost);
 			ghost.width(this.movingElement.width()).height(this.movingElement.height());
-
+			// put the ghost in the right location ...
+			ghost.offset(this.movingElement.offset())
+			
 			// store the original element and make the ghost the dragged element
 			this.movingElement = ghost;
 			this.noSelection(ghost)
@@ -482,21 +486,22 @@ steal('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack',function( $ 
 		 */
 		revert: function( val ) {
 			this._revert = val === undefined ? true : val;
+			return this;
 		},
 		/**
 		 * Isolates the drag to vertical movement.
 		 */
 		vertical: function() {
 			this._vertical = true;
+			return this;
 		},
 		/**
 		 * Isolates the drag to horizontal movement.
 		 */
 		horizontal: function() {
 			this._horizontal = true;
+			return true;
 		},
-
-
 		/**
 		 * Respondables will not be alerted to this drag.
 		 */
