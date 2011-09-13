@@ -364,11 +364,12 @@ function( $ ) {
 		 * @param {Object} name The text of the link.
 		 * @param {Object} options The route options (variables)
 		 * @param {Object} props Properties of the &lt;a&gt; other than href.
+         * @param {Boolean} merge true if the options should be merged with the current options
 		 */
-		link: function( name, options, props ) {
+		link: function( name, options, props, merge ) {
 			return "<a " + makeProps(
 			$.extend({
-				href: $route.url(options)
+				href: $route.url(options, merge)
 			}, props)) + ">" + name + "</a>";
 		},
 		/**
