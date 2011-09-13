@@ -68,9 +68,14 @@ var isArray =  $.isArray,
 /**
  * @class jQuery.Observe
  * @parent jquerymx.lang
- * Provides observable behavior on JSON-like data structures.
  * 
- *     new $.Observe({ 
+ * 
+ * Observe provides observable behavior on 
+ * JSON-like data structures.  You can
+ * wrap a JS Object or Array with an Observe
+ * and then listen to changes in the observe-able.
+ * 
+ *     o = new $.Observe({ 
  *       addresses : [
  *         {
  *           city: 'Chicago',
@@ -80,10 +85,24 @@ var isArray =  $.isArray,
  *           city: 'Boston',
  *           state : 'MA'
  *         }
- *         ]
+ *         ],
+ *       name : "Justin Meyer"
  *     });
+ *     
+ *     // listen for changes
+ *     o.delegate("name","set", function(){
+ *     })
+ *     
+ *     // change a property
+ *     o.attr('name','Brian Moschel')
+ *     
+ *     // update the 2nd address
+ *     o.attr('addresses.1').attrs({
+ *       city: 'New York',
+ *       state: 'NY'
+ *     })
  * 
- * Observable lets you list to events when an observable changes.
+ * 
  * 
  * @param {Object} obj a JavaScript Object that will be 
  * converted to an observable
@@ -110,9 +129,19 @@ $.Class('jQuery.Observe',
 		this._data = obj;
 	},
 	/**
-	 * Get or set an attribute
-	 * @param {String} attr
-	 * @param {Object} [val]
+	 * Get or set an attribute on the observe.
+	 * 
+	 *     o = new $.Observe({});
+	 *     
+	 *     // sets a user property
+	 *     o.attr('user',{name: 'hank'});
+	 *     
+	 *     // read the user's name
+	 *     o.attr('user.name') //-> 'hank'
+	 * 
+	 * 
+	 * @param {String} attr the attribute to read
+	 * @param {Object} [val] if provided, sets the value.
 	 * @return {Object} the observable or the attribute property
 	 */
 	attr : function(attr, val){
@@ -127,7 +156,12 @@ $.Class('jQuery.Observe',
 	},
 	/**
 	 * Removes a property
+	 * 
+	 *     o =  new $.Observe({foo: 'bar'});
+	 *     o.removeAttr('foo'); //-> 'bar'
+	 * 
 	 * @param {String} attr
+	 * @return {Object} the value being removed 
 	 */
 	removeAttr : function(attr){
 		var parts = isArray(attr) ? attr : attr.split("."),
@@ -137,9 +171,11 @@ $.Class('jQuery.Observe',
 		if(parts.length){
 			return current.removeAttr(parts)
 		} else {
+			
 			delete this._data[prop];
 			// add this .. 
 			send(this, "change", [prop, "remove", current]);
+			return current;
 		}
 	},
 	_get : function(attr){
@@ -183,16 +219,42 @@ $.Class('jQuery.Observe',
 		}		
 	},
 	/**
-	 * Listen to changes in this observable
+	 * Listen to changes in this observe.
+	 * 
+	 *     o = new $.Observe({name : "Payal"});
+	 *     o.bind('change', function(ev, attr, how, newVal, oldVal){
+	 *       // ev    -> {type: 'change'}
+	 *       // attr  -> "name"
+	 *       // how   -> "add"
+	 *       // newVal-> "Justin"
+	 *       // oldVal-> undefined 
+	 *     })
+	 *     
+	 *     o.attr('name', 'Justin')
+	 * 
+	 * @param {String} eventType the event name.  Currently,
+	 * only 'change' events are supported. For more fine 
+	 * grained control, explore [jQuery.Observe.prototype.delegate].
+	 * 
+	 * @param {Function} handler(event, attr, how, newVal, oldVal) A 
+	 * callback function where
+	 * 
+	 *   - event - the event
+	 *   - attr - the name of the attribute changed
+	 *   - how - how the attribute was changed (add, set, remove)
+	 *   - newVal - the new value of the attribute
+	 *   - oldVal - the old value of the attribute
+	 * 
+	 * @return {$.Observe} the observe
 	 */
-	bind : function(){
+	bind : function(eventType, handler){
 		$.fn.bind.apply($([this]),arguments);
 		return this;
 	},
 	/**
-	 * 
+	 * Unbinds a listener.
 	 */
-	unbind : function(){
+	unbind : function(eventType, handler){
 		$.fn.unbind.apply($([this]),arguments);
 		return this;
 	},

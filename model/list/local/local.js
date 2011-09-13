@@ -12,7 +12,7 @@ $.Model.List.extend("jQuery.Model.List.Local",
 		// each also needs what they are referencd by ?
 		var props = window.localStorage[ name ] || "[]",
 			instances = [],
-			Class = props.type ? $.Class.getObject(props.type) :  null;
+			Class = props.type ? $.String.getObject(props.type) :  null;
 		for(var i =0; i < props.ids.length;i++){
 			var identity = props.ids[i],
 				instanceData = window.localStorage[ identity ];

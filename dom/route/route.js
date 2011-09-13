@@ -127,14 +127,63 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 	 * 
 	 * ## Creating a Route
 	 * 
+	 * Use <code>$.route(url, defaults)</code> to create a 
+	 * route. A route is a mapping from a url to 
+	 * an object (that is the $.route's state).
 	 * 
+	 * If no routes are added, or no route is matched, 
+	 * $.route's data is updated with the [jQuery.String.deparam deparamed]
+	 * hash.
 	 * 
-	 *     $.route("", {type: "videos"});
-	 *     $.route(":type",{type: "videos"});
+	 *     location.hash = "#!type=videos";
+	 *     // $.route -> {type : "videos"}
+	 *     
+	 * Once routes are added and the hash changes,
+	 * $.route looks for matching routes and uses them
+	 * to update $.route's data.
 	 * 
-	 * @param {String} url
-	 * @param {Object} [defaults]
-	 * @return {$.route}
+	 *     $.route( "content/:type" );
+	 *     location.hash = "#!content/images";
+	 *     // $.route -> {type : "images"}
+	 *     
+	 * Default values can also be added:
+	 * 
+	 *     $.route("content/:type",{type: "videos" });
+	 *     location.hash = "#!content/"
+	 *     // $.route -> {type : "videos"}
+	 *     
+	 * ## Delay setting $.route
+	 * 
+	 * By default, <code>$.route</code> sets its initial data
+	 * on document ready.  Sometimes, you want to wait to set 
+	 * this data.  To wait, call:
+	 * 
+	 *     $.route.ready(false);
+	 * 
+	 * and when ready, call:
+	 * 
+	 *     $.route.ready(true);
+	 * 
+	 * ## Changing the route.
+	 * 
+	 * Typically, you never want to set <code>location.hash</code>
+	 * directly.  Instead, you can change properties on <code>$.route</code>
+	 * like:
+	 * 
+	 *     $.route.attr('type', 'videos')
+	 *     
+	 * This will automatically look up the appropriate 
+	 * route and update the hash.
+	 * 
+	 * Often, you want to create links.  <code>$.route</code> provides
+	 * the [jQuery.route.link] and [jQuery.route.url] helpers to make this 
+	 * easy:
+	 * 
+	 *     $.route.link("Videos", {type: 'videos'})
+	 * 
+	 * @param {String} url the fragment identifier to match.  
+	 * @param {Object} [defaults] an object of default values
+	 * @return {jQuery.route}
 	 */
 	var $route = $.route = function( url, defaults ) {
 		// add route in a form that can be easily figured out

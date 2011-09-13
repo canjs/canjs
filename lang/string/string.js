@@ -111,15 +111,22 @@ steal('jquery').then(function( $ ) {
 		 * 
 		 */
 		str = $.String = $.extend( $.String || {} , {
+			
+			
 			/**
-			 * @function
+			 * @function getObject
 			 * Gets an object from a string.
+			 * 
+			 *     Foo = {Bar: {Zar: {"Ted"}}}
+		 	 *     $.String.getobject("Foo.Bar.Zar") //-> "Ted"
+			 * 
 			 * @param {String} name the name of the object to look for
 			 * @param {Array} [roots] an array of root objects to look for the 
 			 *   name.  If roots is not provided, the window is used.
 			 * @param {Boolean} [add] true to add missing objects to 
 			 *  the path. false to remove found properties. undefined to 
 			 *  not modify the root object
+			 * @return {Object} The object.
 			 */
 			getObject : getObject,
 			/**
@@ -205,6 +212,7 @@ steal('jquery').then(function( $ ) {
 					}
 				}));
 				return obs.length <= 1 ? obs[0] : obs;
-			}
+			},
+			_regs : regs
 		});
 });

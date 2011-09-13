@@ -378,7 +378,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 *       }
 			 *     },{})
 			 * 
-			 * ## API
 			 * 
 			 * @param {Object} attrs Attributes on the model instance
 			 * @param {Function} success(attrs) the callback function, it must be called with an object 
@@ -449,7 +448,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 *       }
 			 *     },{})
 			 * 
-			 * ## API
 			 * 
 			 * @param {String} id the id of the model instance
 			 * @param {Object} attrs Attributes on the model instance
@@ -525,7 +523,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 *       }
 			 *     },{})
 			 * 
-			 * ## API
 			 * 
 			 * @param {Object} params data to refine the results.  An example might be passing {limit : 20} to
 			 * limit the number of items retrieved.
@@ -569,7 +566,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 *       }
 			 *     },{})
 			 * 
-			 * ## API
 			 * 
 			 * @param {Object} params data to refine the results. This is often something like {id: 5}.
 			 * @param {Function} success(item) called with a model instance
@@ -647,32 +643,52 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		},
 		/**
 		 * @attribute attributes
-		 * Attributes contains a list of properties and their types
-		 * for this model.  You can use this in conjunction with 
+		 * Attributes contains a map of attribute names/types.  
+		 * You can use this in conjunction with 
 		 * [jQuery.Model.static.convert] to provide automatic 
-		 * [jquery.model.typeconversion type conversion].  
+		 * [jquery.model.typeconversion type conversion] (including
+		 * associations).  
 		 * 
 		 * The following converts dueDates to JavaScript dates:
 		 * 
-		 * @codestart
-		 * $.Model("Contact",{
-		 *   attributes : { 
-		 *     birthday : 'date'
-		 *   },
-		 *   convert : {
-		 *     date : function(raw){
-		 *       if(typeof raw == 'string'){
-		 *         var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
-		 *         return new Date( matches[1], 
-		 *                  (+matches[2])-1, 
-		 *                 matches[3] )
-		 *       }else if(raw instanceof Date){
-		 *           return raw;
+		 * 
+		 *     $.Model("Contact",{
+		 *       attributes : { 
+		 *         birthday : 'date'
+		 *       },
+		 *       convert : {
+		 *         date : function(raw){
+		 *           if(typeof raw == 'string'){
+		 *             var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
+		 *             return new Date( matches[1], 
+		 *                      (+matches[2])-1, 
+		 *                     matches[3] )
+		 *           }else if(raw instanceof Date){
+		 *               return raw;
+		 *           }
+		 *         }
 		 *       }
+		 *     },{})
+		 * 
+		 * ## Associations
+		 * 
+		 * Attribute type values can also represent the name of a 
+		 * function.  The most common case this is used is for
+		 * associated data. 
+		 * 
+		 * For example, a Deliverable might have many tasks and 
+		 * an owner (which is a Person).  The attributes property might
+		 * look like:
+		 * 
+		 *     attributes : {
+		 *       tasks : "App.Models.Task.models"
+		 *       owner: "App.Models.Person.model"
 		 *     }
-		 *   }
-		 * },{})
-		 * @codeend
+		 * 
+		 * This points tasks and owner properties to use 
+		 * <code>Task.models</code> and <code>Person.model</code>
+		 * to convert the raw data into an array of Tasks and a Person.
+		 * 
 		 */
 		attributes: {},
 		/**
@@ -756,7 +772,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 *       }
 		 *     },{})
 		 *     
-		 * ## API
 		 * 
 		 * @param {Object} attributes An object of name-value pairs or an object that has a 
 		 *  data, attributes, or 'shortName' property that maps to an object of name-value pairs.
@@ -829,7 +844,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 *             'json')
 		 *     }
 		 * 
-		 * ## API
 		 * 
 		 * @param {Array} instancesRawData an array of raw name - value pairs like
 		 * 
@@ -1509,7 +1523,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 *       todo.elements(this.element).remove();
 		 *     }
 		 * 
-		 * ## API
 		 * 
 		 * @param {String|jQuery|element} context If provided, only elements inside this element
 		 * that represent this model will be returned.

@@ -1,55 +1,40 @@
-steal("jquery/dom/fixture", "jquery/model")
- .then('funcunit/qunit').then(function(){
+steal("jquery/dom/fixture", "jquery/model",'funcunit/qunit',function(){
 
 module("jquery/dom/fixture");
 
 
 test("static fixtures", function(){
-	stop();
+	stop(3000);
+	
+	$.fixture("GET something", "//jquery/dom/fixture/fixtures/test.json");
+	$.fixture("POST something", "//jquery/dom/fixture/fixtures/test.json");
+	
+	
 	$.get("something",function(data){
 		equals(data.sweet,"ness","$.get works");
+		
 		$.post("something",function(data){
-			
 			equals(data.sweet,"ness","$.post works");
 			
-			$.ajax({
-				url: "something",
-				dataType: "json",
-				success: function( data ) {
-					equals(data.sweet,"ness","$.ajax works");
-					start();
-				},
-				fixture: "//jquery/dom/fixture/fixtures/test.json"
-			})
 			
-		},"json","//jquery/dom/fixture/fixtures/test.json");
-	},'json',"//jquery/dom/fixture/fixtures/test.json");
+			start();
+		},'json');
+		
+	},'json');
 })
 
 test("dynamic fixtures",function(){
 	stop();
 	$.fixture.delay = 10;
-	var fix = function(){
+	$.fixture("something", function(){
 		return [{sweet: "ness"}]
-	}
+	})
+	
 	$.get("something",function(data){
 		equals(data.sweet,"ness","$.get works");
-		$.post("something",function(data){
-			
-			equals(data.sweet,"ness","$.post works");
-			
-			$.ajax({
-				url: "something",
-				dataType: "json",
-				success: function( data ) {
-					equals(data.sweet,"ness","$.ajax works");
-					start();
-				},
-				fixture: fix
-			})
-			
-		},"json",fix);
-	},'json',fix);
+		start();
+		
+	},'json');
 });
 
 test("fixture function", 3, function(){
@@ -164,6 +149,133 @@ test("simulating an error", function(){
 		}
 	})
 })
+
+test("rand", function(){
+	var rand = $.fixture.rand;
+	var num = rand(5);
+	equals(typeof num, "number");
+	ok(num >= 0 && num < 5, "gets a number" );
+	
+	stop();
+	var zero, three, between, next = function(){
+		start()
+	}
+	// make sure rand can be everything we need
+	setTimeout(function(){
+		var res = rand([1,2,3]);
+		if(res.length == 0 ){
+			zero = true;
+		} else if(res.length == 3){
+			three = true;
+		} else {
+			between  = true;
+		}
+		if(zero && three && between){
+			ok(true, "got zero, three, between")
+			next();
+		} else {
+			setTimeout(arguments.callee, 10)
+		}
+	}, 10)
+	
+});
+
+
+test("_getData", function(){
+	var data = $.fixture._getData("/thingers/{id}", "/thingers/5");
+	equals(data.id, 5, "gets data");
+})
+
+test("_compare", function(){
+	var same = $.Object.same(
+		{url : "/thingers/5"},
+		{url : "/thingers/{id}"}, $.fixture._compare)
+	
+	ok(same, "they are similar");
+	
+	same = $.Object.same(
+		{url : "/thingers/5"},
+		{url : "/thingers"}, $.fixture._compare);
+		
+	ok(!same, "they are not the same");
+})
+
+test("_similar", function(){
+	
+	var same = $.fixture._similar(
+		{url : "/thingers/5"},
+		{url : "/thingers/{id}"});
+		
+	ok(same, "similar");
+	
+	same = $.fixture._similar(
+		{url : "/thingers/5", type: "get"},
+		{url : "/thingers/{id}"});
+		
+	ok(same, "similar with extra pops on settings");
+	
+	var exact = $.fixture._similar(
+		{url : "/thingers/5", type: "get"},
+		{url : "/thingers/{id}"}, true);
+	
+	ok(!exact, "not exact" )
+	
+	var exact = $.fixture._similar(
+		{url : "/thingers/5"},
+		{url : "/thingers/5"}, true);
+		
+	ok(exact, "exact" )
+})
+
+test("fixture function gets id", function(){
+	$.fixture("/thingers/{id}", function(settings){
+		return {
+			id: settings.data.id,
+			name: "justin"
+		}
+	})
+	stop(3000);
+	$.get("/thingers/5", {}, function(data){
+		start();
+		ok(data.id)
+	},'json')
+});
+
+test("replacing and removing a fixture", function(){
+	var url = steal.root.join("jquery/dom/fixture/fixtures/remove.json")
+	$.fixture("GET "+url, function(){
+		return {weird: "ness!"}
+	})
+	stop();
+	$.get(url,{}, function(json){
+		equals(json.weird,"ness!","fixture set right")
+		
+		$.fixture("GET "+url, function(){
+			return {weird: "ness?"}
+		})
+		
+		$.get(url,{}, function(json){
+			equals(json.weird,"ness?","fixture set right");
+			
+			$.fixture("GET "+url, null )
+			
+			$.get(url,{}, function(json){
+				equals(json.weird,"ness","fixture set right");
+
+				start();
+			});
+			
+			
+		},'json')
+		
+		
+		
+	},'json')
+})
+
+
+
+
 
 
 });

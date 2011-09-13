@@ -13,6 +13,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 		isFunction = $.isFunction,
 		isArray = $.isArray,
 		extend = $.extend,
+		getObject = $.String.getObject,
 		concatArgs = function(arr, args){
 			return arr.concat(makeArray(args));
 		},
@@ -455,20 +456,6 @@ steal("jquery","jquery/lang/string",function( $ ) {
 			}
 		},
 		/**
-		 *   @function getObject 
-		 *   Gets an object from a String.
-		 *   If the object or namespaces the string represent do not
-		 *   exist it will create them.  
-		 *   @codestart
-		 *   Foo = {Bar: {Zar: {"Ted"}}}
-		 *   $.Class.getobject("Foo.Bar.Zar") //-> "Ted"
-		 *   @codeend
-		 *   @param {String} objectName the object you want to get
-		 *   @param {Object} [current=window] the object you want to look in.
-		 *   @return {Object} the object you are looking for.
-		 */
-		getObject: $.String.getObject,
-		/**
 		 * @function newInstance
 		 * Creates a new instance of the class.  This method is useful for creating new instances
 		 * with arbitrary parameters.
@@ -602,7 +589,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 
 				var parts = fullName.split(/\./),
 					shortName = parts.pop(),
-					current = clss.getObject(parts.join('.'), window, true),
+					current = getObject(parts.join('.'), window, true),
 					namespace = current;
 
 				//@steal-remove-start
