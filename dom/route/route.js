@@ -16,7 +16,7 @@ function( $ ) {
 				if ( name === 'className' ) {
 					name = 'class'
 				}
-				val && html.push(name, "=\"", escapeHTML(val), "\" ");
+				val && html.push(escapeHTML(name), "=\"", escapeHTML(val), "\" ");
 			}
 			return html.join("")
 		},
