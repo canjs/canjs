@@ -164,7 +164,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * 
 	 * Create a todo instance and 
 	 * call [jQuery.Model.prototype.save save]<code>( success, error )</code>
-	 * to create it on the server.
+	 * to create the todo on the server.
 	 *     
 	 *     // create a todo instance
 	 *     var todo = new Todo({name: "do the dishes"})
