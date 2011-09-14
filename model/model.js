@@ -127,195 +127,296 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * @test jquery/model/qunit.html
 	 * @plugin jquery/model
 	 * 
-	 * Models wrap an application's data layer.  In large applications, a model is critical for:
+	 * Models super-charge an application's
+	 * data layer, making it easy to:
 	 * 
-	 *  - [jquery.model.encapsulate Encapsulating] services so controllers + views don't care where data comes from.
-	 *    
-	 *  - Providing helper functions that make manipulating and abstracting raw service data easier.
+	 *  - Get and modify data from the server
+	 *  - Listen to changes in data
+	 *  - Setting and retrieving models on elements
+	 *  - Deal with lists of data
+	 *  - Do other good stuff
 	 * 
-	 * This is done in two ways:
+	 * Model inherits from [jQuery.Class $.Class] and make use
+	 * of REST services and [http://api.jquery.com/category/deferred-object/ deferreds]
+	 * so these concepts are worth exploring.  Also, 
+	 * the [mvc.model MVC in JavaScriptMVC] has a good walkthrough of $.Model.
 	 * 
-	 *  - Requesting data from and interacting with services
-	 *  
-	 *  - Converting or wrapping raw service data into a more useful form.
 	 * 
+	 * ## Get and modify data from the server
 	 * 
-	 * ## Basic Use
+	 * $.Model makes connecting to a JSON REST service 
+	 * really easy.  The following models <code>todos</code> by
+	 * describing the services that can create, retrieve,
+	 * update, and delete todos. 
 	 * 
-	 * The [jQuery.Model] class provides a basic skeleton to organize pieces of your application's data layer.
-	 * First, consider doing Ajax <b>without</b> a model.  In our imaginary app, you:
+	 *     $.Model('Todo',{
+	 *       findAll: 'GET /todos.json',
+	 *       findOne: 'GET /todos/{id}.json',
+	 *       create:  'POST /todos.json',
+	 *       update:  'PUT /todos/{id}.json',
+	 *       destroy: 'DELETE /todos/{id}.json' 
+	 *     },{});
 	 * 
-	 *  - retrieve a list of tasks</li>
-	 *  - display the number of days remaining for each task
-	 *  - mark tasks as complete after users click them
+	 * This lets you create, retrieve, update, and delete
+	 * todos programatically:
 	 * 
-	 * Let's see how that might look without a model:
+	 * __Create__
 	 * 
-	 * @codestart
-	 * $.Controller("Tasks",
-	 * {
-	 *   // get tasks when the page is ready 
-	 *   init: function() {
-	 *     $.get('/tasks.json', this.callback('gotTasks'), 'json')
-	 *   },
-	 *  |* 
-	 *   * assume json is an array like [{name: "trash", due_date: 1247111409283}, ...]
-	 *   *|
-	 *  gotTasks: function( json ) { 
-	 *     for(var i =0; i < json.length; i++){
-	 *       var taskJson = json[i];
-	 *       
-	 *       //calculate time remaining
-	 *       var remaininTime = new Date() - new Date(taskJson.due_date);
-	 *       
-	 *       //append some html
-	 *       $("#tasks").append("&lt;div class='task' taskid='"+taskJson.id+"'>"+
-	 *                           "&lt;label>"+taskJson.name+"&lt;/label>"+
-	 *                           "Due Date = "+remaininTime+"&lt;/div>")
-	 *     }
-	 *   },
-	 *   // when a task is complete, get the id, make a request, remove it
-	 *   ".task click" : function( el ) {
-	 *     $.post('/tasks/'+el.attr('data-taskid')+'.json',
-	 *     	 {complete: true}, 
-	 *       function(){
-	 *         el.remove();
-	 *       })
-	 *   }
-	 * })
-	 * @codeend
+	 * Create a todo instance and 
+	 * call [jQuery.Model.prototype.save save]<code>( success, error )</code>
+	 * to create it on the server.
+	 *     
+	 *     // create a todo instance
+	 *     var todo = new Todo({name: "do the dishes"})
+	 *     
+	 *     // save it on the server
+	 *     todo.save();
 	 * 
-	 * This code might seem fine for right now, but what if:
+	 * __Retrieve__
 	 * 
-	 *  - The service changes?
-	 *  - Other parts of the app want to calculate <code>remaininTime</code>?
-	 *  - Other parts of the app want to get tasks?</li>
-	 *  - The same task is represented multiple palces on the page?
-	 * 
-	 * The solution is of course a strong model layer.  Lets look at what a
-	 * a good model does for a controller before we learn how to make one:
-	 * 
-	 * @codestart
-	 * $.Controller("Tasks",
-	 * {
-	 *   init: function() {
-	 *     Task.findAll({}, this.callback('list'));
-	 *   },
-	 *   list : function(todos){
-	 *     this.element.html("tasks.ejs", todos );
-	 *   },
-	 *   ".task click" : function( el ) {
-	 *     el.model().update({complete: true},function(){
-	 *       el.remove();
+	 * Retrieve a list of todos from the server with
+	 * <code>findAll( params, callback( items ) )</code>: 
+	 *     
+	 *     Todo.findAll({}, function( todos ){
+	 *     
+	 *       // print out the todo names
+	 *       $.each(todos, function(i, todo){
+	 *         console.log( todo.name );
+	 *       });
 	 *     });
-	 *   }
-	 * });
-	 * @codeend
 	 * 
-	 * In tasks.ejs
+	 * Retrieve a single todo from the server with
+	 * <code>findOne( params, callback( item ) )</code>:
+	 * 
+	 *     Todo.findOne({id: 5}, function( todo ){
+	 *     
+	 *       // print out the todo name
+	 *       console.log( todo.name );
+	 *     });
+	 * 
+	 * __Update__
+	 * 
+	 * Once an item has been created on the server,
+	 * you can change its properties and call
+	 * <code>save</code> to update it on the server.
+	 * 
+	 *     // update the todos' name
+	 *     todo.attr('name','Take out the trash')
+	 *       
+	 *     // update it on the server
+	 *     todo.save()
+	 *       
+	 * 
+	 * __Destroy__
+	 * 
+	 * Call [jQuery.Model.prototype.destroy destroy]<code>( success, error )</code>
+	 * to delete an item on the server.
+	 * 
+	 *     todo.destroy()
+	 * 
+	 * ## Listen to changes in data
+	 * 
+	 * Listening to changes in data is a critical part of 
+	 * the [http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller Model-View-Controller]
+	 * architecture.  $.Model lets you listen to when an item is created, updated, destroyed
+	 * and its properties are changed by creating [jquery.model.events events]
+	 * on the Model and on instances of the model.
+	 * 
+	 * __Create__
+	 * 
+	 *     // listen for when any todo is created
+	 *     Todo.bind('created', function( ev, todo ) {...})
+	 *     
+	 *     // listen for when a specific todo is created
+	 *     var todo = new Todo({name: 'do dishes'})
+	 *     todo.bind('created', function( ev ) {...})
+	 *   
+	 * __Update__
+	 * 
+	 *     // listen for when any todo is updated
+	 *     Todo.bind('updated', function( ev, todo ) {...})
+	 *     
+	 *     // listen for when a specific todo is created
+	 *     Todo.findOne({id: 6}, function( todo ) {
+	 *       todo.bind('updated', function( ev ) {...})
+	 *     })
+	 *   
+	 * __Destroy__
+	 * 
+	 *     // listen for when any todo is destroyed
+	 *     Todo.bind('destroyed', function( ev, todo ) {...})
+	 *    
+	 *     // listen for when a specific todo is destroyed
+	 *     todo.bind('destroyed', function( ev ) {...})
+	 * 
+	 * __Property Changes__
+	 * 
+	 *     // listen for when the name property changes
+	 *     todo.bind('name', function(ev){  })
+	 * 
+	 * __Listening with Controller__
+	 * 
+	 * You should be using controller to listen to model changes like:
+	 * 
+	 *     $.Controller('Todos',{
+	 *       "{Todo} updated" : function(Todo, ev, todo) {...}
+	 *     })
+	 * 
+	 * 
+	 * ## Setting and retrieving data on elements
+	 * 
+	 * Almost always, we use HTMLElements to represent
+	 * data to the user.  When that data changes, we update those
+	 * elements to reflect the new data.
+	 * 
+	 * $.Model has helper methods that make this easy.  They
+	 * let you "add" a model to an element and also find
+	 * all elements that have had a model "added" to them.
+	 * 
+	 * Consider a todo list widget
+	 * that lists each todo in the page and when a todo is
+	 * deleted, removes it.  
+	 * 
+	 * [jQuery.fn.model $.fn.model]<code>( item )</code> lets you set or read a model 
+	 * instance from an element:
+	 * 
+	 *     Todo.findAll({}, function( todos ) {
+	 *       
+	 *       $.each(todos, function(todo) {
+	 *         $('<li>').model(todo)
+	 *                  .text(todo.name)
+	 *                  .appendTo('#todos')
+	 *       });
+	 *     });
+	 * 
+	 * When a todo is deleted, get its element with
+	 * <code>item.</code>[jQuery.Model.prototype.elements elements]<code>( context )</code>
+	 * and remove it from the page.
+	 * 
+	 *     Todo.bind('destroyed', function( ev, todo ) { 
+	 *       todo.elements( $('#todos') ).remove()
+	 *     })
+	 * 
+	 * __Using EJS and $.Controller__
+	 * 
+	 * [jQuery.View $.View] and [jQuery.EJS EJS] makes adding model data 
+	 * to elements easy.  We can implement the todos widget like the following:
+	 * 
+	 *     $.Controller('Todos',{
+	 *       init: function(){
+	 *         this.element.html('//todos/views/todos.ejs', Todo.findAll({}) ); 
+	 *       },
+	 *       "{Todo} destroyed": function(Todo, ev, todo) {
+	 *         todo.elements( this.element ).remove()
+	 *       }
+	 *     })
+	 * 
+	 * In todos.ejs
 	 * 
 	 * @codestart html
-	 * &lt;% for(var i =0; i &lt; tasks.length; i++){ %>
-	 * &lt;div &lt;%= tasks[i] %>>
-	 *    &lt;label>&lt;%= tasks[i].name %>&lt;/label>
-	 *    &lt;%= tasks[i].<b>timeRemaining</b>() %>
-	 * &lt;/div>
+	 * &lt;% for(var i =0; i &lt; todos.length; i++){ %>
+	 *   &lt;li &lt;%= todos[i] %>>&lt;%= todos[i].name %>&lt;/li>
 	 * &lt;% } %>
 	 * @codeend
 	 * 
-	 * Isn't that better!  Granted, some of the improvement comes because we used a view, but we've
-	 * also made our controller completely understandable.  Now lets take a look at the model:
+	 * Notice how you can add a model to an element with <code>&lt;%= model %&gt;</code>
 	 * 
-	 * @codestart
-	 * $.Model("Task",
-	 * {
-	 *  findAll: "/tasks.json",
-	 *  update: "/tasks/{id}.json"
-	 * },
-	 * {
-	 *  timeRemaining: function() {
-	 *   return new Date() - new Date(this.due_date)
-	 *  }
-	 * })
-	 * @codeend
+	 * ## Lists
 	 * 
-	 * Much better!  Now you have a single place where you 
-	 * can organize Ajax functionality and
-	 * wrap the data that it returned.  Lets go through 
-	 * each bolded item in the controller and view.
+	 * [jQuery.Model.List $.Model.List] lets you handle multiple model instances
+	 * with ease.  A List acts just like an <code>Array</code>, but you can add special properties 
+	 * to it and listen to events on it.  
 	 * 
-	 * ### Task.findAll
-	 * 
-	 * The findAll function requests data from "/tasks.json".  When the data is returned, 
-	 * it converted by the [jQuery.Model.static.models models] function before being 
-	 * passed to the success callback.
-	 * 
-	 * ### el.model
-	 * 
-	 * [jQuery.fn.model] is a jQuery helper that returns a model instance from an element.  The 
-	 * list.ejs template assings tasks to elements with the following line:
-	 * 
-	 * @codestart html
-	 * &lt;div &lt;%= tasks[i] %>> ... &lt;/div>
-	 * @codeend
-	 * 
-	 * ### timeRemaining
-	 * 
-	 * timeRemaining is an example of wrapping your model's raw data with more useful functionality.
+	 * <code>$.Model.List</code> has become its own plugin, read about it
+	 * [jQuery.Model.List here].
 	 * 
 	 * ## Other Good Stuff
 	 * 
-	 * This is just a tiny taste of what models can do.  Check out these other features:
+	 * Model can make a lot of other common tasks much easier.
 	 * 
-	 * ### [jquery.model.encapsulate Encapsulation]
+	 * ### Type Conversion
 	 * 
-	 * Learn how to connect to services.
+	 * Data from the server often needs massaging to make it more useful 
+	 * for JavaScript.  A typical example is date data which is 
+	 * commonly passed as
+	 * a number representing the Julian date like:
 	 * 
-	 *     $.Model("Task",{
-	 *       findAll : "/tasks.json",    
-	 *       findOne : "/tasks/{id}.json", 
-	 *       create : "/tasks.json",
-	 *       update : "/tasks/{id}.json"
-	 *     },{})
+	 *     { name: 'take out trash', 
+	 *       id: 1,
+	 *       dueDate: 1303173531164 }
 	 * 
-	 * ### [jquery.model.typeconversion Type Conversion]
+	 * But instead, you want a JavaScript date object:
 	 * 
-	 * Convert data like "10-20-1982" into new Date(1982,9,20) auto-magically:
-	 * 
-	 *     $.Model("Task",{
-	 *       attributes : {birthday : "date"}
-	 *       convert : {
-	 *         date : function(raw){ ... }
-	 *       }
-	 *     },{})
-	 * 
-	 * ### [jQuery.Model.List]
-	 * 
-	 * Learn how to handle multiple instances with ease.
-	 * 
-	 *     $.Model.List("Task.List",{
-	 *       destroyAll : function(){
-	 *         var ids = this.map(function(c){ return c.id });
-	 *         $.post("/destroy",
-	 *           ids,
-	 *           this.callback('destroyed'),
-	 *           'json')
-	 *       },
-	 *       destroyed : function(){
-	 *         this.each(function(){ this.destroyed() });
-	 *       }
-	 *     });
+	 *     date.attr('dueDate') //-> new Date(1303173531164)
 	 *     
-	 *     ".destroyAll click" : function(){
-	 *       this.find('.destroy:checked')
-	 *           .closest('.task')
-	 *           .models()
-	 *           .destroyAll();
-	 *     }
+	 * By defining property-type pairs in [jQuery.Model.static.attributes attributes],
+	 * you can have model auto-convert values from the server into more useful types:
 	 * 
-	 * ### [jquery.model.validations Validations]
+	 *     $.Model('Todo',{
+	 *       attributes : {
+	 *         dueDate: 'date'
+	 *       }
+	 *     },{})
 	 * 
-	 * Validate your model's attributes.
+	 * ### Associations
+	 * 
+	 * The [jQuery.Model.static.attributes attributes] property also 
+	 * supports associations. For example, todo data might come back with
+	 * User data as an owner property like:
+	 * 
+	 *     { name: 'take out trash', 
+	 *       id: 1, 
+	 *       owner: { name: 'Justin', id: 3} }
+	 * 
+	 * To convert owner into a User model, set the owner type as the User's
+	 * [jQuery.Model.static.model model]<code>( data )</code> method:
+	 * 
+	 *     $.Model('Todo',{
+	 *       attributes : {
+	 *         owner: 'User.model'
+	 *       }
+	 *     },{})
+	 * 
+	 * ### Helper Functions
+	 * 
+	 * Often, you need to perform repeated calculations 
+	 * with a model's data.  You can create methods in the model's 
+	 * prototype and they will be available on 
+	 * all model instances.  
+	 * 
+	 * The following creates a <code>timeRemaining</code> method that
+	 * returns the number of seconds left to complete the todo:
+	 * 
+	 *     $.Model('Todo',{
+	 *     },{
+	 *        timeRemaining : function(){
+	 *          return new Date() - new Date(this.dueDate)
+	 *        }
+	 *     })
+	 *     
+	 *     // create a todo
+	 *     var todo = new Todo({dueDate: new Date()});
+	 *     
+	 *     // show off timeRemaining
+	 *     todo.timeRemaining() //-> Number
+	 * 
+	 * ### Deferreds
+	 * 
+	 * Model methods that make requests to the server such as:
+	 * [jQuery.Model.static.findAll findAll], [jQuery.Model.static.findOne findOne], 
+	 * [jQuery.Model.prototype.save save], and [jQuery.Model.prototype.destroy destroy] return a
+	 * [jquery.model.deferreds deferred] that resolves to the item(s)
+	 * being retrieved or modified.  
+	 * 
+	 * Deferreds can make a lot of asynchronous code much easier.  For example, the following
+	 * waits for all users and tasks before continuing :
+	 * 
+	 *     $.when(Task.findAll(), User.findAll())
+	 *       .then(function( tasksRes, usersRes ){ ... })
+	 * 
+	 * ### Validations
+	 * 
+	 * [jquery.model.validations Validate] your model's attributes.
 	 * 
 	 *     $.Model("Contact",{
 	 *     init : function(){
@@ -326,7 +427,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 *         })
 	 *     }
 	 *     ,{});
-	 *     
+	 * 
 	 *     
 	 */
 		// methods that we'll weave into model if provided
