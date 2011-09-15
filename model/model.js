@@ -1097,7 +1097,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 */
 		publish: function( event, data ) {
 			//@steal-remove-start
-			steal.dev.log("Model.js - publishing " + this._shortName + "." + event);
+			steal.dev.log("Model.js - "+ this.shortName+" "+ event);
 			//@steal-remove-end
 			if ( window.OpenAjax ) {
 				OpenAjax.hub.publish(this._shortName + "." + event, data);
