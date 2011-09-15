@@ -158,6 +158,19 @@ test("non-HTML content in hookups", function(){
   equals($("#qunit-test-area textarea").val(), "asdf");
 });
 
+test("html takes promise", function(){
+	var d = $.Deferred();
+	$("#qunit-test-area").html(d);
+	stop();
+	d.done(function(){
+		equals($("#qunit-test-area").html(), "Hello World", "deferred is working");
+		start();
+	})
+	setTimeout(function(){
+		d.resolve("Hello World")
+	},10)
+})
+
 /*test("bad url", function(){
 	$.View("//asfdsaf/sadf.ejs")
 });*/

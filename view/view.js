@@ -548,9 +548,14 @@ steal("jquery").then(function( $ ) {
 				callback, 
 				self = this,
 				result;
-
+			if( isDeferred(args[0]) ){
+				args[0].done(function(res){
+					modify.call(self, [res], old);
+				})
+				return this;
+			}
 			//check if a template
-			if ( isTemplate(args) ) {
+			else if ( isTemplate(args) ) {
 
 				// if we should operate async
 				if ((callbackNum = getCallback(args))) {

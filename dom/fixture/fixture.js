@@ -548,7 +548,7 @@ steal('jquery/dom',
 			$.fixture["-" + types[0]] = function( settings ) {
 				//copy array of items
 				var retArr = items.slice(0);
-
+				settings.data = settings.data || {};
 				//sort using order
 				//order looks like ["age ASC","gender DESC"]
 				$.each((settings.data.order || []).slice(0).reverse(), function( i, name ) {
