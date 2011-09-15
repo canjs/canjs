@@ -11,8 +11,11 @@ load('steal/rhino/rhino.js');
 
 steal(	'steal/generate',
 		'steal/generate/system.js',	
+		'jquery/generate/templates/model.js',
 function(steal){
 	//check capitalization
+	
+	steal.generate.model(_args[0]);
 	
 	var parts = _args[0].split("."), part;
 	
@@ -44,7 +47,15 @@ function(steal){
 	md.type = _args[1]
 	
 	md.appPath =  md.path.replace(/\/models$/,"");
-
-	steal.generate("jquery/generate/templates/scaffold",md.appPath,md)
+	md.baseName = md.name.replace(/\.Models.*/, "."+md.className);
+	steal.generate("jquery/generate/templates/scaffold",md.appPath+"/"+md.underscore,md);
+	
+	steal.generate.insertSteal(
+		md.appPath+"/test/funcunit/funcunit.js", 
+		md.appPath+"/"+md.underscore+"/create/create_test.js");
+		
+	steal.generate.insertSteal(
+		md.appPath+"/test/funcunit/funcunit.js", 
+		md.appPath+"/"+md.underscore+"/list/list_test.js");	
 	
 });
