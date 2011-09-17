@@ -56,6 +56,19 @@ function(steal){
 		
 	steal.generate.insertSteal(
 		md.appPath+"/test/funcunit/funcunit.js", 
-		md.appPath+"/"+md.underscore+"/list/list_test.js");	
+		md.appPath+"/"+md.underscore+"/list/list_test.js")
+
+	steal.generate.insertSteal(
+		md.appPath+"/"+md.appPath+".js", 
+		md.appPath+"/"+md.underscore+"/create", true)
+	steal.generate.insertSteal(
+		md.appPath+"/"+md.appPath+".js", 
+		md.appPath+"/"+md.underscore+"/list", true)
 	
+	
+	var text = readFile("jquery/generate/templates/scaffoldHookup.ejs");
+	var hookup = new steal.EJS({
+		text: text
+	}).render(md);
+	steal.generate.insertCode(md.appPath+"/"+md.appPath+".js", hookup );
 });

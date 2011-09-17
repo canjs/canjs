@@ -42,6 +42,10 @@ steal(	'steal/generate',
 		if(steal.Inflector.singularize(md.underscore) !== md.underscore){
 			print("! Warning: Model names should be singular.  I don't think "+md.underscore+" is singular!")	
 		}
+		
+		// generate the files
+		steal.generate("jquery/generate/templates/model", md.appPath, md)
+		
 		try{
 			// steal this model in models.js
 			steal.generate.insertSteal(md.appPath+"/models/models.js", "./"+md.underscore+".js");
@@ -56,8 +60,7 @@ steal(	'steal/generate',
 		}
 		// $.fixture.make for this model in fixtures.js
 	
-		// generate the files
-		steal.generate("jquery/generate/templates/model", md.appPath, md)
+		
 		
 		var text = readFile("jquery/generate/templates/fixturemake.ejs");
 		var fixturetext = new steal.EJS({
