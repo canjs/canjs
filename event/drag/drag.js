@@ -261,7 +261,7 @@ steal('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack',function( $ 
 			}
 			//if they set something else as the element
 			this.startPosition = startElement != this.movingElement ? this.movingElement.offsetv() : this.currentDelta();
-			console.log(this.startPosition, this.movingElement)
+			//console.log(this.startPosition, this.movingElement)
 			this.makePositioned(this.movingElement);
 			this.oldZIndex = this.movingElement.css('zIndex');
 			this.movingElement.css('zIndex', 1000);
