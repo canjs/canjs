@@ -75,7 +75,7 @@ $.event.setupHelper( [
 				var deltaX = Math.abs(start.coords[0] - stop.coords[0]),
 					deltaY = Math.abs(start.coords[1] - stop.coords[1]),
 					distance = Math.sqrt(deltaX*deltaX+deltaY*deltaY);
-				console.log(stop.time - start.time, swipe.delay, distance , swipe.min)
+				//console.log(stop.time - start.time, swipe.delay, distance , swipe.min)
 				if ( stop.time - start.time < swipe.delay && distance >= swipe.min ) {
 					
 					var events = ['swipe']
