@@ -2,10 +2,14 @@ steal( 'jquery/controller',
 	   'jquery/view/ejs',
 	   'jquery/controller/view',
 	   '<%= appPath %>/models' )
-	.then( './views/init.ejs', function($){
+.then( './views/init.ejs', 
+       './views/<%= underscore %>.ejs', 
+       function($){
 
 /**
  * @class <%=baseName%>.List
+ * @parent index
+ * Lists <%= plural %> and lets you destroy them.
  */
 $.Controller('<%=baseName%>.List',
 /** @Static */
