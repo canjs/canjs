@@ -44,9 +44,10 @@ $.Class('jQuery.Model.Store',
 		}*/
 	},
 	// this is mostly unnecessary
-	remove : function(id){
-		if(id.id !== undefined){
-			id = id.id;
+	remove : function(ev,id){
+		var idProp = this.id;
+		if(id[idProp] !== undefined){
+			id = id[idProp];
 		}
 		var item = this.data[id];
 		if(!item){

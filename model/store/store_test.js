@@ -135,6 +135,8 @@ test("Store Remove", function(){
 	list.bind("remove", function(ev, items){
 		ok(items[0] === first, "removed first item");
 		equals(list.length, len - 1, "length adjusted")
+		var list2 = Item.Store.findAll({parentId: 1});
+		ok(list2.get(first.id)[0] === undefined, "Model Store remove callback");
 		start();
 	})
 });
