@@ -352,11 +352,10 @@ function( $ ) {
 		 * @return {String} 
 		 */
 		url: function( options, merge ) {
-			//merges
-			if (!merge ) {
-				return "#!" + $route.param(options)
-			} else {
+			if (merge) {
 				return "#!" + $route.param($.extend({}, curParams, options))
+			} else {
+				return "#!" + $route.param(options)
 			}
 		},
 		/**
@@ -378,7 +377,19 @@ function( $ ) {
 		 */
 		current: function( options ) {
 			return window.location.hash == "#!" + $route.param(options)
-		}
+		},
+        /**
+         * Change the current page using either a data object or a url string.
+         * @param {Object|String} loc The object with attributes or hash string.
+         * @param {Boolean} remove true to remove properties not in loc, only if loc === Object, default true
+         */
+        set: function(loc, remove) {
+            if (typeof loc == "string") {
+                window.location.hash = "#!" + loc;
+            } else if ($.isPlainObject( loc )) {
+                $route.attrs( loc, (typeof remove == "undefined") ? true : remove );
+            }
+        }
 	});
 	// onready
 	$(function() {
@@ -387,28 +398,29 @@ function( $ ) {
 	
     // The functions in the following list applied to $.route (e.g. $.route.attr('...')) will
     // instead act on the $.route.data Observe.
-	$.each(['bind','unbind','delegate','undelegate','attr','attrs','removeAttr'], function(i, name){
+	$.each(['bind','unbind','delegate','undelegate','attr','attrs','serialize','removeAttr'], function(i, name){
 		$route[name] = function(){
 			return $route.data[name].apply($route.data, arguments)
 		}
 	})
 
-	var throttle = function( func, time ) {
-		var timer;
-		return function() {
-			clearTimeout(timer);
-			timer = setTimeout(func, time || 1);
-		}
-	},
-		curParams, 
-		setState = function() {
-
-			var hash = window.location.hash.substr(2); // everything after #!
-			//deparam it
-			var props = $route.deparam(hash);
-			curParams = props;
-			$route.attrs(props, true);
-
+	var // A throttled function called multiple times will only fire once the
+        // timer runs down. Each call resets the timer.
+        throttle = function( func, time ) {
+            var timer;
+            return function() {
+                clearTimeout(timer);
+                timer = setTimeout(func, time || 1);
+            }
+        },
+        // Intermediate storage for $.route.data.
+        curParams,
+        // Deparameterizes the portion of the hash of interest and assign the
+        // values to the $.route.data removing existing values no longer in the hash.
+        setState = function() {
+            var hash = window.location.hash.substr(2); // everything after #!
+			curParams = $route.deparam( hash );
+			$route.attrs(curParams, true);
 		};
 
 	// If the hash changes, update the $.route.data
