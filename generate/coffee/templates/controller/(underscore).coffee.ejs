@@ -1,0 +1,12 @@
+steal.plugins("jquery/controller").then ($) ->
+  ###
+  # @class <%= name %>
+  ###
+  $.Controller "<%= name %>",
+
+  ### @Static ###
+  defaults: {},
+
+  ### @Prototype ###
+  init: ->
+    @element.html "Hello World!"
