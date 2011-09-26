@@ -1,6 +1,15 @@
-steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/deparam', 'jquery/lang/observe/delegate', function( $ ) {
+steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/deparam', 'jquery/lang/observe/delegate',
+function( $ ) {
 
-	var globalDefaults, matcher = /\:([\w\.]+)/g,
+    // Helper methods used for matching routes.
+    //
+	var // RegEx used to match route variables of the type ':name'.
+        // Any word character or a period is matched.
+        matcher = /\:([\w\.]+)/g,
+        // Regular expression for identifying &amp;key=value lists.
+        paramsMatcher = /^(?:&[\w\.]+=[\w\.]*)+/,
+        // Converts a JS Object into a list of parameters that can be 
+        // inserted into an html element tag.
 		makeProps = function( props ) {
 			var html = [],
 				name, val;
@@ -9,24 +18,29 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 				if ( name === 'className' ) {
 					name = 'class'
 				}
-				val && html.push(name, "=\"", escapeHTML(val), "\" ");
+				val && html.push(escapeHTML(name), "=\"", escapeHTML(val), "\" ");
 			}
 			return html.join("")
 		},
+        // Escapes ' and " for safe insertion into html tag parameters.
 		escapeHTML = function( content ) {
 			return content.replace(/"/g, '&#34;').replace(/'/g, "&#39;");
 		},
-		// if a route matches the data provided
-		matchesData = function(route, data){
+		// Checks if a route matches the data provided. If any route variable
+        // is not present in the data the route does not match. If all route
+        // variables are present in the data the number of matches is returned 
+        // to allow discerning between general and more specific routes. 
+		matchesData = function(route, data) {
 			var count = 0;
 			for ( var i = 0; i < route.names.length; i++ ) {
 				if (!data.hasOwnProperty(route.names[i]) ) {
-					return 0;
+					return -1;
 				}
 				count++;
 			}
 			return count;
 		},
+        // 
 		onready = true;
 
 	/**
@@ -92,10 +106,14 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 	 * by [jQuery.Observe.prototype.bind bind]ing to
 	 * changes in <code>$.route</code> like:
 	 * 
-	 *     $.route.bind('change', function(ev, attr, how, newVal, oldVal){
+	 *     $.route.bind('change', function(ev, attr, how, newVal, oldVal) {
 	 *     
 	 *     })
 	 * 
+     *  - attr - the name of the changed attribute
+     *  - how - the type of Observe change event (add, set or remove)
+     *  - newVal/oldVal - the new and old values of the attribute
+     * 
 	 * You can also listen to specific changes 
 	 * with [jQuery.Observe.prototype.delegate delegate]:
 	 * 
@@ -186,20 +204,26 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 	 * @return {jQuery.route}
 	 */
 	var $route = $.route = function( url, defaults ) {
-		// add route in a form that can be easily figured out
-		// 
+        // Extract the variable names and replace with regEx that will match an atual URL with values.
 		var names = [],
 			test = url.replace(matcher, function( whole, name ) {
 				names.push(name)
-				return "([\\w\\.]*)"
+				return "([\\w\\.]*)"  // The '\\' is for string-escaping giving single '\' for regEx escaping
 			});
 
-		// need a regexp to match
+		// Add route in a form that can be easily figured out
 		$route.routes[url] = {
+            // A regular expression that will match the route when variable values 
+            // are present; i.e. for :page/:type the regEx is /([\w\.]*)/([\w\.]*)/ which
+            // will match for any value of :page and :type (word chars or period).
 			test: new RegExp("^" + test),
+            // The original URL, same as the index for this entry in routes.
 			route: url,
+            // An array of all the variable names in this route
 			names: names,
+            // Default values provided for the variables.
 			defaults: defaults || {},
+            // The number of parts in the URL separated by '/'.
 			length: url.split('/').length
 		}
 		return $route;
@@ -207,48 +231,52 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 
 	$.extend($route, {
 		/**
-		 * Parameterizes the raw JS object representation of 
-		 * $.route.data.
-		 * 
+		 * Parameterizes the raw JS object representation provided in data.
+		 * If a route matching the provided data is found that URL is built
+         * from the data. Any remaining data is added at the end of the
+         * URL as &amp; separated key/value parameters.
 		 * 
 		 * @param {Object} data
+         * @return {String} The route URL and &amp; separated parameters.
 		 */
 		param: function( data ) {
-			// see what data is provided ...
-			// check if it matches the names in any routes ...
-			// get the one with the most matches
+			// Check if the provided data keys match the names in any routes;
+			// get the one with the most matches.
 			var route,
 				matches = -1,
 				temp,
 				matchCount;
 			for ( var name in $route.routes ) {
-				
-				var temp = $route.routes[name],
-					matchCount = matchesData(temp, data);
-				if( matchCount > matches ){
+                temp = $route.routes[name],
+                matchCount = matchesData(temp, data);
+				if ( matchCount > matches ) {
 					route = temp;
 					matches = matchCount
 				}
 			}
 			if ( route ) {
-				// create url ...
-				var cpy = $.extend({}, data);
-
-				var res = route.route.replace(matcher, function( whole, name ) {
-					delete cpy[name];
-					return data[name] === route.defaults[name] ? "" : data[name];
-				});
-				var after = $.param(cpy);
+				var cpy = $.extend({}, data),
+                    // Create the url by replacing the var names with the provided data.
+                    // If the default value is found an empty string is inserted.
+				    res = route.route.replace(matcher, function( whole, name ) {
+                        delete cpy[name];
+                        return data[name] === route.defaults[name] ? "" : data[name];
+                    }),
+                    // The remaining elements of data are added as $amp; separated parameters to the url.
+				    after = $.param(cpy);
 				return res + (after ? "&" + after : "")
 			}
-			return $.param(data);
+            // If no route was found there is no hash URL, only paramters.
+			return $.isEmptyObject(data) ? "" : "&" + $.param(data);
 		},
 		/**
+		 * Populate the JS data object from a given URL.
 		 * 
 		 * @param {Object} url
 		 */
 		deparam: function( url ) {
-			// see if there are any matches ... 
+			// See if the url matches any routes by testing it against the route.test regEx.
+            // By comparing the URL length the most specialized route that matches is used.
 			var route = {
 				length: -1
 			};
@@ -258,12 +286,21 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 					route = temp;
 				}
 			}
-			if ( route.length > -1 ) {
-				var parts = url.match(route.test),
+            // If a route was matched
+			if ( route.length > -1 ) { 
+				var // Since RegEx backreferences are used in route.test (round brackets)
+                    // the parts will contain the full matched string and each variable (backreferenced) value.
+                    parts = url.match(route.test),
+                    // start will contain the full mathced string; parts contain the variable values.
 					start = parts.shift(),
-					remainder = url.substr(start.length + 1),
-					obj = $.extend(true, remainder ? $.String.deparam(remainder) : {}, route.defaults);
+                    // The remainder will be the &amp;key=value list at the end of the URL.
+					remainder = url.substr(start.length),
+                    // If there is a remainder and it contains a &amp;key=value list deparam it.
+                    obj = (remainder && paramsMatcher.test(remainder)) ? $.String.deparam( remainder.slice(1) ) : {};
 
+                // Add the default values for this route
+				obj = $.extend(true, {}, route.defaults, obj);
+                // Overwrite each of the default values in obj with those in parts if that part is not empty.
 				for ( var p = 0; p < parts.length; p++ ) {
 					if ( parts[p] ) {
 						obj[route.names[p]] = parts[p]
@@ -271,26 +308,39 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 				}
 				return obj;
 			}
-			return $.String.deparam(url);
+            // If no route was matched it is parsed as a &amp;key=value list.
+			return paramsMatcher.test(url) ? $.String.deparam( url.slice(1) ) : {};
 		},
 		/**
 		 * @hide
-		 * A $.Observe that represents the state of the 
-		 * history.
+		 * A $.Observe that represents the state of the history.
 		 */
 		data: new $.Observe({}),
+        /**
+         * @attribute
+         * @type Object
+         * A list of routes recognized by the router indixed by the url used to add it.
+         * Each route is an object with these members:
+         *  - test - A regular expression that will match the route when variable values 
+         *      are present; i.e. for :page/:type the regEx is /([\w\.]*)/([\w\.]*)/ which
+         *      will match for any value of :page and :type (word chars or period).
+         *  - route - The original URL, same as the index for this entry in routes.
+         *  - names - An array of all the variable names in this route
+         *  - defaults - Default values provided for the variables or an empty object.
+         *  - length - The number of parts in the URL separated by '/'.
+         */
 		routes: {},
 		/**
-		 * Indicates that all routes have been added
-		 * and sets $.route.data based upon the routes.
+		 * Indicates that all routes have been added and sets $.route.data
+		 * based upon the routes and the current hash.
 		 * @param {Boolean} [start]
 		 * @return 
 		 */
 		ready: function(val) {
-			if( val === false ){
+			if( val === false ) {
 				onready = false;
 			}
-			if( val === true || onready === true ){
+			if( val === true || onready === true ) {
 				setState();
 			}
 			return $route;
@@ -302,23 +352,23 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 		 * @return {String} 
 		 */
 		url: function( options, merge ) {
-			//merges
-			if (!merge ) {
-				return "#!" + $route.param(options)
-			} else {
+			if (merge) {
 				return "#!" + $route.param($.extend({}, curParams, options))
+			} else {
+				return "#!" + $route.param(options)
 			}
 		},
 		/**
 		 * Returns a link
-		 * @param {Object} name
-		 * @param {Object} options
-		 * @param {Object} props
+		 * @param {Object} name The text of the link.
+		 * @param {Object} options The route options (variables)
+		 * @param {Object} props Properties of the &lt;a&gt; other than href.
+         * @param {Boolean} merge true if the options should be merged with the current options
 		 */
-		link: function( name, options, props ) {
+		link: function( name, options, props, merge ) {
 			return "<a " + makeProps(
 			$.extend({
-				href: $route.url(options)
+				href: $route.url(options, merge)
 			}, props)) + ">" + name + "</a>";
 		},
 		/**
@@ -327,46 +377,59 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 		 */
 		current: function( options ) {
 			return window.location.hash == "#!" + $route.param(options)
-		}
+		},
+        /**
+         * Change the current page using either a data object or a url string.
+         * @param {Object|String} loc The object with attributes or hash string.
+         * @param {Boolean} remove true to remove properties not in loc, only if loc === Object, default true
+         */
+        set: function(loc, remove) {
+            if (typeof loc == "string") {
+                window.location.hash = "#!" + loc;
+            } else if ($.isPlainObject( loc )) {
+                $route.attrs( loc, (typeof remove == "undefined") ? true : remove );
+            }
+        }
 	});
 	// onready
-	$(function(){
+	$(function() {
 		$.route.ready();
 	});
 	
-
-	$.each(['bind','unbind','delegate','undelegate','attr','attrs','removeAttr'], function(i, name){
+    // The functions in the following list applied to $.route (e.g. $.route.attr('...')) will
+    // instead act on the $.route.data Observe.
+	$.each(['bind','unbind','delegate','undelegate','attr','attrs','serialize','removeAttr'], function(i, name){
 		$route[name] = function(){
 			return $route.data[name].apply($route.data, arguments)
 		}
 	})
 
-	var throttle = function( func, time ) {
-		var timer;
-		return function() {
-			clearTimeout(timer);
-			timer = setTimeout(func, time || 1);
-		}
-	},
-		curParams, 
-		setState = function() {
-
-			var hash = window.location.hash.substr(2); // everything after #!
-			//deparam it
-			var props = $route.deparam(hash);
-			curParams = props;
-			$route.attrs(props, true);
-
+	var // A throttled function called multiple times will only fire once the
+        // timer runs down. Each call resets the timer.
+        throttle = function( func, time ) {
+            var timer;
+            return function() {
+                clearTimeout(timer);
+                timer = setTimeout(func, time || 1);
+            }
+        },
+        // Intermediate storage for $.route.data.
+        curParams,
+        // Deparameterizes the portion of the hash of interest and assign the
+        // values to the $.route.data removing existing values no longer in the hash.
+        setState = function() {
+            var hash = window.location.hash.substr(2); // everything after #!
+			curParams = $route.deparam( hash );
+			$route.attrs(curParams, true);
 		};
 
-	// update the state object
+	// If the hash changes, update the $.route.data
 	$(window).bind('hashchange', setState);
 
-
-	// update the page
+	// If the $.route.data changes, update the hash.
+    // Using .serialize() retrieves the raw data contained in the observable.
+    // This function is throttled so it only updates once even if multiple values changed.
 	$route.data.bind("change", throttle(function() {
-		// param and change the hash if necessary
-		// throttle
 		window.location.hash = "#!" + $route.param($route.data.serialize())
 	}));
 })
