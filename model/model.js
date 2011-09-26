@@ -794,29 +794,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 */
 		attributes: {},
 		/**
-		 * @function wrap
-		 * @hide
-		 * @tag deprecated
-		 * __warning__ : wrap is deprecated in favor of [jQuery.Model.static.model].  They 
-		 * provide the same functionality; however, model works better with Deferreds.
-		 * 
-		 * Wrap is used to create a new instance from data returned from the server.
-		 * It is very similar to doing <code> new Model(attributes) </code> 
-		 * except that wrap will check if the data passed has an
-		 * 
-		 * - attributes,
-		 * - data, or
-		 * - <i>singularName</i>
-		 * 
-		 * property.  If it does, it will use that objects attributes.
-		 * 
-		 * Wrap is really a convience method for servers that don't return just attributes.
-		 * 
-		 * @param {Object} attributes
-		 * @return {Model} an instance of the model
-		 */
-		// wrap place holder
-		/**
 		 * $.Model.model is used as a [http://api.jquery.com/extending-ajax/#Converters Ajax converter] 
 		 * to convert the response of a [jQuery.Model.static.findOne] request 
 		 * into a model instance.  
@@ -893,68 +870,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 				isObject(attributes.attributes) || 
 				attributes);
 		},
-		/**
-		 * @function wrapMany
-		 * @hide
-		 * @tag deprecated
-		 * 
-		 * __warning__ : wrapMany is deprecated in favor of [jQuery.Model.static.models].  They 
-		 * provide the same functionality; however, models works better with Deferreds.
-		 * 
-		 * $.Model.wrapMany converts a raw array of JavaScript Objects into an array (or [jQuery.Model.List $.Model.List]) of model instances.
-		 * 
-		 *     // a Recipe Model wi
-		 *     $.Model("Recipe",{
-		 *       squareId : function(){
-		 *         return this.id*this.id;
-		 *       }
-		 *     })
-		 * 
-		 *     var recipes = Recipe.wrapMany([{id: 1},{id: 2}])
-		 *     recipes[0].squareId() //-> 1
-		 * 
-		 * If an array is not passed to wrapMany, it will look in the object's .data
-		 * property.  
-		 * 
-		 * For example:
-		 * 
-		 *     var recipes = Recipe.wrapMany({data: [{id: 1},{id: 2}]})
-		 *     recipes[0].squareId() //-> 1
-		 * 
-		 * 
-		 * Often wrapMany is used with this.callback inside a model's [jQuery.Model.static.findAll findAll]
-		 * method like:
-		 * 
-		 *     findAll : function(params, success, error){
-		 *       $.get('/url',
-		 *             params,
-		 *             this.callback(['wrapMany',success]), 'json' )
-		 *     }
-		 * 
-		 * If you are having problems getting your model to callback success correctly,
-		 * make sure a request is being made (with firebug's net tab).  Also, you 
-		 * might not use this.callback and instead do:
-		 * 
-		 *     findAll : function(params, success, error){
-		 *       self = this;
-		 *       $.get('/url',
-		 *             params,
-		 *             function(data){
-		 *               var wrapped = self.wrapMany(data);
-		 *               success(wrapped)
-		 *             },
-		 *             'json')
-		 *     }
-		 * 
-		 * 
-		 * @param {Array} instancesRawData an array of raw name - value pairs like
-		 * 
-		 *     [{name: "foo", id: 4},{name: "bar", id: 5}]
-		 *     
-		 * @return {Array} a JavaScript array of instances or a [jQuery.Model.List list] of instances
-		 *  if the model list plugin has been included.
-		 */
-		// wrapMany placeholder
 		/**
 		 * $.Model.models is used as a [http://api.jquery.com/extending-ajax/#Converters Ajax converter] 
 		 * to convert the response of a [jQuery.Model.static.findAll] request 
@@ -1665,9 +1580,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		}
 	});
 	
-	// map wrapMany
-	$.Model.wrapMany = $.Model.models;
-	$.Model.wrap = $.Model.model;
 
 	each([
 	/**
