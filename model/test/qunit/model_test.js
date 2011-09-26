@@ -401,8 +401,13 @@ test("serialize", function(){
 	var d = new Date();
 	d.setMonth(1)
 	equals(new Task({
-		createdAt: d
+		createdAt: d,
+		name:"Task1"
 	}).serialize().createdAt, "feb", "serialized")
+	equals(new Task({
+		createdAt: d,
+		name:"Task2"
+	}).serialize().name, "Task2", "default serialized")
 });
 
 test("removeAttr test", function(){
