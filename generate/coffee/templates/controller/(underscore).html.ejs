@@ -14,10 +14,12 @@
 	    <h1><%= name %> Demo</h1>
 		<div id='<%= underscore %>'></div>
 		<script type='text/javascript' 
-                src='<%= path_to_steal %>/steal/steal.js?<%= path %>/<%= underscore %>'>
-        </script>
+                src='<%= path_to_steal %>/steal/steal.js'>
+		</script>
 		<script type='text/javascript'>
-			$('#<%= underscore %>').<%= path %>_<%= underscore %>();
+			steal('steal/coffee').then("<%= path %>/<%= underscore %>/<%= underscore %>.coffee",function(){
+				$('#<%= underscore %>').<%= path %>_<%= underscore %>();
+			})
 		</script>
 	</body>
 </html>
