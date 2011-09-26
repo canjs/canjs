@@ -2,8 +2,8 @@ steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/depa
 function( $ ) {
 
     // Helper methods used for matching routes.
-    //
-	var // RegEx used to match route variables of the type ':name'.
+	var 
+		// RegEx used to match route variables of the type ':name'.
         // Any word character or a period is matched.
         matcher = /\:([\w\.]+)/g,
         // Regular expression for identifying &amp;key=value lists.
@@ -41,7 +41,8 @@ function( $ ) {
 			return count;
 		},
         // 
-		onready = true;
+		onready = true,
+		location = window.location;
 
 	/**
 	 * @class jQuery.route
@@ -376,7 +377,7 @@ function( $ ) {
 		 * @param {Object} options
 		 */
 		current: function( options ) {
-			return window.location.hash == "#!" + $route.param(options)
+			return location.hash == "#!" + $route.param(options)
 		},
         /**
          * Change the current page using either a data object or a url string.
@@ -385,7 +386,7 @@ function( $ ) {
          */
         set: function(loc, remove) {
             if (typeof loc == "string") {
-                window.location.hash = "#!" + loc;
+                location.hash = "#!" + loc;
             } else if ($.isPlainObject( loc )) {
                 $route.attrs( loc, (typeof remove == "undefined") ? true : remove );
             }
@@ -418,7 +419,9 @@ function( $ ) {
         // Deparameterizes the portion of the hash of interest and assign the
         // values to the $.route.data removing existing values no longer in the hash.
         setState = function() {
-            var hash = window.location.hash.substr(2); // everything after #!
+			var hash = location.hash[1] === '!' ? 
+						location.hash.slice(2) : 
+						location.hash.slice(1); // everything after #!
 			curParams = $route.deparam( hash );
 			$route.attrs(curParams, true);
 		};
