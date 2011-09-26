@@ -24,13 +24,13 @@
 			
 		</ul>
 		<script type='text/javascript' 
-                src='../../steal/steal.js'>   
+                src='../../../steal/steal.js'>   
         </script>
 		<script type='text/ejs' id='accountsEJS'>
 			<% for(var i =0; i < this.length; i++){ %>
 			  <li <%= this[i]%>>
 			  	<h3>
-					<%= $.route.link(this[i].name , {file: this[i].id}) %>
+					<%== $.route.link(this[i].name , {file: this[i].id}) %>
 				</h3>
 				<ul class='contents'  <%= plugin('folder_contents',{item: this[i]})%>></ul>
 			  </li>
@@ -39,7 +39,7 @@
 		<script type='text/ejs' id='foldersEJS'>
 			<% for(var i =0; i < this.length; i++){ %>
 			  <li <%= this[i]%>>
-			  	<%= $.route.link(this[i].name , {file: this[i].id},{className: 'folder'}) %>
+			  	<%== $.route.link(this[i].name , {file: this[i].id},{className: 'folder'}) %>
 				<ul class='contents' <%= plugin('folder_contents',{item: this[i]})%> ></ul>
 			  </li>
 			<% } %>
