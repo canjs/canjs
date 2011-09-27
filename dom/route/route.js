@@ -400,6 +400,7 @@ function( $ ) {
             } else if ($.isPlainObject( loc )) {
                 $route.attrs( loc, (typeof remove == "undefined") ? true : remove );
             }
+            return $route;
         }
 	});
 	// onready
@@ -443,6 +444,6 @@ function( $ ) {
     // Using .serialize() retrieves the raw data contained in the observable.
     // This function is throttled so it only updates once even if multiple values changed.
 	$route.data.bind("change", throttle(function() {
-		window.location.hash = "#!" + $route.param($route.data.serialize())
+		location.hash = "#!" + $route.param($route.data.serialize())
 	}));
 })
