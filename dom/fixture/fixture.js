@@ -19,6 +19,9 @@ steal('jquery/dom',
 		
 		// if we don't have a fixture, do nothing
 		if(!settings.fixture){
+			if(window.location.protocol === "file:"){
+				steal.dev.log("ajax request to " + settings.url+", no fixture found");
+			}
 			return;
 		}
 		
