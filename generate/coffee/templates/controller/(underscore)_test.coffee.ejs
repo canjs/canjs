@@ -1,4 +1,5 @@
-steal("funcunit").then ->
+steal "funcunit",
+ ->
   module "<%= fullName %>", setup: ->
     S.open "//<%= path %>/<%=underscore%>/<%=underscore%>.html"
   

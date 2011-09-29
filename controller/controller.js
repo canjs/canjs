@@ -329,7 +329,7 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		 */
 		setup: function() {
 			// Allow contollers to inherit "defaults" from superclasses as it done in $.Class
-			$.Class.setup.apply(this, arguments);
+			this._super.apply(this, arguments);
 
 			// if you didn't provide a name, or are controller, don't do anything
 			if (!this.shortName || this.fullName == "jQuery.Controller" ) {
