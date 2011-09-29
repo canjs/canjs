@@ -8,14 +8,14 @@ if (!_args[0]) {
 load('steal/rhino/rhino.js');
 
 steal('steal/generate','steal/generate/system.js',function(steal){
-	var path =  _args[0].toLowerCase().replace(/\./g,"/"),
+	var md = steal.generate.convert(_args[0]),
 		data = steal.extend({
-			path: path, 
-			application_name: path.match(/[^\/]*$/)[0],
+			path: md.path, 
+			application_name: md.appName,
 			current_path: steal.File.cwdURL(),
-			path_to_steal : new steal.File(path).pathToRoot()
+			path_to_steal : steal.File(md.path).pathToRoot()
 		}, steal.system)
 	
-	steal.generate("jquery/generate/templates/app",path,data);
+	steal.generate("jquery/generate/templates/app", md.path, data);
 });
 
