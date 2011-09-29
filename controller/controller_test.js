@@ -221,4 +221,24 @@ test("pluginName", function() {
 	ok(ta.hasClass("existing_class"), "Existing class should still be there");
 })
 
+test("inherit defaults", function() {
+    $.Controller.extend("BaseController", {
+        defaults : {
+            foo: 'bar'
+        }
+    }, {});
+
+    BaseController.extend("InheritingController", {
+        defaults : {
+            newProp : 'newVal'
+        }
+    }, {});
+
+    ok(InheritingController.defaults.foo === 'bar', 'Class must inherit defaults from the parent class');
+    ok(InheritingController.defaults.newProp == 'newVal', 'Class must have own defaults');
+    var inst = new InheritingController($('<div/>'), {});
+    ok(inst.options.foo === 'bar', 'Instance must inherit defaults from the parent class');
+    ok(inst.options.newProp == 'newVal', 'Instance must have defaults of it`s class');
+});
+
 });
