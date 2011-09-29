@@ -392,13 +392,18 @@ function( $ ) {
         /**
          * Change the current page using either a data object or a url string.
          * @param {Object|String} loc The object with attributes or hash string.
-         * @param {Boolean} remove true to remove properties not in loc, only if loc === Object, default true
+         * @param {Boolean} remove true to remove properties not in loc, only if loc === Object, default true.
+         * @return $.route Fluent interface.
          */
         set: function(loc, remove) {
-            if (typeof loc == "string") {
-                location.hash = "#!" + loc;
-            } else if ($.isPlainObject( loc )) {
+            if ($.isPlainObject( loc )) {
                 $route.attrs( loc, (typeof remove == "undefined") ? true : remove );
+            } else if (typeof loc == "string") {
+                var pre = "";
+                if (loc[0] != '!' && loc[1] != '!') {
+                    pre = '#!';
+                }
+                location.hash = pre + loc;
             }
             return $route;
         }
