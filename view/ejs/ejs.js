@@ -13,7 +13,8 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		extend = $.extend,
 		isArray = $.isArray,
 		clean = function( content ) {
-				return content.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
+			var converted = content.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"').replace(/\t/g, '\\t');
+			return converted;
 		},
 		// from prototype  http://www.prototypejs.org/
 		escapeHTML = function(content){
