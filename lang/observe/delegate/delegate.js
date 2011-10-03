@@ -27,6 +27,8 @@ steal('jquery/lang/observe',function(){
 			var props = prop.split("."),
 				delegates = $.data(this,"_observe_delegates") || [],
 				delegate;
+			event.attr = prop;
+			event.lastAttr = props[props.length -1 ];
 			
 			for(var i =0; i < delegates.length; i++){
 				// check delegate.event

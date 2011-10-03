@@ -200,8 +200,8 @@ test("unique models", function(){
 })
 
 
-test("wrapMany", function(){
-	var people = Person.wrapMany([
+test("models", function(){
+	var people = Person.models([
 		{id: 1, name: "Justin"}
 	])
 	equals(people[0].prettyName(),"Mr. Justin","wraps wrapping works")

@@ -22,62 +22,62 @@
 	    <h1>$.Observe Demo</h1>
 		<p>Make changes to the JSON in the following textarea.  
 		  Click <b>Update Attrs</b> to merge the  JSON and see the events produced.  </p>
-<pre>o = new $.Observe({})</pre>
-<pre style='float:left'>o.attrs(</pre>
+	<pre>o = new $.Observe({})</pre>
+	<pre style='float:left'>o.attrs(</pre>
 <textarea>{
   "message" : "Hello World",
   "items" : ["one","two",{ "name" : "three"}],
   "foo" : {"bar": "car"}
 }
 </textarea><code>, true)</code> <input type='submit' value='Update Attrs' id='update'/>
-<pre id='warning'></pre>
-<pre>o.bind('change', function( ev, attr, how, newValue, prevValue, where ) { </pre>
-<table>
-	<thead>
-		<th>attr</th>
-		<th>how</th>
-		<th>newValue</th>
-		<th>prevValue</th>
-		<th>where</th>
-	</thead>
-	<tbody id='body'>
-		
-	</tbody>
-</table>
+	<pre id='warning'></pre>
+	<pre>o.bind('change', function( ev, attr, how, newValue, prevValue, where ) { </pre>
+	<table>
+		<thead>
+			<th>attr</th>
+			<th>how</th>
+			<th>newValue</th>
+			<th>prevValue</th>
+			<th>where</th>
+		</thead>
+		<tbody id='body'></tbody>
+	</table>
+	
+	
 		<script type='text/javascript' 
                 src='../../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-			steal('jquery/lang/observe', 'jquery/lang/json',function(){
-				var o = new $.Observe({});
-				o.bind('change',function(ev, attr, how, newValue, prevValue, where){
-				
-					$('#body').prepend(["<tr><td>",
-					   attr, "</td><td>",
-					   how, "</td><td>",
-					   $.toJSON(newValue && newValue.serialize ? newValue.serialize() : newValue), "</td><td>",
-					   $.toJSON(prevValue && prevValue.serialize ? prevValue.serialize() : prevValue), "</td><td>",
-					   where, "</td></tr>"
-					].join(''))
-				})
-				$('#update').click(function(){
-					var json =  $.evalJSON( $('textarea').val() );
-					o.attrs(json, true);
-					
-				})
-				$('textarea').keyup(function(){
-					var me = $(this)
-					try { 
-					   $.evalJSON( me.val() );
-					   me.css('border-color','')
-					   $('#warning').hide()
-					} catch (e ){
-						me.css('border-color','red')
-						$('#warning').text(e.toString()).show()
-					}
-				})
-				
-			})
+steal('jquery/lang/observe/delegate', 'jquery/lang/json',function(){
+	o = new $.Observe({});
+	o.bind('change',function(ev, attr, how, newValue, prevValue, where){
+	
+		$('#body').prepend(["<tr><td>",
+		   attr, "</td><td>",
+		   how, "</td><td>",
+		   $.toJSON(newValue && newValue.serialize ? newValue.serialize() : newValue), "</td><td>",
+		   $.toJSON(prevValue && prevValue.serialize ? prevValue.serialize() : prevValue), "</td><td>",
+		   where, "</td></tr>"
+		].join(''))
+	})
+	$('#update').click(function(){
+		var json =  $.evalJSON( $('textarea').val() );
+		o.attrs(json, true);
+		
+	})
+	$('textarea').keyup(function(){
+		var me = $(this)
+		try { 
+		   $.evalJSON( me.val() );
+		   me.css('border-color','')
+		   $('#warning').hide()
+		} catch (e ){
+			me.css('border-color','red')
+			$('#warning').text(e.toString()).show()
+		}
+	})
+	
+})
 		</script>
 	</body>
 </html>

@@ -733,11 +733,8 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			var converters = {},
 				convertName = "* "+this._shortName+".model";
 				
-			converters[convertName+"s"] = this.callback('models');
-			converters[convertName] = this.callback('model');	
-				
-			//converters[convertName+"s"] = this.models = this.callback(this.models);
-			//converters[convertName] = this.model = this.callback(this.model);
+			converters[convertName+"s"] = this.proxy('models');
+			converters[convertName] = this.proxy('model');	
 			
 			$.ajaxSetup({
 				converters : converters
@@ -1309,7 +1306,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			// provides getter / setters
 			// 
 			if ( this[setName] && 
-				(value = this[setName](value, this.callback('_updateProperty', property, value, old, success, errorCallback), errorCallback)) === undefined ) {
+				(value = this[setName](value, this.proxy('_updateProperty', property, value, old, success, errorCallback), errorCallback)) === undefined ) {
 				return;
 			}
 			this._updateProperty(property, value, old, success, errorCallback);
@@ -1623,7 +1620,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			
 			// call event on the instance's Class
 			$([this.Class]).triggerHandler(funcName, this);
-			return [this].concat(makeArray(arguments)); // return like this for this.callback chains
+			return [this].concat(makeArray(arguments)); // return like this for this.proxy chains
 		};
 	});
 

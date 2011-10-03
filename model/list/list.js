@@ -40,7 +40,7 @@ var getArgs = function(args){
  *       this.map(function(contact){
  *         return contact.id
  *       }),
- *       this.callback('destroyed'),
+ *       this.proxy('destroyed'),
  *       'json')
  *   },
  *   destroyed : function(){

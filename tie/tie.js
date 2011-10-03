@@ -72,7 +72,7 @@ $.Controller.extend("jQuery.Tie",{
 			val = this.element.val();
 		}
 		
-		this.inst.attr(this.attr, val, null, this.callback('setBack'))
+		this.inst.attr(this.attr, val, null, this.proxy('setBack'))
 		
 	},
 	setBack : function(){
