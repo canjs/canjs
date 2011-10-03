@@ -51,7 +51,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 				})(name, newProps[name]) : newProps[name];
 			}
 		},
-
+		STR_PROTOTYPE = 'prototype'
 
 	/**
 	 * @class jQuery.Class
@@ -273,16 +273,16 @@ steal("jquery","jquery/lang/string",function( $ ) {
 	 *     var foo = new Foo(1,2,3);
 	 *     foo.sum //-> 6
 	 * 
-	 * ## Callbacks
+	 * ## Proxies
 	 * 
 	 * Similar to jQuery's proxy method, Class provides a
-	 * [jQuery.Class.static.callback callback]
+	 * [jQuery.Class.static.proxy proxy]
 	 * function that returns a callback to a method that will always
 	 * have
 	 * <code>this</code> set to the class or instance of the class.
 	 * 
 	 * 
-	 * The following example uses this.callback to make sure
+	 * The following example uses this.proxy to make sure
 	 * <code>this.name</code> is available in <code>show</code>.
 	 * 
 	 *     $.Class("Todo",{
@@ -290,7 +290,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 	 *       	this.name = name 
 	 *       },
 	 *       get: function() {
-	 *         $.get("/stuff",this.callback('show'))
+	 *         $.get("/stuff",this.proxy('show'))
 	 *       },
 	 *       show: function( txt ) {
 	 *         alert(this.name+txt)
@@ -348,14 +348,14 @@ steal("jquery","jquery/lang/string",function( $ ) {
 	/* @Static*/
 	extend(clss, {
 		/**
-		 * @function callback
+		 * @function proxy
 		 * Returns a callback function for a function on this Class.
-		 * The callback function ensures that 'this' is set appropriately.  
+		 * Proxy ensures that 'this' is set appropriately.  
 		 * @codestart
 		 * $.Class.extend("MyClass",{
 		 *     getData: function() {
 		 *         this.showing = null;
-		 *         $.get("data.json",this.callback('gotData'),'json')
+		 *         $.get("data.json",this.proxy('gotData'),'json')
 		 *     },
 		 *     gotData: function( data ) {
 		 *         this.showing = data;
@@ -364,11 +364,11 @@ steal("jquery","jquery/lang/string",function( $ ) {
 		 * MyClass.showData();
 		 * @codeend
 		 * <h2>Currying Arguments</h2>
-		 * Additional arguments to callback will fill in arguments on the returning function.
+		 * Additional arguments to proxy will fill in arguments on the returning function.
 		 * @codestart
 		 * $.Class.extend("MyClass",{
 		 *    getData: function( <b>callback</b> ) {
-		 *      $.get("data.json",this.callback('process',<b>callback</b>),'json');
+		 *      $.get("data.json",this.proxy('process',<b>callback</b>),'json');
 		 *    },
 		 *    process: function( <b>callback</b>, jsonData ) { //callback is added as first argument
 		 *        jsonData.processed = true;
@@ -378,14 +378,15 @@ steal("jquery","jquery/lang/string",function( $ ) {
 		 * MyClass.getData(showDataFunc)
 		 * @codeend
 		 * <h2>Nesting Functions</h2>
-		 * Callback can take an array of functions to call as the first argument.  When the returned callback function
+		 * Proxy can take an array of functions to call as 
+		 * the first argument.  When the returned callback function
 		 * is called each function in the array is passed the return value of the prior function.  This is often used
 		 * to eliminate currying initial arguments.
 		 * @codestart
 		 * $.Class.extend("MyClass",{
 		 *    getData: function( callback ) {
 		 *      //calls process, then callback with value from process
-		 *      $.get("data.json",this.callback(['process2',callback]),'json') 
+		 *      $.get("data.json",this.proxy(['process2',callback]),'json') 
 		 *    },
 		 *    process2: function( type,jsonData ) {
 		 *        jsonData.processed = true;
@@ -399,7 +400,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 		 * next function.
 		 * @return {Function} the callback function.
 		 */
-		callback: function( funcs ) {
+		proxy: function( funcs ) {
 
 			//args that should be curried
 			var args = makeArray(arguments),
@@ -550,7 +551,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 
 			proto = proto || {};
 			var _super_class = this,
-				_super = this.prototype,
+				_super = this[STR_PROTOTYPE],
 				name, shortName, namespace, prototype;
 
 			// Instantiate a base class (but only create the instance,
@@ -613,7 +614,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 			});
 
 			//make sure our prototype looks nice
-			Class.prototype.Class = Class.prototype.constructor = Class;
+			Class[STR_PROTOTYPE].Class = Class[STR_PROTOTYPE].constructor = Class;
 
 			/**
 			 * @attribute fullName 
@@ -728,18 +729,19 @@ steal("jquery","jquery/lang/string",function( $ ) {
 
 
 
-	clss.prototype.
+	clss.callback = clss[STR_PROTOTYPE].callback = clss[STR_PROTOTYPE].
 	/**
-	 * @function callback
-	 * Returns a callback function.  This does the same thing as and is described better in [jQuery.Class.static.callback].
-	 * The only difference is this callback works
+	 * @function proxy
+	 * Returns a method that sets 'this' to the current instance.  This does the same thing as 
+	 * and is described better in [jQuery.Class.static.proxy].
+	 * The only difference is this proxy works
 	 * on a instance instead of a class.
 	 * @param {String|Array} fname If a string, it represents the function to be called.  
 	 * If it is an array, it will call each function in order and pass the return value of the prior function to the
 	 * next function.
 	 * @return {Function} the callback function
 	 */
-	callback = clss.callback;
+	proxy = clss.proxy;
 
 
 })();

@@ -22,7 +22,7 @@ $.Model.service.jsonRest = $.Model.service({
             type: 'get',
             dataType: 'json',
             data: params,
-            success: this.callback(['wrapMany',success]),
+            success: this.proxy(['wrapMany',success]),
             error: error,
             fixture: true
         })
