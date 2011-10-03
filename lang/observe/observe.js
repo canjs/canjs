@@ -24,15 +24,6 @@ var isArray =  $.isArray,
 		
 		return val;
 	},
-	getArgs = function(args){
-		if(args[0] && ( $.isArray(args[0])  )   ){
-			return args[0]
-		}
-		else{
-			return $.makeArray(args)
-		}
-	},
-	push = [].push,
 	id = 0,
 	collecting = null,
 	collect = function(){
@@ -307,15 +298,20 @@ $.Class('jQuery.Observe',
 			sendCollection();
 		}
 	}
-})
+});
+// Helpers for list
+
 /**
  * @class jQuery.Observe.List
  * @inherits jQuery.Observe
  * @parent jQuery.Observe
- * An observable list
+ * 
+ * An observable list.  You can listen to when items are push, popped,
+ * spliced, shifted, and unshifted on this array.
+ * 
  * 
  */
-jQuery.Observe('jQuery.Observe.List', 
+var list = jQuery.Observe('jQuery.Observe.List', 
 /**
  * @prototype
  */
@@ -326,26 +322,6 @@ jQuery.Observe('jQuery.Observe.List',
         this.push.apply(this, $.makeArray(instances || [] ) );
 		this._data = this;
 	},
-	/**
-	 * Add items to the list
-	 */
-	push: function(){
-		var args = getArgs(arguments),
-			self = this;
-		
-		for(var i=0; i < args.length; i++){
-			var val = args[i];
-			if(isObject(val)){
-				args[i] = hookup(val, i, this)
-			} 
-		}
-		var res = push.apply( this, args )
-		//do this first so we could prevent?
-
-		send(this, "change", ["*","add",args] )
-		
-		return res;
-	},
 	serialize : function(){
 		var arr = [];
 		for(var i =0; i < this.length; i++){
@@ -354,9 +330,40 @@ jQuery.Observe('jQuery.Observe.List',
 		return arr;
 	},
 	/**
-	 * Remove items from the list
-	 * @param {Object} index
-	 * @param {Object} count
+	 * Remove items or add items from a specific point in the list.
+	 * 
+	 * ### Example
+	 * 
+	 * The following creates a list of numbers and replaces 2 and 3 with
+	 * "a", and "b".
+	 * 
+     *     var l = new $.Observe.List([0,1,2,3]);
+	 *     
+	 *     l.bind('change', function( ev, attr, how, newVals, oldVals, where ) { ... })
+	 *     
+	 *     l.splice(1,2, "a", "b"); // results in [0,"a","b",3]
+	 *     
+	 * This creates 2 change events.  The first event is the removal of 
+	 * numbers one and two where it's callback values will be:
+	 * 
+	 *   - attr - "*" - to indicate that multiple values have been changed at once
+	 *   - how - "remove"
+	 *   - newVals - undefined
+	 *   - oldVals - [1,2] -the array of removed values
+	 *   - where - 1 - the location of where these items where removed
+	 * 
+	 * The second change event is the addition of the "a", and "b" values where 
+	 * the callback values will be:
+	 * 
+	 *   - attr - "*" - to indicate that multiple values have been changed at once
+	 *   - how - "added"
+	 *   - newVals - ["a","b"]
+	 *   - oldVals - [1, 2] - the array of removed values
+	 *   - where - 1 - the location of where these items where added
+	 * 
+	 * @param {Number} index where to start removing or adding items
+	 * @param {Object} count the number of items to remove
+	 * @param {Object} [added] an object to add to 
 	 */
 	splice : function(index, count){
 		var args = $.makeArray(arguments);
@@ -368,17 +375,23 @@ jQuery.Observe('jQuery.Observe.List',
 			} 
 		}
 		if(count === undefined){
-			args[1] = this.length - index;
+			count = args[1] = this.length - index;
 		}
 		var removed = [].splice.apply(this, args);
 		if(count > 0){
-			send(this, "change",["*","remove",removed]);
+			send(this, "change",["*","remove",undefined, removed, index]);
 		}
 		if(args.length > 2){
-			send(this, "change",["*","remove",args.slice(2)]);
+			send(this, "change",["*","add",args.slice(2), removed, index]);
 		}
 		return removed;
 	},
+	/**
+	 * Updates an array with a new array.  It is able to handle
+	 * removes in the middle of the array.
+	 * @param {Object} props
+	 * @param {Object} remove
+	 */
 	attrs : function(props, remove){
 		// copy
 		var props = props.slice(0),
@@ -407,13 +420,119 @@ jQuery.Observe('jQuery.Observe.List',
 			sendCollection()
 		}
 	}
-})
+}),
+
+
+// create push and pop:
+	getArgs = function(args){
+		if(args[0] && ( $.isArray(args[0])  )   ){
+			return args[0]
+		}
+		else{
+			return $.makeArray(args)
+		}
+	},
+	push = [].push,
+	pop = [].pop;
+	
+	$.each({
+		/**
+		 * @function push
+		 * Add items to the end of the list.
+		 * 
+		 *     var l = new $.Observe.List([]);
+		 *     
+		 *     l.bind('change', function( 
+		 *         ev,        // the change event
+		 *         attr,      // the attr that was changed, for multiple items, "*" is used 
+		 *         how,       // "add"
+		 *         newVals,   // an array of new values pushed
+		 *         oldVals,   // undefined
+		 *         where      // the location where these items where added
+		 *         ) {
+		 *     
+		 *     })
+		 *     
+		 *     l.push('0','1','2');
+		 * 
+		 * @return {Number} the number of items in the array
+		 */
+		push : "length",
+		/**
+		 * @function unshift
+		 * Add items to the start of the list.  This is very similar to
+		 * [jQuery.Observe.prototype.push].
+		 */
+	 	unshift : 0
+	}, 
+	function(name, where){
+	 	list.prototype[name] = function(){
+			var args = getArgs(arguments),
+				self = this,
+				len = where ? this.length : 0;
+			
+			for(var i=0; i < args.length; i++){
+				var val = args[i];
+				if(isObject(val)){
+					args[i] = hookup(val, i, this)
+				} 
+			}
+			var res = [][name].apply( this, args )
+			//do this first so we could prevent?
+	
+			send(this, "change", ["*","add",args, undefined, len] )
+			
+			return res;
+		}
+	 });
+	
+$.each({
+		/**
+		 * @function pop
+		 * 
+		 * Removes an item from the end of the list.
+		 * 
+		 *     var l = new $.Observe.List([0,1,2]);
+		 *     
+		 *     l.bind('change', function( 
+		 *         ev,        // the change event
+		 *         attr,      // the attr that was changed, for multiple items, "*" is used 
+		 *         how,       // "remove"
+		 *         newVals,   // undefined
+		 *         oldVals,   // 2
+		 *         where      // the location where these items where added
+		 *         ) {
+		 *     
+		 *     })
+		 *     
+		 *     l.pop();
+		 * 
+		 * @return {Object} the element at the end of the list
+		 */
+		pop : "length",
+		/**
+		 * @function shift
+		 * Removes an item from the start of the list.  This is very similar to
+		 * [jQuery.Observe.prototype.pop].
+		 * 
+		 * @return {Object} the element at the start of the list
+		 */
+	 	shift : 0
+	}, 
+	function(name, where){
+	 	list.prototype[name] = function(){
+			var args = getArgs(arguments),
+				self = this,
+				len = where && this.length ? this.length - 1 : 0;
+			
+			var res = [][name].apply( this, args )
+			//do this first so we could prevent?
+	
+			send(this, "change", ["*","remove", undefined, [res], len] )
+			
+			return res;
+		}
+	 });
 
 });
 
-
-
-// add - property added
-// remove - property removed
-// set - property value changed
-// 
