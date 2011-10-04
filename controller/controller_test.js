@@ -147,7 +147,7 @@ test("objects in action", function(){
 		"{item} someEvent" : function(thing, ev){
 			ok(true, "called");
 			equals(ev.type, "someEvent","correct event")
-			equals(this.Class.fullName, "Thing", "This is a controller isntance")
+			equals(this.constructor.fullName, "Thing", "This is a controller isntance")
 			equals(thing.name,"Justin","Raw, not jQuery wrapped thing")
 		}
 	});

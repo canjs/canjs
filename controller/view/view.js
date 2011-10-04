@@ -43,7 +43,7 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 			}
 			//load from name
 			var current = window;
-			var parts = this.Class.fullName.split(/\./);
+			var parts = this.constructor.fullName.split(/\./);
 			for ( var i = 0; i < parts.length; i++ ) {
 				if ( typeof current.Helpers == 'object' ) {
 					jQuery.extend(helpers, current.Helpers);

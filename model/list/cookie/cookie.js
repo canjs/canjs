@@ -80,7 +80,7 @@ $.Model.List.extend("jQuery.Model.List.Cookie",
 		});
 		
 		$.cookie(name, $.toJSON({
-			type: this[0] && this[0].Class.fullName,
+			type: this[0] && this[0].constructor.fullName,
 			ids: ids
 		}), { expires: this.days });
 		return this;
