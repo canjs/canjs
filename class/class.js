@@ -738,7 +738,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 			/**
 			 * @attribute constructor
 			 * 
-			 * A reference to the class's (constructor function).  This allows you to access 
+			 * A reference to the Class (or constructor function).  This allows you to access 
 			 * a class's static properties from an instance.
 			 * 
 			 * ### Quick Example
@@ -752,8 +752,9 @@ steal("jquery","jquery/lang/string",function( $ ) {
 			 *     // read the static property from the instance:
 			 *     mc1.constructor.staticProperty //-> true
 			 *     
-			 * Getting static properties via the Class property, such as it's 
-			 * [jQuery.Class.static.fullName fullName] is very common.
+			 * Getting static properties with the constructor property, like
+			 * [jQuery.Class.static.fullName fullName], is very common.
+			 * 
 			 */
 		}
 
