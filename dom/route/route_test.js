@@ -114,6 +114,16 @@ test("light param", function(){
 
     res = $.route.param({p1: "index", p2: "baz", p3: "bar"});
 	equals(res, "pages//baz/")
+});
+
+test('param doesnt add defaults to params', function(){
+	$.route.routes = {};
+	
+	$.route("pages/:p1",{
+        p2: "foo"
+	})
+	var res = $.route.param({p1: "index", p2: "foo"});
+	equals(res, "pages/index")
 })
 
 test("param-deparam", function(){

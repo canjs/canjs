@@ -117,7 +117,7 @@ $.Class('jQuery.Observe',
 			}
 		}
 		
-		this._data = obj;
+		this._data = obj || {};
 	},
 	/**
 	 * Get or set an attribute on the observe.
