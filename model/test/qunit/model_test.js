@@ -64,7 +64,7 @@ test("findAll deferred", function(){
 	people.then(function(people){
 		equals(people.length, 1, "we got a person back");
 		equals(people[0].name, "Justin", "Got a name back");
-		equals(people[0].Class.shortName, "Person", "got a class back");
+		equals(people[0].constructor.shortName, "Person", "got a class back");
 		start();
 	})
 });
@@ -84,7 +84,7 @@ test("findOne deferred", function(){
 	var person = Person.findOne({});
 	person.then(function(person){
 		equals(person.name, "Justin", "Got a name back");
-		equals(person.Class.shortName, "Person", "got a class back");
+		equals(person.constructor.shortName, "Person", "got a class back");
 		start();
 	})
 });
@@ -285,11 +285,11 @@ test("auto methods",function(){
 	stop(5000);
 	School.findAll({type:"schools"}, function(schools){
 		ok(schools,"findAll Got some data back");
-		equals(schools[0].Class.shortName,"School","there are schools")
+		equals(schools[0].constructor.shortName,"School","there are schools")
 		
 		School.findOne({id : "4"}, function(school){
 			ok(school,"findOne Got some data back");
-			equals(school.Class.shortName,"School","a single school");
+			equals(school.constructor.shortName,"School","a single school");
 			
 			
 			new School({name: "Highland"}).save(function(){

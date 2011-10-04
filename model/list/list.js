@@ -92,7 +92,7 @@ var getArgs = function(args){
  * 
  * @demo jquery/model/list/list-insert.html
  */
-$.Class.extend("jQuery.Model.List",
+$.Class("jQuery.Model.List",
 /**
  * @Prototype
  */
@@ -135,7 +135,7 @@ $.Class.extend("jQuery.Model.List",
 	_makeData : function(){
 		var data = this._data = {};
 		this.each(function(i, inst){
-			data[inst[inst.Class.id]] = inst;
+			data[inst[inst.constructor.id]] = inst;
 		})
 	},
 	/**
@@ -149,8 +149,9 @@ $.Class.extend("jQuery.Model.List",
 			this._makeData();
 		}
 		var list = [],
-			underscored = this[0].Class._fullName,
-			idName = this[0].Class.id,
+			constructor = this[0].constructor,
+			underscored = constructor._fullName,
+			idName = constructor.id,
 			test = new RegExp(underscored+"_([^ ]+)"),
 			matches,
 			val,
@@ -177,8 +178,9 @@ $.Class.extend("jQuery.Model.List",
 			return [];
 		}
 		var list = [],
-			underscored = this[0].Class._fullName,
-			idName = this[0].Class.id,
+			constructor = this[0].constructor,
+			underscored = constructor._fullName,
+			idName = constructor.id,
 			test = new RegExp(underscored+"_([^ ]+)"),
 			matches,
 			val;
@@ -215,9 +217,6 @@ $.Class.extend("jQuery.Model.List",
 		
 		return ret;
 	},
-	publish: function( name, data ) {
-		OpenAjax.hub.publish(this.Class.shortName+"."+name, data)
-	},
 	/**
 	 * Gets all the elements that represent this list.
 	 * @param {Object} context
@@ -230,7 +229,7 @@ $.Class.extend("jQuery.Model.List",
 			);
 	},
 	model : function(){
-		return this.Class.namespace
+		return this.constructor.namespace
 	},
 	/**
 	 * Finds items and adds them to this list.  This uses [jQuery.Model.static.findAll]
@@ -256,7 +255,7 @@ $.Class.extend("jQuery.Model.List",
 	 * @param {Function} error
 	 */
 	destroyAll : function(success, error){
-		var gId = function(item){ return item[item.Class.id]},
+		var gId = function(item){ return item[item.constructor.id]},
 			ids = this.map(gId),
 			model = this.model(),
 			self = this,
