@@ -117,19 +117,21 @@ height:
 
     //getter / setter
     $.fn["outer" + Upper] = function(v, margin) {
-        if (typeof v == 'number') {
-            this[lower](v - getBoxes[lower](this[0], {padding: true, border: true, margin: margin}))
+        var first = this[0];
+		if (typeof v == 'number') {
+            first && this[lower](v - getBoxes[lower](first, {padding: true, border: true, margin: margin}))
             return this;
         } else {
-            return checks["oldOuter" + Upper].call(this, v)
+            return first ? checks["oldOuter" + Upper].call(this, v) : null;
         }
     }
     $.fn["inner" + Upper] = function(v) {
-        if (typeof v == 'number') {
-            this[lower](v - getBoxes[lower](this[0], { padding: true }))
+        var first = this[0];
+		if (typeof v == 'number') {
+            first&& this[lower](v - getBoxes[lower](first, { padding: true }))
             return this;
         } else {
-            return checks["oldInner" + Upper].call(this, v)
+            return first ? checks["oldInner" + Upper].call(this, v) : null;
         }
     }
     //provides animations
