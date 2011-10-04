@@ -263,7 +263,17 @@ function( $ ) {
                         delete cpy[name];
                         return data[name] === route.defaults[name] ? "" : data[name];
                     }),
-                    // The remaining elements of data are added as $amp; separated parameters to the url.
+                    after;
+					
+					// remove matching default values
+					for(name in route.defaults) {
+						if(cpy[name] === route.defaults[name]) {
+							delete cpy[name]
+						}
+					}
+					
+					// The remaining elements of data are added as 
+					// $amp; separated parameters to the url.
 				    after = $.param(cpy);
 				return res + (after ? "&" + after : "")
 			}

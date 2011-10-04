@@ -15,7 +15,7 @@ steal('jquery/lang/observe',function(){
 		for(i; i< len; i++){
 			if(parts[i] == "**") {
 				return true;
-			} else if( props[i] && ( props[i] === parts[i] || parts[i] === "*" ) ) {
+			} else if( typeof props[i] == 'string' && ( props[i] === parts[i] || parts[i] === "*" ) ) {
 				
 			} else {
 				return false;
