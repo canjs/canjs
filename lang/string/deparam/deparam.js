@@ -1,7 +1,9 @@
 steal('jquery', function($){
 	
 	var digitTest = /^\d+$/,
-		keyBreaker = /([^\[\]]+)|(\[\])/g;
+		keyBreaker = /([^\[\]]+)|(\[\])/g,
+		plus = /\+/g,
+		paramTest = /([^?#]*)(#.*)?$/;
 	
 	/**
 	 * @add jQuery.String
@@ -25,7 +27,7 @@ steal('jquery', function($){
 		 */
 		deparam: function(params){
 		
-			if(! params || ! params.match(/([^?#]*)(#.*)?$/) ) {
+			if(! params || ! paramTest.test(params) ) {
 				return {};
 			} 
 		   
@@ -42,9 +44,9 @@ steal('jquery', function($){
 				if(pair.length != 2) { 
 					pair = [pair[0], pair.slice(1).join("=")]
 				}
-				
-				var key = decodeURIComponent(pair[0]), 
-					value = decodeURIComponent(pair[1]),
+				  
+        var key = decodeURIComponent(pair[0].replace(plus, " ")), 
+          value = decodeURIComponent(pair[1].replace(plus, " ")),
 					parts = key.match(keyBreaker);
 		
 				for ( var j = 0; j < parts.length - 1; j++ ) {

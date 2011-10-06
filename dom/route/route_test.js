@@ -92,6 +92,17 @@ test("param", function(){
 
     res = $.route.param({});
 	equals(res, "")
+});
+
+test("symmetry", function(){
+	$.route.routes = {};
+	
+	var obj = {page: "=&[]", nestedArray : ["a"], nested : {a :"b"}  }
+	
+	var res = $.route.param(obj)
+	
+	var o2 = $.route.deparam(res)
+	same(o2, obj)
 })
 
 test("light param", function(){
