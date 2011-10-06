@@ -42,9 +42,9 @@ steal('jquery', function($){
 				if(pair.length != 2) { 
 					pair = [pair[0], pair.slice(1).join("=")]
 				}
-				
-				var key = decodeURIComponent(pair[0]), 
-					value = decodeURIComponent(pair[1]),
+				  
+        var key = decodeURIComponent(pair[0].replace(/\+/g, " ")), 
+          value = decodeURIComponent(pair[1].replace(/\+/g, " ")),
 					parts = key.match(keyBreaker);
 		
 				for ( var j = 0; j < parts.length - 1; j++ ) {
