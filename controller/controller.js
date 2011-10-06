@@ -30,6 +30,7 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		each = $.each,
 		
 		STR_PROTOTYPE = 'prototype',
+		STR_CONSTRUCTOR = 'constructor',
 		slice = Array[STR_PROTOTYPE].slice,
 		
 		// Binds an element, returns a function that unbinds
@@ -846,10 +847,10 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		 */
 		destroy: function() {
 			if ( this._destroyed ) {
-				throw this.Class.shortName + " controller instance has been deleted";
+				throw this[STR_CONSTRUCTOR].shortName + " controller already deleted";
 			}
 			var self = this,
-				fname = this.Class.pluginName || this.Class._fullName,
+				fname = this[STR_CONSTRUCTOR].pluginName || this[STR_CONSTRUCTOR]._fullName,
 				controllers;
 			
 			// mark as destroyed
@@ -913,7 +914,7 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 	//controllers can be strings or classes
 	var i, isAControllerOf = function( instance, controllers ) {
 		for ( i = 0; i < controllers.length; i++ ) {
-			if ( typeof controllers[i] == 'string' ? instance.Class._shortName == controllers[i] : instance instanceof controllers[i] ) {
+			if ( typeof controllers[i] == 'string' ? instance[STR_CONSTRUCTOR]._shortName == controllers[i] : instance instanceof controllers[i] ) {
 				return true;
 			}
 		}
@@ -932,7 +933,7 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 			//check if arguments
 			this.each(function() {
 	
-				controllers = data(this, "controllers");
+				controllers = $.data(this, "controllers");
 				for ( cname in controllers ) {
 					if ( controllers.hasOwnProperty(cname) ) {
 						c = controllers[cname];
