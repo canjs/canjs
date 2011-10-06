@@ -7,7 +7,7 @@ function( $ ) {
         // Any word character or a period is matched.
         matcher = /\:([\w\.]+)/g,
         // Regular expression for identifying &amp;key=value lists.
-        paramsMatcher = /^(?:&[\w\.]+=[\w\.]*)+/,
+        paramsMatcher = /^(?:&[^=]+=[^&]*)+/,
         // Converts a JS Object into a list of parameters that can be 
         // inserted into an html element tag.
 		makeProps = function( props ) {
@@ -320,7 +320,7 @@ function( $ ) {
 				return obj;
 			}
             // If no route was matched it is parsed as a &amp;key=value list.
-			return paramsMatcher.test(url) ? $.String.deparam( url.slice(1) ) : {};
+			return /*paramsMatcher.test(url) ?*/ $.String.deparam( url.slice(1) ) // : {};
 		},
 		/**
 		 * @hide
@@ -429,11 +429,17 @@ function( $ ) {
         // Deparameterizes the portion of the hash of interest and assign the
         // values to the $.route.data removing existing values no longer in the hash.
         setState = function() {
-			var hash = location.hash[1] === '!' ? 
-						location.hash.slice(2) : 
-						location.hash.slice(1); // everything after #!
-			curParams = $route.deparam( hash );
-			$route.attrs(curParams, true);
+			// commented out code handles people setting attrs before onready
+			//if( $.isEmptyObject( $route.data.serialize() ) ) {
+				var hash = location.hash[1] === '!' ? 
+					location.hash.slice(2) : 
+					location.hash.slice(1); // everything after #!
+				curParams = $route.deparam( hash );
+				$route.attrs(curParams, true);
+			//} else {
+			//	window.location.hash = "#!" + $route.param($route.data.serialize())
+			//}
+			
 		};
 
 	// If the hash changes, update the $.route.data
