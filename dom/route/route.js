@@ -320,7 +320,7 @@ function( $ ) {
 				return obj;
 			}
             // If no route was matched it is parsed as a &amp;key=value list.
-			return /*paramsMatcher.test(url) ?*/ $.String.deparam( url.slice(1) ) // : {};
+			return paramsMatcher.test(url) ? $.String.deparam( url.slice(1) ) : {};
 		},
 		/**
 		 * @hide
