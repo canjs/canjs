@@ -39,6 +39,12 @@ test("deparam an array", function(){
 	equals(data.a[0],1)
 	equals(data.a[1],2)
 })
-
-	
+    
+test("deparam object with spaces", function(){
+   var data = $.String.deparam("a+b=c+d&+e+f+=+j+h+");
+    
+    equals(data["a b"], "c d")
+    equals(data[" e f "], " j h ")
+})
+    
 })

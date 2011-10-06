@@ -386,28 +386,58 @@ test("Model events" , function(){
 });
 
 
-test("serialize", function(){
-	$.Model("Task",{
+test("converters and serializes", function(){
+	$.Model("Task1",{
 		attributes: {
 			createdAt: "date"
 		},
-		serialize: {
+		convert: {
 			date: function(d){
 				var months = ["jan", "feb", "mar"]
 				return months[d.getMonth()]
+			}
+		},
+		serialize: {
+			date: function(d){
+				var months = {"jan":0, "feb":1, "mar":2}
+				return months[d]
+			}
+		}
+	},{});
+	$.Model("Task2",{
+		attributes: {
+			createdAt: "date"
+		},
+		convert: {
+			date: function(d){
+				var months = ["apr", "may", "jun"]
+				return months[d.getMonth()]
+			}
+		},
+		serialize: {
+			date: function(d){
+				var months = {"apr":0, "may":1, "jun":2}
+				return months[d]
 			}
 		}
 	},{});
 	var d = new Date();
 	d.setMonth(1)
-	equals(new Task({
+	var task1=new Task1({
 		createdAt: d,
 		name:"Task1"
-	}).serialize().createdAt, "feb", "serialized")
-	equals(new Task({
+	});
+	d.setMonth(2)
+	var task2=new Task2({
 		createdAt: d,
 		name:"Task2"
-	}).serialize().name, "Task2", "default serialized")
+	});
+	equals(task1.createdAt, "feb", "Task1 model convert");
+	equals(task2.createdAt, "jun", "Task2 model convert");
+	equals(task1.serialize().createdAt, 1, "Task1 model serialize");
+	equals(task2.serialize().createdAt, 2, "Task2 model serialize");
+	equals(task1.serialize().name, "Task1", "Task1 model default serialized");
+	equals(task2.serialize().name, "Task2", "Task2 model default serialized");
 });
 
 test("removeAttr test", function(){
