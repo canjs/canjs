@@ -41,6 +41,10 @@ steal('jquery/controller/view','jquery/view/micro','funcunit/qunit')  //load qun
 		
 		var path = jQuery.Controller._calculatePosition(Myproject.Controllers.Foo.Bar, "init.ejs", "init")
 		equals(path, "//myproject/views/foo/bar/init.ejs", "view path is correct")
+		
+		$.Controller.extend("Myproject.Controllers.FooBar");
+		path = jQuery.Controller._calculatePosition(Myproject.Controllers.FooBar, "init.ejs", "init")
+		equals(path, "//myproject/views/foo_bar/init.ejs", "view path is correct")
 	})
 });
 
