@@ -703,7 +703,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			//add missing converters and serializes
 			each(["convert","serialize"],function( i, name ) {
 				if ( superClass[name] != self[name] ) {
-					self[name] = extend( superClass[name], self[name] );
+					self[name] = extend({}, superClass[name], self[name] );
 				}
 			});
 
