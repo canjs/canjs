@@ -77,6 +77,26 @@ $.extend($.Model, {
     * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     */
    validate: validate,
+   
+   /**
+    * @attribute validationMessages
+    * @parent jquery.model.validations
+    * The default validation error messages that will be returned by the 
+    * builtin validation methods. These can be overwritten by assigning
+    * new messages to $.Model.validationMessages in your application setup.
+    * 
+    * It is important to ensure that jquery/model/validations is included
+    * with steal before overwriting the messages otherwise the changes will
+    * be lost once it is loaded by steal later.
+    */
+   validationMessages : {
+       format      : "Is invalid",
+       inclusion   : "Is not a valid option (perhaps out of range)",
+       lengthShort : "Is too short",
+       lengthLong  : "Is too long",
+       presence    : "Can't be empty",
+       range       : "Is out of range"
+   },
 
    /**
     * @function jQuery.Model.static.validateFormatOf
@@ -93,7 +113,7 @@ $.extend($.Model, {
          if(  (typeof value != 'undefined' && value != '')
          	&& String(value).match(regexp) == null )
          {
-            return "is invalid";
+            return this.Class.validationMessages.format;
          }
       });
    },
@@ -114,7 +134,7 @@ $.extend($.Model, {
             return;
 
          if($.grep(inArray, function(elm) { return (elm == value);}).length == 0)
-            return "is not a valid option (perhaps out of range)";
+            return this.Class.validationMessages.inclusion;
       });
    },
 
@@ -130,10 +150,11 @@ $.extend($.Model, {
     */
    validateLengthOf: function(attrNames, min, max, options) {
       validate.call(this, attrNames, options, function(value) {
+         var msg = this.Class.validationMessages.length;
          if((typeof value == 'undefined' && min > 0) || value.length < min)
-            return "is too short (min=" + min + ")";
+            return this.Class.validationMessages.length.tooShort + " (min=" + min + ")";
          else if(typeof value != 'undefined' && value.length > max)
-            return "is too long (max=" + max + ")";
+            return this.Class.validationMessages.length.tooLong + " (max=" + max + ")";
       });
    },
 
@@ -148,7 +169,7 @@ $.extend($.Model, {
    validatePresenceOf: function(attrNames, options) {
       validate.call(this, attrNames, options, function(value) {
          if(typeof value == 'undefined' || value == "" || value === null)
-            return "can't be empty";
+            return this.Class.validationMessages.presence;
       });
    },
 
@@ -165,14 +186,9 @@ $.extend($.Model, {
    validateRangeOf: function(attrNames, low, hi, options) {
       validate.call(this, attrNames, options, function(value) {
          if(typeof value != 'undefined' && value < low || value > hi)
-            return "is out of range [" + low + "," + hi + "]";
+            return this.Class.validationMessages.range + " [" + low + "," + hi + "]";
       });
    }
 });
 
-
-
-
-
-	
 });
