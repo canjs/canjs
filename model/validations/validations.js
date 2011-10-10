@@ -45,14 +45,12 @@ var validate = function(attrNames, options, proc) {
 	}
 	options = options || {};
 	attrNames = $.makeArray(attrNames)
-	var customMsg = options.message,
-		self = this;
 	
 	if(options.testIf && !options.testIf.call(this)){
 		return;
 	}
-	     
 	
+	var self = this;
 	$.each(attrNames, function(i, attrName) {
 		// Call the validate proc function in the instance context
 		if(!self.validations[attrName]){
@@ -66,14 +64,13 @@ var validate = function(attrNames, options, proc) {
    
 };
 
-
 $.extend($.Model, {
    /**
     * @function jQuery.Model.static.validate
     * @parent jquery.model.validations
     * Validates each of the specified attributes with the given function.  See [validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
-    * @param {Function} validateProc Function used to validate each given attribute. Returns true for valid and false otherwise. Function is called in the instance context and takes the value to validate
+    * @param {Function} validateProc Function used to validate each given attribute. Returns nothing if valid and an error message otherwise. Function is called in the instance context and takes the value to validate.
     * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     */
    validate: validate,
