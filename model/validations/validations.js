@@ -78,13 +78,21 @@ $.extend($.Model, {
    /**
     * @attribute validationMessages
     * @parent jquery.model.validations
-    * The default validation error messages that will be returned by the 
-    * builtin validation methods. These can be overwritten by assigning
-    * new messages to $.Model.validationMessages in your application setup.
+    * The default validation error messages that will be returned by the builtin
+    * validation methods. These can be overwritten by assigning new messages
+    * to $.Model.validationMessages.&lt;message> in your application setup.
     * 
-    * It is important to ensure that jquery/model/validations is included
-    * with steal before overwriting the messages otherwise the changes will
-    * be lost once it is loaded by steal later.
+    * The following messages are available:
+    *  * format
+    *  * inclusion
+    *  * lengthShort
+    *  * lengthLong
+    *  * presence
+    *  * range
+    * 
+    * It is important to ensure that you steal jquery/model/validations 
+    * before overwriting the messages, otherwise the changes will
+    * be lost once steal loads it later.
     */
    validationMessages : {
        format      : "Is invalid",
