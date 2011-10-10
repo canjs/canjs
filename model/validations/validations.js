@@ -95,12 +95,12 @@ $.extend($.Model, {
     * be lost once steal loads it later.
     */
    validationMessages : {
-       format      : "Is invalid",
-       inclusion   : "Is not a valid option (perhaps out of range)",
-       lengthShort : "Is too short",
-       lengthLong  : "Is too long",
-       presence    : "Can't be empty",
-       range       : "Is out of range"
+       format      : "is invalid",
+       inclusion   : "is not a valid option (perhaps out of range)",
+       lengthShort : "is too short",
+       lengthLong  : "is too long",
+       presence    : "can't be empty",
+       range       : "is out of range"
    },
 
    /**
@@ -155,11 +155,10 @@ $.extend($.Model, {
     */
    validateLengthOf: function(attrNames, min, max, options) {
       validate.call(this, attrNames, options, function(value) {
-         var msg = this.Class.validationMessages.length;
          if((typeof value == 'undefined' && min > 0) || value.length < min)
-            return this.Class.validationMessages.length.tooShort + " (min=" + min + ")";
+            return this.Class.validationMessages.lengthShort + " (min=" + min + ")";
          else if(typeof value != 'undefined' && value.length > max)
-            return this.Class.validationMessages.length.tooLong + " (max=" + max + ")";
+            return this.Class.validationMessages.lengthLong + " (max=" + max + ")";
       });
    },
 
