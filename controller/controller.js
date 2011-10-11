@@ -93,7 +93,7 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 	 * down auto-magically. Read about [http://jupiterjs.com/news/writing-the-perfect-jquery-plugin 
 	 * the theory behind controller] and 
 	 * a [http://jupiterjs.com/news/organize-jquery-widgets-with-jquery-controller walkthrough of its features]
-	 * on Jupiter's blog.  The [mvc.controller MVC in JavaScriptMVC tutorial] also has a great walkthrough.
+	 * on Jupiter's blog. [mvc.controller Get Started with jQueryMX] also has a great walkthrough.
 	 * 
 	 * Controller inherits from [jQuery.Class $.Class] and makes heavy use of 
 	 * [http://api.jquery.com/delegate/ event delegation]. Make sure 

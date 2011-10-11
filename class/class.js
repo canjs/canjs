@@ -72,6 +72,8 @@ steal("jquery","jquery/lang/string",function( $ ) {
 	 *   - Easy callback function creation
 	 * 
 	 * 
+	 * The [mvc.class Get Started with jQueryMX] has a good walkthrough of $.Class.
+	 * 
 	 * ## Static v. Prototype
 	 * 
 	 * Before learning about Class, it's important to
