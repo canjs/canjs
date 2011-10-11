@@ -4,6 +4,7 @@ var isArray =  $.isArray,
 	isObject = function(obj){
 		return typeof obj === 'object' && obj !== null && obj;
 	},
+	makeArray = $.makeArray,
 	each = $.each,
 	hookup = function(val, prop, parent){
 		
@@ -50,6 +51,14 @@ var isArray =  $.isArray,
 			$(cur.t).trigger(cur.ev, cur.args)
 		}
 		
+	},
+	// which object to put it in
+	serialize = function(observe, how, where){
+		observe.each(function(name, val){
+			where[name] = isObject(val) && 
+				typeof val[how] == 'function' ?  val[how]() : val 
+		})
+		return where;
 	};
 	
 
@@ -59,14 +68,16 @@ var isArray =  $.isArray,
 /**
  * @class jQuery.Observe
  * @parent jquerymx.lang
- * 
+ * @test jquery/lang/observe/qunit.html
  * 
  * Observe provides observable behavior on 
- * JSON-like data structures.  You can
- * wrap a JS Object or Array with an Observe
- * and then listen to changes in the observe-able.
+ * JavaScript Objects and Arrays. 
  * 
- *     o = new $.Observe({ 
+ * ## Use
+ * 
+ * Create a new Observe with the data you want to observe:
+ * 
+ *     var data = { 
  *       addresses : [
  *         {
  *           city: 'Chicago',
@@ -78,22 +89,74 @@ var isArray =  $.isArray,
  *         }
  *         ],
  *       name : "Justin Meyer"
- *     });
+ *     },
+ *     o = new $.Observe(data);
  *     
- *     // listen for changes
- *     o.delegate("name","set", function(){
- *     })
+ * _o_ now represents an observable copy of _data_.  You
+ * can read the property values of _o_ with
+ * `observe.attr( name )` like:
+ * 
+ *     // read name
+ *     o.attr('name') //-> Justin Meyer
  *     
- *     // change a property
- *     o.attr('name','Brian Moschel')
- *     
- *     // update the 2nd address
+ * And set property names of _o_ with 
+ * `observe.attr( name, value )` like:
+ * 
+ *     // update name
+ *     o.attr('name', "Brian Moschel") //-> o
+ * 
+ * Observe handles nested data.  Nested Objects and
+ * Arrays are converted to $.Observe and 
+ * $.Observe.Lists.  This lets you read nested properties 
+ * and use $.Observe methods on them.  The following 
+ * updates the second address (Boston) to 'New York':
+ * 
  *     o.attr('addresses.1').attrs({
  *       city: 'New York',
  *       state: 'NY'
  *     })
  * 
+ * When a property value is changed, it creates events
+ * that you can listen to.  There are two ways to listen
+ * for events:
  * 
+ *   - [jQuery.Observe.prototype.bind bind] - listen for any type of change
+ *   - [jQuery.Observe.prototype.delegate delegate] - listen to a specific type of change
+ *     
+ * With `bind( "change" , handler( ev, attr, how, newVal, oldVal ) )`, you can listen
+ * to any change that happens within the 
+ * observe. The handler gets called with the property name that was
+ * changed, how it was changed ['add','remove','set'], the new value
+ * and the old value.
+ * 
+ *     o.bind('change', function( ev, attr, how, nevVal, oldVal ) {
+ *     
+ *     })
+ * 
+ * `delegate( attr, event, handler(ev, newVal, oldVal ) )` lets you listen
+ * to a specific even on a specific attribute. 
+ * 
+ *     // listen for name changes
+ *     o.delegate("name","set", function(){
+ *     
+ *     })
+ *     
+ * `attrs()` can be used to get all properties back from the observe:
+ * 
+ *     o.attrs() // -> 
+ *     { 
+ *       addresses : [
+ *         {
+ *           city: 'Chicago',
+ *           state: 'IL'
+ *         },
+ *         {
+ *           city: 'New York',
+ *           state : 'MA'
+ *         }
+ *         ],
+ *       name : "Brian Moschel"
+ *     }
  * 
  * @param {Object} obj a JavaScript Object that will be 
  * converted to an observable
@@ -144,6 +207,9 @@ $.Class('jQuery.Observe',
 			this._set(attr, val);
 			return this;
 		}
+	},
+	each : function(){
+		return each.apply(null, [this._data].concat(makeArray(arguments)) )
 	},
 	/**
 	 * Removes a property
@@ -253,12 +319,7 @@ $.Class('jQuery.Observe',
 	 * get the raw data of this observable
 	 */
 	serialize : function(){
-		var obj = {}, val;
-		for(var prop in this._data){
-			val = this._data[prop];
-			obj[prop] =  isObject(val) ?  val.serialize() : val ;
-		}
-		return obj;
+		return serialize(this, 'serialize',{});
 	},
 	/**
 	 * Set multiple properties on the observable
@@ -266,7 +327,10 @@ $.Class('jQuery.Observe',
 	 * @param {Boolean} remove true if you should remove properties that are not in props
 	 */
 	attrs : function(props, remove){
-		// copy
+		if(props === undefined) {
+			return serialize(this,'attrs',{})
+		}
+		
 		props = $.extend(true, {}, props);
 		var prop,
 			collectingStarted = collect();
@@ -319,15 +383,14 @@ var list = jQuery.Observe('jQuery.Observe.List',
 	init : function(instances){
 		this.length = 0;
 		this._namespace = ".list"+(++id);
-        this.push.apply(this, $.makeArray(instances || [] ) );
+        this.push.apply(this, makeArray(instances || [] ) );
 		this._data = this;
 	},
 	serialize : function(){
-		var arr = [];
-		for(var i =0; i < this.length; i++){
-			arr.push( isObject(this[i]) ?  this[i].serialize() : this[i] );
-		}
-		return arr;
+		return serialize(this, 'serialize',[]);
+	},
+	each : function(){
+		return each.apply(null, [this].concat(makeArray(arguments)) )
 	},
 	/**
 	 * Remove items or add items from a specific point in the list.
@@ -366,7 +429,7 @@ var list = jQuery.Observe('jQuery.Observe.List',
 	 * @param {Object} [added] an object to add to 
 	 */
 	splice : function(index, count){
-		var args = $.makeArray(arguments);
+		var args = makeArray(arguments);
 
 		for(var i=0; i < args.length; i++){
 			var val = args[i];
@@ -393,9 +456,14 @@ var list = jQuery.Observe('jQuery.Observe.List',
 	 * @param {Object} remove
 	 */
 	attrs : function(props, remove){
+		if( props === undefined ){
+			return serialize(this, 'attrs',[]);
+		}
+		
 		// copy
-		var props = props.slice(0),
-			len = Math.min(props.length, this.length),
+		props = props.slice(0);
+		
+		var len = Math.min(props.length, this.length),
 			collectingStarted = collect();
 		for(var prop =0; prop < len; prop++) {
 			var curVal =  this[prop],
@@ -429,7 +497,7 @@ var list = jQuery.Observe('jQuery.Observe.List',
 			return args[0]
 		}
 		else{
-			return $.makeArray(args)
+			return makeArray(args)
 		}
 	},
 	push = [].push,
