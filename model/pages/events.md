@@ -1,4 +1,3 @@
-/*
 @page jquery.model.events Events
 @parent jQuery.Model
 
@@ -73,6 +72,3 @@ $.Controller.extend("Subscriber",{
   ...
 })
 @codeend
-
-
- */
