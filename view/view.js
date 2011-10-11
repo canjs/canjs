@@ -27,7 +27,9 @@ steal("jquery").then(function( $ ) {
 	 *  - Template caching.
 	 *  - Bundling of processed templates in production builds.
 	 *  - Hookup jquery plugins directly in the template.
-	 *  
+	 * 
+	 * The [mvc.view Get Started with jQueryMX] has a good walkthrough of $.View.
+	 * 
 	 * ## Use
 	 * 
 	 * 

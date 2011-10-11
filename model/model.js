@@ -141,7 +141,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * Model inherits from [jQuery.Class $.Class] and make use
 	 * of REST services and [http://api.jquery.com/category/deferred-object/ deferreds]
 	 * so these concepts are worth exploring.  Also, 
-	 * the [mvc.model MVC in JavaScriptMVC] has a good walkthrough of $.Model.
+	 * the [mvc.model Get Started with jQueryMX] has a good walkthrough of $.Model.
 	 * 
 	 * 
 	 * ## Get and modify data from the server
@@ -499,8 +499,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * API for services.  
 			 * 
 			 * Update is called by [jQuery.Model.prototype.save] or [jQuery.Model.prototype.update] 
-			 * on an existing model instance.  If you want to be able to call save on an instance
-			 * you have to implement update.
+			 * on an existing model instance.  
 			 * 
 			 * The easist way to implement update is to just give it the url to put data to:
 			 * 
@@ -554,8 +553,13 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * 
 			 * @param {String} id the id of the model instance
 			 * @param {Object} attrs Attributes on the model instance
-			 * @param {Function} success(attrs) the callback function, it must be called with an object 
-			 * that has the id of the new instance and any other attributes the service needs to add.
+			 * @param {Function} success(attrs) the callback function.  It optionally accepts 
+			 * an object of attribute / value pairs of property changes the client doesn't already 
+			 * know about. For example, when you update a name property, the server might 
+			 * update other properties as well (such as updatedAt). The server should send 
+			 * these properties as the response to updates.  Passing them to success will 
+			 * update the model instance with these properties.
+			 * 
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function(id, attrs, success, error){
