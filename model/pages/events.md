@@ -56,7 +56,7 @@ Typically, you'll subscribe with the
 <code>jquery/controller/subscribe</code> plugin like:
 
 @codestart
-$.Controller.extend("Subscriber",{
+$.Controller("Subscriber",{
   
   ...
   

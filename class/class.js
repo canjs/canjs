@@ -533,11 +533,11 @@ steal("jquery","jquery/lang/string",function( $ ) {
 		 * to use extend:
 		 * 
 		 *     // with className, static and prototype functions
-		 *     $.Class.extend('Task',{ STATIC },{ PROTOTYPE })
+		 *     $.Class('Task',{ STATIC },{ PROTOTYPE })
 		 *     // with just classname and prototype functions
-		 *     $.Class.extend('Task',{ PROTOTYPE })
+		 *     $.Class('Task',{ PROTOTYPE })
 		 *     // with just a className
-		 *     $.Class.extend('Task')
+		 *     $.Class('Task')
 		 * 
 		 * You no longer have to use <code>.extend</code>.  Instead, you can pass those options directly to
 		 * $.Class (and any inheriting classes):
@@ -629,7 +629,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 				 * @attribute namespace 
 				 * The namespaces object
 				 * 
-				 *     $.Class.extend("MyOrg.MyClass",{},{})
+				 *     $.Class("MyOrg.MyClass",{},{})
 				 *     MyOrg.MyClass.namespace //-> MyOrg
 				 * 
 				 */
@@ -638,7 +638,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 				 * @attribute shortName 
 				 * The name of the class without its namespace, provided for introspection purposes.
 				 * 
-				 *     $.Class.extend("MyOrg.MyClass",{},{})
+				 *     $.Class("MyOrg.MyClass",{},{})
 				 *     MyOrg.MyClass.shortName //-> 'MyClass'
 				 *     MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
 				 * 
@@ -649,7 +649,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 				 * @attribute fullName 
 				 * The full name of the class, including namespace, provided for introspection purposes.
 				 * 
-				 *     $.Class.extend("MyOrg.MyClass",{},{})
+				 *     $.Class("MyOrg.MyClass",{},{})
 				 *     MyOrg.MyClass.shortName //-> 'MyClass'
 				 *     MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
 				 * 
