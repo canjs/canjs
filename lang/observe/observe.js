@@ -154,7 +154,7 @@ var isArray =  $.isArray,
  *           city: 'New York',
  *           state : 'MA'
  *         }
- *         ],
+ *       ],
  *       name : "Brian Moschel"
  *     }
  * 
