@@ -3,14 +3,14 @@
  * @parent jquerymx
  * JavaScriptMVC has several lightweight language helper plugins.
  * 
- * ## Object
+ * ## [jQuery.Object Object]
  * 
  * Methods useful for comparing Objects. For example, if two
  * objects are the same:
  * 
  *     $.Object.same({foo: "bar"}, {foo: "bar"});
  *     
- * ## Observe
+ * ## [jQuery.Observe Observe]
  * 
  * Makes an Object's properties observable:
  * 
@@ -18,18 +18,18 @@
  *     person.bind('change', function(){ ... })
  *     person.attr('name', "Brian");
  *     
- * ## String
+ * ## [jQuery.String String]
  * 
  * String helpers capitalize, underscore, and perform similar manipulations
  * on strings.  They can also lookup a value in an object:
  * 
  *    $.String.getObject("foo.bar",{foo: {bar: "car"}})
  * 
- * ## toJSON
+ * ## [jQuery.toJSON toJSON]
  * 
  * Used to create or consume JSON strings.
  * 
- * ## Vector
+ * ## [jQuery.Vector Vector]
  * 
  * Used for vector math.
  */

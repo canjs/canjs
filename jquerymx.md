@@ -52,15 +52,15 @@ THe following are the other dom plugins:
 
 jQueryMX comes packed with jQuery [specialevents special events] and event helpers.
 
-  - Drag - Delegatable drag events.
-  - Drop - Delegatable drop events.
-  - Hover - Delegatable hover events.
-  - Destroyed - Know when an element is removed from the page.
-  - Resize - Listen to resize events on any element.
-  - Swipe - Delegatable swipe events.
-  - Key - Get the character from a key event.
-  - Default - Provide default behaviors for events.
-  - Pause-Resume - Pause and resume event propagation.
+  - [jQuery.Drag Drag] - Delegatable drag events.
+  - [jQuery.Drop Drop] - Delegatable drop events.
+  - [jQuery.Hover Hover] - Delegatable hover events.
+  - [jQuery.event.special.destroyed Destroyed] - Know when an element is removed from the page.
+  - [jQuery.event.special.resize Resize] - Listen to resize events on any element.
+  - [jQuery.event.swipe Swipe] - Delegatable swipe events.
+  - [jQuery.Event.prototype.key Key] - Get the character from a key event.
+  - [jQuery.event.special.default Default] - Provide default behaviors for events.
+  - [jquery.event.pause Pause-Resume] - Pause and resume event propagation.
 
 
 ## Language Helpers
