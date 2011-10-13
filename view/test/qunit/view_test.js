@@ -169,6 +169,10 @@ test("html takes promise", function(){
 	setTimeout(function(){
 		d.resolve("Hello World")
 	},10)
+});
+
+test("val set with a template within a hookup within another template", function(){
+	$("#qunit-test-area").html("//jquery/view/test/qunit/hookupvalcall.ejs",{});
 })
 
 /*test("bad url", function(){

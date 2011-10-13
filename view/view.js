@@ -6,7 +6,8 @@ steal("jquery").then(function( $ ) {
 	},
 		// used for hookup ids
 		id = 1;
-
+	// this might be useful for testing if html
+	// htmlTest = /^[\s\n\r\xA0]*<(.|[\r\n])*>[\s\n\r\xA0]*$/
 	/**
 	 * @class jQuery.View
 	 * @parent jquerymx
@@ -119,7 +120,7 @@ steal("jquery").then(function( $ ) {
 	 * into your production files. You just have to point to the view file like: 
 	 * 
 	 *     steal.views('path/to/the/view.ejs');
-     *
+	 *
 	 * ## Asynchronous
 	 * 
 	 * By default, retrieving requests is done synchronously. This is 
@@ -156,7 +157,7 @@ steal("jquery").then(function( $ ) {
 	 * 
 	 *     var out = $.View('path/to/template.jaml',{});
 	 *     
-     * ## Preloading Templates
+	 * ## Preloading Templates
 	 * 
 	 * You can preload templates asynchronously like:
 	 * 
@@ -177,7 +178,7 @@ steal("jquery").then(function( $ ) {
 	 *     
 	 *   - jQuery.Tmpl
 	 *     <pre><code>&lt;h2>${message}&lt;/h2></code></pre>
-
+	 
 	 * 
 	 * The popular <a href='http://awardwinningfjords.com/2010/08/09/mustache-for-javascriptmvc-3.html'>Mustache</a> 
 	 * template engine is supported in a 2nd party plugin.
@@ -219,21 +220,20 @@ steal("jquery").then(function( $ ) {
 	 * the rendered result of the view.
 	 */
 
-	var $view, render, checkText, get, getRenderer,
-		isDeferred = function(obj){
-			return obj && $.isFunction(obj.always) // check if obj is a $.Deferred
-		},
+	var $view, render, checkText, get, getRenderer, isDeferred = function( obj ) {
+		return obj && $.isFunction(obj.always) // check if obj is a $.Deferred
+	},
 		// gets an array of deferreds from an object
 		// this only goes one level deep
-		getDeferreds =  function(data){
+		getDeferreds = function( data ) {
 			var deferreds = [];
-		
+
 			// pull out deferreds
-			if(isDeferred(data)){
+			if ( isDeferred(data) ) {
 				return [data]
-			}else{
-				for(var prop in data) {
-					if(isDeferred(data[prop])) {
+			} else {
+				for ( var prop in data ) {
+					if ( isDeferred(data[prop]) ) {
 						deferreds.push(data[prop]);
 					}
 				}
@@ -242,11 +242,8 @@ steal("jquery").then(function( $ ) {
 		},
 		// gets the useful part of deferred
 		// this is for Models and $.ajax that give arrays
-		usefulPart = function(resolved){
-			return $.isArray(resolved) && 
-					resolved.length ===3 && 
-					resolved[1] === 'success' ?
-						resolved[0] : resolved
+		usefulPart = function( resolved ) {
+			return $.isArray(resolved) && resolved.length === 3 && resolved[1] === 'success' ? resolved[0] : resolved
 		};
 
 	$view = $.View = function( view, data, helpers, callback ) {
@@ -254,40 +251,38 @@ steal("jquery").then(function( $ ) {
 			callback = helpers;
 			helpers = undefined;
 		}
-		
+
 		// see if we got passed any deferreds
 		var deferreds = getDeferreds(data);
-		
-		
-		if(deferreds.length) { // does data contain any deferreds?
-			
+
+
+		if ( deferreds.length ) { // does data contain any deferreds?
 			// the deferred that resolves into the rendered content ...
 			var deferred = $.Deferred();
-			
+
 			// add the view request to the list of deferreds
 			deferreds.push(get(view, true))
-			
+
 			// wait for the view and all deferreds to finish
-			$.when.apply($, deferreds).then(function(resolved) {
+			$.when.apply($, deferreds).then(function( resolved ) {
 				var objs = $.makeArray(arguments),
 					renderer = objs.pop()[0],
 					result; //get the view render function
-				
 				// make data look like the resolved deferreds
-				if (isDeferred(data)) {
+				if ( isDeferred(data) ) {
 					data = usefulPart(resolved);
 				}
 				else {
-					for (var prop in data) {
-						if (isDeferred(data[prop])) {
+					for ( var prop in data ) {
+						if ( isDeferred(data[prop]) ) {
 							data[prop] = usefulPart(objs.shift());
 						}
 					}
 				}
 				result = renderer(data, helpers);
-				
+
 				//resolve with the rendered view
-				deferred.resolve( result ); // this does not work as is...
+				deferred.resolve(result); // this does not work as is...
 				callback && callback(result);
 			});
 			// return the deferred ....
@@ -295,21 +290,20 @@ steal("jquery").then(function( $ ) {
 		}
 		else {
 
-			var response,
-				async = typeof callback === "function",
+			var response, async = typeof callback === "function",
 				deferred = get(view, async);
-			
-			if(async){
+
+			if ( async ) {
 				response = deferred;
-				deferred.done(function(renderer){
+				deferred.done(function( renderer ) {
 					callback(renderer(data, helpers))
 				})
 			} else {
-				deferred.done(function(renderer){
+				deferred.done(function( renderer ) {
 					response = renderer(data, helpers);
 				});
 			}
-			
+
 			return response;
 		}
 	};
@@ -320,21 +314,20 @@ steal("jquery").then(function( $ ) {
 			throw "$.View ERROR: There is no template or an empty template at " + url;
 		}
 	};
-	get = function(url , async){
+	get = function( url, async ) {
 		return $.ajax({
-				url: url,
-				dataType : "view",
-				async : async
+			url: url,
+			dataType: "view",
+			async: async
 		});
 	};
-	
+
 	// you can request a view renderer (a function you pass data to and get html)
-	$.ajaxTransport("view", function(options, orig){
+	$.ajaxTransport("view", function( options, orig ) {
 		var view = orig.url,
 			suffix = view.match(/\.[\w\d]+$/),
 			type, el, id, renderer, url = view,
-			jqXHR,
-			response = function(text){
+			jqXHR, response = function( text ) {
 				var func = type.renderer(id, text);
 				if ( $view.cache ) {
 					$view.cached[id] = func;
@@ -343,13 +336,13 @@ steal("jquery").then(function( $ ) {
 					view: func
 				};
 			};
-			
-        // if we have an inline template, derive the suffix from the 'text/???' part
-        // this only supports '<script></script>' tags
-        if ( el = document.getElementById(view)) {
-          suffix = el.type.match(/\/[\d\w]+$/)[0].replace(/^\//, '.');
-        }
-		
+
+		// if we have an inline template, derive the suffix from the 'text/???' part
+		// this only supports '<script></script>' tags
+		if ( el = document.getElementById(view) ) {
+			suffix = el.type.match(/\/[\d\w]+$/)[0].replace(/^\//, '.');
+		}
+
 		//if there is no suffix, add one
 		if (!suffix ) {
 			suffix = $view.ext;
@@ -361,8 +354,8 @@ steal("jquery").then(function( $ ) {
 
 		//if a absolute path, use steal to get it
 		if ( url.match(/^\/\//) ) {
-			if (typeof steal === "undefined") {
-				url = "/"+url.substr(2);
+			if ( typeof steal === "undefined" ) {
+				url = "/" + url.substr(2);
 			}
 			else {
 				url = steal.root.mapJoin(url.substr(2));
@@ -373,14 +366,16 @@ steal("jquery").then(function( $ ) {
 		type = $view.types[suffix];
 
 		return {
-			send : function(headers, callback){
-				if($view.cached[id]){
-					return callback( 200, "success", {view: $view.cached[id]} );
-				} else if( el  ) {
-					callback( 200, "success", response(el.innerHTML) );
+			send: function( headers, callback ) {
+				if ( $view.cached[id] ) {
+					return callback(200, "success", {
+						view: $view.cached[id]
+					});
+				} else if ( el ) {
+					callback(200, "success", response(el.innerHTML));
 				} else {
 					jqXHR = $.ajax({
-						async : orig.async,
+						async: orig.async,
 						url: url,
 						dataType: "text",
 						error: function() {
@@ -389,12 +384,12 @@ steal("jquery").then(function( $ ) {
 						},
 						success: function( text ) {
 							checkText(text, url);
-							callback(200, "success", response(text) )
+							callback(200, "success", response(text))
 						}
 					});
 				}
 			},
-			abort : function(){
+			abort: function() {
 				jqXHR && jqXHR.abort();
 			}
 		}
@@ -464,10 +459,10 @@ steal("jquery").then(function( $ ) {
 		 * @codeend
 		 * Here's what each property does:
 		 * 
- 		 *    * plugin - the location of the plugin
- 		 *    * suffix - files that use this suffix will be processed by this template engine
- 		 *    * renderer - returns a function that will render the template provided by text
- 		 *    * script - returns a string form of the processed template function.
+		 *    * plugin - the location of the plugin
+		 *    * suffix - files that use this suffix will be processed by this template engine
+		 *    * renderer - returns a function that will render the template provided by text
+		 *    * script - returns a string form of the processed template function.
 		 * 
 		 * @param {Object} info a object of method and properties 
 		 * 
@@ -483,13 +478,13 @@ steal("jquery").then(function( $ ) {
 		 */
 		register: function( info ) {
 			this.types["." + info.suffix] = info;
-			
-			if(window.steal){
-				steal.type(info.suffix+" view js", function(options, orig, success, error){
+
+			if ( window.steal ) {
+				steal.type(info.suffix + " view js", function( options, orig, success, error ) {
 					var type = $view.types["." + options.type],
 						id = toId(options.rootSrc);
-					
-					options.text = type.script(id, options.text )
+
+					options.text = type.script(id, options.text)
 					success();
 				})
 			}
@@ -525,14 +520,12 @@ steal("jquery").then(function( $ ) {
 		}
 
 	});
-	if(window.steal){
-		steal.type("view js", function(options, orig, success, error){
+	if ( window.steal ) {
+		steal.type("view js", function( options, orig, success, error ) {
 			var type = $view.types["." + options.type],
 				id = toId(options.rootSrc);
-			
-			options.text = "steal('"+(type.plugin || "jquery/view/"+options.type)+
-			    "').then(function($){"+
-				"$.View.preload('" + id + "'," + options.text + ");\n})";
+
+			options.text = "steal('" + (type.plugin || "jquery/view/" + options.type) + "').then(function($){" + "$.View.preload('" + id + "'," + options.text + ");\n})";
 			success();
 		})
 	}
@@ -546,12 +539,10 @@ steal("jquery").then(function( $ ) {
 
 		$.fn[func_name] = function() {
 			var args = $.makeArray(arguments),
-				callbackNum, 
-				callback, 
-				self = this,
+				callbackNum, callback, self = this,
 				result;
-			if( isDeferred(args[0]) ){
-				args[0].done(function(res){
+			if ( isDeferred(args[0]) ) {
+				args[0].done(function( res ) {
 					modify.call(self, [res], old);
 				})
 				return this;
@@ -570,17 +561,17 @@ steal("jquery").then(function( $ ) {
 					return this;
 				}
 				result = $view.apply($view, args);
-				if(!isDeferred( result ) ){
+				if (!isDeferred(result) ) {
 					args = [result];
-				}else{
-					result.done(function(res){
+				} else {
+					result.done(function( res ) {
 						modify.call(self, [res], old);
 					})
 					return this;
 				}
 			}
 			return modify.call(this, args, old);
-			 
+
 		};
 	};
 
@@ -594,15 +585,17 @@ steal("jquery").then(function( $ ) {
 		}
 
 		//if there are hookups, get jQuery object
-		if ( hasHookups && args[0] && isHTML( args[0] ) ) {
+		if ( hasHookups && args[0] && isHTML(args[0]) ) {
 			hooks = $view.hookups;
 			$view.hookups = {};
 			args[0] = $(args[0]);
 		}
 		res = old.apply(this, args);
 
-		//now hookup hookups
-		if ( hooks /* && args.length*/ ) {
+		//now hookup the hookups
+		if ( hooks
+		/* && args.length*/
+		) {
 			hookupView(args[0], hooks);
 		}
 		return res;
@@ -617,17 +610,17 @@ steal("jquery").then(function( $ ) {
 
 	// returns whether the argument is some sort of HTML data
 	isHTML = function( arg ) {
-	  if ( arg.jquery || arg.nodeType === 1 ) {
-	    // if jQuery object or DOM node we're good
-	    return true;
-    } else if ( typeof arg === "string" ) {
-      // if string, do a quick sanity check that we're HTML
-	    arg = $.trim(arg);
-	    return arg[0] === "<" && arg[arg.length - 1] === ">" && arg.length >= 3;
-    } else {
-      // don't know what you are
-      return false;
-    }
+		if ( arg.jquery || arg.nodeType === 1 ) {
+			// if jQuery object or DOM node we're good
+			return true;
+		} else if ( typeof arg === "string" ) {
+			// if string, do a quick sanity check that we're HTML
+			arg = $.trim(arg);
+			return arg.substr(0, 1) === "<" && arg.substr(arg.length - 1, 1) === ">" && arg.length >= 3;
+		} else {
+			// don't know what you are
+			return false;
+		}
 	};
 
 	//returns the callback if there is one (for async view use)
@@ -635,12 +628,11 @@ steal("jquery").then(function( $ ) {
 		return typeof args[3] === 'function' ? 3 : typeof args[2] === 'function' && 2;
 	};
 
-	hookupView = function( els , hooks) {
+	hookupView = function( els, hooks ) {
 		//remove all hookups
-		var hookupEls, 
-			len, i = 0,
+		var hookupEls, len, i = 0,
 			id, func;
-		els = els.filter(function(){
+		els = els.filter(function() {
 			return this.nodeType != 3; //filter out text nodes
 		})
 		hookupEls = els.add("[data-view-id]", els);
@@ -655,7 +647,7 @@ steal("jquery").then(function( $ ) {
 		//copy remaining hooks back
 		$.extend($view.hookups, hooks);
 	};
-	
+
 	/**
 	 *  @add jQuery.fn
 	 *  @parent jQuery.View
@@ -668,7 +660,7 @@ steal("jquery").then(function( $ ) {
 	 * $($.View('//views/recipes.ejs',recipeData)).hookup()
 	 * @codeend
 	 */
-	$.fn.hookup = function(){
+	$.fn.hookup = function() {
 		var hooks = $view.hookups;
 		$view.hookups = {};
 		hookupView(this, hooks);
@@ -792,8 +784,7 @@ steal("jquery").then(function( $ ) {
 	 *  If rendering a view template this parameter always has to be present
 	 *  (use the empty object initializer {} for no data).
 	 */
-	"replaceWith", 
-	"val"];
+	"replaceWith", "val"];
 
 	//go through helper funcs and convert
 	for ( var i = 0; i < funcs.length; i++ ) {
