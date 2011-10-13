@@ -1,8 +1,5 @@
-/**
 @page jquery.model.typeconversion Type Conversion
 @parent jQuery.Model
-
-# Type Conversion
 
 You often want to convert from what the model sends you to
 a form more useful to JavaScript.  For example, 
@@ -89,8 +86,3 @@ $.Model("Contact",
 @codeend
 
 This code will format the 'birthday' attribute as '2011-11-24' before it will be sent to the server.
-
-*/
-
-
- */
