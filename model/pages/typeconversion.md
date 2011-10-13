@@ -36,7 +36,7 @@ an attribute and provide a function to convert that type.
 The following sets the birthday attribute to "date" and provides a date conversion function:
 
 @codestart
-$.Model.extend("Contact",
+$.Model("Contact",
 {
   attributes : { 
     birthday : 'date'
@@ -71,7 +71,7 @@ By default every attribute will be passed through the 'default' serialization me
 You can set the serialization methods similar to the convert methods:
 
 @codestart
-$.Model.extend("Contact",
+$.Model("Contact",
 {
   attributes : { 
     birthday : 'date'
