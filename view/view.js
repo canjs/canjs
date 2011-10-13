@@ -24,7 +24,7 @@ steal("jquery").then(function( $ ) {
 	 *   [jQuery.fn.replaceWith replaceWith], [jQuery.fn.text text].
 	 *  - Template loading from html elements and external files.
 	 *  - Synchronous and asynchronous template loading.
-	 *  - Deferred Rendering.
+	 *  - [view.deferreds Deferred Rendering].
 	 *  - Template caching.
 	 *  - Bundling of processed templates in production builds.
 	 *  - Hookup jquery plugins directly in the template.
