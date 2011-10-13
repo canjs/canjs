@@ -14,6 +14,7 @@ var getArgs = function(args){
 	id = 0,
 	expando = jQuery.expando;
 /**
+ * @class jQuery.Model.List
  * @parent jQuery.Model
  * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/list/list.js
  * @test jquery/model/list/qunit.html
