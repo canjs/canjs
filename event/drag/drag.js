@@ -46,12 +46,12 @@ steal('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack',function( $ 
 	 * Here's a quick example:
 	 * 
 	 *     //makes the drag vertical
-	 *     $(".drags").live("draginit", function(event, drag){
+	 *     $(".drags").delegate("draginit", function(event, drag){
 	 *       drag.vertical();
 	 *     })
 	 *     //gets the position of the drag and uses that to set the width
 	 *     //of an element
-	 *     $(".resize").live("dragmove",function(event, drag){
+	 *     $(".resize").delegate("dragmove",function(event, drag){
 	 *       $(this).width(drag.position.left() - $(this).offset().left   )
 	 *     })
 	 * 
@@ -538,7 +538,7 @@ steal('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack',function( $ 
 	 * within the drag element.  Typically these are input elements.</p>
 	 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
 	 * @codestart
-	 * $(".handles").live("dragdown", function(ev, drag){})
+	 * $(".handles").delegate("dragdown", function(ev, drag){})
 	 * @codeend
 	 */
 	'dragdown',
