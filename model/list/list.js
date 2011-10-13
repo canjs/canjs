@@ -35,7 +35,7 @@ var getArgs = function(args){
  * list:
  * 
  * @codestart
- * $.Model.List.extend("Contact.List",{
+ * $.Model.List("Contact.List",{
  *   destroyAll : function(){
  *     $.post("/destroy",
  *       this.map(function(contact){
