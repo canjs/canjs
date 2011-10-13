@@ -41,7 +41,7 @@ But to correct for this, you just need to add the
 function to the [jQuery.Controller.static.listensTo listensTo] 
 property.  Here's how:
 
-	 $.Controller.extend("MyShow",{
+	 $.Controller("MyShow",{
 	   listensTo: ["show"]
 	 },{
 	   show: function( el, ev ) {
