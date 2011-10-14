@@ -93,11 +93,49 @@ var getArgs = function(args){
 	{
 		update : function(str){
 			/**
+			 * @function update
+			 * Update is used to update a set of model instances on the server.  By implementing 
+			 * update along with the rest of the [jquery.model.services service api], your models provide an abstract
+			 * API for services.  
 			 * 
-			 * @param {Object} ids
-			 * @param {Object} attrs
-			 * @param {Object} success
-			 * @param {Object} error
+			 * The easist way to implement update is to just give it the url to put data to:
+			 * 
+			 *     $.Model.List("Recipe",{
+			 *       update: "PUT /recipes/{ids}"
+			 *     },{})
+			 *     
+			 * This lets you update a set of recipes like:
+			 *  
+			 *     // PUT /recipes/5,25,20 {name: "Hot Dog"}
+			 *     recipes.update({ name: "Hot Dog" },
+			 *       function(updatedRecipes){
+			 *         ...
+			 *       })
+			 *  
+			 * If your server doesn't use PUT, you can change it to post like:
+			 * 
+			 *     $.Model("Recipe",{
+			 *       update: "POST /recipes/{ids}"
+			 *     },{})
+			 * 
+			 * Your server should send back an object with any new attributes the model 
+			 * should have.  For example if your server udpates the "updatedAt" property, it
+			 * should send back something like:
+			 * 
+			 *     // PUT /recipes/4,25,20 { name: "Food" } ->
+			 *     {
+			 *       updatedAt : "10-20-2011"
+			 *     }
+			 * 
+			 * @param {Array} ids the ids of the model instance
+			 * @param {Object} attrs Attributes on the model instance
+			 * @param {Function} success the callback function.  It optionally accepts 
+			 * an object of attribute / value pairs of property changes the client doesn't already 
+			 * know about. For example, when you update a name property, the server might 
+			 * update other properties as well (such as updatedAt). The server should send 
+			 * these properties as the response to updates.  Passing them to success will 
+			 * update the model instances with these properties.
+			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function(ids, attrs, success, error){
 				return ajax(str, {
@@ -106,13 +144,36 @@ var getArgs = function(args){
 				}, success, error, "-updateAll","put")
 			}
 		},
-		
 		destroy : function(str){
 			/**
+			 * @function destroy
+			 * Destroy is used to remove a set of model instance from the server. By implementing 
+			 * destroy along with the rest of the [jquery.model.services service api], your models provide an abstract
+			 * service API.
 			 * 
-			 * @param {Object} ids
-			 * @param {Object} success
-			 * @param {Object} error
+			 * You can implement destroy with a string like:
+			 * 
+			 *     $.Model.List("Thing",{
+			 *       destroy : "PUT /thing/destroy/{ids}"
+			 *     })
+			 * 
+			 * Or you can implement destroy manually like:
+			 * 
+			 *     $.Model.List("Thing",{
+			 *       destroy : function(ids, success, error){
+			 * 		   return $.ajax({
+			 * 		   	  url: "/thing/destroy" + ids,
+			 * 		      success: success,
+			 * 		      error: error,
+			 *            type: "PUT"
+			 * 		   });
+			 *       }
+			 *     })
+			 * 
+			 * @param {Array} ids the ids of the instances you want destroyed
+			 * @param {Function} success the callback function, it must be called with an object 
+			 * that has the id of the new instance and any other attributes the service needs to add.
+			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function(ids, success, error){
 				return ajax(str, ids, success, error, "-destroyAll","post")
@@ -286,8 +347,14 @@ $.Class("jQuery.Model.List",{
 	 * Destroys all items in this list.  This will use the List's 
 	 * [jQuery.Model.List.static.destroy destroy] method.
 	 * 
+	 *     list.destroy(function(destroyedItems){
+	 *         //success
+	 *     }, function(){
+	 *         //error
+	 *     });
+	 * 
 	 * @param {Function} success a handler called back with the destroyed items.  The original list will be emptied.
-	 * @param {Function} error
+	 * @param {Function} error a handler called back when the destroy was unsuccessful.
 	 */
 	destroy : function(success, error){
 		var ids = this.map(getIds),
@@ -309,10 +376,16 @@ $.Class("jQuery.Model.List",{
 	/**
 	 * Updates items in the list with attributes.  This makes a 
 	 * request using the list class's [jQuery.Model.List.static.update update].
+	 *
+	 *     list.update(function(updatedItems){
+	 *         //success
+	 *     }, function(){
+	 *         //error
+	 *     });
 	 * 
-	 * @param {Object} attrs attributes to update the list with
-	 * @param {Function} success
-	 * @param {Function} error
+	 * @param {Object} attrs attributes to update the list with.
+	 * @param {Function} success a handler called back with the updated items.
+	 * @param {Function} error a handler called back when the update was unsuccessful.
 	 */
 	update : function(attrs, success, error){
 		var ids = this.map(getIds),
