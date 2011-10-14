@@ -28,7 +28,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 					src = ajaxOb;
 				}
 			}
-			typeof attrs == "object" && (attrs =  extend({},attrs))
+			typeof attrs == "object" && (!isArray(attrs)) && (attrs =  extend({},attrs))
 			
 			var url = $.String.sub(src, attrs, true)
 			return $.ajax({
@@ -504,13 +504,13 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * The easist way to implement update is to just give it the url to put data to:
 			 * 
 			 *     $.Model("Recipe",{
-			 *       create: "/recipes/{id}"
+			 *       update: "/recipes/{id}"
 			 *     },{})
 			 *     
 			 * This lets you update a recipe like:
 			 *  
 			 *     // PUT /recipes/5 {name: "Hot Dog"}
-			 *     recipe.update({name: "Hot Dog"},
+			 *     Recipe.update(5, {name: "Hot Dog"},
 			 *       function(){
 			 *         this.name //this is the updated recipe
 			 *       })
@@ -518,7 +518,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * If your server doesn't use PUT, you can change it to post like:
 			 * 
 			 *     $.Model("Recipe",{
-			 *       create: "POST /recipes/{id}"
+			 *       update: "POST /recipes/{id}"
 			 *     },{})
 			 * 
 			 * Your server should send back an object with any new attributes the model 
@@ -1036,7 +1036,14 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 */
 		convert: {
 			"date": function( str ) {
-				return typeof str === "string" ? (isNaN(Date.parse(str)) ? null : Date.parse(str)) : str;
+				var type = typeof str;
+				if( type === "string" ) {
+					return isNaN(Date.parse(str)) ? null : Date.parse(str)
+				} else if ( type === 'number') {
+					return new Date(str)
+				} else {
+					return str
+				}
 			},
 			"number": function( val ) {
 				return parseFloat(val);
@@ -1061,7 +1068,8 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			}
 		},
 		bind: bind,
-		unbind: unbind
+		unbind: unbind,
+		_ajax: ajax
 	},
 	/**
 	 * @Prototype
@@ -1543,9 +1551,9 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * 
 		 *     <div <%= todo %>> ... </div>
 		 *     
-		 * Typically, you'll use this as a response of an OpenAjax message:
+		 * Typically, you'll use this as a response to a Model Event:
 		 * 
-		 *     "todo.destroyed subscribe": function(called, todo){
+		 *     "{Todo} destroyed": function(Todo, event, todo){
 		 *       todo.elements(this.element).remove();
 		 *     }
 		 * 

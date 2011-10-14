@@ -62,8 +62,7 @@
 <script type='text/javascript'>DEMO_HTML = document.getElementById('demo-html').innerHTML</script>
 <script type='text/javascript' src='../../steal/steal.js'></script>
 <script type='text/javascript' id="demo-source">
-steal('jquery/dom/route', 'jquery/controller').then(function(){
-
+steal('jquery/controller').then(function(){
 $.Controller("Tabs",{
   init : function(){
     this.element.children("li:first").addClass('active')
