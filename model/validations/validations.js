@@ -45,14 +45,12 @@ var validate = function(attrNames, options, proc) {
 	}
 	options = options || {};
 	attrNames = $.makeArray(attrNames)
-	var customMsg = options.message,
-		self = this;
 	
 	if(options.testIf && !options.testIf.call(this)){
 		return;
 	}
-	     
 	
+	var self = this;
 	$.each(attrNames, function(i, attrName) {
 		// Call the validate proc function in the instance context
 		if(!self.validations[attrName]){
@@ -66,17 +64,44 @@ var validate = function(attrNames, options, proc) {
    
 };
 
-
 $.extend($.Model, {
    /**
     * @function jQuery.Model.static.validate
     * @parent jquery.model.validations
     * Validates each of the specified attributes with the given function.  See [validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
-    * @param {Function} validateProc Function used to validate each given attribute. Returns true for valid and false otherwise. Function is called in the instance context and takes the value to validate
+    * @param {Function} validateProc Function used to validate each given attribute. Returns nothing if valid and an error message otherwise. Function is called in the instance context and takes the value to validate.
     * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     */
    validate: validate,
+   
+   /**
+    * @attribute validationMessages
+    * @parent jquery.model.validations
+    * The default validation error messages that will be returned by the builtin
+    * validation methods. These can be overwritten by assigning new messages
+    * to $.Model.validationMessages.&lt;message> in your application setup.
+    * 
+    * The following messages are available:
+    *  * format
+    *  * inclusion
+    *  * lengthShort
+    *  * lengthLong
+    *  * presence
+    *  * range
+    * 
+    * It is important to ensure that you steal jquery/model/validations 
+    * before overwriting the messages, otherwise the changes will
+    * be lost once steal loads it later.
+    */
+   validationMessages : {
+       format      : "is invalid",
+       inclusion   : "is not a valid option (perhaps out of range)",
+       lengthShort : "is too short",
+       lengthLong  : "is too long",
+       presence    : "can't be empty",
+       range       : "is out of range"
+   },
 
    /**
     * @function jQuery.Model.static.validateFormatOf
@@ -93,7 +118,7 @@ $.extend($.Model, {
          if(  (typeof value != 'undefined' && value != '')
          	&& String(value).match(regexp) == null )
          {
-            return "is invalid";
+            return this.Class.validationMessages.format;
          }
       });
    },
@@ -114,7 +139,7 @@ $.extend($.Model, {
             return;
 
          if($.grep(inArray, function(elm) { return (elm == value);}).length == 0)
-            return "is not a valid option (perhaps out of range)";
+            return this.Class.validationMessages.inclusion;
       });
    },
 
@@ -131,9 +156,9 @@ $.extend($.Model, {
    validateLengthOf: function(attrNames, min, max, options) {
       validate.call(this, attrNames, options, function(value) {
          if((typeof value == 'undefined' && min > 0) || value.length < min)
-            return "is too short (min=" + min + ")";
+            return this.Class.validationMessages.lengthShort + " (min=" + min + ")";
          else if(typeof value != 'undefined' && value.length > max)
-            return "is too long (max=" + max + ")";
+            return this.Class.validationMessages.lengthLong + " (max=" + max + ")";
       });
    },
 
@@ -148,7 +173,7 @@ $.extend($.Model, {
    validatePresenceOf: function(attrNames, options) {
       validate.call(this, attrNames, options, function(value) {
          if(typeof value == 'undefined' || value == "" || value === null)
-            return "can't be empty";
+            return this.Class.validationMessages.presence;
       });
    },
 
@@ -165,14 +190,9 @@ $.extend($.Model, {
    validateRangeOf: function(attrNames, low, hi, options) {
       validate.call(this, attrNames, options, function(value) {
          if(typeof value != 'undefined' && value < low || value > hi)
-            return "is out of range [" + low + "," + hi + "]";
+            return this.Class.validationMessages.range + " [" + low + "," + hi + "]";
       });
    }
 });
 
-
-
-
-
-	
 });
