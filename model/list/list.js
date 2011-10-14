@@ -286,8 +286,7 @@ $.Class("jQuery.Model.List",{
 	 * Destroys all items in this list.  This will use the List's 
 	 * [jQuery.Model.List.static.destroy destroy] method.
 	 * 
-	 * @param {Function} success(list) a handler called back with the 
-	 * destroyed items.  The original list will be emptied.
+	 * @param {Function} success a handler called back with the destroyed items.  The original list will be emptied.
 	 * @param {Function} error
 	 */
 	destroy : function(success, error){
