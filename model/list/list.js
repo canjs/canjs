@@ -162,7 +162,7 @@ var getArgs = function(args){
 			 * The easist way to implement update is to just give it the url to put data to:
 			 * 
 			 *     $.Model.List("Recipe",{
-			 *       update: "PUT /recipes/{ids}"
+			 *       update: "PUT /thing/update/"
 			 *     },{})
 			 *
 			 * Or you can implement update manually like:
@@ -170,7 +170,7 @@ var getArgs = function(args){
 			 *     $.Model.List("Thing",{
 			 *       update : function(ids, attrs, success, error){
 			 * 		   return $.ajax({
-			 * 		   	  url: "/thing/destroy" + ids,
+			 * 		   	  url: "/thing/update/",
 			 * 		      success: success,
 			 * 		      type: "PUT",
 			 * 		      data: { ids: ids, attrs : attrs }
@@ -181,8 +181,18 @@ var getArgs = function(args){
 			 *     
 			 * Then you update models by calling the [jQuery.Model.List.prototype.update prototype update method].
 			 *
+			 *     listInstance.update({ name: "Food" })
+			 *
+			 *
 			 * By default, the request will PUT an array of ids to be updated and
 			 * the changed attributes of the model instances in the body of the Ajax request.
+			 *
+			 *     { 
+			 *         ids: [5,10,20],
+			 *         attrs: { 
+			 *             name: "Food" 
+			 *         } 
+			 *     }
 			 * 
 			 * Your server should send back an object with any new attributes the model 
 			 * should have.  For example if your server udpates the "updatedAt" property, it
@@ -213,14 +223,14 @@ var getArgs = function(args){
 		destroy : function(str){
 			/**
 			 * @function destroy
-			 * Destroy is used to remove a set of model instance from the server. By implementing 
+			 * Destroy is used to remove a set of model instances from the server. By implementing 
 			 * destroy along with the rest of the [jquery.model.services service api], your models provide an abstract
 			 * service API.
 			 * 
 			 * You can implement destroy with a string like:
 			 * 
 			 *     $.Model.List("Thing",{
-			 *       destroy : "POST /thing/destroy/{ids}"
+			 *       destroy : "POST /thing/destroy/"
 			 *     })
 			 * 
 			 * Or you can implement destroy manually like:
@@ -228,7 +238,7 @@ var getArgs = function(args){
 			 *     $.Model.List("Thing",{
 			 *       destroy : function(ids, success, error){
 			 * 		   return $.ajax({
-			 * 		   	  url: "/thing/destroy",
+			 * 		   	  url: "/thing/destroy/",
 			 * 		      data: ids,
 			 * 		      success: success,
 			 * 		      error: error,
@@ -239,11 +249,16 @@ var getArgs = function(args){
 			 *
 			 * Then you delete models by calling the [jQuery.Model.List.prototype.destroy prototype delete method].
 			 *
+			 *     listInstance.destroy();
+			 *
 			 * By default, the request will POST an array of ids to be deleted in the body of the Ajax request.
+			 *
+			 *     { 
+			 *         ids: [5,10,20]
+			 *     }
 			 * 
 			 * @param {Array} ids the ids of the instances you want destroyed
-			 * @param {Function} success the callback function, it must be called with an object 
-			 * that has the id of the new instance and any other attributes the service needs to add.
+			 * @param {Function} success the callback function
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function(ids, success, error){
@@ -459,7 +474,7 @@ $.Class("jQuery.Model.List",{
 	},
 	/**
 	 * Destroys all items in this list.  This will use the List's 
-	 * [jQuery.Model.List.static.destroy destroy] method.
+	 * [jQuery.Model.List.static.destroy static destroy] method.
 	 * 
 	 *     list.destroy(function(destroyedItems){
 	 *         //success
@@ -489,7 +504,7 @@ $.Class("jQuery.Model.List",{
 	},
 	/**
 	 * Updates items in the list with attributes.  This makes a 
-	 * request using the list class's [jQuery.Model.List.static.update update].
+	 * request using the list class's [jQuery.Model.List.static.update static update].
 	 *
 	 *     list.update(function(updatedItems){
 	 *         //success
