@@ -504,7 +504,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * The easist way to implement update is to just give it the url to put data to:
 			 * 
 			 *     $.Model("Recipe",{
-			 *       create: "/recipes/{id}"
+			 *       update: "/recipes/{id}"
 			 *     },{})
 			 *     
 			 * This lets you update a recipe like:
@@ -518,7 +518,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * If your server doesn't use PUT, you can change it to post like:
 			 * 
 			 *     $.Model("Recipe",{
-			 *       create: "POST /recipes/{id}"
+			 *       update: "POST /recipes/{id}"
 			 *     },{})
 			 * 
 			 * Your server should send back an object with any new attributes the model 
