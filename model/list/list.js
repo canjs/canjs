@@ -293,13 +293,19 @@ $.Class("jQuery.Model.List",{
 	destroy : function(success, error){
 		var ids = this.map(getIds),
 			items = this.slice(0, this.length);
-			
-		this.constructor.destroy(ids, function(){
-			each(items, function(){
-				this.destroyed();
-			})
-			success && success(items)
-		}, error);
+		
+		if(ids.length){
+			this.constructor.destroy(ids, function(){
+				each(items, function(){
+					this.destroyed();
+				})
+				success && success(items)
+			}, error);
+		} else {
+			success && success(this);
+		}
+		
+		return this;
 	},
 	/**
 	 * Updates items in the list with attributes.  This makes a 
