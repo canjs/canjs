@@ -39,16 +39,20 @@ maintaining additional event handlers.
 
 ## Way 2: Subscribe
 
-If OpenAjax.hub is available, Models also publish events when 
-an instance is created, updated, or destroyed.
+Models will publish events when an instance is created, updated, or destroyed.
 
-You can subscribe to these events with OpenAjax.hub like:
+You can subscribe to these events with Model Events like:
 
 @codestart
-OpenAjax.hub.subscribe(
-  "contact.updated", 
-  function(called, contact){
-    //do something ...
+Task.bind('created', function(ev, task){
+	var el = $("li").html(todo.name);
+	el.appendTo($('#todos'));
+	
+	task.bind('updated', function(){
+		el.html(this.name);
+	}).bind('destroyed', function(){
+		el.remove();
+	});
 })
 @codeend
 
@@ -60,10 +64,10 @@ $.Controller("Subscriber",{
   
   ...
   
-  "todo.destroyed subscribe" : function(called, todo){
+  "Task created" : function(Task, event, task){
     
-    //find the contact in this widget:
-    var el = todo.elements(this.element)
+    //find the task in this widget:
+    var el = task.elements(this.element)
 	
     //remove element
     el.remove();
