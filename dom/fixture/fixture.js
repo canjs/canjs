@@ -382,7 +382,7 @@ steal('jquery/dom',
 		if(fixture !== undefined){
 			if(typeof settings == 'string'){
 				// handle url strings
-				var matches = settings.match(/(GET|POST|PUT|DESTROY) (.+)/i);
+				var matches = settings.match(/(GET|POST|PUT|DELETE) (.+)/i);
 				if(!matches){
 					settings  = {
 						url : settings

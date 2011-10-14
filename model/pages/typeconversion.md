@@ -1,8 +1,5 @@
-/**
 @page jquery.model.typeconversion Type Conversion
 @parent jQuery.Model
-
-# Type Conversion
 
 You often want to convert from what the model sends you to
 a form more useful to JavaScript.  For example, 
@@ -36,7 +33,7 @@ an attribute and provide a function to convert that type.
 The following sets the birthday attribute to "date" and provides a date conversion function:
 
 @codestart
-$.Model.extend("Contact",
+$.Model("Contact",
 {
   attributes : { 
     birthday : 'date'
@@ -71,7 +68,7 @@ By default every attribute will be passed through the 'default' serialization me
 You can set the serialization methods similar to the convert methods:
 
 @codestart
-$.Model.extend("Contact",
+$.Model("Contact",
 {
   attributes : { 
     birthday : 'date'
@@ -89,8 +86,3 @@ $.Model.extend("Contact",
 @codeend
 
 This code will format the 'birthday' attribute as '2011-11-24' before it will be sent to the server.
-
-*/
-
-
- */

@@ -28,7 +28,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 					src = ajaxOb;
 				}
 			}
-			typeof attrs == "object" && (attrs =  extend({},attrs))
+			typeof attrs == "object" && (!isArray(attrs)) && (attrs =  extend({},attrs))
 			
 			var url = $.String.sub(src, attrs, true)
 			return $.ajax({
@@ -141,7 +141,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * Model inherits from [jQuery.Class $.Class] and make use
 	 * of REST services and [http://api.jquery.com/category/deferred-object/ deferreds]
 	 * so these concepts are worth exploring.  Also, 
-	 * the [mvc.model MVC in JavaScriptMVC] has a good walkthrough of $.Model.
+	 * the [mvc.model Get Started with jQueryMX] has a good walkthrough of $.Model.
 	 * 
 	 * 
 	 * ## Get and modify data from the server
@@ -499,19 +499,18 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * API for services.  
 			 * 
 			 * Update is called by [jQuery.Model.prototype.save] or [jQuery.Model.prototype.update] 
-			 * on an existing model instance.  If you want to be able to call save on an instance
-			 * you have to implement update.
+			 * on an existing model instance.  
 			 * 
 			 * The easist way to implement update is to just give it the url to put data to:
 			 * 
 			 *     $.Model("Recipe",{
-			 *       create: "/recipes/{id}"
+			 *       update: "/recipes/{id}"
 			 *     },{})
 			 *     
 			 * This lets you update a recipe like:
 			 *  
 			 *     // PUT /recipes/5 {name: "Hot Dog"}
-			 *     recipe.update({name: "Hot Dog"},
+			 *     Recipe.update(5, {name: "Hot Dog"},
 			 *       function(){
 			 *         this.name //this is the updated recipe
 			 *       })
@@ -519,7 +518,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * If your server doesn't use PUT, you can change it to post like:
 			 * 
 			 *     $.Model("Recipe",{
-			 *       create: "POST /recipes/{id}"
+			 *       update: "POST /recipes/{id}"
 			 *     },{})
 			 * 
 			 * Your server should send back an object with any new attributes the model 
@@ -554,8 +553,13 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * 
 			 * @param {String} id the id of the model instance
 			 * @param {Object} attrs Attributes on the model instance
-			 * @param {Function} success(attrs) the callback function, it must be called with an object 
-			 * that has the id of the new instance and any other attributes the service needs to add.
+			 * @param {Function} success(attrs) the callback function.  It optionally accepts 
+			 * an object of attribute / value pairs of property changes the client doesn't already 
+			 * know about. For example, when you update a name property, the server might 
+			 * update other properties as well (such as updatedAt). The server should send 
+			 * these properties as the response to updates.  Passing them to success will 
+			 * update the model instance with these properties.
+			 * 
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function(id, attrs, success, error){
@@ -789,6 +793,8 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * This points tasks and owner properties to use 
 		 * <code>Task.models</code> and <code>Person.model</code>
 		 * to convert the raw data into an array of Tasks and a Person.
+		 * 
+		 * @demo jquery/model/pages/associations.html
 		 * 
 		 */
 		attributes: {},
@@ -1032,7 +1038,14 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 */
 		convert: {
 			"date": function( str ) {
-				return typeof str === "string" ? (isNaN(Date.parse(str)) ? null : Date.parse(str)) : str;
+				var type = typeof str;
+				if( type === "string" ) {
+					return isNaN(Date.parse(str)) ? null : Date.parse(str)
+				} else if ( type === 'number') {
+					return new Date(str)
+				} else {
+					return str
+				}
 			},
 			"number": function( val ) {
 				return parseFloat(val);
@@ -1057,7 +1070,8 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			}
 		},
 		bind: bind,
-		unbind: unbind
+		unbind: unbind,
+		_ajax: ajax
 	},
 	/**
 	 * @Prototype
@@ -1094,9 +1108,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * recipe.update({name: "chicken"}, success, error);
 		 * @codeend
 		 * 
-		 * If OpenAjax.hub is available, the model will also
-		 * publish a "<i>modelName</i>.updated" message with
-		 * the updated instance.
+		 * The model will also publish a _updated_ event with [jquery.model.events Model Events].
 		 * 
 		 * @param {Object} attrs the model's attributes
 		 * @param {Function} success called if a successful update
@@ -1539,9 +1551,9 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * 
 		 *     <div <%= todo %>> ... </div>
 		 *     
-		 * Typically, you'll use this as a response of an OpenAjax message:
+		 * Typically, you'll use this as a response to a Model Event:
 		 * 
-		 *     "todo.destroyed subscribe": function(called, todo){
+		 *     "{Todo} destroyed": function(Todo, event, todo){
 		 *       todo.elements(this.element).remove();
 		 *     }
 		 * 

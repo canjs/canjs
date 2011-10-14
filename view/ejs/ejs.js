@@ -3,9 +3,9 @@
 
 
 steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
-	var myEval = function(script){
-			eval(script);
-		},
+	var myEval = function( script ) {
+		eval(script);
+	},
 		chop = function( string ) {
 			return string.substr(0, string.length - 1);
 		},
@@ -17,12 +17,8 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 			return converted;
 		},
 		// from prototype  http://www.prototypejs.org/
-		escapeHTML = function(content){
-			return content.replace(/&/g,'&amp;')
-					.replace(/</g,'&lt;')
-					.replace(/>/g,'&gt;')
-					.replace(/"/g, '&#34;')
-					.replace(/'/g, "&#39;");
+		escapeHTML = function( content ) {
+			return content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&#34;').replace(/'/g, "&#39;");
 		},
 		EJS = function( options ) {
 			//returns a renderer function
@@ -231,92 +227,86 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		if ( input === null || input === undefined ) {
 			return '';
 		}
-		var hook = 
-			(input.hookup && function( el, id ) {
-				input.hookup.call(input, el, id);
-			}) 
-			||
-			(typeof input == 'function' && input)
-			||
-			(isArray(input) && function( el, id ) {
-				for ( var i = 0; i < input.length; i++ ) {
-					var stub;
-					stub = input[i].hookup ? input[i].hookup(el, id) : input[i](el, id);
-				}
-			});
-		if(hook){
+		var hook = (input.hookup &&
+		function( el, id ) {
+			input.hookup.call(input, el, id);
+		}) || (typeof input == 'function' && input) || (isArray(input) &&
+		function( el, id ) {
+			for ( var i = 0; i < input.length; i++ ) {
+				var stub;
+				stub = input[i].hookup ? input[i].hookup(el, id) : input[i](el, id);
+			}
+		});
+		if ( hook ) {
 			return "data-view-id='" + $.View.hookup(hook) + "'";
 		}
 		return input.toString ? input.toString() : "";
 	};
-	EJS.clean = function(text){
+	EJS.clean = function( text ) {
 		//return sanatized text
-		if(typeof text == 'string'){
+		if ( typeof text == 'string' ) {
 			return escapeHTML(text);
-		} else if(typeof text == 'number') {
+		} else if ( typeof text == 'number' ) {
 			return text;
 		} else {
 			return EJS.text(text);
 		}
 	}
 	//returns something you can call scan on
-	var scan = function(scanner, source, block ) {
+	var scan = function( scanner, source, block ) {
 		var source_split = rSplit(source, /\n/),
-			i=0;
+			i = 0;
 		for (; i < source_split.length; i++ ) {
-			scanline(scanner,  source_split[i], block);
+			scanline(scanner, source_split[i], block);
 		}
-		
+
 	},
-	scanline= function(scanner,  line, block ) {
-		scanner.lines++;
-		var line_split = rSplit(line, scanner.splitter),
-			token;
-		for ( var i = 0; i < line_split.length; i++ ) {
-			token = line_split[i];
-			if ( token !== null ) {
-				block(token, scanner);
+		scanline = function( scanner, line, block ) {
+			scanner.lines++;
+			var line_split = rSplit(line, scanner.splitter),
+				token;
+			for ( var i = 0; i < line_split.length; i++ ) {
+				token = line_split[i];
+				if ( token !== null ) {
+					block(token, scanner);
+				}
 			}
-		}
-	},
-	makeScanner = function(left, right){
-		var scanner = {};
-		extend(scanner, {
-			left: left + '%',
-			right: '%' + right,
-			dLeft: left + '%%',
-			dRight: '%%' + right,
-			eeLeft : left + '%==',
-			eLeft: left + '%=',
-			cmnt: left + '%#',
-			scan : scan,
-			lines : 0
-		});
-		scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eeLeft, scanner.eLeft, 
-			scanner.cmnt, scanner.left, scanner.right + '\n', scanner.right, '\n'].join(")|(").
-			replace(/\[/g,"\\[").replace(/\]/g,"\\]") + ")");
-		return scanner;
-	},
-	// compiles a template
-	compile = function( source, left, name ) {
-		source = source.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-		//normalize line endings
-		left = left || '<';
-		var put_cmd = "___v1ew.push(",
-			insert_cmd = put_cmd,
-			buff = new EJS.Buffer(['var ___v1ew = [];'], []),
-			content = '',
-			put = function( content ) {
-				buff.push(put_cmd, '"', clean(content), '");');
-			},
-			startTag = null,
-			empty = function(){
-				content = ''
-			};
-		
-		scan( makeScanner(left, left === '[' ? ']' : '>') , 
-			source||"", 
-			function( token, scanner ) {
+		},
+		makeScanner = function( left, right ) {
+			var scanner = {};
+			extend(scanner, {
+				left: left + '%',
+				right: '%' + right,
+				dLeft: left + '%%',
+				dRight: '%%' + right,
+				eeLeft: left + '%==',
+				eLeft: left + '%=',
+				cmnt: left + '%#',
+				scan: scan,
+				lines: 0
+			});
+			scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eeLeft, scanner.eLeft, scanner.cmnt, scanner.left, scanner.right + '\n', scanner.right, '\n'].join(")|(").
+			replace(/\[/g, "\\[").replace(/\]/g, "\\]") + ")");
+			return scanner;
+		},
+		// compiles a template
+		compile = function( source, left, name ) {
+			source = source.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+			//normalize line endings
+			left = left || '<';
+			var put_cmd = "___v1ew.push(",
+				insert_cmd = put_cmd,
+				buff = new EJS.Buffer(['var ___v1ew = [];'], []),
+				content = '',
+				put = function( content ) {
+					buff.push(put_cmd, '"', clean(content), '");');
+				},
+				startTag = null,
+				empty = function() {
+					content = ''
+				};
+
+			scan(makeScanner(left, left === '[' ? ']' : '>'), source || "", function( token, scanner ) {
 				// if we don't have a start pair
 				if ( startTag === null ) {
 					switch ( token ) {
@@ -342,7 +332,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 						content += scanner.left;
 						break;
 					default:
-						content +=  token;
+						content += token;
 						break;
 					}
 				}
@@ -379,18 +369,18 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 					}
 				}
 			})
-		if ( content.length > 0 ) {
-			// Should be content.dump in Ruby
-			buff.push(put_cmd, '"', clean(content) + '");');
-		}
-		var template = buff.close(),
-			out = {
-				out : 'try { with(_VIEW) { with (_CONTEXT) {' + template + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}"
-			};
-		//use eval instead of creating a function, b/c it is easier to debug
-		myEval.call(out,'this.process = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL='+name+".js");
-		return out;
-	};
+			if ( content.length > 0 ) {
+				// Should be content.dump in Ruby
+				buff.push(put_cmd, '"', clean(content) + '");');
+			}
+			var template = buff.close(),
+				out = {
+					out: 'try { with(_VIEW) { with (_CONTEXT) {' + template + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}"
+				};
+			//use eval instead of creating a function, b/c it is easier to debug
+			myEval.call(out, 'this.process = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
+			return out;
+		};
 
 
 	// a line and script buffer
@@ -431,7 +421,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		}
 
 	};
-	
+
 
 	//type, cache, folder
 	/**
