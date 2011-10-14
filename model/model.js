@@ -1108,9 +1108,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * recipe.update({name: "chicken"}, success, error);
 		 * @codeend
 		 * 
-		 * If OpenAjax.hub is available, the model will also
-		 * publish a "<i>modelName</i>.updated" message with
-		 * the updated instance.
+		 * The model will also publish a _updated_ event with [jquery.model.events Model Events].
 		 * 
 		 * @param {Object} attrs the model's attributes
 		 * @param {Function} success called if a successful update
