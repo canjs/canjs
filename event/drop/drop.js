@@ -72,7 +72,7 @@ steal('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then(functio
 	 * <h2>Examples</h2>
 	 * Here's how to listen for when a drag moves over a drop:
 	 * @codestart
-	 * $('.drop').live("dropover", function(ev, drop, drag){
+	 * $('.drop').delegate("dropover", function(ev, drop, drag){
 	 *   $(this).addClass("drop-over")
 	 * })
 	 * @codeend

@@ -214,6 +214,17 @@ test("attrs deep array ", function(){
 	}, true);
 	
 	ok(thing.arr === arr, "thing unmolested");
+});
+
+test('attrs semi-serialize', function(){
+	var first = {
+		foo : {bar: 'car'},
+		arr: [1,2,3, {four: '5'}
+		]
+	},
+	compare = $.extend(true, {}, first);
+	var res = new $.Observe(first).attrs();
+	same(res,compare, "test")
 })
 	
 test("attrs sends events after it is done", function(){

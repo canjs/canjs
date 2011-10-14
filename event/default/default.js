@@ -1,37 +1,33 @@
 
 steal('jquery/event', 'jquery/event/handle').then(function($){
 
-$.fn.
 /**
  * @function jQuery.fn.triggerAsync
  * @plugin jquery/event/default
  * @parent jquery.event.pause
  * 
- * Triggers an event and calls success when the event has finished propagating through the DOM and
- * preventDefault is not called.
- * 
- *     $('#panel').triggerAsync('show', function(){
- *       $('#panel').show();
- *     })
- * 
+ * Triggers an event and calls success when the event has finished propagating through the DOM and preventDefault is not called.
+ *
+ *     $('#panel').triggerAsync('show', function() {
+ *        $('#panel').show();
+ *     });
+ *
  * You can also provide a callback that gets called if preventDefault was called on the event:
- * 
- *     $('#panel').triggerAsync('show', function(){
- *       $('#panel').show();
- *     },function(){
- *       $('#other').addClass('error');
- *     })
- * 
- * triggerAsync is designed to work with the [jquery.event.pause] plugin although it is defined in 
- * <code>jquery/event/default</code>
- * 
+ *
+ *     $('panel').triggerAsync('show', function(){
+ *         $('#panel').show();
+ *     },function(){ 
+ *         $('#other').addClass('error');
+ *     });
+ *
+ * triggerAsync is design to work with the [jquery.event.pause] plugin although it is defined in _jquery/event/default_.
  * 
  * @param {String} type The type of event
  * @param {Object} data The data for the event
- * @param {Function} success(event) a callback function
- * @param {Function} prevented(event) called if preventDefault is called on the 
+ * @param {Function} success a callback function which occurs upon success
+ * @param {Function} prevented a callback function which occurs if preventDefault was called
  */
-triggerAsync = function(type, data, success, prevented){
+$.fn.triggerAsync = function(type, data, success, prevented){
 	if(typeof data == 'function'){
 		success = data;
 		data = undefined;
