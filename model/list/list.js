@@ -24,14 +24,23 @@ var getArgs = function(args){
  * @test jquery/model/list/qunit.html
  * @plugin jquery/model/list
  * 
- * Model lists are useful for managing multiple model instances, such as:
+ * Model lists are useful for managing multiple model instances. 
  * 
  *  - Listening for list updates such as Add/Update/Remove
  *  - Adding helpers for multiple model instances
+ *  - Managing multiple model instances easily
  *  - Faster HTML inserts
  *  - Storing and retrieving multiple instances
+ *
+ * ## Managing List Updates
+ * 
+ * Model.List will publish events when instance(s) are added, updated, or removed.  You can subscribe
+ * to these events by binding to them directly or subscribing in the controller via _jquery/controller/subscribe_.
+ * 
+ * 
+ * 
  *  
- * ## List Helpers
+ * ## Managing Multiple Models Instances
  * 
  * It's pretty common to deal with multiple items at a time.
  * List helpers provide methods for multiple model instances.
@@ -108,29 +117,21 @@ var getArgs = function(args){
 			 * Or you can implement update manually like:
 			 * 
 			 *     $.Model.List("Thing",{
-			 *       update : function(ids, success, error){
+			 *       update : function(ids, attrs, success, error){
 			 * 		   return $.ajax({
 			 * 		   	  url: "/thing/destroy" + ids,
 			 * 		      success: success,
-			 * 		      error: error,
-			 *            type: "PUT"
+			 * 		      type: "PUT",
+			 * 		      data: { ids: ids, attrs : attrs }
+			 * 		      error: error
 			 * 		   });
 			 *       }
 			 *     })
 			 *     
-			 * This lets you update a set of recipes like:
-			 *  
-			 *     // PUT /recipes/5,25,20 {name: "Hot Dog"}
-			 *     Recipe.List.update([5,25,20], { name: "Hot Dog" },
-			 *       function(updatedRecipes){
-			 *         ...
-			 *       })
-			 *  
-			 * If your server doesn't use PUT, you can change it to post like:
-			 * 
-			 *     $.Model.List("Recipe",{
-			 *       update: "POST /recipes/{ids}"
-			 *     },{})
+			 * Then you update models by calling the [jQuery.Model.List.prototype.update prototype update method].
+			 *
+			 * By default, the request will PUT an array of ids to be updated and
+			 * the changed attributes of the model instances in the body of the Ajax request.
 			 * 
 			 * Your server should send back an object with any new attributes the model 
 			 * should have.  For example if your server udpates the "updatedAt" property, it
@@ -168,7 +169,7 @@ var getArgs = function(args){
 			 * You can implement destroy with a string like:
 			 * 
 			 *     $.Model.List("Thing",{
-			 *       destroy : "PUT /thing/destroy/{ids}"
+			 *       destroy : "POST /thing/destroy/{ids}"
 			 *     })
 			 * 
 			 * Or you can implement destroy manually like:
@@ -176,19 +177,18 @@ var getArgs = function(args){
 			 *     $.Model.List("Thing",{
 			 *       destroy : function(ids, success, error){
 			 * 		   return $.ajax({
-			 * 		   	  url: "/thing/destroy" + ids,
+			 * 		   	  url: "/thing/destroy",
+			 * 		      data: ids,
 			 * 		      success: success,
 			 * 		      error: error,
-			 *            type: "PUT"
+			 * 		      type: "POST"
 			 * 		   });
 			 *       }
 			 *     })
 			 *
-			 * Then you delete models by:
+			 * Then you delete models by calling the [jQuery.Model.List.prototype.destroy prototype delete method].
 			 *
-			 *     Thing.List.destroy([5,20,15], function(deletedThings){
-			 *         ...
-			 *     });
+			 * By default, the request will POST an array of ids to be deleted in the body of the Ajax request.
 			 * 
 			 * @param {Array} ids the ids of the instances you want destroyed
 			 * @param {Function} success the callback function, it must be called with an object 
