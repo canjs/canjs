@@ -64,7 +64,7 @@ $.Controller("Subscriber",{
   
   ...
   
-  "Task created" : function(Task, event, task){
+  "{Task} created" : function(Task, event, task){
     
     //find the task in this widget:
     var el = task.elements(this.element)

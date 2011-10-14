@@ -65,7 +65,7 @@ var getArgs = function(args){
  * This pattern is fast enough for 90% of all widgets.  But it
  * does require an extra query.  Lists help you avoid this.
  * 
- * The [jQuery.Model.List.get get] method takes elements and
+ * The [jQuery.Model.List.prototype.get get] method takes elements and
  * uses their className to return matched instances in the list.
  * 
  * To use get, your elements need to have the instance's 
