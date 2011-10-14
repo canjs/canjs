@@ -23,9 +23,11 @@
         src='../../steal/steal.js'>   
 </script>
 <script type='text/javascript' id="demo-source">   
-steal('jquery/model', 'jquery/dom/fixture').then(function(){
+steal('jquery/model', 
+      'jquery/dom/fixture',
+      function(){
 	
-	$.fixture("/foobar.json", function(orig, settings, headers){
+	$.fixture("/foobar.json", function( ) {
 	  return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
 	       {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10'},
 	       {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
@@ -51,9 +53,7 @@ $.Model.extend("Contact",{
       }
     }
   },
-  findAll : function(params, success, error){
-	return $.get('/foobar.json', {}, success, 'json contact.models');		
-  }
+  findAll : '/foobar.json'
 },{
   // helper function that returns age in years
   age : function(){
@@ -70,6 +70,7 @@ Contact.findAll( {}, function( contacts ){
   }
   $('#contacts').html( html.join('') );
 });
+
 })
 </script>
     </body>
