@@ -438,7 +438,7 @@ function( $ ) {
         setState = function() {
 			// commented out code handles people setting attrs before onready
 			//if( $.isEmptyObject( $route.data.serialize() ) ) {
-				var hash = location.hash[1] === '!' ? 
+				var hash = location.hash.substr(1, 1) === '!' ? 
 					location.hash.slice(2) : 
 					location.hash.slice(1); // everything after #!
 				curParams = $route.deparam( hash );
