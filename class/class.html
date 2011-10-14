@@ -62,7 +62,7 @@
 <script type='text/javascript'>DEMO_HTML = document.getElementById('demo-html').innerHTML</script>
 <script type='text/javascript' src='../../steal/steal.js'></script>
 <script type='text/javascript' id="demo-source">
-steal('jquery/controller/history').then(function(){
+steal('jquery/controller').then(function(){
 $.Controller.extend("Tabs",{
   init : function(){
     this.element.children("li:first").addClass('active')
@@ -90,7 +90,7 @@ Tabs.extend("HistoryTabs",{
   "li click" : function(){},
   
   // listen for history changes
-  "history.** subscribe" : function(called){
+  "{window} hashchange" : function(called){
 	var hash = window.location.hash;
 	this.activate(hash === '' || hash === '#' ?
       this.element.find("li:first") : 
