@@ -28,7 +28,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 					src = ajaxOb;
 				}
 			}
-			typeof attrs == "object" && (attrs =  extend({},attrs))
+			typeof attrs == "object" && (!isArray(attrs)) && (attrs =  extend({},attrs))
 			
 			var url = $.String.sub(src, attrs, true)
 			return $.ajax({
@@ -1036,7 +1036,14 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 */
 		convert: {
 			"date": function( str ) {
-				return typeof str === "string" ? (isNaN(Date.parse(str)) ? null : Date.parse(str)) : str;
+				var type = typeof str;
+				if( type === "string" ) {
+					return isNaN(Date.parse(str)) ? null : Date.parse(str)
+				} else if ( type === 'number') {
+					return new Date(str)
+				} else {
+					return str
+				}
 			},
 			"number": function( val ) {
 				return parseFloat(val);
@@ -1061,7 +1068,8 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			}
 		},
 		bind: bind,
-		unbind: unbind
+		unbind: unbind,
+		_ajax: ajax
 	},
 	/**
 	 * @Prototype

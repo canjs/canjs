@@ -1,13 +1,13 @@
-
+steal("jquery/model/list",'funcunit/qunit', 'jquery/dom/fixture', function(){
+	 
 module("jquery/model/list", {
 	setup: function() {
 		$.Model.extend("Person")
 	
-		$.Model.List.extend("Person.List",{
-			destroy: function() {
-				equals(this.length, 20,  "Got 20 people")
-			}
-		});
+		$.Model.List("Person.List",{
+			destroy : "DELETE /person/destroyAll",
+			update : "PUT /person/updateAll"
+		},{});
 		var people = []
 		for(var i =0; i < 20; i++){
 			people.push( new Person({id: "a"+i}) )
@@ -30,7 +30,8 @@ test("hookup with list", function(){
 	}
 	var models = div.children().models();
 	ok(models.Class === Person.List, "correct type");
-	models.destroy();
+	equals(models.length, 20,  "Got 20 people")
+
 
 })
 
@@ -60,8 +61,70 @@ test("remove", function(){
 
 test("list from models", function(){
 	var people = Person.models([{id: 1}, {id: 2}]);
-	ok(people.destroy, "we can destroy a list")
+	ok(people.elements, "we can find elements from a list")
 });
+
+test("destroy a list", function(){
+	var people = Person.models([{id: 1}, {id: 2}]);
+	stop();
+	// make sure a request is made
+	$.fixture('DELETE /person/destroyAll', function(){
+		
+		ok(true, "called right fixture");
+		return true;
+	})
+	// make sure the people have a destroyed event
+	people[0].bind('destroyed', function(){
+		ok(true, "destroyed event called")
+	})
+	
+	people.destroy(function(deleted){
+		ok(true, "destroy callback called");
+		ok(people.length, 0, "objects removed");
+		ok(deleted.length, 2, "got back deleted items")
+		start()
+		// make sure the list is empty
+		
+	})
+
+});
+
+test("update a list", function(){
+	var people = Person.models([{id: 1}, {id: 2}]),
+		updateWith = {
+			name: "Justin",
+			age : 29
+		},
+		newProps = {
+			newProp : "yes"
+		};
+	stop();
+	// make sure a request is made
+	$.fixture('PUT /person/updateAll', function(orig){
+		
+		ok(true, "called right fixture");
+		ok(orig.data.ids.length, 2, "got 2 ids")
+		same(orig.data.attrs, updateWith, "got the same attrs")
+		return newProps;
+	})
+	// make sure the people have a destroyed event
+	people[0].bind('updated', function(){
+		ok(true, "updated event called")
+	})
+	
+	people.update(updateWith,function(updated){
+		ok(true, "updated callback called");
+
+		ok(updated.length, 2, "got back deleted items");
+		
+		same(updated[0].attrs(),$.extend({id : 1},newProps, updateWith ))
+		
+		start()
+		// make sure the list is empty
+		
+	})
+
+})
 
 test("events - add", 4, function(){
 	var list = new Person.List;
@@ -98,4 +161,6 @@ test("events - update", function(){
 	list.push(person);
 	
 	person.updated({name: "Alex"})
+});
+
 })
