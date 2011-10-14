@@ -36,7 +36,7 @@ var getArgs = function(args){
  * List helpers provide methods for multiple model instances.
  * 
  * For example, if we wanted to be able to destroy multiple
- * contacts at once, we could add a `destroyAll(ids, success, error )` method to a Contact
+ * contacts at once, we could add a `destroy(ids, success, error )` method to a Contact
  * model, which is called by a Contact.List:
  * 
  *     $.Model("Contact",{
@@ -318,14 +318,20 @@ $.Class("jQuery.Model.List",{
 		var ids = this.map(getIds),
 			items = this.slice(0, this.length);
 			
-		this.constructor.update(ids, attrs, function(newAttrs){
-			// final attributes to update with
-			var attributes =  $.extend(attrs, newAttrs || {})
-			each(items, function(){
-				this.updated(attributes);
-			})
-			success && success(items)
-		}, error);
+		if(ids.length){
+			this.constructor.update(ids, attrs, function(newAttrs){
+				// final attributes to update with
+				var attributes =  $.extend(attrs, newAttrs || {})
+				each(items, function(){
+					this.updated(attributes);
+				})
+				success && success(items)
+			}, error);
+		} else {
+			success && success(this);
+		}
+		
+		return this;
 	},
 	/**
 	 * Listens for an events on this list.  The only useful events are:
