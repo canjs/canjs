@@ -248,6 +248,7 @@ var getArgs = function(args){
 			 *     })
 			 *
 			 * Then you delete models by calling the [jQuery.Model.List.prototype.destroy prototype delete method].
+			 * Destroy will remove all the items from the list and calls destroy on the model instances in the list.
 			 *
 			 *     listInstance.destroy();
 			 *
@@ -473,7 +474,8 @@ $.Class("jQuery.Model.List",{
 		},error)
 	},
 	/**
-	 * Destroys all items in this list.  This will use the List's 
+	 * Removes all the items from the list and calls destroy on 
+	 * the model instances in the list.  This will use the List's 
 	 * [jQuery.Model.List.static.destroy static destroy] method.
 	 * 
 	 *     list.destroy(function(destroyedItems){
