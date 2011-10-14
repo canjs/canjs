@@ -794,6 +794,8 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * <code>Task.models</code> and <code>Person.model</code>
 		 * to convert the raw data into an array of Tasks and a Person.
 		 * 
+		 * @demo jquery/model/pages/associations.html
+		 * 
 		 */
 		attributes: {},
 		/**
