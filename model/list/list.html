@@ -33,13 +33,13 @@ steal('jquery/model',
 
 // =============== SETUP FIXTURES =============== 
 
-$.fixture("GET /recipes", function(){
+$.fixture("GET /contacts", function(){
 	return [[{'id': 1,'name' : 'Justin Meyer','birthday': 403938000000},
 			 {'id': 2,'name' : 'Brian Moschel','birthday': 437205600000},
 			 {'id': 3,'name' : 'Mihael Konjevic','birthday': 483771600000}]];
 });
 
-$.fixture("POST /recipes/destroy", function(){
+$.fixture("POST /contacts/destroy", function(){
 	return true;
 });
 	
@@ -50,12 +50,7 @@ $.Model("Contact",{
 	attributes : { 
 		birthday : 'date'
 	},
-	findAll : "/recipes",
-	
-	// implement destroyAll, it will be called by your list
-	destroyAll : function(ids, success, error){
-		$.post("/recipes/destroy", ids, success)
-	}
+	findAll : "/contacts"
 },{
 	ageThisYear : function(){
 		return new Date().getFullYear() - 
@@ -72,7 +67,7 @@ $.Model("Contact",{
 // =============== Contact List =============== 
 
 $.Model.List("Contact.List",{
-	destroy: "POST /recipes/destroy"
+	destroy: "POST /contacts/destroy"
 },{});
 
 
@@ -87,11 +82,11 @@ Contact.findAll({},function(contacts){
 			  		contact.name+" "+
 					contact.ageThisYear() )
               .appendTo(contactsEl);
-    // on destroyed, remove elements
-	contact.bind("destroyed", function(){
-      li.remove();
-    })
+	
   });
+  contacts.bind("remove", function(ev, removed){
+  	removed.elements(contactsEl).remove()
+  })
 });
 
 $("#destroyAll").click(function(){
