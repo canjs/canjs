@@ -89,6 +89,23 @@ test("destroy a list", function(){
 
 });
 
+test("destroy a list with nothing in it", function(){
+	var people = Person.models([]);
+	stop();
+	
+	// make sure a request is made
+	$.fixture('DELETE /person/destroyAll', function(){
+		ok(true, "called right fixture");
+		return true;
+	});
+	
+	people.destroy(function(deleted){
+		ok(true, "destroy callback called");
+		equal(deleted.length, people.length, "got back deleted items")
+		start();
+	});
+});
+
 test("update a list", function(){
 	var people = Person.models([{id: 1}, {id: 2}]),
 		updateWith = {
@@ -99,14 +116,15 @@ test("update a list", function(){
 			newProp : "yes"
 		};
 	stop();
+	
 	// make sure a request is made
-	$.fixture('PUT /person/updateAll', function(orig){
-		
+	$.fixture('PUT /person/updateAll', function(orig){	
 		ok(true, "called right fixture");
 		ok(orig.data.ids.length, 2, "got 2 ids")
 		same(orig.data.attrs, updateWith, "got the same attrs")
 		return newProps;
 	})
+	
 	// make sure the people have a destroyed event
 	people[0].bind('updated', function(){
 		ok(true, "updated event called")
@@ -114,16 +132,31 @@ test("update a list", function(){
 	
 	people.update(updateWith,function(updated){
 		ok(true, "updated callback called");
-
 		ok(updated.length, 2, "got back deleted items");
-		
-		same(updated[0].attrs(),$.extend({id : 1},newProps, updateWith ))
-		
-		start()
-		// make sure the list is empty
-		
-	})
+		same(updated[0].attrs(),$.extend({id : 1},newProps, updateWith ));
+		start();
+	});
+})
 
+test("update a list with nothing in it", function(){
+	var people = Person.models([]),
+		updateWith = {
+			name: "Justin",
+			age : 29
+		};
+	stop();
+	
+	// make sure a request is made
+	$.fixture('PUT /person/updateAll', function(orig){
+		ok(true, "called right fixture");
+		return newProps;
+	});
+
+	people.update(updateWith,function(updated){
+		ok(true, "updated callback called");
+		equal(updated.length, people.length, "nothing updated");
+		start();
+	});
 })
 
 test("events - add", 4, function(){
