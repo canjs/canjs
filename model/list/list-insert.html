@@ -27,10 +27,22 @@
 </script>
 <script type='text/javascript' id="demo-source">   
 steal('jquery/model',
-		'jquery/dom/fixture',
-		'jquery/model/list',
-		'jquery/lang/openajax').then(function(){
-$.Model.extend("Contact",{
+      'jquery/dom/fixture',
+      'jquery/model/list',
+	  function(){
+
+// =============== SETUP FIXTURES =============== 
+
+$.fixture("GET /recipes.json", function(){
+	return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
+	       {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10'},
+	       {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
+});
+$.fixture("PUT /recipes/{id}.json", function(){
+	return {};
+})
+		
+$.Model("Contact",{
 	attributes : { 
 		birthday : 'date'
 	},
@@ -46,22 +58,8 @@ $.Model.extend("Contact",{
 			}
 		}
 	},
-	findAll : function(params, success, error){
-		$.get("/recipes.json",
-			{},
-			this.callback(['wrapMany',success]),
-			"json",
-			function(){
-				return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
-					 {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10'},
-					 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
-			})
-	},
-	update : function(id, attrs, success, error){
-		$.post("/recipes.json",{},success,'json',function(){
-			return [attrs]
-		})
-	}
+	findAll : "/recipes.json",
+	update : "/recipes/{id}.json"
 },{
 	ageThisYear : function(){
 		return new Date().getFullYear() - 
@@ -74,9 +72,8 @@ $.Model.extend("Contact",{
 	}
 
 });
-DESTROYFIXTURE = function(){
-				return [true]
-			}
+
+// helper that 
 makeAgeUpdater = function(contact){
 	var updater = $("#update")
 	updater.html("");
@@ -88,9 +85,7 @@ makeAgeUpdater = function(contact){
 	}).appendTo(updater)
 }
 // listen for contact updated events
-  OpenAjax.hub.subscribe(
-    "contact.updated", 
-    function(called, contact){
+  Contact.bind("updated", function(ev, contact){
 		
 		// use the list to get the instance from the element
         contact.elements($('#contacts'))
