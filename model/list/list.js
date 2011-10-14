@@ -103,18 +103,31 @@ var getArgs = function(args){
 			 *     $.Model.List("Recipe",{
 			 *       update: "PUT /recipes/{ids}"
 			 *     },{})
+			 *
+			 * Or you can implement update manually like:
+			 * 
+			 *     $.Model.List("Thing",{
+			 *       update : function(ids, success, error){
+			 * 		   return $.ajax({
+			 * 		   	  url: "/thing/destroy" + ids,
+			 * 		      success: success,
+			 * 		      error: error,
+			 *            type: "PUT"
+			 * 		   });
+			 *       }
+			 *     })
 			 *     
 			 * This lets you update a set of recipes like:
 			 *  
 			 *     // PUT /recipes/5,25,20 {name: "Hot Dog"}
-			 *     recipes.update({ name: "Hot Dog" },
+			 *     Recipe.List.update([5,25,20], { name: "Hot Dog" },
 			 *       function(updatedRecipes){
 			 *         ...
 			 *       })
 			 *  
 			 * If your server doesn't use PUT, you can change it to post like:
 			 * 
-			 *     $.Model("Recipe",{
+			 *     $.Model.List("Recipe",{
 			 *       update: "POST /recipes/{ids}"
 			 *     },{})
 			 * 
@@ -169,6 +182,12 @@ var getArgs = function(args){
 			 * 		   });
 			 *       }
 			 *     })
+			 *
+			 * Then you delete models by:
+			 *
+			 *     Thing.List.destroy([5,20,15], function(deletedThings){
+			 *         ...
+			 *     });
 			 * 
 			 * @param {Array} ids the ids of the instances you want destroyed
 			 * @param {Function} success the callback function, it must be called with an object 
