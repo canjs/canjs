@@ -306,7 +306,7 @@ $.Class("jQuery.Model.List",{
 	 * request using the list class's [jQuery.Model.List.static.update update].
 	 * 
 	 * @param {Object} attrs attributes to update the list with
-	 * @param {Function} success(list)
+	 * @param {Function} success
 	 * @param {Function} error
 	 */
 	update : function(attrs, success, error){
