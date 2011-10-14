@@ -33,7 +33,7 @@ var getArgs = function(args){
  *  - Fast HTML inserts
  *
  * Its easy to add a Model.List to any existing modeling instance.  After you have defined your
- * model you simply define your Model.List like so:
+ * model, simply define your Model.List like:
  *
  *     $.Model.List("MyModel.List", { 
  *         //Static
@@ -61,9 +61,9 @@ var getArgs = function(args){
  * 
  * It's pretty common to deal with updating or deleting multiple items at a time.
  * 
- * For example, if we wanted to be able to destroy multiple
- * contacts at once, we could add a `destroy(ids, success, error )` method to a Contact
- * model, which is called by a Contact.List:
+ * For example, if we wanted to be able to destroy multiple contacts at once, we could 
+ * add a `destroy(ids, success, error )` method to a Contact model, which is 
+ * called by a Contact.List:
  * 
  *     $.Model("Contact",{
  *       destroy : '/contacts/destroy'
