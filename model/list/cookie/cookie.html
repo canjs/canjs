@@ -37,7 +37,8 @@
 steal('jquery/model',
 		'jquery/model/list/cookie',
 		'jquery/dom/form_params').then(function(){
-$.Model.extend("Contact",{
+			
+$.Model("Contact",{
 	attributes : { 
 		birthday : 'date'
 	},
@@ -67,7 +68,7 @@ $.Model.extend("Contact",{
 });
 
 // Create a contact list
-$.Model.List.Cookie.extend("Contact.List");
+$.Model.List.Cookie("Contact.List");
 
 // A helper function for adding a contact to the page
 var addContact = function(contact){
