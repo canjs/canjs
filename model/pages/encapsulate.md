@@ -153,7 +153,7 @@ Lets see how we might fill out the
 <code>Contact.findAll</code> function to work with JSONP:
 
 @codestart
-$.Model.extend('Contact',
+$.Model('Contact',
 {
   findAll : function(params, success, error){
   

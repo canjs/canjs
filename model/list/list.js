@@ -12,17 +12,24 @@ var getArgs = function(args){
 	},
 	//used for namespacing
 	id = 0,
-	expando = jQuery.expando;
+	getIds = function(item){ return item[item.constructor.id]},
+	expando = jQuery.expando,
+	each = $.each,
+	ajax = $.Model._ajax,
+
 /**
+ * @class jQuery.Model.List
  * @parent jQuery.Model
  * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/list/list.js
  * @test jquery/model/list/qunit.html
  * @plugin jquery/model/list
- * Model lists are useful for:
  * 
- *  - Adding helpers for multiple model instances.
- *  - Faster HTML inserts.
- *  - Storing and retrieving multiple instances.
+ * Model lists are useful for managing multiple model instances, such as:
+ * 
+ *  - Listening for list updates such as Add/Update/Remove
+ *  - Adding helpers for multiple model instances
+ *  - Faster HTML inserts
+ *  - Storing and retrieving multiple instances
  *  
  * ## List Helpers
  * 
@@ -30,26 +37,14 @@ var getArgs = function(args){
  * List helpers provide methods for multiple model instances.
  * 
  * For example, if we wanted to be able to destroy multiple
- * contacts, we could add a destroyAll method to a Contact
- * list:
+ * contacts at once, we could add a `destroy(ids, success, error )` method to a Contact
+ * model, which is called by a Contact.List:
  * 
- * @codestart
- * $.Model.List.extend("Contact.List",{
- *   destroyAll : function(){
- *     $.post("/destroy",
- *       this.map(function(contact){
- *         return contact.id
- *       }),
- *       this.proxy('destroyed'),
- *       'json')
- *   },
- *   destroyed : function(){
- *     this.each(function(){
- *       this.destroyed();
- *     })
- *   }
- * });
- * @codeend
+ *     $.Model("Contact",{
+ *       destroy : '/contacts/destroy'
+ *     },{})
+ * 
+ *     $.Model.List("Contact.List");
  * 
  * The following demo illustrates this.  Check
  * multiple Contacts and click "DESTROY ALL"
@@ -70,7 +65,7 @@ var getArgs = function(args){
  * This pattern is fast enough for 90% of all widgets.  But it
  * does require an extra query.  Lists help you avoid this.
  * 
- * The [jQuery.Model.List.get get] method takes elements and
+ * The [jQuery.Model.List.prototype.get get] method takes elements and
  * uses their className to return matched instances in the list.
  * 
  * To use get, your elements need to have the instance's 
@@ -92,7 +87,129 @@ var getArgs = function(args){
  * 
  * @demo jquery/model/list/list-insert.html
  */
-$.Class("jQuery.Model.List",
+	ajaxMethods = 
+/**
+ * @static
+ */	
+	{
+		update : function(str){
+			/**
+			 * @function update
+			 * Update is used to update a set of model instances on the server.  By implementing 
+			 * update along with the rest of the [jquery.model.services service api], your models provide an abstract
+			 * API for services.  
+			 * 
+			 * The easist way to implement update is to just give it the url to put data to:
+			 * 
+			 *     $.Model.List("Recipe",{
+			 *       update: "PUT /recipes/{ids}"
+			 *     },{})
+			 *
+			 * Or you can implement update manually like:
+			 * 
+			 *     $.Model.List("Thing",{
+			 *       update : function(ids, success, error){
+			 * 		   return $.ajax({
+			 * 		   	  url: "/thing/destroy" + ids,
+			 * 		      success: success,
+			 * 		      error: error,
+			 *            type: "PUT"
+			 * 		   });
+			 *       }
+			 *     })
+			 *     
+			 * This lets you update a set of recipes like:
+			 *  
+			 *     // PUT /recipes/5,25,20 {name: "Hot Dog"}
+			 *     Recipe.List.update([5,25,20], { name: "Hot Dog" },
+			 *       function(updatedRecipes){
+			 *         ...
+			 *       })
+			 *  
+			 * If your server doesn't use PUT, you can change it to post like:
+			 * 
+			 *     $.Model.List("Recipe",{
+			 *       update: "POST /recipes/{ids}"
+			 *     },{})
+			 * 
+			 * Your server should send back an object with any new attributes the model 
+			 * should have.  For example if your server udpates the "updatedAt" property, it
+			 * should send back something like:
+			 * 
+			 *     // PUT /recipes/4,25,20 { name: "Food" } ->
+			 *     {
+			 *       updatedAt : "10-20-2011"
+			 *     }
+			 * 
+			 * @param {Array} ids the ids of the model instance
+			 * @param {Object} attrs Attributes on the model instance
+			 * @param {Function} success the callback function.  It optionally accepts 
+			 * an object of attribute / value pairs of property changes the client doesn't already 
+			 * know about. For example, when you update a name property, the server might 
+			 * update other properties as well (such as updatedAt). The server should send 
+			 * these properties as the response to updates.  Passing them to success will 
+			 * update the model instances with these properties.
+			 * @param {Function} error a function to callback if something goes wrong.  
+			 */
+			return function(ids, attrs, success, error){
+				return ajax(str, {
+					ids : ids,
+					attrs : attrs
+				}, success, error, "-updateAll","put")
+			}
+		},
+		destroy : function(str){
+			/**
+			 * @function destroy
+			 * Destroy is used to remove a set of model instance from the server. By implementing 
+			 * destroy along with the rest of the [jquery.model.services service api], your models provide an abstract
+			 * service API.
+			 * 
+			 * You can implement destroy with a string like:
+			 * 
+			 *     $.Model.List("Thing",{
+			 *       destroy : "PUT /thing/destroy/{ids}"
+			 *     })
+			 * 
+			 * Or you can implement destroy manually like:
+			 * 
+			 *     $.Model.List("Thing",{
+			 *       destroy : function(ids, success, error){
+			 * 		   return $.ajax({
+			 * 		   	  url: "/thing/destroy" + ids,
+			 * 		      success: success,
+			 * 		      error: error,
+			 *            type: "PUT"
+			 * 		   });
+			 *       }
+			 *     })
+			 *
+			 * Then you delete models by:
+			 *
+			 *     Thing.List.destroy([5,20,15], function(deletedThings){
+			 *         ...
+			 *     });
+			 * 
+			 * @param {Array} ids the ids of the instances you want destroyed
+			 * @param {Function} success the callback function, it must be called with an object 
+			 * that has the id of the new instance and any other attributes the service needs to add.
+			 * @param {Function} error a function to callback if something goes wrong.  
+			 */
+			return function(ids, success, error){
+				return ajax(str, ids, success, error, "-destroyAll","post")
+			}
+		}
+	};
+
+$.Class("jQuery.Model.List",{
+	setup : function(){
+		for(var name in ajaxMethods){
+			if(typeof this[name] !== 'function'){
+				this[name] = ajaxMethods[name](this[name]);
+			}
+		}
+	},
+},
 /**
  * @Prototype
  */
@@ -106,15 +223,21 @@ $.Class("jQuery.Model.List",
         this.push.apply(this, $.makeArray(instances || [] ) );
     },
 	/**
-	 * Slice works just like an array's slice, except this
-	 * returns another instance of this model list's class.
+	 * The slice method selects a part of an array, and returns another instance of this model list's class.
+	 * 
+	 *     list.slice(start, end)
+	 *
+	 * @param {Number} start the start index to select
+	 * @param {Number} end the last index to select
 	 */
     slice: function() {
         return new this.Class( Array.prototype.slice.apply( this, arguments ) );
     },
 	/**
-	 * Returns a list of all instances who's property matches
-	 * the given value.
+	 * Returns a list of all instances who's property matches the given value.
+	 *
+	 *     list.match('candy', 'snickers')
+	 * 
 	 * @param {String} property the property to match
 	 * @param {Object} value the value the property must equal
 	 */
@@ -124,9 +247,13 @@ $.Class("jQuery.Model.List",
         });
     },
 	/**
-	 * Returns a model list of elements where callback returns true.
-	 * @param {Function} callback the function to call back.  This
-	 * function has the same call pattern as what jQuery.grep provides.
+	 * Finds the instances of the list which satisfy a callback filter function. The original array is not affected.
+	 * 
+	 *     var matchedList = list.grep(function(instanceInList, indexInArray){
+	 *        return instanceInList.date < new Date();
+	 *     });
+	 * 
+	 * @param {Function} callback the function to call back.  This function has the same call pattern as what jQuery.grep provides.
 	 * @param {Object} args
 	 */
     grep: function( callback, args ) {
@@ -140,6 +267,16 @@ $.Class("jQuery.Model.List",
 	},
 	/**
 	 * Gets a list of elements by ID or element.
+	 *
+	 * To fetch by id:
+	 *
+	 *     var match = list.get(23);
+	 *
+	 * or to fetch by element:
+	 * 
+	 *     var match = list.get($('#content')[0])
+	 * 
+	 * @param {Object} args element or id to remove
 	 */
 	get: function() {
 		if(!this.length){
@@ -169,9 +306,17 @@ $.Class("jQuery.Model.List",
 		return new this.Class(list)
 	},
 	/**
-	 * Removes instances from this list by id or by an
-	 * element.
-	 * @param {Object} args
+	 * Removes instances from this list by id or by an element.
+	 *
+	 * To remove by id:
+	 *
+	 *     var match = list.get(23);
+	 *
+	 * or to remove by element:
+	 * 
+	 *     var match = list.get($('#content')[0])
+	 *
+	 * @param {Object} args element or id to remove
 	 */
 	remove: function( args ) {
 		if(!this.length){
@@ -218,8 +363,23 @@ $.Class("jQuery.Model.List",
 		return ret;
 	},
 	/**
-	 * Gets all the elements that represent this list.
-	 * @param {Object} context
+	 * Returns elements that represent this list.  For this to work, your element's should
+	 * us the [jQuery.Model.prototype.identity identity] function in their class name.  Example:
+	 * 
+	 *     <div class='todo <%= todo.identity() %>'> ... </div>
+	 * 
+	 * This also works if you hooked up the model:
+	 * 
+	 *     <div <%= todo %>> ... </div>
+	 *     
+	 * Typically, you'll use this as a response to a Model Event:
+	 * 
+	 *     "{Todo} destroyed": function(Todo, event, todo){
+	 *       todo.elements(this.element).remove();
+	 *     }
+	 * 
+	 * @param {String|jQuery|element} context If provided, only elements inside this element that represent this model will be returned.
+	 * @return {jQuery} Returns a jQuery wrapped nodelist of elements that have these model instances identities in their class names.
 	 */
 	elements: function( context ) {
 		// TODO : this can probably be done with 1 query.
@@ -247,34 +407,67 @@ $.Class("jQuery.Model.List",
 		},error)
 	},
 	/**
-	 * Destroys all items in this list.  This will use the Model's 
-	 * [jQuery.Model.static.destroyAll] method if it exists, otherwise it will fall back to
-	 * [jQuery.model.static.destroy].
+	 * Destroys all items in this list.  This will use the List's 
+	 * [jQuery.Model.List.static.destroy destroy] method.
 	 * 
-	 * @param {Function} success
-	 * @param {Function} error
+	 *     list.destroy(function(destroyedItems){
+	 *         //success
+	 *     }, function(){
+	 *         //error
+	 *     });
+	 * 
+	 * @param {Function} success a handler called back with the destroyed items.  The original list will be emptied.
+	 * @param {Function} error a handler called back when the destroy was unsuccessful.
 	 */
-	destroyAll : function(success, error){
-		var gId = function(item){ return item[item.constructor.id]},
-			ids = this.map(gId),
-			model = this.model(),
-			self = this,
-			items = this.slice(0, this.length),
-			destroy = function(){
-				this.destroyed();
-			};
+	destroy : function(success, error){
+		var ids = this.map(getIds),
+			items = this.slice(0, this.length);
 		
-		if(model.destroyAll){
-			model.destroyAll(ids, function(){
-				$.each(items, destroy)//success(self); //should call back with the destroyed elements (not removed)
-			});
-		}else{
-			this.each(function(i, item){
-				model.destroy(gId(item), function(){
-					item.destroyed()
+		if(ids.length){
+			this.constructor.destroy(ids, function(){
+				each(items, function(){
+					this.destroyed();
 				})
-			});
+				success && success(items)
+			}, error);
+		} else {
+			success && success(this);
 		}
+		
+		return this;
+	},
+	/**
+	 * Updates items in the list with attributes.  This makes a 
+	 * request using the list class's [jQuery.Model.List.static.update update].
+	 *
+	 *     list.update(function(updatedItems){
+	 *         //success
+	 *     }, function(){
+	 *         //error
+	 *     });
+	 * 
+	 * @param {Object} attrs attributes to update the list with.
+	 * @param {Function} success a handler called back with the updated items.
+	 * @param {Function} error a handler called back when the update was unsuccessful.
+	 */
+	update : function(attrs, success, error){
+		var ids = this.map(getIds),
+			items = this.slice(0, this.length);
+			
+		if(ids.length){
+			this.constructor.update(ids, attrs, function(newAttrs){
+				// final attributes to update with
+				var attributes =  $.extend(attrs, newAttrs || {})
+				each(items, function(){
+					this.updated(attributes);
+				})
+				success && success(items)
+			}, error);
+		} else {
+			success && success(this);
+		}
+		
+		return this;
 	},
 	/**
 	 * Listens for an events on this list.  The only useful events are:
@@ -318,7 +511,6 @@ $.Class("jQuery.Model.List",
 	unbind : function(){
 		$.fn.unbind.apply($([this]),arguments);
 		if(this[expando] === undefined){
-			//console.log("unbinding all")
 			$(this).unbind(this._namespace)
 		}
 		return this;
@@ -332,7 +524,7 @@ $.Class("jQuery.Model.List",
 			//remove from me
 			self.remove(this); //triggers the remove event
 		}).bind("updated"+this._namespace, function(){
-			$([self]).trigger("update", this)
+			$([self]).trigger("updated", this)
 		});
 	},
 	/**
@@ -371,51 +563,74 @@ var push = [].push,
 
 	/**
 	 * @function pop
-	 * Pops the last instance off the list
+	 * Removes the last instance of the list, and returns that instance.
+	 *
+	 *     list.pop()
+	 * 
 	 */
 	pop: [].pop,
 	/**
 	 * @function shift
-	 * Shifts the first instance off the list
+	 * Removes the first instance of the list, and returns that instance.
+	 *
+	 *     list.shift()
+	 * 
 	 */
 	shift: [].shift,
 	/**
 	 * @function unshift
-	 * Adds an instance to the start of the list.
+	 * Adds a new instance to the beginning of an array, and returns the new length.
+	 *
+	 *     list.unshift(element1,element2,...) 
+	 *
 	 */
 	unshift: [].unshift,
 	/**
 	 * @function splice
-	 * Splices items from the list
+	 * The splice method adds and/or removes instances to/from the list, and returns the removed instance(s).
+	 *
+	 *     list.splice(index,howmany)
+	 * 
 	 */
 	splice: [].splice,
 	/**
 	 * @function sort
-	 * sorts the list
+	 * Sorts the instances in the list.
+	 *
+	 *     list.sort(sortfunc)
+	 * 
 	 */
-	sort : [].sort//,
-	//slice : [].slice
+	sort : [].sort
 }
 
-$.each(modifiers, function(name, func){
+each(modifiers, function(name, func){
 	$.Model.List.prototype[name] = function(){
 		this._changed = true;
 		return func.apply( this, arguments );
 	}
 })
 
-$.each([
+each([
 /**
  * @function each
- * Iterates through the list, calling callback on each item in the list.
- * @param {Function}  callback 
+ * Iterates through the list of model instances, calling the callback function on each iteration. 
+ *
+ *     list.each(function(indexInList, modelOfList){
+ *         ...
+ *     });
+ * 
+ * @param {Function} callback The function that will be executed on every object.
  */
 'each',
 /**
  * @function map
- * Iterates through the list, calling callback on each item in the list.
- * It returns an array of the items each call to callback returned.
- * @param {Function}  callback 
+ * Iterates through the list of model instances, calling the callback function on each iteration.
+ * 
+ *     list.map(function(modelOfList, indexInList){
+ *         ...
+ *     });
+ * 
+ * @param {Function} callback The function to process each item against.
  */
 'map'], function(i, name){
 	$.Model.List.prototype[name] = function(callback, args){

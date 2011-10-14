@@ -38,7 +38,7 @@ outer width and height of elements like:
 THe following are the other dom plugins:
 
   - [jQuery.cookie Cookie] - Set and get cookie values.
-  - [jQuery.fixture Fixture - Simulate Ajax responses.
+  - [jQuery.fixture Fixture] - Simulate Ajax responses.
   - [jQuery.fn.closest Closest] - Use the open child selector in event delegation.
   - [jQuery.fn.compare Compare] - Compare the location of two elements rapidly.
   - [jQuery.fn.curStyles CurStyles] - Get multiple css properties quickly.
