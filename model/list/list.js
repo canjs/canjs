@@ -259,7 +259,7 @@ $.Class("jQuery.Model.List",{
 				this[name] = ajaxMethods[name](this[name]);
 			}
 		}
-	},
+	}
 },
 /**
  * @Prototype
