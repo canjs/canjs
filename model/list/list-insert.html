@@ -41,12 +41,15 @@ $.fixture("GET /recipes.json", function(){
 $.fixture("PUT /recipes/{id}.json", function(){
 	return {};
 })
-		
+
+// =============== Contact Model =============== 
+
 $.Model("Contact",{
 	attributes : { 
 		birthday : 'date'
 	},
 	convert : {
+		// a converter to handle dates like 12-12-2012
 		date : function(raw){
 			if(typeof raw == 'string'){
 				var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
@@ -73,49 +76,65 @@ $.Model("Contact",{
 
 });
 
-// helper that 
+// =============== updaterWidget =============== 
+
 makeAgeUpdater = function(contact){
 	var updater = $("#update")
-	updater.html("");
-	updater.append(contact.name+"'s birthday")
-	$('<input/>').val(contact.attr("birthday")).change(function(){
-		contact.update({
-			'birthday': this.value
-		})
-	}).appendTo(updater)
-}
-// listen for contact updated events
-  Contact.bind("updated", function(ev, contact){
-		
-		// use the list to get the instance from the element
-        contact.elements($('#contacts'))
-          .html(contact.name+" "+contact.ageThisYear()+
-              " <a>Show</a>");
-    })
-Contact.findAll({},function(contacts){
-  var contactsEl = $('#contacts'),
-  	html = [], 
-	contact;
 	
-  // collect contact html
-  for(var i =0; i < contacts.length;i++){
-  	contact = contacts[i]
+	// clear the old update content and add the contact's bday
+	updater.html("")
+	       .append(contact.name+"'s birthday");
+	
+	// create an input element
+	$('<input/>')
+		// set the contacts birthday as val
+		.val(contact.attr("birthday"))
+		// when the input changes, update the contact with the value
+		.change(function(){
+			contact.update({
+				'birthday': this.value
+			})
+		})
+		// add the input to the updater
+		.appendTo(updater)
+};
+
+// =============== Listen for updates =============== 
+
+Contact.bind("updated", function(ev, contact){
+	
+	// use the list to get the instance from the element
+    contact.elements($('#contacts'))
+      .html(contact.name+" "+contact.ageThisYear()+
+          " <a>Show</a>");
+});
+
+// =============== Draw out Contacts =============== 
+
+Contact.findAll({},function(contacts){
+	var contactsEl = $('#contacts'),
+		html = [], 
+		contact;
+	
+	// collect contact html
+	for(var i =0; i < contacts.length;i++){
+		contact = contacts[i]
 	html.push("<li class='contact ",
 		contact.identity(), //add the identity to the className manually
 		"'>",
 		contact.name+" "+contact.ageThisYear()+
-                    " <a>Show</a>",
+	                " <a>Show</a>",
 		"</li>")
-  }
-  // insert contacts html
-  contactsEl.html(html.join(""))
-  
-  contactsEl.delegate("li","click", function(){
+	}
+	// insert contacts html
+	contactsEl.html(html.join(""))
+	
+	contactsEl.delegate("li","click", function(){
 	 // use the contacts list to get the
 	 // contact from the clicked element
 	 var contact = contacts.get(this)[0]
 	 makeAgeUpdater( contact );
-  });
+	});
 
 });
 
