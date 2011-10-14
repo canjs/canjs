@@ -24,11 +24,12 @@ var getArgs = function(args){
  * @test jquery/model/list/qunit.html
  * @plugin jquery/model/list
  * 
- * Model lists are useful for:
+ * Model lists are useful for managing multiple model instances, such as:
  * 
- *  - Adding helpers for multiple model instances.
- *  - Faster HTML inserts.
- *  - Storing and retrieving multiple instances.
+ *  - Listening for list updates such as Add/Update/Remove
+ *  - Adding helpers for multiple model instances
+ *  - Faster HTML inserts
+ *  - Storing and retrieving multiple instances
  *  
  * ## List Helpers
  * 
@@ -222,15 +223,21 @@ $.Class("jQuery.Model.List",{
         this.push.apply(this, $.makeArray(instances || [] ) );
     },
 	/**
-	 * Slice works just like an array's slice, except this
-	 * returns another instance of this model list's class.
+	 * The slice method selects a part of an array, and returns another instance of this model list's class.
+	 * 
+	 *     list.slice(start, end)
+	 *
+	 * @param {Number} start the start index to select
+	 * @param {Number} end the last index to select
 	 */
     slice: function() {
         return new this.Class( Array.prototype.slice.apply( this, arguments ) );
     },
 	/**
-	 * Returns a list of all instances who's property matches
-	 * the given value.
+	 * Returns a list of all instances who's property matches the given value.
+	 *
+	 *     list.match('candy', 'snickers')
+	 * 
 	 * @param {String} property the property to match
 	 * @param {Object} value the value the property must equal
 	 */
@@ -240,9 +247,13 @@ $.Class("jQuery.Model.List",{
         });
     },
 	/**
-	 * Returns a model list of elements where callback returns true.
-	 * @param {Function} callback the function to call back.  This
-	 * function has the same call pattern as what jQuery.grep provides.
+	 * Finds the instances of the list which satisfy a callback filter function. The original array is not affected.
+	 * 
+	 *     var matchedList = list.grep(function(instanceInList, indexInArray){
+	 *        return instanceInList.date < new Date();
+	 *     });
+	 * 
+	 * @param {Function} callback the function to call back.  This function has the same call pattern as what jQuery.grep provides.
 	 * @param {Object} args
 	 */
     grep: function( callback, args ) {
@@ -256,6 +267,16 @@ $.Class("jQuery.Model.List",{
 	},
 	/**
 	 * Gets a list of elements by ID or element.
+	 *
+	 * To fetch by id:
+	 *
+	 *     var match = list.get(23);
+	 *
+	 * or to fetch by element:
+	 * 
+	 *     var match = list.get($('#content')[0])
+	 * 
+	 * @param {Object} args element or id to remove
 	 */
 	get: function() {
 		if(!this.length){
@@ -285,9 +306,17 @@ $.Class("jQuery.Model.List",{
 		return new this.Class(list)
 	},
 	/**
-	 * Removes instances from this list by id or by an
-	 * element.
-	 * @param {Object} args
+	 * Removes instances from this list by id or by an element.
+	 *
+	 * To remove by id:
+	 *
+	 *     var match = list.get(23);
+	 *
+	 * or to remove by element:
+	 * 
+	 *     var match = list.get($('#content')[0])
+	 *
+	 * @param {Object} args element or id to remove
 	 */
 	remove: function( args ) {
 		if(!this.length){
@@ -334,8 +363,23 @@ $.Class("jQuery.Model.List",{
 		return ret;
 	},
 	/**
-	 * Gets all the elements that represent this list.
-	 * @param {Object} context
+	 * Returns elements that represent this list.  For this to work, your element's should
+	 * us the [jQuery.Model.prototype.identity identity] function in their class name.  Example:
+	 * 
+	 *     <div class='todo <%= todo.identity() %>'> ... </div>
+	 * 
+	 * This also works if you hooked up the model:
+	 * 
+	 *     <div <%= todo %>> ... </div>
+	 *     
+	 * Typically, you'll use this as a response to a Model Event:
+	 * 
+	 *     "{Todo} destroyed": function(Todo, event, todo){
+	 *       todo.elements(this.element).remove();
+	 *     }
+	 * 
+	 * @param {String|jQuery|element} context If provided, only elements inside this element that represent this model will be returned.
+	 * @return {jQuery} Returns a jQuery wrapped nodelist of elements that have these model instances identities in their class names.
 	 */
 	elements: function( context ) {
 		// TODO : this can probably be done with 1 query.
@@ -519,30 +563,44 @@ var push = [].push,
 
 	/**
 	 * @function pop
-	 * Pops the last instance off the list
+	 * Removes the last instance of the list, and returns that instance.
+	 *
+	 *     list.pop()
+	 * 
 	 */
 	pop: [].pop,
 	/**
 	 * @function shift
-	 * Shifts the first instance off the list
+	 * Removes the first instance of the list, and returns that instance.
+	 *
+	 *     list.shift()
+	 * 
 	 */
 	shift: [].shift,
 	/**
 	 * @function unshift
-	 * Adds an instance to the start of the list.
+	 * Adds a new instance to the beginning of an array, and returns the new length.
+	 *
+	 *     list.unshift(element1,element2,...) 
+	 *
 	 */
 	unshift: [].unshift,
 	/**
 	 * @function splice
-	 * Splices items from the list
+	 * The splice method adds and/or removes instances to/from the list, and returns the removed instance(s).
+	 *
+	 *     list.splice(index,howmany)
+	 * 
 	 */
 	splice: [].splice,
 	/**
 	 * @function sort
-	 * sorts the list
+	 * Sorts the instances in the list.
+	 *
+	 *     list.sort(sortfunc)
+	 * 
 	 */
-	sort : [].sort//,
-	//slice : [].slice
+	sort : [].sort
 }
 
 each(modifiers, function(name, func){
@@ -555,15 +613,24 @@ each(modifiers, function(name, func){
 each([
 /**
  * @function each
- * Iterates through the list, calling callback on each item in the list.
- * @param {Function}  callback 
+ * Iterates through the list of model instances, calling the callback function on each iteration. 
+ *
+ *     list.each(function(indexInList, modelOfList){
+ *         ...
+ *     });
+ * 
+ * @param {Function} callback The function that will be executed on every object.
  */
 'each',
 /**
  * @function map
- * Iterates through the list, calling callback on each item in the list.
- * It returns an array of the items each call to callback returned.
- * @param {Function}  callback 
+ * Iterates through the list of model instances, calling the callback function on each iteration.
+ * 
+ *     list.map(function(modelOfList, indexInList){
+ *         ...
+ *     });
+ * 
+ * @param {Function} callback The function to process each item against.
  */
 'map'], function(i, name){
 	$.Model.List.prototype[name] = function(callback, args){

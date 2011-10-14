@@ -510,7 +510,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * This lets you update a recipe like:
 			 *  
 			 *     // PUT /recipes/5 {name: "Hot Dog"}
-			 *     recipe.update({name: "Hot Dog"},
+			 *     Recipe.update(5, {name: "Hot Dog"},
 			 *       function(){
 			 *         this.name //this is the updated recipe
 			 *       })
@@ -1551,9 +1551,9 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * 
 		 *     <div <%= todo %>> ... </div>
 		 *     
-		 * Typically, you'll use this as a response of an OpenAjax message:
+		 * Typically, you'll use this as a response to a Model Event:
 		 * 
-		 *     "todo.destroyed subscribe": function(called, todo){
+		 *     "{Todo} destroyed": function(Todo, event, todo){
 		 *       todo.elements(this.element).remove();
 		 *     }
 		 * 
