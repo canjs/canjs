@@ -31,7 +31,7 @@
 	<tr>
 	    <% for(var attr in model.attributes){%>
 	        <% if(attr == 'id') continue;%>
-	        <th><%= attr%> </th>    
+	        <th><%= attr %> </th>    
 	    <%}%>
 	    <th>Options</th>
 	</tr>
@@ -39,7 +39,7 @@
 	<tbody>
 		<% for(var i =0; i < items.length;i++){ %>
 			<tr <%= items[i] %>>
-				<%= view('itemView',{item: items[i], model : model})%>
+				<%== view('itemView',{item: items[i], model : model})%>
 			</tr>
 		<%} %>
 	    
@@ -126,9 +126,13 @@ $.Controller.extend("Grid",{
 // A Recipe model that implements findAll and update
 $.Model.extend("Recipe",{
 	findAll : function(params, success, error){
-		$.get("/recipes.json",{},
-				this.callback(['wrapMany',success]),
-				"json","-recipes")
+		return $.ajax({
+			url : "/recipes.json",
+			success : success,
+			type : "get",
+			dataType : "json recipe.models",
+			fixture: "-recipes"
+		});	
 	},
 	update : function(id, attrs, success, error){
 		$.post("/recipes.json",{},success,'json',function(){
@@ -140,9 +144,13 @@ $.Model.extend("Recipe",{
 // A WorkItem model that implements findAll and update
 $.Model.extend("WorkItem",{
 	findAll : function(params, success, error){
-		$.get("/recipes.json", {},
-			  this.callback(['wrapMany',success]),
-			  "json","-workitems")
+		return $.ajax({
+			url : "/recipes.json",
+			success : success,
+			type : "get",
+			dataType : "json work_item.models",
+			fixture: "-workitems"
+		});
 	},
 	update : function(id, attrs, success, error){
 		$.post("/recipes.json",{},success,'json',function(){

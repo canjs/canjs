@@ -1,8 +1,8 @@
 steal('jquery/controller').then(function($){
 
 /**
- * @core
  * @class jQuery.Tie
+ * @core
  * 
  * The $.fn.tie plugin binds form elements and controllers with 
  * models and vice versa.  The result is that a change in 
@@ -14,7 +14,7 @@ steal('jquery/controller').then(function($){
  * 
  * 
  */
-$.Controller.extend("jQuery.Tie",{
+$.Controller("jQuery.Tie",{
 	init : function(el, inst, attr, type){
 		// if there's a controller
 		if(!type){

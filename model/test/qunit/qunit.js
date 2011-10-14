@@ -4,6 +4,6 @@ steal("jquery/model","jquery/dom/fixture")  //load your app
  .then("./model_test.js","./associations_test.js")
  .then(
 	"jquery/model/backup/qunit",
-	"jquery/model/list/test/qunit"
+	"jquery/model/list/list_test.js"
   )
   .then("jquery/model/validations/qunit/validations_test.js")
