@@ -241,4 +241,29 @@ test("inherit defaults", function() {
     ok(inst.options.newProp == 'newVal', 'Instance must have defaults of it`s class');
 });
 
+test("update rebinding", 2, function(){
+	var first = true;
+	$.Controller("Rebinder", {
+		"{item} foo" : function(item, ev){
+			if(first){
+				equals(item.id, 1, "first item");
+				first = false;
+			} else  {
+				equals(item.id, 2, "first item");
+			}
+		}
+	});
+	
+	var item1 = {id: 1},
+		item2 = {id: 2},
+		el = $('<div>').rebinder({item: item1})
+	
+	$(item1).trigger("foo")
+	
+	el.rebinder({item: item2});
+	
+	$(item2).trigger("foo")
+})
+
+
 });

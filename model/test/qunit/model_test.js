@@ -440,6 +440,11 @@ test("converters and serializes", function(){
 	equals(task2.serialize().name, "Task2", "Task2 model default serialized");
 });
 
+test("default converters", function(){
+	var num = 1318541064012;
+	equals( $.Model.convert.date(num).getTime(), num, "converted to a date with a number" );
+})
+
 test("removeAttr test", function(){
 	var person = new Person({foo: "bar"})
 	equals(person.foo, "bar", "property set");

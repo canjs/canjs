@@ -27,27 +27,29 @@
 steal('jquery/model',
 		'jquery/dom/fixture',
 		'jquery/model/list').then(function(){
-	var convertDate =  function(raw){
-		if(typeof raw == 'string'){
-			var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
-			return new Date( +matches[1], 
-			                 (+matches[2])-1, 
-			                 +matches[3] )
-		}else if(raw instanceof Date){
-			return raw;
-		}
-	};
-	CONTACT_FIXTURE = function(){
-				return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20',
-							tasks : [{id: 1, title: "write up model layer", due: "2010-10-5"}]},
-					 {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10',
-					 		tasks : [{id: 2, title: "write up funcunit", due: "2009-5-1"}, {id: 3, title: "test funcunit", due: "2010-3-15"}]},
-					 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
-			}
-$.Model.extend("Task",{
-	convert : {
-		date :convertDate
-	},
+			
+$.Model.convert.date =  function(raw){
+	if(typeof raw == 'string'){
+		var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
+		return new Date( +matches[1], 
+		                 (+matches[2])-1, 
+		                 +matches[3] )
+	}else if(raw instanceof Date){
+		return raw;
+	}
+};
+
+$.fixture("/contacts.json", function(){
+	return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20',
+				tasks : [{id: 1, title: "write up model layer", due: "2010-10-5"}]},
+		 {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10',
+		 		tasks : [{id: 2, title: "write up funcunit", due: "2009-5-1"}, 
+				         {id: 3, title: "test funcunit", due: "2010-3-15"}]},
+		 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
+})
+
+// A task model that has a date
+$.Model("Task",{
 	attributes : {
 		due : 'date'
 	}
@@ -58,19 +60,13 @@ $.Model.extend("Task",{
 	}
 })
 
-$.Model.extend("Contact",{
+// A contact model that has many tasks
+$.Model("Contact",{
 	attributes : { 
 		birthday : 'date',
 		tasks: "Task.models"
 	},
-	convert : {
-		date :convertDate
-	},
-	findAll : function(params, success, error){
-		$.get("/recipes.json",{},
-			this.callback(['wrapMany',success]),
-			"json",CONTACT_FIXTURE)
-	}
+	findAll : "/contacts.json"
 },{
 	ageThisYear : function(){
 		return new Date().getFullYear() - 
@@ -85,14 +81,14 @@ $.Model.extend("Contact",{
 });
 
 
-// List 1
+// Get all contacts and put them on the page
 Contact.findAll({},function(contacts){
   var contactsEl = $('#contacts');
   $.each(contacts, function(i, contact){
     var li = $('<li>')
-              .model(contact)
               .html(contact.name+" "+contact.ageThisYear())
               .appendTo(contactsEl);
+			  
 	var ul =$("<ul>");
 	var tasks = contact.attr('tasks')
 	if(tasks){

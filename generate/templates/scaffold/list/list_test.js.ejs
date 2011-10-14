@@ -10,7 +10,7 @@ test("delete <%= plural %>", function(){
 	S('#create').click()
 	
 	// wait until grilled cheese has been added
-	S('h3:last').text('Grilled Cheese X');
+	S('h3:contains(Grilled Cheese X)').exists();
 	
 	S.confirm(true);
 	S('h3:last a').click();

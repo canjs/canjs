@@ -330,15 +330,22 @@ function( $ ) {
         /**
          * @attribute
          * @type Object
+		 * @hide
+		 * 
          * A list of routes recognized by the router indixed by the url used to add it.
          * Each route is an object with these members:
-         *  - test - A regular expression that will match the route when variable values 
-         *      are present; i.e. for :page/:type the regEx is /([\w\.]*)/([\w\.]*)/ which
-         *      will match for any value of :page and :type (word chars or period).
+         * 
+ 		 *  - test - A regular expression that will match the route when variable values 
+         *    are present; i.e. for :page/:type the regEx is /([\w\.]*)/([\w\.]*)/ which
+         *    will match for any value of :page and :type (word chars or period).
+		 * 
          *  - route - The original URL, same as the index for this entry in routes.
-         *  - names - An array of all the variable names in this route
-         *  - defaults - Default values provided for the variables or an empty object.
-         *  - length - The number of parts in the URL separated by '/'.
+         * 
+		 *  - names - An array of all the variable names in this route
+         * 
+		 *  - defaults - Default values provided for the variables or an empty object.
+         * 
+		 *  - length - The number of parts in the URL separated by '/'.
          */
 		routes: {},
 		/**

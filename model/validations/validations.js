@@ -15,7 +15,7 @@ To use validations, you need to call a validate method on the Model class.
 The best place to do this is in a Class's init function.
 
 @codestart
-$.Model.extend("Contact",{
+$.Model("Contact",{
 	init : function(){
 		// validates that birthday is in the future
 		this.validate("birthday",function(){
