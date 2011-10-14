@@ -24,30 +24,46 @@ var getArgs = function(args){
  * @test jquery/model/list/qunit.html
  * @plugin jquery/model/list
  * 
- * Model lists are useful for managing multiple model instances. 
+ * Model.Lists are useful for managing multiple model instances.  They provide the ability to:
  * 
- *  - Listening for list updates such as Add/Update/Remove
- *  - Adding helpers for multiple model instances
- *  - Managing multiple model instances easily
- *  - Faster HTML inserts
- *  - Storing and retrieving multiple instances
+ *  - Store and retrieve multiple instances
+ *  - Manage CRUD operations on multiple instances easily
+ *  - Listen for list updates such as Add/Update/Remove
+ *  - Add helpers and converters for multiple instances
+ *  - Fast HTML inserts
  *
- * ## Managing List Updates
+ * Its easy to add a Model.List to any existing modeling instance.  After you have defined your
+ * model, simply define your Model.List like:
+ *
+ *     $.Model.List("MyModel.List", { 
+ *         //Static
+ *     },{ 
+ *         //Prototype 
+ *     });
+ *
+ *
+ * ## Store and retrieve multiple instances
  * 
- * Model.List will publish events when instance(s) are added, updated, or removed.  You can subscribe
- * to these events by binding to them directly or subscribing in the controller via _jquery/controller/subscribe_.
+ * Once you have a collection of models, you often want to retrieve and update 
+ * that list with new instances.  Storing and retrieving is a powerful feature
+ * you can leverage to manage and maintain a list of models.
+ *
+ * To store a new model instance in a list...
+ *
+ *     listInstance.push(new Animal({ type: dog, id: 123 }))
  * 
+ * To later retrieve that instance in your list...
  * 
+ *     var animal = listInstance.get(123);
+ *
+ *
+ * ## CRUD operations on multiple instances
  * 
- *  
- * ## Managing Multiple Models Instances
+ * It's pretty common to deal with updating or deleting multiple items at a time.
  * 
- * It's pretty common to deal with multiple items at a time.
- * List helpers provide methods for multiple model instances.
- * 
- * For example, if we wanted to be able to destroy multiple
- * contacts at once, we could add a `destroy(ids, success, error )` method to a Contact
- * model, which is called by a Contact.List:
+ * For example, if we wanted to be able to destroy multiple contacts at once, we could 
+ * add a `destroy(ids, success, error )` method to a Contact model, which is 
+ * called by a Contact.List:
  * 
  *     $.Model("Contact",{
  *       destroy : '/contacts/destroy'
@@ -59,6 +75,40 @@ var getArgs = function(args){
  * multiple Contacts and click "DESTROY ALL"
  * 
  * @demo jquery/model/list/list.html
+ *
+ *
+ * ## Managing List Updates
+ * 
+ * Model.List will publish events when instance(s) are added, updated, or removed.  
+ * Listening to Model.List events allow you to listen easily manage updates of a 
+ * items in a specific list instance.  You can subscribe  to these events by binding to them directly...
+ * 
+ *     myModelListInstance.bind('created', function(MyModelList, event, myModelList){
+ *         ...
+ *     })
+ * 
+ * or subscribing in the controller using [jquery.controller.listening templated binding].
+ * 
+ *     "{myModelListInstancePassedViaOptions} created":function(MyModelList, event, myModelList){ 
+ *         ...
+ *     }
+ * 
+ * 
+ * ## Helpers and Converters
+ * 
+ * List helpers provide the ability to add methods for multiple model instances.
+ *
+ * For example, if we wanted to add a helper method that would filter a collection
+ * which contained objects of type 'dogs' and 'cats' to just dogs.
+ *
+ *     $.Model.List('Animals.List', {}, {
+ *         dogs: function(){
+ *             return this.grep(function(entry){
+ *                 return entry.type === "dog";
+ *             });
+ *         }
+ *     });
+ * 
  * 
  * ## Faster Inserts
  * 
@@ -95,6 +145,7 @@ var getArgs = function(args){
  * The following demonstrates how to use this technique:
  * 
  * @demo jquery/model/list/list-insert.html
+ *
  */
 	ajaxMethods = 
 /**
@@ -208,7 +259,7 @@ $.Class("jQuery.Model.List",{
 				this[name] = ajaxMethods[name](this[name]);
 			}
 		}
-	},
+	}
 },
 /**
  * @Prototype
