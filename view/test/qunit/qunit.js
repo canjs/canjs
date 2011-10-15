@@ -3,6 +3,6 @@ steal("jquery/view","jquery/view/micro","jquery/view/ejs","jquery/view/jaml","jq
  .then('funcunit/qunit')  //load qunit
  .then("./view_test.js","jquery/view/tmpl/tmpl_test.js")
  
-if(steal.browser.rhino){
+if(steal.isRhino){
   steal('funcunit/qunit/rhino')
 }

@@ -488,7 +488,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function(attrs, success, error){
-				return ajax(str, attrs, success, error, "-restCreate")
+				return ajax(str, attrs, success, error, fixture.call(this,"Create", "-restCreate"))
 			};
 		},
 		update: function( str ) {
@@ -563,7 +563,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function(id, attrs, success, error){
-				return ajax(str, addId.call(this,attrs, id), success, error, "-restUpdate","put")
+				return ajax(str, addId.call(this,attrs, id), success, error, fixture.call(this,"Update", "-restUpdate"),"put")
 			}
 		},
 		destroy: function( str ) {
@@ -597,7 +597,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			return function( id, success, error ) {
 				var attrs = {};
 				attrs[this.id] = id;
-				return ajax(str, attrs, success, error, "-restDestroy","delete")
+				return ajax(str, attrs, success, error, fixture.call(this,"Destroy", "-restDestroy") ,"delete")
 			}
 		},
 		
