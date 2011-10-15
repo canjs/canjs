@@ -159,13 +159,13 @@ steal('jquery/dom',
 			//*/
 
 			if(id === undefined){
-                settings.url.replace(/\/(\d+)(\/|$)/g, function(all, num){
+                settings.url.replace(/\/(\d+)(\/|$|\.)/g, function(all, num){
                     id = num;
                 });
             }
 			
             if(id === undefined){
-                id = settings.url.replace(/\/(\w+)(\/|$)/g, function(all, num){
+                id = settings.url.replace(/\/(\w+)(\/|$|\.)/g, function(all, num){
                     if(num != 'update'){
                         id = num;
                     }
@@ -468,8 +468,8 @@ steal('jquery/dom',
 		 * @hide
 		 * Provides a rest create fixture function
 		 */
-		"-restCreate": function( settings, cbType ) {
-			var id = parseInt(Math.random() * 100000, 10);
+		"-restCreate": function( settings, cbType, nul, id ) {
+			var id = id || parseInt(Math.random() * 100000, 10);
 			return [200,"succes",{
 						id: id
 					},{
@@ -588,7 +588,7 @@ steal('jquery/dom',
 
 
 				var offset = parseInt(settings.data.offset, 10) || 0,
-					limit = parseInt(settings.data.limit, 10) || (count - offset),
+					limit = parseInt(settings.data.limit, 10) || (items.length - offset),
 					i = 0;
 
 				//filter results if someone added an attr like parentId
@@ -654,6 +654,7 @@ steal('jquery/dom',
 			};
 			$.fixture["-" + types[1]+"Create"] = function( settings, cbType ) {
                 var item = make(items.length, items);
+				
 				$.extend(item, settings.data);
 				
 				if(!item.id){
@@ -661,7 +662,8 @@ steal('jquery/dom',
 				}
 				
 				items.push(item);
-				return $.fixture["-restCreate"](settings, cbType)
+				
+				return $.fixture["-restCreate"](settings, cbType, undefined, item.id );
 			};
 			
 			
