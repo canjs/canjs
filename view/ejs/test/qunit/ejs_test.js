@@ -80,7 +80,7 @@ test("unescapedContent", function(){
 	
 	var div = $('<div/>').html(compiled)
 	equals(div.find('span').text(), "foobar" );
-	equals(div.find('div').text(), "<strong>foo</strong><strong>bar</strong>" );
-	equals(div.find('span').html(), "<strong>foo</strong><strong>bar</strong>" );
+	equals(div.find('div').text().toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
+	equals(div.find('span').html().toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
 	equals(div.find('input').val(), "I use 'quote' fingers \"a lot\"" );
 })
