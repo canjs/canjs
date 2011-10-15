@@ -133,7 +133,7 @@ steal('jquery/event').then(function($){
 		if( key_Key && test.test(key_Key) ) {
 			return key_Key.toLowerCase()
 		}
-		//console.log(this.type, key_Key, char_Key, key_Char, char_Char);
+
 		//if IE
 		//if ($.browser.msie){
 			if (event.type == 'keypress'){
