@@ -49,7 +49,6 @@ test("triggering defaults", function(){
 	})
 	$(document.body).bind("hide", function(ev){
 		if(ev.target.id == "clickme1"){
-			console.log("stopping and preventing")
 			ev.stopPropagation()
 			ev.preventDefault()
 		}
