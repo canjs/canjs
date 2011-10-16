@@ -77,28 +77,36 @@ steal('jquery').then(function($){
 			}
 			return vec.update(arr);
 		},
-/*
-	 * Returns the 2nd value of the vector
-	 * @return {Number}
-	 */
-		x: getSetZero,
-		width: getSetZero,
 		/**
 		 * Returns the first value of the vector
 		 * @return {Number}
 		 */
-		y: getSetOne,
-		height: getSetOne,
+		x: getSetZero,
 		/**
-		 * Same as x()
+		 * same as x()
+		 * @return {Number}
+		 */
+		left: getSetZero,
+		/**
+		 * Returns the first value of the vector
+		 * @return {Number}
+		 */
+		width: getSetZero,
+		/**
+		 * Returns the 2nd value of the vector
+		 * @return {Number}
+		 */
+		y: getSetOne,
+		/**
+		 * Same as y()
 		 * @return {Number}
 		 */
 		top: getSetOne,
 		/**
-		 * same as y()
+		 * Returns the 2nd value of the vector
 		 * @return {Number}
 		 */
-		left: getSetZero,
+		height: getSetOne,
 		/**
 		 * returns (x,y)
 		 * @return {String}
