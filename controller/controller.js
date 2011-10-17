@@ -625,9 +625,25 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 			
 			/**
 			 * @attribute options
-			 * Options is [jQuery.Controller.static.defaults] merged with the 2nd argument
+			 * 
+			 * Options are used to configure an controller.  They are
+			 * the 2nd argument
 			 * passed to a controller (or the first argument passed to the 
 			 * [jquery.controller.plugin controller's jQuery plugin]).
+			 * 
+			 * For example:
+			 * 
+			 *     $.Controller('Hello')
+			 *     
+			 *     var h1 = new Hello($('#content1'), {message: 'World'} );
+			 *     equal( h1.options.message , "World" )
+			 *     
+			 *     var h2 = $('#content2').hello({message: 'There'})
+			 *                            .controller();
+			 *     equal( h2.options.message , "There" )
+			 * 
+			 * Options are merged with [jQuery.Controller.static.defaults defaults] in
+			 * [jQuery.Controller.prototype.setup setup].
 			 * 
 			 * For example:
 			 * 
@@ -646,7 +662,9 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 			 *     $("#tabs1").tabs()                         // adds 'ui-active-state'
 			 *     $("#tabs2").tabs({activeClass : 'active'}) // adds 'active'
 			 *     
-			 *  
+			 * Options are typically updated by calling 
+			 * [jQuery.Controller.prototype.update update];
+			 *
 			 */
 			this.options = extend( extend(true, {}, cls.defaults), options);
 
@@ -836,15 +854,15 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		 *     $.Controller('Creator',{
 		 *       "{recipe} created" : function(){
 		 *         this.update({recipe : new Recipe()});
-		 *     	   this.element[0].reset();
-		 *     	   this.find("[type=submit]").val("Create Recipe")
+		 *         this.element[0].reset();
+		 *         this.find("[type=submit]").val("Create Recipe")
 		 *       },
 		 *       "submit" : function(el, ev){
-		 *       	ev.preventDefault();
-		 *          var recipe = this.options.recipe;
-		 *          recipe.attrs( this.element.formParams() );
-		 *     	    this.find("[type=submit]").val("Saving...")
-		 *          recipe.save();
+		 *         ev.preventDefault();
+		 *         var recipe = this.options.recipe;
+		 *         recipe.attrs( this.element.formParams() );
+		 *         this.find("[type=submit]").val("Saving...")
+		 *         recipe.save();
 		 *       }
 		 *     });
 		 *     $('#createRecipes').creator({recipe : new Recipe()})
@@ -862,24 +880,24 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 		 *     $.Controller('Updater',{
 		 *       // when the controller is created, update the html
 		 *       init : function(){
-		 *       	this.updateView();
+		 *         this.updateView();
 		 *       },
 		 *       
 		 *       // update the html with a template
 		 *       updateView : function(){
-		 *          this.element.html( "content.ejs",
-		 *                             this.options.model ); 
+		 *         this.element.html( "content.ejs",
+		 *                            this.options.model ); 
 		 *       },
 		 *       
 		 *       // if the model is updated
 		 *       "{model} updated" : function(){
-		 *          this.updateView();
+		 *         this.updateView();
 		 *       },
 		 *       update : function(options){
-		 *          // make sure you call super
-		 *          this._super(options);
+		 *         // make sure you call super
+		 *         this._super(options);
 		 *          
-		 *          this.updateView();
+		 *         this.updateView();
 		 *       }
 		 *     })
 		 * 
