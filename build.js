@@ -41,14 +41,6 @@ var i, fileName, cmd,
 	"dom/cur_styles",
 	"model",
 	{
-		plugin: "model/associations",
-		exclude: ["jquery/class/class.js",
-				  "jquery/lang/lang.js",
-				  "jquery/event/destroyed/destroyed.js",
-				  "jquery/lang/openajax/openajax.js",
-				  "jquery/model/model.js"]
-	},
-	{
 		plugin: "model/backup",
 		exclude: ["jquery/class/class.js",
 				  "jquery/lang/lang.js",
