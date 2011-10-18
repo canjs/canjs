@@ -98,6 +98,7 @@ var i, fileName, cmd,
 ]
 
 
+steal.File('jquery/dist').mkdir();
 steal('steal/build/pluginify').then( function(s){
 var plugin, exclude, fileDest, fileName;
 	for(i=0; i<plugins.length; i++){
@@ -113,7 +114,7 @@ var plugin, exclude, fileDest, fileName;
 		fileDest = "jquery/dist/"+fileName
 		s.build.pluginify("jquery/"+plugin,{
 			nojquery: true,
-			destination: fileDest,
+			out: fileDest,
 			exclude: exclude.length? exclude: false
 		})
 		
