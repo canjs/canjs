@@ -1,9 +1,10 @@
 steal("jquery").then(function( $ ) {
 
-	// converts to an ok dom id
+	// a path like string into something that's ok for an element ID
 	var toId = function( src ) {
 		return src.replace(/^\/\//, "").replace(/[\/\.]/g, "_");
 	},
+		makeArray = $.makeArray,
 		// used for hookup ids
 		id = 1;
 	// this might be useful for testing if html
@@ -216,37 +217,12 @@ steal("jquery").then(function( $ ) {
 	 * @param {Object} [callback] Optional callback function.  If present, the template is 
 	 * retrieved asynchronously.  This is a good idea if you aren't compressing the templates
 	 * into your view.
-	 * @return {String} The rendered result of the view or if deferreds are passed, a deferred that will contain
+	 * @return {String} The rendered result of the view or if deferreds 
+	 * are passed, a deferred that will resolve to
 	 * the rendered result of the view.
 	 */
-
-	var $view, render, checkText, get, getRenderer, isDeferred = function( obj ) {
-		return obj && $.isFunction(obj.always) // check if obj is a $.Deferred
-	},
-		// gets an array of deferreds from an object
-		// this only goes one level deep
-		getDeferreds = function( data ) {
-			var deferreds = [];
-
-			// pull out deferreds
-			if ( isDeferred(data) ) {
-				return [data]
-			} else {
-				for ( var prop in data ) {
-					if ( isDeferred(data[prop]) ) {
-						deferreds.push(data[prop]);
-					}
-				}
-			}
-			return deferreds;
-		},
-		// gets the useful part of deferred
-		// this is for Models and $.ajax that give arrays
-		usefulPart = function( resolved ) {
-			return $.isArray(resolved) && resolved.length === 3 && resolved[1] === 'success' ? resolved[0] : resolved
-		};
-
-	$view = $.View = function( view, data, helpers, callback ) {
+	var $view = $.View = function( view, data, helpers, callback ) {
+		// if helpers is a function, it is actually a callback
 		if ( typeof helpers === 'function' ) {
 			callback = helpers;
 			helpers = undefined;
@@ -265,40 +241,56 @@ steal("jquery").then(function( $ ) {
 
 			// wait for the view and all deferreds to finish
 			$.when.apply($, deferreds).then(function( resolved ) {
-				var objs = $.makeArray(arguments),
+				// get all the resolved deferreds
+				var objs = makeArray(arguments),
+					// renderer is last [0] is the data
 					renderer = objs.pop()[0],
-					result; //get the view render function
+					// the result of the template rendering with data
+					result; 
+				
 				// make data look like the resolved deferreds
 				if ( isDeferred(data) ) {
 					data = usefulPart(resolved);
 				}
 				else {
+					// go through each prop in data again,
+					// replace the defferreds with what they resolved to
 					for ( var prop in data ) {
 						if ( isDeferred(data[prop]) ) {
 							data[prop] = usefulPart(objs.shift());
 						}
 					}
 				}
+				// get the rendered result
 				result = renderer(data, helpers);
 
 				//resolve with the rendered view
-				deferred.resolve(result); // this does not work as is...
+				deferred.resolve(result); 
+				// if there's a callback, call it back with the result
 				callback && callback(result);
 			});
 			// return the deferred ....
 			return deferred.promise();
 		}
 		else {
-
-			var response, async = typeof callback === "function",
+			// no deferreds, render this bad boy
+			var response, 
+				// if there's a callback function
+				async = typeof callback === "function",
+				// get the 'view' type
 				deferred = get(view, async);
 
+			// if we are async, 
 			if ( async ) {
+				// return the deferred
 				response = deferred;
+				// and callback callback with the rendered result
 				deferred.done(function( renderer ) {
 					callback(renderer(data, helpers))
 				})
 			} else {
+				// otherwise, the deferred is complete, so
+				// set response to the result of the rendering
 				deferred.done(function( renderer ) {
 					response = renderer(data, helpers);
 				});
@@ -306,32 +298,87 @@ steal("jquery").then(function( $ ) {
 
 			return response;
 		}
-	};
-	// makes sure there's a template
-	checkText = function( text, url ) {
-		if (!text.match(/[^\s]/) ) {
-			steal.dev.log("There is no template or an empty template at " + url)
-			throw "$.View ERROR: There is no template or an empty template at " + url;
-		}
-	};
-	get = function( url, async ) {
-		return $.ajax({
-			url: url,
-			dataType: "view",
-			async: async
-		});
-	};
+	}, 
+		// makes sure there's a template, if not, has steal provide a warning
+		checkText = function( text, url ) {
+			if (!text.match(/[^\s]/) ) {
+				steal.dev.log("There is no template or an empty template at " + url)
+				throw "$.View ERROR: There is no template or an empty template at " + url;
+			}
+		},
+		// returns a 'view' renderer deferred
+		// url - the url to the view template
+		// async - if the ajax request should be synchronous
+		get = function( url, async ) {
+			return $.ajax({
+				url: url,
+				dataType: "view",
+				async: async
+			});
+		},
+		// returns true if something looks like a deferred
+		isDeferred = function( obj ) {
+			return obj && $.isFunction(obj.always) // check if obj is a $.Deferred
+		},
+		// gets an array of deferreds from an object
+		// this only goes one level deep
+		getDeferreds = function( data ) {
+			var deferreds = [];
+
+			// pull out deferreds
+			if ( isDeferred(data) ) {
+				return [data]
+			} else {
+				for ( var prop in data ) {
+					if ( isDeferred(data[prop]) ) {
+						deferreds.push(data[prop]);
+					}
+				}
+			}
+			return deferreds;
+		},
+		// gets the useful part of deferred
+		// this is for Models and $.ajax that resolve to array (with success and such)
+		// returns the useful, content part
+		usefulPart = function( resolved ) {
+			return $.isArray(resolved) && resolved.length === 3 && resolved[1] === 'success' ? resolved[0] : resolved
+		};
+
+
 
 	// you can request a view renderer (a function you pass data to and get html)
+	// Creates a 'view' transport.  These resolve to a 'view' renderer
+	// a 'view' renderer takes data and returns a string result.
+	// For example: 
+	//
+	//  $.ajax({dataType : 'view', src: 'foo.ejs'}).then(function(renderer){
+	//     renderer({message: 'hello world'})
+	//  })
 	$.ajaxTransport("view", function( options, orig ) {
-		var view = orig.url,
-			suffix = view.match(/\.[\w\d]+$/),
-			type, el, id, renderer, url = view,
-			jqXHR, response = function( text ) {
+		// the url (or possibly id) of the view content
+		var url = orig.url,
+			// check if a suffix exists (ex: "foo.ejs")
+			suffix = url.match(/\.[\w\d]+$/),
+			type, 
+			// if we are reading a script element for the content of the template
+			// el will be set to that script element
+			el, 
+			// a unique identifier for the view (used for caching)
+			// this is typically derived from the element id or
+			// the url for the template
+			id, 
+			// the AJAX request used to retrieve the template content
+			jqXHR, 
+			// used to generate the response 
+			response = function( text ) {
+				// get the renderer function
 				var func = type.renderer(id, text);
+				// cache if if we are caching
 				if ( $view.cache ) {
 					$view.cached[id] = func;
 				}
+				// return the objects for the response's dataTypes 
+				// (in this case view)
 				return {
 					view: func
 				};
@@ -339,41 +386,47 @@ steal("jquery").then(function( $ ) {
 
 		// if we have an inline template, derive the suffix from the 'text/???' part
 		// this only supports '<script></script>' tags
-		if ( el = document.getElementById(view) ) {
+		if ( el = document.getElementById(url) ) {
 			suffix = el.type.match(/\/[\d\w]+$/)[0].replace(/^\//, '.');
 		}
 
-		//if there is no suffix, add one
+		// if there is no suffix, add one
 		if (!suffix ) {
 			suffix = $view.ext;
 			url = url + $view.ext;
 		}
 
-		//convert to a unique and valid id
+		// convert to a unique and valid id
 		id = toId(url);
 
-		//if a absolute path, use steal to get it
+		// if a absolute path, use steal to get it
+		// you should only be using // if you are using steal
 		if ( url.match(/^\/\//) ) {
-			if ( typeof steal === "undefined" ) {
-				url = "/" + url.substr(2);
-			}
-			else {
-				url = steal.root.mapJoin(url.substr(2));
-			}
+			var sub = url.substr(2);
+			url = typeof steal === "undefined" ? 
+				url = "/" + sub : 
+				steal.root.mapJoin(sub);
 		}
 
-		//get the template engine
+		//set the template engine type 
 		type = $view.types[suffix];
 
+		// return the ajax transport contract: http://api.jquery.com/extending-ajax/
 		return {
 			send: function( headers, callback ) {
+				// if it is cached, 
 				if ( $view.cached[id] ) {
+					// return the catched renderer
 					return callback(200, "success", {
 						view: $view.cached[id]
 					});
+				
+				// otherwise if we are getting this from a script elment
 				} else if ( el ) {
+					// resolve immediately with the element's innerHTML
 					callback(200, "success", response(el.innerHTML));
 				} else {
+					// make an ajax request for text
 					jqXHR = $.ajax({
 						async: orig.async,
 						url: url,
@@ -383,7 +436,9 @@ steal("jquery").then(function( $ ) {
 							callback(404);
 						},
 						success: function( text ) {
+							// make sure we got some text back
 							checkText(text, url);
+							// cache and send back text
 							callback(200, "success", response(text))
 						}
 					});
@@ -532,15 +587,24 @@ steal("jquery").then(function( $ ) {
 
 	//---- ADD jQUERY HELPERS -----
 	//converts jquery functions to use views	
-	var convert, modify, isTemplate, isHTML, getCallback, hookupView, funcs;
+	var convert, modify, isTemplate, isHTML, isDOM, getCallback, hookupView, funcs;
 
 	convert = function( func_name ) {
+		// save the old jQuery helper
 		var old = $.fn[func_name];
 
+		// replace it wiht our new helper
 		$.fn[func_name] = function() {
-			var args = $.makeArray(arguments),
-				callbackNum, callback, self = this,
+			
+			var args = makeArray(arguments),
+				callbackNum, 
+				callback, 
+				self = this,
 				result;
+			
+			// if the first arg is a deferred
+			// wait until it finishes, and call
+			// modify with the result
 			if ( isDeferred(args[0]) ) {
 				args[0].done(function( res ) {
 					modify.call(self, [res], old);
@@ -560,10 +624,15 @@ steal("jquery").then(function( $ ) {
 					$view.apply($view, args);
 					return this;
 				}
+				// call view with args (there might be deferreds)
 				result = $view.apply($view, args);
+				
+				// if we got a string back
 				if (!isDeferred(result) ) {
+					// we are going to call the old method with that string
 					args = [result];
 				} else {
+					// if there is a deferred, wait until it is done before calling modify
 					result.done(function( res ) {
 						modify.call(self, [res], old);
 					})
@@ -575,7 +644,8 @@ steal("jquery").then(function( $ ) {
 		};
 	};
 
-	// modifies the html of the element
+	// modifies the content of the element
+	// but also will run any hookup
 	modify = function( args, old ) {
 		var res, stub, hooks;
 
@@ -602,15 +672,27 @@ steal("jquery").then(function( $ ) {
 	};
 
 	// returns true or false if the args indicate a template is being used
+	// $('#foo').html('/path/to/template.ejs',{data})
+	// in general, we want to make sure the first arg is a string
+	// and the second arg is data
 	isTemplate = function( args ) {
+		// save the second arg type
 		var secArgType = typeof args[1];
-
-		return typeof args[0] == "string" && (secArgType == 'object' || secArgType == 'function') && !args[1].nodeType && !args[1].jquery;
+		
+		// the first arg is a string
+		return typeof args[0] == "string" && 
+				// the second arg is an object or function
+		       (secArgType == 'object' || secArgType == 'function') && 
+			   // but it is not a dom element
+			   !isDOM(args[1]);
 	};
-
+	// returns true if the arg is a jQuery object or HTMLElement
+	isDOM = function(arg){
+		return arg.nodeType || arg.jquery
+	};
 	// returns whether the argument is some sort of HTML data
 	isHTML = function( arg ) {
-		if ( arg.jquery || arg.nodeType === 1 ) {
+		if ( isDOM(arg) ) {
 			// if jQuery object or DOM node we're good
 			return true;
 		} else if ( typeof arg === "string" ) {
@@ -623,7 +705,7 @@ steal("jquery").then(function( $ ) {
 		}
 	};
 
-	//returns the callback if there is one (for async view use)
+	//returns the callback arg number if there is one (for async view use)
 	getCallback = function( args ) {
 		return typeof args[3] === 'function' ? 3 : typeof args[2] === 'function' && 2;
 	};
@@ -670,7 +752,7 @@ steal("jquery").then(function( $ ) {
 	/**
 	 *  @add jQuery.fn
 	 */
-	funcs = [
+	$.each([
 	/**
 	 *  @function prepend
 	 *  @parent jQuery.View
@@ -784,11 +866,11 @@ steal("jquery").then(function( $ ) {
 	 *  If rendering a view template this parameter always has to be present
 	 *  (use the empty object initializer {} for no data).
 	 */
-	"replaceWith", "val"];
+	"replaceWith", "val"],function(i, func){
+		convert(func);
+	});
 
 	//go through helper funcs and convert
-	for ( var i = 0; i < funcs.length; i++ ) {
-		convert(funcs[i]);
-	}
+
 
 });
