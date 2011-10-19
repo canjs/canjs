@@ -189,7 +189,7 @@ $.Model('Task', {
   attributes : {
     'createdAt' : 'date' 
   }
-});
+},{});
 
 var task = new Task({ createdAt : 1303087131164});
 
