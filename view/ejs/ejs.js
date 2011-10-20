@@ -17,6 +17,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		returnReg = /\r\n/g,
 		retReg = /\r/g,
 		newReg = /\n/g,
+		nReg = /\n/,
 		slashReg = /\\/g,
 		quoteReg = /"/g,
 		singleQuoteReg = /'/g,
@@ -309,7 +310,8 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 	// source - the source you want to scan
 	// block - function(token, scanner), called with each token
 	var scan = function( scanner, source, block ) {
-		var source_split = rSplit(source, newReg),
+		// split on /\n/ to have new lines on their own line.
+		var source_split = rSplit(source, nReg),
 			i = 0;
 		for (; i < source_split.length; i++ ) {
 			scanline(scanner, source_split[i], block);
@@ -460,6 +462,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 				};
 			//use eval instead of creating a function, b/c it is easier to debug
 			myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
+
 			return out;
 		};
 
