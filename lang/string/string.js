@@ -47,48 +47,18 @@ steal('jquery').then(function( $ ) {
 		replacer: /\{([^\}]+)\}/g,
 		dot: /\./
 	},
+		// gets the nextPart property from current
+		// add - if true and nextPart doesnt exist, create it as an empty object
 		getNext = function(current, nextPart, add){
 			return current[nextPart] !== undefined ? current[nextPart] : ( add && (current[nextPart] = {}) );
 		},
+		// returns true if the object can have properties (no nulls)
 		isContainer = function(current){
 			var type = typeof current;
-			return type && (  type == 'function' || type == 'object' );
+			return current && ( type == 'function' || type == 'object' );
 		},
-		getObject = function( objectName, roots, add ) {
-			
-			var parts = objectName ? objectName.split(regs.dot) : [],
-				length =  parts.length,
-				currents = $.isArray(roots) ? roots : [roots || window],
-				current,
-				ret, 
-				i,
-				c = 0,
-				type;
-			
-			if(length == 0){
-				return currents[0];
-			}
-			while(current = currents[c++]){
-				for (i =0; i < length - 1 && isContainer(current); i++ ) {
-					current = getNext(current, parts[i], add);
-				}
-				if( isContainer(current) ) {
-					
-					ret = getNext(current, parts[i], add); 
-					
-					if( ret !== undefined ) {
-						
-						if ( add === false ) {
-							delete current[parts[i]];
-						}
-						return ret;
-						
-					}
-					
-				}
-			}
-		},
-
+		// a reference
+		getObject,
 		/** 
 		 * @class jQuery.String
 		 * @parent jquerymx.lang
@@ -115,7 +85,8 @@ steal('jquery').then(function( $ ) {
 			
 			/**
 			 * @function getObject
-			 * Gets an object from a string.
+			 * Gets an object from a string.  It can also modify objects on the
+			 * 'object path' by removing or adding properties.
 			 * 
 			 *     Foo = {Bar: {Zar: {"Ted"}}}
 		 	 *     $.String.getobject("Foo.Bar.Zar") //-> "Ted"
@@ -128,7 +99,49 @@ steal('jquery').then(function( $ ) {
 			 *  not modify the root object
 			 * @return {Object} The object.
 			 */
-			getObject : getObject,
+			getObject : getObject = function( name, roots, add ) {
+			
+				// the parts of the name we are looking up
+				// ['App','Models','Recipe']
+				var parts = name ? name.split(regs.dot) : [],
+					length =  parts.length,
+					current,
+					ret, 
+					i,
+					r = 0,
+					type;
+				
+				// make sure roots is an array
+				roots = $.isArray(roots) ? roots : [roots || window];
+				
+				if(length == 0){
+					return roots[0];
+				}
+				// for each root, mark it as current
+				while( current = roots[r++] ) {
+					// walk current to the 2nd to last object
+					// or until there is not a container
+					for (i =0; i < length - 1 && isContainer(current); i++ ) {
+						current = getNext(current, parts[i], add);
+					}
+					// if we can get a property from the 2nd to last object
+					if( isContainer(current) ) {
+						
+						// get (and possibly set) the property
+						ret = getNext(current, parts[i], add); 
+						
+						// if there is a value, we exit
+						if( ret !== undefined ) {
+							// if add is false, delete the property
+							if ( add === false ) {
+								delete current[parts[i]];
+							}
+							return ret;
+							
+						}
+					}
+				}
+			},
 			/**
 			 * Capitalizes a string
 			 * @param {String} s the string.
@@ -199,18 +212,21 @@ steal('jquery').then(function( $ ) {
 			 * @param {Boolean} [remove] if a match is found, remove the property from the object
 			 */
 			sub: function( s, data, remove ) {
-				var obs = [];
+				var obs = [],
+					remove = typeof remove == 'boolean' ? !remove : remove;
 				obs.push(s.replace(regs.replacer, function( whole, inside ) {
 					//convert inside to type
-					var ob = getObject(inside, data, typeof remove == 'boolean' ? !remove : remove),
-						type = typeof ob;
-					if((type === 'object' || type === 'function') && type !== null){
+					var ob = getObject(inside, data, remove);
+					
+					// if a container, push into objs (which will return objects found)
+					if( isContainer(ob) ){
 						obs.push(ob);
 						return "";
 					}else{
 						return ""+ob;
 					}
 				}));
+				
 				return obs.length <= 1 ? obs[0] : obs;
 			},
 			_regs : regs
