@@ -118,7 +118,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		 * @codeend
 		 * 
 		 * To hook up a controller with options or any other jQuery plugin use the
-		 * [plugin view helper \ jQuery.EJS.Helpers.prototype.plugin]:
+		 * [jQuery.EJS.Helpers.prototype.plugin | plugin view helper]:
 		 * 
 		 * @codestart
 		 * &lt;ul &lt;%= plugin('mxui_tabs', { option: 'value' }) %>>...&lt;ul>
