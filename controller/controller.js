@@ -1024,7 +1024,7 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 
 
 
-	//set commong events to be processed as a basicProcessor
+	//set common events to be processed as a basicProcessor
 	each("change click contextmenu dblclick keydown keyup keypress mousedown mousemove mouseout mouseover mouseup reset resize scroll select submit focusin focusout mouseenter mouseleave".split(" "), function( i, v ) {
 		processors[v] = basicProcessor;
 	});
