@@ -117,6 +117,16 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		 * &lt;ul &lt;%= [Mxui.Tabs, Mxui.Filler]%>>...&lt;ul>
 		 * @codeend
 		 * 
+		 * To hook up a controller with options or any other jQuery plugin use the
+		 * [jQuery.EJS.Helpers.prototype.plugin | plugin view helper]:
+		 * 
+		 * @codestart
+		 * &lt;ul &lt;%= plugin('mxui_tabs', { option: 'value' }) %>>...&lt;ul>
+		 * @codeend
+		 * 
+		 * Don't add a semicolon when using view helpers.
+		 * 
+		 * 
 		 * <h2>View Helpers</h2>
 		 * View Helpers return html code.  View by default only comes with 
 		 * [jQuery.EJS.Helpers.prototype.view view] and [jQuery.EJS.Helpers.prototype.text text].
