@@ -463,3 +463,26 @@ test("identity should replace spaces with underscores", function(){
 	equals(t.identity(), "task_id_with_spaces")
 });
 
+test("save error args", function(){
+	var Foo = $.Model('Testin.Models.Foo',{
+		create : "/testinmodelsfoos.json"
+	},{
+		
+	})
+	var st = '{type: "unauthorized"}';
+	
+	$.fixture("/testinmodelsfoos.json", function(){
+		return [401,st]
+	});
+	stop();
+	var inst = new Foo({}).save(function(){
+		ok(false, "success should not be called")
+	}, function(jQXHR){
+		ok(true, "error called")
+		ok(jQXHR.getResponseHeader,"jQXHR object")
+		start()
+	})
+	
+	
+	
+})
