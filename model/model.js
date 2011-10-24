@@ -116,7 +116,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			});
 			// remove unique 
 			return each(collect, function( i, item ) {
-				delete collect["__u Nique"];
+				delete item["__u Nique"];
 			});
 		},
 		// helper makes a request to a static ajax method
