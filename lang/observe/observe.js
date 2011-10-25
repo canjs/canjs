@@ -59,7 +59,9 @@ var isArray =  $.isArray,
 				typeof val[how] == 'function' ?  val[how]() : val 
 		})
 		return where;
-	};
+	},
+	defineProperty = Object.defineProperty,
+	expando = $.expando;
 	
 
 // add - property added
@@ -161,7 +163,20 @@ var isArray =  $.isArray,
  * @param {Object} obj a JavaScript Object that will be 
  * converted to an observable
  */
-$.Class('jQuery.Observe',
+$.Class('jQuery.Observe',{
+	setup : function(baseClass, fullName, staticProps, protoProps){
+		// make prototype properties non enumerable 
+		// (for performance in browsers that support it)
+		if(defineProperty){
+			for(var prop in protoProps){
+				if(protoProps.hasOwnProperty(prop)){
+					defineProperty(this.prototype, prop , {enumerable: false})	
+				}
+			}
+		}
+		
+	}
+},
 /**
  * @prototype
  */
@@ -173,14 +188,12 @@ $.Class('jQuery.Observe',
 			if(obj.hasOwnProperty(prop)){
 				var val = obj[prop]
 				if(isObject(val)){
-					obj[prop] = hookup(val, prop, this)
+					this[prop] = hookup(val, prop, this)
 				} else {
-					//obj[prop] = val;
+					this[prop] = val;
 				}
 			}
 		}
-		
-		this._data = obj || {};
 	},
 	/**
 	 * Get or set an attribute on the observe.
@@ -208,8 +221,13 @@ $.Class('jQuery.Observe',
 			return this;
 		}
 	},
-	each : function(){
-		return each.apply(null, [this._data].concat(makeArray(arguments)) )
+	each : function(callback){
+		for(var prop in this){
+			if(this.hasOwnProperty(prop) && prop !== '_namespace' && prop !== expando){
+				callback(prop, this[prop] )
+			}
+		}
+		return this;
 	},
 	/**
 	 * Removes a property
@@ -223,13 +241,13 @@ $.Class('jQuery.Observe',
 	removeAttr : function(attr){
 		var parts = isArray(attr) ? attr : attr.split("."),
 			prop = parts.shift()
-			current = this._data[ prop ];
+			current = this[ prop ];
 		
 		if(parts.length){
 			return current.removeAttr(parts)
 		} else {
 			
-			delete this._data[prop];
+			delete this[prop];
 			// add this .. 
 			send(this, "change", [prop, "remove", current]);
 			return current;
@@ -237,7 +255,7 @@ $.Class('jQuery.Observe',
 	},
 	_get : function(attr){
 		var parts = isArray(attr) ? attr : attr.split("."),
-			current = this._data[ parts.shift() ];
+			current = this[ parts.shift() ];
 		if(parts.length){
 			return current ? current._get(parts) : undefined
 		} else {
@@ -247,7 +265,7 @@ $.Class('jQuery.Observe',
 	_set : function(attr, value){
 		var parts = isArray(attr) ? attr : (""+attr).split("."),
 			prop = parts.shift() ,
-			current = this._data[ prop ];
+			current = this[ prop ];
 		
 		// if we have an object and remaining parts, that object should get it
 		if(isObject(current) && parts.length){
@@ -260,12 +278,13 @@ $.Class('jQuery.Observe',
 			
 			if(value !== current){
 				
-				var changeType = this._data.hasOwnProperty(prop) ? "set" : "add";
+				var changeType = this.hasOwnProperty(prop) ? "set" : "add";
 
-				this._data[prop] = isObject(value) ? hookup(value, prop, this) : value;
+				this[prop] = isObject(value) ? hookup(value, prop, this) : value;
 				
 				send(this,"change",[prop, changeType, value, current]);
 				
+				// unbind on old object
 				if(current && current.unbind){
 					current.unbind("change"+this._namespace)
 				}
@@ -335,23 +354,26 @@ $.Class('jQuery.Observe',
 		var prop,
 			collectingStarted = collect();
 			
-		for(prop in this._data){
-			var curVal = this._data[prop],
+		for(prop in this){
+			if(this.hasOwnProperty(prop)){
+				var curVal = this[prop],
 				newVal = props[prop];
 			
-			// if we are merging ...
-			if(newVal === undefined){
-				remove && this.removeAttr(prop);
-				continue;
+				// if we are merging ...
+				if(newVal === undefined){
+					remove && this.removeAttr(prop);
+					continue;
+				}
+				if(isObject(curVal) && isObject(newVal) ){
+					curVal.attrs(newVal, remove)
+				} else if( curVal != newVal ){
+					this._set(prop, newVal)
+				} else {
+					
+				}
+				delete props[prop];
 			}
-			if(isObject(curVal) && isObject(newVal) ){
-				curVal.attrs(newVal, remove)
-			} else if( curVal != newVal ){
-				this._set(prop, newVal)
-			} else {
-				
-			}
-			delete props[prop];
+			
 		}
 		// add remaining props
 		for (var prop in props) {
@@ -384,7 +406,6 @@ var list = jQuery.Observe('jQuery.Observe.List',
 		this.length = 0;
 		this._namespace = ".list"+(++id);
         this.push.apply(this, makeArray(instances || [] ) );
-		this._data = this;
 	},
 	serialize : function(){
 		return serialize(this, 'serialize',[]);
