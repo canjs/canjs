@@ -390,8 +390,9 @@ function( $ ) {
 			}, props)) + ">" + name + "</a>";
 		},
 		/**
-		 * Returns if the options represent the current page.
+		 * Returns true if the options represent the current page.
 		 * @param {Object} options
+         * @return {Boolean}
 		 */
 		current: function( options ) {
 			return location.hash == "#!" + $route.param(options)
