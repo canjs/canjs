@@ -22,6 +22,8 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		quoteReg = /"/g,
 		singleQuoteReg = /'/g,
 		tabReg = /\t/g,
+		leftBracket = /\{/g,
+		rightBracket = /\}/g,
 		// escapes characters starting with \
 		clean = function( content ) {
 			return content.replace(slashReg, '\\\\').replace(newReg, '\\n').replace(quoteReg, '\\"').replace(tabReg, '\\t');
@@ -32,6 +34,13 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 			return content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(quoteReg, '&#34;').replace(singleQuoteReg, "&#39;");
 		},
 		$View = $.View,
+		bracketNum = function(content){
+			var lefts = content.match(leftBracket),
+				rights = content.match(rightBracket);
+				
+			return (lefts ? lefts.length : 0) - 
+				   (rights ? rights.length : 0);
+		},
 		/**
 		 * @class jQuery.EJS
 		 * 
@@ -367,8 +376,12 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 			// currently they are identical, I am not sure why
 			var put_cmd = "___v1ew.push(",
 				insert_cmd = put_cmd,
+				// the text that starts the view code (or block function)
+				startTxt = 'var ___v1ew = [];',
+				// the text that ends the view code (or block function)
+				finishTxt = "return ___v1ew.join('')";
 				// initialize a buffer
-				buff = new EJS.Buffer(['var ___v1ew = [];'], []),
+				buff = new EJS.Buffer([startTxt], []),
 				// content is used as the current 'processing' string
 				// this is the content between magic tags
 				content = '',
@@ -384,11 +397,16 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 					content = ''
 				},
 				// what comes after clean or text
-				trippleParen = ")));";
+				doubleParen = "));",
+				// a stack used to keep track of how we should end a bracket }
+				// once we have a <%= %> with a leftBracket
+				// we store how the file should end here (either '))' or ';' )
+				endStack =[];
 
 			// start going token to token
 			scan(makeScanner(left, left === '[' ? ']' : '>'), source || "", function( token, scanner ) {
 				// if we don't have a start pair
+				var bn;
 				if ( startTag === null ) {
 					switch ( token ) {
 					case '\n':
@@ -429,15 +447,59 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 						switch ( startTag ) {
 						case scanner.left:
 							// <%
-							buff.push(content, ";");
+							
+							// get the number of { minus }
+							bn = bracketNum(content);
+							// how are we ending this statement
+							var last = 
+								// if the stack has value and we are ending a block
+								endStack.length && bn == -1 ? 
+								// use the last item in the block stack
+								endStack.pop() : 
+								// or use the default ending
+								";";
+							
+							// if we are ending a returning block
+							// add the finish text which returns the result of the
+							// block 
+							if(last === doubleParen) {
+								buff.push(finishTxt)
+							}
+							// add the remaining content
+							buff.push(content, last);
+							
+							// if we have a block, start counting 
+							if(bn === 1 ){
+								endStack.push(";")
+							}
 							break;
 						case scanner.eLeft:
 							// <%= clean content
-							buff.push(insert_cmd, "(jQuery.EJS.clean(", content, trippleParen);
+							bn = bracketNum(content);
+							if( bn ) {
+								endStack.push(doubleParen)
+							} 
+							buff.push(insert_cmd, "jQuery.EJS.clean(", content,bn ? startTxt : doubleParen);
 							break;
 						case scanner.eeLeft:
 							// <%== content
-							buff.push(insert_cmd, "(jQuery.EJS.text(", content, trippleParen);
+							
+							// get the number of { minus } 
+							bn = bracketNum(content);
+							// if we have more {, it means there is a block
+							if( bn ){
+								// when we return to the same # of { vs } end wiht a doubleParen
+								endStack.push(doubleParen)
+							} 
+							
+							buff.push(insert_cmd, "jQuery.EJS.text(", content, 
+								// if we have a block
+								bn ? 
+								// start w/ startTxt "var _v1ew = [])"
+								startTxt : 
+								// if not, add doubleParent to close push and text
+								doubleParen
+								);
 							break;
 						}
 						startTag = null;
@@ -458,7 +520,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 			}
 			var template = buff.close(),
 				out = {
-					out: 'try { with(_VIEW) { with (_CONTEXT) {' + template + " return ___v1ew.join('');}}}catch(e){e.lineNumber=null;throw e;}"
+					out: 'try { with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}}catch(e){e.lineNumber=null;throw e;}"
 				};
 			//use eval instead of creating a function, b/c it is easier to debug
 			myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");

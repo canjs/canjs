@@ -460,7 +460,7 @@ $.Class('jQuery.Observe',
 	 *     o.serialize() //-> { name: 'Justin' }
 	 *     
 	 * Serialize currently returns the same data 
-	 * as [jQuery.Observe.prototype.attrs attrs].  However, in future
+	 * as [jQuery.Observe.prototype.attrs].  However, in future
 	 * versions, serialize will be able to return serialized
 	 * data similar to [jQuery.Model].  The following will work:
 	 * 
@@ -475,7 +475,7 @@ $.Class('jQuery.Observe',
 		return serialize(this, 'serialize',{});
 	},
 	/**
-	 * Set or gets multiple properties on the observable
+	 * Set multiple properties on the observable
 	 * @param {Object} props
 	 * @param {Boolean} remove true if you should remove properties that are not in props
 	 */

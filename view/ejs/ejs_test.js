@@ -1,3 +1,4 @@
+steal('funcunit/qunit','jquery/view/ejs', function(){
 module("jquery/view/ejs, rendering",{
 	setup : function(){
 
@@ -83,4 +84,18 @@ test("unescapedContent", function(){
 	equals(div.find('div').text().toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
 	equals(div.find('span').html().toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
 	equals(div.find('input').val(), "I use 'quote' fingers \"a lot\"" );
+});
+
+test("returning blocks", function(){
+	var somethingHelper = function(cb){
+		return cb([1,2,3,4])
+	}
+	
+	var res = $.View("//jquery/view/ejs/test_template.ejs",{something: somethingHelper, 
+		items: ['a','b']});
+	// make sure expected values are in res
+	ok(/\s4\s/.test(res), "first block called" );
+	equals(res.match(/ItemsLength4/g).length, 4, "innerBlock and each")
+});
+
 })
