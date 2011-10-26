@@ -136,7 +136,7 @@ test("remove attr", function(){
 		}
 	});
 	
-	state.bind("change", function(ev, attr, how, old){
+	state.bind("change", function(ev, attr, how, newVal, old){
 		equals(attr, "properties");
 		equals(how, "remove")
 		same(old.serialize() ,{
@@ -235,6 +235,13 @@ test("attrs sends events after it is done", function(){
 	})
 	state.attrs({foo: -1, bar: -2});
 })
+
+test("direct property access", function(){
+	var state = new $.Observe({foo: 1, attrs: 2});
+	equals(state.foo,1);
+	equals(typeof state.attrs, 'function')
+})
+
 	
 	
 }).then('./delegate/delegate_test.js');
