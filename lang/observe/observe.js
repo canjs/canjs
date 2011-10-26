@@ -1,20 +1,25 @@
 steal('jquery/class').then(function(){
 
+// Alias helpful methods from jQuery
 var isArray =  $.isArray,
 	isObject = function(obj){
 		return typeof obj === 'object' && obj !== null && obj;
 	},
 	makeArray = $.makeArray,
 	each = $.each,
+	// listens to changes on val and 'bubbles' the event up
+	// - val the object to listen to changes on
+	// - prop the property name val is at on
+	// - parent the parent object of prop
 	hookup = function(val, prop, parent){
-		
+		// if it's an array make a list, otherwise a val
 		if(isArray(val)){
 			 val = new $.Observe.List( val )
 		} else {
 			 val = new $.Observe( val )
 		}
 		
-		//listen to all changes and send upwards
+		//listen to all changes and trigger upwards
 		val.bind("change"+parent._namespace, function(ev, attr, how, val, old ) {
 			// trigger the type on this ...
 			var args = $.makeArray(arguments),
@@ -25,15 +30,22 @@ var isArray =  $.isArray,
 		
 		return val;
 	},
+	// an id to track events for a given observe
 	id = 0,
 	collecting = null,
+	// call to start collecting events (Observe sends all events at once)
 	collect = function(){
 		if(!collecting){
 			collecting = [];
 			return true;
 		}
 	},
-	send = function(item, event, args){
+	// creates an event on item, but will not send immediately 
+	// if collecting events
+	// - item - the item the event should happen on
+	// - event - the event name ("change")
+	// - args - an array of arguments
+	trigger = function(item, event, args){
 		var THIS = $([item]);
 		if(!collecting){
 			return THIS.trigger(event, args)
@@ -41,6 +53,7 @@ var isArray =  $.isArray,
 			collecting.push({t: THIS, ev: event, args: args})
 		}
 	},
+	// sends all pending events
 	sendCollection = function(){
 		var len = collecting.length,
 			items = collecting.slice(0),
@@ -52,19 +65,24 @@ var isArray =  $.isArray,
 		}
 		
 	},
-	// which object to put it in
+	// a helper used to serialize an Observe or Observe.List where:
+	// observe - the observable
+	// how - to serialize with 'attrs' or 'serialize'
+	// where - to put properties, in a {} or [].
 	serialize = function(observe, how, where){
+		// go through each property
 		observe.each(function(name, val){
+			// if the value is an object, and has a attrs or serialize function
 			where[name] = isObject(val) && 
-				typeof val[how] == 'function' ?  val[how]() : val 
+				typeof val[how] == 'function' ?  
+				// call attrs or serialize to get the original data back
+				val[how]() : 
+				// otherwise return the value
+				val 
 		})
 		return where;
 	};
 	
-
-// add - property added
-// remove - property removed
-// set - property value changed
 /**
  * @class jQuery.Observe
  * @parent jquerymx.lang
@@ -158,6 +176,8 @@ var isArray =  $.isArray,
  *       name : "Brian Moschel"
  *     }
  * 
+ * @constructor
+ * 
  * @param {Object} obj a JavaScript Object that will be 
  * converted to an observable
  */
@@ -167,20 +187,12 @@ $.Class('jQuery.Observe',
  */
 {
 	init : function(obj){
+		// _data is where we keep the properties
+		this._data = {};
+		// the namespace this object uses to listen to events
 		this._namespace = ".observe"+(++id);
-		var self = this;
-		for(var prop in obj){
-			if(obj.hasOwnProperty(prop)){
-				var val = obj[prop]
-				if(isObject(val)){
-					obj[prop] = hookup(val, prop, this)
-				} else {
-					//obj[prop] = val;
-				}
-			}
-		}
-		
-		this._data = obj || {};
+		// sets all attrs
+		this.attrs(obj)
 	},
 	/**
 	 * Get or set an attribute on the observe.
@@ -193,21 +205,70 @@ $.Class('jQuery.Observe',
 	 *     // read the user's name
 	 *     o.attr('user.name') //-> 'hank'
 	 * 
+	 * If a value is set for the first time, it will trigger 
+	 * an `'add'` and `'set'` change event.  Once
+	 * the value has been added.  Any future value changes will
+	 * trigger only `'set'` events.
 	 * 
-	 * @param {String} attr the attribute to read
+	 * 
+	 * @param {String} attr the attribute to read or write.
+	 * 
+	 *     o.attr('name') //-> reads the name
+	 *     o.attr('name', 'Justin') //-> writes the name
+	 *     
+	 * You can read or write deep property names.  For example:
+	 * 
+	 *     o.attr('person', {name: 'Justin'})
+	 *     o.attr('person.name') //-> 'Justin'
+	 * 
 	 * @param {Object} [val] if provided, sets the value.
-	 * @return {Object} the observable or the attribute property
+	 * @return {Object} the observable or the attribute property.
+	 * 
+	 * If you are reading, the property value is returned:
+	 * 
+	 *     o.attr('name') //-> Justin
+	 *     
+	 * If you are writing, the observe is returned for chaining:
+	 * 
+	 *     o.attr('name',"Brian").attr('name') //-> Justin
 	 */
 	attr : function(attr, val){
+		
 		if(val === undefined){
+			// if we are getting a value
 			return this._get(attr)
 		} else {
-			
-			// might set "properties.brand.0.foo".  Need to get 0 object, and trigger change
+			// otherwise we are setting
 			this._set(attr, val);
 			return this;
 		}
 	},
+	/**
+	 * Iterates through each attribute, calling handler 
+	 * with each attribute name and value.
+	 * 
+	 *     new Observe({foo: 'bar'})
+	 *       .each(function(name, value){
+	 *         equals(name, 'foo')
+	 *         equals(value,'bar')
+	 *       })
+	 * 
+	 * @param {function} handler(attrName,value) A function that will get 
+	 * called back with the name and value of each attribute on the observe.
+	 * 
+	 * Returning `false` breaks the looping.  The following will never
+	 * log 3:
+	 * 
+	 *     new Observe({a : 1, b : 2, c: 3})
+	 *       .each(function(name, value){
+	 *         console.log(value)
+	 *         if(name == 2){
+	 *           return false;
+	 *         }
+	 *       })
+	 * 
+	 * @return {jQuery.Observe} the original observable.
+	 */
 	each : function(){
 		return each.apply(null, [this._data].concat(makeArray(arguments)) )
 	},
@@ -217,21 +278,28 @@ $.Class('jQuery.Observe',
 	 *     o =  new $.Observe({foo: 'bar'});
 	 *     o.removeAttr('foo'); //-> 'bar'
 	 * 
-	 * @param {String} attr
-	 * @return {Object} the value being removed 
+	 * This creates a `'remove'` change event. Learn more about events
+	 * in [jQuery.Observe.prototype.bind bind] and [jQuery.Observe.prototype.delegate delegate].
+	 * 
+	 * @param {String} attr the attribute name to remove.
+	 * @return {Object} the value that was removed.
 	 */
 	removeAttr : function(attr){
+		// convert the attr into parts (if nested)
 		var parts = isArray(attr) ? attr : attr.split("."),
-			prop = parts.shift()
+			// the actual property to remove
+			prop = parts.shift(),
+			// the current value
 			current = this._data[ prop ];
 		
+		// if we have more parts, call removeAttr on that part
 		if(parts.length){
 			return current.removeAttr(parts)
 		} else {
-			
+			// otherwise, delete
 			delete this._data[prop];
-			// add this .. 
-			send(this, "change", [prop, "remove", current]);
+			// create the event
+			trigger(this, "change", [prop, "remove", undefined, current]);
 			return current;
 		}
 	},
@@ -244,28 +312,53 @@ $.Class('jQuery.Observe',
 			return current;
 		}
 	},
+	// sets attr prop as value on this object where
+	// attr - is a string of properties or an array  of property values
+	// value - the raw value to set
+	// description - an object with converters / serializers / defaults / getterSetters?
 	_set : function(attr, value){
+		// convert attr to attr parts (if it isn't already)
 		var parts = isArray(attr) ? attr : (""+attr).split("."),
+			// the immediate prop we are setting
 			prop = parts.shift() ,
+			// its current value
 			current = this._data[ prop ];
 		
-		// if we have an object and remaining parts, that object should get it
+		// if we have an object and remaining parts
 		if(isObject(current) && parts.length){
+			// that object should set it (this might need to call attr)
 			current._set(parts, value)
 		} else if(!parts.length){
-			//we are setting
+			// otherwise, we are setting it on this object
 			
 			// todo: check if value is object and transform
 			
-			
+			// are we changing the value
 			if(value !== current){
 				
+				// check if we are adding this for the first time
+				// if we are, we need to create an 'add' event
 				var changeType = this._data.hasOwnProperty(prop) ? "set" : "add";
 
-				this._data[prop] = isObject(value) ? hookup(value, prop, this) : value;
+				// set the value on data
+				this._data[prop] = 
+					// if we are getting an object
+					isObject(value) ? 
+				  	// hook it up to send event to us
+				  	hookup(value, prop, this) : 
+					// value is normal
+					value;
 				
-				send(this,"change",[prop, changeType, value, current]);
+				// add property directly for easy writing
+				// check if its on the prototype so we don't overwrite methods like attrs
+				if(! (prop in this.constructor.prototype) ){
+					this[prop] = this._data[prop]
+				}
 				
+				// trigger the change event
+				trigger(this,"change",[prop, changeType, value, current]);
+				
+				// if we can stop listening to our old value, do it
 				if(current && current.unbind){
 					current.unbind("change"+this._namespace)
 				}
@@ -276,7 +369,24 @@ $.Class('jQuery.Observe',
 		}		
 	},
 	/**
-	 * Listen to changes in this observe.
+	 * Listens to changes on a jQuery.Observe.
+	 * 
+	 * When attributes of an observe change, including attributes on nested objects,
+	 * a `'change'` event is triggered on the observe.  These events come
+	 * in three flavors:
+	 * 
+	 *   - `add` - a attribute is added
+	 *   - `set` - an existing attribute's value is changed
+	 *   - `remove` - an attribute is removed
+	 * 
+	 * The change event is fired with:
+	 * 
+	 *  - the attribute changed
+	 *  - how it was changed
+	 *  - the newValue of the attribute
+	 *  - the oldValue of the attribute
+	 * 
+	 * Example:
 	 * 
 	 *     o = new $.Observe({name : "Payal"});
 	 *     o.bind('change', function(ev, attr, how, newVal, oldVal){
@@ -289,9 +399,16 @@ $.Class('jQuery.Observe',
 	 *     
 	 *     o.attr('name', 'Justin')
 	 * 
+	 * Listening to `change` is only useful for when you want to 
+	 * know every change on an Observe.  For most applications,
+	 * [jQuery.Observe.prototype.delegate delegate] is 
+	 * much more useful as it lets you listen to specific attribute
+	 * changes and sepecific types of changes.
+	 * 
+	 * 
 	 * @param {String} eventType the event name.  Currently,
 	 * only 'change' events are supported. For more fine 
-	 * grained control, explore [jQuery.Observe.prototype.delegate].
+	 * grained control, use [jQuery.Observe.prototype.delegate].
 	 * 
 	 * @param {Function} handler(event, attr, how, newVal, oldVal) A 
 	 * callback function where
@@ -302,27 +419,63 @@ $.Class('jQuery.Observe',
 	 *   - newVal - the new value of the attribute
 	 *   - oldVal - the old value of the attribute
 	 * 
-	 * @return {$.Observe} the observe
+	 * @return {$.Observe} the observe for chaining.
 	 */
 	bind : function(eventType, handler){
 		$.fn.bind.apply($([this]),arguments);
 		return this;
 	},
 	/**
-	 * Unbinds a listener.
+	 * Unbinds a listener.  This uses [http://api.jquery.com/unbind/ jQuery.unbind]
+	 * and works very similar.  This means you can 
+	 * use namespaces or unbind all event handlers for a given event:
+	 * 
+	 *     // unbind a specific event handler
+	 *     o.unbind('change', handler)
+	 *     
+	 *     // unbind all change event handlers bound with the
+	 *     // foo namespace
+	 *     o.unbind('change.foo')
+	 *     
+	 *     // unbind all change event handlers
+	 *     o.unbind('change')
+	 * 
+	 * @params {String} eventType - the type of event with
+	 * any optional namespaces.  Currently, only `change` events
+	 * are supported with bind.
+	 * 
+	 * @params {Function} [handler] - The original handler function passed
+	 * to [jQuery.Observe.prototype.bind bind].
+	 * 
+	 * @return {jQuery.Observe} the original observe for chaining.
 	 */
 	unbind : function(eventType, handler){
 		$.fn.unbind.apply($([this]),arguments);
 		return this;
 	},
 	/**
-	 * get the raw data of this observable
+	 * Get the serialized Object form of the observe.  Serialized
+	 * data is typically used to send back to a server.
+	 * 
+	 *     o.serialize() //-> { name: 'Justin' }
+	 *     
+	 * Serialize currently returns the same data 
+	 * as [jQuery.Observe.prototype.attrs attrs].  However, in future
+	 * versions, serialize will be able to return serialized
+	 * data similar to [jQuery.Model].  The following will work:
+	 * 
+	 *     new Observe({time: new Date()})
+	 *       .serialize() //-> { time: 1319666613663 }
+	 * 
+	 * @return {Object} a JavaScript Object that can be 
+	 * serialized with `JSON.stringify` or other methods. 
+	 * 
 	 */
 	serialize : function(){
 		return serialize(this, 'serialize',{});
 	},
 	/**
-	 * Set multiple properties on the observable
+	 * Set or gets multiple properties on the observable
 	 * @param {Object} props
 	 * @param {Boolean} remove true if you should remove properties that are not in props
 	 */
@@ -442,10 +595,10 @@ var list = jQuery.Observe('jQuery.Observe.List',
 		}
 		var removed = [].splice.apply(this, args);
 		if(count > 0){
-			send(this, "change",["*","remove",undefined, removed, index]);
+			trigger(this, "change",["*","remove",undefined, removed, index]);
 		}
 		if(args.length > 2){
-			send(this, "change",["*","add",args.slice(2), removed, index]);
+			trigger(this, "change",["*","add",args.slice(2), removed, index]);
 		}
 		return removed;
 	},
@@ -548,7 +701,7 @@ var list = jQuery.Observe('jQuery.Observe.List',
 			var res = [][name].apply( this, args )
 			//do this first so we could prevent?
 	
-			send(this, "change", ["*","add",args, undefined, len] )
+			trigger(this, "change", ["*","add",args, undefined, len] )
 			
 			return res;
 		}
@@ -596,7 +749,7 @@ $.each({
 			var res = [][name].apply( this, args )
 			//do this first so we could prevent?
 	
-			send(this, "change", ["*","remove", undefined, [res], len] )
+			trigger(this, "change", ["*","remove", undefined, [res], len] )
 			
 			return res;
 		}
