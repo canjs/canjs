@@ -447,7 +447,8 @@ steal('jquery/model').then(function( $ ) {
 		 * 
 		 *     var match = list.get($('#content')[0])
 		 * 
-		 * @param {Object} args element or id to remove
+		 * @param {Object} args elements or ids to retrieve.
+         * @return {$.Model.List} A sub-Model.List with the elements that were queried.
 		 */
 		get: function() {
 			if (!this.length ) {
@@ -478,13 +479,14 @@ steal('jquery/model').then(function( $ ) {
 		 *
 		 * To remove by id:
 		 *
-		 *     var match = list.get(23);
+		 *     var match = list.remove(23);
 		 *
 		 * or to remove by element:
 		 * 
-		 *     var match = list.get($('#content')[0])
+		 *     var match = list.remove($('#content')[0])
 		 *
-		 * @param {Object} args element or id to remove
+		 * @param {Object} args elements or ids to remove.
+         * @return {$.Model.List} A Model.List of the elements that were removed.
 		 */
 		remove: function( args ) {
 			if (!this.length ) {
