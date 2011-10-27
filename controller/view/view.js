@@ -3,13 +3,18 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 		return jQuery.String.underscore(this.fullName.replace(/\./g, "/")).replace("/Controllers", "");
 	};
 
-	var calculatePosition = function( Class, view, action_name ) {
-		var slashes = Class.fullName.replace(/\./g, "/"),
-			hasControllers = slashes.indexOf("/Controllers/" + Class.shortName) != -1,
-			path = jQuery.String.underscore(slashes.replace("/Controllers/" + Class.shortName, "")),
-			controller_name = Class._shortName,
-	        suffix = (typeof view == "string" && /\.[\w\d]+$/.test(view)) ? "" : jQuery.View.ext;
+	jQuery.Controller._calculatePosition = function( Class, view, action_name ) {
+		
+		var classParts = Class.fullName.split('.'),
+			classPartsWithoutPrefix = classParts.slice(0);
+			classPartsWithoutPrefix.splice(0, 2); // Remove prefix (usually 2 elements)
 
+		var classPartsWithoutPrefixSlashes = classPartsWithoutPrefix.join('/'),
+			hasControllers = (classParts.length > 2) && classParts[1] == 'Controllers',
+			path = hasControllers? jQuery.String.underscore(classParts[0]): jQuery.String.underscore(classParts.join("/")),
+			controller_name = jQuery.String.underscore(classPartsWithoutPrefix.join('/')).toLowerCase(),
+			suffix = (typeof view == "string" && /\.[\w\d]+$/.test(view)) ? "" : jQuery.View.ext;
+			
 		//calculate view
 		if ( typeof view == "string" ) {
 			if ( view.substr(0, 2) == "//" ) { //leave where it is
@@ -38,7 +43,7 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 			}
 			//load from name
 			var current = window;
-			var parts = this.Class.fullName.split(/\./);
+			var parts = this.constructor.fullName.split(/\./);
 			for ( var i = 0; i < parts.length; i++ ) {
 				if ( typeof current.Helpers == 'object' ) {
 					jQuery.extend(helpers, current.Helpers);
@@ -71,18 +76,20 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 	 *     el.html( this.view() ) 
 	 *     // renders with views/tasks/under.ejs
 	 *     el.after( this.view("under", [1,2]) );
+	 *     // renders with views/tasks/under.micro 
+	 *     el.after( this.view("under.micro", [1,2]) );
 	 *     // renders with views/shared/top.ejs
 	 *     el.before( this.view("shared/top", {phrase: "hi"}) );
 	 *   }
 	 * })
 	 * @codeend
-	 * @plugin controller/view
+	 * @plugin jquery/controller/view
 	 * @return {String} the rendered result of the view.
-	 * @param {String} [optional1] view The view you are going to render.  If a view isn't explicity given
+	 * @param {String} [view]  The view you are going to render.  If a view isn't explicity given
 	 * this function will try to guess at the correct view as show in the example code above.
-	 * @param {Object} [optional2] data data to be provided to the view.  If not present, the controller instance 
+	 * @param {Object} [data]  data to be provided to the view.  If not present, the controller instance 
 	 * is used.
-	 * @param {Object} [optional3] myhelpers an object of helpers that will be available in the view.  If not present
+	 * @param {Object} [myhelpers] an object of helpers that will be available in the view.  If not present
 	 * this controller class's "Helpers" property will be used.
 	 *
 	 */
@@ -94,7 +101,7 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 			view = null;
 		}
 		//guess from controller name
-		view = calculatePosition(this.Class, view, this.called);
+		view = jQuery.Controller._calculatePosition(this.Class, view, this.called);
 
 		//calculate data
 		data = data || this;

@@ -4,8 +4,11 @@ steal('jquery','jquery/dom/compare').then(function($){
 
 /**
  * @function jQuery.fn.range
+ * @parent $.Range
  * 
- * Returns a jQuery.Range.
+ * Returns a jQuery.Range for the element selected.
+ * 
+ *     $('#content').range()
  */
 $.fn.range = function(){
 	return $.Range(this[0])
@@ -36,7 +39,25 @@ support = {};
  * @parent dom
  * @tag alpha
  * 
- * Provides text range helpers for creating, moving, and comparing ranges.
+ * Provides text range helpers for creating, moving, 
+ * and comparing ranges cross browser.
+ * 
+ * ## Examples
+ * 
+ *     // Get the current range
+ *     var range = $.Range.current()
+ *     
+ *     // move the end of the range 2 characters right
+ *     range.end("+2")
+ *     
+ *     // get the startOffset of the range and the container
+ *     range.start() //-> { offset: 2, container: HTMLELement }
+ *     
+ *     //get the most common ancestor element
+ *     var parent = range.parent()
+ *     
+ *     //select the parent
+ *     var range2 = new $.Range(parent)
  * 
  * @constructor
  * 
@@ -220,12 +241,19 @@ $.extend($.Range.prototype,
 	 * 
 	 * @param {Boolean} [toStart] true if to the start of the range, false if to the
 	 *  end.  Defaults to false.
-	 * @return {Range} returns the range for chaining.
+	 * @return {jQuery.Range} returns the range for chaining.
 	 */
 	collapse : function(toStart){
 		this.range.collapse(toStart === undefined ? true : toStart);
 		return this;
 	},
+	/**
+	 * Returns the text of the range.
+	 * 
+	 *     currentText = $.Range.current().toString()
+	 * 
+	 * @return {String} the text of the range
+	 */
 	toString : function(){
 		return typeof this.range.text == "string"  ? this.range.text : this.range.toString();
 	},
@@ -289,7 +317,8 @@ $.extend($.Range.prototype,
 		
 	},
 	/**
-	 * Sets or gets the end of the range.  It takes similar options as [jQuery.Range.prototype.get].
+	 * Sets or gets the end of the range.  
+	 * It takes similar options as [jQuery.Range.prototype.start].
 	 * @param {Object} [set]
 	 */
 	end : function(set){
@@ -326,6 +355,8 @@ $.extend($.Range.prototype,
 	 * Returns the most common ancestor element of 
 	 * the endpoints in the range. This will return text elements if the range is
 	 * within a text element.
+	 * @return {HTMLNode} the TextNode or HTMLElement
+	 * that fully contains the range
 	 */
 	parent : function(){
 		if(this.range.commonAncestorContainer){
@@ -421,13 +452,36 @@ $.extend($.Range.prototype,
 	
 	/**
 	 * @function compare
-	 * Compares one range to another range.  This is different from the spec b/c the spec is confusing.
+	 * Compares one range to another range.  
 	 * 
-	 * source.compare("START_TO_END", toRange);
+	 * ## Example
 	 * 
-	 * This returns -1 if source's start is before toRange's end.
-	 * @param {Object} type
-	 * @param {Object} range
+	 *     // compare the highlight element's start position
+	 *     // to the start of the current range
+	 *     $('#highlight')
+	 *         .range()
+	 *         .compare('START_TO_START', $.Range.current())
+	 * 
+	 * 
+	 *
+	 * @param {Object} type Specifies the boundry of the
+	 * range and the <code>compareRange</code> to compare.
+	 * 
+	 *   - START\_TO\_START - the start of the range and the start of compareRange
+	 *   - START\_TO\_END - the start of the range and the end of compareRange
+	 *   - END\_TO\_END - the end of the range and the end of compareRange
+	 *   - END\_TO\_START - the end of the range and the start of compareRange
+	 *   
+	 * @param {$.Range} compareRange The other range
+	 * to compare against.
+	 * @return {Number} a number indicating if the range
+	 * boundary is before,
+	 * after, or equal to <code>compareRange</code>'s 
+	 * boundary where:
+	 * 
+	 *   - -1 - the range boundary comes before the compareRange boundary
+	 *   - 0 - the boundaries are equal
+	 *   - 1 - the range boundary comes after the compareRange boundary
 	 */
 	fn.compare = range.compareBoundaryPoints ? 
 		function(type, range){
@@ -439,9 +493,24 @@ $.extend($.Range.prototype,
 	
 	/**
 	 * @function move
-	 * Move the endpoints of a range
-	 * @param {Object} type
-	 * @param {Object} range
+	 * Move the endpoints of a range relative to another range.
+	 * 
+	 *     // Move the current selection's end to the 
+	 *     // end of the #highlight element
+	 *     $.Range.current().move('END_TO_END',
+	 *       $('#highlight').range() )
+	 *                            
+	 * 
+	 * @param {String} type a string indicating the ranges boundary point
+	 * to move to which referenceRange boundary point where:
+	 * 
+	 *   - START\_TO\_START - the start of the range moves to the start of referenceRange
+	 *   - START\_TO\_END - the start of the range move to the end of referenceRange
+	 *   - END\_TO\_END - the end of the range moves to the end of referenceRange
+	 *   - END\_TO\_START - the end of the range moves to the start of referenceRange
+	 *   
+	 * @param {jQuery.Range} referenceRange
+	 * @return {jQuery.Range} the original range for chaining
 	 */
 	fn.move = range.setStart ? 
 		function(type, range){
@@ -473,7 +542,10 @@ $.extend($.Range.prototype,
 	
 	fn.
 	/**
-	 * Clones the range and returns a new $.Range object.
+	 * Clones the range and returns a new $.Range 
+	 * object.
+	 * 
+	 * @return {jQuery.Range} returns the range as a $.Range.
 	 */
 	clone = function(){
 		return $.Range( this.range[cloneFunc]() );
@@ -481,12 +553,15 @@ $.extend($.Range.prototype,
 	
 	fn.
 	/**
-	 * Selects an element with this range.  If nothing is provided, makes the current
+	 * @function
+	 * Selects an element with this range.  If nothing 
+	 * is provided, makes the current
 	 * range appear as if the user has selected it.
 	 * 
 	 * This works with text nodes.
 	 * 
-	 * @param {HTMLElement} el
+	 * @param {HTMLElement} [el]
+	 * @return {jQuery.Range} the range for chaining.
 	 */
 	select = range.selectNodeContents ? function(el){
 		if(!el){
