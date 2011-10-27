@@ -242,6 +242,54 @@ test("direct property access", function(){
 	equals(typeof state.attrs, 'function')
 })
 
+test("pop unbinds", function(){
+	var l = new $.Observe.List([{foo: 'bar'}]);
+	var o = l.attr(0),
+		count = 0;
+	l.bind('change', function(ev, attr, how, newVal, oldVal){
+		count++;
+		if(count == 1){
+			// the prop change
+			equals(attr, '0.foo', "count is set");
+		} else if(count === 2 ){
+			equals(how, "remove");
+			equals(attr, "*")
+		} else {
+			ok(false, "called too many times")
+		}
+		
+	})
 	
+	equals( o.attr('foo') , 'bar');
+	
+	o.attr('foo','car')
+	l.pop();
+	o.attr('foo','bad')
+})
+
+test("splice unbinds", function(){
+	var l = new $.Observe.List([{foo: 'bar'}]);
+	var o = l.attr(0),
+		count = 0;
+	l.bind('change', function(ev, attr, how, newVal, oldVal){
+		count++;
+		if(count == 1){
+			// the prop change
+			equals(attr, '0.foo', "count is set");
+		} else if(count === 2 ){
+			equals(how, "remove");
+			equals(attr, "*")
+		} else {
+			ok(false, "called too many times")
+		}
+		
+	})
+	
+	equals( o.attr('foo') , 'bar');
+	
+	o.attr('foo','car')
+	l.splice(0,1);
+	o.attr('foo','bad')
+})
 	
 }).then('./delegate/delegate_test.js');

@@ -1171,7 +1171,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * 
 		 *     errors.dueDate[0] //-> "can't be empty"
 		 * 
-		 * @params {Array} [attrs] an optional list of attributes to get errors for:
+		 * @param {Array} [attrs] an optional list of attributes to get errors for:
 		 * 
 		 *     task.errors(['dueDate']);
 		 *     
