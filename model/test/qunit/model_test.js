@@ -64,7 +64,7 @@ test("findAll deferred", function(){
 	people.then(function(people){
 		equals(people.length, 1, "we got a person back");
 		equals(people[0].name, "Justin", "Got a name back");
-		equals(people[0].Class.shortName, "Person", "got a class back");
+		equals(people[0].constructor.shortName, "Person", "got a class back");
 		start();
 	})
 });
@@ -84,7 +84,7 @@ test("findOne deferred", function(){
 	var person = Person.findOne({});
 	person.then(function(person){
 		equals(person.name, "Justin", "Got a name back");
-		equals(person.Class.shortName, "Person", "got a class back");
+		equals(person.constructor.shortName, "Person", "got a class back");
 		start();
 	})
 });
@@ -200,8 +200,8 @@ test("unique models", function(){
 })
 
 
-test("wrapMany", function(){
-	var people = Person.wrapMany([
+test("models", function(){
+	var people = Person.models([
 		{id: 1, name: "Justin"}
 	])
 	equals(people[0].prettyName(),"Mr. Justin","wraps wrapping works")
@@ -285,11 +285,11 @@ test("auto methods",function(){
 	stop(5000);
 	School.findAll({type:"schools"}, function(schools){
 		ok(schools,"findAll Got some data back");
-		equals(schools[0].Class.shortName,"School","there are schools")
+		equals(schools[0].constructor.shortName,"School","there are schools")
 		
 		School.findOne({id : "4"}, function(school){
 			ok(school,"findOne Got some data back");
-			equals(school.Class.shortName,"School","a single school");
+			equals(school.constructor.shortName,"School","a single school");
 			
 			
 			new School({name: "Highland"}).save(function(){
@@ -386,4 +386,103 @@ test("Model events" , function(){
 });
 
 
+test("converters and serializes", function(){
+	$.Model("Task1",{
+		attributes: {
+			createdAt: "date"
+		},
+		convert: {
+			date: function(d){
+				var months = ["jan", "feb", "mar"]
+				return months[d.getMonth()]
+			}
+		},
+		serialize: {
+			date: function(d){
+				var months = {"jan":0, "feb":1, "mar":2}
+				return months[d]
+			}
+		}
+	},{});
+	$.Model("Task2",{
+		attributes: {
+			createdAt: "date"
+		},
+		convert: {
+			date: function(d){
+				var months = ["apr", "may", "jun"]
+				return months[d.getMonth()]
+			}
+		},
+		serialize: {
+			date: function(d){
+				var months = {"apr":0, "may":1, "jun":2}
+				return months[d]
+			}
+		}
+	},{});
+	var d = new Date();
+	d.setMonth(1)
+	var task1=new Task1({
+		createdAt: d,
+		name:"Task1"
+	});
+	d.setMonth(2)
+	var task2=new Task2({
+		createdAt: d,
+		name:"Task2"
+	});
+	equals(task1.createdAt, "feb", "Task1 model convert");
+	equals(task2.createdAt, "jun", "Task2 model convert");
+	equals(task1.serialize().createdAt, 1, "Task1 model serialize");
+	equals(task2.serialize().createdAt, 2, "Task2 model serialize");
+	equals(task1.serialize().name, "Task1", "Task1 model default serialized");
+	equals(task2.serialize().name, "Task2", "Task2 model default serialized");
+});
 
+test("default converters", function(){
+	var num = 1318541064012;
+	equals( $.Model.convert.date(num).getTime(), num, "converted to a date with a number" );
+})
+
+test("removeAttr test", function(){
+	var person = new Person({foo: "bar"})
+	equals(person.foo, "bar", "property set");
+	person.removeAttr('foo')
+	
+	equals(person.foo, undefined, "property removed");
+	var attrs = person.attrs()
+	equals(attrs.foo, undefined, "attrs removed");
+});
+
+test("identity should replace spaces with underscores", function(){
+	$.Model("Task",{},{});
+	t = new Task({
+		id: "id with spaces"
+	});
+	equals(t.identity(), "task_id_with_spaces")
+});
+
+test("save error args", function(){
+	var Foo = $.Model('Testin.Models.Foo',{
+		create : "/testinmodelsfoos.json"
+	},{
+		
+	})
+	var st = '{type: "unauthorized"}';
+	
+	$.fixture("/testinmodelsfoos.json", function(){
+		return [401,st]
+	});
+	stop();
+	var inst = new Foo({}).save(function(){
+		ok(false, "success should not be called")
+	}, function(jQXHR){
+		ok(true, "error called")
+		ok(jQXHR.getResponseHeader,"jQXHR object")
+		start()
+	})
+	
+	
+	
+})

@@ -25,7 +25,7 @@ steal('jquery/model',
 		'jquery/model/validations',
 		'jquery/controller').then(function(){
 
-$.Model.extend("Contact",{
+$.Model("Contact",{
 	init : function(){
 		this.validate("birthday",function(bday){
 			if(!bday){
