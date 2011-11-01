@@ -184,6 +184,8 @@ test("rand", function(){
 test("_getData", function(){
 	var data = $.fixture._getData("/thingers/{id}", "/thingers/5");
 	equals(data.id, 5, "gets data");
+	var data = $.fixture._getData("/thingers/5?hi.there", "/thingers/5?hi.there");
+	deepEqual(data, {}, "gets data");
 })
 
 test("_compare", function(){
