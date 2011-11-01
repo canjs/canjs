@@ -429,7 +429,8 @@ steal('jquery/dom',
 		// gets data from a url like "/todo/{id}" given "todo/5"
 		_getData : function(fixtureUrl, url){
 			var order = [],
-				res = new RegExp(fixtureUrl.replace(replacer, function(whole, part){
+				fixtureUrlAdjusted = fixtureUrl.replace('.', '\\.').replace('?', '\\?'),
+				res = new RegExp(fixtureUrlAdjusted.replace(replacer, function(whole, part){
 			  		order.push(part)
 			 		 return "([^\/])+"
 				})+"$").exec(url),
