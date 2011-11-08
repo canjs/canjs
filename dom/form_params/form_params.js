@@ -28,6 +28,9 @@ steal("jquery/dom").then(function( $ ) {
 		 * Returns an object of name-value pairs that represents values in a form.  
 		 * It is able to nest values whose element's name has square brackets.
 		 * 
+		 * When convert is set to true strings that represent numbers and booleans will
+		 * be converted and empty string will not be added to the object. 
+		 * 
 		 * Example html:
 		 * @codestart html
 		 * &lt;form>
@@ -42,7 +45,8 @@ steal("jquery/dom").then(function( $ ) {
 		 * 
 		 * @demo jquery/dom/form_params/form_params.html
 		 * 
-		 * @param {Boolean} [convert=false] True if strings that look like numbers and booleans should be converted.  Defaults to true.
+		 * @param {Boolean} [convert=false] True if strings that look like numbers and booleans should be converted and if
+		 * empty string should not be added to the result. Defaults to false.
 		 * @return {Object} An object of name-value pairs.
 		 */
 		formParams: function( convert ) {
@@ -98,7 +102,7 @@ steal("jquery/dom").then(function( $ ) {
 				lastPart = parts[parts.length - 1];
 
 				//now we are on the last part, set the value
-				if ( lastPart in current && type === "checkbox" ) {
+				if (current[lastPart]) {
 					if (!$.isArray(current[lastPart]) ) {
 						current[lastPart] = current[lastPart] === undefined ? [] : [current[lastPart]];
 					}
@@ -106,6 +110,7 @@ steal("jquery/dom").then(function( $ ) {
 						current[lastPart].push(value);
 					}
 				} else if ( write || !current[lastPart] ) {
+
 					current[lastPart] = write ? value : undefined;
 				}
 
