@@ -478,11 +478,11 @@ steal('jquery/model').then(function( $ ) {
 		 *
 		 * To remove by id:
 		 *
-		 *     var match = list.get(23);
+		 *     var match = list.remove(23);
 		 *
 		 * or to remove by element:
 		 * 
-		 *     var match = list.get($('#content')[0])
+		 *     var match = list.remove($('#content')[0])
 		 *
 		 * @param {Object} args element or id to remove
 		 */
