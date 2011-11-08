@@ -1586,7 +1586,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 */
 		isNew: function() {
 			var id = getId(this);
-			return (id === undefined || id === null); //if null or undefined
+			return (id === undefined || id === null || id === ''); //if null or undefined
 		},
 		/**
 		 * Creates or updates the instance using [jQuery.Model.static.create] or
