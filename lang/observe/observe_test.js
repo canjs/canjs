@@ -17,7 +17,7 @@ test("Basic Observe",9,function(){
 	var added;
 	
 	state.bind("change", function(ev, attr, how, val, old){
-		equals(attr, "properties.brand", "correct change name")
+		equals(attr, "properties.brand.0", "correct change name")
 		equals(how, "add")
 		equals(val[0].attr("foo"),"bar", "correct")
 		
@@ -47,30 +47,30 @@ test("list splice", function(){
 	var l = new $.Observe.List([0,1,2,3]),
 		first = true;
   
-	l.bind('change', function( ev, attr, how, newVals, oldVals, where ) { 
-		equals (attr, "*")
-		equals(where, 1)
+	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
+		equals (attr, "1")
+		// where comes from the attr ...
+		//equals(where, 1)
 		if(first){
-			equals( how, "remove" )
-			equals( newVals, undefined )
+			equals( how, "remove", "removing items" )
+			equals( newVals, undefined, "no new Vals" )
 		} else {
-			same( newVals, ["a","b"] )
-			equals( how, "add" )
+			same( newVals, ["a","b"] , "got the right newVals")
+			equals( how, "add", "adding items" )
 		}
 	
 		first = false;
 	})
 	
 	l.splice(1,2, "a", "b"); 
-	same(l.serialize(), [0,"a","b", 3])
+	same(l.serialize(), [0,"a","b", 3], "serialized")
 });
 
 test("list pop", function(){
 	var l = new $.Observe.List([0,1,2,3]);
   
-	l.bind('change', function( ev, attr, how, newVals, oldVals, where ) { 
-		equals (attr, "*")
-		equals(where, 3)
+	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
+		equals (attr, "3")
 		
 		equals( how, "remove" )
 		equals( newVals, undefined )
@@ -180,7 +180,7 @@ test("attrs", function(){
 	state.unbind("change");
 	
 	state.bind("change", function(ev, attr, how, newVal){
-		equals(attr, "properties.brand")
+		equals(attr, "properties.brand.0")
 		equals(how,"add")
 		same(newVal, ["bad"])
 	});
@@ -253,7 +253,7 @@ test("pop unbinds", function(){
 			equals(attr, '0.foo', "count is set");
 		} else if(count === 2 ){
 			equals(how, "remove");
-			equals(attr, "*")
+			equals(attr, "0")
 		} else {
 			ok(false, "called too many times")
 		}
@@ -278,7 +278,7 @@ test("splice unbinds", function(){
 			equals(attr, '0.foo', "count is set");
 		} else if(count === 2 ){
 			equals(how, "remove");
-			equals(attr, "*")
+			equals(attr, "0")
 		} else {
 			ok(false, "called too many times")
 		}
@@ -290,6 +290,23 @@ test("splice unbinds", function(){
 	o.attr('foo','car')
 	l.splice(0,1);
 	o.attr('foo','bad')
+});
+
+
+test("always gets right attr even after moving array items", function(){
+	var l = new $.Observe.List([{foo: 'bar'}]);
+	var o = l.attr(0);
+	l.unshift("A new Value")
+	
+	
+	l.bind('change', function(ev, attr, how){
+		equals(attr, "1.foo")
+	})
+	
+	
+	o.attr('foo','led you')
 })
+
+
 	
 }).then('./delegate/delegate_test.js');

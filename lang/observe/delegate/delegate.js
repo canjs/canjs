@@ -4,24 +4,48 @@ steal('jquery/lang/observe',function(){
 	 * @add jQuery.Observe.prototype
 	 */
 	
+	// ** - 'this' will be the deepest item changed
+	// * - 'this' will be any changes within *, but * will be the 
+	//     this returned
+	
 	// tells if the parts part of a delegate matches the broken up props of the event
+	// gives the prop to use as 'this'
+	// - delegate - an object like {parts: ['foo','*']}
+	// - props - ['foo','bar','0']
+	// - returns - 'foo.bar'
 	var matches = function(delegate, props){
 		//check props parts are the same or 
 		var parts = delegate.parts,
 			len = parts.length,
-			i =0;
+			i =0,
+			// keeps the matched props we will use
+			matchedProps = [],
+			prop;
 		
 		// if the event matches
 		for(i; i< len; i++){
-			if(parts[i] == "**") {
-				return true;
-			} else if( typeof props[i] == 'string' && ( props[i] === parts[i] || parts[i] === "*" ) ) {
-				
+			prop =  props[i]
+			// if no more props (but we should be matching them)
+			// return null
+			if( typeof prop !== 'string' ) {
+				return null;
+			} else
+			// if we have a "**", match everything
+			if( parts[i] == "**" ) {
+				return props.join(".");
+			} else 
+			// a match, but we want to delegate to "*"
+			if (parts[i] == "*"){
+				// only do this if there is nothing after ...
+				matchedProps.push(prop);
+			}
+			else if(  prop === parts[i]  ) {
+				matchedProps.push(prop);
 			} else {
-				return false;
+				return null;
 			}
 		}
-		return len === props.length;
+		return matchedProps.join(".");
 	},
 		delegate = function(event, prop, how, newVal, oldVal){
 			var props = prop.split("."),
@@ -34,13 +58,25 @@ steal('jquery/lang/observe',function(){
 				// check delegate.event
 				delegate = delegates[i];
 				
-				if(  delegate.event === 'change' && matches(delegate, props) ){
-					delegate.callback.apply(this.attr(prop), arguments);
-				} else if(delegate.event === how && matches(delegate, props) ){
-					delegate.callback.apply(this.attr(prop), [event,newVal, oldVal]);
-				} else if(delegate.event === 'set' && how == 'add' && matches(delegates[i], props)) {
-					delegate.callback.apply(this.attr(prop), [event,newVal, oldVal]);
+				// see if this delegate matches props
+				var attr = matches(delegate, props);
+				if(attr) {
+					var from = prop.replace(attr+".","");
+					
+					if(  delegate.event === 'change' ){
+						arguments[1] = from;
+						event.curAttr = attr;
+						delegate.callback.apply(this.attr(attr), $.makeArray( arguments));
+					} else if(delegate.event === how ){
+						// TODO: change where from is
+						delegate.callback.apply(this.attr(attr), [event,newVal, oldVal, from]);
+					} else if(delegate.event === 'set' && 
+							 how == 'add' ) {
+						// TODO: change where from is
+						delegate.callback.apply(this.attr(attr), [event,newVal, oldVal, from]);
+					}
 				}
+				
 			}
 		};
 		
@@ -199,5 +235,7 @@ steal('jquery/lang/observe',function(){
 			}
 			return this;
 		}
-	})
+	});
+	// add helpers for testing .. 
+	$.Observe.prototype.delegate.matches = matches;
 })
