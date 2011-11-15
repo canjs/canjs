@@ -65,7 +65,10 @@ steal("jquery/dom").then(function( $ ) {
 		},
 		setParams: function( params ) {
 			this.find("[name]").val(function(){
-				return params[ $(this).attr("name") ] || '';
+				var value = params[ $(this).attr("name") ];
+				if ( value ) {
+					return value;
+				}
 			});
 		},
 		getParams: function( convert ) {
