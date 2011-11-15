@@ -44,12 +44,26 @@ test("just strings",function(){
 	same(formParams.params.four,["4","1"],"four is right");
 	same(formParams.params.five,['2','3'],"five is right");
 	$("#qunit-test-area").html('')
-})
+});
+
+test("empty string conversion",function() {
+	$("#qunit-test-area").html("//jquery/dom/form_params/test/basics.micro",{});
+	var formParams =  $("#qunit-test-area form").formParams(false) ;
+	ok('' === formParams.empty, 'Default empty string conversion');
+	formParams =  $("#qunit-test-area form").formParams(true);
+	ok(undefined === formParams.empty, 'Default empty string conversion');
+});
 
 test("missing names",function(){
 	$("#qunit-test-area").html("//jquery/dom/form_params/test/checkbox.micro",{});
 	var formParams =  $("#qunit-test-area form").formParams() ;
 	ok(true, "does not break")
+});
+
+test("same input names to array", function() {
+	$("#qunit-test-area").html("//jquery/dom/form_params/test/basics.micro",{});
+	var formParams =  $("#qunit-test-area form").formParams(true);
+	same(formParams.param1, ['first', 'second', 'third']);
 });
 
 });
