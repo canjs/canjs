@@ -49,12 +49,24 @@ steal("jquery/dom").then(function( $ ) {
 		 * empty string should not be added to the result. Defaults to false.
 		 * @return {Object} An object of name-value pairs.
 		 */
-		formParams: function( convert ) {
-			if ( this[0].nodeName.toLowerCase() == 'form' && this[0].elements ) {
+		formParams: function( params, convert ) {
 
+			if ( !! params === params ) {
+				convert = params;
+				params = null;
+			}
+
+			if ( params ) {
+				return this.setParams( params );
+			} else if ( this[0].nodeName.toLowerCase() == 'form' && this[0].elements ) {
 				return jQuery(jQuery.makeArray(this[0].elements)).getParams(convert);
 			}
 			return jQuery("input[name], textarea[name], select[name]", this[0]).getParams(convert);
+		},
+		setParams: function( params ) {
+			this.find("[name]").val(function(){
+				return params[ $(this).attr("name") ] || '';
+			});
 		},
 		getParams: function( convert ) {
 			var data = {},
