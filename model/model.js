@@ -1094,6 +1094,31 @@ steal('jquery/class', 'jquery/lang/string', function() {
 				return typeof construct == "function" ? construct.call(context, val) : val;
 			}
 		},
+		/**
+		 * @attribute serialize
+		 * @type Object
+		 * An object of name-function pairs that are used to serialize attributes.
+		 * Similar to [jQuery.Model.static.convert], in that the keys of this object
+		 * correspond to the types specified in [jQuery.Model.static.attributes].
+		 * 
+		 * For example, to serialize all dates to ISO format:
+		 * 
+		 *     @codestart
+		 *     $.Model("Contact",{
+		 *       attributes : {
+		 *         birthday : 'date'
+		 *       },
+		 *       serialize : {
+		 *         date : function(val, type){
+		 *           return new Date(val).toISOString();
+		 *         }
+		 *       }
+		 *     },{})
+		 *     
+		 *     new Contact({ birthday: new Date("Oct 25, 1973") }).serialize()
+		 *        // { "birthday" : "1973-10-25T05:00:00.000Z" }
+		 *     @codeend
+		 */
 		serialize: {
 			"default": function( val, type ) {
 				return isObject(val) && val.serialize ? val.serialize() : val;
@@ -1171,7 +1196,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * 
 		 *     errors.dueDate[0] //-> "can't be empty"
 		 * 
-		 * @params {Array} [attrs] an optional list of attributes to get errors for:
+		 * @param {Array} [attrs] an optional list of attributes to get errors for:
 		 * 
 		 *     task.errors(['dueDate']);
 		 *     
@@ -1525,6 +1550,15 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			}
 			return attributes;
 		},
+		/**
+		 * Get a serialized object for the model. Serialized data is typically
+		 * used to send back to a server. See [jQuery.Model.static.serialize].
+		 *
+		 *     model.serialize() // -> { name: 'Fred' }
+		 *
+		 * @return {Object} a JavaScript object that can be serialized with
+		 * `JSON.stringify` or other methods.
+		 */
 		serialize: function() {
 			var Class = this.constructor,
 				attrs = Class.attributes,
@@ -1536,6 +1570,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			for ( attr in attrs ) {
 				if ( attrs.hasOwnProperty(attr) ) {
 					type = attrs[attr];
+					// the attribute's converter or the default converter for the class
 					converter = Class.serialize[type] || Class.serialize['default'];
 					data[attr] = converter(this[attr], type);
 				}
@@ -1551,7 +1586,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 */
 		isNew: function() {
 			var id = getId(this);
-			return (id === undefined || id === null); //if null or undefined
+			return (id === undefined || id === null || id === ''); //if null or undefined
 		},
 		/**
 		 * Creates or updates the instance using [jQuery.Model.static.create] or
