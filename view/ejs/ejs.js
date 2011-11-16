@@ -379,7 +379,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 				// the text that starts the view code (or block function)
 				startTxt = 'var ___v1ew = [];',
 				// the text that ends the view code (or block function)
-				finishTxt = "return ___v1ew.join('')";
+				finishTxt = "return ___v1ew.join('')",
 				// initialize a buffer
 				buff = new EJS.Buffer([startTxt], []),
 				// content is used as the current 'processing' string
