@@ -974,7 +974,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * 
 		 *     $.Model('Person',{
 		 *       models : function(data){
-		 *         this._super(data.ballers);
+		 *         return this._super(data.ballers);
 		 *       }
 		 *     },{})
 		 * 
@@ -1691,7 +1691,12 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 *  identity in their class name.
 		 */
 		elements: function( context ) {
-			return $("." + this.identity(), context);
+			var id = this.identity();
+			if( this.constructor.escapeIdentity ) {
+				id = id.replace(/([ #;&,.+*~\'%:"!^$[\]()=>|\/])/g,'\\$1')
+			}
+			
+			return $("." + id, context);
 		},
 		hookup: function( el ) {
 			var shortName = this.constructor._shortName,
