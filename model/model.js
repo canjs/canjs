@@ -974,7 +974,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * 
 		 *     $.Model('Person',{
 		 *       models : function(data){
-		 *         this._super(data.ballers);
+		 *         return this._super(data.ballers);
 		 *       }
 		 *     },{})
 		 * 
