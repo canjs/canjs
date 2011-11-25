@@ -387,7 +387,7 @@ steal("jquery").then(function( $ ) {
 		// if we have an inline template, derive the suffix from the 'text/???' part
 		// this only supports '<script></script>' tags
 		if ( el = document.getElementById(url) ) {
-			suffix = el.type.match(/\/[\d\w]+$/)[0].replace(/^\//, '.');
+			suffix = "."+el.type.match(/\/(x\-)?(.+)/)[2];
 		}
 
 		// if there is no suffix, add one
