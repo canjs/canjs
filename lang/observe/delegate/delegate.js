@@ -10,13 +10,12 @@ steal('jquery/lang/observe',function(){
 	
 	// tells if the parts part of a delegate matches the broken up props of the event
 	// gives the prop to use as 'this'
-	// - delegate - an object like {parts: ['foo','*']}
-	// - props - ['foo','bar','0']
-	// - returns - 'foo.bar'
-	var matches = function(delegate, props){
+	// - parts - the attribute name of the delegate split in parts ['foo','*']
+	// - props - the split props of the event that happened ['foo','bar','0']
+	// - returns - the attribute to delegate too ('foo.bar'), or null if not a match 
+	var matches = function(parts, props){
 		//check props parts are the same or 
-		var parts = delegate.parts,
-			len = parts.length,
+		var len = parts.length,
 			i =0,
 			// keeps the matched props we will use
 			matchedProps = [],
@@ -47,33 +46,85 @@ steal('jquery/lang/observe',function(){
 		}
 		return matchedProps.join(".");
 	},
+		// gets a change event and tries to figure out which
+		// delegates to call
 		delegate = function(event, prop, how, newVal, oldVal){
+			// pre-split properties to save some regexp time
 			var props = prop.split("."),
 				delegates = $.data(this,"_observe_delegates") || [],
-				delegate;
+				delegate,
+				len = delegates.length,
+				attr,
+				matchedAttr,
+				hasMatch,
+				valuesEqual;
 			event.attr = prop;
 			event.lastAttr = props[props.length -1 ];
 			
-			for(var i =0; i < delegates.length; i++){
-				// check delegate.event
-				delegate = delegates[i];
+			// for each delegate
+			for(var i =0; i < len; i++){
 				
-				// see if this delegate matches props
-				var attr = matches(delegate, props);
-				if(attr) {
-					var from = prop.replace(attr+".","");
+				delegate = delegates[i];
+				// if there is a batchNum, this means that this
+				// event is part of a series of events caused by a single 
+				// attrs call.  We don't want to issue the same event
+				// multiple times
+				// setting the batchNum happens later
+				if(event.batchNum && delegate.batchNum === event.batchNum){
+					continue;
+				}
+				
+				// reset match and values tests
+				hasMatch = undefined;
+				valuesEqual = true;
+				
+				// for each attr in a delegate
+				for(var a =0 ; a < delegate.attrs.length; a++){
 					
+					attr = delegate.attrs[a];
+					
+					// check if it is a match
+					if(matchedAttr = matches(attr.parts, props)){
+						hasMatch = matchedAttr;
+					}
+					// if it has a value, make sure it's the right value
+					// if it's set, we should probably check that it has a 
+					// value no matter what
+					if(attr.value && valuesEqual /* || delegate.hasValues */){
+						valuesEqual = attr.value === ""+this.attr(attr.attr)
+					} else if (valuesEqual && delegate.attrs.length > 1){
+						// if there are multiple attributes, each has to at
+						// least have some value
+						valuesEqual = this.attr(attr.attr) !== undefined
+					}
+				}
+				
+				// if there is a match and valuesEqual ... call back
+
+				if(hasMatch && valuesEqual) {
+					// how to get to the changed property from the delegate
+					var from = prop.replace(hasMatch+".","");
+					
+					// if this event is part of a batch, set it on the delegate
+					// to only send one event
+					if(event.batchNum ){
+						delegate.batchNum = event.batchNum
+					}
+					
+					// if we listen to change, fire those with the same attrs
+					// TODO: the attrs should probably be using from
 					if(  delegate.event === 'change' ){
 						arguments[1] = from;
-						event.curAttr = attr;
-						delegate.callback.apply(this.attr(attr), $.makeArray( arguments));
+						event.curAttr = hasMatch;
+						delegate.callback.apply(this.attr(hasMatch), $.makeArray( arguments));
 					} else if(delegate.event === how ){
-						// TODO: change where from is
-						delegate.callback.apply(this.attr(attr), [event,newVal, oldVal, from]);
+						
+						// if it's a match, callback with the location of the match
+						delegate.callback.apply(this.attr(hasMatch), [event,newVal, oldVal, from]);
 					} else if(delegate.event === 'set' && 
 							 how == 'add' ) {
-						// TODO: change where from is
-						delegate.callback.apply(this.attr(attr), [event,newVal, oldVal, from]);
+						// if we are listening to set, we should also listen to add
+						delegate.callback.apply(this.attr(hasMatch), [event,newVal, oldVal, from]);
 					}
 				}
 				
@@ -88,7 +139,7 @@ steal('jquery/lang/observe',function(){
 		 * 
 		 *     
 		 *     // create an observable
-		 *     var observe = new $.Observe({
+		 *     var observe = $.O({
 		 *       foo : {
 		 *         bar : "Hello World"
 		 *       }
@@ -97,6 +148,7 @@ steal('jquery/lang/observe',function(){
 		 *     //listen to changes on a property
 		 *     observe.delegate("foo.bar","change", function(ev, prop, how, newVal, oldVal){
 		 *       // foo.bar has been added, set, or removed
+		 *       this //-> 
 		 *     });
 		 * 
 		 *     // change the property
@@ -178,19 +230,40 @@ steal('jquery/lang/observe',function(){
 		 * properties.  Using a double wildcard (<code>**</code>) matches
 		 * any deep property.
 		 * 
-		 * @param {String} attr the attribute you want to listen for changes in.
+		 * ## Listening on multiple properties and values
+		 * 
+		 * Delegate lets you listen on multiple values at once, for example, 
+		 * 
+		 * @param {String} selector the attributes you want to listen for changes in.
 		 * @param {String} event the event name
 		 * @param {Function} cb the callback handler
 		 * @return {jQuery.Delegate} the delegate for chaining
 		 */
-		delegate :  function(attr, event, cb){
-			attr = $.trim(attr);
+		delegate :  function(selector, event, cb){
+			selector = $.trim(selector);
 			var delegates = $.data(this, "_observe_delegates") ||
-				$.data(this, "_observe_delegates", []);
-			attr = $.trim(attr);
+				$.data(this, "_observe_delegates", []),
+				attrs = [];
+			
+			// split selector by spaces
+			selector.replace(/([^\s=]+)=?([^\s]+)?/g, function(whole, attr, value){
+			  attrs.push({
+			  	// the attribute name
+				attr: attr,
+				// the attribute's pre-split names (for speed)
+				parts: attr.split('.'),
+				// the value associated with this prop
+				value: value
+			  })
+			}); 
+			
+			// delegates has pre-processed info about the event
 			delegates.push({
-				attr : attr,
-				parts : attr.split('.'),
+				// the attrs name for unbinding
+				selector : selector,
+				// an object of attribute names and values {type: 'recipe',id: undefined}
+				// undefined means a value was not defined
+				attrs : attrs,
 				callback : cb,
 				event: event
 			});
@@ -205,28 +278,29 @@ steal('jquery/lang/observe',function(){
 		 * 
 		 *   observe.undelegate("name","set", function(){ ... })
 		 * 
-		 * @param {String} attr the attribute name of the object you want to undelegate from.
+		 * @param {String} selector the attribute name of the object you want to undelegate from.
 		 * @param {String} event the event name
 		 * @param {Function} cb the callback handler
 		 * @return {jQuery.Delegate} the delegate for chaining
 		 */
-		undelegate : function(attr, event, cb){
-			attr = $.trim(attr);
+		undelegate : function(selector, event, cb){
+			selector = $.trim(selector);
 			
 			var i =0,
 				delegates = $.data(this, "_observe_delegates") || [],
-				delegate;
-			if(attr){
+				delegateOb;
+			if(selector){
 				while(i < delegates.length){
-					delegate = delegates[i];
-					if( delegate.callback === cb ||
-						(!cb && delegate.attr === attr) ){
+					delegateOb = delegates[i];
+					if( delegateOb.callback === cb ||
+						(!cb && delegateOb.selector === selector) ){
 						delegates.splice(i,1)
 					} else {
 						i++;
 					}
 				}
 			} else {
+				// remove all delegates
 				delegates = [];
 			}
 			if(!delegates.length){
