@@ -587,7 +587,9 @@ steal("jquery").then(function( $ ) {
 
 	//---- ADD jQUERY HELPERS -----
 	//converts jquery functions to use views	
-	var convert, modify, isTemplate, isHTML, isDOM, getCallback, hookupView, funcs;
+	var convert, modify, isTemplate, isHTML, isDOM, getCallback, hookupView, funcs,
+		// text and val cannot produce an element, so don't run hookups on them
+		noHookup = {'val':true,'text':true};
 
 	convert = function( func_name ) {
 		// save the old jQuery helper
@@ -639,8 +641,8 @@ steal("jquery").then(function( $ ) {
 					return this;
 				}
 			}
-			return modify.call(this, args, old);
-
+			return noHookup[func_name] ? old.apply(this,args) : 
+				modify.call(this, args, old);
 		};
 	};
 
