@@ -505,4 +505,53 @@ test("hookup and elements", function(){
 	equals(res[0], li[0])
 })
 
+test('aborting create update and destroy', function(){
+	stop(5000);
+	var delay = $.fixture.delay;
+	$.fixture.delay = 1000;
+	
+	$.fixture("POST /abort", function(){
+		ok(false, "we should not be calling the fixture");
+		return {};
+	})
+	
+	$.Model('Abortion',{
+		create : "POST /abort",
+		update : "POST /abort",
+		destroy: "POST /abort"
+	},{});
+	
+	var deferred = new Abortion({name: "foo"}).save(function(){
+		ok(false, "success create")
+	}, function(){
+		ok(true, "create error called");
+		
+		
+		deferred = new Abortion({name: "foo",id: 5})
+			.save(function(){},function(){
+				ok(true, "error called in update")
+				
+				deferred = new Abortion({name: "foo",id: 5}).destroy(function(){},
+					function(){
+						ok(true,"destroy error called")
+						$.fixture.delay = delay;
+						start();
+					})
+				
+				setTimeout(function(){
+					deferred.abort();
+				},10)
+				
+			})
+		
+		setTimeout(function(){
+		deferred.abort();
+	},10)
+	});
+	setTimeout(function(){
+		deferred.abort();
+	},10)
+	
+	
+})
 
