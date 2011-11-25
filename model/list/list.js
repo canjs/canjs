@@ -768,6 +768,14 @@ steal('jquery/model').then(function( $ ) {
 			 * 
 			 */
 			sort: [].sort
+			/**
+			 * @function reverse
+			 * Reverse the list in place
+			 *
+			 *     list.reverse()
+			 * 
+			 */
+			reverse: [].reverse
 		}
 
 		each(modifiers, function( name, func ) {
