@@ -85,17 +85,26 @@ steal('jquery/class').then(function() {
 				})
 			}
 		},
+		// which batch of events this is for, might not want to send multiple
+		// messages on the same batch.  This is mostly for 
+		// event delegation
+		batchNum = 0,
 		// sends all pending events
 		sendCollection = function() {
 			var len = collecting.length,
 				items = collecting.slice(0),
 				cur;
 			collecting = null;
+			batchNum ++;
 			for ( var i = 0; i < len; i++ ) {
 				cur = items[i];
-				$.event.trigger(cur.ev, cur.args, cur.t)
+				// batchNum
+				$.event.trigger({
+					type: cur.ev,
+					batchNum : batchNum
+				}, cur.args, cur.t)
 			}
-
+			
 		},
 		// a helper used to serialize an Observe or Observe.List where:
 		// observe - the observable
@@ -119,12 +128,32 @@ steal('jquery/class').then(function() {
 	 * @parent jquerymx.lang
 	 * @test jquery/lang/observe/qunit.html
 	 * 
-	 * Observe provides observable behavior on 
-	 * JavaScript Objects and Arrays. 
+	 * Observe provides the awesome observable pattern for
+	 * JavaScript Objects and Arrays. It lets you
 	 * 
-	 * ## Use
+	 *   - Set and remove property or property values on objects and arrays
+	 *   - Listen for changes in objects and arrays
+	 *   - Work with nested properties
 	 * 
-	 * Create a new Observe with the data you want to observe:
+	 * ## Creating an $.Observe
+	 * 
+	 * To create an $.Observe, or $.Observe.List, you can simply use 
+	 * the `$.O(data)` shortcut like:
+	 * 
+	 *     var person = $.O({name: 'justin', age: 29}),
+	 *         hobbies = $.O(['programming', 'basketball', 'nose picking'])
+	 * 
+	 * Depending on the type of data passed to $.O, it will create an instance of either: 
+	 * 
+	 *   - $.Observe, which is used for objects like: `{foo: 'bar'}`, and
+	 *   - [jQuery.Observe.List $.Observe.List], which is used for arrays like `['foo','bar']`
+	 *   
+	 * $.Observe.List and $.Observe are very similar. In fact,
+	 * $.Observe.List inherits $.Observe and only adds a few extra methods for
+	 * manipulating arrays like [jQuery.Observe.List.prototype.push push].  Go to
+	 * [jQuery.Observe.List $.Observe.List] for more information about $.Observe.List.
+	 * 
+	 * You can also create a `new $.Observe` simply by pass it the data you want to observe:
 	 * 
 	 *     var data = { 
 	 *       addresses : [
@@ -141,8 +170,14 @@ steal('jquery/class').then(function() {
 	 *     },
 	 *     o = new $.Observe(data);
 	 *     
-	 * _o_ now represents an observable copy of _data_.  You
-	 * can read the property values of _o_ with
+	 * _o_ now represents an observable copy of _data_.  
+	 * 
+	 * ## Getting and Setting Properties
+	 * 
+	 * Use [jQuery.Observe.prototype.attr attr] and [jQuery.Observe.prototype.attr attrs]
+	 * to get and set properties.
+	 * 
+	 * For example, you can read the property values of _o_ with
 	 * `observe.attr( name )` like:
 	 * 
 	 *     // read name
@@ -165,6 +200,25 @@ steal('jquery/class').then(function() {
 	 *       state: 'NY'
 	 *     })
 	 * 
+	 * `attrs()` can be used to get all properties back from the observe:
+	 * 
+	 *     o.attrs() // -> 
+	 *     { 
+	 *       addresses : [
+	 *         {
+	 *           city: 'Chicago',
+	 *           state: 'IL'
+	 *         },
+	 *         {
+	 *           city: 'New York',
+	 *           state : 'MA'
+	 *         }
+	 *       ],
+	 *       name : "Brian Moschel"
+	 *     }
+	 * 
+	 * ## Listening to property changes
+	 * 
 	 * When a property value is changed, it creates events
 	 * that you can listen to.  There are two ways to listen
 	 * for events:
@@ -183,29 +237,20 @@ steal('jquery/class').then(function() {
 	 *     })
 	 * 
 	 * `delegate( attr, event, handler(ev, newVal, oldVal ) )` lets you listen
-	 * to a specific even on a specific attribute. 
+	 * to a specific event on a specific attribute. 
 	 * 
 	 *     // listen for name changes
 	 *     o.delegate("name","set", function(){
 	 *     
 	 *     })
 	 *     
-	 * `attrs()` can be used to get all properties back from the observe:
+	 * Delegate lets you specify multiple attributes and values to match 
+	 * for the callback. For example,
 	 * 
-	 *     o.attrs() // -> 
-	 *     { 
-	 *       addresses : [
-	 *         {
-	 *           city: 'Chicago',
-	 *           state: 'IL'
-	 *         },
-	 *         {
-	 *           city: 'New York',
-	 *           state : 'MA'
-	 *         }
-	 *       ],
-	 *       name : "Brian Moschel"
-	 *     }
+	 *     r = $.O({type: "video", id : 5})
+	 *     r.delegate("type=images id","set", function(){})
+	 *     
+	 * This is used heavily by [jQuery.route $.route].
 	 * 
 	 * @constructor
 	 * 
@@ -953,6 +998,7 @@ steal('jquery/class').then(function() {
 	
 	list.prototype.
 	/**
+	 * @function indexOf
 	 * Returns the position of the item in the array.  Returns -1 if the
 	 * item is not in the array.
 	 * @param {Object} item
@@ -962,5 +1008,14 @@ steal('jquery/class').then(function() {
 		return $.inArray(item, this)
 	}
 
-
+	/**
+	 * @class $.O
+	 */
+	$.O = function(data, options){
+		if(isArray(data) || data instanceof $.Observe.List){
+			return new $.Observe.List(data, options)
+		} else {
+			return new $.Observe(data, options)
+		}
+	}
 });

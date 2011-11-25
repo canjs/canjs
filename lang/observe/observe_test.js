@@ -4,7 +4,7 @@ module('jquery/lang/observe')
 
 test("Basic Observe",9,function(){
 	
-	var state = new $.Observe({
+	var state = new $.O({
 		category : 5,
 		productType : 4,
 		properties : {
@@ -243,7 +243,7 @@ test("direct property access", function(){
 })
 
 test("pop unbinds", function(){
-	var l = new $.Observe.List([{foo: 'bar'}]);
+	var l = new $.O([{foo: 'bar'}]);
 	var o = l.attr(0),
 		count = 0;
 	l.bind('change', function(ev, attr, how, newVal, oldVal){
