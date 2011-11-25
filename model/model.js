@@ -842,6 +842,11 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * <code>Task.models</code> and <code>Person.model</code>
 		 * to convert the raw data into an array of Tasks and a Person.
 		 * 
+		 * Note that the full names of the models themselves are <code>App.Models.Task</code>
+		 * and <code>App.Models.Person</code>. The _.model_ and _.models_ parts are appended
+		 * for the benefit of [jQuery.Model.static.convert convert] to identify the types as 
+		 * models.
+		 * 
 		 * @demo jquery/model/pages/associations.html
 		 * 
 		 */
