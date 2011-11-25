@@ -65,7 +65,11 @@ $.fn.withinBox = function(left, top, width, height, cache){
 
         if(this == document.documentElement) return  this.ret.push(this);
 
-        var offset = cache ? jQuery.data(this,"offset", q.offset()) : q.offset();
+        var offset = cache ? 
+			jQuery.data(this,"offset") || 
+			jQuery.data(this,"offset", q.offset()) : 
+			q.offset();
+
 
         var ew = q.width(), eh = q.height();
 
