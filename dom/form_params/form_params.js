@@ -45,16 +45,58 @@ steal("jquery/dom").then(function( $ ) {
 		 * 
 		 * @demo jquery/dom/form_params/form_params.html
 		 * 
-		 * @param {Boolean} [convert=false] True if strings that look like numbers and booleans should be converted and if
-		 * empty string should not be added to the result. Defaults to false.
+		 * @param {Object} [params] If an object is passed, the form will be repopulated
+		 * with the values of the object based on the name of the inputs within
+		 * the form
+		 * @param {Boolean} [convert=false] True if strings that look like numbers 
+		 * and booleans should be converted and if empty string should not be added 
+		 * to the result. Defaults to false.
 		 * @return {Object} An object of name-value pairs.
 		 */
-		formParams: function( convert ) {
-			if ( this[0].nodeName.toLowerCase() == 'form' && this[0].elements ) {
+		formParams: function( params, convert ) {
 
+			// Quick way to determine if something is a boolean
+			if ( !! params === params ) {
+				convert = params;
+				params = null;
+			}
+
+			if ( params ) {
+				return this.setParams( params );
+			} else if ( this[0].nodeName.toLowerCase() == 'form' && this[0].elements ) {
 				return jQuery(jQuery.makeArray(this[0].elements)).getParams(convert);
 			}
 			return jQuery("input[name], textarea[name], select[name]", this[0]).getParams(convert);
+		},
+		setParams: function( params ) {
+
+			// Find all the inputs
+			this.find("[name]").each(function() {
+				
+				var value = params[ $(this).attr("name") ],
+					$this;
+				
+				// Don't do all this work if there's no value
+				if ( value ) {
+					$this = $(this);
+					
+					// Nested these if statements for performance
+					if ( $this.is(":radio") ) {
+						if ( $this.val() == value ) {
+							$this.attr("checked", true);
+						}
+					} else if ( $this.is(":checkbox") ) {
+						// Convert single value to an array to reduce
+						// complexity
+						value = $.isArray( value ) ? value : [value];
+						if ( $.inArray( $this.val(), value ) > -1) {
+							$this.attr("checked", true);
+						}
+					} else {
+						$this.val( value );
+					}
+				}
+			});         
 		},
 		getParams: function( convert ) {
 			var data = {},
