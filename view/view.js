@@ -535,7 +535,7 @@ steal("jquery").then(function( $ ) {
 			this.types["." + info.suffix] = info;
 
 			if ( window.steal ) {
-				steal.type(info.suffix + " view js", function( options, orig, success, error ) {
+				steal.type(info.suffix + " view js", function( options, success, error ) {
 					var type = $view.types["." + options.type],
 						id = toId(options.rootSrc);
 
@@ -576,7 +576,7 @@ steal("jquery").then(function( $ ) {
 
 	});
 	if ( window.steal ) {
-		steal.type("view js", function( options, orig, success, error ) {
+		steal.type("view js", function( options, success, error ) {
 			var type = $view.types["." + options.type],
 				id = toId(options.rootSrc);
 

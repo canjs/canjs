@@ -29,8 +29,7 @@ steal('jquery').then(function(){
 'jquery/controller/view/test/qunit',
 'jquery/model/test/qunit',
 
-'jquery/view/test/qunit',
-'jquery/view/ejs/test/qunit'
+'jquery/view/test/qunit'
 
 
 ).then('./integration.js',
