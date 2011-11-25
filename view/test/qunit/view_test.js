@@ -178,3 +178,13 @@ test("val set with a template within a hookup within another template", function
 /*test("bad url", function(){
 	$.View("//asfdsaf/sadf.ejs")
 });*/
+
+test("hyphen in type", function(){
+	$(document.body).append("<script type='text/x-ejs' id='hyphenEjs'>\nHyphen\n</script>")
+
+	$("#qunit-test-area").html('hyphenEjs',{});
+	
+	ok( /Hyphen/.test( $("#qunit-test-area").html() ), "has hyphen" );
+})
+
+
