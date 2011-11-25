@@ -553,5 +553,38 @@ test('aborting create update and destroy', function(){
 	},10)
 	
 	
+});
+
+test("object definitions", function(){
+	
+	$.Model('ObjectDef',{
+		findAll : {
+			url : "/test/place"
+		},
+		findOne : {
+			url : "/objectdef/{id}",
+			timeout : 1000
+		},
+		create : {
+			
+		},
+		update : {
+			
+		},
+		destroy : {
+			
+		}
+	},{})
+	
+	$.fixture("GET /objectdef/{id}", function(original){
+		equals(original.timeout,1000,"timeout set");
+		return {yes: true}
+	});
+	stop(3000);
+	ObjectDef.findOne({id: 5}, function(){
+		start();
+	})
 })
+
+
 
