@@ -140,7 +140,9 @@ steal('jquery/class', 'jquery/lang/string', function() {
 				// the args to pass to the ajax method
 				args = [self.serialize(), resolve, reject],
 				// the Model
-				model = self.constructor;
+				model = self.constructor,
+				jqXHR,
+				promise = deferred.promise();
 
 			// destroy does not need data
 			if ( type == 'destroy' ) {
@@ -156,10 +158,15 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			deferred.then(success);
 			deferred.fail(error);
 
-			// call the 
-			model[type].apply(model, args);
-
-			return deferred.promise();
+			// call the model's function and hook up
+			// abort
+			jqXHR = model[type].apply(model, args);
+			if(jqXHR && jqXHR.abort){
+				promise.abort = function(){
+					jqXHR.abort();
+				}
+			}
+			return promise;
 		},
 		// a quick way to tell if it's an object and not some string
 		isObject = function( obj ) {
