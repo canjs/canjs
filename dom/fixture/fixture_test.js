@@ -273,8 +273,51 @@ test("replacing and removing a fixture", function(){
 		
 		
 	},'json')
+});
+
+return; // future fixture stuff
+
+// returning undefined means you want to control timing?
+$.fixture('GET /foo', function(orig, settings, headers, cb){
+	setTimeout(function(){
+		cb(200, "success",{json : "{}"},{})
+	},1000);
 })
 
+// fixture that hooks into model / vice versa?
+
+// fixture that creates a nice store
+
+var store = $.fixture.store(1000, function(){
+	
+})
+
+store.find()
+
+// make cloud
+
+var clouds =  $.fixture.store(1, function(){
+	return {
+		name: "ESCCloud",
+		DN : "ESCCloud-ESCCloud",
+		type : "ESCCloud"
+	}
+});
+
+var computeCluster = $.fixture.store(5, function(i){
+	return {
+		name : "",
+		parentDN : clouds.find()[0].DN,
+		type: "ComputeCluster",
+		DN : "ComputeCluster-ComputeCluster"+i
+	}
+});
+
+$.fixture("GET /computeclusters", function(){
+	return []
+});
+
+// hacking models?
 
 
 
