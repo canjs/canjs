@@ -767,7 +767,7 @@ steal('jquery/model').then(function( $ ) {
 			 *     list.sort(sortfunc)
 			 * 
 			 */
-			sort: [].sort
+			sort: [].sort,
 			/**
 			 * @function reverse
 			 * Reverse the list in place
