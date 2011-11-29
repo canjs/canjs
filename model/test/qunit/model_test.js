@@ -282,7 +282,7 @@ test("auto methods",function(){
 	   create : steal.root.join("jquery/model/test")+"/create.json",
 	   update : "POST "+steal.root.join("jquery/model/test")+"/update{id}.json"
 	},{})
-	stop(5000);
+	stop();
 	School.findAll({type:"schools"}, function(schools){
 		ok(schools,"findAll Got some data back");
 		equals(schools[0].constructor.shortName,"School","there are schools")
@@ -506,7 +506,7 @@ test("hookup and elements", function(){
 })
 
 test('aborting create update and destroy', function(){
-	stop(5000);
+	stop();
 	var delay = $.fixture.delay;
 	$.fixture.delay = 1000;
 	
@@ -580,7 +580,7 @@ test("object definitions", function(){
 		equals(original.timeout,1000,"timeout set");
 		return {yes: true}
 	});
-	stop(3000);
+	stop();
 	ObjectDef.findOne({id: 5}, function(){
 		start();
 	})

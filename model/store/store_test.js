@@ -45,7 +45,7 @@ test("store findAll", 5, function(){
 	
 	
 	var list = Item.Store.findAll({});
-	stop(3000);
+	stop();
 	list.bind("add", function(ev, items){
 		console.log("here ...")
 		start();
@@ -95,7 +95,7 @@ test("Store Compare", function(){
 	
 	
 	var list = Item.Store.findAll({count: 2});
-	stop(3000);
+	stop();
 	list.bind("add", function(ev, items){
 		ok(items.length);
 		ok(list.length)
@@ -125,7 +125,7 @@ test("Store Remove", function(){
 	var list = Item.Store.findAll({parentId: 1}),
 		len = 0,
 		first;
-	stop(2000);
+	stop();
 	list.bind("add", function(ev, items){
 		ok(items.length, "there should be items");
 		len = items.length;
@@ -162,7 +162,7 @@ test("Store Update", function(){
 		len = 0,
 		first;
 		
-	stop(2000);
+	stop();
 	var def1 = $.Deferred(),
 		def2 = $.Deferred(),
 		first,
