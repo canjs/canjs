@@ -4,7 +4,7 @@ module("jquery/dom/fixture");
 
 
 test("static fixtures", function(){
-	stop(3000);
+	stop();
 	
 	$.fixture("GET something", "//jquery/dom/fixture/fixtures/test.json");
 	$.fixture("POST something", "//jquery/dom/fixture/fixtures/test.json");
@@ -236,7 +236,7 @@ test("fixture function gets id", function(){
 			name: "justin"
 		}
 	})
-	stop(3000);
+	stop();
 	$.get("/thingers/5", {}, function(data){
 		start();
 		ok(data.id)
