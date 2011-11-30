@@ -153,6 +153,11 @@ test("param-deparam", function(){
     res = $.route.param(data);
     obj = $.route.deparam(res);
 	same(data, obj)
+	
+	data = {page: " a ", type: " / "};
+    res = $.route.param(data);
+    obj = $.route.deparam(res);
+	same(obj ,data ,"slashes and spaces")
 
     data = {page: "index", type: "foo", bar: "baz", where: "there"};
     res = $.route.param(data);
