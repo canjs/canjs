@@ -1,3 +1,4 @@
+
 steal("jquery/dom/fixture", "jquery/model",'funcunit/qunit',function(){
 
 module("jquery/dom/fixture");
@@ -187,6 +188,11 @@ test("_getData", function(){
 	var data = $.fixture._getData("/thingers/5?hi.there", "/thingers/5?hi.there");
 	deepEqual(data, {}, "gets data");
 })
+
+test("_getData with two position wildcard", function(){
+	var data = $.fixture._getData("/days/{id}/time_slots.json", "/days/17/time_slots.json");
+	equals(data.id, 17, "gets data");
+});
 
 test("_compare", function(){
 	var same = $.Object.same(
