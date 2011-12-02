@@ -59,6 +59,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 	 * @parent jquerymx
 	 * @download dist/jquery/jquery.class.js
 	 * @test jquery/class/qunit.html
+	 * @description Easy inheritance in JavaScript.
 	 * 
 	 * Class provides simulated inheritance in JavaScript. Use clss to bridge the gap between
 	 * jQuery's functional programming style and Object Oriented Programming. It 

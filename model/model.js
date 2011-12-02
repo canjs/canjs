@@ -180,6 +180,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/model.js
 	 * @test jquery/model/qunit.html
 	 * @plugin jquery/model
+	 * @description Models and apps data layer.
 	 * 
 	 * Models super-charge an application's
 	 * data layer, making it easy to:

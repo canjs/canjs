@@ -16,6 +16,8 @@ steal("jquery").then(function( $ ) {
 	 * @test jquery/view/qunit.html
 	 * @download dist/jquery.view.js
 	 * 
+	 * @description A JavaScript template framework.
+	 * 
 	 * View provides a uniform interface for using templates with 
 	 * jQuery. When template engines [jQuery.View.register register] 
 	 * themselves, you are able to:
