@@ -13,7 +13,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		extend = $.extend,
 		each = $.each,
 		trigger = function(obj, event, args){
-			$(obj).triggerHandler( event, args );
+			$.event.trigger(event, args, obj, true)
 		},
 		
 		// used to make an ajax request where
@@ -33,8 +33,8 @@ steal('jquery/class', 'jquery/lang/string', function() {
 				var sp = ajaxOb.indexOf(" ")
 				if ( sp > -1 ) {
 					ajaxOb = {
-						url :  ajaxOb.substr(sp + 1),
-						type :ajaxOb.substr(0, sp)
+						url:  ajaxOb.substr(sp + 1),
+						type: ajaxOb.substr(0, sp)
 					}
 				} else {
 					ajaxOb = {url : ajaxOb}
@@ -49,7 +49,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			// get the url with any templated values filled out
 			ajaxOb.url = $String.sub(ajaxOb.url, ajaxOb.data, true);
 
-			return $.ajax($.extend({
+			return $.ajax(extend({
 				type: type || "post",
 				dataType: dataType ||"json",
 				fixture: fixture,
@@ -105,7 +105,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			each(items, function( i, item ) {
 				if (!item["__u Nique"] ) {
 					collect.push(item);
-					item["__u Nique"] = true;
+					item["__u Nique"] = 1;
 				}
 			});
 			// remove unique 
@@ -168,8 +168,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		},
 		$method = function( name ) {
 			return function( eventType, handler ) {
-				$.fn[name].apply($([this]), arguments);
-				return this;
+				return $.fn[name].apply($([this]), arguments);
 			}
 		},
 		bind = $method('bind'),
@@ -541,7 +540,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function( attrs, success, error ) {
-				return ajax(str || "{_shortName}", attrs, success, error, fixture(this, "Create", "-restCreate"))
+				return ajax(str || this._shortName, attrs, success, error, fixture(this, "Create", "-restCreate"))
 			};
 		},
 		update: function( str ) {
@@ -616,7 +615,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
 			return function( id, attrs, success, error ) {
-				return ajax( str || "{_shortName}s/"+id+".json", addId(this, attrs, id), success, error, fixture(this, "Update", "-restUpdate"), "put")
+				return ajax( str || this._shortName+"/{"+this.id+"}", addId(this, attrs, id), success, error, fixture(this, "Update", "-restUpdate"), "put")
 			}
 		},
 		destroy: function( str ) {
@@ -650,7 +649,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			return function( id, success, error ) {
 				var attrs = {};
 				attrs[this.id] = id;
-				return ajax( str || "{_shortName}s/"+id+".json", attrs, success, error, fixture(this, "Destroy", "-restDestroy"), "delete")
+				return ajax( str || this._shortName+"/{"+this.id+"}", attrs, success, error, fixture(this, "Destroy", "-restDestroy"), "delete")
 			}
 		},
 
@@ -690,7 +689,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * @param {Function} error
 			 */
 			return function( params, success, error ) {
-				return ajax( str ||  "{_shortName}s.json", params, success, error, fixture(this, "s"), "get", "json " + this._shortName + ".models");
+				return ajax( str ||  this._shortName, params, success, error, fixture(this, "s"), "get", "json " + this._shortName + ".models");
 			};
 		},
 		findOne: function( str ) {
@@ -726,7 +725,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * @param {Function} error
 			 */
 			return function( params, success, error ) {
-				return ajax(str || "{_shortName}s/{"+this.id+"}.json", params, success, error, fixture(this), "get", "json " + this._shortName + ".model");
+				return ajax(str || this._shortName+"/{"+this.id+"}", params, success, error, fixture(this), "get", "json " + this._shortName + ".model");
 			};
 		}
 	};
@@ -757,7 +756,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			this._fullName = underscore(fullName.replace(/\./g, "_"));
 			this._shortName = underscore(this.shortName);
 
-			if ( fullName.substr(0, 7) == "jQuery." ) {
+			if ( fullName.indexOf("jQuery") == 0 ) {
 				return;
 			}
 
@@ -771,11 +770,12 @@ steal('jquery/class', 'jquery/lang/string', function() {
 				steal.dev.warn("model.js " + fullName + " has no static properties.  You probably need  ,{} ")
 			}
 			//@steal-remove-end
-			for ( var name in ajaxMethods ) {
-				if ( typeof this[name] !== 'function' ) {
-					this[name] = ajaxMethods[name](this[name]);
+			each(ajaxMethods, function(name, method){
+				var prop = self[name];
+				if ( typeof prop !== 'function' ) {
+					self[name] = method(prop);
 				}
-			}
+			});
 
 			//add ajax converters
 			var converters = {},
@@ -1019,17 +1019,15 @@ steal('jquery/class', 'jquery/lang/string', function() {
 				steal.dev.warn("model.js models has no data.  If you have one item, use model")
 			}
 			//@steal-remove-end
-			// res._use_call = true; //so we don't call next function with all of these
 			for (; i < length; i++ ) {
 				res.push(this.model(raw[i]));
 			}
 			if (!arr ) { //push other stuff onto array
-				for ( var prop in instancesRawData ) {
+				each(instancesRawData, function(prop, val){
 					if ( prop !== 'data' ) {
-						res[prop] = instancesRawData[prop];
+						res[prop] = val;
 					}
-
-				}
+				})
 			}
 			return res;
 		},
@@ -1058,9 +1056,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			stub = attrs[property] || (attrs[property] = type);
 			return type;
 		},
-		guessType: function() {
-			return "string"
-		},
 		/**
 		 * @attribute convert
 		 * @type Object
@@ -1068,6 +1063,12 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * Check out [jQuery.Model.static.attributes] or 
 		 * [jquery.model.typeconversion type conversion]
 		 * for examples.
+		 * 
+		 * Convert comes with the following types:
+		 * 
+		 *   - date - Converts to a JS date.  Accepts integers or strings that work with Date.parse
+		 *   - number - an integer or number that can be passed to parseFloat
+		 *   - boolean - converts "false" to false, and puts everything else through Boolean()
 		 */
 		convert: {
 			"date": function( str ) {
@@ -1084,7 +1085,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 				return parseFloat(val);
 			},
 			"boolean": function( val ) {
-				return Boolean(val);
+				return Boolean(val === "false" ? 0 : val);
 			},
 			"default": function( val, error, type ) {
 				var construct = getObject(type),
@@ -1109,7 +1110,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * 
 		 * For example, to serialize all dates to ISO format:
 		 * 
-		 *     @codestart
+		 * 
 		 *     $.Model("Contact",{
 		 *       attributes : {
 		 *         birthday : 'date'
@@ -1123,7 +1124,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 *     
 		 *     new Contact({ birthday: new Date("Oct 25, 1973") }).serialize()
 		 *        // { "birthday" : "1973-10-25T05:00:00.000Z" }
-		 *     @codeend
+		 * 
 		 */
 		serialize: {
 			"default": function( val, type ) {
@@ -1402,16 +1403,6 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * @param {Function} handler
 		 */
 		unbind: unbind,
-		// Checks if there is a setProperty value.  
-		// If it returns true, lets it handle; otherwise
-		// property - the attribute name
-		// value - the value to set
-		// success - a successful callback
-		// error - an error callback
-		// capitalized - the clasized property value (expensive to recalculate)
-		_setProperty: function( property, value, success, error, capitalized ) {
-
-		},
 		// Actually updates a property on a model.  This
 		// - Triggers events when a property has been updated
 		// - uses converters to change the data type
@@ -1424,7 +1415,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 				// the value that we will set
 				val,
 				// the type of the attribute
-				type = Class.attributes[property] || Class.addAttr(property, Class.guessType(value)),
+				type = Class.attributes[property] || Class.addAttr(property, "string"),
 				//the converter
 				converter = Class.convert[type] || Class.convert['default'],
 				// errors for this property
@@ -1757,7 +1748,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			//@steal-remove-end
 
 			// call event on the instance's Class
-			trigger([constructor],funcName, this);
+			trigger(constructor,funcName, this);
 			return [this].concat(makeArray(arguments)); // return like this for this.proxy chains
 		};
 	});

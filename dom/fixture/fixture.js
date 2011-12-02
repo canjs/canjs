@@ -432,7 +432,7 @@ steal('jquery/dom',
 				fixtureUrlAdjusted = fixtureUrl.replace('.', '\\.').replace('?', '\\?'),
 				res = new RegExp(fixtureUrlAdjusted.replace(replacer, function(whole, part){
 			  		order.push(part)
-			 		 return "([^\/])+"
+			 		 return "([^\/]+)"
 				})+"$").exec(url),
 				data = {};
 			

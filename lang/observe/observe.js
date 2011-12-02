@@ -76,7 +76,7 @@ steal('jquery/class').then(function() {
 				return;
 			}
 			if (!collecting ) {
-				return $.event.trigger(event, args, item)
+				return $.event.trigger(event, args, item, true)
 			} else {
 				collecting.push({
 					t: item,
