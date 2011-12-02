@@ -189,7 +189,7 @@ test("_getData", function(){
 	deepEqual(data, {}, "gets data");
 })
 
-test("_getData with two position wildcard", function(){
+test("_getData with double character value", function(){
 	var data = $.fixture._getData("/days/{id}/time_slots.json", "/days/17/time_slots.json");
 	equals(data.id, 17, "gets data");
 });
