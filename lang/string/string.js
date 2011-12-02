@@ -1,6 +1,8 @@
 /**
  * @page jquerymx.lang Language Helpers
  * @parent jquerymx
+ * @description A collection of language helpers for things like String, Objects, etc.
+ * 
  * JavaScriptMVC has several lightweight language helper plugins.
  * 
  * ## [jQuery.Object Object]
