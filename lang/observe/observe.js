@@ -1,9 +1,9 @@
-steal('jquery/class').then(function() {
+steal('jquery/class',function() {
 
 	// Alias helpful methods from jQuery
 	var isArray = $.isArray,
 		isObject = function( obj ) {
-			return typeof obj === 'object' && obj !== null && obj;
+			return typeof obj === 'object' && obj !== null && obj && !(obj instanceof Date);
 		},
 		makeArray = $.makeArray,
 		each = $.each,
@@ -106,16 +106,16 @@ steal('jquery/class').then(function() {
 			}
 			
 		},
-		// a helper used to serialize an Observe or Observe.List where:
+		// a helper used to json an Observe or Observe.List where:
 		// observe - the observable
-		// how - to serialize with 'attrs' or 'serialize'
+		// how - to json with 'attrs' or 'json'
 		// where - to put properties, in a {} or [].
-		serialize = function( observe, how, where ) {
+		json = function( observe, how, where ) {
 			// go through each property
 			observe.each(function( name, val ) {
-				// if the value is an object, and has a attrs or serialize function
+				// if the value is an object, and has a attrs or json function
 				where[name] = isObject(val) && typeof val[how] == 'function' ?
-				// call attrs or serialize to get the original data back
+				// call attrs or json to get the original data back
 				val[how]() :
 				// otherwise return the value
 				val
@@ -195,14 +195,14 @@ steal('jquery/class').then(function() {
 	 * and use $.Observe methods on them.  The following 
 	 * updates the second address (Boston) to 'New York':
 	 * 
-	 *     o.attr('addresses.1').attrs({
+	 *     o.attr('addresses.1').attr({
 	 *       city: 'New York',
 	 *       state: 'NY'
 	 *     })
 	 * 
-	 * `attrs()` can be used to get all properties back from the observe:
+	 * `attr()` can be used to get all properties back from the observe:
 	 * 
-	 *     o.attrs() // -> 
+	 *     o.attr() // -> 
 	 *     { 
 	 *       addresses : [
 	 *         {
@@ -257,7 +257,14 @@ steal('jquery/class').then(function() {
 	 * @param {Object} obj a JavaScript Object that will be 
 	 * converted to an observable
 	 */
-	$.Class('jQuery.Observe',
+	var count = 0;
+	$.Class('jQuery.Observe',{
+		setup : function(baseClass){
+			$.Class.setup.apply(this, arguments)
+			this._ajax();
+		},
+		_ajax : function(){}
+	},
 	/**
 	 * @prototype
 	 */
@@ -269,7 +276,7 @@ steal('jquery/class').then(function() {
 			this._namespace = ".observe" + (++id);
 			// sets all attrs
 			this._init = true;
-			this.attrs(obj);
+			this.attr(obj);
 			delete this._init;
 		},
 		/**
@@ -311,8 +318,9 @@ steal('jquery/class').then(function() {
 		 *     o.attr('name',"Brian").attr('name') //-> Justin
 		 */
 		attr: function( attr, val ) {
-
-			if ( val === undefined ) {
+			if(typeof attr !== 'string'){
+				return this._attrs(attr, val)
+			}else if ( val === undefined ) {
 				// if we are getting a value
 				return this._get(attr)
 			} else {
@@ -399,7 +407,7 @@ steal('jquery/class').then(function() {
 		// sets attr prop as value on this object where
 		// attr - is a string of properties or an array  of property values
 		// value - the raw value to set
-		// description - an object with converters / serializers / defaults / getterSetters?
+		// description - an object with converters / attrs / defaults / getterSetters ?
 		_set: function( attr, value ) {
 			// convert attr to attr parts (if it isn't already)
 			var parts = isArray(attr) ? attr : ("" + attr).split("."),
@@ -413,39 +421,46 @@ steal('jquery/class').then(function() {
 				// that object should set it (this might need to call attr)
 				current._set(parts, value)
 			} else if (!parts.length ) {
-				// otherwise, we are setting it on this object
-				// todo: check if value is object and transform
-				// are we changing the value
-				if ( value !== current ) {
-
-					// check if we are adding this for the first time
-					// if we are, we need to create an 'add' event
-					var changeType = this.__get().hasOwnProperty(prop) ? "set" : "add";
-
-					// set the value on data
-					this.__set(prop,
-					// if we are getting an object
-					isObject(value) ?
-					// hook it up to send event to us
-					hookup(value, prop, this) :
-					// value is normal
-					value);
-
-
-
-					// trigger the change event
-					trigger(this, "change", [prop, changeType, value, current]);
-
-					// if we can stop listening to our old value, do it
-					current && unhookup([current], this._namespace);
-				}
-
+				// we're in 'real' set territory
+				
+				this.__set(prop, value, current)
+				
+				
 			} else {
 				throw "jQuery.Observe: set a property on an object that does not exist"
 			}
 		},
+		__set : function(prop, value, current){
+			// otherwise, we are setting it on this object
+			// todo: check if value is object and transform
+			// are we changing the value
+			if ( value !== current ) {
+
+				// check if we are adding this for the first time
+				// if we are, we need to create an 'add' event
+				var changeType = this.__get().hasOwnProperty(prop) ? "set" : "add";
+
+				// set the value on data
+				this.___set(prop,
+				// if we are getting an object
+				isObject(value) ?
+				// hook it up to send event to us
+				hookup(value, prop, this) :
+				// value is normal
+				value);
+
+
+
+				// trigger the change event
+				trigger(this, "change", [prop, changeType, value, current]);
+
+				// if we can stop listening to our old value, do it
+				current && unhookup([current], this._namespace);
+			}
+
+		},
 		// directly sets a property on this object
-		__set: function( prop, val ) {
+		___set: function( prop, val ) {
 			this._data[prop] = val;
 			// add property directly for easy writing
 			// check if its on the prototype so we don't overwrite methods like attrs
@@ -539,34 +554,34 @@ steal('jquery/class').then(function() {
 			return this;
 		},
 		/**
-		 * Get the serialized Object form of the observe.  Serialized
+		 * Get the jsond Object form of the observe.  Serialized
 		 * data is typically used to send back to a server.
 		 * 
-		 *     o.serialize() //-> { name: 'Justin' }
+		 *     o.json() //-> { name: 'Justin' }
 		 *     
 		 * Serialize currently returns the same data 
 		 * as [jQuery.Observe.prototype.attrs].  However, in future
-		 * versions, serialize will be able to return serialized
+		 * versions, json will be able to return jsond
 		 * data similar to [jQuery.Model].  The following will work:
 		 * 
 		 *     new Observe({time: new Date()})
-		 *       .serialize() //-> { time: 1319666613663 }
+		 *       .json() //-> { time: 1319666613663 }
 		 * 
 		 * @return {Object} a JavaScript Object that can be 
-		 * serialized with `JSON.stringify` or other methods. 
+		 * jsond with `JSON.stringify` or other methods. 
 		 * 
 		 */
-		serialize: function() {
-			return serialize(this, 'serialize', {});
+		json: function() {
+			return json(this, 'json', {});
 		},
 		/**
 		 * Set multiple properties on the observable
 		 * @param {Object} props
 		 * @param {Boolean} remove true if you should remove properties that are not in props
 		 */
-		attrs: function( props, remove ) {
+		_attrs: function( props, remove ) {
 			if ( props === undefined ) {
-				return serialize(this, 'attrs', {})
+				return json(this, 'attrs', {})
 			}
 
 			props = $.extend(true, {}, props);
@@ -582,7 +597,7 @@ steal('jquery/class').then(function() {
 					continue;
 				}
 				if ( isObject(curVal) && isObject(newVal) ) {
-					curVal.attrs(newVal, remove)
+					curVal.attr(newVal, remove)
 				} else if ( curVal != newVal ) {
 					this._set(prop, newVal)
 				} else {
@@ -598,6 +613,7 @@ steal('jquery/class').then(function() {
 			if ( collectingStarted ) {
 				sendCollection();
 			}
+			return this;
 		}
 	});
 	// Helpers for list
@@ -620,7 +636,7 @@ steal('jquery/class').then(function() {
 			this.length = 0;
 			this._namespace = ".list" + (++id);
 			this._init = true;
-			this.bind('change',this.proxy('_changes'));
+			this.bind('change',$.proxy(this._changes,this));
 			this.push.apply(this, makeArray(instances || []));
 			$.extend(this, options);
 			if(this.comparator){
@@ -695,14 +711,14 @@ steal('jquery/class').then(function() {
 		__get : function(attr){
 			return attr ? this[attr] : this;
 		},
-		__set : function(attr, val){
+		___set : function(attr, val){
 			this[attr] = val;
 		},
 		/**
-		 * Returns the serialized form of this list.
+		 * Returns the jsond form of this list.
 		 */
-		serialize: function() {
-			return serialize(this, 'serialize', []);
+		json: function() {
+			return json(this, 'json', []);
 		},
 		/**
 		 * Iterates through each item of the list, calling handler 
@@ -797,9 +813,9 @@ steal('jquery/class').then(function() {
 		 * @param {Array} props
 		 * @param {Boolean} remove
 		 */
-		attrs: function( props, remove ) {
+		_attrs: function( props, remove ) {
 			if ( props === undefined ) {
-				return serialize(this, 'attrs', []);
+				return json(this, 'attrs', []);
 			}
 
 			// copy
@@ -812,7 +828,7 @@ steal('jquery/class').then(function() {
 					newVal = props[prop];
 
 				if ( isObject(curVal) && isObject(newVal) ) {
-					curVal.attrs(newVal, remove)
+					curVal.attr(newVal, remove)
 				} else if ( curVal != newVal ) {
 					this._set(prop, newVal)
 				} else {
