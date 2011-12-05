@@ -11,7 +11,7 @@ proto.__set = function(prop, value, current, success, error){
 		setName = "set" + cap,
 		errorCallback = function( errors ) {
 			var stub = error && error.call(self, errors);
-			trigger(self, "error." + attribute, errors);
+			$.event.trigger("error." + prop, errors, self, true);
 		},
 		self = this;
 	// if we have a setter

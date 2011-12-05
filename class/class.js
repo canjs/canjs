@@ -318,7 +318,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 
 	clss = $.Class = function() {
 		if (arguments.length) {
-			clss.extend.apply(clss, arguments);
+			return clss.extend.apply(clss, arguments);
 		}
 	};
 
@@ -501,8 +501,8 @@ steal("jquery","jquery/lang/string",function( $ ) {
 				 * 
 				 */
 				shortName: shortName,
-				_shortName : shortName,
-				_fullName: fullName,
+				_shortName : _shortName,
+				_fullName: _fullName,
 				constructor: Class,
 				/**
 				 * @attribute fullName 

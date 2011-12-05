@@ -13,14 +13,14 @@ steal('jquery/class',function() {
 		// - parent the parent object of prop
 		hookup = function( val, prop, parent ) {
 			// if it's an array make a list, otherwise a val
-			if (val instanceof $.Observe){
+			if (val instanceof $Observe){
 				// we have an observe already
 				// make sure it is not listening to this already
 				unhookup([val], parent._namespace)
 			} else if ( isArray(val) ) {
-				val = new $.Observe.List(val)
+				val = new $Observe.List(val)
 			} else {
-				val = new $.Observe(val)
+				val = new $Observe(val)
 			}
 			// attr (like target, how you (delegate) to get to the target)
             // currentAttr (how to get to you)
@@ -38,22 +38,17 @@ steal('jquery/class',function() {
 				} else {
 					args[0] = prop +  "." + args[0]
 				}
-				// change the attr
-				//ev.origTarget = ev.origTarget || ev.target;
-				// the target should still be the original object ...
-				$.event.trigger(ev, args, parent)
+				triggerHandle(ev, args, parent, true)
 			});
 
 			return val;
 		},
 		unhookup = function(items, namespace){
-			var item;
-			for(var i =0; i < items.length; i++){
-				item = items[i]
-				if(  item && item.unbind ){
+			return each(items, function(i, item){
+				if(item && item.unbind){
 					item.unbind("change" + namespace)
 				}
-			}
+			});
 		},
 		// an id to track events for a given observe
 		id = 0,
@@ -76,19 +71,21 @@ steal('jquery/class',function() {
 				return;
 			}
 			if (!collecting ) {
-				return $.event.trigger(event, args, item, true)
+				return triggerHandle(event, args, item, true);
 			} else {
-				collecting.push({
-					t: item,
-					ev: event,
-					args: args
-				})
+				collecting.push([{
+					type: event,
+					batchNum : batchNum
+				}, args, item ] );
 			}
+		},
+		triggerHandle = function(event, args, item){
+			$.event.trigger(event, args, item, true)
 		},
 		// which batch of events this is for, might not want to send multiple
 		// messages on the same batch.  This is mostly for 
 		// event delegation
-		batchNum = 0,
+		batchNum = 1,
 		// sends all pending events
 		sendCollection = function() {
 			var len = collecting.length,
@@ -97,31 +94,33 @@ steal('jquery/class',function() {
 			collecting = null;
 			batchNum ++;
 			for ( var i = 0; i < len; i++ ) {
-				cur = items[i];
-				// batchNum
-				$.event.trigger({
-					type: cur.ev,
-					batchNum : batchNum
-				}, cur.args, cur.t)
+				triggerHandle.apply(null, items[i]);
 			}
 			
 		},
-		// a helper used to json an Observe or Observe.List where:
+		// a helper used to serialize an Observe or Observe.List where:
 		// observe - the observable
-		// how - to json with 'attrs' or 'json'
+		// how - to serialize with 'attrs' or 'serialize'
 		// where - to put properties, in a {} or [].
-		json = function( observe, how, where ) {
+		serialize = function( observe, how, where ) {
 			// go through each property
 			observe.each(function( name, val ) {
-				// if the value is an object, and has a attrs or json function
+				// if the value is an object, and has a attrs or serialize function
 				where[name] = isObject(val) && typeof val[how] == 'function' ?
-				// call attrs or json to get the original data back
+				// call attrs or serialize to get the original data back
 				val[how]() :
 				// otherwise return the value
 				val
 			})
 			return where;
-		};
+		},
+		$method = function( name ) {
+			return function( eventType, handler ) {
+				return $.fn[name].apply($([this]), arguments);
+			}
+		},
+		bind = $method('bind'),
+		unbind = $method('unbind');
 
 	/**
 	 * @class jQuery.Observe
@@ -257,13 +256,14 @@ steal('jquery/class',function() {
 	 * @param {Object} obj a JavaScript Object that will be 
 	 * converted to an observable
 	 */
-	var count = 0;
-	$.Class('jQuery.Observe',{
+	var count = 0,
+		$Observe = $.Class('jQuery.Observe',{
+		// keep so it can be overwritten
 		setup : function(baseClass){
 			$.Class.setup.apply(this, arguments)
-			this._ajax();
 		},
-		_ajax : function(){}
+		bind : bind,
+		unbind: unbind
 	},
 	/**
 	 * @prototype
@@ -275,7 +275,7 @@ steal('jquery/class',function() {
 			// the namespace this object uses to listen to events
 			this._namespace = ".observe" + (++id);
 			// sets all attrs
-			this._init = true;
+			this._init = 1;
 			this.attr(obj);
 			delete this._init;
 		},
@@ -385,6 +385,9 @@ steal('jquery/class',function() {
 				// otherwise, delete
 				delete this._data[prop];
 				// create the event
+				if (!(prop in this.constructor.prototype)) {
+					delete this[prop]
+				}
 				trigger(this, "change", [prop, "remove", undefined, current]);
 				return current;
 			}
@@ -425,7 +428,6 @@ steal('jquery/class',function() {
 				
 				this.__set(prop, value, current)
 				
-				
 			} else {
 				throw "jQuery.Observe: set a property on an object that does not exist"
 			}
@@ -453,7 +455,7 @@ steal('jquery/class',function() {
 
 				// trigger the change event
 				trigger(this, "change", [prop, changeType, value, current]);
-
+				trigger(this, prop, value, current);
 				// if we can stop listening to our old value, do it
 				current && unhookup([current], this._namespace);
 			}
@@ -521,10 +523,7 @@ steal('jquery/class',function() {
 		 * 
 		 * @return {$.Observe} the observe for chaining.
 		 */
-		bind: function( eventType, handler ) {
-			$.fn.bind.apply($([this]), arguments);
-			return this;
-		},
+		bind: bind,
 		/**
 		 * Unbinds a listener.  This uses [http://api.jquery.com/unbind/ jQuery.unbind]
 		 * and works very similar.  This means you can 
@@ -549,30 +548,27 @@ steal('jquery/class',function() {
 		 * 
 		 * @return {jQuery.Observe} the original observe for chaining.
 		 */
-		unbind: function( eventType, handler ) {
-			$.fn.unbind.apply($([this]), arguments);
-			return this;
-		},
+		unbind: unbind,
 		/**
-		 * Get the jsond Object form of the observe.  Serialized
+		 * Get the serialized Object form of the observe.  Serialized
 		 * data is typically used to send back to a server.
 		 * 
-		 *     o.json() //-> { name: 'Justin' }
+		 *     o.serialize() //-> { name: 'Justin' }
 		 *     
 		 * Serialize currently returns the same data 
 		 * as [jQuery.Observe.prototype.attrs].  However, in future
-		 * versions, json will be able to return jsond
+		 * versions, serialize will be able to return serialized
 		 * data similar to [jQuery.Model].  The following will work:
 		 * 
 		 *     new Observe({time: new Date()})
-		 *       .json() //-> { time: 1319666613663 }
+		 *       .serialize() //-> { time: 1319666613663 }
 		 * 
 		 * @return {Object} a JavaScript Object that can be 
-		 * jsond with `JSON.stringify` or other methods. 
+		 * serialized with `JSON.stringify` or other methods. 
 		 * 
 		 */
-		json: function() {
-			return json(this, 'json', {});
+		serialize: function() {
+			return serialize(this, 'serialize', {});
 		},
 		/**
 		 * Set multiple properties on the observable
@@ -581,30 +577,31 @@ steal('jquery/class',function() {
 		 */
 		_attrs: function( props, remove ) {
 			if ( props === undefined ) {
-				return json(this, 'attrs', {})
+				return serialize(this, 'attrs', {})
 			}
 
 			props = $.extend(true, {}, props);
-			var prop, collectingStarted = collect();
-
-			for ( prop in this._data ) {
-				var curVal = this._data[prop],
-					newVal = props[prop];
+			var prop, 
+				collectingStarted = collect(),
+				self = this;
+			
+			this.each(function(prop, curVal){
+				var newVal = props[prop];
 
 				// if we are merging ...
 				if ( newVal === undefined ) {
-					remove && this.removeAttr(prop);
-					continue;
+					remove && self.removeAttr(prop);
+					return;
 				}
 				if ( isObject(curVal) && isObject(newVal) ) {
 					curVal.attr(newVal, remove)
 				} else if ( curVal != newVal ) {
-					this._set(prop, newVal)
+					self._set(prop, newVal)
 				} else {
 
 				}
 				delete props[prop];
-			}
+			})
 			// add remaining props
 			for ( var prop in props ) {
 				newVal = props[prop];
@@ -627,7 +624,8 @@ steal('jquery/class',function() {
 	 * 
 	 * 
 	 */
-	var list = jQuery.Observe('jQuery.Observe.List',
+	var splice = [].splice,
+		list = $Observe('jQuery.Observe.List',
 	/**
 	 * @prototype
 	 */
@@ -635,13 +633,13 @@ steal('jquery/class',function() {
 		init: function( instances, options ) {
 			this.length = 0;
 			this._namespace = ".list" + (++id);
-			this._init = true;
+			this._init = 1;
 			this.bind('change',$.proxy(this._changes,this));
 			this.push.apply(this, makeArray(instances || []));
 			$.extend(this, options);
-			if(this.comparator){
-				this.sort()
-			}
+			//if(this.comparator){
+			//	this.sort()
+			//}
 			delete this._init;
 		},
 		_changes : function(ev, attr, how, newVal, oldVal){
@@ -651,7 +649,7 @@ steal('jquery/class',function() {
 			
 			
 			// if we are sorting, and an attribute inside us changed
-			if(this.comparator && /^\d+./.test(attr) ) {
+			/*if(this.comparator && /^\d+./.test(attr) ) {
 				
 				// get the index
 				var index = +/^\d+/.exec(attr)[0],
@@ -662,8 +660,8 @@ steal('jquery/class',function() {
 				
 				if(newIndex !== index){
 					// move ...
-					[].splice.call(this, index, 1);
-					[].splice.call(this, newIndex, 0, item);
+					splice.call(this, index, 1);
+					splice.call(this, newIndex, 0, item);
 					
 					trigger(this, "move", [item, newIndex, index]);
 					ev.stopImmediatePropagation();
@@ -675,7 +673,7 @@ steal('jquery/class',function() {
 					]);
 					return;
 				}
-			}
+			}*/
 			
 			
 			// if we add items, we need to handle 
@@ -693,7 +691,7 @@ steal('jquery/class',function() {
 			}
 			// issue add, remove, and move events ...
 		},
-		sortedIndex : function(item){
+		/*sortedIndex : function(item){
 			var itemCompare = item.attr(this.comparator),
 				equaled = 0,
 				i;
@@ -707,7 +705,7 @@ steal('jquery/class',function() {
 				}
 			}
 			return i+equaled;
-		},
+		},*/
 		__get : function(attr){
 			return attr ? this[attr] : this;
 		},
@@ -715,10 +713,10 @@ steal('jquery/class',function() {
 			this[attr] = val;
 		},
 		/**
-		 * Returns the jsond form of this list.
+		 * Returns the serialized form of this list.
 		 */
-		json: function() {
-			return json(this, 'json', []);
+		serialize: function() {
+			return serialize(this, 'serialize', []);
 		},
 		/**
 		 * Iterates through each item of the list, calling handler 
@@ -796,7 +794,7 @@ steal('jquery/class',function() {
 			if ( count === undefined ) {
 				count = args[1] = this.length - index;
 			}
-			var removed = [].splice.apply(this, args);
+			var removed = splice.apply(this, args);
 			if ( count > 0 ) {
 				trigger(this, "change", [""+index, "remove", undefined, removed]);
 				unhookup(removed, this._namespace);
@@ -815,7 +813,7 @@ steal('jquery/class',function() {
 		 */
 		_attrs: function( props, remove ) {
 			if ( props === undefined ) {
-				return json(this, 'attrs', []);
+				return serialize(this, 'attrs', []);
 			}
 
 			// copy
@@ -845,7 +843,7 @@ steal('jquery/class',function() {
 			if ( collectingStarted ) {
 				sendCollection()
 			}
-		},
+		}/*,
 		sort: function(method, silent){
 			var comparator = this.comparator,
 				args = comparator ? [function(a, b){
@@ -857,14 +855,14 @@ steal('jquery/class',function() {
 				
 			!silent && trigger(this, "reset");
 
-		}
+		}*/
 	}),
 
 
 		// create push, pop, shift, and unshift
 		// converts to an array of arguments 
 		getArgs = function( args ) {
-			if ( args[0] && ($.isArray(args[0])) ) {
+			if ( args[0] && (isArray(args[0])) ) {
 				return args[0]
 			}
 			else {
@@ -1028,10 +1026,10 @@ steal('jquery/class',function() {
 	 * @class $.O
 	 */
 	$.O = function(data, options){
-		if(isArray(data) || data instanceof $.Observe.List){
-			return new $.Observe.List(data, options)
+		if(isArray(data) || data instanceof $Observe.List){
+			return new $Observe.List(data, options)
 		} else {
-			return new $.Observe(data, options)
+			return new $Observe(data, options)
 		}
 	}
 });
