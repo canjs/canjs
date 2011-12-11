@@ -9,12 +9,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 
 	    // if we are initializing a new class
 	var initializing = false,
-		extend = $.extend,
-		$String = $.String,
-		getObject = $String.getObject,
-		underscore = $String.underscore,
-		
-		STR_PROTOTYPE = 'prototype'
+		underscore = $.String.underscore;
 
 	/**
 	 * @class jQuery.Class
@@ -24,7 +19,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 	 * @test jquery/class/qunit.html
 	 * @description Easy inheritance in JavaScript.
 	 * 
-	 * Class provides simulated inheritance in JavaScript. Use clss to bridge the gap between
+	 * Class provides simulated inheritance in JavaScript. Use $.Class to bridge the gap between
 	 * jQuery's functional programming style and Object Oriented Programming. It 
 	 * is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Class]
 	 * Inheritance library.  Besides prototypal inheritance, it includes a few important features:
@@ -310,14 +305,14 @@ steal("jquery","jquery/lang/string",function( $ ) {
 	 * are called.
 	 */
 
-	clss = $.Class = function() {
+	$.Class = function() {
 		if (arguments.length) {
-			return clss.extend.apply(clss, arguments);
+			return $.Class.extend.apply($.Class, arguments);
 		}
 	};
 
 	/* @Static*/
-	extend(clss, {
+	$.extend($.Class, {
 		/**
 		 * @function newInstance
 		 * Creates a new instance of the class.  This method is useful for creating new instances
@@ -349,7 +344,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 		//   oldProps - where the old properties might be
 		//   addTo - what we are adding to
 		_inherit: function( newProps, oldProps, addTo ) {
-			extend(addTo || newProps, newProps || {})
+			$.extend(addTo || newProps, newProps || {})
 		},
 		/**
 		 * Setup gets called on the inherting class with the base class followed by the
@@ -379,7 +374,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 		 */
 		setup: function( baseClass, fullName ) {
 			// set defaults as the merger of the parent defaults and this object's defaults
-			this.defaults = extend(true, {}, baseClass.defaults, this.defaults);
+			this.defaults = $.extend(true, {}, baseClass.defaults, this.defaults);
 			return arguments;
 		},
 		instance: function() {
@@ -431,7 +426,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 
 			proto = proto || {};
 			var _super_class = this,
-				_super = this[STR_PROTOTYPE],
+				_super = this.prototype,
 				name, shortName, namespace, prototype;
 
 			// Instantiate a base class (but only create the instance,
@@ -467,7 +462,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 
 				var parts = fullName.split(/\./),
 					shortName = parts.pop(),
-					current = getObject(parts.join('.'), window, true),
+					current = $.String.getObject(parts.join('.'), window, true),
 					namespace = current,
 					_fullName = underscore(fullName.replace(/\./g, "_")),
 					_shortName = underscore(shortName);
@@ -481,7 +476,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 			}
 
 			// set things that can't be overwritten
-			extend(Class, {
+			$.extend(Class, {
 				prototype: prototype,
 				/**
 				 * @attribute namespace 
@@ -518,7 +513,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 			});
 
 			//make sure our prototype looks nice
-			Class[STR_PROTOTYPE].Class = Class[STR_PROTOTYPE].constructor = Class;
+			Class.prototype.Class = Class.prototype.constructor = Class;
 
 			
 

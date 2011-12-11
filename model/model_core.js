@@ -1,14 +1,7 @@
 // this file should not be stolen directly
 steal('jquery/lang/observe',function(){
 	
-	var extend = $.extend,
-		each = $.each,
-		proxy = $.proxy,
-		inArray = $.inArray,
-		isArray = $.isArray,
-		$String = $.String,
-		$Observe = $.Observe,
-		getId = function( inst ) {
+	var getId = function( inst ) {
 			return inst[inst.constructor.id]
 		},
 		trigger = function(obj, event, args){
@@ -28,14 +21,14 @@ steal('jquery/lang/observe',function(){
 			}
 
 			// if we are a non-array object, copy to a new attrs
-			ajaxOb.data = typeof data == "object" && !isArray(data) ?
-				extend(ajaxOb.data || {}, data) : data;
+			ajaxOb.data = typeof data == "object" && !$.isArray(data) ?
+				$.extend(ajaxOb.data || {}, data) : data;
 	
 
 			// get the url with any templated values filled out
-			ajaxOb.url = $String.sub(ajaxOb.url, ajaxOb.data, true);
+			ajaxOb.url = $.String.sub(ajaxOb.url, ajaxOb.data, true);
 
-			return $.ajax(extend({
+			return $.ajax($.extend({
 				type: type || "post",
 				dataType: dataType ||"json",
 				success : success,
@@ -94,7 +87,7 @@ steal('jquery/lang/observe',function(){
 				attrs = attrs || {};
 				var identity = this.id;
 				if ( attrs[identity] && attrs[identity] !== id ) {
-					attrs["new" + $String.capitalize(id)] = attrs[identity];
+					attrs["new" + $.String.capitalize(id)] = attrs[identity];
 					delete attrs[identity];
 				}
 				attrs[identity] = id;
@@ -121,11 +114,11 @@ steal('jquery/lang/observe',function(){
 			};
 		}
 	};
-	$Observe("jQuery.Model",{
+	$.Observe("jQuery.Model",{
 		setup : function(){
-			$Observe.apply(this, arguments);
+			$.Observe.apply(this, arguments);
 			var self = this;
-			each(ajaxMethods, function(name, method){
+			$.each(ajaxMethods, function(name, method){
 				var prop = self[name];
 				if ( typeof prop !== 'function' ) {
 					self[name] = method(prop);
@@ -136,8 +129,8 @@ steal('jquery/lang/observe',function(){
 			var converters = {},
 				convertName = "* " + self.fullName + ".model";
 	
-			converters[convertName + "s"] = proxy(self.models,self);
-			converters[convertName] = proxy(self.model,self);
+			converters[convertName + "s"] = $.proxy(self.models,self);
+			converters[convertName] = $.proxy(self.model,self);
 	
 			$.ajaxSetup({
 				converters: converters
@@ -152,7 +145,7 @@ steal('jquery/lang/observe',function(){
 			// get the list type
 			var res = new( this.List || ML),
 				// did we get an array
-				arr = isArray(instancesRawData),
+				arr = $.isArray(instancesRawData),
 				
 				// did we get a model list?
 				ml = (instancesRawData instanceof ML),
@@ -179,7 +172,7 @@ steal('jquery/lang/observe',function(){
 				res.push(this.model(raw[i]));
 			}
 			if (!arr ) { //push other stuff onto array
-				each(instancesRawData, function(prop, val){
+				$.each(instancesRawData, function(prop, val){
 					if ( prop !== 'data' ) {
 						res[prop] = val;
 					}
@@ -210,7 +203,7 @@ steal('jquery/lang/observe',function(){
 		}
 	});
 	
-		each([
+		$.each([
 	/**
 	 * @function created
 	 * @hide
@@ -255,6 +248,6 @@ steal('jquery/lang/observe',function(){
 	});
 	
 	
-	var ML = $Observe.List('jQuery.Model.List')
+	var ML = $.Observe.List('jQuery.Model.List')
 	
 })

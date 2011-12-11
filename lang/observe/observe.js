@@ -1,12 +1,9 @@
-steal('jquery/class',function() {
+steal('jquery/class/class_core.js',function() {
 
 	// Alias helpful methods from jQuery
-	var isArray = $.isArray,
-		isObject = function( obj ) {
+	var isObject = function( obj ) {
 			return typeof obj === 'object' && obj !== null && obj && !(obj instanceof Date);
 		},
-		makeArray = $.makeArray,
-		each = $.each,
 		// listens to changes on val and 'bubbles' the event up
 		// - val the object to listen to changes on
 		// - prop the property name val is at on
@@ -17,7 +14,7 @@ steal('jquery/class',function() {
 				// we have an observe already
 				// make sure it is not listening to this already
 				unhookup([val], parent._namespace)
-			} else if ( isArray(val) ) {
+			} else if ( $.isArray(val) ) {
 				val = new $Observe.List(val)
 			} else {
 				val = new $Observe(val)
@@ -38,13 +35,13 @@ steal('jquery/class',function() {
 				} else {
 					args[0] = prop +  "." + args[0]
 				}
-				triggerHandle(ev, args, parent, true)
+				$.event.trigger(ev, args, parent, true)
 			});
 
 			return val;
 		},
 		unhookup = function(items, namespace){
-			return each(items, function(i, item){
+			return $.each(items, function(i, item){
 				if(item && item.unbind){
 					item.unbind("change" + namespace)
 				}
@@ -71,16 +68,13 @@ steal('jquery/class',function() {
 				return;
 			}
 			if (!collecting ) {
-				return triggerHandle(event, args, item, true);
+				return $.event.trigger(event, args, item, true);
 			} else {
 				collecting.push([{
 					type: event,
 					batchNum : batchNum
-				}, args, item ] );
+				}, args, item, true ] );
 			}
-		},
-		triggerHandle = function(event, args, item){
-			$.event.trigger(event, args, item, true)
 		},
 		// which batch of events this is for, might not want to send multiple
 		// messages on the same batch.  This is mostly for 
@@ -94,7 +88,7 @@ steal('jquery/class',function() {
 			collecting = null;
 			batchNum ++;
 			for ( var i = 0; i < len; i++ ) {
-				triggerHandle.apply(null, items[i]);
+				$.event.trigger.apply($.event, items[i]);
 			}
 			
 		},
@@ -357,7 +351,7 @@ steal('jquery/class',function() {
 		 * @return {jQuery.Observe} the original observable.
 		 */
 		each: function() {
-			return each.apply(null, [this.__get()].concat(makeArray(arguments)))
+			return $.each.apply(null, [this.__get()].concat($.makeArray(arguments)))
 		},
 		/**
 		 * Removes a property
@@ -373,7 +367,7 @@ steal('jquery/class',function() {
 		 */
 		removeAttr: function( attr ) {
 			// convert the attr into parts (if nested)
-			var parts = isArray(attr) ? attr : attr.split("."),
+			var parts = $.isArray(attr) ? attr : attr.split("."),
 				// the actual property to remove
 				prop = parts.shift(),
 				// the current value
@@ -395,7 +389,7 @@ steal('jquery/class',function() {
 		},
 		// reads a property from the object
 		_get: function( attr ) {
-			var parts = isArray(attr) ? attr : (""+attr).split("."),
+			var parts = $.isArray(attr) ? attr : (""+attr).split("."),
 				current = this.__get(parts.shift());
 			if ( parts.length ) {
 				return current ? current._get(parts) : undefined
@@ -414,7 +408,7 @@ steal('jquery/class',function() {
 		// description - an object with converters / attrs / defaults / getterSetters ?
 		_set: function( attr, value ) {
 			// convert attr to attr parts (if it isn't already)
-			var parts = isArray(attr) ? attr : ("" + attr).split("."),
+			var parts = $.isArray(attr) ? attr : ("" + attr).split("."),
 				// the immediate prop we are setting
 				prop = parts.shift(),
 				// its current value
@@ -636,7 +630,7 @@ steal('jquery/class',function() {
 			this._namespace = ".list" + (++id);
 			this._init = 1;
 			this.bind('change',$.proxy(this._changes,this));
-			this.push.apply(this, makeArray(instances || []));
+			this.push.apply(this, $.makeArray(instances || []));
 			$.extend(this, options);
 			//if(this.comparator){
 			//	this.sort()
@@ -783,7 +777,7 @@ steal('jquery/class',function() {
 		 * @param {Object} [added] an object to add to 
 		 */
 		splice: function( index, count ) {
-			var args = makeArray(arguments),
+			var args = $.makeArray(arguments),
 				i;
 
 			for ( i = 2; i < args.length; i++ ) {
@@ -851,15 +845,15 @@ steal('jquery/class',function() {
 		// create push, pop, shift, and unshift
 		// converts to an array of arguments 
 		getArgs = function( args ) {
-			if ( args[0] && (isArray(args[0])) ) {
+			if ( args[0] && ($.isArray(args[0])) ) {
 				return args[0]
 			}
 			else {
-				return makeArray(args)
+				return $.makeArray(args)
 			}
 		};
 	// describes the method and where items should be added
-	each({
+	$.each({
 		/**
 		 * @function push
 		 * Add items to the end of the list.
@@ -939,7 +933,7 @@ steal('jquery/class',function() {
 		}
 	});
 
-	each({
+	$.each({
 		/**
 		 * @function pop
 		 * 
@@ -1015,7 +1009,7 @@ steal('jquery/class',function() {
 	 * @class $.O
 	 */
 	$.O = function(data, options){
-		if(isArray(data) || data instanceof $Observe.List){
+		if($.isArray(data) || data instanceof $Observe.List){
 			return new $Observe.List(data, options)
 		} else {
 			return new $Observe(data, options)

@@ -1,4 +1,4 @@
-steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/deparam', 'jquery/lang/observe/delegate',
+steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/deparam',
 function( $ ) {
 
     // Helper methods used for matching routes.
@@ -207,7 +207,7 @@ function( $ ) {
 	 * @param {Object} [defaults] an object of default values
 	 * @return {jQuery.route}
 	 */
-	var $route = $.route = function( url, defaults ) {
+	$.route = function( url, defaults ) {
         // Extract the variable names and replace with regEx that will match an atual URL with values.
 		var names = [],
 			test = url.replace(matcher, function( whole, name ) {
@@ -216,7 +216,7 @@ function( $ ) {
 			});
 
 		// Add route in a form that can be easily figured out
-		$route.routes[url] = {
+		$.route.routes[url] = {
             // A regular expression that will match the route when variable values 
             // are present; i.e. for :page/:type the regEx is /([\w\.]*)/([\w\.]*)/ which
             // will match for any value of :page and :type (word chars or period).
@@ -230,10 +230,10 @@ function( $ ) {
             // The number of parts in the URL separated by '/'.
 			length: url.split('/').length
 		}
-		return $route;
+		return $.route;
 	};
 
-	extend($route, {
+	extend($.route, {
 		/**
 		 * Parameterizes the raw JS object representation provided in data.
 		 * If a route matching the provided data is found that URL is built
@@ -246,10 +246,11 @@ function( $ ) {
 		param: function( data ) {
 			// Check if the provided data keys match the names in any routes;
 			// get the one with the most matches.
+			delete data.route;
 			var route,
 				matches = -1,
 				matchCount;
-			each($route.routes, function(name, temp){
+			each($.route.routes, function(name, temp){
 				matchCount = matchesData(temp, data);
 				if ( matchCount > matches ) {
 					route = temp;
@@ -292,7 +293,7 @@ function( $ ) {
 			var route = {
 				length: -1
 			};
-			each($route.routes, function(name, temp){
+			each($.route.routes, function(name, temp){
 				if ( temp.test.test(url) && temp.length > route.length ) {
 					route = temp;
 				}
@@ -317,6 +318,7 @@ function( $ ) {
 						obj[route.names[i]] = decode( part );
 					}
 				});
+				obj.route = route.route;
 				return obj;
 			}
             // If no route was matched it is parsed as a &amp;key=value list.
@@ -361,7 +363,7 @@ function( $ ) {
 			if( val === true || onready === true ) {
 				setState();
 			}
-			return $route;
+			return $.route;
 		},
 		/**
 		 * Returns a url from the options
@@ -371,9 +373,9 @@ function( $ ) {
 		 */
 		url: function( options, merge ) {
 			if (merge) {
-				return "#!" + $route.param(extend({}, curParams, options))
+				return "#!" + $.route.param(extend({}, curParams, options))
 			} else {
-				return "#!" + $route.param(options)
+				return "#!" + $.route.param(options)
 			}
 		},
 		/**
@@ -386,7 +388,7 @@ function( $ ) {
 		link: function( name, options, props, merge ) {
 			return "<a " + makeProps(
 			extend({
-				href: $route.url(options, merge)
+				href: $.route.url(options, merge)
 			}, props)) + ">" + name + "</a>";
 		},
 		/**
@@ -395,7 +397,7 @@ function( $ ) {
          * @return {Boolean}
 		 */
 		current: function( options ) {
-			return location.hash == "#!" + $route.param(options)
+			return location.hash == "#!" + $.route.param(options)
 		}
 	});
 	// onready
@@ -406,8 +408,8 @@ function( $ ) {
     // The functions in the following list applied to $.route (e.g. $.route.attr('...')) will
     // instead act on the $.route.data Observe.
 	each(['bind','unbind','delegate','undelegate','attr','serialize','removeAttr'], function(i, name){
-		$route[name] = function(){
-			return $route.data[name].apply($route.data, arguments)
+		$.route[name] = function(){
+			return $.route.data[name].apply($.route.data, arguments)
 		}
 	})
 
@@ -428,8 +430,8 @@ function( $ ) {
 			var hash = location.hash.substr(1, 1) === '!' ? 
 				location.hash.slice(2) : 
 				location.hash.slice(1); // everything after #!
-			curParams = $route.deparam( hash );
-			$route.attr(curParams, true);
+			curParams = $.route.deparam( hash );
+			$.route.attr(curParams, true);
 		};
 
 	// If the hash changes, update the $.route.data
@@ -438,7 +440,7 @@ function( $ ) {
 	// If the $.route.data changes, update the hash.
     // Using .serialize() retrieves the raw data contained in the observable.
     // This function is throttled so it only updates once even if multiple values changed.
-	$route.bind("change", throttle(function() {
-		location.hash = "#!" + $route.param($route.serialize())
+	$.route.bind("change", throttle(function() {
+		location.hash = "#!" + $.route.param($.route.serialize())
 	}));
 })

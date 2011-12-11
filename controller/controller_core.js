@@ -13,15 +13,10 @@ steal('jquery/class/class_core.js', 'jquery/lang/string', 'jquery/event/destroye
 			el = ev = callback = null;
 		};
 	},
-		makeArray = $.makeArray,
-		isArray = $.isArray,
 		isFunction = $.isFunction,
 		extend = $.extend,
-		Str = $.String,
 		each = $.each,
-		
-		STR_PROTOTYPE = 'prototype',
-		slice = Array[STR_PROTOTYPE].slice,
+		slice = [].slice,
 		
 		// Binds an element, returns a function that unbinds
 		delegate = function( el, selector, ev, callback ) {
@@ -347,15 +342,15 @@ steal('jquery/class/class_core.js', 'jquery/lang/string', 'jquery/event/destroye
 
 			// make sure listensTo is an array
 			//@steal-remove-start
-			if (!isArray(this.listensTo) ) {
+			if (!$.isArray(this.listensTo) ) {
 				throw "listensTo is not an array in " + this.fullName;
 			}
 			//@steal-remove-end
 			// calculate and cache actions
 			this.actions = {};
 
-			for ( funcName in this[STR_PROTOTYPE] ) {
-				if (funcName == 'constructor' || !isFunction(this[STR_PROTOTYPE][funcName]) ) {
+			for ( funcName in this.prototype ) {
+				if (funcName == 'constructor' || !isFunction(this.prototype[funcName]) ) {
 					continue;
 				}
 				if ( this._isAction(funcName) ) {
@@ -408,10 +403,10 @@ steal('jquery/class/class_core.js', 'jquery/lang/string', 'jquery/event/destroye
 			}
 			// If we have options, run sub to replace templates "{}" with a value from the options
 			// or the window
-			var convertedName = options ? Str.sub(methodName, [options, window]) : methodName,
+			var convertedName = options ? $.String.sub(methodName, [options, window]) : methodName,
 				
 				// If a "{}" resolves to an object, convertedName will be an array
-				arr = isArray(convertedName),
+				arr = $.isArray(convertedName),
 				
 				// get the parts of the function = [convertedName, delegatePart, eventPart]
 				parts = (arr ? convertedName[1] : convertedName).match(breaker),
