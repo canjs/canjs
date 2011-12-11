@@ -21,7 +21,6 @@ steal('jquery').then(function(){
 .then('jquery/event/drag/drag_test.js')
 .then('jquery/event/hover/hover_test.js')
 .then('jquery/event/key/key_test.js')
-.then('jquery/tie/tie_test.js')
 .then('jquery/controller/view/test/qunit')
 .then('jquery/model/test/qunit')
 .then('jquery/view/test/qunit')

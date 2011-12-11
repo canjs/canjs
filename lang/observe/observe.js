@@ -100,7 +100,7 @@ steal('jquery/class',function() {
 		},
 		// a helper used to serialize an Observe or Observe.List where:
 		// observe - the observable
-		// how - to serialize with 'attrs' or 'serialize'
+		// how - to serialize with 'attr' or 'serialize'
 		// where - to put properties, in a {} or [].
 		serialize = function( observe, how, where ) {
 			// go through each property
@@ -318,7 +318,8 @@ steal('jquery/class',function() {
 		 *     o.attr('name',"Brian").attr('name') //-> Justin
 		 */
 		attr: function( attr, val ) {
-			if(typeof attr !== 'string'){
+			var tAttr= typeof attr;
+			if(tAttr != 'string' && tAttr != 'number'){
 				return this._attrs(attr, val)
 			}else if ( val === undefined ) {
 				// if we are getting a value
@@ -577,7 +578,7 @@ steal('jquery/class',function() {
 		 */
 		_attrs: function( props, remove ) {
 			if ( props === undefined ) {
-				return serialize(this, 'attrs', {})
+				return serialize(this, 'attr', {})
 			}
 
 			props = $.extend(true, {}, props);
@@ -813,7 +814,7 @@ steal('jquery/class',function() {
 		 */
 		_attrs: function( props, remove ) {
 			if ( props === undefined ) {
-				return serialize(this, 'attrs', []);
+				return serialize(this, 'attr', []);
 			}
 
 			// copy
@@ -843,19 +844,7 @@ steal('jquery/class',function() {
 			if ( collectingStarted ) {
 				sendCollection()
 			}
-		}/*,
-		sort: function(method, silent){
-			var comparator = this.comparator,
-				args = comparator ? [function(a, b){
-					a = a[comparator]
-					b = b[comparator]
-					return a === b ? 0 : (a < b ? -1 : 1);
-				}] : [],
-				res = [].sort.apply(this, args);
-				
-			!silent && trigger(this, "reset");
-
-		}*/
+		}
 	}),
 
 

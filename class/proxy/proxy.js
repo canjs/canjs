@@ -1,5 +1,7 @@
-steal('jquery/class',function($){
+steal('jquery/class/class_core.js',function($){
 var isFunction = $.isFunction,
+	isArray = $.isArray,
+	makeArray = $.makeArray,
 /**
  * @function proxy
  * Returns a callback function for a function on this Class.
@@ -79,7 +81,7 @@ proxy = function( funcs ) {
 			//@steal-remove-end
 			return function class_cb() {
 				// add the arguments after the curried args
-				var cur = concatArgs(args, arguments),
+				var cur = args.concat(makeArray(arguments)),
 					isString, 
 					length = funcs.length,
 					f = 0,

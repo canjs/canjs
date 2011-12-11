@@ -1,5 +1,5 @@
 
-steal('jquery/event', 'jquery/event/handle').then(function($){
+steal('jquery/event').then(function($){
 
 /**
  * @function jQuery.fn.triggerAsync
@@ -20,7 +20,8 @@ steal('jquery/event', 'jquery/event/handle').then(function($){
  *         $('#other').addClass('error');
  *     });
  *
- * triggerAsync is design to work with the [jquery.event.pause] plugin although it is defined in _jquery/event/default_.
+ * triggerAsync is design to work with the [jquery.event.pause] 
+ * plugin although it is defined in _jquery/event/default_.
  * 
  * @param {String} type The type of event
  * @param {Object} data The data for the event
@@ -105,114 +106,13 @@ $event.special["default"] = {
 		//save the type
 		types[handleObj.namespace.replace(rnamespaces,"")] = true;
 		
-		//move the handler ...
-		var origHandler = handleObj.handler;
 		
-		handleObj.origHandler = origHandler;
-		handleObj.handler = function(ev, data){
-			if(!ev._defaultActions) ev._defaultActions = [];
-			ev._defaultActions.push({element: this, handler: origHandler, event: ev, data: data, currentTarget: ev.currentTarget})
-		}
 	},
-	setup: function() {return true},
-	triggerDefault : function(event, elem, data){
-		
-		var defaultGetter = jQuery.Event("default."+event.type);
-			
-		$.extend(defaultGetter,{
-			target: elem,
-			_defaultActions: event._defaultActions,
-			exclusive : true
-		});
-		
-		defaultGetter.stopPropagation();
-	
-		//default events only work on elements
-		if(elem){
-			// Event object or event type
-			var type = defaultGetter.type || event, namespaces = [], exclusive;
-			
-			if (type.indexOf("!") >= 0) {
-				// Exclusive events trigger only for the exact event (no namespaces)
-				type = type.slice(0, -1);
-				exclusive = true;
-			}
-			
-			if (type.indexOf(".") >= 0) {
-				// Namespaced trigger; create a regexp to match event type in handle()
-				namespaces = type.split(".");
-				type = namespaces.shift();
-				namespaces.sort();
-			}
-			defaultGetter.type = type;
-			defaultGetter.exclusive = exclusive;
-			
-			$event.handle.call(elem, defaultGetter, data);
-		}
-	},
-	checkAndRunDefaults : function(event, elem){
-		//fire if there are default actions to run && 
-	    //        we have not prevented default &&
-	    //        propagation has been stopped or we are at the document element
-	    //        we have reached the document
-		if (!event.isDefaultPrevented() &&
-		    (!event.isPaused || !event.isPaused()) &&  // no paused function or it's not paused
-	         event._defaultActions  &&
-	        ( ( event.isPropagationStopped() ) ||
-	          ( !elem.parentNode && !elem.ownerDocument ) )
-	          
-	        ) {			
-			var origNamespace = event.namespace,
-				origType = event.type,
-				origLiveFired = event.liveFired;
-			// put event back
-			event.namespace= event.type;
-			event.type = "default";
-			event.liveFired = null;
-			
-			// call each event handler
-			for(var i = 0 ; i < event._defaultActions.length; i++){
-				var a  = event._defaultActions[i],
-					oldHandle = event.handled;
-				event.currentTarget = a.currentTarget;
-				a.handler.call(a.element, event, a.data);
-				event.handled = event.handled === null ? oldHandle : true;
-	        }
-	        
-			event._defaultActions = null; //set to null so everyone else on this element ignores it
-	        
-			if(event._success){
-				event._success(event);
-			}
-			
-			event.namespace= origNamespace;
-			event.type = origType;
-			event.liveFired = origLiveFired;
-			
-	    }
-	}
+	setup: function() {return true}
 }
 
 // overwrite trigger to allow default types
-var oldTrigger = $event.trigger,
-	triggerDefault = $event.special['default'].triggerDefault,
-	checkAndRunDefaults = $event.special['default'].checkAndRunDefaults,
-	oldData = jQuery._data;
-	
-$._data = function(elem, name, data){
-	// always need to supply a function to call for handle
-	if(!data && name === "handle"){
-		var func = oldData.apply(this, arguments);
-		return function(e){
-			// Discard the second event of a jQuery.event.trigger() and
-			// when an event is called after a page has unloaded
-			return typeof jQuery !== "undefined" && (!e || jQuery.event.triggered !== e.type) ?
-				jQuery.event.handle.apply( this, arguments ) :
-				undefined;
-		}
-	}
-	return oldData.apply(this, arguments)
-}
+var oldTrigger = $event.trigger;
 
 $event.trigger =  function defaultTriggerer( event, data, elem, onlyHandlers){
 	// Event object or event type
@@ -228,9 +128,26 @@ $event.trigger =  function defaultTriggerer( event, data, elem, onlyHandlers){
 		// Just the event type (string)
 		new jQuery.Event( type );
 		
-    event._defaultActions = []; //set depth for possibly reused events
+    //event._defaultActions = []; //set depth for possibly reused events
 	
-	oldTrigger.call($.event, event, data, elem, onlyHandlers);
+	var res = oldTrigger.call($.event, event, data, elem, onlyHandlers);
+	
+	
+	if(!onlyHandlers && !event.isDefaultPrevented() && event.type.indexOf("default") !== 0){
+		oldTrigger("default."+event.type, data, elem)
+		if(event._success){
+			event._success(event)
+		}
+	}
+	// code for paused
+	if( event.isPaused && event.isPaused() ){
+		// set back original stuff
+		event.isDefaultPrevented = 
+			event.pausedState.isDefaultPrevented;
+		event.isPropagationStopped = 
+			event.pausedState.isPropagationStopped;
+	}
+	return res;
 };
 	
 	

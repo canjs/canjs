@@ -128,7 +128,7 @@ test("setups", function(){
 	
 });
 
-test("callback", function(){
+test("proxy", function(){
 	var curVal = 0;
 	$.Class.extend("Car",{
 		show: function( value ) {
@@ -139,16 +139,16 @@ test("callback", function(){
 			
 		}
 	})
-	var cb = Car.callback('show');
+	var cb = Car.proxy('show');
 	curVal = 1;
 	cb(1)
 	
 	curVal = 2;
-	var cb2 = Car.callback('show',2)
+	var cb2 = Car.proxy('show',2)
 	cb2();
 });
 
-test("callback error", 1,function(){
+test("proxy error", 1,function(){
 	$.Class.extend("Car",{
 		show: function( value ) {
 			equals(curVal, value)
@@ -159,7 +159,7 @@ test("callback error", 1,function(){
 		}
 	})
 	try{
-		Car.callback('huh');
+		Car.proxy('huh');
 		ok(false, "I should have errored")
 	}catch(e){
 		ok(true, "Error was thrown")
