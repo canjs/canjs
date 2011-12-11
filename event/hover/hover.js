@@ -115,7 +115,7 @@ var event = $.event,
 	handle  = event.handle,
 	onmouseenter = function(ev){
 		//now start checking mousemoves to update location
-		var delegate = ev.liveFired || ev.currentTarget;
+		var delegate = ev.delegateTarget || ev.currentTarget;
 		var selector = ev.handleObj.selector;
 		//prevents another mouseenter until current has run its course
 		if($.data(delegate,"_hover"+selector)){

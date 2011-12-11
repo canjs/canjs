@@ -1,17 +1,17 @@
-steal('jquery',function($){
+steal('jquery/class/class_core.js',function($){
 
 // tests if we can get super in .toString()
-		var isFunction = $.isFunction,
+	var isFunction = $.isFunction,
 		
 		fnTest = /xyz/.test(function() {
 			xyz;
-		}) ? /\b_super\b/ : /.*/,
+		}) ? /\b_super\b/ : /.*/;
 		
 		// overwrites an object with methods, sets up _super
 		//   newProps - new properties
 		//   oldProps - where the old properties might be
 		//   addTo - what we are adding to
-		inheritProps = function( newProps, oldProps, addTo ) {
+		$.Class._inherit = function( newProps, oldProps, addTo ) {
 			addTo = addTo || newProps
 			for ( var name in newProps ) {
 				// Check if we're overwriting an existing function

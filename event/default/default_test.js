@@ -30,17 +30,17 @@ test("triggering defaults", function(){
 		touchNum = (++num)
 	})
 	$("#touchme1").trigger("touch")
-	equals(1, count1, "trigger default event")
-	equals(1, touchNum, "default called second")
-	equals(2, defaultNum, "default called second")
-	
-	
+	equals(count1, 1 , "trigger default event")
+	equals(touchNum, 1, "default called second")
+	equals(defaultNum, 2, "default called second")
 	
 	//now prevent
 	
-	$("#bigwrapper").bind("touch", function(e){ e.preventDefault()})
-	$("#touchme1").trigger("touch")
-	equals(1, count1, "default event not called")
+	$("#bigwrapper").bind("touch", function(e){ e.preventDefault()});
+	
+	$("#touchme1").trigger("touch");
+	
+	equals(count1, 1 , "default event not called again"); // breaking
 	equals(3, touchNum, "touch called again")
 	
 	var count2 = 0;

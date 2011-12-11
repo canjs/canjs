@@ -104,14 +104,14 @@ steal('jquery/event', 'jquery/lang/vector', 'jquery/event/livehack',function( $ 
 			//ev.preventDefault();
 			//create Drag
 			var drag = new $.Drag(),
-				delegate = ev.liveFired || element,
+				delegate = ev.delegateTarget || element,
 				selector = ev.handleObj.selector,
 				self = this;
 			this.current = drag;
 
 			drag.setup({
 				element: element,
-				delegate: ev.liveFired || element,
+				delegate: ev.delegateTarget || element,
 				selector: ev.handleObj.selector,
 				moved: false,
 				_distance: this.distance,
