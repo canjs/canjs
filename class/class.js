@@ -668,7 +668,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 			
 			// call the class init
 			if ( Class.init ) {
-				Class.init.apply(Class, args || []);
+				Class.init.apply(Class, args || concatArgs([_super_class],arguments));
 			}
 
 			/* @Prototype*/
