@@ -522,7 +522,7 @@ steal("jquery","jquery/lang/string",function( $ ) {
 			
 			// call the class init
 			if ( Class.init ) {
-				Class.init.apply(Class, args || []);
+				Class.init.apply(Class, args || [_super_class].concat($.makeArray(arguments)) );
 			}
 
 			/* @Prototype*/
