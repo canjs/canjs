@@ -317,7 +317,7 @@ steal('jquery/class/class_core.js', 'jquery/lang/string', 'jquery/event/destroye
 			$.Class.setup.apply(this, arguments);
 
 			// if you didn't provide a name, or are controller, don't do anything
-			if (!this.shortName || this.fullName == "jQuery.Controller" ) {
+			if (this === jQuery.Controller ) {
 				return;
 			}
 			// cache the underscored names
@@ -334,11 +334,14 @@ steal('jquery/class/class_core.js', 'jquery/lang/string', 'jquery/event/destroye
 				 *     
 				 *     $("#foo").fillWith();
 				 */
-				pluginname = this.pluginName || this._fullName,
+				pluginName = this.pluginName || this._fullName,
 				funcName;
 
 			// create jQuery plugin
-			this.plugin(pluginname);
+			if(pluginName !== 'j_query_controller'){
+				this.plugin(pluginName);
+			} 
+			
 
 			// make sure listensTo is an array
 			//@steal-remove-start
@@ -561,11 +564,16 @@ steal('jquery/class/class_core.js', 'jquery/lang/string', 'jquery/event/destroye
 			//set element and className on element
 			var pluginname = cls.pluginName || cls._fullName;
 
-			//set element and className on element
-			this.element = $(element).addClass(pluginname);
+			this.element = $(element)
 
-			//set in data
-			(data(element) || data(element, {}))[pluginname] = this;
+			if(pluginname !== 'j_query_controller') {
+				//set element and className on element
+				this.element.addClass(pluginname);
+
+				//set in data
+				(data(element) || data(element, {}))[pluginname] = this;
+			}
+			
 
 			
 			/**
@@ -909,25 +917,21 @@ steal('jquery/class/class_core.js', 'jquery/lang/string', 'jquery/event/destroye
 		 */
 		destroy: function() {
 			var Class= this.constructor;
-			if ( this._destroyed ) {
-				throw Class.shortName + " controller already deleted";
-			}
+
 			var self = this,
-				fname = Class.pluginName || Class._fullName,
+				pluginName = Class.pluginName || Class._fullName,
 				controllers;
 			
-			// mark as destroyed
-			this._destroyed = true;
-			
-			// remove the className
-			this.element.removeClass(fname);
-
 			// unbind bindings
 			this._unbind();
-			// clean up
-			delete this._actions;
+			
+			if(pluginName !== 'j_query_controller'){
+				// remove the className
+				this.element.removeClass(fname);
 
-			delete this.element.data("controllers")[fname];
+				// remove from data
+				delete this.element.data("controllers")[fname];
+			}
 			
 			$(this).triggerHandler("destroyed"); //in case we want to know if the controller is removed
 			

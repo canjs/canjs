@@ -114,17 +114,24 @@ steal('jquery/lang/observe',function(){
 			};
 		}
 	};
+	var modelNum = 0;
 	$.Observe("jQuery.Model",{
 		setup : function(){
 			$.Observe.apply(this, arguments);
+			if(this === jQuery.Model){
+				return;
+			}
 			var self = this;
+			
 			$.each(ajaxMethods, function(name, method){
 				var prop = self[name];
 				if ( typeof prop !== 'function' ) {
 					self[name] = method(prop);
 				}
 			});
-	
+			if(self.fullName == "jQuery.Model"){
+				self.fullName = "Model"+(++modelNum);
+			}
 			//add ajax converters
 			var converters = {},
 				convertName = "* " + self.fullName + ".model";
