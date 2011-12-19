@@ -322,6 +322,9 @@ function( $ ) {
 				return obj;
 			}
             // If no route was matched it is parsed as a &amp;key=value list.
+			if ( url.charAt(0) !== '&' ) {
+				url = '&' + url;
+			}
 			return paramsMatcher.test(url) ? $.String.deparam( url.slice(1) ) : {};
 		},
 		/**

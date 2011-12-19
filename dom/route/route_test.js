@@ -61,6 +61,19 @@ test("deparam of invalid url", function(){
     });
 })
 
+test("deparam of url with non-generated hash (manual override)", function(){
+	$.route.routes = {};
+    
+	// This won't be set like this by route, but it could easily happen via a 
+	// user manually changing the URL or when porting a prior URL structure.
+	obj = $.route.deparam("page=foo&bar=baz&where=there");
+	same(obj, {
+		page: 'foo',
+		bar: 'baz',
+		where: 'there'
+	});
+})
+
 test("param", function(){
 	$.route.routes = {};
 	$.route("pages/:page",{
