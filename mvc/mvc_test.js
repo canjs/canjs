@@ -83,7 +83,7 @@ test("Controller Basics",3,function(){
 	});
 	
 	
-	var tasks = new Tasks( $('#qunit-test-area') , {
+	var tasks = new Tasks( '#qunit-test-area' , {
 		Task : Task
 	})
 	$('#qunit-test-area').click();
