@@ -612,7 +612,8 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 			var funcName, ready, cls = this[STR_CONSTRUCTOR];
 
 			//want the raw element here
-			element = element.jquery ? element[0] : element;
+			element = (typeof element == 'string' ? $(element) :
+				(element.jquery ? element : [element]) )[0];
 
 			//set element and className on element
 			var pluginname = cls.pluginName || cls._fullName;
@@ -727,7 +728,7 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 			 *       }
 			 *     }
 			 */
-			return this.element;
+			return [this.element, this.options];
 		},
 		/**
 		 * Bind attaches event handlers that will be 
