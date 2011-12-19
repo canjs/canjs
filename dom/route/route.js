@@ -410,7 +410,7 @@ function( $ ) {
 	
     // The functions in the following list applied to $.route (e.g. $.route.attr('...')) will
     // instead act on the $.route.data Observe.
-	each(['bind','unbind','delegate','undelegate','attr','serialize','removeAttr'], function(i, name){
+	each(['bind','unbind','delegate','undelegate','attr','attrs','serialize','removeAttr'], function(i, name){
 		$.route[name] = function(){
 			return $.route.data[name].apply($.route.data, arguments)
 		}
@@ -434,7 +434,7 @@ function( $ ) {
 				location.hash.slice(2) : 
 				location.hash.slice(1); // everything after #!
 			curParams = $.route.deparam( hash );
-			$.route.attr(curParams, true);
+			$.route.attrs(curParams, true);
 		};
 
 	// If the hash changes, update the $.route.data
