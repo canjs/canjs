@@ -281,29 +281,6 @@ test("replacing and removing a fixture", function(){
 	},'json')
 });
 
-module("jquery/dom/fixture2");
-
-
-test("static fixtures2", function(){
-	stop();
-	
-	$.fixture("GET something", "//jquery/dom/fixture/fixtures/test.json");
-	$.fixture("POST something", "//jquery/dom/fixture/fixtures/test.json");
-	
-	
-	$.get("something",function(data){
-		equals(data.sweet,"ness","$.get works");
-		
-		$.post("something",function(data){
-			equals(data.sweet,"ness","$.post works");
-			
-			
-			start();
-		},'json');
-		
-	},'json');
-})
-
 return; // future fixture stuff
 
 // returning undefined means you want to control timing?
