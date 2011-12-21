@@ -65,5 +65,19 @@ steal('funcunit/qunit', 'jquery/event/resize').then(function() {
 		$("#qunit-test-area").empty();
 	});
 
-
+	test('resize event propagates data on trigger', function(){
+		var captured;
+		
+		$('#qunit-test-area').html('<div id="1"></div>');
+		
+		$('#1').resize(function(ev, data){
+			captured = data.foo;
+		});
+		
+		$('#1').trigger('resize', { foo: 'bar' });
+		
+		equal(captured, 'bar');
+		
+		$('#qunit-test-area').empty();
+	});
 })
