@@ -728,7 +728,7 @@ steal('jquery/class', 'jquery/lang/string', 'jquery/event/destroyed', function( 
 			 *       }
 			 *     }
 			 */
-			return [this.element, this.options];
+			return [this.element, this.options].concat(makeArray(arguments).slice(2));
 		},
 		/**
 		 * Bind attaches event handlers that will be 
