@@ -10,14 +10,21 @@ steal('jquery/dom/route','jquery/controller', function(){
 	 */
 	jQuery.Controller.processors.route = function(el, event, selector, funcName, controller){
 		$.route(selector||"")
-		var check = function(){
-			if($.route.attr('route') === (selector||"")){
-				controller[funcName]($.route.attr())
+		var batchNum;
+		var check = function(ev, attr, how){
+			if($.route.attr('route') === (selector||"") && ev.batchNum !== batchNum){
+				
+				batchNum = ev.batchNum;
+				
+				var d = $.route.attrs();
+				delete d.route;
+				
+				controller[funcName](d)
 			}
 		}
-		$.route.bind('route',check);
+		$.route.bind('change',check);
 		return function(){
-			$.route.unbind('route',check)
+			$.route.unbind('change',check)
 		}
 	}
 })

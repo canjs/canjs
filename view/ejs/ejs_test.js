@@ -99,8 +99,8 @@ test("returning blocks", function(){
 });
 
 test("easy hookup", function(){
-	var div = $('<div/>').html("//jquery/view/ejs/easyhookup.ejs",{})
+	var div = $('<div/>').html("//jquery/view/ejs/easyhookup.ejs",{text: "yes"})
 	ok( div.find('div').hasClass('yes'), "has yes" )
-})
+});
 
 })
