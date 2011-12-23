@@ -268,10 +268,10 @@ test("replacing and removing a fixture", function(){
 			$.fixture("GET "+url, null )
 			
 			$.get(url,{}, function(json){
-				equals(json.weird,undefined,"fixture set right");
+				equals(json.weird,"ness","fixture set right");
 
 				start();
-			});
+			},'json');
 			
 			
 		},'json')
