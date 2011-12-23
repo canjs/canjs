@@ -114,7 +114,7 @@ steal('jquery/event').then(function( $ ) {
 					var where = data === false ? ev.target : this
 
 					//trigger all this element's handlers
-					$.event.handle.call(where, ev, data);
+					$.event.handle.call(where, ev);
 					if ( ev.isPropagationStopped() ) {
 						resizeCount--;
 						return;
@@ -130,7 +130,7 @@ steal('jquery/event').then(function( $ ) {
 					while (++index < length && (child = resizers[index]) && (isWindow || $.contains(where, child)) ) {
 
 						// call the event
-						$.event.handle.call(child, ev, data);
+						$.event.handle.call(child, ev);
 
 						if ( ev.isPropagationStopped() ) {
 							// move index until the item is not in the current child

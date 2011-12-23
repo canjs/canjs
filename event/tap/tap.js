@@ -22,7 +22,7 @@ $.event.setupHelper( ["tap"], touchStartEvent, function(ev){
 	//listen to mouseup
 	var start = data(ev),
 		stop,
-		delegate = ev.liveFired || ev.currentTarget,
+		delegate = ev.delegateTarget || ev.currentTarget,
 		selector = ev.handleObj.selector,
 		entered = this,
 		moved = false,
