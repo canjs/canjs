@@ -24,6 +24,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		tabReg = /\t/g,
 		leftBracket = /\{/g,
 		rightBracket = /\}/g,
+		quickFunc = /\s*\(([\w]+)\)\s*->([^\n]*)/,
 		// escapes characters starting with \
 		clean = function( content ) {
 			return content.replace(slashReg, '\\\\').replace(newReg, '\\n').replace(quoteReg, '\\"').replace(tabReg, '\\t');
@@ -478,7 +479,11 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 							bn = bracketNum(content);
 							if( bn ) {
 								endStack.push(doubleParen)
-							} 
+							}
+							if(quickFunc.test(content)){
+								var parts = content.match(quickFunc)
+								content = "function(__){var "+parts[1]+"=$(__);"+parts[2]+"}"
+							}
 							buff.push(insert_cmd, "jQuery.EJS.clean(", content,bn ? startTxt : doubleParen);
 							break;
 						case scanner.eeLeft:
