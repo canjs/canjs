@@ -24,7 +24,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		tabReg = /\t/g,
 		leftBracket = /\{/g,
 		rightBracket = /\}/g,
-		quickFunc = /\s*\(([\w]+)\)\s*->([^\n]*)/,
+		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 		// escapes characters starting with \
 		clean = function( content ) {
 			return content.replace(slashReg, '\\\\').replace(newReg, '\\n').replace(quoteReg, '\\"').replace(tabReg, '\\t');
