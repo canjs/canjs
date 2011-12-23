@@ -218,7 +218,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * __Create__
 	 * 
 	 * Create a todo instance and 
-	 * call [jQuery.Model.prototype.save save]<code>( success, error )</code>
+	 * call <code>[$.Model::save save]\(success, error\)</code>
 	 * to create the todo on the server.
 	 *     
 	 *     // create a todo instance
@@ -230,7 +230,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * __Retrieve__
 	 * 
 	 * Retrieve a list of todos from the server with
-	 * <code>findAll( params, callback( items ) )</code>: 
+	 * <code>[$.Model.findAll findAll]\(params, callback(items)\)</code>: 
 	 *     
 	 *     Todo.findAll({}, function( todos ){
 	 *     
@@ -241,7 +241,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 *     });
 	 * 
 	 * Retrieve a single todo from the server with
-	 * <code>findOne( params, callback( item ) )</code>:
+	 * <code>[$.Model.findOne findOne]\(params, callback(item)\)</code>:
 	 * 
 	 *     Todo.findOne({id: 5}, function( todo ){
 	 *     
@@ -264,7 +264,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * 
 	 * __Destroy__
 	 * 
-	 * Call [jQuery.Model.prototype.destroy destroy]<code>( success, error )</code>
+	 * Call <code>[$.Model.prototype.destroy destroy]\(success, error\)</code>
 	 * to delete an item on the server.
 	 * 
 	 *     todo.destroy()
@@ -274,8 +274,11 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * Listening to changes in data is a critical part of 
 	 * the [http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller Model-View-Controller]
 	 * architecture.  $.Model lets you listen to when an item is created, updated, destroyed
-	 * and its properties are changed by creating [jquery.model.events events]
-	 * on the Model and on instances of the model.
+	 * or its properties are changed. Use 
+	 * <code>Model.[$.Model.bind bind]\(eventType, handler(event, model)\)</code>
+	 * to listen to all events of type on a model and
+	 * <code>model.[$.Model.prototype.bind bind]\(eventType, handler(event)\)</code>
+	 * to listen to events on a specific instance.
 	 * 
 	 * __Create__
 	 * 
@@ -332,7 +335,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * that lists each todo in the page and when a todo is
 	 * deleted, removes it.  
 	 * 
-	 * [jQuery.fn.model $.fn.model]<code>( item )</code> lets you set or read a model 
+	 * <code>[jQuery.fn.model $.fn.model]\(item\)</code> lets you set or read a model 
 	 * instance from an element:
 	 * 
 	 *     Todo.findAll({}, function( todos ) {
@@ -345,7 +348,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 *     });
 	 * 
 	 * When a todo is deleted, get its element with
-	 * <code>item.</code>[jQuery.Model.prototype.elements elements]<code>( context )</code>
+	 * <code>item.[$.Model.prototype.elements elements]\(context\)</code>
 	 * and remove it from the page.
 	 * 
 	 *     Todo.bind('destroyed', function( ev, todo ) { 
@@ -378,12 +381,12 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * 
 	 * ## Lists
 	 * 
-	 * [jQuery.Model.List $.Model.List] lets you handle multiple model instances
+	 * [$.Model.List $.Model.List] lets you handle multiple model instances
 	 * with ease.  A List acts just like an <code>Array</code>, but you can add special properties 
 	 * to it and listen to events on it.  
 	 * 
 	 * <code>$.Model.List</code> has become its own plugin, read about it
-	 * [jQuery.Model.List here].
+	 * [$.Model.List here].
 	 * 
 	 * ## Other Good Stuff
 	 * 
@@ -404,7 +407,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * 
 	 *     date.attr('dueDate') //-> new Date(1303173531164)
 	 *     
-	 * By defining property-type pairs in [jQuery.Model.static.attributes attributes],
+	 * By defining property-type pairs in [$.Model.attributes attributes],
 	 * you can have model auto-convert values from the server into more useful types:
 	 * 
 	 *     $.Model('Todo',{
@@ -415,7 +418,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * 
 	 * ### Associations
 	 * 
-	 * The [jQuery.Model.static.attributes attributes] property also 
+	 * The [$.Model.attributes attributes] property also 
 	 * supports associations. For example, todo data might come back with
 	 * User data as an owner property like:
 	 * 
@@ -424,7 +427,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 *       owner: { name: 'Justin', id: 3} }
 	 * 
 	 * To convert owner into a User model, set the owner type as the User's
-	 * [jQuery.Model.static.model model]<code>( data )</code> method:
+	 * [$.Model.model model]<code>( data )</code> method:
 	 * 
 	 *     $.Model('Todo',{
 	 *       attributes : {
@@ -458,8 +461,8 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * ### Deferreds
 	 * 
 	 * Model methods that make requests to the server such as:
-	 * [jQuery.Model.static.findAll findAll], [jQuery.Model.static.findOne findOne], 
-	 * [jQuery.Model.prototype.save save], and [jQuery.Model.prototype.destroy destroy] return a
+	 * [$.Model.findAll findAll], [$.Model.findOne findOne], 
+	 * [$.Model.prototype.save save], and [$.Model.prototype.destroy destroy] return a
 	 * [jquery.model.deferreds deferred] that resolves to the item(s)
 	 * being retrieved or modified.  
 	 * 
@@ -494,14 +497,9 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		create: function( str ) {
 			/**
 			 * @function create
-			 * Create is used to create a model instance on the server.  By implementing 
-			 * create along with the rest of the [jquery.model.services service api], your models provide an abstract
-			 * API for services.  
+			 * Create is used by [$.Model.prototype.save save] to create a model instance on the server. 
 			 * 
-			 * Create is called by save to create a new instance.  If you want to be able to call save on an instance
-			 * you have to implement create.
-			 * 
-			 * The easiest way to implement create is to just give it the url to post data to:
+			 * The easiest way to implement create is to give it the url to post data to:
 			 * 
 			 *     $.Model("Recipe",{
 			 *       create: "/recipes"
@@ -509,21 +507,25 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 *     
 			 * This lets you create a recipe like:
 			 *  
-			 *     new Recipe({name: "hot dog"}).save(function(){
-			 *       this.name //this is the new recipe
-			 *     }).save(callback)
+			 *     new Recipe({name: "hot dog"}).save();
 			 *  
-			 * You can also implement create by yourself.  You just need to call success back with
+			 * You can also implement create by yourself.  Create gets called with:
+			 * 
+			 *  - `attrs` - the [$.Model.serialize serialized] model attributes.
+			 *  - `success(newAttrs)` - a success handler.
+			 *  - `error` - an error handler. 
+			 *  
+			 * You just need to call success back with
 			 * an object that contains the id of the new instance and any other properties that should be
 			 * set on the instance.
 			 *  
 			 * For example, the following code makes a request 
-			 * to '/recipes.json?name=hot+dog' and gets back
+			 * to `POST /recipes.json {'name': 'hot+dog'}` and gets back
 			 * something that looks like:
 			 *  
 			 *     { 
-			 *       id: 5,
-			 *       createdAt: 2234234329
+			 *       "id": 5,
+			 *       "createdAt": 2234234329
 			 *     }
 			 * 
 			 * The code looks like:
@@ -536,7 +538,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 * 
 			 * 
 			 * @param {Object} attrs Attributes on the model instance
-			 * @param {Function} success(attrs) the callback function, it must be called with an object 
+			 * @param {Function} success(newAttrs) the callback function, it must be called with an object 
 			 * that has the id of the new instance and any other attributes the service needs to add.
 			 * @param {Function} error a function to callback if something goes wrong.  
 			 */
@@ -547,14 +549,10 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		update: function( str ) {
 			/**
 			 * @function update
-			 * Update is used to update a model instance on the server.  By implementing 
-			 * update along with the rest of the [jquery.model.services service api], your models provide an abstract
-			 * API for services.  
+			 * Update is used by [$.Model.prototype.save save] to 
+			 * update a model instance on the server. 
 			 * 
-			 * Update is called by [jQuery.Model.prototype.save] or [jQuery.Model.prototype.update] 
-			 * on an existing model instance.  
-			 * 
-			 * The easist way to implement update is to just give it the url to put data to:
+			 * The easist way to implement update is to just give it the url to `PUT` data to:
 			 * 
 			 *     $.Model("Recipe",{
 			 *       update: "/recipes/{id}"
@@ -622,9 +620,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		destroy: function( str ) {
 			/**
 			 * @function destroy
-			 * Destroy is used to remove a model instance from the server. By implementing 
-			 * destroy along with the rest of the [jquery.model.services service api], your models provide an abstract
-			 * service API.
+			 * Destroy is used to remove a model instance from the server.
 			 * 
 			 * You can implement destroy with a string like:
 			 * 
@@ -657,10 +653,8 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		findAll: function( str ) {
 			/**
 			 * @function findAll
-			 * FindAll is used to retrive a model instances from the server. By implementing 
-			 * findAll along with the rest of the [jquery.model.services service api], your models provide an abstract
-			 * service API.
-			 * findAll returns a deferred ($.Deferred)
+			 * FindAll is used to retrive a model instances from the server. 
+			 * findAll returns a deferred ($.Deferred).
 			 * 
 			 * You can implement findAll with a string:
 			 * 
@@ -668,13 +662,14 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			 *       findAll : "/things.json"
 			 *     },{})
 			 * 
-			 * Or you can implement it yourself.  The 'dataType' attribute is used to convert a JSON array of attributes
-			 * to an array of instances.  For example:
+			 * Or you can implement it yourself.  The `dataType` attribute 
+			 * is used to convert a JSON array of attributes
+			 * to an array of instances.  It calls <code>[$.Model.models]\(raw\)</code>.  For example:
 			 * 
 			 *     $.Model("Thing",{
 			 *       findAll : function(params, success, error){
 			 *         return $.ajax({
-			 *         	 url: '/things.json',
+			 *           url: '/things.json',
 			 *           type: 'get',
 			 *           dataType: 'json thing.models',
 			 *           data: params,
@@ -762,7 +757,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			}
 
 			//add this to the collection of models
-			//jQuery.Model.models[this._fullName] = this;
+			//$.Model.models[this._fullName] = this;
 			if ( this.listType ) {
 				this.list = new this.listType([]);
 			}
@@ -793,7 +788,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * @attribute attributes
 		 * Attributes contains a map of attribute names/types.  
 		 * You can use this in conjunction with 
-		 * [jQuery.Model.static.convert] to provide automatic 
+		 * [$.Model.convert] to provide automatic 
 		 * [jquery.model.typeconversion type conversion] (including
 		 * associations).  
 		 * 
@@ -839,7 +834,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * 
 		 * Note that the full names of the models themselves are <code>App.Models.Task</code>
 		 * and <code>App.Models.Person</code>. The _.model_ and _.models_ parts are appended
-		 * for the benefit of [jQuery.Model.static.convert convert] to identify the types as 
+		 * for the benefit of [$.Model.convert convert] to identify the types as 
 		 * models.
 		 * 
 		 * @demo jquery/model/pages/associations.html
@@ -848,7 +843,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		attributes: {},
 		/**
 		 * $.Model.model is used as a [http://api.jquery.com/extending-ajax/#Converters Ajax converter] 
-		 * to convert the response of a [jQuery.Model.static.findOne] request 
+		 * to convert the response of a [$.Model.findOne] request 
 		 * into a model instance.  
 		 * 
 		 * You will never call this method directly.  Instead, you tell $.ajax about it in findOne:
@@ -922,8 +917,8 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		},
 		/**
 		 * $.Model.models is used as a [http://api.jquery.com/extending-ajax/#Converters Ajax converter] 
-		 * to convert the response of a [jQuery.Model.static.findAll] request 
-		 * into an array (or [jQuery.Model.List $.Model.List]) of model instances.  
+		 * to convert the response of a [$.Model.findAll] request 
+		 * into an array (or [$.Model.List $.Model.List]) of model instances.  
 		 * 
 		 * You will never call this method directly.  Instead, you tell $.ajax about it in findAll:
 		 * 
@@ -986,7 +981,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 *     },{})
 		 * 
 		 * @param {Array} instancesRawData an array of raw name - value pairs.
-		 * @return {Array} a JavaScript array of instances or a [jQuery.Model.List list] of instances
+		 * @return {Array} a JavaScript array of instances or a [$.Model.List list] of instances
 		 *  if the model list plugin has been included.
 		 */
 		models: function( instancesRawData ) {
@@ -1061,7 +1056,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * @attribute convert
 		 * @type Object
 		 * An object of name-function pairs that are used to convert attributes.
-		 * Check out [jQuery.Model.static.attributes] or 
+		 * Check out [$.Model.attributes] or 
 		 * [jquery.model.typeconversion type conversion]
 		 * for examples.
 		 * 
@@ -1106,8 +1101,8 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * @attribute serialize
 		 * @type Object
 		 * An object of name-function pairs that are used to serialize attributes.
-		 * Similar to [jQuery.Model.static.convert], in that the keys of this object
-		 * correspond to the types specified in [jQuery.Model.static.attributes].
+		 * Similar to [$.Model.convert], in that the keys of this object
+		 * correspond to the types specified in [$.Model.attributes].
 		 * 
 		 * For example, to serialize all dates to ISO format:
 		 * 
@@ -1135,7 +1130,13 @@ steal('jquery/class', 'jquery/lang/string', function() {
 				return val && val.getTime()
 			}
 		},
+		/**
+		 * @function bind
+		 */
 		bind: bind,
+		/**
+		 * @function unbind
+		 */
 		unbind: unbind,
 		_ajax: ajax
 	},
@@ -1167,7 +1168,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		/**
 		 * Sets the attributes on this instance and calls save.
 		 * The instance needs to have an id.  It will use
-		 * the instance class's [jQuery.Model.static.update update]
+		 * the instance class's [$.Model.update update]
 		 * method.
 		 * 
 		 * @codestart
@@ -1309,7 +1310,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * ## Events
 		 * 
 		 * When you use attr, it can also trigger events.  This is
-		 * covered in [jQuery.Model.prototype.bind].
+		 * covered in [$.Model.prototype.bind].
 		 * 
 		 * @param {String} attribute the attribute you want to set or get
 		 * @param {String|Number|Boolean} [value] value the value you want to set.
@@ -1358,6 +1359,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		},
 
 		/**
+		 * @function bind
 		 * Binds to events on this model instance.  Typically 
 		 * you'll bind to an attribute name.  Handler will be called
 		 * every time the attribute value changes.  For example:
@@ -1397,8 +1399,9 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 */
 		bind: bind,
 		/**
+		 * @function unbind
 		 * Unbinds an event handler from this instance.
-		 * Read [jQuery.Model.prototype.bind] for 
+		 * Read [$.Model.prototype.bind] for 
 		 * more information.
 		 * @param {String} eventType
 		 * @param {Function} handler
@@ -1477,7 +1480,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 
 		/**
 		 * Removes an attribute from the list existing of attributes. 
-		 * Each attribute is set with [jQuery.Model.prototype.attr attr].
+		 * Each attribute is set with [$.Model.prototype.attr attr].
 		 * 
 		 * @codestart
 		 * recipe.removeAttr('name')
@@ -1509,7 +1512,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 
 		/**
 		 * Gets or sets a list of attributes. 
-		 * Each attribute is set with [jQuery.Model.prototype.attr attr].
+		 * Each attribute is set with [$.Model.prototype.attr attr].
 		 * 
 		 * @codestart
 		 * recipe.attrs({
@@ -1550,7 +1553,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		},
 		/**
 		 * Get a serialized object for the model. Serialized data is typically
-		 * used to send back to a server. See [jQuery.Model.static.serialize].
+		 * used to send back to a server. See [$.Model.serialize].
 		 *
 		 *     model.serialize() // -> { name: 'Fred' }
 		 *
@@ -1587,9 +1590,9 @@ steal('jquery/class', 'jquery/lang/string', function() {
 			return (id === undefined || id === null || id === ''); //if null or undefined
 		},
 		/**
-		 * Creates or updates the instance using [jQuery.Model.static.create] or
-		 * [jQuery.Model.static.update] depending if the instance
-		 * [jQuery.Model.prototype.isNew has an id or not].
+		 * Creates or updates the instance using [$.Model.create] or
+		 * [$.Model.update] depending if the instance
+		 * [$.Model.prototype.isNew has an id or not].
 		 * 
 		 * When a save is successful, `success` is called and depending if the
 		 * instance was created or updated, a created or updated event is fired.
@@ -1633,7 +1636,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 
 		/**
 		 * Destroys the instance by calling 
-		 * [jQuery.Model.static.destroy] with the id of the instance.
+		 * [$.Model.destroy] with the id of the instance.
 		 * 
 		 * @codestart
 		 * recipe.destroy(success, error);
@@ -1657,7 +1660,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		 * new Todo({id: 5}).identity() //-> 'todo_5'
 		 * @codeend
 		 * Typically this is used in an element's shortName property so you can find all elements
-		 * for a model with [jQuery.Model.prototype.elements elements].
+		 * for a model with [$.Model.prototype.elements elements].
 		 * @return {String}
 		 */
 		identity: function() {
@@ -1667,7 +1670,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		},
 		/**
 		 * Returns elements that represent this model instance.  For this to work, your element's should
-		 * us the [jQuery.Model.prototype.identity identity] function in their class name.  Example:
+		 * us the [$.Model.prototype.identity identity] function in their class name.  Example:
 		 * 
 		 *     <div class='todo <%= todo.identity() %>'> ... </div>
 		 * 
@@ -1761,7 +1764,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	/**
 	 * @function models
 	 * Returns a list of models.  If the models are of the same
-	 * type, and have a [jQuery.Model.List], it will return 
+	 * type, and have a [$.Model.List], it will return 
 	 * the models wrapped with the list.
 	 * 
 	 * @codestart
@@ -1769,7 +1772,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 	 * @codeend
 	 * 
 	 * @param {jQuery.Class} [type] if present only returns models of the provided type.
-	 * @return {Array|jQuery.Model.List} returns an array of model instances that are represented by the contained elements.
+	 * @return {Array|$.Model.List} returns an array of model instances that are represented by the contained elements.
 	 */
 	$.fn.models = function( type ) {
 		//get it from the data
@@ -1819,71 +1822,4 @@ steal('jquery/class', 'jquery/lang/string', function() {
 		}
 
 	};
-	/**
-	 * @page jquery.model.services Service APIs
-	 * @parent jQuery.Model
-	 * 
-	 * Models provide an abstract API for connecting to your Services.  
-	 * By implementing static:
-	 * 
-	 *  - [jQuery.Model.static.findAll] 
-	 *  - [jQuery.Model.static.findOne] 
-	 *  - [jQuery.Model.static.create] 
-	 *  - [jQuery.Model.static.update] 
-	 *  - [jQuery.Model.static.destroy]
-	 *  
-	 * You can find more details on how to implement each method.
-	 * Typically, you can just use templated service urls. But if you need to
-	 * implement these methods yourself, the following
-	 * is a useful quick reference:
-	 * 
-	 * ### create(attrs, success([attrs]), error()) -> deferred
-	 *  
-	 *  - <code>attrs</code> - an Object of attribute / value pairs
-	 *  - <code>success([attrs])</code> - Create calls success when the request has completed 
-	 *    successfully.  Success can be called back with an object that represents
-	 *    additional properties that will be set on the instance. For example, the server might 
-	 *    send back an updatedAt date.
-	 *  - <code>error</code> - Create should callback error if an error happens during the request
-	 *  - <code>deferred</code> - A deferred that gets resolved to any additional attrs
-	 *    that might need to be set on the model instance.
-	 * 
-	 * 
-	 * ### findAll( params, success(items), error) -> deferred
-	 * 
-	 * 
-	 *  - <code>params</code> - an Object that filters the items returned
-	 *  - <code>success(items)</code> - success should be called with an Array of Model instances.
-	 *  - <code>error</code> - called if an error happens during the request
-	 *  - <code>deferred</code> - A deferred that gets resolved to the list of items
-	 *          
-	 * ### findOne(params, success(items), error) -> deferred
-	 *          
-	 *  - <code>params</code> - an Object that filters the item returned
-	 *  - <code>success(item)</code> - success should be called with a model instance.
-	 *  - <code>error</code> - called if an error happens during the request
-	 *  - <code>deferred</code> - A deferred that gets resolved to a model instance
-	 *        
-	 * ### update(id, attrs, success([attrs]), error()) -> deferred
-	 *  
-	 *  - <code>id</code> - the id of the instance you are updating
-	 *  - <code>attrs</code> - an Object of attribute / value pairs
-	 *  - <code>success([attrs])</code> - Call success when the request has completed 
-	 *    successfully.  Success can be called back with an object that represents
-	 *    additional properties that will be set on the instance. For example, the server might 
-	 *    send back an updatedAt date.
-	 *  - <code>error</code> - Callback error if an error happens during the request
-	 *  - <code>deferred</code> - A deferred that gets resolved to any additional attrs
-	 *      that might need to be set on the model instance.
-	 *     
-	 * ### destroy(id, success([attrs]), error()) -> deferred
-	 *  
-	 *  - <code>id</code> - the id of the instance you are destroying
-	 *  - <code>success([attrs])</code> - Calls success when the request has completed 
-	 *      successfully.  Success can be called back with an object that represents
-	 *      additional properties that will be set on the instance. 
-	 *  - <code>error</code> - Create should callback error if an error happens during the request
-	 *  - <code>deferred</code> - A deferred that gets resolved to any additional attrs
-	 *      that might need to be set on the model instance.
-	 */
 });

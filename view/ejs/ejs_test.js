@@ -98,4 +98,9 @@ test("returning blocks", function(){
 	equals(res.match(/ItemsLength4/g).length, 4, "innerBlock and each")
 });
 
+test("easy hookup", function(){
+	var div = $('<div/>').html("//jquery/view/ejs/easyhookup.ejs",{})
+	ok( div.find('div').hasClass('yes'), "has yes" )
+})
+
 })
