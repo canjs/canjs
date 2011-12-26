@@ -244,4 +244,16 @@ test("linkTo", function(){
     equal( res, '<a href="#!bar&baz=foo" >Hello</a>');
 })
 
+test("param with route defined", function(){
+	$.route.routes = {};
+	$.route("holler")
+	$.route("foo");
+	
+	var res = $.route.param({foo: "abc",route: "foo"});
+	
+	equal(res, "foo&foo=abc")
+})
+
+
+
 })
