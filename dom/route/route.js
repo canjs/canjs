@@ -246,17 +246,27 @@ function( $ ) {
 		param: function( data ) {
 			// Check if the provided data keys match the names in any routes;
 			// get the one with the most matches.
-			delete data.route;
 			var route,
-				matches = -1,
-				matchCount;
-			each($.route.routes, function(name, temp){
-				matchCount = matchesData(temp, data);
-				if ( matchCount > matches ) {
-					route = temp;
-					matches = matchCount
-				}
-			});
+				// need it to be at least 1 match
+				matches = 0,
+				matchCount,
+				routeName = data.route;
+			
+			delete data.route;
+			// if we have a route name in our $.route data, use it
+			if(routeName && (route = $.route.routes[routeName])){
+				
+			} else {
+				// otherwise find route
+				each($.route.routes, function(name, temp){
+					matchCount = matchesData(temp, data);
+					if ( matchCount > matches ) {
+						route = temp;
+						matches = matchCount
+					}
+				});
+			}
+			// if this is match
 			
 			if ( route ) {
 				var cpy = extend({}, data),
@@ -356,8 +366,15 @@ function( $ ) {
 		/**
 		 * Indicates that all routes have been added and sets $.route.data
 		 * based upon the routes and the current hash.
+		 * 
+		 * By default, ready is fired on jQuery's ready event.  Sometimes
+		 * you might want it to happen sooner or earlier.  To do this call
+		 * 
+		 *     $.route.ready(false); //prevents firing by the ready event
+		 *     $.route.ready(true); // fire the first route change
+		 * 
 		 * @param {Boolean} [start]
-		 * @return 
+		 * @return $.route
 		 */
 		ready: function(val) {
 			if( val === false ) {
@@ -421,8 +438,12 @@ function( $ ) {
         throttle = function( func ) {
             var timer;
             return function() {
+				var args = arguments,
+					self = this;
                 clearTimeout(timer);
-                timer = setTimeout(func, 1);
+                timer = setTimeout(function(){
+					func.apply(self, args)
+				}, 1);
             }
         },
         // Intermediate storage for $.route.data.
