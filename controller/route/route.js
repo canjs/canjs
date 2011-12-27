@@ -12,7 +12,8 @@ steal('jquery/dom/route','jquery/controller', function(){
 		$.route(selector||"")
 		var batchNum;
 		var check = function(ev, attr, how){
-			if($.route.attr('route') === (selector||"") && ev.batchNum !== batchNum){
+			if($.route.attr('route') === (selector||"") && 
+			 (ev.batchNum === undefined || ev.batchNum !== batchNum ) ){
 				
 				batchNum = ev.batchNum;
 				
