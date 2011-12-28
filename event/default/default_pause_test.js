@@ -9,14 +9,13 @@ test("default and pause with delegate", function(){
 	$("#qunit-test-area").html("<div id='foo'><p id='bar'>hello</p></div>")
 	
 	$("#foo").delegate("#bar","default.show", function(){
-		console.log("default");
 		order.push("default")
 	});
 	
 	$("#foo").delegate("#bar","show", function(ev){
-		console.log("SHOW");
 		order.push('show')
 		ev.pause();
+		
 		setTimeout(function(){
 			ev.resume();
 			
