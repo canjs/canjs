@@ -103,4 +103,26 @@ test("easy hookup", function(){
 	ok( div.find('div').hasClass('yes'), "has yes" )
 });
 
+test("helpers", function() {
+	$.EJS.Helpers.prototype.simpleHelper = function()
+	{
+		return 'Simple';
+	}
+	
+	$.EJS.Helpers.prototype.elementHelper = function()
+	{
+		return function(el) {
+			$(el).html('Simple');
+		}
+	}
+	
+	var text = "<div><%= simpleHelper() %></div>";
+	var compiled = new $.EJS({text: text}).render() ;
+	equals(compiled, "<div>Simple</div>");
+	
+	text = "<div <%= elementHelper() %>></div>";
+	compiled = new $.EJS({text: text}).render() ;
+	equals(compiled, "<div>Simple</div>");
+});
+
 })
