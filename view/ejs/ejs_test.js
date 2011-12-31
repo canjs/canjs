@@ -112,7 +112,7 @@ test("helpers", function() {
 	$.EJS.Helpers.prototype.elementHelper = function()
 	{
 		return function(el) {
-			$(el).html('Simple');
+			el.innerHTML = 'Simple';
 		}
 	}
 	
@@ -120,9 +120,10 @@ test("helpers", function() {
 	var compiled = new $.EJS({text: text}).render() ;
 	equals(compiled, "<div>Simple</div>");
 	
-	text = "<div <%= elementHelper() %>></div>";
+	text = "<div id=\"hookup\" <%= elementHelper() %>></div>";
 	compiled = new $.EJS({text: text}).render() ;
-	equals(compiled, "<div>Simple</div>");
+	$('#qunit-test-area').append($(compiled));
+	equals($('#hookup').html(), "Simple");
 });
 
 })
