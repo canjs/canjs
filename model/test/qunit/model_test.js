@@ -318,7 +318,7 @@ test("isNew", function(){
 test("findAll string", function(){
 	$.fixture.on = false;
 	$.Model("Test.Thing",{
-		findAll : steal.root.join("jquery/model/test/qunit/findAll.json")
+		findAll : steal.root.join("jquery/model/test/qunit/findAll.json")+''
 	},{});
 	stop();
 	Test.Thing.findAll({},function(things){
