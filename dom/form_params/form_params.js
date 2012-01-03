@@ -77,7 +77,7 @@ steal("jquery/dom").then(function( $ ) {
 					$this;
 				
 				// Don't do all this work if there's no value
-				if ( value ) {
+				if ( value !== undefined ) {
 					$this = $(this);
 					
 					// Nested these if statements for performance
@@ -96,7 +96,7 @@ steal("jquery/dom").then(function( $ ) {
 						$this.val( value );
 					}
 				}
-			});         
+			});
 		},
 		getParams: function( convert ) {
 			var data = {},
