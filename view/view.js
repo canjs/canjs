@@ -407,7 +407,7 @@ steal("jquery").then(function( $ ) {
 			var sub = url.substr(2);
 			url = typeof steal === "undefined" ? 
 				url = "/" + sub : 
-				steal.root.mapJoin(sub);
+				steal.root.mapJoin(sub) +'';
 		}
 
 		//set the template engine type 
