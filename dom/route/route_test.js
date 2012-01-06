@@ -169,8 +169,8 @@ test("param-deparam", function(){
     var res = $.route.param(data);
     var obj = $.route.deparam(res);
 	delete obj.route
-	same(data, obj)
-
+	same(obj,data )
+	return;
     data = {page: "jQuery.Controller", type: "foo", bar: "baz", where: "there"};
     res = $.route.param(data);
     obj = $.route.deparam(res);
@@ -254,6 +254,14 @@ test("param with route defined", function(){
 	equal(res, "foo&foo=abc")
 })
 
-
+test("route endings", function(){
+	$.route.routes = {};
+	$.route("foo",{foo: true});
+	$.route("food",{food: true})
+	
+	var res = $.route.deparam("food")
+	ok(res.food, "we get food back")
+	
+})
 
 })
