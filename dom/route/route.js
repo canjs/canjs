@@ -212,6 +212,7 @@ function( $ ) {
 		var names = [],
 			test = url.replace(matcher, function( whole, name ) {
 				names.push(name)
+				// TODO: I think this should have a +
 				return "([^\\/\\&]*)"  // The '\\' is for string-escaping giving single '\' for regEx escaping
 			});
 
