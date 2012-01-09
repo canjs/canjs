@@ -368,7 +368,9 @@ steal('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then(functio
 			}
 		},
 		end: function( event, moveable ) {
-			var responder, la, endName = this.lowerName+'end';
+			var responder, la, 
+				endName = this.lowerName+'end',
+				dropData;
 			
 			// call dropon
 			//go through the actives ... if you are over one, call dropped on it
@@ -378,9 +380,11 @@ steal('jquery/event/drag','jquery/dom/within','jquery/dom/compare').then(functio
 					la.callHandlers(this.endName, null, event, moveable);
 				}
 			}
+			var drop
 			// call dropend
 			for(var r =0; r<this._elements.length; r++){
-				$.data(this._elements[r],"_dropData").callHandlers(endName, null, event, moveable);
+				dropData = $.data(this._elements[r],"_dropData");
+				dropData && dropData.callHandlers(endName, null, event, moveable);
 			}
 
 			this.clear();
