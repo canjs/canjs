@@ -212,6 +212,7 @@ function( $ ) {
 		var names = [],
 			test = url.replace(matcher, function( whole, name ) {
 				names.push(name)
+				// TODO: I think this should have a +
 				return "([^\\/\\&]*)"  // The '\\' is for string-escaping giving single '\' for regEx escaping
 			});
 
@@ -220,7 +221,7 @@ function( $ ) {
             // A regular expression that will match the route when variable values 
             // are present; i.e. for :page/:type the regEx is /([\w\.]*)/([\w\.]*)/ which
             // will match for any value of :page and :type (word chars or period).
-			test: new RegExp("^" + test),
+			test: new RegExp("^" + test+"($|&)"),
             // The original URL, same as the index for this entry in routes.
 			route: url,
             // An array of all the variable names in this route
@@ -316,7 +317,7 @@ function( $ ) {
                     // start will contain the full matched string; parts contain the variable values.
 					start = parts.shift(),
                     // The remainder will be the &amp;key=value list at the end of the URL.
-					remainder = url.substr(start.length),
+					remainder = url.substr(start.length - (parts[parts.length-1] === "&" ? 1 : 0) ),
                     // If there is a remainder and it contains a &amp;key=value list deparam it.
                     obj = (remainder && paramsMatcher.test(remainder)) ? $.String.deparam( remainder.slice(1) ) : {};
 
@@ -324,7 +325,7 @@ function( $ ) {
 				obj = extend(true, {}, route.defaults, obj);
                 // Overwrite each of the default values in obj with those in parts if that part is not empty.
 				each(parts,function(i, part){
-					if ( part ) {
+					if ( part && part !== '&') {
 						obj[route.names[i]] = decode( part );
 					}
 				});
