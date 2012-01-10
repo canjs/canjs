@@ -898,4 +898,6 @@ steal('jquery/dom',
 	 *     }
 	 * 
 	 */
+	 //Expose this for fixture debugging
+	 $.fixture.overwrites = overwrites;
 });
