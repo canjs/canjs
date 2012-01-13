@@ -47,12 +47,14 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 			var current = window;
 			var parts = this.constructor.fullName.split(/\./);
 			for ( var i = 0; i < parts.length; i++ ) {
-				if ( typeof current.Helpers == 'object' ) {
-					jQuery.extend(helpers, current.Helpers);
+				if(current){
+					if ( typeof current.Helpers == 'object' ) {
+						jQuery.extend(helpers, current.Helpers);
+					}
+					current = current[parts[i]];
 				}
-				current = current[parts[i]];
 			}
-			if ( typeof current.Helpers == 'object' ) {
+			if (current && typeof current.Helpers == 'object' ) {
 				jQuery.extend(helpers, current.Helpers);
 			}
 			this._default_helpers = helpers;
