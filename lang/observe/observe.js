@@ -315,8 +315,9 @@ steal('jquery/class/class_core.js',function() {
 			var tAttr= typeof attr;
 			if(tAttr != 'string' && tAttr != 'number'){
 				return this._attrs(attr, val)
-			}else if ( val === undefined ) {
-				// if we are getting a value
+			}else if ( val === undefined ) {// if we are getting a value
+				// let people know we are reading (
+				$.Observe.__reading && $.Observe.__reading(this, attr)
 				return this._get(attr)
 			} else {
 				// otherwise we are setting

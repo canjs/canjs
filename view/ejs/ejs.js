@@ -213,10 +213,23 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		var v = new EJS.Helpers(object, extraHelpers || {});
 		return this.template.fn.call(object, object, v);
 	};
+	var liveBind = function(observed, el, cb){
+		$.each(observed, function(i, ob){
+			ob.cb = function(){
+				console.log('prop changed!')
+				cb()
+			}
+			ob.obj.bind(ob.attr, ob.cb)
+		})
+		$(el).bind('destroyed', function(){
+			$.each(observed, function(i, ob){
+				ob.obj.unbind(ob.attr, ob.cb)
+			})
+		})
+	};
 	/**
 	 * @Static
 	 */
-
 	extend(EJS, {
 		/**
 		 * Used to convert what's in &lt;%= %> magic tags to a string
@@ -245,7 +258,64 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		 *   * a function - the attribute "data-view-id='XX'", where XX is a hookup number for jQuery.View
 		 *   * an array - the attribute "data-view-id='XX'", where XX is a hookup number for jQuery.View
 		 */
-		text: function( input ) {
+		text: function(status, self, func ) {
+			console.log('holler')
+			// wire up observe listener
+			var observed = [];
+			$.Observe.__reading = function(obj, attr){
+				observed.push({
+					obj : obj,
+					attr : attr
+				})
+			}
+			var input = func.call(self);
+			delete $.Observe.__reading;
+			if(observed.length) { 
+				if(status === 0){ // we are in some html ... (we can't know this!)
+					// return a span with a hookup function ...
+					return "<span "
+							+ "data-view-id='" + $View.hookup(function(el){
+								// remove child, bind on parent
+								var parent = el.parentNode;
+								// get where el is ...
+								for(var i=0; i < parent.childNodes.length; i++){
+									if(parent.childNodes[i] === el){
+										break;
+									}
+								}
+								var node = document.createTextNode(input);
+								parent.insertBefore(node, el)
+								parent.removeChild(el);
+								
+								
+								// create textNode
+								liveBind(observed, parent, function(){
+									node.nodeValue = func.call(self)
+								})
+							}) + "'></span>"
+				} else if(status === 1){
+					return input;
+					// mark at end!
+				} else {
+					
+					
+					pendingHookups.push(function(el){
+						var attr = el.getAttribute(status);
+						var parts = attr.split("__!@#$%__")
+						parts.splice(1,0,input)
+						el.setAttribute(status, parts.join(""))
+						
+						liveBind(observed, parent, function(){
+							parts[1] = func.call(self)
+							el.setAttribute(status, parts.join(""))
+						})
+					})
+					return "__!@#$%__";
+					return input;
+				}
+				
+			}
+			console.log(observed)
 			// if it's a string, return
 			if ( typeof input == 'string' ) {
 				return input;
@@ -279,6 +349,19 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 			}
 			// finally, if all else false, toString it
 			return input.toString ? input.toString() : "";
+		},
+		pending : function(){
+			if(pendingHookups.length){
+				var hooks = pendingHookups.slice(0);
+				pendingHookups = [];
+				return " data-view-id='" + $View.hookup(function(el){
+					$.each(hooks, function(i, fn){
+						fn(el);
+					})
+				}) + "'";
+			}else {
+				return "";
+			}
 		},
 		/**
 		 * Escapes the text provided as html if it's a string.  
@@ -327,6 +410,17 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		}
 
 	},
+		htmlTag =null,
+		quote = null,
+		beforeQuote = null,
+		status = function(){
+			// t - 1
+			// h - 0
+			// q - string beforeQuote
+			
+			return quote ? "'"+beforeQuote.match(/([^\s]+)=$/)[1]+"'" : (htmlTag ? 1 : 0)
+		},
+		pendingHookups = [],
 		scanline = function( scanner, line, block ) {
 			scanner.lines++;
 			var line_split = rSplit(line, scanner.splitter),
@@ -355,7 +449,9 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 				scan: scan,
 				lines: 0
 			});
-			scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eeLeft, scanner.eLeft, scanner.cmnt, scanner.left, scanner.right + '\n', scanner.right, '\n'].join(")|(").
+			scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eeLeft, 
+			scanner.eLeft, scanner.cmnt, scanner.left, 
+			scanner.right + '\n', scanner.right, '\n',"<",">","'",'"'].join(")|(").
 			replace(/\[/g, "\\[").replace(/\]/g, "\\]") + ")");
 			return scanner;
 		},
@@ -387,11 +483,10 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 				content = '',
 				// adds something to be inserted into the view template
 				// this comes out looking like __v1ew.push("CONENT")
-				put = function( content ) {
-					buff.push(put_cmd, '"', clean(content), '");');
+				put = function( content, bonus ) {
+					buff.push(put_cmd, '"', clean(content), '"'+(bonus||'')+');');
 				},
-				// the starting magic tag
-				startTag = null,
+				
 				// cleans the running content
 				empty = function() {
 					content = ''
@@ -401,8 +496,13 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 				// a stack used to keep track of how we should end a bracket }
 				// once we have a <%= %> with a leftBracket
 				// we store how the file should end here (either '))' or ';' )
-				endStack =[];
+				endStack =[],
+				lastToken,
+				startTag = null;
 
+			// re-init the tag goodness
+			htmlTag = quote = beforeQuote = null;
+				
 			// start going token to token
 			scan(makeScanner(left, left === '[' ? ']' : '>'), source || "", function( token, scanner ) {
 				// if we don't have a start pair
@@ -434,6 +534,36 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 						// replace <%% with <%
 						content += scanner.left;
 						break;
+					case '<':
+						htmlTag = '<'
+						content += token;
+						console.log('<');
+						
+						break;
+					case '>':
+						htmlTag = null;
+						console.log('>');
+						// add some code that checks for pending hookups?
+						
+						
+						put(content, ",jQuery.EJS.pending(),\">\"");
+						empty();
+						
+						
+						break;
+					case "'":
+					case '"':
+						console.log('q')
+						if(htmlTag){
+							if(quote && quote === token){
+								quote = null;
+								console.log('eq')
+							} else if(quote === null){
+								quote = token;
+								beforeQuote = lastToken;
+								console.log('Q')
+							}
+						}
 					default:
 						content += token;
 						break;
@@ -492,13 +622,13 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 								endStack.push(doubleParen)
 							} 
 							
-							buff.push(insert_cmd, "jQuery.EJS.text(", content, 
+							buff.push(insert_cmd, "jQuery.EJS.text("+status()+",this,function(){ return ", content, 
 								// if we have a block
 								bn ? 
 								// start w/ startTxt "var _v1ew = [])"
 								startTxt : 
 								// if not, add doubleParent to close push and text
-								doubleParen
+								"}"+doubleParen
 								);
 							break;
 						}
@@ -512,7 +642,9 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 						content += token;
 						break;
 					}
+					
 				}
+				lastToken = token;
 			})
 			if ( content.length > 0 ) {
 				// Should be content.dump in Ruby
