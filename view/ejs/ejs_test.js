@@ -103,4 +103,27 @@ test("easy hookup", function(){
 	ok( div.find('div').hasClass('yes'), "has yes" )
 });
 
+test("helpers", function() {
+	$.EJS.Helpers.prototype.simpleHelper = function()
+	{
+		return 'Simple';
+	}
+	
+	$.EJS.Helpers.prototype.elementHelper = function()
+	{
+		return function(el) {
+			el.innerHTML = 'Simple';
+		}
+	}
+	
+	var text = "<div><%= simpleHelper() %></div>";
+	var compiled = new $.EJS({text: text}).render() ;
+	equals(compiled, "<div>Simple</div>");
+	
+	text = "<div id=\"hookup\" <%= elementHelper() %>></div>";
+	compiled = new $.EJS({text: text}).render() ;
+	$('#qunit-test-area').append($(compiled));
+	equals($('#hookup').html(), "Simple");
+});
+
 })
