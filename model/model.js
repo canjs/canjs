@@ -1007,7 +1007,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 				// get the object's data
 				instancesRawData.data),
 				// the number of items
-				length = raw.length,
+				length = raw ? raw.length : null,
 				i = 0;
 
 			//@steal-remove-start
