@@ -1573,7 +1573,7 @@ steal('jquery/class', 'jquery/lang/string', function() {
 					type = attrs[attr];
 					// the attribute's converter or the default converter for the class
 					converter = Class.serialize[type] || Class.serialize['default'];
-					data[attr] = converter(this[attr], type);
+					data[attr] = converter.call(Class, this[attr], type);
 				}
 			}
 			return data;
