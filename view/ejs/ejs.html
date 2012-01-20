@@ -1,0 +1,16 @@
+<html>
+	<head>
+		
+	</head>
+	<body>
+		<script type='text/javascript' src='../../../steal/steal.js'></script>
+		<script type='text/javascript'>
+			steal('jquery/view/ejs/ejs2.js', function(){
+				$.get('test_template.ejs',{},function(text){
+					console.log(EJS(text,{}))
+				})
+			})
+		</script>
+	</body>
+	
+</html>

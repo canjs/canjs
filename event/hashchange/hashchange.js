@@ -92,7 +92,7 @@
  *     })
  *    
  */
-steal('jquery').then(function($){
+steal('can/jquery.js',function($){
   '$:nomunge'; // Used by YUI compressor.
   
   // Method / object references.

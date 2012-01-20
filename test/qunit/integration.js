@@ -12,7 +12,7 @@ module('integration',{
 });
 
 test("controller can listen to model instances and model classes", function(){
-	
+	stop();
 	
 	$("#qunit-test-area").html("");
 	
@@ -29,10 +29,10 @@ test("controller can listen to model instances and model classes", function(){
 	});
 	
 	$.Model("Test.ModelThing",{
-		create : function(attrs, success){
-			success({id: 1})
+		create : function(attrs){
+			return $.Deferred().resolve({id: 1})
 		}
-	});
+	},{});
 	
 	
 	var inst = new Test.ModelThing();
@@ -44,7 +44,7 @@ test("controller can listen to model instances and model classes", function(){
 		});
 		
 	inst.save();
-	stop();
+	
 })
 
 

@@ -15,7 +15,7 @@
  */
 //
 
- steal('jquery',function($){
+ steal('can/jquery.js',function($){
     /**
      * @page jQuery.toJSON jQuery.toJSON
      * @parent jquerymx.lang

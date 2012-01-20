@@ -1,6 +1,6 @@
-steal('jquery/dom',
-	'jquery/lang/object',
-	'jquery/lang/string',function( $ ) {
+steal('can/dom',
+	'can/lang/object',
+	'can/lang/string',function( $ ) {
 	
 	//used to check urls
 	

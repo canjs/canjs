@@ -1,4 +1,4 @@
-steal('jquery/dom/route','jquery/controller', function(){
+steal('can/dom/route','can/controller', function(){
 	/**
 	 * 
 	 *     ":type route" //

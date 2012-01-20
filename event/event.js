@@ -39,4 +39,4 @@
  * ## 
  * 
  */
-steal('jquery');
+steal('can/jquery.js');
