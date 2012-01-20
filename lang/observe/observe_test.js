@@ -150,7 +150,7 @@ test("remove attr", function(){
 	equals(undefined,  state.attr("properties") );
 });
 
-test("attrs", function(){
+test("attr with an object", function(){
 	var state = new $.Observe({
 		properties : {
 		  foo: "bar",
@@ -163,14 +163,14 @@ test("attrs", function(){
 		equals(newVal, "bad")
 	})
 	
-	state.attrs({
+	state.attr({
 		properties : {
 		  foo: "bar",
 		  brand: []
 		}
 	})
 	
-	state.attrs({
+	state.attr({
 		properties : {
 		  foo: "bad",
 		  brand: []
@@ -185,7 +185,7 @@ test("attrs", function(){
 		same(newVal, ["bad"])
 	});
 	
-	state.attrs({
+	state.attr({
 		properties : {
 		  foo: "bad",
 		  brand: ["bad"]
@@ -200,7 +200,7 @@ test("empty get", function(){
 	equals(state.attr('foo.bar'), undefined)
 });
 
-test("attrs deep array ", function(){
+test("attr deep array ", function(){
 	var state = new $.Observe({});
 	var arr = [{
 			foo: "bar"
@@ -209,37 +209,37 @@ test("attrs deep array ", function(){
 			arr: arr
 		};
 	
-	state.attrs({
+	state.attr({
 		thing: thing
 	}, true);
 	
 	ok(thing.arr === arr, "thing unmolested");
 });
 
-test('attrs semi-serialize', function(){
+test('attr semi-serialize', function(){
 	var first = {
 		foo : {bar: 'car'},
 		arr: [1,2,3, {four: '5'}
 		]
 	},
 	compare = $.extend(true, {}, first);
-	var res = new $.Observe(first).attrs();
+	var res = new $.Observe(first).attr();
 	same(res,compare, "test")
 })
 	
-test("attrs sends events after it is done", function(){
+test("attr sends events after it is done", function(){
 	var state = new $.Observe({foo: 1, bar: 2})
 	state.bind('change', function(){
 		equals(state.attr('foo'), -1, "foo set");
 		equals(state.attr('bar'), -2, "bar set")
 	})
-	state.attrs({foo: -1, bar: -2});
+	state.attr({foo: -1, bar: -2});
 })
 
 test("direct property access", function(){
-	var state = new $.Observe({foo: 1, attrs: 2});
+	var state = new $.Observe({foo: 1, attr: 2});
 	equals(state.foo,1);
-	equals(typeof state.attrs, 'function')
+	equals(typeof state.attr, 'function')
 })
 
 test("pop unbinds", function(){

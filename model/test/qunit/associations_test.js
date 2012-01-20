@@ -17,7 +17,7 @@ module("jquery/model/associations",{
 				issues : "MyTest.Issue.models"
 			},
 			
-			update : function(id, attrs, success, error){
+			update : function(id, attrs){
 				return $.ajax({
 					url : "/people/"+id,
 					data : attrs,
@@ -25,11 +25,11 @@ module("jquery/model/associations",{
 					dataType : "json",
 					fixture: function(){
 						return [{
+							// moving despite saving?
 							loansAttr: attrs.loans,
 							personAttr: attrs.person
 						}]
-					},
-					success : success
+					}
 				})
 			}			
 		},
@@ -111,10 +111,12 @@ test("Model.List association serialize on save", function(){
 	stop();
 	cSave.then(function(customer){
 		start()
-		ok(customer.loansAttr._namespace === undefined, "_namespace does not exist");
+		ok(true, "called back")
+		equals(customer.loansAttr.constructor, $.Observe.List, "we get an observe list back")
+		/*ok(customer.loansAttr._namespace === undefined, "_namespace does not exist");
 		ok(customer.loansAttr._data === undefined, "_data does not exist");
 		ok(customer.loansAttr._use_call === undefined, "_use_call does not exist");
-		ok(customer.loansAttr._changed === undefined, "_changed does not exist");
+		ok(customer.loansAttr._changed === undefined, "_changed does not exist");*/
 		
 	});
 	

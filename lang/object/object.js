@@ -1,4 +1,4 @@
-steal('jquery',function($){
+steal('can/jquery.js',function($){
 	
 var isArray = $.isArray,
 	// essentially returns an object that has all the must have comparisons ...

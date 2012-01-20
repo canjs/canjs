@@ -222,13 +222,13 @@ test("pluginName", function() {
 })
 
 test("inherit defaults", function() {
-    $.Controller.extend("BaseController", {
+    $.Controller("BaseController", {
         defaults : {
             foo: 'bar'
         }
     }, {});
 
-    BaseController.extend("InheritingController", {
+    BaseController("InheritingController", {
         defaults : {
             newProp : 'newVal'
         }
@@ -236,7 +236,9 @@ test("inherit defaults", function() {
 
     ok(InheritingController.defaults.foo === 'bar', 'Class must inherit defaults from the parent class');
     ok(InheritingController.defaults.newProp == 'newVal', 'Class must have own defaults');
+	
     var inst = new InheritingController($('<div/>'), {});
+	
     ok(inst.options.foo === 'bar', 'Instance must inherit defaults from the parent class');
     ok(inst.options.newProp == 'newVal', 'Instance must have defaults of it`s class');
 });

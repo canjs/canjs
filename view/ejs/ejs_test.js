@@ -1,4 +1,5 @@
-steal('funcunit/qunit','jquery/view/ejs', function(){
+steal('funcunit/qunit','jquery/view/ejs', 
+	'jquery/lang/observe',function(){
 module("jquery/view/ejs, rendering",{
 	setup : function(){
 
@@ -125,5 +126,22 @@ test("helpers", function() {
 	$('#qunit-test-area').append($(compiled));
 	equals($('#hookup').html(), "Simple");
 });
+
+test("binding", function(){
+	var text = "<div class='<%== task.attr('completed') ? 'complete' : ''%>'><%== task.attr('name') %></div>";
+	var task = new $.Observe({
+		name : 'dishes'
+	})
+	var compiled = new $.EJS({text: text}).render({task:  task}) ;
+	var div = $('<div/>').html(compiled)
+	
+	console.log(div.html());
+	task.attr('name','lawn')
+	console.log(div.html());
+	task.attr('completed', true);
+	console.log(div.html());
+});
+
+
 
 })

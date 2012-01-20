@@ -36,7 +36,7 @@
  * Used for vector math.
  */
 //string helpers
-steal('jquery').then(function( $ ) {
+steal('can/jquery.js').then(function( $ ) {
 	// Several of the methods in this plugin use code adapated from Prototype
 	//  Prototype JavaScript framework, version 1.6.0.1
 	//  (c) 2005-2007 Sam Stephenson
@@ -150,20 +150,8 @@ steal('jquery').then(function( $ ) {
 			 * @return {String} a string with the first character capitalized.
 			 */
 			capitalize: function( s, cache ) {
+				// used to make newId ...
 				return s.charAt(0).toUpperCase() + s.substr(1);
-			},
-			/**
-			 * Capitalizes a string from something undercored. Examples:
-			 * @codestart
-			 * jQuery.String.camelize("one_two") //-> "oneTwo"
-			 * "three-four".camelize() //-> threeFour
-			 * @codeend
-			 * @param {String} s
-			 * @return {String} a the camelized string
-			 */
-			camelize: function( s ) {
-				s = str.classize(s);
-				return s.charAt(0).toLowerCase() + s.substr(1);
 			},
 			/**
 			 * Like [jQuery.String.camelize|camelize], but the first part is also capitalized
@@ -171,6 +159,8 @@ steal('jquery').then(function( $ ) {
 			 * @return {String} the classized string
 			 */
 			classize: function( s , join) {
+				// this can be moved out ..
+				// used for getter setter
 				var parts = s.split(regs.undHash),
 					i = 0;
 				for (; i < parts.length; i++ ) {
@@ -179,18 +169,6 @@ steal('jquery').then(function( $ ) {
 
 				return parts.join(join || '');
 			},
-			/**
-			 * Like [jQuery.String.classize|classize], but a space separates each 'word'
-			 * @codestart
-			 * jQuery.String.niceName("one_two") //-> "One Two"
-			 * @codeend
-			 * @param {String} s
-			 * @return {String} the niceName
-			 */
-			niceName: function( s ) {
-				return str.classize(s,' ');
-			},
-
 			/**
 			 * Underscores a string.
 			 * @codestart

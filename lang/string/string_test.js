@@ -35,12 +35,12 @@ test("$.String.getObject", function(){
 	
 	equals(obj,0, 'got 0 (falsey stuff)')
 });
-
+/*
 test("$.String.niceName", function(){
 	var str = "some_underscored_string";
 	var niceStr = $.String.niceName(str);
 	equals(niceStr, 'Some Underscored String', 'got correct niceName');
-})
+})*/
 
 	
 }).then('./deparam/deparam_test');

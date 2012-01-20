@@ -1,4 +1,4 @@
-steal('jquery/lang/observe', 'jquery/event/hashchange', 'jquery/lang/string/deparam',
+steal('can/lang/observe', 'can/event/hashchange', 'can/lang/string/deparam',
 function( $ ) {
 
     // Helper methods used for matching routes.
@@ -247,6 +247,7 @@ function( $ ) {
 		param: function( data ) {
 			// Check if the provided data keys match the names in any routes;
 			// get the one with the most matches.
+			delete data.route;
 			var route,
 				// need it to be at least 1 match
 				matches = 0,
@@ -268,6 +269,7 @@ function( $ ) {
 				});
 			}
 			// if this is match
+
 			
 			if ( route ) {
 				var cpy = extend({}, data),
@@ -428,7 +430,7 @@ function( $ ) {
 	
     // The functions in the following list applied to $.route (e.g. $.route.attr('...')) will
     // instead act on the $.route.data Observe.
-	each(['bind','unbind','delegate','undelegate','attr','attrs','serialize','removeAttr'], function(i, name){
+	each(['bind','unbind','delegate','undelegate','attr','serialize','removeAttr'], function(i, name){
 		$.route[name] = function(){
 			return $.route.data[name].apply($.route.data, arguments)
 		}
@@ -456,7 +458,7 @@ function( $ ) {
 				location.hash.slice(2) : 
 				location.hash.slice(1); // everything after #!
 			curParams = $.route.deparam( hash );
-			$.route.attrs(curParams, true);
+			$.route.attr(curParams, true);
 		};
 
 	// If the hash changes, update the $.route.data

@@ -1,4 +1,4 @@
-steal('jquery', function($){
+steal('can/jquery.js', function($){
 	
 	var digitTest = /^\d+$/,
 		keyBreaker = /([^\[\]]+)|(\[\])/g,
