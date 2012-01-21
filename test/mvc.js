@@ -1,5 +1,5 @@
 steal(
 'can/model',
-'can/controller/route',
+'can/control/route',
 'can/view'
 )
