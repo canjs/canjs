@@ -64,7 +64,7 @@ test("Model basics",function(){
 	});
 })
 
-test("Controller Basics",3,function(){
+test("Control Basics",3,function(){
 	var Task = Can.Model({
 		findAll : "/mvc/foo"
 	},{
@@ -73,7 +73,7 @@ test("Controller Basics",3,function(){
 		}
 	});
 	
-	var Tasks = Can.Controller({
+	var Tasks = Can.Control({
 		"{Task} created" : function(Task, ev, task){
 			ok(task, "created called")
 		},
