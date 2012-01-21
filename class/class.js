@@ -3,13 +3,13 @@
 // http://ejohn.org/blog/simple-javascript-inheritance/
 // It provides class level inheritance and callbacks.
 //@steal-clean
-steal("can/jquery.js","can/lang/string",function( $ ) {
+steal("can/util/string",function( $ ) {
 
 	// =============== HELPERS =================
 
 	    // if we are initializing a new class
 	var initializing = false,
-		underscore = $.String.underscore;
+		underscore = Can.String.underscore;
 
 	/**
 	 * @class jQuery.Class
@@ -19,7 +19,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 	 * @test jquery/class/qunit.html
 	 * @description Easy inheritance in JavaScript.
 	 * 
-	 * Class provides simulated inheritance in JavaScript. Use $.Class to bridge the gap between
+	 * Class provides simulated inheritance in JavaScript. Use Can.Class to bridge the gap between
 	 * jQuery's functional programming style and Object Oriented Programming. It 
 	 * is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Class]
 	 * Inheritance library.  Besides prototypal inheritance, it includes a few important features:
@@ -31,7 +31,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 	 *   - Easy callback function creation
 	 * 
 	 * 
-	 * The [mvc.class Get Started with jQueryMX] has a good walkthrough of $.Class.
+	 * The [mvc.class Get Started with jQueryMX] has a good walkthrough of Can.Class.
 	 * 
 	 * ## Static v. Prototype
 	 * 
@@ -59,7 +59,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 	 * count is incremented.
 	 *
 	 * @codestart
-	 * $.Class('Monster',
+	 * Can.Class('Monster',
 	 * /* @static *|
 	 * {
 	 *   count: 0
@@ -128,7 +128,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 	 * 
 	 * You can also inherit static properties in the same way:
 	 * 
-	 *     $.Class("First",
+	 *     Can.Class("First",
 	 *     {
 	 *         staticMethod: function() { return 1;}
 	 *     },{})
@@ -146,7 +146,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 	 * Making a namespaced class is easy:
 	 * 
 	 * 
-	 *     $.Class("MyNamespace.MyClass",{},{});
+	 *     Can.Class("MyNamespace.MyClass",{},{});
 	 *
 	 *     new MyNamespace.MyClass()
 	 * 
@@ -158,7 +158,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 	 * is a great example of this.  Unfortunately, JavaScript doesn't have a way of determining
 	 * an object's name, so the developer must provide a name.  Class fixes this by taking a String name for the class.
 	 * 
-	 *     $.Class("MyOrg.MyClass",{},{})
+	 *     Can.Class("MyOrg.MyClass",{},{})
 	 *     MyOrg.MyClass.shortName //-> 'MyClass'
 	 *     MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
 	 * 
@@ -179,7 +179,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 	 *
 	 * </div>
 	 * @codestart
-	 * $.Class("MyClass",
+	 * Can.Class("MyClass",
 	 * {
 	 *   setup: function() {} //static setup
 	 *   init: function() {} //static constructor
@@ -208,7 +208,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 	 * even if it is passed a raw
 	 * HTMLElement and no second parameter.
 	 * 
-	 *     $.Class("jQuery.Controller",{
+	 *     Can.Class("jQuery.Controller",{
 	 *       ...
 	 *     },{
 	 *       setup: function( el, options ) {
@@ -229,7 +229,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 	 * as their preceding setup function.  The Foo class's <code>init</code> method
 	 * gets called in the following example:
 	 * 
-	 *     $.Class("Foo", {
+	 *     Can.Class("Foo", {
 	 *       init: function( arg1, arg2, arg3 ) {
 	 *         this.sum = arg1+arg2+arg3;
 	 *       }
@@ -249,7 +249,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 	 * The following example uses this.proxy to make sure
 	 * <code>this.name</code> is available in <code>show</code>.
 	 * 
-	 *     $.Class("Todo",{
+	 *     Can.Class("Todo",{
 	 *       init: function( name ) { 
 	 *       	this.name = name 
 	 *       },
@@ -273,7 +273,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 	 * 
 	 * To create a Class call:
 	 * 
-	 *     $.Class( [NAME , STATIC,] PROTOTYPE ) -> Class
+	 *     Can.Class( [NAME , STATIC,] PROTOTYPE ) -> Class
 	 * 
 	 * <div class='params'>
 	 *   <div class='param'><label>NAME</label><code>{optional:String}</code>
@@ -305,14 +305,14 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 	 * are called.
 	 */
 
-	$.Class = function() {
+	Can.Class = function() {
 		if (arguments.length) {
-			return $.Class.extend.apply($.Class, arguments);
+			return Can.Class.extend.apply(Can.Class, arguments);
 		}
 	};
 
 	/* @Static*/
-	$.extend($.Class, {
+	$.extend(Can.Class, {
 		/**
 		 * @function newInstance
 		 * Creates a new instance of the class.  This method is useful for creating new instances
@@ -353,7 +353,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 		 * Setup will deeply extend a static defaults property on the base class with 
 		 * properties on the base class.  For example:
 		 * 
-		 *     $.Class("MyBase",{
+		 *     Can.Class("MyBase",{
 		 *       defaults : {
 		 *         foo: 'bar'
 		 *       }
@@ -390,21 +390,21 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 		 * to use extend:
 		 * 
 		 *     // with className, static and prototype functions
-		 *     $.Class('Task',{ STATIC },{ PROTOTYPE })
+		 *     Can.Class('Task',{ STATIC },{ PROTOTYPE })
 		 *     // with just classname and prototype functions
-		 *     $.Class('Task',{ PROTOTYPE })
+		 *     Can.Class('Task',{ PROTOTYPE })
 		 *     // with just a className
-		 *     $.Class('Task')
+		 *     Can.Class('Task')
 		 * 
 		 * You no longer have to use <code>.extend</code>.  Instead, you can pass those options directly to
-		 * $.Class (and any inheriting classes):
+		 * Can.Class (and any inheriting classes):
 		 * 
 		 *     // with className, static and prototype functions
-		 *     $.Class('Task',{ STATIC },{ PROTOTYPE })
+		 *     Can.Class('Task',{ STATIC },{ PROTOTYPE })
 		 *     // with just classname and prototype functions
-		 *     $.Class('Task',{ PROTOTYPE })
+		 *     Can.Class('Task',{ PROTOTYPE })
 		 *     // with just a className
-		 *     $.Class('Task')
+		 *     Can.Class('Task')
 		 * 
 		 * @param {String} [fullName]  the classes name (used for classes w/ introspection)
 		 * @param {Object} [klass]  the new classes static/class functions
@@ -462,7 +462,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 
 				var parts = fullName.split(/\./),
 					shortName = parts.pop(),
-					current = $.String.getObject(parts.join('.'), window, true),
+					current = Can.String.getObject(parts.join('.'), window, true),
 					namespace = current,
 					_fullName = underscore(fullName.replace(/\./g, "_")),
 					_shortName = underscore(shortName);
@@ -482,7 +482,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 				 * @attribute namespace 
 				 * The namespaces object
 				 * 
-				 *     $.Class("MyOrg.MyClass",{},{})
+				 *     Can.Class("MyOrg.MyClass",{},{})
 				 *     MyOrg.MyClass.namespace //-> MyOrg
 				 * 
 				 */
@@ -491,7 +491,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 				 * @attribute shortName 
 				 * The name of the class without its namespace, provided for introspection purposes.
 				 * 
-				 *     $.Class("MyOrg.MyClass",{},{})
+				 *     Can.Class("MyOrg.MyClass",{},{})
 				 *     MyOrg.MyClass.shortName //-> 'MyClass'
 				 *     MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
 				 * 
@@ -504,7 +504,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 				 * @attribute fullName 
 				 * The full name of the class, including namespace, provided for introspection purposes.
 				 * 
-				 *     $.Class("MyOrg.MyClass",{},{})
+				 *     Can.Class("MyOrg.MyClass",{},{})
 				 *     MyOrg.MyClass.shortName //-> 'MyClass'
 				 *     MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
 				 * 
@@ -533,7 +533,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 			 * instances is created.  It gets passed the same arguments that
 			 * were given to the Class constructor function (<code> new Class( arguments ... )</code>).
 			 * 
-			 *     $.Class("MyClass",
+			 *     Can.Class("MyClass",
 			 *     {
 			 *        setup: function( val ) {
 			 *           this.val = val;
@@ -545,7 +545,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 			 * Setup is called before [jQuery.Class.prototype.init init].  If setup 
 			 * return an array, those arguments will be used for init. 
 			 * 
-			 *     $.Class("jQuery.Controller",{
+			 *     Can.Class("jQuery.Controller",{
 			 *       setup : function(htmlElement, rawOptions){
 			 *         return [$(htmlElement), 
 			 *                   $.extend({}, this.Class.defaults, rawOptions )] 
@@ -558,10 +558,10 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 			 * run.
 			 * </div>
 			 * 
-			 * Setup is not defined on $.Class itself, so calling super in inherting classes
+			 * Setup is not defined on Can.Class itself, so calling super in inherting classes
 			 * will break.  Don't do the following:
 			 * 
-			 *     $.Class("Thing",{
+			 *     Can.Class("Thing",{
 			 *       setup : function(){
 			 *         this._super(); // breaks!
 			 *       }
@@ -578,7 +578,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 			 * same arguments passed to the Class 
 			 * constructor: (<code> new Class( arguments ... )</code>).  
 			 * 
-			 *     $.Class("MyClass",
+			 *     Can.Class("MyClass",
 			 *     {
 			 *        init: function( val ) {
 			 *           this.val = val;
@@ -601,7 +601,7 @@ steal("can/jquery.js","can/lang/string",function( $ ) {
 			 * ### Quick Example
 			 * 
 			 *     // a class with a static property
-			 *     $.Class("MyClass", {staticProperty : true}, {});
+			 *     Can.Class("MyClass", {staticProperty : true}, {});
 			 *     
 			 *     // a new instance of myClass
 			 *     var mc1 = new MyClass();
