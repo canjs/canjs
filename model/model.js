@@ -1,5 +1,5 @@
 // this file should not be stolen directly
-steal('can/lang/observe',function(){
+steal('can/observe',function(){
 	
 	var getId = function( inst ) {
 			return inst[inst.constructor.id]
@@ -26,7 +26,7 @@ steal('can/lang/observe',function(){
 	
 
 			// get the url with any templated values filled out
-			ajaxOb.url = $.String.sub(ajaxOb.url, ajaxOb.data, true);
+			ajaxOb.url = Can.String.sub(ajaxOb.url, ajaxOb.data, true);
 
 			return $.ajax($.extend({
 				type: type || "post",
@@ -87,7 +87,7 @@ steal('can/lang/observe',function(){
 				attrs = attrs || {};
 				var identity = this.id;
 				if ( attrs[identity] && attrs[identity] !== id ) {
-					attrs["new" + $.String.capitalize(id)] = attrs[identity];
+					attrs["new" + Can.String.capitalize(id)] = attrs[identity];
 					delete attrs[identity];
 				}
 				attrs[identity] = id;
@@ -115,9 +115,9 @@ steal('can/lang/observe',function(){
 		}
 	};
 	var modelNum = 0;
-	$.Observe("jQuery.Model",{
+	Can.Observe("Can.Model",{
 		setup : function(){
-			$.Observe.apply(this, arguments);
+			Can.Observe.apply(this, arguments);
 			if(this === jQuery.Model){
 				return;
 			}
@@ -235,7 +235,7 @@ steal('can/lang/observe',function(){
 	 * 
 	 */
 	"destroyed"], function( i, funcName ) {
-		$.Model.prototype[funcName] = function( attrs ) {
+		Can.Model.prototype[funcName] = function( attrs ) {
 			var stub, 
 				constructor = this.constructor;
 
@@ -255,6 +255,6 @@ steal('can/lang/observe',function(){
 	});
 	
 	
-	var ML = $.Observe.List('jQuery.Model.List')
+	var ML = Can.Observe.List('jQuery.Model.List')
 	
 })

@@ -1,4 +1,4 @@
-steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
+steal('can/class', 'can/util/destroyed.js', function( $ ) {
 	// ------- HELPER FUNCTIONS  ------
 	
 	// Binds an element, returns a function that unbinds
@@ -91,7 +91,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 	 * 
 	 * do this
 	 * 
-	 *     $.Controller('Tabs',{
+	 *     Can.Controller('Tabs',{
 	 *       click: function() {...},
 	 *       '.tab click' : function() {...},
 	 *       '.delete click' : function() {...}
@@ -115,7 +115,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 	 * 
 	 * ### A controller class is created.
 	 *       
-	 *     $.Controller("MyWidget",
+	 *     Can.Controller("MyWidget",
 	 *     {
 	 *       defaults :  {
 	 *         message : "Remove Me"
@@ -193,7 +193,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 	 * 
 	 * To add a mousover effect and create todos, your controller might look like:
 	 * 
-	 *     $.Controller('Todos',{
+	 *     Can.Controller('Todos',{
 	 *       ".todo mouseover" : function( el, ev ) {
 	 *         el.css("backgroundColor","red")
 	 *       },
@@ -294,7 +294,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 	 * These methods let you call one controller from another controller.
 	 * 
 	 */
-	$.Class("jQuery.Controller",
+	Can.Class("Can.Controller",
 	/** 
 	 * @Static
 	 */
@@ -314,10 +314,10 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 		 */
 		setup: function() {
 			// Allow contollers to inherit "defaults" from superclasses as it done in $.Class
-			$.Class.setup.apply(this, arguments);
+			Can.Class.setup.apply(this, arguments);
 
 			// if you didn't provide a name, or are controller, don't do anything
-			if (this === jQuery.Controller ) {
+			if (this === Can.Controller ) {
 				return;
 			}
 			// cache the underscored names
@@ -328,7 +328,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 				 * to change the jQuery plugin helper name from its 
 				 * default value.
 				 * 
-				 *     $.Controller("Mxui.Layout.Fill",{
+				 *     Can.Controller("Mxui.Layout.Fill",{
 				 *       pluginName: "fillWith"
 				 *     },{});
 				 *     
@@ -406,7 +406,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 			}
 			// If we have options, run sub to replace templates "{}" with a value from the options
 			// or the window
-			var convertedName = options ? $.String.sub(methodName, [options, window]) : methodName,
+			var convertedName = options ? Can.String.sub(methodName, [options, window]) : methodName,
 				
 				// If a "{}" resolves to an object, convertedName will be an array
 				arr = $.isArray(convertedName),
@@ -468,7 +468,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 		 * with templated event handlers:
 		 * 
 		 *
-		 *     $.Controller('Sized',{
+		 *     Can.Controller('Sized',{
 		 *       "{window} resize" : function(){
 		 *         this.element.width(this.element.parent().width() / 2);
 		 *       }
@@ -483,7 +483,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 		 * listens too.  You only need to add event names that
 		 * are whole words (ie have no special characters).
 		 * 
-		 *     $.Controller('TabPanel',{
+		 *     Can.Controller('TabPanel',{
 		 *       listensTo : ['show']
 		 *     },{
 		 *       'show' : function(){
@@ -500,7 +500,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 		 * A object of name-value pairs that act as default values for a controller's 
 		 * [jQuery.Controller.prototype.options options].
 		 * 
-		 *     $.Controller("Message",
+		 *     Can.Controller("Message",
 		 *     {
 		 *       defaults : {
 		 *         message : "Hello World"
@@ -567,7 +567,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 
 			this.element = $(element)
 
-			if(pluginname !== 'j_query_controller') {
+			if(pluginname !== 'can_controller') {
 				//set element and className on element
 				this.element.addClass(pluginname);
 
@@ -587,7 +587,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 			 * 
 			 * For example:
 			 * 
-			 *     $.Controller('Hello')
+			 *     Can.Controller('Hello')
 			 *     
 			 *     var h1 = new Hello($('#content1'), {message: 'World'} );
 			 *     equal( h1.options.message , "World" )
@@ -601,7 +601,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 			 * 
 			 * For example:
 			 * 
-			 *     $.Controller("Tabs", 
+			 *     Can.Controller("Tabs", 
 			 *     {
 			 *        defaults : {
 			 *          activeClass: "ui-active-state"
@@ -636,7 +636,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 			 * 
 			 * For example, if I add MyWidget to a '#myelement' element like:
 			 * 
-			 *     $.Controller("MyWidget",{
+			 *     Can.Controller("MyWidget",{
 			 *       init : function(){
 			 *         this.element.css("color","red")
 			 *       }
@@ -653,7 +653,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 			 * 
 			 * To change this.element, overwrite Controller's setup method like:
 			 * 
-			 *     $.Controller("Combobox",{
+			 *     Can.Controller("Combobox",{
 			 *       setup : function(el, options){
 			 *          this.oldElement = $(el);
 			 *          var newEl = $('<div/>');
@@ -798,7 +798,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 		 * is submitted, it creates the recipe on the server.  When the recipe
 		 * is `created`, it resets the form with a new instance.
 		 * 
-		 *     $.Controller('Creator',{
+		 *     Can.Controller('Creator',{
 		 *       "{recipe} created" : function(){
 		 *         this.update({recipe : new Recipe()});
 		 *         this.element[0].reset();
@@ -824,7 +824,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 		 * For example, a widget that listens for model updates
 		 * and updates it's html would look like.  
 		 * 
-		 *     $.Controller('Updater',{
+		 *     Can.Controller('Updater',{
 		 *       // when the controller is created, update the html
 		 *       init : function(){
 		 *         this.updateView();
@@ -869,7 +869,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 		 * 
 		 * ### Example
 		 * 
-		 *     $.Controller("Thing",{
+		 *     Can.Controller("Thing",{
 		 *       init: function( el, options ) {
 		 *         alert( 'init:'+this.options.prop )
 		 *       },
@@ -896,7 +896,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 		 * if the element is removed.  You can overwrite it to add your own
 		 * teardown functionality:
 		 * 
-		 *     $.Controller("ChangeText",{
+		 *     Can.Controller("ChangeText",{
 		 *       init : function(){
 		 *         this.oldText = this.element.text();
 		 *         this.element.text("Changed!!!")
@@ -926,7 +926,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 			// unbind bindings
 			this._unbind();
 			
-			if(pluginName !== 'j_query_controller'){
+			if(pluginName !== 'can_controller'){
 				// remove the className
 				this.element.removeClass(fname);
 
@@ -953,7 +953,7 @@ steal('can/class', 'can/lang/string', 'can/event/destroyed', function( $ ) {
 		}
 	});
 
-	var processors = $.Controller.processors,
+	var processors = Can.Controller.processors,
 
 	//------------- PROCESSSORS -----------------------------
 	//processors do the binding.  They return a function that

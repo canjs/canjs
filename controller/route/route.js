@@ -1,4 +1,4 @@
-steal('can/dom/route','can/controller', function(){
+steal('can/route','can/controller', function(){
 	/**
 	 * 
 	 *     ":type route" //
@@ -8,24 +8,24 @@ steal('can/dom/route','can/controller', function(){
 	 * @param {Object} selector
 	 * @param {Object} cb
 	 */
-	jQuery.Controller.processors.route = function(el, event, selector, funcName, controller){
-		$.route(selector||"")
+	Can.Controller.processors.route = function(el, event, selector, funcName, controller){
+		Can.route(selector||"")
 		var batchNum;
 		var check = function(ev, attr, how){
-			if($.route.attr('route') === (selector||"") && 
+			if(Can.route.attr('route') === (selector||"") && 
 			 (ev.batchNum === undefined || ev.batchNum !== batchNum ) ){
 				
 				batchNum = ev.batchNum;
 				
-				var d = $.route.attrs();
+				var d = Can.route.attrs();
 				delete d.route;
 				
 				controller[funcName](d)
 			}
 		}
-		$.route.bind('change',check);
+		Can.route.bind('change',check);
 		return function(){
-			$.route.unbind('change',check)
+			Can.route.unbind('change',check)
 		}
 	}
 })

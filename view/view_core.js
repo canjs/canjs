@@ -1,4 +1,4 @@
-steal("can/jquery.js").then(function( $ ) {
+steal("can/util").then(function( $ ) {
 
 	// a path like string into something that's ok for an element ID
 	var toId = function( src ) {
