@@ -17,7 +17,7 @@ steal('can/class', 'can/util/destroyed.js', function( $ ) {
 		extend = $.extend,
 		each = $.each,
 		slice = [].slice,
-		
+		special = $.event.special || {},
 		// Binds an element, returns a function that unbinds
 		delegate = function( el, selector, ev, callback ) {
 			var binder = el.delegate && el.undelegate ? el : $(isFunction(el) ? [el] : el)
@@ -370,7 +370,7 @@ steal('can/class', 'can/util/destroyed.js', function( $ ) {
 			if ( actionMatcher.test(methodName) ) {
 				return true;
 			} else {
-				return $.inArray(methodName, this.listensTo) > -1 || $.event.special[methodName] || processors[methodName];
+				return $.inArray(methodName, this.listensTo) > -1 || special[methodName] || processors[methodName];
 			}
 
 		},
@@ -567,7 +567,7 @@ steal('can/class', 'can/util/destroyed.js', function( $ ) {
 
 			this.element = $(element)
 
-			if(pluginname !== 'can_control') {
+			if(pluginname && pluginname !== 'can_control') {
 				//set element and className on element
 				this.element.addClass(pluginname);
 
@@ -620,7 +620,7 @@ steal('can/class', 'can/util/destroyed.js', function( $ ) {
 			 * [jQuery.Control.prototype.update update];
 			 *
 			 */
-			this.options = extend( extend(true, {}, cls.defaults), options);
+			this.options = extend( extend(/*true,*/ {}, cls.defaults), options);
 
 			
 
@@ -926,7 +926,7 @@ steal('can/class', 'can/util/destroyed.js', function( $ ) {
 			// unbind bindings
 			this._unbind();
 			
-			if(pluginName !== 'can_control'){
+			if(pluginName && pluginName !== 'can_control'){
 				// remove the className
 				this.element.removeClass(fname);
 
@@ -934,7 +934,7 @@ steal('can/class', 'can/util/destroyed.js', function( $ ) {
 				delete this.element.data("controls")[fname];
 			}
 			
-			$(this).triggerHandler("destroyed"); //in case we want to know if the control is removed
+			$([this]).triggerHandler("destroyed"); //in case we want to know if the control is removed
 			
 			this.element = null;
 		},

@@ -2,120 +2,125 @@ steal('can/util/object',
 	'can/util/string',function( $ ) {
 	
 	//used to check urls
+	// check if jQuery	
+	if ($.ajaxPrefilter && $.ajaxTransport) {
 	
-
-	
-	// the pre-filter needs to re-route the url
-	
-	$.ajaxPrefilter( function( settings, originalOptions, jqXHR ) {
-	  	// if fixtures are on
-		if(! $.fixture.on) {
-			return;
-		}
+		// the pre-filter needs to re-route the url
 		
-		// add the fixture option if programmed in
-		var data = overwrite(settings);
-		
-		// if we don't have a fixture, do nothing
-		if(!settings.fixture){
-			if(window.location.protocol === "file:"){
-				steal.dev.log("ajax request to " + settings.url+", no fixture found");
+		$.ajaxPrefilter(function(settings, originalOptions, jqXHR){
+			// if fixtures are on
+			if (!$.fixture.on) {
+				return;
 			}
-			return;
-		}
-		
-		//if referencing something else, update the fixture option
-		if ( typeof settings.fixture === "string" && $.fixture[settings.fixture] ) {
-			settings.fixture = $.fixture[settings.fixture];
-		}
-		
-		// if a string, we just point to the right url
-		if ( typeof settings.fixture == "string" ) {
-			var url = settings.fixture;
 			
-			if (/^\/\//.test(url) ) {
-				url = steal.root.mapJoin(settings.fixture.substr(2))+'';
-			}
-			//@steal-remove-start
-			steal.dev.log("looking for fixture in " + url);
-			//@steal-remove-end
-			settings.url = url;
-			settings.data = null;
-			settings.type = "GET";
-			if (!settings.error ) {
-				settings.error = function( xhr, error, message ) {
-					throw "fixtures.js Error " + error + " " + message;
-				};
-			}
-
-		}else {
-			//@steal-remove-start
-			steal.dev.log("using a dynamic fixture for " +settings.type+" "+ settings.url);
-			//@steal-remove-end
+			// add the fixture option if programmed in
+			var data = overwrite(settings);
 			
-			//it's a function ... add the fixture datatype so our fixture transport handles it
-			// TODO: make everything go here for timing and other fun stuff
-			settings.dataTypes.splice(0,0,"fixture");
-			
-			if(data){
-				$.extend(originalOptions.data, data)
+			// if we don't have a fixture, do nothing
+			if (!settings.fixture) {
+				if (window.location.protocol === "file:") {
+					steal.dev.log("ajax request to " + settings.url + ", no fixture found");
+				}
+				return;
 			}
+			
+			//if referencing something else, update the fixture option
+			if (typeof settings.fixture === "string" && $.fixture[settings.fixture]) {
+				settings.fixture = $.fixture[settings.fixture];
+			}
+			
+			// if a string, we just point to the right url
+			if (typeof settings.fixture == "string") {
+				var url = settings.fixture;
+				
+				if (/^\/\//.test(url)) {
+					url = steal.root.mapJoin(settings.fixture.substr(2)) + '';
+				}
+				//@steal-remove-start
+				steal.dev.log("looking for fixture in " + url);
+				//@steal-remove-end
+				settings.url = url;
+				settings.data = null;
+				settings.type = "GET";
+				if (!settings.error) {
+					settings.error = function(xhr, error, message){
+						throw "fixtures.js Error " + error + " " + message;
+					};
+				}
+				
+			}
+			else {
+				//@steal-remove-start
+				steal.dev.log("using a dynamic fixture for " + settings.type + " " + settings.url);
+				//@steal-remove-end
+				
+				//it's a function ... add the fixture datatype so our fixture transport handles it
+				// TODO: make everything go here for timing and other fun stuff
+				settings.dataTypes.splice(0, 0, "fixture");
+				
+				if (data) {
+					$.extend(originalOptions.data, data)
+				}
 			// add to settings data from fixture ...
 			
-		}
-		
-	});
-		
-	
-	$.ajaxTransport( "fixture", function( s, original ) {
-
-		// remove the fixture from the datatype
-		s.dataTypes.shift();
-		
-		//we'll return the result of the next data type
-		var next = s.dataTypes[0],
-			timeout;
-		
-		return {
-		
-			send: function( headers , callback ) {
-				
-				// callback after a timeout
-				timeout = setTimeout(function() {
-					
-					// get the callback data from the fixture function
-					var response = s.fixture(original, s, headers);
-					
-					// normalize the fixture data into a response
-					if(!$.isArray(response)){
-						var tmp = [{}];
-						tmp[0][next] = response
-						response = tmp;
-					}
-					if(typeof response[0] != 'number'){
-						response.unshift(200,"success")
-					}
-					
-					// make sure we provide a response type that matches the first datatype (typically json)
-					if(!response[2] || !response[2][next]){
-						var tmp = {}
-						tmp[next] = response[2];
-						response[2] = tmp;
-					}
-					
-					// pass the fixture data back to $.ajax
-					callback.apply(null, response );
-				}, $.fixture.delay);
-			},
-			
-			abort: function() {
-				clearTimeout(timeout)
 			}
-		};
+			
+		});
 		
-	});
-
-
+		
+		$.ajaxTransport("fixture", function(s, original){
+		
+			// remove the fixture from the datatype
+			s.dataTypes.shift();
+			
+			//we'll return the result of the next data type
+			var next = s.dataTypes[0], timeout;
+			
+			return {
+			
+				send: function(headers, callback){
+				
+					// callback after a timeout
+					timeout = setTimeout(function(){
+					
+						// get the callback data from the fixture function
+						var response = s.fixture(original, s, headers);
+						
+						// normalize the fixture data into a response
+						if (!$.isArray(response)) {
+							var tmp = [{}];
+							tmp[0][next] = response
+							response = tmp;
+						}
+						if (typeof response[0] != 'number') {
+							response.unshift(200, "success")
+						}
+						
+						// make sure we provide a response type that matches the first datatype (typically json)
+						if (!response[2] || !response[2][next]) {
+							var tmp = {}
+							tmp[next] = response[2];
+							response[2] = tmp;
+						}
+						
+						// pass the fixture data back to $.ajax
+						callback.apply(null, response);
+					}, $.fixture.delay);
+				},
+				
+				abort: function(){
+					clearTimeout(timeout)
+				}
+			};
+			
+		});
+		
+	} else {
+		//var orig = $.ajax;
+		//$.ajax = function(settings){
+		//	
+		//}
+	}
 
 	var typeTest = /^(script|json|test|jsonp)$/,
 		// a list of 'overwrite' settings object

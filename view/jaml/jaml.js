@@ -1,4 +1,4 @@
-steal("jquery/view").then(function(){
+steal("can/view").then(function(){
 	
 
 
@@ -353,7 +353,7 @@ Jaml.Template.prototype = {
   };
 })();
 
-$.View.register({
+Can.View.register({
 	suffix : "jaml",
 	script: function(id, str ) {
 		return "((function(){ Jaml.register("+id+", "+str+"); return function(data){return Jaml.render("+id+", data)} })())"

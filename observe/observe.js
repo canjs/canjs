@@ -68,7 +68,7 @@ steal('can/class',function() {
 				return;
 			}
 			if (!collecting ) {
-				return $.event.trigger(event, args, item, true);
+				return Can.trigger(item, event, args);
 			} else {
 				collecting.push([{
 					type: event,
@@ -88,7 +88,7 @@ steal('can/class',function() {
 			collecting = null;
 			batchNum ++;
 			for ( var i = 0; i < len; i++ ) {
-				$.event.trigger.apply($.event, items[i]);
+				Can.trigger.apply(Can, items[i])
 			}
 			
 		},
@@ -576,7 +576,7 @@ steal('can/class',function() {
 				return serialize(this, 'attr', {})
 			}
 
-			props = $.extend(true, {}, props);
+			props = $.extend(/*true,*/ {}, props);
 			var prop, 
 				collectingStarted = collect(),
 				self = this;
@@ -1005,4 +1005,9 @@ steal('can/class',function() {
 	indexOf = [].indexOf || function(item){
 		return $.inArray(item, this)
 	};
+	if(Can.addEvent){
+		Can.Observe.prototype.addEventListener = Can.addEvent;
+		Can.Observe.prototype.removeEventListener = Can.removeEvent;
+		Can.Observe.prototype.dispatchEvent  = Can.dispatch
+	}
 });

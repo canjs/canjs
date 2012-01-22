@@ -1,7 +1,7 @@
 steal("./view",function( $ ) {
 
 
-	$.extend($.View, {
+	$.extend(Can.View, {
 		register: function( info ) {
 			this.types["." + info.suffix] = info;
 

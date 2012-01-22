@@ -1,12 +1,20 @@
 // this file should not be stolen directly
 steal('can/observe',function(){
 	
-	var getId = function( inst ) {
+	var pipe = function(def, done){
+		var d = $.Deferred();
+		def.done(function(){
+			d.resolve.apply(d, done.apply(this, arguments))
+		});
+		return d;
+	},
+		makeObject = function(json){
+			return typeof json == 'string' ? JSON.parse(json) : json;
+		},
+		getId = function( inst ) {
 			return inst[inst.constructor.id]
 		},
-		trigger = function(obj, event, args){
-			$.event.trigger(event, args, obj, true)
-		},
+		trigger = Can.trigger,
 		ajax = function(ajaxOb, data, type, dataType, success, error ) {
 
 			
@@ -105,7 +113,13 @@ steal('can/observe',function(){
 
 		findAll: function( str ) {
 			return function( params, success, error ) {
-				return ajax( str ||  this._shortName, params, "get", "json " + this.fullName + ".models", success, error);
+				var self = this;
+				return pipe( 
+					ajax( str ||  this._shortName, params, "get", "json"),
+					function(){
+						arguments[0] = self.models( makeObject(arguments[0]) );
+						return arguments;
+					}).done(success).fail(error)
 			};
 		},
 		findOne: function( str ) {
@@ -118,7 +132,7 @@ steal('can/observe',function(){
 	Can.Observe("Can.Model",{
 		setup : function(){
 			Can.Observe.apply(this, arguments);
-			if(this === jQuery.Model){
+			if(this === Can.Model){
 				return;
 			}
 			var self = this;
@@ -129,19 +143,22 @@ steal('can/observe',function(){
 					self[name] = method(prop);
 				}
 			});
-			if(self.fullName == "jQuery.Model"){
+			if(self.fullName == "Can.Model"){
 				self.fullName = "Model"+(++modelNum);
 			}
 			//add ajax converters
-			var converters = {},
-				convertName = "* " + self.fullName + ".model";
+			
+			if($.ajaxSetup){
+				var converters = {},
+					convertName = "* " + self.fullName + ".model";
 	
-			converters[convertName + "s"] = $.proxy(self.models,self);
-			converters[convertName] = $.proxy(self.model,self);
-	
-			$.ajaxSetup({
-				converters: converters
-			});
+				converters[convertName + "s"] = $.proxy(self.models,self);
+				converters[convertName] = $.proxy(self.model,self);
+				$.ajaxSetup({
+					converters: converters
+				});
+			}
+			
 			this._url = this._shortName+"/{"+this.id+"}"
 		},
 		id: "id",
@@ -253,8 +270,12 @@ steal('can/observe',function(){
 			trigger(constructor,funcName, this);
 		};
 	});
+	if(Can.addEvent){
+		Can.Model.addEventListener = Can.addEvent;
+		Can.Model.removeEventListener = Can.removeEvent;
+		Can.Model.dispatchEvent  = Can.dispatch
+	}
 	
-	
-	var ML = Can.Observe.List('jQuery.Model.List')
+	var ML = Can.Observe.List('Can.Model.List')
 	
 })

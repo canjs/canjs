@@ -26,7 +26,7 @@ steal('can/util').then(function( $ ) {
 	 * @demo jquery/event/destroyed/destroyed_menu.html 
 	 */
 
-	var oldClean = jQuery.cleanData;
+	var oldClean = $.cleanData;
 
 	$.cleanData = function( elems ) {
 		for ( var i = 0, elem;

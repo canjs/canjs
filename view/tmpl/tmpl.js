@@ -23,7 +23,7 @@
  * For more information on jQuery.tmpl read 
  * [http://api.jquery.com/category/plugins/templates/ it's documentation].
  */
-steal('jquery/view').then(function(){
+steal('can/view').then(function(){
 		// Override the DOM manipulation function
 	var oldManip = jQuery.fn.domManip, tmplItmAtt = "_tmplitem", htmlExpr = /^[^<]*(<[\w\W]+>)[^>]*$|\{\{\! /,
 		newTmplItems = {}, wrappedItems = {}, appendToTmplItems, topTmplItem = { key: 0, data: {} }, itemKey = 0, cloneIndex = 0, stack = [];
@@ -505,7 +505,7 @@ steal('jquery/view').then(function(){
 		jQuery( coll ).remove();
 	}
 	
-	$.View.register({
+	Can.View.register({
 		suffix : "tmpl",
 		renderer: function( id, text ) {
 			var tmpl = $.template( null, text );
@@ -519,5 +519,5 @@ steal('jquery/view').then(function(){
 			return "function(data){return ("+tmpl+").call(jQuery, jQuery, {data: data}).join(''); }";
 		}
 	})
-	jQuery.View.ext = ".tmpl"
+	Can.View.ext = ".tmpl"
 })
