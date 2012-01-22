@@ -47,10 +47,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		// handles parameterized action names
 		parameterReplacer = /\{([^\}]+)\}/g,
 		breaker = /^(?:(.*?)\s)?([\w\.\:>]+)$/,
-		basicProcessor,
-		data = function(el, data){
-			return $.data(el, "controls", data)
-		};
+		basicProcessor;
 	/**
 	 * @class jQuery.Control
 	 * @parent jquerymx
@@ -571,10 +568,12 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 				//set element and className on element
 				this.element.addClass(pluginname);
 
-				//set in data
-				(data(element) || data(element, {}))[pluginname] = this;
+					
 			}
-			
+			//set in data
+			var arr;
+			(arr = this.element.data("controls")) || this.element.data("controls",arr = [])
+			arr.push(this);
 
 			
 			/**
@@ -928,11 +927,12 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			
 			if(pluginName && pluginName !== 'can_control'){
 				// remove the className
-				this.element.removeClass(fname);
-
-				// remove from data
-				delete this.element.data("controls")[fname];
+				this.element.removeClass(pluginName);
 			}
+			
+			// remove from data
+			var controls = this.element.data("controls");
+			controls.splice($.inArray(this, controls),1);
 			
 			$([this]).triggerHandler("destroyed"); //in case we want to know if the control is removed
 			

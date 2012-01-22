@@ -1,4 +1,4 @@
-steal('./zepto.0.8.js').then('./fill', function(){
+steal('./zepto.0.8.js').then('./data').then('./fill', function(){
 
 if(window.jQuery){
 	Can.trigger = function(obj, event, args){

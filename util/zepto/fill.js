@@ -193,11 +193,9 @@ steal(function(){
 		if(!this.__bindEvents[event]){
 			this.__bindEvents[event] = [];
 		}
-		console.log("addEvent",event)
 		this.__bindEvents[event].push(fn);
 	};
 	Can.removeEvent = function(event, fn){
-		console.log("removeEvent",event)
 		var i = this.__bindEvents[event].indexOf(fn);
 		this.__bindEvents[event].splice(i, 1);
 	};
@@ -210,8 +208,7 @@ steal(function(){
 			args = [event].concat(event.data || []);
 		$.each(handlers, function(i, handler){
 			handler.apply(self, args)
-		})
-		console.log("dispatch", event)
+		});
 	}
 	$.proxy = function(f, ctx){
 		return function(){
@@ -222,8 +219,7 @@ steal(function(){
 		return arr.indexOf(item)
 	}
 	
-	$.cleanData = function(arg){
-	}
+	
 	
 	$.fn.empty = function(){
 		return this.each(function(){ 
