@@ -1,4 +1,4 @@
-steal('jquery/view').then(function(){
+steal('can/view').then(function(){
 // Simple JavaScript Templating
 // John Resig - http://ejohn.org/ - MIT Licensed
 
@@ -63,7 +63,7 @@ steal('jquery/view').then(function(){
     return data ? fn( data ) : fn;
   };
 
-	$.View.register({
+	Can.View.register({
 		suffix : "micro",
 		renderer: function( id, text ) {
 			var mt = Micro(text)
@@ -75,7 +75,7 @@ steal('jquery/view').then(function(){
 			return "function(obj){"+Micro(str).body+"}";
 		}
 	})
-	jQuery.View.ext = ".micro"
+	Can.View.ext = ".micro"
 	
 
 });

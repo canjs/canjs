@@ -1,5 +1,5 @@
 /*jslint evil: true */
-steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
+steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 
 	// HELPER METHODS ==============
 	var myEval = function( script ) {
@@ -10,7 +10,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		// chop = function( string ) {
 		//	return string.substr(0, string.length - 1);
 		//},
-		rSplit = $.String.rsplit,
+		rSplit = Can.String.rsplit,
 		extend = $.extend,
 		isArray = $.isArray,
 		// regular expressions for caching
@@ -34,7 +34,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		escapeHTML = function( content ) {
 			return content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(quoteReg, '&#34;').replace(singleQuoteReg, "&#39;");
 		},
-		$View = $.View,
+		$View = Can.View,
 		bracketNum = function(content){
 			var lefts = content.match(leftBracket),
 				rights = content.match(rightBracket);
@@ -43,10 +43,10 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 				   (rights ? rights.length : 0);
 		},
 		/**
-		 * @class jQuery.EJS
+		 * @class Can.EJS
 		 * 
 		 * @plugin jquery/view/ejs
-		 * @parent jQuery.View
+		 * @parent Can.View
 		 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/view/ejs/ejs.js
 		 * @test jquery/view/ejs/qunit.html
 		 * 
@@ -192,7 +192,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 			this.template = compile(this.text, this.type, this.name);
 		};
 	// add EJS to jQuery if it exists
-	window.jQuery && (jQuery.EJS = EJS);
+	Can.EJS = EJS;
 	/** 
 	 * @Prototype
 	 */
@@ -260,17 +260,21 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 		 *   * an array - the attribute "data-view-id='XX'", where XX is a hookup number for jQuery.View
 		 */
 		text: function(status, self, func ) {
-			console.log('holler')
 			// wire up observe listener
 			var observed = [];
-			$.Observe.__reading = function(obj, attr){
-				observed.push({
-					obj : obj,
-					attr : attr
-				})
+			if (Can.Observe) {
+				Can.Observe.__reading = function(obj, attr){
+					observed.push({
+						obj: obj,
+						attr: attr
+					})
+				}
 			}
 			var input = func.call(self);
-			delete $.Observe.__reading;
+			if(Can.Observe){
+				delete Can.Observe.__reading;
+			}
+			
 			if(observed.length) { 
 				if(status === 0){ // we are in some html ... (we can't know this!)
 					// return a span with a hookup function ...
@@ -547,7 +551,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 						// add some code that checks for pending hookups?
 						
 						
-						put(content, ",jQuery.EJS.pending(),\">\"");
+						put(content, ",Can.EJS.pending(),\">\"");
 						empty();
 						
 						
@@ -614,7 +618,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 								var parts = content.match(quickFunc)
 								content = "function(__){var "+parts[1]+"=$(__);"+parts[2]+"}"
 							}
-							buff.push(insert_cmd, "jQuery.EJS.clean(", content,bn ? startTxt : doubleParen);
+							buff.push(insert_cmd, "Can.EJS.clean(", content,bn ? startTxt : doubleParen);
 							break;
 						case scanner.eeLeft:
 							// <%== content
@@ -627,7 +631,7 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 								endStack.push(doubleParen)
 							} 
 							
-							buff.push(insert_cmd, "jQuery.EJS.text("+status()+",this,function(){ return ", content, 
+							buff.push(insert_cmd, "Can.EJS.text("+status()+",this,function(){ return ", content, 
 								// if we have a block
 								bn ? 
 								// start w/ startTxt "var _v1ew = [])"
@@ -711,9 +715,9 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 	};
 
 	/**
-	 * @class jQuery.EJS.Helpers
-	 * @parent jQuery.EJS
-	 * By adding functions to jQuery.EJS.Helpers.prototype, those functions will be available in the 
+	 * @class Can.EJS.Helpers
+	 * @parent Can.EJS
+	 * By adding functions to Can.EJS.Helpers.prototype, those functions will be available in the 
 	 * views.
 	 * 
 	 * The following helper converts a given string to upper case:
@@ -778,11 +782,11 @@ steal('jquery/view', 'jquery/lang/string/rsplit').then(function( $ ) {
 	};
 
 	// options for steal's build
-	$View.register({
+	Can.View.register({
 		suffix: "ejs",
 		//returns a function that renders the view
 		script: function( id, src ) {
-			return "jQuery.EJS(function(_CONTEXT,_VIEW) { " + new EJS({
+			return "Can.EJS(function(_CONTEXT,_VIEW) { " + new EJS({
 				text: src,
 				name: id
 			}).template.out + " })";

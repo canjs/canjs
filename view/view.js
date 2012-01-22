@@ -32,7 +32,7 @@ steal("can/util").then(function( $ ) {
 	 *  - Bundling of processed templates in production builds.
 	 *  - Hookup jquery plugins directly in the template.
 	 * 
-	 * The [mvc.view Get Started with jQueryMX] has a good walkthrough of $.View.
+	 * The [mvc.view Get Started with jQueryMX] has a good walkthrough of Can.View.
 	 * 
 	 * ## Use
 	 * 
@@ -142,7 +142,7 @@ steal("can/util").then(function( $ ) {
 	 * 
 	 * ## Deferreds (3.0.6)
 	 * 
-	 * If you pass deferreds to $.View or any of the jQuery 
+	 * If you pass deferreds to Can.View or any of the jQuery 
 	 * modifiers, the view will wait until all deferreds resolve before 
 	 * rendering the view.  This makes it a one-liner to make a request and 
 	 * use the result to render a template. 
@@ -156,9 +156,9 @@ steal("can/util").then(function( $ ) {
 	 * ## Just Render Templates
 	 * 
 	 * Sometimes, you just want to get the result of a rendered 
-	 * template without inserting it, you can do this with $.View: 
+	 * template without inserting it, you can do this with Can.View: 
 	 * 
-	 *     var out = $.View('path/to/template.jaml',{});
+	 *     var out = Can.View('path/to/template.jaml',{});
 	 *     
 	 * ## Preloading Templates
 	 * 
@@ -188,7 +188,7 @@ steal("can/util").then(function( $ ) {
 	 * 
 	 * ## Using other Template Engines
 	 * 
-	 * It's easy to integrate your favorite template into $.View and Steal.  Read 
+	 * It's easy to integrate your favorite template into Can.View and Steal.  Read 
 	 * how in [jQuery.View.register].
 	 * 
 	 * @constructor
@@ -200,13 +200,13 @@ steal("can/util").then(function( $ ) {
 	 * This makes it ok to use views synchronously like:
 	 * 
 	 * @codestart
-	 * $.View("//myplugin/views/init.ejs",{message: "Hello World"})
+	 * Can.View("//myplugin/views/init.ejs",{message: "Hello World"})
 	 * @codeend
 	 * 
 	 * If you aren't using StealJS, it's best to use views asynchronously like:
 	 * 
 	 * @codestart
-	 * $.View("//myplugin/views/init.ejs",
+	 * Can.View("//myplugin/views/init.ejs",
 	 *        {message: "Hello World"}, function(result){
 	 *   // do something with result
 	 * })
@@ -223,7 +223,7 @@ steal("can/util").then(function( $ ) {
 	 * are passed, a deferred that will resolve to
 	 * the rendered result of the view.
 	 */
-	var $view = $.View = function( view, data, helpers, callback ) {
+	var $view = Can.View = function( view, data, helpers, callback ) {
 		// if helpers is a function, it is actually a callback
 		if ( typeof helpers === 'function' ) {
 			callback = helpers;
@@ -305,18 +305,109 @@ steal("can/util").then(function( $ ) {
 		checkText = function( text, url ) {
 			if (!text.match(/[^\s]/) ) {
 				steal.dev.log("There is no template or an empty template at " + url)
-				throw "$.View ERROR: There is no template or an empty template at " + url;
+				throw "Can.View ERROR: There is no template or an empty template at " + url;
 			}
 		},
 		// returns a 'view' renderer deferred
 		// url - the url to the view template
 		// async - if the ajax request should be synchronous
+		// returns a deferred
 		get = function( url, async ) {
-			return $.ajax({
+			
+			
+			var suffix = url.match(/\.[\w\d]+$/),
+			type, 
+			// if we are reading a script element for the content of the template
+			// el will be set to that script element
+			el, 
+			// a unique identifier for the view (used for caching)
+			// this is typically derived from the element id or
+			// the url for the template
+			id, 
+			// the AJAX request used to retrieve the template content
+			jqXHR, 
+			// used to generate the response 
+			response = function( text ) {
+				// get the renderer function
+				var func = type.renderer(id, text),
+					d = $.Deferred().resolve(func)
+				// cache if if we are caching
+				if ( $view.cache ) {
+					$view.cached[id] = d;
+				}
+				// return the objects for the response's dataTypes 
+				// (in this case view)
+				return d;
+			};
+
+		// if we have an inline template, derive the suffix from the 'text/???' part
+		// this only supports '<script></script>' tags
+		if ( el = document.getElementById(url) ) {
+			suffix = "."+el.type.match(/\/(x\-)?(.+)/)[2];
+		}
+
+		// if there is no suffix, add one
+		if (!suffix ) {
+			suffix = $view.ext;
+			url = url + $view.ext;
+		}
+		if($.isArray(suffix)){
+			suffix = suffix[0]
+		}
+
+		// convert to a unique and valid id
+		id = toId(url);
+
+		// if a absolute path, use steal to get it
+		// you should only be using // if you are using steal
+		if ( url.match(/^\/\//) ) {
+			var sub = url.substr(2);
+			url = typeof steal === "undefined" ? 
+				url = "/" + sub : 
+				steal.root.mapJoin(sub);
+		}
+
+		//set the template engine type 
+		type = $view.types[suffix];
+
+		// if it is cached, 
+		if ( $view.cached[id] ) {
+			// return the cached deferred renderer
+			return $view.cached[id];
+		
+		// otherwise if we are getting this from a script elment
+		} else if ( el ) {
+			// resolve immediately with the element's innerHTML
+			return response(el.innerHTML);
+		} else {
+			// make an ajax request for text
+			var d = $.Deferred();
+			// TODO, create an ajax request and deferred
+			// deferred resolved with function.
+			$.ajax({
+				async: async,
 				url: url,
-				dataType: "view",
-				async: async
+				dataType: "text",
+				error: function(jqXHR) {
+					checkText("", url);
+					d.reject(jqXHR);
+				},
+				success: function( text ) {
+					// make sure we got some text back
+					checkText(text, url);
+					d.resolve(type.renderer(id, text))
+					// cache if if we are caching
+					if ( $view.cache ) {
+						$view.cached[id] = d;
+					}
+					
+				}
 			});
+			return d;
+		}
+			
+			
+
 		},
 		// returns true if something looks like a deferred
 		isDeferred = function( obj ) {
@@ -346,112 +437,7 @@ steal("can/util").then(function( $ ) {
 			return $.isArray(resolved) && resolved.length === 3 && resolved[1] === 'success' ? resolved[0] : resolved
 		};
 
-
-
-	// you can request a view renderer (a function you pass data to and get html)
-	// Creates a 'view' transport.  These resolve to a 'view' renderer
-	// a 'view' renderer takes data and returns a string result.
-	// For example: 
-	//
-	//  $.ajax({dataType : 'view', src: 'foo.ejs'}).then(function(renderer){
-	//     renderer({message: 'hello world'})
-	//  })
-	$.ajaxTransport("view", function( options, orig ) {
-		// the url (or possibly id) of the view content
-		var url = orig.url,
-			// check if a suffix exists (ex: "foo.ejs")
-			suffix = url.match(/\.[\w\d]+$/),
-			type, 
-			// if we are reading a script element for the content of the template
-			// el will be set to that script element
-			el, 
-			// a unique identifier for the view (used for caching)
-			// this is typically derived from the element id or
-			// the url for the template
-			id, 
-			// the AJAX request used to retrieve the template content
-			jqXHR, 
-			// used to generate the response 
-			response = function( text ) {
-				// get the renderer function
-				var func = type.renderer(id, text);
-				// cache if if we are caching
-				if ( $view.cache ) {
-					$view.cached[id] = func;
-				}
-				// return the objects for the response's dataTypes 
-				// (in this case view)
-				return {
-					view: func
-				};
-			};
-
-		// if we have an inline template, derive the suffix from the 'text/???' part
-		// this only supports '<script></script>' tags
-		if ( el = document.getElementById(url) ) {
-			suffix = "."+el.type.match(/\/(x\-)?(.+)/)[2];
-		}
-
-		// if there is no suffix, add one
-		if (!suffix ) {
-			suffix = $view.ext;
-			url = url + $view.ext;
-		}
-
-		// convert to a unique and valid id
-		id = toId(url);
-
-		// if a absolute path, use steal to get it
-		// you should only be using // if you are using steal
-		if ( url.match(/^\/\//) ) {
-			var sub = url.substr(2);
-			url = typeof steal === "undefined" ? 
-				url = "/" + sub : 
-				steal.root.mapJoin(sub);
-		}
-
-		//set the template engine type 
-		type = $view.types[suffix];
-
-		// return the ajax transport contract: http://api.jquery.com/extending-ajax/
-		return {
-			send: function( headers, callback ) {
-				// if it is cached, 
-				if ( $view.cached[id] ) {
-					// return the catched renderer
-					return callback(200, "success", {
-						view: $view.cached[id]
-					});
-				
-				// otherwise if we are getting this from a script elment
-				} else if ( el ) {
-					// resolve immediately with the element's innerHTML
-					callback(200, "success", response(el.innerHTML));
-				} else {
-					// make an ajax request for text
-					jqXHR = $.ajax({
-						async: orig.async,
-						url: url,
-						dataType: "text",
-						error: function() {
-							checkText("", url);
-							callback(404);
-						},
-						success: function( text ) {
-							// make sure we got some text back
-							checkText(text, url);
-							// cache and send back text
-							callback(200, "success", response(text))
-						}
-					});
-				}
-			},
-			abort: function() {
-				jqXHR && jqXHR.abort();
-			}
-		}
-	})
-	$.extend($view, {
+		$.extend($view, {
 		/**
 		 * @attribute hookups
 		 * @hide
@@ -464,7 +450,7 @@ steal("can/util").then(function( $ ) {
 		 * put on the page.  Typically this is handled by the template engine.  Currently
 		 * only EJS supports this functionality.
 		 * 
-		 *     var id = $.View.hookup(function(el){
+		 *     var id = Can.View.hookup(function(el){
 		 *            //do something with el
 		 *         }),
 		 *         html = "<div data-view-id='"+id+"'>"
@@ -498,7 +484,7 @@ steal("can/util").then(function( $ ) {
 		 * ## Example
 		 * 
 		 * @codestart
-		 * $.View.register({
+		 * Can.View.register({
 		 * 	suffix : "tmpl",
 		 *  plugin : "jquery/view/tmpl",
 		 * 	renderer: function( id, text ) {
@@ -534,6 +520,7 @@ steal("can/util").then(function( $ ) {
 		 * </ul>
 		 */
 		register: function( info ) {
+			this.types["." + info.suffix] = info;
 		},
 		types: {},
 		/**
@@ -566,7 +553,7 @@ steal("can/util").then(function( $ ) {
 			var type = $view.types["." + options.type],
 				id = toId(options.rootSrc);
 
-			options.text = "steal('" + (type.plugin || "jquery/view/" + options.type) + "').then(function($){" + "$.View.preload('" + id + "'," + options.text + ");\n})";
+			options.text = "steal('" + (type.plugin || "jquery/view/" + options.type) + "').then(function($){" + "Can.View.preload('" + id + "'," + options.text + ");\n})";
 			success();
 		})
 	}
@@ -721,13 +708,13 @@ steal("can/util").then(function( $ ) {
 	/**
 	 *  @add jQuery.fn
 	 *  @parent jQuery.View
-	 *  Called on a jQuery collection that was rendered with $.View with pending hookups.  $.View can render a 
+	 *  Called on a jQuery collection that was rendered with Can.View with pending hookups.  Can.View can render a 
 	 *  template with hookups, but not actually perform the hookup, because it returns a string without actual DOM 
 	 *  elements to hook up to.  So hookup performs the hookup and clears the pending hookups, preventing errors in 
 	 *  future templates.
 	 *  
 	 * @codestart
-	 * $($.View('//views/recipes.ejs',recipeData)).hookup()
+	 * $(Can.View('//views/recipes.ejs',recipeData)).hookup()
 	 * @codeend
 	 */
 	$.fn.hookup = function() {

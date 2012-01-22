@@ -29,15 +29,15 @@ test("Class basics", function(){
 });
 
 test("Model basics",function(){
-	$.fixture("/mvc/foo",function(){
+	/*$.fixture("/mvc/foo",function(){
 		return [[{
 			id: 1,
 			name : "foo"
 		}]]
-	})
+	})*/
 	
 	var Task = Can.Model({
-		findAll : "/mvc/foo"
+		findAll : steal.root.join("can/test/foo.json")+''
 	},{
 		print : function(){
 			return this.name;
@@ -86,7 +86,7 @@ test("Control Basics",3,function(){
 	var tasks = new Tasks( '#qunit-test-area' , {
 		Task : Task
 	})
-	$('#qunit-test-area').click();
+	$('#qunit-test-area').trigger("click");
 	
 	new Task({id: 1}).created();
 	
