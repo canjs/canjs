@@ -374,7 +374,7 @@ steal("can/util/string",function( $ ) {
 		 */
 		setup: function( baseConstructor, fullName ) {
 			// set defaults as the merger of the parent defaults and this object's defaults
-			this.defaults = $.extend(true, {}, baseConstructor.defaults, this.defaults);
+			this.defaults = $.extend(/*true,*/ {}, baseConstructor.defaults, this.defaults);
 			return arguments;
 		},
 		instance: function() {
