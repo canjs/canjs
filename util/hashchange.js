@@ -84,8 +84,8 @@
  *       // do something
  *     })
  *    
- *     // with $.Controller
- *     $.Controller('Nav',{
+ *     // with Can.Control
+ *     Can.Control('Nav',{
  *       "{window} hashchange" : function(){
  *         // do something
  *       }

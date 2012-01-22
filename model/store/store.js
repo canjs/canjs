@@ -3,7 +3,7 @@ steal('jquery/model/list','jquery/lang/object',function($){
 var same = $.Object.same;
 
 
-$.Class('jQuery.Model.Store',
+Can.Construct('jQuery.Model.Store',
 {
 	init : function(){
 		if(this.fullName === 'jQuery.Model.Store'){

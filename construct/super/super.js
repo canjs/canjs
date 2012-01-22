@@ -1,4 +1,4 @@
-steal('jquery/class/class_core.js',function($){
+steal('can/construct',function($){
 
 // tests if we can get super in .toString()
 	var isFunction = $.isFunction,
@@ -11,7 +11,7 @@ steal('jquery/class/class_core.js',function($){
 		//   newProps - new properties
 		//   oldProps - where the old properties might be
 		//   addTo - what we are adding to
-		$.Class._inherit = function( newProps, oldProps, addTo ) {
+		Can.Construct._inherit = function( newProps, oldProps, addTo ) {
 			addTo = addTo || newProps
 			for ( var name in newProps ) {
 				// Check if we're overwriting an existing function

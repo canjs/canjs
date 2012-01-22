@@ -190,7 +190,7 @@
 	 * @test jquery/class/qunit.html
 	 * @description Easy inheritance in JavaScript.
 	 * 
-	 * Class provides simulated inheritance in JavaScript. Use $.Class to bridge the gap between
+	 * Class provides simulated inheritance in JavaScript. Use Can.Construct to bridge the gap between
 	 * jQuery's functional programming style and Object Oriented Programming. It 
 	 * is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Class]
 	 * Inheritance library.  Besides prototypal inheritance, it includes a few important features:
@@ -202,7 +202,7 @@
 	 *   - Easy callback function creation
 	 * 
 	 * 
-	 * The [mvc.class Get Started with jQueryMX] has a good walkthrough of $.Class.
+	 * The [mvc.class Get Started with jQueryMX] has a good walkthrough of Can.Construct.
 	 * 
 	 * ## Static v. Prototype
 	 * 
@@ -230,7 +230,7 @@
 	 * count is incremented.
 	 *
 	 * @codestart
-	 * $.Class('Monster',
+	 * Can.Construct('Monster',
 	 * /* @static *|
 	 * {
 	 *   count: 0
@@ -299,7 +299,7 @@
 	 * 
 	 * You can also inherit static properties in the same way:
 	 * 
-	 *     $.Class("First",
+	 *     Can.Construct("First",
 	 *     {
 	 *         staticMethod: function() { return 1;}
 	 *     },{})
@@ -317,7 +317,7 @@
 	 * Making a namespaced class is easy:
 	 * 
 	 * 
-	 *     $.Class("MyNamespace.MyClass",{},{});
+	 *     Can.Construct("MyNamespace.MyClass",{},{});
 	 *
 	 *     new MyNamespace.MyClass()
 	 * 
@@ -329,7 +329,7 @@
 	 * is a great example of this.  Unfortunately, JavaScript doesn't have a way of determining
 	 * an object's name, so the developer must provide a name.  Class fixes this by taking a String name for the class.
 	 * 
-	 *     $.Class("MyOrg.MyClass",{},{})
+	 *     Can.Construct("MyOrg.MyClass",{},{})
 	 *     MyOrg.MyClass.shortName //-> 'MyClass'
 	 *     MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
 	 * 
@@ -350,7 +350,7 @@
 	 *
 	 * </div>
 	 * @codestart
-	 * $.Class("MyClass",
+	 * Can.Construct("MyClass",
 	 * {
 	 *   setup: function() {} //static setup
 	 *   init: function() {} //static constructor
@@ -379,7 +379,7 @@
 	 * even if it is passed a raw
 	 * HTMLElement and no second parameter.
 	 * 
-	 *     $.Class("jQuery.Controller",{
+	 *     Can.Construct("jQuery.Controller",{
 	 *       ...
 	 *     },{
 	 *       setup: function( el, options ) {
@@ -400,7 +400,7 @@
 	 * as their preceding setup function.  The Foo class's <code>init</code> method
 	 * gets called in the following example:
 	 * 
-	 *     $.Class("Foo", {
+	 *     Can.Construct("Foo", {
 	 *       init: function( arg1, arg2, arg3 ) {
 	 *         this.sum = arg1+arg2+arg3;
 	 *       }
@@ -420,7 +420,7 @@
 	 * The following example uses this.proxy to make sure
 	 * <code>this.name</code> is available in <code>show</code>.
 	 * 
-	 *     $.Class("Todo",{
+	 *     Can.Construct("Todo",{
 	 *       init: function( name ) { 
 	 *       	this.name = name 
 	 *       },
@@ -444,7 +444,7 @@
 	 * 
 	 * To create a Class call:
 	 * 
-	 *     $.Class( [NAME , STATIC,] PROTOTYPE ) -> Class
+	 *     Can.Construct( [NAME , STATIC,] PROTOTYPE ) -> Class
 	 * 
 	 * <div class='params'>
 	 *   <div class='param'><label>NAME</label><code>{optional:String}</code>
@@ -476,21 +476,21 @@
 	 * are called.
 	 */
 
-	$.Class = function() {
+	Can.Construct = function() {
 		if (arguments.length) {
-			return $.Class.extend.apply($.Class, arguments);
+			return Can.Construct.extend.apply(Can.Construct, arguments);
 		}
 	};
 
 	/* @Static*/
-	$.extend($.Class, {
+	$.extend(Can.Construct, {
 		/**
 		 * @function newInstance
 		 * Creates a new instance of the class.  This method is useful for creating new instances
 		 * with arbitrary parameters.
 		 * <h3>Example</h3>
 		 * @codestart
-		 * $.Class("MyClass",{},{})
+		 * Can.Construct("MyClass",{},{})
 		 * var mc = MyClass.newInstance.apply(null, new Array(parseInt(Math.random()*10,10))
 		 * @codeend
 		 * @return {class} instance of the class
@@ -524,7 +524,7 @@
 		 * Setup will deeply extend a static defaults property on the base class with 
 		 * properties on the base class.  For example:
 		 * 
-		 *     $.Class("MyBase",{
+		 *     Can.Construct("MyBase",{
 		 *       defaults : {
 		 *         foo: 'bar'
 		 *       }
@@ -561,21 +561,21 @@
 		 * to use extend:
 		 * 
 		 *     // with className, static and prototype functions
-		 *     $.Class('Task',{ STATIC },{ PROTOTYPE })
+		 *     Can.Construct('Task',{ STATIC },{ PROTOTYPE })
 		 *     // with just classname and prototype functions
-		 *     $.Class('Task',{ PROTOTYPE })
+		 *     Can.Construct('Task',{ PROTOTYPE })
 		 *     // with just a className
-		 *     $.Class('Task')
+		 *     Can.Construct('Task')
 		 * 
 		 * You no longer have to use <code>.extend</code>.  Instead, you can pass those options directly to
-		 * $.Class (and any inheriting classes):
+		 * Can.Construct (and any inheriting classes):
 		 * 
 		 *     // with className, static and prototype functions
-		 *     $.Class('Task',{ STATIC },{ PROTOTYPE })
+		 *     Can.Construct('Task',{ STATIC },{ PROTOTYPE })
 		 *     // with just classname and prototype functions
-		 *     $.Class('Task',{ PROTOTYPE })
+		 *     Can.Construct('Task',{ PROTOTYPE })
 		 *     // with just a className
-		 *     $.Class('Task')
+		 *     Can.Construct('Task')
 		 * 
 		 * @param {String} [fullName]  the classes name (used for classes w/ introspection)
 		 * @param {Object} [klass]  the new classes static/class functions
@@ -649,7 +649,7 @@
 				 * @attribute namespace 
 				 * The namespaces object
 				 * 
-				 *     $.Class("MyOrg.MyClass",{},{})
+				 *     Can.Construct("MyOrg.MyClass",{},{})
 				 *     MyOrg.MyClass.namespace //-> MyOrg
 				 * 
 				 */
@@ -658,7 +658,7 @@
 				 * @attribute shortName 
 				 * The name of the class without its namespace, provided for introspection purposes.
 				 * 
-				 *     $.Class("MyOrg.MyClass",{},{})
+				 *     Can.Construct("MyOrg.MyClass",{},{})
 				 *     MyOrg.MyClass.shortName //-> 'MyClass'
 				 *     MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
 				 * 
@@ -671,7 +671,7 @@
 				 * @attribute fullName 
 				 * The full name of the class, including namespace, provided for introspection purposes.
 				 * 
-				 *     $.Class("MyOrg.MyClass",{},{})
+				 *     Can.Construct("MyOrg.MyClass",{},{})
 				 *     MyOrg.MyClass.shortName //-> 'MyClass'
 				 *     MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
 				 * 
@@ -700,7 +700,7 @@
 			 * instances is created.  It gets passed the same arguments that
 			 * were given to the Class constructor function (<code> new Class( arguments ... )</code>).
 			 * 
-			 *     $.Class("MyClass",
+			 *     Can.Construct("MyClass",
 			 *     {
 			 *        setup: function( val ) {
 			 *           this.val = val;
@@ -712,7 +712,7 @@
 			 * Setup is called before [jQuery.Class.prototype.init init].  If setup 
 			 * return an array, those arguments will be used for init. 
 			 * 
-			 *     $.Class("jQuery.Controller",{
+			 *     Can.Construct("jQuery.Controller",{
 			 *       setup : function(htmlElement, rawOptions){
 			 *         return [$(htmlElement), 
 			 *                   $.extend({}, this.Class.defaults, rawOptions )] 
@@ -725,10 +725,10 @@
 			 * run.
 			 * </div>
 			 * 
-			 * Setup is not defined on $.Class itself, so calling super in inherting classes
+			 * Setup is not defined on Can.Construct itself, so calling super in inherting classes
 			 * will break.  Don't do the following:
 			 * 
-			 *     $.Class("Thing",{
+			 *     Can.Construct("Thing",{
 			 *       setup : function(){
 			 *         this._super(); // breaks!
 			 *       }
@@ -745,7 +745,7 @@
 			 * same arguments passed to the Class 
 			 * constructor: (<code> new Class( arguments ... )</code>).  
 			 * 
-			 *     $.Class("MyClass",
+			 *     Can.Construct("MyClass",
 			 *     {
 			 *        init: function( val ) {
 			 *           this.val = val;
@@ -768,7 +768,7 @@
 			 * ### Quick Example
 			 * 
 			 *     // a class with a static property
-			 *     $.Class("MyClass", {staticProperty : true}, {});
+			 *     Can.Construct("MyClass", {staticProperty : true}, {});
 			 *     
 			 *     // a new instance of myClass
 			 *     var mc1 = new MyClass();
@@ -1042,10 +1042,10 @@
 	 * converted to an observable
 	 */
 	var count = 0,
-		$Observe = $.Class('jQuery.Observe',{
+		$Observe = Can.Construct('jQuery.Observe',{
 		// keep so it can be overwritten
 		setup : function(baseClass){
-			$.Class.setup.apply(this, arguments)
+			Can.Construct.setup.apply(this, arguments)
 		},
 		bind : bind,
 		unbind: unbind
@@ -2610,7 +2610,7 @@
 	 * a [http://jupiterjs.com/news/organize-jquery-widgets-with-jquery-controller walkthrough of its features]
 	 * on Jupiter's blog. [mvc.controller Get Started with jQueryMX] also has a great walkthrough.
 	 * 
-	 * Controller inherits from [jQuery.Class $.Class] and makes heavy use of 
+	 * Controller inherits from [jQuery.Class Can.Construct] and makes heavy use of 
 	 * [http://api.jquery.com/delegate/ event delegation]. Make sure 
 	 * you understand these concepts before using it.
 	 * 
@@ -2627,7 +2627,7 @@
 	 * 
 	 * do this
 	 * 
-	 *     $.Controller('Tabs',{
+	 *     Can.Control('Tabs',{
 	 *       click: function() {...},
 	 *       '.tab click' : function() {...},
 	 *       '.delete click' : function() {...}
@@ -2651,7 +2651,7 @@
 	 * 
 	 * ### A controller class is created.
 	 *       
-	 *     $.Controller("MyWidget",
+	 *     Can.Control("MyWidget",
 	 *     {
 	 *       defaults :  {
 	 *         message : "Remove Me"
@@ -2729,7 +2729,7 @@
 	 * 
 	 * To add a mousover effect and create todos, your controller might look like:
 	 * 
-	 *     $.Controller('Todos',{
+	 *     Can.Control('Todos',{
 	 *       ".todo mouseover" : function( el, ev ) {
 	 *         el.css("backgroundColor","red")
 	 *       },
@@ -2758,7 +2758,7 @@
 	 * 
 	 * In the following example, I create a controller that when created, will put a message as the content of the element:
 	 * 
-	 *     $.Controller("SpecialController",
+	 *     Can.Control("SpecialController",
 	 *     {
 	 *       init: function( el, message ) {
 	 *         this.element.html(message)
@@ -2830,7 +2830,7 @@
 	 * These methods let you call one controller from another controller.
 	 * 
 	 */
-	$.Class("jQuery.Controller",
+	Can.Construct("jQuery.Controller",
 	/** 
 	 * @Static
 	 */
@@ -2849,8 +2849,8 @@
 		 * 
 		 */
 		setup: function() {
-			// Allow contollers to inherit "defaults" from superclasses as it done in $.Class
-			$.Class.setup.apply(this, arguments);
+			// Allow contollers to inherit "defaults" from superclasses as it done in Can.Construct
+			Can.Construct.setup.apply(this, arguments);
 
 			// if you didn't provide a name, or are controller, don't do anything
 			if (this === jQuery.Controller ) {
@@ -2864,7 +2864,7 @@
 				 * to change the jQuery plugin helper name from its 
 				 * default value.
 				 * 
-				 *     $.Controller("Mxui.Layout.Fill",{
+				 *     Can.Control("Mxui.Layout.Fill",{
 				 *       pluginName: "fillWith"
 				 *     },{});
 				 *     
@@ -3000,7 +3000,7 @@
 		 * with templated event handlers:
 		 * 
 		 *
-		 *     $.Controller('Sized',{
+		 *     Can.Control('Sized',{
 		 *       "{window} resize" : function(){
 		 *         this.element.width(this.element.parent().width() / 2);
 		 *       }
@@ -3015,7 +3015,7 @@
 		 * listens too.  You only need to add event names that
 		 * are whole words (ie have no special characters).
 		 * 
-		 *     $.Controller('TabPanel',{
+		 *     Can.Control('TabPanel',{
 		 *       listensTo : ['show']
 		 *     },{
 		 *       'show' : function(){
@@ -3032,7 +3032,7 @@
 		 * A object of name-value pairs that act as default values for a controller's 
 		 * [jQuery.Controller.prototype.options options].
 		 * 
-		 *     $.Controller("Message",
+		 *     Can.Control("Message",
 		 *     {
 		 *       defaults : {
 		 *         message : "Hello World"
@@ -3118,7 +3118,7 @@
 			 * 
 			 * For example:
 			 * 
-			 *     $.Controller('Hello')
+			 *     Can.Control('Hello')
 			 *     
 			 *     var h1 = new Hello($('#content1'), {message: 'World'} );
 			 *     equal( h1.options.message , "World" )
@@ -3132,7 +3132,7 @@
 			 * 
 			 * For example:
 			 * 
-			 *     $.Controller("Tabs", 
+			 *     Can.Control("Tabs", 
 			 *     {
 			 *        defaults : {
 			 *          activeClass: "ui-active-state"
@@ -3167,7 +3167,7 @@
 			 * 
 			 * For example, if I add MyWidget to a '#myelement' element like:
 			 * 
-			 *     $.Controller("MyWidget",{
+			 *     Can.Control("MyWidget",{
 			 *       init : function(){
 			 *         this.element.css("color","red")
 			 *       }
@@ -3184,7 +3184,7 @@
 			 * 
 			 * To change this.element, overwrite Controller's setup method like:
 			 * 
-			 *     $.Controller("Combobox",{
+			 *     Can.Control("Combobox",{
 			 *       setup : function(el, options){
 			 *          this.oldElement = $(el);
 			 *          var newEl = $('<div/>');
@@ -3329,7 +3329,7 @@
 		 * is submitted, it creates the recipe on the server.  When the recipe
 		 * is `created`, it resets the form with a new instance.
 		 * 
-		 *     $.Controller('Creator',{
+		 *     Can.Control('Creator',{
 		 *       "{recipe} created" : function(){
 		 *         this.update({recipe : new Recipe()});
 		 *         this.element[0].reset();
@@ -3355,7 +3355,7 @@
 		 * For example, a widget that listens for model updates
 		 * and updates it's html would look like.  
 		 * 
-		 *     $.Controller('Updater',{
+		 *     Can.Control('Updater',{
 		 *       // when the controller is created, update the html
 		 *       init : function(){
 		 *         this.updateView();
@@ -3400,7 +3400,7 @@
 		 * 
 		 * ### Example
 		 * 
-		 *     $.Controller("Thing",{
+		 *     Can.Control("Thing",{
 		 *       init: function( el, options ) {
 		 *         alert( 'init:'+this.options.prop )
 		 *       },
@@ -3427,7 +3427,7 @@
 		 * if the element is removed.  You can overwrite it to add your own
 		 * teardown functionality:
 		 * 
-		 *     $.Controller("ChangeText",{
+		 *     Can.Control("ChangeText",{
 		 *       init : function(){
 		 *         this.oldText = this.element.text();
 		 *         this.element.text("Changed!!!")
@@ -3484,7 +3484,7 @@
 		}
 	});
 
-	var processors = $.Controller.processors,
+	var processors = Can.Control.processors,
 
 	//------------- PROCESSSORS -----------------------------
 	//processors do the binding.  They return a function that

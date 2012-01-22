@@ -1,4 +1,4 @@
-steal('jquery/class/class_core.js',function($){
+steal('can/construct',function($){
 var isFunction = $.isFunction,
 	isArray = $.isArray,
 	makeArray = $.makeArray,
@@ -7,7 +7,7 @@ var isFunction = $.isFunction,
  * Returns a callback function for a function on this Class.
  * Proxy ensures that 'this' is set appropriately.  
  * @codestart
- * $.Class("MyClass",{
+ * Can.Construct("MyClass",{
  *     getData: function() {
  *         this.showing = null;
  *         $.get("data.json",this.proxy('gotData'),'json')
@@ -21,7 +21,7 @@ var isFunction = $.isFunction,
  * <h2>Currying Arguments</h2>
  * Additional arguments to proxy will fill in arguments on the returning function.
  * @codestart
- * $.Class("MyClass",{
+ * Can.Construct("MyClass",{
  *    getData: function( <b>callback</b> ) {
  *      $.get("data.json",this.proxy('process',<b>callback</b>),'json');
  *    },
@@ -38,7 +38,7 @@ var isFunction = $.isFunction,
  * is called each function in the array is passed the return value of the prior function.  This is often used
  * to eliminate currying initial arguments.
  * @codestart
- * $.Class("MyClass",{
+ * Can.Construct("MyClass",{
  *    getData: function( callback ) {
  *      //calls process, then callback with value from process
  *      $.get("data.json",this.proxy(['process2',callback]),'json') 
@@ -108,7 +108,7 @@ proxy = function( funcs ) {
 				return cur;
 			}
 		}
-	$.Class.proxy = $.Class.prototype.proxy = proxy;
+	Can.Construct.proxy = Can.Construct.prototype.proxy = proxy;
 	
 	
 	

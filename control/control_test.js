@@ -1,71 +1,58 @@
-steal("jquery/controller",'jquery/controller/subscribe')  //load your app
- .then('funcunit/qunit')  //load qunit
- .then(function(){
+steal("can/control",'funcunit/qunit',function(){
  	
-module("jquery/controller")
-test("subscribe testing works", function(){
-	
-	var ta = $("<div/>").appendTo( $("#qunit-test-area") )
-	
-	ta.html("click here")
+module("can/control");
 
-	var clicks = 0, destroys = 0;
-	var subscribes = 0;
-	$.Controller.extend("MyTest",{
-		click: function() {
-			clicks++
+// tests binding and unbind, removing event handlers, etc
+test("basics",  14, function(){
+	var clickCount = 0;
+	var Things = Can.Control({
+		"click" : function(){
+			clickCount++;
 		},
-		"a.b subscribe" : function() {
-			subscribes++
+		"span  click" : function(){
+			ok(true, "span clicked")
 		},
-		destroy: function() {
+		"{foo} bar" : function(){
 			
-			this._super()
-			destroys++;
 		}
 	})
-	ta.my_test();
-	ta.trigger("click")
-	equals(clicks,1, "can listen to clicks")
-	
-	OpenAjax.hub.publish("a.b",{})
-	equals(subscribes,1, "can subscribe")
-	var controllerInstance = ta.controller('my_test')
-	ok( controllerInstance.Class == MyTest, "can get controller" )
-	controllerInstance.destroy()
-	
-	equals(destroys,1, "destroy called once")
-	ok(!ta.controller(), "controller is removed")
-	
-	OpenAjax.hub.publish("a.b",{})
-	equals(subscribes,1, "subscription is torn down")
-	ta.trigger("click")
-	equals(clicks,1, "No longer listening")
+	var foo = {
+		bind : function(event, cb){
+			ok(true, "bind called");
+			equal(event, "bar");
+			ok(cb, "called with a callback")
+		},
+		unbind : function(event, cb){
+			ok(true, "unbind called");
+			equal(event, "bar")
+			ok(cb, "called with a callback")
+		}
+	}
 	
 	
+	$("#qunit-test-area").append("<div id='things'>div<span>span</span></div>")
+	var things = new Things("#things",{foo: foo});
 	
-	ta.my_test();
-	ta.trigger("click")
-	OpenAjax.hub.publish("a.b",{})
-	equals(clicks,2, "can listen again to clicks")
-	equals(subscribes,2, "can listen again to subscription")
 	
-	ta.remove();
+	$('#things span').trigger('click');
+	$('#things').trigger('click');
+	equal(clickCount,  2, "click called twice");
 	
-	ta.trigger("click")
-	OpenAjax.hub.publish("a.b",{})
-	equals(clicks,2, "Clicks stopped")
-	equals(subscribes,2, "Subscribes stopped")
+	things.destroy();
+	$('#things span').trigger('click');
+	
+	new Things("#things",{foo: foo});
+	$('#things').remove()
 })
 
-
+return;
 
 test("bind to any special", function(){
 	jQuery.event.special.crazyEvent = {
 		
 	}
 	var called = false;
-	jQuery.Controller.extend("WeirdBind",{
+	Can.Control("WeirdBind",{
 		crazyEvent: function() {
 			called = true;
 		}
@@ -81,7 +68,7 @@ test("bind to any special", function(){
 
 test("parameterized actions", function(){
 	var called = false;
-	jQuery.Controller.extend("WeirderBind",{
+	Can.Control("WeirderBind",{
 		"{parameterized}" : function() {
 			called = true;
 		}
@@ -96,7 +83,7 @@ test("parameterized actions", function(){
 
 test("windowresize", function(){
 	var called = false;
-	jQuery.Controller.extend("WindowBind",{
+	Can.Control("WindowBind",{
 		"{window} resize" : function() {
 			called = true;
 		}
@@ -112,7 +99,7 @@ test("windowresize", function(){
 // this.delegate(this.cached.header.find('tr'), "th", "mousemove", "th_mousemove"); 
 test("delegate", function(){
 	var called = false;
-	jQuery.Controller.extend("DelegateTest",{
+	Can.Control("DelegateTest",{
 		click: function() {}
 	})
 	var els = $("<div><span><a href='#'>click me</a></span></div>").appendTo($("#qunit-test-area"))
@@ -127,7 +114,7 @@ test("delegate", function(){
 
 test("inherit", function(){
 	var called = false;
-	$.Controller.extend( "Parent", {
+	Can.Control.extend( "Parent", {
 		click: function(){
 			called = true;
 		}
@@ -143,7 +130,7 @@ test("inherit", function(){
 });
 
 test("objects in action", function(){
-	$.Controller('Thing',{
+	Can.Control('Thing',{
 		"{item} someEvent" : function(thing, ev){
 			ok(true, "called");
 			equals(ev.type, "someEvent","correct event")
@@ -164,7 +151,7 @@ test("objects in action", function(){
 });
 
 test("dot",function(){
-	$.Controller("Dot",{
+	Can.Control("Dot",{
 		"foo.bar" : function(){
 			ok(true,'called')
 		}
@@ -177,7 +164,7 @@ test("dot",function(){
 
 // HTMLFormElement[0] breaks
 test("the right element", 1, function(){
-	$.Controller('FormTester',{
+	Can.Control('FormTester',{
 		init : function(){
 			equals(this.element[0].nodeName.toLowerCase(), "form" )
 		}
@@ -193,7 +180,7 @@ test("pluginName", function() {
 	// http://forum.javascriptmvc.com/#topic/32525000000488001
 	expect(6);
 
-	$.Controller("PluginName", {
+	Can.Control("PluginName", {
 	pluginName : "my_plugin"
 	}, {
 	method : function(arg) {
@@ -222,7 +209,7 @@ test("pluginName", function() {
 })
 
 test("inherit defaults", function() {
-    $.Controller("BaseController", {
+    Can.Control("BaseController", {
         defaults : {
             foo: 'bar'
         }
@@ -245,7 +232,7 @@ test("inherit defaults", function() {
 
 test("update rebinding", 2, function(){
 	var first = true;
-	$.Controller("Rebinder", {
+	Can.Control("Rebinder", {
 		"{item} foo" : function(item, ev){
 			if(first){
 				equals(item.id, 1, "first item");
