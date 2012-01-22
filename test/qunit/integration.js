@@ -18,7 +18,7 @@ test("controller can listen to model instances and model classes", function(){
 	
 	
 	
-	$.Controller("Test.BinderThing",{
+	Can.Control("Test.BinderThing",{
 		"{model} created" : function(){
 			ok(true,"model called");
 			start();

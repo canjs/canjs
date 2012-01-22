@@ -251,10 +251,10 @@ steal('can/class',function() {
 	 * converted to an observable
 	 */
 	var count = 0,
-		$Observe = Can.Class('Can.Observe',{
+		$Observe = Can.Construct('Can.Observe',{
 		// keep so it can be overwritten
 		setup : function(baseClass){
-			Can.Class.setup.apply(this, arguments)
+			Can.Construct.setup.apply(this, arguments)
 		},
 		bind : bind,
 		unbind: unbind

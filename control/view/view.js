@@ -74,7 +74,7 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 	 * it looks for a view in /views/controller_name/action_name.ejs.
 	 * If data is not provided, it uses the controller instance as data.
 	 * @codestart
-	 * TasksController = $.Controller.extend('TasksController',{
+	 * TasksController = Can.Control.extend('TasksController',{
 	 *   click: function( el ) {
 	 *     // renders with views/tasks/click.ejs
 	 *     el.html( this.view() ) 

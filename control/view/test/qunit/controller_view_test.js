@@ -5,7 +5,7 @@ steal('jquery/controller/view','jquery/view/micro','funcunit/qunit')  //load qun
 	
 	test("this.view", function(){
 		
-		$.Controller.extend("jquery.Controller.View.Test.Qunit",{
+		Can.Control.extend("jquery.Controller.View.Test.Qunit",{
 			init: function() {
 				this.element.html(this.view('init'))
 			}
@@ -20,7 +20,7 @@ steal('jquery/controller/view','jquery/view/micro','funcunit/qunit')  //load qun
 	
 	test("test.suffix.doubling", function(){
 		
-		$.Controller.extend("jquery.Controller.View.Test.Qunit",{
+		Can.Control.extend("jquery.Controller.View.Test.Qunit",{
 			init: function() {
 				this.element.html(this.view('init.micro'))
 			}
@@ -37,12 +37,12 @@ steal('jquery/controller/view','jquery/view/micro','funcunit/qunit')  //load qun
 	});
 	
 	test("complex paths nested inside a controller directory", function(){
-		$.Controller.extend("Myproject.Controllers.Foo.Bar");
+		Can.Control.extend("Myproject.Controllers.Foo.Bar");
 		
 		//var path = jQuery.Controller._calculatePosition(Myproject.Controllers.Foo.Bar, "init.ejs", "init")
 		//equals(path, "//myproject/views/foo/bar/init.ejs", "view path is correct")
 		
-		$.Controller.extend("Myproject.Controllers.FooBar");
+		Can.Control.extend("Myproject.Controllers.FooBar");
 		path = jQuery.Controller._calculatePosition(Myproject.Controllers.FooBar, "init.ejs", "init")
 		equals(path, "//myproject/views/foo_bar/init.ejs", "view path is correct")
 	})

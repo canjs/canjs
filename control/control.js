@@ -1,4 +1,4 @@
-steal('can/class', 'can/util/destroyed.js', function( $ ) {
+steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	// ------- HELPER FUNCTIONS  ------
 	
 	// Binds an element, returns a function that unbinds
@@ -57,7 +57,7 @@ steal('can/class', 'can/util/destroyed.js', function( $ ) {
 	 * @plugin jquery/control
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/control/control.js
 	 * @test jquery/control/qunit.html
-	 * @inherits jQuery.Class
+	 * @inherits jQuery.Construct
 	 * @description jQuery widget factory.
 	 * 
 	 * jQuery.Control helps create organized, memory-leak free, rapidly performing
@@ -74,7 +74,7 @@ steal('can/class', 'can/util/destroyed.js', function( $ ) {
 	 * a [http://jupiterjs.com/news/organize-jquery-widgets-with-jquery-control walkthrough of its features]
 	 * on Jupiter's blog. [mvc.control Get Started with jQueryMX] also has a great walkthrough.
 	 * 
-	 * Control inherits from [jQuery.Class $.Class] and makes heavy use of 
+	 * Control inherits from [Can.Construct Can.Construct] and makes heavy use of 
 	 * [http://api.jquery.com/delegate/ event delegation]. Make sure 
 	 * you understand these concepts before using it.
 	 * 
@@ -144,7 +144,7 @@ steal('can/class', 'can/util/destroyed.js', function( $ ) {
 	 * This calls <code>new MyWidget(el, options)</code> on 
 	 * each <code>'.thing'</code> element.  
 	 *     
-	 * When a new [jQuery.Class Class] instance is created, it calls the class's
+	 * When a new [Can.Construct Class] instance is created, it calls the class's
 	 * prototype setup and init methods. Control's [jQuery.Control.prototype.setup setup]
 	 * method:
 	 *     
@@ -294,7 +294,7 @@ steal('can/class', 'can/util/destroyed.js', function( $ ) {
 	 * These methods let you call one control from another control.
 	 * 
 	 */
-	Can.Class("Can.Control",
+	Can.Construct("Can.Control",
 	/** 
 	 * @Static
 	 */
@@ -313,8 +313,8 @@ steal('can/class', 'can/util/destroyed.js', function( $ ) {
 		 * 
 		 */
 		setup: function() {
-			// Allow contollers to inherit "defaults" from superclasses as it done in $.Class
-			Can.Class.setup.apply(this, arguments);
+			// Allow contollers to inherit "defaults" from superclasses as it done in Can.Construct
+			Can.Construct.setup.apply(this, arguments);
 
 			// if you didn't provide a name, or are control, don't do anything
 			if (this === Can.Control ) {

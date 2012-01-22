@@ -221,4 +221,25 @@ steal(function(){
 	$.inArray =function(item, arr){
 		return arr.indexOf(item)
 	}
+	
+	$.cleanData = function(arg){
+	}
+	
+	$.fn.empty = function(){
+		return this.each(function(){ 
+			$.cleanData(this.getElementsByTagName('*'))
+			this.innerHTML = '' 
+		}) 
+	}
+	
+	$.fn.remove= function () {
+		$.cleanData(this);
+		this.each(function () {
+			if (this.parentNode != null) {
+				$.cleanData(this.getElementsByTagName('*'))
+				this.parentNode.removeChild(this);
+			}
+		});
+		return this;
+    }
 })

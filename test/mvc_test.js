@@ -4,7 +4,7 @@ module("mvc");
 
 test("Class basics", function(){
 	
-	var Note = Can.Class({
+	var Note = Can.Construct({
 		init : function(name){
 			this.name = name;
 		},

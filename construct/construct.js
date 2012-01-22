@@ -1,4 +1,4 @@
-//jQuery.Class 
+//Can.Construct 
 // This is a modified version of John Resig's class
 // http://ejohn.org/blog/simple-javascript-inheritance/
 // It provides class level inheritance and callbacks.
@@ -12,16 +12,16 @@ steal("can/util/string",function( $ ) {
 		underscore = Can.String.underscore;
 
 	/**
-	 * @class jQuery.Class
+	 * @class Can.Construct
 	 * @plugin jquery/class
 	 * @parent jquerymx
 	 * @download dist/jquery/jquery.class.js
 	 * @test jquery/class/qunit.html
 	 * @description Easy inheritance in JavaScript.
 	 * 
-	 * Class provides simulated inheritance in JavaScript. Use Can.Class to bridge the gap between
+	 * Constructor provides simulated inheritance in JavaScript. Use Can.Construct to bridge the gap between
 	 * jQuery's functional programming style and Object Oriented Programming. It 
-	 * is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Class]
+	 * is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Constructor]
 	 * Inheritance library.  Besides prototypal inheritance, it includes a few important features:
 	 * 
 	 *   - Static inheritance
@@ -31,27 +31,27 @@ steal("can/util/string",function( $ ) {
 	 *   - Easy callback function creation
 	 * 
 	 * 
-	 * The [mvc.class Get Started with jQueryMX] has a good walkthrough of Can.Class.
+	 * The [mvc.class Get Started with jQueryMX] has a good walkthrough of Can.Construct.
 	 * 
 	 * ## Static v. Prototype
 	 * 
-	 * Before learning about Class, it's important to
+	 * Before learning about Constructor, it's important to
 	 * understand the difference between
 	 * a class's __static__ and __prototype__ properties.
 	 * 
 	 *     //STATIC
-	 *     MyClass.staticProperty  //shared property
+	 *     MyConstructor.staticProperty  //shared property
 	 *     
 	 *     //PROTOTYPE
-	 *     myclass = new MyClass()
+	 *     myclass = new MyConstructor()
 	 *     myclass.prototypeMethod() //instance method
 	 * 
-	 * A static (or class) property is on the Class constructor
+	 * A static (or class) property is on the Constructor constructor
 	 * function itself
 	 * and can be thought of being shared by all instances of the 
-	 * Class. Prototype propertes are available only on instances of the Class.
+	 * Constructor. Prototype propertes are available only on instances of the Constructor.
 	 * 
-	 * ## A Basic Class
+	 * ## A Basic Constructor
 	 * 
 	 * The following creates a Monster class with a
 	 * name (for introspection), static, and prototype members.
@@ -59,7 +59,7 @@ steal("can/util/string",function( $ ) {
 	 * count is incremented.
 	 *
 	 * @codestart
-	 * Can.Class('Monster',
+	 * Can.Construct('Monster',
 	 * /* @static *|
 	 * {
 	 *   count: 0
@@ -128,7 +128,7 @@ steal("can/util/string",function( $ ) {
 	 * 
 	 * You can also inherit static properties in the same way:
 	 * 
-	 *     Can.Class("First",
+	 *     Can.Construct("First",
 	 *     {
 	 *         staticMethod: function() { return 1;}
 	 *     },{})
@@ -146,9 +146,9 @@ steal("can/util/string",function( $ ) {
 	 * Making a namespaced class is easy:
 	 * 
 	 * 
-	 *     Can.Class("MyNamespace.MyClass",{},{});
+	 *     Can.Construct("MyNamespace.MyConstructor",{},{});
 	 *
-	 *     new MyNamespace.MyClass()
+	 *     new MyNamespace.MyConstructor()
 	 * 
 	 * 
 	 * <h2 id='introspection'>Introspection</h2>
@@ -156,20 +156,20 @@ steal("can/util/string",function( $ ) {
 	 * Often, it's nice to create classes whose name helps determine functionality.  Ruby on
 	 * Rails's [http://api.rubyonrails.org/classes/ActiveRecord/Base.html|ActiveRecord] ORM class
 	 * is a great example of this.  Unfortunately, JavaScript doesn't have a way of determining
-	 * an object's name, so the developer must provide a name.  Class fixes this by taking a String name for the class.
+	 * an object's name, so the developer must provide a name.  Constructor fixes this by taking a String name for the class.
 	 * 
-	 *     Can.Class("MyOrg.MyClass",{},{})
-	 *     MyOrg.MyClass.shortName //-> 'MyClass'
-	 *     MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
+	 *     Can.Construct("MyOrg.MyConstructor",{},{})
+	 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
+	 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
 	 * 
-	 * The fullName (with namespaces) and the shortName (without namespaces) are added to the Class's
+	 * The fullName (with namespaces) and the shortName (without namespaces) are added to the Constructor's
 	 * static properties.
 	 *
 	 *
 	 * ## Setup and initialization methods
 	 * 
 	 * <p>
-	 * Class provides static and prototype initialization functions.
+	 * Constructor provides static and prototype initialization functions.
 	 * These come in two flavors - setup and init.
 	 * Setup is called before init and
 	 * can be used to 'normalize' init's arguments.
@@ -179,7 +179,7 @@ steal("can/util/string",function( $ ) {
 	 *
 	 * </div>
 	 * @codestart
-	 * Can.Class("MyClass",
+	 * Can.Construct("MyConstructor",
 	 * {
 	 *   setup: function() {} //static setup
 	 *   init: function() {} //static constructor
@@ -194,7 +194,7 @@ steal("can/util/string",function( $ ) {
 	 * 
 	 * Setup functions are called before init functions.  Static setup functions are passed
 	 * the base class followed by arguments passed to the extend function.
-	 * Prototype static functions are passed the Class constructor 
+	 * Prototype static functions are passed the Constructor constructor 
 	 * function arguments.
 	 * 
 	 * If a setup function returns an array, that array will be used as the arguments
@@ -208,14 +208,14 @@ steal("can/util/string",function( $ ) {
 	 * even if it is passed a raw
 	 * HTMLElement and no second parameter.
 	 * 
-	 *     Can.Class("jQuery.Controller",{
+	 *     Can.Construct("jQuery.Controller",{
 	 *       ...
 	 *     },{
 	 *       setup: function( el, options ) {
 	 *         ...
 	 *         return [$(el),
 	 *                 $.extend(true,
-	 *                    this.Class.defaults,
+	 *                    this.constructor.defaults,
 	 *                    options || {} ) ]
 	 *       }
 	 *     })
@@ -229,7 +229,7 @@ steal("can/util/string",function( $ ) {
 	 * as their preceding setup function.  The Foo class's <code>init</code> method
 	 * gets called in the following example:
 	 * 
-	 *     Can.Class("Foo", {
+	 *     Can.Construct("Foo", {
 	 *       init: function( arg1, arg2, arg3 ) {
 	 *         this.sum = arg1+arg2+arg3;
 	 *       }
@@ -239,8 +239,8 @@ steal("can/util/string",function( $ ) {
 	 * 
 	 * ## Proxies
 	 * 
-	 * Similar to jQuery's proxy method, Class provides a
-	 * [jQuery.Class.static.proxy proxy]
+	 * Similar to jQuery's proxy method, Constructor provides a
+	 * [Can.Construct.static.proxy proxy]
 	 * function that returns a callback to a method that will always
 	 * have
 	 * <code>this</code> set to the class or instance of the class.
@@ -249,7 +249,7 @@ steal("can/util/string",function( $ ) {
 	 * The following example uses this.proxy to make sure
 	 * <code>this.name</code> is available in <code>show</code>.
 	 * 
-	 *     Can.Class("Todo",{
+	 *     Can.Construct("Todo",{
 	 *       init: function( name ) { 
 	 *       	this.name = name 
 	 *       },
@@ -266,14 +266,14 @@ steal("can/util/string",function( $ ) {
 	 * 
 	 * ##  Demo
 	 * 
-	 * @demo jquery/class/class.html
+	 * @demo can/contruct/class.html
 	 * 
 	 * 
 	 * @constructor
 	 * 
-	 * To create a Class call:
+	 * To create a Constructor call:
 	 * 
-	 *     Can.Class( [NAME , STATIC,] PROTOTYPE ) -> Class
+	 *     Can.Construct( [NAME , STATIC,] PROTOTYPE ) -> Constructor
 	 * 
 	 * <div class='params'>
 	 *   <div class='param'><label>NAME</label><code>{optional:String}</code>
@@ -290,37 +290,37 @@ steal("can/util/string",function( $ ) {
 	 *   </div>
 	 * </div>
 	 * 
-	 * When a Class is created, the static [jQuery.Class.static.setup setup] 
-	 * and [jQuery.Class.static.init init]  methods are called.
+	 * When a Constructor is created, the static [Can.Construct.static.setup setup] 
+	 * and [Can.Construct.static.init init]  methods are called.
 	 * 
-	 * To create an instance of a Class, call:
+	 * To create an instance of a Constructor, call:
 	 * 
-	 *     new Class([args ... ]) -> instance
+	 *     new Constructor([args ... ]) -> instance
 	 * 
 	 * The created instance will have all the 
 	 * prototype properties and methods defined by the PROTOTYPE object.
 	 * 
-	 * When an instance is created, the prototype [jQuery.Class.prototype.setup setup] 
-	 * and [jQuery.Class.prototype.init init]  methods 
+	 * When an instance is created, the prototype [Can.Construct.prototype.setup setup] 
+	 * and [Can.Construct.prototype.init init]  methods 
 	 * are called.
 	 */
 
-	Can.Class = function() {
+	Can.Construct = function() {
 		if (arguments.length) {
-			return Can.Class.extend.apply(Can.Class, arguments);
+			return Can.Construct.extend.apply(Can.Construct, arguments);
 		}
 	};
 
 	/* @Static*/
-	$.extend(Can.Class, {
+	$.extend(Can.Construct, {
 		/**
 		 * @function newInstance
 		 * Creates a new instance of the class.  This method is useful for creating new instances
 		 * with arbitrary parameters.
 		 * <h3>Example</h3>
 		 * @codestart
-		 * $.Class("MyClass",{},{})
-		 * var mc = MyClass.newInstance.apply(null, new Array(parseInt(Math.random()*10,10))
+		 * Can.Construct("MyConstructor",{},{})
+		 * var mc = MyConstructor.newInstance.apply(null, new Array(parseInt(Math.random()*10,10))
 		 * @codeend
 		 * @return {class} instance of the class
 		 */
@@ -353,7 +353,7 @@ steal("can/util/string",function( $ ) {
 		 * Setup will deeply extend a static defaults property on the base class with 
 		 * properties on the base class.  For example:
 		 * 
-		 *     Can.Class("MyBase",{
+		 *     Can.Construct("MyBase",{
 		 *       defaults : {
 		 *         foo: 'bar'
 		 *       }
@@ -367,14 +367,14 @@ steal("can/util/string",function( $ ) {
 		 *     
 		 *     Inheriting.defaults -> {foo: 'bar', 'newProp': 'newVal'}
 		 * 
-		 * @param {Object} baseClass the base class that is being inherited from
+		 * @param {Object} baseConstructor the base class that is being inherited from
 		 * @param {String} fullName the name of the new class
 		 * @param {Object} staticProps the static properties of the new class
 		 * @param {Object} protoProps the prototype properties of the new class
 		 */
-		setup: function( baseClass, fullName ) {
+		setup: function( baseConstructor, fullName ) {
 			// set defaults as the merger of the parent defaults and this object's defaults
-			this.defaults = $.extend(true, {}, baseClass.defaults, this.defaults);
+			this.defaults = $.extend(true, {}, baseConstructor.defaults, this.defaults);
 			return arguments;
 		},
 		instance: function() {
@@ -390,27 +390,27 @@ steal("can/util/string",function( $ ) {
 		 * to use extend:
 		 * 
 		 *     // with className, static and prototype functions
-		 *     Can.Class('Task',{ STATIC },{ PROTOTYPE })
+		 *     Can.Construct('Task',{ STATIC },{ PROTOTYPE })
 		 *     // with just classname and prototype functions
-		 *     Can.Class('Task',{ PROTOTYPE })
+		 *     Can.Construct('Task',{ PROTOTYPE })
 		 *     // with just a className
-		 *     Can.Class('Task')
+		 *     Can.Construct('Task')
 		 * 
 		 * You no longer have to use <code>.extend</code>.  Instead, you can pass those options directly to
-		 * Can.Class (and any inheriting classes):
+		 * Can.Construct (and any inheriting classes):
 		 * 
 		 *     // with className, static and prototype functions
-		 *     Can.Class('Task',{ STATIC },{ PROTOTYPE })
+		 *     Can.Construct('Task',{ STATIC },{ PROTOTYPE })
 		 *     // with just classname and prototype functions
-		 *     Can.Class('Task',{ PROTOTYPE })
+		 *     Can.Construct('Task',{ PROTOTYPE })
 		 *     // with just a className
-		 *     Can.Class('Task')
+		 *     Can.Construct('Task')
 		 * 
 		 * @param {String} [fullName]  the classes name (used for classes w/ introspection)
 		 * @param {Object} [klass]  the new classes static/class functions
 		 * @param {Object} [proto]  the new classes prototype functions
 		 * 
-		 * @return {jQuery.Class} returns the new class
+		 * @return {Can.Construct} returns the new class
 		 */
 		extend: function( fullName, klass, proto ) {
 			// figure out what was passed and normalize it
@@ -437,25 +437,25 @@ steal("can/util/string",function( $ ) {
 			this._inherit(proto, _super, prototype);
 
 			// The dummy class constructor
-			function Class() {
+			function Constructor() {
 				// All construction is actually done in the init method
 				if ( initializing ) return;
 
 				// we are being called w/o new, we are extending
-				if ( this.constructor !== Class && arguments.length ) { 
+				if ( this.constructor !== Constructor && arguments.length ) { 
 					return arguments.callee.extend.apply(arguments.callee, arguments)
 				} else { //we are being called w/ new
-					return this.Class.newInstance.apply(this.Class, arguments)
+					return this.constructor.newInstance.apply(this.constructor, arguments)
 				}
 			}
 			// Copy old stuff onto class (can probably be merged w/ inherit)
 			for ( name in this ) {
 				if ( this.hasOwnProperty(name) ) {
-					Class[name] = this[name];
+					Constructor[name] = this[name];
 				}
 			}
 			// copy new static props on class
-			this._inherit(klass, this, Class);
+			this._inherit(klass, this, Constructor);
 
 			// do namespace stuff
 			if ( fullName ) {
@@ -472,18 +472,19 @@ steal("can/util/string",function( $ ) {
 					steal.dev.warn("class.js There's already something called "+fullName)
 				}
 				//@steal-remove-end
-				current[shortName] = Class;
+				
+				current[shortName] = Constructor;
 			}
 
 			// set things that can't be overwritten
-			$.extend(Class, {
+			$.extend(Constructor, {
 				prototype: prototype,
 				/**
 				 * @attribute namespace 
 				 * The namespaces object
 				 * 
-				 *     Can.Class("MyOrg.MyClass",{},{})
-				 *     MyOrg.MyClass.namespace //-> MyOrg
+				 *     Can.Construct("MyOrg.MyConstructor",{},{})
+				 *     MyOrg.MyConstructor.namespace //-> MyOrg
 				 * 
 				 */
 				namespace: namespace,
@@ -491,64 +492,64 @@ steal("can/util/string",function( $ ) {
 				 * @attribute shortName 
 				 * The name of the class without its namespace, provided for introspection purposes.
 				 * 
-				 *     Can.Class("MyOrg.MyClass",{},{})
-				 *     MyOrg.MyClass.shortName //-> 'MyClass'
-				 *     MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
+				 *     Can.Construct("MyOrg.MyConstructor",{},{})
+				 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
+				 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
 				 * 
 				 */
 				shortName: shortName,
 				_shortName : _shortName,
 				_fullName: _fullName,
-				constructor: Class,
+				constructor: Constructor,
 				/**
 				 * @attribute fullName 
 				 * The full name of the class, including namespace, provided for introspection purposes.
 				 * 
-				 *     Can.Class("MyOrg.MyClass",{},{})
-				 *     MyOrg.MyClass.shortName //-> 'MyClass'
-				 *     MyOrg.MyClass.fullName //->  'MyOrg.MyClass'
+				 *     Can.Construct("MyOrg.MyConstructor",{},{})
+				 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
+				 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
 				 * 
 				 */
 				fullName: fullName
 			});
 
 			//make sure our prototype looks nice
-			Class.prototype.Class = Class.prototype.constructor = Class;
+			Constructor.prototype.constructor = Constructor;
 
 			
 
 			// call the class setup
-			var args = Class.setup.apply(Class, [_super_class].concat($.makeArray(arguments)) );
+			var args = Constructor.setup.apply(Constructor, [_super_class].concat($.makeArray(arguments)) );
 			
 			// call the class init
-			if ( Class.init ) {
-				Class.init.apply(Class, args || [_super_class].concat($.makeArray(arguments)) );
+			if ( Constructor.init ) {
+				Constructor.init.apply(Constructor, args || [_super_class].concat($.makeArray(arguments)) );
 			}
 
 			/* @Prototype*/
-			return Class;
+			return Constructor;
 			/** 
 			 * @function setup
 			 * If a setup method is provided, it is called when a new 
 			 * instances is created.  It gets passed the same arguments that
-			 * were given to the Class constructor function (<code> new Class( arguments ... )</code>).
+			 * were given to the Constructor constructor function (<code> new Constructor( arguments ... )</code>).
 			 * 
-			 *     Can.Class("MyClass",
+			 *     Can.Construct("MyConstructor",
 			 *     {
 			 *        setup: function( val ) {
 			 *           this.val = val;
 			 *         }
 			 *     })
-			 *     var mc = new MyClass("Check Check")
+			 *     var mc = new MyConstructor("Check Check")
 			 *     mc.val //-> 'Check Check'
 			 * 
-			 * Setup is called before [jQuery.Class.prototype.init init].  If setup 
+			 * Setup is called before [Can.Construct.prototype.init init].  If setup 
 			 * return an array, those arguments will be used for init. 
 			 * 
-			 *     Can.Class("jQuery.Controller",{
+			 *     Can.Construct("jQuery.Controller",{
 			 *       setup : function(htmlElement, rawOptions){
 			 *         return [$(htmlElement), 
-			 *                   $.extend({}, this.Class.defaults, rawOptions )] 
+			 *                   $.extend({}, this.constructor.defaults, rawOptions )] 
 			 *       }
 			 *     })
 			 * 
@@ -558,36 +559,36 @@ steal("can/util/string",function( $ ) {
 			 * run.
 			 * </div>
 			 * 
-			 * Setup is not defined on Can.Class itself, so calling super in inherting classes
+			 * Setup is not defined on Can.Construct itself, so calling super in inherting classes
 			 * will break.  Don't do the following:
 			 * 
-			 *     Can.Class("Thing",{
+			 *     Can.Construct("Thing",{
 			 *       setup : function(){
 			 *         this._super(); // breaks!
 			 *       }
 			 *     })
 			 * 
-			 * @return {Array|undefined} If an array is return, [jQuery.Class.prototype.init] is 
+			 * @return {Array|undefined} If an array is return, [Can.Construct.prototype.init] is 
 			 * called with those arguments; otherwise, the original arguments are used.
 			 */
 			//break up
 			/** 
 			 * @function init
 			 * If an <code>init</code> method is provided, it gets called when a new instance
-			 * is created.  Init gets called after [jQuery.Class.prototype.setup setup], typically with the 
-			 * same arguments passed to the Class 
-			 * constructor: (<code> new Class( arguments ... )</code>).  
+			 * is created.  Init gets called after [Can.Construct.prototype.setup setup], typically with the 
+			 * same arguments passed to the Constructor 
+			 * constructor: (<code> new Constructor( arguments ... )</code>).  
 			 * 
-			 *     Can.Class("MyClass",
+			 *     Can.Construct("MyConstructor",
 			 *     {
 			 *        init: function( val ) {
 			 *           this.val = val;
 			 *        }
 			 *     })
-			 *     var mc = new MyClass(1)
+			 *     var mc = new MyConstructor(1)
 			 *     mc.val //-> 1
 			 * 
-			 * [jQuery.Class.prototype.setup Setup] is able to modify the arguments passed to init.  Read
+			 * [Can.Construct.prototype.setup Setup] is able to modify the arguments passed to init.  Read
 			 * about it there.
 			 * 
 			 */
@@ -595,22 +596,22 @@ steal("can/util/string",function( $ ) {
 			/**
 			 * @attribute constructor
 			 * 
-			 * A reference to the Class (or constructor function).  This allows you to access 
+			 * A reference to the Constructor (or constructor function).  This allows you to access 
 			 * a class's static properties from an instance.
 			 * 
 			 * ### Quick Example
 			 * 
 			 *     // a class with a static property
-			 *     Can.Class("MyClass", {staticProperty : true}, {});
+			 *     Can.Construct("MyConstructor", {staticProperty : true}, {});
 			 *     
-			 *     // a new instance of myClass
-			 *     var mc1 = new MyClass();
+			 *     // a new instance of myConstructor
+			 *     var mc1 = new MyConstructor();
 			 * 
 			 *     // read the static property from the instance:
 			 *     mc1.constructor.staticProperty //-> true
 			 *     
 			 * Getting static properties with the constructor property, like
-			 * [jQuery.Class.static.fullName fullName], is very common.
+			 * [Can.Constructor.static.fullName fullName], is very common.
 			 * 
 			 */
 		}
