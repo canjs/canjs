@@ -84,7 +84,18 @@ steal(function(){
 	};
 
 	$.extend( Deferred.prototype, {
-
+		pipe : function(done, fail){
+			var d = $.Deferred();
+			this.done(function(){
+				d.resolve( done.apply(this, arguments) );
+			});
+			if(fail){
+				this.fail(function(){
+					d.reject( fail.apply(this, arguments) );
+				});
+			}
+			return d;
+		},
 		resolveWith : resolveFunc("_doneFuncs","rs"),
 		rejectWith : resolveFunc("_failFuncs","rj"),
 		done : doneFunc("_doneFuncs","rs"),

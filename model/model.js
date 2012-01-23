@@ -1,17 +1,8 @@
 // this file should not be stolen directly
 steal('can/observe',function(){
 	
-	var pipe = function(def, done){
-		var d = $.Deferred();
-		def.done(function(){
-			d.resolve.apply(d, done.apply(this, arguments))
-		});
-		return d;
-	},
-		makeObject = function(json){
-			return typeof json == 'string' ? JSON.parse(json) : json;
-		},
-		getId = function( inst ) {
+
+	var	getId = function( inst ) {
 			return inst[inst.constructor.id]
 		},
 		trigger = Can.trigger,
@@ -65,15 +56,15 @@ steal('can/observe',function(){
 				self[method || type + "d"](data, jqXHR);
 				return self
 			})
-			promise = deferred.promise();
+			//promise = deferred.promise();
 			// hook up abort
 			if(jqXHR.abort){
-				promise.abort = function(){
+				deferred.abort = function(){
 					jqXHR.abort();
 				}
 			}
 			
-			return promise.then(success)
+			return deferred.then(success)
 			.fail(error);
 		}
 		
@@ -114,16 +105,18 @@ steal('can/observe',function(){
 		findAll: function( str ) {
 			return function( params, success, error ) {
 				var self = this;
-				return pipe( 
-					ajax( str ||  this._shortName, params, "get", "json"),
-					function(){
-						arguments[0] = self.models( makeObject(arguments[0]) );
+				return ajax( str ||  this._shortName, params, "get", "json")
+					.pipe(function(){
+						arguments[0] = self.models( arguments[0] );
 						return arguments;
-					}).done(success).fail(error)
+					})
+					.done(success)
+					.fail(error);
 			};
 		},
 		findOne: function( str ) {
 			return function( params, success, error ) {
+				
 				return ajax(str || this._url, params, "get", "json " + this.fullName + ".model", success, error);
 			};
 		}

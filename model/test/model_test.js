@@ -1,4 +1,12 @@
-module("jquery/model", { 
+steal(
+	"can/model",
+	"can/test/fixture.js",
+	'funcunit/qunit',
+	function(){  //load qunit
+ 
+
+
+module("can/model", { 
 	setup: function() {
 
 	}
@@ -23,14 +31,27 @@ test("CRUD", function(){
 });
 
 test("findAll deferred", function(){
-	$.Model.extend("Person",{
+	Can.Model("Person",{
 		findAll : function(params, success, error){
-			return $.ajax({
-				url : "/people",
-				data : params,
-				dataType : "json Person.models",
-				fixture: "//jquery/model/test/people.json"
-			})
+			if(window.jQuery){
+				return $.ajax({
+					url : "/people",
+					data : params,
+					dataType : "json Person.models",
+					fixture: "//can/model/test/people.json"
+				})
+			} else {
+				var self= this;
+				return $.ajax({
+					url : "/people",
+					data : params,
+					fixture: "//can/model/test/people.json",
+					dataType : "json"
+				}).pipe(function(data){
+					return self.models(data);
+				})
+			}
+			
 		}
 	},{});
 	stop();
@@ -44,13 +65,13 @@ test("findAll deferred", function(){
 });
 
 test("findOne deferred", function(){
-	$.Model("Person",{
+	Can.Model("Person",{
 		findOne : function(params, success, error){
 			return $.ajax({
 				url : "/people/5",
 				data : params,
 				dataType : "json Person.model",
-				fixture: "//jquery/model/test/person.json"
+				fixture: "//can/model/test/person.json"
 			})
 		}
 	},{});
@@ -65,7 +86,7 @@ test("findOne deferred", function(){
 
 test("save deferred", function(){
 	
-	$.Model("Person",{
+	Can.Model("Person",{
 		create : function(attrs, success, error){
 			return $.ajax({
 				url : "/people",
@@ -94,7 +115,7 @@ test("save deferred", function(){
 
 test("update deferred", function(){
 	
-	$.Model("Person",{
+	Can.Model("Person",{
 		update : function(id, attrs, success, error){
 			return $.ajax({
 				url : "/people/"+id,
@@ -123,7 +144,7 @@ test("update deferred", function(){
 
 test("destroy deferred", function(){
 	
-	$.Model("Person",{
+	Can.Model("Person",{
 		destroy : function(id, success, error){
 			return $.ajax({
 				url : "/people/"+id,
@@ -150,7 +171,7 @@ test("destroy deferred", function(){
 
 
 test("hookup and model", function(){
-	$.Model('Person')
+	Can.Model('Person')
 	var div = $("<div/>")
 	var p = new Person({foo: "bar2", id: 5});
 	p.hookup( div[0] );
@@ -176,7 +197,7 @@ test("unique models", function(){
 
 
 test("models", function(){
-	$.Model("Person",{
+	Can.Model("Person",{
 		prettyName : function(){
 			return "Mr. "+this.name;
 		}
@@ -192,7 +213,7 @@ test("models", function(){
 test("async setters", function(){
 	
 	/*
-	$.Model("Test.AsyncModel",{
+	Can.Model("Test.AsyncModel",{
 		setName : function(newVal, success, error){
 			
 			
@@ -224,7 +245,7 @@ test("async setters", function(){
 })
 
 test("binding", 2,function(){
-	$.Model('Person')
+	Can.Model('Person')
 	var inst = new Person({foo: "bar"});
 	
 	inst.bind("foo", function(ev, val){
@@ -238,7 +259,7 @@ test("binding", 2,function(){
 
 test("error binding", 1, function(){
 
-	$.Model("School",{
+	Can.Model("School",{
 	   setName : function(name, success, error){
 	     if(!name){
 	        error("no name");
@@ -258,11 +279,11 @@ test("error binding", 1, function(){
 test("auto methods",function(){
 	//turn off fixtures
 	$.fixture.on = false;
-	var School = $.Model.extend("Jquery.Model.Models.School",{
-	   findAll : steal.root.join("jquery/model/test")+"/{type}.json",
-	   findOne : steal.root.join("jquery/model/test")+"/{id}.json",
-	   create : steal.root.join("jquery/model/test")+"/create.json",
-	   update : "POST "+steal.root.join("jquery/model/test")+"/update{id}.json"
+	var School = Can.Model.extend("Jquery.Model.Models.School",{
+	   findAll : steal.root.join("can/model/test")+"/{type}.json",
+	   findOne : steal.root.join("can/model/test")+"/{id}.json",
+	   create : steal.root.join("can/model/test")+"/create.json",
+	   update : "POST "+steal.root.join("can/model/test")+"/update{id}.json"
 	},{})
 	stop();
 	School.findAll({type:"schools"}, function(schools){
@@ -301,8 +322,8 @@ test("isNew", function(){
 });
 test("findAll string", function(){
 	$.fixture.on = false;
-	$.Model("Test.Thing",{
-		findAll : steal.root.join("jquery/model/test/qunit/findAll.json")+''
+	Can.Model("Test.Thing",{
+		findAll : steal.root.join("can/model/test/qunit/findAll.json")+''
 	},{});
 	stop();
 	Test.Thing.findAll({},function(things){
@@ -315,7 +336,7 @@ test("findAll string", function(){
 test("Empty uses fixtures", function(){
 	ok(false, "Figure out")
 	return;
-	$.Model("Test.Things");
+	Can.Model("Test.Things");
 	$.fixture.make("thing", 10, function(i){
 		return {
 			id: i
@@ -331,7 +352,7 @@ test("Empty uses fixtures", function(){
 test("Model events" , function(){
 
 	var order = 0;
-	$.Model("Test.Event",{
+	Can.Model("Test.Event",{
 		create : function(attrs){
 			return $.Deferred().resolve({id: 1})
 		},
@@ -374,7 +395,7 @@ test("Model events" , function(){
 
 
 test("converters and serializes", function(){
-	$.Model("Task1",{
+	Can.Model("Task1",{
 		attributes: {
 			createdAt: "date"
 		},
@@ -391,7 +412,7 @@ test("converters and serializes", function(){
 			}
 		}
 	},{});
-	$.Model("Task2",{
+	Can.Model("Task2",{
 		attributes: {
 			createdAt: "date"
 		},
@@ -429,11 +450,11 @@ test("converters and serializes", function(){
 
 test("default converters", function(){
 	var num = 1318541064012;
-	equals( $.Model.convert.date(num).getTime(), num, "converted to a date with a number" );
+	equals( Can.Model.convert.date(num).getTime(), num, "converted to a date with a number" );
 })
 
 test("removeAttr test", function(){
-	$.Model("Person");
+	Can.Model("Person");
 	var person = new Person({foo: "bar"})
 	equals(person.foo, "bar", "property set");
 	person.removeAttr('foo')
@@ -444,7 +465,7 @@ test("removeAttr test", function(){
 });
 
 test("identity should replace spaces with underscores", function(){
-	$.Model("Task",{},{});
+	Can.Model("Task",{},{});
 	t = new Task({
 		id: "id with spaces"
 	});
@@ -452,7 +473,7 @@ test("identity should replace spaces with underscores", function(){
 });
 
 test("save error args", function(){
-	var Foo = $.Model('Testin.Models.Foo',{
+	var Foo = Can.Model('Testin.Models.Foo',{
 		create : "/testinmodelsfoos.json"
 	},{
 		
@@ -476,7 +497,7 @@ test("save error args", function(){
 });
 
 test("hookup and elements", function(){
-	$.Model('Escaper',{
+	Can.Model('Escaper',{
 		escapeIdentity : true
 	},{});
 	
@@ -503,7 +524,7 @@ test('aborting create update and destroy', function(){
 		return {};
 	})
 	
-	$.Model('Abortion',{
+	Can.Model('Abortion',{
 		create : "POST /abort",
 		update : "POST /abort",
 		destroy: "POST /abort"
@@ -545,7 +566,7 @@ test('aborting create update and destroy', function(){
 
 test("object definitions", function(){
 	
-	$.Model('ObjectDef',{
+	Can.Model('ObjectDef',{
 		findAll : {
 			url : "/test/place"
 		},
@@ -574,5 +595,5 @@ test("object definitions", function(){
 	})
 })
 
-
+})//.then("./model_test.js","./associations_test.js")
 
