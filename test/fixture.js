@@ -127,14 +127,25 @@ steal('can/util/object',
 		$.ajax = function(settings){
 			updateSettings(settings, settings);
 			if(settings.fixture){
-				var response = getResponse(settings, settings, settings.headers );
-				var d = $.Deferred();
 				
+				var d = $.Deferred();
+				d.getResponseHeader = function(){}
 				d.done(settings.success)
 					.fail(settings.fail)
-				setTimeout(function(){
+				
+				d.abort = function(){
+					clearTimeout(timeout);
+					d.reject(d)
+				}
+				var timeout = setTimeout(function(){
+					var response = getResponse(settings, settings, settings.headers );
+					var status = response[0];
+					if(status >= 200 && status < 300 || status === 304){
+						d.resolve(response[2][settings.dataType], d)
+					} else {
+						d.reject(d);
+					}
 					
-					d.resolve(response[2][settings.dataType], d)
 					
 				},$.fixture.delay)
 				return d;

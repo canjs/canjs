@@ -89,11 +89,14 @@ steal(function(){
 			this.done(function(){
 				d.resolve( done.apply(this, arguments) );
 			});
-			if(fail){
-				this.fail(function(){
+			
+			this.fail(function(){
+				if(fail){
 					d.reject( fail.apply(this, arguments) );
-				});
-			}
+				} else {
+					d.reject.apply(d, arguments);
+				}
+			});
 			return d;
 		},
 		resolveWith : resolveFunc("_doneFuncs","rs"),

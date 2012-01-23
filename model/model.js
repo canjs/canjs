@@ -2,7 +2,18 @@
 steal('can/observe',function(){
 	
 
-	var	getId = function( inst ) {
+	var	pipe = function(def, model, func){
+		var d = $.Deferred();
+		def.done(function(){
+			arguments[0] = model[func](arguments[0])
+			d.resolve.apply(d, arguments)
+		});
+		def.fail((function(){
+			d.resolveWith.apply(this,arguments)
+		}))
+		return d;
+	},
+		getId = function( inst ) {
 			return inst[inst.constructor.id]
 		},
 		trigger = Can.trigger,
@@ -104,20 +115,17 @@ steal('can/observe',function(){
 
 		findAll: function( str ) {
 			return function( params, success, error ) {
-				var self = this;
-				return ajax( str ||  this._shortName, params, "get", "json")
-					.pipe(function(){
-						arguments[0] = self.models( arguments[0] );
-						return arguments;
-					})
-					.done(success)
-					.fail(error);
+				return pipe( ajax( str ||  this._shortName, params, "get", "json"),
+					this, 
+					"models" ).done(success).fail(error);
 			};
 		},
 		findOne: function( str ) {
 			return function( params, success, error ) {
-				
-				return ajax(str || this._url, params, "get", "json " + this.fullName + ".model", success, error);
+				return pipe(
+					ajax(str || this._url, params, "get", "json"),
+					this,
+					"model").done(success).fail(error)
 			};
 		}
 	};

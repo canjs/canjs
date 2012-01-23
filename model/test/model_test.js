@@ -65,16 +65,22 @@ test("findAll deferred", function(){
 });
 
 test("findOne deferred", function(){
-	Can.Model("Person",{
-		findOne : function(params, success, error){
-			return $.ajax({
-				url : "/people/5",
-				data : params,
-				dataType : "json Person.model",
-				fixture: "//can/model/test/person.json"
-			})
-		}
-	},{});
+	if(window.jQuery){
+		Can.Model("Person",{
+			findOne : function(params, success, error){
+				return $.ajax({
+					url : "/people/5",
+					data : params,
+					dataType : "json Person.model",
+					fixture: "//can/model/test/person.json"
+				});
+			}
+		},{});
+	} else {
+		Can.Model("Person",{
+			findOne : steal.root.join("can/model/test/person.json")+''
+		},{});
+	}
 	stop();
 	var person = Person.findOne({});
 	person.then(function(person){
@@ -170,30 +176,6 @@ test("destroy deferred", function(){
 });
 
 
-test("hookup and model", function(){
-	Can.Model('Person')
-	var div = $("<div/>")
-	var p = new Person({foo: "bar2", id: 5});
-	p.hookup( div[0] );
-	ok(div.hasClass("person"), "has person");
-	ok(div.hasClass("person_5"), "has person_5");
-	equals(p, div.model(),"gets model" )
-})
-// test that models returns an array of unique instances
-test("unique models", function(){
-	var div1 = $("<div/>")
-	var div2 = $("<div/>")
-	var div3 = $("<div/>")
-	var p = new Person({foo: "bar2", id: 5});
-	var p2 = new Person({foo: "bar3", id: 4});
-	p.hookup( div1[0] );
-	p.hookup( div2[0] );
-	p2.hookup( div3[0] );
-	var models = div1.add(div2).add(div3).models();
-	equals(p, models[0], "gets models" )
-	equals(p2, models[1], "gets models" )
-	equals(2, models.length, "gets models" )
-})
 
 
 test("models", function(){
@@ -209,10 +191,10 @@ test("models", function(){
 });
 
 
-
+/*
 test("async setters", function(){
 	
-	/*
+	
 	Can.Model("Test.AsyncModel",{
 		setName : function(newVal, success, error){
 			
@@ -241,8 +223,8 @@ test("async setters", function(){
 	})
 	var now = new Date();
 	model.attr('name',"Brian");
-	stop();*/
-})
+	stop();
+})*/
 
 test("binding", 2,function(){
 	Can.Model('Person')
@@ -257,24 +239,7 @@ test("binding", 2,function(){
 	
 });
 
-test("error binding", 1, function(){
 
-	Can.Model("School",{
-	   setName : function(name, success, error){
-	     if(!name){
-	        error("no name");
-	     }
-	     return error;
-	   }
-	})
-	var school = new School();
-	school.bind("error.name", function(ev, error){
-		equals(error, "no name", "error message provided")
-	})
-	school.attr("name","");
-	
-	
-})
 
 test("auto methods",function(){
 	//turn off fixtures
@@ -323,7 +288,7 @@ test("isNew", function(){
 test("findAll string", function(){
 	$.fixture.on = false;
 	Can.Model("Test.Thing",{
-		findAll : steal.root.join("can/model/test/qunit/findAll.json")+''
+		findAll : steal.root.join("can/model/test/findAll.json")+''
 	},{});
 	stop();
 	Test.Thing.findAll({},function(things){
@@ -377,7 +342,7 @@ test("Model events" , function(){
 		ok(this === Test.Event, "got model")
 		ok(passedItem === item, "got instance")
 		
-		passedItem.destroy({});
+		passedItem.destroy();
 		
 	}).bind('destroyed', function(ev, passedItem){
 		equals(++order, 3, "order");
@@ -394,64 +359,8 @@ test("Model events" , function(){
 });
 
 
-test("converters and serializes", function(){
-	Can.Model("Task1",{
-		attributes: {
-			createdAt: "date"
-		},
-		convert: {
-			date: function(d){
-				var months = ["jan", "feb", "mar"]
-				return months[d.getMonth()]
-			}
-		},
-		serialize: {
-			date: function(d){
-				var months = {"jan":0, "feb":1, "mar":2}
-				return months[d]
-			}
-		}
-	},{});
-	Can.Model("Task2",{
-		attributes: {
-			createdAt: "date"
-		},
-		convert: {
-			date: function(d){
-				var months = ["apr", "may", "jun"]
-				return months[d.getMonth()]
-			}
-		},
-		serialize: {
-			date: function(d){
-				var months = {"apr":0, "may":1, "jun":2}
-				return months[d]
-			}
-		}
-	},{});
-	var d = new Date();
-	d.setMonth(1)
-	var task1=new Task1({
-		createdAt: d,
-		name:"Task1"
-	});
-	d.setMonth(2)
-	var task2=new Task2({
-		createdAt: d,
-		name:"Task2"
-	});
-	equals(task1.createdAt, "feb", "Task1 model convert");
-	equals(task2.createdAt, "jun", "Task2 model convert");
-	equals(task1.serialize().createdAt, 1, "Task1 model serialize");
-	equals(task2.serialize().createdAt, 2, "Task2 model serialize");
-	equals(task1.serialize().name, "Task1", "Task1 model default serialized");
-	equals(task2.serialize().name, "Task2", "Task2 model default serialized");
-});
 
-test("default converters", function(){
-	var num = 1318541064012;
-	equals( Can.Model.convert.date(num).getTime(), num, "converted to a date with a number" );
-})
+
 
 test("removeAttr test", function(){
 	Can.Model("Person");
@@ -464,13 +373,7 @@ test("removeAttr test", function(){
 	equals(attrs.foo, undefined, "attrs removed");
 });
 
-test("identity should replace spaces with underscores", function(){
-	Can.Model("Task",{},{});
-	t = new Task({
-		id: "id with spaces"
-	});
-	equals(t.identity(), "task_id_with_spaces")
-});
+
 
 test("save error args", function(){
 	var Foo = Can.Model('Testin.Models.Foo',{
@@ -486,6 +389,7 @@ test("save error args", function(){
 	stop();
 	var inst = new Foo({}).save(function(){
 		ok(false, "success should not be called")
+		start()
 	}, function(jQXHR){
 		ok(true, "error called")
 		ok(jQXHR.getResponseHeader,"jQXHR object")
@@ -496,23 +400,38 @@ test("save error args", function(){
 	
 });
 
-test("hookup and elements", function(){
-	Can.Model('Escaper',{
-		escapeIdentity : true
-	},{});
+test("object definitions", function(){
 	
-	var ul = $('<ul><li></li></ul>'),
-		li = ul.find('li');
+	Can.Model('ObjectDef',{
+		findAll : {
+			url : "/test/place"
+		},
+		findOne : {
+			url : "/objectdef/{id}",
+			timeout : 1000
+		},
+		create : {
+			
+		},
+		update : {
+			
+		},
+		destroy : {
+			
+		}
+	},{})
 	
-	var esc = new Escaper({id: " some crazy #/ %ing stuff"});
-	
-	li.model(esc);
-	
-	var res  = esc.elements(ul);
-	
-	equals(res.length,1)
-	equals(res[0], li[0])
+	$.fixture("GET /objectdef/{id}", function(original){
+		equals(original.timeout,1000,"timeout set");
+		return {yes: true}
+	});
+	stop();
+	ObjectDef.findOne({id: 5}, function(){
+		start();
+	})
 })
+
+
 
 test('aborting create update and destroy', function(){
 	stop();
@@ -564,36 +483,7 @@ test('aborting create update and destroy', function(){
 	
 });
 
-test("object definitions", function(){
-	
-	Can.Model('ObjectDef',{
-		findAll : {
-			url : "/test/place"
-		},
-		findOne : {
-			url : "/objectdef/{id}",
-			timeout : 1000
-		},
-		create : {
-			
-		},
-		update : {
-			
-		},
-		destroy : {
-			
-		}
-	},{})
-	
-	$.fixture("GET /objectdef/{id}", function(original){
-		equals(original.timeout,1000,"timeout set");
-		return {yes: true}
-	});
-	stop();
-	ObjectDef.findOne({id: 5}, function(){
-		start();
-	})
-})
+
 
 })//.then("./model_test.js","./associations_test.js")
 
