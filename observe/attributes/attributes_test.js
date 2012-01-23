@@ -89,6 +89,12 @@ var makeClasses= function(){
 	{});
 }
 
+
+test("default converters", function(){
+	var num = 1318541064012;
+	equals( Can.Model.convert.date(num).getTime(), num, "converted to a date with a number" );
+})
+
 test("basic observe associations", function(){
 	makeClasses();
 	

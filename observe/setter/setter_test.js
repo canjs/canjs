@@ -20,5 +20,23 @@ test("setter testing works", function(){
 	equals(contact.birthday.getTime(), date.getTime(), "set as birthday")
 });
 
+test("error binding", 1, function(){
+
+	Can.Model("School",{
+	   setName : function(name, success, error){
+	     if(!name){
+	        error("no name");
+	     }
+	     return error;
+	   }
+	})
+	var school = new School();
+	school.bind("error.name", function(ev, error){
+		equals(error, "no name", "error message provided")
+	})
+	school.attr("name","");
+	
+})
+
 
 });
