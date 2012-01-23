@@ -1,9 +1,9 @@
-steal('funcunit/qunit','jquery/lang/observe',function(){
+steal('funcunit/qunit','can/observe/delegate',function(){
 
 
 module('jquery/lang/observe/delegate')
 
-var matches = $.Observe.prototype.delegate.matches;
+var matches = Can.Control.prototype.delegate.matches;
 
 test("matches", function(){
 	
@@ -32,7 +32,7 @@ test("matches", function(){
 
 test("delegate", 4,function(){
 	
-	var state = new $.Observe({
+	var state = new Can.Control({
 		properties : {
 		  prices : []
 		}
@@ -53,7 +53,7 @@ test("delegate", 4,function(){
 })
 test("delegate on add", 2, function(){
 	
-	var state = new $.Observe({});
+	var state = new Can.Control({});
 	
 	state.delegate("foo","add", function(ev, newVal){
 		ok(true, "called");
@@ -67,7 +67,7 @@ test("delegate on add", 2, function(){
 })
 
 test("delegate set is called on add", 2, function(){
-	var state = new $.Observe({});
+	var state = new Can.Control({});
 	
 	state.delegate("foo","set", function(ev, newVal){
 		ok(true, "called");
@@ -77,7 +77,7 @@ test("delegate set is called on add", 2, function(){
 });
 
 test("delegate's this", 5, function(){
-	var state = new $.Observe({
+	var state = new Can.Control({
 		person : {
 			name : {
 				first : "justin",
@@ -113,7 +113,7 @@ test("delegate's this", 5, function(){
 
 
 test("delegate on deep properties with *", function(){
-	var state = new $.Observe({
+	var state = new Can.Control({
 		person : {
 			name : {
 				first : "justin",
@@ -131,7 +131,7 @@ test("delegate on deep properties with *", function(){
 
 test("compound sets", function(){
 	
-	var state = new $.Observe({
+	var state = new Can.Control({
 		type : "person",
 		id: "5"
 	});

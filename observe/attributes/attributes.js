@@ -1,6 +1,6 @@
-steal('jquery/lang/observe',function($){
+steal('can/observe',function($){
 
-var $Observe = $.Observe,
+var $Observe = Can.Control,
 	each = $.each,
 	extend = $.extend,
 	getObject = $.String.getObject;

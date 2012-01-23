@@ -2,9 +2,11 @@ steal(function(){
 	var isFn = $.isFunction;
 	
 	$.makeArray = function(arr){
-		return $.map(arr, function(a){
-			return a
+		var ret = []
+		$.each(arr, function(i,a){
+			ret[i] = a
 		})
+		return ret;
 	};
 	
 	var Deferred = function( func ) {
@@ -207,7 +209,8 @@ steal(function(){
 			self= this,
 			args = [event].concat(event.data || []);
 		$.each(handlers, function(i, handler){
-			handler.apply(self, args)
+			event.data = args.slice(1);
+			handler.apply(self, args);
 		});
 	}
 	$.proxy = function(f, ctx){

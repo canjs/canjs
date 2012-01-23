@@ -908,7 +908,7 @@
 		unbind = $method('unbind');
 
 	/**
-	 * @class jQuery.Observe
+	 * @class Can.Control
 	 * @parent jquerymx.lang
 	 * @test jquery/lang/observe/qunit.html
 	 * 
@@ -919,9 +919,9 @@
 	 *   - Listen for changes in objects and arrays
 	 *   - Work with nested properties
 	 * 
-	 * ## Creating an $.Observe
+	 * ## Creating an Can.Control
 	 * 
-	 * To create an $.Observe, or $.Observe.List, you can simply use 
+	 * To create an Can.Control, or Can.Control.List, you can simply use 
 	 * the `$.O(data)` shortcut like:
 	 * 
 	 *     var person = $.O({name: 'justin', age: 29}),
@@ -929,15 +929,15 @@
 	 * 
 	 * Depending on the type of data passed to $.O, it will create an instance of either: 
 	 * 
-	 *   - $.Observe, which is used for objects like: `{foo: 'bar'}`, and
-	 *   - [jQuery.Observe.List $.Observe.List], which is used for arrays like `['foo','bar']`
+	 *   - Can.Control, which is used for objects like: `{foo: 'bar'}`, and
+	 *   - [Can.Control.List Can.Control.List], which is used for arrays like `['foo','bar']`
 	 *   
-	 * $.Observe.List and $.Observe are very similar. In fact,
-	 * $.Observe.List inherits $.Observe and only adds a few extra methods for
-	 * manipulating arrays like [jQuery.Observe.List.prototype.push push].  Go to
-	 * [jQuery.Observe.List $.Observe.List] for more information about $.Observe.List.
+	 * Can.Control.List and Can.Control are very similar. In fact,
+	 * Can.Control.List inherits Can.Control and only adds a few extra methods for
+	 * manipulating arrays like [Can.Control.List.prototype.push push].  Go to
+	 * [Can.Control.List Can.Control.List] for more information about Can.Control.List.
 	 * 
-	 * You can also create a `new $.Observe` simply by pass it the data you want to observe:
+	 * You can also create a `new Can.Control` simply by pass it the data you want to observe:
 	 * 
 	 *     var data = { 
 	 *       addresses : [
@@ -952,13 +952,13 @@
 	 *         ],
 	 *       name : "Justin Meyer"
 	 *     },
-	 *     o = new $.Observe(data);
+	 *     o = new Can.Control(data);
 	 *     
 	 * _o_ now represents an observable copy of _data_.  
 	 * 
 	 * ## Getting and Setting Properties
 	 * 
-	 * Use [jQuery.Observe.prototype.attr attr] and [jQuery.Observe.prototype.attr attrs]
+	 * Use [Can.Control.prototype.attr attr] and [Can.Control.prototype.attr attrs]
 	 * to get and set properties.
 	 * 
 	 * For example, you can read the property values of _o_ with
@@ -974,9 +974,9 @@
 	 *     o.attr('name', "Brian Moschel") //-> o
 	 * 
 	 * Observe handles nested data.  Nested Objects and
-	 * Arrays are converted to $.Observe and 
-	 * $.Observe.Lists.  This lets you read nested properties 
-	 * and use $.Observe methods on them.  The following 
+	 * Arrays are converted to Can.Control and 
+	 * Can.Control.Lists.  This lets you read nested properties 
+	 * and use Can.Control methods on them.  The following 
 	 * updates the second address (Boston) to 'New York':
 	 * 
 	 *     o.attr('addresses.1').attr({
@@ -1007,8 +1007,8 @@
 	 * that you can listen to.  There are two ways to listen
 	 * for events:
 	 * 
-	 *   - [jQuery.Observe.prototype.bind bind] - listen for any type of change
-	 *   - [jQuery.Observe.prototype.delegate delegate] - listen to a specific type of change
+	 *   - [Can.Control.prototype.bind bind] - listen for any type of change
+	 *   - [Can.Control.prototype.delegate delegate] - listen to a specific type of change
 	 *     
 	 * With `bind( "change" , handler( ev, attr, how, newVal, oldVal ) )`, you can listen
 	 * to any change that happens within the 
@@ -1042,7 +1042,7 @@
 	 * converted to an observable
 	 */
 	var count = 0,
-		$Observe = Can.Construct('jQuery.Observe',{
+		$Observe = Can.Construct('Can.Control',{
 		// keep so it can be overwritten
 		setup : function(baseClass){
 			Can.Construct.setup.apply(this, arguments)
@@ -1067,7 +1067,7 @@
 		/**
 		 * Get or set an attribute on the observe.
 		 * 
-		 *     o = new $.Observe({});
+		 *     o = new Can.Control({});
 		 *     
 		 *     // sets a user property
 		 *     o.attr('user',{name: 'hank'});
@@ -1139,7 +1139,7 @@
 		 *         }
 		 *       })
 		 * 
-		 * @return {jQuery.Observe} the original observable.
+		 * @return {Can.Control} the original observable.
 		 */
 		each: function() {
 			return $.each.apply(null, [this.__get()].concat($.makeArray(arguments)))
@@ -1147,11 +1147,11 @@
 		/**
 		 * Removes a property
 		 * 
-		 *     o =  new $.Observe({foo: 'bar'});
+		 *     o =  new Can.Control({foo: 'bar'});
 		 *     o.removeAttr('foo'); //-> 'bar'
 		 * 
 		 * This creates a `'remove'` change event. Learn more about events
-		 * in [jQuery.Observe.prototype.bind bind] and [jQuery.Observe.prototype.delegate delegate].
+		 * in [Can.Control.prototype.bind bind] and [Can.Control.prototype.delegate delegate].
 		 * 
 		 * @param {String} attr the attribute name to remove.
 		 * @return {Object} the value that was removed.
@@ -1215,7 +1215,7 @@
 				this.__set(prop, value, current)
 				
 			} else {
-				throw "jQuery.Observe: set a property on an object that does not exist"
+				throw "Can.Control: set a property on an object that does not exist"
 			}
 		},
 		__set : function(prop, value, current){
@@ -1257,7 +1257,7 @@
 			}
 		},
 		/**
-		 * Listens to changes on a jQuery.Observe.
+		 * Listens to changes on a Can.Control.
 		 * 
 		 * When attributes of an observe change, including attributes on nested objects,
 		 * a `'change'` event is triggered on the observe.  These events come
@@ -1276,7 +1276,7 @@
 		 * 
 		 * Example:
 		 * 
-		 *     o = new $.Observe({name : "Payal"});
+		 *     o = new Can.Control({name : "Payal"});
 		 *     o.bind('change', function(ev, attr, how, newVal, oldVal){
 		 *       // ev    -> {type: 'change'}
 		 *       // attr  -> "name"
@@ -1289,14 +1289,14 @@
 		 * 
 		 * Listening to `change` is only useful for when you want to 
 		 * know every change on an Observe.  For most applications,
-		 * [jQuery.Observe.prototype.delegate delegate] is 
+		 * [Can.Control.prototype.delegate delegate] is 
 		 * much more useful as it lets you listen to specific attribute
 		 * changes and sepecific types of changes.
 		 * 
 		 * 
 		 * @param {String} eventType the event name.  Currently,
 		 * only 'change' events are supported. For more fine 
-		 * grained control, use [jQuery.Observe.prototype.delegate].
+		 * grained control, use [Can.Control.prototype.delegate].
 		 * 
 		 * @param {Function} handler(event, attr, how, newVal, oldVal) A 
 		 * callback function where
@@ -1307,7 +1307,7 @@
 		 *   - newVal - the new value of the attribute
 		 *   - oldVal - the old value of the attribute
 		 * 
-		 * @return {$.Observe} the observe for chaining.
+		 * @return {Can.Control} the observe for chaining.
 		 */
 		bind: bind,
 		/**
@@ -1330,9 +1330,9 @@
 		 * are supported with bind.
 		 * 
 		 * @param {Function} [handler] - The original handler function passed
-		 * to [jQuery.Observe.prototype.bind bind].
+		 * to [Can.Control.prototype.bind bind].
 		 * 
-		 * @return {jQuery.Observe} the original observe for chaining.
+		 * @return {Can.Control} the original observe for chaining.
 		 */
 		unbind: unbind,
 		/**
@@ -1342,7 +1342,7 @@
 		 *     o.serialize() //-> { name: 'Justin' }
 		 *     
 		 * Serialize currently returns the same data 
-		 * as [jQuery.Observe.prototype.attrs].  However, in future
+		 * as [Can.Control.prototype.attrs].  However, in future
 		 * versions, serialize will be able to return serialized
 		 * data similar to [jQuery.Model].  The following will work:
 		 * 
@@ -1401,9 +1401,9 @@
 	});
 	// Helpers for list
 	/**
-	 * @class jQuery.Observe.List
-	 * @inherits jQuery.Observe
-	 * @parent jQuery.Observe
+	 * @class Can.Control.List
+	 * @inherits Can.Control
+	 * @parent Can.Control
 	 * 
 	 * An observable list.  You can listen to when items are push, popped,
 	 * spliced, shifted, and unshifted on this array.
@@ -1411,7 +1411,7 @@
 	 * 
 	 */
 	var splice = [].splice,
-		list = $Observe('jQuery.Observe.List',
+		list = $Observe('Can.Control.List',
 	/**
 	 * @prototype
 	 */
@@ -1528,7 +1528,7 @@
 		 *         }
 		 *       })
 		 * 
-		 * @return {jQuery.Observe.List} the original observable.
+		 * @return {Can.Control.List} the original observable.
 		 */
 		// placeholder for each
 		/**
@@ -1539,7 +1539,7 @@
 		 * The following creates a list of numbers and replaces 2 and 3 with
 		 * "a", and "b".
 		 * 
-		 *     var l = new $.Observe.List([0,1,2,3]);
+		 *     var l = new Can.Control.List([0,1,2,3]);
 		 *     
 		 *     l.bind('change', function( ev, attr, how, newVals, oldVals, where ) { ... })
 		 *     
@@ -1649,7 +1649,7 @@
 		 * @function push
 		 * Add items to the end of the list.
 		 * 
-		 *     var l = new $.Observe.List([]);
+		 *     var l = new Can.Control.List([]);
 		 *     
 		 *     l.bind('change', function( 
 		 *         ev,        // the change event
@@ -1670,7 +1670,7 @@
 		/**
 		 * @function unshift
 		 * Add items to the start of the list.  This is very similar to
-		 * [jQuery.Observe.prototype.push].
+		 * [Can.Control.prototype.push].
 		 */
 		unshift: 0
 	},
@@ -1730,7 +1730,7 @@
 		 * 
 		 * Removes an item from the end of the list.
 		 * 
-		 *     var l = new $.Observe.List([0,1,2]);
+		 *     var l = new Can.Control.List([0,1,2]);
 		 *     
 		 *     l.bind('change', function( 
 		 *         ev,        // the change event
@@ -1751,7 +1751,7 @@
 		/**
 		 * @function shift
 		 * Removes an item from the start of the list.  This is very similar to
-		 * [jQuery.Observe.prototype.pop].
+		 * [Can.Control.prototype.pop].
 		 * 
 		 * @return {Object} the element at the start of the list
 		 */
@@ -2139,7 +2139,7 @@
 
 	/**
 	 * @class jQuery.route
-	 * @inherits jQuery.Observe
+	 * @inherits Can.Control
 	 * @plugin jquery/dom/route
 	 * @parent dom
 	 * @tag 3.2
@@ -2147,7 +2147,7 @@
 	 * jQuery.route helps manage browser history (and
 	 * client state) by
 	 * synchronizing the window.location.hash with
-	 * an [jQuery.Observe].
+	 * an [Can.Control].
 	 * 
 	 * ## Background Information
 	 * 
@@ -2170,7 +2170,7 @@
 	 * 
 	 * ## How it works
 	 * 
-	 * <code>$.route</code> is a [jQuery.Observe $.Observe] that represents the
+	 * <code>$.route</code> is a [Can.Control Can.Control] that represents the
 	 * <code>window.location.hash</code> as an 
 	 * object.  For example, if the hash looks like:
 	 * 
@@ -2184,10 +2184,10 @@
 	 * $.route keeps the state of the hash in-sync with the data in
 	 * $.route.
 	 * 
-	 * ## $.Observe
+	 * ## Can.Control
 	 * 
-	 * $.route is a [jQuery.Observe $.Observe]. Understanding
-	 * $.Observe is essential for using $.route correctly.
+	 * $.route is a [Can.Control Can.Control]. Understanding
+	 * Can.Control is essential for using $.route correctly.
 	 * 
 	 * You can
 	 * listen to changes in an Observe with bind and
@@ -2197,7 +2197,7 @@
 	 * ### Listening to changes in an Observable
 	 * 
 	 * Listen to changes in history 
-	 * by [jQuery.Observe.prototype.bind bind]ing to
+	 * by [Can.Control.prototype.bind bind]ing to
 	 * changes in <code>$.route</code> like:
 	 * 
 	 *     $.route.bind('change', function(ev, attr, how, newVal, oldVal) {
@@ -2209,7 +2209,7 @@
      *  - newVal/oldVal - the new and old values of the attribute
      * 
 	 * You can also listen to specific changes 
-	 * with [jQuery.Observe.prototype.delegate delegate]:
+	 * with [Can.Control.prototype.delegate delegate]:
 	 * 
 	 *     $.route.delegate('id','change', function(){ ... })
 	 * 
@@ -2230,7 +2230,7 @@
 	 *     $.route.attr('type','images');
 	 * 
 	 * Or change multiple properties at once with
-	 * [jQuery.Observe.prototype.attrs attrs]:
+	 * [Can.Control.prototype.attrs attrs]:
 	 * 
 	 *     $.route.attr({type: 'pages', id: 5}, true)
 	 * 
@@ -2416,9 +2416,9 @@
 		},
 		/**
 		 * @hide
-		 * A $.Observe that represents the state of the history.
+		 * A Can.Control that represents the state of the history.
 		 */
-		data: new $.Observe({}),
+		data: new Can.Control({}),
         /**
          * @attribute
          * @type Object
@@ -3622,9 +3622,9 @@
 		}
 	};
 	var modelNum = 0;
-	$.Observe("jQuery.Model",{
+	Can.Control("jQuery.Model",{
 		setup : function(){
-			$.Observe.apply(this, arguments);
+			Can.Control.apply(this, arguments);
 			if(this === jQuery.Model){
 				return;
 			}
@@ -3756,7 +3756,7 @@
 	});
 	
 	
-	var ML = $.Observe.List('jQuery.Model.List')
+	var ML = Can.Control.List('jQuery.Model.List')
 	
 })(jQuery);
 (function(){

@@ -3,7 +3,7 @@ steal('funcunit/qunit','./attributes',function(){
 module("attributes");
 
 test("literal converters and serializes", function(){
-	$.Observe("Task1",{
+	Can.Control("Task1",{
 		attributes: {
 			createdAt: "date"
 		},
@@ -20,7 +20,7 @@ test("literal converters and serializes", function(){
 			}
 		}
 	},{});
-	$.Observe("Task2",{
+	Can.Control("Task2",{
 		attributes: {
 			createdAt: "date"
 		},
@@ -57,13 +57,13 @@ test("literal converters and serializes", function(){
 });
 
 var makeClasses= function(){
-	$.Observe("AttrTest.Person", {
+	Can.Control("AttrTest.Person", {
 		serialize: function() {
 			return "My name is " + this.name;
 		}
 	});
-	$.Observe("AttrTest.Loan");
-	$.Observe("AttrTest.Issue");
+	Can.Control("AttrTest.Loan");
+	Can.Control("AttrTest.Issue");
 	
 	AttrTest.Person.model = function(data){
 		return new this(data);
@@ -78,7 +78,7 @@ var makeClasses= function(){
 			return new AttrTest.Issue(l)
 		});
 	}
-	$.Observe("AttrTest.Customer",
+	Can.Control("AttrTest.Customer",
 	{
 		attributes : {
 			person : "AttrTest.Person.model",
