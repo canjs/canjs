@@ -41,7 +41,7 @@ test("ajax testing works", 12, function(){
 	Thing.findAll({}, function(things){
 		
 		equals(things.length,1,"got a thing");
-		ok(things[0] instanceof $.Observe,"it's an observe");
+		ok(things[0] instanceof Can.Observe,"it's an observe");
 		
 		var thing = things[0]
 		

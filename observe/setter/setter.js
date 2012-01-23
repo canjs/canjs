@@ -1,8 +1,8 @@
-steal('jquery/lang/observe',function($){
+steal('can/observe',function($){
 
 
 var classize = $.String.classize,
-	proto =  $.Observe.prototype,
+	proto =  Can.Control.prototype,
 	old = proto.__set;
 
 proto.__set = function(prop, value, current, success, error){

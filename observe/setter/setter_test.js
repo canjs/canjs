@@ -4,7 +4,7 @@ module("Observe setter");
 
 test("setter testing works", function(){
 	
-	var Contact = $.Observe({
+	var Contact = Can.Control({
 		setBirthday : function(raw){
 			if(typeof raw == 'number'){
 				return new Date( raw )

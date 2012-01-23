@@ -1,4 +1,4 @@
-steal('can/class',function() {
+steal('can/construct',function() {
 
 	// Alias helpful methods from jQuery
 	var isObject = function( obj ) {
@@ -35,7 +35,7 @@ steal('can/class',function() {
 				} else {
 					args[0] = prop +  "." + args[0]
 				}
-				$.event.trigger(ev, args, parent, true)
+				Can.trigger(parent, ev, args);
 			});
 
 			return val;
@@ -70,10 +70,13 @@ steal('can/class',function() {
 			if (!collecting ) {
 				return Can.trigger(item, event, args);
 			} else {
-				collecting.push([{
+				collecting.push([
+				item,
+				{
 					type: event,
 					batchNum : batchNum
-				}, args, item, true ] );
+				}, 
+				args ] );
 			}
 		},
 		// which batch of events this is for, might not want to send multiple
@@ -119,7 +122,7 @@ steal('can/class',function() {
 	/**
 	 * @class Can.Observe
 	 * @parent jquerymx.lang
-	 * @test jquery/lang/observe/qunit.html
+	 * @test can/observe/qunit.html
 	 * 
 	 * Observe provides the awesome observable pattern for
 	 * JavaScript Objects and Arrays. It lets you
@@ -128,9 +131,9 @@ steal('can/class',function() {
 	 *   - Listen for changes in objects and arrays
 	 *   - Work with nested properties
 	 * 
-	 * ## Creating an $.Observe
+	 * ## Creating an Can.Observe
 	 * 
-	 * To create an $.Observe, or $.Observe.List, you can simply use 
+	 * To create an Can.Observe, or Can.Observe.List, you can simply use 
 	 * the `$.O(data)` shortcut like:
 	 * 
 	 *     var person = $.O({name: 'justin', age: 29}),
@@ -138,15 +141,15 @@ steal('can/class',function() {
 	 * 
 	 * Depending on the type of data passed to $.O, it will create an instance of either: 
 	 * 
-	 *   - $.Observe, which is used for objects like: `{foo: 'bar'}`, and
-	 *   - [Can.Observe.List $.Observe.List], which is used for arrays like `['foo','bar']`
+	 *   - Can.Observe, which is used for objects like: `{foo: 'bar'}`, and
+	 *   - [Can.Observe.List Can.Observe.List], which is used for arrays like `['foo','bar']`
 	 *   
-	 * $.Observe.List and $.Observe are very similar. In fact,
-	 * $.Observe.List inherits $.Observe and only adds a few extra methods for
+	 * Can.Observe.List and Can.Observe are very similar. In fact,
+	 * Can.Observe.List inherits Can.Observe and only adds a few extra methods for
 	 * manipulating arrays like [Can.Observe.List.prototype.push push].  Go to
-	 * [Can.Observe.List $.Observe.List] for more information about $.Observe.List.
+	 * [Can.Observe.List Can.Observe.List] for more information about Can.Observe.List.
 	 * 
-	 * You can also create a `new $.Observe` simply by pass it the data you want to observe:
+	 * You can also create a `new Can.Observe` simply by pass it the data you want to observe:
 	 * 
 	 *     var data = { 
 	 *       addresses : [
@@ -161,7 +164,7 @@ steal('can/class',function() {
 	 *         ],
 	 *       name : "Justin Meyer"
 	 *     },
-	 *     o = new $.Observe(data);
+	 *     o = new Can.Observe(data);
 	 *     
 	 * _o_ now represents an observable copy of _data_.  
 	 * 
@@ -183,9 +186,9 @@ steal('can/class',function() {
 	 *     o.attr('name', "Brian Moschel") //-> o
 	 * 
 	 * Observe handles nested data.  Nested Objects and
-	 * Arrays are converted to $.Observe and 
-	 * $.Observe.Lists.  This lets you read nested properties 
-	 * and use $.Observe methods on them.  The following 
+	 * Arrays are converted to Can.Observe and 
+	 * Can.Observe.Lists.  This lets you read nested properties 
+	 * and use Can.Observe methods on them.  The following 
 	 * updates the second address (Boston) to 'New York':
 	 * 
 	 *     o.attr('addresses.1').attr({
@@ -276,7 +279,7 @@ steal('can/class',function() {
 		/**
 		 * Get or set an attribute on the observe.
 		 * 
-		 *     o = new $.Observe({});
+		 *     o = new Can.Observe({});
 		 *     
 		 *     // sets a user property
 		 *     o.attr('user',{name: 'hank'});
@@ -357,7 +360,7 @@ steal('can/class',function() {
 		/**
 		 * Removes a property
 		 * 
-		 *     o =  new $.Observe({foo: 'bar'});
+		 *     o =  new Can.Observe({foo: 'bar'});
 		 *     o.removeAttr('foo'); //-> 'bar'
 		 * 
 		 * This creates a `'remove'` change event. Learn more about events
@@ -749,7 +752,7 @@ steal('can/class',function() {
 		 * The following creates a list of numbers and replaces 2 and 3 with
 		 * "a", and "b".
 		 * 
-		 *     var l = new $.Observe.List([0,1,2,3]);
+		 *     var l = new Can.Observe.List([0,1,2,3]);
 		 *     
 		 *     l.bind('change', function( ev, attr, how, newVals, oldVals, where ) { ... })
 		 *     
@@ -859,7 +862,7 @@ steal('can/class',function() {
 		 * @function push
 		 * Add items to the end of the list.
 		 * 
-		 *     var l = new $.Observe.List([]);
+		 *     var l = new Can.Observe.List([]);
 		 *     
 		 *     l.bind('change', function( 
 		 *         ev,        // the change event
@@ -940,7 +943,7 @@ steal('can/class',function() {
 		 * 
 		 * Removes an item from the end of the list.
 		 * 
-		 *     var l = new $.Observe.List([0,1,2]);
+		 *     var l = new Can.Observe.List([0,1,2]);
 		 *     
 		 *     l.bind('change', function( 
 		 *         ev,        // the change event

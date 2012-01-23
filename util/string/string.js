@@ -12,11 +12,11 @@
  * 
  *     $.Object.same({foo: "bar"}, {foo: "bar"});
  *     
- * ## [jQuery.Observe Observe]
+ * ## [Can.Control Observe]
  * 
  * Makes an Object's properties observable:
  * 
- *     var person = new $.Observe({ name: "Justin" })
+ *     var person = new Can.Control({ name: "Justin" })
  *     person.bind('change', function(){ ... })
  *     person.attr('name', "Brian");
  *     

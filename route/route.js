@@ -49,7 +49,7 @@ function( $ ) {
 
 	/**
 	 * @class jQuery.route
-	 * @inherits jQuery.Observe
+	 * @inherits Can.Control
 	 * @plugin jquery/dom/route
 	 * @parent dom
 	 * @tag 3.2
@@ -57,7 +57,7 @@ function( $ ) {
 	 * jQuery.route helps manage browser history (and
 	 * client state) by
 	 * synchronizing the window.location.hash with
-	 * an [jQuery.Observe].
+	 * an [Can.Control].
 	 * 
 	 * ## Background Information
 	 * 
@@ -80,7 +80,7 @@ function( $ ) {
 	 * 
 	 * ## How it works
 	 * 
-	 * <code>Can.route</code> is a [jQuery.Observe Can.Observe] that represents the
+	 * <code>Can.route</code> is a [Can.Control Can.Observe] that represents the
 	 * <code>window.location.hash</code> as an 
 	 * object.  For example, if the hash looks like:
 	 * 
@@ -96,7 +96,7 @@ function( $ ) {
 	 * 
 	 * ## Can.Observe
 	 * 
-	 * Can.route is a [jQuery.Observe Can.Observe]. Understanding
+	 * Can.route is a [Can.Control Can.Observe]. Understanding
 	 * Can.Observe is essential for using Can.route correctly.
 	 * 
 	 * You can
@@ -107,7 +107,7 @@ function( $ ) {
 	 * ### Listening to changes in an Observable
 	 * 
 	 * Listen to changes in history 
-	 * by [jQuery.Observe.prototype.bind bind]ing to
+	 * by [Can.Control.prototype.bind bind]ing to
 	 * changes in <code>Can.route</code> like:
 	 * 
 	 *     Can.route.bind('change', function(ev, attr, how, newVal, oldVal) {
@@ -119,7 +119,7 @@ function( $ ) {
      *  - newVal/oldVal - the new and old values of the attribute
      * 
 	 * You can also listen to specific changes 
-	 * with [jQuery.Observe.prototype.delegate delegate]:
+	 * with [Can.Control.prototype.delegate delegate]:
 	 * 
 	 *     Can.route.delegate('id','change', function(){ ... })
 	 * 
@@ -140,7 +140,7 @@ function( $ ) {
 	 *     Can.route.attr('type','images');
 	 * 
 	 * Or change multiple properties at once with
-	 * [jQuery.Observe.prototype.attrs attrs]:
+	 * [Can.Control.prototype.attrs attrs]:
 	 * 
 	 *     Can.route.attr({type: 'pages', id: 5}, true)
 	 * 

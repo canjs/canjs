@@ -1,10 +1,10 @@
-steal('funcunit/qunit','jquery/lang/observe/delegate',function(){
+steal('funcunit/qunit','can/observe',function(){
 	
-module('jquery/lang/observe')
+module('can/observe')
 
 test("Basic Observe",9,function(){
 	
-	var state = new $.O({
+	var state = new Can.Observe({
 		category : 5,
 		productType : 4,
 		properties : {
@@ -27,12 +27,13 @@ test("Basic Observe",9,function(){
 	
 	
 	state.attr("properties.brand").push({foo: "bar"});
+	
 	state.unbind("change");
 	
 	added.bind("change", function(ev, attr, how, val, old){
-		equals(attr, "foo")
-		equals(how, "set")
-		equals(val, "zoo")
+		equals(attr, "foo","foo property set on added")
+		equals(how, "set","added")
+		equals(val, "zoo","added")
 	})
 	state.bind("change", function(ev, attr, how, val, old){
 		equals(attr, "properties.brand.0.foo")
@@ -43,8 +44,10 @@ test("Basic Observe",9,function(){
 	
 });
 
+
+
 test("list splice", function(){
-	var l = new $.Observe.List([0,1,2,3]),
+	var l = new Can.Observe.List([0,1,2,3]),
 		first = true;
   
 	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
@@ -66,8 +69,10 @@ test("list splice", function(){
 	same(l.serialize(), [0,"a","b", 3], "serialized")
 });
 
+
+
 test("list pop", function(){
-	var l = new $.Observe.List([0,1,2,3]);
+	var l = new Can.Observe.List([0,1,2,3]);
   
 	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
 		equals (attr, "3")
@@ -82,7 +87,7 @@ test("list pop", function(){
 })
 
 test("changing an object unbinds", function(){
-	var state = new $.Observe({
+	var state = new Can.Observe({
 		category : 5,
 		productType : 4,
 		properties : {
@@ -112,7 +117,7 @@ test("changing an object unbinds", function(){
 });
 
 test("replacing with an object that object becomes observable",function(){
-	var state = new $.Observe({
+	var state = new Can.Observe({
 		properties : {
 		  brand: [],
 		  model : [],
@@ -128,7 +133,7 @@ test("replacing with an object that object becomes observable",function(){
 });
 
 test("remove attr", function(){
-	var state = new $.Observe({
+	var state = new Can.Observe({
 		properties : {
 		  brand: [],
 		  model : [],
@@ -151,7 +156,7 @@ test("remove attr", function(){
 });
 
 test("attr with an object", function(){
-	var state = new $.Observe({
+	var state = new Can.Observe({
 		properties : {
 		  foo: "bar",
 		  brand: []
@@ -195,13 +200,13 @@ test("attr with an object", function(){
 });
 
 test("empty get", function(){
-	var state = new $.Observe({});
+	var state = new Can.Observe({});
 	
 	equals(state.attr('foo.bar'), undefined)
 });
 
 test("attr deep array ", function(){
-	var state = new $.Observe({});
+	var state = new Can.Observe({});
 	var arr = [{
 			foo: "bar"
 		}],
@@ -218,17 +223,20 @@ test("attr deep array ", function(){
 
 test('attr semi-serialize', function(){
 	var first = {
-		foo : {bar: 'car'},
-		arr: [1,2,3, {four: '5'}
-		]
-	},
-	compare = $.extend(true, {}, first);
-	var res = new $.Observe(first).attr();
+			foo : {bar: 'car'},
+			arr: [1,2,3, {four: '5'}]
+		},
+		compare = {
+			foo : {bar: 'car'},
+			arr: [1,2,3, {four: '5'}]
+		};
+	
+	var res = new Can.Observe(first).attr();
 	same(res,compare, "test")
 })
 	
 test("attr sends events after it is done", function(){
-	var state = new $.Observe({foo: 1, bar: 2})
+	var state = new Can.Observe({foo: 1, bar: 2})
 	state.bind('change', function(){
 		equals(state.attr('foo'), -1, "foo set");
 		equals(state.attr('bar'), -2, "bar set")
@@ -237,13 +245,13 @@ test("attr sends events after it is done", function(){
 })
 
 test("direct property access", function(){
-	var state = new $.Observe({foo: 1, attr: 2});
+	var state = new Can.Observe({foo: 1, attr: 2});
 	equals(state.foo,1);
 	equals(typeof state.attr, 'function')
 })
 
 test("pop unbinds", function(){
-	var l = new $.O([{foo: 'bar'}]);
+	var l = new Can.Observe.List([{foo: 'bar'}]);
 	var o = l.attr(0),
 		count = 0;
 	l.bind('change', function(ev, attr, how, newVal, oldVal){
@@ -268,7 +276,7 @@ test("pop unbinds", function(){
 })
 
 test("splice unbinds", function(){
-	var l = new $.Observe.List([{foo: 'bar'}]);
+	var l = new Can.Observe.List([{foo: 'bar'}]);
 	var o = l.attr(0),
 		count = 0;
 	l.bind('change', function(ev, attr, how, newVal, oldVal){
@@ -294,7 +302,7 @@ test("splice unbinds", function(){
 
 
 test("always gets right attr even after moving array items", function(){
-	var l = new $.Observe.List([{foo: 'bar'}]);
+	var l = new Can.Observe.List([{foo: 'bar'}]);
 	var o = l.attr(0);
 	l.unshift("A new Value")
 	
@@ -309,4 +317,4 @@ test("always gets right attr even after moving array items", function(){
 
 
 	
-}).then('./delegate/delegate_test.js');
+})//.then('./delegate/delegate_test.js');

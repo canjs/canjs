@@ -1,7 +1,7 @@
-steal('jquery/lang/observe',function(){
+steal('can/observe',function(){
 	
 	/**
-	 * @add jQuery.Observe.prototype
+	 * @add Can.Control.prototype
 	 */
 	
 	// ** - 'this' will be the deepest item changed
@@ -131,7 +131,7 @@ steal('jquery/lang/observe',function(){
 			}
 		};
 		
-	$.extend($.Observe.prototype,{
+	$.extend(Can.Control.prototype,{
 		/**
 		 * @plugin jquery/lang/observe/delegate
 		 * Listen for changes in a child attribute from the parent. The child attribute
@@ -162,7 +162,7 @@ steal('jquery/lang/observe',function(){
 		 * 
 		 * An add event is fired when a new property has been added.
 		 * 
-		 *     var o = new $.Observe({});
+		 *     var o = new Can.Control({});
 		 *     o.delegate("name","add", function(ev, value){
 		 *       // called once
 		 *       $('#name').show()
@@ -203,7 +203,7 @@ steal('jquery/lang/observe',function(){
 		 * match any property name.  The following listens for any change
 		 * on an attribute of the params attribute:
 		 * 
-		 *     var o = $.Observe({
+		 *     var o = Can.Control({
 		 *       options : {
 		 *         limit : 100,
 		 *         offset: 0,
@@ -311,5 +311,5 @@ steal('jquery/lang/observe',function(){
 		}
 	});
 	// add helpers for testing .. 
-	$.Observe.prototype.delegate.matches = matches;
+	Can.Control.prototype.delegate.matches = matches;
 })

@@ -129,7 +129,7 @@ test("helpers", function() {
 
 test("binding", function(){
 	var text = "<div class='<%== task.attr('completed') ? 'complete' : ''%>'><%== task.attr('name') %></div>";
-	var task = new $.Observe({
+	var task = new Can.Control({
 		name : 'dishes'
 	})
 	var compiled = new $.EJS({text: text}).render({task:  task}) ;
