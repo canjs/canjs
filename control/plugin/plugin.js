@@ -1,4 +1,4 @@
-steal('jquery/controller/controller_core.js', function(){
+steal('can/control', function(){
 	
 /**
  *  @add jQuery.fn
