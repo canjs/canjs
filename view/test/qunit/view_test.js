@@ -5,7 +5,7 @@ steal("can/view",
 	"can/view/jaml",
 	//"can/view/tmpl",
 	'funcunit/qunit',
-	//,"can/view/tmpl/tmpl_test.js"
+	//"can/view/tmpl/tmpl_test.js"
 	function(){
 
 
@@ -36,19 +36,20 @@ test("multiple template types work", function(){
 		ok($("#qunit-test-area").find('h3').length, ext+": h3 written for ")
 		ok( /helloworld\s*/.test( $("#qunit-test-area").text()), ext+": hello world present for ")
 	})
-})
-return;
+});
+
 test("plugin in ejs", function(){
 	$("#qunit-test-area").html("");
 	$("#qunit-test-area").html("//can/view/test/qunit/plugin.ejs",{})
 	ok(/something/.test( $("#something").text()),"something has something");
 	$("#qunit-test-area").html("");
-})
+});
+
 test("nested plugins", function(){
 	$("#qunit-test-area").html("");
 	$("#qunit-test-area").html("//can/view/test/qunit/nested_plugin.ejs",{})
 	ok(/something/.test( $("#something").text()),"something has something");
-})
+});
 
 test("async templates, and caching work", function(){
 	$("#qunit-test-area").html("");
@@ -109,7 +110,7 @@ test("object of deferreds", function(){
 	var foo = $.Deferred(),
 		bar = $.Deferred();
 	stop();
-	$.View("//can/view/test/qunit/deferreds.ejs",{
+	Can.View("//can/view/test/qunit/deferreds.ejs",{
 		foo : foo.promise(),
 		bar : bar
 	}).then(function(result){
@@ -126,7 +127,7 @@ test("object of deferreds", function(){
 test("deferred", function(){
 	var foo = $.Deferred();
 	stop();
-	$.View("//can/view/test/qunit/deferred.ejs",foo).then(function(result){
+	Can.View("//can/view/test/qunit/deferred.ejs",foo).then(function(result){
 		equals(result, "FOO");
 		start();
 	});
@@ -157,13 +158,13 @@ test("modifier with a deferred", function(){
 
 test("jQuery.fn.hookup", function(){
 	$("#qunit-test-area").html("");
-	var els = $($.View("//can/view/test/qunit/hookup.ejs",{})).hookup();
+	var els = $(Can.View("//can/view/test/qunit/hookup.ejs",{})).hookup();
 	$("#qunit-test-area").html(els); //makes sure no error happens
 });
 
 test("non-HTML content in hookups", function(){
   $("#qunit-test-area").html("<textarea></textarea>");
-  $.View.hookup(function(){});
+  Can.View.hookup(function(){});
   $("#qunit-test-area textarea").val("asdf");
   equals($("#qunit-test-area textarea").val(), "asdf");
 });
@@ -186,7 +187,7 @@ test("val set with a template within a hookup within another template", function
 })
 
 /*test("bad url", function(){
-	$.View("//asfdsaf/sadf.ejs")
+	Can.View("//asfdsaf/sadf.ejs")
 });*/
 
 test("hyphen in type", function(){
