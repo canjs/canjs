@@ -383,7 +383,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			} else if ( typeof text == 'number' ) {
 				return text;
 			} else {
-				return EJS.text(text);
+				return EJS.text(status(), this, function(){ return text});
 			}
 		},
 		/**

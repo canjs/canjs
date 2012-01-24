@@ -246,7 +246,7 @@ steal("can/util").then(function( $ ) {
 				// get all the resolved deferreds
 				var objs = makeArray(arguments),
 					// renderer is last [0] is the data
-					renderer = objs.pop()[0],
+					renderer = objs.pop(),
 					// the result of the template rendering with data
 					result; 
 				
