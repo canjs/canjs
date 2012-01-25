@@ -476,7 +476,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			} else if ( typeof text == 'number' ) {
 				return text;
 			} else {
-				return EJS.text(status(), this, function(){ return text});
+				return EJS.text(text);
 			}
 		},
 		/**
@@ -696,23 +696,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 								})
 							}
 							break;
-							/*
-							// <%= clean content
-							bracketCount = bracketNum(content);
-							if( bracketCount ) {
-								endStack.push({
-									before : finishTxt,
-									after : doubleParen+";"
-								})
-							}
-							// check if its a func like ()->
-							if(quickFunc.test(content)){
-								var parts = content.match(quickFunc)
-								content = "function(__){var "+parts[1]+"=$(__);"+parts[2]+"}"
-							}
-							
-							buff.push(insert_cmd, "Can.EJS.clean(", content,bracketCount ? startTxt : doubleParen);
-							break;*/
 						case scanner.eLeft:
 						case scanner.eeLeft:
 							// <%== content
