@@ -217,7 +217,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 	var liveBind = function(observed, el, cb){
 		$.each(observed, function(i, ob){
 			ob.cb = function(){
-				console.log('prop changed!')
 				cb()
 			}
 			ob.obj.bind(ob.attr, ob.cb)
@@ -232,6 +231,160 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 	 * @Static
 	 */
 	extend(EJS, {
+		// t - 1
+		// h - 0
+		// q - string beforeQuote
+		// 
+		/**
+		 * @hide
+		 * called to setup unescaped text
+		 * @param {Number|String} status
+		 *   - "string" - the name of the attribute  <div string="HERE">
+		 *   - 1 - in an html tag <div HERE></div>
+		 *   - 0 - in the content of a tag <div>HERE</div>
+		 *   
+		 * @param {Object} self
+		 * @param {Object} func
+		 */
+		txt : function(status, self, func){
+			if(status  !== 0){
+				return EJS.esc(status, self, func)
+			}
+			var obs = EJS.observes(self, func),
+				observed = obs.observes,
+				input = obs.val;
+			if(!obs.observes.length){
+				return EJS.text(obs.val)
+			}
+			
+			
+			// add span ... (this will almost certainly
+			// not work w/i tables ...
+			// we could check what 'type' it is here
+			return "<span "
+						+ "data-view-id='" + $View.hookup(function(el){
+					// remove child, bind on parent
+
+					var parent = el.parentNode;
+					var makeAndPut = function(val, insertBefore, remove){
+						var frag;
+						
+						$(parent).domManip([val], true, function( f ) {
+							frag = f;
+						});
+						if(frag.nodeType == 3){
+							frag = frag.parentNode;
+						}
+						var nodes = $( $.map(frag.childNodes,function(node){
+							return node;
+						}));
+						if(insertBefore){
+							parent.insertBefore(frag, insertBefore)
+						} else {
+							parent.appendChild(frag)
+						}
+						
+						$(remove).remove();
+						return nodes;
+					}
+					
+					var nodes = makeAndPut(input, el, el)
+					
+					// create textNode
+					liveBind(observed, parent, function(){
+						// after the last node
+						var insertBefore = nodes[nodes.length - 1].nextSibling;
+						nodes = makeAndPut(func.call(self), 
+							insertBefore,
+							nodes);
+					})
+			}) + "'></span>";
+			
+		},
+		// called to setup escaped text
+		esc : function(status, self, func){
+			var obs = EJS.observes(self, func),
+				observed = obs.observes,
+				input = obs.val;
+
+			if(!observed.length){
+				return EJS.clean(input)
+			}
+			// handle hookup cases
+			
+			if(status === 0){ // we are in between html tags
+				// return a span with a hookup function ...
+				return "<span "
+						+ "data-view-id='" + $View.hookup(function(el){
+					// remove child, bind on parent
+					var parent = el.parentNode;
+					// get where el is ...
+					for(var i=0; i < parent.childNodes.length; i++){
+						if(parent.childNodes[i] === el){
+							break;
+						}
+					}
+					var node = document.createTextNode(input);
+					parent.insertBefore(node, el)
+					parent.removeChild(el);
+					
+					
+					// create textNode
+					liveBind(observed, parent, function(){
+						node.nodeValue = func.call(self)
+					})
+				}) + "'></span>";
+				
+			} else if(status === 1){ // in a tag
+				return input;
+				// mark at end!
+			} else { // in an attribute
+				
+				
+				pendingHookups.push(function(el){
+					var attr = el.getAttribute(status);
+					var parts = attr.split("__!@#$%__")
+					parts.splice(1,0,input)
+					el.setAttribute(status, parts.join(""))
+					
+					liveBind(observed, parent, function(){
+						parts[1] = func.call(self)
+						el.setAttribute(status, parts.join(""))
+					})
+				})
+				return "__!@#$%__";
+			}
+		},
+		/**
+		 * @hide
+		 * runs the function and checks if any attrs are called
+		 * @param {Object} self - the context of the view
+		 * @param {Object} func - the function to evaluate
+		 * @return {Object} an object with the following properties:
+		 * 
+		 *   - observes: array of observed objects and the attr that they are binding to.
+		 *   - val: the result of calling the function
+		 */
+		observes : function(self, func){
+			var observed = [],
+				val;
+			if (Can.Observe) {
+				Can.Observe.__reading = function(obj, attr){
+					observed.push({
+						obj: obj,
+						attr: attr
+					})
+				}
+			}
+			val = func.call(self);
+			if(Can.Observe){
+				delete Can.Observe.__reading;
+			}
+			return {
+				observes: observed,
+				val: val
+			};
+		},
 		/**
 		 * Used to convert what's in &lt;%= %> magic tags to a string
 		 * to be inserted in the rendered output.
@@ -259,68 +412,8 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		 *   * a function - the attribute "data-view-id='XX'", where XX is a hookup number for jQuery.View
 		 *   * an array - the attribute "data-view-id='XX'", where XX is a hookup number for jQuery.View
 		 */
-		text: function(status, self, func ) {
-			// wire up observe listener
-			var observed = [];
-			if (Can.Observe) {
-				Can.Observe.__reading = function(obj, attr){
-					observed.push({
-						obj: obj,
-						attr: attr
-					})
-				}
-			}
-			var input = func.call(self);
-			if(Can.Observe){
-				delete Can.Observe.__reading;
-			}
+		text: function( input ) {	
 			
-			if(observed.length) { 
-				if(status === 0){ // we are in some html ... (we can't know this!)
-					// return a span with a hookup function ...
-					return "<span "
-							+ "data-view-id='" + $View.hookup(function(el){
-								// remove child, bind on parent
-								var parent = el.parentNode;
-								// get where el is ...
-								for(var i=0; i < parent.childNodes.length; i++){
-									if(parent.childNodes[i] === el){
-										break;
-									}
-								}
-								var node = document.createTextNode(input);
-								parent.insertBefore(node, el)
-								parent.removeChild(el);
-								
-								
-								// create textNode
-								liveBind(observed, parent, function(){
-									node.nodeValue = func.call(self)
-								})
-							}) + "'></span>"
-				} else if(status === 1){
-					return input;
-					// mark at end!
-				} else {
-					
-					
-					pendingHookups.push(function(el){
-						var attr = el.getAttribute(status);
-						var parts = attr.split("__!@#$%__")
-						parts.splice(1,0,input)
-						el.setAttribute(status, parts.join(""))
-						
-						liveBind(observed, parent, function(){
-							parts[1] = func.call(self)
-							el.setAttribute(status, parts.join(""))
-						})
-					})
-					return "__!@#$%__";
-					return input;
-				}
-				
-			}
-			console.log(observed)
 			// if it's a string, return
 			if ( typeof input == 'string' ) {
 				return input;
@@ -511,7 +604,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			// start going token to token
 			scan(makeScanner(left, left === '[' ? ']' : '>'), source || "", function( token, scanner ) {
 				// if we don't have a start pair
-				var bn;
+				var bracketCount;
 				if ( startTag === null ) {
 					switch ( token ) {
 					case '\n':
@@ -542,12 +635,11 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					case '<':
 						htmlTag = '<'
 						content += token;
-						console.log('<');
 						
 						break;
 					case '>':
 						htmlTag = null;
-						console.log('>');
+						
 						// add some code that checks for pending hookups?
 						
 						
@@ -558,15 +650,12 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						break;
 					case "'":
 					case '"':
-						console.log('q')
 						if(htmlTag){
 							if(quote && quote === token){
 								quote = null;
-								console.log('eq')
 							} else if(quote === null){
 								quote = token;
 								beforeQuote = lastToken;
-								console.log('Q')
 							}
 						}
 					default:
@@ -584,57 +673,72 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							// <%
 							
 							// get the number of { minus }
-							bn = bracketNum(content);
+							bracketCount = bracketNum(content);
 							// how are we ending this statement
-							var last = 
-								// if the stack has value and we are ending a block
-								endStack.length && bn == -1 ? 
-								// use the last item in the block stack
-								endStack.pop() : 
-								// or use the default ending
-								";";
+							var last = // if the stack has value and we are ending a block
+								endStack.length && bracketCount == -1 ? // use the last item in the block stack
+								endStack.pop() : // or use the default ending
+								{after: ";"};
 							
 							// if we are ending a returning block
 							// add the finish text which returns the result of the
 							// block 
-							if(last === doubleParen) {
-								buff.push(finishTxt)
+							if(last.before) {
+								buff.push(last.before)
 							}
 							// add the remaining content
-							buff.push(content, last);
+							buff.push(content, last.after);
 							
 							// if we have a block, start counting 
-							if(bn === 1 ){
-								endStack.push(";")
+							if(bracketCount === 1 ){
+								endStack.push({
+									after : ";"
+								})
 							}
 							break;
-						case scanner.eLeft:
+							/*
 							// <%= clean content
-							bn = bracketNum(content);
-							if( bn ) {
-								endStack.push(doubleParen)
+							bracketCount = bracketNum(content);
+							if( bracketCount ) {
+								endStack.push({
+									before : finishTxt,
+									after : doubleParen+";"
+								})
 							}
+							// check if its a func like ()->
 							if(quickFunc.test(content)){
 								var parts = content.match(quickFunc)
 								content = "function(__){var "+parts[1]+"=$(__);"+parts[2]+"}"
 							}
-							buff.push(insert_cmd, "Can.EJS.clean(", content,bn ? startTxt : doubleParen);
-							break;
+							
+							buff.push(insert_cmd, "Can.EJS.clean(", content,bracketCount ? startTxt : doubleParen);
+							break;*/
+						case scanner.eLeft:
 						case scanner.eeLeft:
 							// <%== content
-							
+							// - we have an extra { -> block
 							// get the number of { minus } 
-							bn = bracketNum(content);
+							bracketCount = bracketNum(content);
 							// if we have more {, it means there is a block
-							if( bn ){
+							if( bracketCount ){
 								// when we return to the same # of { vs } end wiht a doubleParen
-								endStack.push(doubleParen)
+								endStack.push({
+									before : finishTxt,
+									after: "}));"
+								})
 							} 
+							// check if its a func like ()->
+							if(quickFunc.test(content)){
+								var parts = content.match(quickFunc)
+								content = "function(__){var "+parts[1]+"=$(__);"+parts[2]+"}"
+							}
 							
-							buff.push(insert_cmd, "Can.EJS.text("+status()+",this,function(){ return ", content, 
+							// if we have <%== a(function(){ %> then we want
+							//  Can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];
+							buff.push(insert_cmd, "Can.EJS."+(startTag === scanner.eLeft ? "esc" : "txt")+"("+status()+",this,function(){ return ", content, 
 								// if we have a block
-								bn ? 
-								// start w/ startTxt "var _v1ew = [])"
+								bracketCount ? 
+								// start w/ startTxt "var _v1ew = [];"
 								startTxt : 
 								// if not, add doubleParent to close push and text
 								"}"+doubleParen
@@ -665,7 +769,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				};
 			//use eval instead of creating a function, b/c it is easier to debug
 			myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
-
 			return out;
 		};
 

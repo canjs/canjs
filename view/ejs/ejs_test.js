@@ -24,6 +24,17 @@ module("can/view/ejs, rendering",{
 
 	}
 })
+
+
+test("domMap", function(){
+	var frag
+	$("#qunit-test-area").domManip(["Holler<span>foo</span>ed"], true, function( f ) {
+		frag = f
+	});
+	
+	$("#qunit-test-area").append(frag)
+})
+
 test("render with left bracket", function(){
 	var compiled = new Can.EJS({text: this.squareBrackets, type: '['}).render({animals: this.animals})
 	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders with bracket")
@@ -78,13 +89,13 @@ test("escapedContent", function(){
 test("unescapedContent", function(){
 	var text = "<span><%== tags %></span><div><%= tags %></div><input value='<%== quotes %>'/>";
 	var compiled = new Can.EJS({text: text}).render({tags: "<strong>foo</strong><strong>bar</strong>",
-							quotes : "I use &#39;quote&#39; fingers &quot;a lot&quot;"}) ;
+							quotes : "I use 'quote' fingers \"a lot\""}) ;
 	
 	var div = $('<div/>').html(compiled)
 	equals(div.find('span').text(), "foobar" );
 	equals(div.find('div').text().toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
 	equals(div.find('span').html().toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
-	equals(div.find('input').val(), "I use 'quote' fingers \"a lot\"" );
+	equals(div.find('input').val(), "I use 'quote' fingers \"a lot\"", "escapped no matter what" );
 });
 
 test("returning blocks", function(){
@@ -92,8 +103,11 @@ test("returning blocks", function(){
 		return cb([1,2,3,4])
 	}
 	
-	var res = Can.View("//can/view/ejs/test_template.ejs",{something: somethingHelper, 
-		items: ['a','b']});
+	var res = Can.
+		View("//can/view/ejs/test_template.ejs",{
+			something: somethingHelper, 
+			items: ['a','b']
+		});
 	// make sure expected values are in res
 	//ok(/\s4\s/.test(res), "first block called" );
 	//equals(res.match(/ItemsLength4/g).length, 4, "innerBlock and each")
@@ -128,18 +142,26 @@ test("helpers", function() {
 });
 
 test("binding", function(){
+
 	var text = "<div class='<%== task.attr('completed') ? 'complete' : ''%>'><%== task.attr('name') %></div>";
-	var task = new Can.Control({
+	var task = new Can.Observe({
 		name : 'dishes'
 	})
 	var compiled = new Can.EJS({text: text}).render({task:  task}) ;
 	var div = $('<div/>').html(compiled)
 	
-	console.log(div.html());
+	equals(div.find('div').html(),"dishes", "html correctly dishes")
+	equals(div.find('div').attr('class'),"", "class empty")
+	
+	
 	task.attr('name','lawn')
-	console.log(div.html());
+	
+	equals(div.find('div').html(),"lawn", "html correctly lawn")
+	equals(div.find('div').attr('class'),"", "class empty")
+	
 	task.attr('completed', true);
-	console.log(div.html());
+	
+	equals(div.find('div').attr('class'),"complete", "class changed to complete")
 });
 
 
