@@ -255,4 +255,30 @@ steal(function(){
 		});
 		return this;
     }
+	$.isEmptyObject = function(object){
+		var name;
+		for(name in object){};
+		return name !== undefined;
+	}
+	// make extend handle true for deep
+	var old = $.extend;
+	$.extend = function(first){
+		if(first === true){
+			var args = $.makeArray(arguments);
+			args.shift();
+			return old.apply($, args)
+		}
+		return old.apply($, arguments)
+	}
+	$.fn.domManip = function(args, table, callback){
+		this.each(function(elem){
+			elem.cloneNode(false);
+			var frag =  document.createDocumentFragment();
+			elem.innerHTML = args[0];
+			for(var i=0; i < elem.childNodes.length; i++){
+				frag.appendChild(elem[i])
+			}
+			callback(frag)
+		})
+	}
 })
