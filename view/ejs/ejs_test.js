@@ -109,8 +109,8 @@ test("returning blocks", function(){
 			items: ['a','b']
 		});
 	// make sure expected values are in res
-	//ok(/\s4\s/.test(res), "first block called" );
-	//equals(res.match(/ItemsLength4/g).length, 4, "innerBlock and each")
+	ok(/\s4\s/.test(res), "first block called" );
+	equals(res.match(/ItemsLength4/g).length, 4, "innerBlock and each")
 });
 
 test("easy hookup", function(){
