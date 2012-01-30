@@ -42,6 +42,41 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			return (lefts ? lefts.length : 0) - 
 				   (rights ? rights.length : 0);
 		},
+		// used to bind to an observe, and unbind when the element is removed
+		liveBind = function(observed, el, cb){
+			$.each(observed, function(i, ob){
+				ob.cb = function(){
+					cb()
+				}
+				ob.obj.bind(ob.attr, ob.cb)
+			})
+			$(el).bind('destroyed', function(){
+				$.each(observed, function(i, ob){
+					ob.obj.unbind(ob.attr, ob.cb)
+				})
+			})
+		},
+		// gets observes
+		observes = function(self, func){
+			var observed = [],
+				val;
+			if (Can.Observe) {
+				Can.Observe.__reading = function(obj, attr){
+					observed.push({
+						obj: obj,
+						attr: attr
+					})
+				}
+			}
+			val = func.call(self);
+			if(Can.Observe){
+				delete Can.Observe.__reading;
+			}
+			return {
+				observes: observed,
+				val: val
+			};
+		},
 		/**
 		 * @class Can.EJS
 		 * 
@@ -169,10 +204,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		 *    </tbody></table>
 		 */
 		EJS = function( options ) {
-			// If called without new, return a function that 
-			// renders with data and helpers like
-			// EJS({text: '<%= message %>'})({message: 'foo'});
-			// this is useful for steal's build system
 			if ( this.constructor != EJS ) {
 				var ejs = new EJS(options);
 				return function( data, helpers ) {
@@ -189,7 +220,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			}
 			//set options on self
 			extend(this, EJS.options, options);
-			this.template = compile(this.text, this.type, this.name);
+			this.template = scan(this.text, this.name);
 		};
 	// add EJS to jQuery if it exists
 	Can.EJS = EJS;
@@ -214,27 +245,10 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		var v = new EJS.Helpers(object, extraHelpers || {});
 		return this.template.fn.call(object, object, v);
 	};
-	var liveBind = function(observed, el, cb){
-		$.each(observed, function(i, ob){
-			ob.cb = function(){
-				cb()
-			}
-			ob.obj.bind(ob.attr, ob.cb)
-		})
-		$(el).bind('destroyed', function(){
-			$.each(observed, function(i, ob){
-				ob.obj.unbind(ob.attr, ob.cb)
-			})
-		})
-	};
 	/**
 	 * @Static
 	 */
 	extend(EJS, {
-		// t - 1
-		// h - 0
-		// q - string beforeQuote
-		// 
 		/**
 		 * @hide
 		 * called to setup unescaped text
@@ -250,7 +264,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			if(status  !== 0){
 				return EJS.esc(status, self, func)
 			}
-			var obs = EJS.observes(self, func),
+			var obs = observes(self, func),
 				observed = obs.observes,
 				input = obs.val;
 			if(!obs.observes.length){
@@ -258,38 +272,35 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			}
 			
 			
-			// add span ... (this will almost certainly
-			// not work w/i tables ...
-			// we could check what 'type' it is here
-			return "<span "
-						+ "data-view-id='" + $View.hookup(function(el){
+			// TODO: check previous tag, if ul, ol, table, tbody, etc, do the right thing
+			return "<span data-view-id='" + $View.hookup(function(span){
 					// remove child, bind on parent
 
-					var parent = el.parentNode;
-					var makeAndPut = function(val, insertBefore, remove){
-						var frag;
-						
-						$(parent).domManip([val], true, function( f ) {
-							frag = f;
-						});
-						if(frag.nodeType == 3){ // text node
-							frag = frag.parentNode;
-						}
-						
-						var nodes = $(frag.nodeType == 1 ? frag : $.map(frag.childNodes,function(node){
-							return node;
-						}));
-						if(insertBefore){
-							parent.insertBefore(frag, insertBefore)
-						} else {
-							parent.appendChild(frag)
-						}
-						
-						$(remove).remove();
-						return nodes;
-					}
-					
-					var nodes = makeAndPut(input, el, el)
+					var parent = span.parentNode,
+						makeAndPut = function(val, insertBefore, remove){
+							// get fragement
+							var frag;
+							
+							$(parent).domManip([val], true, function( f ) {
+								frag = f;
+							});
+							
+							// wrap it with jQuery (so we can remove it later)
+							var nodes = $(frag.nodeType !== 11 ? frag : $.map(frag.childNodes,function(node){
+								return node;
+							}));
+							
+							// insert it in the document
+							if(insertBefore){
+								parent.insertBefore(frag, insertBefore)
+							} else {
+								parent.appendChild(frag)
+							}
+							// remove the old content
+							$(remove).remove();
+							return nodes;
+						},
+						nodes = makeAndPut(input, span, span)
 					
 					// create textNode
 					liveBind(observed, parent, function(){
@@ -298,13 +309,13 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						nodes = makeAndPut(func.call(self), 
 							insertBefore,
 							nodes);
-					})
+					});
 			}) + "'></span>";
 			
 		},
 		// called to setup escaped text
 		esc : function(status, self, func){
-			var obs = EJS.observes(self, func),
+			var obs = observes(self, func),
 				observed = obs.observes,
 				input = obs.val;
 
@@ -315,20 +326,13 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			
 			if(status === 0){ // we are in between html tags
 				// return a span with a hookup function ...
-				return "<span "
-						+ "data-view-id='" + $View.hookup(function(el){
+				return "<span data-view-id='" + $View.hookup(function(el){
 					// remove child, bind on parent
-					var parent = el.parentNode;
-					// get where el is ...
-					for(var i=0; i < parent.childNodes.length; i++){
-						if(parent.childNodes[i] === el){
-							break;
-						}
-					}
-					var node = document.createTextNode(input);
-					parent.insertBefore(node, el)
-					parent.removeChild(el);
+					var parent = el.parentNode,
+						node = document.createTextNode(input);
 					
+					parent.insertBefore(node, el);
+					parent.removeChild(el);
 					
 					// create textNode
 					liveBind(observed, parent, function(){
@@ -337,14 +341,16 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				}) + "'></span>";
 				
 			} else if(status === 1){ // in a tag
+			
+				// TODO: handle within a tag <div <%== %>>
 				return input;
 				// mark at end!
 			} else { // in an attribute
 				
-				
+				// TODO: handle multiple parts
 				pendingHookups.push(function(el){
-					var attr = el.getAttribute(status);
-					var parts = attr.split("__!@#$%__")
+					var attr = el.getAttribute(status),
+						parts = attr.split("__!@#$%__")
 					parts.splice(1,0,input)
 					el.setAttribute(status, parts.join(""))
 					
@@ -355,36 +361,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				})
 				return "__!@#$%__";
 			}
-		},
-		/**
-		 * @hide
-		 * runs the function and checks if any attrs are called
-		 * @param {Object} self - the context of the view
-		 * @param {Object} func - the function to evaluate
-		 * @return {Object} an object with the following properties:
-		 * 
-		 *   - observes: array of observed objects and the attr that they are binding to.
-		 *   - val: the result of calling the function
-		 */
-		observes : function(self, func){
-			var observed = [],
-				val;
-			if (Can.Observe) {
-				Can.Observe.__reading = function(obj, attr){
-					observed.push({
-						obj: obj,
-						attr: attr
-					})
-				}
-			}
-			val = func.call(self);
-			if(Can.Observe){
-				delete Can.Observe.__reading;
-			}
-			return {
-				observes: observed,
-				val: val
-			};
 		},
 		/**
 		 * Used to convert what's in &lt;%= %> magic tags to a string
@@ -479,118 +455,39 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			} else {
 				return EJS.text(text);
 			}
-		},
-		/**
-		 * @attribute options
-		 * Sets default options for all views.
-		 * 
-		 *     $.EJS.options.type = '['
-		 * 
-		 * Only one option is currently supported: type.
-		 * 
-		 * Type is the left hand magic tag.
-		 */
-		options: {
-			type: '<',
-			ext: '.ejs'
 		}
-	});
+});
 	// ========= SCANNING CODE =========
-	// Given a scanner, and source content, calls block  with each token
-	// scanner - an object of magicTagName : values
-	// source - the source you want to scan
-	// block - function(token, scanner), called with each token
-	var scan = function( scanner, source, block ) {
-		// split on /\n/ to have new lines on their own line.
-		var source_split = rSplit(source, nReg),
-			i = 0;
-		for (; i < source_split.length; i++ ) {
-			scanline(scanner, source_split[i], block);
-		}
-
-	},
+	var tokenReg = new RegExp("(" +["<%%","%%>","<%==","<%=","<%#","<%","%>","<",">",'"',"'"].join("|")+")"),
+		// commands for caching
+		put_cmd = "___v1ew.push(",
+		insert_cmd = put_cmd,
+		startTxt = 'var ___v1ew = [];',
+		finishTxt = "return ___v1ew.join('')",
 		htmlTag =null,
 		quote = null,
 		beforeQuote = null,
+		// used to mark where the element is
 		status = function(){
 			// t - 1
 			// h - 0
 			// q - string beforeQuote
-			
 			return quote ? "'"+beforeQuote.match(/([^\s]+)=$/)[1]+"'" : (htmlTag ? 1 : 0)
 		},
 		pendingHookups = [],
-		scanline = function( scanner, line, block ) {
-			scanner.lines++;
-			var line_split = rSplit(line, scanner.splitter),
-				token;
-			for ( var i = 0; i < line_split.length; i++ ) {
-				token = line_split[i];
-				if ( token !== null ) {
-					block(token, scanner);
-				}
-			}
-		},
-		// creates a 'scanner' object.  This creates
-		// values for the left and right magic tags
-		// it's splitter property is a regexp that splits content
-		// by all tags
-		makeScanner = function( left, right ) {
-			var scanner = {};
-			extend(scanner, {
-				left: left + '%',
-				right: '%' + right,
-				dLeft: left + '%%',
-				dRight: '%%' + right,
-				eeLeft: left + '%==',
-				eLeft: left + '%=',
-				cmnt: left + '%#',
-				scan: scan,
-				lines: 0
-			});
-			scanner.splitter = new RegExp("(" + [scanner.dLeft, scanner.dRight, scanner.eeLeft, 
-			scanner.eLeft, scanner.cmnt, scanner.left, 
-			scanner.right + '\n', scanner.right, '\n',"<",">","'",'"'].join(")|(").
-			replace(/\[/g, "\\[").replace(/\]/g, "\\]") + ")");
-			return scanner;
-		},
-		// compiles a template where
-		// source - template text
-		// left - the left magic tag
-		// name - the name of the template (for debugging)
-		// returns an object like: {out : "", fn : function(){ ... }} where
-		//   out -  the converted JS source of the view
-		//   fn - a function made from the JS source
-		compile = function( source, left, name ) {
-			// make everything only use \n
-			source = source.replace(returnReg, "\n").replace(retReg, "\n");
-			// if no left is given, assume <
-			left = left || '<';
-
-			// put and insert cmds are used for adding content to the template
-			// currently they are identical, I am not sure why
-			var put_cmd = "___v1ew.push(",
-				insert_cmd = put_cmd,
-				// the text that starts the view code (or block function)
-				startTxt = 'var ___v1ew = [];',
-				// the text that ends the view code (or block function)
-				finishTxt = "return ___v1ew.join('')",
-				// initialize a buffer
-				buff = new EJS.Buffer([startTxt], []),
-				// content is used as the current 'processing' string
-				// this is the content between magic tags
+		scan = function(source, name){
+			
+			var tokens = source.replace(returnReg, "\n")
+				.replace(retReg, "\n")
+				.split(tokenReg),
 				content = '',
-				// adds something to be inserted into the view template
-				// this comes out looking like __v1ew.push("CONENT")
+				buff = [startTxt],
 				put = function( content, bonus ) {
 					buff.push(put_cmd, '"', clean(content), '"'+(bonus||'')+');');
 				},
-				
-				// cleans the running content
 				empty = function() {
 					content = ''
 				},
-				// what comes after clean or text
 				doubleParen = "));",
 				// a stack used to keep track of how we should end a bracket }
 				// once we have a <%= %> with a leftBracket
@@ -600,28 +497,23 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				startTag = null,
 				magicInTag = false;
 
-			// re-init the tag goodness
+			// re-init the tag state goodness
 			htmlTag = quote = beforeQuote = null;
+			
+			for (var i = 0, token; (token = tokens[i++]) !== undefined;) {
 				
-			// start going token to token
-			scan(makeScanner(left, left === '[' ? ']' : '>'), source || "", function( token, scanner ) {
-				// if we don't have a start pair
-				var bracketCount;
 				if ( startTag === null ) {
 					switch ( token ) {
 					case '\n':
 						content = content + "\n";
 						put(content);
-						buff.cr();
 						empty();
 						break;
-						// set start tag, add previous content (if there is some)
-						// clean content
-					case scanner.left:
-					case scanner.eLeft:
-					case scanner.eeLeft:
+					case '<%':
+					case '<%=':
+					case '<%==':
 						magicInTag = true;
-					case scanner.cmnt:
+					case '<%#':
 						// a new line, just add whatever content w/i a clean
 						// reset everything
 						startTag = token;
@@ -631,9 +523,9 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						empty();
 						break;
 
-					case scanner.dLeft:
+					case '<%%':
 						// replace <%% with <%
-						content += scanner.left;
+						content += '<%';
 						break;
 					case '<':
 						htmlTag = '<'
@@ -642,9 +534,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						break;
 					case '>':
 						htmlTag = null;
-						
-						// add some code that checks for pending hookups?
-						
+						// TODO: all <%= in tags should be added to pending hookups
 						if(magicInTag){
 							put(content, ",Can.EJS.pending(),\">\"");
 							empty();
@@ -671,10 +561,10 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				else {
 					//we have a start tag
 					switch ( token ) {
-					case scanner.right:
+					case '%>':
 						// %>
 						switch ( startTag ) {
-						case scanner.left:
+						case '<%':
 							// <%
 							
 							// get the number of { minus }
@@ -708,17 +598,10 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 								}
 								// add the remaining content
 								buff.push(content, ";",last.after);
-								
-								// if we have a block, start counting 
-								if (bracketCount === 1) {
-									endStack.push({
-										after: ";"
-									});
-								}
 							}
 							break;
-						case scanner.eLeft:
-						case scanner.eeLeft:
+						case '<%=':
+						case '<%==':
 							// <%== content
 							// - we have an extra { -> block
 							// get the number of { minus } 
@@ -739,7 +622,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							
 							// if we have <%== a(function(){ %> then we want
 							//  Can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];
-							buff.push(insert_cmd, "Can.EJS."+(startTag === scanner.eLeft ? "esc" : "txt")+"("+status()+",this,function(){ return ", content, 
+							buff.push(insert_cmd, "Can.EJS."+(startTag === '<%=' ? "esc" : "txt")+"("+status()+",this,function(){ return ", content, 
 								// if we have a block
 								bracketCount ? 
 								// start w/ startTxt "var _v1ew = [];"
@@ -752,7 +635,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						startTag = null;
 						empty();
 						break;
-					case scanner.dRight:
+					case '<%%':
 						content += scanner.right;
 						break;
 					default:
@@ -762,12 +645,17 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					
 				}
 				lastToken = token;
-			})
+			}
+			
+			// put it together ..
+			
 			if ( content.length > 0 ) {
 				// Should be content.dump in Ruby
-				buff.push(put_cmd, '"', clean(content) + '");');
+				buff.push(put_cmd, '"', clean(content) + '")');
 			}
-			var template = buff.close(),
+			buff.push(";")
+			
+			var template = buff.join(''),
 				out = {
 					out: 'try { with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}}catch(e){e.lineNumber=null;throw e;}"
 				};
@@ -775,51 +663,8 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
 			return out;
 		};
-
-
-	// A Buffer used to add content to.
-	// This is useful for performance and simplifying the 
-	// code above.
-	// We also can use this so we know line numbers when there
-	// is an error.  
-	// pre_cmd - code that sets up the buffer
-	// post - code that finalizes the buffer
-	EJS.Buffer = function( pre_cmd, post ) {
-		// the current line we are on
-		this.line = [];
-		// the combined content added to this buffer
-		this.script = [];
-		// content at the end of the buffer
-		this.post = post;
-		// add the pre commands to the first line
-		this.push.apply(this, pre_cmd);
-	};
-	EJS.Buffer.prototype = {
-		// add content to this line
-		// need to maintain your own semi-colons (for performance)
-		push: function() {
-			this.line.push.apply(this.line, arguments);
-		},
-		// starts a new line
-		cr: function() {
-			this.script.push(this.line.join(''), "\n");
-			this.line = [];
-		},
-		//returns the script too
-		close: function() {
-			// if we have ending line content, add it to the script
-			if ( this.line.length > 0 ) {
-				this.script.push(this.line.join(''));
-				this.line = [];
-			}
-			// if we have ending content, add it
-			this.post.length && this.push.apply(this, this.post);
-			// always end in a ;
-			this.script.push(";");
-			return this.script.join("");
-		}
-
-	};
+	
+	
 
 	/**
 	 * @class Can.EJS.Helpers
