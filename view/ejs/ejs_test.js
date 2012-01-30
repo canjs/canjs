@@ -141,7 +141,7 @@ test("helpers", function() {
 	equals($('#hookup').html(), "Simple");
 });
 
-test("binding", function(){
+test("live binding", function(){
 
 	var text = "<div class='<%== task.attr('completed') ? 'complete' : ''%>'><%== task.attr('name') %></div>";
 	var task = new Can.Observe({
@@ -163,6 +163,33 @@ test("binding", function(){
 	
 	equals(div.find('div').attr('class'),"complete", "class changed to complete")
 });
+
+test("block live binding", function(){
+	
+	var text = "<div><% if( obs.attr('sex') == 'male' ){ %>"+
+			"<span>Mr.</span>"+
+		"<% } else { %>"+
+		  "<label>Ms.</label>"+
+		"<% } %>"+
+		"</div>"
+	
+	
+	var obs = new Can.Observe({
+		sex : 'male'
+	})
+	
+	var compiled = new Can.EJS({text: text}).render({obs: obs});
+	
+	var div = $('<div/>').html(compiled);
+	
+	equals(div.find('div').html(), "<span>Mr.</span>","initial content")
+	
+	obs.attr('sex','female')
+	
+	equals(div.find('div').html(), "<label>Ms.</label>","updated label")
+	
+})
+
 
 
 

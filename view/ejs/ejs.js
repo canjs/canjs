@@ -272,10 +272,11 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						$(parent).domManip([val], true, function( f ) {
 							frag = f;
 						});
-						if(frag.nodeType == 3){
+						if(frag.nodeType == 3){ // text node
 							frag = frag.parentNode;
 						}
-						var nodes = $( $.map(frag.childNodes,function(node){
+						
+						var nodes = $(frag.nodeType == 1 ? frag : $.map(frag.childNodes,function(node){
 							return node;
 						}));
 						if(insertBefore){
@@ -596,7 +597,8 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				// we store how the file should end here (either '))' or ';' )
 				endStack =[],
 				lastToken,
-				startTag = null;
+				startTag = null,
+				magicInTag = false;
 
 			// re-init the tag goodness
 			htmlTag = quote = beforeQuote = null;
@@ -618,6 +620,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					case scanner.left:
 					case scanner.eLeft:
 					case scanner.eeLeft:
+						magicInTag = true;
 					case scanner.cmnt:
 						// a new line, just add whatever content w/i a clean
 						// reset everything
@@ -635,17 +638,19 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					case '<':
 						htmlTag = '<'
 						content += token;
-						
+						magicInTag = false;
 						break;
 					case '>':
 						htmlTag = null;
 						
 						// add some code that checks for pending hookups?
 						
-						
-						put(content, ",Can.EJS.pending(),\">\"");
-						empty();
-						
+						if(magicInTag){
+							put(content, ",Can.EJS.pending(),\">\"");
+							empty();
+						} else {
+							content += token;
+						}
 						
 						break;
 					case "'":
@@ -674,26 +679,42 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							
 							// get the number of { minus }
 							bracketCount = bracketNum(content);
-							// how are we ending this statement
-							var last = // if the stack has value and we are ending a block
-								endStack.length && bracketCount == -1 ? // use the last item in the block stack
-								endStack.pop() : // or use the default ending
-								{after: ";"};
 							
-							// if we are ending a returning block
-							// add the finish text which returns the result of the
-							// block 
-							if(last.before) {
-								buff.push(last.before)
-							}
-							// add the remaining content
-							buff.push(content, last.after);
-							
-							// if we have a block, start counting 
-							if(bracketCount === 1 ){
+							// we are ending a block
+							if (bracketCount == 1) {
+								// we are starting on
+								buff.push(insert_cmd, "Can.EJS.txt(" + status() + ",this,function(){", startTxt, content);
+								
 								endStack.push({
-									after : ";"
+									before: "",
+									after: finishTxt+"}));/*ft*/"
 								})
+							}
+							else {
+								
+								// how are we ending this statement
+								var last = // if the stack has value and we are ending a block
+									 endStack.length && bracketCount == -1 ? // use the last item in the block stack
+									 endStack.pop() : // or use the default ending
+								{
+									after: ";"
+								};
+								
+								// if we are ending a returning block
+								// add the finish text which returns the result of the
+								// block 
+								if (last.before) {
+									buff.push(last.before)
+								}
+								// add the remaining content
+								buff.push(content, ";",last.after);
+								
+								// if we have a block, start counting 
+								if (bracketCount === 1) {
+									endStack.push({
+										after: ";"
+									});
+								}
 							}
 							break;
 						case scanner.eLeft:
