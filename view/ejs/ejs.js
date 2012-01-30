@@ -408,15 +408,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				input.hookup.call(input, el, id);
 			}) ||
 			// or if it's a function, just use the input
-			(typeof input == 'function' && input) ||
-			// of it its an array, make a function that calls hookup or the function
-			// on each item in the array
-			(isArray(input) &&
-			function( el, id ) {
-				for ( var i = 0; i < input.length; i++ ) {
-					input[i].hookup ? input[i].hookup(el, id) : input[i](el, id);
-				}
-			});
+			(typeof input == 'function' && input);
 			// finally, if there is a funciton to hookup on some dom
 			// pass it to hookup to get the data-view-id back
 			if ( hook ) {
@@ -485,10 +477,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				put = function( content, bonus ) {
 					buff.push(put_cmd, '"', clean(content), '"'+(bonus||'')+');');
 				},
-				empty = function() {
-					content = ''
-				},
-				doubleParen = "));",
 				// a stack used to keep track of how we should end a bracket }
 				// once we have a <%= %> with a leftBracket
 				// we store how the file should end here (either '))' or ';' )
@@ -504,11 +492,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				
 				if ( startTag === null ) {
 					switch ( token ) {
-					case '\n':
-						content = content + "\n";
-						put(content);
-						empty();
-						break;
 					case '<%':
 					case '<%=':
 					case '<%==':
@@ -520,7 +503,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						if ( content.length > 0 ) {
 							put(content);
 						}
-						empty();
+						content = '';
 						break;
 
 					case '<%%':
@@ -537,7 +520,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						// TODO: all <%= in tags should be added to pending hookups
 						if(magicInTag){
 							put(content, ",Can.EJS.pending(),\">\"");
-							empty();
+							content = '';
 						} else {
 							content += token;
 						}
@@ -628,12 +611,12 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 								// start w/ startTxt "var _v1ew = [];"
 								startTxt : 
 								// if not, add doubleParent to close push and text
-								"}"+doubleParen
+								"}));"
 								);
 							break;
 						}
 						startTag = null;
-						empty();
+						content = '';
 						break;
 					case '<%%':
 						content += scanner.right;
@@ -711,18 +694,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 	 * @prototype
 	 */
 	EJS.Helpers.prototype = {
-		/**
-		 * Hooks up a jQuery plugin on.
-		 * @param {String} name the plugin name
-		 */
-		plugin: function( name ) {
-			var args = $.makeArray(arguments),
-				widget = args.shift();
-			return function( el ) {
-				var jq = $(el);
-				jq[widget].apply(jq, args);
-			};
-		},
 		/**
 		 * Renders a partial view.  This is deprecated in favor of <code>$.View()</code>.
 		 */
