@@ -12,12 +12,12 @@ module("can/view/ejs, rendering",{
 			}
 		}
 		
-		this.squareBrackets = "<ul>[% this.animals.each(function(animal){%]" +
-		               "<li>[%= animal %]</li>" + 
-			      "[%});%]</ul>"
-	    this.squareBracketsNoThis = "<ul>[% animals.each(function(animal){%]" +
-		               "<li>[%= animal %]</li>" + 
-			      "[%});%]</ul>"
+		this.squareBrackets = "<ul><% this.animals.each(function(animal){%>" +
+		               "<li><%= animal %></li>" + 
+			      "<%});%></ul>"
+	    this.squareBracketsNoThis = "<ul><% animals.each(function(animal){%>" +
+		               "<li><%= animal %></li>" + 
+			      "<%});%></ul>"
 	    this.angleBracketsNoThis  = "<ul><% animals.each(function(animal){%>" +
 		               "<li><%= animal %></li>" + 
 			      "<%});%></ul>";
