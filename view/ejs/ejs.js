@@ -298,6 +298,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							}
 							// remove the old content
 							$(remove).remove();
+							nodes.hookup();
 							return nodes;
 						},
 						nodes = makeAndPut(input, span, span)
@@ -701,6 +702,12 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			helpers = helpers || this._extras;
 			data = data || this._data;
 			return $View(url, data, helpers); //new EJS(options).render(data, helpers);
+		},
+		list : function(list, cb){
+			list.attr('length')
+			for(var i = 0, len = list.attr('length'); i < len; i++){
+				cb(list[i], i, list)
+			}
 		}
 	};
 

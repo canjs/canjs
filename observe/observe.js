@@ -266,7 +266,7 @@ steal('can/construct',function() {
 	 * @prototype
 	 */
 	{
-		init: function( obj ) {
+		setup: function( obj ) {
 			// _data is where we keep the properties
 			this._data = {};
 			// the namespace this object uses to listen to events
@@ -629,7 +629,7 @@ steal('can/construct',function() {
 	 * @prototype
 	 */
 	{
-		init: function( instances, options ) {
+		setup: function( instances, options ) {
 			this.length = 0;
 			this._namespace = ".list" + (++id);
 			this._init = 1;
@@ -683,8 +683,10 @@ steal('can/construct',function() {
 				
 				if( how === 'add' ) {
 					trigger(this, how, [newVal,+attr]);
+					trigger(this,'length',[this.length]);
 				} else if( how === 'remove' ) {
-					trigger(this, how, [oldVal, +attr])
+					trigger(this, how, [oldVal, +attr]);
+					trigger(this,'length',[this.length]);
 				}
 				
 			}
