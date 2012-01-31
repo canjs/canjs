@@ -262,7 +262,7 @@ steal('can/observe',function(){
 
 			// call event on the instance
 			trigger(this,funcName);
-			
+			trigger(this,"change","destroyed")
 			//@steal-remove-start
 			steal.dev.log("Model.js - "+ constructor.shortName+" "+ funcName);
 			//@steal-remove-end
@@ -277,6 +277,19 @@ steal('can/observe',function(){
 		Can.Model.dispatchEvent  = Can.dispatch
 	}
 	
-	var ML = Can.Observe.List('Can.Model.List')
+	var ML = Can.Observe.List('Can.Model.List',{
+		setup : function(){
+			Can.Observe.List.prototype.setup.apply(this, arguments );
+			// send destroy events
+			this.bind('change', $.proxy(this._sendDestroy, this))
+		},
+		_sendDestroy : function(ev, how){
+			console.log('change', how)
+			if(/\w+\.destroyed/.test(how)){
+				console.log('destroyed ...');
+				this.splice(this.indexOf(ev.target),1);
+			}
+		}
+	})
 	
 })

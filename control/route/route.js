@@ -17,7 +17,7 @@ steal('can/route','can/control', function(){
 				
 				batchNum = ev.batchNum;
 				
-				var d = Can.route.attrs();
+				var d = Can.route.attr();
 				delete d.route;
 				
 				controller[funcName](d)

@@ -632,7 +632,7 @@ steal("can/util").then(function( $ ) {
 		//if there are hookups, get jQuery object
 		if ( hasHookups && args[0] && isHTML(args[0]) ) {
 			hooks = $view.hookups;
-			$view.hookups = {};
+			//$view.hookups = {};
 			args[0] = $(args[0]);
 		}
 		res = old.apply(this, args);
@@ -701,8 +701,8 @@ steal("can/util").then(function( $ ) {
 				hookupEls[i].removeAttribute('data-view-id');
 			}
 		}
-		//copy remaining hooks back
-		$.extend($view.hookups, hooks);
+		//copy remaining hooks back ... hooks w/i a hook?
+		//$.extend($view.hookups, hooks);
 	};
 
 	/**
@@ -719,7 +719,7 @@ steal("can/util").then(function( $ ) {
 	 */
 	$.fn.hookup = function() {
 		var hooks = $view.hookups;
-		$view.hookups = {};
+		//$view.hookups = {};
 		hookupView(this, hooks);
 		return this;
 	};
