@@ -46,8 +46,10 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		liveBind = function(observed, el, cb){
 			$.each(observed, function(i, ob){
 				ob.cb = function(){
+					console.log("changed", ob.attr)
 					cb()
 				}
+				console.log("binding", ob.attr, ob.obj)
 				ob.obj.bind(ob.attr, ob.cb)
 			})
 			$(el).bind('destroyed', function(){
@@ -62,6 +64,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				val;
 			if (Can.Observe) {
 				Can.Observe.__reading = function(obj, attr){
+					console.log('observe',attr, obj)
 					observed.push({
 						obj: obj,
 						attr: attr
@@ -279,23 +282,28 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					var parent = span.parentNode,
 						makeAndPut = function(val, insertBefore, remove){
 							// get fragement
+							// TODO ... make this only get called once per 'changes'
 							var frag;
 							
 							$(parent).domManip([val], true, function( f ) {
 								frag = f;
 							});
-							
-							// wrap it with jQuery (so we can remove it later)
-							var nodes = $(frag.nodeType !== 11 ? frag : $.map(frag.childNodes,function(node){
-								return node;
-							}));
-							
-							// insert it in the document
-							if(insertBefore){
-								parent.insertBefore(frag, insertBefore)
+							if(frag){
+								// wrap it with jQuery (so we can remove it later)
+								var nodes = $(frag.nodeType !== 11 ? frag : $.map(frag.childNodes,function(node){
+									return node;
+								}));
+								
+								// insert it in the document
+								if(insertBefore){
+									parent.insertBefore(frag, insertBefore)
+								} else {
+									parent.appendChild(frag)
+								}
 							} else {
-								parent.appendChild(frag)
+								var nodes = $();
 							}
+							
 							// remove the old content
 							$(remove).remove();
 							nodes.hookup();
@@ -705,7 +713,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		},
 		list : function(list, cb){
 			list.attr('length')
-			for(var i = 0, len = list.attr('length'); i < len; i++){
+			for(var i = 0, len = list.length; i < len; i++){
 				cb(list[i], i, list)
 			}
 		}
