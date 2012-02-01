@@ -113,8 +113,7 @@ Can.Control("Todos",{
 // call update on the editor like
 Can.Control('Editor',{
   todo : function(todo){
-  	this.options.todo = todo;
-  	this.update();
+  	this.update({todo: todo});
   	this.setName()
   },
   // a helper that sets the value of the input
@@ -126,6 +125,9 @@ Can.Control('Editor',{
   // and update the input
   "{todo} updated" : function(){
     this.setName();
+  },
+  "{todo} destroyed" : function(){
+  	this.element.hide();
   },
   // when the input changes
   // update the todo instance
