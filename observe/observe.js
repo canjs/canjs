@@ -1,6 +1,6 @@
 steal('can/construct',function() {
 
-	// Alias helpful methods from jQuery
+	// returns if something is an object with properties of its own
 	var isObject = function( obj ) {
 			return typeof obj === 'object' && obj !== null && obj && !(obj instanceof Date);
 		},
@@ -40,6 +40,7 @@ steal('can/construct',function() {
 
 			return val;
 		},
+		// removes all listeners
 		unhookup = function(items, namespace){
 			return $.each(items, function(i, item){
 				if(item && item.unbind){
@@ -49,6 +50,7 @@ steal('can/construct',function() {
 		},
 		// an id to track events for a given observe
 		id = 0,
+		// a reference to an array of events that will be dispatched
 		collecting = null,
 		// call to start collecting events (Observe sends all events at once)
 		collect = function() {
@@ -117,7 +119,10 @@ steal('can/construct',function() {
 			}
 		},
 		bind = $method('bind'),
-		unbind = $method('unbind');
+		unbind = $method('unbind'),
+		attrParts = function(attr){
+			return $.isArray(attr) ? attr : (""+attr).split(".")
+		};
 
 	/**
 	 * @class Can.Observe
@@ -253,8 +258,7 @@ steal('can/construct',function() {
 	 * @param {Object} obj a JavaScript Object that will be 
 	 * converted to an observable
 	 */
-	var count = 0,
-		$Observe = Can.Construct('Can.Observe',{
+	var $Observe = Can.Construct('Can.Observe',{
 		// keep so it can be overwritten
 		setup : function(baseClass){
 			Can.Construct.setup.apply(this, arguments)
@@ -320,7 +324,7 @@ steal('can/construct',function() {
 				return this._attrs(attr, val)
 			}else if ( val === undefined ) {// if we are getting a value
 				// let people know we are reading (
-				Can.Observe.__reading && Can.Observe.__reading(this, attr)
+				$Observe.__reading && $Observe.__reading(this, attr)
 				return this._get(attr)
 			} else {
 				// otherwise we are setting
@@ -371,7 +375,7 @@ steal('can/construct',function() {
 		 */
 		removeAttr: function( attr ) {
 			// convert the attr into parts (if nested)
-			var parts = $.isArray(attr) ? attr : attr.split("."),
+			var parts = attrParts(attr),
 				// the actual property to remove
 				prop = parts.shift(),
 				// the current value
@@ -393,7 +397,7 @@ steal('can/construct',function() {
 		},
 		// reads a property from the object
 		_get: function( attr ) {
-			var parts = $.isArray(attr) ? attr : (""+attr).split("."),
+			var parts = attrParts(attr),
 				current = this.__get(parts.shift());
 			if ( parts.length ) {
 				return current ? current._get(parts) : undefined
@@ -412,7 +416,7 @@ steal('can/construct',function() {
 		// description - an object with converters / attrs / defaults / getterSetters ?
 		_set: function( attr, value ) {
 			// convert attr to attr parts (if it isn't already)
-			var parts = $.isArray(attr) ? attr : ("" + attr).split("."),
+			var parts = attrParts(attr),
 				// the immediate prop we are setting
 				prop = parts.shift(),
 				// its current value
@@ -579,7 +583,7 @@ steal('can/construct',function() {
 				return serialize(this, 'attr', {})
 			}
 
-			props = $.extend(/*true,*/ {}, props);
+			props = $.extend(true, {}, props);
 			var prop, 
 				collectingStarted = collect(),
 				self = this;
@@ -642,10 +646,7 @@ steal('can/construct',function() {
 			delete this._init;
 		},
 		_changes : function(ev, attr, how, newVal, oldVal){
-			// detects an add, sorts it, re-adds?
-			//console.log("")
-			
-			
+			// detects an add, sorts it, re-adds?			
 			
 			// if we are sorting, and an attribute inside us changed
 			/*if(this.comparator && /^\d+./.test(attr) ) {
@@ -673,7 +674,6 @@ steal('can/construct',function() {
 					return;
 				}
 			}*/
-			
 			
 			// if we add items, we need to handle 
 			// sorting and such

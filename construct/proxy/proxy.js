@@ -72,13 +72,13 @@ proxy = function( funcs ) {
 			// keep a reference to us in self
 			self = this;
 			
-			//@steal-remove-start
+			//!steal-remove-start
 			for( var i =0; i< funcs.length;i++ ) {
 				if(typeof funcs[i] == "string" && !isFunction(this[funcs[i]])){
 					throw ("class.js "+( this.fullName || this.Class.fullName)+" does not have a "+funcs[i]+"method!");
 				}
 			}
-			//@steal-remove-end
+			//!steal-remove-end
 			return function class_cb() {
 				// add the arguments after the curried args
 				var cur = args.concat(makeArray(arguments)),

@@ -188,11 +188,11 @@ steal('can/observe',function(){
 				length = raw.length,
 				i = 0;
 
-			//@steal-remove-start
+			//!steal-remove-start
 			if (!length ) {
 				steal.dev.warn("model.js models has no data.  If you have one item, use model")
 			}
-			//@steal-remove-end
+			//!steal-remove-end
 			for (; i < length; i++ ) {
 				res.push(this.model(raw[i]));
 			}
@@ -286,9 +286,9 @@ steal('can/observe',function(){
 			// call event on the instance
 			trigger(this,funcName);
 			trigger(this,"change",funcName)
-			//@steal-remove-start
+			//!steal-remove-start
 			steal.dev.log("Model.js - "+ constructor.shortName+" "+ funcName);
-			//@steal-remove-end
+			//!steal-remove-end
 
 			// call event on the instance's Class
 			trigger(constructor,funcName, this);
