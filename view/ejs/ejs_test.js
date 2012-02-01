@@ -190,7 +190,28 @@ test("block live binding", function(){
 	
 })
 
-
+test("hookups in tables", function(){
+	var text = "<table><% if( obs.attr('sex') == 'male' ){ %>"+
+			"<tr><td>Mr.</td></tr>"+
+		"<% } else { %>"+
+		  "<tr><td>Ms.</td></tr>"+
+		"<% } %>"+
+		"</table>"
+		
+	var obs = new Can.Observe({
+		sex : 'male'
+	})
+	
+	var compiled = new Can.EJS({text: text}).render({obs: obs});
+	
+	var div = $('<div/>').html(compiled);
+	
+	equals(div.find('table').html(), "<tr><td>Mr.</td></tr>","initial content")
+	
+	obs.attr('sex','female')
+	
+	equals(div.find('table').html(), "<<tr><td>Ms.</td></tr>","updated label")
+})
 
 
 })

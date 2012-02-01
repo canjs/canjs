@@ -25,6 +25,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		leftBracket = /\{/g,
 		rightBracket = /\}/g,
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
+		tagMap = {"" : "span", table: "tr", tr: "td", ol: "li", ul: "li",tbody: "tr", thead: "tr", tfoot: "tr"},
 		// escapes characters starting with \
 		clean = function( content ) {
 			return content.replace(slashReg, '\\\\').replace(newReg, '\\n').replace(quoteReg, '\\"').replace(tabReg, '\\t');
@@ -261,9 +262,9 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		 * @param {Object} self
 		 * @param {Object} func
 		 */
-		txt : function(status, self, func){
+		txt : function(tagName, status, self, func){
 			if(status  !== 0){
-				return EJS.esc(status, self, func)
+				return EJS.esc(tagName, status, self, func)
 			}
 			var obs = observes(self, func),
 				observed = obs.observes,
@@ -274,7 +275,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			
 			
 			// TODO: check previous tag, if ul, ol, table, tbody, etc, do the right thing
-			return "<span data-view-id='" + $View.hookup(function(span){
+			return "<" +(tagMap[tagName] || "span")+" data-view-id='" + $View.hookup(function(span){
 					// remove child, bind on parent
 
 					var parent = span.parentNode,
@@ -317,11 +318,11 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							insertBefore,
 							nodes);
 					});
-			}) + "'></span>";
+			}) + "'></" +( tagMap[tagName] || "span")+">";
 			
 		},
 		// called to setup escaped text
-		esc : function(status, self, func){
+		esc : function(tagName, status, self, func){
 			var obs = observes(self, func),
 				observed = obs.observes,
 				input = obs.val;
@@ -333,7 +334,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			
 			if(status === 0){ // we are in between html tags
 				// return a span with a hookup function ...
-				return "<span data-view-id='" + $View.hookup(function(el){
+				return "<" +(tagMap[tagName] || "span")+" data-view-id='" + $View.hookup(function(el){
 					// remove child, bind on parent
 					var parent = el.parentNode,
 						node = document.createTextNode(input);
@@ -345,7 +346,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					liveBind(observed, parent, function(){
 						node.nodeValue = func.call(self)
 					})
-				}) + "'></span>";
+				}) + "'></" +(tagMap[tagName] || "span")+">";
 				
 			} else if(status === 1){ // in a tag
 			
@@ -490,7 +491,8 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				endStack =[],
 				lastToken,
 				startTag = null,
-				magicInTag = false;
+				magicInTag = false,
+				tagName = '';
 
 			// re-init the tag state goodness
 			htmlTag = quote = beforeQuote = null;
@@ -544,6 +546,10 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							}
 						}
 					default:
+						if(lastToken === '<'){
+							tagName = token.split(' ')[0]
+							console.log(tagName)
+						}
 						content += token;
 						break;
 					}
@@ -563,7 +569,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							// we are ending a block
 							if (bracketCount == 1) {
 								// we are starting on
-								buff.push(insert_cmd, "Can.EJS.txt(" + status() + ",this,function(){", startTxt, content);
+								buff.push(insert_cmd, "Can.EJS.txt('"+tagName+"'," + status() + ",this,function(){", startTxt, content);
 								
 								endStack.push({
 									before: "",
@@ -612,7 +618,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							
 							// if we have <%== a(function(){ %> then we want
 							//  Can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];
-							buff.push(insert_cmd, "Can.EJS."+(startTag === '<%=' ? "esc" : "txt")+"("+status()+",this,function(){ return ", content, 
+							buff.push(insert_cmd, "Can.EJS."+(startTag === '<%=' ? "esc" : "txt")+"('"+tagName+"'," + status()+",this,function(){ return ", content, 
 								// if we have a block
 								bracketCount ? 
 								// start w/ startTxt "var _v1ew = [];"
