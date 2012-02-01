@@ -43,13 +43,12 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				   (rights ? rights.length : 0);
 		},
 		// used to bind to an observe, and unbind when the element is removed
+		// TODO: batching should happen here
 		liveBind = function(observed, el, cb){
 			$.each(observed, function(i, ob){
 				ob.cb = function(){
-					console.log("changed", ob.attr)
 					cb()
 				}
-				console.log("binding", ob.attr, ob.obj)
 				ob.obj.bind(ob.attr, ob.cb)
 			})
 			$(el).bind('destroyed', function(){
@@ -64,7 +63,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				val;
 			if (Can.Observe) {
 				Can.Observe.__reading = function(obj, attr){
-					console.log('observe',attr, obj)
 					observed.push({
 						obj: obj,
 						attr: attr

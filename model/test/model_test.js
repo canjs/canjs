@@ -483,7 +483,36 @@ test('aborting create update and destroy', function(){
 	
 });
 
-
+test("store binding", function(){
+	
+	Can.Model("Storage");
+	
+	var s = new Storage({
+		id: 1,
+		thing : {foo: "bar"}
+	});
+	ok(!Storage.store[1],"not stored");
+	var func = function(){};
+	s.bind("foo",func)	;
+	
+	ok(Storage.store[1], "stored");
+	
+	s.unbind("foo", func);
+	
+	ok(!Storage.store[1],"not stored");
+	
+	var s2 = new Storage({});
+	
+	s2.bind("foo",func)	;
+	
+	s2.attr('id',5)
+	
+	ok(Storage.store[5], "stored");
+	
+	s2.unbind("foo", func);
+	ok(!Storage.store[5],"not stored");
+	
+})
 
 })//.then("./model_test.js","./associations_test.js")
 

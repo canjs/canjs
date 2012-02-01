@@ -159,7 +159,7 @@ steal('can/observe',function(){
 					converters: converters
 				});
 			}
-			
+			this.store = {};
 			this._url = this._shortName+"/{"+this.id+"}"
 		},
 		id: "id",
@@ -212,7 +212,8 @@ steal('can/observe',function(){
 			if ( attributes instanceof this ) {
 				attributes = attributes.serialize();
 			}
-			return new this( attributes );
+			
+			return this.store[attributes.id] || new this( attributes );
 		}
 	},{
 		isNew: function() {
@@ -225,9 +226,31 @@ steal('can/observe',function(){
 		},
 		destroy: function( success, error ) {
 			return makeRequest(this, 'destroy', success, error, 'destroyed');
+		},
+		bind : function(){
+			if(!this._bindings){
+				this.constructor.store[getId(this)] = this;
+				this._bindings = 0;
+			}
+			this._bindings++;
+			return Can.Observe.prototype.bind.apply(this, arguments);
+		},
+		unbind : function(){
+			this._bindings--;
+			if(!this._bindings){
+				delete this.constructor.store[getId(this)];
+			}
+			return Can.Observe.prototype.unbind.apply(this, arguments);
+		},
+		// change ID
+		___set: function( prop, val ) {
+			Can.Observe.prototype.___set.call(this,prop, val)
+			// if we add an id, move it to the store
+			if(prop === this.constructor.id && this._bindings){
+				this.constructor.store[getId(this)] = this;
+			}
 		}
 	});
-	
 		$.each([
 	/**
 	 * @function created
@@ -262,7 +285,7 @@ steal('can/observe',function(){
 
 			// call event on the instance
 			trigger(this,funcName);
-			trigger(this,"change","destroyed")
+			trigger(this,"change",funcName)
 			//@steal-remove-start
 			steal.dev.log("Model.js - "+ constructor.shortName+" "+ funcName);
 			//@steal-remove-end
@@ -284,7 +307,6 @@ steal('can/observe',function(){
 			this.bind('change', $.proxy(this._sendDestroy, this))
 		},
 		_sendDestroy : function(ev, how){
-			console.log('change', how)
 			if(/\w+\.destroyed/.test(how)){
 				console.log('destroyed ...');
 				this.splice(this.indexOf(ev.target),1);
