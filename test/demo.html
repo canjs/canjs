@@ -1,13 +1,13 @@
 <html>
 <body>
 	<ul id='todos'></ul>
-<input id='editor'/>
+	<input id='editor'/>
 
 <script type='text/ejs' id='todosEjs'>
     
 <% list(this, function( todo ) { %>
   <li <%= (el) -> el.data('todo',todo) %>>
-    <%= todo.name %>
+    <%= todo.attr('name') %>
     <a href="javascript://" class='destroy'>X</a>
   </li>
 <% }) %>
@@ -97,7 +97,7 @@ Can.Control("Todos",{
   // when a todo is clicked, create a 'selected'
   // event for others to listen to
   "li click" : function(li){
-    li.trigger('selected', li.model() );
+    li.trigger('selected', li.data('todo') );
   },
   // when .destroy is clicked, destroy the
   // todo
@@ -112,12 +112,10 @@ Can.Control("Todos",{
 // Editor manages editing a todo's name
 // call update on the editor like
 Can.Control('Editor',{
-  // an update method to change the editor's todo
-  update : function(options){
-    // resets all bindings
-    this._super(options);
-    // updates the name
-    this.setName();
+  todo : function(todo){
+  	this.options.todo = todo;
+  	this.update();
+  	this.setName()
   },
   // a helper that sets the value of the input
   // to the todo's name
@@ -152,11 +150,11 @@ Can.Control("Routing",{
   "todos/:id route" : function(data){
     $("#editor").show();
     Todo.findOne(data, $.proxy(function(todo){
-      this.editor.update({todo: todo});
+      this.editor.todo(todo);
     }, this))
   },
-  ".todo selected" : function(el, ev, todo){
-    $.route.attr('id',todo.id);
+  "li selected" : function(el, ev, todo){
+    Can.route.attr('id',todo.id);
   }
 });
 
