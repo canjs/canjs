@@ -1,4 +1,4 @@
-steal('can/observe',function($){
+steal('can/observe','can/util/string/classize.js',function($){
 
 
 var classize = $.String.classize,

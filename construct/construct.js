@@ -8,8 +8,7 @@ steal("can/util/string",function( $ ) {
 	// =============== HELPERS =================
 
 	    // if we are initializing a new class
-	var initializing = false,
-		underscore = Can.String.underscore;
+	var initializing = false;
 
 	/**
 	 * @class Can.Construct
@@ -464,8 +463,8 @@ steal("can/util/string",function( $ ) {
 					shortName = parts.pop(),
 					current = Can.String.getObject(parts.join('.'), window, true),
 					namespace = current,
-					_fullName = underscore(fullName.replace(/\./g, "_")),
-					_shortName = underscore(shortName);
+					_fullName = Can.String.underscore(fullName.replace(/\./g, "_")),
+					_shortName = Can.String.underscore(shortName);
 
 				//@steal-remove-start
 				if(current[shortName]){
