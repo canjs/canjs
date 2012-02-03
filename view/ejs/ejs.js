@@ -42,12 +42,27 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				
 			return (lefts ? lefts.length : 0) - 
 				   (rights ? rights.length : 0);
-		},	
+		},
+		batchedUpdates = [],
+		batchTimerId = null,
+		batch = function(update) {
+			clearTimeout(batchTimerId);
+			batchedUpdates.push(update);
+			batchTimerId = setTimeout(function(){
+				//console.log(batchedUpdates.length)
+				$.each(batchedUpdates, function(i, bu){
+					bu();
+				})
+				batchedUpdates = [];
+			}, 200)
+		}
 		// used to bind to an observe, and unbind when the element is removed
 		// TODO: batching should happen here
 		liveBind = function(observed, el, cb){
 			$.each(observed, function(i, ob){
 				ob.cb = function(){
+					//Uncomment this to enable batching of callbacks
+					//batch(cb);
 					cb()
 				}
 				ob.obj.bind(ob.attr, ob.cb)
