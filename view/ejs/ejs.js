@@ -54,7 +54,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					bu();
 				})
 				batchedUpdates = [];
-			}, 200)
+			}, 1)
 		}
 		// used to bind to an observe, and unbind when the element is removed
 		// TODO: batching should happen here
@@ -324,10 +324,13 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						nodes = makeAndPut(input, span, span);
 					// create textNode
 					liveBind(observed, parent, function(){
-						// after the last node
-						var insertBefore = nodes[nodes.length - 1].nextSibling;
+						
+						var oldNodes = nodes,
+							insertBefore = nodes[nodes.length - 1].nextSibling; // after the last node
 						nodes = makeAndPut(func.call(self), 
-							insertBefore, nodes);
+							insertBefore);
+						//replace oldNodes with new nodes
+						$(oldNodes.parent()).append(nodes).find(oldNodes).remove();
 					});
 					return parent;
 			}) + "'></" +( tagMap[tagName] || "span")+">";
@@ -376,8 +379,8 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					el.setAttribute(status, parts.join(""))
 					
 					liveBind(observed, parent, function(){
-						parts[1] = func.call(self)
-						el.setAttribute(status, parts.join(""))
+						parts[1] = func.call(self);
+						el.setAttribute(status, parts.join(""));
 					})
 				})
 				return "__!@#$%__";

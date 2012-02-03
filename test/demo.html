@@ -1,15 +1,25 @@
 <html>
+<head>
+  <style>
+    .done {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
 <body>
 	<ul id='todos'></ul>
 	<input id='editor'/>
 
 <script type='text/ejs' id='todosEjs'>
-    
+
 <% list(this, function( todo ) { %>
-  <li <%= (el) -> el.data('todo',todo) %>>
-    <%= todo.attr('name') %>
-    <a href="javascript://" class='destroy'>X</a>
-  </li>
+    <li <%= (el) -> el.data('todo',todo) %>>
+      <input type="checkbox" class="complete" <%= todo.attr('complete') ? 'checked' : '' %>>
+      <span class="<%= todo.attr('complete') ? 'done' : '' %>">
+        <%= todo.attr('name') %>
+      </span>
+      <a href="javascript://" class='destroy'>X</a>
+    </li>
 <% }) %>
 
 </script> 
@@ -47,9 +57,9 @@ Can.Model('Todo',{
 
 // Our fake todos
 var TODOS = [
-    {id: 1, name: "wake up"},
-    {id: 2, name: "take out trash"},
-    {id: 3, name: "do dishes"}
+    {id: 1, name: "wake up", complete: true},
+    {id: 2, name: "take out trash", complete: false},
+    {id: 3, name: "do dishes", complete: false}
 ];
 
 // findAll
@@ -99,6 +109,15 @@ Can.Control("Todos",{
   "li click" : function(li){
     li.trigger('selected', li.data('todo') );
   },
+  // when .complete is clicked, mark the todo completed
+  "li .complete click" : function(el, ev){
+    el.closest('li')
+      .data('todo')
+      .attr('complete', el.prop('checked'))
+      .save();
+    
+    ev.stopPropagation();
+  },
   // when .destroy is clicked, destroy the
   // todo
   "li .destroy click" : function(el, ev){
@@ -133,7 +152,7 @@ Can.Control('Editor',{
   // update the todo instance
   "change" : function(){
     var todo = this.options.todo
-    todo.attr('name',this.element.val() )
+    todo.attr('name',this.element.val())
     todo.save();
   }
 });
