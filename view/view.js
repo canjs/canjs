@@ -635,14 +635,18 @@ steal("can/util").then(function( $ ) {
 			//$view.hookups = {};
 			args[0] = $(args[0]);
 		}
-		res = old.apply(this, args);
-
-		//now hookup the hookups
+		
+		//hookup the hookups
 		if ( hooks
 		/* && args.length*/
 		) {
-			hookupView(args[0], hooks);
+			//hookupView returns a DocumentFragment or jQuery elements now
+			args[0] = hookupView(args[0], hooks);
 		}
+
+		//then insert into DOM
+		res = old.apply(this, args);
+
 		return res;
 	};
 
@@ -688,7 +692,7 @@ steal("can/util").then(function( $ ) {
 	hookupView = function( els, hooks ) {
 		//remove all hookups
 		var hookupEls, len, i = 0,
-			id, func;
+			id, func, res;
 		els = els.filter(function() {
 			return this.nodeType != 3; //filter out text nodes
 		})
@@ -696,11 +700,13 @@ steal("can/util").then(function( $ ) {
 		len = hookupEls.length;
 		for (; i < len; i++ ) {
 			if ( hookupEls[i].getAttribute && (id = hookupEls[i].getAttribute('data-view-id')) && (func = hooks[id]) ) {
-				func(hookupEls[i], id);
+				res = func(hookupEls[i], id);
+				typeof res !== "undefined" ? hookupEls[i] = res : ''; 
 				delete hooks[id];
-				hookupEls[i].removeAttribute('data-view-id');
+				hookupEls[i] && hookupEls[i].nodeType !== 11 && hookupEls[i].removeAttribute('data-view-id');
 			}
 		}
+		return hookupEls;
 		//copy remaining hooks back ... hooks w/i a hook?
 		//$.extend($view.hookups, hooks);
 	};
