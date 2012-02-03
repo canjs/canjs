@@ -25,7 +25,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		leftBracket = /\{/g,
 		rightBracket = /\}/g,
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
-		tagMap = {"" : "span", table: "tr", tr: "td", ol: "li", ul: "li",tbody: "tr", thead: "tr", tfoot: "tr"},
+		tagMap = {"": "span", table: "tr", tr: "td", ol: "li", ul: "li", tbody: "tr", thead: "tr", tfoot: "tr"},
 		// escapes characters starting with \
 		clean = function( content ) {
 			return content.replace(slashReg, '\\\\').replace(newReg, '\\n').replace(quoteReg, '\\"').replace(tabReg, '\\t');
@@ -42,7 +42,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				
 			return (lefts ? lefts.length : 0) - 
 				   (rights ? rights.length : 0);
-		},
+		},	
 		// used to bind to an observe, and unbind when the element is removed
 		// TODO: batching should happen here
 		liveBind = function(observed, el, cb){
@@ -273,8 +273,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				return EJS.text(obs.val)
 			}
 			
-			
-			// TODO: check previous tag, if ul, ol, table, tbody, etc, do the right thing
 			return "<" +(tagMap[tagName] || "span")+" data-view-id='" + $View.hookup(function(span){
 					// remove child, bind on parent
 
@@ -308,16 +306,15 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							nodes.hookup();
 							return nodes;
 						},
-						nodes = makeAndPut(input, span, span)
-					
+						nodes = makeAndPut(input, span, span);
 					// create textNode
 					liveBind(observed, parent, function(){
 						// after the last node
 						var insertBefore = nodes[nodes.length - 1].nextSibling;
 						nodes = makeAndPut(func.call(self), 
-							insertBefore,
-							nodes);
+							insertBefore, nodes);
 					});
+					return parent;
 			}) + "'></" +( tagMap[tagName] || "span")+">";
 			
 		},
@@ -346,6 +343,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					liveBind(observed, parent, function(){
 						node.nodeValue = func.call(self)
 					})
+					return parent;
 				}) + "'></" +(tagMap[tagName] || "span")+">";
 				
 			} else if(status === 1){ // in a tag
