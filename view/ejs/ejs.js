@@ -315,7 +315,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					// make sure the parent does not die
 					// we might simply check that nodes is still in the document 
 					// before a write ...
-					liveBind(observed, parent, function(){
+					liveBind(observed, span.parentNode, function(){
 						nodes = makeAndPut(func.call(self), nodes);
 					});
 					//return parent;
@@ -363,7 +363,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					parts.splice(1,0,input)
 					el.setAttribute(status, parts.join(""))
 					
-					liveBind(observed, parent, function(){
+					liveBind(observed, el, function(){
 						parts[1] = func.call(self);
 						el.setAttribute(status, parts.join(""));
 					})

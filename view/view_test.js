@@ -111,7 +111,7 @@ test("object of deferreds", function(){
 		bar = $.Deferred();
 	stop();
 	Can.View("//can/view/test/qunit/deferreds.ejs",{
-		foo : foo.promise(),
+		foo : foo.promise ? foo.promise() : foo,
 		bar : bar
 	}).then(function(result){
 		equals(result, "FOO and BAR");

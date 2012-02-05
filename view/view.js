@@ -272,7 +272,7 @@ steal("can/util").then(function( $ ) {
 				callback && callback(result);
 			});
 			// return the deferred ....
-			return deferred.promise();
+			return deferred;
 		}
 		else {
 			// no deferreds, render this bad boy
@@ -661,7 +661,7 @@ steal("can/util").then(function( $ ) {
 	};
 	// returns true if the arg is a jQuery object or HTMLElement
 	isDOM = function(arg){
-		return arg.nodeType || arg.jquery
+		return arg.nodeType || (arg[0] && arg[0].nodeType)
 	};
 	// returns whether the argument is some sort of HTML data
 	isHTML = function( arg ) {
@@ -686,11 +686,15 @@ steal("can/util").then(function( $ ) {
 	hookupView = function( fragment, hooks ) {
 		//remove all hookups
 		var hookupEls, len, i = 0,
-			id, func, res;
-		els = $(fragment.childNodes ? fragment.childNodes : fragment).filter(function() {
-			return this.nodeType != 3; //filter out text nodes
+			id, func, res,
+			arr = [];
+		$.each(fragment.childNodes ? fragment.childNodes : fragment, function(i, node){
+			if(node.nodeType != 3){
+				arr.push(node)
+			}
 		})
-		hookupEls = els.add("[data-view-id]", els);
+		var els = $(arr);
+		hookupEls = els.find("*").andSelf().filter("[data-view-id]");
 		len = hookupEls.length;
 		for (; i < len; i++ ) {
 			if ( hookupEls[i].getAttribute && (id = hookupEls[i].getAttribute('data-view-id')) && (func = hooks[id]) ) {
