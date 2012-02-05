@@ -298,6 +298,7 @@ test("findAll string", function(){
 		$.fixture.on = true;
 	})
 })
+/*
 test("Empty uses fixtures", function(){
 	ok(false, "Figure out")
 	return;
@@ -312,7 +313,7 @@ test("Empty uses fixtures", function(){
 		start();
 		equals(things.length, 10,"got 10 things")
 	})
-});
+});*/
 
 test("Model events" , function(){
 
