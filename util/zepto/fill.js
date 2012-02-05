@@ -23,7 +23,7 @@ steal(function(){
 		func && func.call(this, this);
 	};
 	
-	Deferred.when = function() {
+	$.when = Deferred.when = function() {
 		var args = $.makeArray( arguments );
 		if (args.length < 2) {
 			var obj = args[0];
@@ -249,11 +249,15 @@ steal(function(){
 		$.cleanData(this);
 		this.each(function () {
 			if (this.parentNode != null) {
-				$.cleanData(this.getElementsByTagName('*'))
+				// might be a text node
+				this.getElementsByTagName && $.cleanData(this.getElementsByTagName('*'))
 				this.parentNode.removeChild(this);
 			}
 		});
 		return this;
+    }
+    $.trim = function(str){
+    	return str.trim();
     }
 	$.isEmptyObject = function(object){
 		var name;
@@ -270,15 +274,34 @@ steal(function(){
 		}
 		return old.apply($, arguments)
 	}
-	$.fn.domManip = function(args, table, callback){
-		this.each(function(elem){
-			elem.cloneNode(false);
-			var frag =  document.createDocumentFragment();
-			elem.innerHTML = args[0];
-			for(var i=0; i < elem.childNodes.length; i++){
-				frag.appendChild(elem[i])
-			}
-			callback(frag)
+	var table = document.createElement('table'),
+    	tableRow = document.createElement('tr'),
+		containers = {
+		  'tr': document.createElement('tbody'),
+		  'tbody': table, 'thead': table, 'tfoot': table,
+		  'td': tableRow, 'th': tableRow,
+		  '*': document.createElement('div')
+		},
+   		fragmentRE = /^\s*<(\w+)[^>]*>/,
+   		fragment  = function(html, name) {
+		    if (name === undefined) {
+		    	name = fragmentRE.test(html) && RegExp.$1;
+		    }
+		    if (!(name in containers)) name = '*';
+		    var container = containers[name];
+		    container.innerHTML = '' + html;
+		    return [].slice.call(container.childNodes);
+		}
+	
+	$.buildFragment = function(htmls, nodes){
+		var parts = fragment(htmls[0]),
+			frag = document.createDocumentFragment();
+		parts.forEach(function(part){
+			frag.appendChild(part);
 		})
+		return {
+			fragment: frag
+		}
 	}
+	
 })

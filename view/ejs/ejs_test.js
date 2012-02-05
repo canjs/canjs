@@ -26,14 +26,7 @@ module("can/view/ejs, rendering",{
 })
 
 
-test("domMap", function(){
-	var frag
-	$("#qunit-test-area").domManip(["Holler<span>foo</span>ed"], true, function( f ) {
-		frag = f
-	});
-	
-	$("#qunit-test-area").append(frag)
-})
+
 
 test("render with left bracket", function(){
 	var compiled = new Can.EJS({text: this.squareBrackets, type: '['}).render({animals: this.animals})
@@ -206,11 +199,11 @@ test("hookups in tables", function(){
 	
 	var div = $('<div/>').html(compiled);
 	
-	equals(div.find('table').html(), "<tr><td>Mr.</td></tr>","initial content")
+	equals(div.find('tbody').html(), "<tr><td>Mr.</td></tr>","initial content")
 	
 	obs.attr('sex','female')
 	
-	equals(div.find('table').html(), "<<tr><td>Ms.</td></tr>","updated label")
+	equals(div.find('tbody').html(), "<tr><td>Ms.</td></tr>","updated label")
 })
 
 

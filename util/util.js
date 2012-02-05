@@ -1,15 +1,23 @@
 Can = {};
-steal('./jquery.js',function(){
-	Can.trigger= function(parent, ev, args){
-		$.event.trigger(ev, args, parent, true)
-	}
-	// creates a document fragement of the html provided
-	
-	Can.frag = function(html, nodes){
-		// converting an array of elements into a fragmeent
 
-		return html ? $.buildFragment([html], [nodes||document]).fragment :
-			document.createDocumentFragment(document.createTextNode(""));
+if(window.STEALZEPTO){
+	steal('can/util/zepto').then('./zepto/fill')
+} else {
+	steal('./jquery.js').then('./jquery_fill')
+}
+steal(function(){
+	
+	// creates a document fragement of the html provided
+	Can.frag = function(html, node){
+		// converting an array of elements into a fragmeent
+		var frag
+		if(html){
+			frag = html.nodeType == 11 || html.appendTo ? html : $.buildFragment([html], [node||document]).fragment
+		} else {
+			frag = document.createDocumentFragment();
+			frag.appendChild(document.createTextNode(""))
+		}
+		return frag;
 	}
 	
 })
