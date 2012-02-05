@@ -57,7 +57,7 @@ if( window.jQuery ){
 			}
 		})
 		var a = $("<div id='crazy'></div>").appendTo($("#qunit-test-area"))
-		a.weird_bind();
+		new WeirdBind(a);
 		a.trigger("crazyEvent")
 		ok(called, "heard the trigger");
 		

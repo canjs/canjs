@@ -61,8 +61,8 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		liveBind = function(observed, el, cb){
 			$.each(observed, function(i, ob){
 				ob.cb = function(){
-					batch(cb);
-					//cb()
+					//batch(cb);
+					cb()
 				}
 				ob.obj.bind(ob.attr, ob.cb)
 			})
@@ -289,30 +289,20 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			
 			return "<" +(tagMap[tagName] || "span")+" data-view-id='" + $View.hookup(function(span){
 					// remove child, bind on parent
-
-					var parent = span.parentNode,
-						makeAndPut = function(val, insertBefore, remove){
-							// get fragement
-							// TODO ... make this only get called once per 'changes'
-							var frag;
-							
-							$(parent).domManip([val], true, function( f ) {
-								frag = f;
-							});
-							if(frag){
-								// wrap it with jQuery (so we can remove it later)
-								var nodes = $(frag.nodeType !== 11 ? frag : $.map(frag.childNodes,function(node){
+					var makeAndPut = function(val, remove){
+							// get fragement of html to fragment
+							var frag = Can.frag(val),
+								// wrap it with jQuery
+								nodes = $($.map(frag.childNodes,function(node){
 									return node;
-								}));
-								
-								// insert it in the document
-								if(insertBefore){
-									parent.insertBefore(frag, insertBefore)
-								} else {
-									parent.appendChild(frag)
-								}
+								})),
+								last = remove[remove.length - 1];
+							
+							// insert it in the document
+							if( last.nextSibling ){
+								last.parentNode.insertBefore(frag, last.nextSibling)
 							} else {
-								var nodes = $();
+								last.parentNode.appendChild(frag)
 							}
 							
 							// remove the old content
@@ -320,18 +310,15 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							nodes.hookup();
 							return nodes;
 						},
-						nodes = makeAndPut(input, span, span);
-					// create textNode
+						nodes = makeAndPut(input, [span]);
+					// listen to changes and update
+					// make sure the parent does not die
+					// we might simply check that nodes is still in the document 
+					// before a write ...
 					liveBind(observed, parent, function(){
-						
-						var oldNodes = nodes,
-							insertBefore = nodes[nodes.length - 1].nextSibling; // after the last node
-						nodes = makeAndPut(func.call(self), 
-							insertBefore);
-						//replace oldNodes with new nodes
-						$(oldNodes.parent()).append(nodes).find(oldNodes).remove();
+						nodes = makeAndPut(func.call(self), nodes);
 					});
-					return parent;
+					//return parent;
 			}) + "'></" +( tagMap[tagName] || "span")+">";
 			
 		},
@@ -360,7 +347,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					liveBind(observed, parent, function(){
 						node.nodeValue = func.call(self)
 					})
-					return parent;
 				}) + "'></" +(tagMap[tagName] || "span")+">";
 				
 			} else if(status === 1){ // in a tag
@@ -562,8 +548,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						}
 					default:
 						if(lastToken === '<'){
-							tagName = token.split(' ')[0]
-							console.log(tagName)
+							tagName = token.split(' ')[0];
 						}
 						content += token;
 						break;

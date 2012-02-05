@@ -629,20 +629,14 @@ steal("can/util").then(function( $ ) {
 			break;
 		}
 
-		//if there are hookups, get jQuery object
+		//if there are hookups, turn into a frag
+		// and insert that
+		// by using a frag, the element can be recursively hooked up
+		// before insterion
 		if ( hasHookups && args[0] && isHTML(args[0]) ) {
-			hooks = $view.hookups;
-			//$view.hookups = {};
-			args[0] = $(args[0]);
+			args[0] = hookupView(Can.frag(args[0]), $view.hookups)
 		}
-		
-		//hookup the hookups
-		if ( hooks
-		/* && args.length*/
-		) {
-			//hookupView returns a DocumentFragment or jQuery elements now
-			args[0] = hookupView(args[0], hooks);
-		}
+	
 
 		//then insert into DOM
 		res = old.apply(this, args);
@@ -688,25 +682,24 @@ steal("can/util").then(function( $ ) {
 	getCallback = function( args ) {
 		return typeof args[3] === 'function' ? 3 : typeof args[2] === 'function' && 2;
 	};
-
-	hookupView = function( els, hooks ) {
+	
+	hookupView = function( fragment, hooks ) {
 		//remove all hookups
 		var hookupEls, len, i = 0,
 			id, func, res;
-		els = els.filter(function() {
+		els = $(fragment.childNodes ? fragment.childNodes : fragment).filter(function() {
 			return this.nodeType != 3; //filter out text nodes
 		})
 		hookupEls = els.add("[data-view-id]", els);
 		len = hookupEls.length;
 		for (; i < len; i++ ) {
 			if ( hookupEls[i].getAttribute && (id = hookupEls[i].getAttribute('data-view-id')) && (func = hooks[id]) ) {
-				res = func(hookupEls[i], id);
-				typeof res !== "undefined" ? hookupEls[i] = res : ''; 
+				func(hookupEls[i], id);
 				delete hooks[id];
 				hookupEls[i] && hookupEls[i].nodeType !== 11 && hookupEls[i].removeAttribute('data-view-id');
 			}
 		}
-		return hookupEls;
+		return fragment;
 		//copy remaining hooks back ... hooks w/i a hook?
 		//$.extend($view.hookups, hooks);
 	};
