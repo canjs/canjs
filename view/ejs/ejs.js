@@ -350,22 +350,41 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				}) + "'></" +(tagMap[tagName] || "span")+">";
 				
 			} else if(status === 1){ // in a tag
-			
 				// TODO: handle within a tag <div <%== %>>
 				return input;
 				// mark at end!
 			} else { // in an attribute
-				
-				// TODO: handle multiple parts
 				pendingHookups.push(function(el){
-					var attr = el.getAttribute(status),
-						parts = attr.split("__!@#$%__")
+					var hooks = $(el).data('hooks') || $(el).data('hooks', {}).data('hooks'),
+					attr = el.getAttribute(status),
+					parts = attr.split("__!@#$%__");
+
+					if(hooks[status]) {
+						hooks[status].funcs.push(func);
+					}
+					else {
+						var me = {
+							render: function() {
+								for(var i = 0; i < hooks[status].funcs.length; i++) {
+									attr = attr.replace(/__!@#\$%__/, function() {
+										return hooks[status].funcs[i].call(self);
+									});
+								}
+
+								return attr;
+							},
+							
+							funcs: [func]
+						};
+
+						hooks[status] = me;
+					}
+
 					parts.splice(1,0,input)
 					el.setAttribute(status, parts.join(""))
 					
-					liveBind(observed, el, function(){
-						parts[1] = func.call(self);
-						el.setAttribute(status, parts.join(""));
+					liveBind(observed, el, function() {
+						el.setAttribute(status, hooks[status].render());
 					})
 				})
 				return "__!@#$%__";
@@ -426,9 +445,10 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			// finally, if all else false, toString it
 			return input.toString ? input.toString() : "";
 		},
-		pending : function(){
-			if(pendingHookups.length){
+		pending: function() {
+			if(pendingHookups.length) {
 				var hooks = pendingHookups.slice(0);
+
 				pendingHookups = [];
 				return " data-view-id='" + $View.hookup(function(el){
 					$.each(hooks, function(i, fn){
@@ -477,7 +497,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		},
 		pendingHookups = [],
 		scan = function(source, name){
-			
 			var tokens = source.replace(returnReg, "\n")
 				.replace(retReg, "\n")
 				.split(tokenReg),
@@ -497,9 +516,9 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 
 			// re-init the tag state goodness
 			htmlTag = quote = beforeQuote = null;
-			
+
 			for (var i = 0, token; (token = tokens[i++]) !== undefined;) {
-				
+
 				if ( startTag === null ) {
 					switch ( token ) {
 					case '<%':
