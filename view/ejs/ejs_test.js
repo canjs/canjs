@@ -206,5 +206,24 @@ test("hookups in tables", function(){
 	equals(div.find('tbody').html(), "<tr><td>Ms.</td></tr>","updated label")
 })
 
+test('multiple hookups in a single attribute', function() {
+	var text =	'<div class=\'<%= obs.attr("foo") %>' +
+							'<%= obs.attr("bar") %><%= obs.attr("baz") %>\'></div>',
+
+	obs = new Can.Observe({
+		foo: 'a',
+		bar: 'b',
+		baz: 'c'
+	}),
+
+	compiled = new Can.EJS({ text: text }).render({ obs: obs }),
+	div = $('<div/>').html(compiled);
+
+	equals(div.html(), '<div class="abc"></div>', 'initial render');
+
+	obs.attr('bar', 'e');
+
+	equals(div.html(), '<div class="aec"></div>', 'updated values');
+});
 
 })
