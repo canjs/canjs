@@ -28,13 +28,14 @@ module("can/view");
 
 test("multiple template types work", function(){
 	
-	$.each(["micro","ejs","jaml"/*, "tmpl"*/], function(i, ext){
-		$("#qunit-test-area").html("");
-		ok($("#qunit-test-area").children().length == 0,ext+ ": Empty To Start")
+	Can.each(["micro","ejs","jaml"/*, "tmpl"*/], function(i, ext){
+		var div = Can.$(document.createElement('div'));
+			
+		Can.append(div, Can.view("//can/view/test/qunit/template."+ext,{"message" :"helloworld"}))
 		
-		$("#qunit-test-area").html("//can/view/test/qunit/template."+ext,{"message" :"helloworld"})
-		ok($("#qunit-test-area").find('h3').length, ext+": h3 written for ")
-		ok( /helloworld\s*/.test( $("#qunit-test-area").text()), ext+": hello world present for ")
+		
+		ok( div[0].getElementsByTagName('h3').length, ext+": h3 written for ")
+		ok( /helloworld\s*/.test( div[0].innerHTML ), ext+": hello world present for ")
 	})
 });
 

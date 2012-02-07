@@ -31,6 +31,9 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 	Can.inArray = function(item,arr){
 		return arr.indexOf(item)
 	}
+	Can.map = function(arr, fn){
+		return Array.from(arr||[]).map(fn);
+	}
 	Can.each = function(elements, callback) {
     	var i, key;
 	    if (typeof  elements.length == 'number' && elements.pop)
@@ -226,6 +229,9 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 		}
 		return wrapped.grab(html)
 	}
+	Can.filter = function(wrapped, filter){
+		return wrapped.filter(filter);
+	}
 	Can.data = function(wrapped, key, value){
 		if(value === undefined){
 			return wrapped[0].retrieve(key)
@@ -237,8 +243,15 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 		return wrapped.addClass(className);
 	}
 	Can.remove = function(wrapped){
+		// we need to remove text nodes ourselves
 		
-		return wrapped.destroy();
+		return wrapped.filter(function(node){ 
+			if(node.nodeType !== 1){
+				node.parentNode.removeChild(node);
+			} else {
+				return true;
+			}
+		}).destroy();
 	}
 	// destroyed method
 	var destroy = Element.prototype.destroy;

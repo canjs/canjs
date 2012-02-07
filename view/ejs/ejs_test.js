@@ -72,11 +72,13 @@ test("escapedContent", function(){
 							quotes : "I use 'quote' fingers \"a lot\"",
 							number : 123}) ;
 	
-	var div = $('<div/>').html(compiled)
-	equals(div.find('span').text(), "foo < bar < car > zar > poo" );
-	equals(div.find('strong').text(), 123 );
-	equals(div.find('input').val(), "I use 'quote' fingers \"a lot\"" );
-	equals(div.find('label').html(), "&amp;" );
+	var div = document.createElement('div');
+	div.innerHTML = compiled;
+	
+	equals(div.getElementsByTagName('span')[0].firstChild.nodeValue, "foo < bar < car > zar > poo" );
+	equals(div.getElementsByTagName('strong')[0].firstChild.nodeValue, 123 );
+	equals(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"" );
+	equals(div.getElementsByTagName('label')[0].innerHTML, "&amp;" );
 })
 
 test("unescapedContent", function(){
@@ -84,11 +86,13 @@ test("unescapedContent", function(){
 	var compiled = new Can.EJS({text: text}).render({tags: "<strong>foo</strong><strong>bar</strong>",
 							quotes : "I use 'quote' fingers \"a lot\""}) ;
 	
-	var div = $('<div/>').html(compiled)
-	equals(div.find('span').text(), "foobar" );
-	equals(div.find('div').text().toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
-	equals(div.find('span').html().toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
-	equals(div.find('input').val(), "I use 'quote' fingers \"a lot\"", "escapped no matter what" );
+	var div = document.createElement('div');
+	div.innerHTML = compiled;
+
+	equals(div.getElementsByTagName('span')[0].firstChild.nodeType, 1 );
+	equals(div.getElementsByTagName('div')[0].firstChild.nodeValue.toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
+	equals(div.getElementsByTagName('span')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
+	equals(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"", "escapped no matter what" );
 });
 
 test("returning blocks", function(){
@@ -107,8 +111,10 @@ test("returning blocks", function(){
 });
 
 test("easy hookup", function(){
-	var div = $('<div/>').html("//can/view/ejs/easyhookup.ejs",{text: "yes"})
-	ok( div.find('div').hasClass('yes'), "has yes" )
+	var div = document.createElement('div');
+	div.appendChild(Can.view("//can/view/ejs/easyhookup.ejs",{text: "yes"}))
+	
+	ok( div.getElementsByTagName('div')[0].className.indexOf("yes") != -1, "has yes" )
 });
 
 test("helpers", function() {
@@ -130,8 +136,8 @@ test("helpers", function() {
 	
 	text = "<div id=\"hookup\" <%= elementHelper() %>></div>";
 	compiled = new Can.EJS({text: text}).render() ;
-	$('#qunit-test-area').append($(compiled));
-	equals($('#hookup').html(), "Simple");
+	Can.append( Can.$('#qunit-test-area'), Can.view.frag(compiled));
+	equals(Can.$('#hookup')[0].innerHTML, "Simple");
 });
 
 test("live binding", function(){
@@ -141,20 +147,24 @@ test("live binding", function(){
 		name : 'dishes'
 	})
 	var compiled = new Can.EJS({text: text}).render({task:  task}) ;
-	var div = $('<div/>').html(compiled)
 	
-	equals(div.find('div').html(),"dishes", "html correctly dishes")
-	equals(div.find('div').attr('class'),"", "class empty")
+	var div = document.createElement('div');
+
+	div.appendChild(Can.view.frag(compiled))
+	
+
+	equals(div.getElementsByTagName('div')[0].innerHTML,"dishes", "html correctly dishes")
+	equals(div.getElementsByTagName('div')[0].className,"", "class empty")
 	
 	
 	task.attr('name','lawn')
 	
-	equals(div.find('div').html(),"lawn", "html correctly lawn")
-	equals(div.find('div').attr('class'),"", "class empty")
+	equals(div.getElementsByTagName('div')[0].innerHTML,"lawn", "html correctly lawn")
+	equals(div.getElementsByTagName('div')[0].className,"", "class empty")
 	
 	task.attr('completed', true);
 	
-	equals(div.find('div').attr('class'),"complete", "class changed to complete")
+	equals(div.getElementsByTagName('div')[0].className,"complete", "class changed to complete")
 });
 
 test("block live binding", function(){
@@ -173,13 +183,15 @@ test("block live binding", function(){
 	
 	var compiled = new Can.EJS({text: text}).render({obs: obs});
 	
-	var div = $('<div/>').html(compiled);
+	var div = document.createElement('div');
+
+	div.appendChild(Can.view.frag(compiled))
 	
-	equals(div.find('div').html(), "<span>Mr.</span>","initial content")
+	equals(div.getElementsByTagName('div')[0].innerHTML, "<span>Mr.</span>","initial content")
 	
 	obs.attr('sex','female')
 	
-	equals(div.find('div').html(), "<label>Ms.</label>","updated label")
+	equals(div.getElementsByTagName('div')[0].innerHTML, "<label>Ms.</label>","updated label")
 	
 })
 
@@ -197,13 +209,16 @@ test("hookups in tables", function(){
 	
 	var compiled = new Can.EJS({text: text}).render({obs: obs});
 	
-	var div = $('<div/>').html(compiled);
+	var div = document.createElement('div');
+
+	div.appendChild(Can.view.frag(compiled));
 	
-	equals(div.find('tbody').html(), "<tr><td>Mr.</td></tr>","initial content")
+	
+	equals(div.getElementsByTagName('tbody')[0].innerHTML, "<tr><td>Mr.</td></tr>","initial content")
 	
 	obs.attr('sex','female')
 	
-	equals(div.find('tbody').html(), "<tr><td>Ms.</td></tr>","updated label")
+	equals(div.getElementsByTagName('tbody')[0].innerHTML, "<tr><td>Ms.</td></tr>","updated label")
 })
 
 test('multiple hookups in a single attribute', function() {
@@ -216,14 +231,17 @@ test('multiple hookups in a single attribute', function() {
 		baz: 'c'
 	}),
 
-	compiled = new Can.EJS({ text: text }).render({ obs: obs }),
-	div = $('<div/>').html(compiled);
+	compiled = new Can.EJS({ text: text }).render({ obs: obs })
+	
+	var div = document.createElement('div');
 
-	equals(div.html(), '<div class="abc"></div>', 'initial render');
+	div.appendChild(Can.view.frag(compiled));
+
+	equals(div.innerHTML, '<div class="abc"></div>', 'initial render');
 
 	obs.attr('bar', 'e');
 
-	equals(div.html(), '<div class="aec"></div>', 'updated values');
+	equals(div.innerHTML, '<div class="aec"></div>', 'updated values');
 });
 
 })
