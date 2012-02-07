@@ -116,8 +116,8 @@ steal('can/construct',function() {
 				return Can[name].apply(this, arguments );
 			}
 		},
-		bind = $method('bind'),
-		unbind = $method('unbind'),
+		bind = $method('addEvent'),
+		unbind = $method('removeEvent'),
 		attrParts = function(attr){
 			return Can.isArray(attr) ? attr : (""+attr).split(".")
 		};

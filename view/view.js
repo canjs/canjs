@@ -4,7 +4,7 @@ steal("can/util").then(function( $ ) {
 	var toId = function( src ) {
 		return src.replace(/^\/\//, "").replace(/[\/\.]/g, "_");
 	},
-		makeArray = $.makeArray,
+		makeArray = Can.makeArray,
 		// used for hookup ids
 		id = 1;
 	// this might be useful for testing if html
@@ -223,6 +223,26 @@ steal("can/util").then(function( $ ) {
 	 * are passed, a deferred that will resolve to
 	 * the rendered result of the view.
 	 */
+	
+	Can.view = function(view, data, helpers){
+		// get the result
+		var result = Can.View(view, data, helpers);
+		// convert it into a dom frag
+		return Can.view.frag(result);
+	};
+	Can.view.frag = function(result){
+		var frag = Can.buildFragment([result],[]).fragment;
+		
+		// hook it up
+		var hooks = $view.hookups;
+		//$view.hookups = {};
+		return hookupView(frag, hooks);
+	}
+	Can.view.hookup = function(frag){
+		//$view.hookups = {};
+		return hookupView(frag, $view.hookups);
+	}
+	
 	var $view = Can.View = function( view, data, helpers, callback ) {
 		// if helpers is a function, it is actually a callback
 		if ( typeof helpers === 'function' ) {
@@ -236,13 +256,13 @@ steal("can/util").then(function( $ ) {
 
 		if ( deferreds.length ) { // does data contain any deferreds?
 			// the deferred that resolves into the rendered content ...
-			var deferred = $.Deferred();
+			var deferred = Can.Deferred();
 
 			// add the view request to the list of deferreds
 			deferreds.push(get(view, true))
 
 			// wait for the view and all deferreds to finish
-			$.when.apply($, deferreds).then(function( resolved ) {
+			Can.when.apply(Can, deferreds).then(function( resolved ) {
 				// get all the resolved deferreds
 				var objs = makeArray(arguments),
 					// renderer is last [0] is the data
@@ -330,7 +350,7 @@ steal("can/util").then(function( $ ) {
 			response = function( text ) {
 				// get the renderer function
 				var func = type.renderer(id, text),
-					d = $.Deferred().resolve(func)
+					d = Can.Deferred().resolve(func)
 				// cache if if we are caching
 				if ( $view.cache ) {
 					$view.cached[id] = d;
@@ -351,7 +371,7 @@ steal("can/util").then(function( $ ) {
 			suffix = $view.ext;
 			url = url + $view.ext;
 		}
-		if($.isArray(suffix)){
+		if(Can.isArray(suffix)){
 			suffix = suffix[0]
 		}
 
@@ -381,10 +401,10 @@ steal("can/util").then(function( $ ) {
 			return response(el.innerHTML);
 		} else {
 			// make an ajax request for text
-			var d = $.Deferred();
+			var d = Can.Deferred();
 			// TODO, create an ajax request and deferred
 			// deferred resolved with function.
-			$.ajax({
+			Can.ajax({
 				async: async,
 				url: url,
 				dataType: "text",
@@ -411,7 +431,7 @@ steal("can/util").then(function( $ ) {
 		},
 		// returns true if something looks like a deferred
 		isDeferred = function( obj ) {
-			return obj && $.isFunction(obj.always) // check if obj is a $.Deferred
+			return obj && Can.isFunction(obj.always) // check if obj is a Can.Deferred
 		},
 		// gets an array of deferreds from an object
 		// this only goes one level deep
@@ -431,13 +451,13 @@ steal("can/util").then(function( $ ) {
 			return deferreds;
 		},
 		// gets the useful part of deferred
-		// this is for Models and $.ajax that resolve to array (with success and such)
+		// this is for Models and Can.ajax that resolve to array (with success and such)
 		// returns the useful, content part
 		usefulPart = function( resolved ) {
-			return $.isArray(resolved) && resolved.length === 3 && resolved[1] === 'success' ? resolved[0] : resolved
+			return Can.isArray(resolved) && resolved.length === 3 && resolved[1] === 'success' ? resolved[0] : resolved
 		};
 
-		$.extend($view, {
+		Can.extend($view, {
 		/**
 		 * @attribute hookups
 		 * @hide
@@ -493,7 +513,7 @@ steal("can/util").then(function( $ ) {
 		 * 		}
 		 * 	},
 		 * 	script: function( id, text ) {
-		 * 		var tmpl = $.tmpl(text).toString();
+		 * 		var tmpl = Can.tmpl(text).toString();
 		 * 		return "function(data){return ("+
 		 * 		  	tmpl+
 		 * 			").call(jQuery, jQuery, data); }";
@@ -563,6 +583,8 @@ steal("can/util").then(function( $ ) {
 	var convert, modify, isTemplate, isHTML, isDOM, getCallback, hookupView, funcs,
 		// text and val cannot produce an element, so don't run hookups on them
 		noHookup = {'val':true,'text':true};
+
+	
 
 	convert = function( func_name ) {
 		// save the old jQuery helper
@@ -670,7 +692,7 @@ steal("can/util").then(function( $ ) {
 			return true;
 		} else if ( typeof arg === "string" ) {
 			// if string, do a quick sanity check that we're HTML
-			arg = $.trim(arg);
+			arg = Can.trim(arg);
 			return arg.substr(0, 1) === "<" && arg.substr(arg.length - 1, 1) === ">" && arg.length >= 3;
 		} else {
 			// don't know what you are
@@ -688,16 +710,21 @@ steal("can/util").then(function( $ ) {
 		var hookupEls, len, i = 0,
 			id, func, res,
 			arr = [];
-		$.each(fragment.childNodes ? fragment.childNodes : fragment, function(i, node){
+		
+		console.log("hookin up ")
+		Can.each(fragment.childNodes ? Can.makeArray(fragment.childNodes) : fragment, function(i, node){
 			if(node.nodeType != 3){
 				arr.push(node)
+				arr.push.apply(arr, Can.makeArray( node.getElementsByTagName('*')))
 			}
-		})
-		var els = $(arr);
-		hookupEls = els.find("*").andSelf().filter("[data-view-id]");
+		});
+		console.log("got els")
+		hookupEls = Can.filter(Can.$(arr), "[data-view-id]");
 		len = hookupEls.length;
+		console.log("filtered")
 		for (; i < len; i++ ) {
 			if ( hookupEls[i].getAttribute && (id = hookupEls[i].getAttribute('data-view-id')) && (func = hooks[id]) ) {
+				console.log("calling func")
 				func(hookupEls[i], id);
 				delete hooks[id];
 				hookupEls[i] && hookupEls[i].nodeType !== 11 && hookupEls[i].removeAttribute('data-view-id');
@@ -707,7 +734,10 @@ steal("can/util").then(function( $ ) {
 		//copy remaining hooks back ... hooks w/i a hook?
 		//$.extend($view.hookups, hooks);
 	};
+	if($.fn){
+		
 
+	
 	/**
 	 *  @add jQuery.fn
 	 *  @parent jQuery.View
@@ -730,7 +760,7 @@ steal("can/util").then(function( $ ) {
 	/**
 	 *  @add jQuery.fn
 	 */
-	$.each([
+	Can.each([
 	/**
 	 *  @function prepend
 	 *  @parent jQuery.View
@@ -850,5 +880,5 @@ steal("can/util").then(function( $ ) {
 
 	//go through helper funcs and convert
 
-
+	}
 });

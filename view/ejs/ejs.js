@@ -11,8 +11,8 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		//	return string.substr(0, string.length - 1);
 		//},
 		rSplit = Can.String.rsplit,
-		extend = $.extend,
-		isArray = $.isArray,
+		extend = Can.extend,
+		isArray = Can.isArray,
 		// regular expressions for caching
 		returnReg = /\r\n/g,
 		retReg = /\r/g,
@@ -48,10 +48,10 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		batch = function(update) {
 			clearTimeout(batchTimerId);
 			//keep batched updates unique
-			var updatePos = $.inArray(update, batchedUpdates);
+			var updatePos = Can.inArray(update, batchedUpdates);
 			updatePos === -1 ? batchedUpdates.push(update) : batchedUpdates[updatePos] = update;
 			batchTimerId = setTimeout(function(){
-				$.each(batchedUpdates, function(i, bu){
+				Can.each(batchedUpdates, function(i, bu){
 					bu();
 				})
 				batchedUpdates = [];
@@ -59,15 +59,15 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		}
 		// used to bind to an observe, and unbind when the element is removed
 		liveBind = function(observed, el, cb){
-			$.each(observed, function(i, ob){
+			Can.each(observed, function(i, ob){
 				ob.cb = function(){
 					//batch(cb);
 					cb()
 				}
 				ob.obj.bind(ob.attr, ob.cb)
 			})
-			$(el).bind('destroyed', function(){
-				$.each(observed, function(i, ob){
+			Can.bind.call(el,'destroyed', function(){
+				Can.each(observed, function(i, ob){
 					ob.obj.unbind(ob.attr, ob.cb)
 				})
 			})
@@ -290,10 +290,11 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			return "<" +(tagMap[tagName] || "span")+" data-view-id='" + $View.hookup(function(span){
 					// remove child, bind on parent
 					var makeAndPut = function(val, remove){
+							console.log("make and put")
 							// get fragement of html to fragment
-							var frag = Can.frag(val),
-								// wrap it with jQuery
-								nodes = $($.map(frag.childNodes,function(node){
+							var frag = Can.view.frag(val),
+								// wrap it to keep a reference to the elements .. 
+								nodes = Can.$(Can.map(frag.childNodes,function(node){
 									return node;
 								})),
 								last = remove[remove.length - 1];
@@ -306,8 +307,8 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							}
 							
 							// remove the old content
-							$(remove).remove();
-							nodes.hookup();
+							Can.remove( Can.$(remove) );
+							//Can.view.hookup(nodes);
 							return nodes;
 						},
 						nodes = makeAndPut(input, [span]);
@@ -355,7 +356,10 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				// mark at end!
 			} else { // in an attribute
 				pendingHookups.push(function(el){
-					var hooks = $(el).data('hooks') || $(el).data('hooks', {}).data('hooks'),
+					var wrapped = Can.$(el),
+						hooks
+						
+					(hooks = Can.data(wrapped,'hooks')) || Can.data(wrapped, 'hooks', hooks = {}),
 					attr = el.getAttribute(status),
 					parts = attr.split("__!@#$%__");
 
@@ -451,7 +455,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 
 				pendingHookups = [];
 				return " data-view-id='" + $View.hookup(function(el){
-					$.each(hooks, function(i, fn){
+					Can.each(hooks, function(i, fn){
 						fn(el);
 					})
 				}) + "'";
@@ -465,7 +469,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		 * 
 		 * @param {String|Object|Array|Function} text to escape.  Otherwise,
 		 * the result of [jQuery.EJS.text] is returned.
-		 * @return {String} the escaped text or likely a $.View data-view-id attribute.
+		 * @return {String} the escaped text or likely a Can.View data-view-id attribute.
 		 */
 		clean: function( text ) {
 			//return sanatized text
@@ -632,7 +636,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							// check if its a func like ()->
 							if(quickFunc.test(content)){
 								var parts = content.match(quickFunc)
-								content = "function(__){var "+parts[1]+"=$(__);"+parts[2]+"}"
+								content = "function(__){var "+parts[1]+"=Can.$(__);"+parts[2]+"}"
 							}
 							
 							// if we have <%== a(function(){ %> then we want
@@ -689,7 +693,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 	 * 
 	 * The following helper converts a given string to upper case:
 	 * 
-	 * 	$.EJS.Helpers.prototype.toUpper = function(params)
+	 * 	Can.EJS.Helpers.prototype.toUpper = function(params)
 	 * 	{
 	 * 		return params.toUpperCase();
 	 * 	}
@@ -700,7 +704,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 	 * 
 	 * To access the current DOM element return a function that takes the element as a parameter:
 	 * 
-	 * 	$.EJS.Helpers.prototype.upperHtml = function(params)
+	 * 	Can.EJS.Helpers.prototype.upperHtml = function(params)
 	 * 	{
 	 * 		return function(el) {
 	 * 			$(el).html(params.toUpperCase());
@@ -727,7 +731,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 	 */
 	EJS.Helpers.prototype = {
 		/**
-		 * Renders a partial view.  This is deprecated in favor of <code>$.View()</code>.
+		 * Renders a partial view.  This is deprecated in favor of <code>Can.View()</code>.
 		 */
 		view: function( url, data, helpers ) {
 			helpers = helpers || this._extras;

@@ -13,7 +13,7 @@ steal(function(){
 		// converting an array of elements into a fragmeent
 		var frag
 		if(html){
-			frag = html.nodeType == 11 || html.appendTo ? html : $.buildFragment([html], [node||document]).fragment
+			frag = html.nodeType == 11 || html.appendTo ? html : Can.buildFragment([html], [node||document]).fragment
 		} else {
 			frag = document.createDocumentFragment();
 			frag.appendChild(document.createTextNode(""))
