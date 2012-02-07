@@ -13,6 +13,7 @@ Can.addEvent = function(event, fn){
 		handler: fn,
 		name: event
 	});
+	return this;
 };
 Can.removeEvent = function(event, fn){
 	if(!this.__bindEvents){
@@ -29,6 +30,7 @@ Can.removeEvent = function(event, fn){
 			i++;
 		}
 	}	
+	return this;
 };
 Can.dispatch = function(event){
 	if(!this.__bindEvents){

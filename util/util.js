@@ -1,5 +1,5 @@
 Can = {};
-if(true || window.STEALMOO) {
+if( window.STEALMOO) {
 	steal('can/util/mootools')
 } else if(window.STEALZEPTO){
 	steal('can/util/zepto').then('./zepto/fill')
@@ -8,7 +8,7 @@ if(true || window.STEALMOO) {
 }
 steal(function(){
 	
-	// creates a document fragement of the html provided
+	// creates a document fragement of the html provided (this can probably be removed)
 	Can.frag = function(html, node){
 		// converting an array of elements into a fragmeent
 		var frag

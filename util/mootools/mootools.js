@@ -55,7 +55,12 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 		}
 		return Object.append.apply(Object, arguments)
 	}
-	
+	Can.param = function(object){
+		return Object.toQueryString(object)
+	}
+	Can.isEmptyObject = function(object){
+		return Object.keys(object).length === 0;
+	}
 	// Function
 	Can.proxy = function(func){
 		var args = Can.makeArray(arguments),
@@ -137,7 +142,6 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 			this.addEvent(ev+":relay("+selector+")", cb)
 		} else {
 			// make it bind-able ...
-			console.log("this does not support event delegation")
 		}
 		return this;
 	}
@@ -149,7 +153,7 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 			this.removeEvent(ev+":relay("+selector+")", cb)
 		} else {
 			// make it bind-able ...
-			console.log("this does not support event delegation")
+			
 		}
 		return this;
 	}
@@ -200,7 +204,6 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 		}
 		
 		var request = new Request(requestOptions);
-		console.log(request);
 		request.send();
 		updateDeferred(request.xhr, d);
 		return d;

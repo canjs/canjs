@@ -44,8 +44,8 @@ function( $ ) {
 		location = window.location,
 		encode = encodeURIComponent,
 		decode = decodeURIComponent,
-		each = $.each,
-		extend = $.extend;
+		each = Can.each,
+		extend = Can.extend;
 
 	/**
 	 * @class jQuery.route
@@ -289,11 +289,11 @@ function( $ ) {
 					
 					// The remaining elements of data are added as 
 					// $amp; separated parameters to the url.
-				    after = $.param(cpy);
+				    after = Can.param(cpy);
 				return res + (after ? "&" + after : "")
 			}
             // If no route was found there is no hash URL, only paramters.
-			return $.isEmptyObject(data) ? "" : "&" + $.param(data);
+			return Can.isEmptyObject(data) ? "" : "&" + Can.param(data);
 		},
 		/**
 		 * Populate the JS data object from a given URL.
@@ -459,9 +459,9 @@ function( $ ) {
 		};
 
 	// If the hash changes, update the Can.route.data
-	$(window).bind('hashchange', setState);
+	Can.bind.call(window,'hashchange', setState);
 
-	// If the $.route.data changes, update the hash.
+	// If the Can.route.data changes, update the hash.
     // Using .serialize() retrieves the raw data contained in the observable.
     // This function is throttled so it only updates once even if multiple values changed.
 	Can.route.bind("change", throttle(function() {

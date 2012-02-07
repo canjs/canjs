@@ -290,7 +290,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			return "<" +(tagMap[tagName] || "span")+" data-view-id='" + $View.hookup(function(span){
 					// remove child, bind on parent
 					var makeAndPut = function(val, remove){
-							console.log("make and put")
 							// get fragement of html to fragment
 							var frag = Can.view.frag(val),
 								// wrap it to keep a reference to the elements .. 

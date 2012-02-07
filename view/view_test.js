@@ -40,28 +40,22 @@ test("multiple template types work", function(){
 });
 
 test("plugin in ejs", function(){
-	$("#qunit-test-area").html("");
-	$("#qunit-test-area").html("//can/view/test/qunit/plugin.ejs",{})
-	ok(/something/.test( $("#something").text()),"something has something");
-	$("#qunit-test-area").html("");
+
+	Can.append( Can.$("#qunit-test-area"), Can.view("//can/view/test/qunit/plugin.ejs",{}) )
+	ok(/something/.test( Can.$("#something span")[0].firstChild.nodeValue ),"something has something");
+	Can.remove( Can.$("#something") );
 });
 
-test("nested plugins", function(){
-	$("#qunit-test-area").html("");
-	$("#qunit-test-area").html("//can/view/test/qunit/nested_plugin.ejs",{})
-	ok(/something/.test( $("#something").text()),"something has something");
-});
+
 
 test("async templates, and caching work", function(){
-	$("#qunit-test-area").html("");
 	stop();
 	var i = 0;
-	$("#qunit-test-area").html("//can/view/test/qunit/temp.ejs",{"message" :"helloworld"}, function(text){
-		ok( /helloworld\s*/.test( $("#qunit-test-area").text()))
+	
+	Can.View("//can/view/test/qunit/temp.ejs",{"message" :"helloworld"}, function(text){
 		ok(/helloworld\s*/.test(text), "we got a rendered template");
 		i++;
 		equals(i, 2, "Ajax is not synchronous");
-		equals(this.attr("id"), "qunit-test-area" )
 		start();
 	});
 	i++;
@@ -70,46 +64,44 @@ test("async templates, and caching work", function(){
 test("caching works", function(){
 	// this basically does a large ajax request and makes sure 
 	// that the second time is always faster
-	$("#qunit-test-area").html("");
 	stop();
 	var startT = new Date(),
 		first;
-	$("#qunit-test-area").html("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
+	Can.View("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
 		first = new Date();
 		ok(text, "we got a rendered template");
 		
 		
-		$("#qunit-test-area").html("");
-		$("#qunit-test-area").html("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
+		Can.View("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
 			var lap2 = (new Date()) - first,
 				lap1 =  first-startT;
 			// ok( lap1 > lap2, "faster this time "+(lap1 - lap2) )
 			
 			start();
-			$("#qunit-test-area").html("");
 		})
 		
 	})
 })
 test("hookup", function(){
-	$("#qunit-test-area").html("");
-	
-	$("#qunit-test-area").html("//can/view/test/qunit/hookup.ejs",{}); //makes sure no error happens
+
+	Can.view("//can/view/test/qunit/hookup.ejs",{})
+
 })
 
 test("inline templates other than 'tmpl' like ejs", function(){
-        $("#qunit-test-area").html("");
 
-        $("#qunit-test-area").html($('<script type="test/ejs" id="test_ejs"><span id="new_name"><%= name %></span></script>'));
+        Can.append( Can.$("#qunit-test-area") ,'<script type="test/ejs" id="test_ejs"><span id="new_name"><%= name %></span></script>');
+	
+		var div = document.createElement('div');
+		div.appendChild(Can.view('test_ejs', {name: 'Henry'}))
 
-        $("#qunit-test-area").html('test_ejs', {name: 'Henry'});
-        equal( $("#new_name").text(), 'Henry');
-	$("#qunit-test-area").html("");
+        equal( div.getElementsByTagName("span")[0].firstChild.nodeValue , 'Henry');
+
 });
 
 test("object of deferreds", function(){
-	var foo = $.Deferred(),
-		bar = $.Deferred();
+	var foo = Can.Deferred(),
+		bar = Can.Deferred();
 	stop();
 	Can.View("//can/view/test/qunit/deferreds.ejs",{
 		foo : foo.promise ? foo.promise() : foo,
@@ -126,7 +118,7 @@ test("object of deferreds", function(){
 });
 
 test("deferred", function(){
-	var foo = $.Deferred();
+	var foo = Can.Deferred();
 	stop();
 	Can.View("//can/view/test/qunit/deferred.ejs",foo).then(function(result){
 		equals(result, "FOO");
@@ -140,7 +132,7 @@ test("deferred", function(){
 	
 });
 
-
+/* put in modifiers
 test("modifier with a deferred", function(){
 	$("#qunit-test-area").html("");
 	stop();
@@ -155,21 +147,26 @@ test("modifier with a deferred", function(){
 		equals($("#qunit-test-area").html(), "FOO", "worked!");
 	},100);
 
-});
+}); */
 
+/* remove hookup
 test("jQuery.fn.hookup", function(){
 	$("#qunit-test-area").html("");
 	var els = $(Can.View("//can/view/test/qunit/hookup.ejs",{})).hookup();
 	$("#qunit-test-area").html(els); //makes sure no error happens
 });
+*/
 
+/* move to modifiers
 test("non-HTML content in hookups", function(){
   $("#qunit-test-area").html("<textarea></textarea>");
   Can.View.hookup(function(){});
   $("#qunit-test-area textarea").val("asdf");
   equals($("#qunit-test-area textarea").val(), "asdf");
 });
+*/
 
+/* move to modifiers 
 test("html takes promise", function(){
 	var d = $.Deferred();
 	$("#qunit-test-area").html(d);
@@ -181,22 +178,27 @@ test("html takes promise", function(){
 	setTimeout(function(){
 		d.resolve("Hello World")
 	},10)
-});
+});*/
 
+/* move to modifiers
 test("val set with a template within a hookup within another template", function(){
-	$("#qunit-test-area").html("//can/view/test/qunit/hookupvalcall.ejs",{});
+	Can.view("//can/view/test/qunit/hookupvalcall.ejs",{});
 })
+*/
 
 /*test("bad url", function(){
 	Can.View("//asfdsaf/sadf.ejs")
 });*/
 
 test("hyphen in type", function(){
-	$(document.body).append("<script type='text/x-ejs' id='hyphenEjs'>\nHyphen\n</script>")
-
-	$("#qunit-test-area").html('hyphenEjs',{});
 	
-	ok( /Hyphen/.test( $("#qunit-test-area").html() ), "has hyphen" );
+	Can.append( Can.$("#qunit-test-area") ,"<script type='text/x-ejs' id='hyphenEjs'>\nHyphen\n</script>");
+	
+	var div = document.createElement('div');
+	div.appendChild(Can.view('hyphenEjs', {}))
+
+    ok( /Hyphen/.test(div.innerHTML) , 'has hyphen');
+
 })
 
 });
