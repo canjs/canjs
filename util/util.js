@@ -2,7 +2,7 @@ Can = {};
 if( window.STEALMOO) {
 	steal('can/util/mootools')
 } else if(window.STEALZEPTO){
-	steal('can/util/zepto').then('./zepto/fill')
+	steal('can/util/zepto');
 } else {
 	steal('can/util/jquery')
 }

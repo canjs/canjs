@@ -18,7 +18,7 @@ steal(function(){
 		var args = Can.makeArray( arguments );
 		if (args.length < 2) {
 			var obj = args[0];
-			if (obj && ( isFn( obj.isResolved ) && isFn( obj.isRejected ))) {
+			if (obj && ( Can.isFunction( obj.isResolved ) && Can.isFunction( obj.isRejected ))) {
 				return obj;			
 			} else {
 				return Deferred().resolve(obj);
