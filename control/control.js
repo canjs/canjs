@@ -3,34 +3,34 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	
 	// Binds an element, returns a function that unbinds
 	var bind = function( el, ev, callback ) {
-		var binder = el.bind && el.unbind ? el : $(isFunction(el) ? [el] : el);
+		Can.bind.call(el,ev, callback)
+		//var binder = el.bind && el.unbind ? el : $(isFunction(el) ? [el] : el);
 
-		binder.bind(ev, callback);
+		//binder.bind(ev, callback);
 		// if ev name has >, change the name and bind
 		// in the wrapped callback, check that the element matches the actual element
 		return function() {
-			binder.unbind(ev, callback);
-			el = ev = callback = null;
+			Can.unbind.call(el, ev, callback);
 		};
 	},
-		isFunction = $.isFunction,
-		extend = $.extend,
-		each = $.each,
+		isFunction = Can.isFunction,
+		extend = Can.extend,
+		each = Can.each,
 		slice = [].slice,
-		special = $.event.special || {},
+		special = ($.event && $.event.special) || {},
 		// Binds an element, returns a function that unbinds
 		delegate = function( el, selector, ev, callback ) {
-			var binder = el.delegate && el.undelegate ? el : $(isFunction(el) ? [el] : el)
-			binder.delegate(selector, ev, callback);
+			//var binder = el.delegate && el.undelegate ? el : $(isFunction(el) ? [el] : el)
+			//binder.delegate(selector, ev, callback);
+			Can.delegate.call(el, selector, ev, callback)
 			return function() {
-				binder.undelegate(selector, ev, callback);
-				binder = el = ev = callback = selector = null;
+				Can.undelegate.call(el, selector, ev, callback);
 			};
 		},
 		
 		// calls bind or unbind depending if there is a selector
 		binder = function( el, ev, callback, selector ) {
-			return selector ? delegate(el, selector, ev, callback) : bind(el, ev, callback);
+			return selector ? delegate(el, Can.trim(selector), ev, callback) : bind(el, ev, callback);
 		},
 		
 		// moves 'this' to the first argument, wraps it with jQuery if it's an element
@@ -38,7 +38,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			var method = typeof name == "string" ? context[name] : name;
 			return function() {
 				context.called = name;
-    			return method.apply(context, [this.nodeName ? $(this) : this].concat( slice.call(arguments, 0) ) );
+    			return method.apply(context, [this.nodeName ? Can.$(this) : this].concat( slice.call(arguments, 0) ) );
 			};
 		},
 		// matches dots
@@ -342,7 +342,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 
 			// make sure listensTo is an array
 			//!steal-remove-start
-			if (!$.isArray(this.listensTo) ) {
+			if (!Can.isArray(this.listensTo) ) {
 				throw "listensTo is not an array in " + this.fullName;
 			}
 			//!steal-remove-end
@@ -367,7 +367,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			if ( actionMatcher.test(methodName) ) {
 				return true;
 			} else {
-				return $.inArray(methodName, this.listensTo) > -1 || special[methodName] || processors[methodName];
+				return Can.inArray(methodName, this.listensTo) > -1 || special[methodName] || processors[methodName];
 			}
 
 		},
@@ -406,7 +406,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			var convertedName = options ? Can.String.sub(methodName, [options, window]) : methodName,
 				
 				// If a "{}" resolves to an object, convertedName will be an array
-				arr = $.isArray(convertedName),
+				arr = Can.isArray(convertedName),
 				
 				// get the parts of the function = [convertedName, delegatePart, eventPart]
 				parts = (arr ? convertedName[1] : convertedName).match(breaker),
@@ -556,13 +556,13 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			var funcName, ready, cls = this.constructor;
 
 			//want the raw element here
-			element = (typeof element == 'string' ? $(element) :
+			element = (typeof element == 'string' ? Can.$(element) :
 				(element.jquery ? element : [element]) )[0];
 
 			//set element and className on element
 			var pluginname = cls.pluginName || cls._fullName;
 
-			this.element = $(element)
+			this.element = Can.$(element)
 
 			if(pluginname && pluginname !== 'can_control') {
 				//set element and className on element
@@ -572,7 +572,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			}
 			//set in data
 			var arr;
-			(arr = this.element.data("controls")) || this.element.data("controls",arr = [])
+			(arr = Can.data(this.element,"controls")) || Can.data(this.element,"controls",arr = []);
 			arr.push(this);
 
 			
@@ -733,9 +733,9 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	
 				//setup to be destroyed ... don't bind b/c we don't want to remove it
 				var destroyCB = shifter(this,"destroy");
-				element.bind("destroyed", destroyCB);
+				Can.bind.call(element,"destroyed", destroyCB);
 				bindings.push(function( el ) {
-					$(el).unbind("destroyed", destroyCB);
+					Can.unbind.call(el,"destroyed", destroyCB);
 				});
 				return bindings.length;
 			}
@@ -931,25 +931,12 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			}
 			
 			// remove from data
-			var controls = this.element.data("controls");
-			controls.splice($.inArray(this, controls),1);
+			var controls = Can.data(this.element,"controls");
+			controls.splice(Can.inArray(this, controls),1);
 			
-			$([this]).triggerHandler("destroyed"); //in case we want to know if the control is removed
+			Can.trigger( this, "destroyed"); //in case we want to know if the control is removed
 			
 			this.element = null;
-		},
-		/**
-		 * Queries from the control's element.
-		 * @codestart
-		 * ".destroy_all click" : function() {
-		 *    this.find(".todos").remove();
-		 * }
-		 * @codeend
-		 * @param {String} selector selection string
-		 * @return {jQuery.fn} returns the matched elements
-		 */
-		find: function( selector ) {
-			return this.element.find(selector);
 		}
 	});
 

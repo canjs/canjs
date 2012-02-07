@@ -3,7 +3,7 @@ steal('can/observe',function(){
 	
 
 	var	pipe = function(def, model, func){
-		var d = $.Deferred();
+		var d = Can.Deferred();
 		def.done(function(){
 			arguments[0] = model[func](arguments[0])
 			d.resolve.apply(d, arguments)
@@ -31,14 +31,14 @@ steal('can/observe',function(){
 			}
 
 			// if we are a non-array object, copy to a new attrs
-			ajaxOb.data = typeof data == "object" && !$.isArray(data) ?
-				$.extend(ajaxOb.data || {}, data) : data;
+			ajaxOb.data = typeof data == "object" && !Can.isArray(data) ?
+				Can.extend(ajaxOb.data || {}, data) : data;
 	
 
 			// get the url with any templated values filled out
 			ajaxOb.url = Can.String.sub(ajaxOb.url, ajaxOb.data, true);
 
-			return $.ajax($.extend({
+			return Can.ajax(Can.extend({
 				type: type || "post",
 				dataType: dataType ||"json",
 				success : success,
@@ -138,7 +138,7 @@ steal('can/observe',function(){
 			}
 			var self = this;
 			
-			$.each(ajaxMethods, function(name, method){
+			Can.each(ajaxMethods, function(name, method){
 				var prop = self[name];
 				if ( typeof prop !== 'function' ) {
 					self[name] = method(prop);
@@ -153,8 +153,8 @@ steal('can/observe',function(){
 				var converters = {},
 					convertName = "* " + self.fullName + ".model";
 	
-				converters[convertName + "s"] = $.proxy(self.models,self);
-				converters[convertName] = $.proxy(self.model,self);
+				converters[convertName + "s"] = Can.proxy(self.models,self);
+				converters[convertName] = Can.proxy(self.model,self);
 				$.ajaxSetup({
 					converters: converters
 				});
@@ -170,7 +170,7 @@ steal('can/observe',function(){
 			// get the list type
 			var res = new( this.List || ML),
 				// did we get an array
-				arr = $.isArray(instancesRawData),
+				arr = Can.isArray(instancesRawData),
 				
 				// did we get a model list?
 				ml = (instancesRawData instanceof ML),
@@ -197,7 +197,7 @@ steal('can/observe',function(){
 				res.push(this.model(raw[i]));
 			}
 			if (!arr ) { //push other stuff onto array
-				$.each(instancesRawData, function(prop, val){
+				Can.each(instancesRawData, function(prop, val){
 					if ( prop !== 'data' ) {
 						res[prop] = val;
 					}
@@ -251,7 +251,7 @@ steal('can/observe',function(){
 			}
 		}
 	});
-		$.each([
+		Can.each([
 	/**
 	 * @function created
 	 * @hide
@@ -304,7 +304,7 @@ steal('can/observe',function(){
 		setup : function(){
 			Can.Observe.List.prototype.setup.apply(this, arguments );
 			// send destroy events
-			this.bind('change', $.proxy(this._sendDestroy, this))
+			this.bind('change', Can.proxy(this._sendDestroy, this))
 		},
 		_sendDestroy : function(ev, how){
 			if(/\w+\.destroyed/.test(how)){

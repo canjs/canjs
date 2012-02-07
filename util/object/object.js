@@ -1,10 +1,10 @@
 steal('can/util',function($){
 	
-var isArray = $.isArray,
+var isArray = Can.isArray,
 	// essentially returns an object that has all the must have comparisons ...
 	// must haves, do not return true when provided undefined
 	cleanSet = function(obj, compares){
-		var copy = $.extend({}, obj);
+		var copy = Can.extend({}, obj);
 		for(var prop in copy) {
 			var compare = compares[prop] === undefined ? compares["*"] : compares[prop];
 			if( same(copy[prop], undefined, compare ) ) {
@@ -30,19 +30,19 @@ var isArray = $.isArray,
  * 
  * Returns true if two objects are similar.
  * 
- *     $.Object.same({foo: "bar"} , {bar: "foo"}) //-> false
+ *     Can.Object.same({foo: "bar"} , {bar: "foo"}) //-> false
  *   
  * ## subset
  * 
  * Returns true if an object is a set of another set.
  * 
- *     $.Object.subset({}, {foo: "bar"} ) //-> true
+ *     Can.Object.subset({}, {foo: "bar"} ) //-> true
  * 
  * ## subsets
  * 
  * Returns the subsets of an object
  * 
- *     $.Object.subsets({userId: 20},
+ *     Can.Object.subsets({userId: 20},
  *                      [
  *                       {userId: 20, limit: 30},
  *                       {userId: 5},
@@ -143,7 +143,7 @@ var same = Can.Object.same = function(a, b, compares, aParent, bParent, deep){
 		};
 		return true;
 	} else if(aType === "object" || aType === 'function'){
-		var bCopy = $.extend({}, b);
+		var bCopy = Can.extend({}, b);
 		for(var prop in a){
 			compare = compares[prop] === undefined ? compares["*"] : compares[prop];
 			if(! same( a[prop], b[prop], compare , a, b, deep === false ? -1 : undefined )){

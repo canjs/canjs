@@ -10,7 +10,7 @@ test("basics",  14, function(){
 			clickCount++;
 		},
 		"span  click" : function(){
-			ok(true, "span clicked")
+			ok(true, "SPAN clicked")
 		},
 		"{foo} bar" : function(){
 			
@@ -30,19 +30,21 @@ test("basics",  14, function(){
 	}
 	
 	
-	$("#qunit-test-area").append("<div id='things'>div<span>span</span></div>")
+	Can.append( Can.$("#qunit-test-area"), "<div id='things'>div<span>span</span></div>")
 	var things = new Things("#things",{foo: foo});
 	
 	
-	$('#things span').trigger('click');
-	$('#things').trigger('click');
+	Can.trigger( Can.$('#things span'), 'click');
+	Can.trigger( Can.$('#things'), 'click');
+	
 	equal(clickCount,  2, "click called twice");
 	
 	things.destroy();
-	$('#things span').trigger('click');
+	Can.trigger( Can.$('#things span'), 'click');
 	
 	new Things("#things",{foo: foo});
-	$('#things').remove()
+	
+	Can.remove( Can.$('#things') );
 })
 
 if( window.jQuery ){
@@ -75,12 +77,19 @@ test("parameterized actions", function(){
 				called = true;
 			}
 		}),
-		a = $("<div id='crazy'></div>").appendTo($("#qunit-test-area"))
+		a;
+	
+	Can.append( Can.$("#qunit-test-area"), "<div id='crazy'></div>")
+	
+	a = Can.$("#crazy")
+	
 	new WeirderBind(a, {parameterized: "sillyEvent"});
-	a.trigger("sillyEvent")
+	
+	Can.trigger(a, "sillyEvent");
+
 	ok(called, "heard the trigger")
 	
-	$("#qunit-test-area").html("")
+	Can.remove( a );
 })
 
 
@@ -92,14 +101,17 @@ test("windowresize", function(){
 				called = true;
 			}
 		})
-	$("#qunit-test-area").html("<div id='weird'>")
+	
+	Can.append( Can.$("#qunit-test-area"), "<div id='weird'>")
+	
+
 	
 	new WindowBind("#weird")
 	
-	$(window).trigger('resize')
+	Can.trigger( Can.$(window),'resize')
 	ok(called,"got window resize event");
 	
-	$("#qunit-test-area").html("")
+	Can.remove( Can.$("#weird") );
 });
 
 
@@ -110,19 +122,21 @@ test("delegate", function(){
 		DelegateTest= Can.Control({
 			click: function() {}
 		})
-		
-	var els = $("<div><span><a href='#'>click me</a></span></div>").appendTo($("#qunit-test-area"))
+	
+	Can.append( Can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
+	
+	var els = Can.$("#els")
 	
 	var dt = new DelegateTest(els)
 	
 	
-	dt.delegate(els.find("span"), "a", "click", function(){
+	dt.delegate(Can.$("#els span"), "a", "click", function(){
 		called = true;
 	})
 	
-	els.find("a").trigger('click')
+	Can.trigger( Can.$("#els a"), 'click')
 	ok(called, "delegate works")
-	$("#qunit-test-area").html("")
+	Can.remove( els )
 });
 
 
@@ -135,12 +149,16 @@ test("inherit", function(){
 		}),
 		Child = Parent({});
 	
+	Can.append( Can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
+	
+	var els = Can.$("#els")
 
-	var els = $("<div><span><a href='#'>click me</a></span></div>").appendTo($("#qunit-test-area"))
 	new Child(els);
-	els.find("a").trigger('click')
+	Can.trigger( Can.$("#els"),'click' )
+
 	ok(called, "inherited the click method")
-	$("#qunit-test-area").html("")
+	
+	Can.remove(els);
 });
 
 
@@ -152,27 +170,17 @@ test("space makes event",1,function(){
 		}
 	});
 	
+	Can.append( Can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
 	
-	var ta = $("<div/>").appendTo( $("#qunit-test-area") );
+	var els = Can.$("#els")
 	
-	new Dot(ta);
-	ta.trigger("foo");
-	$("#qunit-test-area").html("");
+	
+	new Dot(els);
+	Can.trigger( Can.$("#els"),'foo' )
+	Can.remove(els);
 })
 
 
-// HTMLFormElement[0] breaks
-test("the right element", 1, function(){
-	
-	
-	var FT = Can.Control({
-		init : function(){
-			equals(this.element[0].nodeName.toLowerCase(), "form" )
-		}
-	})
-	new FT( $("<form><input name='one'/></form>").appendTo( $("#qunit-test-area") ) );
-	$("#qunit-test-area").html("")
-})
 
 
 test("inherit defaults", function() {
@@ -191,7 +199,7 @@ test("inherit defaults", function() {
     ok(INHERIT.defaults.foo === 'bar', 'Class must inherit defaults from the parent class');
     ok(INHERIT.defaults.newProp == 'newVal', 'Class must have own defaults');
 	
-    var inst = new INHERIT($('<div/>'), {});
+    var inst = new INHERIT(document.createElement('div'), {});
 	
     ok(inst.options.foo === 'bar', 'Instance must inherit defaults from the parent class');
     ok(inst.options.newProp == 'newVal', 'Instance must have defaults of it`s class');
@@ -202,17 +210,7 @@ var bindable = function(b){
 	if(window.jQuery){
 		return b;
 	} else {
-		$.extend(b,{
-			addEventListener: Can.addEvent,
-			removeEventListener: Can.removeEvent,
-			dispatchEvent: Can.dispatch,
-			bind : function(ev, cb){
-				this.addEventListener(ev, cb)
-			},
-			unbind : function(ev, cb){
-				this.removeEventListener(ev, cb)
-			}
-		})
+		
 	}
 	return b
 }
@@ -232,12 +230,12 @@ test("update rebinding", 2, function(){
 	});
 	var item1 = bindable({id: 1}),
 		item2 = bindable({id: 2}),
-		rb = new Rebinder( $(document.createElement('div')), {item: item1} );
+		rb = new Rebinder( document.createElement('div'), {item: item1} );
 	
-	$([item1]).trigger("foo")
+	Can.trigger(item1, "foo")
 	rb.update({item: item2});
 	
-	$([item2]).trigger("foo")
+	Can.trigger(item2, "foo")
 })
 
 
