@@ -26,13 +26,13 @@ steal('can/util').then(function( $ ) {
 	 * @demo jquery/event/destroyed/destroyed_menu.html 
 	 */
 
+	// makes this trigger a destroyed event
 	var oldClean = $.cleanData;
 
 	$.cleanData = function( elems ) {
 		for ( var i = 0, elem;
 		(elem = elems[i]) !== undefined; i++ ) {
-			$(elem).triggerHandler("destroyed");
-			//$.event.remove( elem, 'destroyed' );
+			Can.trigger(Can.$(elem),"destroyed",[],false);
 		}
 		oldClean(elems);
 	};

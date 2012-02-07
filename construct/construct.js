@@ -213,7 +213,7 @@ steal("can/util/string",function( $ ) {
 	 *       setup: function( el, options ) {
 	 *         ...
 	 *         return [$(el),
-	 *                 $.extend(true,
+	 *                 Can.extend(true,
 	 *                    this.constructor.defaults,
 	 *                    options || {} ) ]
 	 *       }
@@ -311,7 +311,7 @@ steal("can/util/string",function( $ ) {
 	};
 
 	/* @Static*/
-	$.extend(Can.Construct, {
+	Can.extend(Can.Construct, {
 		/**
 		 * @function newInstance
 		 * Creates a new instance of the class.  This method is useful for creating new instances
@@ -334,7 +334,7 @@ steal("can/util/string",function( $ ) {
 			}
 			// call init if there is an init, if setup returned args, use those as the arguments
 			if ( inst.init ) {
-				inst.init.apply(inst, $.isArray(args) ? args : arguments);
+				inst.init.apply(inst, Can.isArray(args) ? args : arguments);
 			}
 			return inst;
 		},
@@ -343,7 +343,7 @@ steal("can/util/string",function( $ ) {
 		//   oldProps - where the old properties might be
 		//   addTo - what we are adding to
 		_inherit: function( newProps, oldProps, addTo ) {
-			$.extend(addTo || newProps, newProps || {})
+			Can.extend(addTo || newProps, newProps || {})
 		},
 		/**
 		 * Setup gets called on the inherting class with the base class followed by the
@@ -373,7 +373,7 @@ steal("can/util/string",function( $ ) {
 		 */
 		setup: function( baseConstructor, fullName ) {
 			// set defaults as the merger of the parent defaults and this object's defaults
-			this.defaults = $.extend(/*true,*/ {}, baseConstructor.defaults, this.defaults);
+			this.defaults = Can.extend(true,{}, baseConstructor.defaults, this.defaults);
 			return arguments;
 		},
 		instance: function() {
@@ -476,7 +476,7 @@ steal("can/util/string",function( $ ) {
 			}
 
 			// set things that can't be overwritten
-			$.extend(Constructor, {
+			Can.extend(Constructor, {
 				prototype: prototype,
 				/**
 				 * @attribute namespace 
@@ -518,11 +518,11 @@ steal("can/util/string",function( $ ) {
 			
 
 			// call the class setup
-			var args = Constructor.setup.apply(Constructor, [_super_class].concat($.makeArray(arguments)) );
+			var args = Constructor.setup.apply(Constructor, [_super_class].concat(Can.makeArray(arguments)) );
 			
 			// call the class init
 			if ( Constructor.init ) {
-				Constructor.init.apply(Constructor, args || [_super_class].concat($.makeArray(arguments)) );
+				Constructor.init.apply(Constructor, args || [_super_class].concat(Can.makeArray(arguments)) );
 			}
 
 			/* @Prototype*/
@@ -548,7 +548,7 @@ steal("can/util/string",function( $ ) {
 			 *     Can.Construct("jQuery.Controller",{
 			 *       setup : function(htmlElement, rawOptions){
 			 *         return [$(htmlElement), 
-			 *                   $.extend({}, this.constructor.defaults, rawOptions )] 
+			 *                   Can.extend({}, this.constructor.defaults, rawOptions )] 
 			 *       }
 			 *     })
 			 * 

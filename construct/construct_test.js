@@ -46,10 +46,19 @@ module("can/construct",{
 	}
 });
 
+
+test("inherit", function(){
+	var Base = Can.Construct({});
+	ok(new Base instanceof Can.Construct)
+	var Inherit = Base({});
+	ok(new Inherit instanceof Base);
+	
+})
+
 test("Creating", function(){
 
     new this.Dog();
-    new this.Animal();
+    var a1 = new this.Animal();
     new this.Animal();
     var ajax = new this.Ajax(1000);
         
@@ -63,6 +72,9 @@ test("Creating", function(){
     equals(2, this.Animal.count, "right number of animals");
     equals(true, ajax.eyes, "right number of animals");
     equals(1000, ajax.hairs, "right number of animals");
+    
+    ok(a1 instanceof this.Animal)
+    ok(a1 instanceof Can.Construct)
 })
 
 
@@ -124,10 +136,10 @@ test("setups", function(){
 	equals(protoSetup, 3);
 	equals(protoInit, 4);
 	
-	same($.makeArray(staticInitArgs), ["something"] )
-	same($.makeArray(protoInitArgs),["Ford: geo"] )
+	same(Can.makeArray(staticInitArgs), ["something"] )
+	same(Can.makeArray(protoInitArgs),["Ford: geo"] )
 	
-	same($.makeArray(staticSetupArgs),[Can.Construct, "Car",staticProps, protoProps] ,"static construct");
+	same(Can.makeArray(staticSetupArgs),[Can.Construct, "Car",staticProps, protoProps] ,"static construct");
 	
 	
 	//now see if staticSetup gets called again ...

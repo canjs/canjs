@@ -1,9 +1,10 @@
 Can = {};
-
-if(window.STEALZEPTO){
+if(true || window.STEALMOO) {
+	steal('can/util/mootools')
+} else if(window.STEALZEPTO){
 	steal('can/util/zepto').then('./zepto/fill')
 } else {
-	steal('./jquery.js').then('./jquery_fill')
+	steal('can/util/jquery')
 }
 steal(function(){
 	

@@ -66,7 +66,7 @@ steal('can/util/object',
 				next = s.dataTypes ? s.dataTypes[0] : (s.dataType || 'json');
 						
 			// normalize the fixture data into a response
-			if (!$.isArray(response)) {
+			if (!Can.isArray(response)) {
 				var tmp = [{}];
 				tmp[0][next] = response
 				response = tmp;
@@ -123,12 +123,12 @@ steal('can/util/object',
 		});
 		
 	} else {
-		var AJAX = $.ajax;
-		$.ajax = function(settings){
+		var AJAX = Can.ajax;
+		Can.ajax = function(settings){
 			updateSettings(settings, settings);
 			if(settings.fixture){
 				
-				var d = $.Deferred();
+				var d = Can.Deferred();
 				d.getResponseHeader = function(){}
 				d.done(settings.success)
 					.fail(settings.fail)
@@ -417,7 +417,7 @@ steal('can/util/object',
 	 * If __null__ is passed, and there is a fixture at settings, that fixture will be removed,
 	 * allowing the AJAX request to behave normally.
 	 */
-	var $fixture = $.fixture = function( settings , fixture ){
+	var $fixture = Can.fixture = $.fixture = function( settings , fixture ){
 		// if we provide a fixture ...
 		if(fixture !== undefined){
 			if(typeof settings == 'string'){
@@ -480,7 +480,7 @@ steal('can/util/object',
 				return null;
 			}
 			res.shift();
-			$.each(order, function(i, name){
+			Can.each(order, function(i, name){
 				data[name] = res.shift()
 			})
 			return data;
@@ -595,7 +595,7 @@ steal('can/util/object',
 				settings.data = settings.data || {};
 				//sort using order
 				//order looks like ["age ASC","gender DESC"]
-				$.each((settings.data.order || []).slice(0).reverse(), function( i, name ) {
+				Can.each((settings.data.order || []).slice(0).reverse(), function( i, name ) {
 					var split = name.split(" ");
 					retArr = retArr.sort(function( a, b ) {
 						if ( split[1].toUpperCase() !== "ASC" ) {
@@ -620,7 +620,7 @@ steal('can/util/object',
 				});
 
 				//group is just like a sort
-				$.each((settings.data.group || []).slice(0).reverse(), function( i, name ) {
+				Can.each((settings.data.group || []).slice(0).reverse(), function( i, name ) {
 					var split = name.split(" ");
 					retArr = retArr.sort(function( a, b ) {
 						return a[split[0]] > b[split[0]];

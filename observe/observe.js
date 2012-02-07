@@ -10,25 +10,23 @@ steal('can/construct',function() {
 		// - parent the parent object of prop
 		hookup = function( val, prop, parent ) {
 			// if it's an array make a list, otherwise a val
-			if (val instanceof $Observe){
+			if (val instanceof Observe){
 				// we have an observe already
 				// make sure it is not listening to this already
 				unhookup([val], parent._namespace)
-			} else if ( $.isArray(val) ) {
-				val = new $Observe.List(val)
+			} else if ( Can.isArray(val) ) {
+				val = new Observe.List(val)
 			} else {
-				val = new $Observe(val)
+				val = new Observe(val)
 			}
 			// attr (like target, how you (delegate) to get to the target)
             // currentAttr (how to get to you)
             // delegateAttr (hot to get to the delegated Attr)
 			
-			//
-			//
 			//listen to all changes and trigger upwards
 			val.bind("change" + parent._namespace, function( ev, attr ) {
 				// trigger the type on this ...
-				var args = $.makeArray(arguments),
+				var args = Can.makeArray(arguments),
 					ev = args.shift();
 				if(prop === "*"){
 					args[0] = parent.indexOf(val)+"." + args[0]
@@ -42,7 +40,7 @@ steal('can/construct',function() {
 		},
 		// removes all listeners
 		unhookup = function(items, namespace){
-			return $.each(items, function(i, item){
+			return Can.each(items, function(i, item){
 				if(item && item.unbind){
 					item.unbind("change" + namespace)
 				}
@@ -115,13 +113,13 @@ steal('can/construct',function() {
 		},
 		$method = function( name ) {
 			return function( eventType, handler ) {
-				return $.fn[name].apply($([this]), arguments);
+				return Can[name].apply(this, arguments );
 			}
 		},
 		bind = $method('bind'),
 		unbind = $method('unbind'),
 		attrParts = function(attr){
-			return $.isArray(attr) ? attr : (""+attr).split(".")
+			return Can.isArray(attr) ? attr : (""+attr).split(".")
 		};
 
 	/**
@@ -258,7 +256,7 @@ steal('can/construct',function() {
 	 * @param {Object} obj a JavaScript Object that will be 
 	 * converted to an observable
 	 */
-	var $Observe = Can.Construct('Can.Observe',{
+	var Observe = Can.Construct('Can.Observe',{
 		// keep so it can be overwritten
 		setup : function(baseClass){
 			Can.Construct.setup.apply(this, arguments)
@@ -324,7 +322,7 @@ steal('can/construct',function() {
 				return this._attrs(attr, val)
 			}else if ( val === undefined ) {// if we are getting a value
 				// let people know we are reading (
-				$Observe.__reading && $Observe.__reading(this, attr)
+				Observe.__reading && Observe.__reading(this, attr)
 				return this._get(attr)
 			} else {
 				// otherwise we are setting
@@ -359,7 +357,7 @@ steal('can/construct',function() {
 		 * @return {Can.Observe} the original observable.
 		 */
 		each: function() {
-			return $.each.apply(null, [this.__get()].concat($.makeArray(arguments)))
+			return Can.each.apply(null, [this.__get()].concat(Can.makeArray(arguments)))
 		},
 		/**
 		 * Removes a property
@@ -583,7 +581,7 @@ steal('can/construct',function() {
 				return serialize(this, 'attr', {})
 			}
 
-			props = $.extend(true, {}, props);
+			props = Can.extend(true, {}, props);
 			var prop, 
 				collectingStarted = collect(),
 				self = this;
@@ -628,7 +626,7 @@ steal('can/construct',function() {
 	 * 
 	 */
 	var splice = [].splice,
-		list = $Observe('Can.Observe.List',
+		list = Observe('Can.Observe.List',
 	/**
 	 * @prototype
 	 */
@@ -637,9 +635,9 @@ steal('can/construct',function() {
 			this.length = 0;
 			this._namespace = ".list" + (++id);
 			this._init = 1;
-			this.bind('change',$.proxy(this._changes,this));
-			this.push.apply(this, $.makeArray(instances || []));
-			$.extend(this, options);
+			this.bind('change',Can.proxy(this._changes,this));
+			this.push.apply(this, Can.makeArray(instances || []));
+			Can.extend(this, options);
 			//if(this.comparator){
 			//	this.sort()
 			//}
@@ -783,7 +781,7 @@ steal('can/construct',function() {
 		 * @param {Object} [added] an object to add to 
 		 */
 		splice: function( index, count ) {
-			var args = $.makeArray(arguments),
+			var args = Can.makeArray(arguments),
 				i;
 
 			for ( i = 2; i < args.length; i++ ) {
@@ -851,15 +849,15 @@ steal('can/construct',function() {
 		// create push, pop, shift, and unshift
 		// converts to an array of arguments 
 		getArgs = function( args ) {
-			if ( args[0] && ($.isArray(args[0])) ) {
+			if ( args[0] && (Can.isArray(args[0])) ) {
 				return args[0]
 			}
 			else {
-				return $.makeArray(args)
+				return Can.makeArray(args)
 			}
 		};
 	// describes the method and where items should be added
-	$.each({
+	Can.each({
 		/**
 		 * @function push
 		 * Add items to the end of the list.
@@ -939,7 +937,7 @@ steal('can/construct',function() {
 		}
 	});
 
-	$.each({
+	Can.each({
 		/**
 		 * @function pop
 		 * 
@@ -1008,7 +1006,7 @@ steal('can/construct',function() {
 	 * @return {Number}
 	 */
 	indexOf = [].indexOf || function(item){
-		return $.inArray(item, this)
+		return Can.inArray(item, this)
 	};
 	if(Can.addEvent){
 		Can.Observe.prototype.addEventListener = Can.addEvent;

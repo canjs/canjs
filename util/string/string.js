@@ -82,7 +82,7 @@ steal('can/util',function( $ ) {
 		 * </ul>
 		 * 
 		 */
-		str = Can.String = $.extend( Can.String || {} , {
+		str = Can.String = Can.extend( Can.String || {} , {
 			
 			
 			/**
@@ -114,7 +114,7 @@ steal('can/util',function( $ ) {
 					type;
 				
 				// make sure roots is an array
-				roots = $.isArray(roots) ? roots : [roots || window];
+				roots = Can.isArray(roots) ? roots : [roots || window];
 				
 				if(length == 0){
 					return roots[0];

@@ -1,0 +1,149 @@
+steal(function(){
+	
+	var Deferred = function( func ) {
+		if ( ! ( this instanceof Deferred ))
+			return new Deferred();
+
+		this._doneFuncs = [];
+		this._failFuncs = [];
+		this._resultArgs = null;
+		this._status = "";
+
+		// check for option function: call it with this as context and as first 
+		// parameter, as specified in jQuery api
+		func && func.call(this, this);
+	};
+	Can.Deferred = Deferred;
+	Can.when = Deferred.when = function() {
+		var args = Can.makeArray( arguments );
+		if (args.length < 2) {
+			var obj = args[0];
+			if (obj && ( isFn( obj.isResolved ) && isFn( obj.isRejected ))) {
+				return obj;			
+			} else {
+				return Deferred().resolve(obj);
+			}
+		} else {
+			
+			var df = Deferred(),
+				done = 0,
+				// resolve params: params of each resolve, we need to track down 
+				// them to be able to pass them in the correct order if the master 
+				// needs to be resolved
+				rp = [];
+
+			Can.each(args, function(j, arg){
+				arg.done(function() {
+					rp[j] = (arguments.length < 2) ? arguments[0] : arguments;
+					if (++done == args.length) {
+						df.resolve.apply(df, rp);
+					}
+				}).fail(function() {
+					df.reject(arguments);
+				});
+			});
+
+			return df;
+			
+		}
+	}
+	
+	var resolveFunc = function(type, _status){
+		return function(context){
+			var args = this._resultArgs = (arguments.length > 1) ? arguments[1] : [];
+			return this.exec(context, this[type], args, _status);
+		}
+	},
+	doneFunc = function(type, _status){
+		return function(){
+			var self = this;
+			Can.each(arguments, function( i, v, args ) {
+				if ( ! v )
+					return;
+				if ( v.constructor === Array ) {
+					args.callee.apply(self, v)
+				} else {
+					// immediately call the function if the deferred has been resolved
+					if (self._status === _status)
+						v.apply(self, self._resultArgs || []);
+	
+					self[type].push(v);
+				}
+			});
+			return this;
+		}
+	};
+
+	Can.extend( Deferred.prototype, {
+		pipe : function(done, fail){
+			var d = Can.Deferred();
+			this.done(function(){
+				d.resolve( done.apply(this, arguments) );
+			});
+			
+			this.fail(function(){
+				if(fail){
+					d.reject( fail.apply(this, arguments) );
+				} else {
+					d.reject.apply(d, arguments);
+				}
+			});
+			return d;
+		},
+		resolveWith : resolveFunc("_doneFuncs","rs"),
+		rejectWith : resolveFunc("_failFuncs","rj"),
+		done : doneFunc("_doneFuncs","rs"),
+		fail : doneFunc("_failFuncs","rj"),
+		always : function() {
+			var args = Can.makeArray(arguments);
+			if (args.length && args[0])
+				this.done(args[0]).fail(args[0]);
+
+			return this;
+		},
+
+		then : function() {
+			var args = Can.makeArray( arguments );
+			// fail function(s)
+			if (args.length > 1 && args[1])
+				this.fail(args[1]);
+
+			// done function(s)
+			if (args.length && args[0])
+				this.done(args[0]);
+
+			return this;
+		},
+
+		isResolved : function() {
+			return this._status === "rs";
+		},
+
+		isRejected : function() {
+			return this._status === "rj";
+		},
+
+		reject : function() {
+			return this.rejectWith(this, arguments);
+		},
+
+		resolve : function() {
+			return this.resolveWith(this, arguments);
+		},
+
+		exec : function(context, dst, args, st) {
+			if (this._status !== "")
+				return this;
+
+			this._status = st;
+
+			Can.each(dst, function(i, d){
+				d.apply(context, args);
+			});
+
+			return this;
+		}
+	});
+
+
+})
