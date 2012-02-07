@@ -356,11 +356,11 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			} else { // in an attribute
 				pendingHookups.push(function(el){
 					var wrapped = Can.$(el),
-						hooks
+						hooks;
 						
-					(hooks = Can.data(wrapped,'hooks')) || Can.data(wrapped, 'hooks', hooks = {}),
-					attr = el.getAttribute(status),
-					parts = attr.split("__!@#$%__");
+					(hooks = Can.data(wrapped,'hooks')) || Can.data(wrapped, 'hooks', hooks = {});
+					var attr = el.getAttribute(status),
+						parts = attr.split("__!@#$%__");
 
 					if(hooks[status]) {
 						hooks[status].funcs.push(func);

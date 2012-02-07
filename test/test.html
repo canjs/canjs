@@ -1,27 +1,32 @@
 <html>
 	<head>
 		<style>
-			#left {
+			iframe {
 				position: fixed;
 				top: 0px;
 				bottom: 0px;
-				left: 0px;
-				width: 49%;
-				left: 0px;
 				height: 98%;
 			}
-			#right {
-				position: fixed;
-				top: 0px;
-				bottom: 0px;
-				right: 0px;
-				width: 49%;
-				height: 98%;
+			#jquery {
+				left: 0px;
+				width: 33%;
+			}
+			#zepto {
+				left: 34%;
+				width: 33%;
+			}
+			#mootools {
+				left: 68%;
+				width: 32%;
+			}
+			body {
+				background-color: black;
 			}
 		</style>
 	</head>
 	<body>
-		<iframe src='can_jquery.html' id='left'></iframe>
-		<iframe src='can_zepto.html' id='right'></iframe>
+		<iframe src='can_jquery.html' id='jquery'></iframe>
+		<iframe src='can_zepto.html' id='zepto'></iframe>
+		<iframe src='can_mootools.html' id='mootools'></iframe>
 	</body>
 </html>

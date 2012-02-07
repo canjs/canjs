@@ -52,7 +52,7 @@ steal('./jquery.1.7.1.js', function(){
 		$([this]).unbind(ev, cb)
 		return this;
 	}
-	$.each(["append","filter","addClass","remove"], function(i,name){
+	$.each(["append","filter","addClass","remove","data"], function(i,name){
 		Can[name] = function(wrapped){
 			return wrapped[name].apply(wrapped, Can.makeArray(arguments).slice(1))
 		}
