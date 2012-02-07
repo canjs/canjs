@@ -1008,9 +1008,4 @@ steal('can/construct',function() {
 	indexOf = [].indexOf || function(item){
 		return Can.inArray(item, this)
 	};
-	if(Can.addEvent){
-		Can.Observe.prototype.addEventListener = Can.addEvent;
-		Can.Observe.prototype.removeEventListener = Can.removeEvent;
-		Can.Observe.prototype.dispatchEvent  = Can.dispatch
-	}
 });

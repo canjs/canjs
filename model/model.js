@@ -294,11 +294,6 @@ steal('can/observe',function(){
 			trigger(constructor,funcName, this);
 		};
 	});
-	if(Can.addEvent){
-		Can.Model.addEventListener = Can.addEvent;
-		Can.Model.removeEventListener = Can.removeEvent;
-		Can.Model.dispatchEvent  = Can.dispatch
-	}
 	
 	var ML = Can.Observe.List('Can.Model.List',{
 		setup : function(){
@@ -308,7 +303,6 @@ steal('can/observe',function(){
 		},
 		_sendDestroy : function(ev, how){
 			if(/\w+\.destroyed/.test(how)){
-				console.log('destroyed ...');
 				this.splice(this.indexOf(ev.target),1);
 			}
 		}

@@ -224,14 +224,20 @@ steal("can/util").then(function( $ ) {
 	 * the rendered result of the view.
 	 */
 	
-	Can.view = function(view, data, helpers){
+	Can.view = function(view, data, helpers, callback){
 		// get the result
-		var result = Can.View(view, data, helpers);
+		var result = Can.View(view, data, helpers, callback);
+		if(isDeferred(result)){
+			return result.pipe(function(result){
+				return Can.view.frag(result);
+			})
+		}
+		
 		// convert it into a dom frag
 		return Can.view.frag(result);
 	};
 	Can.view.frag = function(result){
-		var frag = Can.buildFragment([result],[]).fragment;
+		var frag = Can.buildFragment([result],[document.body]).fragment;
 		
 		// hook it up
 		var hooks = $view.hookups;
@@ -711,20 +717,19 @@ steal("can/util").then(function( $ ) {
 			id, func, res,
 			arr = [];
 		
-		console.log("hookin up ")
 		Can.each(fragment.childNodes ? Can.makeArray(fragment.childNodes) : fragment, function(i, node){
 			if(node.nodeType != 3){
 				arr.push(node)
 				arr.push.apply(arr, Can.makeArray( node.getElementsByTagName('*')))
 			}
 		});
-		console.log("got els")
+
 		hookupEls = Can.filter(Can.$(arr), "[data-view-id]");
 		len = hookupEls.length;
-		console.log("filtered")
+
 		for (; i < len; i++ ) {
 			if ( hookupEls[i].getAttribute && (id = hookupEls[i].getAttribute('data-view-id')) && (func = hooks[id]) ) {
-				console.log("calling func")
+
 				func(hookupEls[i], id);
 				delete hooks[id];
 				hookupEls[i] && hookupEls[i].nodeType !== 11 && hookupEls[i].removeAttribute('data-view-id');

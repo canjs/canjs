@@ -86,16 +86,16 @@ test("Control Basics",3,function(){
 	var tasks = new Tasks( '#qunit-test-area' , {
 		Task : Task
 	})
-	$('#qunit-test-area').trigger("click");
+	Can.trigger(Can.$('#qunit-test-area'),"click")
 	
 	new Task({id: 1}).created();
 	
-	equals($('#qunit-test-area')[0].className, "")
+	equals(Can.$('#qunit-test-area')[0].className, "")
 	
 	tasks.destroy();
 	
 	// make sure we can't click
-	$('#qunit-test-area').click();
+	Can.trigger(Can.$('#qunit-test-area'),"click")
 	
 })
 
