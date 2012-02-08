@@ -1,39 +1,23 @@
-steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
-	/**
-	 * makeArray
-	 * isArray
-	 * each
-	 * extend
-	 * proxy
-	 * bind
-	 * unbind
-	 * trigger
-	 * 
-	 * inArray
-	 * Deferred
-	 * When
-	 * ajax
-	 * 
-	 * delegate
-	 * undelegate
-	 * 
-	 * buildFragement
-	 */
+steal("http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js", '../event.js',function(){
+	
+	// String
 	Can.trim = function(s){
-		return s.trim()
+		return dojo.trim()
 	}
 	
 	// Array
-	Can.makeArray = Array.from;
-	Can.isArray = function(arr){
-		return typeOf(arr) === 'array'
+	Can.makeArray = function(arr){
+		array = [];
+		dojo.forEach(arr, function(item){ array.push(item)});
+		return array;
 	};
+	Can.isArray = dojo.isArray;
 	Can.inArray = function(item,arr){
-		return arr.indexOf(item)
-	}
+		return dojo.indexOf(arr, item);
+	};
 	Can.map = function(arr, fn){
-		return Array.from(arr||[]).map(fn);
-	}
+		return dojo.map(Can.makeArray(arr||[]), fn);
+	};
 	Can.each = function(elements, callback) {
     	var i, key;
 	    if (typeof  elements.length == 'number' && elements.pop)
@@ -51,25 +35,26 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 		if(first === true){
 			var args = Can.makeArray(arguments);
 			args.shift();
-			return Object.merge.apply(Object, args)
+			return dojo.mixin.apply(dojo, args)
 		}
-		return Object.append.apply(Object, arguments)
+		return dojo.mixin.apply(dojo, arguments)
 	}
 	Can.param = function(object){
-		return Object.toQueryString(object)
+		return dojo.objectToQuery(object)
 	}
 	Can.isEmptyObject = function(object){
-		return Object.keys(object).length === 0;
+		var prop;
+		for(prop in object){
+			break;
+		}
+		return prop === undefined;;
 	}
 	// Function
-	Can.proxy = function(func){
-		var args = Can.makeArray(arguments),
-			func = args.shift();
-		
-		return func.bind.apply(func, args)
+	Can.proxy = function(func, context){
+		return dojo.hitch(context, func)
 	}
 	Can.isFunction = function(f){
-		return typeOf(f) == 'function'
+		return dojo.isFunction(f);
 	}
 	// make this object so you can bind on it
 	Can.bind = function( ev, cb){
@@ -155,6 +140,9 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 		}
 		return this;
 	}
+	//require(["dojo/on"], function(on){
+	//  on(document, "click", function(){alert('hi')});
+	//});
 	var optionsMap = {
 		type:"method",
 		success : undefined,
@@ -171,39 +159,52 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 			}
 		}
 	}
+	Can.Deferred = dojo.Deferred;
+	Can.When = dojo.Deferred.When;
+	Can.Deferred.prototype.pipe = function(done, fail){
+			var d = new Can.Deferred();
+		this.addCallback(function(){
+			d.resolve( done.apply(this, arguments) );
+		});
+		
+		this.addErrback(function(){
+			if(fail){
+				d.reject( fail.apply(this, arguments) );
+			} else {
+				d.reject.apply(d, arguments);
+			}
+		});
+		return d;
+	};
+	
 	Can.ajax = function(options){
-		var d = Can.Deferred(),
-			requestOptions = Can.extend({}, options);
-		// maap jQuery options to mootools options
-		
-		for(var option in optionsMap){
-			if(requestOptions[option] !== undefined){
-				requestOptions[optionsMap[option]] = requestOptions[option];
-				delete requestOptions[option]
-			}
-		}
-
+		var type = Can.String.capitalize( (options.type || "get").toLowerCase() ),
+			method = dojo["xhr"+type];
 		var success = options.success,
-			error = options.error;
+			error = options.error,
+			d = new Can.Deferred();
+			
+		var def = method({
+			url : options.url,
+			handleAs : options.dataType,
+			sync : !options.async,
+			headers : options.headers,
+			content: options.data
+		})
+		def.then(function(data, ioargs){
+			updateDeferred(xhr, d);
+			d.resolve(data,"success",xhr);
+			success && success(data,"success",xhr);
+		},function(data,ioargs){
+			updateDeferred(xhr, d);
+			d.reject(xhr,"error");
+			error(xhr,"error");
+		})
 		
-		requestOptions.onSuccess = function(responseText, xml){
-			var data = responseText;
-			if(options.dataType ==='json'){
-				data = eval("("+data+")")
-			}
-			updateDeferred(request.xhr, d);
-			d.resolve(data,"success",request.xhr);
-			success && success(data,"success",request.xhr);
-		}
-		requestOptions.onError = function(){
-			updateDeferred(request.xhr, d);
-			d.reject(request.xhr,"error");
-			error(equest.xhr,"error");
-		}
+		var xhr = def.ioArgs.xhr;
 		
-		var request = new Request(requestOptions);
-		request.send();
-		updateDeferred(request.xhr, d);
+
+		updateDeferred(xhr, d);
 		return d;
 			
 	}
@@ -265,4 +266,6 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 		destroy.apply(this, arguments)
 	}
 	
-},'../deferred.js')
+	
+	
+})

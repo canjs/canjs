@@ -320,13 +320,19 @@ test("Model events" , function(){
 	var order = 0;
 	Can.Model("Test.Event",{
 		create : function(attrs){
-			return Can.Deferred().resolve({id: 1})
+			var def = new Can.Deferred()
+			def.resolve({id: 1})
+			return def;
 		},
 		update : function(id, attrs, success){
-			return Can.Deferred().resolve(attrs)
+			var def = new Can.Deferred()
+			def.resolve(attrs)
+			return def;
 		},
 		destroy : function(id, success){
-			return Can.Deferred().resolve({})
+			var def = new Can.Deferred()
+			def.resolve({})
+			return def;
 		}
 	},{});
 	
