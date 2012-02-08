@@ -3,14 +3,13 @@ steal('can/observe',function(){
 	
 
 	var	pipe = function(def, model, func){
-		var d = Can.Deferred();
-		def.done(function(){
+		var d = new Can.Deferred();
+		def.then(function(){
 			arguments[0] = model[func](arguments[0])
 			d.resolve.apply(d, arguments)
-		});
-		def.fail((function(){
+		},function(){
 			d.resolveWith.apply(this,arguments)
-		}))
+		})
 		return d;
 	},
 		getId = function( inst ) {
@@ -75,8 +74,8 @@ steal('can/observe',function(){
 				}
 			}
 			
-			return deferred.then(success)
-			.fail(error);
+			deferred.then(success,error);
+			return deferred;
 		}
 		
 	// 338
@@ -117,7 +116,7 @@ steal('can/observe',function(){
 			return function( params, success, error ) {
 				return pipe( ajax( str ||  this._shortName, params, "get", "json"),
 					this, 
-					"models" ).done(success).fail(error);
+					"models" ).then(success,error);
 			};
 		},
 		findOne: function( str ) {
@@ -125,7 +124,7 @@ steal('can/observe',function(){
 				return pipe(
 					ajax(str || this._url, params, "get", "json"),
 					this,
-					"model").done(success).fail(error)
+					"model").then(success,error)
 			};
 		}
 	};
@@ -149,7 +148,7 @@ steal('can/observe',function(){
 			}
 			//add ajax converters
 			
-			if($.ajaxSetup){
+			if(window.jQuery){
 				var converters = {},
 					convertName = "* " + self.fullName + ".model";
 	

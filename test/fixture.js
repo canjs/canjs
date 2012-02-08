@@ -128,10 +128,9 @@ steal('can/util/object',
 			updateSettings(settings, settings);
 			if(settings.fixture){
 				
-				var d = Can.Deferred();
+				var d = new Can.Deferred();
 				d.getResponseHeader = function(){}
-				d.done(settings.success)
-					.fail(settings.fail)
+				d.then(settings.success,settings.fail)
 				
 				d.abort = function(){
 					clearTimeout(timeout);
