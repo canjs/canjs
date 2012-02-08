@@ -76,4 +76,3 @@ $.Controller('Menu', {}, {
 });
 
 $('#wrapper').menu();
-hljs.initHighlightingOnLoad();
