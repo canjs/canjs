@@ -1,9 +1,10 @@
 $.Controller('Menu', {}, {
 	init : function(){
 		this.find('#menu').append(this.buildMenu());
-		this.bind(window, 'scroll', this.proxy('mark'));
-		this._scroll = $(window).scrollTop();
-		this.mark();
+		setTimeout(this.proxy(function(){
+			this.mark();
+			this.bind(window, 'scroll', this.proxy('mark'));
+		}), 50)
 	},
 	buildMenu : function(){
 		this.headings = this.find('h1,h2,h3');
@@ -48,7 +49,16 @@ $.Controller('Menu', {}, {
 		}
 		return build();
 	},
+	"a click" : function(current, ev){
+		this._isClicking = true;
+		var active = this.find('#menu a.active');
+		this.markActive(active, current);
+	},
 	mark : function(){
+		if(this._isClicking){
+			delete this._isClicking;
+			return;
+		}
 		var scroll = $(window).scrollTop(),
 				windowHeight = $(window).height();
 		for(var i = this.headingOffsets.length - 1; i >= 0; i--){
@@ -56,22 +66,85 @@ $.Controller('Menu', {}, {
 			if(offset - windowHeight / 2 < scroll){
 				var active = this.find('#menu a.active'),
 						current = this.find('#menu a[href="#heading-' + (i + 1) + '"]');
-				if(active.attr('href') != current.attr('href')){
-					active.removeClass('active');
-					if(active.data('level') == 2){
-						active.siblings('ul').hide()
-					} else if(active.data('level') === 3){
-						active.closest('ul').hide();
-					}
-					if(current.data('level') == 2){
-						current.siblings('ul').show();
-					}
-					current.addClass('active');
-					current.closest('ul').show();
-				}
+				this.markActive(active, current);
 				return;
 			}
 		}
+	},
+	markActive : function(active, current){
+		console.log(active, current)
+		var currentLevel = current.data('level'),
+				activeLevel = active.data('level'),
+				method = {2: 'siblings', 3: 'closest'}[currentLevel],
+				self = this;
+		if(active.attr('href') != current.attr('href')){
+			if(active.length == 0){ // this happens on load
+				current.addClass('active')[method]('ul').slideDown();
+			} else {
+				if(currentLevel === 2 && activeLevel === 2){
+					var currentUl = current.siblings('ul'),
+							activeUl  = active.siblings('ul');
+					active.removeClass('active');
+					current.addClass('active');
+					if(currentUl.find('li').length > 0){
+						currentUl.slideDown(this.slideDur(currentUl), function(){
+							activeUl.slideUp(self.slideDur(activeUl, true))
+						});
+					} else {
+						activeUl.slideUp(self.slideDur(activeUl, true))
+					}
+					
+				} else if(currentLevel === 3 && activeLevel === 2){
+					var isSameGroup = current.closest('ul')[0] === active.siblings('ul')[0];
+					active.removeClass('active');
+					current.addClass('active');
+					if(!isSameGroup){
+						var currentUl = current.closest('ul'),
+								activeUl = active.siblings('ul');
+						currentUl.slideDown(this.slideDur(currentUl), function(){
+							activeUl.slideUp(self.slideDur(activeUl, true))
+						})
+					}
+				} else if(currentLevel === 2 && activeLevel === 3){
+					var currentUl = current.siblings('ul'),
+							activeUl  = active.closest('ul'),
+							isSameGroup = currentUl[0] === activeUl[0];
+					active.removeClass('active');
+					current.addClass('active');
+					if(!isSameGroup){
+						
+						active.removeClass('active');
+						current.addClass('active');
+						if(currentUl.find('li').length > 0){
+							currentUl.slideDown(this.slideDur(currentUl), function(){
+								activeUl.slideUp(self.slideDur(activeUl, true))
+							})
+						} else {
+							activeUl.slideUp(this.slideDur(activeUl, true))
+						}
+						
+					}
+				} else if(currentLevel === 3 && activeLevel === 3){
+					var currentUl = current.closest('ul'),
+							activeUl = active.closest('ul'),
+							isSameGroup = currentUl[0] === activeUl[0];
+					active.removeClass('active');
+					current.addClass('active');
+					if(!isSameGroup){
+						currentUl.slideDown(this.slideDur(currentUl), function(){
+							activeUl.slideUp(self.slideDur(activeUl, true))
+						})
+					}
+				}
+			}
+		}
+	},
+	slideDur : function(ul, hide){
+		var base = hide ? 50 : 30,
+				dur = base * ul.find('li').length;
+		console.log(dur)
+		dur = dur > 200 ? dur : 200
+		return dur;
 	}
 });
 
