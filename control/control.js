@@ -49,9 +49,9 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		breaker = /^(?:(.*?)\s)?([\w\.\:>]+)$/,
 		basicProcessor;
 	/**
-	 * @class jQuery.Control
-	 * @parent jquerymx
-	 * @plugin jquery/control
+	 * @class Can.Control
+	 * @parent CanJS
+	 * @plugin can/control
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/control/control.js
 	 * @test jquery/control/qunit.html
 	 * @inherits jQuery.Construct

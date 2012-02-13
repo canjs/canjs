@@ -1,11 +1,3 @@
-steal(
-	"can/model",
-	"can/test/fixture.js",
-	'funcunit/qunit',
-	function(){  //load qunit
- 
-
-
 module("can/model", { 
 	setup: function() {
 
@@ -521,5 +513,4 @@ test("store binding", function(){
 	
 })
 
-})//.then("./model_test.js","./associations_test.js")
 

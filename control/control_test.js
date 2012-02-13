@@ -1,5 +1,3 @@
-steal("can/control",'funcunit/qunit',function(){
- 	
 module("can/control");
 
 // tests binding and unbind, removing event handlers, etc
@@ -236,7 +234,4 @@ test("update rebinding", 2, function(){
 	rb.update({item: item2});
 	
 	Can.trigger(item2, "foo")
-})
-
-
 });

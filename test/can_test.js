@@ -1,4 +1,4 @@
-steal('funcunit/qunit',
+steal('can/util/mvc.js').then('funcunit/qunit', 'can/test/fixture.js').then(
 './mvc_test.js',
 // test basic 'first'
 'can/construct/construct_test.js',

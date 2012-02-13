@@ -1,4 +1,8 @@
-steal('can/util',function($){
+if(!window.Can){
+	steal('can/util')
+}
+
+steal(function($){
 	
 var isArray = Can.isArray,
 	// essentially returns an object that has all the must have comparisons ...

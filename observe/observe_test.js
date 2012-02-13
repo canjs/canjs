@@ -1,5 +1,3 @@
-steal('funcunit/qunit','can/observe',function(){
-	
 module('can/observe')
 
 test("Basic Observe",9,function(){
@@ -315,6 +313,3 @@ test("always gets right attr even after moving array items", function(){
 	o.attr('foo','led you')
 })
 
-
-	
-})//.then('./delegate/delegate_test.js');

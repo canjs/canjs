@@ -1,14 +1,14 @@
 steal('can/construct',function() {
 
 	// returns if something is an object with properties of its own
-	var isObject = function( obj ) {
+	var canMakeObserve = function( obj ) {
 			return typeof obj === 'object' && obj !== null && obj && !(obj instanceof Date);
 		},
 		// listens to changes on val and 'bubbles' the event up
 		// - val the object to listen to changes on
 		// - prop the property name val is at on
 		// - parent the parent object of prop
-		hookup = function( val, prop, parent ) {
+		hookupBubble = function( val, prop, parent ) {
 			// if it's an array make a list, otherwise a val
 			if (val instanceof Observe){
 				// we have an observe already
@@ -23,9 +23,9 @@ steal('can/construct',function() {
             // currentAttr (how to get to you)
             // delegateAttr (hot to get to the delegated Attr)
 			
-			//listen to all changes and trigger upwards
+			//listen to all changes and batchTrigger upwards
 			val.bind("change" + parent._namespace, function( ev, attr ) {
-				// trigger the type on this ...
+				// batchTrigger the type on this ...
 				var args = Can.makeArray(arguments),
 					ev = args.shift();
 				if(prop === "*"){
@@ -47,7 +47,7 @@ steal('can/construct',function() {
 			});
 		},
 		// an id to track events for a given observe
-		id = 0,
+		observeId = 0,
 		// a reference to an array of events that will be dispatched
 		collecting = null,
 		// call to start collecting events (Observe sends all events at once)
@@ -62,7 +62,7 @@ steal('can/construct',function() {
 		// - item - the item the event should happen on
 		// - event - the event name ("change")
 		// - args - an array of arguments
-		trigger = function( item, event, args ) {
+		batchTrigger = function( item, event, args ) {
 			// send no events if initalizing
 			if (item._init) {
 				return;
@@ -103,7 +103,7 @@ steal('can/construct',function() {
 			// go through each property
 			observe.each(function( name, val ) {
 				// if the value is an object, and has a attrs or serialize function
-				where[name] = isObject(val) && typeof val[how] == 'function' ?
+				where[name] = canMakeObserve(val) && typeof val[how] == 'function' ?
 				// call attrs or serialize to get the original data back
 				val[how]() :
 				// otherwise return the value
@@ -272,7 +272,7 @@ steal('can/construct',function() {
 			// _data is where we keep the properties
 			this._data = {};
 			// the namespace this object uses to listen to events
-			this._namespace = ".observe" + (++id);
+			this._namespace = ".observe" + (++observeId);
 			// sets all attrs
 			this._init = 1;
 			this.attr(obj);
@@ -289,10 +289,10 @@ steal('can/construct',function() {
 		 *     // read the user's name
 		 *     o.attr('user.name') //-> 'hank'
 		 * 
-		 * If a value is set for the first time, it will trigger 
+		 * If a value is set for the first time, it will batchTrigger 
 		 * an `'add'` and `'set'` change event.  Once
 		 * the value has been added.  Any future value changes will
-		 * trigger only `'set'` events.
+		 * batchTrigger only `'set'` events.
 		 * 
 		 * 
 		 * @param {String} attr the attribute to read or write.
@@ -389,7 +389,7 @@ steal('can/construct',function() {
 				if (!(prop in this.constructor.prototype)) {
 					delete this[prop]
 				}
-				trigger(this, "change", [prop, "remove", undefined, current]);
+				batchTrigger(this, "change", [prop, "remove", undefined, current]);
 				return current;
 			}
 		},
@@ -421,7 +421,7 @@ steal('can/construct',function() {
 				current = this.__get(prop);
 
 			// if we have an object and remaining parts
-			if ( isObject(current) && parts.length ) {
+			if ( canMakeObserve(current) && parts.length ) {
 				// that object should set it (this might need to call attr)
 				current._set(parts, value)
 			} else if (!parts.length ) {
@@ -446,17 +446,17 @@ steal('can/construct',function() {
 				// set the value on data
 				this.___set(prop,
 				// if we are getting an object
-				isObject(value) ?
+				canMakeObserve(value) ?
 				// hook it up to send event to us
-				hookup(value, prop, this) :
+				hookupBubble(value, prop, this) :
 				// value is normal
 				value);
 
 
 
-				// trigger the change event
-				trigger(this, "change", [prop, changeType, value, current]);
-				trigger(this, prop, value, current);
+				// batchTrigger the change event
+				batchTrigger(this, "change", [prop, changeType, value, current]);
+				batchTrigger(this, prop, value, current);
 				// if we can stop listening to our old value, do it
 				current && unhookup([current], this._namespace);
 			}
@@ -594,7 +594,7 @@ steal('can/construct',function() {
 					remove && self.removeAttr(prop);
 					return;
 				}
-				if ( isObject(curVal) && isObject(newVal) ) {
+				if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {
 					curVal.attr(newVal, remove)
 				} else if ( curVal != newVal ) {
 					self._set(prop, newVal)
@@ -633,7 +633,7 @@ steal('can/construct',function() {
 	{
 		setup: function( instances, options ) {
 			this.length = 0;
-			this._namespace = ".list" + (++id);
+			this._namespace = ".list" + (++observeId);
 			this._init = 1;
 			this.bind('change',Can.proxy(this._changes,this));
 			this.push.apply(this, Can.makeArray(instances || []));
@@ -661,9 +661,9 @@ steal('can/construct',function() {
 					splice.call(this, index, 1);
 					splice.call(this, newIndex, 0, item);
 					
-					trigger(this, "move", [item, newIndex, index]);
+					batchTrigger(this, "move", [item, newIndex, index]);
 					ev.stopImmediatePropagation();
-					trigger(this,"change", [
+					batchTrigger(this,"change", [
 						attr.replace(/^\d+/,newIndex),
 						how,
 						newVal,
@@ -676,15 +676,15 @@ steal('can/construct',function() {
 			// if we add items, we need to handle 
 			// sorting and such
 			
-			// trigger direct add and remove events ...
+			// batchTrigger direct add and remove events ...
 			if(attr.indexOf('.') === -1){
 				
 				if( how === 'add' ) {
-					trigger(this, how, [newVal,+attr]);
-					trigger(this,'length',[this.length]);
+					batchTrigger(this, how, [newVal,+attr]);
+					batchTrigger(this,'length',[this.length]);
 				} else if( how === 'remove' ) {
-					trigger(this, how, [oldVal, +attr]);
-					trigger(this,'length',[this.length]);
+					batchTrigger(this, how, [oldVal, +attr]);
+					batchTrigger(this,'length',[this.length]);
 				}
 				
 			}
@@ -786,8 +786,8 @@ steal('can/construct',function() {
 
 			for ( i = 2; i < args.length; i++ ) {
 				var val = args[i];
-				if ( isObject(val) ) {
-					args[i] = hookup(val, "*", this)
+				if ( canMakeObserve(val) ) {
+					args[i] = hookupBubble(val, "*", this)
 				}
 			}
 			if ( count === undefined ) {
@@ -795,11 +795,11 @@ steal('can/construct',function() {
 			}
 			var removed = splice.apply(this, args);
 			if ( count > 0 ) {
-				trigger(this, "change", [""+index, "remove", undefined, removed]);
+				batchTrigger(this, "change", [""+index, "remove", undefined, removed]);
 				unhookup(removed, this._namespace);
 			}
 			if ( args.length > 2 ) {
-				trigger(this, "change", [""+index, "add", args.slice(2), removed]);
+				batchTrigger(this, "change", [""+index, "add", args.slice(2), removed]);
 			}
 			return removed;
 		},
@@ -824,7 +824,7 @@ steal('can/construct',function() {
 				var curVal = this[prop],
 					newVal = props[prop];
 
-				if ( isObject(curVal) && isObject(newVal) ) {
+				if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {
 					curVal.attr(newVal, remove)
 				} else if ( curVal != newVal ) {
 					this._set(prop, newVal)
@@ -902,8 +902,8 @@ steal('can/construct',function() {
 			// go through and convert anything to an observe that needs to be converted
 			for ( var i = 0; i < args.length; i++ ) {
 				var val = args[i];
-				if ( isObject(val) ) {
-					args[i] = hookup(val, "*", this)
+				if ( canMakeObserve(val) ) {
+					args[i] = hookupBubble(val, "*", this)
 				}
 			}
 			
@@ -927,9 +927,9 @@ steal('can/construct',function() {
 			// undefined - the old value
 			if ( this.comparator  && args.length > 1) {
 				this.sort(null, true);
-				trigger(this,"reset", [args])
+				batchTrigger(this,"reset", [args])
 			} else {
-				trigger(this, "change", [""+len, "add", args, undefined])
+				batchTrigger(this, "change", [""+len, "add", args, undefined])
 			}
 			
 
@@ -988,7 +988,7 @@ steal('can/construct',function() {
 			// undefined - the new values (there are none)
 			// res - the old, removed values (should these be unbound)
 			// len - where these items were removed
-			trigger(this, "change", [""+len, "remove", undefined, [res]])
+			batchTrigger(this, "change", [""+len, "remove", undefined, [res]])
 
 			if ( res && res.unbind ) {
 				res.unbind("change" + this._namespace)

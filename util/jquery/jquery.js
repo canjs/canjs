@@ -10,40 +10,18 @@ steal('./jquery.1.7.1.js', function(){
 		
 	}
 	Can.$ = jQuery
-	
+	var maker = function(func){
+		return function(){
+			var t = this[func] ? this : $([this])
+			t[func].apply(t, arguments)
+			return this;
+		}
+	}
 	// a primitive to bind on 'this' ... just pass to jquery
-	Can.bind = function( ev, cb){
-		// if we can bind to it ...
-		if(this.bind){
-			this.bind(ev, cb)
-		} else {
-			$([this]).bind(ev, cb)
-		}
-		return this;
-	}
-	Can.unbind = function(ev, cb){
-		// if we can bind to it ...
-		if(this.unbind){
-			this.unbind(ev, cb)
-		} else {
-			$([this]).unbind(ev, cb)
-		}
-		return this;
-	}
-	Can.delegate = function(selector,ev, cb){
-		if(this.delegate){
-			this.delegate(selector, ev, cb)
-		} else {
-			$([this]).delegate(selector,ev, cb)
-		}
-	}
-	Can.undelegate = function(selector,ev, cb){
-		if(this.undelegate){
-			this.undelegate(selector, ev, cb)
-		} else {
-			$([this]).undelegate(selector,ev, cb)
-		}
-	}
+	Can.bind = maker("bind");;
+	Can.unbind = maker("unbind");
+	Can.delegate = maker("delegate");
+	Can.undelegate = maker("undelegate");
 	Can.addEvent = function(ev, cb){
 		$([this]).bind(ev, cb)
 		return this;

@@ -1,4 +1,4 @@
-steal("http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js", '../event.js',function(){
+steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompressed.js", '../event.js',function(){
 	
 	// String
 	Can.trim = function(s){
@@ -213,7 +213,11 @@ steal("http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js", '../event.
 		if(selector === window){
 			return window;
 		}
-		return $$(selector)
+		return dojo.query(selector)
+	}
+	Can.buildFragment = function(frags, nodes){
+		var owner = nodes.length && nodes[0].ownerDocument;
+		return dojo.toDom(frags[0], owner );
 	}
 	
 	// add document fragement support
@@ -226,14 +230,80 @@ steal("http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js", '../event.
 		}
 	};
 	Can.append = function(wrapped, html){
-		if(typeof html === 'string'){
-			html = Can.buildFragment([html],[]).fragment
-		}
-		return wrapped.grab(html)
+		return wrapped.forEach(function(node){
+			dojo.place( html, node)
+		});
 	}
 	Can.filter = function(wrapped, filter){
 		return wrapped.filter(filter);
 	}
+	
+	
+	
+	// Can.data
+	
+  var data = {},
+    uuid = Can.uuid = +new Date(),
+    exp  = Can.expando = 'Can' + uuid;
+
+  function getData(node, name) {
+    var id = node[exp], store = id && data[id];
+    return name === undefined ? store || setData(node) :
+      (store && store[name]) || dataAttr.call($(node), name);
+  }
+
+  function setData(node, name, value) {
+    var id = node[exp] || (node[exp] = ++uuid),
+      store = data[id] || (data[id] = {});
+    if (name !== undefined) store[name] = value;
+    return store;
+  };
+
+var cleanData = function(elems){
+  	for ( var i = 0, elem;
+		(elem = elems[i]) !== undefined; i++ ) {
+			var id = elem[exp]
+			delete data[id];
+		}
+  }
+	Can.data = function(wrapped, name, value){
+		return value === undefined ?
+			wrapped.length == 0 ? undefined : getData(this[0], name) :
+			wrapped.forEach(function(node){
+				setData(node, name, value);
+			});
+	};
+	// overwrite dojo.destroy and dojo.empty and dojo.palce
+	var empty = dojo.empty;
+	dojo.empty = function(){
+		for(var c; c = node.lastChild;){ // intentional assignment
+			dojo.destroy(c);
+		} 
+	}
+	var destroy = dojo.destroy;
+	dojo.destroy = function(node){
+		node = dojo.byId(node);
+		cleanData(node);
+		node.getElementsByTagName && cleanData(node.getElementsByTagName('*'))
+		
+		return destroy.apply(dojo, arguments);
+	}
+	
+	
+	
+	
+  var cleanData = function(elems){
+  	for ( var i = 0, elem;
+		(elem = elems[i]) !== undefined; i++ ) {
+			var id = elem[exp]
+			delete data[id];
+		}
+  }
+	
+	
+	
+	
+	
 	Can.data = function(wrapped, key, value){
 		if(value === undefined){
 			return wrapped[0].retrieve(key)
@@ -266,6 +336,11 @@ steal("http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js", '../event.
 		destroy.apply(this, arguments)
 	}
 	
+	
+	
+	
+	
+
 	
 	
 })
