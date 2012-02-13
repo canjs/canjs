@@ -1,12 +1,4 @@
-steal("can/view",
-	"can/view/micro",
-	"can/view/ejs",
-	//"can/view/ejs/ejs_test.js",
-	"can/view/jaml",
-	//"can/view/tmpl",
-	'funcunit/qunit',
-	//"can/view/tmpl/tmpl_test.js"
-	function(){
+
 
 
 module("can/view");
@@ -25,19 +17,20 @@ module("can/view");
 	equals(++order,2, "called synchronously");
 })*/
 
-
-test("multiple template types work", function(){
-	
-	Can.each(["micro","ejs","jaml"/*, "tmpl"*/], function(i, ext){
-		var div = Can.$(document.createElement('div'));
+if(window.Jaml){
+	test("multiple template types work", function(){
+		
+		Can.each(["micro","ejs","jaml"/*, "tmpl"*/], function(i, ext){
+			var div = Can.$(document.createElement('div'));
+				
+			Can.append(div, Can.view("//can/view/test/qunit/template."+ext,{"message" :"helloworld"}))
 			
-		Can.append(div, Can.view("//can/view/test/qunit/template."+ext,{"message" :"helloworld"}))
-		
-		
-		ok( div[0].getElementsByTagName('h3').length, ext+": h3 written for ")
-		ok( /helloworld\s*/.test( div[0].innerHTML ), ext+": hello world present for ")
-	})
-});
+			
+			ok( div[0].getElementsByTagName('h3').length, ext+": h3 written for ")
+			ok( /helloworld\s*/.test( div[0].innerHTML ), ext+": hello world present for ")
+		})
+	});
+}
 
 test("plugin in ejs", function(){
 
@@ -201,4 +194,4 @@ test("hyphen in type", function(){
 
 })
 
-});
+

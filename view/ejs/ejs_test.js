@@ -1,5 +1,3 @@
-steal('funcunit/qunit','can/view/ejs', 
-	'can/observe',function(){
 module("can/view/ejs, rendering",{
 	setup : function(){
 
@@ -242,6 +240,36 @@ test('multiple hookups in a single attribute', function() {
 	obs.attr('bar', 'e');
 
 	equals(div.innerHTML, '<div class="aec"></div>', 'updated values');
+	
+	obs.attr('bar', 'f');
+
+	equals(div.innerHTML, '<div class="afc"></div>', 'updated values');
 });
 
+test('adding and removing multiple html content within a single element', function(){
+	
+	var text =	'<div><%== obs.attr("a") %><%== obs.attr("b") %><%== obs.attr("c") %></div>',
+
+	obs = new Can.Observe({
+		a: 'a',
+		b: 'b',
+		c: 'c'
+	});
+
+	compiled = new Can.EJS({ text: text }).render({ obs: obs })
+	
+	var div = document.createElement('div');
+
+	div.appendChild(Can.view.frag(compiled));
+
+	equals(div.innerHTML, '<div>abc</div>', 'initial render');
+
+	obs.attr({a: '', b : '', c: ''});
+
+	equals(div.innerHTML, '<div></div>', 'updated values');
+	
+	obs.attr({c: 'c'});
+	
+	equals(div.innerHTML, '<div>c</div>', 'updated values');
 })
+

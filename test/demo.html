@@ -102,7 +102,10 @@ Can.Control("Todos",{
     
     // get all todos and render them with
     // a template in the element's html
-    this.element.html('todosEjs', Todo.findAll() )
+    var self = this;
+    Can.view('todosEjs', Todo.findAll()).then(function(frag){
+    	self.element.html(frag)
+    });
   },
   // when a todo is clicked, create a 'selected'
   // event for others to listen to

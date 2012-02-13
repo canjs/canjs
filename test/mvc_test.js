@@ -1,4 +1,4 @@
-steal('funcunit/qunit','./mvc','./fixture',function(){
+steal('funcunit/qunit','./fixture',function(){
 
 module("mvc");
 

@@ -1,5 +1,3 @@
-steal("can/construct",'funcunit/qunit').then(function(){
-
 module("can/construct",{
 	setup : function(){
 		var Animal = this.Animal = Can.Construct({
@@ -164,9 +162,4 @@ test("Creating without extend", function(){
 		}
 	});
 	new Foo().dude(true);
-})
-
-
-
-
 });

@@ -1,5 +1,10 @@
-steal('can/util/object',
-	'can/util/string',function( $ ) {
+// needs a .then! does not steal dependencies because this needs to work with dist ...
+
+if(!window.Can || !Can.String){
+	steal('can/util/string')
+}
+
+steal('can/util/object',function( $ ) {
 	
 	
 	var updateSettings = function(settings, originalOptions){

@@ -1,5 +1,3 @@
-steal('funcunit/qunit','./route.js',function(){
-
 module("can/route")
 
 test("deparam", function(){
@@ -264,4 +262,4 @@ test("route endings", function(){
 	
 })
 
-})
+

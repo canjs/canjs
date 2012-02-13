@@ -1,7 +1,6 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="../../funcunit/qunit/qunit.css" />
-		<script type='text/javascript' src='../../steal/steal.js?can/view/view_test.js'></script>
     </head>
     <body>
 
@@ -12,5 +11,15 @@
 		<div id="test-content"></div>
         <ol id="qunit-tests"></ol>
 		<div id="qunit-test-area"></div>
+		<script type='text/javascript' src='../../steal/steal.js'></script>
+	    <script type='text/javascript'>
+	    	steal('can/view','funcunit/qunit', 
+	    		"can/view/micro",
+				"can/view/ejs",
+				//"can/view/ejs/ejs_test.js",
+				"can/view/jaml",
+				//"can/view/tmpl",
+				'funcunit/qunit').then('can/view/view_test.js')
+	    </script>
     </body>
 </html>

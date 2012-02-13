@@ -12,6 +12,9 @@
 	<div id="qunit-test-area"></div>
 	<a href='associations/qunit.html'>associations</a>
 	<a href='list/qunit.html'>list</a>
-    <script type='text/javascript' src='../../steal/steal.js?can/observe/observe_test.js'></script>
+    <script type='text/javascript' src='../../steal/steal.js'></script>
+    <script type='text/javascript'>
+    	steal('can/observe','funcunit/qunit').then('can/observe/observe_test.js')
+    </script>
     </body>
 </html>

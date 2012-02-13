@@ -368,13 +368,11 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					else {
 						var me = {
 							render: function() {
-								for(var i = 0; i < hooks[status].funcs.length; i++) {
-									attr = attr.replace(/__!@#\$%__/, function() {
-										return hooks[status].funcs[i].call(self);
-									});
-								}
-
-								return attr;
+								var i =0;
+								var newAttr = attr.replace(/__!@#\$%__/g, function() {
+									return hooks[status].funcs[i++].call(self);
+								});
+								return newAttr;
 							},
 							
 							funcs: [func]
