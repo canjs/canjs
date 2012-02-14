@@ -228,7 +228,7 @@ steal("can/util").then(function( $ ) {
 	$view = Can.view = function(view, data, helpers, callback){
 		// get the result
 		var result = Can.render(view, data, helpers, callback);
-		if(isDeferred(result)){
+		if(Can.isDeferred(result)){
 			return result.pipe(function(result){
 				return Can.view.frag(result);
 			})
@@ -250,7 +250,6 @@ steal("can/util").then(function( $ ) {
 			var hookupEls,
 				id, 
 				func, 
-				res,
 				arr = [],
 				el,
 				i=0;
@@ -414,14 +413,14 @@ steal("can/util").then(function( $ ) {
 					result; 
 				
 				// make data look like the resolved deferreds
-				if ( isDeferred(data) ) {
+				if ( Can.isDeferred(data) ) {
 					data = usefulPart(resolved);
 				}
 				else {
 					// go through each prop in data again,
 					// replace the defferreds with what they resolved to
 					for ( var prop in data ) {
-						if ( isDeferred(data[prop]) ) {
+						if ( Can.isDeferred(data[prop]) ) {
 							data[prop] = usefulPart(objs.shift());
 						}
 					}
@@ -463,8 +462,12 @@ steal("can/util").then(function( $ ) {
 
 			return response;
 		}
+	}
+	// returns true if something looks like a deferred
+	Can.isDeferred = function( obj ) {
+		return obj && Can.isFunction(obj.always) // check if obj is a Can.Deferred
 	} 
-		// makes sure there's a template, if not, has steal provide a warning
+	// makes sure there's a template, if not, has steal provide a warning
 	var	checkText = function( text, url ) {
 			if (!text.match(/[^\s]/) ) {
 				steal.dev.log("There is no template or an empty template at " + url);
@@ -566,13 +569,6 @@ steal("can/util").then(function( $ ) {
 				});
 				return d;
 			}
-			
-			
-
-		},
-		// returns true if something looks like a deferred
-		isDeferred = function( obj ) {
-			return obj && Can.isFunction(obj.always) // check if obj is a Can.Deferred
 		},
 		// gets an array of deferreds from an object
 		// this only goes one level deep
@@ -580,11 +576,11 @@ steal("can/util").then(function( $ ) {
 			var deferreds = [];
 
 			// pull out deferreds
-			if ( isDeferred(data) ) {
+			if ( Can.isDeferred(data) ) {
 				return [data]
 			} else {
 				for ( var prop in data ) {
-					if ( isDeferred(data[prop]) ) {
+					if ( Can.isDeferred(data[prop]) ) {
 						deferreds.push(data[prop]);
 					}
 				}
