@@ -1,3 +1,4 @@
+// 384
 steal('can/util', function($){
 	
 	var digitTest = /^\d+$/,

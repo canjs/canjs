@@ -1,3 +1,4 @@
+// 674
 //Can.Construct 
 // This is a modified version of John Resig's class
 // http://ejohn.org/blog/simple-javascript-inheritance/
