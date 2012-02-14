@@ -1,24 +1,9 @@
-steal('jquery/view/modifiers', function(){
-	
-	Can.frag = function(html, node){
-		// converting an array of elements into a fragmeent
-		var frag
-		if(html){
-			frag = html.nodeType == 11 || html.appendTo ? html : Can.buildFragment([html], [node||document]).fragment
-		} else {
-			frag = document.createDocumentFragment();
-			frag.appendChild(document.createTextNode(""))
-		}
-		return frag;
-	};
-	
-//---- ADD jQUERY HELPERS -----
+steal('can/util/jquery', function(){
+	//---- ADD jQUERY HELPERS -----
 	//converts jquery functions to use views	
 	var convert, modify, isTemplate, isHTML, isDOM, getCallback, hookupView, funcs,
 		// text and val cannot produce an element, so don't run hookups on them
 		noHookup = {'val':true,'text':true};
-
-	
 
 	convert = function( func_name ) {
 		// save the old jQuery helper
@@ -27,7 +12,7 @@ steal('jquery/view/modifiers', function(){
 		// replace it wiht our new helper
 		$.fn[func_name] = function() {
 			
-			var args = makeArray(arguments),
+			var args = Can.makeArray(arguments),
 				callbackNum, 
 				callback, 
 				self = this,
@@ -36,7 +21,7 @@ steal('jquery/view/modifiers', function(){
 			// if the first arg is a deferred
 			// wait until it finishes, and call
 			// modify with the result
-			if ( isDeferred(args[0]) ) {
+			if ( Can.isDeferred(args[0]) ) {
 				args[0].done(function( res ) {
 					modify.call(self, [res], old);
 				})
@@ -52,14 +37,14 @@ steal('jquery/view/modifiers', function(){
 						modify.call(self, [result], old);
 						callback.call(self, result);
 					};
-					$view.apply($view, args);
+					Can.view.apply(Can.view, args);
 					return this;
 				}
 				// call view with args (there might be deferreds)
-				result = $view.apply($view, args);
+				result = Can.view.apply(Can.view, args);
 				
 				// if we got a string back
-				if (!isDeferred(result) ) {
+				if (!Can.isDeferred(result) ) {
 					// we are going to call the old method with that string
 					args = [result];
 				} else {
@@ -81,7 +66,7 @@ steal('jquery/view/modifiers', function(){
 		var res, stub, hooks;
 
 		//check if there are new hookups
-		for ( var hasHookups in $view.hookups ) {
+		for ( var hasHookups in Can.view.hookups ) {
 			break;
 		}
 
@@ -90,10 +75,9 @@ steal('jquery/view/modifiers', function(){
 		// by using a frag, the element can be recursively hooked up
 		// before insterion
 		if ( hasHookups && args[0] && isHTML(args[0]) ) {
-			args[0] = hookupView(Can.frag(args[0]), $view.hookups)
+			args[0] = Can.view.frag(args[0])
 		}
 	
-
 		//then insert into DOM
 		res = old.apply(this, args);
 
@@ -138,11 +122,7 @@ steal('jquery/view/modifiers', function(){
 	getCallback = function( args ) {
 		return typeof args[3] === 'function' ? 3 : typeof args[2] === 'function' && 2;
 	};
-	
 
-		
-
-	
 	/**
 	 *  @add jQuery.fn
 	 *  @parent jQuery.View
@@ -156,9 +136,7 @@ steal('jquery/view/modifiers', function(){
 	 * @codeend
 	 */
 	$.fn.hookup = function() {
-		var hooks = $view.hookups;
-		//$view.hookups = {};
-		hookupView(this, hooks);
+		Can.view.frag(this);
 		return this;
 	};
 
@@ -284,8 +262,5 @@ steal('jquery/view/modifiers', function(){
 	});
 
 	//go through helper funcs and convert
-
-	
-	
 	
 })
