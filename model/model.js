@@ -13,10 +13,10 @@ steal('can/observe',function(){
 		})
 		return d;
 	},
+		modelNum = 0,
 		getId = function( inst ) {
 			return inst[inst.constructor.id]
 		},
-		trigger = Can.trigger,
 		ajax = function(ajaxOb, data, type, dataType, success, error ) {
 
 			
@@ -129,7 +129,7 @@ steal('can/observe',function(){
 			};
 		}
 	};
-	var modelNum = 0;
+
 	Can.Observe("Can.Model",{
 		setup : function(){
 			Can.Observe.apply(this, arguments);
@@ -190,7 +190,7 @@ steal('can/observe',function(){
 
 			//!steal-remove-start
 			if (!length ) {
-				steal.dev.warn("model.js models has no data.  If you have one item, use model")
+				steal.dev.warn("model.js models has no data.")
 			}
 			//!steal-remove-end
 			for (; i < length; i++ ) {
@@ -219,7 +219,7 @@ steal('can/observe',function(){
 		isNew: function() {
 			var id = getId(this);
 			// id || id === 0?
-			return (id === undefined || id === null || id === ''); //if null or undefined
+			return !(id || id === 0); //if null or undefined
 		},
 		save: function( success, error ) {
 			return makeRequest(this, this.isNew() ? 'create' : 'update', success, error);
@@ -284,27 +284,29 @@ steal('can/observe',function(){
 			stub = attrs && typeof attrs == 'object' && this.attr(attrs.attr ? attrs.attr() : attrs);
 
 			// call event on the instance
-			trigger(this,funcName);
-			trigger(this,"change",funcName)
+			Can.trigger(this,funcName);
+			Can.trigger(this,"change",funcName)
 			//!steal-remove-start
 			steal.dev.log("Model.js - "+ constructor.shortName+" "+ funcName);
 			//!steal-remove-end
 
 			// call event on the instance's Class
-			trigger(constructor,funcName, this);
+			Can.trigger(constructor,funcName, this);
 		};
 	});
 	
+	// model lists are just like Observe.List except that when their items is destroyed, it automatically
+	// gets removed from the list
 	var ML = Can.Observe.List('Can.Model.List',{
 		setup : function(){
 			Can.Observe.List.prototype.setup.apply(this, arguments );
 			// send destroy events
-			this.bind('change', Can.proxy(this._sendDestroy, this))
-		},
-		_sendDestroy : function(ev, how){
-			if(/\w+\.destroyed/.test(how)){
-				this.splice(this.indexOf(ev.target),1);
-			}
+			var self = this;
+			this.bind('change', function(ev, how){
+				if(/\w+\.destroyed/.test(how)){
+					self.splice(self.indexOf(ev.target),1);
+				}
+			})
 		}
 	})
 	

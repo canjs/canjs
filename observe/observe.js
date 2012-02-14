@@ -454,8 +454,6 @@ steal('can/construct', function() {
 				// value is normal
 				value);
 
-
-
 				// batchTrigger the change event
 				batchTrigger(this, "change", [prop, changeType, value, current]);
 				batchTrigger(this, prop, value, current);

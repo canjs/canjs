@@ -1,5 +1,4 @@
-// 384
-steal('can/util', function($){
+steal('can/util/string', function($){
 	
 	var digitTest = /^\d+$/,
 		keyBreaker = /([^\[\]]+)|(\[\])/g,
@@ -9,7 +8,7 @@ steal('can/util', function($){
 	/**
 	 * @add jQuery.String
 	 */
-	Can.String = $.extend(Can.String || {}, { 
+	Can.extend(Can.String, { 
 		
 		/**
 		 * @function deparam
@@ -46,8 +45,8 @@ steal('can/util', function($){
 					pair = [pair[0], pair.slice(1).join("=")]
 				}
 				  
-        var key = decodeURIComponent(pair[0].replace(plus, " ")), 
-          value = decodeURIComponent(pair[1].replace(plus, " ")),
+		        var key = decodeURIComponent(pair[0].replace(plus, " ")), 
+		         	value = decodeURIComponent(pair[1].replace(plus, " ")),
 					parts = key.match(keyBreaker);
 		
 				for ( var j = 0; j < parts.length - 1; j++ ) {
