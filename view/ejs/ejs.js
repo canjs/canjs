@@ -1,6 +1,6 @@
 // 2.19
 /*jslint evil: true */
-steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
+steal('can/view', 'can/util/string').then(function( $ ) {
 
 	// HELPER METHODS ==============
 	var myEval = function( script ) {
@@ -18,8 +18,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		newReg = /\n/g,
 		nReg = /\n/,
 		slashReg = /\\/g,
-		quoteReg = /"/g,
-		singleQuoteReg = /'/g,
 		tabReg = /\t/g,
 		leftBracket = /\{/g,
 		rightBracket = /\}/g,
@@ -28,12 +26,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		tagMap = {"": "span", table: "tr", tr: "td", ol: "li", ul: "li", tbody: "tr", thead: "tr", tfoot: "tr"},
 		// escapes characters starting with \
 		clean = function( content ) {
-			return content.replace(slashReg, '\\\\').replace(newReg, '\\n').replace(quoteReg, '\\"').replace(tabReg, '\\t');
-		},
-		// escapes html
-		// - from prototype  http://www.prototypejs.org/
-		escapeHTML = function( content ) {
-			return content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(quoteReg, '&#34;').replace(singleQuoteReg, "&#39;");
+			return content.replace(slashReg, '\\\\').replace(newReg, '\\n').replace(/"/g, '\\"').replace(tabReg, '\\t');
 		},
 		bracketNum = function(content){
 			var lefts = content.match(leftBracket),
@@ -439,7 +432,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		clean: function( text ) {
 			//return sanatized text
 			if ( typeof text == 'string' || typeof text == 'number'  ) {
-				return escapeHTML(""+text);
+				return Can.String.esc(""+text);
 			} else {
 				return EJS.text(text);
 			}
