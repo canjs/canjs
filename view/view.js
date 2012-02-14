@@ -1,3 +1,4 @@
+// 1.18
 steal("can/util").then(function( $ ) {
 
 	// a path like string into something that's ok for an element ID
@@ -6,7 +7,7 @@ steal("can/util").then(function( $ ) {
 	},
 		makeArray = Can.makeArray,
 		// used for hookup ids
-		id = 1;
+		id = 1,
 	// this might be useful for testing if html
 	// htmlTest = /^[\s\n\r\xA0]*<(.|[\r\n])*>[\s\n\r\xA0]*$/
 	/**
@@ -224,9 +225,9 @@ steal("can/util").then(function( $ ) {
 	 * the rendered result of the view.
 	 */
 	
-	Can.view = function(view, data, helpers, callback){
+	$view = Can.view = function(view, data, helpers, callback){
 		// get the result
-		var result = Can.View(view, data, helpers, callback);
+		var result = Can.render(view, data, helpers, callback);
 		if(isDeferred(result)){
 			return result.pipe(function(result){
 				return Can.view.frag(result);
@@ -236,237 +237,45 @@ steal("can/util").then(function( $ ) {
 		// convert it into a dom frag
 		return Can.view.frag(result);
 	};
-	Can.view.frag = function(result){
-		var frag = Can.buildFragment([result],[document.body]).fragment;
-		// if we have an empty frag
-		if(!frag.childNodes.length) { 
-			frag.appendChild(document.createTextNode(''))
-		}
-		// hook it up
-		var hooks = $view.hookups;
-		//$view.hookups = {};
-		return hookupView(frag, hooks);
-	}
-	Can.view.hookup = function(frag){
-		//$view.hookups = {};
-		return hookupView(frag, $view.hookups);
-	}
-	
-	var $view = Can.View = function( view, data, helpers, callback ) {
-		// if helpers is a function, it is actually a callback
-		if ( typeof helpers === 'function' ) {
-			callback = helpers;
-			helpers = undefined;
-		}
-
-		// see if we got passed any deferreds
-		var deferreds = getDeferreds(data);
-
-
-		if ( deferreds.length ) { // does data contain any deferreds?
-			// the deferred that resolves into the rendered content ...
-			var deferred = Can.Deferred();
-
-			// add the view request to the list of deferreds
-			deferreds.push(get(view, true))
-
-			// wait for the view and all deferreds to finish
-			Can.when.apply(Can, deferreds).then(function( resolved ) {
-				// get all the resolved deferreds
-				var objs = makeArray(arguments),
-					// renderer is last [0] is the data
-					renderer = objs.pop(),
-					// the result of the template rendering with data
-					result; 
-				
-				// make data look like the resolved deferreds
-				if ( isDeferred(data) ) {
-					data = usefulPart(resolved);
-				}
-				else {
-					// go through each prop in data again,
-					// replace the defferreds with what they resolved to
-					for ( var prop in data ) {
-						if ( isDeferred(data[prop]) ) {
-							data[prop] = usefulPart(objs.shift());
-						}
-					}
-				}
-				// get the rendered result
-				result = renderer(data, helpers);
-
-				//resolve with the rendered view
-				deferred.resolve(result); 
-				// if there's a callback, call it back with the result
-				callback && callback(result);
-			});
-			// return the deferred ....
-			return deferred;
-		}
-		else {
-			// no deferreds, render this bad boy
-			var response, 
-				// if there's a callback function
-				async = typeof callback === "function",
-				// get the 'view' type
-				deferred = get(view, async);
-
-			// if we are async, 
-			if ( async ) {
-				// return the deferred
-				response = deferred;
-				// and callback callback with the rendered result
-				deferred.done(function( renderer ) {
-					callback(renderer(data, helpers))
-				})
-			} else {
-				// otherwise, the deferred is complete, so
-				// set response to the result of the rendering
-				deferred.done(function( renderer ) {
-					response = renderer(data, helpers);
-				});
+	Can.extend(Can.view,{
+		frag: function(result){
+			var frag = Can.buildFragment([result],[document.body]).fragment;
+			// if we have an empty frag
+			if(!frag.childNodes.length) { 
+				frag.appendChild(document.createTextNode(''))
 			}
-
-			return response;
-		}
-	}, 
-		// makes sure there's a template, if not, has steal provide a warning
-		checkText = function( text, url ) {
-			if (!text.match(/[^\s]/) ) {
-				steal.dev.log("There is no template or an empty template at " + url)
-				throw "Can.View ERROR: There is no template or an empty template at " + url;
-			}
+			return Can.view.hookup(frag);
 		},
-		// returns a 'view' renderer deferred
-		// url - the url to the view template
-		// async - if the ajax request should be synchronous
-		// returns a deferred
-		get = function( url, async ) {
+		hookup: function(fragment){
+			var hookupEls,
+				id, 
+				func, 
+				res,
+				arr = [],
+				el,
+				i=0;
 			
-			
-			var suffix = url.match(/\.[\w\d]+$/),
-			type, 
-			// if we are reading a script element for the content of the template
-			// el will be set to that script element
-			el, 
-			// a unique identifier for the view (used for caching)
-			// this is typically derived from the element id or
-			// the url for the template
-			id, 
-			// the AJAX request used to retrieve the template content
-			jqXHR, 
-			// used to generate the response 
-			response = function( text ) {
-				// get the renderer function
-				var func = type.renderer(id, text),
-					d = Can.Deferred().resolve(func)
-				// cache if if we are caching
-				if ( $view.cache ) {
-					$view.cached[id] = d;
+			// get all childNodes
+			Can.each(fragment.childNodes ? makeArray(fragment.childNodes) : fragment, function(i, node){
+				if(node.nodeType != 3){
+					arr.push(node)
+					arr.push.apply(arr, makeArray( node.getElementsByTagName('*')))
 				}
-				// return the objects for the response's dataTypes 
-				// (in this case view)
-				return d;
-			};
-
-		// if we have an inline template, derive the suffix from the 'text/???' part
-		// this only supports '<script></script>' tags
-		if ( el = document.getElementById(url) ) {
-			suffix = "."+el.type.match(/\/(x\-)?(.+)/)[2];
-		}
-
-		// if there is no suffix, add one
-		if (!suffix ) {
-			suffix = $view.ext;
-			url = url + $view.ext;
-		}
-		if(Can.isArray(suffix)){
-			suffix = suffix[0]
-		}
-
-		// convert to a unique and valid id
-		id = toId(url);
-
-		// if a absolute path, use steal to get it
-		// you should only be using // if you are using steal
-		if ( url.match(/^\/\//) ) {
-			var sub = url.substr(2);
-			url = typeof steal === "undefined" ? 
-				url = "/" + sub : 
-				steal.root.mapJoin(sub);
-		}
-
-		//set the template engine type 
-		type = $view.types[suffix];
-
-		// if it is cached, 
-		if ( $view.cached[id] ) {
-			// return the cached deferred renderer
-			return $view.cached[id];
+			});
+			// filter by data-view-id attribute
+			hookupEls = Can.filter(Can.$(arr), "[data-view-id]");
+			
+			//
 		
-		// otherwise if we are getting this from a script elment
-		} else if ( el ) {
-			// resolve immediately with the element's innerHTML
-			return response(el.innerHTML);
-		} else {
-			// make an ajax request for text
-			var d = Can.Deferred();
-			// TODO, create an ajax request and deferred
-			// deferred resolved with function.
-			Can.ajax({
-				async: async,
-				url: url,
-				dataType: "text",
-				error: function(jqXHR) {
-					checkText("", url);
-					d.reject(jqXHR);
-				},
-				success: function( text ) {
-					// make sure we got some text back
-					checkText(text, url);
-					d.resolve(type.renderer(id, text))
-					// cache if if we are caching
-					if ( $view.cache ) {
-						$view.cached[id] = d;
-					}
-					
-				}
-			});
-			return d;
-		}
-			
-			
-
-		},
-		// returns true if something looks like a deferred
-		isDeferred = function( obj ) {
-			return obj && Can.isFunction(obj.always) // check if obj is a Can.Deferred
-		},
-		// gets an array of deferreds from an object
-		// this only goes one level deep
-		getDeferreds = function( data ) {
-			var deferreds = [];
-
-			// pull out deferreds
-			if ( isDeferred(data) ) {
-				return [data]
-			} else {
-				for ( var prop in data ) {
-					if ( isDeferred(data[prop]) ) {
-						deferreds.push(data[prop]);
-					}
+			for (; el = hookupEls[i++]; ) {
+				if ( el.getAttribute && (id = el.getAttribute('data-view-id')) && (func = $view.hookups[id]) ) {
+					func(el, id);
+					delete $view.hookups[id];
+					el.removeAttribute('data-view-id');
 				}
 			}
-			return deferreds;
+			return fragment;
 		},
-		// gets the useful part of deferred
-		// this is for Models and Can.ajax that resolve to array (with success and such)
-		// returns the useful, content part
-		usefulPart = function( resolved ) {
-			return Can.isArray(resolved) && resolved.length === 3 && resolved[1] === 'success' ? resolved[0] : resolved
-		};
-
-	Can.extend($view, {
 		/**
 		 * @attribute hookups
 		 * @hide
@@ -474,7 +283,7 @@ steal("can/util").then(function( $ ) {
 		 */
 		hookups: {},
 		/**
-		 * @function hookup
+		 * @function hook
 		 * Registers a hookup function that can be called back after the html is 
 		 * put on the page.  Typically this is handled by the template engine.  Currently
 		 * only EJS supports this functionality.
@@ -489,7 +298,7 @@ steal("can/util").then(function( $ ) {
 		 * @param {Function} cb a callback function to be called with the element
 		 * @param {Number} the hookup number
 		 */
-		hookup: function( cb ) {
+		hook: function( cb ) {
 			var myid = ++id;
 			$view.hookups[myid] = cb;
 			return myid;
@@ -565,8 +374,7 @@ steal("can/util").then(function( $ ) {
 		 * @param {Object} id
 		 * @param {Object} src
 		 */
-		registerScript: function( type, id, src ) {
-		},
+		registerScript: function() {},
 		/**
 		 * @hide
 		 * Called by a production script to pre-load a renderer function
@@ -575,36 +383,219 @@ steal("can/util").then(function( $ ) {
 		 * @param {Function} renderer
 		 */
 		preload: function( ) {}
+	})
+	
 
-	});
-
-	var hookupView = function( fragment, hooks ) {
-		//remove all hookups
-		var hookupEls, len, i = 0,
-			id, func, res,
-			arr = [];
-		
-		Can.each(fragment.childNodes ? Can.makeArray(fragment.childNodes) : fragment, function(i, node){
-			if(node.nodeType != 3){
-				arr.push(node)
-				arr.push.apply(arr, Can.makeArray( node.getElementsByTagName('*')))
-			}
-		});
-
-		hookupEls = Can.filter(Can.$(arr), "[data-view-id]");
-		len = hookupEls.length;
-
-		for (; i < len; i++ ) {
-			if ( hookupEls[i].getAttribute && (id = hookupEls[i].getAttribute('data-view-id')) && (func = hooks[id]) ) {
-
-				func(hookupEls[i], id);
-				delete hooks[id];
-				hookupEls[i] && hookupEls[i].nodeType !== 11 && hookupEls[i].removeAttribute('data-view-id');
-			}
+	Can.render = function( view, data, helpers, callback ) {
+		// if helpers is a function, it is actually a callback
+		if ( typeof helpers === 'function' ) {
+			callback = helpers;
+			helpers = undefined;
 		}
-		return fragment;
-		//copy remaining hooks back ... hooks w/i a hook?
-		//$.extend($view.hookups, hooks);
-	};
+
+		// see if we got passed any deferreds
+		var deferreds = getDeferreds(data);
+
+
+		if ( deferreds.length ) { // does data contain any deferreds?
+			// the deferred that resolves into the rendered content ...
+			var deferred = new Can.Deferred();
+
+			// add the view request to the list of deferreds
+			deferreds.push(get(view, true))
+
+			// wait for the view and all deferreds to finish
+			Can.when.apply(Can, deferreds).then(function( resolved ) {
+				// get all the resolved deferreds
+				var objs = makeArray(arguments),
+					// renderer is last [0] is the data
+					renderer = objs.pop(),
+					// the result of the template rendering with data
+					result; 
+				
+				// make data look like the resolved deferreds
+				if ( isDeferred(data) ) {
+					data = usefulPart(resolved);
+				}
+				else {
+					// go through each prop in data again,
+					// replace the defferreds with what they resolved to
+					for ( var prop in data ) {
+						if ( isDeferred(data[prop]) ) {
+							data[prop] = usefulPart(objs.shift());
+						}
+					}
+				}
+				// get the rendered result
+				result = renderer(data, helpers);
+
+				//resolve with the rendered view
+				deferred.resolve(result); 
+				// if there's a callback, call it back with the result
+				callback && callback(result);
+			});
+			// return the deferred ....
+			return deferred;
+		}
+		else {
+			// no deferreds, render this bad boy
+			var response, 
+				// if there's a callback function
+				async = typeof callback === "function",
+				// get the 'view' type
+				deferred = get(view, async);
+
+			// if we are async, 
+			if ( async ) {
+				// return the deferred
+				response = deferred;
+				// and callback callback with the rendered result
+				deferred.done(function( renderer ) {
+					callback(renderer(data, helpers))
+				})
+			} else {
+				// otherwise, the deferred is complete, so
+				// set response to the result of the rendering
+				deferred.done(function( renderer ) {
+					response = renderer(data, helpers);
+				});
+			}
+
+			return response;
+		}
+	} 
+		// makes sure there's a template, if not, has steal provide a warning
+	var	checkText = function( text, url ) {
+			if (!text.match(/[^\s]/) ) {
+				steal.dev.log("There is no template or an empty template at " + url);
+				throw "Can.view ERROR: There is no template or an empty template at " + url;
+			}
+		},
+		// returns a 'view' renderer deferred
+		// url - the url to the view template
+		// async - if the ajax request should be synchronous
+		// returns a deferred
+		get = function( url, async ) {
+			
+			
+			var suffix = url.match(/\.[\w\d]+$/),
+			type, 
+			// if we are reading a script element for the content of the template
+			// el will be set to that script element
+			el, 
+			// a unique identifier for the view (used for caching)
+			// this is typically derived from the element id or
+			// the url for the template
+			id, 
+			// the AJAX request used to retrieve the template content
+			jqXHR, 
+			// used to generate the response 
+			response = function( text ) {
+				// get the renderer function
+				var func = type.renderer(id, text),
+					d = (new Can.Deferred()).resolve(func)
+				// cache if if we are caching
+				if ( $view.cache ) {
+					$view.cached[id] = d;
+				}
+				// return the objects for the response's dataTypes 
+				// (in this case view)
+				return d;
+			};
+
+			// if we have an inline template, derive the suffix from the 'text/???' part
+			// this only supports '<script></script>' tags
+			if ( el = document.getElementById(url) ) {
+				suffix = "."+el.type.match(/\/(x\-)?(.+)/)[2];
+			}
+	
+			// if there is no suffix, add one
+			if (!suffix ) {
+				suffix = $view.ext;
+				url = url + $view.ext;
+			}
+			if(Can.isArray(suffix)){
+				suffix = suffix[0]
+			}
+	
+			// convert to a unique and valid id
+			id = toId(url);
+	
+			// if a absolute path, use steal to get it
+			// you should only be using // if you are using steal
+			if ( url.match(/^\/\//) ) {
+				var sub = url.substr(2);
+				url = typeof steal === "undefined" ? 
+					url = "/" + sub : 
+					steal.root.mapJoin(sub);
+			}
+	
+			//set the template engine type 
+			type = $view.types[suffix];
+	
+			// if it is cached, 
+			if ( $view.cached[id] ) {
+				// return the cached deferred renderer
+				return $view.cached[id];
+			
+			// otherwise if we are getting this from a script elment
+			} else if ( el ) {
+				// resolve immediately with the element's innerHTML
+				return response(el.innerHTML);
+			} else {
+				// make an ajax request for text
+				var d = new Can.Deferred();
+				Can.ajax({
+					async: async,
+					url: url,
+					dataType: "text",
+					error: function(jqXHR) {
+						checkText("", url);
+						d.reject(jqXHR);
+					},
+					success: function( text ) {
+						// make sure we got some text back
+						checkText(text, url);
+						d.resolve(type.renderer(id, text))
+						// cache if if we are caching
+						if ( $view.cache ) {
+							$view.cached[id] = d;
+						}
+						
+					}
+				});
+				return d;
+			}
+			
+			
+
+		},
+		// returns true if something looks like a deferred
+		isDeferred = function( obj ) {
+			return obj && Can.isFunction(obj.always) // check if obj is a Can.Deferred
+		},
+		// gets an array of deferreds from an object
+		// this only goes one level deep
+		getDeferreds = function( data ) {
+			var deferreds = [];
+
+			// pull out deferreds
+			if ( isDeferred(data) ) {
+				return [data]
+			} else {
+				for ( var prop in data ) {
+					if ( isDeferred(data[prop]) ) {
+						deferreds.push(data[prop]);
+					}
+				}
+			}
+			return deferreds;
+		},
+		// gets the useful part of deferred
+		// this is for Models and Can.ajax that resolve to array (with success and such)
+		// returns the useful, content part
+		usefulPart = function( resolved ) {
+			return Can.isArray(resolved) && resolved.length === 3 && resolved[1] === 'success' ? resolved[0] : resolved
+		};
 	
 });

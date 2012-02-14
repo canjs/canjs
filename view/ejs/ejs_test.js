@@ -99,7 +99,7 @@ test("returning blocks", function(){
 	}
 	
 	var res = Can.
-		View("//can/view/ejs/test_template.ejs",{
+		render("//can/view/ejs/test_template.ejs",{
 			something: somethingHelper, 
 			items: ['a','b']
 		});
