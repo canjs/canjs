@@ -1,8 +1,12 @@
-steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompressed.js", '../event.js',function(){
+steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompressed.js", 
+	'../event.js').then(
+	'http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojox/NodeList/delegate.xd.js',
+	'http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/NodeList-traverse.xd.js',
+	function(){
 	
 	// String
 	Can.trim = function(s){
-		return dojo.trim()
+		return dojo.trim(s);
 	}
 	
 	// Array
@@ -117,6 +121,9 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompre
 			Can.dispatch.call(item, event)
 		}
 	}
+	
+	dojo.require("dojox.NodeList.delegate");
+	
 	Can.delegate = function(selector, ev , cb){
 		if(this.delegate) {
 			this.delegate(selector, ev , cb)
@@ -249,7 +256,7 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompre
   function getData(node, name) {
     var id = node[exp], store = id && data[id];
     return name === undefined ? store || setData(node) :
-      (store && store[name]) || dataAttr.call($(node), name);
+      (store && store[name]);
   }
 
   function setData(node, name, value) {
@@ -268,7 +275,7 @@ var cleanData = function(elems){
   }
 	Can.data = function(wrapped, name, value){
 		return value === undefined ?
-			wrapped.length == 0 ? undefined : getData(this[0], name) :
+			wrapped.length == 0 ? undefined : getData(wrapped[0], name) :
 			wrapped.forEach(function(node){
 				setData(node, name, value);
 			});
@@ -287,54 +294,19 @@ var cleanData = function(elems){
 		node.getElementsByTagName && cleanData(node.getElementsByTagName('*'))
 		
 		return destroy.apply(dojo, arguments);
-	}
+	};
 	
-	
-	
-	
-  var cleanData = function(elems){
-  	for ( var i = 0, elem;
-		(elem = elems[i]) !== undefined; i++ ) {
-			var id = elem[exp]
-			delete data[id];
-		}
-  }
-	
-	
-	
-	
-	
-	Can.data = function(wrapped, key, value){
-		if(value === undefined){
-			return wrapped[0].retrieve(key)
-		} else {
-			return wrapped.store(key, value)
-		}
-	}
+
 	Can.addClass = function(wrapped, className){
 		return wrapped.addClass(className);
 	}
 	Can.remove = function(wrapped){
 		// we need to remove text nodes ourselves
-		
-		return wrapped.filter(function(node){ 
-			if(node.nodeType !== 1){
-				node.parentNode.removeChild(node);
-			} else {
-				return true;
-			}
-		}).destroy();
+		wrapped.forEach(function(node){
+			dojo.destroy(node)
+		});
 	}
-	// destroyed method
-	var destroy = Element.prototype.destroy;
-	Element.prototype.destroy = function(){
-		Can.trigger(this,"destroyed",[],false)
-		var elems = this.getElementsByTagName("*");
-		for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
-			Can.trigger(elem,"destroyed",[],false);
-		}
-		destroy.apply(this, arguments)
-	}
+
 	
 	
 	
