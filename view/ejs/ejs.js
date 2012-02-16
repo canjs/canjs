@@ -38,17 +38,49 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		// used to bind to an observe, and unbind when the element is removed
 		liveBind = function(observed, el, cb){
 			Can.each(observed, function(i, ob){
-				ob.cb = function(){
-					//batch(cb);
-					cb()
-				}
-				ob.obj.bind(ob.attr, ob.cb)
+				ob.obj.bind(ob.attr, cb)
 			})
 			Can.bind.call(el,'destroyed', function(){
 				Can.each(observed, function(i, ob){
-					ob.obj.unbind(ob.attr, ob.cb)
+					ob.obj.unbind(ob.attr, cb)
 				})
 			})
+		},
+		contentEscape = function( txt ) {
+			//return sanatized text
+			if ( typeof txt == 'string' || typeof txt == 'number'  ) {
+				return Can.String.esc(""+txt);
+			} else {
+				return contentText(txt);
+			}
+		},
+		contentText =  function( input ) {	
+			
+			// if it's a string, return
+			if ( typeof input == 'string' ) {
+				return input;
+			}
+			// if has no value
+			if ( input === null || input === undefined ) {
+				return '';
+			}
+
+			// if it's an object, and it has a hookup method
+			var hook = (input.hookup &&
+			// make a function call the hookup method
+
+			function( el, id ) {
+				input.hookup.call(input, el, id);
+			}) ||
+			// or if it's a function, just use the input
+			(typeof input == 'function' && input);
+			// finally, if there is a funciton to hookup on some dom
+			// pass it to hookup to get the data-view-id back
+			if ( hook ) {
+				return "data-view-id='" + Can.view.hook(hook) + "'";
+			}
+			// finally, if all else false, toString it
+			return ""+input;
 		},
 		/**
 		 * @class Can.EJS
@@ -238,7 +270,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					observed.push({
 						obj: obj,
 						attr: attr
-					})
+					});
 				}
 			}
 			// get value
@@ -252,7 +284,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 
 			// if we had no observes
 			if(!observed.length){
-				return EJS[escape || status !== 0? "clean" : "text"](input)
+				return (escape || status !== 0? contentEscape : contentText)(input);
 			}
 			var tag = (tagMap[tagName] || "span");
 			if(status == 0){
@@ -271,7 +303,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						// create textNode
 						liveBind(observed, parent, function(){
 							node.nodeValue = func.call(self)
-						})
+						});
 					}
 					:
 					function(span){
@@ -329,21 +361,20 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							render: function() {
 								var i =0;
 								var newAttr = attr.replace(/__!!__/g, function() {
-									return hooks[status].funcs[i++].call(self);
+									return contentEscape( hooks[status].funcs[i++].call(self) );
 								});
 								return newAttr;
 							},
-							
 							funcs: [func]
 						};
 					}
 
-					parts.splice(1,0,input)
-					el.setAttribute(status, parts.join(""))
+					parts.splice(1,0,input);
+					el.setAttribute(status, parts.join(""));
 					
 					liveBind(observed, el, function() {
 						el.setAttribute(status, hooks[status].render());
-					})
+					});
 				})
 				return "__!!__";
 			}
@@ -351,61 +382,6 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		// called to setup escaped text
 		esc : function(tagName, status, self, func){
 			return EJS.txt(tagName, status, self, func, true)
-		},
-		/**
-		 * Used to convert what's in &lt;%= %> magic tags to a string
-		 * to be inserted in the rendered output.
-		 * 
-		 * Typically, it's a string, and the string is just inserted.  However,
-		 * if it's a function or an object with a hookup method, it can potentially be 
-		 * be ran on the element after it's inserted into the page.
-		 * 
-		 * This is a very nice way of adding functionality through the view.
-		 * Usually this is done with [jQuery.EJS.Helpers.prototype.plugin]
-		 * but the following fades in the div element after it has been inserted:
-		 * 
-		 * @codestart
-		 * &lt;%= function(el){$(el).fadeIn()} %>
-		 * @codeend
-		 * 
-		 * @param {String|Object|Function} input the value in between the
-		 * write magic tags: &lt;%= %>
-		 * @return {String} returns the content to be added to the rendered
-		 * output.  The content is different depending on the type:
-		 * 
-		 *   * string - the original string
-		 *   * null or undefined - the empty string ""
-		 *   * an object with a hookup method - the attribute "data-view-id='XX'", where XX is a hookup number for jQuery.View
-		 *   * a function - the attribute "data-view-id='XX'", where XX is a hookup number for jQuery.View
-		 *   * an array - the attribute "data-view-id='XX'", where XX is a hookup number for jQuery.View
-		 */
-		text: function( input ) {	
-			
-			// if it's a string, return
-			if ( typeof input == 'string' ) {
-				return input;
-			}
-			// if has no value
-			if ( input === null || input === undefined ) {
-				return '';
-			}
-
-			// if it's an object, and it has a hookup method
-			var hook = (input.hookup &&
-			// make a function call the hookup method
-
-			function( el, id ) {
-				input.hookup.call(input, el, id);
-			}) ||
-			// or if it's a function, just use the input
-			(typeof input == 'function' && input);
-			// finally, if there is a funciton to hookup on some dom
-			// pass it to hookup to get the data-view-id back
-			if ( hook ) {
-				return "data-view-id='" + Can.view.hook(hook) + "'";
-			}
-			// finally, if all else false, toString it
-			return input.toString ? input.toString() : "";
 		},
 		pending: function() {
 			if(pendingHookups.length) {
@@ -419,22 +395,6 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				}) + "'";
 			}else {
 				return "";
-			}
-		},
-		/**
-		 * Escapes the text provided as html if it's a string.  
-		 * Otherwise, the value is passed to EJS.text(text).
-		 * 
-		 * @param {String|Object|Array|Function} text to escape.  Otherwise,
-		 * the result of [jQuery.EJS.text] is returned.
-		 * @return {String} the escaped text or likely a Can.View data-view-id attribute.
-		 */
-		clean: function( text ) {
-			//return sanatized text
-			if ( typeof text == 'string' || typeof text == 'number'  ) {
-				return Can.String.esc(""+text);
-			} else {
-				return EJS.text(text);
 			}
 		}
 });
