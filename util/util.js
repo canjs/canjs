@@ -1,5 +1,5 @@
 Can = {};
-if (true || window.STEALDOJO){
+if (window.STEALDOJO){
 	steal('can/util/dojo')
 } else if( window.STEALMOO) {
 	steal('can/util/mootools')
