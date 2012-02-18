@@ -38,11 +38,16 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		// used to bind to an observe, and unbind when the element is removed
 		liveBind = function(observed, el, cb){
 			Can.each(observed, function(i, ob){
-				ob.obj.bind(ob.attr, cb)
+				ob.cb = function(ev, attr){
+					if(attr === ob.attr) {
+						cb();
+					} 
+				}
+				ob.obj.bind('change', ob.cb)
 			})
 			Can.bind.call(el,'destroyed', function(){
 				Can.each(observed, function(i, ob){
-					ob.obj.unbind(ob.attr, cb)
+					ob.obj.unbind('change', ob.cb)
 				})
 			})
 		},

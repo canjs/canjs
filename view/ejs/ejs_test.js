@@ -271,5 +271,51 @@ test('adding and removing multiple html content within a single element', functi
 	obs.attr({c: 'c'});
 	
 	equals(div.innerHTML, '<div>c</div>', 'updated values');
-})
+});
+
+test('live binding and removeAttr', function(){
+
+	var text = '<% if(obs.attr("show")) { %>' + 
+			'<p class="<%= obs.attr("className")%>"><%= obs.attr("message") %></p>' + 
+		'<% } %>',
+
+		obs = new Can.Observe({
+			show: true,
+			className: 'myMessage',
+			message: 'Live long and prosper'
+		}),
+
+		compiled = new Can.EJS({ text: text }).render({ obs: obs }),
+
+		div = document.createElement('div');
+
+	div.appendChild(Can.view.frag(compiled));
+
+	equals(div.innerHTML, '<p class="myMessage">Live long and prosper</p>', 'initial render');
+
+	obs.removeAttr('className');
+
+	equals(div.innerHTML, '<p class="">Live long and prosper</p>', 'attribute is undefined');
+
+	obs.attr('className', 'newClass');
+
+	equals(div.innerHTML, '<p class="newClass">Live long and prosper</p>', 'attribute updated');
+
+	obs.removeAttr('message');
+
+	equals(div.innerHTML, '<p class="newClass">undefined</p>', 'text node value is undefined');
+
+	obs.attr('message', 'Warp drive, Mr. Sulu');
+
+	equals(div.innerHTML, '<p class="newClass">Warp drive, Mr. Sulu</p>', 'text node updated');
+
+	obs.removeAttr('show');
+
+	equals(div.innerHTML, '', 'value in block statement is undefined');
+
+	obs.attr('show', true);
+
+	equals(div.innerHTML, '<p class="newClass">Warp drive, Mr. Sulu</p>', 'value in block statement updated');
+		
+});
 
