@@ -707,3 +707,74 @@ If you can understand this, you understand
 everything. Congrats! {% jmvclink tutorials/rapidstart/todos.html See it in action %}.
 
 ## Use with other libraries
+
+CanJS can be used with libraries other than jQuery.
+
+### Implementing another library
+
+
+__STRING__
+
+{% highlight javascript %}
+    // remove leading and trailing whitespace
+    Can.trim( " foo " ) // -> "foo" 
+{% endhighlight %}
+
+__ARRAY__
+{% highlight javascript %}
+    // convert array-like data into arrays
+    Can.makeArray({0 : "zero", 1: "one", length: 2}) // -> ["zero","one"]
+    
+    // return if an array is an array
+    Can.isArray([]) //-> true
+    
+    // converts one array to another array
+    Can.map([{prop: "val1"}, {prop: "val2"}], function(val, prop){
+      return val
+    })  //-> ["val1","val2"]
+    
+    // iterates through an array
+    Can.each([{prop: "val1"}, {prop: "val2"}], function( index, value ) {
+      // function called with
+      //  index=0 value={prop: "val1"}
+      //  index=1 value={prop: "val2"}
+    })
+{% endhighlight %}
+
+__EXTEND__
+{% highlight javascript %}
+    // extends one object with the properties of another
+    var first = {},
+        second = {a: "b"},
+        thrid = {c: "d"};
+    Can.extend(first, second, third); //-> first
+    first  //-> {a: "b",c : "d"}
+    second //-> {a: "b"}
+    thrid  //-> {c: "d"}
+    
+    // deep extends one object with another
+    Can.extend( true, first, second, third ); 
+    
+    // parameterize into a querystring
+    Can.param({a: "b", c: "d"}) //-> "a=b&c=d"
+    
+    // returns if an object is empty
+    Can.isEmptyObject({})      //-> true
+    Can.isEmptyObject({a:"b"}) //-> false
+    
+{% endhighlight %}
+
+__FUNCTION__
+{% highlight javascript %}
+    // returns a function that calls another function
+    // with "this" set.
+    var func = Can.proxy(function(one){
+      return this.a + one
+    }, {a: "b"}); 
+    func("two") //-> "btwo" 
+    
+    // returns if an object is a function
+    Can.isFunction({})           //-> false
+    Can.isFunction(function(){}) //-> true
+{% endhighlight %}
+
