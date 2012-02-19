@@ -8,6 +8,13 @@ smal todo app.  Check out the {% jmvclink getstarted Getting Started Guide %}
 for a more in-depth overview.
 
 ## Get Canned
+
+ - can.jquery.js (8k)
+ - can.zepto.js (9k)
+ - can.dojo.js (9k)
+ - can.mootools.js (9k)
+ - can.yui.js (9k)
+
 ## Can.Construct `Can.Construct([classProps,] [prototypeProps])`
 
 Constructors made with {% jmvclink Can.Construct %} are used to create
@@ -698,3 +705,5 @@ are traditional views, consuming models.
 
 If you can understand this, you understand 
 everything. Congrats! {% jmvclink tutorials/rapidstart/todos.html See it in action %}.
+
+## Use with other libraries
