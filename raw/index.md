@@ -716,12 +716,14 @@ CanJS can be used with libraries other than jQuery.
 __STRING__
 
 {% highlight javascript %}
+
     // remove leading and trailing whitespace
     Can.trim( " foo " ) // -> "foo" 
 {% endhighlight %}
 
 __ARRAY__
 {% highlight javascript %}
+
     // convert array-like data into arrays
     Can.makeArray({0 : "zero", 1: "one", length: 2}) // -> ["zero","one"]
     
@@ -743,6 +745,7 @@ __ARRAY__
 
 __EXTEND__
 {% highlight javascript %}
+
     // extends one object with the properties of another
     var first = {},
         second = {a: "b"},
@@ -766,6 +769,7 @@ __EXTEND__
 
 __FUNCTION__
 {% highlight javascript %}
+
     // returns a function that calls another function
     // with "this" set.
     var func = Can.proxy(function(one){
