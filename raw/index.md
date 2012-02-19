@@ -743,7 +743,7 @@ __ARRAY__
     })
 {% endhighlight %}
 
-__EXTEND__
+__Object__
 {% highlight javascript %}
 
     // extends one object with the properties of another
