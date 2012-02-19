@@ -866,3 +866,6 @@ __HTMLElement 'destroyed' event__
 When an element is removed from the page, a 'destroyed' event should be triggered on the 
 event.  This is used to teardown event handlers in Can.Control.
 
+## Examples
+
+Examples of canJS.
