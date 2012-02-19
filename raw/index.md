@@ -782,3 +782,87 @@ __FUNCTION__
     Can.isFunction(function(){}) //-> true
 {% endhighlight %}
 
+__EVENT__
+
+{% highlight javascript %}
+
+    // binds handler on obj's eventName event
+    Can.bind(obj, eventName, handler )
+    
+    // unbind handler on obj's eventName event
+    Can.unbind(obj, eventName, handler) 
+    
+    // 
+    Can.delegate(obj, selector, eventName, handler)
+    
+    //
+    Can.delegate(obj, selector, eventName, handler)
+    
+    //
+    Can.trigger(obj, event, args )
+    Can.trigger(obj, eventName, args)
+{% endhighlight %}
+
+__DEFERRED__
+
+{% highlight javascript %}
+
+    // Creates a new Deferred object
+    var deferred = new Can.Deferred()
+    
+    // pipes a deferred into another deferred
+    deferred.pipe(function(){
+    
+    }, function(){})
+    
+    // 
+    deferred.resolve()
+    
+    //
+    deferred.reject()
+    
+    // 
+    Can.When()
+{% endhighlight %}
+
+
+__AJAX__
+
+{% highlight javascript %}
+
+    Can.ajax({
+      url : "url",
+      type: "GET", // "POST"
+      async : false,
+      dataType: "json",
+      success: function(){},
+      error: function(){}
+    }) //-> deferred
+{% endhighlight %}
+
+__HTMLElement__
+
+{% highlight javascript %}
+
+    Can.buildFragment(frags, nodes)
+
+    // a node list
+    Can.$("div.bar") //-> []
+    
+    Can.append(NodeList, html)
+    
+    Can.remove(NodeList)
+    
+    Can.filter(NodeList, function(){})
+    
+    Can.data(NodeList, dataName, dataValue)
+    
+    Can.addClass(NodeList, className )
+{% endhighlight %}
+
+
+__HTMLElement 'destroyed' event__
+
+When an element is removed from the page, a 'destroyed' event should be triggered on the 
+event.  This is used to teardown event handlers in Can.Control.
+
