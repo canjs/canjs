@@ -273,3 +273,26 @@ test('adding and removing multiple html content within a single element', functi
 	equals(div.innerHTML, '<div>c</div>', 'updated values');
 })
 
+test('hookup within a tag', function () {
+	var text =	'<div <%== obs.attr("foo") %> '
+		//+ 'disabled '
+		+ '<%== obs.attr("baz") %>>lorem ipsum</div>',
+
+	obs = new Can.Observe({
+		foo: 'class="a"',
+		baz: 'some=\'property\''
+	}),
+
+	compiled = new Can.EJS({ text: text }).render({ obs: obs });
+
+	var div = document.createElement('div');
+
+	div.appendChild(Can.view.frag(compiled));
+	equals(div.innerHTML, '<div class="a" some="property">lorem ipsum</div>', 'initial render');
+
+	obs.attr('foo', 'class="b"');
+	equals(div.innerHTML, '<div class="b" some="property">lorem ipsum</div>', 'updated values');
+
+	obs.attr('baz', 'some=\'new property\'');
+	equals(div.innerHTML, '<div class="b" some="new property">lorem ipsum</div>', 'updated values');
+});

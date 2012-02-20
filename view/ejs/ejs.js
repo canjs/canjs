@@ -349,10 +349,21 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					})
 				}) + "'></" +(tagMap[tagName] || "span")+">";
 				
-			} else if(status === 1){ // in a tag
-				// TODO: handle within a tag <div <%== %>>
-				return input;
+			} else if(status === 1) { // in a tag
 				// mark at end!
+				pendingHookups.push(function(el) {
+					el.removeAttribute('__!@#$%__');
+
+					var attr = func.call(self).replace(/['"]/g, '').split('=');
+					el.setAttribute(attr[0], attr[1]);
+
+					liveBind(observed, el, function() {
+						attr = func.call(self).replace(/['"]/g, '').split('=');
+						el.setAttribute(attr[0], attr[1]);
+					});
+				});
+
+				return '__!@#$%__';
 			} else { // in an attribute
 				pendingHookups.push(function(el){
 					var wrapped = Can.$(el),
@@ -368,7 +379,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					else {
 						var me = {
 							render: function() {
-								var i =0;
+								var i = 0;
 								var newAttr = attr.replace(/__!@#\$%__/g, function() {
 									return hooks[status].funcs[i++].call(self);
 								});
