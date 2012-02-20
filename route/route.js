@@ -456,7 +456,7 @@ function( $ ) {
     // Using .serialize() retrieves the raw data contained in the observable.
     // This function is throttled so it only updates once even if multiple values changed.
 	Can.route.bind("change", throttle(function() {
-		location.hash = "#!" + Can.route.param(Can.route.serialize())
+		location.hash = "#!" + Can.route.param(Can.route.data.serialize())
 	}));
 	// onready event ...
 	Can.bind.call(document,"ready",Can.route.ready);
