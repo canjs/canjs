@@ -61,9 +61,28 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 	Can.isFunction = function(f){
 		return dojo.isFunction(f);
 	}
-	// make this object so you can bind on it
-	var bindings = {},
-		id = 0,
+	/**
+	 * EVENTS
+	 * 
+	 * Dojo does not use the callback handler when unbinding.  Instead
+	 * when binding (dojo.connect or dojo.on) an object with a remove
+	 * method is returned.
+	 * 
+	 * Because of this, we have to map each callback to the "remove"
+	 * object to it can be passed to dojo.disconnect.
+	 */
+	
+	// these should be pre-loaded by steal
+	// we might want to wrap
+	require(["dojo/query", "plugd/trigger"], function(){})
+	
+	// the id of the function to be bound, used as an expando on the function
+	// so we can lookup it's "remove" object
+	var id = 0,
+		// takes a node list, goes through each node
+		// and adds events data that has a map of events to 
+		// callbackId to "remove" object.  It looks like
+		// {click: {5: {remove: fn}}}		
 		addBinding = function(nodelist, ev, cb){
 			nodelist.forEach(function(node){
 				var node = new dojo.NodeList(node)
@@ -80,6 +99,8 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 				events[ev][cb.__bindingsIds] = node.on(ev, cb)[0]
 			});
 		},
+		// removes a binding on a nodelist by finding
+		// the remove object within the object's data
 		removeBinding = function(nodelist,ev,cb){
 			nodelist.forEach(function(node){
 				var node = new dojo.NodeList(node),
@@ -98,7 +119,6 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 				}
 			});
 		}
-	
 	
 	Can.bind = function( ev, cb){
 		// if we can bind to it ...
@@ -130,11 +150,12 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 		}
 		return this;
 	}
+	
 	Can.trigger = function(item, event, args, bubble){
-		// defaults to true
 		if(item.trigger){
 			if(bubble === false){
-				//  force stop propagation
+				//  force stop propagation by
+				// listening to On and then immediately disconnecting
 				var connect = item.on(event, function(ev){
 					ev.stopPropagation();
 					dojo.disconnect(connect);
@@ -153,12 +174,6 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 		}
 	}
 	
-	//require("dojox.NodeList.delegate");
-	
-	require(["dojo/query", "plugd/trigger"], function(){
-		console.log("holler")
-	})
-	
 	Can.delegate = function(selector, ev , cb){
 		if(this.on || this.nodeType){
 			addBinding( new dojo.NodeList(this), selector+":"+ev, cb)
@@ -176,9 +191,11 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 
 		return this;
 	}
-	//require(["dojo/on"], function(on){
-	//  on(document, "click", function(){alert('hi')});
-	//});
+
+
+	/**
+	 * Ajax
+	 */
 	var optionsMap = {
 		type:"method",
 		success : undefined,
@@ -276,33 +293,49 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 	
 	
 	
-	// Can.data
+	/**
+	 * Can.data
+	 * 
+	 * Can.data is used to store arbitrary data on an element.
+	 * Dojo does not support this, so we implement it itself.
+	 * 
+	 * The important part is to call cleanData on any elements 
+	 * that are removed from the DOM.  For this to happen, we
+	 * overwrite 
+	 * 
+	 *   -dojo.empty
+	 *   -dojo.destroy
+	 *   -dojo.place when "replace" is used TODO!!!!
+	 * 
+	 * For Can.Control, we also need to trigger a non bubbling event
+	 * when an element is removed.  We do this also in cleanData.
+	 */
 	
-  var data = {},
-    uuid = Can.uuid = +new Date(),
-    exp  = Can.expando = 'Can' + uuid;
-
-  function getData(node, name) {
-    var id = node[exp], store = id && data[id];
-    return name === undefined ? store || setData(node) :
-      (store && store[name]);
-  }
-
-  function setData(node, name, value) {
-    var id = node[exp] || (node[exp] = ++uuid),
-      store = data[id] || (data[id] = {});
-    if (name !== undefined) store[name] = value;
-    return store;
-  };
-
-var cleanData = function(elems){
-  	Can.trigger(new dojo.NodeList(elems),"destroyed",false)
-  	for ( var i = 0, elem;
-		(elem = elems[i]) !== undefined; i++ ) {
-			var id = elem[exp]
-			delete data[id];
-		}
-  }
+	var data = {},
+	    uuid = Can.uuid = +new Date(),
+	    exp  = Can.expando = 'Can' + uuid;
+	
+	function getData(node, name) {
+	    var id = node[exp], store = id && data[id];
+	    return name === undefined ? store || setData(node) :
+	      (store && store[name]);
+	}
+	
+	function setData(node, name, value) {
+	    var id = node[exp] || (node[exp] = ++uuid),
+	      store = data[id] || (data[id] = {});
+	    if (name !== undefined) store[name] = value;
+	    return store;
+	};
+	
+	var cleanData = function(elems){
+	  	Can.trigger(new dojo.NodeList(elems),"destroyed",false)
+	  	for ( var i = 0, elem;
+			(elem = elems[i]) !== undefined; i++ ) {
+				var id = elem[exp]
+				delete data[id];
+			}
+	  }
 	Can.data = function(wrapped, name, value){
 		return value === undefined ?
 			wrapped.length == 0 ? undefined : getData(wrapped[0], name) :
@@ -327,6 +360,8 @@ var cleanData = function(elems){
 	};
 	
 
+
+	
 	Can.addClass = function(wrapped, className){
 		return wrapped.addClass(className);
 	}
