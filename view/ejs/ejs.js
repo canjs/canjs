@@ -1,5 +1,6 @@
+// 2.19
 /*jslint evil: true */
-steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
+steal('can/view', 'can/util/string').then(function( $ ) {
 
 	// HELPER METHODS ==============
 	var myEval = function( script ) {
@@ -10,32 +11,23 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		// chop = function( string ) {
 		//	return string.substr(0, string.length - 1);
 		//},
-		rSplit = Can.String.rsplit,
 		extend = Can.extend,
-		isArray = Can.isArray,
 		// regular expressions for caching
 		returnReg = /\r\n/g,
 		retReg = /\r/g,
 		newReg = /\n/g,
 		nReg = /\n/,
 		slashReg = /\\/g,
-		quoteReg = /"/g,
-		singleQuoteReg = /'/g,
 		tabReg = /\t/g,
 		leftBracket = /\{/g,
 		rightBracket = /\}/g,
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
+		attrReg = /([^\s]+)=$/,
 		tagMap = {"": "span", table: "tr", tr: "td", ol: "li", ul: "li", tbody: "tr", thead: "tr", tfoot: "tr"},
 		// escapes characters starting with \
 		clean = function( content ) {
-			return content.replace(slashReg, '\\\\').replace(newReg, '\\n').replace(quoteReg, '\\"').replace(tabReg, '\\t');
+			return content.replace(slashReg, '\\\\').replace(newReg, '\\n').replace(/"/g, '\\"').replace(tabReg, '\\t');
 		},
-		// escapes html
-		// - from prototype  http://www.prototypejs.org/
-		escapeHTML = function( content ) {
-			return content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(quoteReg, '&#34;').replace(singleQuoteReg, "&#39;");
-		},
-		$View = Can.View,
 		bracketNum = function(content){
 			var lefts = content.match(leftBracket),
 				rights = content.match(rightBracket);
@@ -43,55 +35,57 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			return (lefts ? lefts.length : 0) - 
 				   (rights ? rights.length : 0);
 		},
-		batchedUpdates = [],
-		batchTimerId = null,
-		batch = function(update) {
-			clearTimeout(batchTimerId);
-			//keep batched updates unique
-			var updatePos = Can.inArray(update, batchedUpdates);
-			updatePos === -1 ? batchedUpdates.push(update) : batchedUpdates[updatePos] = update;
-			batchTimerId = setTimeout(function(){
-				Can.each(batchedUpdates, function(i, bu){
-					bu();
-				})
-				batchedUpdates = [];
-			}, 1)
-		}
 		// used to bind to an observe, and unbind when the element is removed
 		liveBind = function(observed, el, cb){
 			Can.each(observed, function(i, ob){
-				ob.cb = function(){
-					//batch(cb);
-					cb()
+				ob.cb = function(ev, attr){
+					if(attr === ob.attr) {
+						cb();
+					} 
 				}
-				ob.obj.bind(ob.attr, ob.cb)
+				ob.obj.bind('change', ob.cb)
 			})
 			Can.bind.call(el,'destroyed', function(){
 				Can.each(observed, function(i, ob){
-					ob.obj.unbind(ob.attr, ob.cb)
+					ob.obj.unbind('change', ob.cb)
 				})
 			})
 		},
-		// gets observes
-		observes = function(self, func){
-			var observed = [],
-				val;
-			if (Can.Observe) {
-				Can.Observe.__reading = function(obj, attr){
-					observed.push({
-						obj: obj,
-						attr: attr
-					})
-				}
+		contentEscape = function( txt ) {
+			//return sanatized text
+			if ( typeof txt == 'string' || typeof txt == 'number'  ) {
+				return Can.String.esc(""+txt);
+			} else {
+				return contentText(txt);
 			}
-			val = func.call(self);
-			if(Can.Observe){
-				delete Can.Observe.__reading;
+		},
+		contentText =  function( input ) {	
+			
+			// if it's a string, return
+			if ( typeof input == 'string' ) {
+				return input;
 			}
-			return {
-				observes: observed,
-				val: val
-			};
+			// if has no value
+			if ( input === null || input === undefined ) {
+				return '';
+			}
+
+			// if it's an object, and it has a hookup method
+			var hook = (input.hookup &&
+			// make a function call the hookup method
+
+			function( el, id ) {
+				input.hookup.call(input, el, id);
+			}) ||
+			// or if it's a function, just use the input
+			(typeof input == 'function' && input);
+			// finally, if there is a funciton to hookup on some dom
+			// pass it to hookup to get the data-view-id back
+			if ( hook ) {
+				return "data-view-id='" + Can.view.hook(hook) + "'";
+			}
+			// finally, if all else false, toString it
+			return ""+input;
 		},
 		/**
 		 * @class Can.EJS
@@ -235,7 +229,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				return;
 			}
 			//set options on self
-			extend(this, EJS.options, options);
+			extend(this, options);
 			this.template = scan(this.text, this.name);
 		};
 	// add EJS to jQuery if it exists
@@ -257,9 +251,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 	 */
 	render = function( object, extraHelpers ) {
 		object = object || {};
-		this._extra_helpers = extraHelpers;
-		var v = new EJS.Helpers(object, extraHelpers || {});
-		return this.template.fn.call(object, object, v);
+		return this.template.fn.call(object, object, new EJS.Helpers(object, extraHelpers || {}));
 	};
 	/**
 	 * @Static
@@ -276,83 +268,86 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		 * @param {Object} self
 		 * @param {Object} func
 		 */
-		txt : function(tagName, status, self, func){
-			if(status  !== 0){
-				return EJS.esc(tagName, status, self, func)
-			}
-			var obs = observes(self, func),
-				observed = obs.observes,
-				input = obs.val;
-			if(!obs.observes.length){
-				return EJS.text(obs.val)
-			}
-			
-			return "<" +(tagMap[tagName] || "span")+" data-view-id='" + $View.hookup(function(span){
-					// remove child, bind on parent
-					var makeAndPut = function(val, remove){
-							// get fragement of html to fragment
-							var frag = Can.view.frag(val),
-								// wrap it to keep a reference to the elements .. 
-								nodes = Can.$(Can.map(frag.childNodes,function(node){
-									return node;
-								})),
-								last = remove[remove.length - 1];
-							
-							// insert it in the document
-							if( last.nextSibling ){
-								last.parentNode.insertBefore(frag, last.nextSibling)
-							} else {
-								last.parentNode.appendChild(frag)
-							}
-							
-							// remove the old content
-							Can.remove( Can.$(remove) );
-							//Can.view.hookup(nodes);
-							return nodes;
-						},
-						nodes = makeAndPut(input, [span]);
-					// listen to changes and update
-					// make sure the parent does not die
-					// we might simply check that nodes is still in the document 
-					// before a write ...
-					liveBind(observed, span.parentNode, function(){
-						nodes = makeAndPut(func.call(self), nodes);
+		txt : function(tagName, status, self, func, escape){
+			// set callback on reading ...
+			if (Can.Observe) {
+				Can.Observe.__reading = function(obj, attr){
+					observed.push({
+						obj: obj,
+						attr: attr
 					});
-					//return parent;
-			}) + "'></" +( tagMap[tagName] || "span")+">";
-			
-		},
-		// called to setup escaped text
-		esc : function(tagName, status, self, func){
-			var obs = observes(self, func),
-				observed = obs.observes,
-				input = obs.val;
-
-			if(!observed.length){
-				return EJS.clean(input)
+				}
 			}
-			// handle hookup cases
-			
-			if(status === 0){ // we are in between html tags
-				// return a span with a hookup function ...
-				return "<" +(tagMap[tagName] || "span")+" data-view-id='" + $View.hookup(function(el){
-					// remove child, bind on parent
-					var parent = el.parentNode,
-						node = document.createTextNode(input);
-					
-					parent.insertBefore(node, el);
-					parent.removeChild(el);
-					
-					// create textNode
-					liveBind(observed, parent, function(){
-						node.nodeValue = func.call(self)
-					})
-				}) + "'></" +(tagMap[tagName] || "span")+">";
-				
-			} else if(status === 1) { // in a tag
+			// get value
+			var observed = [],
+				input = func.call(self);
+	
+			// set back so we are no longer reading
+			if(Can.Observe){
+				delete Can.Observe.__reading;
+			}
+
+			// if we had no observes
+			if(!observed.length){
+				return (escape || status !== 0? contentEscape : contentText)(input);
+			}
+			var tag = (tagMap[tagName] || "span");
+			if(status == 0){
+				return "<" +tag+" data-view-id='" +Can.view.hook(
+				// are we escaping
+				escape ? 
+					// 
+					function(el){
+						// remove child, bind on parent
+						var parent = el.parentNode,
+							node = document.createTextNode(input);
+						
+						parent.insertBefore(node, el);
+						parent.removeChild(el);
+						
+						// create textNode
+						liveBind(observed, parent, function(){
+							node.nodeValue = func.call(self)
+						});
+					}
+					:
+					function(span){
+						// remove child, bind on parent
+						var makeAndPut = function(val, remove){
+								// get fragement of html to fragment
+								var frag = Can.view.frag(val),
+									// wrap it to keep a reference to the elements .. 
+									nodes = Can.$(Can.map(frag.childNodes,function(node){
+										return node;
+									})),
+									last = remove[remove.length - 1];
+								
+								// insert it in the document
+								if( last.nextSibling ){
+									last.parentNode.insertBefore(frag, last.nextSibling)
+								} else {
+									last.parentNode.appendChild(frag)
+								}
+								
+								// remove the old content
+								Can.remove( Can.$(remove) );
+								//Can.view.hookup(nodes);
+								return nodes;
+							},
+							nodes = makeAndPut(input, [span]);
+						// listen to changes and update
+						// make sure the parent does not die
+						// we might simply check that nodes is still in the document 
+						// before a write ...
+						liveBind(observed, span.parentNode, function(){
+							nodes = makeAndPut(func.call(self), nodes);
+						});
+						//return parent;
+				}) + "'></" +tag+">";
+			} else if(status === 1){ // in a tag
 				// mark at end!
 				pendingHookups.push(function(el) {
-					el.removeAttribute('__!@#$%__');
+					el.removeAttribute('__!!__');
 
 					var attr = func.call(self).replace(/['"]/g, '').split('=');
 					el.setAttribute(attr[0], attr[1]);
@@ -363,7 +358,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 					});
 				});
 
-				return '__!@#$%__';
+				return '__!!__';
 			} else { // in an attribute
 				pendingHookups.push(function(el){
 					var wrapped = Can.$(el),
@@ -371,98 +366,45 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						
 					(hooks = Can.data(wrapped,'hooks')) || Can.data(wrapped, 'hooks', hooks = {});
 					var attr = el.getAttribute(status),
-						parts = attr.split("__!@#$%__");
+						parts = attr.split("__!!__");
 
 					if(hooks[status]) {
 						hooks[status].funcs.push(func);
 					}
 					else {
-						var me = {
+
+						hooks[status] = {
 							render: function() {
-								var i = 0;
-								var newAttr = attr.replace(/__!@#\$%__/g, function() {
-									return hooks[status].funcs[i++].call(self);
+								var i =0;
+								var newAttr = attr.replace(/__!!__/g, function() {
+									return contentEscape( hooks[status].funcs[i++].call(self) );
 								});
 								return newAttr;
 							},
-							
 							funcs: [func]
 						};
-
-						hooks[status] = me;
 					}
 
-					parts.splice(1,0,input)
-					el.setAttribute(status, parts.join(""))
+					parts.splice(1,0,input);
+					el.setAttribute(status, parts.join(""));
 					
 					liveBind(observed, el, function() {
 						el.setAttribute(status, hooks[status].render());
-					})
+					});
 				})
-				return "__!@#$%__";
+				return "__!!__";
 			}
 		},
-		/**
-		 * Used to convert what's in &lt;%= %> magic tags to a string
-		 * to be inserted in the rendered output.
-		 * 
-		 * Typically, it's a string, and the string is just inserted.  However,
-		 * if it's a function or an object with a hookup method, it can potentially be 
-		 * be ran on the element after it's inserted into the page.
-		 * 
-		 * This is a very nice way of adding functionality through the view.
-		 * Usually this is done with [jQuery.EJS.Helpers.prototype.plugin]
-		 * but the following fades in the div element after it has been inserted:
-		 * 
-		 * @codestart
-		 * &lt;%= function(el){$(el).fadeIn()} %>
-		 * @codeend
-		 * 
-		 * @param {String|Object|Function} input the value in between the
-		 * write magic tags: &lt;%= %>
-		 * @return {String} returns the content to be added to the rendered
-		 * output.  The content is different depending on the type:
-		 * 
-		 *   * string - the original string
-		 *   * null or undefined - the empty string ""
-		 *   * an object with a hookup method - the attribute "data-view-id='XX'", where XX is a hookup number for jQuery.View
-		 *   * a function - the attribute "data-view-id='XX'", where XX is a hookup number for jQuery.View
-		 *   * an array - the attribute "data-view-id='XX'", where XX is a hookup number for jQuery.View
-		 */
-		text: function( input ) {	
-			
-			// if it's a string, return
-			if ( typeof input == 'string' ) {
-				return input;
-			}
-			// if has no value
-			if ( input === null || input === undefined ) {
-				return '';
-			}
-
-			// if it's an object, and it has a hookup method
-			var hook = (input.hookup &&
-			// make a function call the hookup method
-
-			function( el, id ) {
-				input.hookup.call(input, el, id);
-			}) ||
-			// or if it's a function, just use the input
-			(typeof input == 'function' && input);
-			// finally, if there is a funciton to hookup on some dom
-			// pass it to hookup to get the data-view-id back
-			if ( hook ) {
-				return "data-view-id='" + $View.hookup(hook) + "'";
-			}
-			// finally, if all else false, toString it
-			return input.toString ? input.toString() : "";
+		// called to setup escaped text
+		esc : function(tagName, status, self, func){
+			return EJS.txt(tagName, status, self, func, true)
 		},
 		pending: function() {
 			if(pendingHookups.length) {
 				var hooks = pendingHookups.slice(0);
 
 				pendingHookups = [];
-				return " data-view-id='" + $View.hookup(function(el){
+				return " data-view-id='" + Can.view.hook(function(el){
 					Can.each(hooks, function(i, fn){
 						fn(el);
 					})
@@ -470,50 +412,38 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			}else {
 				return "";
 			}
-		},
-		/**
-		 * Escapes the text provided as html if it's a string.  
-		 * Otherwise, the value is passed to EJS.text(text).
-		 * 
-		 * @param {String|Object|Array|Function} text to escape.  Otherwise,
-		 * the result of [jQuery.EJS.text] is returned.
-		 * @return {String} the escaped text or likely a Can.View data-view-id attribute.
-		 */
-		clean: function( text ) {
-			//return sanatized text
-			if ( typeof text == 'string' ) {
-				return escapeHTML(text);
-			} else if ( typeof text == 'number' ) {
-				return text;
-			} else {
-				return EJS.text(text);
-			}
 		}
 });
 	// ========= SCANNING CODE =========
 	var tokenReg = new RegExp("(" +["<%%","%%>","<%==","<%=","<%#","<%","%>","<",">",'"',"'"].join("|")+")"),
 		// commands for caching
-		put_cmd = "___v1ew.push(",
-		insert_cmd = put_cmd,
 		startTxt = 'var ___v1ew = [];',
 		finishTxt = "return ___v1ew.join('')",
+		put_cmd = "___v1ew.push(",
+		insert_cmd = put_cmd,
+		// global controls (used by other functions to know where we are)
+		// are we inside a tag
 		htmlTag =null,
+		// are we within a quote within a tag
 		quote = null,
+		// what was the text before the current quote (used to get the attr name)
 		beforeQuote = null,
 		// used to mark where the element is
 		status = function(){
 			// t - 1
 			// h - 0
 			// q - string beforeQuote
-			return quote ? "'"+beforeQuote.match(/([^\s]+)=$/)[1]+"'" : (htmlTag ? 1 : 0)
+			return quote ? "'"+beforeQuote.match(attrReg)[1]+"'" : (htmlTag ? 1 : 0)
 		},
 		pendingHookups = [],
+		
 		scan = function(source, name){
 			var tokens = source.replace(returnReg, "\n")
 				.replace(retReg, "\n")
 				.split(tokenReg),
 				content = '',
 				buff = [startTxt],
+				// helper function for putting stuff in the view concat
 				put = function( content, bonus ) {
 					buff.push(put_cmd, '"', clean(content), '"'+(bonus||'')+');');
 				},
@@ -521,22 +451,30 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 				// once we have a <%= %> with a leftBracket
 				// we store how the file should end here (either '))' or ';' )
 				endStack =[],
+				// the last token, used to remember which tag we are in
 				lastToken,
+				// the corresponding magic tag
 				startTag = null,
+				// was there a magic tag inside an html tag
 				magicInTag = false,
-				tagName = '';
+				// the current tag name
+				tagName = '',
+				// declared here
+				bracketCount,
+				i = 0,
+				token;
 
 			// re-init the tag state goodness
 			htmlTag = quote = beforeQuote = null;
 
-			for (var i = 0, token; (token = tokens[i++]) !== undefined;) {
+			for (; (token = tokens[i++]) !== undefined;) {
 
 				if ( startTag === null ) {
 					switch ( token ) {
 					case '<%':
 					case '<%=':
 					case '<%==':
-						magicInTag = true;
+						magicInTag = 1;
 					case '<%#':
 						// a new line, just add whatever content w/i a clean
 						// reset everything
@@ -552,12 +490,12 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						content += '<%';
 						break;
 					case '<':
-						htmlTag = '<'
+						htmlTag = 1;
 						content += token;
-						magicInTag = false;
+						magicInTag = 0;
 						break;
 					case '>':
-						htmlTag = null;
+						htmlTag = 0;
 						// TODO: all <%= in tags should be added to pending hookups
 						if(magicInTag){
 							put(content, ",Can.EJS.pending(),\">\"");
@@ -569,9 +507,14 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						break;
 					case "'":
 					case '"':
+						// if we are in an html tag, finding matching quotes
 						if(htmlTag){
+							// we have a quote and it matches
 							if(quote && quote === token){
+								// we are exiting the quote
 								quote = null;
+								// otherwise we are creating a quote
+								// TOOD: does this handle "\""
 							} else if(quote === null){
 								quote = token;
 								beforeQuote = lastToken;
@@ -604,7 +547,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 								
 								endStack.push({
 									before: "",
-									after: finishTxt+"}));/*ft*/"
+									after: finishTxt+"}));"
 								})
 							}
 							else {
@@ -629,7 +572,6 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 							break;
 						case '<%=':
 						case '<%==':
-							// <%== content
 							// - we have an extra { -> block
 							// get the number of { minus } 
 							bracketCount = bracketNum(content);
@@ -663,7 +605,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 						content = '';
 						break;
 					case '<%%':
-						content += scanner.right;
+						content += '<%';
 						break;
 					default:
 						content += token;
@@ -678,13 +620,12 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 			
 			if ( content.length > 0 ) {
 				// Should be content.dump in Ruby
-				buff.push(put_cmd, '"', clean(content) + '")');
+				put(content)
 			}
 			buff.push(";")
-			
 			var template = buff.join(''),
 				out = {
-					out: 'try { with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}}catch(e){e.lineNumber=null;throw e;}"
+					out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"
 				};
 			//use eval instead of creating a function, b/c it is easier to debug
 			myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
@@ -742,9 +683,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 		 * Renders a partial view.  This is deprecated in favor of <code>Can.View()</code>.
 		 */
 		view: function( url, data, helpers ) {
-			helpers = helpers || this._extras;
-			data = data || this._data;
-			return $View(url, data, helpers); //new EJS(options).render(data, helpers);
+			return $View(url, data || this._data, helpers || this._extras); //new EJS(options).render(data, helpers);
 		},
 		list : function(list, cb){
 			list.attr('length')
@@ -755,7 +694,7 @@ steal('can/view', 'can/util/string/rsplit').then(function( $ ) {
 	};
 
 	// options for steal's build
-	Can.View.register({
+	Can.view.register({
 		suffix: "ejs",
 		//returns a function that renders the view
 		script: function( id, src ) {

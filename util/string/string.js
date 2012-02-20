@@ -1,3 +1,4 @@
+// 560
 /**
  * @page jquerymx.lang Language Helpers
  * @parent jquerymx
@@ -47,7 +48,9 @@ steal('can/util',function( $ ) {
 		lowUp: /([a-z\d])([A-Z])/g,
 		dash: /([a-z\d])([A-Z])/g,
 		replacer: /\{([^\}]+)\}/g,
-		dot: /\./
+		dot: /\./,
+		quote: /"/g,
+		singleQuote: /'/g
 	},
 		// gets the nextPart property from current
 		// add - if true and nextPart doesnt exist, create it as an empty object
@@ -60,7 +63,7 @@ steal('can/util',function( $ ) {
 			return current && ( type == 'function' || type == 'object' );
 		},
 		// a reference
-		getObject,
+		getObject;
 		/** 
 		 * @class jQuery.String
 		 * @parent jquerymx.lang
@@ -82,8 +85,10 @@ steal('can/util',function( $ ) {
 		 * </ul>
 		 * 
 		 */
-		str = Can.String = Can.extend( Can.String || {} , {
-			
+		Can.String = Can.extend({
+			esc : function(content){
+				return content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(regs.quote, '&#34;').replace(regs.singleQuote, "&#39;");
+			},
 			
 			/**
 			 * @function getObject
