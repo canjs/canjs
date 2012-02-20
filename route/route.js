@@ -1,3 +1,4 @@
+// 1.11
 steal('can/observe', 'can/util/string/deparam',
 function( $ ) {
 
@@ -11,19 +12,11 @@ function( $ ) {
         // Converts a JS Object into a list of parameters that can be 
         // inserted into an html element tag.
 		makeProps = function( props ) {
-			var html = [],
-				name, val;
+			var html = [];
 			each(props, function(name, val){
-				if ( name === 'className' ) {
-					name = 'class'
-				}
-				val && html.push(escapeHTML(name), "=\"", escapeHTML(val), "\" ");
+				val && html.push(name === 'className' ? 'class'  : name, '="', Can.String.esc(val), '"');
 			})
-			return html.join("")
-		},
-        // Escapes ' and " for safe insertion into html tag parameters.
-		escapeHTML = function( content ) {
-			return content.replace(/"/g, '&#34;').replace(/'/g, "&#39;");
+			return html.join(" ")
 		},
 		// Checks if a route matches the data provided. If any route variable
         // is not present in the data the route does not match. If all route
@@ -42,8 +35,6 @@ function( $ ) {
         // 
 		onready = true,
 		location = window.location,
-		encode = encodeURIComponent,
-		decode = decodeURIComponent,
 		each = Can.each,
 		extend = Can.extend;
 
@@ -277,7 +268,7 @@ function( $ ) {
                     // If the default value is found an empty string is inserted.
 				    res = route.route.replace(matcher, function( whole, name ) {
                         delete cpy[name];
-                        return data[name] === route.defaults[name] ? "" : encode( data[name] );
+                        return data[name] === route.defaults[name] ? "" : encodeURIComponent( data[name] );
                     }),
                     after;
 					// remove matching default values
@@ -328,7 +319,7 @@ function( $ ) {
                 // Overwrite each of the default values in obj with those in parts if that part is not empty.
 				each(parts,function(i, part){
 					if ( part && part !== '&') {
-						obj[route.names[i]] = decode( part );
+						obj[route.names[i]] = decodeURIComponent( part );
 					}
 				});
 				obj.route = route.route;
@@ -427,7 +418,7 @@ function( $ ) {
 	
     // The functions in the following list applied to Can.route (e.g. Can.route.attr('...')) will
     // instead act on the Can.route.data Observe.
-	each(['bind','unbind','delegate','undelegate','attr','serialize','removeAttr'], function(i, name){
+	each(['bind','unbind','delegate','undelegate','attr','removeAttr'], function(i, name){
 		Can.route[name] = function(){
 			return Can.route.data[name].apply(Can.route.data, arguments)
 		}
@@ -465,10 +456,8 @@ function( $ ) {
     // Using .serialize() retrieves the raw data contained in the observable.
     // This function is throttled so it only updates once even if multiple values changed.
 	Can.route.bind("change", throttle(function() {
-		location.hash = "#!" + Can.route.param(Can.route.serialize())
+		location.hash = "#!" + Can.route.param(Can.route.data.serialize())
 	}));
-	// onready
-	$(function() {
-		Can.route.ready();
-	});
+	// onready event ...
+	Can.bind.call(document,"ready",Can.route.ready);
 })

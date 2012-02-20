@@ -1,8 +1,17 @@
-steal('can/construct',function() {
+// 1.69
+steal('can/construct', function() {
 
 	// returns if something is an object with properties of its own
 	var canMakeObserve = function( obj ) {
 			return typeof obj === 'object' && obj !== null && obj && !(obj instanceof Date);
+		},
+		// removes all listeners
+		unhookup = function(items, namespace){
+			return Can.each(items, function(i, item){
+				if(item && item.unbind){
+					item.unbind("change" + namespace);
+				}
+			});
 		},
 		// listens to changes on val and 'bubbles' the event up
 		// - val the object to listen to changes on
@@ -13,11 +22,11 @@ steal('can/construct',function() {
 			if (val instanceof Observe){
 				// we have an observe already
 				// make sure it is not listening to this already
-				unhookup([val], parent._namespace)
+				unhookup([val], parent._namespace);
 			} else if ( Can.isArray(val) ) {
-				val = new Observe.List(val)
+				val = new Observe.List(val);
 			} else {
-				val = new Observe(val)
+				val = new Observe(val);
 			}
 			// attr (like target, how you (delegate) to get to the target)
             // currentAttr (how to get to you)
@@ -29,23 +38,16 @@ steal('can/construct',function() {
 				var args = Can.makeArray(arguments),
 					ev = args.shift();
 				if(prop === "*"){
-					args[0] = parent.indexOf(val)+"." + args[0]
+					args[0] = parent.indexOf(val)+"." + args[0];
 				} else {
-					args[0] = prop +  "." + args[0]
+					args[0] = prop +  "." + args[0];
 				}
 				Can.trigger(parent, ev, args);
 			});
 
 			return val;
 		},
-		// removes all listeners
-		unhookup = function(items, namespace){
-			return Can.each(items, function(i, item){
-				if(item && item.unbind){
-					item.unbind("change" + namespace)
-				}
-			});
-		},
+		
 		// an id to track events for a given observe
 		observeId = 0,
 		// a reference to an array of events that will be dispatched
@@ -451,8 +453,6 @@ steal('can/construct',function() {
 				hookupBubble(value, prop, this) :
 				// value is normal
 				value);
-
-
 
 				// batchTrigger the change event
 				batchTrigger(this, "change", [prop, changeType, value, current]);

@@ -1,3 +1,4 @@
+// 1.28
 steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	// ------- HELPER FUNCTIONS  ------
 	
