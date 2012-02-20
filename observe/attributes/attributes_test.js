@@ -1,9 +1,9 @@
-steal('funcunit/qunit','./attributes',function(){
+steal('funcunit/qunit','./attributes', function(){
 
 module("attributes");
 
 test("literal converters and serializes", function(){
-	Can.Control("Task1",{
+	Can.Observe("Task1",{
 		attributes: {
 			createdAt: "date"
 		},
@@ -20,7 +20,7 @@ test("literal converters and serializes", function(){
 			}
 		}
 	},{});
-	Can.Control("Task2",{
+	Can.Observe("Task2",{
 		attributes: {
 			createdAt: "date"
 		},
@@ -57,13 +57,13 @@ test("literal converters and serializes", function(){
 });
 
 var makeClasses= function(){
-	Can.Control("AttrTest.Person", {
+	Can.Observe("AttrTest.Person", {
 		serialize: function() {
 			return "My name is " + this.name;
 		}
 	});
-	Can.Control("AttrTest.Loan");
-	Can.Control("AttrTest.Issue");
+	Can.Observe("AttrTest.Loan");
+	Can.Observe("AttrTest.Issue");
 	
 	AttrTest.Person.model = function(data){
 		return new this(data);
@@ -78,7 +78,7 @@ var makeClasses= function(){
 			return new AttrTest.Issue(l)
 		});
 	}
-	Can.Control("AttrTest.Customer",
+	Can.Observe("AttrTest.Customer",
 	{
 		attributes : {
 			person : "AttrTest.Person.model",
@@ -92,7 +92,7 @@ var makeClasses= function(){
 
 test("default converters", function(){
 	var num = 1318541064012;
-	equals( Can.Model.convert.date(num).getTime(), num, "converted to a date with a number" );
+	equals( Can.Observe.convert.date(num).getTime(), num, "converted to a date with a number" );
 })
 
 test("basic observe associations", function(){
@@ -117,13 +117,14 @@ test("basic observe associations", function(){
 	});
 	
 	equals(c.person.name, "Justin", "association present");
-	equals(c.person.Class, AttrTest.Person, "belongs to association typed");
+	
+	equals(c.person.constructor, AttrTest.Person, "belongs to association typed");
 	
 	equals(c.issues.length, 0);
 	
 	equals(c.loans.length, 2);
 	
-	equals(c.loans[0].Class, AttrTest.Loan);
+	equals(c.loans[0].constructor, AttrTest.Loan);
 	
 	
 });

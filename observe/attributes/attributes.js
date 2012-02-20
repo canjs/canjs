@@ -1,9 +1,10 @@
-steal('can/observe',function($){
+steal('can/observe', function($){
 
-var $Observe = Can.Control,
-	each = $.each,
-	extend = $.extend,
-	getObject = $.String.getObject;
+var $Observe = Can.Observe,
+	each = Can.each,
+	extend = Can.extend,
+	getObject = Can.String.getObject;
+	
 // adds attributes, serialize, convert
 extend($Observe,{
 	attributes : {},
@@ -52,7 +53,6 @@ var proto =  $Observe.prototype,
 	oldSet = proto.__set,
 	oldSetup = $Observe.setup;
 
-
 proto.__set = function(prop, value, current, success, error){
 	// check if there is a
 	
@@ -71,6 +71,7 @@ proto.__set = function(prop, value, current, success, error){
 			// otherwise, pass to the converter
 			converter.call(Class, value, function() {}, type), current, success, error  )
 };
+
 proto.serialize = function(){
 	var where = {},
 		Class = this.constructor,
@@ -92,6 +93,7 @@ proto.serialize = function(){
 	})
 	return where;
 }
+
 // overwrite setup to do this stuff
 $Observe.setup = function(superClass, stat, proto){
 	var self = this;
@@ -110,14 +112,6 @@ $Observe.setup = function(superClass, stat, proto){
 	});
 };
 
-
 //add missing converters and serializes
-
-
-
-
-
-
-
 
 });
