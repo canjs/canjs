@@ -1,21 +1,20 @@
-steal('jquery/controller', 'jquery/view').then(function( $ ) {
+steal('can/control', 'can/view').then(function( $ ) {
 	var URI = steal.URI || steal.File;
 	
-	jQuery.Controller.getFolder = function() {
-		return jQuery.String.underscore(this.fullName.replace(/\./g, "/")).replace("/Controllers", "");
+	Can.Control.getFolder = function() {
+		return Can.String.underscore(this.fullName.replace(/\./g, "/")).replace("/Controllers", "");
 	};
 
-	jQuery.Controller._calculatePosition = function( Class, view, action_name ) {
-		
+	Can.Control._calculatePosition = function( Class, view, action_name ) {
 		var classParts = Class.fullName.split('.'),
 			classPartsWithoutPrefix = classParts.slice(0);
 			classPartsWithoutPrefix.splice(0, 2); // Remove prefix (usually 2 elements)
 
 		var classPartsWithoutPrefixSlashes = classPartsWithoutPrefix.join('/'),
 			hasControllers = (classParts.length > 2) && classParts[1] == 'Controllers',
-			path = hasControllers? jQuery.String.underscore(classParts[0]): jQuery.String.underscore(classParts.join("/")),
-			controller_name = jQuery.String.underscore(classPartsWithoutPrefix.join('/')).toLowerCase(),
-			suffix = (typeof view == "string" && /\.[\w\d]+$/.test(view)) ? "" : jQuery.View.ext;
+			path = hasControllers? Can.String.underscore(classParts[0]): Can.String.underscore(classParts.join("/")),
+			controller_name = Can.String.underscore(classPartsWithoutPrefix.join('/')).toLowerCase(),
+			suffix = (typeof view == "string" && /\.[\w\d]+$/.test(view)) ? "" : Can.view.ext;
 			
 		//calculate view
 		if ( typeof view == "string" ) {
@@ -28,51 +27,55 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 		}
 		return view;
 	};
+	
 	var calculateHelpers = function( myhelpers ) {
 		var helpers = {};
 		if ( myhelpers ) {
-			if ( jQuery.isArray(myhelpers) ) {
+			if ( Can.isArray(myhelpers) ) {
 				for ( var h = 0; h < myhelpers.length; h++ ) {
-					jQuery.extend(helpers, myhelpers[h]);
+					Can.extend(helpers, myhelpers[h]);
 				}
 			}
 			else {
-				jQuery.extend(helpers, myhelpers);
+				Can.extend(helpers, myhelpers);
 			}
 		} else {
 			if ( this._default_helpers ) {
 				helpers = this._default_helpers;
 			}
+			
 			//load from name
 			var current = window;
 			var parts = this.constructor.fullName.split(/\./);
 			for ( var i = 0; i < parts.length; i++ ) {
 				if(current){
 					if ( typeof current.Helpers == 'object' ) {
-						jQuery.extend(helpers, current.Helpers);
+						Can.extend(helpers, current.Helpers);
 					}
 					current = current[parts[i]];
 				}
 			}
+			
 			if (current && typeof current.Helpers == 'object' ) {
-				jQuery.extend(helpers, current.Helpers);
+				Can.extend(helpers, current.Helpers);
 			}
+			
 			this._default_helpers = helpers;
 		}
 		return helpers;
 	};
 
 	/**
-	 * @add jQuery.Controller.prototype
+	 * @add Can.Control.prototype
 	 */
-
-	jQuery.Controller.prototype.
+	Can.Control.prototype.
+	
 	/**
 	 * @tag view
 	 * Renders a View template with the controller instance. If the first argument
-	 * is not supplied, 
-	 * it looks for a view in /views/controller_name/action_name.ejs.
+	 * is not supplied, it looks for a view in /views/controller_name/action_name.ejs.
 	 * If data is not provided, it uses the controller instance as data.
+	 *
 	 * @codestart
 	 * TasksController = Can.Control.extend('TasksController',{
 	 *   click: function( el ) {
@@ -87,7 +90,8 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 	 *   }
 	 * })
 	 * @codeend
-	 * @plugin jquery/controller/view
+	 *
+	 * @plugin can/control/view
 	 * @return {String} the rendered result of the view.
 	 * @param {String} [view]  The view you are going to render.  If a view isn't explicity given
 	 * this function will try to guess at the correct view as show in the example code above.
@@ -104,8 +108,9 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 			data = view;
 			view = null;
 		}
+		
 		//guess from controller name
-		view = jQuery.Controller._calculatePosition(this.Class, view, this.called);
+		view = Can.Control._calculatePosition(this.constructor, view, this.called);
 
 		//calculate data
 		data = data || this;
@@ -113,9 +118,7 @@ steal('jquery/controller', 'jquery/view').then(function( $ ) {
 		//calculate helpers
 		var helpers = calculateHelpers.call(this, myhelpers);
 
-
-		return jQuery.View(view, data, helpers); //what about controllers in other folders?
+		return Can.view(view, data, helpers); //what about controllers in other folders?
 	};
-
 
 });
