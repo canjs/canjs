@@ -449,13 +449,13 @@ steal("can/util").then(function( $ ) {
 				// return the deferred
 				response = deferred;
 				// and callback callback with the rendered result
-				deferred.done(function( renderer ) {
+				deferred.then(function( renderer ) {
 					callback(renderer(data, helpers))
 				})
 			} else {
 				// otherwise, the deferred is complete, so
 				// set response to the result of the rendering
-				deferred.done(function( renderer ) {
+				deferred.then(function( renderer ) {
 					response = renderer(data, helpers);
 				});
 			}
@@ -496,7 +496,8 @@ steal("can/util").then(function( $ ) {
 			response = function( text ) {
 				// get the renderer function
 				var func = type.renderer(id, text),
-					d = (new Can.Deferred()).resolve(func)
+					d = new Can.Deferred();
+				d.resolve(func)
 				// cache if if we are caching
 				if ( $view.cache ) {
 					$view.cached[id] = d;
