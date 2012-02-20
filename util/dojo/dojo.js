@@ -1,7 +1,8 @@
-steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompressed.js", 
-	'../event.js').then(
-	'http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojox/NodeList/delegate.xd.js',
-	'http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/NodeList-traverse.xd.js',
+steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompressed.js", 
+	'../event.js'
+	
+	).then('./nodelist-traverse').then(
+	'./trigger',
 	function(){
 	
 	// String
@@ -61,10 +62,52 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompre
 		return dojo.isFunction(f);
 	}
 	// make this object so you can bind on it
+	var bindings = {},
+		id = 0,
+		addBinding = function(nodelist, ev, cb){
+			nodelist.forEach(function(node){
+				var node = new dojo.NodeList(node)
+				var events = Can.data(node,"events");
+				if(!events){
+					Can.data(node,"events", events = {})
+				}
+				if(!events[ev]){
+					events[ev] = {};
+				}
+				if(cb.__bindingsIds === undefined) {
+					cb.__bindingsIds=id++;
+				} 
+				events[ev][cb.__bindingsIds] = node.on(ev, cb)[0]
+			});
+		},
+		removeBinding = function(nodelist,ev,cb){
+			nodelist.forEach(function(node){
+				var node = new dojo.NodeList(node),
+					events = Can.data(node,"events"),
+					handlers = events[ev],
+					handler = handlers[cb.__bindingsIds];
+				
+				dojo.disconnect(handler);
+				delete handlers[cb.__bindingsIds];
+				
+				if(Can.isEmptyObject(handlers)){
+					delete events[ev]
+				}
+				if(Can.isEmptyObject(events)){
+					// clear data
+				}
+			});
+		}
+	
+	
 	Can.bind = function( ev, cb){
 		// if we can bind to it ...
 		if(this.bind && this.bind !== Can.bind){
 			this.bind(ev, cb)
+			
+		// otherwise it's an element or node List
+		} else if(this.on || this.nodeType){
+			addBinding( new dojo.NodeList(this), ev, cb)
 		} else if(this.addEvent) {
 			this.addEvent(ev, cb)
 		} else {
@@ -77,8 +120,10 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompre
 		// if we can bind to it ...
 		if(this.unbind && this.unbind !== Can.unbind){
 			this.unbind(ev, cb)
-		} else if(this.removeEvent) {
-			this.removeEvent(ev, cb)
+		} 
+		
+		else if(this.on || this.nodeType) {
+			removeBinding(new dojo.NodeList(this), ev, cb);
 		} else {
 			// make it bind-able ...
 			Can.removeEvent.call(this, ev, cb)
@@ -87,32 +132,18 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompre
 	}
 	Can.trigger = function(item, event, args, bubble){
 		// defaults to true
-		bubble = (bubble === undefined ? true : bubble);
-		args = args || []
-		if(item.fireEvent){
-			item = item[0] || item;
-			// walk up parents to simulate bubbling 
-			while(item) {
-			// handle walking yourself
-				if(!event.type){
-					event = {
-						type : event,
-						target : item
-					}
-				}
-				var events = item.retrieve('events');
-				if (events && events[event.type]) {
-					
-					events[event.type].keys.each(function(fn){
-						fn.apply(this, [event].concat(args));
-					}, this); 
-				} 
-				// if we are bubbling, get parent node
-				item = bubble && item.parentNode
-				
+		if(item.trigger){
+			if(bubble === false){
+				//  force stop propagation
+				var connect = item.on(event, function(ev){
+					ev.stopPropagation();
+					dojo.disconnect(connect);
+				})
+				item.trigger(event,args)
+			} else {
+				item.trigger(event,args)
 			}
 			
-	
 		} else {
 			if(typeof event === 'string'){
 				event = {type: event}
@@ -122,29 +153,27 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompre
 		}
 	}
 	
-	dojo.require("dojox.NodeList.delegate");
+	//require("dojox.NodeList.delegate");
+	
+	require(["dojo/query", "plugd/trigger"], function(){
+		console.log("holler")
+	})
 	
 	Can.delegate = function(selector, ev , cb){
-		if(this.delegate) {
+		if(this.on || this.nodeType){
+			addBinding( new dojo.NodeList(this), selector+":"+ev, cb)
+		} else if(this.delegate) {
 			this.delegate(selector, ev , cb)
-		}
-		 else if(this.addEvent) {
-			this.addEvent(ev+":relay("+selector+")", cb)
-		} else {
-			// make it bind-able ...
-		}
+		} 
 		return this;
 	}
 	Can.undelegate = function(selector, ev , cb){
-		if(this.undelegate) {
+		if(this.on || this.nodeType){
+			removeBinding(new dojo.NodeList(this), selector+":"+ev, cb);
+		} else if(this.undelegate) {
 			this.undelegate(selector, ev , cb)
 		}
-		 else if(this.removeEvent) {
-			this.removeEvent(ev+":relay("+selector+")", cb)
-		} else {
-			// make it bind-able ...
-			
-		}
+
 		return this;
 	}
 	//require(["dojo/on"], function(on){
@@ -267,6 +296,7 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompre
   };
 
 var cleanData = function(elems){
+  	Can.trigger(new dojo.NodeList(elems),"destroyed",false)
   	for ( var i = 0, elem;
 		(elem = elems[i]) !== undefined; i++ ) {
 			var id = elem[exp]
@@ -290,7 +320,7 @@ var cleanData = function(elems){
 	var destroy = dojo.destroy;
 	dojo.destroy = function(node){
 		node = dojo.byId(node);
-		cleanData(node);
+		cleanData([node]);
 		node.getElementsByTagName && cleanData(node.getElementsByTagName('*'))
 		
 		return destroy.apply(dojo, arguments);
