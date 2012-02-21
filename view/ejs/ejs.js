@@ -346,19 +346,25 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				}) + "'></" +tag+">";
 			} else if(status === 1){ // in a tag
 				// mark at end!
+				var attrName = func.call(self).replace(/['"]/g, '').split('=')[0];
 				pendingHookups.push(function(el) {
-					el.removeAttribute('__!!__');
-
-					var attr = func.call(self).replace(/['"]/g, '').split('=');
-					el.setAttribute(attr[0], attr[1]);
-
 					liveBind(observed, el, function() {
-						attr = func.call(self).replace(/['"]/g, '').split('=');
-						el.setAttribute(attr[0], attr[1]);
+						var attr = func.call(self),
+							parts = (attr || "").replace(/['"]/g, '').split('=')
+							newAttrName = parts[0];
+						
+						// remove if we have a change and used to have an attrName
+						if((newAttrName != attrName) && attrName){
+							el.removeAttribute(attrName)
+						}
+						// set if we have a new attrName
+						if(newAttrName){
+							el.setAttribute(newAttrName, parts[1])
+						}
 					});
 				});
 
-				return '__!!__';
+				return input;
 			} else { // in an attribute
 				pendingHookups.push(function(el){
 					var wrapped = Can.$(el),
