@@ -39,10 +39,12 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		liveBind = function(observed, el, cb){
 			Can.each(observed, function(i, ob){
 				ob.cb = function(ev, attr){
+					console.log("event",attr, "listening",ob.attr)
 					if(attr === ob.attr) {
 						cb();
 					} 
 				}
+				console.log("listening on", ob.attr)
 				ob.obj.bind('change', ob.cb)
 			})
 			Can.bind.call(el,'destroyed', function(){

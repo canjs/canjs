@@ -341,4 +341,10 @@ test('hookup within a tag', function () {
 
 	obs.attr('baz', 'some=\'new property\'');
 	equals(div.innerHTML, '<div class="b" some="new property">lorem ipsum</div>', 'updated values');
+	
+	obs.attr('foo','');
+	obs.attr('baz','')
+	
+	equals(div.innerHTML, '<div>lorem ipsum</div>', 'removing values');
+	
 });

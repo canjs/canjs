@@ -93,11 +93,11 @@ test("inline templates other than 'tmpl' like ejs", function(){
 });
 
 test("object of deferreds", function(){
-	var foo = Can.Deferred(),
-		bar = Can.Deferred();
+	var foo = new Can.Deferred(),
+		bar = new Can.Deferred();
 	stop();
 	Can.render("//can/view/test/qunit/deferreds.ejs",{
-		foo : foo.promise ? foo.promise() : foo,
+		foo : typeof foo.promise == 'function' ? foo.promise() : foo,
 		bar : bar
 	}).then(function(result){
 		equals(result, "FOO and BAR");
@@ -111,7 +111,7 @@ test("object of deferreds", function(){
 });
 
 test("deferred", function(){
-	var foo = Can.Deferred();
+	var foo = new Can.Deferred();
 	stop();
 	Can.render("//can/view/test/qunit/deferred.ejs",foo).then(function(result){
 		equals(result, "FOO");

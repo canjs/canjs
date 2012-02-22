@@ -262,7 +262,7 @@ steal("can/util").then(function( $ ) {
 				}
 			});
 			// filter by data-view-id attribute
-			hookupEls = Can.filter(Can.$(arr), "[data-view-id]");
+			hookupEls = arr;
 			
 			//
 		
@@ -465,7 +465,7 @@ steal("can/util").then(function( $ ) {
 	}
 	// returns true if something looks like a deferred
 	Can.isDeferred = function( obj ) {
-		return obj && Can.isFunction(obj.always) // check if obj is a Can.Deferred
+		return obj && Can.isFunction(obj.then) && Can.isFunction(obj.pipe) // check if obj is a Can.Deferred
 	} 
 	// makes sure there's a template, if not, has steal provide a warning
 	var	checkText = function( text, url ) {
