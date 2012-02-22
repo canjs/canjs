@@ -1,6 +1,5 @@
 steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompressed.js", 
 	'../event.js'
-	
 	).then('./nodelist-traverse').then(
 	'./trigger',
 	function(){
@@ -212,23 +211,7 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 			}
 		}
 	}
-	Can.Deferred = dojo.Deferred;
-	Can.When = dojo.Deferred.When;
-	Can.Deferred.prototype.pipe = function(done, fail){
-			var d = new Can.Deferred();
-		this.addCallback(function(){
-			d.resolve( done.apply(this, arguments) );
-		});
-		
-		this.addErrback(function(){
-			if(fail){
-				d.reject( fail.apply(this, arguments) );
-			} else {
-				d.reject.apply(d, arguments);
-			}
-		});
-		return d;
-	};
+
 	
 	Can.ajax = function(options){
 		var type = Can.String.capitalize( (options.type || "get").toLowerCase() ),
@@ -266,29 +249,30 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 		if(selector === window){
 			return window;
 		}
-		return dojo.query(selector)
+		if(typeof selector === "string"){
+			return dojo.query(selector)
+		} else {
+			return new dojo.NodeList(selector);
+		}
+
+		
 	}
 	Can.buildFragment = function(frags, nodes){
-		var owner = nodes.length && nodes[0].ownerDocument;
-		return dojo.toDom(frags[0], owner );
+		var owner = nodes.length && nodes[0].ownerDocument,
+			frag = dojo.toDom(frags[0], owner );
+		if(frag.nodeType !== 11){
+			var tmp = document.createDocumentFragment();
+			tmp.appendChild(frag)
+			frag = tmp;
+		}
+		return {fragment: frag}
 	}
 	
-	// add document fragement support
-	var old = document.id;
-	document.id =  function(el){
-		if(el && el.nodeType === 11){
-			return el
-		} else{
-			return old.apply(document, arguments);
-		}
-	};
+
 	Can.append = function(wrapped, html){
 		return wrapped.forEach(function(node){
 			dojo.place( html, node)
 		});
-	}
-	Can.filter = function(wrapped, filter){
-		return wrapped.filter(filter);
 	}
 	
 	
@@ -329,7 +313,7 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 	};
 	
 	var cleanData = function(elems){
-	  	Can.trigger(new dojo.NodeList(elems),"destroyed",false)
+	  	Can.trigger(new dojo.NodeList(elems),"destroyed",[],false)
 	  	for ( var i = 0, elem;
 			(elem = elems[i]) !== undefined; i++ ) {
 				var id = elem[exp]
@@ -380,4 +364,4 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 
 	
 	
-})
+}).then('../deferred.js')
