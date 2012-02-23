@@ -331,20 +331,29 @@ test('hookup within a tag', function () {
 
 	compiled = new Can.EJS({ text: text }).render({ obs: obs });
 
-	var div = document.createElement('div');
+	var div = $('<div>');
 
-	div.appendChild(Can.view.frag(compiled));
-	equals(div.innerHTML, '<div class="a" some="property">lorem ipsum</div>', 'initial render');
+	div.append(Can.view.frag(compiled));
+	var anchor = div.find('.a');
+
+	equals(anchor.attr('class'), 'a');
+	equals(anchor.attr('some'), 'property');
+	//equals(div.innerHTML, '<div class="a" some="property">lorem ipsum</div>', 'initial render');
 
 	obs.attr('foo', 'class="b"');
-	equals(div.innerHTML, '<div class="b" some="property">lorem ipsum</div>', 'updated values');
+	equals(anchor.attr('class'), 'b');
+	equals(anchor.attr('some'), 'property');
+	//equals(div.innerHTML, '<div class="b" some="property">lorem ipsum</div>', 'updated values');
 
 	obs.attr('baz', 'some=\'new property\'');
-	equals(div.innerHTML, '<div class="b" some="new property">lorem ipsum</div>', 'updated values');
-	
-	obs.attr('foo','');
-	obs.attr('baz','')
-	
-	equals(div.innerHTML, '<div>lorem ipsum</div>', 'removing values');
-	
+	equals(anchor.attr('class'), 'b');
+	equals(anchor.attr('some'), 'new property');
+	//equals(div.innerHTML, '<div class="b" some="new property">lorem ipsum</div>', 'updated values');
+
+	obs.attr('foo', '');
+	obs.attr('baz', '');
+	equals(anchor.attr('class'), undefined);
+	equals(anchor.attr('some'), undefined);
+
+	//equals(div.innerHTML, '<div>lorem ipsum</div>', 'removing values');
 });
