@@ -8,6 +8,13 @@ smal todo app.  Check out the {% jmvclink getstarted Getting Started Guide %}
 for a more in-depth overview.
 
 ## Get Canned
+
+ - can.jquery.js (8k)
+ - can.zepto.js (9k)
+ - can.dojo.js (9k)
+ - can.mootools.js (9k)
+ - can.yui.js (9k)
+
 ## Can.Construct `Can.Construct([classProps,] [prototypeProps])`
 
 Constructors made with {% jmvclink Can.Construct %} are used to create
@@ -698,3 +705,167 @@ are traditional views, consuming models.
 
 If you can understand this, you understand 
 everything. Congrats! {% jmvclink tutorials/rapidstart/todos.html See it in action %}.
+
+## Use with other libraries
+
+CanJS can be used with libraries other than jQuery.
+
+### Implementing another library
+
+
+__STRING__
+
+{% highlight javascript %}
+
+    // remove leading and trailing whitespace
+    Can.trim( " foo " ) // -> "foo" 
+{% endhighlight %}
+
+__ARRAY__
+{% highlight javascript %}
+
+    // convert array-like data into arrays
+    Can.makeArray({0 : "zero", 1: "one", length: 2}) // -> ["zero","one"]
+    
+    // return if an array is an array
+    Can.isArray([]) //-> true
+    
+    // converts one array to another array
+    Can.map([{prop: "val1"}, {prop: "val2"}], function(val, prop){
+      return val
+    })  //-> ["val1","val2"]
+    
+    // iterates through an array
+    Can.each([{prop: "val1"}, {prop: "val2"}], function( index, value ) {
+      // function called with
+      //  index=0 value={prop: "val1"}
+      //  index=1 value={prop: "val2"}
+    })
+{% endhighlight %}
+
+__Object__
+{% highlight javascript %}
+
+    // extends one object with the properties of another
+    var first = {},
+        second = {a: "b"},
+        thrid = {c: "d"};
+    Can.extend(first, second, third); //-> first
+    first  //-> {a: "b",c : "d"}
+    second //-> {a: "b"}
+    thrid  //-> {c: "d"}
+    
+    // deep extends one object with another
+    Can.extend( true, first, second, third ); 
+    
+    // parameterize into a querystring
+    Can.param({a: "b", c: "d"}) //-> "a=b&c=d"
+    
+    // returns if an object is empty
+    Can.isEmptyObject({})      //-> true
+    Can.isEmptyObject({a:"b"}) //-> false
+    
+{% endhighlight %}
+
+__FUNCTION__
+{% highlight javascript %}
+
+    // returns a function that calls another function
+    // with "this" set.
+    var func = Can.proxy(function(one){
+      return this.a + one
+    }, {a: "b"}); 
+    func("two") //-> "btwo" 
+    
+    // returns if an object is a function
+    Can.isFunction({})           //-> false
+    Can.isFunction(function(){}) //-> true
+{% endhighlight %}
+
+__EVENT__
+
+{% highlight javascript %}
+
+    // binds handler on obj's eventName event
+    Can.bind(obj, eventName, handler )
+    
+    // unbind handler on obj's eventName event
+    Can.unbind(obj, eventName, handler) 
+    
+    // 
+    Can.delegate(obj, selector, eventName, handler)
+    
+    //
+    Can.delegate(obj, selector, eventName, handler)
+    
+    //
+    Can.trigger(obj, event, args )
+    Can.trigger(obj, eventName, args)
+{% endhighlight %}
+
+__DEFERRED__
+
+{% highlight javascript %}
+
+    // Creates a new Deferred object
+    var deferred = new Can.Deferred()
+    
+    // pipes a deferred into another deferred
+    deferred.pipe(function(){
+    
+    }, function(){})
+    
+    // 
+    deferred.resolve()
+    
+    //
+    deferred.reject()
+    
+    // 
+    Can.When()
+{% endhighlight %}
+
+
+__AJAX__
+
+{% highlight javascript %}
+
+    Can.ajax({
+      url : "url",
+      type: "GET", // "POST"
+      async : false,
+      dataType: "json",
+      success: function(){},
+      error: function(){}
+    }) //-> deferred
+{% endhighlight %}
+
+__HTMLElement__
+
+{% highlight javascript %}
+
+    Can.buildFragment(frags, nodes)
+
+    // a node list
+    Can.$("div.bar") //-> []
+    
+    Can.append(NodeList, html)
+    
+    Can.remove(NodeList)
+    
+    Can.filter(NodeList, function(){})
+    
+    Can.data(NodeList, dataName, dataValue)
+    
+    Can.addClass(NodeList, className )
+{% endhighlight %}
+
+
+__HTMLElement 'destroyed' event__
+
+When an element is removed from the page, a 'destroyed' event should be triggered on the 
+event.  This is used to teardown event handlers in Can.Control.
+
+## Examples
+
+Examples of canJS.
