@@ -1,0 +1,5 @@
+#!/bin/sh
+cd raw
+jekyll
+cd ..
+cp -r raw/_site/ .
