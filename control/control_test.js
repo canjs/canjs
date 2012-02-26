@@ -115,7 +115,7 @@ test("windowresize", function(){
 
 
 // this.delegate(this.cached.header.find('tr'), "th", "mousemove", "th_mousemove"); 
-test("delegate", function(){
+test("on", function(){
 	var called = false,
 		DelegateTest= Can.Control({
 			click: function() {}
@@ -128,7 +128,7 @@ test("delegate", function(){
 	var dt = new DelegateTest(els)
 	
 	
-	dt.delegate(Can.$("#els span"), "a", "click", function(){
+	dt.on(Can.$("#els span"), "a", "click", function(){
 		called = true;
 	})
 	

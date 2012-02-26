@@ -1,4 +1,7 @@
-# View
+@class Can.view
+@parent CanJS
+
+
 
 Render tempaltes into a documentFragement.  A platform for retrieving those fragements
 and inserting them into the dom.
