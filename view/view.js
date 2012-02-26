@@ -247,24 +247,21 @@ steal("can/util").then(function( $ ) {
 			return Can.view.hookup(frag);
 		},
 		hookup: function(fragment){
-			var hookupEls,
+			var hookupEls = [],
 				id, 
 				func, 
-				arr = [],
 				el,
 				i=0;
 			
 			// get all childNodes
 			Can.each(fragment.childNodes ? makeArray(fragment.childNodes) : fragment, function(i, node){
 				if(node.nodeType != 3){
-					arr.push(node)
-					arr.push.apply(arr, makeArray( node.getElementsByTagName('*')))
+					hookupEls.push(node)
+					hookupEls.push.apply(hookupEls, makeArray( node.getElementsByTagName('*')))
 				}
 			});
 			// filter by data-view-id attribute
-			hookupEls = arr;
-			
-			//
+
 		
 			for (; el = hookupEls[i++]; ) {
 				if ( el.getAttribute && (id = el.getAttribute('data-view-id')) && (func = $view.hookups[id]) ) {

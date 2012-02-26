@@ -126,7 +126,7 @@ steal('can/construct', function() {
 
 	/**
 	 * @class Can.Observe
-	 * @parent jquerymx.lang
+	 * @parent CanJS
 	 * @test can/observe/qunit.html
 	 * 
 	 * Observe provides the awesome observable pattern for
