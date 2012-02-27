@@ -532,12 +532,11 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			var funcName, ready, cls = this.constructor;
 
 			//want the raw element here
-			element = (typeof element == 'string' ? can.$(element) :
-				(element.jquery ? element : [element]) )[0];
+			element = can.get(can.$(element),0);
 
 			//set element and className on element
 			var pluginname = cls.pluginName || cls._fullName;
-
+			console.log(element)
 			this.element = can.$(element)
 
 			if(pluginname && pluginname !== 'can_control') {
@@ -843,7 +842,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * 
 		 */
 		off : function(){
-			var el = this.element[0];
+			var el = can.get(this.element,0);
 			each(this._bindings || [], function( key, value ) {
 				value(el);
 			});

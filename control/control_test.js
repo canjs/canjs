@@ -69,6 +69,15 @@ if( window.jQuery ){
 
 
 test("parameterized actions", function(){
+	// YUI does not like non-dom event
+	if(can.Y){
+		can.Y.mix(can.Y.Node.DOM_EVENTS, {
+			sillyEvent: true,
+		});
+	}
+	
+	
+	
 	var called = false,
 		WeirderBind = can.Control({
 			"{parameterized}" : function() {
@@ -161,6 +170,12 @@ test("inherit", function(){
 
 
 test("space makes event",1,function(){
+	
+	if(can.Y){
+		can.Y.mix(can.Y.Node.DOM_EVENTS, {
+			foo: true,
+		});
+	}
 	
 	var Dot = can.Control({
 		" foo" : function(){

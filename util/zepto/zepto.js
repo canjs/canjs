@@ -180,7 +180,9 @@ can.$ = Zepto
 		return $.extend.apply($, arguments)
 	}
 
-
+	can.get = function(wrapped, index){
+		return wrapped[index];
+	}
 
 
 	

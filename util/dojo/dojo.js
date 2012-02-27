@@ -356,7 +356,9 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 		});
 	}
 
-	
+	can.get = function(wrapped, index){
+		return wrapped[index];
+	}
 	
 	
 	
