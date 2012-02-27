@@ -69,12 +69,12 @@ var makeClasses= function(){
 		return new this(data);
 	}
 	AttrTest.Loan.models = function(data){
-		return $.map(data, function(l){
+		return can.map(data, function(l){
 			return new AttrTest.Loan(l)
 		});
 	}
 	AttrTest.Issue.models = function(data){
-		return $.map(data, function(l){
+		return can.map(data, function(l){
 			return new AttrTest.Issue(l)
 		});
 	}

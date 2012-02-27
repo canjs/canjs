@@ -27,7 +27,8 @@
 	"node-screen/node-screen-min.js", 
 	"node-style/node-style-min.js", 
 	"querystring-stringify-simple/querystring-stringify-simple-min.js", 
-	"io-base/io-base-min.js", 
+	"io-base/io-base-min.js",
+	'array-extras/array-extras-min.js',
 	"querystring-parse-simple/querystring-parse-simple-min.js"]
 
 	var url = "http://yui.yahooapis.com/combo?3.4.1/build/" + yuilibs.join("&3.4.1/build/")
@@ -55,9 +56,12 @@
 		can.inArray = function( item, arr ) {
 			return Y.Array.indexOf(arr, item);
 		};
+		
 		can.map = function( arr, fn ) {
+			// http://yuilibrary.com/yui/docs/api/classes/Array.html#method_map
 			return Y.Array.map(can.makeArray(arr || []), fn);
 		};
+		
 		can.each = function( elements, callback ) {
 			var i, key;
 			if ( typeof elements.length == 'number' && elements.pop ) for ( i = 0; i < elements.length; i++ ) {
