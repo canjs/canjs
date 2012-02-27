@@ -264,5 +264,9 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 		}
 		destroy.apply(this, arguments)
 	}
+	can.get = function(wrapped, index){
+		return wrapped[index];
+	}
+	
 	
 },'../deferred.js')
