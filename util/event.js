@@ -37,9 +37,11 @@ can.dispatch = function(event){
 		return;
 	}
 	
-	var handlers = this.__bindEvents[event.type] || [],
+	var eventName = event.type.split(".")[0],
+		handlers = this.__bindEvents[eventName] || [],
 		self= this,
 		args = [event].concat(event.data || []);
+		
 	can.each(handlers, function(i, ev){
 		event.data = args.slice(1);
 		ev.handler.apply(self, args);
