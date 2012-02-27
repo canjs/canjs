@@ -198,7 +198,7 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 		requestOptions.onError = function(){
 			updateDeferred(request.xhr, d);
 			d.reject(request.xhr,"error");
-			error(equest.xhr,"error");
+			error(request.xhr,"error");
 		}
 		
 		var request = new Request(requestOptions);
