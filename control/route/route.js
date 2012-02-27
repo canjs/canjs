@@ -8,24 +8,24 @@ steal('can/route','can/control', function(){
 	 * @param {Object} selector
 	 * @param {Object} cb
 	 */
-	Can.Control.processors.route = function(el, event, selector, funcName, controller){
-		Can.route(selector||"")
+	can.Control.processors.route = function(el, event, selector, funcName, controller){
+		can.route(selector||"")
 		var batchNum,
 			check = function(ev, attr, how){
-				if(Can.route.attr('route') === (selector||"") && 
+				if(can.route.attr('route') === (selector||"") && 
 				   (ev.batchNum === undefined || ev.batchNum !== batchNum ) ){
 					
 					batchNum = ev.batchNum;
 					
-					var d = Can.route.attr();
+					var d = can.route.attr();
 					delete d.route;
 					
 					controller[funcName](d)
 				}
 			}
-		Can.route.bind('change',check);
+		can.route.bind('change',check);
 		return function(){
-			Can.route.unbind('change',check)
+			can.route.unbind('change',check)
 		}
 	}
 })

@@ -353,7 +353,7 @@ Jaml.Template.prototype = {
   };
 })();
 
-Can.view.register({
+can.view.register({
 	suffix : "jaml",
 	script: function(id, str ) {
 		return "((function(){ Jaml.register("+id+", "+str+"); return function(data){return Jaml.render("+id+", data)} })())"

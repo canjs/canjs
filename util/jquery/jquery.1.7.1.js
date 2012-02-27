@@ -1353,7 +1353,7 @@ jQuery.support = (function() {
 	all = div.getElementsByTagName( "*" );
 	a = div.getElementsByTagName( "a" )[ 0 ];
 
-	// Can't get basic test support
+	// can't get basic test support
 	if ( !all || !all.length || !a ) {
 		return {};
 	}
@@ -3158,7 +3158,7 @@ jQuery.event = {
 				!(type === "click" && jQuery.nodeName( elem, "a" )) && jQuery.acceptData( elem ) ) {
 
 				// Call a native DOM method on the target with the same name name as the event.
-				// Can't use an .isFunction() check here because IE6/7 fails that test.
+				// can't use an .isFunction() check here because IE6/7 fails that test.
 				// Don't do default actions on window, that's where global variables be (#6170)
 				// IE<9 dies on focus/blur to hidden element (#1486)
 				if ( ontype && elem[ type ] && ((type !== "focus" && type !== "blur") || event.target.offsetWidth !== 0) && !jQuery.isWindow( elem ) ) {
@@ -3707,7 +3707,7 @@ jQuery.fn.extend({
 		if ( one === 1 ) {
 			origFn = fn;
 			fn = function( event ) {
-				// Can use an empty set, since event contains the info
+				// can use an empty set, since event contains the info
 				jQuery().off( event );
 				return origFn.apply( this, arguments );
 			};
@@ -5590,7 +5590,7 @@ jQuery.extend({
 // Implement the identical functionality for filter and not
 function winnow( elements, qualifier, keep ) {
 
-	// Can't pass null or undefined to indexOf in Firefox 4
+	// can't pass null or undefined to indexOf in Firefox 4
 	// Set to 0 to skip string check
 	qualifier = qualifier || 0;
 
@@ -7298,7 +7298,7 @@ jQuery.extend({
 					return this;
 				},
 
-				// Cancel the request
+				// cancel the request
 				abort: function( statusText ) {
 					statusText = statusText || "abort";
 					if ( transport ) {

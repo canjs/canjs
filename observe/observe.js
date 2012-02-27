@@ -7,7 +7,7 @@ steal('can/construct', function() {
 		},
 		// removes all listeners
 		unhookup = function(items, namespace){
-			return Can.each(items, function(i, item){
+			return can.each(items, function(i, item){
 				if(item && item.unbind){
 					item.unbind("change" + namespace);
 				}
@@ -23,7 +23,7 @@ steal('can/construct', function() {
 				// we have an observe already
 				// make sure it is not listening to this already
 				unhookup([val], parent._namespace);
-			} else if ( Can.isArray(val) ) {
+			} else if ( can.isArray(val) ) {
 				val = new Observe.List(val);
 			} else {
 				val = new Observe(val);
@@ -35,14 +35,14 @@ steal('can/construct', function() {
 			//listen to all changes and batchTrigger upwards
 			val.bind("change" + parent._namespace, function( ev, attr ) {
 				// batchTrigger the type on this ...
-				var args = Can.makeArray(arguments),
+				var args = can.makeArray(arguments),
 					ev = args.shift();
 				if(prop === "*"){
 					args[0] = parent.indexOf(val)+"." + args[0];
 				} else {
 					args[0] = prop +  "." + args[0];
 				}
-				Can.trigger(parent, ev, args);
+				can.trigger(parent, ev, args);
 			});
 
 			return val;
@@ -70,7 +70,7 @@ steal('can/construct', function() {
 				return;
 			}
 			if (!collecting ) {
-				return Can.trigger(item, event, args);
+				return can.trigger(item, event, args);
 			} else {
 				collecting.push([
 				item,
@@ -93,7 +93,7 @@ steal('can/construct', function() {
 			collecting = null;
 			batchNum ++;
 			for ( var i = 0; i < len; i++ ) {
-				Can.trigger.apply(Can, items[i])
+				can.trigger.apply(can, items[i])
 			}
 			
 		},
@@ -115,153 +115,21 @@ steal('can/construct', function() {
 		},
 		$method = function( name ) {
 			return function( eventType, handler ) {
-				return Can[name].apply(this, arguments );
+				return can[name].apply(this, arguments );
 			}
 		},
 		bind = $method('addEvent'),
 		unbind = $method('removeEvent'),
 		attrParts = function(attr){
-			return Can.isArray(attr) ? attr : (""+attr).split(".")
+			return can.isArray(attr) ? attr : (""+attr).split(".")
 		};
-
 	/**
-	 * @class Can.Observe
-	 * @parent jquerymx.lang
-	 * @test can/observe/qunit.html
-	 * 
-	 * Observe provides the awesome observable pattern for
-	 * JavaScript Objects and Arrays. It lets you
-	 * 
-	 *   - Set and remove property or property values on objects and arrays
-	 *   - Listen for changes in objects and arrays
-	 *   - Work with nested properties
-	 * 
-	 * ## Creating an Can.Observe
-	 * 
-	 * To create an Can.Observe, or Can.Observe.List, you can simply use 
-	 * the `$.O(data)` shortcut like:
-	 * 
-	 *     var person = $.O({name: 'justin', age: 29}),
-	 *         hobbies = $.O(['programming', 'basketball', 'nose picking'])
-	 * 
-	 * Depending on the type of data passed to $.O, it will create an instance of either: 
-	 * 
-	 *   - Can.Observe, which is used for objects like: `{foo: 'bar'}`, and
-	 *   - [Can.Observe.List Can.Observe.List], which is used for arrays like `['foo','bar']`
-	 *   
-	 * Can.Observe.List and Can.Observe are very similar. In fact,
-	 * Can.Observe.List inherits Can.Observe and only adds a few extra methods for
-	 * manipulating arrays like [Can.Observe.List.prototype.push push].  Go to
-	 * [Can.Observe.List Can.Observe.List] for more information about Can.Observe.List.
-	 * 
-	 * You can also create a `new Can.Observe` simply by pass it the data you want to observe:
-	 * 
-	 *     var data = { 
-	 *       addresses : [
-	 *         {
-	 *           city: 'Chicago',
-	 *           state: 'IL'
-	 *         },
-	 *         {
-	 *           city: 'Boston',
-	 *           state : 'MA'
-	 *         }
-	 *         ],
-	 *       name : "Justin Meyer"
-	 *     },
-	 *     o = new Can.Observe(data);
-	 *     
-	 * _o_ now represents an observable copy of _data_.  
-	 * 
-	 * ## Getting and Setting Properties
-	 * 
-	 * Use [Can.Observe.prototype.attr attr] and [Can.Observe.prototype.attr attrs]
-	 * to get and set properties.
-	 * 
-	 * For example, you can read the property values of _o_ with
-	 * `observe.attr( name )` like:
-	 * 
-	 *     // read name
-	 *     o.attr('name') //-> Justin Meyer
-	 *     
-	 * And set property names of _o_ with 
-	 * `observe.attr( name, value )` like:
-	 * 
-	 *     // update name
-	 *     o.attr('name', "Brian Moschel") //-> o
-	 * 
-	 * Observe handles nested data.  Nested Objects and
-	 * Arrays are converted to Can.Observe and 
-	 * Can.Observe.Lists.  This lets you read nested properties 
-	 * and use Can.Observe methods on them.  The following 
-	 * updates the second address (Boston) to 'New York':
-	 * 
-	 *     o.attr('addresses.1').attr({
-	 *       city: 'New York',
-	 *       state: 'NY'
-	 *     })
-	 * 
-	 * `attr()` can be used to get all properties back from the observe:
-	 * 
-	 *     o.attr() // -> 
-	 *     { 
-	 *       addresses : [
-	 *         {
-	 *           city: 'Chicago',
-	 *           state: 'IL'
-	 *         },
-	 *         {
-	 *           city: 'New York',
-	 *           state : 'MA'
-	 *         }
-	 *       ],
-	 *       name : "Brian Moschel"
-	 *     }
-	 * 
-	 * ## Listening to property changes
-	 * 
-	 * When a property value is changed, it creates events
-	 * that you can listen to.  There are two ways to listen
-	 * for events:
-	 * 
-	 *   - [Can.Observe.prototype.bind bind] - listen for any type of change
-	 *   - [Can.Observe.prototype.delegate delegate] - listen to a specific type of change
-	 *     
-	 * With `bind( "change" , handler( ev, attr, how, newVal, oldVal ) )`, you can listen
-	 * to any change that happens within the 
-	 * observe. The handler gets called with the property name that was
-	 * changed, how it was changed ['add','remove','set'], the new value
-	 * and the old value.
-	 * 
-	 *     o.bind('change', function( ev, attr, how, nevVal, oldVal ) {
-	 *     
-	 *     })
-	 * 
-	 * `delegate( attr, event, handler(ev, newVal, oldVal ) )` lets you listen
-	 * to a specific event on a specific attribute. 
-	 * 
-	 *     // listen for name changes
-	 *     o.delegate("name","set", function(){
-	 *     
-	 *     })
-	 *     
-	 * Delegate lets you specify multiple attributes and values to match 
-	 * for the callback. For example,
-	 * 
-	 *     r = $.O({type: "video", id : 5})
-	 *     r.delegate("type=images id","set", function(){})
-	 *     
-	 * This is used heavily by [Can.route $.route].
-	 * 
-	 * @constructor
-	 * 
-	 * @param {Object} obj a JavaScript Object that will be 
-	 * converted to an observable
+	 * @add can.Observe
 	 */
-	var Observe = Can.Construct('Can.Observe',{
+	var Observe = can.Construct('can.Observe',{
 		// keep so it can be overwritten
 		setup : function(baseClass){
-			Can.Construct.setup.apply(this, arguments)
+			can.Construct.setup.apply(this, arguments)
 		},
 		bind : bind,
 		unbind: unbind
@@ -283,7 +151,7 @@ steal('can/construct', function() {
 		/**
 		 * Get or set an attribute on the observe.
 		 * 
-		 *     o = new Can.Observe({});
+		 *     o = new can.Observe({});
 		 *     
 		 *     // sets a user property
 		 *     o.attr('user',{name: 'hank'});
@@ -356,19 +224,19 @@ steal('can/construct', function() {
 		 *         }
 		 *       })
 		 * 
-		 * @return {Can.Observe} the original observable.
+		 * @return {can.Observe} the original observable.
 		 */
 		each: function() {
-			return Can.each.apply(null, [this.__get()].concat(Can.makeArray(arguments)))
+			return can.each.apply(null, [this.__get()].concat(can.makeArray(arguments)))
 		},
 		/**
 		 * Removes a property
 		 * 
-		 *     o =  new Can.Observe({foo: 'bar'});
+		 *     o =  new can.Observe({foo: 'bar'});
 		 *     o.removeAttr('foo'); //-> 'bar'
 		 * 
 		 * This creates a `'remove'` change event. Learn more about events
-		 * in [Can.Observe.prototype.bind bind] and [Can.Observe.prototype.delegate delegate].
+		 * in [can.Observe.prototype.bind bind] and [can.Observe.prototype.delegate delegate].
 		 * 
 		 * @param {String} attr the attribute name to remove.
 		 * @return {Object} the value that was removed.
@@ -432,7 +300,7 @@ steal('can/construct', function() {
 				this.__set(prop, value, current)
 				
 			} else {
-				throw "Can.Observe: set a property on an object that does not exist"
+				throw "can.Observe: set a property on an object that does not exist"
 			}
 		},
 		__set : function(prop, value, current){
@@ -472,7 +340,7 @@ steal('can/construct', function() {
 			}
 		},
 		/**
-		 * Listens to changes on a Can.Observe.
+		 * Listens to changes on a can.Observe.
 		 * 
 		 * When attributes of an observe change, including attributes on nested objects,
 		 * a `'change'` event is triggered on the observe.  These events come
@@ -491,7 +359,7 @@ steal('can/construct', function() {
 		 * 
 		 * Example:
 		 * 
-		 *     o = new Can.Observe({name : "Payal"});
+		 *     o = new can.Observe({name : "Payal"});
 		 *     o.bind('change', function(ev, attr, how, newVal, oldVal){
 		 *       // ev    -> {type: 'change'}
 		 *       // attr  -> "name"
@@ -504,14 +372,14 @@ steal('can/construct', function() {
 		 * 
 		 * Listening to `change` is only useful for when you want to 
 		 * know every change on an Observe.  For most applications,
-		 * [Can.Observe.prototype.delegate delegate] is 
+		 * [can.Observe.prototype.delegate delegate] is 
 		 * much more useful as it lets you listen to specific attribute
 		 * changes and sepecific types of changes.
 		 * 
 		 * 
 		 * @param {String} eventType the event name.  Currently,
 		 * only 'change' events are supported. For more fine 
-		 * grained control, use [Can.Observe.prototype.delegate].
+		 * grained control, use [can.Observe.prototype.delegate].
 		 * 
 		 * @param {Function} handler(event, attr, how, newVal, oldVal) A 
 		 * callback function where
@@ -522,11 +390,11 @@ steal('can/construct', function() {
 		 *   - newVal - the new value of the attribute
 		 *   - oldVal - the old value of the attribute
 		 * 
-		 * @return {Can.Observe} the observe for chaining.
+		 * @return {can.Observe} the observe for chaining.
 		 */
 		bind: bind,
 		/**
-		 * Unbinds a listener.  This uses [http://api.jquery.com/unbind/ Can.unbind]
+		 * Unbinds a listener.  This uses [http://api.jquery.com/unbind/ can.unbind]
 		 * and works very similar.  This means you can 
 		 * use namespaces or unbind all event handlers for a given event:
 		 * 
@@ -545,21 +413,22 @@ steal('can/construct', function() {
 		 * are supported with bind.
 		 * 
 		 * @param {Function} [handler] - The original handler function passed
-		 * to [Can.Observe.prototype.bind bind].
+		 * to [can.Observe.prototype.bind bind].
 		 * 
-		 * @return {Can.Observe} the original observe for chaining.
+		 * @return {can.Observe} the original observe for chaining.
 		 */
 		unbind: unbind,
 		/**
+		 * @hide
 		 * Get the serialized Object form of the observe.  Serialized
 		 * data is typically used to send back to a server.
 		 * 
 		 *     o.serialize() //-> { name: 'Justin' }
 		 *     
 		 * Serialize currently returns the same data 
-		 * as [Can.Observe.prototype.attrs].  However, in future
+		 * as [can.Observe.prototype.attrs].  However, in future
 		 * versions, serialize will be able to return serialized
-		 * data similar to [Can.Model].  The following will work:
+		 * data similar to [can.Model].  The following will work:
 		 * 
 		 *     new Observe({time: new Date()})
 		 *       .serialize() //-> { time: 1319666613663 }
@@ -572,6 +441,7 @@ steal('can/construct', function() {
 			return serialize(this, 'serialize', {});
 		},
 		/**
+		 * @hide
 		 * Set multiple properties on the observable
 		 * @param {Object} props
 		 * @param {Boolean} remove true if you should remove properties that are not in props
@@ -581,7 +451,7 @@ steal('can/construct', function() {
 				return serialize(this, 'attr', {})
 			}
 
-			props = Can.extend(true, {}, props);
+			props = can.extend(true, {}, props);
 			var prop, 
 				collectingStarted = collect(),
 				self = this;
@@ -616,9 +486,9 @@ steal('can/construct', function() {
 	});
 	// Helpers for list
 	/**
-	 * @class Can.Observe.List
-	 * @inherits Can.Observe
-	 * @parent Can.Observe
+	 * @class can.Observe.List
+	 * @inherits can.Observe
+	 * @parent index
 	 * 
 	 * An observable list.  You can listen to when items are push, popped,
 	 * spliced, shifted, and unshifted on this array.
@@ -626,7 +496,7 @@ steal('can/construct', function() {
 	 * 
 	 */
 	var splice = [].splice,
-		list = Observe('Can.Observe.List',
+		list = Observe('can.Observe.List',
 	/**
 	 * @prototype
 	 */
@@ -635,9 +505,9 @@ steal('can/construct', function() {
 			this.length = 0;
 			this._namespace = ".list" + (++observeId);
 			this._init = 1;
-			this.bind('change',Can.proxy(this._changes,this));
-			this.push.apply(this, Can.makeArray(instances || []));
-			Can.extend(this, options);
+			this.bind('change',can.proxy(this._changes,this));
+			this.push.apply(this, can.makeArray(instances || []));
+			can.extend(this, options);
 			//if(this.comparator){
 			//	this.sort()
 			//}
@@ -741,7 +611,7 @@ steal('can/construct', function() {
 		 *         }
 		 *       })
 		 * 
-		 * @return {Can.Observe.List} the original observable.
+		 * @return {can.Observe.List} the original observable.
 		 */
 		// placeholder for each
 		/**
@@ -752,7 +622,7 @@ steal('can/construct', function() {
 		 * The following creates a list of numbers and replaces 2 and 3 with
 		 * "a", and "b".
 		 * 
-		 *     var l = new Can.Observe.List([0,1,2,3]);
+		 *     var l = new can.Observe.List([0,1,2,3]);
 		 *     
 		 *     l.bind('change', function( ev, attr, how, newVals, oldVals, where ) { ... })
 		 *     
@@ -781,7 +651,7 @@ steal('can/construct', function() {
 		 * @param {Object} [added] an object to add to 
 		 */
 		splice: function( index, count ) {
-			var args = Can.makeArray(arguments),
+			var args = can.makeArray(arguments),
 				i;
 
 			for ( i = 2; i < args.length; i++ ) {
@@ -849,20 +719,20 @@ steal('can/construct', function() {
 		// create push, pop, shift, and unshift
 		// converts to an array of arguments 
 		getArgs = function( args ) {
-			if ( args[0] && (Can.isArray(args[0])) ) {
+			if ( args[0] && (can.isArray(args[0])) ) {
 				return args[0]
 			}
 			else {
-				return Can.makeArray(args)
+				return can.makeArray(args)
 			}
 		};
 	// describes the method and where items should be added
-	Can.each({
+	can.each({
 		/**
 		 * @function push
 		 * Add items to the end of the list.
 		 * 
-		 *     var l = new Can.Observe.List([]);
+		 *     var l = new can.Observe.List([]);
 		 *     
 		 *     l.bind('change', function( 
 		 *         ev,        // the change event
@@ -883,7 +753,7 @@ steal('can/construct', function() {
 		/**
 		 * @function unshift
 		 * Add items to the start of the list.  This is very similar to
-		 * [Can.Observe.prototype.push].
+		 * [can.Observe.prototype.push].
 		 */
 		unshift: 0
 	},
@@ -937,13 +807,13 @@ steal('can/construct', function() {
 		}
 	});
 
-	Can.each({
+	can.each({
 		/**
 		 * @function pop
 		 * 
 		 * Removes an item from the end of the list.
 		 * 
-		 *     var l = new Can.Observe.List([0,1,2]);
+		 *     var l = new can.Observe.List([0,1,2]);
 		 *     
 		 *     l.bind('change', function( 
 		 *         ev,        // the change event
@@ -964,7 +834,7 @@ steal('can/construct', function() {
 		/**
 		 * @function shift
 		 * Removes an item from the start of the list.  This is very similar to
-		 * [Can.Observe.prototype.pop].
+		 * [can.Observe.prototype.pop].
 		 * 
 		 * @return {Object} the element at the start of the list
 		 */
@@ -1006,6 +876,6 @@ steal('can/construct', function() {
 	 * @return {Number}
 	 */
 	indexOf = [].indexOf || function(item){
-		return Can.inArray(item, this)
+		return can.inArray(item, this)
 	};
 });

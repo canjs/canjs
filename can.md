@@ -1,0 +1,3 @@
+@page index CanJS
+
+Awesome

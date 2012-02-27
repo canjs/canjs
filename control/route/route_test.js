@@ -4,7 +4,7 @@ module("route");
 
 test("routes changed", function(){
 	//setup controller
-	Can.Control("Router",{
+	can.Control("Router",{
 		"foo/:bar route" : function(){
 			ok('route updated to foo/:bar')
 		},
@@ -14,14 +14,14 @@ test("routes changed", function(){
 	})
 
 	//append some anchors
-	Can.append( Can.$("#qunit-test-area"), '<a id="foo" href="#!foo/bar">foo/bar</a><a id="empty" href="#!">empty</a>')
+	can.append( can.$("#qunit-test-area"), '<a id="foo" href="#!foo/bar">foo/bar</a><a id="empty" href="#!">empty</a>')
 	
 	//init controller
 	new Router(window);
 	
 	//trigger change events
-	Can.trigger( Can.$('#foo'), 'click');
-	Can.trigger( Can.$('#empty'), 'click');
+	can.trigger( can.$('#foo'), 'click');
+	can.trigger( can.$('#empty'), 'click');
 });
 
 

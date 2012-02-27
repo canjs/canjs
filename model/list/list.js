@@ -33,7 +33,7 @@ steal('jquery/model').then(function( $ ) {
 		 *  - make Ajax requests on multiple instances
 		 *  - add helper function for multiple instances (ACLs)
 		 * 
-		 * The [todo] app demonstrates using a Can.Control to 
+		 * The [todo] app demonstrates using a can.Control to 
 		 * implement an interface for a $.Model.List.
 		 * 
 		 * ## Creating A List Class
@@ -372,7 +372,7 @@ steal('jquery/model').then(function( $ ) {
 			}
 		};
 
-	Can.Construct("jQuery.Model.List", {
+	can.Construct("jQuery.Model.List", {
 		setup: function() {
 			for ( var name in ajaxMethods ) {
 				if ( typeof this[name] !== 'function' ) {

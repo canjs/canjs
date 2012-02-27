@@ -13,12 +13,12 @@ steal(function(){
 		// parameter, as specified in jQuery api
 		func && func.call(this, this);
 	};
-	Can.Deferred = Deferred;
-	Can.when = Deferred.when = function() {
-		var args = Can.makeArray( arguments );
+	can.Deferred = Deferred;
+	can.when = Deferred.when = function() {
+		var args = can.makeArray( arguments );
 		if (args.length < 2) {
 			var obj = args[0];
-			if (obj && ( Can.isFunction( obj.isResolved ) && Can.isFunction( obj.isRejected ))) {
+			if (obj && ( can.isFunction( obj.isResolved ) && can.isFunction( obj.isRejected ))) {
 				return obj;			
 			} else {
 				return Deferred().resolve(obj);
@@ -32,7 +32,7 @@ steal(function(){
 				// needs to be resolved
 				rp = [];
 
-			Can.each(args, function(j, arg){
+			can.each(args, function(j, arg){
 				arg.done(function() {
 					rp[j] = (arguments.length < 2) ? arguments[0] : arguments;
 					if (++done == args.length) {
@@ -57,7 +57,7 @@ steal(function(){
 	doneFunc = function(type, _status){
 		return function(){
 			var self = this;
-			Can.each(arguments, function( i, v, args ) {
+			can.each(arguments, function( i, v, args ) {
 				if ( ! v )
 					return;
 				if ( v.constructor === Array ) {
@@ -74,9 +74,9 @@ steal(function(){
 		}
 	};
 
-	Can.extend( Deferred.prototype, {
+	can.extend( Deferred.prototype, {
 		pipe : function(done, fail){
-			var d = Can.Deferred();
+			var d = can.Deferred();
 			this.done(function(){
 				d.resolve( done.apply(this, arguments) );
 			});
@@ -95,7 +95,7 @@ steal(function(){
 		done : doneFunc("_doneFuncs","rs"),
 		fail : doneFunc("_failFuncs","rj"),
 		always : function() {
-			var args = Can.makeArray(arguments);
+			var args = can.makeArray(arguments);
 			if (args.length && args[0])
 				this.done(args[0]).fail(args[0]);
 
@@ -103,7 +103,7 @@ steal(function(){
 		},
 
 		then : function() {
-			var args = Can.makeArray( arguments );
+			var args = can.makeArray( arguments );
 			// fail function(s)
 			if (args.length > 1 && args[1])
 				this.fail(args[1]);
@@ -137,7 +137,7 @@ steal(function(){
 
 			this._status = st;
 
-			Can.each(dst, function(i, d){
+			can.each(dst, function(i, d){
 				d.apply(context, args);
 			});
 

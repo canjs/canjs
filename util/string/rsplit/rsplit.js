@@ -2,7 +2,7 @@ steal('can/util/string',function( $ ) {
 	/**
 	 * @add jQuery.String
 	 */
-	Can.String.
+	can.String.
 	/**
 	 * Splits a string with a regex correctly cross browser
 	 * 

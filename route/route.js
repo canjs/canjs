@@ -14,7 +14,7 @@ function( $ ) {
 		makeProps = function( props ) {
 			var html = [];
 			each(props, function(name, val){
-				val && html.push(name === 'className' ? 'class'  : name, '="', Can.String.esc(val), '"');
+				val && html.push(name === 'className' ? 'class'  : name, '="', can.String.esc(val), '"');
 			})
 			return html.join(" ")
 		},
@@ -35,20 +35,19 @@ function( $ ) {
         // 
 		onready = true,
 		location = window.location,
-		each = Can.each,
-		extend = Can.extend;
+		each = can.each,
+		extend = can.extend;
 
 	/**
-	 * @class jQuery.route
-	 * @inherits Can.Control
+	 * @class can.route
+	 * @inherits can.Observe
 	 * @plugin jquery/dom/route
-	 * @parent dom
-	 * @tag 3.2
+	 * @parent index
 	 * 
 	 * jQuery.route helps manage browser history (and
 	 * client state) by
 	 * synchronizing the window.location.hash with
-	 * an [Can.Control].
+	 * an [can.Control].
 	 * 
 	 * ## Background Information
 	 * 
@@ -71,37 +70,37 @@ function( $ ) {
 	 * 
 	 * ## How it works
 	 * 
-	 * <code>Can.route</code> is a [Can.Control Can.Observe] that represents the
+	 * <code>can.route</code> is a [can.Control can.Observe] that represents the
 	 * <code>window.location.hash</code> as an 
 	 * object.  For example, if the hash looks like:
 	 * 
 	 *     #!type=videos&id=5
 	 *     
-	 * the data in <code>Can.route</code> would look like:
+	 * the data in <code>can.route</code> would look like:
 	 * 
 	 *     { type: 'videos', id: 5 }
 	 * 
 	 * 
-	 * Can.route keeps the state of the hash in-sync with the data in
-	 * Can.route.
+	 * can.route keeps the state of the hash in-sync with the data in
+	 * can.route.
 	 * 
-	 * ## Can.Observe
+	 * ## can.Observe
 	 * 
-	 * Can.route is a [Can.Control Can.Observe]. Understanding
-	 * Can.Observe is essential for using Can.route correctly.
+	 * can.route is a [can.Control can.Observe]. Understanding
+	 * can.Observe is essential for using can.route correctly.
 	 * 
 	 * You can
 	 * listen to changes in an Observe with bind and
-	 * delegate and change Can.route's properties with 
+	 * delegate and change can.route's properties with 
 	 * attr and attrs.
 	 * 
 	 * ### Listening to changes in an Observable
 	 * 
 	 * Listen to changes in history 
-	 * by [Can.Control.prototype.bind bind]ing to
-	 * changes in <code>Can.route</code> like:
+	 * by [can.Control.prototype.bind bind]ing to
+	 * changes in <code>can.route</code> like:
 	 * 
-	 *     Can.route.bind('change', function(ev, attr, how, newVal, oldVal) {
+	 *     can.route.bind('change', function(ev, attr, how, newVal, oldVal) {
 	 *     
 	 *     })
 	 * 
@@ -110,9 +109,9 @@ function( $ ) {
      *  - newVal/oldVal - the new and old values of the attribute
      * 
 	 * You can also listen to specific changes 
-	 * with [Can.Control.prototype.delegate delegate]:
+	 * with [can.Control.prototype.delegate delegate]:
 	 * 
-	 *     Can.route.delegate('id','change', function(){ ... })
+	 *     can.route.delegate('id','change', function(){ ... })
 	 * 
 	 * Observe lets you listen to the following events:
 	 * 
@@ -128,77 +127,77 @@ function( $ ) {
 	 * 
 	 * Create changes in the route data like:
 	 * 
-	 *     Can.route.attr('type','images');
+	 *     can.route.attr('type','images');
 	 * 
 	 * Or change multiple properties at once with
-	 * [Can.Control.prototype.attrs attrs]:
+	 * [can.Control.prototype.attrs attrs]:
 	 * 
-	 *     Can.route.attr({type: 'pages', id: 5}, true)
+	 *     can.route.attr({type: 'pages', id: 5}, true)
 	 * 
-	 * When you make changes to Can.route, they will automatically
+	 * When you make changes to can.route, they will automatically
 	 * change the <code>hash</code>.
 	 * 
 	 * ## Creating a Route
 	 * 
-	 * Use <code>Can.route(url, defaults)</code> to create a 
+	 * Use <code>can.route(url, defaults)</code> to create a 
 	 * route. A route is a mapping from a url to 
-	 * an object (that is the Can.route's state).
+	 * an object (that is the can.route's state).
 	 * 
 	 * If no routes are added, or no route is matched, 
-	 * Can.route's data is updated with the [jQuery.String.deparam deparamed]
+	 * can.route's data is updated with the [jQuery.String.deparam deparamed]
 	 * hash.
 	 * 
 	 *     location.hash = "#!type=videos";
-	 *     // Can.route -> {type : "videos"}
+	 *     // can.route -> {type : "videos"}
 	 *     
 	 * Once routes are added and the hash changes,
-	 * Can.route looks for matching routes and uses them
-	 * to update Can.route's data.
+	 * can.route looks for matching routes and uses them
+	 * to update can.route's data.
 	 * 
-	 *     Can.route( "content/:type" );
+	 *     can.route( "content/:type" );
 	 *     location.hash = "#!content/images";
-	 *     // Can.route -> {type : "images"}
+	 *     // can.route -> {type : "images"}
 	 *     
 	 * Default values can also be added:
 	 * 
-	 *     Can.route("content/:type",{type: "videos" });
+	 *     can.route("content/:type",{type: "videos" });
 	 *     location.hash = "#!content/"
-	 *     // Can.route -> {type : "videos"}
+	 *     // can.route -> {type : "videos"}
 	 *     
-	 * ## Delay setting Can.route
+	 * ## Delay setting can.route
 	 * 
-	 * By default, <code>Can.route</code> sets its initial data
+	 * By default, <code>can.route</code> sets its initial data
 	 * on document ready.  Sometimes, you want to wait to set 
 	 * this data.  To wait, call:
 	 * 
-	 *     Can.route.ready(false);
+	 *     can.route.ready(false);
 	 * 
 	 * and when ready, call:
 	 * 
-	 *     Can.route.ready(true);
+	 *     can.route.ready(true);
 	 * 
 	 * ## Changing the route.
 	 * 
 	 * Typically, you never want to set <code>location.hash</code>
-	 * directly.  Instead, you can change properties on <code>Can.route</code>
+	 * directly.  Instead, you can change properties on <code>can.route</code>
 	 * like:
 	 * 
-	 *     Can.route.attr('type', 'videos')
+	 *     can.route.attr('type', 'videos')
 	 *     
 	 * This will automatically look up the appropriate 
 	 * route and update the hash.
 	 * 
-	 * Often, you want to create links.  <code>Can.route</code> provides
+	 * Often, you want to create links.  <code>can.route</code> provides
 	 * the [jQuery.route.link] and [jQuery.route.url] helpers to make this 
 	 * easy:
 	 * 
-	 *     Can.route.link("Videos", {type: 'videos'})
+	 *     can.route.link("Videos", {type: 'videos'})
 	 * 
 	 * @param {String} url the fragment identifier to match.  
 	 * @param {Object} [defaults] an object of default values
 	 * @return {jQuery.route}
 	 */
-	Can.route = function( url, defaults ) {
+	can.route = function( url, defaults ) {
         // Extract the variable names and replace with regEx that will match an atual URL with values.
 		var names = [],
 			test = url.replace(matcher, function( whole, name ) {
@@ -208,7 +207,7 @@ function( $ ) {
 			});
 
 		// Add route in a form that can be easily figured out
-		Can.route.routes[url] = {
+		can.route.routes[url] = {
             // A regular expression that will match the route when variable values 
             // are present; i.e. for :page/:type the regEx is /([\w\.]*)/([\w\.]*)/ which
             // will match for any value of :page and :type (word chars or period).
@@ -222,10 +221,10 @@ function( $ ) {
             // The number of parts in the URL separated by '/'.
 			length: url.split('/').length
 		}
-		return Can.route;
+		return can.route;
 	};
 
-	extend(Can.route, {
+	extend(can.route, {
 		/**
 		 * Parameterizes the raw JS object representation provided in data.
 		 * If a route matching the provided data is found that URL is built
@@ -246,12 +245,12 @@ function( $ ) {
 				routeName = data.route;
 			
 			delete data.route;
-			// if we have a route name in our Can.route data, use it
-			if(routeName && (route = Can.route.routes[routeName])){
+			// if we have a route name in our can.route data, use it
+			if(routeName && (route = can.route.routes[routeName])){
 				
 			} else {
 				// otherwise find route
-				each(Can.route.routes, function(name, temp){
+				each(can.route.routes, function(name, temp){
 					matchCount = matchesData(temp, data);
 					if ( matchCount > matches ) {
 						route = temp;
@@ -280,11 +279,11 @@ function( $ ) {
 					
 					// The remaining elements of data are added as 
 					// $amp; separated parameters to the url.
-				    after = Can.param(cpy);
+				    after = can.param(cpy);
 				return res + (after ? "&" + after : "")
 			}
             // If no route was found there is no hash URL, only paramters.
-			return Can.isEmptyObject(data) ? "" : "&" + Can.param(data);
+			return can.isEmptyObject(data) ? "" : "&" + can.param(data);
 		},
 		/**
 		 * Populate the JS data object from a given URL.
@@ -297,7 +296,7 @@ function( $ ) {
 			var route = {
 				length: -1
 			};
-			each(Can.route.routes, function(name, temp){
+			each(can.route.routes, function(name, temp){
 				if ( temp.test.test(url) && temp.length > route.length ) {
 					route = temp;
 				}
@@ -312,7 +311,7 @@ function( $ ) {
                     // The remainder will be the &amp;key=value list at the end of the URL.
 					remainder = url.substr(start.length - (parts[parts.length-1] === "&" ? 1 : 0) ),
                     // If there is a remainder and it contains a &amp;key=value list deparam it.
-                    obj = (remainder && paramsMatcher.test(remainder)) ? Can.String.deparam( remainder.slice(1) ) : {};
+                    obj = (remainder && paramsMatcher.test(remainder)) ? can.String.deparam( remainder.slice(1) ) : {};
 
                 // Add the default values for this route
 				obj = extend(true, {}, route.defaults, obj);
@@ -329,13 +328,13 @@ function( $ ) {
 			if ( url.charAt(0) !== '&' ) {
 				url = '&' + url;
 			}
-			return paramsMatcher.test(url) ? Can.String.deparam( url.slice(1) ) : {};
+			return paramsMatcher.test(url) ? can.String.deparam( url.slice(1) ) : {};
 		},
 		/**
 		 * @hide
-		 * A Can.Observe that represents the state of the history.
+		 * A can.Observe that represents the state of the history.
 		 */
-		data: new Can.Observe({}),
+		data: new can.Observe({}),
         /**
          * @attribute
          * @type Object
@@ -358,17 +357,17 @@ function( $ ) {
          */
 		routes: {},
 		/**
-		 * Indicates that all routes have been added and sets Can.route.data
+		 * Indicates that all routes have been added and sets can.route.data
 		 * based upon the routes and the current hash.
 		 * 
 		 * By default, ready is fired on jQuery's ready event.  Sometimes
 		 * you might want it to happen sooner or earlier.  To do this call
 		 * 
-		 *     Can.route.ready(false); //prevents firing by the ready event
-		 *     Can.route.ready(true); // fire the first route change
+		 *     can.route.ready(false); //prevents firing by the ready event
+		 *     can.route.ready(true); // fire the first route change
 		 * 
 		 * @param {Boolean} [start]
-		 * @return Can.route
+		 * @return can.route
 		 */
 		ready: function(val) {
 			if( val === false ) {
@@ -377,7 +376,7 @@ function( $ ) {
 			if( val === true || onready === true ) {
 				setState();
 			}
-			return Can.route;
+			return can.route;
 		},
 		/**
 		 * Returns a url from the options
@@ -387,9 +386,9 @@ function( $ ) {
 		 */
 		url: function( options, merge ) {
 			if (merge) {
-				return "#!" + Can.route.param(extend({}, curParams, options))
+				return "#!" + can.route.param(extend({}, curParams, options))
 			} else {
-				return "#!" + Can.route.param(options)
+				return "#!" + can.route.param(options)
 			}
 		},
 		/**
@@ -402,7 +401,7 @@ function( $ ) {
 		link: function( name, options, props, merge ) {
 			return "<a " + makeProps(
 			extend({
-				href: Can.route.url(options, merge)
+				href: can.route.url(options, merge)
 			}, props)) + ">" + name + "</a>";
 		},
 		/**
@@ -411,16 +410,16 @@ function( $ ) {
          * @return {Boolean}
 		 */
 		current: function( options ) {
-			return location.hash == "#!" + Can.route.param(options)
+			return location.hash == "#!" + can.route.param(options)
 		}
 	});
 	
 	
-    // The functions in the following list applied to Can.route (e.g. Can.route.attr('...')) will
-    // instead act on the Can.route.data Observe.
+    // The functions in the following list applied to can.route (e.g. can.route.attr('...')) will
+    // instead act on the can.route.data Observe.
 	each(['bind','unbind','delegate','undelegate','attr','removeAttr'], function(i, name){
-		Can.route[name] = function(){
-			return Can.route.data[name].apply(Can.route.data, arguments)
+		can.route[name] = function(){
+			return can.route.data[name].apply(can.route.data, arguments)
 		}
 	})
 
@@ -437,27 +436,27 @@ function( $ ) {
 				}, 1);
             }
         },
-        // Intermediate storage for Can.route.data.
+        // Intermediate storage for can.route.data.
         curParams,
         // Deparameterizes the portion of the hash of interest and assign the
-        // values to the Can.route.data removing existing values no longer in the hash.
+        // values to the can.route.data removing existing values no longer in the hash.
         setState = function() {
 			var hash = location.hash.substr(1, 1) === '!' ? 
 				location.hash.slice(2) : 
 				location.hash.slice(1); // everything after #!
-			curParams = Can.route.deparam( hash );
-			Can.route.attr(curParams, true);
+			curParams = can.route.deparam( hash );
+			can.route.attr(curParams, true);
 		};
 
-	// If the hash changes, update the Can.route.data
-	Can.bind.call(window,'hashchange', setState);
+	// If the hash changes, update the can.route.data
+	can.bind.call(window,'hashchange', setState);
 
-	// If the Can.route.data changes, update the hash.
+	// If the can.route.data changes, update the hash.
     // Using .serialize() retrieves the raw data contained in the observable.
     // This function is throttled so it only updates once even if multiple values changed.
-	Can.route.bind("change", throttle(function() {
-		location.hash = "#!" + Can.route.param(Can.route.data.serialize())
+	can.route.bind("change", throttle(function() {
+		location.hash = "#!" + can.route.param(can.route.data.serialize())
 	}));
 	// onready event ...
-	Can.bind.call(document,"ready",Can.route.ready);
+	can.bind.call(document,"ready",can.route.ready);
 })

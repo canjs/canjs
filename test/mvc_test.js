@@ -4,7 +4,7 @@ module("mvc");
 
 test("Class basics", function(){
 	
-	var Note = Can.Construct({
+	var Note = can.Construct({
 		init : function(name){
 			this.name = name;
 		},
@@ -36,7 +36,7 @@ test("Model basics",function(){
 		}]]
 	})*/
 	
-	var Task = Can.Model({
+	var Task = can.Model({
 		findAll : steal.root.join("can/test/foo.json")+''
 	},{
 		print : function(){
@@ -65,7 +65,7 @@ test("Model basics",function(){
 })
 
 test("Control Basics",3,function(){
-	var Task = Can.Model({
+	var Task = can.Model({
 		findAll : "/mvc/foo"
 	},{
 		print : function(){
@@ -73,7 +73,7 @@ test("Control Basics",3,function(){
 		}
 	});
 	
-	var Tasks = Can.Control({
+	var Tasks = can.Control({
 		"{Task} created" : function(Task, ev, task){
 			ok(task, "created called")
 		},
@@ -86,16 +86,16 @@ test("Control Basics",3,function(){
 	var tasks = new Tasks( '#qunit-test-area' , {
 		Task : Task
 	})
-	Can.trigger(Can.$('#qunit-test-area'),"click")
+	can.trigger(can.$('#qunit-test-area'),"click")
 	
 	new Task({id: 1}).created();
 	
-	equals(Can.$('#qunit-test-area')[0].className, "")
+	equals(can.$('#qunit-test-area')[0].className, "")
 	
 	tasks.destroy();
 	
 	// make sure we can't click
-	Can.trigger(Can.$('#qunit-test-area'),"click")
+	can.trigger(can.$('#qunit-test-area'),"click")
 	
 })
 

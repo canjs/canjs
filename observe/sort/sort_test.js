@@ -1,6 +1,6 @@
 test("list events", function(){
 	
-	var list = new Can.Observe.List([
+	var list = new can.Observe.List([
 		{name: 'Justin'},
 		{name: 'Brian'},
 		{name: 'Austin'},
