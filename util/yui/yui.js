@@ -70,21 +70,23 @@ steal({ src : "http://yui.yahooapis.com/combo?3.4.1/build/yui-base/yui-base-min.
 	Can.$ = function(selector){
 		return selector === window ? window : Y.all(selector);
 	}
-
-	Can.bind = function() {};
-	Can.unbind = function() {};
-	Can.trigger = function() {};
-	Can.delegate = function() {};
-	Can.undelegate = function() {};
 	
 	Can.buildFragment = function(frags, nodes){
 		var owner = nodes.length && nodes[0].ownerDocument,
-			frag = Y.Node.create(frags[0], owner);
+			frag = Y.Node.create(frags[0], owner).getDOMNode();
+		if(frag.nodeType !== 11){
+			var tmp = document.createDocumentFragment();
+			tmp.appendChild(frag)
+			frag = tmp;
+		}
 		return {fragment: frag}
 	}
 	
 	Can.append = function(wrapped, html){
 		wrapped.each(function(node){
+			if(typeof html === 'string'){
+				html = Can.buildFragment([html],[]).fragment
+			}
 			node.append(html)
 		});
 	}
@@ -136,7 +138,6 @@ steal({ src : "http://yui.yahooapis.com/combo?3.4.1/build/yui-base/yui-base-min.
 	Can.ajax = function(options){
 		var d = Can.Deferred(),
 			requestOptions = Can.extend({}, options);
-			// map jQuery options to mootools options
 		
 		for(var option in optionsMap){
 			if(requestOptions[option] !== undefined){
@@ -166,72 +167,117 @@ steal({ src : "http://yui.yahooapis.com/combo?3.4.1/build/yui-base/yui-base-min.
 		};
 		
 		var request = new Y.io(requestOptions.url, requestOptions);
+		console.log(request);
 		updateDeferred(request.io, d);
 		return d;
 			
 	}
 	
 	// Events
-	// Can.bind = function( ev, cb){
-	// 	// if we can bind to it ...
-	// 	if(this.bind && this.bind !== Can.bind){
-	// 		this.bind(ev, cb)
-	// 	} else if(this.addEvent) {
-	// 		this.addEvent(ev, cb)
-	// 	} else {
-	// 		// make it bind-able ...
-	// 		Can.addEvent.call(this, ev, cb)
-	// 	}
-	// 	return this;
-	// }
-	// Can.unbind = function(ev, cb){
-	// 	// if we can bind to it ...
-	// 	if(this.unbind && this.unbind !== Can.unbind){
-	// 		this.unbind(ev, cb)
-	// 	} else {
-	// 		// make it bind-able ...
-	// 		Can.removeEvent.call(this, ev, cb)
-	// 	}
-	// 	return this;
-	// }
-	// Can.trigger = function(item, event, args, bubble){
-	// 	if(item.trigger){
-	// 		if(bubble === false){
-	// 			//  force stop propagation by
-	// 			// listening to On and then immediately disconnecting
-	// 			var connect = item.on(event, function(ev){
-	// 				ev.stopPropagation();
-	// 				dojo.disconnect(connect);
-	// 			})
-	// 			item.trigger(event,args)
-	// 		} else {
-	// 			item.trigger(event,args)
-	// 		}
-	// 		
-	// 	} else {
-	// 		if(typeof event === 'string'){
-	// 			event = {type: event}
-	// 		}
-	// 		event.data = args
-	// 		Can.dispatch.call(item, event)
-	// 	}
-	// }
-	// Can.delegate = function(selector, ev , cb){
-	// 	if(this.on || this.nodeType){
-	// 		addBinding( new dojo.NodeList(this), selector+":"+ev, cb)
-	// 	} else if(this.delegate) {
-	// 		this.delegate(selector, ev , cb)
-	// 	} 
-	// 	return this;
-	// }
-	// Can.undelegate = function(selector, ev , cb){
-	// 	if(this.on || this.nodeType){
-	// 		removeBinding(new dojo.NodeList(this), selector+":"+ev, cb);
-	// 	} else if(this.undelegate) {
-	// 		this.undelegate(selector, ev , cb)
-	// 	}
-	// 	return this;
-	// }
+	
+	// the id of the function to be bound, used as an expando on the function
+	// so we can lookup it's "remove" object
+	var id = 0,
+		// takes a node list, goes through each node
+		// and adds events data that has a map of events to 
+		// callbackId to "remove" object.  It looks like
+		// {click: {5: {remove: fn}}}		
+		addBinding = function(nodelist, ev, cb){
+			nodelist.forEach(function(node){
+				var node = new dojo.NodeList(node)
+				var events = Can.data(node,"events");
+				if(!events){
+					Can.data(node,"events", events = {})
+				}
+				if(!events[ev]){
+					events[ev] = {};
+				}
+				if(cb.__bindingsIds === undefined) {
+					cb.__bindingsIds=id++;
+				} 
+				events[ev][cb.__bindingsIds] = node.on(ev, cb)[0]
+			});
+		},
+		// removes a binding on a nodelist by finding
+		// the remove object within the object's data
+		removeBinding = function(nodelist,ev,cb){
+			nodelist.forEach(function(node){
+				var node = new dojo.NodeList(node),
+					events = Can.data(node,"events"),
+					handlers = events[ev],
+					handler = handlers[cb.__bindingsIds];
+				
+				dojo.disconnect(handler);
+				delete handlers[cb.__bindingsIds];
+				
+				if(Can.isEmptyObject(handlers)){
+					delete events[ev]
+				}
+				if(Can.isEmptyObject(events)){
+					// clear data
+				}
+			});
+		}
+	Can.bind = function( ev, cb){
+		// if we can bind to it ...
+		if(this.bind && this.bind !== Can.bind){
+			this.bind(ev, cb)
+		} else if(this.addEvent) {
+			this.addEvent(ev, cb)
+		} else {
+			// make it bind-able ...
+			Can.addEvent.call(this, ev, cb)
+		}
+		return this;
+	}
+	Can.unbind = function(ev, cb){
+		// if we can bind to it ...
+		if(this.unbind && this.unbind !== Can.unbind){
+			this.unbind(ev, cb)
+		} else {
+			// make it bind-able ...
+			Can.removeEvent.call(this, ev, cb)
+		}
+		return this;
+	}
+	Can.trigger = function(item, event, args, bubble){
+		if(item.trigger){
+			if(bubble === false){
+				//  force stop propagation by
+				// listening to On and then immediately disconnecting
+				var connect = item.on(event, function(ev){
+					ev.stopPropagation();
+					dojo.disconnect(connect);
+				})
+				item.trigger(event,args)
+			} else {
+				item.trigger(event,args)
+			}
+			
+		} else {
+			if(typeof event === 'string'){
+				event = {type: event}
+			}
+			event.data = args
+			Can.dispatch.call(item, event)
+		}
+	}
+	Can.delegate = function(selector, ev , cb){
+		if(this.on || this.nodeType){
+			addBinding( new dojo.NodeList(this), selector+":"+ev, cb)
+		} else if(this.delegate) {
+			this.delegate(selector, ev , cb)
+		} 
+		return this;
+	}
+	Can.undelegate = function(selector, ev , cb){
+		if(this.on || this.nodeType){
+			removeBinding(new dojo.NodeList(this), selector+":"+ev, cb);
+		} else if(this.undelegate) {
+			this.undelegate(selector, ev , cb)
+		}
+		return this;
+	}
 
 
 }).then("../deferred.js")
