@@ -1,5 +1,5 @@
 // 674
-//Can.Construct 
+//can.Construct 
 // This is a modified version of John Resig's class
 // http://ejohn.org/blog/simple-javascript-inheritance/
 // It provides class level inheritance and callbacks.
@@ -10,18 +10,18 @@ steal("can/util/string",function( $ ) {
 	var initializing = false;
 
 	/** 
-	 * @add Can.Construct 
+	 * @add can.Construct 
 	 */
-	Can.Construct = function() {
+	can.Construct = function() {
 		if (arguments.length) {
-			return Can.Construct.extend.apply(Can.Construct, arguments);
+			return can.Construct.extend.apply(can.Construct, arguments);
 		}
 	};
 
 	/**
 	 * @static
 	 */
-	Can.extend(Can.Construct, {
+	can.extend(can.Construct, {
 		/**
 		 * @function newInstance
 		 * Creates a new instance of the constructor function.  This method is useful for creating new instances
@@ -32,7 +32,7 @@ steal("can/util/string",function( $ ) {
 		 * The following creates a `Person` constructor method, then creates a new instance of person, but
 		 * by using `apply` on newInstance to pass arbitrary parameters.
 		 * 
-		 *     var Person = Can.Construct({
+		 *     var Person = can.Construct({
 		 *       init : function(first, middle, last) {
 		 *         this.first = first;
 		 *         this.middle = middle;
@@ -43,8 +43,8 @@ steal("can/util/string",function( $ ) {
 		 *     var args = ["Justin","Barry","Meyer"],
 		 *         justin = new Person.newInstance.apply(null, args);
 		 * 
-		 * @param {Object} [args] arguments that get passed to [Can.Construct::setup] and [Can.Construct::init]. Note
-		 * that if [Can.Construct::setup] returns an array, those arguments will be passed to [Can.Construct::init]
+		 * @param {Object} [args] arguments that get passed to [can.Construct::setup] and [can.Construct::init]. Note
+		 * that if [can.Construct::setup] returns an array, those arguments will be passed to [can.Construct::init]
 		 * instead.
 		 * @return {class} instance of the class
 		 */
@@ -59,7 +59,7 @@ steal("can/util/string",function( $ ) {
 			}
 			// call init if there is an init, if setup returned args, use those as the arguments
 			if ( inst.init ) {
-				inst.init.apply(inst, Can.isArray(args) ? args : arguments);
+				inst.init.apply(inst, can.isArray(args) ? args : arguments);
 			}
 			return inst;
 		},
@@ -68,7 +68,7 @@ steal("can/util/string",function( $ ) {
 		//   oldProps - where the old properties might be
 		//   addTo - what we are adding to
 		_inherit: function( newProps, oldProps, addTo ) {
-			Can.extend(addTo || newProps, newProps || {})
+			can.extend(addTo || newProps, newProps || {})
 		},
 		/**
 		 * Setup is called immediately after a constructor function is created and 
@@ -83,15 +83,15 @@ steal("can/util/string",function( $ ) {
 		 * class.
 		 * 
 		 * 
-		 *     Base = Can.Construct({
+		 *     Base = can.Construct({
 		 *       setup : function(base, fullName, staticProps, protoProps){
 		 * 	       this.base = base;
 		 *         // call base functionality
-		 *         Can.Construct.setup.apply(this, arguments)
+		 *         can.Construct.setup.apply(this, arguments)
 		 *       }
 		 *     },{});
 		 * 
-		 *     Base.base //-> Can.Construct
+		 *     Base.base //-> can.Construct
 		 *     
 		 *     Inherting = Base({});
 		 * 
@@ -102,7 +102,7 @@ steal("can/util/string",function( $ ) {
 		 * Setup deeply extends the static `defaults` property of the base constructor with 
 		 * properties of the inheriting constructor.  For example:
 		 * 
-		 *     MyBase = Can.Construct({
+		 *     MyBase = can.Construct({
 		 *       defaults : {
 		 *         foo: 'bar'
 		 *       }
@@ -123,7 +123,7 @@ steal("can/util/string",function( $ ) {
 		 */
 		setup: function( base, fullName ) {
 			// set defaults as the merger of the parent defaults and this object's defaults
-			this.defaults = Can.extend(true,{}, base.defaults, this.defaults);
+			this.defaults = can.extend(true,{}, base.defaults, this.defaults);
 		},
 		instance: function() {
 			// prevent running init
@@ -139,27 +139,27 @@ steal("can/util/string",function( $ ) {
 		 * to use extend:
 		 * 
 		 *     // with className, static and prototype functions
-		 *     Can.Construct('Task',{ STATIC },{ PROTOTYPE })
+		 *     can.Construct('Task',{ STATIC },{ PROTOTYPE })
 		 *     // with just classname and prototype functions
-		 *     Can.Construct('Task',{ PROTOTYPE })
+		 *     can.Construct('Task',{ PROTOTYPE })
 		 *     // with just a className
-		 *     Can.Construct('Task')
+		 *     can.Construct('Task')
 		 * 
 		 * You no longer have to use <code>.extend</code>.  Instead, you can pass those options directly to
-		 * Can.Construct (and any inheriting classes):
+		 * can.Construct (and any inheriting classes):
 		 * 
 		 *     // with className, static and prototype functions
-		 *     Can.Construct('Task',{ STATIC },{ PROTOTYPE })
+		 *     can.Construct('Task',{ STATIC },{ PROTOTYPE })
 		 *     // with just classname and prototype functions
-		 *     Can.Construct('Task',{ PROTOTYPE })
+		 *     can.Construct('Task',{ PROTOTYPE })
 		 *     // with just a className
-		 *     Can.Construct('Task')
+		 *     can.Construct('Task')
 		 * 
 		 * @param {String} [fullName]  the classes name (used for classes w/ introspection)
 		 * @param {Object} [klass]  the new classes static/class functions
 		 * @param {Object} [proto]  the new classes prototype functions
 		 * 
-		 * @return {Can.Construct} returns the new class
+		 * @return {can.Construct} returns the new class
 		 */
 		extend: function( fullName, klass, proto ) {
 			// figure out what was passed and normalize it
@@ -211,10 +211,10 @@ steal("can/util/string",function( $ ) {
 
 				var parts = fullName.split(/\./),
 					shortName = parts.pop(),
-					current = Can.String.getObject(parts.join('.'), window, true),
+					current = can.String.getObject(parts.join('.'), window, true),
 					namespace = current,
-					_fullName = Can.String.underscore(fullName.replace(/\./g, "_")),
-					_shortName = Can.String.underscore(shortName);
+					_fullName = can.String.underscore(fullName.replace(/\./g, "_")),
+					_shortName = can.String.underscore(shortName);
 
 				//@steal-remove-start
 				if(current[shortName]){
@@ -226,13 +226,13 @@ steal("can/util/string",function( $ ) {
 			}
 
 			// set things that can't be overwritten
-			Can.extend(Constructor, {
+			can.extend(Constructor, {
 				prototype: prototype,
 				/**
 				 * @attribute namespace 
 				 * The namespaces object
 				 * 
-				 *     Can.Construct("MyOrg.MyConstructor",{},{})
+				 *     can.Construct("MyOrg.MyConstructor",{},{})
 				 *     MyOrg.MyConstructor.namespace //-> MyOrg
 				 * 
 				 */
@@ -241,7 +241,7 @@ steal("can/util/string",function( $ ) {
 				 * @attribute shortName 
 				 * The name of the class without its namespace, provided for introspection purposes.
 				 * 
-				 *     Can.Construct("MyOrg.MyConstructor",{},{})
+				 *     can.Construct("MyOrg.MyConstructor",{},{})
 				 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
 				 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
 				 * 
@@ -254,7 +254,7 @@ steal("can/util/string",function( $ ) {
 				 * @attribute fullName 
 				 * The full name of the class, including namespace, provided for introspection purposes.
 				 * 
-				 *     Can.Construct("MyOrg.MyConstructor",{},{})
+				 *     can.Construct("MyOrg.MyConstructor",{},{})
 				 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
 				 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
 				 * 
@@ -268,11 +268,11 @@ steal("can/util/string",function( $ ) {
 			
 
 			// call the class setup
-			var args = Constructor.setup.apply(Constructor, [_super_class].concat(Can.makeArray(arguments)) );
+			var args = Constructor.setup.apply(Constructor, [_super_class].concat(can.makeArray(arguments)) );
 			
 			// call the class init
 			if ( Constructor.init ) {
-				Constructor.init.apply(Constructor, args || [_super_class].concat(Can.makeArray(arguments)) );
+				Constructor.init.apply(Constructor, args || [_super_class].concat(can.makeArray(arguments)) );
 			}
 
 			/* @Prototype*/
@@ -284,10 +284,10 @@ steal("can/util/string",function( $ ) {
 			 * instance is created.  It is passed the same arguments that
 			 * were passed to the Constructor constructor 
 			 * function (`new Constructor( arguments ... )`).  If `setup` returns an
-			 * array, those arguments are passed to [Can.Construct::init] instead
+			 * array, those arguments are passed to [can.Construct::init] instead
 			 * of the original arguments.
 			 * 
-			 * Typically, you should only provide [Can.Construct::init] methods to 
+			 * Typically, you should only provide [can.Construct::init] methods to 
 			 * handle initilization code. Use `setup` for:
 			 * 
 			 *   - initialization code that you want to run before inheriting constructor's 
@@ -298,17 +298,17 @@ steal("can/util/string",function( $ ) {
 			 * 
 			 * ## Examples
 			 * 
-			 * The following is similar to code in [Can.Control]'s setup method that
+			 * The following is similar to code in [can.Control]'s setup method that
 			 * converts the first argument to a jQuery collection and extends the 
-			 * second argument with the constructor's [Can.Construct.defaults defaults]:
+			 * second argument with the constructor's [can.Construct.defaults defaults]:
 			 * 
-			 *     Can.Construct("Can.Control",{
+			 *     can.Construct("can.Control",{
 			 *       setup: function( htmlElement, rawOptions ) {
 			 *         // set this.element
 			 *         this.element = $(htmlElement);
 			 * 
 			 *         // set this.options
-			 *         this.options = Can.extend( {}, 
+			 *         this.options = can.extend( {}, 
 			 * 	                               this.constructor.defaults, 
 			 * 	                               rawOptions );
 			 * 
@@ -319,16 +319,16 @@ steal("can/util/string",function( $ ) {
 			 * 
 			 * ## Base Functionality
 			 * 
-			 * Setup is not defined on Can.Construct itself, so calling super in inherting classes
+			 * Setup is not defined on can.Construct itself, so calling super in inherting classes
 			 * will break.  Don't do the following:
 			 * 
-			 *     Thing = Can.Construct({
+			 *     Thing = can.Construct({
 			 *       setup : function(){
 			 *         this._super(); // breaks!
 			 *       }
 			 *     })
 			 * 
-			 * @return {Array|undefined} If an array is return, [Can.Construct.prototype.init] is 
+			 * @return {Array|undefined} If an array is return, [can.Construct.prototype.init] is 
 			 * called with those arguments; otherwise, the original arguments are used.
 			 */
 			//break up
@@ -336,7 +336,7 @@ steal("can/util/string",function( $ ) {
 			 * @function init
 			 * 
 			 * If a prototype `init` method is provided, it gets called when a new instance
-			 * is created.  It gets called after [Can.Construct::setup], typically with the 
+			 * is created.  It gets called after [can.Construct::setup], typically with the 
 			 * same arguments passed to the Constructor 
 			 * constructor: (<code> new Constructor( arguments ... )</code>).  
 			 * 
@@ -347,7 +347,7 @@ steal("can/util/string",function( $ ) {
 			 * 
 			 * The following creates a Person constructor with a first and last name property:
 			 * 
-			 *     var Person = Can.Construct({
+			 *     var Person = can.Construct({
 			 *       init : function(first, last){
 			 *         this.first = first;
 			 *         this.last = last;
@@ -380,12 +380,12 @@ steal("can/util/string",function( $ ) {
 			 * 
 			 * ## Notes
 			 * 
-			 * [Can.Construct::setup] is able to modify the arguments passed to init.
+			 * [can.Construct::setup] is able to modify the arguments passed to init.
 			 * 
 			 * It doesn't matter what init returns.  This is because the `new` keyword always
 			 * returns the new object.
 			 * 
-			 * There is no `init` method defined on Can.Construct so calling _super will not work.
+			 * There is no `init` method defined on can.Construct so calling _super will not work.
 			 * 
 			 */
 			//Breaks up code
@@ -399,7 +399,7 @@ steal("can/util/string",function( $ ) {
 			 * 
 			 * `Counter` counts how many instances are created:
 			 * 
-			 *     Counter = Can.Construct({
+			 *     Counter = can.Construct({
 			 * 	     count : 0
 			 *     },{
 			 *       init : function(){

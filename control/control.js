@@ -4,34 +4,34 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	
 	// Binds an element, returns a function that unbinds
 	var bind = function( el, ev, callback ) {
-		Can.bind.call(el,ev, callback)
+		can.bind.call(el,ev, callback)
 		//var binder = el.bind && el.unbind ? el : $(isFunction(el) ? [el] : el);
 
 		//binder.bind(ev, callback);
 		// if ev name has >, change the name and bind
 		// in the wrapped callback, check that the element matches the actual element
 		return function() {
-			Can.unbind.call(el, ev, callback);
+			can.unbind.call(el, ev, callback);
 		};
 	},
-		isFunction = Can.isFunction,
-		extend = Can.extend,
-		each = Can.each,
+		isFunction = can.isFunction,
+		extend = can.extend,
+		each = can.each,
 		slice = [].slice,
 		special = ($.event && $.event.special) || {},
 		// Binds an element, returns a function that unbinds
 		delegate = function( el, selector, ev, callback ) {
 			//var binder = el.delegate && el.undelegate ? el : $(isFunction(el) ? [el] : el)
 			//binder.delegate(selector, ev, callback);
-			Can.delegate.call(el, selector, ev, callback)
+			can.delegate.call(el, selector, ev, callback)
 			return function() {
-				Can.undelegate.call(el, selector, ev, callback);
+				can.undelegate.call(el, selector, ev, callback);
 			};
 		},
 		
 		// calls bind or unbind depending if there is a selector
 		binder = function( el, ev, callback, selector ) {
-			return selector ? delegate(el, Can.trim(selector), ev, callback) : bind(el, ev, callback);
+			return selector ? delegate(el, can.trim(selector), ev, callback) : bind(el, ev, callback);
 		},
 		
 		// moves 'this' to the first argument, wraps it with jQuery if it's an element
@@ -39,7 +39,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			var method = typeof name == "string" ? context[name] : name;
 			return function() {
 				context.called = name;
-    			return method.apply(context, [this.nodeName ? Can.$(this) : this].concat( slice.call(arguments, 0) ) );
+    			return method.apply(context, [this.nodeName ? can.$(this) : this].concat( slice.call(arguments, 0) ) );
 			};
 		},
 		// matches dots
@@ -50,8 +50,8 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		breaker = /^(?:(.*?)\s)?([\w\.\:>]+)$/,
 		basicProcessor;
 	/**
-	 * @class Can.Control
-	 * @parent CanJS
+	 * @class can.Control
+	 * @parent index
 	 * @plugin can/control
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/control/control.js
 	 * @test jquery/control/qunit.html
@@ -72,7 +72,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	 * a [http://jupiterjs.com/news/organize-jquery-widgets-with-jquery-control walkthrough of its features]
 	 * on Jupiter's blog. [mvc.control Get Started with jQueryMX] also has a great walkthrough.
 	 * 
-	 * Control inherits from [Can.Construct Can.Construct] and makes heavy use of 
+	 * Control inherits from [can.Construct can.Construct] and makes heavy use of 
 	 * [http://api.jquery.com/delegate/ event delegation]. Make sure 
 	 * you understand these concepts before using it.
 	 * 
@@ -89,7 +89,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	 * 
 	 * do this
 	 * 
-	 *     Can.Control('Tabs',{
+	 *     can.Control('Tabs',{
 	 *       click: function() {...},
 	 *       '.tab click' : function() {...},
 	 *       '.delete click' : function() {...}
@@ -113,7 +113,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	 * 
 	 * ### A control class is created.
 	 *       
-	 *     Can.Control("MyWidget",
+	 *     can.Control("MyWidget",
 	 *     {
 	 *       defaults :  {
 	 *         message : "Remove Me"
@@ -142,7 +142,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	 * This calls <code>new MyWidget(el, options)</code> on 
 	 * each <code>'.thing'</code> element.  
 	 *     
-	 * When a new [Can.Construct Class] instance is created, it calls the class's
+	 * When a new [can.Construct Class] instance is created, it calls the class's
 	 * prototype setup and init methods. Control's [jQuery.Control.prototype.setup setup]
 	 * method:
 	 *     
@@ -191,7 +191,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	 * 
 	 * To add a mousover effect and create todos, your control might look like:
 	 * 
-	 *     Can.Control('Todos',{
+	 *     can.Control('Todos',{
 	 *       ".todo mouseover" : function( el, ev ) {
 	 *         el.css("backgroundColor","red")
 	 *       },
@@ -292,7 +292,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	 * These methods let you call one control from another control.
 	 * 
 	 */
-	Can.Construct("Can.Control",
+	can.Construct("can.Control",
 	/** 
 	 * @Static
 	 */
@@ -311,11 +311,11 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * 
 		 */
 		setup: function() {
-			// Allow contollers to inherit "defaults" from superclasses as it done in Can.Construct
-			Can.Construct.setup.apply(this, arguments);
+			// Allow contollers to inherit "defaults" from superclasses as it done in can.Construct
+			can.Construct.setup.apply(this, arguments);
 
 			// if you didn't provide a name, or are control, don't do anything
-			if (this === Can.Control ) {
+			if (this === can.Control ) {
 				return;
 			}
 			// cache the underscored names
@@ -327,7 +327,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 				 * to change the jQuery plugin helper name from its 
 				 * default value.
 				 * 
-				 *     Can.Control("Mxui.Layout.Fill",{
+				 *     can.Control("Mxui.Layout.Fill",{
 				 *       pluginName: "fillWith"
 				 *     },{});
 				 *     
@@ -362,7 +362,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			if ( actionMatcher.test(methodName) ) {
 				return true;
 			} else {
-				return /*Can.inArray(methodName, this.listensTo) > -1 ||*/ special[methodName] || processors[methodName];
+				return /*can.inArray(methodName, this.listensTo) > -1 ||*/ special[methodName] || processors[methodName];
 			}
 
 		},
@@ -398,10 +398,10 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			}
 			// If we have options, run sub to replace templates "{}" with a value from the options
 			// or the window
-			var convertedName = options ? Can.String.sub(methodName, [options, window]) : methodName,
+			var convertedName = options ? can.String.sub(methodName, [options, window]) : methodName,
 				
 				// If a "{}" resolves to an object, convertedName will be an array
-				arr = Can.isArray(convertedName),
+				arr = can.isArray(convertedName),
 				
 				// get the parts of the function = [convertedName, delegatePart, eventPart]
 				parts = (arr ? convertedName[1] : convertedName).match(breaker),
@@ -460,7 +460,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * with templated event handlers:
 		 * 
 		 *
-		 *     Can.Control('Sized',{
+		 *     can.Control('Sized',{
 		 *       "{window} resize" : function(){
 		 *         this.element.width(this.element.parent().width() / 2);
 		 *       }
@@ -472,9 +472,9 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		/**
 		 * @attribute defaults
 		 * A object of name-value pairs that act as default values for a control's 
-		 * [Can.Control::options this.options].
+		 * [can.Control::options this.options].
 		 * 
-		 *     Message = Can.Control({
+		 *     Message = can.Control({
 		 *       defaults : {
 		 *         message : "Hello World"
 		 *       }
@@ -487,7 +487,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 *     new Message("#el1"); //writes "Hello World"
 		 *     new Message("#el12",{message: "hi"}); //writes hi
 		 *     
-		 * In [Can.Control::setup] the options passed to the control
+		 * In [can.Control::setup] the options passed to the control
 		 * are merged with defaults.  This is not a deep merge.
 		 */
 		defaults: {}
@@ -532,13 +532,13 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			var funcName, ready, cls = this.constructor;
 
 			//want the raw element here
-			element = (typeof element == 'string' ? Can.$(element) :
+			element = (typeof element == 'string' ? can.$(element) :
 				(element.jquery ? element : [element]) )[0];
 
 			//set element and className on element
 			var pluginname = cls.pluginName || cls._fullName;
 
-			this.element = Can.$(element)
+			this.element = can.$(element)
 
 			if(pluginname && pluginname !== 'can_control') {
 				//set element and className on element
@@ -548,7 +548,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			}
 			//set in data
 			var arr;
-			(arr = Can.data(this.element,"controls")) || Can.data(this.element,"controls",arr = []);
+			(arr = can.data(this.element,"controls")) || can.data(this.element,"controls",arr = []);
 			arr.push(this);
 
 			
@@ -562,7 +562,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			 * 
 			 * For example:
 			 * 
-			 *     Can.Control('Hello')
+			 *     can.Control('Hello')
 			 *     
 			 *     var h1 = new Hello($('#content1'), {message: 'World'} );
 			 *     equal( h1.options.message , "World" )
@@ -576,7 +576,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			 * 
 			 * For example:
 			 * 
-			 *     Can.Control("Tabs", 
+			 *     can.Control("Tabs", 
 			 *     {
 			 *        defaults : {
 			 *          activeClass: "ui-active-state"
@@ -608,15 +608,15 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			 * 
 			 * The control instance's HTMLElement (or window) wrapped by the 
 			 * util library for ease of use. It is set by the first
-			 * parameter to `new Can.Construct(element, options)` 
-			 * in [Can.Control::setup].  Control listens on `this.element`
+			 * parameter to `new can.Construct(element, options)` 
+			 * in [can.Control::setup].  Control listens on `this.element`
 			 * for events.
 			 * 
 			 * ### Quick Example
 			 * 
 			 * The following `HelloWorld` control sets the control`s text to "Hello World":
 			 * 
-			 *     HelloWorld = Can.Control({
+			 *     HelloWorld = can.Control({
 			 *       init : function(){
 			 * 	       this.element.text('Hello World')
 			 *       }
@@ -660,7 +660,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			 * 
 			 * ## Changing `this.element`
 			 * 
-			 * Sometimes you don't want what's passed to `new Can.Control`
+			 * Sometimes you don't want what's passed to `new can.Control`
 			 * to be this.element.  You can change this by overwriting
 			 * setup or by unbinding, setting this.element, and rebinding.
 			 * 
@@ -671,12 +671,12 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			 * as `this.element`. Notice how `destroy` sets back the
 			 * original element.
 			 * 
-			 *     Combobox = Can.Control({
+			 *     Combobox = can.Control({
 			 *       setup : function(el, options){
 			 *          this.oldElement = $(el);
 			 *          var newEl = $('<div/>');
 			 *          this.oldElement.wrap(newEl);
-			 *          Can.Controll.prototype.setup.call(this, newEl, options);
+			 *          can.Controll.prototype.setup.call(this, newEl, options);
 			 *       },
 			 *       init : function(){
 			 *          this.element //-> the div
@@ -686,7 +686,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			 *       },
 			 *       destroy : function(){
 			 *          var div = this.element; //save reference
-			 *          Can.Control.prototype.destroy.call(this);
+			 *          can.Control.prototype.destroy.call(this);
 			 *          div.replaceWith(this.oldElement);
 			 *       }
 			 *     })
@@ -694,8 +694,8 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			 * ### unbining, setting, and rebinding.
 			 * 
 			 * You could also change this.element by calling
-			 * [Can.Control::off], setting this.element, and 
-			 * then calling [Can.Control::on] like:
+			 * [can.Control::off], setting this.element, and 
+			 * then calling [can.Control::on] like:
 			 * 
 			 *     move : function(newElement) {
 			 *        this.off();
@@ -707,7 +707,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		},
 		/**
 		 * `this.on( [element, selector, eventName, handler] )` is used to rebind 
-		 * all event handlers when [Can.Control::options this.options] has changed.  It
+		 * all event handlers when [can.Control::options this.options] has changed.  It
 		 * can also be used to bind or delegate from other elements or objects.
 		 * 
 		 * ## Rebinding
@@ -717,7 +717,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * the following control might listen to a task model's `completed` property and
 		 * toggle a strike className like:
 		 * 
-		 *     TaskStriker = Can.Control({
+		 *     TaskStriker = can.Control({
 		 *       "{task} completed" : function(){
 		 * 	       this.update();
 		 *       },
@@ -737,7 +737,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * To update the taskstriker's task, add a task method that updates
 		 * this.options and calls rebind like:
 		 * 
-		 *     TaskStriker = Can.Control({
+		 *     TaskStriker = can.Control({
 		 *       "{task} completed" : function(){
 		 * 	       this.update();
 		 *       },
@@ -816,9 +816,9 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	
 				//setup to be destroyed ... don't bind b/c we don't want to remove it
 				var destroyCB = shifter(this,"destroy");
-				Can.bind.call(element,"destroyed", destroyCB);
+				can.bind.call(element,"destroyed", destroyCB);
 				bindings.push(function( el ) {
-					Can.unbind.call(el,"destroyed", destroyCB);
+					can.unbind.call(el,"destroyed", destroyCB);
 				});
 				return bindings.length;
 			}
@@ -838,7 +838,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		/**
 		 * @hide
 		 * Unbinds all event handlers on the controller. You should never
-		 * be calling this unless in use with [Can.Control::on].
+		 * be calling this unless in use with [can.Control::on].
 		 * 
 		 * 
 		 */
@@ -860,7 +860,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * is submitted, it creates the recipe on the server.  When the recipe
 		 * is `created`, it resets the form with a new instance.
 		 * 
-		 *     Can.Control('Creator',{
+		 *     can.Control('Creator',{
 		 *       "{recipe} created" : function(){
 		 *         this.update({recipe : new Recipe()});
 		 *         this.element[0].reset();
@@ -886,7 +886,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * For example, a widget that listens for model updates
 		 * and updates it's html would look like.  
 		 * 
-		 *     Can.Control('Updater',{
+		 *     can.Control('Updater',{
 		 *       // when the control is created, update the html
 		 *       init : function(){
 		 *         this.updateView();
@@ -931,7 +931,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * 
 		 * ### Example
 		 * 
-		 *     Can.Control("Thing",{
+		 *     can.Control("Thing",{
 		 *       init: function( el, options ) {
 		 *         alert( 'init:'+this.options.prop )
 		 *       },
@@ -967,7 +967,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * is removed auto-magically:
 		 *  
 		 * 
-		 *      Clickr = Can.Control({
+		 *      Clickr = can.Control({
 		 *       "{window} click" : function(){
 		 * 	       this.element.html( this.count ? 
 		 * 	                          this.count++ : this.count = 0)
@@ -1015,14 +1015,14 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * The following example changes an element's text when the control is
 		 * created and sets it back when the control is removed:
 		 * 
-		 *     Changer = Can.Control({
+		 *     Changer = can.Control({
 		 *       init : function(){
 		 *         this.oldText = this.element.text();
 		 *         this.element.text("Changed!!!")
 		 *       },
 		 *       destroy : function(){
 		 *         this.element.text(this.oldText);
-		 *         Can.Control.prototype.destroy.call(this)
+		 *         can.Control.prototype.destroy.call(this)
 		 *     })
 		 *     
 		 *     // create a changer which changes #myel's text
@@ -1038,7 +1038,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 *   - unbinding all event handlers
 		 *   - clearing references to this.element and this.options
 		 *   - clearing the element's reference to the control
-		 *   - removing it's [Can.Control.pluginName] from the element's className
+		 *   - removing it's [can.Control.pluginName] from the element's className
 		 * 
 		 */
 		destroy: function() {
@@ -1057,16 +1057,16 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			}
 			
 			// remove from data
-			var controls = Can.data(this.element,"controls");
-			controls.splice(Can.inArray(this, controls),1);
+			var controls = can.data(this.element,"controls");
+			controls.splice(can.inArray(this, controls),1);
 			
-			Can.trigger( this, "destroyed"); //in case we want to know if the control is removed
+			can.trigger( this, "destroyed"); //in case we want to know if the control is removed
 			
 			this.element = null;
 		}
 	});
 
-	var processors = Can.Control.processors,
+	var processors = can.Control.processors,
 
 	//------------- PROCESSSORS -----------------------------
 	//processors do the binding.  They return a function that

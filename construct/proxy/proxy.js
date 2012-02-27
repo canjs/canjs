@@ -3,11 +3,19 @@ var isFunction = $.isFunction,
 	isArray = $.isArray,
 	makeArray = $.makeArray,
 /**
- * @function proxy
+ * @page can.Construct.proxy
+ * @parent can.Construct
+ * @plugin can/construct/plugin
+ * 
+ * Adds a static and prototype proxy method that are
+ * useful for creating callback functions that have
+ * `this` set correctly.
+ * 
+ * 
  * Returns a callback function for a function on this Class.
  * Proxy ensures that 'this' is set appropriately.  
  * @codestart
- * Can.Construct("MyClass",{
+ * can.Construct("MyClass",{
  *     getData: function() {
  *         this.showing = null;
  *         $.get("data.json",this.proxy('gotData'),'json')
@@ -21,7 +29,7 @@ var isFunction = $.isFunction,
  * <h2>Currying Arguments</h2>
  * Additional arguments to proxy will fill in arguments on the returning function.
  * @codestart
- * Can.Construct("MyClass",{
+ * can.Construct("MyClass",{
  *    getData: function( <b>callback</b> ) {
  *      $.get("data.json",this.proxy('process',<b>callback</b>),'json');
  *    },
@@ -38,7 +46,7 @@ var isFunction = $.isFunction,
  * is called each function in the array is passed the return value of the prior function.  This is often used
  * to eliminate currying initial arguments.
  * @codestart
- * Can.Construct("MyClass",{
+ * can.Construct("MyClass",{
  *    getData: function( callback ) {
  *      //calls process, then callback with value from process
  *      $.get("data.json",this.proxy(['process2',callback]),'json') 
@@ -108,21 +116,10 @@ proxy = function( funcs ) {
 				return cur;
 			}
 		}
-	Can.Construct.proxy = Can.Construct.prototype.proxy = proxy;
+	can.Construct.proxy = can.Construct.prototype.proxy = proxy;
 	
 	
-	
-	/**
-	 * @function proxy
-	 * Returns a method that sets 'this' to the current instance.  This does the same thing as 
-	 * and is described better in [jQuery.Class.static.proxy].
-	 * The only difference is this proxy works
-	 * on a instance instead of a class.
-	 * @param {String|Array} fname If a string, it represents the function to be called.  
-	 * If it is an array, it will call each function in order and pass the return value of the prior function to the
-	 * next function.
-	 * @return {Function} the callback function
-	 */
+
 
 
 

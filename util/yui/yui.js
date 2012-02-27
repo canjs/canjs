@@ -43,22 +43,22 @@ steal({ src : url, type: "js" },
 	var Y = YUI().use('*');
 		
 	// String
-	Can.trim = function(s){
+	can.trim = function(s){
 		return Y.Lang.trim(s);
 	}
 	
 	// Array
-	Can.makeArray = function(arr){
+	can.makeArray = function(arr){
 		return Y.Array(arr);
 	};
-	Can.isArray = Y.Lang.isArray;
-	Can.inArray = function(item,arr){
+	can.isArray = Y.Lang.isArray;
+	can.inArray = function(item,arr){
 		return Y.Array.indexOf(arr, item);
 	};
-	Can.map = function(arr, fn){
-		return Y.Array.map(Can.makeArray(arr||[]), fn);
+	can.map = function(arr, fn){
+		return Y.Array.map(can.makeArray(arr||[]), fn);
 	};
-	Can.each = function(elements, callback) {
+	can.each = function(elements, callback) {
 		var i, key;
 		if (typeof elements.length == 'number' && elements.pop)
 			for(i = 0; i < elements.length; i++) {
@@ -72,7 +72,7 @@ steal({ src : url, type: "js" },
  	};
 
 	// Object
-	Can.extend = function(first){
+	can.extend = function(first){
 		var deep = first === true ? 1 : 0,
 			target = arguments[deep],
 			i = deep + 1,
@@ -82,68 +82,68 @@ steal({ src : url, type: "js" },
 		}
 		return target;
 	}
-	Can.param = function(object){
+	can.param = function(object){
 		return Y.QueryString.stringify(object)
 	}
-	Can.isEmptyObject = function(object){
+	can.isEmptyObject = function(object){
 		return Y.Object.isEmpty(object);
 	}
 	
 	// Function
-	Can.proxy = function(func, context){
+	can.proxy = function(func, context){
 		return Y.bind.apply(Y, arguments);
 	}
-	Can.isFunction = function(f){
+	can.isFunction = function(f){
 		return Y.Lang.isFunction(f);
 	}
 	
 	// element ... get the wrapped helper
-	Can.$ = function(selector){
+	can.$ = function(selector){
 		return selector === window ? window : Y.all(selector);
 	}
 
-	Can.bind = function() {};
-	Can.unbind = function() {};
-	Can.trigger = function() {};
-	Can.delegate = function() {};
-	Can.undelegate = function() {};
+	can.bind = function() {};
+	can.unbind = function() {};
+	can.trigger = function() {};
+	can.delegate = function() {};
+	can.undelegate = function() {};
 	
-	Can.buildFragment = function(frags, nodes){
+	can.buildFragment = function(frags, nodes){
 		var owner = nodes.length && nodes[0].ownerDocument,
 			frag = Y.Node.create(frags[0], owner);
 		return {fragment: frag}
 	}
 	
-	Can.append = function(wrapped, html){
+	can.append = function(wrapped, html){
 		wrapped.each(function(node){
 			node.append(html)
 		});
 	}
 	
 	// Events
-	// Can.bind = function( ev, cb){
+	// can.bind = function( ev, cb){
 	// 	// if we can bind to it ...
-	// 	if(this.bind && this.bind !== Can.bind){
+	// 	if(this.bind && this.bind !== can.bind){
 	// 		this.bind(ev, cb)
 	// 	} else if(this.addEvent) {
 	// 		this.addEvent(ev, cb)
 	// 	} else {
 	// 		// make it bind-able ...
-	// 		Can.addEvent.call(this, ev, cb)
+	// 		can.addEvent.call(this, ev, cb)
 	// 	}
 	// 	return this;
 	// }
-	// Can.unbind = function(ev, cb){
+	// can.unbind = function(ev, cb){
 	// 	// if we can bind to it ...
-	// 	if(this.unbind && this.unbind !== Can.unbind){
+	// 	if(this.unbind && this.unbind !== can.unbind){
 	// 		this.unbind(ev, cb)
 	// 	} else {
 	// 		// make it bind-able ...
-	// 		Can.removeEvent.call(this, ev, cb)
+	// 		can.removeEvent.call(this, ev, cb)
 	// 	}
 	// 	return this;
 	// }
-	// Can.trigger = function(item, event, args, bubble){
+	// can.trigger = function(item, event, args, bubble){
 	// 	if(item.trigger){
 	// 		if(bubble === false){
 	// 			//  force stop propagation by
@@ -162,10 +162,10 @@ steal({ src : url, type: "js" },
 	// 			event = {type: event}
 	// 		}
 	// 		event.data = args
-	// 		Can.dispatch.call(item, event)
+	// 		can.dispatch.call(item, event)
 	// 	}
 	// }
-	// Can.delegate = function(selector, ev , cb){
+	// can.delegate = function(selector, ev , cb){
 	// 	if(this.on || this.nodeType){
 	// 		addBinding( new dojo.NodeList(this), selector+":"+ev, cb)
 	// 	} else if(this.delegate) {
@@ -173,7 +173,7 @@ steal({ src : url, type: "js" },
 	// 	} 
 	// 	return this;
 	// }
-	// Can.undelegate = function(selector, ev , cb){
+	// can.undelegate = function(selector, ev , cb){
 	// 	if(this.on || this.nodeType){
 	// 		removeBinding(new dojo.NodeList(this), selector+":"+ev, cb);
 	// 	} else if(this.undelegate) {

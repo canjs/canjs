@@ -84,8 +84,8 @@
  *       // do something
  *     })
  *    
- *     // with Can.Control
- *     Can.Control('Nav',{
+ *     // with can.Control
+ *     can.Control('Nav',{
  *       "{window} hashchange" : function(){
  *         // do something
  *       }

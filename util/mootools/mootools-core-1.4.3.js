@@ -4502,7 +4502,7 @@ var Fx = this.Fx = new Class({
 	options: {
 		/*
 		onStart: nil,
-		onCancel: nil,
+		oncancel: nil,
 		onComplete: nil,
 		*/
 		fps: 60,
@@ -5138,7 +5138,7 @@ var Request = this.Request = new Class({
 		onLoadstart: function(event, xhr){},
 		onProgress: function(event, xhr){},
 		onComplete: function(){},
-		onCancel: function(){},
+		oncancel: function(){},
 		onSuccess: function(responseText, responseXML){},
 		onFailure: function(xhr){},
 		onException: function(headerName, value){},

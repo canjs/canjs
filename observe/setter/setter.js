@@ -2,7 +2,7 @@ steal('can/observe','can/util/string/classize.js',function($){
 
 
 var classize = $.String.classize,
-	proto =  Can.Control.prototype,
+	proto =  can.Control.prototype,
 	old = proto.__set;
 
 proto.__set = function(prop, value, current, success, error){

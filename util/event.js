@@ -1,6 +1,6 @@
 steal(function(){
 
-Can.addEvent = function(event, fn){
+can.addEvent = function(event, fn){
 	if(!this.__bindEvents){
 		this.__bindEvents = {};
 	}
@@ -15,7 +15,7 @@ Can.addEvent = function(event, fn){
 	});
 	return this;
 };
-Can.removeEvent = function(event, fn){
+can.removeEvent = function(event, fn){
 	if(!this.__bindEvents){
 		return;
 	}
@@ -32,7 +32,7 @@ Can.removeEvent = function(event, fn){
 	}	
 	return this;
 };
-Can.dispatch = function(event){
+can.dispatch = function(event){
 	if(!this.__bindEvents){
 		return;
 	}
@@ -40,7 +40,7 @@ Can.dispatch = function(event){
 	var handlers = this.__bindEvents[event.type] || [],
 		self= this,
 		args = [event].concat(event.data || []);
-	Can.each(handlers, function(i, ev){
+	can.each(handlers, function(i, ev){
 		event.data = args.slice(1);
 		ev.handler.apply(self, args);
 	});

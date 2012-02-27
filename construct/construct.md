@@ -1,7 +1,7 @@
-@class Can.Construct
-@parent CanJS
+@class can.Construct
+@parent index
 
-Can.Construct provides easy prototypal inheritance for JavaScript.    It creates
+can.Construct provides easy prototypal inheritance for JavaScript.    It creates
 constructor functions that can be used with the __new__ keyword. It 
 is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Constructor]
 Inheritance library. 
@@ -9,9 +9,9 @@ Inheritance library.
 ## Creating Constructor Functions
 
 To create a constructor function, 
-call `Can.Construct( [ NAME, classProperties, ] instanceProperties )`. 
+call `can.Construct( [ NAME, classProperties, ] instanceProperties )`. 
 
-    var Animal = Can.Construct({
+    var Animal = can.Construct({
       breathe : function(){
          console.log('breathe'); 
       }

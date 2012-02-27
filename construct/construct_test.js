@@ -1,6 +1,6 @@
 module("can/construct",{
 	setup : function(){
-		var Animal = this.Animal = Can.Construct({
+		var Animal = this.Animal = can.Construct({
 	        count: 0,
 	        test: function() {
 	            return this.match ? true : false
@@ -46,8 +46,8 @@ module("can/construct",{
 
 
 test("inherit", function(){
-	var Base = Can.Construct({});
-	ok(new Base instanceof Can.Construct)
+	var Base = can.Construct({});
+	ok(new Base instanceof can.Construct)
 	var Inherit = Base({});
 	ok(new Inherit instanceof Base);
 	
@@ -72,7 +72,7 @@ test("Creating", function(){
     equals(1000, ajax.hairs, "right number of animals");
     
     ok(a1 instanceof this.Animal)
-    ok(a1 instanceof Can.Construct)
+    ok(a1 instanceof can.Construct)
 })
 
 
@@ -83,11 +83,11 @@ test("new instance",function(){
 
 
 test("namespaces",function(){
-	var Todo = Can.Construct("Todo",{},{})
+	var Todo = can.Construct("Todo",{},{})
 	
 	
 	
-	var fb = Can.Construct.extend("Foo.Bar")
+	var fb = can.Construct.extend("Foo.Bar")
 	ok(Foo.Bar === fb, "returns class")
 	equals(fb.shortName, "Bar", "short name is right");
 	equals(fb.fullName, "Foo.Bar","fullName is right")
@@ -126,7 +126,7 @@ test("setups", function(){
 				protoInitArgs = arguments;
 			}
 		}
-	Can.Construct.extend("Car",staticProps,protoProps);
+	can.Construct.extend("Car",staticProps,protoProps);
 	
 	var geo = new Car("geo");
 	equals(staticSetup, 1);
@@ -134,10 +134,10 @@ test("setups", function(){
 	equals(protoSetup, 3);
 	equals(protoInit, 4);
 	
-	same(Can.makeArray(staticInitArgs), ["something"] )
-	same(Can.makeArray(protoInitArgs),["Ford: geo"] )
+	same(can.makeArray(staticInitArgs), ["something"] )
+	same(can.makeArray(protoInitArgs),["Ford: geo"] )
 	
-	same(Can.makeArray(staticSetupArgs),[Can.Construct, "Car",staticProps, protoProps] ,"static construct");
+	same(can.makeArray(staticSetupArgs),[can.Construct, "Car",staticProps, protoProps] ,"static construct");
 	
 	
 	//now see if staticSetup gets called again ...
@@ -149,7 +149,7 @@ test("setups", function(){
 
 
 test("Creating without extend", function(){
-	Can.Construct("Bar",{
+	can.Construct("Bar",{
 		ok : function(){
 			ok(true, "ok called")
 		}

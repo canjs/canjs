@@ -1,4 +1,3 @@
-@page CanJS CanJS
-@parent index 0
+@page index CanJS
 
 Awesome

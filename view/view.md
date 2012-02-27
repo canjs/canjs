@@ -1,5 +1,5 @@
-@class Can.view
-@parent CanJS
+@class can.view
+@parent index
 
 
 
@@ -8,7 +8,7 @@ and inserting them into the dom.
 
 Live binding ....
 
-    Can.view("//path/to/template",{data}) //-> documentFragement
+    can.view("//path/to/template",{data}) //-> documentFragement
     
 EJS + Observe
 
@@ -23,8 +23,8 @@ template:
 
     John is <input value='<%= person.attr('age') %>'/> years old
     
-    john = new Can.Observe({age: 29})
-    form.appendChild( Can.view('person.ejs', {person: john}) )
+    john = new can.Observe({age: 29})
+    form.appendChild( can.view('person.ejs', {person: john}) )
 
 Escaped HTML
 
@@ -32,22 +32,22 @@ template:
 
 	<div>My favorite HTML tag is: <%= favorites.attr('tag')%></div>
     
-    favorites = new Can.Observe({tag: "<div>"})
-    favs.appendChild( Can.view('favs.ejs', {favorites: favorites}) )
+    favorites = new can.Observe({tag: "<div>"})
+    favs.appendChild( can.view('favs.ejs', {favorites: favorites}) )
 
 Unescaped HTML
 
 	<div>My favorite HTML tag shows up like: <%== favorites.attr('tag')%></div>
     
-    favorites = new Can.Observe({tag: "<b>this</b>"})
-    favs.appendChild( Can.view('favs.ejs', {favorites: favorites}) )
+    favorites = new can.Observe({tag: "<b>this</b>"})
+    favs.appendChild( can.view('favs.ejs', {favorites: favorites}) )
 
 Tag properties
 
 	<input type='checkbox' <%= task.attr('complete') ? 'checked' : "" %>/>
     
-    favorites = new Can.Observe({tag: "<b>this</b>"})
-    favs.appendChild( Can.view('favs.ejs', {favorites: favorites}) )
+    favorites = new can.Observe({tag: "<b>this</b>"})
+    favs.appendChild( can.view('favs.ejs', {favorites: favorites}) )
 
 Conditional Blocks
 
