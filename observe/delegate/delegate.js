@@ -302,7 +302,7 @@ steal('can/observe',function(){
 				delegates = [];
 			}
 			if(!delegates.length){
-				can.removeData(this, "_observe_delegates");
+				//can.removeData(this, "_observe_delegates");
 				this.unbind("change",delegate)
 			}
 			return this;
