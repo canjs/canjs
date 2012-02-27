@@ -198,7 +198,6 @@
 			};
 
 			var request = new Y.io(requestOptions.url, requestOptions);
-			console.log(request);
 			updateDeferred(request.io, d);
 			return d;
 
