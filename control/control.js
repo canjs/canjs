@@ -536,15 +536,13 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 
 			//set element and className on element
 			var pluginname = cls.pluginName || cls._fullName;
-			console.log(element)
 			this.element = can.$(element)
 
 			if(pluginname && pluginname !== 'can_control') {
 				//set element and className on element
 				this.element.addClass(pluginname);
-
-					
 			}
+			
 			//set in data
 			var arr;
 			(arr = can.data(this.element,"controls")) || can.data(this.element,"controls",arr = []);
