@@ -51,9 +51,8 @@ steal('can/observe',function(){
 		delegate = function(event, prop, how, newVal, oldVal){
 			// pre-split properties to save some regexp time
 			var props = prop.split("."),
-				delegates = $.data(this,"_observe_delegates") || [],
+				delegates = (this._observe_delegates || []).slice(0),
 				delegate,
-				len = delegates.length,
 				attr,
 				matchedAttr,
 				hasMatch,
@@ -62,15 +61,14 @@ steal('can/observe',function(){
 			event.lastAttr = props[props.length -1 ];
 			
 			// for each delegate
-			for(var i =0; i < len; i++){
+			for(var i =0; delegate = delegates[i++];){
 				
-				delegate = delegates[i];
 				// if there is a batchNum, this means that this
 				// event is part of a series of events caused by a single 
 				// attrs call.  We don't want to issue the same event
 				// multiple times
 				// setting the batchNum happens later
-				if(event.batchNum && delegate.batchNum === event.batchNum){
+				if((event.batchNum && delegate.batchNum === event.batchNum) || delegate.undelegated ){
 					continue;
 				}
 				
@@ -116,7 +114,7 @@ steal('can/observe',function(){
 					if(  delegate.event === 'change' ){
 						arguments[1] = from;
 						event.curAttr = hasMatch;
-						delegate.callback.apply(this.attr(hasMatch), $.makeArray( arguments));
+						delegate.callback.apply(this.attr(hasMatch), can.makeArray( arguments));
 					} else if(delegate.event === how ){
 						
 						// if it's a match, callback with the location of the match
@@ -131,7 +129,7 @@ steal('can/observe',function(){
 			}
 		};
 		
-	$.extend(can.Control.prototype,{
+	can.extend(can.Observe.prototype,{
 		/**
 		 * @plugin jquery/lang/observe/delegate
 		 * Listen for changes in a child attribute from the parent. The child attribute
@@ -240,9 +238,8 @@ steal('can/observe',function(){
 		 * @return {jQuery.Delegate} the delegate for chaining
 		 */
 		delegate :  function(selector, event, cb){
-			selector = $.trim(selector);
-			var delegates = $.data(this, "_observe_delegates") ||
-				$.data(this, "_observe_delegates", []),
+			selector = can.trim(selector);
+			var delegates = this._observe_delegates || (this._observe_delegates = []),
 				attrs = [];
 			
 			// split selector by spaces
@@ -284,16 +281,17 @@ steal('can/observe',function(){
 		 * @return {jQuery.Delegate} the delegate for chaining
 		 */
 		undelegate : function(selector, event, cb){
-			selector = $.trim(selector);
+			selector = can.trim(selector);
 			
 			var i =0,
-				delegates = $.data(this, "_observe_delegates") || [],
+				delegates = this._observe_delegates || [],
 				delegateOb;
 			if(selector){
 				while(i < delegates.length){
 					delegateOb = delegates[i];
 					if( delegateOb.callback === cb ||
 						(!cb && delegateOb.selector === selector) ){
+						delegateOb.undelegated = true;
 						delegates.splice(i,1)
 					} else {
 						i++;
@@ -304,12 +302,12 @@ steal('can/observe',function(){
 				delegates = [];
 			}
 			if(!delegates.length){
-				$.removeData(this, "_observe_delegates");
+				can.removeData(this, "_observe_delegates");
 				this.unbind("change",delegate)
 			}
 			return this;
 		}
 	});
 	// add helpers for testing .. 
-	can.Control.prototype.delegate.matches = matches;
+	can.Observe.prototype.delegate.matches = matches;
 })
