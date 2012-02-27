@@ -18,7 +18,7 @@ test("modifier with a deferred", function(){
 
 /*test("non-HTML content in hookups", function(){
   $("#qunit-test-area").html("<textarea></textarea>");
-  Can.render.hookup(function(){});
+  can.render.hookup(function(){});
   $("#qunit-test-area textarea").val("asdf");
   equals($("#qunit-test-area textarea").val(), "asdf");
 });*/
@@ -37,11 +37,11 @@ test("html takes promise", function(){
 });
 
 test("val set with a template within a hookup within another template", function(){
-	Can.view("//can/view/test/qunit/hookupvalcall.ejs",{});
+	can.view("//can/view/test/qunit/hookupvalcall.ejs",{});
 });
 
 test("jQuery.fn.hookup", function(){
 	$("#qunit-test-area").html("");
-	var els = $(Can.render("//can/view/test/qunit/hookup.ejs",{})).hookup();
+	var els = $(can.render("//can/view/test/qunit/hookup.ejs",{})).hookup();
 	$("#qunit-test-area").html(els); //makes sure no error happens
 });

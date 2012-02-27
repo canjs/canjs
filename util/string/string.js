@@ -13,11 +13,11 @@
  * 
  *     $.Object.same({foo: "bar"}, {foo: "bar"});
  *     
- * ## [Can.Control Observe]
+ * ## [can.Control Observe]
  * 
  * Makes an Object's properties observable:
  * 
- *     var person = new Can.Control({ name: "Justin" })
+ *     var person = new can.Control({ name: "Justin" })
  *     person.bind('change', function(){ ... })
  *     person.attr('name', "Brian");
  *     
@@ -85,7 +85,7 @@ steal('can/util',function( $ ) {
 		 * </ul>
 		 * 
 		 */
-		Can.String = Can.extend({
+		can.String = can.extend({
 			esc : function(content){
 				return content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(regs.quote, '&#34;').replace(regs.singleQuote, "&#39;");
 			},
@@ -119,7 +119,7 @@ steal('can/util',function( $ ) {
 					type;
 				
 				// make sure roots is an array
-				roots = Can.isArray(roots) ? roots : [roots || window];
+				roots = can.isArray(roots) ? roots : [roots || window];
 				
 				if(length == 0){
 					return roots[0];

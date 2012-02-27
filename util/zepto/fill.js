@@ -202,7 +202,7 @@ steal(function(){
 	};
 	
 	$.Deferred = Deferred;
-	Can.addEvent = function(event, fn){
+	can.addEvent = function(event, fn){
 		if(!this.__bindEvents){
 			this.__bindEvents = {};
 		}
@@ -211,11 +211,11 @@ steal(function(){
 		}
 		this.__bindEvents[event].push(fn);
 	};
-	Can.removeEvent = function(event, fn){
+	can.removeEvent = function(event, fn){
 		var i = this.__bindEvents[event].indexOf(fn);
 		this.__bindEvents[event].splice(i, 1);
 	};
-	Can.dispatch = function(event){
+	can.dispatch = function(event){
 		if(!this.__bindEvents){
 			return;
 		}

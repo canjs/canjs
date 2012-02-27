@@ -1,86 +1,132 @@
-## 3.1 Backlog - Deferreds
+@class can.Observe
+@parent index
+@test can/observe/qunit.html
 
-jQuery 1.6 brought Deferred support.  They are a great feature
-that promise to make a lot of asynchronous functionality 
-easier to write and manage. But, many people struggle 
-with uses other than 'waiting for a bunch of Ajax requests to complete'. For 3.1, we 
-identified an extremely common, but annoying, practice that becomes
-a one-liner with deferreds: loading data and a template and rendering the
-result into an element.
+can.Observe provides the observable pattern for
+JavaScript Objects and Lists. It lets you
 
-## Templates Consume Deferreds
+  - Set and remove property or property values on objects and arrays
+  - Listen for changes in objects and arrays
+  - Work with nested properties
 
-Here's what that looks like in 3.1:
 
-    $('#todos').html('temps/todos.ejs', $.get('/todos',{},'json') );
+## Creating an can.Observe
+
+To create an observable object, use `new can.Observe( OBJECT )` like:
+
+    var person = new can.Observe({name: 'justin', age: 29})
     
-This will make two parallel ajax requests.  One request 
-is made for the template at `temps/todos.ejs` which might look like:
+To create an observable array, use `new can.Observe.List( ARRAY )` like:
 
-<pre><code>&lt;% for(var i =0; i< this.length; i++) { %>
-  &lt;li>&lt;%= this[i].name %>&lt;/li>
-&lt;% } %>
-</code></pre>
+    var hobbies = new can.Observe(['programming', 'basketball', 'nose picking'])
 
-The second request loads `/todos` which might look like:
+  
+can.Observe and can.Observe.List are very similar. In fact,
+can.Observe.List inherits can.Observe and only adds a few extra methods for
+manipulating arrays like [can.Observe.List::push push].  Go to
+[can.Observe.List] for more information about lists.
 
-    [
-        {"id" : 1, "name": "Take out the Trash"},
-        {"id" : 2, "name": "Do the Laundry"}
-    ]
+`Observe` works with nested objects and arrays, so the following works:
 
-When both have been loaded, the template is rendered with the todos data and
-the result set as the `#todos` element's innerHTML.  
-
-This is fab fast! The AJAX and template request are made in parallel and rendered
-when both are complete.  I am too lazy to write 
-out what this would look like before deferreds.  Actually, I'm not too lazy:
-
-    var template,
-    	data,
-        done = function(){ 
-           if( template && data ) { 
-             var html = new EJS({text: template})
-                                    .render(data);
-             $('#todos').html( html )
-           }
+    var data = { 
+      addresses : [
+        {
+          city: 'Chicago',
+          state: 'IL'
+        },
+        {
+          city: 'Boston',
+          state : 'MA'
         }
-    $.get('temps/todos.ejs', function(text){
-      template = text;
-      done();
-    },'text')
-    $.get('/todos',{}, function(json){
-      data = json
-      done();
-    },'json')
+        ],
+      name : "Justin Meyer"
+    },
+    o = new can.Observe(data);
     
-## Models Return Deferreds
+_o_ now represents an observable copy of _data_.  
 
-Model AJAX functions now return deferreds.  Creating models like:
+## Getting and Setting Properties
 
-    $.Model('User',{
-      findAll: '/users'
-    },{});
+Use [can.Observe::attr attr] to get and set properties.
+
+For example, you can __read__ the property values of _o_ with
+`observe.attr( name )` like:
+
+    // read name
+    o.attr('name') //-> Justin Meyer
     
-    $.Model('Todo',{
-      findAll: '/todos'
-    },{})
-    
-Lets you request todos and users and get back a deferred that can be 
-used in functions that accept deferreds like $.when:
+And __set__ property names of _o_ with 
+`observe.attr( name, value )` like:
 
-    $.when( User.findAll(), 
-            Todo.findAll() )
+    // update name
+    o.attr('name', "Brian Moschel") //-> o
 
-Or $.View:
+Observe handles nested data.  Nested Objects and
+Arrays are converted to can.Observe and 
+can.Observe.Lists.  This lets you read nested properties 
+and use can.Observe methods on them.  The following 
+updates the second address (Boston) to 'New York':
 
-    $('#content').html('temps/content.ejs',{
-      users : User.findAll(),
-      todos: Todo.findAll()
+    o.attr('addresses.1').attr({
+      city: 'New York',
+      state: 'NY'
     })
 
-## Conclusion
+`attr()` can be used to get all properties back from the observe:
 
-Despite using templates, this is 
-still 'waiting for a bunch of Ajax requests to complete'.  Does 
-anyone have other good uses for deferreds?
+    o.attr() // -> 
+    { 
+      addresses : [
+        {
+          city: 'Chicago',
+          state: 'IL'
+        },
+        {
+          city: 'New York',
+          state : 'MA'
+        }
+      ],
+      name : "Brian Moschel"
+    }
+
+
+## Listening to property changes
+
+When a property value is changed, it creates events
+that you can listen to.  There are two ways to listen
+for events:
+
+  - [can.Observe::bind bind] - listen for any type of change
+  - [can.Observe::delegate delegate] - listen to a specific type of changes
+    
+    
+    
+With `bind( "change" , handler( ev, attr, how, newVal, oldVal ) )`, you can listen
+to any change that happens within the 
+observe. The handler gets called with the property name that was
+changed, how it was changed ['add','remove','set'], the new value
+and the old value.
+
+    o.bind('change', function( ev, attr, how, nevVal, oldVal ) {
+    
+    })
+
+`delegate( attr, event, handler(ev, newVal, oldVal ) )` lets you listen
+to a specific event on a specific attribute. 
+
+    // listen for name changes
+    o.delegate("name","set", function(){
+    
+    })
+    
+Delegate lets you specify multiple attributes and values to match 
+for the callback. For example,
+
+    r = $.O({type: "video", id : 5})
+    r.delegate("type=images id","set", function(){})
+    
+
+@constructor
+
+@param {Object} obj a JavaScript Object that will be 
+converted to an observable

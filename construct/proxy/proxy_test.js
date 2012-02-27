@@ -5,7 +5,7 @@ module("can/construct/proxy");
 
 test("proxy", function(){
 	var curVal = 0;
-	Can.Construct("Car",{
+	can.Construct("Car",{
 		show: function( value ) {
 			equals(curVal, value)
 		}
@@ -24,7 +24,7 @@ test("proxy", function(){
 });
 
 test("proxy error", 1,function(){
-	Can.Construct("Car",{
+	can.Construct("Car",{
 		show: function( value ) {
 			equals(curVal, value)
 		}

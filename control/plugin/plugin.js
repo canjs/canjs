@@ -57,7 +57,7 @@ $.fn.extend({
 	}
 });
 
-Can.Control.plugin = function(pluginname){
+can.Control.plugin = function(pluginname){
 	var controller = this;
 
 	if (!$.fn[pluginname]) {

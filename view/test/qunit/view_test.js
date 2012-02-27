@@ -110,7 +110,7 @@ test("object of deferreds", function(){
 	var foo = $.Deferred(),
 		bar = $.Deferred();
 	stop();
-	Can.View("//can/view/test/qunit/deferreds.ejs",{
+	can.View("//can/view/test/qunit/deferreds.ejs",{
 		foo : foo.promise(),
 		bar : bar
 	}).then(function(result){
@@ -127,7 +127,7 @@ test("object of deferreds", function(){
 test("deferred", function(){
 	var foo = $.Deferred();
 	stop();
-	Can.View("//can/view/test/qunit/deferred.ejs",foo).then(function(result){
+	can.View("//can/view/test/qunit/deferred.ejs",foo).then(function(result){
 		equals(result, "FOO");
 		start();
 	});
@@ -158,13 +158,13 @@ test("modifier with a deferred", function(){
 
 test("jQuery.fn.hookup", function(){
 	$("#qunit-test-area").html("");
-	var els = $(Can.View("//can/view/test/qunit/hookup.ejs",{})).hookup();
+	var els = $(can.View("//can/view/test/qunit/hookup.ejs",{})).hookup();
 	$("#qunit-test-area").html(els); //makes sure no error happens
 });
 
 test("non-HTML content in hookups", function(){
   $("#qunit-test-area").html("<textarea></textarea>");
-  Can.View.hookup(function(){});
+  can.View.hookup(function(){});
   $("#qunit-test-area textarea").val("asdf");
   equals($("#qunit-test-area textarea").val(), "asdf");
 });
@@ -187,7 +187,7 @@ test("val set with a template within a hookup within another template", function
 })
 
 /*test("bad url", function(){
-	Can.View("//asfdsaf/sadf.ejs")
+	can.View("//asfdsaf/sadf.ejs")
 });*/
 
 test("hyphen in type", function(){

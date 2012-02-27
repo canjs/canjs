@@ -5,7 +5,7 @@ steal("can/util").then(function( $ ) {
 	var toId = function( src ) {
 		return src.replace(/^\/\//, "").replace(/[\/\.]/g, "_");
 	},
-		makeArray = Can.makeArray,
+		makeArray = can.makeArray,
 		// used for hookup ids
 		id = 1,
 	// this might be useful for testing if html
@@ -33,7 +33,7 @@ steal("can/util").then(function( $ ) {
 	 *  - Bundling of processed templates in production builds.
 	 *  - Hookup jquery plugins directly in the template.
 	 * 
-	 * The [mvc.view Get Started with jQueryMX] has a good walkthrough of Can.View.
+	 * The [mvc.view Get Started with jQueryMX] has a good walkthrough of can.View.
 	 * 
 	 * ## Use
 	 * 
@@ -143,7 +143,7 @@ steal("can/util").then(function( $ ) {
 	 * 
 	 * ## Deferreds (3.0.6)
 	 * 
-	 * If you pass deferreds to Can.View or any of the jQuery 
+	 * If you pass deferreds to can.View or any of the jQuery 
 	 * modifiers, the view will wait until all deferreds resolve before 
 	 * rendering the view.  This makes it a one-liner to make a request and 
 	 * use the result to render a template. 
@@ -157,9 +157,9 @@ steal("can/util").then(function( $ ) {
 	 * ## Just Render Templates
 	 * 
 	 * Sometimes, you just want to get the result of a rendered 
-	 * template without inserting it, you can do this with Can.View: 
+	 * template without inserting it, you can do this with can.View: 
 	 * 
-	 *     var out = Can.View('path/to/template.jaml',{});
+	 *     var out = can.View('path/to/template.jaml',{});
 	 *     
 	 * ## Preloading Templates
 	 * 
@@ -189,7 +189,7 @@ steal("can/util").then(function( $ ) {
 	 * 
 	 * ## Using other Template Engines
 	 * 
-	 * It's easy to integrate your favorite template into Can.View and Steal.  Read 
+	 * It's easy to integrate your favorite template into can.View and Steal.  Read 
 	 * how in [jQuery.View.register].
 	 * 
 	 * @constructor
@@ -201,13 +201,13 @@ steal("can/util").then(function( $ ) {
 	 * This makes it ok to use views synchronously like:
 	 * 
 	 * @codestart
-	 * Can.View("//myplugin/views/init.ejs",{message: "Hello World"})
+	 * can.View("//myplugin/views/init.ejs",{message: "Hello World"})
 	 * @codeend
 	 * 
 	 * If you aren't using StealJS, it's best to use views asynchronously like:
 	 * 
 	 * @codestart
-	 * Can.View("//myplugin/views/init.ejs",
+	 * can.View("//myplugin/views/init.ejs",
 	 *        {message: "Hello World"}, function(result){
 	 *   // do something with result
 	 * })
@@ -225,46 +225,43 @@ steal("can/util").then(function( $ ) {
 	 * the rendered result of the view.
 	 */
 	
-	$view = Can.view = function(view, data, helpers, callback){
+	$view = can.view = function(view, data, helpers, callback){
 		// get the result
-		var result = Can.render(view, data, helpers, callback);
-		if(Can.isDeferred(result)){
+		var result = can.render(view, data, helpers, callback);
+		if(can.isDeferred(result)){
 			return result.pipe(function(result){
-				return Can.view.frag(result);
+				return can.view.frag(result);
 			})
 		}
 		
 		// convert it into a dom frag
-		return Can.view.frag(result);
+		return can.view.frag(result);
 	};
-	Can.extend(Can.view,{
+	can.extend(can.view,{
 		frag: function(result){
-			var frag = Can.buildFragment([result],[document.body]).fragment;
+			var frag = can.buildFragment([result],[document.body]).fragment;
 			// if we have an empty frag
 			if(!frag.childNodes.length) { 
 				frag.appendChild(document.createTextNode(''))
 			}
-			return Can.view.hookup(frag);
+			return can.view.hookup(frag);
 		},
 		hookup: function(fragment){
-			var hookupEls,
+			var hookupEls = [],
 				id, 
 				func, 
-				arr = [],
 				el,
 				i=0;
 			
 			// get all childNodes
-			Can.each(fragment.childNodes ? makeArray(fragment.childNodes) : fragment, function(i, node){
+			can.each(fragment.childNodes ? makeArray(fragment.childNodes) : fragment, function(i, node){
 				if(node.nodeType != 3){
-					arr.push(node)
-					arr.push.apply(arr, makeArray( node.getElementsByTagName('*')))
+					hookupEls.push(node)
+					hookupEls.push.apply(hookupEls, makeArray( node.getElementsByTagName('*')))
 				}
 			});
 			// filter by data-view-id attribute
-			hookupEls = Can.filter(Can.$(arr), "[data-view-id]");
-			
-			//
+
 		
 			for (; el = hookupEls[i++]; ) {
 				if ( el.getAttribute && (id = el.getAttribute('data-view-id')) && (func = $view.hookups[id]) ) {
@@ -287,7 +284,7 @@ steal("can/util").then(function( $ ) {
 		 * put on the page.  Typically this is handled by the template engine.  Currently
 		 * only EJS supports this functionality.
 		 * 
-		 *     var id = Can.View.hookup(function(el){
+		 *     var id = can.View.hookup(function(el){
 		 *            //do something with el
 		 *         }),
 		 *         html = "<div data-view-id='"+id+"'>"
@@ -321,7 +318,7 @@ steal("can/util").then(function( $ ) {
 		 * ## Example
 		 * 
 		 * @codestart
-		 * Can.View.register({
+		 * can.View.register({
 		 * 	suffix : "tmpl",
 		 *  plugin : "jquery/view/tmpl",
 		 * 	renderer: function( id, text ) {
@@ -330,7 +327,7 @@ steal("can/util").then(function( $ ) {
 		 * 		}
 		 * 	},
 		 * 	script: function( id, text ) {
-		 * 		var tmpl = Can.tmpl(text).toString();
+		 * 		var tmpl = can.tmpl(text).toString();
 		 * 		return "function(data){return ("+
 		 * 		  	tmpl+
 		 * 			").call(jQuery, jQuery, data); }";
@@ -385,7 +382,7 @@ steal("can/util").then(function( $ ) {
 	})
 	
 
-	Can.render = function( view, data, helpers, callback ) {
+	can.render = function( view, data, helpers, callback ) {
 		// if helpers is a function, it is actually a callback
 		if ( typeof helpers === 'function' ) {
 			callback = helpers;
@@ -398,13 +395,13 @@ steal("can/util").then(function( $ ) {
 
 		if ( deferreds.length ) { // does data contain any deferreds?
 			// the deferred that resolves into the rendered content ...
-			var deferred = new Can.Deferred();
+			var deferred = new can.Deferred();
 
 			// add the view request to the list of deferreds
 			deferreds.push(get(view, true))
 
 			// wait for the view and all deferreds to finish
-			Can.when.apply(Can, deferreds).then(function( resolved ) {
+			can.when.apply(can, deferreds).then(function( resolved ) {
 				// get all the resolved deferreds
 				var objs = makeArray(arguments),
 					// renderer is last [0] is the data
@@ -413,14 +410,14 @@ steal("can/util").then(function( $ ) {
 					result; 
 				
 				// make data look like the resolved deferreds
-				if ( Can.isDeferred(data) ) {
+				if ( can.isDeferred(data) ) {
 					data = usefulPart(resolved);
 				}
 				else {
 					// go through each prop in data again,
 					// replace the defferreds with what they resolved to
 					for ( var prop in data ) {
-						if ( Can.isDeferred(data[prop]) ) {
+						if ( can.isDeferred(data[prop]) ) {
 							data[prop] = usefulPart(objs.shift());
 						}
 					}
@@ -464,14 +461,14 @@ steal("can/util").then(function( $ ) {
 		}
 	}
 	// returns true if something looks like a deferred
-	Can.isDeferred = function( obj ) {
-		return obj && Can.isFunction(obj.always) // check if obj is a Can.Deferred
+	can.isDeferred = function( obj ) {
+		return obj && can.isFunction(obj.then) && can.isFunction(obj.pipe) // check if obj is a can.Deferred
 	} 
 	// makes sure there's a template, if not, has steal provide a warning
 	var	checkText = function( text, url ) {
 			if (!text.match(/[^\s]/) ) {
 				steal.dev.log("There is no template or an empty template at " + url);
-				throw "Can.view ERROR: There is no template or an empty template at " + url;
+				throw "can.view ERROR: There is no template or an empty template at " + url;
 			}
 		},
 		// returns a 'view' renderer deferred
@@ -496,7 +493,7 @@ steal("can/util").then(function( $ ) {
 			response = function( text ) {
 				// get the renderer function
 				var func = type.renderer(id, text),
-					d = new Can.Deferred();
+					d = new can.Deferred();
 				d.resolve(func)
 				// cache if if we are caching
 				if ( $view.cache ) {
@@ -518,7 +515,7 @@ steal("can/util").then(function( $ ) {
 				suffix = $view.ext;
 				url = url + $view.ext;
 			}
-			if(Can.isArray(suffix)){
+			if(can.isArray(suffix)){
 				suffix = suffix[0]
 			}
 	
@@ -548,8 +545,8 @@ steal("can/util").then(function( $ ) {
 				return response(el.innerHTML);
 			} else {
 				// make an ajax request for text
-				var d = new Can.Deferred();
-				Can.ajax({
+				var d = new can.Deferred();
+				can.ajax({
 					async: async,
 					url: url,
 					dataType: "text",
@@ -577,11 +574,11 @@ steal("can/util").then(function( $ ) {
 			var deferreds = [];
 
 			// pull out deferreds
-			if ( Can.isDeferred(data) ) {
+			if ( can.isDeferred(data) ) {
 				return [data]
 			} else {
 				for ( var prop in data ) {
-					if ( Can.isDeferred(data[prop]) ) {
+					if ( can.isDeferred(data[prop]) ) {
 						deferreds.push(data[prop]);
 					}
 				}
@@ -589,10 +586,10 @@ steal("can/util").then(function( $ ) {
 			return deferreds;
 		},
 		// gets the useful part of deferred
-		// this is for Models and Can.ajax that resolve to array (with success and such)
+		// this is for Models and can.ajax that resolve to array (with success and such)
 		// returns the useful, content part
 		usefulPart = function( resolved ) {
-			return Can.isArray(resolved) && resolved.length === 3 && resolved[1] === 'success' ? resolved[0] : resolved
+			return can.isArray(resolved) && resolved.length === 3 && resolved[1] === 'success' ? resolved[0] : resolved
 		};
 	
 });
