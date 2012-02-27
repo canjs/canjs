@@ -17,7 +17,7 @@ test("routes changed", function(){
 	can.append( can.$("#qunit-test-area"), '<a id="foo" href="#!foo/bar">foo/bar</a><a id="empty" href="#!">empty</a>')
 	
 	//init controller
-	new Router(window);
+	new Router(document.body);
 	
 	//trigger change events
 	can.trigger( can.$('#foo'), 'click');
