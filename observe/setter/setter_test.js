@@ -1,10 +1,10 @@
-steal('funcunit/qunit','./setter',function(){
+steal('funcunit/qunit','./setter', 'can/model', function(){
 
-module("Observe setter");
+module("Can.Observe.Setter");
 
 test("setter testing works", function(){
 	
-	var Contact = can.Control({
+	var Contact = can.Observe({
 		setBirthday : function(raw){
 			if(typeof raw == 'number'){
 				return new Date( raw )
