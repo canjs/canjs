@@ -3,7 +3,7 @@ steal('funcunit/qunit','./super',function(){
 module("can/construct/super");
 
 test("prototype super", function(){
-	var A = Can.Construct({
+	var A = can.Construct({
 		init : function(arg){
 			this.arg = arg+ 1;
 		},
@@ -27,7 +27,7 @@ test("prototype super", function(){
 });
 
 test("static super", function(){
-	var First = Can.Construct({
+	var First = can.Construct({
 		raise: function(num){
 			return num;
 		}
@@ -45,7 +45,7 @@ test("static super", function(){
 
 /* Not sure I want to fix this yet.
 test("Super in derived when parent doesn't have init", function(){
-	Can.Construct("Parent",{
+	can.Construct("Parent",{
 	});
 	
 	Parent("Derived",{
@@ -56,7 +56,7 @@ test("Super in derived when parent doesn't have init", function(){
 
 	try {
 		new Derived();
-		ok(true, "Can call super in init safely")
+		ok(true, "can call super in init safely")
 	} catch (e) {
 		ok(false, "Failed to call super in init with error: " + e)
 	}

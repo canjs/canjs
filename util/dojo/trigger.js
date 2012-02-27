@@ -79,7 +79,7 @@ define("plugd/trigger",["dojo"], function(dojo){
 		//		in this case is returned from `dojo.trigger`
 		//	 
 		// event: String|Function
-		//		The name of the event to trigger. Can be any DOM level 2 event
+		//		The name of the event to trigger. can be any DOM level 2 event
 		//		and can be in either form: "onclick" or "click" for instance.
 		//		In the object-firing case, this method can be a function or
 		//		a string version of a member function, just like `dojo.hitch`.

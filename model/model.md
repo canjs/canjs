@@ -1,4 +1,4 @@
-@class Can.Model
-@parent CanJS
+@class can.Model
+@parent index
 
 Model

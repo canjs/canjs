@@ -8,7 +8,7 @@ steal('can/util/string', function($){
 	/**
 	 * @add jQuery.String
 	 */
-	Can.extend(Can.String, { 
+	can.extend(can.String, { 
 		
 		/**
 		 * @function deparam

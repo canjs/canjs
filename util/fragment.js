@@ -19,7 +19,7 @@ steal(function(){
 		    return [].slice.call(container.childNodes);
 		}
 	
-	Can.buildFragment = function(htmls, nodes){
+	can.buildFragment = function(htmls, nodes){
 		var parts = fragment(htmls[0]),
 			frag = document.createDocumentFragment();
 		parts.forEach(function(part){

@@ -4,7 +4,7 @@ steal('can/observe',function(){
 	
 
 	var	pipe = function(def, model, func){
-		var d = new Can.Deferred();
+		var d = new can.Deferred();
 		def.then(function(){
 			arguments[0] = model[func](arguments[0])
 			d.resolve.apply(d, arguments)
@@ -31,14 +31,14 @@ steal('can/observe',function(){
 			}
 
 			// if we are a non-array object, copy to a new attrs
-			ajaxOb.data = typeof data == "object" && !Can.isArray(data) ?
-				Can.extend(ajaxOb.data || {}, data) : data;
+			ajaxOb.data = typeof data == "object" && !can.isArray(data) ?
+				can.extend(ajaxOb.data || {}, data) : data;
 	
 
 			// get the url with any templated values filled out
-			ajaxOb.url = Can.String.sub(ajaxOb.url, ajaxOb.data, true);
+			ajaxOb.url = can.String.sub(ajaxOb.url, ajaxOb.data, true);
 
-			return Can.ajax(Can.extend({
+			return can.ajax(can.extend({
 				type: type || "post",
 				dataType: dataType ||"json",
 				success : success,
@@ -97,7 +97,7 @@ steal('can/observe',function(){
 				attrs = attrs || {};
 				var identity = this.id;
 				if ( attrs[identity] && attrs[identity] !== id ) {
-					attrs["new" + Can.String.capitalize(id)] = attrs[identity];
+					attrs["new" + can.String.capitalize(id)] = attrs[identity];
 					delete attrs[identity];
 				}
 				attrs[identity] = id;
@@ -130,21 +130,21 @@ steal('can/observe',function(){
 		}
 	};
 
-	Can.Observe("Can.Model",{
+	can.Observe("can.Model",{
 		setup : function(){
-			Can.Observe.apply(this, arguments);
-			if(this === Can.Model){
+			can.Observe.apply(this, arguments);
+			if(this === can.Model){
 				return;
 			}
 			var self = this;
 			
-			Can.each(ajaxMethods, function(name, method){
+			can.each(ajaxMethods, function(name, method){
 				var prop = self[name];
 				if ( typeof prop !== 'function' ) {
 					self[name] = method(prop);
 				}
 			});
-			if(self.fullName == "Can.Model"){
+			if(self.fullName == "can.Model"){
 				self.fullName = "Model"+(++modelNum);
 			}
 			//add ajax converters
@@ -153,8 +153,8 @@ steal('can/observe',function(){
 				var converters = {},
 					convertName = "* " + self.fullName + ".model";
 	
-				converters[convertName + "s"] = Can.proxy(self.models,self);
-				converters[convertName] = Can.proxy(self.model,self);
+				converters[convertName + "s"] = can.proxy(self.models,self);
+				converters[convertName] = can.proxy(self.model,self);
 				$.ajaxSetup({
 					converters: converters
 				});
@@ -170,7 +170,7 @@ steal('can/observe',function(){
 			// get the list type
 			var res = new( this.List || ML),
 				// did we get an array
-				arr = Can.isArray(instancesRawData),
+				arr = can.isArray(instancesRawData),
 				
 				// did we get a model list?
 				ml = (instancesRawData instanceof ML),
@@ -197,7 +197,7 @@ steal('can/observe',function(){
 				res.push(this.model(raw[i]));
 			}
 			if (!arr ) { //push other stuff onto array
-				Can.each(instancesRawData, function(prop, val){
+				can.each(instancesRawData, function(prop, val){
 					if ( prop !== 'data' ) {
 						res[prop] = val;
 					}
@@ -233,25 +233,25 @@ steal('can/observe',function(){
 				this._bindings = 0;
 			}
 			this._bindings++;
-			return Can.Observe.prototype.bind.apply(this, arguments);
+			return can.Observe.prototype.bind.apply(this, arguments);
 		},
 		unbind : function(){
 			this._bindings--;
 			if(!this._bindings){
 				delete this.constructor.store[getId(this)];
 			}
-			return Can.Observe.prototype.unbind.apply(this, arguments);
+			return can.Observe.prototype.unbind.apply(this, arguments);
 		},
 		// change ID
 		___set: function( prop, val ) {
-			Can.Observe.prototype.___set.call(this,prop, val)
+			can.Observe.prototype.___set.call(this,prop, val)
 			// if we add an id, move it to the store
 			if(prop === this.constructor.id && this._bindings){
 				this.constructor.store[getId(this)] = this;
 			}
 		}
 	});
-		Can.each([
+		can.each([
 	/**
 	 * @function created
 	 * @hide
@@ -276,7 +276,7 @@ steal('can/observe',function(){
 	 * 
 	 */
 	"destroyed"], function( i, funcName ) {
-		Can.Model.prototype[funcName] = function( attrs ) {
+		can.Model.prototype[funcName] = function( attrs ) {
 			var stub, 
 				constructor = this.constructor;
 
@@ -284,22 +284,27 @@ steal('can/observe',function(){
 			stub = attrs && typeof attrs == 'object' && this.attr(attrs.attr ? attrs.attr() : attrs);
 
 			// call event on the instance
-			Can.trigger(this,funcName);
-			Can.trigger(this,"change",funcName)
+			can.trigger(this,funcName);
+			can.trigger(this,"change",funcName)
 			//!steal-remove-start
 			steal.dev.log("Model.js - "+ constructor.shortName+" "+ funcName);
 			//!steal-remove-end
 
 			// call event on the instance's Class
-			Can.trigger(constructor,funcName, this);
+			can.trigger(constructor,funcName, this);
 		};
 	});
 	
 	// model lists are just like Observe.List except that when their items is destroyed, it automatically
 	// gets removed from the list
-	var ML = Can.Observe.List('Can.Model.List',{
+	/**
+	 * @class can.Model.List
+	 * @inherits can.Observe.List
+	 * @parent index
+	 */
+	var ML = can.Observe.List('can.Model.List',{
 		setup : function(){
-			Can.Observe.List.prototype.setup.apply(this, arguments );
+			can.Observe.List.prototype.setup.apply(this, arguments );
 			// send destroy events
 			var self = this;
 			this.bind('change', function(ev, how){

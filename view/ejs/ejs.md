@@ -1,8 +1,8 @@
-@class Can.EJS
-@parent Can.view
+@class can.EJS
+@parent can.view
 
 EJS provides __live__ ERB style client-side templates. Use EJS 
-with [Can.view] and for live templating use EJS with [Can.Observe].
+with [can.view] and for live templating use EJS with [can.Observe].
 
 ## Basic Example
 
@@ -27,7 +27,7 @@ Notice the magic tags?  Those are things that look like `<% %>` and
 `<%= %>`.  Code between `<% %>` is run and the return value of code
 between `<%= %>` is inserted into the page.
 
-Next, create a teacher and use Can.view to render the template:
+Next, create a teacher and use can.view to render the template:
 
     var teacher = {
       name : "Mr. Smith",
@@ -41,7 +41,7 @@ Next, create a teacher and use Can.view to render the template:
     };
     
     document.getElementById('teacher')
-      .appendChild( Can.view("teacherEjs", teacher) )
+      .appendChild( can.view("teacherEjs", teacher) )
 
 This results in HTML like:
 
@@ -62,8 +62,8 @@ This is nice, but what if we change properties of the teacher?
 
 ## Basic Live Binding Example
 
-EJS sets up live templating binding when a [Can.Observe]'s properties are read 
-via [Can.Observe::attr attr] within a magic tag.  To make this template
+EJS sets up live templating binding when a [can.Observe]'s properties are read 
+via [can.Observe::attr attr] within a magic tag.  To make this template
 respond to changes in the teacher data, first rewrite the template
 to use the attr method to read properties and `list( observeList, cb(item, i) )`
 to iterate through a list like:
@@ -85,10 +85,10 @@ to iterate through a list like:
 __Note:__ The end of this page discusses why using `list` is 
 helpful, but it does nothing fancy.
 
-Next, turn your teacher into a `new Can.Observe(object)` and pass
-that to `Can.view`:
+Next, turn your teacher into a `new can.Observe(object)` and pass
+that to `can.view`:
 
-    var teacher = Can.Observe({
+    var teacher = can.Observe({
       name : "Mr. Smith",
       grade : "a"
       students : [
@@ -100,7 +100,7 @@ that to `Can.view`:
     });
     
     document.getElementById('teacher')
-      .appendChild( Can.view("teacherEjs", teacher) );
+      .appendChild( can.view("teacherEjs", teacher) );
       
 Finally, update some properties of teacher and slap your 
 head with disbelief ...

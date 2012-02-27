@@ -4,7 +4,7 @@ test("pluginName", function() {
 	// http://forum.javascriptmvc.com/#topic/32525000000488001
 	expect(6);
 
-	Can.Control("PluginName", {
+	can.Control("PluginName", {
 	pluginName : "my_plugin"
 	}, {
 	method : function(arg) {

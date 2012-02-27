@@ -8,7 +8,7 @@ test("elements testing works", function(){
 
 
 test("hookup and model", function(){
-	Can.Model('Person')
+	can.Model('Person')
 	var div = $(document.createElement('div'))
 	var p = new Person({foo: "bar2", id: 5});
 	p.hookup( div[0] );
@@ -34,7 +34,7 @@ test("unique models", function(){
 })
 
 test("identity should replace spaces with underscores", function(){
-	Can.Model("Task",{},{});
+	can.Model("Task",{},{});
 	t = new Task({
 		id: "id with spaces"
 	});
@@ -43,7 +43,7 @@ test("identity should replace spaces with underscores", function(){
 
 
 test("hookup and elements", function(){
-	Can.Model('Escaper',{
+	can.Model('Escaper',{
 		escapeIdentity : true
 	},{});
 	

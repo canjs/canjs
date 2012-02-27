@@ -7,7 +7,7 @@ steal('steal/build/pluginify', function () {
 	steal.build.pluginify("can/util/mvc.js",{
 		out : "can/util/can.jquery.js",
 		exclude : "can/util/jquery/jquery.1.7.1.js",
-		global : "Can = {}",
+		global : "can = {}",
 		onefunc : true,
 		compress: true
 	});

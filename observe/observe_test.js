@@ -2,7 +2,7 @@ module('can/observe')
 
 test("Basic Observe",9,function(){
 	
-	var state = new Can.Observe({
+	var state = new can.Observe({
 		category : 5,
 		productType : 4,
 		properties : {
@@ -45,7 +45,7 @@ test("Basic Observe",9,function(){
 
 
 test("list splice", function(){
-	var l = new Can.Observe.List([0,1,2,3]),
+	var l = new can.Observe.List([0,1,2,3]),
 		first = true;
   
 	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
@@ -70,7 +70,7 @@ test("list splice", function(){
 
 
 test("list pop", function(){
-	var l = new Can.Observe.List([0,1,2,3]);
+	var l = new can.Observe.List([0,1,2,3]);
   
 	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
 		equals (attr, "3")
@@ -85,7 +85,7 @@ test("list pop", function(){
 })
 
 test("changing an object unbinds", function(){
-	var state = new Can.Observe({
+	var state = new can.Observe({
 		category : 5,
 		productType : 4,
 		properties : {
@@ -115,7 +115,7 @@ test("changing an object unbinds", function(){
 });
 
 test("replacing with an object that object becomes observable",function(){
-	var state = new Can.Observe({
+	var state = new can.Observe({
 		properties : {
 		  brand: [],
 		  model : [],
@@ -131,7 +131,7 @@ test("replacing with an object that object becomes observable",function(){
 });
 
 test("remove attr", function(){
-	var state = new Can.Observe({
+	var state = new can.Observe({
 		properties : {
 		  brand: [],
 		  model : [],
@@ -154,7 +154,7 @@ test("remove attr", function(){
 });
 
 test("attr with an object", function(){
-	var state = new Can.Observe({
+	var state = new can.Observe({
 		properties : {
 		  foo: "bar",
 		  brand: []
@@ -198,13 +198,13 @@ test("attr with an object", function(){
 });
 
 test("empty get", function(){
-	var state = new Can.Observe({});
+	var state = new can.Observe({});
 	
 	equals(state.attr('foo.bar'), undefined)
 });
 
 test("attr deep array ", function(){
-	var state = new Can.Observe({});
+	var state = new can.Observe({});
 	var arr = [{
 			foo: "bar"
 		}],
@@ -229,12 +229,12 @@ test('attr semi-serialize', function(){
 			arr: [1,2,3, {four: '5'}]
 		};
 	
-	var res = new Can.Observe(first).attr();
+	var res = new can.Observe(first).attr();
 	same(res,compare, "test")
 })
 	
 test("attr sends events after it is done", function(){
-	var state = new Can.Observe({foo: 1, bar: 2})
+	var state = new can.Observe({foo: 1, bar: 2})
 	state.bind('change', function(){
 		equals(state.attr('foo'), -1, "foo set");
 		equals(state.attr('bar'), -2, "bar set")
@@ -243,13 +243,13 @@ test("attr sends events after it is done", function(){
 })
 
 test("direct property access", function(){
-	var state = new Can.Observe({foo: 1, attr: 2});
+	var state = new can.Observe({foo: 1, attr: 2});
 	equals(state.foo,1);
 	equals(typeof state.attr, 'function')
 })
 
 test("pop unbinds", function(){
-	var l = new Can.Observe.List([{foo: 'bar'}]);
+	var l = new can.Observe.List([{foo: 'bar'}]);
 	var o = l.attr(0),
 		count = 0;
 	l.bind('change', function(ev, attr, how, newVal, oldVal){
@@ -274,7 +274,7 @@ test("pop unbinds", function(){
 })
 
 test("splice unbinds", function(){
-	var l = new Can.Observe.List([{foo: 'bar'}]);
+	var l = new can.Observe.List([{foo: 'bar'}]);
 	var o = l.attr(0),
 		count = 0;
 	l.bind('change', function(ev, attr, how, newVal, oldVal){
@@ -300,7 +300,7 @@ test("splice unbinds", function(){
 
 
 test("always gets right attr even after moving array items", function(){
-	var l = new Can.Observe.List([{foo: 'bar'}]);
+	var l = new can.Observe.List([{foo: 'bar'}]);
 	var o = l.attr(0);
 	l.unshift("A new Value")
 	

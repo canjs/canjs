@@ -27,15 +27,15 @@ module("can/view/ejs, rendering",{
 
 
 test("render with left bracket", function(){
-	var compiled = new Can.EJS({text: this.squareBrackets, type: '['}).render({animals: this.animals})
+	var compiled = new can.EJS({text: this.squareBrackets, type: '['}).render({animals: this.animals})
 	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders with bracket")
 })
 test("render with with", function(){
-	var compiled = new Can.EJS({text: this.squareBracketsNoThis, type: '['}).render({animals: this.animals}) ;
+	var compiled = new can.EJS({text: this.squareBracketsNoThis, type: '['}).render({animals: this.animals}) ;
 	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders bracket with no this")
 })
 test("default carrot", function(){
-	var compiled = new Can.EJS({text: this.angleBracketsNoThis}).render({animals: this.animals}) ;
+	var compiled = new can.EJS({text: this.angleBracketsNoThis}).render({animals: this.animals}) ;
 
 	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>")
 })
@@ -44,7 +44,7 @@ test("render with double angle", function(){
 			  "<ul><% animals.each(function(animal){%>" +
 	               "<li><%= animal %></li>" + 
 		      "<%});%></ul>";
-	var compiled = new Can.EJS({text: text}).render({animals: this.animals}) ;
+	var compiled = new can.EJS({text: text}).render({animals: this.animals}) ;
 	equals(compiled, "<% replace_me %><ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "works")
 });
 
@@ -53,20 +53,20 @@ test("comments", function(){
 			  "<ul><% animals.each(function(animal){%>" +
 	               "<li><%= animal %></li>" + 
 		      "<%});%></ul>";
-	var compiled = new Can.EJS({text: text}).render({animals: this.animals}) ;
+	var compiled = new can.EJS({text: text}).render({animals: this.animals}) ;
 	equals(compiled,"<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>" )
 });
 
 test("multi line", function(){
 	var text = "a \n b \n c",
-		result = new Can.EJS({text: text}).render({}) ;
+		result = new can.EJS({text: text}).render({}) ;
 		
 	equals(result, text)
 })
 
 test("escapedContent", function(){
 	var text = "<span><%= tags %></span><label>&amp;</label><strong><%= number %></strong><input value='<%= quotes %>'/>";
-	var compiled = new Can.EJS({text: text}).render({tags: "foo < bar < car > zar > poo",
+	var compiled = new can.EJS({text: text}).render({tags: "foo < bar < car > zar > poo",
 							quotes : "I use 'quote' fingers \"a lot\"",
 							number : 123}) ;
 	
@@ -81,7 +81,7 @@ test("escapedContent", function(){
 
 test("unescapedContent", function(){
 	var text = "<span><%== tags %></span><div><%= tags %></div><input value='<%== quotes %>'/>";
-	var compiled = new Can.EJS({text: text}).render({tags: "<strong>foo</strong><strong>bar</strong>",
+	var compiled = new can.EJS({text: text}).render({tags: "<strong>foo</strong><strong>bar</strong>",
 							quotes : "I use 'quote' fingers \"a lot\""}) ;
 	
 	var div = document.createElement('div');
@@ -98,7 +98,7 @@ test("returning blocks", function(){
 		return cb([1,2,3,4])
 	}
 	
-	var res = Can.
+	var res = can.
 		render("//can/view/ejs/test_template.ejs",{
 			something: somethingHelper, 
 			items: ['a','b']
@@ -110,18 +110,18 @@ test("returning blocks", function(){
 
 test("easy hookup", function(){
 	var div = document.createElement('div');
-	div.appendChild(Can.view("//can/view/ejs/easyhookup.ejs",{text: "yes"}))
+	div.appendChild(can.view("//can/view/ejs/easyhookup.ejs",{text: "yes"}))
 	
 	ok( div.getElementsByTagName('div')[0].className.indexOf("yes") != -1, "has yes" )
 });
 
 test("helpers", function() {
-	Can.EJS.Helpers.prototype.simpleHelper = function()
+	can.EJS.Helpers.prototype.simpleHelper = function()
 	{
 		return 'Simple';
 	}
 	
-	Can.EJS.Helpers.prototype.elementHelper = function()
+	can.EJS.Helpers.prototype.elementHelper = function()
 	{
 		return function(el) {
 			el.innerHTML = 'Simple';
@@ -129,26 +129,26 @@ test("helpers", function() {
 	}
 	
 	var text = "<div><%= simpleHelper() %></div>";
-	var compiled = new Can.EJS({text: text}).render() ;
+	var compiled = new can.EJS({text: text}).render() ;
 	equals(compiled, "<div>Simple</div>");
 	
 	text = "<div id=\"hookup\" <%= elementHelper() %>></div>";
-	compiled = new Can.EJS({text: text}).render() ;
-	Can.append( Can.$('#qunit-test-area'), Can.view.frag(compiled));
-	equals(Can.$('#hookup')[0].innerHTML, "Simple");
+	compiled = new can.EJS({text: text}).render() ;
+	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
+	equals(can.$('#hookup')[0].innerHTML, "Simple");
 });
 
 test("live binding", function(){
 
 	var text = "<div class='<%== task.attr('completed') ? 'complete' : ''%>'><%== task.attr('name') %></div>";
-	var task = new Can.Observe({
+	var task = new can.Observe({
 		name : 'dishes'
 	})
-	var compiled = new Can.EJS({text: text}).render({task:  task}) ;
+	var compiled = new can.EJS({text: text}).render({task:  task}) ;
 	
 	var div = document.createElement('div');
 
-	div.appendChild(Can.view.frag(compiled))
+	div.appendChild(can.view.frag(compiled))
 	
 
 	equals(div.getElementsByTagName('div')[0].innerHTML,"dishes", "html correctly dishes")
@@ -175,15 +175,15 @@ test("block live binding", function(){
 		"</div>"
 	
 	
-	var obs = new Can.Observe({
+	var obs = new can.Observe({
 		sex : 'male'
 	})
 	
-	var compiled = new Can.EJS({text: text}).render({obs: obs});
+	var compiled = new can.EJS({text: text}).render({obs: obs});
 	
 	var div = document.createElement('div');
 
-	div.appendChild(Can.view.frag(compiled))
+	div.appendChild(can.view.frag(compiled))
 	
 	equals(div.getElementsByTagName('div')[0].innerHTML, "<span>Mr.</span>","initial content")
 	
@@ -201,15 +201,15 @@ test("hookups in tables", function(){
 		"<% } %>"+
 		"</table>"
 		
-	var obs = new Can.Observe({
+	var obs = new can.Observe({
 		sex : 'male'
 	})
 	
-	var compiled = new Can.EJS({text: text}).render({obs: obs});
+	var compiled = new can.EJS({text: text}).render({obs: obs});
 	
 	var div = document.createElement('div');
 
-	div.appendChild(Can.view.frag(compiled));
+	div.appendChild(can.view.frag(compiled));
 	
 	
 	equals(div.getElementsByTagName('tbody')[0].innerHTML, "<tr><td>Mr.</td></tr>","initial content")
@@ -223,17 +223,17 @@ test('multiple hookups in a single attribute', function() {
 	var text =	'<div class=\'<%= obs.attr("foo") %>' +
 							'<%= obs.attr("bar") %><%= obs.attr("baz") %>\'></div>',
 
-	obs = new Can.Observe({
+	obs = new can.Observe({
 		foo: 'a',
 		bar: 'b',
 		baz: 'c'
 	}),
 
-	compiled = new Can.EJS({ text: text }).render({ obs: obs })
+	compiled = new can.EJS({ text: text }).render({ obs: obs })
 	
 	var div = document.createElement('div');
 
-	div.appendChild(Can.view.frag(compiled));
+	div.appendChild(can.view.frag(compiled));
 
 	equals(div.innerHTML, '<div class="abc"></div>', 'initial render');
 
@@ -250,17 +250,17 @@ test('adding and removing multiple html content within a single element', functi
 	
 	var text =	'<div><%== obs.attr("a") %><%== obs.attr("b") %><%== obs.attr("c") %></div>',
 
-	obs = new Can.Observe({
+	obs = new can.Observe({
 		a: 'a',
 		b: 'b',
 		c: 'c'
 	});
 
-	compiled = new Can.EJS({ text: text }).render({ obs: obs })
+	compiled = new can.EJS({ text: text }).render({ obs: obs })
 	
 	var div = document.createElement('div');
 
-	div.appendChild(Can.view.frag(compiled));
+	div.appendChild(can.view.frag(compiled));
 
 	equals(div.innerHTML, '<div>abc</div>', 'initial render');
 
@@ -279,17 +279,17 @@ test('live binding and removeAttr', function(){
 			'<p class="<%= obs.attr("className")%>"><%= obs.attr("message") %></p>' + 
 		'<% } %>',
 
-		obs = new Can.Observe({
+		obs = new can.Observe({
 			show: true,
 			className: 'myMessage',
 			message: 'Live long and prosper'
 		}),
 
-		compiled = new Can.EJS({ text: text }).render({ obs: obs }),
+		compiled = new can.EJS({ text: text }).render({ obs: obs }),
 
 		div = document.createElement('div');
 
-	div.appendChild(Can.view.frag(compiled));
+	div.appendChild(can.view.frag(compiled));
 
 	equals(div.innerHTML, '<p class="myMessage">Live long and prosper</p>', 'initial render');
 
@@ -324,15 +324,15 @@ test('hookup within a tag', function () {
 		//+ 'disabled '
 		+ '<%== obs.attr("baz") %>>lorem ipsum</div>',
 
-	obs = new Can.Observe({
+	obs = new can.Observe({
 		foo: 'class="a"',
 		baz: 'some=\'property\''
 	}),
 
-	compiled = new Can.EJS({ text: text }).render({ obs: obs });
+	compiled = new can.EJS({ text: text }).render({ obs: obs });
 
 	var div = document.createElement('div');
-	div.appendChild(Can.view.frag(compiled));
+	div.appendChild(can.view.frag(compiled));
 	var anchor = div.getElementsByTagName('div')[0];
 
 	equals(anchor.getAttribute('class'), 'a');

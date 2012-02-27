@@ -7,7 +7,7 @@ steal('jquery/controller', 'jquery/lang/openajax').then(function() {
 	 * @plugin jquery/controller/subscribe
 	 * Adds OpenAjax.Hub subscribing to controllers.
 	 * 
-	 *     Can.Control("Subscriber",{
+	 *     can.Control("Subscriber",{
 	 *       "recipe.updated subscribe" : function(called, recipe){
 	 *         
 	 *       },

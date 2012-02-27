@@ -2,22 +2,22 @@ steal("./view",function( $ ) {
 
 	if ( window.steal ) {
 		steal.type("view js", function( options, success, error ) {
-			var type = Can.view.types["." + options.type],
+			var type = can.view.types["." + options.type],
 				id = toId(options.rootSrc);
 
-			options.text = "steal('" + (type.plugin || "jquery/view/" + options.type) + "').then(function($){" + "Can.View.preload('" + id + "'," + options.text + ");\n})";
+			options.text = "steal('" + (type.plugin || "jquery/view/" + options.type) + "').then(function($){" + "can.View.preload('" + id + "'," + options.text + ");\n})";
 			success();
 		})
 	}
 
 
-	$.extend(Can.view, {
+	$.extend(can.view, {
 		register: function( info ) {
 			this.types["." + info.suffix] = info;
 
 			if ( window.steal ) {
 				steal.type(info.suffix + " view js", function( options, success, error ) {
-					var type = Can.view.types["." + options.type],
+					var type = can.view.types["." + options.type],
 						id = toId(options.rootSrc+'');
 
 					options.text = type.script(id, options.text)
@@ -29,7 +29,7 @@ steal("./view",function( $ ) {
 			return "$.View.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
 		},
 		preload: function( id, renderer ) {
-			Can.view.cached[id] = function( data, helpers ) {
+			can.view.cached[id] = function( data, helpers ) {
 				return renderer.call(data, data, helpers);
 			};
 		}
@@ -37,7 +37,7 @@ steal("./view",function( $ ) {
 	});
 	if ( window.steal ) {
 		steal.type("view js", function( options, success, error ) {
-			var type = Can.view.types["." + options.type],
+			var type = can.view.types["." + options.type],
 				id = toId(options.rootSrc+'');
 
 			options.text = "steal('" + (type.plugin || "jquery/view/" + options.type) + "').then(function($){" + "$.View.preload('" + id + "'," + options.text + ");\n})";

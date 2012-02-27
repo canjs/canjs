@@ -505,7 +505,7 @@ steal('can/view').then(function(){
 		jQuery( coll ).remove();
 	}
 	
-	Can.View.register({
+	can.View.register({
 		suffix : "tmpl",
 		renderer: function( id, text ) {
 			var tmpl = $.template( null, text );
@@ -519,5 +519,5 @@ steal('can/view').then(function(){
 			return "function(data){return ("+tmpl+").call(jQuery, jQuery, {data: data}).join(''); }";
 		}
 	})
-	Can.View.ext = ".tmpl"
+	can.View.ext = ".tmpl"
 })

@@ -7,7 +7,7 @@ test("subscribe testing works", function(){
 
 	var clicks = 0, destroys = 0;
 	var subscribes = 0;
-	Can.Control.extend("MyTest",{
+	can.Control.extend("MyTest",{
 		click: function() {
 			clicks++
 		},

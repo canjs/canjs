@@ -1,20 +1,20 @@
 steal('can/control', 'can/view').then(function( $ ) {
 	var URI = steal.URI || steal.File;
 	
-	Can.Control.getFolder = function() {
-		return Can.String.underscore(this.fullName.replace(/\./g, "/")).replace("/Controllers", "");
+	can.Control.getFolder = function() {
+		return can.String.underscore(this.fullName.replace(/\./g, "/")).replace("/Controllers", "");
 	};
 
-	Can.Control._calculatePosition = function( Class, view, action_name ) {
+	can.Control._calculatePosition = function( Class, view, action_name ) {
 		var classParts = Class.fullName.split('.'),
 			classPartsWithoutPrefix = classParts.slice(0);
 			classPartsWithoutPrefix.splice(0, 2); // Remove prefix (usually 2 elements)
 
 		var classPartsWithoutPrefixSlashes = classPartsWithoutPrefix.join('/'),
 			hasControllers = (classParts.length > 2) && classParts[1] == 'Controllers',
-			path = hasControllers? Can.String.underscore(classParts[0]): Can.String.underscore(classParts.join("/")),
-			controller_name = Can.String.underscore(classPartsWithoutPrefix.join('/')).toLowerCase(),
-			suffix = (typeof view == "string" && /\.[\w\d]+$/.test(view)) ? "" : Can.view.ext;
+			path = hasControllers? can.String.underscore(classParts[0]): can.String.underscore(classParts.join("/")),
+			controller_name = can.String.underscore(classPartsWithoutPrefix.join('/')).toLowerCase(),
+			suffix = (typeof view == "string" && /\.[\w\d]+$/.test(view)) ? "" : can.view.ext;
 			
 		//calculate view
 		if ( typeof view == "string" ) {
@@ -31,13 +31,13 @@ steal('can/control', 'can/view').then(function( $ ) {
 	var calculateHelpers = function( myhelpers ) {
 		var helpers = {};
 		if ( myhelpers ) {
-			if ( Can.isArray(myhelpers) ) {
+			if ( can.isArray(myhelpers) ) {
 				for ( var h = 0; h < myhelpers.length; h++ ) {
-					Can.extend(helpers, myhelpers[h]);
+					can.extend(helpers, myhelpers[h]);
 				}
 			}
 			else {
-				Can.extend(helpers, myhelpers);
+				can.extend(helpers, myhelpers);
 			}
 		} else {
 			if ( this._default_helpers ) {
@@ -50,14 +50,14 @@ steal('can/control', 'can/view').then(function( $ ) {
 			for ( var i = 0; i < parts.length; i++ ) {
 				if(current){
 					if ( typeof current.Helpers == 'object' ) {
-						Can.extend(helpers, current.Helpers);
+						can.extend(helpers, current.Helpers);
 					}
 					current = current[parts[i]];
 				}
 			}
 			
 			if (current && typeof current.Helpers == 'object' ) {
-				Can.extend(helpers, current.Helpers);
+				can.extend(helpers, current.Helpers);
 			}
 			
 			this._default_helpers = helpers;
@@ -66,9 +66,9 @@ steal('can/control', 'can/view').then(function( $ ) {
 	};
 
 	/**
-	 * @add Can.Control.prototype
+	 * @add can.Control.prototype
 	 */
-	Can.Control.prototype.
+	can.Control.prototype.
 	
 	/**
 	 * @tag view
@@ -77,7 +77,7 @@ steal('can/control', 'can/view').then(function( $ ) {
 	 * If data is not provided, it uses the controller instance as data.
 	 *
 	 * @codestart
-	 * TasksController = Can.Control.extend('TasksController',{
+	 * TasksController = can.Control.extend('TasksController',{
 	 *   click: function( el ) {
 	 *     // renders with views/tasks/click.ejs
 	 *     el.html( this.view() ) 
@@ -110,7 +110,7 @@ steal('can/control', 'can/view').then(function( $ ) {
 		}
 		
 		//guess from controller name
-		view = Can.Control._calculatePosition(this.constructor, view, this.called);
+		view = can.Control._calculatePosition(this.constructor, view, this.called);
 
 		//calculate data
 		data = data || this;
@@ -118,7 +118,7 @@ steal('can/control', 'can/view').then(function( $ ) {
 		//calculate helpers
 		var helpers = calculateHelpers.call(this, myhelpers);
 
-		return Can.view(view, data, helpers); //what about controllers in other folders?
+		return can.view(view, data, helpers); //what about controllers in other folders?
 	};
 
 });

@@ -104,7 +104,7 @@ $.extend($.Model.prototype,
 			});
 		});
 
-		ret = new(kind || Can.Observe.List);
+		ret = new(kind || can.Observe.List);
 
 		ret.push.apply(ret, unique(collection));
 		return ret;

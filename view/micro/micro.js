@@ -63,7 +63,7 @@ steal('can/view').then(function(){
     return data ? fn( data ) : fn;
   };
 
-	Can.view.register({
+	can.view.register({
 		suffix : "micro",
 		renderer: function( id, text ) {
 			var mt = Micro(text)
@@ -75,7 +75,7 @@ steal('can/view').then(function(){
 			return "function(obj){"+Micro(str).body+"}";
 		}
 	})
-	Can.view.ext = ".micro"
+	can.view.ext = ".micro"
 	
 
 });
