@@ -2,19 +2,10 @@
 	YUI modules: http://yuilibrary.com/yui/configurator/
 		node rollup
 		io-base
-		querystring-parse-simple
-		
-	Splitting a URL, because steal doesn't support http://yui.yahooapis.com/combo?args
+		querystring-parse-simple	
 */
-var yui = ("3.4.1/build/oop/oop-min.js&3.4.1/build/event-custom-base/event-custom-base-min.js&3.4.1/build/features/features-min.js&3.4.1/build/dom-core/dom-core-min.js&3.4.1/build/dom-base/dom-base-min.js&3.4.1/build/selector-native/selector-native-min.js&3.4.1/build/selector/selector-min.js&3.4.1/build/node-core/node-core-min.js&3.4.1/build/node-base/node-base-min.js&3.4.1/build/event-base/event-base-min.js&3.4.1/build/event-delegate/event-delegate-min.js&3.4.1/build/node-event-delegate/node-event-delegate-min.js&3.4.1/build/pluginhost-base/pluginhost-base-min.js&3.4.1/build/pluginhost-config/pluginhost-config-min.js&3.4.1/build/node-pluginhost/node-pluginhost-min.js&3.4.1/build/dom-style/dom-style-min.js&3.4.1/build/dom-screen/dom-screen-min.js&3.4.1/build/node-screen/node-screen-min.js&3.4.1/build/node-style/node-style-min.js&3.4.1/build/querystring-stringify-simple/querystring-stringify-simple-min.js&3.4.1/build/io-base/io-base-min.js&3.4.1/build/querystring-parse-simple/querystring-parse-simple-min.js").split('&');
-for (var i = 0; i < yui.length; i++) {
-	yui[i] = "http://yui.yahooapis.com/" + yui[i];
-}
-
-steal("http://yui.yahooapis.com/3.4.1/build/yui-base/yui-base-min.js",
-	"../event.js")
-	.then.apply(steal, yui).then(
-// steal({ src: "http://yui.yahooapis.com/combo?3.4.1/build/yui-base/yui-base-min.js&3.4.1/build/oop/oop-min.js&3.4.1/build/event-custom-base/event-custom-base-min.js&3.4.1/build/features/features-min.js&3.4.1/build/dom-core/dom-core-min.js&3.4.1/build/dom-base/dom-base-min.js&3.4.1/build/selector-native/selector-native-min.js&3.4.1/build/selector/selector-min.js&3.4.1/build/node-core/node-core-min.js&3.4.1/build/node-base/node-base-min.js&3.4.1/build/event-base/event-base-min.js&3.4.1/build/event-delegate/event-delegate-min.js&3.4.1/build/node-event-delegate/node-event-delegate-min.js&3.4.1/build/pluginhost-base/pluginhost-base-min.js&3.4.1/build/pluginhost-config/pluginhost-config-min.js&3.4.1/build/node-pluginhost/node-pluginhost-min.js&3.4.1/build/dom-style/dom-style-min.js&3.4.1/build/dom-screen/dom-screen-min.js&3.4.1/build/node-screen/node-screen-min.js&3.4.1/build/node-style/node-style-min.js&3.4.1/build/querystring-stringify-simple/querystring-stringify-simple-min.js&3.4.1/build/io-base/io-base-min.js&3.4.1/build/querystring-parse-simple/querystring-parse-simple-min.js", type: "js" }, "../event.js").then(
+steal({ src : "http://yui.yahooapis.com/combo?3.4.1/build/yui-base/yui-base-min.js&3.4.1/build/oop/oop-min.js&3.4.1/build/event-custom-base/event-custom-base-min.js&3.4.1/build/features/features-min.js&3.4.1/build/dom-core/dom-core-min.js&3.4.1/build/dom-base/dom-base-min.js&3.4.1/build/selector-native/selector-native-min.js&3.4.1/build/selector/selector-min.js&3.4.1/build/node-core/node-core-min.js&3.4.1/build/node-base/node-base-min.js&3.4.1/build/event-base/event-base-min.js&3.4.1/build/event-delegate/event-delegate-min.js&3.4.1/build/node-event-delegate/node-event-delegate-min.js&3.4.1/build/pluginhost-base/pluginhost-base-min.js&3.4.1/build/pluginhost-config/pluginhost-config-min.js&3.4.1/build/node-pluginhost/node-pluginhost-min.js&3.4.1/build/dom-style/dom-style-min.js&3.4.1/build/dom-screen/dom-screen-min.js&3.4.1/build/node-screen/node-screen-min.js&3.4.1/build/node-style/node-style-min.js&3.4.1/build/querystring-stringify-simple/querystring-stringify-simple-min.js&3.4.1/build/io-base/io-base-min.js&3.4.1/build/querystring-parse-simple/querystring-parse-simple-min.js", type: "js" },
+	"../event.js").then(
 		
 	function(){
 		

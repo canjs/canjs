@@ -39,11 +39,10 @@ function( $ ) {
 		extend = Can.extend;
 
 	/**
-	 * @class jQuery.route
-	 * @inherits Can.Control
+	 * @class Can.route
+	 * @inherits Can.Observe
 	 * @plugin jquery/dom/route
-	 * @parent dom
-	 * @tag 3.2
+	 * @parent CanJS
 	 * 
 	 * jQuery.route helps manage browser history (and
 	 * client state) by
