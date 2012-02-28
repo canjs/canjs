@@ -2,7 +2,9 @@
 // this file should not be stolen directly
 steal('can/observe',function(){
 	
-
+	/**
+	 * @add can.Model
+	 */
 	var	pipe = function(def, model, func){
 		var d = new can.Deferred();
 		def.then(function(){
@@ -85,11 +87,17 @@ steal('can/observe',function(){
 	 * @Static
 	 */
 	{
+		/**
+		 * @function create
+		 */
 		create: function( str , method) {
 			return function( attrs ) {
 				return ajax(str || this._shortName, attrs)
 			};
 		},
+		/**
+		 * @function update
+		 */
 		update: function( str ) {
 			return function( id, attrs ) {
 				
@@ -105,6 +113,9 @@ steal('can/observe',function(){
 				return ajax( str || this._url, attrs, "put")
 			}
 		},
+		/**
+		 * @function destroy
+		 */
 		destroy: function( str ) {
 			return function( id ) {
 				var attrs = {};
@@ -112,7 +123,9 @@ steal('can/observe',function(){
 				return ajax( str || this._url, attrs, "delete")
 			}
 		},
-
+		/**
+		 * @function findAll
+		 */
 		findAll: function( str ) {
 			return function( params, success, error ) {
 				return pipe( ajax( str ||  this._shortName, params, "get", "json"),
@@ -120,6 +133,9 @@ steal('can/observe',function(){
 					"models" ).then(success,error);
 			};
 		},
+		/**
+		 * @function findOne
+		 */
 		findOne: function( str ) {
 			return function( params, success, error ) {
 				return pipe(
@@ -162,7 +178,13 @@ steal('can/observe',function(){
 			this.store = {};
 			this._url = this._shortName+"/{"+this.id+"}"
 		},
+		/**
+		 * @attribute id
+		 */
 		id: "id",
+		/**
+		 * @function models
+		 */
 		models: function( instancesRawData ) {
 			if (!instancesRawData ) {
 				return null;
@@ -205,6 +227,9 @@ steal('can/observe',function(){
 			}
 			return res;
 		},
+		/**
+		 * @function model
+		 */
 		model: function( attributes ) {
 			if (!attributes ) {
 				return null;
@@ -215,18 +240,119 @@ steal('can/observe',function(){
 			
 			return this.store[attributes.id] || new this( attributes );
 		}
-	},{
+		/**
+		 * @function bind
+		 */
+		// inherited with can.Observe
+		/**
+		 * @function unbind
+		 */
+		// inherited with can.Observe
+	},
+	/**
+	 * @prototype
+	 */
+	{
+		/**
+		 * @function isNew
+		 */
 		isNew: function() {
 			var id = getId(this);
 			// id || id === 0?
 			return !(id || id === 0); //if null or undefined
 		},
+		/**
+		 * @function save
+		 */
 		save: function( success, error ) {
 			return makeRequest(this, this.isNew() ? 'create' : 'update', success, error);
 		},
+		/**
+		 * Destroys the instance by calling 
+		 * [Can.Model.destroy] with the id of the instance.
+		 * 
+		 *     recipe.destroy(success, error);
+		 * 
+		 * This triggers "destroyed" events on the instance and the 
+		 * Model constructor function which can be listened to with
+		 * [can.Model::bind] and [can.Model.bind]. 
+		 * 
+		 *     Recipe = can.Model({
+		 *       destroy : "DELETE /services/recipes/{id}",
+		 *       findOne : "/services/recipes/{id}"
+		 *     },{})
+		 *     
+		 *     Recipe.bind("destroyed", function(){
+		 *       console.log("a recipe destroyed");	
+		 *     });
+		 * 
+		 *     // get a recipe
+		 *     Recipe.findOne({id: 5}, function(recipe){
+		 *       recipe.bind("destroyed", function(){
+		 *         console.log("this recipe destroyed")	
+		 *       })
+		 *       recipe.destroy();
+		 *     })
+		 * 
+		 * @param {Function} [success(instance)] called if a successful destroy
+		 * @param {Function} [error(xhr)] called if an unsuccessful destroy
+		 * @return {can.Deferred} a deferred that resolves with the destroyed instance
+		 */
 		destroy: function( success, error ) {
 			return makeRequest(this, 'destroy', success, error, 'destroyed');
 		},
+		/**
+		 * @function bind
+		 * 
+		 * `bind(eventName, handler(ev, args...) )` is used to listen
+		 * to events on this model instance.  Example:
+		 * 
+		 *     Task = can.Model()
+		 *     var task = new Task({name : "dishes"})
+		 *     task.bind("name", function(ev, newVal, oldVal){})
+		 * 
+		 * Use `bind` the
+		 * same as [can.Observe::bind] which should be used as
+		 * a reference for listening to property changes.
+		 * 
+		 * Bind on model can be used to listen to when 
+		 * an instance is:
+		 * 
+		 *  - created
+		 *  - updated
+		 *  - destroyed
+		 * 
+		 * like:
+		 * 
+		 *     Task = can.Model()
+		 *     var task = new Task({name : "dishes"})
+		 * 
+		 *     task.bind("created", function(ev, newTask){
+		 * 	     console.log("created", newTask)
+		 *     })
+		 *     .bind("updated", function(ev, updatedTask){
+		 *       console.log("updated", updatedTask)
+		 *     })
+		 *     .bind("destroyed", function(ev, destroyedTask){
+		 * 	     console.log("destroyed", destroyedTask)
+		 *     })
+		 * 
+		 *     // create, update, and destroy
+		 *     task.save(function(){
+		 *       task.attr('name', "do dishes")
+		 *           .save(function(){
+		 * 	            task.destroy()
+		 *           })
+		 *     }); 
+		 *     
+		 * 
+		 * `bind` also extends the inherited 
+		 * behavior of [can.Observe::bind] to track the number
+		 * of event bindings on this object which is used to store
+		 * the model instance.  When there are no bindings, the 
+		 * model instance is removed from the store, freeing memory.  
+		 * 
+		 */
 		bind : function(){
 			if(!this._bindings){
 				this.constructor.store[getId(this)] = this;
@@ -235,6 +361,9 @@ steal('can/observe',function(){
 			this._bindings++;
 			return can.Observe.prototype.bind.apply(this, arguments);
 		},
+		/**
+		 * @function unbind
+		 */
 		unbind : function(){
 			this._bindings--;
 			if(!this._bindings){
