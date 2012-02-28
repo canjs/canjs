@@ -10,7 +10,7 @@ JavaScript Objects. It lets you
   - Work with nested properties
 
 
-## Creating an can.Observe
+## Creating an Observe
 
 To create an observable object, use `new can.Observe( OBJECT )` like:
 
@@ -18,7 +18,7 @@ To create an observable object, use `new can.Observe( OBJECT )` like:
     
 To create an observable array, use `new can.Observe.List( ARRAY )` like:
 
-    var hobbies = new can.Observe(['programming', 
+    var hobbies = new can.Observe.List(['programming', 
                                    'basketball', 
                                    'nose picking'])
 
@@ -46,6 +46,8 @@ manipulating arrays like [can.Observe.List::push push].  Go to
     o = new can.Observe(data);
     
 _o_ now represents an observable copy of _data_.  
+
+Observe is inherited by [can.Model].
 
 ## Getting and Setting Properties
 
