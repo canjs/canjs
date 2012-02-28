@@ -1,7 +1,7 @@
 steal('can/construct',function($){
-var isFunction = $.isFunction,
-	isArray = $.isArray,
-	makeArray = $.makeArray,
+var isFunction = can.isFunction,
+	isArray = can.isArray,
+	makeArray = can.makeArray,
 /**
  * @page can.Construct.proxy
  * @parent can.Construct
