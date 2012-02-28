@@ -3,7 +3,7 @@ if (window.STEALDOJO){
 	steal('can/util/dojo')
 } else if( window.STEALMOO) {
 	steal('can/util/mootools')
-} else if(true ||window.STEALYUI){
+} else if(window.STEALYUI){
 	steal('can/util/yui');
 } else if(window.STEALZEPTO){
 	steal('can/util/zepto');

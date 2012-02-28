@@ -3,9 +3,9 @@
 @test can/observe/qunit.html
 
 can.Observe provides the observable pattern for
-JavaScript Objects and Lists. It lets you
+JavaScript Objects. It lets you
 
-  - Set and remove property or property values on objects and arrays
+  - Set and remove property or property values on objects
   - Listen for changes in objects and arrays
   - Work with nested properties
 
@@ -18,10 +18,12 @@ To create an observable object, use `new can.Observe( OBJECT )` like:
     
 To create an observable array, use `new can.Observe.List( ARRAY )` like:
 
-    var hobbies = new can.Observe(['programming', 'basketball', 'nose picking'])
+    var hobbies = new can.Observe(['programming', 
+                                   'basketball', 
+                                   'nose picking'])
 
   
-can.Observe and can.Observe.List are very similar. In fact,
+can.Observe and [can.Observe.List] are very similar. In fact,
 can.Observe.List inherits can.Observe and only adds a few extra methods for
 manipulating arrays like [can.Observe.List::push push].  Go to
 [can.Observe.List] for more information about lists.

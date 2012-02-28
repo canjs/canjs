@@ -149,21 +149,160 @@ steal('can/construct', function() {
 			delete this._init;
 		},
 		/**
-		 * Get or set an attribute on the observe.
+		 * Get or set an attribute or attributes on the observe.
 		 * 
 		 *     o = new can.Observe({});
 		 *     
 		 *     // sets a user property
-		 *     o.attr('user',{name: 'hank'});
+		 *     o.attr('user',{name: 'hank'})
 		 *     
 		 *     // read the user's name
 		 *     o.attr('user.name') //-> 'hank'
 		 * 
-		 * If a value is set for the first time, it will batchTrigger 
-		 * an `'add'` and `'set'` change event.  Once
-		 * the value has been added.  Any future value changes will
-		 * batchTrigger only `'set'` events.
+		 *     // merge multiple properties
+		 *     o.attr({
+		 *        grade : "A"
+		 *     })
 		 * 
+		 *     // get properties
+		 *     o.attr()           //-> {user: {name: 'hank'}, grade: "A"}
+		 * 
+		 *     // set multiple properties and remove absent attrs
+		 *     o.attr({foo: 'bar'}, true)
+		 * 
+		 *     o.attr()           //-> {foo: 'bar'}
+		 * 
+		 * ## Setting Properties
+		 * 
+		 * `attr( PROPERTY, VALUE )` sets the observable's PROPERTY to VALUE.  For example:
+		 * 
+		 *     o = new can.Observe({});
+		 *     o.attr('user',"Justin");
+		 * 
+		 * This call to attr fires two events on __o__ immediately after the value is set, the first is a "change" event that can be 
+		 * listened to like:
+		 * 
+		 *     o.bind('change', function(ev, attr, how, newVal, oldVal){})
+		 * 
+		 * where:
+		 * 
+		 *  - ev - the "change" event
+		 *  - attr - the name of the attribute changed: `"user"`
+		 *  - how - how the attribute was changed: `"add"` because the property was set for the first time
+		 *  - newVal - the new value of the property: `"Justin"`
+		 *  - oldVal - the old value of the property: `undefined`
+		 * 
+		 * "change" events are the generic event that gets fired on all changes to an 
+		 * observe's properties. The second event shares the name of the property being changed
+		 * and can be bound to like:
+		 * 
+		 *     o.bind('name', function(ev, newVal, oldVal){});
+		 * 
+		 * where:
+		 * 
+		 *   - ev - the "name" event
+		 *   - newVal - the new value of the name property: `'Justin'`
+		 *   - oldVal - the old value of the name property: `undefined`
+		 * 
+		 * `attr( PROPERTY, VALUE )` allows setting of deep properties like:
+		 * 
+		 *      o = new can.Observe({person: {name: {first: "Just"}}});
+		 *      o.attr('person.name.first',"Justin");
+		 * 
+		 *  All property names should be seperated with a __"."__.
+		 * 
+		 * `attr( PROPERTIES )` sets multiple properties at once and removes
+		 * properties not in `PROPERTIES`.  For example:
+		 * 
+		 *     o = new can.Observe({first: "Just", middle: "B"})
+		 *     o.attr({
+		 *       first : "Justin",
+		 *       last : "Meyer"
+		 *     })
+		 * 
+		 * This results in an object that looks like:
+		 * 
+		 *     { first: "Justin", last: "Meyer" }
+		 * 
+		 * Notice that the `middle` property is removed.  This results in
+		 * 3 change events (and the corresponding property-named events) that
+		 * are triggered after all properties have been set:
+		 * 
+		 * <table>
+		 *   <tr><th>attr</th><th>how</th><th>newVal</th><th>oldVal</th></tr>
+		 *   <tr>
+		 * 	   <td>"first"</td><td>"set"</td><td>"Justin"</td><td>"Just"</td>
+		 *   </tr>
+		 *   <tr>
+		 * 	   <td>"last"</td><td>"add"</td><td>"Meyer"</td><td>undefined</td>
+		 *   </tr>
+		 *   <tr>
+		 * 	   <td>"middle"</td><td>"remove"</td><td>undefined</td><td>"B"</td>
+		 *   </tr>
+		 * </table>
+		 * 
+		 * `attr( PROPERTIES , true )` merges properties into existing 
+		 * properties. For example:
+		 * 
+		 *     o = new can.Observe({first: "Just", middle: "B"})
+		 *     o.attr({
+		 *       first : "Justin",
+		 *       last : "Meyer"
+		 *     })
+		 * 
+		 * This results in an object that looks like:
+		 * 
+		 *     { first: "Justin", middle: "B", last: "Meyer" }
+		 * 
+		 * and results in 2 change events (and the corresponding 
+		 * property-named events):
+		 * 
+		 * <table>
+		 *   <tr><th>attr</th><th>how</th><th>newVal</th><th>oldVal</th></tr>
+		 *   <tr>
+		 * 	   <td>"first"</td><td>"set"</td><td>"Justin"</td><td>"Just"</td>
+		 *   </tr>
+		 *   <tr>
+		 * 	   <td>"last"</td><td>"add"</td><td>"Meyer"</td><td>undefined</td>
+		 *   </tr>
+		 * </table>
+		 * 
+		 * Use [can.Observe::removeAttr removeAttr] to remove an attribute.
+		 * 
+		 * ## Reading Properties
+		 * 
+		 * `attr( PROPERTY )` returns a property value.  For example:
+		 * 
+		 *     o = new can.Observe({ first: "Justin" })
+		 *     o.attr('first') //-> "Justin"
+		 * 
+		 * You can also read properties that don't conflict with Observe's inherited
+		 * methods direclty like:
+		 * 
+		 *     o.first //-> "Justin"
+		 * 
+		 * `attr( PROPERTY )` can read nested properties like:
+		 * 
+		 *      o = new can.Observe({person: {name: {first: "Justin"}}});
+		 *      o.attr('person.name.first') //-> "Justin"
+		 * 
+		 * If `attr( PROPERTY )` returns an object or an array, it returns
+		 * the Observe wrapped object or array. For example:
+		 * 
+		 *      o = new can.Observe({person: {name: {first: "Justin"}}});
+		 *      o.attr('person').attr('name.first') //-> "Justin"
+		 * 
+		 * 
+		 * `attr()` returns all properties in the observe, for example:
+		 * 
+		 *     o = new can.Observe({ first: "Justin" })
+		 *     o.attr() //-> { first: "Justin" }
+		 * 
+		 * If the observe has nested objects, `attr()` returns the 
+		 * data as plain JS objects, not as observes.  Example:
+		 * 
+		 *      o = new can.Observe({person: {name: {first: "Justin"}}});
+		 *      o.attr() //-> {person: {name: {first: "Justin"}}}
 		 * 
 		 * @param {String} attr the attribute to read or write.
 		 * 
@@ -230,7 +369,7 @@ steal('can/construct', function() {
 			return can.each.apply(null, [this.__get()].concat(can.makeArray(arguments)))
 		},
 		/**
-		 * Removes a property
+		 * Removes a property by name from an observe.
 		 * 
 		 *     o =  new can.Observe({foo: 'bar'});
 		 *     o.removeAttr('foo'); //-> 'bar'
@@ -260,6 +399,7 @@ steal('can/construct', function() {
 					delete this[prop]
 				}
 				batchTrigger(this, "change", [prop, "remove", undefined, current]);
+				batchTrigger(this, prop, undefined, current);
 				return current;
 			}
 		},
@@ -340,10 +480,26 @@ steal('can/construct', function() {
 			}
 		},
 		/**
-		 * Listens to changes on a can.Observe.
+		 * @function bind
+		 * `bind( eventType, handler )` Listens to changes on a can.Observe.
 		 * 
-		 * When attributes of an observe change, including attributes on nested objects,
-		 * a `'change'` event is triggered on the observe.  These events come
+		 * When attributes of an observe change, two types of events are produced
+		 * 
+		 *   - "change" events - a generic event so you can listen to any property changes
+		 *   - ATTR_NAME events - bind to specific attribute changes
+		 * 
+		 *     o = new can.Observe({name : "Payal"});
+		 *     o.bind('change', function(ev, attr, how, newVal, oldVal){
+		 *       
+		 *     }).bind('name', function(ev, newVal, oldVal){
+		 *     	
+		 *     })
+		 *     
+		 *     o.attr('name', 'Justin') 
+		 * 
+		 * ## Change Events
+		 * 
+		 * A `'change'` event is triggered on the observe.  These events come
 		 * in three flavors:
 		 * 
 		 *   - `add` - a attribute is added
@@ -370,16 +526,24 @@ steal('can/construct', function() {
 		 *     
 		 *     o.attr('name', 'Justin')
 		 * 
-		 * Listening to `change` is only useful for when you want to 
-		 * know every change on an Observe.  For most applications,
-		 * [can.Observe.prototype.delegate delegate] is 
-		 * much more useful as it lets you listen to specific attribute
-		 * changes and sepecific types of changes.
+		 * ## ATTR_NAME events
+		 * 
+		 * When a attribute value is changed, an event with the name of the attribute
+		 * is triggered on the observable with the new value and old value as 
+		 * parameters. For example:
+		 * 
+		 *     o = new can.Observe({name : "Payal"});
+		 *     o.bind('name', function(ev, newVal, oldVal){
+		 *       // ev    -> {type : "name"}
+		 *       // newVal-> "Justin"
+		 *       // oldVal-> undefined 
+		 *     })
+		 *     
+		 *     o.attr('name', 'Justin')
 		 * 
 		 * 
 		 * @param {String} eventType the event name.  Currently,
-		 * only 'change' events are supported. For more fine 
-		 * grained control, use [can.Observe.prototype.delegate].
+		 * only `'change'`  and `ATTR_NAME` events are supported. 
 		 * 
 		 * @param {Function} handler(event, attr, how, newVal, oldVal) A 
 		 * callback function where
@@ -394,8 +558,8 @@ steal('can/construct', function() {
 		 */
 		bind: bind,
 		/**
-		 * Unbinds a listener.  This uses [http://api.jquery.com/unbind/ can.unbind]
-		 * and works very similar.  This means you can 
+		 * @function unbind
+		 * Unbinds an event listener.  This works similar to jQuery's unbind.  This means you can 
 		 * use namespaces or unbind all event handlers for a given event:
 		 * 
 		 *     // unbind a specific event handler
@@ -409,8 +573,7 @@ steal('can/construct', function() {
 		 *     o.unbind('change')
 		 * 
 		 * @param {String} eventType - the type of event with
-		 * any optional namespaces.  Currently, only `change` events
-		 * are supported with bind.
+		 * any optional namespaces. 
 		 * 
 		 * @param {Function} [handler] - The original handler function passed
 		 * to [can.Observe.prototype.bind bind].
@@ -490,9 +653,16 @@ steal('can/construct', function() {
 	 * @inherits can.Observe
 	 * @parent index
 	 * 
-	 * An observable list.  You can listen to when items are push, popped,
-	 * spliced, shifted, and unshifted on this array.
+	 * Provides the observable pattern for JavaScript arrays.  It lets you:
 	 * 
+	 *   - change the strucutre of an array
+	 *   - listen to changes in the array
+	 * 
+	 * ## Creating an observable list
+	 * 
+	 * To create an observable array, use `new can.Observe.List( ARRAY )` like:
+	 * 
+	 *     var hobbies = new can.Observe(['programming', 'basketball', 'nose picking'])
 	 * 
 	 */
 	var splice = [].splice,
@@ -560,7 +730,9 @@ steal('can/construct', function() {
 			}
 			// issue add, remove, and move events ...
 		},
-		/*sortedIndex : function(item){
+		/**
+		 * @hide
+		   sortedIndex : function(item){
 			var itemCompare = item.attr(this.comparator),
 				equaled = 0,
 				i;
@@ -582,6 +754,7 @@ steal('can/construct', function() {
 			this[attr] = val;
 		},
 		/**
+		 * @hide
 		 * Returns the serialized form of this list.
 		 */
 		serialize: function() {
@@ -674,11 +847,40 @@ steal('can/construct', function() {
 			return removed;
 		},
 		/**
-		 * Updates an array with a new array.  It is able to handle
+		 * @function attr
+		 * Gets or sets an item or items in the observe list.  Examples:
+		 * 
+		 *     list = new can.Observe.List(["a","b","c"]);
+		 *      
+		 *     // sets an array item
+		 *     list.attr(3,'d')
+		 *     
+		 *     // read an array's item
+		 *     list.attr(3) //-> 'd'
+		 * 
+		 *     // merge array's properties
+		 *     list.attr( ["b","BOO"] )
+		 * 
+		 *     // get properties
+		 *     o.attr()           //-> ["b","BOO","c","d"]
+		 *     
+		 *     // set array
+		 *     o.attr(["item"])
+		 *     o.attr() //-> ["item"]
+		 * 
+		 * ## Setting Properties
+		 * 
+		 * `attr( array )`
+		 * 
+		 * ## Writing Properties
+		 * 
+		 * It is able to handle
 		 * removes in the middle of the array.
 		 * 
 		 * @param {Array} props
-		 * @param {Boolean} remove
+		 * @param {Boolean} {optional:remove} 
+		 * @return {list|Array} returns the props on a read or the observe
+		 * list on a write.
 		 */
 		_attrs: function( props, remove ) {
 			if ( props === undefined ) {
