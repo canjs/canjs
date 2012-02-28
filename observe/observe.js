@@ -655,15 +655,122 @@ steal('can/construct', function() {
 	 * 
 	 * Provides the observable pattern for JavaScript arrays.  It lets you:
 	 * 
-	 *   - change the strucutre of an array
+	 *   - change the structure of an array
 	 *   - listen to changes in the array
 	 * 
-	 * ## Creating an observable list
+	 * ## Creating an observe list
 	 * 
-	 * To create an observable array, use `new can.Observe.List( ARRAY )` like:
+	 * To create an observable list, use `new can.Observe.List( ARRAY )` like:
 	 * 
-	 *     var hobbies = new can.Observe(['programming', 'basketball', 'nose picking'])
+	 *     var hobbies = new can.Observe.List(['programming', 'basketball', 'nose picking'])
 	 * 
+	 * can.Observe.List inherits from [can.Observe], including it's 
+	 * [can.Observe::bind bind], [can.Observe::each], and [can.Observe.unbind] 
+	 * methods.
+	 * 
+	 * can.Observe.List is inherited by [can.Model.List].
+	 * 
+	 * ## Getting and Setting Properties
+	 * 
+	 * Similar to an array, use the index operator to access items of a list:
+	 * 
+	 *     list = new can.Observe.List(["a","b"])
+	 *     list[1] //-> "b"
+	 * 
+	 * Or, use the `attr( PROPERTY )` method like:
+	 * 
+	 *     list = new can.Observe.List(["a","b"])
+	 *     list.attr(1)  //-> "b"
+	 * 
+	 * Using the 'attr' method lets Observe know you accessed the 
+	 * property. This is used by [can.EJS] for live-binding.
+	 * 
+	 * Get back a js Array with `attr()`:
+	 * 
+	 *     list = new can.Observe.List(["a","b"])
+	 *     list.attr()  //-> ["a","b"]
+	 * 
+	 * Change the structure of the array with:
+	 * 
+	 *    - [can.Observe.List::attr attr]
+	 *    - [can.Observe.List::pop pop]
+	 *    - [can.Observe.List::push push]
+	 *    - [can.Observe.List::shift shift]
+	 *    - [can.Observe.List::unshift unshift]
+	 *    - [can.Observe.List::splice splice]
+	 * 
+	 * ## Events
+	 * 
+	 * When an item is added, removed, or updated in a list, it triggers
+	 * events that can be [can.Observe::bind bind]ed to for changes.
+	 * 
+	 * There are 5 types of events: add, remove, set, length, and change.
+	 * 
+	 * ### add events
+	 * 
+	 * Add events are fired when items are added to the list. Listen 
+	 * to them like:
+	 * 
+	 *     list.bind("add", handler(ev, newVals, index) )
+	 * 
+	 * where:
+	 * 
+	 *  - `newVals` - the values added to the list
+	 *  - `index` - where the items where added
+	 * 
+	 * ### remove events
+	 * 
+	 * Removes events are fired when items are removed from the list. Listen 
+	 * to them like:
+	 * 
+	 *     list.bind("remove", handler(ev, oldVals, index) )
+	 * 
+	 * where:
+	 * 
+	 *   - `oldVals` - the values removed from the list
+	 *   - `index` - where the items where removed
+	 * 
+	 * ### set events
+	 * 
+	 * Set events happen when an item in the list is updated. Listen to 
+	 * these events with:
+	 * 
+	 *     list.bind("set", handler(ev, newVal, index) )
+	 * 
+	 * where:
+	 * 
+	 *   - `newVal` - the new value at index
+	 *   - `index` - where the items where removed
+	 * 
+	 * ### length events
+	 * 
+	 * Anytime the length is changed a length attribute event is
+	 * fired.
+	 * 
+	 *     list.bind("length", handler(ev, length) )
+	 * 
+	 * where:
+	 * 
+	 * - `length` - the new length of the array.
+	 * 
+	 * ### change events
+	 * 
+	 * Change events are fired when any type of change 
+	 * happens on the array.  They get called with:
+	 * 
+	 *     .bind("change", handler(ev, attr, how, newVal, oldVal) )
+	 * 
+	 * Where:
+	 * 
+	 *   - `attr` - the index of the item changed
+	 *   - `how` - how the item was changed (add, remove, set)
+	 *   - `newVal` - For set, a single item. For add events, an array 
+	 *     of items. For remove event, undefined.
+	 *   - `oldVal` - the old values at `attr`.
+	 * 
+	 * @constructor
+	 * 
+	 * @param {Array} [items...] the array of items to create the list with
 	 */
 	var splice = [].splice,
 		list = Observe('can.Observe.List',
@@ -725,6 +832,8 @@ steal('can/construct', function() {
 				} else if( how === 'remove' ) {
 					batchTrigger(this, how, [oldVal, +attr]);
 					batchTrigger(this,'length',[this.length]);
+				} else {
+					batchTrigger(this,how,[newVal, +attr])
 				}
 				
 			}
@@ -788,7 +897,8 @@ steal('can/construct', function() {
 		 */
 		// placeholder for each
 		/**
-		 * Remove items or add items from a specific point in the list.
+		 * `splice(index, [ howMany, elements... ] )` remove or add items 
+		 * from a specific point in the list.
 		 * 
 		 * ### Example
 		 * 
@@ -797,12 +907,12 @@ steal('can/construct', function() {
 		 * 
 		 *     var l = new can.Observe.List([0,1,2,3]);
 		 *     
-		 *     l.bind('change', function( ev, attr, how, newVals, oldVals, where ) { ... })
-		 *     
 		 *     l.splice(1,2, "a", "b"); // results in [0,"a","b",3]
 		 *     
 		 * This creates 2 change events.  The first event is the removal of 
-		 * numbers one and two where it's callback values will be:
+		 * numbers one and two where it's callback is 
+		 * `bind('change', function( ev, attr, how, newVals, oldVals, where ) )`
+		 * and it's values are:
 		 * 
 		 *   - attr - "1" - indicates where the remove event took place
 		 *   - how - "remove"
@@ -820,10 +930,10 @@ steal('can/construct', function() {
 		 *   - where - 1 - the location of where these items where added
 		 * 
 		 * @param {Number} index where to start removing or adding items
-		 * @param {Object} count the number of items to remove
-		 * @param {Object} [added] an object to add to 
+		 * @param {Object} [howMany=0] the number of items to remove
+		 * @param {Object} [elements...] items to add to the array
 		 */
-		splice: function( index, count ) {
+		splice: function( index, howMany ) {
 			var args = can.makeArray(arguments),
 				i;
 
@@ -833,11 +943,11 @@ steal('can/construct', function() {
 					args[i] = hookupBubble(val, "*", this)
 				}
 			}
-			if ( count === undefined ) {
-				count = args[1] = this.length - index;
+			if ( howMany === undefined ) {
+				howMany = args[1] = this.length - index;
 			}
 			var removed = splice.apply(this, args);
-			if ( count > 0 ) {
+			if ( howMany > 0 ) {
 				batchTrigger(this, "change", [""+index, "remove", undefined, removed]);
 				unhookup(removed, this._namespace);
 			}
@@ -870,15 +980,89 @@ steal('can/construct', function() {
 		 * 
 		 * ## Setting Properties
 		 * 
-		 * `attr( array )`
+		 * `attr( array , true )` updates the list to look like array.  For example:
 		 * 
-		 * ## Writing Properties
+		 *     list = new can.Observe.List(["a","b","c"])
+		 *     list.attr(["foo"], true)
+		 *     
+		 *     list.attr() //-> ["foo"]
 		 * 
-		 * It is able to handle
-		 * removes in the middle of the array.
 		 * 
-		 * @param {Array} props
-		 * @param {Boolean} {optional:remove} 
+		 * When the array is changed, it produces events that detail the changes
+		 * in the list. They are listed in the
+		 * order they are produced for the above example:
+		 * 
+		 *   1. `.bind( "change", handler(ev, attr, how, newVal, oldVal) )` where:
+		 *       
+		 *      - ev = {type: "change"}
+		 *      - attr = "0"
+		 *      - how = "set"
+		 *      - newVal = "foo"
+		 *      - oldVal = "a"
+		 * 
+		 *   2. `.bind( "set", handler(ev, newVal, index) )` where:
+		 *       
+		 *      - ev = {type: "set"}
+		 *      - newVal = "foo"
+		 *      - index = 0
+		 * 
+		 *   3. `.bind( "change", handler(ev, attr, how, newVal, oldVal) )` where:
+		 *       
+		 *      - ev = {type: "change"}
+		 *      - attr = "1"
+		 *      - how = "remove"
+		 *      - newVal = undefined
+		 *      - oldVal = ["b","c"]
+		 * 
+		 *   4. `.bind( "remove", handler(ev, newVal, index) )` where:
+		 *       
+		 *      - ev = {type: "remove"}
+		 *      - newVal = undefined
+		 *      - index = 1
+		 * 
+		 *   5. `.bind( "length", handler(ev, length) )` where:
+		 *       
+		 *      - ev = {type: "length"}
+		 *      - length = 1
+		 * 
+		 * In general, it is possible to listen to events and reproduce the
+		 * changes in a facsimile of the list.  This is useful for implementing 
+		 * high-performance widgets that need to reflect the contents of the list without
+		 * redrawing the entire list.  Here's an example of how that would look:
+		 * 
+		 *     list.bind("set", function(ev, newVal, index){
+		 * 	     // update the item at index with newVal
+		 *     }).bind("remove", function(ev, oldVals, index){
+		 * 	     // remove oldVals.length items at index
+		 *     }).bind("add", function(ev, newVals, index){
+		 *       // insert newVals at index
+		 *     })
+		 * 
+		 * `attr( array )` merges items into the beginning of the array.  For example:
+		 * 
+		 *     list = new can.Observe.List(["a","b"])
+		 *     list.attr(["foo"])
+		 *     
+		 *     list.attr() //-> ["foo","b"]
+		 * 
+		 * `attr( INDEX, VALUE )` sets or updates an item at `INDEX`.  Example:
+		 * 
+		 *     list.attr(0, "ITEM")
+		 * 
+		 * ## Reading Properties
+		 * 
+		 * `attr()` returns the lists content as an array.  For example:
+		 * 
+		 *      list = new can.Observe.List(["a", {foo: "bar"}])
+		 *      list.attr()  //-> ["a", {foo: "bar"}]
+		 * 
+		 * `attr( INDEX )` reads a property at `INDEX` like:
+		 * 
+		 *      list = new can.Observe.List(["a", {foo: "bar"}])
+		 *      list.attr(0)  //-> "a",
+		 * 
+		 * @param {Array|Number} props
+		 * @param {Boolean|Object} {optional:remove} 
 		 * @return {list|Array} returns the props on a read or the observe
 		 * list on a write.
 		 */
@@ -955,7 +1139,14 @@ steal('can/construct', function() {
 		/**
 		 * @function unshift
 		 * Add items to the start of the list.  This is very similar to
-		 * [can.Observe.prototype.push].
+		 * [can.Observe.List::push].  Example:
+		 * 
+		 *     var l = new can.Observe.List(["a","b"]);
+		 *     l.unshift(1,2,3) //-> 5
+		 *     l.attr() //-> [1,2,3,"a","b"]
+		 * 
+		 * @param {Object} [items...] items to add to the start of the list.
+		 * @return {Number} the length of the array.
 		 */
 		unshift: 0
 	},
@@ -1013,10 +1204,13 @@ steal('can/construct', function() {
 		/**
 		 * @function pop
 		 * 
-		 * Removes an item from the end of the list.
+		 * Removes an item from the end of the list. Example:
 		 * 
 		 *     var l = new can.Observe.List([0,1,2]);
-		 *     
+		 *     l.pop() //-> 2;
+		 * 
+		 * This produces a change event like
+		 * 
 		 *     l.bind('change', function( 
 		 *         ev,        // the change event
 		 *         attr,      // the attr that was changed, for multiple items, "*" is used 
@@ -1027,16 +1221,18 @@ steal('can/construct', function() {
 		 *         ) {
 		 *     
 		 *     })
-		 *     
-		 *     l.pop();
 		 * 
-		 * @return {Object} the element at the end of the list
+		 * @return {Object} the element at the end of the list or undefined if the
+		 * list is empty.
 		 */
 		pop: "length",
 		/**
 		 * @function shift
 		 * Removes an item from the start of the list.  This is very similar to
-		 * [can.Observe.prototype.pop].
+		 * [can.Observe.List::pop]. Example:
+		 * 
+		 *     var l = new can.Observe.List([0,1,2]);
+		 *     l.shift() //-> 0;
 		 * 
 		 * @return {Object} the element at the start of the list
 		 */
@@ -1073,9 +1269,14 @@ steal('can/construct', function() {
 	/**
 	 * @function indexOf
 	 * Returns the position of the item in the array.  Returns -1 if the
-	 * item is not in the array.
-	 * @param {Object} item
-	 * @return {Number}
+	 * item is not in the array.  Examples:
+	 * 
+	 *     list = new can.Observe.List(["a","b","c"]);
+	 *     list.indexOf("b") //-> 1
+	 *     list.indexOf("f") //-> -1
+	 * 
+	 * @param {Object} item the item to look for
+	 * @return {Number} the index of the object in the array or -1.
 	 */
 	indexOf = [].indexOf || function(item){
 		return can.inArray(item, this)
