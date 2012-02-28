@@ -1,9 +1,9 @@
 steal('funcunit/qunit','can/observe/delegate',function(){
 
 
-module('jquery/lang/observe/delegate')
+module('observe/delegate')
 
-var matches = can.Control.prototype.delegate.matches;
+var matches = can.Observe.prototype.delegate.matches;
 
 test("matches", function(){
 	
@@ -32,7 +32,7 @@ test("matches", function(){
 
 test("delegate", 4,function(){
 	
-	var state = new can.Control({
+	var state = new can.Observe({
 		properties : {
 		  prices : []
 		}
@@ -53,7 +53,7 @@ test("delegate", 4,function(){
 })
 test("delegate on add", 2, function(){
 	
-	var state = new can.Control({});
+	var state = new can.Observe({});
 	
 	state.delegate("foo","add", function(ev, newVal){
 		ok(true, "called");
@@ -67,7 +67,7 @@ test("delegate on add", 2, function(){
 })
 
 test("delegate set is called on add", 2, function(){
-	var state = new can.Control({});
+	var state = new can.Observe({});
 	
 	state.delegate("foo","set", function(ev, newVal){
 		ok(true, "called");
@@ -77,7 +77,7 @@ test("delegate set is called on add", 2, function(){
 });
 
 test("delegate's this", 5, function(){
-	var state = new can.Control({
+	var state = new can.Observe({
 		person : {
 			name : {
 				first : "justin",
@@ -113,7 +113,7 @@ test("delegate's this", 5, function(){
 
 
 test("delegate on deep properties with *", function(){
-	var state = new can.Control({
+	var state = new can.Observe({
 		person : {
 			name : {
 				first : "justin",
@@ -131,7 +131,7 @@ test("delegate on deep properties with *", function(){
 
 test("compound sets", function(){
 	
-	var state = new can.Control({
+	var state = new can.Observe({
 		type : "person",
 		id: "5"
 	});
@@ -175,6 +175,32 @@ test("compound sets", function(){
 		type : "person"
 	});
 	equals(count, 3, "setting person does not fire anything");
+})
+
+test("undelegate within event loop",1, function(){
+
+	var state = new can.Observe({
+		type : "person",
+		id: "5"
+	});
+	var f1 = function(){
+		state.undelegate("type","add",f2);
+	},
+		f2 = function(){
+			ok(false,"I am removed, how am I called")
+		},
+		f3 = function(){
+			state.undelegate("type","add",f1);
+		},
+		f4 = function(){
+			ok(true,"f4 called")
+		};
+	state.delegate("type", "set", f1);
+	state.delegate("type","set",f2);
+	state.delegate("type","set",f3);
+	state.delegate("type","set",f4);
+	state.attr("type","other");
+
 })
 
 });
