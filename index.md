@@ -196,7 +196,7 @@ but adds list specific methods such as:
 
  - [indexOf](http://donejs.com/docs.html#!can.Observe.List.prototype.indexOf) `list.indexOf( item )` - returns 
    the position of the item in the array
- - [pop]
+ - <code>[pop](http://donejs.com/docs.html#!can.Observe.List.prototype.pop)()</code> - removes the last item in the list
  - [push]
  - [shift]
  - [splice]
