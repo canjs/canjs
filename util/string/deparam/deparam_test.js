@@ -2,6 +2,7 @@ steal('funcunit/qunit','./deparam').then(function(){
 	
 module('jquery/lang/deparam')
 
+/** /
 test("Basic deparam",function(){
 	
 	var data = can.String.deparam("a=b");
@@ -11,6 +12,7 @@ test("Basic deparam",function(){
 	equals(data.a,"b")
 	equals(data.c,"d")
 })
+/**/
 test("Nested deparam",function(){
 	
 	var data = can.String.deparam("a[b]=1&a[c]=2");
@@ -31,6 +33,7 @@ test("Nested deparam",function(){
 });
 
 
+/** /
 test("deparam an array", function(){
 	var data = can.String.deparam("a[0]=1&a[1]=2");
 	
@@ -46,5 +49,6 @@ test("deparam object with spaces", function(){
     equals(data["a b"], "c d")
     equals(data[" e f "], " j h ")
 })
+/**/
     
 })
