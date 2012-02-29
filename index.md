@@ -4,7 +4,7 @@ layout: default
 # CanJS!
 
 This walks through the basics of CanJS by building a 
-smal todo app.  Check out the [Getting Started Guide](http://javascriptmvc.com/docs.html#!getstarted)
+small todo app.  Check out the [Getting Started Guide](http://javascriptmvc.com/docs.html#!getstarted)
 for a more in-depth overview. 
 
 ## Get Canned
