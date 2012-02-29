@@ -30,10 +30,10 @@ the minor differencs between use with other libraries.
 
 ## can.Construct `can.Construct([classProps,] [prototypeProps])`
 
-Constructors made with [can.Construct](http://donejs.com/docs.html#!can.Construct) are used to create
+Constructor function made with [can.Construct](http://donejs.com/docs.html#!can.Construct) are used to create
 objects with shared properties. It's used by both __can.Control__ and __can.Model__.
 
-To create a __Class__ of your own, call __can.Construct__ with the:
+To create a constructor function of your own, call __can.Construct__ with the:
 
 - __classProperties__ that are attached directly to the constructor, and
 - instance __prototypeProperties__.
@@ -62,24 +62,27 @@ var PrivateTodo = Todo({
 });
 {% endhighlight %}
 
+If only one set of properties is passed to __can.Construct__, it's assumed to 
+be the prototype properties.
+
 ### init `new can.Construct(arg1, arg2)`
 
-When a class constructor is invoked, __can.Construct__ creates the instance and 
+When a constructor is called with the `new` keyword, __can.Construct__ creates the instance and 
 calls [can.Construct.prototype.init](http://javascriptmvc.com/docs.html#!can.Construct.prototype.init) with 
-the arguments passed to `new Class(...)`.
+the arguments passed to `new Constructor(...)`.
 
 {% highlight javascript %}	
-	var Todo = can.Construct({
-	  init : function(text) {
-	    this.text = text
-	  },
-	  read : function(){
-	    console.log(this.text);
-	  }
-	})
+var Todo = can.Construct({
+  init : function(text) {
+    this.text = text
+  },
+  read : function(){
+    console.log(this.text);
+  }
+})
 	
-	var todo = new Todo("Hello World");
-	todo.read()
+var todo = new Todo("Hello World");
+todo.read()
 {% endhighlight %}
 
 
