@@ -11,11 +11,11 @@ steal('can/control/view','can/view/micro','funcunit/qunit')  //load qunit
 			}
 		})
 		can.view.ext = ".micro";
-		$("#qunit-test-area").append("<div id='cont_view'/>");
+		can.$("#qunit-test-area").append("<div id='cont_view'/>");
 		
-		new can.Control.View.Test.Qunit( $('#cont_view') );
+		new can.Control.View.Test.Qunit( can.$('#cont_view') );
 		
-		ok(/Hello World/i.test($('#cont_view').text()),"view rendered")
+		ok(/Hello World/i.test(can.$('#cont_view').text()),"view rendered")
 	});
 	
 	test("test.suffix.doubling", function(){
@@ -29,11 +29,11 @@ steal('can/control/view','can/view/micro','funcunit/qunit')  //load qunit
 		can.view.ext = ".ejs"; // Reset view extension to default
 		equal(".ejs", can.view.ext); 
 		
-		$("#qunit-test-area").append("<div id='suffix_test_cont_view'/>");
+		can.$("#qunit-test-area").append("<div id='suffix_test_cont_view'/>");
 		
-		new can.Control.View.Test.Qunit( $('#suffix_test_cont_view') );
+		new can.Control.View.Test.Qunit(can.$('#suffix_test_cont_view') );
 		
-		ok(/Hello World/i.test($('#suffix_test_cont_view').text()),"view rendered")
+		ok(/Hello World/i.test(can.$('#suffix_test_cont_view').text()),"view rendered")
 	});
 	
 	test("complex paths nested inside a controller directory", function(){
