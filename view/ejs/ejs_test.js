@@ -276,12 +276,13 @@ test('adding and removing multiple html content within a single element', functi
 test('live binding and removeAttr', function(){
 
 	var text = '<% if(obs.attr("show")) { %>' + 
-			'<p class="<%= obs.attr("className")%>"><%= obs.attr("message") %></p>' + 
+			'<p <%== obs.attr("attributes") %> class="<%= obs.attr("className")%>"><span><%= obs.attr("message") %></span></p>' + 
 		'<% } %>',
 
 		obs = new can.Observe({
 			show: true,
 			className: 'myMessage',
+			attributes: 'some=\"myText\"',
 			message: 'Live long and prosper'
 		}),
 
@@ -291,23 +292,35 @@ test('live binding and removeAttr', function(){
 
 	div.appendChild(can.view.frag(compiled));
 
-	equals(div.innerHTML, '<p class="myMessage">Live long and prosper</p>', 'initial render');
+
+	var p = div.getElementsByTagName('p')[0],
+		span = p.getElementsByTagName('span')[0];
+
+	equals(div.innerHTML, '<p some="myText" class="myMessage"><span>Live long and prosper</span></p>', 'initial render');
 
 	obs.removeAttr('className');
 
-	equals(div.innerHTML, '<p class="">Live long and prosper</p>', 'attribute is undefined');
+	equals(p.getAttribute('class'), '', 'class is undefined');
 
 	obs.attr('className', 'newClass');
 
-	equals(div.innerHTML, '<p class="newClass">Live long and prosper</p>', 'attribute updated');
+	equals(p.getAttribute('class'), 'newClass', 'class updated');
+
+	obs.removeAttr('attributes');
+
+	equals(p.getAttribute('some'), null, 'attribute is undefined');
+
+	obs.attr('attributes', 'some="newText"');
+
+	equals(p.getAttribute('some'), 'newText', 'attribute updated');
 
 	obs.removeAttr('message');
 
-	equals(div.innerHTML, '<p class="newClass">undefined</p>', 'text node value is undefined');
+	equals(span.innerHTML, 'undefined', 'text node value is undefined');
 
 	obs.attr('message', 'Warp drive, Mr. Sulu');
 
-	equals(div.innerHTML, '<p class="newClass">Warp drive, Mr. Sulu</p>', 'text node updated');
+	equals(span.innerHTML, 'Warp drive, Mr. Sulu', 'text node updated');
 
 	obs.removeAttr('show');
 
@@ -315,8 +328,8 @@ test('live binding and removeAttr', function(){
 
 	obs.attr('show', true);
 
-	equals(div.innerHTML, '<p class="newClass">Warp drive, Mr. Sulu</p>', 'value in block statement updated');
-		
+	equals(div.innerHTML, '<p some="newText" class="newClass"><span>Warp drive, Mr. Sulu</span></p>', 'value in block statement updated');
+
 });
 
 test('hookup within a tag', function () {
