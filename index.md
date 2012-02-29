@@ -194,13 +194,13 @@ paginate.each(function(name, value){
 [can.Observe.List](http://donejs.com/docs.html#!can.Observe.List) inherits from __can.Observe__
 but adds list specific methods such as:
 
-  - [indexOf](http://donejs.com/docs.html#!can.Observe.List.prototype.indexOf) `list.indexOf( item )` - returns 
-    the position of the item in the array
-  - [pop]
-  - [push]
-  - [shift]
-  - [splice]
-  - [unshift]
+ - [indexOf](http://donejs.com/docs.html#!can.Observe.List.prototype.indexOf) `list.indexOf( item )` - returns 
+   the position of the item in the array
+ - [pop]
+ - [push]
+ - [shift]
+ - [splice]
+ - [unshift]
 
 
 ## can.Model `can.Model([classProperties,] [prototypeProperties])`
