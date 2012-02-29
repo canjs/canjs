@@ -194,13 +194,13 @@ paginate.each(function(name, value){
 [can.Observe.List](http://donejs.com/docs.html#!can.Observe.List) inherits from __can.Observe__
 but adds list specific methods such as:
 
- - [indexOf](http://donejs.com/docs.html#!can.Observe.List.prototype.indexOf) `list.indexOf( item )` - returns 
-   the position of the item in the array
- - <code>[pop](http://donejs.com/docs.html#!can.Observe.List.prototype.pop)()</code> - removes the last item in the list
- - [push](http://donejs.com/docs.html#!can.Observe.List.prototype.push)
- - [shift](http://donejs.com/docs.html#!can.Observe.List.prototype.shift)
- - [splice](http://donejs.com/docs.html#!can.Observe.List.prototype.splice)
- - [unshift](http://donejs.com/docs.html#!can.Observe.List.prototype.unshift)
+ - [indexOf](http://donejs.com/docs.html#!can.Observe.List.prototype.indexOf) `list.indexOf( item )` - Returns 
+   the position of the item in the list.
+ - [pop](http://donejs.com/docs.html#!can.Observe.List.prototype.pop) `list.pop()` - removes the last item in the list.
+ - [push](http://donejs.com/docs.html#!can.Observe.List.prototype.push) `list.push(items...)` - adds items to the end of the list.
+ - [shift](http://donejs.com/docs.html#!can.Observe.List.prototype.shift) `list.shift()` - removes the first item in the list.
+ - [splice](http://donejs.com/docs.html#!can.Observe.List.prototype.splice) `list.splice(index, howMany, [items...])` - removes and inserts items at the specified index.
+ - [unshift](http://donejs.com/docs.html#!can.Observe.List.prototype.unshift) `list.unshift(items...)` - adds items to the start of the list.
 
 {% highlight javascript %}
 var hobbies = new can.Observe.List(['programming', 
