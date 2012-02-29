@@ -25,7 +25,7 @@ for the library you are using:
  - can.yui.js (9k)
 
 This page walks through the basics of CanJS by building a 
-small todo app with CanJS and jQuery.  The [Use with other libraries] section details 
+small todo app with CanJS and jQuery.  The [Use with other libraries](#use_with_other_libraries) section details 
 the minor differencs between use with other libraries.
 
 ## can.Construct `can.Construct([classProps,] [prototypeProps])`
@@ -424,7 +424,7 @@ Render a list of todos with:
 can.View also takes a __url__ for a template location.  __Create__ 
 a _todos/todos.ejs_ file that contains the following:
 
-{% highlight aspx %}	
+{% highlight html %}	
 	<% for(var i = 0; i < this.length; i++ ){ %>
 	  <li><%= this[i].name %></li>
 	<% } %>
