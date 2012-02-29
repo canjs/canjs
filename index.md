@@ -197,11 +197,27 @@ but adds list specific methods such as:
  - [indexOf](http://donejs.com/docs.html#!can.Observe.List.prototype.indexOf) `list.indexOf( item )` - returns 
    the position of the item in the array
  - <code>[pop](http://donejs.com/docs.html#!can.Observe.List.prototype.pop)()</code> - removes the last item in the list
- - [push]
- - [shift]
- - [splice]
- - [unshift]
+ - [push](http://donejs.com/docs.html#!can.Observe.List.prototype.push)
+ - [shift](http://donejs.com/docs.html#!can.Observe.List.prototype.shift)
+ - [splice](http://donejs.com/docs.html#!can.Observe.List.prototype.splice)
+ - [unshift](http://donejs.com/docs.html#!can.Observe.List.prototype.unshift)
 
+{% highlight javascript %}
+var hobbies = new can.Observe.List(['programming', 
+                               'basketball', 
+                               'party rocking'])
+                               
+// listen to changes in the list
+hobbies.bind("add", function(ev, newVals, index){
+  console.log("added",newVals,"at",index);
+}).bind("remove", function(ev, oldVals, index){
+  console.log("removed",oldVals,"at",index);
+})
+
+// modify the list
+hobbies.pop()
+hobbies.unshift("rocking parties")
+{% endhighlight %}  
 
 ## can.Model `can.Model([classProperties,] [prototypeProperties])`
 
