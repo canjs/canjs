@@ -319,9 +319,9 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 								// get fragement of html to fragment
 								var frag = can.view.frag(val),
 									// wrap it to keep a reference to the elements .. 
-									nodes = can.makeArray(can.$(can.map(frag.childNodes,function(node){
+									nodes = can.$(can.map(frag.childNodes,function(node){
 										return node;
-									}))),
+									})),
 									last = remove[remove.length - 1];
 								
 								// insert it in the document
@@ -342,7 +342,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						// we might simply check that nodes is still in the document 
 						// before a write ...
 						liveBind(observed, span.parentNode, function(){
-							nodes = makeAndPut(func.call(self), can.makeArray(nodes));
+							nodes = makeAndPut(func.call(self), nodes);
 						});
 						//return parent;
 				}) + "'></" +tag+">";

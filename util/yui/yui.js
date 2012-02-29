@@ -50,15 +50,7 @@
 
 		// Array
 		can.makeArray = function( arr ) {
-			var array = [];
-			Y.each(arr, function(item){
-				if (item && item.getDOMNode) {
-					array.push(item.getDOMNode());
-				} else {
-					array.push(item)
-				}
-			});
-			return array;
+			return Y.Array(arr);
 		};
 		can.isArray = Y.Lang.isArray;
 		can.inArray = function( item, arr ) {
@@ -67,7 +59,7 @@
 		
 		can.map = function( arr, fn ) {
 			// http://yuilibrary.com/yui/docs/api/classes/Array.html#method_map
-			return can.makeArray(Y.Array.map(can.makeArray(arr || []), fn));
+			return Y.Array.map(can.makeArray(arr || []), fn);
 		};
 		
 		can.each = function( elements, callback ) {
@@ -108,13 +100,20 @@
 		}
 
 		// element ... get the wrapped helper
+		var prepareNodeList = function(nodelist) {
+			nodelist.each(function(node, i) {
+				nodelist[i] = node.getDOMNode();
+			});
+			nodelist.length = nodelist.size();
+			return nodelist;
+		}
 		can.$ = function( selector ) {
 			if ( selector === window ) {
 				return window
 			} else if ( selector instanceof Y.NodeList ) {
-				return selector;
+				return prepareNodeList(selector);
 			}
-			return selector === window ? window : Y.all(selector);
+			return selector === window ? window : prepareNodeList(Y.all(selector));
 		}
 		can.get = function( wrapped, index ) {
 			return wrapped._nodes[index];
