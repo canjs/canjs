@@ -43,23 +43,23 @@ extended and sub-classed as far as you like:
 
 
 {% highlight javascript %}	
-	var Todo = can.Construct({
-	  init : function(){},
+var Todo = can.Construct({
+  init : function(){},
 	
-	  author : function(){ ... },
+  author : function(){ ... },
 	
-	  coordinates : function(){ ... },
+  coordinates : function(){ ... },
 	
-	  allowedToEdit: function(account) { 
-	   return true;
-	  }
-	});
+  allowedToEdit: function(account) { 
+    return true;
+  }
+});
 	
-	 var PrivateTodo = Todo({
-	  allowedToEdit: function(account) {
-	    return account.owns(this);
-	  }
-	})
+var PrivateTodo = Todo({
+  allowedToEdit: function(account) {
+    return account.owns(this);
+  }
+});
 {% endhighlight %}
 
 ### init `new can.Construct(arg1, arg2)`
