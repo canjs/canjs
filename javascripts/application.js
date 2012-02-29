@@ -6,7 +6,7 @@ $.Controller('Menu', {}, {
 		setTimeout(this.proxy(function(){
 			this.mark();
 			this.bind(window, 'scroll', this.proxy('mark'));
-		}), 50)
+		}), 1)
 	},
 	buildMenu : function(){
 		this.headings = this.find('h1,h2,h3');
