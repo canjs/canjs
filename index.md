@@ -221,13 +221,14 @@ hobbies.unshift("rocking parties")
 
 ## can.Model `can.Model([classProperties,] [prototypeProperties])`
 
-Models are central to any application.  They 
-contain data and logic surrounding it.  You 
-extend [can.Model](http://javascriptmvc.com/docs.html#!can.Model) with your domain specific 
+[can.Model](http://donejs.com/docs.html#!can.Model)s are __can.Observe__s that connect
+to a RESTful interface.
+
+Extend [can.Model](http://javascriptmvc.com/docs.html#!can.Model) with your domain specific 
 methods and can.Model provides a set of methods 
 for managing changes.
 
-To create a __Model__ class, call __can.Model__ with the:
+To create a __Model__ class, call __can.Model__ with:
 
 - __classProperties__, including 
   [findAll](http://javascriptmvc.com/docs.html#!can.Model.findAll),
@@ -235,19 +236,19 @@ To create a __Model__ class, call __can.Model__ with the:
   [create](http://javascriptmvc.com/docs.html#!can.Model.create),
   [update](http://javascriptmvc.com/docs.html#!can.Model.update),
   [destroy](http://javascriptmvc.com/docs.html#!can.Model.destroy) properties, and
-- prototype instance properties.
+- any __prototypeProperties__ helper methods.
 
 Make a Todo model in __todos.js__ like the following:
 
 {% highlight javascript %}	
-	var Todo = can.Model({
-	  findAll : "GET /todos",
-	  findOne : "GET /todos/{id}",
-	  create  : "POST /todos",
-	  update  : "PUT /todos/{id}",
-	  destroy : "DELETE /todos/{id}"
-	},
-	{})
+var Todo = can.Model({
+  findAll : "GET /todos",
+  findOne : "GET /todos/{id}",
+  create  : "POST /todos",
+  update  : "PUT /todos/{id}",
+  destroy : "DELETE /todos/{id}"
+},
+{})
 {% endhighlight %}
 
 __Note:__ Try the following commands in your browser:
