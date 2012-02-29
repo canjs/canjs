@@ -23,6 +23,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		rightBracket = /\}/g,
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 		attrReg = /([^\s]+)=$/,
+		attributeReplace = /__!!__/g,
 		tagMap = {"": "span", table: "tr", tr: "td", ol: "li", ul: "li", tbody: "tr", thead: "tr", tfoot: "tr"},
 		// escapes characters starting with \
 		clean = function( content ) {
@@ -38,18 +39,11 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		// used to bind to an observe, and unbind when the element is removed
 		liveBind = function(observed, el, cb){
 			can.each(observed, function(i, ob){
-				ob.cb = function(ev, attr){
-					console.log("event",attr, "listening",ob.attr)
-					if(attr === ob.attr) {
-						cb();
-					} 
-				}
-				console.log("listening on", ob.attr)
-				ob.obj.bind('change', ob.cb)
+				ob.obj.bind(ob.attr, cb)
 			})
 			can.bind.call(el,'destroyed', function(){
 				can.each(observed, function(i, ob){
-					ob.obj.unbind('change', ob.cb)
+					ob.obj.unbind(ob.attr, ob.cb)
 				})
 			})
 		},
@@ -374,7 +368,8 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						
 					(hooks = can.data(wrapped,'hooks')) || can.data(wrapped, 'hooks', hooks = {});
 					var attr = el.getAttribute(status),
-						parts = attr.split("__!!__");
+						parts = attr.split("__!!__"),
+						hook;
 
 					if(hooks[status]) {
 						hooks[status].funcs.push(func);
@@ -384,20 +379,28 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						hooks[status] = {
 							render: function() {
 								var i =0;
-								var newAttr = attr.replace(/__!!__/g, function() {
-									return contentEscape( hooks[status].funcs[i++].call(self) );
+								var newAttr = attr.replace(attributeReplace, function() {
+									return contentEscape( hook.funcs[i++].call(self) );
 								});
 								return newAttr;
 							},
-							funcs: [func]
+							funcs: [func],
+							batchNum : undefined
 						};
 					}
-
+					hook = hooks[status];
+					
 					parts.splice(1,0,input);
 					el.setAttribute(status, parts.join(""));
 					
-					liveBind(observed, el, function() {
-						el.setAttribute(status, hooks[status].render());
+
+					liveBind(observed, el, function(ev) {
+						if(ev.batchNum === undefined || ev.batchNum !== hook.batchNum){
+							hook.batchNum = ev.batchNum;
+							el.setAttribute(status, hook.render());
+						} 
+						
+						
 					});
 				})
 				return "__!!__";

@@ -42,7 +42,7 @@
 		<script type="text/ejs" id="ejs-template">
 			<div class="box-view">
 				<div class="box" id="box-<%= this.id%>" style="top:<%= this.attr('top')%>px; left:<%= this.attr('left')%>px; background:rgb(0,0,<%= this.attr('color')%>)">
-					<%= this.attr('content') %>
+					<%= this.attr('count') % 100 %>
 				</div>
 			</div>
 		</script>
@@ -52,7 +52,6 @@
 		// Change N to change the number of drawn circles.
 
 		var N = 100;
-
 		(function(){
 			steal(
 			'can/view/ejs',
@@ -66,8 +65,7 @@
 							count: count,
 							top: Math.sin(count / 10) * 10,
 							left: Math.cos(count / 10) * 10,
-							color: count % 255,
-							content: count % 100
+							color: count % 255
 						})
 					}
 				});
@@ -93,10 +91,20 @@
 					for(var i = 0; i < N; i++) {
 						boxes[i].tick();
 					}
-					window.timeout = _.defer(canAnimate);
+					iteration++;
+					if(iteration <= iterations){
+						window.timeout = _.defer(canAnimate);
+					} else {
+						console.log(new Date() - start)
+					}
+					
 				}
-
+				var start,
+					iterations = 99,
+					iteration;
 				window.runCan = function(){
+					start = new Date();
+					iteration = 0;
 					reset();
 					canInit();
 					canAnimate();
