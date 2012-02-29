@@ -68,7 +68,7 @@ be the prototype properties.
 ### init `new can.Construct(arg1, arg2)`
 
 When a constructor is called with the `new` keyword, __can.Construct__ creates the instance and 
-calls [can.Construct.prototype.init](http://javascriptmvc.com/docs.html#!can.Construct.prototype.init) with 
+calls [can.Construct.prototype.init](donejs.com/docs.html#!can.Construct.prototype.init) with 
 the arguments passed to `new Constructor(...)`.
 
 {% highlight javascript %}	
