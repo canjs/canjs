@@ -65,7 +65,7 @@ var PrivateTodo = Todo({
 If only one set of properties is passed to __can.Construct__, it's assumed to 
 be the prototype properties.
 
-### init `new can.Construct(arg1, arg2)`
+### init `new can.Construct( [args ...] )`
 
 When a constructor is called with the `new` keyword, __can.Construct__ creates the instance and 
 calls [can.Construct.prototype.init](donejs.com/docs.html#!can.Construct.prototype.init) with 
@@ -85,8 +85,88 @@ var todo = new Todo("Hello World");
 todo.read()
 {% endhighlight %}
 
+## can.Observe `new can.Observe( data )`
 
-## can.Model `can.Model(classProperties, prototypeProperties)`
+__can.Observe__ provides the observable pattern for JavaScript Objects. It lets you
+
+ - Set and remove property or property values on objects
+ - Listen for property changes changes
+ - Work with nested properties
+
+To create an observable object, use `new can.Observe( [data] )` like:
+
+{% highlight javascript %}
+var paginate = new can.Observe({offset: 0, limit : 100, count: 2000})
+{% endhighlight %}
+
+To create an observable array, use `new can.Observe.List( array )` like:
+
+{% highlight javascript %}
+var hobbies = new can.Observe.List(['programming', 
+                               'basketball', 
+                               'party rocking'])
+{% endhighlight %}
+
+__can.Model__ inherits from __can.Observe__ and __can.route__ is a special Observe,
+but Observe is useful on its own to maintain client-side state (such as pagination data). 
+
+### attr `observe.attr( [name,] [value] )`
+
+[can.Observe.prototype.attr](http://donejs.com/docs.html#!can.Observe.prototype.attr) reads or 
+sets properties on an observe:
+
+{% highlight javascript %}	
+paginate.attr('offset') //-> 0
+	
+paginate.attr('offset', 100 );
+	
+paginate.attr() //-> {offset: 100, limit : 100, count: 2000}
+	
+paginate.attr({limit: 200, count: 1000});
+{% endhighlight %}
+
+### bind `observe.bind( eventType, handler(args...) )`
+
+[can.Observe.prototype.bind](http://donejs.com/docs.html#!can.Observe.prototype.bind) listens to
+changes on a __can.Observe__.  There are two types of events triggered as a 
+result of an attribute change:
+
+ - `change` events - a generic event so you can listen to any property change and how it was changed
+ - `ATTR_NAME` events - bind to specific attribute changes
+
+The following listens to a all attribute changes and 'offset' changes on the paginate instance:
+
+{% highlight javascript %}
+paginate.bind('change', function(ev, attr, how, newVal, oldVal){
+   // attr = 'offset'
+   // how = 'set'
+   // newVal = 200
+   // oldVal = 100
+}).bind('offset', function(ev, newVal, oldVal){
+   // newVal = 200
+   // oldVal = 100
+})
+paginate.attr('offset', 200);
+{% endhighlight %}                 
+
+### each `observe.each( handler(attrName, value) )`
+
+[can.Observe.prototype.each](http://donejs.com/docs.html#!can.Observe.prototype.each) iterates through 
+each attribute, calling handler with each attribute name and value.
+
+{% highlight javascript %}
+paginate.each(function(name, value){
+   console.log( name, value);
+})
+// writes:
+//  offset 200
+//  limit 200
+//  count 1000}
+{% endhighlight %}  
+
+
+
+## can.Model `can.Model([classProperties,] [prototypeProperties])`
 
 Models are central to any application.  They 
 contain data and logic surrounding it.  You 
