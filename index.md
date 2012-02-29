@@ -1,13 +1,22 @@
 ---
 layout: default
 ---
-# CanJS
+# Welcome to CanJS!
 
-This walks through the basics of CanJS by building a 
-smal todo app.  Check out the [Getting Started Guide](http://javascriptmvc.com/docs.html#!getstarted)
-for a more in-depth overview. 
+CanJS is an MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.  It provides:
+
+ - __can.Construct__  - inheritable constructor functions
+ - __can.Control__ - declaritive event bindings
+ - __can.Model__ - connect data to a RESTful JSON interface
+ - __can.Observe__ - key-value binding
+ - __can.route__ - backbutton and bookmarking support
+ - __can.view__ - dynamic live binding client side templates
+ 
 
 ## Get Canned
+
+CanJS supports jQuery, Zepto, Dojo, YUI and Mootools.  Select your download 
+for the library you are using:
 
  - can.jquery.js (8k)
  - can.zepto.js (9k)
@@ -15,95 +24,236 @@ for a more in-depth overview.
  - can.mootools.js (9k)
  - can.yui.js (9k)
 
-## Can.Construct `Can.Construct([classProps,] [prototypeProps])`
+This page walks through the basics of CanJS by building a 
+small todo app with CanJS and jQuery.  The [Use with other libraries] section details 
+the minor differencs between use with other libraries.
 
-Constructors made with [Can.Construct](http://javascriptmvc.com/docs.html#!Can.Construct) are used to create
-objects with shared properties. It's used by both __Can.Control__ and __Can.Model__.
+## can.Construct `can.Construct([classProps,] [prototypeProps])`
 
-To create a __Class__ of your own, call __Can.Construct__ with the:
+Constructor function made with [can.Construct](http://donejs.com/docs.html#!can.Construct) are used to create
+objects with shared properties. It's used by both __can.Control__ and __can.Model__.
+
+To create a constructor function of your own, call __can.Construct__ with the:
 
 - __classProperties__ that are attached directly to the constructor, and
 - instance __prototypeProperties__.
 
-__Can.Construct__ sets up the prototype chain so subclasses can be further 
+__can.Construct__ sets up the prototype chain so subclasses can be further 
 extended and sub-classed as far as you like:
 
 
 {% highlight javascript %}	
-	var Todo = Can.Construct({
-	  init : function(){},
+var Todo = can.Construct({
+  init : function(){},
 	
-	  author : function(){ ... },
+  author : function(){ ... },
 	
-	  coordinates : function(){ ... },
+  coordinates : function(){ ... },
 	
-	  allowedToEdit: function(account) { 
-	   return true;
-	  }
-	});
+  allowedToEdit: function(account) { 
+    return true;
+  }
+});
 	
-	 var PrivateTodo = Todo({
-	  allowedToEdit: function(account) {
-	    return account.owns(this);
-	  }
-	})
+var PrivateTodo = Todo({
+  allowedToEdit: function(account) {
+    return account.owns(this);
+  }
+});
 {% endhighlight %}
 
-### init `new Can.Construct(arg1, arg2)`
+If only one set of properties is passed to __can.Construct__, it's assumed to 
+be the prototype properties.
 
-When a class constructor is invoked, __Can.Construct__ creates the instance and 
-calls [Can.Construct.prototype.init](http://javascriptmvc.com/docs.html#!Can.Construct.prototype.init) with 
-the arguments passed to `new Class(...)`.
+### init `new can.Construct( [args ...] )`
+
+When a constructor is called with the `new` keyword, __can.Construct__ creates the instance and 
+calls [can.Construct.prototype.init](donejs.com/docs.html#!can.Construct.prototype.init) with 
+the arguments passed to `new Constructor(...)`.
 
 {% highlight javascript %}	
-	var Todo = Can.Construct({
-	  init : function(text) {
-	    this.text = text
-	  },
-	  read : function(){
-	    console.log(this.text);
-	  }
-	})
+var Todo = can.Construct({
+  init : function(text) {
+    this.text = text
+  },
+  read : function(){
+    console.log(this.text);
+  }
+})
 	
-	var todo = new Todo("Hello World");
-	todo.read()
+var todo = new Todo("Hello World");
+todo.read()
+{% endhighlight %}
+
+## can.Observe `new can.Observe( data )`
+
+[can.Observe](http://donejs.com/docs.html#!can.Observe) provides the observable pattern for JavaScript Objects. It lets you:
+
+ - Set and remove property values on objects.
+ - Listen for property changes changes.
+ - Work with nested properties.
+
+To create an observable object, use `new can.Observe( [data] )` like:
+
+{% highlight javascript %}
+var paginate = new can.Observe({offset: 0, limit : 100, count: 2000})
+{% endhighlight %}
+
+To create an observable array, use `new can.Observe.List( [array] )` like:
+
+{% highlight javascript %}
+var hobbies = new can.Observe.List(['programming', 
+                               'basketball', 
+                               'party rocking'])
+{% endhighlight %}
+
+__can.Observe__ is used by both __can.Model__ and __can.route__. However, observe 
+is useful on its own to maintain client-side state (such as pagination data). 
+
+### attr `observe.attr( [name,] [value] )`
+
+[can.Observe.prototype.attr](http://donejs.com/docs.html#!can.Observe.prototype.attr) reads or 
+sets properties on an observe:
+
+{% highlight javascript %}	
+paginate.attr('offset') //-> 0
+	
+paginate.attr('offset', 100 );
+	
+paginate.attr() //-> {offset: 100, limit : 100, count: 2000}
+	
+paginate.attr({limit: 200, count: 1000});
 {% endhighlight %}
 
 
-## Can.Model `Can.Model(classProperties, prototypeProperties)`
+### removeAttr `observe.removeAttr( name )`
 
-Models are central to any application.  They 
-contain data and logic surrounding it.  You 
-extend [Can.Model](http://javascriptmvc.com/docs.html#!Can.Model) with your domain specific 
-methods and Can.Model provides a set of methods 
+[can.Observe.prototype.removeAttr](http://donejs.com/docs.html#!can.Observe.prototype.removeAttr) removes a property 
+by name from an observe.  This is similar to using the `delete` keyword to remove a property.
+
+{% highlight javascript %}
+o =  new can.Observe({foo: 'bar'});
+o.removeAttr('foo'); //-> 'bar'
+{% endhighlight %}
+
+### bind `observe.bind( eventType, handler(args...) )`
+
+[can.Observe.prototype.bind](http://donejs.com/docs.html#!can.Observe.prototype.bind) listens to
+changes on a __can.Observe__.  There are two types of events triggered as a 
+result of an attribute change:
+
+ - `change` events - a generic event so you can listen to any property change and how it was changed
+ - `ATTR_NAME` events - bind to specific attribute changes
+
+The following listens to a all attribute changes and 'offset' changes on the paginate instance:
+
+{% highlight javascript %}
+paginate.bind('change', function(ev, attr, how, newVal, oldVal){
+   // attr = 'offset'
+   // how = 'set'
+   // newVal = 200
+   // oldVal = 100
+}).bind('offset', function(ev, newVal, oldVal){
+   // newVal = 200
+   // oldVal = 100
+})
+paginate.attr('offset', 200);
+{% endhighlight %}                 
+
+### unbind `observe.unbind( eventType, handler )`
+
+[can.Observe.prototype.unbind](http://donejs.com/docs.html#!can.Observe.prototype.unbind) stops listening
+to an event.  The same function that was used for the handler in `bind` must be passed to `unbind`.
+
+{% highlight javascript %}
+var countHandler = function(ev, newVal, oldVal){
+  console.log("the count has changed");
+}
+paginate.bind('count',countHandler);
+paginate.attr('count', 3000);
+paginate.unbind('count', countHandler);
+{% endhighlight %}  
+
+### each `observe.each( handler(attrName, value) )`
+
+[can.Observe.prototype.each](http://donejs.com/docs.html#!can.Observe.prototype.each) iterates through 
+each attribute, calling handler with each attribute name and value.
+
+{% highlight javascript %}
+paginate.each(function(name, value){
+   console.log( name, value);
+})
+// writes:
+//  offset 200
+//  limit 200
+//  count 1000}
+{% endhighlight %}  
+
+### can.Observe.List `new can.Observe.List( [array] )`
+
+[can.Observe.List](http://donejs.com/docs.html#!can.Observe.List) inherits from __can.Observe__
+but adds list specific methods such as:
+
+ - [indexOf](http://donejs.com/docs.html#!can.Observe.List.prototype.indexOf) `list.indexOf( item )` - Returns 
+   the position of the item in the list.
+ - [pop](http://donejs.com/docs.html#!can.Observe.List.prototype.pop) `list.pop()` - removes the last item in the list.
+ - [push](http://donejs.com/docs.html#!can.Observe.List.prototype.push) `list.push(items...)` - adds items to the end of the list.
+ - [shift](http://donejs.com/docs.html#!can.Observe.List.prototype.shift) `list.shift()` - removes the first item in the list.
+ - [splice](http://donejs.com/docs.html#!can.Observe.List.prototype.splice) `list.splice(index, howMany, [items...])` - removes and inserts items at the specified index.
+ - [unshift](http://donejs.com/docs.html#!can.Observe.List.prototype.unshift) `list.unshift(items...)` - adds items to the start of the list.
+
+{% highlight javascript %}
+var hobbies = new can.Observe.List(['programming', 
+                               'basketball', 
+                               'party rocking'])
+                               
+// listen to changes in the list
+hobbies.bind("add", function(ev, newVals, index){
+  console.log("added",newVals,"at",index);
+}).bind("remove", function(ev, oldVals, index){
+  console.log("removed",oldVals,"at",index);
+})
+
+// modify the list
+hobbies.pop()
+hobbies.unshift("rocking parties")
+{% endhighlight %}  
+
+## can.Model `can.Model([classProperties,] [prototypeProperties])`
+
+[can.Model](http://donejs.com/docs.html#!can.Model)s are __can.Observe__s that connect
+to a RESTful interface.
+
+Extend [can.Model](http://donejs.com/docs.html#!can.Model) with your domain specific 
+methods and can.Model provides a set of methods 
 for managing changes.
 
-To create a __Model__ class, call __Can.Model__ with the:
+To create a __Model__ class, call __can.Model__ with:
 
 - __classProperties__, including 
-  [findAll](http://javascriptmvc.com/docs.html#!Can.Model.findAll),
-  [findOne](http://javascriptmvc.com/docs.html#!Can.Model.findAll),
-  [create](http://javascriptmvc.com/docs.html#!Can.Model.create),
-  [update](http://javascriptmvc.com/docs.html#!Can.Model.update),
-  [destroy](http://javascriptmvc.com/docs.html#!Can.Model.destroy) properties, and
-- prototype instance properties.
+  [findAll](http://donejs.com/docs.html#!can.Model.findAll),
+  [findOne](http://donejs.com/docs.html#!can.Model.findAll),
+  [create](http://donejs.com/docs.html#!can.Model.create),
+  [update](http://donejs.com/docs.html#!can.Model.update),
+  [destroy](http://donejs.com/docs.html#!can.Model.destroy) properties, and
+- any __prototypeProperties__ helper methods.
 
 Make a Todo model in __todos.js__ like the following:
 
 {% highlight javascript %}	
-	var Todo = Can.Model({
-	  findAll : "GET /todos",
-	  findOne : "GET /todos/{id}",
-	  create  : "POST /todos",
-	  update  : "PUT /todos/{id}",
-	  destroy : "DELETE /todos/{id}"
-	},
-	{})
+var Todo = can.Model({
+  findAll : "GET /todos",
+  findOne : "GET /todos/{id}",
+  create  : "POST /todos",
+  update  : "PUT /todos/{id}",
+  destroy : "DELETE /todos/{id}"
+},
+{})
 {% endhighlight %}
 
 __Note:__ Try the following commands in your browser:
 
-### new Can.Model(attributes)
+### new can.Model(attributes)
 
 Create a todo instance like:
 
@@ -113,7 +263,7 @@ Create a todo instance like:
     
 ### attr `model.attr( name, [value] )`
 
-[Can.Model.prototype.attr](http://javascriptmvc.com/docs.html#!Can.Model.prototype.attr) reads or sets properties on model instances.
+[can.Model.prototype.attr](http://donejs.com/docs.html#!can.Model.prototype.attr) reads or sets properties on model instances.
 
 {% highlight javascript %}	
 	todo.attr('name') //-> "do the dishes"
@@ -127,9 +277,9 @@ Create a todo instance like:
 
 ### Talking to the server
 
-Model uses static [findAll](http://javascriptmvc.com/docs.html#!Can.Model.findAll),
-[findOne](http://javascriptmvc.com/docs.html#!Can.findAll), [create](http://javascriptmvc.com/docs.html#!Can.create),
-[update](http://javascriptmvc.com/docs.html#!Can.update), and [destroy](http://javascriptmvc.com/docs.html#!Can.destroy)
+Model uses static [findAll](http://donejs.com/docs.html#!can.Model.findAll),
+[findOne](http://donejs.com/docs.html#!can.findAll), [create](http://donejs.com/docs.html#!can.create),
+[update](http://donejs.com/docs.html#!can.update), and [destroy](http://donejs.com/docs.html#!can.destroy)
 methods to create, read, update and delete 
 model instances on the server.  
 
@@ -146,7 +296,7 @@ to `GET /todos`.
 
 ### findAll `findAll( params, success( todos ), error() )`
 
-  [findAll](http://javascriptmvc.com/docs.html#!Can.Model.findAll) retrieves multiple todos:
+  [findAll](http://donejs.com/docs.html#!can.Model.findAll) retrieves multiple todos:
 
 {% highlight javascript %}	
 	Todo.findAll({}, function( todos ) {
@@ -156,7 +306,7 @@ to `GET /todos`.
 
 ### findOne `findOne( params, success( todo ), error() )`
 
-[findOne](http://javascriptmvc.com/docs.html#!Can.Model.findOne) retrieves a single todo:
+[findOne](http://donejs.com/docs.html#!can.Model.findOne) retrieves a single todo:
 
 {% highlight javascript %}	
 	Todo.findOne({}, function( todo ) {
@@ -166,7 +316,7 @@ to `GET /todos`.
 
 ### save `todo.save( success( todo ), error() )`
 
-[Save](http://javascriptmvc.com/docs.html#!$.Model::save) can __create__ 
+[Save](http://donejs.com/docs.html#!$.Model::save) can __create__ 
 or __update__ instances depending if the 
 instance has already been created or not.
 
@@ -197,7 +347,7 @@ and call __save__ again like the following:
 
 ### destroy `todo.destroy( success( todo ), error() )`
 
-[Destroy](http://javascriptmvc.com/docs.html#!Can.Model.prototype.destroy) deletes a 
+[Destroy](http://donejs.com/docs.html#!can.Model.prototype.destroy) deletes a 
 record on the server.  You can do this like:
 
 {% highlight javascript %}	
@@ -215,9 +365,9 @@ record on the server.  You can do this like:
 ### bind `todo.bind( event, handler(ev, todo ) )`
 
 Listening to changes in the Model is what MVC 
-is about.  Model lets you [bind](http://javascriptmvc.com/docs.html#!Can.Model::bind) to changes 
+is about.  Model lets you [bind](http://donejs.com/docs.html#!can.Model::bind) to changes 
 on an individual instance 
-or [all instances](http://javascriptmvc.com/docs.html#!Can.Model.bind). For example, you can listen to 
+or [all instances](http://donejs.com/docs.html#!can.Model.bind). For example, you can listen to 
 when an instance is __created__ on the server like:
 
 {% highlight javascript %}	
@@ -244,9 +394,9 @@ the model class and instances whenever a model Ajax request completes:
 - __updated__ - an instance is updated on the server
 - __destroyed__ - an instance is destroyed on the server
 
-## Can.View `Can.View( idOrUrl, data )`
+## can.View `can.View( idOrUrl, data )`
 
-[Can.View](http://javascriptmvc.com/docs.html#!Can.View) is used to easily create HTML with
+[can.View](http://donejs.com/docs.html#!can.View) is used to easily create HTML with
 JS templates. Pass it ...
 
 - the __id__ of a script tag to use as the content of the template
@@ -271,7 +421,7 @@ Render a list of todos with:
 	});
 {% endhighlight %}
 
-Can.View also takes a __url__ for a template location.  __Create__ 
+can.View also takes a __url__ for a template location.  __Create__ 
 a _todos/todos.ejs_ file that contains the following:
 
 {% highlight aspx %}	
@@ -288,7 +438,7 @@ Render this with:
 	});
 {% endhighlight %}
 
-__Can.View__ works with any template language, such
+__can.View__ works with any template language, such
 as JAML, jQuery-tmpl, Mustache and superpowers them with:
 
 - Loading from scripts and external files 
@@ -300,7 +450,7 @@ as JAML, jQuery-tmpl, Mustache and superpowers them with:
 
 ### Modifiers `el.<i>modifier</i>( idOrUrl, data )`
 
-__Can.View__ overwrites the jQuery's html modifiers
+__can.View__ overwrites the jQuery's html modifiers
 after, append, before, html, prepend, replaceWith, and text,
 allowing you to write:
 
@@ -318,7 +468,7 @@ To make this work, make sure `todos.html` has a `#todos` element like:
 
 ### Deferreds
 
-__Can.Model__'s ajax methods return a deffered. __Can.View__
+__can.Model__'s ajax methods return a deffered. __can.View__
 accepts deferreds, making this hotness possible:
 
 {% highlight javascript %}	
@@ -329,12 +479,12 @@ This syntax will render todos.ejs with the todo instances in the AJAX request
 made by Todo.findAll, whenever its completed.
 
 
-## Can.Control `Can.Control(classProps, prototypeProps)`
+## can.Control `can.Control(classProps, prototypeProps)`
 
-[Can.Control](http://javascriptmvc.com/docs.html#!Can.Control) creates organized, memory-leak free, 
-rapidly performing, stateful widgets. It is used to create UI controls like 
+[can.Control](http://donejs.com/docs.html#!can.Control) creates organized, memory-leak free, 
+rapidly performing, stateful controls. It is used to create UI controls like 
 tabs, grids, and contextmenus and used to organize them 
-into higher-order business rules with [Can.route](http://javascriptmvc.com/docs.html#!Can.route). Its serves as 
+into higher-order business rules with [can.route](http://donejs.com/docs.html#!can.route). Its serves as 
 both a traditional view and a 
 traditional controller.
   
@@ -343,7 +493,7 @@ lists todos and lets
 us destroy them. Add the following to __todos.js__:
 
 {% highlight javascript %}	
-	var Todos = Can.Control({
+	var Todos = can.Control({
 	  "init" : function( element , options ){
 	    this.element.html('todos.ejs', Todo.findAll() )
 	  }
@@ -356,20 +506,20 @@ We can create this widget on the `#todos` element with:
 	new Todos('#todos', {});
 {% endhighlight %}
 
-### init `Can.Control.prototype.init(element, options)`
+### init `can.Control.prototype.init(element, options)`
 
-[Init](http://javascriptmvc.com/docs.html#!Can.Control:init) is called when a
-new Can.Control instance is created.  It's called with:
+[Init](http://donejs.com/docs.html#!can.Control:init) is called when a
+new can.Control instance is created.  It's called with:
 
-- __element__ - The jQuery wrapped element passed to the 
-                controller. Controller accepts a jQuery element, a
-                raw HTMLElement, or a css selector.  This is
-                set as __this.element__ on the controller instance.
-- __options__ - The second argument passed to new Controller, extended with
-                the Can.Control's static __defaults__. This is set as 
-                __this.options__ on the controller instance.
+- __element__ - The wrapped element passed to the 
+                control. Control accepts a
+                raw HTMLElement, a css selector, or a NodeList.  This is
+                set as __this.element__ on the control instance.
+- __options__ - The second argument passed to new Control, extended with
+                the can.Control's static __defaults__. This is set as 
+                __this.options__ on the control instance.
 
-and any other arguments passed to `new Can.Control()`.  For example:
+and any other arguments passed to `new can.Control()`.  For example:
 
 {% highlight javascript %}	
 	var Todos = $.Controller({
@@ -386,13 +536,13 @@ and any other arguments passed to `new Can.Control()`.  For example:
 
 ### element `this.element`
 
-[this.element](http://javascriptmvc.com/docs.html#!Can.Controll.prototype.element) is the 
-element the controller is created on. 
+[this.element](http://donejs.com/docs.html#!can.Controll.prototype.element) is the 
+element the control is created on. 
 
 ### options `this.options`
 
-[this.options](http://javascriptmvc.com/docs.html#!Can.Control.prototype.options) is the second argument passed to 
-`new Can.Control()` merged with the controller's static __defaults__ property.
+[this.options](http://donejs.com/docs.html#!can.Control.prototype.options) is the second argument passed to 
+`new can.Control()` merged with the control's static __defaults__ property.
 
 ### Listening to events
 
@@ -400,7 +550,7 @@ Controller automatically binds prototype methods that look
 like event handlers.  Listen to __click__s on `<li>` elements like:
 
 {% highlight javascript %}	
-	var Todos = Can.Control({
+	var Todos = can.Control({
 	"init" : function( element , options ){
 	  this.element.html('todos.ejs', Todo.findAll() )
 	},
@@ -425,7 +575,7 @@ To destroy a todo when it's `<a href='javascript:// class='destroy'>` link
 is clicked:
 
 {% highlight javascript %}	
-	var Todos = Can.Control({
+	var Todos = can.Control({
 	"init" : function( element , options ){
 	  this.element.html('todos.ejs', Todo.findAll() )
 	},
@@ -455,7 +605,7 @@ the event handler name.  The following allows customization
 of the event that destroys a todo:
 
 {% highlight javascript %}	
-	var Todos = Can.Control("Todos",{
+	var Todos = can.Control("Todos",{
 	  "init" : function( element , options ){ ... },
 	  "li click" : function(li){ ... },
 	  
@@ -468,11 +618,11 @@ of the event that destroys a todo:
 	new Todos("#todos",{destroyEvent: "mouseenter"})
 {% endhighlight %}
 
-Values inside `{NAME}` are looked up on the controller's `this.options`
+Values inside `{NAME}` are looked up on the control's `this.options`
 and then the `window`.  For example, we could customize it instead like:
 
 {% highlight javascript %}	
-	var Todos = Can.Control("Todos",{
+	var Todos = can.Control("Todos",{
 	  "init" : function( element , options ){ ... },
 	  "li click" : function(li){ ... },
 	  
@@ -520,7 +670,7 @@ to `todo.destroy(cb)`, we should be listening to
 __destroyed__ events.  We'll handle __updated__ too:
 
 {% highlight javascript %}	
-	var Todos = Can.Control({
+	var Todos = can.Control({
 	  "init" : function( element , options ){
 	    this.element.html('todos.ejs', Todo.findAll() )
 	  },
@@ -550,9 +700,9 @@ This is better because it removes the todo's element from the page even if anoth
 destroyed the todo. Also, this works very well with real-time
 architectures.
 
-### destroy `controller.destroy()`
+### destroy `control.destroy()`
 
-[Can.Control.prototype.destroy](http://javascriptmvc.com/docs.html#!Can.Control.prototype.destroy) unbinds a controller's
+[can.Control.prototype.destroy](http://donejs.com/docs.html#!can.Control.prototype.destroy) unbinds a control's
 event handlers and releases its element, but does not remove 
 the element from the page. 
 
@@ -561,7 +711,7 @@ the element from the page.
 	todo.destroy();
 {% endhighlight %}
 
-When a controller's element is removed from the page
+When a control's element is removed from the page
 __destroy__ is called automatically.
 
 {% highlight javascript %}	
@@ -569,20 +719,20 @@ __destroy__ is called automatically.
 	$("#todos").remove();
 {% endhighlight %}
     
-All event handlers bound with Controller are unbound when the controller 
+All event handlers bound with Controller are unbound when the control 
 is destroyed (or its element is removed).
 
 _Brief aside on destroy and templated event binding. Taken 
-together, templated event binding, and controller's automatic
+together, templated event binding, and control's automatic
 clean-up make it almost impossible 
 to write leaking applications. An application that uses
-only templated event handlers on controllers within the body
+only templated event handlers on controls within the body
 could free up all 
 data by calling `$(document.body).empty()`._
 
-### update `controller.update(options)`
+### update `control.update(options)`
 
-[Can.Control.prototype.update](http://javascriptmvc.com/docs.html#!Can.Control.prototype.update) updates a controller's 
+[can.Control.prototype.update](http://donejs.com/docs.html#!can.Control.prototype.update) updates a control's 
 `this.options` and rebinds all event handlers.This is useful
 when you want to listen to a specific model:
 
@@ -626,17 +776,17 @@ when you want to listen to a specific model:
 
 Notice that because we are overwriting `update`, we must call __\_super__.
 
-## Can.route
+## can.route
 
-[Can.route](http://javascriptmvc.com/docs.html#!Can.route) is the core of JavaScriptMVC's 
-routing functionality. It is a [Can.Observe](http://javascriptmvc.com/docs.html#!Can.Observe) that
+[can.route](http://donejs.com/docs.html#!can.route) is the core of donejs's 
+routing functionality. It is a [can.Observe](http://donejs.com/docs.html#!can.Observe) that
 updates `window.location.hash` when it's properties change
 and updates its properties when `window.location.hash` 
 changes. It allows very sophisticated routing behavior ... too
 sophisticated for this guide. But, it also handles 
 the basics with ease.  
 
-Listen to routes in controller's with special "route" events like:
+Listen to routes in controls with special "route" events like:
 
 {% highlight javascript %}	
 	var Routing = $.Controller({
@@ -648,7 +798,7 @@ Listen to routes in controller's with special "route" events like:
 	  }
 	})
 	
-	// create routing controller
+	// create routing control
 	new Routing(document.body);
 {% endhighlight %}
 
@@ -669,13 +819,13 @@ Or we can set the hash ourselves like
 	location.hash = hash;
 {% endhighlight %}
 
-The following enhances the Routing controller to listen for
+The following enhances the Routing control to listen for
 `".todo selected"` events and change the `$.route`.  When the
 $.route changes, it retrieves the todo from the server
 and updates the editor widget.
 
 {% highlight javascript %}	
-	var Routing = Can.Control({
+	var Routing = can.Control({
 	  init : function(){
 	    this.editor = new Editor("#editor")
 	    new Todos("#todos");
@@ -695,16 +845,16 @@ and updates the editor widget.
 	  }
 	});
 	
-	// create routing controller
+	// create routing control
 	new Routing(document.body);
 {% endhighlight %}
 
-The __Routing__ controller is a traditional controller. It coordinates
+The __Routing__ control is a traditional controller. It coordinates
 between the `$.route`, `Editor` and `Todos`.  `Editor` and `Todos`
 are traditional views, consuming models.
 
 If you can understand this, you understand 
-everything. Congrats! [See it in action](http://javascriptmvc.com/docs.html#!tutorials/rapidstart/todos.html).
+everything. Congrats! [See it in action](http://donejs.com/docs.html#!tutorials/rapidstart/todos.html).
 
 ## Use with other libraries
 
@@ -718,25 +868,25 @@ __STRING__
 {% highlight javascript %}	
 	
 	// remove leading and trailing whitespace
-	Can.trim( " foo " ) // -> "foo" 
+	can.trim( " foo " ) // -> "foo" 
 {% endhighlight %}
 
 __ARRAY__
 {% highlight javascript %}	
 	
 	// convert array-like data into arrays
-	Can.makeArray({0 : "zero", 1: "one", length: 2}) // -> ["zero","one"]
+	can.makeArray({0 : "zero", 1: "one", length: 2}) // -> ["zero","one"]
 	
 	// return if an array is an array
-	Can.isArray([]) //-> true
+	can.isArray([]) //-> true
 	
 	// converts one array to another array
-	Can.map([{prop: "val1"}, {prop: "val2"}], function(val, prop){
+	can.map([{prop: "val1"}, {prop: "val2"}], function(val, prop){
 	  return val
 	})  //-> ["val1","val2"]
 	
 	// iterates through an array
-	Can.each([{prop: "val1"}, {prop: "val2"}], function( index, value ) {
+	can.each([{prop: "val1"}, {prop: "val2"}], function( index, value ) {
 	  // function called with
 	  //  index=0 value={prop: "val1"}
 	  //  index=1 value={prop: "val2"}
@@ -750,20 +900,20 @@ __Object__
 	var first = {},
 	    second = {a: "b"},
 	    thrid = {c: "d"};
-	Can.extend(first, second, third); //-> first
+	can.extend(first, second, third); //-> first
 	first  //-> {a: "b",c : "d"}
 	second //-> {a: "b"}
 	thrid  //-> {c: "d"}
 	
 	// deep extends one object with another
-	Can.extend( true, first, second, third ); 
+	can.extend( true, first, second, third ); 
 	
 	// parameterize into a querystring
-	Can.param({a: "b", c: "d"}) //-> "a=b&c=d"
+	can.param({a: "b", c: "d"}) //-> "a=b&c=d"
 	
 	// returns if an object is empty
-	Can.isEmptyObject({})      //-> true
-	Can.isEmptyObject({a:"b"}) //-> false
+	can.isEmptyObject({})      //-> true
+	can.isEmptyObject({a:"b"}) //-> false
 	
 {% endhighlight %}
 
@@ -772,14 +922,14 @@ __FUNCTION__
 	
 	// returns a function that calls another function
 	// with "this" set.
-	var func = Can.proxy(function(one){
+	var func = can.proxy(function(one){
 	  return this.a + one
 	}, {a: "b"}); 
 	func("two") //-> "btwo" 
 	
 	// returns if an object is a function
-	Can.isFunction({})           //-> false
-	Can.isFunction(function(){}) //-> true
+	can.isFunction({})           //-> false
+	can.isFunction(function(){}) //-> true
 {% endhighlight %}
 
 __EVENT__
@@ -787,20 +937,20 @@ __EVENT__
 {% highlight javascript %}	
 	
 	// binds handler on obj's eventName event
-	Can.bind(obj, eventName, handler )
+	can.bind(obj, eventName, handler )
 	
 	// unbind handler on obj's eventName event
-	Can.unbind(obj, eventName, handler) 
+	can.unbind(obj, eventName, handler) 
 	
 	// 
-	Can.delegate(obj, selector, eventName, handler)
+	can.delegate(obj, selector, eventName, handler)
 	
 	//
-	Can.delegate(obj, selector, eventName, handler)
+	can.delegate(obj, selector, eventName, handler)
 	
 	//
-	Can.trigger(obj, event, args )
-	Can.trigger(obj, eventName, args)
+	can.trigger(obj, event, args )
+	can.trigger(obj, eventName, args)
 {% endhighlight %}
 
 __DEFERRED__
@@ -808,7 +958,7 @@ __DEFERRED__
 {% highlight javascript %}	
 	
 	// Creates a new Deferred object
-	var deferred = new Can.Deferred()
+	var deferred = new can.Deferred()
 	
 	// pipes a deferred into another deferred
 	deferred.pipe(function(){
@@ -822,7 +972,7 @@ __DEFERRED__
 	deferred.reject()
 	
 	// 
-	Can.When()
+	can.When()
 {% endhighlight %}
 
 
@@ -830,7 +980,7 @@ __AJAX__
 
 {% highlight javascript %}	
 	
-	Can.ajax({
+	can.ajax({
 	  url : "url",
 	  type: "GET", // "POST"
 	  async : false,
@@ -844,27 +994,27 @@ __HTMLElement__
 
 {% highlight javascript %}	
 	
-	Can.buildFragment(frags, nodes)
+	can.buildFragment(frags, nodes)
 	
 	// a node list
-	Can.$("div.bar") //-> []
+	can.$("div.bar") //-> []
 	
-	Can.append(NodeList, html)
+	can.append(NodeList, html)
 	
-	Can.remove(NodeList)
+	can.remove(NodeList)
 	
-	Can.filter(NodeList, function(){})
+	can.filter(NodeList, function(){})
 	
-	Can.data(NodeList, dataName, dataValue)
+	can.data(NodeList, dataName, dataValue)
 	
-	Can.addClass(NodeList, className )
+	can.addClass(NodeList, className )
 {% endhighlight %}
 
 
 __HTMLElement 'destroyed' event__
 
 When an element is removed from the page, a 'destroyed' event should be triggered on the 
-event.  This is used to teardown event handlers in Can.Control.
+event.  This is used to teardown event handlers in can.Control.
 
 ## Examples
 
