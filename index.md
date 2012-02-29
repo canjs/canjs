@@ -87,11 +87,11 @@ todo.read()
 
 ## can.Observe `new can.Observe( data )`
 
-__can.Observe__ provides the observable pattern for JavaScript Objects. It lets you
+__can.Observe__ provides the observable pattern for JavaScript Objects. It lets you:
 
- - Set and remove property or property values on objects
- - Listen for property changes changes
- - Work with nested properties
+ - Set and remove property values on objects.
+ - Listen for property changes changes.
+ - Work with nested properties.
 
 To create an observable object, use `new can.Observe( [data] )` like:
 
@@ -99,7 +99,7 @@ To create an observable object, use `new can.Observe( [data] )` like:
 var paginate = new can.Observe({offset: 0, limit : 100, count: 2000})
 {% endhighlight %}
 
-To create an observable array, use `new can.Observe.List( array )` like:
+To create an observable array, use `new can.Observe.List( [array] )` like:
 
 {% highlight javascript %}
 var hobbies = new can.Observe.List(['programming', 
@@ -107,8 +107,8 @@ var hobbies = new can.Observe.List(['programming',
                                'party rocking'])
 {% endhighlight %}
 
-__can.Model__ inherits from __can.Observe__ and __can.route__ is a special Observe,
-but Observe is useful on its own to maintain client-side state (such as pagination data). 
+__can.Observe__ is used by both __can.Model__ and __can.route__. However, observe 
+is useful on its own to maintain client-side state (such as pagination data). 
 
 ### attr `observe.attr( [name,] [value] )`
 
@@ -123,6 +123,17 @@ paginate.attr('offset', 100 );
 paginate.attr() //-> {offset: 100, limit : 100, count: 2000}
 	
 paginate.attr({limit: 200, count: 1000});
+{% endhighlight %}
+
+
+### removeAttr `observe.removeAttr( name )`
+
+[can.Observe.prototype.removeAttr](http://donejs.com/docs.html#!can.Observe.prototype.removeAttr) removes a property 
+by name from an observe.  This is similar to using the `delete` keyword to remove a property.
+
+{% highlight javascript %}
+o =  new can.Observe({foo: 'bar'});
+o.removeAttr('foo'); //-> 'bar'
 {% endhighlight %}
 
 ### bind `observe.bind( eventType, handler(args...) )`
@@ -149,6 +160,20 @@ paginate.bind('change', function(ev, attr, how, newVal, oldVal){
 paginate.attr('offset', 200);
 {% endhighlight %}                 
 
+### unbind `observe.unbind( eventType, handler )`
+
+[can.Observe.prototype.unbind](http://donejs.com/docs.html#!can.Observe.prototype.unbind) stops listening
+to an event.  The same function that was used for the handler in `bind` must be passed to `unbind`.
+
+{% highlight javascript %}
+var countHandler = function(ev, newVal, oldVal){
+  console.log("the count has changed");
+}
+paginate.bind('count',countHandler);
+paginate.attr('count', 3000);
+paginate.unbind('count', countHandler);
+{% endhighlight %}  
+
 ### each `observe.each( handler(attrName, value) )`
 
 [can.Observe.prototype.each](http://donejs.com/docs.html#!can.Observe.prototype.each) iterates through 
@@ -164,6 +189,9 @@ paginate.each(function(name, value){
 //  count 1000}
 {% endhighlight %}  
 
+### can.Observe.List `new can.Observe.List( [array] )`
+
+Blah blah blah.
 
 
 ## can.Model `can.Model([classProperties,] [prototypeProperties])`
