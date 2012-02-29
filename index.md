@@ -224,18 +224,18 @@ hobbies.unshift("rocking parties")
 [can.Model](http://donejs.com/docs.html#!can.Model)s are __can.Observe__s that connect
 to a RESTful interface.
 
-Extend [can.Model](http://javascriptmvc.com/docs.html#!can.Model) with your domain specific 
+Extend [can.Model](http://donejs.com/docs.html#!can.Model) with your domain specific 
 methods and can.Model provides a set of methods 
 for managing changes.
 
 To create a __Model__ class, call __can.Model__ with:
 
 - __classProperties__, including 
-  [findAll](http://javascriptmvc.com/docs.html#!can.Model.findAll),
-  [findOne](http://javascriptmvc.com/docs.html#!can.Model.findAll),
-  [create](http://javascriptmvc.com/docs.html#!can.Model.create),
-  [update](http://javascriptmvc.com/docs.html#!can.Model.update),
-  [destroy](http://javascriptmvc.com/docs.html#!can.Model.destroy) properties, and
+  [findAll](http://donejs.com/docs.html#!can.Model.findAll),
+  [findOne](http://donejs.com/docs.html#!can.Model.findAll),
+  [create](http://donejs.com/docs.html#!can.Model.create),
+  [update](http://donejs.com/docs.html#!can.Model.update),
+  [destroy](http://donejs.com/docs.html#!can.Model.destroy) properties, and
 - any __prototypeProperties__ helper methods.
 
 Make a Todo model in __todos.js__ like the following:
@@ -263,7 +263,7 @@ Create a todo instance like:
     
 ### attr `model.attr( name, [value] )`
 
-[can.Model.prototype.attr](http://javascriptmvc.com/docs.html#!can.Model.prototype.attr) reads or sets properties on model instances.
+[can.Model.prototype.attr](http://donejs.com/docs.html#!can.Model.prototype.attr) reads or sets properties on model instances.
 
 {% highlight javascript %}	
 	todo.attr('name') //-> "do the dishes"
@@ -277,9 +277,9 @@ Create a todo instance like:
 
 ### Talking to the server
 
-Model uses static [findAll](http://javascriptmvc.com/docs.html#!can.Model.findAll),
-[findOne](http://javascriptmvc.com/docs.html#!can.findAll), [create](http://javascriptmvc.com/docs.html#!can.create),
-[update](http://javascriptmvc.com/docs.html#!can.update), and [destroy](http://javascriptmvc.com/docs.html#!can.destroy)
+Model uses static [findAll](http://donejs.com/docs.html#!can.Model.findAll),
+[findOne](http://donejs.com/docs.html#!can.findAll), [create](http://donejs.com/docs.html#!can.create),
+[update](http://donejs.com/docs.html#!can.update), and [destroy](http://donejs.com/docs.html#!can.destroy)
 methods to create, read, update and delete 
 model instances on the server.  
 
@@ -296,7 +296,7 @@ to `GET /todos`.
 
 ### findAll `findAll( params, success( todos ), error() )`
 
-  [findAll](http://javascriptmvc.com/docs.html#!can.Model.findAll) retrieves multiple todos:
+  [findAll](http://donejs.com/docs.html#!can.Model.findAll) retrieves multiple todos:
 
 {% highlight javascript %}	
 	Todo.findAll({}, function( todos ) {
@@ -306,7 +306,7 @@ to `GET /todos`.
 
 ### findOne `findOne( params, success( todo ), error() )`
 
-[findOne](http://javascriptmvc.com/docs.html#!can.Model.findOne) retrieves a single todo:
+[findOne](http://donejs.com/docs.html#!can.Model.findOne) retrieves a single todo:
 
 {% highlight javascript %}	
 	Todo.findOne({}, function( todo ) {
@@ -316,7 +316,7 @@ to `GET /todos`.
 
 ### save `todo.save( success( todo ), error() )`
 
-[Save](http://javascriptmvc.com/docs.html#!$.Model::save) can __create__ 
+[Save](http://donejs.com/docs.html#!$.Model::save) can __create__ 
 or __update__ instances depending if the 
 instance has already been created or not.
 
@@ -347,7 +347,7 @@ and call __save__ again like the following:
 
 ### destroy `todo.destroy( success( todo ), error() )`
 
-[Destroy](http://javascriptmvc.com/docs.html#!can.Model.prototype.destroy) deletes a 
+[Destroy](http://donejs.com/docs.html#!can.Model.prototype.destroy) deletes a 
 record on the server.  You can do this like:
 
 {% highlight javascript %}	
@@ -365,9 +365,9 @@ record on the server.  You can do this like:
 ### bind `todo.bind( event, handler(ev, todo ) )`
 
 Listening to changes in the Model is what MVC 
-is about.  Model lets you [bind](http://javascriptmvc.com/docs.html#!can.Model::bind) to changes 
+is about.  Model lets you [bind](http://donejs.com/docs.html#!can.Model::bind) to changes 
 on an individual instance 
-or [all instances](http://javascriptmvc.com/docs.html#!can.Model.bind). For example, you can listen to 
+or [all instances](http://donejs.com/docs.html#!can.Model.bind). For example, you can listen to 
 when an instance is __created__ on the server like:
 
 {% highlight javascript %}	
@@ -396,7 +396,7 @@ the model class and instances whenever a model Ajax request completes:
 
 ## can.View `can.View( idOrUrl, data )`
 
-[can.View](http://javascriptmvc.com/docs.html#!can.View) is used to easily create HTML with
+[can.View](http://donejs.com/docs.html#!can.View) is used to easily create HTML with
 JS templates. Pass it ...
 
 - the __id__ of a script tag to use as the content of the template
@@ -481,10 +481,10 @@ made by Todo.findAll, whenever its completed.
 
 ## can.Control `can.Control(classProps, prototypeProps)`
 
-[can.Control](http://javascriptmvc.com/docs.html#!can.Control) creates organized, memory-leak free, 
-rapidly performing, stateful widgets. It is used to create UI controls like 
+[can.Control](http://donejs.com/docs.html#!can.Control) creates organized, memory-leak free, 
+rapidly performing, stateful controls. It is used to create UI controls like 
 tabs, grids, and contextmenus and used to organize them 
-into higher-order business rules with [can.route](http://javascriptmvc.com/docs.html#!can.route). Its serves as 
+into higher-order business rules with [can.route](http://donejs.com/docs.html#!can.route). Its serves as 
 both a traditional view and a 
 traditional controller.
   
@@ -508,7 +508,7 @@ We can create this widget on the `#todos` element with:
 
 ### init `can.Control.prototype.init(element, options)`
 
-[Init](http://javascriptmvc.com/docs.html#!can.Control:init) is called when a
+[Init](http://donejs.com/docs.html#!can.Control:init) is called when a
 new can.Control instance is created.  It's called with:
 
 - __element__ - The jQuery wrapped element passed to the 
@@ -536,12 +536,12 @@ and any other arguments passed to `new can.Control()`.  For example:
 
 ### element `this.element`
 
-[this.element](http://javascriptmvc.com/docs.html#!can.Controll.prototype.element) is the 
+[this.element](http://donejs.com/docs.html#!can.Controll.prototype.element) is the 
 element the controller is created on. 
 
 ### options `this.options`
 
-[this.options](http://javascriptmvc.com/docs.html#!can.Control.prototype.options) is the second argument passed to 
+[this.options](http://donejs.com/docs.html#!can.Control.prototype.options) is the second argument passed to 
 `new can.Control()` merged with the controller's static __defaults__ property.
 
 ### Listening to events
@@ -702,7 +702,7 @@ architectures.
 
 ### destroy `controller.destroy()`
 
-[can.Control.prototype.destroy](http://javascriptmvc.com/docs.html#!can.Control.prototype.destroy) unbinds a controller's
+[can.Control.prototype.destroy](http://donejs.com/docs.html#!can.Control.prototype.destroy) unbinds a controller's
 event handlers and releases its element, but does not remove 
 the element from the page. 
 
@@ -732,7 +732,7 @@ data by calling `$(document.body).empty()`._
 
 ### update `controller.update(options)`
 
-[can.Control.prototype.update](http://javascriptmvc.com/docs.html#!can.Control.prototype.update) updates a controller's 
+[can.Control.prototype.update](http://donejs.com/docs.html#!can.Control.prototype.update) updates a controller's 
 `this.options` and rebinds all event handlers.This is useful
 when you want to listen to a specific model:
 
@@ -778,8 +778,8 @@ Notice that because we are overwriting `update`, we must call __\_super__.
 
 ## can.route
 
-[can.route](http://javascriptmvc.com/docs.html#!can.route) is the core of JavaScriptMVC's 
-routing functionality. It is a [can.Observe](http://javascriptmvc.com/docs.html#!can.Observe) that
+[can.route](http://donejs.com/docs.html#!can.route) is the core of donejs's 
+routing functionality. It is a [can.Observe](http://donejs.com/docs.html#!can.Observe) that
 updates `window.location.hash` when it's properties change
 and updates its properties when `window.location.hash` 
 changes. It allows very sophisticated routing behavior ... too
@@ -854,7 +854,7 @@ between the `$.route`, `Editor` and `Todos`.  `Editor` and `Todos`
 are traditional views, consuming models.
 
 If you can understand this, you understand 
-everything. Congrats! [See it in action](http://javascriptmvc.com/docs.html#!tutorials/rapidstart/todos.html).
+everything. Congrats! [See it in action](http://donejs.com/docs.html#!tutorials/rapidstart/todos.html).
 
 ## Use with other libraries
 
