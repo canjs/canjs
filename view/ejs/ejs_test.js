@@ -138,7 +138,7 @@ test("helpers", function() {
 	equals(can.$('#hookup')[0].innerHTML, "Simple");
 });
 
-test("live binding", function(){
+test("attribute single unescaped, html single unescaped", function(){
 
 	var text = "<div class='<%== task.attr('completed') ? 'complete' : ''%>'><%== task.attr('name') %></div>";
 	var task = new can.Observe({
@@ -321,7 +321,6 @@ test('live binding and removeAttr', function(){
 
 test('hookup within a tag', function () {
 	var text =	'<div <%== obs.attr("foo") %> '
-		//+ 'disabled '
 		+ '<%== obs.attr("baz") %>>lorem ipsum</div>',
 
 	obs = new can.Observe({
@@ -337,22 +336,39 @@ test('hookup within a tag', function () {
 
 	equals(anchor.getAttribute('class'), 'a');
 	equals(anchor.getAttribute('some'), 'property');
-	//equals(div.innerHTML, '<div class="a" some="property">lorem ipsum</div>', 'initial render');
 
 	obs.attr('foo', 'class="b"');
 	equals(anchor.getAttribute('class'), 'b');
 	equals(anchor.getAttribute('some'), 'property');
-	//equals(div.innerHTML, '<div class="b" some="property">lorem ipsum</div>', 'updated values');
 
 	obs.attr('baz', 'some=\'new property\'');
 	equals(anchor.getAttribute('class'), 'b');
 	equals(anchor.getAttribute('some'), 'new property');
-	//equals(div.innerHTML, '<div class="b" some="new property">lorem ipsum</div>', 'updated values');
 
 	obs.attr('foo', '');
 	obs.attr('baz', '');
 	equals(anchor.getAttribute('class'), undefined);
 	equals(anchor.getAttribute('some'), undefined);
+});
 
-	//equals(div.innerHTML, '<div>lorem ipsum</div>', 'removing values');
+test('single escaped tag, removeAttr', function () {
+	var text =	'<div <%= obs.attr("foo") %>>lorem ipsum</div>',
+
+	obs = new can.Observe({
+		foo: 'data-bar="john doe\'s bar"'
+	}),
+
+	compiled = new can.EJS({ text: text }).render({ obs: obs });
+
+	var div = document.createElement('div');
+	div.appendChild(can.view.frag(compiled));
+	var anchor = div.getElementsByTagName('div')[0];
+
+	equals(anchor.getAttribute('data-bar'), "john doe's bar");
+
+	obs.removeAttr('foo');
+	equals(anchor.getAttribute('data-bar'), null);
+
+	obs.attr('foo', 'data-bar="baz"');
+	equals(anchor.getAttribute('data-bar'), 'baz');
 });
