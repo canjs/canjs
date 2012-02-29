@@ -50,7 +50,15 @@
 
 		// Array
 		can.makeArray = function( arr ) {
-			return Y.Array(arr);
+			var array = [];
+			Y.each(arr, function(item){
+				if (item && item.getDOMNode) {
+					array.push(item.getDOMNode());
+				} else {
+					array.push(item)
+				}
+			});
+			return array;
 		};
 		can.isArray = Y.Lang.isArray;
 		can.inArray = function( item, arr ) {
@@ -59,7 +67,7 @@
 		
 		can.map = function( arr, fn ) {
 			// http://yuilibrary.com/yui/docs/api/classes/Array.html#method_map
-			return Y.Array.map(can.makeArray(arr || []), fn);
+			return can.makeArray(Y.Array.map(can.makeArray(arr || []), fn));
 		};
 		
 		can.each = function( elements, callback ) {
@@ -113,15 +121,14 @@
 		}
 		can.buildFragment = function( frags, nodes ) {
 			var owner = nodes.length && nodes[0].ownerDocument,
-				frag = Y.Node.create(frags[0], owner).getDOMNode();
+				frag = Y.Node.create(frags[0], owner);
+			frag = (frag && frag.getDOMNode()) || document.createDocumentFragment();
 			if ( frag.nodeType !== 11 ) {
 				var tmp = document.createDocumentFragment();
 				tmp.appendChild(frag)
 				frag = tmp;
 			}
-			return {
-				fragment: frag
-			}
+			return { fragment: frag }
 		}
 
 		can.append = function( wrapped, html ) {
@@ -142,7 +149,7 @@
 			}
 		}
 		can.remove = function( wrapped ) {
-			return wrapped.destroy();
+			return wrapped.remove() && wrapped.destroy();
 		}
 
 		// destroyed method
