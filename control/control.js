@@ -19,6 +19,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		each = can.each,
 		slice = [].slice,
 		special = ($.event && $.event.special) || {},
+
 		// Binds an element, returns a function that unbinds
 		delegate = function( el, selector, ev, callback ) {
 			//var binder = el.delegate && el.undelegate ? el : $(isFunction(el) ? [el] : el)
@@ -359,12 +360,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * @return {Boolean} truthy if an action or not
 		 */
 		_isAction: function( methodName ) {
-			if ( actionMatcher.test(methodName) ) {
-				return true;
-			} else {
-				return /*can.inArray(methodName, this.listensTo) > -1 ||*/ special[methodName] || processors[methodName];
-			}
-
+			return actionMatcher.test(methodName) || special[methodName] || processors[methodName];
 		},
 		plugin : function(){},
 		/**

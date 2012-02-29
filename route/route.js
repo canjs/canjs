@@ -12,11 +12,9 @@ function( $ ) {
         // Converts a JS Object into a list of parameters that can be 
         // inserted into an html element tag.
 		makeProps = function( props ) {
-			var html = [];
-			each(props, function(name, val){
-				val && html.push(name === 'className' ? 'class'  : name, '="', can.String.esc(val), '"');
-			})
-			return html.join(" ")
+			return can.map(props, function( val, name ) {
+				return ( name === 'className' ? 'class'  : name )+ '="' + can.String.esc(val) + '"';
+			}).join(" ");
 		},
 		// Checks if a route matches the data provided. If any route variable
         // is not present in the data the route does not match. If all route
@@ -371,7 +369,7 @@ function( $ ) {
 		 */
 		ready: function(val) {
 			if( val === false ) {
-				onready = false;
+				onready = val;
 			}
 			if( val === true || onready === true ) {
 				setState();
@@ -386,10 +384,9 @@ function( $ ) {
 		 */
 		url: function( options, merge ) {
 			if (merge) {
-				return "#!" + can.route.param(extend({}, curParams, options))
-			} else {
-				return "#!" + can.route.param(options)
+				options = extend({}, curParams, options)
 			}
+			return "#!" + can.route.param(options)
 		},
 		/**
 		 * Returns a link
@@ -423,19 +420,10 @@ function( $ ) {
 		}
 	})
 
-	var // A throttled function called multiple times will only fire once the
-        // timer runs down. Each call resets the timer.
-        throttle = function( func ) {
-            var timer;
-            return function() {
-				var args = arguments,
-					self = this;
-                clearTimeout(timer);
-                timer = setTimeout(function(){
-					func.apply(self, args)
-				}, 1);
-            }
-        },
+	var // A ~~throttled~~ debounced function called multiple times will only fire once the
+        // timer runs down. Each call resets the timer. (throttled functions
+		// are called once every x seconds)
+		timer,
         // Intermediate storage for can.route.data.
         curParams,
         // Deparameterizes the portion of the hash of interest and assign the
@@ -453,10 +441,13 @@ function( $ ) {
 
 	// If the can.route.data changes, update the hash.
     // Using .serialize() retrieves the raw data contained in the observable.
-    // This function is throttled so it only updates once even if multiple values changed.
-	can.route.bind("change", throttle(function() {
-		location.hash = "#!" + can.route.param(can.route.data.serialize())
-	}));
+    // This function is ~~throttled~~ debounced so it only updates once even if multiple values changed.
+	can.route.bind("change", function() {
+		clearTimeout( timer );
+		timer = setTimeout(function() {
+			location.hash = "#!" + can.route.param(can.route.data.serialize())
+		}, 1);
+	});
 	// onready event ...
 	can.bind.call(document,"ready",can.route.ready);
-})
+});
