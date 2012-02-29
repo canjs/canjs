@@ -165,14 +165,18 @@
 			success: undefined,
 			error: undefined
 		}
-		var updateDeferred = function( xhr, d ) {
-			for ( var prop in xhr ) {
-				if ( typeof d[prop] == 'function' ) {
-					d[prop] = function() {
-						xhr[prop].apply(xhr, arguments)
+		var updateDeferred = function( request, d ) {
+			// YUI only returns a request if it is asynchronous
+			if (request && request.io) {
+				var xhr = request.io;
+				for ( var prop in xhr ) {
+					if ( typeof d[prop] == 'function' ) {
+						d[prop] = function() {
+							xhr[prop].apply(xhr, arguments)
+						}
+					} else {
+						d[prop] = prop[xhr]
 					}
-				} else {
-					d[prop] = prop[xhr]
 				}
 			}
 		}
@@ -186,6 +190,7 @@
 					delete requestOptions[option]
 				}
 			}
+			requestOptions.sync = !options.async;
 
 			var success = options.success,
 				error = options.error;
@@ -196,19 +201,19 @@
 					if ( options.dataType === 'json' ) {
 						data = eval("(" + data + ")")
 					}
-					updateDeferred(request.io, d);
-					d.resolve(data, "success", request.io);
-					success && success(data, "success", request.io);
+					updateDeferred(request, d);
+					d.resolve(data, "success", request);
+					success && success(data, "success", request);
 				},
 				failure: function( transactionid, response, arguments ) {
-					updateDeferred(request.io, d);
-					d.reject(request.io, "error");
-					error(request.io, "error");
+					updateDeferred(request, d);
+					d.reject(request, "error");
+					error(request, "error");
 				}
 			};
-
-			var request = new Y.io(requestOptions.url, requestOptions);
-			updateDeferred(request.io, d);
+			
+			var request = Y.io(requestOptions.url, requestOptions);
+			updateDeferred(request, d);
 			return d;
 
 		}
