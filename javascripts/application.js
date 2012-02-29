@@ -1,3 +1,5 @@
+var currentH2slug = "";
+
 $.Controller('Menu', {}, {
 	init : function(){
 		this.find('#menu').append(this.buildMenu());
@@ -24,8 +26,14 @@ $.Controller('Menu', {}, {
 						for(var i = 0; i < nodes.length; i++){
 							var h = $(nodes[i].node), text = $('<div>' + h.html() + '</div>');
 							text.find('code').remove();
+							var slug = $.trim(text.text()).toLowerCase().replace(/[^A-Za-z0-9_]/g, '_');
+							if(nodes[i].level === 2){
+								currentH2slug = slug
+							} else if(currentH2slug != "" && nodes[i].level === 3){
+								slug = currentH2slug + "-" + slug;
+							}
 							html.push('<li>');
-							html.push('<a href="#heading-' + nodes[i].id + '" data-level="'+ nodes[i].level +'">' + text.text() + '</a>');
+							html.push('<a href="#' + slug + '" class="heading-'+nodes[i].id+'" data-level="'+ nodes[i].level +'">' + text.text() + '</a>');
 							html.push(build(nodes[i].id));
 							html.push('</li>')
 						}
@@ -37,9 +45,17 @@ $.Controller('Menu', {}, {
 			var level       = parseInt(this.headings[i].nodeName.match(/\d/), 10),
 					parentLevel = level - 1,
 					id          = function(){ return i+1; }(),
-					node        = { node: this.headings[i], children: [], level: level, id: id };
+					node        = { node: this.headings[i], children: [], level: level, id: id },
+					text = $('<div>' + $(this.headings[i]).html() + '</div>');
+			text.find('code').remove();
 			this.headingOffsets.push($(this.headings[i]).offset().top)
-			$(this.headings[i]).attr('id', 'heading-' + id);
+			var slug = $.trim(text.text()).toLowerCase().replace(/[^A-Za-z0-9_]/g, '_');
+			if(level === 2){
+				currentH2slug = slug;
+			} else if(level === 3){
+				slug = currentH2slug + "-" + slug;
+			}
+			$(this.headings[i]).attr('id', slug);
 			byId[id] = node;
 			lastByLevel[level] = node;
 			byLevel[level].push(node);
@@ -65,7 +81,7 @@ $.Controller('Menu', {}, {
 			var offset = this.headingOffsets[i];
 			if(offset - windowHeight / 2 < scroll){
 				var active = this.find('#menu a.active'),
-						current = this.find('#menu a[href="#heading-' + (i + 1) + '"]');
+						current = this.find('#menu a.heading-' + (i + 1));
 				this.markActive(active, current);
 				return;
 			}
