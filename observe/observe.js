@@ -37,11 +37,9 @@ steal('can/construct', function() {
 				// batchTrigger the type on this ...
 				var args = can.makeArray(arguments),
 					ev = args.shift();
-				if(prop === "*"){
-					args[0] = parent.indexOf(val)+"." + args[0];
-				} else {
-					args[0] = prop +  "." + args[0];
-				}
+					args[0] = prop === "*" ? 
+						parent.indexOf(val)+"." + args[0] :
+						prop +  "." + args[0];
 				can.trigger(parent, ev, args);
 			});
 
@@ -87,14 +85,13 @@ steal('can/construct', function() {
 		batchNum = 1,
 		// sends all pending events
 		sendCollection = function() {
-			var len = collecting.length,
-				items = collecting.slice(0),
-				cur;
+			var items = collecting.slice(0);
+
 			collecting = null;
-			batchNum ++;
-			for ( var i = 0; i < len; i++ ) {
-				can.trigger.apply(can, items[i])
-			}
+			batchNum++;
+			can.each(items, function( i, item) {
+				can.trigger.apply(can, item)
+			})
 			
 		},
 		// a helper used to serialize an Observe or Observe.List where:
@@ -105,7 +102,7 @@ steal('can/construct', function() {
 			// go through each property
 			observe.each(function( name, val ) {
 				// if the value is an object, and has a attrs or serialize function
-				where[name] = canMakeObserve(val) && typeof val[how] == 'function' ?
+				where[name] = canMakeObserve(val) && can.isFunction( val[how] ) ?
 				// call attrs or serialize to get the original data back
 				val[how]() :
 				// otherwise return the value
@@ -114,7 +111,7 @@ steal('can/construct', function() {
 			return where;
 		},
 		$method = function( name ) {
-			return function( eventType, handler ) {
+			return function() {
 				return can[name].apply(this, arguments );
 			}
 		},
@@ -327,7 +324,7 @@ steal('can/construct', function() {
 		 */
 		attr: function( attr, val ) {
 			var tAttr= typeof attr;
-			if(tAttr != 'string' && tAttr != 'number'){
+			if(tAttr != 'string' && tAttr != 'number' ){
 				return this._attrs(attr, val)
 			}else if ( val === undefined ) {// if we are getting a value
 				// let people know we are reading (
@@ -824,7 +821,7 @@ steal('can/construct', function() {
 			// sorting and such
 			
 			// batchTrigger direct add and remove events ...
-			if(attr.indexOf('.') === -1){
+			if ( !~ attr.indexOf('.')){
 				
 				if( how === 'add' ) {
 					batchTrigger(this, how, [newVal,+attr]);
@@ -1105,12 +1102,9 @@ steal('can/construct', function() {
 		// create push, pop, shift, and unshift
 		// converts to an array of arguments 
 		getArgs = function( args ) {
-			if ( args[0] && (can.isArray(args[0])) ) {
-				return args[0]
-			}
-			else {
-				return can.makeArray(args)
-			}
+			return args[0] && can.isArray(args[0]) ?
+				args[0] :
+				can.makeArray(args);
 		};
 	// describes the method and where items should be added
 	can.each({

@@ -2,8 +2,10 @@ steal('can/util/string', function($){
 	
 	var digitTest = /^\d+$/,
 		keyBreaker = /([^\[\]]+)|(\[\])/g,
-		plus = /\+/g,
-		paramTest = /([^?#]*)(#.*)?$/;
+		paramTest = /([^?#]*)(#.*)?$/,
+		prep = function( str ) {
+			return decodeURIComponent( str.replace(/\+/g, " ") );
+		}
 	
 	/**
 	 * @add jQuery.String
@@ -27,42 +29,36 @@ steal('can/util/string', function($){
 		 */
 		deparam: function(params){
 		
-			if(! params || ! paramTest.test(params) ) {
-				return {};
-			} 
-		   
-		
 			var data = {},
+				pairs;
+
+			if ( params && paramTest.test( params )) {
+				
 				pairs = params.split('&'),
-				current;
 				
-			for(var i=0; i < pairs.length; i++){
-				current = data;
-				var pair = pairs[i].split('=');
-				
-				// if we find foo=1+1=2
-				if(pair.length != 2) { 
-					pair = [pair[0], pair.slice(1).join("=")]
-				}
-				  
-		        var key = decodeURIComponent(pair[0].replace(plus, " ")), 
-		         	value = decodeURIComponent(pair[1].replace(plus, " ")),
+				can.each( pairs, function( i, pair ) {
+
+					var parts = pair.split('='),
+						key   = prep( parts.shift() ),
+						value = prep( parts.join("=") );
+
+					current = data;
 					parts = key.match(keyBreaker);
-		
-				for ( var j = 0; j < parts.length - 1; j++ ) {
-					var part = parts[j];
-					if (!current[part] ) {
-						// if what we are pointing to looks like an array
-						current[part] = digitTest.test(parts[j+1]) || parts[j+1] == "[]" ? [] : {}
+			
+					for ( var j = 0, l = parts.length - 1; j < l; j++ ) {
+						if (!current[parts[j]] ) {
+							// if what we are pointing to looks like an array
+							current[parts[j]] = digitTest.test(parts[j+1]) || parts[j+1] == "[]" ? [] : {}
+						}
+						current = current[parts[j]];
 					}
-					current = current[part];
-				}
-				lastPart = parts[parts.length - 1];
-				if(lastPart == "[]"){
-					current.push(value)
-				}else{
-					current[lastPart] = value;
-				}
+					lastPart = parts.pop()
+					if ( lastPart == "[]" ) {
+						current.push(value)
+					}else{
+						current[lastPart] = value;
+					}
+				});
 			}
 			return data;
 		}

@@ -59,8 +59,7 @@ steal('can/util',function( $ ) {
 		},
 		// returns true if the object can have properties (no nulls)
 		isContainer = function(current){
-			var type = typeof current;
-			return current && ( type == 'function' || type == 'object' );
+			return /^f|o/.test( typeof current );
 		},
 		// a reference
 		getObject;
