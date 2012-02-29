@@ -5,7 +5,7 @@ layout: default
 
 This walks through the basics of CanJS by building a 
 smal todo app.  Check out the {% jmvclink getstarted Getting Started Guide %}
-for a more in-depth overview.
+for a more in-depth overview. 
 
 ## Get Canned
 
