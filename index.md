@@ -5,16 +5,13 @@ layout: default
 
 CanJS is an MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.  It provides:
 
-  - __can.Construct__  - inheritable constructor functions
-  - __can.Control__ - declaritive event bindings
-  - __can.Model__ - connect data to a RESTful JSON interface
-  - __can.Observe__ - key-value binding
-  - __can.route__ - backbutton and bookmarking support
-  - __can.view__ - dynamic live binding client side templates
-  
-
-This page walks through the basics of CanJS by building a 
-small todo app in jQuery.  
+ - __can.Construct__  - inheritable constructor functions
+ - __can.Control__ - declaritive event bindings
+ - __can.Model__ - connect data to a RESTful JSON interface
+ - __can.Observe__ - key-value binding
+ - __can.route__ - backbutton and bookmarking support
+ - __can.view__ - dynamic live binding client side templates
+ 
 
 ## Get Canned
 
@@ -26,6 +23,10 @@ for the library you are using:
  - can.dojo.js (9k)
  - can.mootools.js (9k)
  - can.yui.js (9k)
+
+This page walks through the basics of CanJS by building a 
+small todo app with CanJS and jQuery.  The [Use with other libraries] section details 
+the minor differencs between use with other libraries.
 
 ## can.Construct `can.Construct([classProps,] [prototypeProps])`
 
