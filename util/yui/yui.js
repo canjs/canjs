@@ -129,7 +129,6 @@
 			}
 			return { fragment: frag }
 		}
-
 		can.append = function( wrapped, html ) {
 			wrapped.each(function( node ) {
 				if ( typeof html === 'string' ) {
@@ -138,7 +137,9 @@
 				node.append(html)
 			});
 		}
-
+		can.addClass = function(wrapped, className){
+			return wrapped.addClass(className);
+		}
 		can.data = function( wrapped, key, value ) {
 			if ( value === undefined ) {
 
@@ -150,7 +151,6 @@
 		can.remove = function( wrapped ) {
 			return wrapped.remove() && wrapped.destroy();
 		}
-
 		// destroyed method
 		var destroy = Y.Node.prototype.destroy;
 		Y.Node.prototype.destroy = function() {
@@ -159,6 +159,7 @@
 		}
 		// let nodelist know about the new destroy ...
 		Y.NodeList.addMethod("destroy", Y.Node.prototype.destroy);
+		
 		// Ajax
 		var optionsMap = {
 			type: "method",
