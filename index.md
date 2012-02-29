@@ -87,7 +87,7 @@ todo.read()
 
 ## can.Observe `new can.Observe( data )`
 
-__can.Observe__ provides the observable pattern for JavaScript Objects. It lets you:
+[can.Observe](http://donejs.com/docs.html#!can.Observe) provides the observable pattern for JavaScript Objects. It lets you:
 
  - Set and remove property values on objects.
  - Listen for property changes changes.
