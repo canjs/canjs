@@ -488,6 +488,8 @@ steal('can/construct', function() {
 		 *   - "change" events - a generic event so you can listen to any property changes
 		 *   - ATTR_NAME events - bind to specific attribute changes
 		 * 
+		 * Example:
+		 * 
 		 *     o = new can.Observe({name : "Payal"});
 		 *     o.bind('change', function(ev, attr, how, newVal, oldVal){
 		 *       

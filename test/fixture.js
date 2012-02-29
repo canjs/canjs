@@ -145,7 +145,7 @@ steal('can/util/object',function( $ ) {
 					var response = getResponse(settings, settings, settings.headers );
 					var status = response[0];
 					if(status >= 200 && status < 300 || status === 304){
-						d.resolve(response[2][settings.dataType], d)
+						d.resolve(response[2][settings.dataType], "success",d)
 					} else {
 						d.reject(d);
 					}
