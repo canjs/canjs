@@ -511,13 +511,13 @@ We can create this widget on the `#todos` element with:
 [Init](http://donejs.com/docs.html#!can.Control:init) is called when a
 new can.Control instance is created.  It's called with:
 
-- __element__ - The jQuery wrapped element passed to the 
-                controller. Controller accepts a jQuery element, a
-                raw HTMLElement, or a css selector.  This is
-                set as __this.element__ on the controller instance.
-- __options__ - The second argument passed to new Controller, extended with
+- __element__ - The wrapped element passed to the 
+                control. Control accepts a
+                raw HTMLElement, a css selector, or a NodeList.  This is
+                set as __this.element__ on the control instance.
+- __options__ - The second argument passed to new Control, extended with
                 the can.Control's static __defaults__. This is set as 
-                __this.options__ on the controller instance.
+                __this.options__ on the control instance.
 
 and any other arguments passed to `new can.Control()`.  For example:
 
@@ -537,12 +537,12 @@ and any other arguments passed to `new can.Control()`.  For example:
 ### element `this.element`
 
 [this.element](http://donejs.com/docs.html#!can.Controll.prototype.element) is the 
-element the controller is created on. 
+element the control is created on. 
 
 ### options `this.options`
 
 [this.options](http://donejs.com/docs.html#!can.Control.prototype.options) is the second argument passed to 
-`new can.Control()` merged with the controller's static __defaults__ property.
+`new can.Control()` merged with the control's static __defaults__ property.
 
 ### Listening to events
 
@@ -618,7 +618,7 @@ of the event that destroys a todo:
 	new Todos("#todos",{destroyEvent: "mouseenter"})
 {% endhighlight %}
 
-Values inside `{NAME}` are looked up on the controller's `this.options`
+Values inside `{NAME}` are looked up on the control's `this.options`
 and then the `window`.  For example, we could customize it instead like:
 
 {% highlight javascript %}	
@@ -700,9 +700,9 @@ This is better because it removes the todo's element from the page even if anoth
 destroyed the todo. Also, this works very well with real-time
 architectures.
 
-### destroy `controller.destroy()`
+### destroy `control.destroy()`
 
-[can.Control.prototype.destroy](http://donejs.com/docs.html#!can.Control.prototype.destroy) unbinds a controller's
+[can.Control.prototype.destroy](http://donejs.com/docs.html#!can.Control.prototype.destroy) unbinds a control's
 event handlers and releases its element, but does not remove 
 the element from the page. 
 
@@ -711,7 +711,7 @@ the element from the page.
 	todo.destroy();
 {% endhighlight %}
 
-When a controller's element is removed from the page
+When a control's element is removed from the page
 __destroy__ is called automatically.
 
 {% highlight javascript %}	
@@ -719,20 +719,20 @@ __destroy__ is called automatically.
 	$("#todos").remove();
 {% endhighlight %}
     
-All event handlers bound with Controller are unbound when the controller 
+All event handlers bound with Controller are unbound when the control 
 is destroyed (or its element is removed).
 
 _Brief aside on destroy and templated event binding. Taken 
-together, templated event binding, and controller's automatic
+together, templated event binding, and control's automatic
 clean-up make it almost impossible 
 to write leaking applications. An application that uses
-only templated event handlers on controllers within the body
+only templated event handlers on controls within the body
 could free up all 
 data by calling `$(document.body).empty()`._
 
-### update `controller.update(options)`
+### update `control.update(options)`
 
-[can.Control.prototype.update](http://donejs.com/docs.html#!can.Control.prototype.update) updates a controller's 
+[can.Control.prototype.update](http://donejs.com/docs.html#!can.Control.prototype.update) updates a control's 
 `this.options` and rebinds all event handlers.This is useful
 when you want to listen to a specific model:
 
@@ -786,7 +786,7 @@ changes. It allows very sophisticated routing behavior ... too
 sophisticated for this guide. But, it also handles 
 the basics with ease.  
 
-Listen to routes in controller's with special "route" events like:
+Listen to routes in controls with special "route" events like:
 
 {% highlight javascript %}	
 	var Routing = $.Controller({
@@ -798,7 +798,7 @@ Listen to routes in controller's with special "route" events like:
 	  }
 	})
 	
-	// create routing controller
+	// create routing control
 	new Routing(document.body);
 {% endhighlight %}
 
@@ -819,7 +819,7 @@ Or we can set the hash ourselves like
 	location.hash = hash;
 {% endhighlight %}
 
-The following enhances the Routing controller to listen for
+The following enhances the Routing control to listen for
 `".todo selected"` events and change the `$.route`.  When the
 $.route changes, it retrieves the todo from the server
 and updates the editor widget.
@@ -845,11 +845,11 @@ and updates the editor widget.
 	  }
 	});
 	
-	// create routing controller
+	// create routing control
 	new Routing(document.body);
 {% endhighlight %}
 
-The __Routing__ controller is a traditional controller. It coordinates
+The __Routing__ control is a traditional controller. It coordinates
 between the `$.route`, `Editor` and `Todos`.  `Editor` and `Todos`
 are traditional views, consuming models.
 
