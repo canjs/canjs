@@ -15,7 +15,7 @@ for a more in-depth overview.
  - can.mootools.js (9k)
  - can.yui.js (9k)
 
-## Can.Construct `Can.Construct([classProps,] [prototypeProps])`
+## can.Construct `can.Construct([classProps,] [prototypeProps])`
 
 Constructors made with [Can.Construct](http://javascriptmvc.com/docs.html#!Can.Construct) are used to create
 objects with shared properties. It's used by both __Can.Control__ and __Can.Model__.
