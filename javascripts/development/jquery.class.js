@@ -54,6 +54,7 @@
 	 * @parent jquerymx
 	 * @download dist/jquery/jquery.class.js
 	 * @test jquery/class/qunit.html
+	 * @description Easy inheritance in JavaScript.
 	 * 
 	 * Class provides simulated inheritance in JavaScript. Use clss to bridge the gap between
 	 * jQuery's functional programming style and Object Oriented Programming. It 
@@ -649,7 +650,7 @@
 			
 			// call the class init
 			if ( Class.init ) {
-				Class.init.apply(Class, args || []);
+				Class.init.apply(Class, args || concatArgs([_super_class],arguments));
 			}
 
 			/* @Prototype*/

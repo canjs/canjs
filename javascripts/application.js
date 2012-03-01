@@ -1,6 +1,7 @@
 var currentH2slug = "";
 
-$.Controller('Menu', {}, {
+$.Controller('Menu', {
+}, {
 	init : function(){
 		this.find('#menu').append(this.buildMenu());
 		setTimeout(this.proxy(function(){
@@ -88,7 +89,6 @@ $.Controller('Menu', {}, {
 		}
 	},
 	markActive : function(active, current){
-		console.log(active, current)
 		var currentLevel = current.data('level'),
 				activeLevel = active.data('level'),
 				method = {2: 'siblings', 3: 'closest'}[currentLevel],
@@ -158,9 +158,18 @@ $.Controller('Menu', {}, {
 	slideDur : function(ul, hide){
 		var base = hide ? 50 : 30,
 				dur = base * ul.find('li').length;
-		console.log(dur)
 		dur = dur > 200 ? dur : 200
 		return dur;
+	},
+	"{window} hashchange" : function(el, ev){
+		var hash = location.hash,
+				current = this.find('#menu a[href$='+hash+']'),
+				active = this.find('#menu a.active'),
+				self = this;
+		setTimeout(function(){
+			self.markActive(active, current);
+		}, 1)
+		
 	}
 });
 

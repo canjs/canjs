@@ -14,48 +14,18 @@
 		replacer: /\{([^\}]+)\}/g,
 		dot: /\./
 	},
+		// gets the nextPart property from current
+		// add - if true and nextPart doesnt exist, create it as an empty object
 		getNext = function(current, nextPart, add){
 			return current[nextPart] !== undefined ? current[nextPart] : ( add && (current[nextPart] = {}) );
 		},
+		// returns true if the object can have properties (no nulls)
 		isContainer = function(current){
 			var type = typeof current;
-			return type && (  type == 'function' || type == 'object' );
+			return current && ( type == 'function' || type == 'object' );
 		},
-		getObject = function( objectName, roots, add ) {
-			
-			var parts = objectName ? objectName.split(regs.dot) : [],
-				length =  parts.length,
-				currents = $.isArray(roots) ? roots : [roots || window],
-				current,
-				ret, 
-				i,
-				c = 0,
-				type;
-			
-			if(length == 0){
-				return currents[0];
-			}
-			while(current = currents[c++]){
-				for (i =0; i < length - 1 && isContainer(current); i++ ) {
-					current = getNext(current, parts[i], add);
-				}
-				if( isContainer(current) ) {
-					
-					ret = getNext(current, parts[i], add); 
-					
-					if( ret !== undefined ) {
-						
-						if ( add === false ) {
-							delete current[parts[i]];
-						}
-						return ret;
-						
-					}
-					
-				}
-			}
-		},
-
+		// a reference
+		getObject,
 		/** 
 		 * @class jQuery.String
 		 * @parent jquerymx.lang
@@ -82,10 +52,11 @@
 			
 			/**
 			 * @function getObject
-			 * Gets an object from a string.
+			 * Gets an object from a string.  It can also modify objects on the
+			 * 'object path' by removing or adding properties.
 			 * 
 			 *     Foo = {Bar: {Zar: {"Ted"}}}
-		 	 *     $.String.getobject("Foo.Bar.Zar") //-> "Ted"
+		 	 *     $.String.getObject("Foo.Bar.Zar") //-> "Ted"
 			 * 
 			 * @param {String} name the name of the object to look for
 			 * @param {Array} [roots] an array of root objects to look for the 
@@ -95,7 +66,49 @@
 			 *  not modify the root object
 			 * @return {Object} The object.
 			 */
-			getObject : getObject,
+			getObject : getObject = function( name, roots, add ) {
+			
+				// the parts of the name we are looking up
+				// ['App','Models','Recipe']
+				var parts = name ? name.split(regs.dot) : [],
+					length =  parts.length,
+					current,
+					ret, 
+					i,
+					r = 0,
+					type;
+				
+				// make sure roots is an array
+				roots = $.isArray(roots) ? roots : [roots || window];
+				
+				if(length == 0){
+					return roots[0];
+				}
+				// for each root, mark it as current
+				while( current = roots[r++] ) {
+					// walk current to the 2nd to last object
+					// or until there is not a container
+					for (i =0; i < length - 1 && isContainer(current); i++ ) {
+						current = getNext(current, parts[i], add);
+					}
+					// if we can get a property from the 2nd to last object
+					if( isContainer(current) ) {
+						
+						// get (and possibly set) the property
+						ret = getNext(current, parts[i], add); 
+						
+						// if there is a value, we exit
+						if( ret !== undefined ) {
+							// if add is false, delete the property
+							if ( add === false ) {
+								delete current[parts[i]];
+							}
+							return ret;
+							
+						}
+					}
+				}
+			},
 			/**
 			 * Capitalizes a string
 			 * @param {String} s the string.
@@ -166,18 +179,21 @@
 			 * @param {Boolean} [remove] if a match is found, remove the property from the object
 			 */
 			sub: function( s, data, remove ) {
-				var obs = [];
+				var obs = [],
+					remove = typeof remove == 'boolean' ? !remove : remove;
 				obs.push(s.replace(regs.replacer, function( whole, inside ) {
 					//convert inside to type
-					var ob = getObject(inside, data, typeof remove == 'boolean' ? !remove : remove),
-						type = typeof ob;
-					if((type === 'object' || type === 'function') && type !== null){
+					var ob = getObject(inside, data, remove);
+					
+					// if a container, push into objs (which will return objects found)
+					if( isContainer(ob) ){
 						obs.push(ob);
 						return "";
 					}else{
 						return ""+ob;
 					}
 				}));
+				
 				return obs.length <= 1 ? obs[0] : obs;
 			},
 			_regs : regs
@@ -242,6 +258,7 @@
 	 * @parent jquerymx
 	 * @download dist/jquery/jquery.class.js
 	 * @test jquery/class/qunit.html
+	 * @description Easy inheritance in JavaScript.
 	 * 
 	 * Class provides simulated inheritance in JavaScript. Use clss to bridge the gap between
 	 * jQuery's functional programming style and Object Oriented Programming. It 
@@ -837,7 +854,7 @@
 			
 			// call the class init
 			if ( Class.init ) {
-				Class.init.apply(Class, args || []);
+				Class.init.apply(Class, args || concatArgs([_super_class],arguments));
 			}
 
 			/* @Prototype*/
@@ -1081,6 +1098,7 @@
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/controller/controller.js
 	 * @test jquery/controller/qunit.html
 	 * @inherits jQuery.Class
+	 * @description jQuery widget factory.
 	 * 
 	 * jQuery.Controller helps create organized, memory-leak free, rapidly performing
 	 * jQuery widgets.  Its extreme flexibility allows it to serve as both
@@ -1223,7 +1241,7 @@
 	 *         el.css("backgroundColor","")
 	 *       },
 	 *       ".create click" : function() {
-	 *         this.find("ol").append("&lt;li class='todo'>New Todo&lt;/li>"); 
+	 *         this.find("ol").append("<li class='todo'>New Todo</li>"); 
 	 *       }
 	 *     })
 	 * 
@@ -1608,7 +1626,8 @@
 			var funcName, ready, cls = this[STR_CONSTRUCTOR];
 
 			//want the raw element here
-			element = element.jquery ? element[0] : element;
+			element = (typeof element == 'string' ? $(element) :
+				(element.jquery ? element : [element]) )[0];
 
 			//set element and className on element
 			var pluginname = cls.pluginName || cls._fullName;
@@ -1622,9 +1641,25 @@
 			
 			/**
 			 * @attribute options
-			 * Options is [jQuery.Controller.static.defaults] merged with the 2nd argument
+			 * 
+			 * Options are used to configure an controller.  They are
+			 * the 2nd argument
 			 * passed to a controller (or the first argument passed to the 
 			 * [jquery.controller.plugin controller's jQuery plugin]).
+			 * 
+			 * For example:
+			 * 
+			 *     $.Controller('Hello')
+			 *     
+			 *     var h1 = new Hello($('#content1'), {message: 'World'} );
+			 *     equal( h1.options.message , "World" )
+			 *     
+			 *     var h2 = $('#content2').hello({message: 'There'})
+			 *                            .controller();
+			 *     equal( h2.options.message , "There" )
+			 * 
+			 * Options are merged with [jQuery.Controller.static.defaults defaults] in
+			 * [jQuery.Controller.prototype.setup setup].
 			 * 
 			 * For example:
 			 * 
@@ -1643,7 +1678,9 @@
 			 *     $("#tabs1").tabs()                         // adds 'ui-active-state'
 			 *     $("#tabs2").tabs({activeClass : 'active'}) // adds 'active'
 			 *     
-			 *  
+			 * Options are typically updated by calling 
+			 * [jQuery.Controller.prototype.update update];
+			 *
 			 */
 			this.options = extend( extend(true, {}, cls.defaults), options);
 
@@ -1705,7 +1742,12 @@
 			 *       }
 			 *     }
 			 */
-			return this.element;
+			return [this.element, this.options].concat(makeArray(arguments).slice(2));
+			/**
+			 * @function init
+			 * 
+			 * Implement this.
+			 */
 		},
 		/**
 		 * Bind attaches event handlers that will be 
@@ -1833,15 +1875,15 @@
 		 *     $.Controller('Creator',{
 		 *       "{recipe} created" : function(){
 		 *         this.update({recipe : new Recipe()});
-		 *     	   this.element[0].reset();
-		 *     	   this.find("[type=submit]").val("Create Recipe")
+		 *         this.element[0].reset();
+		 *         this.find("[type=submit]").val("Create Recipe")
 		 *       },
 		 *       "submit" : function(el, ev){
-		 *       	ev.preventDefault();
-		 *          var recipe = this.options.recipe;
-		 *          recipe.attrs( this.element.formParams() );
-		 *     	    this.find("[type=submit]").val("Saving...")
-		 *          recipe.save();
+		 *         ev.preventDefault();
+		 *         var recipe = this.options.recipe;
+		 *         recipe.attrs( this.element.formParams() );
+		 *         this.find("[type=submit]").val("Saving...")
+		 *         recipe.save();
 		 *       }
 		 *     });
 		 *     $('#createRecipes').creator({recipe : new Recipe()})
@@ -1859,24 +1901,24 @@
 		 *     $.Controller('Updater',{
 		 *       // when the controller is created, update the html
 		 *       init : function(){
-		 *       	this.updateView();
+		 *         this.updateView();
 		 *       },
 		 *       
 		 *       // update the html with a template
 		 *       updateView : function(){
-		 *          this.element.html( "content.ejs",
-		 *                             this.options.model ); 
+		 *         this.element.html( "content.ejs",
+		 *                            this.options.model ); 
 		 *       },
 		 *       
 		 *       // if the model is updated
 		 *       "{model} updated" : function(){
-		 *          this.updateView();
+		 *         this.updateView();
 		 *       },
 		 *       update : function(options){
-		 *          // make sure you call super
-		 *          this._super(options);
+		 *         // make sure you call super
+		 *         this._super(options);
 		 *          
-		 *          this.updateView();
+		 *         this.updateView();
 		 *       }
 		 *     })
 		 * 
@@ -2003,7 +2045,7 @@
 
 
 
-	//set commong events to be processed as a basicProcessor
+	//set common events to be processed as a basicProcessor
 	each("change click contextmenu dblclick keydown keyup keypress mousedown mousemove mouseout mouseover mouseup reset resize scroll select submit focusin focusout mouseenter mouseleave".split(" "), function( i, v ) {
 		processors[v] = basicProcessor;
 	});
@@ -2058,6 +2100,183 @@
 	});
 	
 
+})(jQuery);
+
+//jquery.event.hashchange.js
+
+(function($){
+  '$:nomunge'; // Used by YUI compressor.
+  
+  // Method / object references.
+  var fake_onhashchange,
+    jq_event_special = $.event.special,
+    
+    // Reused strings.
+    str_location = 'location',
+    str_hashchange = 'hashchange',
+    str_href = 'href',
+    
+    // IE6/7 specifically need some special love when it comes to back-button
+    // support, so let's do a little browser sniffing..
+    browser = $.browser,
+    mode = document.documentMode,
+    is_old_ie = browser.msie && ( mode === undefined || mode < 8 ),
+    
+    // Does the browser support window.onhashchange? Test for IE version, since
+    // IE8 incorrectly reports this when in "IE7" or "IE8 Compatibility View"!
+    supports_onhashchange = 'on' + str_hashchange in window && !is_old_ie;
+  
+  // Get location.hash (or what you'd expect location.hash to be) sans any
+  // leading #. Thanks for making this necessary, Firefox!
+  function get_fragment( url ) {
+    url = url || window[ str_location ][ str_href ];
+    return url.replace( /^[^#]*#?(.*)$/, '$1' );
+  };
+  
+  // Property: jQuery.hashchangeDelay
+  // 
+  // The numeric interval (in milliseconds) at which the <hashchange event>
+  // polling loop executes. Defaults to 100.
+  
+  $[ str_hashchange + 'Delay' ] = 100;
+  
+  // Event: hashchange event
+  // 
+  // Fired when location.hash changes. In browsers that support it, the native
+  // window.onhashchange event is used (IE8, FF3.6), otherwise a polling loop is
+  // initialized, running every <jQuery.hashchangeDelay> milliseconds to see if
+  // the hash has changed. In IE 6 and 7, a hidden Iframe is created to allow
+  // the back button and hash-based history to work.
+  // 
+  // Usage:
+  // 
+  // > $(window).bind( 'hashchange', function(e) {
+  // >   var hash = location.hash;
+  // >   ...
+  // > });
+  // 
+  // Additional Notes:
+  // 
+  // * The polling loop and Iframe are not created until at least one callback
+  //   is actually bound to 'hashchange'.
+  // * If you need the bound callback(s) to execute immediately, in cases where
+  //   the page 'state' exists on page load (via bookmark or page refresh, for
+  //   example) use $(window).trigger( 'hashchange' );
+  // * The event can be bound before DOM ready, but since it won't be usable
+  //   before then in IE6/7 (due to the necessary Iframe), recommended usage is
+  //   to bind it inside a $(document).ready() callback.
+  
+  jq_event_special[ str_hashchange ] = $.extend( jq_event_special[ str_hashchange ], {
+    
+    // Called only when the first 'hashchange' event is bound to window.
+    setup: function() {
+      // If window.onhashchange is supported natively, there's nothing to do..
+      if ( supports_onhashchange ) { return false; }
+      
+      // Otherwise, we need to create our own. And we don't want to call this
+      // until the user binds to the event, just in case they never do, since it
+      // will create a polling loop and possibly even a hidden Iframe.
+      $( fake_onhashchange.start );
+    },
+    
+    // Called only when the last 'hashchange' event is unbound from window.
+    teardown: function() {
+      // If window.onhashchange is supported natively, there's nothing to do..
+      if ( supports_onhashchange ) { return false; }
+      
+      // Otherwise, we need to stop ours (if possible).
+      $( fake_onhashchange.stop );
+    }
+    
+  });
+  
+  // fake_onhashchange does all the work of triggering the window.onhashchange
+  // event for browsers that don't natively support it, including creating a
+  // polling loop to watch for hash changes and in IE 6/7 creating a hidden
+  // Iframe to enable back and forward.
+  fake_onhashchange = (function(){
+    var self = {},
+      timeout_id,
+      iframe,
+      set_history,
+      get_history;
+    
+    // Initialize. In IE 6/7, creates a hidden Iframe for history handling.
+    function init(){
+      // Most browsers don't need special methods here..
+      set_history = get_history = function(val){ return val; };
+      
+      // But IE6/7 do!
+      if ( is_old_ie ) {
+        
+        // Create hidden Iframe after the end of the body to prevent initial
+        // page load from scrolling unnecessarily.
+        iframe = $('<iframe src="javascript:0"/>').hide().insertAfter( 'body' )[0].contentWindow;
+        
+        // Get history by looking at the hidden Iframe's location.hash.
+        get_history = function() {
+          return get_fragment( iframe.document[ str_location ][ str_href ] );
+        };
+        
+        // Set a new history item by opening and then closing the Iframe
+        // document, *then* setting its location.hash.
+        set_history = function( hash, history_hash ) {
+          if ( hash !== history_hash ) {
+            var doc = iframe.document;
+            doc.open().close();
+            doc[ str_location ].hash = '#' + hash;
+          }
+        };
+        
+        // Set initial history.
+        set_history( get_fragment() );
+      }
+    };
+    
+    // Start the polling loop.
+    self.start = function() {
+      // Polling loop is already running!
+      if ( timeout_id ) { return; }
+      
+      // Remember the initial hash so it doesn't get triggered immediately.
+      var last_hash = get_fragment();
+      
+      // Initialize if not yet initialized.
+      set_history || init();
+      
+      // This polling loop checks every $.hashchangeDelay milliseconds to see if
+      // location.hash has changed, and triggers the 'hashchange' event on
+      // window when necessary.
+      if(!navigator.userAgent.match(/Rhino/))
+	      (function loopy(){
+	        var hash = get_fragment(),
+	          history_hash = get_history( last_hash );
+	        
+	        if ( hash !== last_hash ) {
+	          set_history( last_hash = hash, history_hash );
+	          
+	          $(window).trigger( str_hashchange );
+	          
+	        } else if ( history_hash !== last_hash ) {
+	          window[ str_location ][ str_href ] = window[ str_location ][ str_href ].replace( /#.*/, '' ) + '#' + history_hash;
+	        }
+	        
+	        timeout_id = setTimeout( loopy, $[ str_hashchange + 'Delay' ] );
+	      })();
+    };
+    
+    // Stop the polling loop, but only if an IE6/7 Iframe wasn't created. In
+    // that case, even if there are no longer any bound event handlers, the
+    // polling loop is still necessary for back/next to work at all!
+    self.stop = function() {
+      if ( !iframe ) {
+        timeout_id && clearTimeout( timeout_id );
+        timeout_id = 0;
+      }
+    };
+    
+    return self;
+  })();
 })(jQuery);
 
 //jquery.event.resize.js

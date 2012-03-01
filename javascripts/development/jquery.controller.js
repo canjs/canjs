@@ -80,6 +80,7 @@
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/controller/controller.js
 	 * @test jquery/controller/qunit.html
 	 * @inherits jQuery.Class
+	 * @description jQuery widget factory.
 	 * 
 	 * jQuery.Controller helps create organized, memory-leak free, rapidly performing
 	 * jQuery widgets.  Its extreme flexibility allows it to serve as both
@@ -222,7 +223,7 @@
 	 *         el.css("backgroundColor","")
 	 *       },
 	 *       ".create click" : function() {
-	 *         this.find("ol").append("&lt;li class='todo'>New Todo&lt;/li>"); 
+	 *         this.find("ol").append("<li class='todo'>New Todo</li>"); 
 	 *       }
 	 *     })
 	 * 
@@ -607,7 +608,8 @@
 			var funcName, ready, cls = this[STR_CONSTRUCTOR];
 
 			//want the raw element here
-			element = element.jquery ? element[0] : element;
+			element = (typeof element == 'string' ? $(element) :
+				(element.jquery ? element : [element]) )[0];
 
 			//set element and className on element
 			var pluginname = cls.pluginName || cls._fullName;
@@ -621,9 +623,25 @@
 			
 			/**
 			 * @attribute options
-			 * Options is [jQuery.Controller.static.defaults] merged with the 2nd argument
+			 * 
+			 * Options are used to configure an controller.  They are
+			 * the 2nd argument
 			 * passed to a controller (or the first argument passed to the 
 			 * [jquery.controller.plugin controller's jQuery plugin]).
+			 * 
+			 * For example:
+			 * 
+			 *     $.Controller('Hello')
+			 *     
+			 *     var h1 = new Hello($('#content1'), {message: 'World'} );
+			 *     equal( h1.options.message , "World" )
+			 *     
+			 *     var h2 = $('#content2').hello({message: 'There'})
+			 *                            .controller();
+			 *     equal( h2.options.message , "There" )
+			 * 
+			 * Options are merged with [jQuery.Controller.static.defaults defaults] in
+			 * [jQuery.Controller.prototype.setup setup].
 			 * 
 			 * For example:
 			 * 
@@ -642,7 +660,9 @@
 			 *     $("#tabs1").tabs()                         // adds 'ui-active-state'
 			 *     $("#tabs2").tabs({activeClass : 'active'}) // adds 'active'
 			 *     
-			 *  
+			 * Options are typically updated by calling 
+			 * [jQuery.Controller.prototype.update update];
+			 *
 			 */
 			this.options = extend( extend(true, {}, cls.defaults), options);
 
@@ -704,7 +724,12 @@
 			 *       }
 			 *     }
 			 */
-			return this.element;
+			return [this.element, this.options].concat(makeArray(arguments).slice(2));
+			/**
+			 * @function init
+			 * 
+			 * Implement this.
+			 */
 		},
 		/**
 		 * Bind attaches event handlers that will be 
@@ -832,15 +857,15 @@
 		 *     $.Controller('Creator',{
 		 *       "{recipe} created" : function(){
 		 *         this.update({recipe : new Recipe()});
-		 *     	   this.element[0].reset();
-		 *     	   this.find("[type=submit]").val("Create Recipe")
+		 *         this.element[0].reset();
+		 *         this.find("[type=submit]").val("Create Recipe")
 		 *       },
 		 *       "submit" : function(el, ev){
-		 *       	ev.preventDefault();
-		 *          var recipe = this.options.recipe;
-		 *          recipe.attrs( this.element.formParams() );
-		 *     	    this.find("[type=submit]").val("Saving...")
-		 *          recipe.save();
+		 *         ev.preventDefault();
+		 *         var recipe = this.options.recipe;
+		 *         recipe.attrs( this.element.formParams() );
+		 *         this.find("[type=submit]").val("Saving...")
+		 *         recipe.save();
 		 *       }
 		 *     });
 		 *     $('#createRecipes').creator({recipe : new Recipe()})
@@ -858,24 +883,24 @@
 		 *     $.Controller('Updater',{
 		 *       // when the controller is created, update the html
 		 *       init : function(){
-		 *       	this.updateView();
+		 *         this.updateView();
 		 *       },
 		 *       
 		 *       // update the html with a template
 		 *       updateView : function(){
-		 *          this.element.html( "content.ejs",
-		 *                             this.options.model ); 
+		 *         this.element.html( "content.ejs",
+		 *                            this.options.model ); 
 		 *       },
 		 *       
 		 *       // if the model is updated
 		 *       "{model} updated" : function(){
-		 *          this.updateView();
+		 *         this.updateView();
 		 *       },
 		 *       update : function(options){
-		 *          // make sure you call super
-		 *          this._super(options);
+		 *         // make sure you call super
+		 *         this._super(options);
 		 *          
-		 *          this.updateView();
+		 *         this.updateView();
 		 *       }
 		 *     })
 		 * 
@@ -1002,7 +1027,7 @@
 
 
 
-	//set commong events to be processed as a basicProcessor
+	//set common events to be processed as a basicProcessor
 	each("change click contextmenu dblclick keydown keyup keypress mousedown mousemove mouseout mouseover mouseup reset resize scroll select submit focusin focusout mouseenter mouseleave".split(" "), function( i, v ) {
 		processors[v] = basicProcessor;
 	});

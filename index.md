@@ -42,24 +42,24 @@ __can.Construct__ sets up the prototype chain so subclasses can be further
 extended and sub-classed as far as you like:
 
 
-{% highlight javascript %}	
-var Todo = can.Construct({
-  init : function(){},
-	
-  author : function(){ ... },
-	
-  coordinates : function(){ ... },
-	
-  allowedToEdit: function(account) { 
-    return true;
-  }
-});
-	
-var PrivateTodo = Todo({
-  allowedToEdit: function(account) {
-    return account.owns(this);
-  }
-});
+{% highlight javascript %}
+	var Todo = can.Construct({
+	  init : function(){},
+		
+	  author : function(){ ... },
+		
+	  coordinates : function(){ ... },
+		
+	  allowedToEdit: function(account) { 
+	    return true;
+	  }
+	});
+		
+	var PrivateTodo = Todo({
+	  allowedToEdit: function(account) {
+	    return account.owns(this);
+	  }
+	});
 {% endhighlight %}
 
 If only one set of properties is passed to __can.Construct__, it's assumed to 
@@ -71,18 +71,18 @@ When a constructor is called with the `new` keyword, __can.Construct__ creates t
 calls [can.Construct.prototype.init](donejs.com/docs.html#!can.Construct.prototype.init) with 
 the arguments passed to `new Constructor(...)`.
 
-{% highlight javascript %}	
-var Todo = can.Construct({
-  init : function(text) {
-    this.text = text
-  },
-  read : function(){
-    console.log(this.text);
-  }
-})
-	
-var todo = new Todo("Hello World");
-todo.read()
+{% highlight javascript %}
+	var Todo = can.Construct({
+	  init : function(text) {
+	    this.text = text
+	  },
+	  read : function(){
+	    console.log(this.text);
+	  }
+	})
+		
+	var todo = new Todo("Hello World");
+	todo.read()
 {% endhighlight %}
 
 ## can.Observe `new can.Observe( data )`
@@ -96,15 +96,15 @@ todo.read()
 To create an observable object, use `new can.Observe( [data] )` like:
 
 {% highlight javascript %}
-var paginate = new can.Observe({offset: 0, limit : 100, count: 2000})
+	var paginate = new can.Observe({offset: 0, limit : 100, count: 2000})
 {% endhighlight %}
 
 To create an observable array, use `new can.Observe.List( [array] )` like:
 
 {% highlight javascript %}
-var hobbies = new can.Observe.List(['programming', 
-                               'basketball', 
-                               'party rocking'])
+	var hobbies = new can.Observe.List(['programming', 
+	                             'basketball', 
+	                             'party rocking'])
 {% endhighlight %}
 
 __can.Observe__ is used by both __can.Model__ and __can.route__. However, observe 
@@ -115,14 +115,14 @@ is useful on its own to maintain client-side state (such as pagination data).
 [can.Observe.prototype.attr](http://donejs.com/docs.html#!can.Observe.prototype.attr) reads or 
 sets properties on an observe:
 
-{% highlight javascript %}	
-paginate.attr('offset') //-> 0
-	
-paginate.attr('offset', 100 );
-	
-paginate.attr() //-> {offset: 100, limit : 100, count: 2000}
-	
-paginate.attr({limit: 200, count: 1000});
+{% highlight javascript %}
+	paginate.attr('offset') //-> 0
+		
+	paginate.attr('offset', 100 );
+		
+	paginate.attr() //-> {offset: 100, limit : 100, count: 2000}
+		
+	paginate.attr({limit: 200, count: 1000});
 {% endhighlight %}
 
 
@@ -132,8 +132,8 @@ paginate.attr({limit: 200, count: 1000});
 by name from an observe.  This is similar to using the `delete` keyword to remove a property.
 
 {% highlight javascript %}
-o =  new can.Observe({foo: 'bar'});
-o.removeAttr('foo'); //-> 'bar'
+	o =  new can.Observe({foo: 'bar'});
+	o.removeAttr('foo'); //-> 'bar'
 {% endhighlight %}
 
 ### bind `observe.bind( eventType, handler(args...) )`
@@ -166,12 +166,12 @@ paginate.attr('offset', 200);
 to an event.  The same function that was used for the handler in `bind` must be passed to `unbind`.
 
 {% highlight javascript %}
-var countHandler = function(ev, newVal, oldVal){
-  console.log("the count has changed");
-}
-paginate.bind('count',countHandler);
-paginate.attr('count', 3000);
-paginate.unbind('count', countHandler);
+	var countHandler = function(ev, newVal, oldVal){
+	  console.log("the count has changed");
+	}
+	paginate.bind('count',countHandler);
+	paginate.attr('count', 3000);
+	paginate.unbind('count', countHandler);
 {% endhighlight %}  
 
 ### each `observe.each( handler(attrName, value) )`
@@ -180,13 +180,13 @@ paginate.unbind('count', countHandler);
 each attribute, calling handler with each attribute name and value.
 
 {% highlight javascript %}
-paginate.each(function(name, value){
-   console.log( name, value);
-})
-// writes:
-//  offset 200
-//  limit 200
-//  count 1000}
+	paginate.each(function(name, value){
+	   console.log( name, value);
+	})
+	// writes:
+	//  offset 200
+	//  limit 200
+	//  count 1000}
 {% endhighlight %}  
 
 ### can.Observe.List `new can.Observe.List( [array] )`
@@ -203,20 +203,20 @@ but adds list specific methods such as:
  - [unshift](http://donejs.com/docs.html#!can.Observe.List.prototype.unshift) `list.unshift(items...)` - adds items to the start of the list.
 
 {% highlight javascript %}
-var hobbies = new can.Observe.List(['programming', 
-                               'basketball', 
-                               'party rocking'])
-                               
-// listen to changes in the list
-hobbies.bind("add", function(ev, newVals, index){
-  console.log("added",newVals,"at",index);
-}).bind("remove", function(ev, oldVals, index){
-  console.log("removed",oldVals,"at",index);
-})
+	var hobbies = new can.Observe.List(['programming', 
+	                               'basketball', 
+	                               'party rocking'])
+	                               
+	// listen to changes in the list
+	hobbies.bind("add", function(ev, newVals, index){
+	  console.log("added",newVals,"at",index);
+	}).bind("remove", function(ev, oldVals, index){
+	  console.log("removed",oldVals,"at",index);
+	})
 
-// modify the list
-hobbies.pop()
-hobbies.unshift("rocking parties")
+	// modify the list
+	hobbies.pop()
+	hobbies.unshift("rocking parties")
 {% endhighlight %}  
 
 ## can.Model `can.Model([classProperties,] [prototypeProperties])`
@@ -240,15 +240,15 @@ To create a __Model__ class, call __can.Model__ with:
 
 Make a Todo model in __todos.js__ like the following:
 
-{% highlight javascript %}	
-var Todo = can.Model({
-  findAll : "GET /todos",
-  findOne : "GET /todos/{id}",
-  create  : "POST /todos",
-  update  : "PUT /todos/{id}",
-  destroy : "DELETE /todos/{id}"
-},
-{})
+{% highlight javascript %}
+	var Todo = can.Model({
+	  findAll : "GET /todos",
+	  findOne : "GET /todos/{id}",
+	  create  : "POST /todos",
+	  update  : "PUT /todos/{id}",
+	  destroy : "DELETE /todos/{id}"
+	},
+	{})
 {% endhighlight %}
 
 __Note:__ Try the following commands in your browser:
@@ -257,7 +257,7 @@ __Note:__ Try the following commands in your browser:
 
 Create a todo instance like:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var todo = new Todo({name: "do the dishes"});
 {% endhighlight %}
     
@@ -265,7 +265,7 @@ Create a todo instance like:
 
 [can.Model.prototype.attr](http://donejs.com/docs.html#!can.Model.prototype.attr) reads or sets properties on model instances.
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	todo.attr('name') //-> "do the dishes"
 	
 	todo.attr('name', "wash the dishes" );
@@ -287,7 +287,7 @@ Now you can call methods on Todo that
 make changes on the server.  For example, 
 in your console, try:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	Todo.findAll({});
 {% endhighlight %}
 
@@ -298,7 +298,7 @@ to `GET /todos`.
 
   [findAll](http://donejs.com/docs.html#!can.Model.findAll) retrieves multiple todos:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	Todo.findAll({}, function( todos ) {
 	  console.log( todos );
 	})
@@ -308,7 +308,7 @@ to `GET /todos`.
 
 [findOne](http://donejs.com/docs.html#!can.Model.findOne) retrieves a single todo:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	Todo.findOne({}, function( todo ) {
 	  console.log( todo );
 	})
@@ -323,7 +323,7 @@ instance has already been created or not.
 To __create__ a todo on the server, create a
 todo instance and call __save__ like the following:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var todo = new Todo({name: "mow lawn"})
 	todo.save(function(todo){
 	  console.log( todo );
@@ -333,7 +333,7 @@ todo instance and call __save__ like the following:
 To __update__ a todo on the server, change the attributes
 and call __save__ again like the following:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var todo = new Todo({name: "mow lawn"});
 	todo.save( function(todo){
 	  console.log("created", todo );
@@ -350,7 +350,7 @@ and call __save__ again like the following:
 [Destroy](http://donejs.com/docs.html#!can.Model.prototype.destroy) deletes a 
 record on the server.  You can do this like:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var todo = new Todo({name: "mow lawn"});
 	todo.save( function(todo){
 	  console.log("created", todo );
@@ -370,7 +370,7 @@ on an individual instance
 or [all instances](http://donejs.com/docs.html#!can.Model.bind). For example, you can listen to 
 when an instance is __created__ on the server like:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var todo = new Todo({name: "mow lawn"});
 	todo.bind('created', function(ev, todo){
 	  console.log("created", todo );
@@ -381,7 +381,7 @@ when an instance is __created__ on the server like:
 You can listen to anytime an __instance__ is created on the server by 
 binding on the model:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	Todo.bind('created', function(ev, todo){
 	  console.log("created", todo );
 	})
@@ -405,7 +405,7 @@ JS templates. Pass it ...
 ... and it returns the rendered result of the template.  For
 example, add the following to __todos.html__:
 
-{% highlight html %}	
+{% highlight html %}
 	<script type='text/ejs' id='todosEJS'>
 	  <% for(var i = 0; i < this.length; i++ ){ %>
 	    <li><%= this[i].name %></li>
@@ -415,7 +415,7 @@ example, add the following to __todos.html__:
 
 Render a list of todos with:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	Todo.findAll( {}, function( todos ){
 	   console.log( $.View( 'todosEJS', todos ) );
 	});
@@ -424,7 +424,7 @@ Render a list of todos with:
 can.View also takes a __url__ for a template location.  __Create__ 
 a _todos/todos.ejs_ file that contains the following:
 
-{% highlight html %}	
+{% highlight html %}
 	<% for(var i = 0; i < this.length; i++ ){ %>
 	  <li><%= this[i].name %></li>
 	<% } %>
@@ -432,7 +432,7 @@ a _todos/todos.ejs_ file that contains the following:
 
 Render this with:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	Todo.findAll( {}, function( todos ){
 	  console.log( $.View( 'todos.ejs', todos ) );
 	});
@@ -454,7 +454,7 @@ __can.View__ overwrites the jQuery's html modifiers
 after, append, before, html, prepend, replaceWith, and text,
 allowing you to write:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	Todo.findAll( {}, function( todos ){
 	  $('#todos').html( 'todos.ejs', todos );
 	});
@@ -462,7 +462,7 @@ allowing you to write:
 
 To make this work, make sure `todos.html` has a `#todos` element like:
 
-{% highlight html %}	
+{% highlight html %}
 	<ul id='todos'></ul>
 {% endhighlight %}
 
@@ -471,7 +471,7 @@ To make this work, make sure `todos.html` has a `#todos` element like:
 __can.Model__'s ajax methods return a deffered. __can.View__
 accepts deferreds, making this hotness possible:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	$('#todos').html('todos.ejs', Todo.findAll() )
 {% endhighlight %}
     
@@ -492,7 +492,7 @@ Let's make a basic todos widget that
 lists todos and lets 
 us destroy them. Add the following to __todos.js__:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var Todos = can.Control({
 	  "init" : function( element , options ){
 	    this.element.html('todos.ejs', Todo.findAll() )
@@ -502,7 +502,7 @@ us destroy them. Add the following to __todos.js__:
 
 We can create this widget on the `#todos` element with:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	new Todos('#todos', {});
 {% endhighlight %}
 
@@ -521,7 +521,7 @@ new can.Control instance is created.  It's called with:
 
 and any other arguments passed to `new can.Control()`.  For example:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var Todos = $.Controller({
 	  defaults : {template: 'todos.ejs'}
 	},{
@@ -549,7 +549,7 @@ element the control is created on.
 Controller automatically binds prototype methods that look
 like event handlers.  Listen to __click__s on `<li>` elements like:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var Todos = can.Control({
 	"init" : function( element , options ){
 	  this.element.html('todos.ejs', Todo.findAll() )
@@ -574,7 +574,7 @@ event handlers.
 To destroy a todo when it's `<a href='javascript:// class='destroy'>` link 
 is clicked:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var Todos = can.Control({
 	"init" : function( element , options ){
 	  this.element.html('todos.ejs', Todo.findAll() )
@@ -604,7 +604,7 @@ Customize event handler behavior with `"{NAME}"` in
 the event handler name.  The following allows customization 
 of the event that destroys a todo:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var Todos = can.Control("Todos",{
 	  "init" : function( element , options ){ ... },
 	  "li click" : function(li){ ... },
@@ -621,7 +621,7 @@ of the event that destroys a todo:
 Values inside `{NAME}` are looked up on the control's `this.options`
 and then the `window`.  For example, we could customize it instead like:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var Todos = can.Control("Todos",{
 	  "init" : function( element , options ){ ... },
 	  "li click" : function(li){ ... },
@@ -650,7 +650,7 @@ If the value inside `{NAME}` is an object, that object will be
 bound to.  For example, the following tooltip listens to 
 clicks on the window:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var Tooltip({
 	  "{window} click" : function(el, ev){
 	    // hide only if we clicked outside the tooltip
@@ -669,7 +669,7 @@ listen to model updates.  Instead of adding a callback
 to `todo.destroy(cb)`, we should be listening to 
 __destroyed__ events.  We'll handle __updated__ too:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var Todos = can.Control({
 	  "init" : function( element , options ){
 	    this.element.html('todos.ejs', Todo.findAll() )
@@ -706,7 +706,7 @@ architectures.
 event handlers and releases its element, but does not remove 
 the element from the page. 
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var todo = new Todos("#todos")
 	todo.destroy();
 {% endhighlight %}
@@ -714,7 +714,7 @@ the element from the page.
 When a control's element is removed from the page
 __destroy__ is called automatically.
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	new Todos("#todos")
 	$("#todos").remove();
 {% endhighlight %}
@@ -736,7 +736,7 @@ data by calling `$(document.body).empty()`._
 `this.options` and rebinds all event handlers.This is useful
 when you want to listen to a specific model:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var Editor = $.Controller({
 	  update : function(options){
 	    this._super(options)
@@ -788,7 +788,7 @@ the basics with ease.
 
 Listen to routes in controls with special "route" events like:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var Routing = $.Controller({
 	  "route" : function(){
 	    // matches empty hash, #, or #!
@@ -808,13 +808,13 @@ will be called with data like: `{id: 6}`.
 
 We can update the route by changing $.route's data like:
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	$.route.attr('id','6') // location.hash = #!todos/6
 {% endhighlight %}
 
 Or we can set the hash ourselves like
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var hash = $.route.url({id: 7}) // #!todos/7
 	location.hash = hash;
 {% endhighlight %}
@@ -824,7 +824,7 @@ The following enhances the Routing control to listen for
 $.route changes, it retrieves the todo from the server
 and updates the editor widget.
 
-{% highlight javascript %}	
+{% highlight javascript %}
 	var Routing = can.Control({
 	  init : function(){
 	    this.editor = new Editor("#editor")
@@ -865,15 +865,13 @@ CanJS can be used with libraries other than jQuery.
 
 __STRING__
 
-{% highlight javascript %}	
-	
+{% highlight javascript %}
 	// remove leading and trailing whitespace
 	can.trim( " foo " ) // -> "foo" 
 {% endhighlight %}
 
 __ARRAY__
-{% highlight javascript %}	
-	
+{% highlight javascript %}
 	// convert array-like data into arrays
 	can.makeArray({0 : "zero", 1: "one", length: 2}) // -> ["zero","one"]
 	
@@ -894,8 +892,7 @@ __ARRAY__
 {% endhighlight %}
 
 __Object__
-{% highlight javascript %}	
-	
+{% highlight javascript %}
 	// extends one object with the properties of another
 	var first = {},
 	    second = {a: "b"},
@@ -918,8 +915,7 @@ __Object__
 {% endhighlight %}
 
 __FUNCTION__
-{% highlight javascript %}	
-	
+{% highlight javascript %}
 	// returns a function that calls another function
 	// with "this" set.
 	var func = can.proxy(function(one){
@@ -934,8 +930,7 @@ __FUNCTION__
 
 __EVENT__
 
-{% highlight javascript %}	
-	
+{% highlight javascript %}
 	// binds handler on obj's eventName event
 	can.bind(obj, eventName, handler )
 	
@@ -955,8 +950,7 @@ __EVENT__
 
 __DEFERRED__
 
-{% highlight javascript %}	
-	
+{% highlight javascript %}
 	// Creates a new Deferred object
 	var deferred = new can.Deferred()
 	
@@ -978,8 +972,7 @@ __DEFERRED__
 
 __AJAX__
 
-{% highlight javascript %}	
-	
+{% highlight javascript %}
 	can.ajax({
 	  url : "url",
 	  type: "GET", // "POST"
@@ -992,8 +985,7 @@ __AJAX__
 
 __HTMLElement__
 
-{% highlight javascript %}	
-	
+{% highlight javascript %}
 	can.buildFragment(frags, nodes)
 	
 	// a node list
