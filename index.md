@@ -867,55 +867,55 @@ are required to run CanJS from another library.
 
 {% highlight javascript %}	
 	
-	// remove leading and trailing whitespace
-	can.trim( " foo " ) // -> "foo" 
+// remove leading and trailing whitespace
+can.trim( " foo " ) // -> "foo" 
 {% endhighlight %}
 
 ### Array Helpers
 
 {% highlight javascript %}	
 	
-	// convert array-like data into arrays
-	can.makeArray({0 : "zero", 1: "one", length: 2}) // -> ["zero","one"]
+// convert array-like data into arrays
+can.makeArray({0 : "zero", 1: "one", length: 2}) // -> ["zero","one"]
 	
-	// return if an array is an array
-	can.isArray([]) //-> true
+// return if an array is an array
+can.isArray([]) //-> true
 	
-	// converts one array to another array
-	can.map([{prop: "val1"}, {prop: "val2"}], function(val, prop){
-	  return val
-	})  //-> ["val1","val2"]
+// converts one array to another array
+can.map([{prop: "val1"}, {prop: "val2"}], function(val, prop){
+  return val
+})  //-> ["val1","val2"]
 	
-	// iterates through an array
-	can.each([{prop: "val1"}, {prop: "val2"}], function( index, value ) {
-	  // function called with
-	  //  index=0 value={prop: "val1"}
-	  //  index=1 value={prop: "val2"}
-	})
+// iterates through an array
+can.each([{prop: "val1"}, {prop: "val2"}], function( index, value ) {
+  // function called with
+  //  index=0 value={prop: "val1"}
+  //  index=1 value={prop: "val2"}
+})
 {% endhighlight %}
 
 ### Object Helpers
 
 {% highlight javascript %}	
 	
-	// extends one object with the properties of another
-	var first = {},
-	    second = {a: "b"},
-	    thrid = {c: "d"};
-	can.extend(first, second, third); //-> first
-	first  //-> {a: "b",c : "d"}
-	second //-> {a: "b"}
-	thrid  //-> {c: "d"}
+// extends one object with the properties of another
+var first = {},
+    second = {a: "b"},
+    thrid = {c: "d"};
+can.extend(first, second, third); //-> first
+first  //-> {a: "b",c : "d"}
+second //-> {a: "b"}
+thrid  //-> {c: "d"}
 	
-	// deep extends one object with another
-	can.extend( true, first, second, third ); 
+// deep extends one object with another
+can.extend( true, first, second, third ); 
 	
-	// parameterize into a querystring
-	can.param({a: "b", c: "d"}) //-> "a=b&c=d"
+// parameterize into a querystring
+can.param({a: "b", c: "d"}) //-> "a=b&c=d"
 	
-	// returns if an object is empty
-	can.isEmptyObject({})      //-> true
-	can.isEmptyObject({a:"b"}) //-> false
+// returns if an object is empty
+can.isEmptyObject({})      //-> true
+can.isEmptyObject({a:"b"}) //-> false
 	
 {% endhighlight %}
 
@@ -923,94 +923,90 @@ are required to run CanJS from another library.
 
 {% highlight javascript %}	
 	
-	// returns a function that calls another function
-	// with "this" set.
-	var func = can.proxy(function(one){
-	  return this.a + one
-	}, {a: "b"}); 
-	func("two") //-> "btwo" 
-	
-	// returns if an object is a function
-	can.isFunction({})           //-> false
-	can.isFunction(function(){}) //-> true
+// returns a function that calls another function
+// with "this" set.
+var func = can.proxy(function(one){
+  return this.a + one
+}, {a: "b"}); 
+func("two") //-> "btwo" 
+
+// returns if an object is a function
+can.isFunction({})           //-> false
+can.isFunction(function(){}) //-> true
 {% endhighlight %}
 
 ### Event Helpers
 
 {% highlight javascript %}	
 	
-	// binds handler on obj's eventName event
-	can.bind(obj, eventName, handler )
+// binds handler on obj's eventName event
+can.bind(obj, eventName, handler )
 	
-	// unbind handler on obj's eventName event
-	can.unbind(obj, eventName, handler) 
+// unbind handler on obj's eventName event
+can.unbind(obj, eventName, handler) 
 	
-	// 
-	can.delegate(obj, selector, eventName, handler)
+// 
+can.delegate(obj, selector, eventName, handler)
 	
-	//
-	can.delegate(obj, selector, eventName, handler)
+//
+can.delegate(obj, selector, eventName, handler)
 	
-	//
-	can.trigger(obj, event, args )
-	can.trigger(obj, eventName, args)
+//
+can.trigger(obj, event, args )
+can.trigger(obj, eventName, args)
 {% endhighlight %}
 
 ### Deferred
 
 {% highlight javascript %}	
+// Creates a new Deferred object
+var deferred = new can.Deferred()
 	
-	// Creates a new Deferred object
-	var deferred = new can.Deferred()
+// pipes a deferred into another deferred
+deferred.pipe(function(){
+
+}, function(){})
 	
-	// pipes a deferred into another deferred
-	deferred.pipe(function(){
+// 
+deferred.resolve()
 	
-	}, function(){})
+//
+deferred.reject()
 	
-	// 
-	deferred.resolve()
-	
-	//
-	deferred.reject()
-	
-	// 
-	can.When()
+// 
+can.When()
 {% endhighlight %}
 
 
-## Ajax
+### Ajax
 
 {% highlight javascript %}	
-	
-	can.ajax({
-	  url : "url",
-	  type: "GET", // "POST"
-	  async : false,
-	  dataType: "json",
-	  success: function(){},
-	  error: function(){}
-	}) //-> deferred
+can.ajax({
+  url : "url",
+  type: "GET", // "POST"
+  async : false,
+  dataType: "json",
+  success: function(){},
+  error: function(){}
+}) //-> deferred
 {% endhighlight %}
 
-## HTMLElement Helpers
+### HTMLElement Helpers
 
 {% highlight javascript %}	
 	
-	can.buildFragment(frags, nodes)
+can.buildFragment(frags, nodes)
 	
-	// a node list
-	can.$("div.bar") //-> []
+// a node list
+can.$("div.bar") //-> []
 	
-	can.append(NodeList, html)
+can.append(NodeList, html)
 	
-	can.remove(NodeList)
+can.remove(NodeList)
 	
-	can.filter(NodeList, function(){})
+can.data(NodeList, dataName, dataValue)
 	
-	can.data(NodeList, dataName, dataValue)
-	
-	can.addClass(NodeList, className )
+can.addClass(NodeList, className )
 {% endhighlight %}
 
 
