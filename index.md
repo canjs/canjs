@@ -860,7 +860,8 @@ everything. Congrats! [See it in action](http://donejs.com/docs.html#!tutorials/
 ## utility methods
 
 CanJS provides a number of utility methods.  Most of the time, they are mapped to the underlying 
-library. But, by using only these methods, you can create plugins that work with any library.
+library. But, by using only these methods, you can create plugins that work with any library. Also, these methods
+are required to run CanJS from another library.
 
 ### String Helpers
 
