@@ -238,8 +238,6 @@ To create a __Model__ class, call __can.Model__ with:
   [destroy](http://donejs.com/docs.html#!can.Model.destroy) properties, and
 - any __prototypeProperties__ helper methods.
 
-Make a Todo model in __todos.js__ like the following:
-
 {% highlight javascript %}	
 var Todo = can.Model({
   findAll : "GET /todos",
@@ -251,8 +249,6 @@ var Todo = can.Model({
 {})
 {% endhighlight %}
 
-__Note:__ Try the following commands in your browser:
-
 ### init `new can.Model(attributes)`
 
 Create a todo instance like:
@@ -260,10 +256,11 @@ Create a todo instance like:
 {% highlight javascript %}	
 var todo = new Todo({name: "do the dishes"});
 {% endhighlight %}
-    
+
 ### attr `model.attr( name, [value] )`
 
-[can.Model.prototype.attr](http://donejs.com/docs.html#!can.Model.prototype.attr) reads or sets properties on model instances.
+[can.Model.prototype.attr](http://donejs.com/docs.html#!can.Model.prototype.attr) reads or sets properties 
+on model instances.  It works the same way as [can.Observe.prototype.attr](#can_observe-attr)
 
 {% highlight javascript %}	
 todo.attr('name') //-> "do the dishes"
@@ -280,29 +277,25 @@ todo.attr({name: "did the dishes"});
 Model uses static [findAll](http://donejs.com/docs.html#!can.Model.findAll),
 [findOne](http://donejs.com/docs.html#!can.findAll), [create](http://donejs.com/docs.html#!can.create),
 [update](http://donejs.com/docs.html#!can.update), and [destroy](http://donejs.com/docs.html#!can.destroy)
-methods to create, read, update and delete 
-model instances on the server.  
+methods to create, read, update and delete (CRUD)
+model data on the server.  
 
-Now you can call methods on Todo that
-make changes on the server.  For example, 
-in your console, try:
-
-{% highlight javascript %}	
-Todo.findAll({});
-{% endhighlight %}
-
-In the console, you'll see it make a request 
-to `GET /todos`.
+By filling these functions out, you are able to call __findAll__ and __findOne__ on the model 
+to retrieve model instances and __save__ and __destroy__ on instances.
 
 ### findAll `findAll( params, success( todos ), error() )`
 
-  [findAll](http://donejs.com/docs.html#!can.Model.findAll) retrieves multiple todos:
+[can.Model.findAll](http://donejs.com/docs.html#!can.Model.findAll) retrieves multiple instances
+from the server:
 
 {% highlight javascript %}	
-	Todo.findAll({}, function( todos ) {
-	  console.log( todos );
-	})
+Todo.findAll({}, function( todos ) {
+  console.log( todos );
+})
 {% endhighlight %}
+
+This would make a
+
 
 ### findOne `findOne( params, success( todo ), error() )`
 
