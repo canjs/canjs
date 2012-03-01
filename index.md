@@ -457,7 +457,7 @@ Todo.findAll({}, function(todos){
 })
 {% endhighlight %}
 
-## can.View `can.view( idOrUrl, data ) -> documentFragment`
+## can.view `can.view( idOrUrl, data ) -> documentFragment`
 
 [can.view](http://donejs.com/docs.html#!can.view) is used to easily create HTML with
 JS templates. Pass it ...
