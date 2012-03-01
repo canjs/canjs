@@ -432,21 +432,34 @@ todo.save()
 anytime __any__ instance is __created__, __updated__, or __destroyed__:
 
 {% highlight javascript %}	
-	Todo.bind('created', function(ev, todo){
-	  console.log("created", todo );
-	})
+Todo.bind('created', function(ev, todo){
+  console.log("created", todo );
+})
 {% endhighlight %}
 
 
 ### can.Model.List `new can.Model.List( items )`
 
-A can.Observe.List that automatically removes items when they are 
-destroyed.
+[can.Model.List](http://donejs.com/docs.html#!can.Model.List) is a 
+[can.Observe.List](#can_observe-can_observe_list) that automatically removes items when they are 
+destroyed.  __Model.Lists__ are return by [findAll](#can_model-findAll).
 
+{% highlight javascript %}
+Todo.findAll({}, function(todos){
 
-## can.View `can.View( idOrUrl, data )`
+  // listen when a todo is removed
+  todos.bind("remove", function(ev, removed, index){
+    console.log("removed", removed.length, "todos");
+  })
+  
+  // destroy the first todo
+  todos[0].destroy()
+})
+{% endhighlight %}
 
-[can.View](http://donejs.com/docs.html#!can.View) is used to easily create HTML with
+## can.View `can.view( idOrUrl, data ) -> documentFragment`
+
+[can.view](http://donejs.com/docs.html#!can.view) is used to easily create HTML with
 JS templates. Pass it ...
 
 - the __id__ of a script tag to use as the content of the template
@@ -456,28 +469,28 @@ JS templates. Pass it ...
 example, add the following to __todos.html__:
 
 {% highlight html %}	
-	<script type='text/ejs' id='todosEJS'>
-	  <% for(var i = 0; i < this.length; i++ ){ %>
-	    <li><%= this[i].name %></li>
-	  <% } %>
-	</script>
+<script type='text/ejs' id='todosEJS'>
+  <% for(var i = 0; i < this.length; i++ ){ %>
+    <li><%= this[i].name %></li>
+  <% } %>
+</script>
 {% endhighlight %}
 
 Render a list of todos with:
 
 {% highlight javascript %}	
-	Todo.findAll( {}, function( todos ){
-	   console.log( $.View( 'todosEJS', todos ) );
-	});
+Todo.findAll( {}, function( todos ){
+   console.log( $.View( 'todosEJS', todos ) );
+});
 {% endhighlight %}
 
 can.View also takes a __url__ for a template location.  __Create__ 
 a _todos/todos.ejs_ file that contains the following:
 
 {% highlight html %}	
-	<% for(var i = 0; i < this.length; i++ ){ %>
-	  <li><%= this[i].name %></li>
-	<% } %>
+<% for(var i = 0; i < this.length; i++ ){ %>
+  <li><%= this[i].name %></li>
+<% } %>
 {% endhighlight %}
 
 Render this with:
