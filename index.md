@@ -253,12 +253,12 @@ var Todo = can.Model({
 
 __Note:__ Try the following commands in your browser:
 
-### new can.Model(attributes)
+### init `new can.Model(attributes)`
 
 Create a todo instance like:
 
 {% highlight javascript %}	
-	var todo = new Todo({name: "do the dishes"});
+var todo = new Todo({name: "do the dishes"});
 {% endhighlight %}
     
 ### attr `model.attr( name, [value] )`
@@ -266,13 +266,13 @@ Create a todo instance like:
 [can.Model.prototype.attr](http://donejs.com/docs.html#!can.Model.prototype.attr) reads or sets properties on model instances.
 
 {% highlight javascript %}	
-	todo.attr('name') //-> "do the dishes"
+todo.attr('name') //-> "do the dishes"
 	
-	todo.attr('name', "wash the dishes" );
+todo.attr('name', "wash the dishes" );
 	
-	todo.attr() //-> {name: "wash the dishes"}
+todo.attr() //-> {name: "wash the dishes"}
 	
-	todo.attr({name: "did the dishes"});
+todo.attr({name: "did the dishes"});
 {% endhighlight %}
 
 ### Talking to the server
@@ -288,7 +288,7 @@ make changes on the server.  For example,
 in your console, try:
 
 {% highlight javascript %}	
-	Todo.findAll({});
+Todo.findAll({});
 {% endhighlight %}
 
 In the console, you'll see it make a request 
@@ -324,25 +324,25 @@ To __create__ a todo on the server, create a
 todo instance and call __save__ like the following:
 
 {% highlight javascript %}	
-	var todo = new Todo({name: "mow lawn"})
-	todo.save(function(todo){
-	  console.log( todo );
-	})
+var todo = new Todo({name: "mow lawn"})
+todo.save(function(todo){
+  console.log( todo );
+})
 {% endhighlight %}
 
 To __update__ a todo on the server, change the attributes
 and call __save__ again like the following:
 
 {% highlight javascript %}	
-	var todo = new Todo({name: "mow lawn"});
-	todo.save( function(todo){
-	  console.log("created", todo );
-	  
-	  todo.attr("name", "mow my lawn")
-	  todo.save( function( todo ) {
-	    console.log("updated", todo );
-	  })
-	})
+var todo = new Todo({name: "mow lawn"});
+todo.save( function(todo){
+  console.log("created", todo );
+  
+  todo.attr("name", "mow my lawn")
+  todo.save( function( todo ) {
+    console.log("updated", todo );
+  })
+})
 {% endhighlight %}
 
 ### destroy `todo.destroy( success( todo ), error() )`
@@ -351,14 +351,14 @@ and call __save__ again like the following:
 record on the server.  You can do this like:
 
 {% highlight javascript %}	
-	var todo = new Todo({name: "mow lawn"});
-	todo.save( function(todo){
-	  console.log("created", todo );
-	  
-	  todo.destroy( function( todo ) {
-	    console.log("destroyed", todo );
-	  })
-	})
+var todo = new Todo({name: "mow lawn"});
+todo.save( function(todo){
+  console.log("created", todo );
+  
+  todo.destroy( function( todo ) {
+    console.log("destroyed", todo );
+  })
+})
 {% endhighlight %}
 
 
@@ -371,11 +371,11 @@ or [all instances](http://donejs.com/docs.html#!can.Model.bind). For example, yo
 when an instance is __created__ on the server like:
 
 {% highlight javascript %}	
-	var todo = new Todo({name: "mow lawn"});
-	todo.bind('created', function(ev, todo){
-	  console.log("created", todo );
-	})
-	todo.save()
+var todo = new Todo({name: "mow lawn"});
+todo.bind('created', function(ev, todo){
+  console.log("created", todo );
+})
+todo.save()
 {% endhighlight %}
     
 You can listen to anytime an __instance__ is created on the server by 
