@@ -332,7 +332,7 @@ This makes a request to `GET /todos/{id}` which should return JSON like:
 }
 {% endhighlight %}
 
-The __todo__ parameter is model instance. Todo.findOne returns a [deferred](#utilities_deferred) that resolves to 
+The __todo__ parameter is model instance. Todo.findOne returns a [deferred](#utilities-deferred) that resolves to 
 the __todo__ instance.
 
 ### save `todo.save( success( todo ), error() )`
