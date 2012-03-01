@@ -20,7 +20,7 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 	 * buildFragement
 	 */
 	can.trim = function(s){
-		return s.trim()
+		return s && s.trim()
 	}
 	
 	// Array
