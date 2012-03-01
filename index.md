@@ -399,14 +399,25 @@ callback's `todo` parameter is the destroyed instance and a deferred is returned
 resolves with the `todo` after it has been destroyed by the server.
 
 
-### bind `todo.bind( event, handler(ev, todo ) ) -> todo`
+### bind `model.bind( event, handler(ev, model ) ) -> model`
 
+[can.Model.prototype.bind](http://donejs.com/docs.html#!can.Model.prototype.bind)
+listens to changes in a model instance's attributes in the same way as 
+[Observe's bind(#an_observe-bind).  For example:
 
+{% highlight javascript %}
+todo.bind("name", function(ev, newVal, oldVal ){
+  console.log("name changed to", newVal);
+})
+{% endhighlight %}
 
-Listening to changes in the Model is what MVC 
-is about.  Model lets you [bind](http://donejs.com/docs.html#!can.Model::bind) to changes 
-on an individual instance 
-or [all instances](http://donejs.com/docs.html#!can.Model.bind). For example, you can listen to 
+In addition to Observe's events, Model also supports three new events:
+
+- __created__ - an instance is created on the server
+- __updated__ - an instance is updated on the server
+- __destroyed__ - an instance is destroyed on the server
+
+For example, listen to 
 when an instance is __created__ on the server like:
 
 {% highlight javascript %}	
@@ -416,9 +427,9 @@ todo.bind('created', function(ev, todo){
 })
 todo.save()
 {% endhighlight %}
-    
-You can listen to anytime an __instance__ is created on the server by 
-binding on the model:
+
+[can.Model.bind](http://donejs.com/docs.html#!can.Model.static.bind) lets you listen to 
+anytime __any__ instance is __created__, __updated__, or __destroyed__:
 
 {% highlight javascript %}	
 	Todo.bind('created', function(ev, todo){
@@ -426,12 +437,6 @@ binding on the model:
 	})
 {% endhighlight %}
 
-Model produces the following events on 
-the model class and instances whenever a model Ajax request completes:
-
-- __created__ - an instance is created on the server
-- __updated__ - an instance is updated on the server
-- __destroyed__ - an instance is destroyed on the server
 
 ### can.Model.List `new can.Model.List( items )`
 
