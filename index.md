@@ -856,14 +856,13 @@ are traditional views, consuming models.
 If you can understand this, you understand 
 everything. Congrats! [See it in action](http://donejs.com/docs.html#!tutorials/rapidstart/todos.html).
 
-## Use with other libraries
 
-CanJS can be used with libraries other than jQuery.
+## utility methods
 
-### Implementing another library
+CanJS provides a number of utility methods.  Most of the time, they are mapped to the underlying 
+library. But, by using only these methods, you can create plugins that work with any library.
 
-
-__STRING__
+### String Helpers
 
 {% highlight javascript %}	
 	
@@ -871,7 +870,8 @@ __STRING__
 	can.trim( " foo " ) // -> "foo" 
 {% endhighlight %}
 
-__ARRAY__
+### Array Helpers
+
 {% highlight javascript %}	
 	
 	// convert array-like data into arrays
@@ -893,7 +893,8 @@ __ARRAY__
 	})
 {% endhighlight %}
 
-__Object__
+### Object Helpers
+
 {% highlight javascript %}	
 	
 	// extends one object with the properties of another
@@ -917,7 +918,8 @@ __Object__
 	
 {% endhighlight %}
 
-__FUNCTION__
+### Function Helpers
+
 {% highlight javascript %}	
 	
 	// returns a function that calls another function
@@ -932,7 +934,7 @@ __FUNCTION__
 	can.isFunction(function(){}) //-> true
 {% endhighlight %}
 
-__EVENT__
+### Event Helpers
 
 {% highlight javascript %}	
 	
@@ -953,7 +955,7 @@ __EVENT__
 	can.trigger(obj, eventName, args)
 {% endhighlight %}
 
-__DEFERRED__
+### Deferred
 
 {% highlight javascript %}	
 	
@@ -976,7 +978,7 @@ __DEFERRED__
 {% endhighlight %}
 
 
-__AJAX__
+## Ajax
 
 {% highlight javascript %}	
 	
@@ -990,7 +992,7 @@ __AJAX__
 	}) //-> deferred
 {% endhighlight %}
 
-__HTMLElement__
+## HTMLElement Helpers
 
 {% highlight javascript %}	
 	
@@ -1015,6 +1017,13 @@ __HTMLElement 'destroyed' event__
 
 When an element is removed from the page, a 'destroyed' event should be triggered on the 
 event.  This is used to teardown event handlers in can.Control.
+
+## Use with other libraries
+
+CanJS can be used with libraries other than jQuery.
+
+### Implementing another library
+
 
 ## Examples
 
