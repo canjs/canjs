@@ -221,7 +221,7 @@ hobbies.unshift("rocking parties")
 
 ## can.Model `can.Model([classProperties,] [prototypeProperties])`
 
-[can.Model](http://donejs.com/docs.html#!can.Model) is a __can.Observe__ that connects
+[can.Model](http://donejs.com/docs.html#!can.Model) is a [can.Observe](#can_observe) that connects
 to a RESTful interface.
 
 Extend [can.Model](http://donejs.com/docs.html#!can.Model) with your domain specific 
