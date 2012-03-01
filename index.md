@@ -260,7 +260,7 @@ var todo = new Todo({name: "do the dishes"});
 ### attr `model.attr( name, [value] )`
 
 [can.Model.prototype.attr](http://donejs.com/docs.html#!can.Model.prototype.attr) reads or sets properties 
-on model instances.  It works the same way as [can.Observe.prototype.attr](#can_observe-attr)
+on model instances.  It works the same way as [can.Observe.prototype.attr](#can_observe-attr).
 
 {% highlight javascript %}	
 todo.attr('name') //-> "do the dishes"
@@ -283,7 +283,7 @@ model data on the server.
 By filling these functions out, you are able to call __findAll__ and __findOne__ on the model 
 to retrieve model instances and __save__ and __destroy__ on instances.
 
-### findAll `findAll( params, success( todos ), error() )`
+### findAll `findAll( params, success( models ), error() ) -> Deferred`
 
 [can.Model.findAll](http://donejs.com/docs.html#!can.Model.findAll) retrieves multiple instances
 from the server:
@@ -294,10 +294,25 @@ Todo.findAll({}, function( todos ) {
 })
 {% endhighlight %}
 
-This would make a
+
+This example makes a request to `GET /todos` which should return JSON like:
+
+{% highlight javascript %}	
+[{
+  "id" : 1,
+  "name" : "do the dishes"
+},{
+  "id" : 2,
+  "name" : "mow the lawn"
+},{
+  "id" : 3,
+  "name" : "iron my shirts"
+}]
+{% endhighlight %}
 
 
-### findOne `findOne( params, success( todo ), error() )`
+
+### findOne `findOne( params, success( model ), error() )`
 
 [findOne](http://donejs.com/docs.html#!can.Model.findOne) retrieves a single todo:
 
