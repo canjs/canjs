@@ -501,7 +501,7 @@ Render this with:
 	});
 {% endhighlight %}
 
-__can.View__ works with any template language, such
+__can.view__ works with any template language, such
 as JAML, jQuery-tmpl, Mustache and superpowers them with:
 
 - Loading from scripts and external files 
