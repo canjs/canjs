@@ -310,7 +310,7 @@ This makes a request to `GET /todos` which should return JSON like:
 {% endhighlight %}
 
 The __todos__ parameter is a [can.Model.List](#can_model-can_model_list) of 
-todo instances. Todo.findAll returns a [deferred](#utilities_deferred) that resolves to 
+todo instances. `Todo.findAll` returns a [deferred](#utilities-deferred) that resolves to 
 the __todos__ list.
 
 ### findOne `findOne( params, success( model ), error() ) -> Deferred`
@@ -332,13 +332,13 @@ This makes a request to `GET /todos/{id}` which should return JSON like:
 }
 {% endhighlight %}
 
-The __todo__ parameter is model instance. Todo.findOne returns a [deferred](#utilities-deferred) that resolves to 
+The __todo__ parameter is model instance. `Todo.findOne` returns a [deferred](#utilities-deferred) that resolves to 
 the __todo__ instance.
 
-### save `todo.save( success( todo ), error() )`
+### save `todo.save( success( todo ), error() ) -> Deferred`
 
-[Save](http://donejs.com/docs.html#!$.Model::save) can __create__ 
-or __update__ instances depending if the 
+[can.Model.prototype.save](http://donejs.com/docs.html#!can.Model.prototype.save) __creates__ 
+or __updates__ instances depending if the 
 instance has already been created or not.
 
 To __create__ a todo on the server, create a
@@ -350,6 +350,16 @@ todo.save(function(todo){
   console.log( todo );
 })
 {% endhighlight %}
+
+This makes a request to `POST /todos` with `name=mow lawn` and should get a response with the __id__ like:
+
+{% highlight javascript %}
+{ "id" : 5 }
+{% endhighlight %}
+
+__save__ calls back with the original todo instance and returns a deferred that resolves
+with the todo after it has been created on the server.
+
 
 To __update__ a todo on the server, change the attributes
 and call __save__ again like the following:
@@ -366,9 +376,11 @@ todo.save( function(todo){
 })
 {% endhighlight %}
 
-### destroy `todo.destroy( success( todo ), error() )`
+This makes a request to `POST /todos/5` with `name=mow my lawn` and only needs to get a successful response.
 
-[Destroy](http://donejs.com/docs.html#!can.Model.prototype.destroy) deletes a 
+### destroy `todo.destroy( success( todo ), error() ) -> Deferred`
+
+[can.Model.prototype.destroy](http://donejs.com/docs.html#!can.Model.prototype.destroy) deletes a 
 record on the server.  You can do this like:
 
 {% highlight javascript %}	
@@ -382,8 +394,14 @@ todo.save( function(todo){
 })
 {% endhighlight %}
 
+This makes a request to `DELETE /todos/5` and only needs a successful response.  Like __save__, the 
+callback's `todo` parameter is the destroyed instance and a deferred is returned that
+resolves with the `todo` after it has been destroyed by the server.
 
-### bind `todo.bind( event, handler(ev, todo ) )`
+
+### bind `todo.bind( event, handler(ev, todo ) ) -> todo`
+
+
 
 Listening to changes in the Model is what MVC 
 is about.  Model lets you [bind](http://donejs.com/docs.html#!can.Model::bind) to changes 
