@@ -290,12 +290,11 @@ from the server:
 
 {% highlight javascript %}	
 Todo.findAll({}, function( todos ) {
-  console.log( todos );
-})
+  console.log( todos[0].name );
+}) //-> Deferred
 {% endhighlight %}
 
-
-This example makes a request to `GET /todos` which should return JSON like:
+This makes a request to `GET /todos` which should return JSON like:
 
 {% highlight javascript %}	
 [{
@@ -310,17 +309,31 @@ This example makes a request to `GET /todos` which should return JSON like:
 }]
 {% endhighlight %}
 
+The __todos__ parameter is a [can.Model.List](#can_model-can_model_list) of 
+todo instances. Todo.findAll returns a [deferred](#utilities_deferred) that resolves to 
+the __todos__ list.
 
+### findOne `findOne( params, success( model ), error() ) -> Deferred`
 
-### findOne `findOne( params, success( model ), error() )`
-
-[findOne](http://donejs.com/docs.html#!can.Model.findOne) retrieves a single todo:
+[findOne](http://donejs.com/docs.html#!can.Model.findOne) retrieves a single model instance:
 
 {% highlight javascript %}	
-	Todo.findOne({}, function( todo ) {
-	  console.log( todo );
-	})
+Todo.findOne({id: 1}, function( todo ) {
+  console.log( todo.name );
+})
 {% endhighlight %}
+
+This makes a request to `GET /todos/{id}` which should return JSON like:
+
+{% highlight javascript %}	
+{
+  "id" : 1,
+  "name" : "do the dishes"
+}
+{% endhighlight %}
+
+The __todo__ parameter is model instance. Todo.findOne returns a [deferred](#utilities_deferred) that resolves to 
+the __todo__ instance.
 
 ### save `todo.save( success( todo ), error() )`
 
@@ -401,6 +414,12 @@ the model class and instances whenever a model Ajax request completes:
 - __created__ - an instance is created on the server
 - __updated__ - an instance is updated on the server
 - __destroyed__ - an instance is destroyed on the server
+
+### can.Model.List `new can.Model.List( items )`
+
+A can.Observe.List that automatically removes items when they are 
+destroyed.
+
 
 ## can.View `can.View( idOrUrl, data )`
 
@@ -865,7 +884,7 @@ If you can understand this, you understand
 everything. Congrats! [See it in action](http://donejs.com/docs.html#!tutorials/rapidstart/todos.html).
 
 
-## utility methods
+## Utilities
 
 CanJS provides a number of utility methods.  Most of the time, they are mapped to the underlying 
 library. But, by using only these methods, you can create plugins that work with any library. Also, these methods
