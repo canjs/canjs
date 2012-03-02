@@ -535,7 +535,10 @@ __can.Model__'s ajax methods return a [deffered](#utilities-deferred). __can.vie
 accepts deferreds, making this hotness possible:
 
 {% highlight javascript %}
-$('#todos').html('todos.ejs', Todo.findAll() )
+can.view('todos/todos.ejs', Todo.findAll() ).then(function( frag ){
+  document.getElementById('todos')
+          .appendChild(frag);
+})
 {% endhighlight %}
     
 This syntax will render todos.ejs with the todo instances in the AJAX request 
@@ -546,9 +549,9 @@ made by Todo.findAll, whenever its completed.
 To render a string instead of a documentFragment, use `can.view.render` like:
 
 {% highlight javascript %}
-<% for( var i = 0; i < recipes.length; i++) %>
-  <li><%== can.view.render("/templates/recipe.ejs",{
-             recipe: recipes[i]
+<% for( var i = 0; i < todos.length; i++) %>
+  <li><%== can.view.render("/todos/todo.ejs",{
+             todo: todo[i]
             }) %>
   </li>
 <% }) %>
