@@ -188,13 +188,12 @@ steal("can/util/string",function( $ ) {
 			// The dummy class constructor
 			function Constructor() {
 				// All construction is actually done in the init method
-				if ( initializing ) return;
-
-				// we are being called w/o new, we are extending
-				if ( this.constructor !== Constructor && arguments.length ) { 
-					return arguments.callee.extend.apply(arguments.callee, arguments)
-				} else { //we are being called w/ new
-					return this.constructor.newInstance.apply(this.constructor, arguments)
+				if ( ! initializing ) {
+					// we are being called w/o new, we are extending
+					return this.constructor !== Constructor && arguments.length ?
+						arguments.callee.extend.apply(arguments.callee, arguments) :
+						//we are being called w/ new
+						this.constructor.newInstance.apply(this.constructor, arguments);
 				}
 			}
 			// Copy old stuff onto class (can probably be merged w/ inherit)
@@ -266,13 +265,13 @@ steal("can/util/string",function( $ ) {
 			Constructor.prototype.constructor = Constructor;
 
 			
-
 			// call the class setup
-			var args = Constructor.setup.apply(Constructor, [_super_class].concat(can.makeArray(arguments)) );
+			var t = [_super_class].concat(can.makeArray(arguments)),
+				args = Constructor.setup.apply(Constructor, t );
 			
 			// call the class init
 			if ( Constructor.init ) {
-				Constructor.init.apply(Constructor, args || [_super_class].concat(can.makeArray(arguments)) );
+				Constructor.init.apply(Constructor, args || t );
 			}
 
 			/* @Prototype*/

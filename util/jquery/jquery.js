@@ -1,14 +1,11 @@
 //352
 steal('./jquery.1.7.1.js', function(){
 	
-	$.extend(can,jQuery,{
-		trigger: function(obj, event, args){
-			if(obj.trigger){
-				obj.trigger(event,args)
-			} else {
-				$.event.trigger(event, args, obj, true)
-			}
-			
+	$.extend( can, jQuery, {
+		trigger: function( obj, event, args ) {
+			obj.trigger ?
+				obj.trigger( event, args ) :
+				$.event.trigger( event, args, obj, true );
 		},
 		addEvent: function(ev, cb){
 			$([this]).bind(ev, cb)
