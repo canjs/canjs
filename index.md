@@ -467,13 +467,13 @@ Todo.findAll({}, function(todos){
 
 ## can.view `can.view( idOrUrl, data ) -> documentFragment`
 
-[can.view](http://donejs.com/docs.html#!can.view) is used to easily create HTML with
+[can.view](http://donejs.com/docs.html#!can.view) is used to create HTML with
 JS templates. Pass it ...
 
 - the __id__ of a script tag to use as the content of the template
 - __data__ to pass to the template
   
-... and it returns the rendered result of the template.  For
+It returns the rendered result of the template.  For
 example, add the following to __todos.html__:
 
 {% highlight html %}
@@ -488,11 +488,11 @@ Render a list of todos with:
 
 {% highlight javascript %}
 Todo.findAll( {}, function( todos ){
-   console.log( $.View( 'todosEJS', todos ) );
+   console.log( can.view( 'todosEJS', todos ) );
 });
 {% endhighlight %}
 
-can.View also takes a __url__ for a template location.  __Create__ 
+can.view also takes a __url__ for a template location.  __Create__ 
 a _todos/todos.ejs_ file that contains the following:
 
 {% highlight html %}
@@ -505,7 +505,7 @@ Render this with:
 
 {% highlight javascript %}
 Todo.findAll( {}, function( todos ){
-  console.log( $.View( 'todos.ejs', todos ) );
+  console.log( can.view( 'todos.ejs', todos ) );
 });
 {% endhighlight %}
 
