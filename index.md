@@ -594,9 +594,9 @@ and todos:
 {% highlight html %}
 <script type='text/ejs' id='todosEJS'>
 <h2><%= user.name %></h2>
-<% for( var i = 0; i < todos.length; i++) %>
+<% for( var i = 0; i < todos.length; i++) { %>
   <li><%= todos[i].name %></li>
-<% }) %>
+<% } %>
 </script>
 {% endhighlight %}
 
@@ -619,7 +619,7 @@ EJS uses 5 types of magic tags:
 __`<% CODE %>`__ - Runs JS Code.
 
 This type of magic tag does not modify the template but is used for JS control statements 
-like for-loops, if/else, switch, declaring variables, etc.  Examples:
+like for-loops, if/else, switch, declaring variables, etc.  Pretty much any JS code is valid.  Examples:
 
 {% highlight html %}
 <!-- check if there are no todos -->
@@ -636,30 +636,94 @@ like for-loops, if/else, switch, declaring variables, etc.  Examples:
 <span><%= person.attr('name') %><span>
 {% endhighlight %}
 
-__`<%= CODE %>`__ - Runs JS Code and writes the _escaped_ result into the result of the template.
+__`<%= CODE %>`__ - Runs a JS statement and writes the __escaped__ result into the result of the template.
 
-The following results in the user seeing "my favorite element is &lt;b>B&lt;b>" and not
-<b>B</b>.
+The following results in the user seeing `my favorite element is &lt;b>B&lt;b>.` and not
+<code>my favorite element is <B>B</B>.</code>.
 
      <div>my favorite element is <%= '<b>B</b>' %>.</div>
+     
+This protects you against [cross-site scripting](http://en.wikipedia.org/wiki/Cross-site_scripting) attacks.
          
-__`<%== CODE %>`__  - Runs JS Code and writes the _unescaped_ result into the result of the template.
+__`<%== CODE %>`__  - Runs a JS statement and writes the __unescaped__ result into the result of the template.
 
-The following results in "my favorite element is <B>B</B>.". Using `<%==` is useful
+The following results in <code>my favorite element is <B>B</B>.</code>. Using `<%==` is useful
 for sub-templates.
      
-         <div>my favorite element is <%== '<B>B</B>' %>.</div>
-         
-__`<%% CODE %>`__ - Writes <% CODE %> to the result of the template.  This is very useful for generators.
-     
-         <%%= 'hello world' %>
-         
-__`<%# CODE %>`__  - Used for comments.  This does nothing.
-     
-         <%# 'hello world' %>
+    <div>my favorite element is <%== '<B>B</B>' %>.</div>
 
+Use `<%== CODE %>` when rendering subtemplates:
+
+{% highlight html %}
+<% for( var i = 0; i < todos.length; i++) { %>
+  <li><%== can.view.render('todoEJS', todos[i]) %></li>
+<% } %>
+{% endhighlight %}
 
 ### Live Binding
+
+__can.EJS__ will automatically update itself when [can.Observes](#can_observe) change.  To enable
+live-binding, use [attr](#!can_observe-attr) to read properties.  For example, the following
+template will update todo's name when it change:
+
+{% highlight html %}
+  <li><%= todo.attr('name') %></li>
+{% endhighlight %}
+
+Notice `attr('name')`.  This sets up live-binding.  If you change the todo's name, the `<li>` will automatically
+be updated:
+
+{% highlight javascript %}
+todo.attr("Clean the toilet");
+{% endhighlight %}
+
+Live-binding works by wrapping the code inside the magic tags with a function to call when the attribute (or attributes)
+are changed.  This is important to understand because a template like this will not work:
+
+{% highlight html %}
+<% for( var i = 0; i < todos.length; i++) { %>
+  <li><%= todos[i].attr('name') %></li>
+<% } %>
+{% endhighlight %}
+
+This does not work because when the function wrapping `todos[i].attr('name')` is called, `i` will be __3__ not the index
+of the desired todo.  Fix this by using a closure like:
+
+{% highlight html %}
+<% $.each(todos, function(i, todo){ %>
+  <li><%= todo.attr('name') %></li>
+<% }) %>
+{% endhighlight %}
+
+### list `list( observeList, iterator( item, index ) )`
+
+If you want to make the previous template update when todos are 
+added or removed, could bind to length like:
+
+{% highlight html %}
+<% todos.bind("length", function(){});
+   $.each(todos, function(i, todo){ %>
+      <li><%= todo.attr('name') %></li>
+<% }) %>
+{% endhighlight %}
+
+Or simply use EJS's `list` helper method like:
+
+{% highlight html %}
+<% list(todos, function(todo){ %>
+  <li><%= todo.attr('name') %></li>
+<% }) %>
+{% endhighlight %}
+
+Now when todos are added or removed from the todo list, the template's HTML is updated:
+
+{% highlight javascript %}
+// add an item
+todos.push( new Todo({name : "file taxes"}) );
+
+// destroying an item removes it from Model.Lists
+todos[0].destroy()
+{% endhighlight %}
 
 ## can.Control `can.Control(classProps, prototypeProps)`
 
