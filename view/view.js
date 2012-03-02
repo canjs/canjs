@@ -5,6 +5,7 @@ steal("can/util").then(function( $ ) {
 	var toId = function( src ) {
 		return src.replace(/^\/\//, "").replace(/[\/\.]/g, "_");
 	},
+		isFunction = can.isFunction,
 		makeArray = can.makeArray,
 		// used for hookup ids
 		id = 1,
@@ -263,7 +264,7 @@ steal("can/util").then(function( $ ) {
 			// filter by data-view-id attribute
 
 		
-			for (; el = hookupEls[i++]; ) {
+			while ( el = hookupEls[i++] ) {
 				if ( el.getAttribute && (id = el.getAttribute('data-view-id')) && (func = $view.hookups[id]) ) {
 					func(el, id);
 					delete $view.hookups[id];
@@ -384,7 +385,7 @@ steal("can/util").then(function( $ ) {
 
 	can.render = function( view, data, helpers, callback ) {
 		// if helpers is a function, it is actually a callback
-		if ( typeof helpers === 'function' ) {
+		if ( isFunction( helpers )) {
 			callback = helpers;
 			helpers = undefined;
 		}
@@ -462,7 +463,7 @@ steal("can/util").then(function( $ ) {
 	}
 	// returns true if something looks like a deferred
 	can.isDeferred = function( obj ) {
-		return obj && can.isFunction(obj.then) && can.isFunction(obj.pipe) // check if obj is a can.Deferred
+		return obj && isFunction(obj.then) && isFunction(obj.pipe) // check if obj is a can.Deferred
 	} 
 	// makes sure there's a template, if not, has steal provide a warning
 	var	checkText = function( text, url ) {

@@ -190,7 +190,8 @@ steal('can/observe',function(){
 				return null;
 			}
 			// get the list type
-			var res = new( this.List || ML),
+			var self = this,
+				res = new( this.List || ML),
 				// did we get an array
 				arr = can.isArray(instancesRawData),
 				
@@ -215,9 +216,9 @@ steal('can/observe',function(){
 				steal.dev.warn("model.js models has no data.")
 			}
 			//!steal-remove-end
-			for (; i < length; i++ ) {
-				res.push(this.model(raw[i]));
-			}
+			can.each(raw, function( i, rawPart ) {
+				res.push( self.model( rawPart ));
+			});
 			if (!arr ) { //push other stuff onto array
 				can.each(instancesRawData, function(prop, val){
 					if ( prop !== 'data' ) {

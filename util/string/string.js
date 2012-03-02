@@ -114,8 +114,7 @@ steal('can/util',function( $ ) {
 					current,
 					ret, 
 					i,
-					r = 0,
-					type;
+					r = 0;
 				
 				// make sure roots is an array
 				roots = can.isArray(roots) ? roots : [roots || window];
