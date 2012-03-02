@@ -787,7 +787,14 @@ new Todos( $('#todos'), {template: 'specialTodos.ejs'})
 ### element `this.element`
 
 [this.element](http://donejs.com/docs.html#!can.Controll.prototype.element) is the 
-element the control is created on. 
+a nodelist of a single element, the element the control is created on. 
+
+{% highlight javascript %}
+var todosControl = new Todos( document.body.firstElementChild );
+todosControl.element[0] //-> document.body.firstElementChild
+{% endhighlight %}
+
+Each library wraps the element differently.  If you are using jQuery, the element is wrapped with `jQuery( element )`.
 
 ### options `this.options`
 
@@ -815,7 +822,7 @@ var Todos = can.Control({
 
 When an `<li>` is clicked, `"li click"` is called with:
 
-- The jQuery-wrapped __element__ that was clicked
+- The library-wrapped __element__ that was clicked.
 - The __event__ data
 
 Controller uses event delegation, so you can add `<li>`s without needing to rebind
