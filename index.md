@@ -467,14 +467,29 @@ Todo.findAll({}, function(todos){
 
 ## can.view `can.view( idOrUrl, data ) -> documentFragment`
 
-[can.view](http://donejs.com/docs.html#!can.view) is used to easily create HTML with
+[can.view](http://donejs.com/docs.html#!can.view) is used to create HTML with
 JS templates. Pass it ...
 
-- the __id__ of a script tag to use as the content of the template
+- the __id__ or __url__ of a script tag to use as the content of the template
 - __data__ to pass to the template
   
-... and it returns the rendered result of the template.  For
-example, add the following to __todos.html__:
+It returns the rendered result of the template as a documentFragment.  
+
+{% highlight javascript %}
+document.getElementById('todos')
+  .appendChild( can.view('todos.ejs', [{name: "mow lawn"}] ) )
+{% endhighlight %}
+
+`can.view` supports multiple templating languages; however, [can.EJS](#can_ejs)
+is packaged with CanJS and supports live-binding of __can.Observe__.
+
+### Loading Templates
+
+`can.view` can load templates from a url or from a script tag. To load from
+a __script__ tag, create a script tag with the template contents, an id, 
+and a type attribute that specifies the template type (ejs).
+
+For example, add the following __html__:
 
 {% highlight html %}
 <script type='text/ejs' id='todosEJS'>
@@ -484,15 +499,16 @@ example, add the following to __todos.html__:
 </script>
 {% endhighlight %}
 
-Render a list of todos with:
+Render this template with:
 
 {% highlight javascript %}
 Todo.findAll( {}, function( todos ){
-   console.log( $.View( 'todosEJS', todos ) );
+   document.getElementById('todos')
+           .appendChild( can.view( 'todosEJS', todos ) );
 });
 {% endhighlight %}
 
-can.View also takes a __url__ for a template location.  __Create__ 
+To load from a __url__.  create
 a _todos/todos.ejs_ file that contains the following:
 
 {% highlight html %}
@@ -505,50 +521,94 @@ Render this with:
 
 {% highlight javascript %}
 Todo.findAll( {}, function( todos ){
-  console.log( $.View( 'todos.ejs', todos ) );
+  document.getElementById('todos')
+           .appendChild( can.view( 'todos/todos.ejs', todos ) );
 });
 {% endhighlight %}
 
 __can.view__ works with any template language, such
 as JAML, jQuery-tmpl, Mustache and superpowers them with:
 
-- Loading from scripts and external files 
-- using templates with jQuery __modifiers__ like html
-- Template caching
-- Deferred support
-- Bundling processed templates in production builds
-
-
-### Modifiers `el.<i>modifier</i>( idOrUrl, data )`
-
-__can.View__ overwrites the jQuery's html modifiers
-after, append, before, html, prepend, replaceWith, and text,
-allowing you to write:
-
-{% highlight javascript %}
-Todo.findAll( {}, function( todos ){
-  $('#todos').html( 'todos.ejs', todos );
-});
-{% endhighlight %}
-
-To make this work, make sure `todos.html` has a `#todos` element like:
-
-{% highlight html %}
-<ul id='todos'></ul>
-{% endhighlight %}
-
 ### Deferreds
 
-__can.Model__'s ajax methods return a deffered. __can.View__
+__can.Model__'s ajax methods return a [deffered](#utilities-deferred). __can.view__
 accepts deferreds, making this hotness possible:
 
 {% highlight javascript %}
-$('#todos').html('todos.ejs', Todo.findAll() )
+can.view('todos/todos.ejs', Todo.findAll() ).then(function( frag ){
+  document.getElementById('todos')
+          .appendChild(frag);
+})
 {% endhighlight %}
     
 This syntax will render todos.ejs with the todo instances in the AJAX request 
 made by Todo.findAll, whenever its completed.
 
+### render `can.view.render( idOrUrl, data )`
+
+To render a string instead of a documentFragment, use `can.view.render` like:
+
+{% highlight javascript %}
+<% for( var i = 0; i < todos.length; i++) %>
+  <li><%== can.view.render("/todos/todo.ejs",{
+             todo: todo[i]
+            }) %>
+  </li>
+<% }) %>
+{% endhighlight %}
+
+## can.EJS `new can.EJS( options )`
+
+[can.EJS](http://donejs.com/docs.html#!can.EJS) is CanJS's default template 
+language.  It provides live binding by listening to [can.Observes](#can_observe).
+
+
+
+### Magic Tags
+
+EJS uses 5 types of magic tags:
+
+__`<% CODE %>`__ - Runs JS Code.
+
+This type of magic tag does not modify the template but is used for JS control statements 
+like for-loops, if/else, switch, etc.  Examples:
+
+    <% if( todos.attr('length') === 0 ) { %>
+        <li>You have no todos</li>
+    <% } else { %>
+        <% list(todos, function(){ %>
+          <li> .... </li>
+        <% }) %>
+    <% } %>
+
+
+    <% var person = todo.attr('person') %>
+    <span><%= person.attr('name') %><span>
+
+__`<%= CODE %>`__ - Runs JS Code and writes the _escaped_ result into the result of the template.
+
+The following results in the user seeing "my favorite element is &lt;b>B&lt;b>" and not
+<b>B</b>.
+
+     <div>my favorite element is <%= '<b>B</b>' %>.</div>
+         
+__`<%== CODE %>`__  - Runs JS Code and writes the _unescaped_ result into the result of the template.
+
+The following results in "my favorite element is <B>B</B>.". Using `<%==` is useful
+for sub-templates.
+     
+         <div>my favorite element is <%== '<B>B</B>' %>.</div>
+         
+__`<%% CODE %>`__ - Writes <% CODE %> to the result of the template.  This is very useful for generators.
+     
+         <%%= 'hello world' %>
+         
+__`<%# CODE %>`__  - Used for comments.  This does nothing.
+     
+         <%# 'hello world' %>
+
+
+### Live Binding
 
 ## can.Control `can.Control(classProps, prototypeProps)`
 
@@ -593,7 +653,7 @@ new can.Control instance is created.  It's called with:
 and any other arguments passed to `new can.Control()`.  For example:
 
 {% highlight javascript %}
-var Todos = $.Controller({
+var Todos = can.Control({
   defaults : {template: 'todos.ejs'}
 },{
   "init" : function( element , options ){
