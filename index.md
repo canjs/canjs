@@ -470,11 +470,26 @@ Todo.findAll({}, function(todos){
 [can.view](http://donejs.com/docs.html#!can.view) is used to create HTML with
 JS templates. Pass it ...
 
-- the __id__ of a script tag to use as the content of the template
+- the __id__ or __url__ of a script tag to use as the content of the template
 - __data__ to pass to the template
   
-It returns the rendered result of the template.  For
-example, add the following to __todos.html__:
+It returns the rendered result of the template as a documentFragment.  
+
+{% highlight javascript %}
+document.getElementById('todos')
+  .appendChild( can.view('todos.ejs', [{name: "mow lawn"}] ) )
+{% endhighlight %}
+
+`can.view` supports multiple templating languages; however, [can.EJS](#can_ejs)
+is packaged with CanJS and supports live-binding of __can.Observe__.
+
+### Loading Templates
+
+`can.view` can load templates from a url or from a script tag. To load from
+a __script__ tag, create a script tag with the template contents, an id, 
+and a type attribute that specifies the template type (ejs).
+
+For example, add the following __html__:
 
 {% highlight html %}
 <script type='text/ejs' id='todosEJS'>
@@ -484,11 +499,12 @@ example, add the following to __todos.html__:
 </script>
 {% endhighlight %}
 
-Render a list of todos with:
+Render this template with:
 
 {% highlight javascript %}
 Todo.findAll( {}, function( todos ){
-   console.log( can.view( 'todosEJS', todos ) );
+   document.getElementById('todos')
+           .appendChild( can.view( 'todosEJS', todos ) );
 });
 {% endhighlight %}
 
