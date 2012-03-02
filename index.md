@@ -548,7 +548,7 @@ can.view('todos/todos.ejs', {
 
 ### render `can.view.render( idOrUrl, data )`
 
-To render a string instead of a documentFragment, use `can.view.render` like:
+To render a string instead of a documentFragment, use [can.view.render]() like:
 
 {% highlight javascript %}
 <% for( var i = 0; i < todos.length; i++) %>
@@ -559,10 +559,56 @@ To render a string instead of a documentFragment, use `can.view.render` like:
 <% }) %>
 {% endhighlight %}
 
+__can.view.render--
+
 ## can.EJS `new can.EJS( options )`
 
 [can.EJS](http://donejs.com/docs.html#!can.EJS) is CanJS's default template 
-language.  It provides live binding by listening to [can.Observes](#can_observe).
+language and used with [can.view](#!can_view).  It provides live binding 
+by listening to [can.Observes](#can_observe).  A __can.EJS__ template looks
+like the HTML you want, but with __magic tags__ where you want
+code or to insert text.  The following lists todo elements:
+
+{% highlight html %}
+<script type='text/ejs' id='todosEJS'>
+<% for( var i = 0; i < this.length; i++) %>
+  <li><%= this[i].name %></li>
+<% }) %>
+</script>
+{% endhighlight %}
+
+Use __can.view__ to render this template:
+
+{% highlight javascript %}
+Todo.findAll({}, function( todos ) {
+  document.getElementById('todos')
+          .appendChild( can.view('todosEJS', todos ) )
+}
+{% endhighlight %}
+
+Notice that `this` in the template is the list of todos.  The `data` argument passed __can.view__ 
+becomes `this` in EJS.  EJS can also access any properties of `this` 
+directly (without writing `this.PROPERTY`).  For example, a template that lists the user's name
+and todos:
+
+{% highlight html %}
+<script type='text/ejs' id='todosEJS'>
+<h2><%= user.name %></h2>
+<% for( var i = 0; i < todos.length; i++) %>
+  <li><%= todos[i].name %></li>
+<% }) %>
+</script>
+{% endhighlight %}
+
+Can be inserted into the document with:
+
+can.view('todosEJS', {
+  todos : Todo.findAll(),
+  user: User.findOne({ id: 5 })
+}).then(function( frag ){
+  document.getElementById('todos')
+          .appendChild(frag);
+})
 
 
 
