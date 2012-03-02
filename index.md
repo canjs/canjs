@@ -531,6 +531,10 @@ This syntax will render todos.ejs with the todo instances in the AJAX request
 made by Todo.findAll, whenever its completed.
 
 
+## can.EJS `new can.EJS( options )`
+
+Blah Blah
+
 ## can.Control `can.Control(classProps, prototypeProps)`
 
 [can.Control](http://donejs.com/docs.html#!can.Control) creates organized, memory-leak free, 
