@@ -467,8 +467,8 @@ Todo.findAll({}, function(todos){
 
 ## can.view `can.view( idOrUrl, data ) -> documentFragment`
 
-[can.view](http://donejs.com/docs.html#!can.view) is used to create HTML with
-JS templates. Pass it ...
+[can.view](http://donejs.com/docs.html#!can.view) is used to load, render, and create HTMLElements from
+JavaScript templates. Pass it ...
 
 - the __id__ or __url__ of a script tag to use as the content of the template
 - __data__ to pass to the template
@@ -481,13 +481,13 @@ document.getElementById('todos')
 {% endhighlight %}
 
 `can.view` supports multiple templating languages; however, [can.EJS](#can_ejs)
-is packaged with CanJS and supports live-binding of __can.Observe__.
+is packaged with CanJS and supports live-binding of [can.Observe](#can_observe).
 
 ### Loading Templates
 
-`can.view` can load templates from a url or from a script tag. To load from
+`can.view` loads templates from a url or a script tag. To load from
 a __script__ tag, create a script tag with the template contents, an id, 
-and a type attribute that specifies the template type (ejs).
+and a type attribute that specifies the template type (text/ejs).
 
 For example, add the following __html__:
 
@@ -499,7 +499,7 @@ For example, add the following __html__:
 </script>
 {% endhighlight %}
 
-Render this template with:
+Render this template and insert it into the page:
 
 {% highlight javascript %}
 Todo.findAll( {}, function( todos ){
@@ -508,8 +508,8 @@ Todo.findAll( {}, function( todos ){
 });
 {% endhighlight %}
 
-To load from a __url__.  create
-a _todos/todos.ejs_ file that contains the following:
+To load from a __url__,  create
+a _todos/todos.ejs_ file that contains:
 
 {% highlight html %}
 <% for(var i = 0; i < this.length; i++ ){ %>
@@ -526,13 +526,12 @@ Todo.findAll( {}, function( todos ){
 });
 {% endhighlight %}
 
-__can.view__ works with any template language, such
-as JAML, jQuery-tmpl, Mustache and superpowers them with:
-
 ### Deferreds
 
-__can.Model__'s ajax methods return a [deffered](#utilities-deferred). __can.view__
-accepts deferreds, making this hotness possible:
+__can.view__ accepts [deferreds](#utilities-deferred).  If the data passed to it is a deferred or an object
+that contains deferreds, __can.view__ it returns a deferred that resolves to the documentFragment after
+all deferreds have resolved and the template has loaded.
+
 
 {% highlight javascript %}
 can.view('todos/todos.ejs', Todo.findAll() ).then(function( frag ){
