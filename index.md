@@ -528,20 +528,23 @@ Todo.findAll( {}, function( todos ){
 
 ### Deferreds
 
-__can.view__ accepts [deferreds](#utilities-deferred).  If the data passed to it is a deferred or an object
-that contains deferreds, __can.view__ it returns a deferred that resolves to the documentFragment after
+__can.view__ accepts [deferreds](#utilities-deferred).  If the `data` argument is a deferred or an object
+that contains deferreds, __can.view__ returns a deferred that resolves to the documentFragment after
 all deferreds have resolved and the template has loaded.
 
+[can.Model.findAll](#can_model-findAll) returns deferreds. This means that the following loads `todos/todos.ejs`, `Todo.findAll` and `User.findOne`
+in parallel and resolves the returned deferred with the documentFragment when they are all done:
 
 {% highlight javascript %}
-can.view('todos/todos.ejs', Todo.findAll() ).then(function( frag ){
+can.view('todos/todos.ejs', {
+  todos : Todo.findAll(),
+  user: User.findOne({ id: 5 })
+}).then(function( frag ){
   document.getElementById('todos')
           .appendChild(frag);
 })
 {% endhighlight %}
     
-This syntax will render todos.ejs with the todo instances in the AJAX request 
-made by Todo.findAll, whenever its completed.
 
 ### render `can.view.render( idOrUrl, data )`
 
