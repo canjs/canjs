@@ -1271,6 +1271,29 @@ CanJS can be used with libraries other than jQuery.
 
 ### Implementing another library
 
+## Plugins
+
+### construct proxy
+
+### construct super
+
+### control plugin
+
+### control view
+
+### observe attributes
+
+### observe delegate
+
+### observe setter
+
+### model backup
+
+### model validations
+
+### model elements
+
+### view modifiers
 
 ## Examples
 
