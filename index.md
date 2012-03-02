@@ -559,7 +559,54 @@ To render a string instead of a documentFragment, use `can.view.render` like:
 
 ## can.EJS `new can.EJS( options )`
 
-Blah Blah
+[can.EJS](http://donejs.com/docs.html#!can.EJS) is CanJS's default template 
+language.
+
+### Magic Tags
+
+EJS uses 5 types of magic tags:
+
+__`<% CODE %>`__ - Runs JS Code.
+
+This type of magic tag does not modify the template but is used for JS control statements 
+like for-loops, if/else, switch, etc.  Examples:
+
+    <% if( items.attr('length') === 0 ) { %>
+        <tr><td>You have no items</td></tr>
+    <% } else { %>
+        <% list(items, function(){ %>
+          <tr> .... </tr>
+        <% }) %>
+    <% } %>
+
+
+    <% var address = person.attr('address') %>
+    <span><%= address.attr('street') %><span>
+
+__`<%= CODE %>`__ - Runs JS Code and writes the _escaped_ result into the result of the template.
+
+The following results in the user seeing "my favorite element is &lt;blink>BLINK&lt;blink>" and not
+<blink>BLINK</blink>.
+
+     <div>my favorite element is <%= '<blink>BLINK</blink>' %>.</div>
+         
+__`<%== CODE %>`__  - Runs JS Code and writes the _unescaped_ result into the result of the template.
+
+The following results in "my favorite element is <B>B</B>.". Using `<%==` is useful
+for sub-templates.
+     
+         <div>my favorite element is <%== '<B>B</B>' %>.</div>
+         
+__`<%% CODE %>`__ - Writes <% CODE %> to the result of the template.  This is very useful for generators.
+     
+         <%%= 'hello world' %>
+         
+__`<%# CODE %>`__  - Used for comments.  This does nothing.
+     
+         <%# 'hello world' %>
+
+
+### Live Binding
 
 ## can.Control `can.Control(classProps, prototypeProps)`
 
