@@ -728,15 +728,16 @@ todos[0].destroy()
 ## can.Control `can.Control(classProps, prototypeProps)`
 
 [can.Control](http://donejs.com/docs.html#!can.Control) creates organized, memory-leak free, 
-rapidly performing, stateful controls. It is used to create UI controls like 
+rapidly performing, stateful controls. Use it to create UI controls like 
 tabs, grids, and contextmenus and used to organize them 
-into higher-order business rules with [can.route](http://donejs.com/docs.html#!can.route). Its serves as 
-both a traditional view and a 
+into higher-order business rules with [can.route](http://donejs.com/docs.html#!can.route). It can serve as 
+a traditional view and a 
 traditional controller.
   
-Let's make a basic todos widget that 
+The following examples make a basic todos widget that 
 lists todos and lets 
-us destroy them. Add the following to __todos.js__:
+us destroy them. Create a control constructor function of your own by 
+extending `can.Control`.  
 
 {% highlight javascript %}
 var Todos = can.Control({
@@ -746,10 +747,10 @@ var Todos = can.Control({
 })
 {% endhighlight %}
 
-We can create this widget on the `#todos` element with:
+Create an instance of the Todos control the `#todos` element with:
 
 {% highlight javascript %}
-new Todos('#todos', {});
+var todosControl = new Todos('#todos', {});
 {% endhighlight %}
 
 ### init `can.Control.prototype.init(element, options)`
