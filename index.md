@@ -564,10 +564,10 @@ __can.view.render--
 ## can.EJS `new can.EJS( options )`
 
 [can.EJS](http://donejs.com/docs.html#!can.EJS) is CanJS's default template 
-language and used with [can.view](#!can_view).  It provides live binding 
-by listening to [can.Observes](#can_observe).  A __can.EJS__ template looks
+language and used with [can.view](#!can_view).  It provides live binding
+when use dwith [can.Observes](#can_observe).  A __can.EJS__ template looks
 like the HTML you want, but with __magic tags__ where you want
-code or to insert text.  The following lists todo elements:
+dynamic behavior.  The following lists todo elements:
 
 {% highlight html %}
 <script type='text/ejs' id='todosEJS'>
@@ -588,7 +588,7 @@ Todo.findAll({}, function( todos ) {
 
 Notice that `this` in the template is the list of todos.  The `data` argument passed __can.view__ 
 becomes `this` in EJS.  EJS can also access any properties of `this` 
-directly (without writing `this.PROPERTY`).  For example, a template that lists the user's name
+directly (without writing `this.PROPERTY` all the time).  For example, a template that lists the user's name
 and todos:
 
 {% highlight html %}
@@ -602,6 +602,7 @@ and todos:
 
 Can be inserted into the document with:
 
+{% highlight javascript %}
 can.view('todosEJS', {
   todos : Todo.findAll(),
   user: User.findOne({ id: 5 })
@@ -609,8 +610,7 @@ can.view('todosEJS', {
   document.getElementById('todos')
           .appendChild(frag);
 })
-
-
+{% endhighlight %}
 
 ### Magic Tags
 
@@ -619,19 +619,22 @@ EJS uses 5 types of magic tags:
 __`<% CODE %>`__ - Runs JS Code.
 
 This type of magic tag does not modify the template but is used for JS control statements 
-like for-loops, if/else, switch, etc.  Examples:
+like for-loops, if/else, switch, declaring variables, etc.  Examples:
 
-    <% if( todos.attr('length') === 0 ) { %>
-        <li>You have no todos</li>
-    <% } else { %>
-        <% list(todos, function(){ %>
-          <li> .... </li>
-        <% }) %>
-    <% } %>
+{% highlight html %}
+<!-- check if there are no todos -->
+<% if( todos.attr('length') === 0 ) { %>
+    <li>You have no todos</li>
+<% } else { %>
+    <% list(todos, function(){ %>
+        <li> .... </li>
+    <% }) %>
+<% } %>
 
-
-    <% var person = todo.attr('person') %>
-    <span><%= person.attr('name') %><span>
+<!-- create and use a variable -->
+<% var person = todo.attr('person') %>
+<span><%= person.attr('name') %><span>
+{% endhighlight %}
 
 __`<%= CODE %>`__ - Runs JS Code and writes the _escaped_ result into the result of the template.
 
