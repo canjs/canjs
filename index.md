@@ -777,7 +777,10 @@ var Todos = can.Control({
   }
 })
 
+// create a Todos with default options
 new Todos( document.body.firstElementChild );
+
+// overwrite the template option
 new Todos( $('#todos'), {template: 'specialTodos.ejs'})
 {% endhighlight %}
 
