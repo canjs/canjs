@@ -6,7 +6,7 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompresse
 	
 	// String
 	can.trim = function(s){
-		return dojo.trim(s);
+		return s && dojo.trim(s);
 	}
 	
 	// Array
