@@ -518,25 +518,6 @@ as JAML, jQuery-tmpl, Mustache and superpowers them with:
 - Deferred support
 - Bundling processed templates in production builds
 
-
-### Modifiers `el.<i>modifier</i>( idOrUrl, data )`
-
-__can.View__ overwrites the jQuery's html modifiers
-after, append, before, html, prepend, replaceWith, and text,
-allowing you to write:
-
-{% highlight javascript %}
-Todo.findAll( {}, function( todos ){
-  $('#todos').html( 'todos.ejs', todos );
-});
-{% endhighlight %}
-
-To make this work, make sure `todos.html` has a `#todos` element like:
-
-{% highlight html %}
-<ul id='todos'></ul>
-{% endhighlight %}
-
 ### Deferreds
 
 __can.Model__'s ajax methods return a deffered. __can.View__
