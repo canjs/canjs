@@ -76,7 +76,7 @@ $.Controller('Menu', {
 			delete this._isClicking;
 			return;
 		}
-		var scroll = $(window).scrollTop(),
+		var scroll = $('html, body').scrollTop(),
 				windowHeight = $(window).height();
 		for(var i = this.headingOffsets.length - 1; i >= 0; i--){
 			var offset = this.headingOffsets[i];
@@ -95,7 +95,10 @@ $.Controller('Menu', {
 				self = this;
 		if(active.attr('href') != current.attr('href')){
 			if(active.length == 0){ // this happens on load
-				current.addClass('active')[method]('ul').slideDown();
+				//console.log("HERE:", method, currentLevel)
+				if(currentLevel > 1){
+					current.addClass('active')[method]('ul').slideDown();
+				}
 			} else {
 				if(currentLevel === 2 && activeLevel === 2){
 					var currentUl = current.siblings('ul'),

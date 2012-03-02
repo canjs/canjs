@@ -1,4 +1,8 @@
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video {
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,
+acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,
+sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,
+tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,
+header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -240,4 +244,32 @@ body {
 	float: right;
 	margin: -17px -17px 0 0;
 }
+html.lt-ie7 body {
+	text-align: center;
+}
+html.lt-ie7 #bg {
+	display: none;
+}
 
+html.lt-ie7 body #wrapper {
+	text-align: left;
+}
+
+html.lt-ie7 #menu-wrapper {
+	float: left;
+	margin-top: expression(eval(document.documentElement.scrollTop + 20));
+}
+
+html.lt-ie7 #content-wrapper {
+	margin: 20px 0 0 10px;
+}
+html.lt-ie7 #logo {
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='images/logo.png', sizingMethod='scale');
+}
+html.lt-ie7 .github-fork {
+	margin-right: -23px;
+	margin-top: -18px;
+}
+html.lt-ie7 .github-fork img {
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://a248.e.akamai.net/assets.github.com/img/30f550e0d38ceb6ef5b81500c64d970b7fb0f028/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67', sizingMethod='scale');
+}
