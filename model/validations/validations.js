@@ -1,4 +1,4 @@
-steal('jquery/model').then(function($){
+steal('can/model').then(function(){
 /**
 @page jquery.model.validations Validations
 @plugin jquery/model/validations
@@ -44,14 +44,14 @@ var validate = function(attrNames, options, proc) {
 		options = {};
 	}
 	options = options || {};
-	attrNames = $.makeArray(attrNames)
+	attrNames = can.makeArray(attrNames)
 	
 	if(options.testIf && !options.testIf.call(this)){
 		return;
 	}
 	
 	var self = this;
-	$.each(attrNames, function(i, attrName) {
+	can.each(attrNames, function(i, attrName) {
 		// Call the validate proc function in the instance context
 		if(!self.validations[attrName]){
 			self.validations[attrName] = [];
@@ -64,7 +64,10 @@ var validate = function(attrNames, options, proc) {
    
 };
 
-$.extend($.Model, {
+can.extend(can.Model, {
+	
+	validations: {},
+	
    /**
     * @function jQuery.Model.static.validate
     * @parent jquery.model.validations
@@ -123,7 +126,7 @@ $.extend($.Model, {
          if(  (typeof value != 'undefined' && value != '')
          	&& String(value).match(regexp) == null )
          {
-            return this.Class.validationMessages.format;
+            return this.constructor.validationMessages.format;
          }
       });
    },
@@ -143,8 +146,8 @@ $.extend($.Model, {
          if(typeof value == 'undefined')
             return;
 
-         if($.grep(inArray, function(elm) { return (elm == value);}).length == 0)
-            return this.Class.validationMessages.inclusion;
+         if(can.grep(inArray, function(elm) { return (elm == value);}).length == 0)
+            return this.constructor.validationMessages.inclusion;
       });
    },
 
@@ -161,9 +164,9 @@ $.extend($.Model, {
    validateLengthOf: function(attrNames, min, max, options) {
       validate.call(this, attrNames, options, function(value) {
          if((typeof value == 'undefined' && min > 0) || value.length < min)
-            return this.Class.validationMessages.lengthShort + " (min=" + min + ")";
+            return this.constructor.validationMessages.lengthShort + " (min=" + min + ")";
          else if(typeof value != 'undefined' && value.length > max)
-            return this.Class.validationMessages.lengthLong + " (max=" + max + ")";
+            return this.constructor.validationMessages.lengthLong + " (max=" + max + ")";
       });
    },
 
@@ -178,7 +181,7 @@ $.extend($.Model, {
    validatePresenceOf: function(attrNames, options) {
       validate.call(this, attrNames, options, function(value) {
          if(typeof value == 'undefined' || value == "" || value === null)
-            return this.Class.validationMessages.presence;
+            return this.constructor.validationMessages.presence;
       });
    },
 
@@ -195,9 +198,84 @@ $.extend($.Model, {
    validateRangeOf: function(attrNames, low, hi, options) {
       validate.call(this, attrNames, options, function(value) {
          if(typeof value != 'undefined' && value < low || value > hi)
-            return this.Class.validationMessages.range + " [" + low + "," + hi + "]";
+            return this.constructor.validationMessages.range + " [" + low + "," + hi + "]";
       });
    }
+});
+
+can.extend(can.Model.prototype, {
+
+	/**
+	 * Runs the validations on this model.  You can
+	 * also pass it an array of attributes to run only those attributes.
+	 * It returns nothing if there are no errors, or an object
+	 * of errors by attribute.
+	 * 
+	 * To use validations, it's suggested you use the 
+	 * model/validations plugin.
+	 * 
+	 *     $.Model("Task",{
+	 *       init : function(){
+	 *         this.validatePresenceOf("dueDate")
+	 *       }
+	 *     },{});
+	 * 
+	 *     var task = new Task(),
+	 *         errors = task.errors()
+	 * 
+	 *     errors.dueDate[0] //-> "can't be empty"
+	 * 
+	 * @param {Array} [attrs] an optional list of attributes to get errors for:
+	 * 
+	 *     task.errors(['dueDate']);
+	 *     
+	 * @return {Object} an object of attributeName : [errors] like:
+	 * 
+	 *     task.errors() // -> {dueDate: ["cant' be empty"]}
+	 */
+	errors: function( attrs ) {
+		// convert attrs to an array
+		if ( attrs ) {
+			attrs = can.isArray(attrs) ? attrs : can.makeArray(arguments);
+		}
+		
+		var errors = {},
+			self = this,
+			attr,
+			// helper function that adds error messages to errors object
+			// attr - the name of the attribute
+			// funcs - the validation functions
+			addErrors = function( attr, funcs ) {
+				can.each(funcs, function( i, func ) {
+					var res = func.call(self);
+					if ( res ) {
+						if (!errors[attr] ) {
+							errors[attr] = [];
+						}
+						errors[attr].push(res);
+					}
+
+				});
+			},
+			validations = this.constructor.validations;
+
+		// go through each attribute or validation and
+		// add any errors
+		can.each(attrs || validations || {}, function( attr, funcs ) {
+			// if we are iterating through an array, use funcs
+			// as the attr name
+			if ( typeof attr == 'number' ) {
+				attr = funcs;
+				funcs = validations[attr];
+			}
+			// add errors to the 
+			addErrors(attr, funcs || []);
+		});
+		
+		// return errors as long as we have one
+		return can.isEmptyObject(errors) ? null : errors;
+	}
+	
 });
 
 });
