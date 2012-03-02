@@ -560,7 +560,9 @@ To render a string instead of a documentFragment, use `can.view.render` like:
 ## can.EJS `new can.EJS( options )`
 
 [can.EJS](http://donejs.com/docs.html#!can.EJS) is CanJS's default template 
-language.
+language.  It provides live binding by listening to [can.Observes](#can_observe).
+
+
 
 ### Magic Tags
 
@@ -571,24 +573,24 @@ __`<% CODE %>`__ - Runs JS Code.
 This type of magic tag does not modify the template but is used for JS control statements 
 like for-loops, if/else, switch, etc.  Examples:
 
-    <% if( items.attr('length') === 0 ) { %>
-        <tr><td>You have no items</td></tr>
+    <% if( todos.attr('length') === 0 ) { %>
+        <li>You have no todos</li>
     <% } else { %>
-        <% list(items, function(){ %>
-          <tr> .... </tr>
+        <% list(todos, function(){ %>
+          <li> .... </li>
         <% }) %>
     <% } %>
 
 
-    <% var address = person.attr('address') %>
-    <span><%= address.attr('street') %><span>
+    <% var person = todo.attr('person') %>
+    <span><%= person.attr('name') %><span>
 
 __`<%= CODE %>`__ - Runs JS Code and writes the _escaped_ result into the result of the template.
 
-The following results in the user seeing "my favorite element is &lt;blink>BLINK&lt;blink>" and not
-<blink>BLINK</blink>.
+The following results in the user seeing "my favorite element is &lt;b>B&lt;b>" and not
+<b>B</b>.
 
-     <div>my favorite element is <%= '<blink>BLINK</blink>' %>.</div>
+     <div>my favorite element is <%= '<b>B</b>' %>.</div>
          
 __`<%== CODE %>`__  - Runs JS Code and writes the _unescaped_ result into the result of the template.
 
@@ -651,7 +653,7 @@ new can.Control instance is created.  It's called with:
 and any other arguments passed to `new can.Control()`.  For example:
 
 {% highlight javascript %}
-var Todos = $.Controller({
+var Todos = can.Control({
   defaults : {template: 'todos.ejs'}
 },{
   "init" : function( element , options ){
