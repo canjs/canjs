@@ -508,7 +508,7 @@ Todo.findAll( {}, function( todos ){
 });
 {% endhighlight %}
 
-can.view also takes a __url__ for a template location.  __Create__ 
+To load from a __url__.  create
 a _todos/todos.ejs_ file that contains the following:
 
 {% highlight html %}
@@ -521,22 +521,17 @@ Render this with:
 
 {% highlight javascript %}
 Todo.findAll( {}, function( todos ){
-  console.log( can.view( 'todos.ejs', todos ) );
+  document.getElementById('todos')
+           .appendChild( can.view( 'todos/todos.ejs', todos ) );
 });
 {% endhighlight %}
 
 __can.view__ works with any template language, such
 as JAML, jQuery-tmpl, Mustache and superpowers them with:
 
-- Loading from scripts and external files 
-- using templates with jQuery __modifiers__ like html
-- Template caching
-- Deferred support
-- Bundling processed templates in production builds
-
 ### Deferreds
 
-__can.Model__'s ajax methods return a deffered. __can.View__
+__can.Model__'s ajax methods return a [deffered](#utilities-deferred). __can.view__
 accepts deferreds, making this hotness possible:
 
 {% highlight javascript %}
@@ -546,6 +541,18 @@ $('#todos').html('todos.ejs', Todo.findAll() )
 This syntax will render todos.ejs with the todo instances in the AJAX request 
 made by Todo.findAll, whenever its completed.
 
+### render `can.view.render( idOrUrl, data )`
+
+To render a string instead of a documentFragment, use `can.view.render` like:
+
+{% highlight javascript %}
+<% for( var i = 0; i < recipes.length; i++) %>
+  <li><%== can.view.render("/templates/recipe.ejs",{
+             recipe: recipes[i]
+            }) %>
+  </li>
+<% }) %>
+{% endhighlight %}
 
 ## can.EJS `new can.EJS( options )`
 
