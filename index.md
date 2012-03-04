@@ -467,8 +467,8 @@ Todo.findAll({}, function(todos){
 
 ## can.view `can.view( idOrUrl, data ) -> documentFragment`
 
-[can.view](http://donejs.com/docs.html#!can.view) is used to create HTML with
-JS templates. Pass it ...
+[can.view](http://donejs.com/docs.html#!can.view) is used to load, render, and create HTMLElements from
+JavaScript templates. Pass it ...
 
 - the __id__ or __url__ of a script tag to use as the content of the template
 - __data__ to pass to the template
@@ -481,13 +481,13 @@ document.getElementById('todos')
 {% endhighlight %}
 
 `can.view` supports multiple templating languages; however, [can.EJS](#can_ejs)
-is packaged with CanJS and supports live-binding of __can.Observe__.
+is packaged with CanJS and supports live-binding of [can.Observe](#can_observe).
 
 ### Loading Templates
 
-`can.view` can load templates from a url or from a script tag. To load from
+`can.view` loads templates from a url or a script tag. To load from
 a __script__ tag, create a script tag with the template contents, an id, 
-and a type attribute that specifies the template type (ejs).
+and a type attribute that specifies the template type (text/ejs).
 
 For example, add the following __html__:
 
@@ -499,7 +499,7 @@ For example, add the following __html__:
 </script>
 {% endhighlight %}
 
-Render this template with:
+Render this template and insert it into the page:
 
 {% highlight javascript %}
 Todo.findAll( {}, function( todos ){
@@ -508,8 +508,8 @@ Todo.findAll( {}, function( todos ){
 });
 {% endhighlight %}
 
-To load from a __url__.  create
-a _todos/todos.ejs_ file that contains the following:
+To load from a __url__,  create
+a _todos/todos.ejs_ file that contains:
 
 {% highlight html %}
 <% for(var i = 0; i < this.length; i++ ){ %>
@@ -526,27 +526,29 @@ Todo.findAll( {}, function( todos ){
 });
 {% endhighlight %}
 
-__can.view__ works with any template language, such
-as JAML, jQuery-tmpl, Mustache and superpowers them with:
-
 ### Deferreds
 
-__can.Model__'s ajax methods return a [deffered](#utilities-deferred). __can.view__
-accepts deferreds, making this hotness possible:
+__can.view__ accepts [deferreds](#utilities-deferred).  If the `data` argument is a deferred or an object
+that contains deferreds, __can.view__ returns a deferred that resolves to the documentFragment after
+all deferreds have resolved and the template has loaded.
+
+[can.Model.findAll](#can_model-findAll) returns deferreds. This means that the following loads `todos/todos.ejs`, `Todo.findAll` and `User.findOne`
+in parallel and resolves the returned deferred with the documentFragment when they are all done:
 
 {% highlight javascript %}
-can.view('todos/todos.ejs', Todo.findAll() ).then(function( frag ){
+can.view('todos/todos.ejs', {
+  todos : Todo.findAll(),
+  user: User.findOne({ id: 5 })
+}).then(function( frag ){
   document.getElementById('todos')
           .appendChild(frag);
 })
 {% endhighlight %}
     
-This syntax will render todos.ejs with the todo instances in the AJAX request 
-made by Todo.findAll, whenever its completed.
 
 ### render `can.view.render( idOrUrl, data )`
 
-To render a string instead of a documentFragment, use `can.view.render` like:
+To render a string instead of a documentFragment, use [can.view.render]() like:
 
 {% highlight javascript %}
 <% for( var i = 0; i < todos.length; i++) %>
@@ -557,12 +559,58 @@ To render a string instead of a documentFragment, use `can.view.render` like:
 <% }) %>
 {% endhighlight %}
 
+__can.view.render--
+
 ## can.EJS `new can.EJS( options )`
 
 [can.EJS](http://donejs.com/docs.html#!can.EJS) is CanJS's default template 
-language.  It provides live binding by listening to [can.Observes](#can_observe).
+language and used with [can.view](#!can_view).  It provides live binding
+when use dwith [can.Observes](#can_observe).  A __can.EJS__ template looks
+like the HTML you want, but with __magic tags__ where you want
+dynamic behavior.  The following lists todo elements:
 
+{% highlight html %}
+<script type='text/ejs' id='todosEJS'>
+<% for( var i = 0; i < this.length; i++) %>
+  <li><%= this[i].name %></li>
+<% }) %>
+</script>
+{% endhighlight %}
 
+Use __can.view__ to render this template:
+
+{% highlight javascript %}
+Todo.findAll({}, function( todos ) {
+  document.getElementById('todos')
+          .appendChild( can.view('todosEJS', todos ) )
+}
+{% endhighlight %}
+
+Notice that `this` in the template is the list of todos.  The `data` argument passed __can.view__ 
+becomes `this` in EJS.  EJS can also access any properties of `this` 
+directly (without writing `this.PROPERTY` all the time).  For example, a template that lists the user's name
+and todos:
+
+{% highlight html %}
+<script type='text/ejs' id='todosEJS'>
+<h2><%= user.name %></h2>
+<% for( var i = 0; i < todos.length; i++) { %>
+  <li><%= todos[i].name %></li>
+<% } %>
+</script>
+{% endhighlight %}
+
+Can be inserted into the document with:
+
+{% highlight javascript %}
+can.view('todosEJS', {
+  todos : Todo.findAll(),
+  user: User.findOne({ id: 5 })
+}).then(function( frag ){
+  document.getElementById('todos')
+          .appendChild(frag);
+})
+{% endhighlight %}
 
 ### Magic Tags
 
@@ -571,57 +619,125 @@ EJS uses 5 types of magic tags:
 __`<% CODE %>`__ - Runs JS Code.
 
 This type of magic tag does not modify the template but is used for JS control statements 
-like for-loops, if/else, switch, etc.  Examples:
+like for-loops, if/else, switch, declaring variables, etc.  Pretty much any JS code is valid.  Examples:
 
-    <% if( todos.attr('length') === 0 ) { %>
-        <li>You have no todos</li>
-    <% } else { %>
-        <% list(todos, function(){ %>
-          <li> .... </li>
-        <% }) %>
-    <% } %>
+{% highlight html %}
+<!-- check if there are no todos -->
+<% if( todos.attr('length') === 0 ) { %>
+    <li>You have no todos</li>
+<% } else { %>
+    <% list(todos, function(){ %>
+        <li> .... </li>
+    <% }) %>
+<% } %>
 
+<!-- create and use a variable -->
+<% var person = todo.attr('person') %>
+<span><%= person.attr('name') %><span>
+{% endhighlight %}
 
-    <% var person = todo.attr('person') %>
-    <span><%= person.attr('name') %><span>
+__`<%= CODE %>`__ - Runs a JS statement and writes the __escaped__ result into the result of the template.
 
-__`<%= CODE %>`__ - Runs JS Code and writes the _escaped_ result into the result of the template.
-
-The following results in the user seeing "my favorite element is &lt;b>B&lt;b>" and not
-<b>B</b>.
+The following results in the user seeing `my favorite element is &lt;b>B&lt;b>.` and not
+<code>my favorite element is <B>B</B>.</code>.
 
      <div>my favorite element is <%= '<b>B</b>' %>.</div>
+     
+This protects you against [cross-site scripting](http://en.wikipedia.org/wiki/Cross-site_scripting) attacks.
          
-__`<%== CODE %>`__  - Runs JS Code and writes the _unescaped_ result into the result of the template.
+__`<%== CODE %>`__  - Runs a JS statement and writes the __unescaped__ result into the result of the template.
 
-The following results in "my favorite element is <B>B</B>.". Using `<%==` is useful
+The following results in <code>my favorite element is <B>B</B>.</code>. Using `<%==` is useful
 for sub-templates.
      
-         <div>my favorite element is <%== '<B>B</B>' %>.</div>
-         
-__`<%% CODE %>`__ - Writes <% CODE %> to the result of the template.  This is very useful for generators.
-     
-         <%%= 'hello world' %>
-         
-__`<%# CODE %>`__  - Used for comments.  This does nothing.
-     
-         <%# 'hello world' %>
+    <div>my favorite element is <%== '<B>B</B>' %>.</div>
 
+Use `<%== CODE %>` when rendering subtemplates:
+
+{% highlight html %}
+<% for( var i = 0; i < todos.length; i++) { %>
+  <li><%== can.view.render('todoEJS', todos[i]) %></li>
+<% } %>
+{% endhighlight %}
 
 ### Live Binding
+
+__can.EJS__ will automatically update itself when [can.Observes](#can_observe) change.  To enable
+live-binding, use [attr](#!can_observe-attr) to read properties.  For example, the following
+template will update todo's name when it change:
+
+{% highlight html %}
+  <li><%= todo.attr('name') %></li>
+{% endhighlight %}
+
+Notice `attr('name')`.  This sets up live-binding.  If you change the todo's name, the `<li>` will automatically
+be updated:
+
+{% highlight javascript %}
+todo.attr("Clean the toilet");
+{% endhighlight %}
+
+Live-binding works by wrapping the code inside the magic tags with a function to call when the attribute (or attributes)
+are changed.  This is important to understand because a template like this will not work:
+
+{% highlight html %}
+<% for( var i = 0; i < todos.length; i++) { %>
+  <li><%= todos[i].attr('name') %></li>
+<% } %>
+{% endhighlight %}
+
+This does not work because when the function wrapping `todos[i].attr('name')` is called, `i` will be __3__ not the index
+of the desired todo.  Fix this by using a closure like:
+
+{% highlight html %}
+<% $.each(todos, function(i, todo){ %>
+  <li><%= todo.attr('name') %></li>
+<% }) %>
+{% endhighlight %}
+
+### list `list( observeList, iterator( item, index ) )`
+
+If you want to make the previous template update when todos are 
+added or removed, could bind to length like:
+
+{% highlight html %}
+<% todos.bind("length", function(){});
+   $.each(todos, function(i, todo){ %>
+      <li><%= todo.attr('name') %></li>
+<% }) %>
+{% endhighlight %}
+
+Or simply use EJS's `list` helper method like:
+
+{% highlight html %}
+<% list(todos, function(todo){ %>
+  <li><%= todo.attr('name') %></li>
+<% }) %>
+{% endhighlight %}
+
+Now when todos are added or removed from the todo list, the template's HTML is updated:
+
+{% highlight javascript %}
+// add an item
+todos.push( new Todo({name : "file taxes"}) );
+
+// destroying an item removes it from Model.Lists
+todos[0].destroy()
+{% endhighlight %}
 
 ## can.Control `can.Control(classProps, prototypeProps)`
 
 [can.Control](http://donejs.com/docs.html#!can.Control) creates organized, memory-leak free, 
-rapidly performing, stateful controls. It is used to create UI controls like 
+rapidly performing, stateful controls. Use it to create UI controls like 
 tabs, grids, and contextmenus and used to organize them 
-into higher-order business rules with [can.route](http://donejs.com/docs.html#!can.route). Its serves as 
-both a traditional view and a 
+into higher-order business rules with [can.route](http://donejs.com/docs.html#!can.route). It can serve as 
+a traditional view and a 
 traditional controller.
   
-Let's make a basic todos widget that 
+The following examples make a basic todos widget that 
 lists todos and lets 
-us destroy them. Add the following to __todos.js__:
+us destroy them. Create a control constructor function of your own by 
+extending `can.Control`.  
 
 {% highlight javascript %}
 var Todos = can.Control({
@@ -631,10 +747,10 @@ var Todos = can.Control({
 })
 {% endhighlight %}
 
-We can create this widget on the `#todos` element with:
+Create an instance of the Todos control the `#todos` element with:
 
 {% highlight javascript %}
-new Todos('#todos', {});
+var todosControl = new Todos('#todos', {});
 {% endhighlight %}
 
 ### init `can.Control.prototype.init(element, options)`
@@ -661,14 +777,24 @@ var Todos = can.Control({
   }
 })
 
+// create a Todos with default options
 new Todos( document.body.firstElementChild );
+
+// overwrite the template option
 new Todos( $('#todos'), {template: 'specialTodos.ejs'})
 {% endhighlight %}
 
 ### element `this.element`
 
 [this.element](http://donejs.com/docs.html#!can.Controll.prototype.element) is the 
-element the control is created on. 
+a nodelist of a single element, the element the control is created on. 
+
+{% highlight javascript %}
+var todosControl = new Todos( document.body.firstElementChild );
+todosControl.element[0] //-> document.body.firstElementChild
+{% endhighlight %}
+
+Each library wraps the element differently.  If you are using jQuery, the element is wrapped with `jQuery( element )`.
 
 ### options `this.options`
 
@@ -696,7 +822,7 @@ var Todos = can.Control({
 
 When an `<li>` is clicked, `"li click"` is called with:
 
-- The jQuery-wrapped __element__ that was clicked
+- The library-wrapped __element__ that was clicked.
 - The __event__ data
 
 Controller uses event delegation, so you can add `<li>`s without needing to rebind
@@ -1145,6 +1271,29 @@ CanJS can be used with libraries other than jQuery.
 
 ### Implementing another library
 
+## Plugins
+
+### construct proxy
+
+### construct super
+
+### control plugin
+
+### control view
+
+### observe attributes
+
+### observe delegate
+
+### observe setter
+
+### model backup
+
+### model validations
+
+### model elements
+
+### view modifiers
 
 ## Examples
 
