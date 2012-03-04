@@ -117,13 +117,13 @@ body {
 }
 #content-wrapper {
 	width: 680px;
-	float: left;
+	float: right;
 	background: white;
 	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
-	margin: 20px 0 20px 270px;
+	margin: 20px 0 20px 0;
 }
 #buttons a,
 #logo-and-download a {
