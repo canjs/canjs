@@ -1,6 +1,9 @@
 var currentH2slug = "";
 
 $.Controller('Menu', {
+	defaults : {
+		scroll : window
+	}
 }, {
 	init : function(){
 		this.find('#menu').append(this.buildMenu());
@@ -76,7 +79,7 @@ $.Controller('Menu', {
 			delete this._isClicking;
 			return;
 		}
-		var scroll = $('html, body').scrollTop(),
+		var scroll = $(this.options.scroll).scrollTop(),
 				windowHeight = $(window).height();
 		for(var i = this.headingOffsets.length - 1; i >= 0; i--){
 			var offset = this.headingOffsets[i];
@@ -175,5 +178,8 @@ $.Controller('Menu', {
 		
 	}
 });
-
-$('#wrapper').menu();
+if($('.lt-ie7, .lt-ie8, .lt-ie9').length == 0){
+	$('#wrapper').menu();
+} else {
+	$('#wrapper').menu('html,body');
+}
