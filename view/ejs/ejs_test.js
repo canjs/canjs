@@ -98,7 +98,7 @@ test("returning blocks", function(){
 		return cb([1,2,3,4])
 	}
 	
-	var res = can.
+	var res = can.view.
 		render("//can/view/ejs/test_template.ejs",{
 			something: somethingHelper, 
 			items: ['a','b']

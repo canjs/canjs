@@ -1,76 +1,132 @@
 @class can.view
 @parent index
+@description A JavaScript template framework.
 
+can.view is a JavaScript template framework that provides:
 
+ - template loading from html elements or external files
+ - synchronous and asynchronous template loading
+ - deferred support
+ - callbacks on elements for functionality like live live-binding
+ 
+can.view supports other templating languages, but using [can.EJS] is highly encouraged.
 
-Render tempaltes into a documentFragement.  A platform for retrieving those fragements
-and inserting them into the dom.
+## Use
 
-Live binding ....
+`can.view( idOrUrl, data)` loads template content from an element or url, renders
+it with data, and converts it to a documentFragment so it can be easily and 
+efficiently inserted into the DOM.
 
-    can.view("//path/to/template",{data}) //-> documentFragement
+    document.getElementById('person')
+      .appendChild( can.view('person.ejs', {name: "Justin" } ) )
+
+This code:
+
     
-EJS + Observe
+ 1. Loads the template a 'mytemplate.ejs'. It might look like:
+    <pre><code>&lt;h2>&lt;%= name %>&lt;/h2></pre></code>
 
-EJS knows when you read an observe property with the attr method.  It then sets
-itself up to replace the content anytime the EJS file is rendered.
+ 2. Renders it with {message: 'hello world'}, resulting in:
+    <pre><code>&lt;div id='foo'>"&lt;h2>Justin&lt;/h2>&lt;/div></pre></code>
 
-Examples:
+ 3. Inserts the result into the foo element. Foo might look like:
+    <pre><code>&lt;div id='person'>&lt;h2>Justin&lt;/h2>&lt;/div></pre></code>
 
-INPUT VALUE
+## Loading Templates
 
-template:
+`can.view` can load templates from a url or from a script.
 
-    John is <input value='<%= person.attr('age') %>'/> years old
-    
-    john = new can.Observe({age: 29})
-    form.appendChild( can.view('person.ejs', {person: john}) )
+### Loading templates from a script tag
 
-Escaped HTML
+To load from a script tag, create a script tag with:
 
-template:
+ - the template contents within the script tag
+ - an id
+ - a type attribute that specifies the type of template
 
-	<div>My favorite HTML tag is: <%= favorites.attr('tag')%></div>
-    
-    favorites = new can.Observe({tag: "<div>"})
-    favs.appendChild( can.view('favs.ejs', {favorites: favorites}) )
+    <script type='text/ejs' id='recipesEJS'>
+    <% for(var i=0; i < recipes.length; i++){ %>
+      <li><%=recipes[i].name %></li>
+    <%} %>
+    </script>
 
-Unescaped HTML
+Render with this template like:
 
-	<div>My favorite HTML tag shows up like: <%== favorites.attr('tag')%></div>
-    
-    favorites = new can.Observe({tag: "<b>this</b>"})
-    favs.appendChild( can.view('favs.ejs', {favorites: favorites}) )
+    document.getElementById('recipes')
+      .appendChild( can.view('recipesEJS', recipeData ) )
 
-Tag properties
+Notice we passed the id of the element we want to render.
 
-	<input type='checkbox' <%= task.attr('complete') ? 'checked' : "" %>/>
-    
-    favorites = new can.Observe({tag: "<b>this</b>"})
-    favs.appendChild( can.view('favs.ejs', {favorites: favorites}) )
+### Loading templates from a url
 
-Conditional Blocks
+To load from a url, simply pass the location of the template
+to `can.view`.  The location of the template needs an extension that
+matches the type of template:
 
-	if() {
-	
-	} else {
-	
-	}
+    document.getElementById('recipes')
+      .appendChild( can.view('templates/recipes.ejs', recipeData ) )
 
+## Supported Template Engines
 
-Iterative Blocks
+CanJS supports the following template languages:
 
-	// make sure your block listens on length, but the block 
-	part can be re-called
+- EmbeddedJS (ejs)
+  <pre><code>&lt;h2>&lt;%= message %>&lt;/h2></code></pre>
+  
+- JAML (jaml)
+  <pre><code>h2(data.message);</code></pre>
+  
+- Micro (micro)
+  <pre><code>&lt;h2>{%= message %}&lt;/h2></code></pre>
+  
+- jQuery.Tmpl (tmpl)
+  <pre><code>&lt;h2>${message}&lt;/h2></code></pre>
 
-	problem example
-	
-	<% for(var i =0 ; i < todos.attr('length'); i++) { %>
-	  <li class='<%= todos[i].attr('completed') ? 'complete' : '' %>'> .... </li>
-	<% } %>
-	
-This does not work if a todo's completed attr is updated because i will not be the index
-of the todo when "todos[i].attr('completed') ? 'complete' : ''" is reevaluated.
+## Rendering to strings and sub-templates
 
-To fix this, make sure each iteration of the block gets a referece to the instance it's working on.
-EJS has a list helper method that does just this.
+To render to a string, use `can.view.render(idOrUrl, data)` like:
+
+    can.view.render("/templates/recipe.ejs",{recipe: recipe})
+
+To render a sub-template within another template, use render like:
+
+    <% $.each(recipes, function(i, recipe){ %>
+      <li><%== can.view.render("/templates/recipe.ejs",{
+                 recipe: recipe
+                }) %>
+      </li>
+    <% }) %>
+
+## Asynchronous Loading
+
+By default, retrieving templates is done synchronously. This 
+is fine because StealJS packages view templates with your 
+JS download.
+
+However, some people might not be using StealJS or want to 
+delay loading templates until necessary. If you have the need, 
+you can provide a callback paramter like:
+
+    can.view('recipes',recipeData, function(frag){
+      document.getElementById('recipes')
+        .appendChild(frag)
+    });
+
+The callback function will be called with the result of 
+the rendered template.
+
+## Deferreds 
+
+If you pass deferreds to can.view it 
+will wait until all deferreds resolve before rendering 
+the view. This makes it a one-liner to make a request and use the 
+result to render a template.
+
+The following makes a request for todos in parallel with the 
+todos.ejs template. Once todos and template have been loaded, 
+it with render the view with the todos.
+
+    can.view('recipes', Todo.findAll() , function(frag){
+      document.getElementById('recipes')
+        .appendChild(frag)
+    })

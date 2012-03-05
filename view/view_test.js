@@ -45,7 +45,7 @@ test("async templates, and caching work", function(){
 	stop();
 	var i = 0;
 	
-	can.render("//can/view/test/qunit/temp.ejs",{"message" :"helloworld"}, function(text){
+	can.view.render("//can/view/test/qunit/temp.ejs",{"message" :"helloworld"}, function(text){
 		ok(/helloworld\s*/.test(text), "we got a rendered template");
 		i++;
 		equals(i, 2, "Ajax is not synchronous");
@@ -60,12 +60,12 @@ test("caching works", function(){
 	stop();
 	var startT = new Date(),
 		first;
-	can.render("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
+	can.view.render("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
 		first = new Date();
 		ok(text, "we got a rendered template");
 		
 		
-		can.render("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
+		can.view.render("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
 			var lap2 = (new Date()) - first,
 				lap1 =  first-startT;
 			// ok( lap1 > lap2, "faster this time "+(lap1 - lap2) )
@@ -96,7 +96,7 @@ test("object of deferreds", function(){
 	var foo = new can.Deferred(),
 		bar = new can.Deferred();
 	stop();
-	can.render("//can/view/test/qunit/deferreds.ejs",{
+	can.view.render("//can/view/test/qunit/deferreds.ejs",{
 		foo : typeof foo.promise == 'function' ? foo.promise() : foo,
 		bar : bar
 	}).then(function(result){
@@ -113,7 +113,7 @@ test("object of deferreds", function(){
 test("deferred", function(){
 	var foo = new can.Deferred();
 	stop();
-	can.render("//can/view/test/qunit/deferred.ejs",foo).then(function(result){
+	can.view.render("//can/view/test/qunit/deferred.ejs",foo).then(function(result){
 		equals(result, "FOO");
 		start();
 	});

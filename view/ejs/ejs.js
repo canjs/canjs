@@ -1,4 +1,4 @@
-// 2.19
+// 2.04
 /*jslint evil: true */
 steal('can/view', 'can/util/string').then(function( $ ) {
 
@@ -16,7 +16,6 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		returnReg = /\r\n/g,
 		retReg = /\r/g,
 		newReg = /\n/g,
-		nReg = /\n/,
 		slashReg = /\\/g,
 		tabReg = /\t/g,
 		leftBracket = /\{/g,
@@ -78,7 +77,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			// finally, if there is a funciton to hookup on some dom
 			// pass it to hookup to get the data-view-id back
 			if ( hook ) {
-				return "data-view-id='" + can.view.hook(hook) + "'";
+				return can.view.hook(hook);
 			}
 			// finally, if all else false, toString it
 			return ""+input;
@@ -276,7 +275,8 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			}
 			// get value
 			var observed = [],
-				input = func.call(self);
+				input = func.call(self),
+				tag = (tagMap[tagName] || "span");
 	
 			// set back so we are no longer reading
 			if(can.Observe){
@@ -287,9 +287,9 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			if(!observed.length){
 				return (escape || status !== 0? contentEscape : contentText)(input);
 			}
-			var tag = (tagMap[tagName] || "span");
+
 			if(status == 0){
-				return "<" +tag+" data-view-id='" +can.view.hook(
+				return "<" +tag+can.view.hook(
 				// are we escaping
 				escape ? 
 					// 
@@ -339,7 +339,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							nodes = makeAndPut(func.call(self), nodes);
 						});
 						//return parent;
-				}) + "'></" +tag+">";
+				}) + "></" +tag+">";
 			} else if(status === 1){ // in a tag
 				// mark at end!
 				var attrName = func.call(self).replace(/['"]/g, '').split('=')[0];
@@ -378,10 +378,10 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 
 						hooks[status] = {
 							render: function() {
-								var i =0;
-								var newAttr = attr.replace(attributeReplace, function() {
-									return contentEscape( hook.funcs[i++].call(self) );
-								});
+								var i =0,
+									newAttr = attr.replace(attributeReplace, function() {
+										return contentEscape( hook.funcs[i++].call(self) );
+									});
 								return newAttr;
 							},
 							funcs: [func],
@@ -415,11 +415,11 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				var hooks = pendingHookups.slice(0);
 
 				pendingHookups = [];
-				return " data-view-id='" + can.view.hook(function(el){
+				return can.view.hook(function(el){
 					can.each(hooks, function(i, fn){
 						fn(el);
 					})
-				}) + "'";
+				});
 			}else {
 				return "";
 			}
