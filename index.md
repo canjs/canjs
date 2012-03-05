@@ -491,7 +491,7 @@ and a type attribute that specifies the template type (text/ejs).
 
 For example, add the following __html__:
 
-{% highlight html %}
+{% highlight erb %}
 <script type='text/ejs' id='todosEJS'>
   <% for(var i = 0; i < this.length; i++ ){ %>
     <li><%= this[i].name %></li>
@@ -511,7 +511,7 @@ Todo.findAll( {}, function( todos ){
 To load from a __url__,  create
 a _todos/todos.ejs_ file that contains:
 
-{% highlight html %}
+{% highlight erb %}
 <% for(var i = 0; i < this.length; i++ ){ %>
   <li><%= this[i].name %></li>
 <% } %>
@@ -569,7 +569,7 @@ when use dwith [can.Observes](#can_observe).  A __can.EJS__ template looks
 like the HTML you want, but with __magic tags__ where you want
 dynamic behavior.  The following lists todo elements:
 
-{% highlight html %}
+{% highlight erb %}
 <script type='text/ejs' id='todosEJS'>
 <% for( var i = 0; i < this.length; i++) %>
   <li><%= this[i].name %></li>
@@ -591,7 +591,7 @@ becomes `this` in EJS.  EJS can also access any properties of `this`
 directly (without writing `this.PROPERTY` all the time).  For example, a template that lists the user's name
 and todos:
 
-{% highlight html %}
+{% highlight erb %}
 <script type='text/ejs' id='todosEJS'>
 <h2><%= user.name %></h2>
 <% for( var i = 0; i < todos.length; i++) { %>
@@ -621,7 +621,7 @@ __`<% CODE %>`__ - Runs JS Code.
 This type of magic tag does not modify the template but is used for JS control statements 
 like for-loops, if/else, switch, declaring variables, etc.  Pretty much any JS code is valid.  Examples:
 
-{% highlight html %}
+{% highlight erb %}
 <!-- check if there are no todos -->
 <% if( todos.attr('length') === 0 ) { %>
     <li>You have no todos</li>
@@ -654,7 +654,7 @@ for sub-templates.
 
 Use `<%== CODE %>` when rendering subtemplates:
 
-{% highlight html %}
+{% highlight erb %}
 <% for( var i = 0; i < todos.length; i++) { %>
   <li><%== can.view.render('todoEJS', todos[i]) %></li>
 <% } %>
@@ -666,7 +666,7 @@ __can.EJS__ will automatically update itself when [can.Observes](#can_observe) c
 live-binding, use [attr](#!can_observe-attr) to read properties.  For example, the following
 template will update todo's name when it change:
 
-{% highlight html %}
+{% highlight erb %}
   <li><%= todo.attr('name') %></li>
 {% endhighlight %}
 
@@ -680,7 +680,7 @@ todo.attr("Clean the toilet");
 Live-binding works by wrapping the code inside the magic tags with a function to call when the attribute (or attributes)
 are changed.  This is important to understand because a template like this will not work:
 
-{% highlight html %}
+{% highlight erb %}
 <% for( var i = 0; i < todos.length; i++) { %>
   <li><%= todos[i].attr('name') %></li>
 <% } %>
@@ -689,7 +689,7 @@ are changed.  This is important to understand because a template like this will 
 This does not work because when the function wrapping `todos[i].attr('name')` is called, `i` will be __3__ not the index
 of the desired todo.  Fix this by using a closure like:
 
-{% highlight html %}
+{% highlight erb %}
 <% $.each(todos, function(i, todo){ %>
   <li><%= todo.attr('name') %></li>
 <% }) %>
@@ -700,7 +700,7 @@ of the desired todo.  Fix this by using a closure like:
 If you want to make the previous template update when todos are 
 added or removed, could bind to length like:
 
-{% highlight html %}
+{% highlight erb %}
 <% todos.bind("length", function(){});
    $.each(todos, function(i, todo){ %>
       <li><%= todo.attr('name') %></li>
@@ -709,7 +709,7 @@ added or removed, could bind to length like:
 
 Or simply use EJS's `list` helper method like:
 
-{% highlight html %}
+{% highlight erb %}
 <% list(todos, function(todo){ %>
   <li><%= todo.attr('name') %></li>
 <% }) %>
