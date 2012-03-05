@@ -404,11 +404,7 @@ steal('can/construct', function() {
 		_get: function( attr ) {
 			var parts = attrParts(attr),
 				current = this.__get(parts.shift());
-			if ( parts.length ) {
-				return current ? current._get(parts) : undefined
-			} else {
-				return current;
-			}
+			return parts.length ? current ? current._get(parts) : undefined : current;
 		},
 		// reads a property directly if an attr is provided, otherwise
 		// returns the 'real' data object itself
@@ -437,7 +433,7 @@ steal('can/construct', function() {
 				this.__set(prop, value, current)
 				
 			} else {
-				throw "can.Observe: set a property on an object that does not exist"
+				throw "can.Observe: Object does not exist"
 			}
 		},
 		__set : function(prop, value, current){
