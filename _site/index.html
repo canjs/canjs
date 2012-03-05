@@ -424,7 +424,7 @@
 </div>
 <h2 id='canview_'>can.view <code>can.view( idOrUrl, data ) -&gt; documentFragment</code></h2>
 
-<p><a href='http://donejs.com/docs.html#!can.view'>can.view</a> is used to create HTML with JS templates. Pass it &#8230;</p>
+<p><a href='http://donejs.com/docs.html#!can.view'>can.view</a> is used to load, render, and create HTMLElements from JavaScript templates. Pass it &#8230;</p>
 
 <ul>
 <li>the <strong>id</strong> or <strong>url</strong> of a script tag to use as the content of the template</li>
@@ -437,31 +437,31 @@
   <span class='p'>.</span><span class='nx'>appendChild</span><span class='p'>(</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>view</span><span class='p'>(</span><span class='s1'>&#39;todos.ejs&#39;</span><span class='p'>,</span> <span class='p'>[{</span><span class='nx'>name</span><span class='o'>:</span> <span class='s2'>&quot;mow lawn&quot;</span><span class='p'>}]</span> <span class='p'>)</span> <span class='p'>)</span>
 </code></pre>
 </div>
-<p><code>can.view</code> supports multiple templating languages; however, <a href='#can_ejs'>can.EJS</a> is packaged with CanJS and supports live-binding of <strong>can.Observe</strong>.</p>
+<p><code>can.view</code> supports multiple templating languages; however, <a href='#can_ejs'>can.EJS</a> is packaged with CanJS and supports live-binding of <a href='#can_observe'>can.Observe</a>.</p>
 
 <h3 id='loading_templates'>Loading Templates</h3>
 
-<p><code>can.view</code> can load templates from a url or from a script tag. To load from a <strong>script</strong> tag, create a script tag with the template contents, an id, and a type attribute that specifies the template type (ejs).</p>
+<p><code>can.view</code> loads templates from a url or a script tag. To load from a <strong>script</strong> tag, create a script tag with the template contents, an id, and a type attribute that specifies the template type (text/ejs).</p>
 
 <p>For example, add the following <strong>html</strong>:</p>
-<div class='highlight'><pre><code class='html'><span class='nt'>&lt;script </span><span class='na'>type=</span><span class='s'>&#39;text/ejs&#39;</span> <span class='na'>id=</span><span class='s'>&#39;todosEJS&#39;</span><span class='nt'>&gt;</span>
-  <span class='o'>&lt;%</span> <span class='k'>for</span><span class='p'>(</span><span class='kd'>var</span> <span class='nx'>i</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span> <span class='nx'>i</span> <span class='o'>&lt;</span> <span class='k'>this</span><span class='p'>.</span><span class='nx'>length</span><span class='p'>;</span> <span class='nx'>i</span><span class='o'>++</span> <span class='p'>){</span> <span class='o'>%&gt;</span>
-    <span class='o'>&lt;</span><span class='nx'>li</span><span class='o'>&gt;&lt;%=</span> <span class='k'>this</span><span class='p'>[</span><span class='nx'>i</span><span class='p'>].</span><span class='nx'>name</span> <span class='o'>%&gt;&lt;</span><span class='err'>/li&gt;</span>
-  <span class='o'>&lt;%</span> <span class='p'>}</span> <span class='o'>%&gt;</span>
-<span class='nt'>&lt;/script&gt;</span>
+<div class='highlight'><pre><code class='erb'><span class='x'>&lt;script type=&#39;text/ejs&#39; id=&#39;todosEJS&#39;&gt;</span>
+<span class='x'>  </span><span class='cp'>&lt;%</span> <span class='k'>for</span><span class='p'>(</span><span class='n'>var</span> <span class='n'>i</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='o'>&lt;</span> <span class='n'>this</span><span class='o'>.</span><span class='n'>length</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>++</span> <span class='p'>){</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>    &lt;li&gt;</span><span class='cp'>&lt;%=</span> <span class='n'>this</span><span class='o'>[</span><span class='n'>i</span><span class='o'>].</span><span class='n'>name</span> <span class='cp'>%&gt;</span><span class='x'>&lt;/li&gt;</span>
+<span class='x'>  </span><span class='cp'>&lt;%</span> <span class='p'>}</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>&lt;/script&gt;</span>
 </code></pre>
 </div>
-<p>Render this template with:</p>
+<p>Render this template and insert it into the page:</p>
 <div class='highlight'><pre><code class='javascript'><span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>(</span> <span class='p'>{},</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>todos</span> <span class='p'>){</span>
    <span class='nb'>document</span><span class='p'>.</span><span class='nx'>getElementById</span><span class='p'>(</span><span class='s1'>&#39;todos&#39;</span><span class='p'>)</span>
            <span class='p'>.</span><span class='nx'>appendChild</span><span class='p'>(</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>view</span><span class='p'>(</span> <span class='s1'>&#39;todosEJS&#39;</span><span class='p'>,</span> <span class='nx'>todos</span> <span class='p'>)</span> <span class='p'>);</span>
 <span class='p'>});</span>
 </code></pre>
 </div>
-<p>To load from a <strong>url</strong>. create a <em>todos/todos.ejs</em> file that contains the following:</p>
-<div class='highlight'><pre><code class='html'><span class='err'>&lt;</span>% for(var i = 0; i <span class='nt'>&lt; this</span><span class='err'>.</span><span class='na'>length</span><span class='err'>;</span> <span class='na'>i</span><span class='err'>++</span> <span class='err'>){</span> <span class='err'>%</span><span class='nt'>&gt;</span>
-  <span class='nt'>&lt;li&gt;</span><span class='err'>&lt;</span>%= this[i].name %&gt;<span class='nt'>&lt;/li&gt;</span>
-<span class='err'>&lt;</span>% } %&gt;
+<p>To load from a <strong>url</strong>, create a <em>todos/todos.ejs</em> file that contains:</p>
+<div class='highlight'><pre><code class='erb'><span class='cp'>&lt;%</span> <span class='k'>for</span><span class='p'>(</span><span class='n'>var</span> <span class='n'>i</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='o'>&lt;</span> <span class='n'>this</span><span class='o'>.</span><span class='n'>length</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>++</span> <span class='p'>){</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>  &lt;li&gt;</span><span class='cp'>&lt;%=</span> <span class='n'>this</span><span class='o'>[</span><span class='n'>i</span><span class='o'>].</span><span class='n'>name</span> <span class='cp'>%&gt;</span><span class='x'>&lt;/li&gt;</span>
+<span class='cp'>&lt;%</span> <span class='p'>}</span> <span class='cp'>%&gt;</span><span class='x' />
 </code></pre>
 </div>
 <p>Render this with:</p>
@@ -471,22 +471,23 @@
 <span class='p'>});</span>
 </code></pre>
 </div>
-<p><strong>can.view</strong> works with any template language, such as JAML, jQuery-tmpl, Mustache and superpowers them with:</p>
-
 <h3 id='deferreds'>Deferreds</h3>
 
-<p><strong>can.Model</strong>&#8217;s ajax methods return a <a href='#utilities-deferred'>deffered</a>. <strong>can.view</strong> accepts deferreds, making this hotness possible:</p>
-<div class='highlight'><pre><code class='javascript'><span class='nx'>can</span><span class='p'>.</span><span class='nx'>view</span><span class='p'>(</span><span class='s1'>&#39;todos/todos.ejs&#39;</span><span class='p'>,</span> <span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>()</span> <span class='p'>).</span><span class='nx'>then</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>(</span> <span class='nx'>frag</span> <span class='p'>){</span>
+<p><strong>can.view</strong> accepts <a href='#utilities-deferred'>deferreds</a>. If the <code>data</code> argument is a deferred or an object that contains deferreds, <strong>can.view</strong> returns a deferred that resolves to the documentFragment after all deferreds have resolved and the template has loaded.</p>
+
+<p><a href='#can_model-findAll'>can.Model.findAll</a> returns deferreds. This means that the following loads <code>todos/todos.ejs</code>, <code>Todo.findAll</code> and <code>User.findOne</code> in parallel and resolves the returned deferred with the documentFragment when they are all done:</p>
+<div class='highlight'><pre><code class='javascript'><span class='nx'>can</span><span class='p'>.</span><span class='nx'>view</span><span class='p'>(</span><span class='s1'>&#39;todos/todos.ejs&#39;</span><span class='p'>,</span> <span class='p'>{</span>
+  <span class='nx'>todos</span> <span class='o'>:</span> <span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>(),</span>
+  <span class='nx'>user</span><span class='o'>:</span> <span class='nx'>User</span><span class='p'>.</span><span class='nx'>findOne</span><span class='p'>({</span> <span class='nx'>id</span><span class='o'>:</span> <span class='mi'>5</span> <span class='p'>})</span>
+<span class='p'>}).</span><span class='nx'>then</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>(</span> <span class='nx'>frag</span> <span class='p'>){</span>
   <span class='nb'>document</span><span class='p'>.</span><span class='nx'>getElementById</span><span class='p'>(</span><span class='s1'>&#39;todos&#39;</span><span class='p'>)</span>
           <span class='p'>.</span><span class='nx'>appendChild</span><span class='p'>(</span><span class='nx'>frag</span><span class='p'>);</span>
 <span class='p'>})</span>
 </code></pre>
 </div>
-<p>This syntax will render todos.ejs with the todo instances in the AJAX request made by Todo.findAll, whenever its completed.</p>
-
 <h3 id='render_'>render <code>can.view.render( idOrUrl, data )</code></h3>
 
-<p>To render a string instead of a documentFragment, use <code>can.view.render</code> like:</p>
+<p>To render a string instead of a documentFragment, use <a href=''>can.view.render</a> like:</p>
 <div class='highlight'><pre><code class='javascript'><span class='o'>&lt;%</span> <span class='k'>for</span><span class='p'>(</span> <span class='kd'>var</span> <span class='nx'>i</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span> <span class='nx'>i</span> <span class='o'>&lt;</span> <span class='nx'>todos</span><span class='p'>.</span><span class='nx'>length</span><span class='p'>;</span> <span class='nx'>i</span><span class='o'>++</span><span class='p'>)</span> <span class='o'>%&gt;</span>
   <span class='o'>&lt;</span><span class='nx'>li</span><span class='o'>&gt;&lt;%==</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>view</span><span class='p'>.</span><span class='nx'>render</span><span class='p'>(</span><span class='s2'>&quot;/todos/todo.ejs&quot;</span><span class='p'>,{</span>
              <span class='nx'>todo</span><span class='o'>:</span> <span class='nx'>todo</span><span class='p'>[</span><span class='nx'>i</span><span class='p'>]</span>
@@ -495,57 +496,135 @@
 <span class='o'>&lt;%</span> <span class='p'>})</span> <span class='o'>%&gt;</span>
 </code></pre>
 </div>
+<p><strong>can.view.render&#8211;</strong></p>
+
 <h2 id='canejs_'>can.EJS <code>new can.EJS( options )</code></h2>
 
-<p><a href='http://donejs.com/docs.html#!can.EJS'>can.EJS</a> is CanJS&#8217;s default template language. It provides live binding by listening to <a href='#can_observe'>can.Observes</a>.</p>
-
+<p><a href='http://donejs.com/docs.html#!can.EJS'>can.EJS</a> is CanJS&#8217;s default template language and used with <a href='#!can_view'>can.view</a>. It provides live binding when use dwith <a href='#can_observe'>can.Observes</a>. A <strong>can.EJS</strong> template looks like the HTML you want, but with <strong>magic tags</strong> where you want dynamic behavior. The following lists todo elements:</p>
+<div class='highlight'><pre><code class='erb'><span class='x'>&lt;script type=&#39;text/ejs&#39; id=&#39;todosEJS&#39;&gt;</span>
+<span class='cp'>&lt;%</span> <span class='k'>for</span><span class='p'>(</span> <span class='n'>var</span> <span class='n'>i</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='o'>&lt;</span> <span class='n'>this</span><span class='o'>.</span><span class='n'>length</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>++</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>  &lt;li&gt;</span><span class='cp'>&lt;%=</span> <span class='n'>this</span><span class='o'>[</span><span class='n'>i</span><span class='o'>].</span><span class='n'>name</span> <span class='cp'>%&gt;</span><span class='x'>&lt;/li&gt;</span>
+<span class='cp'>&lt;%</span> <span class='p'>})</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>&lt;/script&gt;</span>
+</code></pre>
+</div>
+<p>Use <strong>can.view</strong> to render this template:</p>
+<div class='highlight'><pre><code class='javascript'><span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>({},</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>todos</span> <span class='p'>)</span> <span class='p'>{</span>
+  <span class='nb'>document</span><span class='p'>.</span><span class='nx'>getElementById</span><span class='p'>(</span><span class='s1'>&#39;todos&#39;</span><span class='p'>)</span>
+          <span class='p'>.</span><span class='nx'>appendChild</span><span class='p'>(</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>view</span><span class='p'>(</span><span class='s1'>&#39;todosEJS&#39;</span><span class='p'>,</span> <span class='nx'>todos</span> <span class='p'>)</span> <span class='p'>)</span>
+<span class='p'>}</span>
+</code></pre>
+</div>
+<p>Notice that <code>this</code> in the template is the list of todos. The <code>data</code> argument passed <strong>can.view</strong> becomes <code>this</code> in EJS. EJS can also access any properties of <code>this</code> directly (without writing <code>this.PROPERTY</code> all the time). For example, a template that lists the user&#8217;s name and todos:</p>
+<div class='highlight'><pre><code class='erb'><span class='x'>&lt;script type=&#39;text/ejs&#39; id=&#39;todosEJS&#39;&gt;</span>
+<span class='x'>&lt;h2&gt;</span><span class='cp'>&lt;%=</span> <span class='n'>user</span><span class='o'>.</span><span class='n'>name</span> <span class='cp'>%&gt;</span><span class='x'>&lt;/h2&gt;</span>
+<span class='cp'>&lt;%</span> <span class='k'>for</span><span class='p'>(</span> <span class='n'>var</span> <span class='n'>i</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='o'>&lt;</span> <span class='n'>todos</span><span class='o'>.</span><span class='n'>length</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>++</span><span class='p'>)</span> <span class='p'>{</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>  &lt;li&gt;</span><span class='cp'>&lt;%=</span> <span class='n'>todos</span><span class='o'>[</span><span class='n'>i</span><span class='o'>].</span><span class='n'>name</span> <span class='cp'>%&gt;</span><span class='x'>&lt;/li&gt;</span>
+<span class='cp'>&lt;%</span> <span class='p'>}</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>&lt;/script&gt;</span>
+</code></pre>
+</div>
+<p>Can be inserted into the document with:</p>
+<div class='highlight'><pre><code class='javascript'><span class='nx'>can</span><span class='p'>.</span><span class='nx'>view</span><span class='p'>(</span><span class='s1'>&#39;todosEJS&#39;</span><span class='p'>,</span> <span class='p'>{</span>
+  <span class='nx'>todos</span> <span class='o'>:</span> <span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>(),</span>
+  <span class='nx'>user</span><span class='o'>:</span> <span class='nx'>User</span><span class='p'>.</span><span class='nx'>findOne</span><span class='p'>({</span> <span class='nx'>id</span><span class='o'>:</span> <span class='mi'>5</span> <span class='p'>})</span>
+<span class='p'>}).</span><span class='nx'>then</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>(</span> <span class='nx'>frag</span> <span class='p'>){</span>
+  <span class='nb'>document</span><span class='p'>.</span><span class='nx'>getElementById</span><span class='p'>(</span><span class='s1'>&#39;todos&#39;</span><span class='p'>)</span>
+          <span class='p'>.</span><span class='nx'>appendChild</span><span class='p'>(</span><span class='nx'>frag</span><span class='p'>);</span>
+<span class='p'>})</span>
+</code></pre>
+</div>
 <h3 id='magic_tags'>Magic Tags</h3>
 
 <p>EJS uses 5 types of magic tags:</p>
 
 <p><strong><code>&lt;% CODE %&gt;</code></strong> - Runs JS Code.</p>
 
-<p>This type of magic tag does not modify the template but is used for JS control statements like for-loops, if/else, switch, etc. Examples:</p>
+<p>This type of magic tag does not modify the template but is used for JS control statements like for-loops, if/else, switch, declaring variables, etc. Pretty much any JS code is valid. Examples:</p>
+<div class='highlight'><pre><code class='erb'><span class='x'>&lt;!-- check if there are no todos --&gt;</span>
+<span class='cp'>&lt;%</span> <span class='k'>if</span><span class='p'>(</span> <span class='n'>todos</span><span class='o'>.</span><span class='n'>attr</span><span class='p'>(</span><span class='s1'>&#39;length&#39;</span><span class='p'>)</span> <span class='o'>===</span> <span class='mi'>0</span> <span class='p'>)</span> <span class='p'>{</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>    &lt;li&gt;You have no todos&lt;/li&gt;</span>
+<span class='cp'>&lt;%</span> <span class='p'>}</span> <span class='k'>else</span> <span class='p'>{</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>    </span><span class='cp'>&lt;%</span> <span class='n'>list</span><span class='p'>(</span><span class='n'>todos</span><span class='p'>,</span> <span class='n'>function</span><span class='p'>(){</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>        &lt;li&gt; .... &lt;/li&gt;</span>
+<span class='x'>    </span><span class='cp'>&lt;%</span> <span class='p'>})</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='cp'>&lt;%</span> <span class='p'>}</span> <span class='cp'>%&gt;</span><span class='x' />
 
-<pre><code>&lt;% if( todos.attr(&#39;length&#39;) === 0 ) { %&gt;
-    &lt;li&gt;You have no todos&lt;/li&gt;
-&lt;% } else { %&gt;
-    &lt;% list(todos, function(){ %&gt;
-      &lt;li&gt; .... &lt;/li&gt;
-    &lt;% }) %&gt;
-&lt;% } %&gt;
+<span class='x'>&lt;!-- create and use a variable --&gt;</span>
+<span class='cp'>&lt;%</span> <span class='n'>var</span> <span class='n'>person</span> <span class='o'>=</span> <span class='n'>todo</span><span class='o'>.</span><span class='n'>attr</span><span class='p'>(</span><span class='s1'>&#39;person&#39;</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>&lt;span&gt;</span><span class='cp'>&lt;%=</span> <span class='n'>person</span><span class='o'>.</span><span class='n'>attr</span><span class='p'>(</span><span class='s1'>&#39;name&#39;</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x'>&lt;span&gt;</span>
+</code></pre>
+</div>
+<p><strong><code>&lt;%= CODE %&gt;</code></strong> - Runs a JS statement and writes the <strong>escaped</strong> result into the result of the template.</p>
 
-
-&lt;% var person = todo.attr(&#39;person&#39;) %&gt;
-&lt;span&gt;&lt;%= person.attr(&#39;name&#39;) %&gt;&lt;span&gt;</code></pre>
-
-<p><strong><code>&lt;%= CODE %&gt;</code></strong> - Runs JS Code and writes the <em>escaped</em> result into the result of the template.</p>
-
-<p>The following results in the user seeing &#8220;my favorite element is &#60;b&gt;B&#60;b&gt;&#8221; and not <b>B</b>.</p>
+<p>The following results in the user seeing <code>my favorite element is &amp;lt;b&gt;B&amp;lt;b&gt;.</code> and not <code>my favorite element is <B>B</B>.</code>.</p>
 
 <pre><code> &lt;div&gt;my favorite element is &lt;%= &#39;&lt;b&gt;B&lt;/b&gt;&#39; %&gt;.&lt;/div&gt;</code></pre>
 
-<p><strong><code>&lt;%== CODE %&gt;</code></strong> - Runs JS Code and writes the <em>unescaped</em> result into the result of the template.</p>
+<p>This protects you against <a href='http://en.wikipedia.org/wiki/Cross-site_scripting'>cross-site scripting</a> attacks.</p>
 
-<p>The following results in &#8220;my favorite element is <B>B</B>.&#8221;. Using <code>&lt;%==</code> is useful for sub-templates.</p>
+<p><strong><code>&lt;%== CODE %&gt;</code></strong> - Runs a JS statement and writes the <strong>unescaped</strong> result into the result of the template.</p>
 
-<pre><code>     &lt;div&gt;my favorite element is &lt;%== &#39;&lt;B&gt;B&lt;/B&gt;&#39; %&gt;.&lt;/div&gt;</code></pre>
+<p>The following results in <code>my favorite element is <B>B</B>.</code>. Using <code>&lt;%==</code> is useful for sub-templates.</p>
 
-<p><strong><code>&lt;%% CODE %&gt;</code></strong> - Writes &lt;% CODE %&gt; to the result of the template. This is very useful for generators.</p>
+<pre><code>&lt;div&gt;my favorite element is &lt;%== &#39;&lt;B&gt;B&lt;/B&gt;&#39; %&gt;.&lt;/div&gt;</code></pre>
 
-<pre><code>     &lt;%%= &#39;hello world&#39; %&gt;</code></pre>
-
-<p><strong><code>&lt;%# CODE %&gt;</code></strong> - Used for comments. This does nothing.</p>
-
-<pre><code>     &lt;%# &#39;hello world&#39; %&gt;</code></pre>
-
+<p>Use <code>&lt;%== CODE %&gt;</code> when rendering subtemplates:</p>
+<div class='highlight'><pre><code class='erb'><span class='cp'>&lt;%</span> <span class='k'>for</span><span class='p'>(</span> <span class='n'>var</span> <span class='n'>i</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='o'>&lt;</span> <span class='n'>todos</span><span class='o'>.</span><span class='n'>length</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>++</span><span class='p'>)</span> <span class='p'>{</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>  &lt;li&gt;</span><span class='cp'>&lt;%=</span><span class='o'>=</span> <span class='n'>can</span><span class='o'>.</span><span class='n'>view</span><span class='o'>.</span><span class='n'>render</span><span class='p'>(</span><span class='s1'>&#39;todoEJS&#39;</span><span class='p'>,</span> <span class='n'>todos</span><span class='o'>[</span><span class='n'>i</span><span class='o'>]</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x'>&lt;/li&gt;</span>
+<span class='cp'>&lt;%</span> <span class='p'>}</span> <span class='cp'>%&gt;</span><span class='x' />
+</code></pre>
+</div>
 <h3 id='live_binding'>Live Binding</h3>
 
+<p><strong>can.EJS</strong> will automatically update itself when <a href='#can_observe'>can.Observes</a> change. To enable live-binding, use <a href='#!can_observe-attr'>attr</a> to read properties. For example, the following template will update todo&#8217;s name when it change:</p>
+<div class='highlight'><pre><code class='erb'><span class='x'>  &lt;li&gt;</span><span class='cp'>&lt;%=</span> <span class='n'>todo</span><span class='o'>.</span><span class='n'>attr</span><span class='p'>(</span><span class='s1'>&#39;name&#39;</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x'>&lt;/li&gt;</span>
+</code></pre>
+</div>
+<p>Notice <code>attr(&#39;name&#39;)</code>. This sets up live-binding. If you change the todo&#8217;s name, the <code>&lt;li&gt;</code> will automatically be updated:</p>
+<div class='highlight'><pre><code class='javascript'><span class='nx'>todo</span><span class='p'>.</span><span class='nx'>attr</span><span class='p'>(</span><span class='s2'>&quot;Clean the toilet&quot;</span><span class='p'>);</span>
+</code></pre>
+</div>
+<p>Live-binding works by wrapping the code inside the magic tags with a function to call when the attribute (or attributes) are changed. This is important to understand because a template like this will not work:</p>
+<div class='highlight'><pre><code class='erb'><span class='cp'>&lt;%</span> <span class='k'>for</span><span class='p'>(</span> <span class='n'>var</span> <span class='n'>i</span> <span class='o'>=</span> <span class='mi'>0</span><span class='p'>;</span> <span class='n'>i</span> <span class='o'>&lt;</span> <span class='n'>todos</span><span class='o'>.</span><span class='n'>length</span><span class='p'>;</span> <span class='n'>i</span><span class='o'>++</span><span class='p'>)</span> <span class='p'>{</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>  &lt;li&gt;</span><span class='cp'>&lt;%=</span> <span class='n'>todos</span><span class='o'>[</span><span class='n'>i</span><span class='o'>].</span><span class='n'>attr</span><span class='p'>(</span><span class='s1'>&#39;name&#39;</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x'>&lt;/li&gt;</span>
+<span class='cp'>&lt;%</span> <span class='p'>}</span> <span class='cp'>%&gt;</span><span class='x' />
+</code></pre>
+</div>
+<p>This does not work because when the function wrapping <code>todos[i].attr(&#39;name&#39;)</code> is called, <code>i</code> will be <strong>3</strong> not the index of the desired todo. Fix this by using a closure like:</p>
+<div class='highlight'><pre><code class='erb'><span class='cp'>&lt;%</span> <span class='vg'>$.</span><span class='n'>each</span><span class='p'>(</span><span class='n'>todos</span><span class='p'>,</span> <span class='n'>function</span><span class='p'>(</span><span class='n'>i</span><span class='p'>,</span> <span class='n'>todo</span><span class='p'>){</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>  &lt;li&gt;</span><span class='cp'>&lt;%=</span> <span class='n'>todo</span><span class='o'>.</span><span class='n'>attr</span><span class='p'>(</span><span class='s1'>&#39;name&#39;</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x'>&lt;/li&gt;</span>
+<span class='cp'>&lt;%</span> <span class='p'>})</span> <span class='cp'>%&gt;</span><span class='x' />
+</code></pre>
+</div>
+<h3 id='list_'>list <code>list( observeList, iterator( item, index ) )</code></h3>
+
+<p>If you want to make the previous template update when todos are added or removed, could bind to length like:</p>
+<div class='highlight'><pre><code class='erb'><span class='cp'>&lt;%</span> <span class='n'>todos</span><span class='o'>.</span><span class='n'>bind</span><span class='p'>(</span><span class='s2'>&quot;length&quot;</span><span class='p'>,</span> <span class='n'>function</span><span class='p'>(){});</span>
+   <span class='vg'>$.</span><span class='n'>each</span><span class='p'>(</span><span class='n'>todos</span><span class='p'>,</span> <span class='n'>function</span><span class='p'>(</span><span class='n'>i</span><span class='p'>,</span> <span class='n'>todo</span><span class='p'>){</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>      &lt;li&gt;</span><span class='cp'>&lt;%=</span> <span class='n'>todo</span><span class='o'>.</span><span class='n'>attr</span><span class='p'>(</span><span class='s1'>&#39;name&#39;</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x'>&lt;/li&gt;</span>
+<span class='cp'>&lt;%</span> <span class='p'>})</span> <span class='cp'>%&gt;</span><span class='x' />
+</code></pre>
+</div>
+<p>Or simply use EJS&#8217;s <code>list</code> helper method like:</p>
+<div class='highlight'><pre><code class='erb'><span class='cp'>&lt;%</span> <span class='n'>list</span><span class='p'>(</span><span class='n'>todos</span><span class='p'>,</span> <span class='n'>function</span><span class='p'>(</span><span class='n'>todo</span><span class='p'>){</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>  &lt;li&gt;</span><span class='cp'>&lt;%=</span> <span class='n'>todo</span><span class='o'>.</span><span class='n'>attr</span><span class='p'>(</span><span class='s1'>&#39;name&#39;</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x'>&lt;/li&gt;</span>
+<span class='cp'>&lt;%</span> <span class='p'>})</span> <span class='cp'>%&gt;</span><span class='x' />
+</code></pre>
+</div>
+<p>Now when todos are added or removed from the todo list, the template&#8217;s HTML is updated:</p>
+<div class='highlight'><pre><code class='javascript'><span class='c1'>// add an item</span>
+<span class='nx'>todos</span><span class='p'>.</span><span class='nx'>push</span><span class='p'>(</span> <span class='k'>new</span> <span class='nx'>Todo</span><span class='p'>({</span><span class='nx'>name</span> <span class='o'>:</span> <span class='s2'>&quot;file taxes&quot;</span><span class='p'>})</span> <span class='p'>);</span>
+
+<span class='c1'>// destroying an item removes it from Model.Lists</span>
+<span class='nx'>todos</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>destroy</span><span class='p'>()</span>
+</code></pre>
+</div>
 <h2 id='cancontrol_'>can.Control <code>can.Control(classProps, prototypeProps)</code></h2>
 
-<p><a href='http://donejs.com/docs.html#!can.Control'>can.Control</a> creates organized, memory-leak free, rapidly performing, stateful controls. It is used to create UI controls like tabs, grids, and contextmenus and used to organize them into higher-order business rules with <a href='http://donejs.com/docs.html#!can.route'>can.route</a>. Its serves as both a traditional view and a traditional controller.</p>
+<p><a href='http://donejs.com/docs.html#!can.Control'>can.Control</a> creates organized, memory-leak free, rapidly performing, stateful controls. Use it to create UI controls like tabs, grids, and contextmenus and used to organize them into higher-order business rules with <a href='http://donejs.com/docs.html#!can.route'>can.route</a>. It can serve as a traditional view and a traditional controller.</p>
 
-<p>Let&#8217;s make a basic todos widget that lists todos and lets us destroy them. Add the following to <strong>todos.js</strong>:</p>
+<p>The following examples make a basic todos widget that lists todos and lets us destroy them. Create a control constructor function of your own by extending <code>can.Control</code>.</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Todos</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Control</span><span class='p'>({</span>
   <span class='s2'>&quot;init&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>element</span> <span class='p'>,</span> <span class='nx'>options</span> <span class='p'>){</span>
     <span class='k'>this</span><span class='p'>.</span><span class='nx'>element</span><span class='p'>.</span><span class='nx'>html</span><span class='p'>(</span><span class='s1'>&#39;todos.ejs&#39;</span><span class='p'>,</span> <span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>()</span> <span class='p'>)</span>
@@ -553,8 +632,8 @@
 <span class='p'>})</span>
 </code></pre>
 </div>
-<p>We can create this widget on the <code>#todos</code> element with:</p>
-<div class='highlight'><pre><code class='javascript'><span class='k'>new</span> <span class='nx'>Todos</span><span class='p'>(</span><span class='s1'>&#39;#todos&#39;</span><span class='p'>,</span> <span class='p'>{});</span>
+<p>Create an instance of the Todos control the <code>#todos</code> element with:</p>
+<div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>todosControl</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>Todos</span><span class='p'>(</span><span class='s1'>&#39;#todos&#39;</span><span class='p'>,</span> <span class='p'>{});</span>
 </code></pre>
 </div>
 <h3 id='init_'>init <code>can.Control.prototype.init(element, options)</code></h3>
@@ -576,13 +655,21 @@
   <span class='p'>}</span>
 <span class='p'>})</span>
 
+<span class='c1'>// create a Todos with default options</span>
 <span class='k'>new</span> <span class='nx'>Todos</span><span class='p'>(</span> <span class='nb'>document</span><span class='p'>.</span><span class='nx'>body</span><span class='p'>.</span><span class='nx'>firstElementChild</span> <span class='p'>);</span>
+
+<span class='c1'>// overwrite the template option</span>
 <span class='k'>new</span> <span class='nx'>Todos</span><span class='p'>(</span> <span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;#todos&#39;</span><span class='p'>),</span> <span class='p'>{</span><span class='nx'>template</span><span class='o'>:</span> <span class='s1'>&#39;specialTodos.ejs&#39;</span><span class='p'>})</span>
 </code></pre>
 </div>
 <h3 id='element_'>element <code>this.element</code></h3>
 
-<p><a href='http://donejs.com/docs.html#!can.Controll.prototype.element'>this.element</a> is the element the control is created on.</p>
+<p><a href='http://donejs.com/docs.html#!can.Controll.prototype.element'>this.element</a> is the a nodelist of a single element, the element the control is created on.</p>
+<div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>todosControl</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>Todos</span><span class='p'>(</span> <span class='nb'>document</span><span class='p'>.</span><span class='nx'>body</span><span class='p'>.</span><span class='nx'>firstElementChild</span> <span class='p'>);</span>
+<span class='nx'>todosControl</span><span class='p'>.</span><span class='nx'>element</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>]</span> <span class='c1'>//-&gt; document.body.firstElementChild</span>
+</code></pre>
+</div>
+<p>Each library wraps the element differently. If you are using jQuery, the element is wrapped with <code>jQuery( element )</code>.</p>
 
 <h3 id='options_'>options <code>this.options</code></h3>
 
@@ -607,7 +694,7 @@
 <p>When an <code>&lt;li&gt;</code> is clicked, <code>&quot;li click&quot;</code> is called with:</p>
 
 <ul>
-<li>The jQuery-wrapped <strong>element</strong> that was clicked</li>
+<li>The library-wrapped <strong>element</strong> that was clicked.</li>
 
 <li>The <strong>event</strong> data</li>
 </ul>
@@ -971,6 +1058,30 @@
 <p>CanJS can be used with libraries other than jQuery.</p>
 
 <h3 id='implementing_another_library'>Implementing another library</h3>
+
+<h2 id='plugins'>Plugins</h2>
+
+<h3 id='construct_proxy'>construct proxy</h3>
+
+<h3 id='construct_super'>construct super</h3>
+
+<h3 id='control_plugin'>control plugin</h3>
+
+<h3 id='control_view'>control view</h3>
+
+<h3 id='observe_attributes'>observe attributes</h3>
+
+<h3 id='observe_delegate'>observe delegate</h3>
+
+<h3 id='observe_setter'>observe setter</h3>
+
+<h3 id='model_backup'>model backup</h3>
+
+<h3 id='model_validations'>model validations</h3>
+
+<h3 id='model_elements'>model elements</h3>
+
+<h3 id='view_modifiers'>view modifiers</h3>
 
 <h2 id='examples'>Examples</h2>
 
