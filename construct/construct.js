@@ -7,7 +7,7 @@
 steal("can/util/string",function( $ ) {
 
 	
-	var initializing = false;
+	var initializing = 0;
 
 	/** 
 	 * @add can.Construct 
@@ -51,6 +51,7 @@ steal("can/util/string",function( $ ) {
 		newInstance: function() {
 			// get a raw instance objet (init is not called)
 			var inst = this.instance(),
+				arg = arguments,
 				args;
 				
 			// call setup if there is a setup
@@ -59,7 +60,7 @@ steal("can/util/string",function( $ ) {
 			}
 			// call init if there is an init, if setup returned args, use those as the arguments
 			if ( inst.init ) {
-				inst.init.apply(inst, can.isArray(args) ? args : arguments);
+				inst.init.apply(inst, args || arguments);
 			}
 			return inst;
 		},
@@ -67,7 +68,7 @@ steal("can/util/string",function( $ ) {
 		//   newProps - new properties
 		//   oldProps - where the old properties might be
 		//   addTo - what we are adding to
-		_inherit: function( newProps, oldProps, addTo ) {
+		_inherit: function( newProps, addTo ) {
 			can.extend(addTo || newProps, newProps || {})
 		},
 		/**
@@ -127,9 +128,9 @@ steal("can/util/string",function( $ ) {
 		},
 		instance: function() {
 			// prevent running init
-			initializing = true;
+			initializing = 1;
 			var inst = new this();
-			initializing = false;
+			initializing = 0;
 			// allow running init
 			return inst;
 		},
@@ -183,7 +184,7 @@ steal("can/util/string",function( $ ) {
 			prototype = this.instance();
 			
 			// Copy the properties over onto the new prototype
-			this._inherit(proto, _super, prototype);
+			this._inherit(proto, prototype);
 
 			// The dummy class constructor
 			function Constructor() {
@@ -203,12 +204,12 @@ steal("can/util/string",function( $ ) {
 				}
 			}
 			// copy new static props on class
-			this._inherit(klass, this, Constructor);
+			this._inherit(klass, Constructor);
 
 			// do namespace stuff
 			if ( fullName ) {
 
-				var parts = fullName.split(/\./),
+				var parts = fullName.split('.'),
 					shortName = parts.pop(),
 					current = can.String.getObject(parts.join('.'), window, true),
 					namespace = current,
@@ -418,4 +419,4 @@ steal("can/util/string",function( $ ) {
 
 
 
-})();
+})
