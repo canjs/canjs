@@ -3,7 +3,7 @@ module("can/control");
 // tests binding and unbind, removing event handlers, etc
 test("basics",  14, function(){
 	var clickCount = 0;
-	var Things = Can.Control({
+	var Things = can.Control({
 		"click" : function(){
 			clickCount++;
 		},
@@ -28,21 +28,21 @@ test("basics",  14, function(){
 	}
 	
 	
-	Can.append( Can.$("#qunit-test-area"), "<div id='things'>div<span>span</span></div>")
+	can.append( can.$("#qunit-test-area"), "<div id='things'>div<span>span</span></div>")
 	var things = new Things("#things",{foo: foo});
 	
 	
-	Can.trigger( Can.$('#things span'), 'click');
-	Can.trigger( Can.$('#things'), 'click');
+	can.trigger( can.$('#things span'), 'click');
+	can.trigger( can.$('#things'), 'click');
 	
 	equal(clickCount,  2, "click called twice");
 	
 	things.destroy();
-	Can.trigger( Can.$('#things span'), 'click');
+	can.trigger( can.$('#things span'), 'click');
 	
 	new Things("#things",{foo: foo});
 	
-	Can.remove( Can.$('#things') );
+	can.remove( can.$('#things') );
 })
 
 if( window.jQuery ){
@@ -51,7 +51,7 @@ if( window.jQuery ){
 			
 		}
 		var called = false;
-		Can.Control("WeirdBind",{
+		can.Control("WeirdBind",{
 			crazyEvent: function() {
 				called = true;
 			}
@@ -69,120 +69,135 @@ if( window.jQuery ){
 
 
 test("parameterized actions", function(){
+	// YUI does not like non-dom event
+	if(can.Y){
+		can.Y.mix(can.Y.Node.DOM_EVENTS, {
+			sillyEvent: true,
+		});
+	}
+	
+	
+	
 	var called = false,
-		WeirderBind = Can.Control({
+		WeirderBind = can.Control({
 			"{parameterized}" : function() {
 				called = true;
 			}
 		}),
 		a;
 	
-	Can.append( Can.$("#qunit-test-area"), "<div id='crazy'></div>")
+	can.append( can.$("#qunit-test-area"), "<div id='crazy'></div>")
 	
-	a = Can.$("#crazy")
+	a = can.$("#crazy")
 	
 	new WeirderBind(a, {parameterized: "sillyEvent"});
 	
-	Can.trigger(a, "sillyEvent");
+	can.trigger(a, "sillyEvent");
 
 	ok(called, "heard the trigger")
 	
-	Can.remove( a );
+	can.remove( a );
 })
 
 
 test("windowresize", function(){
 	
 	var called = false,
-		WindowBind= Can.Control("",{
+		WindowBind= can.Control("",{
 			"{window} resize" : function() {
 				called = true;
 			}
 		})
 	
-	Can.append( Can.$("#qunit-test-area"), "<div id='weird'>")
+	can.append( can.$("#qunit-test-area"), "<div id='weird'>")
 	
 
 	
 	new WindowBind("#weird")
 	
-	Can.trigger( Can.$(window),'resize')
+	can.trigger( can.$(window),'resize')
 	ok(called,"got window resize event");
 	
-	Can.remove( Can.$("#weird") );
+	can.remove( can.$("#weird") );
 });
 
 
 
 // this.delegate(this.cached.header.find('tr'), "th", "mousemove", "th_mousemove"); 
-test("delegate", function(){
+test("on", function(){
 	var called = false,
-		DelegateTest= Can.Control({
+		DelegateTest= can.Control({
 			click: function() {}
 		})
 	
-	Can.append( Can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
+	can.append( can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
 	
-	var els = Can.$("#els")
+	var els = can.$("#els")
 	
 	var dt = new DelegateTest(els)
 	
 	
-	dt.delegate(Can.$("#els span"), "a", "click", function(){
+	dt.on(can.$("#els span"), "a", "click", function(){
 		called = true;
 	})
 	
-	Can.trigger( Can.$("#els a"), 'click')
+	can.trigger( can.$("#els a"), 'click')
 	ok(called, "delegate works")
-	Can.remove( els )
+	can.remove( els )
 });
 
 
 test("inherit", function(){
 	var called = false,
-		Parent = Can.Control({
+		Parent = can.Control({
 			click: function(){
 				called = true;
 			}
 		}),
 		Child = Parent({});
 	
-	Can.append( Can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
+	can.append( can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
 	
-	var els = Can.$("#els")
+	var els = can.$("#els")
 
 	new Child(els);
-	Can.trigger( Can.$("#els"),'click' )
+	can.trigger( can.$("#els"),'click' )
 
 	ok(called, "inherited the click method")
 	
-	Can.remove(els);
+	can.remove(els);
 });
 
 
 test("space makes event",1,function(){
 	
-	var Dot = Can.Control({
+	if(can.Y){
+		can.Y.mix(can.Y.Node.DOM_EVENTS, {
+			foo: true,
+		});
+	}
+	
+	var Dot = can.Control({
 		" foo" : function(){
 			ok(true,'called')
 		}
 	});
 	
-	Can.append( Can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
+	can.append( can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
 	
-	var els = Can.$("#els")
+	var els = can.$("#els")
 	
 	
 	new Dot(els);
-	Can.trigger( Can.$("#els"),'foo' )
-	Can.remove(els);
+	can.trigger( can.$("#els"),'foo' )
+	can.remove(els);
 })
 
 
 
 
 test("inherit defaults", function() {
-    var BASE = Can.Control({
+    var BASE = can.Control({
         defaults : {
             foo: 'bar'
         }
@@ -216,7 +231,7 @@ var bindable = function(b){
 test("update rebinding", 2, function(){
 	var first = true;
 	
-	var Rebinder = Can.Control({
+	var Rebinder = can.Control({
 		"{item} foo" : function(item, ev){
 			if(first){
 				equals(item.id, 1, "first item");
@@ -230,8 +245,8 @@ test("update rebinding", 2, function(){
 		item2 = bindable({id: 2}),
 		rb = new Rebinder( document.createElement('div'), {item: item1} );
 	
-	Can.trigger(item1, "foo")
+	can.trigger(item1, "foo")
 	rb.update({item: item2});
 	
-	Can.trigger(item2, "foo")
+	can.trigger(item2, "foo")
 });

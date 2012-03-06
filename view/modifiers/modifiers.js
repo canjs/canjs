@@ -12,7 +12,7 @@ steal('can/util/jquery', function(){
 		// replace it wiht our new helper
 		$.fn[func_name] = function() {
 			
-			var args = Can.makeArray(arguments),
+			var args = can.makeArray(arguments),
 				callbackNum, 
 				callback, 
 				self = this,
@@ -21,7 +21,7 @@ steal('can/util/jquery', function(){
 			// if the first arg is a deferred
 			// wait until it finishes, and call
 			// modify with the result
-			if ( Can.isDeferred(args[0]) ) {
+			if ( can.isDeferred(args[0]) ) {
 				args[0].done(function( res ) {
 					modify.call(self, [res], old);
 				})
@@ -37,14 +37,14 @@ steal('can/util/jquery', function(){
 						modify.call(self, [result], old);
 						callback.call(self, result);
 					};
-					Can.view.apply(Can.view, args);
+					can.view.apply(can.view, args);
 					return this;
 				}
 				// call view with args (there might be deferreds)
-				result = Can.view.apply(Can.view, args);
+				result = can.view.apply(can.view, args);
 				
 				// if we got a string back
-				if (!Can.isDeferred(result) ) {
+				if (!can.isDeferred(result) ) {
 					// we are going to call the old method with that string
 					args = [result];
 				} else {
@@ -66,7 +66,7 @@ steal('can/util/jquery', function(){
 		var res, stub, hooks;
 
 		//check if there are new hookups
-		for ( var hasHookups in Can.view.hookups ) {
+		for ( var hasHookups in can.view.hookups ) {
 			break;
 		}
 
@@ -75,7 +75,7 @@ steal('can/util/jquery', function(){
 		// by using a frag, the element can be recursively hooked up
 		// before insterion
 		if ( hasHookups && args[0] && isHTML(args[0]) ) {
-			args[0] = Can.view.frag(args[0])
+			args[0] = can.view.frag(args[0])
 		}
 	
 		//then insert into DOM
@@ -110,7 +110,7 @@ steal('can/util/jquery', function(){
 			return true;
 		} else if ( typeof arg === "string" ) {
 			// if string, do a quick sanity check that we're HTML
-			arg = Can.trim(arg);
+			arg = can.trim(arg);
 			return arg.substr(0, 1) === "<" && arg.substr(arg.length - 1, 1) === ">" && arg.length >= 3;
 		} else {
 			// don't know what you are
@@ -126,24 +126,24 @@ steal('can/util/jquery', function(){
 	/**
 	 *  @add jQuery.fn
 	 *  @parent jQuery.View
-	 *  Called on a jQuery collection that was rendered with Can.View with pending hookups.  Can.View can render a 
+	 *  Called on a jQuery collection that was rendered with can.View with pending hookups.  can.View can render a 
 	 *  template with hookups, but not actually perform the hookup, because it returns a string without actual DOM 
 	 *  elements to hook up to.  So hookup performs the hookup and clears the pending hookups, preventing errors in 
 	 *  future templates.
 	 *  
 	 * @codestart
-	 * $(Can.View('//views/recipes.ejs',recipeData)).hookup()
+	 * $(can.View('//views/recipes.ejs',recipeData)).hookup()
 	 * @codeend
 	 */
 	$.fn.hookup = function() {
-		Can.view.frag(this);
+		can.view.frag(this);
 		return this;
 	};
 
 	/**
 	 *  @add jQuery.fn
 	 */
-	Can.each([
+	can.each([
 	/**
 	 *  @function prepend
 	 *  @parent jQuery.View

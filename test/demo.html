@@ -43,7 +43,7 @@ steal('can/model',
       function($){
 
 // GETS TODOS FROM THE SERVER
-Can.Model('Todo',{
+can.Model('Todo',{
     findAll : "GET /todos",
     findOne : "GET /todos/{id}",
     create  : "POST /todos",
@@ -96,14 +96,14 @@ $.fixture("DELETE /todos/{id}", function(){
 // OR FOR MANGING WIDGETS
           
 // Organizes a list of todos
-Can.Control("Todos",{
+can.Control("Todos",{
   // called when a new Todos() is created
   "init" : function( element , options ){
     
     // get all todos and render them with
     // a template in the element's html
     var self = this;
-    Can.view('todosEjs', Todo.findAll()).then(function(frag){
+    can.view('todosEjs', Todo.findAll()).then(function(frag){
     	self.element.html(frag)
     });
   },
@@ -133,7 +133,7 @@ Can.Control("Todos",{
 
 // Editor manages editing a todo's name
 // call update on the editor like
-Can.Control('Editor',{
+can.Control('Editor',{
   todo : function(todo){
   	this.update({todo: todo});
   	this.setName()
@@ -162,7 +162,7 @@ Can.Control('Editor',{
 
 // Routing puts all the widget controllers together
 // along with managing routes
-Can.Control("Routing",{
+can.Control("Routing",{
   init : function(){
     this.editor = new Editor("#editor")
     new Todos("#todos");
@@ -178,7 +178,7 @@ Can.Control("Routing",{
     }, this))
   },
   "li selected" : function(el, ev, todo){
-    Can.route.attr('id',todo.id);
+    can.route.attr('id',todo.id);
   }
 });
 

@@ -1,28 +1,28 @@
-steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompressed.js", 
-	'../event.js').then(
-	'http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojox/NodeList/delegate.xd.js',
-	'http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/NodeList-traverse.xd.js',
+steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompressed.js", 
+	'../event.js'
+	).then('./nodelist-traverse').then(
+	'./trigger',
 	function(){
 	
 	// String
-	Can.trim = function(s){
-		return dojo.trim(s);
+	can.trim = function(s){
+		return s && dojo.trim(s);
 	}
 	
 	// Array
-	Can.makeArray = function(arr){
+	can.makeArray = function(arr){
 		array = [];
 		dojo.forEach(arr, function(item){ array.push(item)});
 		return array;
 	};
-	Can.isArray = dojo.isArray;
-	Can.inArray = function(item,arr){
+	can.isArray = dojo.isArray;
+	can.inArray = function(item,arr){
 		return dojo.indexOf(arr, item);
 	};
-	Can.map = function(arr, fn){
-		return dojo.map(Can.makeArray(arr||[]), fn);
+	can.map = function(arr, fn){
+		return dojo.map(can.makeArray(arr||[]), fn);
 	};
-	Can.each = function(elements, callback) {
+	can.each = function(elements, callback) {
     	var i, key;
 	    if (typeof  elements.length == 'number' && elements.pop)
 	      for(i = 0; i < elements.length; i++) {
@@ -35,18 +35,18 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompre
 	    return elements;
   	}
 	// Object
-	Can.extend = function(first){
+	can.extend = function(first){
 		if(first === true){
-			var args = Can.makeArray(arguments);
+			var args = can.makeArray(arguments);
 			args.shift();
 			return dojo.mixin.apply(dojo, args)
 		}
 		return dojo.mixin.apply(dojo, arguments)
 	}
-	Can.param = function(object){
+	can.param = function(object){
 		return dojo.objectToQuery(object)
 	}
-	Can.isEmptyObject = function(object){
+	can.isEmptyObject = function(object){
 		var prop;
 		for(prop in object){
 			break;
@@ -54,102 +54,147 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompre
 		return prop === undefined;;
 	}
 	// Function
-	Can.proxy = function(func, context){
+	can.proxy = function(func, context){
 		return dojo.hitch(context, func)
 	}
-	Can.isFunction = function(f){
+	can.isFunction = function(f){
 		return dojo.isFunction(f);
 	}
-	// make this object so you can bind on it
-	Can.bind = function( ev, cb){
+	/**
+	 * EVENTS
+	 * 
+	 * Dojo does not use the callback handler when unbinding.  Instead
+	 * when binding (dojo.connect or dojo.on) an object with a remove
+	 * method is returned.
+	 * 
+	 * Because of this, we have to map each callback to the "remove"
+	 * object to it can be passed to dojo.disconnect.
+	 */
+	
+	// these should be pre-loaded by steal
+	// we might want to wrap
+	require(["dojo/query", "plugd/trigger"], function(){})
+	
+	// the id of the function to be bound, used as an expando on the function
+	// so we can lookup it's "remove" object
+	var id = 0,
+		// takes a node list, goes through each node
+		// and adds events data that has a map of events to 
+		// callbackId to "remove" object.  It looks like
+		// {click: {5: {remove: fn}}}		
+		addBinding = function(nodelist, ev, cb){
+			nodelist.forEach(function(node){
+				var node = new dojo.NodeList(node)
+				var events = can.data(node,"events");
+				if(!events){
+					can.data(node,"events", events = {})
+				}
+				if(!events[ev]){
+					events[ev] = {};
+				}
+				if(cb.__bindingsIds === undefined) {
+					cb.__bindingsIds=id++;
+				} 
+				events[ev][cb.__bindingsIds] = node.on(ev, cb)[0]
+			});
+		},
+		// removes a binding on a nodelist by finding
+		// the remove object within the object's data
+		removeBinding = function(nodelist,ev,cb){
+			nodelist.forEach(function(node){
+				var node = new dojo.NodeList(node),
+					events = can.data(node,"events"),
+					handlers = events[ev],
+					handler = handlers[cb.__bindingsIds];
+				
+				dojo.disconnect(handler);
+				delete handlers[cb.__bindingsIds];
+				
+				if(can.isEmptyObject(handlers)){
+					delete events[ev]
+				}
+				if(can.isEmptyObject(events)){
+					// clear data
+				}
+			});
+		}
+	
+	can.bind = function( ev, cb){
 		// if we can bind to it ...
-		if(this.bind && this.bind !== Can.bind){
+		if(this.bind && this.bind !== can.bind){
 			this.bind(ev, cb)
+			
+		// otherwise it's an element or node List
+		} else if(this.on || this.nodeType){
+			addBinding( new dojo.NodeList(this), ev, cb)
 		} else if(this.addEvent) {
 			this.addEvent(ev, cb)
 		} else {
 			// make it bind-able ...
-			Can.addEvent.call(this, ev, cb)
+			can.addEvent.call(this, ev, cb)
 		}
 		return this;
 	}
-	Can.unbind = function(ev, cb){
+	can.unbind = function(ev, cb){
 		// if we can bind to it ...
-		if(this.unbind && this.unbind !== Can.unbind){
+		if(this.unbind && this.unbind !== can.unbind){
 			this.unbind(ev, cb)
-		} else if(this.removeEvent) {
-			this.removeEvent(ev, cb)
+		} 
+		
+		else if(this.on || this.nodeType) {
+			removeBinding(new dojo.NodeList(this), ev, cb);
 		} else {
 			// make it bind-able ...
-			Can.removeEvent.call(this, ev, cb)
+			can.removeEvent.call(this, ev, cb)
 		}
 		return this;
 	}
-	Can.trigger = function(item, event, args, bubble){
-		// defaults to true
-		bubble = (bubble === undefined ? true : bubble);
-		args = args || []
-		if(item.fireEvent){
-			item = item[0] || item;
-			// walk up parents to simulate bubbling 
-			while(item) {
-			// handle walking yourself
-				if(!event.type){
-					event = {
-						type : event,
-						target : item
-					}
-				}
-				var events = item.retrieve('events');
-				if (events && events[event.type]) {
-					
-					events[event.type].keys.each(function(fn){
-						fn.apply(this, [event].concat(args));
-					}, this); 
-				} 
-				// if we are bubbling, get parent node
-				item = bubble && item.parentNode
-				
+	
+	can.trigger = function(item, event, args, bubble){
+		if(item.trigger){
+			if(bubble === false){
+				//  force stop propagation by
+				// listening to On and then immediately disconnecting
+				var connect = item.on(event, function(ev){
+					ev.stopPropagation();
+					dojo.disconnect(connect);
+				})
+				item.trigger(event,args)
+			} else {
+				item.trigger(event,args)
 			}
 			
-	
 		} else {
 			if(typeof event === 'string'){
 				event = {type: event}
 			}
 			event.data = args
-			Can.dispatch.call(item, event)
+			can.dispatch.call(item, event)
 		}
 	}
 	
-	dojo.require("dojox.NodeList.delegate");
-	
-	Can.delegate = function(selector, ev , cb){
-		if(this.delegate) {
+	can.delegate = function(selector, ev , cb){
+		if(this.on || this.nodeType){
+			addBinding( new dojo.NodeList(this), selector+":"+ev, cb)
+		} else if(this.delegate) {
 			this.delegate(selector, ev , cb)
-		}
-		 else if(this.addEvent) {
-			this.addEvent(ev+":relay("+selector+")", cb)
-		} else {
-			// make it bind-able ...
-		}
+		} 
 		return this;
 	}
-	Can.undelegate = function(selector, ev , cb){
-		if(this.undelegate) {
+	can.undelegate = function(selector, ev , cb){
+		if(this.on || this.nodeType){
+			removeBinding(new dojo.NodeList(this), selector+":"+ev, cb);
+		} else if(this.undelegate) {
 			this.undelegate(selector, ev , cb)
 		}
-		 else if(this.removeEvent) {
-			this.removeEvent(ev+":relay("+selector+")", cb)
-		} else {
-			// make it bind-able ...
-			
-		}
+
 		return this;
 	}
-	//require(["dojo/on"], function(on){
-	//  on(document, "click", function(){alert('hi')});
-	//});
+
+
+	/**
+	 * Ajax
+	 */
 	var optionsMap = {
 		type:"method",
 		success : undefined,
@@ -166,30 +211,14 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompre
 			}
 		}
 	}
-	Can.Deferred = dojo.Deferred;
-	Can.When = dojo.Deferred.When;
-	Can.Deferred.prototype.pipe = function(done, fail){
-			var d = new Can.Deferred();
-		this.addCallback(function(){
-			d.resolve( done.apply(this, arguments) );
-		});
-		
-		this.addErrback(function(){
-			if(fail){
-				d.reject( fail.apply(this, arguments) );
-			} else {
-				d.reject.apply(d, arguments);
-			}
-		});
-		return d;
-	};
+
 	
-	Can.ajax = function(options){
-		var type = Can.String.capitalize( (options.type || "get").toLowerCase() ),
+	can.ajax = function(options){
+		var type = can.String.capitalize( (options.type || "get").toLowerCase() ),
 			method = dojo["xhr"+type];
 		var success = options.success,
 			error = options.error,
-			d = new Can.Deferred();
+			d = new can.Deferred();
 			
 		var def = method({
 			url : options.url,
@@ -216,64 +245,82 @@ steal("https://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js.uncompre
 			
 	}
 	// element ... get the wrapped helper
-	Can.$ = function(selector){
+	can.$ = function(selector){
 		if(selector === window){
 			return window;
 		}
-		return dojo.query(selector)
+		if(typeof selector === "string"){
+			return dojo.query(selector)
+		} else {
+			return new dojo.NodeList(selector);
+		}
+
+		
 	}
-	Can.buildFragment = function(frags, nodes){
-		var owner = nodes.length && nodes[0].ownerDocument;
-		return dojo.toDom(frags[0], owner );
+	can.buildFragment = function(frags, nodes){
+		var owner = nodes.length && nodes[0].ownerDocument,
+			frag = dojo.toDom(frags[0], owner );
+		if(frag.nodeType !== 11){
+			var tmp = document.createDocumentFragment();
+			tmp.appendChild(frag)
+			frag = tmp;
+		}
+		return {fragment: frag}
 	}
 	
-	// add document fragement support
-	var old = document.id;
-	document.id =  function(el){
-		if(el && el.nodeType === 11){
-			return el
-		} else{
-			return old.apply(document, arguments);
-		}
-	};
-	Can.append = function(wrapped, html){
+
+	can.append = function(wrapped, html){
 		return wrapped.forEach(function(node){
 			dojo.place( html, node)
 		});
 	}
-	Can.filter = function(wrapped, filter){
-		return wrapped.filter(filter);
+	
+	
+	
+	/**
+	 * can.data
+	 * 
+	 * can.data is used to store arbitrary data on an element.
+	 * Dojo does not support this, so we implement it itself.
+	 * 
+	 * The important part is to call cleanData on any elements 
+	 * that are removed from the DOM.  For this to happen, we
+	 * overwrite 
+	 * 
+	 *   -dojo.empty
+	 *   -dojo.destroy
+	 *   -dojo.place when "replace" is used TODO!!!!
+	 * 
+	 * For can.Control, we also need to trigger a non bubbling event
+	 * when an element is removed.  We do this also in cleanData.
+	 */
+	
+	var data = {},
+	    uuid = can.uuid = +new Date(),
+	    exp  = can.expando = 'can' + uuid;
+	
+	function getData(node, name) {
+	    var id = node[exp], store = id && data[id];
+	    return name === undefined ? store || setData(node) :
+	      (store && store[name]);
 	}
 	
+	function setData(node, name, value) {
+	    var id = node[exp] || (node[exp] = ++uuid),
+	      store = data[id] || (data[id] = {});
+	    if (name !== undefined) store[name] = value;
+	    return store;
+	};
 	
-	
-	// Can.data
-	
-  var data = {},
-    uuid = Can.uuid = +new Date(),
-    exp  = Can.expando = 'Can' + uuid;
-
-  function getData(node, name) {
-    var id = node[exp], store = id && data[id];
-    return name === undefined ? store || setData(node) :
-      (store && store[name]);
-  }
-
-  function setData(node, name, value) {
-    var id = node[exp] || (node[exp] = ++uuid),
-      store = data[id] || (data[id] = {});
-    if (name !== undefined) store[name] = value;
-    return store;
-  };
-
-var cleanData = function(elems){
-  	for ( var i = 0, elem;
-		(elem = elems[i]) !== undefined; i++ ) {
-			var id = elem[exp]
-			delete data[id];
-		}
-  }
-	Can.data = function(wrapped, name, value){
+	var cleanData = function(elems){
+	  	can.trigger(new dojo.NodeList(elems),"destroyed",[],false)
+	  	for ( var i = 0, elem;
+			(elem = elems[i]) !== undefined; i++ ) {
+				var id = elem[exp]
+				delete data[id];
+			}
+	  }
+	can.data = function(wrapped, name, value){
 		return value === undefined ?
 			wrapped.length == 0 ? undefined : getData(wrapped[0], name) :
 			wrapped.forEach(function(node){
@@ -290,24 +337,28 @@ var cleanData = function(elems){
 	var destroy = dojo.destroy;
 	dojo.destroy = function(node){
 		node = dojo.byId(node);
-		cleanData(node);
+		cleanData([node]);
 		node.getElementsByTagName && cleanData(node.getElementsByTagName('*'))
 		
 		return destroy.apply(dojo, arguments);
 	};
 	
 
-	Can.addClass = function(wrapped, className){
+
+	
+	can.addClass = function(wrapped, className){
 		return wrapped.addClass(className);
 	}
-	Can.remove = function(wrapped){
+	can.remove = function(wrapped){
 		// we need to remove text nodes ourselves
 		wrapped.forEach(function(node){
 			dojo.destroy(node)
 		});
 	}
 
-	
+	can.get = function(wrapped, index){
+		return wrapped[index];
+	}
 	
 	
 	
@@ -315,4 +366,4 @@ var cleanData = function(elems){
 
 	
 	
-})
+}).then('../deferred.js')

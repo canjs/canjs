@@ -1,8 +1,7 @@
 steal('can/observe','can/util/string/classize.js',function($){
 
-
-var classize = $.String.classize,
-	proto =  Can.Control.prototype,
+var classize = can.String.classize,
+	proto =  can.Observe.prototype,
 	old = proto.__set;
 
 proto.__set = function(prop, value, current, success, error){
@@ -11,9 +10,10 @@ proto.__set = function(prop, value, current, success, error){
 		setName = "set" + cap,
 		errorCallback = function( errors ) {
 			var stub = error && error.call(self, errors);
-			$.event.trigger("error." + prop, errors, self, true);
+			can.trigger(self, "error." + prop, errors, true);
 		},
 		self = this;
+		
 	// if we have a setter
 	if ( this[setName] &&
 		// call the setter, if returned value is undefined,
@@ -24,7 +24,9 @@ proto.__set = function(prop, value, current, success, error){
 			errorCallback ) ) === undefined ) {
 		return;
 	}
+	
 	old.call(self,prop, value, current, success, errorCallback);
+	
 	return this;
 };
 

@@ -20,10 +20,10 @@ module("can/view");
 if(window.Jaml){
 	test("multiple template types work", function(){
 		
-		Can.each(["micro","ejs","jaml"/*, "tmpl"*/], function(i, ext){
-			var div = Can.$(document.createElement('div'));
+		can.each(["micro","ejs","jaml"/*, "tmpl"*/], function(i, ext){
+			var div = can.$(document.createElement('div'));
 				
-			Can.append(div, Can.view("//can/view/test/qunit/template."+ext,{"message" :"helloworld"}))
+			can.append(div, can.view("//can/view/test/qunit/template."+ext,{"message" :"helloworld"}))
 			
 			
 			ok( div[0].getElementsByTagName('h3').length, ext+": h3 written for ")
@@ -34,9 +34,9 @@ if(window.Jaml){
 
 test("plugin in ejs", function(){
 
-	Can.append( Can.$("#qunit-test-area"), Can.view("//can/view/test/qunit/plugin.ejs",{}) )
-	ok(/something/.test( Can.$("#something span")[0].firstChild.nodeValue ),"something has something");
-	Can.remove( Can.$("#something") );
+	can.append( can.$("#qunit-test-area"), can.view("//can/view/test/qunit/plugin.ejs",{}) )
+	ok(/something/.test( can.$("#something span")[0].firstChild.nodeValue ),"something has something");
+	can.remove( can.$("#something") );
 });
 
 
@@ -45,7 +45,7 @@ test("async templates, and caching work", function(){
 	stop();
 	var i = 0;
 	
-	Can.render("//can/view/test/qunit/temp.ejs",{"message" :"helloworld"}, function(text){
+	can.render("//can/view/test/qunit/temp.ejs",{"message" :"helloworld"}, function(text){
 		ok(/helloworld\s*/.test(text), "we got a rendered template");
 		i++;
 		equals(i, 2, "Ajax is not synchronous");
@@ -60,12 +60,12 @@ test("caching works", function(){
 	stop();
 	var startT = new Date(),
 		first;
-	Can.render("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
+	can.render("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
 		first = new Date();
 		ok(text, "we got a rendered template");
 		
 		
-		Can.render("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
+		can.render("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
 			var lap2 = (new Date()) - first,
 				lap1 =  first-startT;
 			// ok( lap1 > lap2, "faster this time "+(lap1 - lap2) )
@@ -77,27 +77,27 @@ test("caching works", function(){
 })
 test("hookup", function(){
 
-	Can.view("//can/view/test/qunit/hookup.ejs",{})
+	can.view("//can/view/test/qunit/hookup.ejs",{})
 
 })
 
 test("inline templates other than 'tmpl' like ejs", function(){
 
-        Can.append( Can.$("#qunit-test-area") ,'<script type="test/ejs" id="test_ejs"><span id="new_name"><%= name %></span></script>');
+        can.append( can.$("#qunit-test-area") ,'<script type="test/ejs" id="test_ejs"><span id="new_name"><%= name %></span></script>');
 	
 		var div = document.createElement('div');
-		div.appendChild(Can.view('test_ejs', {name: 'Henry'}))
+		div.appendChild(can.view('test_ejs', {name: 'Henry'}))
 
         equal( div.getElementsByTagName("span")[0].firstChild.nodeValue , 'Henry');
 
 });
 
 test("object of deferreds", function(){
-	var foo = Can.Deferred(),
-		bar = Can.Deferred();
+	var foo = new can.Deferred(),
+		bar = new can.Deferred();
 	stop();
-	Can.render("//can/view/test/qunit/deferreds.ejs",{
-		foo : foo.promise ? foo.promise() : foo,
+	can.render("//can/view/test/qunit/deferreds.ejs",{
+		foo : typeof foo.promise == 'function' ? foo.promise() : foo,
 		bar : bar
 	}).then(function(result){
 		equals(result, "FOO and BAR");
@@ -111,9 +111,9 @@ test("object of deferreds", function(){
 });
 
 test("deferred", function(){
-	var foo = Can.Deferred();
+	var foo = new can.Deferred();
 	stop();
-	Can.render("//can/view/test/qunit/deferred.ejs",foo).then(function(result){
+	can.render("//can/view/test/qunit/deferred.ejs",foo).then(function(result){
 		equals(result, "FOO");
 		start();
 	});
@@ -126,15 +126,15 @@ test("deferred", function(){
 });
 
 /*test("bad url", function(){
-	Can.render("//asfdsaf/sadf.ejs")
+	can.render("//asfdsaf/sadf.ejs")
 });*/
 
 test("hyphen in type", function(){
 	
-	Can.append( Can.$("#qunit-test-area") ,"<script type='text/x-ejs' id='hyphenEjs'>\nHyphen\n</script>");
+	can.append( can.$("#qunit-test-area") ,"<script type='text/x-ejs' id='hyphenEjs'>\nHyphen\n</script>");
 	
 	var div = document.createElement('div');
-	div.appendChild(Can.view('hyphenEjs', {}))
+	div.appendChild(can.view('hyphenEjs', {}))
 
     ok( /Hyphen/.test(div.innerHTML) , 'has hyphen');
 

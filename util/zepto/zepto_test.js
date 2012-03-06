@@ -1,4 +1,4 @@
-Can = {};
+can = {};
 steal('can/util/zepto','funcunit/qunit', 'can/util/destroyed.js',function(){
 	
 module("zepto-fill")
