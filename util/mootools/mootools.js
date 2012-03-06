@@ -19,22 +19,22 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 	 * 
 	 * buildFragement
 	 */
-	Can.trim = function(s){
-		return s.trim()
+	can.trim = function(s){
+		return s && s.trim()
 	}
 	
 	// Array
-	Can.makeArray = Array.from;
-	Can.isArray = function(arr){
+	can.makeArray = Array.from;
+	can.isArray = function(arr){
 		return typeOf(arr) === 'array'
 	};
-	Can.inArray = function(item,arr){
+	can.inArray = function(item,arr){
 		return arr.indexOf(item)
 	}
-	Can.map = function(arr, fn){
+	can.map = function(arr, fn){
 		return Array.from(arr||[]).map(fn);
 	}
-	Can.each = function(elements, callback) {
+	can.each = function(elements, callback) {
     	var i, key;
 	    if (typeof  elements.length == 'number' && elements.pop)
 	      for(i = 0; i < elements.length; i++) {
@@ -47,56 +47,56 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 	    return elements;
   	}
 	// Object
-	Can.extend = function(first){
+	can.extend = function(first){
 		if(first === true){
-			var args = Can.makeArray(arguments);
+			var args = can.makeArray(arguments);
 			args.shift();
 			return Object.merge.apply(Object, args)
 		}
 		return Object.append.apply(Object, arguments)
 	}
-	Can.param = function(object){
+	can.param = function(object){
 		return Object.toQueryString(object)
 	}
-	Can.isEmptyObject = function(object){
+	can.isEmptyObject = function(object){
 		return Object.keys(object).length === 0;
 	}
 	// Function
-	Can.proxy = function(func){
-		var args = Can.makeArray(arguments),
+	can.proxy = function(func){
+		var args = can.makeArray(arguments),
 			func = args.shift();
 		
 		return func.bind.apply(func, args)
 	}
-	Can.isFunction = function(f){
+	can.isFunction = function(f){
 		return typeOf(f) == 'function'
 	}
 	// make this object so you can bind on it
-	Can.bind = function( ev, cb){
+	can.bind = function( ev, cb){
 		// if we can bind to it ...
-		if(this.bind && this.bind !== Can.bind){
+		if(this.bind && this.bind !== can.bind){
 			this.bind(ev, cb)
 		} else if(this.addEvent) {
 			this.addEvent(ev, cb)
 		} else {
 			// make it bind-able ...
-			Can.addEvent.call(this, ev, cb)
+			can.addEvent.call(this, ev, cb)
 		}
 		return this;
 	}
-	Can.unbind = function(ev, cb){
+	can.unbind = function(ev, cb){
 		// if we can bind to it ...
-		if(this.unbind && this.unbind !== Can.unbind){
+		if(this.unbind && this.unbind !== can.unbind){
 			this.unbind(ev, cb)
 		} else if(this.removeEvent) {
 			this.removeEvent(ev, cb)
 		} else {
 			// make it bind-able ...
-			Can.removeEvent.call(this, ev, cb)
+			can.removeEvent.call(this, ev, cb)
 		}
 		return this;
 	}
-	Can.trigger = function(item, event, args, bubble){
+	can.trigger = function(item, event, args, bubble){
 		// defaults to true
 		bubble = (bubble === undefined ? true : bubble);
 		args = args || []
@@ -129,10 +129,10 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 				event = {type: event}
 			}
 			event.data = args
-			Can.dispatch.call(item, event)
+			can.dispatch.call(item, event)
 		}
 	}
-	Can.delegate = function(selector, ev , cb){
+	can.delegate = function(selector, ev , cb){
 		if(this.delegate) {
 			this.delegate(selector, ev , cb)
 		}
@@ -143,7 +143,7 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 		}
 		return this;
 	}
-	Can.undelegate = function(selector, ev , cb){
+	can.undelegate = function(selector, ev , cb){
 		if(this.undelegate) {
 			this.undelegate(selector, ev , cb)
 		}
@@ -171,9 +171,9 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 			}
 		}
 	}
-	Can.ajax = function(options){
-		var d = Can.Deferred(),
-			requestOptions = Can.extend({}, options);
+	can.ajax = function(options){
+		var d = can.Deferred(),
+			requestOptions = can.extend({}, options);
 		// maap jQuery options to mootools options
 		
 		for(var option in optionsMap){
@@ -198,7 +198,7 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 		requestOptions.onError = function(){
 			updateDeferred(request.xhr, d);
 			d.reject(request.xhr,"error");
-			error(equest.xhr,"error");
+			error(request.xhr,"error");
 		}
 		
 		var request = new Request(requestOptions);
@@ -208,7 +208,7 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 			
 	}
 	// element ... get the wrapped helper
-	Can.$ = function(selector){
+	can.$ = function(selector){
 		if(selector === window){
 			return window;
 		}
@@ -224,26 +224,26 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 			return old.apply(document, arguments);
 		}
 	};
-	Can.append = function(wrapped, html){
+	can.append = function(wrapped, html){
 		if(typeof html === 'string'){
-			html = Can.buildFragment([html],[]).fragment
+			html = can.buildFragment([html],[]).fragment
 		}
 		return wrapped.grab(html)
 	}
-	Can.filter = function(wrapped, filter){
+	can.filter = function(wrapped, filter){
 		return wrapped.filter(filter);
 	}
-	Can.data = function(wrapped, key, value){
+	can.data = function(wrapped, key, value){
 		if(value === undefined){
 			return wrapped[0].retrieve(key)
 		} else {
 			return wrapped.store(key, value)
 		}
 	}
-	Can.addClass = function(wrapped, className){
+	can.addClass = function(wrapped, className){
 		return wrapped.addClass(className);
 	}
-	Can.remove = function(wrapped){
+	can.remove = function(wrapped){
 		// we need to remove text nodes ourselves
 		
 		return wrapped.filter(function(node){ 
@@ -257,12 +257,16 @@ steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
 	// destroyed method
 	var destroy = Element.prototype.destroy;
 	Element.prototype.destroy = function(){
-		Can.trigger(this,"destroyed",[],false)
+		can.trigger(this,"destroyed",[],false)
 		var elems = this.getElementsByTagName("*");
 		for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
-			Can.trigger(elem,"destroyed",[],false);
+			can.trigger(elem,"destroyed",[],false);
 		}
 		destroy.apply(this, arguments)
 	}
+	can.get = function(wrapped, index){
+		return wrapped[index];
+	}
+	
 	
 },'../deferred.js')

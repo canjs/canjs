@@ -1,6 +1,6 @@
 // needs a .then! does not steal dependencies because this needs to work with dist ...
 
-if(!window.Can || !Can.String){
+if(!window.can || !can.String){
 	steal('can/util/string')
 }
 
@@ -71,7 +71,7 @@ steal('can/util/object',function( $ ) {
 				next = s.dataTypes ? s.dataTypes[0] : (s.dataType || 'json');
 						
 			// normalize the fixture data into a response
-			if (!Can.isArray(response)) {
+			if (!can.isArray(response)) {
 				var tmp = [{}];
 				tmp[0][next] = response
 				response = tmp;
@@ -128,12 +128,12 @@ steal('can/util/object',function( $ ) {
 		});
 		
 	} else {
-		var AJAX = Can.ajax;
-		Can.ajax = function(settings){
+		var AJAX = can.ajax;
+		can.ajax = function(settings){
 			updateSettings(settings, settings);
 			if(settings.fixture){
 				
-				var d = new Can.Deferred();
+				var d = new can.Deferred();
 				d.getResponseHeader = function(){}
 				d.then(settings.success,settings.fail)
 				
@@ -145,7 +145,7 @@ steal('can/util/object',function( $ ) {
 					var response = getResponse(settings, settings, settings.headers );
 					var status = response[0];
 					if(status >= 200 && status < 300 || status === 304){
-						d.resolve(response[2][settings.dataType], d)
+						d.resolve(response[2][settings.dataType], "success",d)
 					} else {
 						d.reject(d);
 					}
@@ -421,7 +421,7 @@ steal('can/util/object',function( $ ) {
 	 * If __null__ is passed, and there is a fixture at settings, that fixture will be removed,
 	 * allowing the AJAX request to behave normally.
 	 */
-	var $fixture = Can.fixture = $.fixture = function( settings , fixture ){
+	var $fixture = can.fixture = $.fixture = function( settings , fixture ){
 		// if we provide a fixture ...
 		if(fixture !== undefined){
 			if(typeof settings == 'string'){
@@ -452,15 +452,15 @@ steal('can/util/object',function( $ ) {
 			overwrites.push(settings)
 		}
 	};
-	var replacer = Can.String._regs.replacer;
+	var replacer = can.String.replacer;
 	
 	$.extend($.fixture, {
 		// given ajax settings, find an overwrite
 		_similar : function(settings, overwrite, exact){
 			if(exact){
-				return Can.Object.same(settings , overwrite, {fixture :  null})
+				return can.Object.same(settings , overwrite, {fixture :  null})
 			} else {
-				return Can.Object.subset(settings, overwrite, $.fixture._compare)
+				return can.Object.subset(settings, overwrite, $.fixture._compare)
 			}
 		},
 		_compare : {
@@ -484,7 +484,7 @@ steal('can/util/object',function( $ ) {
 				return null;
 			}
 			res.shift();
-			Can.each(order, function(i, name){
+			can.each(order, function(i, name){
 				data[name] = res.shift()
 			})
 			return data;
@@ -599,7 +599,7 @@ steal('can/util/object',function( $ ) {
 				settings.data = settings.data || {};
 				//sort using order
 				//order looks like ["age ASC","gender DESC"]
-				Can.each((settings.data.order || []).slice(0).reverse(), function( i, name ) {
+				can.each((settings.data.order || []).slice(0).reverse(), function( i, name ) {
 					var split = name.split(" ");
 					retArr = retArr.sort(function( a, b ) {
 						if ( split[1].toUpperCase() !== "ASC" ) {
@@ -624,7 +624,7 @@ steal('can/util/object',function( $ ) {
 				});
 
 				//group is just like a sort
-				Can.each((settings.data.group || []).slice(0).reverse(), function( i, name ) {
+				can.each((settings.data.group || []).slice(0).reverse(), function( i, name ) {
 					var split = name.split(" ");
 					retArr = retArr.sort(function( a, b ) {
 						return a[split[0]] > b[split[0]];

@@ -1,7 +1,7 @@
 steal('can/construct',function($){
 
 // tests if we can get super in .toString()
-	var isFunction = $.isFunction,
+	var isFunction = can.isFunction,
 		
 		fnTest = /xyz/.test(function() {
 			xyz;
@@ -11,7 +11,7 @@ steal('can/construct',function($){
 		//   newProps - new properties
 		//   oldProps - where the old properties might be
 		//   addTo - what we are adding to
-		Can.Construct._inherit = function( newProps, oldProps, addTo ) {
+		can.Construct._inherit = function( newProps, oldProps, addTo ) {
 			addTo = addTo || newProps
 			for ( var name in newProps ) {
 				// Check if we're overwriting an existing function

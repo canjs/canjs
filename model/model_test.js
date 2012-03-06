@@ -23,7 +23,7 @@ test("CRUD", function(){
 });
 
 test("findAll deferred", function(){
-	Can.Model("Person",{
+	can.Model("Person",{
 		findAll : function(params, success, error){
 			if(window.jQuery){
 				return $.ajax({
@@ -34,7 +34,7 @@ test("findAll deferred", function(){
 				})
 			} else {
 				var self= this;
-				return Can.ajax({
+				return can.ajax({
 					url : "/people",
 					data : params,
 					fixture: "//can/model/test/people.json",
@@ -58,7 +58,7 @@ test("findAll deferred", function(){
 
 test("findOne deferred", function(){
 	if(window.jQuery){
-		Can.Model("Person",{
+		can.Model("Person",{
 			findOne : function(params, success, error){
 				return $.ajax({
 					url : "/people/5",
@@ -69,7 +69,7 @@ test("findOne deferred", function(){
 			}
 		},{});
 	} else {
-		Can.Model("Person",{
+		can.Model("Person",{
 			findOne : steal.root.join("can/model/test/person.json")+''
 		},{});
 	}
@@ -84,9 +84,9 @@ test("findOne deferred", function(){
 
 test("save deferred", function(){
 	
-	Can.Model("Person",{
+	can.Model("Person",{
 		create : function(attrs, success, error){
-			return Can.ajax({
+			return can.ajax({
 				url : "/people",
 				data : attrs,
 				type : 'post',
@@ -113,9 +113,9 @@ test("save deferred", function(){
 
 test("update deferred", function(){
 	
-	Can.Model("Person",{
+	can.Model("Person",{
 		update : function(id, attrs, success, error){
-			return Can.ajax({
+			return can.ajax({
 				url : "/people/"+id,
 				data : attrs,
 				type : 'post',
@@ -142,9 +142,9 @@ test("update deferred", function(){
 
 test("destroy deferred", function(){
 	
-	Can.Model("Person",{
+	can.Model("Person",{
 		destroy : function(id, success, error){
-			return Can.ajax({
+			return can.ajax({
 				url : "/people/"+id,
 				type : 'post',
 				dataType : "json",
@@ -171,7 +171,7 @@ test("destroy deferred", function(){
 
 
 test("models", function(){
-	Can.Model("Person",{
+	can.Model("Person",{
 		prettyName : function(){
 			return "Mr. "+this.name;
 		}
@@ -187,7 +187,7 @@ test("models", function(){
 test("async setters", function(){
 	
 	
-	Can.Model("Test.AsyncModel",{
+	can.Model("Test.AsyncModel",{
 		setName : function(newVal, success, error){
 			
 			
@@ -219,7 +219,7 @@ test("async setters", function(){
 })*/
 
 test("binding", 2,function(){
-	Can.Model('Person')
+	can.Model('Person')
 	var inst = new Person({foo: "bar"});
 	
 	inst.bind("foo", function(ev, val){
@@ -235,8 +235,8 @@ test("binding", 2,function(){
 
 test("auto methods",function(){
 	//turn off fixtures
-	Can.fixture.on = false;
-	var School = Can.Model.extend("Jquery.Model.Models.School",{
+	can.fixture.on = false;
+	var School = can.Model.extend("Jquery.Model.Models.School",{
 	   findAll : steal.root.join("can/model/test")+"/{type}.json",
 	   findOne : steal.root.join("can/model/test")+"/{id}.json",
 	   create : steal.root.join("can/model/test")+"/create.json",
@@ -260,7 +260,7 @@ test("auto methods",function(){
 					start();
 					equals(school.name,"LHS","create gets the right name")
 					
-					Can.fixture.on = true;
+					can.fixture.on = true;
 				})
 			})
 			
@@ -278,8 +278,8 @@ test("isNew", function(){
 	ok(!p3.isNew(), "0 is not new");
 });
 test("findAll string", function(){
-	Can.fixture.on = false;
-	Can.Model("Test.Thing",{
+	can.fixture.on = false;
+	can.Model("Test.Thing",{
 		findAll : steal.root.join("can/model/test/findAll.json")+''
 	},{});
 	stop();
@@ -287,14 +287,14 @@ test("findAll string", function(){
 		equals(things.length, 1, "got an array");
 		equals(things[0].id, 1, "an array of things");
 		start();
-		Can.fixture.on = true;
+		can.fixture.on = true;
 	})
 })
 /*
 test("Empty uses fixtures", function(){
 	ok(false, "Figure out")
 	return;
-	Can.Model("Test.Things");
+	can.Model("Test.Things");
 	$.fixture.make("thing", 10, function(i){
 		return {
 			id: i
@@ -310,19 +310,19 @@ test("Empty uses fixtures", function(){
 test("Model events" , function(){
 
 	var order = 0;
-	Can.Model("Test.Event",{
+	can.Model("Test.Event",{
 		create : function(attrs){
-			var def = new Can.Deferred()
+			var def = new can.Deferred()
 			def.resolve({id: 1})
 			return def;
 		},
 		update : function(id, attrs, success){
-			var def = new Can.Deferred()
+			var def = new can.Deferred()
 			def.resolve(attrs)
 			return def;
 		},
 		destroy : function(id, success){
-			var def = new Can.Deferred()
+			var def = new can.Deferred()
 			def.resolve({})
 			return def;
 		}
@@ -362,7 +362,7 @@ test("Model events" , function(){
 
 
 test("removeAttr test", function(){
-	Can.Model("Person");
+	can.Model("Person");
 	var person = new Person({foo: "bar"})
 	equals(person.foo, "bar", "property set");
 	person.removeAttr('foo')
@@ -375,14 +375,14 @@ test("removeAttr test", function(){
 
 
 test("save error args", function(){
-	var Foo = Can.Model('Testin.Models.Foo',{
+	var Foo = can.Model('Testin.Models.Foo',{
 		create : "/testinmodelsfoos.json"
 	},{
 		
 	})
 	var st = '{type: "unauthorized"}';
 	
-	Can.fixture("/testinmodelsfoos.json", function(){
+	can.fixture("/testinmodelsfoos.json", function(){
 		return [401,st]
 	});
 	stop();
@@ -401,7 +401,7 @@ test("save error args", function(){
 
 test("object definitions", function(){
 	
-	Can.Model('ObjectDef',{
+	can.Model('ObjectDef',{
 		findAll : {
 			url : "/test/place"
 		},
@@ -420,7 +420,7 @@ test("object definitions", function(){
 		}
 	},{})
 	
-	Can.fixture("GET /objectdef/{id}", function(original){
+	can.fixture("GET /objectdef/{id}", function(original){
 		equals(original.timeout,1000,"timeout set");
 		return {yes: true}
 	});
@@ -434,15 +434,15 @@ test("object definitions", function(){
 
 test('aborting create update and destroy', function(){
 	stop();
-	var delay = Can.fixture.delay;
-	Can.fixture.delay = 1000;
+	var delay = can.fixture.delay;
+	can.fixture.delay = 1000;
 	
-	Can.fixture("POST /abort", function(){
+	can.fixture("POST /abort", function(){
 		ok(false, "we should not be calling the fixture");
 		return {};
 	})
 	
-	Can.Model('Abortion',{
+	can.Model('Abortion',{
 		create : "POST /abort",
 		update : "POST /abort",
 		destroy: "POST /abort"
@@ -461,7 +461,7 @@ test('aborting create update and destroy', function(){
 				deferred = new Abortion({name: "foo",id: 5}).destroy(function(){},
 					function(){
 						ok(true,"destroy error called")
-						Can.fixture.delay = delay;
+						can.fixture.delay = delay;
 						start();
 					})
 				
@@ -484,7 +484,7 @@ test('aborting create update and destroy', function(){
 
 test("store binding", function(){
 	
-	Can.Model("Storage");
+	can.Model("Storage");
 	
 	var s = new Storage({
 		id: 1,

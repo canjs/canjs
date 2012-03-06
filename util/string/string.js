@@ -13,11 +13,11 @@
  * 
  *     $.Object.same({foo: "bar"}, {foo: "bar"});
  *     
- * ## [Can.Control Observe]
+ * ## [can.Control Observe]
  * 
  * Makes an Object's properties observable:
  * 
- *     var person = new Can.Control({ name: "Justin" })
+ *     var person = new can.Control({ name: "Justin" })
  *     person.bind('change', function(){ ... })
  *     person.attr('name', "Brian");
  *     
@@ -41,26 +41,22 @@ steal('can/util',function( $ ) {
 	// Several of the methods in this plugin use code adapated from Prototype
 	//  Prototype JavaScript framework, version 1.6.0.1
 	//  (c) 2005-2007 Sam Stephenson
-	var regs = {
-		undHash: /_|-/,
-		colons: /::/,
-		words: /([A-Z]+)([A-Z][a-z])/g,
-		lowUp: /([a-z\d])([A-Z])/g,
-		dash: /([a-z\d])([A-Z])/g,
-		replacer: /\{([^\}]+)\}/g,
-		dot: /\./,
-		quote: /"/g,
-		singleQuote: /'/g
-	},
+	var undHash= /_|-/,
+		colons= /==/,
+		words= /([A-Z]+)([A-Z][a-z])/g,
+		lowUp= /([a-z\d])([A-Z])/g,
+		dash= /([a-z\d])([A-Z])/g,
+		replacer= /\{([^\}]+)\}/g,
+		quote= /"/g,
+		singleQuote= /'/g,
 		// gets the nextPart property from current
 		// add - if true and nextPart doesnt exist, create it as an empty object
 		getNext = function(current, nextPart, add){
-			return current[nextPart] !== undefined ? current[nextPart] : ( add && (current[nextPart] = {}) );
+			return nextPart in current ? current[nextPart] : ( add && (current[nextPart] = {}) );
 		},
 		// returns true if the object can have properties (no nulls)
 		isContainer = function(current){
-			var type = typeof current;
-			return current && ( type == 'function' || type == 'object' );
+			return /^f|o/.test( typeof current );
 		},
 		// a reference
 		getObject;
@@ -85,9 +81,9 @@ steal('can/util',function( $ ) {
 		 * </ul>
 		 * 
 		 */
-		Can.String = Can.extend({
+		can.String = can.extend({
 			esc : function(content){
-				return content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(regs.quote, '&#34;').replace(regs.singleQuote, "&#39;");
+				return content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(quote, '&#34;').replace(singleQuote, "&#39;");
 			},
 			
 			/**
@@ -110,16 +106,15 @@ steal('can/util',function( $ ) {
 			
 				// the parts of the name we are looking up
 				// ['App','Models','Recipe']
-				var parts = name ? name.split(regs.dot) : [],
+				var parts = name ? name.split('.') : [],
 					length =  parts.length,
 					current,
 					ret, 
 					i,
-					r = 0,
-					type;
+					r = 0;
 				
 				// make sure roots is an array
-				roots = Can.isArray(roots) ? roots : [roots || window];
+				roots = can.isArray(roots) ? roots : [roots || window];
 				
 				if(length == 0){
 					return roots[0];
@@ -156,7 +151,7 @@ steal('can/util',function( $ ) {
 			 */
 			capitalize: function( s, cache ) {
 				// used to make newId ...
-				return s.charAt(0).toUpperCase() + s.substr(1);
+				return s.charAt(0).toUpperCase() + s.slice(1);
 			},
 			
 			/**
@@ -168,7 +163,7 @@ steal('can/util',function( $ ) {
 			 * @return {String} the underscored string
 			 */
 			underscore: function( s ) {
-				return s.replace(regs.colons, '/').replace(regs.words, '$1_$2').replace(regs.lowUp, '$1_$2').replace(regs.dash, '_').toLowerCase();
+				return s.replace(colons, '/').replace(words, '$1_$2').replace(lowUp, '$1_$2').replace(dash, '_').toLowerCase();
 			},
 			/**
 			 * Returns a string with {param} replaced values from data.
@@ -184,7 +179,7 @@ steal('can/util',function( $ ) {
 			sub: function( s, data, remove ) {
 				var obs = [],
 					remove = typeof remove == 'boolean' ? !remove : remove;
-				obs.push(s.replace(regs.replacer, function( whole, inside ) {
+				obs.push(s.replace(replacer, function( whole, inside ) {
 					//convert inside to type
 					var ob = getObject(inside, data, remove);
 					
@@ -199,6 +194,7 @@ steal('can/util',function( $ ) {
 				
 				return obs.length <= 1 ? obs[0] : obs;
 			},
-			_regs : regs
+			replacer : replacer,
+			undHash :undHash
 		});
 });

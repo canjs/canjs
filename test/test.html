@@ -1,23 +1,17 @@
 <html>
 	<head>
 		<style>
+			* {
+				-moz-box-sizing: border-box; 
+				-webkit-box-sizing: border-box; 
+				box-sizing: border-box;
+				padding: 0;
+				margin: 0;
+			}
 			iframe {
-				position: fixed;
-				top: 0px;
-				bottom: 0px;
-				height: 98%;
-			}
-			#jquery {
-				left: 0px;
-				width: 33%;
-			}
-			#zepto {
-				left: 34%;
-				width: 33%;
-			}
-			#mootools {
-				left: 68%;
-				width: 32%;
+				float: left;
+				width: 20%;
+				height: 100%;
 			}
 			body {
 				background-color: black;
@@ -28,5 +22,7 @@
 		<iframe src='can_jquery.html' id='jquery'></iframe>
 		<iframe src='can_zepto.html' id='zepto'></iframe>
 		<iframe src='can_mootools.html' id='mootools'></iframe>
+		<iframe src='can_dojo.html' id='dojo'></iframe>
+		<iframe src='can_yui.html' id='yui'></iframe>
 	</body>
 </html>

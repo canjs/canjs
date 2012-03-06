@@ -1,14 +1,14 @@
-if(!window.Can){
+if(!window.can){
 	steal('can/util')
 }
 
 steal(function($){
 	
-var isArray = Can.isArray,
+var isArray = can.isArray,
 	// essentially returns an object that has all the must have comparisons ...
 	// must haves, do not return true when provided undefined
 	cleanSet = function(obj, compares){
-		var copy = Can.extend({}, obj);
+		var copy = can.extend({}, obj);
 		for(var prop in copy) {
 			var compare = compares[prop] === undefined ? compares["*"] : compares[prop];
 			if( same(copy[prop], undefined, compare ) ) {
@@ -34,19 +34,19 @@ var isArray = Can.isArray,
  * 
  * Returns true if two objects are similar.
  * 
- *     Can.Object.same({foo: "bar"} , {bar: "foo"}) //-> false
+ *     can.Object.same({foo: "bar"} , {bar: "foo"}) //-> false
  *   
  * ## subset
  * 
  * Returns true if an object is a set of another set.
  * 
- *     Can.Object.subset({}, {foo: "bar"} ) //-> true
+ *     can.Object.subset({}, {foo: "bar"} ) //-> true
  * 
  * ## subsets
  * 
  * Returns the subsets of an object
  * 
- *     Can.Object.subsets({userId: 20},
+ *     can.Object.subsets({userId: 20},
  *                      [
  *                       {userId: 20, limit: 30},
  *                       {userId: 5},
@@ -54,7 +54,7 @@ var isArray = Can.isArray,
  *                      ]) 
  *              //->    [{userId: 20, limit: 30}]
  */
-Can.Object = {};
+can.Object = {};
 
 /**
  * @function same
@@ -65,26 +65,26 @@ Can.Object = {};
  * 
  * ## Examples
  * 
- *     Can.Object.same({name: "Justin"},
+ *     can.Object.same({name: "Justin"},
  *                   {name: "JUSTIN"}) //-> false
  *     
  *     // ignore the name property
- *     Can.Object.same({name: "Brian"},
+ *     can.Object.same({name: "Brian"},
  *                   {name: "JUSTIN"},
  *                   {name: null})      //-> true
  *     
  *     // ignore case
- *     Can.Object.same({name: "Justin"},
+ *     can.Object.same({name: "Justin"},
  *                   {name: "JUSTIN"},
  *                   {name: "i"})      //-> true
  *     
  *     // deep rule
- *     Can.Object.same({ person : { name: "Justin" } },
+ *     can.Object.same({ person : { name: "Justin" } },
  *                   { person : { name: "JUSTIN" } },
  *                   { person : { name: "i"      } }) //-> true
  *                   
  *     // supplied compare function
- *     Can.Object.same({age: "Thirty"},
+ *     can.Object.same({age: "Thirty"},
  *                   {age: 30},
  *                   {age: function( a, b ){
  *                           if( a == "Thirty" ) { 
@@ -102,7 +102,7 @@ Can.Object = {};
  * compare specific properties. 
  * Typically this is a name / value pair
  * 
- *     Can.Object.same({name: "Justin"},{name: "JUSTIN"},{name: "i"})
+ *     can.Object.same({name: "Justin"},{name: "JUSTIN"},{name: "i"})
  *     
  * There are two compare functions that you can specify with a string:
  * 
@@ -111,7 +111,7 @@ Can.Object = {};
  * 
  * @param {Object} [deep] used internally
  */
-var same = Can.Object.same = function(a, b, compares, aParent, bParent, deep){
+var same = can.Object.same = function(a, b, compares, aParent, bParent, deep){
 	var aType = typeof a,
 		aArray = isArray(a),
 		comparesType = typeof compares,
@@ -147,7 +147,7 @@ var same = Can.Object.same = function(a, b, compares, aParent, bParent, deep){
 		};
 		return true;
 	} else if(aType === "object" || aType === 'function'){
-		var bCopy = Can.extend({}, b);
+		var bCopy = can.extend({}, b);
 		for(var prop in a){
 			compare = compares[prop] === undefined ? compares["*"] : compares[prop];
 			if(! same( a[prop], b[prop], compare , a, b, deep === false ? -1 : undefined )){
@@ -173,7 +173,7 @@ var same = Can.Object.same = function(a, b, compares, aParent, bParent, deep){
  * @param {Object} checkSet
  * @param {Object} sets
  */
-Can.Object.subsets = function(checkSet, sets, compares){
+can.Object.subsets = function(checkSet, sets, compares){
 	var len = sets.length,
 		subsets = [],
 		checkPropCount = propCount(checkSet),
@@ -182,7 +182,7 @@ Can.Object.subsets = function(checkSet, sets, compares){
 	for(var i =0; i < len; i++){
 		//check this subset
 		var set = sets[i];
-		if( Can.Object.subset(checkSet, set, compares) ){
+		if( can.Object.subset(checkSet, set, compares) ){
 			subsets.push(set)
 		}
 	}
@@ -196,7 +196,7 @@ Can.Object.subsets = function(checkSet, sets, compares){
  * @param {Object} [compares]
  * @param {Object} [checkPropCount]
  */
-Can.Object.subset = function(subset, set, compares){
+can.Object.subset = function(subset, set, compares){
 	// go through set {type: 'folder'} and make sure every property
 	// is in subset {type: 'folder', parentId :5}
 	// then make sure that set has fewer properties

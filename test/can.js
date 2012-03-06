@@ -1,5 +1,5 @@
 (function(){
-	Can.trigger= function(parent, ev, args){
+	can.trigger= function(parent, ev, args){
 		$.event.trigger(ev, args, parent, true)
 	}
 })(jQuery);
@@ -49,7 +49,7 @@
 		 * </ul>
 		 * 
 		 */
-		str = Can.String = $.extend( Can.String || {} , {
+		str = can.String = $.extend( can.String || {} , {
 			
 			
 			/**
@@ -172,14 +172,14 @@
 	var initializing = false;
 
 	/**
-	 * @class Can.Construct
+	 * @class can.Construct
 	 * @plugin jquery/class
 	 * @parent jquerymx
 	 * @download dist/jquery/jquery.class.js
 	 * @test jquery/class/qunit.html
 	 * @description Easy inheritance in JavaScript.
 	 * 
-	 * Constructor provides simulated inheritance in JavaScript. Use Can.Construct to bridge the gap between
+	 * Constructor provides simulated inheritance in JavaScript. Use can.Construct to bridge the gap between
 	 * jQuery's functional programming style and Object Oriented Programming. It 
 	 * is based off John Resig's [http://ejohn.org/blog/simple-javascript-inheritance/|Simple Constructor]
 	 * Inheritance library.  Besides prototypal inheritance, it includes a few important features:
@@ -191,7 +191,7 @@
 	 *   - Easy callback function creation
 	 * 
 	 * 
-	 * The [mvc.class Get Started with jQueryMX] has a good walkthrough of Can.Construct.
+	 * The [mvc.class Get Started with jQueryMX] has a good walkthrough of can.Construct.
 	 * 
 	 * ## Static v. Prototype
 	 * 
@@ -219,7 +219,7 @@
 	 * count is incremented.
 	 *
 	 * @codestart
-	 * Can.Construct('Monster',
+	 * can.Construct('Monster',
 	 * /* @static *|
 	 * {
 	 *   count: 0
@@ -288,7 +288,7 @@
 	 * 
 	 * You can also inherit static properties in the same way:
 	 * 
-	 *     Can.Construct("First",
+	 *     can.Construct("First",
 	 *     {
 	 *         staticMethod: function() { return 1;}
 	 *     },{})
@@ -306,7 +306,7 @@
 	 * Making a namespaced class is easy:
 	 * 
 	 * 
-	 *     Can.Construct("MyNamespace.MyConstructor",{},{});
+	 *     can.Construct("MyNamespace.MyConstructor",{},{});
 	 *
 	 *     new MyNamespace.MyConstructor()
 	 * 
@@ -318,7 +318,7 @@
 	 * is a great example of this.  Unfortunately, JavaScript doesn't have a way of determining
 	 * an object's name, so the developer must provide a name.  Constructor fixes this by taking a String name for the class.
 	 * 
-	 *     Can.Construct("MyOrg.MyConstructor",{},{})
+	 *     can.Construct("MyOrg.MyConstructor",{},{})
 	 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
 	 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
 	 * 
@@ -339,7 +339,7 @@
 	 *
 	 * </div>
 	 * @codestart
-	 * Can.Construct("MyConstructor",
+	 * can.Construct("MyConstructor",
 	 * {
 	 *   setup: function() {} //static setup
 	 *   init: function() {} //static constructor
@@ -368,7 +368,7 @@
 	 * even if it is passed a raw
 	 * HTMLElement and no second parameter.
 	 * 
-	 *     Can.Construct("jQuery.Controller",{
+	 *     can.Construct("jQuery.Controller",{
 	 *       ...
 	 *     },{
 	 *       setup: function( el, options ) {
@@ -389,7 +389,7 @@
 	 * as their preceding setup function.  The Foo class's <code>init</code> method
 	 * gets called in the following example:
 	 * 
-	 *     Can.Construct("Foo", {
+	 *     can.Construct("Foo", {
 	 *       init: function( arg1, arg2, arg3 ) {
 	 *         this.sum = arg1+arg2+arg3;
 	 *       }
@@ -400,7 +400,7 @@
 	 * ## Proxies
 	 * 
 	 * Similar to jQuery's proxy method, Constructor provides a
-	 * [Can.Construct.static.proxy proxy]
+	 * [can.Construct.static.proxy proxy]
 	 * function that returns a callback to a method that will always
 	 * have
 	 * <code>this</code> set to the class or instance of the class.
@@ -409,7 +409,7 @@
 	 * The following example uses this.proxy to make sure
 	 * <code>this.name</code> is available in <code>show</code>.
 	 * 
-	 *     Can.Construct("Todo",{
+	 *     can.Construct("Todo",{
 	 *       init: function( name ) { 
 	 *       	this.name = name 
 	 *       },
@@ -433,7 +433,7 @@
 	 * 
 	 * To create a Constructor call:
 	 * 
-	 *     Can.Construct( [NAME , STATIC,] PROTOTYPE ) -> Constructor
+	 *     can.Construct( [NAME , STATIC,] PROTOTYPE ) -> Constructor
 	 * 
 	 * <div class='params'>
 	 *   <div class='param'><label>NAME</label><code>{optional:String}</code>
@@ -450,8 +450,8 @@
 	 *   </div>
 	 * </div>
 	 * 
-	 * When a Constructor is created, the static [Can.Construct.static.setup setup] 
-	 * and [Can.Construct.static.init init]  methods are called.
+	 * When a Constructor is created, the static [can.Construct.static.setup setup] 
+	 * and [can.Construct.static.init init]  methods are called.
 	 * 
 	 * To create an instance of a Constructor, call:
 	 * 
@@ -460,26 +460,26 @@
 	 * The created instance will have all the 
 	 * prototype properties and methods defined by the PROTOTYPE object.
 	 * 
-	 * When an instance is created, the prototype [Can.Construct.prototype.setup setup] 
-	 * and [Can.Construct.prototype.init init]  methods 
+	 * When an instance is created, the prototype [can.Construct.prototype.setup setup] 
+	 * and [can.Construct.prototype.init init]  methods 
 	 * are called.
 	 */
 
-	Can.Construct = function() {
+	can.Construct = function() {
 		if (arguments.length) {
-			return Can.Construct.extend.apply(Can.Construct, arguments);
+			return can.Construct.extend.apply(can.Construct, arguments);
 		}
 	};
 
 	/* @Static*/
-	$.extend(Can.Construct, {
+	$.extend(can.Construct, {
 		/**
 		 * @function newInstance
 		 * Creates a new instance of the class.  This method is useful for creating new instances
 		 * with arbitrary parameters.
 		 * <h3>Example</h3>
 		 * @codestart
-		 * Can.Construct("MyConstructor",{},{})
+		 * can.Construct("MyConstructor",{},{})
 		 * var mc = MyConstructor.newInstance.apply(null, new Array(parseInt(Math.random()*10,10))
 		 * @codeend
 		 * @return {class} instance of the class
@@ -513,7 +513,7 @@
 		 * Setup will deeply extend a static defaults property on the base class with 
 		 * properties on the base class.  For example:
 		 * 
-		 *     Can.Construct("MyBase",{
+		 *     can.Construct("MyBase",{
 		 *       defaults : {
 		 *         foo: 'bar'
 		 *       }
@@ -550,27 +550,27 @@
 		 * to use extend:
 		 * 
 		 *     // with className, static and prototype functions
-		 *     Can.Construct('Task',{ STATIC },{ PROTOTYPE })
+		 *     can.Construct('Task',{ STATIC },{ PROTOTYPE })
 		 *     // with just classname and prototype functions
-		 *     Can.Construct('Task',{ PROTOTYPE })
+		 *     can.Construct('Task',{ PROTOTYPE })
 		 *     // with just a className
-		 *     Can.Construct('Task')
+		 *     can.Construct('Task')
 		 * 
 		 * You no longer have to use <code>.extend</code>.  Instead, you can pass those options directly to
-		 * Can.Construct (and any inheriting classes):
+		 * can.Construct (and any inheriting classes):
 		 * 
 		 *     // with className, static and prototype functions
-		 *     Can.Construct('Task',{ STATIC },{ PROTOTYPE })
+		 *     can.Construct('Task',{ STATIC },{ PROTOTYPE })
 		 *     // with just classname and prototype functions
-		 *     Can.Construct('Task',{ PROTOTYPE })
+		 *     can.Construct('Task',{ PROTOTYPE })
 		 *     // with just a className
-		 *     Can.Construct('Task')
+		 *     can.Construct('Task')
 		 * 
 		 * @param {String} [fullName]  the classes name (used for classes w/ introspection)
 		 * @param {Object} [klass]  the new classes static/class functions
 		 * @param {Object} [proto]  the new classes prototype functions
 		 * 
-		 * @return {Can.Construct} returns the new class
+		 * @return {can.Construct} returns the new class
 		 */
 		extend: function( fullName, klass, proto ) {
 			// figure out what was passed and normalize it
@@ -622,10 +622,10 @@
 
 				var parts = fullName.split(/\./),
 					shortName = parts.pop(),
-					current = Can.String.getObject(parts.join('.'), window, true),
+					current = can.String.getObject(parts.join('.'), window, true),
 					namespace = current,
-					_fullName = Can.String.underscore(fullName.replace(/\./g, "_")),
-					_shortName = Can.String.underscore(shortName);
+					_fullName = can.String.underscore(fullName.replace(/\./g, "_")),
+					_shortName = can.String.underscore(shortName);
 
 				//@steal-remove-start
 				if(current[shortName]){
@@ -643,7 +643,7 @@
 				 * @attribute namespace 
 				 * The namespaces object
 				 * 
-				 *     Can.Construct("MyOrg.MyConstructor",{},{})
+				 *     can.Construct("MyOrg.MyConstructor",{},{})
 				 *     MyOrg.MyConstructor.namespace //-> MyOrg
 				 * 
 				 */
@@ -652,7 +652,7 @@
 				 * @attribute shortName 
 				 * The name of the class without its namespace, provided for introspection purposes.
 				 * 
-				 *     Can.Construct("MyOrg.MyConstructor",{},{})
+				 *     can.Construct("MyOrg.MyConstructor",{},{})
 				 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
 				 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
 				 * 
@@ -665,7 +665,7 @@
 				 * @attribute fullName 
 				 * The full name of the class, including namespace, provided for introspection purposes.
 				 * 
-				 *     Can.Construct("MyOrg.MyConstructor",{},{})
+				 *     can.Construct("MyOrg.MyConstructor",{},{})
 				 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
 				 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
 				 * 
@@ -694,7 +694,7 @@
 			 * instances is created.  It gets passed the same arguments that
 			 * were given to the Constructor constructor function (<code> new Constructor( arguments ... )</code>).
 			 * 
-			 *     Can.Construct("MyConstructor",
+			 *     can.Construct("MyConstructor",
 			 *     {
 			 *        setup: function( val ) {
 			 *           this.val = val;
@@ -703,10 +703,10 @@
 			 *     var mc = new MyConstructor("Check Check")
 			 *     mc.val //-> 'Check Check'
 			 * 
-			 * Setup is called before [Can.Construct.prototype.init init].  If setup 
+			 * Setup is called before [can.Construct.prototype.init init].  If setup 
 			 * return an array, those arguments will be used for init. 
 			 * 
-			 *     Can.Construct("jQuery.Controller",{
+			 *     can.Construct("jQuery.Controller",{
 			 *       setup : function(htmlElement, rawOptions){
 			 *         return [$(htmlElement), 
 			 *                   $.extend({}, this.constructor.defaults, rawOptions )] 
@@ -719,27 +719,27 @@
 			 * run.
 			 * </div>
 			 * 
-			 * Setup is not defined on Can.Construct itself, so calling super in inherting classes
+			 * Setup is not defined on can.Construct itself, so calling super in inherting classes
 			 * will break.  Don't do the following:
 			 * 
-			 *     Can.Construct("Thing",{
+			 *     can.Construct("Thing",{
 			 *       setup : function(){
 			 *         this._super(); // breaks!
 			 *       }
 			 *     })
 			 * 
-			 * @return {Array|undefined} If an array is return, [Can.Construct.prototype.init] is 
+			 * @return {Array|undefined} If an array is return, [can.Construct.prototype.init] is 
 			 * called with those arguments; otherwise, the original arguments are used.
 			 */
 			//break up
 			/** 
 			 * @function init
 			 * If an <code>init</code> method is provided, it gets called when a new instance
-			 * is created.  Init gets called after [Can.Construct.prototype.setup setup], typically with the 
+			 * is created.  Init gets called after [can.Construct.prototype.setup setup], typically with the 
 			 * same arguments passed to the Constructor 
 			 * constructor: (<code> new Constructor( arguments ... )</code>).  
 			 * 
-			 *     Can.Construct("MyConstructor",
+			 *     can.Construct("MyConstructor",
 			 *     {
 			 *        init: function( val ) {
 			 *           this.val = val;
@@ -748,7 +748,7 @@
 			 *     var mc = new MyConstructor(1)
 			 *     mc.val //-> 1
 			 * 
-			 * [Can.Construct.prototype.setup Setup] is able to modify the arguments passed to init.  Read
+			 * [can.Construct.prototype.setup Setup] is able to modify the arguments passed to init.  Read
 			 * about it there.
 			 * 
 			 */
@@ -762,7 +762,7 @@
 			 * ### Quick Example
 			 * 
 			 *     // a class with a static property
-			 *     Can.Construct("MyConstructor", {staticProperty : true}, {});
+			 *     can.Construct("MyConstructor", {staticProperty : true}, {});
 			 *     
 			 *     // a new instance of myConstructor
 			 *     var mc1 = new MyConstructor();
@@ -771,7 +771,7 @@
 			 *     mc1.constructor.staticProperty //-> true
 			 *     
 			 * Getting static properties with the constructor property, like
-			 * [Can.Constructor.static.fullName fullName], is very common.
+			 * [can.Constructor.static.fullName fullName], is very common.
 			 * 
 			 */
 		}
@@ -820,7 +820,7 @@
 				} else {
 					args[0] = prop +  "." + args[0]
 				}
-				Can.trigger(parent, ev, args);
+				can.trigger(parent, ev, args);
 			});
 
 			return val;
@@ -855,7 +855,7 @@
 				return;
 			}
 			if (!collecting ) {
-				return Can.trigger(item, event, args);
+				return can.trigger(item, event, args);
 			} else {
 				collecting.push([
 				item,
@@ -878,7 +878,7 @@
 			collecting = null;
 			batchNum ++;
 			for ( var i = 0; i < len; i++ ) {
-				Can.trigger.apply(Can, items[i])
+				can.trigger.apply(can, items[i])
 			}
 			
 		},
@@ -910,7 +910,7 @@
 		};
 
 	/**
-	 * @class Can.Observe
+	 * @class can.Observe
 	 * @parent jquerymx.lang
 	 * @test can/observe/qunit.html
 	 * 
@@ -921,9 +921,9 @@
 	 *   - Listen for changes in objects and arrays
 	 *   - Work with nested properties
 	 * 
-	 * ## Creating an Can.Observe
+	 * ## Creating an can.Observe
 	 * 
-	 * To create an Can.Observe, or Can.Observe.List, you can simply use 
+	 * To create an can.Observe, or can.Observe.List, you can simply use 
 	 * the `$.O(data)` shortcut like:
 	 * 
 	 *     var person = $.O({name: 'justin', age: 29}),
@@ -931,15 +931,15 @@
 	 * 
 	 * Depending on the type of data passed to $.O, it will create an instance of either: 
 	 * 
-	 *   - Can.Observe, which is used for objects like: `{foo: 'bar'}`, and
-	 *   - [Can.Observe.List Can.Observe.List], which is used for arrays like `['foo','bar']`
+	 *   - can.Observe, which is used for objects like: `{foo: 'bar'}`, and
+	 *   - [can.Observe.List can.Observe.List], which is used for arrays like `['foo','bar']`
 	 *   
-	 * Can.Observe.List and Can.Observe are very similar. In fact,
-	 * Can.Observe.List inherits Can.Observe and only adds a few extra methods for
-	 * manipulating arrays like [Can.Observe.List.prototype.push push].  Go to
-	 * [Can.Observe.List Can.Observe.List] for more information about Can.Observe.List.
+	 * can.Observe.List and can.Observe are very similar. In fact,
+	 * can.Observe.List inherits can.Observe and only adds a few extra methods for
+	 * manipulating arrays like [can.Observe.List.prototype.push push].  Go to
+	 * [can.Observe.List can.Observe.List] for more information about can.Observe.List.
 	 * 
-	 * You can also create a `new Can.Observe` simply by pass it the data you want to observe:
+	 * You can also create a `new can.Observe` simply by pass it the data you want to observe:
 	 * 
 	 *     var data = { 
 	 *       addresses : [
@@ -954,13 +954,13 @@
 	 *         ],
 	 *       name : "Justin Meyer"
 	 *     },
-	 *     o = new Can.Observe(data);
+	 *     o = new can.Observe(data);
 	 *     
 	 * _o_ now represents an observable copy of _data_.  
 	 * 
 	 * ## Getting and Setting Properties
 	 * 
-	 * Use [Can.Observe.prototype.attr attr] and [Can.Observe.prototype.attr attrs]
+	 * Use [can.Observe.prototype.attr attr] and [can.Observe.prototype.attr attrs]
 	 * to get and set properties.
 	 * 
 	 * For example, you can read the property values of _o_ with
@@ -976,9 +976,9 @@
 	 *     o.attr('name', "Brian Moschel") //-> o
 	 * 
 	 * Observe handles nested data.  Nested Objects and
-	 * Arrays are converted to Can.Observe and 
-	 * Can.Observe.Lists.  This lets you read nested properties 
-	 * and use Can.Observe methods on them.  The following 
+	 * Arrays are converted to can.Observe and 
+	 * can.Observe.Lists.  This lets you read nested properties 
+	 * and use can.Observe methods on them.  The following 
 	 * updates the second address (Boston) to 'New York':
 	 * 
 	 *     o.attr('addresses.1').attr({
@@ -1009,8 +1009,8 @@
 	 * that you can listen to.  There are two ways to listen
 	 * for events:
 	 * 
-	 *   - [Can.Observe.prototype.bind bind] - listen for any type of change
-	 *   - [Can.Observe.prototype.delegate delegate] - listen to a specific type of change
+	 *   - [can.Observe.prototype.bind bind] - listen for any type of change
+	 *   - [can.Observe.prototype.delegate delegate] - listen to a specific type of change
 	 *     
 	 * With `bind( "change" , handler( ev, attr, how, newVal, oldVal ) )`, you can listen
 	 * to any change that happens within the 
@@ -1036,17 +1036,17 @@
 	 *     r = $.O({type: "video", id : 5})
 	 *     r.delegate("type=images id","set", function(){})
 	 *     
-	 * This is used heavily by [Can.route $.route].
+	 * This is used heavily by [can.route $.route].
 	 * 
 	 * @constructor
 	 * 
 	 * @param {Object} obj a JavaScript Object that will be 
 	 * converted to an observable
 	 */
-	var $Observe = Can.Construct('Can.Observe',{
+	var $Observe = can.Construct('can.Observe',{
 		// keep so it can be overwritten
 		setup : function(baseClass){
-			Can.Construct.setup.apply(this, arguments)
+			can.Construct.setup.apply(this, arguments)
 		},
 		bind : bind,
 		unbind: unbind
@@ -1068,7 +1068,7 @@
 		/**
 		 * Get or set an attribute on the observe.
 		 * 
-		 *     o = new Can.Observe({});
+		 *     o = new can.Observe({});
 		 *     
 		 *     // sets a user property
 		 *     o.attr('user',{name: 'hank'});
@@ -1141,7 +1141,7 @@
 		 *         }
 		 *       })
 		 * 
-		 * @return {Can.Observe} the original observable.
+		 * @return {can.Observe} the original observable.
 		 */
 		each: function() {
 			return $.each.apply(null, [this.__get()].concat($.makeArray(arguments)))
@@ -1149,11 +1149,11 @@
 		/**
 		 * Removes a property
 		 * 
-		 *     o =  new Can.Observe({foo: 'bar'});
+		 *     o =  new can.Observe({foo: 'bar'});
 		 *     o.removeAttr('foo'); //-> 'bar'
 		 * 
 		 * This creates a `'remove'` change event. Learn more about events
-		 * in [Can.Observe.prototype.bind bind] and [Can.Observe.prototype.delegate delegate].
+		 * in [can.Observe.prototype.bind bind] and [can.Observe.prototype.delegate delegate].
 		 * 
 		 * @param {String} attr the attribute name to remove.
 		 * @return {Object} the value that was removed.
@@ -1217,7 +1217,7 @@
 				this.__set(prop, value, current)
 				
 			} else {
-				throw "Can.Observe: set a property on an object that does not exist"
+				throw "can.Observe: set a property on an object that does not exist"
 			}
 		},
 		__set : function(prop, value, current){
@@ -1259,7 +1259,7 @@
 			}
 		},
 		/**
-		 * Listens to changes on a Can.Observe.
+		 * Listens to changes on a can.Observe.
 		 * 
 		 * When attributes of an observe change, including attributes on nested objects,
 		 * a `'change'` event is triggered on the observe.  These events come
@@ -1278,7 +1278,7 @@
 		 * 
 		 * Example:
 		 * 
-		 *     o = new Can.Observe({name : "Payal"});
+		 *     o = new can.Observe({name : "Payal"});
 		 *     o.bind('change', function(ev, attr, how, newVal, oldVal){
 		 *       // ev    -> {type: 'change'}
 		 *       // attr  -> "name"
@@ -1291,14 +1291,14 @@
 		 * 
 		 * Listening to `change` is only useful for when you want to 
 		 * know every change on an Observe.  For most applications,
-		 * [Can.Observe.prototype.delegate delegate] is 
+		 * [can.Observe.prototype.delegate delegate] is 
 		 * much more useful as it lets you listen to specific attribute
 		 * changes and sepecific types of changes.
 		 * 
 		 * 
 		 * @param {String} eventType the event name.  Currently,
 		 * only 'change' events are supported. For more fine 
-		 * grained control, use [Can.Observe.prototype.delegate].
+		 * grained control, use [can.Observe.prototype.delegate].
 		 * 
 		 * @param {Function} handler(event, attr, how, newVal, oldVal) A 
 		 * callback function where
@@ -1309,11 +1309,11 @@
 		 *   - newVal - the new value of the attribute
 		 *   - oldVal - the old value of the attribute
 		 * 
-		 * @return {Can.Observe} the observe for chaining.
+		 * @return {can.Observe} the observe for chaining.
 		 */
 		bind: bind,
 		/**
-		 * Unbinds a listener.  This uses [http://api.jquery.com/unbind/ Can.unbind]
+		 * Unbinds a listener.  This uses [http://api.jquery.com/unbind/ can.unbind]
 		 * and works very similar.  This means you can 
 		 * use namespaces or unbind all event handlers for a given event:
 		 * 
@@ -1332,9 +1332,9 @@
 		 * are supported with bind.
 		 * 
 		 * @param {Function} [handler] - The original handler function passed
-		 * to [Can.Observe.prototype.bind bind].
+		 * to [can.Observe.prototype.bind bind].
 		 * 
-		 * @return {Can.Observe} the original observe for chaining.
+		 * @return {can.Observe} the original observe for chaining.
 		 */
 		unbind: unbind,
 		/**
@@ -1344,9 +1344,9 @@
 		 *     o.serialize() //-> { name: 'Justin' }
 		 *     
 		 * Serialize currently returns the same data 
-		 * as [Can.Observe.prototype.attrs].  However, in future
+		 * as [can.Observe.prototype.attrs].  However, in future
 		 * versions, serialize will be able to return serialized
-		 * data similar to [Can.Model].  The following will work:
+		 * data similar to [can.Model].  The following will work:
 		 * 
 		 *     new Observe({time: new Date()})
 		 *       .serialize() //-> { time: 1319666613663 }
@@ -1403,9 +1403,9 @@
 	});
 	// Helpers for list
 	/**
-	 * @class Can.Observe.List
-	 * @inherits Can.Observe
-	 * @parent Can.Observe
+	 * @class can.Observe.List
+	 * @inherits can.Observe
+	 * @parent can.Observe
 	 * 
 	 * An observable list.  You can listen to when items are push, popped,
 	 * spliced, shifted, and unshifted on this array.
@@ -1413,7 +1413,7 @@
 	 * 
 	 */
 	var splice = [].splice,
-		list = $Observe('Can.Observe.List',
+		list = $Observe('can.Observe.List',
 	/**
 	 * @prototype
 	 */
@@ -1528,7 +1528,7 @@
 		 *         }
 		 *       })
 		 * 
-		 * @return {Can.Observe.List} the original observable.
+		 * @return {can.Observe.List} the original observable.
 		 */
 		// placeholder for each
 		/**
@@ -1539,7 +1539,7 @@
 		 * The following creates a list of numbers and replaces 2 and 3 with
 		 * "a", and "b".
 		 * 
-		 *     var l = new Can.Observe.List([0,1,2,3]);
+		 *     var l = new can.Observe.List([0,1,2,3]);
 		 *     
 		 *     l.bind('change', function( ev, attr, how, newVals, oldVals, where ) { ... })
 		 *     
@@ -1649,7 +1649,7 @@
 		 * @function push
 		 * Add items to the end of the list.
 		 * 
-		 *     var l = new Can.Observe.List([]);
+		 *     var l = new can.Observe.List([]);
 		 *     
 		 *     l.bind('change', function( 
 		 *         ev,        // the change event
@@ -1670,7 +1670,7 @@
 		/**
 		 * @function unshift
 		 * Add items to the start of the list.  This is very similar to
-		 * [Can.Observe.prototype.push].
+		 * [can.Observe.prototype.push].
 		 */
 		unshift: 0
 	},
@@ -1730,7 +1730,7 @@
 		 * 
 		 * Removes an item from the end of the list.
 		 * 
-		 *     var l = new Can.Observe.List([0,1,2]);
+		 *     var l = new can.Observe.List([0,1,2]);
 		 *     
 		 *     l.bind('change', function( 
 		 *         ev,        // the change event
@@ -1751,7 +1751,7 @@
 		/**
 		 * @function shift
 		 * Removes an item from the start of the list.  This is very similar to
-		 * [Can.Observe.prototype.pop].
+		 * [can.Observe.prototype.pop].
 		 * 
 		 * @return {Object} the element at the start of the list
 		 */
@@ -1795,10 +1795,10 @@
 	indexOf = [].indexOf || function(item){
 		return $.inArray(item, this)
 	};
-	if(Can.addEvent){
-		Can.Observe.prototype.addEventListener = Can.addEvent;
-		Can.Observe.prototype.removeEventListener = Can.removeEvent;
-		Can.Observe.prototype.dispatchEvent  = Can.dispatch
+	if(can.addEvent){
+		can.Observe.prototype.addEventListener = can.addEvent;
+		can.Observe.prototype.removeEventListener = can.removeEvent;
+		can.Observe.prototype.dispatchEvent  = can.dispatch
 	}
 })(jQuery);
 (function($){
@@ -1811,7 +1811,7 @@
 	/**
 	 * @add jQuery.String
 	 */
-	Can.String = $.extend(Can.String || {}, { 
+	can.String = $.extend(can.String || {}, { 
 		
 		/**
 		 * @function deparam
@@ -1959,7 +1959,7 @@
 
 	/**
 	 * @class jQuery.route
-	 * @inherits Can.Control
+	 * @inherits can.Control
 	 * @plugin jquery/dom/route
 	 * @parent dom
 	 * @tag 3.2
@@ -1967,7 +1967,7 @@
 	 * jQuery.route helps manage browser history (and
 	 * client state) by
 	 * synchronizing the window.location.hash with
-	 * an [Can.Control].
+	 * an [can.Control].
 	 * 
 	 * ## Background Information
 	 * 
@@ -1990,37 +1990,37 @@
 	 * 
 	 * ## How it works
 	 * 
-	 * <code>Can.route</code> is a [Can.Control Can.Observe] that represents the
+	 * <code>can.route</code> is a [can.Control can.Observe] that represents the
 	 * <code>window.location.hash</code> as an 
 	 * object.  For example, if the hash looks like:
 	 * 
 	 *     #!type=videos&id=5
 	 *     
-	 * the data in <code>Can.route</code> would look like:
+	 * the data in <code>can.route</code> would look like:
 	 * 
 	 *     { type: 'videos', id: 5 }
 	 * 
 	 * 
-	 * Can.route keeps the state of the hash in-sync with the data in
-	 * Can.route.
+	 * can.route keeps the state of the hash in-sync with the data in
+	 * can.route.
 	 * 
-	 * ## Can.Observe
+	 * ## can.Observe
 	 * 
-	 * Can.route is a [Can.Control Can.Observe]. Understanding
-	 * Can.Observe is essential for using Can.route correctly.
+	 * can.route is a [can.Control can.Observe]. Understanding
+	 * can.Observe is essential for using can.route correctly.
 	 * 
 	 * You can
 	 * listen to changes in an Observe with bind and
-	 * delegate and change Can.route's properties with 
+	 * delegate and change can.route's properties with 
 	 * attr and attrs.
 	 * 
 	 * ### Listening to changes in an Observable
 	 * 
 	 * Listen to changes in history 
-	 * by [Can.Control.prototype.bind bind]ing to
-	 * changes in <code>Can.route</code> like:
+	 * by [can.Control.prototype.bind bind]ing to
+	 * changes in <code>can.route</code> like:
 	 * 
-	 *     Can.route.bind('change', function(ev, attr, how, newVal, oldVal) {
+	 *     can.route.bind('change', function(ev, attr, how, newVal, oldVal) {
 	 *     
 	 *     })
 	 * 
@@ -2029,9 +2029,9 @@
      *  - newVal/oldVal - the new and old values of the attribute
      * 
 	 * You can also listen to specific changes 
-	 * with [Can.Control.prototype.delegate delegate]:
+	 * with [can.Control.prototype.delegate delegate]:
 	 * 
-	 *     Can.route.delegate('id','change', function(){ ... })
+	 *     can.route.delegate('id','change', function(){ ... })
 	 * 
 	 * Observe lets you listen to the following events:
 	 * 
@@ -2047,77 +2047,77 @@
 	 * 
 	 * Create changes in the route data like:
 	 * 
-	 *     Can.route.attr('type','images');
+	 *     can.route.attr('type','images');
 	 * 
 	 * Or change multiple properties at once with
-	 * [Can.Control.prototype.attrs attrs]:
+	 * [can.Control.prototype.attrs attrs]:
 	 * 
-	 *     Can.route.attr({type: 'pages', id: 5}, true)
+	 *     can.route.attr({type: 'pages', id: 5}, true)
 	 * 
-	 * When you make changes to Can.route, they will automatically
+	 * When you make changes to can.route, they will automatically
 	 * change the <code>hash</code>.
 	 * 
 	 * ## Creating a Route
 	 * 
-	 * Use <code>Can.route(url, defaults)</code> to create a 
+	 * Use <code>can.route(url, defaults)</code> to create a 
 	 * route. A route is a mapping from a url to 
-	 * an object (that is the Can.route's state).
+	 * an object (that is the can.route's state).
 	 * 
 	 * If no routes are added, or no route is matched, 
-	 * Can.route's data is updated with the [jQuery.String.deparam deparamed]
+	 * can.route's data is updated with the [jQuery.String.deparam deparamed]
 	 * hash.
 	 * 
 	 *     location.hash = "#!type=videos";
-	 *     // Can.route -> {type : "videos"}
+	 *     // can.route -> {type : "videos"}
 	 *     
 	 * Once routes are added and the hash changes,
-	 * Can.route looks for matching routes and uses them
-	 * to update Can.route's data.
+	 * can.route looks for matching routes and uses them
+	 * to update can.route's data.
 	 * 
-	 *     Can.route( "content/:type" );
+	 *     can.route( "content/:type" );
 	 *     location.hash = "#!content/images";
-	 *     // Can.route -> {type : "images"}
+	 *     // can.route -> {type : "images"}
 	 *     
 	 * Default values can also be added:
 	 * 
-	 *     Can.route("content/:type",{type: "videos" });
+	 *     can.route("content/:type",{type: "videos" });
 	 *     location.hash = "#!content/"
-	 *     // Can.route -> {type : "videos"}
+	 *     // can.route -> {type : "videos"}
 	 *     
-	 * ## Delay setting Can.route
+	 * ## Delay setting can.route
 	 * 
-	 * By default, <code>Can.route</code> sets its initial data
+	 * By default, <code>can.route</code> sets its initial data
 	 * on document ready.  Sometimes, you want to wait to set 
 	 * this data.  To wait, call:
 	 * 
-	 *     Can.route.ready(false);
+	 *     can.route.ready(false);
 	 * 
 	 * and when ready, call:
 	 * 
-	 *     Can.route.ready(true);
+	 *     can.route.ready(true);
 	 * 
 	 * ## Changing the route.
 	 * 
 	 * Typically, you never want to set <code>location.hash</code>
-	 * directly.  Instead, you can change properties on <code>Can.route</code>
+	 * directly.  Instead, you can change properties on <code>can.route</code>
 	 * like:
 	 * 
-	 *     Can.route.attr('type', 'videos')
+	 *     can.route.attr('type', 'videos')
 	 *     
 	 * This will automatically look up the appropriate 
 	 * route and update the hash.
 	 * 
-	 * Often, you want to create links.  <code>Can.route</code> provides
+	 * Often, you want to create links.  <code>can.route</code> provides
 	 * the [jQuery.route.link] and [jQuery.route.url] helpers to make this 
 	 * easy:
 	 * 
-	 *     Can.route.link("Videos", {type: 'videos'})
+	 *     can.route.link("Videos", {type: 'videos'})
 	 * 
 	 * @param {String} url the fragment identifier to match.  
 	 * @param {Object} [defaults] an object of default values
 	 * @return {jQuery.route}
 	 */
-	Can.route = function( url, defaults ) {
+	can.route = function( url, defaults ) {
         // Extract the variable names and replace with regEx that will match an atual URL with values.
 		var names = [],
 			test = url.replace(matcher, function( whole, name ) {
@@ -2127,7 +2127,7 @@
 			});
 
 		// Add route in a form that can be easily figured out
-		Can.route.routes[url] = {
+		can.route.routes[url] = {
             // A regular expression that will match the route when variable values 
             // are present; i.e. for :page/:type the regEx is /([\w\.]*)/([\w\.]*)/ which
             // will match for any value of :page and :type (word chars or period).
@@ -2141,10 +2141,10 @@
             // The number of parts in the URL separated by '/'.
 			length: url.split('/').length
 		}
-		return Can.route;
+		return can.route;
 	};
 
-	extend(Can.route, {
+	extend(can.route, {
 		/**
 		 * Parameterizes the raw JS object representation provided in data.
 		 * If a route matching the provided data is found that URL is built
@@ -2165,12 +2165,12 @@
 				routeName = data.route;
 			
 			delete data.route;
-			// if we have a route name in our Can.route data, use it
-			if(routeName && (route = Can.route.routes[routeName])){
+			// if we have a route name in our can.route data, use it
+			if(routeName && (route = can.route.routes[routeName])){
 				
 			} else {
 				// otherwise find route
-				each(Can.route.routes, function(name, temp){
+				each(can.route.routes, function(name, temp){
 					matchCount = matchesData(temp, data);
 					if ( matchCount > matches ) {
 						route = temp;
@@ -2216,7 +2216,7 @@
 			var route = {
 				length: -1
 			};
-			each(Can.route.routes, function(name, temp){
+			each(can.route.routes, function(name, temp){
 				if ( temp.test.test(url) && temp.length > route.length ) {
 					route = temp;
 				}
@@ -2231,7 +2231,7 @@
                     // The remainder will be the &amp;key=value list at the end of the URL.
 					remainder = url.substr(start.length - (parts[parts.length-1] === "&" ? 1 : 0) ),
                     // If there is a remainder and it contains a &amp;key=value list deparam it.
-                    obj = (remainder && paramsMatcher.test(remainder)) ? Can.String.deparam( remainder.slice(1) ) : {};
+                    obj = (remainder && paramsMatcher.test(remainder)) ? can.String.deparam( remainder.slice(1) ) : {};
 
                 // Add the default values for this route
 				obj = extend(true, {}, route.defaults, obj);
@@ -2248,13 +2248,13 @@
 			if ( url.charAt(0) !== '&' ) {
 				url = '&' + url;
 			}
-			return paramsMatcher.test(url) ? Can.String.deparam( url.slice(1) ) : {};
+			return paramsMatcher.test(url) ? can.String.deparam( url.slice(1) ) : {};
 		},
 		/**
 		 * @hide
-		 * A Can.Observe that represents the state of the history.
+		 * A can.Observe that represents the state of the history.
 		 */
-		data: new Can.Observe({}),
+		data: new can.Observe({}),
         /**
          * @attribute
          * @type Object
@@ -2277,17 +2277,17 @@
          */
 		routes: {},
 		/**
-		 * Indicates that all routes have been added and sets Can.route.data
+		 * Indicates that all routes have been added and sets can.route.data
 		 * based upon the routes and the current hash.
 		 * 
 		 * By default, ready is fired on jQuery's ready event.  Sometimes
 		 * you might want it to happen sooner or earlier.  To do this call
 		 * 
-		 *     Can.route.ready(false); //prevents firing by the ready event
-		 *     Can.route.ready(true); // fire the first route change
+		 *     can.route.ready(false); //prevents firing by the ready event
+		 *     can.route.ready(true); // fire the first route change
 		 * 
 		 * @param {Boolean} [start]
-		 * @return Can.route
+		 * @return can.route
 		 */
 		ready: function(val) {
 			if( val === false ) {
@@ -2296,7 +2296,7 @@
 			if( val === true || onready === true ) {
 				setState();
 			}
-			return Can.route;
+			return can.route;
 		},
 		/**
 		 * Returns a url from the options
@@ -2306,9 +2306,9 @@
 		 */
 		url: function( options, merge ) {
 			if (merge) {
-				return "#!" + Can.route.param(extend({}, curParams, options))
+				return "#!" + can.route.param(extend({}, curParams, options))
 			} else {
-				return "#!" + Can.route.param(options)
+				return "#!" + can.route.param(options)
 			}
 		},
 		/**
@@ -2321,7 +2321,7 @@
 		link: function( name, options, props, merge ) {
 			return "<a " + makeProps(
 			extend({
-				href: Can.route.url(options, merge)
+				href: can.route.url(options, merge)
 			}, props)) + ">" + name + "</a>";
 		},
 		/**
@@ -2330,16 +2330,16 @@
          * @return {Boolean}
 		 */
 		current: function( options ) {
-			return location.hash == "#!" + Can.route.param(options)
+			return location.hash == "#!" + can.route.param(options)
 		}
 	});
 	
 	
-    // The functions in the following list applied to Can.route (e.g. Can.route.attr('...')) will
-    // instead act on the Can.route.data Observe.
+    // The functions in the following list applied to can.route (e.g. can.route.attr('...')) will
+    // instead act on the can.route.data Observe.
 	each(['bind','unbind','delegate','undelegate','attr','serialize','removeAttr'], function(i, name){
-		Can.route[name] = function(){
-			return Can.route.data[name].apply(Can.route.data, arguments)
+		can.route[name] = function(){
+			return can.route.data[name].apply(can.route.data, arguments)
 		}
 	})
 
@@ -2356,30 +2356,30 @@
 				}, 1);
             }
         },
-        // Intermediate storage for Can.route.data.
+        // Intermediate storage for can.route.data.
         curParams,
         // Deparameterizes the portion of the hash of interest and assign the
-        // values to the Can.route.data removing existing values no longer in the hash.
+        // values to the can.route.data removing existing values no longer in the hash.
         setState = function() {
 			var hash = location.hash.substr(1, 1) === '!' ? 
 				location.hash.slice(2) : 
 				location.hash.slice(1); // everything after #!
-			curParams = Can.route.deparam( hash );
-			Can.route.attr(curParams, true);
+			curParams = can.route.deparam( hash );
+			can.route.attr(curParams, true);
 		};
 
-	// If the hash changes, update the Can.route.data
+	// If the hash changes, update the can.route.data
 	$(window).bind('hashchange', setState);
 
 	// If the $.route.data changes, update the hash.
     // Using .serialize() retrieves the raw data contained in the observable.
     // This function is throttled so it only updates once even if multiple values changed.
-	Can.route.bind("change", throttle(function() {
-		location.hash = "#!" + Can.route.param(Can.route.serialize())
+	can.route.bind("change", throttle(function() {
+		location.hash = "#!" + can.route.param(can.route.serialize())
 	}));
 	// onready
 	$(function() {
-		Can.route.ready();
+		can.route.ready();
 	});
 })(jQuery);
 (function( $ ) {
@@ -2455,7 +2455,7 @@
 	 * a [http://jupiterjs.com/news/organize-jquery-widgets-with-jquery-control walkthrough of its features]
 	 * on Jupiter's blog. [mvc.control Get Started with jQueryMX] also has a great walkthrough.
 	 * 
-	 * Control inherits from [Can.Construct Can.Construct] and makes heavy use of 
+	 * Control inherits from [can.Construct can.Construct] and makes heavy use of 
 	 * [http://api.jquery.com/delegate/ event delegation]. Make sure 
 	 * you understand these concepts before using it.
 	 * 
@@ -2472,7 +2472,7 @@
 	 * 
 	 * do this
 	 * 
-	 *     Can.Control('Tabs',{
+	 *     can.Control('Tabs',{
 	 *       click: function() {...},
 	 *       '.tab click' : function() {...},
 	 *       '.delete click' : function() {...}
@@ -2496,7 +2496,7 @@
 	 * 
 	 * ### A control class is created.
 	 *       
-	 *     Can.Control("MyWidget",
+	 *     can.Control("MyWidget",
 	 *     {
 	 *       defaults :  {
 	 *         message : "Remove Me"
@@ -2525,7 +2525,7 @@
 	 * This calls <code>new MyWidget(el, options)</code> on 
 	 * each <code>'.thing'</code> element.  
 	 *     
-	 * When a new [Can.Construct Class] instance is created, it calls the class's
+	 * When a new [can.Construct Class] instance is created, it calls the class's
 	 * prototype setup and init methods. Control's [jQuery.Control.prototype.setup setup]
 	 * method:
 	 *     
@@ -2574,7 +2574,7 @@
 	 * 
 	 * To add a mousover effect and create todos, your control might look like:
 	 * 
-	 *     Can.Control('Todos',{
+	 *     can.Control('Todos',{
 	 *       ".todo mouseover" : function( el, ev ) {
 	 *         el.css("backgroundColor","red")
 	 *       },
@@ -2675,7 +2675,7 @@
 	 * These methods let you call one control from another control.
 	 * 
 	 */
-	Can.Construct("Can.Control",
+	can.Construct("can.Control",
 	/** 
 	 * @Static
 	 */
@@ -2694,11 +2694,11 @@
 		 * 
 		 */
 		setup: function() {
-			// Allow contollers to inherit "defaults" from superclasses as it done in Can.Construct
-			Can.Construct.setup.apply(this, arguments);
+			// Allow contollers to inherit "defaults" from superclasses as it done in can.Construct
+			can.Construct.setup.apply(this, arguments);
 
 			// if you didn't provide a name, or are control, don't do anything
-			if (this === Can.Control ) {
+			if (this === can.Control ) {
 				return;
 			}
 			// cache the underscored names
@@ -2709,7 +2709,7 @@
 				 * to change the jQuery plugin helper name from its 
 				 * default value.
 				 * 
-				 *     Can.Control("Mxui.Layout.Fill",{
+				 *     can.Control("Mxui.Layout.Fill",{
 				 *       pluginName: "fillWith"
 				 *     },{});
 				 *     
@@ -2783,7 +2783,7 @@
 			}
 			// If we have options, run sub to replace templates "{}" with a value from the options
 			// or the window
-			var convertedName = options ? Can.String.sub(methodName, [options, window]) : methodName,
+			var convertedName = options ? can.String.sub(methodName, [options, window]) : methodName,
 				
 				// If a "{}" resolves to an object, convertedName will be an array
 				arr = $.isArray(convertedName),
@@ -2845,7 +2845,7 @@
 		 * with templated event handlers:
 		 * 
 		 *
-		 *     Can.Control('Sized',{
+		 *     can.Control('Sized',{
 		 *       "{window} resize" : function(){
 		 *         this.element.width(this.element.parent().width() / 2);
 		 *       }
@@ -2860,7 +2860,7 @@
 		 * listens too.  You only need to add event names that
 		 * are whole words (ie have no special characters).
 		 * 
-		 *     Can.Control('TabPanel',{
+		 *     can.Control('TabPanel',{
 		 *       listensTo : ['show']
 		 *     },{
 		 *       'show' : function(){
@@ -2877,7 +2877,7 @@
 		 * A object of name-value pairs that act as default values for a control's 
 		 * [jQuery.Control.prototype.options options].
 		 * 
-		 *     Can.Control("Message",
+		 *     can.Control("Message",
 		 *     {
 		 *       defaults : {
 		 *         message : "Hello World"
@@ -2966,7 +2966,7 @@
 			 * 
 			 * For example:
 			 * 
-			 *     Can.Control('Hello')
+			 *     can.Control('Hello')
 			 *     
 			 *     var h1 = new Hello($('#content1'), {message: 'World'} );
 			 *     equal( h1.options.message , "World" )
@@ -2980,7 +2980,7 @@
 			 * 
 			 * For example:
 			 * 
-			 *     Can.Control("Tabs", 
+			 *     can.Control("Tabs", 
 			 *     {
 			 *        defaults : {
 			 *          activeClass: "ui-active-state"
@@ -3015,7 +3015,7 @@
 			 * 
 			 * For example, if I add MyWidget to a '#myelement' element like:
 			 * 
-			 *     Can.Control("MyWidget",{
+			 *     can.Control("MyWidget",{
 			 *       init : function(){
 			 *         this.element.css("color","red")
 			 *       }
@@ -3032,7 +3032,7 @@
 			 * 
 			 * To change this.element, overwrite Control's setup method like:
 			 * 
-			 *     Can.Control("Combobox",{
+			 *     can.Control("Combobox",{
 			 *       setup : function(el, options){
 			 *          this.oldElement = $(el);
 			 *          var newEl = $('<div/>');
@@ -3177,7 +3177,7 @@
 		 * is submitted, it creates the recipe on the server.  When the recipe
 		 * is `created`, it resets the form with a new instance.
 		 * 
-		 *     Can.Control('Creator',{
+		 *     can.Control('Creator',{
 		 *       "{recipe} created" : function(){
 		 *         this.update({recipe : new Recipe()});
 		 *         this.element[0].reset();
@@ -3203,7 +3203,7 @@
 		 * For example, a widget that listens for model updates
 		 * and updates it's html would look like.  
 		 * 
-		 *     Can.Control('Updater',{
+		 *     can.Control('Updater',{
 		 *       // when the control is created, update the html
 		 *       init : function(){
 		 *         this.updateView();
@@ -3248,7 +3248,7 @@
 		 * 
 		 * ### Example
 		 * 
-		 *     Can.Control("Thing",{
+		 *     can.Control("Thing",{
 		 *       init: function( el, options ) {
 		 *         alert( 'init:'+this.options.prop )
 		 *       },
@@ -3275,7 +3275,7 @@
 		 * if the element is removed.  You can overwrite it to add your own
 		 * teardown functionality:
 		 * 
-		 *     Can.Control("ChangeText",{
+		 *     can.Control("ChangeText",{
 		 *       init : function(){
 		 *         this.oldText = this.element.text();
 		 *         this.element.text("Changed!!!")
@@ -3333,7 +3333,7 @@
 		}
 	});
 
-	var processors = Can.Control.processors,
+	var processors = can.Control.processors,
 
 	//------------- PROCESSSORS -----------------------------
 	//processors do the binding.  They return a function that
@@ -3389,7 +3389,7 @@
 	 *  - Bundling of processed templates in production builds.
 	 *  - Hookup jquery plugins directly in the template.
 	 * 
-	 * The [mvc.view Get Started with jQueryMX] has a good walkthrough of Can.View.
+	 * The [mvc.view Get Started with jQueryMX] has a good walkthrough of can.View.
 	 * 
 	 * ## Use
 	 * 
@@ -3499,7 +3499,7 @@
 	 * 
 	 * ## Deferreds (3.0.6)
 	 * 
-	 * If you pass deferreds to Can.View or any of the jQuery 
+	 * If you pass deferreds to can.View or any of the jQuery 
 	 * modifiers, the view will wait until all deferreds resolve before 
 	 * rendering the view.  This makes it a one-liner to make a request and 
 	 * use the result to render a template. 
@@ -3513,9 +3513,9 @@
 	 * ## Just Render Templates
 	 * 
 	 * Sometimes, you just want to get the result of a rendered 
-	 * template without inserting it, you can do this with Can.View: 
+	 * template without inserting it, you can do this with can.View: 
 	 * 
-	 *     var out = Can.View('path/to/template.jaml',{});
+	 *     var out = can.View('path/to/template.jaml',{});
 	 *     
 	 * ## Preloading Templates
 	 * 
@@ -3545,7 +3545,7 @@
 	 * 
 	 * ## Using other Template Engines
 	 * 
-	 * It's easy to integrate your favorite template into Can.View and Steal.  Read 
+	 * It's easy to integrate your favorite template into can.View and Steal.  Read 
 	 * how in [jQuery.View.register].
 	 * 
 	 * @constructor
@@ -3557,13 +3557,13 @@
 	 * This makes it ok to use views synchronously like:
 	 * 
 	 * @codestart
-	 * Can.View("//myplugin/views/init.ejs",{message: "Hello World"})
+	 * can.View("//myplugin/views/init.ejs",{message: "Hello World"})
 	 * @codeend
 	 * 
 	 * If you aren't using StealJS, it's best to use views asynchronously like:
 	 * 
 	 * @codestart
-	 * Can.View("//myplugin/views/init.ejs",
+	 * can.View("//myplugin/views/init.ejs",
 	 *        {message: "Hello World"}, function(result){
 	 *   // do something with result
 	 * })
@@ -3580,7 +3580,7 @@
 	 * are passed, a deferred that will resolve to
 	 * the rendered result of the view.
 	 */
-	var $view = Can.View = function( view, data, helpers, callback ) {
+	var $view = can.View = function( view, data, helpers, callback ) {
 		// if helpers is a function, it is actually a callback
 		if ( typeof helpers === 'function' ) {
 			callback = helpers;
@@ -3662,7 +3662,7 @@
 		checkText = function( text, url ) {
 			if (!text.match(/[^\s]/) ) {
 				
-				throw "Can.View ERROR: There is no template or an empty template at " + url;
+				throw "can.View ERROR: There is no template or an empty template at " + url;
 			}
 		},
 		// returns a 'view' renderer deferred
@@ -3807,7 +3807,7 @@
 		 * put on the page.  Typically this is handled by the template engine.  Currently
 		 * only EJS supports this functionality.
 		 * 
-		 *     var id = Can.View.hookup(function(el){
+		 *     var id = can.View.hookup(function(el){
 		 *            //do something with el
 		 *         }),
 		 *         html = "<div data-view-id='"+id+"'>"
@@ -3841,7 +3841,7 @@
 		 * ## Example
 		 * 
 		 * @codestart
-		 * Can.View.register({
+		 * can.View.register({
 		 * 	suffix : "tmpl",
 		 *  plugin : "jquery/view/tmpl",
 		 * 	renderer: function( id, text ) {
@@ -3910,7 +3910,7 @@
 			var type = $view.types["." + options.type],
 				id = toId(options.rootSrc);
 
-			options.text = "steal('" + (type.plugin || "jquery/view/" + options.type) + "').then(function($){" + "Can.View.preload('" + id + "'," + options.text + ");\n})";
+			options.text = "steal('" + (type.plugin || "jquery/view/" + options.type) + "').then(function($){" + "can.View.preload('" + id + "'," + options.text + ");\n})";
 			success();
 		})
 	}
@@ -4065,13 +4065,13 @@
 	/**
 	 *  @add jQuery.fn
 	 *  @parent jQuery.View
-	 *  Called on a jQuery collection that was rendered with Can.View with pending hookups.  Can.View can render a 
+	 *  Called on a jQuery collection that was rendered with can.View with pending hookups.  can.View can render a 
 	 *  template with hookups, but not actually perform the hookup, because it returns a string without actual DOM 
 	 *  elements to hook up to.  So hookup performs the hookup and clears the pending hookups, preventing errors in 
 	 *  future templates.
 	 *  
 	 * @codestart
-	 * $(Can.View('//views/recipes.ejs',recipeData)).hookup()
+	 * $(can.View('//views/recipes.ejs',recipeData)).hookup()
 	 * @codeend
 	 */
 	$.fn.hookup = function() {
@@ -4210,7 +4210,7 @@
 	/**
 	 * @add jQuery.String
 	 */
-	Can.String.
+	can.String.
 	/**
 	 * Splits a string with a regex correctly cross browser
 	 * 
@@ -4258,7 +4258,7 @@
 		getId = function( inst ) {
 			return inst[inst.constructor.id]
 		},
-		trigger = Can.trigger,
+		trigger = can.trigger,
 		ajax = function(ajaxOb, data, type, dataType, success, error ) {
 
 			
@@ -4278,7 +4278,7 @@
 	
 
 			// get the url with any templated values filled out
-			ajaxOb.url = Can.String.sub(ajaxOb.url, ajaxOb.data, true);
+			ajaxOb.url = can.String.sub(ajaxOb.url, ajaxOb.data, true);
 
 			return $.ajax($.extend({
 				type: type || "post",
@@ -4339,7 +4339,7 @@
 				attrs = attrs || {};
 				var identity = this.id;
 				if ( attrs[identity] && attrs[identity] !== id ) {
-					attrs["new" + Can.String.capitalize(id)] = attrs[identity];
+					attrs["new" + can.String.capitalize(id)] = attrs[identity];
 					delete attrs[identity];
 				}
 				attrs[identity] = id;
@@ -4372,10 +4372,10 @@
 		}
 	};
 	var modelNum = 0;
-	Can.Observe("Can.Model",{
+	can.Observe("can.Model",{
 		setup : function(){
-			Can.Observe.apply(this, arguments);
-			if(this === Can.Model){
+			can.Observe.apply(this, arguments);
+			if(this === can.Model){
 				return;
 			}
 			var self = this;
@@ -4386,7 +4386,7 @@
 					self[name] = method(prop);
 				}
 			});
-			if(self.fullName == "Can.Model"){
+			if(self.fullName == "can.Model"){
 				self.fullName = "Model"+(++modelNum);
 			}
 			//add ajax converters
@@ -4471,18 +4471,18 @@
 				this._bindings = 0;
 			}
 			this._bindings++;
-			return Can.Observe.prototype.bind.apply(this, arguments);
+			return can.Observe.prototype.bind.apply(this, arguments);
 		},
 		unbind : function(){
 			this._bindings--;
 			if(!this._bindings){
 				delete this.constructor.store[getId(this)];
 			}
-			return Can.Observe.prototype.unbind.apply(this, arguments);
+			return can.Observe.prototype.unbind.apply(this, arguments);
 		},
 		// change ID
 		___set: function( prop, val ) {
-			Can.Observe.prototype.___set.call(this,prop, val)
+			can.Observe.prototype.___set.call(this,prop, val)
 			// if we add an id, move it to the store
 			if(prop === this.constructor.id && this._bindings){
 				this.constructor.store[getId(this)] = this;
@@ -4514,7 +4514,7 @@
 	 * 
 	 */
 	"destroyed"], function( i, funcName ) {
-		Can.Model.prototype[funcName] = function( attrs ) {
+		can.Model.prototype[funcName] = function( attrs ) {
 			var stub, 
 				constructor = this.constructor;
 
@@ -4530,15 +4530,15 @@
 			trigger(constructor,funcName, this);
 		};
 	});
-	if(Can.addEvent){
-		Can.Model.addEventListener = Can.addEvent;
-		Can.Model.removeEventListener = Can.removeEvent;
-		Can.Model.dispatchEvent  = Can.dispatch
+	if(can.addEvent){
+		can.Model.addEventListener = can.addEvent;
+		can.Model.removeEventListener = can.removeEvent;
+		can.Model.dispatchEvent  = can.dispatch
 	}
 	
-	var ML = Can.Observe.List('Can.Model.List',{
+	var ML = can.Observe.List('can.Model.List',{
 		setup : function(){
-			Can.Observe.List.prototype.setup.apply(this, arguments );
+			can.Observe.List.prototype.setup.apply(this, arguments );
 			// send destroy events
 			this.bind('change', $.proxy(this._sendDestroy, this))
 		},
@@ -4561,24 +4561,24 @@
 	 * @param {Object} selector
 	 * @param {Object} cb
 	 */
-	Can.Control.processors.route = function(el, event, selector, funcName, controller){
-		Can.route(selector||"")
+	can.Control.processors.route = function(el, event, selector, funcName, controller){
+		can.route(selector||"")
 		var batchNum,
 			check = function(ev, attr, how){
-				if(Can.route.attr('route') === (selector||"") && 
+				if(can.route.attr('route') === (selector||"") && 
 				   (ev.batchNum === undefined || ev.batchNum !== batchNum ) ){
 					
 					batchNum = ev.batchNum;
 					
-					var d = Can.route.attr();
+					var d = can.route.attr();
 					delete d.route;
 					
 					controller[funcName](d)
 				}
 			}
-		Can.route.bind('change',check);
+		can.route.bind('change',check);
 		return function(){
-			Can.route.unbind('change',check)
+			can.route.unbind('change',check)
 		}
 	}
 })(jQuery);
@@ -4593,7 +4593,7 @@
 		// chop = function( string ) {
 		//	return string.substr(0, string.length - 1);
 		//},
-		rSplit = Can.String.rsplit,
+		rSplit = can.String.rsplit,
 		extend = $.extend,
 		isArray = $.isArray,
 		// regular expressions for caching
@@ -4617,7 +4617,7 @@
 		escapeHTML = function( content ) {
 			return content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(quoteReg, '&#34;').replace(singleQuoteReg, "&#39;");
 		},
-		$View = Can.View,
+		$View = can.View,
 		bracketNum = function(content){
 			var lefts = content.match(leftBracket),
 				rights = content.match(rightBracket);
@@ -4644,8 +4644,8 @@
 		observes = function(self, func){
 			var observed = [],
 				val;
-			if (Can.Observe) {
-				Can.Observe.__reading = function(obj, attr){
+			if (can.Observe) {
+				can.Observe.__reading = function(obj, attr){
 					observed.push({
 						obj: obj,
 						attr: attr
@@ -4653,8 +4653,8 @@
 				}
 			}
 			val = func.call(self);
-			if(Can.Observe){
-				delete Can.Observe.__reading;
+			if(can.Observe){
+				delete can.Observe.__reading;
 			}
 			return {
 				observes: observed,
@@ -4662,10 +4662,10 @@
 			};
 		},
 		/**
-		 * @class Can.EJS
+		 * @class can.EJS
 		 * 
 		 * @plugin jquery/view/ejs
-		 * @parent Can.View
+		 * @parent can.View
 		 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/view/ejs/ejs.js
 		 * @test jquery/view/ejs/qunit.html
 		 * 
@@ -4807,7 +4807,7 @@
 			this.template = scan(this.text, this.name);
 		};
 	// add EJS to jQuery if it exists
-	Can.EJS = EJS;
+	can.EJS = EJS;
 	/** 
 	 * @Prototype
 	 */
@@ -5109,7 +5109,7 @@
 						htmlTag = null;
 						// TODO: all <%= in tags should be added to pending hookups
 						if(magicInTag){
-							put(content, ",Can.EJS.pending(),\">\"");
+							put(content, ",can.EJS.pending(),\">\"");
 							content = '';
 						} else {
 							content += token;
@@ -5146,7 +5146,7 @@
 							// we are ending a block
 							if (bracketCount == 1) {
 								// we are starting on
-								buff.push(insert_cmd, "Can.EJS.txt(" + status() + ",this,function(){", startTxt, content);
+								buff.push(insert_cmd, "can.EJS.txt(" + status() + ",this,function(){", startTxt, content);
 								
 								endStack.push({
 									before: "",
@@ -5194,8 +5194,8 @@
 							}
 							
 							// if we have <%== a(function(){ %> then we want
-							//  Can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];
-							buff.push(insert_cmd, "Can.EJS."+(startTag === '<%=' ? "esc" : "txt")+"("+status()+",this,function(){ return ", content, 
+							//  can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];
+							buff.push(insert_cmd, "can.EJS."+(startTag === '<%=' ? "esc" : "txt")+"("+status()+",this,function(){ return ", content, 
 								// if we have a block
 								bracketCount ? 
 								// start w/ startTxt "var _v1ew = [];"
@@ -5240,9 +5240,9 @@
 	
 
 	/**
-	 * @class Can.EJS.Helpers
-	 * @parent Can.EJS
-	 * By adding functions to Can.EJS.Helpers.prototype, those functions will be available in the 
+	 * @class can.EJS.Helpers
+	 * @parent can.EJS
+	 * By adding functions to can.EJS.Helpers.prototype, those functions will be available in the 
 	 * views.
 	 * 
 	 * The following helper converts a given string to upper case:
@@ -5301,11 +5301,11 @@
 	};
 
 	// options for steal's build
-	Can.View.register({
+	can.View.register({
 		suffix: "ejs",
 		//returns a function that renders the view
 		script: function( id, src ) {
-			return "Can.EJS(function(_CONTEXT,_VIEW) { " + new EJS({
+			return "can.EJS(function(_CONTEXT,_VIEW) { " + new EJS({
 				text: src,
 				name: id
 			}).template.out + " })";

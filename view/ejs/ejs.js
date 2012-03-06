@@ -11,7 +11,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		// chop = function( string ) {
 		//	return string.substr(0, string.length - 1);
 		//},
-		extend = Can.extend,
+		extend = can.extend,
 		// regular expressions for caching
 		returnReg = /\r\n/g,
 		retReg = /\r/g,
@@ -23,6 +23,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		rightBracket = /\}/g,
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 		attrReg = /([^\s]+)=$/,
+		attributeReplace = /__!!__/g,
 		tagMap = {"": "span", table: "tr", tr: "td", ol: "li", ul: "li", tbody: "tr", thead: "tr", tfoot: "tr"},
 		// escapes characters starting with \
 		clean = function( content ) {
@@ -37,19 +38,19 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		},
 		// used to bind to an observe, and unbind when the element is removed
 		liveBind = function(observed, el, cb){
-			Can.each(observed, function(i, ob){
+			can.each(observed, function(i, ob){
 				ob.obj.bind(ob.attr, cb)
 			})
-			Can.bind.call(el,'destroyed', function(){
-				Can.each(observed, function(i, ob){
-					ob.obj.unbind(ob.attr, cb)
+			can.bind.call(el,'destroyed', function(){
+				can.each(observed, function(i, ob){
+					ob.obj.unbind(ob.attr, ob.cb)
 				})
 			})
 		},
 		contentEscape = function( txt ) {
 			//return sanatized text
 			if ( typeof txt == 'string' || typeof txt == 'number'  ) {
-				return Can.String.esc(""+txt);
+				return can.String.esc(""+txt);
 			} else {
 				return contentText(txt);
 			}
@@ -77,16 +78,16 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			// finally, if there is a funciton to hookup on some dom
 			// pass it to hookup to get the data-view-id back
 			if ( hook ) {
-				return "data-view-id='" + Can.view.hook(hook) + "'";
+				return "data-view-id='" + can.view.hook(hook) + "'";
 			}
 			// finally, if all else false, toString it
 			return ""+input;
 		},
 		/**
-		 * @class Can.EJS
+		 * @class can.EJS
 		 * 
 		 * @plugin jquery/view/ejs
-		 * @parent Can.View
+		 * @parent can.View
 		 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/view/ejs/ejs.js
 		 * @test jquery/view/ejs/qunit.html
 		 * 
@@ -228,7 +229,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			this.template = scan(this.text, this.name);
 		};
 	// add EJS to jQuery if it exists
-	Can.EJS = EJS;
+	can.EJS = EJS;
 	/** 
 	 * @Prototype
 	 */
@@ -265,8 +266,8 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		 */
 		txt : function(tagName, status, self, func, escape){
 			// set callback on reading ...
-			if (Can.Observe) {
-				Can.Observe.__reading = function(obj, attr){
+			if (can.Observe) {
+				can.Observe.__reading = function(obj, attr){
 					observed.push({
 						obj: obj,
 						attr: attr
@@ -278,8 +279,8 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				input = func.call(self);
 	
 			// set back so we are no longer reading
-			if(Can.Observe){
-				delete Can.Observe.__reading;
+			if(can.Observe){
+				delete can.Observe.__reading;
 			}
 
 			// if we had no observes
@@ -288,7 +289,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			}
 			var tag = (tagMap[tagName] || "span");
 			if(status == 0){
-				return "<" +tag+" data-view-id='" +Can.view.hook(
+				return "<" +tag+" data-view-id='" +can.view.hook(
 				// are we escaping
 				escape ? 
 					// 
@@ -310,9 +311,9 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						// remove child, bind on parent
 						var makeAndPut = function(val, remove){
 								// get fragement of html to fragment
-								var frag = Can.view.frag(val),
+								var frag = can.view.frag(val),
 									// wrap it to keep a reference to the elements .. 
-									nodes = Can.$(Can.map(frag.childNodes,function(node){
+									nodes = can.$(can.map(frag.childNodes,function(node){
 										return node;
 									})),
 									last = remove[remove.length - 1];
@@ -325,8 +326,8 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 								}
 								
 								// remove the old content
-								Can.remove( Can.$(remove) );
-								//Can.view.hookup(nodes);
+								can.remove( can.$(remove) );
+								//can.view.hookup(nodes);
 								return nodes;
 							},
 							nodes = makeAndPut(input, [span]);
@@ -340,17 +341,35 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						//return parent;
 				}) + "'></" +tag+">";
 			} else if(status === 1){ // in a tag
-				// TODO: handle within a tag <div <%== %>>
-				return input;
 				// mark at end!
+				var attrName = func.call(self).replace(/['"]/g, '').split('=')[0];
+				pendingHookups.push(function(el) {
+					liveBind(observed, el, function() {
+						var attr = func.call(self),
+							parts = (attr || "").replace(/['"]/g, '').split('=')
+							newAttrName = parts[0];
+						
+						// remove if we have a change and used to have an attrName
+						if((newAttrName != attrName) && attrName){
+							el.removeAttribute(attrName)
+						}
+						// set if we have a new attrName
+						if(newAttrName){
+							el.setAttribute(newAttrName, parts[1])
+						}
+					});
+				});
+
+				return input;
 			} else { // in an attribute
 				pendingHookups.push(function(el){
-					var wrapped = Can.$(el),
+					var wrapped = can.$(el),
 						hooks;
 						
-					(hooks = Can.data(wrapped,'hooks')) || Can.data(wrapped, 'hooks', hooks = {});
+					(hooks = can.data(wrapped,'hooks')) || can.data(wrapped, 'hooks', hooks = {});
 					var attr = el.getAttribute(status),
-						parts = attr.split("__!!__");
+						parts = attr.split("__!!__"),
+						hook;
 
 					if(hooks[status]) {
 						hooks[status].funcs.push(func);
@@ -360,20 +379,28 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						hooks[status] = {
 							render: function() {
 								var i =0;
-								var newAttr = attr.replace(/__!!__/g, function() {
-									return contentEscape( hooks[status].funcs[i++].call(self) );
+								var newAttr = attr.replace(attributeReplace, function() {
+									return contentEscape( hook.funcs[i++].call(self) );
 								});
 								return newAttr;
 							},
-							funcs: [func]
+							funcs: [func],
+							batchNum : undefined
 						};
 					}
-
+					hook = hooks[status];
+					
 					parts.splice(1,0,input);
 					el.setAttribute(status, parts.join(""));
 					
-					liveBind(observed, el, function() {
-						el.setAttribute(status, hooks[status].render());
+
+					liveBind(observed, el, function(ev) {
+						if(ev.batchNum === undefined || ev.batchNum !== hook.batchNum){
+							hook.batchNum = ev.batchNum;
+							el.setAttribute(status, hook.render());
+						} 
+						
+						
 					});
 				})
 				return "__!!__";
@@ -388,8 +415,8 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				var hooks = pendingHookups.slice(0);
 
 				pendingHookups = [];
-				return " data-view-id='" + Can.view.hook(function(el){
-					Can.each(hooks, function(i, fn){
+				return " data-view-id='" + can.view.hook(function(el){
+					can.each(hooks, function(i, fn){
 						fn(el);
 					})
 				}) + "'";
@@ -482,7 +509,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						htmlTag = 0;
 						// TODO: all <%= in tags should be added to pending hookups
 						if(magicInTag){
-							put(content, ",Can.EJS.pending(),\">\"");
+							put(content, ",can.EJS.pending(),\">\"");
 							content = '';
 						} else {
 							content += token;
@@ -527,7 +554,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							// we are ending a block
 							if (bracketCount == 1) {
 								// we are starting on
-								buff.push(insert_cmd, "Can.EJS.txt('"+tagName+"'," + status() + ",this,function(){", startTxt, content);
+								buff.push(insert_cmd, "can.EJS.txt('"+tagName+"'," + status() + ",this,function(){", startTxt, content);
 								
 								endStack.push({
 									before: "",
@@ -570,12 +597,12 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							// check if its a func like ()->
 							if(quickFunc.test(content)){
 								var parts = content.match(quickFunc)
-								content = "function(__){var "+parts[1]+"=Can.$(__);"+parts[2]+"}"
+								content = "function(__){var "+parts[1]+"=can.$(__);"+parts[2]+"}"
 							}
 							
 							// if we have <%== a(function(){ %> then we want
-							//  Can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];
-							buff.push(insert_cmd, "Can.EJS."+(startTag === '<%=' ? "esc" : "txt")+"('"+tagName+"'," + status()+",this,function(){ return ", content, 
+							//  can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];
+							buff.push(insert_cmd, "can.EJS."+(startTag === '<%=' ? "esc" : "txt")+"('"+tagName+"'," + status()+",this,function(){ return ", content, 
 								// if we have a block
 								bracketCount ? 
 								// start w/ startTxt "var _v1ew = [];"
@@ -619,14 +646,14 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 	
 
 	/**
-	 * @class Can.EJS.Helpers
-	 * @parent Can.EJS
-	 * By adding functions to Can.EJS.Helpers.prototype, those functions will be available in the 
+	 * @class can.EJS.Helpers
+	 * @parent can.EJS
+	 * By adding functions to can.EJS.Helpers.prototype, those functions will be available in the 
 	 * views.
 	 * 
 	 * The following helper converts a given string to upper case:
 	 * 
-	 * 	Can.EJS.Helpers.prototype.toUpper = function(params)
+	 * 	can.EJS.Helpers.prototype.toUpper = function(params)
 	 * 	{
 	 * 		return params.toUpperCase();
 	 * 	}
@@ -637,7 +664,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 	 * 
 	 * To access the current DOM element return a function that takes the element as a parameter:
 	 * 
-	 * 	Can.EJS.Helpers.prototype.upperHtml = function(params)
+	 * 	can.EJS.Helpers.prototype.upperHtml = function(params)
 	 * 	{
 	 * 		return function(el) {
 	 * 			$(el).html(params.toUpperCase());
@@ -664,7 +691,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 	 */
 	EJS.Helpers.prototype = {
 		/**
-		 * Renders a partial view.  This is deprecated in favor of <code>Can.View()</code>.
+		 * Renders a partial view.  This is deprecated in favor of <code>can.View()</code>.
 		 */
 		view: function( url, data, helpers ) {
 			return $View(url, data || this._data, helpers || this._extras); //new EJS(options).render(data, helpers);
@@ -678,11 +705,11 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 	};
 
 	// options for steal's build
-	Can.view.register({
+	can.view.register({
 		suffix: "ejs",
 		//returns a function that renders the view
 		script: function( id, src ) {
-			return "Can.EJS(function(_CONTEXT,_VIEW) { " + new EJS({
+			return "can.EJS(function(_CONTEXT,_VIEW) { " + new EJS({
 				text: src,
 				name: id
 			}).template.out + " })";

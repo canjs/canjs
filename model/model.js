@@ -2,9 +2,11 @@
 // this file should not be stolen directly
 steal('can/observe',function(){
 	
-
+	/**
+	 * @add can.Model
+	 */
 	var	pipe = function(def, model, func){
-		var d = new Can.Deferred();
+		var d = new can.Deferred();
 		def.then(function(){
 			arguments[0] = model[func](arguments[0])
 			d.resolve.apply(d, arguments)
@@ -31,14 +33,14 @@ steal('can/observe',function(){
 			}
 
 			// if we are a non-array object, copy to a new attrs
-			ajaxOb.data = typeof data == "object" && !Can.isArray(data) ?
-				Can.extend(ajaxOb.data || {}, data) : data;
+			ajaxOb.data = typeof data == "object" && !can.isArray(data) ?
+				can.extend(ajaxOb.data || {}, data) : data;
 	
 
 			// get the url with any templated values filled out
-			ajaxOb.url = Can.String.sub(ajaxOb.url, ajaxOb.data, true);
+			ajaxOb.url = can.String.sub(ajaxOb.url, ajaxOb.data, true);
 
-			return Can.ajax(Can.extend({
+			return can.ajax(can.extend({
 				type: type || "post",
 				dataType: dataType ||"json",
 				success : success,
@@ -85,11 +87,17 @@ steal('can/observe',function(){
 	 * @Static
 	 */
 	{
+		/**
+		 * @function create
+		 */
 		create: function( str , method) {
 			return function( attrs ) {
 				return ajax(str || this._shortName, attrs)
 			};
 		},
+		/**
+		 * @function update
+		 */
 		update: function( str ) {
 			return function( id, attrs ) {
 				
@@ -97,7 +105,7 @@ steal('can/observe',function(){
 				attrs = attrs || {};
 				var identity = this.id;
 				if ( attrs[identity] && attrs[identity] !== id ) {
-					attrs["new" + Can.String.capitalize(id)] = attrs[identity];
+					attrs["new" + can.String.capitalize(id)] = attrs[identity];
 					delete attrs[identity];
 				}
 				attrs[identity] = id;
@@ -105,6 +113,9 @@ steal('can/observe',function(){
 				return ajax( str || this._url, attrs, "put")
 			}
 		},
+		/**
+		 * @function destroy
+		 */
 		destroy: function( str ) {
 			return function( id ) {
 				var attrs = {};
@@ -112,7 +123,9 @@ steal('can/observe',function(){
 				return ajax( str || this._url, attrs, "delete")
 			}
 		},
-
+		/**
+		 * @function findAll
+		 */
 		findAll: function( str ) {
 			return function( params, success, error ) {
 				return pipe( ajax( str ||  this._shortName, params, "get", "json"),
@@ -120,6 +133,9 @@ steal('can/observe',function(){
 					"models" ).then(success,error);
 			};
 		},
+		/**
+		 * @function findOne
+		 */
 		findOne: function( str ) {
 			return function( params, success, error ) {
 				return pipe(
@@ -130,21 +146,21 @@ steal('can/observe',function(){
 		}
 	};
 
-	Can.Observe("Can.Model",{
+	can.Observe("can.Model",{
 		setup : function(){
-			Can.Observe.apply(this, arguments);
-			if(this === Can.Model){
+			can.Observe.apply(this, arguments);
+			if(this === can.Model){
 				return;
 			}
 			var self = this;
 			
-			Can.each(ajaxMethods, function(name, method){
+			can.each(ajaxMethods, function(name, method){
 				var prop = self[name];
 				if ( typeof prop !== 'function' ) {
 					self[name] = method(prop);
 				}
 			});
-			if(self.fullName == "Can.Model"){
+			if(self.fullName == "can.Model"){
 				self.fullName = "Model"+(++modelNum);
 			}
 			//add ajax converters
@@ -153,8 +169,8 @@ steal('can/observe',function(){
 				var converters = {},
 					convertName = "* " + self.fullName + ".model";
 	
-				converters[convertName + "s"] = Can.proxy(self.models,self);
-				converters[convertName] = Can.proxy(self.model,self);
+				converters[convertName + "s"] = can.proxy(self.models,self);
+				converters[convertName] = can.proxy(self.model,self);
 				$.ajaxSetup({
 					converters: converters
 				});
@@ -162,15 +178,22 @@ steal('can/observe',function(){
 			this.store = {};
 			this._url = this._shortName+"/{"+this.id+"}"
 		},
+		/**
+		 * @attribute id
+		 */
 		id: "id",
+		/**
+		 * @function models
+		 */
 		models: function( instancesRawData ) {
 			if (!instancesRawData ) {
 				return null;
 			}
 			// get the list type
-			var res = new( this.List || ML),
+			var self = this,
+				res = new( this.List || ML),
 				// did we get an array
-				arr = Can.isArray(instancesRawData),
+				arr = can.isArray(instancesRawData),
 				
 				// did we get a model list?
 				ml = (instancesRawData instanceof ML),
@@ -193,11 +216,11 @@ steal('can/observe',function(){
 				steal.dev.warn("model.js models has no data.")
 			}
 			//!steal-remove-end
-			for (; i < length; i++ ) {
-				res.push(this.model(raw[i]));
-			}
+			can.each(raw, function( i, rawPart ) {
+				res.push( self.model( rawPart ));
+			});
 			if (!arr ) { //push other stuff onto array
-				Can.each(instancesRawData, function(prop, val){
+				can.each(instancesRawData, function(prop, val){
 					if ( prop !== 'data' ) {
 						res[prop] = val;
 					}
@@ -205,6 +228,9 @@ steal('can/observe',function(){
 			}
 			return res;
 		},
+		/**
+		 * @function model
+		 */
 		model: function( attributes ) {
 			if (!attributes ) {
 				return null;
@@ -215,43 +241,147 @@ steal('can/observe',function(){
 			
 			return this.store[attributes.id] || new this( attributes );
 		}
-	},{
+		/**
+		 * @function bind
+		 */
+		// inherited with can.Observe
+		/**
+		 * @function unbind
+		 */
+		// inherited with can.Observe
+	},
+	/**
+	 * @prototype
+	 */
+	{
+		/**
+		 * @function isNew
+		 */
 		isNew: function() {
 			var id = getId(this);
 			// id || id === 0?
 			return !(id || id === 0); //if null or undefined
 		},
+		/**
+		 * @function save
+		 */
 		save: function( success, error ) {
 			return makeRequest(this, this.isNew() ? 'create' : 'update', success, error);
 		},
+		/**
+		 * Destroys the instance by calling 
+		 * [Can.Model.destroy] with the id of the instance.
+		 * 
+		 *     recipe.destroy(success, error);
+		 * 
+		 * This triggers "destroyed" events on the instance and the 
+		 * Model constructor function which can be listened to with
+		 * [can.Model::bind] and [can.Model.bind]. 
+		 * 
+		 *     Recipe = can.Model({
+		 *       destroy : "DELETE /services/recipes/{id}",
+		 *       findOne : "/services/recipes/{id}"
+		 *     },{})
+		 *     
+		 *     Recipe.bind("destroyed", function(){
+		 *       console.log("a recipe destroyed");	
+		 *     });
+		 * 
+		 *     // get a recipe
+		 *     Recipe.findOne({id: 5}, function(recipe){
+		 *       recipe.bind("destroyed", function(){
+		 *         console.log("this recipe destroyed")	
+		 *       })
+		 *       recipe.destroy();
+		 *     })
+		 * 
+		 * @param {Function} [success(instance)] called if a successful destroy
+		 * @param {Function} [error(xhr)] called if an unsuccessful destroy
+		 * @return {can.Deferred} a deferred that resolves with the destroyed instance
+		 */
 		destroy: function( success, error ) {
 			return makeRequest(this, 'destroy', success, error, 'destroyed');
 		},
+		/**
+		 * @function bind
+		 * 
+		 * `bind(eventName, handler(ev, args...) )` is used to listen
+		 * to events on this model instance.  Example:
+		 * 
+		 *     Task = can.Model()
+		 *     var task = new Task({name : "dishes"})
+		 *     task.bind("name", function(ev, newVal, oldVal){})
+		 * 
+		 * Use `bind` the
+		 * same as [can.Observe::bind] which should be used as
+		 * a reference for listening to property changes.
+		 * 
+		 * Bind on model can be used to listen to when 
+		 * an instance is:
+		 * 
+		 *  - created
+		 *  - updated
+		 *  - destroyed
+		 * 
+		 * like:
+		 * 
+		 *     Task = can.Model()
+		 *     var task = new Task({name : "dishes"})
+		 * 
+		 *     task.bind("created", function(ev, newTask){
+		 * 	     console.log("created", newTask)
+		 *     })
+		 *     .bind("updated", function(ev, updatedTask){
+		 *       console.log("updated", updatedTask)
+		 *     })
+		 *     .bind("destroyed", function(ev, destroyedTask){
+		 * 	     console.log("destroyed", destroyedTask)
+		 *     })
+		 * 
+		 *     // create, update, and destroy
+		 *     task.save(function(){
+		 *       task.attr('name', "do dishes")
+		 *           .save(function(){
+		 * 	            task.destroy()
+		 *           })
+		 *     }); 
+		 *     
+		 * 
+		 * `bind` also extends the inherited 
+		 * behavior of [can.Observe::bind] to track the number
+		 * of event bindings on this object which is used to store
+		 * the model instance.  When there are no bindings, the 
+		 * model instance is removed from the store, freeing memory.  
+		 * 
+		 */
 		bind : function(){
 			if(!this._bindings){
 				this.constructor.store[getId(this)] = this;
 				this._bindings = 0;
 			}
 			this._bindings++;
-			return Can.Observe.prototype.bind.apply(this, arguments);
+			return can.Observe.prototype.bind.apply(this, arguments);
 		},
+		/**
+		 * @function unbind
+		 */
 		unbind : function(){
 			this._bindings--;
 			if(!this._bindings){
 				delete this.constructor.store[getId(this)];
 			}
-			return Can.Observe.prototype.unbind.apply(this, arguments);
+			return can.Observe.prototype.unbind.apply(this, arguments);
 		},
 		// change ID
 		___set: function( prop, val ) {
-			Can.Observe.prototype.___set.call(this,prop, val)
+			can.Observe.prototype.___set.call(this,prop, val)
 			// if we add an id, move it to the store
 			if(prop === this.constructor.id && this._bindings){
 				this.constructor.store[getId(this)] = this;
 			}
 		}
 	});
-		Can.each([
+		can.each([
 	/**
 	 * @function created
 	 * @hide
@@ -276,7 +406,7 @@ steal('can/observe',function(){
 	 * 
 	 */
 	"destroyed"], function( i, funcName ) {
-		Can.Model.prototype[funcName] = function( attrs ) {
+		can.Model.prototype[funcName] = function( attrs ) {
 			var stub, 
 				constructor = this.constructor;
 
@@ -284,22 +414,27 @@ steal('can/observe',function(){
 			stub = attrs && typeof attrs == 'object' && this.attr(attrs.attr ? attrs.attr() : attrs);
 
 			// call event on the instance
-			Can.trigger(this,funcName);
-			Can.trigger(this,"change",funcName)
+			can.trigger(this,funcName);
+			can.trigger(this,"change",funcName)
 			//!steal-remove-start
 			steal.dev.log("Model.js - "+ constructor.shortName+" "+ funcName);
 			//!steal-remove-end
 
 			// call event on the instance's Class
-			Can.trigger(constructor,funcName, this);
+			can.trigger(constructor,funcName, this);
 		};
 	});
 	
 	// model lists are just like Observe.List except that when their items is destroyed, it automatically
 	// gets removed from the list
-	var ML = Can.Observe.List('Can.Model.List',{
+	/**
+	 * @class can.Model.List
+	 * @inherits can.Observe.List
+	 * @parent index
+	 */
+	var ML = can.Observe.List('can.Model.List',{
 		setup : function(){
-			Can.Observe.List.prototype.setup.apply(this, arguments );
+			can.Observe.List.prototype.setup.apply(this, arguments );
 			// send destroy events
 			var self = this;
 			this.bind('change', function(ev, how){
