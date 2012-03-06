@@ -802,7 +802,7 @@ __todos.ejs__ looks like:
 
 {% highlight erb %}
 <% list(todos, function(todo){ %>
-  <li <%= (el) -> can.data(el, "todo", todo) %>>
+  <li <%= (el) -> el.data("todo", todo) %> >
     <%= todo.attr('name') %>
     <a href='javascript:// class='destroy'>
   </li>
@@ -905,11 +905,11 @@ var Todos = can.Control({
     li.trigger('selected', li.model() );
   },
   "li .destroy click" : function(el, ev){
-    // get the li element that has the model
-    var li = el.closest('.todo');
+    // get the li element that has todo data
+    var li = el.closest('li');
   
     // get the model
-    var todo = li.model()
+    var todo = li.data('todo')
   
     //destroy it
     todo.destroy(function(){
