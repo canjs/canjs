@@ -912,13 +912,12 @@ var Todos = can.Control({
     var todo = li.data('todo')
   
     //destroy it
-    todo.destroy(function(){
-      // remove the element
-      li.remove();
-    });
+    todo.destroy();
   }
 })
 {% endhighlight %}
+
+When the todo is destroyed, EJS's live binding will remove it's LI automatically.
 
 ### Templated Event Handlers Pt 1 `"{optionName}"`
 
@@ -965,7 +964,7 @@ The selector can also be templated.
 ### Templated Event Handlers Pt 2 `"{objectName}"`
 
 Controller can also bind to objects other than `this.element` with
-templated event handlers.  This is __especially critical__
+templated event handlers.  This is _critical
 for avoiding memory leaks that are so common among MVC applications.  
 
 If the value inside `{NAME}` is an object, that object will be 
@@ -987,40 +986,42 @@ new Tooltip( $('<div>INFO</div>').appendTo(el) )
 {% endhighlight %}
     
 This is convenient when needing to 
-listen to model updates.  Instead of adding a callback
-to `todo.destroy(cb)`, we should be listening to 
-__destroyed__ events.  We'll handle __updated__ too:
+listen to model changes.  If EJS was not taking care of
+removing `<li>`s after their model is destroyed, we
+could implement it in `Todos` like:
 
 {% highlight javascript %}
 var Todos = can.Control({
   "init" : function( element , options ){
-    this.element.html('todos.ejs', Todo.findAll() )
+    var self = this;
+    Todo.findAll({}, function( todos ){
+      self.todosList = todos;
+      self.element.html(self.options.template, todos )
+    })
   },
   "li click" : function(li){
     li.trigger('selected', li.model() );
   },
   "li .destroy click" : function(el, ev){
-    el.closest('.todo')
-      .model()
-      .destroy();
-    ev.stopPropagation();
+    // get the li element that has todo data
+    var li = el.closest('li');
+  
+    // get the model
+    var todo = li.data('todo')
+  
+    //destroy it
+    todo.destroy();
   },
-  "{Todo} destroyed" : function(Todo, ev, destroyedTodo){
-    destroyedTodo.elements(this.element)
-                 .remove();
-  },
-  "{Todo} updated" : function(Todo, ev, updatedTodo){
-    updatedTodo.elements(this.element)
-               .replaceWith('todos.ejs',[updatedTodo]);
+  "{Todo} destroyed" : funtion(Todo, ev, todoDestroyed) {
+    // find where the element
+    var index = this.todosList.indexOf(todoDestroyed)
+    this.element.children(":nth-child("+(index+1)+")")
+        .remove()
   }
 })
 
 new Todos("#todos");
 {% endhighlight %}
-
-This is better because it removes the todo's element from the page even if another widget
-destroyed the todo. Also, this works very well with real-time
-architectures.
 
 ### destroy `control.destroy()`
 
@@ -1052,16 +1053,16 @@ only templated event handlers on controls within the body
 could free up all 
 data by calling `$(document.body).empty()`._
 
-### update `control.update(options)`
+### on `control.on()`
 
-[can.Control.prototype.update](http://donejs.com/docs.html#!can.Control.prototype.update) updates a control's 
-`this.options` and rebinds all event handlers.This is useful
-when you want to listen to a specific model:
+[can.Control.prototype.on] rebinds a control's event handlers.  This is useful when you want
+to listen to a specific model and change it:
 
 {% highlight javascript %}
-var Editor = $.Controller({
-  update : function(options){
-    this._super(options)
+var Editor = can.Control({
+  todo : function(todo){
+    this.options.todo = todo;
+    this.on();
     this.setName();
   },
   // a helper that sets the value of the input
@@ -1090,13 +1091,11 @@ var todo1 = new Todo({id: 6, name: "trash"}),
 var editor = new Editor("#editor");
 
 // show the first todo
-editor.update({todo: todo1})
+editor.todo( todo1 )
 
 // switch it to the second todo
-editor.update({todo: todo2});
+editor.todo( todo2 );
 {% endhighlight %}
-
-Notice that because we are overwriting `update`, we must call __\_super__.
 
 ## can.route
 
