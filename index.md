@@ -725,8 +725,7 @@ todos[0].destroy()
 
 ### Element Callbacks
 
-If a function is returned within the `<%= %>` or `<%== %>` magic tags within an
-html element's tag like:
+If a function is returned by the `<%= %>` or `<%== %>` magic tags within an element's tag like:
 
 {% highlight erb %}
 <div <%= function(element){ element.style.display = "none" } %> >
@@ -735,7 +734,7 @@ html element's tag like:
 {% endhighlight %}
 
 The function is called back with the `HTMLElement` as the first 
-argument.  This can be useful to initialize functionality on an 
+argument.  This is useful to initialize functionality on an 
 element within the view.  This is so common that EJS supports 
 [ES5 arrow functions](http://wiki.ecmascript.org/doku.php?id=strawman:arrow_function_syntax)
 that get passed the NodeList wrapped element.  Using jQuery, this lets you write 
@@ -747,7 +746,7 @@ the above callback as:
 </div>
 {% endhighlight %}
 
-This technique is used to add data, especially model instances to an element's data like:
+This technique is commonly used to add data, especially model instances, to an element like:
 
 {% highlight erb %}
 <% list(todos, function(todo){ %>
