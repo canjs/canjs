@@ -65,6 +65,27 @@ var validate = function(attrNames, options, proc) {
    
 };
 
+var proto = can.Observe.prototype,
+	old = proto.__set;
+
+proto.__set = function(prop, value, current, success, error){
+	var self = this,
+		validations = self.constructor.validations,
+		errorCallback = function( errors ) {
+			var stub = error && error.call(self, errors);
+			can.trigger(self, "error." + prop, errors, true);
+		};
+		
+	if (validations[prop]){
+		var errors = self.errors(prop);
+		errors && errorCallback(errors)
+	}
+	
+	old.call(self, prop, value, current, success, errorCallback);
+	
+	return this;
+}
+
 can.extend(can.Observe, {
 	
 	validations: {},
