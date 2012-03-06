@@ -783,8 +783,11 @@ extending `can.Control`.
 
 {% highlight javascript %}
 var Todos = can.Control({
-  "init" : function( element , options ){
-    this.element.html('todos.ejs', Todo.findAll() )
+  "init" : function( element , options ) {
+    var self = this;
+    Todo.findAll({}, function( todos ){
+      self.element.html('todos.ejs', todos )
+    })
   }
 })
 {% endhighlight %}
@@ -815,7 +818,10 @@ var Todos = can.Control({
   defaults : {template: 'todos.ejs'}
 },{
   "init" : function( element , options ){
-    element.html(options.template, Todo.findAll() )
+    var self = this;
+    Todo.findAll({}, function( todos ){
+      self.element.html(self.options.template, todos )
+    })
   }
 })
 
@@ -850,15 +856,18 @@ like event handlers.  Listen to __click__s on `<li>` elements like:
 
 {% highlight javascript %}
 var Todos = can.Control({
-"init" : function( element , options ){
-  this.element.html('todos.ejs', Todo.findAll() )
-},
-"li click" : function(li, event){
-  console.log("You clicked", li.text() )
-  
-  // let other controls know what happened
-  li.trigger('selected');
-}
+  "init" : function( element , options ){
+    var self = this;
+    Todo.findAll({}, function( todos ){
+      self.element.html(self.options.template, todos )
+    })
+  },
+  "li click" : function(li, event){
+    console.log("You clicked", li.text() )
+    
+    // let other controls know what happened
+    li.trigger('selected');
+  }
 })
 {% endhighlight %}
 
@@ -875,25 +884,28 @@ is clicked:
 
 {% highlight javascript %}
 var Todos = can.Control({
-"init" : function( element , options ){
-  this.element.html('todos.ejs', Todo.findAll() )
-},
-"li click" : function(li){
-  li.trigger('selected', li.model() );
-},
-"li .destroy click" : function(el, ev){
-  // get the li element that has the model
-  var li = el.closest('.todo');
+  "init" : function( element , options ){
+    var self = this;
+    Todo.findAll({}, function( todos ){
+      self.element.html(self.options.template, todos )
+    })
+  },
+  "li click" : function(li){
+    li.trigger('selected', li.model() );
+  },
+  "li .destroy click" : function(el, ev){
+    // get the li element that has the model
+    var li = el.closest('.todo');
   
-  // get the model
-  var todo = li.model()
+    // get the model
+    var todo = li.model()
   
-  //destroy it
-  todo.destroy(function(){
-    // remove the element
-    li.remove();
-  });
-}
+    //destroy it
+    todo.destroy(function(){
+      // remove the element
+      li.remove();
+    });
+  }
 })
 {% endhighlight %}
 
