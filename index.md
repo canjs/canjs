@@ -559,8 +559,6 @@ To render a string instead of a documentFragment, use [can.view.render]() like:
 <% }) %>
 {% endhighlight %}
 
-__can.view.render--
-
 ## can.EJS `new can.EJS( options )`
 
 [can.EJS](http://donejs.com/docs.html#!can.EJS) is CanJS's default template 
@@ -723,6 +721,51 @@ todos.push( new Todo({name : "file taxes"}) );
 
 // destroying an item removes it from Model.Lists
 todos[0].destroy()
+{% endhighlight %}
+
+### Element Callbacks
+
+If a function is returned within the `<%= %>` or `<%== %>` magic tags within an
+html element's tag like:
+
+{% highlight erb %}
+<div <%= function(element){ element.style.display = "none" } %> >
+  Hello
+</div>
+{% endhighlight %}
+
+The function is called back with the `HTMLElement` as the first 
+argument.  This can be useful to initialize functionality on an 
+element within the view.  This is so common that EJS supports 
+[ES5 arrow functions](http://wiki.ecmascript.org/doku.php?id=strawman:arrow_function_syntax)
+that get passed the NodeList wrapped element.  Using jQuery, this lets you write 
+the above callback as:
+
+{% highlight erb %}
+<div <%= (el)-> el.hide() %> >
+  Hello
+</div>
+{% endhighlight %}
+
+This technique is used to add data, especially model instances to an element's data like:
+
+{% highlight erb %}
+<% list(todos, function(todo){ %>
+  <li <%= (el) -> el.data("todo",todo) %>>
+    <%= todo.attr('name') %>
+  </li>
+<% }) %>
+{% endhighlight %}
+
+jQuery's `el.data( NAME, data )` adds data to an element.  If your library does not support this,
+can provides it as `can.data( NodeList, NAME, data )`.  Rewrite the above example as:
+
+{% highlight erb %}
+<% list(todos, function(todo){ %>
+  <li <%= (el) -> can.data(el, "todo", todo) %>>
+    <%= todo.attr('name') %>
+  </li>
+<% }) %>
 {% endhighlight %}
 
 ## can.Control `can.Control(classProps, prototypeProps)`
