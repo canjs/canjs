@@ -7,7 +7,7 @@ CanJS is an MIT-licensed, client-side, JavaScript framework that makes building 
 
  - __can.Construct__  - inheritable constructor functions
  - __can.Observe__ - key-value binding
- - __can.Model__ - observable data connected to a RESTful JSON interface
+ - __can.Model__ - observes connected to a RESTful JSON interface
  - __can.view__ - template loading, caching, rendering
  - __can.EJS__ - live binding template language
  - __can.Control__ - declaritive event bindings
