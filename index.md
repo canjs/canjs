@@ -798,6 +798,17 @@ Create an instance of the Todos control the `#todos` element with:
 var todosControl = new Todos('#todos', {});
 {% endhighlight %}
 
+__todos.ejs__ looks like:
+
+{% highlight erb %}
+<% list(todos, function(todo){ %>
+  <li <%= (el) -> can.data(el, "todo", todo) %>>
+    <%= todo.attr('name') %>
+    <a href='javascript:// class='destroy'>
+  </li>
+<% }) %>
+{% endhighlight %}
+
 ### init `can.Control.prototype.init(element, options)`
 
 [Init](http://donejs.com/docs.html#!can.Control:init) is called when a
