@@ -68,7 +68,7 @@ steal("can/util/string",function( $ ) {
 		//   newProps - new properties
 		//   oldProps - where the old properties might be
 		//   addTo - what we are adding to
-		_inherit: function( newProps, addTo ) {
+		_inherit: function( newProps, oldProps, addTo ) {
 			can.extend(addTo || newProps, newProps || {})
 		},
 		/**
@@ -184,7 +184,7 @@ steal("can/util/string",function( $ ) {
 			prototype = this.instance();
 			
 			// Copy the properties over onto the new prototype
-			this._inherit(proto, prototype);
+			this._inherit(proto, _super, prototype);
 
 			// The dummy class constructor
 			function Constructor() {
@@ -204,7 +204,7 @@ steal("can/util/string",function( $ ) {
 				}
 			}
 			// copy new static props on class
-			this._inherit(klass, Constructor);
+			this._inherit(klass, this, Constructor);
 
 			// do namespace stuff
 			if ( fullName ) {
