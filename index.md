@@ -96,7 +96,7 @@ todo.read()
 To create an observable object, use `new can.Observe( [data] )` like:
 
 {% highlight javascript %}
-	var paginate = new can.Observe({offset: 0, limit : 100, count: 2000})
+var paginate = new can.Observe({offset: 0, limit : 100, count: 2000})
 {% endhighlight %}
 
 To create an observable array, use `new can.Observe.List( [array] )` like:
