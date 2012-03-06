@@ -1097,15 +1097,65 @@ editor.todo( todo1 )
 editor.todo( todo2 );
 {% endhighlight %}
 
-## can.route
+## can.route `can.route( route, [defaults] )`
 
-[can.route](http://donejs.com/docs.html#!can.route) is the core of donejs's 
-routing functionality. It is a [can.Observe](http://donejs.com/docs.html#!can.Observe) that
+[can.route](http://donejs.com/docs.html#!can.route) is the core of CanJS's 
+routing functionality. It is a speical [can.Observe](#can_observe) that
 updates `window.location.hash` when it's properties change
 and updates its properties when `window.location.hash` 
-changes. It allows very sophisticated routing behavior ... too
-sophisticated for this guide. But, it also handles 
-the basics with ease.  
+changes. __can.route__ uses routes to translate urls into
+property values.  If no routes are provided, it just serializes the route
+into standard URL-encoded notation.  Example:
+
+{% highlight javascript %}
+window.location.hash = ""
+  
+can.route.attr() //-> {}
+  
+window.location.hash = "#!id=7"
+  
+can.route.attr() //-> { id: 7 }
+  
+can.route.attr( { type : "todos" })
+
+window.location.hash //-> #!type=todos
+
+can.route.attr("id",5)
+
+window.location.hash //-> #!type=todos&id=5
+{% endhighlight %}
+
+Use `can.route( route, defaults )` to make pretty urls:
+
+{% highlight javascript %}
+can.route(":type/:id")
+
+window.location.hash = "#!todo/5"
+
+can.route.attr() //-> { type: "todo", id: 5 }
+
+can.route.attr({type: "user", id: 7})
+
+window.location.hash = "#!user/5"
+  
+can.route(":type",{type : "recipe"})
+
+window.location.hash = "";
+
+can.route.attr() //-> { type : "recipe" })
+{% endhighlight %}
+
+### bind `route.bind( eventName, handler( event ) )`
+
+Use [bind](#can_observe-bind) to listen to changes in the route like:
+
+{% highlight javascript %}
+can.route.bind("id", function( ev, newVal ) {
+  console.log("id changed");
+});
+{% endhighlight %}
+
+### route events
 
 Listen to routes in controls with special "route" events like:
 
@@ -1157,12 +1207,13 @@ var Routing = can.Control({
   },
   "todos/:id route" : function(data){
     $("#editor").show();
-    Todo.findOne(data, $.proxy(function(todo){
+    var self = this;
+    Todo.findOne(data, function(todo){
       this.editor.update({todo: todo});
-    }, this))
+    })
   },
   ".todo selected" : function(el, ev, todo){
-    $.route.attr('id',todo.id);
+    can.route.attr('id',todo.id);
   }
 });
 
