@@ -2,3 +2,4 @@
 dist
 *.swp
 *.orig
+util/can.*.js

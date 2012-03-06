@@ -15,7 +15,7 @@ steal('steal/build/pluginify', function () {
 	steal.build.pluginify("can/util/make/zepto.js",{
 		out : "can/util/can.zepto.js",
 		exclude : "can/util/zepto/zepto.0.8.js",
-		global : "can = {};",
+		global : "can = {}",
 		onefunc : true,
 		compress: true
 	});
@@ -23,7 +23,7 @@ steal('steal/build/pluginify', function () {
 	steal.build.pluginify("can/util/make/dojo.js",{
 		out : "can/util/can.dojo.js",
 		exclude : "https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompressed.js",
-		global : "can = {};",
+		global : "can = {}",
 		onefunc : true,
 		compress: true
 	});
@@ -31,7 +31,7 @@ steal('steal/build/pluginify', function () {
 	steal.build.pluginify("can/util/make/mootools.js",{
 		out : "can/util/can.mootools.js",
 		exclude : "can/util/mootools/mootools-core-1.4.3.js",
-		global : "can = {};",
+		global : "can = {}",
 		onefunc : true,
 		compress: true
 	});
@@ -39,7 +39,7 @@ steal('steal/build/pluginify', function () {
 	steal.build.pluginify("can/util/make/yui.js",{
 		out : "can/util/can.yui.js",
 		exclude : "can/util/yui/yui.js",
-		global : "can = {};",
+		global : "can = {}",
 		onefunc : true,
 		compress: true
 	});
