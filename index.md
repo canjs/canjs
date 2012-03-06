@@ -1116,7 +1116,7 @@ window.location.hash = "#!id=7"
   
 can.route.attr() //-> { id: 7 }
   
-can.route.attr( { type : "todos" })
+can.route.attr({ type : "todos" })
 
 window.location.hash //-> #!type=todos
 
@@ -1138,7 +1138,7 @@ can.route.attr({type: "user", id: 7})
 
 window.location.hash = "#!user/5"
   
-can.route(":type",{type : "recipe"})
+can.route(":type",{ type : "recipe" })
 
 window.location.hash = "";
 
@@ -1183,12 +1183,29 @@ We can update the route by changing $.route's data like:
 $.route.attr('id','6') // location.hash = #!todos/6
 {% endhighlight %}
 
-Or we can set the hash ourselves like
+### url `can.route.url( options, [merge] )`
+
+[can.route.url](http://donejs.com/docs.html#!can.route.url) takes attributes
+and creates a url that can be used in a link.  
 
 {% highlight javascript %}
-var hash = $.route.url({id: 7}) // #!todos/7
+var hash = can.route.url({id: 7}) // #!todos/7
 location.hash = hash;
 {% endhighlight %}
+
+### link `can.route.link( name, options, props, merge )`
+
+[can.route.link](http://donejs.com/docs.html#!can.route.link) is used to 
+create a link.
+
+{% highlight javascript %}
+var link = can.link("Todo 5",
+                    { id: 5 }, 
+                    { className : "button" });
+
+link //-> <a href="#!todos/7" class="button">Todo 5</a>
+{% endhighlight %}
+
 
 The following enhances the Routing control to listen for
 `".todo selected"` events and change the `$.route`.  When the
