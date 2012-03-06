@@ -6,12 +6,12 @@ layout: default
 CanJS is an MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.  It provides:
 
  - __can.Construct__  - inheritable constructor functions
- - __can.Control__ - declaritive event bindings
- - __can.Model__ - connect data to a RESTful JSON interface
  - __can.Observe__ - key-value binding
+ - __can.Model__ - observes connected to a RESTful JSON interface
+ - __can.view__ - template loading, caching, rendering
+ - __can.EJS__ - live binding template language
+ - __can.Control__ - declaritive event bindings
  - __can.route__ - backbutton and bookmarking support
- - __can.view__ - dynamic live binding client side templates
- 
 
 ## Get Canned
 
@@ -96,7 +96,7 @@ todo.read()
 To create an observable object, use `new can.Observe( [data] )` like:
 
 {% highlight javascript %}
-	var paginate = new can.Observe({offset: 0, limit : 100, count: 2000})
+var paginate = new can.Observe({offset: 0, limit : 100, count: 2000})
 {% endhighlight %}
 
 To create an observable array, use `new can.Observe.List( [array] )` like:
@@ -559,8 +559,6 @@ To render a string instead of a documentFragment, use [can.view.render]() like:
 <% }) %>
 {% endhighlight %}
 
-__can.view.render--
-
 ## can.EJS `new can.EJS( options )`
 
 [can.EJS](http://donejs.com/docs.html#!can.EJS) is CanJS's default template 
@@ -725,6 +723,50 @@ todos.push( new Todo({name : "file taxes"}) );
 todos[0].destroy()
 {% endhighlight %}
 
+### Element Callbacks
+
+If a function is returned by the `<%= %>` or `<%== %>` magic tags within an element's tag like:
+
+{% highlight erb %}
+<div <%= function(element){ element.style.display = "none" } %> >
+  Hello
+</div>
+{% endhighlight %}
+
+The function is called back with the `HTMLElement` as the first 
+argument.  This is useful to initialize functionality on an 
+element within the view.  This is so common that EJS supports 
+[ES5 arrow functions](http://wiki.ecmascript.org/doku.php?id=strawman:arrow_function_syntax)
+that get passed the NodeList wrapped element.  Using jQuery, this lets you write 
+the above callback as:
+
+{% highlight erb %}
+<div <%= (el)-> el.hide() %> >
+  Hello
+</div>
+{% endhighlight %}
+
+This technique is commonly used to add data, especially model instances, to an element like:
+
+{% highlight erb %}
+<% list(todos, function(todo){ %>
+  <li <%= (el) -> el.data("todo",todo) %>>
+    <%= todo.attr('name') %>
+  </li>
+<% }) %>
+{% endhighlight %}
+
+jQuery's `el.data( NAME, data )` adds data to an element.  If your library does not support this,
+can provides it as `can.data( NodeList, NAME, data )`.  Rewrite the above example as:
+
+{% highlight erb %}
+<% list(todos, function(todo){ %>
+  <li <%= (el) -> can.data(el, "todo", todo) %>>
+    <%= todo.attr('name') %>
+  </li>
+<% }) %>
+{% endhighlight %}
+
 ## can.Control `can.Control(classProps, prototypeProps)`
 
 [can.Control](http://donejs.com/docs.html#!can.Control) creates organized, memory-leak free, 
@@ -741,8 +783,11 @@ extending `can.Control`.
 
 {% highlight javascript %}
 var Todos = can.Control({
-  "init" : function( element , options ){
-    this.element.html('todos.ejs', Todo.findAll() )
+  "init" : function( element , options ) {
+    var self = this;
+    Todo.findAll({}, function( todos ){
+      self.element.html('todos.ejs', todos )
+    })
   }
 })
 {% endhighlight %}
@@ -751,6 +796,17 @@ Create an instance of the Todos control the `#todos` element with:
 
 {% highlight javascript %}
 var todosControl = new Todos('#todos', {});
+{% endhighlight %}
+
+__todos.ejs__ looks like:
+
+{% highlight erb %}
+<% list(todos, function(todo){ %>
+  <li <%= (el) -> el.data("todo", todo) %> >
+    <%= todo.attr('name') %>
+    <a href='javascript:// class='destroy'>
+  </li>
+<% }) %>
 {% endhighlight %}
 
 ### init `can.Control.prototype.init(element, options)`
@@ -773,7 +829,10 @@ var Todos = can.Control({
   defaults : {template: 'todos.ejs'}
 },{
   "init" : function( element , options ){
-    element.html(options.template, Todo.findAll() )
+    var self = this;
+    Todo.findAll({}, function( todos ){
+      self.element.html(self.options.template, todos )
+    })
   }
 })
 
@@ -808,15 +867,18 @@ like event handlers.  Listen to __click__s on `<li>` elements like:
 
 {% highlight javascript %}
 var Todos = can.Control({
-"init" : function( element , options ){
-  this.element.html('todos.ejs', Todo.findAll() )
-},
-"li click" : function(li, event){
-  console.log("You clicked", li.text() )
-  
-  // let other controls know what happened
-  li.trigger('selected');
-}
+  "init" : function( element , options ){
+    var self = this;
+    Todo.findAll({}, function( todos ){
+      self.element.html(self.options.template, todos )
+    })
+  },
+  "li click" : function(li, event){
+    console.log("You clicked", li.text() )
+    
+    // let other controls know what happened
+    li.trigger('selected');
+  }
 })
 {% endhighlight %}
 
@@ -833,25 +895,28 @@ is clicked:
 
 {% highlight javascript %}
 var Todos = can.Control({
-"init" : function( element , options ){
-  this.element.html('todos.ejs', Todo.findAll() )
-},
-"li click" : function(li){
-  li.trigger('selected', li.model() );
-},
-"li .destroy click" : function(el, ev){
-  // get the li element that has the model
-  var li = el.closest('.todo');
+  "init" : function( element , options ){
+    var self = this;
+    Todo.findAll({}, function( todos ){
+      self.element.html(self.options.template, todos )
+    })
+  },
+  "li click" : function(li){
+    li.trigger('selected', li.model() );
+  },
+  "li .destroy click" : function(el, ev){
+    // get the li element that has todo data
+    var li = el.closest('li');
   
-  // get the model
-  var todo = li.model()
+    // get the model
+    var todo = li.data('todo')
   
-  //destroy it
-  todo.destroy(function(){
-    // remove the element
-    li.remove();
-  });
-}
+    //destroy it
+    todo.destroy(function(){
+      // remove the element
+      li.remove();
+    });
+  }
 })
 {% endhighlight %}
 
