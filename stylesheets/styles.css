@@ -91,12 +91,12 @@ body {
 #menu li { margin: 1px 0 }
 #menu li ul { }
 #menu li ul li a {
-	padding-left: 24px;
-	font-size: 13px;
+	padding-left: 14px;
+	font-size: 14px;
 }
 #menu li ul li ul { display: none }
 #menu li ul li ul a {
-	padding-left: 34px;
+	padding-left: 24px;
 	font-weight: normal;
 }
 #menu a {
@@ -114,6 +114,9 @@ body {
 	color: white;
 	background: #006ab0;
 	text-shadow: none;
+}
+#menu a.heading-1 {
+	display: none;
 }
 #content-wrapper {
 	width: 680px;
@@ -189,14 +192,17 @@ body {
 #content h2:first-child,
 #content h3:first-child { margin-top: 0 }
 #content h2 {
-	font-size: 22px;
+	font-size: 24px;
 	line-height: 24px;
 	border-top: 1px dotted #666;
 	padding-top: 20px;
 }
 #content h3 {
-	font-size: 18px;
+	font-size: 20px;
 	line-height: 24px;
+}
+#content h1 {
+	margin: 10px 0 20px;
 }
 #content p { margin-bottom: 10px }
 #content pre {
