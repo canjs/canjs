@@ -1177,10 +1177,10 @@ The `route` methods get called back with the route __data__.  The
 empty `"route"` will be called with no data. But, `"todos/:id route"`
 will be called with data like: `{id: 6}`.
 
-We can update the route by changing $.route's data like:
+We can update the route by changing can.route's data like:
 
 {% highlight javascript %}
-$.route.attr('id','6') // location.hash = #!todos/6
+can.route.attr('id','6') // location.hash = #!todos/6
 {% endhighlight %}
 
 ### url `can.route.url( options, [merge] )`
@@ -1208,8 +1208,8 @@ link //-> <a href="#!todos/7" class="button">Todo 5</a>
 
 
 The following enhances the Routing control to listen for
-`".todo selected"` events and change the `$.route`.  When the
-$.route changes, it retrieves the todo from the server
+`".todo selected"` events and change __can.route__.  When the
+can.route changes, it retrieves the todo from the server
 and updates the editor widget.
 
 {% highlight javascript %}
@@ -1239,7 +1239,7 @@ new Routing(document.body);
 {% endhighlight %}
 
 The __Routing__ control is a traditional controller. It coordinates
-between the `$.route`, `Editor` and `Todos`.  `Editor` and `Todos`
+between the `can.route`, `Editor` and `Todos`.  `Editor` and `Todos`
 are traditional views, consuming models.
 
 If you can understand this, you understand 
