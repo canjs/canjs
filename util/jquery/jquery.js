@@ -2,7 +2,7 @@
 steal({
 	src: './jquery.1.7.1.js',
 	_skip: true
-}, function(){
+}, function($){
 	
 	$.extend( can, jQuery, {
 		trigger: function( obj, event, args ) {
