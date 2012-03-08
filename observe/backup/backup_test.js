@@ -3,7 +3,7 @@ steal('funcunit/qunit',
 .then('can/observe/backup')
 .then(function(){
 	
-module("can/model/backup",{
+module("can/observe/backup",{
 	setup : function(){
 		can.Observe.extend("Recipe")
 	}
