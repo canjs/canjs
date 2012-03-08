@@ -12,6 +12,7 @@ steal('can/util/mvc.js')
 	  'can/construct/super/super_test.js',
 	  'can/observe/attributes/attributes_test.js',
 	  'can/observe/delegate/delegate_test.js',
+	  'can/observe/backup/backup_test.js',
 	  'can/observe/setter/setter_test.js',
 	  'can/observe/validations/validations_test.js',
 	  'can/control/route/route_test.js',
