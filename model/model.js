@@ -179,10 +179,6 @@ steal('can/observe',function(){
 			this._url = this._shortName+"/{"+this.id+"}"
 		},
 		/**
-		 * @attribute id
-		 */
-		id: "id",
-		/**
 		 * @function models
 		 */
 		models: function( instancesRawData ) {
