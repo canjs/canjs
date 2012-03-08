@@ -85,8 +85,8 @@ body {
 }
 #menu {
 	font-size: 14px;
-	border-bottom: 1px solid #b5b6b5;
-	padding-bottom: 5px;
+	position: relative;
+	
 }
 #menu li { margin: 1px 0 }
 #menu li ul { }
@@ -117,6 +117,30 @@ body {
 }
 #menu a.heading-1 {
 	display: none;
+}
+#inner-menu-wrap {
+	overflow: hidden;
+	border-top: 1px solid #f0f1f0;
+	border-bottom: 1px solid #b5b6b5;
+	position: relative;
+}
+#scroll-top {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	height: 40px;
+	background: rgba(0,0,0,0.3);
+	z-index: 1000;
+}
+#scroll-bottom {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	height: 40px;
+	background: rgba(0,0,0,0.3);
+	z-index: 1000;
 }
 #content-wrapper {
 	width: 680px;
@@ -157,6 +181,7 @@ body {
 }
 #buttons {
 	border-top: 1px solid #f0f1f0;
+	border-bottom: 1px solid #b5b6b5;
 	padding: 10px 0 10px 14px;
 }
 #buttons a {
