@@ -1,4 +1,5 @@
-steal('can/util/jquery', function(){
+steal('can/view', function(){
+	
 	//---- ADD jQUERY HELPERS -----
 	//converts jquery functions to use views	
 	var convert, modify, isTemplate, isHTML, isDOM, getCallback, hookupView, funcs,
@@ -7,10 +8,10 @@ steal('can/util/jquery', function(){
 
 	convert = function( func_name ) {
 		// save the old jQuery helper
-		var old = $.fn[func_name];
+		var old = can.prototype[func_name];
 
 		// replace it wiht our new helper
-		$.fn[func_name] = function() {
+		can.prototype[func_name] = function() {
 			
 			var args = can.makeArray(arguments),
 				callbackNum, 
@@ -85,7 +86,7 @@ steal('can/util/jquery', function(){
 	};
 
 	// returns true or false if the args indicate a template is being used
-	// $('#foo').html('/path/to/template.ejs',{data})
+	// can.$('#foo').html('/path/to/template.ejs',{data})
 	// in general, we want to make sure the first arg is a string
 	// and the second arg is data
 	isTemplate = function( args ) {
@@ -124,37 +125,37 @@ steal('can/util/jquery', function(){
 	};
 
 	/**
-	 *  @add jQuery.fn
-	 *  @parent jQuery.View
-	 *  Called on a jQuery collection that was rendered with can.View with pending hookups.  can.View can render a 
+	 *  @add can.prototype
+	 *  @parent can.View
+	 *  Called on a can collection that was rendered with can.View with pending hookups.  can.View can render a 
 	 *  template with hookups, but not actually perform the hookup, because it returns a string without actual DOM 
 	 *  elements to hook up to.  So hookup performs the hookup and clears the pending hookups, preventing errors in 
 	 *  future templates.
 	 *  
 	 * @codestart
-	 * $(can.View('//views/recipes.ejs',recipeData)).hookup()
+	 * can.$(can.View('//views/recipes.ejs',recipeData)).hookup()
 	 * @codeend
 	 */
-	$.fn.hookup = function() {
+	can.prototype.hookup = function() {
 		can.view.frag(this);
 		return this;
 	};
 
 	/**
-	 *  @add jQuery.fn
+	 *  @add can.prototype
 	 */
 	can.each([
 	/**
 	 *  @function prepend
-	 *  @parent jQuery.View
+	 *  @parent can.View
 	 *  
 	 *  Extending the original [http://api.jquery.com/prepend/ jQuery().prepend()]
-	 *  to render [jQuery.View] templates inserted at the beginning of each element in the set of matched elements.
+	 *  to render [can.View] templates inserted at the beginning of each element in the set of matched elements.
 	 *  
-	 *  	$('#test').prepend('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  	can.$('#test').prepend('path/to/template.ejs', { name : 'javascriptmvc' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
-	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  or a DOM element, array of elements, HTML string, or can object.
 	 *  @param {Object} [data] The data to render the view with.
 	 *  If rendering a view template this parameter always has to be present
 	 *  (use the empty object initializer {} for no data).
@@ -162,15 +163,15 @@ steal('can/util/jquery', function(){
 	"prepend",
 	/**
 	 *  @function append
-	 *  @parent jQuery.View
+	 *  @parent can.View
 	 *  
 	 *  Extending the original [http://api.jquery.com/append/ jQuery().append()]
-	 *  to render [jQuery.View] templates inserted at the end of each element in the set of matched elements.
+	 *  to render [can.View] templates inserted at the end of each element in the set of matched elements.
 	 *  
-	 *  	$('#test').append('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  	can.$('#test').append('path/to/template.ejs', { name : 'javascriptmvc' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
-	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  or a DOM element, array of elements, HTML string, or can object.
 	 *  @param {Object} [data] The data to render the view with.
 	 *  If rendering a view template this parameter always has to be present
 	 *  (use the empty object initializer {} for no data).
@@ -178,15 +179,15 @@ steal('can/util/jquery', function(){
 	"append",
 	/**
 	 *  @function after
-	 *  @parent jQuery.View
+	 *  @parent can.View
 	 *  
 	 *  Extending the original [http://api.jquery.com/after/ jQuery().after()]
-	 *  to render [jQuery.View] templates inserted after each element in the set of matched elements.
+	 *  to render [can.View] templates inserted after each element in the set of matched elements.
 	 *  
-	 *  	$('#test').after('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  	can.$('#test').after('path/to/template.ejs', { name : 'javascriptmvc' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
-	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  or a DOM element, array of elements, HTML string, or can object.
 	 *  @param {Object} [data] The data to render the view with.
 	 *  If rendering a view template this parameter always has to be present
 	 *  (use the empty object initializer {} for no data).
@@ -194,15 +195,15 @@ steal('can/util/jquery', function(){
 	"after",
 	/**
 	 *  @function before
-	 *  @parent jQuery.View
+	 *  @parent can.View
 	 *  
 	 *  Extending the original [http://api.jquery.com/before/ jQuery().before()]
-	 *  to render [jQuery.View] templates inserted before each element in the set of matched elements.
+	 *  to render [can.View] templates inserted before each element in the set of matched elements.
 	 *  
-	 *  	$('#test').before('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  	can.$('#test').before('path/to/template.ejs', { name : 'javascriptmvc' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
-	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  or a DOM element, array of elements, HTML string, or can object.
 	 *  @param {Object} [data] The data to render the view with.
 	 *  If rendering a view template this parameter always has to be present
 	 *  (use the empty object initializer {} for no data).
@@ -210,17 +211,17 @@ steal('can/util/jquery', function(){
 	"before",
 	/**
 	 *  @function text
-	 *  @parent jQuery.View
+	 *  @parent can.View
 	 *  
 	 *  Extending the original [http://api.jquery.com/text/ jQuery().text()]
-	 *  to render [jQuery.View] templates as the content of each matched element.
-	 *  Unlike [jQuery.fn.html] jQuery.fn.text also works with XML, escaping the provided
+	 *  to render [cac.View] templates as the content of each matched element.
+	 *  Unlike [can.prototype.html] can.prototype.text also works with XML, escaping the provided
 	 *  string as necessary.
 	 *  
-	 *  	$('#test').text('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  	can.$('#test').text('path/to/template.ejs', { name : 'javascriptmvc' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
-	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  or a DOM element, array of elements, HTML string, or can object.
 	 *  @param {Object} [data] The data to render the view with.
 	 *  If rendering a view template this parameter always has to be present
 	 *  (use the empty object initializer {} for no data).
@@ -228,15 +229,15 @@ steal('can/util/jquery', function(){
 	"text",
 	/**
 	 *  @function html
-	 *  @parent jQuery.View
+	 *  @parent can.View
 	 *  
 	 *  Extending the original [http://api.jquery.com/html/ jQuery().html()]
-	 *  to render [jQuery.View] templates as the content of each matched element.
+	 *  to render [can.View] templates as the content of each matched element.
 	 *  
-	 *  	$('#test').html('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  	can.$('#test').html('path/to/template.ejs', { name : 'javascriptmvc' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
-	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  or a DOM element, array of elements, HTML string, or can object.
 	 *  @param {Object} [data] The data to render the view with.
 	 *  If rendering a view template this parameter always has to be present
 	 *  (use the empty object initializer {} for no data).
@@ -244,15 +245,15 @@ steal('can/util/jquery', function(){
 	"html",
 	/**
 	 *  @function replaceWith
-	 *  @parent jQuery.View
+	 *  @parent can.View
 	 *  
 	 *  Extending the original [http://api.jquery.com/replaceWith/ jQuery().replaceWith()]
-	 *  to render [jQuery.View] templates replacing each element in the set of matched elements.
+	 *  to render [can.View] templates replacing each element in the set of matched elements.
 	 *  
-	 *  	$('#test').replaceWith('path/to/template.ejs', { name : 'javascriptmvc' });
+	 *  	can.$('#test').replaceWith('path/to/template.ejs', { name : 'javascriptmvc' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
-	 *  or a DOM element, array of elements, HTML string, or jQuery object.
+	 *  or a DOM element, array of elements, HTML string, or can object.
 	 *  @param {Object} [data] The data to render the view with.
 	 *  If rendering a view template this parameter always has to be present
 	 *  (use the empty object initializer {} for no data).

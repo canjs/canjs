@@ -16,4 +16,5 @@ steal('can/util/mvc.js')
 	  'can/observe/setter/setter_test.js',
 	  'can/observe/validations/validations_test.js',
 	  'can/control/route/route_test.js',
-	  'can/control/view/test/qunit/view_test.js')
+	  'can/control/view/test/qunit/view_test.js',
+	  'can/view/modifiers/modifiers_test.js')

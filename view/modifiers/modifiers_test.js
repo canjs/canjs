@@ -1,17 +1,22 @@
+steal('can/view/ejs', 
+	  'can/view/modifiers', 
+	  'funcunit/qunit')
+.then(function(){
+
 module("can/view/modifiers");
 
 test("modifier with a deferred", function(){
-	$("#qunit-test-area").html("");
+	can.$("#qunit-test-area").html("");
 	stop();
 	
-	var foo = $.Deferred();
-	$("#qunit-test-area").html("//can/view/test/qunit/deferred.ejs", foo );
+	var foo = can.Deferred();
+	can.$("#qunit-test-area").html("//can/view/test/qunit/deferred.ejs", foo );
 	setTimeout(function(){
 		foo.resolve({
 			foo: "FOO"
 		});
 		start();
-		equals($("#qunit-test-area").html(), "FOO", "worked!");
+		equals(can.$("#qunit-test-area").html(), "FOO", "worked!");
 	},100);
 
 });
@@ -24,11 +29,11 @@ test("modifier with a deferred", function(){
 });*/
 
 test("html takes promise", function(){
-	var d = $.Deferred();
-	$("#qunit-test-area").html(d);
+	var d = can.Deferred();
+	can.$("#qunit-test-area").html(d);
 	stop();
 	d.done(function(){
-		equals($("#qunit-test-area").html(), "Hello World", "deferred is working");
+		equals(can.$("#qunit-test-area").html(), "Hello World", "deferred is working");
 		start();
 	})
 	setTimeout(function(){
@@ -41,7 +46,9 @@ test("val set with a template within a hookup within another template", function
 });
 
 test("jQuery.fn.hookup", function(){
-	$("#qunit-test-area").html("");
+	can.$("#qunit-test-area").html("");
 	var els = $(can.render("//can/view/test/qunit/hookup.ejs",{})).hookup();
-	$("#qunit-test-area").html(els); //makes sure no error happens
+	can.$("#qunit-test-area").html(els); //makes sure no error happens
 });
+
+})
