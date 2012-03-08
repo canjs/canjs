@@ -129,7 +129,11 @@ steal('can/construct', function() {
 			can.Construct.setup.apply(this, arguments)
 		},
 		bind : bind,
-		unbind: unbind
+		unbind: unbind,
+		/**
+		 * @attribute id
+		 */
+		id: "id"
 	},
 	/**
 	 * @prototype
