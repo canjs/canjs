@@ -18,11 +18,11 @@ CanJS is an MIT-licensed, client-side, JavaScript framework that makes building 
 CanJS supports jQuery, Zepto, Dojo, YUI and Mootools.  Select your download 
 for the library you are using:
 
- - can.jquery.js (8k)
- - can.zepto.js (9k)
- - can.dojo.js (9k)
- - can.mootools.js (9k)
- - can.yui.js (9k)
+ - [can.jquery.js](http://staging.donejs.com/can/dist/can.jquery-edge.js) (8k)
+ - [can.zepto.js](http://staging.donejs.com/can/dist/can.zepto-edge.js) (9k)
+ - [can.dojo.js](http://staging.donejs.com/can/dist/can.dojo-edge.js) (9k)
+ - [can.mootools.js](http://staging.donejs.com/can/dist/can.mootools-edge.js) (9k)
+ - [can.yui.js](http://staging.donejs.com/can/dist/can.yui-edge.js) (9k)
 
 This page walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery.  The [Use with other libraries](#use_with_other_libraries) section details 
