@@ -1,3 +1,5 @@
+steal(function(){
+
 define("plugd/trigger",["dojo"], function(dojo){
     
 	var d = dojo, isfn = d.isFunction, 
@@ -184,3 +186,5 @@ define("plugd/trigger",["dojo"], function(dojo){
 	return d.trigger;
 	
 });
+
+})
