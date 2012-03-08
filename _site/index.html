@@ -23,8 +23,12 @@
 			<a href='#'>Visit Forums</a>
 			<a href='#'>Fork on Github</a>
 		</div>
-		<ul id='menu'>
-		</ul>
+		<div id="inner-menu-wrap">
+			<div id="scroll-top"></div>
+			<ul id='menu'>
+			</ul>
+			<div id="scroll-bottom"></div>
+		</div>
 		<a href='#' id='developed-by'>
 		<img alt="Bitovi" src="images/bitovi.png"/>
 		</a>
@@ -39,15 +43,17 @@
 <ul>
 <li><strong>can.Construct</strong> - inheritable constructor functions</li>
 
-<li><strong>can.Control</strong> - declaritive event bindings</li>
-
-<li><strong>can.Model</strong> - connect data to a RESTful JSON interface</li>
-
 <li><strong>can.Observe</strong> - key-value binding</li>
 
-<li><strong>can.route</strong> - backbutton and bookmarking support</li>
+<li><strong>can.Model</strong> - observes connected to a RESTful JSON interface</li>
 
-<li><strong>can.view</strong> - dynamic live binding client side templates</li>
+<li><strong>can.view</strong> - template loading, caching, rendering</li>
+
+<li><strong>can.EJS</strong> - live binding template language</li>
+
+<li><strong>can.Control</strong> - declaritive event bindings</li>
+
+<li><strong>can.route</strong> - backbutton and bookmarking support</li>
 </ul>
 
 <h2 id='get_canned'>Get Canned</h2>
@@ -131,7 +137,7 @@
 </ul>
 
 <p>To create an observable object, use <code>new can.Observe( [data] )</code> like:</p>
-<div class='highlight'><pre><code class='javascript'>	<span class='kd'>var</span> <span class='nx'>paginate</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Observe</span><span class='p'>({</span><span class='nx'>offset</span><span class='o'>:</span> <span class='mi'>0</span><span class='p'>,</span> <span class='nx'>limit</span> <span class='o'>:</span> <span class='mi'>100</span><span class='p'>,</span> <span class='nx'>count</span><span class='o'>:</span> <span class='mi'>2000</span><span class='p'>})</span>
+<div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>paginate</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Observe</span><span class='p'>({</span><span class='nx'>offset</span><span class='o'>:</span> <span class='mi'>0</span><span class='p'>,</span> <span class='nx'>limit</span> <span class='o'>:</span> <span class='mi'>100</span><span class='p'>,</span> <span class='nx'>count</span><span class='o'>:</span> <span class='mi'>2000</span><span class='p'>})</span>
 </code></pre>
 </div>
 <p>To create an observable array, use <code>new can.Observe.List( [array] )</code> like:</p>
@@ -496,8 +502,6 @@
 <span class='o'>&lt;%</span> <span class='p'>})</span> <span class='o'>%&gt;</span>
 </code></pre>
 </div>
-<p><strong>can.view.render&#8211;</strong></p>
-
 <h2 id='canejs_'>can.EJS <code>new can.EJS( options )</code></h2>
 
 <p><a href='http://donejs.com/docs.html#!can.EJS'>can.EJS</a> is CanJS&#8217;s default template language and used with <a href='#!can_view'>can.view</a>. It provides live binding when use dwith <a href='#can_observe'>can.Observes</a>. A <strong>can.EJS</strong> template looks like the HTML you want, but with <strong>magic tags</strong> where you want dynamic behavior. The following lists todo elements:</p>
@@ -620,20 +624,62 @@
 <span class='nx'>todos</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>].</span><span class='nx'>destroy</span><span class='p'>()</span>
 </code></pre>
 </div>
+<h3 id='element_callbacks'>Element Callbacks</h3>
+
+<p>If a function is returned by the <code>&lt;%= %&gt;</code> or <code>&lt;%== %&gt;</code> magic tags within an element&#8217;s tag like:</p>
+<div class='highlight'><pre><code class='erb'><span class='x'>&lt;div </span><span class='cp'>&lt;%=</span> <span class='n'>function</span><span class='p'>(</span><span class='n'>element</span><span class='p'>){</span> <span class='n'>element</span><span class='o'>.</span><span class='n'>style</span><span class='o'>.</span><span class='n'>display</span> <span class='o'>=</span> <span class='s2'>&quot;none&quot;</span> <span class='p'>}</span> <span class='cp'>%&gt;</span><span class='x'> &gt;</span>
+<span class='x'>  Hello</span>
+<span class='x'>&lt;/div&gt;</span>
+</code></pre>
+</div>
+<p>The function is called back with the <code>HTMLElement</code> as the first argument. This is useful to initialize functionality on an element within the view. This is so common that EJS supports <a href='http://wiki.ecmascript.org/doku.php?id=strawman:arrow_function_syntax'>ES5 arrow functions</a> that get passed the NodeList wrapped element. Using jQuery, this lets you write the above callback as:</p>
+<div class='highlight'><pre><code class='erb'><span class='x'>&lt;div </span><span class='cp'>&lt;%=</span> <span class='p'>(</span><span class='n'>el</span><span class='p'>)</span><span class='o'>-&gt;</span> <span class='n'>el</span><span class='o'>.</span><span class='n'>hide</span><span class='p'>()</span> <span class='cp'>%&gt;</span><span class='x'> &gt;</span>
+<span class='x'>  Hello</span>
+<span class='x'>&lt;/div&gt;</span>
+</code></pre>
+</div>
+<p>This technique is commonly used to add data, especially model instances, to an element like:</p>
+<div class='highlight'><pre><code class='erb'><span class='cp'>&lt;%</span> <span class='n'>list</span><span class='p'>(</span><span class='n'>todos</span><span class='p'>,</span> <span class='n'>function</span><span class='p'>(</span><span class='n'>todo</span><span class='p'>){</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>  &lt;li </span><span class='cp'>&lt;%=</span> <span class='p'>(</span><span class='n'>el</span><span class='p'>)</span> <span class='o'>-&gt;</span> <span class='n'>el</span><span class='o'>.</span><span class='n'>data</span><span class='p'>(</span><span class='s2'>&quot;todo&quot;</span><span class='p'>,</span><span class='n'>todo</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x'>&gt;</span>
+<span class='x'>    </span><span class='cp'>&lt;%=</span> <span class='n'>todo</span><span class='o'>.</span><span class='n'>attr</span><span class='p'>(</span><span class='s1'>&#39;name&#39;</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>  &lt;/li&gt;</span>
+<span class='cp'>&lt;%</span> <span class='p'>})</span> <span class='cp'>%&gt;</span><span class='x' />
+</code></pre>
+</div>
+<p>jQuery&#8217;s <code>el.data( NAME, data )</code> adds data to an element. If your library does not support this, can provides it as <code>can.data( NodeList, NAME, data )</code>. Rewrite the above example as:</p>
+<div class='highlight'><pre><code class='erb'><span class='cp'>&lt;%</span> <span class='n'>list</span><span class='p'>(</span><span class='n'>todos</span><span class='p'>,</span> <span class='n'>function</span><span class='p'>(</span><span class='n'>todo</span><span class='p'>){</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>  &lt;li </span><span class='cp'>&lt;%=</span> <span class='p'>(</span><span class='n'>el</span><span class='p'>)</span> <span class='o'>-&gt;</span> <span class='n'>can</span><span class='o'>.</span><span class='n'>data</span><span class='p'>(</span><span class='n'>el</span><span class='p'>,</span> <span class='s2'>&quot;todo&quot;</span><span class='p'>,</span> <span class='n'>todo</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x'>&gt;</span>
+<span class='x'>    </span><span class='cp'>&lt;%=</span> <span class='n'>todo</span><span class='o'>.</span><span class='n'>attr</span><span class='p'>(</span><span class='s1'>&#39;name&#39;</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>  &lt;/li&gt;</span>
+<span class='cp'>&lt;%</span> <span class='p'>})</span> <span class='cp'>%&gt;</span><span class='x' />
+</code></pre>
+</div>
 <h2 id='cancontrol_'>can.Control <code>can.Control(classProps, prototypeProps)</code></h2>
 
 <p><a href='http://donejs.com/docs.html#!can.Control'>can.Control</a> creates organized, memory-leak free, rapidly performing, stateful controls. Use it to create UI controls like tabs, grids, and contextmenus and used to organize them into higher-order business rules with <a href='http://donejs.com/docs.html#!can.route'>can.route</a>. It can serve as a traditional view and a traditional controller.</p>
 
 <p>The following examples make a basic todos widget that lists todos and lets us destroy them. Create a control constructor function of your own by extending <code>can.Control</code>.</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Todos</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Control</span><span class='p'>({</span>
-  <span class='s2'>&quot;init&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>element</span> <span class='p'>,</span> <span class='nx'>options</span> <span class='p'>){</span>
-    <span class='k'>this</span><span class='p'>.</span><span class='nx'>element</span><span class='p'>.</span><span class='nx'>html</span><span class='p'>(</span><span class='s1'>&#39;todos.ejs&#39;</span><span class='p'>,</span> <span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>()</span> <span class='p'>)</span>
+  <span class='s2'>&quot;init&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>element</span> <span class='p'>,</span> <span class='nx'>options</span> <span class='p'>)</span> <span class='p'>{</span>
+    <span class='kd'>var</span> <span class='nx'>self</span> <span class='o'>=</span> <span class='k'>this</span><span class='p'>;</span>
+    <span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>({},</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>todos</span> <span class='p'>){</span>
+      <span class='nx'>self</span><span class='p'>.</span><span class='nx'>element</span><span class='p'>.</span><span class='nx'>html</span><span class='p'>(</span><span class='s1'>&#39;todos.ejs&#39;</span><span class='p'>,</span> <span class='nx'>todos</span> <span class='p'>)</span>
+    <span class='p'>})</span>
   <span class='p'>}</span>
 <span class='p'>})</span>
 </code></pre>
 </div>
 <p>Create an instance of the Todos control the <code>#todos</code> element with:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>todosControl</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>Todos</span><span class='p'>(</span><span class='s1'>&#39;#todos&#39;</span><span class='p'>,</span> <span class='p'>{});</span>
+</code></pre>
+</div>
+<p><strong>todos.ejs</strong> looks like:</p>
+<div class='highlight'><pre><code class='erb'><span class='cp'>&lt;%</span> <span class='n'>list</span><span class='p'>(</span><span class='n'>todos</span><span class='p'>,</span> <span class='n'>function</span><span class='p'>(</span><span class='n'>todo</span><span class='p'>){</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>  &lt;li </span><span class='cp'>&lt;%=</span> <span class='p'>(</span><span class='n'>el</span><span class='p'>)</span> <span class='o'>-&gt;</span> <span class='n'>el</span><span class='o'>.</span><span class='n'>data</span><span class='p'>(</span><span class='s2'>&quot;todo&quot;</span><span class='p'>,</span> <span class='n'>todo</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x'> &gt;</span>
+<span class='x'>    </span><span class='cp'>&lt;%=</span> <span class='n'>todo</span><span class='o'>.</span><span class='n'>attr</span><span class='p'>(</span><span class='s1'>&#39;name&#39;</span><span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x' />
+<span class='x'>    &lt;a href=&#39;javascript:// class=&#39;destroy&#39;&gt;</span>
+<span class='x'>  &lt;/li&gt;</span>
+<span class='cp'>&lt;%</span> <span class='p'>})</span> <span class='cp'>%&gt;</span><span class='x' />
 </code></pre>
 </div>
 <h3 id='init_'>init <code>can.Control.prototype.init(element, options)</code></h3>
@@ -651,7 +697,10 @@
   <span class='nx'>defaults</span> <span class='o'>:</span> <span class='p'>{</span><span class='nx'>template</span><span class='o'>:</span> <span class='s1'>&#39;todos.ejs&#39;</span><span class='p'>}</span>
 <span class='p'>},{</span>
   <span class='s2'>&quot;init&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>element</span> <span class='p'>,</span> <span class='nx'>options</span> <span class='p'>){</span>
-    <span class='nx'>element</span><span class='p'>.</span><span class='nx'>html</span><span class='p'>(</span><span class='nx'>options</span><span class='p'>.</span><span class='nx'>template</span><span class='p'>,</span> <span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>()</span> <span class='p'>)</span>
+    <span class='kd'>var</span> <span class='nx'>self</span> <span class='o'>=</span> <span class='k'>this</span><span class='p'>;</span>
+    <span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>({},</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>todos</span> <span class='p'>){</span>
+      <span class='nx'>self</span><span class='p'>.</span><span class='nx'>element</span><span class='p'>.</span><span class='nx'>html</span><span class='p'>(</span><span class='nx'>self</span><span class='p'>.</span><span class='nx'>options</span><span class='p'>.</span><span class='nx'>template</span><span class='p'>,</span> <span class='nx'>todos</span> <span class='p'>)</span>
+    <span class='p'>})</span>
   <span class='p'>}</span>
 <span class='p'>})</span>
 
@@ -679,15 +728,18 @@
 
 <p>Controller automatically binds prototype methods that look like event handlers. Listen to <strong>click</strong>s on <code>&lt;li&gt;</code> elements like:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Todos</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Control</span><span class='p'>({</span>
-<span class='s2'>&quot;init&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>element</span> <span class='p'>,</span> <span class='nx'>options</span> <span class='p'>){</span>
-  <span class='k'>this</span><span class='p'>.</span><span class='nx'>element</span><span class='p'>.</span><span class='nx'>html</span><span class='p'>(</span><span class='s1'>&#39;todos.ejs&#39;</span><span class='p'>,</span> <span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>()</span> <span class='p'>)</span>
-<span class='p'>},</span>
-<span class='s2'>&quot;li click&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>li</span><span class='p'>,</span> <span class='nx'>event</span><span class='p'>){</span>
-  <span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='s2'>&quot;You clicked&quot;</span><span class='p'>,</span> <span class='nx'>li</span><span class='p'>.</span><span class='nx'>text</span><span class='p'>()</span> <span class='p'>)</span>
-  
-  <span class='c1'>// let other controls know what happened</span>
-  <span class='nx'>li</span><span class='p'>.</span><span class='nx'>trigger</span><span class='p'>(</span><span class='s1'>&#39;selected&#39;</span><span class='p'>);</span>
-<span class='p'>}</span>
+  <span class='s2'>&quot;init&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>element</span> <span class='p'>,</span> <span class='nx'>options</span> <span class='p'>){</span>
+    <span class='kd'>var</span> <span class='nx'>self</span> <span class='o'>=</span> <span class='k'>this</span><span class='p'>;</span>
+    <span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>({},</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>todos</span> <span class='p'>){</span>
+      <span class='nx'>self</span><span class='p'>.</span><span class='nx'>element</span><span class='p'>.</span><span class='nx'>html</span><span class='p'>(</span><span class='nx'>self</span><span class='p'>.</span><span class='nx'>options</span><span class='p'>.</span><span class='nx'>template</span><span class='p'>,</span> <span class='nx'>todos</span> <span class='p'>)</span>
+    <span class='p'>})</span>
+  <span class='p'>},</span>
+  <span class='s2'>&quot;li click&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>li</span><span class='p'>,</span> <span class='nx'>event</span><span class='p'>){</span>
+    <span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='s2'>&quot;You clicked&quot;</span><span class='p'>,</span> <span class='nx'>li</span><span class='p'>.</span><span class='nx'>text</span><span class='p'>()</span> <span class='p'>)</span>
+    
+    <span class='c1'>// let other controls know what happened</span>
+    <span class='nx'>li</span><span class='p'>.</span><span class='nx'>trigger</span><span class='p'>(</span><span class='s1'>&#39;selected&#39;</span><span class='p'>);</span>
+  <span class='p'>}</span>
 <span class='p'>})</span>
 </code></pre>
 </div>
@@ -703,25 +755,28 @@
 
 <p>To destroy a todo when it&#8217;s <code>&lt;a href=&#39;javascript:// class=&#39;destroy&#39;&gt;</code> link is clicked:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Todos</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Control</span><span class='p'>({</span>
-<span class='s2'>&quot;init&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>element</span> <span class='p'>,</span> <span class='nx'>options</span> <span class='p'>){</span>
-  <span class='k'>this</span><span class='p'>.</span><span class='nx'>element</span><span class='p'>.</span><span class='nx'>html</span><span class='p'>(</span><span class='s1'>&#39;todos.ejs&#39;</span><span class='p'>,</span> <span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>()</span> <span class='p'>)</span>
-<span class='p'>},</span>
-<span class='s2'>&quot;li click&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>li</span><span class='p'>){</span>
-  <span class='nx'>li</span><span class='p'>.</span><span class='nx'>trigger</span><span class='p'>(</span><span class='s1'>&#39;selected&#39;</span><span class='p'>,</span> <span class='nx'>li</span><span class='p'>.</span><span class='nx'>model</span><span class='p'>()</span> <span class='p'>);</span>
-<span class='p'>},</span>
-<span class='s2'>&quot;li .destroy click&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>el</span><span class='p'>,</span> <span class='nx'>ev</span><span class='p'>){</span>
-  <span class='c1'>// get the li element that has the model</span>
-  <span class='kd'>var</span> <span class='nx'>li</span> <span class='o'>=</span> <span class='nx'>el</span><span class='p'>.</span><span class='nx'>closest</span><span class='p'>(</span><span class='s1'>&#39;.todo&#39;</span><span class='p'>);</span>
+  <span class='s2'>&quot;init&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>element</span> <span class='p'>,</span> <span class='nx'>options</span> <span class='p'>){</span>
+    <span class='kd'>var</span> <span class='nx'>self</span> <span class='o'>=</span> <span class='k'>this</span><span class='p'>;</span>
+    <span class='nx'>Todo</span><span class='p'>.</span><span class='nx'>findAll</span><span class='p'>({},</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>todos</span> <span class='p'>){</span>
+      <span class='nx'>self</span><span class='p'>.</span><span class='nx'>element</span><span class='p'>.</span><span class='nx'>html</span><span class='p'>(</span><span class='nx'>self</span><span class='p'>.</span><span class='nx'>options</span><span class='p'>.</span><span class='nx'>template</span><span class='p'>,</span> <span class='nx'>todos</span> <span class='p'>)</span>
+    <span class='p'>})</span>
+  <span class='p'>},</span>
+  <span class='s2'>&quot;li click&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>li</span><span class='p'>){</span>
+    <span class='nx'>li</span><span class='p'>.</span><span class='nx'>trigger</span><span class='p'>(</span><span class='s1'>&#39;selected&#39;</span><span class='p'>,</span> <span class='nx'>li</span><span class='p'>.</span><span class='nx'>model</span><span class='p'>()</span> <span class='p'>);</span>
+  <span class='p'>},</span>
+  <span class='s2'>&quot;li .destroy click&quot;</span> <span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span><span class='nx'>el</span><span class='p'>,</span> <span class='nx'>ev</span><span class='p'>){</span>
+    <span class='c1'>// get the li element that has todo data</span>
+    <span class='kd'>var</span> <span class='nx'>li</span> <span class='o'>=</span> <span class='nx'>el</span><span class='p'>.</span><span class='nx'>closest</span><span class='p'>(</span><span class='s1'>&#39;li&#39;</span><span class='p'>);</span>
   
-  <span class='c1'>// get the model</span>
-  <span class='kd'>var</span> <span class='nx'>todo</span> <span class='o'>=</span> <span class='nx'>li</span><span class='p'>.</span><span class='nx'>model</span><span class='p'>()</span>
+    <span class='c1'>// get the model</span>
+    <span class='kd'>var</span> <span class='nx'>todo</span> <span class='o'>=</span> <span class='nx'>li</span><span class='p'>.</span><span class='nx'>data</span><span class='p'>(</span><span class='s1'>&#39;todo&#39;</span><span class='p'>)</span>
   
-  <span class='c1'>//destroy it</span>
-  <span class='nx'>todo</span><span class='p'>.</span><span class='nx'>destroy</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>(){</span>
-    <span class='c1'>// remove the element</span>
-    <span class='nx'>li</span><span class='p'>.</span><span class='nx'>remove</span><span class='p'>();</span>
-  <span class='p'>});</span>
-<span class='p'>}</span>
+    <span class='c1'>//destroy it</span>
+    <span class='nx'>todo</span><span class='p'>.</span><span class='nx'>destroy</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>(){</span>
+      <span class='c1'>// remove the element</span>
+      <span class='nx'>li</span><span class='p'>.</span><span class='nx'>remove</span><span class='p'>();</span>
+    <span class='p'>});</span>
+  <span class='p'>}</span>
 <span class='p'>})</span>
 </code></pre>
 </div>
@@ -1089,7 +1144,7 @@
 		</div>
 	</div>
 </div>
-<script src="javascripts/jquery-1.7.1.min.js" type="text/javascript"></script>
+<script src="javascripts/jquery-1.7.1.js" type="text/javascript"></script>
 <script src="javascripts/jquerymx-3.2.custom.js" type="text/javascript"></script>
 <script src="javascripts/application.js" type="text/javascript"></script>
 </body>

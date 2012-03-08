@@ -1,12 +1,15 @@
 var currentH2slug = "";
-
+var animationCount = 0;
 $.Controller('Menu', {
 	defaults : {
 		scroll : window
 	}
 }, {
 	init : function(){
-		this.find('#menu').append(this.buildMenu());
+		this._menu = this.find('#menu');
+		this._menu.append(this.buildMenu());
+		this.resizeMenu();
+		this._menuShouldScroll = false;
 		setTimeout(this.proxy(function(){
 			this.mark();
 			this.bind(window, 'scroll', this.proxy('mark'));
@@ -95,12 +98,17 @@ $.Controller('Menu', {
 		var currentLevel = current.data('level'),
 				activeLevel = active.data('level'),
 				method = {2: 'siblings', 3: 'closest'}[currentLevel],
-				self = this;
+				self = this,
+
+				animations = [];
+
+
+
 		if(active.attr('href') != current.attr('href')){
 			if(active.length == 0){ // this happens on load
-				//console.log("HERE:", method, currentLevel)
 				if(currentLevel > 1){
-					current.addClass('active')[method]('ul').slideDown();
+					current.addClass('active')
+					animations.push([current[method]('ul'), 'slideDown']);
 				}
 			} else {
 				if(currentLevel === 2 && activeLevel === 2){
@@ -109,11 +117,10 @@ $.Controller('Menu', {
 					active.removeClass('active');
 					current.addClass('active');
 					if(currentUl.find('li').length > 0){
-						currentUl.slideDown(this.slideDur(currentUl), function(){
-							activeUl.slideUp(self.slideDur(activeUl, true))
-						});
+						animations.push([currentUl, 'slideDown', this.slideDur(currentUl)]);
+						animations.push([activeUl, 'slideUp', this.slideDur(activeUl, true)]);
 					} else {
-						activeUl.slideUp(self.slideDur(activeUl, true))
+						animations.push([activeUl, 'slideUp', this.slideDur(activeUl, true)])
 					}
 					
 				} else if(currentLevel === 3 && activeLevel === 2){
@@ -123,9 +130,8 @@ $.Controller('Menu', {
 					if(!isSameGroup){
 						var currentUl = current.closest('ul'),
 								activeUl = active.siblings('ul');
-						currentUl.slideDown(this.slideDur(currentUl), function(){
-							activeUl.slideUp(self.slideDur(activeUl, true))
-						})
+						animations.push([currentUl, 'slideDown', this.slideDur(currentUl)]);
+						animations.push([activeUl, 'slideUp', this.slideDur(activeUl, true)]);
 					}
 				} else if(currentLevel === 2 && activeLevel === 3){
 					var currentUl = current.siblings('ul'),
@@ -134,17 +140,13 @@ $.Controller('Menu', {
 					active.removeClass('active');
 					current.addClass('active');
 					if(!isSameGroup){
-						
-						active.removeClass('active');
-						current.addClass('active');
 						if(currentUl.find('li').length > 0){
-							currentUl.slideDown(this.slideDur(currentUl), function(){
-								activeUl.slideUp(self.slideDur(activeUl, true))
-							})
+							animations.push([currentUl, 'slideDown', this.slideDur(currentUl)]);
+							animations.push([activeUl, 'slideUp', this.slideDur(activeUl, true)]);
+
 						} else {
-							activeUl.slideUp(this.slideDur(activeUl, true))
+							animations.push([activeUl, 'slideUp', this.slideDur(activeUl, true)])
 						}
-						
 					}
 				} else if(currentLevel === 3 && activeLevel === 3){
 					var currentUl = current.closest('ul'),
@@ -153,18 +155,39 @@ $.Controller('Menu', {
 					active.removeClass('active');
 					current.addClass('active');
 					if(!isSameGroup){
-						currentUl.slideDown(this.slideDur(currentUl), function(){
-							activeUl.slideUp(self.slideDur(activeUl, true))
-						})
+						animations.push([currentUl, 'slideDown', this.slideDur(currentUl)]);
+						animations.push([activeUl, 'slideUp', this.slideDur(activeUl, true)]);
 					}
 				}
 			}
+		}
+		if(animations.length > 0){
+			var queue = [];
+			animationCount += animations.length;
+			for(var i = 0; i < animations.length; i++){
+				queue.push((function(definition, j){
+					return function(){
+						var el = $(definition.shift()),
+								effect = definition.shift(),
+								cb = queue[j+1];
+						if(typeof cb === "undefined"){
+							cb = self.proxy('positionActiveMenuItem');
+						}
+						animationCount--;
+						definition.push(cb);
+						el[effect].apply(el, definition);
+					}
+				})(animations[i], i))
+			}
+			queue[0]();
+		} else {
+			this.positionActiveMenuItem();
 		}
 	},
 	slideDur : function(ul, hide){
 		var base = hide ? 50 : 30,
 				dur = base * ul.find('li').length;
-		dur = dur > 200 ? dur : 200
+		dur = dur > 200 ? dur : 200;
 		return dur;
 	},
 	"{window} hashchange" : function(el, ev){
@@ -175,7 +198,85 @@ $.Controller('Menu', {
 		setTimeout(function(){
 			self.markActive(active, current);
 		}, 1)
+	},
+	resizeMenu : function(){
+		var menuWrapHeight = this.find('#menu-wrapper').height(),
+				menuHeight     = this._menu.height(),
+				windowHeight   = $(window).height();
+		this.find('#inner-menu-wrap').css('maxHeight', (windowHeight - (menuWrapHeight - menuHeight) - 40) + "px");
+		if(this.find('#inner-menu-wrap').innerHeight() - menuHeight > 2){ // top and bottom borders
+			this._menuShouldScroll = true;
+		} else {
+			this._menuShouldScroll = false;
+			this._menu.css('marginTop', 0);
+			this.find('#scroll-top, #scroll-bottom').hide();
+		}
+	},
+	"#inner-menu-wrap mousemove" : function(el, ev){
+		/*if(!this._menuShouldScroll){
+			return;
+		}*/
+		var mousePos = ev.pageY - el.offset().top,
+				height   = el.height();
+		if(mousePos < 40){
+			this._scrollMenu = 'top';
+			this.scrollMenu();
+		} else if(mousePos > height - 40){
+			this._scrollMenu = 'bottom';
+			this.scrollMenu();
+		} else {
+			delete this._scrollMenu;
+		}
+	},
+	"#inner-menu-wrap mouseleave" : function(el, ev){
+		delete this._scrollMenu;
+	},
+	scrollMenu : function(){
+		var menu = this._menu,
+				menuHeight = menu.height(),
+				marginTop  = parseInt(menu.css('marginTop'), 10);
+		if(this._scrollMenu == 'top' && marginTop < 0){
+			menu.css('marginTop', (marginTop + 1) + "px")
+			setTimeout(this.proxy('scrollMenu'), 1);
+		} else if(this._scrollMenu == 'bottom' && menuHeight + marginTop > this.find('#inner-menu-wrap').height()){
+			menu.css('marginTop', (marginTop - 1) + "px")
+			setTimeout(this.proxy('scrollMenu'), 1);
+		}
+	},
+	positionActiveMenuItem : function(){
+		clearTimeout(this._positionTimeout);
+		this._positionTimeout = setTimeout(this.proxy(function(){
+			if(animationCount === 0){
+				var active = this.find('#menu a.active'),
+						activePos = active.position().top,
+						marginTop = parseInt(this._menu.css('marginTop'), 10),
+						wrapHeight = this.find('#inner-menu-wrap').height();
+
+				console.log('TIEMOUT', marginTop);
+
+				if(marginTop > 0){
+					this._menu.css('marginTop', '0px');
+					return
+				} 
+
+				var	viewPortPos = activePos + marginTop;
+				
+				if(viewPortPos >= 0 && viewPortPos + 25 <= wrapHeight){
+					return;
+				} else if(viewPortPos < 0){
+					this._menu.css({'marginTop': (marginTop + Math.abs(viewPortPos)) + "px"})
+				} else if(viewPortPos + 25 > wrapHeight){
+					console.log('!OUT:', this._menu.css('marginTop'), marginTop, (viewPortPos - wrapHeight))
+					marginTop = marginTop - 100
+					this._menu.css({'marginTop': marginTop + "px"})
+				}
+
+			}
+		}), 1);
 		
+	},
+	"{window} resize" : function(){
+		this.resizeMenu();
 	}
 });
 if($('.lt-ie7, .lt-ie8, .lt-ie9').length == 0){
