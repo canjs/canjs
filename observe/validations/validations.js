@@ -76,7 +76,7 @@ proto.__set = function(prop, value, current, success, error){
 			can.trigger(self, "error." + prop, errors, true);
 		};
 		
-	if (validations[prop]){
+	if (validations && validations[prop]){
 		var errors = self.errors(prop);
 		errors && errorCallback(errors)
 	}
