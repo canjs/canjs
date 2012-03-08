@@ -57,11 +57,13 @@ proto.__set = function(prop, value, current, success, error){
 	// check if there is a
 	
 	var Class = this.constructor,
-		// the value that we will set
-		val,
+		val, type, converter;
+		
+	if(Class.attributes){
 		// the type of the attribute
-		type = Class.attributes[prop],
+		type = Class.attributes[prop];
 		converter = Class.convert[type] || Class.convert['default'];
+	}
 		
 	oldSet.call(this, prop, 
 		// if we get null or there is no type set
