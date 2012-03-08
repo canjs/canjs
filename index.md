@@ -18,11 +18,11 @@ CanJS is an MIT-licensed, client-side, JavaScript framework that makes building 
 CanJS supports jQuery, Zepto, Dojo, YUI and Mootools.  Select your download 
 for the library you are using:
 
- - can.jquery.js (8k)
- - can.zepto.js (9k)
- - can.dojo.js (9k)
- - can.mootools.js (9k)
- - can.yui.js (9k)
+ - [can.jquery.js](http://staging.donejs.com/can/dist/can.jquery-edge.js) (8k)
+ - [can.zepto.js](http://staging.donejs.com/can/dist/can.zepto-edge.js) (9k)
+ - [can.dojo.js](http://staging.donejs.com/can/dist/can.dojo-edge.js) (9k)
+ - [can.mootools.js](http://staging.donejs.com/can/dist/can.mootools-edge.js) (9k)
+ - [can.yui.js](http://staging.donejs.com/can/dist/can.yui-edge.js) (9k)
 
 This page walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery.  The [Use with other libraries](#use_with_other_libraries) section details 
@@ -912,13 +912,12 @@ var Todos = can.Control({
     var todo = li.data('todo')
   
     //destroy it
-    todo.destroy(function(){
-      // remove the element
-      li.remove();
-    });
+    todo.destroy();
   }
 })
 {% endhighlight %}
+
+When the todo is destroyed, EJS's live binding will remove it's LI automatically.
 
 ### Templated Event Handlers Pt 1 `"{optionName}"`
 
@@ -965,7 +964,7 @@ The selector can also be templated.
 ### Templated Event Handlers Pt 2 `"{objectName}"`
 
 Controller can also bind to objects other than `this.element` with
-templated event handlers.  This is __especially critical__
+templated event handlers.  This is _critical
 for avoiding memory leaks that are so common among MVC applications.  
 
 If the value inside `{NAME}` is an object, that object will be 
@@ -987,40 +986,42 @@ new Tooltip( $('<div>INFO</div>').appendTo(el) )
 {% endhighlight %}
     
 This is convenient when needing to 
-listen to model updates.  Instead of adding a callback
-to `todo.destroy(cb)`, we should be listening to 
-__destroyed__ events.  We'll handle __updated__ too:
+listen to model changes.  If EJS was not taking care of
+removing `<li>`s after their model is destroyed, we
+could implement it in `Todos` like:
 
 {% highlight javascript %}
 var Todos = can.Control({
   "init" : function( element , options ){
-    this.element.html('todos.ejs', Todo.findAll() )
+    var self = this;
+    Todo.findAll({}, function( todos ){
+      self.todosList = todos;
+      self.element.html(self.options.template, todos )
+    })
   },
   "li click" : function(li){
     li.trigger('selected', li.model() );
   },
   "li .destroy click" : function(el, ev){
-    el.closest('.todo')
-      .model()
-      .destroy();
-    ev.stopPropagation();
+    // get the li element that has todo data
+    var li = el.closest('li');
+  
+    // get the model
+    var todo = li.data('todo')
+  
+    //destroy it
+    todo.destroy();
   },
-  "{Todo} destroyed" : function(Todo, ev, destroyedTodo){
-    destroyedTodo.elements(this.element)
-                 .remove();
-  },
-  "{Todo} updated" : function(Todo, ev, updatedTodo){
-    updatedTodo.elements(this.element)
-               .replaceWith('todos.ejs',[updatedTodo]);
+  "{Todo} destroyed" : funtion(Todo, ev, todoDestroyed) {
+    // find where the element
+    var index = this.todosList.indexOf(todoDestroyed)
+    this.element.children(":nth-child("+(index+1)+")")
+        .remove()
   }
 })
 
 new Todos("#todos");
 {% endhighlight %}
-
-This is better because it removes the todo's element from the page even if another widget
-destroyed the todo. Also, this works very well with real-time
-architectures.
 
 ### destroy `control.destroy()`
 
@@ -1052,16 +1053,16 @@ only templated event handlers on controls within the body
 could free up all 
 data by calling `$(document.body).empty()`._
 
-### update `control.update(options)`
+### on `control.on()`
 
-[can.Control.prototype.update](http://donejs.com/docs.html#!can.Control.prototype.update) updates a control's 
-`this.options` and rebinds all event handlers.This is useful
-when you want to listen to a specific model:
+[can.Control.prototype.on] rebinds a control's event handlers.  This is useful when you want
+to listen to a specific model and change it:
 
 {% highlight javascript %}
-var Editor = $.Controller({
-  update : function(options){
-    this._super(options)
+var Editor = can.Control({
+  todo : function(todo){
+    this.options.todo = todo;
+    this.on();
     this.setName();
   },
   // a helper that sets the value of the input
@@ -1090,23 +1091,71 @@ var todo1 = new Todo({id: 6, name: "trash"}),
 var editor = new Editor("#editor");
 
 // show the first todo
-editor.update({todo: todo1})
+editor.todo( todo1 )
 
 // switch it to the second todo
-editor.update({todo: todo2});
+editor.todo( todo2 );
 {% endhighlight %}
 
-Notice that because we are overwriting `update`, we must call __\_super__.
+## can.route `can.route( route, [defaults] )`
 
-## can.route
-
-[can.route](http://donejs.com/docs.html#!can.route) is the core of donejs's 
-routing functionality. It is a [can.Observe](http://donejs.com/docs.html#!can.Observe) that
+[can.route](http://donejs.com/docs.html#!can.route) is the core of CanJS's 
+routing functionality. It is a speical [can.Observe](#can_observe) that
 updates `window.location.hash` when it's properties change
 and updates its properties when `window.location.hash` 
-changes. It allows very sophisticated routing behavior ... too
-sophisticated for this guide. But, it also handles 
-the basics with ease.  
+changes. __can.route__ uses routes to translate urls into
+property values.  If no routes are provided, it just serializes the route
+into standard URL-encoded notation.  Example:
+
+{% highlight javascript %}
+window.location.hash = ""
+  
+can.route.attr() //-> {}
+  
+window.location.hash = "#!id=7"
+  
+can.route.attr() //-> { id: 7 }
+  
+can.route.attr({ type : "todos" })
+
+window.location.hash //-> #!type=todos
+
+can.route.attr("id",5)
+
+window.location.hash //-> #!type=todos&id=5
+{% endhighlight %}
+
+Use `can.route( route, defaults )` to make pretty urls:
+
+{% highlight javascript %}
+can.route(":type/:id")
+
+window.location.hash = "#!todo/5"
+
+can.route.attr() //-> { type: "todo", id: 5 }
+
+can.route.attr({type: "user", id: 7})
+
+window.location.hash = "#!user/5"
+  
+can.route(":type",{ type : "recipe" })
+
+window.location.hash = "";
+
+can.route.attr() //-> { type : "recipe" })
+{% endhighlight %}
+
+### bind `route.bind( eventName, handler( event ) )`
+
+Use [bind](#can_observe-bind) to listen to changes in the route like:
+
+{% highlight javascript %}
+can.route.bind("id", function( ev, newVal ) {
+  console.log("id changed");
+});
+{% endhighlight %}
+
+### route events
 
 Listen to routes in controls with special "route" events like:
 
@@ -1128,22 +1177,39 @@ The `route` methods get called back with the route __data__.  The
 empty `"route"` will be called with no data. But, `"todos/:id route"`
 will be called with data like: `{id: 6}`.
 
-We can update the route by changing $.route's data like:
+We can update the route by changing can.route's data like:
 
 {% highlight javascript %}
-$.route.attr('id','6') // location.hash = #!todos/6
+can.route.attr('id','6') // location.hash = #!todos/6
 {% endhighlight %}
 
-Or we can set the hash ourselves like
+### url `can.route.url( options, [merge] )`
+
+[can.route.url](http://donejs.com/docs.html#!can.route.url) takes attributes
+and creates a url that can be used in a link.  
 
 {% highlight javascript %}
-var hash = $.route.url({id: 7}) // #!todos/7
+var hash = can.route.url({id: 7}) // #!todos/7
 location.hash = hash;
 {% endhighlight %}
 
+### link `can.route.link( name, options, props, merge )`
+
+[can.route.link](http://donejs.com/docs.html#!can.route.link) is used to 
+create a link.
+
+{% highlight javascript %}
+var link = can.link("Todo 5",
+                    { id: 5 }, 
+                    { className : "button" });
+
+link //-> <a href="#!todos/7" class="button">Todo 5</a>
+{% endhighlight %}
+
+
 The following enhances the Routing control to listen for
-`".todo selected"` events and change the `$.route`.  When the
-$.route changes, it retrieves the todo from the server
+`".todo selected"` events and change __can.route__.  When the
+can.route changes, it retrieves the todo from the server
 and updates the editor widget.
 
 {% highlight javascript %}
@@ -1158,12 +1224,13 @@ var Routing = can.Control({
   },
   "todos/:id route" : function(data){
     $("#editor").show();
-    Todo.findOne(data, $.proxy(function(todo){
+    var self = this;
+    Todo.findOne(data, function(todo){
       this.editor.update({todo: todo});
-    }, this))
+    })
   },
   ".todo selected" : function(el, ev, todo){
-    $.route.attr('id',todo.id);
+    can.route.attr('id',todo.id);
   }
 });
 
@@ -1172,7 +1239,7 @@ new Routing(document.body);
 {% endhighlight %}
 
 The __Routing__ control is a traditional controller. It coordinates
-between the `$.route`, `Editor` and `Todos`.  `Editor` and `Todos`
+between the `can.route`, `Editor` and `Todos`.  `Editor` and `Todos`
 are traditional views, consuming models.
 
 If you can understand this, you understand 
