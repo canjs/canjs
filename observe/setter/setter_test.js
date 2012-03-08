@@ -3,7 +3,7 @@ steal('funcunit/qunit',
 	  'can/observe/setter', 
 	  function(){
 
-module("Can.Observe.Setter");
+module("can/observe/setter");
 
 test("setter testing works", function(){
 	
