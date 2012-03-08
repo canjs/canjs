@@ -1,4 +1,4 @@
-steal('can/construct',function($){
+steal('can/construct',function(){
 
 // tests if we can get super in .toString()
 	var isFunction = can.isFunction,
