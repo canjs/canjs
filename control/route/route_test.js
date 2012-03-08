@@ -1,6 +1,6 @@
 steal('funcunit/qunit','./route',function(){
 
-module("route");
+module("can/control/route");
 
 test("routes changed", function(){
 	//setup controller
