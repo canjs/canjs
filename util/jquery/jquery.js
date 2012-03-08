@@ -18,7 +18,8 @@ steal({
 			$([this]).unbind(ev, cb)
 			return this;
 		},
-		$: jQuery
+		$: jQuery,
+		prototype: jQuery.fn
 	});
 
 	// make binding functions
