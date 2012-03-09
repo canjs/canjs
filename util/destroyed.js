@@ -29,11 +29,9 @@ steal('can/util').then(function( $ ) {
 	var oldClean = $.cleanData;
 
 	$.cleanData = function( elems ) {
-		for ( var i = 0, elem;
-		(elem = elems[i]) !== undefined; i++ ) {
+		$.each( elems, function( i, elem ) {
 			$(elem).triggerHandler("destroyed");
-			//$.event.remove( elem, 'destroyed' );
-		}
+		});
 		oldClean(elems);
 	};
 
