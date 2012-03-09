@@ -8,15 +8,32 @@
 				padding: 0;
 				margin: 0;
 			}
-			iframe {
-				float: left;
-				width: 20%;
-				height: 100%;
-			}
 			body {
 				background-color: black;
 			}
+			iframe {
+				float: left;
+				width: 33.333%;
+				height: 50%;
+				border-color: #eee;
+				border-style: dashed;
+				border-width: 0 2px 2px 0;
+			}
+			#mootools {
+				border-right: 0;
+			}
+			#dojo {
+				border-bottom: 0;
+			}
+			#yui {
+				border-bottom: 0;
+			}
+			#plugins {
+				border-bottom: 0;
+				border-right: 0;
+			}
 		</style>
+		<title>Test ... ALL THE PAGES</title>
 	</head>
 	<body>
 		<iframe src='can_jquery.html' id='jquery'></iframe>
@@ -24,5 +41,6 @@
 		<iframe src='can_mootools.html' id='mootools'></iframe>
 		<iframe src='can_dojo.html' id='dojo'></iframe>
 		<iframe src='can_yui.html' id='yui'></iframe>
+		<iframe src='plugin_test.html' id='plugins'></iframe>
 	</body>
 </html>

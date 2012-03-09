@@ -177,6 +177,7 @@ steal("can/util/string",function( $ ) {
 			proto = proto || {};
 			var _super_class = this,
 				_super = this.prototype,
+				string = can.String,
 				name, shortName, namespace, prototype;
 
 			// Instantiate a base class (but only create the instance,
