@@ -16,6 +16,7 @@ steal('can/observe',function(){
 		return d;
 	},
 		modelNum = 0,
+		ignoreHookup = /change.observe\d+/,
 		getId = function( inst ) {
 			return inst[inst.constructor.id]
 		},
@@ -214,6 +215,7 @@ steal('can/observe',function(){
 		},
 		_clean : function(){
 			this._reqs--;
+			console.log(this._reqs)
 			if(!this._reqs){
 				for(var id in this.store) {
 					if(!this.store[id]._bindings){
@@ -397,21 +399,26 @@ steal('can/observe',function(){
 		 * model instance is removed from the store, freeing memory.  
 		 * 
 		 */
-		bind : function(){
-			if(!this._bindings){
-				this.constructor.store[getId(this)] = this;
-				this._bindings = 0;
+		bind : function(eventName){
+			if(!ignoreHookup.test(eventName)) { 
+					if(!this._bindings){
+					this.constructor.store[getId(this)] = this;
+					this._bindings = 0;
+				}
+				this._bindings++;
 			}
-			this._bindings++;
+			
 			return can.Observe.prototype.bind.apply(this, arguments);
 		},
 		/**
 		 * @function unbind
 		 */
-		unbind : function(){
-			this._bindings--;
-			if(!this._bindings){
-				delete this.constructor.store[getId(this)];
+		unbind : function(eventName){
+			if(!ignoreHookup.test(eventName)) { 
+				this._bindings--;
+				if(!this._bindings){
+					delete this.constructor.store[getId(this)];
+				}
 			}
 			return can.Observe.prototype.unbind.apply(this, arguments);
 		},

@@ -531,8 +531,15 @@ test("store ajax binding", function(){
 		
 		equals(guyRes[0].id,1, "got a guy id 1 back");
 		equals(guysRes[0][0].id, 1, "got guys w/ id 1 back")
-		ok(guyRes[0] === guysRes[0][0], "guys are the same")	  	
-		start();
+		ok(guyRes[0] === guysRes[0][0], "guys are the same");
+		// check the store is empty
+		setTimeout(function(){
+			start();
+			for(var id in Guy.store){
+				ok(false, "there should be nothing in the store")
+			}
+		},1)  	
+		
 	});
 	
 })

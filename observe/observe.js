@@ -777,7 +777,7 @@ steal('can/construct', function() {
 	{
 		setup: function( instances, options ) {
 			this.length = 0;
-			this._namespace = ".list" + (++observeId);
+			this._namespace = ".observe" + (++observeId);
 			this._init = 1;
 			this.bind('change',can.proxy(this._changes,this));
 			this.push.apply(this, can.makeArray(instances || []));
