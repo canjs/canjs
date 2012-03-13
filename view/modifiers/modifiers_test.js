@@ -47,7 +47,7 @@ test("val set with a template within a hookup within another template", function
 
 test("jQuery.fn.hookup", function(){
 	can.$("#qunit-test-area").html("");
-	var els = $(can.render("//can/view/test/qunit/hookup.ejs",{})).hookup();
+	var els = $(can.view.render("//can/view/test/qunit/hookup.ejs",{})).hookup();
 	can.$("#qunit-test-area").html(els); //makes sure no error happens
 });
 
