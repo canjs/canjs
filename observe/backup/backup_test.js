@@ -1,10 +1,11 @@
-steal('funcunit/qunit')
- .then("jquery/model/backup").then(function(){
- 	
+steal('funcunit/qunit', 
+	  'can/observe/attributes')
+.then('can/observe/backup')
+.then(function(){
 	
-module("jquery/model/backup",{
+module("can/observe/backup",{
 	setup : function(){
-		$.Model.extend("Recipe")
+		can.Observe.extend("Recipe")
 	}
 })
 
@@ -15,7 +16,7 @@ test("backing up", function(){
 	recipe.backup();
 	ok(!recipe.isDirty(), "backedup, but clean");
 	
-	recipe.name = 'blah'
+	recipe.attr('name', 'blah')
 	
 	ok(recipe.isDirty(), "dirty");
 	
@@ -28,10 +29,10 @@ test("backing up", function(){
 });
 
 test("backup / restore with associations", function(){
-	$.Model("Instruction");
-	$.Model("Cookbook");
+	can.Observe("Instruction");
+	can.Observe("Cookbook");
 	
-	$.Model("Recipe",{
+	can.Observe("Recipe",{
 		attributes : {
 			instructions : "Instruction.models",
 			cookbook: "Cookbook.model"
@@ -63,7 +64,7 @@ test("backup / restore with associations", function(){
 	recipe.backup();
 	ok(!recipe.isDirty(), "backedup, but clean");
 	
-	recipe.name = 'blah'
+	recipe.attr('name', 'blah')
 	
 	ok(recipe.isDirty(), "dirty");
 	

@@ -1,13 +1,13 @@
-steal('funcunit/qunit','can/model/validations').then(function(){
+steal('funcunit/qunit','can/observe/validations').then(function(){
 
-module("can/model/validations",{
+module("can/observe/validations",{
 	setup : function(){
-		can.Model.extend("Person",{
+		can.Observe.extend("Person",{
 		},{});
 	}
 })
 
-test("models can validate, events, callbacks", 11,function(){
+test("observe can validate, events, callbacks", 11,function(){
 	Person.validate("age", {message : "it's a date type"},function(val){
 					return ! ( this.date instanceof Date )
 				})
@@ -30,12 +30,9 @@ test("models can validate, events, callbacks", 11,function(){
 	})
 	
 	task.attr("age","blah");
-	
-	
-	
+
 	task.unbind("error.age");
-	
-	
+
 	task.attr("age", "blaher", function(){}, function(errs){
 		ok(this === task, "we get task back in error handler");
 		
@@ -104,7 +101,7 @@ test("validatesLengthOf", function(){
 });
 
 test("validatesPresenceOf", function(){
-	can.Model.extend("Task",{
+	can.Observe.extend("Task",{
 		init : function(){
 			this.validatePresenceOf("dueDate")
 		}
@@ -140,7 +137,7 @@ test("validatesPresenceOf", function(){
 	
 	ok(!errors, "no errors "+typeof errors);
 	
-	can.Model.extend("Task",{
+	can.Observe.extend("Task",{
 		init : function(){
 			this.validatePresenceOf("dueDate",{message : "You must have a dueDate"})
 		}

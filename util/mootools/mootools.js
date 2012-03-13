@@ -1,4 +1,7 @@
-steal('./mootools-core-1.4.3.js', '../event.js','../fragment',function(){
+steal({
+	src: './mootools-core-1.4.3.js',
+	_skip: true
+}, '../event.js','../fragment', function(){
 	/**
 	 * makeArray
 	 * isArray

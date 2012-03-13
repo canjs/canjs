@@ -1,6 +1,7 @@
-//allows you to backup and restore a model instance
-steal('jquery/model').then(function($){
-var isArray = $.isArray,
+//allows you to backup and restore a observe instance
+steal('can/observe').then(function(){
+	
+var isArray = can.isArray,
 	propCount = function(obj){
 		var count = 0;
 		for(var prop in obj) count++;
@@ -49,49 +50,50 @@ var isArray = $.isArray,
 		}
 		return obj;
 	};
-/**
-@page jquerymx.model.backup Backup / Restore
-@parent jQuery.Model
-@plugin jquery/model/backup
-@test jquery/model/backup/qunit.html
-@download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/backup/backup.js
+	
+	/**
+	 * @page can.observe.backup Backup / Restore
+	 * @parent can.Observe
+	 * @plugin can/observe/backup
+	 * @test can/observe/backup/qunit.html
+	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/backup/backup.js
 
-You can backup and restore instance data with the jquery/model/backup
-plugin.
+	 * You can backup and restore instance data with the jquery/observe/backup
+	 * plugin.
 
-To backup a model instance call [jQuery.Model.prototype.backup backup] like:
+	 * To backup a observe instance call [can.Observe.prototype.backup backup] like:
 
-@codestart
-var recipe = new Recipe({name: "cheese"});
-recipe.backup()
-@codeend
+	 * @codestart
+	 * var recipe = new Recipe({name: "cheese"});
+	 * recipe.backup()
+	 * @codeend
 
-You can check if the instance is dirty with [jQuery.Model.prototype.isDirty isDirty]:
+	 * You can check if the instance is dirty with [can.Observe.prototype.isDirty isDirty]:
 
-@codestart
-recipe.name = 'blah'
-recipe.isDirty() //-> true
-@codeend
+	 * @codestart
+	 * recipe.name = 'blah'
+	 * recipe.isDirty() //-> true
+	 * @codeend
 
-Finally, you can restore the original attributes with 
-[jQuery.Model.prototype.backup backup].
+	 * Finally, you can restore the original attributes with 
+	 * [can.Observe.prototype.backup backup].
 
-@codestart
-recipe.restore();
-recipe.name //-> "cheese"
-@codeend
+	 * @codestart
+	 * recipe.restore();
+	 * recipe.name //-> "cheese"
+	 * @codeend
 
-See this in action:
+	 * See this in action:
 
-@demo jquery/model/backup/backup.html
- */
-
-	$.extend($.Model.prototype,{
+	 * @demo can/observe/backup/backup.html
+	 */
+	can.extend(can.Observe.prototype, {
+		
 		/**
-		 * @function jQuery.Model.prototype.backup
-		 * @parent jquerymx.model.backup
-		 * Backs up an instance of a model, so it can be restored later.
-		 * The plugin also adds an [jQuery.Model.prototype.isDirty isDirty]
+		 * @function can.Observe.prototype.backup
+		 * @parent can.observe.backup
+		 * Backs up an instance of a observe, so it can be restored later.
+		 * The plugin also adds an [can.Observe.prototype.isDirty isDirty]
 		 * method for checking if it is dirty.
 		 */
 		backup: function() {
@@ -100,9 +102,9 @@ See this in action:
 		},
 
 	   /**
-	    * @function jQuery.Model.prototype.isDirty
-	    * @plugin jquery/model/backup
-	    * @parent jquerymx.model.backup
+	    * @function can.Observe.prototype.isDirty
+	    * @plugin can/observe/backup
+	    * @parent can.observe.backup
 	    * Returns if the instance needs to be saved.  This will go
 	    * through associations too.
 	    * @return {Boolean} true if there are changes, false if otherwise
@@ -115,15 +117,16 @@ See this in action:
 				return !same(this.serialize(), this._backupStore, !!checkAssociations);
 			}
 		},
+		
 		/**
-		 * @function jQuery.Model.prototype.restore
-		 * @parent jquery.model.backup
+		 * @function can.Observe.prototype.restore
+		 * @parent can.observe.backup
 		 * restores this instance to its backup data.
-		 * @return {model} the instance (for chaining)
+		 * @return {observe} the instance (for chaining)
 		 */
 		restore: function(restoreAssociations) {
 			var props = restoreAssociations ? this._backupStore : flatProps(this._backupStore)
-			this.attrs(props);   
+			this._attrs(props);   
 			
 			return this;
 		}

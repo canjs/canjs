@@ -1,13 +1,14 @@
-steal('can/model').then(function(){
+steal('can/observe/attributes', function(){
+	
 /**
-@page jquery.model.validations Validations
-@plugin jquery/model/validations
-@download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/validations/validations.js
-@test jquery/model/validations/qunit.html
+@page can.observe.validations Validations
+@plugin can/observe/validations
+@download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/validations/validations.js
+@test can/observe/validations/qunit.html
 @parent jQuery.Model
 
 In many apps, it's important to validate data before sending it to the server. 
-The jquery/model/validations plugin provides validations on models.
+The can/observe/validations plugin provides validations on observes.
 
 ## Example
 
@@ -32,7 +33,7 @@ $.Model("Contact",{
 Click a person's name to update their birthday.  If you put the date
 in the future, say the year 2525, it will report back an error.
 
-@demo jquery/model/validations/validations.html
+@demo can/observe/validations/validations.html
  */
 
 //validations object is by property.  You can have validations that
@@ -64,14 +65,35 @@ var validate = function(attrNames, options, proc) {
    
 };
 
-can.extend(can.Model, {
+var proto = can.Observe.prototype,
+	old = proto.__set;
+
+proto.__set = function(prop, value, current, success, error){
+	var self = this,
+		validations = self.constructor.validations,
+		errorCallback = function( errors ) {
+			var stub = error && error.call(self, errors);
+			can.trigger(self, "error." + prop, errors, true);
+		};
+		
+	if (validations && validations[prop]){
+		var errors = self.errors(prop);
+		errors && errorCallback(errors)
+	}
+	
+	old.call(self, prop, value, current, success, errorCallback);
+	
+	return this;
+}
+
+can.extend(can.Observe, {
 	
 	validations: {},
 	
    /**
     * @function jQuery.Model.static.validate
-    * @parent jquery.model.validations
-    * Validates each of the specified attributes with the given function.  See [jquery.model.validations validation] for more on validations.
+    * @parent can.observe.validations
+    * Validates each of the specified attributes with the given function.  See [can.observe.validations validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Function} validateProc Function used to validate each given attribute. Returns nothing if valid and an error message otherwise. Function is called in the instance context and takes the value to validate.
     * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
@@ -80,7 +102,7 @@ can.extend(can.Model, {
    
    /**
     * @attribute jQuery.Model.static.validationMessages
-    * @parent jquery.model.validations
+    * @parent can.observe.validations
     * The default validation error messages that will be returned by the builtin
     * validation methods. These can be overwritten by assigning new messages
     * to $.Model.validationMessages.&lt;message> in your application setup.
@@ -94,7 +116,7 @@ can.extend(can.Model, {
     *  * presence - "can't be empty"
     *  * range - "is out of range"
     * 
-    * It is important to steal jquery/model/validations before 
+    * It is important to steal can/observe/validations before 
     * overwriting the messages, otherwise the changes will
     * be lost once steal loads it later.
     * 
@@ -113,9 +135,9 @@ can.extend(can.Model, {
 
    /**
     * @function jQuery.Model.static.validateFormatOf
-    * @parent jquery.model.validations
+    * @parent can.observe.validations
     * Validates where the values of specified attributes are of the correct form by
-    * matching it against the regular expression provided.  See [jquery.model.validations validation] for more on validations.
+    * matching it against the regular expression provided.  See [can.observe.validations validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {RegExp} regexp Regular expression used to match for validation
     * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
@@ -133,9 +155,9 @@ can.extend(can.Model, {
 
    /**
     * @function jQuery.Model.static.validateInclusionOf
-    * @parent jquery.model.validations
+    * @parent can.observe.validations
     * Validates whether the values of the specified attributes are available in a particular
-    * array.   See [jquery.model.validations validation] for more on validations.
+    * array.   See [can.observe.validations validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Array} inArray Array of options to test for inclusion
     * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
@@ -153,8 +175,8 @@ can.extend(can.Model, {
 
    /**
     * @function jQuery.Model.static.validateLengthOf
-    * @parent jquery.model.validations
-    * Validates that the specified attributes' lengths are in the given range.  See [jquery.model.validations validation] for more on validations.
+    * @parent can.observe.validations
+    * Validates that the specified attributes' lengths are in the given range.  See [can.observe.validations validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Number} min Minimum length (inclusive)
     * @param {Number} max Maximum length (inclusive)
@@ -172,8 +194,8 @@ can.extend(can.Model, {
 
    /**
     * @function jQuery.Model.static.validatePresenceOf
-    * @parent jquery.model.validations
-    * Validates that the specified attributes are not blank.  See [jquery.model.validations validation] for more on validations.
+    * @parent can.observe.validations
+    * Validates that the specified attributes are not blank.  See [can.observe.validations validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     *
@@ -187,8 +209,8 @@ can.extend(can.Model, {
 
    /**
     * @function jQuery.Model.static.validateRangeOf
-    * @parent jquery.model.validations
-    * Validates that the specified attributes are in the given numeric range.  See [jquery.model.validations validation] for more on validations.
+    * @parent can.observe.validations
+    * Validates that the specified attributes are in the given numeric range.  See [can.observe.validations validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Number} low Minimum value (inclusive)
     * @param {Number} hi Maximum value (inclusive)
@@ -203,16 +225,16 @@ can.extend(can.Model, {
    }
 });
 
-can.extend(can.Model.prototype, {
+can.extend(can.Observe.prototype, {
 
 	/**
-	 * Runs the validations on this model.  You can
+	 * Runs the validations on this observe.  You can
 	 * also pass it an array of attributes to run only those attributes.
 	 * It returns nothing if there are no errors, or an object
 	 * of errors by attribute.
 	 * 
 	 * To use validations, it's suggested you use the 
-	 * model/validations plugin.
+	 * observe/validations plugin.
 	 * 
 	 *     $.Model("Task",{
 	 *       init : function(){

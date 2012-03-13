@@ -1,7 +1,7 @@
 steal('funcunit/qunit','can/observe/delegate',function(){
 
 
-module('observe/delegate')
+module('can/observe/delegate')
 
 var matches = can.Observe.prototype.delegate.matches;
 
