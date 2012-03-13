@@ -210,7 +210,7 @@
 				failure: function( transactionid, response, arguments ) {
 					updateDeferred(request, d);
 					d.reject(request, "error");
-					error(request, "error");
+					error && error(request, "error");
 				}
 			};
 			

@@ -27,9 +27,11 @@ steal('can/observe',function(){
 				// if there's a space, it's probably the type
 				var parts = ajaxOb.split(" ")
 				ajaxOb = {
-					url : parts.pop(),
-					type : parts.pop()
+					url : parts.pop()
 				};
+				if(parts.length){
+					ajaxOb.type = parts.pop();
+				}
 			}
 
 			// if we are a non-array object, copy to a new attrs
@@ -79,29 +81,31 @@ steal('can/observe',function(){
 			
 			deferred.then(success,error);
 			return deferred;
-		}
-		
-	// 338
-	ajaxMethods =
+		},
+	
 	/** 
 	 * @Static
 	 */
-	{
+	
+	// this object describes how to make an ajax request for each ajax method
+	// the available properties are
+	// url - the default url to use as indicated as a property on the model
+	// type - the default http request type
+	// data - a method that takes the arguments and returns data used for ajax
+	// 292 bytes
+	ajaxMethods = {
 		/**
 		 * @function create
 		 */
-		create: function( str , method) {
-			return function( attrs ) {
-				return ajax(str || this._shortName, attrs)
-			};
+		create : {
+			url : "_shortName",
+			type :"post"
 		},
 		/**
 		 * @function update
 		 */
-		update: function( str ) {
-			return function( id, attrs ) {
-				
-				// move id to newId if changing id
+		update : {
+			data : function(id, attrs){
 				attrs = attrs || {};
 				var identity = this.id;
 				if ( attrs[identity] && attrs[identity] !== id ) {
@@ -109,43 +113,51 @@ steal('can/observe',function(){
 					delete attrs[identity];
 				}
 				attrs[identity] = id;
-
-				return ajax( str || this._url, attrs, "put")
-			}
+				return attrs;
+			},
+			type : "put"
 		},
 		/**
 		 * @function destroy
 		 */
-		destroy: function( str ) {
-			return function( id ) {
+		destroy : {
+			type : "delete",
+			data : function(id){
 				var attrs = {};
 				attrs[this.id] = id;
-				return ajax( str || this._url, attrs, "delete")
+				return attrs;
 			}
 		},
 		/**
 		 * @function findAll
 		 */
-		findAll: function( str ) {
-			return function( params, success, error ) {
-				return pipe( ajax( str ||  this._shortName, params, "get", "json"),
-					this, 
-					"models" ).then(success,error);
-			};
+		findAll : {
+			url : "_shortName"
 		},
 		/**
 		 * @function findOne
 		 */
-		findOne: function( str ) {
-			return function( params, success, error ) {
-				return pipe(
-					ajax(str || this._url, params, "get", "json"),
-					this,
-					"model").then(success,error)
-			};
+		findOne: {}
+	},
+		// makes an ajax request function from a string
+		// ajaxMethod - the ajaxMethod object defined above
+		// str - the string the user provided. ex: findAll: "/recipes.json"
+		ajaxMaker = function(ajaxMethod, str){
+			// return a function that serves as the ajax method
+			return function(data){
+				// if the ajax method has it's own way of getting data, use that
+				data = ajaxMethod.data ? 
+					ajaxMethod.data.apply(this, arguments) :
+					// otherwise use the data passed in
+					data;
+				// return the ajax method with data and the type provided
+				return ajax(str || this[ajaxMethod.url || "_url"], data, ajaxMethod.type || "get")
+			}
 		}
-	};
 
+
+	
+	
 	can.Observe("can.Model",{
 		setup : function(){
 			can.Observe.apply(this, arguments);
@@ -157,9 +169,30 @@ steal('can/observe',function(){
 			can.each(ajaxMethods, function(name, method){
 				var prop = self[name];
 				if ( typeof prop !== 'function' ) {
-					self[name] = method(prop);
+					self[name] = ajaxMaker(method, prop);
 				}
 			});
+			
+			can.each({findAll : "models", findOne: "model"}, function(name, method){
+				var old = self[name];
+				self[name] = function(params, success, error){
+					// increment requests
+					self._reqs++;
+					// make the request
+					return pipe( old.call(self,params),
+						self, 
+						method ).then(function(items){
+							
+							success && success.apply(self, arguments);
+							// if ajax count === 0, cleanup
+							// otherwise if positive, adds to store
+							self._clean(items);
+						},error);
+				}
+				
+			})
+			// convert findAll and findOne
+			var oldFindAll
 			if(self.fullName == "can.Model"){
 				self.fullName = "Model"+(++modelNum);
 			}
@@ -176,7 +209,18 @@ steal('can/observe',function(){
 				});
 			}
 			this.store = {};
+			this._reqs = 0;
 			this._url = this._shortName+"/{"+this.id+"}"
+		},
+		_clean : function(){
+			this._reqs--;
+			if(!this._reqs){
+				for(var id in this.store) {
+					if(!this.store[id]._bindings){
+						delete this.store[id];
+					}
+				}
+			}
 		},
 		/**
 		 * @function models
@@ -234,8 +278,11 @@ steal('can/observe',function(){
 			if ( attributes instanceof this ) {
 				attributes = attributes.serialize();
 			}
-			
-			return this.store[attributes.id] || new this( attributes );
+			var model = this.store[attributes.id] || new this( attributes );
+			if(this._reqs){
+				this.store[attributes.id] = model;
+			}
+			return model;
 		}
 		/**
 		 * @function bind
