@@ -215,7 +215,6 @@ steal('can/observe',function(){
 		},
 		_clean : function(){
 			this._reqs--;
-			console.log(this._reqs)
 			if(!this._reqs){
 				for(var id in this.store) {
 					if(!this.store[id]._bindings){
@@ -401,7 +400,7 @@ steal('can/observe',function(){
 		 */
 		bind : function(eventName){
 			if(!ignoreHookup.test(eventName)) { 
-					if(!this._bindings){
+				if(!this._bindings){
 					this.constructor.store[getId(this)] = this;
 					this._bindings = 0;
 				}
@@ -431,6 +430,7 @@ steal('can/observe',function(){
 			}
 		}
 	});
+	
 		can.each([
 	/**
 	 * @function created
