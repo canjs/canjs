@@ -972,7 +972,7 @@ bound to.  For example, the following tooltip listens to
 clicks on the window:
 
 {% highlight javascript %}
-var Tooltip({
+var Tooltip = can.Control({
   "{window} click" : function(el, ev){
     // hide only if we clicked outside the tooltip
     if(! this.element.has(ev.target ) {
@@ -1430,3 +1430,114 @@ CanJS can be used with libraries other than jQuery.
 ## Examples
 
 Examples of canJS.
+
+## Why CanJS
+
+There are a lot of libraries out there and it can be difficult 
+to pick the one that's right for you.  The following are our very biased reasons to use CanJS.
+
+### Lightweight 
+
+Ontop of jQuery, CanJS is 8.2k.  Here's some other frameworks for comparison:
+
+  - Backbone 8.3kb (with Underscore.js)
+  - Angular 24kb
+  - Knockout 13kb
+  - Ember 37kb
+  - Batman 15kb
+
+Note: Size is not everything.  It really is what's inside that counts.
+
+### Engineering
+
+CanJS is designed to create lightweight, memory safe, high-performance applications.  It takes things to another level with:
+
+__Controls that unbind event handlers auto-magically__
+
+Using templated event binding, Control's can listen to events on objects other than their [element](#can_control-element).  For example, a tooltip listening to the window looks like:
+
+{% highlight javascript %}
+var Tooltip = can.Control({
+  "{window} click" : function(el, ev){
+    // hide only if we clicked outside the tooltip
+    if(! this.element.has(ev.target ) {
+      this.element.remove();
+    }
+  }
+})
+
+// create a Tooltip
+var tooltipElement = $('<div>INFO</div>').appendTo(el)
+var tooltipInstance = new Tooltip( tooltipElement );
+{% endhighlight %}
+
+`window` now has a reference to the control which keeps the `tooltipInstance` and everything the 
+tooltip instance might reference in memory.  CanJS overwrites each libraries element remove functionality
+to check for and destroy controls.  Destroying a control unbinds all of its event handlers, removing any
+memory leaks automagically.
+
+__A model store that does not leak__
+
+It's relatively common to load the same model instance multiple times on a single page.  For example, an
+app might request todos due today and high-priority todos and render them like:
+
+{% highlight javascript %}
+can.view("todosList.ejs",{
+  todaysTodos : Todo.findAll({due: "today"}),
+  criticalTodos : Todo.findAll({type: "critical"})
+}).then(function(frag){
+  $("#todos").html(frag);
+})
+{% endhighlight %}
+
+`todosList.ejs` might look like:
+
+{% highlight erb %}
+<h2>Due Today</h2>
+<% list(todaysTodos, function(todo){ %>
+  <li <%= (el) -> el.data("todo",todo) %>>
+    <%= todo.attr('name') %>
+  </li>
+<% }) %>
+<h2>Critical Todos</h2>
+<% list(criticalTodos, function(todo){ %>
+  <li <%= (el) -> el.data("todo",todo) %>>
+    <%= todo.attr('name') %>
+  </li>
+<% }) %>
+{% endhighlight %}
+
+If `Todo.findAll({due: "today"})` and `Todo.findAll({type: "critical"})` both retrieve the same todo instance's data like:
+
+{% highlight javascript %}
+`{ "id" : 5, "name" : "do dishes", "due": "today", "type" : "critical" }
+{% endhighlight %}
+
+
+
+  - Model and view deferred support for parallel loading
+  - Observables that handle nested data
+  - Opt-in data binding
+  
+It's wide variety of supported plugins add even more power.
+
+CanJS produces memory-safe applications.  can.Control 
+
+### Support
+
+CanJS is supported by Bitovi, formerly Jupiter Consulting.  We are extremely active on the forums. And should the 
+need arise, we provide support, training, and development.
+
+### Flexibility
+
+CanJS runs on multiple libraries and frameworks, making it an ideal choice for individuals and organizations that have varied 
+
+
+
+## Developing CanJS
+
+### Documentation
+
+### Making a build
+
+### Custom Builds
