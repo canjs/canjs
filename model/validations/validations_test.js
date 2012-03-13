@@ -1,8 +1,8 @@
-steal('funcunit/qunit','jquery/model/validations').then(function(){
+steal('funcunit/qunit','can/model/validations').then(function(){
 
-module("jquery/model/validations",{
+module("can/model/validations",{
 	setup : function(){
-		jQuery.Model.extend("Person",{
+		can.Model.extend("Person",{
 		},{});
 	}
 })
@@ -104,7 +104,7 @@ test("validatesLengthOf", function(){
 });
 
 test("validatesPresenceOf", function(){
-	$.Model.extend("Task",{
+	can.Model.extend("Task",{
 		init : function(){
 			this.validatePresenceOf("dueDate")
 		}
@@ -140,7 +140,7 @@ test("validatesPresenceOf", function(){
 	
 	ok(!errors, "no errors "+typeof errors);
 	
-	$.Model.extend("Task",{
+	can.Model.extend("Task",{
 		init : function(){
 			this.validatePresenceOf("dueDate",{message : "You must have a dueDate"})
 		}
