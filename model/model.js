@@ -173,7 +173,7 @@ steal('can/observe',function(){
 					self[name] = ajaxMaker(method, prop);
 				}
 			});
-			
+			var clean = can.proxy(this._clean, self);
 			can.each({findAll : "models", findOne: "model"}, function(name, method){
 				var old = self[name];
 				self[name] = function(params, success, error){
@@ -182,13 +182,7 @@ steal('can/observe',function(){
 					// make the request
 					return pipe( old.call(self,params),
 						self, 
-						method ).then(function(items){
-							
-							success && success.apply(self, arguments);
-							// if ajax count === 0, cleanup
-							// otherwise if positive, adds to store
-							self._clean(items);
-						},error);
+						method ).then(success,error).then(clean, clean);
 				}
 				
 			})
