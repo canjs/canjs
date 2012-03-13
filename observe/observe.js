@@ -613,10 +613,11 @@ steal('can/construct', function() {
 			props = can.extend(true, {}, props);
 			var prop, 
 				collectingStarted = collect(),
-				self = this;
+				self = this,
+				newVal;
 			
 			this.each(function(prop, curVal){
-				var newVal = props[prop];
+				newVal = props[prop];
 
 				// if we are merging ...
 				if ( newVal === undefined ) {

@@ -513,4 +513,26 @@ test("store binding", function(){
 	
 })
 
-
+test("store ajax binding", function(){
+	var Guy = can.Model({
+		findAll : "/guys",
+		findOne : "/guy/{id}"
+	},{});
+	
+	can.fixture("GET /guys", function(){
+		return [[{id: 1}]]
+	})
+	can.fixture("GET /guy/{id}", function(){
+		return {id: 1}
+	});
+	stop();
+	can.when( Guy.findOne({id: 1}),
+		Guy.findAll()).then(function(guyRes, guysRes){
+		
+		equals(guyRes[0].id,1, "got a guy id 1 back");
+		equals(guysRes[0][0].id, 1, "got guys w/ id 1 back")
+		ok(guyRes[0] === guysRes[0][0], "guys are the same")	  	
+		start();
+	});
+	
+})
