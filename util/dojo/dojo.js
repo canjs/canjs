@@ -1,6 +1,7 @@
-steal("https://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompressed.js", 
-	'../event.js'
-	).then('./nodelist-traverse').then(
+steal({
+	src: "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompressed.js",
+	_skip: true
+}, '../event.js').then('./nodelist-traverse').then(
 	'./trigger',
 	function(){
 	

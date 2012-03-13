@@ -452,7 +452,7 @@ steal('can/util/object',function( $ ) {
 			overwrites.push(settings)
 		}
 	};
-	var replacer = can.String._regs.replacer;
+	var replacer = can.String.replacer;
 	
 	$.extend($.fixture, {
 		// given ajax settings, find an overwrite

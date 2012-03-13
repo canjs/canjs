@@ -1,4 +1,7 @@
-steal('./zepto.0.8.js').then('./data').then('../event','../fragment.js',function(){
+steal({
+	src: './zepto.0.8.js',
+	_skip: true
+}).then('./data').then('../event','../fragment.js',function(){
 
 // extend what you can out of Zepto
 $.extend(can,Zepto);

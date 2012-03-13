@@ -1,6 +1,6 @@
 steal('funcunit/qunit','./attributes', function(){
 
-module("attributes");
+module("can/observe/attributes");
 
 test("literal converters and serializes", function(){
 	can.Observe("Task1",{

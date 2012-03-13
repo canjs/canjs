@@ -22,21 +22,22 @@ steal("can/util").then(function( $ ) {
 		var result = $view.render(view, data, helpers, callback);
 		if(can.isDeferred(result)){
 			return result.pipe(function(result){
-				return can.view.frag(result);
+				return $view.frag(result);
 			})
 		}
 		
 		// convert it into a dom frag
-		return can.view.frag(result);
+		return $view.frag(result);
 	};
-	can.extend(can.view,{
+
+	can.extend( $view, {
 		frag: function(result){
 			var frag = can.buildFragment([result],[document.body]).fragment;
 			// if we have an empty frag
 			if(!frag.childNodes.length) { 
 				frag.appendChild(document.createTextNode(''))
 			}
-			return can.view.hookup(frag);
+			return $view.hookup(frag);
 		},
 		hookup: function(fragment){
 			var hookupEls = [],
@@ -302,8 +303,10 @@ steal("can/util").then(function( $ ) {
 	// makes sure there's a template, if not, has steal provide a warning
 	var	checkText = function( text, url ) {
 			if (!text.match(/[^\s]/) ) {
+				//@steal-remove-start
 				steal.dev.log("There is no template or an empty template at " + url);
-				throw "can.view ERROR: There is no template or an empty template at " + url;
+				//@steal-remove-end
+				throw "can.view: No template or empty template:" + url;
 			}
 		},
 		// returns a 'view' renderer deferred

@@ -36,7 +36,8 @@
 
 	steal({
 		src: url,
-		type: "js"
+		type: "js",
+		_skip: true
 	}, "../event.js").then(
 
 	function() {

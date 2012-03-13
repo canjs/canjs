@@ -1,3 +1,5 @@
+steal(function(){
+
 define("dojo/NodeList-traverse",["./query", "./_base/lang", "./_base/array"], function(dquery, lang, array) {
 	// module:
 	//		dojo/NodeList-traverse
@@ -506,3 +508,5 @@ lang.extend(NodeList, {
 
 return NodeList;
 });
+
+})

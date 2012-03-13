@@ -1,6 +1,9 @@
-steal('funcunit/qunit','./setter', 'can/model', function(){
+steal('funcunit/qunit', 
+	  'can/observe/validations', 
+	  'can/observe/setter', 
+	  function(){
 
-module("Can.Observe.Setter");
+module("can/observe/setter");
 
 test("setter testing works", function(){
 	
@@ -22,7 +25,7 @@ test("setter testing works", function(){
 
 test("error binding", 1, function(){
 
-	can.Model("School",{
+	can.Observe("School",{
 	   setName : function(name, success, error){
 	     if(!name){
 	        error("no name");

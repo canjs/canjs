@@ -1,9 +1,9 @@
-steal('can/observe', function($){
+steal('can/observe', function(){
 
 var $Observe = can.Observe,
 	each = can.each,
-	extend = can.extend,
-	getObject = can.String.getObject;
+	getObject = can.String.getObject,
+	extend = can.extend;
 	
 // adds attributes, serialize, convert
 extend($Observe,{
@@ -57,11 +57,13 @@ proto.__set = function(prop, value, current, success, error){
 	// check if there is a
 	
 	var Class = this.constructor,
-		// the value that we will set
-		val,
+		val, type, converter;
+		
+	if(Class.attributes){
 		// the type of the attribute
-		type = Class.attributes[prop],
+		type = Class.attributes[prop];
 		converter = Class.convert[type] || Class.convert['default'];
+	}
 		
 	oldSet.call(this, prop, 
 		// if we get null or there is no type set

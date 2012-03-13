@@ -8,7 +8,7 @@ steal('./string', function(){
 can.String.classize =  function( s , join) {
 	// this can be moved out ..
 	// used for getter setter
-	var parts = s.split(can.String._regs.undHash),
+	var parts = s.split(can.String.undHash),
 		i = 0;
 	for (; i < parts.length; i++ ) {
 		parts[i] = can.String.capitalize(parts[i]);

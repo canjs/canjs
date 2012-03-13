@@ -316,41 +316,36 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			can.Construct.setup.apply(this, arguments);
 
 			// if you didn't provide a name, or are control, don't do anything
-			if (this === can.Control ) {
-				return;
-			}
-			// cache the underscored names
-			var control = this,
-				/**
-				 * @hide
-				 * @attribute pluginName
-				 * Setting the <code>pluginName</code> property allows you
-				 * to change the jQuery plugin helper name from its 
-				 * default value.
-				 * 
-				 *     can.Control("Mxui.Layout.Fill",{
-				 *       pluginName: "fillWith"
-				 *     },{});
-				 *     
-				 *     $("#foo").fillWith();
-				 */
-				pluginName = this.pluginName || this._fullName,
-				funcName;
+			if (this !== can.Control ) {
 
-			// create jQuery plugin
-			if(pluginName !== 'can_control'){
-				this.plugin(pluginName);
-			} 
-			
-			// calculate and cache actions
-			this.actions = {};
+				// cache the underscored names
+				var control = this,
+					/**
+					* @hide
+					* @attribute pluginName
+					* Setting the <code>pluginName</code> property allows you
+					* to change the jQuery plugin helper name from its 
+					* default value.
+					* 
+					*     can.Control("Mxui.Layout.Fill",{
+					*       pluginName: "fillWith"
+					*     },{});
+					*     
+					*     $("#foo").fillWith();
+					*/
+					pluginName = this.pluginName || this._fullName,
+					funcName;
 
-			for ( funcName in this.prototype ) {
-				if (funcName == 'constructor' || !isFunction(this.prototype[funcName]) ) {
-					continue;
-				}
-				if ( this._isAction(funcName) ) {
-					this.actions[funcName] = this._action(funcName);
+				// calculate and cache actions
+				this.actions = {};
+
+				for ( funcName in this.prototype ) {
+					if (funcName == 'constructor' || !isFunction(this.prototype[funcName]) ) {
+						continue;
+					}
+					if ( this._isAction(funcName) ) {
+						this.actions[funcName] = this._action(funcName);
+					}
 				}
 			}
 		},
@@ -360,9 +355,8 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * @return {Boolean} truthy if an action or not
 		 */
 		_isAction: function( methodName ) {
-			return actionMatcher.test(methodName) || special[methodName] || processors[methodName];
+			return special[methodName] || processors[methodName] || actionMatcher.test(methodName);
 		},
-		plugin : function(){},
 		/**
 		 * @hide
 		 * Takes a method name and the options passed to a control
@@ -389,25 +383,24 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			parameterReplacer.lastIndex = 0;
 			
 			//if we don't have options (a control instance), we'll run this later
-			if (!options && parameterReplacer.test(methodName) ) {
-				return null;
+			if ( options || ! parameterReplacer.test( methodName )) {
+				// If we have options, run sub to replace templates "{}" with a value from the options
+				// or the window
+				var convertedName = options ? can.String.sub(methodName, [options, window]) : methodName,
+					
+					// If a "{}" resolves to an object, convertedName will be an array
+					arr = can.isArray(convertedName),
+					
+					// get the parts of the function = [convertedName, delegatePart, eventPart]
+					parts = (arr ? convertedName[1] : convertedName).match(breaker),
+					event = parts[2],
+					processor = processors[event] || basicProcessor;
+				return {
+					processor: processor,
+					parts: parts,
+					delegate : arr ? convertedName[0] : undefined
+				};
 			}
-			// If we have options, run sub to replace templates "{}" with a value from the options
-			// or the window
-			var convertedName = options ? can.String.sub(methodName, [options, window]) : methodName,
-				
-				// If a "{}" resolves to an object, convertedName will be an array
-				arr = can.isArray(convertedName),
-				
-				// get the parts of the function = [convertedName, delegatePart, eventPart]
-				parts = (arr ? convertedName[1] : convertedName).match(breaker),
-				event = parts[2],
-				processor = processors[event] || basicProcessor;
-			return {
-				processor: processor,
-				parts: parts,
-				delegate : arr ? convertedName[0] : undefined
-			};
 		},
 		/**
 		 * @attribute processors
@@ -525,23 +518,21 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * default it is called with the element and options passed to the control.
 		 */
 		setup: function( element, options ) {
-			var funcName, ready, cls = this.constructor;
+			var cls = this.constructor,
+				cls = this.constructor,
+				pluginname = cls.pluginName || cls._fullName,
+				arr;
 
 			//want the raw element here
 			element = can.get(can.$(element),0);
 
-			//set element and className on element
-			var pluginname = cls.pluginName || cls._fullName;
-
 			this.element = can.$(element)
 
-			if(pluginname && pluginname !== 'can_control') {
+			if( pluginname && pluginname !== 'can_control') {
 				//set element and className on element
 				this.element.addClass(pluginname);
 			}
 			
-			//set in data
-			var arr;
 			(arr = can.data(this.element,"controls")) || can.data(this.element,"controls",arr = []);
 			arr.push(this);
 
@@ -589,7 +580,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			 * [jQuery.Control.prototype.update update];
 			 *
 			 */
-			this.options = extend( extend(/*true,*/ {}, cls.defaults), options);
+			this.options = extend({}, cls.defaults, options);
 
 			
 
@@ -785,7 +776,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * @return {Integer} The id of the binding in this._bindings
 		 */
 		on: function( el, selector, eventName, func ) {
-			if( el === undefined ) {
+			if ( ! el ) {
 				//adds bindings
 				this.off();
 				//go through the cached list of actions and use the processor to bind
@@ -808,7 +799,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 				}
 	
 	
-				//setup to be destroyed ... don't bind b/c we don't want to remove it
+				// setup to be destroyed ... don't bind b/c we don't want to remove it
 				var destroyCB = shifter(this,"destroy");
 				can.bind.call(element,"destroyed", destroyCB);
 				bindings.push(function( el ) {
@@ -1036,9 +1027,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * 
 		 */
 		destroy: function() {
-			var Class= this.constructor;
-
-			var self = this,
+			var Class = this.constructor,
 				pluginName = Class.pluginName || Class._fullName,
 				controls;
 			
@@ -1074,7 +1063,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 
 
 	//set common events to be processed as a basicProcessor
-	each("change click contextmenu dblclick keydown keyup keypress mousedown mousemove mouseout mouseover mouseup reset resize scroll select submit focusin focusout mouseenter mouseleave".split(" "), function( i, v ) {
+	each(["change", "click", "contextmenu", "dblclick", "keydown", "keyup", "keypress", "mousedown", "mousemove", "mouseout", "mouseover", "mouseup", "reset", "resize", "scroll", "select", "submit", "focusin", "focusout", "mouseenter", "mouseleave"], function( i, v ) {
 		processors[v] = basicProcessor;
 	});
 	

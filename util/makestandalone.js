@@ -1,17 +1,17 @@
-// load('can/util/make.js')
-
 load("steal/rhino/rhino.js");
 steal('steal/build/pluginify', function () {
 	
-	steal.File("can/dist").mkdirs();
+	steal.File("can/standalone").mkdirs();
 
 	steal.build.pluginify("can/util/make/jquery.js",{
-		out : "can/dist/can.jquery-edge.js",
+		out : "can/standalone/can.jquery-edge.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
-		skipCallbacks: true
+		skipCallbacks: true,
+		exclude : "can/util/jquery/jquery.1.7.1.js"
 	});
+	/** /
 	
 	steal.build.pluginify("can/util/make/mootools.js",{
 		out : "can/dist/can.mootools-edge.js",
@@ -45,5 +45,6 @@ steal('steal/build/pluginify', function () {
 		compress: true,
 		skipCallbacks: true
 	});
+	/**/
 
 });

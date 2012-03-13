@@ -1,4 +1,6 @@
-steal('can/observe','can/util/string/classize.js',function($){
+steal('can/observe/attributes',
+	  'can/util/string/classize.js',
+	  function(){
 
 var classize = can.String.classize,
 	proto =  can.Observe.prototype,
