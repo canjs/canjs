@@ -5,11 +5,8 @@ steal("can/util").then(function( $ ) {
 	var toId = function( src ) {
 		return src.replace(/^\/\//, "").replace(/[\/\.]/g, "_");
 	},
-<<<<<<< HEAD
-=======
 		isFunction = can.isFunction,
 		makeArray = can.makeArray,
->>>>>>> ab333545a40b5a46b874c0dccbf73be35c77c209
 		// used for hookup ids
 		hookupId = 1,
 	// this might be useful for testing if html
@@ -54,13 +51,8 @@ steal("can/util").then(function( $ ) {
 				}
 			});
 			// filter by data-view-id attribute
-<<<<<<< HEAD
 			for (; el = hookupEls[i++]; ) {
-=======
 
-		
-			while ( el = hookupEls[i++] ) {
->>>>>>> ab333545a40b5a46b874c0dccbf73be35c77c209
 				if ( el.getAttribute && (id = el.getAttribute('data-view-id')) && (func = $view.hookups[id]) ) {
 					func(el, id);
 					delete $view.hookups[id];
@@ -178,12 +170,11 @@ steal("can/util").then(function( $ ) {
 		preload: function( ) {},
 		render: function( view, data, helpers, callback ) {
 			// if helpers is a function, it is actually a callback
-			if ( typeof helpers === 'function' ) {
+			if ( isFunction( helpers )) {
 				callback = helpers;
 				helpers = undefined;
 			}
 	
-<<<<<<< HEAD
 			// see if we got passed any deferreds
 			var deferreds = getDeferreds(data);
 	
@@ -198,12 +189,12 @@ steal("can/util").then(function( $ ) {
 				// wait for the view and all deferreds to finish
 				can.when.apply(can, deferreds).then(function( resolved ) {
 					// get all the resolved deferreds
-					var objs = can.makeArray(arguments),
+					var objs = makeArray(arguments),
 						// renderer is last [0] is the data
 						renderer = objs.pop(),
 						// the result of the template rendering with data
 						result; 
-					
+	
 					// make data look like the resolved deferreds
 					if ( can.isDeferred(data) ) {
 						data = usefulPart(resolved);
@@ -215,46 +206,6 @@ steal("can/util").then(function( $ ) {
 							if ( can.isDeferred(data[prop]) ) {
 								data[prop] = usefulPart(objs.shift());
 							}
-=======
-
-	can.render = function( view, data, helpers, callback ) {
-		// if helpers is a function, it is actually a callback
-		if ( isFunction( helpers )) {
-			callback = helpers;
-			helpers = undefined;
-		}
-
-		// see if we got passed any deferreds
-		var deferreds = getDeferreds(data);
-
-
-		if ( deferreds.length ) { // does data contain any deferreds?
-			// the deferred that resolves into the rendered content ...
-			var deferred = new can.Deferred();
-
-			// add the view request to the list of deferreds
-			deferreds.push(get(view, true))
-
-			// wait for the view and all deferreds to finish
-			can.when.apply(can, deferreds).then(function( resolved ) {
-				// get all the resolved deferreds
-				var objs = makeArray(arguments),
-					// renderer is last [0] is the data
-					renderer = objs.pop(),
-					// the result of the template rendering with data
-					result; 
-				
-				// make data look like the resolved deferreds
-				if ( can.isDeferred(data) ) {
-					data = usefulPart(resolved);
-				}
-				else {
-					// go through each prop in data again,
-					// replace the defferreds with what they resolved to
-					for ( var prop in data ) {
-						if ( can.isDeferred(data[prop]) ) {
-							data[prop] = usefulPart(objs.shift());
->>>>>>> ab333545a40b5a46b874c0dccbf73be35c77c209
 						}
 					}
 					// get the rendered result
