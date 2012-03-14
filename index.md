@@ -1507,13 +1507,15 @@ can.view("todosList.ejs",{
 <% }) %>
 {% endhighlight %}
 
-If `Todo.findAll({due: "today"})` and `Todo.findAll({type: "critical"})` both retrieve the same todo instance's data like:
+If `Todo.findAll({due: "today"})` and `Todo.findAll({type: "critical"})` both have the same todo instance's data like:
 
 {% highlight javascript %}
-`{ "id" : 5, "name" : "do dishes", "due": "today", "type" : "critical" }
+{ "id" : 5, "name" : "do dishes", "due": "today", "type" : "critical" }
 {% endhighlight %}
 
+Model knows that this data represents the same todo and only creates one instance.  This means that a single model instance is in both lists.  By changing the todo's name or destroying it, both lists will be changed.
 
+However, model only stores these model instances while something is binding to them.  Once 
 
   - Model and view deferred support for parallel loading
   - Observables that handle nested data
