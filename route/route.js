@@ -241,6 +241,7 @@ function( $ ) {
 				matchCount,
 				routeName = data.route;
 			
+			delete data.route;
 			// if we have a route name in our can.route data, use it
 			if ( ! ( routeName && (route = can.route.routes[routeName]))){
 				// otherwise find route
