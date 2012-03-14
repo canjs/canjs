@@ -42,7 +42,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			})
 			can.bind.call(el,'destroyed', function(){
 				can.each(observed, function(i, ob){
-					ob.obj.unbind(ob.attr, ob.cb)
+					ob.obj.unbind(ob.attr, cb)
 				})
 			})
 		},
