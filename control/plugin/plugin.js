@@ -1,7 +1,7 @@
 steal('can/control', function(){
 	
 /**
- *  @add jQuery.fn
+ *  @add can.prototype
  */
 
 //used to determine if a controller instance is one of controllers
@@ -16,12 +16,14 @@ isAControllerOf = function( instance, controllers ) {
 	return false;
 },
 data = function(el, data){
-	return $.data(el, "controllers", data)
+	var $el = can.$(el);
+	$el.data("controllers", data || {})
+	return $el.data('controllers');
 },
-makeArray = $.makeArray;
+makeArray = can.makeArray;
 
 
-$.fn.extend({
+can.prototype.extend({
 	/**
 	 * @function controllers
 	 * Gets all controllers in the jQuery element.
@@ -34,7 +36,7 @@ $.fn.extend({
 		//check if arguments
 		this.each(function() {
 
-			controllers = $.data(this, "controllers");
+			controllers = can.$(this).data("controllers");
 			for ( cname in controllers ) {
 				if ( controllers.hasOwnProperty(cname) ) {
 					c = controllers[cname];
@@ -60,8 +62,8 @@ $.fn.extend({
 can.Control.plugin = function(pluginname){
 	var controller = this;
 
-	if (!$.fn[pluginname]) {
-		$.fn[pluginname] = function(options){
+	if (!can.prototype[pluginname]) {
+		can.prototype[pluginname] = function(options){
 		
 			var args = makeArray(arguments),   //if the arg is a method on this controller
 			isMethod = typeof options == "string" && $.isFunction(controller.prototype[options]), meth = args[0];
@@ -83,7 +85,8 @@ can.Control.plugin = function(pluginname){
 				}
 				else {
 					//create a new controller instance
-					controller.newInstance.apply(controller, [this].concat(args));
+					controllers[pluginname] = 
+						controller.newInstance.apply(controller, [this].concat(args));
 				}
 			});
 		};
