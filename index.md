@@ -9,13 +9,15 @@ CanJS is an MIT-licensed, client-side, JavaScript framework that makes building 
  - __can.Observe__ - key-value binding
  - __can.Model__ - observes connected to a RESTful JSON interface
  - __can.view__ - template loading, caching, rendering
- - __can.EJS__ - live binding template language
+ - __can.EJS__ - live binding templates
  - __can.Control__ - declaritive event bindings
  - __can.route__ - backbutton and bookmarking support
 
+It also includes a rich set of supported [extensions and plugins](#plugins).
+
 ## Get Canned
 
-CanJS supports jQuery, Zepto, Dojo, YUI and Mootools.  Select your download 
+CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools.  Select your download 
 for the library you are using:
 
  - [can.jquery.js](http://staging.donejs.com/can/dist/can.jquery-edge.js) (8k)
