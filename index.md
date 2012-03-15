@@ -1515,15 +1515,67 @@ If `Todo.findAll({due: "today"})` and `Todo.findAll({type: "critical"})` both ha
 
 Model knows that this data represents the same todo and only creates one instance.  This means that a single model instance is in both lists.  By changing the todo's name or destroying it, both lists will be changed.
 
-However, model only stores these model instances while something is binding to them.  Once 
+However, model only stores these model instances while something is binding to them.  Once nothing is bound to the model instance, they are removed from the store.
 
-  - Model and view deferred support for parallel loading
-  - Observables that handle nested data
-  - Opt-in data binding
+__Model and view deferred support for parallel loading__
+
+[Deferreds](#utilities-deferred) are simply awesome for dealing with asynchronous behavior.  [can.Model](#can_model) produces deferreds and [can.view](#can_view) consumes them.  With the [view modifiers](#plugins-view_modifiers) plugin, 
+you can load a template and its data in parallel and render it into an element with:
+
+{% highlight javascript %}
+$("#todos").html("todos.ejs", Todo.findAll() );
+{% endhighlight %}
+
+Hot.  You can do this without the view modifiers plugin like:
+
+{% highlight javascript %}
+can.view("todos.ejs", Todo.findAll() ).then(function( frag ){
+  $("#todos").html( frag );
+})
+{% endhighlight %}
+
+__Observables that handle nested data__
+
+[can.Observe](#can_observe) works well with nested data.  It converts nested objects into observes 
+automatically.  For example:
+
+{% highlight javascript %}
+var person = new can.Observe({
+  name : {first: "Justin", last: "Myer"},
+  hobbies : ["programming", "party rocking"]
+})
+
+person.attr('name.first') //-> "Justin"
+person.attr('hobbies.0') //-> "programming"
+{% endhighlight %}
+
+But most important, `change` events bubble.  Letting observe listen when a nested property changes:
+
+{% highlight javascript %}
+person.bind("change", function( ev, attr, how, newVal, oldVal ){
+  attr   //-> "name.last"
+  how    //-> "set"
+  newVal //-> "Meyer"
+  oldVal //-> "Myer"
+});
+
+person.attr("name.last", "Meyer");
+{% endhighlight %}
+
+__Opt-in data binding__
+
+Although [can.EJS's](#can_ejs) live-binding is super-duper fast, setting up live data binding can be too slow in certain situations (like rendering a list of 1000 items).  EJS's live binding is opt-in.  It only turns on
+if you are using the `attr` method.  If the following template binds to a `todo`'s `name` ...
+
+{% highlight erb %}
+<li> <%= todo.attr('name') %> </li>
+{% endhighlight %}
   
-It's wide variety of supported plugins add even more power.
+... the following doesn't setup live-binding and renders much faster ...
 
-CanJS produces memory-safe applications.  can.Control 
+{% highlight erb %}
+<li> <%= todo.name %> </li>
+{% endhighlight %}
 
 ### Support
 
