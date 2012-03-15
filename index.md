@@ -1584,13 +1584,18 @@ need arise, we provide support, training, and development.
 
 ### Flexibility
 
-CanJS runs on multiple libraries and frameworks, making it an ideal choice for individuals and organizations that have varied 
-
+CanJS runs on multiple libraries and frameworks, making it an ideal choice for individuals and organizations that need flexibility.
 
 
 ## Developing CanJS
 
 ### Documentation
+
+To edit this page, fork and edit the [github pages's index.md page](https://github.com/jupiterjs/canjs/blob/gh-pages/index.md).  Don't forget to submit a pull request.
+
+To edit the documentation on DoneJS.com, fork and edit the markdown and js files in the 
+[CanJS github repo](https://github.com/jupiterjs/canjs).  For example, to edit [can.Control's overview page](http://donejs.com/docs.html#!can.Control),
+change [https://github.com/jupiterjs/canjs/blob/master/control/control.md].  To edit [can.Control's destory method](http://donejs.com/docs.html#!can.Control.prototype.destroy), change [https://github.com/jupiterjs/canjs/blob/master/control/control.js](https://github.com/jupiterjs/canjs/blob/master/control/control.js#L939) where you find the `destroy` comment.
 
 ### Making a build
 
