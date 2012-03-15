@@ -1440,13 +1440,13 @@ to pick the one that's right for you.  The following are our very biased reasons
 
 Ontop of jQuery, CanJS is 8.2k.  Here's some other frameworks for comparison:
 
-  - Backbone 8.3kb (with Underscore.js)
-  - Angular 24kb
-  - Knockout 13kb
-  - Ember 37kb
-  - Batman 15kb
+ - Backbone 8.3kb (with Underscore.js)
+ - Angular 24kb
+ - Knockout 13kb
+ - Ember 37kb
+ - Batman 15kb
 
-Note: Size is not everything.  It really is what's inside that counts.
+__Size is not everything__.  It really is what's inside that counts. And that's where we think CanJS really delivers a lot of bang for your buck.
 
 ### Engineering
 
