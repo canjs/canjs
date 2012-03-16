@@ -4,7 +4,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	
 	// Binds an element, returns a function that unbinds
 	var bind = function( el, ev, callback ) {
-		can.bind.call(el,ev, callback)
+		can.bind.call( el, ev, callback )
 		//var binder = el.bind && el.unbind ? el : $(isFunction(el) ? [el] : el);
 
 		//binder.bind(ev, callback);
@@ -32,7 +32,9 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		
 		// calls bind or unbind depending if there is a selector
 		binder = function( el, ev, callback, selector ) {
-			return selector ? delegate(el, can.trim(selector), ev, callback) : bind(el, ev, callback);
+			return selector ?
+				delegate( el, can.trim( selector ), ev, callback ) : 
+				bind( el, ev, callback );
 		},
 		
 		// moves 'this' to the first argument, wraps it with jQuery if it's an element
@@ -40,15 +42,9 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			var method = typeof name == "string" ? context[name] : name;
 			return function() {
 				context.called = name;
-    			return method.apply(context, [this.nodeName ? can.$(this) : this].concat( slice.call(arguments, 0) ) );
+    			return method.apply(context, [this.nodeName ? can.$(this) : this].concat( slice.call(arguments, 0)));
 			};
 		},
-		// matches dots
-		// checks if it looks like an action
-		actionMatcher = /[^\w]/,
-		// handles parameterized action names
-		parameterReplacer = /\{([^\}]+)\}/g,
-		breaker = /^(?:(.*?)\s)?([\w\.\:>]+)$/,
 		basicProcessor;
 	
 	/**
@@ -66,26 +62,40 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * 
 		 */
 		setup: function() {
+
 			// Allow contollers to inherit "defaults" from superclasses as it done in can.Construct
-			can.Construct.setup.apply(this, arguments);
+			can.Construct.setup.apply( this, arguments );
 
 			// if you didn't provide a name, or are control, don't do anything
-			if (this !== can.Control ) {
+			if ( this !== can.Control ) {
 
 				// cache the underscored names
 				var control = this,
-					pluginName = this.pluginName || this._fullName,
+					/**
+					* @hide
+					* @attribute pluginName
+					* Setting the <code>pluginName</code> property allows you
+					* to change the jQuery plugin helper name from its 
+					* default value.
+					* 
+					*     can.Control("Mxui.Layout.Fill",{
+					*       pluginName: "fillWith"
+					*     },{});
+					*     
+					*     $("#foo").fillWith();
+					*/
+					pluginName = control.pluginName || control._fullName,
 					funcName;
 
 				// calculate and cache actions
-				this.actions = {};
+				control.actions = {};
 
-				for ( funcName in this.prototype ) {
-					if (funcName == 'constructor' || !isFunction(this.prototype[funcName]) ) {
+				for ( funcName in control.prototype ) {
+					if (funcName == 'constructor' || ! isFunction(control.prototype[funcName]) ) {
 						continue;
 					}
-					if ( this._isAction(funcName) ) {
-						this.actions[funcName] = this._action(funcName);
+					if ( control._isAction(funcName) ) {
+						control.actions[funcName] = control._action(funcName);
 					}
 				}
 			}
@@ -96,7 +106,9 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * @return {Boolean} truthy if an action or not
 		 */
 		_isAction: function( methodName ) {
-			return special[methodName] || processors[methodName] || actionMatcher.test(methodName);
+			// RegExp literals don't carry a last index property so this is
+			// safe
+			return special[methodName] || processors[methodName] || /[^\w]/.test(methodName);
 		},
 		/**
 		 * @hide
@@ -121,10 +133,10 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 */
 		_action: function( methodName, options ) {
 			// reset the test index
-			parameterReplacer.lastIndex = 0;
 			
 			//if we don't have options (a control instance), we'll run this later
-			if ( options || ! parameterReplacer.test( methodName )) {
+			                  // Parameter replacer regex
+			if ( options || ! /\{([^\}]+)\}/g.test( methodName )) {
 				// If we have options, run sub to replace templates "{}" with a value from the options
 				// or the window
 				var convertedName = options ? can.String.sub(methodName, [options, window]) : methodName,
@@ -133,7 +145,8 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 					arr = can.isArray(convertedName),
 					
 					// get the parts of the function = [convertedName, delegatePart, eventPart]
-					parts = (arr ? convertedName[1] : convertedName).match(breaker),
+					                                                       // Breaker regex
+					parts = (arr ? convertedName[1] : convertedName).match(/^(?:(.*?)\s)?([\w\.\:>]+)$/),
 					event = parts[2],
 					processor = processors[event] || basicProcessor;
 				return {
@@ -260,13 +273,9 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 */
 		setup: function( element, options ) {
 			var cls = this.constructor,
-				cls = this.constructor,
-				pluginname = cls.pluginName || cls._fullName,
-				arr;
+				pluginname = cls.pluginName || cls._fullName;
 
-			//want the raw element here
-			element = can.get(can.$(element),0);
-
+			// want the raw element here
 			this.element = can.$(element)
 
 			if( pluginname && pluginname !== 'can_control') {
@@ -274,9 +283,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 				this.element.addClass(pluginname);
 			}
 			
-			(arr = can.data(this.element,"controls")) || can.data(this.element,"controls",arr = []);
-			arr.push(this);
-
+			(can.data(this.element,"controls")) || can.data(this.element,"controls", [ this ]);
 			
 			/**
 			 * @attribute options
@@ -322,9 +329,6 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			 *
 			 */
 			this.options = extend({}, cls.defaults, options);
-
-			
-
 
 			// bind all event handlers
 			this.on();
@@ -517,6 +521,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * @return {Integer} The id of the binding in this._bindings
 		 */
 		on: function( el, selector, eventName, func ) {
+			
 			if ( ! el ) {
 				//adds bindings
 				this.off();
@@ -525,10 +530,11 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 				var cls = this.constructor,
 					bindings = this._bindings,
 					actions = cls.actions,
-					element = this.element;
+					element = this.element,
+					destroyCB = shifter(this,"destroy");
 					
 				for ( funcName in actions ) {
-					if ( actions.hasOwnProperty(funcName) ) {
+					if ( actions.hasOwnProperty( funcName )) {
 						ready = actions[funcName] || cls._action(funcName, this.options);
 						bindings.push(
 							ready.processor(ready.delegate || element, 
@@ -541,13 +547,13 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	
 	
 				// setup to be destroyed ... don't bind b/c we don't want to remove it
-				var destroyCB = shifter(this,"destroy");
 				can.bind.call(element,"destroyed", destroyCB);
 				bindings.push(function( el ) {
 					can.unbind.call(el,"destroyed", destroyCB);
 				});
 				return bindings.length;
 			}
+
 			if ( typeof el == 'string' ) {
 				func = eventName;
 				eventName = selector;
@@ -558,7 +564,9 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			if ( typeof func == 'string' ) {
 				func = shifter(this,func);
 			}
-			this._bindings.push(binder(el, eventName, func, selector));
+
+			this._bindings.push( binder( el, eventName, func, selector ));
+
 			return this._bindings.length;
 		},
 		/**
@@ -569,7 +577,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * 
 		 */
 		off : function(){
-			var el = can.get(this.element,0);
+			var el = this.element[0]
 			each(this._bindings || [], function( key, value ) {
 				value(el);
 			});
@@ -781,7 +789,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			}
 			
 			// remove from data
-			var controls = can.data(this.element,"controls");
+			controls = can.data(this.element,"controls");
 			controls.splice(can.inArray(this, controls),1);
 			
 			can.trigger( this, "destroyed"); //in case we want to know if the control is removed
@@ -797,7 +805,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	//unbinds when called.
 	//the basic processor that binds events
 	basicProcessor = function( el, event, selector, methodName, control ) {
-		return binder(el, event, shifter(control, methodName), selector);
+		return binder( el, event, shifter(control, methodName), selector);
 	};
 
 
