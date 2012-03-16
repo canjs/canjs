@@ -10,7 +10,8 @@ steal('steal/build/pluginify', function () {
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
-		skipCallbacks: true
+		skipCallbacks: true,
+		exclude : "can/util/jquery/jquery.1.7.1.js"
 	});
 	
 	steal.build.pluginify("can/util/make/mootools.js",{
