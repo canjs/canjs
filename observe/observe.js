@@ -128,9 +128,6 @@ steal('can/construct', function() {
 		},
 		bind : bind,
 		unbind: unbind,
-		/**
-		 * @attribute id
-		 */
 		id: "id"
 	},
 	/**
@@ -430,7 +427,9 @@ steal('can/construct', function() {
 				current._set(parts, value)
 			} else if (!parts.length ) {
 				// we're in 'real' set territory
-				
+				if(this.__convert){
+					value = this.__convert(prop, value)
+				}
 				this.__set(prop, value, current)
 				
 			} else {
@@ -438,6 +437,7 @@ steal('can/construct', function() {
 			}
 		},
 		__set : function(prop, value, current){
+			
 			// otherwise, we are setting it on this object
 			// todo: check if value is object and transform
 			// are we changing the value
