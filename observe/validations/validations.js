@@ -227,7 +227,6 @@ can.extend(can.Observe.prototype, {
 	 *     task.errors() // -> {dueDate: ["cant' be empty"]}
 	 */
 	errors: function( attrs , newVal) {
-		console.log(arguments.length)
 		// convert attrs to an array
 		if ( attrs ) {
 			attrs = can.isArray(attrs) ? attrs : [attrs];
@@ -241,7 +240,7 @@ can.extend(can.Observe.prototype, {
 			// funcs - the validation functions
 			addErrors = function( attr, funcs ) {
 				can.each(funcs, function( i, func ) {
-					var res = func.call(self, isTest ? ( self._convert ? 
+					var res = func.call(self, isTest ? ( self.__convert ? 
 							self.__convert(attr,newVal) : 
 							newVal ): self[attr]);
 					if ( res ) {
