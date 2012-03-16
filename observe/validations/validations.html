@@ -12,7 +12,7 @@
 	</head>
 	<body>
 <div id="demo-instructions">
-		<h1>Model Validations Demo</h1>
+		<h1>Observe Validations Demo</h1>
 		<p>This demo demonstrates using validations to prevent
 		a person's birthday from being in the future.</p>
 		<p>Clicking a person's name will show a form to update
@@ -20,103 +20,94 @@
 		input to update their listed age.</p>
 </div>
 <div id="demo-html">
-<div id='contacts1'></div>
-<div id='update'></div>
+<div id='person'></div>
+<input id='updater'/>
 </div>
 <script type='text/javascript' 
         src='../../../steal/steal.js'>   
 </script>
+<script type='text/ejs' id='personEJS'>
+<h3>Person <%= person.attr('name') %> is <%= person.ageThisYear() %> years old.</h3>
+</script>
 <script type='text/javascript'  id="demo-source">   
-steal('jquery/model',
-		'jquery/dom/fixture',
-		'jquery/model/list',
-		'jquery/model/validations').then(function(){
+steal('can/observe/validations',
+	 'can/observe/attributes',
+	 'can/control',
+	 'can/view/ejs',function(){
 	
-$.Model.convert.date = function(raw){
-	if(typeof raw == 'string'){
-		var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
-		
-		return matches ? new Date( +matches[1], 
-		                 (+matches[2])-1, 
-		                 +matches[3] )
-					   : null;
-	}else if(raw instanceof Date){
-		return raw;
-	}
-};
-
-$.fixture("/contacts.json", function(){
-  return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
-	       {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10'},
-	       {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
-});
-$.fixture("/contacts/{id}.json", function() {
-	return {};
-})
-
-$.Model("Contact",{
-	init : function(){
-		this.validate("birthday",function(){
-			if(this.birthday == null){
-				return "your birthday needs to be formatted YYYY-MM-DD"
+Person = can.Observe({
+	convert : {
+		date : function(raw){
+			if(typeof raw == 'string'){
+				var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
+				
+				return matches ? new Date( +matches[1], 
+				                 (+matches[2])-1, 
+				                 +matches[3] )
+							   : null;
+			}else if(raw instanceof Date){
+				return raw;
 			}
-			if(this.birthday > new Date){
-				return "your birthday needs to be in the past"
-			}
-		})
+		}
 	},
 	attributes : { 
 		birthday : 'date'
 	},
-	findAll : "/contacts.json",
-	update : "/contacts/{id}.json"
+	init : function(){
+		this.validate("birthday",function(bithday){
+			if(bithday == null){
+				return "your birthday needs to be formatted YYYY-MM-DD"
+			}
+			if(bithday > new Date){
+				return "your birthday needs to be in the past"
+			}
+		})
+	}
 },{
 	ageThisYear : function(){
-		return new Date().getFullYear() - 
-		      this.birthday.getFullYear()
+		// use attr to get the birthday so this is bindable
+		var birthday = this.attr('birthday');
+		if(birthday){
+			// return a value if we have one
+			return new Date().getFullYear() - 
+		      birthday.getFullYear()
+		}
+		
 	},
 	getBirthday : function(){
 		return ""+this.birthday.getFullYear()+
 			"-"+(this.birthday.getMonth()+1)+
 			"-"+this.birthday.getDate();
 	}
-
 });
 
-makeAgeUpdater = function(contact){
-	var updater = $("#update")
-	updater.html("");
-	updater.append("<span>" +contact.name+"'s birthday </span>")
-	$('<input/>').val(contact.attr("birthday")).change(function(){
-		
-		
-		contact.attr("birthday", this.value , function(){
-			$('#error').hide();
-		}, function(errors){
-			$('#error').html(errors.birthday[0]).show();
-		})
-	}).appendTo(updater);
-	updater.append("<div id='error' style='display:none'><div>");
-}
-	// List 1
-Contact.findAll({},function(contacts){
-  var contactsEl = $('#contacts1');
-  $.each(contacts, function(i, contact){
-    var li = $('<li>')
-              .model(contact)
-              .html(contact.name+" "+contact.ageThisYear()+
-                    " <a>Show</a>")
-              .appendTo(contactsEl);
-    contact.bind("birthday", function(){
-      li.html(contact.name+" "+this.ageThisYear()+
-              " <a>Show</a>");
-    })
-  })
-  
-  contactsEl.delegate("li","click", function(){
-	 makeAgeUpdater( $(this).closest('.contact').model() );
-  });
-});
+var justin = new Person({'name' : 'Justin Meyer','birthday': '1982-10-20'})
+
+var Updater = can.Control({
+	init : function(){
+		this.element.val(this.options.person.getBirthday())
+	},
+	"{person} error" : function(person, ev, prop, errors){
+		console.log("error", prop, errors)
+	},
+	"change" : function(){
+		// test if it's valid
+		var person = this.options.person,
+			newVal = this.element.val(),
+			errors = person.errors("birthday", newVal)
+		if(errors){
+			// give a warning
+			console.log("errors")
+		} else {
+			person.attr("birthday", newVal );
+		}
+	}
+})
+
+new Updater("#updater",{person: justin})
+
+$("#person").html(can.view("personEJS", {person: justin}))
+
 })
 </script>
 	</body>
