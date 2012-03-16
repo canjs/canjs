@@ -24,7 +24,7 @@
  */
 
 load("steal/rhino/rhino.js");
-steal('steal/build/pluginify', function () {
+steal('steal/build/pluginify', function() {
 	
 	steal.File("can/dist").mkdirs();
 	steal.build.pluginify("can/util/make/jquery.js",{

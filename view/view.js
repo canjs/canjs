@@ -3,7 +3,7 @@ steal("can/util").then(function( $ ) {
 
 	// a path like string into something that's ok for an element ID
 	var toId = function( src ) {
-		return src.replace(/^\/\//, "").replace(/[\/\.]/g, "_");
+		return src.split(/\/|\./g).join("_");
 	},
 		isFunction = can.isFunction,
 		makeArray = can.makeArray,
@@ -84,9 +84,8 @@ steal("can/util").then(function( $ ) {
 		 * @param {Number} the hookup number
 		 */
 		hook: function( cb ) {
-			var myid = ++hookupId;
-			$view.hookups[myid] = cb;
-			return " data-view-id='"+myid+"'";
+			$view.hookups[++hookupId] = cb;
+			return " data-view-id='"+hookupId+"'";
 		},
 		/**
 		 * @attribute cached
@@ -223,7 +222,7 @@ steal("can/util").then(function( $ ) {
 				// no deferreds, render this bad boy
 				var response, 
 					// if there's a callback function
-					async = typeof callback === "function",
+					async = isFunction( callback ),
 					// get the 'view' type
 					deferred = get(view, async);
 	
@@ -253,7 +252,7 @@ steal("can/util").then(function( $ ) {
 	} 
 	// makes sure there's a template, if not, has steal provide a warning
 	var	checkText = function( text, url ) {
-			if (!text.match(/[^\s]/) ) {
+			if ( ! text.length ) {
 				//@steal-remove-start
 				steal.dev.log("There is no template or an empty template at " + url);
 				//@steal-remove-end
@@ -301,8 +300,7 @@ steal("can/util").then(function( $ ) {
 	
 			// if there is no suffix, add one
 			if (!suffix ) {
-				suffix = $view.ext;
-				url = url + $view.ext;
+				url += ( suffix = $view.ext );
 			}
 			if(can.isArray(suffix)){
 				suffix = suffix[0]
@@ -315,8 +313,8 @@ steal("can/util").then(function( $ ) {
 			// you should only be using // if you are using steal
 			if ( url.match(/^\/\//) ) {
 				var sub = url.substr(2);
-				url = typeof steal === "undefined" ? 
-					url = "/" + sub : 
+				url = window.steal ? 
+					"/" + sub : 
 					steal.root.mapJoin(sub);
 			}
 	
@@ -378,7 +376,7 @@ steal("can/util").then(function( $ ) {
 		// this is for Models and can.ajax that resolve to array (with success and such)
 		// returns the useful, content part
 		usefulPart = function( resolved ) {
-			return can.isArray(resolved) && resolved.length === 3 && resolved[1] === 'success' ? resolved[0] : resolved
+			return can.isArray(resolved) && resolved[1] === 'success' ? resolved[0] : resolved
 		};
 	
 });

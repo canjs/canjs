@@ -80,8 +80,7 @@ steal('can/observe',function(){
 				}
 			}
 			
-			deferred.then(success,error);
-			return deferred;
+			return deferred.then(success,error);
 		},
 	
 	/** 
@@ -124,9 +123,7 @@ steal('can/observe',function(){
 		destroy : {
 			type : "delete",
 			data : function(id){
-				var attrs = {};
-				attrs[this.id] = id;
-				return attrs;
+				return {}[this.id] = id;
 			}
 		},
 		/**
@@ -168,9 +165,8 @@ steal('can/observe',function(){
 			var self = this;
 			
 			can.each(ajaxMethods, function(name, method){
-				var prop = self[name];
-				if ( typeof prop !== 'function' ) {
-					self[name] = ajaxMaker(method, prop);
+				if ( ! can.isFunction( self[name] )) {
+					self[name] = ajaxMaker(method, self[name]);
 				}
 			});
 			var clean = can.proxy(this._clean, self);
@@ -221,12 +217,12 @@ steal('can/observe',function(){
 		 * @function models
 		 */
 		models: function( instancesRawData ) {
-			if (!instancesRawData ) {
-				return null;
+			if ( ! instancesRawData ) {
+				return;
 			}
 			// get the list type
 			var self = this,
-				res = new( this.List || ML),
+				res = new( self.List || ML),
 				// did we get an array
 				arr = can.isArray(instancesRawData),
 				
@@ -242,18 +238,18 @@ steal('can/observe',function(){
 				instancesRawData.serialize() :
 				// get the object's data
 				instancesRawData.data),
-				// the number of items
-				length = raw.length,
 				i = 0;
 
 			//!steal-remove-start
-			if (!length ) {
+			if ( ! raw.length ) {
 				steal.dev.warn("model.js models has no data.")
 			}
 			//!steal-remove-end
+
 			can.each(raw, function( i, rawPart ) {
 				res.push( self.model( rawPart ));
 			});
+
 			if (!arr ) { //push other stuff onto array
 				can.each(instancesRawData, function(prop, val){
 					if ( prop !== 'data' ) {
@@ -268,7 +264,7 @@ steal('can/observe',function(){
 		 */
 		model: function( attributes ) {
 			if (!attributes ) {
-				return null;
+				return;
 			}
 			if ( attributes instanceof this ) {
 				attributes = attributes.serialize();
