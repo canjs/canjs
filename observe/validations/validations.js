@@ -1,40 +1,6 @@
 steal('can/observe/attributes', function(){
 	
-/**
-@page can.observe.validations Validations
-@plugin can/observe/validations
-@download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/validations/validations.js
-@test can/observe/validations/qunit.html
-@parent jQuery.Model
 
-In many apps, it's important to validate data before sending it to the server. 
-The can/observe/validations plugin provides validations on observes.
-
-## Example
-
-To use validations, you need to call a validate method on the Model class.
-The best place to do this is in a Class's init function.
-
-@codestart
-$.Model("Contact",{
-	init : function(){
-		// validates that birthday is in the future
-		this.validate("birthday",function(){
-			if(this.birthday > new Date){
-				return "your birthday needs to be in the past"
-			}
-		})
-	}
-},{});
-@codeend
-
-## Demo
-
-Click a person's name to update their birthday.  If you put the date
-in the future, say the year 2525, it will report back an error.
-
-@demo can/observe/validations/validations.html
- */
 
 //validations object is by property.  You can have validations that
 //span properties, but this way we know which ones to run.
@@ -57,8 +23,8 @@ var validate = function(attrNames, options, proc) {
 		if(!self.validations[attrName]){
 			self.validations[attrName] = [];
 		}
-		self.validations[attrName].push(function(){
-			var res = proc.call(this, this[attrName]);
+		self.validations[attrName].push(function(newVal){
+			var res = proc.call(this, newVal);
 			return res === undefined ? undefined : (options.message || res);
 		})
 	});
@@ -69,19 +35,24 @@ var proto = can.Observe.prototype,
 	old = proto.__set;
 
 proto.__set = function(prop, value, current, success, error){
+	
+	
+	
 	var self = this,
 		validations = self.constructor.validations,
 		errorCallback = function( errors ) {
 			var stub = error && error.call(self, errors);
-			can.trigger(self, "error." + prop, errors, true);
+			can.trigger(self, "error", [prop, errors], true);
 		};
-		
+	
+	old.call(self, prop, value, current, success, errorCallback);
+	
 	if (validations && validations[prop]){
 		var errors = self.errors(prop);
 		errors && errorCallback(errors)
 	}
 	
-	old.call(self, prop, value, current, success, errorCallback);
+	
 	
 	return this;
 }
@@ -91,9 +62,9 @@ can.extend(can.Observe, {
 	validations: {},
 	
    /**
-    * @function jQuery.Model.static.validate
-    * @parent can.observe.validations
-    * Validates each of the specified attributes with the given function.  See [can.observe.validations validation] for more on validations.
+    * @function can.Observe.static.validate
+    * @parent can.Observe.validations
+    * Validates each of the specified attributes with the given function.  See [can.Observe.validations validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Function} validateProc Function used to validate each given attribute. Returns nothing if valid and an error message otherwise. Function is called in the instance context and takes the value to validate.
     * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
@@ -101,8 +72,8 @@ can.extend(can.Observe, {
    validate: validate,
    
    /**
-    * @attribute jQuery.Model.static.validationMessages
-    * @parent can.observe.validations
+    * @attribute can.Observe.static.validationMessages
+    * @parent can.Observe.validations
     * The default validation error messages that will be returned by the builtin
     * validation methods. These can be overwritten by assigning new messages
     * to $.Model.validationMessages.&lt;message> in your application setup.
@@ -134,10 +105,10 @@ can.extend(can.Observe, {
    },
 
    /**
-    * @function jQuery.Model.static.validateFormatOf
-    * @parent can.observe.validations
+    * @function can.Observe.static.validateFormatOf
+    * @parent can.Observe.validations
     * Validates where the values of specified attributes are of the correct form by
-    * matching it against the regular expression provided.  See [can.observe.validations validation] for more on validations.
+    * matching it against the regular expression provided.  See [can.Observe.validations validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {RegExp} regexp Regular expression used to match for validation
     * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
@@ -154,10 +125,10 @@ can.extend(can.Observe, {
    },
 
    /**
-    * @function jQuery.Model.static.validateInclusionOf
-    * @parent can.observe.validations
+    * @function can.Observe.static.validateInclusionOf
+    * @parent can.Observe.validations
     * Validates whether the values of the specified attributes are available in a particular
-    * array.   See [can.observe.validations validation] for more on validations.
+    * array.   See [can.Observe.validations validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Array} inArray Array of options to test for inclusion
     * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
@@ -174,9 +145,9 @@ can.extend(can.Observe, {
    },
 
    /**
-    * @function jQuery.Model.static.validateLengthOf
-    * @parent can.observe.validations
-    * Validates that the specified attributes' lengths are in the given range.  See [can.observe.validations validation] for more on validations.
+    * @function can.Observe.static.validateLengthOf
+    * @parent can.Observe.validations
+    * Validates that the specified attributes' lengths are in the given range.  See [can.Observe.validations validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Number} min Minimum length (inclusive)
     * @param {Number} max Maximum length (inclusive)
@@ -193,9 +164,9 @@ can.extend(can.Observe, {
    },
 
    /**
-    * @function jQuery.Model.static.validatePresenceOf
-    * @parent can.observe.validations
-    * Validates that the specified attributes are not blank.  See [can.observe.validations validation] for more on validations.
+    * @function can.Observe.static.validatePresenceOf
+    * @parent can.Observe.validations
+    * Validates that the specified attributes are not blank.  See [can.Observe.validations validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     *
@@ -208,9 +179,9 @@ can.extend(can.Observe, {
    },
 
    /**
-    * @function jQuery.Model.static.validateRangeOf
-    * @parent can.observe.validations
-    * Validates that the specified attributes are in the given numeric range.  See [can.observe.validations validation] for more on validations.
+    * @function can.Observe.static.validateRangeOf
+    * @parent can.Observe.validations
+    * Validates that the specified attributes are in the given numeric range.  See [can.Observe.validations validation] for more on validations.
     * @param {Array|String} attrNames Attribute name(s) to to validate
     * @param {Number} low Minimum value (inclusive)
     * @param {Number} hi Maximum value (inclusive)
@@ -228,6 +199,9 @@ can.extend(can.Observe, {
 can.extend(can.Observe.prototype, {
 
 	/**
+	 * @function can.Observe.prototype.errors
+	 * @parent can.Observe.validations
+	 * 
 	 * Runs the validations on this observe.  You can
 	 * also pass it an array of attributes to run only those attributes.
 	 * It returns nothing if there are no errors, or an object
@@ -255,10 +229,10 @@ can.extend(can.Observe.prototype, {
 	 * 
 	 *     task.errors() // -> {dueDate: ["cant' be empty"]}
 	 */
-	errors: function( attrs ) {
+	errors: function( attrs , newVal) {
 		// convert attrs to an array
 		if ( attrs ) {
-			attrs = can.isArray(attrs) ? attrs : can.makeArray(arguments);
+			attrs = can.isArray(attrs) ? attrs : [attrs];
 		}
 		
 		var errors = {},
@@ -269,7 +243,9 @@ can.extend(can.Observe.prototype, {
 			// funcs - the validation functions
 			addErrors = function( attr, funcs ) {
 				can.each(funcs, function( i, func ) {
-					var res = func.call(self);
+					var res = func.call(self, isTest ? ( self.__convert ? 
+							self.__convert(attr,newVal) : 
+							newVal ): self[attr]);
 					if ( res ) {
 						if (!errors[attr] ) {
 							errors[attr] = [];
@@ -279,7 +255,8 @@ can.extend(can.Observe.prototype, {
 
 				});
 			},
-			validations = this.constructor.validations;
+			validations = this.constructor.validations,
+			isTest = attrs && attrs.length === 1 && arguments.length === 2;
 
 		// go through each attribute or validation and
 		// add any errors
@@ -295,7 +272,7 @@ can.extend(can.Observe.prototype, {
 		});
 		
 		// return errors as long as we have one
-		return can.isEmptyObject(errors) ? null : errors;
+		return can.isEmptyObject(errors) ? null : isTest ? errors[attrs[0]] : errors;
 	}
 	
 });

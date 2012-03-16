@@ -50,248 +50,9 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		parameterReplacer = /\{([^\}]+)\}/g,
 		breaker = /^(?:(.*?)\s)?([\w\.\:>]+)$/,
 		basicProcessor;
+	
 	/**
-	 * @class can.Control
-	 * @parent index
-	 * @plugin can/control
-	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/control/control.js
-	 * @test jquery/control/qunit.html
-	 * @inherits jQuery.Construct
-	 * @description jQuery widget factory.
-	 * 
-	 * jQuery.Control helps create organized, memory-leak free, rapidly performing
-	 * jQuery widgets.  Its extreme flexibility allows it to serve as both
-	 * a traditional View and a traditional Control.  
-	 * 
-	 * This means it is used to
-	 * create things like tabs, grids, and contextmenus as well as 
-	 * organizing them into higher-order business rules.
-	 * 
-	 * Controls make your code deterministic, reusable, organized and can tear themselves 
-	 * down auto-magically. Read about [http://jupiterjs.com/news/writing-the-perfect-jquery-plugin 
-	 * the theory behind control] and 
-	 * a [http://jupiterjs.com/news/organize-jquery-widgets-with-jquery-control walkthrough of its features]
-	 * on Jupiter's blog. [mvc.control Get Started with jQueryMX] also has a great walkthrough.
-	 * 
-	 * Control inherits from [can.Construct can.Construct] and makes heavy use of 
-	 * [http://api.jquery.com/delegate/ event delegation]. Make sure 
-	 * you understand these concepts before using it.
-	 * 
-	 * ## Basic Example
-	 * 
-	 * Instead of
-	 * 
-	 * 
-	 *     $(function(){
-	 *       $('#tabs').click(someCallbackFunction1)
-	 *       $('#tabs .tab').click(someCallbackFunction2)
-	 *       $('#tabs .delete click').click(someCallbackFunction3)
-	 *     });
-	 * 
-	 * do this
-	 * 
-	 *     can.Control('Tabs',{
-	 *       click: function() {...},
-	 *       '.tab click' : function() {...},
-	 *       '.delete click' : function() {...}
-	 *     })
-	 *     $('#tabs').tabs();
-	 * 
-	 * 
-	 * ## Tabs Example
-	 * 
-	 * @demo jquery/control/control.html
-	 * 
-	 * ## Using Control
-	 * 
-	 * Control helps you build and organize jQuery plugins.  It can be used
-	 * to build simple widgets, like a slider, or organize multiple
-	 * widgets into something greater.
-	 * 
-	 * To understand how to use Control, you need to understand 
-	 * the typical lifecycle of a jQuery widget and how that maps to
-	 * control's functionality:
-	 * 
-	 * ### A control class is created.
-	 *       
-	 *     can.Control("MyWidget",
-	 *     {
-	 *       defaults :  {
-	 *         message : "Remove Me"
-	 *       }
-	 *     },
-	 *     {
-	 *       init : function(rawEl, rawOptions){ 
-	 *         this.element.append(
-	 *            "<div>"+this.options.message+"</div>"
-	 *           );
-	 *       },
-	 *       "div click" : function(div, ev){ 
-	 *         div.remove();
-	 *       }  
-	 *     }) 
-	 *     
-	 * This creates a <code>$.fn.my_widget</code> jQuery helper function
-	 * that can be used to create a new control instance on an element. Find
-	 * more information [jquery.control.plugin  here] about the plugin gets created 
-	 * and the rules around its name.
-	 *       
-	 * ### An instance of control is created on an element
-	 * 
-	 *     $('.thing').my_widget(options) // calls new MyWidget(el, options)
-	 * 
-	 * This calls <code>new MyWidget(el, options)</code> on 
-	 * each <code>'.thing'</code> element.  
-	 *     
-	 * When a new [can.Construct Class] instance is created, it calls the class's
-	 * prototype setup and init methods. Control's [jQuery.Control.prototype.setup setup]
-	 * method:
-	 *     
-	 *  - Sets [jQuery.Control.prototype.element this.element] and adds the control's name to element's className.
-	 *  - Merges passed in options with defaults object and sets it as [jQuery.Control.prototype.options this.options]
-	 *  - Saves a reference to the control in <code>$.data</code>.
-	 *  - [jquery.control.listening Binds all event handler methods].
-	 *   
-	 * 
-	 * ### The control responds to events
-	 * 
-	 * Typically, Control event handlers are automatically bound.  However, there are
-	 * multiple ways to [jquery.control.listening listen to events] with a control.
-	 * 
-	 * Once an event does happen, the callback function is always called with 'this' 
-	 * referencing the control instance.  This makes it easy to use helper functions and
-	 * save state on the control.
-	 * 
-	 * 
-	 * ### The widget is destroyed
-	 * 
-	 * If the element is removed from the page, the 
-	 * control's [jQuery.Control.prototype.destroy] method is called.
-	 * This is a great place to put any additional teardown functionality.
-	 * 
-	 * You can also teardown a control programatically like:
-	 * 
-	 *     $('.thing').my_widget('destroy');
-	 * 
-	 * ## Todos Example
-	 * 
-	 * Lets look at a very basic example - 
-	 * a list of todos and a button you want to click to create a new todo.
-	 * Your HTML might look like:
-	 * 
-	 * @codestart html
-	 * &lt;div id='todos'>
-	 *  &lt;ol>
-	 *    &lt;li class="todo">Laundry&lt;/li>
-	 *    &lt;li class="todo">Dishes&lt;/li>
-	 *    &lt;li class="todo">Walk Dog&lt;/li>
-	 *  &lt;/ol>
-	 *  &lt;a class="create">Create&lt;/a>
-	 * &lt;/div>
-	 * @codeend
-	 * 
-	 * To add a mousover effect and create todos, your control might look like:
-	 * 
-	 *     can.Control('Todos',{
-	 *       ".todo mouseover" : function( el, ev ) {
-	 *         el.css("backgroundColor","red")
-	 *       },
-	 *       ".todo mouseout" : function( el, ev ) {
-	 *         el.css("backgroundColor","")
-	 *       },
-	 *       ".create click" : function() {
-	 *         this.find("ol").append("&lt;li class='todo'>New Todo&lt;/li>"); 
-	 *       }
-	 *     })
-	 * 
-	 * Now that you've created the control class, you've must attach the event handlers on the '#todos' div by
-	 * creating [jQuery.Control.prototype.setup|a new control instance].  There are 2 ways of doing this.
-	 * 
-	 * @codestart
-	 * //1. Create a new control directly:
-	 * new Todos($('#todos'));
-	 * //2. Use jQuery function
-	 * $('#todos').todos();
-	 * @codeend
-	 * 
-	 * ## Control Initialization
-	 * 
-	 * It can be extremely useful to add an init method with 
-	 * setup functionality for your widget.
-	 * 
-	 * In the following example, I create a control that when created, will put a message as the content of the element:
-	 * 
-	 *     $.Control("SpecialControl",
-	 *     {
-	 *       init: function( el, message ) {
-	 *         this.element.html(message)
-	 *       }
-	 *     })
-	 *     $(".special").special("Hello World")
-	 * 
-	 * ## Removing Controls
-	 * 
-	 * Control removal is built into jQuery.  So to remove a control, you just have to remove its element:
-	 * 
-	 * @codestart
-	 * $(".special_control").remove()
-	 * $("#containsControls").html("")
-	 * @codeend
-	 * 
-	 * It's important to note that if you use raw DOM methods (<code>innerHTML, removeChild</code>), the controls won't be destroyed.
-	 * 
-	 * If you just want to remove control functionality, call destroy on the control instance:
-	 * 
-	 * @codestart
-	 * $(".special_control").control().destroy()
-	 * @codeend
-	 * 
-	 * ## Accessing Controls
-	 * 
-	 * Often you need to get a reference to a control, there are a few ways of doing that.  For the 
-	 * following example, we assume there are 2 elements with <code>className="special"</code>.
-	 * 
-	 * @codestart
-	 * //creates 2 foo controls
-	 * $(".special").foo()
-	 * 
-	 * //creates 2 bar controls
-	 * $(".special").bar()
-	 * 
-	 * //gets all controls on all elements:
-	 * $(".special").controls() //-> [foo, bar, foo, bar]
-	 * 
-	 * //gets only foo controls
-	 * $(".special").controls(FooControl) //-> [foo, foo]
-	 * 
-	 * //gets all bar controls
-	 * $(".special").controls(BarControl) //-> [bar, bar]
-	 * 
-	 * //gets first control
-	 * $(".special").control() //-> foo
-	 * 
-	 * //gets foo control via data
-	 * $(".special").data("controls")["FooControl"] //-> foo
-	 * @codeend
-	 * 
-	 * ## Calling methods on Controls
-	 * 
-	 * Once you have a reference to an element, you can call methods on it.  However, Control has
-	 * a few shortcuts:
-	 * 
-	 * @codestart
-	 * //creates foo control
-	 * $(".special").foo({name: "value"})
-	 * 
-	 * //calls FooControl.prototype.update
-	 * $(".special").foo({name: "value2"})
-	 * 
-	 * //calls FooControl.prototype.bar
-	 * $(".special").foo("bar","something I want to pass")
-	 * @codeend
-	 * 
-	 * These methods let you call one control from another control.
-	 * 
+	 * @add can.Control
 	 */
 	can.Construct("can.Control",
 	/** 
@@ -299,16 +60,9 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 	 */
 	{
 		/**
-		 * Does 2 things:
+		 * @hide
 		 * 
-		 *   - Creates a jQuery helper for this control.</li>
-		 *   - Calculates and caches which functions listen for events.</li>
-		 *    
-		 * ### jQuery Helper Naming Examples
-		 * 
-		 * 
-		 *     "TaskControl" -> $().task_control()
-		 *     "Controls.Task" -> $().controls_task()
+		 * Setup pre-process which methods are event listeners.
 		 * 
 		 */
 		setup: function() {
@@ -320,19 +74,6 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 
 				// cache the underscored names
 				var control = this,
-					/**
-					* @hide
-					* @attribute pluginName
-					* Setting the <code>pluginName</code> property allows you
-					* to change the jQuery plugin helper name from its 
-					* default value.
-					* 
-					*     can.Control("Mxui.Layout.Fill",{
-					*       pluginName: "fillWith"
-					*     },{});
-					*     
-					*     $("#foo").fillWith();
-					*/
 					pluginName = this.pluginName || this._fullName,
 					funcName;
 
@@ -940,7 +681,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		 * `destroy` prepares a control for garbage collection and is a place to
 		 * reset any changes the control has made.  
 		 * 
-		 * ## Automatic garbage collection
+		 * ## Allowing Garbage Collection
 		 * 
 		 * Destroy is called whenever a control's element is removed from the page using 
 		 * the library's standard HTML modifier methods.  This means that you
