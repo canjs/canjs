@@ -3,27 +3,54 @@
 @download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/validations/validations.js
 @test can/observe/validations/qunit.html
 @parent can.Observe
+ 
+The `can/observe/validations` plugin provides validations on observes. Validations
+are setup on constructor functions that inherit from [can.Observe]. Call
+validation functions in `init`.
 
-In many apps, it's important to validate data before sending it to the server. 
-The can/observe/validations plugin provides validations on observes.
-
-## Example
-
-To use validations, you need to call a validate method on the Model class.
-The best place to do this is in a Class's init function.
-
+THe following validates the `birthday` attribute in Contacts:
 
     can.Observe("Contact",{
     	init : function(){
     		// validates that birthday is in the future
-    		this.validate("birthday",function(){
-    			if(this.birthday > new Date){
+    		this.validate("birthday",function(birthday){
+    			if(birthday > new Date){
     				return "your birthday needs to be in the past"
     			}
     		})
     	}
     },{});
+    
+    var contact = new Contact({birthday: new Date(2012,0) })
 
+Use [can.Observe::errors]`( [attrs...], newVal )` to read errors
+or to test if setting a value would create an error:
+
+    contact.errors() //-> null - there are no errors
+    
+    contact.errros("birthday", 
+                   new Date(3013,0) ) 
+                   //-> ["your birthday needs to be in the past"] 
+    
+    contact.attr("birthday", new Date(3013,0) )
+    
+    contact.errors() 
+        //-> {
+        //     birthday: ["your birthday needs to be in the past"]
+        //   }
+
+Use [can.Observe::bind] to listen to error messages:
+
+    contact.bind("error", function(ev, attr, errors){
+      attr //-> "birthday"
+      errors //-> {birthday: ["your birthday needs to be in the past"]}
+    })
+
+## Validation Methods
+
+## Error Method
+
+## Listening to events
 
 ## Demo
 
