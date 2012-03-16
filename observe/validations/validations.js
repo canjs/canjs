@@ -42,7 +42,7 @@ proto.__set = function(prop, value, current, success, error){
 		validations = self.constructor.validations,
 		errorCallback = function( errors ) {
 			var stub = error && error.call(self, errors);
-			can.trigger(self, "error", prop, errors, true);
+			can.trigger(self, "error", [prop, errors], true);
 		};
 	
 	old.call(self, prop, value, current, success, errorCallback);
@@ -254,7 +254,7 @@ can.extend(can.Observe.prototype, {
 				});
 			},
 			validations = this.constructor.validations,
-			isTest = attrs.length === 1 && arguments.length === 2;
+			isTest = attrs && attrs.length === 1 && arguments.length === 2;
 
 		// go through each attribute or validation and
 		// add any errors

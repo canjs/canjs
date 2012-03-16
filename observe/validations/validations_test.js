@@ -21,7 +21,7 @@ test("observe can validate, events, callbacks", 11,function(){
 	equals(errors.age.length, 1, "there is one error");
 	equals(errors.age[0], "it's a date type", "error message is right");
 	
-	task.bind("error.age", function(ev, errs){
+	task.bind("error.age", function(ev, attr, errs){
 		ok(this === task, "we get task back by binding");
 		
 		ok(errs, "There are errors");
@@ -33,7 +33,7 @@ test("observe can validate, events, callbacks", 11,function(){
 
 	task.unbind("error.age");
 
-	task.attr("age", "blaher", function(){}, function(errs){
+	task.attr("age", "blaher", function(){}, function(ev, attr, errs){
 		ok(this === task, "we get task back in error handler");
 		
 		ok(errs, "There are errors");

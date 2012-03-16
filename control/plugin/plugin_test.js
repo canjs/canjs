@@ -1,3 +1,11 @@
+steal('can/construct/super', 
+	  'funcunit/qunit')
+.then('can/control/plugin')
+.then(function(){
+
+module("can/control/plugin")
+
+
 test("pluginName", function() {
 	// Testing for controller pluginName fixes as reported in
 	// http://forum.javascriptmvc.com/#topic/32525000000253001
@@ -7,6 +15,7 @@ test("pluginName", function() {
 	can.Control("PluginName", {
 	pluginName : "my_plugin"
 	}, {
+		
 	method : function(arg) {
 	ok(true, "Method called");
 	},
@@ -22,7 +31,7 @@ test("pluginName", function() {
 	}
 	});
 
-	var ta = $("<div/>").addClass('existing_class').appendTo( $("#qunit-test-area") );
+	var ta = can.$("<div/>").addClass('existing_class').appendTo( $("#qunit-test-area") );
 	ta.my_plugin(); // Init
 	ok(ta.hasClass("my_plugin"), "Should have class my_plugin");
 	ta.my_plugin(); // Update
@@ -31,3 +40,5 @@ test("pluginName", function() {
 	ok(!ta.hasClass("my_plugin"), "Shouldn't have class my_plugin after being destroyed");
 	ok(ta.hasClass("existing_class"), "Existing class should still be there");
 })
+
+});

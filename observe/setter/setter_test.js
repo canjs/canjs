@@ -34,7 +34,7 @@ test("error binding", 1, function(){
 	   }
 	})
 	var school = new School();
-	school.bind("error.name", function(ev, error){
+	school.bind("error", function(ev, attr, error){
 		equals(error, "no name", "error message provided")
 	})
 	school.attr("name","");
