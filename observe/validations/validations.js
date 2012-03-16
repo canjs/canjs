@@ -199,6 +199,9 @@ can.extend(can.Observe, {
 can.extend(can.Observe.prototype, {
 
 	/**
+	 * @function can.Observe.prototype.errors
+	 * @parent can.Observe.validations
+	 * 
 	 * Runs the validations on this observe.  You can
 	 * also pass it an array of attributes to run only those attributes.
 	 * It returns nothing if there are no errors, or an object
