@@ -27,7 +27,6 @@ load("steal/rhino/rhino.js");
 steal('steal/build/pluginify', function () {
 	
 	steal.File("can/dist").mkdirs();
-
 	steal.build.pluginify("can/util/make/jquery.js",{
 		out : "can/dist/can.jquery-edge.js",
 		global : "can = {}",
@@ -67,6 +66,48 @@ steal('steal/build/pluginify', function () {
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
+		skipCallbacks: true
+	});
+
+	steal.build.pluginify("can/util/make/jquery.js",{
+		out : "can/dist/can.jquery-dev-edge.js",
+		global : "can = {}",
+		onefunc : true,
+		compress: false,
+		skipCallbacks: true,
+		exclude : "can/util/jquery/jquery.1.7.1.js"
+	});
+	
+	steal.build.pluginify("can/util/make/mootools.js",{
+		out : "can/dist/can.mootools-dev-edge.js",
+		global : "can = {}",
+		onefunc : true,
+		compress: false,
+		skipCallbacks: true,
+		skipCallbacks: true
+	});
+	
+	steal.build.pluginify("can/util/make/zepto.js",{
+		out : "can/dist/can.zepto-dev-edge.js",
+		global : "can = {}",
+		onefunc : true,
+		compress: false,
+		skipCallbacks: true
+	});
+	
+	steal.build.pluginify("can/util/make/dojo.js",{
+		out : "can/dist/can.dojo-dev-edge.js",
+		global : "can = {}",
+		onefunc : true,
+		compress: false,
+		skipCallbacks: true
+	});
+	
+	steal.build.pluginify("can/util/make/yui.js",{
+		out : "can/dist/can.yui-dev-edge.js",
+		global : "can = {}",
+		onefunc : true,
+		compress: false,
 		skipCallbacks: true
 	});
 
