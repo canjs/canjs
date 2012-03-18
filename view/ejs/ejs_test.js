@@ -385,3 +385,26 @@ test('single escaped tag, removeAttr', function () {
 	obs.attr('foo', 'data-bar="baz"');
 	equals(anchor.getAttribute('data-bar'), 'baz');
 });
+
+test('multiple curly braces in a block', function() {
+	var text = '<% if(!obs.attr("items").length) { %>' +
+	'<li>No items</li>' +
+	'<% } else {' +
+	'each(obs.items, function(item) { %>' +
+	'<li><%= item.attr("name") %></li>' +
+	'<% }) }%>',
+
+	obs = new can.Observe({
+		items: []
+	}),
+
+	compiled = new can.EJS({ text: text }).render({ obs: obs });
+
+	var ul = document.createElement('ul');
+	ul.appendChild(can.view.frag(compiled));
+
+	equals(ul.innerHTML, '<li>No items</li>', 'initial observable state');
+
+	obs.attr('items', [{ name: 'foo' }]);
+	equals(u.innerHTML, '<li>foo</li>', 'updated observable');
+});
