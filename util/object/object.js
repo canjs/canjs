@@ -2,7 +2,7 @@ if(!window.can){
 	steal('can/util')
 }
 
-steal(function($){
+steal(function(){
 	
 var isArray = can.isArray,
 	// essentially returns an object that has all the must have comparisons ...
@@ -24,8 +24,8 @@ var isArray = can.isArray,
 	};
 
 /**
- * @class jQuery.Object
- * @parent jquerymx.lang
+ * @class can.Object
+ * @parent can.util
  * 
  * Object contains several helper methods that 
  * help compare objects.

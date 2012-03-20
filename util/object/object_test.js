@@ -1,32 +1,32 @@
 steal('funcunit/qunit','./object',function(){
 
-module("object");
+module("can/util/object");
 
 test("same", function(){
 	
 	
-	ok( $.Object.same({type: "FOLDER"},{type: "FOLDER", count: 5}, {
+	ok( can.Object.same({type: "FOLDER"},{type: "FOLDER", count: 5}, {
 		count: null
 	}), "count ignored" );
 	
-	ok( $.Object.same({type: "folder"},{type: "FOLDER"}, {
+	ok(can.Object.same({type: "folder"},{type: "FOLDER"}, {
 		type: "i"
 	}), "folder case ignored" );
 })
 
 test("subsets", function(){
 	
-	var res1 = $.Object.subsets({parentId: 5, type: "files"},
+	var res1 = can.Object.subsets({parentId: 5, type: "files"},
 		[{parentId: 6}, {type: "folders"}, {type: "files"}]);
 		
 	same(res1,[{type: "files"}])
 	
-	var res2 = $.Object.subsets({parentId: 5, type: "files"},
+	var res2 = can.Object.subsets({parentId: 5, type: "files"},
 		[{}, {type: "folders"}, {type: "files"}]);
 		
 	same(res2,[{},{type: "files"}]);
 	
-	var res3 = $.Object.subsets({parentId: 5, type: "folders"},
+	var res3 = can.Object.subsets({parentId: 5, type: "folders"},
 		[{parentId: 5},{type: "files"}]);
 		
 	same(res3,[{parentId: 5}])
@@ -34,19 +34,19 @@ test("subsets", function(){
 
 test("subset compare", function(){
 	
-	ok( $.Object.subset(
+	ok( can.Object.subset(
 		{type: "FOLDER"},
 		{type: "FOLDER"}), 
 		
 		"equal sets" );
 	
-	ok( $.Object.subset(
+	ok( can.Object.subset(
 		{type: "FOLDER", parentId: 5},
 		{type: "FOLDER"}), 
 		
 		"sub set" );
 	
-	ok(! $.Object.subset(
+	ok(! can.Object.subset(
 		{type: "FOLDER"},
 		{type: "FOLDER", parentId: 5}), 
 		
@@ -59,7 +59,7 @@ test("subset compare", function(){
 		
 		"different values" );
 
-	ok( $.Object.subset(
+	ok( can.Object.subset(
 		{type: "FOLDER", count: 5}, // subset
 		{type: "FOLDER"},
 		{count: null} ), 
@@ -67,13 +67,13 @@ test("subset compare", function(){
 		"count ignored" );
 	
 	
-	ok( $.Object.subset(
+	ok( can.Object.subset(
 		{type: "FOLDER", kind: "tree"}, // subset
 		{type: "FOLDER", foo: true, bar: true },
 		{foo: null, bar: null} ), 
 		
 		"understands a subset" );
-	ok( $.Object.subset(
+	ok( can.Object.subset(
 		{type: "FOLDER", foo: true, bar: true },
 		{type: "FOLDER", kind: "tree"}, // subset
 		
@@ -98,7 +98,7 @@ test("searchText", function(){
 			}
 		};
 		
-	ok( $.Object.subset( item, searchText, compare ), "searchText" );
+	ok( can.Object.subset( item, searchText, compare ), "searchText" );
 });
 
 
