@@ -7,7 +7,15 @@ var $Observe = can.Observe,
 	
 // adds attributes, serialize, convert
 extend($Observe,{
+	/**
+	 * @attribute can.Observe.static.attributes
+	 * @parent can.Observe.attributes
+	 */
 	attributes : {},
+	/**
+	 * @attribute can.Observe.static.convert
+	 * @parent can.Observe.attributes
+	 */
 	convert: {
 		"date": function( str ) {
 			var type = typeof str;
@@ -39,6 +47,10 @@ extend($Observe,{
 			return typeof construct == "function" ? construct.call(context, val) : val;
 		}
 	},
+	/**
+	 * @attribute can.Observe.static.serialize
+	 * @parent can.Observe.attributes
+	 */
 	serialize: {
 		"default": function( val, type ) {
 			return isObject(val) && val.serialize ? val.serialize() : val;
@@ -53,9 +65,9 @@ var proto =  $Observe.prototype,
 	oldSet = proto.__set,
 	oldSetup = $Observe.setup;
 
-proto.__set = function(prop, value, current, success, error){
+proto.__convert = function(prop, value){
 	// check if there is a
-	
+
 	var Class = this.constructor,
 		val, type, converter;
 		
@@ -65,15 +77,16 @@ proto.__set = function(prop, value, current, success, error){
 		converter = Class.convert[type] || Class.convert['default'];
 	}
 		
-	oldSet.call(this, prop, 
-		// if we get null or there is no type set
-		value === null || !type ? 
+	return value === null || !type ? 
 			// just use the value
 			value : 
 			// otherwise, pass to the converter
-			converter.call(Class, value, function() {}, type), current, success, error  )
+			converter.call(Class, value, function() {}, type);
 };
-
+/**
+ * @function can.Observe.prototype.serialize
+ * @parent can.Observe.attributes
+ */
 proto.serialize = function(){
 	var where = {},
 		Class = this.constructor,

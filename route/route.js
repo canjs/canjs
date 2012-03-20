@@ -1,6 +1,5 @@
 // 1.11
-steal('can/observe', 'can/util/string/deparam',
-function() {
+steal('can/observe', 'can/util/string/deparam', function() {
 
     // Helper methods used for matching routes.
 	var 
@@ -233,6 +232,7 @@ function() {
          * @return {String} The route URL and &amp; separated parameters.
 		 */
 		param: function( data ) {
+			delete data.route;
 			// Check if the provided data keys match the names in any routes;
 			// get the one with the most matches.
 			var route,
@@ -241,7 +241,6 @@ function() {
 				matchCount,
 				routeName = data.route;
 			
-			delete data.route;
 			// if we have a route name in our can.route data, use it
 			if ( ! ( routeName && (route = can.route.routes[routeName]))){
 				// otherwise find route

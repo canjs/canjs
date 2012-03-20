@@ -12,7 +12,7 @@ proto.__set = function(prop, value, current, success, error){
 		setName = "set" + cap,
 		errorCallback = function( errors ) {
 			var stub = error && error.call(self, errors);
-			can.trigger(self, "error." + prop, errors, true);
+			can.trigger(self, "error",[ prop, errors], true);
 		},
 		self = this;
 		

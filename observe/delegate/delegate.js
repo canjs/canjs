@@ -1,8 +1,6 @@
 steal('can/observe',function(){
 	
-	/**
-	 * @add can.Control.prototype
-	 */
+	
 	
 	// ** - 'this' will be the deepest item changed
 	// * - 'this' will be any changes within *, but * will be the 
@@ -131,6 +129,8 @@ steal('can/observe',function(){
 		
 	can.extend(can.Observe.prototype,{
 		/**
+		 * @function can.Observe.prototype.delegate
+		 * @parent can.Observe.delegate
 		 * @plugin can/observe/delegate
 		 * Listen for changes in a child attribute from the parent. The child attribute
 		 * does not have to exist.
@@ -270,7 +270,8 @@ steal('can/observe',function(){
 			return this;
 		},
 		/**
-		 * @plugin can/observe/delegate
+		 * @function can.Observe.prototype.undelegate
+		 * @parent can.Observe.delegate
 		 * Removes a delegate event handler.
 		 * 
 		 *   observe.undelegate("name","set", function(){ ... })
