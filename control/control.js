@@ -71,20 +71,6 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 
 				// cache the underscored names
 				var control = this,
-					/**
-					* @hide
-					* @attribute pluginName
-					* Setting the <code>pluginName</code> property allows you
-					* to change the jQuery plugin helper name from its 
-					* default value.
-					* 
-					*     can.Control("Mxui.Layout.Fill",{
-					*       pluginName: "fillWith"
-					*     },{});
-					*     
-					*     $("#foo").fillWith();
-					*/
-					pluginName = control.pluginName || control._fullName,
 					funcName;
 
 				// calculate and cache actions
