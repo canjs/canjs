@@ -15,12 +15,12 @@
  */
 //
 
- steal('can/util',function($){
+ steal('can/util',function(){
     /**
-     * @page jQuery.toJSON jQuery.toJSON
-     * @parent jquerymx.lang
+     * @page can.toJSON
+     * @parent can.util
      * 
-     *     jQuery.toJSON( json-serializble )
+     *     can.toJSON( json-serializble )
      * 
      * Converts the given argument into a JSON respresentation.
      * 
@@ -32,12 +32,12 @@
      * json-serializble:
      * The *thing* to be converted.
      */
-    $.toJSON = function(o, replacer, space, recurse)
+    can.toJSON = function(o, replacer, space, recurse)
     {
         if (typeof(JSON) == 'object' && JSON.stringify)
             return JSON.stringify(o, replacer, space);
 
-        if (!recurse && $.isFunction(replacer))
+        if (!recurse && can.isFunction(replacer))
             o = replacer("", o);
 
         if (typeof space == "number")
@@ -61,7 +61,7 @@
         if (type == 'object')
         {
             if (typeof o.toJSON == "function") 
-                return $.toJSON( o.toJSON(), replacer, space, true );
+                return can.toJSON( o.toJSON(), replacer, space, true );
             
             if (o.constructor === Date)
             {
@@ -91,7 +91,7 @@
                              '.' + milli + 'Z"'; 
             }
 
-            var process = ($.isFunction(replacer)) ?
+            var process = (can.isFunction(replacer)) ?
                 function (k, v) { return replacer(k, v); } :
                 function (k, v) { return v; },
                 nl = (space) ? "\n" : "",
@@ -101,14 +101,14 @@
             {
                 var ret = [];
                 for (var i = 0; i < o.length; i++)
-                    ret.push(( $.toJSON( process(i, o[i]), replacer, space, true ) || "null" ).replace(/^/gm, space));
+                    ret.push(( can.toJSON( process(i, o[i]), replacer, space, true ) || "null" ).replace(/^/gm, space));
 
                 return "[" + nl + ret.join("," + nl) + nl + "]";
             }
         
             var pairs = [], proplist;
-            if ($.isArray(replacer)) {
-                proplist = $.map(replacer, function (v) {
+            if (can.isArray(replacer)) {
+                proplist = can.map(replacer, function (v) {
                     return (typeof v == "string" || typeof v == "number") ?
                         v + "" :
                         null;
@@ -127,7 +127,7 @@
                 else
                     continue;  //skip non-string or number keys
             
-                val = $.toJSON( process(k, o[k]), replacer, space, true );
+                val = can.toJSON( process(k, o[k]), replacer, space, true );
             
                 if (typeof val == "undefined")
                     continue;  //skip pairs where the value is a function.
@@ -140,10 +140,10 @@
     };
 
     /** 
-     * @function jQuery.evalJSON
+     * @function can.evalJSON
      * Evaluates a given piece of json source.
      **/
-    $.evalJSON = function(src)
+    can.evalJSON = function(src)
     {
         if (typeof(JSON) == 'object' && JSON.parse)
             return JSON.parse(src);
@@ -151,10 +151,10 @@
     };
     
     /** 
-     * @function jQuery.secureEvalJSON
+     * @function can.secureEvalJSON
      * Evals JSON in a way that is *more* secure.
      **/
-    $.secureEvalJSON = function(src)
+    can.secureEvalJSON = function(src)
     {
         if (typeof(JSON) == 'object' && JSON.parse)
             return JSON.parse(src);
@@ -171,19 +171,19 @@
     };
 
     /** 
-     * @function jQuery.quoteString
+     * @function can.quoteString
      * 
      * Returns a string-repr of a string, escaping quotes intelligently.  
      * Mostly a support function for toJSON.
      * 
      * Examples:
      * 
-     *      jQuery.quoteString("apple") //-> "apple"
+     *      can.quoteString("apple") //-> "apple"
      * 
-     *      jQuery.quoteString('"Where are we going?", she asked.')
+     *      can.quoteString('"Where are we going?", she asked.')
      *        // -> "\"Where are we going?\", she asked."
      **/
-    $.quoteString = function(string)
+    can.quoteString = function(string)
     {
         if (string.match(_escapeable))
         {

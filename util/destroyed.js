@@ -1,7 +1,7 @@
 /**
- * @add jQuery.event.special
+ * @add can.event.special
  */
-steal('can/util').then(function( $ ) {
+steal('can/util').then(function() {
 	/**
 	 * @attribute destroyed
 	 * @parent specialevents
@@ -14,12 +14,14 @@ steal('can/util').then(function( $ ) {
 	 * replaceWith, etc. Destroyed events do not bubble, so make sure you don't use live or delegate with destroyed
 	 * events.
 	 * </p>
+	 *
 	 * <h2>Quick Example</h2>
 	 * @codestart
-	 * $(".foo").bind("destroyed", function(){
+	 * can.$(".foo").bind("destroyed", function(){
 	 *    //clean up code
 	 * })
 	 * @codeend
+	 *
 	 * <h2>Quick Demo</h2>
 	 * @demo jquery/event/destroyed/destroyed.html 
 	 * <h2>More Involved Demo</h2>
@@ -28,7 +30,7 @@ steal('can/util').then(function( $ ) {
 
 	var oldClean = $.cleanData;
 
-	$.cleanData = function( elems ) {
+	can.cleanData = function( elems ) {
 		$.each( elems, function( i, elem ) {
 			$(elem).triggerHandler("destroyed");
 		});
