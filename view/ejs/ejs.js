@@ -8,32 +8,22 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 	},
 		// removes the last character from a string
 		// this is no longer needed
-		// chop = function( string ) {
-		//	return string.substr(0, string.length - 1);
-		//},
 		extend = can.extend,
 		// regular expressions for caching
-		returnReg = /\r\n/g,
-		retReg = /\r/g,
-		newReg = /\n/g,
-		slashReg = /\\/g,
-		tabReg = /\t/g,
-		leftBracket = /\{/g,
-		rightBracket = /\}/g,
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 		attrReg = /([^\s]+)=$/,
 		attributeReplace = /__!!__/g,
 		tagMap = {"": "span", table: "tr", tr: "td", ol: "li", ul: "li", tbody: "tr", thead: "tr", tfoot: "tr"},
 		// escapes characters starting with \
 		clean = function( content ) {
-			return content.replace(slashReg, '\\\\').replace(newReg, '\\n').replace(/"/g, '\\"').replace(tabReg, '\\t');
+			return content
+				.split('\\').join("\\\\")
+				.split("\n").join("\\n")
+				.split('"').join('\\"')
+				.split("\t").join("\\t");
 		},
 		bracketNum = function(content){
-			var lefts = content.match(leftBracket),
-				rights = content.match(rightBracket);
-				
-			return (lefts ? lefts.length : 0) - 
-				   (rights ? rights.length : 0);
+			return (--content.split("{").length) - (--content.split("}").length);
 		},
 		// used to bind to an observe, and unbind when the element is removed
 		liveBind = function(observed, el, cb){
@@ -48,11 +38,9 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		},
 		contentEscape = function( txt ) {
 			//return sanatized text
-			if ( typeof txt == 'string' || typeof txt == 'number'  ) {
-				return can.String.esc(""+txt);
-			} else {
-				return contentText(txt);
-			}
+			return (typeof txt == 'string' || typeof txt == 'number') ?
+				can.String.esc( txt ) :
+				contentText(txt);
 		},
 		contentText =  function( input ) {	
 			
@@ -61,7 +49,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				return input;
 			}
 			// if has no value
-			if ( input === null || input === undefined ) {
+			if ( !input && input != 0 ) {
 				return '';
 			}
 
@@ -346,7 +334,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				pendingHookups.push(function(el) {
 					liveBind(observed, el, function() {
 						var attr = func.call(self),
-							parts = (attr || "").replace(/['"]/g, '').split('=')
+							parts = (attr || "").replace(/['"]/g, '').split('='),
 							newAttrName = parts[0];
 						
 						// remove if we have a change and used to have an attrName
@@ -380,7 +368,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							render: function() {
 								var i =0,
 									newAttr = attr.replace(attributeReplace, function() {
-										return contentEscape( hook.funcs[i++].call(self) );
+										return contentText( hook.funcs[i++].call(self) );
 									});
 								return newAttr;
 							},
@@ -449,8 +437,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		pendingHookups = [],
 		
 		scan = function(source, name){
-			var tokens = source.replace(returnReg, "\n")
-				.replace(retReg, "\n")
+			var tokens = source.replace(/(\r|\n)+/g, "\n")
 				.split(tokenReg),
 				content = '',
 				buff = [startTxt],

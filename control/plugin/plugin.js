@@ -1,8 +1,6 @@
 steal('can/control', function(){
 	
-/**
- *  @add can.prototype
- */
+
 
 //used to determine if a controller instance is one of controllers
 //controllers can be strings or classes
@@ -23,9 +21,24 @@ data = function(el, data){
 makeArray = can.makeArray;
 
 
+/**
+ * @hide
+ * @attribute pluginName
+ * Setting the <code>pluginName</code> property allows you
+ * to change the jQuery plugin helper name from its 
+ * default value.
+ * 
+ *     can.Control("Mxui.Layout.Fill",{
+ *       pluginName: "fillWith"
+ *     },{});
+ *     
+ *     $("#foo").fillWith();
+ */
 can.prototype.extend({
+
 	/**
-	 * @function controllers
+	 * @function jQuery.fn.controllers
+	 * @parent can.Control.plugin
 	 * Gets all controllers in the jQuery element.
 	 * @return {Array} an array of controller instances.
 	 */
@@ -49,7 +62,8 @@ can.prototype.extend({
 		return instances;
 	},
 	/**
-	 * @function controller
+	 * @function jQuery.fn.controller
+	 * @parent can.Control.plugin
 	 * Gets a controller in the jQuery element.  With no arguments, returns the first one found.
 	 * @param {Object} controller (optional) if exists, the first controller instance with this class type will be returned.
 	 * @return {jQuery.Controller} the first controller.

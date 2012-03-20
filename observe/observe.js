@@ -128,9 +128,6 @@ steal('can/construct', function() {
 		},
 		bind : bind,
 		unbind: unbind,
-		/**
-		 * @attribute id
-		 */
 		id: "id"
 	},
 	/**
@@ -325,7 +322,9 @@ steal('can/construct', function() {
 		 *     o.attr('name',"Brian").attr('name') //-> Justin
 		 */
 		attr: function( attr, val ) {
-			if ( ! /^s|^n/.test( typeof attr )) {
+			// This is super obfuscated for space -- basically, we're checking
+			// if the type of the attribute is not a number or a string
+			if ( !~ "ns".indexOf((typeof attr).charAt(0))) {
 				return this._attrs(attr, val)
 			} else if ( val === undefined ) {// if we are getting a value
 				// let people know we are reading (
@@ -430,7 +429,9 @@ steal('can/construct', function() {
 				current._set(parts, value)
 			} else if (!parts.length ) {
 				// we're in 'real' set territory
-				
+				if(this.__convert){
+					value = this.__convert(prop, value)
+				}
 				this.__set(prop, value, current)
 				
 			} else {
@@ -438,6 +439,7 @@ steal('can/construct', function() {
 			}
 		},
 		__set : function(prop, value, current){
+			
 			// otherwise, we are setting it on this object
 			// todo: check if value is object and transform
 			// are we changing the value

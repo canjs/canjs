@@ -84,7 +84,7 @@ steal('can/util',function() {
 		 */
 		can.String = can.extend({
 			esc : function(content){
-				return content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(quote, '&#34;').replace(singleQuote, "&#39;");
+				return ("" + content).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(quote, '&#34;').replace(singleQuote, "&#39;");
 			},
 			
 			/**
