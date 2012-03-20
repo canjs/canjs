@@ -5,21 +5,49 @@ steal('can/control', function(){
 //used to determine if a controller instance is one of controllers
 //controllers can be strings or classes
 var i, 
-isAControllerOf = function( instance, controllers ) {
-	for ( i = 0; i < controllers.length; i++ ) {
-		if ( typeof controllers[i] == 'string' ? instance.constructor._shortName == controllers[i] : instance instanceof controllers[i] ) {
-			return true;
+	isAControllerOf = function( instance, controllers ) {
+		for ( i = 0; i < controllers.length; i++ ) {
+			if ( typeof controllers[i] == 'string' ? instance.constructor._shortName == controllers[i] : instance instanceof controllers[i] ) {
+				return true;
+			}
 		}
-	}
-	return false;
-},
-data = function(el, data){
-	var $el = can.$(el);
-	$el.data("controllers", data || {})
-	return $el.data('controllers');
-},
-makeArray = can.makeArray;
+		return false;
+	},
+	data = function(el, data){
+		var $el = can.$(el);
+		$el.data("controllers", data || {})
+		return $el.data('controllers');
+	},
+	makeArray = can.makeArray,
+	old = can.Control.setup;
 
+
+can.Control.setup = function() {
+	// if you didn't provide a name, or are control, don't do anything
+	if ( this !== can.Control ) {
+		/**
+		 * @hide
+		 * @attribute pluginName
+		 * Setting the <code>pluginName</code> property allows you
+		 * to change the jQuery plugin helper name from its 
+		 * default value.
+		 * 
+		 *     can.Control("Mxui.Layout.Fill",{
+		 *       pluginName: "fillWith"
+		 *     },{});
+		 *     
+		 *     $("#foo").fillWith();
+		 */
+		var pluginName = this.pluginName || this._fullName;
+			
+		// create jQuery plugin
+		if(pluginName !== 'can_control'){
+			this.plugin(pluginName);
+		}
+			
+		old.apply(this, arguments);
+	}
+};
 
 /**
  * @hide
