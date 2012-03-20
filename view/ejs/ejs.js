@@ -85,10 +85,10 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		/**
 		 * @class can.EJS
 		 * 
-		 * @plugin jquery/view/ejs
+		 * @plugin can/view/ejs
 		 * @parent can.View
-		 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/view/ejs/ejs.js
-		 * @test jquery/view/ejs/qunit.html
+		 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/view/ejs/ejs.js
+		 * @test can/view/ejs/qunit.html
 		 * 
 		 * 
 		 * Ejs provides <a href="http://www.ruby-doc.org/stdlib/libdoc/erb/rdoc/">ERB</a> 
@@ -124,7 +124,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		 *   - [jQuery.fn.replaceWith replaceWith], and 
 		 *   - [jQuery.fn.text text].
 		 * 
-		 * or [jQuery.Controller.prototype.view].
+		 * or [Can.Control.prototype.view].
 		 * 
 		 * ### Syntax
 		 * 
@@ -169,7 +169,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		 * @codeend
 		 * 
 		 * To hook up a controller with options or any other jQuery plugin use the
-		 * [jQuery.EJS.Helpers.prototype.plugin | plugin view helper]:
+		 * [can.EJS.Helpers.prototype.plugin | plugin view helper]:
 		 * 
 		 * @codestart
 		 * &lt;ul &lt;%= plugin('mxui_tabs', { option: 'value' }) %>>...&lt;ul>
@@ -180,9 +180,9 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		 * 
 		 * <h2>View Helpers</h2>
 		 * View Helpers return html code.  View by default only comes with 
-		 * [jQuery.EJS.Helpers.prototype.view view] and [jQuery.EJS.Helpers.prototype.text text].
+		 * [can.EJS.Helpers.prototype.view view] and [can.EJS.Helpers.prototype.text text].
 		 * You can include more with the view/helpers plugin.  But, you can easily make your own!
-		 * Learn how in the [jQuery.EJS.Helpers Helpers] page.
+		 * Learn how in the [can.EJS.Helpers Helpers] page.
 		 * 
 		 * @constructor Creates a new view
 		 * @param {Object} options A hash with the following options
