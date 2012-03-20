@@ -58,7 +58,7 @@ var isArray = can.isArray,
 	 * @test can/observe/backup/qunit.html
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/backup/backup.js
 
-	 * You can backup and restore instance data with the jquery/observe/backup
+	 * You can backup and restore instance data with the can/observe/backup
 	 * plugin.
 
 	 * To backup a observe instance call [can.Observe.prototype.backup backup] like:

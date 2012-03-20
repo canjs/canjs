@@ -2,7 +2,7 @@
             "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 	<head>
-		<title>Model Backup Demo</title>
+		<title>Observe Backup Demo</title>
         <style type='text/css'>
             body {font-family: verdana}
             li {border: solid 1px gray; padding: 5px; width: 250px;}
@@ -12,7 +12,7 @@
 	</head>
 	<body>
 		<div id="demo-instructions">
-		<h1>Model Backup Demo</h1>
+		<h1>Observe Backup Demo</h1>
 			<p>This demo shows backing up and restoring model instances.
 			Click the names to change birthdays.  After changing some birthdays,
 			click RESTORE.  
@@ -27,19 +27,19 @@
         src='../../../steal/steal.js'>   
 </script>
 <script type='text/javascript'>
-steal('jquery/model',
-		'jquery/dom/fixture',
-		'jquery/model/list',
-		'jquery/model/backup').then(function(){
+steal('can/model',
+		'can/model/fixture',
+		'can/model/list',
+		'can/observe/backup').then(function(){
 			
-			$.fixture("/recipes.json", function(orig, settings, headers){
+			can.fixture("/recipes.json", function(orig, settings, headers){
 				return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
 						 {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10'},
 						 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
 			});			
 
 			
-$.Model("Contact",{
+can.Model("Contact",{
 	attributes : { 
 		birthday : 'date'
 	},
@@ -56,10 +56,10 @@ $.Model("Contact",{
 		}
 	},
 	findAll : function(params, success, error){
-		return $.get("/recipes.json", {}, success, "json contact.models");
+		return can.get("/recipes.json", {}, success, "json contact.models");
 	},
 	update : function(id, attrs, success, error){
-		$.post("/recipes.json",{},success,'json',function(){
+		can.post("/recipes.json",{},success,'json',function(){
 			return [attrs]
 		})
 	}
@@ -79,21 +79,21 @@ makeAgeUpdater = function(contact){
 	var updater = $("#update")
 	updater.html("");
 	updater.append(contact.name+"'s birthday")
-	$('<input/>').val(contact.attr("birthday")).change(function(){
+	can.$('<input/>').val(contact.attr("birthday")).change(function(){
 		contact.update({
 			'birthday': this.value
 		})
 	}).appendTo(updater)
 }
-$('#contacts').delegate("li","click", function(){
-	 makeAgeUpdater( $(this).closest('.contact').model() );
+can.$('#contacts').delegate("li","click", function(){
+	 makeAgeUpdater( can.$(this).closest('.contact').model() );
   });
 Contact.findAll({},function(contacts){
-  var contactsEl = $('#contacts');
-  $.each(contacts, function(i, contact){
+  var contactsEl = can.$('#contacts');
+  can.each(contacts, function(i, contact){
     
 	// add the contact to the page
-	var li = $('<li>')
+	var li = can.$('<li>')
               .model(contact)
               .html(contact.name+" "+
 			  		contact.ageThisYear()+
@@ -111,7 +111,7 @@ Contact.findAll({},function(contacts){
   })
   
   // on restore, update all contacts
-  $("#restore").click(function(){
+  can.$("#restore").click(function(){
   	contacts.each(function(){
 		this.restore()
 	})
