@@ -2,7 +2,7 @@
             "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 	<head>
-		<title>object</title>
+		<title>can.Observe</title>
         <style type='text/css'>
             body {font-family: verdana}
             .error {border: solid 1px red;}
@@ -19,10 +19,10 @@
         </style>
 	</head>
 	<body>
-	    <h1>$.Observe Demo</h1>
+	    <h1>can.Observe Demo</h1>
 		<p>Make changes to the JSON in the following textarea.  
 		  Click <b>Update Attrs</b> to merge the  JSON and see the events produced.  </p>
-	<pre>o = new $.Observe({})</pre>
+	<pre>o = new can.Observe({})</pre>
 	<pre style='float:left'>o.attrs(</pre>
 <textarea>{
   "message" : "Hello World",
@@ -45,35 +45,35 @@
 	
 	
 		<script type='text/javascript' 
-                src='../../../steal/steal.js'>   
+                src='../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-steal('jquery/lang/observe/delegate', 'jquery/lang/json',function(){
-	o = new $.Observe({});
+steal('can/observe/delegate', 'can/util/json.js',function(){
+	o = new can.Observe({});
 	o.bind('change',function(ev, attr, how, newValue, prevValue, where){
 	
-		$('#body').prepend(["<tr><td>",
+		can.$('#body').prepend(["<tr><td>",
 		   attr, "</td><td>",
 		   how, "</td><td>",
-		   $.toJSON(newValue && newValue.serialize ? newValue.serialize() : newValue), "</td><td>",
-		   $.toJSON(prevValue && prevValue.serialize ? prevValue.serialize() : prevValue), "</td><td>",
+		   can.toJSON(newValue && newValue.serialize ? newValue.serialize() : newValue), "</td><td>",
+		   can.toJSON(prevValue && prevValue.serialize ? prevValue.serialize() : prevValue), "</td><td>",
 		   where, "</td></tr>"
 		].join(''))
 	})
-	$('#update').click(function(){
-		var json =  $.evalJSON( $('textarea').val() );
+	can.$('#update').click(function(){
+		var json =  can.evalJSON( $('textarea').val() );
 		o.attrs(json, true);
 		
 	})
-	$('textarea').keyup(function(){
-		var me = $(this)
+	can.$('textarea').keyup(function(){
+		var me = can.$(this)
 		try { 
-		   $.evalJSON( me.val() );
+		   can.evalJSON( me.val() );
 		   me.css('border-color','')
-		   $('#warning').hide()
+		   can.$('#warning').hide()
 		} catch (e ){
 			me.css('border-color','red')
-			$('#warning').text(e.toString()).show()
+			can.$('#warning').text(e.toString()).show()
 		}
 	})
 	

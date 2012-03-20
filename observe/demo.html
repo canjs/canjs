@@ -17,7 +17,7 @@
 	
 	<form id='create'><input type='text'/></form>
 	<script type='text/javascript' 
-            src='../../../steal/steal.js'>   
+            src='../../steal/steal.js'>   
     </script>
 	<script type='text/ejs' id='todosEJS'>
 		<% $.each(this, function(i, item){ %>
@@ -27,27 +27,27 @@
 		<% }) %>
 	</script>
 	<script type='text/javascript'>
-steal('jquery/lang/observe/delegate', 
-	  'jquery/lang/json',
-	  'jquery/controller',
-	  'jquery/view/ejs',function(){
+steal('can/observe/delegate', 
+	  'can/util/json.js',
+	  'can/control',
+	  'can/view/ejs',function(){
 
 // create a list of todos
-unsortedTodos = new $.Observe.List([
+unsortedTodos = new can.Observe.List([
 	{ name: "mow lawn"},
 	{ name: "dishes" },
 	{ name: "laundry" }
 ]);
 
 // create another sorted list of the same todos:
-sortedTodos = new $.Observe.List(unsortedTodos,{
+sortedTodos = new can.Observe.List(unsortedTodos,{
 	comparator : "name"
 });
 
 
 
 // each item gets an updater widget
-$.Controller("Updater",{
+can.Controller("Updater",{
 	init : function(el, item, attr){
 		this.item = item;
 		this.attr = attr;
@@ -67,7 +67,7 @@ $.Controller("Updater",{
 	}
 })
 
-$.Controller('Todos',{
+can.Controller('Todos',{
 	
 	init : function(){
 		this.insert(this.options.list)
@@ -102,7 +102,7 @@ $.Controller('Todos',{
 	// adds an item at a specified position
 	insert : function(items, pos){
 		if( !items.jquery ){
-			items = $($.View('todosEJS',items))
+			items = can.$(can.View('todosEJS',items))
 		}
 		if( pos === 0 ){
 			this.element.prepend(items)
@@ -118,14 +118,14 @@ $.Controller('Todos',{
 	}
 })
 
-$('#sorted').todos({list:  sortedTodos});
-$('#unsorted').todos({list:  unsortedTodos});
+can.$('#sorted').todos({list:  sortedTodos});
+can.$('#unsorted').todos({list:  unsortedTodos});
 
-$('#rename').click(function(){
+can.$('#rename').click(function(){
 	todos.attr('0.name', "wash dishes")
 })
 
-$('#create').submit(function(ev){
+can.$('#create').submit(function(ev){
 	ev.preventDefault();
 	var input =  $(this).find('input');
 	todos.push({

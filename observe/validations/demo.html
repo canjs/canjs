@@ -2,7 +2,7 @@
             "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 	<head>
-		<title>Model Validations Demo</title>
+		<title>Observe Validations Demo</title>
         <style type='text/css'>
             body {font-family: verdana}
             li {border: solid 1px gray; padding: 5px; width: 250px;}
@@ -19,13 +19,13 @@
         src='../../../steal/steal.js'>   
 </script>
 <script type='text/javascript'  id="demo-source">   
-steal('jquery/model',
-		'jquery/dom/fixture',
-		'jquery/model/list',
-		'jquery/model/validations',
-		'jquery/controller').then(function(){
+steal('can/model',
+	  'can/model/fixture',
+	  'can/model/list',
+	  'can/observe/validations',
+	  'can/control').then(function(){
 
-$.Model("Contact",{
+can.Model("Contact",{
 	init : function(){
 		this.validate("birthday",function(bday){
 			if(!bday){
@@ -69,7 +69,7 @@ $.Model("Contact",{
 
 });
 
-$.Controller("ErrorReport",
+can.Control("ErrorReport",
 {
 	defaults : {
 		model : null,

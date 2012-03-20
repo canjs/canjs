@@ -131,13 +131,13 @@ steal('can/observe',function(){
 		
 	can.extend(can.Observe.prototype,{
 		/**
-		 * @plugin jquery/lang/observe/delegate
+		 * @plugin can/observe/delegate
 		 * Listen for changes in a child attribute from the parent. The child attribute
 		 * does not have to exist.
 		 * 
 		 *     
 		 *     // create an observable
-		 *     var observe = $.O({
+		 *     var observe = can.Observe({
 		 *       foo : {
 		 *         bar : "Hello World"
 		 *       }
@@ -163,7 +163,7 @@ steal('can/observe',function(){
 		 *     var o = new can.Control({});
 		 *     o.delegate("name","add", function(ev, value){
 		 *       // called once
-		 *       $('#name').show()
+		 *       can.$('#name').show()
 		 *     })
 		 *     o.attr('name',"Justin")
 		 *     o.attr('name',"Brian");
@@ -178,7 +178,7 @@ steal('can/observe',function(){
 		 * 
 		 *     o.delegate("name","set", function(ev, value){
 		 *       // called twice
-		 *       $('#name').text(value)
+		 *       can.$('#name').text(value)
 		 *     })
 		 *     o.attr('name',"Justin")
 		 *     o.attr('name',"Brian");
@@ -270,7 +270,7 @@ steal('can/observe',function(){
 			return this;
 		},
 		/**
-		 * @plugin jquery/lang/observe/delegate
+		 * @plugin can/observe/delegate
 		 * Removes a delegate event handler.
 		 * 
 		 *   observe.undelegate("name","set", function(){ ... })

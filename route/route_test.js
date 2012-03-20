@@ -6,9 +6,9 @@ test("deparam", function(){
 		page: "index"
 	})
 
-	var obj = can.route.deparam("jQuery.Controller");
+	var obj = can.route.deparam("can.Control");
 	same(obj, {
-		page : "jQuery.Controller",
+		page : "can.Control",
 		route: ":page"
 	});
 
@@ -18,9 +18,9 @@ test("deparam", function(){
 		route: ":page"
 	});
 
-	obj = can.route.deparam("jQuery.Controller&where=there");
+	obj = can.route.deparam("can.Control&where=there");
 	same(obj, {
-		page : "jQuery.Controller",
+		page : "can.Control",
 		where: "there",
 		route: ":page"
 	});
@@ -31,9 +31,9 @@ test("deparam", function(){
         index: "foo"
 	});
 
-    obj = can.route.deparam("jQuery.Controller/&where=there");
+    obj = can.route.deparam("can.Control/&where=there");
 	same(obj, {
-		page : "jQuery.Controller",
+		page : "can.Control",
         index: "foo",
 		where: "there",
 		route: ":page/:index"
@@ -160,7 +160,7 @@ test("param-deparam", function(){
         type: "foo"
 	})
 
-    var data = {page: "jQuery.Controller", 
+    var data = {page: "can.Control", 
 				type: "document", 
 				bar: "baz", 
 				where: "there"};
@@ -169,7 +169,7 @@ test("param-deparam", function(){
 	delete obj.route
 	same(obj,data )
 	return;
-    data = {page: "jQuery.Controller", type: "foo", bar: "baz", where: "there"};
+    data = {page: "can.Control", type: "foo", bar: "baz", where: "there"};
     res = can.route.param(data);
     obj = can.route.deparam(res);
 	delete obj.route;
@@ -200,27 +200,27 @@ test("precident", function(){
 	can.route(":who",{who: "index"});
 	can.route("search/:search");
 
-	var obj = can.route.deparam("jQuery.Controller");
+	var obj = can.route.deparam("can.Control");
 	same(obj, {
-		who : "jQuery.Controller",
+		who : "can.Control",
 		route: ":who"
 	});
 
-	obj = can.route.deparam("search/jQuery.Controller");
+	obj = can.route.deparam("search/can.Control");
 	same(obj, {
-		search : "jQuery.Controller",
+		search : "can.Control",
 		route: "search/:search"
 	},"bad deparam");
 
 	equal( can.route.param({
-			search : "jQuery.Controller"
+			search : "can.Control"
 		}),
-		"search/jQuery.Controller" , "bad param");
+		"search/can.Control" , "bad param");
 
 	equal( can.route.param({
-			who : "jQuery.Controller"
+			who : "can.Control"
 		}),
-		"jQuery.Controller" );
+		"can.Control" );
 })
 
 test("precident2", function(){

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Jquery.Dom.Route</title>
+		<title>can.Route</title>
         <style type='text/css'>
             body {font-family: verdana; font-size: 11px;}
             .blue {color: #56638c; font-size: 12px}
@@ -15,8 +15,8 @@
         </style>
 	</head>
 	<body>
-	    <h1>$.Route Demo</h1>
-        <div><a href="/jquery/dom/route/qunit.html">View qunit test results</a></div>
+	    <h1>can.Route Demo</h1>
+        <div><a href="/can/route/qunit.html">View qunit test results</a></div>
         <br />
         <div id="hash_update">
             <div class="comments">
@@ -51,63 +51,64 @@
             <div id="data_update_target"></div>
         </div>
 
-		<script type='text/javascript' src='../../../steal/steal.js'></script>
+		<script type='text/javascript' src='../../steal/steal.js'></script>
 		<script type='text/javascript'>
-            steal('jquery/dom/route', 'jquery/lang/json', 'jquery/dom/form_params',
+            steal('can/route', 'can/util/json.js', 'can/util/form_params',
             function() {
                 
                 window.location.hash = "";
-                $('#data_update_target').html();
-                $('#hash_update_target').html();
+                can.$('#data_update_target').html();
+                can.$('#hash_update_target').html();
                 var hash_cnt = 0, data_cnt = 0;
                 
-                $.route.routes = {};
-                $.route("");
-                $.route("pages/:var1/:var2/:var3", {
+                can.route.routes = {};
+                can.route("");
+                can.route("pages/:var1/:var2/:var3", {
                     'var1': 'default1',
                     'var2': 'default2',
                     'var3': 'default3'
                 });
-                $.route("/:var1/:var2", {
+
+                can.route("/:var1/:var2", {
                     'var1': 'def1',
                     'var2': 'def2'
                 });
                 
-                $(window).bind('hashchange', function() {
-                    $('#hash_update_target').append( ++hash_cnt + ": Hash: <span class=\"green\">" + window.location.hash )
-                                            .append( "</span> Route data: " + $.toJSON( $.route.data._data ) + "<br />" );
+                can.$(window).bind('hashchange', function() {
+                    can.$('#hash_update_target').append( ++hash_cnt + ": Hash: <span class=\"green\">" + window.location.hash )
+                                            .append( "</span> Route data: " + can.toJSON( $.route.data._data ) + "<br />" );
                 });
 
-                $.route.bind('change', function(ev, attr, how, newVal, oldVal){
-                    $('#data_update_target').append( ++data_cnt + ": <span class=\"green\">" + showChange(attr, how, newVal, oldVal) )
-                                            .append( "</span> Route data: " + $.toJSON( $.route.data._data ) + "<br />" );
+                can.route.bind('change', function(ev, attr, how, newVal, oldVal){
+                    can.$('#data_update_target').append( ++data_cnt + ": <span class=\"green\">" + showChange(attr, how, newVal, oldVal) )
+                                            .append( "</span> Route data: " + can.toJSON( $.route.data._data ) + "<br />" );
                 });
 
                 showChange = function(attr, how, newVal, oldVal){
                     switch (how) {
                     case "set" :
-                        $('#data_form > #' + attr).val(newVal);
+                        can.$('#data_form > #' + attr).val(newVal);
                         return (how + " " + attr + ": " + oldVal + " => " + newVal);
                         break;
                     case "remove" :
-                        $('#data_form > #' + attr).val('');
+                        can.$('#data_form > #' + attr).val('');
                         return (how + " " + attr);
                         break;
                     case "add" :
-                        $('#data_form > #' + attr).val(newVal);
+                        can.$('#data_form > #' + attr).val(newVal);
                         return (how + " " + attr + ": " + newVal);
                         break;
                     }
                 }
                 
-                $('#data_form').bind('submit', function() {
-                    data = $('#data_form').formParams();
+                can.$('#data_form').bind('submit', function() {
+                    data = can.$('#data_form').formParams();
                     for (var val in data) {
                         if (data[val] == "") {
                             delete data[val];
                         }
                     }
-                    $.route.attrs(data, true);
+                    can.route.attrs(data, true);
                     return false;
                 });
             })
