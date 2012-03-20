@@ -1,7 +1,7 @@
 steal('./string', function(){
 	
 /**
- * Like [jQuery.String.camelize|camelize], but the first part is also capitalized
+ * Like [can.String.camelize|camelize], but the first part is also capitalized
  * @param {String} s
  * @return {String} the classized string
  */
