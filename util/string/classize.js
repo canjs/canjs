@@ -1,17 +1,17 @@
 steal('./string', function(){
 	
 /**
- * Like [can.String.camelize|camelize], but the first part is also capitalized
+ * Like [can.camelize|camelize], but the first part is also capitalized
  * @param {String} s
  * @return {String} the classized string
  */
-can.String.classize =  function( s , join) {
+can.classize =  function( s , join) {
 	// this can be moved out ..
 	// used for getter setter
-	var parts = s.split(can.String.undHash),
+	var parts = s.split(can.undHash),
 		i = 0;
 	for (; i < parts.length; i++ ) {
-		parts[i] = can.String.capitalize(parts[i]);
+		parts[i] = can.capitalize(parts[i]);
 	}
 
 	return parts.join(join || '');

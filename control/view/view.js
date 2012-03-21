@@ -2,7 +2,7 @@ steal('can/control', 'can/view').then(function( $ ) {
 	var URI = steal.URI || steal.File;
 	
 	can.Control.getFolder = function() {
-		return can.String.underscore(this.fullName.replace(/\./g, "/")).replace("/Controllers", "");
+		return can.underscore(this.fullName.replace(/\./g, "/")).replace("/Controllers", "");
 	};
 
 	can.Control._calculatePosition = function( Class, view, action_name ) {
@@ -12,8 +12,8 @@ steal('can/control', 'can/view').then(function( $ ) {
 
 		var classPartsWithoutPrefixSlashes = classPartsWithoutPrefix.join('/'),
 			hasControllers = (classParts.length > 2) && classParts[1] == 'Controllers',
-			path = hasControllers? can.String.underscore(classParts[0]): can.String.underscore(classParts.join("/")),
-			controller_name = can.String.underscore(classPartsWithoutPrefix.join('/')).toLowerCase(),
+			path = hasControllers? can.underscore(classParts[0]): can.underscore(classParts.join("/")),
+			controller_name = can.underscore(classPartsWithoutPrefix.join('/')).toLowerCase(),
 			suffix = (typeof view == "string" && /\.[\w\d]+$/.test(view)) ? "" : can.view.ext;
 			
 		//calculate view

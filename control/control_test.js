@@ -1,7 +1,7 @@
 module("can/control");
 
 // tests binding and unbind, removing event handlers, etc
-test("basics",  14, function(){
+test("basics",  11, function(){
 	var clickCount = 0;
 	var Things = can.Control({
 		"click" : function(){
