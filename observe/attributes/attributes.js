@@ -2,7 +2,7 @@ steal('can/observe', function(){
 
 var $Observe = can.Observe,
 	each = can.each,
-	getObject = can.String.getObject,
+	getObject = can.getObject,
 	extend = can.extend;
 	
 // adds attributes, serialize, convert

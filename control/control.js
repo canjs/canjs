@@ -125,7 +125,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 			if ( options || ! /\{([^\}]+)\}/g.test( methodName )) {
 				// If we have options, run sub to replace templates "{}" with a value from the options
 				// or the window
-				var convertedName = options ? can.String.sub(methodName, [options, window]) : methodName,
+				var convertedName = options ? can.sub(methodName, [options, window]) : methodName,
 					
 					// If a "{}" resolves to an object, convertedName will be an array
 					arr = can.isArray(convertedName),

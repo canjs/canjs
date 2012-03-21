@@ -49,7 +49,7 @@
 		 * </ul>
 		 * 
 		 */
-		str = can.String = $.extend( can.String || {} , {
+		str = can = $.extend( can || {} , {
 			
 			
 			/**
@@ -622,10 +622,10 @@
 
 				var parts = fullName.split(/\./),
 					shortName = parts.pop(),
-					current = can.String.getObject(parts.join('.'), window, true),
+					current = can.getObject(parts.join('.'), window, true),
 					namespace = current,
-					_fullName = can.String.underscore(fullName.replace(/\./g, "_")),
-					_shortName = can.String.underscore(shortName);
+					_fullName = can.underscore(fullName.replace(/\./g, "_")),
+					_shortName = can.underscore(shortName);
 
 				//@steal-remove-start
 				if(current[shortName]){
@@ -1811,7 +1811,7 @@
 	/**
 	 * @add jQuery.String
 	 */
-	can.String = $.extend(can.String || {}, { 
+	can = $.extend(can || {}, { 
 		
 		/**
 		 * @function deparam
@@ -2231,7 +2231,7 @@
                     // The remainder will be the &amp;key=value list at the end of the URL.
 					remainder = url.substr(start.length - (parts[parts.length-1] === "&" ? 1 : 0) ),
                     // If there is a remainder and it contains a &amp;key=value list deparam it.
-                    obj = (remainder && paramsMatcher.test(remainder)) ? can.String.deparam( remainder.slice(1) ) : {};
+                    obj = (remainder && paramsMatcher.test(remainder)) ? can.deparam( remainder.slice(1) ) : {};
 
                 // Add the default values for this route
 				obj = extend(true, {}, route.defaults, obj);
@@ -2248,7 +2248,7 @@
 			if ( url.charAt(0) !== '&' ) {
 				url = '&' + url;
 			}
-			return paramsMatcher.test(url) ? can.String.deparam( url.slice(1) ) : {};
+			return paramsMatcher.test(url) ? can.deparam( url.slice(1) ) : {};
 		},
 		/**
 		 * @hide
@@ -2783,7 +2783,7 @@
 			}
 			// If we have options, run sub to replace templates "{}" with a value from the options
 			// or the window
-			var convertedName = options ? can.String.sub(methodName, [options, window]) : methodName,
+			var convertedName = options ? can.sub(methodName, [options, window]) : methodName,
 				
 				// If a "{}" resolves to an object, convertedName will be an array
 				arr = $.isArray(convertedName),
@@ -4210,7 +4210,7 @@
 	/**
 	 * @add jQuery.String
 	 */
-	can.String.
+	can.
 	/**
 	 * Splits a string with a regex correctly cross browser
 	 * 
@@ -4278,7 +4278,7 @@
 	
 
 			// get the url with any templated values filled out
-			ajaxOb.url = can.String.sub(ajaxOb.url, ajaxOb.data, true);
+			ajaxOb.url = can.sub(ajaxOb.url, ajaxOb.data, true);
 
 			return $.ajax($.extend({
 				type: type || "post",
@@ -4339,7 +4339,7 @@
 				attrs = attrs || {};
 				var identity = this.id;
 				if ( attrs[identity] && attrs[identity] !== id ) {
-					attrs["new" + can.String.capitalize(id)] = attrs[identity];
+					attrs["new" + can.capitalize(id)] = attrs[identity];
 					delete attrs[identity];
 				}
 				attrs[identity] = id;
@@ -4593,7 +4593,7 @@
 		// chop = function( string ) {
 		//	return string.substr(0, string.length - 1);
 		//},
-		rSplit = can.String.rsplit,
+		rSplit = can.rsplit,
 		extend = $.extend,
 		isArray = $.isArray,
 		// regular expressions for caching

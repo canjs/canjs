@@ -2,11 +2,11 @@ steal('can/util/string',function() {
 	/**
 	 * @add jQuery.String
 	 */
-	can.String.
+	can.
 	/**
 	 * Splits a string with a regex correctly cross browser
 	 * 
-	 *     can.String.rsplit("a.b.c.d", /\./) //-> ['a','b','c','d']
+	 *     can.rsplit("a.b.c.d", /\./) //-> ['a','b','c','d']
 	 * 
 	 * @param {String} string The string to split
 	 * @param {RegExp} regex A regular expression

@@ -215,7 +215,7 @@ steal({
 
 	
 	can.ajax = function(options){
-		var type = can.String.capitalize( (options.type || "get").toLowerCase() ),
+		var type = can.capitalize( (options.type || "get").toLowerCase() ),
 			method = dojo["xhr"+type];
 		var success = options.success,
 			error = options.error,

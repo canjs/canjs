@@ -21,12 +21,12 @@
  *     person.bind('change', function(){ ... })
  *     person.attr('name', "Brian");
  *     
- * ## [can.String String]
+ * ## [can String]
  * 
  * String helpers capitalize, underscore, and perform similar manipulations
  * on strings.  They can also lookup a value in an object:
  * 
- *    can.String.getObject("foo.bar",{foo: {bar: "car"}})
+ *    can.getObject("foo.bar",{foo: {bar: "car"}})
  * 
  * ## [can.toJSON toJSON]
  * 
@@ -62,7 +62,7 @@ steal('can/util',function() {
 		// a reference
 		getObject;
 		/** 
-		 * @class can.String
+		 * @class can
 		 * @parent can.util
 		 * 
 		 * A collection of useful string helpers. Available helpers are:
@@ -76,13 +76,13 @@ steal('can/util',function() {
 		 *   <li>[can.util.String.underscore|underscore]: Underscores a string (SomeString &raquo; some_string)</li>
 		 *   <li>[can.util.String.sub|sub]: Returns a string with {param} replaced values from data.
 		 *       <code><pre>
-		 *       can.String.sub("foo {bar}",{bar: "far"})
+		 *       can.sub("foo {bar}",{bar: "far"})
 		 *       //-> "foo far"</pre></code>
 		 *   </li>
 		 * </ul>
 		 * 
 		 */
-		can.String = can.extend({
+		can.extend({
 			esc : function(content){
 				return ("" + content).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(quote, '&#34;').replace(singleQuote, "&#39;");
 			},
@@ -93,7 +93,7 @@ steal('can/util',function() {
 			 * 'object path' by removing or adding properties.
 			 * 
 			 *     Foo = {Bar: {Zar: {"Ted"}}}
-		 	 *     can.String.getObject("Foo.Bar.Zar") //-> "Ted"
+		 	 *     can.getObject("Foo.Bar.Zar") //-> "Ted"
 			 * 
 			 * @param {String} name the name of the object to look for
 			 * @param {Array} [roots] an array of root objects to look for the 
@@ -158,7 +158,7 @@ steal('can/util',function() {
 			/**
 			 * Underscores a string.
 			 * @codestart
-			 * can.String.underscore("OneTwo") //-> "one_two"
+			 * can.underscore("OneTwo") //-> "one_two"
 			 * @codeend
 			 * @param {String} s
 			 * @return {String} the underscored string
@@ -169,7 +169,7 @@ steal('can/util',function() {
 			/**
 			 * Returns a string with {param} replaced values from data.
 			 * 
-			 *     can.String.sub("foo {bar}",{bar: "far"})
+			 *     can.sub("foo {bar}",{bar: "far"})
 			 *     //-> "foo far"
 			 *     
 			 * @param {String} s The string to replace

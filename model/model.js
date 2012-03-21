@@ -41,7 +41,7 @@ steal('can/observe',function(){
 	
 
 			// get the url with any templated values filled out
-			ajaxOb.url = can.String.sub(ajaxOb.url, ajaxOb.data, true);
+			ajaxOb.url = can.sub(ajaxOb.url, ajaxOb.data, true);
 
 			return can.ajax(can.extend({
 				type: type || "post",
@@ -109,7 +109,7 @@ steal('can/observe',function(){
 				attrs = attrs || {};
 				var identity = this.id;
 				if ( attrs[identity] && attrs[identity] !== id ) {
-					attrs["new" + can.String.capitalize(id)] = attrs[identity];
+					attrs["new" + can.capitalize(id)] = attrs[identity];
 					delete attrs[identity];
 				}
 				attrs[identity] = id;
