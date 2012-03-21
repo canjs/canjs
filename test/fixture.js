@@ -1,6 +1,6 @@
 // needs a .then! does not steal dependencies because this needs to work with dist ...
 
-if(!window.can || !can.String){
+if(!window.can || !can){
 	steal('can/util/string')
 }
 
@@ -452,7 +452,7 @@ steal('can/util/object',function( $ ) {
 			overwrites.push(settings)
 		}
 	};
-	var replacer = can.String.replacer;
+	var replacer = can.replacer;
 	
 	$.extend($.fixture, {
 		// given ajax settings, find an overwrite

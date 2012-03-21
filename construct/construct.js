@@ -177,7 +177,7 @@ steal("can/util/string",function( $ ) {
 			proto = proto || {};
 			var _super_class = this,
 				_super = this.prototype,
-				string = can.String,
+				string = can,
 				name, shortName, namespace, prototype;
 
 			// Instantiate a base class (but only create the instance,
@@ -212,10 +212,10 @@ steal("can/util/string",function( $ ) {
 
 				var parts = fullName.split('.'),
 					shortName = parts.pop(),
-					current = can.String.getObject(parts.join('.'), window, true),
+					current = can.getObject(parts.join('.'), window, true),
 					namespace = current,
-					_fullName = can.String.underscore(fullName.replace(/\./g, "_")),
-					_shortName = can.String.underscore(shortName);
+					_fullName = can.underscore(fullName.replace(/\./g, "_")),
+					_shortName = can.underscore(shortName);
 
 				//@steal-remove-start
 				if(current[shortName]){
