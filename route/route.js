@@ -12,7 +12,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
         // inserted into an html element tag.
 		makeProps = function( props ) {
 			return can.map(props, function( val, name ) {
-				return ( name === 'className' ? 'class'  : name )+ '="' + can.String.esc(val) + '"';
+				return ( name === 'className' ? 'class'  : name )+ '="' + can.esc(val) + '"';
 			}).join(" ");
 		},
 		// Checks if a route matches the data provided. If any route variable
@@ -304,7 +304,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
                     // The remainder will be the &amp;key=value list at the end of the URL.
 					remainder = url.substr(start.length - (parts[parts.length-1] === "&" ? 1 : 0) ),
                     // If there is a remainder and it contains a &amp;key=value list deparam it.
-                    obj = (remainder && paramsMatcher.test(remainder)) ? can.String.deparam( remainder.slice(1) ) : {};
+                    obj = (remainder && paramsMatcher.test(remainder)) ? can.deparam( remainder.slice(1) ) : {};
 
                 // Add the default values for this route
 				obj = extend(true, {}, route.defaults, obj);
@@ -321,7 +321,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
 			if ( url.charAt(0) !== '&' ) {
 				url = '&' + url;
 			}
-			return paramsMatcher.test(url) ? can.String.deparam( url.slice(1) ) : {};
+			return paramsMatcher.test(url) ? can.deparam( url.slice(1) ) : {};
 		},
 		/**
 		 * @hide

@@ -8,9 +8,9 @@ steal('can/util/string', function($){
 		}
 	
 	/**
-	 * @add can.String
+	 * @add can
 	 */
-	can.extend(can.String, { 
+	can.extend(can, { 
 		
 		/**
 		 * @function deparam

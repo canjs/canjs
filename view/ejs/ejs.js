@@ -39,7 +39,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		contentEscape = function( txt ) {
 			//return sanatized text
 			return (typeof txt == 'string' || typeof txt == 'number') ?
-				can.String.esc( txt ) :
+				can.esc( txt ) :
 				contentText(txt);
 		},
 		contentText =  function( input ) {	

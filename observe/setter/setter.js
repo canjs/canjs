@@ -2,7 +2,7 @@ steal('can/observe/attributes',
 	  'can/util/string/classize.js',
 	  function(){
 
-var classize = can.String.classize,
+var classize = can.classize,
 	proto =  can.Observe.prototype,
 	old = proto.__set;
 
