@@ -1,6 +1,10 @@
 steal('can/util/mvc.js')
 .then('funcunit/qunit', 
 	  'can/test/fixture.js')
+.then(function() {
+	// Set the test timeout to five minutes
+	QUnit.config.testTimeout = 300000;
+})
 .then('./mvc_test.js',
 	  'can/construct/construct_test.js',
 	  'can/observe/observe_test.js',
