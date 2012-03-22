@@ -1,5 +1,5 @@
 //352
-steal('./jquery.1.7.1.js').then('can/util/destroyed.js', function( $ ) {
+steal('./jquery.1.7.1.js', function( $ ) {
 
 	$.extend( can, jQuery, {
 		trigger: function( obj, event, args ) {
