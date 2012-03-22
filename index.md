@@ -1259,6 +1259,22 @@ are required to run CanJS from another library.
 {% highlight javascript %}
 // remove leading and trailing whitespace
 can.trim( " foo " ) // -> "foo" 
+
+// escape HTML code
+can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
+
+// looks up an object by name
+can.getObject("foo.bar",[{foo: {bar : "zed"}}]) //-> "zed"
+
+// capitalize a string
+can.capitalize("fooBar") //-> "FooBar"
+
+// micro templating
+can.sub("{greet} world",{greet: "hello"}) //-> "hello world"
+
+// deparams a form encoded url into an object
+can.deparam("foo=bar&hello=world")
+    //-> {foo: "bar", hello: "world}
 {% endhighlight %}
 
 ### Array Helpers
