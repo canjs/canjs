@@ -1,5 +1,5 @@
 //352
-steal('./jquery.1.7.1.js', function( $ ) {
+steal('./jquery.1.7.1.js').then('can/util/destroyed.js', function( $ ) {
 
 	$.extend( can, jQuery, {
 		trigger: function( obj, event, args ) {
@@ -34,5 +34,14 @@ steal('./jquery.1.7.1.js', function( $ ) {
 			return wrapped[name].apply(wrapped, can.makeArray(arguments).slice(1))
 		}
 	})
+
+	var oldClean = $.cleanData;
+
+	$.cleanData = function( elems ) {
+		$.each( elems, function( i, elem ) {
+			can.trigger(elem,"destroyed",[],false)
+		});
+		oldClean(elems);
+	};
 
 })

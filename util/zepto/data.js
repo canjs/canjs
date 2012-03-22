@@ -33,6 +33,7 @@ steal(function($){
   $.cleanData = function(elems){
   	for ( var i = 0, elem;
 		(elem = elems[i]) !== undefined; i++ ) {
+      can.trigger(elem,"destroyed",[],false)
 			var id = elem[exp]
 			delete data[id];
 		}
