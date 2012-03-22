@@ -11,11 +11,16 @@ var arrHas = function(obj, name){
 }
 
 // do what's similar for jQuery
-can.trigger = function(obj, event, args){
+can.trigger = function(obj, event, args, bubble){
 	if(obj.trigger){
 		obj.trigger(event, args)
 	} else if(arrHas(obj, "dispatchEvent")){
-		$([obj]).trigger(event, args)
+		if(bubble === false){
+			$([obj]).triggerHandler(event, args)
+		} else {
+			$([obj]).trigger(event, args)
+		}
+		
 	} else {
 		if(typeof event == "string"){
 			event = {type: event}
