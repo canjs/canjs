@@ -3,3 +3,4 @@ dist
 *.swp
 *.orig
 util/can.*.js
+*node_modules*
