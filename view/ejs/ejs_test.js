@@ -140,7 +140,7 @@ test("helpers", function() {
 
 test("attribute single unescaped, html single unescaped", function(){
 
-	var text = "<div class='<%== task.attr('completed') ? 'complete' : ''%>'><%== task.attr('name') %></div>";
+	var text = "<div id='me' class='<%== task.attr('completed') ? 'complete' : ''%>'><%== task.attr('name') %></div>";
 	var task = new can.Observe({
 		name : 'dishes'
 	})

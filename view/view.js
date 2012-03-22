@@ -313,7 +313,7 @@ steal("can/util").then(function( $ ) {
 			// you should only be using // if you are using steal
 			if ( url.match(/^\/\//) ) {
 				var sub = url.substr(2);
-				url = window.steal ? 
+				url = !window.steal ? 
 					"/" + sub : 
 					steal.root.mapJoin(sub);
 			}

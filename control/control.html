@@ -50,9 +50,9 @@
 </div>
 <script type='text/javascript' src='../../steal/steal.js'></script>
 <script type='text/javascript'>
-steal("jquery/controller", function(){
+steal("can/control", function(){
 // create a new Tabs class
-$.Controller("Tabs",{
+can.Control("Tabs",{
   
   // initialize widget
   init : function(el){
@@ -75,13 +75,14 @@ $.Controller("Tabs",{
   // hides old active tab, shows new one
   "li click" : function(el, ev){
     ev.preventDefault();
-    this.tab(this.find('.active').removeClass('active')).hide()
+    this.tab(this.element.find('.active')
+                 .removeClass('active')).hide()
     this.tab(el.addClass('active')).show();
   }
 })
   
 // adds the controller to the element
-$("#tabs").tabs();
+new Tabs("#tabs");
 })
 </script>
     </body>
