@@ -1,50 +1,37 @@
 load("steal/rhino/rhino.js");
 steal('steal/build/pluginify', function () {
+
+	var libs = {
+		"jquery" : "jquery.1.7.1.js",
+		"mootools" : "mootools-core-1.4.3.js",
+		"zepto" : "zepto.0.8.js",
+		"dojo" : "dojo.js",
+		"yui" : "yui.js"
+	}, lib, exclude;
 	
 	steal.File("can/standalone").mkdirs();
 
-	steal.build.pluginify("can/util/make/jquery.js",{
-		out : "can/standalone/can.jquery-edge.js",
-		global : "can = {}",
-		onefunc : true,
-		compress: true,
-		skipCallbacks: true,
-		exclude : "can/util/jquery/jquery.1.7.1.js"
-	});
-	/** /
-	
-	steal.build.pluginify("can/util/make/mootools.js",{
-		out : "can/dist/can.mootools-edge.js",
-		global : "can = {}",
-		onefunc : true,
-		compress: true,
-		skipCallbacks: true,
-		skipCallbacks: true
-	});
-	
-	steal.build.pluginify("can/util/make/zepto.js",{
-		out : "can/dist/can.zepto-edge.js",
-		global : "can = {}",
-		onefunc : true,
-		compress: true,
-		skipCallbacks: true
-	});
-	
-	steal.build.pluginify("can/util/make/dojo.js",{
-		out : "can/dist/can.dojo-edge.js",
-		global : "can = {}",
-		onefunc : true,
-		compress: true,
-		skipCallbacks: true
-	});
-	
-	steal.build.pluginify("can/util/make/yui.js",{
-		out : "can/dist/can.yui-edge.js",
-		global : "can = {}",
-		onefunc : true,
-		compress: true,
-		skipCallbacks: true
-	});
-	/**/
+	for ( lib in libs ) {
+
+		exclude = libs[ lib ];
+
+		steal.build.pluginify("can/util/make/" + lib + ".js",{
+			out : "can/standalone/can." + lib + "-edge.min.js",
+			global : "can = {}",
+			onefunc : true,
+			compress: true,
+			skipCallbacks: true,
+			exclude : "can/util/" + lib + "/" + exclude
+		});
+
+		steal.build.pluginify("can/util/make/" + lib + ".js",{
+			out : "can/standalone/can." + lib + "-edge.js",
+			global : "can = {}",
+			onefunc : true,
+			compress: false,
+			skipCallbacks: true,
+			exclude : "can/util/" + lib + "/" + exclude
+		});
+	}
 
 });
