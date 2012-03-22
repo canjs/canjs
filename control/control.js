@@ -1,5 +1,5 @@
 // 1.28
-steal('can/construct', 'can/util/destroyed.js', function( $ ) {
+steal('can/construct', function( $ ) {
 	// ------- HELPER FUNCTIONS  ------
 	
 	// Binds an element, returns a function that unbinds
@@ -18,7 +18,7 @@ steal('can/construct', 'can/util/destroyed.js', function( $ ) {
 		extend = can.extend,
 		each = can.each,
 		slice = [].slice,
-		special = ($.event && $.event.special) || {},
+		special = can.getObject("$.event.special") || {},
 
 		// Binds an element, returns a function that unbinds
 		delegate = function( el, selector, ev, callback ) {

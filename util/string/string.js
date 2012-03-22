@@ -82,7 +82,7 @@ steal('can/util',function() {
 		 * </ul>
 		 * 
 		 */
-		can.extend({
+		can.extend(can, {
 			esc : function(content){
 				return ("" + content).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(quote, '&#34;').replace(singleQuote, "&#39;");
 			},
