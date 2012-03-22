@@ -864,7 +864,7 @@ Each library wraps the element differently.  If you are using jQuery, the elemen
 
 ### Listening to events
 
-Controller automatically binds prototype methods that look
+Control automatically binds prototype methods that look
 like event handlers.  Listen to __click__s on `<li>` elements like:
 
 {% highlight javascript %}
@@ -889,7 +889,7 @@ When an `<li>` is clicked, `"li click"` is called with:
 - The library-wrapped __element__ that was clicked.
 - The __event__ data
 
-Controller uses event delegation, so you can add `<li>`s without needing to rebind
+Control uses event delegation, so you can add `<li>`s without needing to rebind
 event handlers.
 
 To destroy a todo when it's `<a href='javascript:// class='destroy'>` link 
@@ -965,7 +965,7 @@ The selector can also be templated.
 
 ### Templated Event Handlers Pt 2 `"{objectName}"`
 
-Controller can also bind to objects other than `this.element` with
+Control can also bind to objects other than `this.element` with
 templated event handlers.  This is _critical
 for avoiding memory leaks that are so common among MVC applications.  
 
@@ -1044,7 +1044,7 @@ new Todos("#todos")
 $("#todos").remove();
 {% endhighlight %}
     
-All event handlers bound with Controller are unbound when the control 
+All event handlers bound with Control are unbound when the control 
 is destroyed (or its element is removed).
 
 _Brief aside on destroy and templated event binding. Taken 
@@ -1162,7 +1162,7 @@ can.route.bind("id", function( ev, newVal ) {
 Listen to routes in controls with special "route" events like:
 
 {% highlight javascript %}
-var Routing = $.Controller({
+var Routing = can.Control({
   "route" : function(){
     // matches empty hash, #, or #!
   },
