@@ -386,7 +386,6 @@ test('single escaped tag, removeAttr', function () {
 	equals(anchor.getAttribute('data-bar'), 'baz');
 });
 
-/** /
 test('multiple curly braces in a block', function() {
 	var text = '<% if(!obs.attr("items").length) { %>' +
 	'<li>No items</li>' +
@@ -409,4 +408,3 @@ test('multiple curly braces in a block', function() {
 	obs.attr('items', [{ name: 'foo' }]);
 	equals(u.innerHTML, '<li>foo</li>', 'updated observable');
 });
-/**/
