@@ -228,7 +228,7 @@ var bindable = function(b){
 	return b
 }
 
-test("update rebinding", 2, function(){
+test("on rebinding", 2, function(){
 	var first = true;
 	
 	var Rebinder = can.Control({
@@ -246,7 +246,7 @@ test("update rebinding", 2, function(){
 		rb = new Rebinder( document.createElement('div'), {item: item1} );
 	
 	can.trigger(item1, "foo")
-	rb.update({item: item2});
-	
+	rb.options = {item: item2};
+	rb.on();
 	can.trigger(item2, "foo")
 });

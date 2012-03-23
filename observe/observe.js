@@ -580,7 +580,6 @@ steal('can/construct', function() {
 		 */
 		unbind: unbind,
 		/**
-		 * @hide
 		 * Get the serialized Object form of the observe.  Serialized
 		 * data is typically used to send back to a server.
 		 * 
