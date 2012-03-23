@@ -4,3 +4,5 @@ dist
 *.orig
 util/can.*.js
 *node_modules*
+standalone*
+docs*
