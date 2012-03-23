@@ -1,6 +1,6 @@
 steal('can/util/string',function() {
 	/**
-	 * @add jQuery.String
+	 * @add can.util.String
 	 */
 	can.
 	/**
