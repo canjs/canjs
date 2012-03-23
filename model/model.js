@@ -522,7 +522,85 @@ steal('can/observe',function(){
 			}
 		},
 		/**
-		 * @function models
+		 * `can.Model.models(data, xhr)` is used to 
+		 * convert the raw response of a [can.Model.findAll] request 
+		 * into a [can.Model.List] of model instances.  
+		 * 
+		 * This method is rarely called directly. Instead the deferred returned
+		 * by findAll is piped into `models`.  This creates a new deferred that
+		 * resolves to a [can.Model.List] of instances instead of an array of
+		 * simple JS objects.
+		 * 
+		 * If your server is returning data in non-standard way,
+		 * overwriting `can.Model.models` is the best way to normalize it.
+		 * 
+		 * ## Quick Example
+		 * 
+		 * The following uses models to convert to a [can.Model.List] of model
+		 * instances.
+		 * 
+		 *     Task = can.Model({},{})
+		 *     var tasks = Task.models([
+		 * 	     {id: 1, name : "dishes", complete : false},
+		 *       {id: 2, name: "laundry", compelte: true}
+		 *     ])
+		 *     
+		 *     tasks.attr("0.complete", true)
+		 * 
+		 * ## Non-standard Services
+		 * 
+		 * `can.Model.models` expects data to be an array of name-value pair 
+		 * objects like:
+		 * 
+		 *     [{id: 1, name : "dishes"},{id:2, name: "laundry"}, ...]
+		 *     
+		 * It can also take an object with additional data about the array like:
+		 * 
+		 *     {
+		 *       count: 15000 //how many total items there might be
+		 *       data: [{id: 1, name : "justin"},{id:2, name: "brian"}, ...]
+		 *     }
+		 * 
+		 * In this case, models will return a [can.Model.List] of instances found in 
+		 * data, but with additional properties as expandos on the list:
+		 * 
+		 *     var tasks = Task.models({
+		 *       count : 1500,
+		 *       data : [{id: 1, name: 'dishes'}, ...]
+		 *     })
+		 *     tasks.attr("name") // -> 'dishes'
+		 *     tasks.count // -> 1500
+		 * 
+		 * ### Overwriting Models
+		 * 
+		 * If your service returns data like:
+		 * 
+		 *     {thingsToDo: [{name: "dishes", id: 5}]}
+		 * 
+		 * You will want to overwrite models to pass the base models what it expects like:
+		 * 
+		 *     Task = can.Model({
+		 *       models : function(data){
+		 *         return can.Model.models.call(this,data.thingsToDo);
+		 *       }
+		 *     },{})
+		 * 
+		 * `can.Model.models` passes each intstance's data to `can.Model.model` to
+		 * create the individual instances.
+		 * 
+		 * @param {Array|Objects} instancesRawData An array of raw name - value pairs objects like:
+		 * 
+		 *      [{id: 1, name : "dishes"},{id:2, name: "laundry"}, ...]
+		 * 
+		 * Or an Object with a data property and other expando properties like:
+		 * 
+		 * 	   {
+		 *       count: 15000 //how many total items there might be
+		 *       data: [{id: 1, name : "justin"},{id:2, name: "brian"}, ...]
+		 *     }
+		 * 
+		 * @return {Array} a [can.Model.List] of instances.  Each instance is created with
+		 * [can.Model.model].
 		 */
 		models: function( instancesRawData ) {
 			if ( ! instancesRawData ) {
@@ -568,7 +646,67 @@ steal('can/observe',function(){
 			return res;
 		},
 		/**
-		 * @function model
+		 * $.Model.model is used as a [http://api.jquery.com/extending-ajax/#Converters Ajax converter] 
+		 * to convert the response of a [$.Model.findOne] request 
+		 * into a model instance.  
+		 * 
+		 * You will never call this method directly.  Instead, you tell $.ajax about it in findOne:
+		 * 
+		 *     $.Model('Recipe',{
+		 *       findOne : function(params, success, error ){
+		 *         return $.ajax({
+		 *           url: '/services/recipes/'+params.id+'.json',
+		 *           type: 'get',
+		 *           
+		 *           dataType : 'json recipe.model' //LOOK HERE!
+		 *         });
+		 *       }
+		 *     },{})
+		 * 
+		 * This makes the result of findOne a [http://api.jquery.com/category/deferred-object/ $.Deferred]
+		 * that resolves to a model instance:
+		 * 
+		 *     var deferredRecipe = Recipe.findOne({id: 6});
+		 *     
+		 *     deferredRecipe.then(function(recipe){
+		 *       console.log('I am '+recipes.description+'.');
+		 *     })
+		 * 
+		 * ## Non-standard Services
+		 * 
+		 * $.jQuery.model expects data to be name-value pairs like:
+		 * 
+		 *     {id: 1, name : "justin"}
+		 *     
+		 * It can also take an object with attributes in a data, attributes, or
+		 * 'shortName' property.  For a App.Models.Person model the following will  all work:
+		 * 
+		 *     { data : {id: 1, name : "justin"} }
+		 *     
+		 *     { attributes : {id: 1, name : "justin"} }
+		 *     
+		 *     { person : {id: 1, name : "justin"} }
+		 * 
+		 * 
+		 * ### Overwriting Model
+		 * 
+		 * If your service returns data like:
+		 * 
+		 *     {id : 1, name: "justin", data: {foo : "bar"} }
+		 *     
+		 * This will confuse $.Model.model.  You will want to overwrite it to create 
+		 * an instance manually:
+		 * 
+		 *     $.Model('Person',{
+		 *       model : function(data){
+		 *         return new this(data);
+		 *       }
+		 *     },{})
+		 *     
+		 * 
+		 * @param {Object} attributes An object of name-value pairs or an object that has a 
+		 *  data, attributes, or 'shortName' property that maps to an object of name-value pairs.
+		 * @return {Model} an instance of the model
 		 */
 		model: function( attributes ) {
 			if (!attributes ) {
@@ -585,10 +723,48 @@ steal('can/observe',function(){
 		}
 		/**
 		 * @function bind
+		 * `bind(eventType, handler(event, instance))` listens to
+		 * __created__, __updated__, __destroyed__ events on all 
+		 * instances of the model.
+		 * 
+		 *     Task.bind("created", function(ev, createdTask){
+		 * 	     this //-> Task
+		 *       createdTask.attr("name") //-> "Dishes"
+		 *     })
+		 *     
+		 *     new Task({name: "Dishes"}).save();
+		 * 
+		 * @param {String} eventType The type of event.  It must be
+		 * `"created"`, `"udpated"`, `"destroyed"`.
+		 * 
+		 * @param {Function} handler(event,instance) A callback function
+		 * that gets called with the event and instance that was
+		 * created, destroyed, or updated.
+		 * 
+		 * @return {can.Model} the model constructor function.
 		 */
 		// inherited with can.Observe
 		/**
 		 * @function unbind
+		 * `unbind(eventType, handler)` removes a listener
+		 * attached with [can.Model.bind].
+		 * 
+		 *     var handler = function(ev, createdTask){
+		 * 	     
+		 *     }
+		 *     Task.bind("created", handler)
+		 *     Task.unbind("created", handler)
+		 * 
+		 * You have to pass the same function to `unbind` that you
+		 * passed to `bind`.
+		 * 
+		 * @param {String} eventType The type of event.  It must be
+		 * `"created"`, `"udpated"`, `"destroyed"`.
+		 * 
+		 * @param {Function} handler(event,instance) A callback function
+		 * that was passed to `bind`.
+		 * 
+		 * @return {can.Model} the model constructor function.
 		 */
 		// inherited with can.Observe
 		/**
