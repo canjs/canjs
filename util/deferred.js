@@ -74,7 +74,25 @@ steal(function(){
 		}
 	};
 
-	can.extend( Deferred.prototype, {
+	can.extend(Deferred.prototype, {
+		/**
+		 * @function pipe
+		 * Utility to filter Deferred(s).
+		 *
+		 * 		var def = can.Deferred(),
+		 *			filtered = def.pipe(function(val) {
+		 *      		return val + " is awesome!";
+		 *  		});
+		 *
+		 * 		def.resolve('Can');
+		 * 
+		 * 		filtered.done(function(value) {
+		 * 			alert(value); // Alerts: 'Can is awesome!'
+		 * 		});
+		 *
+		 * @param {Object} doneCallbacks A function called when the Deferred is resolved.
+		 * @param {Object} failCallbacks A function called when the Deferred is rejected.
+		 */
 		pipe : function(done, fail){
 			var d = can.Deferred();
 			this.done(function(){
@@ -90,10 +108,41 @@ steal(function(){
 			});
 			return d;
 		},
+		
+		/**
+		 * @function resolveWith
+		 * Rejects a Deferred and calls the doneCallbacks give the arguments.
+		 */
 		resolveWith : resolveFunc("_doneFuncs","rs"),
+		
+		/**
+		 * @function rejectWith
+		 * Rejects a Deferred and calls the failCallbacks give the arguments.
+		 */
 		rejectWith : resolveFunc("_failFuncs","rj"),
+		
+		/**
+		 * @function done
+		 * Add handlers to be called when the Deferred object is done.
+		 * @param {Object} successCallbacks function that is called when the Deferred is resolved.
+		 */
 		done : doneFunc("_doneFuncs","rs"),
+		
+		/**
+		 * @function fail
+		 * Add handlers to be called when the Deferred object is rejected.
+		 * @param {Object} failCallbacks function that is called when the Deferred is rejected.
+		 */
 		fail : doneFunc("_failFuncs","rj"),
+		
+		/**
+		 * @function always
+		 * Add handlers to be called when the Deferred object is either resolved or rejected.
+		 *
+		 * 		deferred.always( alwaysCallbacks )
+		 *
+		 * @param {Object} alwaysCallbacks A function called when the Deferred is resolved or rejected.
+		 */
 		always : function() {
 			var args = can.makeArray(arguments);
 			if (args.length && args[0])
@@ -102,6 +151,15 @@ steal(function(){
 			return this;
 		},
 
+		/**
+		 * @function then
+		 * Add handlers to be called when the Deferred object to be called after its resolved.
+		 *
+		 * 		deferred.then( doneCallbacks, failCallbacks )
+		 *
+		 * @param {Object} doneCallbacks A function called when the Deferred is resolved.
+		 * @param {Object} failCallbacks A function called when the Deferred is rejected.
+		 */
 		then : function() {
 			var args = can.makeArray( arguments );
 			// fail function(s)
@@ -115,22 +173,56 @@ steal(function(){
 			return this;
 		},
 
+		/**
+		 * @function isResolved
+		 * Returns whether a Deferred object has been resolved.
+		 *
+		 * 		deferred.isResolved()
+		 *
+		 */
 		isResolved : function() {
 			return this._status === "rs";
 		},
 
+		/**
+		 * @function isRejected
+		 * Returns whether a Deferred object has been rejected.
+		 *
+		 * 		deferred.isRejected()
+		 *
+		 */
 		isRejected : function() {
 			return this._status === "rj";
 		},
-
+		
+		/**
+		 * @function reject
+		 * Rejects the Deferred object and calls the fail callbacks with the given arguments.
+		 *
+		 * 		deferred.reject( args )
+		 *
+		 * @param {Object} arguments Optional arguments that are passed to the fail callbacks.
+		 */
 		reject : function() {
 			return this.rejectWith(this, arguments);
 		},
 
+		/**
+		 * @function resolve
+		 * Resolves a Deferred object and calls the done callbacks with the given arguments.
+		 *
+		 * 		deferred.resolve( args )
+		 *
+		 * @param {Object} arguments Optional arguments that are passed to the done callbacks.
+		 */
 		resolve : function() {
 			return this.resolveWith(this, arguments);
 		},
 
+		/**
+		 * @hide
+		 * Executes the callbacks of the Deferred object.
+		 */
 		exec : function(context, dst, args, st) {
 			if (this._status !== "")
 				return this;
