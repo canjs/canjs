@@ -13,10 +13,22 @@ var i,
 		}
 		return false;
 	},
-	data = function(el, data){
-		var $el = can.$(el);
-		$el.data("controllers", data || {})
-		return $el.data('controllers');
+	data = function(el, d){
+		var $el = can.$(el),
+			elData = $el.data('controllers');
+		
+		/**
+		 * @hide
+		 * If data was passed or the data is undefined,
+		 * we need to set it and call back into this
+		 * method to get the result and return it out.
+		 */
+		if(d !== undefined || elData === undefined){
+			$el.data('controllers', d || {})
+			elData = data(el);
+		}
+		
+		return elData;
 	},
 	makeArray = can.makeArray,
 	old = can.Control.setup;
@@ -112,7 +124,7 @@ can.Control.plugin = function(pluginname){
 			return this.each(function(){
 				//check if created
 				var controllers = data(this),    //plugin is actually the controller instance
-				plugin = controllers && controllers[pluginname];
+					plugin = controllers && controllers[pluginname];
 				
 				if (plugin) {
 					if (isMethod) {
@@ -235,7 +247,7 @@ can.Control.plugin = function(pluginname){
 		 * is called by the [jquery.control.plugin jQuery helper function].
 		 */
 can.Control.prototype.update = function( options ) {
-		extend(this.options, options);
+		can.extend(this.options, options);
 		this.on();
 };
 
