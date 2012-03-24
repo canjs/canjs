@@ -788,7 +788,7 @@ var Todos = can.Control({
   "init" : function( element , options ) {
     var self = this;
     Todo.findAll({}, function( todos ){
-      self.element.html('todosEJS', todos )
+      self.element.html( can.view('todosEJS', todos) )
     })
   }
 })
