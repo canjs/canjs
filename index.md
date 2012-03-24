@@ -998,7 +998,7 @@ var Todos = can.Control({
     var self = this;
     Todo.findAll({},function(todos){
       self.todosList = todos;
-      self.element.html( can.view('todosEjs', todos ) )
+      self.element.html( can.view('todosEJS', todos ) )
     })
   },
   "li click" : function(li){
