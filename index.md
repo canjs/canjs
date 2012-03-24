@@ -1655,13 +1655,50 @@ person.attr("name.last", "Meyer");
 
 ## Developing CanJS
 
+To develop CanJS, add features, etc, you first must install DoneJS.  DoneJS is the 
+parent project of CanJS.  DoneJS is the 4.0 version of JavaSciptMVC.  It has DocumentJS and
+Steal as submodules that are used to generate the documentation and build the CanJS downloads.
+
+### Installing
+
+ 1. `fork` [CanJS on github](https://github.com/jupiterjs/canjs).
+ 2. Clone DoneJS with:
+
+        git clone git@github.com:jupiterjs/donejs
+        
+ 3. Open the donejs folder's .gitmodule file and change the url of the `"can"` submodule:
+
+        url = git://github.com/jupiterjs/canjs.git
+        
+    to something like
+    
+        url = git://github.com/justinbmeyer/canjs.git
+
+ 4. Install all submodules by running
+   
+        cd donejs
+        git submodule init
+        git submodule update --recursive
+
+    Depending on your version of git, you might need to cd into each submodule and run `git checkout`.
+
 ### Documentation
 
-To edit this page, fork and edit the [github pages's index.md page](https://github.com/jupiterjs/canjs/blob/gh-pages/index.md).  Don't forget to submit a pull request.
+To edit this page, fork and edit the github pages's [index.md page](https://github.com/jupiterjs/canjs/blob/gh-pages/index.md).  Don't forget to submit a pull request.
 
-To edit the documentation on DoneJS.com, fork and edit the markdown and js files in the 
+To edit the documentation at [DoneJS.com](http://doneJS.com/docs.html), fork and edit the markdown and js files in the 
 [CanJS github repo](https://github.com/jupiterjs/canjs).  For example, to edit [can.Control's overview page](http://donejs.com/docs.html#!can.Control),
-change [https://github.com/jupiterjs/canjs/blob/master/control/control.md].  To edit [can.Control's destory method](http://donejs.com/docs.html#!can.Control.prototype.destroy), change [https://github.com/jupiterjs/canjs/blob/master/control/control.js](https://github.com/jupiterjs/canjs/blob/master/control/control.js#L939) where you find the `destroy` comment.
+change [control/control.md](https://github.com/jupiterjs/canjs/blob/master/control/control.md).  To edit [can.Control's destory method](http://donejs.com/docs.html#!can.Control.prototype.destroy), 
+change [control/control.js](https://github.com/jupiterjs/canjs/blob/master/control/control.js#L939) 
+where you find the `destroy` comment.  Then submit a pull request.
+
+To generate the docs yourself, `clone` 
+
+After editing the docs, run:
+
+    js jmvc/scripts/doc.js
+    
+ 
 
 ### Making a build
 
