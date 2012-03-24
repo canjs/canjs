@@ -1593,7 +1593,7 @@ if you are using the `attr` method.  If the following template binds to a `todo`
 
 ### Flexibility
 
-Your library should not break-down as your app and organization grows and 
+Your library should not break-down as your application and organization grow and 
 technologies change. CanJS's flexibility will keep it valuable to you 
 far into the future.
 
