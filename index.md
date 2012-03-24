@@ -1601,8 +1601,8 @@ __Spports multiple libraries and frameworks__
 
 Want to share code between a Zepto mobile app, and a jQuery desktop 
 app?  No problem.  CanJS code (especially models) can be shared 
-across libraries.  But most important, so can skill sets.  Working on a Dojo project today and 
-a YUI one tomorrow?  Don't throw away all those skills.
+across libraries.  But so can skill sets!  Working on a Dojo project today and 
+a YUI one tomorrow?  Don't throw away all of your skills.
 
 __Designed for plugins__
 
