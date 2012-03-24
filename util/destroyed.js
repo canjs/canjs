@@ -4,7 +4,7 @@
 steal('can/util').then(function() {
 	/**
 	 * @attribute destroyed
-	 * @parent util
+	 * @parent specialevents
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/dom/destroyed/destroyed.js
 	 * @test jquery/event/destroyed/qunit.html
 	 * Provides a destroyed event on an element.
@@ -17,9 +17,9 @@ steal('can/util').then(function() {
 	 *
 	 * <h2>Quick Example</h2>
 	 * @codestart
-	 * 		can.$(".foo").bind("destroyed", function(){
-	 *    		//clean up code
-	 * 		})
+	 * can.$(".foo").bind("destroyed", function(){
+	 *    //clean up code
+	 * })
 	 * @codeend
 	 *
 	 * <h2>Quick Demo</h2>
@@ -31,8 +31,8 @@ steal('can/util').then(function() {
 	var oldClean = $.cleanData;
 
 	can.cleanData = function( elems ) {
-		can.each( elems, function( i, elem ) {
-			can.$(elem).triggerHandler("destroyed");
+		$.each( elems, function( i, elem ) {
+			$(elem).triggerHandler("destroyed");
 		});
 		oldClean(elems);
 	};
