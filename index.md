@@ -1593,11 +1593,34 @@ if you are using the `attr` method.  If the following template binds to a `todo`
 
 ### Flexibility
 
-Your library should not break-down as your app and your organization grows.  CanJS runs on multiple libraries and frameworks, making it an ideal choice for individuals and organizations that need flexibility.
+Your library should not break-down as your app and organization grows and 
+technologies change. CanJS's flexibility will keep it valuable to you 
+far into the future.
 
-__Observables that handle nested data__
+__Spports multiple libraries and frameworks__
 
-[can.Observe](#can_observe) works well with nested data.  It converts nested objects into observes 
+Want to share code between a Zepto mobile app, and a jQuery desktop 
+app?  No problem.  CanJS code (especially models) can be shared 
+across libraries.  But most important, so can skill sets.  Working on a Dojo project today and 
+a YUI one tomorrow?  Don't throw away all those skills.
+
+__Designed for plugins__
+
+CanJS is extracted from, but currently supports almsot every [JavaScriptMVC](http://javascriptmvc.com) plugin.  You can start small, with it's basic functionality, and extend it with [plugins](#plugins) that handle things like:
+
+ - setters
+ - serialize / deserialize
+ - jQuery plugin generation
+ - validations
+ - _super methods.
+
+These plugins have forced the core to be quite extendable, making 3rd party plugin development easy.
+
+__Engineered limber__
+
+CanJS's tools are designed to work under almost every situation.  Your server sends back XML with strange urls?  That's ok, overwrite [can.Model.findAll](http://donejs.com/docs.html#!can.Model.static.findAll) or [can.Model.models](http://donejs.com/docs.html#!can.Model.static.models).  Want some special teardown code for a control?  Overwrite [can.Control:destroy](http://donejs.com/docs.html#!can.Control.prototype.destroy).
+
+But our favorite bit of flexibility is how [can.Observe](#can_observe) works with nested data.  It converts nested objects into observes 
 automatically.  For example:
 
 {% highlight javascript %}
