@@ -832,9 +832,10 @@ var Todos = can.Control({
 },{
   "init" : function( element , options ){
     var self = this;
-    Todo.findAll({}, function( todos ){
-      self.element.html(self.options.template, todos )
-    })
+    can.view( self.options.template, Todo.findAll() )
+        .then( function( frag ){
+          self.element.html( frag )
+        })
   }
 })
 
@@ -871,9 +872,10 @@ like event handlers.  Listen to __click__s on `<li>` elements like:
 var Todos = can.Control({
   "init" : function( element , options ){
     var self = this;
-    Todo.findAll({}, function( todos ){
-      self.element.html(self.options.template, todos )
-    })
+    can.view( self.options.template, Todo.findAll() )
+        .then( function( frag ){
+          self.element.html( frag )
+        })
   },
   "li click" : function(li, event){
     console.log("You clicked", li.text() )
@@ -899,9 +901,10 @@ is clicked:
 var Todos = can.Control({
   "init" : function( element , options ){
     var self = this;
-    Todo.findAll({}, function( todos ){
-      self.element.html(self.options.template, todos )
-    })
+    can.view( self.options.template, Todo.findAll() )
+        .then( function( frag ){
+          self.element.html( frag )
+        })
   },
   "li click" : function(li){
     li.trigger('selected', li.model() );
