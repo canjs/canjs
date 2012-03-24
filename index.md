@@ -1606,13 +1606,15 @@ a YUI one tomorrow?  Don't throw away all of your skills.
 
 __Designed for plugins__
 
-CanJS is extracted from, but currently supports almsot every [JavaScriptMVC](http://javascriptmvc.com) plugin.  You can start small, with it's basic functionality, and extend it with [plugins](#plugins) that handle things like:
+CanJS is extracted from [JavaScriptMVC](http://javascriptmvc.com), but currently supports 
+almost all of it's MVC functionality through plugins.  Start small, with it's basic functionality, and extend 
+it with [plugins](#plugins) that handle things like:
 
  - setters
  - serialize / deserialize
  - jQuery plugin generation
  - validations
- - _super methods.
+ - calling super methods
 
 These plugins have forced the core to be quite extendable, making 3rd party plugin development easy.
 
