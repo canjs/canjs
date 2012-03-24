@@ -788,7 +788,7 @@ var Todos = can.Control({
   "init" : function( element , options ) {
     var self = this;
     Todo.findAll({}, function( todos ){
-      self.element.html('todos.ejs', todos )
+      self.element.html('todosEJS', todos )
     })
   }
 })
@@ -828,14 +828,13 @@ and any other arguments passed to `new can.Control()`.  For example:
 
 {% highlight javascript %}
 var Todos = can.Control({
-  defaults : {template: 'todos.ejs'}
+  defaults : {view: 'todos.ejs'}
 },{
   "init" : function( element , options ){
     var self = this;
-    can.view( self.options.template, Todo.findAll() )
-        .then( function( frag ){
-          self.element.html( frag )
-        })
+    Todo.findAll({},function(todos){
+      self.element.html( can.view(self.options.view, todos ) )
+    });
   }
 })
 
@@ -843,7 +842,7 @@ var Todos = can.Control({
 new Todos( document.body.firstElementChild );
 
 // overwrite the template option
-new Todos( $('#todos'), {template: 'specialTodos.ejs'})
+new Todos( $('#todos'), {view: 'specialTodos.ejs'})
 {% endhighlight %}
 
 ### element `this.element`
@@ -872,10 +871,9 @@ like event handlers.  Listen to __click__s on `<li>` elements like:
 var Todos = can.Control({
   "init" : function( element , options ){
     var self = this;
-    can.view( self.options.template, Todo.findAll() )
-        .then( function( frag ){
-          self.element.html( frag )
-        })
+    Todo.findAll({},function(todos){
+      self.element.html( can.view('todosEJS', todos ) )
+    });
   },
   "li click" : function(li, event){
     console.log("You clicked", li.text() )
@@ -901,10 +899,9 @@ is clicked:
 var Todos = can.Control({
   "init" : function( element , options ){
     var self = this;
-    can.view( self.options.template, Todo.findAll() )
-        .then( function( frag ){
-          self.element.html( frag )
-        })
+    Todo.findAll({},function(todos){
+      self.element.html( can.view('todosEJS', todos ) )
+    });
   },
   "li click" : function(li){
     li.trigger('selected', li.model() );
@@ -999,9 +996,9 @@ could implement it in `Todos` like:
 var Todos = can.Control({
   "init" : function( element , options ){
     var self = this;
-    Todo.findAll({}, function( todos ){
+    Todo.findAll({},function(todos){
       self.todosList = todos;
-      self.element.html(self.options.template, todos )
+      self.element.html( can.view('todosEjs', todos ) )
     })
   },
   "li click" : function(li){
