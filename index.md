@@ -1481,7 +1481,7 @@ __Size is not everything__.  It really is what's inside that counts. And that's 
 ### Ease of use
 
 This site highlights the most important features of CanJS.  But the library comes with thorough documentation
-and examples on [it's DoneJS documentation page](http://donejs.com/docs.html).  There example apps for
+and examples on [it's DoneJS documentation page](http://donejs.com/docs.html).  There are example apps for
 each library, and several example apps for jQuery. 
 
 ALso, CanJS is supported by Bitovi, formerly [Jupiter Consulting](http://jupiterjs.com).  We are extremely active on the forums. And should the need arise, we provide support, training, and development.
