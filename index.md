@@ -1670,7 +1670,7 @@ Steal as submodules that are used to generate the documentation and build the Ca
 
         url = git://github.com/jupiterjs/canjs.git
         
-    to something like
+    to your `fork`ed url like
     
         url = git://github.com/justinbmeyer/canjs.git
 
