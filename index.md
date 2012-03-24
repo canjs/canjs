@@ -1058,7 +1058,10 @@ data by calling `$(document.body).empty()`.</i>
 ### on `control.on()`
 
 [can.Control.prototype.on](http://donejs.com/docs.html#!can.Control.prototype.on) rebinds a control's event handlers.  This is useful when you want
-to listen to a specific model and change it:
+to listen to a specific model and change it.
+
+The following `Editor` widget's __todo__ method, updates the todo option and then calls `on()` to 
+rebind `"{todo} updated"`.
 
 {% highlight javascript %}
 var Editor = can.Control({
