@@ -1687,35 +1687,35 @@ Steal as submodules that are used to generate the documentation and build the Ca
 After [installing](#developing_canjs-installing) CanJS and DoneJS, you'll find 
 CanJS's files in a `can` folder.  Within `can`, you'll find a folder for each feature of CanJS: `construct`, `control`, `model`, etc.
 
-Within each _feature_ folder, for exxample `construct`, you'll find a file for:
+Within each _feature_ folder, for example `construct`, you'll find a file for:
 
  - the implementation of the feature - `construct.js`
- - a demo of the part - `construct.html`
+ - a demo of the feature - `construct.html`
  - an overview documentation page - `construct.md`
- - the part's tests - `construct_test.js`
+ - the feature's tests - `construct_test.js`
  - a page to run those tests - `qunit.html`
 
-Any plugins for that feature will be folders within the feature's folders.  Ex: `proxy`, `super`.  They should have their own tests.
+Any plugins for that feature will be folders within the feature's folder.  Ex: `proxy`, `super`.
 
-The `test` folder contains:
+The `can/test` folder contains:
 
  - test pages for CanJS against each library: `can_dojo.html`, `can_jquery.html`, etc. 
  - a test page that tests all libraries and plugins: `test.html`
  - a file that loads all _feature_ tests: `can_test.js`
 
-The `util` folder contains the compatibility layer for each library.
+The `can/util` folder contains the compatibility layer for each library.
 
 To develop CanJS:
 
  1. Edit the _feature's_ file.
  2. Add tests to the _feature's_ test file.
- 3. Open the feature's test page.
+ 3. Open the feature's test page. Make sure it passes.
  4. Open `can/test/test.html` in every browser to test everything.
  5. Submit a pull request!
 
 ### Documentation
 
-To edit this page, installing CanJS and DoneJS is not necessary.  Simply `fork` and edit the 
+To edit CanJS.us, installing CanJS and DoneJS is not necessary.  Simply `fork` and edit the 
 github pages's [index.md page](https://github.com/jupiterjs/canjs/blob/gh-pages/index.md) online.  Don't forget to 
 submit a pull request.
 
