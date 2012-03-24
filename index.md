@@ -833,7 +833,7 @@ var Todos = can.Control({
   "init" : function( element , options ){
     var self = this;
     Todo.findAll({},function(todos){
-      self.element.html( can.view(self.options.view, todos ) )
+      self.element.html( can.view( self.options.view, todos ) )
     });
   }
 })
