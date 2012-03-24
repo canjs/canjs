@@ -1,39 +1,41 @@
 @class can.Control
 @parent index
 @plugin can/control
-@download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/control/control.js
 @test can/control/qunit.html
 @inherits can.Construct
 @description jQuery widget factory.
 
-jQuery.Control helps create organized, memory-leak free, rapidly performing,
+`can.Control` helps create organized, memory-leak free, rapidly performing,
 stateful controls.  Use it to create UI controls like tabs, grids, and contextmenus 
 and used to organize them into higher-order business rules with
- can.route. It can serve as a traditional view and a traditional controller.
+[can.route]. It can serve as a traditional view and a traditional controller.
 
-The following examples make a basic todos widget that lists 
-todos and lets us destroy them. Create a control constructor 
+The following examples make a basic __Todos__ widget that lists 
+todos and lets us destroy them. Create a Control constructor 
 function of your own by extending can.Control.
 
     var Todos = can.Control({
       "init" : function( element , options ) {
         var self = this;
         Todo.findAll({}, function( todos ){
-          self.element.html('todos.ejs', todos )
+          self.element.html( can.view('todos.ejs', todos) )
         })
       }
     })
+
+
+
 
 Create an instance of the Todos control the #todos element with:
 
     var todosControl = new Todos('#todos', {});
 
-todos.ejs looks like:
+__todos.ejs__ looks like:
 
     <% list(todos, function(todo){ %>
       <li <%= (el) -> el.data("todo", todo) %> >
         <%= todo.attr('name') %>
-        <a href='javascript:// class='destroy'>
+        <a href='javascript://' class='destroy'>X</a>
       </li>
     <% }) %>
 
@@ -94,9 +96,10 @@ like event handlers.  Listen to __click__s on `<li>` elements like:
     var Todos = can.Control({
       "init" : function( element , options ){
         var self = this;
-        Todo.findAll({}, function( todos ){
-          self.element.html(self.options.template, todos )
-        })
+        can.view( self.options.template, Todo.findAll() )
+           .then( function( frag ){
+             self.element.html( frag )
+           })
       },
       "li click" : function(li, event){
         console.log("You clicked", li.text() )
@@ -120,9 +123,10 @@ is clicked:
     var Todos = can.Control({
       "init" : function( element , options ){
         var self = this;
-        Todo.findAll({}, function( todos ){
-          self.element.html(self.options.template, todos )
-        })
+        can.view( self.options.template, Todo.findAll() )
+           .then( function( frag ){
+             self.element.html( frag )
+           })
       },
       "li click" : function(li){
         li.trigger('selected', li.model() );
