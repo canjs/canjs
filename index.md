@@ -233,11 +233,11 @@ for managing changes.
 To create a __Model__ class, call __can.Model__ with:
 
 - __classProperties__, including 
-  [findAll](http://donejs.com/docs.html#!can.Model.findAll),
-  [findOne](http://donejs.com/docs.html#!can.Model.findAll),
-  [create](http://donejs.com/docs.html#!can.Model.create),
-  [update](http://donejs.com/docs.html#!can.Model.update),
-  [destroy](http://donejs.com/docs.html#!can.Model.destroy) properties, and
+  [findAll](http://donejs.com/docs.html#!can.Model.static.findAll),
+  [findOne](http://donejs.com/docs.html#!can.Model.static.findOne),
+  [create](http://donejs.com/docs.html#!can.Model.static.create),
+  [update](http://donejs.com/docs.html#!can.Model.static.update),
+  [destroy](http://donejs.com/docs.html#!can.Model.static.destroy) properties, and
 - any __prototypeProperties__ helper methods.
 
 
