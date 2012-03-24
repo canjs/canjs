@@ -17,8 +17,7 @@ define("plugd/trigger",["dojo"], function(dojo){
 				// the sane branch
 				var ev = d.doc.createEvent("HTMLEvents");
 				e = e.replace(leaveRe, _fix);
-				// destroyed events should not bubble
-				ev.initEvent(e,  e === "destroyed" ? false : true, true);
+				ev.initEvent(e, true, true);
 				a && mix(ev, a);
 				n.dispatchEvent(ev);
 			} : 
