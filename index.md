@@ -1047,13 +1047,13 @@ $("#todos").remove();
 All event handlers bound with Control are unbound when the control 
 is destroyed (or its element is removed).
 
-_Brief aside on destroy and templated event binding. Taken 
+<i>Brief aside on destroy and templated event binding. Taken 
 together, templated event binding, and control's automatic
 clean-up make it almost impossible 
 to write leaking applications. An application that uses
 only templated event handlers on controls within the body
 could free up all 
-data by calling `$(document.body).empty()`._
+data by calling `$(document.body).empty()`.</i>
 
 ### on `control.on()`
 
