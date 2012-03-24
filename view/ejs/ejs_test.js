@@ -386,6 +386,20 @@ test('single escaped tag, removeAttr', function () {
 	equals(anchor.getAttribute('data-bar'), 'baz');
 });
 
+test('html comments', function(){
+	var text =	'<!-- bind to changes in the todo list --> <div> '
+	+ '<%= obs.attr("foo") %></div>',
+
+	obs = new can.Observe({
+		foo: 'foo',
+	}),
+
+	compiled = new can.EJS({ text: text }).render({ obs: obs });
+
+	var div = document.createElement('div');
+	div.appendChild(can.view.frag(compiled));
+})
+
 test('multiple curly braces in a block', function() {
 	var text = '<% if(!obs.attr("items").length) { %>' +
 	'<li>No items</li>' +
