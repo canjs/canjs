@@ -1682,24 +1682,62 @@ Steal as submodules that are used to generate the documentation and build the Ca
 
     Depending on your version of git, you might need to cd into each submodule and run `git checkout`.
 
+### Developing
+
+After [installing](#developing_canjs-installing) CanJS and DoneJS, you'll find 
+CanJS's files in a `can` folder.  Within `can`, you'll find a folder for each feature of CanJS: `construct`, `control`, `model`, etc.
+
+Within each _feature_ folder, for exxample `construct`, you'll find a file for:
+
+ - the implementation of the feature - `construct.js`
+ - a demo of the part - `construct.html`
+ - an overview documentation page - `construct.md`
+ - the part's tests - `construct_test.js`
+ - a page to run those tests - `qunit.html`
+
+Any plugins for that feature will be folders within the feature's folders.  Ex: `proxy`, `super`.  They should have their own tests.
+
+The `test` folder contains:
+
+ - test pages for CanJS against each library: `can_dojo.html`, `can_jquery.html`, etc. 
+ - a test page that tests all libraries and plugins: `test.html`
+ - a file that loads all _feature_ tests: `can_test.js`
+
+The `util` folder contains the compatibility layer for each library.
+
+To develop CanJS:
+
+ 1. Edit the _feature's_ file.
+ 2. Add tests to the _feature's_ test file.
+ 3. Open the feature's test page.
+ 4. Open `can/test/test.html` in every browser to test everything.
+ 5. Submit a pull request!
+
 ### Documentation
 
-To edit this page, fork and edit the github pages's [index.md page](https://github.com/jupiterjs/canjs/blob/gh-pages/index.md).  Don't forget to submit a pull request.
+To edit this page, installing CanJS and DoneJS is not necessary.  Simply `fork` and edit the 
+github pages's [index.md page](https://github.com/jupiterjs/canjs/blob/gh-pages/index.md) online.  Don't forget to 
+submit a pull request.
 
-To edit the documentation at [DoneJS.com](http://doneJS.com/docs.html), fork and edit the markdown and js files in the 
-[CanJS github repo](https://github.com/jupiterjs/canjs).  For example, to edit [can.Control's overview page](http://donejs.com/docs.html#!can.Control),
-change [control/control.md](https://github.com/jupiterjs/canjs/blob/master/control/control.md).  To edit [can.Control's destory method](http://donejs.com/docs.html#!can.Control.prototype.destroy), 
-change [control/control.js](https://github.com/jupiterjs/canjs/blob/master/control/control.js#L939) 
-where you find the `destroy` comment.  Then submit a pull request.
+To edit the documentation at [DoneJS.com](http://doneJS.com/docs.html):
 
-To generate the docs yourself, `clone` 
+ 1. [install](#developing_canjs-installing) CanJS and DoneJS.
+ 2. Edit the markdown and js files in the [CanJS github repo](https://github.com/jupiterjs/canjs).  For example, to edit [can.Control's overview page](http://donejs.com/docs.html#!can.Control),
+change [can/control/control.md](https://github.com/jupiterjs/canjs/blob/master/control/control.md).  To edit [can.Control's destory method](http://donejs.com/docs.html#!can.Control.prototype.destroy), 
+change [can/control/control.js](https://github.com/jupiterjs/canjs/blob/master/control/control.js#L939) 
+where you find the `destroy` comment.
+ 3. Generate the docs with:
 
-After editing the docs, run:
-
-    js jmvc/scripts/doc.js
+        js jmvc/scripts/doc.js
     
- 
+    View them at `jmvc/docs.html`
+    
+ 4. Submit a pull request.
 
 ### Making a build
 
-### Custom Builds
+To make the CanJS builds, run:
+
+    js can/util/make.js
+    
+It puts the downloads in `can/dist`.
