@@ -198,7 +198,7 @@
 				error = options.error;
 
 			requestOptions.on = {
-				success: function( transactionid, response, arguments ) {
+				success: function( transactionid, response ) {
 					var data = response.responseText;
 					if ( options.dataType === 'json' ) {
 						data = eval("(" + data + ")")
@@ -207,7 +207,7 @@
 					d.resolve(data, "success", request);
 					success && success(data, "success", request);
 				},
-				failure: function( transactionid, response, arguments ) {
+				failure: function( transactionid, response ) {
 					updateDeferred(request, d);
 					d.reject(request, "error");
 					error && error(request, "error");
@@ -328,7 +328,7 @@
 			};
 		// allow dom destroyed events
 		Y.mix(Y.Node.DOM_EVENTS, {
-			destroyed: true,
+			destroyed: true
 		});
 
 		can.delegate = function( selector, ev, cb ) {
