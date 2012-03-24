@@ -1057,7 +1057,7 @@ data by calling `$(document.body).empty()`.</i>
 
 ### on `control.on()`
 
-[can.Control.prototype.on] rebinds a control's event handlers.  This is useful when you want
+[can.Control.prototype.on](http://donejs.com/docs.html#!can.Control.prototype.on) rebinds a control's event handlers.  This is useful when you want
 to listen to a specific model and change it:
 
 {% highlight javascript %}
