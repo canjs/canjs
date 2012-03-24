@@ -1460,9 +1460,9 @@ balance between:
 
  - Size
  - Ease of use
- - Flexibility
- - Speed
  - Saftey
+ - Speed
+ - Flexibility
 
 The following are our very biased reasons to use CanJS.
 
@@ -1484,7 +1484,7 @@ This site highlights the most important features of CanJS.  But the library come
 and examples on [it's DoneJS documentation page](http://donejs.com/docs.html).  There are example apps for
 each library, and several example apps for jQuery. 
 
-ALso, CanJS is supported by Bitovi, formerly [Jupiter Consulting](http://jupiterjs.com).  We are extremely active on the forums. And should the need arise, we provide support, training, and development.
+CanJS is also supported by Bitovi, formerly [Jupiter Consulting](http://jupiterjs.com).  We are extremely active on the [forums](https://forum.javascriptmvc.com/#Forum/canjs). And should the need arise, we provide support, training, and development.
 
 ### Saftey
 
