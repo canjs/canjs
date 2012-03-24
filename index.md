@@ -1510,8 +1510,8 @@ var tooltipInstance = new Tooltip( tooltipElement );
 {% endhighlight %}
 
 `window` now has a reference to the control which keeps the `tooltipInstance` and everything the 
-tooltip instance might reference in memory.  CanJS overwrites each libraries element remove functionality
-to check for and destroy controls.  Destroying a control unbinds all of its event handlers, removing any
+tooltip instance might reference in memory.  CanJS overwrites each library's element remove functionality
+to [destroy](#can_control-destroy) controls.  Destroying a control unbinds all of its event handlers, removing any
 memory leaks auto-magically.
 
 __A model store that does not leak__
