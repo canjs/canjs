@@ -1,5 +1,11 @@
 steal(function(){
 
+/**
+ * @function addEvent
+ * Adds an event and callback.
+ * @param {Object} event Name of the event to add.
+ * @param {Object} function Function to be called when event is invoked.
+ */
 can.addEvent = function(event, fn){
 	if(!this.__bindEvents){
 		this.__bindEvents = {};
@@ -15,6 +21,12 @@ can.addEvent = function(event, fn){
 	});
 	return this;
 };
+
+/**
+ * @function removeEvent
+ * Removes an event from the listeners binded using 'addEvent'.
+ * @param {Object} event Name of the event to remove.
+ */
 can.removeEvent = function(event, fn){
 	if(!this.__bindEvents){
 		return;
@@ -32,6 +44,12 @@ can.removeEvent = function(event, fn){
 	}	
 	return this;
 };
+
+/**
+ * @function dispatch
+ * Dispatches an event to all the listeners binded using 'addEvent'.
+ * @param {Object} event Name of the event to dispatch.
+ */
 can.dispatch = function(event){
 	if(!this.__bindEvents){
 		return;
