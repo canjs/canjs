@@ -813,7 +813,7 @@ __todos.ejs__ looks like:
 
 ### init `can.Control.prototype.init(element, options)`
 
-[Init](http://donejs.com/docs.html#!can.Control:init) is called when a
+`init` is called when a
 new can.Control instance is created.  It's called with:
 
 - __element__ - The wrapped element passed to the 
