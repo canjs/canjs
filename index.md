@@ -292,7 +292,7 @@ to retrieve model instances and __save__ and __destroy__ on instances.
 
 ### findAll `findAll( params, success( models ), error() ) -> Deferred`
 
-[can.Model.findAll](http://donejs.com/docs.html#!can.Model.findAll) retrieves multiple instances
+[can.Model.findAll](http://donejs.com/docs.html#!can.Model.static.findAll) retrieves multiple instances
 from the server:
 
 {% highlight javascript %}
@@ -322,7 +322,7 @@ the __todos__ list.
 
 ### findOne `findOne( params, success( model ), error() ) -> Deferred`
 
-[findOne](http://donejs.com/docs.html#!can.Model.findOne) retrieves a single model instance:
+[findOne](http://donejs.com/docs.html#!can.Model.static.findOne) retrieves a single model instance:
 
 
 {% highlight javascript %}
