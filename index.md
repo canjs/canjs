@@ -1481,10 +1481,10 @@ __Size is not everything__.  It really is what's inside that counts. And that's 
 ### Ease of use
 
 This site highlights the most important features of CanJS.  But the library comes with thorough documentation
-and examples on [http://donejs.com/docs.html it's DoneJS documentation page].  There example apps for
+and examples on [it's DoneJS documentation page](http://donejs.com/docs.html).  There example apps for
 each library, and several example apps for jQuery. 
 
-Finally, CanJS is supported by Bitovi, formerly Jupiter Consulting.  We are extremely active on the forums. And should the need arise, we provide support, training, and development.
+ALso, CanJS is supported by Bitovi, formerly [Jupiter Consulting](http://jupiterjs.com).  We are extremely active on the forums. And should the need arise, we provide support, training, and development.
 
 ### Saftey
 
@@ -1492,7 +1492,7 @@ Memory saftey is really important, especially in long-lived, dynamic pages. CanJ
 
 __Controls that unbind event handlers auto-magically__
 
-Using templated event binding, Control's can listen to events on objects other than their [element](#can_control-element).  For example, a tooltip listening to the window looks like:
+Using [templated event binding](#can_control-templated_event_handlers_pt_2), Controls can listen to events on objects other than their [element](#can_control-element).  For example, a tooltip listening to the window looks like:
 
 {% highlight javascript %}
 var Tooltip = can.Control({
@@ -1512,7 +1512,7 @@ var tooltipInstance = new Tooltip( tooltipElement );
 `window` now has a reference to the control which keeps the `tooltipInstance` and everything the 
 tooltip instance might reference in memory.  CanJS overwrites each libraries element remove functionality
 to check for and destroy controls.  Destroying a control unbinds all of its event handlers, removing any
-memory leaks automagically.
+memory leaks auto-magically.
 
 __A model store that does not leak__
 
@@ -1551,11 +1551,13 @@ If `Todo.findAll({due: "today"})` and `Todo.findAll({type: "critical"})` both ha
 { "id" : 5, "name" : "do dishes", "due": "today", "type" : "critical" }
 {% endhighlight %}
 
-Model knows that this data represents the same todo and only creates one instance.  This means that a single model instance is in both lists.  By changing the todo's name or destroying it, both lists will be changed.
+[can.Model](#can_model) knows that this data represents the same todo and only creates one instance.  This means that a single model instance is in both lists.  By changing the todo's name or destroying it, both lists will be changed.
 
-However, model only stores these model instances while something is binding to them.  Once nothing is bound to the model instance, they are removed from the store.
+However, model only stores these model instances while something is binding to them.  Once nothing is bound to the model instance, they are removed from the store, freeing their memory for garbage collection.
 
 ### Speed
+
+The importance of performance is almost impossible to over exaggerate.  CanJS's guts are highly optomized. For example, it pre-processes [can.Control] event handlers so binding is super fast.  But, it takes things to another level with the following two features:
 
 __Model and view deferred support for parallel loading__
 
@@ -1566,7 +1568,7 @@ you can load a template and its data in parallel and render it into an element w
 $("#todos").html("todos.ejs", Todo.findAll() );
 {% endhighlight %}
 
-Hot.  You can do this without the view modifiers plugin like:
+Hot.  You can do this without the [view modifiers plugin](#plugins-view_modifiers) like:
 
 {% highlight javascript %}
 can.view("todos.ejs", Todo.findAll() ).then(function( frag ){
