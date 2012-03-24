@@ -1455,9 +1455,18 @@ Examples of canJS.
 ## Why CanJS
 
 There are a lot of libraries out there and it can be difficult 
-to pick the one that's right for you.  The following are our very biased reasons to use CanJS.
+to pick the one that's right for you.  In our (no so, but should be) humble opinion, the technology in CanJS is simply the best.  It strikes a 
+balance between:
 
-### Lightweight 
+ - Size
+ - Ease of use
+ - Flexibility
+ - Speed
+ - Saftey
+
+The following are our very biased reasons to use CanJS.
+
+### Size 
 
 Ontop of jQuery, CanJS is 8.2k.  Here's some other frameworks for comparison:
 
@@ -1469,9 +1478,17 @@ Ontop of jQuery, CanJS is 8.2k.  Here's some other frameworks for comparison:
 
 __Size is not everything__.  It really is what's inside that counts. And that's where we think CanJS really delivers a lot of bang for your buck.
 
-### Engineering
+### Ease of use
 
-CanJS is designed to create lightweight, memory safe, high-performance applications.  It takes things to another level with:
+This site highlights the most important features of CanJS.  But the library comes with thorough documentation
+and examples on [http://donejs.com/docs.html it's DoneJS documentation page].  There example apps for
+each library, and several example apps for jQuery. 
+
+Finally, CanJS is supported by Bitovi, formerly Jupiter Consulting.  We are extremely active on the forums. And should the need arise, we provide support, training, and development.
+
+### Saftey
+
+Memory saftey is really important, especially in long-lived, dynamic pages. CanJS combats this menece in two important and unique ways:
 
 __Controls that unbind event handlers auto-magically__
 
@@ -1538,6 +1555,8 @@ Model knows that this data represents the same todo and only creates one instanc
 
 However, model only stores these model instances while something is binding to them.  Once nothing is bound to the model instance, they are removed from the store.
 
+### Speed
+
 __Model and view deferred support for parallel loading__
 
 [Deferreds](#utilities-deferred) are simply awesome for dealing with asynchronous behavior.  [can.Model](#can_model) produces deferreds and [can.view](#can_view) consumes them.  With the [view modifiers](#plugins-view_modifiers) plugin, 
@@ -1554,6 +1573,25 @@ can.view("todos.ejs", Todo.findAll() ).then(function( frag ){
   $("#todos").html( frag );
 })
 {% endhighlight %}
+
+__Opt-in data binding__
+
+Although [can.EJS's](#can_ejs) live-binding is super-duper fast, setting up live data binding can be too slow in certain situations (like rendering a list of 1000 items).  EJS's live binding is opt-in.  It only turns on
+if you are using the `attr` method.  If the following template binds to a `todo`'s `name` ...
+
+{% highlight erb %}
+<li> <%= todo.attr('name') %> </li>
+{% endhighlight %}
+  
+... the following doesn't setup live-binding and renders much faster ...
+
+{% highlight erb %}
+<li> <%= todo.name %> </li>
+{% endhighlight %}
+
+### Flexibility
+
+Your library should not break-down as your app and your organization grows.  CanJS runs on multiple libraries and frameworks, making it an ideal choice for individuals and organizations that need flexibility.
 
 __Observables that handle nested data__
 
@@ -1583,29 +1621,9 @@ person.bind("change", function( ev, attr, how, newVal, oldVal ){
 person.attr("name.last", "Meyer");
 {% endhighlight %}
 
-__Opt-in data binding__
 
-Although [can.EJS's](#can_ejs) live-binding is super-duper fast, setting up live data binding can be too slow in certain situations (like rendering a list of 1000 items).  EJS's live binding is opt-in.  It only turns on
-if you are using the `attr` method.  If the following template binds to a `todo`'s `name` ...
 
-{% highlight erb %}
-<li> <%= todo.attr('name') %> </li>
-{% endhighlight %}
-  
-... the following doesn't setup live-binding and renders much faster ...
 
-{% highlight erb %}
-<li> <%= todo.name %> </li>
-{% endhighlight %}
-
-### Support
-
-CanJS is supported by Bitovi, formerly Jupiter Consulting.  We are extremely active on the forums. And should the 
-need arise, we provide support, training, and development.
-
-### Flexibility
-
-CanJS runs on multiple libraries and frameworks, making it an ideal choice for individuals and organizations that need flexibility.
 
 
 ## Developing CanJS
