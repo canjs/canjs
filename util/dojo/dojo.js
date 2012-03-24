@@ -1,9 +1,12 @@
 steal({
 	src: "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompressed.js",
 	_skip: true
-}, '../event.js').then('./nodelist-traverse').then(
-	'./trigger',
+}, '../event.js').then(
+	'./trigger', 
 	function(){
+
+	// these are pre-loaded by steal -> no callback
+	require(["dojo", "dojo/query", "plugd/trigger", "dojo/NodeList-dom"]);
 	
 	// String
 	can.trim = function(s){
@@ -71,10 +74,6 @@ steal({
 	 * Because of this, we have to map each callback to the "remove"
 	 * object to it can be passed to dojo.disconnect.
 	 */
-	
-	// these should be pre-loaded by steal
-	// we might want to wrap
-	require(["dojo/query", "plugd/trigger"], function(){})
 	
 	// the id of the function to be bound, used as an expando on the function
 	// so we can lookup it's "remove" object
