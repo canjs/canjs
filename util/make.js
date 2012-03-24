@@ -41,7 +41,6 @@ steal('steal/build/pluginify', function() {
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
-		skipCallbacks: true,
 		skipCallbacks: true
 	});
 	
@@ -84,7 +83,6 @@ steal('steal/build/pluginify', function() {
 		global : "can = {}",
 		onefunc : true,
 		compress: false,
-		skipCallbacks: true,
 		skipCallbacks: true
 	});
 	
