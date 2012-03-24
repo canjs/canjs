@@ -1557,7 +1557,7 @@ However, model only stores these model instances while something is binding to t
 
 ### Speed
 
-The importance of performance is almost impossible to over exaggerate.  CanJS's guts are highly optomized. For example, it pre-processes [can.Control] event handlers so binding is super fast.  But, it takes things to another level with the following two features:
+The importance of performance is almost impossible to over exaggerate.  CanJS's guts are highly optomized. For example, it pre-processes [can.Control](#can_control) event handlers so binding is super fast.  But, it takes things to another level with the following two features:
 
 __Model and view deferred support for parallel loading__
 
