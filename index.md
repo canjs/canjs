@@ -794,7 +794,7 @@ var Todos = can.Control({
 })
 {% endhighlight %}
 
-Create an instance of the Todos control the `#todos` element with:
+Create an instance of the Todos on the `#todos` element with:
 
 {% highlight javascript %}
 var todosControl = new Todos('#todos', {});
