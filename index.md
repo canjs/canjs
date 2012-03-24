@@ -806,7 +806,7 @@ __todos.ejs__ looks like:
 <% list(todos, function(todo){ %>
   <li <%= (el) -> el.data("todo", todo) %> >
     <%= todo.attr('name') %>
-    <a href='javascript://' class='destroy'>
+    <a href='javascript://' class='destroy'>X</a>
   </li>
 <% }) %>
 {% endhighlight %}
