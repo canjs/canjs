@@ -19,6 +19,12 @@ steal(function(){
 		    return [].slice.call(container.childNodes);
 		}
 	
+	/**
+	 * @function buildFragment
+	 * Creates a document fragment.
+	 * @param {Object} html
+	 * @param {Object} nodes.
+	 */
 	can.buildFragment = function(htmls, nodes){
 		var parts = fragment(htmls[0]),
 			frag = document.createDocumentFragment();
