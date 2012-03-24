@@ -646,67 +646,67 @@ steal('can/observe',function(){
 			return res;
 		},
 		/**
-		 * $.Model.model is used as a [http://api.jquery.com/extending-ajax/#Converters Ajax converter] 
-		 * to convert the response of a [$.Model.findOne] request 
-		 * into a model instance.  
+		 * `can.Model.model(attributes)` is used to convert data from the server into
+		 * a model instance.  It is rarely called directly.  Instead it is invoked as 
+		 * a result of [can.Model.findOne] or [can.Model.findAll].  
 		 * 
-		 * You will never call this method directly.  Instead, you tell $.ajax about it in findOne:
+		 * If your server is returning data in non-standard way,
+		 * overwriting `can.Model.model` is a good way to normalize it.
 		 * 
-		 *     $.Model('Recipe',{
-		 *       findOne : function(params, success, error ){
-		 *         return $.ajax({
-		 *           url: '/services/recipes/'+params.id+'.json',
-		 *           type: 'get',
-		 *           
-		 *           dataType : 'json recipe.model' //LOOK HERE!
-		 *         });
-		 *       }
-		 *     },{})
+		 * ## Example
 		 * 
-		 * This makes the result of findOne a [http://api.jquery.com/category/deferred-object/ $.Deferred]
-		 * that resolves to a model instance:
+		 * The following uses `model` to convert to a model
+		 * instance.
 		 * 
-		 *     var deferredRecipe = Recipe.findOne({id: 6});
+		 *     Task = can.Model({},{})
+		 *     var task = Task.model({id: 1, name : "dishes", complete : false})
 		 *     
-		 *     deferredRecipe.then(function(recipe){
-		 *       console.log('I am '+recipes.description+'.');
-		 *     })
+		 *     tasks.attr("complete", true)
+		 * 
+		 * `Task.model(attrs)` is very similar to simply calling `new Model(attrs)` except
+		 * that it checks the model's store if the instance has already been created.  The model's 
+		 * store is a collection of instances that have event handlers.  
+		 * 
+		 * This means that if the model's store already has an instance, you'll get the same instance
+		 * back.  Example:
+		 * 
+		 *     // create a task
+		 *     var taskA = new Task({id: 5, complete: true});
+		 * 
+		 *     // bind to it, which puts it in the store
+		 * 	   taskA.bind("complete", function(){});
+		 *     
+		 *     // use model to create / retrieve a task
+		 *     var taskB = Task.model({id: 5, complete: true});
+		 *     
+		 *     taskA === taskB //-> true
 		 * 
 		 * ## Non-standard Services
 		 * 
-		 * $.jQuery.model expects data to be name-value pairs like:
+		 * `can.Model.model` expects to retreive attributes of the model 
+		 * instance like:
 		 * 
-		 *     {id: 1, name : "justin"}
+		 * 
+		 *     {id: 5, name : "dishes"}
 		 *     
-		 * It can also take an object with attributes in a data, attributes, or
-		 * 'shortName' property.  For a App.Models.Person model the following will  all work:
 		 * 
-		 *     { data : {id: 1, name : "justin"} }
-		 *     
-		 *     { attributes : {id: 1, name : "justin"} }
-		 *     
-		 *     { person : {id: 1, name : "justin"} }
+		 * If the service returns data formatted differently, like:
 		 * 
+		 *     {todo: {name: "dishes", id: 5}}
 		 * 
-		 * ### Overwriting Model
+		 * Overwrite `model` like:
 		 * 
-		 * If your service returns data like:
-		 * 
-		 *     {id : 1, name: "justin", data: {foo : "bar"} }
-		 *     
-		 * This will confuse $.Model.model.  You will want to overwrite it to create 
-		 * an instance manually:
-		 * 
-		 *     $.Model('Person',{
+		 *     Task = can.Model({
 		 *       model : function(data){
-		 *         return new this(data);
+		 *         return can.Model.model.call(this,data.todo);
 		 *       }
-		 *     },{})
-		 *     
+		 *     },{});
 		 * 
-		 * @param {Object} attributes An object of name-value pairs or an object that has a 
-		 *  data, attributes, or 'shortName' property that maps to an object of name-value pairs.
-		 * @return {Model} an instance of the model
+		 * @param {Object} attributes An object of property name and values like:
+		 * 
+		 *      {id: 1, name : "dishes"}
+		 * 
+		 * @return {model} a model instance.
 		 */
 		model: function( attributes ) {
 			if (!attributes ) {
@@ -784,7 +784,13 @@ steal('can/observe',function(){
 	 */
 	{
 		/**
-		 * @function isNew
+		 * `isNew()` returns if the instance is has been created 
+		 * on the server.  
+		 * This is essentially if the [can.Model.id] property is null or undefined.
+		 * 
+		 *     new Recipe({id: 1}).isNew() //-> false
+		 * 
+		 * @return {Boolean} false if an id is set, true if otherwise.
 		 */
 		isNew: function() {
 			var id = getId(this);
@@ -792,7 +798,69 @@ steal('can/observe',function(){
 			return !(id || id === 0); //if null or undefined
 		},
 		/**
-		 * @function save
+		 * `model.save([success(model)],[error(xhr)])` creates or updates 
+		 * the model instance using [can.Model.create] or
+		 * [can.Model.update] depending if the instance
+		 * [can.Model::isNew has an id or not].
+		 * 
+		 * ## Using `save` to create an instance.
+		 * 
+		 * If `save` is called on an instance that does not have 
+		 * an [can.Model.id id] property, it calls [can.Model.create]
+		 * with the instance's properties.  It also [can.trigger triggers]
+		 * a "created" event on the instance and the model.
+		 * 
+		 *     // create a model instance
+		 *     var todo = new Todo({name: "dishes"})
+		 *     
+		 *     // listen when the instance is created
+		 *     todo.bind("created", function(ev){
+		 * 	     this //-> todo
+		 *     })
+		 *     
+		 *     // save it on the server
+		 *     todo.save(function(todo){
+		 * 	     console.log("todo", todo, "created")
+		 *     });
+		 * 
+		 * ## Using `save` to update an instance.
+		 * 
+		 * If save is called on an instance that has 
+		 * an [can.Model.id id] property, it calls [can.Model.create]
+		 * with the instance's properties.  When the save is complete,
+		 * it triggers an "updated" event on the instance and the instance's model.
+		 * 
+		 * Instances with an
+		 * __id__ are typically retrieved with [can.Model.findAll] or
+		 * [can.Model.findOne].  
+		 * 
+		 *  
+		 *     // get a created model instance
+		 *     Todo.findOne({id: 5},function(todo){
+		 *       	     
+		 *       // listen when the instance is updated
+		 *       todo.bind("updated", function(ev){
+		 * 	       this //-> todo
+		 *       })
+		 * 
+		 *       // update the instance's property
+		 *       todo.attr("complete", true)
+		 *       
+		 *       // save it on the server
+		 *       todo.save(function(todo){
+		 * 	       console.log("todo", todo, "updated")
+		 *       });
+		 * 
+		 *     });
+		 * 
+		 * 
+		 * @param {Function} [success(instance,data)]  Called if a successful save.
+		 * 
+		 * @param {Function} [error(xhr)] Called with (jqXHR) if the 
+		 * save was not successful. It is passed the ajax request's jQXHR object.
+		 * 
+		 * @return {can.Deferred} a deferred that resolves to the instance
+		 * after it has been created or updated.
 		 */
 		save: function( success, error ) {
 			return makeRequest(this, this.isNew() ? 'create' : 'update', success, error);
@@ -896,6 +964,27 @@ steal('can/observe',function(){
 		},
 		/**
 		 * @function unbind
+		 * `unbind(eventName, handler)` removes a listener
+		 * attached with [can.Model::bind].
+		 * 
+		 *     var handler = function(ev, createdTask){
+		 * 	     
+		 *     }
+		 *     task.bind("created", handler)
+		 *     task.unbind("created", handler)
+		 * 
+		 * You have to pass the same function to `unbind` that you
+		 * passed to `bind`.
+		 * 
+		 * Unbind will also remove the instance from the store
+		 * if there are no other listeners.
+		 * 
+		 * @param {String} eventName The type of event.  
+		 * 
+		 * @param {Function} handler(event,args...) A callback function
+		 * that was passed to `bind`.
+		 * 
+		 * @return {model} the model instance.
 		 */
 		unbind : function(eventName){
 			if(!ignoreHookup.test(eventName)) { 
