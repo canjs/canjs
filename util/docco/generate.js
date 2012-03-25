@@ -3,6 +3,7 @@
 var path          = require('path'),
 	fs            = require('fs'),
 	sourceDir     = path.join(path.dirname(fs.realpathSync(__filename)), '../../standalone/'),
+	jsDir         = path.join(path.dirname(fs.realpathSync(__filename)), '../../..'),
 	child_process = require('child_process');
 
 function runDocco() {
@@ -38,30 +39,40 @@ function runDocco() {
 
 }
 
-fs.readdir(sourceDir, function( err, files ) {
+function stripComments() {
+	fs.readdir(sourceDir, function( err, files ) {
 
-	var count = 0;
+		var count = 0;
 
-	// Only annotate full srcs
-	files = files.filter(function( file ) {
-		return file.indexOf(".min.") < 0;
-	});
+		// Only annotate full srcs
+		files = files.filter(function( file ) {
+			return file.indexOf(".min.") < 0;
+		});
 
-	// Create the temp directory for stripped code
-	fs.mkdir("temp", function() {
+		// Create the temp directory for stripped code
+		fs.mkdir("temp", function() {
 
-		// Generate source for all standalones
-		console.log( "Stripping multiline comments from:" );
-		files.forEach(function( file ) {
-			fs.readFile( sourceDir + file, "utf-8", function( err, code ) {
-				console.log( "\t" + file );
-				code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*/gim, "");
-				fs.writeFile("temp/" + file, code, "utf-8", function() {
-					if ( ++count == files.length ) {
-						runDocco();
-					}
+			// Generate source for all standalones
+			console.log( "Stripping multiline comments from:" );
+			files.forEach(function( file ) {
+				fs.readFile( sourceDir + file, "utf-8", function( err, code ) {
+					console.log( "\t" + file );
+					code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*/gim, "");
+					fs.writeFile("temp/" + file, code, "utf-8", function() {
+						if ( ++count == files.length ) {
+							runDocco();
+						}
+					});
 				});
 			});
 		});
 	});
+}
+
+console.log("generating unminified sources...");
+child_process.exec("./js can/util/docco/makestandalone.js", {
+	cwd : jsDir
+}, function( err, stdout, stderr ) {
+	stripComments();
 });
+
