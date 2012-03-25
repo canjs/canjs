@@ -1113,40 +1113,57 @@ property values.  If no routes are provided, it just serializes the route
 into standard URL-encoded notation.  Example:
 
 {% highlight javascript %}
+// empty the hash
 window.location.hash = ""
-  
+
+// the route is empty
 can.route.attr() //-> {}
   
+// set the hash
 window.location.hash = "#!id=7"
-  
+
+// the route data reflects what's in the hash
 can.route.attr() //-> { id: 7 }
-  
+
+// set the route data
 can.route.attr({ type : "todos" })
 
+// the hash changes to reflect the route data
 window.location.hash //-> #!type=todos
 
+// set a property on the hash
 can.route.attr("id",5)
 
+// the hash changes again to reflect the route data
 window.location.hash //-> #!type=todos&id=5
 {% endhighlight %}
 
 Use `can.route( route, defaults )` to make pretty urls:
 
 {% highlight javascript %}
+// create a route
 can.route(":type/:id")
 
+// set the hash to look like the route
 window.location.hash = "#!todo/5"
 
+// the route data changes accordingly
 can.route.attr() //-> { type: "todo", id: 5 }
 
+// change the route data with properties
+// used by the route
 can.route.attr({type: "user", id: 7})
 
-window.location.hash = "#!user/5"
-  
-can.route(":type",{ type : "recipe" })
+// the hash is changed to reflect the route
+window.location.hash //-> "#!user/7"
 
+// create a default route
+can.route("",{ type : "recipe" })
+
+// empty the hash
 window.location.hash = "";
 
+// the route data reflects the default value
 can.route.attr() //-> { type : "recipe" })
 {% endhighlight %}
 
