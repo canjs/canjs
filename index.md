@@ -20,7 +20,7 @@ It also includes a rich set of supported [extensions and plugins](#plugins).
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools.  Select your download 
 for the library you are using:
 
- - [can.jquery.js](http://staging.donejs.com/can/dist/can.jquery-edge.js) (8k)
+ - [can.jquery.js](http://staging.donejs.com/can/dist/can.jquery-edge.js) (8k) \[[dev](http://donejs.com/can/dist/can.jquery-dev-edge.js)\]
  - [can.zepto.js](http://staging.donejs.com/can/dist/can.zepto-edge.js) (9k)
  - [can.dojo.js](http://staging.donejs.com/can/dist/can.dojo-edge.js) (9k)
  - [can.mootools.js](http://staging.donejs.com/can/dist/can.mootools-edge.js) (9k)
