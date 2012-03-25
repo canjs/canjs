@@ -144,7 +144,8 @@ can.Control("Todos",{
 // call update on the editor like
 can.Control('Editor',{
   todo : function(todo){
-  	this.update({todo: todo});
+  	this.options.todo = todo;
+  	this.on();
   	this.setName()
   },
   // a helper that sets the value of the input
