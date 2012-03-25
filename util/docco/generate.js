@@ -14,11 +14,23 @@ function runDocco() {
 			return "temp/" + file;
 		});
 
+		console.log( "Generating docco annotated source..." );
 		child_process.exec("node_modules/docco/bin/docco " + files.join(" "), function() {
+			console.log( "Copying files: " );
 			fs.readdir("docs", function( err, files ) {
 				files.forEach(function( file ) {
-					fs.rename( "docs/" + file, "../../docs/" + file );
+					console.log( "\t" + file );
+					fs.renameSync( "docs/" + file, "../../docs/" + file );
 				});
+				console.log("Cleaning up...");
+				fs.readdir("temp", function( e, files ) {
+					files.forEach(function( file ) {
+						fs.unlinkSync("temp/" + file );
+					});
+					fs.rmdir("temp");
+				});
+				fs.rmdir("docs");
+				console.log("Done!");
 			});
 		});
 
@@ -39,8 +51,10 @@ fs.readdir(sourceDir, function( err, files ) {
 	fs.mkdir("temp", function() {
 
 		// Generate source for all standalones
+		console.log( "Stripping multiline comments from:" );
 		files.forEach(function( file ) {
 			fs.readFile( sourceDir + file, "utf-8", function( err, code ) {
+				console.log( "\t" + file );
 				code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*/gim, "");
 				fs.writeFile("temp/" + file, code, "utf-8", function() {
 					if ( ++count == files.length ) {
