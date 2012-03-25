@@ -53,12 +53,12 @@ new can.Control instance is created.  It's called with:
 and any other arguments passed to `new can.Control()`.  For example:
 
     var Todos = can.Control({
-      defaults : {template: 'todos.ejs'}
+      defaults : {view: 'todos.ejs'}
     },{
       "init" : function( element , options ){
         var self = this;
         Todo.findAll({}, function( todos ){
-          self.element.html(self.options.template, todos )
+          self.element.html(self.options.view, todos )
         })
       }
     })
