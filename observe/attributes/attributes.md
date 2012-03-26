@@ -19,6 +19,9 @@ can.Observe.convert to provide automatic type conversion.
 			}
 		}
 	},{})
+	
+*Note: Its important to include this plugin before you include other plugins that 
+extend Observe so that prototype chain is extended correctly.
 
 ## Type Conversion
 
