@@ -28,3 +28,6 @@ we can make our observes (which use _attrs_ and _attr_) automatically convert da
 	contact.attrs({
 		'birthday': new Date().getTime()
 	});
+	
+*Note: Its important to include this plugin before you include other plugins that 
+extend Observe so that prototype chain is extended correctly.
