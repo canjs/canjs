@@ -5,18 +5,21 @@ Renders a View template with the controller instance. If the first argument
 is not supplied, it looks for a view in /views/controller_name/action_name.ejs.
 If data is not provided, it uses the controller instance as data.
 
-	TasksController = can.Control.extend('TasksController',{
+	var Tasks = can.Control.extend('Tasks',{
 		click: function( el ) {
 			// renders with views/tasks/click.ejs
-			el.html( this.view() ) 
-			
+			this.element.html( this.view() )
+
+			// renders with views/tasks/click.ejs with some data
+			this.element.html( this.view({ name : 'The task' }) );
+
 			// renders with views/tasks/under.ejs
-			el.after( this.view("under", [1,2]) );
+			this.element.html( this.view("under", [1,2]) );
 
 			// renders with views/tasks/under.micro 
-			el.after( this.view("under.micro", [1,2]) );
+			this.element.html( this.view("under.micro", [1,2]) );
 
 			// renders with views/shared/top.ejs
-			el.before( this.view("shared/top", {phrase: "hi"}) );
+			this.element.html( this.view("shared/top", {phrase: "hi"}) );
 		}
 	})
