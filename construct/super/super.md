@@ -17,9 +17,9 @@ Allows you to call the base function via a `_super` attribute. Given a simple To
     console.log(trash.toString()); // -> TODO: Take out trash
 
 Using the *super* plugin you can create an extended version of this Todo construct and in each method
-be able to access the overwritten method using `this._super`:
+be able to access the overwritten method using `this._super` (if there is one):
 
-	var BetterTodo = Todo.extend({
+	var BetterTodo = Todo({
 		init : function(text, status) {
 			this._super(text);
 			this.status = status || 'Not done';
@@ -31,12 +31,13 @@ be able to access the overwritten method using `this._super`:
 	});
 
 	var betterTodo = new BetterTodo('Take out trash', 'Done');
-    console.log(newTrash.toString()); // -> [Done] TODO: Take out trash
+    console.log(newTrash.toString());
+    // -> [Done] TODO: Take out trash
 
 If you want to pass all arguments to `_super` use
 [apply](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/apply):
 
-	var EvenBetterTodo = BetterTodo.extend({
+	var EvenBetterTodo = BetterTodo({
 		init : function(text, status) {
 			this._super.apply(this, arguments);
 			this.is_evenbetter = true;
