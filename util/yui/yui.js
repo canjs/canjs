@@ -109,12 +109,15 @@
 			return nodelist;
 		}
 		can.$ = function( selector ) {
-			if ( selector === window ) {
-				return window
-			} else if ( selector instanceof Y.NodeList ) {
+			if (selector === window) {
+				return window;
+			} else if (selector instanceof Y.NodeList) {
 				return prepareNodeList(selector);
+			} else if (typeof selector === "object" && !can.isArray(selector) && typeof selector.nodeType === "undefined" && !selector.getDOMNode) {
+				return selector;
+			} else {
+				return prepareNodeList(Y.all(selector));
 			}
-			return selector === window ? window : prepareNodeList(Y.all(selector));
 		}
 		can.get = function( wrapped, index ) {
 			return wrapped._nodes[index];
@@ -229,43 +232,56 @@
 			// callbackId to "remove" object.  It looks like
 			// {click: {5: {remove: fn}}}		
 			addBinding = function( nodelist, selector, ev, cb ) {
-				nodelist.each(function( node ) {
-					var node = can.$(node)
-					var events = can.data(node, "events"),
-						eventName = ev + ":" + selector;
-					if (!events ) {
-						can.data(node, "events", events = {})
-					}
-					if (!events[eventName] ) {
-						events[eventName] = {};
-					}
-					if ( cb.__bindingsIds === undefined ) {
-						cb.__bindingsIds = id++;
-					}
-					events[eventName][cb.__bindingsIds] =
-					selector ? node.item(0).delegate(ev, cb, selector) : node.item(0).on(ev, cb)
-				});
+        if (nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode) {
+            nodelist.each(function (node) {
+                var node = can.$(node);
+                var events = can.data(node, "events"), eventName = ev + ":" + selector;
+                if (!events) {
+                    can.data(node, "events", events = {});
+                }
+                if (!events[eventName]) {
+                    events[eventName] = {};
+                }
+                if (cb.__bindingsIds === undefined) {
+                    cb.__bindingsIds = id++;
+                }
+                events[eventName][cb.__bindingsIds] = selector ? node.item(0).delegate(ev, cb, selector) : node.item(0).on(ev, cb);
+            });
+        } else {
+            var obj = nodelist, events = obj.__canEvents = obj.__canEvents || {};
+            if (!events[ev]) {
+                events[ev] = {};
+            }
+            if (cb.__bindingsIds === undefined) {
+                cb.__bindingsIds = id++;
+            }
+            events[ev][cb.__bindingsIds] = obj.on(ev, cb);
+        }
 			},
 			// removes a binding on a nodelist by finding
 			// the remove object within the object's data
 			removeBinding = function( nodelist, selector, ev, cb ) {
-				nodelist.each(function( node ) {
-					var node = can.$(node),
-						events = can.data(node, "events"),
-						eventName = ev + ":" + selector,
-						handlers = events[eventName],
-						handler = handlers[cb.__bindingsIds];
-
+				if (nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode) {
+					nodelist.each(function (node) {
+						var node = can.$(node), events = can.data(node, "events"), eventName = ev + ":" + selector, handlers = events[eventName], handler = handlers[cb.__bindingsIds];
+						handler.detach();
+						delete handlers[cb.__bindingsIds];
+						if (can.isEmptyObject(handlers)) {
+							delete events[ev];
+						}
+						if (can.isEmptyObject(events)) {
+						}
+					});
+				} else {
+					var obj = nodelist, events = obj.__canEvents || {}, handlers = events[eventName], handler = handlers[cb.__bindingsIds];
 					handler.detach();
 					delete handlers[cb.__bindingsIds];
-
-					if ( can.isEmptyObject(handlers) ) {
-						delete events[ev]
+					if (can.isEmptyObject(handlers)) {
+						delete events[ev];
 					}
-					if ( can.isEmptyObject(events) ) {
-						// clear data
+					if (can.isEmptyObject(events)) {
 					}
-				});
+				}
 			}
 			can.bind = function( ev, cb ) {
 				// if we can bind to it ...
