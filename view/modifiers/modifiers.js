@@ -2,7 +2,7 @@ steal('can/view', function(){
 	
 	//---- ADD jQUERY HELPERS -----
 	//converts jquery functions to use views	
-	var convert, modify, isTemplate, isHTML, isDOM, getCallback, hookupView, funcs,
+	var convert, modify, isTemplate, isHTML, isDOM, getCallback,
 		// text and val cannot produce an element, so don't run hookups on them
 		noHookup = {'val':true,'text':true};
 
@@ -261,7 +261,4 @@ steal('can/view', function(){
 	"replaceWith", "val"],function(i, func){
 		convert(func);
 	});
-
-	//go through helper funcs and convert
-	
 })

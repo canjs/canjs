@@ -77,7 +77,7 @@ that increments a counter for each instance created:
 Constructor functions are usually anonymus, meaning that they don't carry any naming or namespace information.
 You can however pass a namespace string additionally to the static and prototype properties when defining a
 can.Construct. This will make the constructor function available as a global object in that namespace and also set the
-__shortName__, __fullName__ and __namespace__ static properties.
+[can.Construct::shortName], [can.Construct::fullName] and [can.Construct::namespace] static properties.
 
     can.Construct("Bitovi.Person", {
         init : function(name) {
