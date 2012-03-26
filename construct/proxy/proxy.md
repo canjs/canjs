@@ -32,7 +32,8 @@ parameters followed by the callback's arguments.
 		getData: function( <b>callback</b> ) {
 			$.get("data.json",this.proxy('process',<b>callback</b>),'json');
 		},
-		process: function( <b>callback</b>, jsonData ) { //callback is added as first argument
+		process: function( <b>callback</b>, jsonData ) {
+			//callback is added as first argument
 			jsonData.processed = true;
 			callback(jsonData);
 		}

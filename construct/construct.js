@@ -25,11 +25,11 @@ steal("can/util/string",function( $ ) {
 		/**
 		 * @function newInstance
 		 * Creates a new instance of the constructor function.  This method is useful for creating new instances
-		 * with arbitrary parameters.  Typically you want to simply call `new Constructor` instead.
+		 * with arbitrary parameters.  Typically you want to simply use the __new__ operator instead.
 		 * 
 		 * ## Example
 		 * 
-		 * The following creates a `Person` constructor method, then creates a new instance of person, but
+		 * The following creates a `Person` Construct and then creates a new instance of person, but
 		 * by using `apply` on newInstance to pass arbitrary parameters.
 		 * 
 		 *     var Person = can.Construct({
@@ -73,10 +73,8 @@ steal("can/util/string",function( $ ) {
 		},
 		/**
 		 * Setup is called immediately after a constructor function is created and 
-		 * set to inherit from its base constructor.  It is called with base constructor and
-		 * the params used to extend the base constructor.  
-		 * 
-		 * It is useful for setting up an additional inheritence work.
+		 * set to inherit from its base constructor.  It is called with a base constructor and
+		 * the params used to extend the base constructor. It is useful for setting up additional inheritance work.
 		 * 
 		 * ## Example
 		 * 
@@ -239,8 +237,9 @@ steal("can/util/string",function( $ ) {
 				 */
 				namespace: namespace,
 				/**
-				 * @attribute shortName 
-				 * The name of the class without its namespace, provided for introspection purposes.
+				 * @attribute shortName
+				 * If you pass a name when creating a Construct, the `shortName` property will be set to the
+				 * actual name without the namespace:
 				 * 
 				 *     can.Construct("MyOrg.MyConstructor",{},{})
 				 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
@@ -253,7 +252,8 @@ steal("can/util/string",function( $ ) {
 				constructor: Constructor,
 				/**
 				 * @attribute fullName 
-				 * The full name of the class, including namespace, provided for introspection purposes.
+				 * If you pass a name when creating a Construct, the `fullName` property will be set to
+				 * the actual name including the full namespace:
 				 * 
 				 *     can.Construct("MyOrg.MyConstructor",{},{})
 				 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
@@ -336,12 +336,8 @@ steal("can/util/string",function( $ ) {
 			/** 
 			 * @function init
 			 * 
-			 * If a prototype `init` method is provided, it gets called when a new instance
-			 * is created.  It gets called after [can.Construct::setup], typically with the 
-			 * same arguments passed to the Constructor 
-			 * constructor: (<code> new Constructor( arguments ... )</code>).  
-			 * 
-			 * The `init` method is where your constructor code should go.  Typically,
+			 * If a prototype `init` method is provided, it gets called after [can.Construct::setup] when a new instance
+			 * is created. The `init` method is where your constructor code should go. Typically,
 			 * you will find it saving the arguments passed to the constructor function for later use. 
 			 * 
 			 * ## Examples
@@ -370,8 +366,8 @@ steal("can/util/string",function( $ ) {
 			 *         this.lang = lang
 			 *       },
 			 *       greet : function(){
-			 *         return "I am "+this.first+" "+this.last+"."+
-			 *                "I write "+this.lang +".";
+			 *         return "I am " + this.first + " " + this.last + ". " +
+			 *                "I write " + this.lang + ".";
 			 *       }
 			 *     })
 			 * 
@@ -383,22 +379,19 @@ steal("can/util/string",function( $ ) {
 			 * 
 			 * [can.Construct::setup] is able to modify the arguments passed to init.
 			 * 
-			 * It doesn't matter what init returns.  This is because the `new` keyword always
+			 * It doesn't matter what init returns because the `new` keyword always
 			 * returns the new object.
-			 * 
-			 * There is no `init` method defined on can.Construct so calling _super will not work.
-			 * 
 			 */
 			//Breaks up code
 			/**
 			 * @attribute constructor
 			 * 
-			 * A reference to the constructor function that created the instance.  Its allows one to access 
+			 * A reference to the constructor function that created the instance. It allows you to access
 			 * the constructor function's static properties from an instance.
 			 * 
 			 * ## Example
 			 * 
-			 * `Counter` counts how many instances are created:
+			 * Incrementing a static counter, that counts how many instances have been created:
 			 * 
 			 *     Counter = can.Construct({
 			 * 	     count : 0
