@@ -4,7 +4,7 @@ steal('can/control', function(){
 
 //used to determine if a controller instance is one of controllers
 //controllers can be strings or classes
-var i, 
+var i,
 	isAControllerOf = function( instance, controllers ) {
 		for ( i = 0; i < controllers.length; i++ ) {
 			if ( typeof controllers[i] == 'string' ? instance.constructor._shortName == controllers[i] : instance instanceof controllers[i] ) {
@@ -15,7 +15,9 @@ var i,
 	},
 	data = function(el, data){
 		var $el = can.$(el);
-		$el.data("controllers", data || {})
+		if(!$el.data('controllers')) {
+			$el.data('controllers', data || {})
+		}
 		return $el.data('controllers');
 	},
 	makeArray = can.makeArray,
@@ -77,7 +79,7 @@ can.prototype.extend({
 		//check if arguments
 		this.each(function() {
 
-			controllers = can.$(this).data("controllers");
+			controllers = data(this);
 			for ( cname in controllers ) {
 				if ( controllers.hasOwnProperty(cname) ) {
 					c = controllers[cname];
@@ -106,14 +108,12 @@ can.Control.plugin = function(pluginname){
 
 	if (!can.prototype[pluginname]) {
 		can.prototype[pluginname] = function(options){
-		
 			var args = makeArray(arguments),   //if the arg is a method on this controller
 			isMethod = typeof options == "string" && $.isFunction(controller.prototype[options]), meth = args[0];
 			return this.each(function(){
 				//check if created
 				var controllers = data(this),    //plugin is actually the controller instance
 				plugin = controllers && controllers[pluginname];
-				
 				if (plugin) {
 					if (isMethod) {
 						// call a method on the controller with the remaining args

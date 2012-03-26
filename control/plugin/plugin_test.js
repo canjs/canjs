@@ -1,44 +1,51 @@
-steal('can/construct/super', 
-	  'funcunit/qunit')
-.then('can/control/plugin')
-.then(function(){
+steal('can/construct/super',
+'funcunit/qunit')
+.then('can/construct/super', 'can/control/plugin')
+.then(function () {
 
-module("can/control/plugin")
+	module("can/control/plugin")
 
+	test("pluginName", function () {
+		expect(8);
 
-test("pluginName", function() {
-	// Testing for controller pluginName fixes as reported in
-	// http://forum.javascriptmvc.com/#topic/32525000000253001
-	// http://forum.javascriptmvc.com/#topic/32525000000488001
-	expect(6);
+		var pluginControl = can.Control({
+			pluginName : "my_plugin"
+		}, {
+			init : function(el, ops) {
+				ok(true, 'Init called');
+				equal(ops.testop, 'testing', 'Test argument set');
+			},
 
-	can.Control("PluginName", {
-	pluginName : "my_plugin"
-	}, {
-		
-	method : function(arg) {
-	ok(true, "Method called");
-	},
+			method : function (arg) {
+				ok(true, "Method called");
+				equal(arg, 'testarg', 'Test argument passed');
+			},
 
-	update : function(options) {
-	this._super(options);
-	ok(true, "Update called");
-	},
+			update : function (options) {
+				ok(true, "Update called");
+			}
+		});
 
-	destroy : function() {
-	ok(true, "Destroyed");
-	this._super();
-	}
+		var ta = can.$("<div/>").addClass('existing_class').appendTo($("#qunit-test-area"));
+		ta.my_plugin({ testop : 'testing' }); // Init
+		ok(ta.hasClass("my_plugin"), "Should have class my_plugin");
+		ta.my_plugin(); // Update
+		ta.my_plugin("method", "testarg"); // method()
+		ta.controller().destroy(); // destroy
+		ok(!ta.hasClass("my_plugin"), "Shouldn't have class my_plugin after being destroyed");
+		ok(ta.hasClass("existing_class"), "Existing class should still be there");
 	});
 
-	var ta = can.$("<div/>").addClass('existing_class').appendTo( $("#qunit-test-area") );
-	ta.my_plugin(); // Init
-	ok(ta.hasClass("my_plugin"), "Should have class my_plugin");
-	ta.my_plugin(); // Update
-	ta.my_plugin("method"); // method()
-	ta.controller().destroy(); // destroy
-	ok(!ta.hasClass("my_plugin"), "Shouldn't have class my_plugin after being destroyed");
-	ok(ta.hasClass("existing_class"), "Existing class should still be there");
-})
+	test(".controller(), .controllers()", function() {
+		expect(3);
+		can.Control("TestPlugin", {
+		});
+
+		var ta = can.$("<div/>").appendTo($("#qunit-test-area"));
+		ok(ta.test_plugin, 'Converting Control name to plugin name worked');
+		ta.test_plugin();
+		equal(ta.controllers().length, 1, '.controllers() returns one instance');
+		ok(ta.controller() instanceof TestPlugin, 'Control is instance of test plugin')
+	});
 
 });
