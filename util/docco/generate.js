@@ -76,7 +76,7 @@ console.log("generating unminified sources...");
 child_process.exec("js can/util/docco/makestandalone.js", {
 	cwd : jsDir
 }, function( err, stdout, stderr ) {
-	console.log("test", stdout, stderr, jsDir);
+	console.log( stdout );
 	stripComments();
 });
 
