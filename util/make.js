@@ -41,7 +41,6 @@ steal('steal/build/pluginify', function() {
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
-		skipCallbacks: true,
 		skipCallbacks: true
 	});
 	
@@ -58,6 +57,7 @@ steal('steal/build/pluginify', function() {
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
+		wrapInner: ['\ndefine("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){\n', '\nreturn can;\n});\n'],
 		skipCallbacks: true
 	});
 	
@@ -83,7 +83,6 @@ steal('steal/build/pluginify', function() {
 		global : "can = {}",
 		onefunc : true,
 		compress: false,
-		skipCallbacks: true,
 		skipCallbacks: true
 	});
 	
@@ -100,6 +99,7 @@ steal('steal/build/pluginify', function() {
 		global : "can = {}",
 		onefunc : true,
 		compress: false,
+		wrapInner: ['\ndefine("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){\n', '\nreturn can;\n});\n'],
 		skipCallbacks: true
 	});
 	

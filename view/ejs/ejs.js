@@ -488,9 +488,12 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						content += '<%';
 						break;
 					case '<':
-						htmlTag = 1;
+						// make sure we are not in a comment
+						if(tokens[i].indexOf("!--") !== 0) {
+							htmlTag = 1;
+							magicInTag = 0;
+						}
 						content += token;
-						magicInTag = 0;
 						break;
 					case '>':
 						htmlTag = 0;

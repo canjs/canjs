@@ -522,7 +522,85 @@ steal('can/observe',function(){
 			}
 		},
 		/**
-		 * @function models
+		 * `can.Model.models(data, xhr)` is used to 
+		 * convert the raw response of a [can.Model.findAll] request 
+		 * into a [can.Model.List] of model instances.  
+		 * 
+		 * This method is rarely called directly. Instead the deferred returned
+		 * by findAll is piped into `models`.  This creates a new deferred that
+		 * resolves to a [can.Model.List] of instances instead of an array of
+		 * simple JS objects.
+		 * 
+		 * If your server is returning data in non-standard way,
+		 * overwriting `can.Model.models` is the best way to normalize it.
+		 * 
+		 * ## Quick Example
+		 * 
+		 * The following uses models to convert to a [can.Model.List] of model
+		 * instances.
+		 * 
+		 *     Task = can.Model({},{})
+		 *     var tasks = Task.models([
+		 * 	     {id: 1, name : "dishes", complete : false},
+		 *       {id: 2, name: "laundry", compelte: true}
+		 *     ])
+		 *     
+		 *     tasks.attr("0.complete", true)
+		 * 
+		 * ## Non-standard Services
+		 * 
+		 * `can.Model.models` expects data to be an array of name-value pair 
+		 * objects like:
+		 * 
+		 *     [{id: 1, name : "dishes"},{id:2, name: "laundry"}, ...]
+		 *     
+		 * It can also take an object with additional data about the array like:
+		 * 
+		 *     {
+		 *       count: 15000 //how many total items there might be
+		 *       data: [{id: 1, name : "justin"},{id:2, name: "brian"}, ...]
+		 *     }
+		 * 
+		 * In this case, models will return a [can.Model.List] of instances found in 
+		 * data, but with additional properties as expandos on the list:
+		 * 
+		 *     var tasks = Task.models({
+		 *       count : 1500,
+		 *       data : [{id: 1, name: 'dishes'}, ...]
+		 *     })
+		 *     tasks.attr("name") // -> 'dishes'
+		 *     tasks.count // -> 1500
+		 * 
+		 * ### Overwriting Models
+		 * 
+		 * If your service returns data like:
+		 * 
+		 *     {thingsToDo: [{name: "dishes", id: 5}]}
+		 * 
+		 * You will want to overwrite models to pass the base models what it expects like:
+		 * 
+		 *     Task = can.Model({
+		 *       models : function(data){
+		 *         return can.Model.models.call(this,data.thingsToDo);
+		 *       }
+		 *     },{})
+		 * 
+		 * `can.Model.models` passes each intstance's data to `can.Model.model` to
+		 * create the individual instances.
+		 * 
+		 * @param {Array|Objects} instancesRawData An array of raw name - value pairs objects like:
+		 * 
+		 *      [{id: 1, name : "dishes"},{id:2, name: "laundry"}, ...]
+		 * 
+		 * Or an Object with a data property and other expando properties like:
+		 * 
+		 * 	   {
+		 *       count: 15000 //how many total items there might be
+		 *       data: [{id: 1, name : "justin"},{id:2, name: "brian"}, ...]
+		 *     }
+		 * 
+		 * @return {Array} a [can.Model.List] of instances.  Each instance is created with
+		 * [can.Model.model].
 		 */
 		models: function( instancesRawData ) {
 			if ( ! instancesRawData ) {
@@ -568,7 +646,67 @@ steal('can/observe',function(){
 			return res;
 		},
 		/**
-		 * @function model
+		 * `can.Model.model(attributes)` is used to convert data from the server into
+		 * a model instance.  It is rarely called directly.  Instead it is invoked as 
+		 * a result of [can.Model.findOne] or [can.Model.findAll].  
+		 * 
+		 * If your server is returning data in non-standard way,
+		 * overwriting `can.Model.model` is a good way to normalize it.
+		 * 
+		 * ## Example
+		 * 
+		 * The following uses `model` to convert to a model
+		 * instance.
+		 * 
+		 *     Task = can.Model({},{})
+		 *     var task = Task.model({id: 1, name : "dishes", complete : false})
+		 *     
+		 *     tasks.attr("complete", true)
+		 * 
+		 * `Task.model(attrs)` is very similar to simply calling `new Model(attrs)` except
+		 * that it checks the model's store if the instance has already been created.  The model's 
+		 * store is a collection of instances that have event handlers.  
+		 * 
+		 * This means that if the model's store already has an instance, you'll get the same instance
+		 * back.  Example:
+		 * 
+		 *     // create a task
+		 *     var taskA = new Task({id: 5, complete: true});
+		 * 
+		 *     // bind to it, which puts it in the store
+		 * 	   taskA.bind("complete", function(){});
+		 *     
+		 *     // use model to create / retrieve a task
+		 *     var taskB = Task.model({id: 5, complete: true});
+		 *     
+		 *     taskA === taskB //-> true
+		 * 
+		 * ## Non-standard Services
+		 * 
+		 * `can.Model.model` expects to retreive attributes of the model 
+		 * instance like:
+		 * 
+		 * 
+		 *     {id: 5, name : "dishes"}
+		 *     
+		 * 
+		 * If the service returns data formatted differently, like:
+		 * 
+		 *     {todo: {name: "dishes", id: 5}}
+		 * 
+		 * Overwrite `model` like:
+		 * 
+		 *     Task = can.Model({
+		 *       model : function(data){
+		 *         return can.Model.model.call(this,data.todo);
+		 *       }
+		 *     },{});
+		 * 
+		 * @param {Object} attributes An object of property name and values like:
+		 * 
+		 *      {id: 1, name : "dishes"}
+		 * 
+		 * @return {model} a model instance.
 		 */
 		model: function( attributes ) {
 			if (!attributes ) {
@@ -585,10 +723,48 @@ steal('can/observe',function(){
 		}
 		/**
 		 * @function bind
+		 * `bind(eventType, handler(event, instance))` listens to
+		 * __created__, __updated__, __destroyed__ events on all 
+		 * instances of the model.
+		 * 
+		 *     Task.bind("created", function(ev, createdTask){
+		 * 	     this //-> Task
+		 *       createdTask.attr("name") //-> "Dishes"
+		 *     })
+		 *     
+		 *     new Task({name: "Dishes"}).save();
+		 * 
+		 * @param {String} eventType The type of event.  It must be
+		 * `"created"`, `"udpated"`, `"destroyed"`.
+		 * 
+		 * @param {Function} handler(event,instance) A callback function
+		 * that gets called with the event and instance that was
+		 * created, destroyed, or updated.
+		 * 
+		 * @return {can.Model} the model constructor function.
 		 */
 		// inherited with can.Observe
 		/**
 		 * @function unbind
+		 * `unbind(eventType, handler)` removes a listener
+		 * attached with [can.Model.bind].
+		 * 
+		 *     var handler = function(ev, createdTask){
+		 * 	     
+		 *     }
+		 *     Task.bind("created", handler)
+		 *     Task.unbind("created", handler)
+		 * 
+		 * You have to pass the same function to `unbind` that you
+		 * passed to `bind`.
+		 * 
+		 * @param {String} eventType The type of event.  It must be
+		 * `"created"`, `"udpated"`, `"destroyed"`.
+		 * 
+		 * @param {Function} handler(event,instance) A callback function
+		 * that was passed to `bind`.
+		 * 
+		 * @return {can.Model} the model constructor function.
 		 */
 		// inherited with can.Observe
 		/**
@@ -608,7 +784,12 @@ steal('can/observe',function(){
 	 */
 	{
 		/**
-		 * @function isNew
+		 * `isNew()` returns if the instance is has been created 
+		 * on the server.  
+		 * This is essentially if the [can.Model.id] property is null or undefined.
+		 * 
+		 *     new Recipe({id: 1}).isNew() //-> false
+		 * @return {Boolean} false if an id is set, true if otherwise.
 		 */
 		isNew: function() {
 			var id = getId(this);
@@ -616,7 +797,69 @@ steal('can/observe',function(){
 			return !(id || id === 0); //if null or undefined
 		},
 		/**
-		 * @function save
+		 * `model.save([success(model)],[error(xhr)])` creates or updates 
+		 * the model instance using [can.Model.create] or
+		 * [can.Model.update] depending if the instance
+		 * [can.Model::isNew has an id or not].
+		 * 
+		 * ## Using `save` to create an instance.
+		 * 
+		 * If `save` is called on an instance that does not have 
+		 * an [can.Model.id id] property, it calls [can.Model.create]
+		 * with the instance's properties.  It also [can.trigger triggers]
+		 * a "created" event on the instance and the model.
+		 * 
+		 *     // create a model instance
+		 *     var todo = new Todo({name: "dishes"})
+		 *     
+		 *     // listen when the instance is created
+		 *     todo.bind("created", function(ev){
+		 * 	     this //-> todo
+		 *     })
+		 *     
+		 *     // save it on the server
+		 *     todo.save(function(todo){
+		 * 	     console.log("todo", todo, "created")
+		 *     });
+		 * 
+		 * ## Using `save` to update an instance.
+		 * 
+		 * If save is called on an instance that has 
+		 * an [can.Model.id id] property, it calls [can.Model.create]
+		 * with the instance's properties.  When the save is complete,
+		 * it triggers an "updated" event on the instance and the instance's model.
+		 * 
+		 * Instances with an
+		 * __id__ are typically retrieved with [can.Model.findAll] or
+		 * [can.Model.findOne].  
+		 * 
+		 *  
+		 *     // get a created model instance
+		 *     Todo.findOne({id: 5},function(todo){
+		 *       	     
+		 *       // listen when the instance is updated
+		 *       todo.bind("updated", function(ev){
+		 * 	       this //-> todo
+		 *       })
+		 * 
+		 *       // update the instance's property
+		 *       todo.attr("complete", true)
+		 *       
+		 *       // save it on the server
+		 *       todo.save(function(todo){
+		 * 	       console.log("todo", todo, "updated")
+		 *       });
+		 * 
+		 *     });
+		 * 
+		 * 
+		 * @param {Function} [success(instance,data)]  Called if a successful save.
+		 * 
+		 * @param {Function} [error(xhr)] Called with (jqXHR) if the 
+		 * save was not successful. It is passed the ajax request's jQXHR object.
+		 * 
+		 * @return {can.Deferred} a deferred that resolves to the instance
+		 * after it has been created or updated.
 		 */
 		save: function( success, error ) {
 			return makeRequest(this, this.isNew() ? 'create' : 'update', success, error);
@@ -720,6 +963,27 @@ steal('can/observe',function(){
 		},
 		/**
 		 * @function unbind
+		 * `unbind(eventName, handler)` removes a listener
+		 * attached with [can.Model::bind].
+		 * 
+		 *     var handler = function(ev, createdTask){
+		 * 	     
+		 *     }
+		 *     task.bind("created", handler)
+		 *     task.unbind("created", handler)
+		 * 
+		 * You have to pass the same function to `unbind` that you
+		 * passed to `bind`.
+		 * 
+		 * Unbind will also remove the instance from the store
+		 * if there are no other listeners.
+		 * 
+		 * @param {String} eventName The type of event.  
+		 * 
+		 * @param {Function} handler(event,args...) A callback function
+		 * that was passed to `bind`.
+		 * 
+		 * @return {model} the model instance.
 		 */
 		unbind : function(eventName){
 			if(!ignoreHookup.test(eventName)) { 
