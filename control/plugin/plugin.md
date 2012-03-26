@@ -1,6 +1,8 @@
 @page can.Control.plugin 
 @parent can.Control
 
+> __Note:__ This plugin only supports jQuery.
+
 The can.Control __plugin__ extension creates a plugin for the control in the 
 base-library's NodeList using the control's [fullName can.Construct.fullName] or
 a static pluginName attribute. For example, if you create the following control:
@@ -19,41 +21,39 @@ a static pluginName attribute. For example, if you create the following control:
 		}
 	});
 
-With jQuery, you can create the control direct on a jQuery collection like:
+With jQuery, you can create the control directly on a jQuery collection like:
 
     $(".tabs").tabs();
-    
-> __Note:__ This plugin only supports jQuery.
 
 ## Creating
 
-The first time you call the plugin on an element it will create a new can.Control instance, passing it the element
+The first time you call the plugin it will create a new can.Control instance, passing it the element
 and the plugin options:
 
 	$(".tabs").tabs({ active : 1 });
 
 ## Updating
 
-Once initialized, every subsequent plugin call on an initialized controller will trigger it's *update* method with
-the options passed to the plugin call. By default *update* will merge the new options with the ones already defined.
-
-
-Talk about the update method.  How options are passed to it.
+Once initialized, every subsequent plugin call  will trigger *can.Control.update* with the options passed
+to the plugin call. By default *update* will merge the new options with the ones already defined but it can also
+be extended to e.g. rerender a view.
 
 ## Calling methods
 
-__plugin__ supports calling methods on the Control instance by passing the method name and parameters
-to a plugin call.
+__Plugin__ supports calling methods on the Control instance by passing the method name and parameters
+to a plugin call:
 
-Talk about calling methods
+    $('.tabs').tabs('activate', 0);
+
+Keep in mind, that a method called this way won't return it's value but follows the jQuery convention of returning
+a jQuery object.
 
 ## Access
 
-Control instances created by a plugin will be stored in the element they have been attached to using can.Data.
-You can use *.controllers()* to get a list of all Control instances on an element or *.controller()* to get
-the first or only one:
+Control instances created by a plugin will be stored on the element they have been attached to using can.Data with
+a *controllers* key. You can use *.controllers()* to get a list of all Control instances or *.controller()*
+to get the first or only instance:
 
-	$('.tabs').controllers(); // [ Tabs ]
-
-Talk about how the control instances are stored in can.Data.  How they
-can be retrieved with control or controls.  
+	var controllers = $('.tabs').controllers(); // [ Tabs ]
+	var control = $('.tabs').control(); // Retrieve the only control
+	control.activate(0);
