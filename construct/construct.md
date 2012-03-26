@@ -40,7 +40,7 @@ call the the  base constructor function with the new constructor function's prop
 When a new class instance is created, it calls the class's `init` method with the arguments passed
 to the constructor function:
 
-    $.Class('Person',{
+    var Person = can.Construct({
       init : function(name){
         this.name = name;
       },
@@ -74,10 +74,11 @@ that increments a counter for each instance created:
 
 ## Introspection
 
-Constructor functions are usually anonymus, meaning that they don't carry any naming or namespace information.
-You can however pass a namespace string additionally to the static and prototype properties when defining a
-can.Construct. This will make the constructor function available as a global object in that namespace and also set the
-[can.Construct::shortName], [can.Construct::fullName] and [can.Construct::namespace] static properties.
+Constructor functions are anonymus, meaning that they don't carry any naming or namespace information.
+You can however pass a namespace string when defining a can.Construct which will make the constructor
+function available globally in that namespace and also set the
+[can.Construct.static.shortName], [can.Construct.static.fullName] and [can.Construct.static.namespace]
+static properties.
 
     can.Construct("Bitovi.Person", {
         init : function(name) {
@@ -96,6 +97,6 @@ can.Construct. This will make the constructor function available as a global obj
 
 can.Construct can be used with these two plugins:
 
-[can.Control::super]: Adds access to the prototype by adding `this._super` to overwritten methods
+[can.Construct.super]: Adds access to the prototype by adding `this._super` to overwritten methods
 
-[can.Control::proxy]: Is a flexible way to create callbacks from a Construct instance
+[can.Construct.proxy]: Is a flexible way to create callbacks from constructor functions
