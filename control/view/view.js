@@ -10,8 +10,7 @@ steal('can/control', 'can/view').then(function( $ ) {
 			classPartsWithoutPrefix = classParts.slice(0);
 			classPartsWithoutPrefix.splice(0, 2); // Remove prefix (usually 2 elements)
 
-		var classPartsWithoutPrefixSlashes = classPartsWithoutPrefix.join('/'),
-			hasControllers = (classParts.length > 2) && classParts[1] == 'Controllers',
+		var hasControllers = (classParts.length > 2) && classParts[1] == 'Controllers',
 			path = hasControllers? can.underscore(classParts[0]): can.underscore(classParts.join("/")),
 			controller_name = can.underscore(classPartsWithoutPrefix.join('/')).toLowerCase(),
 			suffix = (typeof view == "string" && /\.[\w\d]+$/.test(view)) ? "" : can.view.ext;
@@ -75,18 +74,21 @@ steal('can/control', 'can/view').then(function( $ ) {
 	 * Renders a View template with the controller instance. If the first argument
 	 * is not supplied, it looks for a view in /views/controller_name/action_name.ejs.
 	 * If data is not provided, it uses the controller instance as data.
+	 * Note that you will have to set a name when creating the Control construct for __view__ to work.
 	 *
 	 * @codestart
-	 * TasksController = can.Control.extend('TasksController',{
+	 * var Tasks = can.Control.extend('Tasks',{
 	 *   click: function( el ) {
 	 *     // renders with views/tasks/click.ejs
-	 *     el.html( this.view() ) 
+	 *     this.element.html( this.view() );
+	 *     // renders with views/tasks/click.ejs with some data
+	 *     this.element.html( this.view({ name : 'The task' }) );
 	 *     // renders with views/tasks/under.ejs
-	 *     el.after( this.view("under", [1,2]) );
+	 *     this.element.html( this.view("under", [1,2]) );
 	 *     // renders with views/tasks/under.micro 
-	 *     el.after( this.view("under.micro", [1,2]) );
+	 *     this.element.html( this.view("under.micro", [1,2]) );
 	 *     // renders with views/shared/top.ejs
-	 *     el.before( this.view("shared/top", {phrase: "hi"}) );
+	 *     this.element.html( this.view("shared/top", {phrase: "hi"}) );
 	 *   }
 	 * })
 	 * @codeend
