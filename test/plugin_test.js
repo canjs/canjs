@@ -1,13 +1,6 @@
 steal('can/util/mvc.js')
 .then('funcunit/qunit', 
 	  'can/test/fixture.js')
-/*.then('./mvc_test.js',
-	  'can/construct/construct_test.js',
-	  'can/observe/observe_test.js',
-	  'can/view/view_test.js',
-	  'can/control/control_test.js',
-	  'can/model/model_test.js',
-	  'can/view/ejs/ejs_test.js')*/
 .then('can/construct/proxy/proxy_test.js',
 	  'can/construct/super/super_test.js',
 	  'can/observe/attributes/attributes_test.js',
@@ -15,7 +8,7 @@ steal('can/util/mvc.js')
 	  'can/observe/backup/backup_test.js',
 	  'can/observe/setter/setter_test.js',
 	  'can/observe/validations/validations_test.js',
-	  /*'can/control/plugin/plugin_test.js',*/
+	  'can/control/plugin/plugin_test.js',
 	  'can/control/route/route_test.js',
 	  'can/control/view/test/qunit/view_test.js',
 	  'can/view/modifiers/modifiers_test.js')
