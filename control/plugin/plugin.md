@@ -8,7 +8,7 @@ a static pluginName attribute. For example, if you create the following control:
     var Tabs = can.Control({
       pluginName : "tabs"
     },{
-      init : function(element, options, arg1){
+      init : function(element, options){
       
       },
       update : function(options) {
@@ -24,8 +24,10 @@ With jQuery, you can create the control direct on a jQuery collection like:
 
 ## Creating
 
-Show how to create an instance, how arguments are passed.  How an instance
-will be created on each object.
+__plugin__ will create a new can.Control instance on the element it has been called on,
+passing the object passed to the plugin as the options:
+
+	$(".tabs").tabs({ active : 1 });
 
 ## Updating
 
