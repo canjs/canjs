@@ -8,32 +8,35 @@ var path          = require('path'),
 
 function runDocco() {
 
-	fs.readdir("temp", function( err, files ) {
+	fs.mkdir("../../docs", function() {
+		fs.readdir("temp", function( err, files ) {
 
-		// Prepend temp to each file
-		files = files.map(function( file ) {
-			return "temp/" + file;
-		});
-
-		console.log( "Generating docco annotated source..." );
-		child_process.exec("node_modules/docco/bin/docco " + files.join(" "), function() {
-			console.log( "Copying files: " );
-			fs.readdir("docs", function( err, files ) {
-				files.forEach(function( file ) {
-					console.log( "\t" + file );
-					fs.renameSync( "docs/" + file, "../../docs/" + file );
-				});
-				console.log("Cleaning up...");
-				fs.readdir("temp", function( e, files ) {
-					files.forEach(function( file ) {
-						fs.unlinkSync("temp/" + file );
-					});
-					fs.rmdir("temp");
-				});
-				fs.rmdir("docs");
-				console.log("Done!");
+			// Prepend temp to each file
+			files = files.map(function( file ) {
+				return "temp/" + file;
 			});
+
+			console.log( "Generating docco annotated source..." );
+			child_process.exec("docco " + files.join(" "), function() {
+				fs.readdir("docs", function( err, files ) {
+					files.forEach(function( file ) {
+						console.log( "\t" + file );
+						fs.renameSync( "docs/" + file, "../../docs/" + file );
+					});
+					console.log("Cleaning up...");
+					fs.readdir("temp", function( e, files ) {
+						files.forEach(function( file ) {
+							fs.unlinkSync("temp/" + file );
+						});
+						fs.rmdir("temp");
+					});
+					fs.rmdir("docs");
+					console.log("Done!");
+				});
+			});
+
 		});
+
 
 	});
 
@@ -70,9 +73,10 @@ function stripComments() {
 }
 
 console.log("generating unminified sources...");
-child_process.exec("./js can/util/docco/makestandalone.js", {
+child_process.exec("js can/util/docco/makestandalone.js", {
 	cwd : jsDir
 }, function( err, stdout, stderr ) {
+	console.log("test", stdout, stderr, jsDir);
 	stripComments();
 });
 
