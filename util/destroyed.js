@@ -31,8 +31,8 @@ steal('can/util').then(function() {
 	var oldClean = $.cleanData;
 
 	can.cleanData = function( elems ) {
-		$.each( elems, function( i, elem ) {
-			$(elem).triggerHandler("destroyed");
+		can.each( elems, function( i, elem ) {
+			can.$(elem).triggerHandler("destroyed");
 		});
 		oldClean(elems);
 	};
