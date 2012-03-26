@@ -10,8 +10,7 @@ steal('can/control', 'can/view').then(function( $ ) {
 			classPartsWithoutPrefix = classParts.slice(0);
 			classPartsWithoutPrefix.splice(0, 2); // Remove prefix (usually 2 elements)
 
-		var classPartsWithoutPrefixSlashes = classPartsWithoutPrefix.join('/'),
-			hasControllers = (classParts.length > 2) && classParts[1] == 'Controllers',
+		var hasControllers = (classParts.length > 2) && classParts[1] == 'Controllers',
 			path = hasControllers? can.underscore(classParts[0]): can.underscore(classParts.join("/")),
 			controller_name = can.underscore(classPartsWithoutPrefix.join('/')).toLowerCase(),
 			suffix = (typeof view == "string" && /\.[\w\d]+$/.test(view)) ? "" : can.view.ext;
@@ -77,7 +76,7 @@ steal('can/control', 'can/view').then(function( $ ) {
 	 * If data is not provided, it uses the controller instance as data.
 	 *
 	 * @codestart
-	 * TasksController = can.Control.extend('TasksController',{
+	 * TasksController = can.Control.extend('Tasks',{
 	 *   click: function( el ) {
 	 *     // renders with views/tasks/click.ejs
 	 *     el.html( this.view() ) 
