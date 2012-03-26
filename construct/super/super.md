@@ -42,3 +42,6 @@ If you want to pass all arguments to `_super` use
 			this.is_evenbetter = true;
 		}
 	});
+
+*Note: Its important to include this plugin before you include other plugins that 
+extend Observe so that prototype chain is extended correctly.

@@ -39,6 +39,9 @@ or to test if setting a value would create an error:
         //     birthday: ["your birthday needs to be in the past"]
         //   }
 
+*Note: Its important to include this plugin before you include other plugins that 
+extend Observe so that prototype chain is extended correctly.
+
 ## Validation Methods
 
 There are several built-in validation methods so you don't have to define your own in all cases like in the birthday example above.
