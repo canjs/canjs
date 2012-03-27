@@ -1489,7 +1489,7 @@ The following are our very biased reasons to use CanJS.
 
 ### Size 
 
-Ontop of jQuery, CanJS is 8.2k.  Here's some other frameworks for comparison:
+On top of jQuery, CanJS is 8.2k.  Here's some other frameworks for comparison:
 
  - Backbone 8.3kb (with Underscore.js)
  - Angular 24kb
@@ -1578,7 +1578,7 @@ However, model only stores these model instances while something is binding to t
 
 ### Speed
 
-The importance of performance is almost impossible to over exaggerate.  CanJS's guts are highly optomized. For example, it pre-processes [can.Control](#can_control) event handlers so binding is super fast.  But, it takes things to another level with the following two features:
+The importance of performance is almost impossible to exaggerate.  CanJS's guts are highly optimized. For example, it pre-processes [can.Control](#can_control) event handlers so binding is super fast.  But, it takes things to another level with the following two features:
 
 __Model and view deferred support for parallel loading__
 
@@ -1599,7 +1599,7 @@ can.view('todos.ejs', Todo.findAll() ).then(function( frag ){
 
 __Opt-in data binding__
 
-Although [can.EJS's](#can_ejs) live-binding is super-duper fast, setting up live data binding can be too slow in certain situations (like rendering a list of 1000 items).  EJS's live binding is opt-in.  It only turns on
+Although [can.EJS's](#can_ejs) live-binding is super fast, setting up live data binding can be too slow in certain situations (like rendering a list of 1000 items).  EJS's live binding is opt-in.  It only turns on
 if you are using the `attr` method.  If the following template binds to a `todo`'s `name` ...
 
 {% highlight erb %}
@@ -1622,17 +1622,17 @@ __Spports multiple libraries and frameworks__
 
 Want to share code between a Zepto mobile app, and a jQuery desktop 
 app?  No problem.  CanJS code (especially models) can be shared 
-across libraries.  But so can skill sets!  Working on a Dojo project today and 
+across libraries, and so can skill sets!  Working on a Dojo project today and 
 a YUI one tomorrow?  Don't throw away all of your skills.
 
 __Designed for plugins__
 
 CanJS is extracted from [JavaScriptMVC](http://javascriptmvc.com), but currently supports 
-almost all of it's MVC functionality through plugins.  Start small, with it's basic functionality, and extend 
+almost all of its MVC functionality through plugins.  Start small, with its basic functionality, and extend 
 it with [plugins](#plugins) that handle things like:
 
  - setters
- - serialize / deserialize
+ - serialization / deserialization
  - jQuery plugin generation
  - validations
  - calling super methods
@@ -1641,7 +1641,7 @@ These plugins have forced the core to be quite extendable, making 3rd party plug
 
 __Engineered limber__
 
-CanJS's tools are designed to work under almost every situation.  Your server sends back XML with strange URLs?  That's ok, overwrite [can.Model.findAll](http://donejs.com/docs.html#!can.Model.static.findAll) or [can.Model.models](http://donejs.com/docs.html#!can.Model.static.models).  Want some special teardown code for a control?  Overwrite [can.Control:destroy](http://donejs.com/docs.html#!can.Control.prototype.destroy).
+CanJS's tools are designed to work under almost every situation.  Your server sends back XML with strange URLs?  That's ok, overwrite [can.Model.findAll](http://donejs.com/docs.html#!can.Model.static.findAll) or [can.Model.models](http://donejs.com/docs.html#!can.Model.static.models).  Want some special teardown code for a control?  Overwrite [can.Control.destroy](http://donejs.com/docs.html#!can.Control.prototype.destroy).
 
 But our favorite bit of flexibility is how [can.Observe](#can_observe) works with nested data.  It converts nested objects into observes 
 automatically.  For example:
@@ -1652,14 +1652,14 @@ var person = new can.Observe({
   hobbies : ['programming', 'party rocking']
 })
 
-person.attr('name.first') //-> "Justin"
-person.attr('hobbies.0') //-> "programming"
+person.attr('name.first') //-> 'Justin'
+person.attr('hobbies.0') //-> 'programming'
 {% endhighlight %}
 
 But most important, `change` events bubble.  Letting observe listen when a nested property changes:
 
 {% highlight javascript %}
-person.bind("change", function( ev, attr, how, newVal, oldVal ){
+person.bind('change', function( ev, attr, how, newVal, oldVal ){
   attr   //-> 'name.last'
   how    //-> 'set'
   newVal //-> 'Meyer'
