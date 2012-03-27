@@ -1,3 +1,5 @@
+steal('can/observe', function(){
+
 var proto = can.Observe.List.prototype,
 	_changes = proto._changes,
 	setup = proto.setup;
@@ -7,7 +9,10 @@ can.extend(proto,{
 	comparator: undefined,
 	sortIndexes: [],
 	
-	sortedIndex = function(item){
+	/**
+	 * @hide
+	 */
+	sortedIndex: function(item){
 		var itemCompare = item.attr(this.comparator),
 			equaled = 0, i;
 			
@@ -25,6 +30,9 @@ can.extend(proto,{
 		return i + equaled;
 	},
 	
+	/**
+	 * @hide
+	 */
 	sort: function(method, silent){
 		var comparator = this.comparator,
 			args = comparator ? [function(a, b){
@@ -34,9 +42,34 @@ can.extend(proto,{
 			}] : [],
 			res = [].sort.apply(this, args);
 
-		!silent && trigger(this, "reset");
+		!silent && can.trigger(this, "reset");
 	}
 });
+
+// create push, pop, shift, and unshift
+// converts to an array of arguments 
+var getArgs = function( args ) {
+		return args[0] && can.isArray(args[0]) ?
+			args[0] :
+			can.makeArray(args);
+	},
+	collecting = undefined,
+	batchTrigger = function( item, event, args ) {
+		// send no events if initalizing
+		if ( ! item._init) {
+			if (!collecting ) {
+				return can.trigger(item, event, args);
+			} else {
+				collecting.push([
+				item,
+				{
+					type: event,
+					batchNum : batchNum
+				}, 
+				args ] );
+			}
+		}
+	};
 
 can.each({
 	/**
@@ -79,39 +112,24 @@ can.each({
 // - name - method name
 // - where - where items in the array should be added
 function( name, where ) {
-	list.prototype[name] = function() {
+	var proto = can.Observe.List.prototype,
+		old = proto[name];
+		
+	proto[name] = function() {
 		// get the items being added
 		var args = getArgs(arguments),
 			// where we are going to add items
 			len = where ? this.length : 0;
-
-		// go through and convert anything to an observe that needs to be converted
-		for ( var i = 0, leg = args.length; i < leg; i++ ) {
-			var val = args[i];
-			if ( canMakeObserve(val) ) {
-				args[i] = hookupBubble(val, "*", this)
-			}
-		}
-
-		// if we have a sort item, add that
-		if( args.length == 1 && this.comparator ) {
-			// add each item ...
-			// we could make this check if we are already adding in order
-			// but that would be confusing ...
-			var index = this.sortedIndex(args[0]);
-			this.splice(index, 0, args[0]);
-			return this.length;
-		}
-
+			
 		// call the original method
-		var res = [][name].apply(this, args)
+		var res = old.apply(this, arguments);
 
 		// cause the change where the args are:
 		// len - where the additions happened
 		// add - items added
 		// args - the items added
 		// undefined - the old value
-		if ( this.comparator && args.length) {
+		if ( this.comparator && args.length ) {
 			this.sort(null, true);
 			batchTrigger(this,"reset", [args])
 		} else {
@@ -134,12 +152,12 @@ proto._changes = function(ev, attr, how, newVal, oldVal){
 
 		if(newIndex !== index){
 			// move ...
-			splice.call(this, index, 1);
-			splice.call(this, newIndex, 0, item);
+			[].splice.call(this, index, 1);
+			[].splice.call(this, newIndex, 0, item);
 
-			trigger(this, "move", [item, newIndex, index]);
+			can.trigger(this, "move", [item, newIndex, index]);
 			ev.stopImmediatePropagation();
-			trigger(this,"change", [
+			can.trigger(this,"change", [
 				attr.replace(/^\d+/,newIndex),
 				how,
 				newVal,
@@ -161,3 +179,5 @@ proto.setup = function( instances, options ) {
 		this.sort()
 	}
 };
+
+});
