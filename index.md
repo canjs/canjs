@@ -773,7 +773,7 @@ can provides it as `can.data( NodeList, NAME, data )`.  Rewrite the above exampl
 
 [can.Control](http://donejs.com/docs.html#!can.Control) creates organized, memory-leak free, 
 rapidly performing, stateful controls. Use it to create UI controls like 
-tabs, grids, and contextmenus and used to organize them 
+tabs, grids, and context menus and organizes them 
 into higher-order business rules with [can.route](http://donejs.com/docs.html#!can.route). It can serve as 
 a traditional view and a 
 traditional controller.
@@ -788,7 +788,7 @@ var Todos = can.Control({
   "init" : function( element , options ) {
     var self = this;
     Todo.findAll({}, function( todos ){
-      self.element.html( can.view('todosEJS', todos) )
+      self.element.html( can.view("todosEJS", todos) )
     })
   }
 })
@@ -797,7 +797,7 @@ var Todos = can.Control({
 Create an instance of the Todos on the `#todos` element with:
 
 {% highlight javascript %}
-var todosControl = new Todos('#todos', {});
+var todosControl = new Todos("#todos", {});
 {% endhighlight %}
 
 __todos.ejs__ looks like:
@@ -805,7 +805,7 @@ __todos.ejs__ looks like:
 {% highlight erb %}
 <% list(todos, function(todo){ %>
   <li <%= (el) -> el.data("todo", todo) %> >
-    <%= todo.attr('name') %>
+    <%= todo.attr("name") %>
     <a href='javascript://' class='destroy'>X</a>
   </li>
 <% }) %>
@@ -828,7 +828,7 @@ and any other arguments passed to `new can.Control()`.  For example:
 
 {% highlight javascript %}
 var Todos = can.Control({
-  defaults : {view: 'todos.ejs'}
+  defaults : {view: "todos.ejs"}
 },{
   "init" : function( element , options ){
     var self = this;
@@ -842,13 +842,13 @@ var Todos = can.Control({
 new Todos( document.body.firstElementChild );
 
 // overwrite the template option
-new Todos( $('#todos'), {view: 'specialTodos.ejs'})
+new Todos( $("#todos"), {view: "specialTodos.ejs"})
 {% endhighlight %}
 
 ### element `this.element`
 
 [this.element](http://donejs.com/docs.html#!can.Controll.prototype.element) is the 
-a nodelist of a single element, the element the control is created on. 
+a NodeList of a single element, the element the control is created on. 
 
 {% highlight javascript %}
 var todosControl = new Todos( document.body.firstElementChild );
@@ -860,23 +860,23 @@ Each library wraps the element differently.  If you are using jQuery, the elemen
 ### options `this.options`
 
 [this.options](http://donejs.com/docs.html#!can.Control.prototype.options) is the second argument passed to 
-`new can.Control()` merged with the control's static __defaults__ property.
+`new can.Control()` and is merged with the control's static __defaults__ property.
 
 ### Listening to events
 
 Control automatically binds prototype methods that look
-like event handlers.  Listen to __click__s on `<li>` elements like:
+like event handlers.  Listening to __click__s on `<li>` elements looks like:
 
 {% highlight javascript %}
 var Todos = can.Control({
-  "init" : function( element , options ){
+  'init' : function( element , options ){
     var self = this;
     Todo.findAll({},function(todos){
       self.element.html( can.view('todosEJS', todos ) )
     });
   },
-  "li click" : function(li, event){
-    console.log("You clicked", li.text() )
+  'li click' : function(li, event){
+    console.log('You clicked', li.text() )
     
     // let other controls know what happened
     li.trigger('selected');
@@ -884,7 +884,7 @@ var Todos = can.Control({
 })
 {% endhighlight %}
 
-When an `<li>` is clicked, `"li click"` is called with:
+When an `<li>` is clicked, `'li click'` is called with:
 
 - The library-wrapped __element__ that was clicked.
 - The __event__ data
@@ -897,23 +897,23 @@ is clicked:
 
 {% highlight javascript %}
 var Todos = can.Control({
-  "init" : function( element , options ){
+  'init' : function( element , options ){
     var self = this;
     Todo.findAll({},function(todos){
       self.element.html( can.view('todosEJS', todos ) )
     });
   },
-  "li click" : function(li){
+  'li click' : function(li){
     li.trigger('selected', li.model() );
   },
-  "li .destroy click" : function(el, ev){
+  'li .destroy click' : function(el, ev){
     // get the li element that has todo data
     var li = el.closest('li');
   
     // get the model
     var todo = li.data('todo')
   
-    //destroy it
+    // destroy it
     todo.destroy();
   }
 })
@@ -928,37 +928,37 @@ the event handler name.  The following allows customization
 of the event that destroys a todo:
 
 {% highlight javascript %}
-var Todos = can.Control("Todos",{
-  "init" : function( element , options ){ ... },
-  "li click" : function(li){ ... },
+var Todos = can.Control('Todos',{
+  'init' : function( element , options ){ ... },
+  'li click' : function(li){ ... },
   
-  "li .destroy {destroyEvent}" : function(el, ev){ 
+  'li .destroy {destroyEvent}' : function(el, ev){ 
     // previous destroy code here
   }
 })
 
 // create Todos with this.options.destroyEvent
-new Todos("#todos",{destroyEvent: "mouseenter"})
+new Todos('#todos',{destroyEvent: 'mouseenter'})
 {% endhighlight %}
 
 Values inside `{NAME}` are looked up on the control's `this.options`
 and then the `window`.  For example, we could customize it instead like:
 
 {% highlight javascript %}
-var Todos = can.Control("Todos",{
-  "init" : function( element , options ){ ... },
-  "li click" : function(li){ ... },
+var Todos = can.Control('Todos',{
+  'init' : function( element , options ){ ... },
+  'li click' : function(li){ ... },
   
-  "li .destroy {Events.destroy}" : function(el, ev){ 
+  'li .destroy {Events.destroy}' : function(el, ev){ 
     // previous destroy code here
   }
 })
 
 // Events config
-Events = {destroy: "click"};
+Events = {destroy: 'click'};
 
 // Events.destroy is looked up on the window.
-new Todos("#todos")
+new Todos('#todos')
 {% endhighlight %}
 
 The selector can also be templated.
@@ -967,7 +967,7 @@ The selector can also be templated.
 
 Control can also bind to objects other than `this.element` with
 templated event handlers.  This is _critical
-for avoiding memory leaks that are so common among MVC applications.  
+for avoiding memory leaks that are common among MVC applications.  
 
 If the value inside `{NAME}` is an object, that object will be 
 bound to.  For example, the following tooltip listens to 
@@ -975,7 +975,7 @@ clicks on the window:
 
 {% highlight javascript %}
 var Tooltip = can.Control({
-  "{window} click" : function(el, ev){
+  '{window} click' : function(el, ev){
     // hide only if we clicked outside the tooltip
     if(! this.element.has(ev.target ) {
       this.element.remove();
@@ -994,17 +994,17 @@ could implement it in `Todos` like:
 
 {% highlight javascript %}
 var Todos = can.Control({
-  "init" : function( element , options ){
+  'init' : function( element , options ){
     var self = this;
     Todo.findAll({},function(todos){
       self.todosList = todos;
       self.element.html( can.view('todosEJS', todos ) )
     })
   },
-  "li click" : function(li){
+  'li click' : function(li){
     li.trigger('selected', li.model() );
   },
-  "li .destroy click" : function(el, ev){
+  'li .destroy clickæ : function(el, ev){
     // get the li element that has todo data
     var li = el.closest('li');
   
@@ -1014,15 +1014,15 @@ var Todos = can.Control({
     //destroy it
     todo.destroy();
   },
-  "{Todo} destroyed" : funtion(Todo, ev, todoDestroyed) {
-    // find where the element
+  '{Todo} destroyed' : funtion(Todo, ev, todoDestroyed) {
+    // find where the element is in the list
     var index = this.todosList.indexOf(todoDestroyed)
-    this.element.children(":nth-child("+(index+1)+")")
+    this.element.children(':nth-child('+(index+1)+')')
         .remove()
   }
 })
 
-new Todos("#todos");
+new Todos('#todos');
 {% endhighlight %}
 
 ### destroy `control.destroy()`
@@ -1032,7 +1032,7 @@ event handlers and releases its element, but does not remove
 the element from the page. 
 
 {% highlight javascript %}
-var todo = new Todos("#todos")
+var todo = new Todos('#todos')
 todo.destroy();
 {% endhighlight %}
 
@@ -1040,28 +1040,28 @@ When a control's element is removed from the page
 __destroy__ is called automatically.
 
 {% highlight javascript %}
-new Todos("#todos")
-$("#todos").remove();
+new Todos('#todos')
+$('#todos').remove();
 {% endhighlight %}
     
 All event handlers bound with Control are unbound when the control 
 is destroyed (or its element is removed).
 
-<i>Brief aside on destroy and templated event binding. Taken 
-together, templated event binding, and control's automatic
+A brief aside on destroy and templated event binding: Taken 
+together, templated event binding and Control's automatic
 clean-up make it almost impossible 
 to write leaking applications. An application that uses
 only templated event handlers on controls within the body
 could free up all 
-data by calling `$(document.body).empty()`.</i>
+data by calling `$(document.body).empty()`.
 
 ### on `control.on()`
 
 [can.Control.prototype.on](http://donejs.com/docs.html#!can.Control.prototype.on) rebinds a control's event handlers.  This is useful when you want
 to listen to a specific model and change it.
 
-The following `Editor` widget's __todo__ method, updates the todo option and then calls `on()` to 
-rebind `"{todo} updated"`.
+The following `Editor` widget's __todo__ method updates the todo option and then calls `on()` to 
+rebind `'{todo} updated'`.
 
 {% highlight javascript %}
 var Editor = can.Control({
@@ -1077,23 +1077,23 @@ var Editor = can.Control({
   },
   // listen for changes in the todo
   // and update the input
-  "{todo} updated" : function(){
+  '{todo} updated' : function(){
     this.setName();
   },
   // when the input changes
   // update the todo instance
-  "change" : function(){
+  'change' : function(){
     var todo = this.options.todo
     todo.attr('name',this.element.val() )
     todo.save();
   }
 });
 
-var todo1 = new Todo({id: 6, name: "trash"}),
-    todo2 = new Todo({id: 6, name: "dishes"});
+var todo1 = new Todo({id: 6, name: 'trash'}),
+    todo2 = new Todo({id: 6, name: 'dishes'});
 
-// create the editor;
-var editor = new Editor("#editor");
+// create the editor
+var editor = new Editor('#editor');
 
 // show the first todo
 editor.todo( todo1 )
@@ -1106,7 +1106,7 @@ editor.todo( todo2 );
 
 [can.route](http://donejs.com/docs.html#!can.route) is the core of CanJS's 
 routing functionality. It is a speical [can.Observe](#can_observe) that
-updates `window.location.hash` when it's properties change
+updates `window.location.hash` when its properties change
 and updates its properties when `window.location.hash` 
 changes. __can.route__ uses routes to translate urls into
 property values.  If no routes are provided, it just serializes the route
