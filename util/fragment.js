@@ -15,7 +15,20 @@ steal(function(){
 		    }
 		    if (!(name in containers)) name = '*';
 		    var container = containers[name];
-		    container.innerHTML = '' + html;
+		     /* 
+			    IE's parser will strip any <tr><td> tags when innerHTML 
+			    is called on a tbody. To get around this, we construct a 
+			    valid table with a tbody that has the innerHTML we want. 
+			    Then the container is the firstChild of the tbody
+			    http://www.ericvasilik.com/2006/07/code-karma.html 
+		    */
+		    if(name === "tr") {
+		    	var temp = document.createElement('div');
+		    	temp.innerHTML = "<table><tbody>" + html + "</tbody></table>";
+		    	container = temp.firstChild.firstChild;
+		    } else {
+		    	container.innerHTML = '' + html;
+		    }
 		    return [].slice.call(container.childNodes);
 		}
 	
