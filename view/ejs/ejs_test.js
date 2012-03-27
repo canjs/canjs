@@ -407,6 +407,35 @@ test('html comments', function(){
 	div.appendChild(can.view.frag(compiled));
 })
 
+test("hookup and live binding", function(){
+	
+	var text = "<div class='<%= task.attr('completed') ? 'complete' : '' %>' <%= (el)-> can.data(can.$(el),'task',task) %>>" +
+		"<%== task.attr('name') %>" +
+		"</div>",
+		task = new can.Observe({
+			completed: false,
+			className: 'someTask',
+			name: 'My Name'
+		}),
+		compiled = new can.EJS({ text: text }).render({ task: task }),
+		div = document.createElement('div');
+	
+	div.appendChild(can.view.frag(compiled))
+	var child = div.getElementsByTagName('div')[0];
+	ok( child.className.indexOf("complete") == -1, "is incomplete" )
+	ok( !!can.data(can.$(child), 'task'), "has data" )
+	equals(child.innerHTML, "My Name", "has name")
+	
+	task.attr({
+		completed: true,
+		name: 'New Name'
+	});
+	
+	ok( child.className.indexOf("complete") != -1, "is complete" )
+	equals(child.innerHTML, "New Name", "has new name")
+	
+})
+
 
 /** /
 test('multiple curly braces in a block', function() {
