@@ -1,6 +1,4 @@
-steal('can/util/mvc.js')
-.then('funcunit/qunit', 
-	  'can/test/fixture.js')
+steal('./setup.js')
 .then('can/construct/proxy/proxy_test.js',
 	  'can/construct/super/super_test.js',
 	  'can/observe/attributes/attributes_test.js',
