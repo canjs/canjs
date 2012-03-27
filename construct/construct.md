@@ -9,11 +9,11 @@ functions that can be used with the __new__ keyword. It  is based off John Resig
 
 To create a constructor function,  call `can.Construct( [ NAME, staticProperties, ] instanceProperties )`.
 
-    var Animal = can.Construct({
-      breathe : function(){
-         console.log('Breathing');
-      }
-    });
+	var Animal = can.Construct({
+		breathe : function () {
+			console.log('Breathing');
+		}
+	});
 
 `Animal` is a constructor function and instances of Animal have a `breathe()` method. We 
 can create a `new Animal` object and call `breathe()` on it like:
@@ -26,10 +26,10 @@ If you want to create a sub-class (a constructor function that inherits properti
 call the the  base constructor function with the new constructor function's properties:
 
     Dog = Animal({
-      bark : function(){
-        console.log('Woof!');
-      }
-    })
+    	bark : function () {
+    		console.log('Woof!');
+    	}
+    });
 
     var dog = new Dog;
     dog.bark();
@@ -40,17 +40,18 @@ call the the  base constructor function with the new constructor function's prop
 When a new class instance is created, it calls the class's `init` method with the arguments passed
 to the constructor function:
 
-    var Person = can.Construct({
-      init : function(name){
-        this.name = name;
-      },
-      speak : function(){
-        return "I am " + this.name + ".";
-      }
-    });
+	var Person = can.Construct({
+		init : function (name) {
+			this.name = name;
+		},
+		speak : function () {
+			return "I am " + this.name + ".";
+		}
+	});
     
     var payal = new Person("Payal");
-    assertEqual( payal.speak() ,  'I am Payal.' );
+    console.log(payal.speak());
+    // -> I am Payal.
 
 ## Static Inheritance 
 
@@ -61,16 +62,16 @@ You can access static properties directly on the construct object or in a protot
 that increments a counter for each instance created:
 
 	var Person = can.Construct({
-			count : 0
-		}, {
-			init : function(name) {
-				this.name = name;
-				this.constructor.count++;
-			}
-		});
+		count : 0
+	}, {
+		init : function(name) {
+			this.name = name;
+			this.constructor.count++;
+		}
+	});
 
 	var justin = new Person('Justin');
-	Person.count // -> 1
+	console.log(Person.count); // -> 1
 
 ## Introspection
 
@@ -86,12 +87,12 @@ static properties.
         }
     });
 
-    Bitovi.Person.shortName; //-> 'Person'
-    Bitovi.Person.fullName;  //-> 'Bitovi.Person'
-    Bitovi.Person.namespace; //-> Bitovi
+    console.log(Bitovi.Person.shortName); // -> 'Person'
+    console.log(Bitovi.Person.fullName);  //-> 'Bitovi.Person'
+    console.log(Bitovi.Person.namespace); //-> [Object]
     
     var person = new Bitovi.Person();
-    person.constructor.shortName; // -> 'Person'
+    console.log(person.constructor.shortName); // -> 'Person'
 
 ## Plugins
 
