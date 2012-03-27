@@ -194,12 +194,12 @@ test("block live binding", function(){
 })
 
 test("hookups in tables", function(){
-	var text = "<table><% if( obs.attr('sex') == 'male' ){ %>"+
+	var text = "<table><tbody><% if( obs.attr('sex') == 'male' ){ %>"+
 			"<tr><td>Mr.</td></tr>"+
 		"<% } else { %>"+
 		  "<tr><td>Ms.</td></tr>"+
 		"<% } %>"+
-		"</table>"
+		"</tbody></table>"
 		
 	var obs = new can.Observe({
 		sex : 'male'
@@ -329,6 +329,9 @@ test('live binding and removeAttr', function(){
 	equals(div.innerHTML, '', 'value in block statement is undefined');
 
 	obs.attr('show', true);
+	
+	var p = div.getElementsByTagName('p')[0],
+		span = p.getElementsByTagName('span')[0];
 
 	equals(p.getAttribute("some"), "newText", 'value in block statement updated attr');
 	equals(p.getAttribute("class"), "newClass", 'value in block statement updated class');
