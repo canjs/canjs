@@ -1,5 +1,8 @@
 @page can.Control.route 
 @parent can.Control
+@plugin can/control/route
+@test can/control/view/qunit.html
+@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/control/view/view.js
 
 The `can/control/route` plugin adds a {can.route] processor to can.Control.  This allows
 creating routes and binding to `can.route` in a single step.  For example:
