@@ -1,5 +1,8 @@
 @page can.Observe.attributes
 @parent can.Observe
+@plugin can/observe/attributes
+@test can/observe/attributes/qunit.html
+@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/attributes/attributes.js
 
 Attributes contains a map of attribute names/types. You can use this in conjunction with 
 [can.Observe.convert] to provide automatic type conversion.

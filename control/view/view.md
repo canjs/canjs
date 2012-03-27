@@ -1,5 +1,8 @@
 @page can.Control.view 
 @parent can.Control
+@plugin can/control/view
+@test can/control/view/qunit.html
+@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/control/view/view.js
 
 Renders a View template with the controller instance. If the first argument
 is not supplied, it looks for a view in /views/controller_name/action_name.ejs.
