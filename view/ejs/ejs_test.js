@@ -409,7 +409,7 @@ test('html comments', function(){
 
 test("hookup and live binding", function(){
 	
-	var text = "<div class='<%= task.attr('completed') && 'complete' %>' <%= (el)-> can.data(can.$(el),'task',task) %>>" +
+	var text = "<div class='<%= task.attr('completed') ? 'complete' : '' %>' <%= (el)-> can.data(can.$(el),'task',task) %>>" +
 		"<%== task.attr('name') %>" +
 		"</div>",
 		task = new can.Observe({
