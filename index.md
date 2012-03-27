@@ -674,7 +674,7 @@ Notice `attr('name')`.  This sets up live-binding.  If you change the todo's nam
 be updated:
 
 {% highlight javascript %}
-todo.attr("Clean the toilet");
+todo.attr("name", "Clean the toilet");
 {% endhighlight %}
 
 Live-binding works by wrapping the code inside the magic tags with a function to call when the attribute (or attributes)
@@ -1445,11 +1445,57 @@ CanJS can be used with libraries other than jQuery.
 
 ### construct proxy
 
-### construct super
+### Construct super
+
+Use the **super** plugin gives access to overwritten methods when extending a can.Construct using `this._super`:
+
+{% highlight javascript %}
+var Person = can.Construct({
+	init : function(name) {
+		this.name = name;
+	},
+
+	fullName : function() {
+		return this.name;
+	}
+});
+
+var ImprovedPerson = can.Construct({
+	init : function(name, lastname) {
+		this._super(name);
+		this.lastname = lastname;
+	},
+
+	fullName : function() {
+		return this._super() + ' ' + this.lastname;
+	}
+});
+{% endhighlight %}
 
 ### control plugin
 
-### control view
+### Control view `control.view([viewname], [data])`
+
+The __view__ plugin renders a view from a Url in a _views/controlname_ folder. If no viewname is supplied it uses
+the current action name. If no data is provided the control instance is passed to the view. Note that you will
+have to set a name when creating the Control construct for __view__ to work.
+
+{% highlight javascript %}
+can.Control('Tasks', {
+	click: function( el ) {
+		// renders with views/tasks/click.ejs with the controller as data
+		this.element.html( this.view() );
+		// renders with views/tasks/click.ejs with some data
+        this.element.html( this.view({ name : 'The task' }) );
+		// renders with views/tasks/under.ejs
+		this.element.html( this.view("under", [1,2]) );
+		// renders with views/tasks/under.micro
+		this.element.html( this.view("under.micro", [1,2]) );
+		// renders with views/shared/top.ejs
+		this.element.html( this.view("shared/top", {phrase: "hi"}) );
+	}
+})
+{% endhighlight %}
 
 ### observe attributes
 
@@ -1463,7 +1509,26 @@ CanJS can be used with libraries other than jQuery.
 
 ### model elements
 
-### view modifiers
+### View modifiers
+
+jQuery uses the modifiers after, append, before, html, prepend, replaceWith and text to alter the content of an element.
+The __modifiers__ plugin allows you to render a can.View using these modifiers. For example, you can render a template
+from the *todo/todos.ejs* url looking like this:
+
+{% highlight erb %}
+<% for(var i = 0; i < this.length; i++ ){ %>
+  <li><%= this[i].name %></li>
+<% } %>
+{% endhiglight %}
+
+By calling the html modifier on an element like this:
+
+{% highlight javascript %}
+$('#todos').html('todo/todos.ejs', [
+    { name : 'First Todo' },
+    { name : 'Second Todo' }
+]);
+{% endhighlight %}
 
 ## Examples
 
@@ -1637,10 +1702,14 @@ These plugins have forced the core to be quite extendable, making 3rd party plug
 
 __Engineered limber__
 
-CanJS's tools are designed to work under almost every situation.  Your server sends back XML with strange urls?  That's ok, overwrite [can.Model.findAll](http://donejs.com/docs.html#!can.Model.static.findAll) or [can.Model.models](http://donejs.com/docs.html#!can.Model.static.models).  Want some special teardown code for a control?  Overwrite [can.Control:destroy](http://donejs.com/docs.html#!can.Control.prototype.destroy).
+CanJS's tools are designed to work under almost every situation.  Your server sends back XML with strange urls?
+That's ok, overwrite [can.Model.findAll](http://donejs.com/docs.html#!can.Model.static.findAll) or
+[can.Model.models](http://donejs.com/docs.html#!can.Model.static.models).
+Want some special teardown code for a control?
+Overwrite [can.Control:destroy](http://donejs.com/docs.html#!can.Control.prototype.destroy).
 
-But our favorite bit of flexibility is how [can.Observe](#can_observe) works with nested data.  It converts nested objects into observes 
-automatically.  For example:
+But our favorite bit of flexibility is how [can.Observe](#can_observe) works with nested data.
+It converts nested objects into observes automatically.  For example:
 
 {% highlight javascript %}
 var person = new can.Observe({
