@@ -1,13 +1,15 @@
 @page can.Control.plugin 
 @parent can.Control
+@plugin can/control/plugin
+@test can/control/plugin/qunit.html
+@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/control/plugin/plugin.js
 
 The can.Control __plugin__ extension creates a plugin for the control in the 
-base-library's NodeList using the control's [fullName can.Construct.fullName] or
+jQuery NodeList using the control's [can.Construct.fullName fullName] or
 a static pluginName attribute. For example, if you create the following control:
 
 	var Tabs = can.Control({
-		pluginName : 'tabs',
-		defaults: {}
+		pluginName : 'tabs'
 	},{
 		init : function(element, options, arg1){ },
 		update : function(options) {}
@@ -15,48 +17,35 @@ a static pluginName attribute. For example, if you create the following control:
 
 With jQuery, you can create the control direct on a jQuery collection like:
 
-    can.$(".tabs").tabs();
+    $(".tabs").tabs();
     
 __Note:__ This plugin only supports jQuery.
 
-## Creating
-
-### Defaults
-
-Just like developing traditional jQuery widgets, plugin allows you
-to sets default settings from which you can override on a individual
-basis if needed.
-
-	var Tabs = can.Control({
-		defaults: {
-			selectFirstByDefault: false
-		}
-	},{ });
-	
-	can.$('.tabs').tabs({ selectFirstByDefault: true })
-
-### Plugin Name
+## Plugin Name
 
 Setting the __pluginName__ property allows you to change 
 the can plugin helper name from its default value.
 
-	can.Control("Mxui.Layout.Fill",{
+	var MxuiLayoutFill = can.Control({
 		pluginName: "fillWith"
 	},{});
 	
-	can.$("#foo").fillWith();
+	$("#foo").fillWith();
+	
+If you don't provide a plugin name, the control falls back
+to the [can.Construct.fullName fullName] attribute.
 
 ## Updating
 
 Update extends [can.Control.prototype.options this.options] 
-with the `options` argument and rebinds all events.  It basically
+with the `options` argument and rebinds all events.  It 
 re-configures the control.
 
 For example, the following control wraps a recipe form. When the form
 is submitted, it creates the recipe on the server.  When the recipe
 is `created`, it resets the form with a new instance.
 
-	can.Control('Creator',{
+	var Creator = can.Control({
 		"{recipe} created" : function(){
 			this.update({recipe : new Recipe()});
 			this.element[0].reset();
@@ -71,7 +60,9 @@ is `created`, it resets the form with a new instance.
 		}
 	});
 	
-	$('#createRecipes').creator({recipe : new Recipe()})
+	$('#createRecipes').creator({ recipe : new Recipe() })
+	
+See [can.Control.prototype.update] for more information.
 
 ## Calling methods
 
@@ -82,13 +73,13 @@ Once a controller is initialized on a DOM element, you can invoke a method
 by querying the DOM and calling the controller name followed with the 
 parameters of the plugin name and any additional arguments you want to pass.
 
-	can.Control('MyTodo',
+	var MyTodo = can.Control({
 		create: function(name, task){
 			this.element.append(name + " " + task)
 		}
 	});
 	
-	can.$('.my_todo').my_todo("create", 'Austin', 'Sweep garage');
+	$('.my_todo').my_todo("create", 'Austin', 'Sweep garage');
 
 Secondly, you can retrieve the instance and invoke the method directly.  
 For more information on fetching controller instances on DOM elements see 
@@ -108,8 +99,7 @@ instance with this class type will be returned.
 
 	<div id="widget" class="my_widget">
 
-	can.$('#widget').controller() // will return: [ MyWidget ]
-
+	$('#widget').controller() //- will return: MyWidget
 
 ### Controllers
 
@@ -119,4 +109,4 @@ below by calling __controllers__ on the DOM element.
 
 	<div id="widget" class="my_widget my_clock">
 	
-	can.$('#widget').controllers() // will return: [ MyWidget, MyClock ]
+	$('#widget').controllers() //- will return: [ MyWidget, MyClock ]

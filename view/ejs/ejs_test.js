@@ -194,12 +194,12 @@ test("block live binding", function(){
 })
 
 test("hookups in tables", function(){
-	var text = "<table><% if( obs.attr('sex') == 'male' ){ %>"+
+	var text = "<table><tbody><% if( obs.attr('sex') == 'male' ){ %>"+
 			"<tr><td>Mr.</td></tr>"+
 		"<% } else { %>"+
 		  "<tr><td>Ms.</td></tr>"+
 		"<% } %>"+
-		"</table>"
+		"</tbody></table>"
 		
 	var obs = new can.Observe({
 		sex : 'male'
@@ -296,7 +296,9 @@ test('live binding and removeAttr', function(){
 	var p = div.getElementsByTagName('p')[0],
 		span = p.getElementsByTagName('span')[0];
 
-	equals(div.innerHTML, '<p some="myText" class="myMessage"><span>Live long and prosper</span></p>', 'initial render');
+	equals(p.getAttribute("some"), "myText", 'initial render attr');
+	equals(p.getAttribute("class"), "myMessage", 'initial render class');
+	equals(span.innerHTML, 'Live long and prosper', 'initial render innerHTML');
 
 	obs.removeAttr('className');
 
@@ -327,8 +329,13 @@ test('live binding and removeAttr', function(){
 	equals(div.innerHTML, '', 'value in block statement is undefined');
 
 	obs.attr('show', true);
+	
+	var p = div.getElementsByTagName('p')[0],
+		span = p.getElementsByTagName('span')[0];
 
-	equals(div.innerHTML, '<p some="newText" class="newClass"><span>Warp drive, Mr. Sulu</span></p>', 'value in block statement updated');
+	equals(p.getAttribute("some"), "newText", 'value in block statement updated attr');
+	equals(p.getAttribute("class"), "newClass", 'value in block statement updated class');
+	equals(span.innerHTML, 'Warp drive, Mr. Sulu', 'value in block statement updated innerHTML');
 
 });
 
@@ -398,6 +405,35 @@ test('html comments', function(){
 
 	var div = document.createElement('div');
 	div.appendChild(can.view.frag(compiled));
+})
+
+test("hookup and live binding", function(){
+	
+	var text = "<div class='<%= task.attr('completed') ? 'complete' : '' %>' <%= (el)-> can.data(can.$(el),'task',task) %>>" +
+		"<%== task.attr('name') %>" +
+		"</div>",
+		task = new can.Observe({
+			completed: false,
+			className: 'someTask',
+			name: 'My Name'
+		}),
+		compiled = new can.EJS({ text: text }).render({ task: task }),
+		div = document.createElement('div');
+	
+	div.appendChild(can.view.frag(compiled))
+	var child = div.getElementsByTagName('div')[0];
+	ok( child.className.indexOf("complete") == -1, "is incomplete" )
+	ok( !!can.data(can.$(child), 'task'), "has data" )
+	equals(child.innerHTML, "My Name", "has name")
+	
+	task.attr({
+		completed: true,
+		name: 'New Name'
+	});
+	
+	ok( child.className.indexOf("complete") != -1, "is complete" )
+	equals(child.innerHTML, "New Name", "has new name")
+	
 })
 
 

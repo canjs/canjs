@@ -1,28 +1,35 @@
-steal('funcunit/qunit','./route',function(){
+steal('funcunit/qunit', './route', function () {
 
 module("can/control/route");
 
-test("routes changed", function(){
+test("routes changed", function () {
+	expect(3);
+
 	//setup controller
-	can.Control("Router",{
-		"foo/:bar route" : function(){
-			ok('route updated to foo/:bar')
+	can.Control("Router", {
+		"foo/:bar route" : function () {
+			ok(true, 'route updated to foo/:bar')
 		},
-		"route" : function(){
-			ok('route updated to empty')
+
+		"foos route" : function () {
+			ok(true, 'route updated to foos');
+		},
+
+		"route" : function () {
+			ok(true, 'route updated to empty')
 		}
-	})
+	});
 
-	//append some anchors
-	can.append( can.$("#qunit-test-area"), '<a id="foo" href="#!foo/bar">foo/bar</a><a id="empty" href="#!">empty</a>')
-	
-	//init controller
+	// init controller
 	new Router(document.body);
-	
-	//trigger change events
-	can.trigger( can.$('#foo'), 'click');
-	can.trigger( can.$('#empty'), 'click');
-});
 
+	can.trigger(window, 'hashchange');
+
+	window.location.hash = '!foo/bar';
+	can.trigger(window, 'hashchange');
+
+	window.location.hash = '!foos';
+	can.trigger(window, 'hashchange');
+});
 
 });
