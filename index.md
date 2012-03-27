@@ -1278,44 +1278,44 @@ are required to run CanJS from another library.
 
 {% highlight javascript %}
 // remove leading and trailing whitespace
-can.trim( " foo " ) // -> "foo" 
+can.trim( ' foo ' ) // -> 'foo' 
 
 // escape HTML code
-can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
+can.esc( '<foo>&<bar>' ) //-> '&lt;foo&lt;&amp;&lt;bar&lt;'
 
 // looks up an object by name
-can.getObject("foo.bar",[{foo: {bar : "zed"}}]) //-> "zed"
+can.getObject('foo.bar', [{foo: {bar : 'zed'}}]) //-> 'zed'
 
 // capitalize a string
-can.capitalize("fooBar") //-> "FooBar"
+can.capitalize('fooBar') //-> 'FooBar'
 
 // micro templating
-can.sub("{greet} world",{greet: "hello"}) //-> "hello world"
+can.sub('{greet} world', {greet: 'hello'}) //-> 'hello world'
 
 // deparams a form encoded URL into an object
-can.deparam("foo=bar&hello=world")
-    //-> {foo: "bar", hello: "world}
+can.deparam('foo=bar&hello=world')
+    //-> {foo: 'bar', hello: 'world'}
 {% endhighlight %}
 
 ### Array Helpers
 
 {% highlight javascript %}
 // convert array-like data into arrays
-can.makeArray({0 : "zero", 1: "one", length: 2}) // -> ["zero","one"]
+can.makeArray({0: "zero", 1: 'one', length: 2}) // -> ['zero', 'one']
   
 // return if an array is an array
 can.isArray([]) //-> true
   
 // converts one array to another array
-can.map([{prop: "val1"}, {prop: "val2"}], function(val, prop){
+can.map([{prop: 'val1'}, {prop: 'val2'}], function(val, prop){
   return val
-})  //-> ["val1","val2"]
+})  //-> ['val1', 'val2']
   
 // iterates through an array
-can.each([{prop: "val1"}, {prop: "val2"}], function( index, value ) {
+can.each([{prop: 'val1'}, {prop: 'val2'}], function( index, value ) {
   // function called with
-  //  index=0 value={prop: "val1"}
-  //  index=1 value={prop: "val2"}
+  //  index=0 value={prop: 'val1'}
+  //  index=1 value={prop: 'val2'}
 })
 {% endhighlight %}
 
@@ -1324,33 +1324,33 @@ can.each([{prop: "val1"}, {prop: "val2"}], function( index, value ) {
 {% highlight javascript %}
 // extends one object with the properties of another
 var first = {},
-    second = {a: "b"},
-    thrid = {c: "d"};
+    second = {a: 'b'},
+    third = {c: 'd'};
 can.extend(first, second, third); //-> first
-first  //-> {a: "b",c : "d"}
-second //-> {a: "b"}
-thrid  //-> {c: "d"}
+first  //-> {a: 'b', c : 'd'}
+second //-> {a: 'b'}
+third  //-> {c: 'd'}
   
 // deep extends one object with another
 can.extend( true, first, second, third ); 
   
-// parameterize into a querystring
-can.param({a: "b", c: "d"}) //-> "a=b&c=d"
+// parameterize into a query string
+can.param({a: 'b', c: 'd'}) //-> 'a=b&c=d'
   
 // returns if an object is empty
 can.isEmptyObject({})      //-> true
-can.isEmptyObject({a:"b"}) //-> false
+can.isEmptyObject({a: 'b'}) //-> false
 {% endhighlight %}
 
 ### Function Helpers
 
 {% highlight javascript %}
 // returns a function that calls another function
-// with "this" set.
+// with 'this' set.
 var func = can.proxy(function(one){
   return this.a + one
-}, {a: "b"}); 
-func("two") //-> "btwo" 
+}, {a: 'b'}); 
+func('two') //-> 'btwo'
 
 // returns if an object is a function
 can.isFunction({})           //-> false
@@ -1361,26 +1361,25 @@ can.isFunction(function(){}) //-> true
 
 {% highlight javascript %}
 // binds handler on obj's eventName event
-can.bind(obj, eventName, handler )
+can.bind(obj, eventName, handler)
 
 // unbind handler on obj's eventName event
 can.unbind(obj, eventName, handler) 
   
-// 
+// binds handler on all elements' eventName event that match selector
 can.delegate(obj, selector, eventName, handler)
   
-//
-can.delegate(obj, selector, eventName, handler)
+// unbinds handler on all elements' eventName event that match selector in obj
+can.undelegate(obj, selector, eventName)
   
-//
-can.trigger(obj, event, args )
+// executes all handlers attached to obj for eventName
 can.trigger(obj, eventName, args)
 {% endhighlight %}
 
 ### Deferred
 
 {% highlight javascript %}
-// Creates a new Deferred object
+// creates a new Deferred object
 var deferred = new can.Deferred()
 
 // pipes a deferred into another deferred
@@ -1388,19 +1387,20 @@ deferred.pipe(function(){
 
 }, function(){})
 
-// 
+// resolves a deferred, deferreds piped into the deferred also become resolved
 deferred.resolve()
   
-//
+// rejects a deferred, deferreds piped into the deferred also become rejected
 deferred.reject()
   
-// 
+// used to execute callback functions when all passed deferreds become resolved
 can.When()
 {% endhighlight %}
 
 
 ### Ajax
 
+// performs an asynchronous HTTP request
 {% highlight javascript %}
 can.ajax({
   url : "url",
@@ -1420,13 +1420,17 @@ can.buildFragment(frags, nodes)
 // a node list
 can.$("div.bar") //-> []
 
+// appends html to the HTMLElements in the NodeList
 can.append(NodeList, html)
   
+// removes the HTMLElements in the NodeList from the DOM  
 can.remove(NodeList)
   
+// stores arbitrary data to the HTMLElements in the NodeList  
 can.data(NodeList, dataName, dataValue)
   
-can.addClass(NodeList, className )
+// adds CSS class(es) to the HTMLElements in the NodeList
+can.addClass(NodeList, className)
 {% endhighlight %}
 
 
