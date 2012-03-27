@@ -147,7 +147,7 @@ steal('can/construct', function( $ ) {
 		 * An object of {eventName : function} pairs that Control uses to hook up events
 		 * auto-magically.  A processor function looks like:
 		 * 
-		 *     jQuery.Control.processors.
+		 *     can.Control.processors.
 		 *       myprocessor = function( el, event, selector, cb, control ) {
 		 *          //el - the control's element
 		 *          //event - the event (myprocessor)
@@ -232,7 +232,7 @@ steal('can/construct', function( $ ) {
 		 * 
 		 * The first parameter passed to new Control(el, options) is expected to be 
 		 * an element.  This gets converted to a jQuery wrapped element and set as
-		 * [jQuery.Control.prototype.element this.element].
+		 * [can.Control.prototype.element this.element].
 		 * 
 		 * ### 2. Adds the control's name to the element's className.
 		 * 
@@ -249,11 +249,11 @@ steal('can/construct', function( $ ) {
 		 * 
 		 * ### Binds event handlers
 		 * 
-		 * Setup does the event binding described in [jquery.control.listening Listening To Events].
+		 * Setup does the event binding described in [can.control.listening Listening To Events].
 		 * 
 		 * @param {HTMLElement} element the element this instance operates on.
 		 * @param {Object} [options] option values for the control.  These get added to
-		 * this.options and merged with [jQuery.Control.static.defaults defaults].
+		 * this.options and merged with [can.Control.static.defaults defaults].
 		 * @return {Array} return an array if you wan to change what init is called with. By
 		 * default it is called with the element and options passed to the control.
 		 */
@@ -277,7 +277,7 @@ steal('can/construct', function( $ ) {
 			 * Options are used to configure an control.  They are
 			 * the 2nd argument
 			 * passed to a control (or the first argument passed to the 
-			 * [jquery.control.plugin control's jQuery plugin]).
+			 * [can.Control.plugin control's jQuery plugin]).
 			 * 
 			 * For example:
 			 * 
@@ -290,8 +290,8 @@ steal('can/construct', function( $ ) {
 			 *                            .control();
 			 *     equal( h2.options.message , "There" )
 			 * 
-			 * Options are merged with [jQuery.Control.static.defaults defaults] in
-			 * [jQuery.Control.prototype.setup setup].
+			 * Options are merged with [can.Control.static.defaults defaults] in
+			 * [can.Control.prototype.setup setup].
 			 * 
 			 * For example:
 			 * 
@@ -311,7 +311,7 @@ steal('can/construct', function( $ ) {
 			 *     $("#tabs2").tabs({activeClass : 'active'}) // adds 'active'
 			 *     
 			 * Options are typically updated by calling 
-			 * [jQuery.Control.prototype.update update];
+			 * [can.Control.prototype.update update];
 			 *
 			 */
 			this.options = extend({}, cls.defaults, options);
