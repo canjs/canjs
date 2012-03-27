@@ -14,15 +14,19 @@ If data is not provided, it uses the controller instance as data.
 			this.element.html( this.view() )
 
 			// renders with views/tasks/click.ejs with some data
-			this.element.html( this.view({ name : 'The task' }) );
+			this.element.html( 
+				this.view({ name : 'The task' }) );
 
 			// renders with views/tasks/under.ejs
-			this.element.html( this.view("under", [1,2]) );
+			this.element.html( 
+				this.view("under", [1,2]) );
 
 			// renders with views/tasks/under.micro 
-			this.element.html( this.view("under.micro", [1,2]) );
+			this.element.html( 
+				this.view("under.micro", [1,2]) );
 
 			// renders with views/shared/top.ejs
-			this.element.html( this.view("shared/top", {phrase: "hi"}) );
+			this.element.html( 
+				this.view("shared/top", {phrase: "hi"}) );
 		}
 	})
