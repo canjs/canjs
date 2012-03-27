@@ -413,10 +413,10 @@ resolves with the `todo` after it has been destroyed by the server.
 
 [can.Model.prototype.bind](http://donejs.com/docs.html#!can.Model.prototype.bind)
 listens to changes in a model instance's attributes in the same way as 
-[Observe's bind(#an_observe-bind).  For example:
+[Observe's bind](#can_observe-bind).  For example:
 
 {% highlight javascript %}
-todo.bind("name", function(ev, newVal, oldVal ){
+todo.bind("name", function(ev, newVal, oldVal){
   console.log("name changed to", newVal);
 })
 {% endhighlight %}
@@ -427,7 +427,7 @@ In addition to Observe's events, Model also supports three new events:
 - __updated__ - an instance is updated on the server
 - __destroyed__ - an instance is destroyed on the server
 
-For example, listen to 
+For example, listen for 
 when an instance is __created__ on the server like:
 
 {% highlight javascript %}
@@ -438,7 +438,7 @@ todo.bind('created', function(ev, todo){
 todo.save()
 {% endhighlight %}
 
-[can.Model.bind](http://donejs.com/docs.html#!can.Model.static.bind) lets you listen to 
+[can.Model.bind](http://donejs.com/docs.html#!can.Model.static.bind) lets you listen for 
 anytime __any__ instance is __created__, __updated__, or __destroyed__:
 
 {% highlight javascript %}
@@ -452,12 +452,12 @@ Todo.bind('created', function(ev, todo){
 
 [can.Model.List](http://donejs.com/docs.html#!can.Model.List) is a 
 [can.Observe.List](#can_observe-can_observe_list) that automatically removes items when they are 
-destroyed.  __Model.Lists__ are return by [findAll](#can_model-findAll).
+destroyed.  __Model.Lists__ are return by [findAll](#can_model-findall).
 
 {% highlight javascript %}
 Todo.findAll({}, function(todos){
 
-  // listen when a todo is removed
+  // listen for when a todo is removed
   todos.bind("remove", function(ev, removed, index){
     console.log("removed", removed.length, "todos");
   })
@@ -478,8 +478,8 @@ JavaScript templates. Pass it ...
 It returns the rendered result of the template as a documentFragment.  
 
 {% highlight javascript %}
-document.getElementById('todos')
-  .appendChild( can.view('todos.ejs', [{name: "mow lawn"}] ) )
+document.getElementById("todos")
+  .appendChild( can.view("todos.ejs", [{name: "mow lawn"}] ) )
 {% endhighlight %}
 
 `can.view` supports multiple templating languages; however, [can.EJS](#can_ejs)
@@ -505,8 +505,8 @@ Render this template and insert it into the page:
 
 {% highlight javascript %}
 Todo.findAll( {}, function( todos ){
-   document.getElementById('todos')
-           .appendChild( can.view( 'todosEJS', todos ) );
+   document.getElementById("todos")
+           .appendChild( can.view( "todosEJS", todos ) );
 });
 {% endhighlight %}
 
@@ -523,8 +523,8 @@ Render this with:
 
 {% highlight javascript %}
 Todo.findAll( {}, function( todos ){
-  document.getElementById('todos')
-           .appendChild( can.view( 'todos/todos.ejs', todos ) );
+  document.getElementById("todos")
+           .appendChild( can.view( "todos/todos.ejs", todos ) );
 });
 {% endhighlight %}
 
@@ -534,7 +534,7 @@ __can.view__ accepts [deferreds](#utilities-deferred).  If the `data` argument i
 that contains deferreds, __can.view__ returns a deferred that resolves to the documentFragment after
 all deferreds have resolved and the template has loaded.
 
-[can.Model.findAll](#can_model-findAll) returns deferreds. This means that the following loads `todos/todos.ejs`, `Todo.findAll` and `User.findOne`
+[can.Model.findAll](#can_model-findall) returns deferreds. This means that the following loads `todos/todos.ejs`, `Todo.findAll` and `User.findOne`
 in parallel and resolves the returned deferred with the documentFragment when they are all done:
 
 {% highlight javascript %}
@@ -550,7 +550,7 @@ can.view('todos/todos.ejs', {
 
 ### render `can.view.render( idOrUrl, data )`
 
-To render a string instead of a documentFragment, use [can.view.render]() like:
+To render a string instead of a documentFragment, use can.view.render like:
 
 {% highlight javascript %}
 <% for( var i = 0; i < todos.length; i++) %>
@@ -565,7 +565,7 @@ To render a string instead of a documentFragment, use [can.view.render]() like:
 
 [can.EJS](http://donejs.com/docs.html#!can.EJS) is CanJS's default template 
 language and used with [can.view](#!can_view).  It provides live binding
-when use dwith [can.Observes](#can_observe).  A __can.EJS__ template looks
+when used with [can.Observes](#can_observe).  A __can.EJS__ template looks
 like the HTML you want, but with __magic tags__ where you want
 dynamic behavior.  The following lists todo elements:
 
@@ -581,8 +581,8 @@ Use __can.view__ to render this template:
 
 {% highlight javascript %}
 Todo.findAll({}, function( todos ) {
-  document.getElementById('todos')
-          .appendChild( can.view('todosEJS', todos ) )
+  document.getElementById("todos")
+          .appendChild( can.view("todosEJS", todos ) )
 }
 {% endhighlight %}
 
@@ -603,11 +603,11 @@ and todos:
 Can be inserted into the document with:
 
 {% highlight javascript %}
-can.view('todosEJS', {
+can.view("todosEJS", {
   todos : Todo.findAll(),
   user: User.findOne({ id: 5 })
 }).then(function( frag ){
-  document.getElementById('todos')
+  document.getElementById("todos")
           .appendChild(frag);
 })
 {% endhighlight %}
@@ -667,14 +667,14 @@ live-binding, use [attr](#!can_observe-attr) to read properties.  For example, t
 template will update todo's name when it change:
 
 {% highlight erb %}
-  <li><%= todo.attr('name') %></li>
+  <li><%= todo.attr("name") %></li>
 {% endhighlight %}
 
-Notice `attr('name')`.  This sets up live-binding.  If you change the todo's name, the `<li>` will automatically
+Notice `attr("name")`.  This sets up live-binding.  If you change the todo's name, the `<li>` will automatically
 be updated:
 
 {% highlight javascript %}
-todo.attr("Clean the toilet");
+todo.attr("name", "Clean the toilet");
 {% endhighlight %}
 
 Live-binding works by wrapping the code inside the magic tags with a function to call when the attribute (or attributes)
@@ -682,28 +682,28 @@ are changed.  This is important to understand because a template like this will 
 
 {% highlight erb %}
 <% for( var i = 0; i < todos.length; i++) { %>
-  <li><%= todos[i].attr('name') %></li>
+  <li><%= todos[i].attr("name") %></li>
 <% } %>
 {% endhighlight %}
 
-This does not work because when the function wrapping `todos[i].attr('name')` is called, `i` will be __3__ not the index
+This does not work because when the function wrapping `todos[i].attr("name")` is called, `i` will be __3__ not the index
 of the desired todo.  Fix this by using a closure like:
 
 {% highlight erb %}
 <% $.each(todos, function(i, todo){ %>
-  <li><%= todo.attr('name') %></li>
+  <li><%= todo.attr("name") %></li>
 <% }) %>
 {% endhighlight %}
 
 ### list `list( observeList, iterator( item, index ) )`
 
 If you want to make the previous template update when todos are 
-added or removed, could bind to length like:
+added or removed, you could bind to length like:
 
 {% highlight erb %}
 <% todos.bind("length", function(){});
    $.each(todos, function(i, todo){ %>
-      <li><%= todo.attr('name') %></li>
+      <li><%= todo.attr("name") %></li>
 <% }) %>
 {% endhighlight %}
 
@@ -711,7 +711,7 @@ Or simply use EJS's `list` helper method like:
 
 {% highlight erb %}
 <% list(todos, function(todo){ %>
-  <li><%= todo.attr('name') %></li>
+  <li><%= todo.attr("name") %></li>
 <% }) %>
 {% endhighlight %}
 
@@ -739,7 +739,7 @@ The function is called back with the `HTMLElement` as the first
 argument.  This is useful to initialize functionality on an 
 element within the view.  This is so common that EJS supports 
 [ES5 arrow functions](http://wiki.ecmascript.org/doku.php?id=strawman:arrow_function_syntax)
-that get passed the NodeList wrapped element.  Using jQuery, this lets you write 
+that get passed the `NodeList` wrapped element.  Using jQuery, this lets you write 
 the above callback as:
 
 {% highlight erb %}
