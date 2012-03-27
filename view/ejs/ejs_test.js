@@ -431,7 +431,7 @@ test("hookup and live binding", function(){
 		name: 'New Name'
 	});
 	
-	ok( child.className.indexOf("complete") == -1, "is complete" )
+	ok( child.className.indexOf("complete") != -1, "is complete" )
 	equals(child.innerHTML, "New Name", "has new name")
 	
 })
