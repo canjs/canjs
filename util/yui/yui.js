@@ -248,7 +248,8 @@
                 events[eventName][cb.__bindingsIds] = selector ? node.item(0).delegate(ev, cb, selector) : node.item(0).on(ev, cb);
             });
         } else {
-            var obj = nodelist, events = obj.__canEvents = obj.__canEvents || {};
+            var obj = nodelist,
+							events = obj.__canEvents = obj.__canEvents || {};
             if (!events[ev]) {
                 events[ev] = {};
             }
@@ -273,7 +274,10 @@
 						}
 					});
 				} else {
-					var obj = nodelist, events = obj.__canEvents || {}, handlers = events[eventName], handler = handlers[cb.__bindingsIds];
+					var obj = nodelist,
+						events = obj.__canEvents || {},
+						handlers = events[ev],
+						handler = handlers[cb.__bindingsIds];
 					handler.detach();
 					delete handlers[cb.__bindingsIds];
 					if (can.isEmptyObject(handlers)) {

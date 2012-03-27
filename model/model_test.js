@@ -25,25 +25,15 @@ test("CRUD", function(){
 test("findAll deferred", function(){
 	can.Model("Person",{
 		findAll : function(params, success, error){
-			if(window.jQuery){
-				return $.ajax({
-					url : "/people",
-					data : params,
-					dataType : "json Person.models",
-					fixture: "//can/model/test/people.json"
-				})
-			} else {
-				var self= this;
-				return can.ajax({
-					url : "/people",
-					data : params,
-					fixture: "//can/model/test/people.json",
-					dataType : "json"
-				}).pipe(function(data){
-					return self.models(data);
-				})
-			}
-			
+			var self= this;
+			return can.ajax({
+				url : "/people",
+				data : params,
+				fixture: "//can/model/test/people.json",
+				dataType : "json"
+			}).pipe(function(data){
+				return self.models(data);
+			});
 		}
 	},{});
 	stop();
@@ -60,11 +50,14 @@ test("findOne deferred", function(){
 	if(window.jQuery){
 		can.Model("Person",{
 			findOne : function(params, success, error){
-				return $.ajax({
+				var self = this;
+				return can.ajax({
 					url : "/people/5",
 					data : params,
-					dataType : "json Person.model",
-					fixture: "//can/model/test/person.json"
+					fixture: "//can/model/test/person.json",
+					dataType : "json"
+				}).pipe(function(data){
+					return self.model(data);
 				});
 			}
 		},{});

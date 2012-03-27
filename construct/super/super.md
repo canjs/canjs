@@ -7,7 +7,6 @@ Allows you to call the base function via a `_super` attribute. Given a simple To
         init : function(text) {
             this.text = text;
         },
-
         toString : function() {
             return 'TODO: ' + this.text;
         }
@@ -40,7 +39,7 @@ If you want to pass all arguments to `_super` use
 	var EvenBetterTodo = BetterTodo({
 		init : function(text, status) {
 			this._super.apply(this, arguments);
-			this.is_evenbetter = true;
+			this.isEvenbetter = true;
 		}
 	});
 
