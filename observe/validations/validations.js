@@ -7,6 +7,7 @@ var validate = function(attrNames, options, proc) {
 		proc = options;
 		options = {};
 	}
+	
 	options = options || {};
 	attrNames = can.makeArray(attrNames)
 	
@@ -20,21 +21,16 @@ var validate = function(attrNames, options, proc) {
 		if(!self.validations[attrName]){
 			self.validations[attrName] = [];
 		}
+		
 		self.validations[attrName].push(function(newVal){
 			var res = proc.call(this, newVal);
 			return res === undefined ? undefined : (options.message || res);
 		})
-	});
-   
+	});   
 };
 
-var proto = can.Observe.prototype,
-	old = proto.__set;
-
-proto.__set = function(prop, value, current, success, error){
-	
-	
-	
+var old = can.Observe.prototype.__set;
+can.Observe.prototype.__set = function(prop, value, current, success, error){	
 	var self = this,
 		validations = self.constructor.validations,
 		errorCallback = function( errors ) {
@@ -49,148 +45,151 @@ proto.__set = function(prop, value, current, success, error){
 		errors && errorCallback(errors)
 	}
 	
-	
-	
 	return this;
 }
 
-can.extend(can.Observe, {
+can.each([ can.Observe, can.Model ], function(i,clss){
+	// in some cases model might not be defined quite yet.
+	if(clss === undefined){
+		return;
+	}
+
+	can.extend(clss, {
+		validations: {},
 	
-	validations: {},
-	
-   /**
-    * @function can.Observe.static.validate
-    * @parent can.Observe.validations
-    * Validates each of the specified attributes with the given function.  See [can.Observe.validations validation] for more on validations.
-    * @param {Array|String} attrNames Attribute name(s) to to validate
-    * @param {Function} validateProc Function used to validate each given attribute. Returns nothing if valid and an error message otherwise. Function is called in the instance context and takes the value to validate.
-    * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
-    */
-   validate: validate,
+   		/**
+    	* @function can.Observe.static.validate
+    	* @parent can.Observe.validations
+    	* Validates each of the specified attributes with the given function.  See [can.Observe.validations validation] for more on validations.
+    	* @param {Array|String} attrNames Attribute name(s) to to validate
+    	* @param {Function} validateProc Function used to validate each given attribute. Returns nothing if valid and an error message otherwise. Function is called in the instance context and takes the value to validate.
+    	* @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
+    	*/
+   		validate: validate,
    
-   /**
-    * @attribute can.Observe.static.validationMessages
-    * @parent can.Observe.validations
-    * The default validation error messages that will be returned by the builtin
-    * validation methods. These can be overwritten by assigning new messages
-    * to can.Observe.validationMessages.&lt;message> in your application setup.
-    * 
-    * The following messages (with defaults) are available:
-    * 
-    *  * format - "is invalid"
-    *  * inclusion - "is not a valid option (perhaps out of range)"
-    *  * lengthShort - "is too short"
-    *  * lengthLong - "is too long"
-    *  * presence - "can't be empty"
-    *  * range - "is out of range"
-    * 
-    * It is important to steal can/observe/validations before 
-    * overwriting the messages, otherwise the changes will
-    * be lost once steal loads it later.
-    * 
-    * ## Example
-    * 
-    *     can.Observe.validationMessages.format = "is invalid dummy!"
-    */
-   validationMessages : {
-       format      : "is invalid",
-       inclusion   : "is not a valid option (perhaps out of range)",
-       lengthShort : "is too short",
-       lengthLong  : "is too long",
-       presence    : "can't be empty",
-       range       : "is out of range"
-   },
+   		/**
+    	 * @attribute can.Observe.static.validationMessages
+    	 * @parent can.Observe.validations
+    	 * The default validation error messages that will be returned by the builtin
+    	 * validation methods. These can be overwritten by assigning new messages
+    	 * to can.Observe.validationMessages.&lt;message> in your application setup.
+    	 * 
+    	 * The following messages (with defaults) are available:
+    	 * 
+    	 *  * format - "is invalid"
+    	 *  * inclusion - "is not a valid option (perhaps out of range)"
+    	 *  * lengthShort - "is too short"
+    	 *  * lengthLong - "is too long"
+    	 *  * presence - "can't be empty"
+    	 *  * range - "is out of range"
+    	 * 
+    	 * It is important to steal can/observe/validations before 
+    	 * overwriting the messages, otherwise the changes will
+    	 * be lost once steal loads it later.
+    	 * 
+    	 * ## Example
+    	 * 
+    	 *     can.Observe.validationMessages.format = "is invalid dummy!"
+    	 */
+   		validationMessages : {
+       		format      : "is invalid",
+       		inclusion   : "is not a valid option (perhaps out of range)",
+       		lengthShort : "is too short",
+       		lengthLong  : "is too long",
+       		presence    : "can't be empty",
+       		range       : "is out of range"
+   		},
 
-   /**
-    * @function can.Observe.static.validateFormatOf
-    * @parent can.Observe.validations
-    * Validates where the values of specified attributes are of the correct form by
-    * matching it against the regular expression provided.  See [can.Observe.validations validation] for more on validations.
-    * @param {Array|String} attrNames Attribute name(s) to to validate
-    * @param {RegExp} regexp Regular expression used to match for validation
-    * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
-    *
-    */
-   validateFormatOf: function(attrNames, regexp, options) {
-      validate.call(this, attrNames, options, function(value) {
-         if(  (typeof value != 'undefined' && value != '')
-         	&& String(value).match(regexp) == null )
-         {
-            return this.constructor.validationMessages.format;
-         }
-      });
-   },
+   		/**
+    	 * @function can.Observe.static.validateFormatOf
+    	 * @parent can.Observe.validations
+    	 * Validates where the values of specified attributes are of the correct form by
+    	 * matching it against the regular expression provided.  See [can.Observe.validations validation] for more on validations.
+    	 * @param {Array|String} attrNames Attribute name(s) to to validate
+    	 * @param {RegExp} regexp Regular expression used to match for validation
+    	 * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
+    	 */
+   		validateFormatOf: function(attrNames, regexp, options) {
+      		validate.call(this, attrNames, options, function(value) {
+         		if( (typeof value != 'undefined' && value != '')
+         			&& String(value).match(regexp) == null ) {
+            		return this.constructor.validationMessages.format;
+         		}
+      		});
+   		},
 
-   /**
-    * @function can.Observe.static.validateInclusionOf
-    * @parent can.Observe.validations
-    * Validates whether the values of the specified attributes are available in a particular
-    * array.   See [can.Observe.validations validation] for more on validations.
-    * @param {Array|String} attrNames Attribute name(s) to to validate
-    * @param {Array} inArray Array of options to test for inclusion
-    * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
-    * 
-    */
-   validateInclusionOf: function(attrNames, inArray, options) {
-      validate.call(this, attrNames, options, function(value) {
-         if(typeof value == 'undefined')
-            return;
+   		/**
+    	 * @function can.Observe.static.validateInclusionOf
+    	 * @parent can.Observe.validations
+    	 * Validates whether the values of the specified attributes are available in a particular
+    	 * array.   See [can.Observe.validations validation] for more on validations.
+    	 * @param {Array|String} attrNames Attribute name(s) to to validate
+    	 * @param {Array} inArray Array of options to test for inclusion
+    	 * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
+    	 */
+   		validateInclusionOf: function(attrNames, inArray, options) {
+      		validate.call(this, attrNames, options, function(value) {
+         		if(typeof value == 'undefined'){
+					return;
+				}
 
-         if(can.grep(inArray, function(elm) { return (elm == value);}).length == 0)
-            return this.constructor.validationMessages.inclusion;
-      });
-   },
+         		if(can.grep(inArray, function(elm) { return (elm == value); }).length == 0){
+					return this.constructor.validationMessages.inclusion;
+				}
+      		});
+   		},
 
-   /**
-    * @function can.Observe.static.validateLengthOf
-    * @parent can.Observe.validations
-    * Validates that the specified attributes' lengths are in the given range.  See [can.Observe.validations validation] for more on validations.
-    * @param {Array|String} attrNames Attribute name(s) to to validate
-    * @param {Number} min Minimum length (inclusive)
-    * @param {Number} max Maximum length (inclusive)
-    * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
-    *
-    */
-   validateLengthOf: function(attrNames, min, max, options) {
-      validate.call(this, attrNames, options, function(value) {
-         if((typeof value == 'undefined' && min > 0) || value.length < min)
-            return this.constructor.validationMessages.lengthShort + " (min=" + min + ")";
-         else if(typeof value != 'undefined' && value.length > max)
-            return this.constructor.validationMessages.lengthLong + " (max=" + max + ")";
-      });
-   },
+   		/**
+    	 * @function can.Observe.static.validateLengthOf
+    	 * @parent can.Observe.validations
+    	 * Validates that the specified attributes' lengths are in the given range.  See [can.Observe.validations validation] for more on validations.
+    	 * @param {Array|String} attrNames Attribute name(s) to to validate
+    	 * @param {Number} min Minimum length (inclusive)
+    	 * @param {Number} max Maximum length (inclusive)
+    	 * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
+    	 */
+   		validateLengthOf: function(attrNames, min, max, options) {
+      		validate.call(this, attrNames, options, function(value) {
+         		if((typeof value == 'undefined' && min > 0) || value.length < min){
+            		return this.constructor.validationMessages.lengthShort + " (min=" + min + ")";
+         		} else if(typeof value != 'undefined' && value.length > max){
+					return this.constructor.validationMessages.lengthLong + " (max=" + max + ")";
+				}	
+      		});
+   		},
 
-   /**
-    * @function can.Observe.static.validatePresenceOf
-    * @parent can.Observe.validations
-    * Validates that the specified attributes are not blank.  See [can.Observe.validations validation] for more on validations.
-    * @param {Array|String} attrNames Attribute name(s) to to validate
-    * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
-    *
-    */
-   validatePresenceOf: function(attrNames, options) {
-      validate.call(this, attrNames, options, function(value) {
-         if(typeof value == 'undefined' || value == "" || value === null)
-            return this.constructor.validationMessages.presence;
-      });
-   },
+   		/**
+    	 * @function can.Observe.static.validatePresenceOf
+    	 * @parent can.Observe.validations
+    	 * Validates that the specified attributes are not blank.  See [can.Observe.validations validation] for more on validations.
+    	 * @param {Array|String} attrNames Attribute name(s) to to validate
+    	 * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
+    	 */
+   		validatePresenceOf: function(attrNames, options) {
+      		validate.call(this, attrNames, options, function(value) {
+         		if(typeof value == 'undefined' || value == "" || value === null){
+					return this.constructor.validationMessages.presence;
+				}
+      		});
+   		},
 
-   /**
-    * @function can.Observe.static.validateRangeOf
-    * @parent can.Observe.validations
-    * Validates that the specified attributes are in the given numeric range.  See [can.Observe.validations validation] for more on validations.
-    * @param {Array|String} attrNames Attribute name(s) to to validate
-    * @param {Number} low Minimum value (inclusive)
-    * @param {Number} hi Maximum value (inclusive)
-    * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
-    *
-    */
-   validateRangeOf: function(attrNames, low, hi, options) {
-      validate.call(this, attrNames, options, function(value) {
-         if(typeof value != 'undefined' && value < low || value > hi)
-            return this.constructor.validationMessages.range + " [" + low + "," + hi + "]";
-      });
-   }
+   		/**
+    	 * @function can.Observe.static.validateRangeOf
+    	 * @parent can.Observe.validations
+    	 * Validates that the specified attributes are in the given numeric range.  See [can.Observe.validations validation] for more on validations.
+    	 * @param {Array|String} attrNames Attribute name(s) to to validate
+    	 * @param {Number} low Minimum value (inclusive)
+    	 * @param {Number} hi Maximum value (inclusive)
+    	 * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
+    	 */
+   		validateRangeOf: function(attrNames, low, hi, options) {
+      		validate.call(this, attrNames, options, function(value) {
+         		if(typeof value != 'undefined' && value < low || value > hi){
+					return this.constructor.validationMessages.range + " [" + low + "," + hi + "]";
+				}
+      		});
+   		}
+	});
 });
 
 can.extend(can.Observe.prototype, {

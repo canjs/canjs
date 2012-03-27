@@ -1,5 +1,8 @@
 @page can.Observe.attributes
 @parent can.Observe
+@plugin can/observe/attributes
+@test can/observe/attributes/qunit.html
+@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/attributes/attributes.js
 
 Attributes contains a map of attribute names/types. You can use this in conjunction with 
 [can.Observe.convert] to provide automatic type conversion.
@@ -15,9 +18,9 @@ We can observe to convert it to something closer to new Date(1982,10,20).
 
 Convert comes with the following types:
 
-	date - Converts to a JS date. Accepts integers or strings that work with Date.parse
-	number - an integer or number that can be passed to parseFloat
-	boolean - converts "false" to false, and puts everything else through Boolean()
+- __date__ Converts to a JS date. Accepts integers or strings that work with Date.parse
+- __number__ An integer or number that can be passed to parseFloat
+- __boolean__ Converts "false" to false, and puts everything else through Boolean()
 
 ### Convert
 
@@ -32,7 +35,11 @@ The following sets the birthday attribute to "date" and provides a date conversi
 			date : function(raw){
 				if(typeof raw == 'string'){
 					var matches = raw.match(/(\d+)-(\d+)-(\d+)/);
-					return new Date( matches[1], (+matches[2])-1, matches[3] );
+					
+					return new Date(matches[1], 
+							        (+matches[2])-1, 
+								    matches[3]);
+								
 				}else if(raw instanceof Date){
 					return raw;
 				}
@@ -40,9 +47,11 @@ The following sets the birthday attribute to "date" and provides a date conversi
 		}
 	},{});
 
-	Contact.attr('birthday', '4-26-2012') //- calls convert on attribute set
+	//- calls convert on attribute set
+	Contact.attr('birthday', '4-26-2012') 
 	
-	Contact.attr('birthday') //- returns newly converted date object
+	//- returns newly converted date object
+	Contact.attr('birthday') 
 
 ## Serialization
 
@@ -61,7 +70,9 @@ You can set the serialization methods similar to the convert methods:
 		},
 		serialize : {
 			date : function( val, type ){
-				return val.getYear() + "-" + (val.getMonth() + 1) + "-" + val.getDate(); 
+				return val.getYear() + 
+					"-" + (val.getMonth() + 1) + 
+					"-" + val.getDate(); 
 			}
 		}
 	},{})

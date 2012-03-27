@@ -12,9 +12,10 @@ does not have to exist.
 	})
   
      //listen to changes on a property
-     observe.delegate("foo.bar","change", function(ev, prop, how, newVal, oldVal){
-       // foo.bar has been added, set, or removed
-       this //-> 
+     observe.delegate("foo.bar","change", 
+		function(ev, prop, how, newVal, oldVal){
+       		// foo.bar has been added, set, or removed
+       		this //-> 
      });
  
      // change the property
