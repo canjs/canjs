@@ -784,44 +784,9 @@ steal('can/construct', function() {
 			this.bind('change',can.proxy(this._changes,this));
 			this.push.apply(this, can.makeArray(instances || []));
 			can.extend(this, options);
-			//if(this.comparator){
-			//	this.sort()
-			//}
 			delete this._init;
 		},
 		_changes : function(ev, attr, how, newVal, oldVal){
-			// detects an add, sorts it, re-adds?			
-			
-			// if we are sorting, and an attribute inside us changed
-			/*if(this.comparator && /^\d+./.test(attr) ) {
-				
-				// get the index
-				var index = +/^\d+/.exec(attr)[0],
-					// and item
-					item = this[index],
-					// and the new item
-					newIndex = this.sortedIndex(item);
-				
-				if(newIndex !== index){
-					// move ...
-					splice.call(this, index, 1);
-					splice.call(this, newIndex, 0, item);
-					
-					batchTrigger(this, "move", [item, newIndex, index]);
-					ev.stopImmediatePropagation();
-					batchTrigger(this,"change", [
-						attr.replace(/^\d+/,newIndex),
-						how,
-						newVal,
-						oldVal
-					]);
-					return;
-				}
-			}*/
-			
-			// if we add items, we need to handle 
-			// sorting and such
-			
 			// batchTrigger direct add and remove events ...
 			if ( !~ attr.indexOf('.')){
 				
@@ -838,23 +803,6 @@ steal('can/construct', function() {
 			}
 			// issue add, remove, and move events ...
 		},
-		/**
-		 * @hide
-		   sortedIndex : function(item){
-			var itemCompare = item.attr(this.comparator),
-				equaled = 0,
-				i;
-			for(var i =0; i < this.length; i++){
-				if(item === this[i]){
-					equaled = -1;
-					continue;
-				}
-				if(itemCompare <= this[i].attr(this.comparator) ) {
-					return i+equaled;
-				}
-			}
-			return i+equaled;
-		},*/
 		__get : function(attr){
 			return attr ? this[attr] : this;
 		},
@@ -1151,8 +1099,6 @@ steal('can/construct', function() {
 	// adds a method where
 	// - name - method name
 	// - where - where items in the array should be added
-
-
 	function( name, where ) {
 		list.prototype[name] = function() {
 			// get the items being added
@@ -1168,32 +1114,9 @@ steal('can/construct', function() {
 				}
 			}
 			
-			// if we have a sort item, add that
-			if( args.length == 1 && this.comparator ) {
-				// add each item ...
-				// we could make this check if we are already adding in order
-				// but that would be confusing ...
-				var index = this.sortedIndex(args[0]);
-				this.splice(index, 0, args[0]);
-				return this.length;
-			}
-			
 			// call the original method
 			var res = [][name].apply(this, args)
-			
-			// cause the change where the args are:
-			// len - where the additions happened
-			// add - items added
-			// args - the items added
-			// undefined - the old value
-			if ( this.comparator  && args.length > 1) {
-				this.sort(null, true);
-				batchTrigger(this,"reset", [args])
-			} else {
-				batchTrigger(this, "change", [""+len, "add", args, undefined])
-			}
-			
-
+			batchTrigger(this, "change", [""+len, "add", args, undefined])			
 			return res;
 		}
 	});
@@ -1237,8 +1160,6 @@ steal('can/construct', function() {
 		shift: 0
 	},
 	// creates a 'remove' type method
-
-
 	function( name, where ) {
 		list.prototype[name] = function() {
 			

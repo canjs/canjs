@@ -111,4 +111,76 @@ steal('steal/build/pluginify', function() {
 		skipCallbacks: true
 	});
 
+	steal.build.pluginify("can/construct/proxy/proxy.js", {
+		out: "can/dist/can.construct.proxy.js",
+		global: "can = {}",
+		onefunc: true,
+		compress: true,
+		skipCallbacks: true,
+		standAlone: true
+	});
+
+	steal.build.pluginify("can/construct/super/super.js", {
+		out: "can/dist/can.construct.super.js",
+		global: "can = {}",
+		onefunc: true,
+		compress: true,
+		skipCallbacks: true,
+		standAlone: true
+	});
+
+	steal.build.pluginify("can/control/plugin/plugin.js", {
+		out: "can/dist/can.control.plugin.js",
+		global: "can = {}",
+		onefunc: true,
+		compress: true,
+		skipCallbacks: true,
+		standAlone: true
+	});
+
+	steal.build.pluginify("can/observe/attributes/attributes.js", {
+		out: "can/dist/can.observe.attributes.js",
+		global: "can = {}",
+		onefunc: true,
+		compress: true,
+		skipCallbacks: true,
+		standAlone: true
+	});
+
+	steal.build.pluginify("can/observe/delegate/delegate.js", {
+		out: "can/dist/can.observe.delegate.js",
+		global: "can = {}",
+		onefunc: true,
+		compress: true,
+		skipCallbacks: true,
+		standAlone: true
+	});
+
+	steal.build.pluginify("can/observe/setter/setter.js", {
+		out: "can/dist/can.observe.setter.js",
+		global: "can = {}",
+		onefunc: true,
+		compress: true,
+		skipCallbacks: true,
+		standAlone: true
+	});
+
+	steal.build.pluginify("can/observe/backup/backup.js", {
+		out: "can/dist/can.observe.backup.js",
+		global: "can = {}",
+		onefunc: true,
+		compress: true,
+		skipCallbacks: true,
+		standAlone: true
+	});
+
+	steal.build.pluginify("can/observe/validations/validations.js", {
+		out: "can/dist/can.observe.validations.js",
+		global: "can = {}",
+		onefunc: true,
+		compress: true,
+		skipCallbacks: true,
+		standAlone: true
+	});
+
 });
