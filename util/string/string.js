@@ -1,29 +1,35 @@
-// 560
-//string helpers
 steal('can/util',function() {
+
+	// string.js
+	// ---------
+	// _Miscellaneous string utility functions._
 	
 	// Several of the methods in this plugin use code adapated from Prototype
-	//  Prototype JavaScript framework, version 1.6.0.1
-	//  (c) 2005-2007 Sam Stephenson
-	var undHash= /_|-/,
-		colons= /==/,
-		words= /([A-Z]+)([A-Z][a-z])/g,
-		lowUp= /([a-z\d])([A-Z])/g,
-		dash= /([a-z\d])([A-Z])/g,
-		replacer= /\{([^\}]+)\}/g,
-		quote= /"/g,
-		singleQuote= /'/g,
-		// gets the nextPart property from current
-		// add - if true and nextPart doesnt exist, create it as an empty object
-		getNext = function(current, nextPart, add){
-			return nextPart in current ? current[nextPart] : ( add && (current[nextPart] = {}) );
+	// Prototype JavaScript framework, version 1.6.0.1.
+	// © 2005-2007 Sam Stephenson
+	var undHash     = /_|-/,
+		colons      = /==/,
+		words       = /([A-Z]+)([A-Z][a-z])/g,
+		lowUp       = /([a-z\d])([A-Z])/g,
+		dash        = /([a-z\d])([A-Z])/g,
+		replacer    = /\{([^\}]+)\}/g,
+		quote       = /"/g,
+		singleQuote = /'/g,
+
+		// Returns the `prop` property from `obj`.
+		// If `add` is true and `prop` doesn't exist in `obj`, create it as an 
+		// empty object.
+		getNext = function( obj, prop, add ) {
+			return prop in obj ?
+				obj[ prop ] : 
+				( add && ( obj[ prop ] = {} ));
 		},
-		// returns true if the object can have properties (no nulls)
-		isContainer = function(current){
+
+		// Returns true if the object can have properties (no nulls).
+		isContainer = function( current ) {
 			return /^f|^o/.test( typeof current );
-		},
-		// a reference
-		getObject;
+		};
+
 		can.extend(can, {
 			/**
 			 * @function can.esc
@@ -32,8 +38,14 @@ steal('can/util',function() {
 			 * 
 			 * can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
 			 */
-			esc : function(content){
-				return ("" + content).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(quote, '&#34;').replace(singleQuote, "&#39;");
+			// Escapes strings for HTML.
+			esc : function( content ) {
+				return ( "" + content )
+					.replace(/&/g, '&amp;')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;')
+					.replace(quote, '&#34;')
+					.replace(singleQuote, "&#39;");
 			},
 			
 			/**
@@ -53,39 +65,41 @@ steal('can/util',function() {
 			 *  not modify the root object
 			 * @return {Object} The object.
 			 */
-			getObject : getObject = function( name, roots, add ) {
+			getObject : function( name, roots, add ) {
 			
-				// the parts of the name we are looking up
+				// The parts of the name we are looking up
 				// ['App','Models','Recipe']
 				var parts = name ? name.split('.') : [],
 					length =  parts.length,
 					current,
-					ret, 
-					i,
-					r = 0;
+					r = 0,
+					ret, i;
 				
-				// make sure roots is an array
+				// Make sure roots is an array.
 				roots = can.isArray(roots) ? roots : [roots || window];
 				
-				if(length == 0){
+				if ( ! length ) {
 					return roots[0];
 				}
-				// for each root, mark it as current
+
+				// For each root, mark it as current.
 				while( current = roots[r++] ) {
-					// walk current to the 2nd to last object
-					// or until there is not a container
-					for (i =0; i < length - 1 && isContainer(current); i++ ) {
-						current = getNext(current, parts[i], add);
+
+					// Walk current to the 2nd to last object or until there 
+					// is not a container.
+					for (i =0; i < length - 1 && isContainer( current ); i++ ) {
+						current = getNext( current, parts[i], add );
 					}
-					// if we can get a property from the 2nd to last object
+
+					// If we can get a property from the 2nd to last object...
 					if( isContainer(current) ) {
 						
-						// get (and possibly set) the property
+						// Get (and possibly set) the property.
 						ret = getNext(current, parts[i], add); 
 						
-						// if there is a value, we exit
-						if( ret !== undefined ) {
-							// if add is false, delete the property
+						// If there is a value, we exit.
+						if ( ret !== undefined ) {
+							// If add is false, delete the property
 							if ( add === false ) {
 								delete current[parts[i]];
 							}
@@ -102,8 +116,9 @@ steal('can/util',function() {
 			 * @param {String} s the string.
 			 * @return {String} a string with the first character capitalized.
 			 */
+			// Capitalizes a string.
 			capitalize: function( s, cache ) {
-				// used to make newId ...
+				// Used to make newId.
 				return s.charAt(0).toUpperCase() + s.slice(1);
 			},
 			
@@ -118,8 +133,14 @@ steal('can/util',function() {
 			 * @param {String} s
 			 * @return {String} the underscored string
 			 */
+			// Underscores a string.
 			underscore: function( s ) {
-				return s.replace(colons, '/').replace(words, '$1_$2').replace(lowUp, '$1_$2').replace(dash, '_').toLowerCase();
+				return s
+					.replace(colons, '/')
+					.replace(words, '$1_$2')
+					.replace(lowUp, '$1_$2')
+					.replace(dash, '_')
+					.toLowerCase();
 			},
 			/**
 			 * @function can.sub
@@ -135,25 +156,31 @@ steal('can/util',function() {
 			 * objects can be used.
 			 * @param {Boolean} [remove] if a match is found, remove the property from the object
 			 */
-			sub: function( s, data, remove ) {
-				var obs = [],
-					remove = typeof remove == 'boolean' ? !remove : remove;
-				obs.push(s.replace(replacer, function( whole, inside ) {
-					//convert inside to type
-					var ob = getObject(inside, data, remove);
+			// Micro-templating.
+			sub: function( str, data, remove ) {
+
+				var obs = [];
+
+				obs.push( str.replace( replacer, function( whole, inside ) {
+
+					// Convert inside to type.
+					var ob = can.getObject( inside, data, remove );
 					
-					// if a container, push into objs (which will return objects found)
-					if( isContainer(ob) ){
-						obs.push(ob);
+					// If a container, push into objs (which will return objects found).
+					if ( isContainer( ob ) ) {
+						obs.push( ob );
 						return "";
-					}else{
-						return ""+ob;
+					} else {
+						return "" + ob;
 					}
 				}));
 				
 				return obs.length <= 1 ? obs[0] : obs;
 			},
+
+			// These regex's are used throughout the rest of can, so let's make
+			// them available.
 			replacer : replacer,
-			undHash :undHash
+			undHash : undHash
 		});
 });

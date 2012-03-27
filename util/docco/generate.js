@@ -61,6 +61,7 @@ function stripComments() {
 				fs.readFile( sourceDir + file, "utf-8", function( err, code ) {
 					console.log( "\t" + file );
 					code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*/gim, "");
+					code = code.replace( /\t/gim, "    ");
 					fs.writeFile("temp/" + file, code, "utf-8", function() {
 						if ( ++count == files.length ) {
 							runDocco();
