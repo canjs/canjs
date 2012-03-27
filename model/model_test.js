@@ -29,7 +29,7 @@ test("findAll deferred", function(){
 				return $.ajax({
 					url : "/people",
 					data : params,
-					dataType : "json Person.models",
+					dataType : "json",
 					fixture: "//can/model/test/people.json"
 				})
 			} else {
@@ -63,7 +63,7 @@ test("findOne deferred", function(){
 				return $.ajax({
 					url : "/people/5",
 					data : params,
-					dataType : "json Person.model",
+					dataType : "json",
 					fixture: "//can/model/test/person.json"
 				});
 			}
