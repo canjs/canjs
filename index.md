@@ -30,7 +30,7 @@ This page walks through the basics of CanJS by building a
 small todo app with CanJS and jQuery.  The [Use with other libraries](#use_with_other_libraries) section details 
 the minor differencs between use with other libraries.
 
-## can.Construct `can.Construct([classProps,] [prototypeProps])`
+## can.Construct `can.Construct([classProperties,] [prototypeProperties])`
 
 Constructor function made with [can.Construct](http://donejs.com/docs.html#!can.Construct) are used to create
 objects with shared properties. It's used by both __can.Control__ and __can.Model__.
@@ -70,7 +70,7 @@ be the prototype properties.
 ### init `new can.Construct( [args ...] )`
 
 When a constructor is called with the `new` keyword, __can.Construct__ creates the instance and 
-calls [can.Construct.prototype.init](donejs.com/docs.html#!can.Construct.prototype.init) with 
+calls [can.Construct.prototype.init](http://donejs.com/docs.html#!can.Construct.prototype.init) with 
 the arguments passed to `new Constructor(...)`.
 
 {% highlight javascript %}
@@ -92,7 +92,7 @@ todo.read()
 [can.Observe](http://donejs.com/docs.html#!can.Observe) provides the observable pattern for JavaScript Objects. It lets you:
 
  - Set and remove property values on objects.
- - Listen for property changes changes.
+ - Listen for property changes.
  - Work with nested properties.
 
 To create an observable object, use `new can.Observe( [data] )` like:
@@ -147,7 +147,7 @@ result of an attribute change:
  - `change` events - a generic event so you can listen to any property change and how it was changed
  - `ATTR_NAME` events - bind to specific attribute changes
 
-The following listens to a all attribute changes and 'offset' changes on the paginate instance:
+The following listens to all attribute changes and 'offset' changes on the paginate instance:
 
 {% highlight javascript %}
 paginate.bind('change', function(ev, attr, how, newVal, oldVal){
@@ -188,7 +188,7 @@ paginate.each(function(name, value){
 // writes:
 //  offset 200
 //  limit 200
-//  count 1000}
+//  count 1000
 {% endhighlight %}  
 
 ### can.Observe.List `new can.Observe.List( [array] )`
@@ -270,9 +270,9 @@ on model instances.  It works the same way as [can.Observe.prototype.attr](#can_
 
 
 {% highlight javascript %}
-todo.attr('name') //-> "do the dishes"
+todo.attr("name") //-> "do the dishes"
 
-todo.attr('name', "wash the dishes" );
+todo.attr("name", "wash the dishes" );
 
 todo.attr() //-> {name: "wash the dishes"}
 
@@ -281,9 +281,9 @@ todo.attr({name: "did the dishes"});
 
 ### Talking to the server
 
-Model uses static [findAll](http://donejs.com/docs.html#!can.Model.findAll),
-[findOne](http://donejs.com/docs.html#!can.findAll), [create](http://donejs.com/docs.html#!can.create),
-[update](http://donejs.com/docs.html#!can.update), and [destroy](http://donejs.com/docs.html#!can.destroy)
+Model uses static [findAll](http://donejs.com/docs.html#!can.Model.static.findAll),
+[findOne](http://donejs.com/docs.html#!can.Model.static.findOne), [create](http://donejs.com/docs.html#!can.Model.static.create),
+[update](http://donejs.com/docs.html#!can.Model.static.update), and [destroy](http://donejs.com/docs.html#!can.Model.static.destroy)
 methods to create, read, update and delete (CRUD)
 model data on the server.  
 
@@ -409,7 +409,7 @@ callback's `todo` parameter is the destroyed instance and a deferred is returned
 resolves with the `todo` after it has been destroyed by the server.
 
 
-### bind `model.bind( event, handler(ev, model ) ) -> model`
+### bind `model.bind( event, handler( ev, model ) ) -> model`
 
 [can.Model.prototype.bind](http://donejs.com/docs.html#!can.Model.prototype.bind)
 listens to changes in a model instance's attributes in the same way as 
