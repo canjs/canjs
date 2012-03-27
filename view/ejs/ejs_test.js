@@ -296,7 +296,9 @@ test('live binding and removeAttr', function(){
 	var p = div.getElementsByTagName('p')[0],
 		span = p.getElementsByTagName('span')[0];
 
-	equals(div.innerHTML, '<p some="myText" class="myMessage"><span>Live long and prosper</span></p>', 'initial render');
+	equals(p.getAttribute("some"), "myText", 'initial render attr');
+	equals(p.getAttribute("class"), "myMessage", 'initial render class');
+	equals(span.innerHTML, 'Live long and prosper', 'initial render innerHTML');
 
 	obs.removeAttr('className');
 
@@ -328,7 +330,9 @@ test('live binding and removeAttr', function(){
 
 	obs.attr('show', true);
 
-	equals(div.innerHTML, '<p some="newText" class="newClass"><span>Warp drive, Mr. Sulu</span></p>', 'value in block statement updated');
+	equals(p.getAttribute("some"), "newText", 'value in block statement updated attr');
+	equals(p.getAttribute("class"), "newClass", 'value in block statement updated class');
+	equals(span.innerHTML, 'Warp drive, Mr. Sulu', 'value in block statement updated innerHTML');
 
 });
 
