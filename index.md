@@ -1105,10 +1105,10 @@ editor.todo( todo2 );
 ## can.route `can.route( route, [defaults] )`
 
 [can.route](http://donejs.com/docs.html#!can.route) is the core of CanJS's 
-routing functionality. It is a speical [can.Observe](#can_observe) that
+routing functionality. It is a special [can.Observe](#can_observe) that
 updates `window.location.hash` when its properties change
 and updates its properties when `window.location.hash` 
-changes. __can.route__ uses routes to translate urls into
+changes. __can.route__ uses routes to translate URLs into
 property values.  If no routes are provided, it just serializes the route
 into standard URL-encoded notation.  For example:
 
@@ -1467,12 +1467,12 @@ CanJS can be used with libraries other than jQuery.
 
 ## Examples
 
-Examples of canJS.
+Examples of CanJS.
 
 ## Why CanJS
 
 There are a lot of libraries out there and it can be difficult 
-to pick the one that's right for you.  In our (no so, but should be) humble opinion, the technology in CanJS is simply the best.  It strikes a 
+to pick the one that's right for you.  In our (not so, but should be) humble opinion, the technology in CanJS is simply the best.  It strikes a 
 balance between:
 
  - Size
@@ -1497,7 +1497,7 @@ __Size is not everything__.  It really is what's inside that counts. And that's 
 
 ### Ease of use
 
-This site highlights the most important features of CanJS.  But the library comes with thorough documentation
+This site highlights the most important features of CanJS.  The library comes with thorough documentation
 and examples on [it's DoneJS documentation page](http://donejs.com/docs.html).  There are example apps for
 each library, and several example apps for jQuery. 
 
@@ -1505,7 +1505,7 @@ CanJS is also supported by Bitovi, formerly [Jupiter Consulting](http://jupiterj
 
 ### Safety
 
-Memory safety is really important, especially in long-lived, dynamic pages. CanJS combats this menece in two important and unique ways:
+Memory safety is really important, especially in long-lived, dynamic pages. CanJS combats this menace in two important and unique ways:
 
 __Controls that unbind event handlers auto-magically__
 
@@ -1513,7 +1513,7 @@ Using [templated event binding](#can_control-templated_event_handlers_pt_2), Con
 
 {% highlight javascript %}
 var Tooltip = can.Control({
-  "{window} click" : function(el, ev){
+  '{window} click' : function(el, ev){
     // hide only if we clicked outside the tooltip
     if(! this.element.has(ev.target ) {
       this.element.remove();
@@ -1537,11 +1537,11 @@ It's relatively common to load the same model instance multiple times on a singl
 app might request todos due today and high-priority todos and render them like:
 
 {% highlight javascript %}
-can.view("todosList.ejs",{
-  todaysTodos : Todo.findAll({due: "today"}),
-  criticalTodos : Todo.findAll({type: "critical"})
+can.view('todosList.ejs',{
+  todaysTodos : Todo.findAll({due: 'today'}),
+  criticalTodos : Todo.findAll({type: 'critical'})
 }).then(function(frag){
-  $("#todos").html(frag);
+  $('#todos').html(frag);
 })
 {% endhighlight %}
 
@@ -1550,22 +1550,22 @@ can.view("todosList.ejs",{
 {% highlight erb %}
 <h2>Due Today</h2>
 <% list(todaysTodos, function(todo){ %>
-  <li <%= (el) -> el.data("todo",todo) %>>
+  <li <%= (el) -> el.data('todo',todo) %>>
     <%= todo.attr('name') %>
   </li>
 <% }) %>
 <h2>Critical Todos</h2>
 <% list(criticalTodos, function(todo){ %>
-  <li <%= (el) -> el.data("todo",todo) %>>
+  <li <%= (el) -> el.data('todo',todo) %>>
     <%= todo.attr('name') %>
   </li>
 <% }) %>
 {% endhighlight %}
 
-If `Todo.findAll({due: "today"})` and `Todo.findAll({type: "critical"})` both have the same todo instance's data like:
+If `Todo.findAll({due: 'today'})` and `Todo.findAll({type: 'critical'})` both have the same todo instance's data like:
 
 {% highlight javascript %}
-{ "id" : 5, "name" : "do dishes", "due": "today", "type" : "critical" }
+{ "id" : 5, "name" : "do dishes", "due" : "today", "type" : "critical" }
 {% endhighlight %}
 
 [can.Model](#can_model) knows that this data represents the same todo and only creates one instance.  This means that a single model instance is in both lists.  By changing the todo's name or destroying it, both lists will be changed.
@@ -1582,14 +1582,14 @@ __Model and view deferred support for parallel loading__
 you can load a template and its data in parallel and render it into an element with:
 
 {% highlight javascript %}
-$("#todos").html("todos.ejs", Todo.findAll() );
+$('#todos').html('todos.ejs', Todo.findAll() );
 {% endhighlight %}
 
 Hot.  You can do this without the [view modifiers plugin](#plugins-view_modifiers) like:
 
 {% highlight javascript %}
-can.view("todos.ejs", Todo.findAll() ).then(function( frag ){
-  $("#todos").html( frag );
+can.view('todos.ejs', Todo.findAll() ).then(function( frag ){
+  $('#todos').html( frag );
 })
 {% endhighlight %}
 
@@ -1637,15 +1637,15 @@ These plugins have forced the core to be quite extendable, making 3rd party plug
 
 __Engineered limber__
 
-CanJS's tools are designed to work under almost every situation.  Your server sends back XML with strange urls?  That's ok, overwrite [can.Model.findAll](http://donejs.com/docs.html#!can.Model.static.findAll) or [can.Model.models](http://donejs.com/docs.html#!can.Model.static.models).  Want some special teardown code for a control?  Overwrite [can.Control:destroy](http://donejs.com/docs.html#!can.Control.prototype.destroy).
+CanJS's tools are designed to work under almost every situation.  Your server sends back XML with strange URLs?  That's ok, overwrite [can.Model.findAll](http://donejs.com/docs.html#!can.Model.static.findAll) or [can.Model.models](http://donejs.com/docs.html#!can.Model.static.models).  Want some special teardown code for a control?  Overwrite [can.Control:destroy](http://donejs.com/docs.html#!can.Control.prototype.destroy).
 
 But our favorite bit of flexibility is how [can.Observe](#can_observe) works with nested data.  It converts nested objects into observes 
 automatically.  For example:
 
 {% highlight javascript %}
 var person = new can.Observe({
-  name : {first: "Justin", last: "Myer"},
-  hobbies : ["programming", "party rocking"]
+  name : {first: 'Justin', last: 'Myer'},
+  hobbies : ['programming', 'party rocking']
 })
 
 person.attr('name.first') //-> "Justin"
@@ -1656,13 +1656,13 @@ But most important, `change` events bubble.  Letting observe listen when a neste
 
 {% highlight javascript %}
 person.bind("change", function( ev, attr, how, newVal, oldVal ){
-  attr   //-> "name.last"
-  how    //-> "set"
-  newVal //-> "Meyer"
-  oldVal //-> "Myer"
+  attr   //-> 'name.last'
+  how    //-> 'set'
+  newVal //-> 'Meyer'
+  oldVal //-> 'Myer'
 });
 
-person.attr("name.last", "Meyer");
+person.attr('name.last', 'Meyer');
 {% endhighlight %}
 
 
@@ -1694,8 +1694,7 @@ Steal as submodules that are used to generate the documentation and build the Ca
  4. Install all submodules by running
    
         cd donejs
-        git submodule init
-        git submodule update --recursive
+        git submodule update --init --recursive
 
     Depending on your version of git, you might need to cd into each submodule and run `git checkout`.
 
