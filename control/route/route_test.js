@@ -20,18 +20,16 @@ test("routes changed", function () {
 		}
 	});
 
-	// append some anchors
-	can.append(can.$("#qunit-test-area"), '<a id="empty" href="#!">empty</a>');
-	can.append(can.$("#qunit-test-area"), '<a id="foo" href="#!foo/bar">foo/bar</a>');
-	can.append(can.$("#qunit-test-area"), '<a id="foos" href="#!foos">foos</a>');
-
 	// init controller
 	new Router(document.body);
 
-	// trigger change events
-	can.trigger(can.$('#foo'), 'click');
-	can.trigger(can.$('#foos'), 'click');
-	can.trigger(can.$('#empty'), 'click');
+	can.trigger(window, 'hashchange');
+
+	window.location.hash = '!foo/bar';
+	can.trigger(window, 'hashchange');
+
+	window.location.hash = '!foos';
+	can.trigger(window, 'hashchange');
 });
 
 });
