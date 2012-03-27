@@ -860,6 +860,9 @@ steal('can/construct', function() {
 		},
 		___set : function(attr, val){
 			this[attr] = val;
+			if(+attr >= this.length){
+				this.length = (+attr+1)
+			}
 		},
 		/**
 		 * @hide
