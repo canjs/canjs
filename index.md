@@ -487,7 +487,7 @@ is packaged with CanJS and supports live-binding of [can.Observe](#can_observe).
 
 ### Loading Templates
 
-`can.view` loads templates from a url or a script tag. To load from
+`can.view` loads templates from a URL or a script tag. To load from
 a __script__ tag, create a script tag with the template contents, an id, 
 and a type attribute that specifies the template type (text/ejs).
 
@@ -1110,61 +1110,61 @@ updates `window.location.hash` when its properties change
 and updates its properties when `window.location.hash` 
 changes. __can.route__ uses routes to translate urls into
 property values.  If no routes are provided, it just serializes the route
-into standard URL-encoded notation.  Example:
+into standard URL-encoded notation.  For example:
 
 {% highlight javascript %}
 // empty the hash
-window.location.hash = ""
+window.location.hash = ''
 
 // the route is empty
 can.route.attr() //-> {}
   
 // set the hash
-window.location.hash = "#!id=7"
+window.location.hash = '#!id=7'
 
 // the route data reflects what's in the hash
 can.route.attr() //-> { id: 7 }
 
 // set the route data
-can.route.attr({ type : "todos" })
+can.route.attr({ type : 'todos' })
 
 // the hash changes to reflect the route data
 window.location.hash //-> #!type=todos
 
 // set a property on the hash
-can.route.attr("id",5)
+can.route.attr('id', 5)
 
 // the hash changes again to reflect the route data
 window.location.hash //-> #!type=todos&id=5
 {% endhighlight %}
 
-Use `can.route( route, defaults )` to make pretty urls:
+Use `can.route( route, defaults )` to make pretty URLs:
 
 {% highlight javascript %}
 // create a route
-can.route(":type/:id")
+can.route(':type/:id')
 
 // set the hash to look like the route
-window.location.hash = "#!todo/5"
+window.location.hash = '#!todo/5'
 
 // the route data changes accordingly
-can.route.attr() //-> { type: "todo", id: 5 }
+can.route.attr() //-> { type: 'todo', id: 5 }
 
 // change the route data with properties
 // used by the route
-can.route.attr({type: "user", id: 7})
+can.route.attr({type: 'user', id: 7})
 
 // the hash is changed to reflect the route
-window.location.hash //-> "#!user/7"
+window.location.hash //-> '#!user/7'
 
 // create a default route
-can.route("",{ type : "recipe" })
+can.route('', { type : 'recipe' })
 
 // empty the hash
-window.location.hash = "";
+window.location.hash = '';
 
 // the route data reflects the default value
-can.route.attr() //-> { type : "recipe" })
+can.route.attr() //-> { type : 'recipe' })
 {% endhighlight %}
 
 ### bind `route.bind( eventName, handler( event ) )`
@@ -1172,8 +1172,8 @@ can.route.attr() //-> { type : "recipe" })
 Use [bind](#can_observe-bind) to listen to changes in the route like:
 
 {% highlight javascript %}
-can.route.bind("id", function( ev, newVal ) {
-  console.log("id changed");
+can.route.bind('id', function( ev, newVal ) {
+  console.log('id changed');
 });
 {% endhighlight %}
 
@@ -1183,10 +1183,10 @@ Listen to routes in controls with special "route" events like:
 
 {% highlight javascript %}
 var Routing = can.Control({
-  "route" : function(){
+  'route' : function(){
     // matches empty hash, #, or #!
   },
-  "todos/:id route" : function(data){
+  'todos/:id route' : function(data){
     // matches routes like #!todos/5
   }
 })
@@ -1202,17 +1202,17 @@ will be called with data like: `{id: 6}`.
 We can update the route by changing can.route's data like:
 
 {% highlight javascript %}
-can.route.attr('id','6') // location.hash = #!todos/6
+can.route.attr('id','6') // window.location.hash = #!todos/6
 {% endhighlight %}
 
 ### url `can.route.url( options, [merge] )`
 
 [can.route.url](http://donejs.com/docs.html#!can.route.url) takes attributes
-and creates a url that can be used in a link.  
+and creates a URL that can be used in a link.  
 
 {% highlight javascript %}
 var hash = can.route.url({id: 7}) // #!todos/7
-location.hash = hash;
+window.location.hash = hash;
 {% endhighlight %}
 
 ### link `can.route.link( name, options, props, merge )`
@@ -1221,9 +1221,9 @@ location.hash = hash;
 create a link.
 
 {% highlight javascript %}
-var link = can.link("Todo 5",
+var link = can.route.link('Todo 5',
                     { id: 5 }, 
-                    { className : "button" });
+                    { className : 'button' });
 
 link //-> <a href="#!todos/7" class="button">Todo 5</a>
 {% endhighlight %}
@@ -1237,21 +1237,21 @@ and updates the editor widget.
 {% highlight javascript %}
 var Routing = can.Control({
   init : function(){
-    this.editor = new Editor("#editor")
-    new Todos("#todos");
+    this.editor = new Editor('#editor')
+    new Todos('#todos');
   },
   // the index page
-  "route" : function(){
-     $("#editor").hide();
+  'route' : function(){
+     $('#editor').hide();
   },
-  "todos/:id route" : function(data){
+  'todos/:id route' : function(data){
     $("#editor").show();
     var self = this;
     Todo.findOne(data, function(todo){
       this.editor.update({todo: todo});
     })
   },
-  ".todo selected" : function(el, ev, todo){
+  '.todo selected' : function(el, ev, todo){
     can.route.attr('id',todo.id);
   }
 });
@@ -1292,7 +1292,7 @@ can.capitalize("fooBar") //-> "FooBar"
 // micro templating
 can.sub("{greet} world",{greet: "hello"}) //-> "hello world"
 
-// deparams a form encoded url into an object
+// deparams a form encoded URL into an object
 can.deparam("foo=bar&hello=world")
     //-> {foo: "bar", hello: "world}
 {% endhighlight %}
@@ -1683,11 +1683,11 @@ Steal as submodules that are used to generate the documentation and build the Ca
 
         git clone git@github.com:jupiterjs/donejs
         
- 3. Open the donejs folder's .gitmodule file and change the url of the `"can"` submodule:
+ 3. Open the donejs folder's .gitmodule file and change the URL of the `"can"` submodule:
 
         url = git://github.com/jupiterjs/canjs.git
         
-    to your `fork`ed url like
+    to your `fork`ed URL like
     
         url = git://github.com/justinbmeyer/canjs.git
 
