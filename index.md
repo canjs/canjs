@@ -47,16 +47,16 @@ extended and sub-classed as far as you like:
 {% highlight javascript %}
 var Todo = can.Construct({
   init : function(){},
-	
+  
   author : function(){ ... },
-	
+  
   coordinates : function(){ ... },
-	
+  
   allowedToEdit: function(account) { 
     return true;
   }
 });
-	
+  
 var PrivateTodo = Todo({
   allowedToEdit: function(account) {
     return account.owns(this);
@@ -82,7 +82,7 @@ var Todo = can.Construct({
     console.log(this.text);
   }
 })
-	
+  
 var todo = new Todo("Hello World");
 todo.read()
 {% endhighlight %}
@@ -119,11 +119,11 @@ sets properties on an observe:
 
 {% highlight javascript %}
 paginate.attr('offset') //-> 0
-	
+  
 paginate.attr('offset', 100 );
-	
+  
 paginate.attr() //-> {offset: 100, limit : 100, count: 2000}
-	
+  
 paginate.attr({limit: 200, count: 1000});
 {% endhighlight %}
 
@@ -1302,15 +1302,15 @@ can.deparam("foo=bar&hello=world")
 {% highlight javascript %}
 // convert array-like data into arrays
 can.makeArray({0 : "zero", 1: "one", length: 2}) // -> ["zero","one"]
-	
+  
 // return if an array is an array
 can.isArray([]) //-> true
-	
+  
 // converts one array to another array
 can.map([{prop: "val1"}, {prop: "val2"}], function(val, prop){
   return val
 })  //-> ["val1","val2"]
-	
+  
 // iterates through an array
 can.each([{prop: "val1"}, {prop: "val2"}], function( index, value ) {
   // function called with
@@ -1330,13 +1330,13 @@ can.extend(first, second, third); //-> first
 first  //-> {a: "b",c : "d"}
 second //-> {a: "b"}
 thrid  //-> {c: "d"}
-	
+  
 // deep extends one object with another
 can.extend( true, first, second, third ); 
-	
+  
 // parameterize into a querystring
 can.param({a: "b", c: "d"}) //-> "a=b&c=d"
-	
+  
 // returns if an object is empty
 can.isEmptyObject({})      //-> true
 can.isEmptyObject({a:"b"}) //-> false
@@ -1365,13 +1365,13 @@ can.bind(obj, eventName, handler )
 
 // unbind handler on obj's eventName event
 can.unbind(obj, eventName, handler) 
-	
+  
 // 
 can.delegate(obj, selector, eventName, handler)
-	
+  
 //
 can.delegate(obj, selector, eventName, handler)
-	
+  
 //
 can.trigger(obj, event, args )
 can.trigger(obj, eventName, args)
@@ -1390,10 +1390,10 @@ deferred.pipe(function(){
 
 // 
 deferred.resolve()
-	
+  
 //
 deferred.reject()
-	
+  
 // 
 can.When()
 {% endhighlight %}
@@ -1421,11 +1421,11 @@ can.buildFragment(frags, nodes)
 can.$("div.bar") //-> []
 
 can.append(NodeList, html)
-	
+  
 can.remove(NodeList)
-	
+  
 can.data(NodeList, dataName, dataValue)
-	
+  
 can.addClass(NodeList, className )
 {% endhighlight %}
 
@@ -1477,7 +1477,7 @@ balance between:
 
  - Size
  - Ease of use
- - Saftey
+ - Safety
  - Speed
  - Flexibility
 
@@ -1503,9 +1503,9 @@ each library, and several example apps for jQuery.
 
 CanJS is also supported by Bitovi, formerly [Jupiter Consulting](http://jupiterjs.com).  We are extremely active on the [forums](https://forum.javascriptmvc.com/#Forum/canjs). And should the need arise, we provide support, training, and development.
 
-### Saftey
+### Safety
 
-Memory saftey is really important, especially in long-lived, dynamic pages. CanJS combats this menece in two important and unique ways:
+Memory safety is really important, especially in long-lived, dynamic pages. CanJS combats this menece in two important and unique ways:
 
 __Controls that unbind event handlers auto-magically__
 
