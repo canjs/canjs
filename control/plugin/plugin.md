@@ -86,7 +86,7 @@ the __Access__ section.
 
 When the widget is initialized, the plugin control creates an association 
 of controller instance(s) with the DOM element it was initialized on using 
-can's [can.Data data] method.
+can's data method.
 
 ### Controller
 
