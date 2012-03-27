@@ -1,5 +1,5 @@
 load("steal/rhino/rhino.js");
-steal('steal/build/pluginify', function () {
+steal('steal/build/pluginify', function() {
 
 	var libs = {
 		"jquery" : "jquery.1.7.1.js",
@@ -9,25 +9,14 @@ steal('steal/build/pluginify', function () {
 		"yui" : "yui.js"
 	}, lib, exclude;
 	
-	steal.File("can/standalone").mkdirs();
+	steal.File("can/util/docco/standalone").mkdirs();
 
 	for ( lib in libs ) {
 
 		exclude = libs[ lib ];
 
-		/** /
-		steal.build.pluginify("can/util/make/" + lib + ".js",{
-			out : "can/standalone/can." + lib + "-edge.min.js",
-			global : "can = {}",
-			onefunc : true,
-			compress: true,
-			skipCallbacks: true,
-			exclude : "can/util/" + lib + "/" + exclude
-		});
-		/**/
-
-		steal.build.pluginify("can/util/make/" + lib + ".js",{
-			out : "can/standalone/can." + lib + "-edge.js",
+		steal.build.pluginify("can/util/make/" + lib + ".js", {
+			out : "can/util/docco/standalone/can." + lib + "-edge.js",
 			global : "can = {}",
 			onefunc : true,
 			compress: false,
