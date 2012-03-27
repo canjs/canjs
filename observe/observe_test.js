@@ -42,7 +42,11 @@ test("Basic Observe",9,function(){
 	
 });
 
-
+test("list attr changes length", function(){
+	var l = new can.Observe.List([0,1,2])
+	l.attr(3,3)
+	equals(l.length, 4);
+})
 
 test("list splice", function(){
 	var l = new can.Observe.List([0,1,2,3]),
