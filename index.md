@@ -10,8 +10,8 @@ CanJS is an MIT-licensed, client-side, JavaScript framework that makes building 
  - __can.Model__ - observes connected to a RESTful JSON interface
  - __can.view__ - template loading, caching, rendering
  - __can.EJS__ - live binding templates
- - __can.Control__ - declaritive event bindings
- - __can.route__ - backbutton and bookmarking support
+ - __can.Control__ - declarative event bindings
+ - __can.route__ - back button and bookmarking support
 
 It also includes a rich set of supported [extensions and plugins](#plugins).
 
@@ -28,7 +28,7 @@ for the library you are using:
 
 This page walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery.  The [Use with other libraries](#use_with_other_libraries) section details 
-the minor differencs between use with other libraries.
+the minor differences among use with other libraries.
 
 ## can.Construct `can.Construct([classProperties,] [prototypeProperties])`
 
@@ -472,7 +472,7 @@ Todo.findAll({}, function(todos){
 [can.view](http://donejs.com/docs.html#!can.view) is used to load, render, and create HTMLElements from
 JavaScript templates. Pass it ...
 
-- the __id__ or __url__ of a script tag to use as the content of the template
+- the __id__ or __URL__ of a script tag to use as the content of the template
 - __data__ to pass to the template
   
 It returns the rendered result of the template as a documentFragment.  
@@ -510,7 +510,7 @@ Todo.findAll( {}, function( todos ){
 });
 {% endhighlight %}
 
-To load from a __url__,  create
+To load from a __URL__,  create
 a _todos/todos.ejs_ file that contains:
 
 {% highlight erb %}
@@ -818,7 +818,7 @@ new can.Control instance is created.  It's called with:
 
 - __element__ - The wrapped element passed to the 
                 control. Control accepts a
-                raw HTMLElement, a css selector, or a NodeList.  This is
+                raw HTMLElement, a CSS selector, or a NodeList.  This is
                 set as __this.element__ on the control instance.
 - __options__ - The second argument passed to new Control, extended with
                 the can.Control's static __defaults__. This is set as 
@@ -848,7 +848,7 @@ new Todos( $("#todos"), {view: "specialTodos.ejs"})
 ### element `this.element`
 
 [this.element](http://donejs.com/docs.html#!can.Controll.prototype.element) is the 
-a NodeList of a single element, the element the control is created on. 
+NodeList of a single element, the element the control is created on. 
 
 {% highlight javascript %}
 var todosControl = new Todos( document.body.firstElementChild );
@@ -1014,7 +1014,7 @@ var Todos = can.Control({
     //destroy it
     todo.destroy();
   },
-  '{Todo} destroyed' : funtion(Todo, ev, todoDestroyed) {
+  '{Todo} destroyed' : function(Todo, ev, todoDestroyed) {
     // find where the element is in the list
     var index = this.todosList.indexOf(todoDestroyed)
     this.element.children(':nth-child('+(index+1)+')')
@@ -1036,7 +1036,7 @@ var todo = new Todos('#todos')
 todo.destroy();
 {% endhighlight %}
 
-When a control's element is removed from the page
+When a control's element is removed from the page,
 __destroy__ is called automatically.
 
 {% highlight javascript %}
@@ -1261,7 +1261,7 @@ new Routing(document.body);
 {% endhighlight %}
 
 The __Routing__ control is a traditional controller. It coordinates
-between the `can.route`, `Editor` and `Todos`.  `Editor` and `Todos`
+among the `can.route`, `Editor` and `Todos`.  `Editor` and `Todos`
 are traditional views, consuming models.
 
 If you can understand this, you understand 
@@ -1270,7 +1270,7 @@ everything. Congrats! [See it in action](http://donejs.com/docs.html#!tutorials/
 
 ## Utilities
 
-CanJS provides a number of utility methods.  Most of the time, they are mapped to the underlying 
+CanJS provides several utility methods.  Usually, they are mapped to the underlying 
 library. But, by using only these methods, you can create plugins that work with any library. Also, these methods
 are required to run CanJS from another library.
 
@@ -1475,7 +1475,7 @@ Examples of CanJS.
 
 ## Why CanJS
 
-There are a lot of libraries out there and it can be difficult 
+There are many libraries out there and it can be difficult 
 to pick the one that's right for you.  In our (not so, but should be) humble opinion, the technology in CanJS is simply the best.  It strikes a 
 balance between:
 
@@ -1582,7 +1582,7 @@ The importance of performance is almost impossible to exaggerate.  CanJS's guts 
 
 __Model and view deferred support for parallel loading__
 
-[Deferreds](#utilities-deferred) are simply awesome for dealing with asynchronous behavior.  [can.Model](#can_model) produces deferreds and [can.view](#can_view) consumes them.  With the [view modifiers](#plugins-view_modifiers) plugin, 
+[Deferreds](#utilities-deferred) are simply awesome for handling asynchronous behavior.  [can.Model](#can_model) produces deferreds and [can.view](#can_view) consumes them.  With the [view modifiers](#plugins-view_modifiers) plugin, 
 you can load a template and its data in parallel and render it into an element with:
 
 {% highlight javascript %}
@@ -1618,9 +1618,9 @@ Your library should not break-down as your application and organization grow and
 technologies change. CanJS's flexibility will keep it valuable to you 
 far into the future.
 
-__Spports multiple libraries and frameworks__
+__Supports multiple libraries and frameworks__
 
-Want to share code between a Zepto mobile app, and a jQuery desktop 
+Want to share code between a Zepto mobile app and a jQuery desktop 
 app?  No problem.  CanJS code (especially models) can be shared 
 across libraries, and so can skill sets!  Working on a Dojo project today and 
 a YUI one tomorrow?  Don't throw away all of your skills.
@@ -1743,7 +1743,7 @@ To edit the documentation at [DoneJS.com](http://doneJS.com/docs.html):
 
  1. [install](#developing_canjs-installing) CanJS and DoneJS.
  2. Edit the markdown and js files in the [CanJS github repo](https://github.com/jupiterjs/canjs).  For example, to edit [can.Control's overview page](http://donejs.com/docs.html#!can.Control),
-change [can/control/control.md](https://github.com/jupiterjs/canjs/blob/master/control/control.md).  To edit [can.Control's destory method](http://donejs.com/docs.html#!can.Control.prototype.destroy), 
+change [can/control/control.md](https://github.com/jupiterjs/canjs/blob/master/control/control.md).  To edit [can.Control's destroy method](http://donejs.com/docs.html#!can.Control.prototype.destroy), 
 change [can/control/control.js](https://github.com/jupiterjs/canjs/blob/master/control/control.js#L939) 
 where you find the `destroy` comment.
  3. Generate the docs with:
