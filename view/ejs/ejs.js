@@ -63,9 +63,10 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			// or if it's a function, just use the input
 			(typeof input == 'function' && input);
 			// finally, if there is a funciton to hookup on some dom
-			// pass it to hookup to get the data-view-id back
+			// add it to pending hookups
 			if ( hook ) {
-				return can.view.hook(hook);
+				pendingHookups.push(hook);
+				return '';
 			}
 			// finally, if all else false, toString it
 			return ""+input;
