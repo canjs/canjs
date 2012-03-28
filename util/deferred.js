@@ -57,7 +57,9 @@ steal(function(){
 	doneFunc = function(type, _status){
 		return function(){
 			var self = this;
-			can.each(arguments, function( i, v, args ) {
+			/* In Safari, the properties of the arguments object are not enumerable, 
+			so we have to convert arguments to an Array that allows can.each to loop over them*/
+			can.each(Array.prototype.slice.call(arguments), function( i, v, args ) {
 				if ( ! v )
 					return;
 				if ( v.constructor === Array ) {
