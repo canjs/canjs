@@ -359,11 +359,24 @@ steal({
 	can.get = function(wrapped, index){
 		return wrapped[index];
 	}
-	
-	
-	
-	
 
-	
-	
+	/* add pipe to dojo.Deferred */
+	can.extend(dojo.Deferred.prototype, {
+		pipe : function(done, fail){
+			var d = new dojo.Deferred();
+			this.addCallback(function(){
+				d.resolve( done.apply(this, arguments) );
+			});
+			
+			this.addErrback(function(){
+				if(fail){
+					d.reject( fail.apply(this, arguments) );
+				} else {
+					d.reject.apply(d, arguments);
+				}
+			});
+			return d;
+		}
+	});
+
 }).then('../deferred.js')
