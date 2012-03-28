@@ -27,29 +27,33 @@
         src='../../../steal/steal.js'>   
 </script>
 <script type='text/javascript'  id="demo-source">   
-steal('can/model',
-		'can/model/fixture',
-		'can/model/list',
-		'can/observe/validations').then(function(){
-	
-can.Model.convert.date = function(raw){
-	if(typeof raw == 'string'){
-		var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
-		
-		return matches ? new Date( +matches[1], 
-		                 (+matches[2])-1, 
-		                 +matches[3] )
-					   : null;
-	}else if(raw instanceof Date){
-		return raw;
-	}
-};
+steal('can/observe/validations',
+	  'can/observe/attributes',
+	  'can/observe/delegate')
+.then('can/model',
+	  'can/util/fixture')
+.then(function(){
 
 can.fixture("/contacts.json", function(){
-  return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
-	       {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10'},
-	       {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
+return [[
+		{ 
+			'id': 1,
+			'name' : 'Justin Meyer',
+			'birthday': '1982-10-20'
+		},
+		{
+			'id': 2,
+			'name' : 'Brian Moschel',
+			'birthday': '1983-11-10'
+		},
+		{
+			'id': 3,
+			'name' : 'Motley Crew',
+			'birthday': '1980-2-10'
+		}
+	]];
 });
+
 can.fixture("/contacts/{id}.json", function() {
 	return {};
 })
@@ -67,6 +71,21 @@ can.Model("Contact",{
 	},
 	attributes : { 
 		birthday : 'date'
+	},
+	convert: {
+		'date': function(raw){
+			if(typeof raw == 'string'){
+				var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
+
+				return matches ? 
+					new Date(+matches[1], 
+				            (+matches[2])-1, 
+				             +matches[3] )
+					: null;
+			}else if(raw instanceof Date){
+				return raw;
+			}
+		}
 	},
 	findAll : "/contacts.json",
 	update : "/contacts/{id}.json"
@@ -87,35 +106,41 @@ makeAgeUpdater = function(contact){
 	var updater = can.$("#update")
 	updater.html("");
 	updater.append("<span>" +contact.name+"'s birthday </span>")
-	can.$('<input/>').val(contact.attr("birthday")).change(function(){
-		
-		
+	
+	can.$('<input/>').val(contact.getBirthday()).change(function(){
 		contact.attr("birthday", this.value , function(){
 			can.$('#error').hide();
 		}, function(errors){
 			can.$('#error').html(errors.birthday[0]).show();
 		})
 	}).appendTo(updater);
+	
 	updater.append("<div id='error' style='display:none'><div>");
 }
-	// List 1
+
+// List 1
 Contact.findAll({},function(contacts){
   var contactsEl = can.$('#contacts1');
+
   can.each(contacts, function(i, contact){
+	
     var li = can.$('<li>')
-              .model(contact)
+              .data('model', contact)
               .html(contact.name+" "+contact.ageThisYear()+
                     " <a>Show</a>")
               .appendTo(contactsEl);
-    contact.bind("birthday", function(){
-      li.html(contact.name+" "+this.ageThisYear()+
+
+	contact.bind("birthday", function(){
+      li.html(contact.name+" "+
+			  this.ageThisYear()+
               " <a>Show</a>");
-    })
-  })
+    });
+});
   
   contactsEl.delegate("li","click", function(){
-	 makeAgeUpdater( can.$(this).closest('.contact').model() );
+	 makeAgeUpdater( can.$(this).data('model') );
   });
+
 });
 })
 </script>
