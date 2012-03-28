@@ -1387,6 +1387,8 @@ can.trigger( obj, eventName, args )
 
 ### Deferred
 
+can.Deferreds are explained in greater detail in the [DoneJS documentation.](http://donejs.com/docs.html#!can.Deferred)
+
 {% highlight javascript %}
 // creates a new Deferred object
 var deferred = new can.Deferred()
