@@ -1,6 +1,6 @@
 steal('can/util/mvc.js')
 .then('funcunit/qunit', 
-	  'can/test/fixture.js')
+	  'can/util/fixture')
 .then(function() {
 	var oldmodule = window.module,
 		library = 'jQuery';
