@@ -1,7 +1,7 @@
 @page can.Observe.setter
 @parent can.Observe
 @plugin can/observe/setter
-@download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/setter/setter.js
+@download http://donejs.com/can/dist/can.observe.setter.js
 @test can/observe/setter/qunit.html
 
 Setter extends the Observe object to provide convenient helper methods for setting attributes on a observable.

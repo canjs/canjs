@@ -2,7 +2,7 @@
 @parent can.Observe
 @plugin can/observe/backup
 @test can/observe/backup/qunit.html
-@download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/backup/backup.js
+@download http://donejs.com/can/dist/can.observe.backup.js
 
 You can backup and restore instance data with the can/observe/backup
 plugin.
