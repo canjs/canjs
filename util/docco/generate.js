@@ -10,16 +10,17 @@ var path          = require('path'),
 	doccoDir      = path.join( canDir, "util/docco" ),
 	doccoOutDir   = path.join( doccoDir, "docs" ),
 	sourceDir     = path.join( doccoDir, 'standalone' ),
-	genCommand    = "js " + path.join( doccoDir, "makestandalone.js" );
+	makePath      = path.join( doccoDir, "makestandalone.js" ),
+	genCommand;
 
 function execCommandWithOutput( command, cwd, callback ) {
 
 	var spawn, parts;
 
 	parts = command.split(" ");
-	spawn = child_process.spawn( parts.shift(), parts, {
-		cwd : cwd,
-		env : process.env
+	console.log( parts );
+	spawn = child_process.spawn( parts.shift(), parts, cwd || {
+		cwd : cwd
 	});
 
 	["stdout", "stderr"].forEach( function( stream ) {
@@ -36,6 +37,10 @@ function runDocco() {
 	fs.mkdir(docsDir, function() {
 
 		fs.readdir("temp", function( err, files ) {
+		
+			var command = os.platform() != "win32" ?
+				"docco " :
+				"sh docco ";
 
 			// Prepend temp to each file
 			files = files.map(function( file ) {
@@ -44,7 +49,7 @@ function runDocco() {
 
 			console.log( "Generating docco annotated source..." );
 
-			execCommandWithOutput( "docco " + files.join(" "), doccoDir, function() {
+			execCommandWithOutput( command + files.join(" "), doccoDir, function() {
 				fs.readdir( doccoOutDir, function( err, files ) {
 					console.log("Moving files into place...");
 					files.forEach(function( file ) {
@@ -114,6 +119,9 @@ function format( exitCode ) {
 
 console.log("Generating unminified sources...");
 if ( os.platform() != "win32" ) {
-	genCommand = "./" + genCommand;
+	genCommand = "./js " + makePath;
+} else {
+	genCommand = "js.bat " + makePath;
 }
 execCommandWithOutput( genCommand, rhinoDir, format );
+
