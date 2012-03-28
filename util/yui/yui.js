@@ -319,14 +319,11 @@
 				if ( item instanceof Y.NodeList ) {
 					item = item.item(0);
 				}
-				if ( item instanceof Y.Node ) {
-					item = item._node
-				}
+        if ( item.getDOMNode ) {
+            item = item.getDOMNode();
+        }
 
 				if ( item.nodeName ) {
-					
-					
-					
 					item = Y.Node(item);
 					if ( bubble === false ) {
 						//  force stop propagation by
@@ -335,13 +332,14 @@
 							ev.preventDefault()
 						})
 					} 
-					realTrigger(item._node, event,{})
+					realTrigger(item.getDOMNode(), event,{})
 				} else {
 					if ( typeof event === 'string' ) {
 						event = {
 							type: event
 						}
 					}
+					event.target = event.target || item
 					event.data = args
 					can.dispatch.call(item, event)
 				}
@@ -399,7 +397,7 @@
 				n.fireEvent(ev);
 			} catch (er) {
 				// a lame duck to work with. we're probably a 'custom event'
-				var evdata = mix({
+				var evdata = can.extend({
 					type: e,
 					target: n,
 					faux: true,
@@ -409,11 +407,11 @@
 						stop = this.cancelBubble;
 					}
 				}, a);
-				isfn(n[ev]) && n[ev](evdata);
+				can.isFunction(n[ev]) && n[ev](evdata);
 				// handle bubbling of custom events, unless the event was stopped.
 				while (!stop && n !== document && n.parentNode ) {
 					n = n.parentNode;
-					isfn(n[ev]) && n[ev](evdata);
+					can.isFunction(n[ev]) && n[ev](evdata);
 				}
 			}
 		}
