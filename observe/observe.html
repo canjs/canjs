@@ -16,67 +16,62 @@
 			#warning {
 				color: red;
 			}
+			.propName {color: green}
+			.remove:hover {
+				background-color: red;
+			}
+			pre {
+				font-size: 14px;
+				line-height: 21px;
+			}
+			.edit-over {
+				padding: 0px;
+				margin: 0px;
+				border: solid 1px gray;
+				-webkit-box-shadow: 5px 5px 5px #999;
+				-moz-box-shadow: 5px 5px 5px #999;
+				box-shadow: 5px 5px 5px #999;
+			}
         </style>
 	</head>
 	<body>
-	    <h1>can.Observe Demo</h1>
-		<p>Make changes to the JSON in the following textarea.  
-		  Click <b>Update Attrs</b> to merge the  JSON and see the events produced.  </p>
-	<pre>o = new can.Observe({})</pre>
-	<pre style='float:left'>o.attrs(</pre>
-<textarea>{
-  "message" : "Hello World",
-  "items" : ["one","two",{ "name" : "three"}],
-  "foo" : {"bar": "car"}
-}
-</textarea><code>, true)</code> <input type='submit' value='Update Attrs' id='update'/>
-	<pre id='warning'></pre>
-	<pre>o.bind('change', function( ev, attr, how, newValue, prevValue, where ) { </pre>
-	<table>
-		<thead>
-			<th>attr</th>
-			<th>how</th>
-			<th>newValue</th>
-			<th>prevValue</th>
-			<th>where</th>
-		</thead>
-		<tbody id='body'></tbody>
-	</table>
 	
-	
+	<pre id='observer1'></pre>
+	<pre id='observer2'></pre>
+	<pre id='observer3'></pre>
+	<pre id='observer4'></pre>
+	<pre id='observer5'></pre>
 		<script type='text/javascript' 
                 src='../../steal/steal.js'>   
         </script>
 		<script type='text/javascript'>
-steal('can/observe/delegate', 'can/util/json.js',function(){
-	o = new can.Observe({});
-	o.bind('change',function(ev, attr, how, newValue, prevValue, where){
+steal('can/observe/delegate', 
+
+	'can/view/ejs',
+	function(){
 	
-		can.$('#body').prepend(["<tr><td>",
-		   attr, "</td><td>",
-		   how, "</td><td>",
-		   can.toJSON(newValue && newValue.serialize ? newValue.serialize() : newValue), "</td><td>",
-		   can.toJSON(prevValue && prevValue.serialize ? prevValue.serialize() : prevValue), "</td><td>",
-		   where, "</td></tr>"
-		].join(''))
-	})
-	can.$('#update').click(function(){
-		var json =  can.evalJSON( $('textarea').val() );
-		o.attrs(json, true);
+
 		
-	})
-	can.$('textarea').keyup(function(){
-		var me = can.$(this)
-		try { 
-		   can.evalJSON( me.val() );
-		   me.css('border-color','')
-		   can.$('#warning').hide()
-		} catch (e ){
-			me.css('border-color','red')
-			can.$('#warning').text(e.toString()).show()
-		}
-	})
+		
+		new Observer("#observer1",{
+			obs: new can.Observe({})
+		})
+		
+		new Observer("#observer2",{
+			obs: new can.Observe({foo : "bar"})
+		})
+		
+		new Observer("#observer3",{
+			obs: new can.Observe({a: "b", c: "d"})
+		})
 	
+		new Observer("#observer4", {
+			obs: new can.Observe({ "a" : {b: "c"}, "d" : {e : "f"}}) 
+		} )
+		
+		new Observer("#observer5", {
+			obs: new can.Observe({items: [1, 2, {a:"b"}]}) 
+		} )
 })
 		</script>
 	</body>
