@@ -5,16 +5,13 @@
 @download http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/attributes/attributes.js
 
 Attributes contains a map of attribute names/types. You can use this in conjunction with 
-[can.Observe.convert] to provide automatic type conversion.
-	
-*Note: Its important to include this plugin before you include other plugins that 
-extend Observe so that prototype chain is extended correctly.
+convert to provide automatic type conversion.
 
 ## Type Conversion
 
 You often want to convert from what the observe sends you to a form more useful to JavaScript. 
 For example, contacts might be returned from the server with dates that look like: "1982-10-20". 
-We can observe to convert it to something closer to new Date(1982,10,20).
+We can observe to convert it to something closer to `new Date(1982,10,20)`.
 
 Convert comes with the following types:
 
