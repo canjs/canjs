@@ -1,51 +1,89 @@
-#!/usr/bin/env node
-
 var path          = require('path'),
 	fs            = require('fs'),
-	sourceDir     = path.join(path.dirname(fs.realpathSync(__filename)), '../../standalone/'),
-	jsDir         = path.join(path.dirname(fs.realpathSync(__filename)), '../../..'),
-	child_process = require('child_process');
+	child_process = require('child_process'),
+	os            = require('os'),
+
+	// Resolve directories
+	rhinoDir      = path.join( path.dirname( fs.realpathSync( __filename )), '../../..' ),
+	canDir        = path.join( rhinoDir, 'can' ),
+	docsDir       = path.join( canDir, "docs" ),
+	doccoDir      = path.join( canDir, "util/docco" ),
+	doccoOutDir   = path.join( doccoDir, "docs" ),
+	sourceDir     = path.join( doccoDir, 'standalone' ),
+	genCommand    = "js can/util/docco/makestandalone.js";
+
+function execCommandWithOutput( command, cwd, callback ) {
+
+	var spawn, parts;
+
+	parts = command.split(" ");
+	spawn = child_process.spawn( parts.shift(), parts, {
+		cwd : cwd,
+		env : process.env
+	});
+
+	["stdout", "stderr"].forEach( function( stream ) {
+		spawn[stream].setEncoding("utf-8");
+		spawn[stream].pipe( process[stream] );
+	});
+
+	spawn.on("exit", callback );
+
+}
 
 function runDocco() {
 
-	fs.mkdir("../../docs", function() {
+	fs.mkdir(docsDir, function() {
+
 		fs.readdir("temp", function( err, files ) {
 
 			// Prepend temp to each file
 			files = files.map(function( file ) {
-				return "temp/" + file;
+				return path.join( "temp", file );
 			});
 
 			console.log( "Generating docco annotated source..." );
-			child_process.exec("docco " + files.join(" "), function() {
-				fs.readdir("docs", function( err, files ) {
+
+			execCommandWithOutput( "docco " + files.join(" "), doccoDir, function() {
+				fs.readdir( doccoOutDir, function( err, files ) {
+					console.log("Moving files into place...");
 					files.forEach(function( file ) {
 						console.log( "\t" + file );
 						fs.renameSync( "docs/" + file, "../../docs/" + file );
 					});
 					console.log("Cleaning up...");
-					fs.readdir("temp", function( e, files ) {
-						files.forEach(function( file ) {
-							fs.unlinkSync("temp/" + file );
+					["temp", "standalone", "docs"].forEach(function( dir ) {
+						fs.readdir( dir, function( e, files ) {
+							files.forEach(function( file ) {
+								fs.unlinkSync( path.join( dir, file ));
+							});
+							fs.rmdir( dir );
 						});
-						fs.rmdir("temp");
 					});
-					fs.rmdir("docs");
 					console.log("Done!");
 				});
-			});
+			})
 
 		});
-
 
 	});
 
 }
 
-function stripComments() {
-	fs.readdir(sourceDir, function( err, files ) {
+function format( exitCode ) {
+
+	if ( exitCode != 0 ) {
+		console.log("Error generating unminified sources.");
+		return
+	}
+
+	fs.readdir( sourceDir, function( err, files ) {
 
 		var count = 0;
+
+		if ( ! files.length ) {
+			console.log("Error - Source directory is empty");
+		}
 
 		// Only annotate full srcs
 		files = files.filter(function( file ) {
@@ -56,13 +94,14 @@ function stripComments() {
 		fs.mkdir("temp", function() {
 
 			// Generate source for all standalones
-			console.log( "Stripping multiline comments from:" );
+			console.log( "Stripping multiline comments and converting tabs to four spaces:" );
+
 			files.forEach(function( file ) {
-				fs.readFile( sourceDir + file, "utf-8", function( err, code ) {
+				fs.readFile( path.join( sourceDir, file ), "utf-8", function( err, code ) {
 					console.log( "\t" + file );
 					code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*/gim, "");
 					code = code.replace( /\t/gim, "    ");
-					fs.writeFile("temp/" + file, code, "utf-8", function() {
+					fs.writeFile( path.join( "temp", file ), code, "utf-8", function() {
 						if ( ++count == files.length ) {
 							runDocco();
 						}
@@ -73,11 +112,8 @@ function stripComments() {
 	});
 }
 
-console.log("generating unminified sources...");
-child_process.exec("js can/util/docco/makestandalone.js", {
-	cwd : jsDir
-}, function( err, stdout, stderr ) {
-	console.log( stdout );
-	stripComments();
-});
-
+console.log("Generating unminified sources...");
+if ( os.platform() != "win32" ) {
+	genCommand = "./" + genCommand;
+}
+execCommandWithOutput( genCommand, rhinoDir, format );

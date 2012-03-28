@@ -2,6 +2,7 @@ steal('./jquery.1.7.1.js', function( $ ) {
 
 	// jquery.js
 	// ---------
+	// _jQuery wrapper._
 	$.extend( can, jQuery, {
 		trigger: function( obj, event, args ) {
 			obj.trigger ?
