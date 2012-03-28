@@ -18,9 +18,9 @@ function execCommandWithOutput( command, cwd, callback ) {
 	var spawn, parts;
 
 	parts = command.split(" ");
-	console.log( parts );
-	spawn = child_process.spawn( parts.shift(), parts, cwd || {
-		cwd : cwd
+	spawn = child_process.spawn( parts.shift(), parts, {
+		cwd : cwd,
+		env : process.env
 	});
 
 	["stdout", "stderr"].forEach( function( stream ) {
@@ -118,10 +118,11 @@ function format( exitCode ) {
 }
 
 console.log("Generating unminified sources...");
+
 if ( os.platform() != "win32" ) {
 	genCommand = "./js " + makePath;
 } else {
 	genCommand = "js.bat " + makePath;
 }
-execCommandWithOutput( genCommand, rhinoDir, format );
 
+execCommandWithOutput( genCommand, rhinoDir, format );
