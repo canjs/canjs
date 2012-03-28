@@ -231,7 +231,7 @@ steal('can/construct', function( $ ) {
 		 * ### 1. Sets this.element
 		 * 
 		 * The first parameter passed to new Control(el, options) is expected to be 
-		 * an element.  This gets converted to a jQuery wrapped element and set as
+		 * an element.  This gets converted to a Wrapped NodeList element and set as
 		 * [can.Control.prototype.element this.element].
 		 * 
 		 * ### 2. Adds the control's name to the element's className.
