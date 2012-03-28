@@ -229,7 +229,8 @@ steal("can/util/string",function( $ ) {
 				prototype: prototype,
 				/**
 				 * @attribute namespace 
-				 * The namespaces object
+				 * The namespace keyword is used to declare a scope. This enables you to organize
+				 * code and provides a way to create globally unique types.
 				 * 
 				 *     can.Construct("MyOrg.MyConstructor",{},{})
 				 *     MyOrg.MyConstructor.namespace //-> MyOrg
