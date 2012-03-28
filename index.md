@@ -27,12 +27,23 @@ for the library you are using:
  - [can.yui.js](http://staging.donejs.com/can/dist/can.yui-edge.js) (9k)
 
 This page walks through the basics of CanJS by building a 
-small todo app with CanJS and jQuery.  The [Use with other libraries](#use_with_other_libraries) section details 
-the minor differences among use with other libraries.
+small todo app with CanJS and jQuery. If you want to download 
+the source to see it in action, you can clone the application from 
+our repository, by running the following commands.
+
+    git clone https://github.com/jupiterjs/todo
+    cd todo
+    git submodule update --init
+
+
+The [Use with other libraries](#use_with_other_libraries) 
+section details the minor differences among use with other libraries.
+The [Examples](#examples) section has other awesome examples of how you
+can put CanJS to good use. 
 
 ## can.Construct `can.Construct([classProperties,] [prototypeProperties])`
 
-Constructor function made with [can.Construct](http://donejs.com/docs.html#!can.Construct) are used to create
+Constructor functions made with [can.Construct](http://donejs.com/docs.html#!can.Construct) are used to create
 objects with shared properties. It's used by both __can.Control__ and __can.Model__.
 
 To create a constructor function of your own, call __can.Construct__ with the:
@@ -366,7 +377,7 @@ This makes a request to `POST /todos` with `name=mow lawn` and should get a resp
 { "id" : 5 }
 {% endhighlight %}
 
-__save__ calls back with the original todo instance and returns a deferred that resolves
+__save__ calls back with the original todo instance and returns a [deferred](#utilities-deferred) that resolves
 with the todo after it has been created on the server.
 
 
@@ -404,7 +415,7 @@ todo.save(function( todo ) {
 {% endhighlight %}
 
 This makes a request to `DELETE /todos/5` and only needs a successful response.  Like __save__, the 
-callback's `todo` parameter is the destroyed instance and a deferred is returned that
+callback's `todo` parameter is the destroyed instance and a [deferred](#utilities-deferred) is returned that
 resolves with the `todo` after it has been destroyed by the server.
 
 
@@ -474,7 +485,8 @@ JavaScript templates. Pass it ...
 - the __id__ or __URL__ of a script tag to use as the content of the template
 - __data__ to pass to the template
   
-It returns the rendered result of the template as a documentFragment.  
+It returns the rendered result of the template as a documentFragment (a documentFragment is a lightweight
+container that can hold DOM elements in it).  
 
 {% highlight javascript %}
 document.getElementById( 'todos' )
@@ -685,8 +697,8 @@ are changed.  This is important to understand because a template like this will 
 <% } %>
 {% endhighlight %}
 
-This does not work because when the function wrapping `todos[ i ].attr( 'name' )` is called, `i` will be __3__ not the index
-of the desired todo.  Fix this by using a closure like:
+This does not work because when the function wrapping `todos[ i ].attr( 'name' )` is called, `i` will be __3__ which 
+is the index of the last todo and not the actual index of the desired todo.  Fix this by using a closure like:
 
 {% highlight erb %}
 <% $.each( todos, function( i, todo ) { %>
@@ -968,8 +980,8 @@ Control can also bind to objects other than `this.element` with
 templated event handlers.  This is _critical
 for avoiding memory leaks that are common among MVC applications.  
 
-If the value inside `{NAME}` is an object, that object will be 
-bound to.  For example, the following tooltip listens to 
+If the value inside `{NAME}` is an object, the event will be bound to that object
+that object rather than the control.  For example, the following tooltip listens to 
 clicks on the window:
 
 {% highlight javascript %}
@@ -1399,8 +1411,8 @@ can.When()
 
 ### Ajax
 
-// performs an asynchronous HTTP request
 {% highlight javascript %}
+// performs an asynchronous HTTP request
 can.ajax({
   url : 'url',
   type: 'GET', // 'POST'
