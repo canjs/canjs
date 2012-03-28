@@ -4,7 +4,7 @@
 @test can/control/plugin/qunit.html
 @download http://jmvcsite.heroku.com/pluginify?plugins[]=can/control/plugin/plugin.js
 
-The can.Control __plugin__ extension creates a plugin for the control in the 
+The can.Control plugin extension creates a plugin for the control in the 
 jQuery NodeList using the control's [can.Construct.fullName fullName] or
 a static pluginName attribute. For example, if you create the following control:
 
@@ -23,7 +23,7 @@ __Note:__ This plugin only supports jQuery.
 
 ## Plugin Name
 
-Setting the __pluginName__ property allows you to change 
+Setting the `pluginName` property allows you to change 
 the can plugin helper name from its default value.
 
 	var MxuiLayoutFill = can.Control({
@@ -37,7 +37,7 @@ to the [can.Construct.fullName fullName] attribute.
 
 ## Updating
 
-Update extends [can.Control.prototype.options this.options] 
+Update extends [can.Control.prototype.options options] 
 with the `options` argument and rebinds all events.  It 
 re-configures the control.
 
@@ -62,7 +62,7 @@ is `created`, it resets the form with a new instance.
 	
 	$('#createRecipes').creator({ recipe : new Recipe() })
 	
-See [can.Control.prototype.update] for more information.
+See [can.Control.prototype.update update] for more information.
 
 ## Calling methods
 
@@ -93,7 +93,7 @@ can's data method.
 
 ### Controller
 
-The __controller__ method allows you to get a controller instance for the element.  
+The `controller` method allows you to get a controller instance for the element.  
 With no arguments, returns the first one found otherwise the first controller 
 instance with this class type will be returned.
 
@@ -103,9 +103,9 @@ instance with this class type will be returned.
 
 ### Controllers
 
-The __controllers__ method allows you to get all the controllers attached to the element.
-For example, we can fetch both the __MyWidget__ and the __MyClock__ instance 
-below by calling __controllers__ on the DOM element.
+The `controllers` method allows you to get all the controllers attached to the element.
+For example, we can fetch both the _MyWidget_ and the _MyClock_ instance 
+below by calling `controllers` on the DOM element.
 
 	<div id="widget" class="my_widget my_clock">
 	
