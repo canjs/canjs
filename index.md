@@ -46,20 +46,20 @@ extended and sub-classed as far as you like:
 
 {% highlight javascript %}
 var Todo = can.Construct({
-  init : function(){},
+  init: function(){},
   
-  author : function(){ ... },
+  author: function() { ... },
   
-  coordinates : function(){ ... },
+  coordinates: function() { ... },
   
-  allowedToEdit: function(account) { 
+  allowedToEdit: function( account ) { 
     return true;
   }
 });
   
 var PrivateTodo = Todo({
-  allowedToEdit: function(account) {
-    return account.owns(this);
+  allowedToEdit: function( account ) {
+    return account.owns( this );
   }
 });
 {% endhighlight %}
@@ -75,15 +75,15 @@ the arguments passed to `new Constructor(...)`.
 
 {% highlight javascript %}
 var Todo = can.Construct({
-  init : function(text) {
+  init: function( text ) {
     this.text = text
   },
-  read : function(){
-    console.log(this.text);
+  read: function() {
+    console.log( this.text );
   }
 })
   
-var todo = new Todo("Hello World");
+var todo = new Todo( 'Hello World' );
 todo.read()
 {% endhighlight %}
 
@@ -98,15 +98,15 @@ todo.read()
 To create an observable object, use `new can.Observe( [data] )` like:
 
 {% highlight javascript %}
-var paginate = new can.Observe({offset: 0, limit : 100, count: 2000})
+var paginate = new can.Observe( { offset: 0, limit: 100, count: 2000 } )
 {% endhighlight %}
 
 To create an observable array, use `new can.Observe.List( [array] )` like:
 
 {% highlight javascript %}
-var hobbies = new can.Observe.List(['programming', 
+var hobbies = new can.Observe.List( ['programming', 
                              'basketball', 
-                             'party rocking'])
+                             'party rocking'] )
 {% endhighlight %}
 
 __can.Observe__ is used by both __can.Model__ and __can.route__. However, observe 
@@ -118,13 +118,13 @@ is useful on its own to maintain client-side state (such as pagination data).
 sets properties on an observe:
 
 {% highlight javascript %}
-paginate.attr('offset') //-> 0
+paginate.attr( 'offset' ) //-> 0
   
-paginate.attr('offset', 100 );
+paginate.attr( 'offset', 100 );
   
-paginate.attr() //-> {offset: 100, limit : 100, count: 2000}
+paginate.attr() //-> { offset: 100, limit: 100, count: 2000 }
   
-paginate.attr({limit: 200, count: 1000});
+paginate.attr( { limit: 200, count: 1000 } );
 {% endhighlight %}
 
 
@@ -134,8 +134,8 @@ paginate.attr({limit: 200, count: 1000});
 by name from an observe.  This is similar to using the `delete` keyword to remove a property.
 
 {% highlight javascript %}
-o =  new can.Observe({foo: 'bar'});
-o.removeAttr('foo'); //-> 'bar'
+o = new can.Observe( { foo: 'bar' } );
+o.removeAttr( 'foo' ); //-> 'bar'
 {% endhighlight %}
 
 ### bind `observe.bind( eventType, handler(args...) )`
@@ -150,16 +150,16 @@ result of an attribute change:
 The following listens to all attribute changes and 'offset' changes on the paginate instance:
 
 {% highlight javascript %}
-paginate.bind('change', function(ev, attr, how, newVal, oldVal){
+paginate.bind( 'change', function( ev, attr, how, newVal, oldVal ) {
    // attr = 'offset'
    // how = 'set'
    // newVal = 200
    // oldVal = 100
-}).bind('offset', function(ev, newVal, oldVal){
+}).bind( 'offset', function( ev, newVal, oldVal ) {
    // newVal = 200
    // oldVal = 100
 })
-paginate.attr('offset', 200);
+paginate.attr( 'offset', 200 );
 {% endhighlight %}
 
 ### unbind `observe.unbind( eventType, handler )`
@@ -168,12 +168,12 @@ paginate.attr('offset', 200);
 to an event.  The same function that was used for the handler in `bind` must be passed to `unbind`.
 
 {% highlight javascript %}
-var countHandler = function(ev, newVal, oldVal){
-  console.log("the count has changed");
+var countHandler = function( ev, newVal, oldVal ) {
+  console.log( 'the count has changed' );
 }
-paginate.bind('count',countHandler);
-paginate.attr('count', 3000);
-paginate.unbind('count', countHandler);
+paginate.bind( 'count', countHandler );
+paginate.attr( 'count', 3000 );
+paginate.unbind( 'count', countHandler );
 {% endhighlight %}  
 
 ### each `observe.each( handler(attrName, value) )`
@@ -182,8 +182,8 @@ paginate.unbind('count', countHandler);
 each attribute, calling handler with each attribute name and value.
 
 {% highlight javascript %}
-paginate.each(function(name, value){
-   console.log( name, value);
+paginate.each(function( name, value ) {
+   console.log( name, value );
 })
 // writes:
 //  offset 200
@@ -199,29 +199,29 @@ but adds list specific methods such as:
  - [indexOf](http://donejs.com/docs.html#!can.Observe.List.prototype.indexOf) `list.indexOf( item )` - Returns 
    the position of the item in the list.
  - [pop](http://donejs.com/docs.html#!can.Observe.List.prototype.pop) `list.pop()` - removes the last item in the list.
- - [push](http://donejs.com/docs.html#!can.Observe.List.prototype.push) `list.push(items...)` - adds items to the end of the list.
+ - [push](http://donejs.com/docs.html#!can.Observe.List.prototype.push) `list.push( items... )` - adds items to the end of the list.
  - [shift](http://donejs.com/docs.html#!can.Observe.List.prototype.shift) `list.shift()` - removes the first item in the list.
- - [splice](http://donejs.com/docs.html#!can.Observe.List.prototype.splice) `list.splice(index, howMany, [items...])` - removes and inserts items at the specified index.
- - [unshift](http://donejs.com/docs.html#!can.Observe.List.prototype.unshift) `list.unshift(items...)` - adds items to the start of the list.
+ - [splice](http://donejs.com/docs.html#!can.Observe.List.prototype.splice) `list.splice( index, howMany, [ items... ] )` - removes and inserts items at the specified index.
+ - [unshift](http://donejs.com/docs.html#!can.Observe.List.prototype.unshift) `list.unshift( items... )` - adds items to the start of the list.
 
 {% highlight javascript %}
-var hobbies = new can.Observe.List(['programming', 
+var hobbies = new can.Observe.List( [ 'programming', 
                                'basketball', 
-                               'party rocking'])
+                               'party rocking' ] )
                                
 // listen to changes in the list
-hobbies.bind("add", function(ev, newVals, index){
-  console.log("added",newVals,"at",index);
-}).bind("remove", function(ev, oldVals, index){
-  console.log("removed",oldVals,"at",index);
+hobbies.bind( 'add', function( ev, newVals, index ) {
+  console.log( 'added', newVals, 'at', index );
+}).bind( 'remove', function( ev, oldVals, index ) {
+  console.log( 'removed', oldVals, 'at', index );
 })
 
 // modify the list
 hobbies.pop()
-hobbies.unshift("rocking parties")
+hobbies.unshift( 'rocking parties' )
 {% endhighlight %}  
 
-## can.Model `can.Model([classProperties,] [prototypeProperties])`
+## can.Model `can.Model( [classProperties,] [prototypeProperties] )`
 
 [can.Model](http://donejs.com/docs.html#!can.Model) is a [can.Observe](#can_observe) that connects
 to a RESTful interface.
@@ -245,13 +245,12 @@ Make a Todo model in __todos.js__ like the following:
 
 {% highlight javascript %}
 var Todo = can.Model({
-  findAll : "GET /todos",
-  findOne : "GET /todos/{id}",
-  create  : "POST /todos",
-  update  : "PUT /todos/{id}",
-  destroy : "DELETE /todos/{id}"
-},
-{})
+  findAll : 'GET /todos',
+  findOne : 'GET /todos/{id}',
+  create  : 'POST /todos',
+  update  : 'PUT /todos/{id}',
+  destroy : 'DELETE /todos/{id}'
+}, {})
 {% endhighlight %}
 
 ### init `new can.Model(attributes)`
@@ -260,7 +259,7 @@ Create a todo instance like:
 
 
 {% highlight javascript %}
-var todo = new Todo({name: "do the dishes"});
+var todo = new Todo( { name: 'do the dishes' } );
 {% endhighlight %}
 
 ### attr `model.attr( name, [value] )`
@@ -270,13 +269,13 @@ on model instances.  It works the same way as [can.Observe.prototype.attr](#can_
 
 
 {% highlight javascript %}
-todo.attr("name") //-> "do the dishes"
+todo.attr( 'name' ) //-> 'do the dishes'
 
-todo.attr("name", "wash the dishes" );
+todo.attr( 'name', 'wash the dishes' );
 
-todo.attr() //-> {name: "wash the dishes"}
+todo.attr() //-> { name: 'wash the dishes' }
 
-todo.attr({name: "did the dishes"});
+todo.attr( { name: 'did the dishes' } );
 {% endhighlight %}
 
 ### Talking to the server
@@ -296,7 +295,7 @@ to retrieve model instances and __save__ and __destroy__ on instances.
 from the server:
 
 {% highlight javascript %}
-Todo.findAll({}, function( todos ) {
+Todo.findAll( {}, function( todos ) {
   console.log( todos[0].name );
 }) //-> Deferred
 {% endhighlight %}
@@ -326,7 +325,7 @@ the __todos__ list.
 
 
 {% highlight javascript %}
-Todo.findOne({id: 1}, function( todo ) {
+Todo.findOne( { id: 1 }, function( todo ) {
   console.log( todo.name );
 })
 {% endhighlight %}
@@ -356,7 +355,7 @@ todo instance and call __save__ like the following:
 
 {% highlight javascript %}
 var todo = new Todo({name: "mow lawn"})
-todo.save(function(todo){
+todo.save(function( todo ) {
   console.log( todo );
 })
 {% endhighlight %}
@@ -375,13 +374,13 @@ To __update__ a todo on the server, change the attributes
 and call __save__ again like the following:
 
 {% highlight javascript %}
-var todo = new Todo({name: "mow lawn"});
-todo.save( function(todo){
-  console.log("created", todo );
+var todo = new Todo( { name: 'mow lawn' } );
+todo.save(function( todo ) {
+  console.log( 'created', todo );
   
-  todo.attr("name", "mow my lawn")
-  todo.save( function( todo ) {
-    console.log("updated", todo );
+  todo.attr( 'name', 'mow my lawn' )
+  todo.save(function( todo ) {
+    console.log( 'updated', todo );
   })
 })
 {% endhighlight %}
@@ -394,12 +393,12 @@ This makes a request to `POST /todos/5` with `name=mow my lawn` and only needs t
 record on the server.  You can do this like:
 
 {% highlight javascript %}
-var todo = new Todo({name: "mow lawn"});
-todo.save( function(todo){
-  console.log("created", todo );
+var todo = new Todo( { name: 'mow lawn' } );
+todo.save(function( todo ) {
+  console.log( 'created', todo );
   
-  todo.destroy( function( todo ) {
-    console.log("destroyed", todo );
+  todo.destroy(function( todo ) {
+    console.log( 'destroyed', todo );
   })
 })
 {% endhighlight %}
@@ -416,8 +415,8 @@ listens to changes in a model instance's attributes in the same way as
 [Observe's bind](#can_observe-bind).  For example:
 
 {% highlight javascript %}
-todo.bind("name", function(ev, newVal, oldVal){
-  console.log("name changed to", newVal);
+todo.bind( 'name', function( ev, newVal, oldVal ) {
+  console.log( 'name changed to', newVal );
 })
 {% endhighlight %}
 
@@ -431,9 +430,9 @@ For example, listen for
 when an instance is __created__ on the server like:
 
 {% highlight javascript %}
-var todo = new Todo({name: "mow lawn"});
-todo.bind('created', function(ev, todo){
-  console.log("created", todo );
+var todo = new Todo( { name: 'mow lawn' } );
+todo.bind( 'created', function( ev, todo ) {
+  console.log( 'created', todo );
 })
 todo.save()
 {% endhighlight %}
@@ -442,8 +441,8 @@ todo.save()
 anytime __any__ instance is __created__, __updated__, or __destroyed__:
 
 {% highlight javascript %}
-Todo.bind('created', function(ev, todo){
-  console.log("created", todo );
+Todo.bind( 'created', function( ev, todo ){
+  console.log( 'created', todo );
 })
 {% endhighlight %}
 
@@ -455,11 +454,11 @@ Todo.bind('created', function(ev, todo){
 destroyed.  __Model.Lists__ are return by [findAll](#can_model-findall).
 
 {% highlight javascript %}
-Todo.findAll({}, function(todos){
+Todo.findAll( {}, function( todos ) {
 
   // listen for when a todo is removed
-  todos.bind("remove", function(ev, removed, index){
-    console.log("removed", removed.length, "todos");
+  todos.bind( 'remove', function( ev, removed, index ) {
+    console.log( 'removed', removed.length, 'todos' );
   })
   
   // destroy the first todo
@@ -478,8 +477,8 @@ JavaScript templates. Pass it ...
 It returns the rendered result of the template as a documentFragment.  
 
 {% highlight javascript %}
-document.getElementById("todos")
-  .appendChild( can.view("todos.ejs", [{name: "mow lawn"}] ) )
+document.getElementById( 'todos' )
+  .appendChild( can.view( 'todos.ejs', [ { name: 'mow lawn' } ] ) )
 {% endhighlight %}
 
 `can.view` supports multiple templating languages; however, [can.EJS](#can_ejs)
@@ -494,8 +493,8 @@ and a type attribute that specifies the template type (text/ejs).
 For example, add the following __html__:
 
 {% highlight erb %}
-<script type='text/ejs' id='todosEJS'>
-  <% for(var i = 0; i < this.length; i++ ){ %>
+<script type="text/ejs" id="todosEJS">
+  <% for( var i = 0; i < this.length; i++ ) { %>
     <li><%= this[i].name %></li>
   <% } %>
 </script>
@@ -504,17 +503,17 @@ For example, add the following __html__:
 Render this template and insert it into the page:
 
 {% highlight javascript %}
-Todo.findAll( {}, function( todos ){
-   document.getElementById("todos")
-           .appendChild( can.view( "todosEJS", todos ) );
-});
+Todo.findAll( {}, function( todos ) {
+   document.getElementById( 'todos' )
+           .appendChild( can.view( 'todosEJS', todos ) );
+} );
 {% endhighlight %}
 
 To load from a __URL__,  create
 a _todos/todos.ejs_ file that contains:
 
 {% highlight erb %}
-<% for(var i = 0; i < this.length; i++ ){ %>
+<% for( var i = 0; i < this.length; i++ ) { %>
   <li><%= this[i].name %></li>
 <% } %>
 {% endhighlight %}
@@ -522,10 +521,10 @@ a _todos/todos.ejs_ file that contains:
 Render this with:
 
 {% highlight javascript %}
-Todo.findAll( {}, function( todos ){
-  document.getElementById("todos")
-           .appendChild( can.view( "todos/todos.ejs", todos ) );
-});
+Todo.findAll( {}, function( todos ) {
+  document.getElementById( 'todos' )
+           .appendChild( can.view( 'todos/todos.ejs', todos ) );
+} );
 {% endhighlight %}
 
 ### Deferreds
@@ -538,12 +537,12 @@ all deferreds have resolved and the template has loaded.
 in parallel and resolves the returned deferred with the documentFragment when they are all done:
 
 {% highlight javascript %}
-can.view('todos/todos.ejs', {
-  todos : Todo.findAll(),
-  user: User.findOne({ id: 5 })
-}).then(function( frag ){
-  document.getElementById('todos')
-          .appendChild(frag);
+can.view( 'todos/todos.ejs', {
+  todos: Todo.findAll(),
+  user: User.findOne( { id: 5 } )
+} ).then(function( frag ){
+  document.getElementById( 'todos' )
+          .appendChild( frag );
 })
 {% endhighlight %}
     
@@ -553,12 +552,12 @@ can.view('todos/todos.ejs', {
 To render a string instead of a documentFragment, use can.view.render like:
 
 {% highlight javascript %}
-<% for( var i = 0; i < todos.length; i++) %>
-  <li><%== can.view.render("/todos/todo.ejs",{
+<% for( var i = 0; i < todos.length; i++ ) { %>
+  <li><%== can.view.render( '/todos/todo.ejs', {
              todo: todo[i]
-            }) %>
+            } ) %>
   </li>
-<% }) %>
+<% } %>
 {% endhighlight %}
 
 ## can.EJS `new can.EJS( options )`
@@ -570,19 +569,19 @@ like the HTML you want, but with __magic tags__ where you want
 dynamic behavior.  The following lists todo elements:
 
 {% highlight erb %}
-<script type='text/ejs' id='todosEJS'>
-<% for( var i = 0; i < this.length; i++) %>
-  <li><%= this[i].name %></li>
-<% }) %>
+<script type="text/ejs" id="todosEJS">
+<% for( var i = 0; i < this.length; i++ ) { %>
+  <li><%= this[ i ].name %></li>
+<% } %>
 </script>
 {% endhighlight %}
 
 Use __can.view__ to render this template:
 
 {% highlight javascript %}
-Todo.findAll({}, function( todos ) {
-  document.getElementById("todos")
-          .appendChild( can.view("todosEJS", todos ) )
+Todo.findAll( {}, function( todos ) {
+  document.getElementById( 'todos' )
+          .appendChild( can.view( 'todosEJS', todos ) )
 }
 {% endhighlight %}
 
@@ -592,9 +591,9 @@ directly (without writing `this.PROPERTY` all the time).  For example, a templat
 and todos:
 
 {% highlight erb %}
-<script type='text/ejs' id='todosEJS'>
+<script type="text/ejs" id="todosEJS">
 <h2><%= user.name %></h2>
-<% for( var i = 0; i < todos.length; i++) { %>
+<% for( var i = 0; i < todos.length; i++ ) { %>
   <li><%= todos[i].name %></li>
 <% } %>
 </script>
@@ -603,12 +602,12 @@ and todos:
 Can be inserted into the document with:
 
 {% highlight javascript %}
-can.view("todosEJS", {
+can.view( 'todosEJS', {
   todos : Todo.findAll(),
-  user: User.findOne({ id: 5 })
-}).then(function( frag ){
-  document.getElementById("todos")
-          .appendChild(frag);
+  user: User.findOne( { id: 5 } )
+}).then(function( frag ) {
+  document.getElementById( 'todos' )
+          .appendChild( frag );
 })
 {% endhighlight %}
 
@@ -623,17 +622,17 @@ like for-loops, if/else, switch, declaring variables, etc.  Pretty much any JS c
 
 {% highlight erb %}
 <!-- check if there are no todos -->
-<% if( todos.attr('length') === 0 ) { %>
+<% if( todos.attr( 'length' ) === 0 ) { %>
     <li>You have no todos</li>
 <% } else { %>
-    <% list(todos, function(){ %>
+    <% list( todos, function() { %>
         <li> .... </li>
-    <% }) %>
+    <% } ) %>
 <% } %>
 
 <!-- create and use a variable -->
-<% var person = todo.attr('person') %>
-<span><%= person.attr('name') %><span>
+<% var person = todo.attr( 'person' ) %>
+<span><%= person.attr( 'name' ) %><span>
 {% endhighlight %}
 
 __`<%= CODE %>`__ - Runs a JS statement and writes the __escaped__ result into the result of the template.
@@ -655,8 +654,8 @@ for sub-templates.
 Use `<%== CODE %>` when rendering subtemplates:
 
 {% highlight erb %}
-<% for( var i = 0; i < todos.length; i++) { %>
-  <li><%== can.view.render('todoEJS', todos[i]) %></li>
+<% for( var i = 0; i < todos.length; i++ ) { %>
+  <li><%== can.view.render( 'todoEJS', todos[i] ) %></li>
 <% } %>
 {% endhighlight %}
 
@@ -667,32 +666,32 @@ live-binding, use [attr](#!can_observe-attr) to read properties.  For example, t
 template will update todo's name when it change:
 
 {% highlight erb %}
-  <li><%= todo.attr("name") %></li>
+  <li><%= todo.attr( 'name' ) %></li>
 {% endhighlight %}
 
-Notice `attr("name")`.  This sets up live-binding.  If you change the todo's name, the `<li>` will automatically
+Notice `attr( 'name' )`.  This sets up live-binding.  If you change the todo's name, the `<li>` will automatically
 be updated:
 
 {% highlight javascript %}
-todo.attr("name", "Clean the toilet");
+todo.attr( 'name', 'Clean the toilet' );
 {% endhighlight %}
 
 Live-binding works by wrapping the code inside the magic tags with a function to call when the attribute (or attributes)
 are changed.  This is important to understand because a template like this will not work:
 
 {% highlight erb %}
-<% for( var i = 0; i < todos.length; i++) { %>
-  <li><%= todos[i].attr("name") %></li>
+<% for( var i = 0; i < todos.length; i++ ) { %>
+  <li><%= todos[ i ].attr( 'name' ) %></li>
 <% } %>
 {% endhighlight %}
 
-This does not work because when the function wrapping `todos[i].attr("name")` is called, `i` will be __3__ not the index
+This does not work because when the function wrapping `todos[ i ].attr( 'name' )` is called, `i` will be __3__ not the index
 of the desired todo.  Fix this by using a closure like:
 
 {% highlight erb %}
-<% $.each(todos, function(i, todo){ %>
-  <li><%= todo.attr("name") %></li>
-<% }) %>
+<% $.each( todos, function( i, todo ) { %>
+  <li><%= todo.attr( 'name' ) %></li>
+<% } ) %>
 {% endhighlight %}
 
 ### list `list( observeList, iterator( item, index ) )`
@@ -701,17 +700,17 @@ If you want to make the previous template update when todos are
 added or removed, you could bind to length like:
 
 {% highlight erb %}
-<% todos.bind("length", function(){});
-   $.each(todos, function(i, todo){ %>
-      <li><%= todo.attr("name") %></li>
+<% todos.bind( 'length', function() {} );
+   $.each( todos, function( i, todo ) { %>
+      <li><%= todo.attr( 'name' ) %></li>
 <% }) %>
 {% endhighlight %}
 
 Or simply use EJS's `list` helper method like:
 
 {% highlight erb %}
-<% list(todos, function(todo){ %>
-  <li><%= todo.attr("name") %></li>
+<% list( todos, function( todo ) { %>
+  <li><%= todo.attr( 'name' ) %></li>
 <% }) %>
 {% endhighlight %}
 
@@ -719,10 +718,10 @@ Now when todos are added or removed from the todo list, the template's HTML is u
 
 {% highlight javascript %}
 // add an item
-todos.push( new Todo({name : "file taxes"}) );
+todos.push( new Todo( { name: 'file taxes' } ) );
 
 // destroying an item removes it from Model.Lists
-todos[0].destroy()
+todos[ 0 ].destroy()
 {% endhighlight %}
 
 ### Element Callbacks
@@ -730,7 +729,7 @@ todos[0].destroy()
 If a function is returned by the `<%= %>` or `<%== %>` magic tags within an element's tag like:
 
 {% highlight erb %}
-<div <%= function(element){ element.style.display = "none" } %> >
+<div <%= function( element ) { element.style.display = 'none' } %> >
   Hello
 </div>
 {% endhighlight %}
@@ -743,7 +742,7 @@ that get passed the `NodeList` wrapped element.  Using jQuery, this lets you wri
 the above callback as:
 
 {% highlight erb %}
-<div <%= (el)-> el.hide() %> >
+<div <%= (el) -> el.hide() %> >
   Hello
 </div>
 {% endhighlight %}
@@ -751,22 +750,22 @@ the above callback as:
 This technique is commonly used to add data, especially model instances, to an element like:
 
 {% highlight erb %}
-<% list(todos, function(todo){ %>
-  <li <%= (el) -> el.data("todo",todo) %>>
-    <%= todo.attr('name') %>
+<% list( todos, function( todo ) { %>
+  <li <%= (el) -> el.data( 'todo', todo ) %>>
+    <%= todo.attr( 'name' ) %>
   </li>
-<% }) %>
+<% } ) %>
 {% endhighlight %}
 
 jQuery's `el.data( NAME, data )` adds data to an element.  If your library does not support this,
 can provides it as `can.data( NodeList, NAME, data )`.  Rewrite the above example as:
 
 {% highlight erb %}
-<% list(todos, function(todo){ %>
-  <li <%= (el) -> can.data(el, "todo", todo) %>>
-    <%= todo.attr('name') %>
+<% list(todos, function( todo ) { %>
+  <li <%= (el) -> can.data( el, 'todo', todo ) %>>
+    <%= todo.attr( 'name' ) %>
   </li>
-<% }) %>
+<% } ) %>
 {% endhighlight %}
 
 ## can.Control `can.Control(classProps, prototypeProps)`
@@ -785,10 +784,10 @@ extending `can.Control`.
 
 {% highlight javascript %}
 var Todos = can.Control({
-  "init" : function( element , options ) {
+  'init': function( element , options ) {
     var self = this;
-    Todo.findAll({}, function( todos ){
-      self.element.html( can.view("todosEJS", todos) )
+    Todo.findAll( {}, function( todos ) {
+      self.element.html( can.view( 'todosEJS', todos ) )
     })
   }
 })
@@ -797,18 +796,18 @@ var Todos = can.Control({
 Create an instance of the Todos on the `#todos` element with:
 
 {% highlight javascript %}
-var todosControl = new Todos("#todos", {});
+var todosControl = new Todos( '#todos', {} );
 {% endhighlight %}
 
 __todos.ejs__ looks like:
 
 {% highlight erb %}
-<% list(todos, function(todo){ %>
-  <li <%= (el) -> el.data("todo", todo) %> >
-    <%= todo.attr("name") %>
-    <a href='javascript://' class='destroy'>X</a>
+<% list( todos, function( todo ) { %>
+  <li <%= (el) -> el.data( 'todo', todo ) %> >
+    <%= todo.attr( 'name' ) %>
+    <a href="javascript://" class="destroy">X</a>
   </li>
-<% }) %>
+<% } ) %>
 {% endhighlight %}
 
 ### init `can.Control.prototype.init(element, options)`
@@ -828,11 +827,11 @@ and any other arguments passed to `new can.Control()`.  For example:
 
 {% highlight javascript %}
 var Todos = can.Control({
-  defaults : {view: "todos.ejs"}
-},{
-  "init" : function( element , options ){
+  defaults: { view: 'todos.ejs' }
+}, {
+  'init': function( element , options ){
     var self = this;
-    Todo.findAll({},function(todos){
+    Todo.findAll( {},function( todos ) {
       self.element.html( can.view( self.options.view, todos ) )
     });
   }
@@ -842,7 +841,7 @@ var Todos = can.Control({
 new Todos( document.body.firstElementChild );
 
 // overwrite the template option
-new Todos( $("#todos"), {view: "specialTodos.ejs"})
+new Todos( $('#todos'), { view: 'specialTodos.ejs' } )
 {% endhighlight %}
 
 ### element `this.element`
@@ -869,17 +868,17 @@ like event handlers.  Listening to __click__s on `<li>` elements looks like:
 
 {% highlight javascript %}
 var Todos = can.Control({
-  'init' : function( element , options ){
+  'init' : function( element , options ) {
     var self = this;
-    Todo.findAll({},function(todos){
+    Todo.findAll( {}, function( todos ) {
       self.element.html( can.view('todosEJS', todos ) )
     });
   },
-  'li click' : function(li, event){
-    console.log('You clicked', li.text() )
+  'li click' : function( li, event ) {
+    console.log( 'You clicked', li.text() )
     
     // let other controls know what happened
-    li.trigger('selected');
+    li.trigger( 'selected' );
   }
 })
 {% endhighlight %}
@@ -892,26 +891,26 @@ When an `<li>` is clicked, `'li click'` is called with:
 Control uses event delegation, so you can add `<li>`s without needing to rebind
 event handlers.
 
-To destroy a todo when it's `<a href='javascript:// class='destroy'>` link 
+To destroy a todo when it's `<a href="javascript://" class="destroy">` link 
 is clicked:
 
 {% highlight javascript %}
 var Todos = can.Control({
-  'init' : function( element , options ){
+  'init' : function( element , options ) {
     var self = this;
-    Todo.findAll({},function(todos){
-      self.element.html( can.view('todosEJS', todos ) )
+    Todo.findAll( {},function( todos ) {
+      self.element.html( can.view( 'todosEJS', todos ) )
     });
   },
-  'li click' : function(li){
-    li.trigger('selected', li.model() );
+  'li click': function( li ) {
+    li.trigger( 'selected', li.model() );
   },
-  'li .destroy click' : function(el, ev){
+  'li .destroy click': function( el, ev ) {
     // get the li element that has todo data
-    var li = el.closest('li');
+    var li = el.closest( 'li' );
   
     // get the model
-    var todo = li.data('todo')
+    var todo = li.data( 'todo' )
   
     // destroy it
     todo.destroy();
@@ -928,37 +927,37 @@ the event handler name.  The following allows customization
 of the event that destroys a todo:
 
 {% highlight javascript %}
-var Todos = can.Control('Todos',{
-  'init' : function( element , options ){ ... },
-  'li click' : function(li){ ... },
+var Todos = can.Control( 'Todos', {
+  'init': function( element , options ) { ... },
+  'li click': function( li ) { ... },
   
-  'li .destroy {destroyEvent}' : function(el, ev){ 
+  'li .destroy {destroyEvent}': function( el, ev ) { 
     // previous destroy code here
   }
 })
 
 // create Todos with this.options.destroyEvent
-new Todos('#todos',{destroyEvent: 'mouseenter'})
+new Todos( '#todos', { destroyEvent: 'mouseenter' } )
 {% endhighlight %}
 
 Values inside `{NAME}` are looked up on the control's `this.options`
 and then the `window`.  For example, we could customize it instead like:
 
 {% highlight javascript %}
-var Todos = can.Control('Todos',{
-  'init' : function( element , options ){ ... },
-  'li click' : function(li){ ... },
+var Todos = can.Control( 'Todos', {
+  'init': function( element , options ) { ... },
+  'li click': function( li ) { ... },
   
-  'li .destroy {Events.destroy}' : function(el, ev){ 
+  'li .destroy {Events.destroy}': function( el, ev ) { 
     // previous destroy code here
   }
 })
 
 // Events config
-Events = {destroy: 'click'};
+Events = { destroy: 'click' };
 
 // Events.destroy is looked up on the window.
-new Todos('#todos')
+new Todos( '#todos' )
 {% endhighlight %}
 
 The selector can also be templated.
@@ -975,9 +974,9 @@ clicks on the window:
 
 {% highlight javascript %}
 var Tooltip = can.Control({
-  '{window} click' : function(el, ev){
+  '{window} click': function( el, ev ) {
     // hide only if we clicked outside the tooltip
-    if(! this.element.has(ev.target ) {
+    if (!this.element.has( ev.target ) {
       this.element.remove();
     }
   }
@@ -994,35 +993,35 @@ could implement it in `Todos` like:
 
 {% highlight javascript %}
 var Todos = can.Control({
-  'init' : function( element , options ){
+  'init': function( element , options ) {
     var self = this;
-    Todo.findAll({},function(todos){
+    Todo.findAll( {}, function( todos ) {
       self.todosList = todos;
-      self.element.html( can.view('todosEJS', todos ) )
+      self.element.html( can.view( 'todosEJS', todos ) )
     })
   },
-  'li click' : function(li){
-    li.trigger('selected', li.model() );
+  'li click': function( li ) {
+    li.trigger( 'selected', li.model() );
   },
-  'li .destroy clickæ : function(el, ev){
+  'li .destroy click': function( el, ev ) {
     // get the li element that has todo data
-    var li = el.closest('li');
+    var li = el.closest( 'li' );
   
     // get the model
-    var todo = li.data('todo')
+    var todo = li.data( 'todo' )
   
     //destroy it
     todo.destroy();
   },
-  '{Todo} destroyed' : function(Todo, ev, todoDestroyed) {
+  '{Todo} destroyed': function( Todo, ev, todoDestroyed ) {
     // find where the element is in the list
-    var index = this.todosList.indexOf(todoDestroyed)
-    this.element.children(':nth-child('+(index+1)+')')
+    var index = this.todosList.indexOf( todoDestroyed )
+    this.element.children( ':nth-child(' + ( index + 1 ) + ')' )
         .remove()
   }
 })
 
-new Todos('#todos');
+new Todos( '#todos' );
 {% endhighlight %}
 
 ### destroy `control.destroy()`
@@ -1032,7 +1031,7 @@ event handlers and releases its element, but does not remove
 the element from the page. 
 
 {% highlight javascript %}
-var todo = new Todos('#todos')
+var todo = new Todos( '#todos' )
 todo.destroy();
 {% endhighlight %}
 
@@ -1040,8 +1039,8 @@ When a control's element is removed from the page,
 __destroy__ is called automatically.
 
 {% highlight javascript %}
-new Todos('#todos')
-$('#todos').remove();
+new Todos( '#todos' )
+$( '#todos' ).remove();
 {% endhighlight %}
     
 All event handlers bound with Control are unbound when the control 
@@ -1053,7 +1052,7 @@ clean-up make it almost impossible
 to write leaking applications. An application that uses
 only templated event handlers on controls within the body
 could free up all 
-data by calling `$(document.body).empty()`.
+data by calling `$( document.body ).empty()`.
 
 ### on `control.on()`
 
@@ -1065,35 +1064,35 @@ rebind `'{todo} updated'`.
 
 {% highlight javascript %}
 var Editor = can.Control({
-  todo : function(todo){
+  todo: function( todo ) {
     this.options.todo = todo;
     this.on();
     this.setName();
   },
   // a helper that sets the value of the input
   // to the todo's name
-  setName : function(){
-    this.element.val(this.options.todo.name);
+  setName: function() {
+    this.element.val( this.options.todo.name );
   },
   // listen for changes in the todo
   // and update the input
-  '{todo} updated' : function(){
+  '{todo} updated': function() {
     this.setName();
   },
   // when the input changes
   // update the todo instance
-  'change' : function(){
+  'change': function() {
     var todo = this.options.todo
-    todo.attr('name',this.element.val() )
+    todo.attr( 'name', this.element.val() )
     todo.save();
   }
 });
 
-var todo1 = new Todo({id: 6, name: 'trash'}),
-    todo2 = new Todo({id: 6, name: 'dishes'});
+var todo1 = new Todo( { id: 6, name: 'trash' } ),
+    todo2 = new Todo( { id: 6, name: 'dishes' } );
 
 // create the editor
-var editor = new Editor('#editor');
+var editor = new Editor( '#editor' );
 
 // show the first todo
 editor.todo( todo1 )
@@ -1126,13 +1125,13 @@ window.location.hash = '#!id=7'
 can.route.attr() //-> { id: 7 }
 
 // set the route data
-can.route.attr({ type : 'todos' })
+can.route.attr( { type : 'todos' } )
 
 // the hash changes to reflect the route data
 window.location.hash //-> #!type=todos
 
 // set a property on the hash
-can.route.attr('id', 5)
+can.route.attr( 'id', 5 )
 
 // the hash changes again to reflect the route data
 window.location.hash //-> #!type=todos&id=5
@@ -1142,7 +1141,7 @@ Use `can.route( route, defaults )` to make pretty URLs:
 
 {% highlight javascript %}
 // create a route
-can.route(':type/:id')
+can.route( ':type/:id' )
 
 // set the hash to look like the route
 window.location.hash = '#!todo/5'
@@ -1152,19 +1151,19 @@ can.route.attr() //-> { type: 'todo', id: 5 }
 
 // change the route data with properties
 // used by the route
-can.route.attr({type: 'user', id: 7})
+can.route.attr( { type: 'user', id: 7 } )
 
 // the hash is changed to reflect the route
 window.location.hash //-> '#!user/7'
 
 // create a default route
-can.route('', { type : 'recipe' })
+can.route( '', { type: 'recipe' } )
 
 // empty the hash
 window.location.hash = '';
 
 // the route data reflects the default value
-can.route.attr() //-> { type : 'recipe' })
+can.route.attr() //-> { type: 'recipe' }
 {% endhighlight %}
 
 ### bind `route.bind( eventName, handler( event ) )`
@@ -1172,8 +1171,8 @@ can.route.attr() //-> { type : 'recipe' })
 Use [bind](#can_observe-bind) to listen to changes in the route like:
 
 {% highlight javascript %}
-can.route.bind('id', function( ev, newVal ) {
-  console.log('id changed');
+can.route.bind( 'id', function( ev, newVal ) {
+  console.log( 'id changed' );
 });
 {% endhighlight %}
 
@@ -1183,16 +1182,16 @@ Listen to routes in controls with special "route" events like:
 
 {% highlight javascript %}
 var Routing = can.Control({
-  'route' : function(){
+  'route': function() {
     // matches empty hash, #, or #!
   },
-  'todos/:id route' : function(data){
+  'todos/:id route': function( data ) {
     // matches routes like #!todos/5
   }
 })
 
 // create routing control
-new Routing(document.body);
+new Routing( document.body );
 {% endhighlight %}
 
 The `route` methods get called back with the route __data__.  The 
@@ -1202,7 +1201,7 @@ will be called with data like: `{id: 6}`.
 We can update the route by changing can.route's data like:
 
 {% highlight javascript %}
-can.route.attr('id','6') // window.location.hash = #!todos/6
+can.route.attr( 'id', '6' ) // window.location.hash = #!todos/6
 {% endhighlight %}
 
 ### url `can.route.url( options, [merge] )`
@@ -1221,9 +1220,9 @@ window.location.hash = hash;
 create a link.
 
 {% highlight javascript %}
-var link = can.route.link('Todo 5',
+var link = can.route.link( 'Todo 5',
                     { id: 5 }, 
-                    { className : 'button' });
+                    { className : 'button' } );
 
 link //-> <a href="#!todos/7" class="button">Todo 5</a>
 {% endhighlight %}
@@ -1236,28 +1235,28 @@ and updates the editor widget.
 
 {% highlight javascript %}
 var Routing = can.Control({
-  init : function(){
-    this.editor = new Editor('#editor')
-    new Todos('#todos');
+  init: function() {
+    this.editor = new Editor( '#editor' )
+    new Todos( '#todos' );
   },
   // the index page
-  'route' : function(){
+  'route': function() {
      $('#editor').hide();
   },
-  'todos/:id route' : function(data){
+  'todos/:id route': function( data ) {
     $("#editor").show();
     var self = this;
-    Todo.findOne(data, function(todo){
-      this.editor.update({todo: todo});
+    Todo.findOne( data, function( todo ) {
+      this.editor.update( { todo: todo } );
     })
   },
-  '.todo selected' : function(el, ev, todo){
-    can.route.attr('id',todo.id);
+  '.todo selected': function( el, ev, todo ) {
+    can.route.attr( 'id', todo.id );
   }
 });
 
 // create routing control
-new Routing(document.body);
+new Routing( document.body );
 {% endhighlight %}
 
 The __Routing__ control is a traditional controller. It coordinates
@@ -1284,38 +1283,38 @@ can.trim( ' foo ' ) // -> 'foo'
 can.esc( '<foo>&<bar>' ) //-> '&lt;foo&lt;&amp;&lt;bar&lt;'
 
 // looks up an object by name
-can.getObject('foo.bar', [{foo: {bar : 'zed'}}]) //-> 'zed'
+can.getObject( 'foo.bar', [ { foo: { bar: 'zed' } } ] ) //-> 'zed'
 
 // capitalize a string
-can.capitalize('fooBar') //-> 'FooBar'
+can.capitalize( 'fooBar' ) //-> 'FooBar'
 
 // micro templating
-can.sub('{greet} world', {greet: 'hello'}) //-> 'hello world'
+can.sub( '{greet} world', { greet: 'hello' } ) //-> 'hello world'
 
 // deparams a form encoded URL into an object
-can.deparam('foo=bar&hello=world')
-    //-> {foo: 'bar', hello: 'world'}
+can.deparam( 'foo=bar&hello=world' )
+    //-> { foo: 'bar', hello: 'world' }
 {% endhighlight %}
 
 ### Array Helpers
 
 {% highlight javascript %}
 // convert array-like data into arrays
-can.makeArray({0: "zero", 1: 'one', length: 2}) // -> ['zero', 'one']
+can.makeArray( { 0: "zero", 1: 'one', length: 2 } ) // -> [ 'zero', 'one' ]
   
 // return if an array is an array
-can.isArray([]) //-> true
+can.isArray( [] ) //-> true
   
 // converts one array to another array
-can.map([{prop: 'val1'}, {prop: 'val2'}], function(val, prop){
+can.map( [ { prop: 'val1' }, { prop: 'val2' } ], function( val, prop ) {
   return val
-})  //-> ['val1', 'val2']
+})  //-> [ 'val1', 'val2' ]
   
 // iterates through an array
-can.each([{prop: 'val1'}, {prop: 'val2'}], function( index, value ) {
+can.each( [ { prop: 'val1' }, { prop: 'val2' } ], function( index, value ) {
   // function called with
-  //  index=0 value={prop: 'val1'}
-  //  index=1 value={prop: 'val2'}
+  //  index = 0 value = { prop: 'val1' }
+  //  index = 1 value = { prop: 'val2' }
 })
 {% endhighlight %}
 
@@ -1324,22 +1323,22 @@ can.each([{prop: 'val1'}, {prop: 'val2'}], function( index, value ) {
 {% highlight javascript %}
 // extends one object with the properties of another
 var first = {},
-    second = {a: 'b'},
-    third = {c: 'd'};
-can.extend(first, second, third); //-> first
-first  //-> {a: 'b', c : 'd'}
-second //-> {a: 'b'}
-third  //-> {c: 'd'}
+    second = { a: 'b' },
+    third = { c: 'd' };
+can.extend( first, second, third ); //-> first
+first  //-> { a: 'b', c: 'd' }
+second //-> { a: 'b' }
+third  //-> { c: 'd' }
   
 // deep extends one object with another
 can.extend( true, first, second, third ); 
   
 // parameterize into a query string
-can.param({a: 'b', c: 'd'}) //-> 'a=b&c=d'
+can.param( { a: 'b', c: 'd' } ) //-> 'a=b&c=d'
   
 // returns if an object is empty
-can.isEmptyObject({})      //-> true
-can.isEmptyObject({a: 'b'}) //-> false
+can.isEmptyObject( {} )      //-> true
+can.isEmptyObject( { a: 'b' } ) //-> false
 {% endhighlight %}
 
 ### Function Helpers
@@ -1347,33 +1346,33 @@ can.isEmptyObject({a: 'b'}) //-> false
 {% highlight javascript %}
 // returns a function that calls another function
 // with 'this' set.
-var func = can.proxy(function(one){
+var func = can.proxy(function( one ) {
   return this.a + one
-}, {a: 'b'}); 
-func('two') //-> 'btwo'
+}, { a: 'b' } ); 
+func( 'two' ) //-> 'btwo'
 
 // returns if an object is a function
-can.isFunction({})           //-> false
-can.isFunction(function(){}) //-> true
+can.isFunction( {} )           //-> false
+can.isFunction( function() {} ) //-> true
 {% endhighlight %}
 
 ### Event Helpers
 
 {% highlight javascript %}
 // binds handler on obj's eventName event
-can.bind(obj, eventName, handler)
+can.bind( obj, eventName, handler )
 
 // unbind handler on obj's eventName event
-can.unbind(obj, eventName, handler) 
+can.unbind( obj, eventName, handler ) 
   
 // binds handler on all elements' eventName event that match selector
-can.delegate(obj, selector, eventName, handler)
+can.delegate( obj, selector, eventName, handler )
   
 // unbinds handler on all elements' eventName event that match selector in obj
-can.undelegate(obj, selector, eventName)
+can.undelegate( obj, selector, eventName )
   
 // executes all handlers attached to obj for eventName
-can.trigger(obj, eventName, args)
+can.trigger( obj, eventName, args )
 {% endhighlight %}
 
 ### Deferred
@@ -1383,9 +1382,9 @@ can.trigger(obj, eventName, args)
 var deferred = new can.Deferred()
 
 // pipes a deferred into another deferred
-deferred.pipe(function(){
+deferred.pipe(function() {
 
-}, function(){})
+}, function() {})
 
 // resolves a deferred, deferreds piped into the deferred also become resolved
 deferred.resolve()
@@ -1403,34 +1402,34 @@ can.When()
 // performs an asynchronous HTTP request
 {% highlight javascript %}
 can.ajax({
-  url : "url",
-  type: "GET", // "POST"
+  url : 'url',
+  type: 'GET', // 'POST'
   async : false,
-  dataType: "json",
-  success: function(){},
-  error: function(){}
+  dataType: 'json',
+  success: function() {},
+  error: function() {}
 }) //-> deferred
 {% endhighlight %}
 
 ### HTMLElement Helpers
 
 {% highlight javascript %}
-can.buildFragment(frags, nodes)
+can.buildFragment( frags, nodes )
 
 // a node list
-can.$("div.bar") //-> []
+can.$( 'div.bar' ) //-> []
 
 // appends html to the HTMLElements in the NodeList
-can.append(NodeList, html)
+can.append( NodeList, html )
   
 // removes the HTMLElements in the NodeList from the DOM  
-can.remove(NodeList)
+can.remove( NodeList )
   
 // stores arbitrary data to the HTMLElements in the NodeList  
-can.data(NodeList, dataName, dataValue)
+can.data( NodeList, dataName, dataValue )
   
 // adds CSS class(es) to the HTMLElements in the NodeList
-can.addClass(NodeList, className)
+can.addClass( NodeList, className )
 {% endhighlight %}
 
 
@@ -1517,16 +1516,16 @@ Using [templated event binding](#can_control-templated_event_handlers_pt_2), Con
 
 {% highlight javascript %}
 var Tooltip = can.Control({
-  '{window} click' : function(el, ev){
+  '{window} click': function( el, ev ) {
     // hide only if we clicked outside the tooltip
-    if(! this.element.has(ev.target ) {
+    if (!this.element.has( ev.target ) {
       this.element.remove();
     }
   }
 })
 
 // create a Tooltip
-var tooltipElement = $('<div>INFO</div>').appendTo(el)
+var tooltipElement = $( '<div>INFO</div>' ).appendTo( el )
 var tooltipInstance = new Tooltip( tooltipElement );
 {% endhighlight %}
 
@@ -1541,11 +1540,11 @@ It's relatively common to load the same model instance multiple times on a singl
 app might request todos due today and high-priority todos and render them like:
 
 {% highlight javascript %}
-can.view('todosList.ejs',{
-  todaysTodos : Todo.findAll({due: 'today'}),
-  criticalTodos : Todo.findAll({type: 'critical'})
-}).then(function(frag){
-  $('#todos').html(frag);
+can.view( 'todosList.ejs', {
+  todaysTodos: Todo.findAll( { due: 'today' } ),
+  criticalTodos: Todo.findAll( { type: 'critical' } )
+}).then(function( frag ) {
+  $( '#todos' ).html( frag );
 })
 {% endhighlight %}
 
@@ -1553,20 +1552,20 @@ can.view('todosList.ejs',{
 
 {% highlight erb %}
 <h2>Due Today</h2>
-<% list(todaysTodos, function(todo){ %>
-  <li <%= (el) -> el.data('todo',todo) %>>
-    <%= todo.attr('name') %>
+<% list( todaysTodos, function( todo ) { %>
+  <li <%= (el) -> el.data( 'todo', todo ) %>>
+    <%= todo.attr( 'name' ) %>
   </li>
-<% }) %>
+<% } ) %>
 <h2>Critical Todos</h2>
-<% list(criticalTodos, function(todo){ %>
-  <li <%= (el) -> el.data('todo',todo) %>>
-    <%= todo.attr('name') %>
+<% list( criticalTodos, function( todo ) { %>
+  <li <%= (el) -> el.data( 'todo', todo ) %>>
+    <%= todo.attr( 'name' ) %>
   </li>
-<% }) %>
+<% } ) %>
 {% endhighlight %}
 
-If `Todo.findAll({due: 'today'})` and `Todo.findAll({type: 'critical'})` both have the same todo instance's data like:
+If `Todo.findAll( { due: 'today' } )` and `Todo.findAll( { type: 'critical' } )` both have the same todo instance's data like:
 
 {% highlight javascript %}
 { "id" : 5, "name" : "do dishes", "due" : "today", "type" : "critical" }
@@ -1586,14 +1585,14 @@ __Model and view deferred support for parallel loading__
 you can load a template and its data in parallel and render it into an element with:
 
 {% highlight javascript %}
-$('#todos').html('todos.ejs', Todo.findAll() );
+$( '#todos' ).html( 'todos.ejs', Todo.findAll() );
 {% endhighlight %}
 
 Hot.  You can do this without the [view modifiers plugin](#plugins-view_modifiers) like:
 
 {% highlight javascript %}
-can.view('todos.ejs', Todo.findAll() ).then(function( frag ){
-  $('#todos').html( frag );
+can.view( 'todos.ejs', Todo.findAll() ).then(function( frag ) {
+  $( '#todos' ).html( frag );
 })
 {% endhighlight %}
 
@@ -1648,25 +1647,25 @@ automatically.  For example:
 
 {% highlight javascript %}
 var person = new can.Observe({
-  name : {first: 'Justin', last: 'Myer'},
-  hobbies : ['programming', 'party rocking']
+  name: { first: 'Justin', last: 'Myer' },
+  hobbies: [ 'programming', 'party rocking' ]
 })
 
-person.attr('name.first') //-> 'Justin'
-person.attr('hobbies.0') //-> 'programming'
+person.attr( 'name.first' ) //-> 'Justin'
+person.attr( 'hobbies.0' ) //-> 'programming'
 {% endhighlight %}
 
 But most important, `change` events bubble.  Letting observe listen when a nested property changes:
 
 {% highlight javascript %}
-person.bind('change', function( ev, attr, how, newVal, oldVal ){
+person.bind( 'change', function( ev, attr, how, newVal, oldVal ) {
   attr   //-> 'name.last'
   how    //-> 'set'
   newVal //-> 'Meyer'
   oldVal //-> 'Myer'
 });
 
-person.attr('name.last', 'Meyer');
+person.attr( 'name.last', 'Meyer' );
 {% endhighlight %}
 
 
