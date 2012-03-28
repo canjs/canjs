@@ -5,7 +5,7 @@
 @download http://jmvcsite.heroku.com/pluginify?plugins[]=can/control/view/view.js
 
 Renders a View template with the controller instance. If the first argument
-is not supplied, it looks for a view in /views/controller_name/action_name.ejs.
+is not supplied, it looks for a view in `/views/controller_name/action_name.ejs`.
 If data is not provided, it uses the controller instance as data.
 
 	var Tasks = can.Control.extend('Tasks',{

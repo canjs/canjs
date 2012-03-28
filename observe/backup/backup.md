@@ -26,6 +26,3 @@ Finally, you can restore the original attributes with
 See this in action:
 
 @demo can/observe/backup/backup.html
-
-*Note: Its important to include this plugin before you include other plugins that 
-extend Observe so that prototype chain is extended correctly.
