@@ -115,6 +115,21 @@ test("easy hookup", function(){
 	ok( div.getElementsByTagName('div')[0].className.indexOf("yes") != -1, "has yes" )
 });
 
+test('multiple function hookups in a tag', function(){
+
+	var text =	"<span <%= (el)-> can.data(can.$(el),'foo','bar') %>" + 
+		" <%= (el)-> can.data(can.$(el),'baz','qux') %>>lorem ipsum</span>",
+		compiled = new can.EJS({ text: text }).render(),
+		div = document.createElement('div');
+
+	div.appendChild(can.view.frag(compiled));
+	var span = div.getElementsByTagName('span')[0];
+
+	equals(can.data(can.$(span), 'foo'), 'bar', "first hookup");
+	equals(can.data(can.$(span), 'baz'), 'qux', "second hookup");
+
+})
+
 test("helpers", function() {
 	can.EJS.Helpers.prototype.simpleHelper = function()
 	{
@@ -392,6 +407,8 @@ test('single escaped tag, removeAttr', function () {
 	obs.attr('foo', 'data-bar="baz"');
 	equals(anchor.getAttribute('data-bar'), 'baz');
 });
+
+
 
 test('html comments', function(){
 	var text =	'<!-- bind to changes in the todo list --> <div> '

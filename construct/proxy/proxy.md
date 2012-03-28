@@ -2,7 +2,7 @@
 @parent can.Construct
 @plugin can/construct/proxy
 @test can/construct/proxy/qunit.html
-@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/construct/proxy/proxy.js
+@download http://donejs.com/can/dist/can.construct.proxy.js
 
 Proxy takes a function name and returns a new function that
 will always have the same context from which it was created.
@@ -21,9 +21,9 @@ set correctly.
 		}
 	},{});
 	
-In the above example when we do __$.get__, the __gotData__ function
+In the above example when we do `$.get`, the `gotData` function
 will execute when the AJAX data request is completed and
-invoke __gotData__ with the 'this' context of the construct rather
+invoke `gotData` with the 'this' context of the construct rather
 than the window.
 
 ## Currying Arguments

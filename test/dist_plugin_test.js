@@ -1,19 +1,19 @@
 steal('can/dist/can.jquery-dev-edge.js',
-	'can/dist/can.construct.proxy.js',
-	'can/dist/can.construct.super.js',
-	'can/dist/can.observe.attributes.js',
-	'can/dist/can.observe.backup.js',
-	'can/dist/can.observe.delegate.js',
-	'can/dist/can.observe.setter.js',
-	'can/dist/can.observe.validations.js',
-	'can/dist/can.control.plugin.js')
+	  'can/dist/can.construct.proxy.js',
+	  'can/dist/can.construct.super.js',
+	  'can/dist/can.observe.attributes.js',
+	  'can/dist/can.observe.backup.js',
+	  'can/dist/can.observe.delegate.js',
+	  'can/dist/can.observe.setter.js',
+	  'can/dist/can.observe.validations.js',
+	  'can/dist/can.control.plugin.js')
 .then('funcunit/qunit',
-	'can/test/fixture.js')
+	  'can/util/fixture')
 .then('can/construct/proxy/proxy_test.js',
-	'can/construct/super/super_test.js',
-	'can/observe/attributes/attributes_test.js',
-	'can/observe/delegate/delegate_test.js',
-	'can/observe/backup/backup_test.js',
-	'can/observe/setter/setter_test.js',
-	'can/observe/validations/validations_test.js',
-	'can/control/plugin/plugin_test.js')
+	  'can/construct/super/super_test.js',
+	  'can/observe/attributes/attributes_test.js',
+	  'can/observe/delegate/delegate_test.js',
+	  'can/observe/backup/backup_test.js',
+	  'can/observe/setter/setter_test.js',
+	  'can/observe/validations/validations_test.js',
+	  'can/control/plugin/plugin_test.js')

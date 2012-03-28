@@ -1118,8 +1118,12 @@ steal('can/construct', function() {
 			}
 			
 			// call the original method
-			var res = [][name].apply(this, args)
-			batchTrigger(this, "change", [""+len, "add", args, undefined])			
+			var res = [][name].apply(this, args);
+			
+			if ( !this.comparator || !args.length ) {
+				batchTrigger(this, "change", [""+len, "add", args, undefined])
+			}
+						
 			return res;
 		}
 	});
