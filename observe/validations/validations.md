@@ -1,7 +1,7 @@
 @page can.Observe.validations
 @parent can.Observe
 @plugin can/observe/validations
-@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/validations/validations.js
+@download http://donejs.com/can/dist/can.observe.validations.js
 @test can/observe/validations/qunit.html
 
 The `can/observe/validations` plugin provides validations on observes. Validations
