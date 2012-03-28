@@ -95,12 +95,10 @@ makeAgeUpdater = function(contact){
 	updater.html("");	
 	updater.append(contact.name+"'s birthday");
 	
-	can.$('<input/>').val(
-		contact.attr("birthday"))
+	can.$('<input type="text" />').val(
+		contact.getBirthday())
 			   .change(function(){
-		contact.update({
-			'birthday': this.value
-		});
+		contact.attr('birthday', this.value);
 	}).appendTo(updater)
 }
 
