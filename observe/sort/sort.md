@@ -1,7 +1,7 @@
 @page can.Observe.sort
 @parent can.Observe
 @plugin can/observe/sort
-@download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/sort/sort.js
+@download http://donejs.com/can/dist/can.observe.sort.js
 @test can/observe/sort/qunit.html
 
 `list.sort(sortfunc)`
