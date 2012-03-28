@@ -18,27 +18,42 @@
 			click RESTORE.  
 			</p>
 		</div>
+		
 <div id="demo-html">
 <div id='contacts'></div>
 <div id='update'></div>
 <a href='javascript://' id='restore'>RESTORE</a>
 </div>
-<script type='text/javascript' 
-        src='../../../steal/steal.js'>   
-</script>
-<script type='text/javascript'>
-steal('can/model',
-		'can/model/fixture',
-		'can/model/list',
-		'can/observe/backup').then(function(){
-			
-			can.fixture("/recipes.json", function(orig, settings, headers){
-				return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
-						 {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10'},
-						 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
-			});			
 
+<script type='text/javascript' src='../../../steal/steal.js'></script>
+<script type='text/javascript'>
+steal('can/observe/backup',
+	  'can/observe/delegate',
+	  'can/observe/attributes')
+.then('can/model',
+	  'can/util/fixture')
+.then(function(){
 			
+can.fixture("/recipes.json", function(orig, settings, headers){
+return [[
+		{ 
+			'id': 1,
+			'name' : 'Justin Meyer',
+			'birthday': '1982-10-20'
+		},
+		{
+			'id': 2,
+			'name' : 'Brian Moschel',
+			'birthday': '1983-11-10'
+		},
+		{
+			'id': 3,
+			'name' : 'Motley Crew',
+			'birthday': '1980-2-10'
+		}
+	]];
+});			
+	
 can.Model("Contact",{
 	attributes : { 
 		birthday : 'date'
@@ -56,10 +71,10 @@ can.Model("Contact",{
 		}
 	},
 	findAll : function(params, success, error){
-		return can.get("/recipes.json", {}, success, "json contact.models");
+		return $.get("/recipes.json", {}, success, "json");
 	},
 	update : function(id, attrs, success, error){
-		can.post("/recipes.json",{},success,'json',function(){
+		$.post("/recipes.json",{},success,'json',function(){
 			return [attrs]
 		})
 	}
@@ -73,37 +88,43 @@ can.Model("Contact",{
 			"-"+(this.birthday.getMonth()+1)+
 			"-"+this.birthday.getDate();
 	}
-
 });
+
 makeAgeUpdater = function(contact){
 	var updater = $("#update")
-	updater.html("");
-	updater.append(contact.name+"'s birthday")
-	can.$('<input/>').val(contact.attr("birthday")).change(function(){
+	updater.html("");	
+	updater.append(contact.name+"'s birthday");
+	
+	can.$('<input/>').val(
+		contact.attr("birthday"))
+			   .change(function(){
 		contact.update({
 			'birthday': this.value
-		})
+		});
 	}).appendTo(updater)
 }
+
 can.$('#contacts').delegate("li","click", function(){
-	 makeAgeUpdater( can.$(this).closest('.contact').model() );
-  });
+	makeAgeUpdater( can.$(this).data('model') );
+});
+
 Contact.findAll({},function(contacts){
   var contactsEl = can.$('#contacts');
   can.each(contacts, function(i, contact){
     
 	// add the contact to the page
 	var li = can.$('<li>')
-              .model(contact)
-              .html(contact.name+" "+
-			  		contact.ageThisYear()+
-                    " <a>Show</a>")
+              .data('model', contact)
+              .html(contact.name + " "+ 
+					contact.ageThisYear() + 
+					" <a>Show</a>")
               .appendTo(contactsEl);
     
 	// listen for changes in birthday
 	contact.bind("birthday", function(){
-      li.html(contact.name+" "+this.ageThisYear()+
-              " <a>Show</a>");
+      li.html(contact.name + " " + 
+			  this.ageThisYear() + 
+			  " <a>Show</a>");
     })
 	
 	// backup the contact
@@ -114,10 +135,11 @@ Contact.findAll({},function(contacts){
   can.$("#restore").click(function(){
   	contacts.each(function(){
 		this.restore()
-	})
-  })
+	});
+  });
 });
+
 })
 </script>
-	</body>
+</body>
 </html>
