@@ -75,7 +75,7 @@ that increments a counter for each instance created:
 
 ## Introspection
 
-Constructor functions are anonymus, meaning that they don't carry any naming or namespace information.
+Constructor functions are anonymous, meaning that they don't carry any naming or namespace information.
 You can however pass a namespace string when defining a can.Construct which will make the constructor
 function available globally in that namespace and also set the
 [can.Construct.static.shortName], [can.Construct.static.fullName] and [can.Construct.static.namespace]
