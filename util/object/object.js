@@ -126,6 +126,9 @@ var same = can.Object.same = function(a, b, compares, aParent, bParent, deep){
 	} 
 	compares = compares || {};
 	
+	if(a instanceof Date){
+		return a === b;
+	}
 	if(deep === -1){
 		return aType === 'object' || a === b;
 	}
@@ -135,9 +138,7 @@ var same = can.Object.same = function(a, b, compares, aParent, bParent, deep){
 	if(a === b){
 		return true;
 	}
-	if(a instanceof Date){
-		return a === b;
-	} else if(aArray){
+	if(aArray){
 		if(a.length !== b.length){
 			return false;
 		}
