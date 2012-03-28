@@ -13,7 +13,7 @@ when you return a deferred this is handled automatically.  So for example, the f
 			return $.get("/recipes.json", {}, 
 				success, "json contact.models");
 		}
-	}, {});S
+	}, {});
 	
 becomes:
 
@@ -22,3 +22,9 @@ becomes:
 			return $.get("/recipes.json", {}, success, "json");
 		}
 	}, {});
+	
+### Model Element Helpers Removed
+
+We removed the `.model()` and `.models()` helpers in favor of using traditional data accessors.
+Now when you want to retrieve models from a element you bound them to, simply do: 
+`can.$('#myelm').data('model')` or to update `can.$('#myelm').data('model', modelInstance)`.
