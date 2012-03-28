@@ -1,3 +1,7 @@
+steal('funcunit/qunit','./sort', function(){
+
+module("can/observe/sort");
+
 test("list events", function(){
 	
 	var list = new can.Observe.List([
@@ -43,3 +47,5 @@ test("list events", function(){
 	list.splice(0,1);
 	list[0].attr('name',"Zed")
 })
+
+});

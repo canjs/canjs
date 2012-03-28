@@ -3,7 +3,7 @@ steal('can/observe', function(){
 can.each([ can.Observe, can.Model ], function(i,clss){
 	// in some cases model might not be defined quite yet.
 	if(clss === undefined){
-		continue;
+		return;
 	}
 	
 	can.extend(clss, {
