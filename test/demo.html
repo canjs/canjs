@@ -30,7 +30,7 @@
       <a href="javascript://" class='destroy'>X</a>
     </li>
 <% }) %>
-
+<%= list.completed() %>
 </script> 
     
 <h1>Welcome To History-Todo</h1>
@@ -194,6 +194,18 @@ can.Control("Routing",{
 
 // create routing controller
 new Routing(document.body);
+
+
+completed : function(){
+	this.attr('length')
+	var num = 0;
+	this.each(function(i, item){
+		if(item.attr('completed')){
+			num++;
+		}
+	})
+	return num;
+}
 
 })
 	
