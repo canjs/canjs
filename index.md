@@ -33,7 +33,6 @@ you can clone the application from  our repository, by running
 the following commands.
 
     git clone https://github.com/jupiterjs/cantodo
-    cd cantodo
 
 The [Use with other libraries](#use_with_other_libraries) 
 section details the minor differences among use with other libraries.
@@ -370,7 +369,7 @@ todo.save(function( todo ) {
 })
 {% endhighlight %}
 
-This makes a request to `POST /todos` with `name=mow lawn` and should get a response with the __id__ like:
+This makes a request to `PUT /todos` with `name=mow lawn` and should get a response with the __id__ like:
 
 {% highlight javascript %}
 { "id" : 5 }
