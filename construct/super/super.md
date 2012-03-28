@@ -2,7 +2,7 @@
 @parent can.Construct
 @plugin can/construct/super
 @test can/construct/super/qunit.html
-@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/construct/super/super.js
+@download http://donejs.com/can/dist/can.construct.super.js
 
 Allows you to call the base function via a `_super` attribute. Given a simple Todo construct:
 

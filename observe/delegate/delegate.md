@@ -2,7 +2,7 @@
 @parent can.Observe
 @plugin can/observe/delegate
 @test can/observe/delegate/qunit.html
-@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/delegate/delegate.js
+@download http://donejs.com/can/dist/can.observe.delegate.js
 
 Listens for changes in a child attribute(s) from the parent. The child attribute
 does not have to exist.

@@ -2,7 +2,7 @@
 @parent can.Control
 @plugin can/control/plugin
 @test can/control/plugin/qunit.html
-@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/control/plugin/plugin.js
+@download http://donejs.com/can/dist/can.control.plugin.js
 
 The can.Control plugin extension creates a plugin for the control in the 
 jQuery NodeList using the control's [can.Construct.fullName fullName] or
