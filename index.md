@@ -29,8 +29,8 @@ for the library you are using:
 This page walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery. If you want to download 
 a fully functional example of a todo app to see it in action, 
-you can clone the application from  our repository, by running 
-the following commands.
+you can clone the application from our repository, by running 
+the following command.
 
     git clone https://github.com/jupiterjs/cantodo
 
