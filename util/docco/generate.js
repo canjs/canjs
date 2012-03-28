@@ -10,7 +10,7 @@ var path          = require('path'),
 	doccoDir      = path.join( canDir, "util/docco" ),
 	doccoOutDir   = path.join( doccoDir, "docs" ),
 	sourceDir     = path.join( doccoDir, 'standalone' ),
-	genCommand    = "js can/util/docco/makestandalone.js";
+	genCommand    = "js " + path.join( doccoDir, "makestandalone.js" );
 
 function execCommandWithOutput( command, cwd, callback ) {
 
