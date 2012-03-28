@@ -1,9 +1,9 @@
 @page can.Observe.validations
-@plugin can/observe/validations
-@download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/validations/validations.js
-@test can/observe/validations/qunit.html
 @parent can.Observe
- 
+@plugin can/observe/validations
+@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/validations/validations.js
+@test can/observe/validations/qunit.html
+
 The `can/observe/validations` plugin provides validations on observes. Validations
 are setup on constructor functions that inherit from [can.Observe]. Call
 validation functions in `init`.
