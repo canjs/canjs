@@ -1,5 +1,8 @@
 @page can.Observe.delegate
 @parent can.Observe
+@plugin can/observe/delegate
+@test can/observe/delegate/qunit.html
+@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/delegate/delegate.js
 
 Listens for changes in a child attribute(s) from the parent. The child attribute
 does not have to exist.
@@ -24,9 +27,6 @@ does not have to exist.
 Delegate will listen on the object until you call _undelegate_ to remove the event handler.
 
 	observe.undelegate("name","set", function(){ ... })
-
-*Note: Its important to include this plugin before you include other plugins that 
-extend Observe so that prototype chain is extended correctly.
  
 ## Types of events
  
@@ -45,7 +45,7 @@ An add event is fired when a new property has been added.
      o.attr('name',"Brian");
     
 Listening to add events is useful for 'setup' functionality (in this case
-showing the <code>#name</code> element.
+showing the `#name` element).
  
 ### Set
  
@@ -105,8 +105,8 @@ on an attribute of the params attribute:
 	// alerts 2
 	o.attr('options.params.parentId',6);
 
-Using a single wildcard (<code>*</code>) matches single level
-properties.  Using a double wildcard (<code>**</code>) matches
+Using a single wildcard (`*`) matches single level
+properties.  Using a double wildcard (`**`) matches
 any deep property.
 
 ## Listening on multiple properties and values

@@ -1,12 +1,15 @@
 @page can.Observe.setter
 @parent can.Observe
+@plugin can/observe/setter
+@download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/observe/setter/setter.js
+@test can/observe/setter/qunit.html
 
 Setter extends the Observe object to provide convenient helper methods for setting attributes on a observable.
 
-The _attrs_ and _attr_ function look for a _setATTRNAME_ function to handle setting the date property.
+The `attrs` and `attr` function look for a `setATTRNAME` function to handle setting the date property.
 
 By providing a function that takes the raw data and returns a form useful for JavaScript, 
-we can make our observes (which use _attrs_ and _attr_) automatically convert data.
+we can make our observes ( which use `attrs` and `attr` ) automatically convert data.
 
 	var Contact = can.Observe({
 		setBirthday : function(raw){
@@ -28,6 +31,3 @@ we can make our observes (which use _attrs_ and _attr_) automatically convert da
 	contact.attrs({
 		'birthday': new Date().getTime()
 	});
-	
-*Note: Its important to include this plugin before you include other plugins that 
-extend Observe so that prototype chain is extended correctly.
