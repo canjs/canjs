@@ -200,11 +200,12 @@ test("block live binding", function(){
 
 	div.appendChild(can.view.frag(compiled))
 	
-	equals(div.getElementsByTagName('div')[0].innerHTML, "<span>Mr.</span>","initial content")
+	// toUpperCase added to normalize cases for IE8
+	equals(div.getElementsByTagName('div')[0].innerHTML.toUpperCase(), "<span>Mr.</span>".toUpperCase(),"initial content")
 	
 	obs.attr('sex','female')
 	
-	equals(div.getElementsByTagName('div')[0].innerHTML, "<label>Ms.</label>","updated label")
+	equals(div.getElementsByTagName('div')[0].innerHTML.toUpperCase(), "<label>Ms.</label>".toUpperCase(),"updated label")
 	
 })
 
@@ -227,11 +228,13 @@ test("hookups in tables", function(){
 	div.appendChild(can.view.frag(compiled));
 	
 	
-	equals(div.getElementsByTagName('tbody')[0].innerHTML, "<tr><td>Mr.</td></tr>","initial content")
+	equals(div.getElementsByTagName('tbody')[0].innerHTML.replace(/(\r|\n)+/g, "").toUpperCase(), 
+		"<tr><td>Mr.</td></tr>".toUpperCase(),"initial content")
 	
 	obs.attr('sex','female')
 	
-	equals(div.getElementsByTagName('tbody')[0].innerHTML, "<tr><td>Ms.</td></tr>","updated label")
+	equals(div.getElementsByTagName('tbody')[0].innerHTML.replace(/(\r|\n)+/g, "").toUpperCase(), 
+		"<tr><td>Ms.</td></tr>".toUpperCase(),"updated label")
 })
 
 test('multiple hookups in a single attribute', function() {
@@ -277,15 +280,15 @@ test('adding and removing multiple html content within a single element', functi
 
 	div.appendChild(can.view.frag(compiled));
 
-	equals(div.innerHTML, '<div>abc</div>', 'initial render');
+	equals(div.innerHTML.toUpperCase(), '<div>abc</div>'.toUpperCase(), 'initial render');
 
 	obs.attr({a: '', b : '', c: ''});
 
-	equals(div.innerHTML, '<div></div>', 'updated values');
+	equals(div.innerHTML.toUpperCase(), '<div></div>'.toUpperCase(), 'updated values');
 	
 	obs.attr({c: 'c'});
 	
-	equals(div.innerHTML, '<div>c</div>', 'updated values');
+	equals(div.innerHTML.toUpperCase(), '<div>c</div>'.toUpperCase(), 'updated values');
 });
 
 test('live binding and removeAttr', function(){
@@ -415,8 +418,8 @@ test('html comments', function(){
 	+ '<%= obs.attr("foo") %></div>',
 
 	obs = new can.Observe({
-		foo: 'foo',
-	}),
+		foo: 'foo'
+	})
 
 	compiled = new can.EJS({ text: text }).render({ obs: obs });
 
