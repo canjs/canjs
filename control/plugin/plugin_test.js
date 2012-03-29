@@ -36,16 +36,27 @@ steal('can/construct/super',
 		ok(ta.hasClass("existing_class"), "Existing class should still be there");
 	});
 
-	test(".controller(), .controllers()", function() {
+	test(".controller(), .controllers() and _fullname", function() {
 		expect(3);
-		can.Control("TestPlugin", {
+		can.Control("My.TestPlugin", {
 		});
 
 		var ta = can.$("<div/>").appendTo($("#qunit-test-area"));
-		ok(ta.test_plugin, 'Converting Control name to plugin name worked');
-		ta.test_plugin();
+		ok(ta.my_test_plugin, 'Converting Control name to plugin name worked');
+		ta.my_test_plugin();
 		equal(ta.controllers().length, 1, '.controllers() returns one instance');
-		ok(ta.controller() instanceof TestPlugin, 'Control is instance of test plugin')
+		ok(ta.controller() instanceof My.TestPlugin, 'Control is instance of test plugin')
 	});
 
+	test('update', function() {
+		var Control = can.Control({
+			pluginName : 'updateTest'
+		}, {});
+
+		var ta = can.$("<div/>").addClass('existing_class').appendTo($("#qunit-test-area"));
+		ta.updateTest(); // Init
+		ta.updateTest({ testop : 'testing' });
+
+		equal(ta.controller().options.testop, 'testing', 'Test option has been extended properly');
+	});
 });
