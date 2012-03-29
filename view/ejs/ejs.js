@@ -26,17 +26,15 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		bracketNum = function(content){
 			return (--content.split("{").length) - (--content.split("}").length);
 		},
-		attrF = function(el, attrName, val){
-			if(attrName === "class"){
-				if(val !== undefined){
-					el.className = val;
-				}
-				return el.className;
-			}
-			if(val !== undefined){
+		setAttr = function(el, attrName){
+			attrName === "class"?
+				(el.className = val):
 				el.setAttribute(attrName);
-			}
-			return el.getAttribute(attrName);
+		},
+		getAttr = function(el, attrName, val){
+			return attrName === "class"?
+				el.className:
+				el.getAttribute(attrName);
 		},
 		// used to bind to an observe, and unbind when the element is removed
 		// oldObserved is a mapping of observe namespaces to instances
@@ -387,7 +385,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						}
 						// set if we have a new attrName
 						if(newAttrName){
-							attrF(el, newAttrName, parts[1])
+							setAttr(el, newAttrName, parts[1])
 						}
 					},{});
 				});
@@ -399,7 +397,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						hooks;
 						
 					(hooks = can.data(wrapped,'hooks')) || can.data(wrapped, 'hooks', hooks = {});
-					var attr = attrF(el, status),
+					var attr = getAttr(el, status),
 						parts = attr.split("__!!__"),
 						hook;
 
@@ -423,13 +421,13 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					hook = hooks[status];
 					
 					parts.splice(1,0,input);
-					attrF(el, status, parts.join(""));
+					setAttr(el, status, parts.join(""));
 					
 
 					liveBind(observed, el, function(ev) {
 						if(ev.batchNum === undefined || ev.batchNum !== hook.batchNum){
 							hook.batchNum = ev.batchNum;
-							attrF(el, status, hook.render());
+							setAttr(el, status, hook.render());
 						} 
 						
 						
