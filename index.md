@@ -1690,7 +1690,7 @@ from the *todo/todos.ejs* url looking like this:
 <% for(var i = 0; i < this.length; i++ ){ %>
   <li><%= this[i].name %></li>
 <% } %>
-{% endhiglight %}
+{% endhighlight %}
 
 By calling the html modifier on an element like this:
 
