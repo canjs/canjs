@@ -36,7 +36,7 @@ section details the minor differences among use with other libraries.
 The [Examples](#examples) section has other awesome examples of how you
 can put CanJS to good use. 
 
-## can.Construct `can.Construct([classProperties,] [prototypeProperties])`
+## can.Construct `can.Construct( [classProperties,] [prototypeProperties] )`
 
 Constructor functions made with [can.Construct](http://donejs.com/docs.html#!can.Construct) are used to create
 objects with shared properties. It's used by both __can.Control__ and __can.Model__.
@@ -1560,7 +1560,7 @@ new can.Observe({
     date: function( raw ) {
       if ( typeof raw == 'string' ) {
         var matches = raw.match( /(\d+)-(\d+)-(\d+)/ );
-        return new Date( matches[ 1 ], ( +matches[ 2 ] ) - 1, matches[ 3 ]);
+        return new Date( matches[ 1 ], ( +matches[ 2 ] ) - 1, matches[ 3 ] );
       }else if ( raw instanceof Date ) {
         return raw;
       }
