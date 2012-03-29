@@ -7,32 +7,30 @@
   </style>
 </head>
 <body>
-	<ul id='todos'></ul>
-	<input id='editor'/>
-
 <script type='text/ejs' id='todosEjs'>
 <!-- bind to changes in the todo list -->
 <% list(this, function( todo ) { %>
-    
-    <!-- add the todo to the element's data -->
-    <li <%= (el) -> el.data('todo',todo) %>>
+    <!-- add the todo to the elements data -->
+    <li <%= (el) -> el.data( 'todo',todo ) %>>
         
       <!-- if the todo is complete, mark as checked -->
       <input type="checkbox" class="complete"
-             <%= todo.attr('complete') ? 'checked' : '' %>>
+             <%= todo.attr( 'complete' ) ? 'checked' : '' %>>
       
       <!-- if the todo is complete, add 'done' to the className -->        
-      <span class="<%= todo.attr('complete') ? 'done' : '' %>">
-        <%= todo.attr('name') %>
+      <span class="<%= todo.attr( 'complete' ) ? 'done' : '' %>">
+        <%= todo.attr( 'name' ) %>
       </span>
-            
+      
       <!-- a destroy link -->
-      <a href="javascript://" class='destroy'>X</a>
+      <a href="javascript://" class="destroy">X</a>
     </li>
 <% }) %>
-<%= list.completed() %>
-</script> 
-    
+</script>
+
+<ul id='todos'></ul>
+<input id='editor'/>
+
 <h1>Welcome To History-Todo</h1>
     <p>History-Todo shows how to build 2 independent widgets (a list and an editor) and tie them together with a managing controller.  The managing controller also listens to routes.  A full write-up can be found <a href='http://localhost:3002/javascriptmvc/jmvc/docs.html#!rapidstart'>here</a>.</p>
 <p>Combined, this lets you:</p>
@@ -43,7 +41,6 @@
 
 <script type='text/javascript' src='../../steal/steal.js'></script>
 <script type='text/javascript'>
-	
 steal('can/model',
       'can/util/fixture',
       'can/view/ejs',
@@ -52,51 +49,50 @@ steal('can/model',
       function($){
 
 // GETS TODOS FROM THE SERVER
-can.Model('Todo',{
+Todo = can.Model({
     findAll : "GET /todos",
     findOne : "GET /todos/{id}",
     create  : "POST /todos",
     update  : "PUT /todos/{id}",
     destroy : "DELETE /todos/{id}"
-},
-{});
+}, {});
 
 // WE DON'T HAVE A SERVER, USE FIXTURES
 // TO SIMULATE ONE:
 
 // Our fake todos
 var TODOS = [
-    {id: 1, name: "wake up", complete: true},
-    {id: 2, name: "take out trash", complete: false},
-    {id: 3, name: "do dishes", complete: false}
+    { id: 1, name: "wake up", complete: true },
+    { id: 2, name: "take out trash", complete: false },
+    { id: 3, name: "do dishes", complete: false }
 ];
 
 // findAll
-$.fixture("GET /todos", function(){
-    return [TODOS]
+$.fixture( "GET /todos", function() {
+    return [ TODOS ];
 });
 
 // findOne
-$.fixture("GET /todos/{id}", function(orig){
+$.fixture( "GET /todos/{id}", function( orig ) {
     // using the id, return that todo
-    return TODOS[(+orig.data.id)-1];
-})
+    return TODOS[ ( +orig.data.id ) - 1 ];
+});
 
 // create
-var id= 4;
-$.fixture("POST /todos", function(){
+var id = 4;
+$.fixture( "POST /todos", function() {
     // just need to send back a new id
-    return {id: (id++)}
-})
+    return { id: id++ };
+});
 
 // update
-$.fixture("PUT /todos/{id}", function(){
+$.fixture( "PUT /todos/{id}", function() {
     // just send back success
     return {};
-})
+});
 
 // destroy
-$.fixture("DELETE /todos/{id}", function(){
+$.fixture( "DELETE /todos/{id}", function() {
     // just send back success
     return {};
 });
@@ -105,36 +101,35 @@ $.fixture("DELETE /todos/{id}", function(){
 // OR FOR MANGING WIDGETS
           
 // Organizes a list of todos
-can.Control("Todos",{
+Todos = can.Control({
   // called when a new Todos() is created
-  "init" : function( element , options ){
-    
+  init: function( element , options ) {
     // get all todos and render them with
     // a template in the element's html
     var self = this;
-    can.view('todosEjs', Todo.findAll()).then(function(frag){
-    	self.element.html(frag)
+    can.view( 'todosEjs', Todo.findAll() ).then(function( frag ) {
+    	self.element.html( frag );
     });
   },
   // when a todo is clicked, create a 'selected'
   // event for others to listen to
-  "li click" : function(li){
-    li.trigger('selected', li.data('todo') );
+  "li click": function( li ) {
+    li.trigger( 'selected', li.data( 'todo' ) );
   },
   // when .complete is clicked, mark the todo completed
-  "li .complete click" : function(el, ev){
-    el.closest('li')
-      .data('todo')
-      .attr('complete', el.prop('checked'))
+  "li .complete click": function( el, ev ) {
+    el.closest( 'li' )
+      .data( 'todo' )
+      .attr( 'complete' , el.prop( 'checked' ) )
       .save();
     
     ev.stopPropagation();
   },
   // when .destroy is clicked, destroy the
   // todo
-  "li .destroy click" : function(el, ev){
-    el.closest('li')
-      .data('todo')
+  "li .destroy click": function( el, ev ) {
+    el.closest( 'li' )
+      .data( 'todo' )
       .destroy();
     ev.stopPropagation();
   }
@@ -142,73 +137,59 @@ can.Control("Todos",{
 
 // Editor manages editing a todo's name
 // call update on the editor like
-can.Control('Editor',{
-  todo : function(todo){
+Editor = can.Control({
+  todo: function( todo ) {
   	this.options.todo = todo;
   	this.on();
   	this.setName()
   },
   // a helper that sets the value of the input
   // to the todo's name
-  setName : function(){
-    this.element.val(this.options.todo.name);
+  setName: function() {
+    this.element.val( this.options.todo.name );
   },
   // listen for changes in the todo
   // and update the input
-  "{todo} updated" : function(){
+  "{todo} updated": function() {
     this.setName();
   },
-  "{todo} destroyed" : function(){
+  "{todo} destroyed": function() {
   	this.element.hide();
   },
   // when the input changes
   // update the todo instance
-  "change" : function(){
-    var todo = this.options.todo
-    todo.attr('name',this.element.val())
+  "change": function() {
+    var todo = this.options.todo;
+    todo.attr( 'name',this.element.val() );
     todo.save();
   }
 });
 
 // Routing puts all the widget controllers together
 // along with managing routes
-can.Control("Routing",{
-  init : function(){
-    this.editor = new Editor("#editor")
-    new Todos("#todos");
+Routing = can.Control({
+  init: function(){
+    this.editor = new Editor( "#editor" );
+    new Todos( "#todos" );
   },
   // the index page
-  "route" : function(){
-     $("#editor").hide();
+  "route": function() {
+     $( "#editor" ).hide();
   },
-  "todos/:id route" : function(data){
-    $("#editor").show();
-    Todo.findOne(data, $.proxy(function(todo){
-      this.editor.todo(todo);
-    }, this))
+  "todos/:id route": function( data ) {
+    $( "#editor" ).show();
+    Todo.findOne( data, $.proxy(function( todo ) {
+      this.editor.todo( todo );
+    }, this));
   },
-  "li selected" : function(el, ev, todo){
-    can.route.attr('id',todo.id);
+  "li selected": function( el, ev, todo ) {
+    can.route.attr( 'id',todo.id );
   }
 });
 
 // create routing controller
-new Routing(document.body);
-
-
-completed : function(){
-	this.attr('length')
-	var num = 0;
-	this.each(function(i, item){
-		if(item.attr('completed')){
-			num++;
-		}
-	})
-	return num;
-}
-
+new Routing( document.body );
 })
-	
 </script>
 </body>
 </html>

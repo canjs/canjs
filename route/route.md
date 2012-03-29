@@ -48,7 +48,7 @@ the data in <code>can.route</code> looks like:
 `can.Observe` is essential for using `can.route` correctly.
 
 You can listen to changes in an Observe with `bind(eventName, handler(ev, args...))` and
-delegate and change can.route's properties with 
+change can.route's properties with 
 [can.Observe:attr attr].
 
 ### Listening to changes in an Observable
