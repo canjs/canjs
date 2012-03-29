@@ -103,6 +103,28 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			// finally, if all else false, toString it
 			return ""+input;
 		},
+		getValueAndObserved = function(func, self){
+			if (can.Observe) {
+				can.Observe.__reading = function(obj, attr){
+					observed.push({
+						obj: obj,
+						attr: attr
+					});
+				}
+			}
+			// get value
+			var observed = [],
+				input = func.call(self);
+	
+			// set back so we are no longer reading
+			if(can.Observe){
+				delete can.Observe.__reading;
+			}
+			return {
+				value : input,
+				observed : observed
+			}
+		},
 		/**
 		 * @class can.EJS
 		 * 
@@ -286,23 +308,12 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		 */
 		txt : function(tagName, status, self, func, escape){
 			// set callback on reading ...
-			if (can.Observe) {
-				can.Observe.__reading = function(obj, attr){
-					observed.push({
-						obj: obj,
-						attr: attr
-					});
-				}
-			}
-			// get value
-			var observed = [],
-				input = func.call(self),
+			var res = getValueAndObserved(func, self),
+				observed = res.observed,
+				input = res.value,
 				tag = (tagMap[tagName] || "span");
 	
-			// set back so we are no longer reading
-			if(can.Observe){
-				delete can.Observe.__reading;
-			}
+
 
 			// if we had no observes
 			if(!observed.length){
