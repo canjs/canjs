@@ -292,7 +292,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						
 						// create textNode
 						liveBind(observed, parent, function(){
-							node.nodeValue = func.call(self)
+							node.nodeValue = ""+func.call(self);
 						});
 					}
 					:
