@@ -1443,11 +1443,33 @@ CanJS can be used with libraries other than jQuery.
 
 ## Plugins
 
-### construct proxy
+### Construct proxy `construct.proxy(methodname, [curriedarguments])`
+
+Proxy takes a function name and returns a new function that will always have the same context from which it was created.
+You can also curry arguments that will be added to the beginning of the proxied functions argument list:
+
+{% highlight javascript %}
+var Person = can.Construct({
+	init : function(name) {
+		this.name = name;
+	},
+
+	sayName : function(text, end) {
+		return text + this.name + end;
+	}
+});
+
+var instance = new Person('John');
+var callback = instance.proxy('sayName'),
+	curriedCallback = instance.proxy('sayName', 'Hi my name is');
+
+console.log(callback('Hi I am ', ' :)')); // -> Hi I am John :)
+console.log(curriedCallback('!')); // -> Hi my name is John!
+{% endhighlight %}
 
 ### Construct super
 
-Use the **super** plugin gives access to overwritten methods when extending a can.Construct using `this._super`:
+Use the **super** plugin to access overwritten methods using `this._super` when extending a [can.Construct]:
 
 {% highlight javascript %}
 var Person = can.Construct({
@@ -1472,7 +1494,47 @@ var ImprovedPerson = can.Construct({
 });
 {% endhighlight %}
 
-### control plugin
+### Control.plugin
+
+__Control.plugin__ registers a jQuery plugin with a given _pluginName_ for your [can.Control] construct.
+For example with this can.Control:
+
+{% highlight javascript %}
+var Tabs = can.Control({
+	pluginName : 'tabs'
+},{
+	init : function(element, options){ },
+	update : function(options) {},
+	activate : function(index) {}
+});
+{% endhighlight %}
+
+You can instantiate the control by calling it as a plugin like this:
+
+{% highlight javascript %}
+$(".tabs").tabs();
+{% endhighlight %}
+
+Once instantiated any subsequent plugin call will call *update* on your control with the options passed to the plugin.
+Or you can call any method on the control like so:
+
+{% highlight javascript %}
+// Call the activate method
+$(".tabs").tabs('activate', 0);
+{% endhighlight %}
+
+Note that calling a method like this will return a jQuery object, not the actual return value.
+To access a controller instance directly use the _.controllers()_ or _.controller()_ plugins:
+
+{% highlight javascript %}
+var allControls = $(".tabs").controllers(),
+	control = $(".tabs").controller();
+
+allControllers[0].activate(0);
+// or
+control.activate(0);
+{% endhighlight %}
+
 
 ### Control view `control.view([viewname], [data])`
 
@@ -1481,15 +1543,15 @@ the current action name. If no data is provided the control instance is passed t
 have to set a name when creating the Control construct for __view__ to work.
 
 {% highlight javascript %}
-can.Control('Tasks', {
+can.Control('Editor', {
 	click: function( el ) {
-		// renders with views/tasks/click.ejs with the controller as data
+		// renders with views/editor/click.ejs with the controller as data
 		this.element.html( this.view() );
-		// renders with views/tasks/click.ejs with some data
-        this.element.html( this.view({ name : 'The task' }) );
-		// renders with views/tasks/under.ejs
+		// renders with views/editor/click.ejs with some data
+        this.element.html( this.view({ name : 'The todo' }) );
+		// renders with views/editor/under.ejs
 		this.element.html( this.view("under", [1,2]) );
-		// renders with views/tasks/under.micro
+		// renders with views/editor/under.micro
 		this.element.html( this.view("under.micro", [1,2]) );
 		// renders with views/shared/top.ejs
 		this.element.html( this.view("shared/top", {phrase: "hi"}) );
@@ -1497,17 +1559,111 @@ can.Control('Tasks', {
 })
 {% endhighlight %}
 
-### observe attributes
+### Observe delegate `observe.delegate(name, event, handler)`
 
-### observe delegate
+This plugin allows you to listen to *change*, *set*, *add* and *remove* on any direct, child or wildcard attribute:
 
-### observe setter
+{% highlight javascript %}
+// create an observable
+var observe = new can.Observe({
+	foo : {
+		bar : "Hello World",
+		baz : "Hi there"
+	}
+});
 
-### model backup
+//listen to changes on a property
+observe.delegate("foo.bar","change",
+	function(ev, prop, how, newVal, oldVal){
+		console.log('foo.bar has changed to ' + newVal);
+});
 
-### model validations
+observe.delegate("foo.*","change",
+	function(ev, prop, how, newVal, oldVal){
+		console.log(prop + ' has changed ');
+});
 
-### model elements
+// change the property
+observe.attr('foo.bar',"Goodbye Cruel World");
+observe.attr('foo.baz', "Bye you");
+{% endhighlight %}
+
+### Observe setter
+
+With the __setter__ plugin you can use attribute setter methods to process the value being set:
+
+{% highlight javascript %}
+var Person = can.Observe({
+	setName : function(name){
+		return name.charAt(0).toUpperCase() + name.slice(1);
+	}
+});
+
+var instance = new Person({ name: 'john' });
+// instance.name == 'John'
+instance.attr('name', 'doe');
+// instance.name == 'Doe'
+{% endhighlight %}
+
+### Observe.attributes
+
+With the __Observe.attributes__ plugin you can define attributes with their type and set converters for
+each type:
+
+{% highlight javascript %}
+new can.Observe({
+    attributes : {
+        birthday : 'date'
+    },
+    convert : {
+        date : function(raw){
+            if(typeof raw == 'string'){
+                var matches = raw.match(/(\d+)-(\d+)-(\d+)/);
+                return new Date( matches[1], (+matches[2])-1, matches[3] );
+            }else if(raw instanceof Date){
+                return raw;
+            }
+        }
+    }
+});
+{% endhighlight %}
+
+### Observe validation `observe.validate(attribute, validator)`
+
+Adds validation to a [can.Observe]. Call the *validate* method in the *init* constructor with the attribute
+name and the validation function and then use *errors* to retrieve the error messages:
+
+{% highlight javascript %}
+can.Observe("Contact",{
+    init : function(){
+        // validates that birthday is in the future
+        this.validate("birthday",function(birthday){
+            if(birthday > new Date){
+                return "your birthday needs to be in the past"
+            }
+        })
+    }
+},{});
+
+var contact = new Contact({birthday: new Date(2012,0) })
+contact.errors()
+//-> {
+//     birthday: ["your birthday needs to be in the past"]
+//   }
+{% endhighlight %}
+
+### Observe backup `observe.backup()`
+
+You can backup and restore [can.Observe] data with the __backup__ plugin. To backup the observe in its current
+state call _backup_. To revert it back to that state use _restore_:
+
+{% highlight javascript %}
+var todo = new Todo( { name: 'do the dishes' } );
+todo.attr('name', 'Don't do the dishes');
+todo.isDirty(); // -> true
+todo.restore();
+todo.name // -> do the dishes
+{% endhighlight %}
 
 ### View modifiers
 
