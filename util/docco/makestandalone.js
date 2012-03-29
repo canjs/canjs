@@ -1,5 +1,5 @@
 load("steal/rhino/rhino.js");
-steal('steal/build/pluginify', function() {
+steal('steal/build/pluginify', 'steal/clean', function() {
 
 	var libs = {
 		"jquery" : "jquery.1.7.1.js",
@@ -23,6 +23,9 @@ steal('steal/build/pluginify', function() {
 			skipCallbacks: true,
 			exclude : "can/util/" + lib + "/" + exclude
 		});
+
+		steal.clean("can/util/docco/standalone/can." + lib + "-edge.js");
+
 	}
 
 });

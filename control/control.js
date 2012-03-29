@@ -144,7 +144,7 @@ steal('can/construct', function( $ ) {
 		},
 		/**
 		 * @attribute processors
-		 * An object of {eventName : function} pairs that Control uses to hook up events
+		 * An object of `{eventName : function}` pairs that Control uses to hook up events
 		 * auto-magically.  A processor function looks like:
 		 * 
 		 *     can.Control.processors.
@@ -228,24 +228,29 @@ steal('can/construct', function( $ ) {
 		/**
 		 * Setup is where most of control's magic happens.  It does the following:
 		 * 
-		 * ### 1. Sets this.element
+		 * ### Sets this.element
 		 * 
 		 * The first parameter passed to new Control(el, options) is expected to be 
-		 * an element.  This gets converted to a jQuery wrapped element and set as
+		 * an element.  This gets converted to a Wrapped NodeList element and set as
 		 * [can.Control.prototype.element this.element].
 		 * 
-		 * ### 2. Adds the control's name to the element's className.
+		 * ### Adds the control's name to the element's className.
 		 * 
 		 * Control adds it's plugin name to the element's className for easier 
 		 * debugging.  For example, if your Control is named "Foo.Bar", it adds
 		 * "foo_bar" to the className.
 		 * 
-		 * ### 3. Saves the control in $.data
+		 * ### Saves the control in $.data
 		 * 
 		 * A reference to the control instance is saved in $.data.  You can find 
 		 * instances of "Foo.Bar" like: 
 		 * 
 		 *     $("#el").data("controls")['foo_bar'].
+		 *
+		 * ### Merges Options
+		 * Merges the default options with optional user-supplied ones.
+		 * Additionally, default values are exposed in the static [can.Control.static.defaults defaults] 
+		 * so that users can change them.
 		 * 
 		 * ### Binds event handlers
 		 * 

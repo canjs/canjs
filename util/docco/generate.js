@@ -99,13 +99,26 @@ function format( exitCode ) {
 		fs.mkdir("temp", function() {
 
 			// Generate source for all standalones
-			console.log( "Stripping multiline comments and converting tabs to four spaces:" );
+			console.log( "Stripping multiline comments and steal removes..." );
+			console.log( "Converting tabs to 4 spaces." );
 
 			files.forEach(function( file ) {
 				fs.readFile( path.join( sourceDir, file ), "utf-8", function( err, code ) {
 					console.log( "\t" + file );
-					code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*/gim, "");
+
+					// Remove multiline comments
+					code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*\n/gim, "");
+
+					// Remove double semicolons from steal pluginify
+					code = code.replace( /;[\s]*;/gim, ";");
+					code = code.replace( /(\/\/.*)\n[\s]*;/gi, "$1");
+					
+					// Tabs -> four spaces
 					code = code.replace( /\t/gim, "    ");
+
+					// Only single new lines
+					code = code.replace( /(\n){3,}/gim, "\n\n");
+
 					fs.writeFile( path.join( "temp", file ), code, "utf-8", function() {
 						if ( ++count == files.length ) {
 							runDocco();
