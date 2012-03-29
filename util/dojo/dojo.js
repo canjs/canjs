@@ -156,7 +156,7 @@ steal({
 				//  force stop propagation by
 				// listening to On and then immediately disconnecting
 				var connect = item.on(event, function(ev){
-					ev.stopPropagation();
+					ev.stopPropagation && ev.stopPropagation();
 					dojo.disconnect(connect);
 				})
 				item.trigger(event,args)
@@ -268,14 +268,11 @@ steal({
 		return {fragment: frag}
 	}
 	
-
 	can.append = function(wrapped, html){
 		return wrapped.forEach(function(node){
 			dojo.place( html, node)
 		});
 	}
-	
-	
 	
 	/**
 	 * can.data
@@ -294,7 +291,6 @@ steal({
 	 * For can.Control, we also need to trigger a non bubbling event
 	 * when an element is removed.  We do this also in cleanData.
 	 */
-	
 	var data = {},
 	    uuid = can.uuid = +new Date(),
 	    exp  = can.expando = 'can' + uuid;
@@ -319,7 +315,8 @@ steal({
 				var id = elem[exp]
 				delete data[id];
 			}
-	  }
+	};
+	
 	can.data = function(wrapped, name, value){
 		return value === undefined ?
 			wrapped.length == 0 ? undefined : getData(wrapped[0], name) :
@@ -327,6 +324,7 @@ steal({
 				setData(node, name, value);
 			});
 	};
+	
 	// overwrite dojo.destroy and dojo.empty and dojo.palce
 	var empty = dojo.empty;
 	dojo.empty = function(){
@@ -334,6 +332,7 @@ steal({
 			dojo.destroy(c);
 		} 
 	}
+	
 	var destroy = dojo.destroy;
 	dojo.destroy = function(node){
 		node = dojo.byId(node);
@@ -343,17 +342,13 @@ steal({
 		return destroy.apply(dojo, arguments);
 	};
 	
-
-
-	
 	can.addClass = function(wrapped, className){
 		return wrapped.addClass(className);
 	}
+	
 	can.remove = function(wrapped){
 		// we need to remove text nodes ourselves
-		wrapped.forEach(function(node){
-			dojo.destroy(node)
-		});
+		wrapped.forEach(dojo.destroy);
 	}
 
 	can.get = function(wrapped, index){
