@@ -629,7 +629,7 @@ like for-loops, if/else, switch, declaring variables, etc.  Pretty much any JS c
 
 {% highlight erb %}
 <!-- check if there are no todos -->
-<% if( todos.attr( 'length' ) === 0 ) { %>
+<% if ( todos.attr( 'length' ) === 0 ) { %>
     <li>You have no todos</li>
 <% } else { %>
     <% list( todos, function() { %>
@@ -1455,7 +1455,7 @@ CanJS can be used with libraries other than jQuery.
 
 ## Plugins
 
-### can.Construct.proxy `construct.proxy(methodname, [curriedArguments])`
+### can.Construct.proxy `construct.proxy( methodname, [ curriedArguments ] )`
 
 This plugin adds a _proxy_ method that takes a function name and returns a new function
 that will always have `this` set to the original context. You can also curry arguments that will
@@ -1463,21 +1463,21 @@ be added to the beginning of the proxied functions argument list:
 
 {% highlight javascript %}
 var Person = can.Construct({
-  init : function(name) {
+  init: function( name ) {
     this.name = name;
   },
 
-  sayName : function(text, end) {
+  sayName: function( text, end ) {
     return text + this.name + end;
   }
 });
 
-var instance = new Person('John');
-var callback = instance.proxy('sayName');
-var curriedCallback = instance.proxy('sayName', 'Hi my name is');
+var instance = new Person( 'John' );
+var callback = instance.proxy( 'sayName' );
+var curriedCallback = instance.proxy( 'sayName', 'Hi my name is' );
 
-callback('Hi I am ', ' :)'); // -> Hi I am John :)
-curriedCallback('!'); // -> Hi my name is John!
+callback( 'Hi I am ', ' :)' ); // -> 'Hi I am John :)'
+curriedCallback( '!' ); // -> 'Hi my name is John!'
 {% endhighlight %}
 
 ### can.Construct.super
@@ -1486,48 +1486,48 @@ This plugin provides access overwritten methods using `this._super` when extendi
 
 {% highlight javascript %}
 var ImprovedPerson = Person({
-  init : function(name, lastName) {
-    this._super(name);
+  init: function( name, lastName ) {
+    this._super( name );
     this.lastName = lastName;
   },
 
-  sayName : function(text) {
-    return this._super(text, this.lastName);
+  sayName: function( text ) {
+    return this._super( text, this.lastName );
   }
 });
 
-var improvedPerson = new ImprovedPerson('John', 'Doe');
-improvedPerson.sayName('To whom it may concern, I am ');
-// -> To whom it may concern, I am John Doe
+var improvedPerson = new ImprovedPerson( 'John', 'Doe' );
+improvedPerson.sayName( 'To whom it may concern, I am ' );
+// -> 'To whom it may concern, I am John Doe'
 {% endhighlight %}
 
-### can.Observe.delegate `observe.delegate(name, event, handler)`
+### can.Observe.delegate `observe.delegate( name, event, handler )`
 
 Use this plugin to listen to _change_, _set_, _add_ and _remove_ on any direct, child or wildcard attribute:
 
 {% highlight javascript %}
 // create an observable
 var observe = new can.Observe({
-  foo : {
-    bar : "Hello World",
-    baz : "Hi there"
+  foo: {
+    bar: 'Hello World',
+    baz: 'Hi there'
   }
 });
 
 //listen to changes on a property
-observe.delegate("foo.bar","change",
-  function(ev, prop, how, newVal, oldVal){
-    console.log('foo.bar has changed to ' + newVal);
+observe.delegate( 'foo.bar', 'change',
+  function( ev, prop, how, newVal, oldVal ) {
+    console.log( 'foo.bar has changed to ' + newVal );
 });
 
-observe.delegate("foo.*","change",
-  function(ev, prop, how, newVal, oldVal){
-    console.log(prop + ' has changed ');
+observe.delegate( 'foo.*', 'change',
+  function( ev, prop, how, newVal, oldVal ) {
+    console.log( prop + ' has changed ' );
 });
 
 // change the property
-observe.attr('foo.bar',"Goodbye Cruel World");
-observe.attr('foo.baz', "Bye you");
+observe.attr( 'foo.bar', 'Goodbye Cruel World' );
+observe.attr( 'foo.baz', 'Bye you' );
 {% endhighlight %}
 
 ### can.Observe.setter
@@ -1536,14 +1536,14 @@ With this plugin you can use attribute setter methods to process the value being
 
 {% highlight javascript %}
 var Person = can.Observe({
-  setName : function(name){
-    return name.charAt(0).toUpperCase() + name.slice(1);
+  setName: function( name ) {
+    return name.charAt( 0 ).toUpperCase() + name.slice( 1 );
   }
 });
 
-var instance = new Person({ name: 'john' });
+var instance = new Person( { name: 'john' } );
 // -> instance.name === 'John'
-instance.attr('name', 'doe');
+instance.attr( 'name', 'doe' );
 // -> instance.name === 'Doe'
 {% endhighlight %}
 
@@ -1553,15 +1553,15 @@ Allows to define attributes and their type and set converters for each type:
 
 {% highlight javascript %}
 new can.Observe({
-  attributes : {
-    birthday : 'date'
+  attributes: {
+    birthday: 'date'
   },
-  convert : {
-    date : function(raw){
-      if(typeof raw == 'string'){
-        var matches = raw.match(/(\d+)-(\d+)-(\d+)/);
-        return new Date( matches[1], (+matches[2])-1, matches[3]);
-      }else if(raw instanceof Date){
+  convert: {
+    date: function( raw ) {
+      if ( typeof raw == 'string'  ){
+        var matches = raw.match( /(\d+)-(\d+)-(\d+)/ );
+        return new Date( matches[ 1 ], ( +matches[ 2 ] ) - 1, matches[ 3 ]);
+      }else if ( raw instanceof Date ) {
         return raw;
       }
     }
@@ -1569,7 +1569,7 @@ new can.Observe({
 });
 {% endhighlight %}
 
-### can.Observe.validation `observe.validate(attribute, validator)`
+### can.Observe.validation `observe.validate( attribute, validator )`
 
 Adds validation to a can.Observe. Call the _validate_ method in the _init_ constructor with the
 attribute name and the validation function and then use _errors_ to retrieve the error messages:
@@ -1582,18 +1582,18 @@ var Person = can.Model({
   update  : 'PUT /people/{id}',
   destroy : 'DELETE /people/{id}'
 }, {
-  init : function() {
-    this.constructor.validate("name", function(name) {
-      if(!name) {
-        return "Name can not be empty!";
+  init: function() {
+    this.constructor.validate( 'name', function( name ) {
+      if ( !name ) {
+        return 'Name can not be empty!';
       }
     });
   }
 });
 
-var john = new Person({ name : '' });
+var john = new Person( { name : '' } );
 john.errors();
-// -> { name : ["Name can not be empty"] }
+// -> { name: [ 'Name can not be empty' ] }
 {% endhighlight %}
 
 ### can.Observe.backup `observe.backup()`
@@ -1604,7 +1604,7 @@ state call _backup_. To revert it back to that state use _restore_:
 {% highlight javascript %}
 var todo = new Todo( { name: 'do the dishes' } );
 todo.backup();
-todo.attr('name', 'Do not do the dishes');
+todo.attr( 'name', 'Do not do the dishes' );
 todo.isDirty(); // -> true
 todo.restore();
 todo.name // -> do the dishes
@@ -1617,18 +1617,18 @@ For example with this can.Control:
 
 {% highlight javascript %}
 var Tabs = can.Control({
-  pluginName : 'tabs'
+  pluginName: 'tabs'
 },{
-  init : function(element, options) {},
-  update : function(options) {},
-  activate : function(index) {}
+  init: function( element, options ) {},
+  update: function( options ) {},
+  activate: function( index ) {}
 });
 {% endhighlight %}
 
 You can instantiate it by calling the plugin like this:
 
 {% highlight javascript %}
-$(".tabs").tabs();
+$( '.tabs' ).tabs();
 {% endhighlight %}
 
 Once created any subsequent plugin call will trigger _update_ on your control with the options passed to the plugin.
@@ -1636,19 +1636,19 @@ You can also call methods on the control instance like so:
 
 {% highlight javascript %}
 // Call the activate method
-$(".tabs").tabs('activate', 0);
+$( '.tabs' ).tabs( 'activate', 0 );
 {% endhighlight %}
 
 Note that calling a method like this will return a jQuery object, not the actual return value.
 You can however retrieve the controller instance directly using the _.controllers()_ or _.controller()_ plugins:
 
 {% highlight javascript %}
-var allControls = $(".tabs").controllers(),
-	control = $(".tabs").controller();
+var allControls = $( '.tabs' ).controllers(),
+	control = $( '.tabs' ).controller();
 
-allControllers[0].activate(0);
+allControllers[ 0 ].activate( 0 );
 // or
-control.activate(0);
+control.activate( 0 );
 {% endhighlight %}
 
 
@@ -1659,18 +1659,18 @@ the current action name. If no data is provided the control instance is passed t
 a name when creating the Control construct for _view_ to work.
 
 {% highlight javascript %}
-can.Control('Editor', {
+can.Control( 'Editor', {
   click: function( el ) {
     // renders with views/editor/click.ejs with the controller as data
     this.element.html( this.view() );
     // renders with views/editor/click.ejs with some data
-    this.element.html( this.view({ name : 'The todo' }) );
+    this.element.html( this.view( { name: 'The todo' } ) );
     // renders with views/editor/under.ejs
-    this.element.html( this.view("under", [1,2]) );
+    this.element.html( this.view( 'under', [ 1, 2 ] ) );
     // renders with views/editor/under.micro
-    this.element.html( this.view("under.micro", [1,2]) );
+    this.element.html( this.view( 'under.micro', [ 1, 2 ] ) );
     // renders with views/shared/top.ejs
-    this.element.html( this.view("shared/top", {phrase: "hi"}) );
+    this.element.html( this.view( 'shared/top', { phrase: 'hi' } ) );
   }
 })
 {% endhighlight %}
@@ -1682,7 +1682,7 @@ to alter the content of an element. This plugin allows you to render a can.View 
 For example, you can render a template from the _todo/todos.ejs_ url looking like this:
 
 {% highlight erb %}
-<% for(var i = 0; i < this.length; i++ ){ %>
+<% for( var i = 0; i < this.length; i++ ) { %>
   <li><%= this[i].name %></li>
 <% } %>
 {% endhighlight %}
@@ -1690,9 +1690,9 @@ For example, you can render a template from the _todo/todos.ejs_ url looking lik
 By calling the _html_ modifier on an element like this:
 
 {% highlight javascript %}
-$('#todos').html('todo/todos.ejs', [
-  { name : 'First Todo' },
-  { name : 'Second Todo' }
+$( '#todos' ).html( 'todo/todos.ejs', [
+  { name: 'First Todo' },
+  { name: 'Second Todo' }
 ]);
 {% endhighlight %}
 
