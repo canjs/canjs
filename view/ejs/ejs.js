@@ -416,7 +416,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		}
 });
 	// ========= SCANNING CODE =========
-	var tokenReg = new RegExp("(" +["<%%","%%>","<%==","<%=","<%#","<%","%>","<",">",'"',"'"].join("|")+")"),
+	var tokenReg = new RegExp("(" +["<%%","%%>","<%==","<%=","<%#","<%","%>","<",">",'"',"'"].join("|")+")","g"),
 		// commands for caching
 		startTxt = 'var ___v1ew = [];',
 		finishTxt = "return ___v1ew.join('')",
@@ -437,29 +437,23 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			return quote ? "'"+beforeQuote.match(attrReg)[1]+"'" : (htmlTag ? 1 : 0)
 		},
 		pendingHookups = [],
-		rsplit = function( string, regex ) {
-			var result = regex.exec(string),
-				retArr = [],
-				first_idx, last_idx;
-			while ( result !== null ) {
-				first_idx = result.index;
-				last_idx = regex.lastIndex;
-				if ( first_idx !== 0 ) {
-					retArr.push(string.substring(0, first_idx));
-					string = string.slice(first_idx);
-				}
-				retArr.push(result[0]);
-				string = string.slice(result[0].length);
-				result = regex.exec(string);
-			}
-			if ( string !== '' ) {
-				retArr.push(string);
-			}
-			return retArr;
-		},
 		scan = function(source, name){
-			var tokens = rsplit(source.replace(newLine, "\n"), tokenReg), 
-				content = '',
+			var tokens = [],
+				last = 0;
+			
+			source = source.replace(newLine, "\n");
+			source.replace(tokenReg, function(whole, part, offset){
+				if(offset > last){
+					tokens.push( source.substring(last, offset) );
+				} 
+				tokens.push(part)
+				last = offset+part.length;
+			})
+			if(last === 0){
+				tokens.push(source)
+			}
+			
+			var content = '',
 				buff = [startTxt],
 				// helper function for putting stuff in the view concat
 				put = function( content, bonus ) {
