@@ -17,7 +17,7 @@ It also includes a rich set of supported [extensions and plugins](#plugins).
 
 ## Get Canned
 
-CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools.  Select your download 
+CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your download
 for the library you are using:
 
  - [can.jquery.js](http://staging.donejs.com/can/dist/can.jquery-edge.js) (8k) \[[dev](http://donejs.com/can/dist/can.jquery-dev-edge.js)\]
@@ -1455,7 +1455,10 @@ CanJS can be used with libraries other than jQuery.
 
 ## Plugins
 
-### can.Construct.proxy `construct.proxy( methodname, [ curriedArguments ] )`
+### can.Construct.proxy `construct.proxy( methodname, [ curriedArgs ] )`
+
+[can.construct.proxy.min.js](http://donejs.com/can/dist/can.construct.proxy.min.js)
+\[[dev](http://donejs.com/can/dist/can.construct.proxy.js)\]
 
 This plugin adds a _proxy_ method that takes a function name and returns a new function
 that will always have `this` set to the original context. You can also curry arguments that will
@@ -1482,6 +1485,9 @@ curriedCallback( '!' ); // -> 'Hi my name is John!'
 
 ### can.Construct.super
 
+[can.construct.super.min.js](http://donejs.com/can/dist/can.construct.super.min.js)
+\[[dev](http://donejs.com/can/dist/can.construct.super.js)\]
+
 This plugin provides access overwritten methods using `this._super` when extending a can.Construct:
 
 {% highlight javascript %}
@@ -1502,6 +1508,9 @@ improvedPerson.sayName( 'To whom it may concern, I am ' );
 {% endhighlight %}
 
 ### can.Observe.delegate `observe.delegate( name, event, handler )`
+
+[can.observe.delegate.min.js](http://donejs.com/can/dist/can.observe.delegate.min.js)
+\[[dev](http://donejs.com/can/dist/can.observe.delegate.js)\]
 
 Use this plugin to listen to _change_, _set_, _add_ and _remove_ on any direct, child or wildcard attribute:
 
@@ -1532,6 +1541,9 @@ observe.attr( 'foo.baz', 'Bye you' );
 
 ### can.Observe.setter
 
+[can.observe.setter.min.js](http://donejs.com/can/dist/can.observe.setter.min.js)
+\[[dev](http://donejs.com/can/dist/can.observe.setter.js)\]
+
 With this plugin you can use attribute setter methods to process the value being set:
 
 {% highlight javascript %}
@@ -1548,6 +1560,9 @@ instance.attr( 'name', 'doe' );
 {% endhighlight %}
 
 ### can.Observe.attributes
+
+[can.observe.attributes.min.js](http://donejs.com/can/dist/can.observe.attributes.min.js)
+\[[dev](http://donejs.com/can/dist/can.observe.attributes.js)\]
 
 Allows you to define attributes and their type and set converters for each type:
 
@@ -1569,7 +1584,10 @@ new can.Observe({
 });
 {% endhighlight %}
 
-### can.Observe.validation `observe.validate( attribute, validator )`
+### can.Observe.validations `observe.validate( attribute, validator )`
+
+[can.observe.validations.min.js](http://donejs.com/can/dist/can.observe.validations.min.js)
+\[[dev](http://donejs.com/can/dist/can.observe.validations.js)\]
 
 Adds validation to a can.Observe. Call the _validate_ method in the _init_ constructor with the
 attribute name and the validation function and then use _errors_ to retrieve the error messages:
@@ -1598,6 +1616,9 @@ john.errors();
 
 ### can.Observe.backup `observe.backup()`
 
+[can.observe.backup.min.js](http://donejs.com/can/dist/can.observe.backup.min.js)
+\[[dev](http://donejs.com/can/dist/can.observe.backup.js)\]
+
 You can backup and restore can.Observe data using this plugin. To backup the observe in its current
 state call _backup_. To revert it back to that state use _restore_:
 
@@ -1611,6 +1632,9 @@ todo.name // -> 'do the dishes'
 {% endhighlight %}
 
 ### can.Control.plugin
+
+[can.control.plugin.min.js](http://donejs.com/can/dist/can.control.plugin.min.js)
+\[[dev](http://donejs.com/can/dist/can.control.plugin.js)\]
 
 This plugin registers a jQuery plugin function with a given _pluginName_ that instantiates a can.Control.
 For example with this can.Control:
@@ -1653,6 +1677,9 @@ control.activate( 0 );
 
 
 ### can.Control.view `control.view( [ viewname ], [ data ] )`
+
+[can.control.view.min.js](http://donejs.com/can/dist/can.control.view.min.js)
+\[[dev](http://donejs.com/can/dist/can.control.view.js)\]
 
 This plugin renders a view from a URL in a _views/controlname_ folder. If no viewname is supplied it uses
 the current action name. If no data is provided the control instance is passed to the view. Note that you have to set
