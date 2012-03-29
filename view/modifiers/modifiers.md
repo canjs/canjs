@@ -23,4 +23,5 @@ By calling the html modifier on an element like this:
 __Note:__ You always have to provide the data (second) argument to render a view. If you have no data to render pass
 an empty object:
 
-	$('#todos').html('todo/todos.ejs', {}); // Render todos.ejs wit no data
+	$('#todos').html('todo/todos.ejs', {});
+	// Render todo/todos.ejs wit no data
