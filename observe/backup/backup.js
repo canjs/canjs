@@ -1,56 +1,14 @@
 //allows you to backup and restore a observe instance
-steal('can/observe').then(function(){
-	
-var isArray = can.isArray,
-	propCount = function(obj){
-		var count = 0;
-		for(var prop in obj) count++;
-		return count;
-	},
-	same = function(a, b, deep){
-		var aType = typeof a,
-			aArray = isArray(a);
-		if(deep === -1){
-			return aType === 'object' || a === b;
-		}
-		if(aType !== typeof  b || aArray !== isArray(b)){
-			return false;
-		}
-		if(a === b){
-			return true;
-		}
-		if(aArray){
-			if(a.length !== b.length){
-				return false;
-			}
-			for(var i =0; i < a.length; i ++){
-				if(!same(a[i],b[i])){
-					return false;
-				}
-			};
-			return true;
-		} else if(aType === "object" || aType === 'function'){
-			var count = 0;
-			for(var prop in a){
-				if(!same(a[prop],b[prop], deep === false ? -1 : undefined )){
-					return false;
-				}
-				count++;
-			}
-			return count === propCount(b)
-		} 
-		return false;
-	},
-	flatProps = function(a){
+steal('can/observe', 'can/util/object').then(function(){	
+	var flatProps = function(a){
 		var obj = {};
 		for(var prop in a){
-			if(typeof a[prop] !== 'object' || a[prop] === null){
+			if(typeof a[prop] !== 'object' || a[prop] === null || a[prop] instanceof Date){
 				obj[prop] = a[prop]
 			}
 		}
 		return obj;
 	};
-	
 	
 	can.extend(can.Observe.prototype, {
 		
@@ -62,7 +20,7 @@ var isArray = can.isArray,
 		 * method for checking if it is dirty.
 		 */
 		backup: function() {
-			this._backupStore = this.serialize();
+			this._backupStore = this._attrs();
 			return this;
 		},
 
@@ -75,12 +33,13 @@ var isArray = can.isArray,
 	    * @return {Boolean} true if there are changes, false if otherwise
 	    */
 	   isDirty: function(checkAssociations) {
-			// check if it serializes the same
-			if(!this._backupStore){
-				return false;
-			} else {
-				return !same(this.serialize(), this._backupStore, !!checkAssociations);
-			}
+			return this._backupStore && 
+				   !can.Object.same(this._attrs(), 
+									this._backupStore, 
+									undefined, 
+									undefined, 
+									undefined, 
+									!!checkAssociations);
 		},
 		
 		/**
@@ -91,8 +50,11 @@ var isArray = can.isArray,
 		 */
 		restore: function(restoreAssociations) {
 			var props = restoreAssociations ? this._backupStore : flatProps(this._backupStore)
-			this._attrs(props);   
 			
+			if(this.isDirty(restoreAssociations)){
+				this._attrs(props);  
+			}
+			 
 			return this;
 		}
 	   

@@ -4,6 +4,7 @@ module("can/model", {
 	}
 })
 
+var isDojo = (typeof dojo !== "undefined");
 
 test("CRUD", function(){
     
@@ -305,17 +306,17 @@ test("Model events" , function(){
 	var order = 0;
 	can.Model("Test.Event",{
 		create : function(attrs){
-			var def = new can.Deferred()
+			var def = isDojo ? new dojo.Deferred() : new can.Deferred();
 			def.resolve({id: 1})
 			return def;
 		},
 		update : function(id, attrs, success){
-			var def = new can.Deferred()
+			var def = isDojo ? new dojo.Deferred() : new can.Deferred();
 			def.resolve(attrs)
 			return def;
 		},
 		destroy : function(id, success){
-			var def = new can.Deferred()
+			var def = isDojo ? new dojo.Deferred() : new can.Deferred();
 			def.resolve({})
 			return def;
 		}
