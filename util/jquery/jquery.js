@@ -1,8 +1,8 @@
-steal('./jquery.1.7.1.js', function( $ ) {
+steal('./jquery.1.7.1.js', "./../preamble.js", function( $ ) {
 
 	// jquery.js
 	// ---------
-	// _jQuery wrapper._
+	// _jQuery node list._
 	$.extend( can, jQuery, {
 		trigger: function( obj, event, args ) {
 			obj.trigger ?
@@ -30,7 +30,7 @@ steal('./jquery.1.7.1.js', function( $ ) {
 		}
 	})
 
-	// Wrap modifier based functions.
+	// Wrap modifier functions.
 	$.each(["append","filter","addClass","remove","data","get"], function(i,name){
 		can[name] = function(wrapped){
 			return wrapped[name].apply(wrapped, can.makeArray(arguments).slice(1))
