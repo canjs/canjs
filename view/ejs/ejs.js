@@ -457,7 +457,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			return retArr;
 		},
 		scan = function(source, name){
-			var tokens = rsplit(source, tokenReg), 
+			var tokens = rsplit(source.replace(/(\r|\n)+/g, "\n"), tokenReg), 
 				content = '',
 				buff = [startTxt],
 				// helper function for putting stuff in the view concat
