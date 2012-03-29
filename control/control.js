@@ -103,7 +103,7 @@ steal('can/construct', function( $ ) {
 		 * 
 		 * For performance reasons, this called twice.  First, it is called when 
 		 * the Control class is created.  If the methodName is templated
-		 * like : "{window} foo", it returns null.  If it is not templated
+		 * like: "{window} foo", it returns null.  If it is not templated
 		 * it returns event binding data.
 		 * 
 		 * The resulting data is added to this.actions.
@@ -192,14 +192,13 @@ steal('can/construct', function( $ ) {
 		 * Listen to events on the document or window 
 		 * with templated event handlers:
 		 * 
-		 *
-		 *     can.Control('Sized',{
-		 *       "{window} resize" : function(){
-		 *         this.element.width(this.element.parent().width() / 2);
+		 *     Sized = can.Control({
+		 *       "{window} resize": function(){
+		 *         this.element.width( this.element.parent().width() / 2 );
 		 *       }
 		 *     });
 		 *     
-		 *     $('.foo').sized();
+		 *     new Sized( $( '#foo' ) );
 		 */
 		// An object of `{eventName : function}` pairs that Control uses to 
 		// hook up events auto-magically.
@@ -210,17 +209,17 @@ steal('can/construct', function( $ ) {
 		 * [can.Control::options this.options].
 		 * 
 		 *     Message = can.Control({
-		 *       defaults : {
-		 *         message : "Hello World"
+		 *       defaults: {
+		 *         message: "Hello World"
 		 *       }
-		 *     },{
-		 *       init : function(){
-		 *         this.element.text(this.options.message);
+		 *     }, {
+		 *       init: function(){
+		 *         this.element.text( this.options.message );
 		 *       }
-		 *     })
+		 *     });
 		 *     
-		 *     new Message("#el1"); //writes "Hello World"
-		 *     new Message("#el12",{message: "hi"}); //writes hi
+		 *     new Message( "#el1" ); //writes "Hello World"
+		 *     new Message( "#el12", { message: "hi" } ); //writes hi
 		 *     
 		 * In [can.Control::setup] the options passed to the control
 		 * are merged with defaults.  This is not a deep merge.
@@ -238,7 +237,7 @@ steal('can/construct', function( $ ) {
 		 * 
 		 * ### Sets this.element
 		 * 
-		 * The first parameter passed to new Control(el, options) is expected to be 
+		 * The first parameter passed to new Control( el, options ) is expected to be 
 		 * an element.  This gets converted to a Wrapped NodeList element and set as
 		 * [can.Control.prototype.element this.element].
 		 * 
@@ -253,7 +252,7 @@ steal('can/construct', function( $ ) {
 		 * A reference to the control instance is saved in $.data.  You can find 
 		 * instances of "Foo.Bar" like: 
 		 * 
-		 *     $("#el").data("controls")['foo_bar'].
+		 *     $( '#el' ).data( 'controls' )[ 'foo_bar' ]
 		 *
 		 * ### Merges Options
 		 * Merges the default options with optional user-supplied ones.
@@ -298,32 +297,30 @@ steal('can/construct', function( $ ) {
 			 * 
 			 *     can.Control('Hello')
 			 *     
-			 *     var h1 = new Hello($('#content1'), {message: 'World'} );
-			 *     equal( h1.options.message , "World" )
+			 *     var h1 = new Hello( $( '#content1' ), { message: 'World' } );
+			 *     equal( h1.options.message , "World" );
 			 *     
-			 *     var h2 = $('#content2').hello({message: 'There'})
-			 *                            .control();
-			 *     equal( h2.options.message , "There" )
+			 *     var h2 = $( '#content2' ).hello({ message: 'There' })
+			 *                              .control();
+			 *     equal( h2.options.message , "There" );
 			 * 
 			 * Options are merged with [can.Control.static.defaults defaults] in
 			 * [can.Control.prototype.setup setup].
 			 * 
 			 * For example:
 			 * 
-			 *     can.Control("Tabs", 
-			 *     {
-			 *        defaults : {
+			 *     Tabs = can.Control({
+			 *        defaults: {
 			 *          activeClass: "ui-active-state"
 			 *        }
-			 *     },
-			 *     {
-			 *        init : function(){
-			 *          this.element.addClass(this.options.activeClass);
+			 *     }, {
+			 *        init: function(){
+			 *          this.element.addClass( this.options.activeClass );
 			 *        }
-			 *     })
+			 *     });
 			 *     
-			 *     $("#tabs1").tabs()                         // adds 'ui-active-state'
-			 *     $("#tabs2").tabs({activeClass : 'active'}) // adds 'active'
+			 *     new Tabs( $( "#tabs1" ) ); // adds 'ui-active-state'
+			 *     new Tabs( $( "#tabs2" ), { activeClass : 'active' } ); // adds 'active'
 			 *     
 			 * Options are typically updated by calling 
 			 * [can.Control.prototype.update update];
@@ -340,7 +337,7 @@ steal('can/construct', function( $ ) {
 			 * 
 			 * The control instance's HTMLElement (or window) wrapped by the 
 			 * util library for ease of use. It is set by the first
-			 * parameter to `new can.Construct(element, options)` 
+			 * parameter to `new can.Construct( element, options )` 
 			 * in [can.Control::setup].  Control listens on `this.element`
 			 * for events.
 			 * 
@@ -349,14 +346,13 @@ steal('can/construct', function( $ ) {
 			 * The following `HelloWorld` control sets the control`s text to "Hello World":
 			 * 
 			 *     HelloWorld = can.Control({
-			 *       init : function(){
-			 * 	       this.element.text('Hello World')
+			 *       init: function(){
+			 * 	       this.element.text( 'Hello World' );
 			 *       }
-			 *     })
+			 *     });
 			 *     
 			 *     // create the controller on the element
-			 *     new HelloWorld(document.getElementById('#helloworld'))
-			 * 
+			 *     new HelloWorld( document.getElementById( '#helloworld' ) );
 			 * 
 			 * ## Wrapped NodeList
 			 * 
@@ -404,24 +400,24 @@ steal('can/construct', function( $ ) {
 			 * original element.
 			 * 
 			 *     Combobox = can.Control({
-			 *       setup : function(el, options){
-			 *          this.oldElement = $(el);
-			 *          var newEl = $('<div/>');
-			 *          this.oldElement.wrap(newEl);
-			 *          can.Controll.prototype.setup.call(this, newEl, options);
+			 *       setup: function( el, options ) {
+			 *          this.oldElement = $( el );
+			 *          var newEl = $( '<div/>' );
+			 *          this.oldElement.wrap( newEl );
+			 *          can.Controll.prototype.setup.call( this, newEl, options );
 			 *       },
-			 *       init : function(){
+			 *       init: function() {
 			 *          this.element //-> the div
 			 *       },
-			 *       ".option click" : function(){
+			 *       ".option click": function() {
 			 *         // event handler bound on the div
 			 *       },
-			 *       destroy : function(){
+			 *       destroy: function() {
 			 *          var div = this.element; //save reference
-			 *          can.Control.prototype.destroy.call(this);
-			 *          div.replaceWith(this.oldElement);
+			 *          can.Control.prototype.destroy.call( this );
+			 *          div.replaceWith( this.oldElement );
 			 *       }
-			 *     })
+			 *     });
 			 * 
 			 * ### unbining, setting, and rebinding.
 			 * 
@@ -429,10 +425,10 @@ steal('can/construct', function( $ ) {
 			 * [can.Control::off], setting this.element, and 
 			 * then calling [can.Control::on] like:
 			 * 
-			 *     move : function(newElement) {
+			 *     move: function( newElement ) {
 			 *        this.off();
-			 *        this.element = $(newElement);
-			 *        this.on();  
+			 *        this.element = $( newElement );
+			 *        this.on();
 			 *     }
 			 */
 			// Get's passed into `init`.
@@ -451,37 +447,37 @@ steal('can/construct', function( $ ) {
 		 * toggle a strike className like:
 		 * 
 		 *     TaskStriker = can.Control({
-		 *       "{task} completed" : function(){
+		 *       "{task} completed": function(){
 		 * 	       this.update();
 		 *       },
-		 *       update : function(){
-		 *         if(this.options.task.completed){
-		 * 	         this.element.addClass('strike')
+		 *       update: function(){
+		 *         if ( this.options.task.completed ) {
+		 * 	         this.element.addClass( 'strike' );
 		 * 	       } else {
-		 *           this.element.removeClass('strike')
+		 *           this.element.removeClass( 'strike' );
 		 *         }
 		 *       }
-		 *     }) 
+		 *     });
 		 * 
 		 *     var taskstriker = new TaskStriker({ 
-		 *       task: new Task({completed: 'true'}) 
-		 *     })
+		 *       task: new Task({ completed: 'true' }) 
+		 *     });
 		 * 
 		 * To update the taskstriker's task, add a task method that updates
 		 * this.options and calls rebind like:
 		 * 
 		 *     TaskStriker = can.Control({
-		 *       "{task} completed" : function(){
+		 *       "{task} completed": function(){
 		 * 	       this.update();
 		 *       },
-		 *       update : function(){
-		 *         if(this.options.task.completed){
-		 * 	         this.element.addClass('strike')
+		 *       update: function() {
+		 *         if ( this.options.task.completed ) {
+		 * 	         this.element.addClass( 'strike' );
 		 * 	       } else {
-		 *           this.element.removeClass('strike')
+		 *           this.element.removeClass( 'strike' );
 		 *         }
 		 *       },
-		 *       task : function(newTask){
+		 *       task: function( newTask ) {
 		 *         this.options.task = newTask;
 		 *         this.on();
 		 *         this.update();
@@ -489,11 +485,11 @@ steal('can/construct', function( $ ) {
 		 *     });
 		 * 
 		 *     var taskstriker = new TaskStriker({ 
-		 *       task: new Task({completed: true}) 
+		 *       task: new Task({ completed: true }) 
 		 *     });
 		 *     taskstriker.task( new TaskStriker({ 
-		 *       task: new Task({completed: false}) 
-		 *     }))
+		 *       task: new Task({ completed: false }) 
+		 *     }));
 		 * 
 		 * ## Adding new events
 		 * 
@@ -501,19 +497,19 @@ steal('can/construct', function( $ ) {
 		 * are not sufficent, you can call this.on to bind or delegate programatically:
 		 * 
 		 *     init: function() {
-		 *        // calls somethingClicked(el,ev)
-		 *        this.on('click','somethingClicked') 
+		 *        // calls somethingClicked( el, ev )
+		 *        this.on( 'click', 'somethingClicked' ); 
 		 *     
 		 *        // calls function when the window is clicked
-		 *        this.on(window, 'click', function(ev){
+		 *        this.on( window, 'click', function( ev ) {
 		 *          //do something
-		 *        })
+		 *        });
 		 *     },
 		 *     somethingClicked: function( el, ev ) {
 		 *       
 		 *     }
 		 * 
-		 * @param {HTMLElement|jQuery.fn|Object} [el=this.element] 
+		 * @param {HTMLElement|jQuery.fn|Object} [el=this.element]
 		 * The element to be bound.  If an eventName is provided,
 		 * the control's element is used instead.
 		 * @param {String} [selector] A css selector for event delegation.
@@ -607,17 +603,17 @@ steal('can/construct', function( $ ) {
 		 *  
 		 * 
 		 *      Clickr = can.Control({
-		 *       "{window} click" : function(){
+		 *       "{window} click": function() {
 		 * 	       this.element.html( this.count ? 
-		 * 	                          this.count++ : this.count = 0)
+		 * 	                          this.count++ : this.count = 0 );
 		 *       }  
-		 *     })
+		 *     });
 		 *     
 		 *     // create a clicker on an element
-		 *     new Clicker("#clickme");
+		 *     new Clicker( "#clickme" );
 		 * 
 		 *     // remove the element
-		 *     $('#clickme').remove();
+		 *     $( '#clickme' ).remove();
 		 * 
 		 * 
 		 * The methods you can use that will destroy controls automatically by library:
@@ -655,20 +651,21 @@ steal('can/construct', function( $ ) {
 		 * created and sets it back when the control is removed:
 		 * 
 		 *     Changer = can.Control({
-		 *       init : function(){
+		 *       init: function() {
 		 *         this.oldText = this.element.text();
-		 *         this.element.text("Changed!!!")
+		 *         this.element.text( "Changed!!!" );
 		 *       },
-		 *       destroy : function(){
-		 *         this.element.text(this.oldText);
-		 *         can.Control.prototype.destroy.call(this)
-		 *     })
+		 *       destroy: function() {
+		 *         this.element.text( this.oldText );
+		 *         can.Control.prototype.destroy.call( this );
+		 *       }
+		 *     });
 		 *     
 		 *     // create a changer which changes #myel's text
-		 *     var changer = new Changer('#myel')
+		 *     var changer = new Changer( '#myel' );
 		 * 
 		 *     // destroy changer which will reset it
-		 *     changer.destroy()
+		 *     changer.destroy();
 		 * 
 		 * ## Base Functionality
 		 * 

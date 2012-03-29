@@ -82,14 +82,16 @@ test("hookup", function(){
 })
 
 test("inline templates other than 'tmpl' like ejs", function(){
-
-        can.append( can.$("#qunit-test-area") ,'<script type="test/ejs" id="test_ejs"><span id="new_name"><%= name %></span></script>');
+	var script = document.createElement('script');
+	script.setAttribute('type', 'test/ejs')
+	script.setAttribute('id', 'test_ejs')
+	script.text = '<span id="new_name"><%= name %></span>';
+	document.getElementById("qunit-test-area").appendChild(script);
 	
-		var div = document.createElement('div');
-		div.appendChild(can.view('test_ejs', {name: 'Henry'}))
+	var div = document.createElement('div');
+	div.appendChild(can.view('test_ejs', {name: 'Henry'}))
 
-        equal( div.getElementsByTagName("span")[0].firstChild.nodeValue , 'Henry');
-
+	equal( div.getElementsByTagName("span")[0].firstChild.nodeValue , 'Henry');
 });
 
 test("object of deferreds", function(){
@@ -130,14 +132,16 @@ test("deferred", function(){
 });*/
 
 test("hyphen in type", function(){
-	
-	can.append( can.$("#qunit-test-area") ,"<script type='text/x-ejs' id='hyphenEjs'>\nHyphen\n</script>");
+	var script = document.createElement('script');
+	script.setAttribute('type', 'text/x-ejs')
+	script.setAttribute('id', 'hyphenEjs')
+	script.text = '\nHyphen\n';
+	document.getElementById("qunit-test-area").appendChild(script);
 	
 	var div = document.createElement('div');
 	div.appendChild(can.view('hyphenEjs', {}))
 
     ok( /Hyphen/.test(div.innerHTML) , 'has hyphen');
-
 })
 
 
