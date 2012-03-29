@@ -441,6 +441,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			var tokens = [],
 				last = 0;
 			
+			source = source.replace(newLine, "\n");
 			source.replace(tokenReg, function(whole, part, offset){
 				if(offset > last){
 					tokens.push( source.substring(last, offset) );
