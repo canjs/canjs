@@ -7,14 +7,12 @@ steal('can/util/string', function($){
 			return decodeURIComponent( str.replace(/\+/g, " ") );
 		}
 	
-	/**
-	 * @add can
-	 */
+
 	can.extend(can, { 
 		
 		/**
-		 * @function deparam
-		 * 
+		 * @function can.deparam
+		 * @parent can.util
 		 * Takes a string of name value pairs and returns a Object literal that represents those params.
 		 * 
 		 * @param {String} params a string like <code>"foo=bar&person[age]=3"</code>
