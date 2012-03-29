@@ -8,7 +8,7 @@ Listens for changes in a child attribute(s) from the parent. The child attribute
 does not have to exist.
 
 	// create an observable
-	var observe = can.Observe({
+	var observe = new can.Observe({
 		foo : {
 			bar : "Hello World"
 		}
