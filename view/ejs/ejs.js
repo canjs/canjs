@@ -12,6 +12,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		// regular expressions for caching
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 		attrReg = /([^\s]+)=$/,
+		newLine = /(\r|\n)+/g,
 		attributeReplace = /__!!__/g,
 		tagMap = {"": "span", table: "tr", tr: "td", ol: "li", ul: "li", tbody: "tr", thead: "tr", tfoot: "tr"},
 		// escapes characters starting with \
@@ -457,7 +458,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			return retArr;
 		},
 		scan = function(source, name){
-			var tokens = rsplit(source.replace(/(\r|\n)+/g, "\n"), tokenReg), 
+			var tokens = rsplit(source.replace(newLine, "\n"), tokenReg), 
 				content = '',
 				buff = [startTxt],
 				// helper function for putting stuff in the view concat
