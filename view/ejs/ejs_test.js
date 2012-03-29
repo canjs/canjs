@@ -252,16 +252,18 @@ test('multiple hookups in a single attribute', function() {
 	var div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled));
+	
+	var innerDiv = div.childNodes[0];
 
-	equals(div.innerHTML, '<div class="abc"></div>', 'initial render');
+	equals(innerDiv.getAttribute('class'), "abc", 'initial render');
 
 	obs.attr('bar', 'e');
 
-	equals(div.innerHTML, '<div class="aec"></div>', 'updated values');
+	equals(innerDiv.getAttribute('class'), "aec", 'initial render');
 	
 	obs.attr('bar', 'f');
 
-	equals(div.innerHTML, '<div class="afc"></div>', 'updated values');
+	equals(innerDiv.getAttribute('class'), "afc", 'initial render');
 });
 
 test('adding and removing multiple html content within a single element', function(){
