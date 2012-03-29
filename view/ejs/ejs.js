@@ -26,12 +26,12 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		bracketNum = function(content){
 			return (--content.split("{").length) - (--content.split("}").length);
 		},
-		setAttr = function(el, attrName){
+		setAttr = function(el, attrName, val){
 			attrName === "class"?
 				(el.className = val):
-				el.setAttribute(attrName);
+				el.setAttribute(attrName, val);
 		},
-		getAttr = function(el, attrName, val){
+		getAttr = function(el, attrName){
 			return attrName === "class"?
 				el.className:
 				el.getAttribute(attrName);
