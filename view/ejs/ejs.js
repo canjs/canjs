@@ -26,6 +26,18 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		bracketNum = function(content){
 			return (--content.split("{").length) - (--content.split("}").length);
 		},
+		attrF = function(el, attrName, val){
+			if(attrName === "class"){
+				if(val !== undefined){
+					el.className = val;
+				}
+				return el.className;
+			}
+			if(val !== undefined){
+				el.setAttribute(attrName);
+			}
+			return el.getAttribute(attrName);
+		},
 		// used to bind to an observe, and unbind when the element is removed
 		liveBind = function(observed, el, cb){
 			can.each(observed, function(i, ob){
@@ -345,7 +357,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						}
 						// set if we have a new attrName
 						if(newAttrName){
-							el.setAttribute(newAttrName, parts[1])
+							attrF(el, newAttrName, parts[1])
 						}
 					});
 				});
@@ -357,7 +369,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						hooks;
 						
 					(hooks = can.data(wrapped,'hooks')) || can.data(wrapped, 'hooks', hooks = {});
-					var attr = el.getAttribute(status),
+					var attr = attrF(el, status),
 						parts = attr.split("__!!__"),
 						hook;
 
@@ -381,13 +393,13 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					hook = hooks[status];
 					
 					parts.splice(1,0,input);
-					el.setAttribute(status, parts.join(""));
+					attrF(el, status, parts.join(""));
 					
 
 					liveBind(observed, el, function(ev) {
 						if(ev.batchNum === undefined || ev.batchNum !== hook.batchNum){
 							hook.batchNum = ev.batchNum;
-							el.setAttribute(status, hook.render());
+							attrF(el, status, hook.render());
 						} 
 						
 						
