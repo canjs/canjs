@@ -502,7 +502,7 @@ For example, add the following __html__:
 {% highlight erb %}
 <script type="text/ejs" id="todosEJS">
   <% for( var i = 0; i < this.length; i++ ) { %>
-    <li><%= this[i].name %></li>
+    <li><%= this[ i ].name %></li>
   <% } %>
 </script>
 {% endhighlight %}
@@ -521,7 +521,7 @@ a _todos/todos.ejs_ file that contains:
 
 {% highlight erb %}
 <% for( var i = 0; i < this.length; i++ ) { %>
-  <li><%= this[i].name %></li>
+  <li><%= this[ i ].name %></li>
 <% } %>
 {% endhighlight %}
 
@@ -561,7 +561,7 @@ To render a string instead of a documentFragment, use can.view.render like:
 {% highlight javascript %}
 <% for( var i = 0; i < todos.length; i++ ) { %>
   <li><%== can.view.render( '/todos/todo.ejs', {
-             todo: todo[i]
+             todo: todo[ i ]
             } ) %>
   </li>
 <% } %>
@@ -601,7 +601,7 @@ and todos:
 <script type="text/ejs" id="todosEJS">
 <h2><%= user.name %></h2>
 <% for( var i = 0; i < todos.length; i++ ) { %>
-  <li><%= todos[i].name %></li>
+  <li><%= todos[ i ].name %></li>
 <% } %>
 </script>
 {% endhighlight %}
@@ -662,7 +662,7 @@ Use `<%== CODE %>` when rendering subtemplates:
 
 {% highlight erb %}
 <% for( var i = 0; i < todos.length; i++ ) { %>
-  <li><%== can.view.render( 'todoEJS', todos[i] ) %></li>
+  <li><%== can.view.render( 'todoEJS', todos[ i ] ) %></li>
 <% } %>
 {% endhighlight %}
 
@@ -1558,7 +1558,7 @@ new can.Observe({
   },
   convert: {
     date: function( raw ) {
-      if ( typeof raw == 'string'  ){
+      if ( typeof raw == 'string' ) {
         var matches = raw.match( /(\d+)-(\d+)-(\d+)/ );
         return new Date( matches[ 1 ], ( +matches[ 2 ] ) - 1, matches[ 3 ]);
       }else if ( raw instanceof Date ) {
@@ -1607,7 +1607,7 @@ todo.backup();
 todo.attr( 'name', 'Do not do the dishes' );
 todo.isDirty(); // -> true
 todo.restore();
-todo.name // -> do the dishes
+todo.name // -> 'do the dishes'
 {% endhighlight %}
 
 ### can.Control.plugin
@@ -1644,7 +1644,7 @@ You can however retrieve the controller instance directly using the _.controller
 
 {% highlight javascript %}
 var allControls = $( '.tabs' ).controllers(),
-	control = $( '.tabs' ).controller();
+  control = $( '.tabs' ).controller();
 
 allControllers[ 0 ].activate( 0 );
 // or
@@ -1683,7 +1683,7 @@ For example, you can render a template from the _todo/todos.ejs_ url looking lik
 
 {% highlight erb %}
 <% for( var i = 0; i < this.length; i++ ) { %>
-  <li><%= this[i].name %></li>
+  <li><%= this[ i ].name %></li>
 <% } %>
 {% endhighlight %}
 
