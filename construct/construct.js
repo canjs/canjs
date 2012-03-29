@@ -1,12 +1,14 @@
-// 674
-//can.Construct 
-// This is a modified version of John Resig's class
-// http://ejohn.org/blog/simple-javascript-inheritance/
-// It provides class level inheritance and callbacks.
 //@steal-clean
 steal("can/util/string",function( $ ) {
 
+	// ## construct.js
+	// `can.Construct`  
+	// _This is a modified version of
+	// [John Resig's class](http://ejohn.org/blog/simple-javascript-inheritance/).  
+	// It provides class level inheritance and callbacks._
 	
+	// A private flag used to initialize a new class instance without
+	// initializing it's bindings.
 	var initializing = 0;
 
 	/** 
@@ -49,25 +51,28 @@ steal("can/util/string",function( $ ) {
 		 * @return {class} instance of the class
 		 */
 		newInstance: function() {
-			// get a raw instance objet (init is not called)
+			// Get a raw instance object (`init` is not called).
 			var inst = this.instance(),
 				arg = arguments,
 				args;
 				
-			// call setup if there is a setup
+			// Call `setup` if there is a `setup`
 			if ( inst.setup ) {
 				args = inst.setup.apply(inst, arguments);
 			}
-			// call init if there is an init, if setup returned args, use those as the arguments
+
+			// Call `init` if there is an `init`  
+			// If `setup` returned `args`, use those as the arguments
 			if ( inst.init ) {
 				inst.init.apply(inst, args || arguments);
 			}
+
 			return inst;
 		},
-		// overwrites an object with methods, sets up _super
-		//   newProps - new properties
-		//   oldProps - where the old properties might be
-		//   addTo - what we are adding to
+		// Overwrites an object with methods. Used in the `super` plugin.
+		// `newProps` - New properties to add.  
+		// `oldProps` - Where the old properties might be (used with `super`).  
+		// `addTo` - What we are adding to.
 		_inherit: function( newProps, oldProps, addTo ) {
 			can.extend(addTo || newProps, newProps || {})
 		},
@@ -120,16 +125,24 @@ steal("can/util/string",function( $ ) {
 		 * @param {Object} [staticProps] the static properties of the new constructor
 		 * @param {Object} [protoProps] the prototype properties of the new constructor
 		 */
+		// Set `defaults` as the merger of the parent `defaults` and this 
+		// object's `defaults`. If you overwrite this method, make sure to
+		// include option merging logic.
 		setup: function( base, fullName ) {
-			// set defaults as the merger of the parent defaults and this object's defaults
 			this.defaults = can.extend(true,{}, base.defaults, this.defaults);
 		},
+		// Create's a new `class` instance without initializing by setting the
+		// `initializing` flag.
 		instance: function() {
-			// prevent running init
+
+			// Prevents running `init`.
 			initializing = 1;
+
 			var inst = new this();
+
+			// Allow running `init`.
 			initializing = 0;
-			// allow running init
+
 			return inst;
 		},
 		/**
@@ -160,52 +173,55 @@ steal("can/util/string",function( $ ) {
 		 * 
 		 * @return {can.Construct} returns the new class
 		 */
+		// Extends classes.
 		extend: function( fullName, klass, proto ) {
-			// figure out what was passed and normalize it
+			// Figure out what was passed and normalize it.
 			if ( typeof fullName != 'string' ) {
 				proto = klass;
 				klass = fullName;
 				fullName = null;
 			}
-			if (!proto ) {
+
+			if ( ! proto ) {
 				proto = klass;
 				klass = null;
 			}
-
 			proto = proto || {};
+
 			var _super_class = this,
 				_super = this.prototype,
-				string = can,
 				name, shortName, namespace, prototype;
 
 			// Instantiate a base class (but only create the instance,
-			// don't run the init constructor)
+			// don't run the init constructor).
 			prototype = this.instance();
 			
-			// Copy the properties over onto the new prototype
-			this._inherit(proto, _super, prototype);
+			// Copy the properties over onto the new prototype.
+			_super_class._inherit(proto, _super, prototype);
 
-			// The dummy class constructor
+			// The dummy class constructor.
 			function Constructor() {
-				// All construction is actually done in the init method
+				// All construction is actually done in the init method.
 				if ( ! initializing ) {
-					// we are being called w/o new, we are extending
 					return this.constructor !== Constructor && arguments.length ?
+						// We are being called without `new` or we are extending.
 						arguments.callee.extend.apply(arguments.callee, arguments) :
-						//we are being called w/ new
+						// We are being called with `new`.
 						this.constructor.newInstance.apply(this.constructor, arguments);
 				}
 			}
+
 			// Copy old stuff onto class (can probably be merged w/ inherit)
-			for ( name in this ) {
-				if ( this.hasOwnProperty(name) ) {
-					Constructor[name] = this[name];
+			for ( name in _super_class ) {
+				if ( _super_class.hasOwnProperty(name) ) {
+					Constructor[name] = _super_class[name];
 				}
 			}
-			// copy new static props on class
-			this._inherit(klass, this, Constructor);
 
-			// do namespace stuff
+			// Copy new static properties on class.
+			_super_class._inherit(klass, _super_class, Constructor);
+
+			// Setup namespaces.
 			if ( fullName ) {
 
 				var parts = fullName.split('.'),
@@ -224,12 +240,14 @@ steal("can/util/string",function( $ ) {
 				current[shortName] = Constructor;
 			}
 
-			// set things that can't be overwritten
+			// Set things that shouldn't be overwritten.
 			can.extend(Constructor, {
+				constructor: Constructor,
 				prototype: prototype,
 				/**
 				 * @attribute namespace 
-				 * The namespaces object
+				 * The namespace keyword is used to declare a scope. This enables you to organize
+				 * code and provides a way to create globally unique types.
 				 * 
 				 *     can.Construct("MyOrg.MyConstructor",{},{})
 				 *     MyOrg.MyConstructor.namespace //-> MyOrg
@@ -248,8 +266,6 @@ steal("can/util/string",function( $ ) {
 				 */
 				shortName: shortName,
 				_shortName : _shortName,
-				_fullName: _fullName,
-				constructor: Constructor,
 				/**
 				 * @attribute fullName 
 				 * If you pass a name when creating a Construct, the `fullName` property will be set to
@@ -260,18 +276,18 @@ steal("can/util/string",function( $ ) {
 				 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
 				 * 
 				 */
-				fullName: fullName
+				fullName: fullName,
+				_fullName: _fullName
 			});
 
-			//make sure our prototype looks nice
+			// Make sure our prototype looks nice.
 			Constructor.prototype.constructor = Constructor;
 
 			
-			// call the class setup
+			// Call the class `setup` and `init`
 			var t = [_super_class].concat(can.makeArray(arguments)),
 				args = Constructor.setup.apply(Constructor, t );
 			
-			// call the class init
 			if ( Constructor.init ) {
 				Constructor.init.apply(Constructor, args || t );
 			}
@@ -408,9 +424,5 @@ steal("can/util/string",function( $ ) {
 		}
 
 	});
-
-
-
-
 
 })

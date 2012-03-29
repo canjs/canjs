@@ -95,7 +95,8 @@ steal("can/util").then(function( $ ) {
 		cached: {},
 		/**
 		 * @attribute cache
-		 * Should the views be cached or reloaded from the server. Defaults to true.
+		 * By default, views are cached on the client.  If you'd like the
+		 * the views to reload from the server, you can set the `cache` attribute to `false`.
 		 */
 		cache: true,
 		/**
@@ -148,7 +149,7 @@ steal("can/util").then(function( $ ) {
 		/**
 		 * @attribute ext
 		 * The default suffix to use if none is provided in the view's url.  
-		 * This is set to .ejs by default.
+		 * This is set to `.ejs` by default.
 		 */
 		ext: ".ejs",
 		/**

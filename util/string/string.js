@@ -1,7 +1,6 @@
 steal('can/util',function() {
 
-	// string.js
-	// ---------
+	// ##string.js
 	// _Miscellaneous string utility functions._
 	
 	// Several of the methods in this plugin use code adapated from Prototype
@@ -25,7 +24,7 @@ steal('can/util',function() {
 				( add && ( obj[ prop ] = {} ));
 		},
 
-		// Returns true if the object can have properties (no nulls).
+		// Returns `true` if the object can have properties (no `null`s).
 		isContainer = function( current ) {
 			return /^f|^o/.test( typeof current );
 		};
@@ -67,15 +66,15 @@ steal('can/util',function() {
 			 */
 			getObject : function( name, roots, add ) {
 			
-				// The parts of the name we are looking up
-				// ['App','Models','Recipe']
+				// The parts of the name we are looking up  
+				// `['App','Models','Recipe']`
 				var parts = name ? name.split('.') : [],
 					length =  parts.length,
 					current,
 					r = 0,
 					ret, i;
 				
-				// Make sure roots is an array.
+				// Make sure roots is an `array`.
 				roots = can.isArray(roots) ? roots : [roots || window];
 				
 				if ( ! length ) {
@@ -99,7 +98,7 @@ steal('can/util',function() {
 						
 						// If there is a value, we exit.
 						if ( ret !== undefined ) {
-							// If add is false, delete the property
+							// If `add` is `false`, delete the property
 							if ( add === false ) {
 								delete current[parts[i]];
 							}
