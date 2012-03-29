@@ -12,6 +12,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		// regular expressions for caching
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 		attrReg = /([^\s]+)=$/,
+		newLine = /(\r|\n)+/g,
 		attributeReplace = /__!!__/g,
 		tagMap = {"": "span", table: "tr", tr: "td", ol: "li", ul: "li", tbody: "tr", thead: "tr", tfoot: "tr"},
 		// escapes characters starting with \
@@ -292,7 +293,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						
 						// create textNode
 						liveBind(observed, parent, function(){
-							node.nodeValue = func.call(self)
+							node.nodeValue = ""+func.call(self);
 						});
 					}
 					:
@@ -436,10 +437,28 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			return quote ? "'"+beforeQuote.match(attrReg)[1]+"'" : (htmlTag ? 1 : 0)
 		},
 		pendingHookups = [],
-		
+		rsplit = function( string, regex ) {
+			var result = regex.exec(string),
+				retArr = [],
+				first_idx, last_idx;
+			while ( result !== null ) {
+				first_idx = result.index;
+				last_idx = regex.lastIndex;
+				if ( first_idx !== 0 ) {
+					retArr.push(string.substring(0, first_idx));
+					string = string.slice(first_idx);
+				}
+				retArr.push(result[0]);
+				string = string.slice(result[0].length);
+				result = regex.exec(string);
+			}
+			if ( string !== '' ) {
+				retArr.push(string);
+			}
+			return retArr;
+		},
 		scan = function(source, name){
-			var tokens = source.replace(/(\r|\n)+/g, "\n")
-				.split(tokenReg),
+			var tokens = rsplit(source.replace(newLine, "\n"), tokenReg), 
 				content = '',
 				buff = [startTxt],
 				// helper function for putting stuff in the view concat
