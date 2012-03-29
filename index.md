@@ -1458,9 +1458,9 @@ CanJS can be used with libraries other than jQuery.
 
 ## Plugins
 
-### can.Construct.proxy `construct.proxy(methodname, [curriedarguments])`
+### can.Construct.proxy `construct.proxy(methodname, [curriedArguments])`
 
-This plugin adds a *proxy* method that takes a function name and returns a new function
+This plugin adds a _proxy_ method that takes a function name and returns a new function
 that will always have `this` set to the original context. You can also curry arguments that will
 be added to the beginning of the proxied functions argument list:
 
@@ -1489,13 +1489,13 @@ This plugin provides access overwritten methods using `this._super` when extendi
 
 {% highlight javascript %}
 var ImprovedPerson = Person({
-  init : function(name, lastname) {
+  init : function(name, lastName) {
     this._super(name);
-    this.lastname = lastname;
+    this.lastName = lastName;
   },
 
   sayName : function(text) {
-    return this._super(text, this.lastname);
+    return this._super(text, this.lastName);
   }
 });
 
@@ -1506,7 +1506,7 @@ improvedPerson.sayName('To whom it may concern, I am ');
 
 ### can.Observe.delegate `observe.delegate(name, event, handler)`
 
-Use this plugin to listen to *change*, *set*, *add* and *remove* on any direct, child or wildcard attribute:
+Use this plugin to listen to _change_, _set_, _add_ and _remove_ on any direct, child or wildcard attribute:
 
 {% highlight javascript %}
 // create an observable
@@ -1574,8 +1574,8 @@ new can.Observe({
 
 ### can.Observe.validation `observe.validate(attribute, validator)`
 
-Adds validation to a can.Observe. Call the *validate* method in the *init* constructor with the
-attribute name and the validation function and then use *errors* to retrieve the error messages:
+Adds validation to a can.Observe. Call the _validate_ method in the _init_ constructor with the
+attribute name and the validation function and then use _errors_ to retrieve the error messages:
 
 {% highlight javascript %}
 var Person = can.Model({
@@ -1596,12 +1596,12 @@ var Person = can.Model({
 
 var john = new Person({ name : '' });
 john.errors();
-// -> [ { name : "Name can not be empty" } ]
+// -> { name : ["Name can not be empty"] }
 {% endhighlight %}
 
 ### can.Observe.backup `observe.backup()`
 
-You can backup and restore [can.Observe] data using this plugin. To backup the observe in its current
+You can backup and restore can.Observe data using this plugin. To backup the observe in its current
 state call _backup_. To revert it back to that state use _restore_:
 
 {% highlight javascript %}
@@ -1634,7 +1634,7 @@ You can instantiate it by calling the plugin like this:
 $(".tabs").tabs();
 {% endhighlight %}
 
-Once created any subsequent plugin call will trigger *update* on your control with the options passed to the plugin.
+Once created any subsequent plugin call will trigger _update_ on your control with the options passed to the plugin.
 You can also call methods on the control instance like so:
 
 {% highlight javascript %}
@@ -1680,9 +1680,9 @@ can.Control('Editor', {
 
 ### View modifiers
 
-jQuery uses the modifiers *after*, *append*, *before*, *html*, *prepend*, *replaceWith* and *text*
+jQuery uses the modifiers _after_, _append_, _before_, _html_, _prepend_, _replaceWith_ and _text_
 to alter the content of an element. This plugin allows you to render a can.View using these modifiers.
-For example, you can render a template from the *todo/todos.ejs* url looking like this:
+For example, you can render a template from the _todo/todos.ejs_ url looking like this:
 
 {% highlight erb %}
 <% for(var i = 0; i < this.length; i++ ){ %>
@@ -1690,7 +1690,7 @@ For example, you can render a template from the *todo/todos.ejs* url looking lik
 <% } %>
 {% endhighlight %}
 
-By calling the *html* modifier on an element like this:
+By calling the _html_ modifier on an element like this:
 
 {% highlight javascript %}
 $('#todos').html('todo/todos.ejs', [
