@@ -132,14 +132,16 @@ test("deferred", function(){
 });*/
 
 test("hyphen in type", function(){
-	
-	can.append( can.$("#qunit-test-area") ,"<script type='text/x-ejs' id='hyphenEjs'>\nHyphen\n</script>");
+	var script = document.createElement('script');
+	script.setAttribute('type', 'text/x-ejs')
+	script.setAttribute('id', 'hyphenEjs')
+	script.text = '\nHyphen\n';
+	document.getElementById("qunit-test-area").appendChild(script);
 	
 	var div = document.createElement('div');
 	div.appendChild(can.view('hyphenEjs', {}))
 
     ok( /Hyphen/.test(div.innerHTML) , 'has hyphen');
-
 })
 
 
