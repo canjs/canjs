@@ -29,7 +29,14 @@ steal(function(){
 		    } else {
 		    	container.innerHTML = '' + html;
 		    }
-		    return [].slice.call(container.childNodes);
+		    // IE8 barfs if you pass slice a childNodes object, so make a copy
+		    var tmp = {},
+		    	children = container.childNodes;
+		    tmp.length = children.length;
+		    for(var i=0; i<children.length; i++){
+		    	tmp[i] = children[i];
+		    }
+		    return [].slice.call(tmp);
 		}
 	
 	can.buildFragment = function(htmls, nodes){
