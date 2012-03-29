@@ -1549,7 +1549,7 @@ instance.attr( 'name', 'doe' );
 
 ### can.Observe.attributes
 
-Allows to define attributes and their type and set converters for each type:
+Allows you to define attributes and their type and set converters for each type:
 
 {% highlight javascript %}
 new can.Observe({
@@ -1652,9 +1652,9 @@ control.activate( 0 );
 {% endhighlight %}
 
 
-### can.Control.view `control.view([viewname], [data])`
+### can.Control.view `control.view( [ viewname ], [ data ] )`
 
-This plugin renders a view from a Url in a _views/controlname_ folder. If no viewname is supplied it uses
+This plugin renders a view from a URL in a _views/controlname_ folder. If no viewname is supplied it uses
 the current action name. If no data is provided the control instance is passed to the view. Note that you have to set
 a name when creating the Control construct for _view_ to work.
 
@@ -1679,7 +1679,7 @@ can.Control( 'Editor', {
 
 jQuery uses the modifiers _after_, _append_, _before_, _html_, _prepend_, _replaceWith_ and _text_
 to alter the content of an element. This plugin allows you to render a can.View using these modifiers.
-For example, you can render a template from the _todo/todos.ejs_ url looking like this:
+For example, you can render a template from the _todo/todos.ejs_ URL looking like this:
 
 {% highlight erb %}
 <% for( var i = 0; i < this.length; i++ ) { %>
