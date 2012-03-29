@@ -1,15 +1,15 @@
 // 1.08
 steal('can/construct', function( $ ) {
-	// ------- HELPER FUNCTIONS  ------
-	
-	// Binds an element, returns a function that unbinds
-	var bind = function( el, ev, callback ) {
-		can.bind.call( el, ev, callback )
-		//var binder = el.bind && el.unbind ? el : $(isFunction(el) ? [el] : el);
 
-		//binder.bind(ev, callback);
-		// if ev name has >, change the name and bind
-		// in the wrapped callback, check that the element matches the actual element
+	// ## control.js
+	// `can.Control`  
+	// _Controller_
+	
+	// Binds an element, returns a function that unbinds.
+	var bind = function( el, ev, callback ) {
+
+		can.bind.call( el, ev, callback )
+
 		return function() {
 			can.unbind.call(el, ev, callback);
 		};
@@ -20,24 +20,22 @@ steal('can/construct', function( $ ) {
 		slice = [].slice,
 		special = can.getObject("$.event.special") || {},
 
-		// Binds an element, returns a function that unbinds
+		// Binds an element, returns a function that unbinds.
 		delegate = function( el, selector, ev, callback ) {
-			//var binder = el.delegate && el.undelegate ? el : $(isFunction(el) ? [el] : el)
-			//binder.delegate(selector, ev, callback);
 			can.delegate.call(el, selector, ev, callback)
 			return function() {
 				can.undelegate.call(el, selector, ev, callback);
 			};
 		},
 		
-		// calls bind or unbind depending if there is a selector
+		// Calls bind or unbind depending if there is a selector.
 		binder = function( el, ev, callback, selector ) {
 			return selector ?
 				delegate( el, can.trim( selector ), ev, callback ) : 
 				bind( el, ev, callback );
 		},
 		
-		// moves 'this' to the first argument, wraps it with jQuery if it's an element
+		// Moves `this` to the first argument, wraps it with `jQuery` if it's an element
 		shifter = function shifter(context, name) {
 			var method = typeof name == "string" ? context[name] : name;
 			return function() {
@@ -61,19 +59,21 @@ steal('can/construct', function( $ ) {
 		 * Setup pre-process which methods are event listeners.
 		 * 
 		 */
+		// Setup pre-processes which methods are event listeners.
 		setup: function() {
 
-			// Allow contollers to inherit "defaults" from superclasses as it done in can.Construct
+			// Allow contollers to inherit "defaults" from super-classes as it 
+			// done in `can.Construct`
 			can.Construct.setup.apply( this, arguments );
 
-			// if you didn't provide a name, or are control, don't do anything
+			// If you didn't provide a name, or are `control`, don't do anything.
 			if ( this !== can.Control ) {
 
-				// cache the underscored names
+				// Cache the underscored names.
 				var control = this,
 					funcName;
 
-				// calculate and cache actions
+				// Calculate and cache actions.
 				control.actions = {};
 
 				for ( funcName in control.prototype ) {
@@ -91,10 +91,9 @@ steal('can/construct', function( $ ) {
 		 * @param {String} methodName a prototype function
 		 * @return {Boolean} truthy if an action or not
 		 */
+		// Return `true` if is an action.
 		_isAction: function( methodName ) {
-			// RegExp literals don't carry a last index property so this is
-			// safe
-			return special[methodName] || processors[methodName] || /[^\w]/.test(methodName);
+			return !! ( special[methodName] || processors[methodName] || /[^\w]/.test(methodName) );
 		},
 		/**
 		 * @hide
@@ -117,21 +116,26 @@ steal('can/construct', function( $ ) {
 		 * @return {Object} null or the processor and pre-split parts.  
 		 * The processor is what does the binding/subscribing.
 		 */
+		 // Takes a method name and the options passed to a control
+		 // and tries to return the data necessary to pass to a processor
+		 // (something that binds things).
 		_action: function( methodName, options ) {
-			// reset the test index
 			
-			//if we don't have options (a control instance), we'll run this later
-			                  // Parameter replacer regex
+			// If we don't have options (a `control` instance), we'll run this 
+			// later.  
+			// `/\{([^\}]+)\}/` - parameter replacer regex.
 			if ( options || ! /\{([^\}]+)\}/g.test( methodName )) {
-				// If we have options, run sub to replace templates "{}" with a value from the options
-				// or the window
+				// If we have options, run sub to replace templates `{}` with a
+				// value from the options or the window
 				var convertedName = options ? can.sub(methodName, [options, window]) : methodName,
 					
-					// If a "{}" resolves to an object, convertedName will be an array
+					// If a `{}` resolves to an object, `convertedName` will be
+					// an array
 					arr = can.isArray(convertedName),
 					
-					// get the parts of the function = [convertedName, delegatePart, eventPart]
-					                                                       // Breaker regex
+					// Get the parts of the function  
+					// `[convertedName, delegatePart, eventPart]`  
+					// `/^(?:(.*?)\s)?([\w\.\:>]+)$/` - Breaker regex.
 					parts = (arr ? convertedName[1] : convertedName).match(/^(?:(.*?)\s)?([\w\.\:>]+)$/),
 					event = parts[2],
 					processor = processors[event] || basicProcessor;
@@ -197,6 +201,8 @@ steal('can/construct', function( $ ) {
 		 *     
 		 *     $('.foo').sized();
 		 */
+		// An object of `{eventName : function}` pairs that Control uses to 
+		// hook up events auto-magically.
 		processors: {},
 		/**
 		 * @attribute defaults
@@ -219,6 +225,8 @@ steal('can/construct', function( $ ) {
 		 * In [can.Control::setup] the options passed to the control
 		 * are merged with defaults.  This is not a deep merge.
 		 */
+		// A object of name-value pairs that act as default values for a 
+		// control instance
 		defaults: {}
 	},
 	/** 
@@ -262,15 +270,17 @@ steal('can/construct', function( $ ) {
 		 * @return {Array} return an array if you wan to change what init is called with. By
 		 * default it is called with the element and options passed to the control.
 		 */
+		// Where the magic happens.
 		setup: function( element, options ) {
+
 			var cls = this.constructor,
 				pluginname = cls.pluginName || cls._fullName;
 
-			// want the raw element here
+			// Want the raw element here.
 			this.element = can.$(element)
 
-			if( pluginname && pluginname !== 'can_control') {
-				//set element and className on element
+			if ( pluginname && pluginname !== 'can_control') {
+				// Set element and `className` on element.
 				this.element.addClass(pluginname);
 			}
 			
@@ -319,9 +329,10 @@ steal('can/construct', function( $ ) {
 			 * [can.Control.prototype.update update];
 			 *
 			 */
+			// Option merging.
 			this.options = extend({}, cls.defaults, options);
 
-			// bind all event handlers
+			// Bind all event handlers.
 			this.on();
 
 			/**
@@ -424,6 +435,7 @@ steal('can/construct', function( $ ) {
 			 *        this.on();  
 			 *     }
 			 */
+			// Get's passed into `init`.
 			return [this.element, this.options];
 		},
 		/**
@@ -514,10 +526,12 @@ steal('can/construct', function( $ ) {
 		on: function( el, selector, eventName, func ) {
 			
 			if ( ! el ) {
-				//adds bindings
+
+				// Adds bindings.
 				this.off();
-				//go through the cached list of actions and use the processor to bind
-				
+
+				// Go through the cached list of actions and use the processor 
+				// to bind
 				var cls = this.constructor,
 					bindings = this._bindings,
 					actions = cls.actions,
@@ -538,7 +552,8 @@ steal('can/construct', function( $ ) {
 				}
 	
 	
-				// setup to be destroyed ... don't bind b/c we don't want to remove it
+				// Setup to be destroyed...  
+				// don't bind because we don't want to remove it.
 				can.bind.call(element,"destroyed", destroyCB);
 				bindings.push(function( el ) {
 					can.unbind.call(el,"destroyed", destroyCB);
@@ -565,15 +580,14 @@ steal('can/construct', function( $ ) {
 		 * @hide
 		 * Unbinds all event handlers on the controller. You should never
 		 * be calling this unless in use with [can.Control::on].
-		 * 
-		 * 
 		 */
+		// Unbinds all event handlers on the controller.
 		off : function(){
 			var el = this.element[0]
 			each(this._bindings || [], function( key, value ) {
 				value(el);
 			});
-			//adds bindings
+			// Adds bindings.
 			this._bindings = [];
 		},
 		/**
@@ -666,24 +680,26 @@ steal('can/construct', function( $ ) {
 		 *   - removing it's [can.Control.pluginName] from the element's className
 		 * 
 		 */
+
+		// Prepares a `control` for garbage collection
 		destroy: function() {
 			var Class = this.constructor,
 				pluginName = Class.pluginName || Class._fullName,
 				controls;
 			
-			// unbind bindings
+			// Unbind bindings.
 			this.off();
 			
 			if(pluginName && pluginName !== 'can_control'){
-				// remove the className
+				// Remove the `className`.
 				this.element.removeClass(pluginName);
 			}
 			
-			// remove from data
+			// Remove from `data`.
 			controls = can.data(this.element,"controls");
 			controls.splice(can.inArray(this, controls),1);
 			
-			can.trigger( this, "destroyed"); //in case we want to know if the control is removed
+			can.trigger( this, "destroyed"); // In case we want to know if the `control` is removed.
 			
 			this.element = null;
 		}
@@ -691,10 +707,10 @@ steal('can/construct', function( $ ) {
 
 	var processors = can.Control.processors,
 
-	//------------- PROCESSSORS -----------------------------
-	//processors do the binding.  They return a function that
-	//unbinds when called.
-	//the basic processor that binds events
+	// Processors do the binding.  
+	// They return a function that unbinds when called.  
+	//
+	// The basic processor that binds events.
 	basicProcessor = function( el, event, selector, methodName, control ) {
 		return binder( el, event, shifter(control, methodName), selector);
 	};
@@ -702,12 +718,12 @@ steal('can/construct', function( $ ) {
 
 
 
-	//set common events to be processed as a basicProcessor
-	each(["change", "click", "contextmenu", "dblclick", "keydown", "keyup", "keypress", "mousedown", "mousemove", "mouseout", "mouseover", "mouseup", "reset", "resize", "scroll", "select", "submit", "focusin", "focusout", "mouseenter", "mouseleave"], function( i, v ) {
+	// Set common events to be processed as a `basicProcessor`
+	each(["change", "click", "contextmenu", "dblclick", "keydown", "keyup", 
+		 "keypress", "mousedown", "mousemove", "mouseout", "mouseover", 
+		 "mouseup", "reset", "resize", "scroll", "select", "submit", "focusin",
+		 "focusout", "mouseenter", "mouseleave"], function( i, v ) {
 		processors[v] = basicProcessor;
 	});
 	
-
-	
-
 });
