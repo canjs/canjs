@@ -36,40 +36,35 @@ function runDocco() {
 
 	fs.mkdir(docsDir, function() {
 
-		fs.readdir("temp", function( err, files ) {
-		
-			var command = os.platform() != "win32" ?
-				"docco " :
-				"sh docco ";
+		var command = os.platform() != "win32" ?
+			"docco " :
+			"sh docco ";
 
-			// Prepend temp to each file
-			files = files.map(function( file ) {
-				return path.join( "temp", file );
-			});
+		console.log( "Generating docco annotated source..." );
 
-			console.log( "Generating docco annotated source..." );
-
-			execCommandWithOutput( command + files.join(" "), doccoDir, function() {
+		execCommandWithOutput( "docco temp/*.js", doccoDir, function( exitCode ) {
+			if ( exitCode == 0 ) {
 				fs.readdir( doccoOutDir, function( err, files ) {
 					console.log("Moving files into place...");
 					files.forEach(function( file ) {
 						console.log( "\t" + file );
-						fs.renameSync( "docs/" + file, "../../docs/" + file );
+						fs.renameSync( path.join( doccoDir, "docs", file ), path.join( canDir, "docs", file ));
 					});
 					console.log("Cleaning up...");
 					["temp", "standalone", "docs"].forEach(function( dir ) {
-						fs.readdir( dir, function( e, files ) {
+						fs.readdir( path.join( doccoDir, dir ), function( e, files ) {
 							files.forEach(function( file ) {
-								fs.unlinkSync( path.join( dir, file ));
+								fs.unlinkSync( path.join( doccoDir, dir, file ));
 							});
-							fs.rmdir( dir );
+							fs.rmdir( path.join( doccoDir, dir ));
 						});
 					});
 					console.log("Done!");
 				});
-			})
-
-		});
+			} else {
+				console.log("Error generating annotated source.");
+			}
+		})
 
 	});
 
@@ -96,7 +91,7 @@ function format( exitCode ) {
 		});
 
 		// Create the temp directory for stripped code
-		fs.mkdir("temp", function() {
+		fs.mkdir( path.join( doccoDir, "temp"), function() {
 
 			// Generate source for all standalones
 			console.log( "Stripping multiline comments and steal removes..." );
@@ -119,7 +114,7 @@ function format( exitCode ) {
 					// Only single new lines
 					code = code.replace( /(\n){3,}/gim, "\n\n");
 
-					fs.writeFile( path.join( "temp", file ), code, "utf-8", function() {
+					fs.writeFile( path.join( doccoDir, "temp", file ), code, "utf-8", function() {
 						if ( ++count == files.length ) {
 							runDocco();
 						}
