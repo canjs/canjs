@@ -27,13 +27,32 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			return (--content.split("{").length) - (--content.split("}").length);
 		},
 		// used to bind to an observe, and unbind when the element is removed
-		liveBind = function(observed, el, cb){
+		// oldObserved is a mapping of observe namespaces to instances
+		liveBind = function(observed, el, cb, oldObserved){
+			// we are going to set everything to matched that we find
+			oldObserved.matched = !oldObserved.matched;
 			can.each(observed, function(i, ob){
-				ob.obj.bind(ob.attr, cb)
+				if(oldObserved[ob.obj._namespace+"|"+ob.attr]){
+					oldObserved[ob.obj._namespace+"|"+ob.attr].matched = oldObserved.matched;
+				} else {
+					ob.matched = oldObserved.matched;
+					oldObserved[ob.obj._namespace+"|"+ob.attr] = ob
+					ob.obj.bind(ob.attr, cb)
+				}
 			})
+			// remove any old bindings
+			for(var name in oldObserved){
+				var ob = oldObserved[name];
+				if(name !== "matched" && ob.matched !== oldObserved.matched){
+					ob.obj.unbind(ob.attr);
+					delete oldObserved[name];
+				}
+			}
 			can.bind.call(el,'destroyed', function(){
-				can.each(observed, function(i, ob){
-					ob.obj.unbind(ob.attr, cb)
+				can.each(oldObserved, function(i, ob){
+					if(typeof ob !== 'boolean'){
+						ob.obj.unbind(ob.attr, cb)
+					}
 				})
 			})
 		},
@@ -294,7 +313,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						// create textNode
 						liveBind(observed, parent, function(){
 							node.nodeValue = ""+func.call(self);
-						});
+						},{});
 					}
 					:
 					function(span){
@@ -327,7 +346,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						// before a write ...
 						liveBind(observed, span.parentNode, function(){
 							nodes = makeAndPut(func.call(self), nodes);
-						});
+						},{});
 						//return parent;
 				}) + "></" +tag+">";
 			} else if(status === 1){ // in a tag
@@ -347,7 +366,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						if(newAttrName){
 							el.setAttribute(newAttrName, parts[1])
 						}
-					});
+					},{});
 				});
 
 				return input;
@@ -391,7 +410,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						} 
 						
 						
-					});
+					},{});
 				})
 				return "__!!__";
 			}
