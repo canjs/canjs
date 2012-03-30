@@ -78,7 +78,7 @@ test("parameterized actions", function(){
 	// YUI does not like non-dom event
 	if(can.Y){
 		can.Y.mix(can.Y.Node.DOM_EVENTS, {
-			sillyEvent: true,
+			sillyEvent: true
 		});
 	}
 	
@@ -186,7 +186,7 @@ test("space makes event",1,function(){
 	
 	if(can.Y){
 		can.Y.mix(can.Y.Node.DOM_EVENTS, {
-			foo: true,
+			foo: true
 		});
 	}
 	
