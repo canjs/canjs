@@ -2,15 +2,18 @@ steal({
 	src: './zepto.0.8.js',
 	_skip: true
 }).then('./data').then('../event','../fragment.js',function(){
+	// zepto.js
+	// ---------
+	// _Zepto node list._
 
-// extend what you can out of Zepto
+// Extend what you can out of Zepto.
 $.extend(can,Zepto);
 
 var arrHas = function(obj, name){
 	return obj[0] && obj[0][name] || obj[name]
 }
 
-// do what's similar for jQuery
+// Do what's similar for jQuery.
 can.trigger = function(obj, event, args, bubble){
 	if(obj.trigger){
 		obj.trigger(event, args)
@@ -34,7 +37,7 @@ can.trigger = function(obj, event, args, bubble){
 can.$ = Zepto
 
 	can.bind = function( ev, cb){
-		// if we can bind to it ...
+		// If we can bind to it...
 		if(this.bind){
 			this.bind(ev, cb)
 		} else if(arrHas(this, "addEventListener")){
@@ -45,7 +48,7 @@ can.$ = Zepto
 		return this;
 	}
 	can.unbind = function(ev, cb){
-		// if we can bind to it ...
+		// If we can bind to it...
 		if(this.unbind){
 			this.unbind(ev, cb)
 		} else if(arrHas(this, "addEventListener")){
@@ -94,7 +97,7 @@ can.$ = Zepto
 		}
 	}
 	
-	// make ajax
+	// Make ajax.
 	var XHR = $.ajaxSettings.xhr;
 	$.ajaxSettings.xhr = function(){
 		var xhr = XHR()
@@ -148,7 +151,7 @@ can.$ = Zepto
 
 	
 	
-	// make destroyed and empty work
+	// Make destroyed and empty work.
 	$.fn.empty = function(){
 		return this.each(function(){ 
 			$.cleanData(this.getElementsByTagName('*'))
@@ -177,8 +180,8 @@ can.$ = Zepto
 		for(name in object){};
 		return name !== undefined;
 	}
-	// make extend handle true for deep
 
+	// Make extend handle `true` for deep.
 	can.extend = function(first){
 		if(first === true){
 			var args = can.makeArray(arguments);
