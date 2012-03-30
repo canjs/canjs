@@ -1460,7 +1460,8 @@ CanJS can be used with libraries other than jQuery.
 [can.construct.proxy.min.js](http://donejs.com/can/dist/can.construct.proxy.min.js)
 \[[dev](http://donejs.com/can/dist/can.construct.proxy.js)\]
 
-This plugin adds a _proxy_ method that takes a function name and returns a new function
+The [can.Construct.proxy](http://donejs.com/docs.html#!can.Construct.proxy)
+plugin adds a _proxy_ method that takes a function name and returns a new function
 that will always have `this` set to the original context. You can also curry arguments that will
 be added to the beginning of the proxied functions argument list:
 
@@ -1488,7 +1489,8 @@ curriedCallback( '!' ); // -> 'Hi my name is John!'
 [can.construct.super.min.js](http://donejs.com/can/dist/can.construct.super.min.js)
 \[[dev](http://donejs.com/can/dist/can.construct.super.js)\]
 
-This plugin provides access overwritten methods using `this._super` when extending a can.Construct:
+The [can.Construct.super](http://donejs.com/docs.html#!can.Construct.super)
+provides access overwritten methods using `this._super` when extending a can.Construct:
 
 {% highlight javascript %}
 var ImprovedPerson = Person({
@@ -1512,7 +1514,8 @@ improvedPerson.sayName( 'To whom it may concern, I am ' );
 [can.observe.delegate.min.js](http://donejs.com/can/dist/can.observe.delegate.min.js)
 \[[dev](http://donejs.com/can/dist/can.observe.delegate.js)\]
 
-Use this plugin to listen to _change_, _set_, _add_ and _remove_ on any direct, child or wildcard attribute:
+Use the [can.Observe.delegate](http://donejs.com/docs.html#!can.Observe.delegate)
+to listen to _change_, _set_, _add_ and _remove_ on any direct, child or wildcard attribute:
 
 {% highlight javascript %}
 // create an observable
@@ -1544,7 +1547,8 @@ observe.attr( 'foo.baz', 'Bye you' );
 [can.observe.setter.min.js](http://donejs.com/can/dist/can.observe.setter.min.js)
 \[[dev](http://donejs.com/can/dist/can.observe.setter.js)\]
 
-With this plugin you can use attribute setter methods to process the value being set:
+With the [can.Observe.setter](http://donejs.com/docs.html#!can.Observe.setter)
+you can use attribute setter methods to process the value being set:
 
 {% highlight javascript %}
 var Person = can.Observe({
@@ -1564,7 +1568,8 @@ instance.attr( 'name', 'doe' );
 [can.observe.attributes.min.js](http://donejs.com/can/dist/can.observe.attributes.min.js)
 \[[dev](http://donejs.com/can/dist/can.observe.attributes.js)\]
 
-Allows you to define attributes and their type and set converters for each type:
+The [can.Observe.attributes](http://donejs.com/docs.html#!can.Observe.attributes)
+allows you to define attributes and their type and set converters for each type:
 
 {% highlight javascript %}
 new can.Observe({
@@ -1589,8 +1594,9 @@ new can.Observe({
 [can.observe.validations.min.js](http://donejs.com/can/dist/can.observe.validations.min.js)
 \[[dev](http://donejs.com/can/dist/can.observe.validations.js)\]
 
-Adds validation to a can.Observe. Call the _validate_ method in the _init_ constructor with the
-attribute name and the validation function and then use _errors_ to retrieve the error messages:
+[can.Observe.validations](http://donejs.com/docs.html#!can.Observe.validations) adds validation to a can.Observe.
+Call the _validate_ method in the _init_ constructor with the attribute name and the validation
+function and then use _errors_ to retrieve the error messages:
 
 {% highlight javascript %}
 var Person = can.Model({
@@ -1619,8 +1625,8 @@ john.errors();
 [can.observe.backup.min.js](http://donejs.com/can/dist/can.observe.backup.min.js)
 \[[dev](http://donejs.com/can/dist/can.observe.backup.js)\]
 
-You can backup and restore can.Observe data using this plugin. To backup the observe in its current
-state call _backup_. To revert it back to that state use _restore_:
+You can backup and restore can.Observe data using the [can.Observe.backup](http://donejs.com/docs.html#!can.Observe.backup)
+plugin. To backup the observe in its current state call _backup_. To revert it back to that state use _restore_:
 
 {% highlight javascript %}
 var todo = new Todo( { name: 'do the dishes' } );
@@ -1636,7 +1642,8 @@ todo.name // -> 'do the dishes'
 [can.control.plugin.min.js](http://donejs.com/can/dist/can.control.plugin.min.js)
 \[[dev](http://donejs.com/can/dist/can.control.plugin.js)\]
 
-This plugin registers a jQuery plugin function with a given _pluginName_ that instantiates a can.Control.
+[can.Control.plugin](http://donejs.com/docs.html#!can.Control.plugin) registers a jQuery plugin function
+with a given _pluginName_ that instantiates a can.Control.
 For example with this can.Control:
 
 {% highlight javascript %}
@@ -1681,8 +1688,9 @@ control.activate( 0 );
 [can.control.view.min.js](http://donejs.com/can/dist/can.control.view.min.js)
 \[[dev](http://donejs.com/can/dist/can.control.view.js)\]
 
-This plugin renders a view from a URL in a _views/controlname_ folder. If no viewname is supplied it uses
-the current action name. If no data is provided the control instance is passed to the view. Note that you have to set
+[can.Control.view](http://donejs.com/docs.html#!can.Control.view) renders a view from a URL in a
+_views/controlname_ folder. If no viewname is supplied it uses the current action name.
+If no data is provided the control instance is passed to the view. Note that you have to set
 a name when creating the Control construct for _view_ to work.
 
 {% highlight javascript %}
