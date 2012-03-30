@@ -517,7 +517,7 @@ test("unescape bindings change", function(){
 	
 	var child = div.getElementsByTagName('div')[0];
 	equals(child.innerHTML, "2", "at first there are 2 true bindings");
-	var item = new can.Observe({complete: true})
+	var item = new can.Observe({complete: true, id: "THIS ONE"})
 	l.push(item);
 	
 	equals(child.innerHTML, "3", "now there are 3 complete");
@@ -525,6 +525,12 @@ test("unescape bindings change", function(){
 	item.attr('complete',false);
 	
 	equals(child.innerHTML, "2", "now there are 2 complete");
+	
+	l.pop();
+	
+	item.attr('complete',true);
+	
+	equals(child.innerHTML, "2", "there are still 2 complete");
 });
 
 
@@ -602,8 +608,8 @@ test("tag bindings change", function(){
 	
 	equals(child.getAttribute("items"), "2", "now there are 2 complete");
 })
-/*
-test("tag bindings change", function(){
+
+test("attribute value bindings change", function(){
 	var l = new can.Observe.List([
 		{complete: true},
 		{complete: false},
@@ -638,7 +644,7 @@ test("tag bindings change", function(){
 	item.attr('complete',false);
 	
 	equals(child.getAttribute("items"), "2", "now there are 2 complete");
-})*/
+})
 
 
 
