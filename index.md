@@ -1569,7 +1569,7 @@ instance.attr( 'name', 'doe' );
 \[[dev](http://donejs.com/can/dist/can.observe.attributes.js)\]
 
 The [can.Observe.attributes](http://donejs.com/docs.html#!can.Observe.attributes) plugin
-allows you to define attributes and their type and set converters for each type:
+allows you to define attributes with type and set converters for each type:
 
 {% highlight javascript %}
 new can.Observe({
