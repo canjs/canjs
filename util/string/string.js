@@ -111,7 +111,10 @@ steal('can/util',function() {
 			/**
 			 * @function can.capitalize
 			 * @parent can.util
-			 * Capitalizes a string
+			 * `can.capitalize(string)` capitalizes the first letter of the string passed.
+			 *
+			 *		can.capitalize('candy is fun!'); //-> Returns: 'Candy is fun!'
+			 *
 			 * @param {String} s the string.
 			 * @return {String} a string with the first character capitalized.
 			 */

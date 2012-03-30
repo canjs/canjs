@@ -167,10 +167,28 @@ are editable so experiment!
 
 ## Using routes with `can.Control`
 
-You can use `can.route` within `can.Control` by using the [can.Control.route]
-plugin. Using this makes it possible to both create routes and bind to `can.route`
-at the same time. So instead of creating several routes to handle our changes to
-__type__ and __id__ we can just add the something like the following to a control:
+Using templated event handlers, it is possible to listen to changes to
+`can.route` within `can.Control`. This is convenient as it allows the
+control to listen to and make changes whenever the route is modified, 
+even outside of the control itself.
+
+    // create the route
+    can.route("!#content/:type")
+
+    // the route has changed
+    "{can.route} change": function(ev, attr, how, newVal, oldVal) {
+        if (attr === "type") {
+            // the route has a type
+        }
+    }
+
+### Creating and binding routes with `can.Control.route`
+
+Using [can.Control.route], a builtin plugin to CanJS, cuts down on the amount
+of code needed to work with `can.route` in `can.Control`. With this plugin, it is possible
+to both create routes and bind to `can.route` at the same time. Instead of creating
+several routes to handle changes to __type__ and __id__, write something like this
+in a control:
 
     // the route is empty
     "route": function(data) {
@@ -196,7 +214,8 @@ listen to change, set, add, and remove on `can.route`.
 If you wanted to, say, show a list of recipes when  __type__ was set to recipe
 and show a specific recipe when __id__ was set, you could do something like:
 
-    "{can.route} type=recipe set": function( ev, prop, how, newVal, oldVal ) {
+    "{can.route} type=recipe set": 
+            function( ev, prop, how, newVal, oldVal ) {
         // show list of recipes
     },
     "recipe/:id": function(data) {

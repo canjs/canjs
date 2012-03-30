@@ -9,35 +9,7 @@
 
 (function() {
 
-	var yuilibs = ['yui-base/yui-base.js', 
-		'oop/oop.js', 
-		'event-custom-base/event-custom-base.js', 
-		'features/features.js', 
-		'dom-core/dom-core.js', 
-		'dom-base/dom-base.js', 
-		'selector-native/selector-native.js', 
-		'selector-css2/selector-css2.js',
-		'selector/selector.js', 
-		'node-core/node-core.js', 
-		'node-base/node-base.js', 
-		'event-base/event-base.js', 
-		'event-delegate/event-delegate.js', 
-		'node-event-delegate/node-event-delegate.js', 
-		'pluginhost-base/pluginhost-base.js', 
-		'pluginhost-config/pluginhost-config.js', 
-		'node-pluginhost/node-pluginhost.js', 
-		'dom-style/dom-style.js', 
-		'dom-screen/dom-screen.js', 
-		'node-screen/node-screen.js', 
-		'node-style/node-style.js', 
-		'querystring-stringify-simple/querystring-stringify-simple.js', 
-		'io-base/io-base.js', 
-		'array-extras/array-extras.js', 
-		'querystring-parse/querystring-parse.js', 
-		'querystring-stringify/querystring-stringify.js', 
-		'event-custom-complex/event-custom-complex.js', 
-		'event-synthetic/event-synthetic.js', 
-		'event-focus/event-focus.js']
+	var yuilibs = ['yui-base/yui-base.js', 'oop/oop.js', 'event-custom-base/event-custom-base.js', 'features/features.js', 'dom-core/dom-core.js', 'dom-base/dom-base.js', 'selector-native/selector-native.js', 'selector-css2/selector-css2.js', 'selector/selector.js', 'node-core/node-core.js', 'node-base/node-base.js', 'event-base/event-base.js', 'event-delegate/event-delegate.js', 'node-event-delegate/node-event-delegate.js', 'pluginhost-base/pluginhost-base.js', 'pluginhost-config/pluginhost-config.js', 'node-pluginhost/node-pluginhost.js', 'dom-style/dom-style.js', 'dom-screen/dom-screen.js', 'node-screen/node-screen.js', 'node-style/node-style.js', 'querystring-stringify-simple/querystring-stringify-simple.js', 'io-base/io-base.js', 'array-extras/array-extras.js', 'querystring-parse/querystring-parse.js', 'querystring-stringify/querystring-stringify.js', 'event-custom-complex/event-custom-complex.js', 'event-synthetic/event-synthetic.js', 'event-focus/event-focus.js']
 
 	var url = "http://yui.yahooapis.com/combo?3.4.1/build/" + yuilibs.join("&3.4.1/build/")
 
@@ -50,16 +22,19 @@
 
 	function() {
 
-		// can.Y is set as part of the build process
-		// YUI().use('*') is called for when YUI is statically loaded (like when running tests)
+
+		// ---------
+		// _YUI node list._
+		// `can.Y` is set as part of the build process.
+		// `YUI().use('*')` is called for when `YUI` is statically loaded (like when running tests).
 		var Y = can.Y = can.Y || YUI().use('*');
 
-		// String
+		// Map string helpers.
 		can.trim = function( s ) {
 			return Y.Lang.trim(s);
 		}
 
-		// Array
+		// Map array helpers.
 		can.makeArray = function( arr ) {
 			return Y.Array(arr);
 		};
@@ -69,7 +44,6 @@
 		};
 
 		can.map = function( arr, fn ) {
-			// http://yuilibrary.com/yui/docs/api/classes/Array.html#method_map
 			return Y.Array.map(can.makeArray(arr || []), fn);
 		};
 
@@ -84,7 +58,7 @@
 			return elements;
 		};
 
-		// Object
+		// Map object helpers.
 		can.extend = function( first ) {
 			var deep = first === true ? 1 : 0,
 				target = arguments[deep],
@@ -102,7 +76,7 @@
 			return Y.Object.isEmpty(object);
 		}
 
-		// Function
+		// Map function helpers.
 		can.proxy = function( func, context ) {
 			return Y.bind.apply(Y, arguments);
 		}
@@ -110,7 +84,7 @@
 			return Y.Lang.isFunction(f);
 		}
 
-		// element ... get the wrapped helper
+		// Element -- get the wrapped helper.
 		var prepareNodeList = function( nodelist ) {
 			nodelist.each(function( node, i ) {
 				nodelist[i] = node.getDOMNode();
@@ -167,13 +141,13 @@
 		can.remove = function( wrapped ) {
 			return wrapped.remove() && wrapped.destroy();
 		}
-		// destroyed method
+		// Destroyed method.
 		can._yNodeDestroy = can._yNodeDestroy || Y.Node.prototype.destroy;
 		Y.Node.prototype.destroy = function() {
 			can.trigger(this, "destroyed", [], false)
 			can._yNodeDestroy.apply(this, arguments)
 		}
-		// let nodelist know about the new destroy ...
+		// Let `nodelist` know about the new destroy...
 		Y.NodeList.addMethod("destroy", Y.Node.prototype.destroy);
 
 		// Ajax
@@ -183,7 +157,7 @@
 			error: undefined
 		}
 		var updateDeferred = function( request, d ) {
-			// YUI only returns a request if it is asynchronous
+			// `YUI` only returns a request if it is asynchronous.
 			if ( request && request.io ) {
 				var xhr = request.io;
 				for ( var prop in xhr ) {
@@ -235,14 +209,13 @@
 
 		}
 
-		// Events
-		// the id of the function to be bound, used as an expando on the function
-		// so we can lookup it's "remove" object
+		// Events - The `id` of the `function` to be bound, used as an expando on the `function`
+		// so we can lookup it's `remove` object.
 		var id = 0,
-			// takes a node list, goes through each node
+			// Takes a node list, goes through each node
 			// and adds events data that has a map of events to 
-			// callbackId to "remove" object.  It looks like
-			// {click: {5: {remove: fn}}}		
+			// `callbackId` to `remove` object.  It looks like
+			// `{click: {5: {remove: fn}}}`. 
 			addBinding = function( nodelist, selector, ev, cb ) {
 				if ( nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode ) {
 					nodelist.each(function( node ) {
@@ -272,8 +245,8 @@
 					events[ev][cb.__bindingsIds] = obj.on(ev, cb);
 				}
 			},
-			// removes a binding on a nodelist by finding
-			// the remove object within the object's data
+			// Removes a binding on a `nodelist` by finding
+			// the remove object within the object's data.
 			removeBinding = function( nodelist, selector, ev, cb ) {
 				if ( nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode ) {
 					nodelist.each(function( node ) {
@@ -303,7 +276,7 @@
 				}
 			}
 			can.bind = function( ev, cb ) {
-				// if we can bind to it ...
+				// If we can bind to it...
 				if ( this.bind && this.bind !== can.bind ) {
 					this.bind(ev, cb)
 				} else if ( this.on || this.nodeType ) {
@@ -311,13 +284,13 @@
 				} else if ( this.addEvent ) {
 					this.addEvent(ev, cb)
 				} else {
-					// make it bind-able ...
+					// Make it bind-able...
 					can.addEvent.call(this, ev, cb)
 				}
 				return this;
 			}
 			can.unbind = function( ev, cb ) {
-				// if we can bind to it ...
+				// If we can bind to it...
 				if ( this.unbind && this.unbind !== can.unbind ) {
 					this.unbind(ev, cb)
 				}
@@ -325,7 +298,7 @@
 				else if ( this.on || this.nodeType ) {
 					removeBinding(can.$(this), undefined, ev, cb);
 				} else {
-					// make it bind-able ...
+					// Make it bind-able...
 					can.removeEvent.call(this, ev, cb)
 				}
 				return this;
@@ -341,8 +314,8 @@
 				if ( item.nodeName ) {
 					item = Y.Node(item);
 					if ( bubble === false ) {
-						//  force stop propagation by
-						// listening to On and then immediately disconnecting
+						// Force stop propagation by listening to `on` and then 
+						// immediately disconnecting
 						item.once(event, function( ev ) {
 							ev.stopPropagation && ev.stopPropagation();
 							ev.cancelBubble = true;
@@ -361,7 +334,7 @@
 					can.dispatch.call(item, event)
 				}
 			};
-		// allow dom destroyed events
+		// Allow `dom` `destroyed` events.
 		Y.mix(Y.Node.DOM_EVENTS, {
 			destroyed: true
 		});
@@ -383,14 +356,14 @@
 			return this;
 		}
 
-		// realTrigger taken from DOJO
+		// `realTrigger` taken from `dojo`.
 		var leaveRe = /mouse(enter|leave)/,
 			_fix = function( _, p ) {
 				return "mouse" + (p == "enter" ? "over" : "out");
 			},
 			realTrigger = document.createEvent ?
 			function( n, e, a ) {
-				// the sane branch
+				// the same branch
 				var ev = document.createEvent("HTMLEvents");
 				e = e.replace(leaveRe, _fix);
 				ev.initEvent(e, true, true);
@@ -425,8 +398,7 @@
 						}
 					}, a);
 					realTriggerHandler(n, e, evdata);
-						
-					//can.isFunction(n[ev]) && n[ev](evdata);
+
 					// handle bubbling of custom events, unless the event was stopped.
 					while (!stop && n !== document && n.parentNode ) {
 						n = n.parentNode;
@@ -435,14 +407,15 @@
 					}
 				}
 			},
-			realTriggerHandler = function(n, e, evdata){
+			realTriggerHandler = function( n, e, evdata ) {
 				var node = Y.Node(n),
-					handlers = can.Y.Event.getListeners(node._yuid , e );
-					if(handlers){
-						for(var i =0; i < handlers.length; i++){
-							handlers[i].fire(evdata)
-						}
-					}			}
+					handlers = can.Y.Event.getListeners(node._yuid, e);
+				if ( handlers ) {
+					for ( var i = 0; i < handlers.length; i++ ) {
+						handlers[i].fire(evdata)
+					}
+				}
+			};
 
 	}).then("../deferred.js")
 

@@ -200,9 +200,15 @@ __Binding to a NodeList__
 @function can.ajax
 @parent can.util
 
-`can.ajax( settings )` is used to make an Ajax request like
-[http://api.jquery.com/jQuery.ajax/ jQuery.ajax].
+`can.ajax( settings )` is used to make an asynchronous HTTP (Ajax) request 
+similar to [http://api.jquery.com/jQuery.ajax/ jQuery.ajax].
 
+	can.ajax({
+		url: 'ajax/farm/animals',
+		success: function(animals) {
+			can.$('.farm').html(animals);
+		}
+	});
 
 */
 //
@@ -227,11 +233,25 @@ The following lists how the NodeList is created by each library:
 /**
 @function can.buildFragment
 @parent can.util
+
+`can.buildFragment([html], nodes)` returns a document fragment for the HTML passed.
+
 */
 //
 /**
 @function can.append
 @parent can.util
+
+`can.append( wrappedNodeList, html )` inserts content to the end of each wrapped node list item(s) passed.
+
+	// Before
+	<div id="demo" />
+	
+	can.append( can.$('#demo'), 'Demos are fun!' );
+	
+	// After
+	<div id="demo">Demos are fun!</div>
+
 */
 //
 /**
@@ -242,17 +262,57 @@ The following lists how the NodeList is created by each library:
 /**
 @function can.data
 @parent can.util
+
+`can.data` enables the associatation of arbitrary data with DOM nodes and JavaScript objects.
+
+### Setting Data
+
+	can.data( can.$('#elm'), key, value )
+	
+- __wrappedNodeList__ node list to associate data to.
+- __key__ string name of the association.
+- __value__ tdata value; it can be any Javascript type including Array or Object.
+
+### Accessing Data
+
+	can.data( can.$('#elm'), key )
+	
+- __wrappedNodeList__ node list to retrieve association data from.
+- __key__ string name of the association.
+
+Due to the way browsers security restrictions with plugins and external code, 
+the _data_ method cannot be used on <object> (unless it's a Flash plugin), <applet> or <embed> elements.
+
 */
 //
 /**
 @function can.addClass
 @parent can.util
 
-`can.addClass( nodelist, className )` adds className to
-nodelist's HTMLElements.  This works just like
-[http://api.jquery.com/addClass/ jQuery.fn.addClass]
+`can.addClass( nodelist, className )` adds the specified class(es) to
+nodelist's HTMLElements.  It does NOT replace any existing class(es)
+already defined.
 
+	// Before
+	<div id="foo" class="monkey" />
+	
     can.addClass(can.$("#foo"),"bar")
+
+	// After
+	<div id="foo" class="monkey bar" />
+	
+You can also pass multiple class(es) and it will add them to the existing
+set also.
+
+	// Before
+	<div id="foo" class="monkey" />
+
+	can.addClass(can.$("#foo"),"bar man")
+
+	// After
+	<div id="foo" class="monkey bar man" />
+	
+This works similarly to [http://api.jquery.com/addClass/ jQuery.fn.addClass].
 
 */
 //
