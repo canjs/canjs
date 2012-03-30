@@ -31,6 +31,6 @@ If data is not provided, it uses the controller instance as data.
 		}
 	})
 
-The control name will be determined by its [full name](can.construct.fullName) so
+The control name will be determined by its [can.Construct.fullName fullName] so
 make sure that it is set when using the plugin. If the view name doesn't include an extension the
 default view extension in [can.view.ext] will be added.

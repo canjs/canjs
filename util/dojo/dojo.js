@@ -5,15 +5,19 @@ steal({
 	'./trigger',
 	function(){
 
-	// these are pre-loaded by steal -> no callback
+	// dojo.js
+	// ---------
+	// _dojo node list._
+	//  
+	// These are pre-loaded by `steal` -> no callback.
 	require(["dojo", "dojo/query", "plugd/trigger", "dojo/NodeList-dom"]);
 	
-	// String
+	// Map string helpers.
 	can.trim = function(s){
 		return s && dojo.trim(s);
 	}
 	
-	// Array
+	// Map array helpers.
 	can.makeArray = function(arr){
 		array = [];
 		dojo.forEach(arr, function(item){ array.push(item)});
@@ -38,7 +42,7 @@ steal({
 	      }
 	    return elements;
   	}
-	// Object
+	// Map object helpers.
 	can.extend = function(first){
 		if(first === true){
 			var args = can.makeArray(arguments);
@@ -57,7 +61,7 @@ steal({
 		}
 		return prop === undefined;;
 	}
-	// Function
+	// Map function helpers.
 	can.proxy = function(func, context){
 		return dojo.hitch(context, func)
 	}
@@ -75,14 +79,14 @@ steal({
 	 * object to it can be passed to dojo.disconnect.
 	 */
 	
-	// the id of the function to be bound, used as an expando on the function
-	// so we can lookup it's "remove" object
+	// The id of the `function` to be bound, used as an expando on the `function`
+	// so we can lookup it's `remove` object.
 	var id = 0,
-		// takes a node list, goes through each node
+		// Takes a node list, goes through each node
 		// and adds events data that has a map of events to 
-		// callbackId to "remove" object.  It looks like
-		// {click: {5: {remove: fn}}}		
-		addBinding = function(nodelist, ev, cb){
+		// callbackId to `remove` object.  It looks like
+		// `{click: {5: {remove: fn}}}`. 
+		addBinding = function( nodelist, ev, cb ) {
 			nodelist.forEach(function(node){
 				var node = new dojo.NodeList(node)
 				var events = can.data(node,"events");
@@ -98,8 +102,8 @@ steal({
 				events[ev][cb.__bindingsIds] = node.on(ev, cb)[0]
 			});
 		},
-		// removes a binding on a nodelist by finding
-		// the remove object within the object's data
+		// Removes a binding on a `nodelist` by finding
+		// the remove object within the object's data.
 		removeBinding = function(nodelist,ev,cb){
 			nodelist.forEach(function(node){
 				var node = new dojo.NodeList(node),
@@ -113,30 +117,27 @@ steal({
 				if(can.isEmptyObject(handlers)){
 					delete events[ev]
 				}
-				if(can.isEmptyObject(events)){
-					// clear data
-				}
 			});
 		}
 	
 	can.bind = function( ev, cb){
-		// if we can bind to it ...
+		// If we can bind to it...
 		if(this.bind && this.bind !== can.bind){
 			this.bind(ev, cb)
 			
-		// otherwise it's an element or node List
+		// Otherwise it's an element or `nodeList`.
 		} else if(this.on || this.nodeType){
 			addBinding( new dojo.NodeList(this), ev, cb)
 		} else if(this.addEvent) {
 			this.addEvent(ev, cb)
 		} else {
-			// make it bind-able ...
+			// Make it bind-able...
 			can.addEvent.call(this, ev, cb)
 		}
 		return this;
 	}
 	can.unbind = function(ev, cb){
-		// if we can bind to it ...
+		// If we can bind to it...
 		if(this.unbind && this.unbind !== can.unbind){
 			this.unbind(ev, cb)
 		} 
@@ -144,7 +145,7 @@ steal({
 		else if(this.on || this.nodeType) {
 			removeBinding(new dojo.NodeList(this), ev, cb);
 		} else {
-			// make it bind-able ...
+			// Make it bind-able...
 			can.removeEvent.call(this, ev, cb)
 		}
 		return this;
@@ -153,10 +154,17 @@ steal({
 	can.trigger = function(item, event, args, bubble){
 		if(item.trigger){
 			if(bubble === false){
-				//  force stop propagation by
-				// listening to On and then immediately disconnecting
+				if(!item[0] || item[0].nodeType === 3){
+					return;
+				}
+				// Force stop propagation by
+				// listening to `on` and then immediately disconnecting.
 				var connect = item.on(event, function(ev){
+					
 					ev.stopPropagation && ev.stopPropagation();
+					ev.cancelBubble = true;
+					ev._stopper && ev._stopper();
+					
 					dojo.disconnect(connect);
 				})
 				item.trigger(event,args)
@@ -244,7 +252,7 @@ steal({
 		return d;
 			
 	}
-	// element ... get the wrapped helper
+	// Element - get the wrapped helper.
 	can.$ = function(selector){
 		if(selector === window){
 			return window;
@@ -325,10 +333,10 @@ steal({
 			});
 	};
 	
-	// overwrite dojo.destroy and dojo.empty and dojo.palce
+	// Overwrite `dojo.destroy`, `dojo.empty` and `dojo.place`.
 	var empty = dojo.empty;
 	dojo.empty = function(){
-		for(var c; c = node.lastChild;){ // intentional assignment
+		for(var c; c = node.lastChild;){ // Intentional assignment.
 			dojo.destroy(c);
 		} 
 	}
@@ -347,7 +355,7 @@ steal({
 	}
 	
 	can.remove = function(wrapped){
-		// we need to remove text nodes ourselves
+		// We need to remove text nodes ourselves.
 		wrapped.forEach(dojo.destroy);
 	}
 
@@ -355,7 +363,7 @@ steal({
 		return wrapped[index];
 	}
 
-	/* add pipe to dojo.Deferred */
+	// Add pipe to `dojo.Deferred`.
 	can.extend(dojo.Deferred.prototype, {
 		pipe : function(done, fail){
 			var d = new dojo.Deferred();

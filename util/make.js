@@ -27,8 +27,9 @@ load("steal/rhino/rhino.js");
 steal('steal/build/pluginify', function() {
 	
 	steal.File("can/dist").mkdirs();
+	steal.File("can/dist/edge").mkdirs();
 	steal.build.pluginify("can/util/make/jquery.js",{
-		out : "can/dist/can.jquery-edge.js",
+		out : "can/dist/edge/can.jquery.min.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
@@ -37,7 +38,7 @@ steal('steal/build/pluginify', function() {
 	});
 	
 	steal.build.pluginify("can/util/make/mootools.js",{
-		out : "can/dist/can.mootools-edge.js",
+		out : "can/dist/edge/can.mootools.min.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
@@ -45,7 +46,7 @@ steal('steal/build/pluginify', function() {
 	});
 	
 	steal.build.pluginify("can/util/make/zepto.js",{
-		out : "can/dist/can.zepto-edge.js",
+		out : "can/dist/edge/can.zepto.min.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
@@ -53,7 +54,7 @@ steal('steal/build/pluginify', function() {
 	});
 	
 	steal.build.pluginify("can/util/make/dojo.js",{
-		out : "can/dist/can.dojo-edge.js",
+		out : "can/dist/edge/can.dojo.min.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
@@ -62,7 +63,7 @@ steal('steal/build/pluginify', function() {
 	});
 	
 	steal.build.pluginify("can/util/make/yui.js",{
-		out : "can/dist/can.yui-edge.js",
+		out : "can/dist/edge/can.yui.min.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
@@ -71,7 +72,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/util/make/jquery.js",{
-		out : "can/dist/can.jquery-dev-edge.js",
+		out : "can/dist/edge/can.jquery.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: false,
@@ -80,7 +81,7 @@ steal('steal/build/pluginify', function() {
 	});
 	
 	steal.build.pluginify("can/util/make/mootools.js",{
-		out : "can/dist/can.mootools-dev-edge.js",
+		out : "can/dist/edge/can.mootools.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: false,
@@ -88,7 +89,7 @@ steal('steal/build/pluginify', function() {
 	});
 	
 	steal.build.pluginify("can/util/make/zepto.js",{
-		out : "can/dist/can.zepto-dev-edge.js",
+		out : "can/dist/edge/can.zepto.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: false,
@@ -96,7 +97,7 @@ steal('steal/build/pluginify', function() {
 	});
 	
 	steal.build.pluginify("can/util/make/dojo.js",{
-		out : "can/dist/can.dojo-dev-edge.js",
+		out : "can/dist/edge/can.dojo.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: false,
@@ -105,16 +106,22 @@ steal('steal/build/pluginify', function() {
 	});
 	
 	steal.build.pluginify("can/util/make/yui.js",{
-		out : "can/dist/can.yui-dev-edge.js",
+		out : "can/dist/edge/can.yui.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: false,
 		wrapInner: ['\nYUI().add("can", function(Y) {\n','}, "0.0.1", {\nrequires: ["node", "io-base", "querystring", "event-focus", "array-extras"]\n});\n'],
 		skipCallbacks: true
 	});
+	
+	STEALJQUERY = true;
+	STEALDOJO = false;
+	STEALMOO = false;
+	STEALYUI = false;
+	STEALZEPTO = false;
 
 	steal.build.pluginify("can/construct/proxy/proxy.js", {
-		out: "can/dist/can.construct.proxy.js",
+		out: "can/dist/edge/can.construct.proxy.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: false,
@@ -123,7 +130,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/construct/super/super.js", {
-		out: "can/dist/can.construct.super.js",
+		out: "can/dist/edge/can.construct.super.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: false,
@@ -132,7 +139,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/control/plugin/plugin.js", {
-		out: "can/dist/can.control.plugin.js",
+		out: "can/dist/edge/can.control.plugin.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: false,
@@ -141,7 +148,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/observe/attributes/attributes.js", {
-		out: "can/dist/can.observe.attributes.js",
+		out: "can/dist/edge/can.observe.attributes.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: false,
@@ -150,7 +157,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/observe/delegate/delegate.js", {
-		out: "can/dist/can.observe.delegate.js",
+		out: "can/dist/edge/can.observe.delegate.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: false,
@@ -159,7 +166,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/observe/setter/setter.js", {
-		out: "can/dist/can.observe.setter.js",
+		out: "can/dist/edge/can.observe.setter.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: false,
@@ -168,7 +175,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/observe/backup/backup.js", {
-		out: "can/dist/can.observe.backup.js",
+		out: "can/dist/edge/can.observe.backup.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: false,
@@ -177,7 +184,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/observe/validations/validations.js", {
-		out: "can/dist/can.observe.validations.js",
+		out: "can/dist/edge/can.observe.validations.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: false,
@@ -186,7 +193,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/construct/proxy/proxy.js", {
-		out: "can/dist/can.construct.proxy.min.js",
+		out: "can/dist/edge/can.construct.proxy.min.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: true,
@@ -195,7 +202,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/construct/super/super.js", {
-		out: "can/dist/can.construct.super.min.js",
+		out: "can/dist/edge/can.construct.super.min.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: true,
@@ -204,7 +211,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/control/plugin/plugin.js", {
-		out: "can/dist/can.control.plugin.min.js",
+		out: "can/dist/edge/can.control.plugin.min.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: true,
@@ -213,7 +220,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/observe/attributes/attributes.js", {
-		out: "can/dist/can.observe.attributes.min.js",
+		out: "can/dist/edge/can.observe.attributes.min.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: true,
@@ -222,7 +229,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/observe/delegate/delegate.js", {
-		out: "can/dist/can.observe.delegate.min.js",
+		out: "can/dist/edge/can.observe.delegate.min.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: true,
@@ -231,7 +238,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/observe/setter/setter.js", {
-		out: "can/dist/can.observe.setter.min.js",
+		out: "can/dist/edge/can.observe.setter.min.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: true,
@@ -240,7 +247,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/observe/backup/backup.js", {
-		out: "can/dist/can.observe.backup.min.js",
+		out: "can/dist/edge/can.observe.backup.min.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: true,
@@ -249,7 +256,7 @@ steal('steal/build/pluginify', function() {
 	});
 
 	steal.build.pluginify("can/observe/validations/validations.js", {
-		out: "can/dist/can.observe.validations.min.js",
+		out: "can/dist/edge/can.observe.validations.min.js",
 		global: "can = {}",
 		onefunc: true,
 		compress: true,
