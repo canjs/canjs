@@ -1451,6 +1451,42 @@ event.  This is used to teardown event handlers in can.Control.
 
 CanJS can be used with libraries other than jQuery.
 
+### Using YUI
+
+CanJS can be used with YUI with either dynamically or statically loaded modules.
+CanJS depends on the following YUI modules: *node*, *io-base*, *querystring*, *event-focus*, and *array-extras*.
+
+To use CanJS with YUI dynamic loading modules:
+
+{% highlight erb %}
+<script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
+<script src="path/to/can.yui.js"></script>
+<script>
+  YUI().use('can', function(Y) {
+    // Start using CanJS
+    can.Model('Todo', {
+      ...
+    });
+  });
+</script>
+{% endhighlight %}
+
+To use CanJS with YUI static loading modules:
+
+{% highlight erb %}
+<!-- Generated with YUI Configurator: http://yuilibrary.com/yui/configurator/ -->
+<script src="http://yui.yahooapis.com/combo?3.4.1/build/yui-base/yui-base-min.js&3.4.1/build/oop/oop-min.js&3.4.1/build/event-custom-base/event-custom-base-min.js&3.4.1/build/features/features-min.js&3.4.1/build/dom-core/dom-core-min.js&3.4.1/build/dom-base/dom-base-min.js&3.4.1/build/selector-native/selector-native-min.js&3.4.1/build/selector/selector-min.js&3.4.1/build/node-core/node-core-min.js&3.4.1/build/node-base/node-base-min.js&3.4.1/build/event-base/event-base-min.js&3.4.1/build/event-delegate/event-delegate-min.js&3.4.1/build/node-event-delegate/node-event-delegate-min.js&3.4.1/build/pluginhost-base/pluginhost-base-min.js&3.4.1/build/pluginhost-config/pluginhost-config-min.js&3.4.1/build/node-pluginhost/node-pluginhost-min.js&3.4.1/build/dom-style/dom-style-min.js&3.4.1/build/dom-screen/dom-screen-min.js&3.4.1/build/node-screen/node-screen-min.js&3.4.1/build/node-style/node-style-min.js&3.4.1/build/querystring-stringify-simple/querystring-stringify-simple-min.js&3.4.1/build/io-base/io-base-min.js&3.4.1/build/array-extras/array-extras-min.js&3.4.1/build/querystring-parse/querystring-parse-min.js&3.4.1/build/querystring-stringify/querystring-stringify-min.js&3.4.1/build/event-custom-complex/event-custom-complex-min.js&3.4.1/build/event-synthetic/event-synthetic-min.js&3.4.1/build/event-focus/event-focus-min.js"></script>
+<script src="path/to/can.yui.js"></script>
+<script>
+  YUI().use('*', function(Y) {
+    // Start using CanJS
+    can.Model('Todo', {
+      ...
+    });
+  });
+</script>
+{% endhighlight %}
+
 ### Implementing another library
 
 ## Plugins
