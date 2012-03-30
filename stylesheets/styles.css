@@ -41,6 +41,9 @@ body {
 	font-size: 10px;
 	line-height: 10px;
 }
+em {
+	font-style: italic;
+}
 #bg {
 	height: 200px;
 	background: url(../images/body_top.png);
