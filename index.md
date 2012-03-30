@@ -1572,15 +1572,20 @@ The [can.Observe.attributes](http://donejs.com/docs.html#!can.Observe.attributes
 allows you to define attributes with type and set converters for each type:
 
 {% highlight javascript %}
-new can.Observe({
+var Birthday = new can.Observe({
   attributes: {
     birthday: 'date'
   },
   convert: {
     date: function( raw ) {
       if ( typeof raw == 'string' ) {
-        var matches = raw.match( /(\d+)-(\d+)-(\d+)/ );
-        return new Date( matches[ 1 ], ( +matches[ 2 ] ) - 1, matches[ 3 ] );
+      
+        //- Extracts dates formated 'YYYY-DD-MM'
+        var matches = raw.match( /(\d+)-(\d+)-(\d+)/ ); 
+        
+        //- parses to date object and returns
+        return new Date( matches[ 1 ], ( +matches[ 2 ] ) - 1, matches[ 3 ] ); 
+        
       }else if ( raw instanceof Date ) {
         return raw;
       }
