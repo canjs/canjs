@@ -352,9 +352,9 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 								// get fragement of html to fragment
 								var frag = can.view.frag(val),
 									// wrap it to keep a reference to the elements .. 
-									nodes = can.$(can.map(frag.childNodes,function(node){
+									nodes = can.map(frag.childNodes,function(node){
 										return node;
-									})),
+									}),
 									last = remove[remove.length - 1];
 								
 								// insert it in the document
