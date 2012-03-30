@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en">
 	<head>
-		<title>route</title>
+		<title>can.Control.plugin</title>
         <style type='text/css'>
             body {font-family: verdana}
             .error {border: solid 1px red;}
@@ -10,30 +10,38 @@
         </style>
 	</head>
 	<body>
-	    <h1>route Demo</h1>
-	
-		<a href="#!foo/bar">foo/bar</a>
-		<a href="#!">empty</a>
-		
-		<p class="status"></p>
-		
-		<script type='text/javascript' 
-                src='../../../steal/steal.js'>   
-        </script>
-
+	    <h1>can.Control.plugin Demo</h1>
+	    <div id="control"></div>
+	    <button>Update myPlugin</button>
+		<script type='text/javascript' src='../../../steal/steal.js'></script>
 		<script type='text/javascript'>
-			steal('can/control/route', function(){
+			steal('can/construct/super').then('can/control/plugin', function(){
 				
-				Can.Control("Router",{
-					"foo/:bar route" : function(){
-						$('.status').html("foo/:bar");
+				var Plugin = can.Control({
+					pluginName: 'myPlugin'
+				}, {
+					init : function(el, options) {
+						this.updateCount = 0;
+						this.update({
+							text : 'Initialized. Updated'
+						});
 					},
-					"route" : function(){
-						$('.status').html('');
+
+					update : function(options) {
+						// Call the old update. Use this._super when using can/construct/super
+						can.Control.prototype.update.call(this, options);
+						this.element.html(this.options.text + ' ' + (++this.updateCount) + ' times');
 					}
-				})
-				
-				new Router(window)
+				});
+
+				var updateCount = 0;
+				$('#control').myPlugin();
+				$('button').click(function() {
+					$('#control').myPlugin({
+						text : 'Update button clicked. Updated',
+						times : ++updateCount
+					});
+				});
 			})
 		</script>
 	</body>

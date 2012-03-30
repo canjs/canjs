@@ -12,7 +12,8 @@
 	<body>
 	    <h1>route Demo</h1>
 	
-		<a href="#!foo/bar">foo/bar</a>
+		<a href="#!foo/test">foo/bar</a>
+	    <a href="#!foo/">foo/</a>
 		<a href="#!">empty</a>
 		
 		<p class="status"></p>
@@ -24,14 +25,18 @@
 		<script type='text/javascript'>
 			steal('can/control/route', function(){
 				
-				Can.Control("Router",{
-					"foo/:bar route" : function(){
-						$('.status').html("foo/:bar");
+				var Router = can.Control({
+					init : function(el, options) {
+						can.route('foo/:bar', { bar : 'default' });
+					},
+
+					"foo/:bar route" : function(data) {
+						$('.status').html("foo/:bar bar is: " + data.bar);
 					},
 					"route" : function(){
-						$('.status').html('');
+						$('.status').html('Empty route');
 					}
-				})
+				});
 				
 				new Router(window)
 			})
