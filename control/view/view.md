@@ -5,12 +5,12 @@
 @download http://donejs.com/can/dist/can.control.view.js
 
 Renders a View template with the controller instance. If the first argument
-is not supplied, it looks for a view in `/views/controller_name/action_name.ejs`.
+is not supplied, it looks for a view in `/views/controlName/action_name.ejs`.
 If data is not provided, it uses the controller instance as data.
 
 	var Tasks = can.Control.extend('Tasks',{
 		click: function( el ) {
-			// renders with views/tasks/click.ejs
+			// renders with views/tasks/click.ejs with the control as data
 			this.element.html( this.view() )
 
 			// renders with views/tasks/click.ejs with some data
@@ -30,3 +30,7 @@ If data is not provided, it uses the controller instance as data.
 				this.view("shared/top", {phrase: "hi"}) );
 		}
 	})
+
+The control name will be determined by its [full name](can.construct.fullName) so
+make sure that it is set when using the plugin. If the view name doesn't include an extension the
+default view extension in [can.view.ext] will be added.

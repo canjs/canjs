@@ -23,17 +23,19 @@ __Note:__ This plugin only supports jQuery.
 
 ## Plugin Name
 
-Setting the `pluginName` property allows you to change 
-the can plugin helper name from its default value.
+Setting the static `pluginName` property allows you to set the can plugin helper name:
 
-	var MxuiLayoutFill = can.Control({
+	var Filler = can.Control({
 		pluginName: "fillWith"
 	},{});
-	
+
 	$("#foo").fillWith();
-	
-If you don't provide a plugin name, the control falls back
-to the [can.Construct.fullName fullName] attribute.
+
+If you don't provide a plugin name, the control falls back to the
+[can.Construct.fullName fullName] attribute:
+
+	can.Control('Ui.Layout.FillWith', {}, {});
+	$("#foo").ui_layout_fill_with();
 
 ## Updating
 
@@ -62,18 +64,47 @@ is `created`, it resets the form with a new instance.
 	
 	$('#createRecipes').creator({ recipe : new Recipe() })
 	
-See [can.Control.prototype.update update] for more information.
+*Update* is called if a control's plugin helper is called with the plugin options on an element
+that already has a control instance of the same type. If you want to implement your
+own update method make sure to call the old one either using the [can.Contruct.super] plugin or
+by calling `can.Control.prototype.update.apply(this, arguments);`.
+For example, you can change the content of the control element every time the options change:
+
+	var Plugin = can.Control({
+		pluginName: 'myPlugin'
+	}, {
+		init : function(el, options) {
+			this.updateCount = 0;
+			this.update({
+				text : 'Initialized'
+			});
+		},
+
+		update : function(options) {
+			// Call the old update. Use this._super when using can/construct/super
+			can.Control.prototype.update.call(this, options);
+			this.element.html(this.options.text + ' ' + (++this.updateCount) + ' times');
+		}
+	});
+
+	$('#control').myPlugin();
+	$('#control').html();
+	// Initialized. Updated 1 times
+	$('#control').myPlugin({ text : 'Calling update. Updated' });
+	$('#control').html();
+	// Calling update. Updated 2 times
 
 ## Calling methods
 
 You can invoke methods on a controller instance after its created through a few
 different approaches.  
 
-Once a controller is initialized on a DOM element, you can invoke a method
-by querying the DOM and calling the controller name followed with the 
-parameters of the plugin name and any additional arguments you want to pass.
+Once a controller is initialized on a DOM element, you can invoke a method by calling
+the plugin with the method name followed by the parameters for that method.
 
 	var MyTodo = can.Control({
+		pluginName : 'my_toto'
+	}, {
 		create: function(name, task){
 			this.element.append(name + " " + task)
 		}
@@ -81,7 +112,8 @@ parameters of the plugin name and any additional arguments you want to pass.
 	
 	$('.my_todo').my_todo("create", 'Austin', 'Sweep garage');
 
-Secondly, you can retrieve the instance and invoke the method directly.  
+Keep in mind that this approach follows the jQuery plugin convention and returns a jQuery object,
+not the methods return value. You can also retrieve the control instance and invoke the method directly.
 For more information on fetching controller instances on DOM elements see 
 the __Access__ section.
 
@@ -89,7 +121,7 @@ the __Access__ section.
 
 When the widget is initialized, the plugin control creates an association 
 of controller instance(s) with the DOM element it was initialized on using 
-can's data method.
+[can.data] method.
 
 ### Controller
 

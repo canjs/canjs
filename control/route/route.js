@@ -1,5 +1,5 @@
 steal('can/route','can/control', function(){
-	
+
 	can.Control.processors.route = function(el, event, selector, funcName, controller){
 		can.route(selector||"")
 		var batchNum,
