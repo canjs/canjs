@@ -1,21 +1,30 @@
-// 2.04
-/*jslint evil: true */
 steal('can/view', 'can/util/string').then(function( $ ) {
 
-	// HELPER METHODS ==============
+	// ## ejs.js
+	// `can.EJS`  
+	// _Embedded JavaScript Templates._
+
+	// Helper methods.
 	var myEval = function( script ) {
 		eval(script);
 	},
-		// removes the last character from a string
-		// this is no longer needed
 		extend = can.extend,
-		// regular expressions for caching
+		// Regular expressions for caching.
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 		attrReg = /([^\s]+)=$/,
 		newLine = /(\r|\n)+/g,
 		attributeReplace = /__!!__/g,
-		tagMap = {"": "span", table: "tr", tr: "td", ol: "li", ul: "li", tbody: "tr", thead: "tr", tfoot: "tr"},
-		// escapes characters starting with \
+		tagMap = {
+			"": "span", 
+			table: "tr", 
+			tr: "td", 
+			ol: "li", 
+			ul: "li", 
+			tbody: "tr",
+			thead: "tr",
+			tfoot: "tr"
+		},
+		// Escapes characters starting with `\`.
 		clean = function( content ) {
 			return content
 				.split('\\').join("\\\\")
@@ -27,7 +36,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			return (--content.split("{").length) - (--content.split("}").length);
 		},
 		setAttr = function(el, attrName, val){
-			attrName === "class"?
+			attrName === "class" ?
 				(el.className = val):
 				el.setAttribute(attrName, val);
 		},
@@ -36,10 +45,10 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				el.className:
 				el.getAttribute(attrName);
 		},
-		// used to bind to an observe, and unbind when the element is removed
-		// oldObserved is a mapping of observe namespaces to instances
-		liveBind = function(observed, el, cb, oldObserved){
-			// we are going to set everything to matched that we find
+		// Used to bind to an `observe` and unbind when the element is removed.
+		// `oldObserved` is a mapping of `observe` namespaces to instances.
+		liveBind = function( observed, el, cb, oldObserved ) {
+			// We are going to set everything to matched that we find.
 			var first = oldObserved.matched === undefined;
 			oldObserved.matched = !oldObserved.matched;
 			can.each(observed, function(i, ob){
@@ -51,8 +60,8 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					ob.obj.bind(ob.attr, cb)
 				}
 			})
-			// remove any old bindings
-			for(var name in oldObserved){
+			// Remove any old bindings.
+			for ( var name in oldObserved ) {
 				var ob = oldObserved[name];
 				if(name !== "matched" && ob.matched !== oldObserved.matched){
 					ob.obj.unbind(ob.attr);
@@ -71,39 +80,42 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 
 		},
 		contentEscape = function( txt ) {
-			//return sanatized text
+			// Return sanatized text.
 			return (typeof txt == 'string' || typeof txt == 'number') ?
 				can.esc( txt ) :
 				contentText(txt);
 		},
 		contentText =  function( input ) {	
 			
-			// if it's a string, return
+			// If it's a string, return.
 			if ( typeof input == 'string' ) {
 				return input;
 			}
-			// if has no value
+			// If has no value, return an empty string.
 			if ( !input && input != 0 ) {
 				return '';
 			}
 
-			// if it's an object, and it has a hookup method
+			// If it's an object, and it has a hookup method.
 			var hook = (input.hookup &&
-			// make a function call the hookup method
 
+			// Make a function call the hookup method.
 			function( el, id ) {
 				input.hookup.call(input, el, id);
 			}) ||
-			// or if it's a function, just use the input
+
+			// Or if it's a `function`, just use the input.
 			(typeof input == 'function' && input);
-			// finally, if there is a funciton to hookup on some dom
-			// add it to pending hookups
+
+			// Finally, if there is a `function` to hookup on some dom,
+			// add it to pending hookups.
 			if ( hook ) {
 				pendingHookups.push(hook);
 				return '';
 			}
-			// finally, if all else false, toString it
-			return ""+input;
+
+			// Finally, if all else is `false`, `toString()` it.
+			return "" + input;
 		},
 		getValueAndObserved = function(func, self){
 			if (can.Observe) {
@@ -114,11 +126,11 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					});
 				}
 			}
-			// get value
+			// Get value.
 			var observed = [],
 				input = func.call(self);
 	
-			// set back so we are no longer reading
+			// Set back so we are no longer reading.
 			if(can.Observe){
 				delete can.Observe.__reading;
 			}
@@ -260,19 +272,19 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					return ejs.render(data, helpers);
 				};
 			}
-			// if we get a function directly, it probably is coming from
-			// a steal-packaged view
+			// If we get a `function` directly, it probably is coming from
+			// a `steal`-packaged view.
 			if ( typeof options == "function" ) {
 				this.template = {
 					fn: options
 				};
 				return;
 			}
-			//set options on self
+			// Set options on self.
 			extend(this, options);
 			this.template = scan(this.text, this.name);
 		};
-	// add EJS to jQuery if it exists
+
 	can.EJS = EJS;
 	/** 
 	 * @Prototype
@@ -309,7 +321,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		 * @param {Object} func
 		 */
 		txt : function(tagName, status, self, func, escape){
-			// set callback on reading ...
+			// Set callback on reading...
 			var res = getValueAndObserved(func, self),
 				observed = res.observed,
 				input = res.value,
@@ -318,18 +330,17 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 	
 
 
-			// if we had no observes
+			// If we had no observes.
 			if(!observed.length){
 				return (escape || status !== 0? contentEscape : contentText)(input);
 			}
 
 			if(status == 0){
 				return "<" +tag+can.view.hook(
-				// are we escaping
+				// Are we escaping?
 				escape ? 
-					// 
 					function(el){
-						// remove child, bind on parent
+						// Remove child, bind on parent.
 						var parent = el.parentNode,
 							node = document.createTextNode(input),
 							binder = function(){
@@ -341,39 +352,37 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						parent.insertBefore(node, el);
 						parent.removeChild(el);
 						
-						// create textNode
+						// Create `textNode`.
 						liveBind(observed, parent, binder,oldObserved);
 					}
 					:
 					function(span){
-						// remove child, bind on parent
-						
+						// Remove child, bind on parent.
 						var makeAndPut = function(val, remove){
-								// get fragement of html to fragment
+								// Get `fragment` of html to `fragment`.
 								var frag = can.view.frag(val),
-									// wrap it to keep a reference to the elements .. 
+									// Wrap it to keep a reference to the elements...
 									nodes = can.map(frag.childNodes,function(node){
 										return node;
 									}),
 									last = remove[remove.length - 1];
 								
-								// insert it in the document
+								// Insert it in the `document`.
 								if( last.nextSibling ){
 									last.parentNode.insertBefore(frag, last.nextSibling)
 								} else {
 									last.parentNode.appendChild(frag)
 								}
 								
-								// remove the old content
+								// Remove the old content.
 								can.remove( can.$(remove) );
-								//can.view.hookup(nodes);
 								return nodes;
 							},
 							nodes = makeAndPut(input, [span]);
-						// listen to changes and update
-						// make sure the parent does not die
-						// we might simply check that nodes is still in the document 
-						// before a write ...
+						// Listen to changes and update. 
+						// Make sure the parent does not die.
+						// We might simply check that nodes is still in the `document` 
+						// before a write...
 						var binder = function(){
 							var res = getValueAndObserved(func, self);
 							nodes = makeAndPut(res.value, nodes);
@@ -381,10 +390,9 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							liveBind(res.observed, span.parentNode, binder ,oldObserved);
 						}
 						liveBind(observed, span.parentNode, binder ,oldObserved);
-						//return parent;
 				}) + "></" +tag+">";
-			} else if(status === 1){ // in a tag
-				// mark at end!
+			} else if(status === 1){ // In a tag.
+				// Mark at end!
 				var attrName = input.replace(/['"]/g, '').split('=')[0];
 				pendingHookups.push(function(el) {
 					var binder = function() {
@@ -392,11 +400,11 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							parts = (res.value || "").replace(/['"]/g, '').split('='),
 							newAttrName = parts[0];
 						
-						// remove if we have a change and used to have an attrName
+						// Remove if we have a change and used to have an `attrName`.
 						if((newAttrName != attrName) && attrName){
 							el.removeAttribute(attrName)
 						}
-						// set if we have a new attrName
+						// Set if we have a new `attrName`.
 						if(newAttrName){
 							setAttr(el, newAttrName, parts[1])
 						}
@@ -407,22 +415,22 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				});
 
 				return input;
-			} else { // in an attribute
+			} else { // In an attribute...
 				pendingHookups.push(function(el){
 					var wrapped = can.$(el),
 						hooks;
 					
-					// get the list of hookups or create one for this element
-					// hooks is a map of attribute name to hookup data
-					// each hookup data has
-					//  - render - a function to render the value of the attribute
-					//  - funcs - a list of hookup functions on that attribute
-					//  - batchNum - the last event batchNum, used for performance	
+					// Get the list of hookups or create one for this element.
+					// Hooks is a map of attribute names to hookup `data`s.
+					// Each hookup data has:
+					// `render` - A `function` to render the value of the attribute.
+					// `funcs` - A list of hookup `function`s on that attribute.
+					// `batchNum` - The last event `batchNum`, used for performance.
 					(hooks = can.data(wrapped,'hooks')) || can.data(wrapped, 'hooks', hooks = {});
 					
-					// get the attribute value
+					// Get the attribute value.
 					var attr = getAttr(el, status),
-						// split the attribute value by the template 
+						// Split the attribute value by the template.
 						parts = attr.split("__!!__"),
 						hook,
 						binder = function(ev){
@@ -432,13 +440,13 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							} 
 						};
 
-					// if we already had a hookup for this attribute
+					// If we already had a hookup for this attribute...
 					if(hooks[status]) {
-						// just add to that attribute's list of functions
+						// Just add to that attribute's list of `function`s.
 						hooks[status].funcs.push({func: func, old: oldObserved});
 					}
 					else {
-						// create the hookup data
+						// Create the hookup data.
 						hooks[status] = {
 							render: function() {
 								var i =0,
@@ -453,21 +461,23 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							batchNum : undefined
 						};
 					};
-					//  getValueAndObserved(func, self)
-					// save the hook for slightly faster performance
+
+					// Save the hook for slightly faster performance.
 					hook = hooks[status];
-					// insert the value in parts
+
+					// Insert the value in parts.
 					parts.splice(1,0,input);
-					// set the attribute
+
+					// Set the attribute.
 					setAttr(el, status, parts.join(""));
 					
-					// bind on cha
+					// Bind on change.
 					liveBind(observed, el, binder,oldObserved);
 				})
 				return "__!!__";
 			}
 		},
-		// called to setup escaped text
+		// Called to setup escaped text.
 		esc : function(tagName, status, self, func){
 			return EJS.txt(tagName, status, self, func, true)
 		},
@@ -486,25 +496,27 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			}
 		}
 });
-	// ========= SCANNING CODE =========
-	var tokenReg = new RegExp("(" +["<%%","%%>","<%==","<%=","<%#","<%","%>","<",">",'"',"'"].join("|")+")","g"),
-		// commands for caching
+	// Start scanning code.
+	var tokenReg = new RegExp("(" +[ "<%%", "%%>", "<%==", "<%=", 
+					"<%#", "<%", "%>", "<", ">", '"', "'"].join("|")+")","g"),
+		// Commands for caching.
 		startTxt = 'var ___v1ew = [];',
 		finishTxt = "return ___v1ew.join('')",
 		put_cmd = "___v1ew.push(",
 		insert_cmd = put_cmd,
-		// global controls (used by other functions to know where we are)
-		// are we inside a tag
-		htmlTag =null,
-		// are we within a quote within a tag
+		// Global controls (used by other functions to know where we are).
+		//  
+		// Are we inside a tag?
+		htmlTag = null,
+		// Are we within a quote within a tag?
 		quote = null,
-		// what was the text before the current quote (used to get the attr name)
+		// What was the text before the current quote? (used to get the `attr` name)
 		beforeQuote = null,
-		// used to mark where the element is
+		// Used to mark where the element is.
 		status = function(){
-			// t - 1
-			// h - 0
-			// q - string beforeQuote
+			// `t` - `1`.
+			// `h` - `0`.
+			// `q` - String `beforeQuote`.
 			return quote ? "'"+beforeQuote.match(attrReg)[1]+"'" : (htmlTag ? 1 : 0)
 		},
 		pendingHookups = [],
@@ -526,28 +538,29 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			
 			var content = '',
 				buff = [startTxt],
-				// helper function for putting stuff in the view concat
+				// Helper `function` for putting stuff in the view concat.
 				put = function( content, bonus ) {
 					buff.push(put_cmd, '"', clean(content), '"'+(bonus||'')+');');
 				},
-				// a stack used to keep track of how we should end a bracket }
-				// once we have a <%= %> with a leftBracket
-				// we store how the file should end here (either '))' or ';' )
+				// A stack used to keep track of how we should end a bracket
+				// `}`.  
+				// Once we have a `<%= %>` with a `leftBracket`,
+				// we store how the file should end here (either `))` or `;`).
 				endStack =[],
-				// the last token, used to remember which tag we are in
+				// The last token, used to remember which tag we are in.
 				lastToken,
-				// the corresponding magic tag
+				// The corresponding magic tag.
 				startTag = null,
-				// was there a magic tag inside an html tag
+				// Was there a magic tag inside an html tag?
 				magicInTag = false,
-				// the current tag name
+				// The current tag name.
 				tagName = '',
-				// declared here
+				// Declared here.
 				bracketCount,
 				i = 0,
 				token;
 
-			// re-init the tag state goodness
+			// Reinitialize the tag state goodness.
 			htmlTag = quote = beforeQuote = null;
 
 			for (; (token = tokens[i++]) !== undefined;) {
@@ -559,8 +572,8 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					case '<%==':
 						magicInTag = 1;
 					case '<%#':
-						// a new line, just add whatever content w/i a clean
-						// reset everything
+						// A new line -- just add whatever content within a clean.  
+						// Reset everything.
 						startTag = token;
 						if ( content.length ) {
 							put(content);
@@ -569,11 +582,11 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						break;
 
 					case '<%%':
-						// replace <%% with <%
+						// Replace `<%%` with `<%`.
 						content += '<%';
 						break;
 					case '<':
-						// make sure we are not in a comment
+						// Make sure we are not in a comment.
 						if(tokens[i].indexOf("!--") !== 0) {
 							htmlTag = 1;
 							magicInTag = 0;
@@ -582,7 +595,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						break;
 					case '>':
 						htmlTag = 0;
-						// TODO: all <%= in tags should be added to pending hookups
+						// TODO: all `<%=` in tags should be added to pending hookups.
 						if(magicInTag){
 							put(content, ",can.EJS.pending(),\">\"");
 							content = '';
@@ -593,14 +606,14 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						break;
 					case "'":
 					case '"':
-						// if we are in an html tag, finding matching quotes
+						// If we are in an html tag, finding matching quotes.
 						if(htmlTag){
-							// we have a quote and it matches
+							// We have a quote and it matches.
 							if(quote && quote === token){
-								// we are exiting the quote
+								// We are exiting the quote.
 								quote = null;
-								// otherwise we are creating a quote
-								// TOOD: does this handle "\""
+								// Otherwise we are creating a quote.
+								// TODO: does this handle `\`?
 							} else if(quote === null){
 								quote = token;
 								beforeQuote = lastToken;
@@ -615,20 +628,21 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					}
 				}
 				else {
-					//we have a start tag
+					// We have a start tag.
 					switch ( token ) {
 					case '%>':
-						// %>
+						// `%>`
 						switch ( startTag ) {
 						case '<%':
-							// <%
+							// `<%`
 							
-							// get the number of { minus }
+							// Get the number of `{ minus }`
 							bracketCount = bracketNum(content);
 							
-							// we are ending a block
+							// We are ending a block.
 							if (bracketCount == 1) {
-								// we are starting on
+
+								// We are starting on.
 								buff.push(insert_cmd, "can.EJS.txt('"+tagName+"'," + status() + ",this,function(){", startTxt, content);
 								
 								endStack.push({
@@ -638,51 +652,51 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							}
 							else {
 								
-								// how are we ending this statement
-								var last = // if the stack has value and we are ending a block
-									 endStack.length && bracketCount == -1 ? // use the last item in the block stack
-									 endStack.pop() : // or use the default ending
+								// How are we ending this statement?
+								var last = // If the stack has value and we are ending a block...
+									 endStack.length && bracketCount == -1 ? // Use the last item in the block stack.
+									 endStack.pop() : // Or use the default ending.
 								{
 									after: ";"
 								};
 								
-								// if we are ending a returning block
+								// If we are ending a returning block, 
 								// add the finish text which returns the result of the
-								// block 
+								// block.
 								if (last.before) {
 									buff.push(last.before)
 								}
-								// add the remaining content
+								// Add the remaining content.
 								buff.push(content, ";",last.after);
 							}
 							break;
 						case '<%=':
 						case '<%==':
-							// - we have an extra { -> block
-							// get the number of { minus } 
+							// We have an extra `{` -> `block`.
+							// Get the number of `{ minus }`.
 							bracketCount = bracketNum(content);
-							// if we have more {, it means there is a block
+							// If we have more `{`, it means there is a block.
 							if( bracketCount ){
-								// when we return to the same # of { vs } end wiht a doubleParen
+								// When we return to the same # of `{` vs `}` end with a `doubleParent`.
 								endStack.push({
 									before : finishTxt,
 									after: "}));"
 								})
 							} 
-							// check if its a func like ()->
+							// Check if its a func like `()->`
 							if(quickFunc.test(content)){
 								var parts = content.match(quickFunc)
 								content = "function(__){var "+parts[1]+"=can.$(__);"+parts[2]+"}"
 							}
 							
-							// if we have <%== a(function(){ %> then we want
-							//  can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];
+							// If we have `<%== a(function(){ %>` then we want
+							// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
 							buff.push(insert_cmd, "can.EJS."+(startTag === '<%=' ? "esc" : "txt")+"('"+tagName+"'," + status()+",this,function(){ return ", content, 
-								// if we have a block
+								// If we have a block.
 								bracketCount ? 
-								// start w/ startTxt "var _v1ew = [];"
+								// Start with startTxt `"var _v1ew = [];"`.
 								startTxt : 
-								// if not, add doubleParent to close push and text
+								// If not, add `doubleParent` to close push and text.
 								"}));"
 								);
 							break;
@@ -702,10 +716,9 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				lastToken = token;
 			}
 			
-			// put it together ..
-			
+			// Put it together...
 			if ( content.length ) {
-				// Should be content.dump in Ruby
+				// Should be `content.dump` in Ruby.
 				put(content)
 			}
 			buff.push(";")
@@ -713,7 +726,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				out = {
 					out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"
 				};
-			//use eval instead of creating a function, b/c it is easier to debug
+			// Use `eval` instead of creating a function, because it is easier to debug.
 			myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
 			return out;
 		};
@@ -769,7 +782,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		 * Renders a partial view.  This is deprecated in favor of <code>can.View()</code>.
 		 */
 		view: function( url, data, helpers ) {
-			return $View(url, data || this._data, helpers || this._extras); //new EJS(options).render(data, helpers);
+			return $View(url, data || this._data, helpers || this._extras); 		
 		},
 		list : function(list, cb){
 			list.attr('length')
@@ -779,10 +792,10 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		}
 	};
 
-	// options for steal's build
+	// Options for `steal`'s build.
 	can.view.register({
 		suffix: "ejs",
-		//returns a function that renders the view
+		// returns a `function` that renders the view.
 		script: function( id, src ) {
 			return "can.EJS(function(_CONTEXT,_VIEW) { " + new EJS({
 				text: src,
