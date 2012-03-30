@@ -48,7 +48,7 @@ function runDocco() {
 
 			console.log( "Generating docco annotated source..." );
 
-			execCommandWithOutput( command + " " + files.join(" "), doccoDir, function( exitCode ) {
+			execCommandWithOutput( command + files.join(" "), doccoDir, function( exitCode ) {
 				if ( exitCode == 0 ) {
 					fs.readdir( doccoOutDir, function( err, files ) {
 						console.log("Moving files into place...");
