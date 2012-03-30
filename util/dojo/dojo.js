@@ -177,6 +177,7 @@ steal({
 				event = {type: event}
 			}
 			event.data = args
+			event.target = event.target || item;
 			can.dispatch.call(item, event)
 		}
 	}

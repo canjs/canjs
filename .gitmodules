@@ -1,0 +1,3 @@
+[submodule "util/docco/docco"]
+	path = util/docco/docco
+	url = git@github.com:jupiterjs/docco.git
