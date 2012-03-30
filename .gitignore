@@ -6,3 +6,4 @@ util/can.*.js
 *node_modules*
 standalone*
 docs*
+*.DS_Store

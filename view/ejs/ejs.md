@@ -17,7 +17,7 @@ create a teacher template in a script tag like:
       
       <ul>
         <% for(var i =0; i< teacher.students.length; i++){ %>
-          <li><%= teaher.students[i].name %></li>
+          <li><%= teacher.students[i].name %></li>
         <% } %>
       </ul>
       
@@ -157,7 +157,6 @@ __`<%# CODE %>`__  - Used for comments.  This does nothing.
          <%# 'hello world' %>
 
 ## Live Binding
-
 How it works ...
 
 It works by wrapping the 
@@ -166,17 +165,43 @@ problems ...
 
 understanding closures ....
 
-
     <% for(var i =0; i < items.attr('length'); i++){ %>
       <li><%= items[i].attr('name') %></li>
     <% } %>
 
-
 This does not work b/c when `items[i].attr('name')` is called again, `i` will 
 not be the index of the item, but instead be items.length.
 
-Using list provides a callback function with a reference to the item (it also binds on
-length for you).
+Using list provides a callback function with a reference to the item (it also binds on length for you).
 
+Adding a "completed" helper function to the todo model list to return the number of completed todos:
 
-what's passed in becomes this and also accessed directly ...
+    can.Model.List('Todo.List', {
+      completed: function() {
+        var count = 0;
+
+        this.attr('length');
+        this.each(function(i, todo) {
+          if(this.attr('completed')) {
+            count++;
+          }
+        });
+
+        return count;
+      }
+    });
+
+This line allows for EJS to recognize and bind to changes in the `length` attribute of the list.
+
+    this.attr('length');
+
+Passing the list and using the helper function in a view:
+
+    <div>
+      You have completed <%= this.completed() %> todos.
+    </div>
+
+__Note:__ The object passed into the view becomes "this" within the view template.
+
+    var todos = Todo.findAll({}); //returns a can.Model.List
+    can.view('//todo/views/init.ejs', todos)
