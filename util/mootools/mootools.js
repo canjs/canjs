@@ -114,15 +114,20 @@ steal({
 						target : item
 					}
 				}
-				var events = item.retrieve('events');
+				var events = (item !== window ? 
+					can.$(item).retrieve('events')[0] :
+					item.retrieve('events') );
 				if (events && events[event.type]) {
-					
 					events[event.type].keys.each(function(fn){
 						fn.apply(this, [event].concat(args));
 					}, this); 
 				} 
 				// if we are bubbling, get parent node
-				item = bubble && item.parentNode
+				if(bubble && item.parentNode){
+					item = item.parentNode
+				} else {
+					item = null;
+				}
 				
 			}
 			
@@ -248,25 +253,39 @@ steal({
 	}
 	can.remove = function(wrapped){
 		// we need to remove text nodes ourselves
-		
-		return wrapped.filter(function(node){ 
+		var filtered = wrapped.filter(function(node){ 
 			if(node.nodeType !== 1){
 				node.parentNode.removeChild(node);
 			} else {
 				return true;
 			}
-		}).destroy();
+		})
+		filtered.destroy();
+		return filtered;
 	}
+	
 	// destroyed method
 	var destroy = Element.prototype.destroy;
+	Element.implement({
+		destroy : function(){
+			can.trigger(this,"destroyed",[],false)
+			var elems = this.getElementsByTagName("*");
+			for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
+				can.trigger(elem,"destroyed",[],false);
+			}
+			destroy.apply(this, arguments)
+		}
+	})
+	/*
 	Element.prototype.destroy = function(){
+		console.log("element.destroy")
 		can.trigger(this,"destroyed",[],false)
 		var elems = this.getElementsByTagName("*");
 		for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
 			can.trigger(elem,"destroyed",[],false);
 		}
 		destroy.apply(this, arguments)
-	}
+	}*/
 	can.get = function(wrapped, index){
 		return wrapped[index];
 	}
