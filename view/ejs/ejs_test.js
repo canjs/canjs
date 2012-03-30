@@ -265,7 +265,7 @@ test('multiple hookups in a single attribute', function() {
 
 	obs.attr('bar', 'e');
 
-	equals(setAttr(innerDiv, 'class'), "aec", 'initial render');
+	equals(getAttr(innerDiv, 'class'), "aec", 'initial render');
 	
 	obs.attr('bar', 'f');
 
