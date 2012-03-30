@@ -1,4 +1,8 @@
 steal(function(){
+
+	// deferred.js
+	// ---------
+	// _Lightweight, jQuery style deferreds._
 	
 	var Deferred = function( func ) {
 		if ( ! ( this instanceof Deferred ))
@@ -9,8 +13,8 @@ steal(function(){
 		this._resultArgs = null;
 		this._status = "";
 
-		// check for option function: call it with this as context and as first 
-		// parameter, as specified in jQuery api
+		// Check for option `function` -- call it with this as context and as first 
+		// parameter, as specified in jQuery API.
 		func && func.call(this, this);
 	};
 	can.Deferred = Deferred;
@@ -27,9 +31,9 @@ steal(function(){
 			
 			var df = Deferred(),
 				done = 0,
-				// resolve params: params of each resolve, we need to track down 
-				// them to be able to pass them in the correct order if the master 
-				// needs to be resolved
+				// Resolve params -- params of each resolve, we need to track them down 
+				// to be able to pass them in the correct order if the master 
+				// needs to be resolved.
 				rp = [];
 
 			can.each(args, function(j, arg){
@@ -57,15 +61,15 @@ steal(function(){
 	doneFunc = function(type, _status){
 		return function(){
 			var self = this;
-			/* In Safari, the properties of the arguments object are not enumerable, 
-			so we have to convert arguments to an Array that allows can.each to loop over them*/
+			// In Safari, the properties of the `arguments` object are not enumerable, 
+			// so we have to convert arguments to an `Array` that allows `can.each` to loop over them.
 			can.each(Array.prototype.slice.call(arguments), function( i, v, args ) {
 				if ( ! v )
 					return;
 				if ( v.constructor === Array ) {
 					args.callee.apply(self, v)
 				} else {
-					// immediately call the function if the deferred has been resolved
+					// Immediately call the `function` if the deferred has been resolved.
 					if (self._status === _status)
 						v.apply(self, self._resultArgs || []);
 	
@@ -106,11 +110,11 @@ steal(function(){
 
 		then : function() {
 			var args = can.makeArray( arguments );
-			// fail function(s)
+			// Fail `function`(s)
 			if (args.length > 1 && args[1])
 				this.fail(args[1]);
 
-			// done function(s)
+			// Done `function`(s)
 			if (args.length && args[0])
 				this.done(args[0]);
 

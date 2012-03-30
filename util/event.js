@@ -1,5 +1,8 @@
 steal(function(){
 
+	// event.js
+	// ---------
+	// _Basic event wrapper._
 can.addEvent = function(event, fn){
 	if(!this.__bindEvents){
 		this.__bindEvents = {};
