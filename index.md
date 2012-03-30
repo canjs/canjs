@@ -1731,14 +1731,16 @@ $( '.tabs' ).tabs( 'activate', 0 );
 {% endhighlight %}
 
 Note that calling a method like this will return a jQuery object, not the actual return value.
-You can however retrieve the controller instance directly using the _.controllers()_ or _.controller()_ plugins:
+You can retrieve the controller instance directly using the _.controllers()_ or _.controller()_ 
+helpers included in this plugin.
 
 {% highlight javascript %}
-var allControls = $( '.tabs' ).controllers(),
-  control = $( '.tabs' ).controller();
-
+//- Returns an array of controllers on the match
+var allControls = $( '.tabs' ).controllers();
 allControllers[ 0 ].activate( 0 );
-// or
+
+//- Returns the first controller on the match
+var control = $( '.tabs' ).controller();
 control.activate( 0 );
 {% endhighlight %}
 
