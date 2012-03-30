@@ -1464,7 +1464,7 @@ Add `'can'` to your normal list of modules with `YUI().use('can', ...)` wherever
 <script src="path/to/can.yui.js"></script>
 <script>
   YUI().use('can', function(Y) {
-    // Start using CanJS
+    // start using CanJS
     can.Model('Todo', {
       ...
     });
@@ -1499,12 +1499,41 @@ ringify-min.js&3.4.1/build/event-custom-complex/event-custom-complex-min.js&3.
 <script src="path/to/can.yui.js"></script>
 <script>
   YUI().use('*', function(Y) {
-    // Start using CanJS
+    // start using CanJS
     can.Model('Todo', {
       ...
     });
   });
 </script>
+{% endhighlight %}
+
+CanJS can also bind to YUI widget events. The following example shows how to 
+bind to the __selectionChange__ event for a YUI Calendar widget:
+
+{% highlight javascript %}
+YUI().use('can', 'calendar', function(Y) {
+	// create models
+	can.Model('Todo', { ... });
+	can.Model.List('Todo.List', { ... });
+
+	// create control
+	can.Control('Todos', {
+		// listen to the calendar widget's selectionChange event
+		'{calendar} selectionChange': function(calendar, ev){
+			// do something with the selected date
+			var selectedDate = ev.newSelection[0];
+			...
+		}
+	});
+
+	// initialize the app
+	Todo.findAll({}, function(todos) {
+		new Todos('#todoapp', {
+			todos: todos,
+			calendar: new Y.Calendar({ contentBox: "#calendar" }).render()
+		});
+	});
+});
 {% endhighlight %}
 
 ### Implementing another library
