@@ -1544,8 +1544,8 @@ YUI().use('can', 'calendar', function(Y) {
 
 ### can.Construct.proxy `construct.proxy( methodname, [ curriedArgs ] )`
 
-[can.construct.proxy.min.js](http://donejs.com/can/dist/can.construct.proxy.min.js)
-\[[dev](http://donejs.com/can/dist/can.construct.proxy.js)\]
+[can.construct.proxy.js](http://donejs.com/can/dist/edge/can.construct.proxy.js)
+([min](http://donejs.com/can/dist/edge/can.construct.proxy.min.js))
 
 The [can.Construct.proxy](http://donejs.com/docs.html#!can.Construct.proxy)
 plugin adds a _proxy_ method that takes a function name and returns a new function
@@ -1573,8 +1573,8 @@ curriedCallback( '!' ); // -> 'Hi my name is John!'
 
 ### can.Construct.super
 
-[can.construct.super.min.js](http://donejs.com/can/dist/can.construct.super.min.js)
-\[[dev](http://donejs.com/can/dist/can.construct.super.js)\]
+[can.construct.super.js](http://donejs.com/can/dist/edge/can.construct.super.js)
+([min](http://donejs.com/can/dist/edge/can.construct.super.min.js))
 
 The [can.Construct.super](http://donejs.com/docs.html#!can.Construct.super) plugin
 provides access to overwritten methods using `this._super` when extending a can.Construct:
@@ -1598,8 +1598,8 @@ improvedPerson.sayName( 'To whom it may concern, I am ' );
 
 ### can.Observe.delegate `observe.delegate( name, event, handler )`
 
-[can.observe.delegate.min.js](http://donejs.com/can/dist/can.observe.delegate.min.js)
-\[[dev](http://donejs.com/can/dist/can.observe.delegate.js)\]
+[can.observe.delegate.js](http://donejs.com/can/dist/edge/can.observe.delegate.js)
+([min](http://donejs.com/can/dist/edge/can.observe.delegate.min.js))
 
 Use the [can.Observe.delegate](http://donejs.com/docs.html#!can.Observe.delegate) plugin
 to listen to _change_, _set_, _add_ and _remove_ on any direct, child or wildcard attribute:
@@ -1631,8 +1631,8 @@ observe.attr( 'foo.baz', 'Bye you' );
 
 ### can.Observe.setter
 
-[can.observe.setter.min.js](http://donejs.com/can/dist/can.observe.setter.min.js)
-\[[dev](http://donejs.com/can/dist/can.observe.setter.js)\]
+[can.observe.setter.js](http://donejs.com/can/dist/edge/can.observe.setter.js)
+([min](http://donejs.com/can/dist/edge/can.observe.setter.min.js))
 
 With the [can.Observe.setter](http://donejs.com/docs.html#!can.Observe.setter) plugin
 you can use attribute setter methods to process the value being set:
@@ -1653,8 +1653,8 @@ instance.attr( 'name', 'doe' );
 
 ### can.Observe.attributes
 
-[can.observe.attributes.min.js](http://donejs.com/can/dist/can.observe.attributes.min.js)
-\[[dev](http://donejs.com/can/dist/can.observe.attributes.js)\]
+[can.observe.attributes.js](http://donejs.com/can/dist/edge/can.observe.attributes.js)
+([min](http://donejs.com/can/dist/edge/can.observe.attributes.min.js))
 
 The [can.Observe.attributes](http://donejs.com/docs.html#!can.Observe.attributes) plugin
 allows you to define attributes with type and set converters for each type:
@@ -1686,8 +1686,8 @@ var Birthday = new can.Observe({
 
 ### can.Observe.validations `observe.validate( attribute, validator )`
 
-[can.observe.validations.min.js](http://donejs.com/can/dist/can.observe.validations.min.js)
-\[[dev](http://donejs.com/can/dist/can.observe.validations.js)\]
+[can.observe.validations.js](http://donejs.com/can/dist/edge/can.observe.validations.js)
+([min](http://donejs.com/can/dist/edge/can.observe.validations.min.js))
 
 [can.Observe.validations](http://donejs.com/docs.html#!can.Observe.validations) adds validation to a can.Observe.
 Call the _validate_ method in the _init_ constructor with the attribute name and the validation
@@ -1717,8 +1717,8 @@ john.errors();
 
 ### can.Observe.backup `observe.backup()`
 
-[can.observe.backup.min.js](http://donejs.com/can/dist/can.observe.backup.min.js)
-\[[dev](http://donejs.com/can/dist/can.observe.backup.js)\]
+[can.observe.backup.js](http://donejs.com/can/dist/edge/can.observe.backup.js)
+([min](http://donejs.com/can/dist/edge/can.observe.backup.min.js))
 
 You can backup and restore can.Observe data using the [can.Observe.backup](http://donejs.com/docs.html#!can.Observe.backup)
 plugin. To backup the observe in its current state call _backup_. To revert it back to that state use _restore_:
@@ -1782,8 +1782,8 @@ control.activate( 0 );
 
 ### can.Control.view `control.view( [ viewname ], [ data ] )`
 
-[can.control.view.min.js](http://donejs.com/can/dist/can.control.view.min.js)
-\[[dev](http://donejs.com/can/dist/can.control.view.js)\]
+[can.control.view.js](http://donejs.com/can/dist/edge/can.control.view.js)
+([min](http://donejs.com/can/dist/edge/can.control.view.min.js))
 
 [can.Control.view](http://donejs.com/docs.html#!can.Control.view) renders a view from a URL in a
 _views/controlname_ folder. If no viewname is supplied it uses the current action name.
