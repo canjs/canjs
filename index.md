@@ -1463,7 +1463,16 @@ Add `'can'` to your normal list of modules with `YUI().use('can', ...)` wherever
 <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
 <script src="path/to/can.yui.js"></script>
 <script>
+  // CanJS with support for modern browsers
   YUI().use('can', function(Y) {
+    // start using CanJS
+    can.Model('Todo', {
+      ...
+    });
+  });
+  
+  // CanJS with support for IE7 and other browsers without querySelectorAll
+  YUI({ loadOptional: true }).use('can', function(Y) {
     // start using CanJS
     can.Model('Todo', {
       ...
