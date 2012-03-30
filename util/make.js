@@ -29,7 +29,7 @@ steal('steal/build/pluginify', function() {
 	steal.File("can/dist").mkdirs();
 	steal.File("can/dist/edge").mkdirs();
 	steal.build.pluginify("can/util/make/jquery.js",{
-		out : "can/dist/edge/can.jquery.minclosure.js",
+		out : "can/dist/edge/can.jquery.min.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
