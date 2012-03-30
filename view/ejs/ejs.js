@@ -26,12 +26,12 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		bracketNum = function(content){
 			return (--content.split("{").length) - (--content.split("}").length);
 		},
-		setAttr = function(el, attrName){
+		setAttr = function(el, attrName, val){
 			attrName === "class"?
 				(el.className = val):
-				el.setAttribute(attrName);
+				el.setAttribute(attrName, val);
 		},
-		getAttr = function(el, attrName, val){
+		getAttr = function(el, attrName){
 			return attrName === "class"?
 				el.className:
 				el.getAttribute(attrName);
@@ -40,6 +40,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		// oldObserved is a mapping of observe namespaces to instances
 		liveBind = function(observed, el, cb, oldObserved){
 			// we are going to set everything to matched that we find
+			var first = oldObserved.matched === undefined;
 			oldObserved.matched = !oldObserved.matched;
 			can.each(observed, function(i, ob){
 				if(oldObserved[ob.obj._namespace+"|"+ob.attr]){
@@ -58,13 +59,16 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					delete oldObserved[name];
 				}
 			}
-			can.bind.call(el,'destroyed', function(){
-				can.each(oldObserved, function(i, ob){
-					if(typeof ob !== 'boolean'){
-						ob.obj.unbind(ob.attr, cb)
-					}
+			if(first){
+				can.bind.call(el,'destroyed', function(){
+					can.each(oldObserved, function(i, ob){
+						if(typeof ob !== 'boolean'){
+							ob.obj.unbind(ob.attr, cb)
+						}
+					})
 				})
-			})
+			}
+
 		},
 		contentEscape = function( txt ) {
 			//return sanatized text
@@ -309,6 +313,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			var res = getValueAndObserved(func, self),
 				observed = res.observed,
 				input = res.value,
+				oldObserved = {},
 				tag = (tagMap[tagName] || "span");
 	
 
@@ -326,19 +331,23 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					function(el){
 						// remove child, bind on parent
 						var parent = el.parentNode,
-							node = document.createTextNode(input);
+							node = document.createTextNode(input),
+							binder = function(){
+								var res = getValueAndObserved(func, self);
+								node.nodeValue = ""+res.value;
+								liveBind(res.observed, parent, binder,oldObserved);
+							};
 						
 						parent.insertBefore(node, el);
 						parent.removeChild(el);
 						
 						// create textNode
-						liveBind(observed, parent, function(){
-							node.nodeValue = ""+func.call(self);
-						},{});
+						liveBind(observed, parent, binder,oldObserved);
 					}
 					:
 					function(span){
 						// remove child, bind on parent
+						
 						var makeAndPut = function(val, remove){
 								// get fragement of html to fragment
 								var frag = can.view.frag(val),
@@ -365,18 +374,22 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						// make sure the parent does not die
 						// we might simply check that nodes is still in the document 
 						// before a write ...
-						liveBind(observed, span.parentNode, function(){
-							nodes = makeAndPut(func.call(self), nodes);
-						},{});
+						var binder = function(){
+							var res = getValueAndObserved(func, self);
+							nodes = makeAndPut(res.value, nodes);
+							
+							liveBind(res.observed, span.parentNode, binder ,oldObserved);
+						}
+						liveBind(observed, span.parentNode, binder ,oldObserved);
 						//return parent;
 				}) + "></" +tag+">";
 			} else if(status === 1){ // in a tag
 				// mark at end!
-				var attrName = func.call(self).replace(/['"]/g, '').split('=')[0];
+				var attrName = input.replace(/['"]/g, '').split('=')[0];
 				pendingHookups.push(function(el) {
-					liveBind(observed, el, function() {
-						var attr = func.call(self),
-							parts = (attr || "").replace(/['"]/g, '').split('='),
+					var binder = function() {
+						var res = getValueAndObserved(func, self);
+						var parts = (res.value || "").replace(/['"]/g, '').split('='),
 							newAttrName = parts[0];
 						
 						// remove if we have a change and used to have an attrName
@@ -387,7 +400,10 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						if(newAttrName){
 							setAttr(el, newAttrName, parts[1])
 						}
-					},{});
+						liveBind(res.observed, el, binder,oldObserved);
+					}
+					
+					liveBind(observed, el, binder,oldObserved);
 				});
 
 				return input;

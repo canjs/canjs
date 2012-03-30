@@ -484,7 +484,45 @@ test('multiple curly braces in a block', function() {
 });
 /**/
 
-test("bindings change", function(){
+test("unescape bindings change", function(){
+	var l = new can.Observe.List([
+		{complete: true},
+		{complete: false},
+		{complete: true}
+	]);
+	var completed = function(){
+		l.attr('length');
+		var num = 0;
+		l.each(function(i, item){
+			if(item.attr('complete')){
+				num++;
+			}
+		})
+		return num;
+	};
+	
+	var text =	'<div><%== completed() %></div>',
+
+
+	compiled = new can.EJS({ text: text }).render({ completed: completed });
+
+	var div = document.createElement('div');
+	div.appendChild(can.view.frag(compiled));
+	
+	var child = div.getElementsByTagName('div')[0];
+	equals(child.innerHTML, "2", "at first there are 2 true bindings");
+	var item = new can.Observe({complete: true})
+	l.push(item);
+	
+	equals(child.innerHTML, "3", "now there are 3 complete");
+	
+	item.attr('complete',false);
+	
+	equals(child.innerHTML, "2", "now there are 2 complete");
+});
+
+
+test("escape bindings change", function(){
 	var l = new can.Observe.List([
 		{complete: true},
 		{complete: false},
@@ -519,4 +557,82 @@ test("bindings change", function(){
 	item.attr('complete',false);
 	
 	equals(child.innerHTML, "2", "now there are 2 complete");
+});
+
+
+test("tag bindings change", function(){
+	var l = new can.Observe.List([
+		{complete: true},
+		{complete: false},
+		{complete: true}
+	]);
+	var completed = function(){
+		l.attr('length');
+		var num = 0;
+		l.each(function(i, item){
+			if(item.attr('complete')){
+				num++;
+			}
+		})
+		return "items='"+num+"'";
+	};
+	
+	var text =	'<div <%= completed() %>></div>',
+
+
+	compiled = new can.EJS({ text: text }).render({ completed: completed });
+
+	var div = document.createElement('div');
+	div.appendChild(can.view.frag(compiled));
+	
+	var child = div.getElementsByTagName('div')[0];
+	equals(child.getAttribute("items"), "2", "at first there are 2 true bindings");
+	var item = new can.Observe({complete: true})
+	l.push(item);
+	
+	equals(child.getAttribute("items"), "3", "now there are 3 complete");
+	
+	item.attr('complete',false);
+	
+	equals(child.getAttribute("items"), "2", "now there are 2 complete");
 })
+/*
+test("tag bindings change", function(){
+	var l = new can.Observe.List([
+		{complete: true},
+		{complete: false},
+		{complete: true}
+	]);
+	var completed = function(){
+		l.attr('length');
+		var num = 0;
+		l.each(function(i, item){
+			if(item.attr('complete')){
+				num++;
+			}
+		})
+		return num;
+	};
+	
+	var text =	'<div items="<%= completed() %>"></div>',
+
+
+	compiled = new can.EJS({ text: text }).render({ completed: completed });
+
+	var div = document.createElement('div');
+	div.appendChild(can.view.frag(compiled));
+	
+	var child = div.getElementsByTagName('div')[0];
+	equals(child.getAttribute("items"), "2", "at first there are 2 true bindings");
+	var item = new can.Observe({complete: true})
+	l.push(item);
+	
+	equals(child.getAttribute("items"), "3", "now there are 3 complete");
+	
+	item.attr('complete',false);
+	
+	equals(child.getAttribute("items"), "2", "now there are 2 complete");
+})*/
+
+
+
