@@ -9,34 +9,7 @@
 
 (function() {
 
-	var yuilibs = ['yui-base/yui-base-min.js',
-		'oop/oop-min.js',
-		'event-custom-base/event-custom-base-min.js',
-		'features/features-min.js',
-		'dom-core/dom-core-min.js',
-		'dom-base/dom-base-min.js',
-		'selector-native/selector-native-min.js',
-		'selector/selector-min.js',
-		'node-core/node-core-min.js',
-		'node-base/node-base-min.js',
-		'event-base/event-base-min.js',
-		'event-delegate/event-delegate-min.js',
-		'node-event-delegate/node-event-delegate-min.js',
-		'pluginhost-base/pluginhost-base-min.js',
-		'pluginhost-config/pluginhost-config-min.js',
-		'node-pluginhost/node-pluginhost-min.js',
-		'dom-style/dom-style-min.js',
-		'dom-screen/dom-screen-min.js',
-		'node-screen/node-screen-min.js',
-		'node-style/node-style-min.js',
-		'querystring-stringify-simple/querystring-stringify-simple-min.js',
-		'io-base/io-base-min.js',
-		'array-extras/array-extras-min.js',
-		'querystring-parse/querystring-parse-min.js',
-		'querystring-stringify/querystring-stringify-min.js',
-		'event-custom-complex/event-custom-complex-min.js',
-		'event-synthetic/event-synthetic-min.js',
-		'event-focus/event-focus-min.js']
+	var yuilibs = ['yui-base/yui-base.js', 'oop/oop.js', 'event-custom-base/event-custom-base.js', 'features/features.js', 'dom-core/dom-core.js', 'dom-base/dom-base.js', 'selector-native/selector-native.js', 'selector-css2/selector-css2.js', 'selector/selector.js', 'node-core/node-core.js', 'node-base/node-base.js', 'event-base/event-base.js', 'event-delegate/event-delegate.js', 'node-event-delegate/node-event-delegate.js', 'pluginhost-base/pluginhost-base.js', 'pluginhost-config/pluginhost-config.js', 'node-pluginhost/node-pluginhost.js', 'dom-style/dom-style.js', 'dom-screen/dom-screen.js', 'node-screen/node-screen.js', 'node-style/node-style.js', 'querystring-stringify-simple/querystring-stringify-simple.js', 'io-base/io-base.js', 'array-extras/array-extras.js', 'querystring-parse/querystring-parse.js', 'querystring-stringify/querystring-stringify.js', 'event-custom-complex/event-custom-complex.js', 'event-synthetic/event-synthetic.js', 'event-focus/event-focus.js']
 
 	var url = "http://yui.yahooapis.com/combo?3.4.1/build/" + yuilibs.join("&3.4.1/build/")
 
@@ -48,17 +21,20 @@
 	}, "../event.js").then(
 
 	function() {
-		
-		// can.Y is set as part of the build process
-		// YUI().use('*') is called for when YUI is statically loaded (like when running tests)
+
+
+		// ---------
+		// _YUI node list._
+		// `can.Y` is set as part of the build process.
+		// `YUI().use('*')` is called for when `YUI` is statically loaded (like when running tests).
 		var Y = can.Y = can.Y || YUI().use('*');
 
-		// String
+		// Map string helpers.
 		can.trim = function( s ) {
 			return Y.Lang.trim(s);
 		}
 
-		// Array
+		// Map array helpers.
 		can.makeArray = function( arr ) {
 			return Y.Array(arr);
 		};
@@ -66,12 +42,11 @@
 		can.inArray = function( item, arr ) {
 			return Y.Array.indexOf(arr, item);
 		};
-	
+
 		can.map = function( arr, fn ) {
-			// http://yuilibrary.com/yui/docs/api/classes/Array.html#method_map
 			return Y.Array.map(can.makeArray(arr || []), fn);
 		};
-	
+
 		can.each = function( elements, callback ) {
 			var i, key;
 			if ( typeof elements.length == 'number' && elements.pop ) for ( i = 0; i < elements.length; i++ ) {
@@ -83,7 +58,7 @@
 			return elements;
 		};
 
-		// Object
+		// Map object helpers.
 		can.extend = function( first ) {
 			var deep = first === true ? 1 : 0,
 				target = arguments[deep],
@@ -101,7 +76,7 @@
 			return Y.Object.isEmpty(object);
 		}
 
-		// Function
+		// Map function helpers.
 		can.proxy = function( func, context ) {
 			return Y.bind.apply(Y, arguments);
 		}
@@ -109,20 +84,20 @@
 			return Y.Lang.isFunction(f);
 		}
 
-		// element ... get the wrapped helper
-		var prepareNodeList = function(nodelist) {
-			nodelist.each(function(node, i) {
+		// Element -- get the wrapped helper.
+		var prepareNodeList = function( nodelist ) {
+			nodelist.each(function( node, i ) {
 				nodelist[i] = node.getDOMNode();
 			});
 			nodelist.length = nodelist.size();
 			return nodelist;
 		}
 		can.$ = function( selector ) {
-			if (selector === window) {
+			if ( selector === window ) {
 				return window;
-			} else if (selector instanceof Y.NodeList) {
+			} else if ( selector instanceof Y.NodeList ) {
 				return prepareNodeList(selector);
-			} else if (typeof selector === "object" && !can.isArray(selector) && typeof selector.nodeType === "undefined" && !selector.getDOMNode) {
+			} else if ( typeof selector === "object" && !can.isArray(selector) && typeof selector.nodeType === "undefined" && !selector.getDOMNode ) {
 				return selector;
 			} else {
 				return prepareNodeList(Y.all(selector));
@@ -140,7 +115,9 @@
 				tmp.appendChild(frag)
 				frag = tmp;
 			}
-			return { fragment: frag }
+			return {
+				fragment: frag
+			}
 		}
 		can.append = function( wrapped, html ) {
 			wrapped.each(function( node ) {
@@ -150,7 +127,7 @@
 				node.append(html)
 			});
 		}
-		can.addClass = function(wrapped, className){
+		can.addClass = function( wrapped, className ) {
 			return wrapped.addClass(className);
 		}
 		can.data = function( wrapped, key, value ) {
@@ -164,15 +141,15 @@
 		can.remove = function( wrapped ) {
 			return wrapped.remove() && wrapped.destroy();
 		}
-		// destroyed method
+		// Destroyed method.
 		can._yNodeDestroy = can._yNodeDestroy || Y.Node.prototype.destroy;
 		Y.Node.prototype.destroy = function() {
 			can.trigger(this, "destroyed", [], false)
 			can._yNodeDestroy.apply(this, arguments)
 		}
-		// let nodelist know about the new destroy ...
+		// Let `nodelist` know about the new destroy...
 		Y.NodeList.addMethod("destroy", Y.Node.prototype.destroy);
-	
+
 		// Ajax
 		var optionsMap = {
 			type: "method",
@@ -180,8 +157,8 @@
 			error: undefined
 		}
 		var updateDeferred = function( request, d ) {
-			// YUI only returns a request if it is asynchronous
-			if (request && request.io) {
+			// `YUI` only returns a request if it is asynchronous.
+			if ( request && request.io ) {
 				var xhr = request.io;
 				for ( var prop in xhr ) {
 					if ( typeof d[prop] == 'function' ) {
@@ -225,62 +202,65 @@
 					error && error(request, "error");
 				}
 			};
-		
+
 			var request = Y.io(requestOptions.url, requestOptions);
 			updateDeferred(request, d);
 			return d;
 
 		}
 
-		// Events
-		// the id of the function to be bound, used as an expando on the function
-		// so we can lookup it's "remove" object
+		// Events - The `id` of the `function` to be bound, used as an expando on the `function`
+		// so we can lookup it's `remove` object.
 		var id = 0,
-			// takes a node list, goes through each node
+			// Takes a node list, goes through each node
 			// and adds events data that has a map of events to 
-			// callbackId to "remove" object.  It looks like
-			// {click: {5: {remove: fn}}}		
+			// `callbackId` to `remove` object.  It looks like
+			// `{click: {5: {remove: fn}}}`. 
 			addBinding = function( nodelist, selector, ev, cb ) {
-        if (nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode) {
-            nodelist.each(function (node) {
-                var node = can.$(node);
-                var events = can.data(node, "events"), eventName = ev + ":" + selector;
-                if (!events) {
-                    can.data(node, "events", events = {});
-                }
-                if (!events[eventName]) {
-                    events[eventName] = {};
-                }
-                if (cb.__bindingsIds === undefined) {
-                    cb.__bindingsIds = id++;
-                }
-                events[eventName][cb.__bindingsIds] = selector ? node.item(0).delegate(ev, cb, selector) : node.item(0).on(ev, cb);
-            });
-        } else {
-            var obj = nodelist,
-							events = obj.__canEvents = obj.__canEvents || {};
-            if (!events[ev]) {
-                events[ev] = {};
-            }
-            if (cb.__bindingsIds === undefined) {
-                cb.__bindingsIds = id++;
-            }
-            events[ev][cb.__bindingsIds] = obj.on(ev, cb);
-        }
+				if ( nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode ) {
+					nodelist.each(function( node ) {
+						var node = can.$(node);
+						var events = can.data(node, "events"),
+							eventName = ev + ":" + selector;
+						if (!events ) {
+							can.data(node, "events", events = {});
+						}
+						if (!events[eventName] ) {
+							events[eventName] = {};
+						}
+						if ( cb.__bindingsIds === undefined ) {
+							cb.__bindingsIds = id++;
+						}
+						events[eventName][cb.__bindingsIds] = selector ? node.item(0).delegate(ev, cb, selector) : node.item(0).on(ev, cb);
+					});
+				} else {
+					var obj = nodelist,
+						events = obj.__canEvents = obj.__canEvents || {};
+					if (!events[ev] ) {
+						events[ev] = {};
+					}
+					if ( cb.__bindingsIds === undefined ) {
+						cb.__bindingsIds = id++;
+					}
+					events[ev][cb.__bindingsIds] = obj.on(ev, cb);
+				}
 			},
-			// removes a binding on a nodelist by finding
-			// the remove object within the object's data
+			// Removes a binding on a `nodelist` by finding
+			// the remove object within the object's data.
 			removeBinding = function( nodelist, selector, ev, cb ) {
-				if (nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode) {
-					nodelist.each(function (node) {
-						var node = can.$(node), events = can.data(node, "events"), eventName = ev + ":" + selector, handlers = events[eventName], handler = handlers[cb.__bindingsIds];
+				if ( nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode ) {
+					nodelist.each(function( node ) {
+						var node = can.$(node),
+							events = can.data(node, "events"),
+							eventName = ev + ":" + selector,
+							handlers = events[eventName],
+							handler = handlers[cb.__bindingsIds];
 						handler.detach();
 						delete handlers[cb.__bindingsIds];
-						if (can.isEmptyObject(handlers)) {
+						if ( can.isEmptyObject(handlers) ) {
 							delete events[ev];
 						}
-						if (can.isEmptyObject(events)) {
-						}
+						if ( can.isEmptyObject(events) ) {}
 					});
 				} else {
 					var obj = nodelist,
@@ -289,15 +269,14 @@
 						handler = handlers[cb.__bindingsIds];
 					handler.detach();
 					delete handlers[cb.__bindingsIds];
-					if (can.isEmptyObject(handlers)) {
+					if ( can.isEmptyObject(handlers) ) {
 						delete events[ev];
 					}
-					if (can.isEmptyObject(events)) {
-					}
+					if ( can.isEmptyObject(events) ) {}
 				}
 			}
 			can.bind = function( ev, cb ) {
-				// if we can bind to it ...
+				// If we can bind to it...
 				if ( this.bind && this.bind !== can.bind ) {
 					this.bind(ev, cb)
 				} else if ( this.on || this.nodeType ) {
@@ -305,13 +284,13 @@
 				} else if ( this.addEvent ) {
 					this.addEvent(ev, cb)
 				} else {
-					// make it bind-able ...
+					// Make it bind-able...
 					can.addEvent.call(this, ev, cb)
 				}
 				return this;
 			}
 			can.unbind = function( ev, cb ) {
-				// if we can bind to it ...
+				// If we can bind to it...
 				if ( this.unbind && this.unbind !== can.unbind ) {
 					this.unbind(ev, cb)
 				}
@@ -319,7 +298,7 @@
 				else if ( this.on || this.nodeType ) {
 					removeBinding(can.$(this), undefined, ev, cb);
 				} else {
-					// make it bind-able ...
+					// Make it bind-able...
 					can.removeEvent.call(this, ev, cb)
 				}
 				return this;
@@ -328,20 +307,22 @@
 				if ( item instanceof Y.NodeList ) {
 					item = item.item(0);
 				}
-        if ( item.getDOMNode ) {
-            item = item.getDOMNode();
-        }
+				if ( item.getDOMNode ) {
+					item = item.getDOMNode();
+				}
 
 				if ( item.nodeName ) {
 					item = Y.Node(item);
 					if ( bubble === false ) {
-						//  force stop propagation by
-						// listening to On and then immediately disconnecting
+						// Force stop propagation by listening to `on` and then 
+						// immediately disconnecting
 						item.once(event, function( ev ) {
-							ev.preventDefault()
+							ev.stopPropagation && ev.stopPropagation();
+							ev.cancelBubble = true;
+							ev._stopper && ev._stopper();
 						})
-					} 
-					realTrigger(item.getDOMNode(), event,{})
+					}
+					realTrigger(item.getDOMNode(), event, {})
 				} else {
 					if ( typeof event === 'string' ) {
 						event = {
@@ -353,7 +334,7 @@
 					can.dispatch.call(item, event)
 				}
 			};
-		// allow dom destroyed events
+		// Allow `dom` `destroyed` events.
 		Y.mix(Y.Node.DOM_EVENTS, {
 			destroyed: true
 		});
@@ -375,55 +356,66 @@
 			return this;
 		}
 
-		// realTrigger taken from DOJO
+		// `realTrigger` taken from `dojo`.
 		var leaveRe = /mouse(enter|leave)/,
-			_fix = function(_, p){
-			return "mouse" + (p == "enter" ? "over" : "out");
+			_fix = function( _, p ) {
+				return "mouse" + (p == "enter" ? "over" : "out");
 			},
-		realTrigger = document.createEvent ?
-		function( n, e, a ) {
-			// the sane branch
-			var ev = document.createEvent("HTMLEvents");
-			e = e.replace(leaveRe, _fix);
-			ev.initEvent(e, true, true);
-			a && can.extend(ev, a);
-			n.dispatchEvent(ev);
-		} : function( n, e, a ) {
-			// the janktastic branch
-			var ev = "on" + e,
-				stop = false,
-				lc = e.toLowerCase(),
-				node = n;
-			try {
-				// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
-				// createEvent path above, and also fails on _some_ native-named events.
-				// if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
-				// // if the event is one of those listed in our NodeList list
-				// // in lowercase form but is mixed case, throw to avoid
-				// // fireEvent. /me sighs. http://gist.github.com/315318
-				// throw("janktastic");
-				// }
-				n.fireEvent(ev);
-			} catch (er) {
-				// a lame duck to work with. we're probably a 'custom event'
-				var evdata = can.extend({
-					type: e,
-					target: n,
-					faux: true,
-					// HACK: [needs] added support for customStopper to _base/event.js
-					// some tests will fail until del._stopPropagation has support.
-					_stopper: function() {
-						stop = this.cancelBubble;
+			realTrigger = document.createEvent ?
+			function( n, e, a ) {
+				// the same branch
+				var ev = document.createEvent("HTMLEvents");
+				e = e.replace(leaveRe, _fix);
+				ev.initEvent(e, true, true);
+				a && can.extend(ev, a);
+				n.dispatchEvent(ev);
+			} : function( n, e, a ) {
+				// the janktastic branch
+				var ev = "on" + e,
+					stop = false,
+					lc = e.toLowerCase(),
+					node = n;
+				try {
+					// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
+					// createEvent path above, and also fails on _some_ native-named events.
+					// if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
+					// // if the event is one of those listed in our NodeList list
+					// // in lowercase form but is mixed case, throw to avoid
+					// // fireEvent. /me sighs. http://gist.github.com/315318
+					// throw("janktastic");
+					// }
+					n.fireEvent(ev);
+				} catch (er) {
+					// a lame duck to work with. we're probably a 'custom event'
+					var evdata = can.extend({
+						type: e,
+						target: n,
+						faux: true,
+						// HACK: [needs] added support for customStopper to _base/event.js
+						// some tests will fail until del._stopPropagation has support.
+						_stopper: function() {
+							stop = this.cancelBubble;
+						}
+					}, a);
+					realTriggerHandler(n, e, evdata);
+
+					// handle bubbling of custom events, unless the event was stopped.
+					while (!stop && n !== document && n.parentNode ) {
+						n = n.parentNode;
+						realTriggerHandler(n, e, evdata);
+						//can.isFunction(n[ev]) && n[ev](evdata);
 					}
-				}, a);
-				can.isFunction(n[ev]) && n[ev](evdata);
-				// handle bubbling of custom events, unless the event was stopped.
-				while (!stop && n !== document && n.parentNode ) {
-					n = n.parentNode;
-					can.isFunction(n[ev]) && n[ev](evdata);
 				}
-			}
-		}
+			},
+			realTriggerHandler = function( n, e, evdata ) {
+				var node = Y.Node(n),
+					handlers = can.Y.Event.getListeners(node._yuid, e);
+				if ( handlers ) {
+					for ( var i = 0; i < handlers.length; i++ ) {
+						handlers[i].fire(evdata)
+					}
+				}
+			};
 
 	}).then("../deferred.js")
 
