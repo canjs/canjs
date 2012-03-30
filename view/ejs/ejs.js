@@ -547,7 +547,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						// a new line, just add whatever content w/i a clean
 						// reset everything
 						startTag = token;
-						if ( content.length > 0 ) {
+						if ( content.length ) {
 							put(content);
 						}
 						content = '';
@@ -689,7 +689,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			
 			// put it together ..
 			
-			if ( content.length > 0 ) {
+			if ( content.length ) {
 				// Should be content.dump in Ruby
 				put(content)
 			}
