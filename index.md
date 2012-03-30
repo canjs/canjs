@@ -1512,29 +1512,29 @@ bind to the __selectionChange__ event for a YUI Calendar widget:
 
 {% highlight javascript %}
 YUI().use('can', 'calendar', function(Y) {
-	// create models
-	can.Model('Todo', { ... });
-	can.Model.List('Todo.List', { ... });
+  // create models
+  can.Model('Todo', { ... });
+  can.Model.List('Todo.List', { ... });
 
-	// create control
-	can.Control('Todos', {
-		// listen to the calendar widget's selectionChange event
-		'{calendar} selectionChange': function(calendar, ev){
-			// do something with the selected date
-			var selectedDate = ev.newSelection[0];
-			...
-		}
-	});
+  // create control
+  can.Control('Todos', {
+    // listen to the calendar widget's selectionChange event
+    '{calendar} selectionChange': function(calendar, ev){
+      // do something with the selected date
+      var selectedDate = ev.newSelection[0];
+      ...
+    }
+  });
 
-	// initialize the app
-	Todo.findAll({}, function(todos) {
-		new Todos('#todoapp', {
-			todos: todos,
-			calendar: new Y.Calendar({
-				contentBox: "#calendar"
-			}).render()
-		});
-	});
+  // initialize the app
+  Todo.findAll({}, function(todos) {
+    new Todos('#todoapp', {
+      todos: todos,
+      calendar: new Y.Calendar({
+        contentBox: "#calendar"
+      }).render()
+    });
+  });
 });
 {% endhighlight %}
 
