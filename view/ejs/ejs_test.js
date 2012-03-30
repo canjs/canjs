@@ -391,7 +391,7 @@ test('hookup within a tag', function () {
 	equals(getAttr(anchor, 'class'), 'b');
 	equals(anchor.getAttribute('some'), 'new property');
 
-	obs.attr('foo', '');
+	obs.attr('foo', 'class=""');
 	obs.attr('baz', '');
 	equals(getAttr(anchor, 'class'), "", 'anchor class blank');
 	equals(anchor.getAttribute('some'), undefined, 'attribute "some" is undefined');
