@@ -275,7 +275,7 @@ steal({
 			}
 			destroy.apply(this, arguments)
 		}
-	})
+	});
 	/*
 	Element.prototype.destroy = function(){
 		console.log("element.destroy")
@@ -290,5 +290,16 @@ steal({
 		return wrapped[index];
 	}
 	
-	
+	// overwrite to handle ie not having an id
+	// ie barfs if text node
+	var idOf = Slick.uidOf;
+	Slick.uidOf = function(node){
+		if(node.nodeType === 1 || node === window){
+			return idOf(node);
+		} else {
+			return Math.random();
+		}
+			
+		
+	}
 },'../deferred.js')
