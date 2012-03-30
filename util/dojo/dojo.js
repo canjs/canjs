@@ -153,10 +153,17 @@ steal({
 	can.trigger = function(item, event, args, bubble){
 		if(item.trigger){
 			if(bubble === false){
+				if(!item[0] || item[0].nodeType === 3){
+					return;
+				}
 				//  force stop propagation by
 				// listening to On and then immediately disconnecting
 				var connect = item.on(event, function(ev){
+					
 					ev.stopPropagation && ev.stopPropagation();
+					ev.cancelBubble = true;
+					ev._stopper && ev._stopper();
+					
 					dojo.disconnect(connect);
 				})
 				item.trigger(event,args)
