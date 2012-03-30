@@ -43,12 +43,12 @@ function runDocco() {
 			});
 
 			var command = os.platform() != "win32" ?
-				"docco " :
-				"sh docco ";
+				"docco/bin/docco " :
+				"sh docco/bin/docco ";
 
 			console.log( "Generating docco annotated source..." );
 
-			execCommandWithOutput( "docco " + files.join(" "), doccoDir, function( exitCode ) {
+			execCommandWithOutput( command + files.join(" "), doccoDir, function( exitCode ) {
 				if ( exitCode == 0 ) {
 					fs.readdir( doccoOutDir, function( err, files ) {
 						console.log("Moving files into place...");
