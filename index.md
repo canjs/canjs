@@ -20,11 +20,11 @@ It also includes a rich set of supported [extensions and plugins](#plugins).
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your download
 for the library you are using:
 
- - [can.jquery.js](http://donejs.com/can/dist/edge/can.jquery.js) ([min](http://donejs.com/can/dist/edge/can.jquery.min.js)) - 8k - [Annotated Source](http://donejs.com/can/docs/can.jquery-edge.html)
- - [can.zepto.js](http://donejs.com/can/dist/edge/can.zepto.js) ([min](http://donejs.com/can/dist/edge/can.zepto.min.js)) - 9k - [Annotated Source](http://donejs.com/can/docs/can.zepto-edge.html)
- - [can.dojo.js](http://donejs.com/can/dist/edge/can.dojo.js) ([min](http://donejs.com/can/dist/edge/can.dojo.min.js)) - 9k - [Annotated Source](http://donejs.com/can/docs/can.dojo-edge.html)
- - [can.mootools.js](http://donejs.com/can/dist/edge/can.mootools.js) ([min](http://donejs.com/can/dist/edge/can.mootools.min.js)) - 9k - [Annotated Source](http://donejs.com/can/docs/can.mootools-edge.html)
- - [can.yui.js](http://donejs.com/can/dist/edge/can.yui.js) ([min](http://donejs.com/can/dist/edge/can.yui.min.js)) - 9k - [Annotated Source](http://donejs.com/can/docs/can.yui-edge.html)
+ - [can.jquery.js](http://donejs.com/can/dist/edge/can.jquery.js) ([min](http://donejs.com/can/dist/edge/can.jquery.min.js)) - 8k - [Annotated Source](http://donejs.com/can/docs/can.jquery.html)
+ - [can.zepto.js](http://donejs.com/can/dist/edge/can.zepto.js) ([min](http://donejs.com/can/dist/edge/can.zepto.min.js)) - 9k - [Annotated Source](http://donejs.com/can/docs/can.zepto.html)
+ - [can.dojo.js](http://donejs.com/can/dist/edge/can.dojo.js) ([min](http://donejs.com/can/dist/edge/can.dojo.min.js)) - 9k - [Annotated Source](http://donejs.com/can/docs/can.dojo.html)
+ - [can.mootools.js](http://donejs.com/can/dist/edge/can.mootools.js) ([min](http://donejs.com/can/dist/edge/can.mootools.min.js)) - 9k - [Annotated Source](http://donejs.com/can/docs/can.mootools.html)
+ - [can.yui.js](http://donejs.com/can/dist/edge/can.yui.js) ([min](http://donejs.com/can/dist/edge/can.yui.min.js)) - 9k - [Annotated Source](http://donejs.com/can/docs/can.yui.html)
 
 This page walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery. If you want to see a
