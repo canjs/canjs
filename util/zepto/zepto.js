@@ -28,6 +28,7 @@ can.trigger = function(obj, event, args, bubble){
 		if(typeof event == "string"){
 			event = {type: event}
 		}
+		event.target = event.target || obj;
 		event.data = args;
 		can.dispatch.call(obj, event)
 	}
