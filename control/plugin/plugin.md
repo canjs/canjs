@@ -81,9 +81,11 @@ For example, you can change the content of the control element every time the op
 		},
 
 		update : function(options) {
-			// Call the old update. Use this._super when using can/construct/super
+			// Call the can.Control update first.
+			// Use this._super when using can/construct/super
 			can.Control.prototype.update.call(this, options);
-			this.element.html(this.options.text + ' ' + (++this.updateCount) + ' times');
+			this.element.html(this.options.text + ' ' +
+				(++this.updateCount) + ' times');
 		}
 	});
 
