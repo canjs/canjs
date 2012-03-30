@@ -1,35 +1,42 @@
 /*
 	YUI modules: http://yuilibrary.com/yui/configurator/
-		node rollup
+		node
 		io-base
-		querystring-parse-simple	
+		querystring
+		event-focus
+		array-extras
 */
 
 (function() {
 
-	var yuilibs = ["yui-base/yui-base.js", "oop/oop.js", 
-	"event-custom-base/event-custom-base.js", 
-	"features/features.js", 
-	"dom-core/dom-core.js", 
-	"dom-base/dom-base.js", 
-	"selector-native/selector-native.js",
-	"selector/selector.js", 
-	"node-core/node-core.js", 
-	"node-base/node-base.js", 
-	"event-base/event-base.js", 
-	"event-delegate/event-delegate.js", 
-	"node-event-delegate/node-event-delegate.js", 
-	"pluginhost-base/pluginhost-base-min.js", 
-	"pluginhost-config/pluginhost-config-min.js", 
-	"node-pluginhost/node-pluginhost-min.js", 
-	"dom-style/dom-style-min.js", 
-	"dom-screen/dom-screen-min.js", 
-	"node-screen/node-screen-min.js", 
-	"node-style/node-style-min.js", 
-	"querystring-stringify-simple/querystring-stringify-simple-min.js", 
-	"io-base/io-base-min.js",
-	'array-extras/array-extras-min.js',
-	"querystring-parse-simple/querystring-parse-simple-min.js"]
+	var yuilibs = ['yui-base/yui-base-min.js',
+		'oop/oop-min.js',
+		'event-custom-base/event-custom-base-min.js',
+		'features/features-min.js',
+		'dom-core/dom-core-min.js',
+		'dom-base/dom-base-min.js',
+		'selector-native/selector-native-min.js',
+		'selector/selector-min.js',
+		'node-core/node-core-min.js',
+		'node-base/node-base-min.js',
+		'event-base/event-base-min.js',
+		'event-delegate/event-delegate-min.js',
+		'node-event-delegate/node-event-delegate-min.js',
+		'pluginhost-base/pluginhost-base-min.js',
+		'pluginhost-config/pluginhost-config-min.js',
+		'node-pluginhost/node-pluginhost-min.js',
+		'dom-style/dom-style-min.js',
+		'dom-screen/dom-screen-min.js',
+		'node-screen/node-screen-min.js',
+		'node-style/node-style-min.js',
+		'querystring-stringify-simple/querystring-stringify-simple-min.js',
+		'io-base/io-base-min.js',
+		'array-extras/array-extras-min.js',
+		'querystring-parse/querystring-parse-min.js',
+		'querystring-stringify/querystring-stringify-min.js',
+		'event-custom-complex/event-custom-complex-min.js',
+		'event-synthetic/event-synthetic-min.js',
+		'event-focus/event-focus-min.js']
 
 	var url = "http://yui.yahooapis.com/combo?3.4.1/build/" + yuilibs.join("&3.4.1/build/")
 
@@ -41,8 +48,10 @@
 	}, "../event.js").then(
 
 	function() {
-
-		var Y = YUI().use('*');
+		
+		// can.Y is set as part of the build process
+		// YUI().use('*') is called for when YUI is statically loaded (like when running tests)
+		var Y = can.Y = can.Y || YUI().use('*');
 
 		// String
 		can.trim = function( s ) {
@@ -57,12 +66,12 @@
 		can.inArray = function( item, arr ) {
 			return Y.Array.indexOf(arr, item);
 		};
-		
+	
 		can.map = function( arr, fn ) {
 			// http://yuilibrary.com/yui/docs/api/classes/Array.html#method_map
 			return Y.Array.map(can.makeArray(arr || []), fn);
 		};
-		
+	
 		can.each = function( elements, callback ) {
 			var i, key;
 			if ( typeof elements.length == 'number' && elements.pop ) for ( i = 0; i < elements.length; i++ ) {
@@ -156,14 +165,14 @@
 			return wrapped.remove() && wrapped.destroy();
 		}
 		// destroyed method
-		var destroy = Y.Node.prototype.destroy;
+		can._yNodeDestroy = can._yNodeDestroy || Y.Node.prototype.destroy;
 		Y.Node.prototype.destroy = function() {
 			can.trigger(this, "destroyed", [], false)
-			destroy.apply(this, arguments)
+			can._yNodeDestroy.apply(this, arguments)
 		}
 		// let nodelist know about the new destroy ...
 		Y.NodeList.addMethod("destroy", Y.Node.prototype.destroy);
-		
+	
 		// Ajax
 		var optionsMap = {
 			type: "method",
@@ -216,7 +225,7 @@
 					error && error(request, "error");
 				}
 			};
-			
+		
 			var request = Y.io(requestOptions.url, requestOptions);
 			updateDeferred(request, d);
 			return d;
@@ -415,7 +424,6 @@
 				}
 			}
 		}
-		can.Y = Y;
 
 	}).then("../deferred.js")
 
