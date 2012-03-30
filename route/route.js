@@ -70,6 +70,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
 	extend(can.route, {
 		/**
 		 * @function can.route.param
+     * @parent can.route
 		 * Parameterizes the raw JS object representation provided in data.
 		 * If a route matching the provided data is found that URL is built
          * from the data. Any remaining data is added at the end of the
@@ -126,7 +127,8 @@ steal('can/observe', 'can/util/string/deparam', function() {
 			return can.isEmptyObject(data) ? "" : "&" + can.param(data);
 		},
 		/**
-		 * @function can.route.param
+		 * @function can.route.deparam
+     * @parent can.route
 		 * 
 		 * Populate the JS data object from a given URL.
 		 * 
@@ -200,7 +202,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
          */
 		routes: {},
 		/**
-		 * @function can.route.param
+		 * @function can.route.ready
 		 * @parent can.route
 		 * Indicates that all routes have been added and sets can.route.data
 		 * based upon the routes and the current hash.
