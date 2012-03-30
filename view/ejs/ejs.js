@@ -388,8 +388,8 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				var attrName = input.replace(/['"]/g, '').split('=')[0];
 				pendingHookups.push(function(el) {
 					var binder = function() {
-						var res = getValueAndObserved(func, self);
-						var parts = (res.value || "").replace(/['"]/g, '').split('='),
+						var res = getValueAndObserved(func, self),
+							parts = (res.value || "").replace(/['"]/g, '').split('='),
 							newAttrName = parts[0];
 						
 						// remove if we have a change and used to have an attrName
@@ -411,43 +411,58 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				pendingHookups.push(function(el){
 					var wrapped = can.$(el),
 						hooks;
-						
+					
+					// get the list of hookups or create one for this element
+					// hooks is a map of attribute name to hookup data
+					// each hookup data has
+					//  - render - a function to render the value of the attribute
+					//  - funcs - a list of hookup functions on that attribute
+					//  - batchNum - the last event batchNum, used for performance	
 					(hooks = can.data(wrapped,'hooks')) || can.data(wrapped, 'hooks', hooks = {});
+					
+					// get the attribute value
 					var attr = getAttr(el, status),
+						// split the attribute value by the template 
 						parts = attr.split("__!!__"),
-						hook;
+						hook,
+						binder = function(ev){
+							if(ev.batchNum === undefined || ev.batchNum !== hook.batchNum){
+								hook.batchNum = ev.batchNum;
+								setAttr(el, status, hook.render());
+							} 
+						};
 
+					// if we already had a hookup for this attribute
 					if(hooks[status]) {
-						hooks[status].funcs.push(func);
+						// just add to that attribute's list of functions
+						hooks[status].funcs.push({func: func, old: oldObserved});
 					}
 					else {
-
+						// create the hookup data
 						hooks[status] = {
 							render: function() {
 								var i =0,
 									newAttr = attr.replace(attributeReplace, function() {
-										return contentText( hook.funcs[i++].call(self) );
+										var ob = getValueAndObserved(hook.funcs[i].func, self);
+										liveBind(ob.observed, el, binder, hook.funcs[i++].old)
+										return contentText( ob.value );
 									});
 								return newAttr;
 							},
-							funcs: [func],
+							funcs: [{func: func, old: oldObserved}],
 							batchNum : undefined
 						};
-					}
+					};
+					//  getValueAndObserved(func, self)
+					// save the hook for slightly faster performance
 					hook = hooks[status];
-					
+					// insert the value in parts
 					parts.splice(1,0,input);
+					// set the attribute
 					setAttr(el, status, parts.join(""));
 					
-
-					liveBind(observed, el, function(ev) {
-						if(ev.batchNum === undefined || ev.batchNum !== hook.batchNum){
-							hook.batchNum = ev.batchNum;
-							setAttr(el, status, hook.render());
-						} 
-						
-						
-					},{});
+					// bind on cha
+					liveBind(observed, el, binder,oldObserved);
 				})
 				return "__!!__";
 			}
