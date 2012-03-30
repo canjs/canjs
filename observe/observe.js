@@ -2,8 +2,8 @@
 steal('can/construct', function() {
 	// ## observe.js  
 	// `can.Observe`  
-	// _Provides the observable pattern for JavaScript Objects._
-
+	// _Provides the observable pattern for JavaScript Objects._  
+	//  
 	// Returns `true` if something is an object with properties of its own.
 	var canMakeObserve = function( obj ) {
 			return obj && typeof obj === 'object' && !(obj instanceof Date);
@@ -1167,7 +1167,7 @@ steal('can/construct', function() {
 		 */
 		shift: 0
 	},
-	// creates a `remove` type method
+	// Creates a `remove` type method
 	function( name, where ) {
 		list.prototype[name] = function() {
 			

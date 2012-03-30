@@ -1,5 +1,8 @@
 steal('can/util/string', function($){
 	
+	// ## deparam.js  
+	// `can.deparam`  
+	// _Takes a string of name value pairs and returns a Object literal that represents those params._
 	var digitTest = /^\d+$/,
 		keyBreaker = /([^\[\]]+)|(\[\])/g,
 		paramTest = /([^?#]*)(#.*)?$/,
@@ -9,7 +12,6 @@ steal('can/util/string', function($){
 	
 
 	can.extend(can, { 
-		
 		/**
 		 * @function can.deparam
 		 * @parent can.util
@@ -45,7 +47,7 @@ steal('can/util/string', function($){
 			
 					for ( var j = 0, l = parts.length - 1; j < l; j++ ) {
 						if (!current[parts[j]] ) {
-							// if what we are pointing to looks like an array
+							// If what we are pointing to looks like an `array`
 							current[parts[j]] = digitTest.test(parts[j+1]) || parts[j+1] == "[]" ? [] : {}
 						}
 						current = current[parts[j]];
@@ -53,7 +55,7 @@ steal('can/util/string', function($){
 					lastPart = parts.pop()
 					if ( lastPart == "[]" ) {
 						current.push(value)
-					}else{
+					} else {
 						current[lastPart] = value;
 					}
 				});

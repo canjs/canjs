@@ -1,9 +1,13 @@
-// 1.11
 steal('can/observe', 'can/util/string/deparam', function() {
 
+	// ## route.js  
+	// `can.route`  
+	// _Helps manage browser history (and client state) by synchronizing the 
+	// `window.location.hash` with a `can.Observe`._  
+	//   
     // Helper methods used for matching routes.
 	var 
-		// RegEx used to match route variables of the type ':name'.
+		// `RegExp` used to match route variables of the type ':name'.
         // Any word character or a period is matched.
         matcher = /\:([\w\.]+)/g,
         // Regular expression for identifying &amp;key=value lists.
@@ -16,8 +20,8 @@ steal('can/observe', 'can/util/string/deparam', function() {
 			}).join(" ");
 		},
 		// Checks if a route matches the data provided. If any route variable
-        // is not present in the data the route does not match. If all route
-        // variables are present in the data the number of matches is returned 
+        // is not present in the data, the route does not match. If all route
+        // variables are present in the data, the number of matches is returned 
         // to allow discerning between general and more specific routes. 
 		matchesData = function(route, data) {
 			var count = 0, i = 0;
@@ -29,7 +33,6 @@ steal('can/observe', 'can/util/string/deparam', function() {
 			}
 			return count;
 		},
-        // 
 		onready = !0,
 		location = window.location,
 		each = can.each,
@@ -37,27 +40,28 @@ steal('can/observe', 'can/util/string/deparam', function() {
 
 
 	can.route = function( url, defaults ) {
-        // Extract the variable names and replace with regEx that will match an atual URL with values.
+        // Extract the variable names and replace with `RegExp` that will match 
+		// an atual URL with values.
 		var names = [],
 			test = url.replace(matcher, function( whole, name ) {
 				names.push(name)
-				// TODO: I think this should have a +
-				return "([^\\/\\&]*)"  // The '\\' is for string-escaping giving single '\' for regEx escaping
+				// TODO: I think this should have a `+`
+				return "([^\\/\\&]*)"  // The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
 			});
 
-		// Add route in a form that can be easily figured out
+		// Add route in a form that can be easily figured out.
 		can.route.routes[url] = {
             // A regular expression that will match the route when variable values 
-            // are present; i.e. for :page/:type the regEx is /([\w\.]*)/([\w\.]*)/ which
-            // will match for any value of :page and :type (word chars or period).
+            // are present; i.e. for `:page/:type` the `RegExp` is `/([\w\.]*)/([\w\.]*)/` which
+            // will match for any value of `:page` and `:type` (word chars or period).
 			test: new RegExp("^" + test+"($|&)"),
             // The original URL, same as the index for this entry in routes.
 			route: url,
-            // An array of all the variable names in this route
+            // An `array` of all the variable names in this route.
 			names: names,
             // Default values provided for the variables.
 			defaults: defaults || {},
-            // The number of parts in the URL separated by '/'.
+            // The number of parts in the URL separated by `/`.
 			length: url.split('/').length
 		}
 		return can.route;
@@ -77,16 +81,16 @@ steal('can/observe', 'can/util/string/deparam', function() {
 		param: function( data ) {
 			delete data.route;
 			// Check if the provided data keys match the names in any routes;
-			// get the one with the most matches.
+			// Get the one with the most matches.
 			var route,
-				// need it to be at least 1 match
+				// Need to have at least 1 match.
 				matches = 0,
 				matchCount,
 				routeName = data.route;
 			
-			// if we have a route name in our can.route data, use it
+			// If we have a route name in our `can.route` data, use it.
 			if ( ! ( routeName && (route = can.route.routes[routeName]))){
-				// otherwise find route
+				// Otherwise find route.
 				each(can.route.routes, function(name, temp){
 					matchCount = matchesData(temp, data);
 					if ( matchCount > matches ) {
@@ -96,7 +100,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
 				});
 			}
 
-			// if this is match
+			// If this is match...
 			if ( route ) {
 				var cpy = extend({}, data),
                     // Create the url by replacing the var names with the provided data.
@@ -106,7 +110,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
                         return data[name] === route.defaults[name] ? "" : encodeURIComponent( data[name] );
                     }),
                     after;
-					// remove matching default values
+					// Remove matching default values
 					each(route.defaults, function(name,val){
 						if(cpy[name] === val) {
 							delete cpy[name]
@@ -114,11 +118,11 @@ steal('can/observe', 'can/util/string/deparam', function() {
 					})
 					
 					// The remaining elements of data are added as 
-					// $amp; separated parameters to the url.
+					// `&amp;` separated parameters to the url.
 				    after = can.param(cpy);
 				return res + (after ? "&" + after : "")
 			}
-            // If no route was found there is no hash URL, only paramters.
+            // If no route was found, there is no hash URL, only paramters.
 			return can.isEmptyObject(data) ? "" : "&" + can.param(data);
 		},
 		/**
@@ -129,7 +133,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
 		 * @param {Object} url
 		 */
 		deparam: function( url ) {
-			// See if the url matches any routes by testing it against the route.test regEx.
+			// See if the url matches any routes by testing it against the `route.test` `RegExp`.
             // By comparing the URL length the most specialized route that matches is used.
 			var route = {
 				length: -1
@@ -139,21 +143,22 @@ steal('can/observe', 'can/util/string/deparam', function() {
 					route = temp;
 				}
 			});
-            // If a route was matched
+            // If a route was matched.
 			if ( route.length > -1 ) { 
-				var // Since RegEx backreferences are used in route.test (round brackets)
-                    // the parts will contain the full matched string and each variable (backreferenced) value.
+				var // Since `RegExp` backreferences are used in `route.test` (parens)
+                    // the parts will contain the full matched string and each variable (back-referenced) value.
                     parts = url.match(route.test),
-                    // start will contain the full matched string; parts contain the variable values.
+                    // Start will contain the full matched string; parts contain the variable values.
 					start = parts.shift(),
-                    // The remainder will be the &amp;key=value list at the end of the URL.
+                    // The remainder will be the `&amp;key=value` list at the end of the URL.
 					remainder = url.substr(start.length - (parts[parts.length-1] === "&" ? 1 : 0) ),
-                    // If there is a remainder and it contains a &amp;key=value list deparam it.
+                    // If there is a remainder and it contains a `&amp;key=value` list deparam it.
                     obj = (remainder && paramsMatcher.test(remainder)) ? can.deparam( remainder.slice(1) ) : {};
 
-                // Add the default values for this route
+                // Add the default values for this route.
 				obj = extend(true, {}, route.defaults, obj);
-                // Overwrite each of the default values in obj with those in parts if that part is not empty.
+                // Overwrite each of the default values in `obj` with those in 
+				// parts if that part is not empty.
 				each(parts,function(i, part){
 					if ( part && part !== '&') {
 						obj[route.names[i]] = decodeURIComponent( part );
@@ -162,7 +167,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
 				obj.route = route.route;
 				return obj;
 			}
-            // If no route was matched it is parsed as a &amp;key=value list.
+            // If no route was matched, it is parsed as a `&amp;key=value` list.
 			if ( url.charAt(0) !== '&' ) {
 				url = '&' + url;
 			}
@@ -182,7 +187,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
          * Each route is an object with these members:
          * 
  		 *  - test - A regular expression that will match the route when variable values 
-         *    are present; i.e. for :page/:type the regEx is /([\w\.]*)/([\w\.]*)/ which
+         *    are present; i.e. for :page/:type the `RegExp` is /([\w\.]*)/([\w\.]*)/ which
          *    will match for any value of :page and :type (word chars or period).
 		 * 
          *  - route - The original URL, same as the index for this entry in routes.
@@ -265,8 +270,8 @@ steal('can/observe', 'can/util/string/deparam', function() {
 	});
 	
 	
-    // The functions in the following list applied to can.route (e.g. can.route.attr('...')) will
-    // instead act on the can.route.data Observe.
+    // The functions in the following list applied to `can.route` (e.g. `can.route.attr('...')`) will
+    // instead act on the `can.route.data` observe.
 	each(['bind','unbind','delegate','undelegate','attr','removeAttr'], function(i, name){
 		can.route[name] = function(){
 			return can.route.data[name].apply(can.route.data, arguments)
@@ -274,23 +279,22 @@ steal('can/observe', 'can/util/string/deparam', function() {
 	})
 
 	var // A ~~throttled~~ debounced function called multiple times will only fire once the
-        // timer runs down. Each call resets the timer. (throttled functions
-		// are called once every x seconds)
+        // timer runs down. Each call resets the timer.
 		timer,
-        // Intermediate storage for can.route.data.
+        // Intermediate storage for `can.route.data`.
         curParams,
         // Deparameterizes the portion of the hash of interest and assign the
-        // values to the can.route.data removing existing values no longer in the hash.
+        // values to the `can.route.data` removing existing values no longer in the hash.
         setState = function() {
 			curParams = can.route.deparam( location.hash.split(/#!?/).pop() );
 			can.route.attr(curParams, true);
 		};
 
-	// If the hash changes, update the can.route.data
+	// If the hash changes, update the `can.route.data`.
 	can.bind.call(window,'hashchange', setState);
 
-	// If the can.route.data changes, update the hash.
-    // Using .serialize() retrieves the raw data contained in the observable.
+	// If the `can.route.data` changes, update the hash.
+    // Using `.serialize()` retrieves the raw data contained in the `observable`.
     // This function is ~~throttled~~ debounced so it only updates once even if multiple values changed.
 	can.route.bind("change", function() {
 		clearTimeout( timer );
@@ -298,6 +302,6 @@ steal('can/observe', 'can/util/string/deparam', function() {
 			location.hash = "#!" + can.route.param(can.route.data.serialize())
 		}, 1);
 	});
-	// onready event ...
+	// `onready` event...
 	can.bind.call(document,"ready",can.route.ready);
 });

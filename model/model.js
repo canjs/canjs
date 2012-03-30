@@ -4,7 +4,7 @@ steal('can/observe',function(){
 	// ## model.js  
 	// `can.Model`  
 	// _A `can.Observe` that connects to a RESTful interface._
-
+	//  
 	/**
 	 * @add can.Model
 	 */
