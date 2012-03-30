@@ -40,7 +40,10 @@ can.Control.setup = function() {
 };
 
 can.prototype.extend({
-
+	/**
+	 * @function jQuery.fn.controllers
+	 *
+	 */
 	controllers: function() {
 		var controllerNames = makeArray(arguments),
 			instances = [],
@@ -61,7 +64,10 @@ can.prototype.extend({
 		return instances;
 	},
 
-	controller: function( controller ) {
+	/**
+	 * @function jQuery.fn.controller
+	 */
+	controller: function() {
 		// Just return the first result from the .controllers() list
 		return this.controllers.apply(this, arguments)[0];
 	}
@@ -100,6 +106,10 @@ can.Control.plugin = function(pluginname){
 }
 
 // Add the update method to the can.Control prototype
+/**
+ *
+ * @param options
+ */
 can.Control.prototype.update = function( options ) {
 	can.extend(this.options, options);
 	this.on();
