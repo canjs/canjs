@@ -36,35 +36,44 @@ function runDocco() {
 
 	fs.mkdir(docsDir, function() {
 
-		var command = os.platform() != "win32" ?
-			"docco " :
-			"sh docco ";
+		fs.readdir( path.join( doccoDir, "temp" ), function( err, files ) {
 
-		console.log( "Generating docco annotated source..." );
+			files = files.map(function( file ) {
+				return path.join( "temp", file );
+			});
 
-		execCommandWithOutput( "docco temp/*.js", doccoDir, function( exitCode ) {
-			if ( exitCode == 0 ) {
-				fs.readdir( doccoOutDir, function( err, files ) {
-					console.log("Moving files into place...");
-					files.forEach(function( file ) {
-						console.log( "\t" + file );
-						fs.renameSync( path.join( doccoDir, "docs", file ), path.join( canDir, "docs", file ));
-					});
-					console.log("Cleaning up...");
-					["temp", "standalone", "docs"].forEach(function( dir ) {
-						fs.readdir( path.join( doccoDir, dir ), function( e, files ) {
-							files.forEach(function( file ) {
-								fs.unlinkSync( path.join( doccoDir, dir, file ));
-							});
-							fs.rmdir( path.join( doccoDir, dir ));
+			var command = os.platform() != "win32" ?
+				"docco " :
+				"sh docco ";
+
+			console.log( "Generating docco annotated source..." );
+
+			execCommandWithOutput( "docco " + files.join(" "), doccoDir, function( exitCode ) {
+				if ( exitCode == 0 ) {
+					fs.readdir( doccoOutDir, function( err, files ) {
+						console.log("Moving files into place...");
+						files.forEach(function( file ) {
+							console.log( "\t" + file );
+							fs.renameSync( path.join( doccoDir, "docs", file ), path.join( canDir, "docs", file ));
 						});
+						console.log("Cleaning up...");
+						["temp", "standalone", "docs"].forEach(function( dir ) {
+							fs.readdir( path.join( doccoDir, dir ), function( e, files ) {
+								files.forEach(function( file ) {
+									fs.unlinkSync( path.join( doccoDir, dir, file ));
+								});
+								fs.rmdir( path.join( doccoDir, dir ));
+							});
+						});
+						console.log("Done!");
 					});
-					console.log("Done!");
-				});
-			} else {
-				console.log("Error generating annotated source.");
-			}
-		})
+				} else {
+					console.log("Error generating annotated source.");
+				}
+			});
+
+		});
+
 
 	});
 

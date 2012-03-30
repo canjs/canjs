@@ -1,7 +1,7 @@
 steal('can/util',function() {
 
 	// ##string.js
-	// _Miscellaneous string utility functions._
+	// _Miscellaneous string utility functions._  
 	
 	// Several of the methods in this plugin use code adapated from Prototype
 	// Prototype JavaScript framework, version 1.6.0.1.
