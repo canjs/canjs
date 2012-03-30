@@ -100,6 +100,10 @@ can.Control.plugin = function(pluginname){
 }
 
 // Add the update method to the can.Control prototype
+/**
+ * @function can.Control.prototype.update 
+ * @parent can.Control.plugin
+ */
 can.Control.prototype.update = function( options ) {
 	can.extend(this.options, options);
 	this.on();
