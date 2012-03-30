@@ -325,3 +325,125 @@ This works similarly to [http://api.jquery.com/addClass/ jQuery.fn.addClass].
 @class can.Deferred
 @parent can.util
 */
+//
+/*
+ * @prototype
+ */
+//
+/**
+@function pipe
+`deferred.pipe(done, fail)` is a utility to filter Deferred(s).
+
+	var def = can.Deferred(),
+		filtered = def.pipe(function(val) {
+			return val + " is awesome!";
+		});
+
+	def.resolve('Can');
+
+	filtered.done(function(value) {
+		alert(value); // Alerts: 'Can is awesome!'
+	});
+
+@param {Object} doneCallbacks A function called when the Deferred is resolved.
+@param {Object} failCallbacks A function called when the Deferred is rejected.
+*/
+//
+/**
+@function resolveWith
+`deferred.resolveWith(context, doneCallbacks)` resolves a Deferred and calls the `doneCallbacks` give the arguments.
+
+	var def = can.Deferred();
+	def.resolveWith(this, { animals: [ 'cows', 'monkey', 'panda' ] })
+	
+@param {Object} context Context passed to the `doneCallbacks` as the `this` object.
+@param {Object} args Optional array of args that are passed to the `doneCallbacks`.
+*/
+//
+/**
+@function rejectWith
+`deferred.rejectWith(context, failCallbacks)` rejects a Deferred and calls the `failCallbacks` give the arguments.
+
+	var def = can.Deferred();
+	def.rejectWith(this, { error: "Animals are gone." })
+	
+@param {Object} context Context passed to the `doneCallbacks` as the `this` object.
+@param {Object} args Optional array of args that are passed to the `failCallbacks`.
+*/
+//
+/**
+@function done
+`deferred.done(successCallbacks)` adds handler(s) to be called when the Deferred object is resolved.
+
+	var def = can.Deferred();
+	def.done(function(){
+		//- Deferred is done.
+	});
+
+@param {Object} successCallbacks function that is called when the Deferred is resolved.
+ */
+//
+/**
+@function always
+`deferred.always( alwaysCallbacks )` adds handler(s) to be called when the Deferred object is either resolved or rejected.
+
+	var def = can.Deferred();
+	def.always( function(){
+		//- Called whether the handler fails or is success.
+	});
+
+@param {Object} alwaysCallbacks A function called when the Deferred is resolved or rejected.
+*/
+//
+/**
+@function then
+`deferred.then( doneCallbacks, failCallbacks )` adds handler(s) to be called when the Deferred object to be called after its resolved.
+
+	var def = can.Deferred();
+	def.then(function(){
+		//- Called when the deferred is resolved.
+	}, function(){
+		//- Called when the deferred fails.
+	})
+
+@param {Object} doneCallbacks A function called when the Deferred is resolved.
+@param {Object} failCallbacks A function called when the Deferred is rejected.
+*/
+//
+/**
+@function isResolved
+`deferred.isResolved()` returns whether a Deferred object has been resolved.
+
+	var def = can.Deferred();
+	var resolved = def.isResolved(); 
+	
+*/
+/**
+@function isRejected
+`deferred.isRejected()` returns whether a Deferred object has been rejected.
+
+	var def = can.Deferred();
+	var rejected = def.isRejected()
+
+*/
+//
+/**
+@function reject
+`deferred.reject( args )` rejects the Deferred object and calls the fail callbacks with the given arguments.
+
+	var def = can.Deferred();
+	def.reject({ error: 'Thats not an animal.' })
+
+@param {Object} arguments Optional arguments that are passed to the fail callbacks.
+*/
+//
+/**
+@function resolve
+`deferred.resolve( args )` resolves a Deferred object and calls the done callbacks with the given arguments.
+
+	var def = can.Deferred();
+	def.resolve({ animals: [ 'pig', 'cow' ] })
+
+@param {Object} arguments Optional arguments that are passed to the done callbacks.
+*/
+//
