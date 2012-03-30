@@ -1,4 +1,5 @@
-steal("can/util").then(function( $ ) {
+steal("can/util")
+.then(function( $ ) {
 
 	// ## view.js
 	// `can.view`  
@@ -264,7 +265,7 @@ steal("can/util").then(function( $ ) {
 	var	checkText = function( text, url ) {
 			if ( ! text.length ) {
 				//@steal-remove-start
-				window.steal.dev.log("There is no template or an empty template at " + url);
+				steal.dev.log("There is no template or an empty template at " + url);
 				//@steal-remove-end
 				throw "can.view: No template or empty template:" + url;
 			}

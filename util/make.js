@@ -29,7 +29,7 @@ steal('steal/build/pluginify', function() {
 	steal.File("can/dist").mkdirs();
 	steal.File("can/dist/edge").mkdirs();
 	steal.build.pluginify("can/util/make/jquery.js",{
-		out : "can/dist/edge/can.jquery.min.js",
+		out : "can/dist/edge/can.jquery.minclosure.js",
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
@@ -113,6 +113,12 @@ steal('steal/build/pluginify', function() {
 		wrapInner: ['\nYUI().add("can", function(Y) {\n','}, "0.0.1", {\nrequires: ["node", "io-base", "querystring", "event-focus", "array-extras"]\n});\n'],
 		skipCallbacks: true
 	});
+	
+	STEALJQUERY = true;
+	STEALDOJO = false;
+	STEALMOO = false;
+	STEALYUI = false;
+	STEALZEPTO = false;
 
 	steal.build.pluginify("can/construct/proxy/proxy.js", {
 		out: "can/dist/edge/can.construct.proxy.js",
