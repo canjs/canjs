@@ -1,4 +1,5 @@
-steal("can/util").then(function( $ ) {
+steal("can/util")
+.then(function( $ ) {
 
 	// ## view.js
 	// `can.view`  
@@ -98,6 +99,10 @@ steal("can/util").then(function( $ ) {
 		 * @attribute cache
 		 * By default, views are cached on the client.  If you'd like the
 		 * the views to reload from the server, you can set the `cache` attribute to `false`.
+		 *
+		 * 		//- Forces loads from server
+		 * 		can.view.cache = false; 
+		 *
 		 */
 		cache: true,
 		/**
@@ -151,6 +156,10 @@ steal("can/util").then(function( $ ) {
 		 * @attribute ext
 		 * The default suffix to use if none is provided in the view's url.  
 		 * This is set to `.ejs` by default.
+		 *
+		 * 		// Changes view ext to 'txt'
+		 * 		can.view.ext = 'txt';
+		 *
 		 */
 		ext: ".ejs",
 		/**
@@ -256,7 +265,7 @@ steal("can/util").then(function( $ ) {
 	var	checkText = function( text, url ) {
 			if ( ! text.length ) {
 				//@steal-remove-start
-				window.steal.dev.log("There is no template or an empty template at " + url);
+				steal.dev.log("There is no template or an empty template at " + url);
 				//@steal-remove-end
 				throw "can.view: No template or empty template:" + url;
 			}
