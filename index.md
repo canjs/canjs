@@ -1530,7 +1530,9 @@ YUI().use('can', 'calendar', function(Y) {
 	Todo.findAll({}, function(todos) {
 		new Todos('#todoapp', {
 			todos: todos,
-			calendar: new Y.Calendar({ contentBox: "#calendar" }).render()
+			calendar: new Y.Calendar({
+				contentBox: "#calendar"
+			}).render()
 		});
 	});
 });
