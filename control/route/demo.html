@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>can.route demo</title>
+    <style type='text/css'>
+        body {
+	        font-family: verdana; font-size: 16px;
+        	width: 660px;
+        	line-height: 24px;
+        	margin: 0px;
+        }
+		
+        a {
+	        color: #1F54C6;
+        }
+
+        .value {
+	        cursor: pointer;
+        }
+
+        .propName {
+	        cursor: pointer;
+        }
+
+        .end {
+	        cursor:pointer;
+        }
+
+        h2 {
+	        border-bottom: 1px solid #D2D988;
+	        padding-bottom: 0px;
+	        margin-bottom: 5px;
+	        font-size: 16px;
+	        font-family: "Courier New", Courier, monospace;
+        }
+
+	    .status span {
+		    color: grey;
+	    }
+
+	    input {
+		    padding: 3px;
+		    width: 80%;
+		    border: 1px solid #DEDEDE;
+		    font-size: 110%;
+	    }
+    </style>
+</head>
+<body>
+
+<h2>"Control method"(data)</h2>
+<p class="status"></p>
+
+<h2>Hash</h2>
+<div><input id="hash" type="text" /></div>
+
+<h2>Links</h2>
+<ul>
+	<li><a href="#!">#!</a></li>
+	<li><a href="#!people">#!people</a></li>
+	<li><a href="#!todos">#!todos</a></li>
+	<li><a href="#!todo/">#!todo/</a></li>
+	<li><a href="#!todo/10">#!todo/10</a></li>
+	<li><a href="#!todo/10&done=true">#!todo/10&done=true</a></li>
+	<li><a href="#!people&order=asc&limit=10">#!people&order=asc&limit=10</a></li>
+</ul>
+
+<h2>can.route</h2>
+<div id="route"></div>
+
+<script type='text/javascript' src='../../../steal/steal.js'></script>
+
+<script type='text/javascript'>
+	steal('can/control/route', 'can/util/demos/observer.js', function(){
+		var setInput = function(){
+				$("#hash").val(window.location.hash);
+			},
+			setStatus = function(method, data) {
+				$('.status').html('<span>"' + method + '"</span>(' + can.toJSON(data) + ')');
+			}
+
+		var Router = can.Control({
+			init : function(el, options) {
+				can.route(':type', { type : 'index' });
+				can.route('todo/:id', { id : 1 });
+			},
+
+			":type route" : function(data) {
+				setStatus(":type route", data);
+			},
+
+			"todo/:id route" : function(data) {
+				setStatus("todo/:id route", data);
+			},
+
+			"route" : function(data){
+				setStatus("route", data);
+			}
+		});
+
+		new Router(window);
+
+		new Observer( $("<pre>").appendTo("#route"),
+		{
+			observe : can.route,
+			fullName : "can.route.attr("
+		});
+
+		setInput();
+		$(window).bind("hashchange",setInput);
+		$('#hash').change(function() {
+			window.location.hash = $(this).val();
+		});
+	})
+</script>
+</body>
+</html>
