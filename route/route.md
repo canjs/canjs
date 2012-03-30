@@ -28,7 +28,7 @@ create history enabled Ajax websites.  However,
 
 ## How it works
 
-<code>can.route</code> is a [can.Control can.Observe] that represents the
+<code>can.route</code> is a [can.Observe] that represents the
 <code>window.location.hash</code> as an 
 object.  For example, if the hash looks like:
 
@@ -39,22 +39,22 @@ the data in <code>can.route</code> looks like:
     { type: 'videos', id: 5 }
 
 
-`can.route` keeps the state of the hash in-sync with the `data` contained within in
+`can.route` keeps the state of the hash in-sync with the `data` contained within 
 `can.route`.
 
 ## can.Observe
 
-`can.route` is a [can.Control can.Observe]. Understanding
+`can.route` is a [can.Observe]. Understanding
 `can.Observe` is essential for using `can.route` correctly.
 
 You can listen to changes in an Observe with `bind(eventName, handler(ev, args...))` and
 change can.route's properties with 
-[can.Observe:attr attr].
+[can.Observe.prototype.attr attr].
 
 ### Listening to changes in an Observable
 
 Listen to changes in history 
-by [can.Observe:bind bind]ing to
+by [can.Observe.prototype.bind bind]ing to
 changes in <code>can.route</code> like:
 
     can.route.bind('change', function(ev, attr, how, newVal, oldVal) {
@@ -66,7 +66,7 @@ changes in <code>can.route</code> like:
  - `newVal`/`oldVal` - the new and old values of the attribute
 
 You can also listen to specific changes 
-with [can.Control.prototype.delegate delegate]:
+with [can.Observe.delegate delegate]:
 
     can.route.delegate('id','change', function(){ ... })
 
@@ -82,7 +82,7 @@ behavior, <code>remove</code> is useful for teardown.
 
 ### Updating an observable
 
-Create changes in the route data with [can.Control.prototype.attr attr] like:
+Create changes in the route data with [can.Observe.prototype.attr attr] like:
 
     can.route.attr('type','images');
 
@@ -97,7 +97,12 @@ change the <code>hash</code>.
 
 Use <code>can.route(url, defaults)</code> to create a 
 route. A route is a mapping from a url to 
-an object (that is the can.route's state).
+an object (that is the can.route's state). 
+In order to map to a specific properties in the url,
+prepend a colon to the name of the property like:
+
+    can.route( "!#content/:type" )
+
 
 If no routes are added, or no route is matched, 
 can.route's data is updated with the [can.deparam deparamed]
@@ -110,9 +115,11 @@ Once routes are added and the hash changes,
 can.route looks for matching routes and uses them
 to update can.route's data.
 
-    can.route( "content/:type" );
+    can.route( "!#content/:type" );
     location.hash = "#!content/images";
     // can.route -> {type : "images"}
+    can.route.attr( "type", "songs" )
+    // location.hash -> "#!content/songs"
     
 Default values can also be added:
 
@@ -158,24 +165,54 @@ are editable so experiment!
 
 @iframe can/route/demo.html 980
 
+## Using routes with `can.Control`
+
+You can use `can.route` within `can.Control` by using the [can.Control.route]
+plugin. Using this makes it possible to both create routes and bind to `can.route`
+at the same time. So instead of creating several routes to handle our changes to
+__type__ and __id__ we can just add the something like the following to a control:
+
+    // the route is empty
+    "route": function(data) {
+
+    },
+    // the route has a type
+    ":type route": function(data) {
+
+    }, 
+    // the route has a type and id
+    ":type/:id route": function(data) {
+
+    }
+
+
+### Getting more specific with the `can.Observe.delegate` plugin
+
+In some cases, you might only want to trigger a function when the route changes
+only once, even if the route change gets called multiple times. By using the 
+[can.Observe.delegate] plugin, this is extremely easy. This plugin allows you to 
+listen to change, set, add, and remove on `can.route`.
+
+If you wanted to, say, show a list of recipes when  __type__ was set to recipe
+and show a specific recipe when __id__ was set, you could do something like:
+
+    "{can.route} type=recipe set": function( ev, prop, how, newVal, oldVal ) {
+        // show list of recipes
+    },
+    "recipe/:id": function(data) {
+        // show a single recipe
+    }
+
+If we didn't only listen to when recipe is set, then every time we chose to
+show a single recipe, we would create and show the list of recipes again which 
+would not very efficient.
+
+
 @param {String} url the fragment identifier to match.  The fragment identifier
 should start with either a character (a-Z) or colon (:).  Examples
 
     can.route(":foo")
     can.route("foo/:bar")
 
-## Using routes with `can.Control`
-
-TALK ABOUT the route event.  Talk about listening to routes like:
-
-"{can.route} type" : function(){
-
-}
-
-talk about the Observe delegate plugin that allows things like
-
-"{can.route} type=recipe set"
-
-
 @param {Object} [defaults] an object of default values
-@return {can.route}
+@return {can.route} 
