@@ -1451,12 +1451,13 @@ event.  This is used to teardown event handlers in can.Control.
 
 CanJS can be used with libraries other than jQuery.
 
-### Using YUI
+### YUI
 
-CanJS can be used with YUI with either dynamically or statically loaded modules.
-CanJS depends on the following YUI modules: *node*, *io-base*, *querystring*, *event-focus*, and *array-extras*.
+CanJS supports YUI with both dynamically or statically loaded modules.
+CanJS depends on the following YUI modules: __node__, __io-base__, __querystring__, __event-focus__, and __array-extras__.
 
-To use CanJS with YUI dynamic loading modules:
+To use with dynamically loaded modules, include the YUI loader along with CanJS.
+Add `'can'` to your normal list of modules with `YUI().use('can', ...)` wherever CanJS will be used.
 
 {% highlight javascript %}
 <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
@@ -1471,27 +1472,30 @@ To use CanJS with YUI dynamic loading modules:
 </script>
 {% endhighlight %}
 
-To use CanJS with YUI static loading modules:
+To use with statically loaded modules, include a static copy of YUI (with the 
+previously mentioned YUI dependencies) along with CanJS. CanJS will automatically 
+be included wherever `YUI().use('*')` is used.
 
 {% highlight javascript %}
 <!-- YUI Configurator: http://yuilibrary.com/yui/configurator/ -->
-<script src="http://yui.yahooapis.com/combo?3.4.1/build/yui-base/yui-base-min.js
-&3.4.1/build/oop/oop-min.js&3.4.1/build/event-custom-base/event-custom-base-min.
-js&3.4.1/build/features/features-min.js&3.4.1/build/dom-core/dom-core-min.js&3.4
-.1/build/dom-base/dom-base-min.js&3.4.1/build/selector-native/selector-native-mi
-n.js&3.4.1/build/selector/selector-min.js&3.4.1/build/node-core/node-core-min.js
-&3.4.1/build/node-base/node-base-min.js&3.4.1/build/event-base/event-base-min.js
-&3.4.1/build/event-delegate/event-delegate-min.js&3.4.1/build/node-event-delegat
-e/node-event-delegate-min.js&3.4.1/build/pluginhost-base/pluginhost-base-min.js&
-3.4.1/build/pluginhost-config/pluginhost-config-min.js&3.4.1/build/node-pluginho
-st/node-pluginhost-min.js&3.4.1/build/dom-style/dom-style-min.js&3.4.1/build/dom
--screen/dom-screen-min.js&3.4.1/build/node-screen/node-screen-min.js&3.4.1/build
-/node-style/node-style-min.js&3.4.1/build/querystring-stringify-simple/querystri
-ng-stringify-simple-min.js&3.4.1/build/io-base/io-base-min.js&3.4.1/build/array-
-extras/array-extras-min.js&3.4.1/build/querystring-parse/querystring-parse-min.j
-s&3.4.1/build/querystring-stringify/querystring-stringify-min.js&3.4.1/build/eve
-nt-custom-complex/event-custom-complex-min.js&3.4.1/build/event-synthetic/event-
-synthetic-min.js&3.4.1/build/event-focus/event-focus-min.js"></script>
+<script src="http://yui.yahooapis.com/combo?3.4.1/build/yui-base/yui-base-min.
+js&3.4.1/build/oop/oop-min.js&3.4.1/build/event-custom-base/event-custom-base-
+min.js&3.4.1/build/features/features-min.js&3.4.1/build/dom-core/dom-core-min.
+js&3.4.1/build/dom-base/dom-base-min.js&3.4.1/build/selector-native/selector-n
+ative-min.js&3.4.1/build/selector/selector-min.js&3.4.1/build/node-core/node-c
+ore-min.js&3.4.1/build/node-base/node-base-min.js&3.4.1/build/event-base/event
+-base-min.js&3.4.1/build/event-delegate/event-delegate-min.js&3.4.1/build/node
+-event-delegate/node-event-delegate-min.js&3.4.1/build/pluginhost-base/pluginh
+ost-base-min.js&3.4.1/build/pluginhost-config/pluginhost-config-min.js&3.4.1/b
+uild/node-pluginhost/node-pluginhost-min.js&3.4.1/build/dom-style/dom-style-mi
+n.js&3.4.1/build/dom-screen/dom-screen-min.js&3.4.1/build/node-screen/node-scr
+een-min.js&3.4.1/build/node-style/node-style-min.js&3.4.1/build/querystring-st
+ringify-simple/querystring-stringify-simple-min.js&3.4.1/build/io-base/io-base
+-min.js&3.4.1/build/array-extras/array-extras-min.js&3.4.1/build/querystring-p
+arse/querystring-parse-min.js&3.4.1/build/querystring-stringify/querystring-st
+ringify-min.js&3.4.1/build/event-custom-complex/event-custom-complex-min.js&3.
+4.1/build/event-synthetic/event-synthetic-min.js&3.4.1/build/event-focus/event
+-focus-min.js"></script>
 <script src="path/to/can.yui.js"></script>
 <script>
   YUI().use('*', function(Y) {
