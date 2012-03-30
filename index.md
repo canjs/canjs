@@ -1489,8 +1489,8 @@ curriedCallback( '!' ); // -> 'Hi my name is John!'
 [can.construct.super.min.js](http://donejs.com/can/dist/can.construct.super.min.js)
 \[[dev](http://donejs.com/can/dist/can.construct.super.js)\]
 
-The [can.Construct.super](http://donejs.com/docs.html#!can.Construct.super)
-provides access overwritten methods using `this._super` when extending a can.Construct:
+The [can.Construct.super](http://donejs.com/docs.html#!can.Construct.super) plugin
+provides access to overwritten methods using `this._super` when extending a can.Construct:
 
 {% highlight javascript %}
 var ImprovedPerson = Person({
@@ -1514,7 +1514,7 @@ improvedPerson.sayName( 'To whom it may concern, I am ' );
 [can.observe.delegate.min.js](http://donejs.com/can/dist/can.observe.delegate.min.js)
 \[[dev](http://donejs.com/can/dist/can.observe.delegate.js)\]
 
-Use the [can.Observe.delegate](http://donejs.com/docs.html#!can.Observe.delegate)
+Use the [can.Observe.delegate](http://donejs.com/docs.html#!can.Observe.delegate) plugin
 to listen to _change_, _set_, _add_ and _remove_ on any direct, child or wildcard attribute:
 
 {% highlight javascript %}
@@ -1547,7 +1547,7 @@ observe.attr( 'foo.baz', 'Bye you' );
 [can.observe.setter.min.js](http://donejs.com/can/dist/can.observe.setter.min.js)
 \[[dev](http://donejs.com/can/dist/can.observe.setter.js)\]
 
-With the [can.Observe.setter](http://donejs.com/docs.html#!can.Observe.setter)
+With the [can.Observe.setter](http://donejs.com/docs.html#!can.Observe.setter) plugin
 you can use attribute setter methods to process the value being set:
 
 {% highlight javascript %}
@@ -1568,7 +1568,7 @@ instance.attr( 'name', 'doe' );
 [can.observe.attributes.min.js](http://donejs.com/can/dist/can.observe.attributes.min.js)
 \[[dev](http://donejs.com/can/dist/can.observe.attributes.js)\]
 
-The [can.Observe.attributes](http://donejs.com/docs.html#!can.Observe.attributes)
+The [can.Observe.attributes](http://donejs.com/docs.html#!can.Observe.attributes) plugin
 allows you to define attributes and their type and set converters for each type:
 
 {% highlight javascript %}
