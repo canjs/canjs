@@ -393,8 +393,8 @@ test('hookup within a tag', function () {
 
 	obs.attr('foo', '');
 	obs.attr('baz', '');
-	equals(getAttr(anchor, 'class'), undefined);
-	equals(anchor.getAttribute('some'), undefined);
+	equals(getAttr(anchor, 'class'), "", 'anchor class blank');
+	equals(anchor.getAttribute('some'), undefined, 'attribute "some" is undefined');
 });
 
 test('single escaped tag, removeAttr', function () {
