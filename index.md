@@ -1778,8 +1778,10 @@ can.Control( 'Editor', {
 
 ### View modifiers
 
-jQuery uses the modifiers _after_, _append_, _before_, _html_, _prepend_, _replaceWith_ and _text_
-to alter the content of an element. This plugin allows you to render a can.View using these modifiers.
+jQuery uses the modifiers [after](http://api.jquery.com/after/), [append](http://api.jquery.com/append/), 
+[before](http://api.jquery.com/before/), [html](http://api.jquery.com/html/), [prepend](http://api.jquery.com/prepend/), 
+[replaceWith](http://api.jquery.com/replaceWith/) and [text](http://api.jquery.com/text/) to alter the content
+of an element. This plugin allows you to render a can.View using these modifiers.
 For example, you can render a template from the _todo/todos.ejs_ URL looking like this:
 
 {% highlight erb %}
