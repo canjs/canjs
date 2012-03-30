@@ -1657,31 +1657,52 @@ instance.attr( 'name', 'doe' );
 ([min](http://donejs.com/can/dist/edge/can.observe.attributes.min.js))
 
 The [can.Observe.attributes](http://donejs.com/docs.html#!can.Observe.attributes) plugin
-allows you to define attributes with type and set converters for each type:
+allows you to specify attributes with type converters and serializers.
 
 {% highlight javascript %}
 var Birthday = new can.Observe({
   attributes: {
     birthday: 'date'
+    age: 'number'
   },
   convert: {
-    date: function( raw ) {
-      if ( typeof raw == 'string' ) {
-      
+  
+    // converts string to date
+    date: function( date ) {
+      if ( typeof date == 'string' ) {
         //- Extracts dates formated 'YYYY-DD-MM'
         var matches = raw.match( /(\d+)-(\d+)-(\d+)/ ); 
         
         //- Parses to date object and returns
-        return new Date( matches[ 1 ], 
+        date = new Date( matches[ 1 ], 
                          ( +matches[ 2 ] ) - 1, 
                          matches[ 3 ] ); 
         
-      }else if ( raw instanceof Date ) {
-        return raw;
       }
+      
+      return date;
+    },
+    
+    // converts string to number
+    number: function(number){
+     if(typeof number === 'string'){
+      number = parseInt(number);
+     }
+     
+     return number;
     }
   }
 });
+
+
+var brian = new Birthday();
+
+// sets brian's birthday
+brian.attr('birthday', '11-29-1986');
+
+//- returns newly converted date object
+var date = brian.attr('birthday');
+
 {% endhighlight %}
 
 ### can.Observe.validations `observe.validate( attribute, validator )`
