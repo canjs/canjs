@@ -1,4 +1,3 @@
-// 1.08
 steal('can/construct', function( $ ) {
 
 	// ## control.js
@@ -123,7 +122,7 @@ steal('can/construct', function( $ ) {
 			
 			// If we don't have options (a `control` instance), we'll run this 
 			// later.  
-			// `/\{([^\}]+)\}/` - parameter replacer regex.
+			// `/\{([^\}]+)\}/` - parameter replacer `RegExp`.
 			if ( options || ! /\{([^\}]+)\}/g.test( methodName )) {
 				// If we have options, run sub to replace templates `{}` with a
 				// value from the options or the window
@@ -135,7 +134,7 @@ steal('can/construct', function( $ ) {
 					
 					// Get the parts of the function  
 					// `[convertedName, delegatePart, eventPart]`  
-					// `/^(?:(.*?)\s)?([\w\.\:>]+)$/` - Breaker regex.
+					// `/^(?:(.*?)\s)?([\w\.\:>]+)$/` - Breaker `RegExp`.
 					parts = (arr ? convertedName[1] : convertedName).match(/^(?:(.*?)\s)?([\w\.\:>]+)$/),
 					event = parts[2],
 					processor = processors[event] || basicProcessor;

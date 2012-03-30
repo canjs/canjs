@@ -1,21 +1,22 @@
-// 1.18
 steal("can/util").then(function( $ ) {
 
-	// a path like string into something that's ok for an element ID
+	// ## view.js
+	// `can.view`  
+	// _Templating abstraction._
+
+	// Convert a path like string into something that's ok for an `element` ID.
 	var toId = function( src ) {
 		return src.split(/\/|\./g).join("_");
 	},
 		isFunction = can.isFunction,
 		makeArray = can.makeArray,
-		// used for hookup ids
+		// Used for hookup `id`s.
 		hookupId = 1,
-	// this might be useful for testing if html
-	// htmlTest = /^[\s\n\r\xA0]*<(.|[\r\n])*>[\s\n\r\xA0]*$/
 	/**
 	 * @add can.view
 	 */
 	$view = can.view = function(view, data, helpers, callback){
-		// get the result
+		// Get the result.
 		var result = $view.render(view, data, helpers, callback);
 		if(can.isDeferred(result)){
 			return result.pipe(function(result){
@@ -23,14 +24,14 @@ steal("can/util").then(function( $ ) {
 			})
 		}
 		
-		// convert it into a dom frag
+		// Convert it into a dom frag.
 		return $view.frag(result);
 	};
 
 	can.extend( $view, {
 		frag: function(result){
 			var frag = can.buildFragment([result],[document.body]).fragment;
-			// if we have an empty fraga
+			// If we have an empty frag...
 			if(!frag.childNodes.length) { 
 				frag.appendChild(document.createTextNode(''))
 			}
@@ -43,14 +44,14 @@ steal("can/util").then(function( $ ) {
 				el,
 				i=0;
 			
-			// get all childNodes
+			// Get all `childNodes`.
 			can.each(fragment.childNodes ? can.makeArray(fragment.childNodes) : fragment, function(i, node){
 				if(node.nodeType === 1){
 					hookupEls.push(node)
 					hookupEls.push.apply(hookupEls, can.makeArray( node.getElementsByTagName('*')))
 				}
 			});
-			// filter by data-view-id attribute
+			// Filter by `data-view-id` attribute.
 			for (; el = hookupEls[i++]; ) {
 
 				if ( el.getAttribute && (id = el.getAttribute('data-view-id')) && (func = $view.hookups[id]) ) {
@@ -169,75 +170,75 @@ steal("can/util").then(function( $ ) {
 		 */
 		preload: function( ) {},
 		render: function( view, data, helpers, callback ) {
-			// if helpers is a function, it is actually a callback
+			// If helpers is a `function`, it is actually a callback.
 			if ( isFunction( helpers )) {
 				callback = helpers;
 				helpers = undefined;
 			}
 	
-			// see if we got passed any deferreds
+			// See if we got passed any deferreds.
 			var deferreds = getDeferreds(data);
 	
 	
-			if ( deferreds.length ) { // does data contain any deferreds?
-				// the deferred that resolves into the rendered content ...
+			if ( deferreds.length ) { // Does data contain any deferreds?
+				// The deferred that resolves into the rendered content...
 				var deferred = new can.Deferred();
 	
-				// add the view request to the list of deferreds
+				// Add the view request to the list of deferreds.
 				deferreds.push(get(view, true))
 	
-				// wait for the view and all deferreds to finish
+				// Wait for the view and all deferreds to finish...
 				can.when.apply(can, deferreds).then(function( resolved ) {
-					// get all the resolved deferreds
+					// Get all the resolved deferreds.
 					var objs = makeArray(arguments),
-						// renderer is last [0] is the data
+						// Renderer is the last index of the data.
 						renderer = objs.pop(),
-						// the result of the template rendering with data
+						// The result of the template rendering with data.
 						result; 
 	
-					// make data look like the resolved deferreds
+					// Make data look like the resolved deferreds.
 					if ( can.isDeferred(data) ) {
 						data = usefulPart(resolved);
 					}
 					else {
-						// go through each prop in data again,
-						// replace the defferreds with what they resolved to
+						// Go through each prop in data again and
+						// replace the defferreds with what they resolved to.
 						for ( var prop in data ) {
 							if ( can.isDeferred(data[prop]) ) {
 								data[prop] = usefulPart(objs.shift());
 							}
 						}
 					}
-					// get the rendered result
+					// Get the rendered result.
 					result = renderer(data, helpers);
 	
-					//resolve with the rendered view
+					// Resolve with the rendered view.
 					deferred.resolve(result); 
-					// if there's a callback, call it back with the result
+					// If there's a `callback`, call it back with the result.
 					callback && callback(result);
 				});
-				// return the deferred ....
+				// Return the deferred...
 				return deferred;
 			}
 			else {
-				// no deferreds, render this bad boy
+				// No deferreds! Render this bad boy.
 				var response, 
-					// if there's a callback function
+					// If there's a `callback` function
 					async = isFunction( callback ),
-					// get the 'view' type
+					// Get the `view` type
 					deferred = get(view, async);
 	
-				// if we are async, 
+				// If we are `async`...
 				if ( async ) {
-					// return the deferred
+					// Return the deferred
 					response = deferred;
-					// and callback callback with the rendered result
+					// And fire callback with the rendered result.
 					deferred.then(function( renderer ) {
 						callback(renderer(data, helpers))
 					})
 				} else {
-					// otherwise, the deferred is complete, so
-					// set response to the result of the rendering
+					// Otherwise, the deferred is complete, so
+					// set response to the result of the rendering.
 					deferred.then(function( renderer ) {
 						response = renderer(data, helpers);
 					});
@@ -247,92 +248,93 @@ steal("can/util").then(function( $ ) {
 			}
 		}
 	});
-	// returns true if something looks like a deferred
+	// Returns `true` if something looks like a deferred.
 	can.isDeferred = function( obj ) {
-		return obj && isFunction(obj.then) && isFunction(obj.pipe) // check if obj is a can.Deferred
+		return obj && isFunction(obj.then) && isFunction(obj.pipe) // Check if `obj` is a `can.Deferred`.
 	} 
-	// makes sure there's a template, if not, has steal provide a warning
+	// Makes sure there's a template, if not, have `steal` provide a warning.
 	var	checkText = function( text, url ) {
 			if ( ! text.length ) {
 				//@steal-remove-start
-				steal.dev.log("There is no template or an empty template at " + url);
+				window.steal.dev.log("There is no template or an empty template at " + url);
 				//@steal-remove-end
 				throw "can.view: No template or empty template:" + url;
 			}
 		},
-		// returns a 'view' renderer deferred
-		// url - the url to the view template
-		// async - if the ajax request should be synchronous
-		// returns a deferred
+		// `Returns a `view` renderer deferred.  
+		// `url` - The url to the template.  
+		// `async` - If the ajax request should be asynchronous.  
+		// Returns a deferred.
 		get = function( url, async ) {
 			
 			
 			var suffix = url.match(/\.[\w\d]+$/),
 			type, 
-			// if we are reading a script element for the content of the template
-			// el will be set to that script element
+			// If we are reading a script element for the content of the template,
+			// `el` will be set to that script element.
 			el, 
-			// a unique identifier for the view (used for caching)
-			// this is typically derived from the element id or
-			// the url for the template
+			// A unique identifier for the view (used for caching).
+			// This is typically derived from the element id or
+			// the url for the template.
 			id, 
-			// the AJAX request used to retrieve the template content
+			// The ajax request used to retrieve the template content.
 			jqXHR, 
-			// used to generate the response 
+			// Used to generate the response.
 			response = function( text ) {
-				// get the renderer function
+				// Get the renderer function.
 				var func = type.renderer(id, text),
 					d = new can.Deferred();
 				d.resolve(func)
-				// cache if if we are caching
+				// Cache if we are caching.
 				if ( $view.cache ) {
 					$view.cached[id] = d;
 				}
-				// return the objects for the response's dataTypes 
-				// (in this case view)
+				// Return the objects for the response's `dataTypes`
+				// (in this case view).
 				return d;
 			};
 
-			// if we have an inline template, derive the suffix from the 'text/???' part
-			// this only supports '<script></script>' tags
+			// If we have an inline template, derive the suffix from the `text/???` part.
+			// This only supports `<script>` tags.
 			if ( el = document.getElementById(url) ) {
 				suffix = "."+el.type.match(/\/(x\-)?(.+)/)[2];
 			}
 	
-			// if there is no suffix, add one
+			// If there is no suffix, add one.
 			if (!suffix ) {
 				url += ( suffix = $view.ext );
 			}
-			if(can.isArray(suffix)){
+
+			if ( can.isArray( suffix )) {
 				suffix = suffix[0]
 			}
 	
-			// convert to a unique and valid id
+			// Convert to a unique and valid id.
 			id = toId(url);
 	
-			// if a absolute path, use steal to get it
-			// you should only be using // if you are using steal
+			// If an absolute path, use `steal` to get it.
+			// You should only be using `//` if you are using `steal`.
 			if ( url.match(/^\/\//) ) {
 				var sub = url.substr(2);
-				url = !window.steal ? 
+				url = ! window.steal ? 
 					"/" + sub : 
 					steal.root.mapJoin(sub);
 			}
 	
-			//set the template engine type 
+			// Set the template engine type.
 			type = $view.types[suffix];
 	
-			// if it is cached, 
+			// If it is cached, 
 			if ( $view.cached[id] ) {
-				// return the cached deferred renderer
+				// Return the cached deferred renderer.
 				return $view.cached[id];
 			
-			// otherwise if we are getting this from a script elment
+			// Otherwise if we are getting this from a `<script>` element.
 			} else if ( el ) {
-				// resolve immediately with the element's innerHTML
+				// Resolve immediately with the element's `innerHTML`.
 				return response(el.innerHTML);
 			} else {
-				// make an ajax request for text
+				// Make an ajax request for text.
 				var d = new can.Deferred();
 				can.ajax({
 					async: async,
@@ -343,10 +345,10 @@ steal("can/util").then(function( $ ) {
 						d.reject(jqXHR);
 					},
 					success: function( text ) {
-						// make sure we got some text back
+						// Make sure we got some text back.
 						checkText(text, url);
 						d.resolve(type.renderer(id, text))
-						// cache if if we are caching
+						// Cache if if we are caching.
 						if ( $view.cache ) {
 							$view.cached[id] = d;
 						}
@@ -356,8 +358,8 @@ steal("can/util").then(function( $ ) {
 				return d;
 			}
 		},
-		// gets an array of deferreds from an object
-		// this only goes one level deep
+		// Gets an `array` of deferreds from an `object`.
+		// This only goes one level deep.
 		getDeferreds = function( data ) {
 			var deferreds = [];
 
@@ -373,9 +375,8 @@ steal("can/util").then(function( $ ) {
 			}
 			return deferreds;
 		},
-		// gets the useful part of deferred
-		// this is for Models and can.ajax that resolve to array (with success and such)
-		// returns the useful, content part
+		// Gets the useful part of a resolved deferred.
+		// This is for `model`s and `can.ajax` that resolve to an `array`.
 		usefulPart = function( resolved ) {
 			return can.isArray(resolved) && resolved[1] === 'success' ? resolved[0] : resolved
 		};
