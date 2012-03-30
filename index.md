@@ -1459,7 +1459,7 @@ CanJS depends on the following YUI modules: __node__, __io-base__, __querystring
 To use with dynamically loaded modules, include the YUI loader along with CanJS.
 Add `'can'` to your normal list of modules with `YUI().use('can', ...)` wherever CanJS will be used.
 
-{% highlight javascript %}
+{% highlight html %}
 <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
 <script src="path/to/can.yui.js"></script>
 <script>
@@ -1485,7 +1485,7 @@ To use with statically loaded modules, include a static copy of YUI (with the
 previously mentioned YUI dependencies) along with CanJS. CanJS will automatically 
 be included wherever `YUI().use('*')` is used.
 
-{% highlight javascript %}
+{% highlight html %}
 <!-- YUI Configurator: http://yuilibrary.com/yui/configurator/ -->
 <script src="http://yui.yahooapis.com/combo?3.4.1/build/yui-base/yui-base-min.
 js&3.4.1/build/oop/oop-min.js&3.4.1/build/event-custom-base/event-custom-base-
