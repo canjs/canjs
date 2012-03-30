@@ -1610,9 +1610,10 @@ var Person = can.Observe({
 });
 
 var instance = new Person( { name: 'john' } );
-// -> instance.name === 'John'
+// -> instance.name now is 'John'
+
 instance.attr( 'name', 'doe' );
-// -> instance.name === 'Doe'
+// -> instance.name now is 'Doe'
 {% endhighlight %}
 
 ### can.Observe.attributes
@@ -1635,8 +1636,10 @@ var Birthday = new can.Observe({
         //- Extracts dates formated 'YYYY-DD-MM'
         var matches = raw.match( /(\d+)-(\d+)-(\d+)/ ); 
         
-        //- parses to date object and returns
-        return new Date( matches[ 1 ], ( +matches[ 2 ] ) - 1, matches[ 3 ] ); 
+        //- Parses to date object and returns
+        return new Date( matches[ 1 ], 
+                         ( +matches[ 2 ] ) - 1, 
+                         matches[ 3 ] ); 
         
       }else if ( raw instanceof Date ) {
         return raw;
