@@ -38,12 +38,12 @@ test("literal converters and serializes", function(){
 		}
 	},{});
 	var d = new Date();
-	d.setMonth(1)
+	d.setMonth(1, 1)
 	var task1=new Task1({
 		createdAt: d,
 		name:"Task1"
 	});
-	d.setMonth(2)
+	d.setMonth(2, 1)
 	var task2=new Task2({
 		createdAt: d,
 		name:"Task2"
