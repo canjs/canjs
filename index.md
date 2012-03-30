@@ -1666,7 +1666,9 @@ instance.attr( 'name', 'doe' );
 ([min](http://donejs.com/can/dist/edge/can.observe.attributes.min.js))
 
 The [can.Observe.attributes](http://donejs.com/docs.html#!can.Observe.attributes) plugin
-allows you to specify attributes with type converters and serializers.
+allows you to specify attributes with type converters and serializers.  Serializers
+make it handy when preparing your data to send to the server for JavaScript objects like
+dates or associations.
 
 {% highlight javascript %}
 var Birthday = new can.Observe({
@@ -1674,8 +1676,19 @@ var Birthday = new can.Observe({
     birthday: 'date'
     age: 'number'
   },
-  convert: {
   
+  serialize : {
+   date : function( val, type ){
+    return val.getYear() + 
+     "-" + (val.getMonth() + 1) + 
+     "-" + val.getDate(); 
+    },
+    number: (val){
+     return val + '';
+    }
+  },
+  
+  convert: {
     // converts string to date
     date: function( date ) {
       if ( typeof date == 'string' ) {
@@ -1686,7 +1699,6 @@ var Birthday = new can.Observe({
         date = new Date( matches[ 1 ], 
                          ( +matches[ 2 ] ) - 1, 
                          matches[ 3 ] ); 
-        
       }
       
       return date;
@@ -1707,13 +1719,15 @@ var Birthday = new can.Observe({
 var brian = new Birthday();
 
 // sets brian's birthday
-brian.attr('birthday', '11-29-1986');
+brian.attr('birthday', '11-29-1983');
 
 //- returns newly converted date object
 var date = brian.attr('birthday');
 
-{% endhighlight %}
+//- returns { 'birthday': '11-29-1983, 'age': '28' }
+var seralizedObj = brian.serialize();
 
+{% endhighlight %}
 ### can.Observe.validations `observe.validate( attribute, validator )`
 
 [can.observe.validations.js](http://donejs.com/can/dist/edge/can.observe.validations.js)
