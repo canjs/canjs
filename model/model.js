@@ -1,7 +1,7 @@
 // this file should not be stolen directly
 steal('can/observe',function(){
 	
-	// ## model.js
+	// ## model.js  
 	// `can.Model`  
 	// _A `can.Observe` that connects to a RESTful interface._
 
