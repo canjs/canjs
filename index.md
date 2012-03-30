@@ -20,11 +20,11 @@ It also includes a rich set of supported [extensions and plugins](#plugins).
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your download
 for the library you are using:
 
- - [can.jquery.js](http://staging.donejs.com/can/dist/can.jquery-edge.js) (8k) \[[dev](http://donejs.com/can/dist/can.jquery-dev-edge.js)\]
- - [can.zepto.js](http://staging.donejs.com/can/dist/can.zepto-edge.js) (9k)
- - [can.dojo.js](http://staging.donejs.com/can/dist/can.dojo-edge.js) (9k)
- - [can.mootools.js](http://staging.donejs.com/can/dist/can.mootools-edge.js) (9k)
- - [can.yui.js](http://staging.donejs.com/can/dist/can.yui-edge.js) (9k)
+ - [can.jquery.js](http://donejs.com/can/dist/edge/can.jquery.js) ([min])(http://donejs.com/can/dist/edge/can.jquery.min.js) - 8k
+ - [can.zepto.js](http://donejs.com/can/dist/edge/can.zepto.js) ([min])(http://donejs.com/can/dist/edge/can.zepto.min.js) - 9k
+ - [can.dojo.js](http://donejs.com/can/dist/edge/can.dojo.js) ([min])(http://donejs.com/can/dist/edge/can.dojo.min.js) - 9k
+ - [can.mootools.js](http://donejs.com/can/dist/edge/can.mootools.js) ([min])(http://donejs.com/can/dist/edge/can.mootools.min.js) - 9k
+ - [can.yui.js](http://donejs.com/can/dist/edge/can.yui.js) ([min])(http://donejs.com/can/dist/edge/can.yui.min.js) - 9k
 
 This page walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery. If you want to see a
@@ -1807,8 +1807,10 @@ can.Control( 'Editor', {
 
 ### View modifiers
 
-jQuery uses the modifiers _after_, _append_, _before_, _html_, _prepend_, _replaceWith_ and _text_
-to alter the content of an element. This plugin allows you to render a can.View using these modifiers.
+jQuery uses the modifiers [after](http://api.jquery.com/after/), [append](http://api.jquery.com/append/), 
+[before](http://api.jquery.com/before/), [html](http://api.jquery.com/html/), [prepend](http://api.jquery.com/prepend/), 
+[replaceWith](http://api.jquery.com/replaceWith/) and [text](http://api.jquery.com/text/) to alter the content
+of an element. This plugin allows you to render a can.View using these modifiers.
 For example, you can render a template from the _todo/todos.ejs_ URL looking like this:
 
 {% highlight erb %}
