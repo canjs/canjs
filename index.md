@@ -1454,7 +1454,7 @@ CanJS can be used with libraries other than jQuery.
 ### YUI
 
 CanJS supports YUI with both dynamically or statically loaded modules.
-CanJS depends on the following YUI modules: __node__, __io-base__, __querystring__, __event-focus__, and __array-extras__.
+CanJS depends on the following YUI modules: __node__, __io-base__, __querystring__, __event-focus__, and __array-extras__. The __selector-css2__ and __selector-css3__ YUI modules are optional, but necessary for IE7 and other browsers that don't support __querySelectorAll__.
 
 To use with dynamically loaded modules, include the YUI loader along with CanJS.
 Add `'can'` to your normal list of modules with `YUI().use('can', ...)` wherever CanJS will be used.
