@@ -5,10 +5,10 @@ steal('can/observe',function(){
 	// `can.Model`  
 	// _A `can.Observe` that connects to a RESTful interface._
 	//  
+	// Generic deferred piping function
 	/**
 	 * @add can.Model
 	 */
-	// Generic deferred piping function
 	var	pipe = function( def, model, func ) {
 		var d = new can.Deferred();
 		def.then(function(){
@@ -88,15 +88,14 @@ steal('can/observe',function(){
 			return deferred.then(success,error);
 		},
 	
-	/** 
-	 * @Static
-	 */
-	
 	// This object describes how to make an ajax request for each ajax method.  
 	// The available properties are:
 	//		`url` - The default url to use as indicated as a property on the model.
 	//		`type` - The default http request type
 	//		`data` - A method that takes the `arguments` and returns `data` used for ajax.
+	/** 
+	 * @Static
+	 */
 	ajaxMethods = {
 		/**
 		 * @function create
@@ -163,13 +162,13 @@ steal('can/observe',function(){
 		 * 
 		 *     Recipe = can.Model({
 		 *       update: "/recipes/{id}"
-		 *     },{})
+		 *     },{});
 		 *     
 		 * This lets you update a recipe like:
 		 *  
 		 *     Recipe.findOne({id: 1}, function(recipe){
-		 * 	      recipe.attr('name','salad')
-		 *        recipe.save()
+		 *       recipe.attr('name','salad');
+		 *       recipe.save();
 		 *     })
 		 * 
 		 * This will make an XHR request like:
@@ -181,7 +180,7 @@ steal('can/observe',function(){
 		 * 
 		 *     $.Model("Recipe",{
 		 *       update: "POST /recipes/{id}"
-		 *     },{})
+		 *     },{});
 		 * 
 		 * The server should send back an object with any new attributes the model 
 		 * should have.  For example if your server udpates the "updatedAt" property, it
@@ -213,7 +212,7 @@ steal('can/observe',function(){
 		 *       update : function(id, attrs ) {
 		 *         return $.post("/recipes/"+id+".json",attrs, null,"json");
 		 *       }
-		 *     },{})
+		 *     },{});
 		 * 
 		 * 
 		 * @param {String} id the id of the model instance
@@ -311,8 +310,8 @@ steal('can/observe',function(){
 		 * `can.ajax` (jQuery.ajax) like:
 		 * 
 		 *     Recipe = can.Model({
-		 * 	     findAll : {
-		 * 	       url: "/recipes.xml",
+		 *       findAll : {
+		 *         url: "/recipes.xml",
 		 *         dataType: "xml"
 		 *       }
 		 *     },{})
@@ -338,9 +337,9 @@ steal('can/observe',function(){
 		 * like:
 		 * 
 		 *     Recipe.findAll({favorite: true}, function(recipes){
-		 * 	     recipes[0].attr('name') //-> "Ice Water"
+		 *       recipes[0].attr('name') //-> "Ice Water"
 		 *     }, function( xhr ){
-		 * 	     // called if an error
+		 *       // called if an error
 		 *     }) //-> Deferred
 		 * 
 		 * The following API details the use of `findAll`.
@@ -400,7 +399,7 @@ steal('can/observe',function(){
 		 * `can.ajax` (jQuery.ajax) like:
 		 * 
 		 *     Recipe = can.Model({
-		 *       findAll : {
+		 *       findOne : {
 		 *         url: "/recipes/{id}.xml",
 		 *         dataType: "xml"
 		 *       }
@@ -413,7 +412,7 @@ steal('can/observe',function(){
 		 * deferred that resolves to the model data. For example:
 		 * 
 		 *     Recipe = can.Model({
-		 *       findAll : function(params){
+		 *       findOne : function(params){
 		 *         return $.ajax({
 		 *           url: '/recipes/{id}.json',
 		 *           type: 'get',
@@ -545,7 +544,7 @@ steal('can/observe',function(){
 		 * 
 		 *     Task = can.Model({},{})
 		 *     var tasks = Task.models([
-		 * 	     {id: 1, name : "dishes", complete : false},
+		 *       {id: 1, name : "dishes", complete : false},
 		 *       {id: 2, name: "laundry", compelte: true}
 		 *     ])
 		 *     
@@ -598,7 +597,7 @@ steal('can/observe',function(){
 		 * 
 		 * Or an Object with a data property and other expando properties like:
 		 * 
-		 * 	   {
+		 *     {
 		 *       count: 15000 //how many total items there might be
 		 *       data: [{id: 1, name : "justin"},{id:2, name: "brian"}, ...]
 		 *     }
@@ -786,7 +785,6 @@ steal('can/observe',function(){
 		 *       id: "Id"
 		 *     },{});
 		 */
-		// 
 	},
 	/**
 	 * @prototype
@@ -1055,43 +1053,78 @@ steal('can/observe',function(){
 			can.trigger(constructor,funcName, this);
 		};
 	});
-	
-	// Model lists are just like `Observe.List` except that when their items are 
-	// destroyed, it automatically gets removed from the list.
-	/**
-	 * @class can.Model.List
-	 * @inherits can.Observe.List
-	 * @parent index
-	 *
-	 * Works exactly like [can.Observe.List] and has all of the same properties,
-	 * events, and functions as an observable list. The only difference is that 
-	 * when an item from the list is destroyed, it will automatically get removed
-	 * from the list.
-	 *
-	 * ## Creating a new Model List
-	 *
-	 * To create a new model list, just use `new {model_name}.List(ARRAY)` like:
-	 *
-	 *     var todo1 = new Todo( { name: "Do the dishes" } ),
-	 *         todo2 = new Todo( { name: "Wash floors" } )
-	 *     var todos = new Todo.List( [todo1, todo2] );
-	 *
-	 * ## Removing models from model list
-	 *
-	 * The advantage that `can.Model.List` has over a traditional `can.Observe.List`
-	 * is that when you destroy a model, if it is in that list, it will automatically
-	 * be removed from the list. 
-	 *
-	 *     // Listen for when something is removed from the todos list.
-	 *     todos.bind("remove", function( ev, oldVals, indx ) {
-	 *         console.log(oldVals[indx].attr("name") + " removed")
-	 *     })
-	 *
-	 *     todo1.destory(); // console shows "Do the dishes removed"
-	 })
-	 *
-	 *
-	 */
+  
+  // Model lists are just like `Observe.List` except that when their items are 
+  // destroyed, it automatically gets removed from the list.
+  /**
+   * @class can.Model.List
+   * @inherits can.Observe.List
+   * @parent index
+   *
+   * Works exactly like [can.Observe.List] and has all of the same properties,
+   * events, and functions as an observable list. The only difference is that 
+   * when an item from the list is destroyed, it will automatically get removed
+   * from the list.
+   *
+   * ## Creating a new Model List
+   *
+   * To create a new model list, just use `new {model_name}.List(ARRAY)` like:
+   *
+   *     var todo1 = new Todo( { name: "Do the dishes" } ),
+   *         todo2 = new Todo( { name: "Wash floors" } )
+   *     var todos = new Todo.List( [todo1, todo2] );
+   *
+   * ### Model Lists in `can.Model`
+   * In addition to creating new lists, it is possible to call 
+   * [can.Model.static.findAll can.Model.findAll] or [can.Model.models] to return
+   * a `can.Model.List` object.
+   *
+   *     var todos = Todo.models([
+   *         new Todo( { name: "Do the dishes" } ),
+   *         new Todo( { name: "Wash floors" } )
+   *     ])
+   *     
+   *     todos.constructor // -> can.Model.List
+   *
+   *     Todo.findAll({}, function(todos) {
+   *         todos.constructor // -> can.Model.List
+   *     })
+   *
+   * ### Extending `can.Model.List`
+   *
+   * Creating custom `can.Model.Lists` allows you to extend lists with helper
+   * functions for a list of a specific type. So, if there was a need to get a
+   * random todo item, something could be written like
+   *
+   *     can.Model.List('Todo.List', {
+   *         random: function() {
+   *             // return a random todo from the list.
+   *         }
+   *     })
+   *
+   *     var list = new Todo.List([
+   *         new Todo( { name: "Do the dishes" } ),
+   *         new Todo( { name: "Wash floors" } )
+   *     ]);
+   *
+   *     list.random() // -> random todo
+   *
+   *
+   * ## Removing models from model list
+   *
+   * The advantage that `can.Model.List` has over a traditional `can.Observe.List`
+   * is that when you destroy a model, if it is in that list, it will automatically
+   * be removed from the list. 
+   *
+   *     // Listen for when something is removed from the todos list.
+   *     todos.bind("remove", function( ev, oldVals, indx ) {
+   *         console.log(oldVals[indx].attr("name") + " removed")
+   *     })
+   *
+   *     todo1.destory(); // console shows "Do the dishes removed"
+   *
+   *
+   */
 	var ML = can.Observe.List('can.Model.List',{
 		setup : function(){
 			can.Observe.List.prototype.setup.apply(this, arguments );

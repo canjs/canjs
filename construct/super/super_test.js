@@ -1,4 +1,4 @@
-steal('funcunit/qunit','./super',function(){
+(function(){
 
 module("can/construct/super");
 
@@ -62,4 +62,4 @@ test("Super in derived when parent doesn't have init", function(){
 	}
 })*/
 
-});
+})();
