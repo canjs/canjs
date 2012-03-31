@@ -1980,7 +1980,13 @@ __View the App__
 
 ### CanPlay
 
-Image of player, description, link.
+![Can Play Demo](http://donejs.com/examples/player/screen.png)
+
+A simple HTML5 video player application utilizing [Popcorn.js](http://popcornjs.org/). We set up two `can.Control` 
+instances to control the `Popcorn` video as well as update the position of the player. This demo makes use of 
+[Templated Event Handlers](#can_control-templated_event_handlers_pt_1) by passing the `Popcorn` wrapped video element 
+to the controller instances. The controllers then bind to events using the `"{video}"` templated event handler to 
+listen and interact with the `video` element.
 
 [Player](http://donejs.com/examples/player/index.html)
 
