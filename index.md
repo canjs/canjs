@@ -1989,13 +1989,13 @@ This applications makes heavy use of [EJS Live Binding](#can_ejs-live_binding).
 
 __View the App__
 
-- [jQuery](http://donejs.com/cantodo/jquery/)
-- [Dojo](http://donejs.com/cantodo/dojo/)
-- [Dojo with calendar widget](http://donejs.com/cantodo/dojo-widget/)
-- [Mootools](http://donejs.com/cantodo/mootools/)
-- [YUI](http://donejs.com/cantodo/yui/)
-- [YUI with calendar widget](http://donejs.com/cantodo/yui-widget/)
-- [Zepto](http://donejs.com/cantodo/zepto/)
+- [jQuery](http://donejs.com/examples/jquery/todo/index.html)
+- [Dojo](http://donejs.com/examples/dojo/todo/index.html)
+- [Dojo with calendar widget](http://donejs.com/examples/dojo-widget/todo/index.html)
+- [Mootools](http://donejs.com/examples/mootools/todo/index.html)
+- [YUI](http://donejs.com/examples/yui/todo/index.html)
+- [YUI with calendar widget](http://donejs.com/examples/yui-widget/todo/index.html)
+- [Zepto](http://donejs.com/examples/zepto/todo/index.html)
 
 [View the source on github](https://github.com/jupiterjs/cantodo)
 
