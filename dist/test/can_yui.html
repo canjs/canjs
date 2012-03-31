@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="../../../funcunit/qunit/qunit.css" />
+        <title>can YUI Test</title>
+		<script type='text/javascript' src='../../../steal/steal.js'></script>
+		<script type='text/javascript'>
+		
+			var yuilibs = ['yui-base/yui-base.js', 'oop/oop.js', 'event-custom-base/event-custom-base.js', 'features/features.js', 'dom-core/dom-core.js', 'dom-base/dom-base.js', 'selector-native/selector-native.js', 'selector-css2/selector-css2.js', 'selector/selector.js', 'node-core/node-core.js', 'node-base/node-base.js', 'event-base/event-base.js', 'event-delegate/event-delegate.js', 'node-event-delegate/node-event-delegate.js', 'pluginhost-base/pluginhost-base.js', 'pluginhost-config/pluginhost-config.js', 'node-pluginhost/node-pluginhost.js', 'dom-style/dom-style.js', 'dom-screen/dom-screen.js', 'node-screen/node-screen.js', 'node-style/node-style.js', 'querystring-stringify-simple/querystring-stringify-simple.js', 'io-base/io-base.js', 'array-extras/array-extras.js', 'querystring-parse/querystring-parse.js', 'querystring-stringify/querystring-stringify.js', 'event-custom-complex/event-custom-complex.js', 'event-synthetic/event-synthetic.js', 'event-focus/event-focus.js']
+		
+			var url = "http://yui.yahooapis.com/combo?3.4.1/build/" + yuilibs.join("&3.4.1/build/")
+			steal(url)
+				.then('can/dist/edge/can.yui.js')
+				.then('can/test/mvc_test.js')
+				.then('can/construct/construct_test.js',
+					'can/observe/observe_test.js',
+					'can/view/view_test.js',
+					'can/control/control_test.js',
+					'can/model/model_test.js',
+					'can/view/ejs/ejs_test.js')
+		</script>
+    </head>
+    <body>
+
+        <h1 id="qunit-header">can jQuery Tests</h1>
+    	<h2 id="qunit-banner"></h2>
+    	<div id="qunit-testrunner-toolbar"></div>
+    	<h2 id="qunit-userAgent"></h2>
+		<div id="test-content"></div>
+        <ol id="qunit-tests"></ol>
+		<div id="qunit-test-area"></div>
+    </body>
+</html>
