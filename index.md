@@ -1451,6 +1451,98 @@ event.  This is used to teardown event handlers in can.Control.
 
 CanJS can be used with libraries other than jQuery.
 
+### Dojo
+
+CanJS supports Dojo 1.7+ using its new AMD loader in asynchronous or synchronous mode.
+CanJS depends on the following Dojo modules: __dojo__, __dojo/query__, __dojo/NodeList-dom__ and __dojo/NodeList-traverse__. It also uses the __plugd/trigger__ plugin for internal object and node event triggering.
+
+To use, include Dojo in your page and add the `'can/dojo'` module as a dependency in your require statement.
+
+% highlight html %}
+<script type='text/javascript' src='path/to/js/dojo.js'></script>
+<script>
+require(['can/dojo',], function(can){ //will load path/to/js/can/dojo.js
+  Contacts = can.Model({
+    …
+  });
+});
+</script>
+{% endhighlight %}
+
+If you are including Dojo from a CDN or you want more control over your file structure, you will need to configure the packages path to can/dojo. This can be done by declaring a variable named [dojoConfig](http://dojotoolkit.org/documentation/tutorials/1.7/dojo_config/) before including the Dojo library or using the [require function](http://dojotoolkit.org/documentation/tutorials/1.7/modules/).
+
+{% highlight html %}
+<script>
+//Using dojoConfig to load can/dojo from the local directory js/libs
+var dojoConfig = {
+  packages: [{
+    name: "can/dojo",
+    location: "location.pathname.replace(/\/[^/]+$/, "") + "/js/libs",
+    main: "can.dojo-edge.js"
+  }]
+}
+</script>
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js'></script>
+<script>
+require(['can/dojo',], function(can){
+  // start using CanJS
+  Todo = can.Model({
+    …
+  });
+});
+</script>
+{% endhighlight %}
+
+{% highlight html %}
+<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js'></script>
+<script>
+//Using require to load can/dojo from the local directory js/libs
+require({
+  packages: [{
+    name: "can/dojo",
+    location: location.pathname.replace(/\/[^/]+$/, "") + "/js/libs",
+    main: "can.dojo-edge"
+  }]
+}, ['can/dojo',], function(can){
+  // start using CanJS
+  Todo = can.Model({
+    …
+  });
+});
+</script>
+{% endhighlight %}
+
+CanJS can bind to any Dijit, Dojox or custom widget events using [templated event binding](http://donejs.com/docs.html#can_control-templated_event_handlers_pt_2)
+
+{% highlight javascript %}
+require(['can/dojo', 'dijit/CalendarLite', 'dijit/Menu', 'dijit/MenuItem'], function(can, CalendarLite){
+  //Define a Control
+  var Todos = can.Controller({
+    //calendar is part of this.options
+    "{calendar} change" : function(calendar, newDate) {
+      //onChange handler: Do something with the newDate selected
+    },
+    //MainMenu is global (part of window)
+    "{MainMenu} itemclick" : function(item, ev) {
+    	//onItemClick handler: Respond to the menu click
+    }	
+  });
+  //Create a menu for your application
+  MainMenu = new dijit.Menu({
+    targetNodeIds:["main_menu"]
+  });
+  MainMenu.addChild(new dijit.MenuItem({
+    label:"New"
+  }));
+  MainMenu.startup();
+  
+  //Initialize app with a calendar widget
+  new Todo('#todoList', {
+    calendar: new CalendarLite({}, "calendar")
+  });
+});
+{% endhighlight %}
+
 ### YUI
 
 CanJS supports YUI with both dynamically or statically loaded modules.
@@ -1877,16 +1969,6 @@ $( '#todos' ).html( 'todo/todos.ejs', [
 ## Examples
 
 Examples of CanJS.
-
-### Todo
-
-### CanPlay
-
-### Srchr
-
-Image of srchr, description, link.
-
-[Srchr](http://donejs.com/examples/srchr/index.html)
 
 ## Why CanJS
 
