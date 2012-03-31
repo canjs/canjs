@@ -272,7 +272,8 @@ steal('can/construct', function( $ ) {
 		setup: function( element, options ) {
 
 			var cls = this.constructor,
-				pluginname = cls.pluginName || cls._fullName;
+				pluginname = cls.pluginName || cls._fullName,
+				arr;
 
 			// Want the raw element here.
 			this.element = can.$(element)
@@ -282,7 +283,8 @@ steal('can/construct', function( $ ) {
 				this.element.addClass(pluginname);
 			}
 			
-			(can.data(this.element,"controls")) || can.data(this.element,"controls", [ this ]);
+			(arr = can.data(this.element,"controls")) || can.data(this.element,"controls",arr = []);
+			arr.push(this);
 			
 			/**
 			 * @attribute options
