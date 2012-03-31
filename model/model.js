@@ -5,10 +5,10 @@ steal('can/observe',function(){
 	// `can.Model`  
 	// _A `can.Observe` that connects to a RESTful interface._
 	//  
+	// Generic deferred piping function
 	/**
 	 * @add can.Model
 	 */
-	// Generic deferred piping function
 	var	pipe = function( def, model, func ) {
 		var d = new can.Deferred();
 		def.then(function(){
@@ -88,15 +88,14 @@ steal('can/observe',function(){
 			return deferred.then(success,error);
 		},
 	
-	/** 
-	 * @Static
-	 */
-	
 	// This object describes how to make an ajax request for each ajax method.  
 	// The available properties are:
 	//		`url` - The default url to use as indicated as a property on the model.
 	//		`type` - The default http request type
 	//		`data` - A method that takes the `arguments` and returns `data` used for ajax.
+	/** 
+	 * @Static
+	 */
 	ajaxMethods = {
 		/**
 		 * @function create
@@ -786,7 +785,6 @@ steal('can/observe',function(){
 		 *       id: "Id"
 		 *     },{});
 		 */
-		// 
 	},
 	/**
 	 * @prototype
