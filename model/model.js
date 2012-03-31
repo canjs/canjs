@@ -1062,6 +1062,35 @@ steal('can/observe',function(){
 	 * @class can.Model.List
 	 * @inherits can.Observe.List
 	 * @parent index
+	 *
+	 * Works exactly like [can.Observe.List] and has all of the same properties,
+	 * events, and functions as an observable list. The only difference is that 
+	 * when an item from the list is destroyed, it will automatically get removed
+	 * from the list.
+	 *
+	 * ## Creating a new Model List
+	 *
+	 * To create a new model list, just use `new {model_name}.List(ARRAY)` like:
+	 *
+	 *     var todo1 = new Todo( { name: "Do the dishes" } ),
+	 *         todo2 = new Todo( { name: "Wash floors" } )
+	 *     var todos = new Todo.List( [todo1, todo2] );
+	 *
+	 * ## Removing models from model list
+	 *
+	 * The advantage that `can.Model.List` has over a traditional `can.Observe.List`
+	 * is that when you destroy a model, if it is in that list, it will automatically
+	 * be removed from the list. 
+	 *
+	 *     // Listen for when something is removed from the todos list.
+	 *     todos.bind("remove", function( ev, oldVals, indx ) {
+	 *         console.log(oldVals[indx].attr("name") + " removed")
+	 *     })
+	 *
+	 *     todo1.destory(); // console shows "Do the dishes removed"
+	 })
+	 *
+	 *
 	 */
 	var ML = can.Observe.List('can.Model.List',{
 		setup : function(){
