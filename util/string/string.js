@@ -30,6 +30,7 @@ steal('can/util',function() {
 		};
 
 		can.extend(can, {
+			// Escapes strings for HTML.
 			/**
 			 * @function can.esc
 			 * @parent can.util
@@ -37,7 +38,6 @@ steal('can/util',function() {
 			 * 
 			 * can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
 			 */
-			// Escapes strings for HTML.
 			esc : function( content ) {
 				return ( "" + content )
 					.replace(/&/g, '&amp;')
@@ -108,6 +108,7 @@ steal('can/util',function() {
 					}
 				}
 			},
+			// Capitalizes a string.
 			/**
 			 * @function can.capitalize
 			 * @parent can.util
@@ -118,12 +119,12 @@ steal('can/util',function() {
 			 * @param {String} s the string.
 			 * @return {String} a string with the first character capitalized.
 			 */
-			// Capitalizes a string.
 			capitalize: function( s, cache ) {
 				// Used to make newId.
 				return s.charAt(0).toUpperCase() + s.slice(1);
 			},
 			
+			// Underscores a string.
 			/**
 			 * @function can.underscore
 			 * @parent can.util
@@ -135,7 +136,6 @@ steal('can/util',function() {
 			 * @param {String} s
 			 * @return {String} the underscored string
 			 */
-			// Underscores a string.
 			underscore: function( s ) {
 				return s
 					.replace(colons, '/')
@@ -144,6 +144,7 @@ steal('can/util',function() {
 					.replace(dash, '_')
 					.toLowerCase();
 			},
+			// Micro-templating.
 			/**
 			 * @function can.sub
 			 * @parent can.util
@@ -158,7 +159,6 @@ steal('can/util',function() {
 			 * objects can be used.
 			 * @param {Boolean} [remove] if a match is found, remove the property from the object
 			 */
-			// Micro-templating.
 			sub: function( str, data, remove ) {
 
 				var obs = [];

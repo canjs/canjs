@@ -67,7 +67,7 @@ steal('steal/build/pluginify', function() {
 		global : "can = {}",
 		onefunc : true,
 		compress: true,
-		wrapInner: ['\nYUI().add("can", function(Y) {\ncan.Y = Y;\n','}, "0.0.1", {\nrequires: ["node", "io-base", "querystring", "event-focus", "array-extras"]\noptional: ["selector-css2", "selector-css3"]\n});\n'],
+		wrapInner: ['\nYUI().add("can", function(Y) {\ncan.Y = Y;\n','}, "0.0.1", {\nrequires: ["node", "io-base", "querystring", "event-focus", "array-extras"],\n optional: ["selector-css2", "selector-css3"]\n});\n'],
 		skipCallbacks: true
 	});
 
@@ -110,7 +110,7 @@ steal('steal/build/pluginify', function() {
 		global : "can = {}",
 		onefunc : true,
 		compress: false,
-		wrapInner: ['\nYUI().add("can", function(Y) {\n','}, "0.0.1", {\nrequires: ["node", "io-base", "querystring", "event-focus", "array-extras"],\noptional: ["selector-css2", "selector-css3"]\n});\n'],
+		wrapInner: ['\nYUI().add("can", function(Y) {\n','}, "0.0.1", {\nrequires: ["node", "io-base", "querystring", "event-focus", "array-extras"],\n optional: ["selector-css2", "selector-css3"]\n});\n'],
 		skipCallbacks: true
 	});
 	
@@ -188,78 +188,6 @@ steal('steal/build/pluginify', function() {
 		global: "can = {}",
 		onefunc: true,
 		compress: false,
-		skipCallbacks: true,
-		standAlone: true
-	});
-
-	steal.build.pluginify("can/construct/proxy/proxy.js", {
-		out: "can/dist/edge/can.construct.proxy.min.js",
-		global: "can = {}",
-		onefunc: true,
-		compress: true,
-		skipCallbacks: true,
-		standAlone: true
-	});
-
-	steal.build.pluginify("can/construct/super/super.js", {
-		out: "can/dist/edge/can.construct.super.min.js",
-		global: "can = {}",
-		onefunc: true,
-		compress: true,
-		skipCallbacks: true,
-		standAlone: true
-	});
-
-	steal.build.pluginify("can/control/plugin/plugin.js", {
-		out: "can/dist/edge/can.control.plugin.min.js",
-		global: "can = {}",
-		onefunc: true,
-		compress: true,
-		skipCallbacks: true,
-		standAlone: true
-	});
-
-	steal.build.pluginify("can/observe/attributes/attributes.js", {
-		out: "can/dist/edge/can.observe.attributes.min.js",
-		global: "can = {}",
-		onefunc: true,
-		compress: true,
-		skipCallbacks: true,
-		standAlone: true
-	});
-
-	steal.build.pluginify("can/observe/delegate/delegate.js", {
-		out: "can/dist/edge/can.observe.delegate.min.js",
-		global: "can = {}",
-		onefunc: true,
-		compress: true,
-		skipCallbacks: true,
-		standAlone: true
-	});
-
-	steal.build.pluginify("can/observe/setter/setter.js", {
-		out: "can/dist/edge/can.observe.setter.min.js",
-		global: "can = {}",
-		onefunc: true,
-		compress: true,
-		skipCallbacks: true,
-		standAlone: true
-	});
-
-	steal.build.pluginify("can/observe/backup/backup.js", {
-		out: "can/dist/edge/can.observe.backup.min.js",
-		global: "can = {}",
-		onefunc: true,
-		compress: true,
-		skipCallbacks: true,
-		standAlone: true
-	});
-
-	steal.build.pluginify("can/observe/validations/validations.js", {
-		out: "can/dist/edge/can.observe.validations.min.js",
-		global: "can = {}",
-		onefunc: true,
-		compress: true,
 		skipCallbacks: true,
 		standAlone: true
 	});

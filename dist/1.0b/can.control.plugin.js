@@ -1,4 +1,4 @@
-steal('can/control', function(){
+(function(can, window, undefined){
 	
 
 
@@ -234,4 +234,4 @@ can.Control.prototype.update = function( options ) {
 		this.on();
 };
 
-});
+})(can = {}, this )

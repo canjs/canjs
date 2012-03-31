@@ -8,7 +8,7 @@ steal('can/construct/super',
 	test("pluginName", function () {
 		expect(8);
 
-		var pluginControl = can.Control({
+		var pluginControl = can.Control("My.TestPlugin", {
 			pluginName : "my_plugin"
 		}, {
 			init : function(el, ops) {
@@ -31,12 +31,12 @@ steal('can/construct/super',
 		ok(ta.hasClass("my_plugin"), "Should have class my_plugin");
 		ta.my_plugin(); // Update
 		ta.my_plugin("method", "testarg"); // method()
-		ta.controller().destroy(); // destroy
+		ta.control().destroy(); // destroy
 		ok(!ta.hasClass("my_plugin"), "Shouldn't have class my_plugin after being destroyed");
 		ok(ta.hasClass("existing_class"), "Existing class should still be there");
 	});
 
-	test(".controller(), .controllers() and _fullname", function() {
+	test(".control(), .controls() and _fullname", function() {
 		expect(3);
 		can.Control("My.TestPlugin", {
 		});
@@ -44,8 +44,8 @@ steal('can/construct/super',
 		var ta = can.$("<div/>").appendTo($("#qunit-test-area"));
 		ok(ta.my_test_plugin, 'Converting Control name to plugin name worked');
 		ta.my_test_plugin();
-		equal(ta.controllers().length, 1, '.controllers() returns one instance');
-		ok(ta.controller() instanceof My.TestPlugin, 'Control is instance of test plugin')
+		equal(ta.controls().length, 1, '.controls() returns one instance');
+		ok(ta.control() instanceof My.TestPlugin, 'Control is instance of test plugin')
 	});
 
 	test('update', function() {
@@ -57,6 +57,6 @@ steal('can/construct/super',
 		ta.updateTest(); // Init
 		ta.updateTest({ testop : 'testing' });
 
-		equal(ta.controller().options.testop, 'testing', 'Test option has been extended properly');
+		equal(ta.control().options.testop, 'testing', 'Test option has been extended properly');
 	});
 });
