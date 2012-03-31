@@ -11,7 +11,7 @@ create a teacher template in a script tag like:
 
     <script type='text/ejs' id='teacherEJS'>
     
-      <h2 class='<%= teacher.grade < 'c' : "good" : "bad" %>'>
+      <h2 class='<%= teacher.grade < 'c'? "good" : "bad" %>'>
         <%= teacher.name %>
       </h2>
       
@@ -31,7 +31,7 @@ Next, create a teacher and use can.view to render the template:
 
     var teacher = {
       name : "Mr. Smith",
-      grade : "a"
+      grade : "a",
       students : [
         {name : "Suzy"},
         {name : "Payal"},
@@ -70,7 +70,7 @@ to iterate through a list like:
 
     <script type='text/ejs' id='teacherEJS'>
     
-      <h2 class='<%= teacher.attr('grade') < 'c' : "good" : "bad" %>'>
+      <h2 class='<%= teacher.attr('grade') < 'c'? "good" : "bad" %>'>
         <%= teacher.attr('name') %>
       </h2>
       

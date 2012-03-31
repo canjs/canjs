@@ -1,4 +1,4 @@
-steal('jquery/model').then(function( $ ) {
+steal('can/model').then(function( $ ) {
 
 	var getArgs = function( args ) {
 		if ( args[0] && ($.isArray(args[0])) ) {
@@ -16,7 +16,7 @@ steal('jquery/model').then(function( $ ) {
 		},
 		expando = jQuery.expando,
 		each = $.each,
-		ajax = $.Model._ajax,
+		ajax = can.Model._ajax,
 
 		/**
 		 * @class jQuery.Model.List
