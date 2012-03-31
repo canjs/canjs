@@ -45,6 +45,8 @@ can.Observe.prototype.__set = function(prop, value, current, success, error){
 			if(stub !== false){
 				can.trigger(self, "error", [prop, errors], true);
 			}
+			
+			return false;
 		};
 	
 	old.call(self, prop, value, current, success, errorCallback);
