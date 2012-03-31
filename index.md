@@ -1823,16 +1823,16 @@ var Person = can.Model({
   findOne : 'GET /people/{id}',
   create  : 'POST /people',
   update  : 'PUT /people/{id}',
-  destroy : 'DELETE /people/{id}'
-}, {
-  init: function() {
-    this.constructor.validate( 'name', function( name ) {
+  destroy : 'DELETE /people/{id}',
+  
+  init:function(){
+    this.validate('name', function( name ) {
       if ( !name ) {
         return 'Name can not be empty!';
       }
-    });
+    })
   }
-});
+}, { });
 
 var john = new Person( { name : '' } );
 john.errors();
