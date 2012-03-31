@@ -4,16 +4,21 @@
 @test can/observe/attributes/qunit.html
 @download http://donejs.com/can/dist/can.observe.attributes.js
 
-`can.Observe.attributes` is a hash map of attribute names and types. Attributes when used in conjunction with
-convert can provide rich functionality for converting data attributes from raw types and serializing complex
-types for the server.
+Attributes when used in conjunction with convert can provide rich functionality for 
+converting data attributes from raw types and serializing complex types for the server.
 
-Below is an example of an Observe providing serialization and conversion.
+Below is an example code of an Observe providing serialization and conversion for dates and numbers.  
 
-	var Birthday = new can.Observe({
+When the observe is initialized, we set the `weight` attribute, its then converted using the 
+`number` converter for when we try to re-access the attribute it will be a integer.  Then we set
+the `birthday` attribute using the `attr` method, it converts it using the `date` converter we 
+provided.  Lastly, we can call `seralize` and it will convert our newly set attributes to our custom 
+serializer methods.
+
+	var Contact = new can.Observe({
 		attributes: {
 			birthday: 'date'
-			age: 'number'
+			weight: 'number'
 		},
 		serialize : {
 			date : function( val, type ){
@@ -49,35 +54,25 @@ Below is an example of an Observe providing serialization and conversion.
 				return number;
 			}
 		}
+	}, {});
+
+	var brian = new Contact({
+		weight: '300'
 	});
+	
+	//- returns the weight as a int
+	var weight = brian.attr('weight');
 
-	var brian = new Birthday();
-
-	// sets brian's birthday
+	//- sets brian's birthday
 	brian.attr('birthday', '11-29-1983');
 
 	//- returns newly converted date object
 	var date = brian.attr('birthday');
 
-	//- returns { 'birthday': '11-29-1983, 'age': '28' }
+	//- returns { 'birthday': '11-29-1983, 'weight': '300' }
 	var seralizedObj = brian.serialize();
 	
-## Associations
-
-Attribute type values can also represent the name of a function. The most common case this is used is for associated data.
-
-For example, a Deliverable might have many tasks and an owner (which is a Person). The attributes property might look like:
-
-	var Deliverable = new can.Observe({
-		attributes : {
-			tasks : "App.Models.Task"
-			owner: "App.Models.Person"
-		}
-	});
-
-This points tasks and owner properties to use _Task_ and _Person_ to convert the raw data into an array of Tasks and a Person.
-
-## Demo
+### Demo
 
 Below is a demo that showcases convert being used on an Observable.  
 
@@ -89,3 +84,28 @@ Additionally, the control also listens for changes on the Observable and
 updates the age in the page for the new birthdate of the contact.
 
 @demo can/observe/attributes/attributes.html
+	
+## Associations
+
+Attribute type values can also represent the name of a function. The most common case this is used is for associated data.
+
+For example, a Deliverable might have many tasks and an owner (which is a Person). The attributes property might look like:
+
+	var Deliverable = new can.Observe({
+		attributes : {
+			tasks : "App.Models.Task.models"
+			owner: "App.Models.Person.model"
+		}
+	});
+
+This points tasks and owner properties to use _Task_ and _Person_ to convert the raw data into an array of Tasks and a Person.
+
+Its important to note that the full names of the models themselves are _App.Models.Task_ and _App.Models.Person_. The `.model` 
+and `.models` parts are appended for the benefit of convert to identify the types as models.
+
+### Demo
+
+Below is a demo that showcases associations between 2 different models to show the tasks
+for each contact and how much time they have left to complete the task(s) using converters.
+
+@demo can/observe/attributes/attributes-assocations.html
