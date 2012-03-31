@@ -190,6 +190,22 @@ and then the `window`. For example, we could customize it instead like:
 
 The selector can also be templated.
 
+    var Todos = can.Control( 'Todos', {
+      init: function( element , options ) { ... },
+      
+      '{listElement} click': function( li ) { ... },
+      
+      '{listElement} .destroy {destroyEvent}': function( el, ev ) { 
+        // previous destroy code here
+      }
+    });
+
+    // create Todos with this.options.destroyEvent
+    new Todos( '#todos',  { 
+      destroyEvent: 'mouseenter', 
+      listElement: 'li' 
+    } );
+
 ## Templated Event Handlers Part 2 `"{objectName}"`
 
 Control can also bind to objects other than `this.element` with
