@@ -2582,7 +2582,7 @@
 	 *         el.css("backgroundColor","")
 	 *       },
 	 *       ".create click" : function() {
-	 *         this.find("ol").append("&lt;li class='todo'>New Todo&lt;/li>"); 
+	 *         this.element.find("ol").append("&lt;li class='todo'>New Todo&lt;/li>"); 
 	 *       }
 	 *     })
 	 * 
@@ -3181,13 +3181,13 @@
 		 *       "{recipe} created" : function(){
 		 *         this.update({recipe : new Recipe()});
 		 *         this.element[0].reset();
-		 *         this.find("[type=submit]").val("Create Recipe")
+		 *         this.element.find("[type=submit]").val("Create Recipe")
 		 *       },
 		 *       "submit" : function(el, ev){
 		 *         ev.preventDefault();
 		 *         var recipe = this.options.recipe;
 		 *         recipe.attrs( this.element.formParams() );
-		 *         this.find("[type=submit]").val("Saving...")
+		 *         this.element.find("[type=submit]").val("Saving...")
 		 *         recipe.save();
 		 *       }
 		 *     });
@@ -3322,7 +3322,7 @@
 		 * Queries from the control's element.
 		 * @codestart
 		 * ".destroy_all click" : function() {
-		 *    this.find(".todos").remove();
+		 *    this.element.find(".todos").remove();
 		 * }
 		 * @codeend
 		 * @param {String} selector selection string
