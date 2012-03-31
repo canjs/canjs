@@ -1,4 +1,4 @@
-steal('funcunit/qunit','./attributes', function(){
+(function(){
 
 module("can/observe/attributes");
 
@@ -151,4 +151,4 @@ test("single seralize w/ attr name", function(){
 
 
 
-});
+})();
