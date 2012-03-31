@@ -1,4 +1,4 @@
-steal('funcunit/qunit','./sort', function(){
+(function(){
 
 module("can/observe/sort");
 
@@ -48,4 +48,4 @@ test("list events", function(){
 	list[0].attr('name',"Zed")
 })
 
-});
+})();

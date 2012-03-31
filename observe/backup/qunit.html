@@ -6,7 +6,7 @@
                 margin: 0px; padding: 0px;
             }
         </style>
-		<script type='text/javascript' src='../../../steal/steal.js?can/observe/backup/can_test.js'></script>
+		<script type='text/javascript' src='../../../steal/steal.js'></script>
     </head>
     <body>
 
@@ -17,5 +17,10 @@
 		<div id="test-content"></div>
         <ol id="qunit-tests"></ol>
 		<div id="qunit-test-area"></div>
+	    <script type='text/javascript'>
+	    	steal('funcunit/qunit','can/observe/attributes')
+	    		.then('can/observe/backup')
+	    		.then('can/observe/backup/backup_test.js')
+	    </script>
     </body>
 </html>

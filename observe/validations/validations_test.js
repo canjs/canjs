@@ -1,4 +1,4 @@
-steal('funcunit/qunit','can/observe/validations').then(function(){
+(function(){
 
 module("can/observe/validations",{
 	setup : function(){
@@ -168,4 +168,4 @@ test("validatesRangeOf", function(){
 	equals(errors2.otherThing[0],"value out of range", "can supply a custom message");
 });
 
-});
+})();

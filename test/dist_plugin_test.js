@@ -1,12 +1,12 @@
-steal('can/dist/can.jquery-dev-edge.js',
-	  'can/dist/can.construct.proxy.js',
-	  'can/dist/can.construct.super.js',
-	  'can/dist/can.observe.attributes.js',
-	  'can/dist/can.observe.backup.js',
-	  'can/dist/can.observe.delegate.js',
-	  'can/dist/can.observe.setter.js',
-	  'can/dist/can.observe.validations.js',
-	  'can/dist/can.control.plugin.js')
+steal('can/dist/edge/can.jquery.js')
+	.then('can/dist/edge/can.construct.proxy.js',
+	  'can/dist/edge/can.construct.super.js',
+	  'can/dist/edge/can.observe.attributes.js',
+	  'can/dist/edge/can.observe.backup.js',
+	  'can/dist/edge/can.observe.delegate.js',
+	  'can/dist/edge/can.observe.setter.js',
+	  'can/dist/edge/can.observe.validations.js',
+	  'can/dist/edge/can.control.plugin.js')
 .then('funcunit/qunit',
 	  'can/util/fixture')
 .then('can/construct/proxy/proxy_test.js',
