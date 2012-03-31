@@ -4,11 +4,11 @@
 @test can/control/view/qunit.html
 @download http://donejs.com/can/dist/can.control.route.js
 
-The can.Control.route plugin adds a __route__ [processor](can.Control.static.processors) to [can.Control].
+The can.Control.route plugin adds a __route__ [can.Control.static.processors processor] to [can.Control].
 This allows creating routes and binding to [can.route] in a single step by listening to the _route_ event
-and a route string. Without a route string the event will be triggered when the route is empty.
-The data passed to the event handler will contain the [deparamed route](can.route.deparam) without the
-matched _route_ attribute.
+and a route. Without a route, the event will be triggered when the route is empty.
+The data passed to the event handler will contain the [can.route.deparam deparamed route] without the
+_route_ attribute.
 
 For example:
 
