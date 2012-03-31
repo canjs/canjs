@@ -163,13 +163,13 @@ steal('can/observe',function(){
 		 * 
 		 *     Recipe = can.Model({
 		 *       update: "/recipes/{id}"
-		 *     },{})
+		 *     },{});
 		 *     
 		 * This lets you update a recipe like:
 		 *  
 		 *     Recipe.findOne({id: 1}, function(recipe){
-		 * 	      recipe.attr('name','salad')
-		 *        recipe.save()
+		 *       recipe.attr('name','salad');
+		 *       recipe.save();
 		 *     })
 		 * 
 		 * This will make an XHR request like:
@@ -181,7 +181,7 @@ steal('can/observe',function(){
 		 * 
 		 *     $.Model("Recipe",{
 		 *       update: "POST /recipes/{id}"
-		 *     },{})
+		 *     },{});
 		 * 
 		 * The server should send back an object with any new attributes the model 
 		 * should have.  For example if your server udpates the "updatedAt" property, it
@@ -213,7 +213,7 @@ steal('can/observe',function(){
 		 *       update : function(id, attrs ) {
 		 *         return $.post("/recipes/"+id+".json",attrs, null,"json");
 		 *       }
-		 *     },{})
+		 *     },{});
 		 * 
 		 * 
 		 * @param {String} id the id of the model instance
@@ -311,8 +311,8 @@ steal('can/observe',function(){
 		 * `can.ajax` (jQuery.ajax) like:
 		 * 
 		 *     Recipe = can.Model({
-		 * 	     findAll : {
-		 * 	       url: "/recipes.xml",
+		 *       findAll : {
+		 *         url: "/recipes.xml",
 		 *         dataType: "xml"
 		 *       }
 		 *     },{})
@@ -338,9 +338,9 @@ steal('can/observe',function(){
 		 * like:
 		 * 
 		 *     Recipe.findAll({favorite: true}, function(recipes){
-		 * 	     recipes[0].attr('name') //-> "Ice Water"
+		 *       recipes[0].attr('name') //-> "Ice Water"
 		 *     }, function( xhr ){
-		 * 	     // called if an error
+		 *       // called if an error
 		 *     }) //-> Deferred
 		 * 
 		 * The following API details the use of `findAll`.
@@ -400,7 +400,7 @@ steal('can/observe',function(){
 		 * `can.ajax` (jQuery.ajax) like:
 		 * 
 		 *     Recipe = can.Model({
-		 *       findAll : {
+		 *       findOne : {
 		 *         url: "/recipes/{id}.xml",
 		 *         dataType: "xml"
 		 *       }
@@ -413,7 +413,7 @@ steal('can/observe',function(){
 		 * deferred that resolves to the model data. For example:
 		 * 
 		 *     Recipe = can.Model({
-		 *       findAll : function(params){
+		 *       findOne : function(params){
 		 *         return $.ajax({
 		 *           url: '/recipes/{id}.json',
 		 *           type: 'get',
@@ -545,7 +545,7 @@ steal('can/observe',function(){
 		 * 
 		 *     Task = can.Model({},{})
 		 *     var tasks = Task.models([
-		 * 	     {id: 1, name : "dishes", complete : false},
+		 *       {id: 1, name : "dishes", complete : false},
 		 *       {id: 2, name: "laundry", compelte: true}
 		 *     ])
 		 *     
@@ -598,7 +598,7 @@ steal('can/observe',function(){
 		 * 
 		 * Or an Object with a data property and other expando properties like:
 		 * 
-		 * 	   {
+		 *     {
 		 *       count: 15000 //how many total items there might be
 		 *       data: [{id: 1, name : "justin"},{id:2, name: "brian"}, ...]
 		 *     }

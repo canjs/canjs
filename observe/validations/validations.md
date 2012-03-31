@@ -5,8 +5,7 @@
 @test can/observe/validations/qunit.html
 
 The `can/observe/validations` plugin provides validations on observes. Validations
-are setup on constructor functions that inherit from [can.Observe]. Call
-validation functions in `init`.
+are s on [can.Observe]'s __static__ `init` function.
 
 The following validates the `birthday` attribute in Contacts:
 
@@ -49,14 +48,16 @@ or to test if setting a value would create an error:
 
 ## Validation Methods
 
+The most basic validate method is [can.Observe.validate validate]<code>()</code>.  
+
 There are several built-in validation methods so you don't have to define your own in all cases like in the birthday example above.
 
-- [can.Observe.validate] Validates each of the specified attributes with the given function.
-- [can.Observe.validateFormatOf] Validates where the values of specified attributes are of the correct form by matching it against the regular expression provided.	
-- [can.Observe.validateInclusionOf] Validates whether the values of the specified attributes are available in a particular array.	
-- [can.Observe.validateLengthOf] Validates that the specified attributes' lengths are in the given range.	
-- [can.Observe.validatePresenceOf] Validates that the specified attributes are not blank.	
-- [can.Observe.validateRangeOf] Validates that the specified attributes are in the given numeric range.
+- [can.Observe.validate]<code>(attrNames, options, proc)</code> Attributes validated with function.
+- [can.Observe.validateFormatOf]<code>(attrNames, regexp, options)</code> Attributes match the regular expression.	
+- [can.Observe.validateInclusionOf]<code>( attrNames, inArray, [options] )</code> Attributes are available in a particular array.	
+- [can.Observe.validateLengthOf validateLengthOf]<code>(attrNames, min, max, [options])</code> Attributes' lengths are in the given range.	
+- [can.Observe.validatePresenceOf validatePresenceOf]<code>( attrNames, [options] )</code> Attributes are not blank.	
+- [can.Observe.validateRangeOf validateRangeOf]<code>(attrNames, low, hi, [options])</code> Attributes are in the given numeric range.
 
 ## Error Method
 
