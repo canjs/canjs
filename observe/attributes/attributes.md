@@ -4,78 +4,88 @@
 @test can/observe/attributes/qunit.html
 @download http://donejs.com/can/dist/can.observe.attributes.js
 
-Attributes contains a map of attribute names/types. You can use this in conjunction with 
-convert to provide automatic type conversion.
+`can.Observe.attributes` is a hash map of attribute names and types. Attributes when used in conjunction with
+convert can provide rich functionality for converting data attributes from raw types and serializing complex
+types for the server.
 
-## Type Conversion
+Below is an example of an Observe providing serialization and conversion.
 
-You often want to convert from what the observe sends you to a form more useful to JavaScript. 
-For example, contacts might be returned from the server with dates that look like: "1982-10-20". 
-We can observe to convert it to something closer to `new Date(1982,10,20)`.
-
-Convert comes with the following types:
-
-- __date__ Converts to a JS date. Accepts integers or strings that work with Date.parse
-- __number__ An integer or number that can be passed to parseFloat
-- __boolean__ Converts "false" to false, and puts everything else through Boolean()
-
-### Convert
-
-You can set the type of an attribute and provide a function to convert that type. 
-The following sets the birthday attribute to "date" and provides a date conversion function:
-
-	var Contact = can.Observe({
-		attributes : {
-			birthday : 'date'
-		},
-		convert : {
-			date : function(raw){
-				if(typeof raw == 'string'){
-					var matches = raw.match(/(\d+)-(\d+)-(\d+)/);
-					
-					return new Date(matches[1], 
-							        (+matches[2])-1, 
-								    matches[3]);
-								
-				}else if(raw instanceof Date){
-					return raw;
-				}
-			}
-		}
-	},{});
-
-	//- calls convert on attribute set
-	Contact.attr('birthday', '4-26-2012') 
-	
-	//- returns newly converted date object
-	Contact.attr('birthday') 
-
-## Serialization
-
-Serialization occurs before the observe is saved. This allows you to prepare your observe's
-attributes before they're sent to the server.
-
-By default every attribute will be passed through the 'default' serialization method 
-that will return the value if the property holds a primitive value (string, number, ...), 
-or it will call the "serialize" method if the property holds an object with the "serialize" method set.
-
-You can set the serialization methods similar to the convert methods:
-
-	var Contact = can.Observe({
-		attributes : { 
-			birthday : 'date'
+	var Birthday = new can.Observe({
+		attributes: {
+			birthday: 'date'
+			age: 'number'
 		},
 		serialize : {
 			date : function( val, type ){
 				return val.getYear() + 
-					"-" + (val.getMonth() + 1) + 
-					"-" + val.getDate(); 
+						"-" + (val.getMonth() + 1) + 
+						"-" + val.getDate(); 
+			},
+			number: (val){
+				return val + '';
+			}
+		},
+		convert: {
+			// converts string to date
+			date: function( date ) {
+				if ( typeof date == 'string' ) {
+					//- Extracts dates formated 'YYYY-DD-MM'
+					var matches = raw.match( /(\d+)-(\d+)-(\d+)/ ); 
+					
+					//- Parses to date object and returns
+					date = new Date( matches[ 1 ],
+							( +matches[ 2 ] ) - 1, 
+							matches[ 3 ] ); 
+				}
+				
+				return date;
+			},
+		
+			// converts string to number
+			number: function(number){
+				if(typeof number === 'string'){
+					number = parseInt(number);
+				}
+				return number;
 			}
 		}
-	},{})
+	});
+
+	var brian = new Birthday();
+
+	// sets brian's birthday
+	brian.attr('birthday', '11-29-1983');
+
+	//- returns newly converted date object
+	var date = brian.attr('birthday');
+
+	//- returns { 'birthday': '11-29-1983, 'age': '28' }
+	var seralizedObj = brian.serialize();
 	
-	Contact.serialize()
-		//- Returns the 'birthday' attribute in format 'YYYY-MM-DD'
-		//- {
-		//- 	birthday: 'YYYY-MM-DD'
-		//- }
+## Associations
+
+Attribute type values can also represent the name of a function. The most common case this is used is for associated data.
+
+For example, a Deliverable might have many tasks and an owner (which is a Person). The attributes property might look like:
+
+	var Deliverable = new can.Observe({
+		attributes : {
+			tasks : "App.Models.Task"
+			owner: "App.Models.Person"
+		}
+	});
+
+This points tasks and owner properties to use _Task_ and _Person_ to convert the raw data into an array of Tasks and a Person.
+
+## Demo
+
+Below is a demo that showcases convert being used on an Observable.  
+
+When a user enters a new date in the format of _YYYY-DD-MM_, the control 
+listens for changes in the input box and updates the Observable using 
+the `attr` method which then converts the string into a JavaScript date object.  
+
+Additionally, the control also listens for changes on the Observable and 
+updates the age in the page for the new birthdate of the contact.
+
+@demo can/observe/attributes/attributes.html

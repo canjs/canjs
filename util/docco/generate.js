@@ -43,8 +43,8 @@ function runDocco() {
 			});
 
 			var command = os.platform() != "win32" ?
-				"docco " :
-				"sh docco ";
+				"docco/bin/docco " :
+				"sh docco/bin/docco ";
 
 			console.log( "Generating docco annotated source..." );
 
