@@ -110,7 +110,6 @@ can.Control.plugin = function(pluginname){
 			isMethod = typeof options == "string" && $.isFunction(control.prototype[options]), meth = args[0];
 			return this.each(function(){
 				//check if created
-				debugger;
 				var plugin = can.$(this).control(control);
 				
 				if (plugin) {
