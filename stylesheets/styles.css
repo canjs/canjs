@@ -16,6 +16,7 @@ article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
 body { line-height: 1 }ol,ul { list-style: none }
 blockquote,
 q { quotes: none }
+em { font-style: italic; }
 blockquote:before,
 blockquote:after,
 q:before,
