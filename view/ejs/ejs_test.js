@@ -465,14 +465,13 @@ test("hookup and live binding", function(){
 })
 
 
-/** /
+/*
 test('multiple curly braces in a block', function() {
-	var text = '<% if(!obs.attr("items").length) { %>' +
-	'<li>No items</li>' +
-	'<% } else {' +
-	'each(obs.items, function(item) { %>' +
-	'<li><%= item.attr("name") %></li>' +
-	'<% }) }%>',
+	var text =  '<% if(!obs.attr("items").length) { %>' +
+				'<li>No items</li>' +
+				'<% } else { each(obs.items, function(item) { %>' +
+						'<li><%= item.attr("name") %></li>' +
+				'<% }) }%>',
 
 	obs = new can.Observe({
 		items: []
@@ -488,7 +487,7 @@ test('multiple curly braces in a block', function() {
 	obs.attr('items', [{ name: 'foo' }]);
 	equals(u.innerHTML, '<li>foo</li>', 'updated observable');
 });
-/**/
+*/
 
 test("unescape bindings change", function(){
 	var l = new can.Observe.List([
@@ -646,7 +645,51 @@ test("attribute value bindings change", function(){
 	equals(child.getAttribute("items"), "2", "now there are 2 complete");
 })
 
+test("in tag toggling", function(){
+		var text = "<div <%== obs.attr('val') %>></div>"
+	
+	
+	var obs = new can.Observe({
+		val : 'foo="bar"'
+	})
+	
+	var compiled = new can.EJS({text: text}).render({obs: obs});
+	
+	var div = document.createElement('div');
 
+	div.appendChild(can.view.frag(compiled));
+	
+	obs.attr('val',"bar='foo'");
+	obs.attr('val','foo="bar"')
+	var d2 = div.getElementsByTagName('div')[0];
+	// toUpperCase added to normalize cases for IE8
+	equals( d2.getAttribute("foo") , "bar","bar set");
+	equals( d2.getAttribute("bar") , null,"bar set")
+});
+
+test("parent is right with bock", function(){
+	var text =  '<ul><% if(!obs.attr("items").length) { %>' +
+				'<li>No items</li>' +
+				'<% } else { %> <%== obs.attr("content") %>'+
+				'<% } %></ul>',
+
+	obs = new can.Observe({
+		content : "<li>Hello</li>",
+		items: [{name : "Justin"}]
+	}),
+
+	compiled = new can.EJS({ text: text }).render({ obs: obs });
+	
+	var div = document.createElement('div');
+
+	div.appendChild(can.view.frag(compiled));
+	var ul = div.getElementsByTagName('ul')[0];
+	var li = div.getElementsByTagName('li')[0];
+	
+	ok(ul, "we have a ul");
+	ok(li, "we have a li")
+	
+})
 
 
 })()
