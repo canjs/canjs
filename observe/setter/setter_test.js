@@ -1,7 +1,4 @@
-steal('funcunit/qunit', 
-	  'can/observe/validations', 
-	  'can/observe/setter', 
-	  function(){
+(function(){
 
 module("can/observe/setter");
 
@@ -42,4 +39,4 @@ test("error binding", 1, function(){
 })
 
 
-});
+})()
