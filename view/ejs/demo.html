@@ -2,130 +2,7 @@
 <html lang="en">
 <head>
 	<title>can.view.ejs demo</title>
-    <style type='text/css'>
-        body {font-family: verdana; font-size: 16px;
-        	width: 660px;
-        	line-height: 24px;
-        	margin: 0px;
-        }
-        #hash {
-        	font-size: 18px;
-        	width: 364px;
-        	border: none;
-        	
-        }
-		.value {
-			cursor: pointer;
-		}
-		.propName {
-			cursor: pointer;
-		}
-		.end {
-			cursor:pointer;
-		}
-		.good{
-			color: green;
-		}
-		.bad{
-			color: red;
-		}
-        h2 {
-        	border-bottom: 1px solid #D2D988;
-        	padding-bottom: 0px;
-        	margin-bottom: 5px;
-        	font-size: 16px;
-        	font-family: "Courier New", Courier, monospace;
-        }
-        #route-data.error, #hash.error:hover {border: solid 1px red}
-        li {
-        	font-family: monospace;
-        }
-        .destroy {color: red}
-        pre {
-        	line-height: 22px;
-        	margin: 0px;
-        	padding-top: 0px;
-        }
-        textarea {
-			width: 315px;
-			height:250px;
-        	border-bottom: 1px solid #D2D988;
-        	padding-bottom: 0px;
-        	margin-bottom: 5px;
-        	font-size: 16px;
-        	font-family: "Courier New", Courier, monospace;
-        }
-        .edit-over {
-			padding: 0px;
-			margin: 0px;
-			border: solid 1px gray;
-		
-		}
-
-		#input {
-			height: 28px;
-			border: solid 1px #C3E2EF;
-			float: left;
-			font-size: 18px;
-			padding: 4px 4px 0px 4px;
-			width: 315px;
-		}
-		.name, .value, #hash:hover, .back:hover, .forward:hover, .value:hover, .name:hover {
-
-			background-color: #F9F7DF;
-		}
-		#binding {
-			font-size: 12px;
-		}
-		th {
-			font-size: 12px;
-		}
-		td, th {
-			width: 95px;
-			text-align: left;
-			vertical-align: top;
-		}
-		#container {
-			height: 100px;
-			overflow-y: auto;
-		}
-		.border td{
-			border-top: solid 1px #C3E2EF;
-		}
-		#route-data-container {
-			min-height: 110px;
-		}
-		li {
-			list-style: none;
-			
-			padding: 3px;
-		}
-		ul {
-			margin: 0px;
-			padding: 0px;
-		}
-		.remove:hover {
-			background: url(../observe/remove.png);
-			background-repeat: no-repeat;
-			cursor: pointer;
-		}
-		.destroy {
-			float: right;
-			text-decoration: none;
-		}
-		pre {margin: 0px;}
-		.comment {
-			color: green;
-		}
-		#layout {
-			table-layout: fixed;
-			width: 100%;
-			
-		}
-		#linkresult {
-			font-size: 12px;
-		}
-    </style>
+    <link rel="stylesheet" type="text/css" href="../../util/demos/demos.css" />
 </head>
 <body>
     <table id='layout'>
@@ -160,7 +37,7 @@
 				<pre id='ejs-data'></pre>
 			    </div>
     		</td>
-    		<td><a id="add-hash">Add</a> or change the data's properties. Without even reapplying the template, the result below 
+    		<td>Change the data's properties by hovering over any of them. Without even reapplying the template, the result below 
     			will update (because of live binding).</td>
     	</tr>
     	<tr>
