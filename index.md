@@ -1758,19 +1758,15 @@ make it handy when preparing your data to send to the server for JavaScript obje
 dates or associations.
 
 The following example creates a Birthday observe that defines a _birthday_ attribute of type
-date and an _age_ attribute that uses the number converter. The _serialize_ and _convert_ object
-define converter functions for each type. _serialize_ converters will be used when getting
-a serialized representation of the observe attributes by calling
-[serialize()](http://donejs.com/docs.html#!can.Observe.prototype.serialize). Type converters
-in the _convert_ object will be used when an attribute of that type is being set. When setting a
-date attribute, for example, the _date_ converter will try to convert any string into a JavaScript
-date object.
+date. The [serialize](http://donejs.com/docs.html#!can.Observe.static.serialize) 
+and [convert](http://donejs.com/docs.html#!can.Observe.static.convert) properties allows
+you to implement your own conversion and serialization for each type.
+
 
 {% highlight javascript %}
 var Birthday = new can.Observe({
   attributes: {
     birthday: 'date'
-    age: 'number'
   },
   
   serialize : {
@@ -1778,9 +1774,6 @@ var Birthday = new can.Observe({
     return val.getYear() + 
      "-" + (val.getMonth() + 1) + 
      "-" + val.getDate(); 
-    },
-    number : function(val){
-     return val + '';
     }
   },
   
@@ -1798,18 +1791,9 @@ var Birthday = new can.Observe({
       }
       
       return date;
-    },
-    
-    // converts string to number
-    number : function(number){
-     if(typeof number === 'string'){
-      number = parseInt(number);
-     }
-     
-     return number;
     }
   }
-});
+}, {});
 
 
 var brian = new Birthday();
@@ -1820,7 +1804,7 @@ brian.attr('birthday', '11-29-1983');
 //- returns newly converted date object
 var date = brian.attr('birthday');
 
-//- returns { 'birthday': '11-29-1983, 'age': '28' }
+//- returns { 'birthday': '11-29-1983' }
 var seralizedObj = brian.serialize();
 
 {% endhighlight %}
