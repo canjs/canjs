@@ -11,7 +11,7 @@ create a teacher template in a script tag like:
 
     <script type='text/ejs' id='teacherEJS'>
     
-      <h2 class='<%= teacher.grade < 'c' : "good" : "bad" %>'>
+      <h2 class='<%= teacher.grade < 'c'? "good" : "bad" %>'>
         <%= teacher.name %>
       </h2>
       
@@ -31,7 +31,7 @@ Next, create a teacher and use can.view to render the template:
 
     var teacher = {
       name : "Mr. Smith",
-      grade : "a"
+      grade : "a",
       students : [
         {name : "Suzy"},
         {name : "Payal"},
@@ -70,7 +70,7 @@ to iterate through a list like:
 
     <script type='text/ejs' id='teacherEJS'>
     
-      <h2 class='<%= teacher.attr('grade') < 'c' : "good" : "bad" %>'>
+      <h2 class='<%= teacher.attr('grade') < 'c'? "good" : "bad" %>'>
         <%= teacher.attr('name') %>
       </h2>
       
@@ -112,6 +112,14 @@ head with disbelief ...
     })
 
 ... but don't slap it too hard, you'll need it for building awesome apps.
+
+## Demo
+
+The following demo shows an EJS template being rendered with observable data. 
+It demonstrates live binding to attributes. The template and all data properties 
+are editable, so experiment!
+
+@iframe can/view/ejs/demo.html 980
 
 ## Magic Tags
 

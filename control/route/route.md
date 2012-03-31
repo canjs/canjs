@@ -7,50 +7,33 @@
 The can.Control.route plugin adds a [can.route] processor to can.Control. This allows
 creating routes and binding to `can.route` in a single step. For example:
 
-    var Router = can.Route({
+	var Router = can.Control({
+		init : function(el, options) {
+		},
+
+		":type route" : function(data) {
+			// the route says anything but todo
+		},
+
+		"todo/:id route" : function(data) {
+			// the route says
+		},
+
 		"route" : function(data){
-			// the route is empty
-		},
-		"todos route" : function(data){
-			// the route says todos
-		},
-		"todo/:id route" : function(data){
-			// the route an id as data
+			setStatus("route", data);
 		}
-    });
+	});
+
+	new Router(window);
 
 The plugin doesn't affect the way you usually use [can.route]. The above control for example can
-add a default value for the id in the `todos/:id` route like this:
+also set some default values in its _init_ method:
 
-    var Router = can.Route({
-        init : function(el, ops) {
-            can.route('todos/:id', { id : 1 });
-        },
+	can.route(':type', { type : 'index' });
+	can.route('todo/:id', { id : 1 });
 
-		"route" : function(data){
-			// the route is empty
-		},
+The following demo shows the control with these default settings in action.
+You can edit the hash, follow some example links or directly change the can.route atttributes.
+At the top it shows the control method being called and the data that are being passed to it:
 
-		"todos route" : function(data){
-			// the route says todos
-		},
-
-		"todo/:id route" : function(data){
-			// the route an id as data
-		}
-    });
-
-Here are some examples of which function will be called and the data passed:
-
-`#!`: Will call the `route` control method with an empty data object
-
-`#!todos`: Calls the `todos route` control method with an empty data object
-
-`#!todos&order=asc&hidedone=true`: Calls the `todos route` control method with the data like
-`{ order : 'asc', hidedone : 'true' }`
-
-`#!todo/`: Calls `todo/:id route` with the default id set `{ id : 1 }`
-
-`#!todo/10`: Calls `todo/:id route` with data `{ id : 10 }`
-
-`#!todo/10&done=true`: Calls `todo/:id route` with `{ id : 10, done : 'true' }`
+@iframe can/control/route/demo.html 600

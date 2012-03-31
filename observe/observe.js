@@ -663,10 +663,11 @@ steal('can/construct', function() {
 	 * 
 	 * To create an observable list, use `new can.Observe.List( ARRAY )` like:
 	 * 
-	 *     var hobbies = new can.Observe.List(['programming', 'basketball', 'nose picking'])
+	 *     var hobbies = new can.Observe.List(
+	 * 		 			['programming', 'basketball', 'nose picking'])
 	 * 
 	 * can.Observe.List inherits from [can.Observe], including it's 
-	 * [can.Observe::bind bind], [can.Observe::each], and [can.Observe.unbind] 
+	 * [can.Observe.prototype.bind bind], [can.Observe.prototype.each], and [can.Observe.prototype.unbind] 
 	 * methods.
 	 * 
 	 * can.Observe.List is inherited by [can.Model.List].
@@ -1072,7 +1073,8 @@ steal('can/construct', function() {
 		 *     
 		 *     l.bind('change', function( 
 		 *         ev,        // the change event
-		 *         attr,      // the attr that was changed, for multiple items, "*" is used 
+		 *         attr,      // the attr that was changed,
+		 *     			   // for multiple items, "*" is used 
 		 *         how,       // "add"
 		 *         newVals,   // an array of new values pushed
 		 *         oldVals,   // undefined
@@ -1089,7 +1091,7 @@ steal('can/construct', function() {
 		/**
 		 * @function unshift
 		 * Add items to the start of the list.  This is very similar to
-		 * [can.Observe.List::push].  Example:
+		 * [can.Observe.List::push can.Observe.prototype.List].  Example:
 		 * 
 		 *     var l = new can.Observe.List(["a","b"]);
 		 *     l.unshift(1,2,3) //-> 5
@@ -1142,7 +1144,8 @@ steal('can/construct', function() {
 		 * 
 		 *     l.bind('change', function( 
 		 *         ev,        // the change event
-		 *         attr,      // the attr that was changed, for multiple items, "*" is used 
+		 *         attr,      // the attr that was changed, 
+		 *     			   // for multiple items, "*" is used 
 		 *         how,       // "remove"
 		 *         newVals,   // undefined
 		 *         oldVals,   // 2
