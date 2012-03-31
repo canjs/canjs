@@ -814,11 +814,11 @@ steal('can/construct', function() {
 				this.length = (+attr+1)
 			}
 		},
+		// Returns the serialized form of this list.
 		/**
 		 * @hide
 		 * Returns the serialized form of this list.
 		 */
-		// Returns the serialized form of this list.
 		serialize: function() {
 			return serialize(this, 'serialize', []);
 		},
@@ -848,7 +848,7 @@ steal('can/construct', function() {
 		 * 
 		 * @return {can.Observe.List} the original observable.
 		 */
-		//
+		//  
 		/**
 		 * `splice(index, [ howMany, elements... ] )` remove or add items 
 		 * from a specific point in the list.
