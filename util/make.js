@@ -97,6 +97,9 @@ steal('steal/build/pluginify', function() {
 	// Build libraries
 	each( libs, function( options, lib ) {
 		each( types, function( compress, type ) {
+
+			var code;
+
 			steal.build.pluginify("can/util/make/" + lib + ".js", extend({
 				out : "can/dist/edge/can." + lib + type + ".js",
 				global : "can = {}",
@@ -104,6 +107,26 @@ steal('steal/build/pluginify', function() {
 				compress: compress,
 				skipCallbacks: true,
 			}, options ));
+			
+			// Strip multiline comments from uncompressed files
+			if ( ! compress ) {
+
+				// Put new index.html into production mode
+				code = readFile( "can/dist/edge/can." + lib + type + ".js" );
+
+				// Remove multiline comments
+				code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*\n/gim, "");
+
+				// Remove double semicolons from steal pluginify
+				code = code.replace( /;[\s]*;/gim, ";");
+				code = code.replace( /(\/\/.*)\n[\s]*;/gi, "$1");
+
+				// Only single new lines
+				code = code.replace( /(\n){3,}/gim, "\n\n");
+
+				// Save the file.
+				steal.File( "can/dist/edge/can." + lib + type + ".js" ).save( code );
+			}
 		});
 	});
 	
