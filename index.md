@@ -2001,6 +2001,10 @@ __View the App__
 
 ### CanPlay
 
+Image of player, description, link.
+
+[Player](http://donejs.com/examples/player/index.html)
+
 ### Srchr
 
 Image of srchr, description, link.
