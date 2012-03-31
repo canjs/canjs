@@ -11,11 +11,13 @@ stateful controls. Use it to create UI controls like tabs, grids, and context me
 and organize them into higher-order business rules with
 [can.route]. It can serve as both a traditional view and a traditional controller.
 
-## Examples
+## Todo Example
 
 Here is an example of how to build a simple tab widget using can.Control:
 
 @demo can/control/control.html
+
+## Creating a Control
 
 The following example builds up a basic todos widget for listing 
 and completing todo items. Start by creating a control constructor 

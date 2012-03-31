@@ -231,6 +231,7 @@ steal('can/construct', function( $ ) {
 	 * @Prototype
 	 */
 	{
+		// Where the magic happens.
 		/**
 		 * Setup is where most of control's magic happens.  It does the following:
 		 * 
@@ -268,7 +269,6 @@ steal('can/construct', function( $ ) {
 		 * @return {Array} return an array if you wan to change what init is called with. By
 		 * default it is called with the element and options passed to the control.
 		 */
-		// Where the magic happens.
 		setup: function( element, options ) {
 
 			var cls = this.constructor,
@@ -588,6 +588,7 @@ steal('can/construct', function( $ ) {
 			this._bindings = [];
 		},
 		/**
+		 * @function destroy
 		 * `destroy` prepares a control for garbage collection and is a place to
 		 * reset any changes the control has made.  
 		 * 
@@ -678,7 +679,6 @@ steal('can/construct', function( $ ) {
 		 *   - removing it's [can.Control.pluginName] from the element's className
 		 * 
 		 */
-
 		// Prepares a `control` for garbage collection
 		destroy: function() {
 			var Class = this.constructor,
