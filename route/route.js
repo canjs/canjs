@@ -169,6 +169,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
      * @return {Object} Data object containing properties and values from the string
 		 */
 		deparam: function( url ) {
+			console.log('deparam', url)
 			// See if the url matches any routes by testing it against the `route.test` `RegExp`.
             // By comparing the URL length the most specialized route that matches is used.
 			var route = {
@@ -376,7 +377,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
         // Deparameterizes the portion of the hash of interest and assign the
         // values to the `can.route.data` removing existing values no longer in the hash.
         setState = function() {
-			curParams = can.route.deparam( location.hash.split(/#!?/).pop() );
+			curParams = can.route.deparam( location.hash.split(/#!?/).pop() || "" );
 			can.route.attr(curParams, true);
 		};
 
