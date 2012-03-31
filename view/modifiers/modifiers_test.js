@@ -1,7 +1,4 @@
-steal('can/view/ejs', 
-	  'can/view/modifiers', 
-	  'funcunit/qunit')
-.then(function(){
+(function(){
 
 module("can/view/modifiers");
 
@@ -51,4 +48,4 @@ test("jQuery.fn.hookup", function(){
 	can.$("#qunit-test-area").html(els); //makes sure no error happens
 });
 
-})
+})();

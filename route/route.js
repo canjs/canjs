@@ -169,7 +169,6 @@ steal('can/observe', 'can/util/string/deparam', function() {
 		 * @return {Object} Data object containing properties and values from the string
 		 */
 		deparam: function( url ) {
-			console.log('deparam', url)
 			// See if the url matches any routes by testing it against the `route.test` `RegExp`.
             // By comparing the URL length the most specialized route that matches is used.
 			var route = {

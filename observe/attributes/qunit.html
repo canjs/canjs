@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="../../../../funcunit/qunit/qunit.css" />
+        <link rel="stylesheet" type="text/css" href="../../../funcunit/qunit/qunit.css" />
         <title>attributes QUnit Test</title>
-		<script type='text/javascript' src='../../../../steal/steal.js?can/observe/attributes/attributes_test.js'></script>
+		<script type='text/javascript' src='../../../steal/steal.js'></script>
     </head>
     <body>
 
@@ -14,5 +14,8 @@
 		<div id="test-content"></div>
         <ol id="qunit-tests"></ol>
 		<div id="qunit-test-area"></div>
+	    <script type='text/javascript'>
+	    	steal('funcunit/qunit','can/observe/attributes').then('can/observe/attributes/attributes_test.js')
+	    </script>
     </body>
 </html>

@@ -1053,43 +1053,78 @@ steal('can/observe',function(){
 			can.trigger(constructor,funcName, this);
 		};
 	});
-	
-	// Model lists are just like `Observe.List` except that when their items are 
-	// destroyed, it automatically gets removed from the list.
-	/**
-	 * @class can.Model.List
-	 * @inherits can.Observe.List
-	 * @parent index
-	 *
-	 * Works exactly like [can.Observe.List] and has all of the same properties,
-	 * events, and functions as an observable list. The only difference is that 
-	 * when an item from the list is destroyed, it will automatically get removed
-	 * from the list.
-	 *
-	 * ## Creating a new Model List
-	 *
-	 * To create a new model list, just use `new {model_name}.List(ARRAY)` like:
-	 *
-	 *     var todo1 = new Todo( { name: "Do the dishes" } ),
-	 *         todo2 = new Todo( { name: "Wash floors" } )
-	 *     var todos = new Todo.List( [todo1, todo2] );
-	 *
-	 * ## Removing models from model list
-	 *
-	 * The advantage that `can.Model.List` has over a traditional `can.Observe.List`
-	 * is that when you destroy a model, if it is in that list, it will automatically
-	 * be removed from the list. 
-	 *
-	 *     // Listen for when something is removed from the todos list.
-	 *     todos.bind("remove", function( ev, oldVals, indx ) {
-	 *         console.log(oldVals[indx].attr("name") + " removed")
-	 *     })
-	 *
-	 *     todo1.destory(); // console shows "Do the dishes removed"
-	 })
-	 *
-	 *
-	 */
+  
+  // Model lists are just like `Observe.List` except that when their items are 
+  // destroyed, it automatically gets removed from the list.
+  /**
+   * @class can.Model.List
+   * @inherits can.Observe.List
+   * @parent index
+   *
+   * Works exactly like [can.Observe.List] and has all of the same properties,
+   * events, and functions as an observable list. The only difference is that 
+   * when an item from the list is destroyed, it will automatically get removed
+   * from the list.
+   *
+   * ## Creating a new Model List
+   *
+   * To create a new model list, just use `new {model_name}.List(ARRAY)` like:
+   *
+   *     var todo1 = new Todo( { name: "Do the dishes" } ),
+   *         todo2 = new Todo( { name: "Wash floors" } )
+   *     var todos = new Todo.List( [todo1, todo2] );
+   *
+   * ### Model Lists in `can.Model`
+   * In addition to creating new lists, it is possible to call 
+   * [can.Model.static.findAll can.Model.findAll] or [can.Model.models] to return
+   * a `can.Model.List` object.
+   *
+   *     var todos = Todo.models([
+   *         new Todo( { name: "Do the dishes" } ),
+   *         new Todo( { name: "Wash floors" } )
+   *     ])
+   *     
+   *     todos.constructor // -> can.Model.List
+   *
+   *     Todo.findAll({}, function(todos) {
+   *         todos.constructor // -> can.Model.List
+   *     })
+   *
+   * ### Extending `can.Model.List`
+   *
+   * Creating custom `can.Model.Lists` allows you to extend lists with helper
+   * functions for a list of a specific type. So, if there was a need to get a
+   * random todo item, something could be written like
+   *
+   *     can.Model.List('Todo.List', {
+   *         random: function() {
+   *             // return a random todo from the list.
+   *         }
+   *     })
+   *
+   *     var list = new Todo.List([
+   *         new Todo( { name: "Do the dishes" } ),
+   *         new Todo( { name: "Wash floors" } )
+   *     ]);
+   *
+   *     list.random() // -> random todo
+   *
+   *
+   * ## Removing models from model list
+   *
+   * The advantage that `can.Model.List` has over a traditional `can.Observe.List`
+   * is that when you destroy a model, if it is in that list, it will automatically
+   * be removed from the list. 
+   *
+   *     // Listen for when something is removed from the todos list.
+   *     todos.bind("remove", function( ev, oldVals, indx ) {
+   *         console.log(oldVals[indx].attr("name") + " removed")
+   *     })
+   *
+   *     todo1.destory(); // console shows "Do the dishes removed"
+   *
+   *
+   */
 	var ML = can.Observe.List('can.Model.List',{
 		setup : function(){
 			can.Observe.List.prototype.setup.apply(this, arguments );

@@ -38,7 +38,13 @@ can.Observe.prototype.__set = function(prop, value, current, success, error){
 		validations = self.constructor.validations,
 		errorCallback = function( errors ) {
 			var stub = error && error.call(self, errors);
-			can.trigger(self, "error", [prop, errors], true);
+			
+			// if 'setter' is on the page it will trigger
+			// the error itself and we dont want to trigger
+			// the event twice. :)
+			if(stub !== false){
+				can.trigger(self, "error", [prop, errors], true);
+			}
 		};
 	
 	old.call(self, prop, value, current, success, errorCallback);

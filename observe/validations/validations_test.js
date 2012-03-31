@@ -1,4 +1,4 @@
-steal('funcunit/qunit','can/observe/validations').then(function(){
+(function(){
 
 module("can/observe/validations",{
 	setup : function(){
@@ -7,7 +7,7 @@ module("can/observe/validations",{
 	}
 })
 
-test("observe can validate, events, callbacks", 11,function(){
+test("observe can validate, events, callbacks", 7,function(){
 	Person.validate("age", {message : "it's a date type"},function(val){
 					return ! ( this.date instanceof Date )
 				})
@@ -32,14 +32,8 @@ test("observe can validate, events, callbacks", 11,function(){
 	task.attr("age","blah");
 
 	task.unbind("error.age");
-
-	task.attr("age", "blaher", function(){}, function(ev, attr, errs){
-		ok(this === task, "we get task back in error handler");
-		
-		ok(errs, "There are errors");
-		equals(errs.age.length, 1, "there is one error");
-		equals(errs.age[0], "it's a date type", "error message is right");
-	});
+	
+	task.attr("age", "blaher");
 	
 })
 
@@ -168,4 +162,4 @@ test("validatesRangeOf", function(){
 	equals(errors2.otherThing[0],"value out of range", "can supply a custom message");
 });
 
-});
+})();

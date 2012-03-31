@@ -1,7 +1,4 @@
-steal('can/construct/super',
-'funcunit/qunit')
-.then('can/construct/super', 'can/control/plugin')
-.then(function () {
+(function () {
 
 	module("can/control/plugin")
 
@@ -59,4 +56,4 @@ steal('can/construct/super',
 
 		equal(ta.control().options.testop, 'testing', 'Test option has been extended properly');
 	});
-});
+})();

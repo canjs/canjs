@@ -11,7 +11,7 @@ can.each([ can.Observe, can.Model ], function(i,clss){
 		 * @attribute can.Observe.static.attributes
 		 * @parent can.Observe.attributes
 		 *
-		 * The attributes property contains key/value pair(s) of an attribute's name and its
+		 * `can.Observe.attributes` is a property that contains key/value pair(s) of an attribute's name and its
 		 * respective type for using in [can.Observe.static.convert convert] and [can.Observe.prototype.serialize serialize].
 		 * 
 		 *		var Contact = can.Observe({
@@ -69,6 +69,32 @@ can.each([ can.Observe, can.Model ], function(i,clss){
 		 *		//- returns newly converted date object
 		 *		contact.attr('birthday');
 		 *
+		 * ## Assocations and Convert
+		 *
+		 * If you have assocations defined within your model(s), you can use convert to automatically
+		 * call seralize on those models.
+		 * 
+		 * 		can.Model("Contact",{
+		 * 			attributes : {
+		 * 				tasks: "Task.models"
+		 * 			}
+		 * 		}, {});
+		 *
+		 * 		can.Model("Task",{
+		 * 			attributes : {
+		 * 				due : 'date'
+		 * 			}
+		 * 		},{});
+		 *
+		 * 		var contact = new Contact({
+		 * 			tasks: [ new Task({
+		 * 				due: new Date()
+		 * 			}) ]
+		 * 		});
+		 * 
+		 * 		contact.seralize(); 
+		 * 		//-> { tasks: [ { due: 1333219754627 } ] }
+		 * 
 		 */
 		convert: {
 			"date": function( str ) {
@@ -149,6 +175,7 @@ can.each([ can.Observe, can.Model ], function(i,clss){
 	var oldSetup = clss.setup;
 	
 	/**
+	 * @hide
 	 * @attribute can.Observe.static.setup
 	 * @parent can.Observe.attributes
 	 *
