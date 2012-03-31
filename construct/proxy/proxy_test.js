@@ -1,4 +1,4 @@
-steal('funcunit/qunit','./proxy',function(){
+(function(){
 
 module("can/construct/proxy");
 
@@ -42,4 +42,4 @@ test("proxy error", 1,function(){
 })
 
 
-});
+})();
