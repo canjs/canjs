@@ -1458,7 +1458,7 @@ CanJS depends on the following Dojo modules: __dojo__, __dojo/query__, __dojo/No
 
 To use, include Dojo in your page and add the `'can/dojo'` module as a dependency in your require statement.
 
-% highlight html %}
+{% highlight html %}
 <script type='text/javascript' src='path/to/js/dojo.js'></script>
 <script>
 require(['can/dojo',], function(can){ //will load path/to/js/can/dojo.js
