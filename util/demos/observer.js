@@ -109,7 +109,7 @@ function(){
 				return frag;
 			},
 			".name mouseenter" : function(el, ev){
-				if(ev.relatedTarget.nodeName === "INPUT") {
+				if(ev.relatedTarget && ev.relatedTarget.nodeName === "INPUT") {
 					return;
 				}
 				this.newEditInput(el)
@@ -236,7 +236,7 @@ function(){
 				this.on();
 			},
 			".value mouseenter" : function(el, ev){
-				if(ev.relatedTarget.nodeName === "INPUT") {
+				if(ev.relatedTarget && ev.relatedTarget.nodeName === "INPUT") {
 					return;
 				}
 				this.newEditInput(el)
@@ -274,7 +274,6 @@ function(){
 				ev.stopImmediatePropagation();
 			},
 			".end click" : function(el, ev){
-				console.log("observe ...")
 				//this.options.editOverInput && this.options.editOverInput.remove();
 				
 				

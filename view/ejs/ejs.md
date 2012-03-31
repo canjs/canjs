@@ -113,6 +113,14 @@ head with disbelief ...
 
 ... but don't slap it too hard, you'll need it for building awesome apps.
 
+## Demo
+
+The following demo shows an EJS template being rendered with observable data. 
+It demonstrates live binding to attributes. The template and all data properties 
+are editable, so experiment!
+
+@iframe can/view/ejs/demo.html 980
+
 ## Magic Tags
 
 EJS uses 5 types of tags:
