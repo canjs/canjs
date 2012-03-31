@@ -1,4 +1,15 @@
 steal('./setup.js')
+.then('can/construct/proxy',
+	  'can/construct/super',
+	  'can/observe/attributes',
+	  'can/observe/delegate',
+	  'can/observe/backup',
+	  'can/observe/setter',
+	  'can/observe/validations',
+	  'can/observe/sort',
+	  'can/control/plugin',
+	  'can/control/route',
+	  'can/view/modifiers')
 .then('can/construct/proxy/proxy_test.js',
 	  'can/construct/super/super_test.js',
 	  'can/observe/attributes/attributes_test.js',
