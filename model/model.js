@@ -1072,8 +1072,9 @@ steal('can/observe',function(){
 	 *
 	 * To create a new model list, just use `new {model_name}.List(ARRAY)` like:
 	 *
-	 *     var todo = new Todo( { name: "Do the dishes" } )
-	 *     var todos = new Todo.List( [ todo ] );
+	 *     var todo1 = new Todo( { name: "Do the dishes" } ),
+	 *         todo2 = new Todo( { name: "Wash floors" } )
+	 *     var todos = new Todo.List( [todo1, todo2] );
 	 *
 	 * ## Removing models from model list
 	 *
@@ -1082,11 +1083,11 @@ steal('can/observe',function(){
 	 * be removed from the list. 
 	 *
 	 *     // Listen for when something is removed from the todos list.
-	 *     todos.bind("remove", function( ev, oldVals, index ) {
-	 *         console.log(oldVals[ index ].attr("name") + " removed")
+	 *     todos.bind("remove", function( ev, oldVals, indx ) {
+	 *         console.log(oldVals[indx].attr("name") + " removed")
 	 *     })
 	 *
-	 *     todo.destory(); // console shows "Do the dishes removed"
+	 *     todo1.destory(); // console shows "Do the dishes removed"
 	 })
 	 *
 	 *
