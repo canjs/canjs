@@ -1462,14 +1462,15 @@ Include Dojo in your page and add the `'can/dojo'` module as a dependency in you
 <script type='text/javascript' src='path/to/js/dojo.js'></script>
 <script>
 require(['can/dojo'], function(can){ //will load path/to/js/can/dojo.js
-  Contacts = can.Model({
+  // start using CanJS
+  Todo = can.Model({
     ...
   });
 });
 </script>
 {% endhighlight %}
 
-If you are including Dojo from a CDN or you want more control over your file structure, you will need to configure the packages path to can/dojo. This can be done by declaring a variable named [dojoConfig](http://dojotoolkit.org/documentation/tutorials/1.7/dojo_config/) before including the Dojo library or using the [require function](http://dojotoolkit.org/documentation/tutorials/1.7/modules/).
+If you are including Dojo from a CDN or you want more control over your file structure, you will need to configure the packages path to `'can/dojo'`. This is done by declaring a variable named [dojoConfig](http://dojotoolkit.org/documentation/tutorials/1.7/dojo_config/) containing an array of package paths before including the Dojo library.
 
 {% highlight html %}
 <script>
@@ -1494,6 +1495,8 @@ require(['can/dojo'], function(can){
 </script>
 {% endhighlight %}
 
+You can also configure package paths using the [require function](http://dojotoolkit.org/documentation/tutorials/1.7/modules/).
+
 {% highlight html %}
 <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/dojo/
 1.7.1/dojo/dojo.js'></script>
@@ -1514,7 +1517,7 @@ require({
 </script>
 {% endhighlight %}
 
-CanJS can bind to any Dijit, Dojox or custom widget events using [templated event binding](http://donejs.com/docs.html#can_control-templated_event_handlers_pt_2)
+CanJS can bind to any Dijit, Dojox or custom widget events using [templated event binding](#can_control-templated_event_handlers_pt_2)
 
 {% highlight javascript %}
 require(['can/dojo', 
@@ -1976,7 +1979,25 @@ $( '#todos' ).html( 'todo/todos.ejs', [
 
 Examples of CanJS.
 
-### Todo	
+### Todo
+
+A simple todo application written in the style of [TodoMVC](https://github.com/addyosmani/todomvc/). There is an implementation for each library supported by CanJS including demos of using [templated event binding](#can_control-templated_event_handlers_pt_2) to bind to widget events in Dojo and YUI.
+
+This applications makes heavy use of [EJS Live Binding](#can_ejs-live_binding).
+
+![CanJS Todo App](images/examples/todo.png "CanJS Todo App")
+
+__View the App__
+
+- [jQuery](http://donejs.com/cantodo/jquery/)
+- [Dojo](http://donejs.com/cantodo/dojo/)
+- [Dojo with calendar widget](http://donejs.com/cantodo/dojo-widget/)
+- [Mootools](http://donejs.com/cantodo/mootools/)
+- [YUI](http://donejs.com/cantodo/yui/)
+- [YUI with calendar widget](http://donejs.com/cantodo/yui-widget/)
+- [Zepto](http://donejs.com/cantodo/zepto/)
+
+[View the source on github](https://github.com/jupiterjs/cantodo)
 
 ### CanPlay
 
