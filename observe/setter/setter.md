@@ -62,3 +62,13 @@ when no value or a empty string is passed.
 	
 	// set to empty string
 	school.attr("name","");
+
+	
+## Demo
+
+The example app below builds on the above example by using `can.Control`
+to listen for changes on a input box where you can name the box.  Furthermore,
+it uses templated event binding to listen for errors and alert the user if
+he/she enters a empty string.
+
+@demo can/observe/setter/setter.html
