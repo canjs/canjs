@@ -41,7 +41,14 @@ the plugin with the method name followed by the parameters for that method.
 	$('.my_todo').my_todo("create", 'Brian', 'Sweep garage');
 
 Keep in mind that this approach follows the jQuery plugin convention and returns a jQuery object,
-not the methods return value. You can also retrieve the control instance and invoke the method directly.
+not the methods return value. 
+
+You can also retrieve the control instance and invoke the method directly.
+
+	var control = $('.my_todo').control();
+	control.create('Brian', 'Sweep garage');
+	
+For more information on this, see [can.Control.prototype.control] or [can.Control.prototype.controls].
 
 ## Demo
 

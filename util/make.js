@@ -122,7 +122,7 @@ steal('steal/build/pluginify', function() {
 
 	steal.build.pluginify("can/construct/proxy/proxy.js", {
 		out: "can/dist/edge/can.construct.proxy.js",
-		global: "can = {}",
+		global: "can",
 		onefunc: true,
 		compress: false,
 		skipCallbacks: true,
@@ -131,7 +131,7 @@ steal('steal/build/pluginify', function() {
 
 	steal.build.pluginify("can/construct/super/super.js", {
 		out: "can/dist/edge/can.construct.super.js",
-		global: "can = {}",
+		global: "can",
 		onefunc: true,
 		compress: false,
 		skipCallbacks: true,
@@ -140,7 +140,7 @@ steal('steal/build/pluginify', function() {
 
 	steal.build.pluginify("can/control/plugin/plugin.js", {
 		out: "can/dist/edge/can.control.plugin.js",
-		global: "can = {}",
+		global: "can",
 		onefunc: true,
 		compress: false,
 		skipCallbacks: true,
@@ -149,7 +149,7 @@ steal('steal/build/pluginify', function() {
 
 	steal.build.pluginify("can/observe/attributes/attributes.js", {
 		out: "can/dist/edge/can.observe.attributes.js",
-		global: "can = {}",
+		global: "can",
 		onefunc: true,
 		compress: false,
 		skipCallbacks: true,
@@ -158,7 +158,7 @@ steal('steal/build/pluginify', function() {
 
 	steal.build.pluginify("can/observe/delegate/delegate.js", {
 		out: "can/dist/edge/can.observe.delegate.js",
-		global: "can = {}",
+		global: "can",
 		onefunc: true,
 		compress: false,
 		skipCallbacks: true,
@@ -167,7 +167,7 @@ steal('steal/build/pluginify', function() {
 
 	steal.build.pluginify("can/observe/setter/setter.js", {
 		out: "can/dist/edge/can.observe.setter.js",
-		global: "can = {}",
+		global: "can",
 		onefunc: true,
 		compress: false,
 		skipCallbacks: true,
@@ -176,7 +176,7 @@ steal('steal/build/pluginify', function() {
 
 	steal.build.pluginify("can/observe/backup/backup.js", {
 		out: "can/dist/edge/can.observe.backup.js",
-		global: "can = {}",
+		global: "can",
 		onefunc: true,
 		compress: false,
 		skipCallbacks: true,
@@ -185,7 +185,7 @@ steal('steal/build/pluginify', function() {
 
 	steal.build.pluginify("can/observe/validations/validations.js", {
 		out: "can/dist/edge/can.observe.validations.js",
-		global: "can = {}",
+		global: "can",
 		onefunc: true,
 		compress: false,
 		skipCallbacks: true,
