@@ -1517,33 +1517,19 @@ require({
 </script>
 {% endhighlight %}
 
-CanJS can bind to any Dijit, Dojox or custom widget events using [templated event binding](#can_control-templated_event_handlers_pt_2)
+CanJS can bind to any Dijit, Dojox or custom widget events using [templated event binding](#can_control-templated_event_handlers_pt_2). Below is an example of binding to the onchnage event of the dijit.CalendarLite widget:
 
 {% highlight javascript %}
 require(['can/dojo', 
-  'dijit/CalendarLite', 
-  'dijit/Menu', 
-  'dijit/MenuItem'], 
+  'dijit/CalendarLite'], 
 function(can, CalendarLite){
   //Define a Control
   var Todos = can.Control({
-    //calendar is part of this.options
+    //events are lowercase and don't use on (onChange -> change)
     "{calendar} change" : function(calendar, newDate) {
       //onChange handler: do something with the newDate selected
-    },
-    //MainMenu is global (part of window)
-    "{MainMenu} itemclick" : function(item, ev) {
-    	//onItemClick handler: respond to the menu click
-    }	
+    }
   });
-  //Create a menu for your application
-  MainMenu = new dijit.Menu({
-    targetNodeIds:["main_menu"]
-  });
-  MainMenu.addChild(new dijit.MenuItem({
-    label:"New"
-  }));
-  MainMenu.startup();
   
   //Initialize app with a calendar widget
   new Todo('#todoList', {
@@ -1992,7 +1978,7 @@ Examples of CanJS.
 
 A simple todo application written in the style of [TodoMVC](https://github.com/addyosmani/todomvc/). There is an implementation for each library supported by CanJS including demos of using [templated event binding](#can_control-templated_event_handlers_pt_2) to bind to widget events in Dojo and YUI.
 
-This applications makes heavy use of [EJS Live Binding](#can_ejs-live_binding).
+This application is a good example of how powerful [EJS Live Binding](#can_ejs-live_binding) is.
 
 ![CanJS Todo App](images/examples/todo.png "CanJS Todo App")
 
@@ -2016,9 +2002,13 @@ Image of player, description, link.
 
 ### Srchr
 
-Image of srchr, description, link.
+Srchr searches several data sources for content and displays it to the user. It is built using the jQuery version of CanJS and is a greate example of how to create dumb, isolated widgets that are loosely coupled to the rest of the application.
 
-[Srchr](http://donejs.com/examples/srchr/index.html)
+![CanJS Srchr jQuery App](images/examples/srchr.png "CanJS Srchr jQuery App")
+
+[__View the App__](http://donejs.com/examples/srchr/index.html)
+
+[View the source on github](https://github.com/jupiterjs/srchr)
 
 ## Why CanJS
 
