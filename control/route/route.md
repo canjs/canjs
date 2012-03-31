@@ -6,7 +6,8 @@
 
 The can.Control.route plugin adds a __route__ [can.Control.static.processors processor] to [can.Control].
 This allows creating routes and binding to [can.route] in a single step by listening to the _route_ event
-and a route part. For example:
+and a route part. Route events will be triggered whenever the route changes to the route part
+the control is listening to. For example:
 
 	var Router = can.Control({
 		init : function(el, options) {
