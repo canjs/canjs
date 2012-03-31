@@ -1,4 +1,4 @@
-steal('funcunit/qunit','can/observe/delegate',function(){
+(function(){
 
 
 module('can/observe/delegate')
@@ -203,4 +203,4 @@ test("undelegate within event loop",1, function(){
 
 })
 
-});
+})();
