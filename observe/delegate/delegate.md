@@ -4,111 +4,39 @@
 @test can/observe/delegate/qunit.html
 @download http://donejs.com/can/dist/can.observe.delegate.js
 
-Listens for changes in a child attribute(s) from the parent. The child attribute
-does not have to exist.
+The __delegate__ plugin allows you to listen to more specific event changes on 
+[can.Observe Observes].  It allows you to specify:
+
+ - the __attribute__ or __attributes__ - that you want to listen to and optionally the __value__ you want it to match
+ - the __type__ of event (add,set,remove,change)
+
+Listen to specific event changes with 
+<code>[can.Observe::delegate delegate]\(selector, event, handler(ev,newVal,oldVal,from)\)</code> :
+
 
 	// create an observable
 	var observe = new can.Observe({
-		foo : {
-			bar : "Hello World"
-		}
-	})
-  
-     //listen to changes on a property
-     observe.delegate("foo.bar","change", 
-		function(ev, prop, how, newVal, oldVal){
-       		// foo.bar has been added, set, or removed
-       		this //-> 
-     });
+      name : {
+        first : "Justin Meyer"
+      }
+    })
+  	var handler;
+    //listen to changes on a property
+    observe.delegate("name.first","set", 
+      handler = function(ev, newVal, oldVal, prop){
+      
+      this   //-> "Justin"
+      ev.currentTarget //-> observe
+      newVal //-> "Justin Meyer"
+      oldVal //-> "Justin"
+      prop   //-> "name.first"
+    });
  
-     // change the property
-     observe.attr('foo.bar',"Goodbye Cruel World")
+    // change the property
+    observe.attr('name.first',"Justin")
 
-Delegate will listen on the object until you call _undelegate_ to remove the event handler.
+Delegate will listen on the object until you 
+call <code>[can.Observe::undelegate undelegate]\(selector, event, handler\)</code> to remove the event handler.
 
-	observe.undelegate("name","set", function(){ ... })
+	observe.undelegate("name.first","set", handler );
  
-## Types of events
- 
-Delegate lets you listen to add, set, remove, and change events on property.
-
-### Add
-
-An add event is fired when a new property has been added.
- 
-     var o = new can.Control({});
-     o.delegate("name","add", function(ev, value){
-       // called once
-       can.$('#name').show()
-     })
-     o.attr('name',"Justin")
-     o.attr('name',"Brian");
-    
-Listening to add events is useful for 'setup' functionality (in this case
-showing the `#name` element).
- 
-### Set
- 
-Set events are fired when a property takes on a new value.  set events are
-always fired after an add.
-
-	o.delegate("name","set", function(ev, value){
-		// called twice
-		can.$('#name').text(value)
-	})
-	
-	o.attr('name',"Justin")
-	o.attr('name',"Brian");
-
-### Remove
-
-Remove events are fired after a property is removed.
-
-	o.delegate("name","remove", function(ev){
-		// called once
-		can.$('#name').text(value)
-	})
-	
-	o.attr('name',"Justin");
-	o.removeAttr('name');
-
-
-## Wildcards - matching multiple properties
-
-Sometimes, you want to know when any property within some part 
-of an observe has changed. Delegate lets you use wildcards to 
-match any property name.  The following listens for any change
-on an attribute of the params attribute:
-
-	var o = can.Control({
-		options : {
-			limit : 100,
-			offset: 0,
-			params : {
-				parentId: 5
-			}
-		}
-	})
-	
-	o.delegate('options.*','change', function(){
-		alert('1');
-	})
-	
-	o.delegate('options.**','change', function(){
-		alert('2');
-	})
-	
-	// alerts 1
-	// alerts 2
-	o.attr('options.offset',100)
-	
-	// alerts 2
-	o.attr('options.params.parentId',6);
-
-Using a single wildcard (`*`) matches single level
-properties.  Using a double wildcard (`**`) matches
-any deep property.
-
-## Listening on multiple properties and values
-
-Delegate lets you listen on multiple values at once.
