@@ -213,6 +213,16 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 	 * @Static
 	 */
 	extend(EJS, {
+		// Called to return the content within a magic tag like `<%= %>`.
+		// - escape - if the content returned should be escaped
+		// - tagName - the tag name the magic tag is within or the one that proceeds the magic tag
+		// - status - where the tag is in.  The status can be:
+		//    - _STRING_ - The name of the attribute the magic tag is within
+		//    - `1` - The magic tag is within a tag like `<div <%= %>>`
+		//    - `0` - The magic tag is outside (or between) tags like `<div><%= %></div>`
+		// - self - the `this` the template was called with
+		// - func - the "wrapping" function.  For example:  `<%= task.attr('name') %>` becomes
+		//   `(function(){return task.attr('name')})
 		/**
 		 * @hide
 		 * called to setup unescaped text
@@ -224,16 +234,6 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		 * @param {Object} self
 		 * @param {Object} func
 		 */
-		// Called to return the content within a magic tag like `<%= %>`.
-		// - escape - if the content returned should be escaped
-		// - tagName - the tag name the magic tag is within or the one that proceeds the magic tag
-		// - status - where the tag is in.  The status can be:
-		//    - _STRING_ - The name of the attribute the magic tag is within
-		//    - `1` - The magic tag is within a tag like `<div <%= %>>`
-		//    - `0` - The magic tag is outside (or between) tags like `<div><%= %></div>`
-		// - self - the `this` the template was called with
-		// - func - the "wrapping" function.  For example:  `<%= task.attr('name') %>` becomes
-		//   `(function(){return task.attr('name')})
 		txt : function(escape, tagName, status, self, func){
 			// Get teh value returned by the wrapping function and any observe/attributes read.
 			var res = getValueAndObserved(func, self),

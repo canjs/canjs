@@ -52,13 +52,13 @@ steal('can/construct', function( $ ) {
 	 * @Static
 	 */
 	{
+		// Setup pre-processes which methods are event listeners.
 		/**
 		 * @hide
 		 * 
 		 * Setup pre-process which methods are event listeners.
 		 * 
 		 */
-		// Setup pre-processes which methods are event listeners.
 		setup: function() {
 
 			// Allow contollers to inherit "defaults" from super-classes as it 
@@ -85,15 +85,18 @@ steal('can/construct', function( $ ) {
 				}
 			}
 		},
+		// Return `true` if is an action.
 		/**
 		 * @hide
 		 * @param {String} methodName a prototype function
 		 * @return {Boolean} truthy if an action or not
 		 */
-		// Return `true` if is an action.
 		_isAction: function( methodName ) {
 			return !! ( special[methodName] || processors[methodName] || /[^\w]/.test(methodName) );
 		},
+		// Takes a method name and the options passed to a control
+		// and tries to return the data necessary to pass to a processor
+		// (something that binds things).
 		/**
 		 * @hide
 		 * Takes a method name and the options passed to a control
@@ -115,9 +118,6 @@ steal('can/construct', function( $ ) {
 		 * @return {Object} null or the processor and pre-split parts.  
 		 * The processor is what does the binding/subscribing.
 		 */
-		 // Takes a method name and the options passed to a control
-		 // and tries to return the data necessary to pass to a processor
-		 // (something that binds things).
 		_action: function( methodName, options ) {
 			
 			// If we don't have options (a `control` instance), we'll run this 
@@ -145,6 +145,8 @@ steal('can/construct', function( $ ) {
 				};
 			}
 		},
+		// An object of `{eventName : function}` pairs that Control uses to 
+		// hook up events auto-magically.
 		/**
 		 * @attribute processors
 		 * An object of `{eventName : function}` pairs that Control uses to hook up events
@@ -199,9 +201,9 @@ steal('can/construct', function( $ ) {
 		 *     
 		 *     new Sized( $( '#foo' ) );
 		 */
-		// An object of `{eventName : function}` pairs that Control uses to 
-		// hook up events auto-magically.
 		processors: {},
+		// A object of name-value pairs that act as default values for a 
+		// control instance
 		/**
 		 * @attribute defaults
 		 * A object of name-value pairs that act as default values for a control's 
@@ -223,15 +225,14 @@ steal('can/construct', function( $ ) {
 		 * In [can.Control::setup] the options passed to the control
 		 * are merged with defaults.  This is not a deep merge.
 		 */
-		// A object of name-value pairs that act as default values for a 
-		// control instance
 		defaults: {}
 	},
 	/** 
 	 * @Prototype
 	 */
 	{
-		// Where the magic happens.
+		// Sets `this.element`, saves the control in `data, binds event
+		// handlers.
 		/**
 		 * Setup is where most of control's magic happens.  It does the following:
 		 * 
@@ -286,6 +287,7 @@ steal('can/construct', function( $ ) {
 			(arr = can.data(this.element,"controls")) || can.data(this.element,"controls",arr = []);
 			arr.push(this);
 			
+			// Option merging.
 			/**
 			 * @attribute options
 			 * 
@@ -327,12 +329,12 @@ steal('can/construct', function( $ ) {
 			 * [can.Control.prototype.update update];
 			 *
 			 */
-			// Option merging.
 			this.options = extend({}, cls.defaults, options);
 
 			// Bind all event handlers.
 			this.on();
 
+			// Get's passed into `init`.
 			/**
 			 * @attribute element
 			 * 
@@ -432,7 +434,6 @@ steal('can/construct', function( $ ) {
 			 *        this.on();
 			 *     }
 			 */
-			// Get's passed into `init`.
 			return [this.element, this.options];
 		},
 		/**
@@ -573,12 +574,12 @@ steal('can/construct', function( $ ) {
 
 			return this._bindings.length;
 		},
+		// Unbinds all event handlers on the controller.
 		/**
 		 * @hide
 		 * Unbinds all event handlers on the controller. You should never
 		 * be calling this unless in use with [can.Control::on].
 		 */
-		// Unbinds all event handlers on the controller.
 		off : function(){
 			var el = this.element[0]
 			each(this._bindings || [], function( key, value ) {
@@ -587,6 +588,7 @@ steal('can/construct', function( $ ) {
 			// Adds bindings.
 			this._bindings = [];
 		},
+		// Prepares a `control` for garbage collection
 		/**
 		 * @function destroy
 		 * `destroy` prepares a control for garbage collection and is a place to
@@ -679,7 +681,6 @@ steal('can/construct', function( $ ) {
 		 *   - removing it's [can.Control.pluginName] from the element's className
 		 * 
 		 */
-		// Prepares a `control` for garbage collection
 		destroy: function() {
 			var Class = this.constructor,
 				pluginName = Class.pluginName || Class._fullName,
