@@ -206,7 +206,7 @@ in a control:
 
 ### Getting more specific with the `can.Observe.delegate` plugin
 
-In some cases, you might only want to trigger a function when the route changes
+Sometimes, you might only want to trigger a function when the route changes
 only once, even if the route change gets called multiple times. By using the 
 [can.Observe.delegate] plugin, this is extremely easy. This plugin allows you to 
 listen to change, set, add, and remove on `can.route`.

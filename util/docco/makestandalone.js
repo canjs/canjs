@@ -16,7 +16,7 @@ steal('steal/build/pluginify', 'steal/clean', function() {
 		exclude = libs[ lib ];
 
 		steal.build.pluginify("can/util/make/" + lib + ".js", {
-			out : "can/util/docco/standalone/can." + lib + "-edge.js",
+			out : "can/util/docco/standalone/can." + lib + ".js",
 			global : "can = {}",
 			onefunc : true,
 			compress: false,
@@ -24,7 +24,7 @@ steal('steal/build/pluginify', 'steal/clean', function() {
 			exclude : "can/util/" + lib + "/" + exclude
 		});
 
-		steal.clean("can/util/docco/standalone/can." + lib + "-edge.js");
+		steal.clean("can/util/docco/standalone/can." + lib + ".js");
 
 	}
 
