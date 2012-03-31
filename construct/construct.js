@@ -76,6 +76,10 @@ steal("can/util/string",function( $ ) {
 		_inherit: function( newProps, oldProps, addTo ) {
 			can.extend(addTo || newProps, newProps || {})
 		},
+
+		// Set `defaults` as the merger of the parent `defaults` and this 
+		// object's `defaults`. If you overwrite this method, make sure to
+		// include option merging logic.
 		/**
 		 * Setup is called immediately after a constructor function is created and 
 		 * set to inherit from its base constructor.  It is called with a base constructor and
@@ -125,9 +129,6 @@ steal("can/util/string",function( $ ) {
 		 * @param {Object} [staticProps] the static properties of the new constructor
 		 * @param {Object} [protoProps] the prototype properties of the new constructor
 		 */
-		// Set `defaults` as the merger of the parent `defaults` and this 
-		// object's `defaults`. If you overwrite this method, make sure to
-		// include option merging logic.
 		setup: function( base, fullName ) {
 			this.defaults = can.extend(true,{}, base.defaults, this.defaults);
 		},
@@ -145,6 +146,7 @@ steal("can/util/string",function( $ ) {
 
 			return inst;
 		},
+		// Extends classes.
 		/**
 		 * @hide
 		 * Extends a class with new static and prototype functions.  There are a variety of ways
@@ -173,7 +175,6 @@ steal("can/util/string",function( $ ) {
 		 * 
 		 * @return {can.Construct} returns the new class
 		 */
-		// Extends classes.
 		extend: function( fullName, klass, proto ) {
 			// Figure out what was passed and normalize it.
 			if ( typeof fullName != 'string' ) {
@@ -348,7 +349,7 @@ steal("can/util/string",function( $ ) {
 			 * @return {Array|undefined} If an array is return, [can.Construct.prototype.init] is 
 			 * called with those arguments; otherwise, the original arguments are used.
 			 */
-			//break up
+			//  
 			/** 
 			 * @function init
 			 * 
@@ -398,7 +399,7 @@ steal("can/util/string",function( $ ) {
 			 * It doesn't matter what init returns because the `new` keyword always
 			 * returns the new object.
 			 */
-			//Breaks up code
+			//  
 			/**
 			 * @attribute constructor
 			 * 
