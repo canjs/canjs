@@ -2,7 +2,7 @@ steal('can/control', function(){
 	
 
 
-//used to determine if a controller instance is one of controllers
+//used to determine if a control instance is one of controllers
 //controllers can be strings or classes
 var i, 
 	isAControllerOf = function( instance, controllers ) {
@@ -14,9 +14,7 @@ var i,
 		return false;
 	},
 	data = function(el, data){
-		var $el = can.$(el);
-		$el.data("controllers", data || {})
-		return $el.data('controllers');
+		return $el.data('controls');
 	},
 	makeArray = can.makeArray,
 	old = can.Control.setup;
@@ -65,58 +63,59 @@ can.Control.setup = function() {
 can.prototype.extend({
 
 	/**
-	 * @function jQuery.fn.controllers
+	 * @function jQuery.fn.controls
 	 * @parent can.Control.plugin
-	 * Gets all controllers in the jQuery element.
-	 * @return {Array} an array of controller instances.
+	 * Gets all controls in the jQuery element.
+	 * @return {Array} an array of control instances.
 	 */
-	controllers: function() {
+	controls: function() {
 		var controllerNames = makeArray(arguments),
 			instances = [],
-			controllers, c, cname;
+			controls, c, cname;
 		//check if arguments
 		this.each(function() {
 
-			controllers = can.$(this).data("controllers");
-			for ( cname in controllers ) {
-				if ( controllers.hasOwnProperty(cname) ) {
-					c = controllers[cname];
-					if (!controllerNames.length || isAControllerOf(c, controllerNames) ) {
-						instances.push(c);
-					}
+			controls = can.$(this).data("controls");
+			if(!controls){
+				return;
+			}
+			for(var i=0; i<controls.length; i++){
+				c = controls[i];
+				if (!controllerNames.length || isAControllerOf(c, controllerNames) ) {
+					instances.push(c);
 				}
 			}
 		});
 		return instances;
 	},
 	/**
-	 * @function jQuery.fn.controller
+	 * @function jQuery.fn.control
 	 * @parent can.Control.plugin
-	 * Gets a controller in the jQuery element.  With no arguments, returns the first one found.
-	 * @param {Object} controller (optional) if exists, the first controller instance with this class type will be returned.
-	 * @return {jQuery.Controller} the first controller.
+	 * Gets a control in the jQuery element.  With no arguments, returns the first one found.
+	 * @param {Object} control (optional) if exists, the first control instance with this class type will be returned.
+	 * @return {jQuery.Controller} the first control.
 	 */
-	controller: function( controller ) {
-		return this.controllers.apply(this, arguments)[0];
+	control: function( control ) {
+		return this.controls.apply(this, arguments)[0];
 	}
 });
 
 can.Control.plugin = function(pluginname){
-	var controller = this;
+	var control = this;
 
 	if (!can.prototype[pluginname]) {
 		can.prototype[pluginname] = function(options){
 		
-			var args = makeArray(arguments),   //if the arg is a method on this controller
-			isMethod = typeof options == "string" && $.isFunction(controller.prototype[options]), meth = args[0];
+			var args = makeArray(arguments),   //if the arg is a method on this control
+			isMethod = typeof options == "string" && $.isFunction(control.prototype[options]), meth = args[0];
 			return this.each(function(){
 				//check if created
-				var controllers = data(this),    //plugin is actually the controller instance
-				plugin = controllers && controllers[pluginname];
+				debugger;
+				var plugin = can.$(this).control(control);
 				
 				if (plugin) {
 					if (isMethod) {
-						// call a method on the controller with the remaining args
+						// call a method on the control with the remaining args
 						plugin[meth].apply(plugin, args.slice(1));
 					}
 					else {
@@ -126,9 +125,8 @@ can.Control.plugin = function(pluginname){
 					
 				}
 				else {
-					//create a new controller instance
-					controllers[pluginname] = 
-						controller.newInstance.apply(controller, [this].concat(args));
+					//create a new control instance
+					control.newInstance.apply(control, [this].concat(args));
 				}
 			});
 		};
@@ -235,7 +233,7 @@ can.Control.plugin = function(pluginname){
 		 * is called by the [jquery.control.plugin jQuery helper function].
 		 */
 can.Control.prototype.update = function( options ) {
-		extend(this.options, options);
+		can.extend(this.options, options);
 		this.on();
 };
 
