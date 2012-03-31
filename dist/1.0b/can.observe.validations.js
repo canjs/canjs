@@ -1,9 +1,8 @@
-steal('can/observe/attributes', function(){
+(function(can, window, undefined){
 //validations object is by property.  You can have validations that
 //span properties, but this way we know which ones to run.
 //  proc should return true if there's an error or the error message
 var validate = function(attrNames, options, proc) {
-	// normalize argumetns
 	if(!proc){
 		proc = options;
 		options = {};
@@ -12,21 +11,19 @@ var validate = function(attrNames, options, proc) {
 	options = options || {};
 	attrNames = can.makeArray(attrNames)
 	
-	// run testIf if it exists
 	if(options.testIf && !options.testIf.call(this)){
 		return;
 	}
 	
 	var self = this;
 	can.each(attrNames, function(i, attrName) {
-		// Add a test function for each attribute
+		// Call the validate proc function in the instance context
 		if(!self.validations[attrName]){
 			self.validations[attrName] = [];
 		}
 		
 		self.validations[attrName].push(function(newVal){
-			// if options has a message return that, otherwise, return the error
-			var res = proc.call(this, newVal, attrName);
+			var res = proc.call(this, newVal);
 			return res === undefined ? undefined : (options.message || res);
 		})
 	});   
@@ -63,59 +60,27 @@ can.each([ can.Observe, can.Model ], function(i,clss){
    		/**
     	* @function can.Observe.static.validate
     	* @parent can.Observe.validations
-    	* `validate(attrNames, [options,] validateProc(value, attrName) )` validates each of the 
-    	* specified attributes with the given `validateProc` function.  The function
-    	* should return a value if there is an error.  By default, the return value is
-    	* the error message.  Validations should be set in the Constructor's static init method.
-    	* 
-    	* The following example validates that a person's age is a number:
-    	* 
-    	*     Person = can.Observe({
-    	* 	    init : function(){
-    	* 	      this.validate(["age"], function(val){
-    	* 	        if( typeof val === 'number' ){
-    	* 	    	  return "must be a number"
-    	* 	        }
-    	* 	      })
-    	* 	    }
-    	*     },{})
+    	* Validates each of the specified attributes with the given function.  
     	* 
     	* 
-    	* The error message can be overwritten with `options` __message__ property:
-    	* 
-    	*     Person = can.Observe({
-    	* 	    init : function(){
-    	* 	      this.validate(
-    	* 	        "age", 
-    	*           {message: "must be a number"}, 
-    	*           function(val){
-    	* 	          if( typeof val === 'number' ){
-    	* 	    	    return true
-    	* 	          }
-    	* 	      })
-    	*       }
-    	*     },{})
     	* 
     	* @param {Array|String} attrNames Attribute name(s) to to validate
     	* 
-    	* @param {Object} [options] Options for the 
-    	* validations.  Valid options include 'message' and 'testIf'.
-    	* 
-    	* @param {Function} validateProc(value,attrName) Function used to validate each 
+    	* @param {Function} validateProc Function used to validate each 
     	* given attribute. Returns nothing if valid and an error message 
-    	* otherwise. Function is called in the instance context and takes the 
-    	* `value` and `attrName` to validate.
+    	* otherwise. Function is called in the instance context and takes the value to validate.
     	* 
+    	* @param {Object} options (optional) Options for the 
+    	* validations.  Valid options include 'message' and 'testIf'.
     	*/
    		validate: validate,
    
    		/**
     	 * @attribute can.Observe.static.validationMessages
     	 * @parent can.Observe.validations
-    	 * 
-    	 * `validationMessages` has the default validation error messages that will be returned by the builtin
+    	 * The default validation error messages that will be returned by the builtin
     	 * validation methods. These can be overwritten by assigning new messages
-    	 * to `can.Observe.validationMessages` in your application setup.
+    	 * to can.Observe.validationMessages.&lt;message> in your application setup.
     	 * 
     	 * The following messages (with defaults) are available:
     	 * 
@@ -146,9 +111,7 @@ can.each([ can.Observe, can.Model ], function(i,clss){
    		/**
     	 * @function can.Observe.static.validateFormatOf
     	 * @parent can.Observe.validations
-    	 * 
-    	 * `validateFormatOf(attrNames, regexp, options)` validates where the values of 
-    	 * specified attributes are of the correct form by
+    	 * Validates where the values of specified attributes are of the correct form by
     	 * matching it against the regular expression provided.
     	 * 
     	 *     init : function(){
@@ -159,7 +122,7 @@ can.each([ can.Observe, can.Model ], function(i,clss){
     	 * 
     	 * @param {Array|String} attrNames Attribute name(s) to to validate
     	 * @param {RegExp} regexp Regular expression used to match for validation
-    	 * @param {Object} [options] Options for the validations.  Valid options include 'message' and 'testIf'.
+    	 * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     	 */
    		validateFormatOf: function(attrNames, regexp, options) {
       		validate.call(this, attrNames, options, function(value) {
@@ -173,17 +136,11 @@ can.each([ can.Observe, can.Model ], function(i,clss){
    		/**
     	 * @function can.Observe.static.validateInclusionOf
     	 * @parent can.Observe.validations
-    	 * 
     	 * Validates whether the values of the specified attributes are available in a particular
-    	 * array.
-    	 * 
-    	 *     init : function(){
-    	 *       this.validateInclusionOf(["salutation"],["Mr.","Mrs.","Dr."])  
-    	 *     }
-    	 * 
+    	 * array.   See [can.Observe.validations validation] for more on validations.
     	 * @param {Array|String} attrNames Attribute name(s) to to validate
     	 * @param {Array} inArray Array of options to test for inclusion
-    	 * @param {Object} [options] Options for the validations.  Valid options include 'message' and 'testIf'.
+    	 * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     	 */
    		validateInclusionOf: function(attrNames, inArray, options) {
       		validate.call(this, attrNames, options, function(value) {
@@ -200,16 +157,11 @@ can.each([ can.Observe, can.Model ], function(i,clss){
    		/**
     	 * @function can.Observe.static.validateLengthOf
     	 * @parent can.Observe.validations
-    	 * 
-    	 * Validates that the specified attributes' lengths are in the given range.  
-    	 * 
-    	 *     init : function(){
-    	 *       this.validateInclusionOf(["suffix"],3,5)  
-    	 *     }
-    	 * 
+    	 * Validates that the specified attributes' lengths are in the given range.  See [can.Observe.validations validation] for more on validations.
+    	 * @param {Array|String} attrNames Attribute name(s) to to validate
     	 * @param {Number} min Minimum length (inclusive)
     	 * @param {Number} max Maximum length (inclusive)
-    	 * @param {Object} [options] Options for the validations.  Valid options include 'message' and 'testIf'.
+    	 * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     	 */
    		validateLengthOf: function(attrNames, min, max, options) {
       		validate.call(this, attrNames, options, function(value) {
@@ -224,15 +176,9 @@ can.each([ can.Observe, can.Model ], function(i,clss){
    		/**
     	 * @function can.Observe.static.validatePresenceOf
     	 * @parent can.Observe.validations
-    	 * 
-    	 * Validates that the specified attributes are not blank.
-    	 * 
-    	 *     init : function(){
-    	 *       this.validatePresenceOf(["name"])  
-    	 *     }
-    	 * 
+    	 * Validates that the specified attributes are not blank.  See [can.Observe.validations validation] for more on validations.
     	 * @param {Array|String} attrNames Attribute name(s) to to validate
-    	 * @param {Object} [options] Options for the validations.  Valid options include 'message' and 'testIf'.
+    	 * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     	 */
    		validatePresenceOf: function(attrNames, options) {
       		validate.call(this, attrNames, options, function(value) {
@@ -245,17 +191,11 @@ can.each([ can.Observe, can.Model ], function(i,clss){
    		/**
     	 * @function can.Observe.static.validateRangeOf
     	 * @parent can.Observe.validations
-    	 * 
-    	 * Validates that the specified attributes are in the given numeric range.
-    	 * 
-    	 *     init : function(){
-    	 *       this.validateRangeOf(["age"],21, 130);  
-    	 *     }
-    	 * 
+    	 * Validates that the specified attributes are in the given numeric range.  See [can.Observe.validations validation] for more on validations.
     	 * @param {Array|String} attrNames Attribute name(s) to to validate
     	 * @param {Number} low Minimum value (inclusive)
     	 * @param {Number} hi Maximum value (inclusive)
-    	 * @param {Object} [options] (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
+    	 * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
     	 */
    		validateRangeOf: function(attrNames, low, hi, options) {
       		validate.call(this, attrNames, options, function(value) {
@@ -358,4 +298,4 @@ can.extend(can.Observe.prototype, {
 	
 });
 
-});
+})(can = {}, this )
