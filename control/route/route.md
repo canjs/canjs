@@ -6,11 +6,7 @@
 
 The can.Control.route plugin adds a __route__ [can.Control.static.processors processor] to [can.Control].
 This allows creating routes and binding to [can.route] in a single step by listening to the _route_ event
-and a route. Without a route, the event will be triggered when the route is empty.
-The data passed to the event handler will contain the [can.route.deparam deparamed route] without the
-_route_ attribute.
-
-For example:
+and a route. For example:
 
 	var Router = can.Control({
 		init : function(el, options) {
@@ -32,7 +28,9 @@ For example:
 
 	new Router(window);
 
-The plugin doesn't affect the way you usually use [can.route]. A control can, for example,
+Without a route, the event will be triggered when the route is empty.
+The data passed to the event handler will contain the [can.route.deparam deparamed route] without the
+_route_ attribute. The plugin doesn't affect the way you usually use [can.route]. A control can, for example,
 also set some default values in its _init_ method:
 
 	init : function(element, options) {
