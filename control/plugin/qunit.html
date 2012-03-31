@@ -14,5 +14,9 @@
 		<div id="test-content"></div>
         <ol id="qunit-tests"></ol>
 		<div id="qunit-test-area"></div>
+	    <script type='text/javascript'>
+	    steal('can/construct/super','funcunit/qunit').then('can/construct/super', 'can/control/plugin')
+	    	.then('can/control/plugin/plugin_test.js')
+	    </script>
     </body>
 </html>

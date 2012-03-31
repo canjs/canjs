@@ -110,9 +110,7 @@ test("changing an object unbinds", function(){
 		equals(how, "set")
 		equals(val[0], "hi")
 	});
-    if (typeof console != "undefined") console.log("before")
 	state.attr("properties.brand",["hi"]);
-	if (typeof console != "undefined") console.log("after")
 	
 	brand.push(1,2,3);
 	
