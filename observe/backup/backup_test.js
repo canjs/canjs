@@ -1,7 +1,4 @@
-steal('funcunit/qunit', 
-	  'can/observe/attributes')
-.then('can/observe/backup')
-.then(function(){
+(function(){
 	
 module("can/observe/backup",{
 	setup : function(){
@@ -104,5 +101,4 @@ test("backup / restore with associations", function(){
 	
 })
 
-})
- 
+})()
