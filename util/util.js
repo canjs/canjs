@@ -16,9 +16,12 @@ if (window.STEALDOJO){
 /**
 @function can.trim
 @parent can.util
-Removes leading and trailing whitespace
 
-    Can.trim( " foo " ) // -> "foo"
+`can.trim(string)` removes leading and trailing whitespace from a string.  It will also
+remove all newlines, spaces including non-breaking, and tabs.  If these occur in the middle
+of the string, then they will be persisted.
+
+    can.trim( " foo " ) // -> "foo"
 
 @param {String} str the string to trim
 @return {String} the value of the string
@@ -29,7 +32,7 @@ Removes leading and trailing whitespace
 @parent can.util
 Converts array like data into arrays.
 
-    Can.makeArray({0 : "zero", 1: "one", length: 2})
+    can.makeArray({0 : "zero", 1: "one", length: 2})
        // -> ["zero","one"]
  */
 //
@@ -281,7 +284,7 @@ The following lists how the NodeList is created by each library:
 - __key__ string name of the association.
 
 Due to the way browsers security restrictions with plugins and external code, 
-the _data_ method cannot be used on <object> (unless it's a Flash plugin), <applet> or <embed> elements.
+the _data_ method cannot be used on `object` (unless it's a Flash plugin), `applet` or `embed` elements.
 
 */
 //
@@ -319,11 +322,30 @@ This works similarly to [http://api.jquery.com/addClass/ jQuery.fn.addClass].
 /**
 @function can.when
 @parent can.util
+
+`can.when(args)` provides the ability to execute callback function(s) 
+typically based on a Deferred or AJAX object.
+
+	can.when( can.ajax('api/farm/animals') ).then(function(animals){ 
+     	alert(animals); //-> alerts the ajax response
+	});
+	
+You can also use this for regular JavaScript objects.
+
+	$.when( { animals: [ 'cat' ] } ).done(function(animals){ 
+		alert(animals[0]); //-> alerts 'cat' 
+	});
+
+@param {Object} deferreds ajax or JavaScript objects
 */
 //
 /**
 @class can.Deferred
 @parent can.util
+
+`can.Deferred` is a object that allows users to assign and chain callback 
+function(s) for the success or failure state of both asynchronous and synchronous function(s).
+
 */
 //
 /*
