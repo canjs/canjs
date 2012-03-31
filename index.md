@@ -1878,6 +1878,16 @@ $( '#todos' ).html( 'todo/todos.ejs', [
 
 Examples of CanJS.
 
+### Todo
+
+### CanPlay
+
+### Srchr
+
+Image of srchr, description, link.
+
+[Srchr](http://donejs.com/examples/srchr/index.html)
+
 ## Why CanJS
 
 There are many libraries out there and it can be difficult 
