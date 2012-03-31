@@ -1,5 +1,5 @@
 .tmp*
-dist
+dist/edge/*
 *.swp
 *.orig
 util/can.*.js
