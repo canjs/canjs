@@ -17,6 +17,17 @@ test("setter testing works", function(){
 	var date = new Date(),
 		contact = new Contact({birthday: date.getTime()});
 	
+	// set via constructor
+	equals(contact.birthday.getTime(), date.getTime(), "set as birthday")
+	
+	// set via attr method
+	date = new Date();
+	contact.attr('birthday', date.getTime())
+	equals(contact.birthday.getTime(), date.getTime(), "set via attr")
+	
+	// set via attr method w/ multiple attrs
+	date = new Date();
+	contact.attr({ birthday: date.getTime() })
 	equals(contact.birthday.getTime(), date.getTime(), "set as birthday")
 });
 
