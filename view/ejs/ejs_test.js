@@ -717,6 +717,7 @@ test("property name only attributes", function(){
 		obs.attr('val',true);
 		
 		ok(input.checked, "checked")
+		div.removeChild(input)
 		start();
 	})
 	
