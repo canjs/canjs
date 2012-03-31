@@ -119,7 +119,7 @@ The following demo shows an EJS template being rendered with observable data.
 It demonstrates live binding to attributes. The template and all data properties 
 are editable, so experiment!
 
-@iframe can/view/ejs/demo.html 980
+@iframe can/view/ejs/demo.html 1020
 
 ## Magic Tags
 
