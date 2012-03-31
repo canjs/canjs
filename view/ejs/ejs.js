@@ -36,15 +36,29 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			return (--content.split("{").length) - (--content.split("}").length);
 		},
 		// Cross-browser attribute methods.
+		// These should be mapped to the underlying library.
+		attrMap = {
+			"class" : "className",
+		},
+		bool = can.each(["checked","disabled","readonly","required"], function(i,n){
+			attrMap[n] = n;
+		}),
 		setAttr = function(el, attrName, val){
-			attrName === "class" ?
-				(el.className = val):
+			attrMap[attrName] ?
+				(el[attrMap[attrName]] = can.inArray(attrName,bool) > -1? true  : val):
 				el.setAttribute(attrName, val);
 		},
 		getAttr = function(el, attrName){
-			return attrName === "class"?
-				el.className:
+			return attrMap[attrName]?
+				el[attrMap[attrName]]:
 				el.getAttribute(attrName);
+		},
+		removeAttr = function(el, attrName){
+			if(can.inArray(attrName,bool) > -1){
+				el[attrName] = false;
+			} else{
+				el.removeAttribute(attrName)
+			}
 		},
 		// This is used to setup live binding on a list of observe/attribute
 		// pairs for a given element.
@@ -317,7 +331,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						
 						// Remove if we have a change and used to have an `attrName`.
 						if((newAttrName != attrName) && attrName){
-							el.removeAttribute(attrName)
+							removeAttr(el,attrName)
 						}
 						// Set if we have a new `attrName`.
 						if(newAttrName){

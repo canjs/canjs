@@ -1,4 +1,4 @@
-(function(){
+steal('funcunit/syn',function(){
 	
 module("can/view/ejs, rendering",{
 	setup : function(){
@@ -689,7 +689,40 @@ test("parent is right with bock", function(){
 	ok(ul, "we have a ul");
 	ok(li, "we have a li")
 	
-})
+});
+
+test("property name only attributes", function(){
+	
+	var text = "<input type='checkbox' <%== obs.attr('val') ? 'checked' : '' %>/>"
+	
+	
+	var obs = new can.Observe({
+		val : true
+	})
+	
+	var compiled = new can.EJS({text: text}).render({obs: obs});
+	
+	var div = document.getElementById('qunit-test-area');
+
+	div.appendChild(can.view.frag(compiled));
+	
+	var input = div.getElementsByTagName('input')[0];
+	stop()
+	Syn.click({},input, function(){
+		obs.attr('val',false)
+	
+		ok(!input.checked, "not checked")
+		
+		
+		obs.attr('val',true);
+		
+		ok(input.checked, "checked")
+		div.removeChild(input)
+		start();
+	})
+	
+	
+});
 
 
 })()
