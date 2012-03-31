@@ -12,9 +12,10 @@
 	<div id="qunit-test-area"></div>
     <script type='text/javascript' src='../../../steal/steal.js'></script>
 	    <script type='text/javascript'>
-	    steal('funcunit/qunit', 
-	    'can/observe/attributes')
+	    steal('funcunit/qunit', 'can/observe')
+	    .then('can/observe/setter')
 	    .then('can/observe/validations')
+	    .then('can/observe/attributes')
 		  .then('can/observe/validations/validations_test.js')
 	    </script>
     </body>
