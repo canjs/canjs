@@ -1,4 +1,4 @@
-steal('funcunit/qunit', './route', function () {
+(function () {
 
 module("can/control/route");
 
@@ -32,4 +32,4 @@ test("routes changed", function () {
 	can.trigger(window, 'hashchange');
 });
 
-});
+})();

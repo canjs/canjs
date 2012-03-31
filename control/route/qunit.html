@@ -3,7 +3,7 @@
     <head>
         <link rel="stylesheet" type="text/css" href="../../../funcunit/qunit/qunit.css" />
         <title>route QUnit Test</title>
-		<script type='text/javascript' src='../../../steal/steal.js?can/control/route/route_test.js'></script>
+		<script type='text/javascript' src='../../../steal/steal.js'></script>
     </head>
     <body>
 
@@ -14,5 +14,9 @@
 		<div id="test-content"></div>
         <ol id="qunit-tests"></ol>
 		<div id="qunit-test-area"></div>
+	    <script type='text/javascript'>
+	    steal('funcunit/qunit', 'can/control/route')
+		    .then('can/control/route_test.js')
+	    </script>
     </body>
 </html>
