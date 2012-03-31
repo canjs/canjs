@@ -1767,9 +1767,18 @@ instance.attr( 'name', 'doe' );
 ([min](http://donejs.com/can/dist/edge/can.observe.attributes.min.js))
 
 The [can.Observe.attributes](http://donejs.com/docs.html#!can.Observe.attributes) plugin
-allows you to specify attributes with type converters and serializers.  Serializers
+allows you to specify attributes with type converters and serializers. Serializers
 make it handy when preparing your data to send to the server for JavaScript objects like
 dates or associations.
+
+The following example creates a Birthday observe that defines a _birthday_ attribute of type
+date and an _age_ attribute that uses the number converter. The _serialize_ and _convert_ object
+define converter functions for each type. _serialize_ converters will be used when getting
+a serialized representation of the observe attributes by calling
+[serialize()](http://donejs.com/docs.html#!can.Observe.prototype.serialize). Type converters
+in the _convert_ object will be used when an attribute of that type is being set. When setting a
+date attribute, for example, the _date_ converter will try to convert any string into a JavaScript
+date object.
 
 {% highlight javascript %}
 var Birthday = new can.Observe({
@@ -1784,14 +1793,14 @@ var Birthday = new can.Observe({
      "-" + (val.getMonth() + 1) + 
      "-" + val.getDate(); 
     },
-    number: (val){
+    number : function(val){
      return val + '';
     }
   },
   
   convert: {
     // converts string to date
-    date: function( date ) {
+    date : function( date ) {
       if ( typeof date == 'string' ) {
         //- Extracts dates formated 'YYYY-DD-MM'
         var matches = raw.match( /(\d+)-(\d+)-(\d+)/ ); 
@@ -1806,7 +1815,7 @@ var Birthday = new can.Observe({
     },
     
     // converts string to number
-    number: function(number){
+    number : function(number){
      if(typeof number === 'string'){
       number = parseInt(number);
      }
