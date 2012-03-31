@@ -4,37 +4,36 @@
 @test can/construct/super/qunit.html
 @download http://donejs.com/can/dist/can.construct.super.js
 
-Allows you to call the base function via a `_super` attribute. Given a simple Todo construct:
+The __super__ provides a `this._super` reference in functions that points to the base function.  For example,
+the following creates a `Vehicle` constructor and `Car` constructor that
+inherits from it.  `Car`'s `init` function calls `Vehicle`'s base `init` function. 
 
-	var Todo = can.Construct({
-        init : function(text) {
-            this.text = text;
-        },
-        toString : function() {
-            return 'TODO: ' + this.text;
-        }
+	var Vehicle = can.Construct({
+      init: function(wheels){
+        this.wheels=wheels;
+      }
     });
 
-    var todo = new Todo('Take out trash');
-    console.log(todo.toString()); // -> TODO: Take out trash
+    var Car = can.Construct({
+      init: function(speed){
+        this._super(4);
+        this.speed = speed;
+      }
+    })
 
-Using the *super* plugin you can create an extended version of this Todo construct and in each method
-be able to access the overwritten method using `this._super` (if there is one):
+`this._super` also works from static properties.  The following example creates methods that can be
+raised to the first and second power:
 
-	var BetterTodo = Todo({
-		init : function(text, status) {
-			this._super(text);
-			this.status = status || 'Not done';
-		},
-
-		toString : function() {
-			return '[' + this.status + ']: ' + this._super();
-		}
-	});
-
-	var betterTodo = new BetterTodo('Take out trash', 'Done');
-    console.log(betterTodo.toString());
-    // -> [Done] TODO: Take out trash
+    First = can.Construct({
+        raise: function(n) { return n;}
+    },{})
+    
+    Second = First({
+        raise: function(n) { return this._super(n)*n;}
+    },{})
+    
+    First.raise(2)  // -> 2
+    Second.raise(2) // -> 4
 
 If you want to pass all arguments to `_super` use
 [apply](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/apply):
