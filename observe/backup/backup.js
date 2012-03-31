@@ -18,7 +18,8 @@ steal('can/observe', 'can/util/object').then(function(){
 		 * @parent can.Observe.backup
 		 *
 		 * Backs up a [can.Observe] instance, so it can be restored later
-		 * by calling [can.Observe.prototype.restore]:
+		 * by calling [can.Observe.prototype.restore] or checked if it
+		 * has changed using [can.Observe.prototype.isDirty]:
 		 *
 		 *      var recipe = new can.Observe({
 		 *           name : 'Pancakes',
