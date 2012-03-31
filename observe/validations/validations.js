@@ -60,10 +60,18 @@ can.each([ can.Observe, can.Model ], function(i,clss){
    		/**
     	* @function can.Observe.static.validate
     	* @parent can.Observe.validations
-    	* Validates each of the specified attributes with the given function.  See [can.Observe.validations validation] for more on validations.
+    	* Validates each of the specified attributes with the given function.  
+    	* 
+    	* 
+    	* 
     	* @param {Array|String} attrNames Attribute name(s) to to validate
-    	* @param {Function} validateProc Function used to validate each given attribute. Returns nothing if valid and an error message otherwise. Function is called in the instance context and takes the value to validate.
-    	* @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
+    	* 
+    	* @param {Function} validateProc Function used to validate each 
+    	* given attribute. Returns nothing if valid and an error message 
+    	* otherwise. Function is called in the instance context and takes the value to validate.
+    	* 
+    	* @param {Object} options (optional) Options for the 
+    	* validations.  Valid options include 'message' and 'testIf'.
     	*/
    		validate: validate,
    
@@ -104,7 +112,14 @@ can.each([ can.Observe, can.Model ], function(i,clss){
     	 * @function can.Observe.static.validateFormatOf
     	 * @parent can.Observe.validations
     	 * Validates where the values of specified attributes are of the correct form by
-    	 * matching it against the regular expression provided.  See [can.Observe.validations validation] for more on validations.
+    	 * matching it against the regular expression provided.
+    	 * 
+    	 *     init : function(){
+    	 * 	     this.validateFormatOf(["email"],/[\w\.]+@]w+\.\w+/,{
+    	 * 	       message : "invalid email"
+    	 *       })
+    	 *     }
+    	 * 
     	 * @param {Array|String} attrNames Attribute name(s) to to validate
     	 * @param {RegExp} regexp Regular expression used to match for validation
     	 * @param {Object} options (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
@@ -217,13 +232,23 @@ can.extend(can.Observe.prototype, {
 	 * 
 	 *     errors.dueDate[0] //-> "can't be empty"
 	 * 
-	 * @param {Array} [attrs] an optional list of attributes to get errors for:
+	 * @param {Array|String} [attrs] An optional list of attributes to get errors for:
 	 * 
-	 *     task.errors(['dueDate']);
-	 *     
+	 *     task.errors(['dueDate','name']);
+	 * 
+	 * Or it can take a single attr name like:
+	 * 
+	 *     task.errors('dueDate')
+	 * 
+	 * @param {Object} [newVal] An optional new value to test setting
+	 * on the observe.  If `newVal` is provided, 
+	 * it returns the errors on the observe if `newVal` was set.
+	 * 
 	 * @return {Object} an object of attributeName : [errors] like:
 	 * 
 	 *     task.errors() // -> {dueDate: ["cant' be empty"]}
+	 * 
+	 * or `null` if there are no errors.
 	 */
 	errors: function( attrs , newVal) {
 		// convert attrs to an array
