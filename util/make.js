@@ -110,7 +110,7 @@ steal('steal/build/pluginify', function() {
 		global : "can = {}",
 		onefunc : true,
 		compress: false,
-		wrapInner: ['\nYUI().add("can", function(Y) {\n','}, "0.0.1", {\nrequires: ["node", "io-base", "querystring", "event-focus", "array-extras"],\n optional: ["selector-css2", "selector-css3"]\n});\n'],
+		wrapInner: ['\nYUI().add("can", function(Y) {\ncan.Y = Y;\n','}, "0.0.1", {\nrequires: ["node", "io-base", "querystring", "event-focus", "array-extras"],\n optional: ["selector-css2", "selector-css3"]\n});\n'],
 		skipCallbacks: true
 	});
 	
