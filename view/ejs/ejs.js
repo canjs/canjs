@@ -38,7 +38,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		// Cross-browser attribute methods.
 		// These should be mapped to the underlying library.
 		attrMap = {
-			"class" : "className",
+			"class" : "className"
 		},
 		bool = can.each(["checked","disabled","readonly","required"], function(i,n){
 			attrMap[n] = n;
