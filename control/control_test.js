@@ -58,7 +58,7 @@ test("data", function(){
 	can.append( can.$("#qunit-test-area"), "<div id='things'>div<span>span</span></div>")
 	var thing1 = new Things("#things",{});
 	var thing2 = new Things("#things",{});
-	equals(can.$('#things').data("controls").length, 2, "there are 2 items in the data array")
+	equals(can.data(can.$('#things'), "controls").length, 2, "there are 2 items in the data array")
 })
 
 if( window.jQuery ){
