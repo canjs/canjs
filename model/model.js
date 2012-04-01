@@ -1075,7 +1075,7 @@ steal('can/observe',function(){
    *     var todos = new Todo.List( [todo1, todo2] );
    *
    * ### Model Lists in `can.Model`
-   * [can.Model.static.findAll can.Model.findAll] or [can.Models.models] will
+   * [can.Model.static.findAll can.Model.findAll] or [can.Model.models] will
    * almost always be used to return a `can.Model.List` object, even though it
    * is possible to create new lists like below:
    *
@@ -1094,10 +1094,11 @@ steal('can/observe',function(){
    * ### Extending `can.Model.List`
    *
    * Creating custom `can.Model.Lists` allows you to extend lists with helper
-   * functions for a list of a specific type. So, if there was a need to get a
-   * random todo item, something could be written like:
+   * functions for a list of a specific type. So, if you wanted to be able to
+   * see how many todos were completed and remaining something could be written
+   * like:
    *
-   *     can.Model.List('Todo.List', {
+   *     Todo.List = can.Model.List({
    *         completed: function() {
    *             var completed = 0;
    *             this.each(function(i, todo) {
