@@ -4,10 +4,11 @@
 @download http://donejs.com/can/dist/can.observe.setter.js
 @test can/observe/setter/qunit.html
 
-`can.Observe.setter` extends the Observe object to provide convenient helper methods for 
-setting attributes on a observable.
+`can.Observe.setter(name, success(value), error(errors))` extends the Observe object 
+to provide convenient helper methods for setting attributes on a observable.
 
-The `attr` function looks for a `setATTRNAME` function to handle setting the date property.
+The `attr` function looks for a `setATTRNAME` function to handle setting 
+the `ATTRNAME` property.
 
 By providing a function that takes the raw data and returns a form useful for JavaScript, 
 we can make our observes automatically convert data.
@@ -25,17 +26,25 @@ we can make our observes automatically convert data.
 	// set on init
 	var contact = new Contact({ birthday: 1332777411799 });
 	
+	// get the contact's birthday via 'attr' method
+	contact.attr('birthday') 
+		// -> Mon Mar 26 2012 08:56:51 GMT-0700 (MST)
+
 	// set via 'attr' method
-	contact.attr('birthday', new Date().getTime())
+	contact.attr('birthday', new Date('11/11/11').getTime())
 	
-	// set via 'attr' method passing object
+	contact.attr('birthday') 
+		// -> Fri Nov 11 2011 00:00:00 GMT-0700 (MST)
+
 	contact.attr({
-		'birthday': new Date().getTime()
+		'birthday': new Date('03/31/12').getTime()
 	});
+
+	contact.attr('birthday') 
+		// -> Sat Mar 31 2012 00:00:00 GMT-0700 (MST)
 	
 If the returned value is `undefined`, this means the setter is either in an async 
-event or the attribute(s) were not set.  If it was in fact in an async event, we 
-do not want to call the `update` property and therefore return `undefined` right away.
+event or the attribute(s) were not set. 
 
 ## Error Handling
 

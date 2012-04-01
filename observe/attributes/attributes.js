@@ -48,8 +48,10 @@ can.each([ can.Observe, can.Model ], function(i,clss){
 		 *			convert : {
 		 *				date : function(raw){
 		 *					if(typeof raw == 'string'){
+		 *						//- Extracts dates formated 'YYYY-DD-MM'
 		 *						var matches = raw.match(/(\d+)-(\d+)-(\d+)/);
 		 *	
+		 *						//- Parses to date object and returns
 		 *						return new Date(matches[1], 
 		 *								        (+matches[2])-1, 
 		 *									    matches[3]);
@@ -66,8 +68,7 @@ can.each([ can.Observe, can.Model ], function(i,clss){
 		 *		//- calls convert on attribute set
 		 *		contact.attr('birthday', '4-26-2012') 
 		 *
-		 *		//- returns newly converted date object
-		 *		contact.attr('birthday');
+		 *		contact.attr('birthday'); //-> Date
 		 *
 		 * ## Assocations and Convert
 		 *
@@ -157,8 +158,7 @@ can.each([ can.Observe, can.Model ], function(i,clss){
 		 * 		var contact = new Contact({ 
 		 * 			birthday: new Date("Oct 25, 1973") 
 		 * 		}).serialize();
-		 *
-		 * 		// { "birthday" : "1973-10-25T05:00:00.000Z" }
+		 * 		//-> { "birthday" : "1973-10-25T05:00:00.000Z" }
 		 *
 		 */
 		serialize: {
@@ -250,11 +250,15 @@ can.Observe.prototype.__convert = function(prop, value){
  *		var contact = new Contact();
  *		contact.attr('birthday', new Date());
  *		contact.serialize()
- *			//- Returns the 'birthday' attribute in format 'YYYY-MM-DD'
- *			//- {
- *			//- 	birthday: 'YYYY-MM-DD'
- *			//- }
+ *		//-> { birthday: 'YYYY-MM-DD' }
  *
+ * You can also get and serialize an individual property by passing the attribute
+ * name to the `serialize` function.  Building on the above demo, we can serialize
+ * the `birthday` attribute only.
+ *
+ *		contact.serialize('birthday') //-> 'YYYY-MM-DD'
+ *
+ * @param {Object} attrName (optional) when passed returns only that attribute name
  */
 can.Observe.prototype.serialize = function(attrName){
 	var where = {},
@@ -283,7 +287,7 @@ can.Observe.prototype.serialize = function(attrName){
 			val
 	});
 	
-	return where;
+	return attrName != undefined ? where[attrName] : where;
 };
 
 });

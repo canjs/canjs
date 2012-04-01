@@ -724,5 +724,30 @@ test("property name only attributes", function(){
 	
 });
 
+test("nested properties", function(){
+	
+	var text = "<div><%= obs.attr('name.first')%></div>"
+	
+	
+	var obs = new can.Observe({
+		name : {first : "Justin"}
+	})
+	
+	var compiled = new can.EJS({text: text}).render({obs: obs});
+	
+	var div = document.createElement('div');
+
+	div.appendChild(can.view.frag(compiled));
+	
+	var div = div.getElementsByTagName('div')[0];
+
+	equals(div.innerHTML, "Justin")
+
+	obs.attr('name.first',"Brian")
+
+	equals(div.innerHTML, "Brian")
+	
+})
+
 
 })()

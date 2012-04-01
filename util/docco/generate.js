@@ -111,7 +111,7 @@ function format( exitCode ) {
 					console.log( "\t" + file );
 
 					// Remove multiline comments
-					code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*\n/gim, "");
+					code = code.replace( /\/\*(?:\n?.*?)+\*\//gim, "");
 
 					// Remove double semicolons from steal pluginify
 					code = code.replace( /;[\s]*;/gim, ";");
