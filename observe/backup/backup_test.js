@@ -99,6 +99,22 @@ test("backup / restore with associations", function(){
 	ok(!recipe.isDirty(true), "cleaned all of recipe and its associations");
 	
 	
-})
+});
+
+test("backup restore nested observables", function() {
+	var observe = new can.Observe({
+		nested : {
+			test : 'property'
+		}
+	});
+
+	equal(observe.attr('nested').attr('test'), 'property', 'Nested object got converted');
+	observe.backup();
+	observe.attr('nested').attr('test', 'changed property');
+	equal(observe.attr('nested').attr('test'), 'changed property', 'Nested property changed');
+	ok(observe.isDirty(true), 'Observe is dirty');
+	observe.restore(true);
+	equal(observe.attr('nested').attr('test'), 'property', 'Nested object got restored');
+});
 
 })()
