@@ -1486,30 +1486,30 @@ jQuery events, so for those cases, a workaround should be applied.
     // create control
     Todos = can.Control({
       // listen to the calendar widget's datepickerselect event
-    	'{calendar} datepickerselect': function(calendar, ev){
+      '{calendar} datepickerselect': function(calendar, ev){
         // do something with the selected date
         var selectedDate = this.options.calendar.datepicker('getDate');
         ...
-    	}
+      }
     });
 
     // Initialize the app
     Todo.findAll({}, function(todos) {
-    	new Todos('#todoapp', {
-    		todos: todos,
-    		calendar: $('#calendar').hide().datepicker({
-    			// Adding a workaround for date selection since the 
-    			// jQuery UI datepicker widget doesn't fire the 
-    			// "datepickerselect" event
-    			onSelect: function(dateText, datepicker) {
-    				$(this).trigger({
-    					type: 'datepickerselect',
-    					text: dateText,
-    					target: datepicker
-    				});
-    			}
-    		})
-    	});
+      new Todos('#todoapp', {
+        todos: todos,
+        calendar: $('#calendar').hide().datepicker({
+          // Adding a workaround for date selection since the 
+          // jQuery UI datepicker widget doesn't fire the 
+          // "datepickerselect" event
+          onSelect: function(dateText, datepicker) {
+            $(this).trigger({
+              type: 'datepickerselect',
+              text: dateText,
+              target: datepicker
+            });
+          }
+        })
+      });
     });
   });
 </script>
