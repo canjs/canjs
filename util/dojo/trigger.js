@@ -55,7 +55,7 @@ define("plugd/trigger",["dojo"], function(dojo){
 			}
 	;
 	
-	d._trigger = function(/* DomNode|String */node, /* String */event, extraArgs){
+	d._trigger = function(node, event, extraArgs){
 		// summary:
 		//		Helper for `dojo.trigger`, which handles the DOM cases. We should never
 		//		be here without a domNode reference and a string eventname.
@@ -133,29 +133,6 @@ define("plugd/trigger",["dojo"], function(dojo){
 		return (isfn(obj) || isfn(event) || isfn(obj[event])) ? 
 			d.hitch.apply(d, arguments)() : d._trigger.apply(d, arguments);
 	};
-	
-	// adapt for dojo.query:
-	/*=====
-	dojo.extend(dojo.NodeList, {
-		trigger: function(event, data){
-			// summary:
-			//		Trigger some Event originating from each of the nodes in this
-			//		`dojo.NodeList`. 
-			//
-			// event: String
-			//		Any strig identifier for the event.type to be triggered.
-			//
-			// data: Object
-			//		Just like `extraArgs` for `dojo.trigger`, additional data
-			//		to mix into the event object.
-			//
-			// example:
-			//	|	dojo.query("a").trigger("onclick");
-			
-			return this; // dojo.NodeList
-		}
-	});
-	=====*/
 	d.NodeList.prototype.trigger = d.NodeList._adaptAsForEach(d._trigger); 
 
 	// if the node.js module is available, extend trigger into that.
