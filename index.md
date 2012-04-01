@@ -1538,7 +1538,7 @@ If you are including Dojo from a CDN or you want more control over your file str
 
 {% highlight html %}
 <script>
-//Using dojoConfig to load can/dojo from the local directory js/libs
+//Using dojoConfig to load can/dojo from the local directory
 var dojoConfig = {
   packages: [{
     name: "can/dojo",
@@ -1565,7 +1565,7 @@ You can also configure package paths using the [require function](http://dojotoo
 <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/dojo/
 1.7.1/dojo/dojo.js'></script>
 <script>
-//Using require to load can/dojo from the local directory js/libs
+//Using require to load can/dojo from the local directory
 require({
   packages: [{
     name: "can/dojo",
