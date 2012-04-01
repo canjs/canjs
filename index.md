@@ -115,7 +115,7 @@ var hobbies = new can.Observe.List( ['programming',
                              'party rocking'] )
 {% endhighlight %}
 
-__can.Observe__ is used by both __can.Model__ and __can.route__. However, observe 
+__can.Observe__ is used by both [can.Model](#can_model) and [can.route](#can_route). However, observe 
 is useful on its own to maintain client-side state (such as pagination data). 
 
 ### attr `observe.attr( [name,] [value] )`
@@ -457,7 +457,7 @@ Todo.bind( 'created', function( ev, todo ){
 
 [can.Model.List](http://donejs.com/docs.html#!can.Model.List) is a 
 [can.Observe.List](#can_observe-can_observe_list) that automatically removes items when they are 
-destroyed.  __Model.Lists__ are return by [findAll](#can_model-findall).
+destroyed.  __Model.Lists__ are returned by [findAll](#can_model-findall).
 
 {% highlight javascript %}
 Todo.findAll( {}, function( todos ) {
@@ -973,10 +973,9 @@ The selector can also be templated.
 
 Control can also bind to objects other than `this.element` with
 templated event handlers.  This is _critical
-for avoiding memory leaks that are common among MVC applications.  
+for avoiding memory leaks that are common among MVC applications_.  
 
-If the value inside `{NAME}` is an object, the event will be bound to that object
-that object rather than the control.  For example, the following tooltip listens to 
+If the value inside `{NAME}` is an object, the event will be bound to that object rather than the control.  For example, the following tooltip listens to 
 clicks on the window:
 
 {% highlight javascript %}
@@ -1478,38 +1477,36 @@ jQuery events, so for those cases, a workaround should be applied:
 <script src="jquery.ui.datepicker.js"></script>
 <script src="can.jquery.js"></script>
 <script>
-  YUI().use('can', 'calendar', function(Y) {
-    // create models
-    Todo = can.Model({ ... });
-    Todo.List = can.Model.List({ ... });
+  // create models
+  Todo = can.Model({ ... });
+  Todo.List = can.Model.List({ ... });
 
-    // create control
-    Todos = can.Control({
-      // listen to the calendar widget's datepickerselect event
-      '{calendar} datepickerselect': function(calendar, ev){
-        // do something with the selected date
-        var selectedDate = this.options.calendar.datepicker('getDate');
-        ...
-      }
-    });
+  // create control
+  Todos = can.Control({
+    // listen to the calendar widget's datepickerselect event
+    '{calendar} datepickerselect': function(calendar, ev){
+      // do something with the selected date
+      var selectedDate = this.options.calendar.datepicker('getDate');
+      ...
+    }
+  });
 
-    // Initialize the app
-    Todo.findAll({}, function(todos) {
-      new Todos('#todoapp', {
-        todos: todos,
-        calendar: $('#calendar').hide().datepicker({
-          // Adding a workaround for date selection since the 
-          // jQuery UI datepicker widget doesn't fire the 
-          // "datepickerselect" event
-          onSelect: function(dateText, datepicker) {
-            $(this).trigger({
-              type: 'datepickerselect',
-              text: dateText,
-              target: datepicker
-            });
-          }
-        })
-      });
+  // Initialize the app
+  Todo.findAll({}, function(todos) {
+    new Todos('#todoapp', {
+      todos: todos,
+      calendar: $('#calendar').hide().datepicker({
+        // Adding a workaround for date selection since the 
+        // jQuery UI datepicker widget doesn't fire the 
+        // "datepickerselect" event
+        onSelect: function(dateText, datepicker) {
+          $(this).trigger({
+            type: 'datepickerselect',
+            text: dateText,
+            target: datepicker
+          });
+        }
+      })
     });
   });
 </script>
@@ -1520,7 +1517,7 @@ jQuery events, so for those cases, a workaround should be applied:
 CanJS supports Dojo 1.7+ using its new AMD loader in asynchronous or synchronous mode.
 CanJS depends on the following Dojo modules: __dojo__, __dojo/query__, __dojo/NodeList-dom__ and __dojo/NodeList-traverse__. It also uses the __plugd/trigger__ plugin for internal object and node event triggering.
 
-Include Dojo in your page and add the `'can/dojo'` module as a dependency in your require statement.
+Include a copy of Dojo and add the `'can/dojo'` module as a dependency in your require statement to get started.
 
 {% highlight html %}
 <script type='text/javascript' src='path/to/js/dojo.js'></script>
@@ -1538,7 +1535,7 @@ If you are including Dojo from a CDN or you want more control over your file str
 
 {% highlight html %}
 <script>
-//Using dojoConfig to load can/dojo from the local directory
+//Using dojoConfig to load can/dojo from a local directory
 var dojoConfig = {
   packages: [{
     name: "can/dojo",
@@ -1565,7 +1562,7 @@ You can also configure package paths using the [require function](http://dojotoo
 <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/dojo/
 1.7.1/dojo/dojo.js'></script>
 <script>
-//Using require to load can/dojo from the local directory
+//Using require to load can/dojo from a local directory
 require({
   packages: [{
     name: "can/dojo",
@@ -1581,14 +1578,14 @@ require({
 </script>
 {% endhighlight %}
 
-CanJS can bind to any Dijit, Dojox or custom widget events using [templated event binding](#can_control-templated_event_handlers_pt_2). Below is an example of binding to the onchnage event of the dijit.CalendarLite widget:
+CanJS can bind to any Dijit, Dojox or custom widget events using [templated event binding](#can_control-templated_event_handlers_pt_2). Below is an example of binding to the __onChange__ event of the dijit.CalendarLite widget:
 
 {% highlight javascript %}
 require(['can/dojo', 
   'dijit/CalendarLite'], 
 function(can, CalendarLite){
   //Define a Control
-  var Todos = can.Control({
+  Todo = can.Control({
     //events are lowercase and don't use on (onChange -> change)
     "{calendar} change" : function(calendar, newDate) {
       //onChange handler: do something with the newDate selected
@@ -1724,7 +1721,7 @@ YUI().use('can', 'calendar', function(Y) {
 CanJS supports Zepto 0.8+. Include a copy of Zepto along with CanJS to get started.
 
 Zepto 0.8 has an issue where __focus__ and __blur__ events are not fired for delegate event listeners.
-There is a fix included for Zepto > 0.8, but apply 
+There is a fix included for Zepto > 0.8, but you can apply 
 [this patch](https://github.com/madrobby/zepto/commit/ab2a3ef0d18beaf768903f0943efd019a29803f0)
 to __zepto.js__ when using Zepto 0.8.
 
@@ -2089,7 +2086,7 @@ listen and interact with the `video` element.
 
 ### Srchr
 
-Srchr searches several data sources for content and displays it to the user. It is built using the jQuery version of CanJS and is a greate example of how to create dumb, isolated widgets that are loosely coupled to the rest of the application.
+Srchr searches several data sources for content and displays it to the user. It is built using the jQuery version of CanJS and is a great example of how to create dumb, isolated widgets that are loosely coupled to the rest of the application.
 
 ![CanJS Srchr jQuery App](images/examples/srchr.png "CanJS Srchr jQuery App")
 
