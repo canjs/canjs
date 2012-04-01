@@ -25,7 +25,7 @@ steal('can/observe/setter', 'can/control')
 var Paginate = can.Model({
   defaults : {
     count: Infinity,
-    offset: 0,
+    offset: 10,
     limit: 100
   }
 },{
@@ -50,7 +50,7 @@ var Paginate = can.Model({
 })
 
 var Paginator = can.Control({
-  '.next click', function(elm,ev){
+  '.next click': function(elm,ev){
     this.options.paginate.attr('offset', this.options.paginate.offset + 
       this.options.paginate.limit);
   },
@@ -72,6 +72,8 @@ var Paginator = can.Control({
 
 new Paginator('#demo-html', {
   paginate: new Paginate()
+})
+
 })
 
 </script>
