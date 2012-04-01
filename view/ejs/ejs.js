@@ -714,11 +714,21 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 	 */
 	EJS.Helpers.prototype = {
 		/**
-		 * Renders a partial view.  This is deprecated in favor of <code>can.View()</code>.
+		 * @function list
+		 *
+		 * `can.EJS.Helpers.list` iterates over an observable list and
+		 * sets up live binding. `list` takes a list of observables and a callback 
+		 * function with the signature `callback( currentItem, index, itemList )`
+		 *
+		 * Typically, this will look like:
+		 *
+		 *     <% list(items, function(item){ %>
+		 *          <li><%= item.attr('name') %></li>
+		 *     <% }) %>
+		 *
+		 * Whenever the list of observables changes, such as when an item is added or removed, 
+		 * the EJS view will redraw the list in the DOM.
 		 */
-		view: function( url, data, helpers ) {
-			return $View(url, data || this._data, helpers || this._extras); 		
-		},
 		list : function(list, cb){
 			list.attr('length')
 			for(var i = 0, len = list.length; i < len; i++){

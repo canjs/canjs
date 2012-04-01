@@ -1,5 +1,5 @@
 @class can.EJS
-@parent can.view
+@parent index
 
 EJS provides __live__ ERB style client-side templates. Use EJS 
 with [can.view] and for live templating use EJS with [can.Observe].
@@ -166,7 +166,8 @@ __`<%# CODE %>`__  - Used for comments.  This does nothing.
 
 ## Live Binding
 
-EJS allows live binding by wrapping magic tag content within a function. When `attr()` is called to update an observable object, these functions are executed to return the new value.
+EJS allows live binding by wrapping magic tag content within a function. When `attr()` is called 
+to update an observable object, these functions are executed to return the new value.
 
     // Suppose an observable "foo":
 
@@ -185,20 +186,41 @@ EJS allows live binding by wrapping magic tag content within a function. When `a
     // As "foo" is updated using attr(), this function is called again to
     // render the view with the new value.
 
-There are drawbacks to this approach illustrated in the example below:
+This means that each function tag has a closure will reference variables in it's 
+parent functions. This can cause problems if you don't understand closures in 
+JavaScript. For example, the following binding does not work:
 
     <% for(var i =0; i < items.attr('length'); i++){ %>
       <li><%= items[i].attr('name') %></li>
     <% } %>
 
-This does not work b/c when `items[i].attr('name')` is called again, `i` will 
+This is because it gets turned into:
+
+
+    <% for(var i =0; i < items.attr('length'); i++){ %>
+      LIVEBIND( function() { return items[i].attr('name') )
+    <% } %>
+
+When the wrapping function is called again, `i` will 
 not be the index of the item, but instead be items.length.
 
-Using can.Model.List, provides a callback function with a reference to the item (it also binds on length for you).
+The [can.EJS.Helpers::view view]<code>(observeList,function(item,index,list){})</code> method in EJS should be used to iterate through observe lists:
 
-Adding a "completed" helper function to the todo model list to return the number of completed todos:
+    <% list(items, function(item){ %>
+      <li><%= item.attr('name') %></li>
+    <% }) %>
+    
+## Advanced Live Binding
 
-    can.Model.List('Todo.List', {
+Once you get the hang of how EJS works, it makes live-binding of complex
+calculations possible.  The following extends a [can.Model.List] to suppot a `completed` method that
+returns the total number of completed items in the list.  It can be used in a template like:
+
+    <h2><%= todos.complete() %> Complete Todos </h2>
+
+And implemented like:
+
+    Todo.List = can.Model.List({
       completed: function() {
         var count = 0;
 
@@ -213,15 +235,11 @@ Adding a "completed" helper function to the todo model list to return the number
       }
     });
 
-This line allows for EJS to recognize and bind to changes in the `length` attribute of the list.
+`completed` listens on changes to the list (via `this.attr('length')`) and 
+each item's `'completed'` property.  EJS keeps track of which observe/attribute pairs are called
+by `.complete()`.  If they change, EJS will automatically unbind.
 
-    this.attr('length');
-
-Passing the list and using the helper function in a view:
-
-    <div>
-      You have completed <%= this.completed() %> todos.
-    </div>
+Adding a "completed" helper function to the todo model list to return the number of completed todos:
 
 __Note:__ The object passed into the view becomes "this" within the view template.
 

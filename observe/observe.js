@@ -152,21 +152,21 @@ steal('can/construct', function() {
 		 *     o = new can.Observe({});
 		 *     
 		 *     // sets a user property
-		 *     o.attr('user',{name: 'hank'})
+		 *     o.attr( 'user', { name: 'hank' } );
 		 *     
 		 *     // read the user's name
-		 *     o.attr('user.name') //-> 'hank'
+		 *     o.attr( 'user.name' ) //-> 'hank'
 		 * 
 		 *     // merge multiple properties
 		 *     o.attr({
-		 *        grade : "A"
-		 *     })
+		 *        grade: 'A'
+		 *     });
 		 * 
 		 *     // get properties
 		 *     o.attr()           //-> {user: {name: 'hank'}, grade: "A"}
 		 * 
 		 *     // set multiple properties and remove absent attrs
-		 *     o.attr({foo: 'bar'}, true)
+		 *     o.attr( { foo: 'bar' }, true );
 		 * 
 		 *     o.attr()           //-> {foo: 'bar'}
 		 * 
@@ -175,12 +175,12 @@ steal('can/construct', function() {
 		 * `attr( PROPERTY, VALUE )` sets the observable's PROPERTY to VALUE.  For example:
 		 * 
 		 *     o = new can.Observe({});
-		 *     o.attr('user',"Justin");
+		 *     o.attr( 'user', 'Justin' );
 		 * 
 		 * This call to attr fires two events on __o__ immediately after the value is set, the first is a "change" event that can be 
 		 * listened to like:
 		 * 
-		 *     o.bind('change', function(ev, attr, how, newVal, oldVal){})
+		 *     o.bind( 'change', function( ev, attr, how, newVal, oldVal ) {} );
 		 * 
 		 * where:
 		 * 
@@ -194,7 +194,7 @@ steal('can/construct', function() {
 		 * observe's properties. The second event shares the name of the property being changed
 		 * and can be bound to like:
 		 * 
-		 *     o.bind('name', function(ev, newVal, oldVal){});
+		 *     o.bind( 'name', function( ev, newVal, oldVal ) {} );
 		 * 
 		 * where:
 		 * 
@@ -204,23 +204,23 @@ steal('can/construct', function() {
 		 * 
 		 * `attr( PROPERTY, VALUE )` allows setting of deep properties like:
 		 * 
-		 *      o = new can.Observe({person: {name: {first: "Just"}}});
-		 *      o.attr('person.name.first',"Justin");
+		 *      o = new can.Observe({ person: { name: { first: 'Just' } } });
+		 *      o.attr( 'person.name.first', 'Justin' );
 		 * 
 		 *  All property names should be seperated with a __"."__.
 		 * 
 		 * `attr( PROPERTIES )` sets multiple properties at once and removes
 		 * properties not in `PROPERTIES`.  For example:
 		 * 
-		 *     o = new can.Observe({first: "Just", middle: "B"})
+		 *     o = new can.Observe({ first: 'Just', middle: 'B' });
 		 *     o.attr({
-		 *       first : "Justin",
-		 *       last : "Meyer"
-		 *     })
+		 *       first: 'Justin',
+		 *       last: 'Meyer'
+		 *     });
 		 * 
 		 * This results in an object that looks like:
 		 * 
-		 *     { first: "Justin", last: "Meyer" }
+		 *     { first: 'Justin', last: 'Meyer' }
 		 * 
 		 * Notice that the `middle` property is removed.  This results in
 		 * 3 change events (and the corresponding property-named events) that
@@ -242,15 +242,15 @@ steal('can/construct', function() {
 		 * `attr( PROPERTIES , true )` merges properties into existing 
 		 * properties. For example:
 		 * 
-		 *     o = new can.Observe({first: "Just", middle: "B"})
+		 *     o = new can.Observe({ first: 'Just', middle: 'B' });
 		 *     o.attr({
-		 *       first : "Justin",
-		 *       last : "Meyer"
+		 *       first: 'Justin',
+		 *       last: 'Meyer'
 		 *     })
 		 * 
 		 * This results in an object that looks like:
 		 * 
-		 *     { first: "Justin", middle: "B", last: "Meyer" }
+		 *     { first: 'Justin', middle: 'B', last: 'Meyer' }
 		 * 
 		 * and results in 2 change events (and the corresponding 
 		 * property-named events):
@@ -271,8 +271,8 @@ steal('can/construct', function() {
 		 * 
 		 * `attr( PROPERTY )` returns a property value.  For example:
 		 * 
-		 *     o = new can.Observe({ first: "Justin" })
-		 *     o.attr('first') //-> "Justin"
+		 *     o = new can.Observe({ first: 'Justin' });
+		 *     o.attr( 'first' ) //-> "Justin"
 		 * 
 		 * You can also read properties that don't conflict with Observe's inherited
 		 * methods direclty like:
@@ -281,47 +281,47 @@ steal('can/construct', function() {
 		 * 
 		 * `attr( PROPERTY )` can read nested properties like:
 		 * 
-		 *      o = new can.Observe({person: {name: {first: "Justin"}}});
-		 *      o.attr('person.name.first') //-> "Justin"
+		 *      o = new can.Observe({ person: { name: { first: 'Justin' } } });
+		 *      o.attr( 'person.name.first' ) //-> "Justin"
 		 * 
 		 * If `attr( PROPERTY )` returns an object or an array, it returns
 		 * the Observe wrapped object or array. For example:
 		 * 
-		 *      o = new can.Observe({person: {name: {first: "Justin"}}});
-		 *      o.attr('person').attr('name.first') //-> "Justin"
+		 *      o = new can.Observe({ person: { name: { first: 'Justin' } } });
+		 *      o.attr( 'person' ).attr( 'name.first' ) //-> "Justin"
 		 * 
 		 * 
 		 * `attr()` returns all properties in the observe, for example:
 		 * 
-		 *     o = new can.Observe({ first: "Justin" })
+		 *     o = new can.Observe({ first: 'Justin' });
 		 *     o.attr() //-> { first: "Justin" }
 		 * 
 		 * If the observe has nested objects, `attr()` returns the 
 		 * data as plain JS objects, not as observes.  Example:
 		 * 
-		 *      o = new can.Observe({person: {name: {first: "Justin"}}});
-		 *      o.attr() //-> {person: {name: {first: "Justin"}}}
+		 *      o = new can.Observe({ person: { name: { first: 'Justin' } } });
+		 *      o.attr() //-> { person: { name: { first: 'Justin' } } }
 		 * 
 		 * @param {String} attr the attribute to read or write.
 		 * 
-		 *     o.attr('name') //-> reads the name
-		 *     o.attr('name', 'Justin') //-> writes the name
+		 *     o.attr( 'name' ) //-> reads the name
+		 *     o.attr( 'name', 'Justin' ) //-> writes the name
 		 *     
 		 * You can read or write deep property names.  For example:
 		 * 
-		 *     o.attr('person', {name: 'Justin'})
-		 *     o.attr('person.name') //-> 'Justin'
+		 *     o.attr( 'person', { name: 'Justin' } );
+		 *     o.attr( 'person.name' ) //-> 'Justin'
 		 * 
 		 * @param {Object} [val] if provided, sets the value.
 		 * @return {Object} the observable or the attribute property.
 		 * 
 		 * If you are reading, the property value is returned:
 		 * 
-		 *     o.attr('name') //-> Justin
+		 *     o.attr( 'name' ) //-> Justin
 		 *     
 		 * If you are writing, the observe is returned for chaining:
 		 * 
-		 *     o.attr('name',"Brian").attr('name') //-> Justin
+		 *     o.attr( 'name', 'Brian' ).attr( 'name' ) //-> Brian
 		 */
 		attr: function( attr, val ) {
 			// This is super obfuscated for space -- basically, we're checking
@@ -342,25 +342,25 @@ steal('can/construct', function() {
 		 * Iterates through each attribute, calling handler 
 		 * with each attribute name and value.
 		 * 
-		 *     new Observe({foo: 'bar'})
-		 *       .each(function(name, value){
-		 *         equals(name, 'foo')
-		 *         equals(value,'bar')
-		 *       })
+		 *     new Observe({ foo: 'bar' })
+		 *       .each( function( name, value ) {
+		 *         equals( name, 'foo' );
+		 *         equals( value,'bar' );
+		 *       });
 		 * 
-		 * @param {function} handler(attrName,value) A function that will get 
+		 * @param {function} handler( attrName, value ) A function that will get 
 		 * called back with the name and value of each attribute on the observe.
 		 * 
-		 * Returning `false` breaks the looping.  The following will never
+		 * Returning `false` breaks the looping. The following will never
 		 * log 3:
 		 * 
-		 *     new Observe({a : 1, b : 2, c: 3})
-		 *       .each(function(name, value){
-		 *         console.log(value)
-		 *         if(name == 2){
+		 *     new Observe({ a: 1, b: 2, c: 3 })
+		 *       .each( function( name, value ) {
+		 *         console.log(value);
+		 *         if ( name == 2 ) {
 		 *           return false;
 		 *         }
-		 *       })
+		 *       });
 		 * 
 		 * @return {can.Observe} the original observable.
 		 */
@@ -370,7 +370,7 @@ steal('can/construct', function() {
 		/**
 		 * Removes a property by name from an observe.
 		 * 
-		 *     o =  new can.Observe({foo: 'bar'});
+		 *     o =  new can.Observe({ foo: 'bar' });
 		 *     o.removeAttr('foo'); //-> 'bar'
 		 * 
 		 * This creates a `'remove'` change event. Learn more about events
@@ -489,14 +489,14 @@ steal('can/construct', function() {
 		 * 
 		 * Example:
 		 * 
-		 *     o = new can.Observe({name : "Payal"});
-		 *     o.bind('change', function(ev, attr, how, newVal, oldVal){
+		 *     o = new can.Observe({ name: 'Payal' });
+		 *     o.bind( 'change', function( ev, attr, how, newVal, oldVal ) {
 		 *       
-		 *     }).bind('name', function(ev, newVal, oldVal){
+		 *     }).bind( 'name', function( ev, newVal, oldVal ) {
 		 *     	
-		 *     })
+		 *     });
 		 *     
-		 *     o.attr('name', 'Justin') 
+		 *     o.attr( 'name', 'Justin' ); 
 		 * 
 		 * ## Change Events
 		 * 
@@ -516,16 +516,16 @@ steal('can/construct', function() {
 		 * 
 		 * Example:
 		 * 
-		 *     o = new can.Observe({name : "Payal"});
-		 *     o.bind('change', function(ev, attr, how, newVal, oldVal){
+		 *     o = new can.Observe({ name: 'Payal' });
+		 *     o.bind( 'change', function( ev, attr, how, newVal, oldVal ) {
 		 *       // ev    -> {type: 'change'}
 		 *       // attr  -> "name"
 		 *       // how   -> "add"
 		 *       // newVal-> "Justin"
 		 *       // oldVal-> undefined 
-		 *     })
+		 *     });
 		 *     
-		 *     o.attr('name', 'Justin')
+		 *     o.attr( 'name', 'Justin' );
 		 * 
 		 * ## ATTR_NAME events
 		 * 
@@ -533,14 +533,14 @@ steal('can/construct', function() {
 		 * is triggered on the observable with the new value and old value as 
 		 * parameters. For example:
 		 * 
-		 *     o = new can.Observe({name : "Payal"});
-		 *     o.bind('name', function(ev, newVal, oldVal){
+		 *     o = new can.Observe({ name: 'Payal' });
+		 *     o.bind( 'name', function( ev, newVal, oldVal ) {
 		 *       // ev    -> {type : "name"}
 		 *       // newVal-> "Justin"
 		 *       // oldVal-> undefined 
-		 *     })
+		 *     });
 		 *     
-		 *     o.attr('name', 'Justin')
+		 *     o.attr( 'name', 'Justin' );
 		 * 
 		 * 
 		 * @param {String} eventType the event name.  Currently,
@@ -564,14 +564,14 @@ steal('can/construct', function() {
 		 * use namespaces or unbind all event handlers for a given event:
 		 * 
 		 *     // unbind a specific event handler
-		 *     o.unbind('change', handler)
+		 *     o.unbind( 'change', handler );
 		 *     
 		 *     // unbind all change event handlers bound with the
 		 *     // foo namespace
-		 *     o.unbind('change.foo')
+		 *     o.unbind( 'change.foo' );
 		 *     
 		 *     // unbind all change event handlers
-		 *     o.unbind('change')
+		 *     o.unbind( 'change' );
 		 * 
 		 * @param {String} eventType - the type of event with
 		 * any optional namespaces. 
@@ -778,7 +778,7 @@ steal('can/construct', function() {
 	 *     of items. For remove event, undefined.
 	 *   - `oldVal` - the old values at `attr`.
 	 * 
-	 * @constructor new
+	 * @constructor Creates a new observable list from an array
 	 * 
 	 * @param {Array} [items...] the array of items to create the list with
 	 */

@@ -34,7 +34,7 @@ can.Control.setup = function() {
 		 * with your own.
 		 *
 		 *		var Filler = can.Control({
-		 *			pluginName: 'fillWith'
+		 *		  pluginName: 'fillWith'
 		 *		},{});
 		 * 
 		 *		$("#foo").fillWith();
@@ -72,28 +72,28 @@ can.prototype.extend({
 	 *
 	 * The `controls` method allows you to get the control instance(s) for any element.  
 	 *
-	 * 		//- Inits the widgets
-	 * 		$('.widgets:eq(0)').my_box();
-	 * 		$('.widgets:eq(1)').my_clock();
+	 *		//- Inits the widgets
+	 *		$('.widgets:eq(0)').my_box();
+	 *		$('.widgets:eq(1)').my_clock();
 	 *
-	 * 		<div class="widgets my_box" />
-	 * 		<div class="widgets my_clock" />
+	 *		<div class="widgets my_box" />
+	 *		<div class="widgets my_clock" />
 	 *
-	 * 		$('.widgets').controls() //-> [ MyBox, MyClock ]
+	 *		$('.widgets').controls() //-> [ MyBox, MyClock ]
 	 *
 	 * Additionally, you can invoke it passing the name of a control
 	 * to fetch a specific instance(s).
 	 *
-	 * 		//- Inits the widgets
-	 * 		$('.widgets:eq(0)').my_box();
-	 * 		$('.widgets:eq(1)').my_clock();
+	 *		//- Inits the widgets
+	 *		$('.widgets:eq(0)').my_box();
+	 *		$('.widgets:eq(1)').my_clock();
 	 *
-	 * 		<div class="widgets my_box" />
-	 * 		<div class="widgets my_clock" />
+	 *		<div class="widgets my_box" />
+	 *		<div class="widgets my_clock" />
 	 *
-	 * 		$('.widgets').controls('MyBox') //-> [ MyBox ]
+	 *		$('.widgets').controls('MyBox') //-> [ MyBox ]
 	 *
-	 * @return {Object} control (optional) if exists, the control instance with this class type will be returned.
+	 * @param {Object} control (optional) if exists the control instance(s) with that constructor function or type will be returned.
 	 * @return {Array} an array of control instance(s).
 	 */
 	controls: function() {
@@ -124,14 +124,14 @@ can.prototype.extend({
 	 * The `control` does the same as [jQuery.fn.controls controls] execept it only 
 	 * returns the first instance found.
 	 *
-	 * 		//- Init MyBox widget
-	 * 		$('.widgets').my_box();
+	 *		//- Init MyBox widget
+	 *		$('.widgets').my_box();
 	 *
-	 * 		<div class="widgets my_box" />
+	 *		<div class="widgets my_box" />
 	 *
-	 * 		$('.widgets').controls() //-> MyBox
+	 *		$('.widgets').controls() //-> MyBox
 	 *
-	 * @param {Object} control (optional) if exists, the first control instance with this class type will be returned.
+	 * @param {Object} control (optional) if exists the first control instance with that constructor function or type will be returned.
 	 * @return {can.Control} the first control.
 	 */
 	control: function( control ) {
@@ -183,18 +183,18 @@ can.Control.plugin = function(pluginname){
  * is `created`, it resets the form with a new instance.
  * 
  *		var Creator = can.Control({
- *			"{recipe} created" : function(){
- *				this.update({recipe : new Recipe()});
- *				this.element[0].reset();
- *				this.element.find("[type=submit]").val("Create Recipe")
- *			},
- *			"submit" : function(el, ev){
- *				ev.preventDefault();
- *				var recipe = this.options.recipe;
- *				recipe.attrs( this.element.formParams() );
- *				this.element.find("[type=submit]").val("Saving...")
- *				recipe.save();
- *			}
+ *		  "{recipe} created" : function(){
+ *		    this.update({recipe : new Recipe()});
+ *		    this.element[0].reset();
+ *		    this.element.find("[type=submit]").val("Create Recipe")
+ *		  },
+ *		  "submit" : function(el, ev){
+ *		    ev.preventDefault();
+ *		    var recipe = this.options.recipe;
+ *			recipe.attrs( this.element.formParams() );
+ *			this.element.find("[type=submit]").val("Saving...")
+ *			recipe.save();
+ *		  }
  *		});
  *
  *		$('#createRecipes').creator({ recipe : new Recipe() })
@@ -206,20 +206,20 @@ can.Control.plugin = function(pluginname){
  * For example, you can change the content of the control element every time the options change:
  * 
  *		var Plugin = can.Control({
- *				pluginName: 'myPlugin'
- *			}, {
- *			init : function(el, options) {
- *				this.updateCount = 0;
- *				this.update({
- *					text : 'Initialized'
- *				});
+ *		    pluginName: 'myPlugin'
+ *		  }, {
+ *		    init : function(el, options) {
+ *			  this.updateCount = 0;
+ *			  this.update({
+ *			    text : 'Initialized'
+ *			  });
  *			},
  *			update : function(options) {
- *				// Call the can.Control update first.
- *				// Use this._super when using can/construct/super
- *				can.Control.prototype.update.call(this, options);
- *				this.element.html(this.options.text + ' ' +
- *					(++this.updateCount) + ' times');
+ *			  // Call the can.Control update first.
+ *			  // Use this._super when using can/construct/super
+ *			  can.Control.prototype.update.call(this, options);
+ *			  this.element.html(this.options.text + ' ' +
+ *			    (++this.updateCount) + ' times');
  *			}
  *		});
  *
@@ -234,7 +234,7 @@ can.Control.plugin = function(pluginname){
  * @demo can/control/plugin/demo-update.html
  * 
  * @param {Object} options A list of options to merge with 
- * [can.Control.prototype.options this.options].  Often, this method
+ * [can.Control.prototype.options this.options].  Often this method
  * is called by the [can.Control.plugin jQuery helper function].
  */
 can.Control.prototype.update = function( options ) {

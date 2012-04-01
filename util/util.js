@@ -30,16 +30,21 @@ of the string, then they will be persisted.
 /**
 @function can.makeArray
 @parent can.util
-Converts array like data into arrays.
+
+`can.makeArray(object)` convert an array-like object into a array.
 
     can.makeArray({0 : "zero", 1: "one", length: 2})
        // -> ["zero","one"]
+
+@param {Object} object to transform into array
+@return {Array} converted array
  */
 //
 /**
 @function can.isArray
 @parent can.util
-Returns if the object is an Array
+
+`can.array(object)` returns if the object is an Array.
 
     can.isArray([]) //-> true
     can.isArray(false)
@@ -51,10 +56,12 @@ Returns if the object is an Array
 /**
 @function can.each
 @parent can.util
-Iterates through an array or object like
+
+`can.each(object, function)` iterates through an array or object like
 like [http://api.jquery.com/jQuery.each/ jQuery.each].
 
-    can.each([{prop: "val1"}, {prop: "val2"}], function( index, value ) {
+    can.each([{prop: "val1"}, {prop: "val2"}], 
+		function( index, value ) {
       // function called with
       //  index=0 value={prop: "val1"}
       //  index=1 value={prop: "val2"}
@@ -67,16 +74,24 @@ like [http://api.jquery.com/jQuery.each/ jQuery.each].
 /**
 @function can.extend
 @parent can.util
-Extends an object like
-like [http://api.jquery.com/jQuery.extend/ jQuery.extend].
+
+`can.extend(target, objectN)` merges the contents of two or more objects together into the first object
+similarly to [http://api.jquery.com/jQuery.extend/ jQuery.extend].
 
     var first = {},
         second = {a: "b"},
         thrid = {c: "d"};
+
     can.extend(first, second, third); //-> first
+
     first  //-> {a: "b",c : "d"}
     second //-> {a: "b"}
     thrid  //-> {c: "d"}
+
+@param {Object} target The target object to extend
+@param {Object} [object1] An object containing properties to merge
+@param {Object} [objectN] Additional objects containing properties to merge
+@return {Object} The target object
 */
 //
 /**
@@ -86,65 +101,62 @@ Parameterizes an object into a query string
 like [http://api.jquery.com/jQuery.param/ jQuery.param].
 
     can.param({a: "b", c: "d"}) //-> "a=b&c=d"
+
+@param {Object} obj An array or object to serialize
+@return {String} The serialized object
 */
 //
 /**
 @function can.isEmptyObject
 @parent can.util
-Returns if an object is empty like
+`can.isEmptyObject(object)` returns if an object has no properties similar to
 [http://api.jquery.com/jQuery.isEmptyObject/ jQuery.isEmptyObject].
 
     can.isEmptyObject({})      //-> true
     can.isEmptyObject({a:"b"}) //-> false
 
+@param {Object} object to evaluate if empty or not
+@param {Boolean} Whether the object is empty
 */
 //
 /**
 @function can.proxy
 @parent can.util
-Returns if an object is empty like
-[http://api.jquery.com/jQuery.proxy/ jQuery.proxy].
+`can.proxy(function)` accepts a function and returns a 
+new one that will always the context from which it was 
+called.  This works similar to [http://api.jquery.com/jQuery.proxy/ jQuery.proxy].
 
      var func = can.proxy(function(one){
        return this.a + one
      }, {a: "b"}); 
      func("two") //-> "btwo" 
 
-*/
-//
-/**
-@function can.proxy
-@parent can.util
-Returns if an object is empty like
-[http://api.jquery.com/jQuery.proxy/ jQuery.proxy].
-
-     var func = can.proxy(function(one){
-       return this.a + one
-     }, {a: "b"}); 
-     func("two") //-> "btwo" 
-
+@param {Function} function to return in the same context
+@param {Object} context The context for the new function
+@return {Function} The new function
 */
 //
 /**
 @function can.isFunction
 @parent can.util
-Returns if an object is a function like
+`can.isFunction(object)` returns if an object is a function similar to
 [http://api.jquery.com/jQuery.isFunction/ jQuery.isFunction].
 
      can.isFunction({})           //-> false
      can.isFunction(function(){}) //-> true
 
+@param {Object} object to evaluate if is function
+@return {Boolean} Whether the object is a function
 */
 //
 /**
 @function can.bind
-@parent can.bind
+@parent can.util
 
-`can.bind(obj, eventName, handler)` binds a callback handler
+`can.bind(eventName, handler)` binds a callback handler
 on an object for a given event.  It works on:
 
   - HTML elements and the window
-  - Nodelists of the underlying library
   - Objects
   - Objects with bind / unbind methods
   
@@ -158,40 +170,123 @@ CanJS; however, if you are making libraries or extensions, use
 __Binding to an object__
 
     var obj = {};
-    can.bind(obj,"something", function(ev, arg1, arg){
-    	arg1 // 1
-    	arg2 // 2
+    can.bind.call(obj,"something", function(ev, arg1, arg){
+      arg1 // 1
+      arg2 // 2
     })
     can.trigger(obj,"something",[1,2])
 
 __Binding to an HTMLElement__
 
     var el = document.getElementById('foo')
-    can.bind(el, "click", function(ev){
-    	this // el
+    can.bind.call(el, "click", function(ev){
+      this // el
     })
 
-__Binding to a NodeList__
-
-    can.bind( $("#foo") , "click", function(){
-    	
-    })
-
+@param {String} eventName The type of event to bind to
+@param {Function} handler The handler for the event
+@return {Object} this
 */
 //
 /**
- * @function can.unbind
- * @parent can.util
- */
+@function can.unbind
+@parent can.util
+
+`can.unbind(eventName, handler)` unbinds a callback handler
+from an object for a given event.  It works on:
+
+  - HTML elements and the window
+  - Objects
+  - Objects with bind / unbind methods
+  
+The idea is that unbind can be used on anything that produces events
+and it will figure out the appropriate way to 
+unbind to it.  Typically, `can.unbind` is only used internally to
+CanJS; however, if you are making libraries or extensions, use
+`can.bind` to listen to events independent of the underlying library.
+
+
+__Binding/unbinding to an object__
+
+    var obj = {},
+      handler = function(ev, arg1, arg){
+        arg1 // 1
+        arg2 // 2
+      };
+    can.bind.call(obj,"something", handler)
+    can.trigger(obj,"something",[1,2])
+    can.unbind.call(obj,"something", handler)
+
+__Binding/unbinding to an HTMLElement__
+
+    var el = document.getElementById('foo'),
+      handler = function(ev){
+        this // el
+      };
+    can.bind.call(el, "click", handler)
+    can.unbind.call(el, "click", handler)
+
+@param {String} eventName The type of event to unbind from
+@param {Function} handler The handler for the event
+@return {Object} this
+*/
 //
 /**
 @function can.delegate
 @parent can.util
+
+`can.delegate(selector, eventName, handler)` binds a delegate handler
+on an object for a given event.  It works on:
+
+  - HTML elements and the window
+  
+The idea is that delegate can be used on anything that produces delegate events
+and it will figure out the appropriate way to 
+bind to it.  Typically, `can.delegate` is only used internally to
+CanJS; however, if you are making libraries or extensions, use
+`can.delegate` to listen to events independent of the underlying library.
+
+__Delegate binding to an HTMLElement__
+
+    var el = document.getElementById('foo')
+    can.delegate.call(el, ".selector", "click", function(ev){
+      this // el
+    })
+
+@param {String} selector The selector to delegate
+@param {String} eventName The type of event to bind to
+@param {Function} handler The handler for the event
+@return {Object} this
 */
 //
 /**
 @function can.undelegate
 @parent can.util
+
+`can.undelegate(selector, eventName, handler)` unbinds a delegate handler
+on an object for a given event.  It works on:
+
+  - HTML elements and the window
+  
+The idea is that undelegate can be used on anything that produces delegate events
+and it will figure out the appropriate way to 
+bind to it.  Typically, `can.undelegate` is only used internally to
+CanJS; however, if you are making libraries or extensions, use
+`can.undelegate` to listen to events independent of the underlying library.
+
+__Delegate/undelegate binding to an HTMLElement__
+
+    var el = document.getElementById('foo'),
+      handler = function(ev){
+        this // el
+      };
+    can.delegate.call(el, ".selector", "click", handler)
+    can.undelegate.call(el, ".selector", "click", handler)
+
+@param {String} selector The selector to undelegate
+@param {String} eventName The type of event to unbind from
+@param {Function} handler The handler for the event
+@return {Object} this
 */
 //
 /**
@@ -213,6 +308,8 @@ similar to [http://api.jquery.com/jQuery.ajax/ jQuery.ajax].
 		}
 	});
 
+@param {Object} options Ajax request configuration options
+@return {Deferred}
 */
 //
 /**
@@ -231,6 +328,8 @@ The following lists how the NodeList is created by each library:
  - __Mootools__ `$$( HTMLElement )`
  - __YUI__ `Y.all(selector)` or `Y.NodeList`
 
+@param {String|Element|NodeList} selector The selector to pass to the underlying library
+@return {NodeList}
 */
 //
 /**
@@ -239,6 +338,9 @@ The following lists how the NodeList is created by each library:
 
 `can.buildFragment([html], nodes)` returns a document fragment for the HTML passed.
 
+@param {Array} frags An array of HTML strings
+@param {Array} nodes An array of elements used for accessing the ownerDocument
+@return {DocumentFragment}
 */
 //
 /**
@@ -255,11 +357,20 @@ The following lists how the NodeList is created by each library:
 	// After
 	<div id="demo">Demos are fun!</div>
 
+@param {Object} wrappedNodeList
+@param {String} html string to append
 */
 //
 /**
 @function can.remove
 @parent can.util
+
+`can.remove( wrappedNodeList )` removes the set of matched element(s) from the DOM.
+
+	<div id="wrap"/>
+	can.remove(can.$('#wrap')) //-> removes 'wrap'
+	
+@param {Object} wrappedNodeList of elements to remove from dom.
 */
 //
 /**
@@ -286,6 +397,10 @@ The following lists how the NodeList is created by each library:
 Due to the way browsers security restrictions with plugins and external code, 
 the _data_ method cannot be used on `object` (unless it's a Flash plugin), `applet` or `embed` elements.
 
+@param {NodeList} wrapped The wrapped node list to associate data with
+@param {String} key The data property to access
+@param {Object} [value] The data value to store
+@return {Object} The value for the given key
 */
 //
 /**
@@ -317,6 +432,7 @@ set also.
 	
 This works similarly to [http://api.jquery.com/addClass/ jQuery.fn.addClass].
 
+@param {String} class name to add to the wrapped node list
 */
 //
 /**

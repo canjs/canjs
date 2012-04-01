@@ -180,23 +180,37 @@ steal("can/util")
 		preload: function( ) {},
 		/**
 		 * @function render
-		 * `can.view.render(view, data, [helpers], callback)` Returns the rendered markup produced by the corresponding template
-		 * engine. If you pass a deferred object in as data, render returns
+		 * `can.view.render(view, data, [helpers], callback)` returns the rendered markup produced by the corresponding template
+		 * engine as String. If you pass a deferred object in as data, render returns
 		 * a deferred resolving to the rendered markup.
+		 * 
+		 * `can.view.render` is commonly used for sub-templates.
 		 * 
 		 * ## Example
 		 * 
-		 *     can.view.render("//views/myview.ejs", {
-		 *       count: 0
-		 *     },
-		 *     function(result) {
-		 *       //do something with result
-		 *     }
+		 * _welcome.ejs_ looks like:
+		 * 
+		 *     <h1>Hello <%= hello %></h1>
+		 * 
+		 * Render it to a string like:
+		 * 
+		 *     can.view.render("welcome.ejs",{hello: "world"})
+		 *       //-> <h1>Hello world</h1>
+		 * 
+		 * ## Use as a Subtemplate
+		 * 
+		 * If you have a template like:
+		 * 
+		 *     <ul>
+		 *       <% list(items, function(item){ %>
+		 *         <%== can.view.render("item.ejs",item) %>
+		 *       <% }) %>
+		 *     </ul>
 		 * 
 		 * @param {String|Object} view the path of the view template or a view object
 		 * @param {Object} data the object passed to a template
 		 * @param {Object} [helpers] additional helper methods to be passed to the view template
-		 * @param {Function} callback function executed after template has been processed
+		 * @param {Function} [callback] function executed after template has been processed
 		 * @param {String|Object} returns a string of processed text or a deferred that resolves to the processed text
 		 * 
 		 */
