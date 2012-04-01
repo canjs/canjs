@@ -44,12 +44,34 @@
 		    border: 1px solid #DEDEDE;
 		    font-size: 110%;
 	    }
+
+        p.status {
+	        background-color: #F9F7DF;
+	        border: solid 1px white;
+	        padding: 13px;
+        }
+
+	    .status span.comment {
+		    color: #007000;
+	    }
     </style>
 </head>
 <body>
 
-<h2>"eventHandler"(data)</h2>
-<p class="status"></p>
+<h2>"eventHandler" : function(data)</h2>
+<p class="status">
+	<span style="color: grey;" class="action"></span> :
+	<span>
+		<span style="color: purple;">function</span>
+		<span style="color: blue;">(data)</span> {
+	</span><br />
+	<span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;// data is</span><br />
+	<span class="comment">
+		&nbsp;&nbsp;&nbsp;&nbsp;//
+		<span class="data comment"></span>
+	</span>
+	<br />}
+</p>
 
 <h2>Hash</h2>
 <div><input id="hash" type="text" /></div>
@@ -60,8 +82,8 @@
 	<li><a href="#!people">#!people</a></li>
 	<li><a href="#!users&limit=10">#!users&limit=10</a></li>
 	<li><a href="#!people&order=asc&limit=10">#!people&order=asc&limit=10</a></li>
-	<li><a href="#!todo/">#!todo/</a></li>
-	<li><a href="#!todo/10">#!todo/10</a></li>
+	<li><a href="#!todo/1">#!todo/1</a></li>
+	<li><a href="#!todo/today">#!todo/today</a></li>
 </ul>
 
 <h2>can.route</h2>
@@ -75,15 +97,11 @@
 				$("#hash").val(window.location.hash);
 			},
 			setStatus = function(method, data) {
-				$('.status').html('<span>"' + method + '"</span>(' + can.toJSON(data) + ')');
+				$('.status .action').html('&quot;' + method + '&quot;');
+				$('.status .data').html(can.toJSON(data));
 			}
 
 		var Router = can.Control({
-			init : function(el, options) {
-				can.route(':type', { type : 'index' });
-				can.route('todo/:id', { id : 1 });
-			},
-
 			":type route" : function(data) {
 				setStatus(":type route", data);
 			},
