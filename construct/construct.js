@@ -293,7 +293,9 @@ steal("can/util/string",function( $ ) {
 				Constructor.init.apply(Constructor, args || t );
 			}
 
-			/* @Prototype*/
+			/**
+			 * @prototype
+			 */
 			return Constructor;
 			/** 
 			 * @function setup

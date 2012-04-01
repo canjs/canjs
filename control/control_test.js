@@ -32,7 +32,6 @@ if(!(isOpera && isDojo)){
 			}
 		}
 		
-		
 		can.append( can.$("#qunit-test-area"), "<div id='things'>div<span>span</span></div>")
 		var things = new Things("#things",{foo: foo});
 		
@@ -59,6 +58,7 @@ test("data", function(){
 	var thing1 = new Things("#things",{});
 	var thing2 = new Things("#things",{});
 	equals(can.data(can.$('#things'), "controls").length, 2, "there are 2 items in the data array")
+	can.remove( can.$('#things') );
 })
 
 if( window.jQuery ){

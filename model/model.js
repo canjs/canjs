@@ -1075,9 +1075,9 @@ steal('can/observe',function(){
    *     var todos = new Todo.List( [todo1, todo2] );
    *
    * ### Model Lists in `can.Model`
-   * In addition to creating new lists, it is possible to call 
-   * [can.Model.static.findAll can.Model.findAll] or [can.Model.models] to return
-   * a `can.Model.List` object.
+   * [can.Model.static.findAll can.Model.findAll] or [can.Models.models] will
+   * almost always be used to return a `can.Model.List` object, even though it
+   * is possible to create new lists like below:
    *
    *     var todos = Todo.models([
    *         new Todo( { name: "Do the dishes" } ),
@@ -1086,6 +1086,7 @@ steal('can/observe',function(){
    *     
    *     todos.constructor // -> can.Model.List
    *
+   *     // the most correct way to get a can.Model.List
    *     Todo.findAll({}, function(todos) {
    *         todos.constructor // -> can.Model.List
    *     })
@@ -1094,21 +1095,25 @@ steal('can/observe',function(){
    *
    * Creating custom `can.Model.Lists` allows you to extend lists with helper
    * functions for a list of a specific type. So, if there was a need to get a
-   * random todo item, something could be written like
+   * random todo item, something could be written like:
    *
    *     can.Model.List('Todo.List', {
-   *         random: function() {
-   *             // return a random todo from the list.
+   *         completed: function() {
+   *             var completed = 0;
+   *             this.each(function(i, todo) {
+   *                 completed += todo.attr('complete') ? 1 : 0
+   *             })
+   *             return completed;
+   *         },
+   *         remaining: function() {
+   *             return this.attr('length') - this.completed();
    *         }
    *     })
    *
-   *     var list = new Todo.List([
-   *         new Todo( { name: "Do the dishes" } ),
-   *         new Todo( { name: "Wash floors" } )
-   *     ]);
-   *
-   *     list.random() // -> random todo
-   *
+   *     Todo.findAll({}, function(todos) {
+   *         todos.completed() // -> 0
+   *         todos.remaining() // -> 2
+   *     });
    *
    * ## Removing models from model list
    *

@@ -59,7 +59,7 @@ var Contact = can.Observe({
 var AgeWidget = can.Control({
   init:function(){
     this.element.find('#input').val(
-      this.options.contact.serialize('birthday').birthday);
+      this.options.contact.serialize('birthday'));
 
       this.element.find('#printer')
         .html(this.options.contact.age())
