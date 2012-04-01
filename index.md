@@ -2044,15 +2044,16 @@ $( '#todos' ).html( 'todo/todos.ejs', [
 
 ## Examples
 
-Examples of CanJS.
+Check out these sweet aps built in CanJS.
 
 ### Todo
 
-A simple todo application written in the style of [TodoMVC](https://github.com/addyosmani/todomvc/). There is an implementation for each library supported by CanJS including demos of using [templated event binding](#can_control-templated_event_handlers_pt_2) to bind to widget events in Dojo and YUI.
-
-This application is a good example of how powerful [EJS Live Binding](#can_ejs-live_binding) is.
-
 ![CanJS Todo App](images/examples/todo.png "CanJS Todo App")
+
+A simple todo application written in the style of [TodoMVC](https://github.com/addyosmani/todomvc/). There is an 
+implementation for each library supported by CanJS including an __extra__  Dojo, YUI, and jQuery one
+using [templated event binding](#can_control-templated_event_handlers_pt_2) to bind to widget events. Todo is a good 
+example of the power of [EJS's live binding](#can_ejs-live_binding).
 
 __View the App__
 
