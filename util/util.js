@@ -56,7 +56,8 @@ of the string, then they will be persisted.
 /**
 @function can.each
 @parent can.util
-Iterates through an array or object like
+
+`can.each(object, function)` iterates through an array or object like
 like [http://api.jquery.com/jQuery.each/ jQuery.each].
 
     can.each([{prop: "val1"}, {prop: "val2"}], 
