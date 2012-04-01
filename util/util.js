@@ -308,6 +308,8 @@ similar to [http://api.jquery.com/jQuery.ajax/ jQuery.ajax].
 		}
 	});
 
+@param {Object} options Ajax request configuration options
+@return {Deferred}
 */
 //
 /**
@@ -326,6 +328,8 @@ The following lists how the NodeList is created by each library:
  - __Mootools__ `$$( HTMLElement )`
  - __YUI__ `Y.all(selector)` or `Y.NodeList`
 
+@param {String|Element|NodeList} selector The selector to pass to the underlying library
+@return {NodeList}
 */
 //
 /**
@@ -334,6 +338,9 @@ The following lists how the NodeList is created by each library:
 
 `can.buildFragment([html], nodes)` returns a document fragment for the HTML passed.
 
+@param {Array} frags An array of HTML strings
+@param {Array} nodes An array of elements used for accessing the ownerDocument
+@return {DocumentFragment}
 */
 //
 /**
@@ -390,6 +397,10 @@ The following lists how the NodeList is created by each library:
 Due to the way browsers security restrictions with plugins and external code, 
 the _data_ method cannot be used on `object` (unless it's a Flash plugin), `applet` or `embed` elements.
 
+@param {NodeList} wrapped The wrapped node list to associate data with
+@param {String} key The data property to access
+@param {Object} [value] The data value to store
+@return {Object} The value for the given key
 */
 //
 /**
