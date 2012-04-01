@@ -1456,7 +1456,8 @@ CanJS can be used with libraries other than jQuery.
 CanJS supports jQuery 1.7+. Include a copy of jQuery along with CanJS to get started.
 
 {% highlight html %}
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
+</script>
 <script src="can.jquery.js"></script>
 <script>
   // start using CanJS
@@ -1471,7 +1472,8 @@ jQuery events. The jQuery UI Datepicker doesn't have built-in support for standa
 jQuery events, so for those cases, a workaround should be applied.
 
 {% highlight html %}
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
+</script>
 <script src="jquery.ui.core.js"></script>
 <script src="jquery.ui.datepicker.js"></script>
 <script src="can.jquery.js"></script>
@@ -1496,8 +1498,9 @@ jQuery events, so for those cases, a workaround should be applied.
     	new Todos('#todoapp', {
     		todos: todos,
     		calendar: $('#calendar').hide().datepicker({
-    			// Adding a workaround for date selection since the jQuery UI
-    			// datepicker widget doesn't fire the "datepickerselect" event
+    			// Adding a workaround for date selection since the 
+    			// jQuery UI datepicker widget doesn't fire the 
+    			// "datepickerselect" event
     			onSelect: function(dateText, datepicker) {
     				$(this).trigger({
     					type: 'datepickerselect',
@@ -1607,7 +1610,8 @@ Mootools Core has an issue where focus/blur events are not fired for delegate ev
 Include Mootools More's Event.Pseudos module for focus/blur support.
 
 {% highlight html %}
-<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.4.3/mootools.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.4.3/
+mootools.js"></script>
 <!-- Mootools More Event.Pseudos module -->
 <script src="mootools-more-event_pseudos-1.4.0.1.js"></script>
 <script src="can.mootools.js"></script>
