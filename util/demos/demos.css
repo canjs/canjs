@@ -129,6 +129,6 @@ pre {margin: 0px;}
 	font-family: sans-serif,"Trebuchet MS",Verdana,Helvetica,Arial;
 	font-size: 17px;
 }
-#teacher li{
-	list-style-type: circle;
+#teacher ul{
+	list-style: circle;
 }
