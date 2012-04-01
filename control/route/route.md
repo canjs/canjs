@@ -29,20 +29,14 @@ the control is listening to. For example:
 
 	new Router(window);
 
-Just listening to the route event without a route part will trigger when the route is empty.
-The data passed to the event handler is the [can.route.deparam deparamed route] without the
-_route_ attribute. The plugin doesn't affect the way you usually use [can.route].
-A control can, for example, also set some default values in its _init_ method:
-
-	init : function(element, options) {
-		can.route(':type', { type : 'index' });
-		can.route('todo/:id', { id : 1 });
-	}
+`route` without a route part will get called when the route is empty.
+The data passed to the event handler is the serialized route data without the
+_route_ attribute.
 
 ## Demo
 
-The following demo shows the above control and default settings in action.
+The following demo shows the above control in action.
 You can edit the hash, follow some example links or directly change the can.route atttributes.
-At the top it shows the event handler, that is being triggered on the control, and the data passed to it:
+At the top it shows the control action being called and the data passed to it:
 
-@iframe can/control/route/demo.html 600
+@iframe can/control/route/demo.html 700
