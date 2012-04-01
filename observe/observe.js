@@ -42,6 +42,7 @@ steal('can/construct', function() {
 						parent.indexOf(val)+"." + args[0] :
 						prop +  "." + args[0];
 				can.trigger(parent, ev, args);
+				can.trigger(parent,args[0],args);
 			});
 
 			return val;
@@ -654,7 +655,7 @@ steal('can/construct', function() {
 	 * @inherits can.Observe
 	 * @parent index
 	 * 
-	 * Provides the observable pattern for JavaScript arrays.  It lets you:
+	 * `new can.Observe.List([items])` provides the observable pattern for JavaScript arrays.  It lets you:
 	 * 
 	 *   - change the structure of an array
 	 *   - listen to changes in the array
@@ -685,10 +686,11 @@ steal('can/construct', function() {
 	 *     list = new can.Observe.List(["a","b"])
 	 *     list.attr(1)  //-> "b"
 	 *
-	 * __WARNING:__ while using the index operator with [] is acceptable, 
+	 * __WARNING:__ while using the index operator with [] is possible, 
 	 * it should be noted that changing properties of objects that way
 	 * will not call bound events to the observed list that would let
-	 * it know that an object in the list has changed.
+	 * it know that an object in the list has changed. In almost every
+	 * case you will use [can.Model.static.findAll findAll].
 	 * 
 	 * Using the 'attr' method lets Observe know you accessed the 
 	 * property. This is used by [can.EJS] for live-binding.
@@ -776,7 +778,7 @@ steal('can/construct', function() {
 	 *     of items. For remove event, undefined.
 	 *   - `oldVal` - the old values at `attr`.
 	 * 
-	 * @constructor
+	 * @constructor new
 	 * 
 	 * @param {Array} [items...] the array of items to create the list with
 	 */
