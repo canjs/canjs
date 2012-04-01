@@ -33,17 +33,17 @@ can.Control.setup = function() {
 		 * Setting the static `pluginName` property allows you to override the default name
 		 * with your own.
 		 *
-		 * 		var Filler = can.Control({
-		 * 			pluginName: 'fillWith'
-		 * 		},{});
+		 *		var Filler = can.Control({
+		 *			pluginName: 'fillWith'
+		 *		},{});
 		 * 
-		 * 		$("#foo").fillWith();
+		 *		$("#foo").fillWith();
 		 *
 		 * If you don't provide a `pluginName`, the control falls back to the
 		 * [can.Construct.fullName fullName] attribute:
 		 *
-		 * 		can.Control('Ui.Layout.FillWith', {}, {});
-		 * 		$("#foo").ui_layout_fill_with();
+		 *		can.Control('Ui.Layout.FillWith', {}, {});
+		 *		$("#foo").ui_layout_fill_with();
 		 *
 		 */
 		var pluginName = this.pluginName || this._fullName;
@@ -63,7 +63,7 @@ can.Control.setup = function() {
 can.prototype.extend({
 
 	/**
-	 * @function can.Control.prototype.controls
+	 * @function jQuery.fn.controls
 	 * @parent can.Control.plugin
 	 * 
 	 * When the widget is initialized, the plugin control creates an array 
@@ -72,17 +72,28 @@ can.prototype.extend({
 	 *
 	 * The `controls` method allows you to get the control instance(s) for any element.  
 	 *
+	 * 		//- Inits the widgets
+	 * 		$('.widgets:eq(0)').my_box();
+	 * 		$('.widgets:eq(1)').my_clock();
+	 *
 	 * 		<div class="widgets my_box" />
 	 * 		<div class="widgets my_clock" />
-	 * 		$('.widgets').controls() //- will return: [ MyBox, MyClock ]
+	 *
+	 * 		$('.widgets').controls() //-> [ MyBox, MyClock ]
 	 *
 	 * Additionally, you can invoke it passing the name of a control
 	 * to fetch a specific instance(s).
 	 *
+	 * 		//- Inits the widgets
+	 * 		$('.widgets:eq(0)').my_box();
+	 * 		$('.widgets:eq(1)').my_clock();
+	 *
 	 * 		<div class="widgets my_box" />
 	 * 		<div class="widgets my_clock" />
-	 * 		$('.widgets').controls('MyBox') //- will return: [ MyBox ]
 	 *
+	 * 		$('.widgets').controls('MyBox') //-> [ MyBox ]
+	 *
+	 * @return {Object} control (optional) if exists, the control instance with this class type will be returned.
 	 * @return {Array} an array of control instance(s).
 	 */
 	controls: function() {
@@ -107,23 +118,18 @@ can.prototype.extend({
 	},
 	
 	/**
-	 * @function can.Control.prototype.control
+	 * @function jQuery.fn.control
 	 * @parent can.Control.plugin
 	 * 
-	 * When the widget is initialized, the plugin control creates an array 
-	 * of the control instance with the DOM element it was initialized on using 
-	 * [can.data] method.
+	 * The `control` does the same as [jQuery.fn.controls controls] execept it only 
+	 * returns the first instance found.
 	 *
-	 * The `control` method allows you to get the control instance for any element.  
+	 * 		//- Init MyBox widget
+	 * 		$('.widgets').my_box();
 	 *
 	 * 		<div class="widgets my_box" />
-	 * 		$('.widgets').controls() //- will return: MyBox,
 	 *
-	 * Additionally, you can invoke it passing the name of a control
-	 * to fetch a specific instance.
-	 *
-	 * 		<div class="widgets my_box my_clock" />
-	 * 		$('.widgets').control('MyBox') //- will return: MyBox
+	 * 		$('.widgets').controls() //-> MyBox
 	 *
 	 * @param {Object} control (optional) if exists, the first control instance with this class type will be returned.
 	 * @return {can.Control} the first control.
@@ -224,6 +230,8 @@ can.Control.plugin = function(pluginname){
  *		$('#control').myPlugin({ text : 'Calling update. Updated' });
  *		$('#control').html();
  *		// Calling update. Updated 2 times
+ *
+ * @demo can/control/plugin/demo-update.html
  * 
  * @param {Object} options A list of options to merge with 
  * [can.Control.prototype.options this.options].  Often, this method
@@ -234,4 +242,4 @@ can.Control.prototype.update = function( options ) {
 		this.on();
 };
 
-})(can = {}, this )
+})(can, this )
