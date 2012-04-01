@@ -34,9 +34,10 @@ steal('can/util',function() {
 			/**
 			 * @function can.esc
 			 * @parent can.util
-			 * Escapes a string for insertion into html.
+			 *
+			 * `can.esc(string)` escapes a string for insertion into html.
 			 * 
-			 * can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
+			 *     can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
 			 */
 			esc : function( content ) {
 				return ( "" + content )
