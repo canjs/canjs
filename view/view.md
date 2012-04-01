@@ -1,4 +1,4 @@
-@class can.view
+@function can.view
 @parent index
 @description A JavaScript template framework.
 
