@@ -18,7 +18,7 @@ NodeList = dojo.NodeList;
 =====*/
 
 lang.extend(NodeList, {
-	_buildArrayFromCallback: function(/*Function*/callback){
+	_buildArrayFromCallback: function(callback){
 		// summary:
 		// 		builds a new array of possibly differing size based on the input list.
 		// 		Since the returned array is likely of different size than the input array,
@@ -33,7 +33,7 @@ lang.extend(NodeList, {
 		return ary;	//Array
 	},
 
-	_getUniqueAsNodeList: function(/*Array*/ nodes){
+	_getUniqueAsNodeList: function(nodes){
 		// summary:
 		// 		given a list of nodes, make sure only unique
 		// 		elements are returned as our NodeList object.
@@ -51,7 +51,7 @@ lang.extend(NodeList, {
 		return this._wrap(ary, null, this._NodeListCtor);	 //dojo.NodeList
 	},
 
-	_getUniqueNodeListWithParent: function(/*Array*/ nodes, /*String*/ query){
+	_getUniqueNodeListWithParent: function( nodes, query){
 		// summary:
 		// 		gets unique element nodes, filters them further
 		// 		with an optional query and then calls _stash to track parent NodeList.
@@ -60,7 +60,7 @@ lang.extend(NodeList, {
 		return ary._stash(this);  //dojo.NodeList
 	},
 
-	_getRelatedUniqueNodes: function(/*String?*/ query, /*Function*/ callback){
+	_getRelatedUniqueNodes: function( query,  callback){
 		// summary:
 		// 		cycles over all the nodes and calls a callback
 		// 		to collect nodes for a possible inclusion in a result.
@@ -69,7 +69,7 @@ lang.extend(NodeList, {
 		return this._getUniqueNodeListWithParent(this._buildArrayFromCallback(callback), query);  //dojo.NodeList
 	},
 
-	children: function(/*String?*/ query){
+	children: function( query){
 		// summary:
 		// 		Returns all immediate child elements for nodes in this dojo.NodeList.
 		// 		Optionally takes a query to filter the child elements.
@@ -100,7 +100,7 @@ lang.extend(NodeList, {
 		}); //dojo.NodeList
 	},
 
-	closest: function(/*String*/ query, /*String|DOMNode?*/ root){
+	closest: function( query, root){
 		// summary:
 		// 		Returns closest parent that matches query, including current node in this
 		// 		dojo.NodeList if it matches the query.
@@ -136,7 +136,7 @@ lang.extend(NodeList, {
 		}); //dojo.NodeList
 	},
 
-	parent: function(/*String?*/ query){
+	parent: function(query){
 		// summary:
 		// 		Returns immediate parent elements for nodes in this dojo.NodeList.
 		// 		Optionally takes a query to filter the parent elements.
@@ -166,7 +166,7 @@ lang.extend(NodeList, {
 		}); //dojo.NodeList
 	},
 
-	parents: function(/*String?*/ query){
+	parents: function(query){
 		// summary:
 		// 		Returns all parent elements for nodes in this dojo.NodeList.
 		// 		Optionally takes a query to filter the child elements.
@@ -202,7 +202,7 @@ lang.extend(NodeList, {
 		}); //dojo.NodeList
 	},
 
-	siblings: function(/*String?*/ query){
+	siblings: function(query){
 		// summary:
 		// 		Returns all sibling elements for nodes in this dojo.NodeList.
 		// 		Optionally takes a query to filter the sibling elements.
@@ -241,7 +241,7 @@ lang.extend(NodeList, {
 		}); //dojo.NodeList
 	},
 
-	next: function(/*String?*/ query){
+	next: function(query){
 		// summary:
 		// 		Returns the next element for nodes in this dojo.NodeList.
 		// 		Optionally takes a query to filter the next elements.
@@ -276,7 +276,7 @@ lang.extend(NodeList, {
 		}); //dojo.NodeList
 	},
 
-	nextAll: function(/*String?*/ query){
+	nextAll: function(query){
 		// summary:
 		// 		Returns all sibling elements that come after the nodes in this dojo.NodeList.
 		// 		Optionally takes a query to filter the sibling elements.
@@ -314,7 +314,7 @@ lang.extend(NodeList, {
 		}); //dojo.NodeList
 	},
 
-	prev: function(/*String?*/ query){
+	prev: function(query){
 		// summary:
 		// 		Returns the previous element for nodes in this dojo.NodeList.
 		// 		Optionally takes a query to filter the previous elements.
@@ -349,7 +349,7 @@ lang.extend(NodeList, {
 		}); //dojo.NodeList
 	},
 
-	prevAll: function(/*String?*/ query){
+	prevAll: function(query){
 		// summary:
 		// 		Returns all sibling elements that come before the nodes in this dojo.NodeList.
 		// 		Optionally takes a query to filter the sibling elements.
