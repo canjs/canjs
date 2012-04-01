@@ -2074,6 +2074,7 @@ example of the power of [EJS's live binding](#can_ejs-live_binding).
 __View the App__
 
 - [jQuery](http://donejs.com/examples/todo/jquery/index.html)
+- [jQuery with calendar widget](http://donejs.com/examples/todo/jquery-widget/index.html)
 - [Dojo](http://donejs.com/examples/todo/dojo/index.html)
 - [Dojo with calendar widget](http://donejs.com/examples/todo/dojo-widget/index.html)
 - [Mootools](http://donejs.com/examples/todo/mootools/index.html)
