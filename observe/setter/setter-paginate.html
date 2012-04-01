@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <title>Model Setter Demo</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            li {border: solid 1px gray; padding: 5px; width: 250px;}
+            li a {color: red; font-weight: bold;}
+            p {width: 400px;}
+        </style>
+    </head>
+    <body>
+<div id="demo-html">
+<div class="prev"></div>
+<div class="next"></div>
+<div class="cur">
+</div>	
+<script type='text/javascript' src='../../../steal/steal.js'></script>
+<script type='text/javascript' id="demo-source">   
+steal('can/observe/setter', 'can/control')
+.then('can/model')
+.then(function(){
+
+var Paginate = can.Model({
+  defaults : {
+    count: Infinity,
+    offset: 0,
+    limit: 100
+  }
+},{
+  setCount : function( newCount ){
+    return Math.max(0, newCount  );
+  },
+  setOffset : function( newOffset ){
+    return Math.max( 0 , Math.min(newOffset, this.count ) )
+  },
+  next : function(){
+    this.attr('offset', this.offset+this.limit);
+  },
+  prev : function(){
+    this.attr('offset', this.offset - this.limit )
+  },
+  canNext : function(){
+    return this.offset > this.count - this.limit
+  },
+  canPrev : function(){
+    return this.offset > 0
+  }
+})
+
+var Paginator = can.Control({
+  '.next click', function(elm,ev){
+    this.options.paginate.attr('offset', this.options.paginate.offset + 
+      this.options.paginate.limit);
+  },
+  '.prev click':function(elm,ev){
+    this.options.paginate.attr('offset', this.options.paginate.offset - 
+      this.options.paginate.limit );
+  },
+  "{paginate} updated":function(){
+    this.element.find('.prev')[this.options.paginate.canPrev() ? 
+      'addClass' : 'removeClass']('enabled');
+
+    this.element.find('.next')[this.options.paginate.canNext() ? 
+      'addClass' : 'removeClass']('enabled');	
+
+    this.element.find('.cur').html(
+      this.options.paginate.attr('offset'))
+  }
+});
+
+new Paginator('#demo-html', {
+  paginate: new Paginate()
+})
+
+</script>
+</body>
+</html>
