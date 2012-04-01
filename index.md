@@ -2113,7 +2113,7 @@ The following are our very biased reasons to use CanJS.
 
 ### Size 
 
-On top of jQuery, CanJS is 8.2k.  Here's some other frameworks for comparison:
+On top of jQuery, CanJS is 8.5k.  Here's some other frameworks for comparison:
 
  - Backbone 8.97kb (with Underscore.js)
  - Angular 24kb
