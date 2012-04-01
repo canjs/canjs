@@ -16,6 +16,7 @@ article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section {
 body { line-height: 1 }ol,ul { list-style: none }
 blockquote,
 q { quotes: none }
+em { font-style: italic; }
 blockquote:before,
 blockquote:after,
 q:before,
@@ -40,6 +41,9 @@ body {
 	font-family: Helvetica,"Lucida Grande","Lucida Sans",Arial,Helvetica,sans-serif;
 	font-size: 10px;
 	line-height: 10px;
+}
+em {
+	font-style: italic;
 }
 #bg {
 	height: 200px;
@@ -179,6 +183,9 @@ body {
 	color: white;
 	background: #006fb8;
 }
+#logo-and-download a.primary:hover {
+	background: #FF5100;
+}
 #buttons {
 	border-top: 1px solid #f0f1f0;
 	border-bottom: 1px solid #b5b6b5;
@@ -187,6 +194,11 @@ body {
 #buttons a {
 	float: left;
 	margin-right: 8px;
+	width: 72px;
+}
+#buttons a:hover {
+	background: #006fb8;
+	color: white;
 }
 #developed-by {
 	display: block;
