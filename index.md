@@ -1601,7 +1601,23 @@ function(can, CalendarLite){
 
 ### Mootools
 
-TODO
+CanJS supports Mootools 1.4.3+. Include a copy of Mootools Core along with CanJS to get started.
+
+Mootools Core has an issue where focus/blur events are not fired for delegate event listeners.
+Include Mootools More's Event.Pseudos module for focus/blur support.
+
+{% highlight html %}
+<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.4.3/mootools.js"></script>
+<!-- Mootools More Event.Pseudos module -->
+<script src="mootools-more-event_pseudos-1.4.0.1.js"></script>
+<script src="can.mootools.js"></script>
+<script>
+  // start using CanJS
+  Todo = can.Model({
+    ...
+  });
+</script>
+{% endhighlight %}
 
 ### YUI
 
@@ -1701,14 +1717,12 @@ YUI().use('can', 'calendar', function(Y) {
 
 ### Zepto
 
-CanJS supports Zepto 0.8+.
+CanJS supports Zepto 0.8+. Include a copy of Zepto along with CanJS to get started.
 
 Zepto 0.8 has an issue where focus/blur events are not fired for delegate event listeners.
 There is a fix included for Zepto > 0.8, but apply 
 [this patch](https://github.com/madrobby/zepto/commit/ab2a3ef0d18beaf768903f0943efd019a29803f0)
 to zepto.js when using Zepto 0.8.
-
-Include a copy of Zepto along with CanJS to get started.
 
 {% highlight html %}
 <!-- Zepto 0.8 with focus/blur patch applied -->
