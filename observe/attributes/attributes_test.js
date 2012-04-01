@@ -146,7 +146,7 @@ test("single seralize w/ attr name", function(){
 		time: time
 	});
 	
-	equals(b.serialize('time').time, time.getTime());
+	equals(b.serialize('time'), time.getTime());
 });
 
 
