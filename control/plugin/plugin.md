@@ -33,7 +33,7 @@ Once a controller is initialized on a DOM element, you can invoke a method by ca
 the plugin with the method name followed by the parameters for that method.
 
 	var MyTodo = can.Control({
-	  pluginName : 'my_toto'
+	  pluginName : 'my_todo'
 	}, {
 	  addTask: function(name, task){
 	    this.element.append(name + " " + task)
