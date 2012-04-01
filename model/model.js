@@ -1098,7 +1098,7 @@ steal('can/observe',function(){
    * see how many todos were completed and remaining something could be written
    * like:
    *
-   *     can.Model.List('Todo.List', {
+   *     Todo.List = can.Model.List({
    *         completed: function() {
    *             var completed = 0;
    *             this.each(function(i, todo) {

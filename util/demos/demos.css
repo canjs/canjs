@@ -47,7 +47,7 @@ pre {
 	padding-top: 0px;
 }
 textarea {
-	width: 315px;
+	width: 380px;
 	height:290px;
 	border-bottom: 1px solid #D2D988;
 	padding-bottom: 0px;
@@ -81,9 +81,9 @@ th {
 	font-size: 12px;
 }
 td, th {
-	width: 95px;
 	text-align: left;
 	vertical-align: top;
+	width: 400px;
 }
 #container {
 	height: 100px;
@@ -92,13 +92,27 @@ td, th {
 .border td{
 	border-top: solid 1px #C3E2EF;
 }
+
+td.explanation {
+	width: 250px;
+}
+
 #route-data-container {
 	min-height: 110px;
 }
 li {
 	list-style: none;
-	
 	padding: 3px;
+}
+#reapply {
+	cursor:pointer;
+	color: blue;
+	font-size: 14px;
+}
+#reapply.glow {
+	background-color: #ff3300;
+	color: white;
+	font-weight:bold;
 }
 ul {
 	margin: 0px;
@@ -118,10 +132,22 @@ pre {margin: 0px;}
 	color: green;
 }
 #layout {
-	table-layout: fixed;
 	width: 100%;
 	
 }
 #linkresult {
 	font-size: 12px;
+}
+#teacher {
+	padding-left: 20px;
+}
+#teacher h2 {
+	font-family: "Trebuchet MS",Verdana,Helvetica,Arial, sans-serif;
+	font-size: 17px;
+}
+#teacher ul li {
+	font-family: "Trebuchet MS",Verdana,Helvetica,Arial, sans-serif;
+	list-style-type: disc;
+	margin-left: 20px;
+	font-family: 
 }

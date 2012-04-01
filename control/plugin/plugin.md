@@ -11,10 +11,10 @@ or a static [can.Control.plugin.static.pluginName pluginName] attribute for the 
 For example, the following plugin:
 
 	var Tabs = can.Control({
-		pluginName : 'tabs'
+	  pluginName : 'tabs'
 	},{
-		init : function(element, options, arg1){ },
-		update : function(options) {}
+	  init : function(element, options, arg1){ },
+	  update : function(options) {}
 	})
 
 Can now be created directly on the jQuery collection like:
@@ -33,18 +33,18 @@ Once a controller is initialized on a DOM element, you can invoke a method by ca
 the plugin with the method name followed by the parameters for that method.
 
 	var MyTodo = can.Control({
-		pluginName : 'my_toto'
+	  pluginName : 'my_todo'
 	}, {
-		update: function(name, task){
-			this.element.append(name + " " + task)
-		}
+	  addTask: function(name, task){
+	    this.element.append(name + " " + task)
+	  }
 	});
 
 	//- inits the widget
 	$('.my_todo').my_todo();
 	
 	//- calls the method `update`
-	$('.my_todo').my_todo("update", 'Brian', 'Sweep garage');
+	$('.my_todo').my_todo("addTask", 'Brian', 'Sweep garage');
 
 Keep in mind that this approach follows the jQuery plugin convention and returns a jQuery object,
 not the methods return value. 
@@ -52,7 +52,7 @@ not the methods return value.
 You can also retrieve the control instance and invoke the method directly.
 
 	var control = $('.my_todo').control();
-	control.create('Brian', 'Sweep garage');
+	control.addTask('Brian', 'Sweep garage');
 	
 For more information on this, see [jQuery.fn.control] or [jQuery.fn.controls].
 
