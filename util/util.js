@@ -30,16 +30,21 @@ of the string, then they will be persisted.
 /**
 @function can.makeArray
 @parent can.util
-Converts array like data into arrays.
+
+`can.makeArray(object)` convert an array-like object into a array.
 
     can.makeArray({0 : "zero", 1: "one", length: 2})
        // -> ["zero","one"]
+
+@param {Object} object to transform into array
+@return {Array} converted array
  */
 //
 /**
 @function can.isArray
 @parent can.util
-Returns if the object is an Array
+
+`can.array(object)` returns if the object is an Array.
 
     can.isArray([]) //-> true
     can.isArray(false)
@@ -51,7 +56,8 @@ Returns if the object is an Array
 /**
 @function can.each
 @parent can.util
-Iterates through an array or object like
+
+`can.each(object, function)` iterates through an array or object like
 like [http://api.jquery.com/jQuery.each/ jQuery.each].
 
     can.each([{prop: "val1"}, {prop: "val2"}], 
@@ -95,12 +101,13 @@ like [http://api.jquery.com/jQuery.param/ jQuery.param].
 /**
 @function can.isEmptyObject
 @parent can.util
-Returns if an object is empty like
+`can.isEmptyObject(object)` returns if an object has no properties similar to
 [http://api.jquery.com/jQuery.isEmptyObject/ jQuery.isEmptyObject].
 
     can.isEmptyObject({})      //-> true
     can.isEmptyObject({a:"b"}) //-> false
 
+@param {Object} object to evaluate if empty or not
 */
 //
 /**
@@ -119,25 +126,28 @@ Returns if an object is empty like
 /**
 @function can.proxy
 @parent can.util
-Returns if an object is empty like
-[http://api.jquery.com/jQuery.proxy/ jQuery.proxy].
+`can.proxy(function)` accepts a function and returns a 
+new one that will always the context from which it was 
+called.  This works similar to [http://api.jquery.com/jQuery.proxy/ jQuery.proxy].
 
      var func = can.proxy(function(one){
        return this.a + one
      }, {a: "b"}); 
      func("two") //-> "btwo" 
 
+@param {Function} function to return in the same context
 */
 //
 /**
 @function can.isFunction
 @parent can.util
-Returns if an object is a function like
+`can.isFunction(object)` returns if an object is a function similar to
 [http://api.jquery.com/jQuery.isFunction/ jQuery.isFunction].
 
      can.isFunction({})           //-> false
      can.isFunction(function(){}) //-> true
 
+@param {Object} object to evaluate if is function
 */
 //
 /**
@@ -259,11 +269,20 @@ The following lists how the NodeList is created by each library:
 	// After
 	<div id="demo">Demos are fun!</div>
 
+@param {Object} wrappedNodeList
+@param {String} html string to append
 */
 //
 /**
 @function can.remove
 @parent can.util
+
+`can.remove( wrappedNodeList )` removes the set of matched element(s) from the DOM.
+
+	<div id="wrap"/>
+	can.remove(can.$('#wrap')) //-> removes 'wrap'
+	
+@param {Object} wrappedNodeList of elements to remove from dom.
 */
 //
 /**
@@ -321,6 +340,7 @@ set also.
 	
 This works similarly to [http://api.jquery.com/addClass/ jQuery.fn.addClass].
 
+@param {String} class name to add to the wrapped node list
 */
 //
 /**
