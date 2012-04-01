@@ -1604,7 +1604,7 @@ function(can, CalendarLite){
 
 ### Mootools
 
-CanJS supports Mootools 1.4.3+. Include a copy of Mootools Core along with CanJS to get started.
+CanJS supports Mootools 1.4+. Include a copy of Mootools Core along with CanJS to get started.
 
 Mootools Core has an issue where focus/blur events are not fired for delegate event listeners.
 Include Mootools More's Event.Pseudos module for focus/blur support.
@@ -1625,7 +1625,7 @@ mootools.js"></script>
 
 ### YUI
 
-CanJS supports YUI 3.4.1+ with both dynamically or statically loaded modules.
+CanJS supports YUI 3.4+ with both dynamically or statically loaded modules.
 CanJS depends on the following YUI modules: __node__, __io-base__, __querystring__, __event-focus__, and __array-extras__. The __selector-css2__ and __selector-css3__ YUI modules are optional, but necessary for IE7 and other browsers that don't support __querySelectorAll__.
 
 To use with dynamically loaded modules, include the YUI loader along with CanJS.
