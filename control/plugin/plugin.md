@@ -52,7 +52,7 @@ not the methods return value.
 You can also retrieve the control instance and invoke the method directly.
 
 	var control = $('.my_todo').control();
-	control.create('Brian', 'Sweep garage');
+	control.addTask('Brian', 'Sweep garage');
 	
 For more information on this, see [jQuery.fn.control] or [jQuery.fn.controls].
 
