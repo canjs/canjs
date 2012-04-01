@@ -20,11 +20,11 @@ It also includes a rich set of supported [extensions and plugins](#plugins).
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your download
 for the library you are using:
 
- - [can.jquery.js](https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0b.min.js)) - 8.250k - [Annotated Source](http://donejs.com/can/docs/can.jquery.html)
- - [can.zepto.js](https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0b.min.js)) - 9.906k - [Annotated Source](http://donejs.com/can/docs/can.zepto.html)
- - [can.dojo.js](https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0b.min.js)) - 10.474k - [Annotated Source](http://donejs.com/can/docs/can.dojo.html)
- - [can.mootools.js](https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0b.min.js)) - 9.806k - [Annotated Source](http://donejs.com/can/docs/can.mootools.html)
- - [can.yui.js](https://github.com/downloads/jupiterjs/canjs/can.yui.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.yui.1.0b.min.js)) - 10.261k - [Annotated Source](http://donejs.com/can/docs/can.yui.html)
+ - [can.jquery.js](https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0b.min.js)) - 8.5k - [Annotated Source](http://donejs.com/can/docs/can.jquery.html)
+ - [can.zepto.js](https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0b.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.zepto.html)
+ - [can.dojo.js](https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0b.min.js)) - 10.8k - [Annotated Source](http://donejs.com/can/docs/can.dojo.html)
+ - [can.mootools.js](https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0b.min.js)) - 10.7k - [Annotated Source](http://donejs.com/can/docs/can.mootools.html)
+ - [can.yui.js](https://github.com/downloads/jupiterjs/canjs/can.yui.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.yui.1.0b.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.yui.html)
 
 This page walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery. If you want to see a
