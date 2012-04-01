@@ -42,6 +42,7 @@ steal('can/construct', function() {
 						parent.indexOf(val)+"." + args[0] :
 						prop +  "." + args[0];
 				can.trigger(parent, ev, args);
+				can.trigger(parent,args[0],args);
 			});
 
 			return val;
