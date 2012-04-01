@@ -17,9 +17,9 @@ steal('can/observe', 'can/util/object').then(function(){
 		 * @plugin can/observe/backup
 		 * @parent can.Observe.backup
 		 *
-		 * Backs up a [can.Observe] instance, so it can be restored later
+		 * `observe.backup()` backs up a [can.Observe] instance, so it can be restored later
 		 * by calling [can.Observe.prototype.restore] or checked if it
-		 * has changed using [can.Observe.prototype.isDirty]:
+		 * has changed with [can.Observe.prototype.isDirty]:
 		 *
 		 *      var recipe = new can.Observe({
 		 *           name : 'Pancakes',
@@ -36,6 +36,8 @@ steal('can/observe', 'can/util/object').then(function(){
 		 *       });
 		 *
 		 *       recipe.backup();
+		 *
+		 * @return {can.Observe} The observe instance
 		 */
 		backup: function() {
 			this._backupStore = this._attrs();
@@ -47,11 +49,9 @@ steal('can/observe', 'can/util/object').then(function(){
 	    * @plugin can/observe/backup
 	    * @parent can.Observe.backup
 	    *
-	    * Returns if the observe has changed since the last
-	    * [can.Observe.prototype.backup] call. Will return
-	    * false if there is no backup yet. If you pass true,
-	    * _isDirty_ also checks if any child properties or [can.Model]
-	    * associations have changed.
+	    * `observe.isDirty([checkAssociations])` returns if the observe has changed since the last
+	    * [can.Observe.prototype.backup] call. If there is no backup it will return false. If you pass
+	    * true, _isDirty_ also checks if any child properties or [can.Model] associations have changed.
 	    *
 	    *       var recipe = new can.Observe({
 	    *           name : 'Pancakes',
@@ -68,14 +68,14 @@ steal('can/observe', 'can/util/object').then(function(){
 	    *       });
 	    *
 	    *       recipe.backup();
-	    *       // Change the attribute of a nested observe
-	    *       recipe.attr('ingredients')[0].attr('amount', '2');
+	    *       // Change the attribute of a nested property
+	    *       recipe.attr('ingredients.0.amount', '2');
 	    *       recipe.isDirty() // -> false
 	    *       recipe.isDirty(true) // -> true
 	    *       recipe.attr('name', 'Eggcakes');
 	    *       recipe.isDirty() // -> true
 	    *
-	    * @param {Boolean} [deep] Whether nested objects should be checked or
+	    * @param {Boolean} [checkAssociations] Whether nested objects should be checked or
 	    * not. Defaults to false.
 	    * @return {Boolean} true if there are changes,
 	    *   false if not or there is no backup
@@ -94,9 +94,9 @@ steal('can/observe', 'can/util/object').then(function(){
 		 * @function can.Observe.prototype.restore
 		 * @parent can.Observe.backup
 		 *
-		 * Restores the observe to the state of the last time
+		 * `observe.restore([restoreAssociations])` restores the observe to the state of the last time
 		 * [can.Observe.prototype.backup] was called if [can.Observe.prototype.isDirty]
-		 * returns true. If you pass true, restore will also restore all nested properties
+		 * returns true. If you pass true, _restore_ will also check and restore all nested properties
 		 * and [can.Model] associations.
 		 *
 		 *      var recipe = new can.Observe({
@@ -110,21 +110,21 @@ steal('can/observe', 'can/util/object').then(function(){
 		 *          }, {
 		 *              name : "milk",
 		 *              amount : '1 1/4 cup'
-		 *          }]});
+		 *       }]});
 		 *
-		 *          recipe.backup();
+		 *       recipe.backup();
 		 *
-		 *          // Change the attribute of a nested observe
-		 *          recipe.attr('ingredients')[0].attr('amount', '2');
-		 *          recipe.attr('name', 'Eggcakes');
-		 *          recipe.attr('name') // -> Eggcakes
-		 *          recipe.attr('ingredients')[0].attr('amount') // -> 2
-		 *          recipe.restore(true);
-		 *          recipe.attr('name') // -> Pancakes
-		 *          recipe.attr('ingredients')[0].attr('amount') // -> 1
+		 *       // Change the attribute of a nested observe
+		 *       recipe.attr('ingredients.0.amount', '2');
+		 *       recipe.attr('name', 'Eggcakes');
+		 *       recipe.attr('name') // -> Eggcakes
+		 *       recipe.attr('ingredients.0.amount') // -> 2
+		 *       recipe.restore(true);
+		 *       recipe.attr('name') // -> Pancakes
+		 *       recipe.attr('ingredients.0.amount') // -> 1
 		 *
-		 * @param {Boolean} [deep] Whether nested objects should also
-		 * be checked and restored or not. Defaults to false.
+		 * @param {Boolean} [restoreAssociations] Whether nested objects should also
+		 * be restored or not. Defaults to false.
 		 * @return {can.Observe} The observe instance
 		 */
 		restore: function(restoreAssociations) {
