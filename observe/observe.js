@@ -778,7 +778,7 @@ steal('can/construct', function() {
 	 *     of items. For remove event, undefined.
 	 *   - `oldVal` - the old values at `attr`.
 	 * 
-	 * @constructor new
+	 * @constructor Creates a new observable list from an array
 	 * 
 	 * @param {Array} [items...] the array of items to create the list with
 	 */
