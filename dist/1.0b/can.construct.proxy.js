@@ -57,4 +57,4 @@ proxy = function( funcs ) {
 
 
 
-})(can = {}, this )
+})(can, this )

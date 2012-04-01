@@ -37,4 +37,4 @@
 		}
 
 
-})(can = {}, this )
+})(can, this )

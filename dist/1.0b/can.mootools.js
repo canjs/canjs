@@ -51,10 +51,7 @@ can.dispatch = function(event){
 	});
 }
 
-
-
 ;
-
 
 	// fragment.js
 	// ---------
@@ -107,8 +104,6 @@ can.dispatch = function(event){
 			fragment: frag
 		}
 	};
-	
-;
 
 	// mootools.js
 	// ---------
@@ -389,7 +384,6 @@ can.dispatch = function(event){
 	}
 ;
 
-
 	// deferred.js
 	// ---------
 	// _Lightweight, jQuery style deferreds._
@@ -541,10 +535,6 @@ can.dispatch = function(event){
 		}
 	});
 
-
-;
-
-
 	// ##string.js
 	// _Miscellaneous string utility functions._  
 	
@@ -575,15 +565,8 @@ can.dispatch = function(event){
 		};
 
 		can.extend(can, {
-			/**
-			 * @function can.esc
-			 * @parent can.util
-			 * Escapes a string for insertion into html.
-			 * 
-			 * can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
-			 */
 			// Escapes strings for HTML.
-			esc : function( content ) {
+						esc : function( content ) {
 				return ( "" + content )
 					.replace(/&/g, '&amp;')
 					.replace(/</g, '&lt;')
@@ -592,24 +575,7 @@ can.dispatch = function(event){
 					.replace(singleQuote, "&#39;");
 			},
 			
-			/**
-			 * @function can.getObject
-			 * @parent can.util
-			 * Gets an object from a string.  It can also modify objects on the
-			 * 'object path' by removing or adding properties.
-			 * 
-			 *     Foo = {Bar: {Zar: {"Ted"}}}
-		 	 *     can.getObject("Foo.Bar.Zar") //-> "Ted"
-			 * 
-			 * @param {String} name the name of the object to look for
-			 * @param {Array} [roots] an array of root objects to look for the 
-			 *   name.  If roots is not provided, the window is used.
-			 * @param {Boolean} [add] true to add missing objects to 
-			 *  the path. false to remove found properties. undefined to 
-			 *  not modify the root object
-			 * @return {Object} The object.
-			 */
-			getObject : function( name, roots, add ) {
+						getObject : function( name, roots, add ) {
 			
 				// The parts of the name we are looking up  
 				// `['App','Models','Recipe']`
@@ -653,35 +619,14 @@ can.dispatch = function(event){
 					}
 				}
 			},
-			/**
-			 * @function can.capitalize
-			 * @parent can.util
-			 * `can.capitalize(string)` capitalizes the first letter of the string passed.
-			 *
-			 *		can.capitalize('candy is fun!'); //-> Returns: 'Candy is fun!'
-			 *
-			 * @param {String} s the string.
-			 * @return {String} a string with the first character capitalized.
-			 */
 			// Capitalizes a string.
-			capitalize: function( s, cache ) {
+						capitalize: function( s, cache ) {
 				// Used to make newId.
 				return s.charAt(0).toUpperCase() + s.slice(1);
 			},
 			
-			/**
-			 * @function can.underscore
-			 * @parent can.util
-			 * 
-			 * Underscores a string.
-			 * 
-			 *     can.underscore("OneTwo") //-> "one_two"
-			 * 
-			 * @param {String} s
-			 * @return {String} the underscored string
-			 */
 			// Underscores a string.
-			underscore: function( s ) {
+						underscore: function( s ) {
 				return s
 					.replace(colons, '/')
 					.replace(words, '$1_$2')
@@ -689,22 +634,8 @@ can.dispatch = function(event){
 					.replace(dash, '_')
 					.toLowerCase();
 			},
-			/**
-			 * @function can.sub
-			 * @parent can.util
-			 * 
-			 * Returns a string with {param} replaced values from data.
-			 * 
-			 *     can.sub("foo {bar}",{bar: "far"})
-			 *     //-> "foo far"
-			 *     
-			 * @param {String} s The string to replace
-			 * @param {Object} data The data to be used to look for properties.  If it's an array, multiple
-			 * objects can be used.
-			 * @param {Boolean} [remove] if a match is found, remove the property from the object
-			 */
 			// Micro-templating.
-			sub: function( str, data, remove ) {
+						sub: function( str, data, remove ) {
 
 				var obs = [];
 
@@ -730,8 +661,6 @@ can.dispatch = function(event){
 			replacer : replacer,
 			undHash : undHash
 		});
-;
-
 
 	// ## construct.js
 	// `can.Construct`  
@@ -743,46 +672,14 @@ can.dispatch = function(event){
 	// initializing it's bindings.
 	var initializing = 0;
 
-	/** 
-	 * @add can.Construct 
-	 */
-	can.Construct = function() {
+		can.Construct = function() {
 		if (arguments.length) {
 			return can.Construct.extend.apply(can.Construct, arguments);
 		}
 	};
 
-	/**
-	 * @static
-	 */
-	can.extend(can.Construct, {
-		/**
-		 * @function newInstance
-		 * Creates a new instance of the constructor function.  This method is useful for creating new instances
-		 * with arbitrary parameters.  Typically you want to simply use the __new__ operator instead.
-		 * 
-		 * ## Example
-		 * 
-		 * The following creates a `Person` Construct and then creates a new instance of person, but
-		 * by using `apply` on newInstance to pass arbitrary parameters.
-		 * 
-		 *     var Person = can.Construct({
-		 *       init : function(first, middle, last) {
-		 *         this.first = first;
-		 *         this.middle = middle;
-		 *         this.last = last;
-		 *       }
-		 *     });
-		 * 
-		 *     var args = ["Justin","Barry","Meyer"],
-		 *         justin = new Person.newInstance.apply(null, args);
-		 * 
-		 * @param {Object} [args] arguments that get passed to [can.Construct::setup] and [can.Construct::init]. Note
-		 * that if [can.Construct::setup] returns an array, those arguments will be passed to [can.Construct::init]
-		 * instead.
-		 * @return {class} instance of the class
-		 */
-		newInstance: function() {
+		can.extend(can.Construct, {
+				newInstance: function() {
 			// Get a raw instance object (`init` is not called).
 			var inst = this.instance(),
 				arg = arguments,
@@ -808,59 +705,11 @@ can.dispatch = function(event){
 		_inherit: function( newProps, oldProps, addTo ) {
 			can.extend(addTo || newProps, newProps || {})
 		},
-		/**
-		 * Setup is called immediately after a constructor function is created and 
-		 * set to inherit from its base constructor.  It is called with a base constructor and
-		 * the params used to extend the base constructor. It is useful for setting up additional inheritance work.
-		 * 
-		 * ## Example
-		 * 
-		 * The following creates a `Base` class that when extended, adds a reference to the base
-		 * class.
-		 * 
-		 * 
-		 *     Base = can.Construct({
-		 *       setup : function(base, fullName, staticProps, protoProps){
-		 * 	       this.base = base;
-		 *         // call base functionality
-		 *         can.Construct.setup.apply(this, arguments)
-		 *       }
-		 *     },{});
-		 * 
-		 *     Base.base //-> can.Construct
-		 *     
-		 *     Inherting = Base({});
-		 * 
-		 *     Inheriting.base //-> Base
-		 * 
-		 * ## Base Functionality
-		 * 
-		 * Setup deeply extends the static `defaults` property of the base constructor with 
-		 * properties of the inheriting constructor.  For example:
-		 * 
-		 *     MyBase = can.Construct({
-		 *       defaults : {
-		 *         foo: 'bar'
-		 *       }
-		 *     },{})
-		 * 
-		 *     Inheriting = MyBase({
-		 *       defaults : {
-		 *         newProp : 'newVal'
-		 *       }
-		 *     },{}
-		 *     
-		 *     Inheriting.defaults // -> {foo: 'bar', 'newProp': 'newVal'}
-		 * 
-		 * @param {Object} base the base constructor that is being inherited from
-		 * @param {String} [fullName] the name of the new constructor
-		 * @param {Object} [staticProps] the static properties of the new constructor
-		 * @param {Object} [protoProps] the prototype properties of the new constructor
-		 */
+
 		// Set `defaults` as the merger of the parent `defaults` and this 
 		// object's `defaults`. If you overwrite this method, make sure to
 		// include option merging logic.
-		setup: function( base, fullName ) {
+				setup: function( base, fullName ) {
 			this.defaults = can.extend(true,{}, base.defaults, this.defaults);
 		},
 		// Create's a new `class` instance without initializing by setting the
@@ -877,36 +726,8 @@ can.dispatch = function(event){
 
 			return inst;
 		},
-		/**
-		 * @hide
-		 * Extends a class with new static and prototype functions.  There are a variety of ways
-		 * to use extend:
-		 * 
-		 *     // with className, static and prototype functions
-		 *     can.Construct('Task',{ STATIC },{ PROTOTYPE })
-		 *     // with just classname and prototype functions
-		 *     can.Construct('Task',{ PROTOTYPE })
-		 *     // with just a className
-		 *     can.Construct('Task')
-		 * 
-		 * You no longer have to use <code>.extend</code>.  Instead, you can pass those options directly to
-		 * can.Construct (and any inheriting classes):
-		 * 
-		 *     // with className, static and prototype functions
-		 *     can.Construct('Task',{ STATIC },{ PROTOTYPE })
-		 *     // with just classname and prototype functions
-		 *     can.Construct('Task',{ PROTOTYPE })
-		 *     // with just a className
-		 *     can.Construct('Task')
-		 * 
-		 * @param {String} [fullName]  the classes name (used for classes w/ introspection)
-		 * @param {Object} [klass]  the new classes static/class functions
-		 * @param {Object} [proto]  the new classes prototype functions
-		 * 
-		 * @return {can.Construct} returns the new class
-		 */
 		// Extends classes.
-		extend: function( fullName, klass, proto ) {
+				extend: function( fullName, klass, proto ) {
 			// Figure out what was passed and normalize it.
 			if ( typeof fullName != 'string' ) {
 				proto = klass;
@@ -976,39 +797,10 @@ can.dispatch = function(event){
 			can.extend(Constructor, {
 				constructor: Constructor,
 				prototype: prototype,
-				/**
-				 * @attribute namespace 
-				 * The namespace keyword is used to declare a scope. This enables you to organize
-				 * code and provides a way to create globally unique types.
-				 * 
-				 *     can.Construct("MyOrg.MyConstructor",{},{})
-				 *     MyOrg.MyConstructor.namespace //-> MyOrg
-				 * 
-				 */
-				namespace: namespace,
-				/**
-				 * @attribute shortName
-				 * If you pass a name when creating a Construct, the `shortName` property will be set to the
-				 * actual name without the namespace:
-				 * 
-				 *     can.Construct("MyOrg.MyConstructor",{},{})
-				 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
-				 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
-				 * 
-				 */
-				shortName: shortName,
+								namespace: namespace,
+								shortName: shortName,
 				_shortName : _shortName,
-				/**
-				 * @attribute fullName 
-				 * If you pass a name when creating a Construct, the `fullName` property will be set to
-				 * the actual name including the full namespace:
-				 * 
-				 *     can.Construct("MyOrg.MyConstructor",{},{})
-				 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
-				 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
-				 * 
-				 */
-				fullName: fullName,
+								fullName: fullName,
 				_fullName: _fullName
 			});
 
@@ -1024,140 +816,12 @@ can.dispatch = function(event){
 				Constructor.init.apply(Constructor, args || t );
 			}
 
-			/* @Prototype*/
-			return Constructor;
-			/** 
-			 * @function setup
-			 * 
-			 * If a prototype `setup` method is provided, it is called when a new 
-			 * instance is created.  It is passed the same arguments that
-			 * were passed to the Constructor constructor 
-			 * function (`new Constructor( arguments ... )`).  If `setup` returns an
-			 * array, those arguments are passed to [can.Construct::init] instead
-			 * of the original arguments.
-			 * 
-			 * Typically, you should only provide [can.Construct::init] methods to 
-			 * handle initilization code. Use `setup` for:
-			 * 
-			 *   - initialization code that you want to run before inheriting constructor's 
-			 *     init method is called.
-			 *   - initialization code that should run without inheriting constructors having to 
-			 *     call base methods (ex: `MyBase.prototype.init.call(this, arg1)`).
-			 *   - passing modified/normalized arguments to `init`.
-			 * 
-			 * ## Examples
-			 * 
-			 * The following is similar to code in [can.Control]'s setup method that
-			 * converts the first argument to a jQuery collection and extends the 
-			 * second argument with the constructor's [can.Construct.defaults defaults]:
-			 * 
-			 *     can.Construct("can.Control",{
-			 *       setup: function( htmlElement, rawOptions ) {
-			 *         // set this.element
-			 *         this.element = $(htmlElement);
-			 * 
-			 *         // set this.options
-			 *         this.options = can.extend( {}, 
-			 * 	                               this.constructor.defaults, 
-			 * 	                               rawOptions );
-			 * 
-			 *         // pass the wrapped element and extended options
-			 *         return [this.element, this.options] 
-			 *       }
-			 *     })
-			 * 
-			 * ## Base Functionality
-			 * 
-			 * Setup is not defined on can.Construct itself, so calling super in inherting classes
-			 * will break.  Don't do the following:
-			 * 
-			 *     Thing = can.Construct({
-			 *       setup : function(){
-			 *         this._super(); // breaks!
-			 *       }
-			 *     })
-			 * 
-			 * @return {Array|undefined} If an array is return, [can.Construct.prototype.init] is 
-			 * called with those arguments; otherwise, the original arguments are used.
-			 */
-			//break up
-			/** 
-			 * @function init
-			 * 
-			 * If a prototype `init` method is provided, it gets called after [can.Construct::setup] when a new instance
-			 * is created. The `init` method is where your constructor code should go. Typically,
-			 * you will find it saving the arguments passed to the constructor function for later use. 
-			 * 
-			 * ## Examples
-			 * 
-			 * The following creates a Person constructor with a first and last name property:
-			 * 
-			 *     var Person = can.Construct({
-			 *       init : function(first, last){
-			 *         this.first = first;
-			 *         this.last = last;
-			 *       }
-			 *     })
-			 * 
-			 *     var justin = new Person("Justin","Meyer");
-			 *     justin.first //-> "Justin"
-			 *     justin.last  //-> "Meyer"
-			 * 
-			 * The following extends person to create a Programmer constructor
-			 * 
-			 *     var Programmer = Person({
-			 *       init : function(first, last, lang){
-			 *         // call base functionality
-			 *         Person.prototype.init.call(this, first, last);
-			 * 
-			 *         // save the lang
-			 *         this.lang = lang
-			 *       },
-			 *       greet : function(){
-			 *         return "I am " + this.first + " " + this.last + ". " +
-			 *                "I write " + this.lang + ".";
-			 *       }
-			 *     })
-			 * 
-			 *     var brian = new Programmer("Brian","Moschel","ECMAScript")
-			 *     brian.greet() //-> "I am Brian Moschel.\
-			 *                   //    I write ECMAScript."
-			 * 
-			 * ## Notes
-			 * 
-			 * [can.Construct::setup] is able to modify the arguments passed to init.
-			 * 
-			 * It doesn't matter what init returns because the `new` keyword always
-			 * returns the new object.
-			 */
-			//Breaks up code
-			/**
-			 * @attribute constructor
-			 * 
-			 * A reference to the constructor function that created the instance. It allows you to access
-			 * the constructor function's static properties from an instance.
-			 * 
-			 * ## Example
-			 * 
-			 * Incrementing a static counter, that counts how many instances have been created:
-			 * 
-			 *     Counter = can.Construct({
-			 * 	     count : 0
-			 *     },{
-			 *       init : function(){
-			 *         this.constructor.count++;
-			 *       }
-			 *     })
-			 * 
-			 *     new Counter();
-			 *     Counter.count //-> 1; 
-			 * 
-			 */
-		}
+						return Constructor;
+						//  
+						//  
+					}
 
 	});
-
-;
 
 	// ## observe.js  
 	// `can.Observe`  
@@ -1201,6 +865,7 @@ can.dispatch = function(event){
 						parent.indexOf(val)+"." + args[0] :
 						prop +  "." + args[0];
 				can.trigger(parent, ev, args);
+				can.trigger(parent,args[0],args);
 			});
 
 			return val;
@@ -1278,10 +943,7 @@ can.dispatch = function(event){
 		attrParts = function(attr){
 			return can.isArray(attr) ? attr : (""+attr).split(".")
 		};
-	/**
-	 * @add can.Observe
-	 */
-	var Observe = can.Construct('can.Observe', {
+		var Observe = can.Construct('can.Observe', {
 		// keep so it can be overwritten
 		setup : function(){
 			can.Construct.setup.apply(this, arguments)
@@ -1290,10 +952,7 @@ can.dispatch = function(event){
 		unbind: unbind,
 		id: "id"
 	},
-	/**
-	 * @prototype
-	 */
-	{
+		{
 		setup: function( obj ) {
 			// `_data` is where we keep the properties.
 			this._data = {};
@@ -1304,184 +963,7 @@ can.dispatch = function(event){
 			this.attr(obj);
 			delete this._init;
 		},
-		/**
-		 * Get or set an attribute or attributes on the observe.
-		 * 
-		 *     o = new can.Observe({});
-		 *     
-		 *     // sets a user property
-		 *     o.attr('user',{name: 'hank'})
-		 *     
-		 *     // read the user's name
-		 *     o.attr('user.name') //-> 'hank'
-		 * 
-		 *     // merge multiple properties
-		 *     o.attr({
-		 *        grade : "A"
-		 *     })
-		 * 
-		 *     // get properties
-		 *     o.attr()           //-> {user: {name: 'hank'}, grade: "A"}
-		 * 
-		 *     // set multiple properties and remove absent attrs
-		 *     o.attr({foo: 'bar'}, true)
-		 * 
-		 *     o.attr()           //-> {foo: 'bar'}
-		 * 
-		 * ## Setting Properties
-		 * 
-		 * `attr( PROPERTY, VALUE )` sets the observable's PROPERTY to VALUE.  For example:
-		 * 
-		 *     o = new can.Observe({});
-		 *     o.attr('user',"Justin");
-		 * 
-		 * This call to attr fires two events on __o__ immediately after the value is set, the first is a "change" event that can be 
-		 * listened to like:
-		 * 
-		 *     o.bind('change', function(ev, attr, how, newVal, oldVal){})
-		 * 
-		 * where:
-		 * 
-		 *  - ev - the "change" event
-		 *  - attr - the name of the attribute changed: `"user"`
-		 *  - how - how the attribute was changed: `"add"` because the property was set for the first time
-		 *  - newVal - the new value of the property: `"Justin"`
-		 *  - oldVal - the old value of the property: `undefined`
-		 * 
-		 * "change" events are the generic event that gets fired on all changes to an 
-		 * observe's properties. The second event shares the name of the property being changed
-		 * and can be bound to like:
-		 * 
-		 *     o.bind('name', function(ev, newVal, oldVal){});
-		 * 
-		 * where:
-		 * 
-		 *   - ev - the "name" event
-		 *   - newVal - the new value of the name property: `'Justin'`
-		 *   - oldVal - the old value of the name property: `undefined`
-		 * 
-		 * `attr( PROPERTY, VALUE )` allows setting of deep properties like:
-		 * 
-		 *      o = new can.Observe({person: {name: {first: "Just"}}});
-		 *      o.attr('person.name.first',"Justin");
-		 * 
-		 *  All property names should be seperated with a __"."__.
-		 * 
-		 * `attr( PROPERTIES )` sets multiple properties at once and removes
-		 * properties not in `PROPERTIES`.  For example:
-		 * 
-		 *     o = new can.Observe({first: "Just", middle: "B"})
-		 *     o.attr({
-		 *       first : "Justin",
-		 *       last : "Meyer"
-		 *     })
-		 * 
-		 * This results in an object that looks like:
-		 * 
-		 *     { first: "Justin", last: "Meyer" }
-		 * 
-		 * Notice that the `middle` property is removed.  This results in
-		 * 3 change events (and the corresponding property-named events) that
-		 * are triggered after all properties have been set:
-		 * 
-		 * <table>
-		 *   <tr><th>attr</th><th>how</th><th>newVal</th><th>oldVal</th></tr>
-		 *   <tr>
-		 * 	   <td>"first"</td><td>"set"</td><td>"Justin"</td><td>"Just"</td>
-		 *   </tr>
-		 *   <tr>
-		 * 	   <td>"last"</td><td>"add"</td><td>"Meyer"</td><td>undefined</td>
-		 *   </tr>
-		 *   <tr>
-		 * 	   <td>"middle"</td><td>"remove"</td><td>undefined</td><td>"B"</td>
-		 *   </tr>
-		 * </table>
-		 * 
-		 * `attr( PROPERTIES , true )` merges properties into existing 
-		 * properties. For example:
-		 * 
-		 *     o = new can.Observe({first: "Just", middle: "B"})
-		 *     o.attr({
-		 *       first : "Justin",
-		 *       last : "Meyer"
-		 *     })
-		 * 
-		 * This results in an object that looks like:
-		 * 
-		 *     { first: "Justin", middle: "B", last: "Meyer" }
-		 * 
-		 * and results in 2 change events (and the corresponding 
-		 * property-named events):
-		 * 
-		 * <table>
-		 *   <tr><th>attr</th><th>how</th><th>newVal</th><th>oldVal</th></tr>
-		 *   <tr>
-		 * 	   <td>"first"</td><td>"set"</td><td>"Justin"</td><td>"Just"</td>
-		 *   </tr>
-		 *   <tr>
-		 * 	   <td>"last"</td><td>"add"</td><td>"Meyer"</td><td>undefined</td>
-		 *   </tr>
-		 * </table>
-		 * 
-		 * Use [can.Observe::removeAttr removeAttr] to remove an attribute.
-		 * 
-		 * ## Reading Properties
-		 * 
-		 * `attr( PROPERTY )` returns a property value.  For example:
-		 * 
-		 *     o = new can.Observe({ first: "Justin" })
-		 *     o.attr('first') //-> "Justin"
-		 * 
-		 * You can also read properties that don't conflict with Observe's inherited
-		 * methods direclty like:
-		 * 
-		 *     o.first //-> "Justin"
-		 * 
-		 * `attr( PROPERTY )` can read nested properties like:
-		 * 
-		 *      o = new can.Observe({person: {name: {first: "Justin"}}});
-		 *      o.attr('person.name.first') //-> "Justin"
-		 * 
-		 * If `attr( PROPERTY )` returns an object or an array, it returns
-		 * the Observe wrapped object or array. For example:
-		 * 
-		 *      o = new can.Observe({person: {name: {first: "Justin"}}});
-		 *      o.attr('person').attr('name.first') //-> "Justin"
-		 * 
-		 * 
-		 * `attr()` returns all properties in the observe, for example:
-		 * 
-		 *     o = new can.Observe({ first: "Justin" })
-		 *     o.attr() //-> { first: "Justin" }
-		 * 
-		 * If the observe has nested objects, `attr()` returns the 
-		 * data as plain JS objects, not as observes.  Example:
-		 * 
-		 *      o = new can.Observe({person: {name: {first: "Justin"}}});
-		 *      o.attr() //-> {person: {name: {first: "Justin"}}}
-		 * 
-		 * @param {String} attr the attribute to read or write.
-		 * 
-		 *     o.attr('name') //-> reads the name
-		 *     o.attr('name', 'Justin') //-> writes the name
-		 *     
-		 * You can read or write deep property names.  For example:
-		 * 
-		 *     o.attr('person', {name: 'Justin'})
-		 *     o.attr('person.name') //-> 'Justin'
-		 * 
-		 * @param {Object} [val] if provided, sets the value.
-		 * @return {Object} the observable or the attribute property.
-		 * 
-		 * If you are reading, the property value is returned:
-		 * 
-		 *     o.attr('name') //-> Justin
-		 *     
-		 * If you are writing, the observe is returned for chaining:
-		 * 
-		 *     o.attr('name',"Brian").attr('name') //-> Justin
-		 */
-		attr: function( attr, val ) {
+				attr: function( attr, val ) {
 			// This is super obfuscated for space -- basically, we're checking
 			// if the type of the attribute is not a `number` or a `string`.
 			if ( !~ "ns".indexOf((typeof attr).charAt(0))) {
@@ -1496,48 +978,10 @@ can.dispatch = function(event){
 				return this;
 			}
 		},
-		/**
-		 * Iterates through each attribute, calling handler 
-		 * with each attribute name and value.
-		 * 
-		 *     new Observe({foo: 'bar'})
-		 *       .each(function(name, value){
-		 *         equals(name, 'foo')
-		 *         equals(value,'bar')
-		 *       })
-		 * 
-		 * @param {function} handler(attrName,value) A function that will get 
-		 * called back with the name and value of each attribute on the observe.
-		 * 
-		 * Returning `false` breaks the looping.  The following will never
-		 * log 3:
-		 * 
-		 *     new Observe({a : 1, b : 2, c: 3})
-		 *       .each(function(name, value){
-		 *         console.log(value)
-		 *         if(name == 2){
-		 *           return false;
-		 *         }
-		 *       })
-		 * 
-		 * @return {can.Observe} the original observable.
-		 */
-		each: function() {
+				each: function() {
 			return can.each.apply(undefined, [this.__get()].concat(can.makeArray(arguments)))
 		},
-		/**
-		 * Removes a property by name from an observe.
-		 * 
-		 *     o =  new can.Observe({foo: 'bar'});
-		 *     o.removeAttr('foo'); //-> 'bar'
-		 * 
-		 * This creates a `'remove'` change event. Learn more about events
-		 * in [can.Observe.prototype.bind bind] and [can.Observe.prototype.delegate delegate].
-		 * 
-		 * @param {String} attr the attribute name to remove.
-		 * @return {Object} the value that was removed.
-		 */
-		removeAttr: function( attr ) {
+				removeAttr: function( attr ) {
 			// Convert the `attr` into parts (if nested).
 			var parts = attrParts(attr),
 				// The actual property to remove.
@@ -1636,139 +1080,12 @@ can.dispatch = function(event){
 				this[prop] = val
 			}
 		},
-		/**
-		 * @function bind
-		 * `bind( eventType, handler )` Listens to changes on a can.Observe.
-		 * 
-		 * When attributes of an observe change, two types of events are produced
-		 * 
-		 *   - "change" events - a generic event so you can listen to any property changes
-		 *   - ATTR_NAME events - bind to specific attribute changes
-		 * 
-		 * Example:
-		 * 
-		 *     o = new can.Observe({name : "Payal"});
-		 *     o.bind('change', function(ev, attr, how, newVal, oldVal){
-		 *       
-		 *     }).bind('name', function(ev, newVal, oldVal){
-		 *     	
-		 *     })
-		 *     
-		 *     o.attr('name', 'Justin') 
-		 * 
-		 * ## Change Events
-		 * 
-		 * A `'change'` event is triggered on the observe.  These events come
-		 * in three flavors:
-		 * 
-		 *   - `add` - a attribute is added
-		 *   - `set` - an existing attribute's value is changed
-		 *   - `remove` - an attribute is removed
-		 * 
-		 * The change event is fired with:
-		 * 
-		 *  - the attribute changed
-		 *  - how it was changed
-		 *  - the newValue of the attribute
-		 *  - the oldValue of the attribute
-		 * 
-		 * Example:
-		 * 
-		 *     o = new can.Observe({name : "Payal"});
-		 *     o.bind('change', function(ev, attr, how, newVal, oldVal){
-		 *       // ev    -> {type: 'change'}
-		 *       // attr  -> "name"
-		 *       // how   -> "add"
-		 *       // newVal-> "Justin"
-		 *       // oldVal-> undefined 
-		 *     })
-		 *     
-		 *     o.attr('name', 'Justin')
-		 * 
-		 * ## ATTR_NAME events
-		 * 
-		 * When a attribute value is changed, an event with the name of the attribute
-		 * is triggered on the observable with the new value and old value as 
-		 * parameters. For example:
-		 * 
-		 *     o = new can.Observe({name : "Payal"});
-		 *     o.bind('name', function(ev, newVal, oldVal){
-		 *       // ev    -> {type : "name"}
-		 *       // newVal-> "Justin"
-		 *       // oldVal-> undefined 
-		 *     })
-		 *     
-		 *     o.attr('name', 'Justin')
-		 * 
-		 * 
-		 * @param {String} eventType the event name.  Currently,
-		 * only `'change'`  and `ATTR_NAME` events are supported. 
-		 * 
-		 * @param {Function} handler(event, attr, how, newVal, oldVal) A 
-		 * callback function where
-		 * 
-		 *   - event - the event
-		 *   - attr - the name of the attribute changed
-		 *   - how - how the attribute was changed (add, set, remove)
-		 *   - newVal - the new value of the attribute
-		 *   - oldVal - the old value of the attribute
-		 * 
-		 * @return {can.Observe} the observe for chaining.
-		 */
-		bind: bind,
-		/**
-		 * @function unbind
-		 * Unbinds an event listener.  This works similar to jQuery's unbind.  This means you can 
-		 * use namespaces or unbind all event handlers for a given event:
-		 * 
-		 *     // unbind a specific event handler
-		 *     o.unbind('change', handler)
-		 *     
-		 *     // unbind all change event handlers bound with the
-		 *     // foo namespace
-		 *     o.unbind('change.foo')
-		 *     
-		 *     // unbind all change event handlers
-		 *     o.unbind('change')
-		 * 
-		 * @param {String} eventType - the type of event with
-		 * any optional namespaces. 
-		 * 
-		 * @param {Function} [handler] - The original handler function passed
-		 * to [can.Observe.prototype.bind bind].
-		 * 
-		 * @return {can.Observe} the original observe for chaining.
-		 */
-		unbind: unbind,
-		/**
-		 * @hide
-		 * Get the serialized Object form of the observe.  Serialized
-		 * data is typically used to send back to a server.
-		 * 
-		 *     o.serialize() //-> { name: 'Justin' }
-		 *     
-		 * Serialize currently returns the same data 
-		 * as [can.Observe.prototype.attrs].  However, in future
-		 * versions, serialize will be able to return serialized
-		 * data similar to [can.Model].  The following will work:
-		 * 
-		 *     new Observe({time: new Date()})
-		 *       .serialize() //-> { time: 1319666613663 }
-		 * 
-		 * @return {Object} a JavaScript Object that can be 
-		 * serialized with `JSON.stringify` or other methods. 
-		 * 
-		 */
-		serialize: function() {
+				bind: bind,
+				unbind: unbind,
+				serialize: function() {
 			return serialize(this, 'serialize', {});
 		},
-		/**
-		 * @hide
-		 * Set multiple properties on the observable
-		 * @param {Object} props
-		 * @param {Boolean} remove true if you should remove properties that are not in props
-		 */
-		_attrs: function( props, remove ) {
+				_attrs: function( props, remove ) {
 			if ( props === undefined ) {
 				return serialize(this, 'attr', {})
 			}
@@ -1808,137 +1125,9 @@ can.dispatch = function(event){
 		}
 	});
 	// Helpers for `observable` lists.
-	/**
-	 * @class can.Observe.List
-	 * @inherits can.Observe
-	 * @parent index
-	 * 
-	 * Provides the observable pattern for JavaScript arrays.  It lets you:
-	 * 
-	 *   - change the structure of an array
-	 *   - listen to changes in the array
-	 * 
-	 * ## Creating an observe list
-	 * 
-	 * To create an observable list, use `new can.Observe.List( ARRAY )` like:
-	 * 
-	 *     var hobbies = new can.Observe.List(
-	 * 		 			['programming', 'basketball', 'nose picking'])
-	 * 
-	 * can.Observe.List inherits from [can.Observe], including it's 
-	 * [can.Observe.prototype.bind bind], [can.Observe.prototype.each], and [can.Observe.prototype.unbind] 
-	 * methods.
-	 * 
-	 * can.Observe.List is inherited by [can.Model.List].
-	 * 
-	 * ## Getting and Setting Properties
-	 * 
-	 * Similar to an array, use the index operator to access items of a list:
-	 * 
-	 *     list = new can.Observe.List(["a","b"])
-	 *     list[1] //-> "b"
-	 * 
-	 * Or, use the `attr( PROPERTY )` method like:
-	 * 
-	 *     list = new can.Observe.List(["a","b"])
-	 *     list.attr(1)  //-> "b"
-	 * 
-	 * Using the 'attr' method lets Observe know you accessed the 
-	 * property. This is used by [can.EJS] for live-binding.
-	 * 
-	 * Get back a js Array with `attr()`:
-	 * 
-	 *     list = new can.Observe.List(["a","b"])
-	 *     list.attr()  //-> ["a","b"]
-	 * 
-	 * Change the structure of the array with:
-	 * 
-	 *    - [can.Observe.List::attr attr]
-	 *    - [can.Observe.List::pop pop]
-	 *    - [can.Observe.List::push push]
-	 *    - [can.Observe.List::shift shift]
-	 *    - [can.Observe.List::unshift unshift]
-	 *    - [can.Observe.List::splice splice]
-	 * 
-	 * ## Events
-	 * 
-	 * When an item is added, removed, or updated in a list, it triggers
-	 * events that can be [can.Observe::bind bind]ed to for changes.
-	 * 
-	 * There are 5 types of events: add, remove, set, length, and change.
-	 * 
-	 * ### add events
-	 * 
-	 * Add events are fired when items are added to the list. Listen 
-	 * to them like:
-	 * 
-	 *     list.bind("add", handler(ev, newVals, index) )
-	 * 
-	 * where:
-	 * 
-	 *  - `newVals` - the values added to the list
-	 *  - `index` - where the items where added
-	 * 
-	 * ### remove events
-	 * 
-	 * Removes events are fired when items are removed from the list. Listen 
-	 * to them like:
-	 * 
-	 *     list.bind("remove", handler(ev, oldVals, index) )
-	 * 
-	 * where:
-	 * 
-	 *   - `oldVals` - the values removed from the list
-	 *   - `index` - where the items where removed
-	 * 
-	 * ### set events
-	 * 
-	 * Set events happen when an item in the list is updated. Listen to 
-	 * these events with:
-	 * 
-	 *     list.bind("set", handler(ev, newVal, index) )
-	 * 
-	 * where:
-	 * 
-	 *   - `newVal` - the new value at index
-	 *   - `index` - where the items where removed
-	 * 
-	 * ### length events
-	 * 
-	 * Anytime the length is changed a length attribute event is
-	 * fired.
-	 * 
-	 *     list.bind("length", handler(ev, length) )
-	 * 
-	 * where:
-	 * 
-	 * - `length` - the new length of the array.
-	 * 
-	 * ### change events
-	 * 
-	 * Change events are fired when any type of change 
-	 * happens on the array.  They get called with:
-	 * 
-	 *     .bind("change", handler(ev, attr, how, newVal, oldVal) )
-	 * 
-	 * Where:
-	 * 
-	 *   - `attr` - the index of the item changed
-	 *   - `how` - how the item was changed (add, remove, set)
-	 *   - `newVal` - For set, a single item. For add events, an array 
-	 *     of items. For remove event, undefined.
-	 *   - `oldVal` - the old values at `attr`.
-	 * 
-	 * @constructor
-	 * 
-	 * @param {Array} [items...] the array of items to create the list with
-	 */
-	var splice = [].splice,
+		var splice = [].splice,
 		list = Observe('can.Observe.List',
-	/**
-	 * @prototype
-	 */
-	{
+		{
 		setup: function( instances, options ) {
 			this.length = 0;
 			this._namespace = ".observe" + (++observeId);
@@ -1973,79 +1162,12 @@ can.dispatch = function(event){
 				this.length = (+attr+1)
 			}
 		},
-		/**
-		 * @hide
-		 * Returns the serialized form of this list.
-		 */
 		// Returns the serialized form of this list.
-		serialize: function() {
+				serialize: function() {
 			return serialize(this, 'serialize', []);
 		},
-		/**
-		 * Iterates through each item of the list, calling handler 
-		 * with each index and value.
-		 * 
-		 *     new Observe.List(['a'])
-		 *       .each(function(index, value){
-		 *         equals(index, 1)
-		 *         equals(value,'a')
-		 *       })
-		 * 
-		 * @param {function} handler(index,value) A function that will get 
-		 * called back with the index and value of each item on the list.
-		 * 
-		 * Returning `false` breaks the looping.  The following will never
-		 * log 'c':
-		 * 
-		 *     new Observe(['a','b','c'])
-		 *       .each(function(index, value){
-		 *         console.log(value)
-		 *         if(index == 1){
-		 *           return false;
-		 *         }
-		 *       })
-		 * 
-		 * @return {can.Observe.List} the original observable.
-		 */
-		//
-		/**
-		 * `splice(index, [ howMany, elements... ] )` remove or add items 
-		 * from a specific point in the list.
-		 * 
-		 * ### Example
-		 * 
-		 * The following creates a list of numbers and replaces 2 and 3 with
-		 * "a", and "b".
-		 * 
-		 *     var l = new can.Observe.List([0,1,2,3]);
-		 *     
-		 *     l.splice(1,2, "a", "b"); // results in [0,"a","b",3]
-		 *     
-		 * This creates 2 change events.  The first event is the removal of 
-		 * numbers one and two where it's callback is 
-		 * `bind('change', function( ev, attr, how, newVals, oldVals, where ) )`
-		 * and it's values are:
-		 * 
-		 *   - attr - "1" - indicates where the remove event took place
-		 *   - how - "remove"
-		 *   - newVals - undefined
-		 *   - oldVals - [1,2] -the array of removed values
-		 *   - where - 1 - the location of where these items where removed
-		 * 
-		 * The second change event is the addition of the "a", and "b" values where 
-		 * the callback values will be:
-		 * 
-		 *   - attr - "1" - indicates where the add event took place
-		 *   - how - "added"
-		 *   - newVals - ["a","b"]
-		 *   - oldVals - [1, 2] - the array of removed values
-		 *   - where - 1 - the location of where these items where added
-		 * 
-		 * @param {Number} index where to start removing or adding items
-		 * @param {Object} [howMany=0] the number of items to remove
-		 * @param {Object} [elements...] items to add to the array
-		 */
-		splice: function( index, howMany ) {
+				//  
+				splice: function( index, howMany ) {
 			var args = can.makeArray(arguments),
 				i;
 
@@ -2068,117 +1190,7 @@ can.dispatch = function(event){
 			}
 			return removed;
 		},
-		/**
-		 * @function attr
-		 * Gets or sets an item or items in the observe list.  Examples:
-		 * 
-		 *     list = new can.Observe.List(["a","b","c"]);
-		 *      
-		 *     // sets an array item
-		 *     list.attr(3,'d')
-		 *     
-		 *     // read an array's item
-		 *     list.attr(3) //-> 'd'
-		 * 
-		 *     // merge array's properties
-		 *     list.attr( ["b","BOO"] )
-		 * 
-		 *     // get properties
-		 *     o.attr()           //-> ["b","BOO","c","d"]
-		 *     
-		 *     // set array
-		 *     o.attr(["item"])
-		 *     o.attr() //-> ["item"]
-		 * 
-		 * ## Setting Properties
-		 * 
-		 * `attr( array , true )` updates the list to look like array.  For example:
-		 * 
-		 *     list = new can.Observe.List(["a","b","c"])
-		 *     list.attr(["foo"], true)
-		 *     
-		 *     list.attr() //-> ["foo"]
-		 * 
-		 * 
-		 * When the array is changed, it produces events that detail the changes
-		 * in the list. They are listed in the
-		 * order they are produced for the above example:
-		 * 
-		 *   1. `.bind( "change", handler(ev, attr, how, newVal, oldVal) )` where:
-		 *       
-		 *      - ev = {type: "change"}
-		 *      - attr = "0"
-		 *      - how = "set"
-		 *      - newVal = "foo"
-		 *      - oldVal = "a"
-		 * 
-		 *   2. `.bind( "set", handler(ev, newVal, index) )` where:
-		 *       
-		 *      - ev = {type: "set"}
-		 *      - newVal = "foo"
-		 *      - index = 0
-		 * 
-		 *   3. `.bind( "change", handler(ev, attr, how, newVal, oldVal) )` where:
-		 *       
-		 *      - ev = {type: "change"}
-		 *      - attr = "1"
-		 *      - how = "remove"
-		 *      - newVal = undefined
-		 *      - oldVal = ["b","c"]
-		 * 
-		 *   4. `.bind( "remove", handler(ev, newVal, index) )` where:
-		 *       
-		 *      - ev = {type: "remove"}
-		 *      - newVal = undefined
-		 *      - index = 1
-		 * 
-		 *   5. `.bind( "length", handler(ev, length) )` where:
-		 *       
-		 *      - ev = {type: "length"}
-		 *      - length = 1
-		 * 
-		 * In general, it is possible to listen to events and reproduce the
-		 * changes in a facsimile of the list.  This is useful for implementing 
-		 * high-performance widgets that need to reflect the contents of the list without
-		 * redrawing the entire list.  Here's an example of how that would look:
-		 * 
-		 *     list.bind("set", function(ev, newVal, index){
-		 * 	     // update the item at index with newVal
-		 *     }).bind("remove", function(ev, oldVals, index){
-		 * 	     // remove oldVals.length items at index
-		 *     }).bind("add", function(ev, newVals, index){
-		 *       // insert newVals at index
-		 *     })
-		 * 
-		 * `attr( array )` merges items into the beginning of the array.  For example:
-		 * 
-		 *     list = new can.Observe.List(["a","b"])
-		 *     list.attr(["foo"])
-		 *     
-		 *     list.attr() //-> ["foo","b"]
-		 * 
-		 * `attr( INDEX, VALUE )` sets or updates an item at `INDEX`.  Example:
-		 * 
-		 *     list.attr(0, "ITEM")
-		 * 
-		 * ## Reading Properties
-		 * 
-		 * `attr()` returns the lists content as an array.  For example:
-		 * 
-		 *      list = new can.Observe.List(["a", {foo: "bar"}])
-		 *      list.attr()  //-> ["a", {foo: "bar"}]
-		 * 
-		 * `attr( INDEX )` reads a property at `INDEX` like:
-		 * 
-		 *      list = new can.Observe.List(["a", {foo: "bar"}])
-		 *      list.attr(0)  //-> "a",
-		 * 
-		 * @param {Array|Number} props
-		 * @param {Boolean|Object} {optional:remove} 
-		 * @return {list|Array} returns the props on a read or the observe
-		 * list on a write.
-		 */
-		_attrs: function( props, remove ) {
+				_attrs: function( props, remove ) {
 			if ( props === undefined ) {
 				return serialize(this, 'attr', []);
 			}
@@ -2215,7 +1227,6 @@ can.dispatch = function(event){
 		}
 	}),
 
-
 		// Converts to an `array` of arguments.
 		getArgs = function( args ) {
 			return args[0] && can.isArray(args[0]) ?
@@ -2224,42 +1235,8 @@ can.dispatch = function(event){
 		};
 	// Create `push`, `pop`, `shift`, and `unshift`
 	can.each({
-		/**
-		 * @function push
-		 * Add items to the end of the list.
-		 * 
-		 *     var l = new can.Observe.List([]);
-		 *     
-		 *     l.bind('change', function( 
-		 *         ev,        // the change event
-		 *         attr,      // the attr that was changed,
-		 *     			   // for multiple items, "*" is used 
-		 *         how,       // "add"
-		 *         newVals,   // an array of new values pushed
-		 *         oldVals,   // undefined
-		 *         where      // the location where these items where added
-		 *         ) {
-		 *     
-		 *     })
-		 *     
-		 *     l.push('0','1','2');
-		 * 
-		 * @return {Number} the number of items in the array
-		 */
-		push: "length",
-		/**
-		 * @function unshift
-		 * Add items to the start of the list.  This is very similar to
-		 * [can.Observe.List::push can.Observe.prototype.List].  Example:
-		 * 
-		 *     var l = new can.Observe.List(["a","b"]);
-		 *     l.unshift(1,2,3) //-> 5
-		 *     l.attr() //-> [1,2,3,"a","b"]
-		 * 
-		 * @param {Object} [items...] items to add to the start of the list.
-		 * @return {Number} the length of the array.
-		 */
-		unshift: 0
+				push: "length",
+				unshift: 0
 	},
 	// Adds a method
 	// `name` - The method name.
@@ -2291,43 +1268,8 @@ can.dispatch = function(event){
 	});
 
 	can.each({
-		/**
-		 * @function pop
-		 * 
-		 * Removes an item from the end of the list. Example:
-		 * 
-		 *     var l = new can.Observe.List([0,1,2]);
-		 *     l.pop() //-> 2;
-		 * 
-		 * This produces a change event like
-		 * 
-		 *     l.bind('change', function( 
-		 *         ev,        // the change event
-		 *         attr,      // the attr that was changed, 
-		 *     			   // for multiple items, "*" is used 
-		 *         how,       // "remove"
-		 *         newVals,   // undefined
-		 *         oldVals,   // 2
-		 *         where      // the location where these items where added
-		 *         ) {
-		 *     
-		 *     })
-		 * 
-		 * @return {Object} the element at the end of the list or undefined if the
-		 * list is empty.
-		 */
-		pop: "length",
-		/**
-		 * @function shift
-		 * Removes an item from the start of the list.  This is very similar to
-		 * [can.Observe.List::pop]. Example:
-		 * 
-		 *     var l = new can.Observe.List([0,1,2]);
-		 *     l.shift() //-> 0;
-		 * 
-		 * @return {Object} the element at the start of the list
-		 */
-		shift: 0
+				pop: "length",
+				shift: 0
 	},
 	// Creates a `remove` type method
 	function( name, where ) {
@@ -2335,7 +1277,6 @@ can.dispatch = function(event){
 			
 			var args = getArgs(arguments),
 				len = where && this.length ? this.length - 1 : 0;
-
 
 			var res = [][name].apply(this, args)
 
@@ -2355,33 +1296,17 @@ can.dispatch = function(event){
 	});
 	
 	list.prototype.
-	/**
-	 * @function indexOf
-	 * Returns the position of the item in the array.  Returns -1 if the
-	 * item is not in the array.  Examples:
-	 * 
-	 *     list = new can.Observe.List(["a","b","c"]);
-	 *     list.indexOf("b") //-> 1
-	 *     list.indexOf("f") //-> -1
-	 * 
-	 * @param {Object} item the item to look for
-	 * @return {Number} the index of the object in the array or -1.
-	 */
-	indexOf = [].indexOf || function(item){
+		indexOf = [].indexOf || function(item){
 		return can.inArray(item, this)
 	};
-;
 
 	
 	// ## model.js  
 	// `can.Model`  
 	// _A `can.Observe` that connects to a RESTful interface._
 	//  
-	/**
-	 * @add can.Model
-	 */
 	// Generic deferred piping function
-	var	pipe = function( def, model, func ) {
+		var	pipe = function( def, model, func ) {
 		var d = new can.Deferred();
 		def.then(function(){
 			arguments[0] = model[func](arguments[0])
@@ -2460,143 +1385,17 @@ can.dispatch = function(event){
 			return deferred.then(success,error);
 		},
 	
-	/** 
-	 * @Static
-	 */
-	
 	// This object describes how to make an ajax request for each ajax method.  
 	// The available properties are:
 	//		`url` - The default url to use as indicated as a property on the model.
 	//		`type` - The default http request type
 	//		`data` - A method that takes the `arguments` and returns `data` used for ajax.
-	ajaxMethods = {
-		/**
-		 * @function create
-		 * `create(attributes) -> Deferred` is used by [can.Model::save save] to create a 
-		 * model instance on the server. 
-		 * 
-		 * ## Implement with a URL
-		 * 
-		 * The easiest way to implement create is to give it the url 
-		 * to post data to:
-		 * 
-		 *     var Recipe = can.Model({
-		 *       create: "/recipes"
-		 *     },{})
-		 *     
-		 * This lets you create a recipe like:
-		 *  
-		 *     new Recipe({name: "hot dog"}).save();
-		 * 
-		 * 
-		 * ## Implmeent with a Function
-		 * 
-		 * You can also implement create by yourself. Create gets called 
-		 * with `attrs`, which are the [can.Observe::serialize serialized] model 
-		 * attributes.  Create returns a `Deferred` 
-		 * that contains the id of the new instance and any other 
-		 * properties that should be set on the instance.
-		 *  
-		 * For example, the following code makes a request 
-		 * to `POST /recipes.json {'name': 'hot+dog'}` and gets back
-		 * something that looks like:
-		 *  
-		 *     { 
-		 *       "id": 5,
-		 *       "createdAt": 2234234329
-		 *     }
-		 * 
-		 * The code looks like:
-		 * 
-		 *     can.Model("Recipe", {
-		 *       create : function( attrs ){
-		 *         return $.post("/recipes.json",attrs, undefined ,"json");
-		 *       }
-		 *     },{})
-		 * 
-		 * 
-		 * @param {Object} attrs Attributes on the model instance
-		 * @return {Deferred} A deferred that resolves to 
-		 * an object with the id of the new instance and
-		 * other properties that should be set on the instance.
-		 */
-		create : {
+		ajaxMethods = {
+				create : {
 			url : "_shortName",
 			type :"post"
 		},
-		/**
-		 * @function update
-		 * `update( id, attrs ) -> Deferred` is used by [can.Model::save save] to 
-		 * update a model instance on the server. 
-		 * 
-		 * ## Implement with a URL
-		 * 
-		 * The easist way to implement update is to just give it the url to `PUT` data to:
-		 * 
-		 *     Recipe = can.Model({
-		 *       update: "/recipes/{id}"
-		 *     },{})
-		 *     
-		 * This lets you update a recipe like:
-		 *  
-		 *     Recipe.findOne({id: 1}, function(recipe){
-		 * 	      recipe.attr('name','salad')
-		 *        recipe.save()
-		 *     })
-		 * 
-		 * This will make an XHR request like:
-		 * 
-		 *     PUT /recipes/1 
-		 *     name=salad
-		 *  
-		 * If your server doesn't use PUT, you can change it to post like:
-		 * 
-		 *     $.Model("Recipe",{
-		 *       update: "POST /recipes/{id}"
-		 *     },{})
-		 * 
-		 * The server should send back an object with any new attributes the model 
-		 * should have.  For example if your server udpates the "updatedAt" property, it
-		 * should send back something like:
-		 * 
-		 *     // PUT /recipes/4 {name: "Food"} ->
-		 *     {
-		 *       updatedAt : "10-20-2011"
-		 *     }
-		 * 
-		 * ## Implement with a Function
-		 * 
-		 * You can also implement update by yourself.  Update takes the `id` and
-		 * `attributes` of the instance to be udpated.  Update must return
-		 * a [can.Deferred Deferred] that resolves to an object that contains any 
-		 * properties that should be set on the instance.
-		 *  
-		 * For example, the following code makes a request 
-		 * to '/recipes/5.json?name=hot+dog' and gets back
-		 * something that looks like:
-		 *  
-		 *     { 
-		 *       updatedAt: "10-20-2011"
-		 *     }
-		 * 
-		 * The code looks like:
-		 * 
-		 *     Recipe = can.Model({
-		 *       update : function(id, attrs ) {
-		 *         return $.post("/recipes/"+id+".json",attrs, null,"json");
-		 *       }
-		 *     },{})
-		 * 
-		 * 
-		 * @param {String} id the id of the model instance
-		 * @param {Object} attrs Attributes on the model instance
-		 * @return {Deferred} A deferred that resolves to
-		 * an object of attribute / value pairs of property changes the client doesn't already 
-		 * know about. For example, when you update a name property, the server might 
-		 * update other properties as well (such as updatedAt). The server should send 
-		 * these properties as the response to updates.  
-		 */
-		update : {
+				update : {
 			data : function(id, attrs){
 				attrs = attrs || {};
 				var identity = this.id;
@@ -2609,228 +1408,16 @@ can.dispatch = function(event){
 			},
 			type : "put"
 		},
-		/**
-		 * @function destroy
-		 * `destroy(id) -> Deferred` is used by [can.Model::destroy] remove a model 
-		 * instance from the server.
-		 * 
-		 * ## Implement with a URL
-		 * 
-		 * You can implement destroy with a string like:
-		 * 
-		 *     Recipe = can.Model({
-		 *       destroy : "/recipe/{id}"
-		 *     },{})
-		 * 
-		 * And use [can.Model::destroy] to destroy it like:
-		 * 
-		 *     Recipe.findOne({id: 1}, function(recipe){
-		 * 	      recipe.destroy();
-		 *     });
-		 * 
-		 * This sends a `DELETE` request to `/thing/destroy/1`.
-		 * 
-		 * If your server does not support `DELETE` you can override it like:
-		 * 
-		 *     Recipe = can.Model({
-		 *       destroy : "POST /recipe/destroy/{id}"
-		 *     },{})
-		 * 
-		 * ## Implement with a function
-		 * 
-		 * Implement destroy with a function like:
-		 * 
-		 *     Recipe = can.Model({
-		 *       destroy : function(id){
-		 *         return $.post("/recipe/destroy/"+id,{});
-		 *       }
-		 *     },{})
-		 * 
-		 * Destroy just needs to return a deferred that resolves.
-		 * 
-		 * @param {String|Number} id the id of the instance you want destroyed
-		 * @return {Deferred} a deferred that resolves when the model instance is destroyed.
-		 */
-		destroy : {
+				destroy : {
 			type : "delete",
 			data : function(id){
 				return {}[this.id] = id;
 			}
 		},
-		/**
-		 * @function findAll
-		 * `findAll( params, success(instances), error(xhr) ) -> Deferred` is used to retrieve model 
-		 * instances from the server. Before you can use `findAll`, you must implement it.
-		 * 
-		 * ## Implement with a URL
-		 * 
-		 * Implement findAll with a url like:
-		 * 
-		 *     Recipe = can.Model({
-		 *       findAll : "/recipes.json"
-		 *     },{});
-		 * 
-		 * The server should return data that looks like:
-		 * 
-		 *     [
-		 *       {"id" : 57, "name": "Ice Water"},
-		 *       {"id" : 58, "name": "Toast"}
-		 *     ]
-		 * 
-		 * ## Implement with an Object
-		 * 
-		 * Implement findAll with an object that specifies the parameters to
-		 * `can.ajax` (jQuery.ajax) like:
-		 * 
-		 *     Recipe = can.Model({
-		 * 	     findAll : {
-		 * 	       url: "/recipes.xml",
-		 *         dataType: "xml"
-		 *       }
-		 *     },{})
-		 * 
-		 * ## Implement with a Function
-		 * 
-		 * To implement with a function, `findAll` is passed __params__ to filter
-		 * the instances retrieved from the server and it should return a
-		 * deferred that resolves to an array of model data. For example:
-		 * 
-		 *     Recipe = can.Model({
-		 *       findAll : function(params){
-		 *         return $.ajax({
-		 *           url: '/recipes.json',
-		 *           type: 'get',
-		 *           dataType: 'json'})
-		 *       }
-		 *     },{})
-		 * 
-		 * ## Use
-		 * 
-		 * After implementing `findAll`, you can use it to retrieve instances of the model
-		 * like:
-		 * 
-		 *     Recipe.findAll({favorite: true}, function(recipes){
-		 * 	     recipes[0].attr('name') //-> "Ice Water"
-		 *     }, function( xhr ){
-		 * 	     // called if an error
-		 *     }) //-> Deferred
-		 * 
-		 * The following API details the use of `findAll`.
-		 * 
-		 * @param {Object} params data to refine the results.  An example might be passing {limit : 20} to
-		 * limit the number of items retrieved.
-		 * 
-		 *     Recipe.findAll({limit: 20})
-		 * 
-		 * @param {Function} [success(items)] called with a [can.Model.List] of model 
-		 * instances.  The model isntances are created from the Deferred's resolved data.
-		 * 
-		 *     Recipe.findAll({limit: 20}, function(recipes){
-		 *       recipes.constructor //-> can.Model.List
-		 *     })
-		 * 
-		 * @param {Function} error(xhr) `error` is called if the Deferred is rejected with the
-		 * xhr handler.
-		 * 
-		 * @return {Deferred} a [can.Deferred Deferred] that __resolves__ to
-		 * a [can.Model.List] of the model instances and __rejects__ to the XHR object.
-		 * 
-		 *     Recipe.findAll()
-		 *           .then(function(recipes){
-		 * 	
-		 *           }, function(xhr){
-		 * 	
-		 *           })
-		 */
-		findAll : {
+				findAll : {
 			url : "_shortName"
 		},
-		/**
-		 * @function findOne
-		 * `findOne( params, success(instance), error(xhr) ) -> Deferred` is used to retrieve a model 
-		 * instance from the server. Before you can use `findOne`, you must implement it.
-		 * 
-		 * ## Implement with a URL
-		 * 
-		 * Implement findAll with a url like:
-		 * 
-		 *     Recipe = can.Model({
-		 *       findOne : "/recipes/{id}.json"
-		 *     },{});
-		 * 
-		 * If `findOne` is called like:
-		 * 
-		 *     Recipe.findOne({id: 57});
-		 * 
-		 * The server should return data that looks like:
-		 * 
-		 *     {"id" : 57, "name": "Ice Water"}
-		 * 
-		 * ## Implement with an Object
-		 * 
-		 * Implement `findOne` with an object that specifies the parameters to
-		 * `can.ajax` (jQuery.ajax) like:
-		 * 
-		 *     Recipe = can.Model({
-		 *       findAll : {
-		 *         url: "/recipes/{id}.xml",
-		 *         dataType: "xml"
-		 *       }
-		 *     },{})
-		 * 
-		 * ## Implement with a Function
-		 * 
-		 * To implement with a function, `findOne` is passed __params__ to specify
-		 * the instance retrieved from the server and it should return a
-		 * deferred that resolves to the model data. For example:
-		 * 
-		 *     Recipe = can.Model({
-		 *       findAll : function(params){
-		 *         return $.ajax({
-		 *           url: '/recipes/{id}.json',
-		 *           type: 'get',
-		 *           dataType: 'json'})
-		 *       }
-		 *     },{})
-		 * 
-		 * ## Use
-		 * 
-		 * After implementing `findOne`, you can use it to retrieve an instance of the model
-		 * like:
-		 * 
-		 *     Recipe.findOne({id: 57}, function(recipe){
-		 * 	     recipe.attr('name') //-> "Ice Water"
-		 *     }, function( xhr ){
-		 * 	     // called if an error
-		 *     }) //-> Deferred
-		 * 
-		 * The following API details the use of `findOne`.
-		 * 
-		 * @param {Object} params data to specify the instance. 
-		 * 
-		 *     Recipe.findAll({id: 20})
-		 * 
-		 * @param {Function} [success(item)] called with a model 
-		 * instance.  The model isntance is created from the Deferred's resolved data.
-		 * 
-		 *     Recipe.findOne({id: 20}, function(recipe){
-		 *       recipe.constructor //-> Recipe
-		 *     })
-		 * 
-		 * @param {Function} error(xhr) `error` is called if the Deferred is rejected with the
-		 * xhr handler.
-		 * 
-		 * @return {Deferred} a [can.Deferred Deferred] that __resolves__ to
-		 * the model instance and __rejects__ to the XHR object.
-		 * 
-		 *     Recipe.findOne({id: 20})
-		 *           .then(function(recipe){
-		 * 	
-		 *           }, function(xhr){
-		 * 	
-		 *           })
-		 */
-		findOne: {}
+				findOne: {}
 	},
 		// Makes an ajax request `function` from a string.
 		//		`ajaxMethod` - The `ajaxMethod` object defined above.
@@ -2847,7 +1434,6 @@ can.dispatch = function(event){
 				return ajax(str || this[ajaxMethod.url || "_url"], data, ajaxMethod.type || "get")
 			}
 		}
-
 
 	
 	
@@ -2897,88 +1483,7 @@ can.dispatch = function(event){
 				}
 			}
 		},
-		/**
-		 * `can.Model.models(data, xhr)` is used to 
-		 * convert the raw response of a [can.Model.findAll] request 
-		 * into a [can.Model.List] of model instances.  
-		 * 
-		 * This method is rarely called directly. Instead the deferred returned
-		 * by findAll is piped into `models`.  This creates a new deferred that
-		 * resolves to a [can.Model.List] of instances instead of an array of
-		 * simple JS objects.
-		 * 
-		 * If your server is returning data in non-standard way,
-		 * overwriting `can.Model.models` is the best way to normalize it.
-		 * 
-		 * ## Quick Example
-		 * 
-		 * The following uses models to convert to a [can.Model.List] of model
-		 * instances.
-		 * 
-		 *     Task = can.Model({},{})
-		 *     var tasks = Task.models([
-		 * 	     {id: 1, name : "dishes", complete : false},
-		 *       {id: 2, name: "laundry", compelte: true}
-		 *     ])
-		 *     
-		 *     tasks.attr("0.complete", true)
-		 * 
-		 * ## Non-standard Services
-		 * 
-		 * `can.Model.models` expects data to be an array of name-value pair 
-		 * objects like:
-		 * 
-		 *     [{id: 1, name : "dishes"},{id:2, name: "laundry"}, ...]
-		 *     
-		 * It can also take an object with additional data about the array like:
-		 * 
-		 *     {
-		 *       count: 15000 //how many total items there might be
-		 *       data: [{id: 1, name : "justin"},{id:2, name: "brian"}, ...]
-		 *     }
-		 * 
-		 * In this case, models will return a [can.Model.List] of instances found in 
-		 * data, but with additional properties as expandos on the list:
-		 * 
-		 *     var tasks = Task.models({
-		 *       count : 1500,
-		 *       data : [{id: 1, name: 'dishes'}, ...]
-		 *     })
-		 *     tasks.attr("name") // -> 'dishes'
-		 *     tasks.count // -> 1500
-		 * 
-		 * ### Overwriting Models
-		 * 
-		 * If your service returns data like:
-		 * 
-		 *     {thingsToDo: [{name: "dishes", id: 5}]}
-		 * 
-		 * You will want to overwrite models to pass the base models what it expects like:
-		 * 
-		 *     Task = can.Model({
-		 *       models : function(data){
-		 *         return can.Model.models.call(this,data.thingsToDo);
-		 *       }
-		 *     },{})
-		 * 
-		 * `can.Model.models` passes each intstance's data to `can.Model.model` to
-		 * create the individual instances.
-		 * 
-		 * @param {Array|Objects} instancesRawData An array of raw name - value pairs objects like:
-		 * 
-		 *      [{id: 1, name : "dishes"},{id:2, name: "laundry"}, ...]
-		 * 
-		 * Or an Object with a data property and other expando properties like:
-		 * 
-		 * 	   {
-		 *       count: 15000 //how many total items there might be
-		 *       data: [{id: 1, name : "justin"},{id:2, name: "brian"}, ...]
-		 *     }
-		 * 
-		 * @return {Array} a [can.Model.List] of instances.  Each instance is created with
-		 * [can.Model.model].
-		 */
-		models: function( instancesRawData ) {
+				models: function( instancesRawData ) {
 			if ( ! instancesRawData ) {
 				return;
 			}
@@ -3022,70 +1527,7 @@ can.dispatch = function(event){
 			}
 			return res;
 		},
-		/**
-		 * `can.Model.model(attributes)` is used to convert data from the server into
-		 * a model instance.  It is rarely called directly.  Instead it is invoked as 
-		 * a result of [can.Model.findOne] or [can.Model.findAll].  
-		 * 
-		 * If your server is returning data in non-standard way,
-		 * overwriting `can.Model.model` is a good way to normalize it.
-		 * 
-		 * ## Example
-		 * 
-		 * The following uses `model` to convert to a model
-		 * instance.
-		 * 
-		 *     Task = can.Model({},{})
-		 *     var task = Task.model({id: 1, name : "dishes", complete : false})
-		 *     
-		 *     tasks.attr("complete", true)
-		 * 
-		 * `Task.model(attrs)` is very similar to simply calling `new Model(attrs)` except
-		 * that it checks the model's store if the instance has already been created.  The model's 
-		 * store is a collection of instances that have event handlers.  
-		 * 
-		 * This means that if the model's store already has an instance, you'll get the same instance
-		 * back.  Example:
-		 * 
-		 *     // create a task
-		 *     var taskA = new Task({id: 5, complete: true});
-		 * 
-		 *     // bind to it, which puts it in the store
-		 * 	   taskA.bind("complete", function(){});
-		 *     
-		 *     // use model to create / retrieve a task
-		 *     var taskB = Task.model({id: 5, complete: true});
-		 *     
-		 *     taskA === taskB //-> true
-		 * 
-		 * ## Non-standard Services
-		 * 
-		 * `can.Model.model` expects to retreive attributes of the model 
-		 * instance like:
-		 * 
-		 * 
-		 *     {id: 5, name : "dishes"}
-		 *     
-		 * 
-		 * If the service returns data formatted differently, like:
-		 * 
-		 *     {todo: {name: "dishes", id: 5}}
-		 * 
-		 * Overwrite `model` like:
-		 * 
-		 *     Task = can.Model({
-		 *       model : function(data){
-		 *         return can.Model.model.call(this,data.todo);
-		 *       }
-		 *     },{});
-		 * 
-		 * @param {Object} attributes An object of property name and values like:
-		 * 
-		 *      {id: 1, name : "dishes"}
-		 * 
-		 * @return {model} a model instance.
-		 */
-		model: function( attributes ) {
+				model: function( attributes ) {
 			if (!attributes ) {
 				return;
 			}
@@ -3098,235 +1540,21 @@ can.dispatch = function(event){
 			}
 			return model;
 		}
-		/**
-		 * @function bind
-		 * `bind(eventType, handler(event, instance))` listens to
-		 * __created__, __updated__, __destroyed__ events on all 
-		 * instances of the model.
-		 * 
-		 *     Task.bind("created", function(ev, createdTask){
-		 * 	     this //-> Task
-		 *       createdTask.attr("name") //-> "Dishes"
-		 *     })
-		 *     
-		 *     new Task({name: "Dishes"}).save();
-		 * 
-		 * @param {String} eventType The type of event.  It must be
-		 * `"created"`, `"udpated"`, `"destroyed"`.
-		 * 
-		 * @param {Function} handler(event,instance) A callback function
-		 * that gets called with the event and instance that was
-		 * created, destroyed, or updated.
-		 * 
-		 * @return {can.Model} the model constructor function.
-		 */
-		// 
-		/**
-		 * @function unbind
-		 * `unbind(eventType, handler)` removes a listener
-		 * attached with [can.Model.bind].
-		 * 
-		 *     var handler = function(ev, createdTask){
-		 * 	     
-		 *     }
-		 *     Task.bind("created", handler)
-		 *     Task.unbind("created", handler)
-		 * 
-		 * You have to pass the same function to `unbind` that you
-		 * passed to `bind`.
-		 * 
-		 * @param {String} eventType The type of event.  It must be
-		 * `"created"`, `"udpated"`, `"destroyed"`.
-		 * 
-		 * @param {Function} handler(event,instance) A callback function
-		 * that was passed to `bind`.
-		 * 
-		 * @return {can.Model} the model constructor function.
-		 */
-		// 
-		/**
-		 * @attribute id
-		 * The name of the id field.  Defaults to 'id'. Change this if it is something different.
-		 * 
-		 * For example, it's common in .NET to use Id.  Your model might look like:
-		 * 
-		 *     Friend = can.Model({
-		 *       id: "Id"
-		 *     },{});
-		 */
-		// 
-	},
-	/**
-	 * @prototype
-	 */
-	{
-		/**
-		 * `isNew()` returns if the instance is has been created 
-		 * on the server.  
-		 * This is essentially if the [can.Model.id] property is null or undefined.
-		 * 
-		 *     new Recipe({id: 1}).isNew() //-> false
-		 * @return {Boolean} false if an id is set, true if otherwise.
-		 */
-		isNew: function() {
+				// 
+				// 
+			},
+		{
+				isNew: function() {
 			var id = getId(this);
 			return ! ( id || id === 0 ); // If `null` or `undefined`
 		},
-		/**
-		 * `model.save([success(model)],[error(xhr)])` creates or updates 
-		 * the model instance using [can.Model.create] or
-		 * [can.Model.update] depending if the instance
-		 * [can.Model::isNew has an id or not].
-		 * 
-		 * ## Using `save` to create an instance.
-		 * 
-		 * If `save` is called on an instance that does not have 
-		 * an [can.Model.id id] property, it calls [can.Model.create]
-		 * with the instance's properties.  It also [can.trigger triggers]
-		 * a "created" event on the instance and the model.
-		 * 
-		 *     // create a model instance
-		 *     var todo = new Todo({name: "dishes"})
-		 *     
-		 *     // listen when the instance is created
-		 *     todo.bind("created", function(ev){
-		 * 	     this //-> todo
-		 *     })
-		 *     
-		 *     // save it on the server
-		 *     todo.save(function(todo){
-		 * 	     console.log("todo", todo, "created")
-		 *     });
-		 * 
-		 * ## Using `save` to update an instance.
-		 * 
-		 * If save is called on an instance that has 
-		 * an [can.Model.id id] property, it calls [can.Model.create]
-		 * with the instance's properties.  When the save is complete,
-		 * it triggers an "updated" event on the instance and the instance's model.
-		 * 
-		 * Instances with an
-		 * __id__ are typically retrieved with [can.Model.findAll] or
-		 * [can.Model.findOne].  
-		 * 
-		 *  
-		 *     // get a created model instance
-		 *     Todo.findOne({id: 5},function(todo){
-		 *       	     
-		 *       // listen when the instance is updated
-		 *       todo.bind("updated", function(ev){
-		 * 	       this //-> todo
-		 *       })
-		 * 
-		 *       // update the instance's property
-		 *       todo.attr("complete", true)
-		 *       
-		 *       // save it on the server
-		 *       todo.save(function(todo){
-		 * 	       console.log("todo", todo, "updated")
-		 *       });
-		 * 
-		 *     });
-		 * 
-		 * 
-		 * @param {Function} [success(instance,data)]  Called if a successful save.
-		 * 
-		 * @param {Function} [error(xhr)] Called with (jqXHR) if the 
-		 * save was not successful. It is passed the ajax request's jQXHR object.
-		 * 
-		 * @return {can.Deferred} a deferred that resolves to the instance
-		 * after it has been created or updated.
-		 */
-		save: function( success, error ) {
+				save: function( success, error ) {
 			return makeRequest(this, this.isNew() ? 'create' : 'update', success, error);
 		},
-		/**
-		 * Destroys the instance by calling 
-		 * [Can.Model.destroy] with the id of the instance.
-		 * 
-		 *     recipe.destroy(success, error);
-		 * 
-		 * This triggers "destroyed" events on the instance and the 
-		 * Model constructor function which can be listened to with
-		 * [can.Model::bind] and [can.Model.bind]. 
-		 * 
-		 *     Recipe = can.Model({
-		 *       destroy : "DELETE /services/recipes/{id}",
-		 *       findOne : "/services/recipes/{id}"
-		 *     },{})
-		 *     
-		 *     Recipe.bind("destroyed", function(){
-		 *       console.log("a recipe destroyed");	
-		 *     });
-		 * 
-		 *     // get a recipe
-		 *     Recipe.findOne({id: 5}, function(recipe){
-		 *       recipe.bind("destroyed", function(){
-		 *         console.log("this recipe destroyed")	
-		 *       })
-		 *       recipe.destroy();
-		 *     })
-		 * 
-		 * @param {Function} [success(instance)] called if a successful destroy
-		 * @param {Function} [error(xhr)] called if an unsuccessful destroy
-		 * @return {can.Deferred} a deferred that resolves with the destroyed instance
-		 */
-		destroy: function( success, error ) {
+				destroy: function( success, error ) {
 			return makeRequest(this, 'destroy', success, error, 'destroyed');
 		},
-		/**
-		 * @function bind
-		 * 
-		 * `bind(eventName, handler(ev, args...) )` is used to listen
-		 * to events on this model instance.  Example:
-		 * 
-		 *     Task = can.Model()
-		 *     var task = new Task({name : "dishes"})
-		 *     task.bind("name", function(ev, newVal, oldVal){})
-		 * 
-		 * Use `bind` the
-		 * same as [can.Observe::bind] which should be used as
-		 * a reference for listening to property changes.
-		 * 
-		 * Bind on model can be used to listen to when 
-		 * an instance is:
-		 * 
-		 *  - created
-		 *  - updated
-		 *  - destroyed
-		 * 
-		 * like:
-		 * 
-		 *     Task = can.Model()
-		 *     var task = new Task({name : "dishes"})
-		 * 
-		 *     task.bind("created", function(ev, newTask){
-		 * 	     console.log("created", newTask)
-		 *     })
-		 *     .bind("updated", function(ev, updatedTask){
-		 *       console.log("updated", updatedTask)
-		 *     })
-		 *     .bind("destroyed", function(ev, destroyedTask){
-		 * 	     console.log("destroyed", destroyedTask)
-		 *     })
-		 * 
-		 *     // create, update, and destroy
-		 *     task.save(function(){
-		 *       task.attr('name', "do dishes")
-		 *           .save(function(){
-		 * 	            task.destroy()
-		 *           })
-		 *     }); 
-		 *     
-		 * 
-		 * `bind` also extends the inherited 
-		 * behavior of [can.Observe::bind] to track the number
-		 * of event bindings on this object which is used to store
-		 * the model instance.  When there are no bindings, the 
-		 * model instance is removed from the store, freeing memory.  
-		 * 
-		 */
-		bind : function(eventName){
+				bind : function(eventName){
 			if ( ! ignoreHookup.test( eventName )) { 
 				if ( ! this._bindings ) {
 					this.constructor.store[getId(this)] = this;
@@ -3337,31 +1565,7 @@ can.dispatch = function(event){
 			
 			return can.Observe.prototype.bind.apply( this, arguments );
 		},
-		/**
-		 * @function unbind
-		 * `unbind(eventName, handler)` removes a listener
-		 * attached with [can.Model::bind].
-		 * 
-		 *     var handler = function(ev, createdTask){
-		 * 	     
-		 *     }
-		 *     task.bind("created", handler)
-		 *     task.unbind("created", handler)
-		 * 
-		 * You have to pass the same function to `unbind` that you
-		 * passed to `bind`.
-		 * 
-		 * Unbind will also remove the instance from the store
-		 * if there are no other listeners.
-		 * 
-		 * @param {String} eventName The type of event.  
-		 * 
-		 * @param {Function} handler(event,args...) A callback function
-		 * that was passed to `bind`.
-		 * 
-		 * @return {model} the model instance.
-		 */
-		unbind : function(eventName){
+				unbind : function(eventName){
 			if(!ignoreHookup.test(eventName)) { 
 				this._bindings--;
 				if(!this._bindings){
@@ -3381,30 +1585,9 @@ can.dispatch = function(event){
 	});
 	
 		can.each([
-	/**
-	 * @function created
-	 * @hide
-	 * Called by save after a new instance is created.  Publishes 'created'.
-	 * @param {Object} attrs
-	 */
-	"created",
-	/**
-	 * @function updated
-	 * @hide
-	 * Called by save after an instance is updated.  Publishes 'updated'.
-	 * @param {Object} attrs
-	 */
-	"updated",
-	/**
-	 * @function destroyed
-	 * @hide
-	 * Called after an instance is destroyed.  
-	 *   - Publishes "shortName.destroyed".
-	 *   - Triggers a "destroyed" event on this model.
-	 *   - Removes the model from the global list if its used.
-	 * 
-	 */
-	"destroyed"], function( i, funcName ) {
+		"created",
+		"updated",
+		"destroyed"], function( i, funcName ) {
 		can.Model.prototype[funcName] = function( attrs ) {
 			var stub, 
 				constructor = this.constructor;
@@ -3421,44 +1604,10 @@ can.dispatch = function(event){
 			can.trigger(constructor,funcName, this);
 		};
 	});
-	
-	// Model lists are just like `Observe.List` except that when their items are 
-	// destroyed, it automatically gets removed from the list.
-	/**
-	 * @class can.Model.List
-	 * @inherits can.Observe.List
-	 * @parent index
-	 *
-	 * Works exactly like [can.Observe.List] and has all of the same properties,
-	 * events, and functions as an observable list. The only difference is that 
-	 * when an item from the list is destroyed, it will automatically get removed
-	 * from the list.
-	 *
-	 * ## Creating a new Model List
-	 *
-	 * To create a new model list, just use `new {model_name}.List(ARRAY)` like:
-	 *
-	 *     var todo1 = new Todo( { name: "Do the dishes" } ),
-	 *         todo2 = new Todo( { name: "Wash floors" } )
-	 *     var todos = new Todo.List( [todo1, todo2] );
-	 *
-	 * ## Removing models from model list
-	 *
-	 * The advantage that `can.Model.List` has over a traditional `can.Observe.List`
-	 * is that when you destroy a model, if it is in that list, it will automatically
-	 * be removed from the list. 
-	 *
-	 *     // Listen for when something is removed from the todos list.
-	 *     todos.bind("remove", function( ev, oldVals, indx ) {
-	 *         console.log(oldVals[indx].attr("name") + " removed")
-	 *     })
-	 *
-	 *     todo1.destory(); // console shows "Do the dishes removed"
-	 })
-	 *
-	 *
-	 */
-	var ML = can.Observe.List('can.Model.List',{
+  
+  // Model lists are just like `Observe.List` except that when their items are 
+  // destroyed, it automatically gets removed from the list.
+  	var ML = can.Observe.List('can.Model.List',{
 		setup : function(){
 			can.Observe.List.prototype.setup.apply(this, arguments );
 			// Send destroy events.
@@ -3486,22 +1635,7 @@ can.dispatch = function(event){
 	
 
 	can.extend(can, { 
-		/**
-		 * @function can.deparam
-		 * @parent can.util
-		 * Takes a string of name value pairs and returns a Object literal that represents those params.
-		 * 
-		 * @param {String} params a string like <code>"foo=bar&person[age]=3"</code>
-		 * @return {Object} A JavaScript Object that represents the params:
-		 * 
-		 *     {
-		 *       foo: "bar",
-		 *       person: {
-		 *         age: "3"
-		 *       }
-		 *     }
-		 */
-		deparam: function(params){
+				deparam: function(params){
 		
 			var data = {},
 				pairs;
@@ -3537,9 +1671,6 @@ can.dispatch = function(event){
 			return data;
 		}
 	});
-	
-;
-
 
 	// ## route.js  
 	// `can.route`  
@@ -3579,7 +1710,6 @@ can.dispatch = function(event){
 		each = can.each,
 		extend = can.extend;
 
-
 	can.route = function( url, defaults ) {
         // Extract the variable names and replace with `RegExp` that will match 
 		// an atual URL with values.
@@ -3609,28 +1739,7 @@ can.dispatch = function(event){
 	};
 
 	extend(can.route, {
-		/**
-		 * @function can.route.param
-     * @parent can.route
-		 * Parameterizes the raw JS object representation provided in data.
-     *
-     *     can.route.param( { type: "video", id: 5 } ) 
-     *          // -> "type=video&id=5"
-     *
-     * If a route matching the provided data is found, that URL is built
-     * from the data. Any remaining data is added at the end of the
-     * URL as &amp; separated key/value parameters.
-     *
-     *     can.route(":type/:id")
-     *     
-     *     can.route.param( { type: "video", id: 5 } ) // -> "video/5"
-     *     can.route.param( { type: "video", id: 5, isNew: false } ) 
-     *          // -> "video/5&isNew=false"
-		 * 
-		 * @param {Object} data Data object containing key/value properies to be parameterized
-     * @return {String} The route URL and &amp; separated parameters.
-		 */
-		param: function( data ) {
+				param: function( data ) {
 			delete data.route;
 			// Check if the provided data keys match the names in any routes;
 			// Get the one with the most matches.
@@ -3657,7 +1766,7 @@ can.dispatch = function(event){
 				var cpy = extend({}, data),
                     // Create the url by replacing the var names with the provided data.
                     // If the default value is found an empty string is inserted.
-				    res = route.route.replace(matcher, function( whole, name ) {
+					res = route.route.replace(matcher, function( whole, name ) {
                         delete cpy[name];
                         return data[name] === route.defaults[name] ? "" : encodeURIComponent( data[name] );
                     }),
@@ -3671,46 +1780,13 @@ can.dispatch = function(event){
 					
 					// The remaining elements of data are added as 
 					// `&amp;` separated parameters to the url.
-				    after = can.param(cpy);
+					after = can.param(cpy);
 				return res + (after ? "&" + after : "")
 			}
             // If no route was found, there is no hash URL, only paramters.
 			return can.isEmptyObject(data) ? "" : "&" + can.param(data);
 		},
-		/**
-		 * @function can.route.deparam
-     * @parent can.route
-		 * 
-     * Creates a data object based on the query string passed into it. This is 
-     * useful to create an object based on the `location.hash`.
-     *
-     *     can.route.deparam("id=5&type=videos") 
-     *          // -> { id: 5, type: "videos" }
-     *
-		 * 
-     * It's important to make sure the hash or exclamantion point is not passed
-     * to `can.route.deparam` otherwise it will be included in the first property's
-     * name.
-     *
-     *     can.route.attr("id", 5) // location.hash -> #!id=5
-     *     can.route.attr("type", "videos") 
-     *          // location.hash -> #!id=5&type=videos
-     *     can.route.deparam(location.hash) 
-     *          // -> { #!id: 5, type: "videos" }
-     *
-     * `can.route.deparam` will try and find a matching route and, if it does,
-     * will deconstruct the URL and parse our the key/value parameters into the data object.
-     *
-     *     can.route(":type/:id")
-     *
-     *     can.route.deparam("videos/5");
-     *          // -> { id: 5, route: ":type/:id", type: "videos" }
-     *
-		 * @param {String} url Query string to be turned into an object.
-     * @return {Object} Data object containing properties and values from the string
-		 */
-		deparam: function( url ) {
-			console.log('deparam', url)
+				deparam: function( url ) {
 			// See if the url matches any routes by testing it against the `route.test` `RegExp`.
             // By comparing the URL length the most specialized route that matches is used.
 			var route = {
@@ -3751,48 +1827,9 @@ can.dispatch = function(event){
 			}
 			return paramsMatcher.test(url) ? can.deparam( url.slice(1) ) : {};
 		},
-		/**
-		 * @hide
-		 * A can.Observe that represents the state of the history.
-		 */
-		data: new can.Observe({}),
-        /**
-         * @attribute
-         * @type Object
-		 * @hide
-		 * 
-         * A list of routes recognized by the router indixed by the url used to add it.
-         * Each route is an object with these members:
-         * 
- 		 *  - test - A regular expression that will match the route when variable values 
-         *    are present; i.e. for :page/:type the `RegExp` is /([\w\.]*)/([\w\.]*)/ which
-         *    will match for any value of :page and :type (word chars or period).
-		 * 
-         *  - route - The original URL, same as the index for this entry in routes.
-         * 
-		 *  - names - An array of all the variable names in this route
-         * 
-		 *  - defaults - Default values provided for the variables or an empty object.
-         * 
-		 *  - length - The number of parts in the URL separated by '/'.
-         */
-		routes: {},
-		/**
-		 * @function can.route.ready
-		 * @parent can.route
-		 * Indicates that all routes have been added and sets can.route.data
-		 * based upon the routes and the current hash.
-		 * 
-		 * By default, ready is fired on jQuery's ready event.  Sometimes
-		 * you might want it to happen sooner or earlier.  To do this, call:
-		 * 
-		 *     can.route.ready(false); //prevents firing by the ready event
-		 *     can.route.ready(true); // fire the first route change
-		 * 
-		 * @param {Boolean} [val] Whether or not to fire the ready event.
-		 * @return {can.route} `can.route` object.
-		 */
-		ready: function(val) {
+				data: new can.Observe({}),
+        		routes: {},
+				ready: function(val) {
 			if( val === false ) {
 				onready = val;
 			}
@@ -3801,102 +1838,19 @@ can.dispatch = function(event){
 			}
 			return can.route;
 		},
-		/**
-		 * @function can.route.url
-		 * @parent can.route
-		 * 
-     * Similar to [can.route.link], but instead of creating an anchor tag, `can.route.url` creates 
-     * only the URL based on the route options passed into it.
-     *
-     *     can.route.url( { type: "videos", id: 5 } ) 
-     *          // -> "#!type=videos&id=5"
-     *
-     * If a route matching the provided data is found the URL is built from the data. Any remaining
-     * data is added at the end of the URL as & separated key/value parameters.
-     *
-     *     can.route(":type/:id")
-     *
-     *     can.route.url( { type: "videos", id: 5 } ) // -> "#!videos/5"
-     *     can.route.url( { type: "video", id: 5, isNew: false } ) 
-     *          // -> "#!video/5&isNew=false"
-     *
-     *
-		 * @param {Object} options The route options (variables)
-		 * @param {Boolean} merge true if the options should be merged with the current options
-		 * @return {String} The route URL & separated parameters
-		 */
-		url: function( options, merge ) {
+				url: function( options, merge ) {
 			if (merge) {
 				options = extend({}, curParams, options)
 			}
 			return "#!" + can.route.param(options)
 		},
-		/**
-		 * @function can.route.link
-		 * @parent can.route
-		 * 
-		 * Creates and returns an anchor tag with an href of the route 
-     * attributes passed into it, as well as any properies desired
-     * for the tag.
-     *
-     *     can.route.link( "My videos", { type: "videos" }, {}, false )
-     *          // -> <a href="#!type=videos">My videos</a>
-		 * 
-     * Other attributes besides href can be added to the anchor tag
-     * by passing in a data object with the attributes desired.
-     *
-     *     can.route.link( "My videos", { type: "videos" }, 
-     *       { className: "new" }, false ) 
-     *          // -> <a href="#!type=videos" class="new">My Videos</a>
-     *
-     * It is possible to utilize the current route options when making anchor
-     * tags in order to make your code more reusable. If merge is set to true,
-     * the route options passed into `can.route.link` will be passed into the
-     * current ones.
-     *
-     *     location.hash = "#!type=videos" 
-     *     can.route.link( "The zoo", { id: 5 }, true )
-     *          // -> <a href="#!type=videos&id=5">The zoo</true>
-     *
-     *     location.hash = "#!type=pictures" 
-     *     can.route.link( "The zoo", { id: 5 }, true )
-     *          // -> <a href="#!type=pictures&id=5">The zoo</true>
-     *
-     *
-		 * @param {Object} name The text of the link.
-		 * @param {Object} options The route options (variables)
-		 * @param {Object} props Properties of the &lt;a&gt; other than href.
-     * @param {Boolean} merge true if the options should be merged with the current options
-     * @return {string} String containing the formatted &lt;a&gt; HTML element
-		 */
-		link: function( name, options, props, merge ) {
+				link: function( name, options, props, merge ) {
 			return "<a " + makeProps(
 			extend({
 				href: can.route.url(options, merge)
 			}, props)) + ">" + name + "</a>";
 		},
-		/**
-		 * @function can.route.current
-		 * @parent can.route
-		 * 
-     * Checks the page's current URL to see if the route represents the options passed 
-     * into the function.
-     *
-     * Returns true if the options respresent the current URL.
-     * 
-     *     can.route.attr('id', 5) // location.hash -> "#!id=5"
-     *     can.route.current({ id: 5 }) // -> true
-     *     can.route.current({ id: 5, type: 'videos' }) // -> false
-     *     
-     *     can.route.attr('type', 'videos') 
-     *            // location.hash -> #!id=5&type=videos
-     *     can.route.current({ id: 5, type: 'videos' }) // -> true
-     * 
-		 * 
-		 * @param {Object} options Data object containing properties and values that might represent the route.
-         * @return {Boolean} Whether or not the options match the current URL.
-		 */
-		current: function( options ) {
+				current: function( options ) {
 			return location.hash == "#!" + can.route.param(options)
 		}
 	});
@@ -3936,8 +1890,6 @@ can.dispatch = function(event){
 	});
 	// `onready` event...
 	can.bind.call(document,"ready",can.route.ready);
-;
-
 
 	// ## control.js
 	// `can.Control`  
@@ -3983,22 +1935,10 @@ can.dispatch = function(event){
 		},
 		basicProcessor;
 	
-	/**
-	 * @add can.Control
-	 */
-	can.Construct("can.Control",
-	/** 
-	 * @Static
-	 */
-	{
-		/**
-		 * @hide
-		 * 
-		 * Setup pre-process which methods are event listeners.
-		 * 
-		 */
+		can.Construct("can.Control",
+		{
 		// Setup pre-processes which methods are event listeners.
-		setup: function() {
+				setup: function() {
 
 			// Allow contollers to inherit "defaults" from super-classes as it 
 			// done in `can.Construct`
@@ -4024,40 +1964,14 @@ can.dispatch = function(event){
 				}
 			}
 		},
-		/**
-		 * @hide
-		 * @param {String} methodName a prototype function
-		 * @return {Boolean} truthy if an action or not
-		 */
 		// Return `true` if is an action.
-		_isAction: function( methodName ) {
+				_isAction: function( methodName ) {
 			return !! ( special[methodName] || processors[methodName] || /[^\w]/.test(methodName) );
 		},
-		/**
-		 * @hide
-		 * Takes a method name and the options passed to a control
-		 * and tries to return the data necessary to pass to a processor
-		 * (something that binds things).
-		 * 
-		 * For performance reasons, this called twice.  First, it is called when 
-		 * the Control class is created.  If the methodName is templated
-		 * like: "{window} foo", it returns null.  If it is not templated
-		 * it returns event binding data.
-		 * 
-		 * The resulting data is added to this.actions.
-		 * 
-		 * When a control instance is created, _action is called again, but only
-		 * on templated actions.  
-		 * 
-		 * @param {Object} methodName the method that will be bound
-		 * @param {Object} [options] first param merged with class default options
-		 * @return {Object} null or the processor and pre-split parts.  
-		 * The processor is what does the binding/subscribing.
-		 */
-		 // Takes a method name and the options passed to a control
-		 // and tries to return the data necessary to pass to a processor
-		 // (something that binds things).
-		_action: function( methodName, options ) {
+		// Takes a method name and the options passed to a control
+		// and tries to return the data necessary to pass to a processor
+		// (something that binds things).
+				_action: function( methodName, options ) {
 			
 			// If we don't have options (a `control` instance), we'll run this 
 			// later.  
@@ -4084,131 +1998,17 @@ can.dispatch = function(event){
 				};
 			}
 		},
-		/**
-		 * @attribute processors
-		 * An object of `{eventName : function}` pairs that Control uses to hook up events
-		 * auto-magically.  A processor function looks like:
-		 * 
-		 *     can.Control.processors.
-		 *       myprocessor = function( el, event, selector, cb, control ) {
-		 *          //el - the control's element
-		 *          //event - the event (myprocessor)
-		 *          //selector - the left of the selector
-		 *          //cb - the function to call
-		 *          //control - the binding control
-		 *       };
-		 * 
-		 * This would bind anything like: "foo~3242 myprocessor".
-		 * 
-		 * The processor must return a function that when called, 
-		 * unbinds the event handler.
-		 * 
-		 * Control already has processors for the following events:
-		 * 
-		 *   - change 
-		 *   - click 
-		 *   - contextmenu 
-		 *   - dblclick 
-		 *   - focusin
-		 *   - focusout
-		 *   - keydown 
-		 *   - keyup 
-		 *   - keypress 
-		 *   - mousedown 
-		 *   - mouseenter
-		 *   - mouseleave
-		 *   - mousemove 
-		 *   - mouseout 
-		 *   - mouseover 
-		 *   - mouseup 
-		 *   - reset 
-		 *   - resize 
-		 *   - scroll 
-		 *   - select 
-		 *   - submit  
-		 * 
-		 * Listen to events on the document or window 
-		 * with templated event handlers:
-		 * 
-		 *     Sized = can.Control({
-		 *       "{window} resize": function(){
-		 *         this.element.width( this.element.parent().width() / 2 );
-		 *       }
-		 *     });
-		 *     
-		 *     new Sized( $( '#foo' ) );
-		 */
 		// An object of `{eventName : function}` pairs that Control uses to 
 		// hook up events auto-magically.
-		processors: {},
-		/**
-		 * @attribute defaults
-		 * A object of name-value pairs that act as default values for a control's 
-		 * [can.Control::options this.options].
-		 * 
-		 *     Message = can.Control({
-		 *       defaults: {
-		 *         message: "Hello World"
-		 *       }
-		 *     }, {
-		 *       init: function(){
-		 *         this.element.text( this.options.message );
-		 *       }
-		 *     });
-		 *     
-		 *     new Message( "#el1" ); //writes "Hello World"
-		 *     new Message( "#el12", { message: "hi" } ); //writes hi
-		 *     
-		 * In [can.Control::setup] the options passed to the control
-		 * are merged with defaults.  This is not a deep merge.
-		 */
+				processors: {},
 		// A object of name-value pairs that act as default values for a 
 		// control instance
-		defaults: {}
+				defaults: {}
 	},
-	/** 
-	 * @Prototype
-	 */
-	{
-		// Where the magic happens.
-		/**
-		 * Setup is where most of control's magic happens.  It does the following:
-		 * 
-		 * ### Sets this.element
-		 * 
-		 * The first parameter passed to new Control( el, options ) is expected to be 
-		 * an element.  This gets converted to a Wrapped NodeList element and set as
-		 * [can.Control.prototype.element this.element].
-		 * 
-		 * ### Adds the control's name to the element's className.
-		 * 
-		 * Control adds it's plugin name to the element's className for easier 
-		 * debugging.  For example, if your Control is named "Foo.Bar", it adds
-		 * "foo_bar" to the className.
-		 * 
-		 * ### Saves the control in $.data
-		 * 
-		 * A reference to the control instance is saved in $.data.  You can find 
-		 * instances of "Foo.Bar" like: 
-		 * 
-		 *     $( '#el' ).data( 'controls' )[ 'foo_bar' ]
-		 *
-		 * ### Merges Options
-		 * Merges the default options with optional user-supplied ones.
-		 * Additionally, default values are exposed in the static [can.Control.static.defaults defaults] 
-		 * so that users can change them.
-		 * 
-		 * ### Binds event handlers
-		 * 
-		 * Setup does the event binding described in [can.control.listening Listening To Events].
-		 * 
-		 * @param {HTMLElement} element the element this instance operates on.
-		 * @param {Object} [options] option values for the control.  These get added to
-		 * this.options and merged with [can.Control.static.defaults defaults].
-		 * @return {Array} return an array if you wan to change what init is called with. By
-		 * default it is called with the element and options passed to the control.
-		 */
-		setup: function( element, options ) {
+		{
+		// Sets `this.element`, saves the control in `data, binds event
+		// handlers.
+				setup: function( element, options ) {
 
 			var cls = this.constructor,
 				pluginname = cls.pluginName || cls._fullName,
@@ -4225,241 +2025,16 @@ can.dispatch = function(event){
 			(arr = can.data(this.element,"controls")) || can.data(this.element,"controls",arr = []);
 			arr.push(this);
 			
-			/**
-			 * @attribute options
-			 * 
-			 * Options are used to configure an control.  They are
-			 * the 2nd argument
-			 * passed to a control (or the first argument passed to the 
-			 * [can.Control.plugin control's jQuery plugin]).
-			 * 
-			 * For example:
-			 * 
-			 *     can.Control('Hello')
-			 *     
-			 *     var h1 = new Hello( $( '#content1' ), { message: 'World' } );
-			 *     equal( h1.options.message , "World" );
-			 *     
-			 *     var h2 = $( '#content2' ).hello({ message: 'There' })
-			 *                              .control();
-			 *     equal( h2.options.message , "There" );
-			 * 
-			 * Options are merged with [can.Control.static.defaults defaults] in
-			 * [can.Control.prototype.setup setup].
-			 * 
-			 * For example:
-			 * 
-			 *     Tabs = can.Control({
-			 *        defaults: {
-			 *          activeClass: "ui-active-state"
-			 *        }
-			 *     }, {
-			 *        init: function(){
-			 *          this.element.addClass( this.options.activeClass );
-			 *        }
-			 *     });
-			 *     
-			 *     new Tabs( $( "#tabs1" ) ); // adds 'ui-active-state'
-			 *     new Tabs( $( "#tabs2" ), { activeClass : 'active' } ); // adds 'active'
-			 *     
-			 * Options are typically updated by calling 
-			 * [can.Control.prototype.update update];
-			 *
-			 */
 			// Option merging.
-			this.options = extend({}, cls.defaults, options);
+						this.options = extend({}, cls.defaults, options);
 
 			// Bind all event handlers.
 			this.on();
 
-			/**
-			 * @attribute element
-			 * 
-			 * The control instance's HTMLElement (or window) wrapped by the 
-			 * util library for ease of use. It is set by the first
-			 * parameter to `new can.Construct( element, options )` 
-			 * in [can.Control::setup].  Control listens on `this.element`
-			 * for events.
-			 * 
-			 * ### Quick Example
-			 * 
-			 * The following `HelloWorld` control sets the control`s text to "Hello World":
-			 * 
-			 *     HelloWorld = can.Control({
-			 *       init: function(){
-			 * 	       this.element.text( 'Hello World' );
-			 *       }
-			 *     });
-			 *     
-			 *     // create the controller on the element
-			 *     new HelloWorld( document.getElementById( '#helloworld' ) );
-			 * 
-			 * ## Wrapped NodeList
-			 * 
-			 * `this.element` is a wrapped NodeList of one HTMLELement (or window).  This
-			 * is for convience in libraries like jQuery where all methods operate only on a
-			 * NodeList.  To get the raw HTMLElement, write:
-			 * 
-			 *     this.element[0] //-> HTMLElement
-			 * 
-			 * The following details the NodeList used by each library with 
-			 * an example of updating it's text:
-			 * 
-			 * __jQuery__ `jQuery( HTMLElement )`
-			 * 
-			 *     this.element.text("Hello World")
-			 * 
-			 * __Zepto__ `Zepto( HTMLElement )`
-			 * 
-			 *     this.element.text("Hello World")
-			 * 
-			 * __Dojo__ `new dojo.NodeList( HTMLElement )`
-			 * 
-			 *     // TODO
-			 * 
-			 * __Mootools__ `$$( HTMLElement )`
-			 * 
-			 *    this.element.empty().appendText("Hello World")
-			 * 
-			 * __YUI__ 
-			 * 
-			 *    // TODO
-			 * 
-			 * 
-			 * ## Changing `this.element`
-			 * 
-			 * Sometimes you don't want what's passed to `new can.Control`
-			 * to be this.element.  You can change this by overwriting
-			 * setup or by unbinding, setting this.element, and rebinding.
-			 * 
-			 * ### Overwriting Setup
-			 * 
-			 * The following Combobox overwrites setup to wrap a
-			 * select element with a div.  That div is used 
-			 * as `this.element`. Notice how `destroy` sets back the
-			 * original element.
-			 * 
-			 *     Combobox = can.Control({
-			 *       setup: function( el, options ) {
-			 *          this.oldElement = $( el );
-			 *          var newEl = $( '<div/>' );
-			 *          this.oldElement.wrap( newEl );
-			 *          can.Controll.prototype.setup.call( this, newEl, options );
-			 *       },
-			 *       init: function() {
-			 *          this.element //-> the div
-			 *       },
-			 *       ".option click": function() {
-			 *         // event handler bound on the div
-			 *       },
-			 *       destroy: function() {
-			 *          var div = this.element; //save reference
-			 *          can.Control.prototype.destroy.call( this );
-			 *          div.replaceWith( this.oldElement );
-			 *       }
-			 *     });
-			 * 
-			 * ### unbining, setting, and rebinding.
-			 * 
-			 * You could also change this.element by calling
-			 * [can.Control::off], setting this.element, and 
-			 * then calling [can.Control::on] like:
-			 * 
-			 *     move: function( newElement ) {
-			 *        this.off();
-			 *        this.element = $( newElement );
-			 *        this.on();
-			 *     }
-			 */
 			// Get's passed into `init`.
-			return [this.element, this.options];
+						return [this.element, this.options];
 		},
-		/**
-		 * `this.on( [element, selector, eventName, handler] )` is used to rebind 
-		 * all event handlers when [can.Control::options this.options] has changed.  It
-		 * can also be used to bind or delegate from other elements or objects.
-		 * 
-		 * ## Rebinding
-		 * 
-		 * By using templated event handlers, a control can listen to objects outside
-		 * `this.element`.  This is extremely common in MVC programming.  For example,
-		 * the following control might listen to a task model's `completed` property and
-		 * toggle a strike className like:
-		 * 
-		 *     TaskStriker = can.Control({
-		 *       "{task} completed": function(){
-		 * 	       this.update();
-		 *       },
-		 *       update: function(){
-		 *         if ( this.options.task.completed ) {
-		 * 	         this.element.addClass( 'strike' );
-		 * 	       } else {
-		 *           this.element.removeClass( 'strike' );
-		 *         }
-		 *       }
-		 *     });
-		 * 
-		 *     var taskstriker = new TaskStriker({ 
-		 *       task: new Task({ completed: 'true' }) 
-		 *     });
-		 * 
-		 * To update the taskstriker's task, add a task method that updates
-		 * this.options and calls rebind like:
-		 * 
-		 *     TaskStriker = can.Control({
-		 *       "{task} completed": function(){
-		 * 	       this.update();
-		 *       },
-		 *       update: function() {
-		 *         if ( this.options.task.completed ) {
-		 * 	         this.element.addClass( 'strike' );
-		 * 	       } else {
-		 *           this.element.removeClass( 'strike' );
-		 *         }
-		 *       },
-		 *       task: function( newTask ) {
-		 *         this.options.task = newTask;
-		 *         this.on();
-		 *         this.update();
-		 *       }
-		 *     });
-		 * 
-		 *     var taskstriker = new TaskStriker({ 
-		 *       task: new Task({ completed: true }) 
-		 *     });
-		 *     taskstriker.task( new TaskStriker({ 
-		 *       task: new Task({ completed: false }) 
-		 *     }));
-		 * 
-		 * ## Adding new events
-		 * 
-		 * If events need to be bound to outside of the control and templated event handlers
-		 * are not sufficent, you can call this.on to bind or delegate programatically:
-		 * 
-		 *     init: function() {
-		 *        // calls somethingClicked( el, ev )
-		 *        this.on( 'click', 'somethingClicked' ); 
-		 *     
-		 *        // calls function when the window is clicked
-		 *        this.on( window, 'click', function( ev ) {
-		 *          //do something
-		 *        });
-		 *     },
-		 *     somethingClicked: function( el, ev ) {
-		 *       
-		 *     }
-		 * 
-		 * @param {HTMLElement|jQuery.fn|Object} [el=this.element]
-		 * The element to be bound.  If an eventName is provided,
-		 * the control's element is used instead.
-		 * @param {String} [selector] A css selector for event delegation.
-		 * @param {String} [eventName] The event to listen for.
-		 * @param {Function|String} [func] A callback function or the String name of a control function.  If a control
-		 * function name is given, the control function is called back with the bound element and event as the first
-		 * and second parameter.  Otherwise the function is called back like a normal bind.
-		 * @return {Integer} The id of the binding in this._bindings
-		 */
-		on: function( el, selector, eventName, func ) {
+				on: function( el, selector, eventName, func ) {
 			
 			if ( ! el ) {
 
@@ -4512,13 +2087,8 @@ can.dispatch = function(event){
 
 			return this._bindings.length;
 		},
-		/**
-		 * @hide
-		 * Unbinds all event handlers on the controller. You should never
-		 * be calling this unless in use with [can.Control::on].
-		 */
 		// Unbinds all event handlers on the controller.
-		off : function(){
+				off : function(){
 			var el = this.element[0]
 			each(this._bindings || [], function( key, value ) {
 				value(el);
@@ -4526,100 +2096,8 @@ can.dispatch = function(event){
 			// Adds bindings.
 			this._bindings = [];
 		},
-		/**
-		 * @function destroy
-		 * `destroy` prepares a control for garbage collection and is a place to
-		 * reset any changes the control has made.  
-		 * 
-		 * ## Allowing Garbage Collection
-		 * 
-		 * Destroy is called whenever a control's element is removed from the page using 
-		 * the library's standard HTML modifier methods.  This means that you
-		 * don't have to call destroy yourself and it 
-		 * will be called automatically when appropriate.  
-		 * 
-		 * The following `Clicker` widget listens on the window for clicks and updates
-		 * its element's innerHTML.  If we remove the element, the window's event handler
-		 * is removed auto-magically:
-		 *  
-		 * 
-		 *      Clickr = can.Control({
-		 *       "{window} click": function() {
-		 * 	       this.element.html( this.count ? 
-		 * 	                          this.count++ : this.count = 0 );
-		 *       }  
-		 *     });
-		 *     
-		 *     // create a clicker on an element
-		 *     new Clicker( "#clickme" );
-		 * 
-		 *     // remove the element
-		 *     $( '#clickme' ).remove();
-		 * 
-		 * 
-		 * The methods you can use that will destroy controls automatically by library:
-		 * 
-		 * __jQuery and Zepto__
-		 * 
-		 *   - $.fn.remove
-		 *   - $.fn.html
-		 *   - $.fn.replaceWith
-		 *   - $.fn.empty
-		 * 
-		 * __Dojo__
-		 * 
-		 *   - dojo.destroy
-		 *   - dojo.empty
-		 *   - dojo.place (with the replace option)
-		 * 
-		 * __Mootools__
-		 * 
-		 *   - Element.prototype.destroy
-		 * 
-		 * __YUI__
-		 * 
-		 *   - TODO!
-		 * 
-		 * 
-		 * ## Teardown in Destroy
-		 * 
-		 * Sometimes, you want to reset a controlled element back to its
-		 * original state when the control is destroyed.  Overwriting destroy
-		 * lets you write teardown code of this manner.  __When overwriting
-		 * destroy, make sure you call Control's base functionality__.
-		 * 
-		 * The following example changes an element's text when the control is
-		 * created and sets it back when the control is removed:
-		 * 
-		 *     Changer = can.Control({
-		 *       init: function() {
-		 *         this.oldText = this.element.text();
-		 *         this.element.text( "Changed!!!" );
-		 *       },
-		 *       destroy: function() {
-		 *         this.element.text( this.oldText );
-		 *         can.Control.prototype.destroy.call( this );
-		 *       }
-		 *     });
-		 *     
-		 *     // create a changer which changes #myel's text
-		 *     var changer = new Changer( '#myel' );
-		 * 
-		 *     // destroy changer which will reset it
-		 *     changer.destroy();
-		 * 
-		 * ## Base Functionality
-		 * 
-		 * Control prepares the control for garbage collection by:
-		 * 
-		 *   - unbinding all event handlers
-		 *   - clearing references to this.element and this.options
-		 *   - clearing the element's reference to the control
-		 *   - removing it's [can.Control.pluginName] from the element's className
-		 * 
-		 */
 		// Prepares a `control` for garbage collection
-		destroy: function() {
+				destroy: function() {
 			var Class = this.constructor,
 				pluginName = Class.pluginName || Class._fullName,
 				controls;
@@ -4652,9 +2130,6 @@ can.dispatch = function(event){
 		return binder( el, event, shifter(control, methodName), selector);
 	};
 
-
-
-
 	// Set common events to be processed as a `basicProcessor`
 	each(["change", "click", "contextmenu", "dblclick", "keydown", "keyup", 
 		 "keypress", "mousedown", "mousemove", "mouseout", "mouseover", 
@@ -4662,8 +2137,6 @@ can.dispatch = function(event){
 		 "focusout", "mouseenter", "mouseleave"], function( i, v ) {
 		processors[v] = basicProcessor;
 	});
-	
-;
 
 	
 	// ## control/route.js  
@@ -4691,7 +2164,6 @@ can.dispatch = function(event){
 	}
 ;
 
-
 	// ## view.js
 	// `can.view`  
 	// _Templating abstraction._
@@ -4704,10 +2176,7 @@ can.dispatch = function(event){
 		makeArray = can.makeArray,
 		// Used for hookup `id`s.
 		hookupId = 1,
-	/**
-	 * @add can.view
-	 */
-	$view = can.view = function(view, data, helpers, callback){
+		$view = can.view = function(view, data, helpers, callback){
 		// Get the result.
 		var result = $view.render(view, data, helpers, callback);
 		if(can.isDeferred(result)){
@@ -4754,121 +2223,20 @@ can.dispatch = function(event){
 			}
 			return fragment;
 		},
-		/**
-		 * @attribute hookups
-		 * @hide
-		 * A list of pending 'hookups'
-		 */
-		hookups: {},
-		/**
-		 * @function hook
-		 * Registers a hookup function that can be called back after the html is 
-		 * put on the page.  Typically this is handled by the template engine.  Currently
-		 * only EJS supports this functionality.
-		 * 
-		 *     var id = can.View.hookup(function(el){
-		 *            //do something with el
-		 *         }),
-		 *         html = "<div data-view-id='"+id+"'>"
-		 *     $('.foo').html(html);
-		 * 
-		 * 
-		 * @param {Function} cb a callback function to be called with the element
-		 * @param {Number} the hookup number
-		 */
-		hook: function( cb ) {
+				hookups: {},
+				hook: function( cb ) {
 			$view.hookups[++hookupId] = cb;
 			return " data-view-id='"+hookupId+"'";
 		},
-		/**
-		 * @attribute cached
-		 * @hide
-		 * Cached are put in this object
-		 */
-		cached: {},
-		/**
-		 * @attribute cache
-		 * By default, views are cached on the client.  If you'd like the
-		 * the views to reload from the server, you can set the `cache` attribute to `false`.
-		 *
-		 * 		//- Forces loads from server
-		 * 		can.view.cache = false; 
-		 *
-		 */
-		cache: true,
-		/**
-		 * @function register
-		 * Registers a template engine to be used with 
-		 * view helpers and compression.  
-		 * 
-		 * ## Example
-		 * 
-		 * @codestart
-		 * can.View.register({
-		 * 	suffix : "tmpl",
-		 *  plugin : "jquery/view/tmpl",
-		 * 	renderer: function( id, text ) {
-		 * 		return function(data){
-		 * 			return jQuery.render( text, data );
-		 * 		}
-		 * 	},
-		 * 	script: function( id, text ) {
-		 * 		var tmpl = can.tmpl(text).toString();
-		 * 		return "function(data){return ("+
-		 * 		  	tmpl+
-		 * 			").call(jQuery, jQuery, data); }";
-		 * 	}
-		 * })
-		 * @codeend
-		 * Here's what each property does:
-		 * 
-		 *    * plugin - the location of the plugin
-		 *    * suffix - files that use this suffix will be processed by this template engine
-		 *    * renderer - returns a function that will render the template provided by text
-		 *    * script - returns a string form of the processed template function.
-		 * 
-		 * @param {Object} info a object of method and properties 
-		 * 
-		 * that enable template integration:
-		 * <ul>
-		 *   <li>plugin - the location of the plugin.  EX: 'jquery/view/ejs'</li>
-		 *   <li>suffix - the view extension.  EX: 'ejs'</li>
-		 *   <li>script(id, src) - a function that returns a string that when evaluated returns a function that can be 
-		 *    used as the render (i.e. have func.call(data, data, helpers) called on it).</li>
-		 *   <li>renderer(id, text) - a function that takes the id of the template and the text of the template and
-		 *    returns a render function.</li>
-		 * </ul>
-		 */
-		register: function( info ) {
+				cached: {},
+				cache: true,
+				register: function( info ) {
 			this.types["." + info.suffix] = info;
 		},
 		types: {},
-		/**
-		 * @attribute ext
-		 * The default suffix to use if none is provided in the view's url.  
-		 * This is set to `.ejs` by default.
-		 *
-		 * 		// Changes view ext to 'txt'
-		 * 		can.view.ext = 'txt';
-		 *
-		 */
-		ext: ".ejs",
-		/**
-		 * Returns the text that 
-		 * @hide 
-		 * @param {Object} type
-		 * @param {Object} id
-		 * @param {Object} src
-		 */
-		registerScript: function() {},
-		/**
-		 * @hide
-		 * Called by a production script to pre-load a renderer function
-		 * into the view cache.
-		 * @param {String} id
-		 * @param {Function} renderer
-		 */
-		preload: function( ) {},
+				ext: ".ejs",
+				registerScript: function() {},
+				preload: function( ) {},
 		render: function( view, data, helpers, callback ) {
 			// If helpers is a `function`, it is actually a callback.
 			if ( isFunction( helpers )) {
@@ -4956,7 +2324,6 @@ can.dispatch = function(event){
 	var	checkText = function( text, url ) {
 			if ( ! text.length ) {
 				//@steal-remove-start
-				;
 				//@steal-remove-end
 				throw "can.view: No template or empty template:" + url;
 			}
@@ -5080,9 +2447,6 @@ can.dispatch = function(event){
 		usefulPart = function( resolved ) {
 			return can.isArray(resolved) && resolved[1] === 'success' ? resolved[0] : resolved
 		};
-	
-;
-
 
 	// ## ejs.js
 	// `can.EJS`  
@@ -5120,15 +2484,29 @@ can.dispatch = function(event){
 			return (--content.split("{").length) - (--content.split("}").length);
 		},
 		// Cross-browser attribute methods.
+		// These should be mapped to the underlying library.
+		attrMap = {
+			"class" : "className"
+		},
+		bool = can.each(["checked","disabled","readonly","required"], function(i,n){
+			attrMap[n] = n;
+		}),
 		setAttr = function(el, attrName, val){
-			attrName === "class" ?
-				(el.className = val):
+			attrMap[attrName] ?
+				(el[attrMap[attrName]] = can.inArray(attrName,bool) > -1? true  : val):
 				el.setAttribute(attrName, val);
 		},
 		getAttr = function(el, attrName){
-			return attrName === "class"?
-				el.className:
+			return attrMap[attrName]?
+				el[attrMap[attrName]]:
 				el.getAttribute(attrName);
+		},
+		removeAttr = function(el, attrName){
+			if(can.inArray(attrName,bool) > -1){
+				el[attrName] = false;
+			} else{
+				el.removeAttribute(attrName)
+			}
 		},
 		// This is used to setup live binding on a list of observe/attribute
 		// pairs for a given element.
@@ -5274,40 +2652,12 @@ can.dispatch = function(event){
 		};
 
 	can.EJS = EJS;
-	/** 
-	 * @Prototype
-	 */
-	EJS.prototype.
-	/**
-	 * Renders an object with view helpers attached to the view.
-	 * 
-	 *     new EJS({text: "<%= message %>"}).render({
-	 *       message: "foo"
-	 *     },{helper: function(){ ... }})
-	 *     
-	 * @param {Object} object data to be rendered
-	 * @param {Object} [extraHelpers] an object with view helpers
-	 * @return {String} returns the result of the string
-	 */
-	render = function( object, extraHelpers ) {
+		EJS.prototype.
+		render = function( object, extraHelpers ) {
 		object = object || {};
 		return this.template.fn.call(object, object, new EJS.Helpers(object, extraHelpers || {}));
 	};
-	/**
-	 * @Static
-	 */
-	extend(EJS, {
-		/**
-		 * @hide
-		 * called to setup unescaped text
-		 * @param {Number|String} status
-		 *   - "string" - the name of the attribute  <div string="HERE">
-		 *   - 1 - in an html tag <div HERE></div>
-		 *   - 0 - in the content of a tag <div>HERE</div>
-		 *   
-		 * @param {Object} self
-		 * @param {Object} func
-		 */
+		extend(EJS, {
 		// Called to return the content within a magic tag like `<%= %>`.
 		// - escape - if the content returned should be escaped
 		// - tagName - the tag name the magic tag is within or the one that proceeds the magic tag
@@ -5318,7 +2668,7 @@ can.dispatch = function(event){
 		// - self - the `this` the template was called with
 		// - func - the "wrapping" function.  For example:  `<%= task.attr('name') %>` becomes
 		//   `(function(){return task.attr('name')})
-		txt : function(escape, tagName, status, self, func){
+				txt : function(escape, tagName, status, self, func){
 			// Get teh value returned by the wrapping function and any observe/attributes read.
 			var res = getValueAndObserved(func, self),
 				observed = res.observed,
@@ -5329,7 +2679,6 @@ can.dispatch = function(event){
 				// The tag type to create within the parent tagName
 				tag = (tagMap[tagName] || "span");
 	
-
 
 			// If we had no observes just return the value returned by func.
 			if(!observed.length){
@@ -5401,7 +2750,7 @@ can.dispatch = function(event){
 						
 						// Remove if we have a change and used to have an `attrName`.
 						if((newAttrName != attrName) && attrName){
-							el.removeAttribute(attrName)
+							removeAttr(el,attrName)
 						}
 						// Set if we have a new `attrName`.
 						if(newAttrName){
@@ -5738,55 +3087,13 @@ can.dispatch = function(event){
 	
 	
 
-	/**
-	 * @class can.EJS.Helpers
-	 * @parent can.EJS
-	 * By adding functions to can.EJS.Helpers.prototype, those functions will be available in the 
-	 * views.
-	 * 
-	 * The following helper converts a given string to upper case:
-	 * 
-	 * 	can.EJS.Helpers.prototype.toUpper = function(params)
-	 * 	{
-	 * 		return params.toUpperCase();
-	 * 	}
-	 * 
-	 * Use it like this in any EJS template:
-	 * 
-	 * 	<%= toUpper('javascriptmvc') %>
-	 * 
-	 * To access the current DOM element return a function that takes the element as a parameter:
-	 * 
-	 * 	can.EJS.Helpers.prototype.upperHtml = function(params)
-	 * 	{
-	 * 		return function(el) {
-	 * 			$(el).html(params.toUpperCase());
-	 * 		}
-	 * 	}
-	 * 
-	 * In your EJS view you can then call the helper on an element tag:
-	 * 
-	 * 	<div <%= upperHtml('javascriptmvc') %>></div>
-	 * 
-	 * 
-	 * @constructor Creates a view helper.  This function 
-	 * is called internally.  You should never call it.
-	 * @param {Object} data The data passed to the 
-	 * view.  Helpers have access to it through this._data
-	 */
-	EJS.Helpers = function( data, extras ) {
+		EJS.Helpers = function( data, extras ) {
 		this._data = data;
 		this._extras = extras;
 		extend(this, extras);
 	};
-	/**
-	 * @prototype
-	 */
-	EJS.Helpers.prototype = {
-		/**
-		 * Renders a partial view.  This is deprecated in favor of <code>can.View()</code>.
-		 */
-		view: function( url, data, helpers ) {
+		EJS.Helpers.prototype = {
+				view: function( url, data, helpers ) {
 			return $View(url, data || this._data, helpers || this._extras); 		
 		},
 		list : function(list, cb){
