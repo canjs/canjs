@@ -115,7 +115,7 @@ steal('steal/build/pluginify', function() {
 				code = readFile( "can/dist/edge/can." + lib + type + ".js" );
 
 				// Remove multiline comments
-				code = code.replace( /\/\*(?:\n?.*?)+\*\//gim, "");
+				code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*\n/gim, "");
 
 				// Remove double semicolons from steal pluginify
 				code = code.replace( /;[\s]*;/gim, ";");
