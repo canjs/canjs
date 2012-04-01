@@ -132,7 +132,9 @@
 		 * @function can.Observe.prototype.delegate
 		 * @parent can.Observe.delegate
 		 * @plugin can/observe/delegate
-		 * Listen for changes in a child attribute from the parent. The child attribute
+		 * 
+		 * `delegate( selector, event, handler(ev,newVal,oldVal,from) )` listen for changes 
+		 * in a child attribute from the parent. The child attribute
 		 * does not have to exist.
 		 * 
 		 *     
@@ -230,14 +232,56 @@
 		 * 
 		 * ## Listening on multiple properties and values
 		 * 
-		 * Delegate lets you listen on multiple values at once, for example, 
+		 * Delegate lets you listen on multiple values at once.  The following listens
+		 * for first and last name changes:
 		 * 
-		 * @param {String} selector the attributes you want to listen for changes in.
-		 * @param {String} event the event name
-		 * @param {Function} cb the callback handler
+		 *     var o = new can.Observe({
+		 *       name : {first: "Justin", last: "Meyer"}
+		 *     })
+		 *     
+		 *     o.bind("name.first,name.last", 
+		 *            "set",
+		 *            function(ev,newVal,oldVal,from){
+		 *     
+		 *     })
+		 * 
+		 * ## Listening when properties are a particular value
+		 * 
+		 * Delegate lets you listen when a property is __set__ to a specific value:
+		 * 
+		 *     var o = new can.Observe({
+		 *       name : "Justin"
+		 *     })
+		 *     
+		 *     o.bind("name=Brian", 
+		 *            "set",
+		 *            function(ev,newVal,oldVal,from){
+		 *     
+		 *     })
+		 * 
+		 * @param {String} selector The attributes you want to listen for changes in.
+		 * 
+		 *   Selector should be the property or 
+		 *   property names of the element you are searching.  Examples:
+		 * 
+		 *     "name" - listens to the "name" property changing
+		 *     "name, address" - listens to "name" or "address" changing
+		 *     "name address" - listens to "name" or "address" changing
+		 *     "address.*" - listens to property directly in address
+		 *     "address.**" - listens to any property change in address
+		 *     "foo=bar" - listens when foo is "bar"
+		 * 
+		 * @param {String} event The event name.  One of ("set","add","remove","change")
+		 * @param {Function} handler(ev,newVal,oldVal,prop) The callback handler 
+		 * called with:
+		 * 
+		 *  - newVal - the new value set on the observe
+		 *  - oldVal - the old value set on the observe
+		 *  - prop - the prop name that was changed
+		 * 
 		 * @return {jQuery.Delegate} the delegate for chaining
 		 */
-		delegate :  function(selector, event, cb){
+		delegate :  function(selector, event, handler){
 			selector = can.trim(selector);
 			var delegates = this._observe_delegates || (this._observe_delegates = []),
 				attrs = [];
@@ -261,7 +305,7 @@
 				// an object of attribute names and values {type: 'recipe',id: undefined}
 				// undefined means a value was not defined
 				attrs : attrs,
-				callback : cb,
+				callback : handler,
 				event: event
 			});
 			if(delegates.length === 1){
@@ -272,16 +316,17 @@
 		/**
 		 * @function can.Observe.prototype.undelegate
 		 * @parent can.Observe.delegate
-		 * Removes a delegate event handler.
 		 * 
-		 *   observe.undelegate("name","set", function(){ ... })
+		 * `undelegate( selector, event, handler )` removes a delegated event handler from an observe.
+		 * 
+		 *     observe.undelegate("name","set", handler )
 		 * 
 		 * @param {String} selector the attribute name of the object you want to undelegate from.
 		 * @param {String} event the event name
-		 * @param {Function} cb the callback handler
+		 * @param {Function} handler the callback handler
 		 * @return {jQuery.Delegate} the delegate for chaining
 		 */
-		undelegate : function(selector, event, cb){
+		undelegate : function(selector, event, handler){
 			selector = can.trim(selector);
 			
 			var i =0,
@@ -290,8 +335,8 @@
 			if(selector){
 				while(i < delegates.length){
 					delegateOb = delegates[i];
-					if( delegateOb.callback === cb ||
-						(!cb && delegateOb.selector === selector) ){
+					if( delegateOb.callback === handler ||
+						(!handler && delegateOb.selector === selector) ){
 						delegateOb.undelegated = true;
 						delegates.splice(i,1)
 					} else {
@@ -311,4 +356,4 @@
 	});
 	// add helpers for testing .. 
 	can.Observe.prototype.delegate.matches = matches;
-})(can = {}, this )
+})(can, this )
