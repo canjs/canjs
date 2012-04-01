@@ -25,7 +25,7 @@
   <% }) %>
 </ul></textarea>
 			</td>
-			<td class="explanation">The template shown is rendered with the data below.  You can change it and click <a id='reapply' href="javascript://">Reapply</a> 
+			<td class="explanation">The template shown is rendered with the data below.  You can change it and click <button id='reapply'>Reapply</button> 
 				to see the result change. Can.view renders the template with the data and appends it to the element as shown.  If data is changed, 
 				the results automatically update with live binding</td>
 		</tr>
@@ -73,7 +73,7 @@ function() {
 		});
 		
 	var reapply = function(){
-		
+		$("#reapply").removeClass("glow");
 		var viewText = document.getElementById("teacherEjs").value,
 			result = new can.EJS({text: viewText}).render({teacher: teacher}),
 			frag = can.view.frag(result);
@@ -81,6 +81,9 @@ function() {
 	}
 	
 	$('#reapply').bind("click", reapply);
+	$('#teacherEjs').bind("keypress", function(){
+		$("#reapply").addClass("glow");
+	});
 	reapply();
 })
 </script>

@@ -102,8 +102,17 @@ td.explanation {
 }
 li {
 	list-style: none;
-	
 	padding: 3px;
+}
+#reapply {
+	cursor:pointer;
+	color: blue;
+	font-size: 14px;
+}
+#reapply.glow {
+	background-color: #ff3300;
+	color: white;
+	font-weight:bold;
 }
 ul {
 	margin: 0px;
