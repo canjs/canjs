@@ -1467,9 +1467,9 @@ CanJS supports jQuery 1.7+. Include a copy of jQuery along with CanJS to get sta
 </script>
 {% endhighlight %}
 
-CanJS supports binding to any jQuery objects (such as jQuery UI) that uses standard 
+CanJS supports binding to any jQuery objects (like jQuery UI widgets) that use standard 
 jQuery events. The jQuery UI Datepicker doesn't have built-in support for standard 
-jQuery events, so for those cases, a workaround should be applied.
+jQuery events, so for those cases, a workaround should be applied:
 
 {% highlight html %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
@@ -1606,8 +1606,8 @@ function(can, CalendarLite){
 
 CanJS supports Mootools 1.4+. Include a copy of Mootools Core along with CanJS to get started.
 
-Mootools Core has an issue where focus/blur events are not fired for delegate event listeners.
-Include Mootools More's Event.Pseudos module for focus/blur support.
+Mootools Core has an issue where __focus__ and __blur__ events are not fired for delegate event listeners.
+Include Mootools More's Event.Pseudos module for __focus__ and __blur__ support.
 
 {% highlight html %}
 <script src="https://ajax.googleapis.com/ajax/libs/mootools/1.4.3/
@@ -1723,10 +1723,10 @@ YUI().use('can', 'calendar', function(Y) {
 
 CanJS supports Zepto 0.8+. Include a copy of Zepto along with CanJS to get started.
 
-Zepto 0.8 has an issue where focus/blur events are not fired for delegate event listeners.
+Zepto 0.8 has an issue where __focus and __blur__ events are not fired for delegate event listeners.
 There is a fix included for Zepto > 0.8, but apply 
 [this patch](https://github.com/madrobby/zepto/commit/ab2a3ef0d18beaf768903f0943efd019a29803f0)
-to zepto.js when using Zepto 0.8.
+to __zepto.js__ when using Zepto 0.8.
 
 {% highlight html %}
 <!-- Zepto 0.8 with focus/blur patch applied -->
