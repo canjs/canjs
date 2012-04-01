@@ -165,13 +165,27 @@ __`<%# CODE %>`__  - Used for comments.  This does nothing.
          <%# 'hello world' %>
 
 ## Live Binding
-How it works ...
 
-It works by wrapping the 
+EJS allows live binding by wrapping magic tag content within a function. When `attr()` is called to update an observable object, these functions are executed to return the new value.
 
-problems ...
+    // Suppose an observable "foo":
 
-understanding closures ....
+    var foo = can.Observe({
+      count: '0'
+    });
+
+    // Suppose also, the above observable is passed to our view:
+
+    <%= foo.attr('bar') %>
+
+    // EJS locates the magic tag and turns the above into:
+
+    function() { return foo.attr('bar'); }
+
+    // As "foo" is updated using attr(), this function is called again to
+    // render the view with the new value.
+
+There are drawbacks to this approach illustrated in the example below:
 
     <% for(var i =0; i < items.attr('length'); i++){ %>
       <li><%= items[i].attr('name') %></li>
@@ -180,7 +194,7 @@ understanding closures ....
 This does not work b/c when `items[i].attr('name')` is called again, `i` will 
 not be the index of the item, but instead be items.length.
 
-Using list provides a callback function with a reference to the item (it also binds on length for you).
+Using can.Model.List, provides a callback function with a reference to the item (it also binds on length for you).
 
 Adding a "completed" helper function to the todo model list to return the number of completed todos:
 
