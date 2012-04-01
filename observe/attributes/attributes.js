@@ -252,6 +252,13 @@ can.Observe.prototype.__convert = function(prop, value){
  *		contact.serialize()
  *		//-> { birthday: 'YYYY-MM-DD' }
  *
+ * You can also get and serialize an individual property by passing the attribute
+ * name to the `serialize` function.  Building on the above demo, we can serialize
+ * the `birthday` attribute only.
+ *
+ *		contact.serialize('birthday') //-> 'YYYY-MM-DD'
+ *
+ * @param {Object} attrName (optional) when passed returns only that attribute name
  */
 can.Observe.prototype.serialize = function(attrName){
 	var where = {},
