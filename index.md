@@ -1449,7 +1449,7 @@ event.  This is used to teardown event handlers in can.Control.
 
 ## Use with other libraries
 
-CanJS can be used with libraries other than jQuery.
+CanJS can be used with jQuery, Dojo, Mootools, YUI, or Zepto.
 
 ### jQuery
 
