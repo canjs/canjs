@@ -87,6 +87,11 @@ similarly to [http://api.jquery.com/jQuery.extend/ jQuery.extend].
     first  //-> {a: "b",c : "d"}
     second //-> {a: "b"}
     thrid  //-> {c: "d"}
+
+@param {Object} target The target object to extend
+@param {Object} [object1] An object containing properties to merge
+@param {Object} [objectN] Additional objects containing properties to merge
+@return {Object} The target object
 */
 //
 /**
@@ -96,6 +101,9 @@ Parameterizes an object into a query string
 like [http://api.jquery.com/jQuery.param/ jQuery.param].
 
     can.param({a: "b", c: "d"}) //-> "a=b&c=d"
+
+@param {Object} obj An array or object to serialize
+@return {String} The serialized object
 */
 //
 /**
@@ -108,19 +116,7 @@ like [http://api.jquery.com/jQuery.param/ jQuery.param].
     can.isEmptyObject({a:"b"}) //-> false
 
 @param {Object} object to evaluate if empty or not
-*/
-//
-/**
-@function can.proxy
-@parent can.util
-Returns if an object is empty like
-[http://api.jquery.com/jQuery.proxy/ jQuery.proxy].
-
-     var func = can.proxy(function(one){
-       return this.a + one
-     }, {a: "b"}); 
-     func("two") //-> "btwo" 
-
+@param {Boolean} Whether the object is empty
 */
 //
 /**
@@ -136,6 +132,8 @@ called.  This works similar to [http://api.jquery.com/jQuery.proxy/ jQuery.proxy
      func("two") //-> "btwo" 
 
 @param {Function} function to return in the same context
+@param {Object} context The context for the new function
+@return {Function} The new function
 */
 //
 /**
@@ -148,17 +146,17 @@ called.  This works similar to [http://api.jquery.com/jQuery.proxy/ jQuery.proxy
      can.isFunction(function(){}) //-> true
 
 @param {Object} object to evaluate if is function
+@return {Boolean} Whether the object is a function
 */
 //
 /**
 @function can.bind
-@parent can.bind
+@parent can.util
 
-`can.bind(obj, eventName, handler)` binds a callback handler
+`can.bind(eventName, handler)` binds a callback handler
 on an object for a given event.  It works on:
 
   - HTML elements and the window
-  - Nodelists of the underlying library
   - Objects
   - Objects with bind / unbind methods
   
@@ -172,40 +170,123 @@ CanJS; however, if you are making libraries or extensions, use
 __Binding to an object__
 
     var obj = {};
-    can.bind(obj,"something", function(ev, arg1, arg){
-    	arg1 // 1
-    	arg2 // 2
+    can.bind.call(obj,"something", function(ev, arg1, arg){
+      arg1 // 1
+      arg2 // 2
     })
     can.trigger(obj,"something",[1,2])
 
 __Binding to an HTMLElement__
 
     var el = document.getElementById('foo')
-    can.bind(el, "click", function(ev){
-    	this // el
+    can.bind.call(el, "click", function(ev){
+      this // el
     })
 
-__Binding to a NodeList__
-
-    can.bind( $("#foo") , "click", function(){
-    	
-    })
-
+@param {String} eventName The type of event to bind to
+@param {Function} handler The handler for the event
+@return {Object} this
 */
 //
 /**
- * @function can.unbind
- * @parent can.util
- */
+@function can.unbind
+@parent can.util
+
+`can.unbind(eventName, handler)` unbinds a callback handler
+from an object for a given event.  It works on:
+
+  - HTML elements and the window
+  - Objects
+  - Objects with bind / unbind methods
+  
+The idea is that unbind can be used on anything that produces events
+and it will figure out the appropriate way to 
+unbind to it.  Typically, `can.unbind` is only used internally to
+CanJS; however, if you are making libraries or extensions, use
+`can.bind` to listen to events independent of the underlying library.
+
+
+__Binding/unbinding to an object__
+
+    var obj = {},
+      handler = function(ev, arg1, arg){
+        arg1 // 1
+        arg2 // 2
+      };
+    can.bind.call(obj,"something", handler)
+    can.trigger(obj,"something",[1,2])
+    can.unbind.call(obj,"something", handler)
+
+__Binding/unbinding to an HTMLElement__
+
+    var el = document.getElementById('foo'),
+      handler = function(ev){
+        this // el
+      };
+    can.bind.call(el, "click", handler)
+    can.unbind.call(el, "click", handler)
+
+@param {String} eventName The type of event to unbind from
+@param {Function} handler The handler for the event
+@return {Object} this
+*/
 //
 /**
 @function can.delegate
 @parent can.util
+
+`can.delegate(selector, eventName, handler)` binds a delegate handler
+on an object for a given event.  It works on:
+
+  - HTML elements and the window
+  
+The idea is that delegate can be used on anything that produces delegate events
+and it will figure out the appropriate way to 
+bind to it.  Typically, `can.delegate` is only used internally to
+CanJS; however, if you are making libraries or extensions, use
+`can.delegate` to listen to events independent of the underlying library.
+
+__Delegate binding to an HTMLElement__
+
+    var el = document.getElementById('foo')
+    can.delegate.call(el, ".selector", "click", function(ev){
+      this // el
+    })
+
+@param {String} selector The selector to delegate
+@param {String} eventName The type of event to bind to
+@param {Function} handler The handler for the event
+@return {Object} this
 */
 //
 /**
 @function can.undelegate
 @parent can.util
+
+`can.undelegate(selector, eventName, handler)` unbinds a delegate handler
+on an object for a given event.  It works on:
+
+  - HTML elements and the window
+  
+The idea is that undelegate can be used on anything that produces delegate events
+and it will figure out the appropriate way to 
+bind to it.  Typically, `can.undelegate` is only used internally to
+CanJS; however, if you are making libraries or extensions, use
+`can.undelegate` to listen to events independent of the underlying library.
+
+__Delegate/undelegate binding to an HTMLElement__
+
+    var el = document.getElementById('foo'),
+      handler = function(ev){
+        this // el
+      };
+    can.delegate.call(el, ".selector", "click", handler)
+    can.undelegate.call(el, ".selector", "click", handler)
+
+@param {String} selector The selector to undelegate
+@param {String} eventName The type of event to unbind from
+@param {Function} handler The handler for the event
+@return {Object} this
 */
 //
 /**
