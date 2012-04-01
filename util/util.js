@@ -54,7 +54,8 @@ Returns if the object is an Array
 Iterates through an array or object like
 like [http://api.jquery.com/jQuery.each/ jQuery.each].
 
-    can.each([{prop: "val1"}, {prop: "val2"}], function( index, value ) {
+    can.each([{prop: "val1"}, {prop: "val2"}], 
+		function( index, value ) {
       // function called with
       //  index=0 value={prop: "val1"}
       //  index=1 value={prop: "val2"}
@@ -67,13 +68,16 @@ like [http://api.jquery.com/jQuery.each/ jQuery.each].
 /**
 @function can.extend
 @parent can.util
-Extends an object like
-like [http://api.jquery.com/jQuery.extend/ jQuery.extend].
+
+`can.extend(target, objectN)` merges the contents of two or more objects together into the first object
+similarly to [http://api.jquery.com/jQuery.extend/ jQuery.extend].
 
     var first = {},
         second = {a: "b"},
         thrid = {c: "d"};
+
     can.extend(first, second, third); //-> first
+
     first  //-> {a: "b",c : "d"}
     second //-> {a: "b"}
     thrid  //-> {c: "d"}
