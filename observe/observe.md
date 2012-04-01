@@ -130,6 +130,6 @@ to a specific event on a specific attribute or pattern:
 
     o.attr( 'name', 'Justin' );
 
-@constructor new
+@constructor Creates a new Observe with its data.
 
 @param {Object} [obj] a JavaScript Object that will be converted to an observable
