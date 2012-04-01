@@ -14,34 +14,38 @@
 	<input type='submit' value='Create Recipe'/>
 </form>
 </div>
-<script type='text/javascript' src='../../steal/steal.js'></script>
+<script type='text/javascript' src='../../../steal/steal.js'></script>
 <script type='text/javascript'>
-steal("jquery/controller", 
-      "jquery/model",
-	  "jquery/dom/form_params",
-	  "jquery/dom/fixture",
-	  function(){
+steal("can/control/plugin", 
+  "can/model",
+  "can/util/fixture",
+  function(){
 	  	
-$.fixture.delay = 2000;
-$.fixture("POST /recipes",function(){
-	return {};
+can.fixture.delay = 2000;
+can.fixture("POST /recipes",function(){
+  return {};
 })
 
-$.Model('Recipe',{
-	create : "/recipes"
+can.Model('Recipe',{
+  create : "/recipes"
 },{});
 
-$.Controller('Creator',{
+can.Control('Creator',{
   "{recipe} created" : function(){
     this.update({recipe : new Recipe()});
-	this.element[0].reset();
-	this.element.find("[type=submit]").val("Create Recipe")
+    this.element[0].reset();
+    this.element.find("[type=submit]").val("Create Recipe")
   },
   "submit" : function(el, ev){
   	ev.preventDefault();
     var recipe = this.options.recipe;
-    recipe.attrs( this.element.formParams() );
+
+    recipe.attr({
+		name: $('.name').val()
+	});
+	
 	this.element.find("[type=submit]").val("Saving...")
+	
     recipe.save();
   }
 });

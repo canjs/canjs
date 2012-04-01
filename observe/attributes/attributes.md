@@ -4,16 +4,14 @@
 @test can/observe/attributes/qunit.html
 @download http://donejs.com/can/dist/can.observe.attributes.js
 
-Attributes when used in conjunction with convert can provide rich functionality for 
-converting data attributes from raw types and serializing complex types for the server.
+The Attributes plugin provides  functionality for converting data attributes from raw types and 
+serializing complex types for the server.
 
 Below is an example code of an Observe providing serialization and conversion for dates and numbers.  
 
-When the observe is initialized, we set the `weight` attribute, its then converted using the 
-`number` converter for when we try to re-access the attribute it will be a integer.  Then we set
-the `birthday` attribute using the `attr` method, it converts it using the `date` converter we 
-provided.  Lastly, we can call `seralize` and it will convert our newly set attributes to our custom 
-serializer methods.
+When `Contact` is initialized, the `weight` attribute is set and converted to a `number` using the
+converter we provided.  Next the `birthday` attribute is set using the `attr` method and gets converted
+as well.  Lastly, `serialize` is invoked converting the new attributes to raw types for the server.
 
 	var Contact = new can.Observe({
 		attributes: {
@@ -22,6 +20,7 @@ serializer methods.
 		},
 		serialize : {
 			date : function( val, type ){
+				// returns the string formatted as 'YYYY-DD-MM'
 				return val.getYear() + 
 						"-" + (val.getMonth() + 1) + 
 						"-" + val.getDate(); 
@@ -60,21 +59,17 @@ serializer methods.
 		weight: '300'
 	});
 	
-	//- returns the weight as a int
-	var weight = brian.attr('weight');
+	var weight = brian.attr('weight'); //-> 300
 
 	//- sets brian's birthday
 	brian.attr('birthday', '11-29-1983');
 
-	//- returns newly converted date object
-	var date = brian.attr('birthday');
+	var date = brian.attr('birthday'); //-> Date()
 
-	//- returns { 'birthday': '11-29-1983, 'weight': '300' }
 	var seralizedObj = brian.serialize();
+	//-> { 'birthday': '11-29-1983', 'weight': '300' }
 	
 ### Demo
-
-Below is a demo that showcases convert being used on an Observable.  
 
 When a user enters a new date in the format of _YYYY-DD-MM_, the control 
 listens for changes in the input box and updates the Observable using 
@@ -89,7 +84,7 @@ updates the age in the page for the new birthdate of the contact.
 
 Attribute type values can also represent the name of a function. The most common case this is used is for associated data.
 
-For example, a Deliverable might have many tasks and an owner (which is a Person). The attributes property might look like:
+For example, a `Deliverable` might have many tasks and an owner (which is a Person). The attributes property might look like:
 
 	var Deliverable = new can.Observe({
 		attributes : {
