@@ -1451,6 +1451,67 @@ event.  This is used to teardown event handlers in can.Control.
 
 CanJS can be used with libraries other than jQuery.
 
+### jQuery
+
+CanJS supports jQuery 1.7+. Include a copy of jQuery along with CanJS to get started.
+
+{% highlight html %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="can.jquery.js"></script>
+<script>
+  // start using CanJS
+  can.Model('Todo', {
+    ...
+  });
+</script>
+{% endhighlight %}
+
+CanJS supports binding to any jQuery objects (such as jQuery UI) that uses standard 
+jQuery events. The jQuery UI Datepicker doesn't have built-in support for standard 
+jQuery events, so for those cases, a workaround should be applied.
+
+{% highlight html %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="jquery.ui.core.js"></script>
+<script src="jquery.ui.datepicker.js"></script>
+<script src="can.jquery.js"></script>
+<script>
+  YUI().use('can', 'calendar', function(Y) {
+    // create models
+    Todo = can.Model({ ... });
+    Todo.List = can.Model.List({ ... });
+
+    // create control
+    Todos = can.Control({
+      // listen to the calendar widget's datepickerselect event
+    	'{calendar} datepickerselect': function(calendar, ev){
+        // do something with the selected date
+        var selectedDate = this.options.calendar.datepicker('getDate');
+        ...
+    	}
+    });
+
+    // Initialize the app
+    Todo.findAll({}, function(todos) {
+    	new Todos('#todoapp', {
+    		todos: todos,
+    		calendar: $('#calendar').hide().datepicker({
+    			// Adding a workaround for date selection since the jQuery UI
+    			// datepicker widget doesn't fire the "datepickerselect" event
+    			onSelect: function(dateText, datepicker) {
+    				$(this).trigger({
+    					type: 'datepickerselect',
+    					text: dateText,
+    					target: datepicker
+    				});
+    			}
+    		})
+    	});
+    });
+  });
+</script>
+{% endhighlight %}
+
 ### Dojo
 
 CanJS supports Dojo 1.7+ using its new AMD loader in asynchronous or synchronous mode.
@@ -1478,8 +1539,8 @@ If you are including Dojo from a CDN or you want more control over your file str
 var dojoConfig = {
   packages: [{
     name: "can/dojo",
-    location: location.pathname.replace(/\/[^/]+$/, "") + "/js/libs",
-    main: "can.dojo-edge.js"
+    location: location.pathname.replace(/\/[^/]+$/, ""),
+    main: "can.dojo.js"
   }]
 }
 </script>
@@ -1505,8 +1566,8 @@ You can also configure package paths using the [require function](http://dojotoo
 require({
   packages: [{
     name: "can/dojo",
-    location: location.pathname.replace(/\/[^/]+$/, "") + "/js/libs",
-    main: "can.dojo-edge"
+    location: location.pathname.replace(/\/[^/]+$/, ""),
+    main: "can.dojo"
   }]
 }, ['can/dojo',], function(can){
   // start using CanJS
@@ -1538,9 +1599,13 @@ function(can, CalendarLite){
 });
 {% endhighlight %}
 
+### Mootools
+
+TODO
+
 ### YUI
 
-CanJS supports YUI with both dynamically or statically loaded modules.
+CanJS supports YUI 3.4.1+ with both dynamically or statically loaded modules.
 CanJS depends on the following YUI modules: __node__, __io-base__, __querystring__, __event-focus__, and __array-extras__. The __selector-css2__ and __selector-css3__ YUI modules are optional, but necessary for IE7 and other browsers that don't support __querySelectorAll__.
 
 To use with dynamically loaded modules, include the YUI loader along with CanJS.
@@ -1548,12 +1613,12 @@ Add `'can'` to your normal list of modules with `YUI().use('can', ...)` wherever
 
 {% highlight html %}
 <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
-<script src="path/to/can.yui.js"></script>
+<script src="can.yui.js"></script>
 <script>
   // CanJS with support for modern browsers
   YUI().use('can', function(Y) {
     // start using CanJS
-    can.Model('Todo', {
+    Todo = can.Model({
       ...
     });
   });
@@ -1561,7 +1626,7 @@ Add `'can'` to your normal list of modules with `YUI().use('can', ...)` wherever
   // CanJS with support for IE7 and other browsers without querySelectorAll
   YUI({ loadOptional: true }).use('can', function(Y) {
     // start using CanJS
-    can.Model('Todo', {
+    Todo = can.Model({
       ...
     });
   });
@@ -1592,11 +1657,11 @@ arse/querystring-parse-min.js&3.4.1/build/querystring-stringify/querystring-st
 ringify-min.js&3.4.1/build/event-custom-complex/event-custom-complex-min.js&3.
 4.1/build/event-synthetic/event-synthetic-min.js&3.4.1/build/event-focus/event
 -focus-min.js"></script>
-<script src="path/to/can.yui.js"></script>
+<script src="can.yui.js"></script>
 <script>
   YUI().use('*', function(Y) {
     // start using CanJS
-    can.Model('Todo', {
+    Todo = can.Model({
       ...
     });
   });
@@ -1609,11 +1674,11 @@ bind to the __selectionChange__ event for a YUI Calendar widget:
 {% highlight javascript %}
 YUI().use('can', 'calendar', function(Y) {
   // create models
-  can.Model('Todo', { ... });
-  can.Model.List('Todo.List', { ... });
+  Todo = can.Model({ ... });
+  Todo.List = can.Model.List({ ... });
 
   // create control
-  can.Control('Todos', {
+  Todos = can.Control({
     // listen to the calendar widget's selectionChange event
     '{calendar} selectionChange': function(calendar, ev){
       // do something with the selected date
@@ -1632,6 +1697,29 @@ YUI().use('can', 'calendar', function(Y) {
     });
   });
 });
+{% endhighlight %}
+
+### Zepto
+
+CanJS supports Zepto 0.8+.
+
+Zepto 0.8 has an issue where focus/blur events are not fired for delegate event listeners.
+There is a fix included for Zepto > 0.8, but apply 
+[this patch](https://github.com/madrobby/zepto/commit/ab2a3ef0d18beaf768903f0943efd019a29803f0)
+to zepto.js when using Zepto 0.8.
+
+Include a copy of Zepto along with CanJS to get started.
+
+{% highlight html %}
+<!-- Zepto 0.8 with focus/blur patch applied -->
+<script src="zepto.0.8-focusblur.js"></script>
+<script src="can.zepto.js"></script>
+<script>
+  // start using CanJS
+  Todo = can.Model({
+    ...
+  });
+</script>
 {% endhighlight %}
 
 ### Implementing another library
