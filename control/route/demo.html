@@ -65,10 +65,8 @@
 		<span style="color: purple;">function</span>
 		<span style="color: blue;">(data)</span> {
 	</span><br />
-	<span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;// data is</span><br />
-	<span class="comment">
-		&nbsp;&nbsp;&nbsp;&nbsp;//
-		<span class="data comment"></span>
+		&nbsp;&nbsp;&nbsp;&nbsp;data<span class="comment">
+		// -> <span class="data comment"></span>
 	</span>
 	<br />}
 </p>
@@ -102,16 +100,16 @@
 			}
 
 		var Router = can.Control({
+			"route" : function(data){
+				setStatus("route", data);
+			},
+
 			":type route" : function(data) {
 				setStatus(":type route", data);
 			},
 
 			"todo/:id route" : function(data) {
 				setStatus("todo/:id route", data);
-			},
-
-			"route" : function(data){
-				setStatus("route", data);
 			}
 		});
 
