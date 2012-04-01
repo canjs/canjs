@@ -20,11 +20,11 @@ It also includes a rich set of supported [extensions and plugins](#plugins).
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your download
 for the library you are using:
 
- - [can.jquery.js](http://donejs.com/can/dist/edge/can.jquery.js) ([min](http://donejs.com/can/dist/edge/can.jquery.min.js)) - 8k - [Annotated Source](http://donejs.com/can/docs/can.jquery.html)
- - [can.zepto.js](http://donejs.com/can/dist/edge/can.zepto.js) ([min](http://donejs.com/can/dist/edge/can.zepto.min.js)) - 9k - [Annotated Source](http://donejs.com/can/docs/can.zepto.html)
- - [can.dojo.js](http://donejs.com/can/dist/edge/can.dojo.js) ([min](http://donejs.com/can/dist/edge/can.dojo.min.js)) - 9k - [Annotated Source](http://donejs.com/can/docs/can.dojo.html)
- - [can.mootools.js](http://donejs.com/can/dist/edge/can.mootools.js) ([min](http://donejs.com/can/dist/edge/can.mootools.min.js)) - 9k - [Annotated Source](http://donejs.com/can/docs/can.mootools.html)
- - [can.yui.js](http://donejs.com/can/dist/edge/can.yui.js) ([min](http://donejs.com/can/dist/edge/can.yui.min.js)) - 9k - [Annotated Source](http://donejs.com/can/docs/can.yui.html)
+ - [can.jquery.js](https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0b.min.js)) - 8.250k - [Annotated Source](http://donejs.com/can/docs/can.jquery.html)
+ - [can.zepto.js](https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0b.min.js)) - 9.906k - [Annotated Source](http://donejs.com/can/docs/can.zepto.html)
+ - [can.dojo.js](https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0b.min.js)) - 10.474k - [Annotated Source](http://donejs.com/can/docs/can.dojo.html)
+ - [can.mootools.js](https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0b.min.js)) - 9.806k - [Annotated Source](http://donejs.com/can/docs/can.mootools.html)
+ - [can.yui.js](https://github.com/downloads/jupiterjs/canjs/can.yui.1.0b.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.yui.1.0b.min.js)) - 10.261k - [Annotated Source](http://donejs.com/can/docs/can.yui.html)
 
 This page walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery. If you want to see a
@@ -1449,7 +1449,71 @@ event.  This is used to teardown event handlers in can.Control.
 
 ## Use with other libraries
 
-CanJS can be used with libraries other than jQuery.
+CanJS can be used with jQuery, Dojo, Mootools, YUI, or Zepto.
+
+### jQuery
+
+CanJS supports jQuery 1.7+. Include a copy of jQuery along with CanJS to get started.
+
+{% highlight html %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
+</script>
+<script src="can.jquery.js"></script>
+<script>
+  // start using CanJS
+  can.Model('Todo', {
+    ...
+  });
+</script>
+{% endhighlight %}
+
+CanJS supports binding to any jQuery objects (like jQuery UI widgets) that use standard 
+jQuery events. The jQuery UI Datepicker doesn't have built-in support for standard 
+jQuery events, so for those cases, a workaround should be applied:
+
+{% highlight html %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
+</script>
+<script src="jquery.ui.core.js"></script>
+<script src="jquery.ui.datepicker.js"></script>
+<script src="can.jquery.js"></script>
+<script>
+  YUI().use('can', 'calendar', function(Y) {
+    // create models
+    Todo = can.Model({ ... });
+    Todo.List = can.Model.List({ ... });
+
+    // create control
+    Todos = can.Control({
+      // listen to the calendar widget's datepickerselect event
+      '{calendar} datepickerselect': function(calendar, ev){
+        // do something with the selected date
+        var selectedDate = this.options.calendar.datepicker('getDate');
+        ...
+      }
+    });
+
+    // Initialize the app
+    Todo.findAll({}, function(todos) {
+      new Todos('#todoapp', {
+        todos: todos,
+        calendar: $('#calendar').hide().datepicker({
+          // Adding a workaround for date selection since the 
+          // jQuery UI datepicker widget doesn't fire the 
+          // "datepickerselect" event
+          onSelect: function(dateText, datepicker) {
+            $(this).trigger({
+              type: 'datepickerselect',
+              text: dateText,
+              target: datepicker
+            });
+          }
+        })
+      });
+    });
+  });
+</script>
+{% endhighlight %}
 
 ### Dojo
 
@@ -1474,12 +1538,12 @@ If you are including Dojo from a CDN or you want more control over your file str
 
 {% highlight html %}
 <script>
-//Using dojoConfig to load can/dojo from the local directory js/libs
+//Using dojoConfig to load can/dojo from the local directory
 var dojoConfig = {
   packages: [{
     name: "can/dojo",
-    location: location.pathname.replace(/\/[^/]+$/, "") + "/js/libs",
-    main: "can.dojo-edge.js"
+    location: location.pathname.replace(/\/[^/]+$/, ""),
+    main: "can.dojo.js"
   }]
 }
 </script>
@@ -1501,12 +1565,12 @@ You can also configure package paths using the [require function](http://dojotoo
 <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/dojo/
 1.7.1/dojo/dojo.js'></script>
 <script>
-//Using require to load can/dojo from the local directory js/libs
+//Using require to load can/dojo from the local directory
 require({
   packages: [{
     name: "can/dojo",
-    location: location.pathname.replace(/\/[^/]+$/, "") + "/js/libs",
-    main: "can.dojo-edge"
+    location: location.pathname.replace(/\/[^/]+$/, ""),
+    main: "can.dojo"
   }]
 }, ['can/dojo',], function(can){
   // start using CanJS
@@ -1538,9 +1602,30 @@ function(can, CalendarLite){
 });
 {% endhighlight %}
 
+### Mootools
+
+CanJS supports Mootools 1.4+. Include a copy of Mootools Core along with CanJS to get started.
+
+Mootools Core has an issue where __focus__ and __blur__ events are not fired for delegate event listeners.
+Include Mootools More's Event.Pseudos module for __focus__ and __blur__ support.
+
+{% highlight html %}
+<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.4.3/
+mootools.js"></script>
+<!-- Mootools More Event.Pseudos module -->
+<script src="mootools-more-event_pseudos-1.4.0.1.js"></script>
+<script src="can.mootools.js"></script>
+<script>
+  // start using CanJS
+  Todo = can.Model({
+    ...
+  });
+</script>
+{% endhighlight %}
+
 ### YUI
 
-CanJS supports YUI with both dynamically or statically loaded modules.
+CanJS supports YUI 3.4+ with both dynamically or statically loaded modules.
 CanJS depends on the following YUI modules: __node__, __io-base__, __querystring__, __event-focus__, and __array-extras__. The __selector-css2__ and __selector-css3__ YUI modules are optional, but necessary for IE7 and other browsers that don't support __querySelectorAll__.
 
 To use with dynamically loaded modules, include the YUI loader along with CanJS.
@@ -1548,12 +1633,12 @@ Add `'can'` to your normal list of modules with `YUI().use('can', ...)` wherever
 
 {% highlight html %}
 <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
-<script src="path/to/can.yui.js"></script>
+<script src="can.yui.js"></script>
 <script>
   // CanJS with support for modern browsers
   YUI().use('can', function(Y) {
     // start using CanJS
-    can.Model('Todo', {
+    Todo = can.Model({
       ...
     });
   });
@@ -1561,7 +1646,7 @@ Add `'can'` to your normal list of modules with `YUI().use('can', ...)` wherever
   // CanJS with support for IE7 and other browsers without querySelectorAll
   YUI({ loadOptional: true }).use('can', function(Y) {
     // start using CanJS
-    can.Model('Todo', {
+    Todo = can.Model({
       ...
     });
   });
@@ -1592,11 +1677,11 @@ arse/querystring-parse-min.js&3.4.1/build/querystring-stringify/querystring-st
 ringify-min.js&3.4.1/build/event-custom-complex/event-custom-complex-min.js&3.
 4.1/build/event-synthetic/event-synthetic-min.js&3.4.1/build/event-focus/event
 -focus-min.js"></script>
-<script src="path/to/can.yui.js"></script>
+<script src="can.yui.js"></script>
 <script>
   YUI().use('*', function(Y) {
     // start using CanJS
-    can.Model('Todo', {
+    Todo = can.Model({
       ...
     });
   });
@@ -1609,11 +1694,11 @@ bind to the __selectionChange__ event for a YUI Calendar widget:
 {% highlight javascript %}
 YUI().use('can', 'calendar', function(Y) {
   // create models
-  can.Model('Todo', { ... });
-  can.Model.List('Todo.List', { ... });
+  Todo = can.Model({ ... });
+  Todo.List = can.Model.List({ ... });
 
   // create control
-  can.Control('Todos', {
+  Todos = can.Control({
     // listen to the calendar widget's selectionChange event
     '{calendar} selectionChange': function(calendar, ev){
       // do something with the selected date
@@ -1634,14 +1719,32 @@ YUI().use('can', 'calendar', function(Y) {
 });
 {% endhighlight %}
 
-### Implementing another library
+### Zepto
+
+CanJS supports Zepto 0.8+. Include a copy of Zepto along with CanJS to get started.
+
+Zepto 0.8 has an issue where __focus__ and __blur__ events are not fired for delegate event listeners.
+There is a fix included for Zepto > 0.8, but apply 
+[this patch](https://github.com/madrobby/zepto/commit/ab2a3ef0d18beaf768903f0943efd019a29803f0)
+to __zepto.js__ when using Zepto 0.8.
+
+{% highlight html %}
+<!-- Zepto 0.8 with focus/blur patch applied -->
+<script src="zepto.0.8-focusblur.js"></script>
+<script src="can.zepto.js"></script>
+<script>
+  // start using CanJS
+  Todo = can.Model({
+    ...
+  });
+</script>
+{% endhighlight %}
 
 ## Plugins
 
 ### can.Construct.proxy `construct.proxy( methodname, [ curriedArgs ] )`
 
-[can.construct.proxy.js](http://donejs.com/can/dist/edge/can.construct.proxy.js)
-([min](http://donejs.com/can/dist/edge/can.construct.proxy.min.js))
+[can.construct.proxy.js](https://github.com/downloads/jupiterjs/canjs/can.construct.proxy.1.0b.js)
 
 The [can.Construct.proxy](http://donejs.com/docs.html#!can.Construct.proxy)
 plugin adds a _proxy_ method that takes a function name and returns a new function
@@ -1669,8 +1772,7 @@ curriedCallback( '!' ); // -> 'Hi my name is John!'
 
 ### can.Construct.super
 
-[can.construct.super.js](http://donejs.com/can/dist/edge/can.construct.super.js)
-([min](http://donejs.com/can/dist/edge/can.construct.super.min.js))
+[can.construct.super.js](https://github.com/downloads/jupiterjs/canjs/can.construct.super.1.0b.js)
 
 The [can.Construct.super](http://donejs.com/docs.html#!can.Construct.super) plugin
 provides access to overwritten methods using `this._super` when extending a can.Construct:
@@ -1694,8 +1796,7 @@ improvedPerson.sayName( 'To whom it may concern, I am ' );
 
 ### can.Observe.delegate `observe.delegate( name, event, handler )`
 
-[can.observe.delegate.js](http://donejs.com/can/dist/edge/can.observe.delegate.js)
-([min](http://donejs.com/can/dist/edge/can.observe.delegate.min.js))
+[can.observe.delegate.js](https://github.com/downloads/jupiterjs/canjs/can.observe.delegate.1.0b.js)
 
 Use the [can.Observe.delegate](http://donejs.com/docs.html#!can.Observe.delegate) plugin
 to listen to _change_, _set_, _add_ and _remove_ on any direct, child or wildcard attribute:
@@ -1727,8 +1828,7 @@ observe.attr( 'foo.baz', 'Bye you' );
 
 ### can.Observe.setter
 
-[can.observe.setter.js](http://donejs.com/can/dist/edge/can.observe.setter.js)
-([min](http://donejs.com/can/dist/edge/can.observe.setter.min.js))
+[can.observe.setter.js](https://github.com/downloads/jupiterjs/canjs/can.observe.setter.1.0b.js)
 
 With the [can.Observe.setter](http://donejs.com/docs.html#!can.Observe.setter) plugin
 you can use attribute setter methods to process the value being set:
@@ -1749,8 +1849,7 @@ instance.attr( 'name', 'doe' );
 
 ### can.Observe.attributes
 
-[can.observe.attributes.js](http://donejs.com/can/dist/edge/can.observe.attributes.js)
-([min](http://donejs.com/can/dist/edge/can.observe.attributes.min.js))
+[can.observe.attributes.js](https://github.com/downloads/jupiterjs/canjs/can.observe.attributes.1.0b.js)
 
 The [can.Observe.attributes](http://donejs.com/docs.html#!can.Observe.attributes) plugin
 allows you to specify attributes with type converters and serializers. Serializers
@@ -1810,8 +1909,7 @@ var seralizedObj = brian.serialize();
 {% endhighlight %}
 ### can.Observe.validations `observe.validate( attribute, validator )`
 
-[can.observe.validations.js](http://donejs.com/can/dist/edge/can.observe.validations.js)
-([min](http://donejs.com/can/dist/edge/can.observe.validations.min.js))
+[can.observe.validations.js](https://github.com/downloads/jupiterjs/canjs/can.observe.validations.1.0b.js)
 
 [can.Observe.validations](http://donejs.com/docs.html#!can.Observe.validations) adds validation to a can.Observe.
 Call the _validate_ method in the _init_ constructor with the attribute name and the validation
@@ -1841,8 +1939,7 @@ john.errors();
 
 ### can.Observe.backup `observe.backup()`
 
-[can.observe.backup.js](http://donejs.com/can/dist/edge/can.observe.backup.js)
-([min](http://donejs.com/can/dist/edge/can.observe.backup.min.js))
+[can.observe.backup.js](https://github.com/downloads/jupiterjs/canjs/can.observe.backup.1.0b.js)
 
 You can backup and restore can.Observe data using the [can.Observe.backup](http://donejs.com/docs.html#!can.Observe.backup)
 plugin. To backup the observe in its current state call _backup_. To revert it back to that state use _restore_:
@@ -1858,8 +1955,7 @@ todo.name // -> 'do the dishes'
 
 ### can.Control.plugin
 
-[can.control.plugin.min.js](http://donejs.com/can/dist/can.control.plugin.min.js)
-\[[dev](http://donejs.com/can/dist/can.control.plugin.js)\]
+[can.control.plugin.js](https://github.com/downloads/jupiterjs/canjs/can.control.plugin.1.0b.js)
 
 [can.Control.plugin](http://donejs.com/docs.html#!can.Control.plugin) registers a jQuery plugin function
 with a given _pluginName_ that instantiates a can.Control.
@@ -1906,8 +2002,7 @@ control.activate( 0 );
 
 ### can.Control.view `control.view( [ viewname ], [ data ] )`
 
-[can.control.view.js](http://donejs.com/can/dist/edge/can.control.view.js)
-([min](http://donejs.com/can/dist/edge/can.control.view.min.js))
+[can.control.view.js](https://github.com/downloads/jupiterjs/canjs/can.control.view.1.0b.js)
 
 [can.Control.view](http://donejs.com/docs.html#!can.Control.view) renders a view from a URL in a
 _views/controlname_ folder. If no viewname is supplied it uses the current action name.
@@ -1956,19 +2051,21 @@ $( '#todos' ).html( 'todo/todos.ejs', [
 
 ## Examples
 
-Examples of CanJS.
+Check out these sweet aps built in CanJS.
 
 ### Todo
 
-A simple todo application written in the style of [TodoMVC](https://github.com/addyosmani/todomvc/). There is an implementation for each library supported by CanJS including demos of using [templated event binding](#can_control-templated_event_handlers_pt_2) to bind to widget events in Dojo and YUI.
-
-This application is a good example of how powerful [EJS Live Binding](#can_ejs-live_binding) is.
-
 ![CanJS Todo App](images/examples/todo.png "CanJS Todo App")
+
+A simple todo application written in the style of [TodoMVC](https://github.com/addyosmani/todomvc/). There is an 
+implementation for each library supported by CanJS including an __extra__  Dojo, YUI, and jQuery one
+using [templated event binding](#can_control-templated_event_handlers_pt_2) to bind to widget events. Todo is a good 
+example of the power of [EJS's live binding](#can_ejs-live_binding).
 
 __View the App__
 
 - [jQuery](http://donejs.com/examples/todo/jquery/index.html)
+- [jQuery with calendar widget](http://donejs.com/examples/todo/jquery-widget/index.html)
 - [Dojo](http://donejs.com/examples/todo/dojo/index.html)
 - [Dojo with calendar widget](http://donejs.com/examples/todo/dojo-widget/index.html)
 - [Mootools](http://donejs.com/examples/todo/mootools/index.html)
