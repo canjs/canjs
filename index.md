@@ -1723,7 +1723,7 @@ YUI().use('can', 'calendar', function(Y) {
 
 CanJS supports Zepto 0.8+. Include a copy of Zepto along with CanJS to get started.
 
-Zepto 0.8 has an issue where __focus and __blur__ events are not fired for delegate event listeners.
+Zepto 0.8 has an issue where __focus__ and __blur__ events are not fired for delegate event listeners.
 There is a fix included for Zepto > 0.8, but apply 
 [this patch](https://github.com/madrobby/zepto/commit/ab2a3ef0d18beaf768903f0943efd019a29803f0)
 to __zepto.js__ when using Zepto 0.8.
