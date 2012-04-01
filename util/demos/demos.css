@@ -125,3 +125,10 @@ pre {margin: 0px;}
 #linkresult {
 	font-size: 12px;
 }
+#teacher{
+	font-family: sans-serif,"Trebuchet MS",Verdana,Helvetica,Arial;
+	font-size: 17px;
+}
+#teacher li{
+	list-style-type: circle;
+}

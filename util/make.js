@@ -88,7 +88,8 @@ steal('steal/build/pluginify', function() {
 			"observe/delegate/delegate" : "observe.delegate",
 			"observe/setter/setter" : "observe.setter",
 			"observe/backup/backup" : "observe.backup",
-			"observe/validations/validations" : "observe.validations"
+			"observe/validations/validations" : "observe.validations",
+			"view/modifiers/modifiers" : "view.modifiers"
 		};
 
 	steal.File("can/dist").mkdirs();
