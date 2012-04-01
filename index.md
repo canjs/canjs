@@ -1722,8 +1722,6 @@ Include a copy of Zepto along with CanJS to get started.
 </script>
 {% endhighlight %}
 
-### Implementing another library
-
 ## Plugins
 
 ### can.Construct.proxy `construct.proxy( methodname, [ curriedArgs ] )`
