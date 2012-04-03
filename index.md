@@ -972,8 +972,7 @@ The selector can also be templated.
 ### Templated Event Handlers Pt 2 `"{objectName}"`
 
 Control can also bind to objects other than `this.element` with
-templated event handlers.  This is _critical
-for avoiding memory leaks that are common among MVC applications_.  
+templated event handlers.  This is _critical_ for avoiding memory leaks that are common among MVC applications_.  
 
 If the value inside `{NAME}` is an object, the event will be bound to that object rather than the control.  For example, the following tooltip listens to 
 clicks on the window:
