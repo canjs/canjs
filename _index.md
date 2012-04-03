@@ -2272,7 +2272,7 @@ It converts nested objects into observes automatically.  For example:
 
 {% highlight javascript %}
 var person = new can.Observe({
-  name: { first: 'Justin', last: 'Myer' },
+  name: { first: 'Justin', last: 'Meyer' },
   hobbies: [ 'programming', 'party rocking' ]
 })
 
