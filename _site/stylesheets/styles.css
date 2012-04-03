@@ -128,24 +128,6 @@ em {
 	border-bottom: 1px solid #b5b6b5;
 	position: relative;
 }
-#scroll-top {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	right: 0px;
-	height: 40px;
-	background: rgba(0,0,0,0.3);
-	z-index: 1000;
-}
-#scroll-bottom {
-	position: absolute;
-	bottom: 0px;
-	left: 0px;
-	right: 0px;
-	height: 40px;
-	background: rgba(0,0,0,0.3);
-	z-index: 1000;
-}
 #content-wrapper {
 	width: 680px;
 	float: right;

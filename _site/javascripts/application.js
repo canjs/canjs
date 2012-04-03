@@ -209,7 +209,6 @@ $.Controller('Menu', {
 		} else {
 			this._menuShouldScroll = false;
 			this._menu.css('marginTop', 0);
-			this.find('#scroll-top, #scroll-bottom').hide();
 		}
 	},
 	"#inner-menu-wrap mousemove" : function(el, ev){
