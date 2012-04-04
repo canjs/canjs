@@ -498,8 +498,8 @@ steal('can/observe',function(){
 					// Increment requests.
 					self._reqs++;
 					// Make the request.
-					return pipe( old.call(self,params),
-						self, 
+					return pipe( old.call(this,params),
+						this,
 						method ).then(success,error).then(clean, clean);
 				}
 				
