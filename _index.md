@@ -34,7 +34,7 @@ fully functional version of this todo app in action, you can
 The [Use with other libraries](#use_with_other_libraries) 
 section details the minor differences among use with other libraries.
 The [Examples](#examples) section has other awesome examples of how you
-can put CanJS to good use. 
+can put CanJS to good use. There is also an [online test suite](http://ci.javascriptmvc.com/jobs/can/test/test.html).
 
 ## can.Construct `can.Construct( [classProperties,] [prototypeProperties] )`
 
