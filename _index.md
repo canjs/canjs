@@ -692,8 +692,8 @@ are changed.  This is important to understand because a template like this will 
 <% } %>
 {% endhighlight %}
 
-This does not work because when the function wrapping `todos[ i ].attr( 'name' )` is called, `i` will be __3__ which 
-is the index of the last todo and not the actual index of the desired todo.  Fix this by using a closure like:
+This does not work because when the function wrapping `todos[ i ].attr( 'name' )` is called, `i` will be __3__, which 
+is the index of the last todo, not the index of the desired todo.  Fix this by using a closure like:
 
 {% highlight erb %}
 <% $.each( todos, function( i, todo ) { %>
@@ -925,7 +925,7 @@ var Todos = can.Control({
 })
 {% endhighlight %}
 
-When the todo is destroyed, EJS's live binding will remove it's LI automatically.
+When the todo is destroyed, EJS's live binding will remove its LI automatically.
 
 ### Templated Event Handlers Pt 1 `"{optionName}"`
 
@@ -948,7 +948,7 @@ new Todos( '#todos', { destroyEvent: 'mouseenter' } )
 {% endhighlight %}
 
 Values inside `{NAME}` are looked up on the control's `this.options`
-and then the `window`.  For example, we could customize it instead like:
+and then, if not found, on the `window`.  For example, we could customize it instead like:
 
 {% highlight javascript %}
 var Todos = can.Control( 'Todos', {
@@ -972,7 +972,7 @@ The selector can also be templated.
 ### Templated Event Handlers Pt 2 `"{objectName}"`
 
 Control can also bind to objects other than `this.element` with
-templated event handlers.  This is _critical_ for avoiding memory leaks that are common among MVC applications_.  
+templated event handlers.  This is _critical_ for avoiding memory leaks that are common among MVC applications.  
 
 If the value inside `{NAME}` is an object, the event will be bound to that object rather than the control.  For example, the following tooltip listens to 
 clicks on the window:
@@ -993,7 +993,7 @@ new Tooltip( $('<div>INFO</div>').appendTo(el) )
     
 This is convenient when needing to 
 listen to model changes.  If EJS was not taking care of
-removing `<li>`s after their model is destroyed, we
+removing `<li>`s after their model was destroyed, we
 could implement it in `Todos` like:
 
 {% highlight javascript %}
@@ -1061,10 +1061,10 @@ data by calling `$( document.body ).empty()`.
 
 ### on `control.on()`
 
-[can.Control.prototype.on](http://donejs.com/docs.html#!can.Control.prototype.on) rebinds a control's event handlers.  This is useful when you want
-to listen to a specific model and change it.
+[can.Control.prototype.on](http://donejs.com/docs.html#!can.Control.prototype.on) rebinds a control's event handlers.  This is useful when you are 
+listening to a specific model instance, and want to change to change to another.
 
-The following `Editor` widget's __todo__ method updates the todo option and then calls `on()` to 
+The following `Editor` widget's __todo__ method updates the control's todo option and then calls `on()` to 
 rebind `'{todo} updated'`.
 
 {% highlight javascript %}
@@ -1264,12 +1264,12 @@ var Routing = can.Control({
 new Routing( document.body );
 {% endhighlight %}
 
-The __Routing__ control is a traditional controller. It coordinates
-among the `can.route`, `Editor` and `Todos`.  `Editor` and `Todos`
+The __Routing__ control is a traditional controller. It coordinates the 
+`Editor` and `Todos` controls with `can.route` hash data.  `Editor` and `Todos`
 are traditional views, consuming models.
 
-If you can understand this, you understand 
-everything. Congrats! [See it in action](http://donejs.com/docs.html#!tutorials/rapidstart/todos.html).
+If you can understand this, you're on your way to mastery of the CanJS MVC architecture. 
+Congrats! [See it in action](http://donejs.com/docs.html#!tutorials/rapidstart/todos.html).
 
 
 ## Utilities
@@ -1390,17 +1390,19 @@ var deferred = new can.Deferred()
 
 // pipes a deferred into another deferred
 deferred.pipe(function() {
+	// done handler
+}, function() {
+	// fail handler
+})
 
-}, function() {})
-
-// resolves a deferred, deferreds piped into the deferred also become resolved
+// resolves a deferred (deferreds piped into the deferred also become resolved)
 deferred.resolve()
   
-// rejects a deferred, deferreds piped into the deferred also become rejected
+// rejects a deferred (deferreds piped into the deferred also become rejected)
 deferred.reject()
   
 // used to execute callback functions when all passed deferreds become resolved
-can.When()
+can.when()
 {% endhighlight %}
 
 
@@ -1442,8 +1444,8 @@ can.addClass( NodeList, className )
 
 __HTMLElement 'destroyed' event__
 
-When an element is removed from the page, a 'destroyed' event should be triggered on the 
-event.  This is used to teardown event handlers in can.Control.
+When an element is removed from the page using any library, CanJS triggers a 'destroyed' event on 
+the element.  This is used to teardown event handlers in can.Control.
 
 ## Use with other libraries
 
@@ -1982,16 +1984,16 @@ $( '.tabs' ).tabs( 'activate', 0 );
 {% endhighlight %}
 
 Note that calling a method like this will return a jQuery object, not the actual return value.
-You can retrieve the controller instance directly using the _.controllers()_ or _.controller()_ 
+You can retrieve the controller instance directly using the _.controls()_ or _.control()_ 
 helpers included in this plugin.
 
 {% highlight javascript %}
 //- Returns an array of controllers on the match
-var allControls = $( '.tabs' ).controllers();
+var allControls = $( '.tabs' ).controls();
 allControllers[ 0 ].activate( 0 );
 
 //- Returns the first controller on the match
-var control = $( '.tabs' ).controller();
+var control = $( '.tabs' ).control();
 control.activate( 0 );
 {% endhighlight %}
 
@@ -2096,8 +2098,8 @@ Srchr searches several data sources for content and displays it to the user. It 
 ## Why CanJS
 
 There are many libraries out there and it can be difficult 
-to pick the one that's right for you.  In our (not so, but should be) humble opinion, the technology in CanJS is simply the best.  It strikes a 
-balance between:
+to pick the one that's right for you.  In our humble opinion, the technology in CanJS is simply the best.  
+It strikes a balance between:
 
  - Size
  - Ease of use
@@ -2105,7 +2107,7 @@ balance between:
  - Speed
  - Flexibility
 
-The following are our very biased reasons to use CanJS.
+The following are the reasons to use CanJS.
 
 ### Size 
 
@@ -2122,10 +2124,11 @@ __Size is not everything__.  It really is what's inside that counts. And that's 
 ### Ease of use
 
 This site highlights the most important features of CanJS.  The library comes with thorough documentation
-and examples on [its DoneJS documentation page](http://donejs.com/docs.html).  There are example apps for
-each library, and several example apps for jQuery. 
+and examples on the [DoneJS documentation page](http://donejs.com/docs.html).  There are example apps for
+each library and several example for jQuery. 
 
-CanJS is also supported by Bitovi, formerly [Jupiter Consulting](http://jupiterjs.com).  We are extremely active on the [forums](https://forum.javascriptmvc.com/#Forum/canjs). And should the need arise, we provide support, training, and development.
+CanJS is also supported by Bitovi, formerly [Jupiter Consulting](http://jupiterjs.com).  We are extremely active on 
+the [forums](https://forum.javascriptmvc.com/#Forum/canjs). And should the need arise, we provide support, training, and development.
 
 ### Safety
 
@@ -2186,7 +2189,7 @@ can.view( 'todosList.ejs', {
 <% } ) %>
 {% endhighlight %}
 
-If `Todo.findAll( { due: 'today' } )` and `Todo.findAll( { type: 'critical' } )` both have the same todo instance's data like:
+If the result for of `Todo.findAll( { due: 'today' } )` and `Todo.findAll( { type: 'critical' } )` both share a todo instance like:
 
 {% highlight javascript %}
 { "id" : 5, "name" : "do dishes", "due" : "today", "type" : "critical" }
@@ -2280,7 +2283,7 @@ person.attr( 'name.first' ) //-> 'Justin'
 person.attr( 'hobbies.0' ) //-> 'programming'
 {% endhighlight %}
 
-But most important, `change` events bubble.  Letting observe listen when a nested property changes:
+But most important, `change` events bubble, letting observes listen for when a nested property changes:
 
 {% highlight javascript %}
 person.bind( 'change', function( ev, attr, how, newVal, oldVal ) {
@@ -2384,4 +2387,4 @@ To make the CanJS builds, run:
 
     js can/util/make.js
     
-It puts the downloads in `can/dist`.
+It puts the downloads in `can/dist/edge`.
