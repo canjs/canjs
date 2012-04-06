@@ -479,7 +479,7 @@ steal('can/observe',function(){
 	
 	
 	can.Observe("can.Model",{
-		setup : function(){
+		setup : function(base){
 			can.Observe.apply(this, arguments);
 			if(this === can.Model){
 				return;
@@ -493,16 +493,18 @@ steal('can/observe',function(){
 			});
 			var clean = can.proxy(this._clean, self);
 			can.each({findAll : "models", findOne: "model"}, function(name, method){
+				
 				var old = self[name];
-				self[name] = function(params, success, error){
+				can.Construct._overwrite(self, base, name, function(params, success, error){
+					// this._super to trick it to load super
+					this._super;
 					// Increment requests.
 					self._reqs++;
 					// Make the request.
 					return pipe( old.call( this, params ),
 						this, 
 						method ).then(success,error).then(clean, clean);
-				}
-				
+				});
 			})
 			// Convert `findAll` and `findOne`.
 			var oldFindAll

@@ -41,6 +41,14 @@ steal('can/construct', function() {
 					args[0] = prop === "*" ? 
 						parent.indexOf(val)+"." + args[0] :
 						prop +  "." + args[0];
+				// track objects dispatched on this observe		
+				ev.triggeredNS = ev.triggeredNS || {};
+				// if it has already been dispatched exit
+				if (ev.triggeredNS[parent._namespace]) {
+					return;
+				}
+				ev.triggeredNS[parent._namespace] = true;
+						
 				can.trigger(parent, ev, args);
 				can.trigger(parent,args[0],args);
 			});
