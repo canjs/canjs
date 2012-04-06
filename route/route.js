@@ -102,7 +102,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
 			// If we have a route name in our `can.route` data, use it.
 			if ( ! ( routeName && (route = can.route.routes[routeName]))){
 				// Otherwise find route.
-				each(can.route.routes, function(name, temp){
+				each(can.route.routes, function(temp, name){
 					matchCount = matchesData(temp, data);
 					if ( matchCount > matches ) {
 						route = temp;
@@ -122,7 +122,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
                     }),
                     after;
 					// Remove matching default values
-					each(route.defaults, function(name,val){
+					each(route.defaults, function(val,name){
 						if(cpy[name] === val) {
 							delete cpy[name]
 						}
@@ -174,7 +174,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
 			var route = {
 				length: -1
 			};
-			each(can.route.routes, function(name, temp){
+			each(can.route.routes, function(temp, name){
 				if ( temp.test.test(url) && temp.length > route.length ) {
 					route = temp;
 				}
@@ -195,7 +195,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
 				obj = extend(true, {}, route.defaults, obj);
                 // Overwrite each of the default values in `obj` with those in 
 				// parts if that part is not empty.
-				each(parts,function(i, part){
+				each(parts,function(part,  i){
 					if ( part && part !== '&') {
 						obj[route.names[i]] = decodeURIComponent( part );
 					}
@@ -362,7 +362,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
 	
     // The functions in the following list applied to `can.route` (e.g. `can.route.attr('...')`) will
     // instead act on the `can.route.data` observe.
-	each(['bind','unbind','delegate','undelegate','attr','removeAttr'], function(i, name){
+	each(['bind','unbind','delegate','undelegate','attr','removeAttr'], function(name){
 		can.route[name] = function(){
 			return can.route.data[name].apply(can.route.data, arguments)
 		}

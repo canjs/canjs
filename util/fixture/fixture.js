@@ -484,7 +484,7 @@ steal('can/util/object',function( $ ) {
 				return null;
 			}
 			res.shift();
-			can.each(order, function(i, name){
+			can.each(order, function(name){
 				data[name] = res.shift()
 			})
 			return data;
@@ -599,7 +599,7 @@ steal('can/util/object',function( $ ) {
 				settings.data = settings.data || {};
 				//sort using order
 				//order looks like ["age ASC","gender DESC"]
-				can.each((settings.data.order || []).slice(0).reverse(), function( i, name ) {
+				can.each((settings.data.order || []).slice(0).reverse(), function( name ) {
 					var split = name.split(" ");
 					retArr = retArr.sort(function( a, b ) {
 						if ( split[1].toUpperCase() !== "ASC" ) {
@@ -624,7 +624,7 @@ steal('can/util/object',function( $ ) {
 				});
 
 				//group is just like a sort
-				can.each((settings.data.group || []).slice(0).reverse(), function( i, name ) {
+				can.each((settings.data.group || []).slice(0).reverse(), function( name ) {
 					var split = name.split(" ");
 					retArr = retArr.sort(function( a, b ) {
 						return a[split[0]] > b[split[0]];

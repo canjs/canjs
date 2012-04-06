@@ -26,7 +26,7 @@ test("modifier with a deferred", function(){
 });*/
 
 test("html takes promise", function(){
-	var d = can.Deferred();
+	var d = new can.Deferred();
 	can.$("#qunit-test-area").html(d);
 	stop();
 	d.done(function(){

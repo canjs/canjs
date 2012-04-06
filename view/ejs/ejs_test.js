@@ -498,7 +498,7 @@ test("unescape bindings change", function(){
 	var completed = function(){
 		l.attr('length');
 		var num = 0;
-		l.each(function(i, item){
+		l.each(function(item){
 			if(item.attr('complete')){
 				num++;
 			}
@@ -542,7 +542,7 @@ test("escape bindings change", function(){
 	var completed = function(){
 		l.attr('length');
 		var num = 0;
-		l.each(function(i, item){
+		l.each(function(item){
 			if(item.attr('complete')){
 				num++;
 			}
@@ -580,7 +580,7 @@ test("tag bindings change", function(){
 	var completed = function(){
 		l.attr('length');
 		var num = 0;
-		l.each(function(i, item){
+		l.each(function(item){
 			if(item.attr('complete')){
 				num++;
 			}
@@ -617,7 +617,7 @@ test("attribute value bindings change", function(){
 	var completed = function(){
 		l.attr('length');
 		var num = 0;
-		l.each(function(i, item){
+		l.each(function(item){
 			if(item.attr('complete')){
 				num++;
 			}

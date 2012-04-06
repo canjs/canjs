@@ -486,13 +486,13 @@ steal('can/observe',function(){
 			}
 			var self = this;
 			
-			can.each(ajaxMethods, function(name, method){
+			can.each(ajaxMethods, function(method, name){
 				if ( ! can.isFunction( self[name] )) {
 					self[name] = ajaxMaker(method, self[name]);
 				}
 			});
 			var clean = can.proxy(this._clean, self);
-			can.each({findAll : "models", findOne: "model"}, function(name, method){
+			can.each({findAll : "models", findOne: "model"}, function(method, name){
 				
 				var old = self[name];
 				can.Construct._overwrite(self, base, name, function(params, success, error){
@@ -642,12 +642,12 @@ steal('can/observe',function(){
 			}
 			//!steal-remove-end
 
-			can.each(raw, function( i, rawPart ) {
+			can.each(raw, function( rawPart ) {
 				res.push( self.model( rawPart ));
 			});
 
 			if ( ! arr ) { // Push other stuff onto `array`.
-				can.each(instancesRawData, function(prop, val){
+				can.each(instancesRawData, function(val, prop){
 					if ( prop !== 'data' ) {
 						res[prop] = val;
 					}
@@ -1036,7 +1036,7 @@ steal('can/observe',function(){
 	 *   - Removes the model from the global list if its used.
 	 * 
 	 */
-	"destroyed"], function( i, funcName ) {
+	"destroyed"], function( funcName ) {
 		can.Model.prototype[funcName] = function( attrs ) {
 			var stub, 
 				constructor = this.constructor;

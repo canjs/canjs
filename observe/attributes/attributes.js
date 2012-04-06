@@ -1,6 +1,6 @@
 steal('can/observe', function(){
 
-can.each([ can.Observe, can.Model ], function(i,clss){
+can.each([ can.Observe, can.Model ], function(clss){
 	// in some cases model might not be defined quite yet.
 	if(clss === undefined){
 		return;
@@ -187,13 +187,13 @@ can.each([ can.Observe, can.Model ], function(i,clss){
 		var self = this;
 		oldSetup.call(self, superClass, stat, proto);
 
-		can.each(["attributes", "validations"], function( i, name ) {
+		can.each(["attributes", "validations"], function( name ) {
 			if (!self[name] || superClass[name] === self[name] ) {
 				self[name] = {};
 			}
 		});
 
-		can.each(["convert", "serialize"], function( i, name ) {
+		can.each(["convert", "serialize"], function( name ) {
 			if ( superClass[name] != self[name] ) {
 				self[name] = can.extend({}, superClass[name], self[name]);
 			}
@@ -271,7 +271,7 @@ can.Observe.prototype.serialize = function(attrName){
 		attrs = this.__get();
 	}
 		
-	can.each(attrs, function( name, val ) {
+	can.each(attrs, function( val, name ) {
 		var type = Class.attributes[name],
 			converter= Class.serialize[type];
 			

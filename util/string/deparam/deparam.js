@@ -36,7 +36,7 @@ steal('can/util/string', function($){
 				
 				pairs = params.split('&'),
 				
-				can.each( pairs, function( i, pair ) {
+				can.each( pairs, function( pair ) {
 
 					var parts = pair.split('='),
 						key   = prep( parts.shift() ),

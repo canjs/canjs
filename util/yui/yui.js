@@ -18,7 +18,7 @@
 		src: url,
 		type: "js",
 		_skip: true
-	}, "../event.js").then(
+	}, "../event.js",'can/util/array/each.js').then(
 
 	function() {
 
@@ -45,17 +45,6 @@
 
 		can.map = function( arr, fn ) {
 			return Y.Array.map(can.makeArray(arr || []), fn);
-		};
-
-		can.each = function( elements, callback ) {
-			var i, key;
-			if ( typeof elements.length == 'number' && elements.pop ) for ( i = 0; i < elements.length; i++ ) {
-				if ( callback(i, elements[i]) === false ) return elements;
-			}
-			else for ( key in elements ) {
-				if ( callback(key, elements[key]) === false ) return elements;
-			}
-			return elements;
 		};
 
 		// Map object helpers.

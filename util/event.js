@@ -45,7 +45,7 @@ can.dispatch = function(event){
 		self= this,
 		args = [event].concat(event.data || []);
 		
-	can.each(handlers, function(i, ev){
+	can.each(handlers, function(ev){
 		event.data = args.slice(1);
 		ev.handler.apply(self, args);
 	});

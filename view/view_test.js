@@ -20,7 +20,7 @@ module("can/view");
 if(window.Jaml){
 	test("multiple template types work", function(){
 		
-		can.each(["micro","ejs","jaml"/*, "tmpl"*/], function(i, ext){
+		can.each(["micro","ejs","jaml"/*, "tmpl"*/], function( ext){
 			var div = can.$(document.createElement('div'));
 				
 			can.append(div, can.view("//can/view/test/qunit/template."+ext,{"message" :"helloworld"}))
