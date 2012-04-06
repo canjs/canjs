@@ -76,7 +76,12 @@ steal("can/util/string",function( $ ) {
 		_inherit: function( newProps, oldProps, addTo ) {
 			can.extend(addTo || newProps, newProps || {})
 		},
-
+		// used for overwriting a single property.
+		// this should be used for patching other objects
+		// the super plugin overwrites this
+		_overwrite : function(what, oldProps, propName, val){
+			what[propName] = val;
+		},
 		// Set `defaults` as the merger of the parent `defaults` and this 
 		// object's `defaults`. If you overwrite this method, make sure to
 		// include option merging logic.

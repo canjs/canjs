@@ -45,25 +45,25 @@ test("static super", function(){
 
 test("findAll super", function(){
 
-  var Parent = can.Model({
-    findAll: function(){
-      equal(this.shortName, 'child');
-      return new can.Deferred();
-    },
-    shortName : 'parent'
-  },{});
-
-  var Child = Parent({
-    findAll: function(){
-      return this._super();
-    },
-     shortName : 'child'
-  },{});
-
-  stop();
-  expect(1);
-  Child.findAll({});
-  start();
+	var Parent = can.Model({
+		findAll: function(){
+			equal(this.shortName, 'child');
+			return new can.Deferred();
+		},
+		shortName : 'parent'
+	},{});
+	
+	var Child = Parent({
+		findAll: function(){
+			return this._super();
+		},
+		shortName : 'child'
+	},{});
+	
+	stop();
+	expect(1);
+	Child.findAll({});
+	start();
 });
 
 /* Not sure I want to fix this yet.
