@@ -83,7 +83,7 @@ can.$ = Zepto
 
 	can.makeArray = function(arr){
 		var ret = []
-		can.each(arr, function(i,a){
+		can.each(arr, function(a, i){
 			ret[i] = a
 		})
 		return ret;
@@ -198,4 +198,4 @@ can.$ = Zepto
 
 
 	
-}).then('../deferred.js')
+}).then('../deferred.js','can/util/array/each.js')

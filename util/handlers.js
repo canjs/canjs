@@ -43,7 +43,7 @@ steal(function(){
 			handlers = events[ev];
 		// copy during trigger
 		var handlers = can.extend({}, handlers);
-		can.each(handlers, function(bindingId, handleData){
+		can.each(handlers, function(handleData, bindingId ){
 			handleData.apply(el,[ev].concat(args))
 		})
 	}

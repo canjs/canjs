@@ -18,7 +18,7 @@ var validate = function(attrNames, options, proc) {
 	}
 	
 	var self = this;
-	can.each(attrNames, function(i, attrName) {
+	can.each(attrNames, function(attrName) {
 		// Add a test function for each attribute
 		if(!self.validations[attrName]){
 			self.validations[attrName] = [];
@@ -59,7 +59,7 @@ can.Observe.prototype.__set = function(prop, value, current, success, error){
 	return this;
 }
 
-can.each([ can.Observe, can.Model ], function(i,clss){
+can.each([ can.Observe, can.Model ], function(clss){
 	// in some cases model might not be defined quite yet.
 	if(clss === undefined){
 		return;
@@ -331,7 +331,7 @@ can.extend(can.Observe.prototype, {
 			// attr - the name of the attribute
 			// funcs - the validation functions
 			addErrors = function( attr, funcs ) {
-				can.each(funcs, function( i, func ) {
+				can.each(funcs, function( func ) {
 					var res = func.call(self, isTest ? ( self.__convert ? 
 							self.__convert(attr,newVal) : 
 							newVal ): self[attr]);
@@ -349,7 +349,7 @@ can.extend(can.Observe.prototype, {
 
 		// go through each attribute or validation and
 		// add any errors
-		can.each(attrs || validations || {}, function( attr, funcs ) {
+		can.each(attrs || validations || {}, function( funcs, attr ) {
 			// if we are iterating through an array, use funcs
 			// as the attr name
 			if ( typeof attr == 'number' ) {

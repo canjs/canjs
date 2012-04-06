@@ -286,7 +286,7 @@ steal('can/view', function(){
 	 *  @return {jQuery|can.Deferred} The jQuery object or a [can.Deferred] if a deferred has
 	 *  been passed in data.
 	 */
-	"replaceWith", "val"],function(i, func){
+	"replaceWith", "val"],function(func){
 		convert(func);
 	});
 })

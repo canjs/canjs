@@ -582,7 +582,7 @@ steal('can/construct', function( $ ) {
 		 */
 		off : function(){
 			var el = this.element[0]
-			each(this._bindings || [], function( key, value ) {
+			each(this._bindings || [], function( value ) {
 				value(el);
 			});
 			// Adds bindings.
@@ -721,7 +721,7 @@ steal('can/construct', function( $ ) {
 	each(["change", "click", "contextmenu", "dblclick", "keydown", "keyup", 
 		 "keypress", "mousedown", "mousemove", "mouseout", "mouseover", 
 		 "mouseup", "reset", "resize", "scroll", "select", "submit", "focusin",
-		 "focusout", "mouseenter", "mouseleave"], function( i, v ) {
+		 "focusout", "mouseenter", "mouseleave"], function( v ) {
 		processors[v] = basicProcessor;
 	});
 	

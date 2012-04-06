@@ -95,7 +95,7 @@ can.Model("Contact",{
 Contact.findAll({},function(contacts){
   var contactsEl = can.$('#contacts');
 
-  can.each(contacts, function(i, contact){
+  can.each(contacts, function(contact){
     var li = can.$('<li>')
       .html(contact.name + " "+ contact.ageThisYear())
       .appendTo(contactsEl);

@@ -111,7 +111,7 @@ can.each({
 // adds a method where
 // - name - method name
 // - where - where items in the array should be added
-function( name, where ) {
+function( where , name ) {
 	var proto = can.Observe.List.prototype,
 		old = proto[name];
 		

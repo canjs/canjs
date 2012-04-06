@@ -46,7 +46,7 @@ steal("can/util")
 				i=0;
 			
 			// Get all `childNodes`.
-			can.each(fragment.childNodes ? can.makeArray(fragment.childNodes) : fragment, function(i, node){
+			can.each(fragment.childNodes ? can.makeArray(fragment.childNodes) : fragment, function(node){
 				if(node.nodeType === 1){
 					hookupEls.push(node)
 					hookupEls.push.apply(hookupEls, can.makeArray( node.getElementsByTagName('*')))

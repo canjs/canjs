@@ -3,6 +3,7 @@ steal({
 	_skip: true
 }, '../event.js').then(
 	'./trigger',
+	'can/util/array/each.js',
 	function(){
 
 	// dojo.js
@@ -30,18 +31,6 @@ steal({
 	can.map = function(arr, fn){
 		return dojo.map(can.makeArray(arr||[]), fn);
 	};
-	can.each = function(elements, callback) {
-    	var i, key;
-	    if (typeof  elements.length == 'number' && elements.pop)
-	      for(i = 0; i < elements.length; i++) {
-	        if(callback(i, elements[i]) === false) return elements;
-	      }
-	    else
-	      for(key in elements) {
-	        if(callback(key, elements[key]) === false) return elements;
-	      }
-	    return elements;
-  	}
 	// Map object helpers.
 	can.extend = function(first){
 		if(first === true){

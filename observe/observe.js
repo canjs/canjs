@@ -11,7 +11,7 @@ steal('can/construct', function() {
 
 		// Removes all listeners.
 		unhookup = function(items, namespace){
-			return can.each(items, function(i, item){
+			return can.each(items, function(item){
 				if(item && item.unbind){
 					item.unbind("change" + namespace);
 				}
@@ -97,7 +97,7 @@ steal('can/construct', function() {
 			var items = collecting.slice(0);
 			collecting = undefined;
 			batchNum++;
-			can.each(items, function( i, item) {
+			can.each(items, function( item ) {
 				can.trigger.apply(can, item)
 			})
 			
@@ -108,7 +108,7 @@ steal('can/construct', function() {
 		// `where` - To put properties, in an `{}` or `[]`.
 		serialize = function( observe, how, where ) {
 			// Go through each property.
-			observe.each(function( name, val ) {
+			observe.each(function( val, name ) {
 				// If the value is an `object`, and has an `attrs` or `serialize` function.
 				where[name] = canMakeObserve(val) && can.isFunction( val[how] ) ?
 				// Call `attrs` or `serialize` to get the original data back.
@@ -351,7 +351,7 @@ steal('can/construct', function() {
 		 * with each attribute name and value.
 		 * 
 		 *     new Observe({ foo: 'bar' })
-		 *       .each( function( name, value ) {
+		 *       .each( function( value, name ) {
 		 *         equals( name, 'foo' );
 		 *         equals( value,'bar' );
 		 *       });
@@ -363,7 +363,7 @@ steal('can/construct', function() {
 		 * log 3:
 		 * 
 		 *     new Observe({ a: 1, b: 2, c: 3 })
-		 *       .each( function( name, value ) {
+		 *       .each( function( value, name ) {
 		 *         console.log(value);
 		 *         if ( name == 2 ) {
 		 *           return false;
@@ -629,7 +629,7 @@ steal('can/construct', function() {
 				self = this,
 				newVal;
 			
-			this.each(function(prop, curVal){
+			this.each(function(curVal, prop){
 				newVal = props[prop];
 
 				// If we are merging...
@@ -843,19 +843,19 @@ steal('can/construct', function() {
 		 * with each index and value.
 		 * 
 		 *     new Observe.List(['a'])
-		 *       .each(function(index, value){
+		 *       .each(function( value , index ){
 		 *         equals(index, 1)
 		 *         equals(value,'a')
 		 *       })
 		 * 
-		 * @param {function} handler(index,value) A function that will get 
+		 * @param {function} handler(value,index) A function that will get 
 		 * called back with the index and value of each item on the list.
 		 * 
 		 * Returning `false` breaks the looping.  The following will never
 		 * log 'c':
 		 * 
 		 *     new Observe(['a','b','c'])
-		 *       .each(function(index, value){
+		 *       .each(function(value, index){
 		 *         console.log(value)
 		 *         if(index == 1){
 		 *           return false;
@@ -1124,7 +1124,7 @@ steal('can/construct', function() {
 	// Adds a method
 	// `name` - The method name.
 	// `where` - Where items in the `array` should be added.
-	function( name, where ) {
+	function( where, name ) {
 		list.prototype[name] = function() {
 			// Get the items being added.
 			var args = getArgs(arguments),
@@ -1192,7 +1192,7 @@ steal('can/construct', function() {
 		shift: 0
 	},
 	// Creates a `remove` type method
-	function( name, where ) {
+	function( where, name ) {
 		list.prototype[name] = function() {
 			
 			var args = getArgs(arguments),

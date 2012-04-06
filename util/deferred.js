@@ -36,7 +36,7 @@ steal(function(){
 				// needs to be resolved.
 				rp = [];
 
-			can.each(args, function(j, arg){
+			can.each(args, function(arg, j){
 				arg.done(function() {
 					rp[j] = (arguments.length < 2) ? arguments[0] : arguments;
 					if (++done == args.length) {
@@ -63,7 +63,7 @@ steal(function(){
 			var self = this;
 			// In Safari, the properties of the `arguments` object are not enumerable, 
 			// so we have to convert arguments to an `Array` that allows `can.each` to loop over them.
-			can.each(Array.prototype.slice.call(arguments), function( i, v, args ) {
+			can.each(Array.prototype.slice.call(arguments), function( v, i, args ) {
 				if ( ! v )
 					return;
 				if ( v.constructor === Array ) {
@@ -143,7 +143,7 @@ steal(function(){
 
 			this._status = st;
 
-			can.each(dst, function(i, d){
+			can.each(dst, function(d){
 				d.apply(context, args);
 			});
 

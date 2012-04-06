@@ -114,7 +114,7 @@ steal('can/observe/backup',
 
 	Contact.findAll({},function(contacts){
 	  var contactsEl = can.$('#contacts');
-	  can.each(contacts, function(i, contact){
+	  can.each(contacts, function(contact){
 
 		// add the contact to the page
 		var li = can.$('<li>')
