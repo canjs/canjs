@@ -176,6 +176,26 @@ test("models", function(){
 	equals(people[0].prettyName(),"Mr. Justin","wraps wrapping works")
 });
 
+test(".model with custom id", function() {
+	can.Model("CustomId", {
+		id : '_id'
+	}, {
+		getName : function() {
+			return this.name;
+		}
+	});
+	var test = CustomId.model({
+		_id : 1,
+		name : 'Justin'
+	});
+	equal(test.getName(), 'Justin', 'Wrapping works and name set properly');
+	var test2 = CustomId.model({
+		_id : 2,
+		name : 'Brian'
+	});
+	equal(test.getName(), 'Brian', 'Warapped and name set');
+});
+
 
 /*
 test("async setters", function(){
