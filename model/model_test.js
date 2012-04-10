@@ -176,6 +176,24 @@ test("models", function(){
 	equals(people[0].prettyName(),"Mr. Justin","wraps wrapping works")
 });
 
+test(".models with custom id", function() {
+	can.Model("CustomId", {
+		findAll : steal.root.join("can/model/test") + "/customids.json",
+		id : '_id'
+	}, {
+		getName : function() {
+			return this.name;
+		}
+	});
+	stop();
+	CustomId.findAll().done(function(results) {
+		equals(results.length, 2, 'Got two items back');
+		equals(results[0].name, 'Justin', 'First name right');
+		equals(results[1].name, 'Brian', 'Second name right');
+		start();
+	});
+});
+
 
 /*
 test("async setters", function(){
