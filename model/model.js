@@ -725,9 +725,9 @@ steal('can/observe',function(){
 			if ( attributes instanceof this ) {
 				attributes = attributes.serialize();
 			}
-			var model = this.store[attributes.id] || new this( attributes );
+			var model = this.store[attributes[this.id]] || new this( attributes );
 			if(this._reqs){
-				this.store[attributes.id] = model;
+				this.store[attributes[this.id]] = model;
 			}
 			return model;
 		}
