@@ -321,4 +321,16 @@ test("recursive observers do not cause stack overflow", function() {
 	console.log("adding")
 	a.attr("b", b);
 
-}); 
+});
+
+test("bind to specific attribute changes", function() {
+	var paginate = new can.Observe( { offset: 100, limit: 100, count: 2000 } );
+	paginate.bind( 'offset', function( ev, newVal, oldVal ) {
+		equals(newVal, 200);
+		equals(oldVal, 100);
+   		// newVal = 200
+   		// oldVal = 100
+	});
+	paginate.attr( 'offset', 200 );
+});
+
