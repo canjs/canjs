@@ -339,6 +339,11 @@ steal("can/util")
 				return d;
 			};
 
+			//If the url has a #, we assume we want to use an inline template
+			//from a script element and not current page's HTML
+			if( url.match(/^#/) ) {
+				url = url.substr(1);
+			}
 			// If we have an inline template, derive the suffix from the `text/???` part.
 			// This only supports `<script>` tags.
 			if ( el = document.getElementById(url) ) {

@@ -94,6 +94,24 @@ test("inline templates other than 'tmpl' like ejs", function(){
 	equal( div.getElementsByTagName("span")[0].firstChild.nodeValue , 'Henry');
 });
 
+//canjs issue #31
+test("render inline templates with a #", function(){
+	var script = document.createElement('script');
+	script.setAttribute('type', 'test/ejs')
+	script.setAttribute('id', 'test_ejs')
+	script.text = '<span id="new_name"><%= name %></span>';
+	document.getElementById("qunit-test-area").appendChild(script);
+	
+	var div = document.createElement('div');
+	div.appendChild(can.view('#test_ejs', {name: 'Henry'}));
+
+	//make sure we aren't returning the current document as the template
+	equals(div.getElementsByTagName("script").length, 0, "Current document was not used as template")
+	if(div.getElementsByTagName("span").length === 1) {
+		equal( div.getElementsByTagName("span")[0].firstChild.nodeValue , 'Henry');
+	}
+});
+
 test("object of deferreds", function(){
 	var foo = new can.Deferred(),
 		bar = new can.Deferred();
