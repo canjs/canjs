@@ -530,7 +530,7 @@ steal('can/construct', function() {
 		 *       // attr  -> "name"
 		 *       // how   -> "add"
 		 *       // newVal-> "Justin"
-		 *       // oldVal-> undefined 
+		 *       // oldVal-> "Payal"
 		 *     });
 		 *     
 		 *     o.attr( 'name', 'Justin' );
@@ -545,7 +545,7 @@ steal('can/construct', function() {
 		 *     o.bind( 'name', function( ev, newVal, oldVal ) {
 		 *       // ev    -> {type : "name"}
 		 *       // newVal-> "Justin"
-		 *       // oldVal-> undefined 
+		 *       // oldVal-> "Payal"
 		 *     });
 		 *     
 		 *     o.attr( 'name', 'Justin' );
