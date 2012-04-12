@@ -323,14 +323,20 @@ test("recursive observers do not cause stack overflow", function() {
 
 });
 
-test("bind to specific attribute changes", function() {
+test("bind to specific attribute changes when an existing attribute's value is changed", function() {
 	var paginate = new can.Observe( { offset: 100, limit: 100, count: 2000 } );
 	paginate.bind( 'offset', function( ev, newVal, oldVal ) {
 		equals(newVal, 200);
 		equals(oldVal, 100);
-   		// newVal = 200
-   		// oldVal = 100
 	});
 	paginate.attr( 'offset', 200 );
+});
+test("bind to specific attribute changes when an attribute is removed", function() {
+	var paginate = new can.Observe( { offset: 100, limit: 100, count: 2000 } );
+	paginate.bind( 'offset', function( ev, newVal, oldVal ) {
+		equals(newVal, undefined);
+		equals(oldVal, 100);
+	});
+	paginate.removeAttr( 'offset' );
 });
 
