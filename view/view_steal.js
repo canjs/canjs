@@ -35,14 +35,5 @@ steal("./view",function( $ ) {
 		}
 
 	});
-	if ( window.steal ) {
-		steal.type("view js", function( options, success, error ) {
-			var type = can.view.types["." + options.type],
-				id = toId(options.rootSrc+'');
-
-			options.text = "steal('" + (type.plugin || "jquery/view/" + options.type) + "').then(function($){" + "$.View.preload('" + id + "'," + options.text + ");\n})";
-			success();
-		})
-	}
 
 });
