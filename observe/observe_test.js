@@ -318,7 +318,6 @@ test("always gets right attr even after moving array items", function(){
 test("recursive observers do not cause stack overflow", function() {
 	var a = new can.Observe();
 	var b = new can.Observe({a: a});
-	console.log("adding")
 	a.attr("b", b);
 
 }); 
