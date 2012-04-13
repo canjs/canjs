@@ -611,6 +611,13 @@ steal('can/observe',function(){
 			if ( ! instancesRawData ) {
 				return;
 			}
+
+      var ml = (instancesRawData instanceof ML);
+
+      if ( ml ) {
+        return instancesRawData;
+      }
+
 			// Get the list type.
 			var self = this,
 				res = new( self.List || ML),
