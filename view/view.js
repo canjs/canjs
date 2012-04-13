@@ -5,11 +5,7 @@ steal("can/util")
 	// `can.view`  
 	// _Templating abstraction._
 
-	// Convert a path like string into something that's ok for an `element` ID.
-	var toId = function( src ) {
-		return src.split(/\/|\./g).join("_");
-	},
-		isFunction = can.isFunction,
+	var isFunction = can.isFunction,
 		makeArray = can.makeArray,
 		// Used for hookup `id`s.
 		hookupId = 1,
@@ -38,6 +34,10 @@ steal("can/util")
 			}
 			return $view.hookup(frag);
 		},
+    // Convert a path like string into something that's ok for an `element` ID.
+    toId : function( src ) {
+      return src.split(/\/|\./g).join("_");
+    },
 		hookup: function(fragment){
 			var hookupEls = [],
 				id, 
@@ -360,7 +360,7 @@ steal("can/util")
 			}
 	
 			// Convert to a unique and valid id.
-			id = toId(url);
+			id = can.view.toId(url);
 	
 			// If an absolute path, use `steal` to get it.
 			// You should only be using `//` if you are using `steal`.
