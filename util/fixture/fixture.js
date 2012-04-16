@@ -1,14 +1,13 @@
 // needs a .then! does not steal dependencies because this needs to work with dist ...
 
-if(!window.can || !can){
+/*if(!window.can || !can){
 	steal('can/util/string')
-}
+}*/
 
-steal('can/util/object',function( $ ) {
-	
-	
+steal('can/util/string').then('can/util/object', function() {
+		
 	var updateSettings = function(settings, originalOptions){
-		if (!$.fixture.on) {
+		if (!can.fixture.on) {
 			return;
 		}
 		
@@ -18,14 +17,14 @@ steal('can/util/object',function( $ ) {
 		// if we don't have a fixture, do nothing
 		if (!settings.fixture) {
 			if (window.location.protocol === "file:") {
-				steal.dev.log("ajax request to " + settings.url + ", no fixture found");
+				console.log("ajax request to " + settings.url + ", no fixture found");
 			}
 			return;
 		}
 		
 		//if referencing something else, update the fixture option
-		if (typeof settings.fixture === "string" && $.fixture[settings.fixture]) {
-			settings.fixture = $.fixture[settings.fixture];
+		if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
+			settings.fixture = can.fixture[settings.fixture];
 		}
 		
 		// if a string, we just point to the right url
@@ -33,12 +32,18 @@ steal('can/util/object',function( $ ) {
 			var url = settings.fixture;
 			
 			if (/^\/\//.test(url)) {
-				url = steal.root.mapJoin(settings.fixture.substr(2)) + '';
+				// this lets us use rootUrl w/o having steal...
+				url = can.fixture.rootUrl === steal.root ? 
+						steal.root.mapJoin(settings.fixture.substr(2)) + '' :
+						can.fixture.rootUrl + settings.fixture.substr(2);
 			}
+			
 			delete settings.fixture;
+			
 			//@steal-remove-start
-			steal.dev.log("looking for fixture in " + url);
+			console.log("looking for fixture in " + url);
 			//@steal-remove-end
+			
 			settings.url = url;
 			settings.data = null;
 			settings.type = "GET";
@@ -47,59 +52,53 @@ steal('can/util/object',function( $ ) {
 					throw "fixtures.js Error " + error + " " + message;
 				};
 			}
-			
 		}
 		else {
 			//@steal-remove-start
-			steal.dev.log("using a dynamic fixture for " + settings.type + " " + settings.url);
+			console.log("using a dynamic fixture for " + settings.type + " " + settings.url);
 			//@steal-remove-end
 			
 			//it's a function ... add the fixture datatype so our fixture transport handles it
 			// TODO: make everything go here for timing and other fun stuff
-
+			// add to settings data from fixture ...
 			settings.dataTypes && settings.dataTypes.splice(0, 0, "fixture");
 			
 			if (data && originalOptions) {
-				$.extend(originalOptions.data, data)
+				can.extend(originalOptions.data, data)
 			}
-		// add to settings data from fixture ...
-		
 		}
 	},
-		getResponse = function(s, original, headers){
-			var response = s.fixture(original, s, headers),
-				next = s.dataTypes ? s.dataTypes[0] : (s.dataType || 'json');
-						
-			// normalize the fixture data into a response
-			if (!can.isArray(response)) {
-				var tmp = [{}];
-				tmp[0][next] = response
-				response = tmp;
-			}
-			if (typeof response[0] != 'number') {
-				response.unshift(200, "success")
-			}
-			
-			// make sure we provide a response type that matches the first datatype (typically json)
-			if (!response[2] || !response[2][next]) {
-				var tmp = {}
-				tmp[next] = response[2];
-				response[2] = tmp;
-			}
-			return response
-		};
+	getResponse = function(s, original, headers){
+		var response = s.fixture(original, s, headers),
+			next = s.dataTypes ? s.dataTypes[0] : (s.dataType || 'json');
+				
+		// normalize the fixture data into a response
+		if (!can.isArray(response)) {
+			var tmp = [{}];
+			tmp[0][next] = response
+			response = tmp;
+		}
+		if (typeof response[0] != 'number') {
+			response.unshift(200, "success")
+		}
+	
+		// make sure we provide a response type that matches the first datatype (typically json)
+		if (!response[2] || !response[2][next]) {
+			var tmp = {}
+			tmp[next] = response[2];
+			response[2] = tmp;
+		}
+		return response
+	};
 	
 	//used to check urls
 	// check if jQuery	
-	if ($.ajaxPrefilter && $.ajaxTransport) {
+	if (can.ajaxPrefilter && can.ajaxTransport) {
 	
 		// the pre-filter needs to re-route the url
+		can.ajaxPrefilter(updateSettings);
 		
-		$.ajaxPrefilter(updateSettings);
-		
-		
-		$.ajaxTransport("fixture", function(s, original){
-		
+		can.ajaxTransport("fixture", function(s, original){
 			// remove the fixture from the datatype
 			s.dataTypes.shift();
 			
@@ -107,26 +106,20 @@ steal('can/util/object',function( $ ) {
 			var next = s.dataTypes[0], timeout;
 			
 			return {
-			
 				send: function(headers, callback){
-				
 					// callback after a timeout
 					timeout = setTimeout(function(){
-						
 						var response = getResponse(s, original, headers)
 						
-						// pass the fixture data back to $.ajax
+						// pass the fixture data back to can.ajax
 						callback.apply(null, response);
-					}, $.fixture.delay);
+					}, can.fixture.delay);
 				},
-				
 				abort: function(){
 					clearTimeout(timeout)
 				}
 			};
-			
 		});
-		
 	} else {
 		var AJAX = can.ajax;
 		can.ajax = function(settings){
@@ -151,14 +144,11 @@ steal('can/util/object',function( $ ) {
 					}
 					
 					
-				},$.fixture.delay)
+				},can.fixture.delay)
 				return d;
 			} else {
 				return AJAX(settings);
 			}
-			
-						
-			
 		}
 	}
 
@@ -224,13 +214,12 @@ steal('can/util/object',function( $ ) {
 		};
 
 	/**
-	 * @function jQuery.fixture
-	 * @plugin jquery/dom/fixture
-	 * @download http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/dom/fixture/fixture.js
-	 * @test jquery/dom/fixture/qunit.html
-	 * @parent dom
+	 * @function can.util.fixture
+	 * @plugin can/util/fixture
+	 * @test can/util/fixture/qunit.html
+	 * @parent can.util
 	 * 
-	 * <code>$.fixture</code> intercepts a AJAX request and simulates
+	 * <code>can.fixture</code> intercepts a AJAX request and simulates
 	 * the response with a file or function. They are a great technique 
 	 * when you want to develop JavaScript 
 	 * independently of the backend. 
@@ -242,13 +231,13 @@ steal('can/util/object',function( $ ) {
 	 * intercepts requests to <code>/tasks.json</code> and directs them 
 	 * to <code>fixtures/tasks.json</code>:
 	 * 
-	 *     $.fixture("/tasks.json","fixtures/tasks.json");
+	 *     can.fixture("/tasks.json","fixtures/tasks.json");
 	 *     
 	 * The other common option is to generate the Ajax response with
 	 * a function.  The following intercepts updating tasks at
 	 * <code>/tasks/ID.json</code> and responds with updated data:
 	 * 
-	 *     $.fixture("PUT /tasks/{id}.json", function(original, settings, headers){
+	 *     can.fixture("PUT /tasks/{id}.json", function(original, settings, headers){
 	 *        return { updatedAt : new Date().getTime() }
 	 *     })
 	 * 
@@ -264,9 +253,9 @@ steal('can/util/object',function( $ ) {
 	 * Static fixtures use an alternate url as the response of the Ajax request.
 	 * 
 	 *     // looks in fixtures/tasks1.json relative to page
-	 *     $.fixture("tasks/1", "fixtures/task1.json");
+	 *     can.fixture("tasks/1", "fixtures/task1.json");
 	 *     
-	 *     $.fixture("tasks/1", "//fixtures/task1.json");
+	 *     can.fixture("tasks/1", "//fixtures/task1.json");
 	 * 
 	 * ## Dynamic Fixtures
 	 * 
@@ -277,7 +266,7 @@ steal('can/util/object',function( $ ) {
 	 * For example, the following returns a successful response 
 	 * with JSON data from the server:
 	 * 
-	 *     $.fixture("/foobar.json", function(orig, settings, headers){
+	 *     can.fixture("/foobar.json", function(orig, settings, headers){
 	 *       return [200, "success", {json: {foo: "bar" } }, {} ]
 	 *     })
 	 * 
@@ -301,28 +290,28 @@ steal('can/util/object',function( $ ) {
 	 *   - responses - a map of dataType/value that contains the responses for each data format supported
 	 *   - headers - response headers
 	 * 
-	 * However, $.fixture handles the 
+	 * However, can.fixture handles the 
 	 * common case where you want a successful response with JSON data.  The 
 	 * previous can be written like:
 	 * 
-	 *     $.fixture("/foobar.json", function(orig, settings, headers){
+	 *     can.fixture("/foobar.json", function(orig, settings, headers){
 	 *       return {foo: "bar" };
 	 *     })
 	 * 
 	 * If you want to return an array of data, wrap your array in another array:
 	 * 
-	 *     $.fixture("/tasks.json", function(orig, settings, headers){
+	 *     can.fixture("/tasks.json", function(orig, settings, headers){
 	 *       return [ [ "first","second","third"] ];
 	 *     })
 	 * 
-	 * $.fixture works closesly with jQuery's 
+	 * can.fixture works closesly with jQuery's 
 	 * ajaxTransport system.  Understanding it is the key to creating advanced
 	 * fixtures.
 	 * 
 	 * ### Templated Urls
 	 * 
 	 * Often, you want a dynamic fixture to handle urls 
-	 * for multiple resources (for example a REST url scheme). $.fixture's
+	 * for multiple resources (for example a REST url scheme). can.fixture's
 	 * templated urls allow you to match urls with a wildcard.  
 	 * 
 	 * The following example simulates services that get and update 100 todos.  
@@ -335,14 +324,14 @@ steal('can/util/object',function( $ ) {
 	 *         name: "Todo "+i
 	 *       }
 	 *     }
-	 *     $.fixture("GET /todos/{id}", function(orig){
+	 *     can.fixture("GET /todos/{id}", function(orig){
 	 *       // return the JSON data
 	 *       // notice that id is pulled from the url and added to data
 	 *       return todos[orig.data.id]
 	 *     })
-	 *     $.fixture("PUT /todos/{id}", function(orig){
+	 *     can.fixture("PUT /todos/{id}", function(orig){
 	 *       // update the todo's data
-	 *       $.extend( todos[orig.data.id], orig.data );
+	 *       can.extend( todos[orig.data.id], orig.data );
 	 *       
 	 *       // return data
 	 *       return {};
@@ -356,13 +345,13 @@ steal('can/util/object',function( $ ) {
 	 * The following simulates an unauthorized request 
 	 * to <code>/foo</code>.
 	 * 
-	 *     $.fixture("/foo", function(){
+	 *     can.fixture("/foo", function(){
 	 * 		return [401,"{type: 'unauthorized'}"]
 	 * 	   });
 	 * 
 	 * This could be received by the following Ajax request:
 	 * 
-	 *     $.ajax({
+	 *     can.ajax({
 	 *       url: '/foo',
 	 *       error : function(jqXhr, status, statusText){
 	 *         // status === 'error'
@@ -375,18 +364,18 @@ steal('can/util/object',function( $ ) {
 	 * You can remove a fixture by passing <code>null</code> for the fixture option:
 	 * 
 	 *     // add a fixture
-	 *     $.fixture("GET todos.json","//fixtures/todos.json");
+	 *     can.fixture("GET todos.json","//fixtures/todos.json");
 	 *     
 	 *     // remove the fixture
-	 *     $.fixture("GET todos.json", null)
+	 *     can.fixture("GET todos.json", null)
 	 *     
-	 * You can also set [jQuery.fixture.on $.fixture.on] to false:
+	 * You can also set [can.util.fixture.on can.fixture.on] to false:
 	 * 
-	 *     $.fixture.on = false;
+	 *     can.fixture.on = false;
 	 * 
 	 * ## Make
 	 * 
-	 * [jQuery.fixture.make $.fixture.make] makes a CRUD service layer that handles sorting, grouping,
+	 * [can.util.fixture.make can.fixture.make] makes a CRUD service layer that handles sorting, grouping,
 	 * filtering and more.
 	 * 
 	 * ## Testing Performance
@@ -395,13 +384,13 @@ steal('can/util/object',function( $ ) {
 	 * 10000 files does to your app's performance?  Make a fixture that returns 10000 items.
 	 * 
 	 * What to see what the app feels like when a request takes 5 seconds to return?  Set
-	 * [jQuery.fixture.delay] to 5000.
+	 * [can.util.fixture.delay] to 5000.
 	 * 
-	 * @demo jquery/dom/fixture/fixture.html
+	 * @demo can/util/fixture/fixture.html
 	 * 
 	 * @param {Object|String} settings Configures the AJAX requests the fixture should 
 	 * intercept.  If an __object__ is passed, the object's properties and values
-	 * are matched against the settings passed to $.ajax.  
+	 * are matched against the settings passed to can.ajax.  
 	 * 
 	 * If a __string__ is passed, it can be used to match the url and type. Urls
 	 * can be templated, using <code>{NAME}</code> as wildcards.  
@@ -414,14 +403,14 @@ steal('can/util/object',function( $ ) {
 	 *     
 	 * where:
 	 * 
-	 *   - originalSettings - the orignal settings passed to $.ajax
+	 *   - originalSettings - the orignal settings passed to can.ajax
 	 *   - settings - the settings after all filters have run
 	 *   - headers - request headers
 	 *   
 	 * If __null__ is passed, and there is a fixture at settings, that fixture will be removed,
 	 * allowing the AJAX request to behave normally.
 	 */
-	var $fixture = can.fixture = $.fixture = function( settings , fixture ){
+	var $fixture = can.fixture = function( settings , fixture ){
 		// if we provide a fixture ...
 		if(fixture !== undefined){
 			if(typeof settings == 'string'){
@@ -454,13 +443,13 @@ steal('can/util/object',function( $ ) {
 	};
 	var replacer = can.replacer;
 	
-	$.extend($.fixture, {
+	can.extend(can.fixture, {
 		// given ajax settings, find an overwrite
 		_similar : function(settings, overwrite, exact){
 			if(exact){
 				return can.Object.same(settings , overwrite, {fixture :  null})
 			} else {
-				return can.Object.subset(settings, overwrite, $.fixture._compare)
+				return can.Object.subset(settings, overwrite, can.fixture._compare)
 			}
 		},
 		_compare : {
@@ -523,12 +512,12 @@ steal('can/util/object',function( $ ) {
 		},
 		
 		/**
-		 * @function jQuery.fixture.make
-		 * @parent jQuery.fixture
+		 * @function can.util.fixture.make
+		 * @parent can.util.fixture
 		 * Used to make fixtures for findAll / findOne style requests.
 		 * 
 		 *     //makes a nested list of messages
-		 *     $.fixture.make(["messages","message"],1000, function(i, messages){
+		 *     can.fixture.make(["messages","message"],1000, function(i, messages){
 		 *       return {
 		 *         subject: "This is message "+i,
 		 *         body: "Here is some text for this message",
@@ -537,7 +526,7 @@ steal('can/util/object',function( $ ) {
 		 *       }
 		 *     })
 		 *     //uses the message fixture to return messages limited by offset, limit, order, etc.
-		 *     $.ajax({
+		 *     can.ajax({
 		 *       url: "messages",
 		 *       data:{ 
 		 *          offset: 100, 
@@ -574,7 +563,7 @@ steal('can/util/object',function( $ ) {
 				types = [types+"s",types ]
 			}
 			// make all items
-			var items = ($.fixture["~" + types[0]] = []), // TODO: change this to a hash
+			var items = (can.fixture["~" + types[0]] = []), // TODO: change this to a hash
 				findOne = function(id){
 					for ( var i = 0; i < items.length; i++ ) {
 						if ( id == items[i].id ) {
@@ -593,7 +582,7 @@ steal('can/util/object',function( $ ) {
 				items.push(item);
 			}
 			//set plural fixture for findAll
-			$.fixture["-" + types[0]] = function( settings ) {
+			can.fixture["-" + types[0]] = function( settings ) {
 				//copy array of items
 				var retArr = items.slice(0);
 				settings.data = settings.data || {};
@@ -672,19 +661,19 @@ steal('can/util/object',function( $ ) {
 				}];
 			};
             // findOne
-			$.fixture["-" + types[1]] = function( settings ) {
+			can.fixture["-" + types[1]] = function( settings ) {
 				var item = findOne(getId(settings));
 				return item ? [item] : [];
 			};
             // update
-            $.fixture["-" + types[1]+"Update"] = function( settings, cbType ) {
+            can.fixture["-" + types[1]+"Update"] = function( settings, cbType ) {
                 var id = getId(settings);
 
                 // TODO: make it work with non-linear ids ..
-                $.extend(findOne(id), settings.data);
-				return $.fixture["-restUpdate"](settings, cbType)
+                can.extend(findOne(id), settings.data);
+				return can.fixture["-restUpdate"](settings, cbType)
 			};
-			$.fixture["-" + types[1]+"Destroy"] = function( settings, cbType ) {
+			can.fixture["-" + types[1]+"Destroy"] = function( settings, cbType ) {
 				var id = getId(settings);
 				for(var i = 0; i < items.length; i ++ ){
 					if(items[i].id == id){
@@ -694,13 +683,13 @@ steal('can/util/object',function( $ ) {
 				}
 				
                 // TODO: make it work with non-linear ids ..
-                $.extend(findOne(id), settings.data);
-				return $.fixture["-restDestroy"](settings, cbType)
+                can.extend(findOne(id), settings.data);
+				return can.fixture["-restDestroy"](settings, cbType)
 			};
-			$.fixture["-" + types[1]+"Create"] = function( settings, cbType ) {
+			can.fixture["-" + types[1]+"Create"] = function( settings, cbType ) {
                 var item = make(items.length, items);
 				
-				$.extend(item, settings.data);
+				can.extend(item, settings.data);
 				
 				if(!item.id){
 					item.id = items.length;
@@ -708,9 +697,8 @@ steal('can/util/object',function( $ ) {
 				
 				items.push(item);
 				
-				return $.fixture["-restCreate"](settings, cbType, undefined, item.id );
+				return can.fixture["-restCreate"](settings, cbType, undefined, item.id );
 			};
-			
 			
 			return {
 				getId: getId,
@@ -721,15 +709,15 @@ steal('can/util/object',function( $ ) {
 			}
 		},
 		/**
-		 * @function jQuery.fixture.rand
-		 * @parent jQuery.fixture
+		 * @function can.util.fixture.rand
+		 * @parent can.util.fixture
 		 * 
 		 * Creates random integers or random arrays of 
 		 * other arrays. 
 		 * 
 		 * ## Examples
 		 * 
-		 *     var rand = $.fixture.rand;
+		 *     var rand = can.fixture.rand;
 		 *     
 		 *     // get a random integer between 0 and 10 (inclusive)
 		 *     rand(11);
@@ -789,7 +777,7 @@ steal('can/util/object',function( $ ) {
 		},
 		/**
 		 * @hide
-		 * Use $.fixture.xhr to create an object that looks like an xhr object. 
+		 * Use can.fixture.xhr to create an object that looks like an xhr object. 
 		 * 
 		 * ## Example
 		 * 
@@ -802,10 +790,10 @@ steal('can/util/object',function( $ ) {
 		 *       return [
 		 *         {id: parseInt(Math.random()*1000)}, 
 		 *         "success", 
-		 *         $.fixture.xhr()];
+		 *         can.fixture.xhr()];
 		 *     case "complete":
 		 *       return [ 
-		 *         $.fixture.xhr({
+		 *         can.fixture.xhr({
 		 *           getResponseHeader: function() { 
 		 *             return settings.url+"/"+parseInt(Math.random()*1000);
 		 *           }
@@ -818,21 +806,21 @@ steal('can/util/object',function( $ ) {
 		 * @return {Object} an object that looks like a successful XHR object.
 		 */
 		xhr: function( xhr ) {
-			return $.extend({}, {
-				abort: $.noop,
+			return can.extend({}, {
+				abort: can.noop,
 				getAllResponseHeaders: function() {
 					return "";
 				},
 				getResponseHeader: function() {
 					return "";
 				},
-				open: $.noop,
-				overrideMimeType: $.noop,
+				open: can.noop,
+				overrideMimeType: can.noop,
 				readyState: 4,
 				responseText: "",
 				responseXML: null,
-				send: $.noop,
-				setRequestHeader: $.noop,
+				send: can.noop,
+				setRequestHeader: can.noop,
 				status: 200,
 				statusText: "OK"
 			}, xhr);
@@ -841,30 +829,38 @@ steal('can/util/object',function( $ ) {
 		 * @attribute on
 		 * On lets you programatically turn off fixtures.  This is mostly used for testing.
 		 * 
-		 *     $.fixture.on = false
+		 *     can.fixture.on = false
 		 *     Task.findAll({}, function(){
-		 *       $.fixture.on = true;
+		 *       can.fixture.on = true;
 		 *     })
 		 */
 		on : true
 	});
 	/**
-	 * @attribute $.fixture.delay
-	 * @parent $.fixture
+	 * @attribute can.util.fixture.delay
+	 * @parent can.util.fixture
 	 * Sets the delay in milliseconds between an ajax request is made and
 	 * the success and complete handlers are called.  This only sets
 	 * functional fixtures.  By default, the delay is 200ms.
 	 * @codestart
-	 * steal('jquery/dom/fixtures').then(function(){
-	 *   $.fixture.delay = 1000;
+	 * steal('can/util/fixtures').then(function(){
+	 *   can.fixture.delay = 1000;
 	 * })
 	 * @codeend
 	 */
-	$.fixture.delay = 200;
+	can.fixture.delay = 200;
+	
+	/**
+	 * @attributes can.util.fixture.rootUrl
+	 * @parent can.util.fixture
+	 *
+	 * Defaults to `steal.root` unless set.
+	 */
+	can.fixture.rootUrl = steal.root;
 
-	$.fixture["-handleFunction"] = function( settings ) {
-		if ( typeof settings.fixture === "string" && $.fixture[settings.fixture] ) {
-			settings.fixture = $.fixture[settings.fixture];
+	can.fixture["-handleFunction"] = function( settings ) {
+		if ( typeof settings.fixture === "string" && can.fixture[settings.fixture] ) {
+			settings.fixture = can.fixture[settings.fixture];
 		}
 		if ( typeof settings.fixture == "function" ) {
 			setTimeout(function() {
@@ -874,7 +870,7 @@ steal('can/util/object',function( $ ) {
 				if ( settings.complete ) {
 					settings.complete.apply(null, settings.fixture(settings, "complete"));
 				}
-			}, $.fixture.delay);
+			}, can.fixture.delay);
 			return true;
 		}
 		return false;
@@ -883,27 +879,27 @@ steal('can/util/object',function( $ ) {
 	
 	
     /**
-  	 * @page jquery.fixture.0organizing Organizing Fixtures
-  	 * @parent jQuery.fixture
+  	 * @page can.fixture.Organizing Organizing Fixtures
+  	 * @parent can.util.fixture
 	 * 
 	 * The __best__ way of organizing fixtures is to have a 'fixtures.js' file that steals
-	 * <code>jquery/dom/fixture</code> and defines all your fixtures.  For example,
+	 * <code>can/util/fixture</code> and defines all your fixtures.  For example,
 	 * if you have a 'todo' application, you might 
 	 * have <code>todo/fixtures/fixtures.js</code> look like:
 	 * 
 	 *     steal({
-	 *             path: '//jquery/dom/fixture.js',
+	 *             path: '//can/util/fixture.js',
 	 *             ignore: true
 	 *           })
 	 *           .then(function(){
 	 *       
-	 *       $.fixture({
+	 *       can.fixture({
 	 *           type: 'get',  
 	 *           url: '/services/todos.json'
 	 *         },
 	 *         '//todo/fixtures/todos.json');
 	 *         
-	 *       $.fixture({
+	 *       can.fixture({
 	 *           type: 'post',  
 	 *           url: '/services/todos.json'
 	 *         },
@@ -934,14 +930,14 @@ steal('can/util/object',function( $ ) {
 	 * sets of fixtures.  You can add something like the following to your fixtures.js file:
 	 * 
 	 *     if( /fixtureSet1/.test( window.location.search) ){
-	 *       $.fixture("/foo","//foo/fixtures/foo1.json');
+	 *       can.fixture("/foo","//foo/fixtures/foo1.json');
 	 *     } else if(/fixtureSet2/.test( window.location.search)){
-	 *       $.fixture("/foo","//foo/fixtures/foo1.json');
+	 *       can.fixture("/foo","//foo/fixtures/foo1.json');
 	 *     } else {
 	 *       // default fixtures (maybe no fixtures)
 	 *     }
 	 * 
 	 */
 	 //Expose this for fixture debugging
-	 $.fixture.overwrites = overwrites;
+	 can.fixture.overwrites = overwrites;
 });
