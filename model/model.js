@@ -608,13 +608,12 @@ steal('can/observe',function(){
 		 * [can.Model.model].
 		 */
 		models: function( instancesRawData ) {
+
 			if ( ! instancesRawData ) {
 				return;
 			}
-
-      var ml = (instancesRawData instanceof ML);
-
-      if ( ml ) {
+      
+      if ( instancesRawData instanceof this.List ) {
         return instancesRawData;
       }
 
