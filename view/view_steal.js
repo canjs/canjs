@@ -3,9 +3,9 @@ steal("./view",function( $ ) {
 	if ( window.steal ) {
 		steal.type("view js", function( options, success, error ) {
 			var type = can.view.types["." + options.type],
-				id = toId(options.rootSrc);
+				id = can.view.toId(options.rootSrc);
 
-			options.text = "steal('" + (type.plugin || "jquery/view/" + options.type) + "').then(function($){" + "can.View.preload('" + id + "'," + options.text + ");\n})";
+			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "').then(function($){" + "can.view.preload('" + id + "'," + options.text + ");\n})";
 			success();
 		})
 	}
@@ -18,7 +18,7 @@ steal("./view",function( $ ) {
 			if ( window.steal ) {
 				steal.type(info.suffix + " view js", function( options, success, error ) {
 					var type = can.view.types["." + options.type],
-						id = toId(options.rootSrc+'');
+						id = can.view.toId(options.rootSrc+'');
 
 					options.text = type.script(id, options.text)
 					success();
@@ -26,7 +26,7 @@ steal("./view",function( $ ) {
 			}
 		},
 		registerScript: function( type, id, src ) {
-			return "$.View.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
+			return "can.view.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
 		},
 		preload: function( id, renderer ) {
 			can.view.cached[id] = function( data, helpers ) {
@@ -35,5 +35,17 @@ steal("./view",function( $ ) {
 		}
 
 	});
+<<<<<<< HEAD
+=======
+	if ( window.steal ) {
+		steal.type("view js", function( options, success, error ) {
+			var type = can.view.types["." + options.type],
+				id = can.view.toId(options.rootSrc+'');
+
+			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "').then(function($){" + "can.view.preload('" + id + "'," + options.text + ");\n})";
+			success();
+		})
+	}
+>>>>>>> 84e54a42d3f3209f7fdfe1c2182bca186fbd988c
 
 });

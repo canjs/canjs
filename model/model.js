@@ -609,9 +609,15 @@ steal('can/observe',function(){
 		 * [can.Model.model].
 		 */
 		models: function( instancesRawData ) {
+
 			if ( ! instancesRawData ) {
 				return;
 			}
+      
+      if ( instancesRawData instanceof this.List ) {
+        return instancesRawData;
+      }
+
 			// Get the list type.
 			var self = this,
 				res = new( self.List || ML),

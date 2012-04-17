@@ -5,11 +5,7 @@ steal("can/util")
 	// `can.view`  
 	// _Templating abstraction._
 
-	// Convert a path like string into something that's ok for an `element` ID.
-	var toId = function( src ) {
-		return src.split(/\/|\./g).join("_");
-	},
-		isFunction = can.isFunction,
+	var isFunction = can.isFunction,
 		makeArray = can.makeArray,
 		// Used for hookup `id`s.
 		hookupId = 1,
@@ -38,6 +34,10 @@ steal("can/util")
 			}
 			return $view.hookup(frag);
 		},
+    // Convert a path like string into something that's ok for an `element` ID.
+    toId : function( src ) {
+      return src.split(/\/|\./g).join("_");
+    },
 		hookup: function(fragment){
 			var hookupEls = [],
 				id, 
@@ -339,6 +339,11 @@ steal("can/util")
 				return d;
 			};
 
+			//If the url has a #, we assume we want to use an inline template
+			//from a script element and not current page's HTML
+			if( url.match(/^#/) ) {
+				url = url.substr(1);
+			}
 			// If we have an inline template, derive the suffix from the `text/???` part.
 			// This only supports `<script>` tags.
 			if ( el = document.getElementById(url) ) {
@@ -355,7 +360,7 @@ steal("can/util")
 			}
 	
 			// Convert to a unique and valid id.
-			id = toId(url);
+			id = can.view.toId(url);
 	
 			// If an absolute path, use `steal` to get it.
 			// You should only be using `//` if you are using `steal`.
