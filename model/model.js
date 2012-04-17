@@ -281,7 +281,9 @@ steal('can/observe',function(){
 		destroy : {
 			type : "delete",
 			data : function(id){
-				return {}[this.id] = id;
+                                var args = {};
+                                args[this.id] = id;
+                                return args;
 			}
 		},
 		/**
