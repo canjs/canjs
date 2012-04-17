@@ -35,8 +35,6 @@ steal("./view",function( $ ) {
 		}
 
 	});
-<<<<<<< HEAD
-=======
 	if ( window.steal ) {
 		steal.type("view js", function( options, success, error ) {
 			var type = can.view.types["." + options.type],
@@ -46,6 +44,5 @@ steal("./view",function( $ ) {
 			success();
 		})
 	}
->>>>>>> 84e54a42d3f3209f7fdfe1c2182bca186fbd988c
 
 });
