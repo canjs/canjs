@@ -281,7 +281,9 @@ steal('can/observe',function(){
 		destroy : {
 			type : "delete",
 			data : function(id){
-				return {}[this.id] = id;
+                                var args = {};
+				args[this.id] = id;
+                                return args;
 			}
 		},
 		/**
@@ -608,12 +610,13 @@ steal('can/observe',function(){
 		 * [can.Model.model].
 		 */
 		models: function( instancesRawData ) {
-
 			if ( ! instancesRawData ) {
 				return;
 			}
-      
-      if ( instancesRawData instanceof this.List ) {
+
+      var ml = (instancesRawData instanceof ML);
+
+      if ( ml ) {
         return instancesRawData;
       }
 
