@@ -2390,7 +2390,7 @@ To make the CanJS builds, run:
     
 It puts the downloads in `can/dist/edge`.
 
-### List of Heroes
+### List of heroes
 
 The following lists everyone who's contributed something to CanJS.  If we've forgotten you, please add yourself.
 
@@ -2405,6 +2405,22 @@ off this work.  This page is for contributors after CanJS's launch.
 [cohuman](https://github.com/cohuman) - [model list dependencies](https://github.com/jupiterjs/canjs/pull/23), [docco fix](https://github.com/jupiterjs/canjs/pull/26)
 
 ### Change Log
+
+__master__
+
+ - can.util
+    - change: [reverse argument order of can.each](https://github.com/jupiterjs/canjs/commit/234fd3b9eca18abdbc3fdbea114be6a818bfe6e3)
+    - change/fix: [buildFragment returns non cached frag](https://github.com/jupiterjs/canjs/issues/33)
+ - can.observe
+    - feature: [recursive observes don't blow up](https://github.com/jupiterjs/canjs/issues/27)
+    - change: [reverse argument order of can.each](https://github.com/jupiterjs/canjs/commit/234fd3b9eca18abdbc3fdbea114be6a818bfe6e3)
+    - fix: [attr change events have old value](https://github.com/jupiterjs/canjs/commit/4081a9baf4441c1002467342baae3cdd885994c6)
+   
+ - can.model
+    - fix: [findOne and findAll work with super](https://github.com/jupiterjs/canjs/commit/c93ae5478eea7fdb88fa6fc03211d81c8d4ca3bd)
+    - fix: [model using custom id for store](https://github.com/jupiterjs/canjs/commit/14d05c29e71ed8c462ba49b740d9eb8e342d3c85)
+    - fix: [destroy not working with templated id](https://github.com/jupiterjs/canjs/issues/32)
+
 
 __1.0 Beta__ (April 1st 2011)
 
