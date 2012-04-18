@@ -32,6 +32,22 @@ if(window.Jaml){
 	});
 }
 
+test("buildFragment works right", function(){
+	can.append( can.$("#qunit-test-area"), can.view("//can/view/test/qunit/plugin.ejs",{}) )
+	ok(/something/.test( can.$("#something span")[0].firstChild.nodeValue ),"something has something");
+	can.remove( can.$("#something") );
+	can.append( can.$("#qunit-test-area"), can.view("//can/view/test/qunit/plugin.ejs",{}) )
+	ok(/something/.test( can.$("#something span")[0].firstChild.nodeValue ),"something has something");
+	can.remove( can.$("#something") );
+	can.append( can.$("#qunit-test-area"), can.view("//can/view/test/qunit/plugin.ejs",{}) )
+	ok(/something/.test( can.$("#something span")[0].firstChild.nodeValue ),"something has something");
+	can.remove( can.$("#something") );
+	can.append( can.$("#qunit-test-area"), can.view("//can/view/test/qunit/plugin.ejs",{}) )
+	ok(/something/.test( can.$("#something span")[0].firstChild.nodeValue ),"something has something");
+	can.remove( can.$("#something") );
+})
+
+
 test("plugin in ejs", function(){
 
 	can.append( can.$("#qunit-test-area"), can.view("//can/view/test/qunit/plugin.ejs",{}) )

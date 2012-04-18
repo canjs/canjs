@@ -179,7 +179,7 @@ can.$ = Zepto
 	can.isEmptyObject = function(object){
 		var name;
 		for(name in object){};
-		return name !== undefined;
+		return name === undefined;
 	}
 
 	// Make extend handle `true` for deep.

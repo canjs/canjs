@@ -253,9 +253,9 @@ test("linkTo", function(){
     can.route.routes = {};
     can.route(":foo");
     var res = can.route.link("Hello",{foo: "bar", baz: 'foo'});
-    equal( res, '<a href="#!bar&baz=foo" >Hello</a>');
+    equal( res, '<a href="#!bar&baz=foo">Hello</a>');
 })
-
+/*
 test("param with route defined", function(){
 	can.route.routes = {};
 	can.route("holler")
@@ -264,7 +264,7 @@ test("param with route defined", function(){
 	var res = can.route.param({foo: "abc",route: "foo"});
 	
 	equal(res, "foo&foo=abc")
-})
+})*/
 
 test("route endings", function(){
 	can.route.routes = {};
@@ -276,4 +276,29 @@ test("route endings", function(){
 	
 })
 
-})
+test("strange characters", function(){
+	can.route.routes = {};
+	can.route(":type/:id");
+	var res = can.route.deparam("foo/"+encodeURIComponent("\/"))
+	equal(res.id, "\/")
+	res  = can.route.param({type: "bar", id: "\/"});
+	equal(res, "bar/"+encodeURIComponent("\/"))
+});
+
+/* TODO add can/route/testing.html
+test("updating the hash", function(){
+	stop();
+	window.routeTestReady = function(iCanRoute, loc){
+		iCanRoute(":type/:id")
+		iCanRoute.attr({type: "bar", id: "\/"})
+		
+		setTimeout(function(){
+			var after = loc.href.substr(loc.href.indexOf("#"));
+			equal(after,"#!bar/"+encodeURIComponent("\/"))
+			console.log('Route test ready');
+			start();
+		},30)
+
+});*/
+
+});

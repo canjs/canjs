@@ -293,15 +293,13 @@ steal(function(){
 		    return [].slice.call(container.childNodes);
 		}
 	
-	$.buildFragment = function(htmls, nodes){
-		var parts = fragment(htmls[0]),
+	$.buildFragment = function(html, node){
+		var parts = fragment(html),
 			frag = document.createDocumentFragment();
 		parts.forEach(function(part){
 			frag.appendChild(part);
 		})
-		return {
-			fragment: frag
-		}
+		return frag
 	}
 	
 })

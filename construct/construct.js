@@ -203,7 +203,7 @@ steal("can/util/string",function( $ ) {
 			prototype = this.instance();
 			
 			// Copy the properties over onto the new prototype.
-			_super_class._inherit(proto, _super, prototype);
+			can.Construct._inherit(proto, _super, prototype);
 
 			// The dummy class constructor.
 			function Constructor() {
@@ -225,7 +225,7 @@ steal("can/util/string",function( $ ) {
 			}
 
 			// Copy new static properties on class.
-			_super_class._inherit(klass, _super_class, Constructor);
+			can.Construct._inherit(klass, _super_class, Constructor);
 
 			// Setup namespaces.
 			if ( fullName ) {

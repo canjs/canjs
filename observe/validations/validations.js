@@ -64,10 +64,15 @@ can.each([ can.Observe, can.Model ], function(clss){
 	if(clss === undefined){
 		return;
 	}
-
-	can.extend(clss, {
-		validations: {},
+	var oldSetup = clss.setup;
 	
+	can.extend(clss, {
+		setup : function(superClass){
+			oldSetup.apply(this, arguments);
+			if (!this.validations || superClass.validations === this.validations) {
+				this.validations = {};
+			}
+		},
    		/**
     	* @function can.Observe.static.validate
     	* @parent can.Observe.validations
