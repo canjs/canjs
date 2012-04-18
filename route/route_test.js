@@ -1,3 +1,17 @@
+var stl = steal(function(){
+	// Does the browser support window.onhashchange? Note that IE8 running in
+    // IE7 compatibility mode reports true for 'onhashchange' in window, even
+    // though the event isn't supported, so also test document.documentMode.
+    var doc_mode = document.documentMode,
+    	supports_onhashchange = 'on' + str_hashchange in window && ( doc_mode === undefined || doc_mode > 7 );\
+
+	if(window.jQuery && !supports_onhashchange){
+		stl = stl('./hashchange');
+	}
+});
+
+stl.then(function(){
+
 module("can/route")
 
 test("deparam", function(){
@@ -262,4 +276,4 @@ test("route endings", function(){
 	
 })
 
-
+})
