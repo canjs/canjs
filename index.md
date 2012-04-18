@@ -13,7 +13,8 @@ CanJS is an MIT-licensed, client-side, JavaScript framework that makes building 
  - __[can.Control](#can_control)__ - declarative event bindings
  - __[can.route](#can_route)__ - back button and bookmarking support
 
-It also includes a rich set of supported [extensions and plugins](#plugins).
+It also includes a rich set of supported [extensions and plugins](#plugins). CanJS is better, faster, 
+easier, smaller, library-er.  [Learn why](#why_canjs).
 
 ## Get Canned
 
