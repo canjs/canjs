@@ -15,9 +15,12 @@ steal('can/observe', 'can/util/string/deparam', function() {
         // Converts a JS Object into a list of parameters that can be 
         // inserted into an html element tag.
 		makeProps = function( props ) {
-			return can.map(props, function( val, name ) {
-				return ( name === 'className' ? 'class'  : name )+ '="' + can.esc(val) + '"';
-			}).join(" ");
+			var tags = [];
+			can.each(props, function(val, name){
+				tags.push( ( name === 'className' ? 'class'  : name )+ '="' + 
+						(name === "href" ? val : can.esc(val) ) + '"');
+			});
+			return tags.join(" ");
 		},
 		// Checks if a route matches the data provided. If any route variable
         // is not present in the data, the route does not match. If all route
@@ -376,7 +379,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
         // Deparameterizes the portion of the hash of interest and assign the
         // values to the `can.route.data` removing existing values no longer in the hash.
         setState = function() {
-			curParams = can.route.deparam( location.hash.split(/#!?/).pop() || "" );
+			curParams = can.route.deparam( location.href.split(/#!?/)[1] || "" );
 			can.route.attr(curParams, true);
 		};
 
