@@ -271,6 +271,7 @@ test("strange characters", function(){
 	equal(res, "bar/"+encodeURIComponent("\/"))
 });
 
+/* TODO add can/route/testing.html
 test("updating the hash", function(){
 	stop();
 	window.routeTestReady = function(iCanRoute, loc){
@@ -280,13 +281,13 @@ test("updating the hash", function(){
 		setTimeout(function(){
 			var after = loc.href.substr(loc.href.indexOf("#"));
 			equal(after,"#!bar/"+encodeURIComponent("\/"))
+			console.log('Route test ready');
 			start();
-			
 		},30)
 	}
 	var iframe = document.createElement('iframe');
-	iframe.src = steal.root.join("can/route/testing.html")
-	can.$("#qunit-test-area")[0].appendChild(iframe)
+	iframe.src = steal.root.join("can/route/testing.html");
+	can.$("#qunit-test-area")[0].appendChild(iframe);
+
 })
-
-
+*/
