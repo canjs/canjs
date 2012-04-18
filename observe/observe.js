@@ -406,7 +406,7 @@ steal('can/construct', function() {
 					delete this[prop]
 				}
 				batchTrigger(this, "change", [prop, "remove", undefined, current]);
-				batchTrigger(this, prop, undefined, current);
+				batchTrigger(this, prop, [undefined, current]);
 				return current;
 			}
 		},
@@ -448,7 +448,7 @@ steal('can/construct', function() {
 			}
 		},
 		__set : function(prop, value, current){
-			
+		
 			// Otherwise, we are setting it on this `object`.
 			// TODO: Check if value is object and transform
 			// are we changing the value.
@@ -471,7 +471,7 @@ steal('can/construct', function() {
 
 				// `batchTrigger` the change event.
 				batchTrigger(this, "change", [prop, changeType, value, current]);
-				batchTrigger(this, prop, value, current);
+				batchTrigger(this, prop, [value, current]);
 				// If we can stop listening to our old value, do it.
 				current && unhookup([current], this._namespace);
 			}
@@ -530,7 +530,7 @@ steal('can/construct', function() {
 		 *       // attr  -> "name"
 		 *       // how   -> "add"
 		 *       // newVal-> "Justin"
-		 *       // oldVal-> undefined 
+		 *       // oldVal-> "Payal"
 		 *     });
 		 *     
 		 *     o.attr( 'name', 'Justin' );
@@ -545,7 +545,7 @@ steal('can/construct', function() {
 		 *     o.bind( 'name', function( ev, newVal, oldVal ) {
 		 *       // ev    -> {type : "name"}
 		 *       // newVal-> "Justin"
-		 *       // oldVal-> undefined 
+		 *       // oldVal-> "Payal"
 		 *     });
 		 *     
 		 *     o.attr( 'name', 'Justin' );
