@@ -2395,8 +2395,8 @@ It puts the downloads in `can/dist/edge`.
 The following lists everyone who's contributed something to CanJS.  If we've forgotten you, please add yourself.
 
 First, thanks to everyone who's contributed to [JavaScriptMVC](https://github.com/jupiterjs/javascriptmvc/contributors) 
-and [jQueryMX](https://github.com/jupiterjs/jquerymx/contributors),
-[everyone at Bitovi](http://bitovi.com/people/).  You deserve heaps of recognition as CanJS is direcly based 
+and [jQueryMX](https://github.com/jupiterjs/jquerymx/contributors), and everyone who's worked at 
+[Bitovi](http://bitovi.com/people/).  You deserve heaps of recognition as CanJS is direcly based 
 off this work.  This page is for contributors after CanJS's launch.
 
 [yusufsafak](https://github.com/yusufsafak) - [observe bindings](https://github.com/jupiterjs/canjs/pull/30).  
