@@ -555,3 +555,19 @@ test("store ajax binding", function(){
 	});
 	
 })
+
+test("templated destroy", function(){
+	var MyModel = can.Model({
+		destroy : "/destroyplace/{id}"
+	},{});
+	
+	can.fixture("/destroyplace/{id}", function(original){
+		ok(true,"fixture called");
+		equals(original.url, "/destroyplace/5", "urls match")
+		return {};
+	})
+	stop();
+	new MyModel({id: 5}).destroy(function(){
+		start();
+	})
+})
