@@ -2399,10 +2399,10 @@ and [jQueryMX](https://github.com/jupiterjs/jquerymx/contributors),
 [everyone at Bitovi](http://bitovi.com/people/).  You deserve heaps of recognition as CanJS is direcly based 
 off this work.  This page is for contributors after CanJS's launch.
 
-[yusufsafak](https://github.com/yusufsafak) - [observe bindings](https://github.com/jupiterjs/canjs/pull/30); 
-[verto](https://github.com/verto) - [destroy fix](https://github.com/jupiterjs/canjs/pull/32);
-[WearyMonkey](https://github.com/WearyMonkey) - [recursive observes](https://github.com/jupiterjs/canjs/issues/27);
-[cohuman](https://github.com/cohuman) - [model list dependencies](https://github.com/jupiterjs/canjs/pull/23), [docco fix](https://github.com/jupiterjs/canjs/pull/26)
+[yusufsafak](https://github.com/yusufsafak) - [observe bindings](https://github.com/jupiterjs/canjs/pull/30).  
+[verto](https://github.com/verto) - [destroy fix](https://github.com/jupiterjs/canjs/pull/32).  
+[WearyMonkey](https://github.com/WearyMonkey) - [recursive observes](https://github.com/jupiterjs/canjs/issues/27).  
+[cohuman](https://github.com/cohuman) - [model list dependencies](https://github.com/jupiterjs/canjs/pull/23), [docco fix](https://github.com/jupiterjs/canjs/pull/26).  
 
 ### Change Log
 
