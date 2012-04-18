@@ -63,7 +63,7 @@ of the string, then they will be persisted.
 like [http://api.jquery.com/jQuery.each/ jQuery.each].
 
     can.each([{prop: "val1"}, {prop: "val2"}], 
-		function( index, value ) {
+		function( value, index ) {
       // function called with
       //  index=0 value={prop: "val1"}
       //  index=1 value={prop: "val2"}

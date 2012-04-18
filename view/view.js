@@ -36,7 +36,12 @@ steal("can/util")
 		},
     // Convert a path like string into something that's ok for an `element` ID.
     toId : function( src ) {
-      return src.split(/\/|\./g).join("_");
+      return can.map(src.split(/\/|\./g), function( part ) {
+        // Dont include empty strings in toId functions
+        if ( part ) {
+          return part;
+        }
+      }).join("_");
     },
 		hookup: function(fragment){
 			var hookupEls = [],
@@ -461,9 +466,9 @@ steal("can/util")
 			return "can.view.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
 		},
 		preload: function( id, renderer ) {
-			can.view.cached[id] = function( data, helpers ) {
+			can.view.cached[id] = new can.Deferred().resolve(function( data, helpers ) {
 				return renderer.call(data, data, helpers);
-			};
+			});
 		}
 
 	});
