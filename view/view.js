@@ -448,7 +448,7 @@ steal("can/util")
 	}
 
 	//!steal-pluginify-remove-start
-	$.extend(can.view, {
+	can.extend(can.view, {
 		register: function( info ) {
 			this.types["." + info.suffix] = info;
 
