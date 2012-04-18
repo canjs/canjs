@@ -5,10 +5,11 @@ steal('can/control', 'can/view').then(function( $ ) {
 		return can.underscore(this.fullName.replace(/\./g, "/")).replace("/Controllers", "");
 	};
 
-	can.Control._calculatePosition = function( Class, view, action_name ) {
+	can.Control._calculatePosition = function( Class, view ) {
 		var classParts = Class.fullName.split('.'),
 			classPartsWithoutPrefix = classParts.slice(0);
-			classPartsWithoutPrefix.splice(0, 2); // Remove prefix (usually 2 elements)
+			classPartsWithoutPrefix.splice(0, 2),
+			action_name = "init"; // Remove prefix (usually 2 elements)
 
 		var hasControllers = (classParts.length > 2) && classParts[1] == 'Controllers',
 			path = hasControllers? can.underscore(classParts[0]): can.underscore(classParts.join("/")),
@@ -64,9 +65,7 @@ steal('can/control', 'can/view').then(function( $ ) {
 		return helpers;
 	};
 
-	can.Control.prototype.
-
-	view = function( view, data, myhelpers ) {
+	can.Control.prototype.view = function( view, data, myhelpers ) {
 		//shift args if no view is provided
 		if ( typeof view != "string" && !myhelpers ) {
 			myhelpers = data;

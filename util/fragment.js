@@ -41,15 +41,13 @@ steal(function(){
 			return [].slice.call(tmp);
 		}
 	
-	can.buildFragment = function(htmls, nodes){
-		var parts = fragment(htmls[0]),
+	can.buildFragment = function(html, nodes){
+		var parts = fragment(html),
 			frag = document.createDocumentFragment();
 		parts.forEach(function(part){
 			frag.appendChild(part);
 		})
-		return {
-			fragment: frag
-		}
+		return frag;
 	};
 	
 })

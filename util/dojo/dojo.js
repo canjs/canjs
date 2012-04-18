@@ -40,9 +40,6 @@ steal({
 		}
 		return dojo.mixin.apply(dojo, arguments)
 	}
-	can.param = function(object){
-		return dojo.objectToQuery(object)
-	}
 	can.isEmptyObject = function(object){
 		var prop;
 		for(prop in object){
@@ -50,6 +47,34 @@ steal({
 		}
 		return prop === undefined;;
 	}
+
+	// Use a version of param similar to jQuery's param that
+	// handles nested data instead of dojo.objectToQuery which doesn't
+	can.param = function(object){
+		var pairs = [],
+			add = function( key, value ){
+				pairs.push(encodeURIComponent(key) + "=" + encodeURIComponent(value))
+			};
+
+		for(var name in object){
+			can.buildParam(name, object[name], add);
+		}
+		return pairs.join("&").replace(/%20/g, "+");
+	}
+	can.buildParam = function(prefix, obj, add){
+        if(can.isArray(obj)){
+            for(var i = 0, l = obj.length; i < l; ++i){
+                add(prefix + "[]", obj[i])
+            }
+        } else if( dojo.isObject(obj) ){
+        	for (var name in obj){
+        		can.buildParam(prefix + "[" + name + "]", obj[name], add);
+        	}
+        } else {
+        	add(prefix, obj);
+        }
+	}
+	
 	// Map function helpers.
 	can.proxy = function(func, context){
 		return dojo.hitch(context, func)
@@ -255,15 +280,15 @@ steal({
 
 		
 	}
-	can.buildFragment = function(frags, nodes){
-		var owner = nodes.length && nodes[0].ownerDocument,
-			frag = dojo.toDom(frags[0], owner );
+	can.buildFragment = function(frag, node){
+		var owner = node && node.ownerDocument,
+			frag = dojo.toDom(frag, owner );
 		if(frag.nodeType !== 11){
 			var tmp = document.createDocumentFragment();
 			tmp.appendChild(frag)
 			frag = tmp;
 		}
-		return {fragment: frag}
+		return frag
 	}
 	
 	can.append = function(wrapped, html){

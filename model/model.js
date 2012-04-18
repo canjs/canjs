@@ -281,7 +281,9 @@ steal('can/observe',function(){
 		destroy : {
 			type : "delete",
 			data : function(id){
-				return {}[this.id] = id;
+				var args = {};
+				args[this.id] = id;
+				return args;
 			}
 		},
 		/**
@@ -509,13 +511,14 @@ steal('can/observe',function(){
 			// Convert `findAll` and `findOne`.
 			var oldFindAll
 			if(self.fullName == "can.Model"){
-				self.fullName = "Model"+(++modelNum);
+				self.fullName = self._shortName = "Model"+(++modelNum);
 			}
 			// Ddd ajax converters.
 			this.store = {};
 			this._reqs = 0;
 			this._url = this._shortName+"/{"+this.id+"}"
 		},
+		_ajax : ajaxMaker,
 		_clean : function(){
 			this._reqs--;
 			if(!this._reqs){
@@ -608,13 +611,12 @@ steal('can/observe',function(){
 		 * [can.Model.model].
 		 */
 		models: function( instancesRawData ) {
+
 			if ( ! instancesRawData ) {
 				return;
 			}
-
-      var ml = (instancesRawData instanceof ML);
-
-      if ( ml ) {
+      
+      if ( instancesRawData instanceof this.List ) {
         return instancesRawData;
       }
 

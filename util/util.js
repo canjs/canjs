@@ -1,5 +1,7 @@
 can = {};
-if (window.STEALDOJO){
+if (window.STEALSTANDALONE){
+	steal('can/util/standalone')
+} else if (window.STEALDOJO){
 	steal('can/util/dojo')
 } else if( window.STEALMOO) {
 	steal('can/util/mootools')
@@ -61,7 +63,7 @@ of the string, then they will be persisted.
 like [http://api.jquery.com/jQuery.each/ jQuery.each].
 
     can.each([{prop: "val1"}, {prop: "val2"}], 
-		function( index, value ) {
+		function( value, index ) {
       // function called with
       //  index=0 value={prop: "val1"}
       //  index=1 value={prop: "val2"}
@@ -336,10 +338,10 @@ The following lists how the NodeList is created by each library:
 @function can.buildFragment
 @parent can.util
 
-`can.buildFragment([html], nodes)` returns a document fragment for the HTML passed.
+`can.buildFragment(html, node)` returns a document fragment for the HTML passed.
 
-@param {Array} frags An array of HTML strings
-@param {Array} nodes An array of elements used for accessing the ownerDocument
+@param {String} html HTML strings
+@param {Array} node element used for accessing the ownerDocument
 @return {DocumentFragment}
 */
 //

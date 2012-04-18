@@ -211,7 +211,7 @@ steal({
 	};
 	can.append = function(wrapped, html){
 		if(typeof html === 'string'){
-			html = can.buildFragment([html],[]).fragment
+			html = can.buildFragment(html)
 		}
 		return wrapped.grab(html)
 	}

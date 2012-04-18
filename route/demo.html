@@ -113,7 +113,7 @@ function() {
     	routesEl.empty();
     	
     	// draw routes
-	    routes.each(function(i, route){
+	    routes.each(function(route){
 	    	// setup an Observer
 	    	// <a href='javascript://' class='destroy'>X</a>
 	    	var pre = $("<li><pre></pre>")
@@ -164,7 +164,7 @@ function() {
     
     var change = function(){
     	can.route.routes = {};
-    	routes.each(function(i, route){
+    	routes.each(function(route){
     		var r = route.attr()
     		can.route(r.route, r.def )
     	})

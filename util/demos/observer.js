@@ -71,7 +71,7 @@ function(){
 						
 
 					var children = $()
-					value.each(function(name, val){
+					value.each(function(val, name){
 						var section = self.draw(indent+1, /*isList ? undefined :*/ name, val);
 						children.push(section);
 					})
