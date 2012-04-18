@@ -1317,10 +1317,10 @@ can.map( [ { prop: 'val1' }, { prop: 'val2' } ], function( val, prop ) {
 })  //-> [ 'val1', 'val2' ]
   
 // iterates through an array
-can.each( [ { prop: 'val1' }, { prop: 'val2' } ], function( index, value ) {
+can.each( [ { prop: 'val1' }, { prop: 'val2' } ], function( value, index ) {
   // function called with
-  //  index = 0 value = { prop: 'val1' }
-  //  index = 1 value = { prop: 'val2' }
+  //  value = { prop: 'val1' }, index = 0
+  //  value = { prop: 'val2' }, index = 1
 })
 {% endhighlight %}
 
