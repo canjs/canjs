@@ -255,15 +255,15 @@ steal({
 
 		
 	}
-	can.buildFragment = function(frags, nodes){
-		var owner = nodes.length && nodes[0].ownerDocument,
-			frag = dojo.toDom(frags[0], owner );
+	can.buildFragment = function(frag, node){
+		var owner = node && node.ownerDocument,
+			frag = dojo.toDom(frag, owner );
 		if(frag.nodeType !== 11){
 			var tmp = document.createDocumentFragment();
 			tmp.appendChild(frag)
 			frag = tmp;
 		}
-		return {fragment: frag}
+		return frag
 	}
 	
 	can.append = function(wrapped, html){

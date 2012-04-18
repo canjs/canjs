@@ -27,7 +27,7 @@ steal("can/util")
 
 	can.extend( $view, {
 		frag: function(result){
-			var frag = can.buildFragment([result],[document.body]).fragment;
+			var frag = can.buildFragment(result,document.body);
 			// If we have an empty frag...
 			if(!frag.childNodes.length) { 
 				frag.appendChild(document.createTextNode(''))

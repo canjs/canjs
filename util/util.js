@@ -338,10 +338,10 @@ The following lists how the NodeList is created by each library:
 @function can.buildFragment
 @parent can.util
 
-`can.buildFragment([html], nodes)` returns a document fragment for the HTML passed.
+`can.buildFragment(html, node)` returns a document fragment for the HTML passed.
 
-@param {Array} frags An array of HTML strings
-@param {Array} nodes An array of elements used for accessing the ownerDocument
+@param {String} html HTML strings
+@param {Array} node element used for accessing the ownerDocument
 @return {DocumentFragment}
 */
 //
