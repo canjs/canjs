@@ -1,5 +1,10 @@
 (function(){
 
+// this only applied to jQuery libs
+if(!window.jQuery){
+	return;
+}
+
 module("can/view/modifiers");
 
 test("modifier with a deferred", function(){
