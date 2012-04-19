@@ -1,10 +1,10 @@
 // needs a .then! does not steal dependencies because this needs to work with dist ...
 
-/*if(!window.can || !can){
+if(!window.can || !can){
 	steal('can/util/string')
-}*/
+}
 
-steal('can/util/string').then('can/util/object', function() {
+steal('can/util/object', function() {
 		
 	var updateSettings = function(settings, originalOptions){
 		if (!can.fixture.on) {
