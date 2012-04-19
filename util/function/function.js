@@ -9,6 +9,8 @@ steal("can/util", function() {
       return function() {
 
         var args = arguments;
+            
+        context = context || this;
 
         clearTimeout( timeout );
         timeout = setTimeout(function() {
@@ -25,6 +27,8 @@ steal("can/util", function() {
       return function() {
 
         var args = arguments;
+
+        context = context || this;
 
         if ( ! run ) {
           run = true;
