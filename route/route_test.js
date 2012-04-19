@@ -285,20 +285,22 @@ test("strange characters", function(){
 	equal(res, "bar/"+encodeURIComponent("\/"))
 });
 
-/* TODO add can/route/testing.html
 test("updating the hash", function(){
 	stop();
 	window.routeTestReady = function(iCanRoute, loc){
-		iCanRoute(":type/:id")
-		iCanRoute.attr({type: "bar", id: "\/"})
-		
+		iCanRoute(":type/:id");
+		iCanRoute.attr({type: "bar", id: "\/"});
+
 		setTimeout(function(){
 			var after = loc.href.substr(loc.href.indexOf("#"));
-			equal(after,"#!bar/"+encodeURIComponent("\/"))
-			console.log('Route test ready');
+			equal(after,"#!bar/"+encodeURIComponent("\/"));
 			start();
-		},30)
 
-});*/
+		},30);
+	}
+	var iframe = document.createElement('iframe');
+	iframe.src = steal.root.join("can/route/testing.html");
+	can.$("#qunit-test-area")[0].appendChild(iframe);
+});
 
 });
