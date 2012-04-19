@@ -8,10 +8,10 @@ steal('can/view', function(){
 
 	convert = function( func_name ) {
 		// save the old jQuery helper
-		var old = can.prototype[func_name];
+		var old = $.fn[func_name];
 
 		// replace it with our new helper
-		can.prototype[func_name] = function() {
+		$.fn[func_name] = function() {
 			
 			var args = can.makeArray(arguments),
 				callbackNum, 
@@ -86,7 +86,7 @@ steal('can/view', function(){
 	};
 
 	// returns true or false if the args indicate a template is being used
-	// can.$('#foo').html('/path/to/template.ejs',{data})
+	// $('#foo').html('/path/to/template.ejs',{data})
 	// in general, we want to make sure the first arg is a string
 	// and the second arg is data
 	isTemplate = function( args ) {
@@ -125,24 +125,24 @@ steal('can/view', function(){
 	};
 
 	/**
-	 *  @add can.prototype
+	 *  @add jQuery.fn
 	 *  @parent can.View
-	 *  Called on a can collection that was rendered with can.View with pending hookups.  can.View can render a 
+	 *  Called on a jQuery collection that was rendered with can.View with pending hookups.  can.View can render a 
 	 *  template with hookups, but not actually perform the hookup, because it returns a string without actual DOM 
 	 *  elements to hook up to.  So hookup performs the hookup and clears the pending hookups, preventing errors in 
 	 *  future templates.
 	 *  
 	 * @codestart
-	 * can.$(can.View('//views/recipes.ejs',recipeData)).hookup()
+	 * $(can.View('//views/recipes.ejs',recipeData)).hookup()
 	 * @codeend
 	 */
-	can.prototype.hookup = function() {
+	$.fn.hookup = function() {
 		can.view.frag(this);
 		return this;
 	};
 
 	/**
-	 *  @add can.prototype
+	 *  @add jQuery.fn
 	 */
 	can.each([
 	/**
@@ -152,7 +152,7 @@ steal('can/view', function(){
 	 *  Extending the original [http://api.jquery.com/prepend/ jQuery().prepend()]
 	 *  to render [can.view] templates inserted at the beginning of each element in the set of matched elements.
 	 *  
-	 *  	can.$('#test').prepend('path/to/template.ejs', { name : 'canjs' });
+	 *  	$('#test').prepend('path/to/template.ejs', { name : 'canjs' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
 	 *  or a DOM element, array of elements, HTML string, or can object.
@@ -172,7 +172,7 @@ steal('can/view', function(){
 	 *  Extending the original [http://api.jquery.com/append/ jQuery().append()]
 	 *  to render [can.view] templates inserted at the end of each element in the set of matched elements.
 	 *  
-	 *  	can.$('#test').append('path/to/template.ejs', { name : 'canjs' });
+	 *  	$('#test').append('path/to/template.ejs', { name : 'canjs' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
 	 *  or a DOM element, array of elements, HTML string, or can object.
@@ -192,7 +192,7 @@ steal('can/view', function(){
 	 *  Extending the original [http://api.jquery.com/after/ jQuery().after()]
 	 *  to render [can.view] templates inserted after each element in the set of matched elements.
 	 *  
-	 *  	can.$('#test').after('path/to/template.ejs', { name : 'canjs' });
+	 *  	$('#test').after('path/to/template.ejs', { name : 'canjs' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
 	 *  or a DOM element, array of elements, HTML string, or can object.
@@ -212,7 +212,7 @@ steal('can/view', function(){
 	 *  Extending the original [http://api.jquery.com/before/ jQuery().before()]
 	 *  to render [can.view] templates inserted before each element in the set of matched elements.
 	 *  
-	 *  	can.$('#test').before('path/to/template.ejs', { name : 'canjs' });
+	 *  	$('#test').before('path/to/template.ejs', { name : 'canjs' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
 	 *  or a DOM element, array of elements, HTML string, or can object.
@@ -231,10 +231,10 @@ steal('can/view', function(){
 	 *  
 	 *  Extending the original [http://api.jquery.com/text/ jQuery().text()]
 	 *  to render [can.View] templates as the content of each matched element.
-	 *  Unlike [can.prototype.jQuery.fn.html] can.prototype.text also works with XML, escaping the provided
+	 *  Unlike [jQuery.fn.html] jQuery.fn.text also works with XML, escaping the provided
 	 *  string as necessary.
 	 *  
-	 *  	can.$('#test').text('path/to/template.ejs', { name : 'canjs' });
+	 *  	$('#test').text('path/to/template.ejs', { name : 'canjs' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
 	 *  or a DOM element, array of elements, HTML string, or can object.
@@ -254,7 +254,7 @@ steal('can/view', function(){
 	 *  Extending the original [http://api.jquery.com/html/ jQuery().html()]
 	 *  to render [can.view] templates as the content of each matched element.
 	 *  
-	 *  	can.$('#test').html('path/to/template.ejs', { name : 'canjs' });
+	 *  	$('#test').html('path/to/template.ejs', { name : 'canjs' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
 	 *  or a DOM element, array of elements, HTML string, or can object.
@@ -274,7 +274,7 @@ steal('can/view', function(){
 	 *  Extending the original [http://api.jquery.com/replaceWith/ jQuery().replaceWith()]
 	 *  to render [can.view] templates replacing each element in the set of matched elements.
 	 *  
-	 *  	can.$('#test').replaceWith('path/to/template.ejs', { name : 'canjs' });
+	 *  	$('#test').replaceWith('path/to/template.ejs', { name : 'canjs' });
 	 *  
 	 *  @param {String|Object|Function} content A template filename or the id of a view script tag 
 	 *  or a DOM element, array of elements, HTML string, or can object.
