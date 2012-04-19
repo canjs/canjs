@@ -256,7 +256,7 @@ test("linkTo", function(){
     equal( res, '<a href="#!bar&baz=foo">Hello</a>');
 })
 
-/* test("param with route defined", function(){
+test("param with route defined", function(){
 	can.route.routes = {};
 	can.route("holler")
 	can.route("foo");
@@ -264,7 +264,7 @@ test("linkTo", function(){
 	var res = can.route.param({foo: "abc",route: "foo"});
 	
 	equal(res, "foo&foo=abc")
-})*/
+})
 
 test("route endings", function(){
 	can.route.routes = {};
