@@ -3,7 +3,7 @@ var stl = steal(function(){
     // IE7 compatibility mode reports true for 'onhashchange' in window, even
     // though the event isn't supported, so also test document.documentMode.
     var doc_mode = document.documentMode,
-    	supports_onhashchange = 'on' + str_hashchange in window && ( doc_mode === undefined || doc_mode > 7 );\
+    	supports_onhashchange = 'onhashchange' in window && ( doc_mode === undefined || doc_mode > 7 );
 
 	if(window.jQuery && !supports_onhashchange){
 		stl = stl('./hashchange');
@@ -255,8 +255,8 @@ test("linkTo", function(){
     var res = can.route.link("Hello",{foo: "bar", baz: 'foo'});
     equal( res, '<a href="#!bar&baz=foo">Hello</a>');
 })
-/*
-test("param with route defined", function(){
+
+/* test("param with route defined", function(){
 	can.route.routes = {};
 	can.route("holler")
 	can.route("foo");
@@ -274,7 +274,7 @@ test("route endings", function(){
 	var res = can.route.deparam("food")
 	ok(res.food, "we get food back")
 	
-})
+});
 
 test("strange characters", function(){
 	can.route.routes = {};
