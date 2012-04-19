@@ -9,8 +9,8 @@
 	(function(){
 		var types = ["STEALSTANDALONE","STEALDOJO","STEALMOO","STEALYUI","STEALZEPTO"];
 		for(var i =0; i < types.length; i++){
-			if(window.top[types[i]]){
-				window[types[i]] = window.top[types[i]]
+			if(window.parent[types[i]]){
+				window[types[i]] = window.parent[types[i]]
 			}
 		}
 	})();
@@ -22,7 +22,7 @@
 steal('can/route', function() {
 	// make sure it's after ready
     setTimeout(function(){
-    	window.top.routeTestReady(can.route, window.location)
+    	window.parent.routeTestReady(can.route, window.location)
     },30)
     
 })
