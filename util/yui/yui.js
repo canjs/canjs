@@ -59,7 +59,7 @@
 			return target;
 		}
 		can.param = function( object ) {
-			return Y.QueryString.stringify(object)
+			return Y.QueryString.stringify(object, {arrayKey: true})
 		}
 		can.isEmptyObject = function( object ) {
 			return Y.Object.isEmpty(object);

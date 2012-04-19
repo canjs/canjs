@@ -730,10 +730,9 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		 * the EJS view will redraw the list in the DOM.
 		 */
 		list : function(list, cb){
-			list.attr('length')
-			for(var i = 0, len = list.length; i < len; i++){
-				cb(list[i], i, list)
-			}
+			can.each(list, function(item, i){
+				cb(item, i, list)
+			})
 		}
 	};
 

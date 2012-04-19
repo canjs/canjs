@@ -1,3 +1,17 @@
+var stl = steal(function(){
+	// Does the browser support window.onhashchange? Note that IE8 running in
+    // IE7 compatibility mode reports true for 'onhashchange' in window, even
+    // though the event isn't supported, so also test document.documentMode.
+    var doc_mode = document.documentMode,
+    	supports_onhashchange = 'onhashchange' in window && ( doc_mode === undefined || doc_mode > 7 );
+
+	if(window.jQuery && !supports_onhashchange){
+		stl = stl('./hashchange');
+	}
+});
+
+stl.then(function(){
+
 module("can/route")
 
 test("deparam", function(){
@@ -241,8 +255,8 @@ test("linkTo", function(){
     var res = can.route.link("Hello",{foo: "bar", baz: 'foo'});
     equal( res, '<a href="#!bar&baz=foo">Hello</a>');
 })
-/*
-test("param with route defined", function(){
+
+/* test("param with route defined", function(){
 	can.route.routes = {};
 	can.route("holler")
 	can.route("foo");
@@ -260,7 +274,7 @@ test("route endings", function(){
 	var res = can.route.deparam("food")
 	ok(res.food, "we get food back")
 	
-})
+});
 
 test("strange characters", function(){
 	can.route.routes = {};
@@ -271,6 +285,7 @@ test("strange characters", function(){
 	equal(res, "bar/"+encodeURIComponent("\/"))
 });
 
+/* TODO add can/route/testing.html
 test("updating the hash", function(){
 	stop();
 	window.routeTestReady = function(iCanRoute, loc){
@@ -280,13 +295,10 @@ test("updating the hash", function(){
 		setTimeout(function(){
 			var after = loc.href.substr(loc.href.indexOf("#"));
 			equal(after,"#!bar/"+encodeURIComponent("\/"))
+			console.log('Route test ready');
 			start();
-			
 		},30)
-	}
-	var iframe = document.createElement('iframe');
-	iframe.src = steal.root.join("can/route/testing.html")
-	can.$("#qunit-test-area")[0].appendChild(iframe)
-})
 
+});*/
 
+});

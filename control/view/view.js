@@ -65,9 +65,7 @@ steal('can/control', 'can/view').then(function( $ ) {
 		return helpers;
 	};
 
-	can.Control.prototype.
-
-	view = function( view, data, myhelpers ) {
+	can.Control.prototype.view = function( view, data, myhelpers ) {
 		//shift args if no view is provided
 		if ( typeof view != "string" && !myhelpers ) {
 			myhelpers = data;

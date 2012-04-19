@@ -4544,7 +4544,6 @@
 		},
 		_sendDestroy : function(ev, how){
 			if(/\w+\.destroyed/.test(how)){
-				console.log('destroyed ...');
 				this.splice(this.indexOf(ev.target),1);
 			}
 		}
