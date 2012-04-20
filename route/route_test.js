@@ -287,7 +287,6 @@ test("updating the hash", function(){
 	var iframe = document.createElement('iframe');
 	iframe.src = steal.root.join("can/route/testing.html");
 	can.$("#qunit-test-area")[0].appendChild(iframe);
-<<<<<<< HEAD
 });
 
 test("empty default is matched even if last", function(){
@@ -301,8 +300,4 @@ test("empty default is matched even if last", function(){
 		foo : "bar",
 		route: ""
 	});
-});
-
-=======
->>>>>>> f8eae9be201492089d521180242672bd4e2af0f7
 });
