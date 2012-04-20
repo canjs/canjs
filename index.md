@@ -2409,8 +2409,14 @@ off JavaScriptMVC.  This page is for contributors after CanJS's launch.
 __master__
 
  - can.util
+    - add: [a util/function plugin](https://github.com/jupiterjs/canjs/commit/75e99f3b1545d4086ccdae259ccc87a3e8e7a018)
+
+__1.0 Beta 2__
+
+ - can.util
     - change: [reverse argument order of can.each](https://github.com/jupiterjs/canjs/commit/234fd3b9eca18abdbc3fdbea114be6a818bfe6e3)
     - change/fix: [buildFragment returns non cached frag](https://github.com/jupiterjs/canjs/issues/33)
+    - fix: [zepto's isEmptyObject was broke](https://github.com/jupiterjs/canjs/commit/7fe391f59a1f54e3f197f31e20276646f82e7f2e)
  - can.observe
     - feature: [recursive observes don't blow up](https://github.com/jupiterjs/canjs/issues/27)
     - change: [reverse argument order of can.each](https://github.com/jupiterjs/canjs/commit/234fd3b9eca18abdbc3fdbea114be6a818bfe6e3)
@@ -2421,7 +2427,10 @@ __master__
     - fix: [model using custom id for store](https://github.com/jupiterjs/canjs/commit/14d05c29e71ed8c462ba49b740d9eb8e342d3c85)
     - fix: [destroy not working with templated id](https://github.com/jupiterjs/canjs/issues/32)
 
-
-__1.0 Beta__ (April 1st 2011)
+ - can.route
+    - fix: a host of bugs in libaries other than jQuery because can.route was not properly tested in other libraries.
+    - fix: can.param fixed in [dojo](https://github.com/jupiterjs/canjs/commit/77dfa012b2f6baa7dfb0fe84f2d62aeb5b04fc90), 
+   
+__1.0 Beta 1__ (April 1st 2011)
 
 Released!
