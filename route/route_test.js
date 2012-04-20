@@ -1,17 +1,3 @@
-var stl = steal(function(){
-	// Does the browser support window.onhashchange? Note that IE8 running in
-    // IE7 compatibility mode reports true for 'onhashchange' in window, even
-    // though the event isn't supported, so also test document.documentMode.
-    var doc_mode = document.documentMode,
-    	supports_onhashchange = 'onhashchange' in window && ( doc_mode === undefined || doc_mode > 7 );
-
-	if(window.jQuery && !supports_onhashchange){
-		stl = stl('./hashchange');
-	}
-});
-
-stl.then(function(){
-
 module("can/route")
 
 test("deparam", function(){
@@ -301,6 +287,7 @@ test("updating the hash", function(){
 	var iframe = document.createElement('iframe');
 	iframe.src = steal.root.join("can/route/testing.html");
 	can.$("#qunit-test-area")[0].appendChild(iframe);
+<<<<<<< HEAD
 });
 
 test("empty default is matched even if last", function(){
@@ -316,4 +303,6 @@ test("empty default is matched even if last", function(){
 	});
 });
 
+=======
+>>>>>>> f8eae9be201492089d521180242672bd4e2af0f7
 });
