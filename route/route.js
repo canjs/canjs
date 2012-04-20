@@ -43,13 +43,16 @@ steal('can/observe', 'can/util/string/deparam', function() {
 
 
 	can.route = function( url, defaults ) {
+        defaults = defaults || {}
         // Extract the variable names and replace with `RegExp` that will match 
 		// an atual URL with values.
 		var names = [],
 			test = url.replace(matcher, function( whole, name ) {
 				names.push(name)
-				// TODO: I think this should have a `+`
-				return "([^\\/\\&]*)"  // The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
+				// a name without a default value HAS to have a value
+				// a name that has a default value can be empty
+				// The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
+				return "([^\\/\\&]"+(defaults[name] ? "*" : "+")+")"  
 			});
 
 		// Add route in a form that can be easily figured out.
@@ -63,7 +66,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
             // An `array` of all the variable names in this route.
 			names: names,
             // Default values provided for the variables.
-			defaults: defaults || {},
+			defaults: defaults,
             // The number of parts in the URL separated by `/`.
 			length: url.split('/').length
 		}

@@ -303,4 +303,17 @@ test("updating the hash", function(){
 	can.$("#qunit-test-area")[0].appendChild(iframe);
 });
 
+test("empty default is matched even if last", function(){
+	
+	can.route.routes = {};
+	can.route(":who");
+	can.route("",{foo: "bar"})
+
+	var obj = can.route.deparam("");
+	same(obj, {
+		foo : "bar",
+		route: ""
+	});
+});
+
 });
