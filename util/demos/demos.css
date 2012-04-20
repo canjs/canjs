@@ -119,7 +119,7 @@ ul {
 	padding: 0px;
 }
 .remove:hover {
-	background: url(../observe/remove.png);
+	background: url(../../observe/remove.png);
 	background-repeat: no-repeat;
 	cursor: pointer;
 }
