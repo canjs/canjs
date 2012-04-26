@@ -1,3 +1,3 @@
 @page can.util
-@parent index
+@parent can
 Utility methods supported by CanJS
