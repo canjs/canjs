@@ -1,7 +1,7 @@
 @class can.route
 @inherits can.Observe
 @plugin can/route
-@parent index
+@parent can
 
 `can.route(route, defults)` helps manage browser history (and
 client state) by
