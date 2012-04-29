@@ -7,6 +7,7 @@
 <title>CanJS</title>
 <link rel="stylesheet" type="text/css" href="stylesheets/styles.css">
 <link rel="stylesheet" type="text/css" href="stylesheets/tango.css">
+<link href='/favicon.ico' rel='shortcut icon' type='image/x-icon' />
 </head>
 <body>
 <div id='bg'>
@@ -16,7 +17,7 @@
 		<div id='header'>
 			<div id='logo-and-download'>
 				<img alt="Logo" id="logo" src="images/logo.png"/>
-				<a class='primary' href='https://github.com/downloads/jupiterjs/canjs/1.0b.zip'>Download v1.0b</a>
+				<a class='primary' href='https://github.com/downloads/jupiterjs/canjs/1.0b2.zip'>Download v1.0b2</a>
 			</div>
 		</div>
 		<div class='cf' id='buttons'>
@@ -54,27 +55,27 @@
 <li><strong><a href='#can_route'>can.route</a></strong> - back button and bookmarking support</li>
 </ul>
 
-<p>It also includes a rich set of supported <a href='#plugins'>extensions and plugins</a>.</p>
+<p>It also includes a rich set of supported <a href='#plugins'>extensions and plugins</a>. CanJS is better, faster, easier, smaller, library-er. <a href='#why_canjs'>Learn why</a>.</p>
 
 <h2 id='get_canned'>Get Canned</h2>
 
 <p>CanJS&#8217;s core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your download for the library you are using:</p>
 
 <ul>
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0b.js'>can.jquery.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0b.min.js'>min</a>) - 8.5k - <a href='http://donejs.com/can/docs/can.jquery.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0b2.js'>can.jquery.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0b2.min.js'>min</a>) - 8.5k - <a href='http://donejs.com/can/docs/can.jquery.html'>Annotated Source</a></li>
 
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0b.js'>can.zepto.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0b.min.js'>min</a>) - 10.2k - <a href='http://donejs.com/can/docs/can.zepto.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0b2.js'>can.zepto.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0b2.min.js'>min</a>) - 10.2k - <a href='http://donejs.com/can/docs/can.zepto.html'>Annotated Source</a></li>
 
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0b.js'>can.dojo.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0b.min.js'>min</a>) - 10.8k - <a href='http://donejs.com/can/docs/can.dojo.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0b2.js'>can.dojo.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0b2.min.js'>min</a>) - 10.8k - <a href='http://donejs.com/can/docs/can.dojo.html'>Annotated Source</a></li>
 
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0b.js'>can.mootools.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0b.min.js'>min</a>) - 10.7k - <a href='http://donejs.com/can/docs/can.mootools.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0b2.js'>can.mootools.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0b2.min.js'>min</a>) - 10.7k - <a href='http://donejs.com/can/docs/can.mootools.html'>Annotated Source</a></li>
 
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.yui.1.0b.js'>can.yui.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.yui.1.0b.min.js'>min</a>) - 10.2k - <a href='http://donejs.com/can/docs/can.yui.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.yui.1.0b2.js'>can.yui.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.yui.1.0b2.min.js'>min</a>) - 10.2k - <a href='http://donejs.com/can/docs/can.yui.html'>Annotated Source</a></li>
 </ul>
 
 <p>This page walks through the basics of CanJS by building a small todo app with CanJS and jQuery. If you want to see a fully functional version of this todo app in action, you can <a href='http://jsfiddle.net/javascriptmvc/ADWhw/3/'>go to this jsfiddle and view the results and code.</a></p>
 
-<p>The <a href='#use_with_other_libraries'>Use with other libraries</a> section details the minor differences among use with other libraries. The <a href='#examples'>Examples</a> section has other awesome examples of how you can put CanJS to good use.</p>
+<p>The <a href='#use_with_other_libraries'>Use with other libraries</a> section details the minor differences among use with other libraries. The <a href='#examples'>Examples</a> section has other awesome examples of how you can put CanJS to good use. There is also an <a href='http://ci.javascriptmvc.com/jobs/can/test/test.html'>online test suite</a>.</p>
 
 <h2 id='canconstruct_'>can.Construct <code>can.Construct( [classProperties,] [prototypeProperties] )</code></h2>
 
@@ -596,7 +597,7 @@
 <span class='cp'>&lt;%</span> <span class='p'>}</span> <span class='cp'>%&gt;</span><span class='x' />
 </code></pre>
 </div>
-<p>This does not work because when the function wrapping <code>todos[ i ].attr( &#39;name&#39; )</code> is called, <code>i</code> will be <strong>3</strong> which is the index of the last todo and not the actual index of the desired todo. Fix this by using a closure like:</p>
+<p>This does not work because when the function wrapping <code>todos[ i ].attr( &#39;name&#39; )</code> is called, <code>i</code> will be <strong>3</strong>, which is the index of the last todo, not the index of the desired todo. Fix this by using a closure like:</p>
 <div class='highlight'><pre><code class='erb'><span class='cp'>&lt;%</span> <span class='vg'>$.</span><span class='n'>each</span><span class='p'>(</span> <span class='n'>todos</span><span class='p'>,</span> <span class='n'>function</span><span class='p'>(</span> <span class='n'>i</span><span class='p'>,</span> <span class='n'>todo</span> <span class='p'>)</span> <span class='p'>{</span> <span class='cp'>%&gt;</span><span class='x' />
 <span class='x'>  &lt;li&gt;</span><span class='cp'>&lt;%=</span> <span class='n'>todo</span><span class='o'>.</span><span class='n'>attr</span><span class='p'>(</span> <span class='s1'>&#39;name&#39;</span> <span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x'>&lt;/li&gt;</span>
 <span class='cp'>&lt;%</span> <span class='p'>}</span> <span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x' />
@@ -778,7 +779,7 @@
 <span class='p'>})</span>
 </code></pre>
 </div>
-<p>When the todo is destroyed, EJS&#8217;s live binding will remove it&#8217;s LI automatically.</p>
+<p>When the todo is destroyed, EJS&#8217;s live binding will remove its LI automatically.</p>
 
 <h3 id='templated_event_handlers_pt_1_'>Templated Event Handlers Pt 1 <code>&quot;{optionName}&quot;</code></h3>
 
@@ -796,7 +797,7 @@
 <span class='k'>new</span> <span class='nx'>Todos</span><span class='p'>(</span> <span class='s1'>&#39;#todos&#39;</span><span class='p'>,</span> <span class='p'>{</span> <span class='nx'>destroyEvent</span><span class='o'>:</span> <span class='s1'>&#39;mouseenter&#39;</span> <span class='p'>}</span> <span class='p'>)</span>
 </code></pre>
 </div>
-<p>Values inside <code>{NAME}</code> are looked up on the control&#8217;s <code>this.options</code> and then the <code>window</code>. For example, we could customize it instead like:</p>
+<p>Values inside <code>{NAME}</code> are looked up on the control&#8217;s <code>this.options</code> and then, if not found, on the <code>window</code>. For example, we could customize it instead like:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Todos</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Control</span><span class='p'>(</span> <span class='s1'>&#39;Todos&#39;</span><span class='p'>,</span> <span class='p'>{</span>
   <span class='s1'>&#39;init&#39;</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>element</span> <span class='p'>,</span> <span class='nx'>options</span> <span class='p'>)</span> <span class='p'>{</span> <span class='p'>...</span> <span class='p'>},</span>
   <span class='s1'>&#39;li click&#39;</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>li</span> <span class='p'>)</span> <span class='p'>{</span> <span class='p'>...</span> <span class='p'>},</span>
@@ -817,7 +818,7 @@
 
 <h3 id='templated_event_handlers_pt_2_'>Templated Event Handlers Pt 2 <code>&quot;{objectName}&quot;</code></h3>
 
-<p>Control can also bind to objects other than <code>this.element</code> with templated event handlers. This is <em>critical</em> for avoiding memory leaks that are common among MVC applications_.</p>
+<p>Control can also bind to objects other than <code>this.element</code> with templated event handlers. This is <em>critical</em> for avoiding memory leaks that are common among MVC applications.</p>
 
 <p>If the value inside <code>{NAME}</code> is an object, the event will be bound to that object rather than the control. For example, the following tooltip listens to clicks on the window:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Tooltip</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Control</span><span class='p'>({</span>
@@ -833,7 +834,7 @@
 <span class='k'>new</span> <span class='nx'>Tooltip</span><span class='p'>(</span> <span class='nx'>$</span><span class='p'>(</span><span class='s1'>&#39;&lt;div&gt;INFO&lt;/div&gt;&#39;</span><span class='p'>).</span><span class='nx'>appendTo</span><span class='p'>(</span><span class='nx'>el</span><span class='p'>)</span> <span class='p'>)</span>
 </code></pre>
 </div>
-<p>This is convenient when needing to listen to model changes. If EJS was not taking care of removing <code>&lt;li&gt;</code>s after their model is destroyed, we could implement it in <code>Todos</code> like:</p>
+<p>This is convenient when needing to listen to model changes. If EJS was not taking care of removing <code>&lt;li&gt;</code>s after their model was destroyed, we could implement it in <code>Todos</code> like:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Todos</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Control</span><span class='p'>({</span>
   <span class='s1'>&#39;init&#39;</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>element</span> <span class='p'>,</span> <span class='nx'>options</span> <span class='p'>)</span> <span class='p'>{</span>
     <span class='kd'>var</span> <span class='nx'>self</span> <span class='o'>=</span> <span class='k'>this</span><span class='p'>;</span>
@@ -884,9 +885,9 @@
 
 <h3 id='on_'>on <code>control.on()</code></h3>
 
-<p><a href='http://donejs.com/docs.html#!can.Control.prototype.on'>can.Control.prototype.on</a> rebinds a control&#8217;s event handlers. This is useful when you want to listen to a specific model and change it.</p>
+<p><a href='http://donejs.com/docs.html#!can.Control.prototype.on'>can.Control.prototype.on</a> rebinds a control&#8217;s event handlers. This is useful when you are listening to a specific model instance, and want to change to change to another.</p>
 
-<p>The following <code>Editor</code> widget&#8217;s <strong>todo</strong> method updates the todo option and then calls <code>on()</code> to rebind <code>&#39;{todo} updated&#39;</code>.</p>
+<p>The following <code>Editor</code> widget&#8217;s <strong>todo</strong> method updates the control&#8217;s todo option and then calls <code>on()</code> to rebind <code>&#39;{todo} updated&#39;</code>.</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Editor</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Control</span><span class='p'>({</span>
   <span class='nx'>todo</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>todo</span> <span class='p'>)</span> <span class='p'>{</span>
     <span class='k'>this</span><span class='p'>.</span><span class='nx'>options</span><span class='p'>.</span><span class='nx'>todo</span> <span class='o'>=</span> <span class='nx'>todo</span><span class='p'>;</span>
@@ -1053,9 +1054,9 @@
 <span class='k'>new</span> <span class='nx'>Routing</span><span class='p'>(</span> <span class='nb'>document</span><span class='p'>.</span><span class='nx'>body</span> <span class='p'>);</span>
 </code></pre>
 </div>
-<p>The <strong>Routing</strong> control is a traditional controller. It coordinates among the <code>can.route</code>, <code>Editor</code> and <code>Todos</code>. <code>Editor</code> and <code>Todos</code> are traditional views, consuming models.</p>
+<p>The <strong>Routing</strong> control is a traditional controller. It coordinates the <code>Editor</code> and <code>Todos</code> controls with <code>can.route</code> hash data. <code>Editor</code> and <code>Todos</code> are traditional views, consuming models.</p>
 
-<p>If you can understand this, you understand everything. Congrats! <a href='http://donejs.com/docs.html#!tutorials/rapidstart/todos.html'>See it in action</a>.</p>
+<p>If you can understand this, you&#8217;re on your way to mastery of the CanJS MVC architecture. Congrats! <a href='http://donejs.com/docs.html#!tutorials/rapidstart/todos.html'>See it in action</a>.</p>
 
 <h2 id='utilities'>Utilities</h2>
 
@@ -1095,10 +1096,10 @@
 <span class='p'>})</span>  <span class='c1'>//-&gt; [ &#39;val1&#39;, &#39;val2&#39; ]</span>
   
 <span class='c1'>// iterates through an array</span>
-<span class='nx'>can</span><span class='p'>.</span><span class='nx'>each</span><span class='p'>(</span> <span class='p'>[</span> <span class='p'>{</span> <span class='nx'>prop</span><span class='o'>:</span> <span class='s1'>&#39;val1&#39;</span> <span class='p'>},</span> <span class='p'>{</span> <span class='nx'>prop</span><span class='o'>:</span> <span class='s1'>&#39;val2&#39;</span> <span class='p'>}</span> <span class='p'>],</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>index</span><span class='p'>,</span> <span class='nx'>value</span> <span class='p'>)</span> <span class='p'>{</span>
+<span class='nx'>can</span><span class='p'>.</span><span class='nx'>each</span><span class='p'>(</span> <span class='p'>[</span> <span class='p'>{</span> <span class='nx'>prop</span><span class='o'>:</span> <span class='s1'>&#39;val1&#39;</span> <span class='p'>},</span> <span class='p'>{</span> <span class='nx'>prop</span><span class='o'>:</span> <span class='s1'>&#39;val2&#39;</span> <span class='p'>}</span> <span class='p'>],</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>value</span><span class='p'>,</span> <span class='nx'>index</span> <span class='p'>)</span> <span class='p'>{</span>
   <span class='c1'>// function called with</span>
-  <span class='c1'>//  index = 0 value = { prop: &#39;val1&#39; }</span>
-  <span class='c1'>//  index = 1 value = { prop: &#39;val2&#39; }</span>
+  <span class='c1'>//  value = { prop: &#39;val1&#39; }, index = 0</span>
+  <span class='c1'>//  value = { prop: &#39;val2&#39; }, index = 1</span>
 <span class='p'>})</span>
 </code></pre>
 </div>
@@ -1161,17 +1162,19 @@
 
 <span class='c1'>// pipes a deferred into another deferred</span>
 <span class='nx'>deferred</span><span class='p'>.</span><span class='nx'>pipe</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>()</span> <span class='p'>{</span>
+	<span class='c1'>// done handler</span>
+<span class='p'>},</span> <span class='kd'>function</span><span class='p'>()</span> <span class='p'>{</span>
+	<span class='c1'>// fail handler</span>
+<span class='p'>})</span>
 
-<span class='p'>},</span> <span class='kd'>function</span><span class='p'>()</span> <span class='p'>{})</span>
-
-<span class='c1'>// resolves a deferred, deferreds piped into the deferred also become resolved</span>
+<span class='c1'>// resolves a deferred (deferreds piped into the deferred also become resolved)</span>
 <span class='nx'>deferred</span><span class='p'>.</span><span class='nx'>resolve</span><span class='p'>()</span>
   
-<span class='c1'>// rejects a deferred, deferreds piped into the deferred also become rejected</span>
+<span class='c1'>// rejects a deferred (deferreds piped into the deferred also become rejected)</span>
 <span class='nx'>deferred</span><span class='p'>.</span><span class='nx'>reject</span><span class='p'>()</span>
   
 <span class='c1'>// used to execute callback functions when all passed deferreds become resolved</span>
-<span class='nx'>can</span><span class='p'>.</span><span class='nx'>When</span><span class='p'>()</span>
+<span class='nx'>can</span><span class='p'>.</span><span class='nx'>when</span><span class='p'>()</span>
 </code></pre>
 </div>
 <h3 id='ajax'>Ajax</h3>
@@ -1207,7 +1210,7 @@
 </div>
 <p><strong>HTMLElement &#8216;destroyed&#8217; event</strong></p>
 
-<p>When an element is removed from the page, a &#8216;destroyed&#8217; event should be triggered on the event. This is used to teardown event handlers in can.Control.</p>
+<p>When an element is removed from the page using any library, CanJS triggers a &#8216;destroyed&#8217; event on the element. This is used to teardown event handlers in can.Control.</p>
 
 <h2 id='use_with_other_libraries'>Use with other libraries</h2>
 
@@ -1470,7 +1473,7 @@
 
 <h3 id='canconstructproxy_'>can.Construct.proxy <code>construct.proxy( methodname, [ curriedArgs ] )</code></h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.construct.proxy.1.0b.js'>can.construct.proxy.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.construct.proxy.1.0b2.js'>can.construct.proxy.js</a></p>
 
 <p>The <a href='http://donejs.com/docs.html#!can.Construct.proxy'>can.Construct.proxy</a> plugin adds a <em>proxy</em> method that takes a function name and returns a new function that will always have <code>this</code> set to the original context. You can also curry arguments that will be added to the beginning of the proxied functions argument list:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Person</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Construct</span><span class='p'>({</span>
@@ -1493,7 +1496,7 @@
 </div>
 <h3 id='canconstructsuper'>can.Construct.super</h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.construct.super.1.0b.js'>can.construct.super.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.construct.super.1.0b2.js'>can.construct.super.js</a></p>
 
 <p>The <a href='http://donejs.com/docs.html#!can.Construct.super'>can.Construct.super</a> plugin provides access to overwritten methods using <code>this._super</code> when extending a can.Construct:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>ImprovedPerson</span> <span class='o'>=</span> <span class='nx'>Person</span><span class='p'>({</span>
@@ -1514,7 +1517,7 @@
 </div>
 <h3 id='canobservedelegate_'>can.Observe.delegate <code>observe.delegate( name, event, handler )</code></h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.delegate.1.0b.js'>can.observe.delegate.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.delegate.1.0b2.js'>can.observe.delegate.js</a></p>
 
 <p>Use the <a href='http://donejs.com/docs.html#!can.Observe.delegate'>can.Observe.delegate</a> plugin to listen to <em>change</em>, <em>set</em>, <em>add</em> and <em>remove</em> on any direct, child or wildcard attribute:</p>
 <div class='highlight'><pre><code class='javascript'><span class='c1'>// create an observable</span>
@@ -1543,7 +1546,7 @@
 </div>
 <h3 id='canobservesetter'>can.Observe.setter</h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.setter.1.0b.js'>can.observe.setter.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.setter.1.0b2.js'>can.observe.setter.js</a></p>
 
 <p>With the <a href='http://donejs.com/docs.html#!can.Observe.setter'>can.Observe.setter</a> plugin you can use attribute setter methods to process the value being set:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Person</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Observe</span><span class='p'>({</span>
@@ -1561,7 +1564,7 @@
 </div>
 <h3 id='canobserveattributes'>can.Observe.attributes</h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.attributes.1.0b.js'>can.observe.attributes.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.attributes.1.0b2.js'>can.observe.attributes.js</a></p>
 
 <p>The <a href='http://donejs.com/docs.html#!can.Observe.attributes'>can.Observe.attributes</a> plugin allows you to specify attributes with type converters and serializers. Serializers make it handy when preparing your data to send to the server for JavaScript objects like dates or associations.</p>
 
@@ -1612,7 +1615,7 @@
 </div>
 <h3 id='canobservevalidations_'>can.Observe.validations <code>observe.validate( attribute, validator )</code></h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.validations.1.0b.js'>can.observe.validations.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.validations.1.0b2.js'>can.observe.validations.js</a></p>
 
 <p><a href='http://donejs.com/docs.html#!can.Observe.validations'>can.Observe.validations</a> adds validation to a can.Observe. Call the <em>validate</em> method in the <em>init</em> constructor with the attribute name and the validation function and then use <em>errors</em> to retrieve the error messages:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Person</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Model</span><span class='p'>({</span>
@@ -1638,7 +1641,7 @@
 </div>
 <h3 id='canobservebackup_'>can.Observe.backup <code>observe.backup()</code></h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.backup.1.0b.js'>can.observe.backup.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.backup.1.0b2.js'>can.observe.backup.js</a></p>
 
 <p>You can backup and restore can.Observe data using the <a href='http://donejs.com/docs.html#!can.Observe.backup'>can.Observe.backup</a> plugin. To backup the observe in its current state call <em>backup</em>. To revert it back to that state use <em>restore</em>:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>todo</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>Todo</span><span class='p'>(</span> <span class='p'>{</span> <span class='nx'>name</span><span class='o'>:</span> <span class='s1'>&#39;do the dishes&#39;</span> <span class='p'>}</span> <span class='p'>);</span>
@@ -1651,7 +1654,7 @@
 </div>
 <h3 id='cancontrolplugin'>can.Control.plugin</h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.control.plugin.1.0b.js'>can.control.plugin.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.control.plugin.1.0b2.js'>can.control.plugin.js</a></p>
 
 <p><a href='http://donejs.com/docs.html#!can.Control.plugin'>can.Control.plugin</a> registers a jQuery plugin function with a given <em>pluginName</em> that instantiates a can.Control. For example with this can.Control:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Tabs</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Control</span><span class='p'>({</span>
@@ -1672,19 +1675,19 @@
 <span class='nx'>$</span><span class='p'>(</span> <span class='s1'>&#39;.tabs&#39;</span> <span class='p'>).</span><span class='nx'>tabs</span><span class='p'>(</span> <span class='s1'>&#39;activate&#39;</span><span class='p'>,</span> <span class='mi'>0</span> <span class='p'>);</span>
 </code></pre>
 </div>
-<p>Note that calling a method like this will return a jQuery object, not the actual return value. You can retrieve the controller instance directly using the <em>.controllers()</em> or <em>.controller()</em> helpers included in this plugin.</p>
+<p>Note that calling a method like this will return a jQuery object, not the actual return value. You can retrieve the controller instance directly using the <em>.controls()</em> or <em>.control()</em> helpers included in this plugin.</p>
 <div class='highlight'><pre><code class='javascript'><span class='c1'>//- Returns an array of controllers on the match</span>
-<span class='kd'>var</span> <span class='nx'>allControls</span> <span class='o'>=</span> <span class='nx'>$</span><span class='p'>(</span> <span class='s1'>&#39;.tabs&#39;</span> <span class='p'>).</span><span class='nx'>controllers</span><span class='p'>();</span>
+<span class='kd'>var</span> <span class='nx'>allControls</span> <span class='o'>=</span> <span class='nx'>$</span><span class='p'>(</span> <span class='s1'>&#39;.tabs&#39;</span> <span class='p'>).</span><span class='nx'>controls</span><span class='p'>();</span>
 <span class='nx'>allControllers</span><span class='p'>[</span> <span class='mi'>0</span> <span class='p'>].</span><span class='nx'>activate</span><span class='p'>(</span> <span class='mi'>0</span> <span class='p'>);</span>
 
 <span class='c1'>//- Returns the first controller on the match</span>
-<span class='kd'>var</span> <span class='nx'>control</span> <span class='o'>=</span> <span class='nx'>$</span><span class='p'>(</span> <span class='s1'>&#39;.tabs&#39;</span> <span class='p'>).</span><span class='nx'>controller</span><span class='p'>();</span>
+<span class='kd'>var</span> <span class='nx'>control</span> <span class='o'>=</span> <span class='nx'>$</span><span class='p'>(</span> <span class='s1'>&#39;.tabs&#39;</span> <span class='p'>).</span><span class='nx'>control</span><span class='p'>();</span>
 <span class='nx'>control</span><span class='p'>.</span><span class='nx'>activate</span><span class='p'>(</span> <span class='mi'>0</span> <span class='p'>);</span>
 </code></pre>
 </div>
 <h3 id='cancontrolview_'>can.Control.view <code>control.view( [ viewname ], [ data ] )</code></h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.control.view.1.0b.js'>can.control.view.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.control.view.1.0b2.js'>can.control.view.js</a></p>
 
 <p><a href='http://donejs.com/docs.html#!can.Control.view'>can.Control.view</a> renders a view from a URL in a <em>views/controlname</em> folder. If no viewname is supplied it uses the current action name. If no data is provided the control instance is passed to the view. Note that you have to set a name when creating the Control construct for <em>view</em> to work.</p>
 <div class='highlight'><pre><code class='javascript'><span class='nx'>can</span><span class='p'>.</span><span class='nx'>Control</span><span class='p'>(</span> <span class='s1'>&#39;Editor&#39;</span><span class='p'>,</span> <span class='p'>{</span>
@@ -1724,7 +1727,7 @@
 
 <h3 id='todo'>Todo</h3>
 
-<p><img alt='CanJS Todo App' src='images/examples/todo.png' /></p>
+<p><img src='images/examples/todo.png' alt='CanJS Todo App' /></p>
 
 <p>A simple todo application written in the style of <a href='https://github.com/addyosmani/todomvc/'>TodoMVC</a>. There is an implementation for each library supported by CanJS including an <strong>extra</strong> Dojo, YUI, and jQuery one using <a href='#can_control-templated_event_handlers_pt_2'>templated event binding</a> to bind to widget events. Todo is a good example of the power of <a href='#can_ejs-live_binding'>EJS&#8217;s live binding</a>.</p>
 
@@ -1752,7 +1755,7 @@
 
 <h3 id='canplay'>CanPlay</h3>
 
-<p><img alt='Can Play Demo' src='http://donejs.com/examples/player/screen.png' /></p>
+<p><img src='http://donejs.com/examples/player/screen.png' alt='Can Play Demo' /></p>
 
 <p>A simple HTML5 video player application utilizing <a href='http://popcornjs.org/'>Popcorn.js</a>. We set up two <code>can.Control</code> instances to control the <code>Popcorn</code> video as well as update the position of the player. This demo makes use of <a href='#can_control-templated_event_handlers_pt_1'>Templated Event Handlers</a> by passing the <code>Popcorn</code> wrapped video element to the controller instances. The controllers then bind to events using the <code>&quot;{video}&quot;</code> templated event handler to listen and interact with the <code>video</code> element.</p>
 
@@ -1762,7 +1765,7 @@
 
 <p>Srchr searches several data sources for content and displays it to the user. It is built using the jQuery version of CanJS and is a great example of how to create dumb, isolated widgets that are loosely coupled to the rest of the application.</p>
 
-<p><img alt='CanJS Srchr jQuery App' src='images/examples/srchr.png' /></p>
+<p><img src='images/examples/srchr.png' alt='CanJS Srchr jQuery App' /></p>
 
 <p><a href='http://donejs.com/examples/srchr/index.html'><strong>View the App</strong></a></p>
 
@@ -1770,7 +1773,7 @@
 
 <h2 id='why_canjs'>Why CanJS</h2>
 
-<p>There are many libraries out there and it can be difficult to pick the one that&#8217;s right for you. In our (not so, but should be) humble opinion, the technology in CanJS is simply the best. It strikes a balance between:</p>
+<p>There are many libraries out there and it can be difficult to pick the one that&#8217;s right for you. In our humble opinion, the technology in CanJS is simply the best.<br />It strikes a balance between:</p>
 
 <ul>
 <li>Size</li>
@@ -1784,7 +1787,7 @@
 <li>Flexibility</li>
 </ul>
 
-<p>The following are our very biased reasons to use CanJS.</p>
+<p>The following are the reasons to use CanJS.</p>
 
 <h3 id='size'>Size</h3>
 
@@ -1806,7 +1809,7 @@
 
 <h3 id='ease_of_use'>Ease of use</h3>
 
-<p>This site highlights the most important features of CanJS. The library comes with thorough documentation and examples on <a href='http://donejs.com/docs.html'>its DoneJS documentation page</a>. There are example apps for each library, and several example apps for jQuery.</p>
+<p>This site highlights the most important features of CanJS. The library comes with thorough documentation and examples on the <a href='http://donejs.com/docs.html'>DoneJS documentation page</a>. There are example apps for each library and several example for jQuery.</p>
 
 <p>CanJS is also supported by Bitovi, formerly <a href='http://jupiterjs.com'>Jupiter Consulting</a>. We are extremely active on the <a href='https://forum.javascriptmvc.com/#Forum/canjs'>forums</a>. And should the need arise, we provide support, training, and development.</p>
 
@@ -1859,7 +1862,7 @@
 <span class='cp'>&lt;%</span> <span class='p'>}</span> <span class='p'>)</span> <span class='cp'>%&gt;</span><span class='x' />
 </code></pre>
 </div>
-<p>If <code>Todo.findAll( { due: &#39;today&#39; } )</code> and <code>Todo.findAll( { type: &#39;critical&#39; } )</code> both have the same todo instance&#8217;s data like:</p>
+<p>If the result for of <code>Todo.findAll( { due: &#39;today&#39; } )</code> and <code>Todo.findAll( { type: &#39;critical&#39; } )</code> both share a todo instance like:</p>
 <div class='highlight'><pre><code class='javascript'><span class='p'>{</span> <span class='s2'>&quot;id&quot;</span> <span class='o'>:</span> <span class='mi'>5</span><span class='p'>,</span> <span class='s2'>&quot;name&quot;</span> <span class='o'>:</span> <span class='s2'>&quot;do dishes&quot;</span><span class='p'>,</span> <span class='s2'>&quot;due&quot;</span> <span class='o'>:</span> <span class='s2'>&quot;today&quot;</span><span class='p'>,</span> <span class='s2'>&quot;type&quot;</span> <span class='o'>:</span> <span class='s2'>&quot;critical&quot;</span> <span class='p'>}</span>
 </code></pre>
 </div>
@@ -1925,7 +1928,7 @@
 
 <p>But our favorite bit of flexibility is how <a href='#can_observe'>can.Observe</a> works with nested data. It converts nested objects into observes automatically. For example:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>person</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Observe</span><span class='p'>({</span>
-  <span class='nx'>name</span><span class='o'>:</span> <span class='p'>{</span> <span class='nx'>first</span><span class='o'>:</span> <span class='s1'>&#39;Justin&#39;</span><span class='p'>,</span> <span class='nx'>last</span><span class='o'>:</span> <span class='s1'>&#39;Myer&#39;</span> <span class='p'>},</span>
+  <span class='nx'>name</span><span class='o'>:</span> <span class='p'>{</span> <span class='nx'>first</span><span class='o'>:</span> <span class='s1'>&#39;Justin&#39;</span><span class='p'>,</span> <span class='nx'>last</span><span class='o'>:</span> <span class='s1'>&#39;Meyer&#39;</span> <span class='p'>},</span>
   <span class='nx'>hobbies</span><span class='o'>:</span> <span class='p'>[</span> <span class='s1'>&#39;programming&#39;</span><span class='p'>,</span> <span class='s1'>&#39;party rocking&#39;</span> <span class='p'>]</span>
 <span class='p'>})</span>
 
@@ -1933,7 +1936,7 @@
 <span class='nx'>person</span><span class='p'>.</span><span class='nx'>attr</span><span class='p'>(</span> <span class='s1'>&#39;hobbies.0&#39;</span> <span class='p'>)</span> <span class='c1'>//-&gt; &#39;programming&#39;</span>
 </code></pre>
 </div>
-<p>But most important, <code>change</code> events bubble. Letting observe listen when a nested property changes:</p>
+<p>But most important, <code>change</code> events bubble, letting observes listen for when a nested property changes:</p>
 <div class='highlight'><pre><code class='javascript'><span class='nx'>person</span><span class='p'>.</span><span class='nx'>bind</span><span class='p'>(</span> <span class='s1'>&#39;change&#39;</span><span class='p'>,</span> <span class='kd'>function</span><span class='p'>(</span> <span class='nx'>ev</span><span class='p'>,</span> <span class='nx'>attr</span><span class='p'>,</span> <span class='nx'>how</span><span class='p'>,</span> <span class='nx'>newVal</span><span class='p'>,</span> <span class='nx'>oldVal</span> <span class='p'>)</span> <span class='p'>{</span>
   <span class='nx'>attr</span>   <span class='c1'>//-&gt; &#39;name.last&#39;</span>
   <span class='nx'>how</span>    <span class='c1'>//-&gt; &#39;set&#39;</span>
@@ -2061,7 +2064,77 @@ git submodule update --init --recursive</code></pre>
 
 <pre><code>js can/util/make.js</code></pre>
 
-<p>It puts the downloads in <code>can/dist</code>.</p>
+<p>It puts the downloads in <code>can/dist/edge</code>.</p>
+
+<h3 id='list_of_heroes'>List of heroes</h3>
+
+<p>The following lists everyone who&#8217;s contributed something to CanJS. If we&#8217;ve forgotten you, please add yourself.</p>
+
+<p>First, thanks to everyone who&#8217;s contributed to <a href='https://github.com/jupiterjs/javascriptmvc/contributors'>JavaScriptMVC</a> and <a href='https://github.com/jupiterjs/jquerymx/contributors'>jQueryMX</a>, and the people at <a href='http://bitovi.com/people/'>Bitovi</a>. You deserve heaps of recognition as CanJS is direcly based off JavaScriptMVC. This page is for contributors after CanJS&#8217;s launch.</p>
+
+<p><a href='https://github.com/yusufsafak'>yusufsafak</a> - <a href='https://github.com/jupiterjs/canjs/pull/30'>observe bindings</a>.<br /><a href='https://github.com/verto'>verto</a> - <a href='https://github.com/jupiterjs/canjs/pull/32'>destroy fix</a>.<br /><a href='https://github.com/WearyMonkey'>WearyMonkey</a> - <a href='https://github.com/jupiterjs/canjs/issues/27'>recursive observes</a>.<br /><a href='https://github.com/cohuman'>cohuman</a> - <a href='https://github.com/jupiterjs/canjs/pull/23'>model list dependencies</a>, <a href='https://github.com/jupiterjs/canjs/pull/26'>docco fix</a>.</p>
+
+<h3 id='change_log'>Change Log</h3>
+
+<p><strong>master</strong></p>
+
+<ul>
+<li>can.util - add: <a href='https://github.com/jupiterjs/canjs/commit/75e99f3b1545d4086ccdae259ccc87a3e8e7a018'>a util/function plugin</a></li>
+</ul>
+
+<p><strong>1.0 Beta 2</strong></p>
+
+<ul>
+<li>
+<p>can.util</p>
+
+<ul>
+<li>change: <a href='https://github.com/jupiterjs/canjs/commit/234fd3b9eca18abdbc3fdbea114be6a818bfe6e3'>reverse argument order of can.each</a></li>
+
+<li>change/fix: <a href='https://github.com/jupiterjs/canjs/issues/33'>buildFragment returns non cached frag</a></li>
+
+<li>fix: <a href='https://github.com/jupiterjs/canjs/commit/7fe391f59a1f54e3f197f31e20276646f82e7f2e'>zepto&#8217;s isEmptyObject was broke</a></li>
+</ul>
+</li>
+
+<li>
+<p>can.observe</p>
+
+<ul>
+<li>feature: <a href='https://github.com/jupiterjs/canjs/issues/27'>recursive observes don&#8217;t blow up</a></li>
+
+<li>change: <a href='https://github.com/jupiterjs/canjs/commit/234fd3b9eca18abdbc3fdbea114be6a818bfe6e3'>reverse argument order of can.each</a></li>
+
+<li>fix: <a href='https://github.com/jupiterjs/canjs/commit/4081a9baf4441c1002467342baae3cdd885994c6'>attr change events have old value</a></li>
+</ul>
+</li>
+
+<li>
+<p>can.model</p>
+
+<ul>
+<li>fix: <a href='https://github.com/jupiterjs/canjs/commit/c93ae5478eea7fdb88fa6fc03211d81c8d4ca3bd'>findOne and findAll work with super</a></li>
+
+<li>fix: <a href='https://github.com/jupiterjs/canjs/commit/14d05c29e71ed8c462ba49b740d9eb8e342d3c85'>model using custom id for store</a></li>
+
+<li>fix: <a href='https://github.com/jupiterjs/canjs/issues/32'>destroy not working with templated id</a></li>
+</ul>
+</li>
+
+<li>
+<p>can.route</p>
+
+<ul>
+<li>fix: a host of bugs in libaries other than jQuery because can.route was not properly tested in other libraries.</li>
+
+<li>fix: can.param fixed in <a href='https://github.com/jupiterjs/canjs/commit/77dfa012b2f6baa7dfb0fe84f2d62aeb5b04fc90'>dojo</a>,</li>
+</ul>
+</li>
+</ul>
+
+<p><strong>1.0 Beta 1</strong> (April 1st 2011)</p>
+
+<p>Released!</p>
 		</div>
 	</div>
 </div>

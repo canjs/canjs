@@ -95,6 +95,12 @@ $.Controller('Menu', {
 		}
 	},
 	markActive : function(active, current){
+		clearTimeout(this._markActiveAnalytics)
+		this._markActiveAnalytics = setTimeout(function(){
+			var path = current.parents('li').find('>a').slice(0,-1).map(function(){ return $(this).text() });
+			path = $.makeArray(path).reverse().join('> ').replace(/\s+$/, "");
+			_gaq.push(['_trackEvent', 'sectionRead', path]);
+		}, 5000)
 		var currentLevel = current.data('level'),
 				activeLevel = active.data('level'),
 				method = {2: 'siblings', 3: 'closest'}[currentLevel],
@@ -246,12 +252,15 @@ $.Controller('Menu', {
 		clearTimeout(this._positionTimeout);
 		this._positionTimeout = setTimeout(this.proxy(function(){
 			if(animationCount === 0){
-				var active = this.find('#menu a.active'),
-						activePos = active.position().top,
+				var active = this.find('#menu a.active');
+				if(active.length === 0){
+					return;
+				}
+				var activePos = active.position().top,
 						marginTop = parseInt(this._menu.css('marginTop'), 10),
 						wrapHeight = this.find('#inner-menu-wrap').height();
 
-				console.log('TIEMOUT', marginTop);
+				//console.log('TIEMOUT', marginTop);
 
 				if(marginTop > 0){
 					this._menu.css('marginTop', '0px');
@@ -265,7 +274,7 @@ $.Controller('Menu', {
 				} else if(viewPortPos < 0){
 					this._menu.css({'marginTop': (marginTop + Math.abs(viewPortPos)) + "px"})
 				} else if(viewPortPos + 25 > wrapHeight){
-					console.log('!OUT:', this._menu.css('marginTop'), marginTop, (viewPortPos - wrapHeight))
+					//console.log('!OUT:', this._menu.css('marginTop'), marginTop, (viewPortPos - wrapHeight))
 					marginTop = marginTop - 100
 					this._menu.css({'marginTop': marginTop + "px"})
 				}
