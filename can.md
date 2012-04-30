@@ -1,4 +1,5 @@
-@page index CanJS
+@page canjs CanJS
+@parent index 0
 @description CanJS API Documentation.
 
 ## CanJS API Documentation
