@@ -344,7 +344,6 @@ test("empty default is matched even if last", function(){
 	});
 });
 
-
 test("order matched", function(){
 	can.route.routes = {};
 	can.route(":foo");
@@ -386,5 +385,4 @@ test("param order matching", function(){
 	res = can.route.param({recipe: "recipe1", task: "task2"});
 	equals(res,"/task2")
 })
-
 
