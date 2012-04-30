@@ -1,5 +1,5 @@
 @function can.view
-@parent can
+@parent index
 @description A JavaScript template framework.
 
 can.view is a JavaScript template framework that provides:
