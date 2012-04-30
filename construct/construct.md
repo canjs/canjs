@@ -1,6 +1,7 @@
 @class can.Construct
 @parent canjs
 
+
 can.Construct provides easy prototypal inheritance for JavaScript by creating constructor
 functions that can be used with the __new__ keyword. It  is based off John Resig's
 [http://ejohn.org/blog/simple-javascript-inheritance/|Simple JavaScript Inheritance] library.
