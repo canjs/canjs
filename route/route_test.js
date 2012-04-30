@@ -195,6 +195,16 @@ test("param-deparam", function(){
 	same(data, obj)
 })
 
+test("deparam-param", function(){
+	can.route.routes = {};
+	can.route(":foo/:bar",{foo: 1, bar: 2});
+	var res = can.route.param({foo: 1, bar: 2});
+	equals(res,"/","empty slash")
+	
+	var deparamed = can.route.deparam("/")
+	same(deparamed, {foo: 1, bar: 2, route: ":foo/:bar"})
+})
+
 test("precident", function(){
 	can.route.routes = {};
 	can.route(":who",{who: "index"});
@@ -223,7 +233,7 @@ test("precident", function(){
 		"can.Control" );
 })
 
-test("precident2", function(){
+test("better matching precident", function(){
 	can.route.routes = {};
 	can.route(":type",{who: "index"});
 	can.route(":type/:id");
@@ -282,13 +292,44 @@ test("updating the hash", function(){
 			equal(after,"#!bar/"+encodeURIComponent("\/"));
 			start();
 
+			can.remove(can.$(iframe))
+
 		},30);
 	}
 	var iframe = document.createElement('iframe');
 	iframe.src = steal.root.join("can/route/testing.html");
 	can.$("#qunit-test-area")[0].appendChild(iframe);
-<<<<<<< HEAD
 });
+
+test("unsticky routes", function(){
+	stop();
+	window.routeTestReady = function(iCanRoute, loc){
+		iCanRoute(":type")
+		iCanRoute(":type/:id");
+		iCanRoute.attr({type: "bar"});
+
+		setTimeout(function(){
+			
+			iCanRoute.attr({type: "bar", id: "\/"});
+			
+			setTimeout(function(){
+				var after = loc.href.substr(loc.href.indexOf("#"));
+				equal(after,"#!bar/"+encodeURIComponent("\/"));
+				start();
+	
+				can.remove(can.$(iframe))
+	
+			},30);
+			
+		},30)
+
+
+	}
+	var iframe = document.createElement('iframe');
+	iframe.src = steal.root.join("can/route/testing.html");
+	can.$("#qunit-test-area")[0].appendChild(iframe);
+});
+
 
 test("empty default is matched even if last", function(){
 	
@@ -303,6 +344,47 @@ test("empty default is matched even if last", function(){
 	});
 });
 
-=======
->>>>>>> f8eae9be201492089d521180242672bd4e2af0f7
+
+test("order matched", function(){
+	can.route.routes = {};
+	can.route(":foo");
+	can.route(":bar")
+	
+	var obj = can.route.deparam("abc");
+	same(obj, {
+		foo : "abc",
+		route: ":foo"
+	});
 });
+
+test("param order matching", function(){
+	can.route.routes = {};
+	can.route("",{
+		bar: "foo"
+	});
+	can.route("something/:bar");
+	var res = can.route.param({bar: "foo"});
+	equal(res, "", "picks the shortest, best match");
+	
+	// picks the first that matches everything ...
+	can.route.routes = {};
+
+	can.route(":recipe",{
+		recipe: "recipe1",
+		task: "task3"
+	});
+	  
+	can.route(":recipe/:task",{
+		recipe: "recipe1",
+		task: "task3"
+	});
+	
+	res = can.route.param({recipe: "recipe1", task: "task3"});
+	
+	equals(res, "", "picks the first match of everything");
+	
+	res = can.route.param({recipe: "recipe1", task: "task2"});
+	equals(res,"/task2")
+})
+
+

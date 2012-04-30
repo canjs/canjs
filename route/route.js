@@ -27,13 +27,25 @@ steal('can/observe', 'can/util/string/deparam', function() {
         // variables are present in the data, the number of matches is returned 
         // to allow discerning between general and more specific routes. 
 		matchesData = function(route, data) {
-			var count = 0, i = 0;
+			var count = 0, i = 0, defaults = {};
+			// look at default values, if they match ...
+			for( var name in route.defaults ) {
+				if(route.defaults[name] === data[name]){
+					// mark as matched
+					defaults[name] = 1;
+					count++;
+				}
+			}
 			for (; i < route.names.length; i++ ) {
 				if (!data.hasOwnProperty(route.names[i]) ) {
 					return -1;
 				}
-				count++;
+				if(!defaults[route.names[i]]){
+					count++;
+				}
+				
 			}
+			
 			return count;
 		},
 		onready = !0,
@@ -102,16 +114,25 @@ steal('can/observe', 'can/util/string/deparam', function() {
 				// Need to have at least 1 match.
 				matches = 0,
 				matchCount,
-				routeName = data.route;
+				routeName = data.route,
+				propCount = 0;
+				
 			delete data.route;
 			// If we have a route name in our `can.route` data, use it.
 			if ( ! ( routeName && (route = can.route.routes[routeName]))){
+				each(data, function(){propCount++});
 				// Otherwise find route.
 				each(can.route.routes, function(temp, name){
+					// best route is the first with all defaults matching
+					
+					
 					matchCount = matchesData(temp, data);
 					if ( matchCount > matches ) {
 						route = temp;
 						matches = matchCount
+					}
+					if(matchCount >= propCount){
+						return false;
 					}
 				});
 			}
@@ -394,7 +415,9 @@ steal('can/observe', 'can/util/string/deparam', function() {
 	can.route.bind("change", function() {
 		clearTimeout( timer );
 		timer = setTimeout(function() {
-			location.hash = "#!" + can.route.param(can.route.data.serialize())
+			var serialized = can.route.data.serialize();
+			delete serialized.route;
+			location.hash = "#!" + can.route.param(serialized)
 		}, 1);
 	});
 	// `onready` event...
