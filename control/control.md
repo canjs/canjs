@@ -1,5 +1,5 @@
 @class can.Control
-@parent can
+@parent index
 @plugin can/control
 @download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/control/control.js
 @test can/control/qunit.html

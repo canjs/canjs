@@ -1,5 +1,5 @@
 @class can.Observe
-@parent can
+@parent index
 @test can/observe/qunit.html
 
 can.Observe provides the observable pattern for
