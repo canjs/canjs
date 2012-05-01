@@ -10,6 +10,13 @@ steal('can/util/object', function() {
 		if (!can.fixture.on) {
 			return;
 		}
+
+		//simple wrapper for logging
+		var log = function(){
+			if ( window.console && console.log ) {
+				console.log.apply(console, Array.prototype.slice.call(arguments) );
+			}
+		}
 		
 		// add the fixture option if programmed in
 		var data = overwrite(settings);
@@ -17,7 +24,7 @@ steal('can/util/object', function() {
 		// if we don't have a fixture, do nothing
 		if (!settings.fixture) {
 			if (window.location.protocol === "file:") {
-				console.log("ajax request to " + settings.url + ", no fixture found");
+				log("ajax request to " + settings.url + ", no fixture found");
 			}
 			return;
 		}
@@ -41,7 +48,7 @@ steal('can/util/object', function() {
 			delete settings.fixture;
 			
 			//@steal-remove-start
-			console.log("looking for fixture in " + url);
+			log("looking for fixture in " + url);
 			//@steal-remove-end
 			
 			settings.url = url;
@@ -55,7 +62,7 @@ steal('can/util/object', function() {
 		}
 		else {
 			//@steal-remove-start
-			console.log("using a dynamic fixture for " + settings.type + " " + settings.url);
+			log("using a dynamic fixture for " + settings.type + " " + settings.url);
 			//@steal-remove-end
 			
 			//it's a function ... add the fixture datatype so our fixture transport handles it
@@ -856,7 +863,7 @@ steal('can/util/object', function() {
 	 *
 	 * Defaults to `steal.root` unless set.
 	 */
-	can.fixture.rootUrl = steal.root;
+	can.fixture.rootUrl = window.steal ? steal.root : undefined;
 
 	can.fixture["-handleFunction"] = function( settings ) {
 		if ( typeof settings.fixture === "string" && can.fixture[settings.fixture] ) {
