@@ -51,4 +51,4 @@ steal('./jquery.1.7.1.js', "./../preamble.js", function( $ ) {
 		});
 		oldClean(elems);
 	};
-}).then('can/util/array/each.js')
+}).then('can/util/array/each.js', 'can/util/object')
