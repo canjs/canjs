@@ -269,4 +269,4 @@ steal({
 			
 		
 	}
-},'../deferred.js')
+},'../deferred.js', 'can/util/object')
