@@ -85,6 +85,7 @@ steal('steal/build/pluginify', function() {
 				"construct/proxy/proxy" : "construct.proxy",
 				"construct/super/super" : "construct.super",
 				"control/plugin/plugin" : "control.plugin",
+				"control/view/view" : "control.view",
 				"observe/attributes/attributes" : "observe.attributes",
 				"observe/delegate/delegate" : "observe.delegate",
 				"observe/setter/setter" : "observe.setter",
