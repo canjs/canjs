@@ -404,6 +404,6 @@
 				}
 			};
 
-	}).then("../deferred.js", "can/util/object")
+	}).then("../deferred.js")
 
 })();
