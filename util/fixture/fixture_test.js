@@ -257,4 +257,62 @@ test("replacing and removing a fixture", function(){
 	},'json')
 });
 
+test("can.fixture.make with can.Model", function() {
+	var store = can.fixture.make(100, function(i) {
+			return {
+				id : i,
+				name : 'Object ' + i
+			}
+		}),
+		Model = can.Model({
+			findAll : 'GET /models',
+			findOne : 'GET /models/{id}',
+			create  : 'POST /models',
+			update  : 'PUT /models/{id}',
+			destroy : 'DELETE /models/{id}'
+		}, {});
+
+	can.fixture('GET /models', store.findAll);
+	can.fixture('GET /models/{id}', store.findOne);
+	can.fixture('POST /models', store.create);
+	can.fixture('PUT /models/{id}', store.update);
+	can.fixture('DELETE /models/{id}', store.destroy);
+
+	stop();
+	Model.findAll().done(function(models) {
+		equals(models.length, 100, 'Got 100 models for findAll with no parameters');
+		equals(models[95].name, 'Object 95', 'All models generated properly');
+		start();
+	});
+
+	stop();
+	Model.findOne({ id : 51 }).done(function(data) {
+		equals(data.id, 51, 'Got correct object id');
+		equals('Object 51', data.name, 'Object name generated correctly');
+		start();
+	});
+
+	stop();
+	new Model({
+		name : 'My test object'
+	}).save().done(function(newmodel) {
+		equals(newmodel.id, 100, 'Id got incremented');
+		equals(newmodel.name, 'My test object');
+		start();
+	});
+
+	stop();
+	// Tests creating, deleting, updating
+	Model.findOne({ id : 100 }).done(function(model) {
+		equals(model.id, 100, 'Loaded new object');
+		model.attr('name', 'Updated test object');
+		model.save().done(function(model) {
+			equals(model.name, 'Updated test object', 'Successfully updated object');
+			model.destroy().done(function(deleted) {
+				start();
+			});
+		});
+	});
+});
+
 });
