@@ -198,4 +198,4 @@ can.$ = Zepto
 
 
 	
-}).then('../deferred.js','can/util/array/each.js', 'can/util/object')
+}).then('../deferred.js','can/util/array/each.js')
