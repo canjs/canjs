@@ -33,7 +33,6 @@ test("subsets", function(){
 });
 
 test("subset compare", function(){
-	
 	ok( can.Object.subset(
 		{type: "FOLDER"},
 		{type: "FOLDER"}), 
@@ -42,43 +41,43 @@ test("subset compare", function(){
 	
 	ok( can.Object.subset(
 		{type: "FOLDER", parentId: 5},
-		{type: "FOLDER"}), 
-		
+		{type: "FOLDER"}),
+
 		"sub set" );
-	
+
 	ok(! can.Object.subset(
 		{type: "FOLDER"},
-		{type: "FOLDER", parentId: 5}), 
-		
+		{type: "FOLDER", parentId: 5}),
+
 		"wrong way" );
-	
-	
-	ok(! $.Object.subset(
+
+
+	ok(! can.Object.subset(
 		{type: "FOLDER", parentId: 7},
-		{type: "FOLDER", parentId: 5}), 
-		
+		{type: "FOLDER", parentId: 5}),
+
 		"different values" );
 
 	ok( can.Object.subset(
 		{type: "FOLDER", count: 5}, // subset
 		{type: "FOLDER"},
-		{count: null} ), 
-		
+		{count: null} ),
+
 		"count ignored" );
-	
-	
+
+
 	ok( can.Object.subset(
 		{type: "FOLDER", kind: "tree"}, // subset
 		{type: "FOLDER", foo: true, bar: true },
-		{foo: null, bar: null} ), 
-		
+		{foo: null, bar: null} ),
+
 		"understands a subset" );
 	ok( can.Object.subset(
 		{type: "FOLDER", foo: true, bar: true },
 		{type: "FOLDER", kind: "tree"}, // subset
-		
-		{foo: null, bar: null, kind : null} ), 
-		
+
+		{foo: null, bar: null, kind : null} ),
+
 		"ignores nulls" );
 });
 
@@ -97,7 +96,7 @@ test("searchText", function(){
 				return true;
 			}
 		};
-		
+
 	ok( can.Object.subset( item, searchText, compare ), "searchText" );
 });
 

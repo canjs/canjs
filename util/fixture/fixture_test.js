@@ -7,15 +7,20 @@ test("static fixtures", function(){
 	
 	can.fixture("GET something", "//can/util/fixture/fixtures/test.json");
 	can.fixture("POST something", "//can/util/fixture/fixtures/test.json");	
-	
-	can.$.get("something",function(data){
+
+	can.ajax({
+		url : 'something',
+		method : 'get'
+	}).done(function(data) {
 		equals(data.sweet,"ness","can.get works");
-		
-		can.$.post("something",function(data){
+		can.ajax({
+			url : 'something',
+			method : 'post'
+		}).done(function(data) {
 			equals(data.sweet,"ness","can.post works");
 			start();
-		},'json');
-	},'json');
+		})
+	})
 })
 
 test("dynamic fixtures",function(){
