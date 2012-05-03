@@ -6,6 +6,7 @@ var stl = steal('./setup.js')
 	.then('can/control/control_test.js')
 	.then('can/model/model_test.js')
 	.then('can/view/ejs/ejs_test.js')
+	.then('can/util/util_test.js')
 	.then(function(){
 		// Does the browser support window.onhashchange? Note that IE8 running in
 	    // IE7 compatibility mode reports true for 'onhashchange' in window, even

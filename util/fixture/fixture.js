@@ -524,7 +524,10 @@ steal('can/util/object', function () {
 		/**
 		 * @function can.util.fixture.make
 		 * @parent can.util.fixture
+		 *
 		 * Used to make fixtures for findAll / findOne style requests.
+		 *
+		 * ## With can.ajax
 		 *
 		 *     //makes a nested list of messages
 		 *     can.fixture.make(["messages","message"],1000, function(i, messages){
@@ -548,10 +551,41 @@ steal('can/util/object', function () {
 		 *        success: function( messages ) {  ... }
 		 *     });
 		 *
+		 * ## With can.Model
+		 *
+		 * You can use can.fixture.make to emulate all Ajax requests made by [can.Model]. With a model like this:
+		 *
+		 *      var Todo = can.Model({
+		 *          findAll : 'GET /todos',
+		 *          findOne : 'GET /todos/{id}',
+		 *          create  : 'POST /todos',
+		 *          update  : 'PUT /todos/{id}',
+		 *          destroy : 'DELETE /todos/{id}'
+		 *      }, {});
+		 *
+		 * And a generated fixture like this:
+		 *
+		 *      var store = can.fixture.make(100, function(i) {
+		 *          return {
+		 *              id : i,
+		 *              name : 'Todo ' + i
+		 *          }
+		 *      });
+		 *
+		 * You can map can.Model requests using the returned store:
+		 *
+		 *      can.fixture('GET /todos', store.findAll);
+		 *      can.fixture('GET /todos/{id}', store.findOne);
+		 *      can.fixture('POST /todos', store.create);
+		 *      can.fixture('PUT /todos/{id}', store.update);
+		 *      can.fixture('DELETE /todos/{id}', store.destroy);
+		 *
+		 *
 		 * @param {Array|String} types An array of the fixture names or the singular fixture name.
 		 * If an array, the first item is the plural fixture name (prefixed with -) and the second
 		 * item is the singular name.  If a string, it's assumed to be the singular fixture name.  Make
-		 * will simply add s to the end of it for the plural name.
+		 * will simply add s to the end of it for the plural name. If this parameter is not an array
+		 * or a String the fixture won't be added and only return the generator object.
 		 * @param {Number} count the number of items to create
 		 * @param {Function} make a function that will return json data representing the object.  The
 		 * make function is called back with the id and the current array of items.
@@ -567,6 +601,8 @@ steal('can/util/object', function () {
 		 *       }
 		 *     }
 		 *
+		 * @return {Object} A generator object providing fixture functions for *findAll*, *findOne*, *create*,
+		 * *update* and *destroy*.
 		 */
 		make : function (types, count, make, filter) {
 			var items = [], // TODO: change this to a hash
@@ -729,7 +765,6 @@ steal('can/util/object', function () {
 
 			return can.extend({
 				getId: getId,
-				findOne : findOne,
 				find : function(settings){
 					return findOne( getId(settings) );
 				}
