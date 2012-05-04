@@ -2096,6 +2096,36 @@ Srchr searches several data sources for content and displays it to the user. It 
 
 [View the source on github](https://github.com/jupiterjs/srchr)
 
+## Get Help
+
+There are several places you can go to ask questions or get help debugging problems.
+
+### Twitter
+
+Follow [@canjsus](https://twitter.com/#!/canjsus) for updates, announcements and quick answers to your questions.
+
+### Forums
+
+Visit the [Forums](http://forum.javascriptmvc.com/#Forum/canjs) for questions requiring more than 140 characters. CanJS has a thriving community that's always eager to help out.
+
+### IRC
+
+The CanJS IRC channel (`#canjs` on **irc.freenode.net**) is an awesome place to hang out with fellow CanJS developers and get your questions answered quickly.
+
+__Help Us Help You __
+
+Help the community help you by using the jsFiddle templates below. Just fork one of these templates and include the URL when you are asking for help.
+
+- [jQuery](http://jsfiddle.net/donejs/qYdwR/)
+- [Zepto](http://jsfiddle.net/donejs/7Yaxk/)
+- [Dojo](http://jsfiddle.net/donejs/9x96n/)
+- [YUI](http://jsfiddle.net/donejs/w6m73/)
+- [Mootools](http://jsfiddle.net/donejs/mnNJX/)
+
+### Get Help from Bitovi
+
+Bitovi _(developers of CanJS)_ offers [training](http://bitovi.com/training/) and [consulting](http://bitovi.com/consulting/) for your team. They can also provide private one-on-one support staffed by their JavaScript/Ajax experts. [Contact Bitovi](contact@bitovi.com) if you're interested.
+
 ## Why CanJS
 
 There are many libraries out there and it can be difficult 
