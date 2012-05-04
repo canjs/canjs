@@ -6,16 +6,23 @@ test("static fixtures", function(){
 	stop();
 	
 	can.fixture("GET something", "//can/util/fixture/fixtures/test.json");
-	can.fixture("POST something", "//can/util/fixture/fixtures/test.json");	
-	
-	can.$.get("something",function(data){
+	can.fixture("POST something", "//can/util/fixture/fixtures/test.json");
+
+	can.ajax({
+		url : 'something',
+		dataType : 'json'
+	}).done(function(data) {
 		equals(data.sweet,"ness","can.get works");
-		
-		can.$.post("something",function(data){
+		can.ajax({
+			url : 'something',
+			method : 'POST',
+			dataType : 'json'
+		}).done(function(data) {
 			equals(data.sweet,"ness","can.post works");
 			start();
-		},'json');
-	},'json');
+		});
+		start();
+	});
 })
 
 test("dynamic fixtures",function(){
@@ -23,57 +30,72 @@ test("dynamic fixtures",function(){
 	can.fixture.delay = 10;
 	can.fixture("something", function(){
 		return [{sweet: "ness"}]
-	})
-	
-	can.$.get("something",function(data){
+	});
+
+	can.ajax({
+		url : 'something',
+		dataType : 'json'
+	}).done(function(data) {
 		equals(data.sweet,"ness","can.get works");
 		start();	
-	},'json');
+	});
 });
 
 test("fixture function", 3, function(){
 	stop();
 	var url = steal.root.join("can/util/fixture/fixtures/foo.json")+'';
 	can.fixture(url,"//can/util/fixture/fixtures/foobar.json" );
-	
-	can.$.get(url,function(data){
+
+	can.ajax({
+		url : url,
+		dataType : 'json'
+	}).done(function(data){
 		equals(data.sweet,"ner","url passed works");
 		can.fixture(url,"//can/util/fixture/fixtures/test.json" );
-		
-		can.$.get(url,function(data){ 
+
+		can.ajax({
+			url : url,
+			dataType : 'json'
+		}).done(function(data){
 			equals(data.sweet,"ness","replaced");
 			can.fixture(url, null );
-		
-			can.$.get(url,function(data){ 			
-				equals(data.a,"b","removed");				
-				start();				
-			},'json')						
-		},'json')		
-	},"json");
+
+			can.ajax({
+				url : url,
+				dataType : 'json'
+			}).done(function(data){
+				equals(data.a,"b","removed");
+				start();
+			})
+		});
+	});
 });
 
-test("fixtures with converters", function(){
-	stop();
-	can.ajax( {
-	  url : steal.root.join("can/util/fixture/fixtures/foobar.json")+'',
-	  dataType: "json fooBar",
-	  converters: {
-	    "json fooBar": function( data ) {
-	      // Extract relevant text from the xml document
-	      return "Mr. "+data.name;
-	    }
-	  },
-	  fixture : function(){
-	  	return {
-			name : "Justin"
-		}
-	  },
-	  success : function(prettyName){
-	  	start();
-		equals(prettyName, "Mr. Justin")
-	  }
-	});
-})
+if(typeof STEALJQUERY !== 'undefined') {
+	// Converters only work with jQuery
+	test("fixtures with converters", function(){
+		stop();
+		can.ajax( {
+		  url : steal.root.join("can/util/fixture/fixtures/foobar.json")+'',
+		  dataType: "json fooBar",
+		  converters: {
+		    "json fooBar": function( data ) {
+		      // Extract relevant text from the xml document
+		      return "Mr. "+data.name;
+		    }
+		  },
+		  fixture : function(){
+		    return {
+				name : "Justin"
+			}
+		  },
+		  success : function(prettyName){
+		    start();
+			equals(prettyName, "Mr. Justin")
+		  }
+		});
+	})
+}
 
 test("can.fixture.make fixtures",function(){
 	stop();
@@ -91,7 +113,7 @@ test("can.fixture.make fixtures",function(){
 	})
 	can.ajax({
 		url: "things",
-		type: "json",
+		dataType: "json",
 		data: {
 			offset: 100,
 			limit: 200,
@@ -117,16 +139,14 @@ test("simulating an error", function(){
 	
 	can.ajax({
 		url : "/foo",
-		success : function(){
-			ok(false, "success called");
-			start();
-		},
-		error : function(jqXHR, status, statusText){
-			ok(true, "error called");
-			equals(statusText, st);
-			start();
-		}
-	})
+		dataType : 'json'
+	}).done(function(){
+		ok(false, "success called");
+		start();
+	}).fail(function(dfd){
+		ok(true, "error called");
+		start();
+	});
 })
 
 test("rand", function(){
@@ -223,11 +243,17 @@ test("fixture function gets id", function(){
 	})
 	
 	stop();
-	
-	can.$.get("/thingers/5", {}, function(data){
-		start();
+
+	can.ajax({
+		url : "/thingers/5",
+		dataType : 'json',
+		data : {
+			id : 5
+		}
+	}).done(function(data) {
 		ok(data.id)
-	},'json')
+		start();
+	});
 });
 
 test("replacing and removing a fixture", function(){
@@ -237,24 +263,31 @@ test("replacing and removing a fixture", function(){
 	});
 	
 	stop();
-	
-	can.$.get(url,{}, function(json){
-		equals(json.weird,"ness!","fixture set right")
-		
+
+	can.ajax({
+		url : url,
+		dataType : 'json'
+	}).done(function(json) {
+		equals(json.weird,"ness!","fixture set right");
 		can.fixture("GET "+url, function(){
 			return {weird: "ness?"}
-		})
-		
-		can.$.get(url,{}, function(json){
+		});
+
+		can.ajax({
+			url : url,
+			dataType : 'json'
+		}).done(function(json) {
 			equals(json.weird,"ness?","fixture set right");
-			can.fixture("GET "+url, null )
-			
-			can.$.get(url,{}, function(json){
+			can.fixture("GET "+url, null );
+			can.ajax({
+				url : url,
+				dataType : 'json'
+			}).done(function(json) {
 				equals(json.weird,"ness","fixture set right");
 				start();
-			},'json');	
-		},'json')			
-	},'json')
+			});
+		});
+	});
 });
 
 });
