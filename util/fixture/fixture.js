@@ -18,6 +18,9 @@ steal('can/util/object', function () {
 				}
 			}
 
+			// We always need the type which can also be called method, default to GET
+			settings.type = settings.type || settings.method || 'GET';
+
 			// add the fixture option if programmed in
 			var data = overwrite(settings);
 
@@ -101,7 +104,7 @@ steal('can/util/object', function () {
 		};
 
 	//used to check urls
-	// check if jQuery	
+	// check if jQuery
 	if (can.ajaxPrefilter && can.ajaxTransport) {
 
 		// the pre-filter needs to re-route the url
