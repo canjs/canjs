@@ -1,4 +1,4 @@
-if(!window.can){
+if(!window.can || !can){
 	steal('can/util')
 }
 
