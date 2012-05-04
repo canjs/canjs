@@ -10,10 +10,13 @@ steal('can/util/object', function() {
 		if (!can.fixture.on) {
 			return;
 		}
-		
+
+		// We always need the type which can also be called method, default to GET
+		settings.type = settings.type || settings.method || 'GET';
+
 		// add the fixture option if programmed in
 		var data = overwrite(settings);
-		
+
 		// if we don't have a fixture, do nothing
 		if (!settings.fixture) {
 			if (window.location.protocol === "file:") {
@@ -21,12 +24,12 @@ steal('can/util/object', function() {
 			}
 			return;
 		}
-		
+
 		//if referencing something else, update the fixture option
 		if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
 			settings.fixture = can.fixture[settings.fixture];
 		}
-		
+
 		// if a string, we just point to the right url
 		if (typeof settings.fixture == "string") {
 			var url = settings.fixture;
@@ -125,7 +128,6 @@ steal('can/util/object', function() {
 		can.ajax = function(settings){
 			updateSettings(settings, settings);
 			if(settings.fixture){
-				
 				var d = new can.Deferred();
 				d.getResponseHeader = function(){}
 				d.then(settings.success,settings.fail)
