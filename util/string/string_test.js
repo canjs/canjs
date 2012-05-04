@@ -8,10 +8,6 @@ test("can.sub", function(){
 	var foo = {b: "c"};
 	
 	equals(can.sub("a{b}",foo,true),"ac");
-	
-	ok(!foo.b, "removed this b");
-	
-	
 });
 
 test("can.sub double", function(){
@@ -35,6 +31,7 @@ test("can.getObject", function(){
 	
 	equals(obj,0, 'got 0 (falsey stuff)')
 });
+
 /*
 test("$.String.niceName", function(){
 	var str = "some_underscored_string";
