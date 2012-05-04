@@ -71,8 +71,8 @@ test("fixture function", 3, function(){
 	});
 });
 
-if(typeof STEALJQUERY !== 'undefined') {
-	// Converters only work with jQuery
+// Converters only work with jQuery
+if(typeof jQuery !== 'undefined') {
 	test("fixtures with converters", function(){
 		stop();
 		can.ajax( {
