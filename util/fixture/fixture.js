@@ -728,7 +728,7 @@ steal('can/util/object', function () {
 					}
 
 					// TODO: make it work with non-linear ids ..
-					can.extend(findOne(id), settings.data);
+					can.extend(findOne(id) || {}, settings.data);
 					return can.fixture["-restDestroy"](settings, cbType)
 				},
 				create : function (settings, cbType) {
