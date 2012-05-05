@@ -2048,6 +2048,10 @@ $( '#todos' ).html( 'todo/todos.ejs', [
 ]);
 {% endhighlight %}
 
+### Third Party Extensions and Plugins
+
+ - [TonfaJS](https://github.com/retro/Tonfa.js) - Glues CanJS and jQueryMobile together.
+
 ## Examples
 
 Check out these sweet aps built in CanJS.
