@@ -1,5 +1,41 @@
 (function(can, window, undefined){
-define("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){
+	// data.js
+	// ---------
+	// _jQuery-like data methods._
+  var data = {}, dataAttr = $.fn.data,
+    uuid = $.uuid = +new Date(),
+    exp  = $.expando = 'Zepto' + uuid;
+
+  function getData(node, name) {
+    var id = node[exp], store = id && data[id];
+    return name === undefined ? store || setData(node) :
+      (store && store[name]) || dataAttr.call($(node), name);
+  }
+
+  function setData(node, name, value) {
+    var id = node[exp] || (node[exp] = ++uuid),
+      store = data[id] || (data[id] = {});
+    if (name !== undefined) store[name] = value;
+    return store;
+  };
+
+  $.fn.data = function(name, value) {
+    return value === undefined ?
+      this.length == 0 ? undefined : getData(this[0], name) :
+      this.each(function(idx){
+        setData(this, name, $.isFunction(value) ?
+                value.call(this, idx, getData(this, name)) : value);
+      });
+  };
+  $.cleanData = function(elems){
+  	for ( var i = 0, elem;
+		(elem = elems[i]) !== undefined; i++ ) {
+      can.trigger(elem,"destroyed",[],false)
+			var id = elem[exp]
+			delete data[id];
+		}
+  }
+;
 
 	// event.js
 	// ---------
@@ -54,388 +90,163 @@ can.dispatch = function(event){
 
 ;
 
-define("plugd/trigger",["dojo"], function(dojo){
-    
-	var d = dojo, isfn = d.isFunction, 
-		leaveRe = /mouse(enter|leave)/, 
-		_fix = function(_, p){
-			return "mouse" + (p == "enter" ? "over" : "out"); 
-		},
-		mix = d._mixin,
-		
-		// the guts of the node triggering logic:
-		// the function accepts node (not string|node), "on"-less event name,
-		// and an object of args to mix into the event. 
-		realTrigger = d.doc.createEvent ? 
-			function(n, e, a){
-				// the sane branch
-				var ev = d.doc.createEvent("HTMLEvents");
-				e = e.replace(leaveRe, _fix);
-				// destroyed events should not bubble
-				ev.initEvent(e,  e === "destroyed" ? false : true, true);
-				a && mix(ev, a);
-				n.dispatchEvent(ev);
-			} : 
-			function(n, e, a){
-				// the janktastic branch
-				var ev = "on" + e, stop = false, lc = e.toLowerCase(), node = n; 
-				try{
-// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
-//	createEvent path above, and also fails on _some_ native-named events. 
-//					if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
-//						// if the event is one of those listed in our NodeList list
-//						// in lowercase form but is mixed case, throw to avoid
-//						// fireEvent. /me sighs. http://gist.github.com/315318
-//						throw("janktastic");
-//					}
-					n.fireEvent(ev);
-				}catch(er){
-					// a lame duck to work with. we're probably a 'custom event'
-					var evdata = mix({ 
-						type: e, target: n, faux: true,
-						// HACK: [needs] added support for customStopper to _base/event.js
-						// some tests will fail until del._stopPropagation has support.
-						_stopper: function(){ stop = this.cancelBubble; }
-					}, a);
-				
-					isfn(n[ev]) && n[ev](evdata);
-				
-					// handle bubbling of custom events, unless the event was stopped.
-					while(!stop && n !== d.doc && n.parentNode){
-						n = n.parentNode;
-						isfn(n[ev]) && n[ev](evdata);
-					}
-				}
-			}
-	;
-	
-	d._trigger = function(node, event, extraArgs){
-		// summary:
-		//		Helper for `dojo.trigger`, which handles the DOM cases. We should never
-		//		be here without a domNode reference and a string eventname.
-		var n = d.byId(node), ev = event && event.slice(0, 2) == "on" ? event.slice(2) : event;
-		realTrigger(n, ev, extraArgs);
-	};
-		
-	d.trigger = function(obj, event, extraArgs){
-		// summary: 
-		//		Trigger some event. It can be either a Dom Event, Custom Event, 
-		//		or direct function call. 
-		//
-		// description:
-		//		Trigger some event. It can be either a Dom Event, Custom Event, 
-		//		or direct function call. NOTE: This function does not trigger
-		//		default behavior, only triggers bound event listeneres. eg:
-		//		one cannot trigger("anchorNode", "onclick") and expect the browser
-		//		to follow the href="" attribute naturally.
-		//
-		// obj: String|DomNode|Object|Function
-		//		An ID, or DomNode reference, from which to trigger the event.
-		//		If an Object, fire the `event` in the scope of this object,
-		//		similar to calling dojo.hitch(obj, event)(). The return value
-		//		in this case is returned from `dojo.trigger`
-		//	 
-		// event: String|Function
-		//		The name of the event to trigger. can be any DOM level 2 event
-		//		and can be in either form: "onclick" or "click" for instance.
-		//		In the object-firing case, this method can be a function or
-		//		a string version of a member function, just like `dojo.hitch`.
-		//
-		// extraArgs: Object?
-		//		An object to mix into the `event` object passed to any bound 
-		//		listeners. Be careful not to override important members, like
-		//		`type`, or `preventDefault`. It will likely error.
-		//
-		//		Additionally, extraArgs is moot in the object-triggering case,
-		//		as all arguments beyond the `event` are curried onto the triggered
-		//		function.
-		//
-		// example: 
-		//	|	dojo.connect(node, "onclick", function(e){ 		//	|	// later:
-		//	|	dojo.trigger(node, "onclick");
-		//
-		// example:
-		//	|	// or from within dojo.query: (requires dojo.NodeList)
-		//	|	dojo.query("a").onclick(function(){}).trigger("onclick");
-		//
-		// example:
-		//	|	// fire obj.method() in scope of obj
-		//	|	dojo.trigger(obj, "method");
-		//
-		// example:
-		//	|	// fire an anonymous function:
-		//	|	dojo.trigger(d.global, function(){ 		//
-		// example: 
-		//	|	// fire and anonymous function in the scope of obj
-		//	|	dojo.trigger(obj, function(){ this == obj; });
-		//
-		// example:
-		//	|	// with a connected function like:
-		//	|	dojo.connect(dojo.doc, "onclick", function(e){
-		//	|		if(e && e.manuallydone){
-		//	|			console.log("this was a triggered onclick, not natural");
-		//	|		}
-		//	|	});
-		//	|	// fire onclick, passing in a custom bit of info
-		//	|	dojo.trigger("someId", "onclick", { manuallydone:true });
-		//
-		// returns: Anything
-		//		Will not return anything in the Dom event case, but will return whatever
-		//		return value is received from the triggered event. 
-		return (isfn(obj) || isfn(event) || isfn(obj[event])) ? 
-			d.hitch.apply(d, arguments)() : d._trigger.apply(d, arguments);
-	};
-	d.NodeList.prototype.trigger = d.NodeList._adaptAsForEach(d._trigger); 
-
-	// if the node.js module is available, extend trigger into that.
-	if(d._Node && !d._Node.prototype.trigger){
-		d.extend(d._Node, {
-			trigger: function(ev, data){
-				// summary:
-				//		Fire some some event originating from this node.
-				//		Only available if both the `dojo.trigger` and `dojo.node` plugin 
-				//		are enabled. Allows chaining as all `dojo._Node` methods do.
-				//
-				// ev: String
-				//		Some string event name to fire. eg: "onclick", "submit"
-				//
-				// data: Object
-				//		Just like `extraArgs` for `dojo.trigger`, additional data
-				//		to mix into the event object.
-				//
-				// example:
-				//	|	// fire onlick orginiating from a node with id="someAnchorId"
-				//	|	dojo.node("someAnchorId").trigger("click");
-
-				d._trigger(this, ev, data);
-				return this; // dojo._Node
-			}
-		});
-	}
-
-	return d.trigger;
-	
-});
-
-	can.each = function(elements, callback) {
-		var i = 0, key;
-		if (typeof  elements.length == 'number' && elements.pop) {
-			elements.attr && elements.attr('length');
-			for(var len = elements.length; i < len; i++) {
-				if(callback(elements[i], i, elements) === false) return elements;
-			}
-		} else {
-			for(key in elements) {
-				if(callback(elements[key], key) === false) return elements;
-			}
-		}
-		return elements;
-	}
-;
-
-	// dojo.js
+	// fragment.js
 	// ---------
-	// _dojo node list._
-	//  
-	// These are pre-loaded by `steal` -> no callback.
-	require(["dojo", "dojo/query", "plugd/trigger", "dojo/NodeList-dom"]);
+	// _DOM Fragment support._
 	
-	// Map string helpers.
-	can.trim = function(s){
-		return s && dojo.trim(s);
-	}
-	
-	// Map array helpers.
-	can.makeArray = function(arr){
-		array = [];
-		dojo.forEach(arr, function(item){ array.push(item)});
-		return array;
-	};
-	can.isArray = dojo.isArray;
-	can.inArray = function(item,arr){
-		return dojo.indexOf(arr, item);
-	};
-	can.map = function(arr, fn){
-		return dojo.map(can.makeArray(arr||[]), fn);
-	};
-	// Map object helpers.
-	can.extend = function(first){
-		if(first === true){
-			var args = can.makeArray(arguments);
-			args.shift();
-			return dojo.mixin.apply(dojo, args)
-		}
-		return dojo.mixin.apply(dojo, arguments)
-	}
-	can.isEmptyObject = function(object){
-		var prop;
-		for(prop in object){
-			break;
-		}
-		return prop === undefined;
-	}
-
-	// Use a version of param similar to jQuery's param that
-	// handles nested data instead of dojo.objectToQuery which doesn't
-	can.param = function(object){
-		var pairs = [],
-			add = function( key, value ){
-				pairs.push(encodeURIComponent(key) + "=" + encodeURIComponent(value))
-			};
-
-		for(var name in object){
-			can.buildParam(name, object[name], add);
-		}
-		return pairs.join("&").replace(/%20/g, "+");
-	}
-	can.buildParam = function(prefix, obj, add){
-        if(can.isArray(obj)){
-            for(var i = 0, l = obj.length; i < l; ++i){
-                add(prefix + "[]", obj[i])
-            }
-        } else if( dojo.isObject(obj) ){
-        	for (var name in obj){
-        		can.buildParam(prefix + "[" + name + "]", obj[name], add);
-        	}
-        } else {
-        	add(prefix, obj);
-        }
-	}
-	
-	// Map function helpers.
-	can.proxy = function(func, context){
-		return dojo.hitch(context, func)
-	}
-	can.isFunction = function(f){
-		return dojo.isFunction(f);
-	}
-		
-	// The id of the `function` to be bound, used as an expando on the `function`
-	// so we can lookup it's `remove` object.
-	var id = 0,
-		// Takes a node list, goes through each node
-		// and adds events data that has a map of events to 
-		// callbackId to `remove` object.  It looks like
-		// `{click: {5: {remove: fn}}}`. 
-		addBinding = function( nodelist, ev, cb ) {
-			nodelist.forEach(function(node){
-				var node = new dojo.NodeList(node)
-				var events = can.data(node,"events");
-				if(!events){
-					can.data(node,"events", events = {})
-				}
-				if(!events[ev]){
-					events[ev] = {};
-				}
-				if(cb.__bindingsIds === undefined) {
-					cb.__bindingsIds=id++;
-				} 
-				events[ev][cb.__bindingsIds] = node.on(ev, cb)[0]
-			});
+	var table = document.createElement('table'),
+		tableRow = document.createElement('tr'),
+		containers = {
+		  'tr': document.createElement('tbody'),
+		  'tbody': table, 'thead': table, 'tfoot': table,
+		  'td': tableRow, 'th': tableRow,
+		  '*': document.createElement('div')
 		},
-		// Removes a binding on a `nodelist` by finding
-		// the remove object within the object's data.
-		removeBinding = function(nodelist,ev,cb){
-			nodelist.forEach(function(node){
-				var node = new dojo.NodeList(node),
-					events = can.data(node,"events"),
-					handlers = events[ev],
-					handler = handlers[cb.__bindingsIds];
-				
-				dojo.disconnect(handler);
-				delete handlers[cb.__bindingsIds];
-				
-				if(can.isEmptyObject(handlers)){
-					delete events[ev]
-				}
-			});
+		fragmentRE = /^\s*<(\w+)[^>]*>/,
+		fragment  = function(html, name) {
+			if (name === undefined) {
+				name = fragmentRE.test(html) && RegExp.$1;
+			}
+			if (!(name in containers)) name = '*';
+			var container = containers[name];
+			// IE's parser will strip any `<tr><td>` tags when `innerHTML`
+			// is called on a `tbody`. To get around this, we construct a 
+			// valid table with a `tbody` that has the `innerHTML` we want. 
+			// Then the container is the `firstChild` of the `tbody`.
+			// [source](http://www.ericvasilik.com/2006/07/code-karma.html).
+			if(name === "tr") {
+				var temp = document.createElement('div');
+				temp.innerHTML = "<table><tbody>" + html + "</tbody></table>";
+				container = temp.firstChild.firstChild;
+			} else {
+				container.innerHTML = '' + html;
+			}
+			// IE8 barfs if you pass slice a `childNodes` object, so make a copy.
+			var tmp = {},
+				children = container.childNodes;
+			tmp.length = children.length;
+			for(var i=0; i<children.length; i++){
+				tmp[i] = children[i];
+			}
+			return [].slice.call(tmp);
 		}
 	
+	can.buildFragment = function(html, nodes){
+		var parts = fragment(html),
+			frag = document.createDocumentFragment();
+		parts.forEach(function(part){
+			frag.appendChild(part);
+		})
+		return frag;
+	};
+
+	// zepto.js
+	// ---------
+	// _Zepto node list._
+
+// Extend what you can out of Zepto.
+$.extend(can,Zepto);
+
+var arrHas = function(obj, name){
+	return obj[0] && obj[0][name] || obj[name]
+}
+
+// Do what's similar for jQuery.
+can.trigger = function(obj, event, args, bubble){
+	if(obj.trigger){
+		obj.trigger(event, args)
+	} else if(arrHas(obj, "dispatchEvent")){
+		if(bubble === false){
+			$([obj]).triggerHandler(event, args)
+		} else {
+			$([obj]).trigger(event, args)
+		}
+		
+	} else {
+		if(typeof event == "string"){
+			event = {type: event}
+		}
+		event.target = event.target || obj;
+		event.data = args;
+		can.dispatch.call(obj, event)
+	}
+	
+}
+
+can.$ = Zepto
+
 	can.bind = function( ev, cb){
 		// If we can bind to it...
-		if(this.bind && this.bind !== can.bind){
+		if(this.bind){
 			this.bind(ev, cb)
-			
-		// Otherwise it's an element or `nodeList`.
-		} else if(this.on || this.nodeType){
-			addBinding( new dojo.NodeList(this), ev, cb)
-		} else if(this.addEvent) {
-			this.addEvent(ev, cb)
+		} else if(arrHas(this, "addEventListener")){
+			$([this]).bind(ev, cb)
 		} else {
-			// Make it bind-able...
 			can.addEvent.call(this, ev, cb)
 		}
 		return this;
 	}
 	can.unbind = function(ev, cb){
 		// If we can bind to it...
-		if(this.unbind && this.unbind !== can.unbind){
+		if(this.unbind){
 			this.unbind(ev, cb)
-		} 
-		
-		else if(this.on || this.nodeType) {
-			removeBinding(new dojo.NodeList(this), ev, cb);
+		} else if(arrHas(this, "addEventListener")){
+			$([this]).unbind(ev, cb)
 		} else {
-			// Make it bind-able...
 			can.removeEvent.call(this, ev, cb)
 		}
 		return this;
 	}
-	
-	can.trigger = function(item, event, args, bubble){
-		if(item.trigger){
-			if(bubble === false){
-				if(!item[0] || item[0].nodeType === 3){
-					return;
-				}
-				// Force stop propagation by
-				// listening to `on` and then immediately disconnecting.
-				var connect = item.on(event, function(ev){
-					
-					ev.stopPropagation && ev.stopPropagation();
-					ev.cancelBubble = true;
-					ev._stopper && ev._stopper();
-					
-					dojo.disconnect(connect);
-				})
-				item.trigger(event,args)
-			} else {
-				item.trigger(event,args)
-			}
-			
+	can.delegate = function(selector,ev, cb){
+		if(this.delegate){
+			this.delegate(selector, ev, cb)
 		} else {
-			if(typeof event === 'string'){
-				event = {type: event}
-			}
-			event.data = args
-			event.target = event.target || item;
-			can.dispatch.call(item, event)
+			$([this]).delegate(selector,ev, cb)
+		}
+	}
+	can.undelegate = function(selector,ev, cb){
+		if(this.undelegate){
+			this.undelegate(selector, ev, cb)
+		} else {
+			$([this]).undelegate(selector,ev, cb)
+		}
+	}
+
+	$.each(["append","filter","addClass","remove","data"], function(i,name){
+		can[name] = function(wrapped){
+			return wrapped[name].apply(wrapped, can.makeArray(arguments).slice(1))
+		}
+	})
+
+	can.makeArray = function(arr){
+		var ret = []
+		can.each(arr, function(a, i){
+			ret[i] = a
+		})
+		return ret;
+	};
+	can.inArray =function(item, arr){
+		return arr.indexOf(item)
+	}
+	
+	can.proxy = function(f, ctx){
+		return function(){
+			return f.apply(ctx, arguments)
 		}
 	}
 	
-	can.delegate = function(selector, ev , cb){
-		if(this.on || this.nodeType){
-			addBinding( new dojo.NodeList(this), selector+":"+ev, cb)
-		} else if(this.delegate) {
-			this.delegate(selector, ev , cb)
-		} 
-		return this;
-	}
-	can.undelegate = function(selector, ev , cb){
-		if(this.on || this.nodeType){
-			removeBinding(new dojo.NodeList(this), selector+":"+ev, cb);
-		} else if(this.undelegate) {
-			this.undelegate(selector, ev , cb)
+	// Make ajax.
+	var XHR = $.ajaxSettings.xhr;
+	$.ajaxSettings.xhr = function(){
+		var xhr = XHR()
+		var open = xhr.open;
+		xhr.open = function(type, url, async){
+			open.call(this, type, url, ASYNC === undefined ? true : ASYNC)
 		}
-
-		return this;
+		return xhr;
 	}
-
-		var optionsMap = {
-		type:"method",
-		success : undefined,
-		error: undefined
-	}
+	var ASYNC;
+	var AJAX = $.ajax;
 	var updateDeferred = function(xhr, d){
 		for(var prop in xhr){
 			if(typeof d[prop] == 'function'){
@@ -447,151 +258,83 @@ define("plugd/trigger",["dojo"], function(dojo){
 			}
 		}
 	}
-
-	
 	can.ajax = function(options){
-		var type = can.capitalize( (options.type || "get").toLowerCase() ),
-			method = dojo["xhr"+type];
+		
 		var success = options.success,
-			error = options.error,
-			d = new can.Deferred();
+			error = options.error;
+		var d = can.Deferred();
+		
+		options.success = function(){
 			
-		var def = method({
-			url : options.url,
-			handleAs : options.dataType,
-			sync : !options.async,
-			headers : options.headers,
-			content: options.data
-		})
-		def.then(function(data, ioargs){
 			updateDeferred(xhr, d);
-			d.resolve(data,"success",xhr);
-			success && success(data,"success",xhr);
-		},function(data,ioargs){
+			d.resolve.apply(d, arguments);
+			success && success.apply(this,arguments);
+		}
+		options.error = function(){
 			updateDeferred(xhr, d);
-			d.reject(xhr,"error");
-			error(xhr,"error");
-		})
-		
-		var xhr = def.ioArgs.xhr;
-		
-
+			d.reject.apply(d, arguments);
+			error && error.apply(this,arguments);
+		}
+		if(options.async === false){
+			ASYNC = false
+		}
+		var xhr = AJAX(options);
+		ASYNC = undefined;
 		updateDeferred(xhr, d);
 		return d;
-			
-	}
-	// Element - get the wrapped helper.
-	can.$ = function(selector){
-		if(selector === window){
-			return window;
-		}
-		if(typeof selector === "string"){
-			return dojo.query(selector)
-		} else {
-			return new dojo.NodeList(selector);
-		}
+	};
+	
 
-		
-	}
-	can.buildFragment = function(frag, node){
-		var owner = node && node.ownerDocument,
-			frag = dojo.toDom(frag, owner );
-		if(frag.nodeType !== 11){
-			var tmp = document.createDocumentFragment();
-			tmp.appendChild(frag)
-			frag = tmp;
-		}
-		return frag
-	}
 	
-	can.append = function(wrapped, html){
-		return wrapped.forEach(function(node){
-			dojo.place( html, node)
-		});
+
+	
+	
+	// Make destroyed and empty work.
+	$.fn.empty = function(){
+		return this.each(function(){ 
+			$.cleanData(this.getElementsByTagName('*'))
+			this.innerHTML = '' 
+		}) 
 	}
 	
-		var data = {},
-	    uuid = can.uuid = +new Date(),
-	    exp  = can.expando = 'can' + uuid;
-	
-	function getData(node, name) {
-	    var id = node[exp], store = id && data[id];
-	    return name === undefined ? store || setData(node) :
-	      (store && store[name]);
-	}
-	
-	function setData(node, name, value) {
-	    var id = node[exp] || (node[exp] = ++uuid),
-	      store = data[id] || (data[id] = {});
-	    if (name !== undefined) store[name] = value;
-	    return store;
-	};
-	
-	var cleanData = function(elems){
-	  	can.trigger(new dojo.NodeList(elems),"destroyed",[],false)
-	  	for ( var i = 0, elem;
-			(elem = elems[i]) !== undefined; i++ ) {
-				var id = elem[exp]
-				delete data[id];
+	$.fn.remove= function () {
+		$.cleanData(this);
+		this.each(function () {
+			if (this.parentNode != null) {
+				// might be a text node
+				this.getElementsByTagName && $.cleanData(this.getElementsByTagName('*'))
+				this.parentNode.removeChild(this);
 			}
-	};
-	
-	can.data = function(wrapped, name, value){
-		return value === undefined ?
-			wrapped.length == 0 ? undefined : getData(wrapped[0], name) :
-			wrapped.forEach(function(node){
-				setData(node, name, value);
-			});
-	};
-	
-	// Overwrite `dojo.destroy`, `dojo.empty` and `dojo.place`.
-	var empty = dojo.empty;
-	dojo.empty = function(){
-		for(var c; c = node.lastChild;){ // Intentional assignment.
-			dojo.destroy(c);
-		} 
+		});
+		return this;
+    }
+    
+    
+    can.trim = function(str){
+    	return str.trim();
+    }
+	can.isEmptyObject = function(object){
+		var name;
+		for(name in object){};
+		return name === undefined;
 	}
-	
-	var destroy = dojo.destroy;
-	dojo.destroy = function(node){
-		node = dojo.byId(node);
-		cleanData([node]);
-		node.getElementsByTagName && cleanData(node.getElementsByTagName('*'))
-		
-		return destroy.apply(dojo, arguments);
-	};
-	
-	can.addClass = function(wrapped, className){
-		return wrapped.addClass(className);
-	}
-	
-	can.remove = function(wrapped){
-		// We need to remove text nodes ourselves.
-		wrapped.forEach(dojo.destroy);
+
+	// Make extend handle `true` for deep.
+	can.extend = function(first){
+		if(first === true){
+			var args = can.makeArray(arguments);
+			args.shift();
+			return $.extend.apply($, args)
+		}
+		return $.extend.apply($, arguments)
 	}
 
 	can.get = function(wrapped, index){
 		return wrapped[index];
 	}
 
-	// Add pipe to `dojo.Deferred`.
-	can.extend(dojo.Deferred.prototype, {
-		pipe : function(done, fail){
-			var d = new dojo.Deferred();
-			this.addCallback(function(){
-				d.resolve( done.apply(this, arguments) );
-			});
-			
-			this.addErrback(function(){
-				if(fail){
-					d.reject( fail.apply(this, arguments) );
-				} else {
-					d.reject.apply(d, arguments);
-				}
-			});
-			return d;
-		}
-	});
+	
+;
 
 	// deferred.js
 	// ---------
@@ -743,6 +486,22 @@ define("plugd/trigger",["dojo"], function(dojo){
 			return this;
 		}
 	});
+
+	can.each = function(elements, callback) {
+		var i = 0, key;
+		if (typeof  elements.length == 'number' && elements.pop) {
+			elements.attr && elements.attr('length');
+			for(var len = elements.length; i < len; i++) {
+				if(callback(elements[i], i, elements) === false) return elements;
+			}
+		} else {
+			for(key in elements) {
+				if(callback(elements[key], key) === false) return elements;
+			}
+		}
+		return elements;
+	}
+;
 
 	// ##string.js
 	// _Miscellaneous string utility functions._  
@@ -1932,28 +1691,44 @@ define("plugd/trigger",["dojo"], function(dojo){
         // variables are present in the data, the number of matches is returned 
         // to allow discerning between general and more specific routes. 
 		matchesData = function(route, data) {
-			var count = 0, i = 0;
+			var count = 0, i = 0, defaults = {};
+			// look at default values, if they match ...
+			for( var name in route.defaults ) {
+				if(route.defaults[name] === data[name]){
+					// mark as matched
+					defaults[name] = 1;
+					count++;
+				}
+			}
 			for (; i < route.names.length; i++ ) {
 				if (!data.hasOwnProperty(route.names[i]) ) {
 					return -1;
 				}
-				count++;
+				if(!defaults[route.names[i]]){
+					count++;
+				}
+				
 			}
+			
 			return count;
 		},
 		onready = !0,
+		boundtohashchange = false,
 		location = window.location,
 		each = can.each,
 		extend = can.extend;
 
 	can.route = function( url, defaults ) {
+        defaults = defaults || {}
         // Extract the variable names and replace with `RegExp` that will match 
 		// an atual URL with values.
 		var names = [],
 			test = url.replace(matcher, function( whole, name ) {
 				names.push(name)
-				// TODO: I think this should have a `+`
-				return "([^\\/\\&]*)"  // The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
+				// a name without a default value HAS to have a value
+				// a name that has a default value can be empty
+				// The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
+				return "([^\\/\\&]"+(defaults[name] ? "*" : "+")+")"  
 			});
 
 		// Add route in a form that can be easily figured out.
@@ -1967,7 +1742,7 @@ define("plugd/trigger",["dojo"], function(dojo){
             // An `array` of all the variable names in this route.
 			names: names,
             // Default values provided for the variables.
-			defaults: defaults || {},
+			defaults: defaults,
             // The number of parts in the URL separated by `/`.
 			length: url.split('/').length
 		}
@@ -1976,23 +1751,31 @@ define("plugd/trigger",["dojo"], function(dojo){
 
 	extend(can.route, {
 				param: function( data ) {
-			delete data.route;
 			// Check if the provided data keys match the names in any routes;
 			// Get the one with the most matches.
 			var route,
 				// Need to have at least 1 match.
 				matches = 0,
 				matchCount,
-				routeName = data.route;
-			
+				routeName = data.route,
+				propCount = 0;
+				
+			delete data.route;
 			// If we have a route name in our `can.route` data, use it.
 			if ( ! ( routeName && (route = can.route.routes[routeName]))){
+				each(data, function(){propCount++});
 				// Otherwise find route.
 				each(can.route.routes, function(temp, name){
+					// best route is the first with all defaults matching
+					
+					
 					matchCount = matchesData(temp, data);
 					if ( matchCount > matches ) {
 						route = temp;
 						matches = matchCount
+					}
+					if(matchCount >= propCount){
+						return false;
 					}
 				});
 			}
@@ -2070,6 +1853,11 @@ define("plugd/trigger",["dojo"], function(dojo){
 				onready = val;
 			}
 			if( val === true || onready === true ) {
+				if(boundtohashchange === false){ // make double sure this only happens once
+					// If the hash changes, update the `can.route.data`.
+					can.bind.call(window,'hashchange', setState);
+					boundtohashchange = true;
+				}
 				setState();
 			}
 			return can.route;
@@ -2112,16 +1900,15 @@ define("plugd/trigger",["dojo"], function(dojo){
 			can.route.attr(curParams, true);
 		};
 
-	// If the hash changes, update the `can.route.data`.
-	can.bind.call(window,'hashchange', setState);
-
 	// If the `can.route.data` changes, update the hash.
     // Using `.serialize()` retrieves the raw data contained in the `observable`.
     // This function is ~~throttled~~ debounced so it only updates once even if multiple values changed.
 	can.route.bind("change", function() {
 		clearTimeout( timer );
 		timer = setTimeout(function() {
-			location.hash = "#!" + can.route.param(can.route.data.serialize())
+			var serialized = can.route.data.serialize();
+			delete serialized.route;
+			location.hash = "#!" + can.route.param(serialized)
 		}, 1);
 	});
 	// `onready` event...
@@ -2702,7 +2489,7 @@ define("plugd/trigger",["dojo"], function(dojo){
 			var type = can.view.types["." + options.type],
 				id = can.view.toId(options.rootSrc);
 
-			options.text = "steal('" + (type.plugin || "jquery/view/" + options.type) + "').then(function($){" + "can.view.preload('" + id + "'," + options.text + ");\n})";
+			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "').then(function($){" + "can.view.preload('" + id + "'," + options.text + ");\n})";
 			success();
 		})
 	}
@@ -3404,6 +3191,11 @@ define("plugd/trigger",["dojo"], function(dojo){
 		}
 	});
 
-return can;
-});
+	// Register as an AMD module if supported, otherwise attach to the window
+	if ( typeof define === "function" && define.amd ) {
+		define( "can", [], function () { return can; } );
+	} else {
+		window.can = can;
+	}
+
 })(can = {}, this )

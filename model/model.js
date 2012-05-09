@@ -1,5 +1,5 @@
 // this file should not be stolen directly
-steal('can/observe',function(){
+steal('can/observe', function() {
 	
 	// ## model.js  
 	// `can.Model`  
