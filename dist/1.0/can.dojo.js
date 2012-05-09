@@ -1,6 +1,5 @@
 (function(can, window, undefined){
-YUI().add("can", function(Y) {
-can.Y = Y;
+define("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){
 
 	// event.js
 	// ---------
@@ -55,6 +54,169 @@ can.dispatch = function(event){
 
 ;
 
+define("plugd/trigger",["dojo"], function(dojo){
+    
+	var d = dojo, isfn = d.isFunction, 
+		leaveRe = /mouse(enter|leave)/, 
+		_fix = function(_, p){
+			return "mouse" + (p == "enter" ? "over" : "out"); 
+		},
+		mix = d._mixin,
+		
+		// the guts of the node triggering logic:
+		// the function accepts node (not string|node), "on"-less event name,
+		// and an object of args to mix into the event. 
+		realTrigger = d.doc.createEvent ? 
+			function(n, e, a){
+				// the sane branch
+				var ev = d.doc.createEvent("HTMLEvents");
+				e = e.replace(leaveRe, _fix);
+				// destroyed events should not bubble
+				ev.initEvent(e,  e === "destroyed" ? false : true, true);
+				a && mix(ev, a);
+				n.dispatchEvent(ev);
+			} : 
+			function(n, e, a){
+				// the janktastic branch
+				var ev = "on" + e, stop = false, lc = e.toLowerCase(), node = n; 
+				try{
+// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
+//	createEvent path above, and also fails on _some_ native-named events. 
+//					if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
+//						// if the event is one of those listed in our NodeList list
+//						// in lowercase form but is mixed case, throw to avoid
+//						// fireEvent. /me sighs. http://gist.github.com/315318
+//						throw("janktastic");
+//					}
+					n.fireEvent(ev);
+				}catch(er){
+					// a lame duck to work with. we're probably a 'custom event'
+					var evdata = mix({ 
+						type: e, target: n, faux: true,
+						// HACK: [needs] added support for customStopper to _base/event.js
+						// some tests will fail until del._stopPropagation has support.
+						_stopper: function(){ stop = this.cancelBubble; }
+					}, a);
+				
+					isfn(n[ev]) && n[ev](evdata);
+				
+					// handle bubbling of custom events, unless the event was stopped.
+					while(!stop && n !== d.doc && n.parentNode){
+						n = n.parentNode;
+						isfn(n[ev]) && n[ev](evdata);
+					}
+				}
+			}
+	;
+	
+	d._trigger = function(node, event, extraArgs){
+		// summary:
+		//		Helper for `dojo.trigger`, which handles the DOM cases. We should never
+		//		be here without a domNode reference and a string eventname.
+		var n = d.byId(node), ev = event && event.slice(0, 2) == "on" ? event.slice(2) : event;
+		realTrigger(n, ev, extraArgs);
+	};
+		
+	d.trigger = function(obj, event, extraArgs){
+		// summary: 
+		//		Trigger some event. It can be either a Dom Event, Custom Event, 
+		//		or direct function call. 
+		//
+		// description:
+		//		Trigger some event. It can be either a Dom Event, Custom Event, 
+		//		or direct function call. NOTE: This function does not trigger
+		//		default behavior, only triggers bound event listeneres. eg:
+		//		one cannot trigger("anchorNode", "onclick") and expect the browser
+		//		to follow the href="" attribute naturally.
+		//
+		// obj: String|DomNode|Object|Function
+		//		An ID, or DomNode reference, from which to trigger the event.
+		//		If an Object, fire the `event` in the scope of this object,
+		//		similar to calling dojo.hitch(obj, event)(). The return value
+		//		in this case is returned from `dojo.trigger`
+		//	 
+		// event: String|Function
+		//		The name of the event to trigger. can be any DOM level 2 event
+		//		and can be in either form: "onclick" or "click" for instance.
+		//		In the object-firing case, this method can be a function or
+		//		a string version of a member function, just like `dojo.hitch`.
+		//
+		// extraArgs: Object?
+		//		An object to mix into the `event` object passed to any bound 
+		//		listeners. Be careful not to override important members, like
+		//		`type`, or `preventDefault`. It will likely error.
+		//
+		//		Additionally, extraArgs is moot in the object-triggering case,
+		//		as all arguments beyond the `event` are curried onto the triggered
+		//		function.
+		//
+		// example: 
+		//	|	dojo.connect(node, "onclick", function(e){ 		//	|	// later:
+		//	|	dojo.trigger(node, "onclick");
+		//
+		// example:
+		//	|	// or from within dojo.query: (requires dojo.NodeList)
+		//	|	dojo.query("a").onclick(function(){}).trigger("onclick");
+		//
+		// example:
+		//	|	// fire obj.method() in scope of obj
+		//	|	dojo.trigger(obj, "method");
+		//
+		// example:
+		//	|	// fire an anonymous function:
+		//	|	dojo.trigger(d.global, function(){ 		//
+		// example: 
+		//	|	// fire and anonymous function in the scope of obj
+		//	|	dojo.trigger(obj, function(){ this == obj; });
+		//
+		// example:
+		//	|	// with a connected function like:
+		//	|	dojo.connect(dojo.doc, "onclick", function(e){
+		//	|		if(e && e.manuallydone){
+		//	|			console.log("this was a triggered onclick, not natural");
+		//	|		}
+		//	|	});
+		//	|	// fire onclick, passing in a custom bit of info
+		//	|	dojo.trigger("someId", "onclick", { manuallydone:true });
+		//
+		// returns: Anything
+		//		Will not return anything in the Dom event case, but will return whatever
+		//		return value is received from the triggered event. 
+		return (isfn(obj) || isfn(event) || isfn(obj[event])) ? 
+			d.hitch.apply(d, arguments)() : d._trigger.apply(d, arguments);
+	};
+	d.NodeList.prototype.trigger = d.NodeList._adaptAsForEach(d._trigger); 
+
+	// if the node.js module is available, extend trigger into that.
+	if(d._Node && !d._Node.prototype.trigger){
+		d.extend(d._Node, {
+			trigger: function(ev, data){
+				// summary:
+				//		Fire some some event originating from this node.
+				//		Only available if both the `dojo.trigger` and `dojo.node` plugin 
+				//		are enabled. Allows chaining as all `dojo._Node` methods do.
+				//
+				// ev: String
+				//		Some string event name to fire. eg: "onclick", "submit"
+				//
+				// data: Object
+				//		Just like `extraArgs` for `dojo.trigger`, additional data
+				//		to mix into the event object.
+				//
+				// example:
+				//	|	// fire onlick orginiating from a node with id="someAnchorId"
+				//	|	dojo.node("someAnchorId").trigger("click");
+
+				d._trigger(this, ev, data);
+				return this; // dojo._Node
+			}
+		});
+	}
+
+	return d.trigger;
+	
+});
+
 	can.each = function(elements, callback) {
 		var i = 0, key;
 		if (typeof  elements.length == 'number' && elements.pop) {
@@ -71,386 +233,365 @@ can.dispatch = function(event){
 	}
 ;
 
-		// ---------
-		// _YUI node list._
-		// `can.Y` is set as part of the build process.
-		// `YUI().use('*')` is called for when `YUI` is statically loaded (like when running tests).
-		var Y = can.Y = can.Y || YUI().use('*');
+	// dojo.js
+	// ---------
+	// _dojo node list._
+	//  
+	// These are pre-loaded by `steal` -> no callback.
+	require(["dojo", "dojo/query", "plugd/trigger", "dojo/NodeList-dom"]);
+	
+	// Map string helpers.
+	can.trim = function(s){
+		return s && dojo.trim(s);
+	}
+	
+	// Map array helpers.
+	can.makeArray = function(arr){
+		array = [];
+		dojo.forEach(arr, function(item){ array.push(item)});
+		return array;
+	};
+	can.isArray = dojo.isArray;
+	can.inArray = function(item,arr){
+		return dojo.indexOf(arr, item);
+	};
+	can.map = function(arr, fn){
+		return dojo.map(can.makeArray(arr||[]), fn);
+	};
+	// Map object helpers.
+	can.extend = function(first){
+		if(first === true){
+			var args = can.makeArray(arguments);
+			args.shift();
+			return dojo.mixin.apply(dojo, args)
+		}
+		return dojo.mixin.apply(dojo, arguments)
+	}
+	can.isEmptyObject = function(object){
+		var prop;
+		for(prop in object){
+			break;
+		}
+		return prop === undefined;
+	}
 
-		// Map string helpers.
-		can.trim = function( s ) {
-			return Y.Lang.trim(s);
-		}
+	// Use a version of param similar to jQuery's param that
+	// handles nested data instead of dojo.objectToQuery which doesn't
+	can.param = function(object){
+		var pairs = [],
+			add = function( key, value ){
+				pairs.push(encodeURIComponent(key) + "=" + encodeURIComponent(value))
+			};
 
-		// Map array helpers.
-		can.makeArray = function( arr ) {
-			return Y.Array(arr);
-		};
-		can.isArray = Y.Lang.isArray;
-		can.inArray = function( item, arr ) {
-			return Y.Array.indexOf(arr, item);
-		};
-
-		can.map = function( arr, fn ) {
-			return Y.Array.map(can.makeArray(arr || []), fn);
-		};
-
-		// Map object helpers.
-		can.extend = function( first ) {
-			var deep = first === true ? 1 : 0,
-				target = arguments[deep],
-				i = deep + 1,
-				arg;
-			for (; arg = arguments[i]; i++ ) {
-				Y.mix(target, arg, true, null, null, !! deep);
-			}
-			return target;
+		for(var name in object){
+			can.buildParam(name, object[name], add);
 		}
-		can.param = function( object ) {
-			return Y.QueryString.stringify(object, {arrayKey: true})
-		}
-		can.isEmptyObject = function( object ) {
-			return Y.Object.isEmpty(object);
-		}
-
-		// Map function helpers.
-		can.proxy = function( func, context ) {
-			return Y.bind.apply(Y, arguments);
-		}
-		can.isFunction = function( f ) {
-			return Y.Lang.isFunction(f);
-		}
-
-		// Element -- get the wrapped helper.
-		var prepareNodeList = function( nodelist ) {
-			nodelist.each(function( node, i ) {
-				nodelist[i] = node.getDOMNode();
-			});
-			nodelist.length = nodelist.size();
-			return nodelist;
-		}
-		can.$ = function( selector ) {
-			if ( selector === window ) {
-				return window;
-			} else if ( selector instanceof Y.NodeList ) {
-				return prepareNodeList(selector);
-			} else if ( typeof selector === "object" && !can.isArray(selector) && typeof selector.nodeType === "undefined" && !selector.getDOMNode ) {
-				return selector;
-			} else {
-				return prepareNodeList(Y.all(selector));
-			}
-		}
-		can.get = function( wrapped, index ) {
-			return wrapped._nodes[index];
-		}
-		can.buildFragment = function( html, node ) {
-			var owner = node && node.ownerDocument,
-				frag = Y.Node.create(html, owner);
-			frag = (frag && frag.getDOMNode()) || document.createDocumentFragment();
-			if ( frag.nodeType !== 11 ) {
-				var tmp = document.createDocumentFragment();
-				tmp.appendChild(frag)
-				frag = tmp;
-			}
-			return frag;
-		}
-		can.append = function( wrapped, html ) {
-			wrapped.each(function( node ) {
-				if ( typeof html === 'string' ) {
-					html = can.buildFragment(html, node)
+		return pairs.join("&").replace(/%20/g, "+");
+	}
+	can.buildParam = function(prefix, obj, add){
+        if(can.isArray(obj)){
+            for(var i = 0, l = obj.length; i < l; ++i){
+                add(prefix + "[]", obj[i])
+            }
+        } else if( dojo.isObject(obj) ){
+        	for (var name in obj){
+        		can.buildParam(prefix + "[" + name + "]", obj[name], add);
+        	}
+        } else {
+        	add(prefix, obj);
+        }
+	}
+	
+	// Map function helpers.
+	can.proxy = function(func, context){
+		return dojo.hitch(context, func)
+	}
+	can.isFunction = function(f){
+		return dojo.isFunction(f);
+	}
+		
+	// The id of the `function` to be bound, used as an expando on the `function`
+	// so we can lookup it's `remove` object.
+	var id = 0,
+		// Takes a node list, goes through each node
+		// and adds events data that has a map of events to 
+		// callbackId to `remove` object.  It looks like
+		// `{click: {5: {remove: fn}}}`. 
+		addBinding = function( nodelist, ev, cb ) {
+			nodelist.forEach(function(node){
+				var node = new dojo.NodeList(node)
+				var events = can.data(node,"events");
+				if(!events){
+					can.data(node,"events", events = {})
 				}
-				node.append(html)
+				if(!events[ev]){
+					events[ev] = {};
+				}
+				if(cb.__bindingsIds === undefined) {
+					cb.__bindingsIds=id++;
+				} 
+				events[ev][cb.__bindingsIds] = node.on(ev, cb)[0]
+			});
+		},
+		// Removes a binding on a `nodelist` by finding
+		// the remove object within the object's data.
+		removeBinding = function(nodelist,ev,cb){
+			nodelist.forEach(function(node){
+				var node = new dojo.NodeList(node),
+					events = can.data(node,"events"),
+					handlers = events[ev],
+					handler = handlers[cb.__bindingsIds];
+				
+				dojo.disconnect(handler);
+				delete handlers[cb.__bindingsIds];
+				
+				if(can.isEmptyObject(handlers)){
+					delete events[ev]
+				}
 			});
 		}
-		can.addClass = function( wrapped, className ) {
-			return wrapped.addClass(className);
+	
+	can.bind = function( ev, cb){
+		// If we can bind to it...
+		if(this.bind && this.bind !== can.bind){
+			this.bind(ev, cb)
+			
+		// Otherwise it's an element or `nodeList`.
+		} else if(this.on || this.nodeType){
+			addBinding( new dojo.NodeList(this), ev, cb)
+		} else if(this.addEvent) {
+			this.addEvent(ev, cb)
+		} else {
+			// Make it bind-able...
+			can.addEvent.call(this, ev, cb)
 		}
-		can.data = function( wrapped, key, value ) {
-			if ( value === undefined ) {
-
-				return wrapped.item(0).getData(key)
+		return this;
+	}
+	can.unbind = function(ev, cb){
+		// If we can bind to it...
+		if(this.unbind && this.unbind !== can.unbind){
+			this.unbind(ev, cb)
+		} 
+		
+		else if(this.on || this.nodeType) {
+			removeBinding(new dojo.NodeList(this), ev, cb);
+		} else {
+			// Make it bind-able...
+			can.removeEvent.call(this, ev, cb)
+		}
+		return this;
+	}
+	
+	can.trigger = function(item, event, args, bubble){
+		if(item.trigger){
+			if(bubble === false){
+				if(!item[0] || item[0].nodeType === 3){
+					return;
+				}
+				// Force stop propagation by
+				// listening to `on` and then immediately disconnecting.
+				var connect = item.on(event, function(ev){
+					
+					ev.stopPropagation && ev.stopPropagation();
+					ev.cancelBubble = true;
+					ev._stopper && ev._stopper();
+					
+					dojo.disconnect(connect);
+				})
+				item.trigger(event,args)
 			} else {
-				return wrapped.item(0).setData(key, value)
+				item.trigger(event,args)
 			}
+			
+		} else {
+			if(typeof event === 'string'){
+				event = {type: event}
+			}
+			event.data = args
+			event.target = event.target || item;
+			can.dispatch.call(item, event)
 		}
-		can.remove = function( wrapped ) {
-			return wrapped.remove() && wrapped.destroy();
+	}
+	
+	can.delegate = function(selector, ev , cb){
+		if(this.on || this.nodeType){
+			addBinding( new dojo.NodeList(this), selector+":"+ev, cb)
+		} else if(this.delegate) {
+			this.delegate(selector, ev , cb)
+		} 
+		return this;
+	}
+	can.undelegate = function(selector, ev , cb){
+		if(this.on || this.nodeType){
+			removeBinding(new dojo.NodeList(this), selector+":"+ev, cb);
+		} else if(this.undelegate) {
+			this.undelegate(selector, ev , cb)
 		}
-		// Destroyed method.
-		can._yNodeDestroy = can._yNodeDestroy || Y.Node.prototype.destroy;
-		Y.Node.prototype.destroy = function() {
-			can.trigger(this, "destroyed", [], false)
-			can._yNodeDestroy.apply(this, arguments)
-		}
-		// Let `nodelist` know about the new destroy...
-		Y.NodeList.addMethod("destroy", Y.Node.prototype.destroy);
 
-		// Ajax
+		return this;
+	}
+
 		var optionsMap = {
-			type: "method",
-			success: undefined,
-			error: undefined
-		}
-		var updateDeferred = function( request, d ) {
-			// `YUI` only returns a request if it is asynchronous.
-			if ( request && request.io ) {
-				var xhr = request.io;
-				for ( var prop in xhr ) {
-					if ( typeof d[prop] == 'function' ) {
-						d[prop] = function() {
-							xhr[prop].apply(xhr, arguments)
-						}
-					} else {
-						d[prop] = prop[xhr]
-					}
+		type:"method",
+		success : undefined,
+		error: undefined
+	}
+	var updateDeferred = function(xhr, d){
+		for(var prop in xhr){
+			if(typeof d[prop] == 'function'){
+				d[prop] = function(){
+					xhr[prop].apply(xhr, arguments)
 				}
+			} else {
+				d[prop] = prop[xhr]
 			}
 		}
-		can.ajax = function( options ) {
-			var d = can.Deferred(),
-				requestOptions = can.extend({}, options);
+	}
 
-			for ( var option in optionsMap ) {
-				if ( requestOptions[option] !== undefined ) {
-					requestOptions[optionsMap[option]] = requestOptions[option];
-					delete requestOptions[option]
-				}
-			}
-			requestOptions.sync = !options.async;
+	
+	can.ajax = function(options){
+		var type = can.capitalize( (options.type || "get").toLowerCase() ),
+			method = dojo["xhr"+type];
+		var success = options.success,
+			error = options.error,
+			d = new can.Deferred();
+			
+		var def = method({
+			url : options.url,
+			handleAs : options.dataType,
+			sync : !options.async,
+			headers : options.headers,
+			content: options.data
+		})
+		def.then(function(data, ioargs){
+			updateDeferred(xhr, d);
+			d.resolve(data,"success",xhr);
+			success && success(data,"success",xhr);
+		},function(data,ioargs){
+			updateDeferred(xhr, d);
+			d.reject(xhr,"error");
+			error(xhr,"error");
+		})
+		
+		var xhr = def.ioArgs.xhr;
+		
 
-			var success = options.success,
-				error = options.error;
-
-			requestOptions.on = {
-				success: function( transactionid, response ) {
-					var data = response.responseText;
-					if ( options.dataType === 'json' ) {
-						data = eval("(" + data + ")")
-					}
-					updateDeferred(request, d);
-					d.resolve(data, "success", request);
-					success && success(data, "success", request);
-				},
-				failure: function( transactionid, response ) {
-					updateDeferred(request, d);
-					d.reject(request, "error");
-					error && error(request, "error");
-				}
-			};
-
-			var request = Y.io(requestOptions.url, requestOptions);
-			updateDeferred(request, d);
-			return d;
-
+		updateDeferred(xhr, d);
+		return d;
+			
+	}
+	// Element - get the wrapped helper.
+	can.$ = function(selector){
+		if(selector === window){
+			return window;
+		}
+		if(typeof selector === "string"){
+			return dojo.query(selector)
+		} else {
+			return new dojo.NodeList(selector);
 		}
 
-		// Events - The `id` of the `function` to be bound, used as an expando on the `function`
-		// so we can lookup it's `remove` object.
-		var id = 0,
-			// Takes a node list, goes through each node
-			// and adds events data that has a map of events to 
-			// `callbackId` to `remove` object.  It looks like
-			// `{click: {5: {remove: fn}}}`. 
-			addBinding = function( nodelist, selector, ev, cb ) {
-				if ( nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode ) {
-					nodelist.each(function( node ) {
-						var node = can.$(node);
-						var events = can.data(node, "events"),
-							eventName = ev + ":" + selector;
-						if (!events ) {
-							can.data(node, "events", events = {});
-						}
-						if (!events[eventName] ) {
-							events[eventName] = {};
-						}
-						if ( cb.__bindingsIds === undefined ) {
-							cb.__bindingsIds = id++;
-						}
-						events[eventName][cb.__bindingsIds] = selector ? node.item(0).delegate(ev, cb, selector) : node.item(0).on(ev, cb);
-					});
-				} else {
-					var obj = nodelist,
-						events = obj.__canEvents = obj.__canEvents || {};
-					if (!events[ev] ) {
-						events[ev] = {};
-					}
-					if ( cb.__bindingsIds === undefined ) {
-						cb.__bindingsIds = id++;
-					}
-					events[ev][cb.__bindingsIds] = obj.on(ev, cb);
-				}
-			},
-			// Removes a binding on a `nodelist` by finding
-			// the remove object within the object's data.
-			removeBinding = function( nodelist, selector, ev, cb ) {
-				if ( nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode ) {
-					nodelist.each(function( node ) {
-						var node = can.$(node),
-							events = can.data(node, "events"),
-							eventName = ev + ":" + selector,
-							handlers = events[eventName],
-							handler = handlers[cb.__bindingsIds];
-						handler.detach();
-						delete handlers[cb.__bindingsIds];
-						if ( can.isEmptyObject(handlers) ) {
-							delete events[ev];
-						}
-						if ( can.isEmptyObject(events) ) {}
-					});
-				} else {
-					var obj = nodelist,
-						events = obj.__canEvents || {},
-						handlers = events[ev],
-						handler = handlers[cb.__bindingsIds];
-					handler.detach();
-					delete handlers[cb.__bindingsIds];
-					if ( can.isEmptyObject(handlers) ) {
-						delete events[ev];
-					}
-					if ( can.isEmptyObject(events) ) {}
-				}
-			}
-			can.bind = function( ev, cb ) {
-				// If we can bind to it...
-				if ( this.bind && this.bind !== can.bind ) {
-					this.bind(ev, cb)
-				} else if ( this.on || this.nodeType ) {
-					addBinding(can.$(this), undefined, ev, cb)
-				} else if ( this.addEvent ) {
-					this.addEvent(ev, cb)
-				} else {
-					// Make it bind-able...
-					can.addEvent.call(this, ev, cb)
-				}
-				return this;
-			}
-			can.unbind = function( ev, cb ) {
-				// If we can bind to it...
-				if ( this.unbind && this.unbind !== can.unbind ) {
-					this.unbind(ev, cb)
-				}
-
-				else if ( this.on || this.nodeType ) {
-					removeBinding(can.$(this), undefined, ev, cb);
-				} else {
-					// Make it bind-able...
-					can.removeEvent.call(this, ev, cb)
-				}
-				return this;
-			}
-			can.trigger = function( item, event, args, bubble ) {
-				if ( item instanceof Y.NodeList ) {
-					item = item.item(0);
-				}
-				if ( item.getDOMNode ) {
-					item = item.getDOMNode();
-				}
-
-				if ( item.nodeName ) {
-					item = Y.Node(item);
-					if ( bubble === false ) {
-						// Force stop propagation by listening to `on` and then 
-						// immediately disconnecting
-						item.once(event, function( ev ) {
-							ev.stopPropagation && ev.stopPropagation();
-							ev.cancelBubble = true;
-							ev._stopper && ev._stopper();
-						})
-					}
-					realTrigger(item.getDOMNode(), event, {})
-				} else {
-					if ( typeof event === 'string' ) {
-						event = {
-							type: event
-						}
-					}
-					event.target = event.target || item
-					event.data = args
-					can.dispatch.call(item, event)
-				}
-			};
-		// Allow `dom` `destroyed` events.
-		Y.mix(Y.Node.DOM_EVENTS, {
-			destroyed: true
+		
+	}
+	can.buildFragment = function(frag, node){
+		var owner = node && node.ownerDocument,
+			frag = dojo.toDom(frag, owner );
+		if(frag.nodeType !== 11){
+			var tmp = document.createDocumentFragment();
+			tmp.appendChild(frag)
+			frag = tmp;
+		}
+		return frag
+	}
+	
+	can.append = function(wrapped, html){
+		return wrapped.forEach(function(node){
+			dojo.place( html, node)
 		});
-
-		can.delegate = function( selector, ev, cb ) {
-			if ( this.on || this.nodeType ) {
-				addBinding(can.$(this), selector, ev, cb)
-			} else if ( this.delegate ) {
-				this.delegate(selector, ev, cb)
+	}
+	
+		var data = {},
+	    uuid = can.uuid = +new Date(),
+	    exp  = can.expando = 'can' + uuid;
+	
+	function getData(node, name) {
+	    var id = node[exp], store = id && data[id];
+	    return name === undefined ? store || setData(node) :
+	      (store && store[name]);
+	}
+	
+	function setData(node, name, value) {
+	    var id = node[exp] || (node[exp] = ++uuid),
+	      store = data[id] || (data[id] = {});
+	    if (name !== undefined) store[name] = value;
+	    return store;
+	};
+	
+	var cleanData = function(elems){
+	  	can.trigger(new dojo.NodeList(elems),"destroyed",[],false)
+	  	for ( var i = 0, elem;
+			(elem = elems[i]) !== undefined; i++ ) {
+				var id = elem[exp]
+				delete data[id];
 			}
-			return this;
-		}
-		can.undelegate = function( selector, ev, cb ) {
-			if ( this.on || this.nodeType ) {
-				removeBinding(can.$(this), selector, ev, cb);
-			} else if ( this.undelegate ) {
-				this.undelegate(selector, ev, cb)
-			}
-			return this;
-		}
+	};
+	
+	can.data = function(wrapped, name, value){
+		return value === undefined ?
+			wrapped.length == 0 ? undefined : getData(wrapped[0], name) :
+			wrapped.forEach(function(node){
+				setData(node, name, value);
+			});
+	};
+	
+	// Overwrite `dojo.destroy`, `dojo.empty` and `dojo.place`.
+	var empty = dojo.empty;
+	dojo.empty = function(){
+		for(var c; c = node.lastChild;){ // Intentional assignment.
+			dojo.destroy(c);
+		} 
+	}
+	
+	var destroy = dojo.destroy;
+	dojo.destroy = function(node){
+		node = dojo.byId(node);
+		cleanData([node]);
+		node.getElementsByTagName && cleanData(node.getElementsByTagName('*'))
+		
+		return destroy.apply(dojo, arguments);
+	};
+	
+	can.addClass = function(wrapped, className){
+		return wrapped.addClass(className);
+	}
+	
+	can.remove = function(wrapped){
+		// We need to remove text nodes ourselves.
+		wrapped.forEach(dojo.destroy);
+	}
 
-		// `realTrigger` taken from `dojo`.
-		var leaveRe = /mouse(enter|leave)/,
-			_fix = function( _, p ) {
-				return "mouse" + (p == "enter" ? "over" : "out");
-			},
-			realTrigger = document.createEvent ?
-			function( n, e, a ) {
-				// the same branch
-				var ev = document.createEvent("HTMLEvents");
-				e = e.replace(leaveRe, _fix);
-				ev.initEvent(e, true, true);
-				a && can.extend(ev, a);
-				n.dispatchEvent(ev);
-			} : function( n, e, a ) {
-				// the janktastic branch
-				var ev = "on" + e,
-					stop = false,
-					lc = e.toLowerCase(),
-					node = n;
-				try {
-					// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
-					// createEvent path above, and also fails on _some_ native-named events.
-					// if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
-					// // if the event is one of those listed in our NodeList list
-					// // in lowercase form but is mixed case, throw to avoid
-					// // fireEvent. /me sighs. http://gist.github.com/315318
-					// throw("janktastic");
-					// }
-					n.fireEvent(ev);
-				} catch (er) {
-					// a lame duck to work with. we're probably a 'custom event'
-					var evdata = can.extend({
-						type: e,
-						target: n,
-						faux: true,
-						// HACK: [needs] added support for customStopper to _base/event.js
-						// some tests will fail until del._stopPropagation has support.
-						_stopper: function() {
-							stop = this.cancelBubble;
-						}
-					}, a);
-					realTriggerHandler(n, e, evdata);
+	can.get = function(wrapped, index){
+		return wrapped[index];
+	}
 
-					// handle bubbling of custom events, unless the event was stopped.
-					while (!stop && n !== document && n.parentNode ) {
-						n = n.parentNode;
-						realTriggerHandler(n, e, evdata);
-						//can.isFunction(n[ev]) && n[ev](evdata);
-					}
+	// Add pipe to `dojo.Deferred`.
+	can.extend(dojo.Deferred.prototype, {
+		pipe : function(done, fail){
+			var d = new dojo.Deferred();
+			this.addCallback(function(){
+				d.resolve( done.apply(this, arguments) );
+			});
+			
+			this.addErrback(function(){
+				if(fail){
+					d.reject( fail.apply(this, arguments) );
+				} else {
+					d.reject.apply(d, arguments);
 				}
-			},
-			realTriggerHandler = function( n, e, evdata ) {
-				var node = Y.Node(n),
-					handlers = can.Y.Event.getListeners(node._yuid, e);
-				if ( handlers ) {
-					for ( var i = 0; i < handlers.length; i++ ) {
-						handlers[i].fire(evdata)
-					}
-				}
-			};
+			});
+			return d;
+		}
+	});
 
 	// deferred.js
 	// ---------
@@ -1791,28 +1932,44 @@ can.dispatch = function(event){
         // variables are present in the data, the number of matches is returned 
         // to allow discerning between general and more specific routes. 
 		matchesData = function(route, data) {
-			var count = 0, i = 0;
+			var count = 0, i = 0, defaults = {};
+			// look at default values, if they match ...
+			for( var name in route.defaults ) {
+				if(route.defaults[name] === data[name]){
+					// mark as matched
+					defaults[name] = 1;
+					count++;
+				}
+			}
 			for (; i < route.names.length; i++ ) {
 				if (!data.hasOwnProperty(route.names[i]) ) {
 					return -1;
 				}
-				count++;
+				if(!defaults[route.names[i]]){
+					count++;
+				}
+				
 			}
+			
 			return count;
 		},
 		onready = !0,
+		boundtohashchange = false,
 		location = window.location,
 		each = can.each,
 		extend = can.extend;
 
 	can.route = function( url, defaults ) {
+        defaults = defaults || {}
         // Extract the variable names and replace with `RegExp` that will match 
 		// an atual URL with values.
 		var names = [],
 			test = url.replace(matcher, function( whole, name ) {
 				names.push(name)
-				// TODO: I think this should have a `+`
-				return "([^\\/\\&]*)"  // The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
+				// a name without a default value HAS to have a value
+				// a name that has a default value can be empty
+				// The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
+				return "([^\\/\\&]"+(defaults[name] ? "*" : "+")+")"  
 			});
 
 		// Add route in a form that can be easily figured out.
@@ -1826,7 +1983,7 @@ can.dispatch = function(event){
             // An `array` of all the variable names in this route.
 			names: names,
             // Default values provided for the variables.
-			defaults: defaults || {},
+			defaults: defaults,
             // The number of parts in the URL separated by `/`.
 			length: url.split('/').length
 		}
@@ -1835,23 +1992,31 @@ can.dispatch = function(event){
 
 	extend(can.route, {
 				param: function( data ) {
-			delete data.route;
 			// Check if the provided data keys match the names in any routes;
 			// Get the one with the most matches.
 			var route,
 				// Need to have at least 1 match.
 				matches = 0,
 				matchCount,
-				routeName = data.route;
-			
+				routeName = data.route,
+				propCount = 0;
+				
+			delete data.route;
 			// If we have a route name in our `can.route` data, use it.
 			if ( ! ( routeName && (route = can.route.routes[routeName]))){
+				each(data, function(){propCount++});
 				// Otherwise find route.
 				each(can.route.routes, function(temp, name){
+					// best route is the first with all defaults matching
+					
+					
 					matchCount = matchesData(temp, data);
 					if ( matchCount > matches ) {
 						route = temp;
 						matches = matchCount
+					}
+					if(matchCount >= propCount){
+						return false;
 					}
 				});
 			}
@@ -1929,6 +2094,11 @@ can.dispatch = function(event){
 				onready = val;
 			}
 			if( val === true || onready === true ) {
+				if(boundtohashchange === false){ // make double sure this only happens once
+					// If the hash changes, update the `can.route.data`.
+					can.bind.call(window,'hashchange', setState);
+					boundtohashchange = true;
+				}
 				setState();
 			}
 			return can.route;
@@ -1971,16 +2141,15 @@ can.dispatch = function(event){
 			can.route.attr(curParams, true);
 		};
 
-	// If the hash changes, update the `can.route.data`.
-	can.bind.call(window,'hashchange', setState);
-
 	// If the `can.route.data` changes, update the hash.
     // Using `.serialize()` retrieves the raw data contained in the `observable`.
     // This function is ~~throttled~~ debounced so it only updates once even if multiple values changed.
 	can.route.bind("change", function() {
 		clearTimeout( timer );
 		timer = setTimeout(function() {
-			location.hash = "#!" + can.route.param(can.route.data.serialize())
+			var serialized = can.route.data.serialize();
+			delete serialized.route;
+			location.hash = "#!" + can.route.param(serialized)
 		}, 1);
 	});
 	// `onready` event...
@@ -2561,7 +2730,7 @@ can.dispatch = function(event){
 			var type = can.view.types["." + options.type],
 				id = can.view.toId(options.rootSrc);
 
-			options.text = "steal('" + (type.plugin || "jquery/view/" + options.type) + "').then(function($){" + "can.view.preload('" + id + "'," + options.text + ");\n})";
+			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "').then(function($){" + "can.view.preload('" + id + "'," + options.text + ");\n})";
 			success();
 		})
 	}
@@ -3262,8 +3431,14 @@ can.dispatch = function(event){
 			});
 		}
 	});
-}, "0.0.1", {
-requires: ["node", "io-base", "querystring", "event-focus", "array-extras"],
- optional: ["selector-css2", "selector-css3"]
+
+	// Register as an AMD module if supported, otherwise attach to the window
+	if ( typeof define === "function" && define.amd ) {
+		define( "can", [], function () { return can; } );
+	} else {
+		window.can = can;
+	}
+
+return can;
 });
 })(can = {}, this )

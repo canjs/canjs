@@ -1,41 +1,6 @@
 (function(can, window, undefined){
-	// data.js
-	// ---------
-	// _jQuery-like data methods._
-  var data = {}, dataAttr = $.fn.data,
-    uuid = $.uuid = +new Date(),
-    exp  = $.expando = 'Zepto' + uuid;
-
-  function getData(node, name) {
-    var id = node[exp], store = id && data[id];
-    return name === undefined ? store || setData(node) :
-      (store && store[name]) || dataAttr.call($(node), name);
-  }
-
-  function setData(node, name, value) {
-    var id = node[exp] || (node[exp] = ++uuid),
-      store = data[id] || (data[id] = {});
-    if (name !== undefined) store[name] = value;
-    return store;
-  };
-
-  $.fn.data = function(name, value) {
-    return value === undefined ?
-      this.length == 0 ? undefined : getData(this[0], name) :
-      this.each(function(idx){
-        setData(this, name, $.isFunction(value) ?
-                value.call(this, idx, getData(this, name)) : value);
-      });
-  };
-  $.cleanData = function(elems){
-  	for ( var i = 0, elem;
-		(elem = elems[i]) !== undefined; i++ ) {
-      can.trigger(elem,"destroyed",[],false)
-			var id = elem[exp]
-			delete data[id];
-		}
-  }
-;
+YUI().add("can", function(Y) {
+can.Y = Y;
 
 	// event.js
 	// ---------
@@ -82,7 +47,7 @@ can.dispatch = function(event){
 		self= this,
 		args = [event].concat(event.data || []);
 		
-	can.each(handlers, function(i, ev){
+	can.each(handlers, function(ev){
 		event.data = args.slice(1);
 		ev.handler.apply(self, args);
 	});
@@ -90,253 +55,402 @@ can.dispatch = function(event){
 
 ;
 
-	// fragment.js
-	// ---------
-	// _DOM Fragment support._
-	
-	var table = document.createElement('table'),
-		tableRow = document.createElement('tr'),
-		containers = {
-		  'tr': document.createElement('tbody'),
-		  'tbody': table, 'thead': table, 'tfoot': table,
-		  'td': tableRow, 'th': tableRow,
-		  '*': document.createElement('div')
-		},
-		fragmentRE = /^\s*<(\w+)[^>]*>/,
-		fragment  = function(html, name) {
-			if (name === undefined) {
-				name = fragmentRE.test(html) && RegExp.$1;
+	can.each = function(elements, callback) {
+		var i = 0, key;
+		if (typeof  elements.length == 'number' && elements.pop) {
+			elements.attr && elements.attr('length');
+			for(var len = elements.length; i < len; i++) {
+				if(callback(elements[i], i, elements) === false) return elements;
 			}
-			if (!(name in containers)) name = '*';
-			var container = containers[name];
-			// IE's parser will strip any `<tr><td>` tags when `innerHTML`
-			// is called on a `tbody`. To get around this, we construct a 
-			// valid table with a `tbody` that has the `innerHTML` we want. 
-			// Then the container is the `firstChild` of the `tbody`.
-			// [source](http://www.ericvasilik.com/2006/07/code-karma.html).
-			if(name === "tr") {
-				var temp = document.createElement('div');
-				temp.innerHTML = "<table><tbody>" + html + "</tbody></table>";
-				container = temp.firstChild.firstChild;
-			} else {
-				container.innerHTML = '' + html;
-			}
-			// IE8 barfs if you pass slice a `childNodes` object, so make a copy.
-			var tmp = {},
-				children = container.childNodes;
-			tmp.length = children.length;
-			for(var i=0; i<children.length; i++){
-				tmp[i] = children[i];
-			}
-			return [].slice.call(tmp);
-		}
-	
-	can.buildFragment = function(htmls, nodes){
-		var parts = fragment(htmls[0]),
-			frag = document.createDocumentFragment();
-		parts.forEach(function(part){
-			frag.appendChild(part);
-		})
-		return {
-			fragment: frag
-		}
-	};
-
-	// zepto.js
-	// ---------
-	// _Zepto node list._
-
-// Extend what you can out of Zepto.
-$.extend(can,Zepto);
-
-var arrHas = function(obj, name){
-	return obj[0] && obj[0][name] || obj[name]
-}
-
-// Do what's similar for jQuery.
-can.trigger = function(obj, event, args, bubble){
-	if(obj.trigger){
-		obj.trigger(event, args)
-	} else if(arrHas(obj, "dispatchEvent")){
-		if(bubble === false){
-			$([obj]).triggerHandler(event, args)
 		} else {
-			$([obj]).trigger(event, args)
-		}
-		
-	} else {
-		if(typeof event == "string"){
-			event = {type: event}
-		}
-		event.target = event.target || obj;
-		event.data = args;
-		can.dispatch.call(obj, event)
-	}
-	
-}
-
-can.$ = Zepto
-
-	can.bind = function( ev, cb){
-		// If we can bind to it...
-		if(this.bind){
-			this.bind(ev, cb)
-		} else if(arrHas(this, "addEventListener")){
-			$([this]).bind(ev, cb)
-		} else {
-			can.addEvent.call(this, ev, cb)
-		}
-		return this;
-	}
-	can.unbind = function(ev, cb){
-		// If we can bind to it...
-		if(this.unbind){
-			this.unbind(ev, cb)
-		} else if(arrHas(this, "addEventListener")){
-			$([this]).unbind(ev, cb)
-		} else {
-			can.removeEvent.call(this, ev, cb)
-		}
-		return this;
-	}
-	can.delegate = function(selector,ev, cb){
-		if(this.delegate){
-			this.delegate(selector, ev, cb)
-		} else {
-			$([this]).delegate(selector,ev, cb)
-		}
-	}
-	can.undelegate = function(selector,ev, cb){
-		if(this.undelegate){
-			this.undelegate(selector, ev, cb)
-		} else {
-			$([this]).undelegate(selector,ev, cb)
-		}
-	}
-
-	$.each(["append","filter","addClass","remove","data"], function(i,name){
-		can[name] = function(wrapped){
-			return wrapped[name].apply(wrapped, can.makeArray(arguments).slice(1))
-		}
-	})
-
-	can.makeArray = function(arr){
-		var ret = []
-		can.each(arr, function(i,a){
-			ret[i] = a
-		})
-		return ret;
-	};
-	can.inArray =function(item, arr){
-		return arr.indexOf(item)
-	}
-	
-	can.proxy = function(f, ctx){
-		return function(){
-			return f.apply(ctx, arguments)
-		}
-	}
-	
-	// Make ajax.
-	var XHR = $.ajaxSettings.xhr;
-	$.ajaxSettings.xhr = function(){
-		var xhr = XHR()
-		var open = xhr.open;
-		xhr.open = function(type, url, async){
-			open.call(this, type, url, ASYNC === undefined ? true : ASYNC)
-		}
-		return xhr;
-	}
-	var ASYNC;
-	var AJAX = $.ajax;
-	var updateDeferred = function(xhr, d){
-		for(var prop in xhr){
-			if(typeof d[prop] == 'function'){
-				d[prop] = function(){
-					xhr[prop].apply(xhr, arguments)
-				}
-			} else {
-				d[prop] = prop[xhr]
+			for(key in elements) {
+				if(callback(elements[key], key) === false) return elements;
 			}
 		}
+		return elements;
 	}
-	can.ajax = function(options){
-		
-		var success = options.success,
-			error = options.error;
-		var d = can.Deferred();
-		
-		options.success = function(){
-			
-			updateDeferred(xhr, d);
-			d.resolve.apply(d, arguments);
-			success && success.apply(this,arguments);
-		}
-		options.error = function(){
-			updateDeferred(xhr, d);
-			d.reject.apply(d, arguments);
-			error && error.apply(this,arguments);
-		}
-		if(options.async === false){
-			ASYNC = false
-		}
-		var xhr = AJAX(options);
-		ASYNC = undefined;
-		updateDeferred(xhr, d);
-		return d;
-	};
-	
-
-	
-
-	
-	
-	// Make destroyed and empty work.
-	$.fn.empty = function(){
-		return this.each(function(){ 
-			$.cleanData(this.getElementsByTagName('*'))
-			this.innerHTML = '' 
-		}) 
-	}
-	
-	$.fn.remove= function () {
-		$.cleanData(this);
-		this.each(function () {
-			if (this.parentNode != null) {
-				// might be a text node
-				this.getElementsByTagName && $.cleanData(this.getElementsByTagName('*'))
-				this.parentNode.removeChild(this);
-			}
-		});
-		return this;
-    }
-    
-    
-    can.trim = function(str){
-    	return str.trim();
-    }
-	can.isEmptyObject = function(object){
-		var name;
-		for(name in object){};
-		return name !== undefined;
-	}
-
-	// Make extend handle `true` for deep.
-	can.extend = function(first){
-		if(first === true){
-			var args = can.makeArray(arguments);
-			args.shift();
-			return $.extend.apply($, args)
-		}
-		return $.extend.apply($, arguments)
-	}
-
-	can.get = function(wrapped, index){
-		return wrapped[index];
-	}
-
-	
 ;
+
+		// ---------
+		// _YUI node list._
+		// `can.Y` is set as part of the build process.
+		// `YUI().use('*')` is called for when `YUI` is statically loaded (like when running tests).
+		var Y = can.Y = can.Y || YUI().use('*');
+
+		// Map string helpers.
+		can.trim = function( s ) {
+			return Y.Lang.trim(s);
+		}
+
+		// Map array helpers.
+		can.makeArray = function( arr ) {
+			return Y.Array(arr);
+		};
+		can.isArray = Y.Lang.isArray;
+		can.inArray = function( item, arr ) {
+			return Y.Array.indexOf(arr, item);
+		};
+
+		can.map = function( arr, fn ) {
+			return Y.Array.map(can.makeArray(arr || []), fn);
+		};
+
+		// Map object helpers.
+		can.extend = function( first ) {
+			var deep = first === true ? 1 : 0,
+				target = arguments[deep],
+				i = deep + 1,
+				arg;
+			for (; arg = arguments[i]; i++ ) {
+				Y.mix(target, arg, true, null, null, !! deep);
+			}
+			return target;
+		}
+		can.param = function( object ) {
+			return Y.QueryString.stringify(object, {arrayKey: true})
+		}
+		can.isEmptyObject = function( object ) {
+			return Y.Object.isEmpty(object);
+		}
+
+		// Map function helpers.
+		can.proxy = function( func, context ) {
+			return Y.bind.apply(Y, arguments);
+		}
+		can.isFunction = function( f ) {
+			return Y.Lang.isFunction(f);
+		}
+
+		// Element -- get the wrapped helper.
+		var prepareNodeList = function( nodelist ) {
+			nodelist.each(function( node, i ) {
+				nodelist[i] = node.getDOMNode();
+			});
+			nodelist.length = nodelist.size();
+			return nodelist;
+		}
+		can.$ = function( selector ) {
+			if ( selector === window ) {
+				return window;
+			} else if ( selector instanceof Y.NodeList ) {
+				return prepareNodeList(selector);
+			} else if ( typeof selector === "object" && !can.isArray(selector) && typeof selector.nodeType === "undefined" && !selector.getDOMNode ) {
+				return selector;
+			} else {
+				return prepareNodeList(Y.all(selector));
+			}
+		}
+		can.get = function( wrapped, index ) {
+			return wrapped._nodes[index];
+		}
+		can.buildFragment = function( html, node ) {
+			var owner = node && node.ownerDocument,
+				frag = Y.Node.create(html, owner);
+			frag = (frag && frag.getDOMNode()) || document.createDocumentFragment();
+			if ( frag.nodeType !== 11 ) {
+				var tmp = document.createDocumentFragment();
+				tmp.appendChild(frag)
+				frag = tmp;
+			}
+			return frag;
+		}
+		can.append = function( wrapped, html ) {
+			wrapped.each(function( node ) {
+				if ( typeof html === 'string' ) {
+					html = can.buildFragment(html, node)
+				}
+				node.append(html)
+			});
+		}
+		can.addClass = function( wrapped, className ) {
+			return wrapped.addClass(className);
+		}
+		can.data = function( wrapped, key, value ) {
+			if ( value === undefined ) {
+
+				return wrapped.item(0).getData(key)
+			} else {
+				return wrapped.item(0).setData(key, value)
+			}
+		}
+		can.remove = function( wrapped ) {
+			return wrapped.remove() && wrapped.destroy();
+		}
+		// Destroyed method.
+		can._yNodeDestroy = can._yNodeDestroy || Y.Node.prototype.destroy;
+		Y.Node.prototype.destroy = function() {
+			can.trigger(this, "destroyed", [], false)
+			can._yNodeDestroy.apply(this, arguments)
+		}
+		// Let `nodelist` know about the new destroy...
+		Y.NodeList.addMethod("destroy", Y.Node.prototype.destroy);
+
+		// Ajax
+		var optionsMap = {
+			type: "method",
+			success: undefined,
+			error: undefined
+		}
+		var updateDeferred = function( request, d ) {
+			// `YUI` only returns a request if it is asynchronous.
+			if ( request && request.io ) {
+				var xhr = request.io;
+				for ( var prop in xhr ) {
+					if ( typeof d[prop] == 'function' ) {
+						d[prop] = function() {
+							xhr[prop].apply(xhr, arguments)
+						}
+					} else {
+						d[prop] = prop[xhr]
+					}
+				}
+			}
+		}
+		can.ajax = function( options ) {
+			var d = can.Deferred(),
+				requestOptions = can.extend({}, options);
+
+			for ( var option in optionsMap ) {
+				if ( requestOptions[option] !== undefined ) {
+					requestOptions[optionsMap[option]] = requestOptions[option];
+					delete requestOptions[option]
+				}
+			}
+			requestOptions.sync = !options.async;
+
+			var success = options.success,
+				error = options.error;
+
+			requestOptions.on = {
+				success: function( transactionid, response ) {
+					var data = response.responseText;
+					if ( options.dataType === 'json' ) {
+						data = eval("(" + data + ")")
+					}
+					updateDeferred(request, d);
+					d.resolve(data, "success", request);
+					success && success(data, "success", request);
+				},
+				failure: function( transactionid, response ) {
+					updateDeferred(request, d);
+					d.reject(request, "error");
+					error && error(request, "error");
+				}
+			};
+
+			var request = Y.io(requestOptions.url, requestOptions);
+			updateDeferred(request, d);
+			return d;
+
+		}
+
+		// Events - The `id` of the `function` to be bound, used as an expando on the `function`
+		// so we can lookup it's `remove` object.
+		var id = 0,
+			// Takes a node list, goes through each node
+			// and adds events data that has a map of events to 
+			// `callbackId` to `remove` object.  It looks like
+			// `{click: {5: {remove: fn}}}`. 
+			addBinding = function( nodelist, selector, ev, cb ) {
+				if ( nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode ) {
+					nodelist.each(function( node ) {
+						var node = can.$(node);
+						var events = can.data(node, "events"),
+							eventName = ev + ":" + selector;
+						if (!events ) {
+							can.data(node, "events", events = {});
+						}
+						if (!events[eventName] ) {
+							events[eventName] = {};
+						}
+						if ( cb.__bindingsIds === undefined ) {
+							cb.__bindingsIds = id++;
+						}
+						events[eventName][cb.__bindingsIds] = selector ? node.item(0).delegate(ev, cb, selector) : node.item(0).on(ev, cb);
+					});
+				} else {
+					var obj = nodelist,
+						events = obj.__canEvents = obj.__canEvents || {};
+					if (!events[ev] ) {
+						events[ev] = {};
+					}
+					if ( cb.__bindingsIds === undefined ) {
+						cb.__bindingsIds = id++;
+					}
+					events[ev][cb.__bindingsIds] = obj.on(ev, cb);
+				}
+			},
+			// Removes a binding on a `nodelist` by finding
+			// the remove object within the object's data.
+			removeBinding = function( nodelist, selector, ev, cb ) {
+				if ( nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode ) {
+					nodelist.each(function( node ) {
+						var node = can.$(node),
+							events = can.data(node, "events"),
+							eventName = ev + ":" + selector,
+							handlers = events[eventName],
+							handler = handlers[cb.__bindingsIds];
+						handler.detach();
+						delete handlers[cb.__bindingsIds];
+						if ( can.isEmptyObject(handlers) ) {
+							delete events[ev];
+						}
+						if ( can.isEmptyObject(events) ) {}
+					});
+				} else {
+					var obj = nodelist,
+						events = obj.__canEvents || {},
+						handlers = events[ev],
+						handler = handlers[cb.__bindingsIds];
+					handler.detach();
+					delete handlers[cb.__bindingsIds];
+					if ( can.isEmptyObject(handlers) ) {
+						delete events[ev];
+					}
+					if ( can.isEmptyObject(events) ) {}
+				}
+			}
+			can.bind = function( ev, cb ) {
+				// If we can bind to it...
+				if ( this.bind && this.bind !== can.bind ) {
+					this.bind(ev, cb)
+				} else if ( this.on || this.nodeType ) {
+					addBinding(can.$(this), undefined, ev, cb)
+				} else if ( this.addEvent ) {
+					this.addEvent(ev, cb)
+				} else {
+					// Make it bind-able...
+					can.addEvent.call(this, ev, cb)
+				}
+				return this;
+			}
+			can.unbind = function( ev, cb ) {
+				// If we can bind to it...
+				if ( this.unbind && this.unbind !== can.unbind ) {
+					this.unbind(ev, cb)
+				}
+
+				else if ( this.on || this.nodeType ) {
+					removeBinding(can.$(this), undefined, ev, cb);
+				} else {
+					// Make it bind-able...
+					can.removeEvent.call(this, ev, cb)
+				}
+				return this;
+			}
+			can.trigger = function( item, event, args, bubble ) {
+				if ( item instanceof Y.NodeList ) {
+					item = item.item(0);
+				}
+				if ( item.getDOMNode ) {
+					item = item.getDOMNode();
+				}
+
+				if ( item.nodeName ) {
+					item = Y.Node(item);
+					if ( bubble === false ) {
+						// Force stop propagation by listening to `on` and then 
+						// immediately disconnecting
+						item.once(event, function( ev ) {
+							ev.stopPropagation && ev.stopPropagation();
+							ev.cancelBubble = true;
+							ev._stopper && ev._stopper();
+						})
+					}
+					realTrigger(item.getDOMNode(), event, {})
+				} else {
+					if ( typeof event === 'string' ) {
+						event = {
+							type: event
+						}
+					}
+					event.target = event.target || item
+					event.data = args
+					can.dispatch.call(item, event)
+				}
+			};
+		// Allow `dom` `destroyed` events.
+		Y.mix(Y.Node.DOM_EVENTS, {
+			destroyed: true
+		});
+
+		can.delegate = function( selector, ev, cb ) {
+			if ( this.on || this.nodeType ) {
+				addBinding(can.$(this), selector, ev, cb)
+			} else if ( this.delegate ) {
+				this.delegate(selector, ev, cb)
+			}
+			return this;
+		}
+		can.undelegate = function( selector, ev, cb ) {
+			if ( this.on || this.nodeType ) {
+				removeBinding(can.$(this), selector, ev, cb);
+			} else if ( this.undelegate ) {
+				this.undelegate(selector, ev, cb)
+			}
+			return this;
+		}
+
+		// `realTrigger` taken from `dojo`.
+		var leaveRe = /mouse(enter|leave)/,
+			_fix = function( _, p ) {
+				return "mouse" + (p == "enter" ? "over" : "out");
+			},
+			realTrigger = document.createEvent ?
+			function( n, e, a ) {
+				// the same branch
+				var ev = document.createEvent("HTMLEvents");
+				e = e.replace(leaveRe, _fix);
+				ev.initEvent(e, true, true);
+				a && can.extend(ev, a);
+				n.dispatchEvent(ev);
+			} : function( n, e, a ) {
+				// the janktastic branch
+				var ev = "on" + e,
+					stop = false,
+					lc = e.toLowerCase(),
+					node = n;
+				try {
+					// FIXME: is this worth it? for mixed-case native event support:? Opera ends up in the
+					// createEvent path above, and also fails on _some_ native-named events.
+					// if(lc !== e && d.indexOf(d.NodeList.events, lc) >= 0){
+					// // if the event is one of those listed in our NodeList list
+					// // in lowercase form but is mixed case, throw to avoid
+					// // fireEvent. /me sighs. http://gist.github.com/315318
+					// throw("janktastic");
+					// }
+					n.fireEvent(ev);
+				} catch (er) {
+					// a lame duck to work with. we're probably a 'custom event'
+					var evdata = can.extend({
+						type: e,
+						target: n,
+						faux: true,
+						// HACK: [needs] added support for customStopper to _base/event.js
+						// some tests will fail until del._stopPropagation has support.
+						_stopper: function() {
+							stop = this.cancelBubble;
+						}
+					}, a);
+					realTriggerHandler(n, e, evdata);
+
+					// handle bubbling of custom events, unless the event was stopped.
+					while (!stop && n !== document && n.parentNode ) {
+						n = n.parentNode;
+						realTriggerHandler(n, e, evdata);
+						//can.isFunction(n[ev]) && n[ev](evdata);
+					}
+				}
+			},
+			realTriggerHandler = function( n, e, evdata ) {
+				var node = Y.Node(n),
+					handlers = can.Y.Event.getListeners(node._yuid, e);
+				if ( handlers ) {
+					for ( var i = 0; i < handlers.length; i++ ) {
+						handlers[i].fire(evdata)
+					}
+				}
+			};
 
 	// deferred.js
 	// ---------
@@ -374,7 +488,7 @@ can.$ = Zepto
 				// needs to be resolved.
 				rp = [];
 
-			can.each(args, function(j, arg){
+			can.each(args, function(arg, j){
 				arg.done(function() {
 					rp[j] = (arguments.length < 2) ? arguments[0] : arguments;
 					if (++done == args.length) {
@@ -401,7 +515,7 @@ can.$ = Zepto
 			var self = this;
 			// In Safari, the properties of the `arguments` object are not enumerable, 
 			// so we have to convert arguments to an `Array` that allows `can.each` to loop over them.
-			can.each(Array.prototype.slice.call(arguments), function( i, v, args ) {
+			can.each(Array.prototype.slice.call(arguments), function( v, i, args ) {
 				if ( ! v )
 					return;
 				if ( v.constructor === Array ) {
@@ -481,7 +595,7 @@ can.$ = Zepto
 
 			this._status = st;
 
-			can.each(dst, function(i, d){
+			can.each(dst, function(d){
 				d.apply(context, args);
 			});
 
@@ -659,7 +773,12 @@ can.$ = Zepto
 		_inherit: function( newProps, oldProps, addTo ) {
 			can.extend(addTo || newProps, newProps || {})
 		},
-
+		// used for overwriting a single property.
+		// this should be used for patching other objects
+		// the super plugin overwrites this
+		_overwrite : function(what, oldProps, propName, val){
+			what[propName] = val;
+		},
 		// Set `defaults` as the merger of the parent `defaults` and this 
 		// object's `defaults`. If you overwrite this method, make sure to
 		// include option merging logic.
@@ -704,7 +823,7 @@ can.$ = Zepto
 			prototype = this.instance();
 			
 			// Copy the properties over onto the new prototype.
-			_super_class._inherit(proto, _super, prototype);
+			can.Construct._inherit(proto, _super, prototype);
 
 			// The dummy class constructor.
 			function Constructor() {
@@ -726,7 +845,7 @@ can.$ = Zepto
 			}
 
 			// Copy new static properties on class.
-			_super_class._inherit(klass, _super_class, Constructor);
+			can.Construct._inherit(klass, _super_class, Constructor);
 
 			// Setup namespaces.
 			if ( fullName ) {
@@ -788,7 +907,7 @@ can.$ = Zepto
 
 		// Removes all listeners.
 		unhookup = function(items, namespace){
-			return can.each(items, function(i, item){
+			return can.each(items, function(item){
 				if(item && item.unbind){
 					item.unbind("change" + namespace);
 				}
@@ -818,6 +937,14 @@ can.$ = Zepto
 					args[0] = prop === "*" ? 
 						parent.indexOf(val)+"." + args[0] :
 						prop +  "." + args[0];
+				// track objects dispatched on this observe		
+				ev.triggeredNS = ev.triggeredNS || {};
+				// if it has already been dispatched exit
+				if (ev.triggeredNS[parent._namespace]) {
+					return;
+				}
+				ev.triggeredNS[parent._namespace] = true;
+						
 				can.trigger(parent, ev, args);
 				can.trigger(parent,args[0],args);
 			});
@@ -866,7 +993,7 @@ can.$ = Zepto
 			var items = collecting.slice(0);
 			collecting = undefined;
 			batchNum++;
-			can.each(items, function( i, item) {
+			can.each(items, function( item ) {
 				can.trigger.apply(can, item)
 			})
 			
@@ -877,7 +1004,7 @@ can.$ = Zepto
 		// `where` - To put properties, in an `{}` or `[]`.
 		serialize = function( observe, how, where ) {
 			// Go through each property.
-			observe.each(function( name, val ) {
+			observe.each(function( val, name ) {
 				// If the value is an `object`, and has an `attrs` or `serialize` function.
 				where[name] = canMakeObserve(val) && can.isFunction( val[how] ) ?
 				// Call `attrs` or `serialize` to get the original data back.
@@ -954,7 +1081,7 @@ can.$ = Zepto
 					delete this[prop]
 				}
 				batchTrigger(this, "change", [prop, "remove", undefined, current]);
-				batchTrigger(this, prop, undefined, current);
+				batchTrigger(this, prop, [undefined, current]);
 				return current;
 			}
 		},
@@ -996,7 +1123,7 @@ can.$ = Zepto
 			}
 		},
 		__set : function(prop, value, current){
-			
+		
 			// Otherwise, we are setting it on this `object`.
 			// TODO: Check if value is object and transform
 			// are we changing the value.
@@ -1019,7 +1146,7 @@ can.$ = Zepto
 
 				// `batchTrigger` the change event.
 				batchTrigger(this, "change", [prop, changeType, value, current]);
-				batchTrigger(this, prop, value, current);
+				batchTrigger(this, prop, [value, current]);
 				// If we can stop listening to our old value, do it.
 				current && unhookup([current], this._namespace);
 			}
@@ -1050,7 +1177,7 @@ can.$ = Zepto
 				self = this,
 				newVal;
 			
-			this.each(function(prop, curVal){
+			this.each(function(curVal, prop){
 				newVal = props[prop];
 
 				// If we are merging...
@@ -1195,7 +1322,7 @@ can.$ = Zepto
 	// Adds a method
 	// `name` - The method name.
 	// `where` - Where items in the `array` should be added.
-	function( name, where ) {
+	function( where, name ) {
 		list.prototype[name] = function() {
 			// Get the items being added.
 			var args = getArgs(arguments),
@@ -1226,7 +1353,7 @@ can.$ = Zepto
 				shift: 0
 	},
 	// Creates a `remove` type method
-	function( name, where ) {
+	function( where, name ) {
 		list.prototype[name] = function() {
 			
 			var args = getArgs(arguments),
@@ -1365,7 +1492,9 @@ can.$ = Zepto
 				destroy : {
 			type : "delete",
 			data : function(id){
-				return {}[this.id] = id;
+				var args = {};
+				args[this.id] = id;
+				return args;
 			}
 		},
 				findAll : {
@@ -1392,41 +1521,44 @@ can.$ = Zepto
 	
 	
 	can.Observe("can.Model",{
-		setup : function(){
+		setup : function(base){
 			can.Observe.apply(this, arguments);
 			if(this === can.Model){
 				return;
 			}
 			var self = this;
 			
-			can.each(ajaxMethods, function(name, method){
+			can.each(ajaxMethods, function(method, name){
 				if ( ! can.isFunction( self[name] )) {
 					self[name] = ajaxMaker(method, self[name]);
 				}
 			});
 			var clean = can.proxy(this._clean, self);
-			can.each({findAll : "models", findOne: "model"}, function(name, method){
+			can.each({findAll : "models", findOne: "model"}, function(method, name){
+				
 				var old = self[name];
-				self[name] = function(params, success, error){
+				can.Construct._overwrite(self, base, name, function(params, success, error){
+					// this._super to trick it to load super
+					this._super;
 					// Increment requests.
 					self._reqs++;
 					// Make the request.
-					return pipe( old.call(self,params),
-						self, 
+					return pipe( old.call( this, params ),
+						this, 
 						method ).then(success,error).then(clean, clean);
-				}
-				
+				});
 			})
 			// Convert `findAll` and `findOne`.
 			var oldFindAll
 			if(self.fullName == "can.Model"){
-				self.fullName = "Model"+(++modelNum);
+				self.fullName = self._shortName = "Model"+(++modelNum);
 			}
 			// Ddd ajax converters.
 			this.store = {};
 			this._reqs = 0;
 			this._url = this._shortName+"/{"+this.id+"}"
 		},
+		_ajax : ajaxMaker,
 		_clean : function(){
 			this._reqs--;
 			if(!this._reqs){
@@ -1438,9 +1570,15 @@ can.$ = Zepto
 			}
 		},
 				models: function( instancesRawData ) {
+
 			if ( ! instancesRawData ) {
 				return;
 			}
+      
+      if ( instancesRawData instanceof this.List ) {
+        return instancesRawData;
+      }
+
 			// Get the list type.
 			var self = this,
 				res = new( self.List || ML),
@@ -1468,12 +1606,12 @@ can.$ = Zepto
 
 			
 
-			can.each(raw, function( i, rawPart ) {
+			can.each(raw, function( rawPart ) {
 				res.push( self.model( rawPart ));
 			});
 
 			if ( ! arr ) { // Push other stuff onto `array`.
-				can.each(instancesRawData, function(prop, val){
+				can.each(instancesRawData, function(val, prop){
 					if ( prop !== 'data' ) {
 						res[prop] = val;
 					}
@@ -1488,9 +1626,9 @@ can.$ = Zepto
 			if ( attributes instanceof this ) {
 				attributes = attributes.serialize();
 			}
-			var model = this.store[attributes.id] || new this( attributes );
+			var model = this.store[attributes[this.id]] || new this( attributes );
 			if(this._reqs){
-				this.store[attributes.id] = model;
+				this.store[attributes[this.id]] = model;
 			}
 			return model;
 		}
@@ -1541,7 +1679,7 @@ can.$ = Zepto
 		can.each([
 		"created",
 		"updated",
-		"destroyed"], function( i, funcName ) {
+		"destroyed"], function( funcName ) {
 		can.Model.prototype[funcName] = function( attrs ) {
 			var stub, 
 				constructor = this.constructor;
@@ -1598,7 +1736,7 @@ can.$ = Zepto
 				
 				pairs = params.split('&'),
 				
-				can.each( pairs, function( i, pair ) {
+				can.each( pairs, function( pair ) {
 
 					var parts = pair.split('='),
 						key   = prep( parts.shift() ),
@@ -1641,37 +1779,56 @@ can.$ = Zepto
         // Converts a JS Object into a list of parameters that can be 
         // inserted into an html element tag.
 		makeProps = function( props ) {
-			return can.map(props, function( val, name ) {
-				return ( name === 'className' ? 'class'  : name )+ '="' + can.esc(val) + '"';
-			}).join(" ");
+			var tags = [];
+			can.each(props, function(val, name){
+				tags.push( ( name === 'className' ? 'class'  : name )+ '="' + 
+						(name === "href" ? val : can.esc(val) ) + '"');
+			});
+			return tags.join(" ");
 		},
 		// Checks if a route matches the data provided. If any route variable
         // is not present in the data, the route does not match. If all route
         // variables are present in the data, the number of matches is returned 
         // to allow discerning between general and more specific routes. 
 		matchesData = function(route, data) {
-			var count = 0, i = 0;
+			var count = 0, i = 0, defaults = {};
+			// look at default values, if they match ...
+			for( var name in route.defaults ) {
+				if(route.defaults[name] === data[name]){
+					// mark as matched
+					defaults[name] = 1;
+					count++;
+				}
+			}
 			for (; i < route.names.length; i++ ) {
 				if (!data.hasOwnProperty(route.names[i]) ) {
 					return -1;
 				}
-				count++;
+				if(!defaults[route.names[i]]){
+					count++;
+				}
+				
 			}
+			
 			return count;
 		},
 		onready = !0,
+		boundtohashchange = false,
 		location = window.location,
 		each = can.each,
 		extend = can.extend;
 
 	can.route = function( url, defaults ) {
+        defaults = defaults || {}
         // Extract the variable names and replace with `RegExp` that will match 
 		// an atual URL with values.
 		var names = [],
 			test = url.replace(matcher, function( whole, name ) {
 				names.push(name)
-				// TODO: I think this should have a `+`
-				return "([^\\/\\&]*)"  // The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
+				// a name without a default value HAS to have a value
+				// a name that has a default value can be empty
+				// The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
+				return "([^\\/\\&]"+(defaults[name] ? "*" : "+")+")"  
 			});
 
 		// Add route in a form that can be easily figured out.
@@ -1685,7 +1842,7 @@ can.$ = Zepto
             // An `array` of all the variable names in this route.
 			names: names,
             // Default values provided for the variables.
-			defaults: defaults || {},
+			defaults: defaults,
             // The number of parts in the URL separated by `/`.
 			length: url.split('/').length
 		}
@@ -1694,23 +1851,31 @@ can.$ = Zepto
 
 	extend(can.route, {
 				param: function( data ) {
-			delete data.route;
 			// Check if the provided data keys match the names in any routes;
 			// Get the one with the most matches.
 			var route,
 				// Need to have at least 1 match.
 				matches = 0,
 				matchCount,
-				routeName = data.route;
-			
+				routeName = data.route,
+				propCount = 0;
+				
+			delete data.route;
 			// If we have a route name in our `can.route` data, use it.
 			if ( ! ( routeName && (route = can.route.routes[routeName]))){
+				each(data, function(){propCount++});
 				// Otherwise find route.
-				each(can.route.routes, function(name, temp){
+				each(can.route.routes, function(temp, name){
+					// best route is the first with all defaults matching
+					
+					
 					matchCount = matchesData(temp, data);
 					if ( matchCount > matches ) {
 						route = temp;
 						matches = matchCount
+					}
+					if(matchCount >= propCount){
+						return false;
 					}
 				});
 			}
@@ -1726,7 +1891,7 @@ can.$ = Zepto
                     }),
                     after;
 					// Remove matching default values
-					each(route.defaults, function(name,val){
+					each(route.defaults, function(val,name){
 						if(cpy[name] === val) {
 							delete cpy[name]
 						}
@@ -1746,7 +1911,7 @@ can.$ = Zepto
 			var route = {
 				length: -1
 			};
-			each(can.route.routes, function(name, temp){
+			each(can.route.routes, function(temp, name){
 				if ( temp.test.test(url) && temp.length > route.length ) {
 					route = temp;
 				}
@@ -1767,7 +1932,7 @@ can.$ = Zepto
 				obj = extend(true, {}, route.defaults, obj);
                 // Overwrite each of the default values in `obj` with those in 
 				// parts if that part is not empty.
-				each(parts,function(i, part){
+				each(parts,function(part,  i){
 					if ( part && part !== '&') {
 						obj[route.names[i]] = decodeURIComponent( part );
 					}
@@ -1788,6 +1953,11 @@ can.$ = Zepto
 				onready = val;
 			}
 			if( val === true || onready === true ) {
+				if(boundtohashchange === false){ // make double sure this only happens once
+					// If the hash changes, update the `can.route.data`.
+					can.bind.call(window,'hashchange', setState);
+					boundtohashchange = true;
+				}
 				setState();
 			}
 			return can.route;
@@ -1812,7 +1982,7 @@ can.$ = Zepto
 	
     // The functions in the following list applied to `can.route` (e.g. `can.route.attr('...')`) will
     // instead act on the `can.route.data` observe.
-	each(['bind','unbind','delegate','undelegate','attr','removeAttr'], function(i, name){
+	each(['bind','unbind','delegate','undelegate','attr','removeAttr'], function(name){
 		can.route[name] = function(){
 			return can.route.data[name].apply(can.route.data, arguments)
 		}
@@ -1826,12 +1996,9 @@ can.$ = Zepto
         // Deparameterizes the portion of the hash of interest and assign the
         // values to the `can.route.data` removing existing values no longer in the hash.
         setState = function() {
-			curParams = can.route.deparam( location.hash.split(/#!?/).pop() || "" );
+			curParams = can.route.deparam( location.href.split(/#!?/)[1] || "" );
 			can.route.attr(curParams, true);
 		};
-
-	// If the hash changes, update the `can.route.data`.
-	can.bind.call(window,'hashchange', setState);
 
 	// If the `can.route.data` changes, update the hash.
     // Using `.serialize()` retrieves the raw data contained in the `observable`.
@@ -1839,7 +2006,9 @@ can.$ = Zepto
 	can.route.bind("change", function() {
 		clearTimeout( timer );
 		timer = setTimeout(function() {
-			location.hash = "#!" + can.route.param(can.route.data.serialize())
+			var serialized = can.route.data.serialize();
+			delete serialized.route;
+			location.hash = "#!" + can.route.param(serialized)
 		}, 1);
 	});
 	// `onready` event...
@@ -1862,6 +2031,7 @@ can.$ = Zepto
 		extend = can.extend,
 		each = can.each,
 		slice = [].slice,
+    paramReplacer = /\{([^\}]+)\}/g,
 		special = can.getObject("$.event.special") || {},
 
 		// Binds an element, returns a function that unbinds.
@@ -1929,8 +2099,8 @@ can.$ = Zepto
 			
 			// If we don't have options (a `control` instance), we'll run this 
 			// later.  
-			// `/\{([^\}]+)\}/` - parameter replacer `RegExp`.
-			if ( options || ! /\{([^\}]+)\}/g.test( methodName )) {
+      paramReplacer.lastIndex = 0;
+			if ( options || ! paramReplacer.test( methodName )) {
 				// If we have options, run sub to replace templates `{}` with a
 				// value from the options or the window
 				var convertedName = options ? can.sub(methodName, [options, window]) : methodName,
@@ -1942,8 +2112,9 @@ can.$ = Zepto
 					// Get the parts of the function  
 					// `[convertedName, delegatePart, eventPart]`  
 					// `/^(?:(.*?)\s)?([\w\.\:>]+)$/` - Breaker `RegExp`.
-					parts = (arr ? convertedName[1] : convertedName).match(/^(?:(.*?)\s)?([\w\.\:>]+)$/),
-					event = parts[2],
+					parts = (arr ? convertedName[1] : convertedName).match(/^(?:(.*?)\s)?([\w\.\:>]+)$/);
+
+					var event = parts[2],
 					processor = processors[event] || basicProcessor;
 				return {
 					processor: processor,
@@ -2044,7 +2215,7 @@ can.$ = Zepto
 		// Unbinds all event handlers on the controller.
 				off : function(){
 			var el = this.element[0]
-			each(this._bindings || [], function( key, value ) {
+			each(this._bindings || [], function( value ) {
 				value(el);
 			});
 			// Adds bindings.
@@ -2088,7 +2259,7 @@ can.$ = Zepto
 	each(["change", "click", "contextmenu", "dblclick", "keydown", "keyup", 
 		 "keypress", "mousedown", "mousemove", "mouseout", "mouseover", 
 		 "mouseup", "reset", "resize", "scroll", "select", "submit", "focusin",
-		 "focusout", "mouseenter", "mouseleave"], function( i, v ) {
+		 "focusout", "mouseenter", "mouseleave"], function( v ) {
 		processors[v] = basicProcessor;
 	});
 
@@ -2122,11 +2293,7 @@ can.$ = Zepto
 	// `can.view`  
 	// _Templating abstraction._
 
-	// Convert a path like string into something that's ok for an `element` ID.
-	var toId = function( src ) {
-		return src.split(/\/|\./g).join("_");
-	},
-		isFunction = can.isFunction,
+	var isFunction = can.isFunction,
 		makeArray = can.makeArray,
 		// Used for hookup `id`s.
 		hookupId = 1,
@@ -2145,13 +2312,22 @@ can.$ = Zepto
 
 	can.extend( $view, {
 		frag: function(result){
-			var frag = can.buildFragment([result],[document.body]).fragment;
+			var frag = can.buildFragment(result,document.body);
 			// If we have an empty frag...
 			if(!frag.childNodes.length) { 
 				frag.appendChild(document.createTextNode(''))
 			}
 			return $view.hookup(frag);
 		},
+    // Convert a path like string into something that's ok for an `element` ID.
+    toId : function( src ) {
+      return can.map(src.split(/\/|\./g), function( part ) {
+        // Dont include empty strings in toId functions
+        if ( part ) {
+          return part;
+        }
+      }).join("_");
+    },
 		hookup: function(fragment){
 			var hookupEls = [],
 				id, 
@@ -2160,7 +2336,7 @@ can.$ = Zepto
 				i=0;
 			
 			// Get all `childNodes`.
-			can.each(fragment.childNodes ? can.makeArray(fragment.childNodes) : fragment, function(i, node){
+			can.each(fragment.childNodes ? can.makeArray(fragment.childNodes) : fragment, function(node){
 				if(node.nodeType === 1){
 					hookupEls.push(node)
 					hookupEls.push.apply(hookupEls, can.makeArray( node.getElementsByTagName('*')))
@@ -2191,7 +2367,7 @@ can.$ = Zepto
 				ext: ".ejs",
 				registerScript: function() {},
 				preload: function( ) {},
-		render: function( view, data, helpers, callback ) {
+				render: function( view, data, helpers, callback ) {
 			// If helpers is a `function`, it is actually a callback.
 			if ( isFunction( helpers )) {
 				callback = helpers;
@@ -2315,6 +2491,11 @@ can.$ = Zepto
 				return d;
 			};
 
+			//If the url has a #, we assume we want to use an inline template
+			//from a script element and not current page's HTML
+			if( url.match(/^#/) ) {
+				url = url.substr(1);
+			}
 			// If we have an inline template, derive the suffix from the `text/???` part.
 			// This only supports `<script>` tags.
 			if ( el = document.getElementById(url) ) {
@@ -2331,7 +2512,7 @@ can.$ = Zepto
 			}
 	
 			// Convert to a unique and valid id.
-			id = toId(url);
+			id = can.view.toId(url);
 	
 			// If an absolute path, use `steal` to get it.
 			// You should only be using `//` if you are using `steal`.
@@ -2401,6 +2582,44 @@ can.$ = Zepto
 		usefulPart = function( resolved ) {
 			return can.isArray(resolved) && resolved[1] === 'success' ? resolved[0] : resolved
 		};
+	
+	
+	if ( window.steal ) {
+		steal.type("view js", function( options, success, error ) {
+			var type = can.view.types["." + options.type],
+				id = can.view.toId(options.rootSrc);
+
+			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "').then(function($){" + "can.view.preload('" + id + "'," + options.text + ");\n})";
+			success();
+		})
+	}
+
+	//!steal-pluginify-remove-start
+	can.extend(can.view, {
+		register: function( info ) {
+			this.types["." + info.suffix] = info;
+
+			if ( window.steal ) {
+				steal.type(info.suffix + " view js", function( options, success, error ) {
+					var type = can.view.types["." + options.type],
+						id = can.view.toId(options.rootSrc+'');
+
+					options.text = type.script(id, options.text)
+					success();
+				})
+			}
+		},
+		registerScript: function( type, id, src ) {
+			return "can.view.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
+		},
+		preload: function( id, renderer ) {
+			can.view.cached[id] = new can.Deferred().resolve(function( data, helpers ) {
+				return renderer.call(data, data, helpers);
+			});
+		}
+
+	});
+	//!steal-pluginify-remove-end
 
 	// ## ejs.js
 	// `can.EJS`  
@@ -2442,7 +2661,7 @@ can.$ = Zepto
 		attrMap = {
 			"class" : "className"
 		},
-		bool = can.each(["checked","disabled","readonly","required"], function(i,n){
+		bool = can.each(["checked","disabled","readonly","required"], function(n){
 			attrMap[n] = n;
 		}),
 		setAttr = function(el, attrName, val){
@@ -2474,7 +2693,7 @@ can.$ = Zepto
 			// toggle the 'matched' indicator
 			oldObserved.matched = !oldObserved.matched;
 			
-			can.each(observed, function(i, ob){
+			can.each(observed, function(ob){
 				// if the observe/attribute pair is being observed
 				if(oldObserved[ob.obj._namespace+"|"+ob.attr]){
 					// mark at as observed
@@ -2501,7 +2720,7 @@ can.$ = Zepto
 				// for the element to be destroyed and unbind
 				// all event handlers for garbage collection.
 				can.bind.call(el,'destroyed', function(){
-					can.each(oldObserved, function(i, ob){
+					can.each(oldObserved, function(ob){
 						if(typeof ob !== 'boolean'){
 							ob.obj.unbind(ob.attr, cb)
 						}
@@ -2786,7 +3005,7 @@ can.$ = Zepto
 
 				pendingHookups = [];
 				return can.view.hook(function(el){
-					can.each(hooks, function(i, fn){
+					can.each(hooks, function(fn){
 						fn(el);
 					})
 				});
@@ -3047,14 +3266,10 @@ can.$ = Zepto
 		extend(this, extras);
 	};
 		EJS.Helpers.prototype = {
-				view: function( url, data, helpers ) {
-			return $View(url, data || this._data, helpers || this._extras); 		
-		},
-		list : function(list, cb){
-			list.attr('length')
-			for(var i = 0, len = list.length; i < len; i++){
-				cb(list[i], i, list)
-			}
+				list : function(list, cb){
+			can.each(list, function(item, i){
+				cb(item, i, list)
+			})
 		}
 	};
 
@@ -3075,4 +3290,16 @@ can.$ = Zepto
 			});
 		}
 	});
+
+	// Register as an AMD module if supported, otherwise attach to the window
+	if ( typeof define === "function" && define.amd ) {
+		define( "can", [], function () { return can; } );
+	} else {
+		window.can = can;
+	}
+
+}, "0.0.1", {
+requires: ["node", "io-base", "querystring", "event-focus", "array-extras"],
+ optional: ["selector-css2", "selector-css3"]
+});
 })(can = {}, this )

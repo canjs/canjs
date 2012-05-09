@@ -2,5 +2,6 @@
 steal(
 'can/model',
 'can/control/route',
-'can/view/ejs'
+'can/view/ejs',
+'can/util/exports.js'
 )
