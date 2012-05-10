@@ -118,25 +118,27 @@ steal('can/observe', 'can/util/string/deparam', function() {
 				propCount = 0;
 				
 			delete data.route;
-			// If we have a route name in our `can.route` data, use it.
-			if ( ! ( routeName && (route = can.route.routes[routeName]))){
-				each(data, function(){propCount++});
-				// Otherwise find route.
-				each(can.route.routes, function(temp, name){
-					// best route is the first with all defaults matching
-					
-					
-					matchCount = matchesData(temp, data);
-					if ( matchCount > matches ) {
-						route = temp;
-						matches = matchCount
-					}
-					if(matchCount >= propCount){
-						return false;
-					}
-				});
+			
+			each(data, function(){propCount++});
+			// Otherwise find route.
+			each(can.route.routes, function(temp, name){
+				// best route is the first with all defaults matching
+				
+				
+				matchCount = matchesData(temp, data);
+				if ( matchCount > matches ) {
+					route = temp;
+					matches = matchCount
+				}
+				if(matchCount >= propCount){
+					return false;
+				}
+			});
+			// If we have a route name in our `can.route` data, and it's
+			// just as good as what currently matches, use that
+			if (can.route.routes[routeName] && matchesData(can.route.routes[routeName], data ) === matches) {
+				route = can.route.routes[routeName];
 			}
-
 			// If this is match...
 			if ( route ) {
 				var cpy = extend({}, data),
@@ -416,7 +418,6 @@ steal('can/observe', 'can/util/string/deparam', function() {
 		clearTimeout( timer );
 		timer = setTimeout(function() {
 			var serialized = can.route.data.serialize();
-			delete serialized.route;
 			location.hash = "#!" + can.route.param(serialized)
 		}, 1);
 	});
