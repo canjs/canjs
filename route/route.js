@@ -49,7 +49,6 @@ steal('can/observe', 'can/util/string/deparam', function() {
 			return count;
 		},
 		onready = !0,
-		boundtohashchange = false,
 		location = window.location,
 		each = can.each,
 		extend = can.extend;
@@ -57,7 +56,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
 
 	can.route = function( url, defaults ) {
         defaults = defaults || {}
-        // Extract the variable names and replace with `RegExp` that will match 
+        // Extract the variable names and replace with `RegExp` that will match
 		// an atual URL with values.
 		var names = [],
 			test = url.replace(matcher, function( whole, name ) {
@@ -65,7 +64,7 @@ steal('can/observe', 'can/util/string/deparam', function() {
 				// a name without a default value HAS to have a value
 				// a name that has a default value can be empty
 				// The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
-				return "([^\\/\\&]"+(defaults[name] ? "*" : "+")+")"  
+				return "([^\\/\\&]"+(defaults[name] ? "*" : "+")+")"
 			});
 
 		// Add route in a form that can be easily figured out.
@@ -282,11 +281,6 @@ steal('can/observe', 'can/util/string/deparam', function() {
 				onready = val;
 			}
 			if( val === true || onready === true ) {
-				if(boundtohashchange === false){ // make double sure this only happens once
-					// If the hash changes, update the `can.route.data`.
-					can.bind.call(window,'hashchange', setState);
-					boundtohashchange = true;
-				}
 				setState();
 			}
 			return can.route;
@@ -411,6 +405,9 @@ steal('can/observe', 'can/util/string/deparam', function() {
 			curParams = can.route.deparam( location.href.split(/#!?/)[1] || "" );
 			can.route.attr(curParams, true);
 		};
+
+	// If the hash changes, update the `can.route.data`.
+	can.bind.call(window,'hashchange', setState);
 
 	// If the `can.route.data` changes, update the hash.
     // Using `.serialize()` retrieves the raw data contained in the `observable`.
