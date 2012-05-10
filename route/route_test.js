@@ -301,6 +301,27 @@ test("updating the hash", function(){
 	can.$("#qunit-test-area")[0].appendChild(iframe);
 });
 
+test("sticky enough routes", function(){
+	stop();
+	window.routeTestReady = function(iCanRoute, loc){
+		iCanRoute("active");
+		iCanRoute("");
+		loc.hash = "#!active"
+
+		setTimeout(function(){
+			var after = loc.href.substr(loc.href.indexOf("#"));
+			equal(after,"#!active");
+			start();
+
+			can.remove(can.$(iframe))
+
+		},30);
+	}
+	var iframe = document.createElement('iframe');
+	iframe.src = steal.root.join("can/route/testing.html");
+	can.$("#qunit-test-area")[0].appendChild(iframe);
+});
+
 test("unsticky routes", function(){
 	stop();
 	window.routeTestReady = function(iCanRoute, loc){
