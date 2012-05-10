@@ -171,12 +171,13 @@ em {
 #buttons {
 	border-top: 1px solid #f0f1f0;
 	border-bottom: 1px solid #b5b6b5;
-	padding: 10px 0 10px 14px;
+	padding: 10px 0 2px 14px;
 }
 #buttons a {
 	float: left;
 	margin-right: 8px;
-	width: 72px;
+	margin-bottom: 8px;
+	width: 112px;
 }
 #buttons a:hover {
 	background: #006fb8;

@@ -24,6 +24,7 @@
 			<a href='https://forum.javascriptmvc.com/#Forum/canjs'>Forums</a>
 			<a href='http://bitovi.com/blog/tag/canjs/'>Blog</a>
 			<a href='https://twitter.com/canjsus'>Twitter</a>
+			<a href='http://webchat.freenode.net?channels=canjs'>IRC</a>
 		</div>
 		<div id="inner-menu-wrap">
 			<ul id='menu'></ul>
@@ -62,15 +63,15 @@
 <p>CanJS&#8217;s core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your download for the library you are using:</p>
 
 <ul>
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0b2.js'>can.jquery.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0b2.min.js'>min</a>) - 8.5k - <a href='http://donejs.com/can/docs/can.jquery.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0.js'>can.jquery.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0.min.js'>min</a>) - 8.5k - <a href='http://donejs.com/can/docs/can.jquery.html'>Annotated Source</a></li>
 
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0b2.js'>can.zepto.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0b2.min.js'>min</a>) - 10.2k - <a href='http://donejs.com/can/docs/can.zepto.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0.js'>can.zepto.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0.min.js'>min</a>) - 10.2k - <a href='http://donejs.com/can/docs/can.zepto.html'>Annotated Source</a></li>
 
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0b2.js'>can.dojo.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0b2.min.js'>min</a>) - 10.8k - <a href='http://donejs.com/can/docs/can.dojo.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0.js'>can.dojo.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0.min.js'>min</a>) - 10.8k - <a href='http://donejs.com/can/docs/can.dojo.html'>Annotated Source</a></li>
 
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0b2.js'>can.mootools.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0b2.min.js'>min</a>) - 10.7k - <a href='http://donejs.com/can/docs/can.mootools.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0.js'>can.mootools.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0.min.js'>min</a>) - 10.7k - <a href='http://donejs.com/can/docs/can.mootools.html'>Annotated Source</a></li>
 
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.yui.1.0b2.js'>can.yui.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.yui.1.0b2.min.js'>min</a>) - 10.2k - <a href='http://donejs.com/can/docs/can.yui.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.yui.1.0.js'>can.yui.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.yui.1.0.min.js'>min</a>) - 10.2k - <a href='http://donejs.com/can/docs/can.yui.html'>Annotated Source</a></li>
 </ul>
 
 <p>This page walks through the basics of CanJS by building a small todo app with CanJS and jQuery. If you want to see a fully functional version of this todo app in action, you can <a href='http://jsfiddle.net/javascriptmvc/ADWhw/3/'>go to this jsfiddle and view the results and code.</a></p>
@@ -1721,13 +1722,19 @@
 <span class='p'>]);</span>
 </code></pre>
 </div>
+<h3 id='third_party_extensions_and_plugins'>Third Party Extensions and Plugins</h3>
+
+<ul>
+<li><a href='https://github.com/retro/Tonfa.js'>TonfaJS</a> - Glues CanJS and jQueryMobile together.</li>
+</ul>
+
 <h2 id='examples'>Examples</h2>
 
 <p>Check out these sweet aps built in CanJS.</p>
 
 <h3 id='todo'>Todo</h3>
 
-<p><img alt='CanJS Todo App' src='images/examples/todo.png' /></p>
+<p><img src='images/examples/todo.png' alt='CanJS Todo App' /></p>
 
 <p>A simple todo application written in the style of <a href='https://github.com/addyosmani/todomvc/'>TodoMVC</a>. There is an implementation for each library supported by CanJS including an <strong>extra</strong> Dojo, YUI, and jQuery one using <a href='#can_control-templated_event_handlers_pt_2'>templated event binding</a> to bind to widget events. Todo is a good example of the power of <a href='#can_ejs-live_binding'>EJS&#8217;s live binding</a>.</p>
 
@@ -1755,7 +1762,7 @@
 
 <h3 id='canplay'>CanPlay</h3>
 
-<p><img alt='Can Play Demo' src='http://donejs.com/examples/player/screen.png' /></p>
+<p><img src='http://donejs.com/examples/player/screen.png' alt='Can Play Demo' /></p>
 
 <p>A simple HTML5 video player application utilizing <a href='http://popcornjs.org/'>Popcorn.js</a>. We set up two <code>can.Control</code> instances to control the <code>Popcorn</code> video as well as update the position of the player. This demo makes use of <a href='#can_control-templated_event_handlers_pt_1'>Templated Event Handlers</a> by passing the <code>Popcorn</code> wrapped video element to the controller instances. The controllers then bind to events using the <code>&quot;{video}&quot;</code> templated event handler to listen and interact with the <code>video</code> element.</p>
 
@@ -1765,11 +1772,47 @@
 
 <p>Srchr searches several data sources for content and displays it to the user. It is built using the jQuery version of CanJS and is a great example of how to create dumb, isolated widgets that are loosely coupled to the rest of the application.</p>
 
-<p><img alt='CanJS Srchr jQuery App' src='images/examples/srchr.png' /></p>
+<p><img src='images/examples/srchr.png' alt='CanJS Srchr jQuery App' /></p>
 
 <p><a href='http://donejs.com/examples/srchr/index.html'><strong>View the App</strong></a></p>
 
 <p><a href='https://github.com/jupiterjs/srchr'>View the source on github</a></p>
+
+<h2 id='get_help'>Get Help</h2>
+
+<p>There are several places you can go to ask questions or get help debugging problems.</p>
+
+<h3 id='twitter'>Twitter</h3>
+
+<p>Follow <a href='https://twitter.com/#!/canjsus'>@canjsus</a> for updates, announcements and quick answers to your questions.</p>
+
+<h3 id='forums'>Forums</h3>
+
+<p>Visit the <a href='http://forum.javascriptmvc.com/#Forum/canjs'>Forums</a> for questions requiring more than 140 characters. CanJS has a thriving community that&#8217;s always eager to help out.</p>
+
+<h3 id='irc'>IRC</h3>
+
+<p>The CanJS IRC channel (<code>#canjs</code> on <strong>irc.freenode.net</strong>) is an awesome place to hang out with fellow CanJS developers and get your questions answered quickly.</p>
+
+<p><strong>Help Us Help You</strong></p>
+
+<p>Help the community help you by using the jsFiddle templates below. Just fork one of these templates and include the URL when you are asking for help.</p>
+
+<ul>
+<li><a href='http://jsfiddle.net/donejs/qYdwR/'>jQuery</a></li>
+
+<li><a href='http://jsfiddle.net/donejs/7Yaxk/'>Zepto</a></li>
+
+<li><a href='http://jsfiddle.net/donejs/9x96n/'>Dojo</a></li>
+
+<li><a href='http://jsfiddle.net/donejs/w6m73/'>YUI</a></li>
+
+<li><a href='http://jsfiddle.net/donejs/mnNJX/'>Mootools</a></li>
+</ul>
+
+<h3 id='get_help_from_bitovi'>Get Help from Bitovi</h3>
+
+<p>Bitovi <em>(developers of CanJS)</em> offers <a href='http://bitovi.com/training/'>training</a> and <a href='http://bitovi.com/consulting/'>consulting</a> for your team. They can also provide private one-on-one support staffed by their JavaScript/Ajax experts. <a href='contact@bitovi.com'>Contact Bitovi</a> if you&#8217;re interested.</p>
 
 <h2 id='why_canjs'>Why CanJS</h2>
 
@@ -2076,10 +2119,20 @@ git submodule update --init --recursive</code></pre>
 
 <h3 id='change_log'>Change Log</h3>
 
-<p><strong>master</strong></p>
+<p><strong>1.0</strong></p>
 
 <ul>
-<li>can.util - add: <a href='https://github.com/jupiterjs/canjs/commit/75e99f3b1545d4086ccdae259ccc87a3e8e7a018'>a util/function plugin</a></li>
+<li>
+<p><a href='https://github.com/jupiterjs/canjs/blob/master/util/exports.js'>Registers itself as an AMD</a> module if <code>define</code> is in the <code>window</code></p>
+</li>
+
+<li>
+<p>can.fixture - add: <a href='https://github.com/jupiterjs/canjs/tree/5277f6f526cfa2514954d66e6f759ec73c47bf09'>a fixture plugin</a></p>
+</li>
+
+<li>
+<p>can.util - add: <a href='https://github.com/jupiterjs/canjs/commit/75e99f3b1545d4086ccdae259ccc87a3e8e7a018'>a util/function plugin</a></p>
+</li>
 </ul>
 
 <p><strong>1.0 Beta 2</strong></p>
