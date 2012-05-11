@@ -1,5 +1,5 @@
 // this file should not be stolen directly
-steal('can/observe',function(){
+steal('can/observe', function() {
 	
 	// ## model.js  
 	// `can.Model`  
@@ -411,12 +411,13 @@ steal('can/observe',function(){
 		 * 
 		 * To implement with a function, `findOne` is passed __params__ to specify
 		 * the instance retrieved from the server and it should return a
-		 * deferred that resolves to the model data. For example:
+		 * deferred that resolves to the model data.  Also notice that you now need to
+		 * build the URL manually. For example:
 		 * 
 		 *     Recipe = can.Model({
 		 *       findOne : function(params){
 		 *         return $.ajax({
-		 *           url: '/recipes/{id}.json',
+		 *           url: '/recipes/' + params.id,
 		 *           type: 'get',
 		 *           dataType: 'json'})
 		 *       }
