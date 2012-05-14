@@ -17,7 +17,7 @@
 		<div id='header'>
 			<div id='logo-and-download'>
 				<img alt="Logo" id="logo" src="images/logo.png"/>
-				<a class='primary' href='https://github.com/downloads/jupiterjs/canjs/1.0b2.zip'>Download v1.0b2</a>
+				<a class='primary' href='https://github.com/downloads/jupiterjs/canjs/can.js.1.0.zip'>Download v1.0</a>
 			</div>
 		</div>
 		<div class='cf' id='buttons'>
@@ -63,15 +63,15 @@
 <p>CanJS&#8217;s core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your download for the library you are using:</p>
 
 <ul>
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0.js'>can.jquery.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.jquery.1.0.min.js'>min</a>) - 8.5k - <a href='http://donejs.com/can/docs/can.jquery.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.jquery.js'>can.jquery.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.jquery.min.js'>min</a>) - 8.5k - <a href='http://donejs.com/can/docs/can.jquery.html'>Annotated Source</a></li>
 
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0.js'>can.zepto.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.zepto.1.0.min.js'>min</a>) - 10.2k - <a href='http://donejs.com/can/docs/can.zepto.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.zepto.js'>can.zepto.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.zepto.min.js'>min</a>) - 10.2k - <a href='http://donejs.com/can/docs/can.zepto.html'>Annotated Source</a></li>
 
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0.js'>can.dojo.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.dojo.1.0.min.js'>min</a>) - 10.8k - <a href='http://donejs.com/can/docs/can.dojo.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.dojo.js'>can.dojo.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.dojo.min.js'>min</a>) - 10.8k - <a href='http://donejs.com/can/docs/can.dojo.html'>Annotated Source</a></li>
 
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0.js'>can.mootools.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.mootools.1.0.min.js'>min</a>) - 10.7k - <a href='http://donejs.com/can/docs/can.mootools.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.mootools.js'>can.mootools.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.mootools.min.js'>min</a>) - 10.7k - <a href='http://donejs.com/can/docs/can.mootools.html'>Annotated Source</a></li>
 
-<li><a href='https://github.com/downloads/jupiterjs/canjs/can.yui.1.0.js'>can.yui.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.yui.1.0.min.js'>min</a>) - 10.2k - <a href='http://donejs.com/can/docs/can.yui.html'>Annotated Source</a></li>
+<li><a href='https://github.com/downloads/jupiterjs/canjs/can.yui.js'>can.yui.js</a> (<a href='https://github.com/downloads/jupiterjs/canjs/can.yui.min.js'>min</a>) - 10.2k - <a href='http://donejs.com/can/docs/can.yui.html'>Annotated Source</a></li>
 </ul>
 
 <p>This page walks through the basics of CanJS by building a small todo app with CanJS and jQuery. If you want to see a fully functional version of this todo app in action, you can <a href='http://jsfiddle.net/javascriptmvc/ADWhw/3/'>go to this jsfiddle and view the results and code.</a></p>
@@ -1474,7 +1474,7 @@
 
 <h3 id='canconstructproxy_'>can.Construct.proxy <code>construct.proxy( methodname, [ curriedArgs ] )</code></h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.construct.proxy.1.0b2.js'>can.construct.proxy.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.construct.proxy.js'>can.construct.proxy.js</a></p>
 
 <p>The <a href='http://donejs.com/docs.html#!can.Construct.proxy'>can.Construct.proxy</a> plugin adds a <em>proxy</em> method that takes a function name and returns a new function that will always have <code>this</code> set to the original context. You can also curry arguments that will be added to the beginning of the proxied functions argument list:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Person</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Construct</span><span class='p'>({</span>
@@ -1497,7 +1497,7 @@
 </div>
 <h3 id='canconstructsuper'>can.Construct.super</h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.construct.super.1.0b2.js'>can.construct.super.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.construct.super.js'>can.construct.super.js</a></p>
 
 <p>The <a href='http://donejs.com/docs.html#!can.Construct.super'>can.Construct.super</a> plugin provides access to overwritten methods using <code>this._super</code> when extending a can.Construct:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>ImprovedPerson</span> <span class='o'>=</span> <span class='nx'>Person</span><span class='p'>({</span>
@@ -1518,7 +1518,7 @@
 </div>
 <h3 id='canobservedelegate_'>can.Observe.delegate <code>observe.delegate( name, event, handler )</code></h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.delegate.1.0b2.js'>can.observe.delegate.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.delegate.js'>can.observe.delegate.js</a></p>
 
 <p>Use the <a href='http://donejs.com/docs.html#!can.Observe.delegate'>can.Observe.delegate</a> plugin to listen to <em>change</em>, <em>set</em>, <em>add</em> and <em>remove</em> on any direct, child or wildcard attribute:</p>
 <div class='highlight'><pre><code class='javascript'><span class='c1'>// create an observable</span>
@@ -1547,7 +1547,7 @@
 </div>
 <h3 id='canobservesetter'>can.Observe.setter</h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.setter.1.0b2.js'>can.observe.setter.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.setter.js'>can.observe.setter.js</a></p>
 
 <p>With the <a href='http://donejs.com/docs.html#!can.Observe.setter'>can.Observe.setter</a> plugin you can use attribute setter methods to process the value being set:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Person</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Observe</span><span class='p'>({</span>
@@ -1565,7 +1565,7 @@
 </div>
 <h3 id='canobserveattributes'>can.Observe.attributes</h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.attributes.1.0b2.js'>can.observe.attributes.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.attributes.js'>can.observe.attributes.js</a></p>
 
 <p>The <a href='http://donejs.com/docs.html#!can.Observe.attributes'>can.Observe.attributes</a> plugin allows you to specify attributes with type converters and serializers. Serializers make it handy when preparing your data to send to the server for JavaScript objects like dates or associations.</p>
 
@@ -1616,7 +1616,7 @@
 </div>
 <h3 id='canobservevalidations_'>can.Observe.validations <code>observe.validate( attribute, validator )</code></h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.validations.1.0b2.js'>can.observe.validations.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.validations.js'>can.observe.validations.js</a></p>
 
 <p><a href='http://donejs.com/docs.html#!can.Observe.validations'>can.Observe.validations</a> adds validation to a can.Observe. Call the <em>validate</em> method in the <em>init</em> constructor with the attribute name and the validation function and then use <em>errors</em> to retrieve the error messages:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Person</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Model</span><span class='p'>({</span>
@@ -1642,7 +1642,7 @@
 </div>
 <h3 id='canobservebackup_'>can.Observe.backup <code>observe.backup()</code></h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.backup.1.0b2.js'>can.observe.backup.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.observe.backup.js'>can.observe.backup.js</a></p>
 
 <p>You can backup and restore can.Observe data using the <a href='http://donejs.com/docs.html#!can.Observe.backup'>can.Observe.backup</a> plugin. To backup the observe in its current state call <em>backup</em>. To revert it back to that state use <em>restore</em>:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>todo</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>Todo</span><span class='p'>(</span> <span class='p'>{</span> <span class='nx'>name</span><span class='o'>:</span> <span class='s1'>&#39;do the dishes&#39;</span> <span class='p'>}</span> <span class='p'>);</span>
@@ -1655,7 +1655,7 @@
 </div>
 <h3 id='cancontrolplugin'>can.Control.plugin</h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.control.plugin.1.0b2.js'>can.control.plugin.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.control.plugin.js'>can.control.plugin.js</a></p>
 
 <p><a href='http://donejs.com/docs.html#!can.Control.plugin'>can.Control.plugin</a> registers a jQuery plugin function with a given <em>pluginName</em> that instantiates a can.Control. For example with this can.Control:</p>
 <div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>Tabs</span> <span class='o'>=</span> <span class='nx'>can</span><span class='p'>.</span><span class='nx'>Control</span><span class='p'>({</span>
@@ -1688,7 +1688,7 @@
 </div>
 <h3 id='cancontrolview_'>can.Control.view <code>control.view( [ viewname ], [ data ] )</code></h3>
 
-<p><a href='https://github.com/downloads/jupiterjs/canjs/can.control.view.1.0b2.js'>can.control.view.js</a></p>
+<p><a href='https://github.com/downloads/jupiterjs/canjs/can.control.view.js'>can.control.view.js</a></p>
 
 <p><a href='http://donejs.com/docs.html#!can.Control.view'>can.Control.view</a> renders a view from a URL in a <em>views/controlname</em> folder. If no viewname is supplied it uses the current action name. If no data is provided the control instance is passed to the view. Note that you have to set a name when creating the Control construct for <em>view</em> to work.</p>
 <div class='highlight'><pre><code class='javascript'><span class='nx'>can</span><span class='p'>.</span><span class='nx'>Control</span><span class='p'>(</span> <span class='s1'>&#39;Editor&#39;</span><span class='p'>,</span> <span class='p'>{</span>
@@ -1734,7 +1734,7 @@
 
 <h3 id='todo'>Todo</h3>
 
-<p><img src='images/examples/todo.png' alt='CanJS Todo App' /></p>
+<p><img alt='CanJS Todo App' src='images/examples/todo.png' /></p>
 
 <p>A simple todo application written in the style of <a href='https://github.com/addyosmani/todomvc/'>TodoMVC</a>. There is an implementation for each library supported by CanJS including an <strong>extra</strong> Dojo, YUI, and jQuery one using <a href='#can_control-templated_event_handlers_pt_2'>templated event binding</a> to bind to widget events. Todo is a good example of the power of <a href='#can_ejs-live_binding'>EJS&#8217;s live binding</a>.</p>
 
@@ -1762,7 +1762,7 @@
 
 <h3 id='canplay'>CanPlay</h3>
 
-<p><img src='http://donejs.com/examples/player/screen.png' alt='Can Play Demo' /></p>
+<p><img alt='Can Play Demo' src='http://donejs.com/examples/player/screen.png' /></p>
 
 <p>A simple HTML5 video player application utilizing <a href='http://popcornjs.org/'>Popcorn.js</a>. We set up two <code>can.Control</code> instances to control the <code>Popcorn</code> video as well as update the position of the player. This demo makes use of <a href='#can_control-templated_event_handlers_pt_1'>Templated Event Handlers</a> by passing the <code>Popcorn</code> wrapped video element to the controller instances. The controllers then bind to events using the <code>&quot;{video}&quot;</code> templated event handler to listen and interact with the <code>video</code> element.</p>
 
@@ -1772,7 +1772,7 @@
 
 <p>Srchr searches several data sources for content and displays it to the user. It is built using the jQuery version of CanJS and is a great example of how to create dumb, isolated widgets that are loosely coupled to the rest of the application.</p>
 
-<p><img src='images/examples/srchr.png' alt='CanJS Srchr jQuery App' /></p>
+<p><img alt='CanJS Srchr jQuery App' src='images/examples/srchr.png' /></p>
 
 <p><a href='http://donejs.com/examples/srchr/index.html'><strong>View the App</strong></a></p>
 
