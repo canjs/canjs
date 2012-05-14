@@ -734,7 +734,7 @@ steal('can/construct', function() {
 	 * where:
 	 * 
 	 *  - `newVals` - the values added to the list
-	 *  - `index` - where the items where added
+	 *  - `index` - where the items were added
 	 * 
 	 * ### remove events
 	 * 
@@ -746,7 +746,7 @@ steal('can/construct', function() {
 	 * where:
 	 * 
 	 *   - `oldVals` - the values removed from the list
-	 *   - `index` - where the items where removed
+	 *   - `index` - where the items were removed
 	 * 
 	 * ### set events
 	 * 
@@ -758,7 +758,7 @@ steal('can/construct', function() {
 	 * where:
 	 * 
 	 *   - `newVal` - the new value at index
-	 *   - `index` - where the items where removed
+	 *   - `index` - where the items were removed
 	 * 
 	 * ### length events
 	 * 
@@ -887,7 +887,7 @@ steal('can/construct', function() {
 		 *   - how - "remove"
 		 *   - newVals - undefined
 		 *   - oldVals - [1,2] -the array of removed values
-		 *   - where - 1 - the location of where these items where removed
+		 *   - where - 1 - the location of where these items were removed
 		 * 
 		 * The second change event is the addition of the "a", and "b" values where 
 		 * the callback values will be:
@@ -896,7 +896,7 @@ steal('can/construct', function() {
 		 *   - how - "added"
 		 *   - newVals - ["a","b"]
 		 *   - oldVals - [1, 2] - the array of removed values
-		 *   - where - 1 - the location of where these items where added
+		 *   - where - 1 - the location of where these items were added
 		 * 
 		 * @param {Number} index where to start removing or adding items
 		 * @param {Object} [howMany=0] the number of items to remove
@@ -1096,7 +1096,7 @@ steal('can/construct', function() {
 		 *         how,       // "add"
 		 *         newVals,   // an array of new values pushed
 		 *         oldVals,   // undefined
-		 *         where      // the location where these items where added
+		 *         where      // the location where these items were added
 		 *         ) {
 		 *     
 		 *     })
@@ -1169,7 +1169,7 @@ steal('can/construct', function() {
 		 *         how,       // "remove"
 		 *         newVals,   // undefined
 		 *         oldVals,   // 2
-		 *         where      // the location where these items where added
+		 *         where      // the location where these items were added
 		 *         ) {
 		 *     
 		 *     })
