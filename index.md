@@ -2440,7 +2440,7 @@ off JavaScriptMVC.  This page is for contributors after CanJS's launch.
 
 ### Change Log
 
-__1.0__
+__1.0__ (May 14st 2012)
 
  - [Registers itself as an AMD](https://github.com/jupiterjs/canjs/blob/master/util/exports.js) module if `define` is in the `window`
 
@@ -2450,7 +2450,11 @@ __1.0__
  - can.util
     - add: [a util/function plugin](https://github.com/jupiterjs/canjs/commit/75e99f3b1545d4086ccdae259ccc87a3e8e7a018)
 
-__1.0 Beta 2__
+ - can.route
+    - fix: [favor current route when matching](https://github.com/jupiterjs/canjs/commit/863f37cc3d34f52517050444e0b31b7d63d6c784)
+    - fix: [uses defaults to match route better, and current route is not always selected](https://github.com/jupiterjs/canjs/commit/b0e59d287caba8fcb98871e4814b924588aef138)
+
+__1.0 Beta 2__ (April 21st 2012)
 
  - can.util
     - change: [reverse argument order of can.each](https://github.com/jupiterjs/canjs/commit/234fd3b9eca18abdbc3fdbea114be6a818bfe6e3)
@@ -2470,6 +2474,6 @@ __1.0 Beta 2__
     - fix: a host of bugs in libaries other than jQuery because can.route was not properly tested in other libraries.
     - fix: can.param fixed in [dojo](https://github.com/jupiterjs/canjs/commit/77dfa012b2f6baa7dfb0fe84f2d62aeb5b04fc90), 
    
-__1.0 Beta 1__ (April 1st 2011)
+__1.0 Beta 1__ (April 1st 2012)
 
 Released!
