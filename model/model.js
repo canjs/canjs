@@ -15,7 +15,7 @@ steal('can/observe', function() {
 			arguments[0] = model[func](arguments[0])
 			d.resolve.apply(d, arguments)
 		},function(){
-			d.resolveWith.apply(this,arguments)
+			d.rejectWith.apply(this,arguments)
 		})
 		return d;
 	},
