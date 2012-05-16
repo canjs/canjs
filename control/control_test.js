@@ -273,4 +273,23 @@ test("on rebinding", 2, function(){
 	rb.on();
 	can.trigger(item2, "foo")
 });
+
+test("actions provide method names", function(){
+	var Tester = can.Control({
+		"{item1} foo" : "food",
+		"{item2} bar" : "food",
+		food : function(item, ev, data){
+			ok(true, "food called")
+			ok(item === item1 || item === item2, "called with an item")
+		}
+	});
+	
+	var item1 = {},
+		item2 = {}
+	rb = new Tester( document.createElement('div'), {item1: item1, item2: item2} );
+	
+	can.trigger(item1, "foo");
+	can.trigger(item2, "bar");
+})
+
 })()
