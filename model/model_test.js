@@ -556,6 +556,33 @@ test("store ajax binding", function(){
 	
 })
 
+test("store instance updates", function(){
+	var Guy, updateCount;
+    Guy = can.Model({
+        findAll : 'GET /guys'
+    },{});
+    updateCount = 0;
+    
+    can.fixture("GET /guys", function(){
+    	var guys = [[{id: 1, updateCount: updateCount, nested: {count: updateCount}}]];
+    	updateCount++;
+        return guys;
+    });
+    stop();
+    Guy.findAll({}, function(guys){
+    	start();
+        guys[0].bind('updated', function(){});
+        ok(Guy.store[1], 'instance stored');
+    	equals(Guy.store[1].updateCount, 0, 'updateCount is 0')
+    	equals(Guy.store[1].nested.count, 0, 'nested.count is 0')
+    })
+    Guy.findAll({}, function(guys){
+    	equals(Guy.store[1].updateCount, 1, 'updateCount is 1')
+    	equals(Guy.store[1].nested.count, 1, 'nested.count is 1')
+    })
+	
+})
+
 test("templated destroy", function(){
 	var MyModel = can.Model({
 		destroy : "/destroyplace/{id}"
