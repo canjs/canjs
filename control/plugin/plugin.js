@@ -60,7 +60,7 @@ can.Control.setup = function() {
 /*
  * prototype
  */
-can.prototype.extend({
+$.fn.extend({
 
 	/**
 	 * @function jQuery.fn.controls
@@ -142,8 +142,8 @@ can.prototype.extend({
 can.Control.plugin = function(pluginname){
 	var control = this;
 
-	if (!can.prototype[pluginname]) {
-		can.prototype[pluginname] = function(options){
+	if (!$.fn[pluginname]) {
+		$.fn[pluginname] = function(options){
 		
 			var args = makeArray(arguments),   //if the arg is a method on this control
 			isMethod = typeof options == "string" && $.isFunction(control.prototype[options]), meth = args[0];
