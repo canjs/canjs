@@ -38,6 +38,9 @@ steal('can/construct', function( $ ) {
 		// Moves `this` to the first argument, wraps it with `jQuery` if it's an element
 		shifter = function shifter(context, name) {
 			var method = typeof name == "string" ? context[name] : name;
+			if(!isFunction(method)){
+				method = context[method];
+			}
 			return function() {
 				context.called = name;
     			return method.apply(context, [this.nodeName ? can.$(this) : this].concat( slice.call(arguments, 0)));
@@ -75,11 +78,7 @@ steal('can/construct', function( $ ) {
 
 				// Calculate and cache actions.
 				control.actions = {};
-
 				for ( funcName in control.prototype ) {
-					if (funcName == 'constructor' || ! isFunction(control.prototype[funcName]) ) {
-						continue;
-					}
 					if ( control._isAction(funcName) ) {
 						control.actions[funcName] = control._action(funcName);
 					}
@@ -93,7 +92,15 @@ steal('can/construct', function( $ ) {
 		 * @return {Boolean} truthy if an action or not
 		 */
 		_isAction: function( methodName ) {
-			return !! ( special[methodName] || processors[methodName] || /[^\w]/.test(methodName) );
+			
+			var val = this.prototype[methodName],
+				type = typeof val;
+			// if not the constructor
+			return (methodName !== 'constructor') &&
+				// and is a function or links to a function
+				( type == "function" || (type == "string" &&  isFunction(this.prototype[val] ) ) ) &&
+				// and is in special, a processor, or has a funny character
+			    !! ( special[methodName] || processors[methodName] || /[^\w]/.test(methodName) );
 		},
 		// Takes a method name and the options passed to a control
 		// and tries to return the data necessary to pass to a processor
@@ -123,7 +130,7 @@ steal('can/construct', function( $ ) {
 			
 			// If we don't have options (a `control` instance), we'll run this 
 			// later.  
-      paramReplacer.lastIndex = 0;
+      		paramReplacer.lastIndex = 0;
 			if ( options || ! paramReplacer.test( methodName )) {
 				// If we have options, run sub to replace templates `{}` with a
 				// value from the options or the window

@@ -14,8 +14,12 @@ steal('can/route','can/control', function(){
 					
 					var d = can.route.attr();
 					delete d.route;
+					if(can.isFunction(controller[funcName])){
+						controller[funcName]( d )
+					}else {
+						controller[controller[funcName]](d)
+					}
 					
-					controller[funcName]( d )
 				}
 			}
 		can.route.bind( 'change', check );
