@@ -407,3 +407,14 @@ test("param order matching", function(){
 	equals(res,"/task2")
 })
 
+test("dashes in routes", function(){
+	can.route.routes = {};
+	can.route(":foo-:bar");
+	
+	var obj = can.route.deparam("abc-def");
+	same(obj, {
+		foo : "abc",
+		bar : "def",
+		route: ":foo-:bar"
+	});
+})

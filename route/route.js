@@ -59,12 +59,13 @@ steal('can/observe', 'can/util/string/deparam', function() {
         // Extract the variable names and replace with `RegExp` that will match
 		// an atual URL with values.
 		var names = [],
-			test = url.replace(matcher, function( whole, name ) {
-				names.push(name)
+			test = url.replace(matcher, function( whole, name, i ) {
+				names.push(name);
+				var next = "\\"+( url.substr(i+whole.length,1) || "&" )
 				// a name without a default value HAS to have a value
 				// a name that has a default value can be empty
 				// The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
-				return "([^\\/\\&]"+(defaults[name] ? "*" : "+")+")"
+				return "([^" +next+"]"+(defaults[name] ? "*" : "+")+")"
 			});
 
 		// Add route in a form that can be easily figured out.
