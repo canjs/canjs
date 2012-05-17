@@ -1,9 +1,5 @@
 @class can.EJS
-<<<<<<< HEAD
 @parent canjs
-=======
-@parent can
->>>>>>> 947f427b460c0db8b82d7e7ac43b7420508fd257
 
 EJS provides __live__ ERB style client-side templates. Use EJS 
 with [can.view] and for live templating use EJS with [can.Observe].
