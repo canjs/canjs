@@ -1,48 +1,152 @@
 var path            = require("path"),
-	program         = require("commander"),
-	GitHubApi       = require("github"),
-	github          = new GitHubApi({
-		version: "3.0.0"
-	}),
-	qs              = require("querystring"),
-	fs              = require("fs"),
-	https           = require("https"),
-	s3p             = require("./s3-post.js"),
-	rhinoPath       = path.join(__dirname, "../../.."),
-	distPath        = path.join(__dirname, "../../dist/edge"),
-	spawn           = require("child_process").spawn,
-	_               = require("underscore"),
-	version         = fs.readFileSync( path.join( __dirname, "../version" )),
-	descriptions    = {
-		"can.construct.proxy.js"     : "Can Construct Proxy Plugin",
-		"can.observe.validations.js" : "Can Observe Validations Plugin",
-		"can.construct.super.js"     : "Can Construct Super Plugin",
-		"can.fixture.js"             : "Can Fixture Plugin",
-		"can.observe.attributes.js"  : "Can Observe Attributes Plugin",
-		"can.view.modifiers.js"      : "Can View Modifiers Plugin",
-		"can.control.plugin.js"      : "Can Control Plugin",
-		"can.observe.backup.js"      : "Can Observe Backup Plugin",
-		"can.control.view.js"        : "Can Control View Plugin",
-		"can.observe.delegate.js"    : "Can Observe Delegate Plugin",
-		"can.observe.setter.js"      : "Can Observe Setter Plugin",
-		"can.yui.js"                 : "Can YUI #{VERSION} Development",
-		"can.yui.min.js"             : "Can YUI #{VERSION} Production",
-		"can.mootools.js"            : "Can MooTools #{VERSION} Development",
-		"can.mootools.min.js"        : "Can MooTools #{VERSION} Production",
-		"can.dojo.js"                : "Can Dojo #{VERSION} Development",
-		"can.dojo.min.js"            : "Can Dojo #{VERSION} Production",
-		"can.jquery.js"              : "Can jQuery #{VERSION} Development",
-		"can.jquery.min.js"          : "Can jQuery #{VERSION} Production",
-		"can.zepto.js"               : "Can Zepto #{VERSION} Development",
-		"can.zepto.min.js"           : "Can Zepto #{VERSION} Production"
-	},
-	username,
-	password,
-	pluginify;
+    fs              = require("fs"),
+    spawn           = require("child_process").spawn,
 
+    // Third party modules
+    program         = require("commander"),
+    GitHubApi       = require("github"),
+    _               = require("underscore"),
+    s3p             = require("./s3-post.js"),
+
+    // Get the current version of CanJS
+    version         = fs.readFileSync( path.join( __dirname, "../version" )).toString("utf8").trim(),
+
+    // Describe all the files we'll be uploading to Github
+    descriptions    = {
+        "can.construct.proxy.js"     : "Can Construct Proxy #{VERSION} Plugin",
+        "can.observe.validations.js" : "Can Observe Validations #{VERSION} Plugin",
+        "can.construct.super.js"     : "Can Construct Super #{VERSION} Plugin",
+        "can.fixture.js"             : "Can Fixture #{VERSION} Plugin",
+        "can.observe.attributes.js"  : "Can Observe Attributes #{VERSION} Plugin",
+        "can.view.modifiers.js"      : "Can View Modifiers #{VERSION} Plugin",
+        "can.control.plugin.js"      : "Can Control #{VERSION} Plugin",
+        "can.observe.backup.js"      : "Can Observe #{VERSION} Backup Plugin",
+        "can.control.view.js"        : "Can Control #{VERSION} View Plugin",
+        "can.observe.delegate.js"    : "Can Observe #{VERSION} Delegate Plugin",
+        "can.observe.setter.js"      : "Can Observe #{VERSION} Setter Plugin",
+        "can.yui.js"                 : "Can YUI #{VERSION} Development",
+        "can.yui.min.js"             : "Can YUI #{VERSION} Production",
+        "can.mootools.js"            : "Can MooTools #{VERSION} Development",
+        "can.mootools.min.js"        : "Can MooTools #{VERSION} Production",
+        "can.dojo.js"                : "Can Dojo #{VERSION} Development",
+        "can.dojo.min.js"            : "Can Dojo #{VERSION} Production",
+        "can.jquery.js"              : "Can jQuery #{VERSION} Development",
+        "can.jquery.min.js"          : "Can jQuery #{VERSION} Production",
+        "can.zepto.js"               : "Can Zepto #{VERSION} Development",
+        "can.zepto.min.js"           : "Can Zepto #{VERSION} Production"
+    },
+
+    // Figure out some paths
+    rhinoPath       = path.join(__dirname, "../../.."),
+    distPath        = path.join(__dirname, "../../dist/edge"),
+
+    // Github client
+    github          = new GitHubApi({
+        version: "3.0.0"
+    }),
+	canJSRemote = "git@github.com:jupiterjs/canjs.git",
+
+    // Timeouts
+	stealTimeout,
+
+    // For Github credentials
+    username,
+    password,
+
+    // For steal build process
+    pluginify;
+
+// Get deferreds
+_.mixin( require("underscore.deferred") );
+
+// Update canjs.us dist
+function updateDist() {
+	console.log("Copying built files to gh-pages.");
+
+	var clone = spawn("git", [ "clone", canJSRemote ], {
+		cwd : __dirname
+	}), dfd = new _.Deferred();
+
+	clone.on("exit", function() {
+
+		var clonePath = path.join( __dirname, "canjs" ),
+		checkout = spawn("git", [ "checkout", "gh-pages"], {
+				cwd : clonePath
+		});
+
+		checkout.on("exit", function() {
+			var cloneReleasePath = path.join( clonePath, "release" ),
+			    latestPath = path.join( cloneReleasePath, "latest" ),
+			    versionPath = path.join( cloneReleasePath, version );
+
+			// Make sure directories exist
+			[ cloneReleasePath, versionPath, latestPath ].forEach( function( dir ) {
+				if ( ! path.existsSync( dir )) {
+					fs.mkdirSync( dir );
+				}
+			});
+
+			fs.readdir( distPath, function( err, files ) {
+				var dfds = files.map(function( file ) {
+					var dfd = new _.Deferred(),
+						inPath = path.join( distPath, file ),
+					    outPath = path.join( versionPath, file ),
+						latestOutPath = path.join( latestPath, file ),
+						inStream = fs.createReadStream( inPath );
+
+					inStream.pipe( fs.createWriteStream( outPath ));
+					inStream.pipe( fs.createWriteStream( latestOutPath ));
+
+					inStream.on("end", function() {
+						dfd.resolve();
+					});
+
+					return dfd.promise();
+
+				});
+
+				_.when.apply( _, dfds ).done(function() {
+					console.log("Finished copying files. Cleaning up...")
+					var add = spawn("git", ["add", "release/*"], {
+						cwd : clonePath
+					});
+
+					add.on("exit", function() {
+						var commit = spawn("git", ["commit", "-m", "Generated release files for " + version ], {
+							cwd : clonePath
+						});
+
+						commit.on("exit", function() {
+							var push = spawn("git", ["push", "origin", "gh-pages"], {
+								cwd : clonePath
+							});
+
+							push.on("exit", function() {
+
+								var remove = spawn("rm", ["-rf", "canjs"], {
+									cwd : __dirname
+								});
+								console.log("Done!")
+							
+							});
+						});
+					});
+				});
+			});
+		});
+
+	});
+
+	return dfd.promise();
+}
+
+// Upload files to the Github downloads page
 function uploadFiles() {
 
-	_.each( descriptions, function( desc, filename ) {
+	var dfd = new _.Deferred(),
+	    dfds = _.map( descriptions, function( desc, filename ) {
+
+		var dfd = new _.Deferred();
 
 		desc = desc.replace("#{VERSION}", version);
 
@@ -86,77 +190,84 @@ function uploadFiles() {
 					if ( e ) {
 						console.log( e );
 					}
+					dfd.resolve();
 				})
 
 			});
 
 		});
 		
+		return dfd.promise();
 	});
 
+	_.when.apply( _, dfds ).done(dfd.resolve.bind( dfd ));
+
+	return dfd.promise();
 }
 
-function processFiles() {
-	github.authenticate({
-		type: "basic",
-		username: username,
-		password: password
+function stealBuild() {
+
+	var dfd = new _.Deferred();
+
+	// Run Steal build script
+	pluginify = spawn( "js", ["can/util/make.js"], {
+		cwd: rhinoPath
 	});
 
-	github.repos.getDownloads({
-		user : "jupiterjs",
-		repo : "canjs"
-	}, function( err, downloads ) {
-
-		// Clean up all previous downloads
-		var i = 0, count = downloads.length;
-		downloads.forEach(function( download ) {
-			github.repos.deleteDownload({
-				user: "jupiterjs",
-				repo: "canjs",
-				id: download.id
-			}, function() {
-				i++;
-				if ( i == count ) {
-					uploadFiles();
-				}
-			})
-		});
-
-	});
-
-
+	pluginify.on("exit", dfd.resolve.bind( dfd ));
+	
+	return dfd.promise();
 }
-
-// Run Steal build script
-pluginify = spawn( "js", ["can/util/make.js"], {
-	cwd: rhinoPath
-});
-
-pluginify.on("exit", function( code ) {
-	if ( code !== 0 ) {
-		process.stdout.write("\nError in Steal build script.")
-		process.exit( code );
-	} else {
-		process.stdout.write("\nBuild complete!")
-		processFiles();
-	}
-});
 
 // Clean up on process exit
 process.on("exit", function() {
 	process.stdout.write("\n")
 })
 
-program.prompt("Github Username: ", function( name ) {
-	username = name;
+// Get Github credentials
+function getCredentials() {
 
-	program.password("Github Password: ", "*", function( pass ) {
-		password = pass;
-		process.stdin.pause();
-		processFiles();
-	})
+	var dfd = new _.Deferred();
 
+	program.prompt("Github Username: ", function( name ) {
+		username = name;
+
+		program.password("Github Password: ", "*", function( pass ) {
+			var timeout;
+			password = pass;
+			process.stdin.pause();
+
+			github.authenticate({
+				type: "basic",
+				username: username,
+				password: password
+			});
+
+			process.stdout.write("Building CanJS...")
+			stealTimeout = setInterval(function() {
+				process.stdout.write(".")
+			}, 1000 )
+			dfd.resolve();
+		})
+
+	});
+
+	return dfd.promise();
+}
+
+_.when( stealBuild(), getCredentials() ).done(function( args ) {
+
+	var code = args.shift();
+	
+	if ( stealTimeout ) {
+		clearTimeout( stealTimeout );
+		process.stdout.write(" Done!\n")
+	}
+
+	if ( code != 0 ) {
+		console.log("Steal build process failed.")
+	} else {
+		_.when( uploadFiles(), updateDist() ).done(function() {
+		});
+	}
 });
-
-
