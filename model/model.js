@@ -98,6 +98,62 @@ steal('can/observe', function() {
 	 */
 	ajaxMethods = {
 		/**
+		 * @function bind
+		 * `bind(eventType, handler(event, instance))` listens to
+		 * __created__, __updated__, __destroyed__ events on all 
+		 * instances of the model.
+		 * 
+		 *     Task.bind("created", function(ev, createdTask){
+		 * 	     this //-> Task
+		 *       createdTask.attr("name") //-> "Dishes"
+		 *     })
+		 *     
+		 *     new Task({name: "Dishes"}).save();
+		 * 
+		 * @param {String} eventType The type of event.  It must be
+		 * `"created"`, `"udpated"`, `"destroyed"`.
+		 * 
+		 * @param {Function} handler(event,instance) A callback function
+		 * that gets called with the event and instance that was
+		 * created, destroyed, or updated.
+		 * 
+		 * @return {can.Model} the model constructor function.
+		 */
+		// 
+		/**
+		 * @function unbind
+		 * `unbind(eventType, handler)` removes a listener
+		 * attached with [can.Model.bind].
+		 * 
+		 *     var handler = function(ev, createdTask){
+		 * 	     
+		 *     }
+		 *     Task.bind("created", handler)
+		 *     Task.unbind("created", handler)
+		 * 
+		 * You have to pass the same function to `unbind` that you
+		 * passed to `bind`.
+		 * 
+		 * @param {String} eventType The type of event.  It must be
+		 * `"created"`, `"udpated"`, `"destroyed"`.
+		 * 
+		 * @param {Function} handler(event,instance) A callback function
+		 * that was passed to `bind`.
+		 * 
+		 * @return {can.Model} the model constructor function.
+		 */
+		// 
+		/**
+		 * @attribute id
+		 * The name of the id field.  Defaults to 'id'. Change this if it is something different.
+		 * 
+		 * For example, it's common in .NET to use Id.  Your model might look like:
+		 * 
+		 *     Friend = can.Model({
+		 *       id: "Id"
+		 *     },{});
+		 */
+		/**
 		 * @function create
 		 * `create(attributes) -> Deferred` is used by [can.Model::save save] to create a 
 		 * model instance on the server. 
@@ -741,62 +797,6 @@ steal('can/observe', function() {
 			}
 			return model;
 		}
-		/**
-		 * @function bind
-		 * `bind(eventType, handler(event, instance))` listens to
-		 * __created__, __updated__, __destroyed__ events on all 
-		 * instances of the model.
-		 * 
-		 *     Task.bind("created", function(ev, createdTask){
-		 * 	     this //-> Task
-		 *       createdTask.attr("name") //-> "Dishes"
-		 *     })
-		 *     
-		 *     new Task({name: "Dishes"}).save();
-		 * 
-		 * @param {String} eventType The type of event.  It must be
-		 * `"created"`, `"udpated"`, `"destroyed"`.
-		 * 
-		 * @param {Function} handler(event,instance) A callback function
-		 * that gets called with the event and instance that was
-		 * created, destroyed, or updated.
-		 * 
-		 * @return {can.Model} the model constructor function.
-		 */
-		// 
-		/**
-		 * @function unbind
-		 * `unbind(eventType, handler)` removes a listener
-		 * attached with [can.Model.bind].
-		 * 
-		 *     var handler = function(ev, createdTask){
-		 * 	     
-		 *     }
-		 *     Task.bind("created", handler)
-		 *     Task.unbind("created", handler)
-		 * 
-		 * You have to pass the same function to `unbind` that you
-		 * passed to `bind`.
-		 * 
-		 * @param {String} eventType The type of event.  It must be
-		 * `"created"`, `"udpated"`, `"destroyed"`.
-		 * 
-		 * @param {Function} handler(event,instance) A callback function
-		 * that was passed to `bind`.
-		 * 
-		 * @return {can.Model} the model constructor function.
-		 */
-		// 
-		/**
-		 * @attribute id
-		 * The name of the id field.  Defaults to 'id'. Change this if it is something different.
-		 * 
-		 * For example, it's common in .NET to use Id.  Your model might look like:
-		 * 
-		 *     Friend = can.Model({
-		 *       id: "Id"
-		 *     },{});
-		 */
 	},
 	/**
 	 * @prototype
