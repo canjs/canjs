@@ -1071,7 +1071,7 @@ steal('can/observe', function() {
   /**
    * @class can.Model.List
    * @inherits can.Observe.List
-   * @parent index
+   * @parent canjs
    *
    * Works exactly like [can.Observe.List] and has all of the same properties,
    * events, and functions as an observable list. The only difference is that 
