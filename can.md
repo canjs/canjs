@@ -1,12 +1,8 @@
-@page index CanJS
+@page canjs CanJS
+@parent index 0
 @description CanJS API Documentation.
 
 ## CanJS API Documentation
-
-### What is this site?
-
-DoneJS is the next generation of JavaScriptMVC. Here you will find everything you need to know
-to start using DoneJS, including a complete API reference and example code for CanJS. 
 
 ### What is CanJS?
 

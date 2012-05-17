@@ -1,5 +1,5 @@
 @class can.Model
-@parent index
+@parent canjs
 
 Model adds service encapsulation to [can.Observe].  Model lets you:
 
