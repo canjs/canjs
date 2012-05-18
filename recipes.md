@@ -4,6 +4,9 @@ layout: default
 
 # CanJS recipes
 
+The following is a list of __CanJS__ recipes to help you learn CanJS.  To
+add your own, simply [edit this file](https://github.com/jupiterjs/canjs/edit/gh-pages/recipes.md).
+
 ## Routing
 
 The following recipes explore using `can.route`.
