@@ -6,15 +6,26 @@ layout: default
 
 ## Routing
 
+The following recipes explore using `can.route`.
+
 ### Basic Routing
+
+Here's a demo on basic routing ....
 
 ### Observe Backed Routes
 
-Shows how to have multiple widgets listening on 
+This recipe shows how to have multiple widgets listening on 
 overlapping parts of the route.
 
 The app lets the user select a type of issue, show issues for that type,
 and select a issue and see details about that issue.
+
+<iframe style="width: 100%; height: 300px" 
+        src="http://jsfiddle.net/YRXHV/7/embedded/" 
+        allowfullscreen="allowfullscreen" 
+        frameborder="0">JSFiddle</iframe>
+
+#### How it works
 
 This functionality is broken down 
 into __Nav__, __Issues__, and __Details__ can.controls.  Here's how
@@ -64,12 +75,11 @@ __Details__
 
 And updates the details panel.
 
-<iframe style="width: 100%; height: 300px" 
-        src="http://jsfiddle.net/YRXHV/7/embedded/" 
-        allowfullscreen="allowfullscreen" 
-        frameborder="0">JSFiddle</iframe>
+
 
 ## Live Binding
+
+The following recipes show how to use `can.EJS`'s live binding.
 
 ### Updating timestamps
 
