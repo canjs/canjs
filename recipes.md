@@ -15,23 +15,19 @@ Here's a demo on basic routing ....
 ### Observe Backed Routes
 
 This recipe shows how to have multiple widgets listening on 
-overlapping parts of the route.
-
-The app lets the user select a type of issue, show issues for that type,
+overlapping parts of the route. The app lets the user select a type of issue, show issues for that type,
 and select a issue and see details about that issue.
 
 <iframe style="width: 100%; height: 300px" 
-        src="http://jsfiddle.net/YRXHV/7/embedded/" 
+        src="http://jsfiddle.net/YRXHV/7/embedded/result,html,js,css" 
         allowfullscreen="allowfullscreen" 
         frameborder="0">JSFiddle</iframe>
 
-#### How it works
+___How it works___
 
 This functionality is broken down 
 into __Nav__, __Issues__, and __Details__ can.controls.  Here's how
 each part works:
-
-__Nav__
 
 `Nav` creates links using `can.route.link` that update the hash like:
 
@@ -40,8 +36,6 @@ __Nav__
 {% endhighlight %}
 
 When these are clicked on, they update the route's filter data.  
-
-__Issues__
 
 `Issues` listens to filter changes like:
 
@@ -64,8 +58,6 @@ issue in the list like:
 {% highlight javascript %}
 "{can.route} issue" : function(route, ev, issue){ ... }
 {% endhighlight %}
-
-__Details__
 
 `Details` listens to issue chagnes like:
 
