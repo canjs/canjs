@@ -30,7 +30,7 @@ for the library you are using:
 This page walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery. If you want to see a
 fully functional version of this todo app in action, you can
-[go to this jsfiddle and view the results and code.](http://jsfiddle.net/javascriptmvc/ADWhw/3/)
+[go to this jsfiddle and view the results and code.](http://jsfiddle.net/ADWhw/20/)
 
 The [Use with other libraries](#use_with_other_libraries) 
 section details the minor differences among use with other libraries.
