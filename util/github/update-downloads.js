@@ -13,27 +13,91 @@ var path            = require("path"),
 
     // Describe all the files we'll be uploading to Github
     descriptions    = {
-        "can.construct.proxy.js"     : "Can Construct Proxy #{VERSION} Plugin",
-        "can.observe.validations.js" : "Can Observe Validations #{VERSION} Plugin",
-        "can.construct.super.js"     : "Can Construct Super #{VERSION} Plugin",
-        "can.fixture.js"             : "Can Fixture #{VERSION} Plugin",
-        "can.observe.attributes.js"  : "Can Observe Attributes #{VERSION} Plugin",
-        "can.view.modifiers.js"      : "Can View Modifiers #{VERSION} Plugin",
-        "can.control.plugin.js"      : "Can Control #{VERSION} Plugin",
-        "can.observe.backup.js"      : "Can Observe #{VERSION} Backup Plugin",
-        "can.control.view.js"        : "Can Control #{VERSION} View Plugin",
-        "can.observe.delegate.js"    : "Can Observe #{VERSION} Delegate Plugin",
-        "can.observe.setter.js"      : "Can Observe #{VERSION} Setter Plugin",
-        "can.yui.js"                 : "Can YUI #{VERSION} Development",
-        "can.yui.min.js"             : "Can YUI #{VERSION} Production",
-        "can.mootools.js"            : "Can MooTools #{VERSION} Development",
-        "can.mootools.min.js"        : "Can MooTools #{VERSION} Production",
-        "can.dojo.js"                : "Can Dojo #{VERSION} Development",
-        "can.dojo.min.js"            : "Can Dojo #{VERSION} Production",
-        "can.jquery.js"              : "Can jQuery #{VERSION} Development",
-        "can.jquery.min.js"          : "Can jQuery #{VERSION} Production",
-        "can.zepto.js"               : "Can Zepto #{VERSION} Development",
-        "can.zepto.min.js"           : "Can Zepto #{VERSION} Production"
+        "can.construct.proxy.js"     : {
+			description : "Can Construct Proxy #{VERSION} Plugin",
+			filename    : "can.construct.proxy-#{VERSION}.js"
+		},
+        "can.observe.validations.js" : {
+			description : "Can Observe Validations #{VERSION} Plugin",
+			filename    : "can.observe.validations-#{VERSION}.js"
+		},
+        "can.construct.super.js"     : {
+			description : "Can Construct Super #{VERSION} Plugin",
+			filename    : "can.construct.super-#{VERSION}.js"
+		},
+        "can.fixture.js"             : {
+			description : "Can Fixture #{VERSION} Plugin",
+			filename    : "can.fixture-#{VERSION}.js"
+		},
+        "can.observe.attributes.js"  : {
+			description : "Can Observe Attributes #{VERSION} Plugin",
+			filename    : "can.observe.attributes-#{VERSION}.js"
+		},
+        "can.view.modifiers.js"      : {
+			description : "Can View Modifiers #{VERSION} Plugin",
+			filename    : "can.view.modifiers-#{VERSION}.js"
+		},
+        "can.control.plugin.js"      : {
+			description : "Can Control #{VERSION} Plugin",
+			filename    : "can.control.plugin-#{VERSION}.js"
+		},
+        "can.observe.backup.js"      : {
+			description : "Can Observe #{VERSION} Backup Plugin",
+			filename    : "can.observe.backup-#{VERSION}.js"
+		},
+        "can.control.view.js"        : {
+			description : "Can Control #{VERSION} View Plugin",
+			filename    : "can.control.view-#{VERSION}.js"
+		},
+        "can.observe.delegate.js"    : {
+			description : "Can Observe #{VERSION} Delegate Plugin",
+			filename    : "can.observe.delegate-#{VERSION}.js"
+		},
+        "can.observe.setter.js"      : {
+			description : "Can Observe #{VERSION} Setter Plugin",
+			filename    : "can.observe.setter-#{VERSION}.js"
+		},
+        "can.yui.js"                 : {
+			description : "Can YUI #{VERSION} Development",
+			filename    : "can.yui-#{VERSION}.js"
+		},
+        "can.mootools.js"            : {
+			description : "Can MooTools #{VERSION} Development",
+			filename    : "can.mootools-#{VERSION}.js"
+		},
+        "can.dojo.js"                : {
+			description : "Can Dojo #{VERSION} Development",
+			filename    : "can.dojo-#{VERSION}.js"
+		},
+        "can.jquery.js"              : {
+			description : "Can jQuery #{VERSION} Development",
+			filename    : "can.jquery-#{VERSION}.js"
+		},
+        "can.zepto.js"               : {
+			description : "Can Zepto #{VERSION} Development",
+			filename    : "can.zepto-#{VERSION}.js"
+		},
+
+        "can.yui.min.js"             : {
+			description : "Can YUI #{VERSION} Production",
+			filename    : "can.yui-#{VERSION}.min.js"
+		},
+        "can.mootools.min.js"        : {
+			description : "Can MooTools #{VERSION} Production",
+			filename    : "can.mootools-#{VERSION}.min.js"
+		},
+        "can.dojo.min.js"            : {
+			description : "Can Dojo #{VERSION} Production",
+			filename    : "can.dojo-#{VERSION}.min.js"
+		},
+        "can.jquery.min.js"          : {
+			description : "Can jQuery #{VERSION} Production",
+			filename    : "can.jquery-#{VERSION}.min.js"
+		},
+        "can.zepto.min.js"           : {
+			description : "Can Zepto #{VERSION} Production",
+			filename    : "can.zepto-#{VERSION}.min.js"
+		}
     },
 
     // Figure out some paths
@@ -144,18 +208,18 @@ function updateDist() {
 function uploadFiles() {
 
 	var dfd = new _.Deferred(),
-	    dfds = _.map( descriptions, function( desc, filename ) {
+	    dfds = _.map( descriptions, function( parts, filename ) {
 
-		var dfd = new _.Deferred();
-
-		desc = desc.replace("#{VERSION}", version);
+		var dfd = new _.Deferred(),
+			desc = parts.description.replace("#{VERSION}", version),
+			name = parts.filename.replace("#{VERSION}", version);
 
 		fs.readFile( path.join( distPath, filename ), function( err, buf ) {
 
 			github.httpSend({
 				"user" : "jupiterjs",
 				"repo" : "canjs",
-				"name" : filename,
+				"name" : name,
 				"size" : buf.length,
 				"description" : desc,
 				"content_type" : "text/javascript"
