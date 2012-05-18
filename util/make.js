@@ -111,7 +111,8 @@ steal('steal/build/pluginify', function() {
 
 			steal.build.pluginify("can/util/make/" + lib + ".js", extend({
 				out : "can/dist/edge/can." + lib + type + ".js",
-				global : "can = {}",
+				global : "this.can || {}",
+				namespace : "can",
 				onefunc : true,
 				compress: compress,
 				skipCallbacks: true,
@@ -155,10 +156,11 @@ steal('steal/build/pluginify', function() {
 
 		steal.build.pluginify("can/" + input + ".js", {
 			out: "can/dist/edge/can." + output + ".js",
-			global: "can",
+			global: "this.can || {}",
 			onefunc: true,
 			compress: false,
 			skipCallbacks: true,
+			namespace : "can",
 			standAlone: true
 		});
 
@@ -171,7 +173,7 @@ steal('steal/build/pluginify', function() {
 		
 		steal.build.pluginify("can/" + input + ".js", {
 			out: "can/dist/edge/can." + output + ".js",
-			global: "can",
+			global: "this.can || {}",
 			onefunc: true,
 			exclude: [
 				'can/util/jquery/jquery.1.7.1.js',
@@ -184,6 +186,7 @@ steal('steal/build/pluginify', function() {
 			],
 			compress: false,
 			skipCallbacks: true,
+			namespace: "can",
 			standAlone: false
 		});
 
