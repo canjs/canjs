@@ -9,7 +9,7 @@ layout: default
 ### Observe Backed Routes
 
 <iframe style="width: 100%; height: 300px" 
-        src="http://jsfiddle.net/YRXHV/embedded/" 
+        src="http://jsfiddle.net/YRXHV/7/embedded/" 
         allowfullscreen="allowfullscreen" 
         frameborder="0">JSFiddle</iframe>
 
@@ -18,6 +18,6 @@ layout: default
 This is an embedded fiddle:
 
 <iframe style="width: 100%; height: 300px" 
-        src="http://jsfiddle.net/u7PpX/embedded/" 
+        src="http://jsfiddle.net/u7PpX/7/embedded/" 
         allowfullscreen="allowfullscreen" 
         frameborder="0">JSFiddle</iframe>
