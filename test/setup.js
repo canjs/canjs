@@ -5,6 +5,7 @@ steal('can/util/mvc.js')
 	var oldmodule = window.module,
 		library = 'jQuery';
 	// Set the test timeout to five minutes
+	QUnit.config.hidepassed = true;
 	QUnit.config.testTimeout = 300000;
 
 	if (window.STEALDOJO){

@@ -30,18 +30,19 @@ test("routes changed", function () {
 
 	window.location.hash = '!foos';
 	can.trigger(window, 'hashchange');
+
 });
 
 test("route pointers", function(){
 	expect(1);
 	var tester = can.Control({
-		"foo/:bar route" : "meth",
+		"lol/:wat route" : "meth",
 		meth : function(){
 			ok(true, "method pointer called")
 		}
 	});
 	new tester(document.body);
-	window.location.hash = '!foo/bar';
+	window.location.hash = '!lol/wat';
 	can.trigger(window, 'hashchange');
 	
 })

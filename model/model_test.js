@@ -47,6 +47,50 @@ test("findAll deferred", function(){
 	})
 });
 
+asyncTest("findAll deferred reject", function() {
+	// This test is automatically paused
+
+	function rejectDeferred(df) { 
+		setTimeout(function() { df.reject(); }, 100);
+	}
+	function resolveDeferred(df) { 
+		setTimeout(function() { df.resolve(); }, 100);
+	}
+
+	can.Model("Person", {
+		findAll : function(params, success, error) {
+			var df = can.Deferred();
+			if(params.resolve) {
+				resolveDeferred(df);
+			} else {
+				rejectDeferred(df);
+			}
+			return df;
+		}
+	},{});
+	var people_reject 	= Person.findAll({ resolve : false});
+	var people_resolve 	= Person.findAll({ resolve : true});
+
+	setTimeout(function() {  
+        people_reject.done(function() { 
+			ok(false, "This deferred should be rejected");
+		});
+		people_reject.fail(function() { 
+			ok(true, "The deferred is rejected");
+		});
+
+		people_resolve.done(function() { 
+			ok(true, "This deferred is resolved");
+		});
+		people_resolve.fail(function() { 
+			ok(false, "The deferred should be resolved");
+		});
+
+        // continue the test  
+        start();  
+    }, 200);
+});
+
 test("findOne deferred", function(){
 	if(window.jQuery){
 		can.Model("Person",{
