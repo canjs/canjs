@@ -1,50 +1,4 @@
 var path            = require("path"),
-<<<<<<< HEAD
-	program         = require("commander"),
-	GitHubApi       = require("github"),
-	github          = new GitHubApi({
-		version: "3.0.0"
-	}),
-	qs              = require("querystring"),
-	fs              = require("fs"),
-	https           = require("https"),
-	s3p             = require("./s3-post.js"),
-	rhinoPath       = path.join(__dirname, "../../.."),
-	distPath        = path.join(__dirname, "../../dist/edge"),
-	spawn           = require("child_process").spawn,
-	_               = require("underscore"),
-	version         = fs.readFileSync( path.join( __dirname, "../version" )),
-	descriptions    = {
-		"can.construct.proxy.js"     : "Can Construct Proxy Plugin",
-		"can.observe.validations.js" : "Can Observe Validations Plugin",
-		"can.construct.super.js"     : "Can Construct Super Plugin",
-		"can.fixture.js"             : "Can Fixture Plugin",
-		"can.observe.attributes.js"  : "Can Observe Attributes Plugin",
-		"can.view.modifiers.js"      : "Can View Modifiers Plugin",
-		"can.control.plugin.js"      : "Can Control Plugin",
-		"can.observe.backup.js"      : "Can Observe Backup Plugin",
-		"can.control.view.js"        : "Can Control View Plugin",
-		"can.observe.delegate.js"    : "Can Observe Delegate Plugin",
-		"can.observe.setter.js"      : "Can Observe Setter Plugin",
-		"can.yui.js"                 : "Can YUI #{VERSION} Development",
-		"can.yui.min.js"             : "Can YUI #{VERSION} Production",
-		"can.mootools.js"            : "Can MooTools #{VERSION} Development",
-		"can.mootools.min.js"        : "Can MooTools #{VERSION} Production",
-		"can.dojo.js"                : "Can Dojo #{VERSION} Development",
-		"can.dojo.min.js"            : "Can Dojo #{VERSION} Production",
-		"can.jquery.js"              : "Can jQuery #{VERSION} Development",
-		"can.jquery.min.js"          : "Can jQuery #{VERSION} Production",
-		"can.zepto.js"               : "Can Zepto #{VERSION} Development",
-		"can.zepto.min.js"           : "Can Zepto #{VERSION} Production"
-	},
-	username,
-	password,
-	pluginify;
-
-function uploadFiles() {
-
-	_.each( descriptions, function( desc, filename ) {
-=======
     fs              = require("fs"),
     spawn           = require("child_process").spawn,
 
@@ -193,7 +147,6 @@ function uploadFiles() {
 	    dfds = _.map( descriptions, function( desc, filename ) {
 
 		var dfd = new _.Deferred();
->>>>>>> 0d3375f89151efa4d70b9e7860d76a4c3cb65e53
 
 		desc = desc.replace("#{VERSION}", version);
 
@@ -237,69 +190,13 @@ function uploadFiles() {
 					if ( e ) {
 						console.log( e );
 					}
-<<<<<<< HEAD
-=======
 					dfd.resolve();
->>>>>>> 0d3375f89151efa4d70b9e7860d76a4c3cb65e53
 				})
 
 			});
 
 		});
 		
-<<<<<<< HEAD
-	});
-
-}
-
-function processFiles() {
-	github.authenticate({
-		type: "basic",
-		username: "ralphholzmann",
-		password: "tDaGariM!"
-	});
-
-	github.repos.getDownloads({
-		user : "jupiterjs",
-		repo : "canjs"
-	}, function( err, downloads ) {
-
-		// Clean up all previous downloads
-		var i = 0, count = downloads.length;
-		downloads.forEach(function( download ) {
-			github.repos.deleteDownload({
-				user: "jupiterjs",
-				repo: "canjs",
-				id: download.id
-			}, function() {
-				i++;
-				if ( i == count ) {
-					uploadFiles();
-				}
-			})
-		});
-
-	});
-
-
-}
-
-// Run Steal build script
-pluginify = spawn( "js", ["can/util/make.js"], {
-	cwd: rhinoPath
-});
-
-pluginify.on("exit", function( code ) {
-	if ( code !== 0 ) {
-		process.stdout.write("\nError in Steal build script.")
-		process.exit( code );
-	} else {
-		process.stdout.write("\nBuild complete!")
-		processFiles();
-	}
-});
-
-=======
 		return dfd.promise();
 	});
 
@@ -322,26 +219,11 @@ function stealBuild() {
 	return dfd.promise();
 }
 
->>>>>>> 0d3375f89151efa4d70b9e7860d76a4c3cb65e53
 // Clean up on process exit
 process.on("exit", function() {
 	process.stdout.write("\n")
 })
 
-<<<<<<< HEAD
-program.prompt("Github Username: ", function( name ) {
-	username = name;
-
-	program.password("Github Password: ", "*", function( pass ) {
-		password = pass;
-		process.stdin.pause();
-		processFiles();
-	})
-
-});
-
-
-=======
 // Get Github credentials
 function getCredentials() {
 
@@ -389,4 +271,3 @@ _.when( stealBuild(), getCredentials() ).done(function( args ) {
 		});
 	}
 });
->>>>>>> 0d3375f89151efa4d70b9e7860d76a4c3cb65e53

@@ -661,7 +661,7 @@ steal('can/construct', function() {
 	/**
 	 * @class can.Observe.List
 	 * @inherits can.Observe
-	 * @parent index
+	 * @parent canjs
 	 * 
 	 * `new can.Observe.List([items])` provides the observable pattern for JavaScript arrays.  It lets you:
 	 * 
