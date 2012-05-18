@@ -14,6 +14,47 @@ help create a JSFiddle, we've created the following fiddles you can fork:
  - [YUI and CanJS](http://jsfiddle.net/donejs/w6m73/)
  - [Mootools and CanJS](http://jsfiddle.net/donejs/mnNJX/)
 
+
+## Controls
+
+The following recipes explore making UI widgets with `can.control`.
+
+### Tabs
+
+The following recipes builds a simple tabs widget.
+
+<iframe style="width: 100%; height: 300px" 
+        src="http://jsfiddle.net/z2N5k/1/embedded/result,html,js,css" 
+        allowfullscreen="allowfullscreen" 
+        frameborder="0">JSFiddle</iframe>
+
+___How it works___
+
+It creates a `Tabs` constructor function that shows and hides tabs
+when it's `<li>`'s are clicked.
+
+When `new Tabs()` is called, it adds `active` to the first `<li>`'s 
+className. Then, using the `tab` helper function, it hides the content for 
+all the other tab buttons.
+
+The `tab` helper function takes a `<li>` element like:
+
+{% highlight html %}
+<li><a href="#model">Model</a></li>
+{% endhighlight %}
+
+Then gets it's `<a>` element, and then uses it's href (`#model`) to get the
+content div for that button.
+
+When a button is clicked, `Tabs` listens to it with:
+
+{% highlight javascript %}
+"li click" : function( el, ev ) { ... }
+{% endhighlight %}
+
+This function, using the `tab` helper deactivates the active tab button and hides its content, 
+then it activates and shows the new tab button and tab content.
+
 ## Routing
 
 The following recipes explore using `can.route`.
