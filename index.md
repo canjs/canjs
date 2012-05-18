@@ -21,11 +21,11 @@ easier, smaller, library-er.  [Learn why](#why_canjs).
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your download
 for the library you are using:
 
- - [can.jquery.js](https://github.com/downloads/jupiterjs/canjs/can.jquery.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.jquery.min.js)) - 8.5k - [Annotated Source](http://donejs.com/can/docs/can.jquery.html)
- - [can.zepto.js](https://github.com/downloads/jupiterjs/canjs/can.zepto.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.zepto.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.zepto.html)
- - [can.dojo.js](https://github.com/downloads/jupiterjs/canjs/can.dojo.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.dojo.min.js)) - 10.8k - [Annotated Source](http://donejs.com/can/docs/can.dojo.html)
- - [can.mootools.js](https://github.com/downloads/jupiterjs/canjs/can.mootools.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.mootools.min.js)) - 10.7k - [Annotated Source](http://donejs.com/can/docs/can.mootools.html)
- - [can.yui.js](https://github.com/downloads/jupiterjs/canjs/can.yui.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.yui.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.yui.html)
+ - [can.jquery.js](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.1.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.1.min.js)) - 8.5k - [Annotated Source](http://donejs.com/can/docs/can.jquery.html)
+ - [can.zepto.js](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.1.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.1.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.zepto.html)
+ - [can.dojo.js](https://github.com/downloads/jupiterjs/canjs/can.dojo-1.0.1.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.dojo-1.0.1.min.js)) - 10.8k - [Annotated Source](http://donejs.com/can/docs/can.dojo.html)
+ - [can.mootools.js](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.1.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.1.min.js)) - 10.7k - [Annotated Source](http://donejs.com/can/docs/can.mootools.html)
+ - [can.yui.js](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.1.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.1.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.yui.html)
 
 This page walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery. If you want to see a
@@ -2437,8 +2437,25 @@ off JavaScriptMVC.  This page is for contributors after CanJS's launch.
 [verto](https://github.com/verto) - [destroy fix](https://github.com/jupiterjs/canjs/pull/32).  
 [WearyMonkey](https://github.com/WearyMonkey) - [recursive observes](https://github.com/jupiterjs/canjs/issues/27).  
 [cohuman](https://github.com/cohuman) - [model list dependencies](https://github.com/jupiterjs/canjs/pull/23), [docco fix](https://github.com/jupiterjs/canjs/pull/26).  
+[roelmonnens](https://twitter.com/roelmonnens) - static model deferreds are now rejectable.
 
 ### Change Log
+
+__1.0.1__ (May 18th 2012)
+
+ - can.util
+     - fix: `can.each` now makes sure the [collection being iterated](https://github.com/jupiterjs/canjs/commit/c3016bc9d7075e5a31cc37576d944d9734457307) is not `undefined`
+
+ - can.control
+     - add: Redirect to another controller [method using a string](https://github.com/jupiterjs/canjs/commit/cab9b518ac0193431815ac0d34938f1168e45d5f)
+
+ - can.model
+     - fix: [Model instances in model store will be updated when `findAll` or `findOne` retrieves updated instances fixes](https://github.com/jupiterjs/canjs/commit/e4606906d37797d4ff551d1924d44f0c4d516fb7)
+     - fix: Static methods such as `findOne` and `findAll` can [now be rejected](https://github.com/jupiterjs/canjs/commit/ff17833b52162348413ebdc47baaa389a90464f9). Thanks [roelmonnens](https://twitter.com/roelmonnens)!
+
+ - can.route
+    - add: Deliminating tokens now [configurable](https://github.com/jupiterjs/canjs/commit/ca98f8f2b781456a42866805e6f9879899dc38af)
+    - fix: [Current route wins if all else equal](https://github.com/jupiterjs/canjs/commit/863f37cc3d34f52517050444e0b31b7d63d6c784)
 
 __1.0__ (May 14st 2012)
 
