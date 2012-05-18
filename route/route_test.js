@@ -417,4 +417,7 @@ test("dashes in routes", function(){
 		bar : "def",
 		route: ":foo-:bar"
 	});
+
+	window.location.hash = "qunit-header";
+	window.location.hash = "";
 })
