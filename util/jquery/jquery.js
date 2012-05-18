@@ -22,8 +22,7 @@ steal('./jquery.1.7.1.js', "./../preamble.js", function( $ ) {
 			var ret = $.buildFragment([result],[element]);
 			return ret.cacheable ? $.clone(ret.fragment) : ret.fragment
 		},
-		$: jQuery,
-		prototype: jQuery.fn
+		$: jQuery
 	});
 
 	// Wrap binding functions.

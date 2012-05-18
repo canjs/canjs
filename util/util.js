@@ -522,6 +522,16 @@ function(s) for the success or failure state of both asynchronous and synchronou
 
 @param {Object} successCallbacks function that is called when the Deferred is resolved.
  */
+/**
+ * @function fail
+
+`deferred.fail(successCallbacks)` adds handler(s) to be called when the Deferred object is rejected.
+
+ var def = can.Deferred();
+ def.fail(function(){
+ //- Deferred got rejected.
+ });
+ */
 //
 /**
 @function always

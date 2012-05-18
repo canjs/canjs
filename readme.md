@@ -1,1 +1,1 @@
-Go to http://canjs.us/.
+Go to http://canjs.us/
