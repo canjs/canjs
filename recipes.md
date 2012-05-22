@@ -174,9 +174,9 @@ an observe, just a date.  Code with EJS becomes live naturally ... amazing.
 
 The following recipes show how to use `can.Model` (and often the `can.fixture` plugin).
 
-### Showing the same data twice
+### Showing the same data in 2 places
 
-THe following recipe shows how `can.Model`'s internal store and `can.view`'s live-binding
+The following recipe shows how `can.Model`'s internal store and `can.view`'s live-binding
 can easily solve the editing-data-that-is-represented-two-places problem.  It 
 shows two task lists of overlaping data.  Notice how the __"do dishes"__ is listed 
 twice. But if you click one "do dishes" checkbox, it updates the other.
