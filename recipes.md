@@ -85,9 +85,6 @@ Events outside an element would normally not be removed, but they are with `can.
 
 The following recipes explore using `can.route`.
 
-### Basic Routing
-
-Here's a demo on basic routing ....
 
 ### Observe Backed Routes
 
@@ -96,7 +93,7 @@ overlapping parts of the route. The app lets the user select a type of issue, sh
 and select a issue and see details about that issue.
 
 <iframe style="width: 100%; height: 300px" 
-        src="http://jsfiddle.net/YRXHV/7/embedded/result,html,js,css" 
+        src="http://jsfiddle.net/YRXHV/15/embedded/result,html,js,css" 
         allowfullscreen="allowfullscreen" 
         frameborder="0">JSFiddle</iframe>
 
