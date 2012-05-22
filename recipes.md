@@ -204,7 +204,7 @@ Finally, it listens when an `input` element's value changes.  When it does,
 it gets the task model instance from the `li` element's `$.data` and 
 updates it's "complete" property.
 
-___The Secret Sauce__
+___The Secret Sauce___
 
 Model keeps an internal, non-leaking, store of instances your app loads.  When
 `Task.findAll({type: "critical"})` and `Task.findAll({due: "today"})` get their
