@@ -62,7 +62,7 @@ explain how it keeps memory leaks from happening. Click on one of the items
 to see a tooltip, click somewhere else to remove it.
 
 <iframe style="width: 100%; height: 300px" 
-        src="http://jsfiddle.net/d3T9c/embedded/result,html,js,css" 
+        src="http://jsfiddle.net/d3T9c/1/embedded/result,html,js,css" 
         allowfullscreen="allowfullscreen" 
         frameborder="0">JSFiddle</iframe>
 
