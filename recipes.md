@@ -170,3 +170,50 @@ an observe, just a date.  Code with EJS becomes live naturally ... amazing.
         allowfullscreen="allowfullscreen" 
         frameborder="0">JSFiddle</iframe>
 
+## Models
+
+The following recipes show how to use `can.Model` (and often the `can.fixture` plugin).
+
+### Showing the same data twice
+
+THe following recipe shows how `can.Model`'s internal store and `can.view`'s live-binding
+can easily solve the editing-data-that-is-represented-two-places problem.  It 
+shows two task lists of overlaping data.  Notice how the __"do dishes"__ is listed 
+twice. But if you click one "do dishes" checkbox, it updates the other.
+
+<iframe style="width: 100%; height: 300px" 
+        src="http://jsfiddle.net/pCtxs/5/embedded/result,html,js,css" 
+        allowfullscreen="allowfullscreen" 
+        frameborder="0">JSFiddle</iframe>
+
+
+___How it works___
+
+The code first sets up a `can.fixture` to return different, but overlapping lists of 
+tasks from the server.  The fixture returns data from the following calls:
+
+ - `/tasks?due=today`
+ - `/tasks?type=critical`
+
+You'll notice "do dishes" in both lists.
+
+The code then creates a `Task` model that maps findAll to `/tasks`.  It then uses
+`can.view` to render the retrieved tasks with the `tasksEJS` template. 
+
+Finally, it listens when an `input` element's value changes.  When it does,
+it gets the task model instance from the `li` element's `$.data` and 
+updates it's "complete" property.
+
+___The Secret Sauce__
+
+Model keeps an internal, non-leaking, store of instances your app loads.  When
+`Task.findAll({type: "critical"})` and `Task.findAll({due: "today"})` get their
+raw JSON data from the server, they convert it to instances.  But before they create
+a new instance, they check if the same instance, matched by 
+the [id](http://donejs.com/docs.html#!can.Model.static.id) property already exists.  If it
+does, it uses that instance. 
+
+This means that the `criticalTasks` list and `todaysTasks` list both point to the 
+same instance. When `can.EJS` does it's live binding on `<%= task.attr("complete") ? "checked" : "" %>`
+it's actually binding on the same "do dishes" intance once.  So updating "do dishes" updates
+the DOM in two places!
