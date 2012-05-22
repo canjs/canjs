@@ -111,7 +111,7 @@ steal('steal/build/pluginify', function() {
 
 			steal.build.pluginify("can/util/make/" + lib + ".js", extend({
 				out : "can/dist/edge/can." + lib + type + ".js",
-				global : "this.can || {}",
+				global : "can = {}",
 				namespace : "can",
 				onefunc : true,
 				compress: compress,
@@ -156,7 +156,7 @@ steal('steal/build/pluginify', function() {
 
 		steal.build.pluginify("can/" + input + ".js", {
 			out: "can/dist/edge/can." + output + ".js",
-			global: "this.can || {}",
+			global: "this.can, this",
 			onefunc: true,
 			compress: false,
 			skipCallbacks: true,
@@ -169,11 +169,10 @@ steal('steal/build/pluginify', function() {
 	// Build can.fixture and can.observe.backup seperately
 	// They need can/util/object, so we can't use the standAlone option
 	each( plugins.can_util_object, function( output, input ) {
-
 		
 		steal.build.pluginify("can/" + input + ".js", {
 			out: "can/dist/edge/can." + output + ".js",
-			global: "this.can || {}",
+			global: "this.can, this",
 			onefunc: true,
 			exclude: [
 				'can/util/jquery/jquery.1.7.1.js',
