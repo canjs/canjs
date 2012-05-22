@@ -156,7 +156,7 @@ steal('steal/build/pluginify', function() {
 
 		steal.build.pluginify("can/" + input + ".js", {
 			out: "can/dist/edge/can." + output + ".js",
-			global: "this.can, this",
+			global: "this.can",
 			onefunc: true,
 			compress: false,
 			skipCallbacks: true,
@@ -172,7 +172,7 @@ steal('steal/build/pluginify', function() {
 		
 		steal.build.pluginify("can/" + input + ".js", {
 			out: "can/dist/edge/can." + output + ".js",
-			global: "this.can, this",
+			global: "this.can",
 			onefunc: true,
 			exclude: [
 				'can/util/jquery/jquery.1.7.1.js',
