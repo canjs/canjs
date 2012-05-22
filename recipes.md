@@ -55,6 +55,32 @@ When a button is clicked, `Tabs` listens to it with:
 This function, using the `tab` helper deactivates the active tab button and hides its content, 
 then it activates and shows the new tab button and tab content.
 
+### Tooltip
+
+The following recipe builds a simple tooltip.  It shows templated event binding and we will
+explain how it keeps memory leaks from happening. Click on one of the items
+to see a tooltip, click somewhere else to remove it.
+
+<iframe style="width: 100%; height: 300px" 
+        src="http://jsfiddle.net/d3T9c/embedded/result,html,js,css" 
+        allowfullscreen="allowfullscreen" 
+        frameborder="0">JSFiddle</iframe>
+
+___How it works___
+
+This creates a `Tooltip` control that when created shows a tooltip.  When a `Tooltip` control
+is created, it positions the `Tooltip` element relative to the `relativeTo` option and 
+sets its inner html to the `html` option.
+
+The tooltip also listens to clicks on the window.  If the user clicked on something other than the
+`relativeTo` element and the tooltip element, it will remove the tooltip from the document.
+
+When an element is removed from the DOM with any controls on it, the control's event handlers
+are automatically removed.  Templated event binding lets us listen to events outside 
+the element.  `"{window} click"` is a templated event binding.
+
+Events outside an element would normally not be removed, but they are with `can.Control`.
+
 ## Routing
 
 The following recipes explore using `can.route`.
