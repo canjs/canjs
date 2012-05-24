@@ -233,7 +233,7 @@ also history enabled, letting you move forward and back through different todos.
 
 ___How it works___
 
-<iframe width="640" height="480" src="http://www.youtube.com/embed/qntCKc5sFZw" 
+<iframe width="640" height="480" src="http://www.youtube.com/embed/PfTbkzh07iE" 
 frameborder="0" allowfullscreen="allowfullscreen">YouTube</iframe>
 
 
