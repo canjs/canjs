@@ -233,6 +233,10 @@ also history enabled, letting you move forward and back through different todos.
 
 ___How it works___
 
+<iframe width="640" height="480" src="http://www.youtube.com/embed/tlsGl11d0QI" 
+frameborder="0" allowfullscreen></iframe>
+
+
 The app starts by creating a `Todo` model that connects to a dummy data 
 store (just an array). The `findAll`, `findOne`, `update` and `destroy` methods
 simply returning the required deferreds.
