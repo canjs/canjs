@@ -1,5 +1,6 @@
 ---
 layout: default
+title: CanJS - Recipes
 ---
 
 # CanJS recipes
