@@ -92,9 +92,92 @@ This recipe shows how to make a history-based tabs widget and have routes
 configured independently by can.route.
 
 <iframe style="width: 100%; height: 300px" 
-        src="http://jsfiddle.net/Z9Cv5/1/embedded/result,html,js,css" 
+        src="http://jsfiddle.net/Z9Cv5/2/embedded/result,html,js,css" 
         allowfullscreen="allowfullscreen" 
         frameborder="0">JSFiddle</iframe>
+
+___How it works___
+
+The HTML is structured such that each tab button has an `<a>` element with an 
+href property that matches the `id` attribute of the tab content 
+panel it should show.  This means that even if JavaScript was disabled,
+clicking a button would send the user to the tab panel (even though
+HistoryTabs overwrites this behavior).
+
+For example:
+
+{% highlight html %}
+<li><a href="#model">can.Model</a></li>
+{% endhighlight %}
+
+references:
+
+{% highlight html %}
+<div id="model" class="tab">
+{% endhighlight %}
+
+The JavaScript code begins by creating a `HistoryTabs` 
+control.  When a new `HistoryTabs` instance is created, it gets
+an __attr__ option like:
+
+{% highlight javascript %}
+new HistoryTabs( '#components',{attr: 'component'});
+{% endhighlight %}
+
+The __attr__ method is used to configure which part of `can.route`'s data the 
+history tab will be listening to.  
+
+When `init` is called, it hides each tab button's content div, looking up
+the content div with the `tab` helper method.  It then reads the current 
+active tab with:
+
+{% highlight javascript %}
+var active = can.route.attr(this.options.attr);
+{% endhighlight %}
+
+It passes that value to the `active` helper which will hide the old active
+content (if `oldActive` is passed) and activate the new active button and
+show it's content.
+
+`HistoryTab` updates the active tab by listening when a tab button is clicked with
+`"li click"`.  It prevents the default behavior (which is changing the hash) and
+updates it's route data attribute with the select tab's id:
+
+{% highlight javascript %}
+can.route.attr(this.options.attr, this.tab(el)[0].id)
+{% endhighlight %}
+
+`HistoryTabs` listens to these route changes with `"{can.route} {attr}"` and activates
+the new tab.
+
+__Configuring Routes__
+
+The code ends by configuring the routes and creating the `HistoryTabs`.  Here's what each
+route rule means:
+
+{% highlight javascript %}
+can.route(":component",{
+  component: "model",
+  person: "mihael"
+});
+{% endhighlight %}
+
+This matches the empty routes ("","#","#!"), and a single "word" route.  If the route
+is one of the empty routes, the route data will look 
+like: `{component: "modal", person: "mihael"}`.  If it is a single "word" route like
+`"#!view"`, the data will look like:  `{component: "view", person: "mihael"}`.
+
+{% highlight javascript %}
+can.route(":component/:person",{
+  component: "model",
+  person: "mihael"
+});
+{% endhighlight %}
+
+This matches two-word routes seperated by a slash ("/").  Each word can be empty. If both
+words are empty "#!/", the data will look 
+like: `{component: "model", person: "mihael"}`.  If the words are non-empty, that word
+will replace the default value.
 
 ### Observe Backed Routes
 
