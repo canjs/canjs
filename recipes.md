@@ -86,6 +86,16 @@ Events outside an element would normally not be removed, but they are with `can.
 The following recipes explore using `can.route`.
 
 
+### History Tabs
+
+This recipe shows how to make a history-based tabs widget and have routes
+configured independently by can.route.
+
+<iframe style="width: 100%; height: 300px" 
+        src="http://jsfiddle.net/Z9Cv5/1/embedded/result,html,js,css" 
+        allowfullscreen="allowfullscreen" 
+        frameborder="0">JSFiddle</iframe>
+
 ### Observe Backed Routes
 
 This recipe shows how to have multiple widgets listening on 
