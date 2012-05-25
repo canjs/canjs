@@ -2423,9 +2423,9 @@ change [can/control/control.js](https://github.com/jupiterjs/canjs/blob/master/c
 where you find the `destroy` comment.
  3. Generate the docs with:
 
-        js jmvc/scripts/doc.js
+        js site/scripts/doc.js
     
-    View them at `jmvc/docs.html`
+    View them at `site/docs.html`
     
  4. Submit a pull request.
 
