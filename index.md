@@ -2141,7 +2141,7 @@ Help the community help you by using the jsFiddle templates below. Just fork one
 
 ### Get Help from Bitovi
 
-Bitovi _(developers of CanJS)_ offers [training](http://bitovi.com/training/) and [consulting](http://bitovi.com/consulting/) for your team. They can also provide private one-on-one support staffed by their JavaScript/Ajax experts. [Contact Bitovi](contact@bitovi.com) if you're interested.
+Bitovi _(developers of CanJS)_ offers [training](http://bitovi.com/training/) and [consulting](http://bitovi.com/consulting/) for your team. They can also provide private one-on-one support staffed by their JavaScript/Ajax experts. [Contact Bitovi](mailto:contact@bitovi.com) if you're interested.
 
 ## Why CanJS
 
