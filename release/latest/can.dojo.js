@@ -1614,10 +1614,11 @@ define("plugd/trigger",["dojo"], function(dojo){
 	//		`url` - The default url to use as indicated as a property on the model.
 	//		`type` - The default http request type
 	//		`data` - A method that takes the `arguments` and returns `data` used for ajax.
-		ajaxMethods = {
+		//
 				// 
 				// 
-						create : {
+			ajaxMethods = {
+				create : {
 			url : "_shortName",
 			type :"post"
 		},
@@ -1671,30 +1672,23 @@ define("plugd/trigger",["dojo"], function(dojo){
 			if(this === can.Model){
 				return;
 			}
-			var self = this;
-			
+			var self = this,
+				clean = can.proxy(this._clean, self);
+				
 			can.each(ajaxMethods, function(method, name){
 				if ( ! can.isFunction( self[name] )) {
 					self[name] = ajaxMaker(method, self[name]);
 				}
+				if (self["make"+can.capitalize(name)]){
+					var newMethod = self["make"+can.capitalize(name)](self[name]);
+					can.Construct._overwrite(self, base, name,function(){
+						this._super;
+						self._reqs++;
+						return newMethod.apply(self, arguments).then(clean, clean);
+					})
+				}
 			});
-			var clean = can.proxy(this._clean, self);
-			can.each({findAll : "models", findOne: "model"}, function(method, name){
-				
-				var old = self[name];
-				can.Construct._overwrite(self, base, name, function(params, success, error){
-					// this._super to trick it to load super
-					this._super;
-					// Increment requests.
-					self._reqs++;
-					// Make the request.
-					return pipe( old.call( this, params ),
-						this, 
-						method ).then(success,error).then(clean, clean);
-				});
-			})
-			// Convert `findAll` and `findOne`.
-			var oldFindAll
+
 			if(self.fullName == "can.Model"){
 				self.fullName = self._shortName = "Model"+(++modelNum);
 			}
@@ -1720,9 +1714,9 @@ define("plugd/trigger",["dojo"], function(dojo){
 				return;
 			}
       
-      if ( instancesRawData instanceof this.List ) {
-        return instancesRawData;
-      }
+			if ( instancesRawData instanceof this.List ) {
+				return instancesRawData;
+			}
 
 			// Get the list type.
 			var self = this,
@@ -1819,6 +1813,19 @@ define("plugd/trigger",["dojo"], function(dojo){
 		}
 	});
 	
+
+	
+				
+	can.each({makeFindAll : "models", makeFindOne: "model"}, function(method, name){
+		can.Model[name] = function(oldFind){
+			return function(params, success, error){
+				return pipe( oldFind.call( this, params ),
+							this, 
+							method ).then(success,error)
+			}
+		};
+	});
+				
 		can.each([
 		"created",
 		"updated",
