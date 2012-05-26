@@ -2055,7 +2055,9 @@ $( '#todos' ).html( 'todo/todos.ejs', [
 
 ## Examples
 
-Check out these sweet aps built in CanJS.
+The following are some sweet apps built with CanJS.  The wiki includes a 
+[list of tutorials and blog posts](https://github.com/jupiterjs/canjs/wiki/CanJS-blog-posts,-tutorials,-and-examples). And
+make sure you checkout [CanJS Recipes](http://canjs.us/recipes.html)
 
 ### Todo
 
