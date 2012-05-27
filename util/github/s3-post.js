@@ -60,7 +60,6 @@
     addParam('Policy', policy64);
     addParam('Signature', signature64);
     addParam('Content-Type', contentType);
-    console.log(arr.join(""));
     arr.push(buf('--' + boundary + '\r\n'));
     arr.push(buf('Content-Disposition: form-data; name="file"; filename="data"\r\n'));
     arr.push(buf("Content-Length: " + data.length + "\r\n"));

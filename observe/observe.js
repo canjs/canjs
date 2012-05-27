@@ -734,7 +734,7 @@ steal('can/construct', function() {
 	 * where:
 	 * 
 	 *  - `newVals` - the values added to the list
-	 *  - `index` - where the items where added
+	 *  - `index` - where the items were added
 	 * 
 	 * ### remove events
 	 * 
@@ -746,7 +746,7 @@ steal('can/construct', function() {
 	 * where:
 	 * 
 	 *   - `oldVals` - the values removed from the list
-	 *   - `index` - where the items where removed
+	 *   - `index` - where the items were removed
 	 * 
 	 * ### set events
 	 * 
@@ -758,7 +758,7 @@ steal('can/construct', function() {
 	 * where:
 	 * 
 	 *   - `newVal` - the new value at index
-	 *   - `index` - where the items where removed
+	 *   - `index` - where the items were removed
 	 * 
 	 * ### length events
 	 * 
@@ -874,9 +874,9 @@ steal('can/construct', function() {
 		 * The following creates a list of numbers and replaces 2 and 3 with
 		 * "a", and "b".
 		 * 
-		 *     var l = new can.Observe.List([0,1,2,3]);
+		 *     var list = new can.Observe.List([0,1,2,3]);
 		 *     
-		 *     l.splice(1,2, "a", "b"); // results in [0,"a","b",3]
+		 *     list.splice(1,2, "a", "b"); // results in [0,"a","b",3]
 		 *     
 		 * This creates 2 change events.  The first event is the removal of 
 		 * numbers one and two where it's callback is 
@@ -887,7 +887,7 @@ steal('can/construct', function() {
 		 *   - how - "remove"
 		 *   - newVals - undefined
 		 *   - oldVals - [1,2] -the array of removed values
-		 *   - where - 1 - the location of where these items where removed
+		 *   - where - 1 - the location of where these items were removed
 		 * 
 		 * The second change event is the addition of the "a", and "b" values where 
 		 * the callback values will be:
@@ -896,7 +896,7 @@ steal('can/construct', function() {
 		 *   - how - "added"
 		 *   - newVals - ["a","b"]
 		 *   - oldVals - [1, 2] - the array of removed values
-		 *   - where - 1 - the location of where these items where added
+		 *   - where - 1 - the location of where these items were added
 		 * 
 		 * @param {Number} index where to start removing or adding items
 		 * @param {Object} [howMany=0] the number of items to remove
@@ -1085,24 +1085,24 @@ steal('can/construct', function() {
 		 * @function push
 		 * Add items to the end of the list.
 		 * 
-		 *     var l = new can.Observe.List([]);
+		 *     var list = new can.Observe.List([]);
 		 *     
-		 *     l.attr() // -> []
+		 *     list.attr() // -> []
 		 *     
-		 *     l.bind('change', function( 
+		 *     list.bind('change', function( 
 		 *         ev,        // the change event
 		 *         attr,      // the attr that was changed,
 		 *     			   // for multiple items, "*" is used 
 		 *         how,       // "add"
 		 *         newVals,   // an array of new values pushed
 		 *         oldVals,   // undefined
-		 *         where      // the location where these items where added
+		 *         where      // the location where these items were added
 		 *         ) {
 		 *     
 		 *     })
 		 *     
-		 *     l.push('0','1','2'); 
-		 *     l.attr() // -> ['0', '1', '2']
+		 *     list.push('0','1','2'); 
+		 *     list.attr() // -> ['0', '1', '2']
 		 * 
 		 * @return {Number} the number of items in the array
 		 */
@@ -1112,9 +1112,9 @@ steal('can/construct', function() {
 		 * Add items to the start of the list.  This is very similar to
 		 * [can.Observe.List::push can.Observe.prototype.List].  Example:
 		 * 
-		 *     var l = new can.Observe.List(["a","b"]);
-		 *     l.unshift(1,2,3) //-> 5
-		 *     l.attr() //-> [1,2,3,"a","b"]
+		 *     var list = new can.Observe.List(["a","b"]);
+		 *     list.unshift(1,2,3) //-> 5
+		 *     .attr() //-> [1,2,3,"a","b"]
 		 * 
 		 * @param {Object} [items...] items to add to the start of the list.
 		 * @return {Number} the length of the array.
@@ -1156,20 +1156,20 @@ steal('can/construct', function() {
 		 * 
 		 * Removes an item from the end of the list. Example:
 		 * 
-		 *     var l = new can.Observe.List([0,1,2]);
-		 *     l.pop() //-> 2;
-		 *     l.attr() //-> [0,1]
+		 *     var list = new can.Observe.List([0,1,2]);
+		 *     list.pop() //-> 2;
+		 *     list.attr() //-> [0,1]
 		 * 
 		 * This produces a change event like
 		 * 
-		 *     l.bind('change', function( 
+		 *     list.bind('change', function( 
 		 *         ev,        // the change event
 		 *         attr,      // the attr that was changed, 
 		 *     			   // for multiple items, "*" is used 
 		 *         how,       // "remove"
 		 *         newVals,   // undefined
 		 *         oldVals,   // 2
-		 *         where      // the location where these items where added
+		 *         where      // the location where these items were added
 		 *         ) {
 		 *     
 		 *     })
@@ -1183,9 +1183,9 @@ steal('can/construct', function() {
 		 * Removes an item from the start of the list.  This is very similar to
 		 * [can.Observe.List::pop]. Example:
 		 * 
-		 *     var l = new can.Observe.List([0,1,2]);
-		 *     l.shift() //-> 0;
-		 *     l.attr() //-> [1,2]
+		 *     var list = new can.Observe.List([0,1,2]);
+		 *     list.shift() //-> 0;
+		 *     list.attr() //-> [1,2]
 		 * 
 		 * @return {Object} the element at the start of the list
 		 */

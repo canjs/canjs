@@ -15,7 +15,7 @@ steal('can/observe', function() {
 			arguments[0] = model[func](arguments[0])
 			d.resolve.apply(d, arguments)
 		},function(){
-			d.resolveWith.apply(this,arguments)
+			d.rejectWith.apply(this,arguments)
 		})
 		return d;
 	},
@@ -96,7 +96,7 @@ steal('can/observe', function() {
 	/** 
 	 * @Static
 	 */
-	ajaxMethods = {
+	//
 		/**
 		 * @function bind
 		 * `bind(eventType, handler(event, instance))` listens to
@@ -153,6 +153,7 @@ steal('can/observe', function() {
 		 *       id: "Id"
 		 *     },{});
 		 */
+	ajaxMethods = {
 		/**
 		 * @function create
 		 * `create(attributes) -> Deferred` is used by [can.Model::save save] to create a 
@@ -172,7 +173,7 @@ steal('can/observe', function() {
 		 *     new Recipe({name: "hot dog"}).save();
 		 * 
 		 * 
-		 * ## Implmeent with a Function
+		 * ## Implement with a Function
 		 * 
 		 * You can also implement create by yourself. Create gets called 
 		 * with `attrs`, which are the [can.Observe::serialize serialized] model 
@@ -543,30 +544,24 @@ steal('can/observe', function() {
 			if(this === can.Model){
 				return;
 			}
-			var self = this;
-			
+			var self = this,
+				clean = can.proxy(this._clean, self);
+				
 			can.each(ajaxMethods, function(method, name){
 				if ( ! can.isFunction( self[name] )) {
 					self[name] = ajaxMaker(method, self[name]);
 				}
+				if (self["make"+can.capitalize(name)]){
+					var newMethod = self["make"+can.capitalize(name)](self[name]);
+					can.Construct._overwrite(self, base, name,function(){
+						this._super;
+						self._reqs++;
+						return newMethod.apply(self, arguments).then(clean, clean);
+					})
+				}
 			});
-			var clean = can.proxy(this._clean, self);
-			can.each({findAll : "models", findOne: "model"}, function(method, name){
-				
-				var old = self[name];
-				can.Construct._overwrite(self, base, name, function(params, success, error){
-					// this._super to trick it to load super
-					this._super;
-					// Increment requests.
-					self._reqs++;
-					// Make the request.
-					return pipe( old.call( this, params ),
-						this, 
-						method ).then(success,error).then(clean, clean);
-				});
-			})
-			// Convert `findAll` and `findOne`.
-			var oldFindAll
+
+
 			if(self.fullName == "can.Model"){
 				self.fullName = self._shortName = "Model"+(++modelNum);
 			}
@@ -673,9 +668,9 @@ steal('can/observe', function() {
 				return;
 			}
       
-      if ( instancesRawData instanceof this.List ) {
-        return instancesRawData;
-      }
+			if ( instancesRawData instanceof this.List ) {
+				return instancesRawData;
+			}
 
 			// Get the list type.
 			var self = this,
@@ -1022,6 +1017,19 @@ steal('can/observe', function() {
 		}
 	});
 	
+
+	
+				
+	can.each({makeFindAll : "models", makeFindOne: "model"}, function(method, name){
+		can.Model[name] = function(oldFind){
+			return function(params, success, error){
+				return pipe( oldFind.call( this, params ),
+							this, 
+							method ).then(success,error)
+			}
+		};
+	});
+				
 		can.each([
 	/**
 	 * @function created
