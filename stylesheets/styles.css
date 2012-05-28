@@ -83,6 +83,7 @@ em {
 	background: transparent url(../images/logo.png) no-repeat scroll center;
 	width: 108px;
 	height: 45px;
+	border-bottom: 0;
 }
 #logo-and-download a {
 	position: absolute;
