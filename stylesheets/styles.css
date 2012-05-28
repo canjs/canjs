@@ -75,11 +75,14 @@ em {
 	position: relative;
 	border-bottom: 1px solid #b5b6b5;
 }
-#logo-and-download img {
+#logo-and-download a.logo {
 	display: block;
 	position: absolute;
 	top: 10px;
 	left: 14px;
+	background: transparent url(../images/logo.png) no-repeat scroll center;
+	width: 108px;
+	height: 45px;
 }
 #logo-and-download a {
 	position: absolute;
@@ -139,7 +142,7 @@ em {
 	margin: 20px 0 20px 0;
 }
 #buttons a,
-#logo-and-download a {
+#logo-and-download a.primary {
 	width: 112px;
 	text-align: center;
 	display: block;

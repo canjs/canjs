@@ -308,6 +308,38 @@ same instance. When `can.EJS` does it's live binding on `<%= task.attr("complete
 it's actually binding on the same "do dishes" intance once.  So updating "do dishes" updates
 the DOM in two places!
 
+### Duplicating a Restful API in Local Storage
+
+The following recipe shows how `can.Model` can be used to create an ORM-like 
+model layer for keeping a local copy of a restful API. This type of base model
+is perfect for situations where you want a responsive UI, but may not want to 
+wait for updates from the server before displaying data, or you need to make 
+your data persist offline. Storing your responses in `localStorage` allows you 
+to access it offline as well as get data to the view as quickly as possible.
+
+<iframe style="width: 100%; height: 300px" 
+        src="http://jsfiddle.net/ralphholzmann/73Xuk/4/embedded/result%2Cjs/" 
+        allowfullscreen="allowfullscreen" 
+        frameborder="0">JSFiddle</iframe>
+
+___How it works___
+
+When creating your base model for other models to extend from, you can prefix 
+any static method with `make`, to allow the base model to define how the 
+extending model's method will behave. In this example, our base model implements
+a static method called `makeFindOne`. This method acts as a hook to define the 
+extending model's `findOne` method. Using this, we can create a middleware-like
+layer between the extending model and the base model that loads and saves model
+data to `localStorage`, while still requesting out to the restful API to get 
+modal updates.
+
+___The Secret Sauce___
+
+The secret sauce for this example is the static `makeFindOne` method along with
+EJS's live binding. Because the live binding will automatically update when the 
+bound model gets updated, we can write our code as usual and allow the base model
+to deliver `localStorage` data instantly, while automatically upating with responses
+from the server, with no extra effort.
 
 ## Everything Together
 
