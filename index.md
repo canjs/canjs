@@ -2268,8 +2268,6 @@ __Control initialization__
 [can.Control](#can_control) pre-processes  event handlers so binding is super 
 fast.  Compare [initializing a can.Control to a Backbone.View tabs](http://jsperf.com/tabs-timing-test) widget:
 
-[![Tabs initialization performance](http://bitovi.com/images/introducing-canjs/performance_control.png)](http://jsperf.com/tabs-timing-test)
-
 <a href="http://jsperf.com/tabs-timing-test"><img alt="Tabs initialization performance" src="http://bitovi.com/images/introducing-canjs/performance_control.png" width="650px"></a>
 
 
