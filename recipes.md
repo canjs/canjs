@@ -325,7 +325,7 @@ to access it offline as well as get data to the view as quickly as possible.
 ___How it works___
 
 When creating your base model for other models to extend from, you can prefix 
-any static method with `make`, to allow the base model to define how the 
+static service methods with `make`, to allow the base model to define how the 
 extending model's method will behave. In this example, our base model implements
 a static method called `makeFindOne`. This method acts as a hook to define the 
 extending model's `findOne` method. Using this, we can create a middleware-like

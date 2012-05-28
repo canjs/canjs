@@ -1442,13 +1442,13 @@ can.$ = Zepto
 					var newMethod = self["make"+can.capitalize(name)](self[name]);
 					can.Construct._overwrite(self, base, name,function(){
 						this._super;
-						self._reqs++;
-						return newMethod.apply(self, arguments).then(clean, clean);
+						this._reqs++;
+						return newMethod.apply(this, arguments).then(clean, clean);
 					})
 				}
 			});
 
-			if(self.fullName == "can.Model"){
+			if(!self.fullName || self.fullName == base.fullName){
 				self.fullName = self._shortName = "Model"+(++modelNum);
 			}
 			// Ddd ajax converters.
@@ -1759,7 +1759,7 @@ can.$ = Zepto
 	};
 
 	extend(can.route, {
-				param: function( data ) {
+				param: function( data , _setRoute ) {
 			// Check if the provided data keys match the names in any routes;
 			// Get the one with the most matches.
 			var route,
@@ -1801,16 +1801,21 @@ can.$ = Zepto
                         return data[name] === route.defaults[name] ? "" : encodeURIComponent( data[name] );
                     }),
                     after;
-					// Remove matching default values
-					each(route.defaults, function(val,name){
-						if(cpy[name] === val) {
-							delete cpy[name]
-						}
-					})
-					
-					// The remaining elements of data are added as 
-					// `&amp;` separated parameters to the url.
-					after = can.param(cpy);
+				// Remove matching default values
+				each(route.defaults, function(val,name){
+					if(cpy[name] === val) {
+						delete cpy[name]
+					}
+				})
+				
+				// The remaining elements of data are added as 
+				// `&amp;` separated parameters to the url.
+				after = can.param(cpy);
+				// if we are paraming for setting the hash
+				// we also want to make sure the route value is updated
+				if(_setRoute){
+					can.route.attr('route',route.route);
+				}
 				return res + (after ? "&" + after : "")
 			}
             // If no route was found, there is no hash URL, only paramters.
@@ -1901,10 +1906,25 @@ can.$ = Zepto
         curParams,
         // Deparameterizes the portion of the hash of interest and assign the
         // values to the `can.route.data` removing existing values no longer in the hash.
+        // setState is called typically by hashchange which fires asynchronously
+        // So it's possible that someone started changing the data before the 
+        // hashchange event fired.  For this reason, it will not set the route data
+        // if the data is changing and the hash already matches the hash that was set.
         setState = function() {
-			curParams = can.route.deparam( location.href.split(/#!?/)[1] || "" );
-			can.route.attr(curParams, true);
-		};
+        	var hash = location.href.split(/#!?/)[1] || ""
+			curParams = can.route.deparam( hash );
+			
+			
+			// if the hash data is currently changing, and
+			// the hash is what we set it to anyway, do NOT change the hash
+			if(!changingData || hash !== lastHash){
+				can.route.attr(curParams, true);
+			}
+		},
+		// The last hash caused by a data change
+		lastHash,
+		// Are data changes pending that haven't yet updated the hash
+		changingData;
 
 	// If the hash changes, update the `can.route.data`.
 	can.bind.call(window,'hashchange', setState);
@@ -1912,11 +1932,16 @@ can.$ = Zepto
 	// If the `can.route.data` changes, update the hash.
     // Using `.serialize()` retrieves the raw data contained in the `observable`.
     // This function is ~~throttled~~ debounced so it only updates once even if multiple values changed.
-	can.route.bind("change", function() {
+    // This might be able to use batchNum and avoid this.
+	can.route.bind("change", function(ev, attr) {
+		// indicate that data is changing
+		changingData = 1;
 		clearTimeout( timer );
 		timer = setTimeout(function() {
+			// indicate that the hash is set to look like the data
+			changingData = 0;
 			var serialized = can.route.data.serialize();
-			location.hash = "#!" + can.route.param(serialized)
+			location.hash = "#!" + (lastHash = can.route.param(serialized, true))
 		}, 1);
 	});
 	// `onready` event...
