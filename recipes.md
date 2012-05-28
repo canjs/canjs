@@ -308,7 +308,7 @@ same instance. When `can.EJS` does it's live binding on `<%= task.attr("complete
 it's actually binding on the same "do dishes" intance once.  So updating "do dishes" updates
 the DOM in two places!
 
-### Duplicating Data in Local Storage
+### Caching Data in Local Storage
 
 The following recipe shows how `can.Model` can be used to create an ORM-like 
 model layer for keeping a local copy of a restful API. This type of base model
