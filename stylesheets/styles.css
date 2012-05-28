@@ -84,6 +84,7 @@ em {
 	width: 108px;
 	height: 45px;
 	border-bottom: 0;
+	box-shadow: none;
 }
 #logo-and-download a {
 	position: absolute;
