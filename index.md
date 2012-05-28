@@ -15,8 +15,9 @@ rich web applications easy.  It provides:
  - __[can.Control](#can_control)__ - declarative event bindings
  - __[can.route](#can_route)__ - back button and bookmarking support
 
-It also includes a rich set of supported [extensions and plugins](#plugins), 
-[example apps](#examples), and [example recipes](http://canjs.us/recipes.html). CanJS is:
+It also includes a rich set of supported [extensions and plugins](#plugins). 
+
+CanJS is:
 
  - Safer - [memory safe](http://canjs.us/#why_canjs-safety) controls and model stores.
  - Faster - [fastest](http://canjs.us/#why_canjs-speed) control initialization, and live-binding.
