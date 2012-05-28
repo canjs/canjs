@@ -2270,7 +2270,7 @@ fast.  Compare [initializing a can.Control to a Backbone.View tabs](http://jsper
 
 [![Tabs initialization performance](http://bitovi.com/images/introducing-canjs/performance_control.png)](http://jsperf.com/tabs-timing-test)
 
-<a href="http://jsperf.com/tabs-timing-test"><img alt="Tabs initialization performance" src="http://bitovi.com/images/introducing-canjs/performance_control.png" width="600"></a>
+<a href="http://jsperf.com/tabs-timing-test"><img alt="Tabs initialization performance" src="http://bitovi.com/images/introducing-canjs/performance_control.png" width="650px"></a>
 
 
 This makes a big difference for page initialization if your site has lots of controls.
@@ -2280,7 +2280,8 @@ __Live binding__
 CanJS's live-binding is very fast. It only updates what's necessary when it's necessary. Compare its 
 [template rendering performance with three other common MVC frameworks](http://jsperf.com/canjs-ejs-performance/5):
 
-[![Temlate Performance](http://bitovi.com/images/introducing-canjs/performance_livebind.png)](http://jsperf.com/canjs-ejs-performance/5)
+<a href="http://jsperf.com/canjs-ejs-performance/5"><img alt="Temlate Performance" src="http://bitovi.com/images/introducing-canjs/performance_livebind.png" width="650px"></a>
+
 
 In this test, CanJS has the fastest live-binding. Backbone and YUI are not doing 
 live-binding, but CanJS is still the fastest.  
