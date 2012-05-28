@@ -4,7 +4,8 @@ title: CanJS
 ---
 # Welcome to CanJS!
 
-CanJS is an MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.  It provides:
+CanJS is an MIT-licensed, client-side, JavaScript framework that makes building 
+rich web applications easy.  It provides:
 
  - __[can.Construct](#can_construct)__  - inheritable constructor functions
  - __[can.Observe](#can_observe)__ - key-value binding
@@ -14,8 +15,16 @@ CanJS is an MIT-licensed, client-side, JavaScript framework that makes building 
  - __[can.Control](#can_control)__ - declarative event bindings
  - __[can.route](#can_route)__ - back button and bookmarking support
 
-It also includes a rich set of supported [extensions and plugins](#plugins). CanJS is better, faster, 
-easier, smaller, library-er.  [Learn why](#why_canjs).
+It also includes a rich set of supported [extensions and plugins](#plugins), 
+[example apps](#examples), and [example recipes](http://canjs.us/recipes.html). CanJS is:
+
+ - Safer - [memory safe](http://canjs.us/#why_canjs-safety) controls and model stores.
+ - Faster - [fast control initialization, tied for fastest live-binding, deferreds](http://canjs.us/#why_canjs-speed).
+ - Easier - [example apps](#examples), [example recipes](http://canjs.us/recipes.html), [thorough documentation](http://donejs.com/docs.html#!).
+ - Smaller - 8.5k (smaller than Backbone+Underscore, Knockout, Ember, etc).
+ - Library-er - integrates with jQuery, Dojo, YUI, Zepto, Mootools!
+
+CanJS is better! [Learn why.](#why_canjs).
 
 ## Get Canned
 
@@ -2251,7 +2260,35 @@ However, model only stores these model instances while something is binding to t
 
 ### Speed
 
-The importance of performance is almost impossible to exaggerate.  CanJS's guts are highly optimized. For example, it pre-processes [can.Control](#can_control) event handlers so binding is super fast.  But, it takes things to another level with the following two features:
+The importance of performance is almost impossible to exaggerate.  CanJS's guts are highly 
+optimized. See how:
+
+__Control initialization__
+
+[can.Control](#can_control) pre-processes  event handlers so binding is super 
+fast.  Compare [initializing a can.Control to a Backbone.View tabs](http://jsperf.com/tabs-timing-test) widget:
+
+[![Tabs initialization performance](http://bitovi.com/images/introducing-canjs/performance_control.png)](http://jsperf.com/tabs-timing-test)
+
+This makes a big difference for page initialization if your site has lots of controls.
+
+__Live binding__
+
+CanJS's live-binding is very fast. It only updates what's necessary when it's necessary. Compare its 
+[template rendering performance with three other common MVC frameworks](http://jsperf.com/canjs-ejs-performance/5):
+
+[![Temlate Performance](http://bitovi.com/images/introducing-canjs/performance_livebind.png)](http://jsperf.com/canjs-ejs-performance/5)
+
+In this test, CanJS has the fastest live-binding. Backbone and YUI are not doing 
+live-binding, but CanJS is still the fastest.  
+
+In the [popular counting circle example](http://jsfiddle.net/JMWf4/5/), 
+Knockout visually appears the fastest, followed by CanJS.
+
+This means that CanJS and Knockout are slightly faster at different things, but
+are likely tied for the fastest live-binding libraries.
+
+_Note: AngularJS throttles updates, which means it doesn't fit well with these tests._
 
 __Model and view deferred support for parallel loading__
 
