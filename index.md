@@ -24,7 +24,7 @@ It also includes a rich set of supported [extensions and plugins](#plugins),
  - Smaller - 8.5k (smaller than Backbone+Underscore, Knockout, Ember, etc).
  - Library-er - integrates with jQuery, Dojo, YUI, Zepto, Mootools!
 
-CanJS is better! [Learn why.](#why_canjs).
+CanJS is better! [Learn why](#why_canjs).
 
 ## Get Canned
 
