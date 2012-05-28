@@ -713,8 +713,12 @@ test("overwrite makeFindAll", function(){
 			count = 2;
 			ok(food2 === food, "same instances")
 			equals(food2.name, "hot dog")
-		})
-	})
+		});
+	});
+});
+
+test("inheriting unique model names", function(){
+	var Foo = can.Model({});
+	var Bar = can.Model({});
+	ok(Foo.fullName != Bar.fullName, "fullNames not the same")
 })
-
-

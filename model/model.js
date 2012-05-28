@@ -555,14 +555,14 @@ steal('can/observe', function() {
 					var newMethod = self["make"+can.capitalize(name)](self[name]);
 					can.Construct._overwrite(self, base, name,function(){
 						this._super;
-						self._reqs++;
-						return newMethod.apply(self, arguments).then(clean, clean);
+						this._reqs++;
+						return newMethod.apply(this, arguments).then(clean, clean);
 					})
 				}
 			});
 
 
-			if(self.fullName == "can.Model"){
+			if(!self.fullName || self.fullName == base.fullName){
 				self.fullName = self._shortName = "Model"+(++modelNum);
 			}
 			// Ddd ajax converters.
