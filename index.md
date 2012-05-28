@@ -19,7 +19,7 @@ It also includes a rich set of supported [extensions and plugins](#plugins),
 [example apps](#examples), and [example recipes](http://canjs.us/recipes.html). CanJS is:
 
  - Safer - [memory safe](http://canjs.us/#why_canjs-safety) controls and model stores.
- - Faster - [fast control initialization, tied for fastest live-binding, deferreds](http://canjs.us/#why_canjs-speed).
+ - Faster - [fastest](http://canjs.us/#why_canjs-speed) control initialization, and live-binding.
  - Easier - [example apps](#examples), [example recipes](http://canjs.us/recipes.html), [thorough documentation](http://donejs.com/docs.html#!).
  - Smaller - 8.5k (smaller than Backbone+Underscore, Knockout, Ember, etc).
  - Library-er - integrates with jQuery, Dojo, YUI, Zepto, Mootools!
