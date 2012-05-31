@@ -2120,7 +2120,7 @@ Srchr searches several data sources for content and displays it to the user. It 
 A contacts manager application built to accompany the 3 part Nettuts+ __"Diving into CanJS"__ tutorial series. This application is meant to introduce people to the core concepts of CanJS like Controls, Models, Views, Observables and Routing.
 
 - __Part 1__: [Tutorial](http://net.tutsplus.com/tutorials/javascript-ajax/diving-into-canjs/) | [Demo](http://ccummings.github.com/canjs-contacts-tutorial/part1/) | [Download](https://github.com/downloads/ccummings/canjs-contacts-tutorial/part1.zip)
-- __Part 2__: _Tutorial (May 28)_ | [Demo](http://ccummings.github.com/canjs-contacts-tutorial/part2/) | [Download](https://github.com/downloads/ccummings/canjs-contacts-tutorial/part2.zip)
+- __Part 2__: [Tutorial](http://net.tutsplus.com/tutorials/javascript-ajax/diving-into-canjs-part-2/) | [Demo](http://ccummings.github.com/canjs-contacts-tutorial/part2/) | [Download](https://github.com/downloads/ccummings/canjs-contacts-tutorial/part2.zip)
 - __Part 3__: _Tutorial (June 4)_ | [Demo](http://ccummings.github.com/canjs-contacts-tutorial/part3/) | [Download](https://github.com/downloads/ccummings/canjs-contacts-tutorial/part3.zip)
 
 [View the source on github](https://github.com/ccummings/canjs-contacts-tutorial)
