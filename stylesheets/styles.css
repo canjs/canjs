@@ -310,3 +310,19 @@ html.lt-ie7 .github-fork {
 html.lt-ie7 .github-fork img {
 	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://a248.e.akamai.net/assets.github.com/img/30f550e0d38ceb6ef5b81500c64d970b7fb0f028/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67', sizingMethod='scale');
 }
+#content ul.checkmarks {
+	height: auto;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 -30px;
+}
+#content ul.checkmarks li {
+	float: left;
+	background: url(../images/check.png);
+	background-repeat: no-repeat;
+	font-size: 16px;
+	font-weight: bold;
+	margin-right: 20px;
+	background-position: left 5px;
+	padding-left: 20px;
+}
