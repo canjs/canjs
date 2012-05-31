@@ -350,6 +350,13 @@ html.lt-ie7 .github-fork img {
 	opacity: 0;
 	display: none;
 }
+#content ul.checkmarks li .overlay a {
+	color: #d9ff64;
+	text-decoration: underline;
+}
+#content ul.checkmarks li .overlay a:hover {
+	text-decoration: none;
+}
 #content ul.checkmarks li .oneliner {
 	line-height: 30px;
 }

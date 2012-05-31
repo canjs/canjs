@@ -14,19 +14,19 @@ title: CanJS
   <li>
     Faster
     <div class="overlay">
-      Fastest control initialization and live binding
+      <a href="http://canjs.us/#why_canjs-speed">Fastest</a> control initialization and live binding
     </div>
   </li>
   <li>
     Safer
     <div class="overlay">
-      Memory safe controls and model stores
+      <a href="http://canjs.us/#why_canjs-safety">Memory safe</a> controls and model stores
     </div>
   </li>
   <li>
     Easier
     <div class="overlay">
-      Through documentation, example apps and example recipes
+      <a href="http://donejs.com/docs.html#!">Through documentation</a>, <a href="#examples">example apps</a> and <a href="http://canjs.us/recipes.html">example recipes</a>
     </div>
   </li>
   <li>
