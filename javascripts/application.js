@@ -293,6 +293,18 @@ if($('.lt-ie7, .lt-ie8, .lt-ie9').length == 0){
 	$('#wrapper').menu('html,body');
 }
 
+$('.checkmarks li').hover(function(){
+	$(this).find('.overlay').show().animate({
+		opacity: 1
+	}, 300)
+}, function(){
+	var overlay = $(this).find('.overlay');
+	overlay.animate({
+		opacity: 0
+	}, function(){
+		overlay.hide()
+	})
+})
 
 // google analytics
 var _gaq = _gaq || [];

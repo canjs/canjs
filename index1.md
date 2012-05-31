@@ -5,11 +5,36 @@ title: CanJS
 # Welcome to CanJS!
 
 <ul class="checkmarks cf">
-  <li>Smaller</li>
-  <li>Faster</li>
-  <li>Safer</li>
-  <li>Easier</li>
-  <li>Library-er</li>
+  <li>
+    Smaller
+    <div class="overlay oneliner">
+      Only 8.5k!
+    </div>
+  </li>
+  <li>
+    Faster
+    <div class="overlay">
+      Fastest control initialization and live binding
+    </div>
+  </li>
+  <li>
+    Safer
+    <div class="overlay">
+      Memory safe controls and model stores
+    </div>
+  </li>
+  <li>
+    Easier
+    <div class="overlay">
+      Through documentation, example apps and example recipes
+    </div>
+  </li>
+  <li>
+    Library-er
+    <div class="overlay">
+      Integrates with jQuery, Dojo, YUI, Zepto, Mootools.
+    </div>
+  </li>
 </ul>
 
 CanJS is an MIT-licensed, client-side, JavaScript framework that makes building 

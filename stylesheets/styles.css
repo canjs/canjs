@@ -325,4 +325,31 @@ html.lt-ie7 .github-fork img {
 	margin-right: 20px;
 	background-position: left 5px;
 	padding-left: 20px;
+	position: relative;
+}
+#content ul.checkmarks li .overlay {
+	position: absolute;
+	background: rgba(0,111,184,0.9);
+	background-image: url(../images/check_white.png);
+	background-repeat: no-repeat;
+	background-position: 15px 50%;
+	color: white;
+	width: 210px;
+	height: 30px;
+	padding: 10px 10px 10px 40px;
+	font-size: 13px;
+	top: 0;
+	left: 0;
+	margin-left: -85px;
+	margin-top: -15px;
+	line-height: 15px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	z-index: 1000;
+	opacity: 0;
+	display: none;
+}
+#content ul.checkmarks li .oneliner {
+	line-height: 30px;
 }
