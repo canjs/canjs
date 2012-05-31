@@ -39,6 +39,17 @@ steal("can/util", function() {
         }
 
       }
+    },
+
+    defer : function( fn, context ) {
+
+      var args = arguments;
+      context = context || this;
+
+      setTimeout(function() {
+        fn.apply( context, args );
+      }, 0 );
+
     }
 
   });

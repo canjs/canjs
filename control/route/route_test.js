@@ -1,6 +1,14 @@
 (function () {
 
-module("can/control/route");
+module("can/control/route",{
+	setup : function(){
+		stop();
+		window.location.hash = "";
+		setTimeout(function(){
+			start();
+		},13)
+	}
+});
 
 test("routes changed", function () {
 	expect(3);
@@ -21,7 +29,7 @@ test("routes changed", function () {
 	});
 
 	// init controller
-	new Router(document.body);
+	var router = new Router(document.body);
 
 	can.trigger(window, 'hashchange');
 
@@ -30,21 +38,22 @@ test("routes changed", function () {
 
 	window.location.hash = '!foos';
 	can.trigger(window, 'hashchange');
+	router.destroy();
 
 });
 
 test("route pointers", function(){
 	expect(1);
-	var tester = can.Control({
+	var Tester = can.Control({
 		"lol/:wat route" : "meth",
 		meth : function(){
 			ok(true, "method pointer called")
 		}
 	});
-	new tester(document.body);
+	var tester = new Tester(document.body);
 	window.location.hash = '!lol/wat';
 	can.trigger(window, 'hashchange');
-	
+	tester.destroy();
 })
 
 

@@ -4,7 +4,7 @@
 
 // The following code is heavily inspired by jQuery's $.fn.data()
 
-steal(function($){
+steal(function(){
 	// data.js
 	// ---------
 	// _jQuery-like data methods._

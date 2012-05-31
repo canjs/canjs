@@ -21,7 +21,6 @@ test("static fixtures", function(){
 			equals(data.sweet,"ness","can.post works");
 			start();
 		});
-		start();
 	});
 })
 
