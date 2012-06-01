@@ -60,15 +60,42 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				el.removeAttribute(attrName)
 			}
 		},
+		// a helper to get the parentNode for a given element el
+		// if el is in a documentFragment, it will return defaultParentNode
+		getParentNode = function(el, defaultParentNode){
+			return defaultParentNode && el.parentNode.nodeType === 11 ? defaultParentNode : el.parentNode;
+		},
+		// helper to know if property is not an expando on oldObserved's list of observes
+		// this should probably be removed and oldObserved should just have a
+		// property with observes
+		observeProp = function(name){
+			return name.indexOf("|") >= 0;
+		},
 		// This is used to setup live binding on a list of observe/attribute
 		// pairs for a given element.
 		//  - observed - an array of observe/attribute
 		//  - el - the parent element, if removed, unbinds all observes
 		//  - cb - a callback function that gets called if any observe/attribute changes
 		//  - oldObserve - a mapping of observe/attributes already bound
+		
 		liveBind = function( observed, el, cb, oldObserved ) {
 			// record if this is the first liveBind call for this magic tag
 			var first = oldObserved.matched === undefined;
+			
+			// If there is no element, teardown.
+			// This case happens when a parent block, like an `if(X){}`, replaces
+			// the content of children bindings like `<%= you.attr('name') %>` and
+			// the same property change that cause the parent block change changes
+			// the child bindings.
+			// If the parent block change did not change the child bindings, liveBind would
+			// not be called and the bindings would still be present until the
+			// parentElement `el` is removed from the page.
+			if(el == null){
+				oldObserved.teardown();
+				can.unbind.call(oldObserved.el,'destroyed', oldObserved.teardown)
+				return;
+				
+			}
 			// toggle the 'matched' indicator
 			oldObserved.matched = !oldObserved.matched;
 			
@@ -89,7 +116,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 			// that are no longer being bound and unbind them
 			for ( var name in oldObserved ) {
 				var ob = oldObserved[name];
-				if(name !== "matched" && ob.matched !== oldObserved.matched){
+				if(observeProp(name) && ob.matched !== oldObserved.matched){
 					ob.obj.unbind(ob.attr);
 					delete oldObserved[name];
 				}
@@ -98,13 +125,15 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				// If this is the first time binding, listen
 				// for the element to be destroyed and unbind
 				// all event handlers for garbage collection.
-				can.bind.call(el,'destroyed', function(){
-					can.each(oldObserved, function(ob){
-						if(typeof ob !== 'boolean'){
+				oldObserved.el = el;
+				oldObserved.teardown = function(){
+					can.each(oldObserved, function(ob, name){
+						if(observeProp(name)){
 							ob.obj.unbind(ob.attr, cb)
 						}
-					})
-				})
+					});
+				};
+				can.bind.call(el,'destroyed', oldObserved.teardown)
 			}
 
 		},
@@ -153,9 +182,15 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		// a magic tag.  For example, `<%= task.attr() %>` becomes
 		// `function(){ return task.attr() }`.  
 		getValueAndObserved = function(func, self){
-			// Set a callback on can.Observe to know
-			// when an attr is read.
+			
+			var oldReading;
 			if (can.Observe) {
+				// Set a callback on can.Observe to know
+				// when an attr is read.
+				// Keep a reference to the old reader
+				// if there is one.  This is used
+				// for nested live binding.
+				oldReading = can.Observe.__reading;
 				can.Observe.__reading = function(obj, attr){
 					// Add the observe and attr that was read
 					// to `observed`
@@ -173,7 +208,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 	
 			// Set back so we are no longer reading.
 			if(can.Observe){
-				delete can.Observe.__reading;
+				can.Observe.__reading = oldReading;
 			}
 			return {
 				value : value,
@@ -249,6 +284,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		 * @param {Object} func
 		 */
 		txt : function(escape, tagName, status, self, func){
+			
 			// Get teh value returned by the wrapping function and any observe/attributes read.
 			var res = getValueAndObserved(func, self),
 				observed = res.observed,
@@ -258,8 +294,6 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				oldObserved = {},
 				// The tag type to create within the parent tagName
 				tag = (tagMap[tagName] || "span");
-	
-
 
 			// If we had no observes just return the value returned by func.
 			if(!observed.length){
@@ -272,13 +306,13 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				escape ? 
 					// If we are escaping, replace the parentNode with 
 					// a text node who's value is `func`'s return value.
-					function(el){
-						var parent = el.parentNode,
+					function(el, parentNode){
+						var parent = getParentNode(el, parentNode),
 							node = document.createTextNode(value),
 							binder = function(){
 								var res = getValueAndObserved(func, self);
 								node.nodeValue = ""+res.value;
-								liveBind(res.observed, parent, binder,oldObserved);
+								liveBind(res.observed, node.parentNode, binder,oldObserved);
 							};
 						
 						parent.insertBefore(node, el);
@@ -288,36 +322,51 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					:
 					// If we are not escaping, replace the parentNode with a
 					// documentFragment created as with `func`'s return value.
-					function(span){
+					function(span, parentNode){
+						parentNode = getParentNode(span, parentNode)
 						// A helper function to manage inserting the contents
 						// and removing the old contents
 						var makeAndPut = function(val, remove){
-							
-								var frag = can.view.frag(val),
+								// create the fragment, but don't hook it up
+								// we need to insert it into the document first
+								
+								var frag = can.view.frag(val, parentNode),
+									// keep a reference to each node
 									nodes = can.map(frag.childNodes,function(node){
 										return node;
 									}),
 									last = remove[remove.length - 1];
 								
-								// Insert it in the `document`.
+								// Insert it in the `document` or `documentFragment`
 								if( last.nextSibling ){
 									last.parentNode.insertBefore(frag, last.nextSibling)
 								} else {
 									last.parentNode.appendChild(frag)
 								}
-								
 								// Remove the old content.
 								can.remove( can.$(remove) );
+								
 								return nodes;
 							},
+							// nodes are the nodes that any updates will replace
+							// at this point, these nodes could be part of a documentFragment
 							nodes = makeAndPut(value, [span]);
-
+						// Anytime a live-bound attribute changes this method gets called
 						var binder = function(){
-							var res = getValueAndObserved(func, self);
-							nodes = makeAndPut(res.value, nodes);
-							liveBind(res.observed, span.parentNode, binder ,oldObserved);
+							
+							// is this still part of the DOM?
+							var attached = nodes[0].parentNode,
+								// get the new value
+								res = getValueAndObserved(func, self);
+							// update the nodes in the DOM with the new rendered value
+							if( attached ) {
+								nodes = makeAndPut(res.value, nodes);
+							}
+							// updating the bindings (some observes may have changed)
+							liveBind(res.observed, nodes[0].parentNode, binder ,oldObserved);
 						}
-						liveBind(observed, span.parentNode, binder ,oldObserved);
+						// setup initial live-binding
+						liveBind(observed, parentNode, binder ,oldObserved);
 				}) + "></" +tag+">";
 			// In a tag, but not in an attribute
 			} else if(status === 1){ 
@@ -530,7 +579,13 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 						} else {
 							content += token;
 						}
-						
+						// if it's a tag like <input/>
+						if(lastToken.substr(-1) == "/"){
+							// remove the current tag in the stack
+							tagNames.pop();
+							// set the current tag to the previous parent
+							tagName = tagNames[tagNames.length-1];
+						}
 						break;
 					case "'":
 					case '"':
@@ -582,7 +637,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 								
 								endStack.push({
 									before: "",
-									after: finishTxt+"}));"
+									after: finishTxt+"}));\n"
 								})
 							}
 							else {
@@ -657,6 +712,7 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 				put(content)
 			}
 			buff.push(";")
+			
 			var template = buff.join(''),
 				out = {
 					out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"

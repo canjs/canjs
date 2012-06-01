@@ -26,13 +26,21 @@ steal("can/util")
 	};
 
 	can.extend( $view, {
-		frag: function(result){
+		// creates a frag and hooks it up all at once
+		frag: function(result, parentNode ){
+			return $view.hookup( $view.fragment(result), parentNode );
+		},
+		// simply creates a frag
+		// this is used internally to create a frag
+		// insert it
+		// then hook it up
+		fragment: function(result){
 			var frag = can.buildFragment(result,document.body);
 			// If we have an empty frag...
 			if(!frag.childNodes.length) { 
 				frag.appendChild(document.createTextNode(''))
 			}
-			return $view.hookup(frag);
+			return frag;
 		},
     // Convert a path like string into something that's ok for an `element` ID.
     toId : function( src ) {
@@ -43,7 +51,7 @@ steal("can/util")
         }
       }).join("_");
     },
-		hookup: function(fragment){
+		hookup: function(fragment, parentNode ){
 			var hookupEls = [],
 				id, 
 				func, 
@@ -61,7 +69,7 @@ steal("can/util")
 			for (; el = hookupEls[i++]; ) {
 
 				if ( el.getAttribute && (id = el.getAttribute('data-view-id')) && (func = $view.hookups[id]) ) {
-					func(el, id);
+					func(el, parentNode, id);
 					delete $view.hookups[id];
 					el.removeAttribute('data-view-id');
 				}

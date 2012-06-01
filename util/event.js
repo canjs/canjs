@@ -41,7 +41,7 @@ can.dispatch = function(event){
 	}
 	
 	var eventName = event.type.split(".")[0],
-		handlers = this.__bindEvents[eventName] || [],
+		handlers = (this.__bindEvents[eventName] || []).slice(0),
 		self= this,
 		args = [event].concat(event.data || []);
 		
