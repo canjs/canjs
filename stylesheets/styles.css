@@ -314,7 +314,7 @@ html.lt-ie7 .github-fork img {
 	height: auto;
 	list-style: none;
 	padding: 0;
-	margin: 0 0 -30px;
+	margin: 0 0 10px;
 }
 #content ul.checkmarks li {
 	float: left;
@@ -326,6 +326,13 @@ html.lt-ie7 .github-fork img {
 	background-position: left 5px;
 	padding-left: 20px;
 	position: relative;
+}
+#content ul.checkmarks li a {
+	font-weight: bold;
+	color: black;
+}
+#content ul.checkmarks li a:hover {
+	text-decoration: none;
 }
 #content ul.checkmarks li .overlay {
 	position: absolute;
@@ -341,7 +348,7 @@ html.lt-ie7 .github-fork img {
 	top: 0;
 	left: 0;
 	margin-left: -85px;
-	margin-top: -15px;
+	margin-top: -50px;
 	line-height: 15px;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
@@ -349,6 +356,18 @@ html.lt-ie7 .github-fork img {
 	z-index: 1000;
 	opacity: 0;
 	display: none;
+}
+#content ul.checkmarks li .overlay .arrow {
+	width: 0px;
+	height: 0px;
+	border-style: solid;
+	border-width: 5px 5px 0 5px;
+	border-color: rgba(0,111,184,0.9) transparent transparent transparent;
+	position: absolute;
+	bottom: 0;
+	margin-bottom: -5px;
+	left: 50%;
+	margin-left: -5px;
 }
 #content ul.checkmarks li .overlay a {
 	color: #d9ff64;

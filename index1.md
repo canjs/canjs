@@ -4,39 +4,6 @@ title: CanJS
 ---
 # Welcome to CanJS!
 
-<ul class="checkmarks cf">
-  <li>
-    Smaller
-    <div class="overlay oneliner">
-      Only 8.5k!
-    </div>
-  </li>
-  <li>
-    Faster
-    <div class="overlay">
-      <a href="http://canjs.us/#why_canjs-speed">Fastest</a> control initialization and live binding
-    </div>
-  </li>
-  <li>
-    Safer
-    <div class="overlay">
-      <a href="http://canjs.us/#why_canjs-safety">Memory safe</a> controls and model stores
-    </div>
-  </li>
-  <li>
-    Easier
-    <div class="overlay">
-      <a href="http://donejs.com/docs.html#!">Through documentation</a>, <a href="#examples">example apps</a> and <a href="http://canjs.us/recipes.html">example recipes</a>
-    </div>
-  </li>
-  <li>
-    Library-er
-    <div class="overlay">
-      Integrates with jQuery, Dojo, YUI, Zepto, Mootools.
-    </div>
-  </li>
-</ul>
-
 CanJS is an MIT-licensed, client-side, JavaScript framework that makes building 
 rich web applications easy.  It provides:
 
@@ -52,11 +19,43 @@ It also includes a rich set of supported [extensions and plugins](#plugins).
 
 CanJS is:
 
- - Safer - [memory safe](http://canjs.us/#why_canjs-safety) controls and model stores.
- - Faster - [fastest](http://canjs.us/#why_canjs-speed) control initialization, and live-binding.
- - Easier - [thorough documentation](http://donejs.com/docs.html#!), [example apps](#examples), and [example recipes](http://canjs.us/recipes.html).
- - Smaller - only 8.5k!
- - Library-er - integrates with jQuery, Dojo, YUI, Zepto, Mootools.
+<ul class="checkmarks cf">
+  <li>
+    <a href="#why_canjs-size">Smaller</a>
+    <div class="overlay oneliner">
+      Only 8.5k!
+      <div class="arrow"></div>
+    </div>
+  </li>
+  <li>
+    <a href="#why_canjs-speed">Faster</a>
+    <div class="overlay">
+      <a href="http://canjs.us/#why_canjs-speed">Fastest</a> control initialization and live binding
+      <div class="arrow"></div>
+    </div>
+  </li>
+  <li>
+    <a href="#can_control">Safer</a>
+    <div class="overlay">
+      <a href="http://canjs.us/#why_canjs-safety">Memory safe</a> controls and model stores
+      <div class="arrow"></div>
+    </div>
+  </li>
+  <li>
+    <a href="#examples">Easier</a>
+    <div class="overlay">
+      <a href="http://donejs.com/docs.html#!">Through documentation</a>, <a href="#examples">example apps</a> and <a href="http://canjs.us/recipes.html">example recipes</a>
+      <div class="arrow"></div>
+    </div>
+  </li>
+  <li>
+    <a href="#get_canned">Library-er</a>
+    <div class="overlay">
+      Integrates with jQuery, Dojo, YUI, Zepto, Mootools.
+      <div class="arrow"></div>
+    </div>
+  </li>
+</ul>
 
 CanJS is better! [Learn why](#why_canjs).
 

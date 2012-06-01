@@ -1,22 +1,23 @@
 var currentH2slug = "";
 var animationCount = 0;
-$.Controller('Menu', {
+can.Control('Menu', {
 	defaults : {
 		scroll : window
 	}
 }, {
 	init : function(){
-		this._menu = this.find('#menu');
+		this._menu = this.element.find('#menu');
 		this._menu.append(this.buildMenu());
 		this.resizeMenu();
 		this._menuShouldScroll = false;
 		setTimeout(this.proxy(function(){
 			this.mark();
-			this.bind(window, 'scroll', this.proxy('mark'));
 		}), 1)
 	},
+	'{window} scroll' : 'mark',
+
 	buildMenu : function(){
-		this.headings = this.find('h1,h2,h3');
+		this.headings = this.element.find('h1,h2,h3');
 		this.headingOffsets = [];
 		var byId = {},
 				lastByLevel = {1: null, 2: null, 3: null},
@@ -40,7 +41,9 @@ $.Controller('Menu', {
 								slug = currentH2slug + "-" + slug;
 							}
 							html.push('<li>');
-							html.push('<a href="#' + slug + '" class="heading-'+nodes[i].id+'" data-level="'+ nodes[i].level +'">' + text.text() + '</a>');
+							html.push('<a href="#' + slug + '" class="heading-' + nodes[i].id
+								+ (h.attr('class') ? ' ' + h.attr('class')  : '') + '" data-level="'
+								+ nodes[i].level +'">' + text.text() + '</a>');
 							html.push(build(nodes[i].id));
 							html.push('</li>')
 						}
@@ -74,7 +77,7 @@ $.Controller('Menu', {
 	},
 	"a click" : function(current, ev){
 		this._isClicking = true;
-		var active = this.find('#menu a.active');
+		var active = this.element.find('#menu a.active');
 		this.markActive(active, current);
 	},
 	mark : function(){
@@ -87,8 +90,8 @@ $.Controller('Menu', {
 		for(var i = this.headingOffsets.length - 1; i >= 0; i--){
 			var offset = this.headingOffsets[i];
 			if(offset - windowHeight / 2 < scroll){
-				var active = this.find('#menu a.active'),
-						current = this.find('#menu a.heading-' + (i + 1));
+				var active = this.element.find('#menu a.active'),
+						current = this.element.find('#menu a.heading-' + (i + 1));
 				this.markActive(active, current);
 				return;
 			}
@@ -128,7 +131,7 @@ $.Controller('Menu', {
 					} else {
 						animations.push([activeUl, 'slideUp', this.slideDur(activeUl, true)])
 					}
-					
+
 				} else if(currentLevel === 3 && activeLevel === 2){
 					var isSameGroup = current.closest('ul')[0] === active.siblings('ul')[0];
 					active.removeClass('active');
@@ -198,19 +201,19 @@ $.Controller('Menu', {
 	},
 	"{window} hashchange" : function(el, ev){
 		var hash = location.hash,
-				current = this.find('#menu a[href$='+hash+']'),
-				active = this.find('#menu a.active'),
+				current = this.element.find('#menu a[href$='+hash+']'),
+				active = this.element.find('#menu a.active'),
 				self = this;
 		setTimeout(function(){
 			self.markActive(active, current);
 		}, 1)
 	},
 	resizeMenu : function(){
-		var menuWrapHeight = this.find('#menu-wrapper').height(),
+		var menuWrapHeight = this.element.find('#menu-wrapper').height(),
 				menuHeight     = this._menu.height(),
 				windowHeight   = $(window).height();
-		this.find('#inner-menu-wrap').css('maxHeight', (windowHeight - (menuWrapHeight - menuHeight) - 40) + "px");
-		if(this.find('#inner-menu-wrap').innerHeight() - menuHeight > 2){ // top and bottom borders
+		this.element.find('#inner-menu-wrap').css('maxHeight', (windowHeight - (menuWrapHeight - menuHeight) - 40) + "px");
+		if(this.element.find('#inner-menu-wrap').innerHeight() - menuHeight > 2){ // top and bottom borders
 			this._menuShouldScroll = true;
 		} else {
 			this._menuShouldScroll = false;
@@ -243,7 +246,7 @@ $.Controller('Menu', {
 		if(this._scrollMenu == 'top' && marginTop < 0){
 			menu.css('marginTop', (marginTop + 1) + "px")
 			setTimeout(this.proxy('scrollMenu'), 1);
-		} else if(this._scrollMenu == 'bottom' && menuHeight + marginTop > this.find('#inner-menu-wrap').height()){
+		} else if(this._scrollMenu == 'bottom' && menuHeight + marginTop > this.element.find('#inner-menu-wrap').height()){
 			menu.css('marginTop', (marginTop - 1) + "px")
 			setTimeout(this.proxy('scrollMenu'), 1);
 		}
@@ -252,23 +255,23 @@ $.Controller('Menu', {
 		clearTimeout(this._positionTimeout);
 		this._positionTimeout = setTimeout(this.proxy(function(){
 			if(animationCount === 0){
-				var active = this.find('#menu a.active');
+				var active = this.element.find('#menu a.active');
 				if(active.length === 0){
 					return;
 				}
 				var activePos = active.position().top,
 						marginTop = parseInt(this._menu.css('marginTop'), 10),
-						wrapHeight = this.find('#inner-menu-wrap').height();
+						wrapHeight = this.element.find('#inner-menu-wrap').height();
 
 				//console.log('TIEMOUT', marginTop);
 
 				if(marginTop > 0){
 					this._menu.css('marginTop', '0px');
 					return
-				} 
+				}
 
 				var	viewPortPos = activePos + marginTop;
-				
+
 				if(viewPortPos >= 0 && viewPortPos + 25 <= wrapHeight){
 					return;
 				} else if(viewPortPos < 0){
@@ -281,30 +284,44 @@ $.Controller('Menu', {
 
 			}
 		}), 1);
-		
+
 	},
 	"{window} resize" : function(){
 		this.resizeMenu();
 	}
 });
 if($('.lt-ie7, .lt-ie8, .lt-ie9').length == 0){
-	$('#wrapper').menu();
+	new Menu($('#wrapper'));
 } else {
-	$('#wrapper').menu('html,body');
+	new Menu($('#wrapper'), 'html,body');
 }
 
-$('.checkmarks li').hover(function(){
-	$(this).find('.overlay').show().animate({
-		opacity: 1
-	}, 300)
-}, function(){
-	var overlay = $(this).find('.overlay');
-	overlay.animate({
-		opacity: 0
-	}, function(){
-		overlay.hide()
-	})
+can.Control('Tooltip', {}, {
+	"li hoverenter" : function(el, ev){
+		el.find('.overlay').show().animate({
+			opacity: 1
+		}, 200)
+	},
+	"li hoverleave" : function(el, ev){
+		var overlay = el.find('.overlay');
+		overlay.animate({
+			opacity: 0
+		}, function(){
+			overlay.hide()
+		})
+	},
+	".overlay click" : function(el, ev){
+		var a = el.siblings('a');
+		window.location = a.attr('href');
+	},
+	".overlay a click" : function(el, ev){
+		ev.stopPropagation();
+	}
 })
+
+new Tooltip($('.checkmarks'));
+
+
 
 // google analytics
 var _gaq = _gaq || [];
