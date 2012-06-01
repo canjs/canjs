@@ -767,7 +767,55 @@ test("nested properties", function(){
 
 	equals(div.innerHTML, "Brian")
 	
+});
+
+test("tags without chidren or ending with /> do not change the state", function(){
+	var ta = can.$('#qunit-test-area')[0]
+	ta.innerHTML = ""
+	
+	var hookup = can.view.hookup;
+	can.view.hookup = function(frag){
+		// check that there are no spans in this frag
+		can.append(  can.$('#qunit-test-area'), frag );
+		equal( ta.getElementsByTagName('span').length, 0, "there are no spans");
+		equal( ta.getElementsByTagName('td').length, 2, "there are 2 td");
+	}
+	var text = "<table><tr><td/><%== obs.attr('content') %></tr></div>"
+	var obs = new can.Observe({
+		content: "<td>Justin</td>"
+	})
+	var compiled = new can.EJS({text: text}).render({obs: obs});
+	
+	var div = document.createElement('div');
+
+	can.view.frag(compiled);
+	can.view.hookup = hookup;
 })
+
+
+
+test("nested live bindings", function(){
+	var items  = new can.Observe.List([
+		{title: 0, is_done: false, id: 0}
+	]);
+	
+	var div = document.createElement('div');
+	div.appendChild(can.view("//can/view/ejs/nested_live_bindings.ejs",{items: items}))
+	items.push({title: 0, is_done: false, id: 1});
+	// this will throw an error unless EJS protects against
+	// nested objects
+	items[0].attr('is_done',true)
+});
+
+// Similar to the nested live bindings test, this makes sure templates with control blocks
+// will eventually remove themselves if at least one change happens
+// before things are removed.
+// It is currently commented out because
+// 
+/*test("memory safe without parentElement of blocks", function(){
+	
+})*/
+
 
 
 })()
