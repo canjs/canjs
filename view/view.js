@@ -44,7 +44,7 @@ steal("can/util")
 		},
     // Convert a path like string into something that's ok for an `element` ID.
     toId : function( src ) {
-      return can.map(src.split(/\/|\./g), function( part ) {
+      return can.map(src.toString().split(/\/|\./g), function( part ) {
         // Dont include empty strings in toId functions
         if ( part ) {
           return part;
