@@ -64,11 +64,11 @@ CanJS is better! [Learn why](#why_canjs).
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your download
 for the library you are using:
 
- - [can.jquery.js](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.4.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.4.min.js)) - 8.5k - [Annotated Source](http://donejs.com/can/docs/can.jquery.html)
- - [can.zepto.js](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.4.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.4.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.zepto.html)
- - [can.dojo.js](https://github.com/downloads/jupiterjs/canjs/can.dojo-1.0.4.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.dojo-1.0.4.min.js)) - 10.8k - [Annotated Source](http://donejs.com/can/docs/can.dojo.html)
- - [can.mootools.js](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.4.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.4.min.js)) - 10.7k - [Annotated Source](http://donejs.com/can/docs/can.mootools.html)
- - [can.yui.js](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.4.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.4.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.yui.html)
+ - [can.jquery.js](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.5.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.5.min.js)) - 8.5k - [Annotated Source](http://donejs.com/can/docs/can.jquery.html)
+ - [can.zepto.js](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.5.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.5.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.zepto.html)
+ - [can.dojo.js](https://github.com/downloads/jupiterjs/canjs/can.dojo-1.0.5.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.dojo-1.0.5.min.js)) - 10.8k - [Annotated Source](http://donejs.com/can/docs/can.dojo.html)
+ - [can.mootools.js](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.5.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.5.min.js)) - 10.7k - [Annotated Source](http://donejs.com/can/docs/can.mootools.html)
+ - [can.yui.js](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.5.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.5.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.yui.html)
 
 This page walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery. If you want to see a
@@ -2527,6 +2527,23 @@ off JavaScriptMVC.  This page is for contributors after CanJS's launch.
 [roelmonnens](https://twitter.com/roelmonnens) - static model deferreds are now rejectable.
 
 ### Change Log
+
+__1.0.5__ (June 2nd 2012)
+
+ - can.model
+      - Added ability to [overwrite model crud operations](https://github.com/jupiterjs/canjs/commit/235097a46e45329d63da9b6d28a6c284c1b2a157) by defining a `make` prefixed static function, such as `makeFindAll`
+
+ - can.EJS
+      - [Fixed problem](https://github.com/jupiterjs/canjs/commit/4d4d31f12a57db1ff81f47fa0c8b4261d8133dbb) with nested block statements.
+
+ - can.each
+      - [Added optional third argument](https://github.com/jupiterjs/canjs/commit/bbd2ad5e38df90f0ebcc09a20f7ea216fe20bd72) that defines the context for the iterator function.
+
+ - can/util/function
+      - Added `can.defer` [method](https://github.com/jupiterjs/canjs/commit/64de5254ce8c284b20c3da487638497457152105) as an alias for `setTimeout(function(){}, 0)`.
+
+ - can.view
+      - Fixed `toId` [so it will work](https://github.com/jupiterjs/canjs/commit/19c9ca0f07b00afe3c99bf439c089948c46464a6) with both older and newer `steal` versions.
 
 __1.0.4__ (May 22nd 2012)
 
