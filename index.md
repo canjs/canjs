@@ -644,7 +644,7 @@ like for-loops, if/else, switch, declaring variables, etc.  Pretty much any JS c
 <% if ( todos.attr( 'length' ) === 0 ) { %>
     <li>You have no todos</li>
 <% } else { %>
-    <% list( todos, function() { %>
+    <% todos.each(function( todo ) { %>
         <li> .... </li>
     <% } ) %>
 <% } %>
@@ -713,7 +713,7 @@ is the index of the last todo, not the index of the desired todo.  Fix this by u
 <% } ) %>
 {% endhighlight %}
 
-### list `list( observeList, iterator( item, index ) )`
+### each `observe.each( iterator( item, index ) )`
 
 If you want to make the previous template update when todos are 
 added or removed, you could bind to length like:
@@ -725,10 +725,10 @@ added or removed, you could bind to length like:
 <% }) %>
 {% endhighlight %}
 
-Or simply use EJS's `list` helper method like:
+Or simply use `can.Observe`'s [each](#can_observe-each) method like:
 
 {% highlight erb %}
-<% list( todos, function( todo ) { %>
+<% todos.each( function( todo ) { %>
   <li><%= todo.attr( 'name' ) %></li>
 <% }) %>
 {% endhighlight %}
