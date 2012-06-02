@@ -313,8 +313,7 @@ function(){
 				
 			},
 			"{observe} change" : function(){
-				
-				console.log("changed")
+
 				var data = this.options.observe.attr();
 				this.options.obs.attr(data, true)
 			},
