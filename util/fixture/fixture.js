@@ -378,7 +378,7 @@ steal('can/util/object', function () {
 			 * @function can.fixture.make
 			 * @parent can.fixture
 			 *
-			 * Used to make fixtures for findAll / findOne style requests.
+			 * `can.fixture.make` is used for findAll / findOne style requests.
 			 *
 			 * ## With can.ajax
 			 *
@@ -630,7 +630,7 @@ steal('can/util/object', function () {
 		 * @function can.fixture.rand
 		 * @parent can.fixture
 		 *
-		 * Creates random integers or random arrays of
+		 * `can.fixture.rand` creates random integers or random arrays of
 		 * other arrays.
 		 *
 		 * ## Examples
@@ -695,6 +695,7 @@ steal('can/util/object', function () {
 		},
 		/**
 		 * @hide
+		 *
 		 * Use can.fixture.xhr to create an object that looks like an xhr object.
 		 *
 		 * ## Example
@@ -747,7 +748,7 @@ steal('can/util/object', function () {
 		 * @attribute can.fixture.on
 		 * @parent can.fixture
 		 *
-		 * On lets you programatically turn off fixtures.  This is mostly used for testing.
+		 * `can.fixture.on` lets you programatically turn off fixtures. This is mostly used for testing.
 		 *
 		 *     can.fixture.on = false
 		 *     Task.findAll({}, function(){
@@ -760,9 +761,10 @@ steal('can/util/object', function () {
 	 * @attribute can.fixture.delay
 	 * @parent can.fixture
 	 *
-	 * Sets the delay in milliseconds between an ajax request is made and
+	 * `can.fixture.delay` indicates the delay in milliseconds between an ajax request is made and
 	 * the success and complete handlers are called.  This only sets
-	 * functional fixtures.  By default, the delay is 200ms.
+	 * functional synchronous fixtures that return a result. By default, the delay is 200ms.
+	 *
 	 * @codestart
 	 * steal('can/util/fixtures').then(function(){
 	 *   can.fixture.delay = 1000;
@@ -775,7 +777,7 @@ steal('can/util/object', function () {
 	 * @attribute can.fixture.rootUrl
 	 * @parent can.fixture
 	 *
-	 * The root URL for fixtures to use.
+	 * `can.fixture.rootUrl` contains the root URL for fixtures to use.
 	 * If you are using StealJS it will use the Steal root
 	 * URL by default.
 	 */
