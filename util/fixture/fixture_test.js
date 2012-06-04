@@ -370,8 +370,13 @@ test("can.fixture with response callback", 4, function() {
 		url : 'responseErrorCb',
 		dataType : 'json'
 	}).fail(function(orig, error, text) {
-		equal(error, 'error', 'Got error status');
-		equal(text, 'This is an error from callback', 'Got error text')
+		if(can.isFunction(orig.isRejected) && orig.isRejected()) {
+			ok(true, 'Deferred rejected');
+			ok(true);
+		} else {
+			equal(error, 'error', 'Got error status');
+			equal(text, 'This is an error from callback', 'Got error text');
+		}
 		start();
 	});
 
