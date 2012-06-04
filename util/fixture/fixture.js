@@ -120,16 +120,15 @@ steal('can/util/object', function () {
 			return {
 				send : function (headers, callback) {
 					var success = function() {
-							var response = extractResponse(s, can.makeArray(arguments));
 							if(stopped === false) {
-								callback.apply(null, response);
+								callback.apply(null, extractResponse(s, can.makeArray(arguments)));
 							}
 						},
 						result = s.fixture(original, s, success, headers);
 
 					if(result !== undefined) {
 						timeout = setTimeout(function () {
-							success.apply(null, result);
+							callback.apply(null, extractResponse(s, result));
 						}, can.fixture.delay);
 					}
 				},
@@ -170,7 +169,7 @@ steal('can/util/object', function () {
 
 				if(result !== undefined) {
 					timeout = setTimeout(function () {
-						success.apply(null, result);
+						callback.apply(null, extractResponse(s, result));
 					}, can.fixture.delay);
 				}
 
