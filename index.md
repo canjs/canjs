@@ -226,13 +226,13 @@ paginate.attr( 'count', 3000 );
 paginate.unbind( 'count', countHandler );
 {% endhighlight %}  
 
-### each `observe.each( handler(attrName, value) )`
+### each `observe.each( handler(value, attrName) )`
 
 [can.Observe.prototype.each](http://donejs.com/docs.html#!can.Observe.prototype.each) iterates through 
-each attribute, calling handler with each attribute name and value.
+each attribute, calling handler with each attribute value and name.
 
 {% highlight javascript %}
-paginate.each(function( name, value ) {
+paginate.each(function( value, name ) {
    console.log( name, value );
 })
 // writes:
