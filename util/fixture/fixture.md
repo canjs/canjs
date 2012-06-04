@@ -1,7 +1,7 @@
-@page can.util.fixture
+@page can.fixture
 @parent can.util
 
-[can.util.fixture can.fixture] intercepts an AJAX request and simulates
+`can.util.fixture` intercepts an AJAX request and simulates
 the response with a file or function. They are a great technique
 when you want to develop JavaScript
 independently of the backend.
@@ -19,9 +19,10 @@ The other common option is to generate the Ajax response with
 a function.  The following intercepts updating tasks at
 `/tasks/ID.json` and responds with updated data:
 
-    can.fixture("PUT /tasks/{id}.json", function(original, settings, respondWith){
-       respondWith({ updatedAt : new Date().getTime() });
-    })
+    can.fixture("PUT /tasks/{id}.json",
+      function(original, settings, respondWith){
+         respondWith({ updatedAt : new Date().getTime() });
+      })
 
 We categorize fixtures into the following types:
 
@@ -47,13 +48,14 @@ request from your server.
 
 For example, the following returns a successful response with JSON data from the server:
 
-    can.fixture("/foobar.json", function(original, settings, respondWith){
-      respondWith(200, "success", { json: {foo: "bar" } }, {})
-    })
+    can.fixture("/foobar.json",
+      function(original, settings, respondWith){
+        respondWith(200, "success", { json: {foo: "bar" } }, {})
+      })
 
 The fixture function has the following signature:
 
-    function( originalOptions, options, respond) {
+    function( originalOptions, options, respondWith) {
       respond(status, statusText, responses, responseHeaders);
     }
 
@@ -72,23 +74,26 @@ where the fixture function is called with:
 However, can.fixture handles the common case where you want a successful response with JSON data.
 The previous can be written like:
 
-    can.fixture("/foobar.json", function(original, settings, respondWith){
-      respondWith({ foo: "bar" });
-    })
+    can.fixture("/foobar.json",
+      function(original, settings, respondWith){
+        respondWith({ foo: "bar" });
+      })
 
 Since `respondWith` is called asynchronously you can also set a custom fixture timeout like this:
 
-    can.fixture("/foobar.json", function(original, settings, respondWith){
-      setTimeout(function() {
-        respondWith({ foo: "bar" });
-      }, 1000);
-    })
+    can.fixture("/foobar.json",
+    function(original, settings, respondWith){
+        setTimeout(function() {
+          respondWith({ foo: "bar" });
+        }, 1000);
+      })
 
 If you want to return an array of data respond like this:
 
-    can.fixture("/tasks.json", function(original, settings, respondWith){
-      respondWith([ "first", "second", "third"]);
-    })
+    can.fixture("/tasks.json",
+      function(original, settings, respondWith){
+        respondWith([ "first", "second", "third"]);
+      })
 
 __Note:__ A fixture function can also return its response directly like this:
 
@@ -115,17 +120,19 @@ The following example simulates services that get and update 100 todos.
         name: "Todo "+i
       }
     }
-    can.fixture("GET /todos/{id}", function(orig, settings, respondWith){
-      // return the JSON data
-      // notice that id is pulled from the url and added to data
-      respondWith(todos[orig.data.id]);
-    })
+    can.fixture("GET /todos/{id}",
+      function(original, settings, respondWith){
+        // return the JSON data
+        // notice that id is pulled from the url and added to data
+        respondWith(todos[orig.data.id]);
+      })
 
-    can.fixture("PUT /todos/{id}", function(orig, settings, respondWith){
-      // update the todo's data
-      can.extend(todos[orig.data.id], orig.data );
-      respondWith({});
-    })
+    can.fixture("PUT /todos/{id}",
+      function(original, settings, respondWith){
+        // update the todo's data
+        can.extend(todos[orig.data.id], orig.data );
+        respondWith({});
+      })
 
 Notice that data found in templated urls (ex: `{id}`) is added to the original data object.
 
@@ -134,9 +141,10 @@ Notice that data found in templated urls (ex: `{id}`) is added to the original d
 The following simulates an unauthorized request
 to `/foo`.
 
-    can.fixture("/foo", function(original, settings, respondWith) {
-      respondWith(401,"{type: 'unauthorized'}");
-    });
+    can.fixture("/foo",
+      function(original, settings, respondWith) {
+        respondWith(401,"{type: 'unauthorized'}");
+      });
 
 This could be received by the following Ajax request:
 
@@ -158,14 +166,35 @@ You can remove a fixture by passing `null` for the fixture option:
     // remove the fixture
     can.fixture("GET todos.json", null)
 
-You can also set [can.util.fixture.on can.fixture.on] to false:
+You can also set [can.fixture.on] to false:
 
     can.fixture.on = false;
 
 ## Make
 
-[can.util.fixture.make can.fixture.make] makes a CRUD service layer that handles sorting, grouping,
-filtering and more.
+[can.fixture.make] makes a CRUD service layer that handles sorting, grouping, filtering and more. Use
+it with a [can.Model] like this:
+
+    var Todo = can.Model({
+      findAll : 'GET /todos',
+      findOne : 'GET /todos/{id}',
+      create  : 'POST /todos',
+      update  : 'PUT /todos/{id}',
+      destroy : 'DELETE /todos/{id}'
+      }, {});
+
+    var store = can.fixture.make(100, function(i) {
+      return {
+        id : i,
+        name : 'Todo ' + i
+      }
+    });
+
+    can.fixture('GET /todos', store.findAll);
+    can.fixture('GET /todos/{id}', store.findOne);
+    can.fixture('POST /todos', store.create);
+    can.fixture('PUT /todos/{id}', store.update);
+    can.fixture('DELETE /todos/{id}', store.destroy);
 
 ## Testing Performance
 
@@ -173,7 +202,7 @@ Dynamic fixtures are awesome for performance testing.  Want to see what
 10000 files does to your app's performance?  Make a fixture that returns 10000 items.
 
 What to see what the app feels like when a request takes 5 seconds to return?  Set
-[can.util.fixture.delay] to 5000.
+[can.fixture.delay] to 5000.
 
 ## Organizing fixture
 
@@ -198,9 +227,11 @@ have <code>todo/fixtures/fixtures.js</code> look like:
           type: 'post',
           url: '/services/todos.json'
         },
-        function(settings){
-            return {id: Math.random(),
-                 name: settings.data.name}
+        function(original, settings, respondWith){
+            respondWith({
+                id: Math.random(),
+                name: settings.data.name
+            })
         });
 
     })

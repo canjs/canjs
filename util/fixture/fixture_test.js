@@ -142,8 +142,9 @@ test("simulating an error", function(){
 	}).done(function(){
 		ok(false, "success called");
 		start();
-	}).fail(function(dfd){
+	}).fail(function(original, type, text){
 		ok(true, "error called");
+		equal(text, st, 'Original text passed')
 		start();
 	});
 })
@@ -370,13 +371,8 @@ test("can.fixture with response callback", 4, function() {
 		url : 'responseErrorCb',
 		dataType : 'json'
 	}).fail(function(orig, error, text) {
-		if(can.isFunction(orig.isRejected) && orig.isRejected()) {
-			ok(true, 'Deferred rejected');
-			ok(true);
-		} else {
-			equal(error, 'error', 'Got error status');
-			equal(text, 'This is an error from callback', 'Got error text');
-		}
+		equal(error, 'error', 'Got error status');
+		equal(text, 'This is an error from callback', 'Got error text');
 		start();
 	});
 

@@ -90,6 +90,7 @@ steal('can/util/object', function () {
 				tmp[0][next] = response
 				response = tmp;
 			}
+
 			if (typeof response[0] != 'number') {
 				response.unshift(200, "success")
 			}
@@ -152,7 +153,8 @@ steal('can/util/object', function () {
 						if ( (status >= 200 && status < 300 || status === 304) && stopped === false) {
 							d.resolve(response[2][settings.dataType], "success", d)
 						} else {
-							d.reject(d);
+							// TODO probably resolve better
+							d.reject(settings, 'error', response[1]);
 						}
 					},
 					result = settings.fixture(settings, settings, success, settings.headers);
@@ -241,10 +243,8 @@ steal('can/util/object', function () {
 		};
 
 	/**
-	 * @function can.fixture
 	 * @plugin can/util/fixture
 	 * @test can/util/fixture/qunit.html
-	 * @parent can.util.fixture
 	 *
 	 * `can.fixture` intercept an AJAX request and simulates the response with a file or function.
 	 * Read more about the usage in the [overview can.fixture].
@@ -375,7 +375,7 @@ steal('can/util/object', function () {
 
 		make : function (types, count, make, filter) {
 			/**
-			 * @function can.util.fixture.make
+			 * @function can.fixture.make
 			 * @parent can.fixture
 			 *
 			 * Used to make fixtures for findAll / findOne style requests.
@@ -383,7 +383,8 @@ steal('can/util/object', function () {
 			 * ## With can.ajax
 			 *
 			 *     //makes a nested list of messages
-			 *     can.fixture.make(["messages","message"],1000, function(i, messages){
+			 *     can.fixture.make(["messages","message"], 1000,
+			 *      function(i, messages){
 			 *       return {
 			 *         subject: "This is message "+i,
 			 *         body: "Here is some text for this message",
@@ -391,10 +392,11 @@ steal('can/util/object', function () {
 			 *         parentId : i < 100 ? null : Math.floor(Math.random()*i)
 			 *       }
 			 *     })
-			 *     //uses the message fixture to return messages limited by offset, limit, order, etc.
+			 *     //uses the message fixture to return messages limited by
+			 *     // offset, limit, order, etc.
 			 *     can.ajax({
 			 *       url: "messages",
-			 *       data:{
+			 *       data: {
 			 *          offset: 100,
 			 *          limit: 50,
 			 *          order: ["date ASC"],
@@ -625,8 +627,8 @@ steal('can/util/object', function () {
 			}, methods);
 		},
 		/**
-		 * @function can.util.fixture.rand
-		 * @parent can.util.fixture
+		 * @function can.fixture.rand
+		 * @parent can.fixture
 		 *
 		 * Creates random integers or random arrays of
 		 * other arrays.
@@ -742,7 +744,9 @@ steal('can/util/object', function () {
 			}, xhr);
 		},
 		/**
-		 * @attribute on
+		 * @attribute can.fixture.on
+		 * @parent can.fixture
+		 *
 		 * On lets you programatically turn off fixtures.  This is mostly used for testing.
 		 *
 		 *     can.fixture.on = false
@@ -753,8 +757,9 @@ steal('can/util/object', function () {
 		on : true
 	});
 	/**
-	 * @attribute can.util.fixture.delay
-	 * @parent can.util.fixture
+	 * @attribute can.fixture.delay
+	 * @parent can.fixture
+	 *
 	 * Sets the delay in milliseconds between an ajax request is made and
 	 * the success and complete handlers are called.  This only sets
 	 * functional fixtures.  By default, the delay is 200ms.
@@ -767,10 +772,12 @@ steal('can/util/object', function () {
 	can.fixture.delay = 200;
 
 	/**
-	 * @attributes can.util.fixture.rootUrl
-	 * @parent can.util.fixture
+	 * @attribute can.fixture.rootUrl
+	 * @parent can.fixture
 	 *
-	 * Defaults to `steal.root` unless set.
+	 * The root URL for fixtures to use.
+	 * If you are using StealJS it will use the Steal root
+	 * URL by default.
 	 */
 	can.fixture.rootUrl = window.steal ? steal.root : undefined;
 
