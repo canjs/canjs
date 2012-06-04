@@ -1,7 +1,7 @@
-@page can.fixture
+@page can.util.fixture
 @parent can.util
 
-[can.fixture can.util.fixture] intercepts an AJAX request and simulates
+[can.util.fixture can.fixture] intercepts an AJAX request and simulates
 the response with a file or function. They are a great technique
 when you want to develop JavaScript
 independently of the backend.
@@ -13,14 +13,14 @@ map Ajax requests to another file.  The following
 intercepts requests to `/tasks.json` and directs them
 to `fixtures/tasks.json`:
     
-  can.fixture("/tasks.json","fixtures/tasks.json");
+    can.fixture("/tasks.json", "fixtures/tasks.json");
 
 The other common option is to generate the Ajax response with
 a function.  The following intercepts updating tasks at
 `/tasks/ID.json` and responds with updated data:
 
-    can.fixture("PUT /tasks/{id}.json", function(original, settings){
-       return { updatedAt : new Date().getTime() }
+    can.fixture("PUT /tasks/{id}.json", function(original, settings, respondWith){
+       respondWith({ updatedAt : new Date().getTime() });
     })
 
 We categorize fixtures into the following types:
@@ -36,64 +36,74 @@ Static fixtures use an alternate url as the response of the Ajax request.
 
     // looks in fixtures/tasks1.json relative to page
     can.fixture("tasks/1", "fixtures/task1.json");
+
+    // looks absolute to the page
     can.fixture("tasks/1", "//fixtures/task1.json");
     
 ## Dynamic Fixtures
 
-Dynamic Fixtures are functions that get the details of
-the Ajax request and return the result of the mocked service
+Dynamic Fixtures are functions that get the details of the Ajax request and return the result of the mocked service
 request from your server.
 
-For example, the following returns a successful response
-with JSON data from the server:
+For example, the following returns a successful response with JSON data from the server:
 
-    can.fixture("/foobar.json", function(orig, settings, headers){
-      return [200, "success", {json: {foo: "bar" } }, {} ]
+    can.fixture("/foobar.json", function(original, settings, respondWith){
+      respondWith(200, "success", { json: {foo: "bar" } }, {})
     })
 
 The fixture function has the following signature:
 
-    function( originalOptions, options, headers ) {
-      return [ status, statusText, responses, responseHeaders ]
+    function( originalOptions, options, respond) {
+      respond(status, statusText, responses, responseHeaders);
     }
 
 where the fixture function is called with:
 
-  - originalOptions - are the options provided to the ajax method, unmodified,
+  - `originalOptions` - are the options provided to the ajax method, unmodified,
     and thus, without defaults from ajaxSettings
-  - options - are the request options
-  - headers - a map of key/value request headers
+  - `options` - are the request options
+  - `respondWith` - the response callback. It can be called with:
+      - `status` - the HTTP status code of the response.
+      - `statusText` - the status text of the response
+      - `responses` - a map of dataType/value that contains the responses for each data format supported
+      - `responseHeaders` - response headers
+  - `headers` - a map of key/value request headers
 
-and the fixture function returns an array as arguments for  ajaxTransport's `completeCallback` with:
+However, can.fixture handles the common case where you want a successful response with JSON data.
+The previous can be written like:
 
-  - status - is the HTTP status code of the response.
-  - statusText - the status text of the response
-  - responses - a map of dataType/value that contains the responses for each data format supported
-  - headers - response headers
-
-However, can.fixture handles the
-common case where you want a successful response with JSON data.  The
-previous can be written like:
-
-    can.fixture("/foobar.json", function(orig, settings, headers){
-      return {foo: "bar" };
+    can.fixture("/foobar.json", function(original, settings, respondWith){
+      respondWith({ foo: "bar" });
     })
 
-If you want to return an array of data, wrap your array in another array:
+Since `respondWith` is called asynchronously you can also set a custom fixture timeout like this:
 
-    can.fixture("/tasks.json", function(orig, settings, headers){
-      return [ [ "first","second","third"] ];
+    can.fixture("/foobar.json", function(original, settings, respondWith){
+      setTimeout(function() {
+        respondWith({ foo: "bar" });
+      }, 1000);
     })
 
-can.fixture works closesly with jQuery's
-ajaxTransport system.  Understanding it is the key to creating advanced
-fixtures.
+If you want to return an array of data respond like this:
+
+    can.fixture("/tasks.json", function(original, settings, respondWith){
+      respondWith([ "first", "second", "third"]);
+    })
+
+__Note:__ A fixture function can also return its response directly like this:
+
+    can.fixture("/foobar.json", function(original, settings){
+      return { foo: "bar" };
+    })
+
+This is kept for backwards compatibility and should not be used.
+
+can.fixture works closesly with [jQuery's ajaxTransport](http://api.jquery.com/extending-ajax/) system.
 
 ### Templated Urls
 
-Often, you want a dynamic fixture to handle urls
-for multiple resources (for example a REST url scheme). can.fixture's
-templated urls allow you to match urls with a wildcard.
+Often, you want a dynamic fixture to handle urls for multiple resources (for example a REST url scheme).
+can.fixture's templated urls allow you to match urls with a wildcard.
 
 The following example simulates services that get and update 100 todos.
 
@@ -105,29 +115,28 @@ The following example simulates services that get and update 100 todos.
         name: "Todo "+i
       }
     }
-    can.fixture("GET /todos/{id}", function(orig){
+    can.fixture("GET /todos/{id}", function(orig, settings, respondWith){
       // return the JSON data
       // notice that id is pulled from the url and added to data
-      return todos[orig.data.id]
-    })
-    can.fixture("PUT /todos/{id}", function(orig){
-      // update the todo's data
-      can.extend( todos[orig.data.id], orig.data );
-      // return data
-      return {};
+      respondWith(todos[orig.data.id]);
     })
 
-Notice that data found in templated urls (ex: `{id}`) is added to the original
-data object.
+    can.fixture("PUT /todos/{id}", function(orig, settings, respondWith){
+      // update the todo's data
+      can.extend(todos[orig.data.id], orig.data );
+      respondWith({});
+    })
+
+Notice that data found in templated urls (ex: `{id}`) is added to the original data object.
 
 ## Simulating Errors
 
 The following simulates an unauthorized request
 to `/foo`.
 
-    can.fixture("/foo", function(){
-        return [401,"{type: 'unauthorized'}"]
-       });
+    can.fixture("/foo", function(original, settings, respondWith) {
+      respondWith(401,"{type: 'unauthorized'}");
+    });
 
 This could be received by the following Ajax request:
 
@@ -165,3 +174,60 @@ Dynamic fixtures are awesome for performance testing.  Want to see what
 
 What to see what the app feels like when a request takes 5 seconds to return?  Set
 [can.util.fixture.delay] to 5000.
+
+## Organizing fixture
+
+The __best__ way of organizing fixtures is to have a 'fixtures.js' file that steals
+<code>can/util/fixture</code> and defines all your fixtures.  For example,
+if you have a 'todo' application, you might
+have <code>todo/fixtures/fixtures.js</code> look like:
+
+    steal({
+            path: '//can/util/fixture.js',
+            ignore: true
+          })
+          .then(function(){
+
+      can.fixture({
+          type: 'get',
+          url: '/services/todos.json'
+        },
+        '//todo/fixtures/todos.json');
+
+      can.fixture({
+          type: 'post',
+          url: '/services/todos.json'
+        },
+        function(settings){
+            return {id: Math.random(),
+                 name: settings.data.name}
+        });
+
+    })
+
+__Notice__: We used steal's ignore option to prevent
+loading the fixture plugin in production.
+
+Finally, we steal <code>todo/fixtures/fixtures.js</code> in the
+app file (<code>todo/todo.js</code>) like:
+
+
+    steal({path: '//todo/fixtures/fixtures.js',ignore: true});
+
+    //start of your app's steals
+    steal( ... )
+
+We typically keep it a one liner so it's easy to comment out.
+
+### Switching Between Sets of Fixtures
+
+If you are using fixtures for testing, you often want to use different
+sets of fixtures.  You can add something like the following to your fixtures.js file:
+
+    if( /fixtureSet1/.test( window.location.search) ){
+      can.fixture("/foo","//foo/fixtures/foo1.json');
+    } else if(/fixtureSet2/.test( window.location.search)){
+      can.fixture("/foo","//foo/fixtures/foo1.json');
+    } else {
+      // default fixtures (maybe no fixtures)
+    }

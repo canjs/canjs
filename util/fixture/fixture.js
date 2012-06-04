@@ -241,10 +241,10 @@ steal('can/util/object', function () {
 		};
 
 	/**
-	 * @function can.util.fixture
+	 * @function can.fixture
 	 * @plugin can/util/fixture
 	 * @test can/util/fixture/qunit.html
-	 * @parent can.fixture
+	 * @parent can.util.fixture
 	 *
 	 * `can.fixture` intercept an AJAX request and simulates the response with a file or function.
 	 * Read more about the usage in the [overview can.fixture].
@@ -376,7 +376,7 @@ steal('can/util/object', function () {
 		make : function (types, count, make, filter) {
 			/**
 			 * @function can.util.fixture.make
-			 * @parent can.util.fixture
+			 * @parent can.fixture
 			 *
 			 * Used to make fixtures for findAll / findOne style requests.
 			 *
@@ -792,67 +792,6 @@ steal('can/util/object', function () {
 		return false;
 	};
 
-
-	/**
-	 * @page can.fixture.Organizing Organizing Fixtures
-	 * @parent can.util.fixture
-	 *
-	 * The __best__ way of organizing fixtures is to have a 'fixtures.js' file that steals
-	 * <code>can/util/fixture</code> and defines all your fixtures.  For example,
-	 * if you have a 'todo' application, you might
-	 * have <code>todo/fixtures/fixtures.js</code> look like:
-	 *
-	 *     steal({
-	 *             path: '//can/util/fixture.js',
-	 *             ignore: true
-	 *           })
-	 *           .then(function(){
-	 *
-	 *       can.fixture({
-	 *           type: 'get',
-	 *           url: '/services/todos.json'
-	 *         },
-	 *         '//todo/fixtures/todos.json');
-	 *
-	 *       can.fixture({
-	 *           type: 'post',
-	 *           url: '/services/todos.json'
-	 *         },
-	 *         function(settings){
-	 *             return {id: Math.random(),
-	 *                  name: settings.data.name}
-	 *         });
-	 *
-	 *     })
-	 *
-	 * __Notice__: We used steal's ignore option to prevent
-	 * loading the fixture plugin in production.
-	 *
-	 * Finally, we steal <code>todo/fixtures/fixtures.js</code> in the
-	 * app file (<code>todo/todo.js</code>) like:
-	 *
-	 *
-	 *     steal({path: '//todo/fixtures/fixtures.js',ignore: true});
-	 *
-	 *     //start of your app's steals
-	 *     steal( ... )
-	 *
-	 * We typically keep it a one liner so it's easy to comment out.
-	 *
-	 * ## Switching Between Sets of Fixtures
-	 *
-	 * If you are using fixtures for testing, you often want to use different
-	 * sets of fixtures.  You can add something like the following to your fixtures.js file:
-	 *
-	 *     if( /fixtureSet1/.test( window.location.search) ){
-	 *       can.fixture("/foo","//foo/fixtures/foo1.json');
-	 *     } else if(/fixtureSet2/.test( window.location.search)){
-	 *       can.fixture("/foo","//foo/fixtures/foo1.json');
-	 *     } else {
-	 *       // default fixtures (maybe no fixtures)
-	 *     }
-	 *
-	 */
-		//Expose this for fixture debugging
+	//Expose this for fixture debugging
 	can.fixture.overwrites = overwrites;
 });

@@ -383,7 +383,6 @@ test("can.fixture with response callback", 4, function() {
 	stop();
 	can.fixture("cbWithTimeout",function(orig, settings, response){
 		setTimeout(function() {
-			console.log('Calling response');
 			response([{  epic : 'ness'  }]);
 		}, 10 );
 	});
