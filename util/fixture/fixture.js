@@ -78,9 +78,9 @@ steal('can/util/object', function () {
 				}
 			}
 		},
-		getResponse = function (s, original, headers) {
-			var response = s.fixture(original, s, headers),
-				next = s.dataTypes ? s.dataTypes[0] : (s.dataType || 'json');
+		extractResponse = function(s, args) {
+			var next = s.dataTypes ? s.dataTypes[0] : (s.dataType || 'json'),
+				response = args;
 
 			// normalize the fixture data into a response
 			if (!can.isArray(response)) {
@@ -100,7 +100,7 @@ steal('can/util/object', function () {
 				tmp[next] = response[2];
 				response[2] = tmp;
 			}
-			return response
+			return response;
 		};
 
 	//used to check urls
@@ -115,19 +115,26 @@ steal('can/util/object', function () {
 			s.dataTypes.shift();
 
 			//we'll return the result of the next data type
-			var next = s.dataTypes[0], timeout;
+			var timeout, stopped = false;
 
 			return {
 				send : function (headers, callback) {
-					// callback after a timeout
-					timeout = setTimeout(function () {
-						var response = getResponse(s, original, headers)
+					var success = function() {
+							var response = extractResponse(s, can.makeArray(arguments));
+							if(stopped === false) {
+								callback.apply(null, response);
+							}
+						},
+						result = s.fixture(original, s, success, headers);
 
-						// pass the fixture data back to can.ajax
-						callback.apply(null, response);
-					}, can.fixture.delay);
+					if(result !== undefined) {
+						timeout = setTimeout(function () {
+							success.apply(null, result);
+						}, can.fixture.delay);
+					}
 				},
 				abort : function () {
+					stopped = true;
 					clearTimeout(timeout)
 				}
 			};
@@ -137,27 +144,36 @@ steal('can/util/object', function () {
 		can.ajax = function (settings) {
 			updateSettings(settings, settings);
 			if (settings.fixture) {
+				var timeout, d = new can.Deferred(),
+					stopped = false,
+					success = function() {
+						var response = extractResponse(s, can.makeArray(arguments)),
+							status = response[0];
 
-				var d = new can.Deferred();
+						if ( (status >= 200 && status < 300 || status === 304) && !stopped) {
+							d.resolve(response[2][settings.dataType], "success", d)
+						} else {
+							d.reject(d);
+						}
+					},
+					result = s.fixture(original, s, success, headers);
+
 				d.getResponseHeader = function () {
 				}
-				d.then(settings.success, settings.fail)
+
+				d.then(settings.success, settings.fail);
 
 				d.abort = function () {
 					clearTimeout(timeout);
-					d.reject(d)
+					stopped = true;
 				}
-				var timeout = setTimeout(function () {
-					var response = getResponse(settings, settings, settings.headers);
-					var status = response[0];
-					if (status >= 200 && status < 300 || status === 304) {
-						d.resolve(response[2][settings.dataType], "success", d)
-					} else {
-						d.reject(d);
-					}
 
+				if(result !== undefined) {
+					timeout = setTimeout(function () {
+						success.apply(null, result);
+					}, can.fixture.delay);
+				}
 
-				}, can.fixture.delay)
 				return d;
 			} else {
 				return AJAX(settings);

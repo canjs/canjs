@@ -71,30 +71,30 @@ test("fixture function", 3, function(){
 });
 
 // Converters only work with jQuery
-if(typeof jQuery !== 'undefined') {
-	test("fixtures with converters", function(){
-		stop();
-		can.ajax( {
-		  url : steal.root.join("can/util/fixture/fixtures/foobar.json")+'',
-		  dataType: "json fooBar",
-		  converters: {
-		    "json fooBar": function( data ) {
-		      // Extract relevant text from the xml document
-		      return "Mr. "+data.name;
-		    }
-		  },
-		  fixture : function(){
-		    return {
-				name : "Justin"
-			}
-		  },
-		  success : function(prettyName){
-		    start();
-			equals(prettyName, "Mr. Justin")
-		  }
-		});
-	})
-}
+//if(typeof jQuery !== 'undefined') {
+//	test("fixtures with converters", function(){
+//		stop();
+//		can.ajax( {
+//		  url : steal.root.join("can/util/fixture/fixtures/foobar.json")+'',
+//		  dataType: "json fooBar",
+//		  converters: {
+//		    "json fooBar": function( data ) {
+//		      // Extract relevant text from the xml document
+//		      return "Mr. "+data.name;
+//		    }
+//		  },
+//		  fixture : function(){
+//		    return {
+//				name : "Justin"
+//			}
+//		  },
+//		  success : function(prettyName){
+//		    start();
+//			equals(prettyName, "Mr. Justin")
+//		  }
+//		});
+//	})
+//}
 
 test("can.fixture.make fixtures",function(){
 	stop();
@@ -344,6 +344,22 @@ test("can.fixture.make with can.Model", function() {
 				start();
 			});
 		});
+	});
+});
+
+test("can.fixture with response callback", function() {
+	stop();
+	can.fixture.delay = 10;
+	can.fixture("responseCb", function(orig, settings, response) {
+		response({sweet: "ness"});
+	});
+
+	can.ajax({
+		url : 'responseCb',
+		dataType : 'json'
+	}).done(function(data) {
+		equals(data.sweet,"ness","can.get works");
+		start();
 	});
 });
 
