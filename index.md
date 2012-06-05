@@ -2070,6 +2070,8 @@ can.Control( 'Editor', {
 
 ### View modifiers
 
+[can.view.modifiers.js](https://github.com/downloads/jupiterjs/canjs/can.view.modifiers.js)
+
 jQuery uses the modifiers [after](http://api.jquery.com/after/), [append](http://api.jquery.com/append/), 
 [before](http://api.jquery.com/before/), [html](http://api.jquery.com/html/), [prepend](http://api.jquery.com/prepend/), 
 [replaceWith](http://api.jquery.com/replaceWith/) and [text](http://api.jquery.com/text/) to alter the content
@@ -2089,6 +2091,67 @@ $( '#todos' ).html( 'todo/todos.ejs', [
   { name: 'First Todo' },
   { name: 'Second Todo' }
 ]);
+{% endhighlight %}
+
+### can.fixture
+
+[can.fixture.js](https://github.com/downloads/jupiterjs/canjs/can.fixture.js)
+
+[can.fixture](http://donejs.com/docs.html#!can.fixture) intercepts AJAX requests and simulates
+the response with a file or function. A __static__ fixture intercepting a request to `/todo`
+and returning the content of `fixtures/todo.json` looks like this:
+
+{% highlight javascript %}
+can.fixture("/todo", "fixtures/todo.json");
+{% endhighlight %}
+
+A __dynamic__ fixture generates the response in a function and calls a callback with the result.
+URLs can be templated and the original parameters can be accessed in the fixture function. The following
+example intercepts any call to `/todo/{id}.json` and returns an object with the `id` that was passed and
+the current date in the `updatedAt` attribute:
+
+{% highlight javascript %}
+can.fixture("PUT /todo/{id}.json",
+  function(original, settings, respondWith){
+    respondWith({
+      id : original.id,
+      updatedAt : new Date().getTime()
+    });
+  })
+{% endhighlight %}
+
+[can.fixture.make](http://donejs.com/docs.html#!can.fixture.make) can be used to generate fixtures for
+[can.Model](#can_model) to simulate `findAll`, `findOne`, `create`, `update` and `destroy` requests like this:
+
+{% highlight javascript %}
+var Todo = can.Model({
+  findAll : 'GET /todos',
+  findOne : 'GET /todos/{id}',
+  create  : 'POST /todos',
+  update  : 'PUT /todos/{id}',
+  destroy : 'DELETE /todos/{id}'
+  }, {});
+
+var store = can.fixture.make(100, function(i) {
+  return {
+    id : i,
+    name : 'Todo ' + i
+  }
+});
+
+can.fixture('GET /todos', store.findAll);
+can.fixture('GET /todos/{id}', store.findOne);
+can.fixture('POST /todos', store.create);
+can.fixture('PUT /todos/{id}', store.update);
+can.fixture('DELETE /todos/{id}', store.destroy);
+{% endhighlight %}
+
+Any fixture can be turned off by setting it to `null` or globally by setting `can.fixture.on` to `false`:
+
+{% highlight javascript %}
+can.fixture("/todo.json", null);
+// Turn off all fixtures
+can.fixture.on = false;
 {% endhighlight %}
 
 ### Third Party Extensions and Plugins
