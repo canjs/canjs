@@ -2112,7 +2112,7 @@ the current date in the `updatedAt` attribute:
 
 {% highlight javascript %}
 can.fixture("PUT /todo/{id}.json",
-  function(original, settings, respondWith){
+  function(original, respondWith){
     respondWith({
       id : original.id,
       updatedAt : new Date().getTime()
@@ -2121,7 +2121,8 @@ can.fixture("PUT /todo/{id}.json",
 {% endhighlight %}
 
 [can.fixture.make](http://donejs.com/docs.html#!can.fixture.make) can be used to generate fixtures for
-[can.Model](#can_model) to simulate `findAll`, `findOne`, `create`, `update` and `destroy` requests like this:
+[can.Model](#can_model) to simulate `findAll`, `findOne`, `create`, `update` and `destroy` requests.
+For a Model like this:
 
 {% highlight javascript %}
 var Todo = can.Model({
@@ -2131,7 +2132,12 @@ var Todo = can.Model({
   update  : 'PUT /todos/{id}',
   destroy : 'DELETE /todos/{id}'
   }, {});
+{% endhighlight %}
 
+The following example creates 100 Todos with the current counter as the `id` and a `name` and fixtures
+for creating, updating and deleting a Todo:
+
+{% highlight javascript %}
 var store = can.fixture.make(100, function(i) {
   return {
     id : i,
