@@ -131,8 +131,8 @@ test("can.fixture.make fixtures",function(){
 test("simulating an error", function(){
 	var st = '{type: "unauthorized"}';
 	
-	can.fixture("/foo", function(){
-		return [401,st]
+	can.fixture("/foo", function(request, response){
+		return response(401,st);
 	});
 	stop();
 	
@@ -350,10 +350,10 @@ test("can.fixture.make with can.Model", function() {
 
 test("can.fixture with response callback", 4, function() {
 	can.fixture.delay = 10;
-	can.fixture("responseCb", function(orig, settings, response) {
+	can.fixture("responseCb", function(orig, response) {
 		response({sweet: "ness"});
 	});
-	can.fixture("responseErrorCb", function(orig, settings, response) {
+	can.fixture("responseErrorCb", function(orig, response) {
 		response(404, 'This is an error from callback');
 	});
 
@@ -377,7 +377,7 @@ test("can.fixture with response callback", 4, function() {
 	});
 
 	stop();
-	can.fixture("cbWithTimeout",function(orig, settings, response){
+	can.fixture("cbWithTimeout",function(orig, response){
 		setTimeout(function() {
 			response([{  epic : 'ness'  }]);
 		}, 10 );

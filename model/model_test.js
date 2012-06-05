@@ -130,7 +130,7 @@ test("save deferred", function(){
 				type : 'post',
 				dataType : "json",
 				fixture: function(){
-					return [{id: 5}]
+					return {id: 5}
 				},
 				success : success
 			})
@@ -159,7 +159,7 @@ test("update deferred", function(){
 				type : 'post',
 				dataType : "json",
 				fixture: function(){
-					return [{thing: "er"}]
+					return {thing: "er"}
 				},
 				success : success
 			})
@@ -187,7 +187,7 @@ test("destroy deferred", function(){
 				type : 'post',
 				dataType : "json",
 				fixture: function(){
-					return [{thing: "er"}]
+					return {thing: "er"}
 				},
 				success : success
 			})
@@ -438,8 +438,8 @@ test("save error args", function(){
 	})
 	var st = '{type: "unauthorized"}';
 	
-	can.fixture("/testinmodelsfoos.json", function(){
-		return [401,st]
+	can.fixture("/testinmodelsfoos.json", function(request, response){
+		response(401,st)
 	});
 	stop();
 	var inst = new Foo({}).save(function(){
@@ -505,13 +505,17 @@ test('aborting create update and destroy', function(){
 	},{});
 	
 	var deferred = new Abortion({name: "foo"}).save(function(){
-		ok(false, "success create")
+		ok(false, "success create");
+		start();
 	}, function(){
 		ok(true, "create error called");
 		
 		
 		deferred = new Abortion({name: "foo",id: 5})
-			.save(function(){},function(){
+			.save(function(){
+				ok(false,"save called")
+				start();
+			},function(){
 				ok(true, "error called in update")
 				
 				deferred = new Abortion({name: "foo",id: 5}).destroy(function(){},
@@ -528,8 +532,8 @@ test('aborting create update and destroy', function(){
 			})
 		
 		setTimeout(function(){
-		deferred.abort();
-	},10)
+			deferred.abort();
+		},10)
 	});
 	setTimeout(function(){
 		deferred.abort();
@@ -576,7 +580,7 @@ test("store ajax binding", function(){
 	},{});
 	
 	can.fixture("GET /guys", function(){
-		return [[{id: 1}]]
+		return [{id: 1}]
 	})
 	can.fixture("GET /guy/{id}", function(){
 		return {id: 1}
@@ -608,7 +612,7 @@ test("store instance updates", function(){
     updateCount = 0;
     
     can.fixture("GET /guys", function(){
-    	var guys = [[{id: 1, updateCount: updateCount, nested: {count: updateCount}}]];
+    	var guys = [{id: 1, updateCount: updateCount, nested: {count: updateCount}}];
     	updateCount++;
         return guys;
     });

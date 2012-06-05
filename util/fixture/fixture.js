@@ -78,30 +78,34 @@ steal('can/util/object', function () {
 				}
 			}
 		},
-		extractResponse = function(s, args) {
-			var next = s.dataTypes ? s.dataTypes[0] : (s.dataType || 'json'),
-				response = args;
-
-			// normalize the fixture data into a response
-			if (!can.isArray(response)) {
-				var tmp = [
-					{}
-				];
-				tmp[0][next] = response
-				response = tmp;
+		// A helper function that takes what's called with response
+		// and moves some common args around to make it easier to call
+		extractResponse = function(status, statusText, responses, headers) {
+			// if we get response(RESPONSES, HEADERS)
+			if(typeof status != "number"){
+				headers = statusText;
+				responses = status;
+				statusText = "success"
+				status = 200;
 			}
-
-			if (typeof response[0] != 'number') {
-				response.unshift(200, "success")
+			// if we get response(200, RESPONSES, HEADERS)
+			if(typeof statusText != "string"){
+				headers = responses;
+				responses = statusText;
+				statusText = "success";
 			}
-
-			// make sure we provide a response type that matches the first datatype (typically json)
-			if (!response[2] || !response[2][next]) {
+			return [status, statusText, extractResponses(this, responses), headers];
+		},
+		// If we get data instead of responses,
+		// make sure we provide a response type that matches the first datatype (typically json)
+		extractResponses = function(settings, responses){
+			var next = settings.dataTypes ? settings.dataTypes[0] : (settings.dataType || 'json');
+			if (!responses || !responses[next]) {
 				var tmp = {}
-				tmp[next] = response[2];
-				response[2] = tmp;
+				tmp[next] = responses;
+				responses = tmp;
 			}
-			return response;
+			return responses;
 		};
 
 	//used to check urls
@@ -119,21 +123,24 @@ steal('can/util/object', function () {
 			var timeout, stopped = false;
 
 			return {
-				send : function (headers, callback) {
-					var success = function() {
+				send: function (headers, callback) {
+					// we'll immediately wait the delay time for all fixtures
+					timeout = setTimeout(function () {
+						// if the user wants to call success on their own, we allow it ...
+						var success = function() {
 							if(stopped === false) {
-								callback.apply(null, extractResponse(s, can.makeArray(arguments)));
+								callback.apply(null, extractResponse.apply(s, arguments) );
 							}
 						},
-						result = s.fixture(original, s, success, headers);
-
-					if(result !== undefined) {
-						timeout = setTimeout(function () {
-							callback.apply(null, extractResponse(s, result));
-						}, can.fixture.delay);
-					}
+						// get the result form the fixture
+						result = s.fixture(original, success, headers, s);
+						if(result !== undefined) {
+							// make sure the result has the right dataType
+							callback(200, "success", extractResponses(s, result), {});
+						}
+					}, can.fixture.delay);
 				},
-				abort : function () {
+				abort: function () {
 					stopped = true;
 					clearTimeout(timeout)
 				}
@@ -145,35 +152,42 @@ steal('can/util/object', function () {
 			updateSettings(settings, settings);
 			if (settings.fixture) {
 				var timeout, d = new can.Deferred(),
-					stopped = false,
-					success = function() {
-						var response = extractResponse(settings, can.makeArray(arguments)),
+					stopped = false;
+
+				//TODO this should work with response
+				d.getResponseHeader = function () {
+				}
+
+				// call success and fail
+				d.then(settings.success, settings.fail);
+
+				// abort should stop the timeout and calling success
+				d.abort = function () {
+					clearTimeout(timeout);
+					stopped = true;
+					d.reject(d)
+				}
+				// set a timeout that simulates making a request ....
+				timeout = setTimeout(function () {
+					// if the user wants to call success on their own, we allow it ...
+					var success = function() {
+						var response = extractResponse.apply(settings, arguments),
 							status = response[0];
 
 						if ( (status >= 200 && status < 300 || status === 304) && stopped === false) {
 							d.resolve(response[2][settings.dataType], "success", d)
 						} else {
 							// TODO probably resolve better
-							d.reject(settings, 'error', response[1]);
+							d.reject(d, 'error', response[1]);
 						}
 					},
-					result = settings.fixture(settings, settings, success, settings.headers);
-
-				d.getResponseHeader = function () {
-				}
-
-				d.then(settings.success, settings.fail);
-
-				d.abort = function () {
-					clearTimeout(timeout);
-					stopped = true;
-				}
-
-				if(result !== undefined) {
-					timeout = setTimeout(function () {
-						success.apply(null, extractResponse(settings, result));
-					}, can.fixture.delay);
-				}
+					// get the result form the fixture
+					result = settings.fixture(settings, success, settings.headers, settings);
+					if(result !== undefined) {
+						d.resolve(result, "success", d)
+					}
+				}, can.fixture.delay);
+				
 				return d;
 			} else {
 				return AJAX(settings);
@@ -339,38 +353,6 @@ steal('can/util/object', function () {
 				data[name] = res.shift()
 			})
 			return data;
-		},
-		/**
-		 * @hide
-		 * Provides a rest update fixture function
-		 */
-		"-restUpdate" : function (settings) {
-			return [200, "succes", {
-				id : getId(settings)
-			}, {
-				location : settings.url + "/" + getId(settings)
-			}];
-		},
-
-		/**
-		 * @hide
-		 * Provides a rest destroy fixture function
-		 */
-		"-restDestroy" : function (settings, cbType) {
-			return {};
-		},
-
-		/**
-		 * @hide
-		 * Provides a rest create fixture function
-		 */
-		"-restCreate" : function (settings, cbType, nul, id) {
-			var id = id || parseInt(Math.random() * 100000, 10);
-			return [200, "succes", {
-				id : id
-			}, {
-				location : settings.url + "/" + id
-			}];
 		},
 
 		make : function (types, count, make, filter) {
@@ -551,27 +533,29 @@ steal('can/util/object', function () {
 					}
 
 					//return data spliced with limit and offset
-					return [
-						{
-							"count" : retArr.length,
-							"limit" : settings.data.limit,
-							"offset" : settings.data.offset,
-							"data" : retArr.slice(offset, offset + limit)
-						}
-					];
+					return {
+						"count" : retArr.length,
+						"limit" : settings.data.limit,
+						"offset" : settings.data.offset,
+						"data" : retArr.slice(offset, offset + limit)
+					};
 				},
-				findOne : function (settings) {
-					var item = findOne(getId(settings));
-					return item ? [item] : [];
+				findOne : function (orig, response) {
+					var item = findOne(getId(orig));
+					response(item ? item : undefined);
 				},
-				update : function (settings, cbType) {
-					var id = getId(settings);
+				update : function (orig,response) {
+					var id = getId(orig);
 
 					// TODO: make it work with non-linear ids ..
-					can.extend(findOne(id), settings.data);
-					return can.fixture["-restUpdate"](settings, cbType)
+					can.extend(findOne(id), orig.data);
+					response({
+						id : getId(orig)
+					}, {
+						location : orig.url + "/" + getId(orig)
+					});
 				},
-				destroy : function (settings, cbType) {
+				destroy : function (settings) {
 					var id = getId(settings);
 					for (var i = 0; i < items.length; i++) {
 						if (items[i].id == id) {
@@ -582,9 +566,9 @@ steal('can/util/object', function () {
 
 					// TODO: make it work with non-linear ids ..
 					can.extend(findOne(id) || {}, settings.data);
-					return can.fixture["-restDestroy"](settings, cbType)
+					return {};
 				},
-				create : function (settings, cbType) {
+				create : function (settings, response) {
 					var item = make(items.length, items);
 
 					can.extend(item, settings.data);
@@ -594,8 +578,12 @@ steal('can/util/object', function () {
 					}
 
 					items.push(item);
-
-					return can.fixture["-restCreate"](settings, cbType, undefined, item.id);
+					var id = item.id || parseInt(Math.random() * 100000, 10);
+					response({
+						id : id
+					}, {
+						location : settings.url + "/" + id
+					})
 				}
 			});
 
