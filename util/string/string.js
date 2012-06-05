@@ -167,7 +167,7 @@ steal('can/util',function() {
 				obs.push( str.replace( replacer, function( whole, inside ) {
 
 					// Convert inside to type.
-					var ob = can.getObject( inside, data, remove );
+					var ob = can.getObject( inside, data, remove === undefined? remove : !remove );
 					
 					// If a container, push into objs (which will return objects found).
 					if ( isContainer( ob ) ) {

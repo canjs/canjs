@@ -8,6 +8,7 @@ test("can.sub", function(){
 	var foo = {b: "c"};
 	
 	equals(can.sub("a{b}",foo,true),"ac");
+	ok(!foo.b,"b's value was removed")
 });
 
 test("can.sub double", function(){
