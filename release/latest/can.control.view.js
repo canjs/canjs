@@ -1,4 +1,4 @@
-(function( can, window, undefined ){
+(function(can, window, undefined){
 	var URI = steal.URI || steal.File;
 	
 	can.Control.getFolder = function() {
@@ -85,4 +85,4 @@
 		return can.view(view, data, helpers); //what about controllers in other folders?
 	};
 
-}( this.can, this ));
+})(this.can, this )

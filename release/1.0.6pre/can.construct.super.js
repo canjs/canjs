@@ -1,4 +1,4 @@
-(function( can, window, undefined ){
+(function(can, window, undefined){
 
 // tests if we can get super in .toString()
 	var isFunction = can.isFunction,
@@ -41,4 +41,4 @@
 		}
 
 
-}( this.can, this ));
+})(this.can, this )

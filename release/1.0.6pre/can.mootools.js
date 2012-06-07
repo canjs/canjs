@@ -1,4 +1,4 @@
-(function( can, window, undefined ){
+(function(can, window, undefined){
 
 	// event.js
 	// ---------
@@ -3348,4 +3348,4 @@ can.dispatch = function(event){
 		window.can = can;
 	}
 
-}( can = {}, this ));
+})(can = {}, this )

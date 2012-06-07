@@ -1,4 +1,4 @@
-(function( can, window, undefined ){
+(function(can, window, undefined){
 	// data.js
 	// ---------
 	// _jQuery-like data methods._
@@ -3312,4 +3312,4 @@ can.$ = Zepto
 		window.can = can;
 	}
 
-}( can = {}, this ));
+})(can = {}, this )

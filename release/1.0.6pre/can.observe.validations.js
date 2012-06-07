@@ -1,4 +1,4 @@
-(function( can, window, undefined ){
+(function(can, window, undefined){
 //validations object is by property.  You can have validations that
 //span properties, but this way we know which ones to run.
 //  proc should return true if there's an error or the error message
@@ -371,4 +371,4 @@ can.extend(can.Observe.prototype, {
 	
 });
 
-}( this.can, this ));
+})(this.can, this )

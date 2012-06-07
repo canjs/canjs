@@ -1,4 +1,4 @@
-(function( can, window, undefined ){
+(function(can, window, undefined){
 
 can.each([ can.Observe, can.Model ], function(clss){
 	// in some cases model might not be defined quite yet.
@@ -290,4 +290,4 @@ can.Observe.prototype.serialize = function(attrName){
 	return attrName != undefined ? where[attrName] : where;
 };
 
-}( this.can, this ));
+})(this.can, this )

@@ -1,4 +1,4 @@
-(function( can, window, undefined ){
+(function(can, window, undefined){
 	
 var isArray = can.isArray,
 	// essentially returns an object that has all the must have comparisons ...
@@ -1013,4 +1013,4 @@ var compareMethods = {
 
 	//Expose this for fixture debugging
 	can.fixture.overwrites = overwrites;
-}( this.can, this ));
+})(this.can, this )

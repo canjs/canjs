@@ -1,4 +1,4 @@
-(function( can, window, undefined ){
+(function(can, window, undefined){
 	
 	//---- ADD jQUERY HELPERS -----
 	//converts jquery functions to use views	
@@ -289,4 +289,4 @@
 	"replaceWith", "val"],function(func){
 		convert(func);
 	});
-}( this.can, this ));
+})(this.can, this )

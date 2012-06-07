@@ -1,4 +1,4 @@
-(function( can, window, undefined ){
+(function(can, window, undefined){
 // # CanJS v1.0.6pre
 
 // (c) 2012 Bitovi  
@@ -2881,4 +2881,4 @@
 		window.can = can;
 	}
 
-}( can = {}, this ));
+})(can = {}, this )

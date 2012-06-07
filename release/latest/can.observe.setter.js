@@ -1,4 +1,4 @@
-(function( can, window, undefined ){
+(function(can, window, undefined){
 
 /**
  * Like [can.camelize|camelize], but the first part is also capitalized
@@ -55,4 +55,4 @@ proto.__set = function(prop, value, current, success, error){
 	return this;
 };
 
-}( this.can, this ));
+})(this.can, this )

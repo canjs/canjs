@@ -1,4 +1,4 @@
-(function( can, window, undefined ){
+(function(can, window, undefined){
 define("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){
 
 	// event.js
@@ -3555,4 +3555,4 @@ define("plugd/trigger",["dojo"], function(dojo){
 
 return can;
 });
-}( can = {}, this ));
+})(can = {}, this )

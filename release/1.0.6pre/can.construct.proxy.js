@@ -1,4 +1,4 @@
-(function( can, window, undefined ){
+(function(can, window, undefined){
 var isFunction = can.isFunction,
 	isArray = can.isArray,
 	makeArray = can.makeArray,
@@ -57,4 +57,4 @@ proxy = function( funcs ) {
 
 
 
-}( this.can, this ));
+})(this.can, this )
