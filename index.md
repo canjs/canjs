@@ -4,7 +4,7 @@ title: CanJS
 ---
 # Welcome to CanJS!
 
-CanJS is an MIT-licensed, client-side, JavaScript framework that makes building 
+CanJS is a MIT-licensed, client-side, JavaScript framework that makes building 
 rich web applications easy.  It provides:
 
  - __[can.Construct](#can_construct)__  - inheritable constructor functions
