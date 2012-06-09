@@ -134,6 +134,7 @@ like for-loops, if/else, switch, etc.  Some examples:
         <tr><td>You have no items</td></tr>
     <% } else { %>
         <% list(items, function(){ %>
+          <%# One table row is output per item %>
           <tr> .... </tr>
         <% }) %>
     <% } %>
@@ -162,7 +163,7 @@ __`<%% CODE %>`__ - Writes <% CODE %> to the result of the template.  This is ve
          
 __`<%# CODE %>`__  - Used for comments.  This does nothing.
      
-         <%# 'hello world' %>
+         <%# hello world %>
 
 ## Live Binding
 
