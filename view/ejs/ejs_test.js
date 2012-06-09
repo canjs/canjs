@@ -817,5 +817,28 @@ test("nested live bindings", function(){
 })*/
 
 
+test("live binding select", function(){
+	var text = "<select><% items.each(function(ob) { %>" +
+		"<option value='<%= ob.attr('id') %>'><%= ob.attr('title') %></option>" +
+		"<% }); %></select>",
+		items	 = new can.Observe.List([
+			{title: "Make bugs", is_done: true, id: 0},
+			{title: "Find bugs", is_done: false, id: 1},
+			{title: "Fix bugs", is_done: false, id: 2}
+		]),
+		compiled = new can.EJS({text: text}).render({items: items}),
+		div = document.createElement('div');
+
+		div.appendChild(can.view.frag(compiled))
+		equals(div.getElementsByTagName('option').length, 3, '3 items in list')
+
+		equals(div.getElementsByTagName('option')[0].value, ""+items[0].id,
+		       'value attr set');
+		equals(div.getElementsByTagName('option')[0].textContent, items[0].title,
+		       'content of option');
+
+		items.push({id: 3, name: 'Go to pub'})
+		equals(div.getElementsByTagName('option').length, 4, '4 items in list')
+});
 
 })()
