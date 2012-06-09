@@ -1215,21 +1215,41 @@ steal('can/construct', function() {
 			return res;
 		}
 	});
-	
+
 	list.prototype.
 	/**
 	 * @function indexOf
 	 * Returns the position of the item in the array.  Returns -1 if the
 	 * item is not in the array.  Examples:
-	 * 
+	 *
 	 *     list = new can.Observe.List(["a","b","c"]);
 	 *     list.indexOf("b") //-> 1
 	 *     list.indexOf("f") //-> -1
-	 * 
+	 *
 	 * @param {Object} item the item to look for
 	 * @return {Number} the index of the object in the array or -1.
 	 */
 	indexOf = [].indexOf || function(item){
 		return can.inArray(item, this)
+	};
+
+  list.prototype.
+	/**
+	 * @function sort
+	 * Sorts the elements of a List in place and returns the List.
+	 *
+	 *     list = new can.Observe.List(["z","y","x"]);
+	 *     list.sort() //-> ["x", "y", "z"]
+	 *
+	 * @param {Function} compareFunction Specifies a function that
+	 *     defines the sort order. If omitted, the array is sorted
+	 *     lexicographically (in dictionary order) according to the
+	 *     string conversion of each element.
+	 * @return {can.Observe.List} the list, which has been sorted.
+	 */
+	sort = function() {
+		[].sort.apply(this, arguments);
+		batchTrigger(this, "length", [this.length]);
+		return this;
 	};
 });

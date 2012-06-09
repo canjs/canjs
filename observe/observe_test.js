@@ -339,3 +339,41 @@ test("bind to specific attribute changes when an attribute is removed", function
 	paginate.removeAttr( 'offset' );
 });
 
+test("list sort", function(){
+	var l = new can.Observe.List([42,2,28,9]),
+		triggered = false,
+		result;
+
+	var str = function(num) { return  "" + num; };
+
+	l.bind('length', function( ev, newLength ) {
+		var i;
+		equals(newLength, 4)
+
+		for (i = 1; i < l.length; i++) {
+			ok(str(l[i-1]) <= str(l[i]), "in order " + i);
+			triggered = true;
+		}
+	});
+
+	result = l.sort();
+
+	ok(triggered, "event triggered");
+	same(result, l);
+});
+
+test("list sort compareFunction", function(){
+	var l = new can.Observe.List([42,2,28,9]),
+		cmp = function(a, b) { return a - b; };
+
+	l.bind('length', function( ev, newLength ) {
+		var i;
+		equals(newLength, 4)
+
+		for (i = 1; i < l.length; i++) {
+			ok(l[i-1] <= l[i], "in order " + i);
+		}
+	});
+
+	result = l.sort(cmp);
+});
