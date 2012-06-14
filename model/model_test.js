@@ -637,15 +637,15 @@ test("store instance update removed fields", function(){
     Guy = can.Model({
         findAll : 'GET /guys'
     },{});
-    updateCount = 0;
     remove = false;
     
     can.fixture("GET /guys", function(){
-    	var guys = [{id: 1, name: 'mikey', age: 35}];
+    	var guys = [{id: 1, name: 'mikey', age: 35, likes: ['soccer', 'fantasy baseball', 'js', 'zelda'], dislikes: ['backbone', 'errors']}];
     	if(remove) {
     		delete guys[0].name;
+    		guys[0].likes = [];
+    		delete guys[0].dislikes;
     	}
-    	updateCount++;
     	remove = true;
         return guys;
     });
@@ -655,9 +655,13 @@ test("store instance update removed fields", function(){
         guys[0].bind('updated', function(){});
         ok(Guy.store[1], 'instance stored');
     	equals(Guy.store[1].name, 'mikey', 'name is mikey')
+    	equals(Guy.store[1].likes.length, 4, 'mikey has 4 likes')
+    	equals(Guy.store[1].dislikes.length, 2, 'mikey has 2 dislikes')
     })
     Guy.findAll({}, function(guys){
     	equals(Guy.store[1].name, undefined, 'name is undefined')
+    	equals(Guy.store[1].likes.length, 0, 'no likes')
+    	equals(Guy.store[1].dislikes, undefined, 'dislikes removed')
     })
 	
 })
