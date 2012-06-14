@@ -631,6 +631,37 @@ test("store instance updates", function(){
 	
 })
 
+test("store instance update removed fields", function(){
+	var Guy, updateCount, remove;
+
+    Guy = can.Model({
+        findAll : 'GET /guys'
+    },{});
+    updateCount = 0;
+    remove = false;
+    
+    can.fixture("GET /guys", function(){
+    	var guys = [{id: 1, name: 'mikey', age: 35}];
+    	if(remove) {
+    		delete guys[0].name;
+    	}
+    	updateCount++;
+    	remove = true;
+        return guys;
+    });
+    stop();
+    Guy.findAll({}, function(guys){
+    	start();
+        guys[0].bind('updated', function(){});
+        ok(Guy.store[1], 'instance stored');
+    	equals(Guy.store[1].name, 'mikey', 'name is mikey')
+    })
+    Guy.findAll({}, function(guys){
+    	equals(Guy.store[1].name, undefined, 'name is undefined')
+    })
+	
+})
+
 test("templated destroy", function(){
 	var MyModel = can.Model({
 		destroy : "/destroyplace/{id}"
