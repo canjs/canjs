@@ -1313,7 +1313,7 @@ The __Routing__ control is a traditional controller. It coordinates the
 are traditional views, consuming models.
 
 If you can understand this, you're on your way to mastery of the CanJS MVC architecture. 
-Congrats! [See it in action](http://donejs.com/docs.html#!tutorials/rapidstart/todos.html).
+Congrats! [See it in action](http://canjs.us/recipes.html#everything_together-basic_todo).
 
 
 ## Utilities
