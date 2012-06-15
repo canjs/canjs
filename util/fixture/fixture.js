@@ -315,6 +315,10 @@ steal('can/util/object', function () {
 			}
 			settings.fixture = fixture;
 			overwrites.push(settings)
+		} else {
+			can.each(settings, function(fixture, url){
+				$fixture(url, fixture);
+			})
 		}
 	};
 	var replacer = can.replacer;
