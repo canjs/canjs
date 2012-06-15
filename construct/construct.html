@@ -8,8 +8,9 @@
 	<p>Open the console to see the status messages.</p>
 	<script type='text/javascript' src='../../steal/steal.js'></script>
 	<script type='text/javascript' id="demo-source">
-		steal('can/construct').then(function(){
-			var Animal = can.Construct({
+		console.log("HERE")
+		steal('can/construct',function(Construct){
+			var Animal = Construct({
 				breathe : function () {
 					console.log('Breathing');
 				}
@@ -29,7 +30,7 @@
 			dog.bark(); // Woof!
 			dog.breathe(); // Breathing
 
-			var Person = can.Construct({
+			var Person = Construct({
 				init : function (name) {
 					this.name = name;
 				},
@@ -41,7 +42,7 @@
 			var payal = new Person("Payal");
 			console.log(payal.speak()); // -> I am Payal.
 
-			var Person = can.Construct({
+			var Person = Construct({
 				count : 0
 			}, {
 				init : function(name) {
@@ -54,7 +55,7 @@
 				brian = new Person('Brian');
 			console.log(Person.count); // -> 2
 
-			can.Construct("Bitovi.Person", {
+			Construct("Bitovi.Person", {
 				init : function(name) {
 					this.name = name;
 				}

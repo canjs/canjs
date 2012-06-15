@@ -1,4 +1,4 @@
-steal('can/construct', function( $ ) {
+steal('can/util','can/construct', function( can, Construct ) {
 
 	// ## control.js
 	// `can.Control`  
@@ -51,7 +51,7 @@ steal('can/construct', function( $ ) {
 	/**
 	 * @add can.Control
 	 */
-	can.Construct("can.Control",
+	var Control = Construct(
 	/** 
 	 * @Static
 	 */
@@ -67,10 +67,10 @@ steal('can/construct', function( $ ) {
 
 			// Allow contollers to inherit "defaults" from super-classes as it 
 			// done in `can.Construct`
-			can.Construct.setup.apply( this, arguments );
+			Construct.setup.apply( this, arguments );
 
 			// If you didn't provide a name, or are `control`, don't do anything.
-			if ( this !== can.Control ) {
+			if ( this !== Control ) {
 
 				// Cache the underscored names.
 				var control = this,
@@ -713,7 +713,7 @@ steal('can/construct', function( $ ) {
 		}
 	});
 
-	var processors = can.Control.processors,
+	var processors = Control.processors,
 
 	// Processors do the binding.  
 	// They return a function that unbinds when called.  
@@ -733,5 +733,5 @@ steal('can/construct', function( $ ) {
 		 "focusout", "mouseenter", "mouseleave"], function( v ) {
 		processors[v] = basicProcessor;
 	});
-	
+	return can.Control;
 });
