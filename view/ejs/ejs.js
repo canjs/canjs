@@ -1,4 +1,4 @@
-steal('can/view', 'can/util/string').then(function( $ ) {
+steal('can/view', 'can/util/string','can/observe/compute').then(function( $ ) {
 
 	// ## ejs.js
 	// `can.EJS`  
@@ -71,72 +71,6 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		observeProp = function(name){
 			return name.indexOf("|") >= 0;
 		},
-		// This is used to setup live binding on a list of observe/attribute
-		// pairs for a given element.
-		//  - observed - an array of observe/attribute
-		//  - el - the parent element, if removed, unbinds all observes
-		//  - cb - a callback function that gets called if any observe/attribute changes
-		//  - oldObserve - a mapping of observe/attributes already bound
-		
-		liveBind = function( observed, el, cb, oldObserved ) {
-			// record if this is the first liveBind call for this magic tag
-			var first = oldObserved.matched === undefined;
-			
-			// If there is no element, teardown.
-			// This case happens when a parent block, like an `if(X){}`, replaces
-			// the content of children bindings like `<%= you.attr('name') %>` and
-			// the same property change that cause the parent block change changes
-			// the child bindings.
-			// If the parent block change did not change the child bindings, liveBind would
-			// not be called and the bindings would still be present until the
-			// parentElement `el` is removed from the page.
-			if(el == null){
-				oldObserved.teardown();
-				can.unbind.call(oldObserved.el,'destroyed', oldObserved.teardown)
-				return;
-				
-			}
-			// toggle the 'matched' indicator
-			oldObserved.matched = !oldObserved.matched;
-			
-			can.each(observed, function(ob){
-				// if the observe/attribute pair is being observed
-				if(oldObserved[ob.obj._namespace+"|"+ob.attr]){
-					// mark at as observed
-					oldObserved[ob.obj._namespace+"|"+ob.attr].matched = oldObserved.matched;
-				} else {
-					// otherwise, set the observe/attribute on oldObserved, marking it as being observed
-					ob.matched = oldObserved.matched;
-					oldObserved[ob.obj._namespace+"|"+ob.attr] = ob
-					// call `cb` when `attr` changes on the observe
-					ob.obj.bind(ob.attr, cb)
-				}
-			})
-			// Iterate through oldObserved, looking for observe/attributes
-			// that are no longer being bound and unbind them
-			for ( var name in oldObserved ) {
-				var ob = oldObserved[name];
-				if(observeProp(name) && ob.matched !== oldObserved.matched){
-					ob.obj.unbind(ob.attr);
-					delete oldObserved[name];
-				}
-			}
-			if(first){
-				// If this is the first time binding, listen
-				// for the element to be destroyed and unbind
-				// all event handlers for garbage collection.
-				oldObserved.el = el;
-				oldObserved.teardown = function(){
-					can.each(oldObserved, function(ob, name){
-						if(observeProp(name)){
-							ob.obj.unbind(ob.attr, cb)
-						}
-					});
-				};
-				can.bind.call(el,'destroyed', oldObserved.teardown)
-			}
-
-		},
 		// Returns escaped/sanatized content for anything other than a live-binding
 		contentEscape = function( txt ) {
 			return (typeof txt == 'string' || typeof txt == 'number') ?
@@ -175,45 +109,6 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 
 			// Finally, if all else is `false`, `toString()` it.
 			return "" + input;
-		},
-		// Returns the return value of a "wrapping" function and any
-		// observe attribute properties that were read.
-		// A wrapping function is the function that gets put around
-		// a magic tag.  For example, `<%= task.attr() %>` becomes
-		// `function(){ return task.attr() }`.  
-		getValueAndObserved = function(func, self){
-			
-			var oldReading;
-			if (can.Observe) {
-				// Set a callback on can.Observe to know
-				// when an attr is read.
-				// Keep a reference to the old reader
-				// if there is one.  This is used
-				// for nested live binding.
-				oldReading = can.Observe.__reading;
-				can.Observe.__reading = function(obj, attr){
-					// Add the observe and attr that was read
-					// to `observed`
-					observed.push({
-						obj: obj,
-						attr: attr
-					});
-				}
-			}
-			
-			var observed = [],
-				// Call the "wrapping" function to get the value. `observed`
-				// will have the observe/attribute pairs that were read.
-				value = func.call(self);
-	
-			// Set back so we are no longer reading.
-			if(can.Observe){
-				can.Observe.__reading = oldReading;
-			}
-			return {
-				value : value,
-				observed : observed
-			}
 		},
 		// The EJS constructor function
 		EJS = function( options ) {
@@ -284,21 +179,40 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 		 * @param {Object} func
 		 */
 		txt : function(escape, tagName, status, self, func){
+			// call the "wrapping" function and get the binding information
+			var binding = can.compute.binder(func, self, function(newVal, oldVal){
+				// call the update method we will define for each
+				// type of attribute
+				update(newVal, oldVal)
+			});
 			
-			// Get teh value returned by the wrapping function and any observe/attributes read.
-			var res = getValueAndObserved(func, self),
-				observed = res.observed,
-				value = res.value,
-				// Contains the bindings this magic tag will make.  Used when 
-				// `func` might dynamically change what it is binding to.
-				oldObserved = {},
-				// The tag type to create within the parent tagName
-				tag = (tagMap[tagName] || "span");
-
 			// If we had no observes just return the value returned by func.
-			if(!observed.length){
-				return (escape || status !== 0? contentEscape : contentText)(value);
+			if(!binding.isListening){
+				return (escape || status !== 0? contentEscape : contentText)(binding.value);
 			}
+			// The following are helper methods or varaibles that will
+			// be defined by one of the various live-updating schemes.
+			
+			// The parent element we are listening to for teardown
+			var	parentElement,
+				// if the parent element is removed, teardown the binding
+				setupTeardownOnDestroy = function(el){
+					can.bind.call(el,'destroyed', binding.teardown)
+					parentElement = el;
+				},
+				// if there is no parent, undo bindings
+				teardownCheck = function(parent){
+					if(!parent){
+						binding.teardown();
+						can.unbind.call(parentElement,'destroyed', binding.teardown)
+					}
+				},
+				// the tag type to insert
+				tag = (tagMap[tagName] || "span"),
+				// this will be filled in if binding.isListening
+				update;
+			
+			
 			// The magic tag is outside or between tags.
 			if(status == 0){
 				// Return an element tag with a hookup in place of the content
@@ -307,22 +221,35 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					// If we are escaping, replace the parentNode with 
 					// a text node who's value is `func`'s return value.
 					function(el, parentNode){
-						var parent = getParentNode(el, parentNode),
-							node = document.createTextNode(value),
-							binder = function(){
-								var res = getValueAndObserved(func, self);
-								node.nodeValue = ""+res.value;
-								liveBind(res.observed, node.parentNode, binder,oldObserved);
-							};
+						// updates the text of the text node
+						update = function(newVal){
+							node.nodeValue = ""+newVal;
+							teardownCheck(node.parentNode);
+						};
 						
+						var parent = getParentNode(el, parentNode),
+							node = document.createTextNode(binding.value);
+							
 						parent.insertBefore(node, el);
 						parent.removeChild(el);
-						liveBind(observed, parent, binder,oldObserved);
+						setupTeardownOnDestroy(parent);
 					} 
 					:
 					// If we are not escaping, replace the parentNode with a
 					// documentFragment created as with `func`'s return value.
 					function(span, parentNode){
+						// updates the elements with the new content
+						update = function(newVal){
+							// is this still part of the DOM?
+							var attached = nodes[0].parentNode;
+							// update the nodes in the DOM with the new rendered value
+							if( attached ) {
+								nodes = makeAndPut(newVal, nodes);
+							}
+							teardownCheck(nodes[0].parentNode)
+						}
+						
+						// make sure we have a valid parentNode
 						parentNode = getParentNode(span, parentNode)
 						// A helper function to manage inserting the contents
 						// and removing the old contents
@@ -350,32 +277,19 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							},
 							// nodes are the nodes that any updates will replace
 							// at this point, these nodes could be part of a documentFragment
-							nodes = makeAndPut(value, [span]);
-						// Anytime a live-bound attribute changes this method gets called
-						var binder = function(){
-							
-							// is this still part of the DOM?
-							var attached = nodes[0].parentNode,
-								// get the new value
-								res = getValueAndObserved(func, self);
-							// update the nodes in the DOM with the new rendered value
-							if( attached ) {
-								nodes = makeAndPut(res.value, nodes);
-							}
-							// updating the bindings (some observes may have changed)
-							liveBind(res.observed, nodes[0].parentNode, binder ,oldObserved);
-						}
-						// setup initial live-binding
-						liveBind(observed, parentNode, binder ,oldObserved);
+							nodes = makeAndPut(binding.value, [span]);
+						
+						
+						setupTeardownOnDestroy(parentNode);
+						
 				}) + "></" +tag+">";
 			// In a tag, but not in an attribute
 			} else if(status === 1){ 
 				// remember the old attr name
-				var attrName = value.replace(/['"]/g, '').split('=')[0];
+				var attrName = binding.value.replace(/['"]/g, '').split('=')[0];
 				pendingHookups.push(function(el) {
-					var binder = function() {
-						var res = getValueAndObserved(func, self),
-							parts = (res.value || "").replace(/['"]/g, '').split('='),
+					update = function(newVal){
+						var parts = (newVal|| "").replace(/['"]/g, '').split('='),
 							newAttrName = parts[0];
 						
 						// Remove if we have a change and used to have an `attrName`.
@@ -387,15 +301,19 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							setAttr(el, newAttrName, parts[1]);
 							attrName = newAttrName;
 						}
-						liveBind(res.observed, el, binder,oldObserved);
 					}
-					
-					liveBind(observed, el, binder,oldObserved);
+					setupTeardownOnDestroy(el);
 				});
 
-				return value;
+				return binding.value;
 			} else { // In an attribute...
 				pendingHookups.push(function(el){
+					// update will call this attribute's render method
+					// and set the attribute accordingly
+					update = function(){
+						setAttr(el, status, hook.render())
+					}
+					
 					var wrapped = can.$(el),
 						hooks;
 					
@@ -411,18 +329,13 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					var attr = getAttr(el, status),
 						// Split the attribute value by the template.
 						parts = attr.split("__!!__"),
-						hook,
-						binder = function(ev){
-							if(ev.batchNum === undefined || ev.batchNum !== hook.batchNum){
-								hook.batchNum = ev.batchNum;
-								setAttr(el, status, hook.render());
-							} 
-						};
+						hook;
 
+					
 					// If we already had a hookup for this attribute...
 					if(hooks[status]) {
 						// Just add to that attribute's list of `function`s.
-						hooks[status].funcs.push({func: func, old: oldObserved});
+						hooks[status].bindings.push(binding);
 					}
 					else {
 						// Create the hookup data.
@@ -430,13 +343,11 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 							render: function() {
 								var i =0,
 									newAttr = attr.replace(attributeReplace, function() {
-										var ob = getValueAndObserved(hook.funcs[i].func, self);
-										liveBind(ob.observed, el, binder, hook.funcs[i++].old)
-										return contentText( ob.value );
+										return contentText( hook.bindings[i++].value );
 									});
 								return newAttr;
 							},
-							funcs: [{func: func, old: oldObserved}],
+							bindings: [binding],
 							batchNum : undefined
 						};
 					};
@@ -445,13 +356,14 @@ steal('can/view', 'can/util/string').then(function( $ ) {
 					hook = hooks[status];
 
 					// Insert the value in parts.
-					parts.splice(1,0,value);
+					parts.splice(1,0,binding.value);
 
 					// Set the attribute.
 					setAttr(el, status, parts.join(""));
 					
 					// Bind on change.
-					liveBind(observed, el, binder,oldObserved);
+					//liveBind(observed, el, binder,oldObserved);
+					setupTeardownOnDestroy(el)
 				})
 				return "__!!__";
 			}
