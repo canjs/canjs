@@ -1,4 +1,4 @@
-steal('can/observe', function(){
+steal('can/util', function(){
 	
 	// returns the
     // - observes and attr methods are called by func
@@ -118,15 +118,27 @@ steal('can/observe', function(){
 	
 	// if no one is listening ... we can not calculate every time
 	/**
-	 * @function can.compute
+	 * @class can.compute
 	 * @parent can.util
 	 * 
-	 * `can.compute( getterSetter, [context] )` creates a `computed` method that represents 
-	 * a single value.  The value is often a composite value of one or
-	 * more [can.Observe] property values, but it can
-	 * also represent a static value.
+	 * `can.compute( getterSetter, [context] ) -> compute` returns a computed method that represents 
+	 * some value.  A `compute` can can be:
 	 * 
-	 * ## Computed static values
+	 *  - __read__ - by calling the method like `compute()`
+	 *  - __updated__ - by passing a new value like `compute( "new value" )`
+	 *  - __listened__ to for changes - like `compute.bind( "change", handler )`
+	 * 
+	 * The value maintained by a `compute` can represent:
+	 * 
+	 *  - A __static__ JavaScript object or value like `{foo : 'bar'}` or `true`.
+	 *  - A __composite__ value of one or more [can.Observe] property values.
+	 *  - A __converted value__ derived from another value.
+	 * 
+	 * Computes are an abstraction for some value that can be changed. [can.Control]s that 
+	 * accept computes (or convert params to computes) can be easily hooked up to 
+	 * any data source and be live widgets (widgets that update themselves when data changes).
+	 * 
+	 * ## Static values
 	 * 
 	 * `can.compute([value])` creates a `computed` with some value.  For example:
 	 * 
@@ -143,12 +155,12 @@ steal('can/observe', function(){
 	 *     // update the age
 	 *     age(30);
 	 * 
-	 * Notice that you can __read__, __write__, 
+	 * Notice that you can __read__, __update__, 
 	 * and __listen__ to changes in any single value.
 	 * 
-	 * _NOTE: can.Observe is similar to compute, but used for objects with multiple properties._
+	 * _NOTE: [can.Observe] is similar to compute, but used for objects with multiple properties._
 	 * 
-	 * ## Computed values
+	 * ## Composite values
 	 * 
 	 * Computes can represent a composite value of one 
 	 * or more `can.Observe` properties.  The following
@@ -169,16 +181,16 @@ steal('can/observe', function(){
 	 * 
 	 * Listen to changes in fullName like:
 	 * 
-	 *     fullName.bind("change", function(){
+	 *     fullName.bind("change", function(ev, newVal, oldVal){
 	 *     
 	 *     })
 	 * 
 	 * When an event handler is bound to fullName it starts
 	 * caching the computes value so additional reads are faster!
 	 * 
-	 * ## Computed converters
+	 * ## Converted values
 	 * 
-	 * `can.compute( getterSetter )` can be used to convert one observe's value into
+	 * `can.compute( getterSetter( [newVal] ) )` can be used to convert one observe's value into
 	 * another value.  For example, a `PercentDone` widget might accept
 	 * a compute that needs to have values from `0` to `100`, but your project's
 	 * progress is given between `0` and `1`. Pass that widget a compute!
@@ -281,10 +293,17 @@ steal('can/observe', function(){
 			}
 			canbind = false;
 		}
-		
+		/**
+		 * @attribute isComputed
+		 * 
+		 */
 		computed.isComputed = true;
 		
-		// var bindings
+
+		/**
+		 * @function bind
+		 * `compute.bind("change", handler(event, newVal, oldVal))`
+		 */
 		computed.bind = function(ev, handler){
 			can.addEvent.apply(computed, arguments);
 			if( bindings === 0 && canbind){
@@ -295,6 +314,10 @@ steal('can/observe', function(){
 			}
 			bindings++;
 		}
+		/**
+		 * @function unbind
+		 * `compute.unbind("change", handler)`
+		 */
 		computed.unbind = function(ev, handler){
 			can.removeEvent.apply(computed, arguments);
 			bindings--;

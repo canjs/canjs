@@ -178,4 +178,11 @@ test("hyphen in type", function(){
     ok( /Hyphen/.test(div.innerHTML) , 'has hyphen');
 })
 
-
+test("create template with string", function(){
+	can.view.ejs("fool", "everybody plays the <%= who %> <%= howOften %>");
+	
+	var div = document.createElement('div');
+	div.appendChild(can.view('fool', {who: "fool", howOften: "sometimes"}));
+	
+	ok( /fool sometimes/.test(div.innerHTML) , 'has fool sometimes'+div.innerHTML);
+})

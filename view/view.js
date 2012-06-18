@@ -364,7 +364,7 @@ steal("can/util")
 			}
 	
 			// If there is no suffix, add one.
-			if (!suffix ) {
+			if (!suffix && !$view.cached[url] ) {
 				url += ( suffix = $view.ext );
 			}
 
@@ -468,6 +468,9 @@ steal("can/util")
 					options.text = type.script(id, options.text)
 					success();
 				})
+			}
+			can.view[info.suffix] = function(id, text){
+				$view.preload(id, info.renderer(id, text) )
 			}
 		},
 		registerScript: function( type, id, src ) {

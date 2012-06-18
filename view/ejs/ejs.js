@@ -683,7 +683,8 @@ steal('can/view', 'can/util/string','can/observe/compute').then(function( $ ) {
 	EJS.Helpers.prototype = {
 		/**
 		 * @function list
-		 *
+		 * @hide
+		 * 
 		 * `can.EJS.Helpers.list` iterates over an observable list and
 		 * sets up live binding. `list` takes a list of observables and a callback 
 		 * function with the signature `callback( currentItem, index, itemList )`
@@ -697,6 +698,7 @@ steal('can/view', 'can/util/string','can/observe/compute').then(function( $ ) {
 		 * Whenever the list of observables changes, such as when an item is added or removed, 
 		 * the EJS view will redraw the list in the DOM.
 		 */
+		// TODO Deprecated!!
 		list : function(list, cb){
 			can.each(list, function(item, i){
 				cb(item, i, list)
