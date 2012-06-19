@@ -748,10 +748,10 @@ is the index of the last todo, not the index of the desired todo.  Fix this by u
 ### each `observe.each( iterator( item, index ) )`
 
 If you want to make the previous template update when todos are 
-added or removed, you could bind to length like:
+added or removed, you could read length like:
 
 {% highlight erb %}
-<% todos.bind( 'length', function() {} );
+<% todos.attr( 'length');
    $.each( todos, function( i, todo ) { %>
       <li><%= todo.attr( 'name' ) %></li>
 <% }) %>
@@ -801,7 +801,7 @@ the above callback as:
 This technique is commonly used to add data, especially model instances, to an element like:
 
 {% highlight erb %}
-<% list( todos, function( todo ) { %>
+<% todos.each( function( todo ) { %>
   <li <%= (el) -> el.data( 'todo', todo ) %>>
     <%= todo.attr( 'name' ) %>
   </li>
