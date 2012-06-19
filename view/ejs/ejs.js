@@ -413,14 +413,19 @@ steal('can/view', 'can/util/string','can/observe/compute').then(function( $ ) {
 			
 			source = source.replace(newLine, "\n");
 			source.replace(tokenReg, function(whole, part, offset){
+				// if the next token starts after the last token ends
+				// push what's in between
 				if(offset > last){
 					tokens.push( source.substring(last, offset) );
-				} 
-				tokens.push(part)
+				}
+				// push the token 
+				tokens.push(part);
+				// update the position of the last part of the last token
 				last = offset+part.length;
 			})
-			if(last === 0){
-				tokens.push(source)
+			// if there's something at the end, add it
+			if(last < source.length){
+				tokens.push(source.substr(last))
 			}
 			
 			var content = '',

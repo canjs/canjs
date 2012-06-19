@@ -816,6 +816,11 @@ test("nested live bindings", function(){
 	
 })*/
 
-
+test("trailing text", function(){
+	can.view.ejs("count","There are <%= this.attr('length') %> todos")
+	var div = document.createElement('div');
+	div.appendChild( can.view("count", new can.Observe.List([{},{}])) );
+	ok(/There are 2 todos/.test(div.innerHTML), "got all text")
+})
 
 })()
