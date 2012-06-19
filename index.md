@@ -1080,8 +1080,8 @@ event handlers and releases its element, but does not remove
 the element from the page. 
 
 {% highlight javascript %}
-var todo = new Todos( '#todos' )
-todo.destroy();
+var todosControl = new Todos( '#todos' )
+todosControl.destroy();
 {% endhighlight %}
 
 When a control's element is removed from the page,
