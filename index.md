@@ -853,7 +853,7 @@ var todosControl = new Todos( '#todos', {} );
 __todos.ejs__ looks like:
 
 {% highlight erb %}
-<% list( todos, function( todo ) { %>
+<% todos.each( function( todo ) { %>
   <li <%= (el) -> el.data( 'todo', todo ) %> >
     <%= todo.attr( 'name' ) %>
     <a href="javascript://" class="destroy">X</a>
