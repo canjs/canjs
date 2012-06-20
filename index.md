@@ -1025,7 +1025,7 @@ clicks on the window:
 var Tooltip = can.Control({
   '{window} click': function( el, ev ) {
     // hide only if we clicked outside the tooltip
-    if (!this.element.has( ev.target ) {
+    if (!this.element.has( ev.target ).length ) {
       this.element.remove();
     }
   }
