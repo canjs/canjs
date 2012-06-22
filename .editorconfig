@@ -1,0 +1,8 @@
+; Unix-style newlines
+[*]
+end_of_line = LF
+
+; Tab indentation (no size specified)
+[*.js]
+indent_style = tab
+indent_size = 4
