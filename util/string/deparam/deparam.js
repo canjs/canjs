@@ -30,7 +30,7 @@ steal('can/util/string', function($){
 		deparam: function(params){
 		
 			var data = {},
-				pairs;
+				pairs, lastPart;
 
 			if ( params && paramTest.test( params )) {
 				
