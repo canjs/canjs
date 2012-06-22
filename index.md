@@ -15,7 +15,9 @@ rich web applications easy.  It provides:
  - __[can.Control](#can_control)__ - declarative event bindings
  - __[can.route](#can_route)__ - back button and bookmarking support
 
-It also includes a rich set of supported [extensions and plugins](#plugins). 
+It also includes a rich set of supported [extensions and plugins](#plugins). Watch the
+[Getting Started with CanJS Video](http://www.youtube.com/watch?v=GdT4Oq6ZQ68) for a thorough
+walkthrough (make it full screen).
 
 CanJS is:
 
@@ -57,7 +59,7 @@ CanJS is:
   </li>
 </ul>
 
-CanJS is better! [Learn why](#why_canjs).
+CanJS is better! [Learn why](#why_canjs).  
 
 ## Get Canned
 
