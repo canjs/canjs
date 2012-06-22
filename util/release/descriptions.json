@@ -85,6 +85,7 @@
     },
     "can.js.zip" : {
       "description": "CanJS v#{VERSION}",
-      "filename" : "can.js.#{VERSION}.zip"
+      "filename" : "can.js.#{VERSION}.zip",
+      "content_type" : "application/zip"
     }
 }

@@ -130,7 +130,7 @@ function createZipArchive() {
 
 	var dfd = new _.Deferred(),
 	    zip = spawn("zip", [ "-r", "edge/can.js.zip", "edge" ], {
-	    	cwd : distPath
+	    	cwd : path.join( distPath, ".." )
 	    });
 
 	zip.on("exit", function() {
@@ -154,13 +154,18 @@ function uploadFiles() {
 
 			fs.readFile( path.join( distPath, filename ), function( err, buf ) {
 
+				if ( err ) {
+					console.log( err );
+					process.exit(1);
+				}
+
 				github.httpSend({
 					"user" : "jupiterjs",
 					"repo" : "canjs",
 					"name" : name,
 					"size" : buf.length,
 					"description" : desc,
-					"content_type" : "text/javascript"
+					"content_type" : parts.content_type || "text/javascript"
 				}, {
 					"url": "/repos/:user/:repo/downloads",
 					"method": "POST",
@@ -248,9 +253,10 @@ function stealBuild() {
 
 	var timeout;
 
-	process.stdout.write("Building CanJS " + version );
 
 	if ( ! buildDfd.isResolved() ) {
+
+		process.stdout.write("Building CanJS " + version );
 
 		// Run Steal build script
 		pluginify = spawn( "js", ["can/util/make.js"], {
