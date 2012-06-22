@@ -544,7 +544,7 @@ steal('can/construct', function( $ ) {
 					actions = cls.actions,
 					element = this.element,
 					destroyCB = shifter(this,"destroy"),
-					funcName;
+					funcName, ready;
 					
 				for ( funcName in actions ) {
 					if ( actions.hasOwnProperty( funcName )) {
