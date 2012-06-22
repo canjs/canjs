@@ -16,7 +16,7 @@ rich web applications easy.  It provides:
  - __[can.route](#can_route)__ - back button and bookmarking support
 
 It also includes a rich set of supported [extensions and plugins](#plugins). Watch the
-[Getting Started with CanJS Video](http://www.youtube.com/watch?v=GdT4Oq6ZQ68) for a (fullscreen) 
+[Getting Started with CanJS Video](http://www.youtube.com/watch?v=GdT4Oq6ZQ68) (fullscreen) for a in-depth 
 walkthrough.
 
 CanJS is:
