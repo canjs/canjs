@@ -41,7 +41,7 @@ steal('can/util', function(){
 		// Calls `callback(newVal, oldVal)` everytime an observed property
 		// called within `getterSetter` is changed and creates a new result of `getterSetter`.
 		// Also returns an object that can teardown all event handlers.
-		binder = function(getterSetter, context, callback){
+		computeBinder = function(getterSetter, context, callback){
 			// track what we are observing
 			var observing = {},
 				// a flag indicating if this observe/attr pair is already bound
@@ -308,7 +308,7 @@ steal('can/util', function(){
 			can.addEvent.apply(computed, arguments);
 			if( bindings === 0 && canbind){
 				// setup live-binding
-				computedData = binder(getterSetter, context || this, function(newValue, oldValue){
+				computedData = computeBinder(getterSetter, context || this, function(newValue, oldValue){
 					can.trigger(computed, "change",[newValue, oldValue])
 				});
 			}
@@ -328,5 +328,5 @@ steal('can/util', function(){
 		};
 		return computed;
 	};
-	can.compute.binder = binder;
+	can.compute.binder = computeBinder;
 })
