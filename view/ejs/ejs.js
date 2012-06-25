@@ -22,7 +22,8 @@ steal('can/view', 'can/util/string','can/observe/compute').then(function( $ ) {
 			ul: "li", 
 			tbody: "tr",
 			thead: "tr",
-			tfoot: "tr"
+			tfoot: "tr",
+			select: "option"
 		},
 		// Escapes characters starting with `\`.
 		clean = function( content ) {
