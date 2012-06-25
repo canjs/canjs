@@ -1,4 +1,6 @@
 steal('can/construct', function( $ ) {
+	(function() {
+	
 
 	// ## control.js
 	// `can.Control`  
@@ -17,7 +19,7 @@ steal('can/construct', function( $ ) {
 		extend = can.extend,
 		each = can.each,
 		slice = [].slice,
-    paramReplacer = /\{([^\}]+)\}/g,
+		paramReplacer = /\{([^\}]+)\}/g,
 		special = can.getObject("$.event.special") || {},
 
 		// Binds an element, returns a function that unbinds.
@@ -544,7 +546,7 @@ steal('can/construct', function( $ ) {
 					actions = cls.actions,
 					element = this.element,
 					destroyCB = shifter(this,"destroy"),
-					funcName;
+					funcName, ready;
 					
 				for ( funcName in actions ) {
 					if ( actions.hasOwnProperty( funcName )) {
@@ -733,5 +735,7 @@ steal('can/construct', function( $ ) {
 		 "focusout", "mouseenter", "mouseleave"], function( v ) {
 		processors[v] = basicProcessor;
 	});
+
+	}());
 	
 });

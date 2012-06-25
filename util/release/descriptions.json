@@ -82,5 +82,10 @@
     "can.zepto.min.js": {
         "description": "Can Zepto #{VERSION} Production",
         "filename": "can.zepto-#{VERSION}.min.js"
+    },
+    "can.js.zip" : {
+      "description": "CanJS v#{VERSION}",
+      "filename" : "can.js.#{VERSION}.zip",
+      "content_type" : "application/zip"
     }
 }

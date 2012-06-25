@@ -1,6 +1,7 @@
 var path            = require("path"),
     fs              = require("fs"),
     spawn           = require("child_process").spawn,
+    zlib            = require("zlib"),
 
     // Third party modules
     program         = require("commander"),
@@ -22,10 +23,10 @@ var path            = require("path"),
     github          = new GitHubApi({
         version: "3.0.0"
     }),
-	canJSRemote = "git@github.com:jupiterjs/canjs.git",
+    canJSRemote = "git@github.com:jupiterjs/canjs.git",
 
     // Timeouts
-	stealTimeout,
+    stealTimeout,
 
     // For Github credentials
     username,
@@ -56,8 +57,8 @@ function updateDist() {
 
 		checkout.on("exit", function() {
 			var cloneReleasePath = path.join( clonePath, "release" ),
-			    latestPath = path.join( cloneReleasePath, "latest" ),
-			    versionPath = path.join( cloneReleasePath, version );
+				latestPath = path.join( cloneReleasePath, "latest" ),
+				versionPath = path.join( cloneReleasePath, version );
 
 			// Make sure directories exist
 			[ cloneReleasePath, versionPath, latestPath ].forEach( function( dir ) {
@@ -70,7 +71,7 @@ function updateDist() {
 				var dfds = files.map(function( file ) {
 					var dfd = new _.Deferred(),
 						inPath = path.join( distPath, file ),
-					    outPath = path.join( versionPath, file ),
+						outPath = path.join( versionPath, file ),
 						latestOutPath = path.join( latestPath, file ),
 						inStream = fs.createReadStream( inPath );
 
@@ -125,12 +126,26 @@ function updateDist() {
 	return dfd.promise();
 }
 
+function createZipArchive() {
+
+	var dfd = new _.Deferred(),
+	    zip = spawn("zip", [ "-r", "edge/can.js.zip", "edge" ], {
+	    	cwd : path.join( distPath, ".." )
+	    });
+
+	zip.on("exit", function() {
+		dfd.resolve();
+	});
+
+	return dfd.promise();
+}
+
 // Upload files to the Github downloads page
 function uploadFiles() {
 
 	var outerDfd = new _.Deferred();
 
-	getCredentials().done(function() {
+	_.when( getCredentials(), createZipArchive() ).done(function() {
 		var dfds = _.map( descriptions, function( parts, filename ) {
 
 			var dfd = new _.Deferred(),
@@ -139,13 +154,18 @@ function uploadFiles() {
 
 			fs.readFile( path.join( distPath, filename ), function( err, buf ) {
 
+				if ( err ) {
+					console.log( err );
+					process.exit(1);
+				}
+
 				github.httpSend({
 					"user" : "jupiterjs",
 					"repo" : "canjs",
 					"name" : name,
 					"size" : buf.length,
 					"description" : desc,
-					"content_type" : "text/javascript"
+					"content_type" : parts.content_type || "text/javascript"
 				}, {
 					"url": "/repos/:user/:repo/downloads",
 					"method": "POST",
@@ -233,9 +253,10 @@ function stealBuild() {
 
 	var timeout;
 
-	process.stdout.write("Building CanJS " + version );
 
 	if ( ! buildDfd.isResolved() ) {
+
+		process.stdout.write("Building CanJS " + version );
 
 		// Run Steal build script
 		pluginify = spawn( "js", ["can/util/make.js"], {
