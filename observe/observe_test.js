@@ -339,3 +339,25 @@ test("bind to specific attribute changes when an attribute is removed", function
 	paginate.removeAttr( 'offset' );
 });
 
+test("Array accessor methods", 11, function() {
+	var l = new can.Observe.List([ 'a', 'b', 'c' ]),
+		sliced = l.slice(2),
+		joined = l.join(' | '),
+		concatenated = l.concat([ 2, 1 ], new can.Observe.List([ 0 ]));
+
+	ok(sliced instanceof can.Observe.List, 'Slice is an Observable list');
+	equal(sliced.length, 1, 'Sliced off two elements');
+	equal(sliced[0], 'c', 'Single element as expected');
+	equal(joined, 'a | b | c', 'Joined list properly');
+	ok(concatenated instanceof can.Observe.List, 'Concatenated is an Observable list');
+	deepEqual(concatenated.serialize(), [ 'a', 'b', 'c', 2, 1, 0 ], 'List concatenated properly');
+	l.forEach(function(letter, index) {
+		ok(true, 'Iteration');
+		if(index === 0) {
+			equal(letter, 'a', 'First letter right');
+		}
+		if(index === 2) {
+			equal(letter, 'c', 'Last letter right');
+		}
+	});
+});
