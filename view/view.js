@@ -306,10 +306,7 @@ steal("can/util")
 			}
 		}
 	});
-	// Returns `true` if something looks like a deferred.
-	can.isDeferred = function( obj ) {
-		return obj && isFunction(obj.then) && isFunction(obj.pipe) // Check if `obj` is a `can.Deferred`.
-	} 
+
 	// Makes sure there's a template, if not, have `steal` provide a warning.
 	var	checkText = function( text, url ) {
 			if ( ! text.length ) {

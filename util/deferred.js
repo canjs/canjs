@@ -151,5 +151,25 @@ steal(function(){
 		}
 	});
 
-
+	/**
+	 * @function can.isDeferred
+	 * @parent can.util
+	 *
+	 * `can.isDeferred` returns if an object is an instance of [can.Deferred].
+	 *
+	 * ## Example
+	 *
+	 * Convert any value to a Deferred:
+	 *
+	 *      function convertDeferred(dfd) {
+	 *          return can.isDeferred(dfd) ? dfd : can.Deferred(dfd);
+	 *      }
+	 *
+	 * @param {String} str the string to trim
+	 * @return {String} the value of the string
+	 */
+	can.isDeferred = function( obj ) {
+		// Returns `true` if something looks like a deferred.
+		return obj && isFunction(obj.then) && isFunction(obj.pipe);
+	}
 })
