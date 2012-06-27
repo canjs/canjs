@@ -102,7 +102,11 @@ steal({
 		// `{click: {5: {remove: fn}}}`. 
 		addBinding = function( nodelist, ev, cb ) {
 			nodelist.forEach(function(node){
-				var node = new dojo.NodeList(node)
+				// Converting a raw select node to a node list
+				// returns a node list of its options due to a
+				// bug in Dojo 1.7.1, this is sovled by wrapping
+				// it in an array.
+				node = new dojo.NodeList(node.nodeName === "SELECT" ? [node] : node)
 				var events = can.data(node,"events");
 				if(!events){
 					can.data(node,"events", events = {})
@@ -141,7 +145,11 @@ steal({
 			
 		// Otherwise it's an element or `nodeList`.
 		} else if(this.on || this.nodeType){
-			addBinding( new dojo.NodeList(this), ev, cb)
+			// Converting a raw select node to a node list
+			// returns a node list of its options due to a
+			// bug in Dojo 1.7.1, this is sovled by wrapping
+			// it in an array.
+			addBinding( new dojo.NodeList(this.nodeName === "SELECT" ? [this] : this), ev, cb)
 		} else if(this.addEvent) {
 			this.addEvent(ev, cb)
 		} else {
