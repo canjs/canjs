@@ -22,7 +22,7 @@ steal('can/observe', 'can/observe/compute', function() {
 
 				// a can.compute that executes the callback
 				var compute = can.compute(function() {
-					return callback(element, index, self);
+					return callback(element, self.indexOf(element), self);
 				});
 
 				// Update the filtered list on any compute change

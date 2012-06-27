@@ -1,5 +1,5 @@
 (function(){
-	module("can/observe/collection");
+	module("can/observe/list");
 
 	test("filter", 8, function() {
 		var original = new can.Observe.List([
