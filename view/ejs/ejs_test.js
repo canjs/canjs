@@ -842,4 +842,21 @@ test("trailing text", function(){
 	ok(/There are 2 todos/.test(div.innerHTML), "got all text")
 })
 
+test("attribute unquoting", function() {
+	var text = '<input type="radio" ' +
+		'<%= facet.single ? \'name="facet-\' + facet.id + \'"\' : "" %> ' +
+		'value="<%= facet.single ? "facet-" + facet.id : "" %>" />',
+	facet = new can.Observe({
+		id: 1,
+		single: true
+	});
+
+	compiled = new can.EJS({text: text}).render({ facet: facet }),
+	div = document.createElement('div');
+	div.appendChild(can.view.frag(compiled))
+
+	equals(div.children[0].name, "facet-1");
+	equals(div.children[0].value, "facet-1");
+})
+
 })()
