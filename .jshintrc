@@ -13,7 +13,8 @@
 		"YUI",
 		"Zepto",
 
-		// QUnit API via http://docs.jquery.com/QUnit#API_documentation
+		// QUnit API
+		// http://docs.jquery.com/QUnit#API_documentation
 		"QUnit",
 		"test",
 		"asyncTest",
@@ -40,7 +41,6 @@
 	"latedef": true,
 	"noarg": true,
 	"smarttabs": true,
-	"trailing": true,
 	"undef": true
 
 }
