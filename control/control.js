@@ -37,17 +37,6 @@ steal('can/construct', function( $ ) {
 				bind( el, ev, callback );
 		},
 		
-		// Moves `this` to the first argument, wraps it with `jQuery` if it's an element
-		shifter = function shifter(context, name) {
-			var method = typeof name == "string" ? context[name] : name;
-			if(!isFunction(method)){
-				method = context[method];
-			}
-			return function() {
-				context.called = name;
-    			return method.apply(context, [this.nodeName ? can.$(this) : this].concat( slice.call(arguments, 0)));
-			};
-		},
 		basicProcessor;
 	
 	/**
@@ -87,6 +76,22 @@ steal('can/construct', function( $ ) {
 				}
 			}
 		},
+
+		// Moves `this` to the first argument, wraps it with `jQuery` if it's an element
+		_shifter : function( context, name ) {
+
+			var method = typeof name == "string" ? context[name] : name;
+
+			if ( ! isFunction( method )) {
+				method = context[ method ];
+			}
+			
+			return function() {
+				context.called = name;
+    			return method.apply(context, [this.nodeName ? can.$(this) : this].concat( slice.call(arguments, 0)));
+			};
+		},
+
 		// Return `true` if is an action.
 		/**
 		 * @hide
@@ -545,7 +550,7 @@ steal('can/construct', function( $ ) {
 					bindings = this._bindings,
 					actions = cls.actions,
 					element = this.element,
-					destroyCB = shifter(this,"destroy"),
+					destroyCB = can.Control._shifter(this,"destroy"),
 					funcName, ready;
 					
 				for ( funcName in actions ) {
@@ -578,7 +583,7 @@ steal('can/construct', function( $ ) {
 			}
 			
 			if ( typeof func == 'string' ) {
-				func = shifter(this,func);
+				func = can.Control._shifter(this,func);
 			}
 
 			this._bindings.push( binder( el, eventName, func, selector ));
@@ -715,6 +720,7 @@ steal('can/construct', function( $ ) {
 		}
 	});
 
+
 	var processors = can.Control.processors,
 
 	// Processors do the binding.  
@@ -722,7 +728,7 @@ steal('can/construct', function( $ ) {
 	//
 	// The basic processor that binds events.
 	basicProcessor = function( el, event, selector, methodName, control ) {
-		return binder( el, event, shifter(control, methodName), selector);
+		return binder( el, event, can.Control._shifter(control, methodName), selector);
 	};
 
 
