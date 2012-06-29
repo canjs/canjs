@@ -161,6 +161,18 @@ test("deferred", function(){
 	
 });
 
+test("deferred resolves to a document fragment", function(){
+	stop();
+	can
+		.view("//can/view/test/qunit/deferred.ejs", { foo:"FOO" }, function(){})
+		.then(function(result){
+			ok( !!result, "was resolved to something" );
+			ok( !!result.nodeName && ( result.nodeType == 11 ), "was resolved to a document fragment");
+			equals( !!result.childNodes.length ? result.childNodes[0].nodeValue : "", "FOO", "document fragment has expected value");
+			start();
+		});
+});
+
 /*test("bad url", function(){
 	can.render("//asfdsaf/sadf.ejs")
 });*/

@@ -288,10 +288,9 @@ steal("can/util")
 	
 				// If we are `async`...
 				if ( async ) {
-					// Return the deferred
-					response = deferred;
-					// And fire callback with the rendered result.
-					deferred.then(function( renderer ) {
+					// Return the deferred and fire callback with
+					// the rendered result.				
+					response = deferred.pipe(function( renderer ) {
 						var result = renderer(data, helpers);
 						callback(result);
 						return result;
