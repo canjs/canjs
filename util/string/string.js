@@ -83,9 +83,7 @@ steal('can/util',function() {
 				}
 
 				// For each root, mark it as current.
-				
-				do {
-					current = roots[r++];
+				while ( current = roots[r++] ) {
 
 					// Walk current to the 2nd to last object or until there 
 					// is not a container.
@@ -109,7 +107,7 @@ steal('can/util',function() {
 							
 						}
 					}
-				} while( current );
+				}
 			},
 			// Capitalizes a string.
 			/**
