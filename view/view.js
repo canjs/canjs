@@ -292,7 +292,9 @@ steal("can/util")
 					response = deferred;
 					// And fire callback with the rendered result.
 					deferred.then(function( renderer ) {
-						callback(renderer(data, helpers))
+						var result = renderer(data, helpers);
+						callback(result);
+						return result;
 					})
 				} else {
 					// Otherwise, the deferred is complete, so
