@@ -13,9 +13,9 @@ steal('can/observe', function() {
 		var d = new can.Deferred();
 		def.then(function(){
 			arguments[0] = model[func](arguments[0])
-			d.resolve.apply(d, arguments)
+			d.resolveWith(d, arguments)
 		},function(){
-			d.rejectWith.apply(this,arguments)
+			d.rejectWith(this, arguments)
 		})
 		return d;
 	},
