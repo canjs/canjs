@@ -422,7 +422,7 @@ steal("can/util")
 						d.resolve( renderer );
 						
 						// If there is another async deferred still pending, resolve it now; at the earliest possible time.
-						if ( !async && $view.cached[id] && $view.cached[id].state && $view.cached[id].state == "pending" ) {
+						if ( !async && $view.cached[id] && $view.cached[id].state && $view.cached[id].state() === "pending" ) {
 							$view.cached[id].resolve( renderer );
 						}
 					}
