@@ -41,6 +41,8 @@
 	"latedef": true,
 	"noarg": true,
 	"smarttabs": true,
-	"undef": true
+	"undef": true,
+	"boss": true
+
 
 }
