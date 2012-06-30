@@ -120,6 +120,10 @@ steal(function(){
 
 			return this;
 		},
+		
+		state : function() {			
+			return { "" : "pending", "rs" : "resolved", "rj" : "rejected" }[ this._status ];
+		},
 
 		isResolved : function() {
 			return this._status === "rs";

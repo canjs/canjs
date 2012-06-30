@@ -288,11 +288,12 @@ steal("can/util")
 	
 				// If we are `async`...
 				if ( async ) {
-					// Return the deferred
-					response = deferred;
-					// And fire callback with the rendered result.
-					deferred.then(function( renderer ) {
-						callback(renderer(data, helpers))
+					// Return the deferred and fire callback with
+					// the rendered result.				
+					response = deferred.pipe(function( renderer ) {
+						var result = renderer(data, helpers);
+						callback(result);
+						return result;
 					})
 				} else {
 					// Otherwise, the deferred is complete, so
@@ -384,10 +385,16 @@ steal("can/util")
 			// Set the template engine type.
 			type = $view.types[suffix];
 	
-			// If it is cached, 
+			// If it is cached and either resolved or async
 			if ( $view.cached[id] ) {
-				// Return the cached deferred renderer.
-				return $view.cached[id];
+				// Only use the cache when either async or already resolved. If synchronous completion is necessary
+				// and the cache is not yet resolved, it must be skipped so that a synchronous AJAX request is
+				// spun up to complete view rendering in a synchronous manner.
+				if ( async || ( $view.cached[id].state && ( $view.cached[id].state() === "resolved" ))) {				
+				
+					// Return the cached deferred renderer.
+					return $view.cached[id];
+				}
 			
 			// Otherwise if we are getting this from a `<script>` element.
 			} else if ( el ) {
@@ -405,14 +412,19 @@ steal("can/util")
 						d.reject(jqXHR);
 					},
 					success: function( text ) {
+						var renderer;
+						
 						// Make sure we got some text back.
 						checkText(text, url);
-						d.resolve(type.renderer(id, text))
-						// Cache if if we are caching.
-						if ( $view.cache ) {
-							$view.cached[id] = d;
-						}
+						renderer = type.renderer(id, text)
 						
+						// Resolve the deferred.
+						d.resolve( renderer );
+						
+						// If there is another async deferred still pending, resolve it now; at the earliest possible time.
+						if ( !async && $view.cached[id] && $view.cached[id].state && $view.cached[id].state() === "pending" ) {
+							$view.cached[id].resolve( renderer );
+						}
 					}
 				});
 				return d;
