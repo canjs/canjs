@@ -1,0 +1,48 @@
+{
+	"predef" : [
+
+		// Bitovi Tools
+		"steal",
+		"can",
+
+		// Supported Libs
+		"jQuery",
+		"$",
+		"$$",
+		"DOJO",
+		"YUI",
+		"Zepto",
+
+		// QUnit API
+		// http://docs.jquery.com/QUnit#API_documentation
+		"QUnit",
+		"test",
+		"asyncTest",
+		"expect",
+		"module",
+		"ok",
+		"equal",
+		"notEqual",
+		"deepEqual",
+		"notDeepEqual",
+		"strictEqual",
+		"notStrictEqual",
+		"raises",
+		"start",
+		"stop"
+
+	],
+
+	"browser": true,
+	"curly": true,
+	"eqnull": true,
+	"eqeqeq": true,
+	"expr": true,
+	"latedef": true,
+	"noarg": true,
+	"smarttabs": true,
+	"undef": true,
+	"boss": true
+
+
+}

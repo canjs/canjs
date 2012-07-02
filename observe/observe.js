@@ -1216,20 +1216,84 @@ steal('can/construct', function() {
 		}
 	});
 	
-	list.prototype.
-	/**
-	 * @function indexOf
-	 * Returns the position of the item in the array.  Returns -1 if the
-	 * item is not in the array.  Examples:
-	 * 
-	 *     list = new can.Observe.List(["a","b","c"]);
-	 *     list.indexOf("b") //-> 1
-	 *     list.indexOf("f") //-> -1
-	 * 
-	 * @param {Object} item the item to look for
-	 * @return {Number} the index of the object in the array or -1.
-	 */
-	indexOf = [].indexOf || function(item){
-		return can.inArray(item, this)
-	};
+	can.extend(list.prototype, {
+		/**
+		 * @function indexOf
+		 * Returns the position of the item in the array.  Returns -1 if the
+		 * item is not in the array.  Examples:
+		 *
+		 *     list = new can.Observe.List(["a","b","c"]);
+		 *     list.indexOf("b") //-> 1
+		 *     list.indexOf("f") //-> -1
+		 *
+		 * @param {Object} item the item to look for
+		 * @return {Number} the index of the object in the array or -1.
+		 */
+		indexOf : [].indexOf || function(item) {
+			return can.inArray(item, this)
+		},
+
+		/**
+		 * @function join
+		 * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/join
+		 *
+		 * Joins the string representation of all elements into a string.
+		 *
+		 *      list = new can.Observe.List(["a","b","c"]);
+		 *      list.join(',') // -> "a, b, c"
+		 *
+		 * @param {String} separator The element separator
+		 * @return {String} The joined string
+		 */
+		join : [].join,
+
+		/**
+		 * @function slice
+		 * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/slice
+		 *
+		 * Creates a flat copy of a section of the observable list and returns
+		 * a new observable list.
+		 *
+		 * @param {Integer} start The beginning index of the section to extract.
+		 * @param {Integer} [end] The end index of the section to extract.
+		 * @return {can.Observe.List} The sliced list
+		 */
+		slice : function() {
+			return new this.constructor(Array.prototype.slice.apply(this, arguments));
+		},
+
+		/**
+		 * @function concat
+		 * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/concat
+		 *
+		 * Returns a new can.Observe.List comprised of this list joined with other
+		 * array(s), value(s) and can.Observe.Lists.
+		 *
+		 * @param {Array|can.Observe.List} args... One or more arrays or observable lists to concatenate
+		 * @return {can.Observe.List} The concatenated list
+		 */
+		concat : function() {
+			var args = [];
+			can.each(arguments, function(arg) {
+				args.push(arg instanceof can.Observe.List ? arg.serialize() : arg);
+			});
+			return new this.constructor(Array.prototype.concat.apply(this.serialize(), args));
+		},
+
+		/**
+		 * @function forEach
+		 * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/forEach
+		 *
+		 * Calls a function for each element in the list.
+		 *
+		 * > Note that [each can.Observe.each] will iterate over the actual properties.
+		 *
+		 * @param {Function} callback The callback to execute.
+		 * It gets passed the element and the index in the list.
+		 * @param {Object} [thisarg] Object to use as `this` when executing `callback`
+		 */
+		forEach : function(cb, thisarg) {
+			can.each(this, can.proxy(cb, thisarg || this ));
+		}
+	});
 });

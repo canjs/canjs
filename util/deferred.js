@@ -150,6 +150,4 @@ steal(function(){
 			return this;
 		}
 	});
-
-
 })

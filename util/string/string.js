@@ -7,7 +7,7 @@ steal('can/util',function() {
 	// Prototype JavaScript framework, version 1.6.0.1.
 	// © 2005-2007 Sam Stephenson
 	var undHash     = /_|-/,
-		colons      = /==/,
+		colons      = /\=\=/,
 		words       = /([A-Z]+)([A-Z][a-z])/g,
 		lowUp       = /([a-z\d])([A-Z])/g,
 		dash        = /([a-z\d])([A-Z])/g,
@@ -26,7 +26,7 @@ steal('can/util',function() {
 
 		// Returns `true` if the object can have properties (no `null`s).
 		isContainer = function( current ) {
-			return /^f|^o/.test( typeof current );
+			return (/^f|^o/).test( typeof current );
 		};
 
 		can.extend(can, {
@@ -55,7 +55,7 @@ steal('can/util',function() {
 			 * 'object path' by removing or adding properties.
 			 * 
 			 *     Foo = {Bar: {Zar: {"Ted"}}}
-		 	 *     can.getObject("Foo.Bar.Zar") //-> "Ted"
+			 *     can.getObject("Foo.Bar.Zar") //-> "Ted"
 			 * 
 			 * @param {String} name the name of the object to look for
 			 * @param {Array} [roots] an array of root objects to look for the 
@@ -70,11 +70,11 @@ steal('can/util',function() {
 				// The parts of the name we are looking up  
 				// `['App','Models','Recipe']`
 				var parts = name ? name.split('.') : [],
-					length =  parts.length,
-					current,
-					r = 0,
-					ret, i;
-				
+				    length =  parts.length,
+				    current,
+				    r = 0,
+				    ret, i;
+
 				// Make sure roots is an `array`.
 				roots = can.isArray(roots) ? roots : [roots || window];
 				
@@ -83,7 +83,7 @@ steal('can/util',function() {
 				}
 
 				// For each root, mark it as current.
-				while( current = roots[r++] ) {
+				while ( current = roots[r++] ) {
 
 					// Walk current to the 2nd to last object or until there 
 					// is not a container.
