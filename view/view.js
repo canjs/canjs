@@ -108,6 +108,7 @@ steal("can/util")
 		 * Cached are put in this object
 		 */
 		cached: {},
+		cachedRenderers: {},
 		/**
 		 * @attribute cache
 		 * By default, views are cached on the client.  If you'd like the
@@ -295,11 +296,25 @@ steal("can/util")
 						callback(renderer(data, helpers))
 					})
 				} else {
-					// Otherwise, the deferred is complete, so
-					// set response to the result of the rendering.
-					deferred.then(function( renderer ) {
-						response = renderer(data, helpers);
-					});
+					// if the deferred is resolved, call the cached renderer instead
+					// this is because it's possible, with recursive deferreds to
+					// need to render a view while its deferred is _resolving_.  A _resolving_ deferred
+					// is a deferred that was just resolved and is calling back it's success callbacks.
+					// If a new success handler is called while resoliving, it does not get fired by
+					// jQuery's deferred system.  So instead of adding a new callback
+					// we use the cached renderer.
+					// We also add __view_id on the deferred so we can look up it's cached renderer.
+					// In the future, we might simply store either a deferred or the cached result.
+					if(deferred.isResolved() && deferred.__view_id  ){
+						return $view.cachedRenderers[ deferred.__view_id ](data, helpers)
+					} else {
+						// Otherwise, the deferred is complete, so
+						// set response to the result of the rendering.
+						deferred.then(function( renderer ) {
+							response = renderer(data, helpers);
+						});
+					}
+					
 				}
 	
 				return response;
@@ -338,15 +353,18 @@ steal("can/util")
 			// The ajax request used to retrieve the template content.
 			jqXHR, 
 			// Used to generate the response.
-			response = function( text ) {
+			response = function( text, d ) {
 				// Get the renderer function.
-				var func = type.renderer(id, text),
-					d = new can.Deferred();
-				d.resolve(func)
+				var func = type.renderer(id, text);
+				d = d || new can.Deferred();
+				
 				// Cache if we are caching.
 				if ( $view.cache ) {
 					$view.cached[id] = d;
+					d.__view_id = id;
+					$view.cachedRenderers[id] = func;
 				}
+				d.resolve(func);
 				// Return the objects for the response's `dataTypes`
 				// (in this case view).
 				return d;
@@ -410,12 +428,7 @@ steal("can/util")
 					success: function( text ) {
 						// Make sure we got some text back.
 						checkText(text, url);
-						d.resolve(type.renderer(id, text))
-						// Cache if if we are caching.
-						if ( $view.cache ) {
-							$view.cached[id] = d;
-						}
-						
+						response(text, d)
 					}
 				});
 				return d;
