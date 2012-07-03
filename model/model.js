@@ -1,5 +1,5 @@
 // this file should not be stolen directly
-steal('can/observe', function() {
+steal('can/util','can/observe', function( can ) {
 	
 	// ## model.js  
 	// `can.Model`  
@@ -538,10 +538,10 @@ steal('can/observe', function() {
 
 	
 	
-	can.Observe("can.Model",{
+	can.Model = can.Observe({
 		setup : function(base){
 			can.Observe.apply(this, arguments);
-			if(this === can.Model){
+			if(!can.Model){
 				return;
 			}
 			var self = this,
@@ -1151,7 +1151,7 @@ steal('can/observe', function() {
    *
    *
    */
-	var ML = can.Observe.List('can.Model.List',{
+	var ML = can.Model.List = can.Observe.List({
 		setup : function(){
 			can.Observe.List.prototype.setup.apply(this, arguments );
 			// Send destroy events.

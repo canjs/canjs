@@ -1,5 +1,4 @@
-steal("can/util")
-.then(function( $ ) {
+steal("can/util",function( can ) {
 
 	// ## view.js
 	// `can.view`  

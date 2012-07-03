@@ -1,4 +1,4 @@
-steal('can/observe', 'can/util/string/deparam', function() {
+steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 
 	// ## route.js  
 	// `can.route`  
@@ -449,4 +449,5 @@ steal('can/observe', 'can/util/string/deparam', function() {
 	});
 	// `onready` event...
 	can.bind.call(document,"ready",can.route.ready);
+	return can.route;
 });

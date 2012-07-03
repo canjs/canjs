@@ -1,5 +1,5 @@
 // 1.69
-steal('can/construct', function() {
+steal('can/util','can/construct', function(can, Construct) {
 	// ## observe.js  
 	// `can.Observe`  
 	// _Provides the observable pattern for JavaScript Objects._  
@@ -131,10 +131,10 @@ steal('can/construct', function() {
 	/**
 	 * @add can.Observe
 	 */
-	var Observe = can.Construct('can.Observe', {
+	var Observe = can.Observe = Construct( {
 		// keep so it can be overwritten
 		setup : function(){
-			can.Construct.setup.apply(this, arguments)
+			Construct.setup.apply(this, arguments)
 		},
 		bind : bind,
 		unbind: unbind,
@@ -791,7 +791,7 @@ steal('can/construct', function() {
 	 * @param {Array} [items...] the array of items to create the list with
 	 */
 	var splice = [].splice,
-		list = Observe('can.Observe.List',
+		list = Observe(
 	/**
 	 * @prototype
 	 */
@@ -1232,4 +1232,6 @@ steal('can/construct', function() {
 	indexOf = [].indexOf || function(item){
 		return can.inArray(item, this)
 	};
+	Observe.List = list;
+	return Observe;
 });

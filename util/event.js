@@ -1,4 +1,4 @@
-steal(function(){
+steal('./can.js',function(can){
 
 	// event.js
 	// ---------

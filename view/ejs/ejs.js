@@ -1,4 +1,4 @@
-steal('can/view', 'can/util/string').then(function( $ ) {
+steal('can/util','can/view', 'can/util/string').then(function( can ) {
 
 	// ## ejs.js
 	// `can.EJS`  

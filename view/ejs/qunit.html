@@ -18,8 +18,9 @@
 		<div id="qunit-test-area"></div>
 		<script type='text/javascript' src='../../../steal/steal.js'></script>
 	    <script type='text/javascript'>
-	    	steal('can/view/ejs', 
-				'can/observe','funcunit/qunit').then('can/view/ejs/ejs_test.js')
+	    	steal('can/util','can/view/ejs', 'can/observe','funcunit/qunit', function(CAN){
+	    		window.can = CAN;
+	    	}).then('can/view/ejs/ejs_test.js')
 	    </script>
     </body>
 </html>
