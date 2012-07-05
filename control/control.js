@@ -538,7 +538,6 @@ steal('can/construct', function( $ ) {
 		 * @return {Integer} The id of the binding in this._bindings
 		 */
 		on: function( el, selector, eventName, func ) {
-			
 			if ( ! el ) {
 
 				// Adds bindings.
@@ -581,7 +580,13 @@ steal('can/construct', function( $ ) {
 				selector = el;
 				el = this.element;
 			}
-			
+
+			if(func === undefined) {
+				func = eventName;
+				eventName = selector;
+				selector = null;
+			}
+
 			if ( typeof func == 'string' ) {
 				func = can.Control._shifter(this,func);
 			}

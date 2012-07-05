@@ -150,7 +150,26 @@ if(!(isOpera && isDojo)){
 		var called = false,
 			DelegateTest= can.Control({
 				click: function() {}
-			})
+			}),
+			Tester = can.Control({
+				init : function(el, ops) {
+					this.on(window, 'click', function(ev) {
+						ok(true, 'Got window click event');
+					});
+
+					this.on(window, 'click', 'clicked');
+					this.on('click', function() {
+						ok(true, 'Directly clicked element');
+					});
+					this.on('click', 'clicked');
+				},
+
+				clicked : function() {
+					ok(true, 'Controller action delegated click triggered, too');
+				}
+			}),
+			div = document.createElement('div'),
+			rb = new Tester(div);
 		
 		can.append( can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
 		
@@ -166,6 +185,9 @@ if(!(isOpera && isDojo)){
 		can.trigger( can.$("#els a"), 'click')
 		ok(called, "delegate works")
 		can.remove( els )
+
+		can.trigger(div, 'click');
+		can.trigger(window, 'click');
 	});
 }
 
@@ -285,8 +307,8 @@ test("actions provide method names", function(){
 	});
 	
 	var item1 = {},
-		item2 = {}
-	rb = new Tester( document.createElement('div'), {item1: item1, item2: item2} );
+		item2 = {},
+		rb = new Tester( document.createElement('div'), {item1: item1, item2: item2} );
 	
 	can.trigger(item1, "foo");
 	can.trigger(item2, "bar");
