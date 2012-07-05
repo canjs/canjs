@@ -316,7 +316,13 @@ __Delegate/undelegate binding to an HTMLElement__
 /**
 @function can.trigger
 @parent can.util
-*/
+
+Trigger an event on an element or object.
+
+@param {can.$|Object} obj The object to trigger the event on
+@param {String} event The event to trigger
+@param {Array} [args] The event data
+ */
 //
 /**
 @function can.ajax
