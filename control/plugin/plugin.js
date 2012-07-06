@@ -146,15 +146,16 @@ can.Control.plugin = function(pluginname){
 		$.fn[pluginname] = function(options){
 		
 			var args = makeArray(arguments),   //if the arg is a method on this control
-			isMethod = typeof options == "string" && $.isFunction(control.prototype[options]), meth = args[0];
-			return this.each(function(){
+			isMethod = typeof options == "string" && $.isFunction(control.prototype[options]), meth = args[0],
+			returns;
+			this.each(function(){
 				//check if created
 				var plugin = can.$(this).control(control);
 				
 				if (plugin) {
 					if (isMethod) {
 						// call a method on the control with the remaining args
-						plugin[meth].apply(plugin, args.slice(1));
+						returns = plugin[meth].apply(plugin, args.slice(1));
 					}
 					else {
 						// call the plugin's update method
@@ -166,6 +167,7 @@ can.Control.plugin = function(pluginname){
 					control.newInstance.apply(control, [this].concat(args));
 				}
 			});
+			return returns !== undefined ? returns : this;
 		};
 	}
 }

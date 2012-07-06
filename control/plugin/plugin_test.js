@@ -56,4 +56,23 @@
 
 		equal(ta.control().options.testop, 'testing', 'Test option has been extended properly');
 	});
+
+	test('calling methods', function() {
+		var Control = can.Control({
+			pluginName : 'callTest'
+		}, {
+			returnTest : function() {
+				return 'Hi ' + this.name;
+			},
+
+			setName : function(name) {
+				this.name = name;
+			}
+		});
+
+		var ta = can.$("<div/>").appendTo($("#qunit-test-area"));
+		ta.callTest();
+		ok(ta.callTest('setName', 'Tester') instanceof jQuery, 'Got jQuery element as return value');
+		equal(ta.callTest('returnTest'), 'Hi Tester', 'Got correct return value');
+	});
 })();
