@@ -2228,6 +2228,12 @@ A contacts manager application built to accompany the 3 part Nettuts+ __"Diving 
 
 [View the source on github](https://github.com/ccummings/canjs-contacts-tutorial)
 
+### iskon.Jumbo
+
+Web application that allows you to upload and host your files in the cloud. Complete web client was built with CanJS. You can try it out at [jumbo.iskon.hr](https://jumbo.iskon.hr)
+
+![iskon.Jumbo App](images/examples/iskon_jumbo.jpg "iskon.Jumbo App")
+
 ## Get Help
 
 There are several places you can go to ask questions or get help debugging problems.
