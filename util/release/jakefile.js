@@ -28,7 +28,7 @@ namespace('deploy', function () {
 		console.log('Cloning CanUI repository');
 		exec('git', ['clone', 'git@github.com:jupiterjs/canjs.git'], function () {
 			exec('git', ['checkout', 'gh-pages'], function() {
-				jake.cpR(path.join(rootPath + 'can/dist/edge/'), './canjs/release/edge/');
+				jake.cpR(path.join(rootPath + 'can/dist/edge/'), './canjs/release/');
 				exec('git', ['add', '.', '--all'], function() {
 					exec('git', ['commit', '-m', '"Updating edge"'], function() {
 						exec('git', ['push', 'origin', 'gh-pages'], function () {
