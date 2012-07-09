@@ -1,1 +1,0 @@
-(function(can, window, undefined){})(can = {}, this );
