@@ -3590,7 +3590,7 @@ can.dispatch = function(event){
 
 			//!steal-remove-start
 			if ( ! raw.length ) {
-				
+				steal.dev && 
 			}
 			//!steal-remove-end
 
@@ -3690,6 +3690,7 @@ can.dispatch = function(event){
 			can.trigger(this,funcName);
 			can.trigger(this,"change",funcName)
 			//!steal-remove-start
+			steal.dev && ;
 			//!steal-remove-end
 
 			// Call event on the instance's Class
