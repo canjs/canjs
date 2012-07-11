@@ -14,7 +14,7 @@ steal('can/route', function() {
             e.preventDefault();
         }
         else {  
-            e.preventDefault();
+           // Link should be followed normally as a route was not matched
         }
     });
 
