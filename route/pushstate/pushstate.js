@@ -39,9 +39,12 @@ steal('can/route', function() {
         // Rest of code for popstate handling goes here...
     };
 
-    // Can we do this so that can.route doesn't listen to hashchange???
-    can.unbind.call(window,'hashchange', can.route.setState);
+    if(can.route.usePushState) {
 
-    // Bind to popstate event
-    can.bind.call(window, 'popstate', doPopState);
+        // Can we do this so that can.route doesn't listen to hashchange???
+        can.unbind.call(window,'hashchange', can.route.setState);
+
+        // Bind to popstate event
+        can.bind.call(window, 'popstate', doPopState);
+    }
 });
