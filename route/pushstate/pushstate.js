@@ -1,5 +1,6 @@
 steal('can/route', function() {
 
+    // I realize this a jQuery-based solution and this will need to use can.bind or something similar
     $(document).on('click', 'a', function(e) {
 
         var curParams,
