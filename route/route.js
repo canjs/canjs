@@ -51,7 +51,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		onready = !0,
 		location = window.location,
 		each = can.each,
-		extend = can.extend;
+		extend = can.extend
 
 
 	can.route = function( url, defaults ) {
@@ -87,6 +87,9 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 	};
 
 	extend(can.route, {
+
+		usePushState: !1,
+
 		/**
 		 * @function can.route.param
 		 * @parent can.route
@@ -215,6 +218,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			});
             // If a route was matched.
 			if ( route.length > -1 ) { 
+
 				var // Since `RegExp` backreferences are used in `route.test` (parens)
                     // the parts will contain the full matched string and each variable (back-referenced) value.
                     parts = url.match(route.test),
@@ -412,13 +416,12 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
         // setState is called typically by hashchange which fires asynchronously
         // So it's possible that someone started changing the data before the 
         // hashchange event fired.  For this reason, it will not set the route data
-        // if the data is changing and the hash already matches the hash that was set.
+        // if the data is changing or the hash already matches the hash that was set.
         setState = function() {
         	var hash = location.href.split(/#!?/)[1] || ""
 			curParams = can.route.deparam( hash );
 			
-			
-			// if the hash data is currently changing, and
+			// if the hash data is currently changing, or
 			// the hash is what we set it to anyway, do NOT change the hash
 			if(!changingData || hash !== lastHash){
 				can.route.attr(curParams, true);
@@ -444,7 +447,14 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			// indicate that the hash is set to look like the data
 			changingData = 0;
 			var serialized = can.route.data.serialize();
-			location.hash = "#!" + (lastHash = can.route.param(serialized, true))
+
+			if(can.route.usePushState) {
+				console.log('link: ' + can.route.param(serialized, true));
+				history.pushState(null, null, can.route.param(serialized, true));
+			}
+			else {
+				location.hash = "#!" + (lastHash = can.route.param(serialized, true))
+			}
 		}, 1);
 	});
 	// `onready` event...
