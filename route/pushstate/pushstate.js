@@ -5,53 +5,43 @@ steal('can/route', function() {
         var curParams,
             href = $(this).attr("href");
 
-        console.log('href: ' + href);
-        console.log('this.href: ' + this.href);
-        //console.log('fragment: ' + can.route.getFragment());
-        console.log('pathname: ' + location.pathname);
-        console.log('path: ' + location.path);
+        if(can.route.updateWith(href)) {
 
-        curParams = can.route.deparam(href);
-        console.dir(curParams);
+            // Don't think this is needed here as it will be handled inside the change event handler for can.route
+            //history.pushState(null, null, href);
 
-        if(!can.route.updateWith()) {
-            console.log('yes');
-
-            history.pushState(null, null, href);
             e.preventDefault();
         }
-        else {
-            console.log('no');
+        else {  
             e.preventDefault();
         }
-        console.log('pathname: ' + location.pathname);
     });
 
     can.extend(can.route, {
 
+        // Can this be used as the hook so can.route knows we are using pushState???
+        usePushState: !!(window.history && window.history.pushState),
+
         updateWith: function(href) {
-            return false;
-        },
+            var curParams = can.route.deparam(href);
 
-        getFragment: function(fragment, forcePushState) {
-
-            var trailingSlash = /\/$/;
-            var routeStripper = /^[#\/]/;
-
-            if (fragment == null) {
-                if (this._hasPushState || !this._wantsHashChange || forcePushState) {
-                    fragment = this.location.pathname;
-                    var root = this.options.root.replace(trailingSlash, '');
-                    if (!fragment.indexOf(root)){
-                        fragment = fragment.substr(root.length);
-                    }
-                }
-                else {
-                    fragment = this.getHash();
-                }
+            if(curParams.route) {
+                can.route.attr(curParams, true);
+                return true;
             }
-            return decodeURIComponent(fragment.replace(routeStripper, ''));
+            return false;
         }
     });
 
+    var doPopState = function() {
+        console.log("POPSTATE: pathname: "+location.pathname);
+
+        // Rest of code for popstate handling goes here...
+    };
+
+    // Can we do this so that can.route doesn't listen to hashchange???
+    can.unbind.call(window,'hashchange', can.route.setState);
+
+    // Bind to popstate event
+    can.bind.call(window, 'popstate', doPopState);
 });
