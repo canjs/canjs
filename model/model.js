@@ -699,7 +699,7 @@ steal('can/observe', function() {
 
 			//!steal-remove-start
 			if ( ! raw.length ) {
-				steal.dev && steal.dev.warn("model.js models has no data.")
+				steal.dev.warn("model.js models has no data.")
 			}
 			//!steal-remove-end
 
@@ -1017,16 +1017,14 @@ steal('can/observe', function() {
 		}
 	});
 	
-
-	
-				
-	can.each({makeFindAll : "models", makeFindOne: "model"}, function(method, name){
-		can.Model[name] = function(oldFind){
-			return function(params, success, error){
-				return pipe( oldFind.call( this, params ),
-							this, 
-							method ).then(success,error)
-			}
+	can.each({
+		makeFindAll : "models",
+		makeFindOne: "model"
+	}, function( method, name ) {
+		can.Model[name] = function( oldFind ) {
+			return function( params, success, error ) {
+				return pipe( oldFind.call( this, params ), this, method ).then( success, error );
+			};
 		};
 	});
 				
@@ -1066,7 +1064,7 @@ steal('can/observe', function() {
 			can.trigger(this,funcName);
 			can.trigger(this,"change",funcName)
 			//!steal-remove-start
-			steal.dev && steal.dev.log("Model.js - "+ constructor.shortName+" "+ funcName);
+			steal.dev.log("Model.js - "+ constructor.shortName+" "+ funcName);
 			//!steal-remove-end
 
 			// Call event on the instance's Class
