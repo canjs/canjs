@@ -3588,11 +3588,7 @@ can.dispatch = function(event){
 				instancesRawData.data),
 				i = 0;
 
-			//!steal-remove-start
-			if ( ! raw.length ) {
-				steal.dev && 
-			}
-			//!steal-remove-end
+			
 
 			can.each(raw, function( rawPart ) {
 				res.push( self.model( rawPart ));
@@ -3662,16 +3658,14 @@ can.dispatch = function(event){
 		}
 	});
 	
-
-	
-				
-	can.each({makeFindAll : "models", makeFindOne: "model"}, function(method, name){
-		can.Model[name] = function(oldFind){
-			return function(params, success, error){
-				return pipe( oldFind.call( this, params ),
-							this, 
-							method ).then(success,error)
-			}
+	can.each({
+		makeFindAll : "models",
+		makeFindOne: "model"
+	}, function( method, name ) {
+		can.Model[name] = function( oldFind ) {
+			return function( params, success, error ) {
+				return pipe( oldFind.call( this, params ), this, method ).then( success, error );
+			};
 		};
 	});
 				
@@ -3689,9 +3683,7 @@ can.dispatch = function(event){
 			// Call event on the instance
 			can.trigger(this,funcName);
 			can.trigger(this,"change",funcName)
-			//!steal-remove-start
-			steal.dev && ;
-			//!steal-remove-end
+			
 
 			// Call event on the instance's Class
 			can.trigger(constructor,funcName, this);
