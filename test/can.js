@@ -627,11 +627,11 @@
 					_fullName = can.underscore(fullName.replace(/\./g, "_")),
 					_shortName = can.underscore(shortName);
 
-				//@steal-remove-start
+				//!steal-remove-start
 				if(current[shortName]){
 					
 				}
-				//@steal-remove-end
+				//!steal-remove-end
 				
 				current[shortName] = Constructor;
 			}

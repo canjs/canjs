@@ -50,9 +50,9 @@ steal('can/util/object', function () {
 
 				delete settings.fixture;
 
-				//@steal-remove-start
+				//!steal-remove-start
 				log("looking for fixture in " + url);
-				//@steal-remove-end
+				//!steal-remove-end
 
 				settings.url = url;
 				settings.data = null;
@@ -64,9 +64,9 @@ steal('can/util/object', function () {
 				}
 			}
 			else {
-				//@steal-remove-start
+				//!steal-remove-start
 				log("using a dynamic fixture for " + settings.type + " " + settings.url);
-				//@steal-remove-end
+				//!steal-remove-end
 
 				//it's a function ... add the fixture datatype so our fixture transport handles it
 				// TODO: make everything go here for timing and other fun stuff

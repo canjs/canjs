@@ -325,9 +325,9 @@ steal("can/util")
 	// Makes sure there's a template, if not, have `steal` provide a warning.
 	var	checkText = function( text, url ) {
 			if ( ! text.length ) {
-				//@steal-remove-start
+				//!steal-remove-start
 				steal.dev.log("There is no template or an empty template at " + url);
-				//@steal-remove-end
+				//!steal-remove-end
 				throw "can.view: No template or empty template:" + url;
 			}
 		},
