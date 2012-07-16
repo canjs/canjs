@@ -1,1 +1,1 @@
-(function(can, window, undefined){})(can = {}, this );
+(function( can, window, undefined ){}( can = {}, this ));

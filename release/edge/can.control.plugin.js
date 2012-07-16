@@ -1,4 +1,4 @@
-(function(can, window, undefined){
+(function( can, window, undefined ){
 	
 
 
@@ -244,4 +244,4 @@ can.Control.prototype.update = function( options ) {
 		this.on();
 };
 
-})(this.can, this );
+}( this.can, this ));

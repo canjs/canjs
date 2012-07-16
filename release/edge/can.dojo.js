@@ -1,4 +1,4 @@
-(function(can, window, undefined){
+(function( can, window, undefined ){
 define("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){
 
 	// Register as an AMD module if supported, otherwise attach to the window
@@ -3708,4 +3708,4 @@ can.dispatch = function(event){
 
 return can;
 });
-})(can = {}, this );
+}( can = {}, this ));

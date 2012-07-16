@@ -1,4 +1,4 @@
-(function(can, window, undefined){
+(function( can, window, undefined ){
 YUI().add("can", function(Y) {
 can.Y = Y;
 
@@ -3560,4 +3560,4 @@ can.dispatch = function(event){
 requires: ["node", "io-base", "querystring", "event-focus", "array-extras"],
  optional: ["selector-css2", "selector-css3"]
 });
-})(can = {}, this );
+}( can = {}, this ));
