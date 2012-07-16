@@ -103,102 +103,92 @@ steal('steal/build/pluginify', function() {
 	steal.File("can/dist").mkdirs();
 	steal.File("can/dist/edge").mkdirs();
 
-	var lib = 'zepto';
-	steal.build.pluginify("can/util/make/" + lib + ".js", extend({
-		out : "can/dist/edge/can." + lib + ".js",
-		global : "can = {}",
-		namespace : "can",
-		onefunc : true,
-		compress: false,
-		skipCallbacks: true
-	}, libs[lib] ));
-
 	// Build libraries
-//	each( libs, function( options, lib ) {
-//		each( types, function( compress, type ) {
-//
-//			var code;
-//
-//			steal.build.pluginify("can/util/make/" + lib + ".js", extend({
-//				out : "can/dist/edge/can." + lib + type + ".js",
-//				global : "can = {}",
-//				namespace : "can",
-//				onefunc : true,
-//				compress: compress,
-//				skipCallbacks: true
-//			}, options ));
-//
-//			// Strip multiline comments from uncompressed files
-//			if ( ! compress ) {
-//
-//				// Put new index.html into production mode
-//				code = readFile( "can/dist/edge/can." + lib + type + ".js" );
-//
-//				// Remove multiline comments
-//				code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*\n/gim, "");
-//
-//				// Remove double semicolons from steal pluginify
-//				code = code.replace( /;[\s]*;/gim, ";");
-//				code = code.replace( /(\/\/.*)\n[\s]*;/gi, "$1");
-//
-//				// Only single new lines
-//				code = code.replace( /(\n){3,}/gim, "\n\n");
-//
-//				// Save the file.
-//				steal.File( "can/dist/edge/can." + lib + type + ".js" ).save( code );
-//			}
-//
-//			// Replace version
-//			code = readFile( "can/dist/edge/can." + lib + type + ".js" );
-//			code = code.replace( /\#\{VERSION\}/gim, version );
-//			steal.File( "can/dist/edge/can." + lib + type + ".js" ).save( code );
-//		});
-//	});
+	each( libs, function( options, lib ) {
+		each( types, function( compress, type ) {
+
+			var code;
+
+			steal.build.pluginify("can/util/make/" + lib + ".js", extend({
+				out : "can/dist/edge/can." + lib + type + ".js",
+				global : "can = {}",
+				namespace : "can",
+				onefunc : true,
+				compress: compress,
+				skipCallbacks: true
+			}, options ));
+
+			// Strip multiline comments from uncompressed files
+			if ( ! compress ) {
+
+				// Put new index.html into production mode
+				code = readFile( "can/dist/edge/can." + lib + type + ".js" );
+
+				// Remove multiline comments
+				code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*\n/gim, "");
+
+				// Remove double semicolons from steal pluginify
+				code = code.replace( /;[\s]*;/gim, ";");
+				code = code.replace( /(\/\/.*)\n[\s]*;/gi, "$1");
+
+				// Only single new lines
+				code = code.replace( /(\n){3,}/gim, "\n\n");
+
+				// Save the file.
+				steal.File( "can/dist/edge/can." + lib + type + ".js" ).save( code );
+			}
+
+			// Replace version
+			code = readFile( "can/dist/edge/can." + lib + type + ".js" );
+			code = code.replace( /\#\{VERSION\}/gim, version );
+			steal.File( "can/dist/edge/can." + lib + type + ".js" ).save( code );
+		});
+	});
 	
-//
-//	// Build standalone plugins
-//	STEALDOJO = STEALMOO = STEALYUI = STEALZEPTO = false;
-//	STEALJQUERY = true;
-//
-//	each( plugins.standAlone, function( output, input ) {
-//
-//		var code;
-//
-//		steal.build.pluginify("can/" + input + ".js", {
-//			out: "can/dist/edge/can." + output + ".js",
-//			global: "this.can",
-//			onefunc: true,
-//			compress: false,
-//			skipCallbacks: true,
-//			namespace : "can",
-//			standAlone: true
-//		});
-//
-//	});
-//
-//	// Build can.fixture and can.observe.backup seperately
-//	// They need can/util/object, so we can't use the standAlone option
-//	each( plugins.can_util_object, function( output, input ) {
-//
-//		steal.build.pluginify("can/" + input + ".js", {
-//			out: "can/dist/edge/can." + output + ".js",
-//			global: "this.can",
-//			onefunc: true,
-//			exclude: [
-//				'can/util/jquery/jquery.1.7.1.js',
-//				'can/util/preamble.js',
-//				'can/util/jquery/jquery.js',
-//				'can/util/array/each.js',
-//				'can/util/string/string.js',
-//				'can/construct/construct.js',
-//				'can/observe/observe.js'
-//			],
-//			compress: false,
-//			skipCallbacks: true,
-//			namespace: "can",
-//			standAlone: false
-//		});
-//
-//
-//	});
+
+	// Build standalone plugins
+	STEALDOJO = STEALMOO = STEALYUI = STEALZEPTO = false;
+	STEALJQUERY = true;
+
+	each( plugins.standAlone, function( output, input ) {
+
+		var code;
+
+		steal.build.pluginify("can/" + input + ".js", {
+			out: "can/dist/edge/can." + output + ".js",
+			global: "this.can",
+			onefunc: true,
+			compress: false,
+			skipCallbacks: true,
+			namespace : "can",
+			standAlone: true
+		});
+
+	});
+
+	// Build can.fixture and can.observe.backup seperately
+	// They need can/util/object, so we can't use the standAlone option
+	each( plugins.can_util_object, function( output, input ) {
+
+		steal.build.pluginify("can/" + input + ".js", {
+			out: "can/dist/edge/can." + output + ".js",
+			global: "this.can",
+			onefunc: true,
+			exclude: [
+				'can/util/jquery/jquery.1.7.1.js',
+				'can/util/preamble.js',
+				'can/util/jquery/jquery.js',
+				'can/util/array/each.js',
+				'can/util/string/string.js',
+				'can/construct/construct.js',
+				'can/observe/observe.js'
+			],
+			compress: false,
+			skipCallbacks: true,
+			namespace: "can",
+			standAlone: false
+		});
+
+
+	});
 });
