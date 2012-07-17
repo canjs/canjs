@@ -804,7 +804,7 @@
 			if (val instanceof $Observe){
 				// we have an observe already
 				// make sure it is not listening to this already
-				unhookup([val], parent._namespace)
+				unhookup([val], parent._cid)
 			} else if ( $.isArray(val) ) {
 				val = new $Observe.List(val)
 			} else {
@@ -817,7 +817,7 @@
 			//
 			//
 			//listen to all changes and trigger upwards
-			val.bind("change" + parent._namespace, function( ev, attr ) {
+			val.bind("change" + parent._cid, function( ev, attr ) {
 				// trigger the type on this ...
 				var args = $.makeArray(arguments),
 					ev = args.shift();
@@ -1058,7 +1058,7 @@
 			// _data is where we keep the properties
 			this._data = {};
 			// the namespace this object uses to listen to events
-			this._namespace = ".observe" + (++id);
+			this._cid = ".observe" + (++id);
 			// sets all attrs
 			this._init = 1;
 			this.attr(obj);
@@ -1243,7 +1243,7 @@
 				trigger(this, "change", [prop, changeType, value, current]);
 				trigger(this, prop, value, current);
 				// if we can stop listening to our old value, do it
-				current && unhookup([current], this._namespace);
+				current && unhookup([current], this._cid);
 			}
 
 		},
@@ -1418,7 +1418,7 @@
 	{
 		init: function( instances, options ) {
 			this.length = 0;
-			this._namespace = ".list" + (++id);
+			this._cid = ".list" + (++id);
 			this._init = 1;
 			this.bind('change',$.proxy(this._changes,this));
 			this.push.apply(this, $.makeArray(instances || []));
@@ -1583,7 +1583,7 @@
 			var removed = splice.apply(this, args);
 			if ( count > 0 ) {
 				trigger(this, "change", [""+index, "remove", undefined, removed]);
-				unhookup(removed, this._namespace);
+				unhookup(removed, this._cid);
 			}
 			if ( args.length > 2 ) {
 				trigger(this, "change", [""+index, "add", args.slice(2), removed]);
@@ -1778,7 +1778,7 @@
 			trigger(this, "change", [""+len, "remove", undefined, [res]])
 
 			if ( res && res.unbind ) {
-				res.unbind("change" + this._namespace)
+				res.unbind("change" + this._cid)
 			}
 			return res;
 		}

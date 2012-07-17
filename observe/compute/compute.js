@@ -86,12 +86,12 @@ steal('can/util', function(){
 				// go through every attribute read by this observe
 				can.each(newObserveSet, function(ob){
 					// if the observe/attribute pair is being observed
-					if(observing[ob.obj._namespace+"|"+ob.attr]){
+					if(observing[ob.obj._cid+"|"+ob.attr]){
 						// mark at as observed
-						observing[ob.obj._namespace+"|"+ob.attr].matched = matched;
+						observing[ob.obj._cid+"|"+ob.attr].matched = matched;
 					} else {
 						// otherwise, set the observe/attribute on oldObserved, marking it as being observed
-						observing[ob.obj._namespace+"|"+ob.attr] = {
+						observing[ob.obj._cid+"|"+ob.attr] = {
 							matched: matched,
 							observe: ob
 						};
