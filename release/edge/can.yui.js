@@ -706,12 +706,12 @@ can.dispatch = function(event){
 				// go through every attribute read by this observe
 				can.each(newObserveSet, function(ob){
 					// if the observe/attribute pair is being observed
-					if(observing[ob.obj._namespace+"|"+ob.attr]){
+					if(observing[ob.obj._cid+"|"+ob.attr]){
 						// mark at as observed
-						observing[ob.obj._namespace+"|"+ob.attr].matched = matched;
+						observing[ob.obj._cid+"|"+ob.attr].matched = matched;
 					} else {
 						// otherwise, set the observe/attribute on oldObserved, marking it as being observed
-						observing[ob.obj._namespace+"|"+ob.attr] = {
+						observing[ob.obj._cid+"|"+ob.attr] = {
 							matched: matched,
 							observe: ob
 						};
@@ -1521,7 +1521,7 @@ can.dispatch = function(event){
 			if (val instanceof Observe){
 				// We have an `observe` already...
 				// Make sure it is not listening to this already
-				unhookup([val], parent._namespace);
+				unhookup([val], parent._cid);
 			} else if ( can.isArray(val) ) {
 				val = new Observe.List(val);
 			} else {
@@ -1529,7 +1529,7 @@ can.dispatch = function(event){
 			}
 			
 			// Listen to all changes and `batchTrigger` upwards.
-			val.bind("change" + parent._namespace, function( ev, attr ) {
+			val.bind("change" + parent._cid, function( ev, attr ) {
 				// `batchTrigger` the type on this...
 				var args = can.makeArray(arguments),
 					ev = args.shift();
@@ -1539,10 +1539,10 @@ can.dispatch = function(event){
 				// track objects dispatched on this observe		
 				ev.triggeredNS = ev.triggeredNS || {};
 				// if it has already been dispatched exit
-				if (ev.triggeredNS[parent._namespace]) {
+				if (ev.triggeredNS[parent._cid]) {
 					return;
 				}
-				ev.triggeredNS[parent._namespace] = true;
+				ev.triggeredNS[parent._cid] = true;
 						
 				can.trigger(parent, ev, args);
 				can.trigger(parent,args[0],args);
@@ -1637,12 +1637,13 @@ can.dispatch = function(event){
 			// `_data` is where we keep the properties.
 			this._data = {};
 			// The namespace this `object` uses to listen to events.
-			this._namespace = ".observe" + (++observeId);
+			this._cid = ".observe" + (++observeId);
 			// Sets all `attrs`.
 			this._init = 1;
 			this.attr(obj);
 			delete this._init;
 		},
+		
 				attr: function( attr, val ) {
 			// This is super obfuscated for space -- basically, we're checking
 			// if the type of the attribute is not a `number` or a `string`.
@@ -1747,7 +1748,7 @@ can.dispatch = function(event){
 				batchTrigger(this, "change", [prop, changeType, value, current]);
 				batchTrigger(this, prop, [value, current]);
 				// If we can stop listening to our old value, do it.
-				current && unhookup([current], this._namespace);
+				current && unhookup([current], this._cid);
 			}
 
 		},
@@ -1810,7 +1811,7 @@ can.dispatch = function(event){
 		{
 		setup: function( instances, options ) {
 			this.length = 0;
-			this._namespace = ".observe" + (++observeId);
+			this._cid = ".observe" + (++observeId);
 			this._init = 1;
 			this.bind('change',can.proxy(this._changes,this));
 			this.push.apply(this, can.makeArray(instances || []));
@@ -1863,7 +1864,7 @@ can.dispatch = function(event){
 			var removed = splice.apply(this, args);
 			if ( howMany > 0 ) {
 				batchTrigger(this, "change", [""+index, "remove", undefined, removed]);
-				unhookup(removed, this._namespace);
+				unhookup(removed, this._cid);
 			}
 			if ( args.length > 2 ) {
 				batchTrigger(this, "change", [""+index, "add", args.slice(2), removed]);
@@ -1969,7 +1970,7 @@ can.dispatch = function(event){
 			batchTrigger(this, "change", [""+len, "remove", undefined, [res]])
 
 			if ( res && res.unbind ) {
-				res.unbind("change" + this._namespace)
+				res.unbind("change" + this._cid)
 			}
 			return res;
 		}
