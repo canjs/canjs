@@ -82,6 +82,10 @@ section details the minor differences among use with other libraries.
 The [Examples](#examples) section has other awesome examples of how you
 can put CanJS to good use. There is also an [online test suite](http://ci.javascriptmvc.com/jobs/can/test/test.html).
 
+## Download builder
+
+{% include builder.html %}
+
 ## can.Construct `can.Construct( [classProperties,] [prototypeProperties] )`
 
 Constructor functions made with [can.Construct](http://donejs.com/docs.html#!can.Construct) are used to create

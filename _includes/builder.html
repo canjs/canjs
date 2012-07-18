@@ -1,0 +1,120 @@
+<form id="builder" action="http://bitbuilder.herokuapp.com/donejs">
+  <h4>CanJS</h4>
+
+  <label>
+    <input type="checkbox" value="can/construct" name="plugins"/>
+    <a href="#can_construct">Construct</a> - Create constructor functions
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/observe" name="plugins"/>
+    <a href="#can_observe">Observe</a> - The observable pattern for JavaScript objects
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/observe" name="plugins"/>
+    <a href="#can_model">Model</a> - Observes connected to a RESTful interface
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/view" name="plugins"/>
+    <a href="#can_view">view</a> - JavaScript view templating
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/ejs" name="plugins"/>
+    <a href="#can_ejs">EJS</a> - Embedded JavaScript templates
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/control" name="plugins"/>
+    <a href="#can_control">Control</a> - Memory-leak free, rapidly performing, stateful controls
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/route" name="plugins"/>
+    <a href="#can_route">route</a> - Window hash routing
+  </label>
+
+  <h4>Plugins</h4>
+
+  <label>
+    <input type="checkbox" value="can/construct/proxy" name="plugins"/>
+    <a href="#plugins-can_construct_proxy">can.Construct.proxy</a> - Proxy construct methods
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/construct/super" name="plugins"/>
+    <a href="#plugins-can_construct_super">can.Construct.super</a> - Call super methods
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/observe/delegate" name="plugins"/>
+    <a href="#plugins-can_observe_delegate">can.Observe.delegate</a> - Listen to Observe attributes
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/observe/setter" name="plugins"/>
+    <a href="#plugins-can_observe_setter">can.Observe.setter</a> - Use setter methods on Observes
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/observe/attributes" name="plugins"/>
+    <a href="#plugins-can_observe_attributes">can.Observe.attributes</a> - Define Observe attributes
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/observe/validations" name="plugins"/>
+    <a href="#plugins-can_observe_validations">can.Observe.validations</a> - Validate attributes
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/observe/backup" name="plugins"/>
+    <a href="#plugins-can_observe_backup">can.Observe.backup</a> - Backup and restore an Observe's state
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/control/plugin" name="plugins"/>
+    <a href="#plugins-can_control_plugin">can.Control.plugin</a> - Registers a jQuery plugin function for Controls
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/control/view" name="plugins"/>
+    <a href="#plugins-can_control_view">can.Control.view</a> - Render views based on Control name and action
+  </label>
+
+  <label>
+    <input type="checkbox" value="can/view/modifiers" name="plugins"/>
+    <a href="#plugins-view_modifiers">View modifiers</a> - Use jQuery modifiers to render views
+  </label>
+
+  <h4>Choose your library</h4>
+
+  <label>
+    <input type="radio" value="STEALJQUERY" name="library" checked="checked" />
+    <a href="#">jQuery</a>
+  </label>
+
+  <label>
+    <input type="radio" value="STEALZEPTO" name="library"/>
+    <a href="#">Zepto</a>
+  </label>
+
+  <label>
+    <input type="radio" value="STEALDOJO" name="library"/>
+    <a href="#">Dojo</a>
+  </label>
+
+  <label>
+    <input type="radio" value="STEALMOO" name="library"/>
+    <a href="#">Mootools</a>
+  </label>
+
+  <label>
+    <input type="radio" value="STEALYUI" name="library"/>
+    <a href="#">YUI</a>
+  </label>
+
+  <button class="button disabled" disabled="disabled" type="submit">Download</button>
+  <p class="loading" style="display: none;"><img src="images/loader.gif" alt="loader" /> Please wait while we generate your download</p>
+</form>

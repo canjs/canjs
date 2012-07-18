@@ -379,3 +379,43 @@ html.lt-ie7 .github-fork img {
 #content ul.checkmarks li .oneliner {
 	line-height: 30px;
 }
+
+#builder input {
+	width: 13px;
+	height: 13px;
+	padding: 0;
+	margin:0;
+	vertical-align: middle;
+	position: relative;
+	top: -1px;
+	*overflow: hidden;
+}
+
+#builder label {
+	display: block;
+	padding-left: 15px;
+	text-indent: -15px;
+}
+
+#builder .loading, #builder .button {
+	margin: 10px 0;
+}
+
+#builder .loading {
+	color: #B5B6B5;
+}
+
+#builder .button {
+	border: none;
+	line-height: 12px;
+	cursor: pointer;
+}
+
+#builder .button.disabled {
+	background-color: #BBC2C7;
+	cursor: auto;
+}
+
+#builder .button.disabled:hover {
+	background-color: #BBC2C7;
+}

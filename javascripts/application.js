@@ -321,7 +321,32 @@ can.Control('Tooltip', {}, {
 
 new Tooltip($('.checkmarks'));
 
+can.Control('Builder', {
+	'input[type="checkbox"] click' : function() {
+		var button = this.element.find('button');
+		if(this.element.find('input[type="checkbox"]:checked').length !== 0) {
+			button.removeAttr('disabled').removeClass('disabled');
+		} else {
+			button.attr('disabled', true).addClass('disabled');
+		}
+	},
 
+	'[type="submit"] click' : function(el, ev) {
+		el.hide();
+		var url = this.element.attr('action') + '?' + this.element.serialize(),
+			iframe = $('<iframe></iframe>').attr('src', url).hide().appendTo(this.element);
+		loader = this.element.find('.loading').show();
+		iframe.on('load', function() {
+			setTimeout(function() {
+				el.show();
+				loader.hide();
+			}, 1000);
+		})
+		ev.preventDefault();
+	}
+});
+
+new Builder('#builder');
 
 // google analytics
 var _gaq = _gaq || [];
