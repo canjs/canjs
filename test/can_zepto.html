@@ -17,7 +17,14 @@
 		<script type='text/javascript'>
 			steal(function(){
 				TESTINGLIBRARY = "Zepto"
-				steal.map("can/util/util.js" , "can/util/zepto/zepto.js")
+				steal.config({
+					map: {
+						"*": {	
+							'jquery/jquery.js' : "jquery",
+							"can/util/util.js": "can/util/zepto/zepto.js"
+						}
+					}
+				});
 			},'can/test/can_test.js')
 		</script>
     </body>
