@@ -643,7 +643,7 @@ steal('can/construct', function() {
 					remove && self.removeAttr(prop);
 					return;
 				}
-				if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {
+				if ( canMakeObserve(curVal) && canMakeObserve(newVal) && curVal.attr ) {
 					curVal.attr(newVal, remove)
 				} else if ( curVal != newVal ) {
 					self._set(prop, newVal)
@@ -1265,7 +1265,8 @@ steal('can/construct', function() {
 		 * @return {can.Observe.List} The sliced list
 		 */
 		slice : function() {
-			return new this.constructor(Array.prototype.slice.apply(this, arguments));
+			var temp = Array.prototype.slice.apply(this, arguments);
+			return new this.constructor( temp );
 		},
 
 		/**
