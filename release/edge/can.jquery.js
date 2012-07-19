@@ -1255,7 +1255,7 @@
 					remove && self.removeAttr(prop);
 					return;
 				}
-				if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {
+				if ( canMakeObserve(curVal) && canMakeObserve(newVal) && curVal.attr ) {
 					curVal.attr(newVal, remove)
 				} else if ( curVal != newVal ) {
 					self._set(prop, newVal)
@@ -1454,7 +1454,8 @@
 				join : [].join,
 
 				slice : function() {
-			return new this.constructor(Array.prototype.slice.apply(this, arguments));
+			var temp = Array.prototype.slice.apply(this, arguments);
+			return new this.constructor( temp );
 		},
 
 				concat : function() {
