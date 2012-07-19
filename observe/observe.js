@@ -1067,7 +1067,7 @@ steal('can/construct', function() {
 			}
 			if ( props.length > this.length ) {
 				// Add in the remaining props.
-				this.push(props.slice(this.length))
+				this.push.apply( this, props.slice( this.length ) );
 			} else if ( props.length < this.length && remove ) {
 				this.splice(props.length)
 			}

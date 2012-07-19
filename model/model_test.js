@@ -726,3 +726,19 @@ test("inheriting unique model names", function(){
 	var Bar = can.Model({});
 	ok(Foo.fullName != Bar.fullName, "fullNames not the same")
 })
+
+
+test("model list attr", function() {
+
+	can.Model("Person",{},{});
+
+	var list1 = new Person.List(),
+		list2 = new Person.List([ new Person({ id : 1 }), new Person({ id : 2 }) ]);
+
+	equal( list1.length, 0, "Initial empty list has length of 0")
+	list1.attr( list2 );
+	equal( list1.length, 2, "Merging using attr yields length of 2")
+	console.log( list1 )
+
+});
+
