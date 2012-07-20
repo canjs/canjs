@@ -1934,7 +1934,7 @@ can.dispatch = function(event){
 					remove && self.removeAttr(prop);
 					return;
 				}
-				if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {
+				if ( canMakeObserve(curVal) && canMakeObserve(newVal) && curVal.attr ) {
 					curVal.attr(newVal, remove)
 				} else if ( curVal != newVal ) {
 					self._set(prop, newVal)
@@ -2046,7 +2046,7 @@ can.dispatch = function(event){
 			}
 			if ( props.length > this.length ) {
 				// Add in the remaining props.
-				this.push(props.slice(this.length))
+				this.push.apply( this, props.slice( this.length ) );
 			} else if ( props.length < this.length && remove ) {
 				this.splice(props.length)
 			}
@@ -2133,7 +2133,8 @@ can.dispatch = function(event){
 				join : [].join,
 
 				slice : function() {
-			return new this.constructor(Array.prototype.slice.apply(this, arguments));
+			var temp = Array.prototype.slice.apply(this, arguments);
+			return new this.constructor( temp );
 		},
 
 				concat : function() {
