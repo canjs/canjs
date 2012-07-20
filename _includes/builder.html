@@ -1,6 +1,8 @@
 <form id="builder" action="http://builder.bitovi.com/donejs">
   <h4>CanJS</h4>
 
+  <input type="hidden" name="filename" value="can.custom.js" />
+
   <label>
     <input type="checkbox" value="can/construct" name="plugins"/>
     <a href="#can_construct">Construct</a> - Create constructor functions
@@ -116,7 +118,7 @@
   </label>
 
   <input type="hidden" name="options" value="[{&quot;option&quot;:&quot;skipCallbacks&quot;},{&quot;option&quot;:&quot;onefunc&quot;},{&quot;option&quot;:&quot;namespace&quot;,&quot;value&quot;:&quot;can&quot;},{&quot;option&quot;:&quot;global&quot;,&quot;value&quot;:&quot;can = {}&quot;}]" />
-  
+
   <button class="button disabled" disabled="disabled" type="submit">Download</button>
   <p class="loading" style="display: none;"><img src="images/loader.gif" alt="loader" /> Please wait while we generate your download</p>
 </form>
