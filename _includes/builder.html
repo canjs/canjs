@@ -1,4 +1,4 @@
-<form id="builder" action="http://bitbuilder.herokuapp.com/donejs">
+<form id="builder" action="http://builder.bitovi.com/donejs">
   <h4>CanJS</h4>
 
   <label>
@@ -91,30 +91,32 @@
   <h4>Choose your library</h4>
 
   <label>
-    <input type="radio" value="STEALJQUERY" name="library" checked="checked" />
+    <input type="radio" value="jquery" name="lib" checked="checked" />
     <a href="#">jQuery</a>
   </label>
 
   <label>
-    <input type="radio" value="STEALZEPTO" name="library"/>
+    <input type="radio" value="zepto" name="lib"/>
     <a href="#">Zepto</a>
   </label>
 
   <label>
-    <input type="radio" value="STEALDOJO" name="library"/>
+    <input type="radio" value="dojo" name="lib"/>
     <a href="#">Dojo</a>
   </label>
 
   <label>
-    <input type="radio" value="STEALMOO" name="library"/>
+    <input type="radio" value="mootools" name="lib"/>
     <a href="#">Mootools</a>
   </label>
 
   <label>
-    <input type="radio" value="STEALYUI" name="library"/>
+    <input type="radio" value="yui" name="lib"/>
     <a href="#">YUI</a>
   </label>
 
+  <input type="hidden" name="options" value="[{&quot;option&quot;:&quot;skipCallbacks&quot;},{&quot;option&quot;:&quot;onefunc&quot;},{&quot;option&quot;:&quot;namespace&quot;,&quot;value&quot;:&quot;can&quot;},{&quot;option&quot;:&quot;global&quot;,&quot;value&quot;:&quot;can = {}&quot;}]" />
+  
   <button class="button disabled" disabled="disabled" type="submit">Download</button>
   <p class="loading" style="display: none;"><img src="images/loader.gif" alt="loader" /> Please wait while we generate your download</p>
 </form>
