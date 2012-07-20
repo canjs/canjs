@@ -1,5 +1,5 @@
 <form id="builder" action="http://builder.bitovi.com/donejs">
-  <h4>CanJS</h4>
+  <h4><span class="special">&#x2605;</span> CanJS</h4>
 
   <input type="hidden" name="filename" value="can.custom.js" />
 
@@ -38,7 +38,7 @@
     <a href="#can_route">route</a> - Window hash routing
   </label>
 
-  <h4>Plugins</h4>
+  <h4><span class="special">&#x2605;</span> Plugins</h4>
 
   <label>
     <input type="checkbox" value="can/construct/proxy" name="plugins"/>
@@ -90,35 +90,37 @@
     <a href="#plugins-view_modifiers">View modifiers</a> - Use jQuery modifiers to render views
   </label>
 
-  <h4>Choose your library</h4>
+  <h4><span class="special">&#x2605;</span> Choose your library</h4>
 
-  <label>
-    <input type="radio" value="jquery" name="lib" checked="checked" />
-    <a href="#">jQuery</a>
-  </label>
+  <div class="libraries">
+    <label>
+      <input type="radio" value="jquery" name="lib" checked="checked" />
+      <a href="#">jQuery</a>
+    </label>
 
-  <label>
-    <input type="radio" value="zepto" name="lib"/>
-    <a href="#">Zepto</a>
-  </label>
+    <label>
+      <input type="radio" value="zepto" name="lib"/>
+      <a href="#">Zepto</a>
+    </label>
 
-  <label>
-    <input type="radio" value="dojo" name="lib"/>
-    <a href="#">Dojo</a>
-  </label>
+    <label>
+      <input type="radio" value="dojo" name="lib"/>
+      <a href="#">Dojo</a>
+    </label>
 
-  <label>
-    <input type="radio" value="mootools" name="lib"/>
-    <a href="#">Mootools</a>
-  </label>
+    <label>
+      <input type="radio" value="moo" name="lib"/>
+      <a href="#">Mootools</a>
+    </label>
 
-  <label>
-    <input type="radio" value="yui" name="lib"/>
-    <a href="#">YUI</a>
-  </label>
+    <label>
+      <input type="radio" value="yui" name="lib"/>
+      <a href="#">YUI</a>
+    </label>
+  </div>
 
   <input type="hidden" name="options" value="[{&quot;option&quot;:&quot;skipCallbacks&quot;},{&quot;option&quot;:&quot;onefunc&quot;},{&quot;option&quot;:&quot;namespace&quot;,&quot;value&quot;:&quot;can&quot;},{&quot;option&quot;:&quot;global&quot;,&quot;value&quot;:&quot;can = {}&quot;}]" />
 
-  <button class="button disabled" disabled="disabled" type="submit">Download</button>
+  <button class="button disabled primary" disabled="disabled" type="submit">Download</button>
   <p class="loading" style="display: none;"><img src="images/loader.gif" alt="loader" /> Please wait while we generate your download</p>
 </form>
