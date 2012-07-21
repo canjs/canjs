@@ -5,19 +5,7 @@ title: CanJS
 # Welcome to CanJS!
 
 CanJS is a MIT-licensed, client-side, JavaScript framework that makes building 
-rich web applications easy.  It provides:
-
- - __[can.Construct](#can_construct)__  - inheritable constructor functions
- - __[can.Observe](#can_observe)__ - key-value binding
- - __[can.Model](#can_model)__ - observes connected to a RESTful JSON interface
- - __[can.view](#can_view)__ - template loading, caching, rendering
- - __[can.EJS](#can_ejs)__ - live binding templates
- - __[can.Control](#can_control)__ - declarative event bindings
- - __[can.route](#can_route)__ - back button and bookmarking support
-
-It also includes a rich set of supported [extensions and plugins](#plugins). Watch the
-[Getting Started with CanJS Video](http://www.youtube.com/watch?v=GdT4Oq6ZQ68) (fullscreen) for a in-depth 
-walkthrough.
+rich web applications easy.
 
 CanJS is:
 
@@ -59,12 +47,13 @@ CanJS is:
   </li>
 </ul>
 
+{% include builder.html %}
+
 CanJS is better! [Learn why](#why_canjs).  
 
 ## Get Canned
 
-CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your download
-for the library you are using:
+CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core download below or select the individual plugins above and click download:
 
  - [can.jquery.js](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.7.min.js)) - 8.5k - [Annotated Source](http://donejs.com/can/docs/can.jquery.html)
  - [can.zepto.js](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.7.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.zepto.html)
