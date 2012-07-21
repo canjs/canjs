@@ -322,6 +322,19 @@ can.Control('Tooltip', {}, {
 new Tooltip($('.checkmarks'));
 
 can.Control('Builder', {
+	'.can-control-route click': function() {
+		var include = this.element.find('.can-control-route').length
+			=== this.element.find('.can-control-route:checked').length;
+
+		if(include) {
+			$('<input type="hidden" name="plugins" value="can/control/route" />')
+				.appendTo(this.element);
+		}
+		else {
+			this.element.find('input[value="can/control/route"]').remove();
+		}
+	},
+
 	'input[type="checkbox"] click' : function() {
 		var button = this.element.find('button');
 		if(this.element.find('input[type="checkbox"]:checked').length !== 0) {
