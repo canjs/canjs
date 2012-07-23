@@ -56,7 +56,7 @@ steal('can/util','can/observe', function( can ) {
 			}, ajaxOb ));
 		},
 		makeRequest = function( self, type, success, error, method ) {
-			var deferred ,
+			var deferred,
 				args = [self.serialize()],
 				// The model.
 				model = self.constructor,
@@ -70,6 +70,7 @@ steal('can/util','can/observe', function( can ) {
 			if ( type !== 'create' ) {
 				args.unshift(getId(self))
 			}
+
 			
 			jqXHR = model[type].apply(model, args);
 			
@@ -496,7 +497,7 @@ steal('can/util','can/observe', function( can ) {
 		 * @param {Object} params data to specify the instance. 
 		 * 
 		 *     Recipe.findAll({id: 20})
-		 * 
+		 *
 		 * @param {Function} [success(item)] called with a model 
 		 * instance.  The model isntance is created from the Deferred's resolved data.
 		 * 

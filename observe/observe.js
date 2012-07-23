@@ -1281,8 +1281,8 @@ steal('can/util','can/construct', function(can, Construct) {
 		 */
 		concat : function() {
 			var args = [];
-			can.each(arguments, function(arg) {
-				args.push(arg instanceof can.Observe.List ? arg.serialize() : arg);
+			can.each( can.makeArray( arguments ), function( arg, i ) {
+				args[i] = arg instanceof can.Observe.List ? arg.serialize() : arg ;
 			});
 			return new this.constructor(Array.prototype.concat.apply(this.serialize(), args));
 		},

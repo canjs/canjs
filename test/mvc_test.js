@@ -52,6 +52,7 @@ test("Model basics",function(){
 		
 		// add a task
 		
+		console.log("here")
 		tasks.bind('add', function(ev, items, where){
 			ok(items.length, "add called with an array");
 			
