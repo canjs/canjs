@@ -1,4 +1,4 @@
-steal('can/observe', function(){
+steal('can/util', 'can/observe', function(can) {
 
 var proto = can.Observe.List.prototype,
 	_changes = proto._changes,

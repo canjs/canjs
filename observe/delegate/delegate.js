@@ -1,4 +1,4 @@
-steal('can/observe',function(){
+steal('can/util', 'can/observe', function(can) {
 	
 	
 	
@@ -356,4 +356,5 @@ steal('can/observe',function(){
 	});
 	// add helpers for testing .. 
 	can.Observe.prototype.delegate.matches = matches;
+	return can.Observe;
 })

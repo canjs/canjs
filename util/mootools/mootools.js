@@ -1,7 +1,5 @@
-steal({
-	src: './mootools-core-1.4.3.js',
-	_skip: true
-}, '../event.js','../fragment', 'can/util/array/each.js',function(){
+steal('can/util/can.js', './mootools-core-1.4.3.js', '../event.js','../fragment', 'can/util/array/each.js',
+function(can) {
 	// mootools.js
 	// ---------
 	// _MooTools node list._
@@ -269,4 +267,6 @@ steal({
 			
 		
 	}
+
+	return can;
 },'../deferred.js')

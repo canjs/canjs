@@ -1,5 +1,4 @@
-steal("can/util")
-.then(function( $ ) {
+steal("can/util",function( can ) {
 
 	// ## view.js
 	// `can.view`  
@@ -494,5 +493,5 @@ steal("can/util")
 
 	});
 	//!steal-pluginify-remove-end
-	
+	return can;
 });

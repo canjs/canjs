@@ -1,4 +1,4 @@
-(function(){
+steal('can/util', 'can/observe/attributes', function(can) {
 
 module("can/observe/attributes");
 

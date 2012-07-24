@@ -1,4 +1,4 @@
-(function(){
+steal('can/util', 'can/observe/sort', function(can) {
 
 module("can/observe/sort");
 

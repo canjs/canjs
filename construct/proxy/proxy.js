@@ -1,4 +1,4 @@
-steal('can/construct',function($){
+steal('can/util', 'can/construct', function(can, Construct){
 var isFunction = can.isFunction,
 	isArray = can.isArray,
 	makeArray = can.makeArray,
@@ -57,10 +57,5 @@ proxy = function( funcs ) {
 			}
 		}
 	can.Construct.proxy = can.Construct.prototype.proxy = proxy;
-	
-	
-
-
-
-
+	return can;
 });

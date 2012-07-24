@@ -1,4 +1,4 @@
-(function(){
+steal('can/util', 'can/view/modifiers', function(can) {
 
 // this only applied to jQuery libs
 if(!window.jQuery){

@@ -1,19 +1,23 @@
-can = {};
+throw "New Steal shouldn't include can/util/util.js";
 
+var library = 'can/util/jquery';
 if (window.STEALSTANDALONE){
-	steal('can/util/standalone')
+	library = 'can/util/standalone';
 } else if (window.STEALDOJO){
-	steal('can/util/dojo')
+	library = 'can/util/dojo';
 } else if( window.STEALMOO) {
-	steal('can/util/mootools')
+	library = 'can/util/mootools';
 } else if(window.STEALYUI){
-	steal('can/util/yui');
+	library = 'can/util/yui';
 } else if(window.STEALZEPTO){
-	steal('can/util/zepto');
-} else {
-	steal('can/util/jquery')
+	library = 'can/util/zepto';
 }
 
+steal(library, function(can) {
+	return can;
+});
+
+// TODO move this somehwere else
 /**
  @function can.isDeferred
  @parent can.util
@@ -21,7 +25,6 @@ if (window.STEALSTANDALONE){
  `can.isDeferred` returns if an object is an instance of [can.Deferred].
 
  ## Example
-
  Convert any value to a Deferred:
 
  function convertDeferred(dfd) {

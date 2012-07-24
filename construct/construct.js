@@ -1,5 +1,5 @@
 //@steal-clean
-steal("can/util/string",function( $ ) {
+steal("can/util/string", function(can) {
 
 	// ## construct.js
 	// `can.Construct`  
@@ -432,5 +432,5 @@ steal("can/util/string",function( $ ) {
 		}
 
 	});
-
+	return can.Construct;
 })

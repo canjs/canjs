@@ -1,5 +1,4 @@
-steal('./jquery.1.7.1.js', "./../preamble.js", function( $ ) {
-
+steal('jquery', 'can/util/can.js','jquery', "../preamble.js", 'can/util/array/each.js',function($, can) {
 	// jquery.js
 	// ---------
 	// _jQuery node list._
@@ -22,7 +21,8 @@ steal('./jquery.1.7.1.js', "./../preamble.js", function( $ ) {
 			var ret = $.buildFragment([result],[element]);
 			return ret.cacheable ? $.clone(ret.fragment) : ret.fragment;
 		},
-		$: jQuery
+		$: jQuery,
+		each: can.each
 	});
 
 	// Wrap binding functions.
@@ -50,4 +50,6 @@ steal('./jquery.1.7.1.js', "./../preamble.js", function( $ ) {
 		});
 		oldClean(elems);
 	};
-}).then('can/util/array/each.js');
+
+	return can;
+});

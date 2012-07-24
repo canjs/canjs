@@ -1,10 +1,10 @@
 // needs a .then! does not steal dependencies because this needs to work with dist ...
 
 if (!window.can || !can) {
-	steal('can/util/string')
+	steal()
 }
 
-steal('can/util/object', function () {
+steal('can/util','can/util/string','can/util/object', function (can) {
 
 	var updateSettings = function (settings, originalOptions) {
 			if (!can.fixture.on) {
@@ -795,4 +795,5 @@ steal('can/util/object', function () {
 
 	//Expose this for fixture debugging
 	can.fixture.overwrites = overwrites;
+	return can.fixture;
 });

@@ -19,10 +19,10 @@
 	</script>
 <script type='text/javascript' src='../../steal/steal.js'></script>
 <script type='text/javascript'>
-steal('can/route', function() {
+steal('can/route', function(route) {
 	// make sure it's after ready
     setTimeout(function(){
-    	window.parent.routeTestReady(can.route, window.location)
+    	window.parent.routeTestReady(route, window.location)
     },30)
     
 })

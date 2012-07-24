@@ -1,4 +1,4 @@
-steal("can/model/list",'funcunit/qunit', 'can/util/fixture', function(){
+steal("can/model/list", 'funcunit/qunit', 'can/util/fixture', function(){
 	 
 module("jquery/model/list", {
 	setup: function() {

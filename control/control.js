@@ -1,7 +1,4 @@
-steal('can/construct', function( $ ) {
-	(function() {
-	
-
+steal('can/util','can/construct', function( can ) {
 	// ## control.js
 	// `can.Control`  
 	// _Controller_
@@ -42,7 +39,7 @@ steal('can/construct', function( $ ) {
 	/**
 	 * @add can.Control
 	 */
-	can.Construct("can.Control",
+	var Control = can.Control = can.Construct(
 	/** 
 	 * @Static
 	 */
@@ -61,7 +58,7 @@ steal('can/construct', function( $ ) {
 			can.Construct.setup.apply( this, arguments );
 
 			// If you didn't provide a name, or are `control`, don't do anything.
-			if ( this !== can.Control ) {
+			if ( can.Control ) {
 
 				// Cache the underscored names.
 				var control = this,
@@ -725,10 +722,8 @@ steal('can/construct', function( $ ) {
 		}
 	});
 
-
 	var processors = can.Control.processors,
-
-	// Processors do the binding.  
+	// Processors do the binding.
 	// They return a function that unbinds when called.  
 	//
 	// The basic processor that binds events.
@@ -747,6 +742,5 @@ steal('can/construct', function( $ ) {
 		processors[v] = basicProcessor;
 	});
 
-	}());
-	
+	return Control;
 });

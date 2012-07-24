@@ -1,8 +1,6 @@
-if(!window.can || !can){
-	steal('can/util')
-}
 
-steal(function(){
+
+steal('can/util',function( can ) {
 	
 var isArray = can.isArray,
 	// essentially returns an object that has all the must have comparisons ...
@@ -228,5 +226,6 @@ var compareMethods = {
 	}
 }
 	
-	
+return can;
+
 });
