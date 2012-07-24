@@ -9,7 +9,7 @@
         <p>This is a dummy page to show off your plugin</p>
 		<script type='text/javascript'  src='../../../steal/steal.js'></script>
 		<script type='text/javascript'>
-			steal('can/construct/super', function(){
+			steal('can/construct/super', function(can) {
 				var Todo = can.Construct({
 					init : function(text) {
 						this.text = text;

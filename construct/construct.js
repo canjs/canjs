@@ -1,5 +1,5 @@
 //@steal-clean
-steal("can/util/string",function( can ) {
+steal("can/util/string", function(can) {
 
 	// ## construct.js
 	// `can.Construct`  

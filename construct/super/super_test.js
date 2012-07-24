@@ -1,4 +1,4 @@
-(function(){
+steal('can/construct/super', function(can) {
 
 module("can/construct/super");
 
@@ -85,4 +85,4 @@ test("Super in derived when parent doesn't have init", function(){
 	}
 })*/
 
-})();
+});

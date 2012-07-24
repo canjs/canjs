@@ -9,7 +9,7 @@
 		<script type='text/javascript'  src='../../../steal/steal.js'>
         </script>
 		<script type='text/javascript'>
-			steal('can/construct/proxy', function(){
+			steal('can/construct/proxy', function(can) {
 				var Person = can.Construct({
 					defaultName : 'John',
 					getPerson : function() {
