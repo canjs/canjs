@@ -1,4 +1,4 @@
-(function(){
+steal('can/view', function(can) {
 
 // this only applied to jQuery libs
 if(!window.jQuery){
