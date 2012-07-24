@@ -1,3 +1,5 @@
+throw "New Steal shouldn't include can/util/util.js";
+
 var library = 'can/util/jquery';
 if (window.STEALSTANDALONE){
 	library = 'can/util/standalone';
