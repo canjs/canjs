@@ -1,4 +1,4 @@
-(function () {
+steal('can/util', 'can/control/plugin', function (can) {
 
 	module("can/control/plugin")
 

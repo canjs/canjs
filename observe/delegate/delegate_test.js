@@ -1,4 +1,4 @@
-(function(){
+steal('can/util', 'can/observe/delegate', function(can) {
 
 
 module('can/observe/delegate')
@@ -6,7 +6,6 @@ module('can/observe/delegate')
 var matches = can.Observe.prototype.delegate.matches;
 
 test("matches", function(){
-	
 	equals( matches(['**'], ['foo','bar','0']) ,
 		'foo.bar.0' , "everything" );
 		

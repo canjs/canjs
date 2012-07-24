@@ -1,4 +1,4 @@
-(function(){
+steal('can/util', 'can/observe/setter', function(can) {
 
 module("can/observe/setter");
 

@@ -1,4 +1,4 @@
-steal('can/model',function(){
+steal('can/util', 'can/model', function(can, Model) {
 	
 var unique = function( items ) {
 		var collect = [];

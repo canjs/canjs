@@ -2,8 +2,8 @@ steal('can/util/mvc.js')
 .then('funcunit/qunit', 
 	  'can/util/fixture')
 .then(function() {
-	var oldmodule = window.module,
-		library = 'jQuery';
+	var oldmodule = window.module;
+
 	// Set the test timeout to five minutes
 	QUnit.config.hidepassed = true;
 	QUnit.config.testTimeout = 300000;

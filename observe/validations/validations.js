@@ -1,4 +1,4 @@
-steal('can/observe/attributes', function(){
+steal('can/util', 'can/observe/attributes', function(can) {
 //validations object is by property.  You can have validations that
 //span properties, but this way we know which ones to run.
 //  proc should return true if there's an error or the error message
@@ -368,7 +368,6 @@ can.extend(can.Observe.prototype, {
 		// return errors as long as we have one
 		return can.isEmptyObject(errors) ? null : isTest ? errors[attrs[0]] : errors;
 	}
-	
 });
-
+return can.Observe;
 });
