@@ -77,5 +77,5 @@ steal('can/view').then(function(can) {
 	})
 	can.view.ext = ".micro"
 	
-
+return can;
 });

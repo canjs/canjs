@@ -17,7 +17,6 @@ steal('can/view', function(can) {
 
 	if(window.Jaml){
 		test("multiple template types work", function(){
-
 			can.each(["micro","ejs","jaml"/*, "tmpl"*/], function( ext){
 				var div = can.$(document.createElement('div'));
 

@@ -17,7 +17,6 @@ steal(library, function(can) {
 	return can;
 });
 
-// TODO move this somehwere else
 /**
  @function can.isDeferred
  @parent can.util
@@ -34,11 +33,6 @@ steal(library, function(can) {
  @param {String} str the string to trim
  @return {String} the value of the string
  */
-can.isDeferred = function( obj ) {
-	var isFunction = can.isFunction;
-	// Returns `true` if something looks like a deferred.
-	return obj && isFunction(obj.then) && isFunction(obj.pipe)
-}
 
 /**
 @function can.trim

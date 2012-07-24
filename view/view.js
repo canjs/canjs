@@ -1,5 +1,4 @@
-steal("can/util",function( can ) {
-
+steal("can/util", function( can ) {
 	// ## view.js
 	// `can.view`  
 	// _Templating abstraction._
@@ -233,11 +232,11 @@ steal("can/util",function( can ) {
 				callback = helpers;
 				helpers = undefined;
 			}
-	
+
 			// See if we got passed any deferreds.
 			var deferreds = getDeferreds(data);
-	
-	
+
+
 			if ( deferreds.length ) { // Does data contain any deferreds?
 				// The deferred that resolves into the rendered content...
 				var deferred = new can.Deferred();

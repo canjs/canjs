@@ -368,5 +368,5 @@ can.view.register({
 	}
 })
 
-
+return can;
 });

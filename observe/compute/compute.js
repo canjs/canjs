@@ -1,4 +1,4 @@
-steal('can/util', function(){
+steal('can/util', function(can) {
 	
 	// returns the
     // - observes and attr methods are called by func
@@ -329,4 +329,5 @@ steal('can/util', function(){
 		return computed;
 	};
 	can.compute.binder = computeBinder;
+	return can.compute;
 })
