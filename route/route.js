@@ -325,7 +325,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			if (merge) {
 				options = extend({}, curParams, options)
 			}
-			return "#!" + can.route.param(options)
+			return (can.route.usePushState ? "" : "#!") + can.route.param(options);
 		},
 		/**
 		 * @function can.route.link
@@ -418,6 +418,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
         // hashchange event fired.  For this reason, it will not set the route data
         // if the data is changing or the hash already matches the hash that was set.
         setState = function() {
+        	console.log('in hashchange');
         	var hash = location.href.split(/#!?/)[1] || ""
 			curParams = can.route.deparam( hash );
 			
@@ -451,6 +452,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			if(can.route.usePushState) {
 				console.log('link: ' + can.route.param(serialized, true));
 				history.pushState(null, null, can.route.param(serialized, true));
+				//location.pathname = location.pathname.replace(can.route.url(can.route.attr()),"");
 			}
 			else {
 				location.hash = "#!" + (lastHash = can.route.param(serialized, true))
