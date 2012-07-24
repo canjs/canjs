@@ -1,5 +1,4 @@
 steal('can/util',function(can) {
-
 	// ##string.js
 	// _Miscellaneous string utility functions._  
 	

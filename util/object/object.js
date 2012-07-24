@@ -226,5 +226,6 @@ var compareMethods = {
 	}
 }
 	
-	
+return can;
+
 });

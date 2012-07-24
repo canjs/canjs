@@ -1,4 +1,4 @@
-steal('can/view').then(function(){
+steal('can/view').then(function(can) {
 // Simple JavaScript Templating
 // John Resig - http://ejohn.org/ - MIT Licensed
 

@@ -8,7 +8,9 @@ steal('can/util/mvc.js')
 	QUnit.config.hidepassed = true;
 	QUnit.config.testTimeout = 300000;
 
-	window.module = function(name, testEnvironment) {
-		oldmodule(TESTINGLIBRARY + '/' + name, testEnvironment);
+	if(window.TESTINGLIBRARY !== undefined) {
+		window.module = function(name, testEnvironment) {
+			oldmodule(TESTINGLIBRARY + '/' + name, testEnvironment);
+		}
 	}
 })

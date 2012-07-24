@@ -1,18 +1,19 @@
-can = {};
+var library = 'can/util/jquery';
 if (window.STEALSTANDALONE){
-	steal('can/util/standalone')
+	library = 'can/util/standalone';
 } else if (window.STEALDOJO){
-	steal('can/util/dojo')
+	library = 'can/util/dojo';
 } else if( window.STEALMOO) {
-	steal('can/util/mootools')
+	library = 'can/util/mootools';
 } else if(window.STEALYUI){
-	steal('can/util/yui');
+	library = 'can/util/yui';
 } else if(window.STEALZEPTO){
-	steal('can/util/zepto');
-} else {
-	steal('can/util/jquery')
+	library = 'can/util/zepto';
 }
 
+steal(library, function(can) {
+	return can;
+});
 
 
 /**

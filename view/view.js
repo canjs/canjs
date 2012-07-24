@@ -480,5 +480,5 @@ steal("can/util",function( can ) {
 
 	});
 	//!steal-pluginify-remove-end
-	
+	return can;
 });

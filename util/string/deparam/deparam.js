@@ -63,5 +63,5 @@ steal('can/util','can/util/string', function( can ){
 			return data;
 		}
 	});
-	return can.deparam;
+	return can;
 })
