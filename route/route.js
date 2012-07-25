@@ -50,6 +50,9 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		},
 		onready = !0,
 		location = window.location,
+		quote = function(str) {
+		    return (str+'').replace(/([.?*+\^$\[\]\\(){}|\-])/g, "\\$1");
+		},
 		each = can.each,
 		extend = can.extend
 
@@ -61,7 +64,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		var names = [],
 			test = url.replace(matcher, function( whole, name, i ) {
 				names.push(name);
-				var next = "\\"+( url.substr(i+whole.length,1) || "&" )
+				var next = "\\"+( url.substr(i+whole.length,1) || can.route._querySeparator )
 				// a name without a default value HAS to have a value
 				// a name that has a default value can be empty
 				// The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
@@ -73,7 +76,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
             // A regular expression that will match the route when variable values 
             // are present; i.e. for `:page/:type` the `RegExp` is `/([\w\.]*)/([\w\.]*)/` which
             // will match for any value of `:page` and `:type` (word chars or period).
-			test: new RegExp("^" + test+"($|&)"),
+			test: new RegExp("^" + test+"($|"+quote(can.route._querySeparator)+")"),
             // The original URL, same as the index for this entry in routes.
 			route: url,
             // An `array` of all the variable names in this route.
@@ -88,7 +91,8 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 
 	extend(can.route, {
 
-		usePushState: !1,
+		_querySeparator: '&',
+		_paramsMatcher: paramsMatcher,
 
 		/**
 		 * @function can.route.param
@@ -168,10 +172,10 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 				if(_setRoute){
 					can.route.attr('route',route.route);
 				}
-				return res + (after ? "&" + after : "")
+				return res + (after ? can.route._querySeparator + after : "")
 			}
             // If no route was found, there is no hash URL, only paramters.
-			return can.isEmptyObject(data) ? "" : "&" + can.param(data);
+			return can.isEmptyObject(data) ? "" : can.route._querySeparator + can.param(data);
 		},
 		/**
 		 * @function can.route.deparam
@@ -225,16 +229,16 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
                     // Start will contain the full matched string; parts contain the variable values.
 					start = parts.shift(),
                     // The remainder will be the `&amp;key=value` list at the end of the URL.
-					remainder = url.substr(start.length - (parts[parts.length-1] === "&" ? 1 : 0) ),
+					remainder = url.substr(start.length - (parts[parts.length-1] === can.route._querySeparator ? 1 : 0) ),
                     // If there is a remainder and it contains a `&amp;key=value` list deparam it.
-                    obj = (remainder && paramsMatcher.test(remainder)) ? can.deparam( remainder.slice(1) ) : {};
+                    obj = (remainder && can.route._paramsMatcher.test(remainder)) ? can.deparam( remainder.slice(1) ) : {};
 
                 // Add the default values for this route.
 				obj = extend(true, {}, route.defaults, obj);
                 // Overwrite each of the default values in `obj` with those in 
 				// parts if that part is not empty.
 				each(parts,function(part,  i){
-					if ( part && part !== '&') {
+					if ( part && part !== can.route._querySeparator) {
 						obj[route.names[i]] = decodeURIComponent( part );
 					}
 				});
@@ -242,10 +246,10 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 				return obj;
 			}
             // If no route was matched, it is parsed as a `&amp;key=value` list.
-			if ( url.charAt(0) !== '&' ) {
-				url = '&' + url;
+			if ( url.charAt(0) !== can.route._querySeparator ) {
+				url = can.route._querySeparator + url;
 			}
-			return paramsMatcher.test(url) ? can.deparam( url.slice(1) ) : {};
+			return can.route._paramsMatcher.test(url) ? can.deparam( url.slice(1) ) : {};
 		},
 		/**
 		 * @hide
@@ -293,6 +297,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 				onready = val;
 			}
 			if( val === true || onready === true ) {
+				can.route._setup();
 				setState();
 			}
 			return can.route;
@@ -325,7 +330,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			if (merge) {
 				options = extend({}, curParams, options)
 			}
-			return (can.route.usePushState ? "" : "#!") + can.route.param(options);
+			return "#!" + can.route.param(options);
 		},
 		/**
 		 * @function can.route.link
@@ -394,6 +399,18 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 */
 		current: function( options ) {
 			return location.hash == "#!" + can.route.param(options)
+		},
+		_setup: function() {
+			// If the hash changes, update the `can.route.data`.
+			can.bind.call(window,'hashchange', setState);
+		},
+		_getHash: function() {
+			return location.href.split(/#!?/)[1] || "";
+		},
+		_setHash: function(serialized) {
+			var path = (can.route.param(serialized, true));
+			location.hash = "#!" + path;
+			return path;
 		}
 	});
 	
@@ -418,8 +435,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
         // hashchange event fired.  For this reason, it will not set the route data
         // if the data is changing or the hash already matches the hash that was set.
         setState = function() {
-        	console.log('in hashchange');
-        	var hash = location.href.split(/#!?/)[1] || ""
+			var hash = can.route._getHash();
 			curParams = can.route.deparam( hash );
 			
 			// if the hash data is currently changing, or
@@ -432,9 +448,6 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		lastHash,
 		// Are data changes pending that haven't yet updated the hash
 		changingData;
-
-	// If the hash changes, update the `can.route.data`.
-	can.bind.call(window,'hashchange', setState);
 
 	// If the `can.route.data` changes, update the hash.
     // Using `.serialize()` retrieves the raw data contained in the `observable`.
@@ -449,14 +462,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			changingData = 0;
 			var serialized = can.route.data.serialize();
 
-			if(can.route.usePushState) {
-				console.log('link: ' + can.route.param(serialized, true));
-				history.pushState(null, null, can.route.param(serialized, true));
-				//location.pathname = location.pathname.replace(can.route.url(can.route.attr()),"");
-			}
-			else {
-				location.hash = "#!" + (lastHash = can.route.param(serialized, true))
-			}
+			lastHash = can.route._setHash(serialized);
 		}, 1);
 	});
 	// `onready` event...
