@@ -12,9 +12,20 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			}
 
 			//simple wrapper for logging
-			var log = function () {
+			var _logger = function(type, arr){
+				if(console.log.apply){
+					console[type].apply(console, arr)
+				} else {
+					console[type](arr)
+				}
+			},
+			log = function () {
 				if (window.console && console.log) {
-					console.log.apply(console, Array.prototype.slice.call(arguments));
+					Array.prototype.unshift.call(arguments, 'fixture INFO:');
+					_logger( "log", Array.prototype.slice.call(arguments) );
+				}
+				else if (window.opera && window.opera.postError) {
+					opera.postError("fixture INFO: " + out);
 				}
 			}
 
