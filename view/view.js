@@ -394,7 +394,7 @@ steal("can/util", function( can ) {
 				var sub = url.substr(2);
 				url = ! window.steal ? 
 					"/" + sub : 
-					steal.root.mapJoin(sub);
+					steal.config().root.mapJoin(sub);
 			}
 	
 			// Set the template engine type.

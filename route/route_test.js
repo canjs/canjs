@@ -297,7 +297,7 @@ test("updating the hash", function(){
 		},30);
 	}
 	var iframe = document.createElement('iframe');
-	iframe.src = steal.root.join("can/route/testing.html");
+	iframe.src = steal.config().root.join("can/route/testing.html");
 	can.$("#qunit-test-area")[0].appendChild(iframe);
 });
 
@@ -318,7 +318,7 @@ test("sticky enough routes", function(){
 		},30);
 	}
 	var iframe = document.createElement('iframe');
-	iframe.src = steal.root.join("can/route/testing.html?2");
+	iframe.src = steal.config().root.join("can/route/testing.html?2");
 	can.$("#qunit-test-area")[0].appendChild(iframe);
 });
 
@@ -356,7 +356,7 @@ test("unsticky routes", function(){
 
 	}
 	var iframe = document.createElement('iframe');
-	iframe.src = steal.root.join("can/route/testing.html?1");
+	iframe.src = steal.config().root.join("can/route/testing.html?1");
 	can.$("#qunit-test-area")[0].appendChild(iframe);
 });
 
