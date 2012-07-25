@@ -456,9 +456,9 @@ steal("can/util", function( can ) {
 	if ( window.steal ) {
 		steal.type("view js", function( options, success, error ) {
 			var type = can.view.types["." + options.type],
-				id = can.view.toId(options.rootSrc);
+				id = can.view.toId(options.id);
 
-			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "').then(function($){" + "can.view.preload('" + id + "'," + options.text + ");\n})";
+			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "').then(function(can){" + "can.view.preload('" + id + "'," + options.text + ");\n})";
 			success();
 		})
 	}
