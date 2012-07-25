@@ -1,4 +1,4 @@
-steal('can/control', 'can/view').then(function( $ ) {
+steal('can/util', 'can/control', 'can/view').then(function(can) {
 	var URI = steal.URI || steal.File;
 	
 	can.Control.getFolder = function() {

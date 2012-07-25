@@ -1,4 +1,4 @@
-steal('can/model/elements').then(function( $ ) {
+steal('can/util', 'can/model/elements', function(can) {
 
 	var getArgs = function( args ) {
 		if ( args[0] && (can.isArray(args[0])) ) {
@@ -535,5 +535,5 @@ steal('can/model/elements').then(function( $ ) {
 			}
 		})
 
-
+	return can.Model.List;
 })
