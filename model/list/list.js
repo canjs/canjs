@@ -446,7 +446,7 @@ steal('can/model/elements').then(function( $ ) {
 		findAll: function( params, success, error ) {
 			var self = this;
 			this.model().findAll(params, function( items ) {
-				self.push(items);
+				self.push.apply(self, items);
 				success && success(self)
 			}, error)
 		},
