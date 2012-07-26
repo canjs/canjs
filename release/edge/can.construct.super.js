@@ -40,5 +40,5 @@
 			}
 		}
 
-
+	return can;
 }( this.can, this ));

@@ -51,10 +51,5 @@ proxy = function( funcs ) {
 			}
 		}
 	can.Construct.proxy = can.Construct.prototype.proxy = proxy;
-	
-	
-
-
-
-
+	return can;
 }( this.can, this ));

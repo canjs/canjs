@@ -368,7 +368,6 @@ can.extend(can.Observe.prototype, {
 		// return errors as long as we have one
 		return can.isEmptyObject(errors) ? null : isTest ? errors[attrs[0]] : errors;
 	}
-	
 });
-
+return can.Observe;
 }( this.can, this ));

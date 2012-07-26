@@ -54,5 +54,5 @@ proto.__set = function(prop, value, current, success, error){
 	
 	return this;
 };
-
+return can.Observe;
 }( this.can, this ));
