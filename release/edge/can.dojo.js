@@ -1,13 +1,14 @@
 (function( can, window, undefined ){
 define("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){
 
-	return {
+	window.can = {
 		isDeferred : function( obj ) {
 			var isFunction = this.isFunction;
 			// Returns `true` if something looks like a deferred.
 			return obj && isFunction(obj.then) && isFunction(obj.pipe)
 		}
 	};
+	return window.can;
 
 // # CanJS v1.0.8pre
 
@@ -10352,8 +10353,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 			})
 		}
 	})
-	
-;
+
+	return can.Model;
 
 	
 	// ## deparam.js  

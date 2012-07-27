@@ -1,11 +1,12 @@
 (function( can, window, undefined ){
-	return {
+	window.can = {
 		isDeferred : function( obj ) {
 			var isFunction = this.isFunction;
 			// Returns `true` if something looks like a deferred.
 			return obj && isFunction(obj.then) && isFunction(obj.pipe)
 		}
 	};
+	return window.can;
 ;
 /*!
  * jQuery JavaScript Library v1.7.1
