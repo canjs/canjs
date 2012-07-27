@@ -11305,7 +11305,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 			if ( window.steal ) {
 				steal.type(info.suffix + " view js", function( options, success, error ) {
 					var type = can.view.types["." + options.type],
-						id = can.view.toId(options.rootSrc+'');
+						id = can.view.toId(options.id+'');
 
 					options.text = type.script(id, options.text)
 					success();
