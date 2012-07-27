@@ -2223,6 +2223,18 @@ Web application that allows you to upload and host your files in the cloud. Comp
 
 ![iskon.Jumbo App](images/examples/iskon_jumbo.jpg "iskon.Jumbo App")
 
+### SnowHit.com
+
+Snowhit is a unique website offering all services to skiers in one place. It contains 3D map, showing the location of lifts, ski runs, hotels etc. Best of all, it uses CanJS and Steal. You can try it out at [snowhit.com](http://snowhit.com/)
+
+![SnowHit.com](images/examples/snowhit.jpg "SnowHit.com")
+
+### BootSwatchr
+
+ThemeRoller for Twitter Bootstrap built on CanJS.  Visit it at [bootswatchr.com](http://bootswatchr.com/)
+
+![bootswatchr.com](images/examples/bootswatchr.jpg "bootswatchr.com")
+
 ## Get Help
 
 There are several places you can go to ask questions or get help debugging problems.
