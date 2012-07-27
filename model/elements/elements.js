@@ -137,7 +137,7 @@ var unique = function( items ) {
 	 * it will add the model to the element.
 	 */
 	$.fn.model = function( type ) {
-		if ( type && type instanceof $.Model ) {
+		if ( type && type instanceof can.Model ) {
 			type.hookup(this[0]);
 			return this;
 		} else {
