@@ -1161,5 +1161,6 @@ steal('can/util','can/observe', function( can ) {
 			})
 		}
 	})
-	
+
+	return can.Model;
 })

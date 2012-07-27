@@ -145,5 +145,6 @@ var unique = function( items ) {
 		}
 
 	};
-	
+
+	return can;
 })
