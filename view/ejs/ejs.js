@@ -523,7 +523,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 					default:
 						// Track the current tag
 						if(lastToken === '<'){
-							tagName = token.split(' ')[0];
+							tagName = token.split(/\s/)[0];
 							// If 
 							if( tagName.indexOf("/") === 0 && tagNames.pop() === tagName.substr(1) ) {
 								tagName = tagNames[tagNames.length-1]|| tagName.substr(1)
