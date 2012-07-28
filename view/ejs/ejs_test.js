@@ -70,6 +70,21 @@ test("multi line", function(){
 	equals(result, text)
 })
 
+test("nested control structures", function(){
+    var text = "<% for (var i = 0; i < test.length; i++) { %>" +
+            "<% if (test[i].length) {" +
+                "for (var j = 0; j < test[i].length; j++) { %>" +
+                    "<%= test[i][j] %>" +
+                "<% } %>" +
+            "<% } else { %>" +
+                "<%= test[i] %>" +
+            "<% } %>" +
+        "<% } %>",
+        result = new can.EJS({text: text}).render({test: ['a', 'b', ['c', 'd']]}) ;
+
+    equals(result, 'abcd')
+})
+
 test("escapedContent", function(){
 	var text = "<span><%= tags %></span><label>&amp;</label><strong><%= number %></strong><input value='<%= quotes %>'/>";
 	var compiled = new can.EJS({text: text}).render({tags: "foo < bar < car > zar > poo",
