@@ -434,7 +434,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
         // So it's possible that someone started changing the data before the 
         // hashchange event fired.  For this reason, it will not set the route data
         // if the data is changing or the hash already matches the hash that was set.
-        setState = function() {
+        setState = can.route.setState = function() {
 			var hash = can.route._getHash();
 			curParams = can.route.deparam( hash );
 			
