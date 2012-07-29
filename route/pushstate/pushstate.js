@@ -31,7 +31,9 @@ steal('can/route', function() {
             },
             _setHash: function(serialized) {
                 var path = can.route.param(serialized, true);
-                history.pushState(null, null, path);
+                if(path !== can.route._getHash()) {
+                    history.pushState(null, null, path);
+                }
                 return path;
             },
             current: function( options ) {
