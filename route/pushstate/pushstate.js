@@ -10,7 +10,7 @@ steal('can/route', function() {
             _setup: function() {
                 // intercept routable links
                 can.$('body').on('click', 'a', function(e) {
-                    if(can.route.updateWith(this.href)) {
+                    if(can.route.updateWith(this.pathname+this.search)) {
                         e.preventDefault();
                     }
                 });
