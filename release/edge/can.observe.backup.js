@@ -1,4 +1,10 @@
-(function( can, window, undefined ){
+var module = { _orig: window.module };
+define = function(id, deps, value) {
+module[id] = value();
+};
+ define.amd = { jQuery: true };
+
+module['can/util/can.js'] = 
 	window.can = {
 		isDeferred : function( obj ) {
 			var isFunction = this.isFunction;
@@ -7,7 +13,6 @@
 		}
 	};
 	return window.can;
-;
 /*!
  * jQuery JavaScript Library v1.7.1
  * http://jquery.com/
@@ -9273,8 +9278,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 
 
-})( window );;
-
+})( window );
+module['can/util/object/object.js'] = 
 	
 var isArray = can.isArray,
 	// essentially returns an object that has all the must have comparisons ...
@@ -9502,8 +9507,8 @@ var compareMethods = {
 	
 return can;
 
-;
 
+module['can/observe/backup/backup.js'] = 
 	var flatProps = function (a) {
 		var obj = {};
 		for (var prop in a) {
@@ -9644,4 +9649,6 @@ return can;
 	})
 
 	return can.Observe;
-}( this.can, this ));
+
+window.can = module['can/util/can.js'];
+window.module = module._orig;

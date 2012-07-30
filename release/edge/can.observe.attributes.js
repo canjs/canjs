@@ -1,4 +1,10 @@
-(function( can, window, undefined ){
+var module = { _orig: window.module };
+define = function(id, deps, value) {
+module[id] = value();
+};
+ define.amd = { jQuery: true };
+
+module['can/observe/attributes/attributes.js'] = 
 
 can.each([ can.Observe, can.Model ], function(clss){
 	// in some cases model might not be defined quite yet.
@@ -290,4 +296,6 @@ can.Observe.prototype.serialize = function(attrName){
 	return attrName != undefined ? where[attrName] : where;
 };
 return can.Observe;
-}( this.can, this ));
+
+window.can = module['can/util/can.js'];
+window.module = module._orig;

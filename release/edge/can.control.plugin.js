@@ -1,4 +1,10 @@
-(function( can, window, undefined ){
+var module = { _orig: window.module };
+define = function(id, deps, value) {
+module[id] = value();
+};
+ define.amd = { jQuery: true };
+
+module['can/control/plugin/plugin.js'] = 
 //used to determine if a control instance is one of controllers
 //controllers can be strings or classes
 var i, 
@@ -241,4 +247,6 @@ can.Control.prototype.update = function( options ) {
 		this.on();
 };
 
-}( this.can, this ));
+
+window.can = module['can/util/can.js'];
+window.module = module._orig;

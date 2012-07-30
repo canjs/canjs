@@ -1,4 +1,10 @@
-(function( can, window, undefined ){
+var module = { _orig: window.module };
+define = function(id, deps, value) {
+module[id] = value();
+};
+ define.amd = { jQuery: true };
+
+module['can/observe/setter/setter.js'] = 
 
 /**
  * Like [can.camelize|camelize], but the first part is also capitalized
@@ -55,4 +61,6 @@ proto.__set = function(prop, value, current, success, error){
 	return this;
 };
 return can.Observe;
-}( this.can, this ));
+
+window.can = module['can/util/can.js'];
+window.module = module._orig;

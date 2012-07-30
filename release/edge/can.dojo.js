@@ -1,6 +1,10 @@
-(function( can, window, undefined ){
-define("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){
+var module = { _orig: window.module };
+define = function(id, deps, value) {
+module[id] = value();
+};
+ define.amd = { jQuery: true };
 
+module['can/util/can.js'] = 
 	window.can = {
 		isDeferred : function( obj ) {
 			var isFunction = this.isFunction;
@@ -10,12 +14,14 @@ define("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"]
 	};
 	return window.can;
 
+module['can/util/preamble.js'] = 
 // # CanJS v1.0.8pre
 
 // (c) 2012 Bitovi  
 // MIT license  
 // [http://canjs.us/](http://canjs.us/)
 
+module['can/util/array/each.js'] = 
 	can.each = function (elements, callback, context) {
 		var i = 0,
 		    key;
@@ -37,7 +43,6 @@ define("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"]
 		}
 		return elements;
 	}
-;
 (function( window, undefined ) {
 
 // Use the correct document accordingly with window argument (sandbox)
@@ -9163,7 +9168,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 }
 
 })( window );
-
+module['can/util/jquery/jquery.js'] = 
 	// jquery.js
 	// ---------
 	// _jQuery node list._
@@ -9218,6 +9223,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 	return can;
 
+module['can/util/string/string.js'] = 
 	// ##string.js
 	// _Miscellaneous string utility functions._  
 	
@@ -9345,6 +9351,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 			undHash : undHash
 		});
 	return can;
+
+module['can/construct/construct.js'] = 
 
 	// ## construct.js
 	// `can.Construct`  
@@ -9509,6 +9517,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 	});
 	return can.Construct;
 
+module['can/observe/observe.js'] = 
 	// ## observe.js  
 	// `can.Observe`  
 	// _Provides the observable pattern for JavaScript Objects._  
@@ -10018,6 +10027,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 	Observe.List = list;
 	return Observe;
 
+module['can/model/model.js'] = 
 	
 	// ## model.js  
 	// `can.Model`  
@@ -10356,6 +10366,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 	return can.Model;
 
+module['can/util/string/deparam/deparam.js'] = 
 	
 	// ## deparam.js  
 	// `can.deparam`  
@@ -10406,6 +10417,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 		}
 	});
 	return can;
+
+module['can/route/route.js'] = 
 
 	// ## route.js  
 	// `can.route`  
@@ -10682,6 +10695,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 	can.bind.call(document,"ready",can.route.ready);
 	return can.route;
 
+module['can/control/control.js'] = 
 	// ## control.js
 	// `can.Control`  
 	// _Controller_
@@ -10949,6 +10963,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 	return Control;
 
+module['can/control/route/route.js'] = 
 	
 	// ## control/route.js  
 	// _Controller route integration._
@@ -10977,8 +10992,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 			can.route.unbind( 'change', check )
 		}
 	}
-;
 
+module['can/view/view.js'] = 
 	// ## view.js
 	// `can.view`  
 	// _Templating abstraction._
@@ -11331,6 +11346,7 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 	//!steal-pluginify-remove-end
 	return can;
 
+module['can/observe/compute/compute.js'] = 
 	
 	// returns the
     // - observes and attr methods are called by func
@@ -11516,6 +11532,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 	};
 	can.compute.binder = computeBinder;
 	return can.compute;
+
+module['can/view/ejs/ejs.js'] = 
 
 	// ## ejs.js
 	// `can.EJS`  
@@ -12165,6 +12183,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 	return can;
 
+module['can/util/exports.js'] = 
+
 	// Register as an AMD module if supported, otherwise attach to the window
 	if (false && typeof define === "function" && define.amd ) {
 		define( "can", [], function () { return can; } );
@@ -12172,6 +12192,5 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 		window.can = can;
 	}
 
-return can;
-});
-}( can = {}, this ));
+window.can = module['can/util/can.js'];
+window.module = module._orig;

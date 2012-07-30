@@ -1,4 +1,10 @@
-(function( can, window, undefined ){
+var module = { _orig: window.module };
+define = function(id, deps, value) {
+module[id] = value();
+};
+ define.amd = { jQuery: true };
+
+module['can/view/modifiers/modifiers.js'] = 
 	//---- ADD jQUERY HELPERS -----
 	//converts jquery functions to use views	
 	var convert, modify, isTemplate, isHTML, isDOM, getCallback,
@@ -288,4 +294,6 @@
 	"replaceWith", "val"],function(func){
 		convert(func);
 	});
-}( this.can, this ));
+
+window.can = module['can/util/can.js'];
+window.module = module._orig;

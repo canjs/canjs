@@ -1,4 +1,10 @@
-(function( can, window, undefined ){
+var module = { _orig: window.module };
+define = function(id, deps, value) {
+module[id] = value();
+};
+ define.amd = { jQuery: true };
+
+module['can/observe/validations/validations.js'] = 
 //validations object is by property.  You can have validations that
 //span properties, but this way we know which ones to run.
 //  proc should return true if there's an error or the error message
@@ -370,4 +376,6 @@ can.extend(can.Observe.prototype, {
 	}
 });
 return can.Observe;
-}( this.can, this ));
+
+window.can = module['can/util/can.js'];
+window.module = module._orig;

@@ -1,4 +1,10 @@
-(function( can, window, undefined ){
+var module = { _orig: window.module };
+define = function(id, deps, value) {
+module[id] = value();
+};
+ define.amd = { jQuery: true };
+
+module['can/control/view/view.js'] = 
 	var URI = steal.URI || steal.File;
 	
 	can.Control.getFolder = function() {
@@ -85,4 +91,6 @@
 		return can.view(view, data, helpers); //what about controllers in other folders?
 	};
 
-}( this.can, this ));
+
+window.can = module['can/util/can.js'];
+window.module = module._orig;
