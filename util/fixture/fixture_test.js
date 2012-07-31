@@ -42,7 +42,7 @@ test("dynamic fixtures",function(){
 
 test("fixture function", 3, function(){
 	stop();
-	var url = steal.root.join("can/util/fixture/fixtures/foo.json")+'';
+	var url = steal.config().root.join("can/util/fixture/fixtures/foo.json")+'';
 	can.fixture(url,"//can/util/fixture/fixtures/foobar.json" );
 
 	can.ajax({
@@ -75,7 +75,7 @@ if(typeof jQuery !== 'undefined') {
 	test("fixtures with converters", function(){
 		stop();
 		can.ajax( {
-		  url : steal.root.join("can/util/fixture/fixtures/foobar.json")+'',
+		  url : steal.config().root.join("can/util/fixture/fixtures/foobar.json")+'',
 		  dataType: "json fooBar",
 		  converters: {
 		    "json fooBar": function( data ) {
@@ -257,7 +257,7 @@ test("fixture function gets id", function(){
 });
 
 test("replacing and removing a fixture", function(){
-	var url = steal.root.join("can/util/fixture/fixtures/remove.json")+''
+	var url = steal.config().root.join("can/util/fixture/fixtures/remove.json")+''
 	can.fixture("GET "+url, function(){
 		return {weird: "ness!"}
 	});

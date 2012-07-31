@@ -1,5 +1,5 @@
 // this file should not be stolen directly
-steal('can/observe', function() {
+steal('can/util','can/observe', function( can ) {
 	
 	// ## model.js  
 	// `can.Model`  
@@ -538,10 +538,10 @@ steal('can/observe', function() {
 
 	
 	
-	can.Observe("can.Model",{
+	can.Model = can.Observe({
 		setup : function(base){
 			can.Observe.apply(this, arguments);
-			if(this === can.Model){
+			if(!can.Model){
 				return;
 			}
 			var self = this,
@@ -1032,16 +1032,14 @@ steal('can/observe', function() {
 		}
 	});
 	
-
-	
-				
-	can.each({makeFindAll : "models", makeFindOne: "model"}, function(method, name){
-		can.Model[name] = function(oldFind){
-			return function(params, success, error){
-				return pipe( oldFind.call( this, params ),
-							this, 
-							method ).then(success,error)
-			}
+	can.each({
+		makeFindAll : "models",
+		makeFindOne: "model"
+	}, function( method, name ) {
+		can.Model[name] = function( oldFind ) {
+			return function( params, success, error ) {
+				return pipe( oldFind.call( this, params ), this, method ).then( success, error );
+			};
 		};
 	});
 				
@@ -1166,7 +1164,7 @@ steal('can/observe', function() {
    *
    *
    */
-	var ML = can.Observe.List('can.Model.List',{
+	var ML = can.Model.List = can.Observe.List({
 		setup : function(){
 			can.Observe.List.prototype.setup.apply(this, arguments );
 			// Send destroy events.
@@ -1178,5 +1176,6 @@ steal('can/observe', function() {
 			})
 		}
 	})
-	
+
+	return can.Model;
 })

@@ -1,4 +1,4 @@
-(function(){
+steal('can/util', 'can/observe/backup', function() {
 	
 module("can/observe/backup",{
 	setup : function(){

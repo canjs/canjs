@@ -3,10 +3,6 @@
     <head>
         <link rel="stylesheet" type="text/css" href="../../funcunit/qunit/qunit.css" />
         <title>can Zepto Test</title>
-        <script type='text/javascript'>
-        	STEALZEPTO = true;
-        </script>
-		<script type='text/javascript' src='../../steal/steal.js?can/test/can_test.js'></script>
     </head>
     <body>
 
@@ -17,5 +13,18 @@
 		<div id="test-content"></div>
         <ol id="qunit-tests"></ol>
 		<div id="qunit-test-area"></div>
+		<script type='text/javascript' src='../../steal/steal.js'></script>
+		<script type='text/javascript'>
+			steal(function(){
+				TESTINGLIBRARY = "Zepto";
+				steal.config({
+					map: {
+						"*": {	
+							"can/util/util.js": "can/util/zepto/zepto.js"
+						}
+					}
+				});
+			},'can/test/can_test.js')
+		</script>
     </body>
 </html>

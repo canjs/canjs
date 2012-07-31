@@ -1,4 +1,4 @@
-steal('funcunit/qunit','can/util/fixture',function(){
+steal('can/util','funcunit/qunit','can/util/fixture',function(can){
 
 module("mvc");
 
@@ -35,9 +35,9 @@ test("Model basics",function(){
 			name : "foo"
 		}]]
 	})*/
-	
+
 	var Task = can.Model({
-		findAll : steal.root.join("can/test/foo.json")+''
+		findAll : steal.config().root.join("can/test/foo.json")+''
 	},{
 		print : function(){
 			return this.name;

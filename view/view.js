@@ -1,6 +1,4 @@
-steal("can/util")
-.then(function( $ ) {
-
+steal("can/util", function( can ) {
 	// ## view.js
 	// `can.view`  
 	// _Templating abstraction._
@@ -234,11 +232,11 @@ steal("can/util")
 				callback = helpers;
 				helpers = undefined;
 			}
-	
+
 			// See if we got passed any deferreds.
 			var deferreds = getDeferreds(data);
-	
-	
+
+
 			if ( deferreds.length ) { // Does data contain any deferreds?
 				// The deferred that resolves into the rendered content...
 				var deferred = new can.Deferred();
@@ -325,9 +323,9 @@ steal("can/util")
 	// Makes sure there's a template, if not, have `steal` provide a warning.
 	var	checkText = function( text, url ) {
 			if ( ! text.length ) {
-				//@steal-remove-start
+				//!steal-remove-start
 				steal.dev.log("There is no template or an empty template at " + url);
-				//@steal-remove-end
+				//!steal-remove-end
 				throw "can.view: No template or empty template:" + url;
 			}
 		},
@@ -396,7 +394,7 @@ steal("can/util")
 				var sub = url.substr(2);
 				url = ! window.steal ? 
 					"/" + sub : 
-					steal.root.mapJoin(sub);
+					steal.config().root.mapJoin(sub);
 			}
 	
 			// Set the template engine type.
@@ -458,9 +456,9 @@ steal("can/util")
 	if ( window.steal ) {
 		steal.type("view js", function( options, success, error ) {
 			var type = can.view.types["." + options.type],
-				id = can.view.toId(options.rootSrc);
+				id = can.view.toId(options.id);
 
-			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "').then(function($){" + "can.view.preload('" + id + "'," + options.text + ");\n})";
+			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "').then(function(can){" + "can.view.preload('" + id + "'," + options.text + ");\n})";
 			success();
 		})
 	}
@@ -473,7 +471,7 @@ steal("can/util")
 			if ( window.steal ) {
 				steal.type(info.suffix + " view js", function( options, success, error ) {
 					var type = can.view.types["." + options.type],
-						id = can.view.toId(options.rootSrc+'');
+						id = can.view.toId(options.id+'');
 
 					options.text = type.script(id, options.text)
 					success();
@@ -494,5 +492,5 @@ steal("can/util")
 
 	});
 	//!steal-pluginify-remove-end
-	
+	return can;
 });

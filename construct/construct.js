@@ -1,5 +1,5 @@
 //@steal-clean
-steal("can/util/string",function( $ ) {
+steal("can/util/string", function(can) {
 
 	// ## construct.js
 	// `can.Construct`  
@@ -237,11 +237,11 @@ steal("can/util/string",function( $ ) {
 					_fullName = can.underscore(fullName.replace(/\./g, "_")),
 					_shortName = can.underscore(shortName);
 
-				//@steal-remove-start
+				//!steal-remove-start
 				if(current[shortName]){
 					steal.dev.warn("class.js There's already something called "+fullName)
 				}
-				//@steal-remove-end
+				//!steal-remove-end
 				
 				current[shortName] = Constructor;
 			}
@@ -432,5 +432,5 @@ steal("can/util/string",function( $ ) {
 		}
 
 	});
-
+	return can.Construct;
 })

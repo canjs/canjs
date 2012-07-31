@@ -1,4 +1,4 @@
-steal("can/view").then(function(){
+steal("can/view", function(can) {
 	
 
 
@@ -368,5 +368,5 @@ can.view.register({
 	}
 })
 
-
+return can;
 });

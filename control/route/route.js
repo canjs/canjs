@@ -1,4 +1,4 @@
-steal('can/route','can/control', function(){
+steal('can/util','can/route','can/control', function(can){
 	
 	// ## control/route.js  
 	// _Controller route integration._

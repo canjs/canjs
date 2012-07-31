@@ -14,7 +14,9 @@
 	<a href='list/qunit.html'>list</a>
     <script type='text/javascript' src='../../steal/steal.js'></script>
 	    <script type='text/javascript'>
-	    	steal('can/model','funcunit/qunit','can/util/fixture').then('can/model/model_test.js')
+	    	steal('can/util','can/model','funcunit/qunit','can/util/fixture',function(CAN){
+	    		window.can = CAN;
+	    	}).then('can/model/model_test.js')
 	    </script>
     </body>
     </body>

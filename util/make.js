@@ -58,7 +58,7 @@ steal('steal/build/pluginify', function() {
 	
 	var libs = {
 			"jquery" : {
-				exclude : "can/util/jquery/jquery.1.7.1.js"
+				exclude : "jquery"
 			},
 			"mootools" : {},
 			"zepto" : {},
@@ -72,7 +72,7 @@ steal('steal/build/pluginify', function() {
 				wrapInner: [
 					'\nYUI().add("can", function(Y) {\ncan.Y = Y;\n',
 					'}, "0.0.1", {\nrequires: ["node", "io-base", "querystring", "event-focus", "array-extras"],\n optional: ["selector-css2", "selector-css3"]\n});\n'
-				],
+				]
 			}
 			
 		},	
@@ -111,32 +111,32 @@ steal('steal/build/pluginify', function() {
 
 			steal.build.pluginify("can/util/make/" + lib + ".js", extend({
 				out : "can/dist/edge/can." + lib + type + ".js",
-				global : "can = {}",
-				namespace : "can",
-				onefunc : true,
+				// global : "can = {}",
+				// namespace : "can",
+				// onefunc : true,
 				compress: compress,
-				skipCallbacks: true,
+				skipCallbacks: true
 			}, options ));
-			
-			// Strip multiline comments from uncompressed files
-			if ( ! compress ) {
 
-				// Put new index.html into production mode
-				code = readFile( "can/dist/edge/can." + lib + type + ".js" );
-
-				// Remove multiline comments
-				code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*\n/gim, "");
-
-				// Remove double semicolons from steal pluginify
-				code = code.replace( /;[\s]*;/gim, ";");
-				code = code.replace( /(\/\/.*)\n[\s]*;/gi, "$1");
-
-				// Only single new lines
-				code = code.replace( /(\n){3,}/gim, "\n\n");
-
-				// Save the file.
-				steal.File( "can/dist/edge/can." + lib + type + ".js" ).save( code );
-			}
+			// TODO Strip multiline comments from uncompressed files
+//			if ( ! compress ) {
+//
+//				// Put new index.html into production mode
+//				code = readFile( "can/dist/edge/can." + lib + type + ".js" );
+//
+//				// Remove multiline comments
+//				code = code.replace( /\/\*(?:.*)(?:\n\s+\*.*)*\n/gim, "");
+//
+//				// Remove double semicolons from steal pluginify
+//				code = code.replace( /;[\s]*;/gim, ";");
+//				code = code.replace( /(\/\/.*)\n[\s]*;/gi, "$1");
+//
+//				// Only single new lines
+//				code = code.replace( /(\n){3,}/gim, "\n\n");
+//
+//				// Save the file.
+//				steal.File( "can/dist/edge/can." + lib + type + ".js" ).save( code );
+//			}
 
 			// Replace version
 			code = readFile( "can/dist/edge/can." + lib + type + ".js" );
@@ -152,14 +152,14 @@ steal('steal/build/pluginify', function() {
 
 	each( plugins.standAlone, function( output, input ) {
 
-		var code; 
+		var code;
 
 		steal.build.pluginify("can/" + input + ".js", {
 			out: "can/dist/edge/can." + output + ".js",
-			global: "this.can",
-			onefunc: true,
+//			global: "this.can",
+//			onefunc: true,
 			compress: false,
-			skipCallbacks: true,
+//			skipCallbacks: true,
 			namespace : "can",
 			standAlone: true
 		});
@@ -169,7 +169,7 @@ steal('steal/build/pluginify', function() {
 	// Build can.fixture and can.observe.backup seperately
 	// They need can/util/object, so we can't use the standAlone option
 	each( plugins.can_util_object, function( output, input ) {
-		
+
 		steal.build.pluginify("can/" + input + ".js", {
 			out: "can/dist/edge/can." + output + ".js",
 			global: "this.can",

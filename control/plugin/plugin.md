@@ -31,23 +31,28 @@ different approaches.
 
 Once a controller is initialized on a DOM element, you can invoke a method by calling
 the plugin with the method name followed by the parameters for that method.
+When calling a method and it returns a value other than `undefined`, this value will
+be returned. Otherwise the method call will return the jQuery object (for chaining).
 
 	var MyTodo = can.Control({
 	  pluginName : 'my_todo'
 	}, {
 	  addTask: function(name, task){
-	    this.element.append(name + " " + task)
+	    this.element.append(name + ": " + task)
+	  },
+
+	  getTasks : function() {
+	    return this.element.text();
 	  }
 	});
 
-	//- inits the widget
+	// Initialize MyTodo
 	$('.my_todo').my_todo();
 	
-	//- calls the method `update`
-	$('.my_todo').my_todo("addTask", 'Brian', 'Sweep garage');
-
-Keep in mind that this approach follows the jQuery plugin convention and returns a jQuery object,
-not the methods return value. 
+	// Calls addTask, returns the jQuery element
+	$('.my_todo').my_todo("addTask", 'Brian', 'Sweep garage') // -> jQuery
+	// Calls getTasks, returns the element text
+	$('.my_todo').my_todo("getTasks") // -> Brian: Sweep garage
 
 You can also retrieve the control instance and invoke the method directly.
 

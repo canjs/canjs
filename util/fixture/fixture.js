@@ -1,10 +1,10 @@
 // needs a .then! does not steal dependencies because this needs to work with dist ...
 
 if (!window.can || !can) {
-	steal('can/util/string')
+	steal()
 }
 
-steal('can/util/object', function () {
+steal('can/util','can/util/string','can/util/object', function (can) {
 
 	var updateSettings = function (settings, originalOptions) {
 			if (!can.fixture.on) {
@@ -12,9 +12,20 @@ steal('can/util/object', function () {
 			}
 
 			//simple wrapper for logging
-			var log = function () {
+			var _logger = function(type, arr){
+				if(console.log.apply){
+					console[type].apply(console, arr)
+				} else {
+					console[type](arr)
+				}
+			},
+			log = function () {
 				if (window.console && console.log) {
-					console.log.apply(console, Array.prototype.slice.call(arguments));
+					Array.prototype.unshift.call(arguments, 'fixture INFO:');
+					_logger( "log", Array.prototype.slice.call(arguments) );
+				}
+				else if (window.opera && window.opera.postError) {
+					opera.postError("fixture INFO: " + out);
 				}
 			}
 
@@ -43,16 +54,16 @@ steal('can/util/object', function () {
 
 				if (/^\/\//.test(url)) {
 					// this lets us use rootUrl w/o having steal...
-					url = can.fixture.rootUrl === steal.root ?
-						steal.root.mapJoin(settings.fixture.substr(2)) + '' :
+					url = can.fixture.rootUrl === steal.config().root ?
+						steal.config().root.mapJoin(settings.fixture.substr(2)) + '' :
 						can.fixture.rootUrl + settings.fixture.substr(2);
 				}
 
 				delete settings.fixture;
 
-				//@steal-remove-start
+				//!steal-remove-start
 				log("looking for fixture in " + url);
-				//@steal-remove-end
+				//!steal-remove-end
 
 				settings.url = url;
 				settings.data = null;
@@ -64,9 +75,9 @@ steal('can/util/object', function () {
 				}
 			}
 			else {
-				//@steal-remove-start
+				//!steal-remove-start
 				log("using a dynamic fixture for " + settings.type + " " + settings.url);
-				//@steal-remove-end
+				//!steal-remove-end
 
 				//it's a function ... add the fixture datatype so our fixture transport handles it
 				// TODO: make everything go here for timing and other fun stuff
@@ -773,7 +784,7 @@ steal('can/util/object', function () {
 	 * If you are using StealJS it will use the Steal root
 	 * URL by default.
 	 */
-	can.fixture.rootUrl = window.steal ? steal.root : undefined;
+	can.fixture.rootUrl = window.steal ? steal.config().root : undefined;
 
 	can.fixture["-handleFunction"] = function (settings) {
 		if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
@@ -795,4 +806,5 @@ steal('can/util/object', function () {
 
 	//Expose this for fixture debugging
 	can.fixture.overwrites = overwrites;
+	return can.fixture;
 });

@@ -1,4 +1,4 @@
-steal('can/observe/attributes', function(){
+steal('can/util', 'can/observe/attributes', function(can) {
 
 /**
  * Like [can.camelize|camelize], but the first part is also capitalized
@@ -54,5 +54,5 @@ proto.__set = function(prop, value, current, success, error){
 	
 	return this;
 };
-
+return can.Observe;
 });

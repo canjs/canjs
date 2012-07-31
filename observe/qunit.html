@@ -17,7 +17,9 @@
 	<a href='backup/qunit.html'>backup</a>
     <script type='text/javascript' src='../../steal/steal.js'></script>
     <script type='text/javascript'>
-    	steal('can/observe','funcunit/qunit').then('can/observe/observe_test.js')
+    	steal('can/util','can/observe','funcunit/qunit', function(CAN){
+    		window.can = CAN;
+    	}).then('can/observe/observe_test.js')
     </script>
     </body>
 </html>

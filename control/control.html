@@ -54,10 +54,10 @@
 </div>
 </div>
 <script type="text/javascript" src="../../steal/steal.js"></script>
-<script type="text/javascript">
-steal('can/control', function(){
+<script type="text/javascript" id="demo-source">
+steal('jquery','can/control', function($, Control){
   // create a new Tabs class
-  var Tabs = can.Control({
+  var Tabs = Control({
     // initialize widget
     init: function( el ) {
       
@@ -89,5 +89,6 @@ steal('can/control', function(){
   new Tabs( '#tabs' );
 });
 </script>
+
 </body>
 </html>

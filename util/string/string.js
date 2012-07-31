@@ -1,5 +1,4 @@
-steal('can/util',function() {
-
+steal('can/util',function(can) {
 	// ##string.js
 	// _Miscellaneous string utility functions._  
 	
@@ -186,4 +185,5 @@ steal('can/util',function() {
 			replacer : replacer,
 			undHash : undHash
 		});
+	return can;
 });

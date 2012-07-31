@@ -1,4 +1,4 @@
-steal('can/model',function(){
+steal('can/util', 'can/model', function(can, Model) {
 	
 var unique = function( items ) {
 		var collect = [];
@@ -18,11 +18,18 @@ var unique = function( items ) {
 	can.extend(can.Model.prototype,{
 		/**
 		 * Returns a unique identifier for the model instance.  For example:
+		 *
 		 * @codestart
 		 * new Todo({id: 5}).identity() //-> 'todo_5'
 		 * @codeend
+		 *
 		 * Typically this is used in an element's shortName property so you can find all elements
 		 * for a model with [$.Model.prototype.elements elements].
+		 *
+		 * If your model id has special characters that are not permitted as CSS class names,
+		 * you can set the `escapeIdentity` on the model instance's constructor
+		 * which will `encodeURIComponent` the `id` of the model.
+		 *
 		 * @return {String}
 		 */
 		identity: function() {
@@ -130,7 +137,7 @@ var unique = function( items ) {
 	 * it will add the model to the element.
 	 */
 	$.fn.model = function( type ) {
-		if ( type && type instanceof $.Model ) {
+		if ( type && type instanceof can.Model ) {
 			type.hookup(this[0]);
 			return this;
 		} else {
@@ -138,5 +145,6 @@ var unique = function( items ) {
 		}
 
 	};
-	
+
+	return can;
 })

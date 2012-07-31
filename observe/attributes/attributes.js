@@ -1,4 +1,4 @@
-steal('can/observe', function(){
+steal('can/util', 'can/observe', function(can, Observe) {
 
 can.each([ can.Observe, can.Model ], function(clss){
 	// in some cases model might not be defined quite yet.
@@ -289,5 +289,5 @@ can.Observe.prototype.serialize = function(attrName){
 	
 	return attrName != undefined ? where[attrName] : where;
 };
-
+return can.Observe;
 });
