@@ -5,13 +5,12 @@ module[id] = value();
  define.amd = { jQuery: true };
 
 module['can/util/can.js'] = (function(){
-	window.can = {
-		isDeferred : function( obj ) {
-			var isFunction = this.isFunction;
-			// Returns `true` if something looks like a deferred.
-			return obj && isFunction(obj.then) && isFunction(obj.pipe)
-		}
-	};
+	window.can = window.can || {};
+	window.can.isDeferred = function( obj ) {
+		var isFunction = this.isFunction;
+		// Returns `true` if something looks like a deferred.
+		return obj && isFunction(obj.then) && isFunction(obj.pipe)
+	}
 	return window.can;
 })();
 module['can/util/preamble.js'] = (function() {
