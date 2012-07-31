@@ -1,4 +1,4 @@
-steal("can/util", function() {
+steal("can/util", function( can ) {
 
   can.extend( can, {
 
@@ -16,7 +16,7 @@ steal("can/util", function() {
         timeout = setTimeout(function() {
           fn.apply( context, args );
         }, time );
-      }
+      };
 
     },
 
@@ -38,7 +38,7 @@ steal("can/util", function() {
           }, time );
         }
 
-      }
+      };
     },
 
     defer : function( fn, context ) {
@@ -54,4 +54,5 @@ steal("can/util", function() {
 
   });
 
+  return can;
 });
