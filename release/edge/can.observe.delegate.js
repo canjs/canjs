@@ -4,7 +4,7 @@ module[id] = value();
 };
  define.amd = { jQuery: true };
 
-module['can/observe/delegate/delegate.js'] = 
+module['can/observe/delegate/delegate.js'] = (function(can) {
 	
 	
 	
@@ -363,6 +363,6 @@ module['can/observe/delegate/delegate.js'] =
 	// add helpers for testing .. 
 	can.Observe.prototype.delegate.matches = matches;
 	return can.Observe;
-
+})(module["can/util/jquery/jquery.js"], module["can/observe/observe.js"]);
 window.can = module['can/util/can.js'];
 window.module = module._orig;

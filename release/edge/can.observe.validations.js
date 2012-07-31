@@ -4,7 +4,7 @@ module[id] = value();
 };
  define.amd = { jQuery: true };
 
-module['can/observe/validations/validations.js'] = 
+module['can/observe/validations/validations.js'] = (function(can) {
 //validations object is by property.  You can have validations that
 //span properties, but this way we know which ones to run.
 //  proc should return true if there's an error or the error message
@@ -376,6 +376,6 @@ can.extend(can.Observe.prototype, {
 	}
 });
 return can.Observe;
-
+})(module["can/util/jquery/jquery.js"], module["can/observe/attributes/attributes.js"]);
 window.can = module['can/util/can.js'];
 window.module = module._orig;

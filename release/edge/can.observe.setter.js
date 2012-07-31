@@ -4,7 +4,7 @@ module[id] = value();
 };
  define.amd = { jQuery: true };
 
-module['can/observe/setter/setter.js'] = 
+module['can/observe/setter/setter.js'] = (function(can) {
 
 /**
  * Like [can.camelize|camelize], but the first part is also capitalized
@@ -61,6 +61,6 @@ proto.__set = function(prop, value, current, success, error){
 	return this;
 };
 return can.Observe;
-
+})(module["can/util/jquery/jquery.js"], module["can/observe/attributes/attributes.js"]);
 window.can = module['can/util/can.js'];
 window.module = module._orig;

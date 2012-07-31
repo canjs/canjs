@@ -4,7 +4,7 @@ module[id] = value();
 };
  define.amd = { jQuery: true };
 
-module['can/control/view/view.js'] = 
+module['can/control/view/view.js'] = (function(can) {
 	var URI = steal.URI || steal.File;
 	
 	can.Control.getFolder = function() {
@@ -91,6 +91,6 @@ module['can/control/view/view.js'] =
 		return can.view(view, data, helpers); //what about controllers in other folders?
 	};
 
-
+})(module["can/util/jquery/jquery.js"], module["can/control/control.js"], module["can/view/view.js"]);
 window.can = module['can/util/can.js'];
 window.module = module._orig;

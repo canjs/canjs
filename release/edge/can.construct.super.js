@@ -4,7 +4,7 @@ module[id] = value();
 };
  define.amd = { jQuery: true };
 
-module['can/construct/super/super.js'] = 
+module['can/construct/super/super.js'] = (function(can, Construct){
 
 // tests if we can get super in .toString()
 	var isFunction = can.isFunction,
@@ -47,6 +47,6 @@ module['can/construct/super/super.js'] =
 		}
 
 	return can;
-
+})(module["can/util/jquery/jquery.js"], module["can/construct/construct.js"]);
 window.can = module['can/util/can.js'];
 window.module = module._orig;

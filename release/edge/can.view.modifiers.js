@@ -4,7 +4,7 @@ module[id] = value();
 };
  define.amd = { jQuery: true };
 
-module['can/view/modifiers/modifiers.js'] = 
+module['can/view/modifiers/modifiers.js'] = (function($, can) {
 	//---- ADD jQUERY HELPERS -----
 	//converts jquery functions to use views	
 	var convert, modify, isTemplate, isHTML, isDOM, getCallback,
@@ -294,6 +294,6 @@ module['can/view/modifiers/modifiers.js'] =
 	"replaceWith", "val"],function(func){
 		convert(func);
 	});
-
+})(module["jquery"], module["can/view/view.js"]);
 window.can = module['can/util/can.js'];
 window.module = module._orig;
