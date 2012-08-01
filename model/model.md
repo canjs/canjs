@@ -123,10 +123,10 @@ __Property Changes__
     // listen for when the name property changes
     todo.bind('name', function(ev){  })
 
-__Listening with Controller__
+__Listening with can.Control__
 
-You should be using controller to listen to model changes like:
+You should be using can.Control to listen to model changes like:
 
-    $.Controller('Todos',{
+    Todos = can.Control({
       "{Todo} updated" : function(Todo, ev, todo) {...}
     })

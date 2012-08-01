@@ -560,10 +560,25 @@ steal('can/util','can/observe', function( can ) {
 					})
 				}
 			});
-
-
-			if(!self.fullName || self.fullName == base.fullName){
-				self.fullName = self._shortName = "Model"+(++modelNum);
+			var clean = can.proxy(this._clean, self);
+			can.each({findAll : "models", findOne: "model"}, function(method, name){
+				
+				var old = self[name];
+				can.Construct._overwrite(self, base, name, function(params, success, error){
+					// this._super to trick it to load super
+					this._super;
+					// Increment requests.
+					self._reqs++;
+					// Make the request.
+					return pipe( old.call( this, params, success, error ),
+						this, 
+						method ).then(success,error).then(clean, clean);
+				});
+			})
+			// Convert `findAll` and `findOne`.
+			var oldFindAll
+			if(self.fullName == "can.Model"){
+				self.fullName = "Model"+(++modelNum);
 			}
 			// Ddd ajax converters.
 			this.store = {};
