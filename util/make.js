@@ -58,7 +58,8 @@ steal('steal/build/pluginify', function() {
 	
 	var libs = {
 			"jquery" : {
-				exclude : "jquery"
+				exclude : "jquery",
+				shim : { 'jquery' : 'jQuery' }
 			},
 			"mootools" : {},
 			"zepto" : {},
