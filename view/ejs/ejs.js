@@ -23,7 +23,8 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 			tbody: "tr",
 			thead: "tr",
 			tfoot: "tr",
-			select: "option"
+			select: "option",
+			optgroup: "option"
 		},
 		// Escapes characters starting with `\`.
 		clean = function( content ) {
