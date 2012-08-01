@@ -2231,7 +2231,7 @@ A contacts manager application built to accompany the 3 part Nettuts+ __"Diving 
 
 - __Part 1__: [Tutorial](http://net.tutsplus.com/tutorials/javascript-ajax/diving-into-canjs/) | [Demo](http://ccummings.github.com/canjs-contacts-tutorial/part1/) | [Download](https://github.com/downloads/ccummings/canjs-contacts-tutorial/part1.zip)
 - __Part 2__: [Tutorial](http://net.tutsplus.com/tutorials/javascript-ajax/diving-into-canjs-part-2/) | [Demo](http://ccummings.github.com/canjs-contacts-tutorial/part2/) | [Download](https://github.com/downloads/ccummings/canjs-contacts-tutorial/part2.zip)
-- __Part 3__: _Tutorial (June 4)_ | [Demo](http://ccummings.github.com/canjs-contacts-tutorial/part3/) | [Download](https://github.com/downloads/ccummings/canjs-contacts-tutorial/part3.zip)
+- __Part 3__: [Tutorial](http://net.tutsplus.com/tutorials/javascript-ajax/diving-into-canjs-part-3/) | [Demo](http://ccummings.github.com/canjs-contacts-tutorial/part3/) | [Download](https://github.com/downloads/ccummings/canjs-contacts-tutorial/part3.zip)
 
 [View the source on github](https://github.com/ccummings/canjs-contacts-tutorial)
 
@@ -2395,9 +2395,9 @@ optimized. See how:
 __Control initialization__
 
 [can.Control](#can_control) pre-processes  event handlers so binding is super 
-fast.  Compare [initializing a can.Control to a Backbone.View tabs](http://jsperf.com/tabs-timing-test) widget:
+fast.  Compare [initializing a can.Control, Backbone.View and Ember.View tabs](http://jsperf.com/tabs-timing-test/7) widget:
 
-<a href="http://jsperf.com/tabs-timing-test"><img alt="Tabs initialization performance" src="http://bitovi.com/images/introducing-canjs/performance_control.png" width="650px"></a>
+<a href="http://jsperf.com/tabs-timing-test/7"><img alt="Tabs initialization performance" src="http://bitovi.com/images/introducing-canjs/performance_control.png" width="650px"></a>
 
 
 This makes a big difference for page initialization if your site has lots of controls.
