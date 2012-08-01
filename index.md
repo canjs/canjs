@@ -53,7 +53,8 @@ rich web applications easy. Use it because it's:
 
 ## Get Canned
 
-CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core download below or select the individual plugins above and click download:
+CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core download 
+below or select the individual plugins above and click download:
 
  - [can.jquery.js](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.7.min.js)) - 8.5k - [Annotated Source](http://donejs.com/can/docs/can.jquery.html)
  - [can.zepto.js](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.7.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.zepto.html)
@@ -61,15 +62,45 @@ CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core do
  - [can.mootools.js](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.7.min.js)) - 10.7k - [Annotated Source](http://donejs.com/can/docs/can.mootools.html)
  - [can.yui.js](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.7.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.yui.html)
 
+
+## Learn
+
+Our goal is to make learning CanJS as easy as possible. There are a number of resources to use:
+
+__http://canjs.us__
+
 This page walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery. If you want to see a
 fully functional version of this todo app in action,
 [view it on CanJS's Recipes page](http://canjs.us/recipes.html#everything_together-basic_todo).
 
+__[Getting Started With CanJS Video](http://www.youtube.com/watch?v=GdT4Oq6ZQ68)__
+
+Watch the <a href="http://www.youtube.com/watch?v=GdT4Oq6ZQ68">Getting Started with CanJS Video</a> for an in-depth walkthrough of 
+CanJS. If you have 42 minuites, you will learn CanJS.
+
+__[In Depth Documentation](http://donejs.com/docs.html#!canjs)__
+
+Want to know the deepest details of CanJS's API? Checkout 
+its [in depth documentation](http://donejs.com/docs.html#!canjs).
+
+__[Recipes](http://canjs.us/recipes.html)__
+
+Checkout some nifty functionality built with CanJS on 
+its [recipes](http://canjs.us/recipes.html) page. If you've got something cool, add your own!
+
+__[Example Apps](#examples)__
+
+The [Examples](#examples) section has example apps of how you
+can put CanJS to good use. 
+
+__More__
+
+
 The [Use with other libraries](#use_with_other_libraries) 
-section details the minor differences among use with other libraries.
-The [Examples](#examples) section has other awesome examples of how you
-can put CanJS to good use. There is also an [online test suite](http://ci.javascriptmvc.com/jobs/can/test/test.html).
+section details the minor differences among use 
+with other libraries. 
+There is also an [online test suite](http://ci.javascriptmvc.com/jobs/can/test/test.html).
 
 ## can.Construct `can.Construct( [classProperties,] [prototypeProperties] )`
 
