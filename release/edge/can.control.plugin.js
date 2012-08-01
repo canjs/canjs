@@ -1,5 +1,6 @@
-var module = { _orig: window.module, _define: window.define };
-var define = function(id, deps, value) {
+(function() {
+ var module = { _define : window.define };
+define = function(id, deps, value) {
 	module[id] = value();
 };
 define.amd = { jQuery: true };
@@ -248,8 +249,6 @@ can.Control.prototype.update = function( options ) {
 };
 
 })(module["jquery"], module["can/util/jquery/jquery.js"], module["can/control/control.js"]);
-window.can = module['can/util/can.js'];
 
 window.define = module._define;
-
-window.module = module._orig;
+})();

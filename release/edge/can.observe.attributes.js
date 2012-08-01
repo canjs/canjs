@@ -1,5 +1,6 @@
-var module = { _orig: window.module, _define: window.define };
-var define = function(id, deps, value) {
+(function() {
+ var module = { _define : window.define };
+define = function(id, deps, value) {
 	module[id] = value();
 };
 define.amd = { jQuery: true };
@@ -297,8 +298,6 @@ can.Observe.prototype.serialize = function(attrName){
 };
 return can.Observe;
 })(module["can/util/jquery/jquery.js"], module["can/observe/observe.js"]);
-window.can = module['can/util/can.js'];
 
 window.define = module._define;
-
-window.module = module._orig;
+})();

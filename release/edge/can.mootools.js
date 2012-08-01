@@ -1,5 +1,6 @@
-var module = { _orig: window.module, _define: window.define };
-var define = function(id, deps, value) {
+(function() {
+ var module = { _define : window.define };
+define = function(id, deps, value) {
 	module[id] = value();
 };
 define.amd = { jQuery: true };
@@ -11852,10 +11853,25 @@ module['can/model/model.js'] = (function( can ) {
 					})
 				}
 			});
-
-
-			if(!self.fullName || self.fullName == base.fullName){
-				self.fullName = self._shortName = "Model"+(++modelNum);
+			var clean = can.proxy(this._clean, self);
+			can.each({findAll : "models", findOne: "model"}, function(method, name){
+				
+				var old = self[name];
+				can.Construct._overwrite(self, base, name, function(params, success, error){
+					// this._super to trick it to load super
+					this._super;
+					// Increment requests.
+					self._reqs++;
+					// Make the request.
+					return pipe( old.call( this, params, success, error ),
+						this, 
+						method ).then(success,error).then(clean, clean);
+				});
+			})
+			// Convert `findAll` and `findOne`.
+			var oldFindAll
+			if(self.fullName == "can.Model"){
+				self.fullName = "Model"+(++modelNum);
 			}
 			// Ddd ajax converters.
 			this.store = {};
@@ -14598,7 +14614,8 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 			tbody: "tr",
 			thead: "tr",
 			tfoot: "tr",
-			select: "option"
+			select: "option",
+			optgroup: "option"
 		},
 		// Escapes characters starting with `\`.
 		clean = function( content ) {
@@ -15317,8 +15334,7 @@ module['can/util/exports.js'] = (function( can ) {
 	}
 
 })(module["can/util/jquery/jquery.js"]);
-window.can = module['can/util/can.js'];
+window['can'] = module['can/util/can.js'];
 
 window.define = module._define;
-
-window.module = module._orig;
+})();
