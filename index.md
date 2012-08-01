@@ -5,9 +5,7 @@ title: CanJS
 # Welcome to CanJS!
 
 CanJS is a MIT-licensed, client-side, JavaScript framework that makes building 
-rich web applications easy.
-
-CanJS is:
+rich web applications easy. Use it because it's:
 
 <ul class="checkmarks cf">
   <li>
@@ -47,9 +45,11 @@ CanJS is:
   </li>
 </ul>
 
+[Learn why CanJS is better](#why_canjs). 
+
 {% include builder.html %}
 
-CanJS is better! [Learn why](#why_canjs).  
+
 
 ## Get Canned
 
