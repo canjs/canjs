@@ -115,6 +115,7 @@ steal('steal/build/pluginify', function() {
 				// global : "can = {}",
 				// namespace : "can",
 				// onefunc : true,
+				exports : { 'can/util/can.js' : 'can' },
 				compress: compress,
 				skipCallbacks: true
 			}, options ));
