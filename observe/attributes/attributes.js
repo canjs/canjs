@@ -201,6 +201,16 @@ can.each([ can.Observe, can.Model ], function(clss){
 	};
 });
 
+var oldSetup = can.Observe.prototype.setup;
+
+can.Observe.prototype.setup = function(obj) {
+	oldSetup.call(this, obj);
+
+	this._init = 1;
+	this.attr(can.extend({}, this.constructor.defaults, this.attr()));
+	delete this._init;
+};
+
 /**
  * @hide
  * @function can.Observe.prototype.convert
