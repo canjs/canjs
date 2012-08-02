@@ -282,8 +282,10 @@ can.Observe.prototype.serialize = function(attrName){
 	}
 		
 	can.each(attrs, function( val, name ) {
-		var type = Class.attributes[name],
-			converter= Class.serialize[type];
+		var type, converter;
+		
+		type = Class.attributes ? Class.attributes[name] : 0;
+		converter = Class.serialize ? Class.serialize[type] : 0;
 			
 		// if the value is an object, and has a attrs or serialize function
 		where[name] = val && typeof val.serialize == 'function' ?
