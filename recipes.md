@@ -271,8 +271,8 @@ can easily solve the editing-data-that-is-represented-two-places problem.  It
 shows two task lists of overlaping data.  Notice how the __"do dishes"__ is listed 
 twice. But if you click one "do dishes" checkbox, it updates the other.
 
-<iframe style="width: 100%; height: 300px" 
-        src="http://jsfiddle.net/pCtxs/5/embedded/result,html,js,css" 
+<iframe style="width: 100%; height: 300px"
+        src="http://jsfiddle.net/pCtxs/11/embedded/result,html,js,css" 
         allowfullscreen="allowfullscreen" 
         frameborder="0">JSFiddle</iframe>
 
