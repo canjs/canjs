@@ -210,8 +210,8 @@ can.Control('Menu', {
 	},
 	resizeMenu : function(){
 		var menuWrapHeight = this.element.find('#menu-wrapper').height(),
-				menuHeight     = this._menu.height(),
-				windowHeight   = $(window).height();
+			menuHeight     = this._menu.height(),
+			windowHeight   = $(window).height();
 		this.element.find('#inner-menu-wrap').css('maxHeight', (windowHeight - (menuWrapHeight - menuHeight) - 40) + "px");
 		if(this.element.find('#inner-menu-wrap').innerHeight() - menuHeight > 2){ // top and bottom borders
 			this._menuShouldScroll = true;
@@ -254,6 +254,7 @@ can.Control('Menu', {
 	positionActiveMenuItem : function(){
 		clearTimeout(this._positionTimeout);
 		this._positionTimeout = setTimeout(this.proxy(function(){
+			if(this._menuShouldScroll === false) return; // prevent scrolling if there is enough space
 			if(animationCount === 0){
 				var active = this.element.find('#menu a.active');
 				if(active.length === 0){
