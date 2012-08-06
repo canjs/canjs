@@ -53,12 +53,20 @@ steal('can/route', function() {
             _setHash: function(serialized) {
                 var path = can.route.param(serialized, true);
                 if(path !== can.route._getHash()) {
-                    history.pushState(null, null, path);
+                    can.route.updateLocation(path);
                 }
                 return path;
             },
             current: function( options ) {
                 return this._getHash() === can.route.param(options);
+            },
+            /**
+             * This is a blunt hook for updating the window.location.
+             * You may prefer to use replaceState instead of pushState in some circumstances,
+             * in which case you can overwrite this method and handle the change yourself.
+             */
+            updateLocation: function(path) {
+                history.pushState(null, null, path);
             },
             url: function( options, merge ) {
                 if (merge) {
