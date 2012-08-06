@@ -108,13 +108,13 @@ steal('can/route/pushstate',
     'can/route',
     'can/util/demos/observer.js',
 function() {
-    
+    var BASE_URL = '/demo/';
     // DRAW ROUTES
     
     // route observe that get smapped to routes
     var routes = new can.Observe.List([
-        {route : "/demo/:type/:id", def : {}},
-        {route : "/demo/:type", def : {type : "recipe"}}
+        {route : BASE_URL+":type/:id", def : {}},
+        {route : BASE_URL+":type", def : {type : "recipe"}}
     ]);
     var drawRoutes = function(){
         var routesEl= $("#routes");
@@ -207,9 +207,10 @@ function() {
     })
     var setInput = function(){
         $("#path").text(location.pathname+location.search);
-    }
+    };
     setInput();
-    can.bind.call(window, 'popstate', setInput);
+    // HTML5 history is a mess - history.path changes when the path changes
+    can.route.history.bind('path',setInput);
     
     $(".back").click(function(){
         window.history.back()
@@ -243,8 +244,8 @@ function() {
         
     })
     $("#changeRoute").click(function(){
-        routes[1].attr({ route: "/demo/:type", def: {type: "recipe",foo: "bar"} }, true)
-        history.pushState(null,null,'/demo/');
+        routes[1].attr({ route: BASE_URL+":type", def: {type: "recipe",foo: "bar"} }, true)
+        history.pushState(null,null,BASE_URL);
     })
 })
 </script>
