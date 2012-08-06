@@ -2,9 +2,33 @@ steal('can/route', function() {
     "use strict";
 
     if(window.history && history.pushState) {
+
+        var getPath = function() {
+            return location.pathname + location.search;
+        };
+
+        // popstate only fires on back/forward.
+        // To detect when someone calls push/replaceState, we need to wrap each method.
+        can.each(['pushState','replaceState'],function(method) {
+            var orig = history[method];
+            history[method] = function(state) {
+                var result = orig.apply(history, arguments);
+                can.route.history.attr('path',getPath());
+                can.route.history.attr('type',method);
+                return result;
+            };
+        });
+        // Bind to popstate for back/forward
+        can.bind.call(window, 'popstate', function() {
+            can.route.history.attr('path',getPath());
+            can.route.history.attr('type','popState');
+        });
+
+
         var param = can.route.param,
             paramsMatcher = /^\?(?:[^=]+=[^&]*&)*[^=]+=[^&]*/;
         can.extend(can.route, {
+            history: new can.Observe({path:getPath()}),
             _paramsMatcher: paramsMatcher,
             _querySeparator: '?',
             _setup: function() {
@@ -14,8 +38,7 @@ steal('can/route', function() {
                         e.preventDefault();
                     }
                 });
-                // Bind to popstate event, which fires on all history changes
-                can.bind.call(window, 'popstate', can.route.setState);
+                can.route.history.bind('path',can.route.setState);
             },
             updateWith: function(href) {
                 var curParams = can.route.deparam(href);
@@ -26,9 +49,7 @@ steal('can/route', function() {
                 }
                 return false;
             },
-            _getHash: function() {
-                return location.pathname + location.search;
-            },
+            _getHash: getPath,
             _setHash: function(serialized) {
                 var path = can.route.param(serialized, true);
                 if(path !== can.route._getHash()) {
