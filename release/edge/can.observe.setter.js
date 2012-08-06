@@ -63,8 +63,6 @@ proto.__set = function(prop, value, current, success, error){
 return can.Observe;
 })(module["can/util/jquery/jquery.js"], module["can/observe/attributes/attributes.js"]);
 
-window.can = module['can/util/can.js'];
-
 window.define = module._define;
 
 window.module = module._orig;

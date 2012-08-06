@@ -6069,8 +6069,7 @@ module['can/util/exports.js'] = (function( can ) {
 	}
 
 })(module["can/util/jquery/jquery.js"]);
-
-window.can = module['can/util/can.js'];
+window['can'] = module['can/util/can.js'];
 
 window.define = module._define;
 

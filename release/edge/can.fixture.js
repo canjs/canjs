@@ -1044,8 +1044,6 @@ module['can/util/fixture/fixture.js'] = (function (can) {
 	return can.fixture;
 })(module["can/util/jquery/jquery.js"], module["can/util/string/string.js"], module["can/util/object/object.js"]);
 
-window.can = module['can/util/can.js'];
-
 window.define = module._define;
 
 window.module = module._orig;

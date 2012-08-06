@@ -6665,8 +6665,7 @@ module['can/route/route.js'] = (function(can) {
 module['can/util/can-all.js'] = (function(can) {
 	return can;
 })(module["can/util/jquery/jquery.js"], module["can/construct/proxy/proxy.js"], module["can/construct/super/super.js"], module["can/control/control.js"], module["can/control/plugin/plugin.js"], module["can/view/modifiers/modifiers.js"], module["can/model/model.js"], module["can/view/ejs/ejs.js"], module["can/route/route.js"]);
-
-window.can = module['can/util/can.js'];
+window['can'] = module['can/util/can.js'];
 
 window.define = module._define;
 
