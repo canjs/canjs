@@ -146,7 +146,15 @@ steal('steal/build/pluginify', function() {
 			steal.File( "can/dist/edge/can." + lib + type + ".js" ).save( code );
 		});
 	});
-	
+
+	steal.build.pluginify("can/util/can-all.js", {
+		out : "can/dist/edge/can.jquery.all.js",
+		exports : { 'can/util/can.js' : 'can' },
+		compress: false,
+		skipCallbacks: true,
+		exclude : "jquery",
+		shim : { 'jquery' : 'jQuery' }
+	});
 
 	// Build standalone plugins
 	STEALDOJO = STEALMOO = STEALYUI = STEALZEPTO = false;
@@ -174,10 +182,9 @@ steal('steal/build/pluginify', function() {
 
 		steal.build.pluginify("can/" + input + ".js", {
 			out: "can/dist/edge/can." + output + ".js",
-			global: "this.can",
-			onefunc: true,
+			shim : { 'can/util' : 'can' },
 			exclude: [
-				'can/util/jquery/jquery.1.7.1.js',
+				'jquery',
 				'can/util/preamble.js',
 				'can/util/jquery/jquery.js',
 				'can/util/array/each.js',
@@ -187,7 +194,6 @@ steal('steal/build/pluginify', function() {
 			],
 			compress: false,
 			skipCallbacks: true,
-			namespace: "can",
 			standAlone: false
 		});
 
