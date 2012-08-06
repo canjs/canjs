@@ -1,7 +1,6 @@
-(function() {
- var module = { _define : window.define };
+var module = { _orig: window.module, _define: window.define };
 module['jquery'] = jQuery;
-define = function(id, deps, value) {
+var define = function(id, deps, value) {
 	module[id] = value();
 };
 define.amd = { jQuery: true };
@@ -1768,7 +1767,7 @@ module['can/observe/observe.js'] = (function(can, Construct) {
 			}
 
 			// Create a copy.
-			props = props.slice(0);
+			props = can.makeArray( props );
 
 			var len = Math.min(props.length, this.length),
 				collectingStarted = collect(),
@@ -6070,7 +6069,9 @@ module['can/util/exports.js'] = (function( can ) {
 	}
 
 })(module["can/util/jquery/jquery.js"]);
-window['can'] = module['can/util/can.js'];
+
+window.can = module['can/util/can.js'];
 
 window.define = module._define;
-})();
+
+window.module = module._orig;

@@ -1,6 +1,5 @@
-(function() {
- var module = { _define : window.define };
-define = function(id, deps, value) {
+var module = { _orig: window.module, _define: window.define };
+var define = function(id, deps, value) {
 	module[id] = value();
 };
 define.amd = { jQuery: true };
@@ -61,5 +60,8 @@ proxy = function( funcs ) {
 	return can;
 })(module["can/util/jquery/jquery.js"], module["can/construct/construct.js"]);
 
+window.can = module['can/util/can.js'];
+
 window.define = module._define;
-})();
+
+window.module = module._orig;

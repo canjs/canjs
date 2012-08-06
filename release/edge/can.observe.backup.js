@@ -1,7 +1,6 @@
-(function() {
- var module = { _define : window.define };
+var module = { _orig: window.module, _define: window.define };
 module['can/util'] = can;
-define = function(id, deps, value) {
+var define = function(id, deps, value) {
 	module[id] = value();
 };
 define.amd = { jQuery: true };
@@ -387,5 +386,8 @@ module['can/observe/backup/backup.js'] = (function (can) {
 	return can.Observe;
 })(module["can/util/jquery/jquery.js"], module["can/observe/observe.js"], module["can/util/object/object.js"]);
 
+window.can = module['can/util/can.js'];
+
 window.define = module._define;
-})();
+
+window.module = module._orig;
