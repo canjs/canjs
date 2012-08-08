@@ -1807,6 +1807,107 @@ can.Control.prototype.update = function( options ) {
 };
 
 })(module["jquery"], module["can/util/jquery/jquery.js"], module["can/control/control.js"]);
+module['can/util/function/function.js'] = (function( can ) {
+
+  can.extend( can, {
+
+    debounce : function( fn, time, context ) {
+
+      var timeout;
+
+      return function() {
+
+        var args = arguments;
+            
+        context = context || this;
+
+        clearTimeout( timeout );
+        timeout = setTimeout(function() {
+          fn.apply( context, args );
+        }, time );
+      };
+
+    },
+
+    throttle : function( fn, time, context ) {
+
+      var run;
+
+      return function() {
+
+        var args = arguments;
+
+        context = context || this;
+
+        if ( ! run ) {
+          run = true;
+          setTimeout(function() {
+            fn.apply( context, args );
+            run = false;
+          }, time );
+        }
+
+      };
+    },
+
+    defer : function( fn, context ) {
+
+      var args = arguments;
+      context = context || this;
+
+      setTimeout(function() {
+        fn.apply( context, args );
+      }, 0 );
+
+    }
+
+  });
+
+  return can;
+})(module["can/util/jquery/jquery.js"]);
+module['can/control/modifier/modifier.js'] = (function() {
+
+	// Hang on to original action
+	var originalAction = can.Control._action,
+	    originalShifter = can.Control._shifter;
+
+	// Redefine _isAction to handle new syntax
+	can.extend( can.Control, {
+
+		_action: function( methodName, options ) {
+
+			var parts = methodName.split(":"),
+			    name = parts.shift();
+
+			return originalAction.apply( this, [ name, options ] );
+		},
+
+		_shifter: function( context, name ) {
+			var fn = originalShifter.apply( this, arguments ),
+			    parts = name.split(":"),
+			    fnName, args, modifier;
+
+			// If there's still a part left, this means we have a modifier
+			if ( parts[1] ) {
+				parts = parts.pop().match(/([\w]+)\((.+)\)/);
+
+				if(parts){
+					fnName = parts[1];
+					args = parts[2] ? parts[2].split(","): [];
+
+					modifier = can.getObject( fnName, [ context.options, can, window ]);
+
+					if ( modifier ) {
+						args.unshift( fn );
+						fn = modifier.apply( null, args );
+					}
+				}
+			}
+			return fn;
+		}
+	});
+
+})(module["can/control/control.js"], module["can/util/function/function.js"]);
 module['can/view/view.js'] = (function( can ) {
 	// ## view.js
 	// `can.view`  
@@ -6664,7 +6765,7 @@ module['can/route/route.js'] = (function(can) {
 })(module["can/util/jquery/jquery.js"], module["can/observe/observe.js"], module["can/util/string/deparam/deparam.js"]);
 module['can/util/can-all.js'] = (function(can) {
 	return can;
-})(module["can/util/jquery/jquery.js"], module["can/construct/proxy/proxy.js"], module["can/construct/super/super.js"], module["can/control/control.js"], module["can/control/plugin/plugin.js"], module["can/control/modifier.js"], module["can/view/modifiers/modifiers.js"], module["can/model/model.js"], module["can/view/ejs/ejs.js"], module["can/route/route.js"]);
+})(module["can/util/jquery/jquery.js"], module["can/construct/proxy/proxy.js"], module["can/construct/super/super.js"], module["can/control/control.js"], module["can/control/plugin/plugin.js"], module["can/control/modifier/modifier.js"], module["can/view/modifiers/modifiers.js"], module["can/model/model.js"], module["can/view/ejs/ejs.js"], module["can/route/route.js"]);
 window['can'] = module['can/util/can.js'];
 
 window.define = module._define;
