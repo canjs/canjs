@@ -24,14 +24,16 @@ steal("can/control", "can/util/function", function() {
 			if ( parts[1] ) {
 				parts = parts.pop().match(/([\w]+)\((.+)\)/);
 
-				fnName = parts[1];
-				args = parts[2] ? parts[2].split(","): [];
+				if(parts){
+					fnName = parts[1];
+					args = parts[2] ? parts[2].split(","): [];
 
-				modifier = can.getObject( fnName, [ context.options, can, window ]);
+					modifier = can.getObject( fnName, [ context.options, can, window ]);
 
-				if ( modifier ) {
-					args.unshift( fn );
-					fn = modifier.apply( null, args );
+					if ( modifier ) {
+						args.unshift( fn );
+						fn = modifier.apply( null, args );
+					}
 				}
 			}
 			return fn;

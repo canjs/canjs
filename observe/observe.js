@@ -1047,7 +1047,7 @@ steal('can/util','can/construct', function(can, Construct) {
 			}
 
 			// Create a copy.
-			props = props.slice(0);
+			props = can.makeArray( props );
 
 			var len = Math.min(props.length, this.length),
 				collectingStarted = collect(),
