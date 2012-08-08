@@ -11831,6 +11831,7 @@ module['can/model/model.js'] = (function( can ) {
 	
 	
 	can.Model = can.Observe({
+		fullName: "can.Model",
 		setup : function(base){
 			can.Observe.apply(this, arguments);
 			if(!can.Model){
@@ -11838,38 +11839,38 @@ module['can/model/model.js'] = (function( can ) {
 			}
 			var self = this,
 				clean = can.proxy(this._clean, self);
-				
+			
+			
+			// go through ajax methods and set them up
 			can.each(ajaxMethods, function(method, name){
+				// if an ajax method is not a function, it's either
+				// a string url like findAll: "/recipes" or an
+				// ajax options object like {url: "/recipes"}
 				if ( ! can.isFunction( self[name] )) {
+					// use ajaxMaker to convert that into a function
+					// that returns a deferred with the data
 					self[name] = ajaxMaker(method, self[name]);
 				}
+				// check if there's a make function like makeFindAll
+				// these take deferred function and can do special
+				// behavior with it (like look up data in a store)
 				if (self["make"+can.capitalize(name)]){
+					// pass the deferred method to the make method to get back
+					// the "findAll" method.
 					var newMethod = self["make"+can.capitalize(name)](self[name]);
 					can.Construct._overwrite(self, base, name,function(){
+						// make sure super is called
 						this._super;
+						// increment the numer of requests
 						this._reqs++;
 						return newMethod.apply(this, arguments).then(clean, clean);
 					})
 				}
 			});
-			var clean = can.proxy(this._clean, self);
-			can.each({findAll : "models", findOne: "model"}, function(method, name){
-				
-				var old = self[name];
-				can.Construct._overwrite(self, base, name, function(params, success, error){
-					// this._super to trick it to load super
-					this._super;
-					// Increment requests.
-					self._reqs++;
-					// Make the request.
-					return pipe( old.call( this, params, success, error ),
-						this, 
-						method ).then(success,error).then(clean, clean);
-				});
-			})
+
 			// Convert `findAll` and `findOne`.
 			var oldFindAll
-			if(self.fullName == "can.Model"){
+			if(self.fullName == "can.Model" || !self.fullName){
 				self.fullName = "Model"+(++modelNum);
 			}
 			// Ddd ajax converters.
