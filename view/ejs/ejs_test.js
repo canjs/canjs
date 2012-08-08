@@ -903,17 +903,36 @@ test("live binding select", function(){
 		]),
 		compiled = new can.EJS({text: text}).render({items: items}),
 		div = document.createElement('div');
-
+		
 		div.appendChild(can.view.frag(compiled))
-		equals(div.getElementsByTagName('option').length, 3, '3 items in list')
+		equal(div.getElementsByTagName('option').length, 3, '3 items in list')
 
-		equals(div.getElementsByTagName('option')[0].value, ""+items[0].id,
+		equal(div.getElementsByTagName('option')[0].value, ""+items[0].id,
 		       'value attr set');
-		equals(div.getElementsByTagName('option')[0].textContent, items[0].title,
+		equal(div.getElementsByTagName('option')[0].textContent, items[0].title,
 		       'content of option');
 
 		items.push({id: 3, name: 'Go to pub'})
-		equals(div.getElementsByTagName('option').length, 4, '4 items in list')
+		equal(div.getElementsByTagName('option').length, 4, '4 items in list')
 });
+
+test("live binding textarea", function(){
+	can.view.ejs("textarea-test","<textarea>Before<%= obs.attr('middle') %>After</textarea>");
+	
+	var obs = new can.Observe({middle: "yes"}),
+		div = document.createElement('div');
+	
+	div.appendChild( can.view("textarea-test",{obs: obs}) )
+	var textarea = div.firstChild
+	
+	equal(textarea.value, "BeforeyesAfter");
+	
+	obs.attr("middle","Middle")
+	equal(textarea.value, "BeforeMiddleAfter")
+	
+})
+
+
+
 
 })()
