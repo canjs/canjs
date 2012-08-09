@@ -2630,7 +2630,7 @@ __1.0.7__ (June 25nd 2012)
       - Fixed a [global collision](https://github.com/jupiterjs/canjs/commit/7aea62462f3d8d7855f71ccdf16330e60d59f6fa) with `can.Control`.
 
  - Removed globals
-      - Thanks [Danial Franz](https://github.com/daniel-franz)!
+      - Thanks [Daniel Franz](https://github.com/daniel-franz)!
 
 __1.0.6__ (June 22nd 2012)
 
