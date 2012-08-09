@@ -31,6 +31,54 @@ var getAttr = function(el, attrName){
 			el.getAttribute(attrName);
 	}
 
+test("register register and replace work", function(){
+	
+	var ids = function(arr){
+		return can.map(arr, function(item){
+			return item.id
+		})
+	},
+		two = {id: 2},
+		listOne = [{id: 1},two,{id: 3}];
+		
+	can.EJS.register(listOne);
+	var listTwo = [two];
+	
+	can.EJS.register(listTwo);
+	
+	var newLabel = {id: 4}
+	can.EJS.replace(listTwo, [newLabel])
+	
+	same( ids(listOne), [1,4,3], "replaced" )
+	same( ids(listTwo), [4] );
+	
+	can.EJS.replace(listTwo,[{id: 5},{id: 6}]);
+	
+	same( ids(listOne), [1,5,6,3], "replaced" );
+	
+	same( ids(listTwo), [5,6], "replaced" );
+	
+	can.EJS.replace(listTwo,[{id: 7}])
+	
+	same( ids(listOne), [1,7,3], "replaced" );
+	
+	same( ids(listTwo), [7], "replaced" );
+	
+	can.EJS.replace( listOne, [{id: 8}])
+	
+	same( ids(listOne), [8], "replaced" );
+	same( ids(listTwo), [7], "replaced" );
+	
+	can.EJS.unregister(listOne);
+	can.EJS.unregister(listTwo);
+	
+	
+	
+	same(can.EJS.nodeMap, {} );
+	same(can.EJS.nodeListMap ,{} )
+	
+	
+})
 
 test("render with left bracket", function(){
 	var compiled = new can.EJS({text: this.squareBrackets, type: '['}).render({animals: this.animals})
@@ -857,10 +905,13 @@ test("nested live bindings", function(){
 	
 	var div = document.createElement('div');
 	div.appendChild(can.view("//can/view/ejs/nested_live_bindings.ejs",{items: items}))
-	items.push({title: 0, is_done: false, id: 1});
+	
+	items.push({title: 1, is_done: false, id: 1});
 	// this will throw an error unless EJS protects against
 	// nested objects
-	items[0].attr('is_done',true)
+
+	items[0].attr('is_done',true);
+	console.log("html -",div.innerHTML)
 });
 
 // Similar to the nested live bindings test, this makes sure templates with control blocks
@@ -931,6 +982,36 @@ test("live binding textarea", function(){
 	equal(textarea.value, "BeforeMiddleAfter")
 	
 })
+
+test("A non-escaping live magic tag within a control structure", function(){
+	var text = "<div><% items.each(function(ob) { %>" +
+		"<%== ob.attr('html') %>" +
+		"<% }); %></div>",
+		items	 = new can.Observe.List([
+			{html: "<label>Hello World</label>"}
+		]),
+		compiled = new can.EJS({text: text}).render({items: items}),
+		div = document.createElement('div')
+	
+		div.appendChild(can.view.frag(compiled))
+		
+		
+		ok(div.getElementsByTagName('label')[0], "label exists")
+		
+		items[0].attr("html","<p>hi</p>");
+		
+		equals(div.getElementsByTagName('label').length, 0, "label is removed")
+		equals(div.getElementsByTagName('p').length, 1, "label is replaced by p")
+		
+		
+		
+		items.push({
+			html: "<p>hola</p>"
+		});
+		
+		equals(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
+		
+});
 
 
 

@@ -13,7 +13,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 		attrReg = /([^\s]+)=$/,
 		newLine = /(\r|\n)+/g,
-		attributeReplace = /__!!__/g,
+		attributeReplace = /__!!__/g,		
 		tagMap = {
 			"": "span", 
 			table: "tr", 
@@ -80,6 +80,82 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 		// property with observes
 		observeProp = function(name){
 			return name.indexOf("|") >= 0;
+		},
+		// a mapping of element ids to nodeList ids
+		nodeMap = {},
+		// a mapping of nodeList ids to nodeList
+		nodeListMap = {},
+		expando = "ejs_"+Math.random(),
+		_id=0,
+		id = function(node){
+			if( node[expando]){
+				return node[expando]
+			} else {
+				return node[expando] = (node.nodeName ? "element_" : "obj_")+(++_id);
+			}
+		},
+		// 
+		register= function(nodeList){
+			var nLId = id(nodeList)
+			nodeListMap[nLId] = nodeList;
+			
+			can.each(nodeList, function(node){
+				addNodeListId(node, nLId)
+			})
+		},
+		addNodeListId = function(node, nodeListId){
+			var nodeListIds = nodeMap[id(node)];
+				if(!nodeListIds){
+					nodeListIds = nodeMap[id(node)] = []
+				}
+				nodeListIds.push(nodeListId)
+		},
+		unregister= function(nodeList){
+			var nLId = id(nodeList);
+			can.each(nodeList, function(node){
+				removeNodeListId(node, nLId);
+			});
+			delete nodeListMap[nLId];
+		},
+		// removes a nodeListId from a node's nodeListIds
+		removeNodeListId= function(node, nodeListId){
+			var nodeListIds = nodeMap[id(node)],
+				index = can.inArray(nodeListId, nodeListIds);
+			index >=0 && nodeListIds.splice( index ,  1 )
+			if(!nodeListIds.length){
+				delete nodeMap[id(node)];
+			}
+		},
+		// all lists
+		replace= function(oldNodeList, newNodes){
+			// for each node in the node list
+			var oldNodeList = can.makeArray( oldNodeList );
+			
+			can.each( oldNodeList, function(node){
+				// for each nodeList the node is in
+				can.each( can.makeArray( nodeMap[id(node)] ), function( nodeListId ){
+					var nodeList = nodeListMap[nodeListId];
+					var startIndex = can.inArray( node, nodeList ),
+						endIndex = can.inArray( oldNodeList[oldNodeList.length - 1], nodeList  );
+					
+					// remove this nodeListId from each node
+					if(startIndex >=0 && endIndex >= 0){
+						//
+						for( var i = startIndex; i <= endIndex; i++){
+							var n = nodeList[i];
+							removeNodeListId(n, nodeListId)
+						}
+						// swap in new nodes into the nodeLIst
+						nodeList.splice.apply(nodeList, [startIndex,endIndex-startIndex+1 ].concat(newNodes))
+						// tell these new nodes they belong to the nodeList
+						can.each(newNodes, function(node){
+							addNodeListId(node, nodeListId)
+						})
+					}
+					
+				});
+				
+			})
 		},
 		// Returns escaped/sanatized content for anything other than a live-binding
 		contentEscape = function( txt ) {
@@ -257,25 +333,25 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 							var attached = nodes[0].parentNode;
 							// update the nodes in the DOM with the new rendered value
 							if( attached ) {
-								nodes = makeAndPut(newVal, nodes);
+								makeAndPut(newVal);
+							} else {
+								// no longer attached
 							}
 							teardownCheck(nodes[0].parentNode)
-						}
+						};
 						
 						// make sure we have a valid parentNode
 						parentNode = getParentNode(span, parentNode)
 						// A helper function to manage inserting the contents
 						// and removing the old contents
-						var makeAndPut = function(val, remove){
+						var nodes,
+							makeAndPut = function(val){
 								// create the fragment, but don't hook it up
 								// we need to insert it into the document first
-								
 								var frag = can.view.frag(val, parentNode),
 									// keep a reference to each node
-									nodes = can.map(frag.childNodes,function(node){
-										return node;
-									}),
-									last = remove[remove.length - 1];
+									newNodes = can.makeArray(frag.childNodes),
+									last = nodes ? nodes[nodes.length - 1] : span;
 								
 								// Insert it in the `document` or `documentFragment`
 								if( last.nextSibling ){
@@ -283,14 +359,19 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 								} else {
 									last.parentNode.appendChild(frag)
 								}
-								// Remove the old content.
-								can.remove( can.$(remove) );
-								
-								return nodes;
-							},
+								// nodes hasn't been set yet
+								if( !nodes ) {
+									can.remove( can.$(span) );
+									nodes = newNodes;
+									register(nodes);
+								} else {
+									can.remove( can.$(nodes) );
+									replace(nodes,newNodes);
+								}
+							};
 							// nodes are the nodes that any updates will replace
 							// at this point, these nodes could be part of a documentFragment
-							nodes = makeAndPut(binding.value, [span]);
+						makeAndPut(binding.value, [span]);
 						
 						
 						setupTeardownOnDestroy(parentNode);
@@ -400,7 +481,13 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 			}else {
 				return "";
 			}
-		}
+		},
+		register: register,
+		unregister: unregister,
+		replace: replace,
+		nodeMap: nodeMap,
+		// a mapping of nodeList ids to nodeList
+		nodeListMap: nodeListMap
 });
 	// Start scanning code.
 	var tokenReg = new RegExp("(" +[ "<%%", "%%>", "<%==", "<%=", 
