@@ -576,7 +576,6 @@ steal('can/util','can/observe', function( can ) {
 				}
 			});
 
-			// Convert `findAll` and `findOne`.
 			var oldFindAll
 			if(self.fullName == "can.Model" || !self.fullName){
 				self.fullName = "Model"+(++modelNum);

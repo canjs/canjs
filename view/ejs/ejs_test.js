@@ -31,6 +31,54 @@ var getAttr = function(el, attrName){
 			el.getAttribute(attrName);
 	}
 
+test("register register and replace work", function(){
+	
+	var ids = function(arr){
+		return can.map(arr, function(item){
+			return item.id
+		})
+	},
+		two = {id: 2},
+		listOne = [{id: 1},two,{id: 3}];
+		
+	can.EJS.register(listOne);
+	var listTwo = [two];
+	
+	can.EJS.register(listTwo);
+	
+	var newLabel = {id: 4}
+	can.EJS.replace(listTwo, [newLabel])
+	
+	same( ids(listOne), [1,4,3], "replaced" )
+	same( ids(listTwo), [4] );
+	
+	can.EJS.replace(listTwo,[{id: 5},{id: 6}]);
+	
+	same( ids(listOne), [1,5,6,3], "replaced" );
+	
+	same( ids(listTwo), [5,6], "replaced" );
+	
+	can.EJS.replace(listTwo,[{id: 7}])
+	
+	same( ids(listOne), [1,7,3], "replaced" );
+	
+	same( ids(listTwo), [7], "replaced" );
+	
+	can.EJS.replace( listOne, [{id: 8}])
+	
+	same( ids(listOne), [8], "replaced" );
+	same( ids(listTwo), [7], "replaced" );
+	
+	can.EJS.unregister(listOne);
+	can.EJS.unregister(listTwo);
+	
+	
+	
+	same(can.EJS.nodeMap, {} );
+	same(can.EJS.nodeListMap ,{} )
+	
+	
+})
 
 test("render with left bracket", function(){
 	var compiled = new can.EJS({text: this.squareBrackets, type: '['}).render({animals: this.animals})
@@ -857,10 +905,13 @@ test("nested live bindings", function(){
 	
 	var div = document.createElement('div');
 	div.appendChild(can.view("//can/view/ejs/nested_live_bindings.ejs",{items: items}))
-	items.push({title: 0, is_done: false, id: 1});
+	
+	items.push({title: 1, is_done: false, id: 1});
 	// this will throw an error unless EJS protects against
 	// nested objects
-	items[0].attr('is_done',true)
+
+	items[0].attr('is_done',true);
+	console.log("html -",div.innerHTML)
 });
 
 // Similar to the nested live bindings test, this makes sure templates with control blocks
@@ -890,6 +941,78 @@ test("recursive views", function(){
 	ok(/class="leaf"/.test(div.innerHTML), "we have a leaf")
 	
 })
+
+
+test("live binding select", function(){
+	var text = "<select><% items.each(function(ob) { %>" +
+		"<option value='<%= ob.attr('id') %>'><%= ob.attr('title') %></option>" +
+		"<% }); %></select>",
+		items	 = new can.Observe.List([
+			{title: "Make bugs", is_done: true, id: 0},
+			{title: "Find bugs", is_done: false, id: 1},
+			{title: "Fix bugs", is_done: false, id: 2}
+		]),
+		compiled = new can.EJS({text: text}).render({items: items}),
+		div = document.createElement('div');
+		
+		div.appendChild(can.view.frag(compiled))
+		equal(div.getElementsByTagName('option').length, 3, '3 items in list')
+
+		equal(div.getElementsByTagName('option')[0].value, ""+items[0].id,
+		       'value attr set');
+		equal(div.getElementsByTagName('option')[0].textContent, items[0].title,
+		       'content of option');
+
+		items.push({id: 3, name: 'Go to pub'})
+		equal(div.getElementsByTagName('option').length, 4, '4 items in list')
+});
+
+test("live binding textarea", function(){
+	can.view.ejs("textarea-test","<textarea>Before<%= obs.attr('middle') %>After</textarea>");
+	
+	var obs = new can.Observe({middle: "yes"}),
+		div = document.createElement('div');
+	
+	div.appendChild( can.view("textarea-test",{obs: obs}) )
+	var textarea = div.firstChild
+	
+	equal(textarea.value, "BeforeyesAfter");
+	
+	obs.attr("middle","Middle")
+	equal(textarea.value, "BeforeMiddleAfter")
+	
+})
+
+test("A non-escaping live magic tag within a control structure", function(){
+	var text = "<div><% items.each(function(ob) { %>" +
+		"<%== ob.attr('html') %>" +
+		"<% }); %></div>",
+		items	 = new can.Observe.List([
+			{html: "<label>Hello World</label>"}
+		]),
+		compiled = new can.EJS({text: text}).render({items: items}),
+		div = document.createElement('div')
+	
+		div.appendChild(can.view.frag(compiled))
+		
+		
+		ok(div.getElementsByTagName('label')[0], "label exists")
+		
+		items[0].attr("html","<p>hi</p>");
+		
+		equals(div.getElementsByTagName('label').length, 0, "label is removed")
+		equals(div.getElementsByTagName('p').length, 1, "label is replaced by p")
+		
+		
+		
+		items.push({
+			html: "<p>hola</p>"
+		});
+		
+		equals(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
+		
+});
+
 
 
 
