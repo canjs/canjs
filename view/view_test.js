@@ -188,5 +188,6 @@ steal('can/view', function(can) {
 		var renderer = can.view('renderer_test');
 		ok(can.isFunction(renderer), 'Renderer is a function');
 		equal(renderer({ test : 'working test' }), 'This is a working test', 'Renderer rendered');
+		can.view("//can/view/test/qunit/template.ejs");
 	})
 });

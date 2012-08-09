@@ -1,4 +1,4 @@
-(function() {
+steal('can/util', 'can/control/modifier', function(can) {
 
 	module("can/control/modifier");
 
@@ -51,4 +51,4 @@
 
 	});
 
-}());
+});

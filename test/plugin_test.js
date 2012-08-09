@@ -10,5 +10,6 @@ steal('./setup.js').then(
 	, 'can/control/plugin/plugin_test.js'
 	, 'can/control/route/route_test.js'
 	, 'can/control/view/test/qunit/view_test.js'
+	// TODO , 'can/control/modifier/modifier_test.js'
 	, 'can/view/modifiers/modifiers_test.js'
 )

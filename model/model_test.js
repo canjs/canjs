@@ -459,7 +459,8 @@ test("object definitions", function(){
 	
 	can.Model('ObjectDef',{
 		findAll : {
-			url : "/test/place"
+			url : "/test/place",
+			 dataType: "json"
 		},
 		findOne : {
 			url : "/objectdef/{id}",
@@ -480,10 +481,31 @@ test("object definitions", function(){
 		equals(original.timeout,1000,"timeout set");
 		return {yes: true}
 	});
+
+
+	can.fixture("GET /test/place", function(original){
+		return [original.data];
+	});
+
 	stop();
 	ObjectDef.findOne({id: 5}, function(){
 		start();
 	})
+
+	/* stop();
+	// Do find all, pass some attrs
+	ObjectDef.findAll({ start: 0, count: 10, myflag: 1}, function(data){
+		start();
+		equals(data[0].myflag, 1, 'my flag set')
+	});
+
+	stop();
+	// Do find all with slightly different attrs than before,
+	// and notice when leaving one out the other is still there
+	ObjectDef.findAll({ start: 0, count: 10 }, function(data){
+		start();
+		ok(data[0].myflag === undefined, 'my flag undefined')
+	}); */
 })
 
 
