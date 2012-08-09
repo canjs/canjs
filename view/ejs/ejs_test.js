@@ -78,7 +78,10 @@ test("register register and replace work", function(){
 	same(can.EJS.nodeListMap ,{} )
 	
 	
-})
+});
+
+
+
 
 test("render with left bracket", function(){
 	var compiled = new can.EJS({text: this.squareBrackets, type: '['}).render({animals: this.animals})
@@ -983,7 +986,15 @@ test("live binding textarea", function(){
 	
 })
 
-test("A non-escaping live magic tag within a control structure", function(){
+test("A non-escaping live magic tag within a control structure and no leaks", function(){
+	
+	for(var prop in can.EJS.nodeMap){
+		delete can.EJS.nodeMap[prop]
+	}
+	for(var prop in can.EJS.nodeListMap){
+		delete can.EJS.nodeListMap[prop]
+	}
+	
 	var text = "<div><% items.each(function(ob) { %>" +
 		"<%== ob.attr('html') %>" +
 		"<% }); %></div>",
@@ -991,26 +1002,31 @@ test("A non-escaping live magic tag within a control structure", function(){
 			{html: "<label>Hello World</label>"}
 		]),
 		compiled = new can.EJS({text: text}).render({items: items}),
-		div = document.createElement('div')
+		div = can.$('#qunit-test-area')[0]
+		div.innerHTML = ""
 	
-		div.appendChild(can.view.frag(compiled))
+	div.appendChild(can.view.frag(compiled))
+	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
+	
+	ok(div.getElementsByTagName('label')[0], "label exists")
+	
+	items[0].attr("html","<p>hi</p>");
+	
+	equals(div.getElementsByTagName('label').length, 0, "label is removed")
+	equals(div.getElementsByTagName('p').length, 1, "label is replaced by p")
+	
+	
+	
+	items.push({
+		html: "<p>hola</p>"
+	});
+	
+	equals(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
 		
+	can.remove( can.$('#qunit-test-area') )
 		
-		ok(div.getElementsByTagName('label')[0], "label exists")
-		
-		items[0].attr("html","<p>hi</p>");
-		
-		equals(div.getElementsByTagName('label').length, 0, "label is removed")
-		equals(div.getElementsByTagName('p').length, 1, "label is replaced by p")
-		
-		
-		
-		items.push({
-			html: "<p>hola</p>"
-		});
-		
-		equals(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
-		
+	same(can.EJS.nodeMap, {} );
+	same(can.EJS.nodeListMap ,{} )
 });
 
 
