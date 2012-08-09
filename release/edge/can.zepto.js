@@ -14709,12 +14709,16 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 		},
 		// removes a nodeListId from a node's nodeListIds
 		removeNodeListId= function(node, nodeListId){
-			var nodeListIds = nodeMap[id(node)],
-				index = can.inArray(nodeListId, nodeListIds);
-			index >=0 && nodeListIds.splice( index ,  1 )
-			if(!nodeListIds.length){
-				delete nodeMap[id(node)];
+			var nodeListIds = nodeMap[id(node)];
+			if( nodeListIds ) {
+				var index = can.inArray(nodeListId, nodeListIds);
+			
+				index >=0 && nodeListIds.splice( index ,  1 )
+				if(!nodeListIds.length){
+					delete nodeMap[id(node)];
+				}
 			}
+			
 		},
 		// all lists
 		replace= function(oldNodeList, newNodes){
@@ -14741,6 +14745,8 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 						can.each(newNodes, function(node){
 							addNodeListId(node, nodeListId)
 						})
+					} else {
+						unregister(nodeList)
 					}
 					
 				});
@@ -14871,16 +14877,21 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 			
 			// The parent element we are listening to for teardown
 			var	parentElement,
+				nodeList,
+				teardown= function(){
+					binding.teardown()
+					nodeList && unregister(nodeList)
+				},
 				// if the parent element is removed, teardown the binding
 				setupTeardownOnDestroy = function(el){
-					can.bind.call(el,'destroyed', binding.teardown)
+					can.bind.call(el,'destroyed', teardown)
 					parentElement = el;
 				},
 				// if there is no parent, undo bindings
 				teardownCheck = function(parent){
 					if(!parent){
-						binding.teardown();
-						can.unbind.call(parentElement,'destroyed', binding.teardown)
+						teardown();
+						can.unbind.call(parentElement,'destroyed', teardown)
 					}
 				},
 				// the tag type to insert
@@ -14953,6 +14964,8 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 								if( !nodes ) {
 									can.remove( can.$(span) );
 									nodes = newNodes;
+									// set the teardown nodeList
+									nodeList = nodes;
 									register(nodes);
 								} else {
 									can.remove( can.$(nodes) );
