@@ -11868,7 +11868,6 @@ module['can/model/model.js'] = (function( can ) {
 				}
 			});
 
-			// Convert `findAll` and `findOne`.
 			var oldFindAll
 			if(self.fullName == "can.Model" || !self.fullName){
 				self.fullName = "Model"+(++modelNum);
@@ -13784,7 +13783,7 @@ module['can/view/view.js'] = (function( can ) {
 		}
 		
 		// Convert it into a dom frag.
-		return can.isFunction(result) ? result : $view.frag(result);
+		return $view.frag(result);
 	};
 
 	can.extend( $view, {
@@ -14055,7 +14054,7 @@ module['can/view/view.js'] = (function( can ) {
 					response = deferred;
 					// And fire callback with the rendered result.
 					deferred.then(function( renderer ) {
-						callback(data !== undefined ? renderer(data, helpers) : renderer)
+						callback(renderer(data, helpers))
 					})
 				} else {
 					// if the deferred is resolved, call the cached renderer instead
@@ -14073,11 +14072,12 @@ module['can/view/view.js'] = (function( can ) {
 						// Otherwise, the deferred is complete, so
 						// set response to the result of the rendering.
 						deferred.then(function( renderer ) {
-							response = data !== undefined ? renderer(data, helpers) : renderer;
+							response = renderer(data, helpers);
 						});
 					}
 					
 				}
+	
 				return response;
 			}
 		}
@@ -14603,7 +14603,7 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 		attrReg = /([^\s]+)=$/,
 		newLine = /(\r|\n)+/g,
-		attributeReplace = /__!!__/g,
+		attributeReplace = /__!!__/g,		
 		tagMap = {
 			"": "span", 
 			table: "tr", 
@@ -14615,6 +14615,10 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 			tfoot: "tr",
 			select: "option",
 			optgroup: "option"
+		},
+		tagToContentPropMap= {
+			option: "textContent",
+			textarea: "value"
 		},
 		// Escapes characters starting with `\`.
 		clean = function( content ) {
@@ -14630,13 +14634,17 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 		// Cross-browser attribute methods.
 		// These should be mapped to the underlying library.
 		attrMap = {
-			"class" : "className"
+			"class" : "className",
+			"value": "value",
+			"textContent" : "textContent"
 		},
 		bool = can.each(["checked","disabled","readonly","required"], function(n){
 			attrMap[n] = n;
 		}),
 		setAttr = function(el, attrName, val){
+			// if this is a special property
 			attrMap[attrName] ?
+				// set the value as true / false
 				(el[attrMap[attrName]] = can.inArray(attrName,bool) > -1? true  : val):
 				el.setAttribute(attrName, val);
 		},
@@ -14662,6 +14670,82 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 		// property with observes
 		observeProp = function(name){
 			return name.indexOf("|") >= 0;
+		},
+		// a mapping of element ids to nodeList ids
+		nodeMap = {},
+		// a mapping of nodeList ids to nodeList
+		nodeListMap = {},
+		expando = "ejs_"+Math.random(),
+		_id=0,
+		id = function(node){
+			if( node[expando]){
+				return node[expando]
+			} else {
+				return node[expando] = (node.nodeName ? "element_" : "obj_")+(++_id);
+			}
+		},
+		// 
+		register= function(nodeList){
+			var nLId = id(nodeList)
+			nodeListMap[nLId] = nodeList;
+			
+			can.each(nodeList, function(node){
+				addNodeListId(node, nLId)
+			})
+		},
+		addNodeListId = function(node, nodeListId){
+			var nodeListIds = nodeMap[id(node)];
+				if(!nodeListIds){
+					nodeListIds = nodeMap[id(node)] = []
+				}
+				nodeListIds.push(nodeListId)
+		},
+		unregister= function(nodeList){
+			var nLId = id(nodeList);
+			can.each(nodeList, function(node){
+				removeNodeListId(node, nLId);
+			});
+			delete nodeListMap[nLId];
+		},
+		// removes a nodeListId from a node's nodeListIds
+		removeNodeListId= function(node, nodeListId){
+			var nodeListIds = nodeMap[id(node)],
+				index = can.inArray(nodeListId, nodeListIds);
+			index >=0 && nodeListIds.splice( index ,  1 )
+			if(!nodeListIds.length){
+				delete nodeMap[id(node)];
+			}
+		},
+		// all lists
+		replace= function(oldNodeList, newNodes){
+			// for each node in the node list
+			var oldNodeList = can.makeArray( oldNodeList );
+			
+			can.each( oldNodeList, function(node){
+				// for each nodeList the node is in
+				can.each( can.makeArray( nodeMap[id(node)] ), function( nodeListId ){
+					var nodeList = nodeListMap[nodeListId];
+					var startIndex = can.inArray( node, nodeList ),
+						endIndex = can.inArray( oldNodeList[oldNodeList.length - 1], nodeList  );
+					
+					// remove this nodeListId from each node
+					if(startIndex >=0 && endIndex >= 0){
+						//
+						for( var i = startIndex; i <= endIndex; i++){
+							var n = nodeList[i];
+							removeNodeListId(n, nodeListId)
+						}
+						// swap in new nodes into the nodeLIst
+						nodeList.splice.apply(nodeList, [startIndex,endIndex-startIndex+1 ].concat(newNodes))
+						// tell these new nodes they belong to the nodeList
+						can.each(newNodes, function(node){
+							addNodeListId(node, nodeListId)
+						})
+					}
+					
+				});
+				
+			})
 		},
 		// Returns escaped/sanatized content for anything other than a live-binding
 		contentEscape = function( txt ) {
@@ -14770,7 +14854,7 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 		 * @param {Object} self
 		 * @param {Object} func
 		 */
-		txt : function(escape, tagName, status, self, func){
+		txt: function(escape, tagName, status, self, func){
 			// call the "wrapping" function and get the binding information
 			var binding = can.compute.binder(func, self, function(newVal, oldVal){
 				// call the update method we will define for each
@@ -14802,11 +14886,14 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 				// the tag type to insert
 				tag = (tagMap[tagName] || "span"),
 				// this will be filled in if binding.isListening
-				update;
+				update,
+				// the property (instead of innerHTML elements) to adjust. For
+				// example options should use textContent
+				contentProp = tagToContentPropMap[tagName];
 			
 			
 			// The magic tag is outside or between tags.
-			if(status == 0){
+			if( status == 0 && !contentProp ) {
 				// Return an element tag with a hookup in place of the content
 				return "<" +tag+can.view.hook(
 				escape ? 
@@ -14829,32 +14916,32 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 					:
 					// If we are not escaping, replace the parentNode with a
 					// documentFragment created as with `func`'s return value.
-					function(span, parentNode){
+					function( span, parentNode ) {
 						// updates the elements with the new content
 						update = function(newVal){
 							// is this still part of the DOM?
 							var attached = nodes[0].parentNode;
 							// update the nodes in the DOM with the new rendered value
 							if( attached ) {
-								nodes = makeAndPut(newVal, nodes);
+								makeAndPut(newVal);
+							} else {
+								// no longer attached
 							}
 							teardownCheck(nodes[0].parentNode)
-						}
+						};
 						
 						// make sure we have a valid parentNode
 						parentNode = getParentNode(span, parentNode)
 						// A helper function to manage inserting the contents
 						// and removing the old contents
-						var makeAndPut = function(val, remove){
+						var nodes,
+							makeAndPut = function(val){
 								// create the fragment, but don't hook it up
 								// we need to insert it into the document first
-								
 								var frag = can.view.frag(val, parentNode),
 									// keep a reference to each node
-									nodes = can.map(frag.childNodes,function(node){
-										return node;
-									}),
-									last = remove[remove.length - 1];
+									newNodes = can.makeArray(frag.childNodes),
+									last = nodes ? nodes[nodes.length - 1] : span;
 								
 								// Insert it in the `document` or `documentFragment`
 								if( last.nextSibling ){
@@ -14862,21 +14949,26 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 								} else {
 									last.parentNode.appendChild(frag)
 								}
-								// Remove the old content.
-								can.remove( can.$(remove) );
-								
-								return nodes;
-							},
+								// nodes hasn't been set yet
+								if( !nodes ) {
+									can.remove( can.$(span) );
+									nodes = newNodes;
+									register(nodes);
+								} else {
+									can.remove( can.$(nodes) );
+									replace(nodes,newNodes);
+								}
+							};
 							// nodes are the nodes that any updates will replace
 							// at this point, these nodes could be part of a documentFragment
-							nodes = makeAndPut(binding.value, [span]);
+						makeAndPut(binding.value, [span]);
 						
 						
 						setupTeardownOnDestroy(parentNode);
 						
 				}) + "></" +tag+">";
 			// In a tag, but not in an attribute
-			} else if(status === 1){ 
+			} else if( status === 1 ) { 
 				// remember the old attr name
 				var attrName = binding.value.replace(/['"]/g, '').split('=')[0];
 				pendingHookups.push(function(el) {
@@ -14899,11 +14991,16 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 
 				return binding.value;
 			} else { // In an attribute...
-				pendingHookups.push(function(el){
+				var attributeName = status == 0 ? contentProp : status;
+				// if the magic tag is inside the element, like `<option><% TAG %></option>`,
+				// we add this hookup to the last element (ex: `option`'s) hookups.
+				// Otherwise, the magic tag is in an attribute, just add to the current element's
+				// hookups.
+				(status === 0  ? lastHookups : pendingHookups ).push(function(el){
 					// update will call this attribute's render method
 					// and set the attribute accordingly
 					update = function(){
-						setAttr(el, status, hook.render())
+						setAttr(el, attributeName, hook.render(), contentProp)
 					}
 					
 					var wrapped = can.$(el),
@@ -14918,20 +15015,20 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 					(hooks = can.data(wrapped,'hooks')) || can.data(wrapped, 'hooks', hooks = {});
 					
 					// Get the attribute value.
-					var attr = getAttr(el, status),
+					var attr = getAttr(el, attributeName, contentProp),
 						// Split the attribute value by the template.
 						parts = attr.split("__!!__"),
 						hook;
 
 					
 					// If we already had a hookup for this attribute...
-					if(hooks[status]) {
+					if(hooks[attributeName]) {
 						// Just add to that attribute's list of `function`s.
-						hooks[status].bindings.push(binding);
+						hooks[attributeName].bindings.push(binding);
 					}
 					else {
 						// Create the hookup data.
-						hooks[status] = {
+						hooks[attributeName] = {
 							render: function() {
 								var i =0,
 									newAttr = attr.replace(attributeReplace, function() {
@@ -14945,13 +15042,13 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 					};
 
 					// Save the hook for slightly faster performance.
-					hook = hooks[status];
+					hook = hooks[attributeName];
 
 					// Insert the value in parts.
 					parts.splice(1,0,binding.value);
 
 					// Set the attribute.
-					setAttr(el, status, parts.join(""));
+					setAttr(el, attributeName, parts.join(""), contentProp);
 					
 					// Bind on change.
 					//liveBind(observed, el, binder,oldObserved);
@@ -14961,9 +15058,10 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 			}
 		},
 		pending: function() {
-			if(pendingHookups.length) {
+			// TODO, make this only run for the right tagName
+			if(true  || pendingHookups.length) {
 				var hooks = pendingHookups.slice(0);
-
+				lastHookups = hooks;
 				pendingHookups = [];
 				return can.view.hook(function(el){
 					can.each(hooks, function(fn){
@@ -14973,7 +15071,13 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 			}else {
 				return "";
 			}
-		}
+		},
+		register: register,
+		unregister: unregister,
+		replace: replace,
+		nodeMap: nodeMap,
+		// a mapping of nodeList ids to nodeList
+		nodeListMap: nodeListMap
 });
 	// Start scanning code.
 	var tokenReg = new RegExp("(" +[ "<%%", "%%>", "<%==", "<%=", 
@@ -14999,6 +15103,7 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 			return quote ? "'"+beforeQuote.match(attrReg)[1]+"'" : (htmlTag ? 1 : 0)
 		},
 		pendingHookups = [],
+		lastHookups = [],
 		scan = function(source, name){
 			var tokens = [],
 				last = 0;
@@ -15081,8 +15186,12 @@ module['can/view/ejs/ejs.js'] = (function( can ) {
 						break;
 					case '>':
 						htmlTag = 0;
-						// TODO: all `<%=` in tags should be added to pending hookups.
-						if(magicInTag){
+						// if there was a magic tag
+						// or it's an element that has text content between its tags, 
+						// but content is not other tags add a hookup
+						// TODO: we should only add `can.EJS.pending()` if there's a magic tag 
+						// within the html tags.
+						if(magicInTag || tagToContentPropMap[ tagNames[tagNames.length -1] ]){
 							put(content, ",can.EJS.pending(),\">\"");
 							content = '';
 						} else {
