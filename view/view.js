@@ -20,7 +20,7 @@ steal("can/util", function( can ) {
 		}
 		
 		// Convert it into a dom frag.
-		return can.isFunction(result) ? result : $view.frag(result);
+		return $view.frag(result);
 	};
 
 	can.extend( $view, {
@@ -291,7 +291,7 @@ steal("can/util", function( can ) {
 					response = deferred;
 					// And fire callback with the rendered result.
 					deferred.then(function( renderer ) {
-						callback(data !== undefined ? renderer(data, helpers) : renderer)
+						callback(renderer(data, helpers))
 					})
 				} else {
 					// if the deferred is resolved, call the cached renderer instead
@@ -309,11 +309,12 @@ steal("can/util", function( can ) {
 						// Otherwise, the deferred is complete, so
 						// set response to the result of the rendering.
 						deferred.then(function( renderer ) {
-							response = data !== undefined ? renderer(data, helpers) : renderer;
+							response = renderer(data, helpers);
 						});
 					}
 					
 				}
+	
 				return response;
 			}
 		}
