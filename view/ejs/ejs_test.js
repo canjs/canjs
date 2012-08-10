@@ -1023,7 +1023,7 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 	
 	equals(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
 		
-	can.remove( can.$('#qunit-test-area') )
+	can.remove( can.$(div.firstChild) )
 		
 	same(can.EJS.nodeMap, {} );
 	same(can.EJS.nodeListMap ,{} )
