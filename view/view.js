@@ -13,6 +13,9 @@ steal("can/util", function( can ) {
 	$view = can.view = function(view, data, helpers, callback){
 		// Get the result.
 		var result = $view.render(view, data, helpers, callback);
+		if(can.isFunction(result))  {
+			return result;
+		}
 		if(can.isDeferred(result)){
 			return result.pipe(function(result){
 				return $view.frag(result);
@@ -291,7 +294,7 @@ steal("can/util", function( can ) {
 					response = deferred;
 					// And fire callback with the rendered result.
 					deferred.then(function( renderer ) {
-						callback(renderer(data, helpers))
+						callback(data ? renderer(data, helpers) : renderer);
 					})
 				} else {
 					// if the deferred is resolved, call the cached renderer instead
@@ -304,12 +307,13 @@ steal("can/util", function( can ) {
 					// We also add __view_id on the deferred so we can look up it's cached renderer.
 					// In the future, we might simply store either a deferred or the cached result.
 					if(deferred.isResolved() && deferred.__view_id  ){
-						return $view.cachedRenderers[ deferred.__view_id ](data, helpers)
+						var currentRenderer = $view.cachedRenderers[ deferred.__view_id ];
+						return data ? currentRenderer(data, helpers) : currentRenderer;
 					} else {
 						// Otherwise, the deferred is complete, so
 						// set response to the result of the rendering.
 						deferred.then(function( renderer ) {
-							response = renderer(data, helpers);
+							response = data ? renderer(data, helpers) : renderer;
 						});
 					}
 					

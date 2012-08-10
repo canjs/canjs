@@ -182,4 +182,18 @@ steal('can/view', function(can) {
 
 		ok( /fool sometimes/.test(div.innerHTML) , 'has fool sometimes'+div.innerHTML);
 	})
+
+
+	test("return renderer", function() {
+		can.view.ejs('renderer_test', "This is a <%= test %>");
+		var renderer = can.view('renderer_test');
+		ok(can.isFunction(renderer), 'Renderer is a function');
+		equal(renderer({ test : 'working test' }), 'This is a working test', 'Rendered');
+		renderer = can.view("//can/view/test/qunit/template.ejs");
+		ok(can.isFunction(renderer), 'Renderer is a function');
+		equal(renderer({ message : 'Rendered!' }), '<h3>Rendered!</h3>', 'Synchronous template loaded and rendered');
+		raises(function() {
+			can.view('jkflsd.ejs')
+		}, 'Nonexistent template throws error');
+	})
 });
