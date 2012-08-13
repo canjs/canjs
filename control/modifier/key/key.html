@@ -13,18 +13,22 @@
 	    <h1>key Demo</h1>
 		<p class="status">NOT!</p>
 		
-		<script type='text/javascript' src='../../../steal/steal.js'></script>
+		<script type='text/javascript' src='../../../../steal/steal.js'></script>
 
 		<script type='text/javascript'>
-			steal('jquery','can/control','can/control/key', function($, Control){
+			steal('jquery','can/control','can/control/modifier/key', function($, Control){
 				
 				var Tester = can.Control({
 					"keydown":function(elm,ev){
 						can.$('.status').text('Found normal!')
 					},
 
+					"keydown:(p)":function(elm,ev){
+						can.$('.status').text('Found jwerty (p)!')
+					},
+
 					"keydown:(shift+p)":function(elm,ev){
-						can.$('.status').text('Found jwerty!')
+						can.$('.status').text('Found jwerty (shift+p)!')
 					}
 				});
 
