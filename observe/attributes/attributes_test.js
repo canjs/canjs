@@ -149,6 +149,24 @@ test("single seralize w/ attr name", function(){
 	equals(b.serialize('time'), time.getTime());
 });
 
+test("defaults", function(){
+	var Zelda = can.Observe({
+		defaults: {
+			sword: 'Wooden Sword',
+			shield: false,
+			hearts: 3,
+			rupees: 0
+		}
+	},{});
+	
+	var link = new Zelda({
+		rupees: 255
+	});
+	
+	equals(link.attr('sword'), 'Wooden Sword');
+	equals(link.attr('rupees'), 255);
+});
+
 
 
 })();
