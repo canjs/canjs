@@ -668,6 +668,31 @@ test("templated destroy", function(){
 	new MyModel({id: 5}).destroy(function(){
 		start();
 	})
+
+
+
+	can.fixture("/product/{id}", function( original ) {
+		equals(original.data.id, 9001, "Changed ID is correctly set.");
+		start();
+		return {};
+	});
+
+	Base = can.Model({
+		id:'_id'
+	}, {
+	});
+
+	Product = Base({
+		destroy:'DELETE /product/{id}'
+	},{
+	});
+
+	var prod = new Product({
+		_id: 9001
+	}).destroy();
+
+	stop();
+
 });
 
 test("overwrite makeFindAll", function(){

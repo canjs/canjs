@@ -340,7 +340,7 @@ steal('can/util','can/observe', function( can ) {
 			type : "delete",
 			data : function(id){
 				var args = {};
-				args[this.id] = id;
+				args.id = args[this.id] = id;
 				return args;
 			}
 		},
