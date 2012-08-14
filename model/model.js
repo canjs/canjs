@@ -1172,7 +1172,10 @@ steal('can/util','can/observe', function( can ) {
 			var self = this;
 			this.bind('change', function(ev, how){
 				if(/\w+\.destroyed/.test(how)){
-					self.splice(self.indexOf(ev.target),1);
+					var index = self.indexOf(ev.target);
+					if (index != -1) {
+						self.splice(index, 1);
+					}
 				}
 			})
 		}

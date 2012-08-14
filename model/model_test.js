@@ -764,3 +764,35 @@ test("model list attr", function() {
 
 });
 
+test("destroying a model impact the right list", function() {
+
+	can.Model("Person",{
+		destroy : function(id, success){
+			var def = isDojo ? new dojo.Deferred() : new can.Deferred();
+			def.resolve({})
+			return def;
+		}
+	},{});
+	can.Model("Organisation",{
+		destroy : function(id, success){
+			var def = isDojo ? new dojo.Deferred() : new can.Deferred();
+			def.resolve({})
+			return def;
+		}
+	},{});
+
+	var list1 = new Person.List([ new Person({ id : 1 }), new Person({ id : 2 }) ]),
+		list2 = new Organisation.List([ new Organisation({ id : 1 }), new Organisation({ id : 2 }) ]);
+
+	list1[0].attr('organisation', list2[0]);
+	list1[1].attr('organisation', list2[1]);
+
+	equal( list1.length, 2, "Initial Person.List has length of 2")
+	equal( list2.length, 2, "Initial Organisation.List has length of 2")
+	list2[0].destroy();
+	equal( list1.length, 2, "After destroying list2[0] Person.List has length of 2")
+	equal( list2.length, 1, "After destroying list2[0] Organisation.List has length of 1")
+	console.log( list1 )
+	console.log( list2 )
+
+});
