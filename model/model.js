@@ -802,7 +802,7 @@ steal('can/util','can/observe', function( can ) {
 			if ( attributes instanceof this ) {
 				attributes = attributes.serialize();
 			}
-			var model = this.store[attributes[this.id]] ? this.store[attributes[this.id]].attr(attributes) : new this( attributes );
+			var model = this.store[attributes[this.id]] ? this.store[attributes[this.id]].attr(attributes, true) : new this( attributes );
 			if(this._reqs){
 				this.store[attributes[this.id]] = model;
 			}
