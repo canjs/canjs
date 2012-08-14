@@ -121,6 +121,13 @@ test("multi line", function(){
 	equals(result, text)
 })
 
+test("multi line elements", function(){
+    var text = "<img\n class=\"<%=myClass%>\" />",
+        result = new can.EJS({text: text}).render({myClass: 'a'}) ;
+
+    equals(result, "<img\n class=\"a\" />")
+})
+
 test("escapedContent", function(){
 	var text = "<span><%= tags %></span><label>&amp;</label><strong><%= number %></strong><input value='<%= quotes %>'/>";
 	var compiled = new can.EJS({text: text}).render({tags: "foo < bar < car > zar > poo",
