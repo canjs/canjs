@@ -125,7 +125,7 @@ test("multi line elements", function(){
     var text = "<img\n class=\"<%=myClass%>\" />",
         result = new can.EJS({text: text}).render({myClass: 'a'}) ;
 
-    equals(result, "<img\n class=\"a\" />")
+    ok(result.indexOf( "<img\n class=\"a\"" ) !== -1, "Multi-line elements render correctly.");
 })
 
 test("escapedContent", function(){
