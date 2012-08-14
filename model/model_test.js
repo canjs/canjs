@@ -460,7 +460,7 @@ test("object definitions", function(){
 	can.Model('ObjectDef',{
 		findAll : {
 			url : "/test/place",
-			 dataType: "json"
+			dataType: "json"
 		},
 		findOne : {
 			url : "/objectdef/{id}",
@@ -492,7 +492,7 @@ test("object definitions", function(){
 		start();
 	})
 
-	/* stop();
+	stop();
 	// Do find all, pass some attrs
 	ObjectDef.findAll({ start: 0, count: 10, myflag: 1}, function(data){
 		start();
@@ -504,8 +504,9 @@ test("object definitions", function(){
 	// and notice when leaving one out the other is still there
 	ObjectDef.findAll({ start: 0, count: 10 }, function(data){
 		start();
-		ok(data[0].myflag === undefined, 'my flag undefined')
-	}); */
+		console.log("DATA IS", data)
+		equals(data[0].myflag, undefined, 'my flag is undefined')
+	}); 
 })
 
 

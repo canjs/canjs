@@ -27,33 +27,33 @@ steal('can/util','can/observe', function( can ) {
 		// Ajax `options` generator function
 		ajax = function( ajaxOb, data, type, dataType, success, error ) {
 
+			var params = {};
 			
 			// If we get a string, handle it.
 			if ( typeof ajaxOb == "string" ) {
 				// If there's a space, it's probably the type.
 				var parts = ajaxOb.split(" ")
-				ajaxOb = {
-					url : parts.pop()
-				};
-				if(parts.length){
-					ajaxOb.type = parts.pop();
+				params.url = parts.pop();
+				if ( parts.length ) {
+					params.type = parts.pop();
 				}
+			} else {
+				can.extend( params, ajaxOb );
 			}
 
 			// If we are a non-array object, copy to a new attrs.
-			ajaxOb.data = typeof data == "object" && !can.isArray(data) ?
-				can.extend(ajaxOb.data || {}, data) : data;
+			params.data = typeof data == "object" && ! can.isArray( data ) ?
+				can.extend(params.data || {}, data) : data;
 	
-
 			// Get the url with any templated values filled out.
-			ajaxOb.url = can.sub(ajaxOb.url, ajaxOb.data, true);
+			params.url = can.sub(params.url, params.data, true);
 
-			return can.ajax(can.extend({
+			return can.ajax( can.extend({
 				type: type || "post",
 				dataType: dataType ||"json",
 				success : success,
 				error: error
-			}, ajaxOb ));
+			}, params ));
 		},
 		makeRequest = function( self, type, success, error, method ) {
 			var deferred,
@@ -802,7 +802,8 @@ steal('can/util','can/observe', function( can ) {
 			if ( attributes instanceof this ) {
 				attributes = attributes.serialize();
 			}
-			var model = this.store[attributes[this.id]] ? this.store[attributes[this.id]].attr(attributes) : new this( attributes );
+			var id = attributes[ this.id ],
+			    model = id && this.store[id] ? this.store[id].attr(attributes) : new this( attributes );
 			if(this._reqs){
 				this.store[attributes[this.id]] = model;
 			}
