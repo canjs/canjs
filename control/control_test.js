@@ -238,8 +238,22 @@ test("space makes event",1,function(){
 	can.remove(els);
 })
 
+test("custom events with hyphens work", 1, function() {
 
+	can.append( can.$("#qunit-test-area"), "<div id='customEvent'><span></span></div>");
 
+	var FooBar = can.Control({
+		"span custom-event" : function() {
+			console.log("hi")
+			ok(true, "Custom event was fired.");
+		}
+	});
+
+	new FooBar("#customEvent");
+
+	can.trigger( can.$("#customEvent span"), "custom-event");
+
+});
 
 test("inherit defaults", function() {
     var BASE = can.Control({

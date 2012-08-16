@@ -147,9 +147,10 @@ steal('can/util','can/construct', function( can ) {
 					// Get the parts of the function  
 					// `[convertedName, delegatePart, eventPart]`  
 					// `/^(?:(.*?)\s)?([\w\.\:>]+)$/` - Breaker `RegExp`.
-					parts = (arr ? convertedName[1] : convertedName).match(/^(?:(.*?)\s)?([\w\.\:>]+)$/);
+					parts = (arr ? convertedName[1] : convertedName).match(/^(?:(.*?)\s)?([\w\-\.\:>]+)$/),
 
-					var event = parts[2],
+					event = parts[2],
+
 					processor = processors[event] || basicProcessor;
 				return {
 					processor: processor,
