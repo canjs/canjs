@@ -105,6 +105,9 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				responses = statusText;
 				statusText = "success";
 			}
+			if ( status >= 400 && status <= 599 ) {
+				this.dataType = "text"
+			}
 			return [status, statusText, extractResponses(this, responses), headers];
 		},
 		// If we get data instead of responses,
@@ -206,7 +209,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		}
 	}
 
-	var typeTest = /^(script|json|test|jsonp)$/,
+	var typeTest = /^(script|json|text|jsonp)$/,
 	// a list of 'overwrite' settings object
 		overwrites = [],
 	// returns the index of an overwrite function
