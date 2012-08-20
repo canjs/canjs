@@ -201,6 +201,16 @@ can.each([ can.Observe, can.Model ], function(clss){
 	};
 });
 
+var oldSetup = can.Observe.prototype.setup;
+
+can.Observe.prototype.setup = function(obj) {
+	oldSetup.call(this, obj);
+
+	this._init = 1;
+	this.attr(can.extend({}, this.constructor.defaults, this.attr()));
+	delete this._init;
+};
+
 /**
  * @hide
  * @function can.Observe.prototype.convert
@@ -272,8 +282,10 @@ can.Observe.prototype.serialize = function(attrName){
 	}
 		
 	can.each(attrs, function( val, name ) {
-		var type = Class.attributes[name],
-			converter= Class.serialize[type];
+		var type, converter;
+		
+		type = Class.attributes ? Class.attributes[name] : 0;
+		converter = Class.serialize ? Class.serialize[type] : 0;
 			
 		// if the value is an object, and has a attrs or serialize function
 		where[name] = val && typeof val.serialize == 'function' ?

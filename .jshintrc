@@ -29,7 +29,12 @@
 		"notStrictEqual",
 		"raises",
 		"start",
-		"stop"
+		"stop",
+
+		// Node.js and CommonJS keywords
+		"define",
+		"require",
+		"__dirname"
 
 	],
 

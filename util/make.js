@@ -59,7 +59,9 @@ steal('steal/build/pluginify', function() {
 	var libs = {
 			"jquery" : {
 				exclude : "jquery",
-				shim : { 'jquery' : 'jQuery' }
+				shim : { 
+					'jquery' : 'jQuery'
+				}
 			},
 			"mootools" : {},
 			"zepto" : {},
@@ -99,7 +101,16 @@ steal('steal/build/pluginify', function() {
 
 			}
 		},
-		version = readFile( "can/util/version" );
+		version = readFile( "can/util/version" ),
+		temp, lib;
+
+
+	if ( _args[0] && _args[0] in libs ) {
+		lib = _args[0];
+		temp = {};
+		temp[ lib ] = libs[ lib ];
+		libs = temp;
+	}
 
 	steal.File("can/dist").mkdirs();
 	steal.File("can/dist/edge").mkdirs();
@@ -160,43 +171,70 @@ steal('steal/build/pluginify', function() {
 	STEALDOJO = STEALMOO = STEALYUI = STEALZEPTO = false;
 	STEALJQUERY = true;
 
-	each( plugins.standAlone, function( output, input ) {
+	if ( ! lib ) {
+		each( plugins.standAlone, function( output, input ) {
 
-		var code;
+			var code;
 
-		steal.build.pluginify("can/" + input + ".js", {
-			out: "can/dist/edge/can." + output + ".js",
-//			global: "this.can",
-//			onefunc: true,
-			compress: false,
-//			skipCallbacks: true,
-			namespace : "can",
-			standAlone: true
+			steal.build.pluginify("can/" + input + ".js", {
+				out: "can/dist/edge/can." + output + ".js",
+	//			global: "this.can",
+	//			onefunc: true,
+				compress: false,
+	//			skipCallbacks: true,
+				namespace : "can",
+				standAlone: true
+			});
+
 		});
 
-	});
+		// Build can.fixture and can.observe.backup seperately
+		// They need can/util/object, so we can't use the standAlone option
+		each( plugins.can_util_object, function( output, input ) {
 
-	// Build can.fixture and can.observe.backup seperately
-	// They need can/util/object, so we can't use the standAlone option
-	each( plugins.can_util_object, function( output, input ) {
+			steal.build.pluginify("can/" + input + ".js", {
+				out: "can/dist/edge/can." + output + ".js",
+				shim : { 'can/util' : 'can' },
+				exclude: [
+					'jquery',
+					'can/util/preamble.js',
+					'can/util/jquery/jquery.js',
+					'can/util/array/each.js',
+					'can/util/string/string.js',
+					'can/construct/construct.js',
+					'can/observe/observe.js'
+				],
+				compress: false,
+				skipCallbacks: true,
+				standAlone: false
+			});
 
-		steal.build.pluginify("can/" + input + ".js", {
-			out: "can/dist/edge/can." + output + ".js",
-			shim : { 'can/util' : 'can' },
-			exclude: [
-				'jquery',
-				'can/util/preamble.js',
-				'can/util/jquery/jquery.js',
-				'can/util/array/each.js',
-				'can/util/string/string.js',
-				'can/construct/construct.js',
-				'can/observe/observe.js'
-			],
-			compress: false,
-			skipCallbacks: true,
-			standAlone: false
 		});
 
+		// Build can.fixture and can.observe.backup seperately
+		// They need can/util/object, so we can't use the standAlone option
+		each( plugins.can_util_object, function( output, input ) {
+			
+			steal.build.pluginify("can/" + input + ".js", {
+				out: "can/dist/edge/can." + output + ".js",
+				global: "this.can",
+				onefunc: true,
+				exclude: [
+					'can/util/jquery/jquery.1.7.1.js',
+					'can/util/preamble.js',
+					'can/util/jquery/jquery.js',
+					'can/util/array/each.js',
+					'can/util/string/string.js',
+					'can/construct/construct.js',
+					'can/observe/observe.js'
+				],
+				compress: false,
+				skipCallbacks: true,
+				namespace: "can",
+				standAlone: false
+			});
 
-	});
+
+		});
+	}
 });

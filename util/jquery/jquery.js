@@ -46,7 +46,9 @@ steal('jquery', 'can/util/can.js','jquery', "../preamble.js", 'can/util/array/ea
 
 	$.cleanData = function( elems ) {
 		$.each( elems, function( i, elem ) {
-			can.trigger(elem,"destroyed",[],false);
+			if ( elem ) {
+				can.trigger(elem,"destroyed",[],false);
+			}
 		});
 		oldClean(elems);
 	};

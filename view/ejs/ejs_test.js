@@ -121,6 +121,13 @@ test("multi line", function(){
 	equals(result, text)
 })
 
+test("multi line elements", function(){
+    var text = "<img\n class=\"<%=myClass%>\" />",
+        result = new can.EJS({text: text}).render({myClass: 'a'}) ;
+
+    ok(result.indexOf( "<img\n class=\"a\"" ) !== -1, "Multi-line elements render correctly.");
+})
+
 test("escapedContent", function(){
 	var text = "<span><%= tags %></span><label>&amp;</label><strong><%= number %></strong><input value='<%= quotes %>'/>";
 	var compiled = new can.EJS({text: text}).render({tags: "foo < bar < car > zar > poo",
@@ -1023,13 +1030,28 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 	
 	equals(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
 		
-	can.remove( can.$('#qunit-test-area') )
+	can.remove( can.$(div.firstChild) )
 		
 	same(can.EJS.nodeMap, {} );
 	same(can.EJS.nodeListMap ,{} )
 });
 
 
+test("attribute unquoting", function() {
+	var text = '<input type="radio" ' +
+		'<%= facet.single ? \'name="facet-\' + facet.id + \'"\' : "" %> ' +
+		'value="<%= facet.single ? "facet-" + facet.id : "" %>" />',
+	facet = new can.Observe({
+		id: 1,
+		single: true
+	});
 
+	compiled = new can.EJS({text: text}).render({ facet: facet }),
+	div = document.createElement('div');
+	div.appendChild(can.view.frag(compiled))
+
+	equals(div.children[0].name, "facet-1");
+	equals(div.children[0].value, "facet-1");
+})
 
 })()

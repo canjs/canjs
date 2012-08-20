@@ -460,7 +460,7 @@ test("object definitions", function(){
 	can.Model('ObjectDef',{
 		findAll : {
 			url : "/test/place",
-			 dataType: "json"
+			dataType: "json"
 		},
 		findOne : {
 			url : "/objectdef/{id}",
@@ -492,7 +492,7 @@ test("object definitions", function(){
 		start();
 	})
 
-	/* stop();
+	stop();
 	// Do find all, pass some attrs
 	ObjectDef.findAll({ start: 0, count: 10, myflag: 1}, function(data){
 		start();
@@ -504,8 +504,9 @@ test("object definitions", function(){
 	// and notice when leaving one out the other is still there
 	ObjectDef.findAll({ start: 0, count: 10 }, function(data){
 		start();
-		ok(data[0].myflag === undefined, 'my flag undefined')
-	}); */
+		console.log("DATA IS", data)
+		equals(data[0].myflag, undefined, 'my flag is undefined')
+	}); 
 })
 
 
@@ -653,6 +654,43 @@ test("store instance updates", function(){
 	
 })
 
+/** /
+test("store instance update removed fields", function(){
+	var Guy, updateCount, remove;
+
+    Guy = can.Model({
+        findAll : 'GET /guys'
+    },{});
+    remove = false;
+    
+    can.fixture("GET /guys", function(){
+    	var guys = [{id: 1, name: 'mikey', age: 35, likes: ['soccer', 'fantasy baseball', 'js', 'zelda'], dislikes: ['backbone', 'errors']}];
+    	if(remove) {
+    		delete guys[0].name;
+    		guys[0].likes = [];
+    		delete guys[0].dislikes;
+    	}
+    	remove = true;
+        return guys;
+    });
+    stop();
+    Guy.findAll({}, function(guys){
+    	start();
+        guys[0].bind('updated', function(){});
+        ok(Guy.store[1], 'instance stored');
+    	equals(Guy.store[1].name, 'mikey', 'name is mikey')
+    	equals(Guy.store[1].likes.length, 4, 'mikey has 4 likes')
+    	equals(Guy.store[1].dislikes.length, 2, 'mikey has 2 dislikes')
+    })
+    Guy.findAll({}, function(guys){
+    	equals(Guy.store[1].name, undefined, 'name is undefined')
+    	equals(Guy.store[1].likes.length, 0, 'no likes')
+    	equals(Guy.store[1].dislikes, undefined, 'dislikes removed')
+    })
+	
+})
+/**/
+
 test("templated destroy", function(){
 	var MyModel = can.Model({
 		destroy : "/destroyplace/{id}"
@@ -667,6 +705,31 @@ test("templated destroy", function(){
 	new MyModel({id: 5}).destroy(function(){
 		start();
 	})
+
+
+
+	can.fixture("/product/{id}", function( original ) {
+		equals(original.data.id, 9001, "Changed ID is correctly set.");
+		start();
+		return {};
+	});
+
+	Base = can.Model({
+		id:'_id'
+	}, {
+	});
+
+	Product = Base({
+		destroy:'DELETE /product/{id}'
+	},{
+	});
+
+	var prod = new Product({
+		_id: 9001
+	}).destroy();
+
+	stop();
+
 });
 
 test("overwrite makeFindAll", function(){
@@ -764,3 +827,35 @@ test("model list attr", function() {
 
 });
 
+test("destroying a model impact the right list", function() {
+
+	can.Model("Person",{
+		destroy : function(id, success){
+			var def = isDojo ? new dojo.Deferred() : new can.Deferred();
+			def.resolve({})
+			return def;
+		}
+	},{});
+	can.Model("Organisation",{
+		destroy : function(id, success){
+			var def = isDojo ? new dojo.Deferred() : new can.Deferred();
+			def.resolve({})
+			return def;
+		}
+	},{});
+
+	var list1 = new Person.List([ new Person({ id : 1 }), new Person({ id : 2 }) ]),
+		list2 = new Organisation.List([ new Organisation({ id : 1 }), new Organisation({ id : 2 }) ]);
+
+	list1[0].attr('organisation', list2[0]);
+	list1[1].attr('organisation', list2[1]);
+
+	equal( list1.length, 2, "Initial Person.List has length of 2")
+	equal( list2.length, 2, "Initial Organisation.List has length of 2")
+	list2[0].destroy();
+	equal( list1.length, 2, "After destroying list2[0] Person.List has length of 2")
+	equal( list2.length, 1, "After destroying list2[0] Organisation.List has length of 1")
+	console.log( list1 )
+	console.log( list2 )
+
+});

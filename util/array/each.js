@@ -3,9 +3,9 @@ steal('can/util/can.js',function (can) {
 		var i = 0,
 		    key;
 		if (elements) {
-			if (typeof elements.length == 'number' && elements.pop) {
+			if (typeof elements.length === 'number' && elements.pop) {
 				elements.attr && elements.attr('length');
-				for (var len = elements.length; i < len; i++) {
+				for (key = elements.length; i < key; i++) {
 					if (callback.call(context || elements[i], elements[i], i, elements) === false) {
 						break;
 					}
@@ -19,5 +19,5 @@ steal('can/util/can.js',function (can) {
 			}
 		}
 		return elements;
-	}
+	};
 });
