@@ -1235,7 +1235,8 @@ steal('can/util','can/construct', function(can, Construct) {
 		 * @param {Object} item the item to look for
 		 * @return {Number} the index of the object in the array or -1.
 		 */
-		indexOf : [].indexOf || function(item) {
+		indexOf: function(item) {
+			this.attr('length')
 			return can.inArray(item, this)
 		},
 
