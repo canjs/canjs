@@ -461,8 +461,12 @@ steal("can/util", function( can ) {
 		steal.type("view js", function( options, success, error ) {
 			var type = can.view.types["." + options.type],
 				id = can.view.toId(options.id);
-
-			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "').then(function(can){" + "can.view.preload('" + id + "'," + options.text + ");\n})";
+			/**
+			 * should return something like steal("dependencies",function(EJS){
+			 * 	 return can.view.preload("ID", options.text)
+			 * })
+			 */
+			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "').then(function(can){return " + "can.view.preload('" + id + "'," + options.text + ");\n})";
 			success();
 		})
 	}
@@ -492,6 +496,9 @@ steal("can/util", function( can ) {
 			can.view.cached[id] = new can.Deferred().resolve(function( data, helpers ) {
 				return renderer.call(data, data, helpers);
 			});
+			return function(){
+				return $view.frag(renderer.apply(this,arguments))
+			};
 		}
 
 	});

@@ -418,9 +418,21 @@ steal('can/util','can/construct', function(can, Construct) {
 		},
 		// Reads a property from the `object`.
 		_get: function( attr ) {
+			// break up the attr (`"foo.bar"`) into `["foo","bar"]`
 			var parts = attrParts(attr),
+				// get the value of the first attr name (`"foo"`)
 				current = this.__get(parts.shift());
-			return parts.length ? current ? current._get(parts) : undefined : current;
+			// if there are other attributes to read
+			return parts.length ? 
+				// and current has a value
+				current ?
+					// lookup the remaining attrs on current
+					current._get(parts) : 
+					// or if there's no current, return undefined
+					undefined 	
+				: 
+				// if there are no more parts, return current
+				current;
 		},
 		// Reads a property directly if an `attr` is provided, otherwise
 		// returns the "real" data object itself.
@@ -1235,7 +1247,8 @@ steal('can/util','can/construct', function(can, Construct) {
 		 * @param {Object} item the item to look for
 		 * @return {Number} the index of the object in the array or -1.
 		 */
-		indexOf : [].indexOf || function(item) {
+		indexOf: function(item) {
+			this.attr('length')
 			return can.inArray(item, this)
 		},
 
