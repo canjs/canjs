@@ -140,11 +140,11 @@ while(++i < 91) {
 
 function JwertyCode(jwertyCode) {
     var i, c, n, z,   
-    	keyCombo,
-    	optionals,
-    	jwertyCodeFragment,
-    	rangeMatches,
-    	rangeI;
+        keyCombo,
+        optionals,
+        jwertyCodeFragment,
+        rangeMatches,
+        rangeI;
     
     // In-case we get called with an instance of ourselves, just return that.
     if (jwertyCode instanceof JwertyCode) return jwertyCode;
@@ -367,7 +367,7 @@ var jwerty = {
  * Add templated event binding with keydown specific binding.
  * For example, the following would bind to keydown on "CTRL+P".
  *
- * 		"keydown:(ctrl+p)":function(elm,ev){ ... }
+ *      "keydown:(ctrl+p)":function(elm,ev){ ... }
  *
  * Uses a modified version of 'jwerty' for its key finding.
  *
@@ -379,16 +379,20 @@ var originalShifter = can.Control._shifter;
 // Redefine _isAction to handle new syntax
 can.extend( can.Control, {
 
-	_shifter: function( context, name ) {
-			var fn = originalShifter.apply( this, arguments ),
-			    parts = name.split(":");
+    _shifter: function( context, name ) {
+            var fn = originalShifter.apply( this, arguments ),
+                parts = name.split(":");
 
-		if ( parts[1] && parts[0] === "keydown" ) {
-			fn = jwerty.event(parts[1].replace(/\(|\)/gi,''), fn);
-		}
+        if ( parts.length > 1 && /key/.test(parts[0])){
+            if(parts[1][0] === "("){ 
+                // Make sure the first char after the ':' is a param
+                // this is for cases like "keydown:debounce(50)":function() { ... }
+                fn = jwerty.event(parts[1].replace(/\(|\)/gi,''), fn);
+            }
+        }
 
-		return fn;
-	}
+        return fn;
+    }
 });
 
 });
