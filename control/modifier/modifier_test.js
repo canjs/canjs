@@ -2,7 +2,7 @@ steal('can/util', 'can/control/modifier', function(can) {
 
 	module("can/control/modifier");
 
-	asyncTest("pluginName", 8, function() {
+	asyncTest("pluginName", function() {
 
 		var controllerClass = can.Control({
 		}, {
@@ -11,12 +11,18 @@ steal('can/util', 'can/control/modifier', function(can) {
 				ok( this instanceof can.Control, "Debounced function has the correct context." );
 				foo = true;
 				run++;
+			},
+
+			"bar:debounce(30)" : function() {
+				run2++;
 			}
 		
-		}),
-		run = 0,
-		controller1 = new controllerClass( $("#foo") ),
+		});
+		/**/
+		var controller1 = new controllerClass( $("#foo") ),
 		controller2 = new controllerClass( $("#bar") ),
+		run = 0,
+		run2 = 0,
 		foo;
 
 		// Do a bunch of clicks!
@@ -30,10 +36,18 @@ steal('can/util', 'can/control/modifier', function(can) {
 		// Make sure foo is still undefined (should be > 30ms before its defined)
 		ok( ! foo, "`foo` is undefined." );
 
+		console.dir( controller1 );
+		ok( "bar" in controller1, "Method name gets aliased correctly");
+		controller1.bar();
+		controller1.bar();
+		controller1.bar();
+		controller1.bar();
+
 		// Check if
 		setTimeout(function() {
 			ok( foo, "`foo` is true." );
-			ok( run === 2, "`run` is 2" );
+			equals( run, 2, "`run` is 2" );
+			equals( run2, 1, "`run2` is 1" );
 
 			// Do a bunch more clicks!
 			$("#foo").trigger("click");
@@ -48,6 +62,7 @@ steal('can/util', 'can/control/modifier', function(can) {
 				start();
 			}, 40);
 		}, 40);
+		/**/
 
 	});
 
