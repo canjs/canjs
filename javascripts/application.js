@@ -75,6 +75,20 @@ can.Control('Menu', {
 		}
 		return build();
 	},
+	"a[href$='.zip'] click" : function(el, ev) {
+		_gaq.push([
+			'_trackEvent',
+			'downloads',
+			$(el).attr('href')
+		]);
+	},
+	"a[href$='.js'] click" : function(el, ev) {
+		_gaq.push([
+			'_trackEvent',
+			'downloads',
+			$(el).attr('href')
+		]);
+	},
 	"a click" : function(current, ev){
 		this._isClicking = true;
 		var active = this.element.find('#menu a.active');
@@ -346,6 +360,15 @@ can.Control('Builder', {
 	},
 
 	'[type="submit"] click' : function(el, ev) {
+		var selectedLibrary = this.element.find('input:radio:checked').val();
+		alert('Builder - ' + selectedLibrary);
+		return false;
+		this.element.find('')
+		_gaq.push([
+			'_trackEvent',
+			'downloads',
+			'Builder - ' + selectedLibrary
+		]);
 		el.hide();
 		var url = this.element.attr('action') + '?' + this.element.serialize(),
 			iframe = $('<iframe></iframe>').attr('src', url).hide().appendTo(this.element);
