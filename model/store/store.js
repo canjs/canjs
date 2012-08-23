@@ -283,7 +283,7 @@ can.Construct('jQuery.Model.Store',
 					} else {
 						//console.log("Store - already loaded exact match",params, ready);
 						list = set.list;
-						if(set.def.isResolved()){
+						if(set.def.state() === "resolved"){
 							setTimeout(cb, 1);
 						} else {
 							set.def.done(cb);
@@ -314,7 +314,7 @@ can.Construct('jQuery.Model.Store',
 				
 				// we need to load this ...
 				
-			} else if( parentLoadedSet.def.isResolved() ){
+			} else if( parentLoadedSet.def.state() === "resolved" ){
 				// add right away
 				//console.log("Store - already loaded parent set",params);
 				var items = self.findAllCached(params);

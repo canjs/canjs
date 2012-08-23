@@ -1,4 +1,4 @@
-steal('can/util','funcunit/qunit','can/util/fixture',function(can){
+steal('can/util', 'can/construct', function(can, Construct) {
 
 module("mvc");
 

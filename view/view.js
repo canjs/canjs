@@ -306,7 +306,7 @@ steal("can/util", function( can ) {
 					// we use the cached renderer.
 					// We also add __view_id on the deferred so we can look up it's cached renderer.
 					// In the future, we might simply store either a deferred or the cached result.
-					if(deferred.isResolved() && deferred.__view_id  ){
+					if(deferred.state() === "resolved" && deferred.__view_id  ){
 						var currentRenderer = $view.cachedRenderers[ deferred.__view_id ];
 						return data ? currentRenderer(data, helpers) : currentRenderer;
 					} else {

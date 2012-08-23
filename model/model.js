@@ -85,8 +85,9 @@ steal('can/util','can/observe', function( can ) {
 					jqXHR.abort();
 				}
 			}
-			
-			return deferred.then(success,error);
+
+			deferred.then(success,error);
+			return deferred;
 		},
 	
 	// This object describes how to make an ajax request for each ajax method.  
@@ -596,6 +597,7 @@ steal('can/util','can/observe', function( can ) {
 					}
 				}
 			}
+			return arguments[0];
 		},
 		/**
 		 * `can.Model.models(data, xhr)` is used to 
