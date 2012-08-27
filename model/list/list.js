@@ -513,7 +513,43 @@ steal('can/util', 'can/model/elements', function(can) {
 			}
 
 			return this;
-		}
+		},
+
+    _updateAttrs :function(items, remove){
+      var len = items.length,
+          newVal,
+          curVal;
+
+      for ( var i = 0; i < len; i++ ) {
+        newVal = items[i];
+        curVal = null;
+
+        if ( can.Observe.canMakeObserve(newVal) ) {
+          curVal = this.get(newVal[this.constructor.id])[0];
+          if (curVal){
+            curVal.attr(newVal, remove)
+          } else {
+            this.push(newVal)
+          }
+        }
+      }
+
+      if(remove){
+        var id = this.constructor.id,
+            existingIds = this.map(function(element) {
+              return element[id];
+            }),
+            itemIds = items.map(function(element){
+              return element[id];
+            });
+
+        can.each(existingIds, $.proxy(function(id){
+          if(itemIds.indexOf(id) == -1){
+            this.remove(id);
+          }
+        }, this));
+      }
+    }
 	});
 
 	

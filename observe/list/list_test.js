@@ -53,6 +53,53 @@
 		equal(filtered[0].attr('name'), 'Test 2', 'Older element remains');
 	});
 
+  test("attr updates items in position order", function(){
+    var original = new can.Observe.List([
+      {
+        id : 1,
+        name : 'Test 1',
+        age : 20
+      },
+      {
+        id : 2,
+        name : 'Test 2',
+        age : 80
+      },
+      {
+        id : 3,
+        name : 'Test 3',
+        age : 1
+      }
+    ]);
+
+    original.attr([
+      {
+        id : 1,
+        name : 'Test 1',
+        age : 120
+      },
+      {
+        id : 2,
+        name : 'Test 2',
+        age : 180
+      },
+      {
+        id : 3,
+        name : 'Test 3',
+        age : 101
+      }
+    ]);
+
+    equal(original.attr('0.id'), 1);
+    equal(original.attr('0.age'), 120, "Test 1's age incremented by 100 years");
+
+    equal(original.attr('1.id'), 2);
+    equal(original.attr('1.age'), 180, "Test 2's age incremented by 100 years");
+
+    equal(original.attr('2.id'), 3);
+    equal(original.attr('2.age'), 101, "Test 3's age incremented by 100 years");
+  });
+
 	test("map", function() {
 		var original = new can.Observe.List([
 			{
@@ -76,11 +123,14 @@
 		equal(mapped.length, 3, 'All items mapped');
 		original.attr('0.name', 'Updated test');
 		original.attr('0.age', '24');
+
 		equal(mapped[0], 'Updated test (24)', 'Mapping got updated');
+
 		original.push({
 			name : 'Push test',
 			age : 99
 		});
+
 		equal(mapped[mapped.length - 1], 'Push test (' + 99 + ')');
 		original.shift();
 		equal(mapped.length, 3, 'Item got removed');
