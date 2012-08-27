@@ -138,7 +138,8 @@ steal('can/util','can/construct', function(can, Construct) {
 		},
 		bind : bind,
 		unbind: unbind,
-		id: "id"
+		id: "id",
+    canMakeObserve : canMakeObserve
 	},
 	/**
 	 * @prototype
@@ -1048,46 +1049,48 @@ steal('can/util','can/construct', function(can, Construct) {
 		 *      list = new can.Observe.List(["a", {foo: "bar"}])
 		 *      list.attr(0)  //-> "a",
 		 * 
-		 * @param {Array|Number} props
+		 * @param {Array|Number} items
 		 * @param {Boolean|Object} {optional:remove} 
 		 * @return {list|Array} returns the props on a read or the observe
 		 * list on a write.
 		 */
-		_attrs: function( props, remove ) {
-			if ( props === undefined ) {
+		_attrs: function( items, remove ) {
+			if ( items === undefined ) {
 				return serialize(this, 'attr', []);
 			}
 
 			// Create a copy.
-			props = can.makeArray( props );
+			items = can.makeArray( items );
 
-			var len = Math.min(props.length, this.length),
-				collectingStarted = collect(),
-				prop;
-
-			for ( var prop = 0; prop < len; prop++ ) {
-				var curVal = this[prop],
-					newVal = props[prop];
-
-				if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {
-					curVal.attr(newVal, remove)
-				} else if ( curVal != newVal ) {
-					this._set(prop, newVal)
-				} else {
-
-				}
-			}
-			if ( props.length > this.length ) {
-				// Add in the remaining props.
-				this.push.apply( this, props.slice( this.length ) );
-			} else if ( props.length < this.length && remove ) {
-				this.splice(props.length)
-			}
-
+      var collectingStarted = collect();
+			this._updateAttrs(items, remove);
 			if ( collectingStarted ) {
 				sendCollection()
 			}
-		}
+		},
+
+    _updateAttrs : function( items, remove ){
+      var len = Math.min(items.length, this.length);
+
+      for ( var prop = 0; prop < len; prop++ ) {
+        var curVal = this[prop],
+          newVal = items[prop];
+
+        if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {
+          curVal.attr(newVal, remove)
+        } else if ( curVal != newVal ) {
+          this._set(prop, newVal)
+        } else {
+
+        }
+      }
+      if ( items.length > this.length ) {
+        // Add in the remaining props.
+        this.push.apply( this, items.slice( this.length ) );
+      } else if ( items.length < this.length && remove ) {
+        this.splice(items.length)
+      }
+    }
 	}),
 
 
