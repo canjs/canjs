@@ -68,7 +68,7 @@ test("destroy a list", function(){
 	var people = Person.models([{id: 1}, {id: 2}]);
 	stop();
 	// make sure a request is made
-	$.fixture('DELETE /person/destroyAll', function(){
+	can.fixture('DELETE /person/destroyAll', function(){
 		
 		ok(true, "called right fixture");
 		return true;
@@ -94,7 +94,7 @@ test("destroy a list with nothing in it", function(){
 	stop();
 	
 	// make sure a request is made
-	$.fixture('DELETE /person/destroyAll', function(){
+	can.fixture('DELETE /person/destroyAll', function(){
 		ok(true, "called right fixture");
 		return true;
 	});
@@ -118,7 +118,7 @@ test("update a list", function(){
 	stop();
 	
 	// make sure a request is made
-	$.fixture('PUT /person/updateAll', function(orig){	
+	can.fixture('PUT /person/updateAll', function(orig){
 		ok(true, "called right fixture");
 		ok(orig.data.ids.length, 2, "got 2 ids")
 		same(orig.data.attrs, updateWith, "got the same attrs")
@@ -147,7 +147,7 @@ test("update a list with nothing in it", function(){
 	stop();
 	
 	// make sure a request is made
-	$.fixture('PUT /person/updateAll', function(orig){
+	can.fixture('PUT /person/updateAll', function(orig){
 		ok(true, "called right fixture");
 		return newProps;
 	});
@@ -157,7 +157,136 @@ test("update a list with nothing in it", function(){
 		equal(updated.length, people.length, "nothing updated");
 		start();
 	});
-})
+});
+
+test("attr update a list when more things come back", function(){
+  var people = Person.models([
+    {
+      id : 1,
+      name : 'Michael',
+      age : 20
+    },
+    {
+      id : 2,
+      name : 'Amy',
+      age : 80
+    }]);
+
+  people.attr([
+    {
+      id : 3,
+      name : 'Andy',
+      age : 101
+    },
+    {
+      id : 1,
+      name : 'Michael',
+      age : 120
+    },
+    {
+      id : 2,
+      name : 'Amy',
+      age : 180
+    }
+  ]);
+  equal(people.attr('0.id'), 1);
+  equal(people.attr('0.age'), 120, "Michael's age incremented by 100 years");
+
+  equal(people.attr('1.id'), 2);
+  equal(people.attr('1.age'), 180, "Amy's age incremented by 100 years");
+
+  equal(people.attr('2.id'), 3, "Added Andy to the end of the list");
+  equal(people.attr('2.age'), 101);
+});
+
+test("attr update a list when less things come back and remove is true", function(){
+  var people = Person.models([
+    {
+      id : 1,
+      name : 'Michael',
+      age : 20
+    },
+    {
+      id : 2,
+      name : 'Amy',
+      age : 80
+    },
+    {
+      id : 3,
+      name : 'Andy',
+      age : 1
+    }
+  ]);
+
+  people.attr([
+    {
+      id : 3,
+      name : 'Andy',
+      age : 101
+    },
+    {
+      id : 1,
+      name : 'Michael',
+      age : 120
+    }], true);
+
+
+  equal(people.length, 2, "Removed Amy");
+
+  equal(people.attr('0.id'), 1);
+  equal(people.attr('0.age'), 120, "Michael's age incremented by 100 years");
+
+  equal(people.attr('1.id'), 3, "Andy is now the 2nd person in the list");
+  equal(people.attr('1.age'), 101, "Andy's age incremented by 100 years");
+});
+
+
+test("attr updates items based on id (when present), not position", function(){
+    var people = Person.models([
+      {
+        id : 1,
+        name : 'Michael',
+        age : 20
+      },
+      {
+        id : 2,
+        name : 'Amy',
+        age : 80
+      },
+      {
+        id : 3,
+        name : 'Andy',
+        age : 1
+      }
+    ]);
+
+    people.attr([
+      {
+        id : 3,
+        name : 'Andy',
+        age : 101
+      },
+      {
+        id : 1,
+        name : 'Michael',
+        age : 120
+      },
+      {
+        id : 2,
+        name : 'Amy',
+        age : 180
+      }
+    ]);
+
+    equal(people.attr('0.id'), 1);
+    equal(people.attr('0.age'), 120, "Michael's age incremented by 100 years");
+
+    equal(people.attr('1.id'), 2);
+    equal(people.attr('1.age'), 180, "Amy's age incremented by 100 years");
+
+    equal(people.attr('2.id'), 3);
+    equal(people.attr('2.age'), 101, "Andy's age incremented by 100 years");
+  });
 
 test("events - add", 4, function(){
 	var list = new Person.List;
