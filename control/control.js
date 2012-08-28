@@ -6,12 +6,12 @@ steal('can/util','can/construct', function( can ) {
 	// Binds an element, returns a function that unbinds.
 	var bind = function( el, ev, callback ) {
 
-		can.bind.call( el, ev, callback )
+			can.bind.call( el, ev, callback );
 
-		return function() {
-			can.unbind.call(el, ev, callback);
-		};
-	},
+			return function() {
+				can.unbind.call(el, ev, callback);
+			};
+		},
 		isFunction = can.isFunction,
 		extend = can.extend,
 		each = can.each,
@@ -140,21 +140,21 @@ steal('can/util','can/construct', function( can ) {
 				// value from the options or the window
 				var convertedName = options ? can.sub(methodName, [options, window]) : methodName,
 					
-					// If a `{}` resolves to an object, `convertedName` will be
+					// If a `{}` template resolves to an object, `convertedName` will be
 					// an array
 					arr = can.isArray(convertedName),
-					
-					// Get the parts of the function  
-					// `[convertedName, delegatePart, eventPart]`  
-					// `/^(?:(.*?)\s)?([\w\.\:>]+)$/` - Breaker `RegExp`.
-					parts = (arr ? convertedName[1] : convertedName).match(/^(?:(.*?)\s)?(.+?)$/),
 
-					event = parts[2],
+					// Get the name
+					name = arr ? convertedName[1] : convertedName,
+
+					// Grab the event off the end
+					parts = name.split(/\s+/g),
+					event = parts.pop();
 
 					processor = processors[event] || basicProcessor;
 				return {
 					processor: processor,
-					parts: parts,
+					parts: [name, parts.join(" "), event],
 					delegate : arr ? convertedName[0] : undefined
 				};
 			}

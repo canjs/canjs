@@ -17,13 +17,14 @@ steal('can/util', 'can/control/modifier', function(can) {
     });
 
     $('#test-content').append("<div class='cat'><div class='paw'></div><div class='tail'></div></div>");
+
     var controller1 = new controllerClass( $("#test-content")),
-      paw = 0,
-      tail = 0;
+		paw = 0,
+		tail = 0;
 
     $('.tail').trigger('click');
     equal(tail, 1);
-    equal(paw, 0)
+    equal(paw, 0);
   });
 
 
