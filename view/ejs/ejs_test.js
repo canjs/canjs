@@ -1039,8 +1039,8 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 
 test("attribute unquoting", function() {
 	var text = '<input type="radio" ' +
-		'<%= facet.single ? \'name="facet-\' + facet.id + \'"\' : "" %> ' +
-		'value="<%= facet.single ? "facet-" + facet.id : "" %>" />',
+		'<%== facet.single ? \'name="facet-\' + facet.attr("id") + \'"\' : "" %> ' +
+		'value="<%= facet.single ? "facet-" + facet.attr("id") : "" %>" />',
 	facet = new can.Observe({
 		id: 1,
 		single: true
