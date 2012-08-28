@@ -1,9 +1,3 @@
-// needs a .then! does not steal dependencies because this needs to work with dist ...
-
-if (!window.can || !can) {
-	steal()
-}
-
 steal('can/util','can/util/string','can/util/object', function (can) {
 
 	var updateSettings = function (settings, originalOptions) {
@@ -57,6 +51,11 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					url = can.fixture.rootUrl === steal.config().root ?
 						steal.config().root.mapJoin(settings.fixture.substr(2)) + '' :
 						can.fixture.rootUrl + settings.fixture.substr(2);
+				}
+
+				if(data) {
+					// Template static fixture URLs
+					url = can.sub(url, data);
 				}
 
 				delete settings.fixture;

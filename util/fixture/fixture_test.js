@@ -22,7 +22,22 @@ test("static fixtures", function(){
 			start();
 		});
 	});
-})
+});
+
+
+test("templated static fixtures", function() {
+	stop();
+
+	can.fixture("GET some/{id}", "//can/util/fixture/fixtures/stuff.{id}.json");
+
+	can.ajax({
+		url : 'some/3',
+		dataType : 'json'
+	}).done(function(data) {
+		equals(data.id, 3, 'Got data with proper id');
+		start();
+	});
+});
 
 test("dynamic fixtures",function(){
 	stop();

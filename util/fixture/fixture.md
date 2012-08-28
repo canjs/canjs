@@ -36,11 +36,19 @@ There are different ways to lookup static and dynamic fixtures.
 Static fixtures use an alternate url as the response of the Ajax request.
 
     // looks in fixtures/tasks1.json relative to page
-    can.fixture("tasks/1", "fixtures/task1.json");
+    can.fixture("tasks", "fixtures/tasks.json");
 
     // looks absolute to the page
-    can.fixture("tasks/1", "//fixtures/task1.json");
-    
+    can.fixture("tasks", "//fixtures/tasks.json");
+
+Static fixtures can also be templated, which means that parameters will be
+used in the fixture filename:
+
+    // looks in fixtures/tasks1.json relative to page
+    can.fixture("tasks/{id}", "fixtures/tasks.{id}.json");
+
+A request to `tasks/42` will look for a `fixtures/tasks.42.json` file.
+
 ## Dynamic Fixtures
 
 Dynamic Fixtures are functions that get the details of the Ajax request and return the result of the mocked service
