@@ -68,11 +68,11 @@ steal('can/util',function(can) {
 			
 				// The parts of the name we are looking up  
 				// `['App','Models','Recipe']`
-				var parts = name ? name.split('.') : [],
-				    length =  parts.length,
-				    current,
-				    r = 0,
-				    ret, i;
+				var	parts = name ? name.split('.') : [],
+					length =  parts.length,
+					current,
+					r = 0,
+					ret, i;
 
 				// Make sure roots is an `array`.
 				roots = can.isArray(roots) ? roots : [roots || window];
@@ -82,7 +82,8 @@ steal('can/util',function(can) {
 				}
 
 				// For each root, mark it as current.
-				while ( current = roots[r++] ) {
+				while ( roots[r] ) {
+					current = roots[r];
 
 					// Walk current to the 2nd to last object or until there 
 					// is not a container.
@@ -106,6 +107,7 @@ steal('can/util',function(can) {
 							
 						}
 					}
+					r++;
 				}
 			},
 			// Capitalizes a string.

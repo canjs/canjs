@@ -21,7 +21,7 @@ steal('can/util', function(can) {
 					obj: obj,
 					attr: attr
 				});
-			}
+			};
 		}
 		
 		var observed = [],
@@ -36,7 +36,7 @@ steal('can/util', function(can) {
 		return {
 			value : value,
 			observed : observed
-		}
+		};
 	},
 		// Calls `callback(newVal, oldVal)` everytime an observed property
 		// called within `getterSetter` is changed and creates a new result of `getterSetter`.
@@ -67,11 +67,11 @@ steal('can/util', function(can) {
 					// get the new value
 					newvalue = getValueAndBind();
 				// update the value reference (in case someone reads)
-				data.value = newvalue
+				data.value = newvalue;
 				// if a change happened
-				if(newvalue !== oldValue){
+				if ( newvalue !== oldValue ) {
 					callback(newvalue, oldValue);
-				};
+				}
 			};
 			
 			// gets the value returned by `getterSetter` and also binds to any attributes
@@ -95,7 +95,7 @@ steal('can/util', function(can) {
 							matched: matched,
 							observe: ob
 						};
-						ob.obj.bind(ob.attr, onchanged)
+						ob.obj.bind(ob.attr, onchanged);
 					}
 				});
 				
@@ -109,7 +109,7 @@ steal('can/util', function(can) {
 					}
 				}
 				return value;
-			}
+			};
 			// set the initial value
 			data.value = getValueAndBind();
 			data.isListening = ! can.isEmptyObject(observing);

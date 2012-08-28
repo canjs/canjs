@@ -53,10 +53,12 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 		}),
 		setAttr = function(el, attrName, val){
 			// if this is a special property
-			attrMap[attrName] ?
+			if ( attrMap[attrName] ) {
 				// set the value as true / false
-				(el[attrMap[attrName]] = can.inArray(attrName,bool) > -1? true  : val):
+				el[attrMap[attrName]] = can.inArray(attrName,bool) > -1 ? true  : val;
+			} else {
 				el.setAttribute(attrName, val);
+			}
 		},
 		getAttr = function(el, attrName){
 			return attrMap[attrName]?
@@ -67,7 +69,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 			if(can.inArray(attrName,bool) > -1){
 				el[attrName] = false;
 			} else{
-				el.removeAttribute(attrName)
+				el.removeAttribute(attrName);
 			}
 		},
 		// a helper to get the parentNode for a given element el
@@ -88,27 +90,27 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 		expando = "ejs_"+Math.random(),
 		_id=0,
 		id = function(node){
-			if( node[expando]){
-				return node[expando]
+			if ( node[expando] ) {
+				return node[expando];
 			} else {
 				return node[expando] = (node.nodeName ? "element_" : "obj_")+(++_id);
 			}
 		},
 		// 
 		register= function(nodeList){
-			var nLId = id(nodeList)
+			var nLId = id(nodeList);
 			nodeListMap[nLId] = nodeList;
 			
 			can.each(nodeList, function(node){
-				addNodeListId(node, nLId)
-			})
+				addNodeListId(node, nLId);
+			});
 		},
 		addNodeListId = function(node, nodeListId){
 			var nodeListIds = nodeMap[id(node)];
 				if(!nodeListIds){
-					nodeListIds = nodeMap[id(node)] = []
+					nodeListIds = nodeMap[id(node)] = [];
 				}
-				nodeListIds.push(nodeListId)
+				nodeListIds.push(nodeListId);
 		},
 		unregister= function(nodeList){
 			var nLId = id(nodeList);
@@ -123,7 +125,9 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 			if( nodeListIds ) {
 				var index = can.inArray(nodeListId, nodeListIds);
 			
-				index >=0 && nodeListIds.splice( index ,  1 )
+				if ( index >= 0 ) {
+					nodeListIds.splice( index ,  1 );
+				}
 				if(!nodeListIds.length){
 					delete nodeMap[id(node)];
 				}
@@ -133,7 +137,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 		// all lists
 		replace= function(oldNodeList, newNodes){
 			// for each node in the node list
-			var oldNodeList = can.makeArray( oldNodeList );
+			oldNodeList = can.makeArray( oldNodeList );
 			
 			can.each( oldNodeList, function(node){
 				// for each nodeList the node is in
@@ -147,21 +151,21 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 						//
 						for( var i = startIndex; i <= endIndex; i++){
 							var n = nodeList[i];
-							removeNodeListId(n, nodeListId)
+							removeNodeListId(n, nodeListId);
 						}
 						// swap in new nodes into the nodeLIst
-						nodeList.splice.apply(nodeList, [startIndex,endIndex-startIndex+1 ].concat(newNodes))
+						nodeList.splice.apply(nodeList, [startIndex,endIndex-startIndex+1 ].concat(newNodes));
 						// tell these new nodes they belong to the nodeList
-						can.each(newNodes, function(node){
-							addNodeListId(node, nodeListId)
-						})
+						can.each(newNodes, function( node ) {
+							addNodeListId(node, nodeListId);
+						});
 					} else {
-						unregister(nodeList)
+						unregister( nodeList );
 					}
 					
 				});
 				
-			})
+			});
 		},
 		// Returns escaped/sanatized content for anything other than a live-binding
 		contentEscape = function( txt ) {
@@ -177,7 +181,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 				return input;
 			}
 			// If has no value, return an empty string.
-			if ( !input && input != 0 ) {
+			if ( !input && input !== 0 ) {
 				return '';
 			}
 
@@ -275,7 +279,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 			var binding = can.compute.binder(func, self, function(newVal, oldVal){
 				// call the update method we will define for each
 				// type of attribute
-				update(newVal, oldVal)
+				update(newVal, oldVal);
 			});
 			
 			// If we had no observes just return the value returned by func.
@@ -289,19 +293,21 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 			var	parentElement,
 				nodeList,
 				teardown= function(){
-					binding.teardown()
-					nodeList && unregister(nodeList)
+					binding.teardown();
+					if ( nodeList ) {
+						unregister( nodeList );
+					}
 				},
 				// if the parent element is removed, teardown the binding
 				setupTeardownOnDestroy = function(el){
-					can.bind.call(el,'destroyed', teardown)
+					can.bind.call(el,'destroyed', teardown);
 					parentElement = el;
 				},
 				// if there is no parent, undo bindings
 				teardownCheck = function(parent){
 					if(!parent){
 						teardown();
-						can.unbind.call(parentElement,'destroyed', teardown)
+						can.unbind.call(parentElement,'destroyed', teardown);
 					}
 				},
 				// the tag type to insert
@@ -314,7 +320,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 			
 			
 			// The magic tag is outside or between tags.
-			if( status == 0 && !contentProp ) {
+			if ( status === 0 && !contentProp ) {
 				// Return an element tag with a hookup in place of the content
 				return "<" +tag+can.view.hook(
 				escape ? 
@@ -348,11 +354,11 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 							} else {
 								// no longer attached
 							}
-							teardownCheck(nodes[0].parentNode)
+							teardownCheck(nodes[0].parentNode);
 						};
 						
 						// make sure we have a valid parentNode
-						parentNode = getParentNode(span, parentNode)
+						parentNode = getParentNode(span, parentNode);
 						// A helper function to manage inserting the contents
 						// and removing the old contents
 						var nodes,
@@ -366,9 +372,9 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 								
 								// Insert it in the `document` or `documentFragment`
 								if( last.nextSibling ){
-									last.parentNode.insertBefore(frag, last.nextSibling)
+									last.parentNode.insertBefore(frag, last.nextSibling);
 								} else {
-									last.parentNode.appendChild(frag)
+									last.parentNode.appendChild(frag);
 								}
 								// nodes hasn't been set yet
 								if( !nodes ) {
@@ -401,20 +407,20 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 						
 						// Remove if we have a change and used to have an `attrName`.
 						if((newAttrName != attrName) && attrName){
-							removeAttr(el,attrName)
+							removeAttr(el,attrName);
 						}
 						// Set if we have a new `attrName`.
 						if(newAttrName){
 							setAttr(el, newAttrName, parts[1]);
 							attrName = newAttrName;
 						}
-					}
+					};
 					setupTeardownOnDestroy(el);
 				});
 
 				return binding.value;
 			} else { // In an attribute...
-				var attributeName = status == 0 ? contentProp : status;
+				var attributeName = status === 0 ? contentProp : status;
 				// if the magic tag is inside the element, like `<option><% TAG %></option>`,
 				// we add this hookup to the last element (ex: `option`'s) hookups.
 				// Otherwise, the magic tag is in an attribute, just add to the current element's
@@ -423,8 +429,8 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 					// update will call this attribute's render method
 					// and set the attribute accordingly
 					update = function(){
-						setAttr(el, attributeName, hook.render(), contentProp)
-					}
+						setAttr(el, attributeName, hook.render(), contentProp);
+					};
 					
 					var wrapped = can.$(el),
 						hooks;
@@ -435,7 +441,10 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 					// `render` - A `function` to render the value of the attribute.
 					// `funcs` - A list of hookup `function`s on that attribute.
 					// `batchNum` - The last event `batchNum`, used for performance.
-					(hooks = can.data(wrapped,'hooks')) || can.data(wrapped, 'hooks', hooks = {});
+					hooks = can.data(wrapped,'hooks');
+					if ( ! hooks ) {
+						can.data(wrapped, 'hooks', hooks = {});
+					}
 					
 					// Get the attribute value.
 					var attr = getAttr(el, attributeName, contentProp),
@@ -448,8 +457,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 					if(hooks[attributeName]) {
 						// Just add to that attribute's list of `function`s.
 						hooks[attributeName].bindings.push(binding);
-					}
-					else {
+					} else {
 						// Create the hookup data.
 						hooks[attributeName] = {
 							render: function() {
@@ -462,7 +470,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 							bindings: [binding],
 							batchNum : undefined
 						};
-					};
+					}
 
 					// Save the hook for slightly faster performance.
 					hook = hooks[attributeName];
@@ -475,8 +483,8 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 					
 					// Bind on change.
 					//liveBind(observed, el, binder,oldObserved);
-					setupTeardownOnDestroy(el)
-				})
+					setupTeardownOnDestroy(el);
+				});
 				return "__!!__";
 			}
 		},
@@ -489,9 +497,9 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 				return can.view.hook(function(el){
 					can.each(hooks, function(fn){
 						fn(el);
-					})
+					});
 				});
-			}else {
+			} else {
 				return "";
 			}
 		},
@@ -523,7 +531,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 			// `t` - `1`.
 			// `h` - `0`.
 			// `q` - String `beforeQuote`.
-			return quote ? "'"+beforeQuote.match(attrReg)[1]+"'" : (htmlTag ? 1 : 0)
+			return quote ? "'"+beforeQuote.match(attrReg)[1]+"'" : (htmlTag ? 1 : 0);
 		},
 		pendingHookups = [],
 		lastHookups = [],
@@ -542,10 +550,10 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 				tokens.push(part);
 				// update the position of the last part of the last token
 				last = offset+part.length;
-			})
+			});
 			// if there's something at the end, add it
 			if(last < source.length){
-				tokens.push(source.substr(last))
+				tokens.push(source.substr(last));
 			}
 			
 			var content = '',
@@ -649,7 +657,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 							tagName = token.split(/\s/)[0];
 							// If 
 							if( tagName.indexOf("/") === 0 && tagNames.pop() === tagName.substr(1) ) {
-								tagName = tagNames[tagNames.length-1]|| tagName.substr(1)
+								tagName = tagNames[tagNames.length-1]|| tagName.substr(1);
 							} else {
 								tagNames.push(tagName);
 							}
@@ -679,14 +687,14 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 								endStack.push({
 									before: "",
 									after: finishTxt+"}));\n"
-								})
+								});
 							}
 							else {
 								
 								// How are we ending this statement?
-								var last = // If the stack has value and we are ending a block...
-									 endStack.length && bracketCount == -1 ? // Use the last item in the block stack.
-									 endStack.pop() : // Or use the default ending.
+								last = // If the stack has value and we are ending a block...
+									endStack.length && bracketCount == -1 ? // Use the last item in the block stack.
+									endStack.pop() : // Or use the default ending.
 								{
 									after: ";"
 								};
@@ -695,7 +703,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 								// add the finish text which returns the result of the
 								// block.
 								if (last.before) {
-									buff.push(last.before)
+									buff.push(last.before);
 								}
 								// Add the remaining content.
 								buff.push(content, ";",last.after);
@@ -712,12 +720,12 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 								endStack.push({
 									before : finishTxt,
 									after: "}));"
-								})
+								});
 							} 
 							// Check if its a func like `()->`
 							if(quickFunc.test(content)){
-								var parts = content.match(quickFunc)
-								content = "function(__){var "+parts[1]+"=can.$(__);"+parts[2]+"}"
+								var parts = content.match(quickFunc);
+								content = "function(__){var "+parts[1]+"=can.$(__);"+parts[2]+"}";
 							}
 							
 							// If we have `<%== a(function(){ %>` then we want
@@ -750,9 +758,9 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute').then(func
 			// Put it together...
 			if ( content.length ) {
 				// Should be `content.dump` in Ruby.
-				put(content)
+				put(content);
 			}
-			buff.push(";")
+			buff.push(";");
 			
 			var template = buff.join(''),
 				out = {

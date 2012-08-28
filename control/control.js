@@ -21,7 +21,7 @@ steal('can/util','can/construct', function( can ) {
 
 		// Binds an element, returns a function that unbinds.
 		delegate = function( el, selector, ev, callback ) {
-			can.delegate.call(el, selector, ev, callback)
+			can.delegate.call(el, selector, ev, callback);
 			return function() {
 				can.undelegate.call(el, selector, ev, callback);
 			};
@@ -85,7 +85,7 @@ steal('can/util','can/construct', function( can ) {
 			
 			return function() {
 				context.called = name;
-    			return method.apply(context, [this.nodeName ? can.$(this) : this].concat( slice.call(arguments, 0)));
+				return method.apply(context, [this.nodeName ? can.$(this) : this].concat( slice.call(arguments, 0)));
 			};
 		},
 
@@ -104,7 +104,7 @@ steal('can/util','can/construct', function( can ) {
 				// and is a function or links to a function
 				( type == "function" || (type == "string" &&  isFunction(this.prototype[val] ) ) ) &&
 				// and is in special, a processor, or has a funny character
-			    !! ( special[methodName] || processors[methodName] || /[^\w]/.test(methodName) );
+				!! ( special[methodName] || processors[methodName] || /[^\w]/.test(methodName) );
 		},
 		// Takes a method name and the options passed to a control
 		// and tries to return the data necessary to pass to a processor

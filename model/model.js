@@ -12,17 +12,18 @@ steal('can/util','can/observe', function( can ) {
 	var	pipe = function( def, model, func ) {
 		var d = new can.Deferred();
 		def.then(function(){
-			arguments[0] = model[func](arguments[0])
-			d.resolveWith(d, arguments)
+			var args = can.makeArray( arguments );
+			args[0] = model[func](args[0]);
+			d.resolveWith(d, args);
 		},function(){
-			d.rejectWith(this, arguments)
-		})
+			d.rejectWith(this, arguments);
+		});
 		return d;
 	},
 		modelNum = 0,
 		ignoreHookup = /change.observe\d+/,
 		getId = function( inst ) {
-			return inst[inst.constructor.id]
+			return inst[inst.constructor.id];
 		},
 		// Ajax `options` generator function
 		ajax = function( ajaxOb, data, type, dataType, success, error ) {
@@ -32,7 +33,7 @@ steal('can/util','can/observe', function( can ) {
 			// If we get a string, handle it.
 			if ( typeof ajaxOb == "string" ) {
 				// If there's a space, it's probably the type.
-				var parts = ajaxOb.split(" ")
+				var parts = ajaxOb.split(/\s/);
 				params.url = parts.pop();
 				if ( parts.length ) {
 					params.type = parts.pop();
@@ -68,7 +69,7 @@ steal('can/util','can/observe', function( can ) {
 			}
 			// `update` and `destroy` need the `id`.
 			if ( type !== 'create' ) {
-				args.unshift(getId(self))
+				args.unshift(getId(self));
 			}
 
 			
@@ -76,14 +77,14 @@ steal('can/util','can/observe', function( can ) {
 			
 			deferred = jqXHR.pipe(function(data){
 				self[method || type + "d"](data, jqXHR);
-				return self
-			})
+				return self;
+			});
 
 			// Hook up `abort`
 			if(jqXHR.abort){
 				deferred.abort = function(){
 					jqXHR.abort();
-				}
+				};
 			}
 
 			deferred.then(success,error);
@@ -798,7 +799,7 @@ steal('can/util','can/observe', function( can ) {
 		 * @return {model} a model instance.
 		 */
 		model: function( attributes ) {
-			if (!attributes ) {
+			if ( ! attributes ) {
 				return;
 			}
 			if ( attributes instanceof this ) {

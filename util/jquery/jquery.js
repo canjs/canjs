@@ -1,12 +1,14 @@
-steal('jquery', 'can/util/can.js','jquery', "../preamble.js", 'can/util/array/each.js',function($, can) {
+steal('jquery', 'can/util/can.js', 'jquery', "../preamble.js", 'can/util/array/each.js', function($, can) {
 	// jquery.js
 	// ---------
 	// _jQuery node list._
 	$.extend( can, jQuery, {
 		trigger: function( obj, event, args ) {
-			obj.trigger ?
-				obj.trigger( event, args ) :
+			if ( obj.trigger ) {
+				obj.trigger( event, args );
+			} else {
 				$.event.trigger( event, args, obj, true );
+			}
 		},
 		addEvent: function(ev, cb){
 			$([this]).bind(ev, cb);

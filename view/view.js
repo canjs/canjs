@@ -19,7 +19,7 @@ steal("can/util", function( can ) {
 		if(can.isDeferred(result)){
 			return result.pipe(function(result){
 				return $view.frag(result);
-			})
+			});
 		}
 		
 		// Convert it into a dom frag.
@@ -39,7 +39,7 @@ steal("can/util", function( can ) {
 			var frag = can.buildFragment(result,document.body);
 			// If we have an empty frag...
 			if(!frag.childNodes.length) { 
-				frag.appendChild(document.createTextNode(''))
+				frag.appendChild(document.createTextNode(''));
 			}
 			return frag;
 		},
@@ -55,26 +55,25 @@ steal("can/util", function( can ) {
 		hookup: function(fragment, parentNode ){
 			var hookupEls = [],
 				id, 
-				func, 
-				el,
-				i=0;
+				func;
 			
 			// Get all `childNodes`.
 			can.each(fragment.childNodes ? can.makeArray(fragment.childNodes) : fragment, function(node){
 				if(node.nodeType === 1){
-					hookupEls.push(node)
-					hookupEls.push.apply(hookupEls, can.makeArray( node.getElementsByTagName('*')))
+					hookupEls.push(node);
+					hookupEls.push.apply(hookupEls, can.makeArray( node.getElementsByTagName('*')));
 				}
 			});
-			// Filter by `data-view-id` attribute.
-			for (; el = hookupEls[i++]; ) {
 
+			// Filter by `data-view-id` attribute.
+			can.each( hookupEls, function( el ) {
 				if ( el.getAttribute && (id = el.getAttribute('data-view-id')) && (func = $view.hookups[id]) ) {
 					func(el, parentNode, id);
 					delete $view.hookups[id];
 					el.removeAttribute('data-view-id');
 				}
-			}
+			});
+
 			return fragment;
 		},
 		/**

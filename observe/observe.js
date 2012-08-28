@@ -34,23 +34,26 @@ steal('can/util','can/construct', function(can, Construct) {
 			}
 			
 			// Listen to all changes and `batchTrigger` upwards.
-			val.bind("change" + parent._cid, function( ev, attr ) {
+			val.bind("change" + parent._cid, function( /* ev, attr */ ) {
 				// `batchTrigger` the type on this...
 				var args = can.makeArray(arguments),
 					ev = args.shift();
-					args[0] = prop === "*" ? 
-						parent.indexOf(val)+"." + args[0] :
-						prop +  "." + args[0];
+					args[0] = (prop === "*" ? 
+						[ parent.indexOf( val ), args[0]] :
+						[ prop, args[0]] ).join(".");
+
 				// track objects dispatched on this observe		
 				ev.triggeredNS = ev.triggeredNS || {};
+
 				// if it has already been dispatched exit
 				if (ev.triggeredNS[parent._cid]) {
 					return;
 				}
+
 				ev.triggeredNS[parent._cid] = true;
 						
 				can.trigger(parent, ev, args);
-				can.trigger(parent,args[0],args);
+				can.trigger(parent, args[0], args);
 			});
 
 			return val;
@@ -59,7 +62,7 @@ steal('can/util','can/construct', function(can, Construct) {
 		// An `id` to track events for a given observe.
 		observeId = 0,
 		// A reference to an `array` of events that will be dispatched.
-		collecting = undefined,
+		collecting,
 		// Call to start collecting events (`Observe` sends all events at
 		// once).
 		collect = function() {
@@ -98,8 +101,8 @@ steal('can/util','can/construct', function(can, Construct) {
 			collecting = undefined;
 			batchNum++;
 			can.each(items, function( item ) {
-				can.trigger.apply(can, item)
-			})
+				can.trigger.apply(can, item);
+			});
 			
 		},
 		// A helper used to serialize an `Observe` or `Observe.List`.  
@@ -114,19 +117,19 @@ steal('can/util','can/construct', function(can, Construct) {
 				// Call `attrs` or `serialize` to get the original data back.
 				val[how]() :
 				// Otherwise return the value.
-				val
-			})
+				val;
+			});
 			return where;
 		},
 		$method = function( name ) {
 			return function() {
 				return can[name].apply(this, arguments );
-			}
+			};
 		},
 		bind = $method('addEvent'),
 		unbind = $method('removeEvent'),
 		attrParts = function(attr){
-			return can.isArray(attr) ? attr : (""+attr).split(".")
+			return can.isArray(attr) ? attr : (""+attr).split(".");
 		};
 	/**
 	 * @add can.Observe
@@ -134,7 +137,7 @@ steal('can/util','can/construct', function(can, Construct) {
 	var Observe = can.Observe = Construct( {
 		// keep so it can be overwritten
 		setup : function(){
-			Construct.setup.apply(this, arguments)
+			Construct.setup.apply(this, arguments);
 		},
 		bind : bind,
 		unbind: unbind,
@@ -341,7 +344,8 @@ steal('can/util','can/construct', function(can, Construct) {
 		attr: function( attr, val ) {
 			// This is super obfuscated for space -- basically, we're checking
 			// if the type of the attribute is not a `number` or a `string`.
-			if ( !~ "ns".indexOf((typeof attr).charAt(0))) {
+			var type = typeof attr;
+			if ( type !== "string" && type !== "number" ) {
 				return this._attrs(attr, val)
 			} else if ( val === undefined ) {// If we are getting a value.
 				// Let people know we are reading.
@@ -1315,8 +1319,8 @@ steal('can/util','can/construct', function(can, Construct) {
 		 * It gets passed the element and the index in the list.
 		 * @param {Object} [thisarg] Object to use as `this` when executing `callback`
 		 */
-		forEach : function(cb, thisarg) {
-			can.each(this, can.proxy(cb, thisarg || this ));
+		forEach : function( cb, thisarg ) {
+			can.each(this, cb, thisarg || this );
 		}
 	});
 

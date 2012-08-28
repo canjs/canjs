@@ -51,24 +51,24 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		onready = !0,
 		location = window.location,
 		quote = function(str) {
-		    return (str+'').replace(/([.?*+\^$\[\]\\(){}|\-])/g, "\\$1");
+			return (str+'').replace(/([.?*+\^$\[\]\\(){}|\-])/g, "\\$1");
 		},
 		each = can.each,
-		extend = can.extend
+		extend = can.extend;
 
 
 	can.route = function( url, defaults ) {
-        defaults = defaults || {}
+        defaults = defaults || {};
         // Extract the variable names and replace with `RegExp` that will match
 		// an atual URL with values.
 		var names = [],
 			test = url.replace(matcher, function( whole, name, i ) {
 				names.push(name);
-				var next = "\\"+( url.substr(i+whole.length,1) || can.route._querySeparator )
+				var next = "\\"+( url.substr(i+whole.length,1) || can.route._querySeparator );
 				// a name without a default value HAS to have a value
 				// a name that has a default value can be empty
 				// The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
-				return "([^" +next+"]"+(defaults[name] ? "*" : "+")+")"
+				return "([^" +next+"]"+(defaults[name] ? "*" : "+")+")";
 			});
 
 		// Add route in a form that can be easily figured out.
@@ -85,7 +85,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			defaults: defaults,
             // The number of parts in the URL separated by `/`.
 			length: url.split('/').length
-		}
+		};
 		return can.route;
 	};
 
@@ -127,7 +127,9 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 				
 			delete data.route;
 			
-			each(data, function(){propCount++});
+			each(data, function(){
+				propCount++;
+			});
 			// Otherwise find route.
 			each(can.route.routes, function(temp, name){
 				// best route is the first with all defaults matching
@@ -136,7 +138,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 				matchCount = matchesData(temp, data);
 				if ( matchCount > matches ) {
 					route = temp;
-					matches = matchCount
+					matches = matchCount;
 				}
 				if(matchCount >= propCount){
 					return false;
@@ -160,9 +162,9 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 				// Remove matching default values
 				each(route.defaults, function(val,name){
 					if(cpy[name] === val) {
-						delete cpy[name]
+						delete cpy[name];
 					}
-				})
+				});
 				
 				// The remaining elements of data are added as 
 				// `&amp;` separated parameters to the url.
@@ -172,7 +174,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 				if(_setRoute){
 					can.route.attr('route',route.route);
 				}
-				return res + (after ? can.route._querySeparator + after : "")
+				return res + (after ? can.route._querySeparator + after : "");
 			}
             // If no route was found, there is no hash URL, only paramters.
 			return can.isEmptyObject(data) ? "" : can.route._querySeparator + can.param(data);
