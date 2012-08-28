@@ -65,7 +65,7 @@ steal("can/control", "can/util/function", function() {
 					event = parts.shift().split(" ").pop();
 					mod = parts.join("");
 
-					if ( ! ( key in processors )) {
+					if ( ! ( can.trim( key ) in processors )) {
 						modifier.addProcessor( event, mod );
 					}
 

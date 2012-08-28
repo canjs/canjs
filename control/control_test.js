@@ -244,7 +244,6 @@ test("custom events with hyphens work", 1, function() {
 
 	var FooBar = can.Control({
 		"span custom-event" : function() {
-			console.log("hi")
 			ok(true, "Custom event was fired.");
 		}
 	});
