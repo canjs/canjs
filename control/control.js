@@ -134,7 +134,7 @@ steal('can/util','can/construct', function( can ) {
 			
 			// If we don't have options (a `control` instance), we'll run this 
 			// later.  
-      		paramReplacer.lastIndex = 0;
+			paramReplacer.lastIndex = 0;
 			if ( options || ! paramReplacer.test( methodName )) {
 				// If we have options, run sub to replace templates `{}` with a
 				// value from the options or the window
@@ -151,9 +151,8 @@ steal('can/util','can/construct', function( can ) {
 					parts = name.split(/\s+/g),
 					event = parts.pop();
 
-					processor = processors[event] || basicProcessor;
 				return {
-					processor: processor,
+					processor: processors[event] || basicProcessor,
 					parts: [name, parts.join(" "), event],
 					delegate : arr ? convertedName[0] : undefined
 				};
