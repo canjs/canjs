@@ -147,7 +147,7 @@ steal('can/util','can/construct', function( can ) {
 					// Get the parts of the function  
 					// `[convertedName, delegatePart, eventPart]`  
 					// `/^(?:(.*?)\s)?([\w\.\:>]+)$/` - Breaker `RegExp`.
-					parts = (arr ? convertedName[1] : convertedName).match(/^(?:(.*?)\s)?(.+?)$/),
+					parts = (arr ? convertedName[1] : convertedName).match(/^(?:(.*?)\s)?(\S+?)$/),
 
 					event = parts[2],
 
