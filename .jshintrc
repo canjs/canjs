@@ -47,7 +47,8 @@
 	"noarg": true,
 	"smarttabs": true,
 	"undef": true,
-	"boss": true
+	"boss": true,
+	"evil": true
 
 
 }
