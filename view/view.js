@@ -31,6 +31,7 @@ steal("can/util", function( can ) {
 		frag: function(result, parentNode ){
 			return $view.hookup( $view.fragment(result), parentNode );
 		},
+
 		// simply creates a frag
 		// this is used internally to create a frag
 		// insert it
@@ -43,15 +44,17 @@ steal("can/util", function( can ) {
 			}
 			return frag;
 		},
-    // Convert a path like string into something that's ok for an `element` ID.
-    toId : function( src ) {
-      return can.map(src.toString().split(/\/|\./g), function( part ) {
-        // Dont include empty strings in toId functions
-        if ( part ) {
-          return part;
-        }
-      }).join("_");
-    },
+
+		// Convert a path like string into something that's ok for an `element` ID.
+		toId : function( src ) {
+			return can.map(src.toString().split(/\/|\./g), function( part ) {
+				// Dont include empty strings in toId functions
+				if ( part ) {
+					return part;
+				}
+			}).join("_");
+		},
+		
 		hookup: function(fragment, parentNode ){
 			var hookupEls = [],
 				id, 
@@ -76,12 +79,14 @@ steal("can/util", function( can ) {
 
 			return fragment;
 		},
+		
 		/**
 		 * @attribute hookups
 		 * @hide
 		 * A list of pending 'hookups'
 		 */
 		hookups: {},
+
 		/**
 		 * @function hook
 		 * Registers a hookup function that can be called back after the html is 
@@ -102,13 +107,16 @@ steal("can/util", function( can ) {
 			$view.hookups[++hookupId] = cb;
 			return " data-view-id='"+hookupId+"'";
 		},
+
 		/**
 		 * @attribute cached
 		 * @hide
 		 * Cached are put in this object
 		 */
 		cached: {},
+
 		cachedRenderers: {},
+
 		/**
 		 * @attribute cache
 		 * By default, views are cached on the client.  If you'd like the
@@ -119,6 +127,7 @@ steal("can/util", function( can ) {
 		 *
 		 */
 		cache: true,
+
 		/**
 		 * @function register
 		 * Registers a template engine to be used with 
@@ -165,7 +174,9 @@ steal("can/util", function( can ) {
 		register: function( info ) {
 			this.types["." + info.suffix] = info;
 		},
+
 		types: {},
+
 		/**
 		 * @attribute ext
 		 * The default suffix to use if none is provided in the view's url.  
@@ -176,6 +187,7 @@ steal("can/util", function( can ) {
 		 *
 		 */
 		ext: ".ejs",
+
 		/**
 		 * Returns the text that 
 		 * @hide 
@@ -184,6 +196,7 @@ steal("can/util", function( can ) {
 		 * @param {Object} src
 		 */
 		registerScript: function() {},
+
 		/**
 		 * @hide
 		 * Called by a production script to pre-load a renderer function
@@ -192,6 +205,7 @@ steal("can/util", function( can ) {
 		 * @param {Function} renderer
 		 */
 		preload: function( ) {},
+
 		/**
 		 * @function render
 		 * `can.view.render(view, data, [helpers], callback)` returns the rendered markup produced by the corresponding template
@@ -238,7 +252,6 @@ steal("can/util", function( can ) {
 			// See if we got passed any deferreds.
 			var deferreds = getDeferreds(data);
 
-
 			if ( deferreds.length ) { // Does data contain any deferreds?
 				// The deferred that resolves into the rendered content...
 				var deferred = new can.Deferred();
@@ -268,11 +281,13 @@ steal("can/util", function( can ) {
 							}
 						}
 					}
+
 					// Get the rendered result.
 					result = renderer(data, helpers);
 	
 					// Resolve with the rendered view.
 					deferred.resolve(result); 
+
 					// If there's a `callback`, call it back with the result.
 					callback && callback(result);
 				});
@@ -337,8 +352,6 @@ steal("can/util", function( can ) {
 		// `async` - If the ajax request should be asynchronous.  
 		// Returns a deferred.
 		get = function( url, async ) {
-			
-			
 			var suffix = url.match(/\.[\w\d]+$/),
 			type, 
 			// If we are reading a script element for the content of the template,
@@ -502,5 +515,6 @@ steal("can/util", function( can ) {
 
 	});
 	//!steal-pluginify-remove-end
+
 	return can;
 });
