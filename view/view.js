@@ -465,7 +465,7 @@ steal("can/util", function( can ) {
 			 * 	 return can.view.preload("ID", options.text)
 			 * })
 			 */
-			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "').then(function(can){return " + "can.view.preload('" + id + "'," + options.text + ");\n})";
+			options.text = "steal('" + (type.plugin || "can/view/" + options.type) + "',function(can){return " + "can.view.preload('" + id + "'," + options.text + ");\n})";
 			success();
 		})
 	}
