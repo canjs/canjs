@@ -1,8 +1,8 @@
-var module = { _orig: window.module, _define: window.define };
-var define = function(id, deps, value) {
-	module[id] = value();
+var module = { _orig: window.module };
+define = function(id, deps, value) {
+module[id] = value();
 };
-define.amd = { jQuery: true };
+ define.amd = { jQuery: true };
 
 module['can/construct/super/super.js'] = (function(can, Construct){
 
@@ -48,7 +48,5 @@ module['can/construct/super/super.js'] = (function(can, Construct){
 
 	return can;
 })(module["can/util/jquery/jquery.js"], module["can/construct/construct.js"]);
-
-window.define = module._define;
-
+window.can = module['can/util/can.js'];
 window.module = module._orig;

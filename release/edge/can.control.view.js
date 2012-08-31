@@ -1,8 +1,8 @@
-var module = { _orig: window.module, _define: window.define };
-var define = function(id, deps, value) {
-	module[id] = value();
+var module = { _orig: window.module };
+define = function(id, deps, value) {
+module[id] = value();
 };
-define.amd = { jQuery: true };
+ define.amd = { jQuery: true };
 
 module['can/control/view/view.js'] = (function(can) {
 	var URI = steal.URI || steal.File;
@@ -92,7 +92,5 @@ module['can/control/view/view.js'] = (function(can) {
 	};
 
 })(module["can/util/jquery/jquery.js"], module["can/control/control.js"], module["can/view/view.js"]);
-
-window.define = module._define;
-
+window.can = module['can/util/can.js'];
 window.module = module._orig;

@@ -1,8 +1,8 @@
-var module = { _orig: window.module, _define: window.define };
-var define = function(id, deps, value) {
-	module[id] = value();
+var module = { _orig: window.module };
+define = function(id, deps, value) {
+module[id] = value();
 };
-define.amd = { jQuery: true };
+ define.amd = { jQuery: true };
 
 module['can/view/modifiers/modifiers.js'] = (function($, can) {
 	//---- ADD jQUERY HELPERS -----
@@ -295,7 +295,5 @@ module['can/view/modifiers/modifiers.js'] = (function($, can) {
 		convert(func);
 	});
 })(module["jquery"], module["can/view/view.js"]);
-
-window.define = module._define;
-
+window.can = module['can/util/can.js'];
 window.module = module._orig;

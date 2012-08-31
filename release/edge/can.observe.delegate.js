@@ -1,8 +1,8 @@
-var module = { _orig: window.module, _define: window.define };
-var define = function(id, deps, value) {
-	module[id] = value();
+var module = { _orig: window.module };
+define = function(id, deps, value) {
+module[id] = value();
 };
-define.amd = { jQuery: true };
+ define.amd = { jQuery: true };
 
 module['can/observe/delegate/delegate.js'] = (function(can) {
 	
@@ -364,7 +364,5 @@ module['can/observe/delegate/delegate.js'] = (function(can) {
 	can.Observe.prototype.delegate.matches = matches;
 	return can.Observe;
 })(module["can/util/jquery/jquery.js"], module["can/observe/observe.js"]);
-
-window.define = module._define;
-
+window.can = module['can/util/can.js'];
 window.module = module._orig;
