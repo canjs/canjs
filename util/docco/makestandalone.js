@@ -2,7 +2,7 @@ load("steal/rhino/rhino.js");
 steal('steal/build/pluginify', 'steal/clean', function() {
 
 	var libs = {
-		"jquery" : "jquery.1.8.0.js",
+		"jquery" : "jquery.1.8.1.js",
 		"mootools" : "mootools-core-1.4.3.js",
 		"zepto" : "zepto.0.8.js",
 		"dojo" : "dojo.js",
