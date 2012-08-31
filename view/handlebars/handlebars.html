@@ -6,7 +6,7 @@
 <body>
 
 <script id="template" type="text/x-handlebars-template">
-  <p>My Teacher is: <input type="text" {{bindAttr value="name" }}></input></p>
+  <p>My Teacher is: <input type="text" value="{{name}}"></input></p>
 </script>
 
 <div id="demo"></div>
@@ -23,13 +23,8 @@
 			name: "Mr Peters"
 		});
 
-		var template = Handlebars.compile(source);
-
-		template = template(teacher)
-
+		var template = can.hb(source, teacher);
 		can.$('#demo').append(template);
-
-		can.view.hookups[2](can.$("[data-view-id='2']"))
 
 		can.$('#button').click(function(){
 			teacher.attr('name', 'Mr Scott')
