@@ -148,8 +148,15 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 						// get the result form the fixture
 						result = s.fixture(original, success, headers, s);
 						if(result !== undefined) {
-							// make sure the result has the right dataType
-							callback(200, "success", extractResponses(s, result), {});
+							if(can.isArray(result) && result.length > 2 &&
+								typeof result[0] === 'number' && typeof result[1] === 'string') {
+								result[2] = extractResponses(s, result[2]);
+								result[3] = result[3] || {};
+								callback.apply(this,result);
+							} else {
+								// make sure the result has the right dataType
+								callback(200, "success", extractResponses(s, result), {});
+							}
 						}
 					}, can.fixture.delay);
 				},
