@@ -18,6 +18,11 @@ steal('can/util','can/observe', function( can ) {
 		},function(){
 			d.rejectWith(this, arguments);
 		});
+		if(typeof def.abort === 'function') {
+			d.abort = function() {
+				return def.abort();
+			};
+		}
 		return d;
 	},
 		modelNum = 0,
