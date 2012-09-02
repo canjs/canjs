@@ -361,9 +361,6 @@ can.Control('Builder', {
 
 	'[type="submit"] click' : function(el, ev) {
 		var selectedLibrary = this.element.find('input:radio:checked').val();
-		alert('Builder - ' + selectedLibrary);
-		return false;
-		this.element.find('')
 		_gaq.push([
 			'_trackEvent',
 			'downloads',
