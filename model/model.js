@@ -579,7 +579,10 @@ steal('can/util','can/observe', function( can ) {
 						this._super;
 						// increment the numer of requests
 						this._reqs++;
-						return newMethod.apply(this, arguments).then(clean, clean);
+						var def = newMethod.apply(this, arguments);
+						def.then(clean, clean);
+						// return the original object
+						return def;
 					})
 				}
 			});
@@ -1048,7 +1051,10 @@ steal('can/util','can/observe', function( can ) {
 	}, function( method, name ) {
 		can.Model[name] = function( oldFind ) {
 			return function( params, success, error ) {
-				return pipe( oldFind.call( this, params ), this, method ).then( success, error );
+				var def = pipe( oldFind.call( this, params ), this, method );
+				def.then( success, error );
+				// return the original promise
+				return def;
 			};
 		};
 	});
