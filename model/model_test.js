@@ -91,6 +91,41 @@ asyncTest("findAll deferred reject", function() {
     }, 200);
 });
 
+asyncTest("findAll abort", function() {
+	expect(4);
+	var df;
+	can.Model("Person", {
+		findAll : function(params, success, error) {
+			df = can.Deferred();
+			df.then(function() {
+				ok(!params.abort,'not aborted');
+			},function() {
+				ok(params.abort,'aborted');
+			});
+			return df.promise({
+				abort: function() {
+					df.reject();
+				}
+			});
+		}
+	},{});
+	var resolvePromise = Person.findAll({ abort : false}).done(function() {
+		ok(true,'resolved');
+	});
+	var resolveDf = df;
+	var abortPromise = Person.findAll({ abort : true}).fail(function() {
+		ok(true,'failed');
+	});
+
+	setTimeout(function() {
+		resolveDf.resolve();
+        abortPromise.abort();
+
+        // continue the test
+        start();
+    }, 200);
+});
+
 test("findOne deferred", function(){
 	if(window.jQuery){
 		can.Model("Person",{
