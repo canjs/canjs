@@ -13,5 +13,6 @@ before_script:
   - git clone https://github.com/jupiterjs/steal.git
   - cd steal
   - git checkout working
+  - cd ..
 script:
-  - cd running && phantomjs can/test/phantom.js http://localhost:8000/can/test/can_jquery.html
+  - phantomjs can/test/phantom.js http://localhost:8000/can/test/can_jquery.html
