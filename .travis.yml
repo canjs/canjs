@@ -1,3 +1,11 @@
-language: java
-install: "cd .. && git clone https://github.com/jupiterjs/steal.git && cd steal && git checkout working"
+language: node_js
+node_js: 0.8
+before_script:
+  - cd ..
+  - cp canjs/stealconfig.js stealconfig.js
+  - canjs/node_modules/.bin/http-server -p 8000 &
+  - git clone https://github.com/jupiterjs/funcunit.git
+  - git clone https://github.com/jupiterjs/steal.git
+  - cd steal
+  - git checkout working
 script: "echo \"Travis CI\""
