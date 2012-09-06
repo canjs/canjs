@@ -5,7 +5,11 @@ before_script:
   - cp canjs/stealconfig.js stealconfig.js
   - canjs/node_modules/.bin/http-server -p 8000 &
   - git clone https://github.com/jupiterjs/funcunit.git
+  - cd funcunit
+  - git submodule update --init --recursive
+  - cd ..
   - git clone https://github.com/jupiterjs/steal.git
   - cd steal
   - git checkout working
-script: "echo \"Travis CI\""
+script:
+  - phantomjs can/test/phantom.js http://localhost:8000/can/test/can_jquery.html

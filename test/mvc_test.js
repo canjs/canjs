@@ -45,20 +45,20 @@ test("Model basics",function(){
 	});
 	stop();
 	Task.findAll({}, function(tasks){
-		
+
 		equals(tasks.length, 1,"we have an array")
 		equals(tasks[0].id, 1, "we have the objects")
 		ok(tasks[0] instanceof Task, "we have an instance of task")
-		
+
 		// add a task
-		
+
 		console.log("here")
 		tasks.bind('add', function(ev, items, where){
 			ok(items.length, "add called with an array");
-			
+
 			ok(newtask === items[0], "add called with new task")
 			start();
-			
+
 		})
 		var newtask = new Task({name: "hello"})
 		tasks.push( newtask )
