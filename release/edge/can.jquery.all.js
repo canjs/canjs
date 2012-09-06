@@ -1,8 +1,10 @@
-var module = { _orig: window.module };
+(function() {
+ var module = { _define : window.define };
+module['jquery'] = jQuery;
 define = function(id, deps, value) {
-module[id] = value();
+	module[id] = value();
 };
- define.amd = { jQuery: true };
+define.amd = { jQuery: true };
 
 module['can/util/can.js'] = (function(){
 	window.can = window.can || {};
@@ -43,6 +45,65 @@ module['can/util/array/each.js'] = (function (can) {
 		return elements;
 	};
 })(module["can/util/can.js"]);
+module['can/util/jquery/jquery.js'] = (function($, can) {
+	// jquery.js
+	// ---------
+	// _jQuery node list._
+	$.extend( can, jQuery, {
+		trigger: function( obj, event, args ) {
+			if ( obj.trigger ) {
+				obj.trigger( event, args );
+			} else {
+				$.event.trigger( event, args, obj, true );
+			}
+		},
+		addEvent: function(ev, cb){
+			$([this]).bind(ev, cb);
+			return this;
+		},
+		removeEvent: function(ev, cb){
+			$([this]).unbind(ev, cb);
+			return this;
+		},
+		// jquery caches fragments, we always needs a new one
+		buildFragment : function(result, element){
+			var ret = $.buildFragment([result],element);
+			return ret.cacheable ? $.clone(ret.fragment) : ret.fragment;
+		},
+		$: jQuery,
+		each: can.each
+	});
+
+	// Wrap binding functions.
+	$.each(['bind','unbind','undelegate','delegate'],function(i,func){
+		can[func] = function(){
+			var t = this[func] ? this : $([this]);
+			t[func].apply(t, arguments);
+			return this;
+		};
+	});
+
+	// Wrap modifier functions.
+	$.each(["append","filter","addClass","remove","data","get"], function(i,name){
+		can[name] = function(wrapped){
+			return wrapped[name].apply(wrapped, can.makeArray(arguments).slice(1));
+		};
+	});
+
+	// Memory safe destruction.
+	var oldClean = $.cleanData;
+
+	$.cleanData = function( elems ) {
+		$.each( elems, function( i, elem ) {
+			if ( elem ) {
+				can.trigger(elem,"destroyed",[],false);
+			}
+		});
+		oldClean(elems);
+	};
+
+	return can;
+})(module["jquery"], module["can/util/can.js"], module["jquery"], module["can/util/preamble.js"], module["can/util/array/each.js"]);
 module['can/util/string/string.js'] = (function(can) {
 	// ##string.js
 	// _Miscellaneous string utility functions._  
@@ -6939,5 +7000,7 @@ module['can/route/route.js'] = (function(can) {
 module['can/util/can-all.js'] = (function(can) {
 	return can;
 })(module["can/util/jquery/jquery.js"], module["can/construct/proxy/proxy.js"], module["can/construct/super/super.js"], module["can/control/control.js"], module["can/control/plugin/plugin.js"], module["can/control/modifier/modifier.js"], module["can/view/modifiers/modifiers.js"], module["can/model/model.js"], module["can/view/ejs/ejs.js"], module["can/route/route.js"]);
-window.can = module['can/util/can.js'];
-window.module = module._orig;
+window['can'] = module['can/util/can.js'];
+
+window.define = module._define;
+})();

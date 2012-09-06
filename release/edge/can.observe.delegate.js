@@ -1,8 +1,9 @@
-var module = { _orig: window.module };
+(function() {
+ var module = { _define : window.define };
 define = function(id, deps, value) {
-module[id] = value();
+	module[id] = value();
 };
- define.amd = { jQuery: true };
+define.amd = { jQuery: true };
 
 module['can/observe/delegate/delegate.js'] = (function(can) {
 	
@@ -364,5 +365,6 @@ module['can/observe/delegate/delegate.js'] = (function(can) {
 	can.Observe.prototype.delegate.matches = matches;
 	return can.Observe;
 })(module["can/util/jquery/jquery.js"], module["can/observe/observe.js"]);
-window.can = module['can/util/can.js'];
-window.module = module._orig;
+
+window.define = module._define;
+})();
