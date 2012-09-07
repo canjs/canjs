@@ -1,7 +1,3 @@
-[![Build Status](https://secure.travis-ci.org/jupiterjs/canjs.png)](http://travis-ci.org/jupiterjs/canjs)
-
-Go to http://canjs.us/
-=======
                                 ___           ___           ___            ___         ___     
                                /\  \         /\  \         /\__\          /\  \       /\  \    
                               /::\  \       /::\  \       /::|  |         \:\  \     /::\  \   
@@ -13,6 +9,8 @@ Go to http://canjs.us/
                              \:\  \           /:/  /       |::/  /                  \:\/:/  /  
                               \:\__\         /:/  /        /:/  /                    \::/  /   
                                \/__/         \/__/         \/__/                      \/__/    
+
+[![Build Status](https://secure.travis-ci.org/jupiterjs/canjs.png)](http://travis-ci.org/jupiterjs/canjs)
 
 CanJS is a MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy. Use it because it’s:
 
