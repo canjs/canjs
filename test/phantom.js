@@ -15,9 +15,9 @@ var url = phantom.args[0];
 var page = require('webpage').create();
 
 // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
-//  page.onConsoleMessage = function(msg) {
-//	    console.log(msg);
-//  };
+page.onConsoleMessage = function(msg) {
+    console.log(msg);
+};
 
 page.open(url, function(status){
 	if (status !== "success") {
@@ -36,13 +36,43 @@ page.open(url, function(status){
 
 page.onResourceReceived = function(data) {
 	page.evaluate(function(addLogging) {
-		setTimeout(function() {
+		// Only add setZeroTimeout to the window object, and hide everything
+		// else in a closure.
+		(function() {
+			var timeouts = [];
+			var messageName = "zero-timeout-message";
+
+			// Like setTimeout, but only takes a function argument.  There's
+			// no time argument (always zero) and no arguments (you have to
+			// use a closure).
+			function setZeroTimeout(fn) {
+				timeouts.push(fn);
+				window.postMessage(messageName, "*");
+			}
+
+			function handleMessage(event) {
+				if (event.source == window && event.data == messageName) {
+					event.stopPropagation();
+					if (timeouts.length > 0) {
+						var fn = timeouts.shift();
+						fn();
+					}
+				}
+			}
+
+			window.addEventListener("message", handleMessage, true);
+
+			// Add the one thing we want added to the window object.
+			window.setZeroTimeout = setZeroTimeout;
+		})();
+
+		setZeroTimeout(function() {
 			if(window.QUnit && !window.QUnit.__logging) {
 				console.log('Adding logging');
 				addLogging();
 				window.QUnit.__logging = true;
 			}
-		}, 1);
+		});
 	}, addLogging);
 }
 
@@ -60,44 +90,49 @@ function onfinishedTests() {
 }
 
 function addLogging() {
-	var current_test_assertions = [];
-	QUnit.testDone(function(result) {
-		var name = result.module + ': ' + result.name;
-		var i;
+	var print = function(msg) {
+		console.log(msg);
+	};
 
-		if (result.failed) {
-			console.log('Assertion Failed: ' + name);
-
-			for (i = 0; i < current_test_assertions.length; i++) {
-				console.log('    ' + current_test_assertions[i]);
-			}
-		}
-
-		current_test_assertions = [];
+	QUnit.begin(function() {
+		print("Starting ...");
 	});
 
-	QUnit.log(function(details) {
-		var response;
+	QUnit.log(function(o){
+		var result = o.result,
+			message = o.message || 'okay';
 
-		if (details.result) {
-			return;
-		}
-
-		response = details.message || '';
-
-		if (typeof details.expected !== 'undefined') {
-			if (response) {
-				response += ', ';
+		// Testdox layout
+		if(result) {
+			print('    [x] ' + message);
+		} else {
+			print('    [ ] ' + message);
+			if(o.expected) {
+				print('        Actual: ' + o.actual);
+				print('        Expected: ' + o.expected);
 			}
-
-			response += 'expected: ' + details.expected + ', but was: ' + details.actual;
 		}
-
-		current_test_assertions.push('Failed assertion: ' + response);
 	});
 
-	QUnit.done(function(result){
-		console.log('Took ' + result.runtime +  'ms to run ' + result.total + ' tests. ' + result.passed + ' passed, ' + result.failed + ' failed.');
-		window.qunitDone = result;
+	QUnit.testStart(function(o){
+		print('  ' + o.name);
+	});
+
+	QUnit.moduleStart(function(o){
+		print("\n" + o.name);
+	});
+
+	QUnit.done(function(o) {
+		if(o.failed > 0) {
+			print("\n" + 'FAILURES!');
+			print('Tests: ' + o.total
+				+ ', Passed: ' + o.passed,
+				+ ', Failures: ' + o.failed);
+		} else {
+			print("\n" + 'SUCESS!');
+			print('Tests: ' + o.total);
+		}
+		print('Took: ' + o.runtime + 'ms');
+		window.qunitDone = true;
 	});
 }
