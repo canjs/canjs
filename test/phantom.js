@@ -15,9 +15,9 @@ var url = phantom.args[0];
 var page = require('webpage').create();
 
 // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
-page.onConsoleMessage = function(msg) {
-	console.log(msg);
-};
+//  page.onConsoleMessage = function(msg) {
+//	    console.log(msg);
+//  };
 
 page.open(url, function(status){
 	if (status !== "success") {
