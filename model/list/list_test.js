@@ -58,6 +58,23 @@ test("remove", function(){
 	equals(res[0].id, "a1")
 })
 
+test("remove with a shadowed id", function(){
+	var MyModel = can.Model.extend({
+		id: 'foo'
+	},{
+		foo: function() {
+			return 'bar';
+		}
+	});
+
+	var list = new MyModel.List([
+		new MyModel({ foo: 'bar' }),
+		new MyModel({ foo: 'baz' })
+	]);
+	list.remove('bar');
+	equals(list.length,1,'bar was removed');
+	equals(list[0].attr('foo'),'baz');
+});
 
 test("list from models", function(){
 	var people = Person.models([{id: 1}, {id: 2}]);
