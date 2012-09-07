@@ -5,7 +5,7 @@ before_script:
   - cp stealconfig.js running/stealconfig.js
   - cd running
   - ../node_modules/.bin/http-server -p 8000 &
-  - git clone https://github.com/daffl/canjs.git can
+  - git clone https://github.com/jupiterjs/canjs.git can
   - git clone https://github.com/jupiterjs/funcunit.git
   - cd funcunit
   - git submodule update --init --recursive
