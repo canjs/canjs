@@ -5,33 +5,27 @@
 </head>
 <body>
 
-<script id="template" type="text/x-handlebars-template">
-  <p>My Teacher is: <input type="text" value="{{name}}"></input></p>
+<script id="template" type="text/hb">
+  <p>My Teacher is: <input type="text" value="{{{ this.attr('name') }}}"></input></p>
 </script>
 
 <div id="demo"></div>
-
 <button id="button">Click for new teacher</button>
 
 <script type='text/javascript' src='../../../steal/steal.js'></script>
 <script type='text/javascript'>
 	steal('can/view/handlebars', 'can/observe', function() {
 
-		var source  = $("#template").html();
-
 		var teacher = new can.Observe({
 			name: "Mr Peters"
 		});
 
-		var template = can.hb(source, teacher);
+		var template = can.view("#template", teacher);
 		can.$('#demo').append(template);
 
 		can.$('#button').click(function(){
 			teacher.attr('name', 'Mr Scott')
-		})
-
-		// TODO: Add support for localization
-		// {{loc myLocalizedString}}
+		});
 
 	});
 </script>

@@ -72,7 +72,7 @@ can.extend(can.view, {
 	/**
 	 * Scans the source and returns the code.
 	 */
-	_scan: function(source, name){
+	scan: function(source, name){
 		var tokens = [],
 			last = 0;
 		
@@ -162,7 +162,7 @@ can.extend(can.view, {
 					// TODO: we should only add `can.EJS.pending()` if there's a magic tag 
 					// within the html tags.
 					if(magicInTag || tagToContentPropMap[ tagNames[tagNames.length -1] ]){
-						put(content, ",can.EJS.pending(),\">\"");
+						put(content, ",can.view.pending(),\">\"");
 						content = '';
 					} else {
 						content += token;
@@ -209,6 +209,7 @@ can.extend(can.view, {
 				// We have a start tag.
 				switch ( token ) {
 				case tmap.right:
+				case tmap.rRight:
 					switch ( startTag ) {
 					case tmap.left:
 						// Get the number of `{ minus }`
@@ -218,7 +219,7 @@ can.extend(can.view, {
 						if (bracketCount == 1) {
 
 							// We are starting on.
-							buff.push(insert_cmd, "can.EJS.txt(0,'"+tagName+"'," + status() + ",this,function(){", startTxt, content);
+							buff.push(insert_cmd, "can.view.txt(0,'"+tagName+"'," + status() + ",this,function(){", startTxt, content);
 							
 							endStack.push({
 								before: "",
@@ -266,7 +267,7 @@ can.extend(can.view, {
 						
 						// If we have `<%== a(function(){ %>` then we want
 						// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-						buff.push(insert_cmd, "can.EJS.txt(" + (startTag === tmap.reLeft ? 1 : 0) + ",'" + tagName+"'," + 
+						buff.push(insert_cmd, "can.view.txt(" + (startTag === tmap.reLeft ? 1 : 0) + ",'" + tagName+"'," + 
 								status() + ",this,function(){ return ", content, 
 									// If we have a block.
 									bracketCount ? 
