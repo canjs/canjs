@@ -1,18 +1,8 @@
-                                ___           ___           ___            ___         ___     
-                               /\  \         /\  \         /\__\          /\  \       /\  \    
-                              /::\  \       /::\  \       /::|  |         \:\  \     /::\  \   
-                             /:/\:\  \     /:/\:\  \     /:|:|  |     ___ /::\__\   /:/\ \  \  
-                            /:/  \:\  \   /::\~\:\  \   /:/|:|  |__  /\  /:/\/__/  _\:\~\ \  \ 
-                           /:/__/ \:\__\ /:/\:\ \:\__\ /:/ |:| /\__\ \:\/:/  /    /\ \:\ \ \__\
-                           \:\  \  \/__/ \/__\:\/:/  / \/__|:|/:/  /  \::/  /     \:\ \:\ \/__/
-                            \:\  \            \::/  /      |:/:/  /    \/__/       \:\ \:\__\  
-                             \:\  \           /:/  /       |::/  /                  \:\/:/  /  
-                              \:\__\         /:/  /        /:/  /                    \::/  /   
-                               \/__/         \/__/         \/__/                      \/__/    
+CanJS [![Build Status](https://secure.travis-ci.org/jupiterjs/canjs.png)](http://travis-ci.org/jupiterjs/canjs)
+=====
 
-[![Build Status](https://secure.travis-ci.org/jupiterjs/canjs.png)](http://travis-ci.org/jupiterjs/canjs)
-
-CanJS is a MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy. Use it because it’s:
+CanJS is a MIT-licensed, client-side, JavaScript framework that makes building 
+rich web applications easy. Use it because it’s:
 
 - Smaller 
 - Faster 
@@ -20,4 +10,4 @@ CanJS is a MIT-licensed, client-side, JavaScript framework that makes building r
 - Easier 
 - Library-er
 
-Go to http://canjs.us/ for docs, downloads, tests, demos, and more.
+Go to [http://canjs.us/](http://canjs.us/) for docs, downloads, tests, demos, and more.
