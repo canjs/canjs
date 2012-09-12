@@ -1,5 +1,5 @@
 steal('../can.js',{
-	id: './zepto.0.8.js',
+	id: './zepto.1.0rc1.js',
 	_skip: true
 }).then('./data').then('../event','../fragment.js',function(can){
 	// zepto.js

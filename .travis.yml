@@ -19,3 +19,4 @@ script:
   - phantomjs can/test/phantom.js http://localhost:8000/can/test/can_dojo.html
   - phantomjs can/test/phantom.js http://localhost:8000/can/test/can_mootools.html
   - phantomjs can/test/phantom.js http://localhost:8000/can/test/can_yui.html
+  - phantomjs can/test/phantom.js http://localhost:8000/can/test/can_zepto.html
