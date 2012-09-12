@@ -9,9 +9,10 @@
 			"web": "http://bitovi.com/"
 		}
 	],
-	"dependencies": {
+	"devDependencies": {
 		"grunt": "~0.3.11",
-		"grunt-closure-tools": "~0.6.2"
+		"grunt-closure-tools": "~0.6.2",
+    "http-server" : "0.5.1"
 	},
 	"homepage": "http://canjs.us/",
 	"repository": {

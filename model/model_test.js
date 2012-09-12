@@ -295,8 +295,8 @@ test("auto methods",function(){
 	var School = can.Model.extend("Jquery.Model.Models.School",{
 	   findAll : steal.config().root.join("can/model/test")+"/{type}.json",
 	   findOne : steal.config().root.join("can/model/test")+"/{id}.json",
-	   create : steal.config().root.join("can/model/test")+"/create.json",
-	   update : "POST "+steal.config().root.join("can/model/test")+"/update{id}.json"
+	   create : "GET " + steal.config().root.join("can/model/test")+"/create.json",
+	   update : "GET "+steal.config().root.join("can/model/test")+"/update{id}.json"
 	},{})
 	stop();
 	School.findAll({type:"schools"}, function(schools){
