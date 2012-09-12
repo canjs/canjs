@@ -71,27 +71,6 @@ steal('can/util','can/construct', function(can, Construct) {
 				return true;
 			}
 		},
-		// Creates an event on item, but will not send immediately 
-		// if collecting events.  
-		// `item` - The item the event should happen on.  
-		// `event` - The event name, ex: `change`.  
-		// `args` - Tn array of arguments.
-		batchTrigger = function( item, event, args ) {
-			// Don't send events if initalizing.
-			if ( ! item._init) {
-				if (!collecting ) {
-					return can.trigger(item, event, args);
-				} else {
-					collecting.push([
-					item,
-					{
-						type: event,
-						batchNum : batchNum
-					}, 
-					args ] );
-				}
-			}
-		},
 		// Which batch of events this is for -- might not want to send multiple
 		// messages on the same batch.  This is mostly for event delegation.
 		batchNum = 1,
@@ -131,6 +110,31 @@ steal('can/util','can/construct', function(can, Construct) {
 		attrParts = function(attr){
 			return can.isArray(attr) ? attr : (""+attr).split(".");
 		};
+		
+		
+	// Creates an event on item, but will not send immediately 
+	// if collecting events.  
+	// `item` - The item the event should happen on.  
+	// `event` - The event name, ex: `change`.  
+	// `args` - Tn array of arguments.
+	can.batchTrigger = function( item, event, args ) {
+		// Don't send events if initalizing.
+		if ( ! item._init) {
+			if (!collecting ) {
+				return can.trigger(item, event, args);
+			} else {
+				collecting.push([
+				item,
+				{
+					type: event,
+					batchNum : batchNum
+				}, 
+				args ] );
+			}
+		}
+	};
+		
+		
 	/**
 	 * @add can.Observe
 	 */
@@ -416,8 +420,8 @@ steal('can/util','can/construct', function(can, Construct) {
 				if (!(prop in this.constructor.prototype)) {
 					delete this[prop]
 				}
-				batchTrigger(this, "change", [prop, "remove", undefined, current]);
-				batchTrigger(this, prop, [undefined, current]);
+				can.batchTrigger(this, "change", [prop, "remove", undefined, current]);
+				can.batchTrigger(this, prop, [undefined, current]);
 				return current;
 			}
 		},
@@ -493,8 +497,8 @@ steal('can/util','can/construct', function(can, Construct) {
 				value);
 
 				// `batchTrigger` the change event.
-				batchTrigger(this, "change", [prop, changeType, value, current]);
-				batchTrigger(this, prop, [value, current]);
+				can.batchTrigger(this, "change", [prop, changeType, value, current]);
+				can.batchTrigger(this, prop, [value, current]);
 				// If we can stop listening to our old value, do it.
 				current && unhookup([current], this._cid);
 			}
@@ -833,13 +837,13 @@ steal('can/util','can/construct', function(can, Construct) {
 			if ( !~ attr.indexOf('.')){
 				
 				if( how === 'add' ) {
-					batchTrigger(this, how, [newVal,+attr]);
-					batchTrigger(this,'length',[this.length]);
+					can.batchTrigger(this, how, [newVal,+attr]);
+					can.batchTrigger(this,'length',[this.length]);
 				} else if( how === 'remove' ) {
-					batchTrigger(this, how, [oldVal, +attr]);
-					batchTrigger(this,'length',[this.length]);
+					can.batchTrigger(this, how, [oldVal, +attr]);
+					can.batchTrigger(this,'length',[this.length]);
 				} else {
-					batchTrigger(this,how,[newVal, +attr])
+					can.batchTrigger(this,how,[newVal, +attr])
 				}
 				
 			}
@@ -940,11 +944,11 @@ steal('can/util','can/construct', function(can, Construct) {
 			}
 			var removed = splice.apply(this, args);
 			if ( howMany > 0 ) {
-				batchTrigger(this, "change", [""+index, "remove", undefined, removed]);
+				can.batchTrigger(this, "change", [""+index, "remove", undefined, removed]);
 				unhookup(removed, this._cid);
 			}
 			if ( args.length > 2 ) {
-				batchTrigger(this, "change", [""+index, "add", args.slice(2), removed]);
+				can.batchTrigger(this, "change", [""+index, "add", args.slice(2), removed]);
 			}
 			return removed;
 		},
@@ -1168,7 +1172,7 @@ steal('can/util','can/construct', function(can, Construct) {
 			var res = [][name].apply(this, args);
 			
 			if ( !this.comparator || !args.length ) {
-				batchTrigger(this, "change", [""+len, "add", args, undefined])
+				can.batchTrigger(this, "change", [""+len, "add", args, undefined])
 			}
 						
 			return res;
@@ -1232,7 +1236,7 @@ steal('can/util','can/construct', function(can, Construct) {
 			// `undefined` - The new values (there are none).
 			// `res` - The old, removed values (should these be unbound).
 			// `len` - Where these items were removed.
-			batchTrigger(this, "change", [""+len, "remove", undefined, [res]])
+			can.batchTrigger(this, "change", [""+len, "remove", undefined, [res]])
 
 			if ( res && res.unbind ) {
 				res.unbind("change" + this._cid)
