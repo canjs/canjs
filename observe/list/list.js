@@ -2,7 +2,7 @@ steal('can/util', 'can/observe', 'can/observe/compute', function(can) {
 	can.extend(can.Observe.List.prototype, {
 		filter : function(callback) {
 			// The filtered list
-			var filtered = new can.Observe.List();
+			var filtered = new this.constructor();
 			var self = this;
 			// Creates the binder for a single element at a given index
 			var generator = function(element, index) {
@@ -57,7 +57,7 @@ steal('can/util', 'can/observe', 'can/observe/compute', function(can) {
 		},
 
 		map : function(callback) {
-			var mapped = new can.Observe.List();
+			var mapped = new this.constructor();
 			var self = this;
 			// Again, lets run a generator function
 			var generator = function(element, index) {
