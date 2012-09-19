@@ -33,7 +33,7 @@ var unique = function( items ) {
 		 * @return {String}
 		 */
 		identity: function() {
-			var id = this[this.constructor.id],
+			var id = this.__get(this.constructor.id),
 				constructor = this.constructor;
 			return (constructor._fullName + '_' + (constructor.escapeIdentity ? encodeURIComponent(id) : id)).replace(/ /g, '_');
 		},
