@@ -258,6 +258,52 @@ test("attr update a list when less things come back and remove is true", functio
 });
 
 
+test("attr update a list with shadowed ids", function(){
+  var MyPerson = Person.extend({
+    id: function() {
+      return 'hi!';
+    }
+  });
+  var people = MyPerson.models([
+    {
+      id : 1,
+      name : 'Michael',
+      age : 20
+    },
+    {
+      id : 2,
+      name : 'Amy',
+      age : 80
+    },
+    {
+      id : 3,
+      name : 'Andy',
+      age : 1
+    }
+  ]);
+
+  people.attr([
+    {
+      id : 3,
+      name : 'Andy',
+      age : 101
+    },
+    {
+      id : 1,
+      name : 'Michael',
+      age : 120
+    }], true);
+
+
+  equal(people.length, 2, "Removed Amy");
+
+  equal(people.attr('0.id'), 1);
+  equal(people.attr('0.age'), 120, "Michael's age incremented by 100 years");
+
+  equal(people.attr('1.id'), 3, "Andy is now the 2nd person in the list");
+  equal(people.attr('1.age'), 101, "Andy's age incremented by 100 years");
+});
+
 test("attr updates items based on id (when present), not position", function(){
     var people = Person.models([
       {

@@ -518,12 +518,17 @@ steal('can/util', 'can/model/elements', function(can) {
           newVal,
           curVal;
 
+      var id = this.constructor.id;
+      function getId(obj) {
+        return obj.attr ? obj.attr(id) : obj[id];
+      }
+
       for ( var i = 0; i < len; i++ ) {
         newVal = items[i];
         curVal = null;
 
-        if ( can.Observe.canMakeObserve(newVal) ) {
-          curVal = this.get(newVal[this.constructor.id])[0];
+        if ( can.Observe.canMakeObserve(newVal) && getId(newVal)) {
+          curVal = this.get(getId(newVal))[0];
           if (curVal){
             curVal.attr(newVal, remove)
           } else {
@@ -533,12 +538,11 @@ steal('can/util', 'can/model/elements', function(can) {
       }
 
       if(remove){
-        var id = this.constructor.id,
-            existingIds = this.map(function(element) {
-              return element[id];
+        var existingIds = this.map(function(element) {
+              return getId(element);
             }),
             itemIds = items.map(function(element){
-              return element[id];
+              return getId(element);
             });
 
         can.each(existingIds, $.proxy(function(id){
