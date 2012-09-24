@@ -735,10 +735,14 @@ steal('can/util','can/construct', function( can ) {
 
 
 	// Set common events to be processed as a `basicProcessor`
-	each(["change", "click", "contextmenu", "dblclick", "keydown", "keyup", 
-		 "keypress", "mousedown", "mousemove", "mouseout", "mouseover", 
-		 "mouseup", "reset", "resize", "scroll", "select", "submit", "focusin",
-		 "focusout", "mouseenter", "mouseleave"], function( v ) {
+	each(["change", "click", "contextmenu", "dblclick", "keydown", "keyup",
+		"keypress", "mousedown", "mousemove", "mouseout", "mouseover",
+		"mouseup", "reset", "resize", "scroll", "select", "submit", "focusin",
+		"focusout", "mouseenter", "mouseleave",
+		// #104 - Add touch events as default processors
+		// TOOD feature detect?
+		"touchstart", "touchmove", "touchcancel", "touchend", "touchleave"
+	], function( v ) {
 		processors[v] = basicProcessor;
 	});
 

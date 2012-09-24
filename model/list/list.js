@@ -524,7 +524,7 @@ steal('can/util', 'can/model/elements', function(can) {
         newVal = items[i];
         curVal = null;
 
-        if ( can.Observe.canMakeObserve(newVal) ) {
+        if ( can.Observe.canMakeObserve(newVal) && newVal[this.constructor.id] ) {
           curVal = this.get(newVal[this.constructor.id])[0];
           if (curVal){
             curVal.attr(newVal, remove)

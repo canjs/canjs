@@ -1,21 +1,8 @@
 language: node_js
 node_js: 0.8
-before_script:
-  - mkdir running
-  - cp stealconfig.js running/stealconfig.js
-  - cd running
-  - ../node_modules/.bin/http-server -p 8000 &
-  - git clone https://github.com/jupiterjs/canjs.git can
-  - git clone https://github.com/jupiterjs/funcunit.git
-  - cd funcunit
-  - git submodule update --init --recursive
-  - cd ..
-  - git clone https://github.com/jupiterjs/steal.git
-  - cd steal
-  - git checkout working
-  - cd ..
+before_script: build/ci/init.sh
 script:
-  - phantomjs can/test/phantom.js http://localhost:8000/can/test/can_jquery.html
-  - phantomjs can/test/phantom.js http://localhost:8000/can/test/can_dojo.html
-  - phantomjs can/test/phantom.js http://localhost:8000/can/test/can_mootools.html
-  - phantomjs can/test/phantom.js http://localhost:8000/can/test/can_yui.html
+  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_jquery.html
+  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_dojo.html
+  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_mootools.html
+  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_yui.html

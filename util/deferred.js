@@ -121,6 +121,17 @@ steal('./can.js',function(can){
 			return this;
 		},
 
+		state : function() {
+			switch(this._status) {
+				case 'rs':
+					return 'resolved';
+				case 'rj':
+					return 'rejected';
+				default:
+					return 'pending';
+			}
+		},
+
 		isResolved : function() {
 			return this._status === "rs";
 		},
