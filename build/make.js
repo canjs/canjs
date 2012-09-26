@@ -220,7 +220,7 @@ steal('steal/build/pluginify', function() {
 				global: "this.can",
 				onefunc: true,
 				exclude: [
-					'can/util/jquery/jquery.1.8.1.js',
+					'can/util/jquery/jquery.1.8.2.js',
 					'can/util/preamble.js',
 					'can/util/jquery/jquery.js',
 					'can/util/array/each.js',
