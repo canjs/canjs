@@ -57,6 +57,21 @@ can.view.Scanner = Scanner = function( options ) {
  */
 Scanner.prototype = {
 
+	helpers:[
+		/**
+		 * Check if its a func like `()->`.
+		 * @param {String} content
+		 */
+		function(content){
+			var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/;
+			if(quickFunc.test(content)){
+				var parts = content.match(quickFunc);
+				content = "function(__){var " + parts[1] + "=can.$(__);" + parts[2] + "}";
+			}
+			return content;
+		}
+	],
+
 	/**
 	 * Generate the Regex based on the tokens above.
 	 */
@@ -258,10 +273,10 @@ Scanner.prototype = {
 								after: "}));"
 							});
 						} 
-						// Check if its a func like `()->`
-						if(quickFunc.test(content)){
-							var parts = content.match(quickFunc);
-							content = "function(__){var "+parts[1]+"=can.$(__);"+parts[2]+"}";
+
+						// go through and apply helpers
+						for(var ii=0;ii<this.helpers.length;ii++){
+							content = this.helpers[ii](content);
 						}
 						
 						// If we have `<%== a(function(){ %>` then we want
