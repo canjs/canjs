@@ -1,9 +1,9 @@
 steal('can/util',
-			'can/view', 
-			'can/view/scanner.js',
-			'can/observe/compute')
-.then('can/view/render.js')
-.then(function( can ){
+	  'can/view',
+	  'can/view/scanner.js',
+	  'can/observe/compute',
+	  'can/view/render.js',
+function( can ){
 
 	can.view.ext = ".mustache";
 
@@ -68,17 +68,17 @@ steal('can/util',
 				rLeft: "{{{", // Return
 				rRight: "}}}",
 				reLeft: "{{", // Return Escaped
-				cmntLeft: "{{#", // Comment ---- Not supported
-				left: "{{%", // Run --- this is hack for now
+				cmntLeft: "{{!", // Comment
+				left: "{{#", // Run --- this is hack for now
 				right: "}}" // Right -> All have same FOR Mustache ...
 			}
 		})
 	});
 
 	Mustache.Helpers = function( data, extras ) {
-			this._data = data;
-			this._extras = extras;
-			extend(this, extras);
+		this._data = data;
+		this._extras = extras;
+		extend(this, extras);
 	};
 
 	/**
