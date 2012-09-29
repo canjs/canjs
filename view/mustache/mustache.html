@@ -10,7 +10,8 @@
 	<p>My fav teacher is: <span>{{ this.name }}</span></p>
 	<p>My fav book is: <span>{{{ this.attr('book') }}}</span></p>
 	<p>My fav color is: <span {{ (el) -> el.css('color', 'blue') }}>blue</span></p>
-</script>
+	<p>Comments {{! 'ignored' }}</p>
+	</script>
 
 <div id="demo"></div>
 <button id="button">Click to change</button>
@@ -21,7 +22,8 @@
 
 		var teacher = new can.Observe({
 			name: "<strong>Mrs Peters</strong>",
-			book: "Harry Potter"
+			book: "Harry Potter",
+			movie: false
 		});
 
 		var template = can.view("#template", teacher);
