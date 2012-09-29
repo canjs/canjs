@@ -65,7 +65,7 @@ function( can ) {
 			 * These are the tokens for the scanner.
 			 */
 			tokens: {
-		    tLeft: "<%%=", // Template
+		    tLeft: "<%%", // Template
 		    tRight: "%>", // Right Template
 		    rLeft: "<%==", // Return
 		    reLeft: "<%=", // Return Escaped

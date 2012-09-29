@@ -31,7 +31,7 @@ var getAttr = function(el, attrName){
 			el.getAttribute(attrName);
 	}
 
-test("register register and replace work", function(){
+test("registerNode, unregisterNode, and replace work", function(){
 	
 	var ids = function(arr){
 		return can.map(arr, function(item){
@@ -41,41 +41,41 @@ test("register register and replace work", function(){
 		two = {id: 2},
 		listOne = [{id: 1},two,{id: 3}];
 		
-	can.EJS.register(listOne);
+	can.view.registerNode(listOne);
 	var listTwo = [two];
 	
-	can.EJS.register(listTwo);
+	can.view.registerNode(listTwo);
 	
 	var newLabel = {id: 4}
-	can.EJS.replace(listTwo, [newLabel])
+	can.view.replace(listTwo, [newLabel])
 	
 	same( ids(listOne), [1,4,3], "replaced" )
 	same( ids(listTwo), [4] );
 	
-	can.EJS.replace(listTwo,[{id: 5},{id: 6}]);
+	can.view.replace(listTwo,[{id: 5},{id: 6}]);
 	
 	same( ids(listOne), [1,5,6,3], "replaced" );
 	
 	same( ids(listTwo), [5,6], "replaced" );
 	
-	can.EJS.replace(listTwo,[{id: 7}])
+	can.view.replace(listTwo,[{id: 7}])
 	
 	same( ids(listOne), [1,7,3], "replaced" );
 	
 	same( ids(listTwo), [7], "replaced" );
 	
-	can.EJS.replace( listOne, [{id: 8}])
+	can.view.replace( listOne, [{id: 8}])
 	
 	same( ids(listOne), [8], "replaced" );
 	same( ids(listTwo), [7], "replaced" );
 	
-	can.EJS.unregister(listOne);
-	can.EJS.unregister(listTwo);
+	can.view.unregisterNode(listOne);
+	can.view.unregisterNode(listTwo);
 	
 	
 	
-	same(can.EJS.nodeMap, {} );
-	same(can.EJS.nodeListMap ,{} )
+	same(can.view.nodeMap, {} );
+	same(can.view.nodeListMap ,{} )
 	
 	
 });
@@ -995,11 +995,11 @@ test("live binding textarea", function(){
 
 test("A non-escaping live magic tag within a control structure and no leaks", function(){
 	
-	for(var prop in can.EJS.nodeMap){
-		delete can.EJS.nodeMap[prop]
+	for(var prop in can.view.nodeMap){
+		delete can.view.nodeMap[prop]
 	}
-	for(var prop in can.EJS.nodeListMap){
-		delete can.EJS.nodeListMap[prop]
+	for(var prop in can.view.nodeListMap){
+		delete can.view.nodeListMap[prop]
 	}
 	
 	var text = "<div><% items.each(function(ob) { %>" +
@@ -1032,8 +1032,8 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 		
 	can.remove( can.$(div.firstChild) )
 		
-	same(can.EJS.nodeMap, {} );
-	same(can.EJS.nodeListMap ,{} )
+	same(can.view.nodeMap, {} );
+	same(can.view.nodeListMap ,{} )
 });
 
 

@@ -431,7 +431,11 @@ can.extend(can.view, {
 				}
 			});
 		});
-	}
+	},
+	
+	// Node mappings
+	nodeMap: nodeMap,
+	nodeListMap: nodeListMap
 
 })
 
