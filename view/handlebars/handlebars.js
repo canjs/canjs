@@ -11,11 +11,11 @@ can.view.tokens = {
     tLeft: "{{$", // Template  ---- Not supported
     tRight: "$}}", // Right Template  ---- Not supported
     rLeft: "{{{", // Return
+    rRight: "}}}",
     reLeft: "{{", // Return Escaped
     cmntLeft: "{{#", // Comment ---- Not supported
     left: "{{", // Run
-    right: "}}", // Right -> All have same FOR EJS ...
-    rRight: "}}}"
+    right: "}}" // Right -> All have same FOR EJS ...
 };
 
 can.view.ext = ".hb";
