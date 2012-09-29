@@ -14,7 +14,7 @@ can.view.tokens = {
     rRight: "}}}",
     reLeft: "{{", // Return Escaped
     cmntLeft: "{{#", // Comment ---- Not supported
-    left: "{{", // Run
+    left: "{{%", // Run --- this is hack for now
     right: "}}" // Right -> All have same FOR EJS ...
 };
 
