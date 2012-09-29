@@ -45,15 +45,17 @@ var newLine = /(\r|\n)+/g,
 		return quote ? "'"+beforeQuote.match(attrReg)[1]+"'" : (htmlTag ? 1 : 0);
 	};
 
+can.view.Scanner = Scanner = function( options ) {
+  // Set options on self
+  can.extend(this, {
+    tokens: {}
+  }, options);
+};
+
 /**
  * Extend can.View to add scanner support.
  */
-can.extend(can.view, {
-
-	/**
-	 * These are the tokens for the scanner.
-	 */
-	tokens: {},
+Scanner.prototype = {
 
 	/**
 	 * Generate the Regex based on the tokens above.
@@ -303,6 +305,6 @@ can.extend(can.view, {
 		myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
 		return out;
 	}
-})
+};
 
 });

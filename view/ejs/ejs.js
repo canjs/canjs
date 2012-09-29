@@ -11,27 +11,30 @@ function( can ) {
 	// _Embedded JavaScript Templates._
 
 	// Helper methods.
-	can.EJS = EJS = function( options ) {
-		// Supports calling EJS without the constructor
-		// This returns a function that renders the template.
-		if ( this.constructor != EJS ) {
-			var ejs = new EJS(options);
-			return function( data, helpers ) {
-				return ejs.render(data, helpers);
-			};
-		}
-		// If we get a `function` directly, it probably is coming from
-		// a `steal`-packaged view.
-		if ( typeof options == "function" ) {
-			this.template = {
-				fn: options
-			};
-			return;
-		}
-		// Set options on self.
-		can.extend(this, options);
-		this.template = can.view.scan(this.text, this.name);
-	};
+	var extend = can.extend,
+		EJS = function( options ) {
+			// Supports calling EJS without the constructor
+			// This returns a function that renders the template.
+			if ( this.constructor != EJS ) {
+				var ejs = new EJS(options);
+				return function( data, helpers ) {
+					return ejs.render(data, helpers);
+				};
+			}
+			// If we get a `function` directly, it probably is coming from
+			// a `steal`-packaged view.
+			if ( typeof options == "function" ) {
+				this.template = {
+					fn: options
+				};
+				return;
+			}
+			// Set options on self.
+			extend(this, options);
+			this.template = this.scanner.scan(this.text, this.name);
+		};
+	
+	can.EJS = EJS;
 
 	/** 
 	 * @Prototype
@@ -52,6 +55,27 @@ function( can ) {
 		object = object || {};
 		return this.template.fn.call(object, object, new EJS.Helpers(object, extraHelpers || {}));
 	};
+	
+	extend(EJS.prototype, {
+		/**
+		 * Singleton scanner instance for parsing templates.
+		 */
+		scanner: new can.view.Scanner({
+			/**
+			 * These are the tokens for the scanner.
+			 */
+			tokens: {
+		    tLeft: "<%%=", // Template
+		    tRight: "%>", // Right Template
+		    rLeft: "<%==", // Return
+		    reLeft: "<%=", // Return Escaped
+		    cmntLeft: "<%#", // Comment
+		    left: "<%", // Run
+		    right: "%>", // Right -> All have same FOR EJS ...
+		    rRight: "%>"
+			}
+		})
+	});
 
 	/**
 	 * @Static
@@ -95,7 +119,7 @@ function( can ) {
 	EJS.Helpers = function( data, extras ) {
 		this._data = data;
 		this._extras = extras;
-		can.extend(this, extras);
+		extend(this, extras);
 	};
 
 	/**
@@ -125,17 +149,6 @@ function( can ) {
 				cb(item, i, list)
 			})
 		}
-	};
-
-	can.view.tokens = {
-	    tLeft: "<%%=", // Template
-	    tRight: "%>", // Right Template
-	    rLeft: "<%==", // Return
-	    reLeft: "<%=", // Return Escaped
-	    cmntLeft: "<%#", // Comment
-	    left: "<%", // Run
-	    right: "%>", // Right -> All have same FOR EJS ...
-	    rRight: "%>"
 	};
 
 	// Options for `steal`'s build.
