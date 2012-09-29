@@ -47,6 +47,13 @@ var attrMap = {
 			el[attrMap[attrName]]:
 			el.getAttribute(attrName);
 	},
+	removeAttr = function(el, attrName){
+		if(can.inArray(attrName,bool) > -1){
+			el[attrName] = false;
+		} else{
+			el.removeAttribute(attrName);
+		}
+	},
 	// Returns text content for anything other than a live-binding 
 	contentText =  function( input ) {	
 		
@@ -79,7 +86,47 @@ var attrMap = {
 
 		// Finally, if all else is `false`, `toString()` it.
 		return "" + input;
-	}
+	},
+	// Returns escaped/sanatized content for anything other than a live-binding
+	contentEscape = function( txt ) {
+		return (typeof txt == 'string' || typeof txt == 'number') ?
+			can.esc( txt ) :
+			contentText(txt);
+	},
+	// a mapping of element ids to nodeList ids
+	nodeMap = {},
+	// a mapping of nodeList ids to nodeList
+	nodeListMap = {},
+	expando = "ejs_"+Math.random(),
+	_id=0,
+	id = function(node){
+		if ( node[expando] ) {
+			return node[expando];
+		} else {
+			return node[expando] = (node.nodeName ? "element_" : "obj_")+(++_id);
+		}
+	},
+	// removes a nodeListId from a node's nodeListIds
+	removeNodeListId= function(node, nodeListId){
+		var nodeListIds = nodeMap[id(node)];
+		if( nodeListIds ) {
+			var index = can.inArray(nodeListId, nodeListIds);
+		
+			if ( index >= 0 ) {
+				nodeListIds.splice( index ,  1 );
+			}
+			if(!nodeListIds.length){
+				delete nodeMap[id(node)];
+			}
+		}
+	},
+	addNodeListId = function(node, nodeListId){
+		var nodeListIds = nodeMap[id(node)];
+			if(!nodeListIds){
+				nodeListIds = nodeMap[id(node)] = [];
+			}
+			nodeListIds.push(nodeListId);
+	};
 
 can.extend(can.view, {
 
@@ -101,14 +148,42 @@ can.extend(can.view, {
 		}
 	},
 
+	registerNode: function(nodeList){
+		var nLId = id(nodeList);
+		nodeListMap[nLId] = nodeList;
+		
+		can.each(nodeList, function(node){
+			addNodeListId(node, nLId);
+		});
+	},
+
+	unregisterNode: function(nodeList){
+		var nLId = id(nodeList);
+		can.each(nodeList, function(node){
+			removeNodeListId(node, nLId);
+		});
+		delete nodeListMap[nLId];
+	},
+
 	/**
 	 * @hide
 	 * called to setup unescaped text
+	 * Called to return the content within a magic tag like `<%= %>`.
+	 *
+	 * - escape - if the content returned should be escaped
+	 * - tagName - the tag name the magic tag is within or the one that proceeds the magic tag
+	 * - status - where the tag is in.  The status can be:
+	 *   - _STRING_ - The name of the attribute the magic tag is within
+	 *    - `1` - The magic tag is within a tag like `<div <%= %>>`
+	 *    - `0` - The magic tag is outside (or between) tags like `<div><%= %></div>`
+	 * - self - the `this` the template was called with
+	 * - func - the "wrapping" function.  For example:  `<%= task.attr('name') %>` becomes
+	 *   `(function(){return task.attr('name')})
+	 *
 	 * @param {Number|String} status
 	 *   - "string" - the name of the attribute  <div string="HERE">
 	 *   - 1 - in an html tag <div HERE></div>
 	 *   - 0 - in the content of a tag <div>HERE</div>
-	 *   
 	 * @param {Object} self
 	 * @param {Object} func
 	 */
@@ -133,7 +208,7 @@ can.extend(can.view, {
 			teardown= function(){
 				binding.teardown();
 				if ( nodeList ) {
-					unregister( nodeList );
+					can.view.unregisterNode( nodeList );
 				}
 			},
 			// if the parent element is removed, teardown the binding
@@ -220,10 +295,10 @@ can.extend(can.view, {
 								nodes = newNodes;
 								// set the teardown nodeList
 								nodeList = nodes;
-								register(nodes);
+								can.view.registerNode(nodes);
 							} else {
 								can.remove( can.$(nodes) );
-								replace(nodes,newNodes);
+								can.view.replace(nodes,newNodes);
 							}
 						};
 						// nodes are the nodes that any updates will replace
@@ -238,7 +313,7 @@ can.extend(can.view, {
 		} else if( status === 1 ) { 
 			// remember the old attr name
 			var attrName = binding.value.replace(/['"]/g, '').split('=')[0];
-			can.view.pendingHookups.push(function(el) {
+			this.pendingHookups.push(function(el) {
 				update = function(newVal){
 					var parts = (newVal|| "").replace(/['"]/g, '').split('='),
 						newAttrName = parts[0];
@@ -263,7 +338,7 @@ can.extend(can.view, {
 			// we add this hookup to the last element (ex: `option`'s) hookups.
 			// Otherwise, the magic tag is in an attribute, just add to the current element's
 			// hookups.
-			(status === 0  ? lastHookups : can.view.pendingHookups ).push(function(el){
+			(status === 0  ? lastHookups : this.pendingHookups ).push(function(el){
 				// update will call this attribute's render method
 				// and set the attribute accordingly
 				update = function(){
@@ -325,6 +400,38 @@ can.extend(can.view, {
 			});
 			return "__!!__";
 		}
+	},
+
+	replace: function(oldNodeList, newNodes){
+		// for each node in the node list
+		oldNodeList = can.makeArray( oldNodeList );
+		
+		can.each( oldNodeList, function(node){
+			// for each nodeList the node is in
+			can.each( can.makeArray( nodeMap[id(node)] ), function( nodeListId ){
+				var nodeList = nodeListMap[nodeListId],
+					startIndex = can.inArray( node, nodeList ),
+					endIndex = can.inArray( oldNodeList[oldNodeList.length - 1], nodeList);
+				
+				// remove this nodeListId from each node
+				if(startIndex >=0 && endIndex >= 0){
+					for( var i = startIndex; i <= endIndex; i++){
+						var n = nodeList[i];
+						removeNodeListId(n, nodeListId);
+					}
+
+					// swap in new nodes into the nodeLIst
+					nodeList.splice.apply(nodeList, [startIndex,endIndex-startIndex+1 ].concat(newNodes));
+
+					// tell these new nodes they belong to the nodeList
+					can.each(newNodes, function( node ) {
+						addNodeListId(node, nodeListId);
+					});
+				} else {
+					can.view.unregisterNode( nodeList );
+				}
+			});
+		});
 	}
 
 })

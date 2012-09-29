@@ -69,9 +69,6 @@ can.extend(can.view, {
 		return new RegExp("(" + regexToken.join("|") + ")","g");
 	},
 
-	/**
-	 * Scans the source and returns the code.
-	 */
 	scan: function(source, name){
 		var tokens = [],
 			last = 0;
@@ -144,7 +141,8 @@ can.extend(can.view, {
 					content = '';
 					break;
 				case tmap.tLeft:
-					content += tmap.left;
+					// Replace `<%%` with `<%`.
+					content += '<%';
 					break;
 				case '<':
 					// Make sure we are not in a comment.
@@ -267,15 +265,14 @@ can.extend(can.view, {
 						
 						// If we have `<%== a(function(){ %>` then we want
 						// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-						buff.push(insert_cmd, "can.view.txt(" + (startTag === tmap.reLeft ? 1 : 0) + ",'" + tagName+"'," + 
-								status() + ",this,function(){ return ", content, 
-									// If we have a block.
-									bracketCount ? 
-									// Start with startTxt `"var _v1ew = [];"`.
-									startTxt : 
-									// If not, add `doubleParent` to close push and text.
-									"}));"
-									);
+						buff.push(insert_cmd, "can.view.txt("+(startTag === '<%=' ? 1 : 0)+",'"+tagName+"'," + status()+",this,function(){ return ", content, 
+							// If we have a block.
+							bracketCount ? 
+							// Start with startTxt `"var _v1ew = [];"`.
+							startTxt : 
+							// If not, add `doubleParent` to close push and text.
+							"}));"
+							);
 						break;
 					}
 					startTag = null;
@@ -289,7 +286,6 @@ can.extend(can.view, {
 					break;
 				}
 			}
-
 			lastToken = token;
 		}
 		
@@ -298,17 +294,14 @@ can.extend(can.view, {
 			// Should be `content.dump` in Ruby.
 			put(content);
 		}
-
 		buff.push(";");
 		
 		var template = buff.join(''),
 			out = {
 				out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"
 			};
-
 		// Use `eval` instead of creating a function, because it is easier to debug.
 		myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
-
 		return out;
 	}
 })
