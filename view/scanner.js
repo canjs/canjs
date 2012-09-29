@@ -141,8 +141,7 @@ can.extend(can.view, {
 					content = '';
 					break;
 				case tmap.tLeft:
-					// Replace `<%%` with `<%`.
-					content += '<%';
+					content += tmap.left;
 					break;
 				case '<':
 					// Make sure we are not in a comment.
@@ -265,7 +264,7 @@ can.extend(can.view, {
 						
 						// If we have `<%== a(function(){ %>` then we want
 						// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-						buff.push(insert_cmd, "can.view.txt("+(startTag === '<%=' ? 1 : 0)+",'"+tagName+"'," + status()+",this,function(){ return ", content, 
+						buff.push(insert_cmd, "can.view.txt("+(startTag === tmap.reLeft ? 1 : 0)+",'"+tagName+"'," + status()+",this,function(){ return ", content, 
 							// If we have a block.
 							bracketCount ? 
 							// Start with startTxt `"var _v1ew = [];"`.

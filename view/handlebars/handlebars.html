@@ -6,9 +6,9 @@
 <body>
 
 <script id="template" type="text/hb">
-  <p>My fav teacher is: <span>{{ this.attr('name') }}</span></p>
-
-  <p>My fav book is: <span>{{{ this.attr('book') }}}</span></p>
+	<p>My fav teacher is: <span>{{ this.attr('name') }}</span></p>
+	<p>My fav teacher is: <span>{{ this.name }}</span></p>
+	<p>My fav book is: <span>{{{ this.attr('book') }}}</span></p>
 </script>
 
 <div id="demo"></div>
@@ -19,7 +19,7 @@
 	steal('can/view/handlebars', 'can/observe', function() {
 
 		var teacher = new can.Observe({
-			name: "Mrs Peters",
+			name: "<strong>Mrs Peters</strong>",
 			book: "Harry Potter"
 		});
 
@@ -27,7 +27,7 @@
 		can.$('#demo').append(template);
 
 		can.$('#button').click(function(){
-			teacher.attr('name', '<strong>Mr Scott</strong>')
+			teacher.attr('name', 'Mr Scott')
 			teacher.attr('book', '<strong>Eat, Pray, Love</strong>')
 		});
 
