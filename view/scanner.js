@@ -19,8 +19,6 @@ var newLine = /(\r|\n)+/g,
 	bracketNum = function(content){
 		return (--content.split("{").length) - (--content.split("}").length);
 	},
-	// Regular expressions for caching.
-	quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 	 myEval = function( script ) {
 		eval(script);
 	},
