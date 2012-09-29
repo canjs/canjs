@@ -54,6 +54,7 @@ var attrMap = {
 			el.removeAttribute(attrName);
 		}
 	},
+	pendingHookups = [],
 	// Returns text content for anything other than a live-binding 
 	contentText =  function( input ) {	
 		
@@ -80,7 +81,7 @@ var attrMap = {
 		// Finally, if there is a `function` to hookup on some dom,
 		// add it to pending hookups.
 		if ( hook ) {
-			can.view.pendingHookups.push(hook);
+			pendingHookups.push(hook);
 			return '';
 		}
 
@@ -130,14 +131,12 @@ var attrMap = {
 
 can.extend(can.view, {
 
-	pendingHookups: [],
-
 	pending: function() {
 		// TODO, make this only run for the right tagName
-		if(true  || this.pendingHookups.length) {
-			var hooks = this.pendingHookups.slice(0);
+		if(true  || pendingHookups.length) {
+			var hooks = pendingHookups.slice(0);
 			lastHookups = hooks;
-			this.pendingHookups = [];
+			pendingHookups = [];
 			return can.view.hook(function(el){
 				can.each(hooks, function(fn){
 					fn(el);
@@ -199,9 +198,9 @@ can.extend(can.view, {
 		if(!binding.isListening){
 			return (escape || status !== 0? contentEscape : contentText)(binding.value);
 		}
+
 		// The following are helper methods or varaibles that will
 		// be defined by one of the various live-updating schemes.
-		
 		// The parent element we are listening to for teardown
 		var	parentElement,
 			nodeList,
@@ -313,7 +312,7 @@ can.extend(can.view, {
 		} else if( status === 1 ) { 
 			// remember the old attr name
 			var attrName = binding.value.replace(/['"]/g, '').split('=')[0];
-			this.pendingHookups.push(function(el) {
+			pendingHookups.push(function(el) {
 				update = function(newVal){
 					var parts = (newVal|| "").replace(/['"]/g, '').split('='),
 						newAttrName = parts[0];
@@ -338,7 +337,7 @@ can.extend(can.view, {
 			// we add this hookup to the last element (ex: `option`'s) hookups.
 			// Otherwise, the magic tag is in an attribute, just add to the current element's
 			// hookups.
-			(status === 0  ? lastHookups : this.pendingHookups ).push(function(el){
+			(status === 0  ? lastHookups : pendingHookups ).push(function(el){
 				// update will call this attribute's render method
 				// and set the attribute accordingly
 				update = function(){

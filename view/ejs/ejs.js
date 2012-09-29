@@ -11,37 +11,28 @@ function( can ) {
 	// _Embedded JavaScript Templates._
 
 	// Helper methods.
-	var extend = can.extend,
-		// helper to know if property is not an expando on oldObserved's list of observes
-		// this should probably be removed and oldObserved should just have a
-		// property with observes
-		observeProp = function(name){
-			return name.indexOf("|") >= 0;
-		},
-		// The EJS constructor function
-		EJS = function( options ) {
-			// Supports calling EJS without the constructor
-			// This returns a function that renders the template.
-			if ( this.constructor != EJS ) {
-				var ejs = new EJS(options);
-				return function( data, helpers ) {
-					return ejs.render(data, helpers);
-				};
-			}
-			// If we get a `function` directly, it probably is coming from
-			// a `steal`-packaged view.
-			if ( typeof options == "function" ) {
-				this.template = {
-					fn: options
-				};
-				return;
-			}
-			// Set options on self.
-			extend(this, options);
-			this.template = can.view.scan(this.text, this.name);
-		};
+	can.EJS = EJS = function( options ) {
+		// Supports calling EJS without the constructor
+		// This returns a function that renders the template.
+		if ( this.constructor != EJS ) {
+			var ejs = new EJS(options);
+			return function( data, helpers ) {
+				return ejs.render(data, helpers);
+			};
+		}
+		// If we get a `function` directly, it probably is coming from
+		// a `steal`-packaged view.
+		if ( typeof options == "function" ) {
+			this.template = {
+				fn: options
+			};
+			return;
+		}
+		// Set options on self.
+		can.extend(this, options);
+		this.template = can.view.scan(this.text, this.name);
+	};
 
-	can.EJS = EJS;
 	/** 
 	 * @Prototype
 	 */
@@ -65,16 +56,6 @@ function( can ) {
 	/**
 	 * @Static
 	 */
-	/*extend(EJS, {
-		
-		register: register,
-		unregister: unregister,
-		replace: replace,
-		nodeMap: nodeMap,
-		// a mapping of nodeList ids to nodeList
-		nodeListMap: nodeListMap
-	});*/
-
 	/**
 	 * @class can.EJS.Helpers
 	 * @parent can.EJS
@@ -114,7 +95,7 @@ function( can ) {
 	EJS.Helpers = function( data, extras ) {
 		this._data = data;
 		this._extras = extras;
-		extend(this, extras);
+		can.extend(this, extras);
 	};
 
 	/**
@@ -147,11 +128,11 @@ function( can ) {
 	};
 
 	can.view.tokens = {
-	    tLeft: "<%%=", // Template  ---- Not supported
-	    tRight: "%>", // Right Template  ---- Not supported
+	    tLeft: "<%%=", // Template
+	    tRight: "%>", // Right Template
 	    rLeft: "<%==", // Return
 	    reLeft: "<%=", // Return Escaped
-	    cmntLeft: "<%#", // Comment ---- Not supported
+	    cmntLeft: "<%#", // Comment
 	    left: "<%", // Run
 	    right: "%>", // Right -> All have same FOR EJS ...
 	    rRight: "%>"
