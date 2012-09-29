@@ -18,16 +18,16 @@ can.view.tokens = {
     right: "}}" // Right -> All have same FOR EJS ...
 };
 
-can.view.ext = ".hb";
+can.view.ext = ".mustache";
 
-can.HandleBars = HandleBars = function( options ) {
+can.Mustache = Mustache = function( options ) {
   // Supports calling EJS without the constructor
   // This returns a function that renders the template.
-  if ( this.constructor != HandleBars ) {
-    var hb = new HandleBars(options);
+  if ( this.constructor != Mustache ) {
+    var mustache = new Mustache(options);
 
     return function( data, helpers ) {
-      return hb.render(data, helpers);
+      return mustache.render(data, helpers);
     };
   }
 
@@ -48,7 +48,7 @@ can.HandleBars = HandleBars = function( options ) {
 /** 
  * @Prototype
  */
-HandleBars.prototype.
+Mustache.prototype.
 /**
  * Renders an object with view helpers attached to the view.
  * 
@@ -62,10 +62,10 @@ HandleBars.prototype.
  */
 render = function( object, extraHelpers ) {
   object = object || {};
-  return this.template.fn.call(object, object, new HandleBars.Helpers(object, extraHelpers || {}));
+  return this.template.fn.call(object, object, new Mustache.Helpers(object, extraHelpers || {}));
 };
 
-HandleBars.Helpers = function( data, extras ) {
+Mustache.Helpers = function( data, extras ) {
     this._data = data;
     this._extras = extras;
     can.extend(this, extras);
@@ -75,20 +75,20 @@ HandleBars.Helpers = function( data, extras ) {
  * Register the view.
  */
 can.view.register({
-  suffix: "hb",
+  suffix: "mustache",
 
-  contentType: "x-handlebars-template",
+  contentType: "x-mustache-template",
 
   // returns a `function` that renders the view.
   script: function( id, src ) {
-    return "can.HandleBars(function(_CONTEXT,_VIEW) { " + new HandleBars({
+    return "can.Mustache(function(_CONTEXT,_VIEW) { " + new Mustache({
       text: src,
       name: id
     }).template.out + " })";
   },
 
   renderer: function( id, text ) {
-    return HandleBars({
+    return Mustache({
       text: text,
       name: id
     });
