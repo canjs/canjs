@@ -1,5 +1,4 @@
-steal('funcunit/syn',function(){
-	
+steal('funcunit/syn', 'can/view/mustache', function(){
 	
 module("can/view/mustache, rendering",{
 	setup : function(){
@@ -26,6 +25,22 @@ module("can/view/mustache, rendering",{
 	}
 })
 
+// Add mustache specs to the test
+can.each(['comments', 'delimiters', 'interpolation', 'inverted', 'partials', 'sections'], function(spec) {
+	can.ajax({
+		url: '../view/mustache/spec/specs/' + spec + '.json',
+		dataType: 'json',
+		async: false
+	}).done(function(data) {
+		can.each(data.tests, function(t) {
+			test('specs/' + spec + ' - ' + t.name + ': ' + t.desc, function() {
+				same(new can.Mustache({ text: t.template }).render(t.data), t.expected);
+			});
+		});
+	});
+});
+
+return;
 var getAttr = function(el, attrName){
 		return attrName === "class"?
 			el.className:
