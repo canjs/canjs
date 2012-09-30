@@ -72,6 +72,11 @@ function( can ){
 				left: "{{#", // Run --- this is hack for now
 				right: "}}" // Right -> All have same FOR Mustache ...
 			},
+			
+			/**
+			 * An ordered token registry (necessary for preventing token errors).
+			 */
+			tokenReg: [ "{{$", "$}}", "{{{", "}}}", "{{!", "{{#", "{{", "}}}", "}}" ],
 
 			helpers:[
 				/**

@@ -46,8 +46,12 @@ var newLine = /(\r|\n)+/g,
 can.view.Scanner = Scanner = function( options ) {
   // Set options on self
   can.extend(this, {
-    tokens: {}
+  	tokens: {},
+		tokenReg: []
   }, options);
+	
+	// Cache the token registry.
+	this.tokenReg = new RegExp("(" + this.tokenReg.slice(0).concat(["<", ">", '"', "'"]).join("|") + ")","g");
 };
 
 /**
@@ -70,26 +74,12 @@ Scanner.prototype = {
 		}
 	],
 
-	/**
-	 * Generate the Regex based on the tokens above.
-	 */
-	tokenRegex:function(){
-		var regexToken = [];
-
-		for(var i in this.tokens){
-			regexToken.push(this.tokens[i]);
-		}
-		regexToken.push("<", ">", '"', "'")
-		
-		return new RegExp("(" + regexToken.join("|") + ")","g");
-	},
-
 	scan: function(source, name){
 		var tokens = [],
 			last = 0;
 		
 		source = source.replace(newLine, "\n");
-		source.replace(this.tokenRegex(), function(whole, part, offset){
+		source.replace(this.tokenReg, function(whole, part, offset){
 			// if the next token starts after the last token ends
 			// push what's in between
 			if(offset > last){

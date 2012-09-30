@@ -73,7 +73,12 @@ function( can ) {
 		    left: "<%", // Run
 		    right: "%>", // Right -> All have same FOR EJS ...
 		    rRight: "%>"
-			}
+			},
+			
+			/**
+			 * An ordered token registry (necessary for preventing token errors).
+			 */
+			tokenReg: [ "<%%", "%%>", "<%==", "<%=", "<%#", "<%", "%>" ]
 		})
 	});
 
