@@ -34,7 +34,9 @@ can.each(['comments', 'delimiters', 'interpolation', 'inverted', 'partials', 'se
 	}).done(function(data) {
 		can.each(data.tests, function(t) {
 			test('specs/' + spec + ' - ' + t.name + ': ' + t.desc, function() {
-				same(new can.Mustache({ text: t.template }).render(t.data), t.expected);
+				// can uses &#34; to escape double quotes, mustache expects &quot;.
+				var expected = t.expected.replace(/&quot;/g, '&#34;');
+				same(new can.Mustache({ text: t.template }).render(t.data), expected);
 			});
 		});
 	});

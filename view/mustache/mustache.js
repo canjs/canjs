@@ -66,6 +66,7 @@ function( can ){
 				tLeft: "{{$", // Template	 ---- Not supported
 				tRight: "$}}", // Right Template	---- Not supported
 				rLeft: "{{{", // Return
+				rLeft2: "{{&", // Return
 				rRight: "}}}",
 				reLeft: "{{", // Return Escaped
 				cmntLeft: "{{!", // Comment
@@ -76,7 +77,7 @@ function( can ){
 			/**
 			 * An ordered token registry (necessary for preventing token errors).
 			 */
-			tokenReg: [ "{{$", "$}}", "{{{", "}}}", "{{!", "{{#", "{{", "}}}", "}}" ],
+			tokenReg: [ "{{$", "$}}", "{{{", "{{&", "}}}", "{{!", "{{#", "{{", "}}}", "}}" ],
 
 			helpers:[
 				/**

@@ -135,6 +135,7 @@ Scanner.prototype = {
 				case tmap.left:
 				case tmap.reLeft:
 				case tmap.rLeft:
+				case tmap.rLeft2:
 					magicInTag = 1;
 				case tmap.cmntLeft:
 					// A new line -- just add whatever content within a clean.  
@@ -250,6 +251,7 @@ Scanner.prototype = {
 						break;
 					case tmap.reLeft:
 					case tmap.rLeft:
+					case tmap.rLeft2:
 						// We have an extra `{` -> `block`.
 						// Get the number of `{ minus }`.
 						bracketCount = bracketNum(content);
