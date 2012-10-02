@@ -6,7 +6,12 @@ steal('can/util','can/construct', function(can, Construct) {
 	//  
 	// Returns `true` if something is an object with properties of its own.
 	var canMakeObserve = function( obj ) {
-			return obj && typeof obj === 'object' && !(obj instanceof Date);
+			return ( obj
+				&& !obj.nodeType
+				&& !can.isWindow( obj )
+				&& !(obj instanceof can.$ )
+				&& !(obj instanceof Date)
+				&& ( "object" === typeof obj ));
 		},
 
 		// Removes all listeners.
