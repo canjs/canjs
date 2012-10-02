@@ -71,3 +71,48 @@ test("setter compute", function(){
 	computed(75);
 	
 })
+
+test("compute a compute", function() {
+	var project = new can.Observe({
+		progress: 0.5
+	});
+
+	var percent = can.compute(function(val){
+		if(val) {
+			project.attr('progress', val / 100);
+		} else {
+			return parseInt( project.attr('progress') * 100, 10);
+		}
+	});
+
+	equals(percent(),50,'percent starts right');
+	percent.bind('change',function() {
+		// noop
+	});
+
+	var fraction = can.compute(function(val) {
+		if(val) {
+			percent(parseInt(val.split('/')[0],10));
+		} else {
+			return percent() + '/100';
+		}
+	});
+
+	fraction.bind('change',function() {
+		// noop
+	});
+
+	equals(fraction(),'50/100','fraction starts right');
+
+	percent(25);
+
+	equals(percent(),25);
+	equals(project.attr('progress'),0.25,'progress updated');
+	equals(fraction(),'25/100','fraction updated');
+
+	fraction('15/100');
+
+	equals(fraction(),'15/100');
+	equals(project.attr('progress'),0.15,'progress updated');
+	equals(percent(),15,'% updated');
+});

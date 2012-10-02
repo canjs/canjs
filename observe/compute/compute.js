@@ -266,6 +266,9 @@ steal('can/util', function(can) {
 				if(value === undefined){
 					// we are reading
 					if(computedData){
+						if(bindings && can.Observe.__reading) {
+							can.Observe.__reading(computed,'change');
+						}
 						return computedData.value;
 					} else {
 						return getterSetter.call(context || this)
