@@ -266,6 +266,9 @@ steal('can/util', function(can) {
 				if(value === undefined){
 					// we are reading
 					if(computedData){
+						// If another compute is calling this compute for the value,
+						// it needs to bind to this compute's change so it will re-compute
+						// and re-bind when this compute changes.
 						if(bindings && can.Observe.__reading) {
 							can.Observe.__reading(computed,'change');
 						}
