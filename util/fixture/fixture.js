@@ -8,7 +8,8 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			//simple wrapper for logging
 			var _logger = function(type, arr){
 				if(console.log.apply){
-					console[type].apply(console, arr)
+					Function.prototype.call.apply(console[type], [console].concat(arr));
+					// console[type].apply(console, arr)
 				} else {
 					console[type](arr)
 				}
