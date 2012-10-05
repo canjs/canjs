@@ -361,3 +361,24 @@ test("Array accessor methods", 11, function() {
 		}
 	});
 });
+
+test("instantiating can.Observe.List of correct type", function() {
+	var Ob = can.Observe({
+		getName : function() {
+			return this.attr('name');
+		}
+	});
+
+	var list = new Ob.List([{
+		name : 'Tester'
+	}]);
+
+	equal(list.length, 1, 'List length is correct');
+	ok(list[0] instanceof can.Observe, 'Initialized list item converted to can.Observe');
+	ok(list[0] instanceof Ob, 'Initialized list item converted to Ob');
+	equal(list[0].getName(), 'Tester', 'Converted to extended Observe instance, could call getName()');
+	list.push({
+		name : 'Another test'
+	});
+	equal(list[1].getName(), 'Another test', 'Pushed item gets converted as well');
+});

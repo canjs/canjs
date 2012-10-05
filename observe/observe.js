@@ -20,17 +20,22 @@ steal('can/util','can/construct', function(can, Construct) {
 		// Listens to changes on `val` and "bubbles" the event up.  
 		// `val` - The object to listen for changes on.  
 		// `prop` - The property name is at on.  
-		// `parent` - The parent object of prop.  
-		hookupBubble = function( val, prop, parent ) {
+		// `parent` - The parent object of prop.
+		// `ob` - (optional) The Observe object constructor
+		// `list` - (optional) The observable list constructor
+		hookupBubble = function( val, prop, parent, Ob, List ) {
+			Ob = Ob || Observe;
+			List = List || Observe.List;
+
 			// If it's an `array` make a list, otherwise a val.
 			if (val instanceof Observe){
 				// We have an `observe` already...
 				// Make sure it is not listening to this already
 				unhookup([val], parent._cid);
 			} else if ( can.isArray(val) ) {
-				val = new Observe.List(val);
+				val = new List(val);
 			} else {
-				val = new Observe(val);
+				val = new Ob(val);
 			}
 			
 			// Listen to all changes and `batchTrigger` upwards.
@@ -140,9 +145,6 @@ steal('can/util','can/construct', function(can, Construct) {
 	 */
 	var Observe = can.Observe = Construct( {
 		// keep so it can be overwritten
-		setup : function(){
-			Construct.setup.apply(this, arguments);
-		},
 		bind : bind,
 		unbind: unbind,
 		id: "id",
@@ -1164,7 +1166,7 @@ steal('can/util','can/construct', function(can, Construct) {
 			for ( var i = 0; i < args.length; i++ ) {
 				var val = args[i];
 				if ( canMakeObserve(val) ) {
-					args[i] = hookupBubble(val, "*", this)
+					args[i] = hookupBubble(val, "*", this, this.constructor.Observe, this.constructor);
 				}
 			}
 			
@@ -1329,5 +1331,9 @@ steal('can/util','can/construct', function(can, Construct) {
 	});
 
 	Observe.List = list;
+	Observe.setup = function(){
+		Construct.setup.apply(this, arguments);
+		this.List = Observe.List({ Observe : this }, {});
+	}
 	return Observe;
 });
