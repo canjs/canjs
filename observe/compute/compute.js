@@ -285,6 +285,10 @@ steal('can/util', function(can) {
 			// we just gave it a value
 			computed = function(val){
 				if(val === undefined){
+					// If observing, record that the value is being read.
+					if(can.Observe.__reading) {
+						can.Observe.__reading(computed,'change');
+					}
 					return getterSetter;
 				} else {
 					var old = getterSetter;

@@ -116,3 +116,21 @@ test("compute a compute", function() {
 	equals(project.attr('progress'),0.15,'progress updated');
 	equals(percent(),15,'% updated');
 });
+
+test("compute with a simple compute", function() {
+	expect(4);
+	var a = can.compute(5);
+	var b = can.compute(function() {
+		return a() * 2;
+	});
+
+	equal(b(),10,'b starts correct');
+	a(3);
+	equal(b(),6,'b updates');
+
+	b.bind('change',function() {
+		equal(b(),24,'b fires change');
+	});
+	a(12);
+	equal(b(),24,'b updates when bound');
+});
