@@ -416,14 +416,16 @@ steal('can/util','can/construct', function(can, Construct) {
 			if ( parts.length ) {
 				return current.removeAttr(parts)
 			} else {
-				// Otherwise, `delete`.
-				delete this._data[prop];
-				// Create the event.
-				if (!(prop in this.constructor.prototype)) {
-					delete this[prop]
+				if( prop in this._data ){
+					// Otherwise, `delete`.
+					delete this._data[prop];
+					// Create the event.
+					if (!(prop in this.constructor.prototype)) {
+						delete this[prop]
+					}
+					can.batchTrigger(this, "change", [prop, "remove", undefined, current]);
+					can.batchTrigger(this, prop, [undefined, current]);
 				}
-				can.batchTrigger(this, "change", [prop, "remove", undefined, current]);
-				can.batchTrigger(this, prop, [undefined, current]);
 				return current;
 			}
 		},

@@ -382,3 +382,12 @@ test("instantiating can.Observe.List of correct type", function() {
 	});
 	equal(list[1].getName(), 'Another test', 'Pushed item gets converted as well');
 });
+
+
+test("removing an already missing attribute does not cause an event", function(){
+	var ob = new can.Observe();
+	ob.bind("change", function(){
+		ok(false)
+	})
+	ob.removeAttr("foo")
+})
