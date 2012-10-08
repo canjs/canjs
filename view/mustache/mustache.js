@@ -60,24 +60,20 @@ function( can ){
 		 */
 		scanner: new can.view.Scanner({
 			/**
-			 * These are the tokens for the scanner.
+			 * An ordered token registry for the scanner.
+			 * This needs to be ordered by priority to prevent token parsing errors.
+			 * Each token is defined as: ["token-name", "string representation", "optional regexp override"]
 			 */
-			tokens: {
-				tLeft: "{{$", // Template	 ---- Not supported
-				tRight: "$}}", // Right Template	---- Not supported
-				rLeft: "{{{", // Return
-				rLeft2: "{{&", // Return
-				rRight: "}}}",
-				reLeft: "{{", // Return Escaped
-				cmntLeft: "{{!", // Comment
-				left: "{{#", // Run --- this is hack for now
-				right: "}}" // Right -> All have same FOR Mustache ...
-			},
-			
-			/**
-			 * An ordered token registry (necessary for preventing token errors).
-			 */
-			tokenReg: [ "{{$", "$}}", "{{{", "{{&", "}}}", "{{!", "{{#", "{{", "}}}", "}}" ],
+			tokens: [
+				["templateLeft", "{{$"], // Template	 ---- Not supported
+				["templateRight", "$}}"], // Right Template	---- Not supported
+				["returnLeft", "{{{", "{{[{&]"], // Return Unescaped
+				["commentLeft", "{{!", "\\n?[\\s\\t]*{{!"], // Comment
+				["left", "{{#"], // Run --- this is hack for now
+				["escapeLeft", "{{"], // Return Escaped
+				["returnRight", "}}}"],
+				["right", "}}"] // Right -> All have same FOR Mustache ...
+			],
 
 			helpers:[
 				/**

@@ -62,23 +62,20 @@ function( can ) {
 		 */
 		scanner: new can.view.Scanner({
 			/**
-			 * These are the tokens for the scanner.
+			 * An ordered token registry for the scanner.
+			 * This needs to be ordered by priority to prevent token parsing errors.
+			 * Each token is defined as: ["token-name", "string representation", "optional regexp override"]
 			 */
-			tokens: {
-		    tLeft: "<%%", // Template
-		    tRight: "%>", // Right Template
-		    rLeft: "<%==", // Return
-		    reLeft: "<%=", // Return Escaped
-		    cmntLeft: "<%#", // Comment
-		    left: "<%", // Run
-		    right: "%>", // Right -> All have same FOR EJS ...
-		    rRight: "%>"
-			},
-			
-			/**
-			 * An ordered token registry (necessary for preventing token errors).
-			 */
-			tokenReg: [ "<%%", "%%>", "<%==", "<%=", "<%#", "<%", "%>" ]
+			tokens: [
+				["templateLeft", "<%%"], // Template
+				["templateRight", "%>"], // Right Template
+				["returnLeft", "<%=="], // Return Unescaped
+				["escapeLeft", "<%="], // Return Escaped
+				["commentLeft", "<%#"], // Comment
+				["left", "<%"], // Run --- this is hack for now
+				["right", "%>"], // Right -> All have same FOR Mustache ...
+				["returnRight", "%>"]
+			]
 		})
 	});
 

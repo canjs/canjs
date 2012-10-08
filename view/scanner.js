@@ -46,9 +46,27 @@ var newLine = /(\r|\n)+/g,
 can.view.Scanner = Scanner = function( options ) {
   // Set options on self
   can.extend(this, {
-  	tokens: {},
-		tokenReg: []
+  	tokens: []
   }, options);
+	
+	// Cache a token lookup
+	this.tokenReg = [];
+	this.tokenSimple = { "<": "<", ">": ">", '"': '"', "'": "'" };
+	this.tokenComplex = [];
+	this.tokenMap = {};
+	for (var i = 0, token; token = this.tokens[i]; i++) {
+		// Save complex mappings (custom regexp)
+		if (token[2]) {
+			this.tokenReg.push(token[2]);
+			this.tokenComplex.push({ abbr: token[1], re: new RegExp(token[2]) });
+		}
+		// Save simple mappings (string only, no regexp)
+		else {
+			this.tokenReg.push(token[1]);
+			this.tokenSimple[token[1]] = token[0];
+		}
+		this.tokenMap[token[0]] = token[1];
+	}
 	
 	// Cache the token registry.
 	this.tokenReg = new RegExp("(" + this.tokenReg.slice(0).concat(["<", ">", '"', "'"]).join("|") + ")","g");
@@ -76,18 +94,34 @@ Scanner.prototype = {
 
 	scan: function(source, name){
 		var tokens = [],
-			last = 0;
+			last = 0,
+			simple = this.tokenSimple,
+			complex = this.tokenComplex;
 		
 		source = source.replace(newLine, "\n");
-		source.replace(this.tokenReg, function(whole, part, offset){
+		source.replace(this.tokenReg, function(whole, part){
+			// offset is the second to last argument
+			var offset = arguments[arguments.length-2];
+			
 			// if the next token starts after the last token ends
 			// push what's in between
 			if(offset > last){
 				tokens.push( source.substring(last, offset) );
 			}
-
-			// push the token 
-			tokens.push(part);
+			
+			// push the simple token (if there is one)
+			if (simple[whole]) {
+				tokens.push(whole);
+			}
+			// otherwise lookup complex tokens
+			else {
+				for (var i = 0, token; token = complex[i]; i++) {
+					if (token.re.test(whole)) {
+						tokens.push(token.abbr);
+						break;
+					}
+				}
+			}
 
 			// update the position of the last part of the last token
 			last = offset+part.length;
@@ -123,7 +157,7 @@ Scanner.prototype = {
 			bracketCount,
 			i = 0,
 			token,
-			tmap = this.tokens;
+			tmap = this.tokenMap;
 
 		// Reinitialize the tag state goodness.
 		htmlTag = quote = beforeQuote = null;
@@ -133,11 +167,10 @@ Scanner.prototype = {
 			if ( startTag === null ) {
 				switch ( token ) {
 				case tmap.left:
-				case tmap.reLeft:
-				case tmap.rLeft:
-				case tmap.rLeft2:
+				case tmap.escapeLeft:
+				case tmap.returnLeft:
 					magicInTag = 1;
-				case tmap.cmntLeft:
+				case tmap.commentLeft:
 					// A new line -- just add whatever content within a clean.  
 					// Reset everything.
 					startTag = token;
@@ -146,7 +179,7 @@ Scanner.prototype = {
 					}
 					content = '';
 					break;
-				case tmap.tLeft:
+				case tmap.templateLeft:
 					content += tmap.left;
 					break;
 				case '<':
@@ -212,7 +245,7 @@ Scanner.prototype = {
 				// We have a start tag.
 				switch ( token ) {
 				case tmap.right:
-				case tmap.rRight:
+				case tmap.returnRight:
 					switch ( startTag ) {
 					case tmap.left:
 						// Get the number of `{ minus }`
@@ -249,9 +282,8 @@ Scanner.prototype = {
 							buff.push(content, ";",last.after);
 						}
 						break;
-					case tmap.reLeft:
-					case tmap.rLeft:
-					case tmap.rLeft2:
+					case tmap.escapeLeft:
+					case tmap.returnLeft:
 						// We have an extra `{` -> `block`.
 						// Get the number of `{ minus }`.
 						bracketCount = bracketNum(content);
@@ -271,7 +303,7 @@ Scanner.prototype = {
 						
 						// If we have `<%== a(function(){ %>` then we want
 						// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-						buff.push(insert_cmd, "can.view.txt("+(startTag === tmap.reLeft ? 1 : 0)+",'"+tagName+"'," + status()+",this,function(){ return ", content, 
+						buff.push(insert_cmd, "can.view.txt("+(startTag === tmap.escapeLeft ? 1 : 0)+",'"+tagName+"'," + status()+",this,function(){ return ", content, 
 							// If we have a block.
 							bracketCount ? 
 							// Start with startTxt `"var _v1ew = [];"`.
@@ -284,7 +316,7 @@ Scanner.prototype = {
 					startTag = null;
 					content = '';
 					break;
-				case tmap.tLeft:
+				case tmap.templateLeft:
 					content += tmap.left;
 					break;
 				default:
