@@ -56,8 +56,14 @@ steal('can/util', 'can/observe', 'can/observe/compute', function(can) {
 			return filtered;
 		},
 
-		map : function(callback) {
-			var mapped = new can.Observe.List();
+		/**
+		 * @param callback the mapping function.
+		 * @param ListType Optional. The type of can.Observe.List to return.
+		 * e.g., can.Model.List. Defaults to can.Observe.List.
+		 */
+		map : function(callback,ListType) {
+			ListType = ListType || can.Observe.List;
+			var mapped = new ListType();
 			var self = this;
 			// Again, lets run a generator function
 			var generator = function(element, index) {
