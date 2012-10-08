@@ -83,10 +83,10 @@ function finished() {
 }
 
 function onfinishedTests() {
-	var output = page.evaluate(function() {
-			return JSON.stringify(window.qunitDone);
+	var success = page.evaluate(function() {
+			return window.qunitSuccess;
 	});
-	phantom.exit(JSON.parse(output).failed > 0 ? 1 : 0);
+	phantom.exit(success ? 0 : 1);
 }
 
 function addLogging() {
@@ -134,5 +134,6 @@ function addLogging() {
 		}
 		print('Took: ' + o.runtime + 'ms');
 		window.qunitDone = true;
+		window.qunitSuccess = o.failed === 0;
 	});
 }
