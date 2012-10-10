@@ -390,4 +390,19 @@ test("removing an already missing attribute does not cause an event", function()
 		ok(false)
 	})
 	ob.removeAttr("foo")
-})
+});
+
+test("Some things should not be converted to Observes", function() {
+	var ob = new can.Observe();
+	ob.attr('date', new Date());
+	ok(ob.attr('date') instanceof Date, 'Date should not be converted');
+
+	ob.attr('sel', can.$('body'));
+	ok(ob.attr('sel') instanceof can.$, 'can.$ should not be converted');
+
+	ob.attr('element', document.getElementsByTagName('body')[0]);
+	equal(ob.attr('element'), document.getElementsByTagName('body')[0], 'HTMLElement should not be converted');
+
+	ob.attr('window', window);
+	equal(ob.attr('window'), window, 'Window object should not be converted');
+});

@@ -6,7 +6,13 @@ steal('can/util','can/construct', function(can, Construct) {
 	//  
 	// Returns `true` if something is an object with properties of its own.
 	var canMakeObserve = function( obj ) {
-			return obj && ( typeof obj === 'object' || ( obj instanceof can.Observe ));
+			return obj && ( typeof obj === 'object' || ( obj instanceof can.Observe ))
+				// Don't convert dates and instances of can.$
+				&& !(obj instanceof Date) && !(obj instanceof can.$)
+				// Absolutely never convert the Window object
+				&& !(typeof obj === "object" && "setInterval" in obj)
+				// TODO this probably needs a more elaborate way to check for a DOM element
+				&& !('nodeType' in obj && obj.nodeType > 0);
 		},
 
 		// Removes all listeners.
