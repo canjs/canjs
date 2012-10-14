@@ -141,6 +141,35 @@ function( can ){
 				 */
 				function(content){
 					return content;
+				},
+				
+				/**
+				 * Basic Context Miss Interpolation
+				 *  {{cannot}}
+				 * 	Failed context lookups should default to empty strings.
+				 * Dotted Names - Broken Chains
+				 *	{{a.b.c}}
+    		 * 	Any falsey value prior to the last part of the name should yield ''.
+				 */
+				function(content) {
+					var split = content.split('.'),
+						// Handle context miss
+						result = ['(typeof ' + split[0] + ' != "undefined" ? '];
+					
+					// Handle broken chains
+					if (split.length > 1) {
+						result.push('(');
+						for (var i = 1; i < split.length; i++) {
+							i > 1 && result.push(' && ');
+							result.push(split.slice(0, i+1).join('.'));
+						}
+						result.push(') || ""');
+					}
+					else {
+						result.push(split[0]);
+					}
+					
+					return result.concat([' : "")']).join('');
 				}
 			].concat(can.view.Scanner.prototype.helpers)
 		})
