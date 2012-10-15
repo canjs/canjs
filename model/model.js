@@ -570,8 +570,6 @@ steal('can/util','can/observe', function( can ) {
 					// the "findAll" method.
 					var newMethod = self["make"+can.capitalize(name)](self[name]);
 					can.Construct._overwrite(self, base, name,function(){
-						// make sure super is called
-						this._super;
 						// increment the numer of requests
 						this._reqs++;
 						return newMethod.apply(this, arguments).then(clean, clean);
@@ -579,7 +577,6 @@ steal('can/util','can/observe', function( can ) {
 				}
 			});
 
-			var oldFindAll
 			if(self.fullName == "can.Model" || !self.fullName){
 				self.fullName = "Model"+(++modelNum);
 			}
