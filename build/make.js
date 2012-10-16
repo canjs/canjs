@@ -101,7 +101,7 @@ steal('steal/build/pluginify', function() {
 
 			}
 		},
-		version = readFile( "can/util/version" ),
+		version = readFile( "can/build/version" ),
 		temp, lib;
 
 
