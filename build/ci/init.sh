@@ -2,7 +2,7 @@
 BASEDIR=$(dirname $0)
 cd $BASEDIR
 ../../node_modules/.bin/http-server -p 8000 &
-git clone https://github.com/jupiterjs/canjs.git can
+git clone ../. can
 git clone https://github.com/jupiterjs/funcunit.git
 cd funcunit
 git submodule update --init --recursive
