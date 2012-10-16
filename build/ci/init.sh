@@ -1,8 +1,9 @@
 #!/bin/bash
 BASEDIR=$(dirname $0)
+mkdir $BASEDIR/can
+git archive HEAD | tar -x -C $BASEDIR/can
+node_modules/.bin/http-server -p 8000 &
 cd $BASEDIR
-../../node_modules/.bin/http-server -p 8000 &
-git clone ../../. can
 git clone https://github.com/jupiterjs/funcunit.git
 cd funcunit
 git submodule update --init --recursive
