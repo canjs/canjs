@@ -1,9 +1,9 @@
-steal('can/view/ejs').then(function($){
+steal('can', 'can/view/ejs', function(can){
 
 /**
  * @add jQuery.EJS.Helpers.prototype
  */
-$.extend($.EJS.Helpers.prototype, {
+can.extend(can.EJS.Helpers.prototype, {
 	/**
 	 * Converts response to text.
 	 */
@@ -321,28 +321,28 @@ $.extend($.EJS.Helpers.prototype, {
 	
 });
 
-$.EJS.Helpers.prototype.text_tag = $.EJS.Helpers.prototype.text_area_tag;
+can.EJS.Helpers.prototype.text_tag = can.EJS.Helpers.prototype.text_area_tag;
 
 // Private variables (in the (function($){})(jQuery) scope)   
 var data = {};
 var name = 0;
 
-$.EJS.Helpers.link_data = function(store){
+can.EJS.Helpers.link_data = function(store){
 	var functionName = name++;
 	data[functionName] = store;	
 	return "_data='"+functionName+"'";
 };
-$.EJS.Helpers.get_data = function(el){
+can.EJS.Helpers.get_data = function(el){
 	if(!el) return null;
 	var dataAt = el.getAttribute('_data');
 	if(!dataAt) return null;
 	return data[parseInt(dataAt)];
 };
-$.EJS.Helpers.prototype.link_data = function(store){
-	return $.EJS.Helpers.link_data(store)
+can.EJS.Helpers.prototype.link_data = function(store){
+	return can.EJS.Helpers.link_data(store)
 };
-$.EJS.Helpers.prototype.get_data = function(el){
-	return $.EJS.Helpers.get_data(el)
+can.EJS.Helpers.prototype.get_data = function(el){
+	return can.EJS.Helpers.get_data(el)
 };
 
 });
