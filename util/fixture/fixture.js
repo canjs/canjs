@@ -189,7 +189,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 							status = response[0];
 
 						if ( (status >= 200 && status < 300 || status === 304) && stopped === false) {
-							d.resolve(response[2][settings.dataType], "success", d)
+							d.resolve(response[2][settings.dataType])
 						} else {
 							// TODO probably resolve better
 							d.reject(d, 'error', response[1]);
@@ -198,7 +198,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					// get the result form the fixture
 					result = settings.fixture(settings, success, settings.headers, settings);
 					if(result !== undefined) {
-						d.resolve(result, "success", d)
+						d.resolve(result)
 					}
 				}, can.fixture.delay);
 				

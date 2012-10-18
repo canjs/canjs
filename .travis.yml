@@ -3,6 +3,7 @@ node_js: 0.8
 before_script: build/ci/init.sh
 script:
   - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_jquery.html
+  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_zepto.html
   - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_dojo.html
   - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_mootools.html
   - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_yui.html
