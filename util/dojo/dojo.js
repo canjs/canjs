@@ -4,6 +4,7 @@ steal({
 }, '../event.js').then(
 	'./trigger',
 	'can/util/array/each.js',
+	'can/util/object/isplain',
 	function(){
 
 	// dojo.js
