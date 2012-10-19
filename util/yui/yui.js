@@ -1,27 +1,23 @@
 /*
-	YUI modules: http://yuilibrary.com/yui/configurator/
-		node
-		io-base
-		querystring
-		event-focus
-		array-extras
-*/
+ YUI modules: http://yuilibrary.com/yui/configurator/
+ node
+ io-base
+ querystring
+ event-focus
+ array-extras
+ */
 
-(function() {
+// This was used to build the custom YUI download. Re-run it to generate a new yui-<version>.js file
+//	var yuilibs = ['yui-base/yui-base.js', 'oop/oop.js', 'event-custom-base/event-custom-base.js', 'features/features.js', 'dom-core/dom-core.js', 'dom-base/dom-base.js', 'selector-native/selector-native.js', 'selector-css2/selector-css2.js', 'selector/selector.js', 'node-core/node-core.js', 'node-base/node-base.js', 'event-base/event-base.js', 'event-delegate/event-delegate.js', 'node-event-delegate/node-event-delegate.js', 'pluginhost-base/pluginhost-base.js', 'pluginhost-config/pluginhost-config.js', 'node-pluginhost/node-pluginhost.js', 'dom-style/dom-style.js', 'dom-screen/dom-screen.js', 'node-screen/node-screen.js', 'node-style/node-style.js', 'querystring-stringify-simple/querystring-stringify-simple.js', 'io-base/io-base.js', 'array-extras/array-extras.js', 'querystring-parse/querystring-parse.js', 'querystring-stringify/querystring-stringify.js', 'event-custom-complex/event-custom-complex.js', 'event-synthetic/event-synthetic.js', 'event-focus/event-focus.js']
+//
+//	var url = "http://yui.yahooapis.com/combo?3.7.3/build/" + yuilibs.join("&3.7.3/build/")
 
-	var yuilibs = ['yui-base/yui-base.js', 'oop/oop.js', 'event-custom-base/event-custom-base.js', 'features/features.js', 'dom-core/dom-core.js', 'dom-base/dom-base.js', 'selector-native/selector-native.js', 'selector-css2/selector-css2.js', 'selector/selector.js', 'node-core/node-core.js', 'node-base/node-base.js', 'event-base/event-base.js', 'event-delegate/event-delegate.js', 'node-event-delegate/node-event-delegate.js', 'pluginhost-base/pluginhost-base.js', 'pluginhost-config/pluginhost-config.js', 'node-pluginhost/node-pluginhost.js', 'dom-style/dom-style.js', 'dom-screen/dom-screen.js', 'node-screen/node-screen.js', 'node-style/node-style.js', 'querystring-stringify-simple/querystring-stringify-simple.js', 'io-base/io-base.js', 'array-extras/array-extras.js', 'querystring-parse/querystring-parse.js', 'querystring-stringify/querystring-stringify.js', 'event-custom-complex/event-custom-complex.js', 'event-synthetic/event-synthetic.js', 'event-focus/event-focus.js']
-
-	var url = "http://yui.yahooapis.com/combo?3.4.1/build/" + yuilibs.join("&3.4.1/build/")
-
-
-	steal({
-		src: url,
-		type: "js",
-		_skip: true
-	}, "../event.js",'can/util/array/each.js').then(
+steal({
+	id : './yui-3.7.3.js',
+	_skip : true
+}, "../event.js",'can/util/array/each.js').then(
 
 	function() {
-
 
 		// ---------
 		// _YUI node list._
@@ -36,10 +32,16 @@
 
 		// Map array helpers.
 		can.makeArray = function( arr ) {
+			if(!arr) {
+				return [];
+			}
 			return Y.Array(arr);
 		};
 		can.isArray = Y.Lang.isArray;
 		can.inArray = function( item, arr ) {
+			if(!arr) {
+				return -1;
+			}
 			return Y.Array.indexOf(arr, item);
 		};
 
@@ -180,7 +182,7 @@
 						data = eval("(" + data + ")")
 					}
 					updateDeferred(request, d);
-					d.resolve(data, "success", request);
+					d.resolve(data);
 					success && success(data, "success", request);
 				},
 				failure: function( transactionid, response ) {
@@ -199,10 +201,10 @@
 		// Events - The `id` of the `function` to be bound, used as an expando on the `function`
 		// so we can lookup it's `remove` object.
 		var id = 0,
-			// Takes a node list, goes through each node
-			// and adds events data that has a map of events to 
-			// `callbackId` to `remove` object.  It looks like
-			// `{click: {5: {remove: fn}}}`. 
+		// Takes a node list, goes through each node
+		// and adds events data that has a map of events to
+		// `callbackId` to `remove` object.  It looks like
+		// `{click: {5: {remove: fn}}}`.
 			addBinding = function( nodelist, selector, ev, cb ) {
 				if ( nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode ) {
 					nodelist.each(function( node ) {
@@ -232,8 +234,8 @@
 					events[ev][cb.__bindingsIds] = obj.on(ev, cb);
 				}
 			},
-			// Removes a binding on a `nodelist` by finding
-			// the remove object within the object's data.
+		// Removes a binding on a `nodelist` by finding
+		// the remove object within the object's data.
 			removeBinding = function( nodelist, selector, ev, cb ) {
 				if ( nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode ) {
 					nodelist.each(function( node ) {
@@ -262,65 +264,65 @@
 					if ( can.isEmptyObject(events) ) {}
 				}
 			}
-			can.bind = function( ev, cb ) {
-				// If we can bind to it...
-				if ( this.bind && this.bind !== can.bind ) {
-					this.bind(ev, cb)
-				} else if ( this.on || this.nodeType ) {
-					addBinding(can.$(this), undefined, ev, cb)
-				} else if ( this.addEvent ) {
-					this.addEvent(ev, cb)
-				} else {
-					// Make it bind-able...
-					can.addEvent.call(this, ev, cb)
-				}
-				return this;
+		can.bind = function( ev, cb ) {
+			// If we can bind to it...
+			if ( this.bind && this.bind !== can.bind ) {
+				this.bind(ev, cb)
+			} else if ( this.on || this.nodeType ) {
+				addBinding(can.$(this), undefined, ev, cb)
+			} else if ( this.addEvent ) {
+				this.addEvent(ev, cb)
+			} else {
+				// Make it bind-able...
+				can.addEvent.call(this, ev, cb)
 			}
-			can.unbind = function( ev, cb ) {
-				// If we can bind to it...
-				if ( this.unbind && this.unbind !== can.unbind ) {
-					this.unbind(ev, cb)
-				}
-
-				else if ( this.on || this.nodeType ) {
-					removeBinding(can.$(this), undefined, ev, cb);
-				} else {
-					// Make it bind-able...
-					can.removeEvent.call(this, ev, cb)
-				}
-				return this;
+			return this;
+		}
+		can.unbind = function( ev, cb ) {
+			// If we can bind to it...
+			if ( this.unbind && this.unbind !== can.unbind ) {
+				this.unbind(ev, cb)
 			}
-			can.trigger = function( item, event, args, bubble ) {
-				if ( item instanceof Y.NodeList ) {
-					item = item.item(0);
-				}
-				if ( item.getDOMNode ) {
-					item = item.getDOMNode();
-				}
 
-				if ( item.nodeName ) {
-					item = Y.Node(item);
-					if ( bubble === false ) {
-						// Force stop propagation by listening to `on` and then 
-						// immediately disconnecting
-						item.once(event, function( ev ) {
-							ev.stopPropagation && ev.stopPropagation();
-							ev.cancelBubble = true;
-							ev._stopper && ev._stopper();
-						})
-					}
-					realTrigger(item.getDOMNode(), event, {})
-				} else {
-					if ( typeof event === 'string' ) {
-						event = {
-							type: event
-						}
-					}
-					event.target = event.target || item
-					event.data = args
-					can.dispatch.call(item, event)
+			else if ( this.on || this.nodeType ) {
+				removeBinding(can.$(this), undefined, ev, cb);
+			} else {
+				// Make it bind-able...
+				can.removeEvent.call(this, ev, cb)
+			}
+			return this;
+		}
+		can.trigger = function( item, event, args, bubble ) {
+			if ( item instanceof Y.NodeList ) {
+				item = item.item(0);
+			}
+			if ( item.getDOMNode ) {
+				item = item.getDOMNode();
+			}
+
+			if ( item.nodeName ) {
+				item = Y.Node(item);
+				if ( bubble === false ) {
+					// Force stop propagation by listening to `on` and then
+					// immediately disconnecting
+					item.once(event, function( ev ) {
+						ev.stopPropagation && ev.stopPropagation();
+						ev.cancelBubble = true;
+						ev._stopper && ev._stopper();
+					})
 				}
-			};
+				realTrigger(item.getDOMNode(), event, {})
+			} else {
+				if ( typeof event === 'string' ) {
+					event = {
+						type: event
+					}
+				}
+				event.target = event.target || item
+				event.data = args
+				can.dispatch.call(item, event)
+			}
+		};
 		// Allow `dom` `destroyed` events.
 		Y.mix(Y.Node.DOM_EVENTS, {
 			destroyed: true
@@ -349,14 +351,14 @@
 				return "mouse" + (p == "enter" ? "over" : "out");
 			},
 			realTrigger = document.createEvent ?
-			function( n, e, a ) {
-				// the same branch
-				var ev = document.createEvent("HTMLEvents");
-				e = e.replace(leaveRe, _fix);
-				ev.initEvent(e, true, true);
-				a && can.extend(ev, a);
-				n.dispatchEvent(ev);
-			} : function( n, e, a ) {
+				function( n, e, a ) {
+					// the same branch
+					var ev = document.createEvent("HTMLEvents");
+					e = e.replace(leaveRe, _fix);
+					ev.initEvent(e, true, true);
+					a && can.extend(ev, a);
+					n.dispatchEvent(ev);
+				} : function( n, e, a ) {
 				// the janktastic branch
 				var ev = "on" + e,
 					stop = false,
@@ -404,6 +406,5 @@
 				}
 			};
 
-	}).then("../deferred.js")
-
-})();
+		return can;
+	}).then("../deferred.js");

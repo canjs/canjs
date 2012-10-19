@@ -10,12 +10,21 @@ function(can) {
 	}
 	
 	// Map array helpers.
-	can.makeArray = Array.from;
-	can.isArray = function(arr){
+	can.makeArray = function(item) {
+		// All other libraries return a copy if item is an array.
+		// The original Mootools Array.from returned the same item so we need to slightly modify it
+		if (item == null) return [];
+		return (Type.isEnumerable(item) && typeof item != 'string') ? Array.prototype.slice.call(item) : [item];
+	}
+
+	can.isArray = function(arr) {
 		return typeOf(arr) === 'array'
 	};
-	can.inArray = function(item,arr){
-		return arr.indexOf(item)
+	can.inArray = function(item,arr) {
+		if(!arr) {
+			return -1;
+		}
+		return Array.prototype.indexOf.call(arr, item);
 	}
 	can.map = function(arr, fn){
 		return Array.from(arr||[]).map(fn);

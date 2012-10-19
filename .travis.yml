@@ -2,7 +2,8 @@ language: node_js
 node_js: 0.8
 before_script: build/ci/init.sh
 script:
+  # No Dojo without AMD - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_dojo.html
+  # TODO Zepto running in Phantom - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_zepto.html
   - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_jquery.html
-  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_dojo.html
   - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_mootools.html
   - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_yui.html
