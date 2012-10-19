@@ -51,8 +51,6 @@ test("Model basics",function(){
 		ok(tasks[0] instanceof Task, "we have an instance of task")
 
 		// add a task
-
-		console.log("here")
 		tasks.bind('add', function(ev, items, where){
 			ok(items.length, "add called with an array");
 
