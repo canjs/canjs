@@ -266,6 +266,12 @@ steal('can/util', function(can) {
 				if(value === undefined){
 					// we are reading
 					if(computedData){
+						// If another compute is calling this compute for the value,
+						// it needs to bind to this compute's change so it will re-compute
+						// and re-bind when this compute changes.
+						if(bindings && can.Observe.__reading) {
+							can.Observe.__reading(computed,'change');
+						}
 						return computedData.value;
 					} else {
 						return getterSetter.call(context || this)
@@ -279,6 +285,10 @@ steal('can/util', function(can) {
 			// we just gave it a value
 			computed = function(val){
 				if(val === undefined){
+					// If observing, record that the value is being read.
+					if(can.Observe.__reading) {
+						can.Observe.__reading(computed,'change');
+					}
 					return getterSetter;
 				} else {
 					var old = getterSetter;
