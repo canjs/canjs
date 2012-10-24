@@ -5,9 +5,7 @@ title: CanJS
 # Welcome to CanJS!
 
 CanJS is a MIT-licensed, client-side, JavaScript framework that makes building 
-rich web applications easy.
-
-CanJS is:
+rich web applications easy. Use it because it's:
 
 <ul class="checkmarks cf">
   <li>
@@ -47,29 +45,49 @@ CanJS is:
   </li>
 </ul>
 
+[Learn why CanJS is better](#why_canjs). 
+
 {% include builder.html %}
 
-CanJS is better! [Learn why](#why_canjs).  
+
 
 ## Get Canned
 
-CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core download below or select the individual plugins above and click download:
+CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core download 
+below or select the individual plugins above and click download:
 
- - [can.jquery.js](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.7.min.js)) - 8.5k - [Annotated Source](http://donejs.com/can/docs/can.jquery.html)
- - [can.zepto.js](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.7.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.zepto.html)
- - [can.dojo.js](https://github.com/downloads/jupiterjs/canjs/can.dojo-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.dojo-1.0.7.min.js)) - 10.8k - [Annotated Source](http://donejs.com/can/docs/can.dojo.html)
- - [can.mootools.js](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.7.min.js)) - 10.7k - [Annotated Source](http://donejs.com/can/docs/can.mootools.html)
- - [can.yui.js](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.7.min.js)) - 10.2k - [Annotated Source](http://donejs.com/can/docs/can.yui.html)
-
-This page walks through the basics of CanJS by building a 
-small todo app with CanJS and jQuery. If you want to see a
-fully functional version of this todo app in action,
-[view it on CanJS's Recipes page](http://canjs.us/recipes.html#everything_together-basic_todo).
+ - [can.jquery.js](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.7.min.js)) - 8.5k
+ - [can.zepto.js](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.7.min.js)) - 10.2k
+ - [can.dojo.js](https://github.com/downloads/jupiterjs/canjs/can.dojo-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.dojo-1.0.7.min.js)) - 10.8k 
+ - [can.mootools.js](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.7.min.js)) - 10.7k 
+ - [can.yui.js](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.7.min.js)) - 10.2k
 
 The [Use with other libraries](#use_with_other_libraries) 
-section details the minor differences among use with other libraries.
-The [Examples](#examples) section has other awesome examples of how you
-can put CanJS to good use. There is also an [online test suite](http://ci.javascriptmvc.com/jobs/can/test/test.html).
+section details the minor differences among use 
+with other libraries. 
+
+## Learn
+
+Our goal is to make learning CanJS as easy as possible. There are a number of resources to use:
+
+__[This Page](http://canjs.us)__ - Walks through the basics of CanJS by building a 
+small todo app with CanJS and jQuery. [Here's the app in action](http://canjs.us/recipes.html#everything_together-basic_todo).
+
+__[Getting Started With CanJS Video](http://www.youtube.com/watch?v=GdT4Oq6ZQ68)__ - An in-depth walkthrough of 
+CanJS. If you have 42 minuites, you will learn CanJS.
+
+__[In Depth Documentation](http://donejs.com/docs.html#!canjs)__ - Want to know the deepest details of CanJS's API? 
+
+__[Recipes](http://canjs.us/recipes.html)__ - Checkout some nifty functionality built with CanJS.
+
+__[Example Apps](#examples)__ - How CanJS has been put to good use. 
+
+__Annotated Source__ - for [jQuery](http://donejs.com/can/docs/can.jquery.html), [Zepto](http://donejs.com/can/docs/can.zepto.html),
+[Dojo](http://donejs.com/can/docs/can.dojo.html),
+[MooTools](http://donejs.com/can/docs/can.mootools.html),
+[YUI](http://donejs.com/can/docs/can.yui.html)
+
+__[Test Suite](http://ci.javascriptmvc.com/jobs/can/test/test.html)__ - See how we poke around the API.
 
 ## can.Construct `can.Construct( [classProperties,] [prototypeProperties] )`
 
@@ -2213,7 +2231,7 @@ A contacts manager application built to accompany the 3 part Nettuts+ __"Diving 
 
 - __Part 1__: [Tutorial](http://net.tutsplus.com/tutorials/javascript-ajax/diving-into-canjs/) | [Demo](http://ccummings.github.com/canjs-contacts-tutorial/part1/) | [Download](https://github.com/downloads/ccummings/canjs-contacts-tutorial/part1.zip)
 - __Part 2__: [Tutorial](http://net.tutsplus.com/tutorials/javascript-ajax/diving-into-canjs-part-2/) | [Demo](http://ccummings.github.com/canjs-contacts-tutorial/part2/) | [Download](https://github.com/downloads/ccummings/canjs-contacts-tutorial/part2.zip)
-- __Part 3__: _Tutorial (June 4)_ | [Demo](http://ccummings.github.com/canjs-contacts-tutorial/part3/) | [Download](https://github.com/downloads/ccummings/canjs-contacts-tutorial/part3.zip)
+- __Part 3__: [Tutorial](http://net.tutsplus.com/tutorials/javascript-ajax/diving-into-canjs-part-3/) | [Demo](http://ccummings.github.com/canjs-contacts-tutorial/part3/) | [Download](https://github.com/downloads/ccummings/canjs-contacts-tutorial/part3.zip)
 
 [View the source on github](https://github.com/ccummings/canjs-contacts-tutorial)
 
@@ -2222,6 +2240,18 @@ A contacts manager application built to accompany the 3 part Nettuts+ __"Diving 
 Web application that allows you to upload and host your files in the cloud. Complete web client was built with CanJS. You can try it out at [jumbo.iskon.hr](https://jumbo.iskon.hr)
 
 ![iskon.Jumbo App](images/examples/iskon_jumbo.jpg "iskon.Jumbo App")
+
+### SnowHit.com
+
+Snowhit is a unique website offering all services to skiers in one place. It contains 3D map, showing the location of lifts, ski runs, hotels etc. Best of all, it uses CanJS and Steal. You can try it out at [snowhit.com](http://snowhit.com/)
+
+![SnowHit.com](images/examples/snowhit.jpg "SnowHit.com")
+
+### BootSwatchr
+
+ThemeRoller for Twitter Bootstrap built on CanJS.  Visit it at [bootswatchr.com](http://bootswatchr.com/)
+
+![bootswatchr.com](images/examples/bootswatchr.jpg "bootswatchr.com")
 
 ## Get Help
 
@@ -2365,9 +2395,9 @@ optimized. See how:
 __Control initialization__
 
 [can.Control](#can_control) pre-processes  event handlers so binding is super 
-fast.  Compare [initializing a can.Control to a Backbone.View tabs](http://jsperf.com/tabs-timing-test) widget:
+fast.  Compare [initializing a can.Control, Backbone.View and Ember.View tabs](http://jsperf.com/tabs-timing-test/7) widget:
 
-<a href="http://jsperf.com/tabs-timing-test"><img alt="Tabs initialization performance" src="http://bitovi.com/images/introducing-canjs/performance_control.png" width="650px"></a>
+<a href="http://jsperf.com/tabs-timing-test/7"><img alt="Tabs initialization performance" src="http://bitovi.com/images/introducing-canjs/performance_control.png" width="650px"></a>
 
 
 This makes a big difference for page initialization if your site has lots of controls.
@@ -2600,7 +2630,7 @@ __1.0.7__ (June 25nd 2012)
       - Fixed a [global collision](https://github.com/jupiterjs/canjs/commit/7aea62462f3d8d7855f71ccdf16330e60d59f6fa) with `can.Control`.
 
  - Removed globals
-      - Thanks [Danial Franz](https://github.com/daniel-franz)!
+      - Thanks [Daniel Franz](https://github.com/daniel-franz)!
 
 __1.0.6__ (June 22nd 2012)
 

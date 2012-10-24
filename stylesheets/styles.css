@@ -436,3 +436,7 @@ html.lt-ie7 .github-fork img {
 	margin-right: 2px;
 	color: #0B74B9;
 }
+
+#req_jquery {
+	font-size: 12px;
+}

@@ -1,4 +1,11 @@
-(function( can, window, undefined ){
+(function() {
+ var module = { _define : window.define };
+define = function(id, deps, value) {
+	module[id] = value();
+};
+define.amd = { jQuery: true };
+
+module['can/observe/delegate/delegate.js'] = (function(can) {
 	
 	
 	
@@ -356,4 +363,8 @@
 	});
 	// add helpers for testing .. 
 	can.Observe.prototype.delegate.matches = matches;
-}( this.can, this ));
+	return can.Observe;
+})(module["can/util/jquery/jquery.js"], module["can/observe/observe.js"]);
+
+window.define = module._define;
+})();

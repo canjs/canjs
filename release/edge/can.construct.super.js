@@ -1,4 +1,11 @@
-(function( can, window, undefined ){
+(function() {
+ var module = { _define : window.define };
+define = function(id, deps, value) {
+	module[id] = value();
+};
+define.amd = { jQuery: true };
+
+module['can/construct/super/super.js'] = (function(can, Construct){
 
 // tests if we can get super in .toString()
 	var isFunction = can.isFunction,
@@ -40,5 +47,8 @@
 			}
 		}
 
+	return can;
+})(module["can/util/jquery/jquery.js"], module["can/construct/construct.js"]);
 
-}( this.can, this ));
+window.define = module._define;
+})();

@@ -1,47 +1,47 @@
-It provides:
+CanJS provides:
 
 <form id="builder" action="http://builder.bitovi.com/donejs">
   <input type="hidden" name="filename" value="can.custom.js" />
 
   <p>
     <label>
-      <input type="checkbox" value="can/construct" name="plugins"/>
+      <input type="checkbox" value="can/construct" name="plugins" checked="checked" />
       <a href="#can_construct">can.Construct</a> - inheritable constructor functions
     </label>
 
     <label>
-      <input type="checkbox" value="can/observe" name="plugins"/>
+      <input type="checkbox" value="can/observe" name="plugins" checked="checked" />
       <a href="#can_observe">can.Observe</a> - key-value binding
     </label>
 
     <label>
-      <input type="checkbox" value="can/observe" name="plugins"/>
+      <input type="checkbox" value="can/model" name="plugins" checked="checked" />
       <a href="#can_model">can.Model</a> - observes connected to a RESTful JSON interface
     </label>
 
     <label>
-      <input type="checkbox" value="can/view" name="plugins"/>
+      <input type="checkbox" value="can/view" name="plugins" checked="checked" />
       <a href="#can_view">can.view</a> - template loading, caching, rendering
     </label>
 
     <label>
-      <input type="checkbox" value="can/view/ejs" name="plugins"/>
+      <input type="checkbox" value="can/view/ejs" name="plugins" checked="checked" />
       <a href="#can_ejs">can.EJS</a> - live binding templates
     </label>
 
     <label>
-      <input type="checkbox" value="can/control" name="plugins" class="can-control-route"/>
+      <input type="checkbox" value="can/control" name="plugins" class="can-control-route" checked="checked" />
       <a href="#can_control">can.Control</a> - declarative event bindings
     </label>
 
     <label>
-      <input type="checkbox" value="can/route" name="plugins" class="can-control-route"/>
+      <input type="checkbox" value="can/route" name="plugins" class="can-control-route" checked="checked" />
       <a href="#can_route">can.route</a> - back button and bookmarking support
     </label>
   </p>
 
   <p>
-    It also includes a rich set of supported <a href="#plugins">extensions and plugins</a>. Watch the <a href="http://www.youtube.com/watch?v=GdT4Oq6ZQ68">Getting Started with CanJS Video</a> (fullscreen) for a in-depth walkthrough.
+    It also includes a rich set of supported <a href="#plugins">extensions and plugins</a>: 
   </p>
 
   <p>
@@ -81,19 +81,23 @@ It provides:
     </label>
 
     <label>
-      <input type="checkbox" value="can/control/plugin" name="plugins"/>
-      <a href="#plugins-can_control_plugin">can.Control.plugin</a> - Registers a jQuery plugin function for Controls
-    </label>
-
-    <label>
       <input type="checkbox" value="can/control/view" name="plugins"/>
       <a href="#plugins-can_control_view">can.Control.view</a> - Render views based on Control name and action
     </label>
 
     <label>
-      <input type="checkbox" value="can/view/modifiers" name="plugins"/>
-      <a href="#plugins-view_modifiers">View modifiers</a> - Use jQuery modifiers to render views
+      <input type="checkbox" value="can/control/plugin" name="plugins"/>
+      <a href="#plugins-can_control_plugin">can.Control.plugin</a> - Registers a jQuery plugin function for Controls[1]
     </label>
+
+    <label>
+      <input type="checkbox" value="can/view/modifiers" name="plugins"/>
+      <a href="#plugins-view_modifiers">View modifiers</a> - Use jQuery modifiers to render views[1]
+    </label>
+  </p>
+
+  <p id="req_jquery">
+    [1] Requires jQuery
   </p>
 
   <h4>Choose your library</h4>

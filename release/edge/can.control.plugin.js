@@ -1,7 +1,11 @@
-(function( can, window, undefined ){
-	
+(function() {
+ var module = { _define : window.define };
+define = function(id, deps, value) {
+	module[id] = value();
+};
+define.amd = { jQuery: true };
 
-
+module['can/control/plugin/plugin.js'] = (function($, can) {
 //used to determine if a control instance is one of controllers
 //controllers can be strings or classes
 var i, 
@@ -244,4 +248,7 @@ can.Control.prototype.update = function( options ) {
 		this.on();
 };
 
-}( this.can, this ));
+})(module["jquery"], module["can/util/jquery/jquery.js"], module["can/control/control.js"]);
+
+window.define = module._define;
+})();
