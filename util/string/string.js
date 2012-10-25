@@ -39,7 +39,7 @@ steal('can/util',function(can) {
 			 *     can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
 			 */
 			esc : function( content ) {
-				return ( "" + content )
+				return ( "" + (content || '') )
 					.replace(/&/g, '&amp;')
 					.replace(/</g, '&lt;')
 					.replace(/>/g, '&gt;')
