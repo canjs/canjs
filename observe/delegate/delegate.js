@@ -225,6 +225,33 @@ steal('can/util', 'can/observe', function(can) {
 		 * Using a single wildcard (<code>*</code>) matches single level
 		 * properties.  Using a double wildcard (<code>**</code>) matches
 		 * any deep property.
+		 *
+		 * ## Listening to a single, or multiple events
+		 *
+		 * When using standard event names, the specified callback will be fired once for each change set 
+		 * even if future changes in that single set match your selectors. This is useful when updating the DOM, 
+		 * or listening for a state change. Alternatively, you can pluralise the event name to listen 
+		 * to all events in a batch. E.g, change or changes:
+		 *
+		 *    var o = new can.Observe({
+		 *      names : [
+		 *        {first: "Justin", last: "Meyer"},
+		 *        {first: "Ralph", last: "Holzmann"}
+		 *      ]
+		 *    })
+		 *    
+		 *    o.delegate('names.*.first', 'change', function(ev, prop, how, newVal, oldVal){
+		 *      // this will be fired ONCE (first matching change)
+		 *    })
+		 *
+		 *    o.delegate('names.*.first', 'changes', function(ev, prop, how, newVal, oldVal){
+		 *      // this will be fired TWICE (once for each matching change)
+		 *    })
+		 *
+		 *    o.names.attr([
+		 *       {first: 'Justinio', last: 'Meyer'}, 
+		 *       {first: 'Ralphinio', last: "Holzmann"}
+		 *    ])
 		 * 
 		 * ## Listening on multiple properties and values
 		 * 
@@ -268,7 +295,6 @@ steal('can/util', 'can/observe', function(can) {
 		 *     "foo=bar" - listens when foo is "bar"
 		 * 
 		 * @param {String} event The event name.  One of ("set","add","remove","change")
-		 * @param {Boolean} [matchAll=false] Selector can optionally match all events in a batch change.
 		 * @param {Function} handler(ev,newVal,oldVal,prop) The callback handler 
 		 * called with:
 		 * 
