@@ -134,3 +134,15 @@ test("compute with a simple compute", function() {
 	a(12);
 	equal(b(),24,'b updates when bound');
 });
+
+
+test("empty compute", function(){
+	var c = can.compute();
+	c.bind("change", function(ev, newVal, oldVal){
+		ok(oldVal === undefined, "was undefined")
+		ok(newVal === 0, "now zero")
+	})
+	
+	c(0);
+	
+})

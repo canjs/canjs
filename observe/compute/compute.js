@@ -252,7 +252,7 @@ steal('can/util', function(can) {
 	 * 
 	 */
 	can.compute = function(getterSetter, context){
-		if(getterSetter.isComputed){
+		if(getterSetter && getterSetter.isComputed){
 			return getterSetter;
 		}
 		// get the value right away
