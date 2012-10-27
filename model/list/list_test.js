@@ -240,6 +240,29 @@ test("attr update a list when less things come back and remove is true", functio
   equal(people.attr('1.age'), 101, "Andy's age incremented by 100 years");
 });
 
+test("attr update an empty list only fires one change event", function(){
+  var people = Person.models([]);
+  var changeCount = 0;
+  people.bind('change', function(){
+    changeCount++
+  });
+
+  people.attr([
+    {
+      id : 3,
+      name : 'Andy',
+      age : 101
+    },
+    {
+      id : 1,
+      name : 'Michael',
+      age : 120
+    }]
+  );
+
+
+  equal(changeCount, 1, "Only one change event is fired even though two items added");
+});
 
 test("attr updates items based on id (when present), not position", function(){
     var people = Person.models([
