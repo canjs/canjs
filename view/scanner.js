@@ -297,10 +297,20 @@ Scanner.prototype = {
 						} 
 
 						// go through and apply helpers
+						var updated = false;
 						for(var ii=0;ii<this.helpers.length;ii++){
-							content = this.helpers[ii](content);
+							nu = this.helpers[ii](content);
+							if(content != nu){
+								updated=true;
+								buff.push(nu);
+							}
 						}
-						
+
+						///// soooo hacky!
+						if(updated){
+							break;
+						}
+
 						// If we have `<%== a(function(){ %>` then we want
 						// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
 						buff.push(insert_cmd, "can.view.txt("+(startTag === tmap.escapeLeft ? 1 : 0)+",'"+tagName+"'," + status()+",this,function(){ return ", content, 

@@ -70,7 +70,7 @@ function( can ){
 				["returnLeft", "{{{", "{{[{&]"], // Return Unescaped
 				// ["commentFull", "{{!}}", "[\\s\\t]*{{!.+?}}\\n?"], // Comment
 				["commentLeft", "{{!", "(\\n[\\s\\t]*{{!|{{!)"], // Comment
-				["left", "{{#"], // Run --- this is hack for now
+				["left", "{{~"], // Run
 				["escapeLeft", "{{"], // Return Escaped
 				["returnRight", "}}}"],
 				["right", "}}"] // Right -> All have same FOR Mustache ...
@@ -78,7 +78,8 @@ function( can ){
 
 			helpers:[
 				/**
-				 * {{# evalvariable }}
+				 * {{#evalvariable}}
+				 * 
 				 * ## Sections
 				 * Sections render blocks of text one or more times, depending on the value 
 				 * of the key in the current context.
@@ -109,14 +110,21 @@ function( can ){
 				 * @param {String} content
 				 */
 				function(content){
+					var match = content.match(/^#\w*$/);
+					if(match){
+						return 'if(' + content.substring(1, content.length) + ') {';
+					}
+
 					return content;
 				},
 
 				/**
 				 * {{#person?}}
+				 * 
 				 * ## Non-False Values
 				 * When the value is non-false but not a list, it will be used as the context 
 				 * for a single rendering of the block.
+				 * 
 				 * @param {String} content
 				 */
 				function(content){
@@ -125,9 +133,11 @@ function( can ){
 
 				/**
 				 * {{^ evalvariable }}
+				 * 
 				 * ## Inverted Sections
 				 * An inverted section begins with a caret (hat) and ends with a slash. 
 				 * That is {{^person}} begins a "person" inverted section while {{/person}} ends it.
+				 * 
 				 * @param {String} content
 				 */
 				function(content){
@@ -140,6 +150,11 @@ function( can ){
 				 * @param {String} content
 				 */
 				function(content){
+					var match = content.match(/^\/\w*$/);
+					if(match){
+						return '};';
+					}
+
 					return content;
 				},
 				
@@ -152,31 +167,35 @@ function( can ){
     			 * 	Any falsey value prior to the last part of the name should yield ''.
 				 */
 				function(content) {
-					var split = content.split('.'),
+					// match only words and dots
+					var match = content.match(/^\w*[\.|\w]*$/);
+					if(match){
+
+						var split = content.split('.'),
 						// Handle context miss
 						result = ['(typeof ' + split[0] + ' != "undefined" ? '];
-					
-					// Make sure we aren't in a (el) -> el.foo()
-					if(content.indexOf('->') >= 0){
-						return content;
-					}
 
-					// Handle broken chains
-					if (split.length > 1) {
-						result.push('(');
-						for (var i = 1; i < split.length; i++) {
-							i > 1 && result.push(' && ');
-							result.push(split.slice(0, i+1).join('.'));
+						// Handle broken chains
+						if (split.length > 1) {
+							result.push('(');
+							for (var i = 1; i < split.length; i++) {
+								i > 1 && result.push(' && ');
+								result.push(split.slice(0, i+1).join('.'));
+							}
+							result.push(') || ""');
 						}
-						result.push(') || ""');
-					}
-					else {
-						result.push(split[0]);
+						else {
+							result.push(split[0]);
+						}
+
+						return result.concat([' : "")']).join('');
 					}
 
-					return result.concat([' : "")']).join('');
+					return content;
 				}
-			].concat(can.view.Scanner.prototype.helpers)
+			]
+			// Add helpers from scanner in now.
+			.concat(can.view.Scanner.prototype.helpers)
 		})
 	});
 
