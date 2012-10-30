@@ -1,5 +1,10 @@
 module.exports = function (grunt) {
 
+	var outPaths = {
+		edge : '<%= meta.out %>/edge/*.js',
+		latest : '<%= meta.out %>/<%= pkg.version %>/*.js'
+	};
+
 	grunt.initConfig({
 		pkg : '<json:package.json>',
 		meta : {
@@ -31,22 +36,6 @@ module.exports = function (grunt) {
 				'util/**/*.js'
 			]
 		},
-		stripcomments : {
-			edge : {
-				files : '<%= meta.out %>/edge/*.js'
-			},
-			latest : {
-				files : '<%= meta.out %>/<%= pkg.version %>/*.js'
-			}
-		},
-		docco : {
-			edge : {
-				files : '<%= meta.out %>/edge/*.js'
-			},
-			latest : {
-				files : '<%= meta.out %>/<%= pkg.version %>/*.js'
-			}
-		},
 		build : {
 			edge : {
 				buildFile : '<config:meta.buildFile>',
@@ -57,12 +46,19 @@ module.exports = function (grunt) {
 				version : '<%= pkg.version %>',
 				out : 'can/<%= meta.out %>'
 			}
-		}
+		},
+		strip : outPaths,
+		docco : outPaths,
+		closureCompiler : {
+			// compilation_level: 'ADVANCED_OPTIMIZATIONS',
+			// language_in: 'ECMASCRIPT5_STRICT'
+		},
+		minify : outPaths
 	});
 
 	grunt.loadNpmTasks('grunt-beautify');
 	grunt.loadTasks("./build/tasks");
 
-	grunt.registerTask("edge", "build:edge stripcomments:edge");
-	grunt.registerTask("latest", "build:latest stripcomments:latest")
+	grunt.registerTask("edge", "build:edge strip:edge minify:edge");
+	grunt.registerTask("latest", "build:latest strip:latest minify:edge")
 };

@@ -1,6 +1,6 @@
-var spawn = require("child_process").spawn,
-	path = require("path"),
-	jsDir = path.join( __dirname, "../../..");
+var spawn = require("child_process").spawn;
+var path = require("path");
+var jsDir = path.join( __dirname, "../../..");
 
 
 module.exports = function( grunt ) {
