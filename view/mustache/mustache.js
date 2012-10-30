@@ -169,7 +169,7 @@ function( can ){
 				function(content) {
 					// match only words and dots
 					var match = content.match(/^\w*[\.|\w]*$/);
-					if(match){
+					if(match && content.length){
 
 						var split = content.split('.'),
 						// Handle context miss
