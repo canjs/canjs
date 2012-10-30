@@ -5,9 +5,18 @@ var spawn = require("child_process").spawn,
 
 module.exports = function( grunt ) {
 
-	grunt.registerTask("build", "Builds CanJS using Steal", function() {
-		var done = this.async(),
-			build = spawn("./js", ["can/util/make.js"], {
+	grunt.registerMultiTask('build', 'Builds CanJS.', function() {
+		var done = this.async();
+		var options = grunt.config.process(['build', this.target]);
+		var args = [options.buildFile, options.out || 'dist/', options.version || 'edge'];
+		var libraries = Array.isArray(options.libraries) ? options.libraries : [];
+
+		args.push.apply(args, libraries);
+
+		grunt.verbose.writeflags(options, 'Options');
+		grunt.log.writeln('Running  ./js ' + args.toString());
+
+		var build = spawn("./js", args, {
 				cwd: jsDir
 			});
 
