@@ -149,13 +149,18 @@ function( can ){
 				 * 	Failed context lookups should default to empty strings.
 				 * Dotted Names - Broken Chains
 				 *	{{a.b.c}}
-    		 * 	Any falsey value prior to the last part of the name should yield ''.
+    			 * 	Any falsey value prior to the last part of the name should yield ''.
 				 */
 				function(content) {
 					var split = content.split('.'),
 						// Handle context miss
 						result = ['(typeof ' + split[0] + ' != "undefined" ? '];
 					
+					// Make sure we aren't in a (el) -> el.foo()
+					if(content.indexOf('->') >= 0){
+						return content;
+					}
+
 					// Handle broken chains
 					if (split.length > 1) {
 						result.push('(');
@@ -168,7 +173,7 @@ function( can ){
 					else {
 						result.push(split[0]);
 					}
-					
+
 					return result.concat([' : "")']).join('');
 				}
 			].concat(can.view.Scanner.prototype.helpers)
