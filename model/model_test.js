@@ -875,3 +875,18 @@ test("destroying a model impact the right list", function() {
 	console.log( list2 )
 
 });
+
+
+test("uses attr with isNew", function(){
+	expect(1)
+	var old = can.Observe.__reading;
+	can.Observe.__reading = function(){
+		ok(true, "used attr")
+	}
+	
+	var m = new can.Model({id: 4});
+	
+	m.isNew();
+	
+	can.Observe.__reading = old;
+})
