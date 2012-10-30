@@ -23,7 +23,7 @@ steal('can/util','can/observe', function( can ) {
 		modelNum = 0,
 		ignoreHookup = /change.observe\d+/,
 		getId = function( inst ) {
-			return inst[inst.constructor.id];
+			return inst.__get(inst.constructor.id);
 		},
 		// Ajax `options` generator function
 		ajax = function( ajaxOb, data, type, dataType, success, error ) {
