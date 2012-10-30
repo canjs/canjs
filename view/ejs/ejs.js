@@ -617,19 +617,25 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute',function( 
 						break;
 					case '>':
 						htmlTag = 0;
+						var emptyElement = content.substr(-1) == "/";
 						// if there was a magic tag
 						// or it's an element that has text content between its tags, 
 						// but content is not other tags add a hookup
 						// TODO: we should only add `can.EJS.pending()` if there's a magic tag 
 						// within the html tags.
 						if(magicInTag || tagToContentPropMap[ tagNames[tagNames.length -1] ]){
-							put(content, ",can.EJS.pending(),\">\"");
+							// make sure / of /> is on the left of pending
+							if(emptyElement){
+								put(content.substr(0,content.length-1), ",can.EJS.pending(),\"/>\"");
+							} else {
+								put(content, ",can.EJS.pending(),\">\"");
+							}
 							content = '';
 						} else {
 							content += token;
 						}
 						// if it's a tag like <input/>
-						if(lastToken.substr(-1) == "/"){
+						if(emptyElement){
 							// remove the current tag in the stack
 							tagNames.pop();
 							// set the current tag to the previous parent
@@ -761,7 +767,6 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute',function( 
 				put(content);
 			}
 			buff.push(";");
-			
 			var template = buff.join(''),
 				out = {
 					out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"

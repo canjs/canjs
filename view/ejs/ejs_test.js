@@ -1044,7 +1044,7 @@ test("attribute unquoting", function() {
 	facet = new can.Observe({
 		id: 1,
 		single: true
-	});
+	}),
 
 	compiled = new can.EJS({text: text}).render({ facet: facet }),
 	div = document.createElement('div');
@@ -1052,6 +1052,20 @@ test("attribute unquoting", function() {
 
 	equals(div.children[0].name, "facet-1");
 	equals(div.children[0].value, "facet-1");
+});
+
+test("empty element hooks work correctly",function(){
+	
+	var text = '<div <%=function(e){$(e).text("1 Will show")}%> />'+
+		'<div <%=function(e){$(e).text("2 Will not show")}%> />'+
+		'3 Will not show';
+	
+	var compiled = new can.EJS({text: text}).render(),
+	div = document.createElement('div');
+	div.appendChild(can.view.frag(compiled));
+	
+	equal(div.childNodes.length, 3, "all three elements present")
+	
 })
 
 })()
