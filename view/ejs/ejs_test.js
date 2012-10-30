@@ -1,4 +1,4 @@
-steal('funcunit/syn',function(){
+steal('funcunit/syn',function(Syn){
 	
 module("can/view/ejs, rendering",{
 	setup : function(){
