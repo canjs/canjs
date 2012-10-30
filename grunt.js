@@ -14,7 +14,8 @@ module.exports = function (grunt) {
 				'test/**/*.js',
 				'util/**/*.js'
 			]
-		}, beautifier : {
+		},
+		beautifier : {
 			dist : {
 				options : {
 					indentSize : 1,
