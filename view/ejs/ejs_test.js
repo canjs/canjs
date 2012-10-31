@@ -377,7 +377,7 @@ test("hookups in tables", function(){
 		"<tr><td>Ms.</td></tr>".toUpperCase(),"updated label")
 })
 
-est('multiple hookups in a single attribute', function() {
+test('multiple hookups in a single attribute', function() {
 	var text =	'<div class=\'<%= obs.attr("foo") %>a<%= obs.attr("bar") %>b<%= obs.attr("baz") %>\'></div>',
 
 	obs = new can.Observe({
