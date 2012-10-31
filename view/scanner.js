@@ -77,12 +77,12 @@ can.view.Scanner = Scanner = function( options ) {
  */
 Scanner.prototype = {
 
-	helpers:[
+	helpers:{
 		/**
 		 * Check if its a func like `()->`.
 		 * @param {String} content
 		 */
-		function(content){
+		plugin: function(content){
 			var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/;
 			if(quickFunc.test(content)){
 				var parts = content.match(quickFunc);
@@ -90,7 +90,7 @@ Scanner.prototype = {
 			}
 			return content;
 		}
-	],
+	},
 
 	scan: function(source, name){
 		var tokens = [],
@@ -163,7 +163,6 @@ Scanner.prototype = {
 		htmlTag = quote = beforeQuote = null;
 
 		for (; (token = tokens[i++]) !== undefined;) {
-
 			if ( startTag === null ) {
 				switch ( token ) {
 				case tmap.left:
@@ -240,8 +239,24 @@ Scanner.prototype = {
 					content += token;
 					break;
 				}
-			}
-			else {
+			} else {
+
+				// Basically content has changed here
+				// therefore we need to determine if
+				// we need to take a new action on the 
+				// content or stay the course.  Most
+				// likely if things have change they 
+				// are going to need to be reran.
+				for(var helper in this.helpers){					
+					var nu = this.helpers[helper](content);
+					if(nu != content){
+						// assume these tag changes?
+						token = tmap.right;
+						startTag = tmap.left;
+						content = nu;
+					}
+				}
+
 				// We have a start tag.
 				switch ( token ) {
 				case tmap.right:
@@ -297,7 +312,7 @@ Scanner.prototype = {
 						} 
 
 						// go through and apply helpers
-						var updated = false;
+						/*var updated = false;
 						for(var ii=0;ii<this.helpers.length;ii++){
 							nu = this.helpers[ii](content);
 							if(content != nu){
@@ -309,11 +324,12 @@ Scanner.prototype = {
 						///// soooo hacky!
 						if(updated){
 							break;
-						}
+						}*/
 
 						// If we have `<%== a(function(){ %>` then we want
 						// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-						buff.push(insert_cmd, "can.view.txt("+(startTag === tmap.escapeLeft ? 1 : 0)+",'"+tagName+"'," + status()+",this,function(){ return ", content, 
+						var escaped = (startTag === tmap.escapeLeft ? 1 : 0);
+						buff.push(insert_cmd, "can.view.txt(" + escaped +",'"+tagName+"'," + status() +",this,function(){ return ", content, 
 							// If we have a block.
 							bracketCount ? 
 							// Start with startTxt `"var _v1ew = [];"`.
@@ -348,8 +364,10 @@ Scanner.prototype = {
 			out = {
 				out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"
 			};
+
 		// Use `eval` instead of creating a function, because it is easier to debug.
 		myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
+
 		return out;
 	}
 };

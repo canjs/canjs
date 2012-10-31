@@ -4,7 +4,6 @@
 	<title>can.view.mustache demo</title>
 </head>
 <body>
-
 	
 	<p>My fav color is: <span {{ (el) -> el.css('color', 'blue') }}>blue</span></p>
 
@@ -22,6 +21,16 @@
 <script type='text/javascript' src='../../../steal/steal.js'></script>
 <script type='text/javascript'>
 	steal('can/view/mustache', 'can/observe', function() {
+
+		/*Mustache.registerHelper('list', function(context, block) {
+			var ret = "<ul>";
+
+			for(var i=0, j=context.length; i<j; i++) {
+				ret = ret + "<li>" + block(context[i]) + "</li>";
+			}
+
+			return ret + "</ul>";
+		});*/
 
 		var teacher = new can.Observe({
 			name: "<strong>Mrs Peters</strong>",

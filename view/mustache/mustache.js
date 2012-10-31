@@ -32,7 +32,7 @@ function( can ){
 			this.template = this.scanner.scan(this.text, this.name);
 		};
 
-	can.Mustache = Mustache;
+	can.Mustache = window.Mustache = Mustache;
 
 	/** 
 	 * @Prototype
@@ -76,7 +76,7 @@ function( can ){
 				["right", "}}"] // Right -> All have same FOR Mustache ...
 			],
 
-			helpers:[
+			helpers: can.extend(can.view.Scanner.prototype.helpers, {
 				/**
 				 * {{#evalvariable}}
 				 * 
@@ -109,7 +109,7 @@ function( can ){
 				 *
 				 * @param {String} content
 				 */
-				function(content){
+				if: function(content){
 					var match = content.match(/^#\w*$/);
 					if(match){
 						return 'if(' + content.substring(1, content.length) + ') {';
@@ -127,7 +127,7 @@ function( can ){
 				 * 
 				 * @param {String} content
 				 */
-				function(content){
+				nonfalse: function(content){
 					return content;
 				},
 
@@ -140,7 +140,7 @@ function( can ){
 				 * 
 				 * @param {String} content
 				 */
-				function(content){
+				inverted: function(content){
 					return content;
 				},
 
@@ -149,7 +149,7 @@ function( can ){
 				 * Closes sections.
 				 * @param {String} content
 				 */
-				function(content){
+				close: function(content){
 					var match = content.match(/^\/\w*$/);
 					if(match){
 						return '};';
@@ -166,7 +166,7 @@ function( can ){
 				 *	{{a.b.c}}
     			 * 	Any falsey value prior to the last part of the name should yield ''.
 				 */
-				function(content) {
+				cannot: function(content) {
 					// match only words and dots
 					var match = content.match(/^\w*[\.|\w]*$/);
 					if(match && content.length){
@@ -193,9 +193,7 @@ function( can ){
 
 					return content;
 				}
-			]
-			// Add helpers from scanner in now.
-			.concat(can.view.Scanner.prototype.helpers)
+			})
 		})
 	});
 
@@ -203,6 +201,10 @@ function( can ){
 		this._data = data;
 		this._extras = extras;
 		extend(this, extras);
+	};
+
+	Mustache.registerHelper = function(name, fn){
+  		this.prototype.scanner.helpers[name] = fn;
 	};
 
 	/**
