@@ -2259,7 +2259,7 @@ There are several places you can go to ask questions or get help debugging probl
 
 ### Twitter
 
-Follow [@canjsus](https://twitter.com/#!/canjsus) for updates, announcements and quick answers to your questions.
+Follow [@canjs](https://twitter.com/#!/canjs) for updates, announcements and quick answers to your questions.
 
 ### Forums
 
