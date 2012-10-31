@@ -1,5 +1,4 @@
 module.exports = function( grunt ) {
-
 	grunt.registerMultiTask("gitdeploy", "Deploys files/folders to a Git repository", function() {
 		var done = this.async();
 		var options = grunt.config(['gitdeploy', this.target]);
@@ -25,5 +24,4 @@ module.exports = function( grunt ) {
 			}, { cwd : './canjs' });
 		});
 	});
-
 };

@@ -7,7 +7,7 @@ module.exports = function (grunt) {
 		grunt.file.expandFiles(this.file.src).forEach(function (file) {
 			var outFile = options.out ? path.join(options.out, path.basename(file)) : file;
 			// TODO use Grunt internals
-			console.log('Stripping ' + file + ' of all multiline comments, writing result to ' + outFile);
+			grunt.log.writeln('Stripping ' + file + ' of all multiline comments, writing result to ' + outFile);
 
 			// Put new index.html into production mode
 			var code = grunt.file.read(file);

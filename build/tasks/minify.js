@@ -2,10 +2,10 @@ var path = require('path');
 var fs = require('fs');
 
 module.exports = function( grunt ) {
-
 	grunt.registerMultiTask("minify", "Minifies CanJS, then outputs filesize information", function() {
 		var done = this.async();
 		var tasks = grunt.file.expandFiles(this.file.src).map(function (file) {
+			console.log(file);
 			return function(callback) {
 				var minFile = path.join(path.dirname(file), path.basename(file, '.js') + '.min.js');
 				var gzFile = minFile + '.gz';
@@ -14,7 +14,7 @@ module.exports = function( grunt ) {
 
 					var originalSize = (stats.size / 1024).toFixed(2);
 					console.log('Minifying ' + file + ' original size is ' + originalSize + 'Kb');
-					grunt.utils.spawn({
+					grunt.utils.exec({
 						cmd : 'closure',
 						args : [file, '--js_output_file', minFile]
 					}, function(error, result, code) {
@@ -29,5 +29,4 @@ module.exports = function( grunt ) {
 			done();
 		});
 	});
-
 };
