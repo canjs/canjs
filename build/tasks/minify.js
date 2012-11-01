@@ -4,10 +4,16 @@ var fs = require('fs');
 module.exports = function( grunt ) {
 	grunt.registerMultiTask("minify", "Minifies CanJS, then outputs filesize information", function() {
 		var done = this.async();
-		var tasks = grunt.file.expandFiles(this.file.src).map(function (file) {
-			console.log(file);
-			return function(callback) {
-				var minFile = path.join(path.dirname(file), path.basename(file, '.js') + '.min.js');
+		var minPostfix = '.min';
+		var tasks = [];
+		grunt.file.expandFiles(this.file.src).forEach(function (file) {
+			if(new RegExp(minPostfix).test(file)) {
+				console.log('Ignoring already minified file ' + file);
+				return;
+			}
+
+			tasks.push(function(callback) {
+				var minFile = path.join(path.dirname(file), path.basename(file, '.js') + minPostfix + '.js');
 				var gzFile = minFile + '.gz';
 				fs.stat(file, function(err, stats) {
 					if(err) return callback(err);
@@ -18,14 +24,24 @@ module.exports = function( grunt ) {
 						cmd : 'closure',
 						args : [file, '--js_output_file', minFile]
 					}, function(error, result, code) {
-						callback(null, result);
-					})
+						fs.stat(minFile, function(err, stats) {
+							if(err) return callback(err);
+
+							var minifiedSize = (stats.size / 1024).toFixed(2);
+							var saved = 100 - Math.round((minifiedSize/originalSize) * 100);
+							console.log('Created ' + minFile + ' minified size is ' +
+								minifiedSize + 'Kb, saved ' + saved + '%')
+							return callback(null, result);
+						});
+					});
 				});
-			}
+			});
 		});
 
-		grunt.utils.async.parallel(tasks, function(error, results) {
-			console.dir(arguments);
+		console.log(tasks.length);
+
+		grunt.utils.async.series(tasks, function(error, results) {
+			console.log(results);
 			done();
 		});
 	});
