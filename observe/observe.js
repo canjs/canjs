@@ -56,9 +56,10 @@ steal('can/util','can/construct', function(can, Construct) {
 				}
 
 				ev.triggeredNS[parent._cid] = true;
-						
+				// send change event with modified attr to parent	
 				can.trigger(parent, ev, args);
-				can.trigger(parent, args[0], args);
+				// send modified attr event to parent
+				//can.trigger(parent, args[0], args);
 			});
 
 			return val;
@@ -66,29 +67,6 @@ steal('can/util','can/construct', function(can, Construct) {
 		
 		// An `id` to track events for a given observe.
 		observeId = 0,
-		// A reference to an `array` of events that will be dispatched.
-		collecting,
-		// Call to start collecting events (`Observe` sends all events at
-		// once).
-		collect = function() {
-			if (!collecting ) {
-				collecting = [];
-				return true;
-			}
-		},
-		// Which batch of events this is for -- might not want to send multiple
-		// messages on the same batch.  This is mostly for event delegation.
-		batchNum = 1,
-		// Sends all pending events.
-		sendCollection = function() {
-			var items = collecting.slice(0);
-			collecting = undefined;
-			batchNum++;
-			can.each(items, function( item ) {
-				can.trigger.apply(can, item);
-			});
-			
-		},
 		// A helper used to serialize an `Observe` or `Observe.List`.  
 		// `observe` - The observable.  
 		// `how` - To serialize with `attr` or `serialize`.  
@@ -114,9 +92,35 @@ steal('can/util','can/construct', function(can, Construct) {
 		unbind = $method('removeEvent'),
 		attrParts = function(attr){
 			return can.isArray(attr) ? attr : (""+attr).split(".");
-		};
-		
-		
+		},
+		// Which batch of events this is for -- might not want to send multiple
+		// messages on the same batch.  This is mostly for event delegation.
+		batchNum = 1,
+		// how many times has start been called without a stop
+		transactions = 0,
+		// an array of events within a transaction
+		batchEvents = [];
+	
+	
+	// starts collecting events
+	can.stop = function(){
+		if(transactions === 0){
+			batchEvents = [];
+		}
+		transactions++;
+	}
+	// ends collecting events
+	can.start = function(){
+		transactions--;
+		if(transactions == 0){
+			var items = batchEvents.slice(0);
+			batchEvents= []
+			batchNum++;
+			can.each(items, function( item ) {
+				can.trigger.apply(can, item);
+			});
+		}
+	}
 	// Creates an event on item, but will not send immediately 
 	// if collecting events.  
 	// `item` - The item the event should happen on.  
@@ -125,10 +129,10 @@ steal('can/util','can/construct', function(can, Construct) {
 	can.batchTrigger = function( item, event, args ) {
 		// Don't send events if initalizing.
 		if ( ! item._init) {
-			if (!collecting ) {
+			if (transactions == 0 ) {
 				return can.trigger(item, event, args);
 			} else {
-				collecting.push([
+				batchEvents.push([
 				item,
 				{
 					type: event,
@@ -162,7 +166,11 @@ steal('can/util','can/construct', function(can, Construct) {
 			// Sets all `attrs`.
 			this._init = 1;
 			this.attr(obj);
+			this.bind('change'+this._cid,can.proxy(this._changes,this));
 			delete this._init;
+		},
+		_changes: function(ev, attr, how,newVal, oldVal){
+			can.batchTrigger(this, {type:attr, batchNum: ev.batchNum}, [newVal,oldVal]);
 		},
 		/**
 		 * @attribute _cid
@@ -502,7 +510,7 @@ steal('can/util','can/construct', function(can, Construct) {
 
 				// `batchTrigger` the change event.
 				can.batchTrigger(this, "change", [prop, changeType, value, current]);
-				can.batchTrigger(this, prop, [value, current]);
+				//can.batchTrigger(this, prop, [value, current]);
 				// If we can stop listening to our old value, do it.
 				current && unhookup([current], this._cid);
 			}
@@ -656,10 +664,9 @@ steal('can/util','can/construct', function(can, Construct) {
 
 			props = can.extend(true, {}, props);
 			var prop, 
-				collectingStarted = collect(),
 				self = this,
 				newVal;
-			
+			can.stop();
 			this.each(function(curVal, prop){
 				newVal = props[prop];
 
@@ -682,9 +689,7 @@ steal('can/util','can/construct', function(can, Construct) {
 				newVal = props[prop];
 				this._set(prop, newVal)
 			}
-			if ( collectingStarted ) {
-				sendCollection();
-			}
+			can.start()
 			return this;
 		}
 	});
@@ -831,8 +836,8 @@ steal('can/util','can/construct', function(can, Construct) {
 			this.length = 0;
 			this._cid = ".observe" + (++observeId);
 			this._init = 1;
-			this.bind('change',can.proxy(this._changes,this));
 			this.push.apply(this, can.makeArray(instances || []));
+			this.bind('change'+this._cid,can.proxy(this._changes,this));
 			can.extend(this, options);
 			delete this._init;
 		},
@@ -851,6 +856,7 @@ steal('can/util','can/construct', function(can, Construct) {
 				}
 				
 			}
+			Observe.prototype._changes.apply(this,arguments)
 		},
 		__get : function(attr){
 			return attr ? this[attr] : this;
@@ -1074,35 +1080,33 @@ steal('can/util','can/construct', function(can, Construct) {
 			// Create a copy.
 			items = can.makeArray( items );
 
-      var collectingStarted = collect();
+      		can.stop();
 			this._updateAttrs(items, remove);
-			if ( collectingStarted ) {
-				sendCollection()
-			}
+			can.start()
 		},
 
-    _updateAttrs : function( items, remove ){
-      var len = Math.min(items.length, this.length);
-
-      for ( var prop = 0; prop < len; prop++ ) {
-        var curVal = this[prop],
-          newVal = items[prop];
-
-        if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {
-          curVal.attr(newVal, remove)
-        } else if ( curVal != newVal ) {
-          this._set(prop, newVal)
-        } else {
-
-        }
-      }
-      if ( items.length > this.length ) {
-        // Add in the remaining props.
-        this.push.apply( this, items.slice( this.length ) );
-      } else if ( items.length < this.length && remove ) {
-        this.splice(items.length)
-      }
-    }
+	    _updateAttrs : function( items, remove ){
+	      var len = Math.min(items.length, this.length);
+	
+	      for ( var prop = 0; prop < len; prop++ ) {
+	        var curVal = this[prop],
+	          newVal = items[prop];
+	
+	        if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {
+	          curVal.attr(newVal, remove)
+	        } else if ( curVal != newVal ) {
+	          this._set(prop, newVal)
+	        } else {
+	
+	        }
+	      }
+	      if ( items.length > this.length ) {
+	        // Add in the remaining props.
+	        this.push.apply( this, items.slice( this.length ) );
+	      } else if ( items.length < this.length && remove ) {
+	        this.splice(items.length)
+	      }
+	    }
 	}),
 
 

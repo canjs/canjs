@@ -547,6 +547,8 @@ steal('can/util','can/observe', function( can ) {
 	can.Model = can.Observe({
 		fullName: "can.Model",
 		setup : function(base){
+			// create store here if someone wants to use model without inheriting from it
+			this.store = {};
 			can.Observe.apply(this, arguments);
 			if(!can.Model){
 				return;
@@ -583,8 +585,7 @@ steal('can/util','can/observe', function( can ) {
 			if(self.fullName == "can.Model" || !self.fullName){
 				self.fullName = "Model"+(++modelNum);
 			}
-			// Ddd ajax converters.
-			this.store = {};
+			// Add ajax converters.
 			this._reqs = 0;
 			this._url = this._shortName+"/{"+this.id+"}"
 		},

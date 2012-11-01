@@ -1,5 +1,8 @@
 steal('can', function(can){
 	
+	
+	
+	
 	var events = [],
 		transactionCount = 0,
 		originalBatchTrigger = can.batchTrigger,
@@ -43,4 +46,7 @@ steal('can', function(can){
 			}
 		}
 	};
+	
+	
+	
 });

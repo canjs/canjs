@@ -145,4 +145,25 @@ test("empty compute", function(){
 	
 	c(0);
 	
+});
+
+test("only one update on a batchTransaction",function(){
+	var person = new can.Observe({first: "Justin", last: "Meyer"});
+	var func = function(){
+		return person.attr('first')+" "+person.attr('last')+Math.random()
+	};
+	var callbacks = 0;
+	can.compute.binder(func, window, function(newVal, oldVal){
+		callbacks++;
+	});
+	
+	person.attr({
+		first: "Brian",
+		last: "Moschel"
+	});
+	
+	equal(callbacks,1,"only one callback")
 })
+
+
+

@@ -407,3 +407,15 @@ test("Only plain objects should be converted to Observes", function() {
 	ob.attr('window', window);
 	equal(ob.attr('window'), window, 'Window object should not be converted');
 });
+
+test("bind on deep properties",function(){
+	expect(2)
+	var ob = new can.Observe({name: {first: "Brian"}});
+	ob.bind("name.first",function(ev, newVal, oldVal){
+		equal(newVal,"Justin");
+		equal(oldVal,"Brian")
+	});
+	
+	ob.attr('name.first',"Justin")
+	
+})
