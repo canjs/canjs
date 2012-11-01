@@ -76,7 +76,7 @@ function( can ){
 				["right", "}}"] // Right -> All have same FOR Mustache ...
 			],
 
-			helpers: can.extend(can.view.Scanner.prototype.helpers, {
+			helpers: [
 				/**
 				 * {{#evalvariable}}
 				 * 
@@ -109,13 +109,11 @@ function( can ){
 				 *
 				 * @param {String} content
 				 */
-				if: function(content){
-					var match = content.match(/^#\w*$/);
-					if(match){
-						return 'if(' + content.substring(1, content.length) + ') {';
+				{
+					name: /^#\w*$/,
+					fn: function(content){
+						return options.fn('if(' + content.substring(1, content.length) + '){');
 					}
-
-					return content;
 				},
 
 				/**
@@ -127,9 +125,9 @@ function( can ){
 				 * 
 				 * @param {String} content
 				 */
-				nonfalse: function(content){
+				/*nonfalse: function(content){
 					return content;
-				},
+				},*/
 
 				/**
 				 * {{^ evalvariable }}
@@ -140,22 +138,20 @@ function( can ){
 				 * 
 				 * @param {String} content
 				 */
-				inverted: function(content){
+				/*inverted: function(content){
 					return content;
-				},
+				},*/
 
 				/**
 				 * {{/ evalvariable }}
 				 * Closes sections.
 				 * @param {String} content
 				 */
-				close: function(content){
-					var match = content.match(/^\/\w*$/);
-					if(match){
-						return '};';
+				{ 
+					name: /^\/\w*$/,
+					fn: function(content, options){
+						return options.fn('};');
 					}
-
-					return content;
 				},
 				
 				/**
@@ -166,11 +162,9 @@ function( can ){
 				 *	{{a.b.c}}
     			 * 	Any falsey value prior to the last part of the name should yield ''.
 				 */
-				cannot: function(content) {
-					// match only words and dots
-					var match = content.match(/^\w*[\.|\w]*$/);
-					if(match && content.length){
-
+				{
+					name: /^\w*[\.|\w]*$/,
+					fn: function(content, options) {
 						var split = content.split('.'),
 						// Handle context miss
 						result = ['(typeof ' + split[0] + ' != "undefined" ? '];
@@ -188,12 +182,10 @@ function( can ){
 							result.push(split[0]);
 						}
 
-						return result.concat([' : "")']).join('');
+						return options.fn(result.concat([' : "")']).join(''));
 					}
-
-					return content;
 				}
-			})
+			].concat(can.view.Scanner.prototype.helpers)
 		})
 	});
 
@@ -204,7 +196,7 @@ function( can ){
 	};
 
 	Mustache.registerHelper = function(name, fn){
-  		this.prototype.scanner.helpers[name] = fn;
+  		this.prototype.scanner.helpers.push({ name: name, fn: fn });
 	};
 
 	/**

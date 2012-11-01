@@ -77,20 +77,20 @@ can.view.Scanner = Scanner = function( options ) {
  */
 Scanner.prototype = {
 
-	helpers:{
+	helpers: [
 		/**
 		 * Check if its a func like `()->`.
 		 * @param {String} content
 		 */
-		plugin: function(content){
-			var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/;
-			if(quickFunc.test(content)){
+		{
+			name:/\s*\(([\$\w]+)\)\s*->([^\n]*)/,
+			fn: function(content, options){
 				var parts = content.match(quickFunc);
 				content = "function(__){var " + parts[1] + "=can.$(__);" + parts[2] + "}";
+				return options.fn(content);
 			}
-			return content;
 		}
-	},
+	],
 
 	scan: function(source, name){
 		var tokens = [],
@@ -240,23 +240,6 @@ Scanner.prototype = {
 					break;
 				}
 			} else {
-
-				// Basically content has changed here
-				// therefore we need to determine if
-				// we need to take a new action on the 
-				// content or stay the course.  Most
-				// likely if things have change they 
-				// are going to need to be reran.
-				for(var helper in this.helpers){					
-					var nu = this.helpers[helper](content);
-					if(nu != content){
-						// assume these tag changes?
-						token = tmap.right;
-						startTag = tmap.left;
-						content = nu;
-					}
-				}
-
 				// We have a start tag.
 				switch ( token ) {
 				case tmap.right:
@@ -311,20 +294,37 @@ Scanner.prototype = {
 							});
 						} 
 
-						// go through and apply helpers
-						/*var updated = false;
-						for(var ii=0;ii<this.helpers.length;ii++){
-							nu = this.helpers[ii](content);
-							if(content != nu){
-								updated=true;
-								buff.push(nu);
+						// Go through and apply helpers
+						var matched = false;
+						for(var ii = 0; ii < this.helpers.length;ii++){
+
+							// Match the helper based on helper
+							// regex name value
+							var helper = this.helpers[ii];
+							if(helper.name.test(content)){
+								options = {
+									fn: function(cnt) { 
+										// What do you want here?
+										// I'd say this prob needs to 
+										// call back into the scanner
+										// with the new string ?
+										// can.view.text() 
+										return cnt;
+									}
+								};
+
+								// parse and interpolate each argument with Mustache.interpolate
+								// el -> would need a special interpolation case
+								matched = true;
+								buff.push(helper.fn(content, options));
 							}
 						}
 
-						///// soooo hacky!
-						if(updated){
+						// if we found a match, break 
+						// and don't do the below
+						if(matched){
 							break;
-						}*/
+						}
 
 						// If we have `<%== a(function(){ %>` then we want
 						// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
