@@ -378,32 +378,31 @@ test("hookups in tables", function(){
 })
 
 test('multiple hookups in a single attribute', function() {
-	var text =	'<div class=\'<%= obs.attr("foo") %>' +
-							'<%= obs.attr("bar") %><%= obs.attr("baz") %>\'></div>',
+	var text =	'<div class=\'<%= obs.attr("foo") %>a<%= obs.attr("bar") %>b<%= obs.attr("baz") %>\'></div>',
 
 	obs = new can.Observe({
-		foo: 'a',
-		bar: 'b',
-		baz: 'c'
+		foo: '1',
+		bar: '2',
+		baz: '3'
 	}),
 
 	compiled = new can.EJS({ text: text }).render({ obs: obs })
-	
+
 	var div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled));
 	
 	var innerDiv = div.childNodes[0];
 
-	equals(getAttr(innerDiv, 'class'), "abc", 'initial render');
+	equals(getAttr(innerDiv, 'class'), "1a2b3", 'initial render');
 
-	obs.attr('bar', 'e');
+	obs.attr('bar', '4');
 
-	equals(getAttr(innerDiv, 'class'), "aec", 'initial render');
+	equals(getAttr(innerDiv, 'class'), "1a4b3", 'initial render');
 	
-	obs.attr('bar', 'f');
+	obs.attr('bar', '5');
 
-	equals(getAttr(innerDiv, 'class'), "afc", 'initial render');
+	equals(getAttr(innerDiv, 'class'), "1a5b3", 'initial render');
 });
 
 test('adding and removing multiple html content within a single element', function(){
