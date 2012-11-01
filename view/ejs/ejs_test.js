@@ -1066,6 +1066,37 @@ test("empty element hooks work correctly",function(){
 	
 	equal(div.childNodes.length, 3, "all three elements present")
 	
+});
+
+test("live binding with parent dependent tags but without parent tag present in template",function(){
+	
+	var text = ['<% if( person.attr("first") ){ %>',
+				'<tr><td><%= person.first %></td></tr>',
+				'<% }%>',
+				'<% if( person.attr("last") ){ %>',
+				'<tr><td><%= person.last %></td></tr>',
+				'<% } %>'];
+	var person = new can.Observe({first: "Austin", last: "McDaniel"});
+	
+	var compiled = new can.EJS({text: text.join("\n")}).render({person: person});
+	console.log(compiled)
+	var table = document.createElement('table');
+	//can.append( can.$('#qunit-test-area'), table )
+	
+	table.appendChild(can.view.frag(compiled));
+	
+	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>Austin</td></tr><tr><td>McDaniel</td></tr>")
+	
+	person.removeAttr('first')
+	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>McDaniel</td></tr>")
+	person.removeAttr('last');
+	equal(table.innerHTML.replace(/[\s\n]/g,""),"");
+	
+	person.attr('first',"Justin");
+	
+	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>Justin</td></tr>")
 })
+
+
 
 })()

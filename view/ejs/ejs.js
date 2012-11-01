@@ -26,9 +26,31 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute',function( 
 			select: "option",
 			optgroup: "option"
 		},
+		reverseTagMap = {
+			tr:"tbody",
+			option:"select",
+			td:"tr",
+			li: "ul"
+		},
 		tagToContentPropMap= {
 			option: "textContent",
 			textarea: "value"
+		},
+		// Returns a tagName to use as a temporary placeholder for live content
+		// looks forward ... could be slow, but we only do it when necessary
+		getTag = function(tagName, tokens, i){
+			// if a tagName is provided, use that
+			if(tagName){
+				return tagName;	
+			} else {
+				// otherwise go searching for the next two tokens like "<",TAG
+				while(i < tokens.length){
+					if(tokens[i] == "<" && reverseTagMap[tokens[i+1]]){
+						return reverseTagMap[tokens[i+1]]
+					}
+					i++;
+				}
+			}
 		},
 		// Escapes characters starting with `\`.
 		clean = function( content ) {
@@ -661,9 +683,10 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute',function( 
 						// Track the current tag
 						if(lastToken === '<'){
 							tagName = token.split(/\s/)[0];
-							// If 
 							if( tagName.indexOf("/") === 0 && tagNames.pop() === tagName.substr(1) ) {
-								tagName = tagNames[tagNames.length-1]|| tagName.substr(1);
+								// set tagName to the last tagName
+								// if there are no more tagNames, we'll rely on getTag.
+								tagName = tagNames[tagNames.length-1];
 							} else {
 								tagNames.push(tagName);
 							}
@@ -688,7 +711,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute',function( 
 							if (bracketCount == 1) {
 
 								// We are starting on.
-								buff.push(insert_cmd, "can.EJS.txt(0,'"+tagName+"'," + status() + ",this,function(){", startTxt, content);
+								buff.push(insert_cmd, "can.EJS.txt(0,'"+getTag(tagName,tokens, i)+"'," + status() + ",this,function(){", startTxt, content);
 								
 								endStack.push({
 									before: "",
