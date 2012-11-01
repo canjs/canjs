@@ -451,12 +451,15 @@ html.lt-ie7 .github-fork img {
 	text-shadow: 0 1px rgba(255, 255, 255, 0.7);
 	text-transform: uppercase;
 }
+#feeder-latest {
+	height: 16px;
+}
 #feeder-latest .event {
 	font-size: 12px;
 	line-height: 16px;
 	text-overflow: ellipsis;
 	overflow: hidden;
-	max-height: 30px;
+	height: 16px;
 	white-space: nowrap;
 }
 #feeder-latest .event b {
