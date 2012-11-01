@@ -1061,7 +1061,8 @@ test("empty element hooks work correctly",function(){
 		'3 Will not show';
 	
 	var compiled = new can.EJS({text: text}).render(),
-	div = document.createElement('div');
+		div = document.createElement('div');
+
 	div.appendChild(can.view.frag(compiled));
 
 	equal(div.childNodes.length, 3, "all three elements present")
@@ -1069,7 +1070,13 @@ test("empty element hooks work correctly",function(){
 })
 
 test("spaces between attribute name and value", function(){
-	var text ="<input type='text' value = '<%= 'test'%>' />";	
-	var compiled = new can.EJS({text: text}).render();
+	var text = '<input type="text" value = "<%= test %>" />',
+		compiled = new can.EJS({text: text}).render({
+			test : 'testing'
+		}),
+		div = document.createElement('div');
+	
+	div.appendChild(can.view.frag(compiled));
+	equal(div.innerHTML, '<input type="text" value="testing">');
 })
 })()
