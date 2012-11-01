@@ -1068,4 +1068,8 @@ test("empty element hooks work correctly",function(){
 	
 })
 
+test("spaces between attribute name and value", function(){
+	var text ="<input type='text' value = '<%= 'test'%>' />";	
+	var compiled = new can.EJS({text: text}).render();
+})
 })()
