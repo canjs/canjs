@@ -11,7 +11,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute',function( 
 		extend = can.extend,
 		// Regular expressions for caching.
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
-		attrReg = /([^\s]+)=$/,
+		attrReg = /([^\s]+)[\s]*=[\s]*$/,
 		newLine = /(\r|\n)+/g,
 		attributeReplace = /__!!__/g,		
 		tagMap = {
