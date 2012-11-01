@@ -381,7 +381,7 @@ can.Control('Builder', {
 });
 
 new Builder('#builder');
-
+new FeederWidget('#feeder-latest');
 // google analytics
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-2302003-11']);
