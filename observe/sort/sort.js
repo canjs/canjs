@@ -132,6 +132,7 @@ function( where , name ) {
 		if ( this.comparator && args.length ) {
 			this.sort(null, true);
 			batchTrigger(this,"reset", [args])
+			batchTrigger(this,'length',[this.length]);
 		}
 
 		return res;
