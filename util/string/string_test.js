@@ -33,6 +33,11 @@ test("can.getObject", function(){
 	equals(obj,0, 'got 0 (falsey stuff)')
 });
 
+test("rendering number 0 value",function(){
+	var text = can.esc(0);
+
+	equal(text,"0","0 value properly rendered");
+});
 /*
 test("$.String.niceName", function(){
 	var str = "some_underscored_string";
