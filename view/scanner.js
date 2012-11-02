@@ -84,10 +84,10 @@ Scanner.prototype = {
 		 */
 		{
 			name:/\s*\(([\$\w]+)\)\s*->([^\n]*)/,
-			fn: function(content, options){
+			fn: function(content){
 				var parts = content.match(quickFunc);
 				content = "function(__){var " + parts[1] + "=can.$(__);" + parts[2] + "}";
-				return options.fn(content);
+				return content;
 			}
 		}
 	],
@@ -302,6 +302,7 @@ Scanner.prototype = {
 							// regex name value
 							var helper = this.helpers[ii];
 							if(helper.name.test(content)){
+								/*
 								options = {
 									fn: function(cnt) { 
 										// What do you want here?
@@ -317,6 +318,8 @@ Scanner.prototype = {
 								// el -> would need a special interpolation case
 								matched = true;
 								buff.push(helper.fn(content, options));
+								*/
+								content = helper.fn(content);
 							}
 						}
 
@@ -328,8 +331,7 @@ Scanner.prototype = {
 
 						// If we have `<%== a(function(){ %>` then we want
 						// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-						var escaped = (startTag === tmap.escapeLeft ? 1 : 0);
-						buff.push(insert_cmd, "can.view.txt(" + escaped +",'"+tagName+"'," + status() +",this,function(){ return ", content, 
+						buff.push(insert_cmd, "can.view.txt(" + (startTag === tmap.escapeLeft ? 1 : 0) +",'"+tagName+"'," + status() +",this,function(){ return ", content, 
 							// If we have a block.
 							bracketCount ? 
 							// Start with startTxt `"var _v1ew = [];"`.

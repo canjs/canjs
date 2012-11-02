@@ -78,117 +78,62 @@ function( can ){
 
 			helpers: [
 				/**
-				 * {{#evalvariable}}
-				 * 
-				 * ## Sections
-				 * Sections render blocks of text one or more times, depending on the value 
-				 * of the key in the current context.
-				 *
-				 * A section begins with a pound and ends with a slash. That is, {{#person}} 
-				 * begins a "person" section while {{/person}} ends it.
-				 *
-				 * The behavior of the section is determined by the value of the key.
-				 *
-				 * ### False Values or Empty Lists
-				 * If the person key exists and has a value of false or an empty list, the HTML 
-				 * between the pound and slash will not be displayed.
-				 *
-				 * ### Non-Empty Lists
-				 * If the person key exists and has a non-false value, the HTML between the pound 
-				 * and slash will be rendered and displayed one or more times.
-				 *
-				 * When the value is a non-empty list, the text in the block will be displayed once for 
-				 * each item in the list. The context of the block will be set to the current item for each 
-				 * iteration. In this way we can loop over collections.
-				 *
-				 * ### Lambdas
-				 * When the value is a callable object, such as a function or lambda, the object will be 
-				 * invoked and passed the block of text. The text passed is the literal block, unrendered. 
-				 * {{tags}} will not have been expanded - the lambda should do that on its own. In this way you 
-				 * can implement filters or caching.
-				 *
-				 * @param {String} content
+				 * Convert the expression for use with interpolation/helpers.
 				 */
 				{
-					name: /^#\w*$/,
-					fn: function(content){
-						return options.fn('if(' + content.substring(1, content.length) + '){');
-					}
-				},
-
-				/**
-				 * {{#person?}}
-				 * 
-				 * ## Non-False Values
-				 * When the value is non-false but not a list, it will be used as the context 
-				 * for a single rendering of the block.
-				 * 
-				 * @param {String} content
-				 */
-				/*nonfalse: function(content){
-					return content;
-				},*/
-
-				/**
-				 * {{^ evalvariable }}
-				 * 
-				 * ## Inverted Sections
-				 * An inverted section begins with a caret (hat) and ends with a slash. 
-				 * That is {{^person}} begins a "person" inverted section while {{/person}} ends it.
-				 * 
-				 * @param {String} content
-				 */
-				/*inverted: function(content){
-					return content;
-				},*/
-
-				/**
-				 * {{/ evalvariable }}
-				 * Closes sections.
-				 * @param {String} content
-				 */
-				{ 
-					name: /^\/\w*$/,
-					fn: function(content, options){
-						return options.fn('};');
-					}
-				},
-				
-				/**
-				 * Basic Context Miss Interpolation
-				 *  {{cannot}}
-				 * 	Failed context lookups should default to empty strings.
-				 * Dotted Names - Broken Chains
-				 *	{{a.b.c}}
-    			 * 	Any falsey value prior to the last part of the name should yield ''.
-				 */
-				{
-					name: /^\w*[\.|\w]*$/,
+					name: /^.*$/,
 					fn: function(content, options) {
-						var split = content.split('.'),
-						// Handle context miss
-						result = ['(typeof ' + split[0] + ' != "undefined" ? '];
+						// Parse content
+						var args = content.replace(/^\s*/,'').replace(/\s*$/,'').split(/\s/),
+							result = ['can.Mustache.txt('],
+							i = 0,
+							arg, split;
+						
+						// Append helper requests as a name string
+						if (args.length > 1) {
+							i = 1;
+							result.push('"' + args[0] + '"');
+						}
+						
+						// Iterate through the arguments
+						for (; arg = args[i]; i++) {
+							i > 0 && result.push(',');
+							split = arg.split('.');
+							
+							/*
+							 * Basic Context Miss Interpolation
+							 *  {{cannot}}
+							 * 	Failed context lookups should default to empty strings.
+							 */
+							result.push('(typeof ' + split[0] + ' != "undefined" ? ');
 
-						// Handle broken chains
-						if (split.length > 1) {
-							result.push('(');
-							for (var i = 1; i < split.length; i++) {
-								i > 1 && result.push(' && ');
-								result.push(split.slice(0, i+1).join('.'));
+							/**
+							 * Dotted Names - Broken Chains
+							 *	{{a.b.c}}
+			    		 * 	Any falsey value prior to the last part of the name should yield ''.
+							 */
+							if (split.length > 1) {
+								result.push('(');
+								for (var i = 1; i < split.length; i++) {
+									i > 1 && result.push(' && ');
+									result.push(split.slice(0, i+1).join('.'));
+								}
+								result.push(') || ""');
 							}
-							result.push(') || ""');
+							else {
+								result.push(split[0]);
+							}
+							result.push(' : "")');
 						}
-						else {
-							result.push(split[0]);
-						}
-
-						return options.fn(result.concat([' : "")']).join(''));
+						
+						result.push(')');
+						return result.join('');
 					}
 				}
 			].concat(can.view.Scanner.prototype.helpers)
 		})
 	});
-
+	
 	Mustache.Helpers = function( data, extras ) {
 		this._data = data;
 		this._extras = extras;
@@ -196,8 +141,113 @@ function( can ){
 	};
 
 	Mustache.registerHelper = function(name, fn){
-  		this.prototype.scanner.helpers.push({ name: name, fn: fn });
+		this._helpers.push({ name: name, fn: fn });
 	};
+	
+	Mustache.txt = function(name) {
+		var args = Array.prototype.slice.call(arguments, 1),
+			i, helper;
+		
+		// If there is more than one argument, it's a helper
+		if (args.length > 0) {
+			for (i = 0; helper = this._helpers[i]; i++) {
+				// Find the correct helper
+				if (helper.name == name) {
+					return helper.fn.apply(helper, args) || '';
+				}
+			}
+		}
+		
+		// Interpolate like normal by default
+		return name || '';
+	};
+
+	Mustache._helpers = [
+		/**
+		 * {{#evalvariable}}
+		 * 
+		 * ## Sections
+		 * Sections render blocks of text one or more times, depending on the value 
+		 * of the key in the current context.
+		 *
+		 * A section begins with a pound and ends with a slash. That is, {{#person}} 
+		 * begins a "person" section while {{/person}} ends it.
+		 *
+		 * The behavior of the section is determined by the value of the key.
+		 *
+		 * ### False Values or Empty Lists
+		 * If the person key exists and has a value of false or an empty list, the HTML 
+		 * between the pound and slash will not be displayed.
+		 *
+		 * ### Non-Empty Lists
+		 * If the person key exists and has a non-false value, the HTML between the pound 
+		 * and slash will be rendered and displayed one or more times.
+		 *
+		 * When the value is a non-empty list, the text in the block will be displayed once for 
+		 * each item in the list. The context of the block will be set to the current item for each 
+		 * iteration. In this way we can loop over collections.
+		 *
+		 * ### Lambdas
+		 * When the value is a callable object, such as a function or lambda, the object will be 
+		 * invoked and passed the block of text. The text passed is the literal block, unrendered. 
+		 * {{tags}} will not have been expanded - the lambda should do that on its own. In this way you 
+		 * can implement filters or caching.
+		 *
+		 * @param {String} content
+		 */
+		// {
+		// 	name: /^#\w*$/,
+		// 	fn: function(content){
+		// 		return options.fn('if(' + content.substring(1, content.length) + '){');
+		// 	}
+		// },
+		{
+			name: 'if',
+			fn: function(content){
+				if (content) {
+					return content;
+				}
+			}
+		},
+		
+		/**
+		 * {{#person?}}
+		 * 
+		 * ## Non-False Values
+		 * When the value is non-false but not a list, it will be used as the context 
+		 * for a single rendering of the block.
+		 * 
+		 * @param {String} content
+		 */
+		/*nonfalse: function(content){
+			return content;
+		},*/
+		
+		/**
+		 * {{^ evalvariable }}
+		 * 
+		 * ## Inverted Sections
+		 * An inverted section begins with a caret (hat) and ends with a slash. 
+		 * That is {{^person}} begins a "person" inverted section while {{/person}} ends it.
+		 * 
+		 * @param {String} content
+		 */
+		/*inverted: function(content){
+			return content;
+		},*/
+		
+		/**
+		 * {{/ evalvariable }}
+		 * Closes sections.
+		 * @param {String} content
+		 */
+		// { 
+		// 	name: /^\/\w*$/,
+		// 	fn: function(content, options){
+		// 		return options.fn('};');
+		// 	}
+		// }
+	];
 
 	/**
 	 * Register the view.
