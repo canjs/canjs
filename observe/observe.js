@@ -14,6 +14,7 @@ steal('can/util','can/construct', function(can, Construct) {
 			return can.each(items, function(item){
 				if(item && item.unbind){
 					item.unbind("change" + namespace);
+					item.unbind("length" + namespace);
 				}
 			});
 		},
@@ -39,13 +40,14 @@ steal('can/util','can/construct', function(can, Construct) {
 			}
 			
 			// Listen to all changes and `batchTrigger` upwards.
-			val.bind("change" + parent._cid, function( /* ev, attr */ ) {
+			function bubble( /* ev, attr */ ) {
 				// `batchTrigger` the type on this...
 				var args = can.makeArray(arguments),
 					ev = args.shift();
 					args[0] = (prop === "*" ? 
 						[ parent.indexOf( val ), args[0]] :
-						[ prop, args[0]] ).join(".");
+						[ prop, ev.type === 'length' ?
+							'length' : args[0]] ).join(".");
 
 				// track objects dispatched on this observe		
 				ev.triggeredNS = ev.triggeredNS || {};
@@ -59,7 +61,12 @@ steal('can/util','can/construct', function(can, Construct) {
 						
 				can.trigger(parent, ev, args);
 				can.trigger(parent, args[0], args);
-			});
+			}
+			val.bind("change" + parent._cid, bubble);
+
+			if (val instanceof Observe.List) {
+				val.bind("length" + parent._cid, bubble);
+			}
 
 			return val;
 		},
