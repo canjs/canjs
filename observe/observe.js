@@ -99,25 +99,37 @@ steal('can/util','can/construct', function(can, Construct) {
 		// how many times has start been called without a stop
 		transactions = 0,
 		// an array of events within a transaction
-		batchEvents = [];
+		batchEvents = [],
+		stopCallbacks = [];
 	
 	
 	// starts collecting events
-	can.stop = function(){
-		if(transactions === 0){
-			batchEvents = [];
-		}
+	// takes a callback for after they are updated
+	// how could you hook into after ejs
+	can.stop = function(fn){
 		transactions++;
+		fn && stopCallbacks.push(fn);
 	}
 	// ends collecting events
-	can.start = function(){
-		transactions--;
+	can.start = function(force, callStop){
+		if(force){
+			transactions = 0;
+		} else {
+			transactions--;
+		}
+		
 		if(transactions == 0){
-			var items = batchEvents.slice(0);
-			batchEvents= []
+			var items = batchEvents.slice(0),
+				callbacks = stopCallbacks.slice(0);
+			batchEvents= [];
+			stopCallbacks = [];
 			batchNum++;
+			callStop && can.stop();
 			can.each(items, function( item ) {
 				can.trigger.apply(can, item);
+			});
+			can.each(callbacks, function( cb ) {
+				cb;
 			});
 		}
 	}
