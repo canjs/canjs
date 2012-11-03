@@ -139,32 +139,43 @@ function( can ){
 						// Iterate through the arguments
 						for (; arg = args[i]; i++) {
 							i > 0 && result.push(',');
-							split = arg.split('.');
-							
-							/*
-							 * Basic Context Miss Interpolation
-							 *  {{cannot}}
-							 * 	Failed context lookups should default to empty strings.
-							 */
-							result.push('(typeof ' + split[0] + ' != "undefined" ? ');
-
+														
 							/**
-							 * Dotted Names - Broken Chains
-							 *	{{a.b.c}}
-			    			 * 	Any falsey value prior to the last part of the name should yield ''.
+							 * Implicit Iterator
+							 *  {{#list}}({{.}}){{/list}}
+							 * 	Implicit iterators should directly interpolate strings.
 							 */
-							if (split.length > 1) {
-								result.push('(');
-								for (var i = 1; i < split.length; i++) {
-									i > 1 && result.push(' && ');
-									result.push(split.slice(0, i+1).join('.'));
-								}
-								result.push(') || ""');
+							if (arg == '.') {
+								result.push('this');
 							}
 							else {
-								result.push(split[0]);
+								split = arg.split('.');
+							
+								/**
+								 * Basic Context Miss Interpolation
+								 *  {{cannot}}
+								 * 	Failed context lookups should default to empty strings.
+								 */
+								result.push('(typeof ' + split[0] + ' != "undefined" ? ');
+
+								/**
+								 * Dotted Names - Broken Chains
+								 *	{{a.b.c}}
+								 * 	Any falsey value prior to the last part of the name should yield ''.
+								 */
+								if (split.length > 1) {
+									result.push('(');
+									for (var i = 1; i < split.length; i++) {
+										i > 1 && result.push(' && ');
+										result.push(split.slice(0, i+1).join('.'));
+									}
+									result.push(') || ""');
+								}
+								else {
+									result.push(split[0]);
+								}
+								result.push(' : "")');
 							}
-							result.push(' : "")');
 						}
 						
 						// Handle sections
@@ -232,17 +243,28 @@ function( can ){
 	 */
 	Mustache.txt = function(mode, name) {
 		var args = Array.prototype.slice.call(arguments, 2),
-			options = mode && can.extend.apply(can, [{}].concat(args.pop())),
+			options = mode && can.extend.apply(can, [{
+					fn: function() {},
+					inverse: function() {}
+				}].concat(args.pop())),
 			validArgs = args.length > 0 ? args : [name],
 			valid = true,
-			i, j, helper;
+			result = [],
+			i, helper;
 		
 		// Validate based on the mode if necessary
 		if (mode) {
-			for (j = 0; j < validArgs.length; j++) {
-				valid = mode == '#' ? valid && !!validArgs[j]
-					: mode == '^' ? valid && !validArgs[j]
-					: valid;
+			for (i = 0; i < validArgs.length; i++) {
+				if (can.isArray(validArgs[i])) {
+					valid = mode == '#' ? valid && !!validArgs[i].length
+						: mode == '^' ? valid && !validArgs[i].length
+						: valid;
+				}
+				else {
+					valid = mode == '#' ? valid && !!validArgs[i]
+						: mode == '^' ? valid && !validArgs[i]
+						: valid;
+				}
 			}
 		}
 		
@@ -272,10 +294,21 @@ function( can ){
 				// Handle truthyness
 				switch (mode) {
 					case '#':
-						return (options.fn && options.fn()) || '';
+						// Iterate over arrays
+						if (can.isArray(name)) {
+							for (i = 0; i < name.length; i++) {
+								result.push(options.fn.call(name[i] || {}) || '');
+							}
+							return result.join('');
+						}
+
+						// Normal case.
+						else {
+							return options.fn.call(name || {}) || '';
+						}
 						break;
 					case '^':
-						return (options.inverse && options.inverse()) || '';
+						return options.inverse.call(name || {}) || '';
 						break;
 					default:
 						return name || '';
