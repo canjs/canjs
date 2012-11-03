@@ -304,22 +304,30 @@ Scanner.prototype = {
 							// regex name value
 							var helper = this.helpers[ii];
 							if(helper.name.test(content)){
-								content = helper.fn(content);
+								content = helper.fn(content, { insert: insert_cmd });
 								escaped = 0;
 								break;
 							}
 						}
-
-						// If we have `<%== a(function(){ %>` then we want
-						// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-						buff.push(insert_cmd, "can.view.txt(" + escaped + ",'"+tagName+"'," + status() +",this,function(){ return ", content, 
-							// If we have a block.
-							bracketCount ? 
-							// Start with startTxt `"var _v1ew = [];"`.
-							startTxt : 
-							// If not, add `doubleParent` to close push and text.
-							"}));"
-							);
+						
+						// Handle special cases
+						if (typeof content == 'object') {
+							if (content.raw) {
+								buff.push(content.raw);
+							}
+						}
+						else {
+							// If we have `<%== a(function(){ %>` then we want
+							// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
+							buff.push(insert_cmd, "can.view.txt(" + escaped + ",'"+tagName+"'," + status() +",this,function(){ return ", content, 
+								// If we have a block.
+								bracketCount ? 
+								// Start with startTxt `"var _v1ew = [];"`.
+								startTxt : 
+								// If not, add `doubleParent` to close push and text.
+								"}));"
+								);
+						}
 						break;
 					}
 					startTag = null;

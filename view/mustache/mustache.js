@@ -97,9 +97,8 @@ function( can ){
 				 */
 				{
 					name: /^>[\s|\w]\w*/,
-					fn:function(content, options){
+					fn:function(content, cmd){
 						return "can.view.render('" + content.replace(/^>\s?/, '').trim() + "', _CONTEXT)";
-					}
 				},
 
 				/**
@@ -107,17 +106,28 @@ function( can ){
 				 */
 				{
 					name: /^.*$/,
-					fn: function(content, options) {
+					fn: function(content, cmd) {
 						// Parse content
-						var mode = false;
-						if (content[0] && (mode = content[0].match(/^[#^/]/))) {
+						var mode = false,
+							result = [];
+						if (content[0] && (mode = content[0].match(/^([#^/]|else$)/))) {
 							mode = mode[0];
+							switch (mode) {
+								case '#':
+								case '^':
+									result.push(cmd.insert + 'can.view.txt(0,"",0,this,function(){ return ');
+									break;
+								// Close section
+								case '/':
+									return { raw: '}}])}));' };
+									break;
+							}
 							content = content.substring(1);
 						}
 						var args = content.replace(/^\s*/,'').replace(/\s*$/,'').split(/\s/),
-							result = ['can.Mustache.txt(' + (mode ? '"'+mode+'"' : 'null') + ','],
 							i = 0,
 							arg, split;
+						result.push('can.Mustache.txt(' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
 						// Append helper requests as a name string
 						if (args.length > 1) {
@@ -156,8 +166,25 @@ function( can ){
 							result.push(' : "")');
 						}
 						
-						result.push(')');
-						return result.join('');
+						// Handle sections
+						mode && result.push(',[{');
+						switch (mode) {
+							// Truthy section
+							case '#':
+								result.push('},{fn:function(){');
+								break;
+							// Falsey section
+							case '^':
+								result.push('},{inverse:function(){');
+								break;
+							// Not a section
+							default:
+								result.push(')');
+								break;
+						}
+						
+						result = result.join('');
+						return mode ? { raw: result } : result;
 					}
 				}
 			]
@@ -204,11 +231,9 @@ function( can ){
 	 */
 	Mustache.txt = function(mode, name) {
 		var args = Array.prototype.slice.call(arguments, 2),
+			options = mode && can.extend.apply(can, [{}].concat(args.pop())),
 			validArgs = args.length > 0 ? args : [name],
-			valid = {
-				'#': true,
-				'^': false
-			}[mode || ''],
+			valid = true,
 			i, j, helper;
 		
 		// Validate based on the mode if necessary
@@ -243,7 +268,18 @@ function( can ){
 			}
 			// Otherwise interpolate like normal
 			else {
-				return name || '';
+				// Handle truthyness
+				switch (mode) {
+					case '#':
+						return (options.fn && options.fn()) || '';
+						break;
+					case '^':
+						return (options.inverse && options.inverse()) || '';
+						break;
+					default:
+						return name || '';
+						break;
+				}
 			}
 		}
 		else {

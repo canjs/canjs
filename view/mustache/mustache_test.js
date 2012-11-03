@@ -67,8 +67,19 @@ test("Handlebars custom helper", function() {
 
 test("Mustache truthy", function() {
 	var t = {
-		template: "{{#name}}do something{{/name}}",
-		expected: "do something",
+		template: "{{#name}}Do something, {{name}}!{{/name}}",
+		expected: "Do something, Andy!",
+		data: { name: 'Andy' }
+	};
+	
+	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+});
+
+test("Mustache falsey", function() {
+	var t = {
+		template: "{{^cannot}}Don't do it, {{name}}!{{/cannot}}",
+		expected: "Don't do it, Andy!",
 		data: { name: 'Andy' }
 	};
 	
