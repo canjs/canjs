@@ -116,7 +116,7 @@ function( can ){
 							switch (mode) {
 								case '#':
 								case '^':
-									result.push(cmd.insert + 'can.view.txt(0,"",0,this,function(___c0nt3xt){ return ');
+									result.push(cmd.insert + 'can.view.txt(0,"",0,this,function(){ return ');
 									break;
 								// Close section
 								case '/':
@@ -128,7 +128,7 @@ function( can ){
 						var args = content.replace(/^\s*/,'').replace(/\s*$/,'').split(/\s/),
 							i = 0,
 							arg, split;
-						result.push('can.Mustache.txt((typeof ___c0nt3xt == "undefined" ? [] : ___c0nt3xt).slice(0).concat([this]),' + (mode ? '"'+mode+'"' : 'null') + ',');
+						result.push('can.Mustache.txt(can.extend({}, typeof ___c0nt3xt == "undefined" ? {} : ___c0nt3xt, this),' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
 						// Append helper requests as a name string
 						if (args.length > 1) {
@@ -149,32 +149,51 @@ function( can ){
 								result.push('this');
 							}
 							else {
+								/**
+								 * Deeply Nested Contexts
+								 *	{{#bool}}B {{#bool}}C{{/bool}} D{{/bool}}
+								 *	All elements on the context stack should be accessible.
+								 */
+								var objs = ['this','___c0nt3xt'],
+									j;
 								split = arg.split('.');
-							
-								/**
-								 * Basic Context Miss Interpolation
-								 *  {{cannot}}
-								 * 	Failed context lookups should default to empty strings.
-								 */
-								result.push('(typeof this.' + split[0] + ' != "undefined" ? ');
-
-								/**
-								 * Dotted Names - Broken Chains
-								 *	{{a.b.c}}
-								 * 	Any falsey value prior to the last part of the name should yield ''.
-								 */
-								if (split.length > 1) {
-									result.push('(');
-									for (var i = 1; i < split.length; i++) {
-										i > 1 && result.push(' && ');
-										result.push(split.slice(0, i+1).join('.'));
+								
+								for (j = 0; j < objs.length; j++) {
+									if (j > 0) {
+										result.push(': (typeof ' + objs[j] + ' != "undefined" && ');
 									}
-									result.push(') || ""');
+									else {
+										result.push('(');
+									}
+															
+									/**
+									 * Basic Context Miss Interpolation
+									 *  {{cannot}}
+									 * 	Failed context lookups should default to empty strings.
+									 */
+									result.push('typeof ' + objs[j] + '.' + split[0] + ' != "undefined" ? ');
+
+									/**
+									 * Dotted Names - Broken Chains
+									 *	{{a.b.c}}
+									 * 	Any falsey value prior to the last part of the name should yield ''.
+									 */
+									if (split.length > 1) {
+										result.push('(');
+										for (var i = 1; i < split.length; i++) {
+											i > 1 && result.push(' && ');
+											result.push(objs[j] + '.' + split.slice(0, i+1).join('.'));
+										}
+										result.push(') || ""');
+									}
+									else {
+										result.push(objs[j] + '.' + split[0]);
+									}
+									
+									if (j == objs.length - 1) {
+										result.push(' : ""))');
+									}
 								}
-								else {
-									result.push('this.' + split[0]);
-								}
-								result.push(' : "")');
 							}
 						}
 						
@@ -239,15 +258,6 @@ function( can ){
 	};
 	
 	/**
-	 * Lookup the context tree
-	 */
-	Mustache.context = function(stack, name) {
-		for (var i = stack.length - 1; i >= 0; i--) {
-			
-		}
-	};
-	
-	/**
 	 * @param {String} [mode]	The mode to evaluate the section with: # for truthy, ^ for falsey
 	 */
 	Mustache.txt = function(context, mode, name) {
@@ -300,7 +310,6 @@ function( can ){
 			}
 			// Otherwise interpolate like normal
 			else {
-						console.log(context, name);
 				// Handle truthyness
 				switch (mode) {
 					case '#':
@@ -311,7 +320,6 @@ function( can ){
 							}
 							return result.join('');
 						}
-
 						// Normal case.
 						else {
 							return options.fn.call(name || {}, context) || '';
