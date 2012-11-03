@@ -84,8 +84,13 @@ function( can ){
 					name: /^.*$/,
 					fn: function(content, options) {
 						// Parse content
+						var mode = false;
+						if (content[0] && (mode = content[0].match(/^[#^/]/))) {
+							mode = mode[0];
+							content = content.substring(1);
+						}
 						var args = content.replace(/^\s*/,'').replace(/\s*$/,'').split(/\s/),
-							result = ['can.Mustache.txt('],
+							result = ['can.Mustache.txt(' + (mode ? '"'+mode+'"' : 'null') + ','],
 							i = 0,
 							arg, split;
 						
@@ -144,22 +149,56 @@ function( can ){
 		this._helpers.push({ name: name, fn: fn });
 	};
 	
-	Mustache.txt = function(name) {
-		var args = Array.prototype.slice.call(arguments, 1),
-			i, helper;
+	/**
+	 * @param {String} [mode]	The mode to evaluate the section with: # for truthy, ^ for falsey
+	 */
+	Mustache.txt = function(mode, name) {
+		var args = Array.prototype.slice.call(arguments, 2),
+			validArgs = args.length > 0 ? args : [name],
+			valid = {
+				'#': true,
+				'^': false
+			}[mode || ''],
+			i, j, helper;
 		
-		// If there is more than one argument, it's a helper
-		if (args.length > 0) {
-			for (i = 0; helper = this._helpers[i]; i++) {
-				// Find the correct helper
-				if (helper.name == name) {
-					return helper.fn.apply(helper, args) || '';
-				}
+		// Validate based on the mode if necessary
+		if (mode) {
+			for (j = 0; j < validArgs.length; j++) {
+				valid = mode == '#' ? valid && !!validArgs[j]
+					: mode == '^' ? valid && !validArgs[j]
+					: valid;
 			}
 		}
 		
-		// Interpolate like normal by default
-		return name || '';
+		if (!mode || (mode && valid)) {
+			// If there is more than one argument, it's a helper
+			if (args.length > 0) {
+				for (i = 0; helper = this._helpers[i]; i++) {
+					// Find the correct helper
+					if (helper.name == name) {
+						args.push({
+							fn: function(context) {
+								// TODO
+								// Should render the code *within* the section
+							},
+							inverse: function() {
+								// TODO
+								// Should render the code *within* an else section
+							}
+						});
+						return helper.fn.apply(helper, args) || '';
+					}
+				}
+				return '';
+			}
+			// Otherwise interpolate like normal
+			else {
+				return name || '';
+			}
+		}
+		else {
+			return '';
+		}
 	};
 
 	Mustache._helpers = [

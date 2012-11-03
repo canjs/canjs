@@ -57,6 +57,17 @@ test("Handlebars custom helper", function() {
 	same(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
+test("Mustache truthy", function() {
+	var t = {
+		template: "{{#name}}do something{{/name}}",
+		expected: "do something",
+		data: { name: 'Andy' }
+	};
+	
+	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+});
+
 return;
 var getAttr = function(el, attrName){
 		return attrName === "class"?
