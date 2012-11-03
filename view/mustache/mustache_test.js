@@ -26,9 +26,9 @@ module("can/view/mustache, rendering",{
 })
 
 // Add mustache specs to the test
-can.each([/*'comments', 'delimiters', */'interpolation'/*, 'inverted', 'partials', 'sections'*/], function(spec) {
+can.each([/*'comments', 'delimiters', 'interpolation', 'inverted', */'partials'/*, 'sections'*/], function(spec) {
 	can.ajax({
-		url: '../view/mustache/spec/specs/' + spec + '.json',
+		url: '../mustache/spec/specs/' + spec + '.json',
 		dataType: 'json',
 		async: false
 	}).done(function(data) {
@@ -37,6 +37,14 @@ can.each([/*'comments', 'delimiters', */'interpolation'/*, 'inverted', 'partials
 				// can uses &#34; to escape double quotes, mustache expects &quot;.
 				// can uses \n for new lines, mustache expects \r\n.
 				var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+
+				// register the partials in the spec
+				if(t.partials){
+					for(var name in t.partials) {
+						Mustache.registerPartial(name, t.partials[name])
+					}
+				}
+
 				same(new can.Mustache({ text: t.template }).render(t.data), expected);
 			});
 		});
