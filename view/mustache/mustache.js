@@ -116,7 +116,7 @@ function( can ){
 							switch (mode) {
 								case '#':
 								case '^':
-									result.push(cmd.insert + 'can.view.txt(0,"",0,this,function(){ return ');
+									result.push(cmd.insert + 'can.view.txt(0,"",0,this,function(___c0nt3xt){ return ');
 									break;
 								// Close section
 								case '/':
@@ -128,7 +128,7 @@ function( can ){
 						var args = content.replace(/^\s*/,'').replace(/\s*$/,'').split(/\s/),
 							i = 0,
 							arg, split;
-						result.push('can.Mustache.txt(' + (mode ? '"'+mode+'"' : 'null') + ',');
+						result.push('can.Mustache.txt((typeof ___c0nt3xt == "undefined" ? [] : ___c0nt3xt).slice(0).concat([this]),' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
 						// Append helper requests as a name string
 						if (args.length > 1) {
@@ -156,7 +156,7 @@ function( can ){
 								 *  {{cannot}}
 								 * 	Failed context lookups should default to empty strings.
 								 */
-								result.push('(typeof ' + split[0] + ' != "undefined" ? ');
+								result.push('(typeof this.' + split[0] + ' != "undefined" ? ');
 
 								/**
 								 * Dotted Names - Broken Chains
@@ -172,7 +172,7 @@ function( can ){
 									result.push(') || ""');
 								}
 								else {
-									result.push(split[0]);
+									result.push('this.' + split[0]);
 								}
 								result.push(' : "")');
 							}
@@ -183,15 +183,15 @@ function( can ){
 						switch (mode) {
 							// Truthy section
 							case '#':
-								result.push('},{fn:function(){');
+								result.push('},{fn:function(___c0nt3xt){');
 								break;
 							// Falsey section
 							case '^':
-								result.push('},{inverse:function(){');
+								result.push('},{inverse:function(___c0nt3xt){');
 								break;
 							// Not a section
 							default:
-								result.push(')');
+								result.push(');');
 								break;
 						}
 						
@@ -239,10 +239,19 @@ function( can ){
 	};
 	
 	/**
+	 * Lookup the context tree
+	 */
+	Mustache.context = function(stack, name) {
+		for (var i = stack.length - 1; i >= 0; i--) {
+			
+		}
+	};
+	
+	/**
 	 * @param {String} [mode]	The mode to evaluate the section with: # for truthy, ^ for falsey
 	 */
-	Mustache.txt = function(mode, name) {
-		var args = Array.prototype.slice.call(arguments, 2),
+	Mustache.txt = function(context, mode, name) {
+		var args = Array.prototype.slice.call(arguments, 3),
 			options = mode && can.extend.apply(can, [{
 					fn: function() {},
 					inverse: function() {}
@@ -291,27 +300,28 @@ function( can ){
 			}
 			// Otherwise interpolate like normal
 			else {
+						console.log(context, name);
 				// Handle truthyness
 				switch (mode) {
 					case '#':
 						// Iterate over arrays
 						if (can.isArray(name)) {
 							for (i = 0; i < name.length; i++) {
-								result.push(options.fn.call(name[i] || {}) || '');
+								result.push(options.fn.call(name[i] || {}, context) || '');
 							}
 							return result.join('');
 						}
 
 						// Normal case.
 						else {
-							return options.fn.call(name || {}) || '';
+							return options.fn.call(name || {}, context) || '';
 						}
 						break;
 					case '^':
-						return options.inverse.call(name || {}) || '';
+						return options.inverse.call(name || {}, context) || '';
 						break;
 					default:
-						return name || '';
+						return '' + (name || '');
 						break;
 				}
 			}
