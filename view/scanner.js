@@ -203,7 +203,7 @@ Scanner.prototype = {
 						content += token;
 					}
 					// if it's a tag like <input/>
-					if(lastToken.substr(-1) == "/"){
+					if(lastToken && lastToken.substr(-1) == "/"){
 						// remove the current tag in the stack
 						tagNames.pop();
 						// set the current tag to the previous parent
@@ -294,44 +294,25 @@ Scanner.prototype = {
 							});
 						} 
 
+						var escaped = startTag === tmap.escapeLeft ? 1 : 0;
+
 						// Go through and apply helpers
 						var matched = false;
 						for(var ii = 0; ii < this.helpers.length;ii++){
-
 							// Match the helper based on helper
 							// regex name value
 							var helper = this.helpers[ii];
 							if(helper.name.test(content)){
-								/*
-								options = {
-									fn: function(cnt) { 
-										// What do you want here?
-										// I'd say this prob needs to 
-										// call back into the scanner
-										// with the new string ?
-										// can.view.text() 
-										return cnt;
-									}
-								};
-
-								// parse and interpolate each argument with Mustache.interpolate
-								// el -> would need a special interpolation case
-								matched = true;
-								buff.push(helper.fn(content, options));
-								*/
+								console.log(content)
 								content = helper.fn(content);
+								escaped = 0;
+								break;
 							}
-						}
-
-						// if we found a match, break 
-						// and don't do the below
-						if(matched){
-							break;
 						}
 
 						// If we have `<%== a(function(){ %>` then we want
 						// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-						buff.push(insert_cmd, "can.view.txt(" + (startTag === tmap.escapeLeft ? 1 : 0) +",'"+tagName+"'," + status() +",this,function(){ return ", content, 
+						buff.push(insert_cmd, "can.view.txt(" + escaped + ",'"+tagName+"'," + status() +",this,function(){ return ", content, 
 							// If we have a block.
 							bracketCount ? 
 							// Start with startTxt `"var _v1ew = [];"`.

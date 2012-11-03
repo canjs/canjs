@@ -96,9 +96,9 @@ function( can ){
 				 * 			<strong>{{name}}</strong>
 				 */
 				{
-					name: /^>[\s|\w]\w*$/,
+					name: /^>[\s|\w]\w*/,
 					fn:function(content, options){
-						return "can.view.render('" + content.replace(/^>\s?/, '') + "', _CONTEXT)";
+						return "can.view.render('" + content.replace(/^>\s?/, '').trim() + "', _CONTEXT)";
 					}
 				},
 
