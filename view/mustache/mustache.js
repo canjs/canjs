@@ -99,6 +99,7 @@ function( can ){
 					name: /^>[\s|\w]\w*/,
 					fn:function(content, cmd){
 						return "can.view.render('" + content.replace(/^>\s?/, '').trim() + "', _CONTEXT)";
+					}
 				},
 
 				/**
