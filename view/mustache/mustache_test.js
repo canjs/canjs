@@ -26,7 +26,7 @@ module("can/view/mustache, rendering",{
 })
 
 // Add mustache specs to the test
-can.each([/*'comments', 'delimiters', 'interpolation', 'inverted', */'partials'/*, 'sections'*/], function(spec) {
+can.each([/*'comments', 'delimiters', 'interpolation', 'inverted', 'partials', 'sections'*/], function(spec) {
 	can.ajax({
 		url: '../mustache/spec/specs/' + spec + '.json',
 		dataType: 'json',
@@ -76,7 +76,7 @@ test("Mustache truthy", function() {
 	same(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
-return;
+
 var getAttr = function(el, attrName){
 		return attrName === "class"?
 			el.className:
@@ -204,11 +204,13 @@ test("unescapedContent", function(){
 	div.innerHTML = compiled;
 
 	equals(div.getElementsByTagName('span')[0].firstChild.nodeType, 1 );
-	equals(div.getElementsByTagName('div')[0].firstChild.nodeValue.toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
-	equals(div.getElementsByTagName('span')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
+	equals(div.getElementsByTagName('div')[0].innerHTML, "<strong>foo</strong><strong>bar</strong>" );
+	equals(div.getElementsByTagName('span')[0].innerHTML, "<strong>foo</strong><strong>bar</strong>" );
 	equals(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"", "escapped no matter what" );
 });
 
+/*
+not really applicable...but could update to work oince complete
 test("returning blocks", function(){
 	var somethingHelper = function(cb){
 		return cb([1,2,3,4])
@@ -222,7 +224,7 @@ test("returning blocks", function(){
 	// make sure expected values are in res
 	ok(/\s4\s/.test(res), "first block called" );
 	equals(res.match(/ItemsLength4/g).length, 4, "innerBlock and each")
-});
+}); */
 
 test("easy hookup", function(){
 	var div = document.createElement('div');
@@ -269,29 +271,10 @@ test("helpers", function() {
 	equals(can.$('#hookup')[0].innerHTML, "Simple");
 });
 
-test('list helper', function(){
-	
-	var text = "<% list(todos, function(todo){ %><div><%= todo.name %></div><% }) %>";
-	var	Todos = new can.Observe.List([
-			{id: 1, name: 'Dishes'}
-		]),
-		compiled = new can.Mustache({text: text}).render({todos: Todos}),
-		div = document.createElement('div');
-
-		div.appendChild(can.view.frag(compiled))
-		equals(div.getElementsByTagName('div').length, 1, '1 item in list')
-		
-		Todos.push({id: 2, name: 'Laundry'})
-		equals(div.getElementsByTagName('div').length, 2, '2 items in list')
-		
-		Todos.splice(0, 2);
-		equals(div.getElementsByTagName('div').length, 0, '0 items in list')
-
-});
 
 test("attribute single unescaped, html single unescaped", function(){
 
-	var text = "<div id='me' class='{{ task.attr('completed') ? 'complete' : ''}}'>{{ task.attr('name') }}</div>";
+	var text = "<div id='me' class='{{ task.attr('completed') }}'>{{ task.attr('name') }}</div>";
 	var task = new can.Observe({
 		name : 'dishes'
 	})
@@ -313,7 +296,7 @@ test("attribute single unescaped, html single unescaped", function(){
 	
 	task.attr('completed', true);
 	
-	equals(div.getElementsByTagName('div')[0].className,"complete", "class changed to complete")
+	equals(div.getElementsByTagName('div')[0].className, "true", "class changed to complete")
 });
 
 
@@ -354,6 +337,8 @@ test("event binding / triggering on options", function(){
 	},100)
 })
 
+/*
+ should update with #each
 test("select live binding", function() {
 	var text = "<select><% todos.each(function(todo){ %><option><%= todo.name %></option><% }) %></select>";
 		Todos = new can.Observe.List([
@@ -370,15 +355,15 @@ test("select live binding", function() {
 
 		Todos.splice(0, 2);
 		equals(div.getElementsByTagName('option').length, 0, '0 items in list')
-});
+});  
 
 test("block live binding", function(){
 	
-	var text = "<div><% if( obs.attr('sex') == 'male' ){ %>"+
+	var text = "<div>{{ # obs.attr('sex')  }}"+
 			"<span>Mr.</span>"+
-		"<% } else { %>"+
+		"{{ else  }}"+
 		  "<label>Ms.</label>"+
-		"<% } %>"+
+		"{{ /sex }}"+
 		"</div>"
 	
 	
@@ -428,10 +413,11 @@ test("hookups in tables", function(){
 	equals(div.getElementsByTagName('tbody')[0].innerHTML.replace(/(\r|\n)+/g, "").toUpperCase(), 
 		"<tr><td>Ms.</td></tr>".toUpperCase(),"updated label")
 })
+*/
 
 test('multiple hookups in a single attribute', function() {
-	var text =	'<div class=\'<%= obs.attr("foo") %>' +
-							'<%= obs.attr("bar") %><%= obs.attr("baz") %>\'></div>',
+	var text =	'<div class=\'{{ obs.attr("foo") }}' +
+							'{{ obs.attr("bar") }}{{ obs.attr("baz") }}\'></div>',
 
 	obs = new can.Observe({
 		foo: 'a',
@@ -460,7 +446,7 @@ test('multiple hookups in a single attribute', function() {
 
 test('adding and removing multiple html content within a single element', function(){
 	
-	var text =	'<div><%== obs.attr("a") %><%== obs.attr("b") %><%== obs.attr("c") %></div>',
+	var text =	'<div>{{ obs.attr("a") }}{{ obs.attr("b") }}{{ obs.attr("c") }}</div>',
 
 	obs = new can.Observe({
 		a: 'a',
@@ -484,12 +470,12 @@ test('adding and removing multiple html content within a single element', functi
 	
 	equals(div.innerHTML.toUpperCase(), '<div>c</div>'.toUpperCase(), 'updated values');
 });
-
+/*
 test('live binding and removeAttr', function(){
 
-	var text = '<% if(obs.attr("show")) { %>' + 
-			'<p <%== obs.attr("attributes") %> class="<%= obs.attr("className")%>"><span><%= obs.attr("message") %></span></p>' + 
-		'<% } %>',
+	var text = '{{ obs.attr("show") }}' + 
+			'<p {{ obs.attr("attributes") }} class="{{ obs.attr("className") }}"><span>{{ obs.attr("message") }}</span></p>' + 
+		'{{ / }}',
 
 		obs = new can.Observe({
 			show: true,
@@ -549,11 +535,11 @@ test('live binding and removeAttr', function(){
 	equals(getAttr(p, "class"), "newClass", 'value in block statement updated class');
 	equals(span.innerHTML, 'Warp drive, Mr. Sulu', 'value in block statement updated innerHTML');
 
-});
+});*/
 
 test('hookup within a tag', function () {
-	var text =	'<div <%== obs.attr("foo") %> '
-		+ '<%== obs.attr("baz") %>>lorem ipsum</div>',
+	var text =	'<div {{ obs.attr("foo") }} '
+		+ '{{ obs.attr("baz") }}>lorem ipsum</div>',
 
 	obs = new can.Observe({
 		foo: 'class="a"',
@@ -832,7 +818,7 @@ test("attribute value bindings change", function(){
 })
 
 test("in tag toggling", function(){
-		var text = "<div <%== obs.attr('val') %>></div>"
+		var text = "<div {{ obs.attr('val') }}></div>"
 	
 	
 	var obs = new can.Observe({
@@ -874,39 +860,6 @@ test("parent is right with bock", function(){
 	
 	ok(ul, "we have a ul");
 	ok(li, "we have a li")
-	
-});
-
-test("property name only attributes", function(){
-	
-	var text = "<input type='checkbox' <%== obs.attr('val') ? 'checked' : '' %>/>"
-	
-	
-	var obs = new can.Observe({
-		val : true
-	})
-	
-	var compiled = new can.Mustache({text: text}).render({obs: obs});
-	
-	var div = document.getElementById('qunit-test-area');
-
-	div.appendChild(can.view.frag(compiled));
-	
-	var input = div.getElementsByTagName('input')[0];
-	stop()
-	Syn.click({},input, function(){
-		obs.attr('val',false)
-	
-		ok(!input.checked, "not checked")
-		
-		
-		obs.attr('val',true);
-		
-		ok(input.checked, "checked")
-		div.removeChild(input)
-		start();
-	})
-	
 	
 });
 
