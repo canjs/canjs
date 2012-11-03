@@ -97,6 +97,11 @@ function() {
 		return wrapped._nodes[index];
 	}
 	can.buildFragment = function( html, node ) {
+		if(html && can.isFunction(html.replace)) {
+			// Fix "XHTML"-style tags in all browsers
+			html = html.replace(/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi, "<$1></$2>");
+		}
+
 		var owner = node && node.ownerDocument,
 			frag = Y.Node.create(html, owner);
 		frag = (frag && frag.getDOMNode()) || document.createDocumentFragment();

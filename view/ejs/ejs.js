@@ -11,7 +11,7 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute',function( 
 		extend = can.extend,
 		// Regular expressions for caching.
 		quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
-		attrReg = /([^\s]+)=$/,
+		attrReg = /([^\s]+)[\s]*=[\s]*$/,
 		newLine = /(\r|\n)+/g,
 		attributeReplace = /__!!__/g,		
 		tagMap = {
@@ -471,7 +471,9 @@ steal('can/util','can/view', 'can/util/string', 'can/observe/compute',function( 
 					// Get the attribute value.
 					var attr = getAttr(el, attributeName, contentProp),
 						// Split the attribute value by the template.
-						parts = attr.split("__!!__"),
+						// Only split out the first __!!__ so if we have multiple hookups in the same attribute, 
+						// they will be put in the right spot on first render
+						parts = attr.split(/__!!__(.+)?/, 2),
 						hook;
 
 					

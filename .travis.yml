@@ -7,3 +7,4 @@ script:
   - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_jquery.html
   - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_mootools.html
   - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_yui.html
+  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/plugin_test.html

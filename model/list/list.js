@@ -516,7 +516,8 @@ steal('can/util', 'can/model/elements', function(can) {
     _updateAttrs :function(items, remove){
       var len = items.length,
           newVal,
-          curVal;
+          curVal,
+          itemsNotInList = [];
 
       var id = this.constructor.id;
       function getId(obj) {
@@ -532,9 +533,14 @@ steal('can/util', 'can/model/elements', function(can) {
           if (curVal){
             curVal.attr(newVal, remove)
           } else {
-            this.push(newVal)
+            itemsNotInList.push(newVal);
           }
         }
+      }
+
+      if (itemsNotInList.length > 0){
+        //splice everything onto end of list so as not to trigger change events for each push
+        this.splice.apply(this, [this.length, 0].concat(itemsNotInList));
       }
 
       if(remove){
