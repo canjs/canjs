@@ -160,9 +160,18 @@ function( can ){
 						return result.join('');
 					}
 				}
-			].concat(can.view.Scanner.prototype.helpers)
+			]
 		})
 	});
+
+	/**
+	 * Addin default helpers first.  We could prob do this
+	 * differently if we didn't 'break' on every match.
+	 */
+	var helpers = can.view.Scanner.prototype.helpers;
+	for (var i = 0; i < helpers.length; i++) {
+		Mustache.prototype.scanner.helpers.unshift(helpers[i]);
+	};
 	
 	Mustache.Helpers = function( data, extras ) {
 		this._data = data;

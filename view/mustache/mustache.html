@@ -4,9 +4,9 @@
 	<title>can.view.mustache demo</title>
 </head>
 <body>
-	<p> My fav color is <span {{ (el) -> el.css('color', 'blue') }}>blue</span></p>
-
+	
 <script id="template" type="text/mustache">
+<p> My fav color is <span {{ (el) -> el.css('color', 'blue') }}>blue</span></p>
 	<p>My fav teacher is: <span>{{ this.attr('name') }}</span></p>
 	<p>My fav teacher is: <span>{{ this.name }}</span></p>
 	<p>My fav book is: <span>{{{ this.attr('book') }}}</span></p>

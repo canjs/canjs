@@ -85,9 +85,10 @@ Scanner.prototype = {
 		{
 			name:/\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 			fn: function(content){
-				var parts = content.match(quickFunc);
-				content = "function(__){var " + parts[1] + "=can.$(__);" + parts[2] + "}";
-				return content;
+				var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
+					parts = content.match(quickFunc);
+
+				return "function(__){var " + parts[1] + "=can.$(__);" + parts[2] + "}";
 			}
 		}
 	],
@@ -303,7 +304,6 @@ Scanner.prototype = {
 							// regex name value
 							var helper = this.helpers[ii];
 							if(helper.name.test(content)){
-								console.log(content)
 								content = helper.fn(content);
 								escaped = 0;
 								break;
