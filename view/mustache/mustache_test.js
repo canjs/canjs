@@ -581,7 +581,7 @@ test('hookup within a tag', function () {
 });
 
 test('single escaped tag, removeAttr', function () {
-	var text =	'<div <%= obs.attr("foo") %>>lorem ipsum</div>',
+	var text =	'<div {{ obs.attr("foo") }}>lorem ipsum</div>',
 
 	obs = new can.Observe({
 		foo: 'data-bar="john doe\'s bar"'
@@ -620,8 +620,8 @@ test('html comments', function(){
 
 test("hookup and live binding", function(){
 	
-	var text = "<div class='<%= task.attr('completed') ? 'complete' : '' %>' <%= (el)-> can.data(can.$(el),'task',task) %>>" +
-		"<%== task.attr('name') %>" +
+	var text = "<div class='{{ task.attr('completed') }}' {{ (el)-> can.data(can.$(el),'task',task) }}>" +
+		"{{ task.attr('name') }}" +
 		"</div>",
 		task = new can.Observe({
 			completed: false,
@@ -633,7 +633,7 @@ test("hookup and live binding", function(){
 	
 	div.appendChild(can.view.frag(compiled))
 	var child = div.getElementsByTagName('div')[0];
-	ok( child.className.indexOf("complete") == -1, "is incomplete" )
+	ok( child.className.indexOf("false") == -1, "is incomplete" )
 	ok( !!can.data(can.$(child), 'task'), "has data" )
 	equals(child.innerHTML, "My Name", "has name")
 	
@@ -642,7 +642,7 @@ test("hookup and live binding", function(){
 		name: 'New Name'
 	});
 	
-	ok( child.className.indexOf("complete") != -1, "is complete" )
+	ok( child.className.indexOf("true") != -1, "is complete" )
 	equals(child.innerHTML, "New Name", "has new name")
 	
 })
@@ -689,7 +689,7 @@ test("unescape bindings change", function(){
 		return num;
 	};
 	
-	var text =	'<div><%== completed() %></div>',
+	var text =	'<div>{{ completed() }}</div>',
 
 
 	compiled = new can.Mustache({ text: text }).render({ completed: completed });
@@ -733,7 +733,7 @@ test("escape bindings change", function(){
 		return num;
 	};
 	
-	var text =	'<div><%= completed() %></div>',
+	var text =	'<div>{{{ completed() }}}</div>',
 
 
 	compiled = new can.Mustache({ text: text }).render({ completed: completed });
@@ -771,7 +771,7 @@ test("tag bindings change", function(){
 		return "items='"+num+"'";
 	};
 	
-	var text =	'<div <%= completed() %>></div>',
+	var text =	'<div {{{ completed() }}}></div>',
 
 
 	compiled = new can.Mustache({ text: text }).render({ completed: completed });
@@ -808,7 +808,7 @@ test("attribute value bindings change", function(){
 		return num;
 	};
 	
-	var text =	'<div items="<%= completed() %>"></div>',
+	var text =	'<div items="{{{ completed() }}}"></div>',
 
 
 	compiled = new can.Mustache({ text: text }).render({ completed: completed });
@@ -874,9 +874,11 @@ test("parent is right with bock", function(){
 	
 });
 
+/*
+not sure about this w/ mustache
 test("nested properties", function(){
 	
-	var text = "<div><%= obs.attr('name.first')%></div>"
+	var text = "<div>{{ obs.attr('name.first') }}</div>"
 	
 	
 	var obs = new can.Observe({
@@ -898,6 +900,7 @@ test("nested properties", function(){
 	equals(div.innerHTML, "Brian")
 	
 });
+*/
 
 test("tags without chidren or ending with /> do not change the state", function(){
 	var ta = can.$('#qunit-test-area')[0]
@@ -910,7 +913,7 @@ test("tags without chidren or ending with /> do not change the state", function(
 		equal( ta.getElementsByTagName('span').length, 0, "there are no spans");
 		equal( ta.getElementsByTagName('td').length, 2, "there are 2 td");
 	}
-	var text = "<table><tr><td/><%== obs.attr('content') %></tr></div>"
+	var text = "<table><tr><td/>{{ obs.attr('content') }}</tr></div>"
 	var obs = new can.Observe({
 		content: "<td>Justin</td>"
 	})
@@ -950,7 +953,7 @@ test("nested live bindings", function(){
 })*/
 
 test("trailing text", function(){
-	can.view.mustache("count","There are <%= this.attr('length') %> todos")
+	can.view.mustache("count","There are {{ this.attr('length') }} todos")
 	var div = document.createElement('div');
 	div.appendChild( can.view("count", new can.Observe.List([{},{}])) );
 	ok(/There are 2 todos/.test(div.innerHTML), "got all text")
@@ -968,33 +971,8 @@ test("recursive views", function(){
 	
 })
 
-
-test("live binding select", function(){
-	var text = "<select><% items.each(function(ob) { %>" +
-		"<option value='<%= ob.attr('id') %>'><%= ob.attr('title') %></option>" +
-		"<% }); %></select>",
-		items	 = new can.Observe.List([
-			{title: "Make bugs", is_done: true, id: 0},
-			{title: "Find bugs", is_done: false, id: 1},
-			{title: "Fix bugs", is_done: false, id: 2}
-		]),
-		compiled = new can.Mustache({text: text}).render({items: items}),
-		div = document.createElement('div');
-		
-		div.appendChild(can.view.frag(compiled))
-		equal(div.getElementsByTagName('option').length, 3, '3 items in list')
-
-		equal(div.getElementsByTagName('option')[0].value, ""+items[0].id,
-		       'value attr set');
-		equal(div.getElementsByTagName('option')[0].textContent, items[0].title,
-		       'content of option');
-
-		items.push({id: 3, name: 'Go to pub'})
-		equal(div.getElementsByTagName('option').length, 4, '4 items in list')
-});
-
 test("live binding textarea", function(){
-	can.view.mustache("textarea-test","<textarea>Before<%= obs.attr('middle') %>After</textarea>");
+	can.view.mustache("textarea-test","<textarea>Before{{ obs.attr('middle') }}After</textarea>");
 	
 	var obs = new can.Observe({middle: "yes"}),
 		div = document.createElement('div');
@@ -1007,67 +985,6 @@ test("live binding textarea", function(){
 	obs.attr("middle","Middle")
 	equal(textarea.value, "BeforeMiddleAfter")
 	
-})
-
-test("A non-escaping live magic tag within a control structure and no leaks", function(){
-	
-	for(var prop in can.view.nodeMap){
-		delete can.view.nodeMap[prop]
-	}
-	for(var prop in can.view.nodeListMap){
-		delete can.view.nodeListMap[prop]
-	}
-	
-	var text = "<div><% items.each(function(ob) { %>" +
-		"<%== ob.attr('html') %>" +
-		"<% }); %></div>",
-		items	 = new can.Observe.List([
-			{html: "<label>Hello World</label>"}
-		]),
-		compiled = new can.Mustache({text: text}).render({items: items}),
-		div = can.$('#qunit-test-area')[0]
-		div.innerHTML = ""
-	
-	div.appendChild(can.view.frag(compiled))
-	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
-	
-	ok(div.getElementsByTagName('label')[0], "label exists")
-	
-	items[0].attr("html","<p>hi</p>");
-	
-	equals(div.getElementsByTagName('label').length, 0, "label is removed")
-	equals(div.getElementsByTagName('p').length, 1, "label is replaced by p")
-	
-	
-	
-	items.push({
-		html: "<p>hola</p>"
-	});
-	
-	equals(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
-		
-	can.remove( can.$(div.firstChild) )
-		
-	same(can.view.nodeMap, {} );
-	same(can.view.nodeListMap ,{} )
-});
-
-
-test("attribute unquoting", function() {
-	var text = '<input type="radio" ' +
-		'<%== facet.single ? \'name="facet-\' + facet.attr("id") + \'"\' : "" %> ' +
-		'value="<%= facet.single ? "facet-" + facet.attr("id") : "" %>" />',
-	facet = new can.Observe({
-		id: 1,
-		single: true
-	});
-
-	compiled = new can.Mustache({text: text}).render({ facet: facet }),
-	div = document.createElement('div');
-	div.appendChild(can.view.frag(compiled))
-
-	equals(div.children[0].name, "facet-1");
-	equals(div.children[0].value, "facet-1");
 })
 
 });
