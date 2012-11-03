@@ -660,7 +660,7 @@ steal('can/util','can/construct', function(can, Construct) {
 					remove && self.removeAttr(prop);
 					return;
 				}
-				if ( canMakeObserve(curVal) && canMakeObserve(newVal) && curVal.attr ) {
+        if ( canMakeObserve(curVal) && canMakeObserve(newVal) && curVal.attr && !(curVal.id != newVal.id) ) {
 					curVal.attr(newVal, remove)
 				} else if ( curVal != newVal ) {
 					self._set(prop, newVal)
