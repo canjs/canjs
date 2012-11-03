@@ -98,7 +98,7 @@ function( can ){
 				{
 					name: /^>[\s|\w]\w*$/,
 					fn:function(content, options){
-						return "can.view.render('" + content.substring(1, content.length) + "', _CONTEXT)";
+						return "can.view.render('" + content.replace(/^>\s?/, '') + "', _CONTEXT)";
 					}
 				},
 
