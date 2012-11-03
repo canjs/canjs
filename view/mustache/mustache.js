@@ -78,6 +78,31 @@ function( can ){
 
 			helpers: [
 				/**
+				 * Partials
+				 * Partials begin with a greater than sign, like {{> box}}.
+				 *
+				 * Partials are rendered at runtime (as opposed to compile time), 
+				 * so recursive partials are possible. Just avoid infinite loops.
+				 *
+				 * For example, this template and partial:
+				 * 
+				 * 		base.mustache:
+				 * 			<h2>Names</h2>
+				 * 			{{#names}}
+				 * 				{{> user}}
+				 * 			{{/names}}
+				 * 			
+				 * 		user.mustache:
+				 * 			<strong>{{name}}</strong>
+				 */
+				{
+					name: /^>[\s|\w]\w*$/,
+					fn:function(content, options){
+						return "can.view.render('" + content.substring(1, content.length) + "', _CONTEXT)";
+					}
+				},
+
+				/**
 				 * Convert the expression for use with interpolation/helpers.
 				 */
 				{
@@ -110,7 +135,7 @@ function( can ){
 							/**
 							 * Dotted Names - Broken Chains
 							 *	{{a.b.c}}
-			    		 * 	Any falsey value prior to the last part of the name should yield ''.
+			    			 * 	Any falsey value prior to the last part of the name should yield ''.
 							 */
 							if (split.length > 1) {
 								result.push('(');
@@ -142,6 +167,22 @@ function( can ){
 
 	Mustache.registerHelper = function(name, fn){
 		this._helpers.push({ name: name, fn: fn });
+	};
+
+	Mustache.registerPartial = function(id, text) {
+		// Get the renderer function.
+		var d = new can.Deferred(),
+			type = can.view.types['.mustache'],
+			func = type.renderer(id, text);
+		
+		// Cache if we are caching.
+		if ( can.view.cache ) {
+			can.view.cached[id] = d;
+			d.__view_id = id;
+			can.view.cachedRenderers[id] = func;
+		}
+
+		d.resolve(func);
 	};
 	
 	Mustache.txt = function(name) {
