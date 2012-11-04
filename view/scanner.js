@@ -305,7 +305,12 @@ Scanner.prototype = {
 							var helper = this.helpers[ii];
 							if(helper.name.test(content)){
 								content = helper.fn(content, { insert: insert_cmd });
-								escaped = 0;
+
+								// dont escape partials
+								if(helper.name.source == /^>[\s|\w]\w*/.source){
+									escaped = 0;
+								}	
+
 								break;
 							}
 						}
@@ -315,8 +320,7 @@ Scanner.prototype = {
 							if (content.raw) {
 								buff.push(content.raw);
 							}
-						}
-						else {
+						} else {
 							// If we have `<%== a(function(){ %>` then we want
 							// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
 							buff.push(insert_cmd, "can.view.txt(" + escaped + ",'"+tagName+"'," + status() +",this,function(){ return ", content, 
