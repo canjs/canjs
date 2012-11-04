@@ -1,1 +1,7 @@
-<form><% items.each(function(item){%><% if( item.attr('is_done') === false ) { %><div id="<%= item.title %>"></div><% } %><%})%></form>
+<form>
+	{{#items}}
+		{{ !item.attr('is_done') }}
+			<div id="{{ item.title }}"></div>
+		{{/item}}
+	{{/items}}
+</form>
