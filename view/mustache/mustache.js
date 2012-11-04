@@ -111,7 +111,7 @@ function( can ){
 						// Parse content
 						var mode = false,
 							result = [];
-						if (content[0] && (mode = content[0].match(/^([#^/]|else$)/))) {
+						if (content.length && (mode = content.match(/^([#^/]|else$)/))) {
 							mode = mode[0];
 							switch (mode) {
 								case '#':
@@ -125,89 +125,97 @@ function( can ){
 							}
 							content = content.substring(1);
 						}
-						var args = content.replace(/^\s*/,'').replace(/\s*$/,'').split(/\s/),
-							i = 0,
-							arg, split;
-						result.push('can.Mustache.txt(can.extend({}, typeof ___c0nt3xt == "undefined" ? {} : ___c0nt3xt, this),' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
-						// Append helper requests as a name string
-						if (args.length > 1) {
-							i = 1;
-							result.push('"' + args[0] + '"');
-						}
+						if (mode != 'else') {
+							var args = content.replace(/^\s*/,'').replace(/\s*$/,'').split(/\s/),
+								i = 0,
+								arg, split;
+							result.push('can.Mustache.txt(can.extend({}, typeof ___c0nt3xt == "undefined" ? {} : ___c0nt3xt, this),' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
-						// Iterate through the arguments
-						for (; arg = args[i]; i++) {
-							i > 0 && result.push(',');
-														
-							/**
-							 * Implicit Iterator
-							 *  {{#list}}({{.}}){{/list}}
-							 * 	Implicit iterators should directly interpolate strings.
-							 */
-							if (arg == '.') {
-								result.push('this');
+							// Append helper requests as a name string
+							if (args.length > 1) {
+								i = 1;
+								result.push('"' + args[0] + '"');
 							}
-							else {
+						
+							// Iterate through the arguments
+							for (; arg = args[i]; i++) {
+								i > 0 && result.push(',');
+														
 								/**
-								 * Deeply Nested Contexts
-								 *	{{#bool}}B {{#bool}}C{{/bool}} D{{/bool}}
-								 *	All elements on the context stack should be accessible.
+								 * Implicit Iterator
+								 *  {{#list}}({{.}}){{/list}}
+								 * 	Implicit iterators should directly interpolate strings.
 								 */
-								var objs = ['this','___c0nt3xt'],
-									j;
-								split = arg.split('.');
+								if (arg == '.') {
+									result.push('this');
+								}
+								else {
+									/**
+									 * Deeply Nested Contexts
+									 *	{{#bool}}B {{#bool}}C{{/bool}} D{{/bool}}
+									 *	All elements on the context stack should be accessible.
+									 */
+									var objs = ['this','___c0nt3xt'],
+										j;
+									split = arg.split('.');
 								
-								for (j = 0; j < objs.length; j++) {
-									if (j > 0) {
-										result.push(': (typeof ' + objs[j] + ' != "undefined" && ');
-									}
-									else {
-										result.push('(');
-									}
-															
-									/**
-									 * Basic Context Miss Interpolation
-									 *  {{cannot}}
-									 * 	Failed context lookups should default to empty strings.
-									 */
-									result.push('typeof ' + objs[j] + '.' + split[0] + ' != "undefined" ? ');
-
-									/**
-									 * Dotted Names - Broken Chains
-									 *	{{a.b.c}}
-									 * 	Any falsey value prior to the last part of the name should yield ''.
-									 */
-									if (split.length > 1) {
-										result.push('(');
-										for (var i = 1; i < split.length; i++) {
-											i > 1 && result.push(' && ');
-											result.push(objs[j] + '.' + split.slice(0, i+1).join('.'));
+									for (j = 0; j < objs.length; j++) {
+										if (j > 0) {
+											result.push(': (typeof ' + objs[j] + ' != "undefined" && ');
 										}
-										result.push(') || ""');
-									}
-									else {
-										result.push(objs[j] + '.' + split[0]);
-									}
+										else {
+											result.push('(');
+										}
+															
+										/**
+										 * Basic Context Miss Interpolation
+										 *  {{cannot}}
+										 * 	Failed context lookups should default to empty strings.
+										 */
+										result.push('typeof ' + objs[j] + '.' + split[0] + ' != "undefined" ? ');
+
+										/**
+										 * Dotted Names - Broken Chains
+										 *	{{a.b.c}}
+										 * 	Any falsey value prior to the last part of the name should yield ''.
+										 */
+										if (split.length > 1) {
+											result.push('(');
+											for (var i = 1; i < split.length; i++) {
+												i > 1 && result.push(' && ');
+												result.push(objs[j] + '.' + split.slice(0, i+1).join('.'));
+											}
+											result.push(') || ""');
+										}
+										else {
+											result.push(objs[j] + '.' + split[0]);
+										}
 									
-									if (j == objs.length - 1) {
-										result.push(' : ""))');
+										if (j == objs.length - 1) {
+											result.push(' : ""))');
+										}
 									}
 								}
 							}
 						}
 						
 						// Handle sections
-						mode && result.push(',[{');
+						mode && mode != 'else' && result.push(',[{_:{');
 						switch (mode) {
 							// Truthy section
 							case '#':
-								result.push('},{fn:function(___c0nt3xt){');
+								result.push('}},{fn:function(___c0nt3xt){');
+								break;
+							// If/else section
+							case 'else':
+								result.push('}},{inverse:function(___c0nt3xt){');
 								break;
 							// Falsey section
 							case '^':
-								result.push('},{inverse:function(___c0nt3xt){');
+								result.push('}},{inverse:function(___c0nt3xt){');
 								break;
+							
 							// Not a section
 							default:
 								result.push(');');
@@ -287,49 +295,44 @@ function( can ){
 			}
 		}
 		
-		if (!mode || (mode && valid)) {
-			// If there is more than one argument, it's a helper
-			if (args.length > 0) {
-				for (i = 0; helper = this._helpers[i]; i++) {
-					// Find the correct helper
-					if (helper.name == name) {
-						args.push({
-							fn: can.proxy(options.fn, context),
-							inverse: can.proxy(options.inverse, context)
-						});
-						return helper.fn.apply(helper, args) || '';
-					}
-				}
-				return '';
-			}
-			// Otherwise interpolate like normal
-			else {
-				// Handle truthyness
-				switch (mode) {
-					case '#':
-						// Iterate over arrays
-						if (can.isArray(name)) {
-							for (i = 0; i < name.length; i++) {
-								result.push(options.fn.call(name[i] || {}, context) || '');
-							}
-							return result.join('');
-						}
-						// Normal case.
-						else {
-							return options.fn.call(name || {}, context) || '';
-						}
-						break;
-					case '^':
-						return options.inverse.call(name || {}, context) || '';
-						break;
-					default:
-						return '' + (name || '');
-						break;
+		// If there is more than one argument, it's a helper
+		if (args.length > 0) {
+			for (i = 0; helper = this._helpers[i]; i++) {
+				// Find the correct helper
+				if (helper.name == name) {
+					args.push({
+						fn: can.proxy(options.fn, context),
+						inverse: can.proxy(options.inverse, context)
+					});
+					return helper.fn.apply(helper, args) || '';
 				}
 			}
-		}
-		else {
 			return '';
+		}
+		// Otherwise interpolate like normal
+		else if (valid) {
+			// Handle truthyness
+			switch (mode) {
+				case '#':
+					// Iterate over arrays
+					if (can.isArray(name)) {
+						for (i = 0; i < name.length; i++) {
+							result.push(options.fn.call(name[i] || {}, context) || '');
+						}
+						return result.join('');
+					}
+					// Normal case.
+					else {
+						return options.fn.call(name || {}, context) || '';
+					}
+					break;
+				case '^':
+					return options.inverse.call(name || {}, context) || '';
+					break;
+				default:
+					return '' + (name || '');
+					break;
+			}
 		}
 	};
 
