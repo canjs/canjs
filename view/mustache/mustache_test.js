@@ -26,7 +26,7 @@ module("can/view/mustache, rendering",{
 })
 
 // Add mustache specs to the test
-can.each([/*'comments', 'delimiters', 'interpolation', 'inverted', 'partials', 'sections'*/], function(spec) {
+can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials', 'sections'], function(spec) {
 	can.ajax({
 		url: '../mustache/spec/specs/' + spec + '.json',
 		dataType: 'json',
@@ -160,17 +160,17 @@ test("default carrot", function(){
 	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>")
 })
 test("render with double angle", function(){
-	var text = "{{& replace_me }} {{{ replace_me_too }}}"+
-			  "<ul><{{#animals}}" +
+	var text = "{{& replace_me }}{{{ replace_me_too }}}"+
+			  "<ul>{{#animals}}" +
 	               "<li>{{.}}</li>" + 
 		      "{{/animals}}</ul>";
 	var compiled = new can.Mustache({text: text}).render({animals: this.animals}) ;
-	equals(compiled, "{{ replace_me }} {{ replace_me_too }}<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "works")
+	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "works")
 });
 
 test("comments", function(){
 	var text = "{{! replace_me }}"+
-			  "<ul><{{#animals}}" +
+			  "<ul>{{#animals}}" +
 	               "<li>{{.}}</li>" + 
 		      "{{/animals}}</ul>";
 	var compiled = new can.Mustache({text: text}).render({animals: this.animals}) ;
@@ -207,7 +207,7 @@ test("escapedContent", function(){
 })
 
 test("unescapedContent", function(){
-	var text = "<span>{{ tags }}</span><div>{{ tags }}</div><input value='{{ quotes }}'/>";
+	var text = "<span>{{{ tags }}}</span><div>{{{ tags }}}</div><input value='{{ quotes }}'/>";
 	var compiled = new can.Mustache({text: text}).render({tags: "<strong>foo</strong><strong>bar</strong>",
 							quotes : "I use 'quote' fingers \"a lot\""}) ;
 	
