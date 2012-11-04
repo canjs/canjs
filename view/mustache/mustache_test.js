@@ -51,6 +51,25 @@ can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials',
 	});
 });
 
+test("Mustache bind", function() {
+	var template = "<span id='binder1'>{{ #bind name }}</span><span id='binder2'>{{{#bind name}}}</span>";
+
+	var teacher = new can.Observe({
+		name: "<strong>Mrs Peters</strong>",
+	});
+
+	var template = new can.Mustache({ text: template }).render(teacher);
+	can.append( can.$('#qunit-test-area'), can.view.frag(template));
+
+	same(can.$('#binder1')[0].innerHTML, "&lt;strong&gt;Mrs Peters&lt;/strong&gt;");
+	same(can.$('#binder2')[0].innerHTML, "<strong>Mrs Peters</strong>");
+
+	teacher.attr('name', '<i>Mr Scott</i>');
+
+	same(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
+	same(can.$('#binder2')[0].innerHTML, "<i>Mr Scott</i>");
+});
+
 test("Handlebars custom helper", function() {
 	can.Mustache.registerHelper('hello', function(name) {
 		return 'Hello, ' + name + '!';

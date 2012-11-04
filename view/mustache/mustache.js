@@ -103,6 +103,27 @@ function( can ){
 				},
 
 				/**
+				 * Bind
+				 * Binds the attribute if the object is observable for self updating.
+				 *
+				 * For example:
+				 * 
+				 * 		# JS
+				 * 		var bar = new can.Observe({ 
+				 * 			foo: "Moo!",
+				 * 		});
+				 * 		
+				 * 		# Template
+				 * 		{{ #bind foo }}
+				 */
+				{
+					name: /bind/,
+					fn:function(content, cmd){
+						return 'this.attr("' + content.replace(/^\s?#\w*\s?/, '').trim() + '")';
+					}
+				},
+
+				/**
 				 * Convert the expression for use with interpolation/helpers.
 				 */
 				{
