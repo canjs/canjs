@@ -12,13 +12,13 @@ module("can/view/mustache, rendering",{
 			}
 		}
 		
-		this.squareBrackets = "<ul><{{#this.animals}}" +
+		this.squareBrackets = "<ul>{{#this.animals}}" +
 	               "<li>{{.}}</li>" + 
 		      "{{/animals}}</ul>";
-	    this.squareBracketsNoThis = "<ul><{{#animals}}" +
+	    this.squareBracketsNoThis = "<ul>{{#animals}}" +
 	               "<li>{{.}}</li>" + 
 		      "{{/animals}}</ul>";
-	    this.angleBracketsNoThis  = "<ul><{{#animals}}" +
+	    this.angleBracketsNoThis  = "<ul>{{#animals}}" +
 	               "<li>{{.}}</li>" + 
 		      "{{/animals}}</ul>";
 
