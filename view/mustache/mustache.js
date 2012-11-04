@@ -262,10 +262,10 @@ function( can ){
 	 */
 	Mustache.txt = function(context, mode, name) {
 		var args = Array.prototype.slice.call(arguments, 3),
-			options = mode && can.extend.apply(can, [{
+			options = can.extend.apply(can, [{
 					fn: function() {},
 					inverse: function() {}
-				}].concat(args.pop())),
+				}].concat(mode ? args.pop() : [])),
 			validArgs = args.length > 0 ? args : [name],
 			valid = true,
 			result = [],
@@ -294,14 +294,8 @@ function( can ){
 					// Find the correct helper
 					if (helper.name == name) {
 						args.push({
-							fn: function(context) {
-								// TODO
-								// Should render the code *within* the section
-							},
-							inverse: function() {
-								// TODO
-								// Should render the code *within* an else section
-							}
+							fn: can.proxy(options.fn, context),
+							inverse: can.proxy(options.inverse, context)
 						});
 						return helper.fn.apply(helper, args) || '';
 					}
@@ -340,90 +334,55 @@ function( can ){
 	};
 
 	Mustache._helpers = [
+		// if, else, unless, each, with
+		
 		/**
-		 * {{#evalvariable}}
-		 * 
-		 * ## Sections
-		 * Sections render blocks of text one or more times, depending on the value 
-		 * of the key in the current context.
-		 *
-		 * A section begins with a pound and ends with a slash. That is, {{#person}} 
-		 * begins a "person" section while {{/person}} ends it.
-		 *
-		 * The behavior of the section is determined by the value of the key.
-		 *
-		 * ### False Values or Empty Lists
-		 * If the person key exists and has a value of false or an empty list, the HTML 
-		 * between the pound and slash will not be displayed.
-		 *
-		 * ### Non-Empty Lists
-		 * If the person key exists and has a non-false value, the HTML between the pound 
-		 * and slash will be rendered and displayed one or more times.
-		 *
-		 * When the value is a non-empty list, the text in the block will be displayed once for 
-		 * each item in the list. The context of the block will be set to the current item for each 
-		 * iteration. In this way we can loop over collections.
-		 *
-		 * ### Lambdas
-		 * When the value is a callable object, such as a function or lambda, the object will be 
-		 * invoked and passed the block of text. The text passed is the literal block, unrendered. 
-		 * {{tags}} will not have been expanded - the lambda should do that on its own. In this way you 
-		 * can implement filters or caching.
-		 *
-		 * @param {String} content
+		 * {{#if expr}}
+		 *   Do {{something}}
+		 * {{else}}
+		 *   Do {{nothing}}
+		 * {{/if}}
 		 */
-		// {
-		// 	name: /^#\w*$/,
-		// 	fn: function(content){
-		// 		return options.fn('if(' + content.substring(1, content.length) + '){');
-		// 	}
-		// },
 		{
 			name: 'if',
-			fn: function(content){
-				if (content) {
-					return content;
+			fn: function(expr, options){
+				if (!!expr) {
+					return options.fn(this);
+				}
+				else {
+					return options.inverse(this);
 				}
 			}
 		},
 		
-		/**
-		 * {{#person?}}
-		 * 
-		 * ## Non-False Values
-		 * When the value is non-false but not a list, it will be used as the context 
-		 * for a single rendering of the block.
-		 * 
-		 * @param {String} content
-		 */
-		/*nonfalse: function(content){
-			return content;
-		},*/
+		{
+			name: 'unless',
+			fn: function(expr, options){
+				if (!expr) {
+					return options.fn(this);
+				}
+			}
+		},
 		
-		/**
-		 * {{^ evalvariable }}
-		 * 
-		 * ## Inverted Sections
-		 * An inverted section begins with a caret (hat) and ends with a slash. 
-		 * That is {{^person}} begins a "person" inverted section while {{/person}} ends it.
-		 * 
-		 * @param {String} content
-		 */
-		/*inverted: function(content){
-			return content;
-		},*/
+		{
+			name: 'each',
+			fn: function(expr, options){
+				if (!!expr && expr.length) {
+					for (var i = 0; i < expr.length; i++) {
+						return options.fn(expr[i]);
+					}
+				}
+			}
+		},
 		
-		/**
-		 * {{/ evalvariable }}
-		 * Closes sections.
-		 * @param {String} content
-		 */
-		// { 
-		// 	name: /^\/\w*$/,
-		// 	fn: function(content, options){
-		// 		return options.fn('};');
-		// 	}
-		// }
+		{
+			name: 'with',
+			fn: function(expr, options){
+				if (!!expr) {
+					return options.fn.call(expr, this);
+				}
+			}
+		}
 	];
 
 	/**

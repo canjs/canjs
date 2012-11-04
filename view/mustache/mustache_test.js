@@ -87,6 +87,50 @@ test("Mustache falsey", function() {
 	same(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
+test("Handlebars helper: if/else", function() {
+	var t = {
+		template: "{{#if name}}{{name}}{{/if}}{{#if missing}}{{else}} is missing!{{/if}}",
+		expected: "Andy is missing!",
+		data: { name: 'Andy' }
+	};
+	
+	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+});
+
+test("Handlebars helper: unless", function() {
+	var t = {
+		template: "{{#unless missing}}Andy is missing!{{/unless}}",
+		expected: "Andy is missing!",
+		data: { name: 'Andy' }
+	};
+	
+	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+});
+
+test("Handlebars helper: each", function() {
+	var t = {
+		template: "{{#each names}}{{.}} {{/each}}",
+		expected: "Andy Austin Justin",
+		data: { names: ['Andy', 'Austin', 'Justin'] }
+	};
+	
+	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+});
+
+test("Handlebars helper: with", function() {
+	var t = {
+		template: "{{#with person}}{{name}}{{/with}}",
+		expected: "Andy",
+		data: { person: { name: 'Andy' } }
+	};
+	
+	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+});
+
 
 var getAttr = function(el, attrName){
 		return attrName === "class"?
