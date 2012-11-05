@@ -7,9 +7,8 @@
 	
 <script id="template" type="text/mustache">
 <p> My fav color is <span {{ (el) -> el.css('color', 'blue') }}>blue</span></p>
-	<p>My fav teacher is: <span>{{ this.attr('name') }}</span></p>
-	<p>My fav teacher is: <span>{{ this.name }}</span></p>
-	<p>My fav book is: <span>{{{ this.attr('book') }}}</span></p>
+	<p>My fav teacher is: <span>{{ name }}</span></p>
+	<p>My fav book is: <span>{{{ book }}}</span></p>
 	<p>Comments {{! 'ignored' }}</p>
 	<p>If Statements {{#name}} <strong>hi!</strong> {{/name}}</p>
 </script>
@@ -20,16 +19,6 @@
 <script type='text/javascript' src='../../../steal/steal.js'></script>
 <script type='text/javascript'>
 	steal('can/view/mustache', 'can/observe', function() {
-
-		/*Mustache.registerHelper('list', function(context, block) {
-			var ret = "<ul>";
-
-			for(var i=0, j=context.length; i<j; i++) {
-				ret = ret + "<li>" + block(context[i]) + "</li>";
-			}
-
-			return ret + "</ul>";
-		});*/
 
 		var teacher = new can.Observe({
 			name: "<strong>Mrs Peters</strong>",
