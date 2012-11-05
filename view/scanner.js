@@ -156,7 +156,7 @@ Scanner.prototype = {
 		}
 		
 		var content = '',
-			buff = [startTxt],
+			buff = [startTxt + (this.startTxt || '')],
 			// Helper `function` for putting stuff in the view concat.
 			put = function( content, bonus ) {
 				buff.push(put_cmd, '"', clean(content), '"'+(bonus||'')+');');

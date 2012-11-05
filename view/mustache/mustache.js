@@ -8,6 +8,7 @@ function( can ){
 	can.view.ext = ".mustache";
 
 	var extend = can.extend,
+		CONTEXT = '___c0nt3xt',
 		Mustache = function( options ) {
 			// Supports calling Mustache without the constructor
 			// This returns a function that renders the template.
@@ -59,6 +60,11 @@ function( can ){
 		 * Singleton scanner instance for parsing templates.
 		 */
 		scanner: new can.view.Scanner({
+			/**
+			 * Inject additional start text.
+			 */
+			startTxt: 'var ' + CONTEXT + ' = {};',
+			
 			/**
 			 * An ordered token registry for the scanner.
 			 * This needs to be ordered by priority to prevent token parsing errors.
@@ -151,7 +157,7 @@ function( can ){
 							var args = content.replace(/^\s*/,'').replace(/\s*$/,'').split(/\s/),
 								i = 0,
 								arg, split;
-							result.push('can.Mustache.txt(can.extend({}, typeof ___c0nt3xt == "undefined" ? {} : ___c0nt3xt, this),' + (mode ? '"'+mode+'"' : 'null') + ',');
+							result.push('can.Mustache.txt(can.extend({}, ' + CONTEXT + ', this),' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
 							// Append helper requests as a name string
 							if (args.length > 1) {
@@ -162,62 +168,7 @@ function( can ){
 							// Iterate through the arguments
 							for (; arg = args[i]; i++) {
 								i > 0 && result.push(',');
-														
-								/**
-								 * Implicit Iterator
-								 *  {{#list}}({{.}}){{/list}}
-								 * 	Implicit iterators should directly interpolate strings.
-								 */
-								if (arg == '.') {
-									result.push('___c0nt3xt');
-								}
-								else {
-									/**
-									 * Deeply Nested Contexts
-									 *	{{#bool}}B {{#bool}}C{{/bool}} D{{/bool}}
-									 *	All elements on the context stack should be accessible.
-									 */
-									var objs = ['this','___c0nt3xt'],
-										j;
-									split = arg.split('.');
-								
-									for (j = 0; j < objs.length; j++) {
-										if (j > 0) {
-											result.push(': (typeof ' + objs[j] + ' != "undefined" && ');
-										}
-										else {
-											result.push('(');
-										}
-															
-										/**
-										 * Basic Context Miss Interpolation
-										 *  {{cannot}}
-										 * 	Failed context lookups should default to empty strings.
-										 */
-										result.push('typeof ' + objs[j] + '.' + split[0] + ' != "undefined" ? ');
-
-										/**
-										 * Dotted Names - Broken Chains
-										 *	{{a.b.c}}
-										 * 	Any falsey value prior to the last part of the name should yield ''.
-										 */
-										if (split.length > 1) {
-											result.push('(');
-											for (var i = 1; i < split.length; i++) {
-												i > 1 && result.push(' && ');
-												result.push(objs[j] + '.' + split.slice(0, i+1).join('.'));
-											}
-											result.push(') || ""');
-										}
-										else {
-											result.push(objs[j] + '.' + split[0]);
-										}
-									
-										if (j == objs.length - 1) {
-											result.push(' : ""))');
-										}
-									}
-								}
+								result.push('can.Mustache.get("' + arg.replace(/"/g,'\\"') + '",this,' + CONTEXT + ')');
 							}
 						}
 						
@@ -226,15 +177,15 @@ function( can ){
 						switch (mode) {
 							// Truthy section
 							case '#':
-								result.push('}},{fn:function(___c0nt3xt){');
+								result.push('}},{fn:function(' + CONTEXT + '){');
 								break;
 							// If/else section
 							case 'else':
-								result.push('}},{inverse:function(___c0nt3xt){');
+								result.push('}},{inverse:function(' + CONTEXT + '){');
 								break;
 							// Falsey section
 							case '^':
-								result.push('}},{inverse:function(___c0nt3xt){');
+								result.push('}},{inverse:function(' + CONTEXT + '){');
 								break;
 							
 							// Not a section
@@ -355,6 +306,71 @@ function( can ){
 					break;
 			}
 		}
+	};
+	
+	/**
+	 * Resolves a reference for a given object (and then a context if that fails).
+	 *	obj = this
+	 *	context = { a: true }
+	 *	ref = 'a.b.c'
+	 *		=> obj.a.b.c || context.a.b.c || ''
+	 *
+	 * This implements the following Mustache specs:
+	 * 	Deeply Nested Contexts
+	 *	All elements on the context stack should be accessible.
+	 *		{{#bool}}B {{#bool}}C{{/bool}} D{{/bool}}
+	 *		{ bool: true }
+	 *		=> "B C D"
+	 * 	Basic Context Miss Interpolation
+	 * 	Failed context lookups should default to empty strings.
+	 *  	{{cannot}}
+	 *		=> ""
+	 * 	Dotted Names - Broken Chains
+	 * 	Any falsey value prior to the last part of the name should yield ''.
+	 *		{{a.b.c}}
+	 *		{ a: { d: 1 } }
+	 *		=> ""
+	 *
+	 * @param {String} ref      The reference to check for on the obj/context.
+	 * @param {Object} obj  		The object to use for checking for a reference.
+	 * @param {Object} context  The context to use for checking for a reference if it doesn't exist in the object.
+	 */
+	Mustache.get = function(ref, obj, context) {
+		var contexts = [obj, context],
+			names = ref.split('.'),
+			value, i, j;
+		
+		// Handle "this" references for list iteration: {{.}} or {{this}}
+		if (/^\.|this$/.test(ref)) {
+			return obj || context || '';
+		}
+		// Handle object resolution.
+		else {
+			for (i = 0; i < contexts.length; i++) {
+				// Check the context for the reference
+				value = contexts[i];
+				// Make sure the context isn't a failed object before diving into it.
+				if (value !== undefined) {
+					for (j = 0; j < names.length; j++) {
+						// Keep running up the tree while there are matches.
+						if (typeof value[names[j]] != 'undefined') {
+							value = value[names[j]];
+						}
+						else {
+							value = undefined;
+							break;
+						}
+					}
+				}
+			
+				// Found a matched reference
+				if (value !== undefined) {
+					return value;
+				}
+			}
+		}
+		
+		return '';
 	};
 
 	Mustache._helpers = [
