@@ -890,3 +890,16 @@ test("uses attr with isNew", function(){
 	
 	can.Observe.__reading = old;
 });
+
+test("extends defaults by calling base method", function(){
+	
+	var M1 = can.Model({
+		defaults: {foo: "bar"}
+	},{});
+	
+	var M2 = M1({});
+	
+	equal(M2.defaults.foo,"bar")
+	
+	
+})
