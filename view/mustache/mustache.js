@@ -169,7 +169,7 @@ function( can ){
 								 * 	Implicit iterators should directly interpolate strings.
 								 */
 								if (arg == '.') {
-									result.push('this');
+									result.push('___c0nt3xt');
 								}
 								else {
 									/**
@@ -325,7 +325,7 @@ function( can ){
 						fn: can.proxy(options.fn, context),
 						inverse: can.proxy(options.inverse, context)
 					});
-					return helper.fn.apply(helper, args) || '';
+					return helper.fn.apply(context, args) || '';
 				}
 			}
 			return '';
@@ -390,11 +390,13 @@ function( can ){
 		
 		{
 			name: 'each',
-			fn: function(expr, options){
+			fn: function(expr, options) {
 				if (!!expr && expr.length) {
+					var result = [];
 					for (var i = 0; i < expr.length; i++) {
-						return options.fn(expr[i]);
+						result.push(options.fn(expr[i]));
 					}
+					return result.join('');
 				}
 			}
 		},
@@ -403,7 +405,7 @@ function( can ){
 			name: 'with',
 			fn: function(expr, options){
 				if (!!expr) {
-					return options.fn.call(expr, this);
+					return options.fn(expr);
 				}
 			}
 		}
