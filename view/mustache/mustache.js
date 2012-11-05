@@ -347,11 +347,16 @@ function( can ){
 				// Found a matched reference
 				if (value !== undefined) {
 					// Add support for observes
-					if(can.isFunction(lastValue.attr) && lastValue.constructor && lastValue.constructor.canMakeObserve){
+					if (can.isFunction(lastValue.attr) && lastValue.constructor && lastValue.constructor.canMakeObserve) {
 						return lastValue.attr(name);
 					}
-						
-					return value;
+					// Support functions stored in objects
+					else if (can.isFunction(lastValue[name])) {
+						return lastValue[name]();
+					}
+					else {
+						return value;
+					}
 				}
 			}
 		}

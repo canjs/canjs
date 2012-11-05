@@ -729,7 +729,7 @@ test("unescape bindings change", function(){
 		return num;
 	};
 	
-	var text =	'<div>{{ completed() }}</div>',
+	var text =	'<div>{{ completed }}</div>',
 
 
 	compiled = new can.Mustache({ text: text }).render({ completed: completed });
@@ -773,7 +773,7 @@ test("escape bindings change", function(){
 		return num;
 	};
 	
-	var text =	'<div>{{{ completed() }}}</div>',
+	var text =	'<div>{{{ completed }}}</div>',
 
 
 	compiled = new can.Mustache({ text: text }).render({ completed: completed });
@@ -811,7 +811,7 @@ test("tag bindings change", function(){
 		return "items='"+num+"'";
 	};
 	
-	var text =	'<div {{{ completed() }}}></div>',
+	var text =	'<div {{{ completed }}}></div>',
 
 
 	compiled = new can.Mustache({ text: text }).render({ completed: completed });
@@ -848,7 +848,7 @@ test("attribute value bindings change", function(){
 		return num;
 	};
 	
-	var text =	'<div items="{{{ completed() }}}"></div>',
+	var text =	'<div items="{{{ completed }}}"></div>',
 
 
 	compiled = new can.Mustache({ text: text }).render({ completed: completed });
