@@ -418,4 +418,4 @@ test("bind on deep properties",function(){
 	
 	ob.attr('name.first',"Justin")
 	
-})
+});

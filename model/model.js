@@ -549,10 +549,12 @@ steal('can/util','can/observe', function( can ) {
 		setup : function(base){
 			// create store here if someone wants to use model without inheriting from it
 			this.store = {};
-			can.Observe.apply(this, arguments);
+			can.Observe.setup.apply(this, arguments);
+			// Set default list as model list
 			if(!can.Model){
 				return;
 			}
+			this.List = ML({Observe: this},{});
 			var self = this,
 				clean = can.proxy(this._clean, self);
 			

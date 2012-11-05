@@ -165,5 +165,33 @@ test("only one update on a batchTransaction",function(){
 	equal(callbacks,1,"only one callback")
 })
 
+test("only one update on a start and end transaction",function(){
+	var person = new can.Observe({first: "Justin", last: "Meyer"}),
+		age = can.compute(5);
+	var func = function(newVal,oldVal){
+		return person.attr('first')+" "+person.attr('last')+age()+Math.random();
+	};
+	var callbacks = 0;
+	can.compute.binder(func, window, function(newVal, oldVal){
+		callbacks++;
+	});
+	
+	can.stop();
+	
+	person.attr('first',"Brian");
+	stop();
+	setTimeout(function(){
+		person.attr('last',"Moschel");
+		age(12)
+		
+		can.start();
+		
+		equal(callbacks,1,"only one callback")
+		
+		start();
+	})
 
+	
+	
+})
 

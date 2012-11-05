@@ -1351,6 +1351,8 @@ steal('can/util','can/construct', function(can, Construct) {
 	Observe.List = list;
 	Observe.setup = function(){
 		Construct.setup.apply(this, arguments);
+		// I would prefer not to do it this way. It should
+		// be using the attributes plugin to do this type of conversion.
 		this.List = Observe.List({ Observe : this }, {});
 	}
 	return Observe;

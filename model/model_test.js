@@ -859,10 +859,10 @@ test("destroying a model impact the right list", function() {
 			return def;
 		}
 	},{});
-
 	var list1 = new Person.List([ new Person({ id : 1 }), new Person({ id : 2 }) ]),
 		list2 = new Organisation.List([ new Organisation({ id : 1 }), new Organisation({ id : 2 }) ]);
 
+	// set each person to have an organization
 	list1[0].attr('organisation', list2[0]);
 	list1[1].attr('organisation', list2[1]);
 
@@ -889,4 +889,4 @@ test("uses attr with isNew", function(){
 	m.isNew();
 	
 	can.Observe.__reading = old;
-})
+});

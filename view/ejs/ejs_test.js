@@ -1106,7 +1106,10 @@ test("spaces between attribute name and value", function(){
 		div = document.createElement('div');
 	
 	div.appendChild(can.view.frag(compiled));
-	equal(div.innerHTML, '<input type="text" value="testing">');
+	var input = div.getElementsByTagName('input')[0];
+	
+	equal(input.value, 'testing');
+	equal(input.type,"text")
 })
 
 })()
