@@ -109,27 +109,6 @@ function( can ){
 				},
 
 				/**
-				 * Bind
-				 * Binds the attribute if the object is observable for self updating.
-				 *
-				 * For example:
-				 * 
-				 * 		# JS
-				 * 		var bar = new can.Observe({ 
-				 * 			foo: "Moo!",
-				 * 		});
-				 * 		
-				 * 		# Template
-				 * 		{{ #bind foo }}
-				 */
-				{
-					name: /bind/,
-					fn:function(content, cmd){
-						return 'this.attr("' + content.replace(/^\s?#\w*\s?/, '').trim() + '")';
-					}
-				},
-
-				/**
 				 * Convert the expression for use with interpolation/helpers.
 				 */
 				{
@@ -348,13 +327,14 @@ function( can ){
 		else {
 			for (i = 0; i < contexts.length; i++) {
 				// Check the context for the reference
-				value = contexts[i];
+				value = contexts[i], name;
+
 				// Make sure the context isn't a failed object before diving into it.
 				if (value !== undefined) {
 					for (j = 0; j < names.length; j++) {
 						// Keep running up the tree while there are matches.
 						if (typeof value[names[j]] != 'undefined') {
-							value = value[names[j]];
+							value = value[name = names[j]];
 						}
 						else {
 							value = undefined;
@@ -362,9 +342,14 @@ function( can ){
 						}
 					}
 				}
-			
+
 				// Found a matched reference
 				if (value !== undefined) {
+					// add support for observes
+					if(can.isFunction(obj.attr) && obj.constructor && obj.constructor.canMakeObserve){
+						return obj.attr(name);
+					}
+						
 					return value;
 				}
 			}
