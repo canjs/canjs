@@ -26,7 +26,7 @@ module("can/view/mustache, rendering",{
 })
 
 // Add mustache specs to the test
-can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials', 'sections'], function(spec) {
+can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials', 'sections'/*, '~lambdas'*/], function(spec) {
 	can.ajax({
 		url: '../mustache/spec/specs/' + spec + '.json',
 		dataType: 'json',
@@ -43,6 +43,11 @@ can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials',
 					for(var name in t.partials) {
 						Mustache.registerPartial(name, t.partials[name])
 					}
+				}
+				
+				// register lambdas
+				if (t.data.lambda && t.data.lambda.js) {
+					t.data.lambda = eval('(' + t.data.lambda.js + ')');
 				}
 
 				same(new can.Mustache({ text: t.template }).render(t.data), expected);
