@@ -176,7 +176,7 @@ test("only one update on a start and end transaction",function(){
 		callbacks++;
 	});
 	
-	can.stop();
+	can.Observe.startBatch();
 	
 	person.attr('first',"Brian");
 	stop();
@@ -184,7 +184,7 @@ test("only one update on a start and end transaction",function(){
 		person.attr('last',"Moschel");
 		age(12)
 		
-		can.start();
+		can.Observe.stopBatch();
 		
 		equal(callbacks,1,"only one callback")
 		

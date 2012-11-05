@@ -419,3 +419,43 @@ test("bind on deep properties",function(){
 	ob.attr('name.first',"Justin")
 	
 });
+
+test("startBatch and stopBatch and changed event", function(){
+	
+	var ob = new can.Observe({name: {first: "Brian"}, age: 29}),
+		bothSet = false,
+		changeCallCount = 0,
+		changedCalled = false;
+	
+	
+	ob.bind("change", function(){
+		ok(bothSet, "both properties are set before the changed event was called")
+		ok(!changedCalled, "changed not called yet")
+		changeCallCount++;
+	})
+	// The following tests how changed events should fire
+	/*ob.bind("changed", function(ev, attrs){
+		equal(changeCallCount, 2, "two change events")
+		
+		equal(attrs.length, 2, "changed events include bubbling change events");
+		changedCalled = true;
+	})*/
+	stop();
+	can.Observe.startBatch(function(){
+		ok(true, "batch callback called")
+	});
+	
+	ob.attr('name.first','Justin')
+	setTimeout(function(){
+		ob.attr('age',30);
+		bothSet = true;
+		can.Observe.stopBatch();
+		start();
+	},1)
+	
+	
+	
+})
+
+
+
