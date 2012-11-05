@@ -110,6 +110,79 @@ test("delegate's this", 5, function(){
 	state.attr('prop','food')
 })
 
+test("* selectors firing for all matching events", function(){
+	var oldPeople = {
+		people : [{
+			first : "justin",
+			last : "meyer"
+		},{
+			first : "ralph",
+			last : "holzmann"
+		}]
+	}
+	var newPeople = {
+		people : [{
+			first : "justin2",
+			last : "meyer2"
+		},{
+			first : "ralph2",
+			last : "holzmann2"
+		}]
+	}
+	var state = new can.Observe(oldPeople),
+		changes = 0
+
+	state.delegate("people.*.first", "changes", function(ev, attr, how, newVal, oldVal){
+		equals(this, state.attr('people.' + changes + '.first'), "this is set right")
+		equals(how, 'set', "how was correct")
+		equals(newVal, state.attr('people.' + changes + '.first'), "newVal was correct")
+		equals(oldVal, oldPeople.people[changes].first, "oldVal was correct")
+		equals(attr, 'people.' + changes + '.first', "attr was correct")
+		changes++
+	});
+
+	state.attr(newPeople)
+
+	equals(changes, 2, "notifications were fired correctly")
+
+});
+
+test("* selectors firing for single event", function(){
+	var oldPeople = {
+		people : [{
+			first : "justin",
+			last : "meyer"
+		},{
+			first : "ralph",
+			last : "holzmann"
+		}]
+	}
+	var newPeople = {
+		people : [{
+			first : "justin2",
+			last : "meyer2"
+		},{
+			first : "ralph2",
+			last : "holzmann2"
+		}]
+	}
+	var state = new can.Observe(oldPeople),
+		changes = 0
+
+	state.delegate("people.*.first", "change", function(ev, attr, how, newVal, oldVal){
+		equals(this, state.attr('people.' + changes + '.first'), "this is set right")
+		equals(how, 'set', "how was correct")
+		equals(newVal, state.attr('people.' + changes + '.first'), "newVal was correct")
+		equals(oldVal, oldPeople.people[changes].first, "oldVal was correct")
+		equals(attr, 'people.' + changes + '.first', "attr was correct")
+		changes++
+	});
+
+	state.attr(newPeople)
+
+	equals(changes, 1, "notification was fired correctly")
+
+});
 
 test("delegate on deep properties with *", function(){
 	var state = new can.Observe({
@@ -168,12 +241,119 @@ test("compound sets", function(){
 	equals(count, 3, "setting person and id only fires 1 event");
 	
 	state.removeAttr("type");
-	state.removeAttr("id");
 	
 	state.attr({
 		type : "person"
 	});
-	equals(count, 3, "setting person does not fire anything");
+	equals(count, 4, "setting only person fires 1 event");
+
+	state.removeAttr("id");
+
+	state.attr({
+		id : "1"
+	});
+	equals(count, 5, "setting only id fires 1 event");
+})
+
+test("compound sets with wildcards, matching all events", function(){
+	var oldPeople = {
+		people : [{
+			first : "justin",
+			last : "meyer"
+		},{
+			first : "ralph",
+			last : "holzmann"
+		}]
+	}
+	var newPeople = {
+		people : [{
+			first : "justin2",
+			last : "meyer2"
+		},{
+			first : "ralph2",
+			last : "holzmann2"
+		}]
+	}
+	var state = new can.Observe(oldPeople),
+		changes = 0
+	
+	state.delegate("people.*.first people.*.last","changes", function(ev, attr, how, newVal, oldVal){
+		equals(this, state.attr(attr), "this is set right")
+		equals(how, 'set', "how was correct")
+		changes++
+	});
+
+	state.attr(newPeople)
+
+	equals(changes, 4, "notifications were fired correctly")
+
+})
+
+test("compound sets with wildcards, matching single event", function(){
+	var oldPeople = {
+		people : [{
+			first : "justin",
+			last : "meyer"
+		},{
+			first : "ralph",
+			last : "holzmann"
+		}]
+	}
+	var newPeople = {
+		people : [{
+			first : "justin2",
+			last : "meyer2"
+		},{
+			first : "ralph2",
+			last : "holzmann2"
+		}]
+	}
+	var state = new can.Observe(oldPeople),
+		changes = 0
+	
+	state.delegate("people.*.first people.*.last","change", function(ev, attr, how, newVal, oldVal){
+		equals(this, state.attr(attr), "this is set right")
+		equals(how, 'set', "how was correct")
+		changes++
+	});
+
+	state.attr(newPeople)
+
+	equals(changes, 1, "notifications were fired correctly")
+
+})
+
+test("compound sets with wildcards with value, matching multiple events", function(){
+	var oldPeople = {
+		people : [{
+			first : "justin",
+			last : "meyer"
+		},{
+			first : "ralph",
+			last : "holzmann"
+		}]
+	}
+	var newPeople = {
+		people : [{
+			first : "justin2",
+			last : "meyer2"
+		},{
+			first : "ralph2",
+			last : "holzmann2"
+		}]
+	}
+	var state = new can.Observe(oldPeople),
+		changes = 0
+
+	state.delegate("people.*.first=justin2 people.*.last=holzmann2","changes", function(ev, attr, how, newVal, oldVal){
+		equals(this, state.attr(attr), "this is set right")
+		equals(how, 'set', "how was correct")
+		changes++
+	});
+
+	state.attr(newPeople)
+
+	equals(changes, 2, "notifications were fired correctly")	
 })
 
 test("undelegate within event loop",1, function(){

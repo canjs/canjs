@@ -28,11 +28,11 @@ steal('can/util', 'can/observe', function(can) {
 				return null;
 			} else
 			// if we have a "**", match everything
-			if( parts[i] == "**" ) {
+			if( parts[i] === "**" ) {
 				return props.join(".");
 			} else 
 			// a match, but we want to delegate to "*"
-			if (parts[i] == "*"){
+			if (parts[i] === "*"){
 				// only do this if there is nothing after ...
 				matchedProps.push(prop);
 			}
@@ -64,9 +64,9 @@ steal('can/util', 'can/observe', function(can) {
 				// if there is a batchNum, this means that this
 				// event is part of a series of events caused by a single 
 				// attrs call.  We don't want to issue the same event
-				// multiple times
+				// multiple times unless specifically requested in the delegate
 				// setting the batchNum happens later
-				if((event.batchNum && delegate.batchNum === event.batchNum) || delegate.undelegated ){
+				if((!delegate.matchAll && (event.batchNum && delegate.batchNum === event.batchNum)) || delegate.undelegated ){
 					continue;
 				}
 				
@@ -74,8 +74,8 @@ steal('can/util', 'can/observe', function(can) {
 				hasMatch = undefined;
 				valuesEqual = true;
 				
-				// for each attr in a delegate
-				for(var a =0 ; a < delegate.attrs.length; a++){
+				// for each attr in a delegate && if the event is matched we don't need to test the next selector.
+				for(var a =0 ; a < delegate.attrs.length && !hasMatch && valuesEqual; a++){
 					
 					attr = delegate.attrs[a];
 					
@@ -84,14 +84,10 @@ steal('can/util', 'can/observe', function(can) {
 						hasMatch = matchedAttr;
 					}
 					// if it has a value, make sure it's the right value
-					// if it's set, we should probably check that it has a 
-					// value no matter what
-					if(attr.value && valuesEqual /* || delegate.hasValues */){
-						valuesEqual = attr.value === ""+this.attr(attr.attr)
-					} else if (valuesEqual && delegate.attrs.length > 1){
-						// if there are multiple attributes, each has to at
-						// least have some value
-						valuesEqual = this.attr(attr.attr) !== undefined
+					// if it's set, we should probably check that it has a value
+					if(hasMatch && attr.value && valuesEqual /* || delegate.hasValues */){
+						// test the actual value of the change against the selector's .value
+						valuesEqual = attr.value === ""+this.attr(prop)
 					}
 				}
 				
@@ -229,6 +225,33 @@ steal('can/util', 'can/observe', function(can) {
 		 * Using a single wildcard (<code>*</code>) matches single level
 		 * properties.  Using a double wildcard (<code>**</code>) matches
 		 * any deep property.
+		 *
+		 * ## Listening to a single, or multiple events
+		 *
+		 * When using standard event names, the specified callback will be fired once for each change set 
+		 * even if future changes in that single set match your selectors. This is useful when updating the DOM, 
+		 * or listening for a state change. Alternatively, you can pluralise the event name to listen 
+		 * to all events in a batch. E.g, change or changes:
+		 *
+		 *    var o = new can.Observe({
+		 *      names : [
+		 *        {first: "Justin", last: "Meyer"},
+		 *        {first: "Ralph", last: "Holzmann"}
+		 *      ]
+		 *    })
+		 *    
+		 *    o.delegate('names.*.first', 'change', function(ev, prop, how, newVal, oldVal){
+		 *      // this will be fired ONCE (first matching change)
+		 *    })
+		 *
+		 *    o.delegate('names.*.first', 'changes', function(ev, prop, how, newVal, oldVal){
+		 *      // this will be fired TWICE (once for each matching change)
+		 *    })
+		 *
+		 *    o.names.attr([
+		 *       {first: 'Justinio', last: 'Meyer'}, 
+		 *       {first: 'Ralphinio', last: "Holzmann"}
+		 *    ])
 		 * 
 		 * ## Listening on multiple properties and values
 		 * 
@@ -284,8 +307,17 @@ steal('can/util', 'can/observe', function(can) {
 		delegate :  function(selector, event, handler){
 			selector = can.trim(selector);
 			var delegates = this._observe_delegates || (this._observe_delegates = []),
-				attrs = [];
-			
+				attrs = [],
+				matchAll = false
+
+			// Test our event name for pluralisation
+			if(event.charAt(event.length-1) === 's'){
+				// If it is a plural, we need to match all events, not just the first
+				matchAll = true;
+				// return to the original event name, we've done the work required.
+				event = event.substring(0,event.length-1);
+			}
+
 			// split selector by spaces
 			selector.replace(/([^\s=]+)=?([^\s]+)?/g, function(whole, attr, value){
 			  attrs.push({
@@ -305,6 +337,8 @@ steal('can/util', 'can/observe', function(can) {
 				// an object of attribute names and values {type: 'recipe',id: undefined}
 				// undefined means a value was not defined
 				attrs : attrs,
+				// Determines if we should continue to match selectors once a match is found
+				matchAll: matchAll,
 				callback : handler,
 				event: event
 			});
