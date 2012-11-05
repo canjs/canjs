@@ -951,6 +951,19 @@ test("recursive views", function(){
 	
 })
 
+test("indirectly recursive views", function() {
+	var unordered = new can.Observe.List([
+		{ ol: [
+			{ ul: [
+				{ ol: [1, 2, 3] }
+			]}
+		]}
+	]);
+
+	var div = document.createElement('div');
+	div.appendChild(can.view('//can/view/ejs/indirect1.ejs', {unordered: unordered}));
+	ok(can.trim($('ul > li > ol > li > ul > li > ol > li:first', div).text()) === "1", "Indirectly recursive views working.");
+});
 
 test("live binding select", function(){
 	var text = "<select><% items.each(function(ob) { %>" +
