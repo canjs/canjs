@@ -52,7 +52,7 @@ can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials',
 });
 
 test("Mustache bind", function() {
-	var template = "<span id='binder1'>{{ #bind name }}</span><span id='binder2'>{{{#bind name}}}</span>";
+	var template = "<span id='binder1'>{{ name }}</span><span id='binder2'>{{{name}}}</span>";
 
 	var teacher = new can.Observe({
 		name: "<strong>Mrs Peters</strong>",
@@ -348,7 +348,7 @@ test("helpers", function() {
 
 test("attribute single unescaped, html single unescaped", function(){
 
-	var text = "<div id='me' class='{{ task.attr('completed') }}'>{{ task.attr('name') }}</div>";
+	var text = "<div id='me' class='{{ task.completed }}'>{{ task.name }}</div>";
 	var task = new can.Observe({
 		name : 'dishes'
 	})
@@ -411,10 +411,9 @@ test("event binding / triggering on options", function(){
 	},100)
 })
 
-/*
- should update with #each
+
 test("select live binding", function() {
-	var text = "<select><% todos.each(function(todo){ %><option><%= todo.name %></option><% }) %></select>";
+	var text = "<select>{{ #todos }}<option>{{ name }}</option>{{ /todos }}</select>";
 		Todos = new can.Observe.List([
 			{id: 1, name: 'Dishes'}
 		]),
@@ -433,7 +432,7 @@ test("select live binding", function() {
 
 test("block live binding", function(){
 	
-	var text = "<div>{{ # obs.attr('sex')  }}"+
+	var text = "<div>{{ #sex  }}"+
 			"<span>Mr.</span>"+
 		"{{ else  }}"+
 		  "<label>Ms.</label>"+
@@ -460,38 +459,9 @@ test("block live binding", function(){
 	
 })
 
-test("hookups in tables", function(){
-	var text = "<table><tbody><% if( obs.attr('sex') == 'male' ){ %>"+
-			"<tr><td>Mr.</td></tr>"+
-		"<% } else { %>"+
-		  "<tr><td>Ms.</td></tr>"+
-		"<% } %>"+
-		"</tbody></table>"
-		
-	var obs = new can.Observe({
-		sex : 'male'
-	})
-	
-	var compiled = new can.Mustache({text: text}).render({obs: obs});
-	
-	var div = document.createElement('div');
-
-	div.appendChild(can.view.frag(compiled));
-	
-	
-	equals(div.getElementsByTagName('tbody')[0].innerHTML.replace(/(\r|\n)+/g, "").toUpperCase(), 
-		"<tr><td>Mr.</td></tr>".toUpperCase(),"initial content")
-	
-	obs.attr('sex','female')
-	
-	equals(div.getElementsByTagName('tbody')[0].innerHTML.replace(/(\r|\n)+/g, "").toUpperCase(), 
-		"<tr><td>Ms.</td></tr>".toUpperCase(),"updated label")
-})
-*/
-
 test('multiple hookups in a single attribute', function() {
-	var text =	'<div class=\'{{ obs.attr("foo") }}' +
-							'{{ obs.attr("bar") }}{{ obs.attr("baz") }}\'></div>',
+	var text =	'<div class=\'{{ obs.foo }}' +
+							'{{ obs.bar }}{{ obs.baz }}\'></div>',
 
 	obs = new can.Observe({
 		foo: 'a',
@@ -520,7 +490,7 @@ test('multiple hookups in a single attribute', function() {
 
 test('adding and removing multiple html content within a single element', function(){
 	
-	var text =	'<div>{{ obs.attr("a") }}{{ obs.attr("b") }}{{ obs.attr("c") }}</div>',
+	var text =	'<div>{{ obs.a) }}{{ obs.b) }}{{ obs.c }}</div>',
 
 	obs = new can.Observe({
 		a: 'a',
@@ -612,8 +582,8 @@ test('live binding and removeAttr', function(){
 });*/
 
 test('hookup within a tag', function () {
-	var text =	'<div {{ obs.attr("foo") }} '
-		+ '{{ obs.attr("baz") }}>lorem ipsum</div>',
+	var text =	'<div {{ obs.foo }} '
+		+ '{{ obs.baz }}>lorem ipsum</div>',
 
 	obs = new can.Observe({
 		foo: 'class="a"',
@@ -644,7 +614,7 @@ test('hookup within a tag', function () {
 });
 
 test('single escaped tag, removeAttr', function () {
-	var text =	'<div {{ obs.attr("foo") }}>lorem ipsum</div>',
+	var text =	'<div {{ obs.foo }}>lorem ipsum</div>',
 
 	obs = new can.Observe({
 		foo: 'data-bar="john doe\'s bar"'
@@ -669,7 +639,7 @@ test('single escaped tag, removeAttr', function () {
 
 test('html comments', function(){
 	var text =	'<!-- bind to changes in the todo list --> <div> '
-	+ '<%= obs.attr("foo") %></div>',
+	+ '<%= obs.foo %></div>',
 
 	obs = new can.Observe({
 		foo: 'foo'
@@ -683,8 +653,8 @@ test('html comments', function(){
 
 test("hookup and live binding", function(){
 	
-	var text = "<div class='{{ task.attr('completed') }}' {{ (el)-> can.data(can.$(el),'task',task) }}>" +
-		"{{ task.attr('name') }}" +
+	var text = "<div class='{{ task.completed }}' {{ (el)-> can.data(can.$(el),'task',task) }}>" +
+		"{{ task.name }}" +
 		"</div>",
 		task = new can.Observe({
 			completed: false,
@@ -892,7 +862,7 @@ test("attribute value bindings change", function(){
 })
 
 test("in tag toggling", function(){
-		var text = "<div {{ obs.attr('val') }}></div>"
+		var text = "<div {{ obs.val) }}></div>"
 	
 	
 	var obs = new can.Observe({
@@ -913,29 +883,6 @@ test("in tag toggling", function(){
 	equals( d2.getAttribute("bar") , null,"bar set")
 });
 
-test("parent is right with bock", function(){
-	var text =  '<ul><% if(!obs.attr("items").length) { %>' +
-				'<li>No items</li>' +
-				'<% } else { %> <%== obs.attr("content") %>'+
-				'<% } %></ul>',
-
-	obs = new can.Observe({
-		content : "<li>Hello</li>",
-		items: [{name : "Justin"}]
-	}),
-
-	compiled = new can.Mustache({ text: text }).render({ obs: obs });
-	
-	var div = document.createElement('div');
-
-	div.appendChild(can.view.frag(compiled));
-	var ul = div.getElementsByTagName('ul')[0];
-	var li = div.getElementsByTagName('li')[0];
-	
-	ok(ul, "we have a ul");
-	ok(li, "we have a li")
-	
-});
 
 /*
 not sure about this w/ mustache
@@ -976,7 +923,7 @@ test("tags without chidren or ending with /> do not change the state", function(
 		equal( ta.getElementsByTagName('span').length, 0, "there are no spans");
 		equal( ta.getElementsByTagName('td').length, 2, "there are 2 td");
 	}
-	var text = "<table><tr><td/>{{ obs.attr('content') }}</tr></div>"
+	var text = "<table><tr><td/>{{ obs.content }}</tr></div>"
 	var obs = new can.Observe({
 		content: "<td>Justin</td>"
 	})
@@ -1016,7 +963,7 @@ test("nested live bindings", function(){
 })*/
 
 test("trailing text", function(){
-	can.view.mustache("count","There are {{ this.attr('length') }} todos")
+	can.view.mustache("count","There are {{ this.length }} todos")
 	var div = document.createElement('div');
 	div.appendChild( can.view("count", new can.Observe.List([{},{}])) );
 	ok(/There are 2 todos/.test(div.innerHTML), "got all text")
@@ -1035,7 +982,7 @@ test("recursive views", function(){
 })
 
 test("live binding textarea", function(){
-	can.view.mustache("textarea-test","<textarea>Before{{ obs.attr('middle') }}After</textarea>");
+	can.view.mustache("textarea-test","<textarea>Before{{ obs.middle }}After</textarea>");
 	
 	var obs = new can.Observe({middle: "yes"}),
 		div = document.createElement('div');
