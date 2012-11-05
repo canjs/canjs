@@ -317,7 +317,7 @@ function( can ){
 	Mustache.get = function(ref, obj, context) {
 		var contexts = [obj, context],
 			names = ref.split('.'),
-			value, i, j;
+			lastValue, value, name, i, j;
 		
 		// Handle "this" references for list iteration: {{.}} or {{this}}
 		if (/^\.|this$/.test(ref)) {
@@ -327,17 +327,18 @@ function( can ){
 		else {
 			for (i = 0; i < contexts.length; i++) {
 				// Check the context for the reference
-				value = contexts[i], name;
+				value = contexts[i];
 
 				// Make sure the context isn't a failed object before diving into it.
 				if (value !== undefined) {
 					for (j = 0; j < names.length; j++) {
 						// Keep running up the tree while there are matches.
 						if (typeof value[names[j]] != 'undefined') {
+							lastValue = value;
 							value = value[name = names[j]];
 						}
 						else {
-							value = undefined;
+							lastValue = value = undefined;
 							break;
 						}
 					}
@@ -345,9 +346,9 @@ function( can ){
 
 				// Found a matched reference
 				if (value !== undefined) {
-					// add support for observes
-					if(can.isFunction(obj.attr) && obj.constructor && obj.constructor.canMakeObserve){
-						return obj.attr(name);
+					// Add support for observes
+					if(can.isFunction(lastValue.attr) && lastValue.constructor && lastValue.constructor.canMakeObserve){
+						return lastValue.attr(name);
 					}
 						
 					return value;

@@ -461,12 +461,15 @@ test("block live binding", function(){
 
 test('multiple hookups in a single attribute', function() {
 	var text =	'<div class=\'{{ obs.foo }}' +
-							'{{ obs.bar }}{{ obs.baz }}\'></div>',
+							'{{ obs.bar }}{{ obs.baz }}{{ obs.nest.what }}\'></div>',
 
 	obs = new can.Observe({
 		foo: 'a',
 		bar: 'b',
-		baz: 'c'
+		baz: 'c',
+		nest: new can.Observe({
+			what: 'd'
+		})
 	}),
 
 	compiled = new can.Mustache({ text: text }).render({ obs: obs })
@@ -475,17 +478,21 @@ test('multiple hookups in a single attribute', function() {
 
 	div.appendChild(can.view.frag(compiled));
 	
-	var innerDiv = div.childNodes[0];
-
-	equals(getAttr(innerDiv, 'class'), "abc", 'initial render');
-
-	obs.attr('bar', 'e');
-
-	equals(getAttr(innerDiv, 'class'), "aec", 'initial render');
+ 	var innerDiv = div.childNodes[0];
+ 
+	equals(getAttr(innerDiv, 'class'), "abcd", 'initial render');
+ 
+ 	obs.attr('bar', 'e');
+ 
+	equals(getAttr(innerDiv, 'class'), "aecd", 'initial render');
+ 	
+ 	obs.attr('bar', 'f');
+ 
+	equals(getAttr(innerDiv, 'class'), "afcd", 'initial render');
 	
-	obs.attr('bar', 'f');
-
-	equals(getAttr(innerDiv, 'class'), "afc", 'initial render');
+	obs.nest.attr('what', 'g');
+	
+	equals(getAttr(innerDiv, 'class'), "afcg", 'nested observe');
 });
 
 test('adding and removing multiple html content within a single element', function(){
