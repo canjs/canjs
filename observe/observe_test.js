@@ -392,13 +392,14 @@ test("removing an already missing attribute does not cause an event", function()
 	ob.removeAttr("foo")
 });
 
-test("Some things should not be converted to Observes", function() {
+test("Only plain objects should be converted to Observes", function() {
 	var ob = new can.Observe();
 	ob.attr('date', new Date());
 	ok(ob.attr('date') instanceof Date, 'Date should not be converted');
 
-	ob.attr('sel', can.$('body'));
-	ok(ob.attr('sel') instanceof can.$, 'can.$ should not be converted');
+	var selected = can.$('body');
+	ob.attr('sel', selected);
+	equal(ob.attr('sel'), selected, 'can.$() should not be converted');
 
 	ob.attr('element', document.getElementsByTagName('body')[0]);
 	equal(ob.attr('element'), document.getElementsByTagName('body')[0], 'HTMLElement should not be converted');
@@ -406,3 +407,15 @@ test("Some things should not be converted to Observes", function() {
 	ob.attr('window', window);
 	equal(ob.attr('window'), window, 'Window object should not be converted');
 });
+
+test("bind on deep properties",function(){
+	expect(2)
+	var ob = new can.Observe({name: {first: "Brian"}});
+	ob.bind("name.first",function(ev, newVal, oldVal){
+		equal(newVal,"Justin");
+		equal(oldVal,"Brian")
+	});
+	
+	ob.attr('name.first',"Justin")
+	
+})

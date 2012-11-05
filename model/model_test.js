@@ -6,6 +6,22 @@ module("can/model", {
 
 var isDojo = (typeof dojo !== "undefined");
 
+test("shadowed id", function(){
+	var MyModel = can.Model({
+		id: 'foo'
+	},{
+		foo: function() {
+			return this.attr('foo');
+		}
+	});
+
+	var newModel = new MyModel({});
+	ok(newModel.isNew(),'new model is isNew');
+	var oldModel = new MyModel({foo:'bar'});
+	ok(!oldModel.isNew(),'old model is not new');
+	equals(oldModel.foo(),'bar','method can coexist with attribute');
+});
+
 test("CRUD", function(){
     
 	
@@ -859,3 +875,18 @@ test("destroying a model impact the right list", function() {
 	console.log( list2 )
 
 });
+
+
+test("uses attr with isNew", function(){
+	expect(1)
+	var old = can.Observe.__reading;
+	can.Observe.__reading = function(){
+		ok(true, "used attr")
+	}
+	
+	var m = new can.Model({id: 4});
+	
+	m.isNew();
+	
+	can.Observe.__reading = old;
+})

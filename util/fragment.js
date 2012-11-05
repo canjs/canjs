@@ -17,6 +17,12 @@ steal('./can.js',function(can){
 			if (name === undefined) {
 				name = fragmentRE.test(html) && RegExp.$1;
 			}
+
+			if(html && can.isFunction(html.replace)) {
+				// Fix "XHTML"-style tags in all browsers
+				html = html.replace(/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi, "<$1></$2>");
+			}
+
 			if (!(name in containers)) name = '*';
 			var container = containers[name];
 			// IE's parser will strip any `<tr><td>` tags when `innerHTML`
@@ -31,6 +37,7 @@ steal('./can.js',function(can){
 			} else {
 				container.innerHTML = '' + html;
 			}
+
 			// IE8 barfs if you pass slice a `childNodes` object, so make a copy.
 			var tmp = {},
 				children = container.childNodes;

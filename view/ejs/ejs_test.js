@@ -1,4 +1,4 @@
-steal('funcunit/syn',function(){
+steal('funcunit/syn',function(Syn){
 	
 module("can/view/ejs, rendering",{
 	setup : function(){
@@ -378,32 +378,31 @@ test("hookups in tables", function(){
 })
 
 test('multiple hookups in a single attribute', function() {
-	var text =	'<div class=\'<%= obs.attr("foo") %>' +
-							'<%= obs.attr("bar") %><%= obs.attr("baz") %>\'></div>',
+	var text =	'<div class=\'<%= obs.attr("foo") %>a<%= obs.attr("bar") %>b<%= obs.attr("baz") %>\'></div>',
 
 	obs = new can.Observe({
-		foo: 'a',
-		bar: 'b',
-		baz: 'c'
+		foo: '1',
+		bar: '2',
+		baz: '3'
 	}),
 
 	compiled = new can.EJS({ text: text }).render({ obs: obs })
-	
+
 	var div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled));
 	
 	var innerDiv = div.childNodes[0];
 
-	equals(getAttr(innerDiv, 'class'), "abc", 'initial render');
+	equals(getAttr(innerDiv, 'class'), "1a2b3", 'initial render');
 
-	obs.attr('bar', 'e');
+	obs.attr('bar', '4');
 
-	equals(getAttr(innerDiv, 'class'), "aec", 'initial render');
+	equals(getAttr(innerDiv, 'class'), "1a4b3", 'initial render');
 	
-	obs.attr('bar', 'f');
+	obs.attr('bar', '5');
 
-	equals(getAttr(innerDiv, 'class'), "afc", 'initial render');
+	equals(getAttr(innerDiv, 'class'), "1a5b3", 'initial render');
 });
 
 test('adding and removing multiple html content within a single element', function(){
@@ -1044,7 +1043,7 @@ test("attribute unquoting", function() {
 	facet = new can.Observe({
 		id: 1,
 		single: true
-	});
+	}),
 
 	compiled = new can.EJS({text: text}).render({ facet: facet }),
 	div = document.createElement('div');
@@ -1052,6 +1051,62 @@ test("attribute unquoting", function() {
 
 	equals(div.children[0].name, "facet-1");
 	equals(div.children[0].value, "facet-1");
+});
+
+test("empty element hooks work correctly",function(){
+	
+	var text = '<div <%= function(e){ e.innerHTML = "1 Will show"; } %> />'+
+		'<div <%= function(e){ e.innerHTML = "2 Will not show"; } %> />'+
+		'3 Will not show';
+	
+	var compiled = new can.EJS({text: text}).render(),
+		div = document.createElement('div');
+
+	div.appendChild(can.view.frag(compiled));
+
+	equal(div.childNodes.length, 3, "all three elements present")
+	
+});
+
+test("live binding with parent dependent tags but without parent tag present in template",function(){
+	
+	var text = ['<% if( person.attr("first") ){ %>',
+				'<tr><td><%= person.first %></td></tr>',
+				'<% }%>',
+				'<% if( person.attr("last") ){ %>',
+				'<tr><td><%= person.last %></td></tr>',
+				'<% } %>'];
+	var person = new can.Observe({first: "Austin", last: "McDaniel"});
+	
+	var compiled = new can.EJS({text: text.join("\n")}).render({person: person});
+	console.log(compiled)
+	var table = document.createElement('table');
+	//can.append( can.$('#qunit-test-area'), table )
+	
+	table.appendChild(can.view.frag(compiled));
+	
+	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>Austin</td></tr><tr><td>McDaniel</td></tr>")
+	
+	person.removeAttr('first')
+	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>McDaniel</td></tr>")
+	person.removeAttr('last');
+	equal(table.innerHTML.replace(/[\s\n]/g,""),"");
+	
+	person.attr('first',"Justin");
+	
+	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>Justin</td></tr>")
+})
+
+
+test("spaces between attribute name and value", function(){
+	var text = '<input type="text" value = "<%= test %>" />',
+		compiled = new can.EJS({text: text}).render({
+			test : 'testing'
+		}),
+		div = document.createElement('div');
+	
+	div.appendChild(can.view.frag(compiled));
+	equal(div.innerHTML, '<input type="text" value="testing">');
 })
 
 })()

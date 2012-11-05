@@ -19,7 +19,7 @@ var attrMap = {
 		tfoot: "tr",
 		select: "option",
 		optgroup: "option"
-	},
+	},	
 	attributeReplace = /__!!__/g,
 	tagToContentPropMap= {
 		option: "textContent",
@@ -361,9 +361,10 @@ can.extend(can.view, {
 				// Get the attribute value.
 				var attr = getAttr(el, attributeName, contentProp),
 					// Split the attribute value by the template.
-					parts = attr.split("__!!__"),
+					// Only split out the first __!!__ so if we have multiple hookups in the same attribute, 
+					// they will be put in the right spot on first render
+					parts = attr.split(/__!!__(.+)?/, 2),
 					hook;
-
 				
 				// If we already had a hookup for this attribute...
 				if(hooks[attributeName]) {

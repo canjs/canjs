@@ -124,10 +124,10 @@ can.$ = Zepto
 			error = options.error;
 		var d = can.Deferred();
 
-		options.success = function(){
+		options.success = function(data) {
 
 			updateDeferred(xhr, d);
-			d.resolve.apply(d, arguments);
+			d.resolve.call(d, data);
 			success && success.apply(this,arguments);
 		}
 		options.error = function(){

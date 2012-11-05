@@ -1,9 +1,10 @@
 steal({
-	src: "http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js.uncompressed.js",
+	id : "http://download.dojotoolkit.org/release-1.8.1/dojo.js.uncompressed.js",
 	_skip: true
 }, '../event.js').then(
 	'./trigger',
 	'can/util/array/each.js',
+	'can/util/object/isplain',
 	function(){
 
 	// dojo.js

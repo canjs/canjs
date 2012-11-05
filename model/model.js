@@ -23,7 +23,10 @@ steal('can/util','can/observe', function( can ) {
 		modelNum = 0,
 		ignoreHookup = /change.observe\d+/,
 		getId = function( inst ) {
-			return inst[inst.constructor.id];
+			// Instead of using attr, use __get for performance.
+			// Need to set reading
+			can.Observe.__reading && can.Observe.__reading(this, inst.constructor.id)
+			return inst.__get(inst.constructor.id);
 		},
 		// Ajax `options` generator function
 		ajax = function( ajaxOb, data, type, dataType, success, error ) {
@@ -544,6 +547,8 @@ steal('can/util','can/observe', function( can ) {
 	can.Model = can.Observe({
 		fullName: "can.Model",
 		setup : function(base){
+			// create store here if someone wants to use model without inheriting from it
+			this.store = {};
 			can.Observe.apply(this, arguments);
 			if(!can.Model){
 				return;
@@ -580,8 +585,7 @@ steal('can/util','can/observe', function( can ) {
 			if(self.fullName == "can.Model" || !self.fullName){
 				self.fullName = "Model"+(++modelNum);
 			}
-			// Ddd ajax converters.
-			this.store = {};
+			// Add ajax converters.
 			this._reqs = 0;
 			this._url = this._shortName+"/{"+this.id+"}"
 		},

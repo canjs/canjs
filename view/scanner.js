@@ -16,13 +16,35 @@ var newLine = /(\r|\n)+/g,
 			.split('"').join('\\"')
 			.split("\t").join("\\t");
 	},
+	reverseTagMap = {
+		tr:"tbody",
+		option:"select",
+		td:"tr",
+		li: "ul"
+	},
+	// Returns a tagName to use as a temporary placeholder for live content
+	// looks forward ... could be slow, but we only do it when necessary
+	getTag = function(tagName, tokens, i){
+		// if a tagName is provided, use that
+		if(tagName){
+			return tagName;  
+		} else {
+			// otherwise go searching for the next two tokens like "<",TAG
+			while(i < tokens.length){
+				if(tokens[i] == "<" && reverseTagMap[tokens[i+1]]){
+					return reverseTagMap[tokens[i+1]];
+				}
+				i++;
+			}
+		}
+	},
 	bracketNum = function(content){
 		return (--content.split("{").length) - (--content.split("}").length);
 	},
 	 myEval = function( script ) {
 		eval(script);
 	},
-	attrReg = /([^\s]+)=$/,
+	attrReg = /([^\s]+)[\s]*=[\s]*$/,
 	// Commands for caching.
 	startTxt = 'var ___v1ew = [];',
 	finishTxt = "return ___v1ew.join('')",
@@ -192,19 +214,25 @@ Scanner.prototype = {
 					break;
 				case '>':
 					htmlTag = 0;
+					var emptyElement = content.substr(-1) == "/";
 					// if there was a magic tag
 					// or it's an element that has text content between its tags, 
 					// but content is not other tags add a hookup
 					// TODO: we should only add `can.EJS.pending()` if there's a magic tag 
 					// within the html tags.
 					if(magicInTag || tagToContentPropMap[ tagNames[tagNames.length -1] ]){
-						put(content, ",can.view.pending(),\">\"");
+						// make sure / of /> is on the left of pending
+						if(emptyElement){
+							put(content.substr(0,content.length-1), ",can.view.pending(),\"/>\"");
+						} else {
+							put(content, ",can.view.pending(),\">\"");
+						}
 						content = '';
 					} else {
 						content += token;
 					}
 					// if it's a tag like <input/>
-					if(lastToken && lastToken.substr(-1) == "/"){
+					if(emptyElement){
 						// remove the current tag in the stack
 						tagNames.pop();
 						// set the current tag to the previous parent
@@ -232,7 +260,9 @@ Scanner.prototype = {
 						tagName = token.split(/\s/)[0];
 						// If 
 						if( tagName.indexOf("/") === 0 && tagNames.pop() === tagName.substr(1) ) {
-							tagName = tagNames[tagNames.length-1]|| tagName.substr(1);
+							// set tagName to the last tagName
+							// if there are no more tagNames, we'll rely on getTag.
+							tagName = tagNames[tagNames.length-1];
 						} else {
 							tagNames.push(tagName);
 						}
@@ -254,8 +284,8 @@ Scanner.prototype = {
 						if (bracketCount == 1) {
 
 							// We are starting on.
-							buff.push(insert_cmd, "can.view.txt(0,'"+tagName+"'," + status() + ",this,function(){", startTxt, content);
-							
+							buff.push(insert_cmd, "can.view.txt(0,'"+getTag(tagName,tokens, i)+"'," + status() + ",this,function(){", startTxt, content);
+
 							endStack.push({
 								before: "",
 								after: finishTxt+"}));\n"
