@@ -62,6 +62,60 @@ can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials',
 	});
 });
 
+var getAttr = function(el, attrName){
+		return attrName === "class"?
+			el.className:
+			el.getAttribute(attrName);
+	}
+
+test("registerNode, unregisterNode, and replace work", function(){
+	var ids = function(arr){
+		return can.map(arr, function(item){
+			return item.id
+		})
+	},
+		two = {id: 2},
+		listOne = [{id: 1},two,{id: 3}];
+		
+	can.view.registerNode(listOne);
+	var listTwo = [two];
+	
+	can.view.registerNode(listTwo);
+	
+	var newLabel = {id: 4}
+	can.view.replace(listTwo, [newLabel])
+	
+	same( ids(listOne), [1,4,3], "replaced" )
+	same( ids(listTwo), [4] );
+	
+	can.view.replace(listTwo,[{id: 5},{id: 6}]);
+	
+	same( ids(listOne), [1,5,6,3], "replaced" );
+	
+	same( ids(listTwo), [5,6], "replaced" );
+	
+	can.view.replace(listTwo,[{id: 7}])
+	
+	same( ids(listOne), [1,7,3], "replaced" );
+	
+	same( ids(listTwo), [7], "replaced" );
+	
+	can.view.replace( listOne, [{id: 8}])
+	
+	same( ids(listOne), [8], "replaced" );
+	same( ids(listTwo), [7], "replaced" );
+	
+	can.view.unregisterNode(listOne);
+	can.view.unregisterNode(listTwo);
+	
+	
+	
+	same(can.view.nodeMap, {} );
+	same(can.view.nodeListMap ,{} )
+});
+
+
+
 test("Mustache bind", function() {
 	var template = "<span id='binder1'>{{ name }}</span><span id='binder2'>{{{name}}}</span>";
 
@@ -160,63 +214,6 @@ test("Handlebars helper: with", function() {
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
 	same(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
-
-
-var getAttr = function(el, attrName){
-		return attrName === "class"?
-			el.className:
-			el.getAttribute(attrName);
-	}
-
-test("registerNode, unregisterNode, and replace work", function(){
-	
-	var ids = function(arr){
-		return can.map(arr, function(item){
-			return item.id
-		})
-	},
-		two = {id: 2},
-		listOne = [{id: 1},two,{id: 3}];
-		
-	can.view.registerNode(listOne);
-	var listTwo = [two];
-	
-	can.view.registerNode(listTwo);
-	
-	var newLabel = {id: 4}
-	can.view.replace(listTwo, [newLabel])
-	
-	same( ids(listOne), [1,4,3], "replaced" )
-	same( ids(listTwo), [4] );
-	
-	can.view.replace(listTwo,[{id: 5},{id: 6}]);
-	
-	same( ids(listOne), [1,5,6,3], "replaced" );
-	
-	same( ids(listTwo), [5,6], "replaced" );
-	
-	can.view.replace(listTwo,[{id: 7}])
-	
-	same( ids(listOne), [1,7,3], "replaced" );
-	
-	same( ids(listTwo), [7], "replaced" );
-	
-	can.view.replace( listOne, [{id: 8}])
-	
-	same( ids(listOne), [8], "replaced" );
-	same( ids(listTwo), [7], "replaced" );
-	
-	can.view.unregisterNode(listOne);
-	can.view.unregisterNode(listTwo);
-	
-	
-	
-	same(can.view.nodeMap, {} );
-	same(can.view.nodeListMap ,{} )
-});
-
-
-
 
 test("render with left bracket", function(){
 	var compiled = new can.Mustache({text: this.squareBrackets, type: '['}).render({animals: this.animals})
@@ -359,11 +356,11 @@ test("helpers", function() {
 
 test("attribute single unescaped, html single unescaped", function(){
 
-	var text = "<div id='me' class='{{#task.completed}}true{{/task.completed}}'>{{ task.name }}</div>";
+	var text = "<div id='me' class='{{#task.completed}}complete{{/task.completed}}'>{{ task.name }}</div>";
 	var task = new can.Observe({
 		name : 'dishes'
 	})
-	var compiled = new can.Mustache({text: text}).render({task:  task}) ;
+	var compiled = new can.Mustache({text: text}).render({ task: task }) ;
 	
 	var div = document.createElement('div');
 
@@ -381,7 +378,7 @@ test("attribute single unescaped, html single unescaped", function(){
 	
 	task.attr('completed', true);
 	
-	equals(div.getElementsByTagName('div')[0].className, "true", "class changed to complete")
+	equals(div.getElementsByTagName('div')[0].className, "complete", "class changed to complete")
 });
 
 

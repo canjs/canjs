@@ -328,13 +328,14 @@ Scanner.prototype = {
 						var escaped = startTag === tmap.escapeLeft ? 1 : 0;
 
 						// Go through and apply helpers
-						var matched = false;
+						var matched = false,
+							commands = { insert: insert_cmd, tagName: tagName, status: status() };
 						for(var ii = 0; ii < this.helpers.length;ii++){
 							// Match the helper based on helper
 							// regex name value
 							var helper = this.helpers[ii];
 							if(helper.name.test(content)){
-								content = helper.fn(content, { insert: insert_cmd });
+								content = helper.fn(content, commands);
 
 								// dont escape partials
 								if(helper.name.source == /^>[\s|\w]\w*/.source){
