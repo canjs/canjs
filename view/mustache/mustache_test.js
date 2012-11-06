@@ -170,7 +170,10 @@ test("Mustache falsey", function() {
 
 test("Handlebars helpers", function() {
 	can.Mustache.registerHelper('hello', function(options) {
-		return 'Hello!';
+		return 'Should not hit this';
+	});
+	can.Mustache.registerHelper('there', function(options) {
+		return 'there';
 	});
 	can.Mustache.registerHelper('bark', function(obj, str, number, options) {
 		var hash = options.hash || {};
@@ -179,9 +182,9 @@ test("Handlebars helpers", function() {
 			hash.where + ' times' + (hash.loud === true ? ' loudly' : '') + '.';
 	});
 	var t = {
-		template: "{{hello}}\n{{bark name 'Austin and Andy' 3 obj=name action='growled and snarled' where=2 loud=true}}",
-		expected: "Hello!\nThe dog barked at Austin and Andy 3 times, then the dog growled and snarled 2 times loudly.",
-		data: { name: 'dog', hello: 'should not hit this' }
+		template: "{{hello}} {{there}}!\n{{bark name 'Austin and Andy' 3 obj=name action='growled and snarled' where=2 loud=true}}",
+		expected: "Hello there!\nThe dog barked at Austin and Andy 3 times, then the dog growled and snarled 2 times loudly.",
+		data: { name: 'dog', hello: 'Hello' }
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
