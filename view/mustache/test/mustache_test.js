@@ -28,7 +28,7 @@ module("can/view/mustache, rendering",{
 // Add mustache specs to the test
 can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials', 'sections'/*, '~lambdas'*/], function(spec) {
 	can.ajax({
-		url: '../mustache/spec/specs/' + spec + '.json',
+		url: '../../mustache/spec/specs/' + spec + '.json',
 		dataType: 'json',
 		async: false
 	}).done(function(data) {
@@ -328,7 +328,7 @@ test("returning blocks", function(){
 
 test("easy hookup", function(){
 	var div = document.createElement('div');
-	div.appendChild(can.view("//can/view/mustache/easyhookup.mustache",{text: "yes"}))
+	div.appendChild(can.view("//can/view/mustache/test/easyhookup.mustache",{text: "yes"}))
 	
 	ok( div.getElementsByTagName('div')[0].className.indexOf("yes") != -1, "has yes" )
 });
@@ -949,7 +949,7 @@ test("nested live bindings", function(){
 	]);
 	
 	var div = document.createElement('div');
-	div.appendChild(can.view("//can/view/mustache/nested_live_bindings.mustache",{items: items}))
+	div.appendChild(can.view("//can/view/mustache/test/nested_live_bindings.mustache",{items: items}))
 	
 	items.push({title: 1, is_done: false, id: 1});
 	// this will throw an error unless Mustache protects against
@@ -981,7 +981,7 @@ test("recursive views", function(){
         ])
 	
 	var div = document.createElement('div');
-	div.appendChild( can.view('//can/view/mustache/recursive.mustache',  {items: data}));
+	div.appendChild( can.view('//can/view/mustache/test/recursive.mustache',  {items: data}));
 	ok(/class="leaf"/.test(div.innerHTML), "we have a leaf")
 	
 })
