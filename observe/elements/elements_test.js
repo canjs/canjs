@@ -1,6 +1,6 @@
-steal("can/model/elements", 'funcunit/qunit', function(){
+steal("can/observe/elements", 'funcunit/qunit', function(){
 
-module("jquery/model/elements")
+module("jquery/observe/elements")
 
 test("identity uses the real id", function(){
   var Person = can.Model.extend({

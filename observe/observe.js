@@ -110,11 +110,6 @@ steal('can/util','can/construct', function(can, Construct) {
 			return object._cid = (name ||"" ) + (++cid)
 		}
 	}
-	
-	
-
-	
-		
 		
 	/**
 	 * @add can.Observe
@@ -193,7 +188,6 @@ steal('can/util','can/construct', function(can, Construct) {
 	 */
 	{
 		setup: function( obj ) {
-			console.log(obj)
 			// `_data` is where we keep the properties.
 			this._data = {};
 			// The namespace this `object` uses to listen to events.
