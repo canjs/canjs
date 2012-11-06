@@ -1125,4 +1125,29 @@ test("spaces between attribute name and value", function(){
 	equal(input.type,"text")
 })
 
+test("live binding with computes", function() {
+	var text = '<span><%= compute() %></span>',
+		compute = can.compute(5),
+		compiled = new can.EJS({text: text}).render({
+			compute: compute
+		}),
+		div = document.createElement('div');
+		
+	div.appendChild(can.view.frag(compiled));
+
+	var span = div.getElementsByTagName('span');
+	equal(span.length, 1);
+
+	span = span[0];
+
+	equal(span.innerHTML, '5');
+	compute(6);
+	equal(span.innerHTML, '6');
+	compute('Justin');
+	equal(span.innerHTML, 'Justin');
+	compute(true);
+	equal(span.innerHTML, 'true');
+
+})
+
 })()

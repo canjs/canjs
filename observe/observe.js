@@ -110,11 +110,6 @@ steal('can/util','can/construct', function(can, Construct) {
 			return object._cid = (name ||"" ) + (++cid)
 		}
 	}
-	
-	
-
-	
-		
 		
 	/**
 	 * @add can.Observe
