@@ -1,18 +1,17 @@
-steal('can/util/string',function() {
+steal('can/util/string', function(can) {
 	/**
 	 * @add jQuery.String
 	 */
-	can.
 	/**
 	 * Splits a string with a regex correctly cross browser
-	 * 
+	 *
 	 *     can.rsplit("a.b.c.d", /\./) //-> ['a','b','c','d']
-	 * 
+	 *
 	 * @param {String} string The string to split
 	 * @param {RegExp} regex A regular expression
 	 * @return {Array} An array of strings
 	 */
-	rsplit = function( string, regex ) {
+	can.rsplit = function( string, regex ) {
 		var result = regex.exec(string),
 			retArr = [],
 			first_idx, last_idx;
@@ -32,4 +31,6 @@ steal('can/util/string',function() {
 		}
 		return retArr;
 	};
+
+	return can;
 });

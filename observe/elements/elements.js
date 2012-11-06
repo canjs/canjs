@@ -148,5 +148,5 @@ var unique = function( items ) {
 
 	};
 
-	return can;
+	return can.Observe;
 })

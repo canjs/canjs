@@ -522,4 +522,5 @@ function( can ){
 		}
 	});
 
+	return can.Mustache;
 });

@@ -1,6 +1,6 @@
 
 
-steal('can/util',function( can ) {
+steal('can/util', function( can ) {
 	
 var isArray = can.isArray,
 	// essentially returns an object that has all the must have comparisons ...

@@ -12,11 +12,11 @@
 //
 //	var url = "http://yui.yahooapis.com/combo?3.7.3/build/" + yuilibs.join("&3.7.3/build/")
 
-steal({
+steal('../can.js', {
 	id : './yui-3.7.3.js',
 	_skip : true
 }, "../event.js",'can/util/array/each.js', 'can/util/object/isplain',
-function() {
+function(can) {
 
 	// ---------
 	// _YUI node list._

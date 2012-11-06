@@ -161,4 +161,5 @@ proto.setup = function( instances, options ) {
 	}
 };
 
+return can.Observe;
 });
