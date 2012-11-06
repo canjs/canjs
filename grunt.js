@@ -10,9 +10,11 @@ module.exports = function (grunt) {
 		meta : {
 			out : "dist/",
 			buildFile : "can/build/dist.js",
-			codestyle : {
-				indentSize : 1,
-				indentChar : "\t"
+			beautifier : {
+				options : {
+					indentSize : 1,
+					indentChar : "\t"
+				}
 			},
 			banner : '/*! <%= pkg.title || pkg.name %> - <%= pkg.version %> - ' +
 				'<%= grunt.template.today("yyyy-mm-dd") %>\n' +
@@ -21,12 +23,11 @@ module.exports = function (grunt) {
 				' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
 		},
 		beautifier : {
-			all : {
-				options : '<config:meta.codestyle>'
-			}
+			codebase : '<config:meta.beautifier>',
+			dist : '<config:meta.beautifier>'
 		},
 		beautify : {
-			all : [
+			codebase : [
 				'construct/**/*.js',
 				'control/**/*.js',
 				'model/**/*.js',
@@ -34,7 +35,8 @@ module.exports = function (grunt) {
 				'route/**/*.js',
 				'test/**/*.js',
 				'util/**/*.js'
-			]
+			],
+			dist : '<%= meta.out %>/**/*.js'
 		},
 		build : {
 			edge : {
@@ -59,6 +61,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-beautify');
 	grunt.loadTasks("./build/tasks");
 
-	grunt.registerTask("edge", "build:edge strip:edge minify:edge");
+	grunt.registerTask("edge", "build:edge strip:edge beautify:dist");
 	grunt.registerTask("latest", "build:latest strip:latest minify:edge")
 };

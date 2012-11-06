@@ -440,4 +440,5 @@ can.extend(can.view, {
 
 })
 
+return can;
 });

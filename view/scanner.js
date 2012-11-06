@@ -397,4 +397,5 @@ Scanner.prototype = {
 	}
 };
 
+return Scanner;
 });
