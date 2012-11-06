@@ -46,7 +46,6 @@ steal('steal/build/pluginify', function () {
 			shim : { 'can/util' : 'can' },
 			exclude : [
 				'jquery',
-				'can/util/preamble.js',
 				'can/util/jquery/jquery.js',
 				'can/util/array/each.js',
 				'can/util/string/string.js',
@@ -70,7 +69,6 @@ steal('steal/build/pluginify', function () {
 			onefunc : true,
 			exclude : [
 				'can/util/jquery/jquery.1.8.2.js',
-				'can/util/preamble.js',
 				'can/util/jquery/jquery.js',
 				'can/util/array/each.js',
 				'can/util/string/string.js',

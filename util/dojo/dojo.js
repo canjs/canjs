@@ -406,4 +406,5 @@ steal({
 		}
 	});
 
+	return can;
 }).then('../deferred.js')

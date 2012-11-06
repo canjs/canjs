@@ -51,10 +51,10 @@ steal('steal/build/pluginify', function () {
 			skipCallbacks : true
 		}, options));
 
-		// Replace version
-		code = readFile(outFile);
-		code = code.replace(/\#\{VERSION\}/gim, version);
-		steal.File(outFile).save(code);
+		// Replace version TODO use Grunt
+		// code = readFile(outFile);
+		// code = code.replace(/\#\{VERSION\}/gim, version);
+		// steal.File(outFile).save(code);
 	});
 
 	/*
