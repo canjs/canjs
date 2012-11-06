@@ -135,14 +135,20 @@ test("Mustache bind", function() {
 	same(can.$('#binder2')[0].innerHTML, "<i>Mr Scott</i>");
 });
 
-test("Handlebars custom helper", function() {
-	can.Mustache.registerHelper('hello', function(name) {
-		return 'Hello, ' + name + '!';
+test("Handlebars helpers", function() {
+	can.Mustache.registerHelper('hello', function(options) {
+		return 'Hello!';
+	});
+	can.Mustache.registerHelper('bark', function(obj, str, number, options) {
+		var hash = options.hash || {};
+		return 'The ' + obj + ' barked at ' + str + ' ' + number + ' times, ' +
+			'then the ' + hash.obj + ' ' + hash.action + ' ' + 
+			hash.where + ' times' + (hash.loud === true ? ' loudly' : '') + '.';
 	});
 	var t = {
-		template: "{{hello name}}",
-		expected: "Hello, Andy!",
-		data: { name: 'Andy' }
+		template: "{{hello}}\n{{bark name 'Austin' 3 obj=name action='growled' where=2 loud=true}}",
+		expected: "Hello!\nThe dog barked at Austin 3 times, then the dog growled 2 times loudly.",
+		data: { name: 'dog' }
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');

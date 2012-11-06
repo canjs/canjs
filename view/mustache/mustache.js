@@ -9,6 +9,7 @@ function( can ){
 
 	var extend = can.extend,
 		CONTEXT = '___c0nt3xt',
+		HASH = '___h4sh',
 		isObserve = function(obj) {
 			return can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
 		},
@@ -142,7 +143,8 @@ function( can ){
 						if (mode != 'else') {
 							var args = content.replace(/^\s*/,'').replace(/\s*$/,'').split(/\s/),
 								i = 0,
-								arg, split;
+								hashing = false,
+								arg, split, m;
 							result.push('can.Mustache.txt(can.extend({}, ' + CONTEXT + ', this),' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
 							// Append helper requests as a name string
@@ -154,7 +156,34 @@ function( can ){
 							// Iterate through the arguments
 							for (; arg = args[i]; i++) {
 								i > 0 && result.push(',');
-								result.push('can.Mustache.get("' + arg.replace(/"/g,'\\"') + '",this,' + CONTEXT + ')');
+								
+								// Check for special helper arguments (string/number/boolean/hashes)
+								if (i > 0 && (m = arg.match(/^(('.*?'|".*?"|[0-9.]+|true|false)|((.+?)=(('.*?'|".*?"|[0-9.]+|true|false)|(.+))))$/))) {
+									// Found a string/number/boolean
+									if (m[2]) {
+										result.push(m[0]);
+									}
+									// Found a hash
+									else {
+										// Open the hash
+										if (!hashing) {
+											hashing = true;
+											result.push('{' + HASH + ':{');
+										}
+										
+										// Add the key/value
+										result.push(m[4], ':', m[6] ? m[6] : 'can.Mustache.get("' + m[5].replace(/"/g,'\\"') + '",this,' + CONTEXT + ')');
+										
+										// Close the hash
+										if (i == args.length - 1) {
+											result.push('}}');
+										}
+									}
+								}
+								// Otherwise output a normal reference	
+								else {
+									result.push('can.Mustache.get("' + arg.replace(/"/g,'\\"') + '",this,' + CONTEXT + ')');
+								}
 							}
 						}
 						
@@ -255,10 +284,18 @@ function( can ){
 			for (i = 0; helper = this._helpers[i]; i++) {
 				// Find the correct helper
 				if (helper.name == name) {
-					args.push({
+					// Update the options with a function/inverse (the inner templates of a section)
+					var opts = {
 						fn: can.proxy(options.fn, context),
 						inverse: can.proxy(options.inverse, context)
-					});
+					}, lastArg = args[args.length-1];
+					// Add the hash if one exists
+					if (lastArg && lastArg[HASH]) {
+						opts.hash = args.pop()[HASH];
+					}
+					args.push(opts);
+					
+					// Call the helper
 					return helper.fn.apply(context, args) || '';
 				}
 			}
