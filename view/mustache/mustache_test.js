@@ -157,8 +157,8 @@ test("Handlebars helpers", function() {
 			hash.where + ' times' + (hash.loud === true ? ' loudly' : '') + '.';
 	});
 	var t = {
-		template: "{{hello}}\n{{bark name 'Austin' 3 obj=name action='growled' where=2 loud=true}}",
-		expected: "Hello!\nThe dog barked at Austin 3 times, then the dog growled 2 times loudly.",
+		template: "{{hello}}\n{{bark name 'Austin and Andy' 3 obj=name action='growled and snarled' where=2 loud=true}}",
+		expected: "Hello!\nThe dog barked at Austin and Andy 3 times, then the dog growled and snarled 2 times loudly.",
 		data: { name: 'dog' }
 	};
 	

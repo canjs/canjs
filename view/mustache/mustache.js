@@ -111,7 +111,7 @@ function( can ){
 				{
 					name: /^>[\s|\w]\w*/,
 					fn:function(content, cmd){
-						return "can.view.render('" + content.replace(/^>\s?/, '').trim() + "', can.extend({}, " + CONTEXT + ", this))";
+						return "can.view.render('" + can.trim(content.replace(/^>\s?/, '')) + "', can.extend({}, " + CONTEXT + ", this))";
 					}
 				},
 
@@ -124,7 +124,7 @@ function( can ){
 						// Parse content
 						var mode = false,
 							result = [],
-							content = content.trim();
+							content = can.trim(content);
 						if (content.length && (mode = content.match(/^([#^/]|else$)/))) {
 							mode = mode[0];
 							switch (mode) {
@@ -141,10 +141,18 @@ function( can ){
 						}
 						
 						if (mode != 'else') {
-							var args = content.replace(/^\s*/,'').replace(/\s*$/,'').split(/\s/),
+							var args = [],
 								i = 0,
 								hashing = false,
 								arg, split, m;
+							
+							// Parse the arguments
+							// Needs to use this method of a split(/\s/) so that strings with spaces can be parsed
+							(can.trim(content)+' ').replace(/((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g, function(whole, part) {
+								args.push(part);
+							});
+								
+							// Start the content
 							result.push('can.Mustache.txt(can.extend({}, ' + CONTEXT + ', this),' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
 							// Append helper requests as a name string
