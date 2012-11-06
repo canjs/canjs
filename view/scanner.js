@@ -201,6 +201,9 @@ Scanner.prototype = {
 					}
 					content = '';
 					break;
+				case tmap.commentFull:
+					// Ignore full line comments.
+					break;
 				case tmap.templateLeft:
 					content += tmap.left;
 					break;

@@ -81,7 +81,7 @@ function( can ){
 				["templateLeft", "{{$"], // Template	 ---- Not supported
 				["templateRight", "$}}"], // Right Template	---- Not supported
 				["returnLeft", "{{{", "{{[{&]"], // Return Unescaped
-				// ["commentFull", "{{!}}", "[\\s\\t]*{{!.+?}}\\n?"], // Comment
+				["commentFull", "{{!}}", "^[\\s\\t]*{{!.+?}}\\n"], // Full line comment
 				["commentLeft", "{{!", "(\\n[\\s\\t]*{{!|{{!)"], // Comment
 				["left", "{{~"], // Run
 				["escapeLeft", "{{"], // Return Escaped
