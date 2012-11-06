@@ -191,7 +191,7 @@ Scanner.prototype = {
 				case tmap.left:
 				case tmap.escapeLeft:
 				case tmap.returnLeft:
-					magicInTag = 1;
+					magicInTag = htmlTag && 1;
 				case tmap.commentLeft:
 					// A new line -- just add whatever content within a clean.  
 					// Reset everything.
@@ -340,7 +340,6 @@ Scanner.prototype = {
 								if(helper.name.source == /^>[\s|\w]\w*/.source){
 									escaped = 0;
 								}	
-
 								break;
 							}
 						}

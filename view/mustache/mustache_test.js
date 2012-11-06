@@ -37,6 +37,12 @@ can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials',
 				// can uses &#34; to escape double quotes, mustache expects &quot;.
 				// can uses \n for new lines, mustache expects \r\n.
 				var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+				
+				// Mustache's "Recursion" spec generates invalid HTML
+				if (spec == 'partials' && t.name == 'Recursion') {
+					t.partials.node = t.partials.node.replace(/</g,'[').replace(/\}>/g,'}]');
+					expected = expected.replace(/</g,'[').replace(/>/g,']');
+				}
 
 				// register the partials in the spec
 				if(t.partials){
