@@ -9,6 +9,9 @@ function( can ){
 
 	var extend = can.extend,
 		CONTEXT = '___c0nt3xt',
+		isObserve = function(obj) {
+			return can.isFunction(obj.attr) && obj.constructor && obj.constructor.canMakeObserve;
+		};
 		Mustache = function( options ) {
 			// Supports calling Mustache without the constructor
 			// This returns a function that renders the template.
@@ -123,7 +126,7 @@ function( can ){
 							switch (mode) {
 								case '#':
 								case '^':
-									result.push(cmd.insert + 'can.view.txt(0,"",0,this,function(){ return ');
+									result.push(cmd.insert + 'can.view.txt(0,\'' + cmd.tagName + '\',' + cmd.status + ',this,function(){ return ');
 									break;
 								// Close section
 								case '/':
@@ -160,14 +163,11 @@ function( can ){
 								result.push('}},{fn:function(' + CONTEXT + '){');
 								break;
 							// If/else section
-							case 'else':
-								result.push('}},{inverse:function(' + CONTEXT + '){');
-								break;
 							// Falsey section
+							case 'else':
 							case '^':
 								result.push('}},{inverse:function(' + CONTEXT + '){');
 								break;
-							
 							// Not a section
 							default:
 								result.push(');');
@@ -345,6 +345,12 @@ function( can ){
 							lastValue = value;
 							value = value[name = names[j]];
 						}
+						// If it's undefined, still match if the parent is an Observe.
+						else if (isObserve(value)) {
+							lastValue = value;
+							name = names[j];
+							break;
+						}
 						else {
 							lastValue = value = undefined;
 							break;
@@ -355,7 +361,7 @@ function( can ){
 				// Found a matched reference
 				if (value !== undefined) {
 					// Add support for observes
-					if (can.isFunction(lastValue.attr) && lastValue.constructor && lastValue.constructor.canMakeObserve) {
+					if (isObserve(lastValue)) {
 						return lastValue.attr(name);
 					}
 					// Support functions stored in objects
