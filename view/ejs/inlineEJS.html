@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<style>
+.header {
+    background: #E1E3E1;
+    padding: 10px 0;
+    border-bottom: 1px solid #B5B6B5;
+    margin-bottom: 15px;
+}
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+}
+p { 
+    margin: 10px 0;
+}
+​</style>
+</head>
+<body>
+<div id="dummy"></div>
+
+<script id="dummyEJS" type="text/ejs">
+    <div class="count">
+        Count:
+        <%= products.attr('length') %>
+    </div>
+    
+    <input type="button" name="add_product" class="small button add_product" value="Add Product" />
+    
+    <div class="twelve columns">
+        <ol class="product">
+            <% products.each( function(product, idx){ %>
+            <li><%= idx %></li>
+            <% }) %>
+        </ol>
+    </div>
+</script>
+<script type='text/javascript' src='../../../steal/steal.js'></script>
+<script type='text/javascript'>
+steal(
+	'can/view/ejs',
+	'can/observe',
+	function() {
+		var products = new can.Observe.List([{}]);
+
+		$('#dummy').html(can.view('dummyEJS', {
+	        products : products
+	    }));
+
+	    setTimeout(function() {
+	        products.push({});
+	    }, 2000);
+
+		console.log('d');
+	}
+);
+</script>
+</body>
+</html>
