@@ -146,26 +146,6 @@ test("Mustache live-binding with escaping", function() {
 	same(can.$('#binder2')[0].innerHTML, "<i>Mr Scott</i>");
 });
 
-test("Handlebars helpers", function() {
-	can.Mustache.registerHelper('hello', function(options) {
-		return 'Hello!';
-	});
-	can.Mustache.registerHelper('bark', function(obj, str, number, options) {
-		var hash = options.hash || {};
-		return 'The ' + obj + ' barked at ' + str + ' ' + number + ' times, ' +
-			'then the ' + hash.obj + ' ' + hash.action + ' ' + 
-			hash.where + ' times' + (hash.loud === true ? ' loudly' : '') + '.';
-	});
-	var t = {
-		template: "{{hello}}\n{{bark name 'Austin and Andy' 3 obj=name action='growled and snarled' where=2 loud=true}}",
-		expected: "Hello!\nThe dog barked at Austin and Andy 3 times, then the dog growled and snarled 2 times loudly.",
-		data: { name: 'dog' }
-	};
-	
-	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	same(new can.Mustache({ text: t.template }).render(t.data), expected);
-});
-
 test("Mustache truthy", function() {
 	var t = {
 		template: "{{#name}}Do something, {{name}}!{{/name}}",
@@ -182,6 +162,26 @@ test("Mustache falsey", function() {
 		template: "{{^cannot}}Don't do it, {{name}}!{{/cannot}}",
 		expected: "Don't do it, Andy!",
 		data: { name: 'Andy' }
+	};
+	
+	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+});
+
+test("Handlebars helpers", function() {
+	can.Mustache.registerHelper('hello', function(options) {
+		return 'Hello!';
+	});
+	can.Mustache.registerHelper('bark', function(obj, str, number, options) {
+		var hash = options.hash || {};
+		return 'The ' + obj + ' barked at ' + str + ' ' + number + ' times, ' +
+			'then the ' + hash.obj + ' ' + hash.action + ' ' + 
+			hash.where + ' times' + (hash.loud === true ? ' loudly' : '') + '.';
+	});
+	var t = {
+		template: "{{hello}}\n{{bark name 'Austin and Andy' 3 obj=name action='growled and snarled' where=2 loud=true}}",
+		expected: "Hello!\nThe dog barked at Austin and Andy 3 times, then the dog growled and snarled 2 times loudly.",
+		data: { name: 'dog', hello: 'should not hit this' }
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');

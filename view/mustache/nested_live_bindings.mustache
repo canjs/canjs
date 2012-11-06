@@ -1,1 +1,1 @@
-<form>{{#items}}{{#.attr('is_done') === false}}<div id="{{.title}}"></div>{{/.attr('is_done') === false}}{{/items}}</form>
+<form>{{#items}}{{^is_done}}<div id="{{title}}"></div>{{/is_done}}{{/items}}</form>
