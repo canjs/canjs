@@ -130,7 +130,7 @@ function( can ){
 									break;
 								// Close section
 								case '/':
-									return { raw: '}}])}));' };
+									return { raw: 'return ___v1ew.join("");}}])}));' };
 									break;
 							}
 							content = content.substring(1);
@@ -156,17 +156,17 @@ function( can ){
 						}
 						
 						// Handle sections
-						mode && mode != 'else' && result.push(',[{_:{');
+						mode && mode != 'else' && result.push(',[{_:function(){');
 						switch (mode) {
 							// Truthy section
 							case '#':
-								result.push('}},{fn:function(' + CONTEXT + '){');
+								result.push('return ___v1ew.join("");}},{fn:function(' + CONTEXT + '){var ___v1ew = [];');
 								break;
 							// If/else section
 							// Falsey section
 							case 'else':
 							case '^':
-								result.push('}},{inverse:function(' + CONTEXT + '){');
+								result.push('return ___v1ew.join("");}},{inverse:function(' + CONTEXT + '){var ___v1ew = [];');
 								break;
 							// Not a section
 							default:
