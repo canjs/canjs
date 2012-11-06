@@ -157,7 +157,7 @@ function( can ){
 						
 							// Append helper requests as a name string
 							
-							if (args.length > 1 || Mustache.getHelper(args[0])) {
+							if (args.length > 1) {
 								i = 1;
 								result.push('"' + args[0] + '"');
 							}
@@ -431,6 +431,11 @@ function( can ){
 					}
 				}
 			}
+		}
+		
+		// Support helpers without arguments, but only if there wasn't a matching data reference.
+		if (value = Mustache.getHelper(ref)) {
+			return ref;
 		}
 		
 		return '';

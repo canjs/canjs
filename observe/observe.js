@@ -181,6 +181,19 @@ steal('can/util','can/construct', function(can, Construct) {
 					args ] );
 				}
 			}
+		},
+		/**
+			* Iterates over an onbservable object to get an array of its keys.
+			* @param {can.Observe} observe The observe to iterate over
+			* @return {Array} array An array of the keys on the object.
+		 */
+		keys: function(observe) {
+			var keys = [];
+			Observe.__reading && Observe.__reading(observe, '__keys');
+			for(var keyName in observe._data) {
+				keys.push(keyName);
+			}
+			return keys;
 		}
 	},
 	/**
@@ -427,6 +440,7 @@ steal('can/util','can/construct', function(can, Construct) {
 		 * @return {can.Observe} the original observable.
 		 */
 		each: function() {
+			Observe.__reading && Observe.__reading(this, '__keys');
 			return can.each.apply(undefined, [this.__get()].concat(can.makeArray(arguments)))
 		},
 		/**
@@ -460,6 +474,8 @@ steal('can/util','can/construct', function(can, Construct) {
 					if (!(prop in this.constructor.prototype)) {
 						delete this[prop]
 					}
+					// Let others know the number of keys have changed
+					Observe.triggerBatch(this, "__keys", undefined);
 					Observe.triggerBatch(this, "change", [prop, "remove", undefined, current]);
 					Observe.triggerBatch(this, prop, [undefined, current]);
 				}
@@ -508,6 +524,11 @@ steal('can/util','can/construct', function(can, Construct) {
 				// We're in "real" set territory.
 				if(this.__convert){
 					value = this.__convert(prop, value)
+				}
+				// If there is no current value, let others know that
+				// the the number of keys have changed
+				if(!current) {
+					Observe.triggerBatch(this, "__keys", undefined);
 				}
 				this.__set(prop, value, current)
 			} else {

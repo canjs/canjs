@@ -195,3 +195,23 @@ test("only one update on a start and end transaction",function(){
 	
 })
 
+test("Compute emits change events when an embbedded observe has properties added or removed", 3, function() {
+	var obs = new can.Observe(),
+		compute1 = can.compute(function(){
+			var txt = obs.attr('foo');
+			obs.each(function(val){
+				txt += val.toString();
+			});
+			return txt;
+		});
+
+	compute1.bind('change', function(ev, newVal, oldVal) {
+		ok(true, 'change handler fired: ' + newVal);
+	})
+
+	obs.attr('foo', 1);
+	obs.attr('bar', 2);
+	obs.attr('foo', 3);
+	obs.removeAttr('bar');
+	obs.removeAttr('bar');
+});
