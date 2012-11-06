@@ -168,12 +168,7 @@ test("defaults", function(){
 });
 
 test("nested model attr", function(){
-  can.Model('NestedAttrTest.User', {
-      model : function( data ) {
-        debugger;
-        return can.Model.model.call( this, data );
-      }
-    }, {});
+  can.Model('NestedAttrTest.User', {}, {});
 
   can.Model('NestedAttrTest.Task', {
       attributes : {
