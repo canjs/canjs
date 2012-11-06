@@ -2,7 +2,7 @@
 <% unordered.each(function(item) { %>
 	<li>
 		<% if(item.ol) { %>
-		<%== can.view.render('indirect2.ejs', { ordered: item.ol }) %>
+		<%== can.view.render('//can/view/ejs/indirect2.ejs', { ordered: item.ol }) %>
 		<% } else { %>
 		<%= item.toString() %>
 		<% } %>

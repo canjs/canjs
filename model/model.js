@@ -732,7 +732,7 @@ steal('can/util','can/observe', function( can ) {
 			if ( ! arr ) { // Push other stuff onto `array`.
 				can.each(instancesRawData, function(val, prop){
 					if ( prop !== 'data' ) {
-						res[prop] = val;
+						res.attr(prop, val);
 					}
 				})
 			}
