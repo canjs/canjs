@@ -10,8 +10,11 @@ function( can ){
 	var extend = can.extend,
 		CONTEXT = '___c0nt3xt',
 		isObserve = function(obj) {
-			return can.isFunction(obj.attr) && obj.constructor && obj.constructor.canMakeObserve;
-		};
+			return can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
+		},
+		isArrayLike = function(obj) {
+			return obj && obj.splice && typeof obj.length == 'number';
+		},
 		Mustache = function( options ) {
 			// Supports calling Mustache without the constructor
 			// This returns a function that renders the template.
@@ -234,7 +237,7 @@ function( can ){
 		// Validate based on the mode if necessary
 		if (mode) {
 			for (i = 0; i < validArgs.length; i++) {
-				if (can.isArray(validArgs[i])) {
+				if (isArrayLike(validArgs[i])) {
 					valid = mode == '#' ? valid && !!validArgs[i].length
 						: mode == '^' ? valid && !validArgs[i].length
 						: valid;
@@ -267,7 +270,7 @@ function( can ){
 			switch (mode) {
 				case '#':
 					// Iterate over arrays
-					if (can.isArray(name)) {
+					if (isArrayLike(name)) {
 						for (i = 0; i < name.length; i++) {
 							result.push(options.fn.call(name[i] || {}, context) || '');
 						}
@@ -369,6 +372,8 @@ function( can ){
 						return lastValue[name]();
 					}
 					else {
+						// Invoke the length to ensure that Observe.List events fire.
+						isObserve(value) && isArrayLike(value) && value.attr('length');
 						return value;
 					}
 				}

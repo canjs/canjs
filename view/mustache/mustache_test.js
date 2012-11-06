@@ -936,7 +936,6 @@ test("nested live bindings", function(){
 	// nested objects
 
 	items[0].attr('is_done',true);
-	console.log("html -",div.innerHTML)
 });
 
 // Similar to the nested live bindings test, this makes sure templates with control blocks
