@@ -962,7 +962,7 @@ test("indirectly recursive views", function() {
 
 	var div = document.createElement('div');
 	div.appendChild(can.view('//can/view/ejs/indirect1.ejs', {unordered: unordered}));
-	ok(can.trim($('ul > li > ol > li > ul > li > ol > li:first', div).text()) === "1", "Indirectly recursive views working.");
+	ok(can.trim(div.querySelectorAll('ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Indirectly recursive views working.");
 });
 
 test("live binding select", function(){
