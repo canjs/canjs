@@ -7,9 +7,14 @@ steal('steal/build/pluginify', function () {
 	var libs = {
 		"jquery" : {
 			exclude : ["jquery"],
-			onefunc : true
-		},
-		"zepto" : {}
+			onefunc : true,
+			wrapInner : ['(function(window, $, undefined) {\n', '\n})(this, jQuery);']
+		}
+//		"zepto" : {
+//			exclude : ["zepto.1.0rc1.js"],
+//			onefunc : true,
+//			wrap : ['(function(window, $, undefined) {', '})(this, jQuery)']
+//		}
 //		"mootools" : {}
 //		"dojo" : {
 //			wrapInner : [

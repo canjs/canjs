@@ -4,7 +4,10 @@
 
 // The following code is heavily inspired by jQuery's $.fn.data()
 
-steal(function(){
+steal({
+	id: './zepto.1.0rc1.js',
+	_skip: true
+}, function(){
 	// data.js
 	// ---------
 	// _jQuery-like data methods._

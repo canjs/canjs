@@ -1,7 +1,7 @@
 steal('../can.js',{
 	id: './zepto.1.0rc1.js',
 	_skip: true
-}).then('./data', '../event', '../fragment.js', function() {
+}, './data', '../event', '../fragment.js', function(can) {
 	// zepto.js
 	// ---------
 	// _Zepto node list._
