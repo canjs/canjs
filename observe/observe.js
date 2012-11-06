@@ -193,7 +193,6 @@ steal('can/util','can/construct', function(can, Construct) {
 	 */
 	{
 		setup: function( obj ) {
-			console.log(obj)
 			// `_data` is where we keep the properties.
 			this._data = {};
 			// The namespace this `object` uses to listen to events.
@@ -516,7 +515,6 @@ steal('can/util','can/construct', function(can, Construct) {
 					value = this.__convert(prop, value)
 				}
 				this.__set(prop, value, current)
-				
 			} else {
 				throw "can.Observe: Object does not exist"
 			}
@@ -527,7 +525,6 @@ steal('can/util','can/construct', function(can, Construct) {
 			// TODO: Check if value is object and transform
 			// are we changing the value.
 			if ( value !== current ) {
-
 				// Check if we are adding this for the first time --
 				// if we are, we need to create an `add` event.
 				var changeType = this.__get().hasOwnProperty(prop) ? "set" : "add";
@@ -693,12 +690,13 @@ steal('can/util','can/construct', function(can, Construct) {
 		 * @param {Boolean} remove true if you should remove properties that are not in props
 		 */
 		_attrs: function( props, remove ) {
+
 			if ( props === undefined ) {
 				return serialize(this, 'attr', {})
 			}
 
 			props = can.extend(true, {}, props);
-			var prop, 
+			var prop,
 				self = this,
 				newVal;
 			Observe.startBatch();
