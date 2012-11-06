@@ -163,7 +163,7 @@ test("returning blocks", function(){
 	}
 	
 	var res = can.view.
-		render("//can/view/ejs/test_template.ejs",{
+		render("//can/view/ejs/test/test_template.ejs",{
 			something: somethingHelper, 
 			items: ['a','b']
 		});
@@ -174,7 +174,7 @@ test("returning blocks", function(){
 
 test("easy hookup", function(){
 	var div = document.createElement('div');
-	div.appendChild(can.view("//can/view/ejs/easyhookup.ejs",{text: "yes"}))
+	div.appendChild(can.view("//can/view/ejs/test/easyhookup.ejs",{text: "yes"}))
 	
 	ok( div.getElementsByTagName('div')[0].className.indexOf("yes") != -1, "has yes" )
 });
@@ -913,7 +913,7 @@ test("nested live bindings", function(){
 	]);
 	
 	var div = document.createElement('div');
-	div.appendChild(can.view("//can/view/ejs/nested_live_bindings.ejs",{items: items}))
+	div.appendChild(can.view("//can/view/ejs/test/nested_live_bindings.ejs",{items: items}))
 	
 	items.push({title: 1, is_done: false, id: 1});
 	// this will throw an error unless EJS protects against
@@ -946,7 +946,7 @@ test("recursive views", function(){
         ])
 	
 	var div = document.createElement('div');
-	div.appendChild( can.view('//can/view/ejs/recursive.ejs',  {items: data}));
+	div.appendChild( can.view('//can/view/ejs/test/recursive.ejs',  {items: data}));
 	ok(/class="leaf"/.test(div.innerHTML), "we have a leaf")
 	
 })
@@ -961,7 +961,7 @@ test("indirectly recursive views", function() {
 	]);
 
 	var div = document.createElement('div');
-	div.appendChild(can.view('//can/view/ejs/indirect1.ejs', {unordered: unordered}));
+	div.appendChild(can.view('//can/view/ejs/test/indirect1.ejs', {unordered: unordered}));
 	ok(can.trim(div.querySelectorAll('ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Indirectly recursive views working.");
 });
 
