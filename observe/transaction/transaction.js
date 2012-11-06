@@ -47,6 +47,6 @@ steal('can', function(can){
 		}
 	};
 	
-	
+	return can.Observe;
 	
 });

@@ -1,4 +1,4 @@
-steal('can/util/can.js', function(can) {
+steal('can/util', function(can) {
 	var core_hasOwn = Object.prototype.hasOwnProperty,
 		isWindow = function( obj ) {
 			return obj != null && obj == obj.window;
@@ -33,5 +33,5 @@ steal('can/util/can.js', function(can) {
 		}
 
 	can.isPlainObject = isPlainObject;
-	return isPlainObject;
+	return can;
 });

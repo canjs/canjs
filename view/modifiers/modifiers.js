@@ -288,4 +288,6 @@ steal('jquery', 'can/view', function($, can) {
 	"replaceWith", "val"],function(func){
 		convert(func);
 	});
-})
+
+	return can;
+});

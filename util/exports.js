@@ -7,4 +7,5 @@ steal('can/util', function( can ) {
 		});
 	}
 
+	return can;
 });

@@ -15,7 +15,7 @@
  */
 //
 
- steal('can/util',function(){
+ steal('can/util',function(can) {
     /**
      * @page can.toJSON
      * @parent can.util
@@ -209,4 +209,6 @@
         '"' : '\\"',
         '\\': '\\\\'
     };
+
+	return can;
 })
