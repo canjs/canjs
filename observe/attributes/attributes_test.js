@@ -1,4 +1,4 @@
-steal('can/util', 'can/model', 'can/observe/attributes', function(can) {
+steal('can/util', 'can/model', 'can/model/list', 'can/observe/attributes', function(can) {
 
 module("can/observe/attributes");
 
@@ -223,5 +223,43 @@ test("nested model attr", function(){
     equal(NestedAttrTest.User.store[17].id, 17, "The model store should still have Michael associated by his id");
 });
 
+test("attr() should respect convert functions for lists when updating", function(){
+  can.Model('ListTest.User', {}, {});
+
+  can.Model('ListTest.Task', {
+    attributes : {
+      project : "ListTest.Project.model"
+    }
+  }, {});
+
+  can.Model('ListTest.Project',{
+      attributes : {
+        members : "ListTest.User.models"
+      }
+    }, {});
+
+    var task = ListTest.Project.model({
+      id : 1,
+      name : "Do it!",
+      project : {
+        id : 789,
+        name : "Get stuff done",
+        members : []
+      }
+    });
+
+    task.attr({
+      id : 1,
+      project : {
+        id : 789,
+        members: [{ id : 72, name : "Andy"}, { id : 74, name : "Michael"}]
+      }
+    });
+
+    equal(task.project.members instanceof ListTest.User.List, true, "the list is a User List");
+    equal(task.project.members.length, 2, "The members were added");
+    equal(task.project.members[0] instanceof ListTest.User, true, "The members was converted to a model object");
+    equal(task.project.members[1] instanceof ListTest.User, true, "The user was converted to a model object");
+});
 
 })();
