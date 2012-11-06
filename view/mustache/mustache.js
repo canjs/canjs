@@ -111,7 +111,7 @@ function( can ){
 				{
 					name: /^>[\s|\w]\w*/,
 					fn:function(content, cmd){
-						return "can.view.render('" + content.replace(/^>\s?/, '').trim() + "', can.extend({}, " + CONTEXT + ", this))";
+						return "can.view.render('" + can.trim(content.replace(/^>\s?/, '')) + "', can.extend({}, " + CONTEXT + ", this))";
 					}
 				},
 
@@ -124,7 +124,7 @@ function( can ){
 						// Parse content
 						var mode = false,
 							result = [],
-							content = content.trim();
+							content = can.trim(content);
 						if (content.length && (mode = content.match(/^([#^/]|else$)/))) {
 							mode = mode[0];
 							switch (mode) {
@@ -141,13 +141,22 @@ function( can ){
 						}
 						
 						if (mode != 'else') {
-							var args = content.replace(/^\s*/,'').replace(/\s*$/,'').split(/\s/),
+							var args = [],
 								i = 0,
 								hashing = false,
 								arg, split, m;
+							
+							// Parse the arguments
+							// Needs to use this method of a split(/\s/) so that strings with spaces can be parsed
+							(can.trim(content)+' ').replace(/((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g, function(whole, part) {
+								args.push(part);
+							});
+								
+							// Start the content
 							result.push('can.Mustache.txt(can.extend({}, ' + CONTEXT + ', this),' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
 							// Append helper requests as a name string
+							
 							if (args.length > 1) {
 								i = 1;
 								result.push('"' + args[0] + '"');
@@ -180,7 +189,7 @@ function( can ){
 										}
 									}
 								}
-								// Otherwise output a normal reference	
+								// Otherwise output a normal reference
 								else {
 									result.push('can.Mustache.get("' + arg.replace(/"/g,'\\"') + '",this,' + CONTEXT + ')');
 								}
@@ -232,6 +241,16 @@ function( can ){
 	Mustache.registerHelper = function(name, fn){
 		this._helpers.push({ name: name, fn: fn });
 	};
+	
+	Mustache.getHelper = function(name) {		
+		for (var i = 0, helper; helper = this._helpers[i]; i++) {
+			// Find the correct helper
+			if (helper.name == name) {
+				return helper;
+			}
+		}
+		return null;
+	};
 
 	Mustache.registerPartial = function(id, text) {
 		// Get the renderer function.
@@ -279,30 +298,25 @@ function( can ){
 			}
 		}
 		
-		// If there is more than one argument, it's a helper
-		if (args.length > 0) {
-			for (i = 0; helper = this._helpers[i]; i++) {
-				// Find the correct helper
-				if (helper.name == name) {
-					// Update the options with a function/inverse (the inner templates of a section)
-					var opts = {
-						fn: can.proxy(options.fn, context),
-						inverse: can.proxy(options.inverse, context)
-					}, lastArg = args[args.length-1];
-					// Add the hash if one exists
-					if (lastArg && lastArg[HASH]) {
-						opts.hash = args.pop()[HASH];
-					}
-					args.push(opts);
-					
-					// Call the helper
-					return helper.fn.apply(context, args) || '';
-				}
+		// Check for a helper
+		if (helper = Mustache.getHelper(name)) {
+			// Update the options with a function/inverse (the inner templates of a section)
+			var opts = {
+				fn: can.proxy(options.fn, context),
+				inverse: can.proxy(options.inverse, context)
+			}, lastArg = args[args.length-1];
+			// Add the hash if one exists
+			if (lastArg && lastArg[HASH]) {
+				opts.hash = args.pop()[HASH];
 			}
-			return '';
+			args.push(opts);
+			
+			// Call the helper
+			return helper.fn.apply(context, args) || '';
 		}
+		
 		// Otherwise interpolate like normal
-		else if (valid) {
+		if (valid) {
 			// Handle truthyness
 			switch (mode) {
 				case '#':
@@ -326,6 +340,8 @@ function( can ){
 					break;
 			}
 		}
+		
+		return '';
 	};
 	
 	/**
@@ -417,6 +433,11 @@ function( can ){
 			}
 		}
 		
+		// Support helpers without arguments, but only if there wasn't a matching data reference.
+		if (value = Mustache.getHelper(ref)) {
+			return ref;
+		}
+		
 		return '';
 	};
 
@@ -468,6 +489,16 @@ function( can ){
 				if (!!expr) {
 					return options.fn(expr);
 				}
+			}
+		},
+
+		{
+			name: 'data',
+			fn: function(attr, options){
+				var obj = this;
+				return can.view.hook(function(el){
+					can.$(el).data(attr, obj);
+				}).replace(/\'/g, '');
 			}
 		}
 	];
