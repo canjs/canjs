@@ -951,6 +951,19 @@ test("recursive views", function(){
 	
 })
 
+test("indirectly recursive views", function() {
+	var unordered = new can.Observe.List([
+		{ ol: [
+			{ ul: [
+				{ ol: [1, 2, 3] }
+			]}
+		]}
+	]);
+
+	var div = document.createElement('div');
+	div.appendChild(can.view('//can/view/ejs/indirect1.ejs', {unordered: unordered}));
+	ok(can.trim($('ul > li > ol > li > ul > li > ol > li:first', div).text()) === "1", "Indirectly recursive views working.");
+});
 
 test("live binding select", function(){
 	var text = "<select><% items.each(function(ob) { %>" +
@@ -1106,7 +1119,10 @@ test("spaces between attribute name and value", function(){
 		div = document.createElement('div');
 	
 	div.appendChild(can.view.frag(compiled));
-	equal(div.innerHTML, '<input type="text" value="testing">');
+	var input = div.getElementsByTagName('input')[0];
+	
+	equal(input.value, 'testing');
+	equal(input.type,"text")
 })
 
 })()

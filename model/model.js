@@ -549,10 +549,12 @@ steal('can/util','can/observe', function( can ) {
 		setup : function(base){
 			// create store here if someone wants to use model without inheriting from it
 			this.store = {};
-			can.Observe.apply(this, arguments);
+			can.Observe.setup.apply(this, arguments);
+			// Set default list as model list
 			if(!can.Model){
 				return;
 			}
+			this.List = ML({Observe: this},{});
 			var self = this,
 				clean = can.proxy(this._clean, self);
 			
@@ -730,7 +732,7 @@ steal('can/util','can/observe', function( can ) {
 			if ( ! arr ) { // Push other stuff onto `array`.
 				can.each(instancesRawData, function(val, prop){
 					if ( prop !== 'data' ) {
-						res[prop] = val;
+						res.attr(prop, val);
 					}
 				})
 			}

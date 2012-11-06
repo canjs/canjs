@@ -300,7 +300,7 @@ steal('can/util', function(can) {
 					var old = getterSetter;
 					getterSetter = val;
 					if( old !== val){
-						can.batchTrigger(computed, "change",[val, old]);
+						can.Observe.triggerBatch(computed, "change",[val, old]);
 					}
 					
 					return val;
@@ -325,7 +325,7 @@ steal('can/util', function(can) {
 			if( bindings === 0 && canbind){
 				// setup live-binding
 				computedData = computeBinder(getterSetter, context || this, function(newValue, oldValue){
-					can.batchTrigger(computed, "change",[newValue, oldValue])
+					can.Observe.triggerBatch(computed, "change",[newValue, oldValue])
 				});
 			}
 			bindings++;

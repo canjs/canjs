@@ -187,7 +187,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 		var self = this;
 		oldSetup.call(self, superClass, stat, proto);
 
-		can.each(["attributes", "validations"], function( name ) {
+		can.each(["attributes"], function( name ) {
 			if (!self[name] || superClass[name] === self[name] ) {
 				self[name] = {};
 			}
