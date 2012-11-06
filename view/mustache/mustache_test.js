@@ -359,7 +359,7 @@ test("helpers", function() {
 
 test("attribute single unescaped, html single unescaped", function(){
 
-	var text = "<div id='me' class='{{ task.completed }}'>{{ task.name }}</div>";
+	var text = "<div id='me' class='{{#task.completed}}true{{/task.completed}}'>{{ task.name }}</div>";
 	var task = new can.Observe({
 		name : 'dishes'
 	})
@@ -441,35 +441,6 @@ test("select live binding", function() {
 		equals(div.getElementsByTagName('option').length, 0, '0 items in list')
 });  
 
-test("block live binding", function(){
-	
-	var text = "<div>{{ #sex  }}"+
-			"<span>Mr.</span>"+
-		"{{ else  }}"+
-		  "<label>Ms.</label>"+
-		"{{ /sex }}"+
-		"</div>"
-	
-	
-	var obs = new can.Observe({
-		sex : 'male'
-	})
-	
-	var compiled = new can.Mustache({text: text}).render({obs: obs});
-	
-	var div = document.createElement('div');
-
-	div.appendChild(can.view.frag(compiled))
-	
-	// toUpperCase added to normalize cases for IE8
-	equals(div.getElementsByTagName('div')[0].innerHTML.toUpperCase(), "<span>Mr.</span>".toUpperCase(),"initial content")
-	
-	obs.attr('sex','female')
-	
-	equals(div.getElementsByTagName('div')[0].innerHTML.toUpperCase(), "<label>Ms.</label>".toUpperCase(),"updated label")
-	
-})
-
 test('multiple hookups in a single attribute', function() {
 	var text =	'<div class=\'{{ obs.foo }}' +
 							'{{ obs.bar }}{{ obs.baz }}{{ obs.nest.what }}\'></div>',
@@ -508,7 +479,7 @@ test('multiple hookups in a single attribute', function() {
 
 test('adding and removing multiple html content within a single element', function(){
 	
-	var text =	'<div>{{ obs.a) }}{{ obs.b) }}{{ obs.c }}</div>',
+	var text =	'<div>{{ obs.a }}{{ obs.b }}{{ obs.c }}</div>',
 
 	obs = new can.Observe({
 		a: 'a',
@@ -880,7 +851,7 @@ test("attribute value bindings change", function(){
 })
 
 test("in tag toggling", function(){
-		var text = "<div {{ obs.val) }}></div>"
+		var text = "<div {{ obs.val }}></div>"
 	
 	
 	var obs = new can.Observe({
@@ -981,7 +952,7 @@ test("nested live bindings", function(){
 })*/
 
 test("trailing text", function(){
-	can.view.mustache("count","There are {{ this.length }} todos")
+	can.view.mustache("count","There are {{ length }} todos")
 	var div = document.createElement('div');
 	div.appendChild( can.view("count", new can.Observe.List([{},{}])) );
 	ok(/There are 2 todos/.test(div.innerHTML), "got all text")

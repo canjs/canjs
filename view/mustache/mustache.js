@@ -116,7 +116,8 @@ function( can ){
 					fn: function(content, cmd) {
 						// Parse content
 						var mode = false,
-							result = [];
+							result = [],
+							content = content.trim();
 						if (content.length && (mode = content.match(/^([#^/]|else$)/))) {
 							mode = mode[0];
 							switch (mode) {

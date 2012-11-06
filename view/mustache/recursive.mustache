@@ -1,14 +1,14 @@
 <div class="template">
 {{#items}}
 	<div class="loop">
-		{{#item.attr('children')}}
+		{{#item.children}}
 			<div class="node">
-				{{>'//can/view/ejs/recursive.ejs', {items:item.attr('children')}}}
+				{{>'//can/view/ejs/recursive.ejs'}}
 			</div>
-		{{/item.attr('children')}}
-		{{^item.attr('children')}}
+		{{/item.children}}
+		{{^item.children}}
 			<div class="leaf">L</div>
-		{{/item.attr('children')}}
+		{{/item.children}}
 	</div>
-<%}) %>
+{{/items}}
 </div>
