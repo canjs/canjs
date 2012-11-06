@@ -114,9 +114,20 @@ test("registerNode, unregisterNode, and replace work", function(){
 	same(can.view.nodeListMap ,{} )
 });
 
+test("Model hookup", function(){
+	var template = '<p id="foo" {{data "name"}}>data rocks</p>';
 
+	var obsvr = new can.Observe({
+		name: 'Austin'
+	});
 
-test("Mustache bind", function() {
+	var template = new can.Mustache({ text: template }).render(obsvr);
+	can.append( can.$('#qunit-test-area'), can.view.frag(template));
+
+	same(can.$('#foo').data('name'), obsvr, 'data hooks worked and fetched');
+});
+
+test("Mustache live-binding with escaping", function() {
 	var template = "<span id='binder1'>{{ name }}</span><span id='binder2'>{{{name}}}</span>";
 
 	var teacher = new can.Observe({

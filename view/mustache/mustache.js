@@ -469,6 +469,16 @@ function( can ){
 					return options.fn(expr);
 				}
 			}
+		},
+
+		{
+			name: 'data',
+			fn: function(attr, options){
+				var obj = this;
+				return can.view.hook(function(el){
+					can.$(el).data(attr, obj);
+				}).replace(/\'/g, '');
+			}
 		}
 	];
 

@@ -410,45 +410,23 @@ After rendering the HTML, `jquery_tabs` will be called on the tabs div.
 
 ### data
 
-You can hookup data to a element easily by calling the `data` helper.
+You can hookup data to a element easily by calling the `data` helper,
+just called `data` followed by the attribute name you want it to attach it as.
 
 	{
-		friends: [
-			{
-				name: 'Austin'
-			}
-		]
+		name: 'Austin'
 	}
 
 	<ul>
-		{{#friends}}
-			<li {{#data}}>{{name}}</li>
-		{{/friends}}
+		<li id="foo" {{data 'name'}}>{{name}}</li>
 	</ul>
 
-The above will automatically attach the data to the
+Now I can access my object by doing:
+
+	var nameObject = can.$('#foo').data('name');
+
+It automatically attaches the data to the
 element using `can.data` with implied context of `this`.
-
-Additionally, you can pass the object you would like to
-attach.
-
-	{
-		friends: [
-			{
-				name: 'Austin',
-				car: {
-					make: "Audi",
-					model: "A5"
-				}
-			}
-		]
-	}
-
-	<ul>
-		{{#friends}}
-			<li {{#data car}}>{{name}}</li>
-		{{/friends}}
-	</ul>
 
 ### Registering Helpers
 
