@@ -141,7 +141,7 @@ test("Handlebars helper: unless", function() {
 
 test("Handlebars helper: each", function() {
 	var t = {
-		template: "{{#each names}}{{.}} {{/each}}",
+		template: "{{#each names}}{{this}} {{/each}}",
 		expected: "Andy Austin Justin ",
 		data: { names: ['Andy', 'Austin', 'Justin'] }
 	};

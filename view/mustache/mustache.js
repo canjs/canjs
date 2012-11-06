@@ -321,7 +321,14 @@ function( can ){
 		
 		// Handle "this" references for list iteration: {{.}} or {{this}}
 		if (/^\.|this$/.test(ref)) {
-			return obj || context || '';
+			// If context isn't an object, then it was a value passed by a helper so use it as an override.
+			if (!/^object|undefined$/.test(typeof context)) {
+				return context || '';
+			}
+			// Otherwise just return the closest object.
+			else {
+				return obj || context || '';
+			}
 		}
 		// Handle object resolution.
 		else {
@@ -365,8 +372,6 @@ function( can ){
 	};
 
 	Mustache._helpers = [
-		// if, else, unless, each, with
-		
 		/**
 		 * {{#if expr}}
 		 *   Do {{something}}
