@@ -21,4 +21,6 @@ steal('can/util/can.js',function (can) {
 		}
 		return elements;
 	};
+
+	return can;
 });

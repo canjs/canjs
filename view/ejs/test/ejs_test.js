@@ -31,7 +31,7 @@ var getAttr = function(el, attrName){
 			el.getAttribute(attrName);
 	}
 
-test("register register and replace work", function(){
+test("registerNode, unregisterNode, and replace work", function(){
 	
 	var ids = function(arr){
 		return can.map(arr, function(item){
@@ -41,41 +41,41 @@ test("register register and replace work", function(){
 		two = {id: 2},
 		listOne = [{id: 1},two,{id: 3}];
 		
-	can.EJS.register(listOne);
+	can.view.registerNode(listOne);
 	var listTwo = [two];
 	
-	can.EJS.register(listTwo);
+	can.view.registerNode(listTwo);
 	
 	var newLabel = {id: 4}
-	can.EJS.replace(listTwo, [newLabel])
+	can.view.replace(listTwo, [newLabel])
 	
 	same( ids(listOne), [1,4,3], "replaced" )
 	same( ids(listTwo), [4] );
 	
-	can.EJS.replace(listTwo,[{id: 5},{id: 6}]);
+	can.view.replace(listTwo,[{id: 5},{id: 6}]);
 	
 	same( ids(listOne), [1,5,6,3], "replaced" );
 	
 	same( ids(listTwo), [5,6], "replaced" );
 	
-	can.EJS.replace(listTwo,[{id: 7}])
+	can.view.replace(listTwo,[{id: 7}])
 	
 	same( ids(listOne), [1,7,3], "replaced" );
 	
 	same( ids(listTwo), [7], "replaced" );
 	
-	can.EJS.replace( listOne, [{id: 8}])
+	can.view.replace( listOne, [{id: 8}])
 	
 	same( ids(listOne), [8], "replaced" );
 	same( ids(listTwo), [7], "replaced" );
 	
-	can.EJS.unregister(listOne);
-	can.EJS.unregister(listTwo);
+	can.view.unregisterNode(listOne);
+	can.view.unregisterNode(listTwo);
 	
 	
 	
-	same(can.EJS.nodeMap, {} );
-	same(can.EJS.nodeListMap ,{} )
+	same(can.view.nodeMap, {} );
+	same(can.view.nodeListMap ,{} )
 	
 	
 });
@@ -163,7 +163,7 @@ test("returning blocks", function(){
 	}
 	
 	var res = can.view.
-		render("//can/view/ejs/test_template.ejs",{
+		render("//can/view/ejs/test/test_template.ejs",{
 			something: somethingHelper, 
 			items: ['a','b']
 		});
@@ -174,7 +174,7 @@ test("returning blocks", function(){
 
 test("easy hookup", function(){
 	var div = document.createElement('div');
-	div.appendChild(can.view("//can/view/ejs/easyhookup.ejs",{text: "yes"}))
+	div.appendChild(can.view("//can/view/ejs/test/easyhookup.ejs",{text: "yes"}))
 	
 	ok( div.getElementsByTagName('div')[0].className.indexOf("yes") != -1, "has yes" )
 });
@@ -913,7 +913,7 @@ test("nested live bindings", function(){
 	]);
 	
 	var div = document.createElement('div');
-	div.appendChild(can.view("//can/view/ejs/nested_live_bindings.ejs",{items: items}))
+	div.appendChild(can.view("//can/view/ejs/test/nested_live_bindings.ejs",{items: items}))
 	
 	items.push({title: 1, is_done: false, id: 1});
 	// this will throw an error unless EJS protects against
@@ -946,11 +946,24 @@ test("recursive views", function(){
         ])
 	
 	var div = document.createElement('div');
-	div.appendChild( can.view('//can/view/ejs/recursive.ejs',  {items: data}));
+	div.appendChild( can.view('//can/view/ejs/test/recursive.ejs',  {items: data}));
 	ok(/class="leaf"/.test(div.innerHTML), "we have a leaf")
 	
 })
 
+test("indirectly recursive views", function() {
+	var unordered = new can.Observe.List([
+		{ ol: [
+			{ ul: [
+				{ ol: [1, 2, 3] }
+			]}
+		]}
+	]);
+
+	var div = document.createElement('div');
+	div.appendChild(can.view('//can/view/ejs/test/indirect1.ejs', {unordered: unordered}));
+	ok(can.trim(div.querySelectorAll('ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Indirectly recursive views working.");
+});
 
 test("live binding select", function(){
 	var text = "<select><% items.each(function(ob) { %>" +
@@ -994,11 +1007,11 @@ test("live binding textarea", function(){
 
 test("A non-escaping live magic tag within a control structure and no leaks", function(){
 	
-	for(var prop in can.EJS.nodeMap){
-		delete can.EJS.nodeMap[prop]
+	for(var prop in can.view.nodeMap){
+		delete can.view.nodeMap[prop]
 	}
-	for(var prop in can.EJS.nodeListMap){
-		delete can.EJS.nodeListMap[prop]
+	for(var prop in can.view.nodeListMap){
+		delete can.view.nodeListMap[prop]
 	}
 	
 	var text = "<div><% items.each(function(ob) { %>" +
@@ -1031,8 +1044,8 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 		
 	can.remove( can.$(div.firstChild) )
 		
-	same(can.EJS.nodeMap, {} );
-	same(can.EJS.nodeListMap ,{} )
+	same(can.view.nodeMap, {} );
+	same(can.view.nodeListMap ,{} )
 });
 
 
@@ -1110,6 +1123,31 @@ test("spaces between attribute name and value", function(){
 	
 	equal(input.value, 'testing');
 	equal(input.type,"text")
+})
+
+test("live binding with computes", function() {
+	var text = '<span><%= compute() %></span>',
+		compute = can.compute(5),
+		compiled = new can.EJS({text: text}).render({
+			compute: compute
+		}),
+		div = document.createElement('div');
+		
+	div.appendChild(can.view.frag(compiled));
+
+	var span = div.getElementsByTagName('span');
+	equal(span.length, 1);
+
+	span = span[0];
+
+	equal(span.innerHTML, '5');
+	compute(6);
+	equal(span.innerHTML, '6');
+	compute('Justin');
+	equal(span.innerHTML, 'Justin');
+	compute(true);
+	equal(span.innerHTML, 'true');
+
 })
 
 })()

@@ -56,5 +56,6 @@ steal('./can.js',function(can){
 		})
 		return frag;
 	};
-	
-})
+
+	return can;
+});

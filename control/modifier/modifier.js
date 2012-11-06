@@ -1,4 +1,4 @@
-steal("can/control", "can/util/function", function() {
+steal("can/util", "can/control", "can/util/function", function(can) {
 
 	// Hang on to original action
 	var originalSetup = can.Control.setup,
@@ -78,4 +78,5 @@ steal("can/control", "can/util/function", function() {
 
 	});
 
+	return can;
 });

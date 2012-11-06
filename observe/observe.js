@@ -8,7 +8,7 @@ steal('can/util','can/construct', function(can, Construct) {
 	var canMakeObserve = function( obj ) {
 			return obj && (can.isArray(obj) || can.isPlainObject( obj ) || ( obj instanceof can.Observe ));
 		},
-
+		
 		// Removes all listeners.
 		unhookup = function(items, namespace){
 			return can.each(items, function(item){
@@ -102,69 +102,99 @@ steal('can/util','can/construct', function(can, Construct) {
 		batchEvents = [],
 		stopCallbacks = [];
 	
-	
-	// starts collecting events
-	// takes a callback for after they are updated
-	// how could you hook into after ejs
-	can.stop = function(fn){
-		transactions++;
-		fn && stopCallbacks.push(fn);
-	}
-	// ends collecting events
-	can.start = function(force, callStop){
-		if(force){
-			transactions = 0;
-		} else {
-			transactions--;
-		}
-		
-		if(transactions == 0){
-			var items = batchEvents.slice(0),
-				callbacks = stopCallbacks.slice(0);
-			batchEvents= [];
-			stopCallbacks = [];
-			batchNum++;
-			callStop && can.stop();
-			can.each(items, function( item ) {
-				can.trigger.apply(can, item);
-			});
-			can.each(callbacks, function( cb ) {
-				cb;
-			});
+	var cid = 0;
+	can.cid = function(object, name){
+		if(object._cid){
+			return object._cid
+		} else{
+			return object._cid = (name ||"" ) + (++cid)
 		}
 	}
-	// Creates an event on item, but will not send immediately 
-	// if collecting events.  
-	// `item` - The item the event should happen on.  
-	// `event` - The event name, ex: `change`.  
-	// `args` - Tn array of arguments.
-	can.batchTrigger = function( item, event, args ) {
-		// Don't send events if initalizing.
-		if ( ! item._init) {
-			if (transactions == 0 ) {
-				return can.trigger(item, event, args);
-			} else {
-				batchEvents.push([
-				item,
-				{
-					type: event,
-					batchNum : batchNum
-				}, 
-				args ] );
-			}
-		}
-	};
-		
 		
 	/**
 	 * @add can.Observe
 	 */
 	var Observe = can.Observe = Construct( {
+	/**
+	 * @static
+	 */
 		// keep so it can be overwritten
 		bind : bind,
 		unbind: unbind,
 		id: "id",
-    canMakeObserve : canMakeObserve
+		canMakeObserve : canMakeObserve,
+		// starts collecting events
+		// takes a callback for after they are updated
+		// how could you hook into after ejs
+		/**
+		 * `can.Observe.startBatch([batchStopHandler])` starts a 
+		 * transaction. 
+		 * @param {Function} [batchStopHandler]
+		 */
+		startBatch: function( batchStopHandler ) {
+			transactions++;
+			batchStopHandler && stopCallbacks.push(batchStopHandler);
+		},
+		/**
+		 * `can.Observe.stopBatch([force,] [callStart])`
+		 */
+		stopBatch: function(force, callStart){
+			if(force){
+				transactions = 0;
+			} else {
+				transactions--;
+			}
+			
+			if(transactions == 0){
+				var items = batchEvents.slice(0),
+					callbacks = stopCallbacks.slice(0);
+				batchEvents= [];
+				stopCallbacks = [];
+				batchNum++;
+				callStart && this.startBatch();
+				can.each(items, function( args ) {
+					can.trigger.apply(can, args);
+				});
+				can.each(callbacks, function( cb ) {
+					cb;
+				});
+			}
+		},
+		/**
+		 * Creates an event on item, but will not send immediately if collecting events.  
+		 * @param {can.Observe} item The item the event should happen on.  
+		 * @param {String|Object} event - The event name, ex: `change`, or an object with an event type, ex: `{type: 'change'}`.  
+		 * @param {Array} - The arguments to call back the function with.
+		 */
+		triggerBatch: function( item, event, args ) {
+			// Don't send events if initalizing.
+			if ( ! item._init) {
+				if (transactions == 0 ) {
+					return can.trigger(item, event, args);
+				} else {
+					batchEvents.push([
+					item,
+					{
+						type: event,
+						batchNum : batchNum
+					}, 
+					args ] );
+				}
+			}
+		},
+		/**
+			* Iterates over an onbservable object to get an array of its keys.
+			* @param {can.Observe} observe The observe to iterate over
+			* @return {Array} array An array of the keys on the object.
+		 */
+		keys: function(observe) {
+			var keys = [];
+			Observe.__reading && Observe.__reading(observe, '__keys');
+			for(var keyName in observe._data) {
+				keys.push(keyName);
+			}
+			return keys;
+		}
 	},
 	/**
 	 * @prototype
@@ -174,7 +204,7 @@ steal('can/util','can/construct', function(can, Construct) {
 			// `_data` is where we keep the properties.
 			this._data = {};
 			// The namespace this `object` uses to listen to events.
-			this._cid = ".observe" + (++observeId);
+			can.cid(this, ".observe");
 			// Sets all `attrs`.
 			this._init = 1;
 			this.attr(obj);
@@ -182,7 +212,7 @@ steal('can/util','can/construct', function(can, Construct) {
 			delete this._init;
 		},
 		_changes: function(ev, attr, how,newVal, oldVal){
-			can.batchTrigger(this, {type:attr, batchNum: ev.batchNum}, [newVal,oldVal]);
+			Observe.triggerBatch(this, {type:attr, batchNum: ev.batchNum}, [newVal,oldVal]);
 		},
 		/**
 		 * @attribute _cid
@@ -410,6 +440,7 @@ steal('can/util','can/construct', function(can, Construct) {
 		 * @return {can.Observe} the original observable.
 		 */
 		each: function() {
+			Observe.__reading && Observe.__reading(this, '__keys');
 			return can.each.apply(undefined, [this.__get()].concat(can.makeArray(arguments)))
 		},
 		/**
@@ -443,8 +474,10 @@ steal('can/util','can/construct', function(can, Construct) {
 					if (!(prop in this.constructor.prototype)) {
 						delete this[prop]
 					}
-					can.batchTrigger(this, "change", [prop, "remove", undefined, current]);
-					can.batchTrigger(this, prop, [undefined, current]);
+					// Let others know the number of keys have changed
+					Observe.triggerBatch(this, "__keys", undefined);
+					Observe.triggerBatch(this, "change", [prop, "remove", undefined, current]);
+					Observe.triggerBatch(this, prop, [undefined, current]);
 				}
 				return current;
 			}
@@ -492,8 +525,12 @@ steal('can/util','can/construct', function(can, Construct) {
 				if(this.__convert){
 					value = this.__convert(prop, value)
 				}
+				// If there is no current value, let others know that
+				// the the number of keys have changed
+				if(!current) {
+					Observe.triggerBatch(this, "__keys", undefined);
+				}
 				this.__set(prop, value, current)
-				
 			} else {
 				throw "can.Observe: Object does not exist"
 			}
@@ -504,7 +541,6 @@ steal('can/util','can/construct', function(can, Construct) {
 			// TODO: Check if value is object and transform
 			// are we changing the value.
 			if ( value !== current ) {
-
 				// Check if we are adding this for the first time --
 				// if we are, we need to create an `add` event.
 				var changeType = this.__get().hasOwnProperty(prop) ? "set" : "add";
@@ -521,8 +557,8 @@ steal('can/util','can/construct', function(can, Construct) {
 				value);
 
 				// `batchTrigger` the change event.
-				can.batchTrigger(this, "change", [prop, changeType, value, current]);
-				//can.batchTrigger(this, prop, [value, current]);
+				Observe.triggerBatch(this, "change", [prop, changeType, value, current]);
+				//Observe.triggerBatch(this, prop, [value, current]);
 				// If we can stop listening to our old value, do it.
 				current && unhookup([current], this._cid);
 			}
@@ -670,15 +706,16 @@ steal('can/util','can/construct', function(can, Construct) {
 		 * @param {Boolean} remove true if you should remove properties that are not in props
 		 */
 		_attrs: function( props, remove ) {
+
 			if ( props === undefined ) {
 				return serialize(this, 'attr', {})
 			}
 
 			props = can.extend(true, {}, props);
-			var prop, 
+			var prop,
 				self = this,
 				newVal;
-			can.stop();
+			Observe.startBatch();
 			this.each(function(curVal, prop){
 				newVal = props[prop];
 
@@ -701,7 +738,7 @@ steal('can/util','can/construct', function(can, Construct) {
 				newVal = props[prop];
 				this._set(prop, newVal)
 			}
-			can.start()
+			Observe.stopBatch()
 			return this;
 		}
 	});
@@ -846,7 +883,7 @@ steal('can/util','can/construct', function(can, Construct) {
 	{
 		setup: function( instances, options ) {
 			this.length = 0;
-			this._cid = ".observe" + (++observeId);
+			can.cid(this, ".observe")
 			this._init = 1;
 			this.push.apply(this, can.makeArray(instances || []));
 			this.bind('change'+this._cid,can.proxy(this._changes,this));
@@ -858,13 +895,13 @@ steal('can/util','can/construct', function(can, Construct) {
 			if ( !~ attr.indexOf('.')){
 				
 				if( how === 'add' ) {
-					can.batchTrigger(this, how, [newVal,+attr]);
-					can.batchTrigger(this,'length',[this.length]);
+					Observe.triggerBatch(this, how, [newVal,+attr]);
+					Observe.triggerBatch(this,'length',[this.length]);
 				} else if( how === 'remove' ) {
-					can.batchTrigger(this, how, [oldVal, +attr]);
-					can.batchTrigger(this,'length',[this.length]);
+					Observe.triggerBatch(this, how, [oldVal, +attr]);
+					Observe.triggerBatch(this,'length',[this.length]);
 				} else {
-					can.batchTrigger(this,how,[newVal, +attr])
+					Observe.triggerBatch(this,how,[newVal, +attr])
 				}
 				
 			}
@@ -966,11 +1003,11 @@ steal('can/util','can/construct', function(can, Construct) {
 			}
 			var removed = splice.apply(this, args);
 			if ( howMany > 0 ) {
-				can.batchTrigger(this, "change", [""+index, "remove", undefined, removed]);
+				Observe.triggerBatch(this, "change", [""+index, "remove", undefined, removed]);
 				unhookup(removed, this._cid);
 			}
 			if ( args.length > 2 ) {
-				can.batchTrigger(this, "change", [""+index, "add", args.slice(2), removed]);
+				Observe.triggerBatch(this, "change", [""+index, "add", args.slice(2), removed]);
 			}
 			return removed;
 		},
@@ -1092,9 +1129,9 @@ steal('can/util','can/construct', function(can, Construct) {
 			// Create a copy.
 			items = can.makeArray( items );
 
-      		can.stop();
+      		Observe.startBatch();
 			this._updateAttrs(items, remove);
-			can.start()
+			Observe.stopBatch()
 		},
 
 	    _updateAttrs : function( items, remove ){
@@ -1192,7 +1229,7 @@ steal('can/util','can/construct', function(can, Construct) {
 			var res = [][name].apply(this, args);
 			
 			if ( !this.comparator || !args.length ) {
-				can.batchTrigger(this, "change", [""+len, "add", args, undefined])
+				Observe.triggerBatch(this, "change", [""+len, "add", args, undefined])
 			}
 						
 			return res;
@@ -1256,7 +1293,7 @@ steal('can/util','can/construct', function(can, Construct) {
 			// `undefined` - The new values (there are none).
 			// `res` - The old, removed values (should these be unbound).
 			// `len` - Where these items were removed.
-			can.batchTrigger(this, "change", [""+len, "remove", undefined, [res]])
+			Observe.triggerBatch(this, "change", [""+len, "remove", undefined, [res]])
 
 			if ( res && res.unbind ) {
 				res.unbind("change" + this._cid)

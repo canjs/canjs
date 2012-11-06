@@ -6,7 +6,5 @@ if ( window.location.search.indexOf("DIST=1") > -1 ) {
 		'can/model',
 		'can/control/route',
 		'can/view/ejs'
-	).then(
-		'can/util/exports.js'
 	);
 }

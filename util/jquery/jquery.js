@@ -1,4 +1,4 @@
-steal('jquery', 'can/util/can.js', 'jquery', "../preamble.js", 'can/util/array/each.js', function($, can) {
+steal('jquery', 'can/util/can.js', 'jquery', 'can/util/array/each.js', function($, can) {
 	// jquery.js
 	// ---------
 	// _jQuery node list._
@@ -20,7 +20,7 @@ steal('jquery', 'can/util/can.js', 'jquery', "../preamble.js", 'can/util/array/e
 		},
 		// jquery caches fragments, we always needs a new one
 		buildFragment : function(result, element){
-			var ret = $.buildFragment([result],element);
+			var ret = $.buildFragment([result],$(element));
 			return ret.cacheable ? $.clone(ret.fragment) : ret.fragment;
 		},
 		$: jQuery,

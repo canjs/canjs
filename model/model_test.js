@@ -880,8 +880,10 @@ test("destroying a model impact the right list", function() {
 test("uses attr with isNew", function(){
 	expect(1)
 	var old = can.Observe.__reading;
-	can.Observe.__reading = function(){
-		ok(true, "used attr")
+	can.Observe.__reading = function(object, attribute){
+		if(attribute == "id") {
+			ok(true, "used attr")
+		}
 	}
 	
 	var m = new can.Model({id: 4});

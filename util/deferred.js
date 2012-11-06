@@ -161,4 +161,6 @@ steal('./can.js',function(can){
 			return this;
 		}
 	});
+
+	return can;
 })
