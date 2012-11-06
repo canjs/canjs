@@ -156,7 +156,8 @@ function( can ){
 							result.push('can.Mustache.txt(can.extend({}, ' + CONTEXT + ', this),' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
 							// Append helper requests as a name string
-							if (args.length > 1) {
+							
+							if (args.length > 1 || Mustache.getHelper(args[0])) {
 								i = 1;
 								result.push('"' + args[0] + '"');
 							}
@@ -188,7 +189,7 @@ function( can ){
 										}
 									}
 								}
-								// Otherwise output a normal reference	
+								// Otherwise output a normal reference
 								else {
 									result.push('can.Mustache.get("' + arg.replace(/"/g,'\\"') + '",this,' + CONTEXT + ')');
 								}
@@ -240,6 +241,16 @@ function( can ){
 	Mustache.registerHelper = function(name, fn){
 		this._helpers.push({ name: name, fn: fn });
 	};
+	
+	Mustache.getHelper = function(name) {		
+		for (var i = 0, helper; helper = this._helpers[i]; i++) {
+			// Find the correct helper
+			if (helper.name == name) {
+				return helper;
+			}
+		}
+		return null;
+	};
 
 	Mustache.registerPartial = function(id, text) {
 		// Get the renderer function.
@@ -287,30 +298,25 @@ function( can ){
 			}
 		}
 		
-		// If there is more than one argument, it's a helper
-		if (args.length > 0) {
-			for (i = 0; helper = this._helpers[i]; i++) {
-				// Find the correct helper
-				if (helper.name == name) {
-					// Update the options with a function/inverse (the inner templates of a section)
-					var opts = {
-						fn: can.proxy(options.fn, context),
-						inverse: can.proxy(options.inverse, context)
-					}, lastArg = args[args.length-1];
-					// Add the hash if one exists
-					if (lastArg && lastArg[HASH]) {
-						opts.hash = args.pop()[HASH];
-					}
-					args.push(opts);
-					
-					// Call the helper
-					return helper.fn.apply(context, args) || '';
-				}
+		// Check for a helper
+		if (helper = Mustache.getHelper(name)) {
+			// Update the options with a function/inverse (the inner templates of a section)
+			var opts = {
+				fn: can.proxy(options.fn, context),
+				inverse: can.proxy(options.inverse, context)
+			}, lastArg = args[args.length-1];
+			// Add the hash if one exists
+			if (lastArg && lastArg[HASH]) {
+				opts.hash = args.pop()[HASH];
 			}
-			return '';
+			args.push(opts);
+			
+			// Call the helper
+			return helper.fn.apply(context, args) || '';
 		}
+		
 		// Otherwise interpolate like normal
-		else if (valid) {
+		if (valid) {
 			// Handle truthyness
 			switch (mode) {
 				case '#':
@@ -334,6 +340,8 @@ function( can ){
 					break;
 			}
 		}
+		
+		return '';
 	};
 	
 	/**
