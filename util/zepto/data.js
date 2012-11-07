@@ -44,4 +44,6 @@ steal({
 			delete data[id];
 		}
   }
+
+return $;
 })

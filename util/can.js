@@ -1,5 +1,9 @@
 steal(function(){
-	var can = window.can = window.can || {};
+	var can = window.can || {};
+	if(typeof GLOBALCAN === 'undefined' || GLOBALCAN !== false) {
+		window.can = can;
+	}
+
 	can.isDeferred = function( obj ) {
 		var isFunction = this.isFunction;
 		// Returns `true` if something looks like a deferred.
