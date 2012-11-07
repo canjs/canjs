@@ -12,7 +12,6 @@ function( can ){
 		HASH = '___h4sh',
 		STACK = '___st4ck',
 		CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
-		RESTACK = 'var ' + CONTEXT + ' = ' + STACK + '(' + CONTEXT + ',null,true);',
 		isObserve = function(obj) {
 			return can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
 		},
@@ -74,12 +73,12 @@ function( can ){
 			 */
 			text: {
 				start: 'var ' + CONTEXT + ' = []; ' + CONTEXT + '.' + STACK + ' = true;\
-					var ' + STACK + ' = function(context, self, restack) {\
+					var ' + STACK + ' = function(context, self) {\
 						var s;\
-						if (restack && context) {\
+						if (arguments.length == 1 && context) {\
 							s = !context.' + STACK + ' ? [context] : context;\
 						} else { \
-							s = context && context.' + STACK + ' ? context.concat([self]) : [context];\
+							s = context && context.' + STACK + ' ? context.concat([self]) : ' + STACK + '(context).concat([self]);\
 						}\
 						return (s.' + STACK + ' = true) && s;\
 					};'
@@ -214,13 +213,13 @@ function( can ){
 						switch (mode) {
 							// Truthy section
 							case '#':
-								result.push('return ___v1ew.join("");}},{fn:function(' + CONTEXT + '){var ___v1ew = [];' + RESTACK);
+								result.push('return ___v1ew.join("");}},{fn:function(' + CONTEXT + '){var ___v1ew = [];');
 								break;
 							// If/else section
 							// Falsey section
 							case 'else':
 							case '^':
-								result.push('return ___v1ew.join("");}},{inverse:function(' + CONTEXT + '){var ___v1ew = [];' + RESTACK);
+								result.push('return ___v1ew.join("");}},{inverse:function(' + CONTEXT + '){var ___v1ew = [];');
 								break;
 							// Not a section
 							default:
@@ -279,8 +278,7 @@ function( can ){
 	 * @param {String} [mode]	The mode to evaluate the section with: # for truthy, ^ for falsey
 	 */
 	Mustache.txt = function(context, mode, name) {
-		var context = (context[STACK] && context[context.length - 1]) || context,
-			args = Array.prototype.slice.call(arguments, 3),
+		var args = Array.prototype.slice.call(arguments, 3),
 			options = can.extend.apply(can, [{
 					fn: function() {},
 					inverse: function() {}
@@ -309,10 +307,12 @@ function( can ){
 		// Check for a registered helper or a helper-like function
 		if (helper = (Mustache.getHelper(name) || (can.isFunction(name) && { fn: name }))) {
 			// Update the options with a function/inverse (the inner templates of a section)
-			var opts = {
-				fn: can.proxy(options.fn, context),
-				inverse: can.proxy(options.inverse, context)
-			}, lastArg = args[args.length-1];
+			var context = (context[STACK] && context[context.length - 1]) || context,
+				opts = {
+					fn: can.proxy(options.fn, context),
+					inverse: can.proxy(options.inverse, context)
+				}, 
+				lastArg = args[args.length-1];
 			// Add the hash if one exists
 			if (lastArg && lastArg[HASH]) {
 				opts.hash = args.pop()[HASH];
