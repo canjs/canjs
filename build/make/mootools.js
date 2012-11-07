@@ -1,4 +1,3 @@
-print('mootools driver');
 steal.config({
 	map: {
 		"*": {

@@ -1,9 +1,8 @@
-steal(function(){
-	steal.config({
-		map: {
-			"*": {
-				"can/util/util.js": "can/util/jquery/jquery.js"
-			}
+steal.config({
+	map: {
+		"*": {
+			"can/util/util.js": "can/util/jquery/jquery.js"
 		}
-	});
-}, 'can/util/mvc.js');
+	}
+});
+steal('can/util/mvc.js');

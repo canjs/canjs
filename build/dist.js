@@ -5,34 +5,36 @@ load("steal/rhino/rhino.js");
 steal('steal/build/pluginify', function () {
 	// Use with ./js can/build/dist.js <outputfolder> <version> <library1> <library2>
 	var libs = {
-		// "jquery" : {
-			// exclude : ["jquery"],
-			// onefunc : true,
-			// wrapInner : ['(function(window, $, undefined) {\n', '\n})(this, jQuery);']
-		// }
-//		"zepto" : {
-//			exclude : ["zepto.1.0rc1.js"],
-//			onefunc : true,
-//			wrap : ['(function(window, $, undefined) {', '})(this, jQuery)']
-//		}
+		"jquery" : {
+			exclude : ["jquery"],
+			onefunc : true,
+			wrapInner : ['(function(window, $, undefined) {\n', '\n})(this, jQuery);']
+		},
+		"zepto" : {
+			exclude : ["zepto.1.0rc1.js"],
+			onefunc : true,
+			wrap : ['(function(window, $, undefined) {', '})(this, jQuery)']
+		},
 		"mootools" : {
 			exclude: ["mootools"],
 			onefunc: true
+		},
+		"dojo" : {
+			onefunc: true,
+			wrapInner : [
+				'\ndefine("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){' + '' +
+					'\n\nreturn can;\n});\n'
+			]
+		},
+		"yui" : {
+			onefunc: true,
+			wrapInner : [
+				'\nYUI().add("can", function(Y) {\ncan.Y = Y;\n' +
+					'}, "0.0.1", {\n' +
+					'requires: ["node", "io-base", "querystring", "event-focus", "array-extras"],' +
+					'\n optional: ["selector-css2", "selector-css3"]\n});\n'
+			]
 		}
-//		"dojo" : {
-//			wrapInner : [
-//				'\ndefine("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){' + '' +
-//					'\n\nreturn can;\n});\n'
-//			]
-//		},
-//		"yui" : {
-//			wrapInner : [
-//				'\nYUI().add("can", function(Y) {\ncan.Y = Y;\n' +
-//					'}, "0.0.1", {\n' +
-//					'requires: ["node", "io-base", "querystring", "event-focus", "array-extras"],' +
-//					'\n optional: ["selector-css2", "selector-css3"]\n});\n'
-//			]
-//		}
 	}
 
 	var version = _args[1] || 'edge';
