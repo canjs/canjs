@@ -13,7 +13,7 @@ steal('steal/build/pluginify', function () {
 		"zepto" : {
 			exclude : ["zepto.1.0rc1.js"],
 			onefunc : true,
-			wrap : ['(function(window, $, undefined) {', '})(this, jQuery)']
+			wrapInner : ['(function(window, $, undefined) {\n', '\n})(this, Zepto)']
 		},
 		"mootools" : {
 			exclude: ["mootools"],
@@ -22,14 +22,14 @@ steal('steal/build/pluginify', function () {
 		"dojo" : {
 			onefunc: true,
 			wrapInner : [
-				'\ndefine("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){' + '' +
-					'\n\nreturn can;\n});\n'
+				'\ndefine("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){\n',
+					'\nreturn can;\n});\n'
 			]
 		},
 		"yui" : {
 			onefunc: true,
 			wrapInner : [
-				'\nYUI().add("can", function(Y) {\ncan.Y = Y;\n' +
+				'\nYUI().add("can", function(Y) {\ncan.Y = Y;\n',
 					'}, "0.0.1", {\n' +
 					'requires: ["node", "io-base", "querystring", "event-focus", "array-extras"],' +
 					'\n optional: ["selector-css2", "selector-css3"]\n});\n'
