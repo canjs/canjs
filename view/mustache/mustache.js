@@ -9,7 +9,9 @@ function( can ){
 
 	var extend = can.extend,
 		CONTEXT = '___c0nt3xt',
+		LOCAL_CONTEXT = '___l0cal',
 		HASH = '___h4sh',
+		LOCAL_STACK = 'var ' + LOCAL_CONTEXT + ' = ' + CONTEXT + '.concat([this]);',
 		isObserve = function(obj) {
 			return can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
 		},
@@ -67,9 +69,12 @@ function( can ){
 		 */
 		scanner: new can.view.Scanner({
 			/**
-			 * Inject additional start text.
+			 * Text for injection by the scanner.
 			 */
-			startTxt: 'var ' + CONTEXT + ' = {};',
+			text: {
+				start: 'var ' + CONTEXT + ' = [];',
+				escape: LOCAL_STACK
+			},
 			
 			/**
 			 * An ordered token registry for the scanner.
@@ -129,7 +134,7 @@ function( can ){
 							switch (mode) {
 								case '#':
 								case '^':
-									result.push(cmd.insert + 'can.view.txt(0,\'' + cmd.tagName + '\',' + cmd.status + ',this,function(){ return ');
+									result.push(cmd.insert + 'can.view.txt(0,\'' + cmd.tagName + '\',' + cmd.status + ',this,function(){ ' + LOCAL_STACK + 'return ');
 									break;
 								// Close section
 								case '/':
@@ -152,7 +157,7 @@ function( can ){
 							});
 								
 							// Start the content
-							result.push('can.Mustache.txt(can.extend({}, ' + CONTEXT + ', this),' + (mode ? '"'+mode+'"' : 'null') + ',');
+							result.push('can.Mustache.txt(' + CONTEXT + '.concat([this]),' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
 							// Iterate through the arguments
 							for (; arg = args[i]; i++) {
@@ -173,7 +178,7 @@ function( can ){
 										}
 										
 										// Add the key/value
-										result.push(m[4], ':', m[6] ? m[6] : 'can.Mustache.get("' + m[5].replace(/"/g,'\\"') + '",this,' + CONTEXT + ')');
+										result.push(m[4], ':', m[6] ? m[6] : 'can.Mustache.get("' + m[5].replace(/"/g,'\\"') + '",' + CONTEXT + '.concat([this]))');
 										
 										// Close the hash
 										if (i == args.length - 1) {
@@ -187,7 +192,7 @@ function( can ){
 										// Include the reference
 										arg.replace(/"/g,'\\"') + '",' +
 										// Then the local and stack contexts
-										'this,' + CONTEXT +
+										CONTEXT + '.concat([this])' +
 										// Flag as a definite helper method
 										(i == 0 && args.length > 1 ? ',true' : '') +
 										')');
@@ -365,9 +370,10 @@ function( can ){
 	 * @param {Object} context  The context to use for checking for a reference if it doesn't exist in the object.
 	 * @param {Boolean} [isHelper]  Whether the reference is a helper.
 	 */
-	Mustache.get = function(ref, obj, context, isHelper) {
-		var contexts = [obj, context],
-			names = ref.split('.'),
+	Mustache.get = function(ref, contexts, isHelper) {
+		var names = ref.split('.'),
+			obj = contexts[contexts.length - 1],
+			context = contexts[contexts.length - 2],
 			lastValue, value, name, i, j;
 		
 		// Handle "this" references for list iteration: {{.}} or {{this}}
@@ -378,14 +384,20 @@ function( can ){
 			}
 			// Otherwise just return the closest object.
 			else {
-				return obj || context || '';
+				while (value = contexts.pop()) {
+					if (typeof value !== 'undefined') {
+						return value;
+					} 
+				}
+				return '';
 			}
 		}
 		// Handle object resolution.
 		else if (!isHelper) {
-			for (i = 0; i < contexts.length; i++) {
+			while (value = contexts.pop()) {
+			// for (i = 0; i < contexts.length; i++) {
 				// Check the context for the reference
-				value = contexts[i];
+				// value = contexts[i];
 
 				// Make sure the context isn't a failed object before diving into it.
 				if (value !== undefined) {
@@ -410,15 +422,14 @@ function( can ){
 
 				// Found a matched reference
 				if (value !== undefined) {
+					// Support functions stored in objects
+					if (can.isFunction(lastValue[name])) {
+						return lastValue[name]();
+					}
 					// Add support for observes
 					if (isObserve(lastValue)) {
 						return lastValue.attr(name);
-					}
-					// Support functions stored in objects
-					else if (can.isFunction(lastValue[name])) {
-						return lastValue[name]();
-					}
-					else {
+					} else {
 						// Invoke the length to ensure that Observe.List events fire.
 						isObserve(value) && isArrayLike(value) && value.attr('length');
 						return value;
@@ -428,7 +439,7 @@ function( can ){
 		}
 		
 		// Support helper-like functions as anonymous helpers
-		if (can.isFunction(obj[ref])) {
+		if (obj !== undefined && can.isFunction(obj[ref])) {
 			return obj[ref];
 		}
 		// Support helpers without arguments, but only if there wasn't a matching data reference.

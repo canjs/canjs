@@ -68,6 +68,7 @@ var newLine = /(\r|\n)+/g,
 can.view.Scanner = Scanner = function( options ) {
   // Set options on self
   can.extend(this, {
+		text: {},
   	tokens: []
   }, options);
 	
@@ -156,7 +157,7 @@ Scanner.prototype = {
 		}
 		
 		var content = '',
-			buff = [startTxt + (this.startTxt || '')],
+			buff = [startTxt + (this.text.start || '')],
 			// Helper `function` for putting stuff in the view concat.
 			put = function( content, bonus ) {
 				buff.push(put_cmd, '"', clean(content), '"'+(bonus||'')+');');
@@ -356,7 +357,7 @@ Scanner.prototype = {
 						} else {
 							// If we have `<%== a(function(){ %>` then we want
 							// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-							buff.push(insert_cmd, "can.view.txt(" + escaped + ",'"+tagName+"'," + status() +",this,function(){ return ", content, 
+							buff.push(insert_cmd, "can.view.txt(" + escaped + ",'"+tagName+"'," + status() +",this,function(){ " + (this.text.escape || '') + "return ", content, 
 								// If we have a block.
 								bracketCount ? 
 								// Start with startTxt `"var _v1ew = [];"`.
