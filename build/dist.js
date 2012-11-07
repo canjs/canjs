@@ -5,17 +5,20 @@ load("steal/rhino/rhino.js");
 steal('steal/build/pluginify', function () {
 	// Use with ./js can/build/dist.js <outputfolder> <version> <library1> <library2>
 	var libs = {
-		"jquery" : {
+		/*"jquery" : {
 			exclude : ["jquery"],
 			onefunc : true,
 			wrapInner : ['(function(window, $, undefined) {\n', '\n})(this, jQuery);']
-		}
+		}*/
 //		"zepto" : {
 //			exclude : ["zepto.1.0rc1.js"],
 //			onefunc : true,
 //			wrap : ['(function(window, $, undefined) {', '})(this, jQuery)']
 //		}
-//		"mootools" : {}
+		"mootools" : {
+			exclude: ["mootools"],
+			onefunc: true
+		}
 //		"dojo" : {
 //			wrapInner : [
 //				'\ndefine("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){' + '' +
