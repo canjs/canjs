@@ -147,7 +147,7 @@ function( can ){
 					name: /^\s?data\s/,
 					fn: function(content, cmd){
 						var attr = content.replace(/^\s?data\s/, '').replace(/\"/g, '');
-						return "function(__){can.$(__).data('" + attr + "', _CONTEXT)}";
+						return "can.proxy(function(__){can.$(__).data('" + attr + "', this[this.length-1]); }, ___st4ck(___c0nt3xt,this))"
 					}
 				},
 

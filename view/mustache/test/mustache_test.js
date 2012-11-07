@@ -136,7 +136,7 @@ test("Model hookup", function(){
 	same(can.$('#li-Justin').data('obsvr'), obsvr2, 'data hooks for list push worked and fetched');
 
 	// Delete last item added
-	obsvr2.destroy();
+	obsvrList.pop();
 	same(can.$('.moo').length, 1, 'new item popped off and deleted from ui');
 });
 
