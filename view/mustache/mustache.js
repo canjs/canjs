@@ -16,13 +16,13 @@ function( can ){
 		isArrayLike = function(obj) {
 			return obj && obj.splice && typeof obj.length == 'number';
 		},
-		Mustache = function( options ) {
+		Mustache = function(options) {
 			// Supports calling Mustache without the constructor
 			// This returns a function that renders the template.
 			if ( this.constructor != Mustache ) {
 				var mustache = new Mustache(options);
-				return function( data, helpers ) {
-					 return mustache.render(data, helpers);
+				return function(data) {
+					 return mustache.render(data);
 				};
 			}
 
@@ -51,15 +51,14 @@ function( can ){
 	 * 
 	 *		 new Mustache({text: "<%= message %>"}).render({
 	 *			 message: "foo"
-	 *		 },{helper: function(){ ... }})
+	 *		 })
 	 *		 
 	 * @param {Object} object data to be rendered
-	 * @param {Object} [extraHelpers] an object with view helpers
 	 * @return {String} returns the result of the string
 	 */
 	render = function( object, extraHelpers ) {
 		object = object || {};
-		return this.template.fn.call(object, object, new Mustache.Helpers(object, extraHelpers || {}));
+		return this.template.fn.call(object, object, { _date: object });
 	};
 
 	extend(Mustache.prototype, {
@@ -230,12 +229,6 @@ function( can ){
 	var helpers = can.view.Scanner.prototype.helpers;
 	for (var i = 0; i < helpers.length; i++) {
 		Mustache.prototype.scanner.helpers.unshift(helpers[i]);
-	};
-	
-	Mustache.Helpers = function( data, extras ) {
-		this._data = data;
-		this._extras = extras;
-		extend(this, extras);
 	};
 
 	Mustache.registerHelper = function(name, fn){

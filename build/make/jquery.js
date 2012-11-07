@@ -1,6 +1,9 @@
-// TODO remove any reference to
-// STEALDOJO = false;
-// STEALMOO = false;
-// STEALYUI = true;
-// STEALZEPTO = false;
-steal('can/util/mvc.js');
+steal(function(){
+	steal.config({
+		map: {
+			"*": {
+				"can/util/util.js": "can/util/jquery/jquery.js"
+			}
+		}
+	});
+}, 'can/util/mvc.js');
