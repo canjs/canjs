@@ -7,7 +7,7 @@ steal('can/util/mvc.js')
 	// Set the test timeout to five minutes
 	QUnit.config.hidepassed = true;
 	QUnit.config.testTimeout = 300000;
-	if ( console && console.log ) {
+	if ( typeof console !== "undefined" && console.log ) {
 		QUnit.log(function( details ) {
 			if ( ! details.result ) {
 				console.log( "FAILURE: ", details.result, details.message );
