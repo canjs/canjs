@@ -140,6 +140,20 @@ test("Model hookup", function(){
 	same(can.$('.moo').length, 1, 'new item popped off and deleted from ui');
 });
 
+test('Inverted section function returning numbers',function() {
+	var template = "<div id='completed'>{{^todos.completed}}hidden{{/todos.completed}}</div>";
+
+	var todos = {
+		completed: function(){
+			return 0;
+		}
+	};
+
+	var frag = new can.Mustache({ text: template }).render({ todos: todos });
+	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	same(can.$('#completed')[0].innerHTML, "hidden", 'hidden shown');
+});
+
 test("Mustache live-binding with escaping", function() {
 	var template = "<span id='binder1'>{{ name }}</span><span id='binder2'>{{{name}}}</span>";
 
