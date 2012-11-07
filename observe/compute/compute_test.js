@@ -1,3 +1,4 @@
+(function() {
 module('can/observe/compute')
 
 test("Basic Compute",function(){
@@ -215,3 +216,4 @@ test("Compute emits change events when an embbedded observe has properties added
 	obs.removeAttr('bar');
 	obs.removeAttr('bar');
 });
+})();

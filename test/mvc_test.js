@@ -1,4 +1,4 @@
-steal('can/util', 'can/construct', function(can, Construct) {
+(function(undefined) {
 
 module("mvc");
 
@@ -98,4 +98,4 @@ test("Control Basics",3,function(){
 	
 })
 
-});
+})();

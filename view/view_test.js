@@ -1,4 +1,4 @@
-steal('can/view', function(can) {
+(function() {
 	module("can/view");
 
 	/*test("Ajax transport", function(){
@@ -197,4 +197,4 @@ steal('can/view', function(can) {
 //			can.view('jkflsd.ejs');
 //		}, 'Nonexistent template throws error');
 	})
-});
+})();

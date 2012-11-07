@@ -1,4 +1,4 @@
-steal('funcunit/syn',function(Syn){
+(function() {
 	
 module("can/view/ejs, rendering",{
 	setup : function(){
@@ -840,21 +840,16 @@ test("property name only attributes", function(){
 	div.appendChild(can.view.frag(compiled));
 	
 	var input = div.getElementsByTagName('input')[0];
-	stop()
-	Syn.click({},input, function(){
-		obs.attr('val',false)
-	
-		ok(!input.checked, "not checked")
-		
-		
-		obs.attr('val',true);
-		
-		ok(input.checked, "checked")
-		div.removeChild(input)
-		start();
-	})
-	
-	
+    can.trigger(input, 'click');
+    obs.attr('val',false)
+
+    ok(!input.checked, "not checked")
+
+
+    obs.attr('val',true);
+
+    ok(input.checked, "checked")
+    div.removeChild(input)
 });
 
 test("nested properties", function(){
@@ -1150,4 +1145,4 @@ test("live binding with computes", function() {
 
 })
 
-})()
+})();

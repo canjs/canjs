@@ -1,3 +1,4 @@
+(function() {
 module("can/route")
 
 test("deparam", function(){
@@ -429,4 +430,5 @@ test("dashes in routes", function(){
 
 	window.location.hash = "qunit-header";
 	window.location.hash = "";
-})
+});
+})();
