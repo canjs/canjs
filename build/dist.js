@@ -13,26 +13,28 @@ steal('steal/build/pluginify', function () {
 		"zepto" : {
 			exclude : ["zepto.1.0rc1.js"],
 			onefunc : true,
-			wrapInner : ['(function(window, $, undefined) {\n', '\n})(this, Zepto);']
+			wrap : ['(function(window, $, undefined) {', '})(this, jQuery)']
+		},
+		"mootools" : {
+			exclude: ["mootools"],
+			onefunc: true
+		},
+		"dojo" : {
+			onefunc: true,
+			wrapInner : [
+				'\ndefine("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){' + '' +
+					'\n\nreturn can;\n});\n'
+			]
+		},
+		"yui" : {
+			onefunc: true,
+			wrapInner : [
+				'\nYUI().add("can", function(Y) {\ncan.Y = Y;\n' +
+					'}, "0.0.1", {\n' +
+					'requires: ["node", "io-base", "querystring", "event-focus", "array-extras"],' +
+					'\n optional: ["selector-css2", "selector-css3"]\n});\n'
+			]
 		}
-//		"mootools" : {
-//			exclude: ["mootools"],
-//			onefunc: true
-//		}
-//		"dojo" : {
-//			wrapInner : [
-//				'\ndefine("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){' + '' +
-//					'\n\nreturn can;\n});\n'
-//			]
-//		},
-//		"yui" : {
-//			wrapInner : [
-//				'\nYUI().add("can", function(Y) {\ncan.Y = Y;\n' +
-//					'}, "0.0.1", {\n' +
-//					'requires: ["node", "io-base", "querystring", "event-focus", "array-extras"],' +
-//					'\n optional: ["selector-css2", "selector-css3"]\n});\n'
-//			]
-//		}
 	}
 
 	var version = _args[1] || 'edge';
@@ -47,6 +49,7 @@ steal('steal/build/pluginify', function () {
 			code;
 
 		console.log('Building ' + lib + ' ' + version + ' to ' + outFile);
+		
 		steal.build.pluginify("can/build/make/" + lib + ".js", _.extend({
 			out : outFile,
 			// global : "can = {}",
@@ -54,7 +57,7 @@ steal('steal/build/pluginify', function () {
 			// onefunc : true,
 			exports : { 'can/util/can.js' : 'can' },
 			compress : false,
-			skipCallbacks : true
+			skipAll : true
 		}, options));
 
 		// Replace version TODO use Grunt
