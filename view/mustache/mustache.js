@@ -10,7 +10,9 @@ function( can ){
 	var extend = can.extend,
 		CONTEXT = '___c0nt3xt',
 		HASH = '___h4sh',
-		CONTEXT_STACK = '(can.isArray(' + CONTEXT + ') && ' + CONTEXT + '.concat([this])) || [' + CONTEXT + ']',
+		STACK = '___st4ck',
+		// CONTEXT_STACK = '(can.isArray(' + CONTEXT + ') && ' + CONTEXT + '.concat([this])) || [' + CONTEXT + ']',
+		CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
 		isObserve = function(obj) {
 			return can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
 		},
@@ -71,7 +73,11 @@ function( can ){
 			 * Text for injection by the scanner.
 			 */
 			text: {
-				start: 'var ' + CONTEXT + ' = [];'
+				start: 'var ' + CONTEXT + ' = []; ' + CONTEXT + '.' + STACK + ' = true;\
+					var ' + STACK + ' = function(context, self) {\
+						var s = context && context.' + STACK + ' ? context.concat([self]) : [context];\
+						return (s.' + STACK + ' = true) && s;\
+					};'
 			},
 			
 			/**
