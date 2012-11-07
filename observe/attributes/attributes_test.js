@@ -209,7 +209,6 @@ test("nested model attr", function(){
     equal(project.attr('creator.name'), 'Michael', 'creator hash correctly modeled');
 
     task.attr({ owner : { id : 29, name : 'Amy'}});
-
     equal(task.attr('owner.name'), 'Amy', 'Task correctly updated to Amy user model');
     equal(task.attr('owner.id'), 29, 'Task correctly updated to Amy user model');
 
@@ -220,6 +219,7 @@ test("nested model attr", function(){
 
 test("attr() should respect convert functions for lists when updating", function(){
   can.Model('ListTest.User', {}, {});
+  can.Model.List('ListTest.User.List', {}, {});
 
   can.Model('ListTest.Task', {
     attributes : {
@@ -233,7 +233,7 @@ test("attr() should respect convert functions for lists when updating", function
       }
     }, {});
 
-    var task = ListTest.Project.model({
+    var task = ListTest.Task.model({
       id : 1,
       name : "Do it!",
       project : {
@@ -242,6 +242,8 @@ test("attr() should respect convert functions for lists when updating", function
         members : []
       }
     });
+
+    equal(task.project.members instanceof ListTest.User.List, true, "the list is a User List");
 
     task.attr({
       id : 1,
