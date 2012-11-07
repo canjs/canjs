@@ -338,7 +338,7 @@ function( can ){
 					return options.inverse.call(name || {}, context) || '';
 					break;
 				default:
-					return '' + (name || '');
+					return '' + (name !== undefined ? name : '');
 					break;
 			}
 		}
