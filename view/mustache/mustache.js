@@ -410,15 +410,14 @@ function( can ){
 
 				// Found a matched reference
 				if (value !== undefined) {
+					// Support functions stored in objects
+					if (can.isFunction(lastValue[name])) {
+						return lastValue[name]();
+					}
 					// Add support for observes
 					if (isObserve(lastValue)) {
 						return lastValue.attr(name);
-					}
-					// Support functions stored in objects
-					else if (can.isFunction(lastValue[name])) {
-						return lastValue[name]();
-					}
-					else {
+					} else {
 						// Invoke the length to ensure that Observe.List events fire.
 						isObserve(value) && isArrayLike(value) && value.attr('length');
 						return value;
