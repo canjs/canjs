@@ -1,48 +1,41 @@
+<!DOCTYPE HTML>
 <html>
-	<head>
-		<style>
-			* {
-				-moz-box-sizing: border-box; 
-				-webkit-box-sizing: border-box; 
-				box-sizing: border-box;
-				padding: 0;
-				margin: 0;
-			}
-			body {
-				background-color: black;
-			}
-			iframe {
-				float: left;
-				width: 33.333%;
-				height: 50%;
-				border-color: #eee;
-				border-style: dashed;
-				border-width: 0 2px 2px 0;
-			}
-			#mootools {
-				border-right: 0;
-			}
-			#dojo {
-				border-bottom: 0;
-			}
-			#yui {
-				border-bottom: 0;
-			}
-			#plugins {
-				border-bottom: 0;
-				border-right: 0;
-			}
-		</style>
-		<title>DIST Test ... ALL THE PAGES</title>
-	</head>
-	<body>
-		<iframe src='can_jquery.html' id='jquery'></iframe>
-		<!--[if !IE]> -->
-		<iframe src='can_zepto.html' id='zepto'></iframe>
-		<!-- <![endif]-->
-		<iframe src='can_mootools.html' id='mootools'></iframe>
-		<iframe src='can_dojo.html' id='dojo'></iframe>
-		<iframe src='can_yui.html' id='yui'></iframe>
-		<iframe src='plugin_test.html' id='plugins'></iframe>
-	</body>
+<head>
+  <link rel="stylesheet" type="text/css" href="../../../funcunit/qunit/qunit.css" />
+  <title></title>
+  <script type='text/javascript' src='../../../steal/steal.js'></script>
+  <script type='text/javascript' src='../../test/configurations.js'></script>
+</head>
+<body>
+  <h1 id="qunit-header"></h1>
+  <h2 id="qunit-banner"></h2>
+  <div id="qunit-testrunner-toolbar"></div>
+  <h2 id="qunit-userAgent"></h2>
+  <div id="test-content"></div>
+  <ol id="qunit-tests"></ol>
+  <div id="qunit-test-area"></div>
+  <script type='text/javascript'>
+    // Call test.html
+    var type = 'jquery';
+    var parts = ("" + window.location).split('?');
+    if(parts[1]) {
+      type = parts[1];
+    }
+
+    if(LIBRARIES[type]) {
+      var configuration = LIBRARIES[type],
+          title = 'Can ' + configuration.name + ' Tests';
+      TESTINGLIBRARY = configuration.name;
+
+      document.getElementsByTagName('title')[0].innerHTML = title;
+      document.getElementById('qunit-header').innerHTML = title;
+
+      steal('funcunit/qunit', 'can/util/fixture', configuration.dist)
+          .then('can/dist/edge/can.' + configuration.name + '-edge.js')
+          .then('can/test/can_test.js');
+    } else {
+      throw new Error('No configuration found for library ' + type);
+    }
+  </script>
+</body>
 </html>
