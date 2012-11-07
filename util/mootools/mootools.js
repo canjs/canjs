@@ -1,7 +1,7 @@
 steal('can/util/can.js', {
 	id: './mootools-core-1.4.3.js',
 	_skip: true
-}, '../event.js','../fragment', 'can/util/array/each.js', 'can/util/object/isplain',
+}, '../event.js','../fragment', 'can/util/array/each.js', 'can/util/object/isplain', 'can/util/object/extend',
 function(can) {
 	// mootools.js
 	// ---------
@@ -34,14 +34,6 @@ function(can) {
 	}
 
 	// Map object helpers.
-	can.extend = function(first){
-		if(first === true){
-			var args = can.makeArray(arguments);
-			args.shift();
-			return Object.merge.apply(Object, args)
-		}
-		return Object.append.apply(Object, arguments)
-	}
 	can.param = function(object){
 		return Object.toQueryString(object)
 	}
