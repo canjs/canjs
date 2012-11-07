@@ -1,0 +1,57 @@
+<html>
+	<head>
+	<script src='../../../../steal/steal.js'></script>
+	<script id="ind1" type="text/ejs">
+<h2><%=name %></h2>
+<%if(this.children){ %>
+<ul>
+	<%== can.view.render("ind2", this.children) %>
+</ul>
+<%}%> 
+	</script>
+	<script id="ind2" type="text/ejs">
+<% can.each(this, function(child, i) { %>
+	<li><%== can.view.render('ind1',child) %></li>
+<% }) %>
+	</script>
+
+	<script type="text/javascript">
+		steal('can/view/ejs', function () {
+		var data = {
+			name: '1',
+			children: [
+				{
+					name: '2',
+					children: [{
+						name: '3'
+					}, {
+						name: '4'
+					}]
+				},
+				{
+					name: 'a',
+					children: [{
+						name: 'b'
+					}]
+				}
+			]
+		};
+
+		can.view.cache = false; //change this to true to cause the problem
+		data.name = 'can.view is not cached';
+		can.$('body').prepend(can.view('ind1', data));
+		can.view.cache = true;
+		data.name = 'can.view is cached';
+		can.$('body').append(can.view('ind1', data));
+	});
+
+	function render(templateName, templateData) {
+		//just a helper function to allow us to put breakpoints in the middle of a template render
+		var a = can.view.render(templateName, templateData);
+		return a || 'undefined';
+	}
+	</script>
+</head>
+<body>		
+</body>
+</html>
