@@ -1,4 +1,5 @@
-module("can/model", { 
+(function() {
+module("can/model", {
 	setup: function() {
 
 	}
@@ -905,3 +906,5 @@ test("extends defaults by calling base method", function(){
 	
 	
 })
+
+})();

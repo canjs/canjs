@@ -1,3 +1,4 @@
+(function() {
 module('can/observe')
 
 test("Basic Observe",9,function(){
@@ -455,7 +456,7 @@ test("startBatch and stopBatch and changed event", function(){
 	
 	
 	
-})
+});
 
 
-
+})();
