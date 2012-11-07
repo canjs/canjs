@@ -128,6 +128,30 @@ function( can ){
 				},
 
 				/**
+				 * Data hookup helper.
+				 * 
+				 * It will attach the data property of `this` to the element
+				 * its found on using the first argument as the data attribute
+				 * key.
+				 *
+				 * 	For example:
+				 * 	
+				 *	 	<li id="nameli" {{ data 'name' }}></li>
+				 *
+				 *	then later you can access it like:
+				 *
+				 * 		can.$('#nameli').data('name');
+				 * 
+				 */
+				{
+					name: /^\s?data\s/,
+					fn: function(content, cmd){
+						var attr = content.replace(/^\s?data\s/, '').replace(/\"/g, '');
+						return "function(__){can.$(__).data('" + attr + "', _CONTEXT)}";
+					}
+				},
+
+				/**
 				 * Convert the expression for use with interpolation/helpers.
 				 */
 				{
@@ -507,16 +531,6 @@ function( can ){
 				if (!!expr) {
 					return options.fn(expr);
 				}
-			}
-		},
-
-		{
-			name: 'data',
-			fn: function(attr, options){
-				var obj = this;
-				return can.view.hook(function(el){
-					can.$(el).data(attr, obj);
-				}).replace(/\'/g, '');
 			}
 		}
 	];
