@@ -11,8 +11,8 @@ function( can ){
 		CONTEXT = '___c0nt3xt',
 		HASH = '___h4sh',
 		STACK = '___st4ck',
-		// CONTEXT_STACK = '(can.isArray(' + CONTEXT + ') && ' + CONTEXT + '.concat([this])) || [' + CONTEXT + ']',
 		CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
+		RESTACK = 'var ' + CONTEXT + ' = ' + STACK + '(' + CONTEXT + ',null,true);',
 		isObserve = function(obj) {
 			return can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
 		},
@@ -74,8 +74,13 @@ function( can ){
 			 */
 			text: {
 				start: 'var ' + CONTEXT + ' = []; ' + CONTEXT + '.' + STACK + ' = true;\
-					var ' + STACK + ' = function(context, self) {\
-						var s = context && context.' + STACK + ' ? context.concat([self]) : [context];\
+					var ' + STACK + ' = function(context, self, restack) {\
+						var s;\
+						if (restack && context) {\
+							s = !context.' + STACK + ' ? [context] : context;\
+						} else { \
+							s = context && context.' + STACK + ' ? context.concat([self]) : [context];\
+						}\
 						return (s.' + STACK + ' = true) && s;\
 					};'
 			},
@@ -209,13 +214,13 @@ function( can ){
 						switch (mode) {
 							// Truthy section
 							case '#':
-								result.push('return ___v1ew.join("");}},{fn:function(' + CONTEXT + '){var ___v1ew = [];');
+								result.push('return ___v1ew.join("");}},{fn:function(' + CONTEXT + '){var ___v1ew = [];' + RESTACK);
 								break;
 							// If/else section
 							// Falsey section
 							case 'else':
 							case '^':
-								result.push('return ___v1ew.join("");}},{inverse:function(' + CONTEXT + '){var ___v1ew = [];');
+								result.push('return ___v1ew.join("");}},{inverse:function(' + CONTEXT + '){var ___v1ew = [];' + RESTACK);
 								break;
 							// Not a section
 							default:
@@ -274,7 +279,8 @@ function( can ){
 	 * @param {String} [mode]	The mode to evaluate the section with: # for truthy, ^ for falsey
 	 */
 	Mustache.txt = function(context, mode, name) {
-		var args = Array.prototype.slice.call(arguments, 3),
+		var context = (context[STACK] && context[context.length - 1]) || context,
+			args = Array.prototype.slice.call(arguments, 3),
 			options = can.extend.apply(can, [{
 					fn: function() {},
 					inverse: function() {}
@@ -398,10 +404,9 @@ function( can ){
 		}
 		// Handle object resolution.
 		else if (!isHelper) {
-			while (value = contexts.pop()) {
-			// for (i = 0; i < contexts.length; i++) {
+			for (i = contexts.length - 1; i >= 0; i--) {
 				// Check the context for the reference
-				// value = contexts[i];
+				value = contexts[i];
 
 				// Make sure the context isn't a failed object before diving into it.
 				if (value !== undefined) {
