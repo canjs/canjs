@@ -5,17 +5,19 @@ load("steal/rhino/rhino.js");
 steal('steal/build/pluginify', function () {
 	// Use with ./js can/build/dist.js <outputfolder> <version> <library1> <library2>
 	var libs = {
-		"jquery" : {
-			exclude : ["jquery"],
-			onefunc : true,
-			wrapInner : ['(function(window, $, undefined) {\n', '\n})(this, jQuery);']
-		}
+		// "jquery" : {
+			// exclude : ["jquery"],
+			// onefunc : true,
+			// wrapInner : ['(function(window, $, undefined) {\n', '\n})(this, jQuery);']
+		// }
 //		"zepto" : {
 //			exclude : ["zepto.1.0rc1.js"],
 //			onefunc : true,
 //			wrap : ['(function(window, $, undefined) {', '})(this, jQuery)']
 //		}
-//		"mootools" : {}
+		"mootools" : {
+			onefunc: true
+		}
 //		"dojo" : {
 //			wrapInner : [
 //				'\ndefine("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){' + '' +
@@ -44,6 +46,7 @@ steal('steal/build/pluginify', function () {
 			code;
 
 		console.log('Building ' + lib + ' ' + version + ' to ' + outFile);
+		
 		steal.build.pluginify("can/build/make/" + lib + ".js", _.extend({
 			out : outFile,
 			// global : "can = {}",
@@ -51,7 +54,7 @@ steal('steal/build/pluginify', function () {
 			// onefunc : true,
 			exports : { 'can/util/can.js' : 'can' },
 			compress : false,
-			skipCallbacks : true
+			skipAll : true
 		}, options));
 
 		// Replace version TODO use Grunt

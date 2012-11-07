@@ -1,9 +1,9 @@
-steal(function(){
-	steal.config({
-		map: {
-			"*": {
-				"can/util/util.js": "can/util/mootools/mootools.js"
-			}
+print('mootools driver');
+steal.config({
+	map: {
+		"*": {
+			"can/util/util.js": "can/util/mootools/mootools.js"
 		}
-	});
-}, 'can/util/mvc.js');
+	}
+});
+steal('can/util/mvc.js');
