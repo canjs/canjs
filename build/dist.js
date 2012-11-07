@@ -16,6 +16,7 @@ steal('steal/build/pluginify', function () {
 //			wrap : ['(function(window, $, undefined) {', '})(this, jQuery)']
 //		}
 		"mootools" : {
+			exclude: ["mootools"],
 			onefunc: true
 		}
 //		"dojo" : {

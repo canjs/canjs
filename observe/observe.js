@@ -1,5 +1,5 @@
 // 1.69
-steal('can/util','can/construct', function(can, Construct) {
+steal('can/util','can/construct', function(can) {
 	// ## observe.js  
 	// `can.Observe`  
 	// _Provides the observable pattern for JavaScript Objects._  
@@ -114,7 +114,7 @@ steal('can/util','can/construct', function(can, Construct) {
 	/**
 	 * @add can.Observe
 	 */
-	var Observe = can.Observe = Construct( {
+	var Observe = can.Observe = can.Construct( {
 	/**
 	 * @static
 	 */
@@ -1387,7 +1387,7 @@ steal('can/util','can/construct', function(can, Construct) {
 
 	Observe.List = list;
 	Observe.setup = function(){
-		Construct.setup.apply(this, arguments);
+		can.Construct.setup.apply(this, arguments);
 		// I would prefer not to do it this way. It should
 		// be using the attributes plugin to do this type of conversion.
 		this.List = Observe.List({ Observe : this }, {});
