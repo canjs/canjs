@@ -224,6 +224,8 @@ can.extend(can.view, {
 			},
 			// the tag type to insert
 			tag = (tagMap[tagName] || "span"),
+			// this will be filled in if binding.isListening
+			update,
 			// the property (instead of innerHTML elements) to adjust. For
 			// example options should use textContent
 			contentProp = tagToContentPropMap[tagName];
