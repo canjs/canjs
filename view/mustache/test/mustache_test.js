@@ -140,6 +140,13 @@ test("Model hookup", function(){
 	same(can.$('.moo').length, 1, 'new item popped off and deleted from ui');
 });
 
+test('Tokens returning 0 where they should diplay the number', function(){
+	var template = "<div id='zero'>{{completed}}</div>";
+	var frag = new can.Mustache({ text: template }).render({ completed: 0 });;
+	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	same(can.$('#zero')[0].innerHTML, "0", 'zero shown');
+})
+
 test('Inverted section function returning numbers',function() {
 	var template = "<div id='completed'>{{^todos.completed}}hidden{{/todos.completed}}</div>";
 	var obsvr = new can.Observe({ named: false });
