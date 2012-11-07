@@ -142,16 +142,22 @@ test("Model hookup", function(){
 
 test('Inverted section function returning numbers',function() {
 	var template = "<div id='completed'>{{^todos.completed}}hidden{{/todos.completed}}</div>";
+	var obsvr = new can.Observe({ named: false });
 
 	var todos = {
 		completed: function(){
-			return 0;
+			return obsvr.attr('named');
 		}
 	};
 
+	// check hidden there
 	var frag = new can.Mustache({ text: template }).render({ todos: todos });
 	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
 	same(can.$('#completed')[0].innerHTML, "hidden", 'hidden shown');
+
+	// now update the named attribute
+	obsvr.attr('named', true);
+	same(can.$('#completed')[0].innerHTML, "", 'hidden gone');
 });
 
 test("Mustache live-binding with escaping", function() {
