@@ -1,6 +1,6 @@
 steal({
-	id : "http://download.dojotoolkit.org/release-1.8.1/dojo.js.uncompressed.js",
-	_skip: true
+	id : "./dojo-1.8.1.js",
+	_skip : true
 }, '../event.js').then(
 	'./trigger',
 	'can/util/array/each.js',

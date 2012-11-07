@@ -29,10 +29,10 @@ steal('steal/build/pluginify', function () {
 		"yui" : {
 			onefunc: true,
 			wrapInner : [
-				'\nYUI().add("can", function(Y) {\ncan.Y = Y;\n',
-					'}, "0.0.1", {\n' +
-					'requires: ["node", "io-base", "querystring", "event-focus", "array-extras"],' +
-					'\n optional: ["selector-css2", "selector-css3"]\n});\n'
+				'(function(can, window, undefined){\nYUI().add("can", function(Y) {\ncan.Y = Y;\n',
+                '}, "0.0.1", {\n' +
+                'requires: ["node", "io-base", "querystring", "event-focus", "array-extras"],' +
+                '\n optional: ["selector-css2", "selector-css3"]\n});\n})(can = {}, this );'
 			]
 		}
 	}
