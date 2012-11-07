@@ -123,7 +123,7 @@ function( can ){
 				{
 					name: /^>[\s|\w]\w*/,
 					fn:function(content, cmd){
-						return "can.view.render('" + can.trim(content.replace(/^>\s?/, '')) + "', can.extend({}, " + CONTEXT + ", this))";
+						return "can.view.render('" + can.trim(content.replace(/^>\s?/, '')) + "', " + CONTEXT_STACK + ".pop())";
 					}
 				},
 
@@ -147,7 +147,7 @@ function( can ){
 					name: /^\s?data\s/,
 					fn: function(content, cmd){
 						var attr = content.replace(/^\s?data\s/, '').replace(/["']/g, '');
-						return "can.proxy(function(__){can.$(__).data('" + attr + "', this[this.length-1]); }, ___st4ck(___c0nt3xt,this))"
+						return "can.proxy(function(__){can.$(__).data('" + attr + "', this.pop()); }, " + CONTEXT_STACK + ")";
 					}
 				},
 

@@ -249,6 +249,28 @@ test("Passing functions as data, then executing them", function() {
 	same(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
+test("Deeply nested partials", function() {
+	var t = {
+		template: "{{#nest1}}{{#nest2}}{{>partial}}{{/nest2}}{{/nest1}}",
+		expected: "Hello!",
+		partials: { partial: '{{#nest3}}{{name}}{{/nest3}}' },
+		data: {
+			nest1: {
+				nest2: {
+					nest3: {
+						name: 'Hello!'
+					}
+				}
+			}
+		}
+	};
+	for(var name in t.partials) {
+		Mustache.registerPartial(name, t.partials[name])
+	}
+	
+	same(new can.Mustache({ text: t.template }).render(t.data), t.expected);
+});
+
 test("Handlebars helper: if/else", function() {
 	var t = {
 		template: "{{#if name}}{{name}}{{/if}}{{#if missing}}{{else}} is missing!{{/if}}",
