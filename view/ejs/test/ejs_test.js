@@ -13,14 +13,14 @@ module("can/view/ejs, rendering",{
 		}
 		
 		this.squareBrackets = "<ul><% this.animals.each(function(animal){%>" +
-		               "<li><%= animal %></li>" + 
-			      "<%});%></ul>"
-	    this.squareBracketsNoThis = "<ul><% animals.each(function(animal){%>" +
-		               "<li><%= animal %></li>" + 
-			      "<%});%></ul>"
-	    this.angleBracketsNoThis  = "<ul><% animals.each(function(animal){%>" +
-		               "<li><%= animal %></li>" + 
-			      "<%});%></ul>";
+					   "<li><%= animal %></li>" + 
+				  "<%});%></ul>"
+		this.squareBracketsNoThis = "<ul><% animals.each(function(animal){%>" +
+					   "<li><%= animal %></li>" + 
+				  "<%});%></ul>"
+		this.angleBracketsNoThis  = "<ul><% animals.each(function(animal){%>" +
+					   "<li><%= animal %></li>" + 
+				  "<%});%></ul>";
 
 	}
 })
@@ -99,8 +99,8 @@ test("default carrot", function(){
 test("render with double angle", function(){
 	var text = "<%% replace_me %>"+
 			  "<ul><% animals.each(function(animal){%>" +
-	               "<li><%= animal %></li>" + 
-		      "<%});%></ul>";
+				   "<li><%= animal %></li>" + 
+			  "<%});%></ul>";
 	var compiled = new can.EJS({text: text}).render({animals: this.animals}) ;
 	equals(compiled, "<% replace_me %><ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "works")
 });
@@ -108,8 +108,8 @@ test("render with double angle", function(){
 test("comments", function(){
 	var text = "<%# replace_me %>"+
 			  "<ul><% animals.each(function(animal){%>" +
-	               "<li><%= animal %></li>" + 
-		      "<%});%></ul>";
+				   "<li><%= animal %></li>" + 
+			  "<%});%></ul>";
 	var compiled = new can.EJS({text: text}).render({animals: this.animals}) ;
 	equals(compiled,"<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>" )
 });
@@ -122,10 +122,10 @@ test("multi line", function(){
 })
 
 test("multi line elements", function(){
-    var text = "<img\n class=\"<%=myClass%>\" />",
-        result = new can.EJS({text: text}).render({myClass: 'a'}) ;
+	var text = "<img\n class=\"<%=myClass%>\" />",
+		result = new can.EJS({text: text}).render({myClass: 'a'}) ;
 
-    ok(result.indexOf( "<img\n class=\"a\"" ) !== -1, "Multi-line elements render correctly.");
+	ok(result.indexOf( "<img\n class=\"a\"" ) !== -1, "Multi-line elements render correctly.");
 })
 
 test("escapedContent", function(){
@@ -840,16 +840,16 @@ test("property name only attributes", function(){
 	div.appendChild(can.view.frag(compiled));
 	
 	var input = div.getElementsByTagName('input')[0];
-    can.trigger(input, 'click');
-    obs.attr('val',false)
+	can.trigger(input, 'click');
+	obs.attr('val',false)
 
-    ok(!input.checked, "not checked")
+	ok(!input.checked, "not checked")
 
 
-    obs.attr('val',true);
+	obs.attr('val',true);
 
-    ok(input.checked, "checked")
-    div.removeChild(input)
+	ok(input.checked, "checked")
+	div.removeChild(input)
 });
 
 test("nested properties", function(){
@@ -937,8 +937,8 @@ test("trailing text", function(){
 test("recursive views", function(){
 	
 	var data = new can.Observe.List([
-            {label:'branch1', children:[{id:2, label:'branch2'}]}
-        ])
+			{label:'branch1', children:[{id:2, label:'branch2'}]}
+		])
 	
 	var div = document.createElement('div');
 	div.appendChild( can.view('//can/view/ejs/test/recursive.ejs',  {items: data}));
@@ -955,9 +955,14 @@ test("indirectly recursive views", function() {
 		]}
 	]);
 
+	can.view.cache = false;
 	var div = document.createElement('div');
 	div.appendChild(can.view('//can/view/ejs/test/indirect1.ejs', {unordered: unordered}));
-	ok(can.trim(div.querySelectorAll('ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Indirectly recursive views working.");
+	ok(can.trim(div.querySelectorAll('ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Uncached indirectly recursive EJS working.");
+
+	can.view.cache = true;
+	div.appendChild(can.view('//can/view/ejs/test/indirect1.ejs', {unordered: unordered}));
+	ok(can.trim(div.querySelectorAll('ul + ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Cached indirectly recursive EJS working.");
 });
 
 test("live binding select", function(){
@@ -976,9 +981,9 @@ test("live binding select", function(){
 		equal(div.getElementsByTagName('option').length, 3, '3 items in list')
 
 		equal(div.getElementsByTagName('option')[0].value, ""+items[0].id,
-		       'value attr set');
+			   'value attr set');
 		equal(div.getElementsByTagName('option')[0].textContent, items[0].title,
-		       'content of option');
+			   'content of option');
 
 		items.push({id: 3, name: 'Go to pub'})
 		equal(div.getElementsByTagName('option').length, 4, '4 items in list')
