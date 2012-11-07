@@ -115,16 +115,29 @@ test("registerNode, unregisterNode, and replace work", function(){
 });
 
 test("Model hookup", function(){
+	
+	// Single item hookup
 	var template = '<p id="foo" {{data "name"}}>data rocks</p>';
-
-	var obsvr = new can.Observe({
-		name: 'Austin'
-	});
-
-	var template = new can.Mustache({ text: template }).render(obsvr);
-	can.append( can.$('#qunit-test-area'), can.view.frag(template));
-
+	var obsvr = new can.Observe({ name: 'Austin' });
+	var frag = new can.Mustache({ text: template }).render(obsvr);
+	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
 	same(can.$('#foo').data('name'), obsvr, 'data hooks worked and fetched');
+
+	// Multi-item hookup
+	var listTemplate = '<ul id="list">{{#list}}<li class="moo" id="li-{{name}}" {{data "obsvr"}}>{{name}}</li>{{/#list}}</ul>';
+	var obsvrList = new can.Observe.List([ obsvr ]);
+	var listFrag = new can.Mustache({ text: listTemplate }).render({ list: obsvrList });
+	can.append(can.$('#qunit-test-area'), can.view.frag(listFrag));
+	same(can.$('#li-Austin').data('obsvr'), obsvr, 'data hooks for list worked and fetched');
+
+	// Mulit-item update with hookup
+	var obsvr2 = new can.Observe({ name: 'Justin' });
+	obsvrList.push(obsvr2);
+	same(can.$('#li-Justin').data('obsvr'), obsvr2, 'data hooks for list push worked and fetched');
+
+	// Delete last item added
+	obsvr2.destroy();
+	same(can.$('.moo').length, 1, 'new item popped off and deleted from ui');
 });
 
 test("Mustache live-binding with escaping", function() {
