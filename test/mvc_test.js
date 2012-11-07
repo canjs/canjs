@@ -37,7 +37,7 @@ test("Model basics",function(){
 	})*/
 
 	var Task = can.Model({
-		findAll : steal.config().root.join("can/test/foo.json")+''
+		findAll : steal.config().root.join("can/test/fixtures/foo.json")+''
 	},{
 		print : function(){
 			return this.name;
