@@ -9,9 +9,8 @@ function( can ){
 
 	var extend = can.extend,
 		CONTEXT = '___c0nt3xt',
-		LOCAL_CONTEXT = '___l0cal',
 		HASH = '___h4sh',
-		LOCAL_STACK = 'var ' + LOCAL_CONTEXT + ' = ' + CONTEXT + '.concat([this]);',
+		CONTEXT_STACK = '(can.isArray(' + CONTEXT + ') && ' + CONTEXT + '.concat([this])) || [' + CONTEXT + ']',
 		isObserve = function(obj) {
 			return can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
 		},
@@ -72,8 +71,7 @@ function( can ){
 			 * Text for injection by the scanner.
 			 */
 			text: {
-				start: 'var ' + CONTEXT + ' = [];',
-				escape: LOCAL_STACK
+				start: 'var ' + CONTEXT + ' = [];'
 			},
 			
 			/**
@@ -134,7 +132,7 @@ function( can ){
 							switch (mode) {
 								case '#':
 								case '^':
-									result.push(cmd.insert + 'can.view.txt(0,\'' + cmd.tagName + '\',' + cmd.status + ',this,function(){ ' + LOCAL_STACK + 'return ');
+									result.push(cmd.insert + 'can.view.txt(0,\'' + cmd.tagName + '\',' + cmd.status + ',this,function(){ return ');
 									break;
 								// Close section
 								case '/':
@@ -157,7 +155,7 @@ function( can ){
 							});
 								
 							// Start the content
-							result.push('can.Mustache.txt(' + CONTEXT + '.concat([this]),' + (mode ? '"'+mode+'"' : 'null') + ',');
+							result.push('can.Mustache.txt(' + CONTEXT_STACK + ',' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
 							// Iterate through the arguments
 							for (; arg = args[i]; i++) {
@@ -178,7 +176,7 @@ function( can ){
 										}
 										
 										// Add the key/value
-										result.push(m[4], ':', m[6] ? m[6] : 'can.Mustache.get("' + m[5].replace(/"/g,'\\"') + '",' + CONTEXT + '.concat([this]))');
+										result.push(m[4], ':', m[6] ? m[6] : 'can.Mustache.get("' + m[5].replace(/"/g,'\\"') + '",' + CONTEXT_STACK + ')');
 										
 										// Close the hash
 										if (i == args.length - 1) {
@@ -192,7 +190,7 @@ function( can ){
 										// Include the reference
 										arg.replace(/"/g,'\\"') + '",' +
 										// Then the local and stack contexts
-										CONTEXT + '.concat([this])' +
+										CONTEXT_STACK +
 										// Flag as a definite helper method
 										(i == 0 && args.length > 1 ? ',true' : '') +
 										')');
