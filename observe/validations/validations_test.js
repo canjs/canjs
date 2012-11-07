@@ -54,6 +54,9 @@ test("validatesFormatOf", function(){
 	var errors2 = new Person({thing: "1-2", otherThing: "a"}).errors();
 	
 	equals(errors2.otherThing[0],"not a digit", "can supply a custom message")
+	
+	ok(!new Person({thing: "1-2", otherThing: null}).errors(),"can handle null")
+	ok(!new Person({thing: "1-2"}).errors(),"can handle undefiend")
 });
 
 test("validatesInclusionOf", function(){
@@ -76,9 +79,11 @@ test("validatesInclusionOf", function(){
 });
 
 test("validatesLengthOf", function(){
+	Person.validateLengthOf("undefinedValue", 0, 5);
+	Person.validateLengthOf("nullValue", 0, 5);
 	Person.validateLengthOf("thing", 2, 5);
 
-	ok(!new Person({thing: "yes"}).errors(),"no errors");
+	ok(!new Person({thing: "yes",nullValue: null}).errors(),"no errors");
 	
 	var errors = new Person({thing: "foobar"}).errors();
 
@@ -92,6 +97,12 @@ test("validatesLengthOf", function(){
 	var errors2 = new Person({thing: "yes", otherThing: "too long"}).errors();
 
 	equals(errors2.otherThing[0],"invalid length", "can supply a custom message");
+	Person.validateLengthOf("undefinedValue2", 1, 5);
+	Person.validateLengthOf("nullValue2", 1, 5);
+	var errors3 = new Person({thing: "yes",nullValue2:null}).errors();
+
+	equals(errors3.undefinedValue2.length,1, "can handle undefined");
+	equals(errors3.nullValue2.length,1, "can handle null");
 });
 
 test("validatesPresenceOf", function(){
@@ -186,8 +197,9 @@ test("validatesPresenceOf with numbers and a 0 value", function() {
 
 test("validatesRangeOf", function(){
 	Person.validateRangeOf("thing", 2, 5);
-
-	ok(!new Person({thing: 4}).errors(),"no errors");
+	Person.validateRangeOf("nullValue", 0, 5);
+	Person.validateRangeOf("undefinedValue", 0, 5);
+	ok(!new Person({thing: 4,nullValue:null}).errors(),"no errors");
 
 	var errors = new Person({thing: 6}).errors();
 
@@ -201,6 +213,11 @@ test("validatesRangeOf", function(){
 	var errors2 = new Person({thing: 4, otherThing: 6}).errors();
 
 	equals(errors2.otherThing[0],"value out of range", "can supply a custom message");
+	Person.validateRangeOf("nullValue2", 1, 5);
+	Person.validateRangeOf("undefinedValue2", 1, 5);
+	var errors3 = new Person({thing: 2,nullValue2:null}).errors();
+	equals(errors3.nullValue2.length,1,"one error on nullValue2");
+	equals(errors3.undefinedValue2.length,1,"one error on undefinedValue2");
 });
 
 })();
