@@ -5,7 +5,7 @@ test("deparam", function(){
 	can.route.routes = {};
 	can.route(":page",{
 		page: "index"
-	})
+	});
 
 	var obj = can.route.deparam("can.Control");
 	same(obj, {
