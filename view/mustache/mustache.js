@@ -81,7 +81,7 @@ function( can ){
 				["templateLeft", "{{$"], // Template	 ---- Not supported
 				["templateRight", "$}}"], // Right Template	---- Not supported
 				["returnLeft", "{{{", "{{[{&]"], // Return Unescaped
-				// ["commentFull", "{{!}}", "[\\s\\t]*{{!.+?}}\\n?"], // Comment
+				["commentFull", "{{!}}", "^[\\s\\t]*{{!.+?}}\\n"], // Full line comment
 				["commentLeft", "{{!", "(\\n[\\s\\t]*{{!|{{!)"], // Comment
 				["left", "{{~"], // Run
 				["escapeLeft", "{{"], // Return Escaped
@@ -155,13 +155,6 @@ function( can ){
 							// Start the content
 							result.push('can.Mustache.txt(can.extend({}, ' + CONTEXT + ', this),' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
-							// Append helper requests as a name string
-							
-							if (args.length > 1) {
-								i = 1;
-								result.push('"' + args[0] + '"');
-							}
-						
 							// Iterate through the arguments
 							for (; arg = args[i]; i++) {
 								i > 0 && result.push(',');
@@ -191,7 +184,14 @@ function( can ){
 								}
 								// Otherwise output a normal reference
 								else {
-									result.push('can.Mustache.get("' + arg.replace(/"/g,'\\"') + '",this,' + CONTEXT + ')');
+									result.push('can.Mustache.get("' + 
+										// Include the reference
+										arg.replace(/"/g,'\\"') + '",' +
+										// Then the local and stack contexts
+										'this,' + CONTEXT +
+										// Flag as a definite helper method
+										(i == 0 && args.length > 1 ? ',true' : '') +
+										')');
 								}
 							}
 						}
@@ -298,8 +298,8 @@ function( can ){
 			}
 		}
 		
-		// Check for a helper
-		if (helper = Mustache.getHelper(name)) {
+		// Check for a registered helper or a helper-like function
+		if (helper = (Mustache.getHelper(name) || (can.isFunction(name) && { fn: name }))) {
 			// Update the options with a function/inverse (the inner templates of a section)
 			var opts = {
 				fn: can.proxy(options.fn, context),
@@ -370,8 +370,9 @@ function( can ){
 	 * @param {String} ref      The reference to check for on the obj/context.
 	 * @param {Object} obj  		The object to use for checking for a reference.
 	 * @param {Object} context  The context to use for checking for a reference if it doesn't exist in the object.
+	 * @param {Boolean} [isHelper]  Whether the reference is a helper.
 	 */
-	Mustache.get = function(ref, obj, context) {
+	Mustache.get = function(ref, obj, context, isHelper) {
 		var contexts = [obj, context],
 			names = ref.split('.'),
 			lastValue, value, name, i, j;
@@ -388,7 +389,7 @@ function( can ){
 			}
 		}
 		// Handle object resolution.
-		else {
+		else if (!isHelper) {
 			for (i = 0; i < contexts.length; i++) {
 				// Check the context for the reference
 				value = contexts[i];
@@ -433,8 +434,12 @@ function( can ){
 			}
 		}
 		
+		// Support helper-like functions as anonymous helpers
+		if (can.isFunction(obj[ref])) {
+			return obj[ref];
+		}
 		// Support helpers without arguments, but only if there wasn't a matching data reference.
-		if (value = Mustache.getHelper(ref)) {
+		else if (value = Mustache.getHelper(ref)) {
 			return ref;
 		}
 		

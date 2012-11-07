@@ -191,6 +191,24 @@ test("Handlebars helpers", function() {
 	same(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
+test("Passing functions as data, then executing them", function() {
+	var t = {
+		template: "{{#nested}}{{welcome name}}{{/nested}}",
+		expected: "Welcome Andy!",
+		data: {
+			name: 'Andy', 
+			nested: {
+				welcome: function(name) {
+					return 'Welcome ' + name + '!';
+				}
+			}
+		}
+	};
+	
+	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+});
+
 test("Handlebars helper: if/else", function() {
 	var t = {
 		template: "{{#if name}}{{name}}{{/if}}{{#if missing}}{{else}} is missing!{{/if}}",
