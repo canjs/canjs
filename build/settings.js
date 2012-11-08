@@ -9,7 +9,7 @@ steal(function () {
 			wrapInner : ['(function(window, $, undefined) {\n', '\n})(this, Zepto)']
 		},
 		"mootools" : {
-			exclude : [ "can/util/mootools/mootools-core-1.4.5.js", "mootools-core-1.4.3.js" ]
+			exclude : [ "can/util/mootools/mootools-core-1.4.5.js", "can/util/mootools/mootools-core-1.4.3.js" ]
 		},
 		"dojo" : {
 			wrapInner : [

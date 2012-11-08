@@ -203,7 +203,7 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 
 	// Events - The `id` of the `function` to be bound, used as an expando on the `function`
 	// so we can lookup it's `remove` object.
-	var id = 0,
+	var yuiEventId = 0,
 	// Takes a node list, goes through each node
 	// and adds events data that has a map of events to
 	// `callbackId` to `remove` object.  It looks like
@@ -221,7 +221,7 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 						events[eventName] = {};
 					}
 					if ( cb.__bindingsIds === undefined ) {
-						cb.__bindingsIds = id++;
+						cb.__bindingsIds = yuiEventId++;
 					}
 					events[eventName][cb.__bindingsIds] = selector ? node.item(0).delegate(ev, cb, selector) : node.item(0).on(ev, cb);
 				});
@@ -232,7 +232,7 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 					events[ev] = {};
 				}
 				if ( cb.__bindingsIds === undefined ) {
-					cb.__bindingsIds = id++;
+					cb.__bindingsIds = yuiEventId++;
 				}
 				events[ev][cb.__bindingsIds] = obj.on(ev, cb);
 			}
