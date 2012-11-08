@@ -20,6 +20,7 @@ var attrMap = {
 		select: "option",
 		optgroup: "option"
 	},	
+	attributePlaceholder = '__!!__',
 	attributeReplace = /__!!__/g,
 	tagToContentPropMap= {
 		option: "textContent",
@@ -363,9 +364,12 @@ can.extend(can.view, {
 					// Split the attribute value by the template.
 					// Only split out the first __!!__ so if we have multiple hookups in the same attribute, 
 					// they will be put in the right spot on first render
-					parts = attr.split(/__!!__(.+)?/, 2),
+					parts = attr.split(attributePlaceholder),
+					goodParts = [],
 					hook;
-				
+					goodParts.push(parts.shift());
+					goodParts.push(parts.join(attributePlaceholder));
+
 				// If we already had a hookup for this attribute...
 				if(hooks[attributeName]) {
 					// Just add to that attribute's list of `function`s.
@@ -389,16 +393,16 @@ can.extend(can.view, {
 				hook = hooks[attributeName];
 
 				// Insert the value in parts.
-				parts.splice(1,0,binding.value);
+				goodParts.splice(1,0,binding.value);
 
 				// Set the attribute.
-				setAttr(el, attributeName, parts.join(""), contentProp);
+				setAttr(el, attributeName, goodParts.join(""), contentProp);
 				
 				// Bind on change.
 				//liveBind(observed, el, binder,oldObserved);
 				setupTeardownOnDestroy(el);
 			});
-			return "__!!__";
+			return attributePlaceholder;
 		}
 	},
 
