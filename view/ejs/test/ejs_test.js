@@ -33,8 +33,16 @@ var getAttr = function(el, attrName){
 
 test("registerNode, unregisterNode, and replace work", function(){
 	// Reset the registered nodes
-	can.view.nodeMap = {};
-	can.view.nodeListMap = {};
+	for (var key in can.view.nodeMap) {
+		if (can.view.nodeMap.hasOwnProperty(key)) {
+			delete can.view.nodeMap[key];
+		}
+	}
+	for (var key in can.view.nodeListMap) {
+		if (can.view.nodeListMap.hasOwnProperty(key)) {
+			delete can.view.nodeListMap[key];
+		}
+	}
 	
 	var ids = function(arr){
 		return can.map(arr, function(item){

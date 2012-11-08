@@ -256,7 +256,8 @@ Scanner.prototype = {
 					break;
 				case '>':
 					htmlTag = 0;
-					var emptyElement = content.substr(-1) == "/";
+					// content.substr(-1) doesn't work in IE7/8
+					var emptyElement = content.substr(content.length-1) == "/";
 					// if there was a magic tag
 					// or it's an element that has text content between its tags, 
 					// but content is not other tags add a hookup
@@ -300,7 +301,6 @@ Scanner.prototype = {
 					// Track the current tag
 					if(lastToken === '<'){
 						tagName = token.split(/\s/)[0];
-						// If 
 						if( tagName.indexOf("/") === 0 && tagNames.pop() === tagName.substr(1) ) {
 							// set tagName to the last tagName
 							// if there are no more tagNames, we'll rely on getTag.
