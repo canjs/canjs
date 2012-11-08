@@ -1,86 +1,67 @@
 load("can/build/underscore.js");
-load("steal/rhino/rhino.js");
-steal('steal/build/pluginify', function () {
-	var arguments = _args;
-	var plugins = {
-		standAlone : {
-			"construct/proxy/proxy" : "construct.proxy",
-			"construct/super/super" : "construct.super",
-			"control/plugin/plugin" : "control.plugin",
-			"control/view/view" : "control.view",
-			"observe/attributes/attributes" : "observe.attributes",
-			"observe/delegate/delegate" : "observe.delegate",
-			"observe/setter/setter" : "observe.setter",
-			"observe/validations/validations" : "observe.validations",
-			"view/modifiers/modifiers" : "view.modifiers"
-		},
-		can_util_object : {
-			"observe/backup/backup" : "observe.backup",
-			"util/fixture/fixture" : "fixture"
+var _ = this._;
 
-		}
+load("steal/rhino/rhino.js");
+steal('steal/build/pluginify', 'can/build/settings.js', function () {
+	// Use with ./js can/build/dist.js <outputfolder> <version> <library1> <library2>
+	var version = _args[1] || 'edge';
+	var outFolder = (_args[0] || 'can/dist/') + version + '/plugins/';
+	var wrapjQuery = {
+		wrapInner : ['(function(window, $, can, undefined) {\n', '\n})(this, jQuery, can);']
 	};
 
-	each(plugins.standAlone, function (output, input) {
+	steal.File(outFolder).mkdirs();
 
-		var code;
+	var plugins = {
+		"construct/proxy/proxy" : {
+			name : "construct.proxy"
+		},
+		"construct/super/super" : {
+			name : "construct.super"
+		},
+		"control/plugin/plugin" : {
+			name : "control.plugin",
+			options : wrapjQuery
+		},
+		"control/view/view" : {
+			name : "control.view"
+		},
+		"observe/attributes/attributes" : {
+			name : "observe.attributes"
+		},
+		"observe/delegate/delegate" : {
+			name : "observe.delegate"
+		},
+		"observe/setter/setter" : {
+			name : "observe.setter"
+		},
+		"observe/validations/validations" : {
+			name : "observe.validations"
+		},
+		"view/modifiers/modifiers" : {
+			name : "view.modifiers",
+			options : wrapjQuery
+		},
+		"observe/backup/backup" : {
+			name : "observe.backup",
+			standAlone : ['can/util/object/object.js']
+		},
+		"util/fixture/fixture" : {
+			name : "fixture",
+			standAlone : ['can/util/object/object.js']
+		}
+	}
 
-		steal.build.pluginify("can/" + input + ".js", {
-			out : "can/dist/edge/can." + output + ".js",
-			//			global: "this.can",
-			//			onefunc: true,
+	_.each(plugins, function (config, module) {
+		var fileName = "can/" + module + ".js";
+		var pluginName = outFolder + "/can." + config.name + "-" + version + ".js"
+		console.log("Building plugin " + fileName + " to " + pluginName);
+		steal.build.pluginify(fileName, _.extend({
+			out : pluginName,
+			onefunc: true,
 			compress : false,
-			//			skipCallbacks: true,
-			namespace : "can",
-			standAlone : true
-		});
-
-	});
-
-	// Build can.fixture and can.observe.backup seperately
-	// They need can/util/object, so we can't use the standAlone option
-	each(plugins.can_util_object, function (output, input) {
-
-		steal.build.pluginify("can/" + input + ".js", {
-			out : "can/dist/edge/can." + output + ".js",
-			shim : { 'can/util' : 'can' },
-			exclude : [
-				'jquery',
-				'can/util/jquery/jquery.js',
-				'can/util/array/each.js',
-				'can/util/string/string.js',
-				'can/construct/construct.js',
-				'can/observe/observe.js'
-			],
-			compress : false,
-			skipCallbacks : true,
-			standAlone : false
-		});
-
-	});
-
-	// Build can.fixture and can.observe.backup seperately
-	// They need can/util/object, so we can't use the standAlone option
-	each(plugins.can_util_object, function (output, input) {
-
-		steal.build.pluginify("can/" + input + ".js", {
-			out : "can/dist/edge/can." + output + ".js",
-			global : "this.can",
-			onefunc : true,
-			exclude : [
-				'can/util/jquery/jquery.1.8.2.js',
-				'can/util/jquery/jquery.js',
-				'can/util/array/each.js',
-				'can/util/string/string.js',
-				'can/construct/construct.js',
-				'can/observe/observe.js'
-			],
-			compress : false,
-			skipCallbacks : true,
-			namespace : "can",
-			standAlone : false
-		});
-
-
+			standAlone : config.standAlone || true,
+			wrapInner : ['(function(can, window, undefined) {\n', '\n})(can, this);\n']
+		}, config.options));
 	});
 });

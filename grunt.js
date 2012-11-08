@@ -1,15 +1,14 @@
 module.exports = function (grunt) {
 
 	var outPaths = {
-		edge : '<%= meta.out %>/edge/*.js',
-		latest : '<%= meta.out %>/<%= pkg.version %>/*.js'
+		edge : '<%= meta.out %>/edge/**/*.js',
+		latest : '<%= meta.out %>/<%= pkg.version %>/**/*.js'
 	};
 
 	grunt.initConfig({
 		pkg : '<json:package.json>',
 		meta : {
 			out : "dist/",
-			buildFile : "can/build/dist.js",
 			beautifier : {
 				options : {
 					indentSize : 1,
@@ -40,27 +39,32 @@ module.exports = function (grunt) {
 		},
 		build : {
 			edge : {
-				buildFile : '<config:meta.buildFile>',
+				src : "can/build/build.js",
+				out : 'can/<%= meta.out %>'
+			},
+			edgePlugins : {
+				src : "can/build/plugins.js",
 				out : 'can/<%= meta.out %>'
 			},
 			latest : {
-				buildFile : '<config:meta.buildFile>',
+				src : "can/build/build.js",
+				version : '<%= pkg.version %>',
+				out : 'can/<%= meta.out %>'
+			},
+			latestPlugins : {
+				src : "can/build/plugins.js",
 				version : '<%= pkg.version %>',
 				out : 'can/<%= meta.out %>'
 			}
 		},
 		strip : outPaths,
 		docco : outPaths,
-		closureCompiler : {
-			// compilation_level: 'ADVANCED_OPTIMIZATIONS',
-			// language_in: 'ECMASCRIPT5_STRICT'
-		},
 		minify : outPaths
 	});
 
 	grunt.loadNpmTasks('grunt-beautify');
 	grunt.loadTasks("./build/tasks");
 
-	grunt.registerTask("edge", "build:edge strip:edge beautify:dist");
+	grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist");
 	grunt.registerTask("latest", "build:latest strip:latest minify:edge")
 };

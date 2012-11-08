@@ -17,17 +17,17 @@
 	<div id="qunit-test-area"></div>
 
   <script type='text/javascript' src='../../steal/steal.js'></script>
-	<script type='text/javascript' src='configurations.js'></script>
+	<script type='text/javascript' src='configuration.js'></script>
 	<script type='text/javascript'>
     // Call test.html
     var type = 'jquery';
-    var parts = ("" + window.location).split('?');
+    var parts = ("" + window.location).split(/\?|#/);
     if(parts[1]) {
       type = parts[1];
     }
 
     if(LIBRARIES[type]) {
-      var configuration = LIBRARIES[type],
+      var configuration = window.CONFIGURATION = LIBRARIES[type],
           title = 'Can ' + configuration.name + ' Tests';
       TESTINGLIBRARY = configuration.name;
 

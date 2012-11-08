@@ -1,6 +1,4 @@
 steal('jquery', 'can/util/can.js', 'jquery', 'can/util/array/each.js', function($, can) {
-	// jquery.js
-	// ---------
 	// _jQuery node list._
 	$.extend( can, jQuery, {
 		trigger: function( obj, event, args ) {

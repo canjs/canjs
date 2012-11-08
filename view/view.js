@@ -409,7 +409,7 @@ steal("can/util", function( can ) {
 			if ( url.match(/^\/\//) ) {
 				var sub = url.substr(2);
 				url = ! window.steal ? 
-					"/" + sub : 
+					sub :
 					steal.config().root.mapJoin(sub);
 			}
 	

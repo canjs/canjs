@@ -36,8 +36,13 @@ test("Model basics",function(){
 		}]]
 	})*/
 
+	var url = "can/test/fixtures/foo.json";
+	if(typeof steal !== 'undefined') {
+		url = steal.config().root.join(url) + '';
+	}
+
 	var Task = can.Model({
-		findAll : steal.config().root.join("can/test/fixtures/foo.json")+''
+		findAll : url
 	},{
 		print : function(){
 			return this.name;
