@@ -140,6 +140,18 @@ test("Model hookup", function(){
 	same(can.$('.moo').length, 1, 'new item popped off and deleted from ui');
 });
 
+test('Helpers sections not returning values', function(){
+	Mustache.registerHelper('filter', function(attr,options){
+		return true;
+	});
+
+	var template = "<div id='sectionshelper'>{{#filter}}moo{{/filter}}</div>";
+	var frag = new can.Mustache({ text: template }).render({ });;
+	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	same(can.$('#sectionshelper')[0].innerHTML, "moo", 'helper section worked');
+
+});
+
 test('Tokens returning 0 where they should diplay the number', function(){
 	var template = "<div id='zero'>{{completed}}</div>";
 	var frag = new can.Mustache({ text: template }).render({ completed: 0 });;
