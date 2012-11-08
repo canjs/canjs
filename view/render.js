@@ -150,6 +150,11 @@ var attrMap = {
 			}
 			nodeListIds.push(nodeListId);
 	};
+	
+// Fix option text content in IE7/8
+if (typeof document.createElement('option').textContent == 'undefined') {
+	tagToContentPropMap.option = 'innerText';
+}
 
 can.extend(can.view, {
 
