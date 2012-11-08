@@ -290,6 +290,11 @@ steal({
 		
 	}
 	can.buildFragment = function(frag, node){
+		if(frag && can.isFunction(frag.replace)) {
+			// Fix "XHTML"-style tags in all browsers
+			frag = frag.replace(/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi, "<$1></$2>");
+		}
+
 		var owner = node && node.ownerDocument,
 			frag = dojo.toDom(frag, owner );
 		if(frag.nodeType !== 11){

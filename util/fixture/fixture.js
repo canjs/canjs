@@ -49,9 +49,9 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 
 				if (/^\/\//.test(url)) {
 					// this lets us use rootUrl w/o having steal...
-					url = can.fixture.rootUrl === steal.config().root ?
+					url = (typeof steal !== 'undefined') && (can.fixture.rootUrl === steal.config().root) ?
 						steal.config().root.mapJoin(settings.fixture.substr(2)) + '' :
-						can.fixture.rootUrl + settings.fixture.substr(2);
+						(can.fixture.rootUrl || '') + settings.fixture.substr(2);
 				}
 
 				if(data) {

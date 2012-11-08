@@ -7,8 +7,7 @@ function( can ){
 
 	can.view.ext = ".mustache";
 
-	var extend = can.extend,
-		CONTEXT = '___c0nt3xt',
+	var CONTEXT = '___c0nt3xt',
 		HASH = '___h4sh',
 		STACK = '___st4ck',
 		CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
@@ -38,7 +37,7 @@ function( can ){
 			}
 
 			// Set options on self.
-			extend(this, options);
+			can.extend(this, options);
 			this.template = this.scanner.scan(this.text, this.name);
 		};
 
@@ -63,7 +62,7 @@ function( can ){
 		return this.template.fn.call(object, object, { _date: object });
 	};
 
-	extend(Mustache.prototype, {
+	can.extend(Mustache.prototype, {
 		/**
 		 * Singleton scanner instance for parsing templates.
 		 */
@@ -72,16 +71,16 @@ function( can ){
 			 * Text for injection by the scanner.
 			 */
 			text: {
-				start: 'var ' + CONTEXT + ' = []; ' + CONTEXT + '.' + STACK + ' = true;\
-					var ' + STACK + ' = function(context, self) {\
-						var s;\
-						if (arguments.length == 1 && context) {\
-							s = !context.' + STACK + ' ? [context] : context;\
-						} else { \
-							s = context && context.' + STACK + ' ? context.concat([self]) : ' + STACK + '(context).concat([self]);\
-						}\
-						return (s.' + STACK + ' = true) && s;\
-					};'
+				start: 'var ' + CONTEXT + ' = []; ' + CONTEXT + '.' + STACK + ' = true;' +
+					'var ' + STACK + ' = function(context, self) {' +
+						'var s;' +
+						'if (arguments.length == 1 && context) {' +
+							's = !context.' + STACK + ' ? [context] : context;' +
+						'} else {' +
+							's = context && context.' + STACK + ' ? context.concat([self]) : ' + STACK + '(context).concat([self]);' +
+						'}' +
+						'return (s.' + STACK + ' = true) && s;' +
+					'};'
 			},
 			
 			/**
@@ -98,11 +97,10 @@ function( can ){
 				["commentLeft", "{{!", "(\\n[\\s\\t]*{{!|{{!)"],
 				// Full line escapes
 				// This is used for detecting lines with only whitespace and an escaped tag
-				["escapeFull", "{{}}", "(^[\\s\\t]*{{[#/][^}]+?}}\\n|\\n[\\s\\t]*{{[#/][^}]+?}}\\n|\\n[\\s\\t]*{{[#/][^}]+?}}$)", function(content) {
-					console.log(content);
+				["escapeFull", "{{}}", "(^[\\s\\t]*{{[#/^][^}]+?}}\\n|\\n[\\s\\t]*{{[#/^][^}]+?}}\\n|\\n[\\s\\t]*{{[#/^][^}]+?}}$)", function(content) {
 					return {
 						before: /^\n.+?\n$/.test(content) ? '\n' : '',
-						content: content.match(/{{(.+?)}}/)[1] || ''
+						content: content.match(/\{\{(.+?)\}\}/)[1] || ''
 					};
 				}],
 				// Return escaped
@@ -171,8 +169,8 @@ function( can ){
 					fn: function(content, cmd) {
 						// Parse content
 						var mode = false,
-							result = [],
-							content = can.trim(content);
+							result = [];
+						content = can.trim(content);
 						if (content.length && (mode = content.match(/^([#^/]|else$)/))) {
 							mode = mode[0];
 							switch (mode) {
