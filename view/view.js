@@ -335,6 +335,23 @@ steal("can/util", function( can ) {
 	
 				return response;
 			}
+		},
+
+		registerView: function( id, text, d ) {
+			// Get the renderer function.
+			var func = can.view.types[can.view.ext].renderer(id, text);
+			d = d || new can.Deferred();
+			
+			// Cache if we are caching.
+			if ( $view.cache ) {
+				$view.cached[id] = d;
+				d.__view_id = id;
+				$view.cachedRenderers[id] = func;
+			}
+
+			// Return the objects for the response's `dataTypes`
+			// (in this case view).
+			return d.resolve(func);
 		}
 	});
 
@@ -362,24 +379,7 @@ steal("can/util", function( can ) {
 			// the url for the template.
 			id, 
 			// The ajax request used to retrieve the template content.
-			jqXHR, 
-			// Used to generate the response.
-			response = function( text, d ) {
-				// Get the renderer function.
-				var func = type.renderer(id, text);
-				d = d || new can.Deferred();
-				
-				// Cache if we are caching.
-				if ( $view.cache ) {
-					$view.cached[id] = d;
-					d.__view_id = id;
-					$view.cachedRenderers[id] = func;
-				}
-				d.resolve(func);
-				// Return the objects for the response's `dataTypes`
-				// (in this case view).
-				return d;
-			};
+			jqXHR;
 
 			//If the url has a #, we assume we want to use an inline template
 			//from a script element and not current page's HTML
@@ -424,7 +424,7 @@ steal("can/util", function( can ) {
 			// Otherwise if we are getting this from a `<script>` element.
 			} else if ( el ) {
 				// Resolve immediately with the element's `innerHTML`.
-				return response(el.innerHTML);
+				return $view.registerView(id, el.innerHTML);
 			} else {
 				// Make an ajax request for text.
 				var d = new can.Deferred();
@@ -439,7 +439,7 @@ steal("can/util", function( can ) {
 					success: function( text ) {
 						// Make sure we got some text back.
 						checkText(text, url);
-						response(text, d)
+						$view.registerView(id, text, d)
 					}
 				});
 				return d;

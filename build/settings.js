@@ -9,13 +9,15 @@ steal(function () {
 			wrapInner : ['(function(window, $, undefined) {\n', '\n})(this, Zepto)']
 		},
 		"mootools" : {
-			exclude : [ "can/util/mootools/mootools-core-1.4.5.js", "mootools-core-1.4.3.js" ]
+			exclude : [ "can/util/mootools/mootools-core-1.4.5.js", "can/util/mootools/mootools-core-1.4.3.js" ]
 		},
 		"dojo" : {
+			/* TODO probably needs to look somehow like this
 			wrapInner : [
 				'\ndefine("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){\n',
 				'\nreturn can;\n});\n'
 			]
+			*/
 		},
 		"yui" : {
 			/* TODO probably needs to look somehow like this

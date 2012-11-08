@@ -47,7 +47,7 @@ LIBRARIES = {
 	},
 	mootools : {
 		name : 'Mootools',
-		dist : 'can/util/mootools/mootools-core-1.4.5.js',
+		dist : 'can/util/mootools/mootools-core-1.4.3.js',
 		libraryLoaded : function () {
 			return window.MooTools;
 		},

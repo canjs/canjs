@@ -49,7 +49,7 @@ var override = {
 // Add mustache specs to the test
 can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials', 'sections'/*, '~lambdas'*/], function(spec) {
 	can.ajax({
-		url: '../../mustache/spec/specs/' + spec + '.json',
+		url: steal.config().root.join('can/view/mustache/spec/specs/' + spec + '.json') + '',
 		dataType: 'json',
 		async: false
 	}).done(function(data) {
@@ -68,7 +68,7 @@ can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials',
 				// register the partials in the spec
 				if(t.partials){
 					for(var name in t.partials) {
-						Mustache.registerPartial(name, t.partials[name])
+						can.view.registerView(name, t.partials[name])
 					}
 				}
 				
@@ -321,7 +321,7 @@ test("Deeply nested partials", function() {
 		}
 	};
 	for(var name in t.partials) {
-		Mustache.registerPartial(name, t.partials[name])
+		can.view.registerView(name, t.partials[name])
 	}
 	
 	same(new can.Mustache({ text: t.template }).render(t.data), t.expected);

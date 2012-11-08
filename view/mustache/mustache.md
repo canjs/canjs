@@ -183,6 +183,20 @@ concat and include all the views in one file for high performance production
 instances.  If your using Steal, it will do this automatically at build 
 for you.
 
+__Registering Partials__
+
+You can call `can.Mustache.registerPartial` to register
+a template you can call from inside mustache.
+
+	can.view.registerView('myTemplate', "MY body lies over {{.}}")
+
+Then later in my view I can do:
+
+	{{>myTemplate}}
+
+and it will apply the current context to my new template.  For more
+information goto the Partials section.
+
 ## Sections
 
 Sections are the army-knife of Mustache templates.  They will evaluate the token
@@ -320,6 +334,9 @@ which would look like:
 	{{#names}}
 		<strong>{{name}}</strong>
 	{{/names}}
+
+See the template acquisition section for more information on
+fetching partials.
 
 ## Helpers
 

@@ -168,7 +168,7 @@
                 div = document.createElement('div'),
                 rb = new Tester(div);
 
-            can.append(can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
+            can.append(can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='javascript://' id='elsa'>click me</a></span></div>")
 
             var els = can.$("#els")
 
