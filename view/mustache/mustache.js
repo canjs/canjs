@@ -157,7 +157,7 @@ function( can ){
 					name: /^\s?data\s/,
 					fn: function(content, cmd){
 						var attr = content.replace(/^\s?data\s/, '').replace(/["']/g, '');
-						return "can.proxy(function(__){can.$(__).data('" + attr + "', this.pop()); }, " + CONTEXT_STACK + ")";
+						return "can.proxy(function(__){can.data(can.$(__),'" + attr + "', this.pop()); }, " + CONTEXT_STACK + ")";
 					}
 				},
 
@@ -493,13 +493,22 @@ function( can ){
 		return '';
 	};
 
+	/**
+	 * @parent can.Mustache
+	 * @class can.Mustache.Helpers
+	 */
 	Mustache._helpers = [
 		/**
-		 * {{#if expr}}
-		 *   Do {{something}}
-		 * {{else}}
-		 *   Do {{nothing}}
-		 * {{/if}}
+		 * @parent can.Mustache.Helpers
+		 * @function if
+	 	 * 
+		 * Explicit if conditions.
+		 * 
+		 * 		{{#if expr}}
+		 *   		// if
+		 *      {{else}}
+		 *      	// else
+		 *      {{/if}}
 		 */
 		{
 			name: 'if',
@@ -513,6 +522,17 @@ function( can ){
 			}
 		},
 		
+		/**
+		 * @parent can.Mustache.Helpers
+		 * @function unless
+	 	 * 
+		 * The `unless` helper evaluates the inverse of the value
+		 * of the key and renders the block between the helper and the slash.
+		 * 
+		 * 		{{#unless expr}}
+		 *   		// unless
+		 *      {{/unless}}
+		 */
 		{
 			name: 'unless',
 			fn: function(expr, options){
@@ -522,6 +542,17 @@ function( can ){
 			}
 		},
 		
+		/**
+		 * @parent can.Mustache.Helpers
+		 * @function each
+	 	 * 
+		 * You can use the `each` helper to itterate over a array 
+		 * of items and render the block between the helper and the slash.
+		 * 
+		 * 		{{#each arr}}
+		 *   		// each
+		 *      {{/each}}
+		 */
 		{
 			name: 'each',
 			fn: function(expr, options) {
@@ -535,6 +566,18 @@ function( can ){
 			}
 		},
 		
+		/**
+		 * @parent can.Mustache.Helpers
+		 * @function with
+	 	 * 
+		 * Mustache typically applies the context passed in the section 
+		 * at compiled time.  However, if you want to override this 
+		 * context you can use the `with` helper.
+		 * 
+		 * 		{{#with arr}}
+		 *   		// with
+		 *      {{/with}}
+		 */
 		{
 			name: 'with',
 			fn: function(expr, options){
