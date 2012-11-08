@@ -98,8 +98,8 @@ function( can ){
 				["commentLeft", "{{!", "(\\n[\\s\\t]*{{!|{{!)"],
 				// Full line escapes
 				// This is used for detecting lines with only whitespace and an escaped tag
-				["escapeFull", "{{}}", "(^[\\s\\t]*{{[#/].+?}}\\n|\\n[\\s\\t]*{{[#/].+?}}\\n|\\n[\\s\\t]*{{[#/].+?}}$)", function(content) {
-					// console.log(content);
+				["escapeFull", "{{}}", "(^[\\s\\t]*{{[#/][^}]+?}}\\n|\\n[\\s\\t]*{{[#/][^}]+?}}\\n|\\n[\\s\\t]*{{[#/][^}]+?}}$)", function(content) {
+					console.log(content);
 					return {
 						before: /^\n.+?\n$/.test(content) ? '\n' : '',
 						content: content.match(/{{(.+?)}}/)[1] || ''
