@@ -958,7 +958,6 @@ test("recursive views", function(){
 	
 	var div = document.createElement('div');
 	div.appendChild( can.view('//can/view/ejs/test/recursive.ejs',  {items: data}));
-	debugger;
 	ok(/class="leaf"|class=leaf/.test(div.innerHTML), "we have a leaf")
 	
 })
