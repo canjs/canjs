@@ -337,21 +337,21 @@ steal("can/util", function( can ) {
 			}
 		},
 
-		registerView: function( id, text, d ) {
+		registerView: function( id, text, type, def ) {
 			// Get the renderer function.
-			var func = can.view.types[can.view.ext].renderer(id, text);
-			d = d || new can.Deferred();
+			var func = (type || $view.types[$view.ext]).renderer(id, text);
+			def = def || new can.Deferred();
 			
 			// Cache if we are caching.
 			if ( $view.cache ) {
-				$view.cached[id] = d;
-				d.__view_id = id;
+				$view.cached[id] = def;
+				def.__view_id = id;
 				$view.cachedRenderers[id] = func;
 			}
 
 			// Return the objects for the response's `dataTypes`
 			// (in this case view).
-			return d.resolve(func);
+			return def.resolve(func);
 		}
 	});
 
@@ -424,7 +424,7 @@ steal("can/util", function( can ) {
 			// Otherwise if we are getting this from a `<script>` element.
 			} else if ( el ) {
 				// Resolve immediately with the element's `innerHTML`.
-				return $view.registerView(id, el.innerHTML);
+				return $view.registerView(id, el.innerHTML, type);
 			} else {
 				// Make an ajax request for text.
 				var d = new can.Deferred();
@@ -439,7 +439,7 @@ steal("can/util", function( can ) {
 					success: function( text ) {
 						// Make sure we got some text back.
 						checkText(text, url);
-						$view.registerView(id, text, d)
+						$view.registerView(id, text, type, d)
 					}
 				});
 				return d;
