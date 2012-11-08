@@ -152,6 +152,22 @@ test('Helpers sections not returning values', function(){
 
 });
 
+
+test('Helpers with obvservables in them', function(){
+	Mustache.registerHelper('filter', function(attr,options){
+		return options.fn(attr === "poo");
+	});
+
+	var template = "<div id='sectionshelper'>{{#filter 'moo'}}moo{{/filter}}</div>";
+	var obsvr = new can.Observe({ filter: 'moo' });
+	var frag = new can.Mustache({ text: template }).render({ filter: obsvr });;
+	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	same(can.$('#sectionshelper')[0].innerHTML, "", 'helper section showed none');
+
+	obsvr.attr('filter', 'poo')
+	same(can.$('#sectionshelper')[0].innerHTML, "poo", 'helper section worked');
+});
+
 test('Tokens returning 0 where they should diplay the number', function(){
 	var template = "<div id='zero'>{{completed}}</div>";
 	var frag = new can.Mustache({ text: template }).render({ completed: 0 });;
