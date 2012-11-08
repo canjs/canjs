@@ -469,5 +469,11 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 	});
 	// `onready` event...
 	can.bind.call(document,"ready",can.route.ready);
+
+	// extend route to have a similar property 
+	// that is often checked in mustache to determine
+	// an object's observability
+	can.route.prototype.canMakeObserve = can.Observe.canMakeObserve;
+
 	return can.route;
 });

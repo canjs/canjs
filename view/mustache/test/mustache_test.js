@@ -136,8 +136,36 @@ test("Model hookup", function(){
 	same(can.$('#li-Justin').data('obsvr'), obsvr2, 'data hooks for list push worked and fetched');
 
 	// Delete last item added
-	obsvr2.destroy();
+	obsvrList.pop();
 	same(can.$('.moo').length, 1, 'new item popped off and deleted from ui');
+});
+
+test('Helpers sections not returning values', function(){
+	Mustache.registerHelper('filter', function(attr,options){
+		return true;
+	});
+
+	var template = "<div id='sectionshelper'>{{#filter}}moo{{/filter}}</div>";
+	var frag = new can.Mustache({ text: template }).render({ });;
+	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	same(can.$('#sectionshelper')[0].innerHTML, "moo", 'helper section worked');
+
+});
+
+
+test('Helpers with obvservables in them', function(){
+	Mustache.registerHelper('filter', function(attr,options){
+		return options.fn(attr === "poo");
+	});
+
+	var template = "<div id='sectionshelper'>{{#filter 'moo'}}moo{{/filter}}</div>";
+	var obsvr = new can.Observe({ filter: 'moo' });
+	var frag = new can.Mustache({ text: template }).render({ filter: obsvr });;
+	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
+	same(can.$('#sectionshelper')[0].innerHTML, "", 'helper section showed none');
+
+	obsvr.attr('filter', 'poo')
+	same(can.$('#sectionshelper')[0].innerHTML, "poo", 'helper section worked');
 });
 
 test('Tokens returning 0 where they should diplay the number', function(){
@@ -247,6 +275,28 @@ test("Passing functions as data, then executing them", function() {
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
 	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+});
+
+test("Deeply nested partials", function() {
+	var t = {
+		template: "{{#nest1}}{{#nest2}}{{>partial}}{{/nest2}}{{/nest1}}",
+		expected: "Hello!",
+		partials: { partial: '{{#nest3}}{{name}}{{/nest3}}' },
+		data: {
+			nest1: {
+				nest2: {
+					nest3: {
+						name: 'Hello!'
+					}
+				}
+			}
+		}
+	};
+	for(var name in t.partials) {
+		Mustache.registerPartial(name, t.partials[name])
+	}
+	
+	same(new can.Mustache({ text: t.template }).render(t.data), t.expected);
 });
 
 test("Handlebars helper: if/else", function() {
