@@ -1071,8 +1071,8 @@ test("attribute unquoting", function() {
 
 test("empty element hooks work correctly",function(){
 	
-	var text = '<div <%= function(e){ e.innerHTML = "1 Will show"; } %> />'+
-		'<div <%= function(e){ e.innerHTML = "2 Will not show"; } %> />'+
+	var text = '<div <%= function(e){ e.innerHTML = "1 Will show"; } %>></div>'+
+		'<div <%= function(e){ e.innerHTML = "2 Will not show"; } %>></div>'+
 		'3 Will not show';
 	
 	var compiled = new can.EJS({text: text}).render(),
