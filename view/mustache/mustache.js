@@ -5,16 +5,27 @@ steal('can/util',
 	  'can/view/render.js',
 function( can ){
 
+	// Define the view extension
 	can.view.ext = ".mustache";
 
-	var extend = can.extend,
-		CONTEXT = '___c0nt3xt',
+	// internal helpers
+	var CONTEXT = '___c0nt3xt',
 		HASH = '___h4sh',
 		STACK = '___st4ck',
 		CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
+		/**
+		 * Tries to determine if the object passed is a can.Observe.
+		 * @param  {[can.Observe]}  observable
+		 * @return {Boolean} returns if the object is an observable.
+		 */
 		isObserve = function(obj) {
 			return can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
 		},
+		/**
+		 * Tries to determine if the object passed is an array.
+		 * @param  {array}  array
+		 * @return {Boolean} returns if the object is an array.
+		 */
 		isArrayLike = function(obj) {
 			return obj && obj.splice && typeof obj.length == 'number';
 		},
@@ -38,10 +49,11 @@ function( can ){
 			}
 
 			// Set options on self.
-			extend(this, options);
+			can.extend(this, options);
 			this.template = this.scanner.scan(this.text, this.name);
 		};
 
+	// Put Mustache on the `can` object
 	can.Mustache = window.Mustache = Mustache;
 
 	/** 
@@ -63,7 +75,7 @@ function( can ){
 		return this.template.fn.call(object, object, { _date: object });
 	};
 
-	extend(Mustache.prototype, {
+	can.extend(Mustache.prototype, {
 		/**
 		 * Singleton scanner instance for parsing templates.
 		 */
@@ -72,16 +84,16 @@ function( can ){
 			 * Text for injection by the scanner.
 			 */
 			text: {
-				start: 'var ' + CONTEXT + ' = []; ' + CONTEXT + '.' + STACK + ' = true;\
-					var ' + STACK + ' = function(context, self) {\
-						var s;\
-						if (arguments.length == 1 && context) {\
-							s = !context.' + STACK + ' ? [context] : context;\
-						} else { \
-							s = context && context.' + STACK + ' ? context.concat([self]) : ' + STACK + '(context).concat([self]);\
-						}\
-						return (s.' + STACK + ' = true) && s;\
-					};'
+				start: 'var ' + CONTEXT + ' = []; ' + CONTEXT + '.' + STACK + ' = true;' +
+					'var ' + STACK + ' = function(context, self) {' +
+						'var s;' +
+						'if (arguments.length == 1 && context) {' +
+							's = !context.' + STACK + ' ? [context] : context;' +
+						'} else {' +
+							's = context && context.' + STACK + ' ? context.concat([self]) : ' + STACK + '(context).concat([self]);' +
+						'}' +
+						'return (s.' + STACK + ' = true) && s;' +
+					'};'
 			},
 			
 			/**
@@ -98,11 +110,10 @@ function( can ){
 				["commentLeft", "{{!", "(\\n[\\s\\t]*{{!|{{!)"],
 				// Full line escapes
 				// This is used for detecting lines with only whitespace and an escaped tag
-				["escapeFull", "{{}}", "(^[\\s\\t]*{{[#/][^}]+?}}\\n|\\n[\\s\\t]*{{[#/][^}]+?}}\\n|\\n[\\s\\t]*{{[#/][^}]+?}}$)", function(content) {
-					console.log(content);
+				["escapeFull", "{{}}", "(^[\\s\\t]*{{[#/^][^}]+?}}\\n|\\n[\\s\\t]*{{[#/^][^}]+?}}\\n|\\n[\\s\\t]*{{[#/^][^}]+?}}$)", function(content) {
 					return {
 						before: /^\n.+?\n$/.test(content) ? '\n' : '',
-						content: content.match(/{{(.+?)}}/)[1] || ''
+						content: content.match(/\{\{(.+?)\}\}/)[1] || ''
 					};
 				}],
 				// Return escaped
@@ -135,7 +146,10 @@ function( can ){
 				{
 					name: /^>[\s|\w]\w*/,
 					fn:function(content, cmd){
-						return "can.view.render('" + can.trim(content.replace(/^>\s?/, '')) + "', " + CONTEXT_STACK + ".pop())";
+						// get the template name and call back into the render method
+						// passing the name and the current context
+						var templateName = can.trim(content.replace(/^>\s?/, ''));
+						return "can.view.render('" + templateName + "', " + CONTEXT_STACK + ".pop())";
 					}
 				},
 
@@ -159,7 +173,10 @@ function( can ){
 					name: /^\s?data\s/,
 					fn: function(content, cmd){
 						var attr = content.replace(/^\s?data\s/, '').replace(/["']/g, '');
-						return "can.proxy(function(__){can.$(__).data('" + attr + "', this.pop()); }, " + CONTEXT_STACK + ")";
+
+						// return a function which calls `can.data` on the element
+						// with the attribute name with the current context.
+						return "can.proxy(function(__){can.data(can.$(__),'" + attr + "', this.pop()); }, " + CONTEXT_STACK + ")";
 					}
 				},
 
@@ -171,8 +188,12 @@ function( can ){
 					fn: function(content, cmd) {
 						// Parse content
 						var mode = false,
-							result = [],
-							content = can.trim(content);
+							result = [];
+
+						// Trim the content so we don't have any trailing whitespace
+						content = can.trim(content);
+
+						// Try to determine the mode the token is such as a eval, inverting, or closing
 						if (content.length && (mode = content.match(/^([#^/]|else$)/))) {
 							mode = mode[0];
 							switch (mode) {
@@ -280,10 +301,29 @@ function( can ){
 		Mustache.prototype.scanner.helpers.unshift(helpers[i]);
 	};
 
+	/**
+	 * @parent can.Mustache
+	 * @class can.Mustache.Helpers
+	 * 
+	 * Registers a helper with the Mustache system.
+	 * Pass the name of the helper followed by the
+	 * function to which Mustache should invoke.
+	 * These are ran at runtime.
+	 * 
+	 * @param  {[String]} name name of helper
+	 * @param  {Function} fn function to call
+	 */
 	Mustache.registerHelper = function(name, fn){
 		this._helpers.push({ name: name, fn: fn });
 	};
 	
+	/**
+	 * @hide
+	 * Returns a helper given the name.
+	 * 
+	 * @param  {[type]} name of the helper
+	 * @return {[type]} helper object
+	 */
 	Mustache.getHelper = function(name) {		
 		for (var i = 0, helper; helper = this._helpers[i]; i++) {
 			// Find the correct helper
@@ -294,10 +334,18 @@ function( can ){
 		return null;
 	};
 
+	/**
+	 * @parent can.Mustache
+	 * @function registerPartial
+	 * Registers a partial you can call
+	 * later from inside the template.
+	 * @param  {[type]} id
+	 * @param  {[type]} text
+	 */
 	Mustache.registerPartial = function(id, text) {
 		// Get the renderer function.
 		var d = new can.Deferred(),
-			type = can.view.types['.mustache'],
+			type = can.view.types[can.view.ext],
 			func = type.renderer(id, text);
 		
 		// Cache if we are caching.
@@ -307,6 +355,8 @@ function( can ){
 			can.view.cachedRenderers[id] = func;
 		}
 
+		// Return the objects for the response's `dataTypes`
+		// (in this case view).
 		d.resolve(func);
 	};
 	
@@ -380,6 +430,10 @@ function( can ){
 					return options.inverse.call(name || {}, context) || '';
 					break;
 				default:
+					// add + '' to convert things like 0 to strings
+					// this can cause issues if you are trying to
+					// eval on the length but I think this is the more
+					// common case
 					return '' + (name !== undefined ? name : '');
 					break;
 			}
@@ -495,13 +549,24 @@ function( can ){
 		return '';
 	};
 
+	/**
+	 * Array of helpers to run.  These helpers are different
+	 * from the other helpers in the fact they run at runtime
+	 * versus during compilation.  These are the ones we expose
+	 * and let others do addins for.
+	 */
 	Mustache._helpers = [
 		/**
-		 * {{#if expr}}
-		 *   Do {{something}}
-		 * {{else}}
-		 *   Do {{nothing}}
-		 * {{/if}}
+		 * @parent can.Mustache.Helpers
+		 * @function if
+	 	 * 
+		 * Explicit if conditions.
+		 * 
+		 * 		{{#if expr}}
+		 *   		// if
+		 *      {{else}}
+		 *      	// else
+		 *      {{/if}}
 		 */
 		{
 			name: 'if',
@@ -515,6 +580,17 @@ function( can ){
 			}
 		},
 		
+		/**
+		 * @parent can.Mustache.Helpers
+		 * @function unless
+	 	 * 
+		 * The `unless` helper evaluates the inverse of the value
+		 * of the key and renders the block between the helper and the slash.
+		 * 
+		 * 		{{#unless expr}}
+		 *   		// unless
+		 *      {{/unless}}
+		 */
 		{
 			name: 'unless',
 			fn: function(expr, options){
@@ -524,6 +600,17 @@ function( can ){
 			}
 		},
 		
+		/**
+		 * @parent can.Mustache.Helpers
+		 * @function each
+	 	 * 
+		 * You can use the `each` helper to itterate over a array 
+		 * of items and render the block between the helper and the slash.
+		 * 
+		 * 		{{#each arr}}
+		 *   		// each
+		 *      {{/each}}
+		 */
 		{
 			name: 'each',
 			fn: function(expr, options) {
@@ -537,6 +624,18 @@ function( can ){
 			}
 		},
 		
+		/**
+		 * @parent can.Mustache.Helpers
+		 * @function with
+	 	 * 
+		 * Mustache typically applies the context passed in the section 
+		 * at compiled time.  However, if you want to override this 
+		 * context you can use the `with` helper.
+		 * 
+		 * 		{{#with arr}}
+		 *   		// with
+		 *      {{/with}}
+		 */
 		{
 			name: 'with',
 			fn: function(expr, options){

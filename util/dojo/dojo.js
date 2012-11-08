@@ -96,12 +96,12 @@ steal({
 	
 	// The id of the `function` to be bound, used as an expando on the `function`
 	// so we can lookup it's `remove` object.
-	var id = 0,
+	var dojoId = 0,
 		// Takes a node list, goes through each node
 		// and adds events data that has a map of events to 
 		// callbackId to `remove` object.  It looks like
 		// `{click: {5: {remove: fn}}}`. 
-		addBinding = function( nodelist, ev, cb ) {
+		dojoAddBinding = function( nodelist, ev, cb ) {
 			nodelist.forEach(function(node){
 				// Converting a raw select node to a node list
 				// returns a node list of its options due to a
@@ -116,14 +116,14 @@ steal({
 					events[ev] = {};
 				}
 				if(cb.__bindingsIds === undefined) {
-					cb.__bindingsIds=id++;
+					cb.__bindingsIds=dojoId++;
 				} 
 				events[ev][cb.__bindingsIds] = node.on(ev, cb)[0]
 			});
 		},
 		// Removes a binding on a `nodelist` by finding
 		// the remove object within the object's data.
-		removeBinding = function(nodelist,ev,cb){
+		dojoRemoveBinding = function(nodelist,ev,cb){
 			nodelist.forEach(function(node){
 				var node = new dojo.NodeList(node),
 					events = can.data(node,"events"),
@@ -150,7 +150,7 @@ steal({
 			// returns a node list of its options due to a
 			// bug in Dojo 1.7.1, this is sovled by wrapping
 			// it in an array.
-			addBinding( new dojo.NodeList(this.nodeName === "SELECT" ? [this] : this), ev, cb)
+			dojoAddBinding( new dojo.NodeList(this.nodeName === "SELECT" ? [this] : this), ev, cb)
 		} else if(this.addEvent) {
 			this.addEvent(ev, cb)
 		} else {
@@ -166,7 +166,7 @@ steal({
 		} 
 		
 		else if(this.on || this.nodeType) {
-			removeBinding(new dojo.NodeList(this), ev, cb);
+			dojoRemoveBinding(new dojo.NodeList(this), ev, cb);
 		} else {
 			// Make it bind-able...
 			can.removeEvent.call(this, ev, cb)
@@ -207,7 +207,7 @@ steal({
 	
 	can.delegate = function(selector, ev , cb){
 		if(this.on || this.nodeType){
-			addBinding( new dojo.NodeList(this), selector+":"+ev, cb)
+			dojoAddBinding( new dojo.NodeList(this), selector+":"+ev, cb)
 		} else if(this.delegate) {
 			this.delegate(selector, ev , cb)
 		} 
@@ -215,7 +215,7 @@ steal({
 	}
 	can.undelegate = function(selector, ev , cb){
 		if(this.on || this.nodeType){
-			removeBinding(new dojo.NodeList(this), selector+":"+ev, cb);
+			dojoRemoveBinding(new dojo.NodeList(this), selector+":"+ev, cb);
 		} else if(this.undelegate) {
 			this.undelegate(selector, ev , cb)
 		}
@@ -290,6 +290,11 @@ steal({
 		
 	}
 	can.buildFragment = function(frag, node){
+		if(frag && can.isFunction(frag.replace)) {
+			// Fix "XHTML"-style tags in all browsers
+			frag = frag.replace(/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi, "<$1></$2>");
+		}
+
 		var owner = node && node.ownerDocument,
 			frag = dojo.toDom(frag, owner );
 		if(frag.nodeType !== 11){

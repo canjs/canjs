@@ -400,7 +400,11 @@ test("Only plain objects should be converted to Observes", function() {
 
 	var selected = can.$('body');
 	ob.attr('sel', selected);
-	equal(ob.attr('sel'), selected, 'can.$() should not be converted');
+	if(can.isArray(selected)) {
+		ok(ob.attr('sel')  instanceof can.Observe.List, 'can.$() as array converted into Observe.List');
+	} else {
+		equal(ob.attr('sel'), selected, 'can.$() should not be converted');
+	}
 
 	ob.attr('element', document.getElementsByTagName('body')[0]);
 	equal(ob.attr('element'), document.getElementsByTagName('body')[0], 'HTMLElement should not be converted');

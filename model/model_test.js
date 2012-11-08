@@ -6,6 +6,12 @@ module("can/model", {
 })
 
 var isDojo = (typeof dojo !== "undefined");
+var getPath = function(path) {
+	if(typeof steal !== 'undefined') {
+		return steal.config().root.join(path) + '';
+	}
+	return path;
+}
 
 test("shadowed id", function(){
 	var MyModel = can.Model({
@@ -125,7 +131,7 @@ test("findOne deferred", function(){
 		},{});
 	} else {
 		can.Model("Person",{
-			findOne : steal.config().root.join("can/model/test/person.json")+''
+			findOne : getPath("can/model/test/person.json")
 		},{});
 	}
 	stop();
@@ -239,7 +245,7 @@ test("models", function(){
 
 test(".models with custom id", function() {
 	can.Model("CustomId", {
-		findAll : steal.config().root.join("can/model/test") + "/customids.json",
+		findAll : getPath("can/model/test") + "/customids.json",
 		id : '_id'
 	}, {
 		getName : function() {
@@ -310,10 +316,10 @@ test("auto methods",function(){
 	//turn off fixtures
 	can.fixture.on = false;
 	var School = can.Model.extend("Jquery.Model.Models.School",{
-	   findAll : steal.config().root.join("can/model/test")+"/{type}.json",
-	   findOne : steal.config().root.join("can/model/test")+"/{id}.json",
-	   create : "GET " + steal.config().root.join("can/model/test")+"/create.json",
-	   update : "GET "+steal.config().root.join("can/model/test")+"/update{id}.json"
+	   findAll : getPath("can/model/test")+"/{type}.json",
+	   findOne : getPath("can/model/test")+"/{id}.json",
+	   create : "GET " + getPath("can/model/test")+"/create.json",
+	   update : "GET "+ getPath("can/model/test")+"/update{id}.json"
 	},{})
 	stop();
 	School.findAll({type:"schools"}, function(schools){
@@ -353,7 +359,7 @@ test("isNew", function(){
 test("findAll string", function(){
 	can.fixture.on = false;
 	can.Model("Test.Thing",{
-		findAll : steal.config().root.join("can/model/test/findAll.json")+''
+		findAll : getPath("can/model/test/findAll.json")+''
 	},{});
 	stop();
 	Test.Thing.findAll({},function(things){
