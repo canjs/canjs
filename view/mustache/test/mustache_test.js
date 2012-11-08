@@ -68,7 +68,7 @@ can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials',
 				// register the partials in the spec
 				if(t.partials){
 					for(var name in t.partials) {
-						Mustache.registerPartial(name, t.partials[name])
+						can.view.registerView(name, t.partials[name])
 					}
 				}
 				
@@ -91,8 +91,16 @@ var getAttr = function(el, attrName){
 
 test("registerNode, unregisterNode, and replace work", function(){
 	// Reset the registered nodes
-	can.view.nodeMap = {};
-	can.view.nodeListMap = {};
+	for (var key in can.view.nodeMap) {
+		if (can.view.nodeMap.hasOwnProperty(key)) {
+			delete can.view.nodeMap[key];
+		}
+	}
+	for (var key in can.view.nodeListMap) {
+		if (can.view.nodeListMap.hasOwnProperty(key)) {
+			delete can.view.nodeListMap[key];
+		}
+	}
 	
 	var ids = function(arr){
 		return can.map(arr, function(item){
@@ -217,7 +225,7 @@ test('Inverted section function returning numbers',function() {
 	var frag = new can.Mustache({ text: template }).render({ todos: todos });
 	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
 	same(can.$('#completed')[0].innerHTML, "hidden", 'hidden shown');
-
+	
 	// now update the named attribute
 	obsvr.attr('named', true);
 	same(can.$('#completed')[0].innerHTML, "", 'hidden gone');
@@ -234,12 +242,12 @@ test("Mustache live-binding with escaping", function() {
 	can.append( can.$('#qunit-test-area'), can.view.frag(template));
 
 	same(can.$('#binder1')[0].innerHTML, "&lt;strong&gt;Mrs Peters&lt;/strong&gt;");
-	same(can.$('#binder2')[0].innerHTML, "<strong>Mrs Peters</strong>");
+	same(can.$('#binder2')[0].getElementsByTagName('strong')[0].innerHTML, "Mrs Peters");
 
 	teacher.attr('name', '<i>Mr Scott</i>');
 
 	same(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
-	same(can.$('#binder2')[0].innerHTML, "<i>Mr Scott</i>");
+	same(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott")
 });
 
 test("Mustache truthy", function() {
@@ -321,7 +329,7 @@ test("Deeply nested partials", function() {
 		}
 	};
 	for(var name in t.partials) {
-		Mustache.registerPartial(name, t.partials[name])
+		can.view.registerView(name, t.partials[name])
 	}
 	
 	same(new can.Mustache({ text: t.template }).render(t.data), t.expected);
@@ -646,15 +654,15 @@ test('adding and removing multiple html content within a single element', functi
 
 	div.appendChild(can.view.frag(compiled));
 
-	equals(div.innerHTML.toUpperCase(), '<div>abc</div>'.toUpperCase(), 'initial render');
+	equals(div.childNodes[0].innerHTML, 'abc', 'initial render');
 
 	obs.attr({a: '', b : '', c: ''});
 
-	equals(div.innerHTML.toUpperCase(), '<div></div>'.toUpperCase(), 'updated values');
+	equals(div.childNodes[0].innerHTML, '', 'updated values');
 	
 	obs.attr({c: 'c'});
 	
-	equals(div.innerHTML.toUpperCase(), '<div>c</div>'.toUpperCase(), 'updated values');
+	equals(div.childNodes[0].innerHTML, 'c', 'updated values');
 });
 
 test('live binding and removeAttr', function(){

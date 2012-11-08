@@ -134,18 +134,14 @@ can.extend(can.view, {
 
 	pending: function() {
 		// TODO, make this only run for the right tagName
-		if(true  || pendingHookups.length) {
-			var hooks = pendingHookups.slice(0);
-			lastHookups = hooks;
-			pendingHookups = [];
-			return can.view.hook(function(el){
-				can.each(hooks, function(fn){
-					fn(el);
-				});
+		var hooks = pendingHookups.slice(0);
+		lastHookups = hooks;
+		pendingHookups = [];
+		return can.view.hook(function(el){
+			can.each(hooks, function(fn){
+				fn(el);
 			});
-		} else {
-			return "";
-		}
+		});
 	},
 
 	registerNode: function(nodeList){
@@ -264,8 +260,6 @@ can.extend(can.view, {
 						// update the nodes in the DOM with the new rendered value
 						if( attached ) {
 							makeAndPut(newVal);
-						} else {
-							// no longer attached
 						}
 						teardownCheck(nodes[0].parentNode);
 					};
@@ -307,8 +301,8 @@ can.extend(can.view, {
 					
 					
 					setupTeardownOnDestroy(parentNode);
-					
-			}) + "></" +tag+">";
+			//buildFragment, specifically innerHTML, in IE doesn't honor leading whitespace after empty elements
+			}) + ">.</" +tag+">";
 		// In a tag, but not in an attribute
 		} else if( status === 1 ) { 
 			// remember the old attr name
@@ -367,8 +361,8 @@ can.extend(can.view, {
 					parts = attr.split(attributePlaceholder),
 					goodParts = [],
 					hook;
-					goodParts.push(parts.shift());
-					goodParts.push(parts.join(attributePlaceholder));
+					goodParts.push(parts.shift(), 
+								   parts.join(attributePlaceholder));
 
 				// If we already had a hookup for this attribute...
 				if(hooks[attributeName]) {
@@ -441,8 +435,7 @@ can.extend(can.view, {
 	// Node mappings
 	nodeMap: nodeMap,
 	nodeListMap: nodeListMap
-
-})
+});
 
 return can;
 });

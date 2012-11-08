@@ -538,7 +538,7 @@ steal('can/util', 'can/observe/elements', function(can) {
         }
       }
 
-      if (itemsNotInList.length > 0){
+      if (itemsNotInList.length){
         //splice everything onto end of list so as not to trigger change events for each push
         if (this.constructor.namespace){
         	itemsNotInList = can.makeArray(this.constructor.namespace.models(itemsNotInList));

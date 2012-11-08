@@ -13,7 +13,7 @@ steal("can/util", function( can ) {
 	$view = can.view = function(view, data, helpers, callback){
 		// Get the result.
 		var result = $view.render(view, data, helpers, callback);
-		if(can.isFunction(result))  {
+		if(isFunction(result))  {
 			return result;
 		}
 		if(can.isDeferred(result)){
@@ -335,6 +335,23 @@ steal("can/util", function( can ) {
 	
 				return response;
 			}
+		},
+
+		registerView: function( id, text, type, def ) {
+			// Get the renderer function.
+			var func = (type || $view.types[$view.ext]).renderer(id, text);
+			def = def || new can.Deferred();
+			
+			// Cache if we are caching.
+			if ( $view.cache ) {
+				$view.cached[id] = def;
+				def.__view_id = id;
+				$view.cachedRenderers[id] = func;
+			}
+
+			// Return the objects for the response's `dataTypes`
+			// (in this case view).
+			return def.resolve(func);
 		}
 	});
 
@@ -362,24 +379,7 @@ steal("can/util", function( can ) {
 			// the url for the template.
 			id, 
 			// The ajax request used to retrieve the template content.
-			jqXHR, 
-			// Used to generate the response.
-			response = function( text, d ) {
-				// Get the renderer function.
-				var func = type.renderer(id, text);
-				d = d || new can.Deferred();
-				
-				// Cache if we are caching.
-				if ( $view.cache ) {
-					$view.cached[id] = d;
-					d.__view_id = id;
-					$view.cachedRenderers[id] = func;
-				}
-				d.resolve(func);
-				// Return the objects for the response's `dataTypes`
-				// (in this case view).
-				return d;
-			};
+			jqXHR;
 
 			//If the url has a #, we assume we want to use an inline template
 			//from a script element and not current page's HTML
@@ -402,7 +402,7 @@ steal("can/util", function( can ) {
 			}
 	
 			// Convert to a unique and valid id.
-			id = can.view.toId(url);
+			id = $view.toId(url);
 	
 			// If an absolute path, use `steal` to get it.
 			// You should only be using `//` if you are using `steal`.
@@ -424,7 +424,7 @@ steal("can/util", function( can ) {
 			// Otherwise if we are getting this from a `<script>` element.
 			} else if ( el ) {
 				// Resolve immediately with the element's `innerHTML`.
-				return response(el.innerHTML);
+				return $view.registerView(id, el.innerHTML, type);
 			} else {
 				// Make an ajax request for text.
 				var d = new can.Deferred();
@@ -439,7 +439,7 @@ steal("can/util", function( can ) {
 					success: function( text ) {
 						// Make sure we got some text back.
 						checkText(text, url);
-						response(text, d)
+						$view.registerView(id, text, type, d)
 					}
 				});
 				return d;
@@ -471,8 +471,8 @@ steal("can/util", function( can ) {
 	
 	if ( window.steal ) {
 		steal.type("view js", function( options, success, error ) {
-			var type = can.view.types["." + options.type],
-				id = can.view.toId(options.id);
+			var type = $view.types["." + options.type],
+				id = $view.toId(options.id);
 			/**
 			 * should return something like steal("dependencies",function(EJS){
 			 * 	 return can.view.preload("ID", options.text)
@@ -484,20 +484,20 @@ steal("can/util", function( can ) {
 	}
 
 	//!steal-pluginify-remove-start
-	can.extend(can.view, {
+	can.extend($view, {
 		register: function( info ) {
 			this.types["." + info.suffix] = info;
 
 			if ( window.steal ) {
 				steal.type(info.suffix + " view js", function( options, success, error ) {
-					var type = can.view.types["." + options.type],
-						id = can.view.toId(options.id+'');
+					var type = $view.types["." + options.type],
+						id = $view.toId(options.id+'');
 
 					options.text = type.script(id, options.text)
 					success();
 				})
 			}
-			can.view[info.suffix] = function(id, text){
+			$view[info.suffix] = function(id, text){
 				$view.preload(id, info.renderer(id, text) )
 			}
 		},
@@ -505,7 +505,7 @@ steal("can/util", function( can ) {
 			return "can.view.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
 		},
 		preload: function( id, renderer ) {
-			can.view.cached[id] = new can.Deferred().resolve(function( data, helpers ) {
+			$view.cached[id] = new can.Deferred().resolve(function( data, helpers ) {
 				return renderer.call(data, data, helpers);
 			});
 			return function(){

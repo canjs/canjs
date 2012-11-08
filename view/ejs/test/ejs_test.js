@@ -33,8 +33,16 @@ var getAttr = function(el, attrName){
 
 test("registerNode, unregisterNode, and replace work", function(){
 	// Reset the registered nodes
-	can.view.nodeMap = {};
-	can.view.nodeListMap = {};
+	for (var key in can.view.nodeMap) {
+		if (can.view.nodeMap.hasOwnProperty(key)) {
+			delete can.view.nodeMap[key];
+		}
+	}
+	for (var key in can.view.nodeListMap) {
+		if (can.view.nodeListMap.hasOwnProperty(key)) {
+			delete can.view.nodeListMap[key];
+		}
+	}
 	
 	var ids = function(arr){
 		return can.map(arr, function(item){
@@ -887,26 +895,19 @@ test("nested properties", function(){
 });
 
 test("tags without chidren or ending with /> do not change the state", function(){
-	var ta = can.$('#qunit-test-area')[0]
-	ta.innerHTML = ""
 	
-	var hookup = can.view.hookup;
-	can.view.hookup = function(frag){
-		// check that there are no spans in this frag
-		can.append(  can.$('#qunit-test-area'), frag );
-		equal( ta.getElementsByTagName('span').length, 0, "there are no spans");
-		equal( ta.getElementsByTagName('td').length, 2, "there are 2 td");
-	}
 	var text = "<table><tr><td/><%== obs.attr('content') %></tr></div>"
 	var obs = new can.Observe({
 		content: "<td>Justin</td>"
 	})
 	var compiled = new can.EJS({text: text}).render({obs: obs});
-	
 	var div = document.createElement('div');
+	var html = can.view.frag(compiled);
+	
+	div.appendChild(html)
 
-	can.view.frag(compiled);
-	can.view.hookup = hookup;
+	equal( div.getElementsByTagName('span').length, 0, "there are no spans");
+	equal( div.getElementsByTagName('td').length, 2, "there are 2 td");
 })
 
 
@@ -1078,8 +1079,8 @@ test("attribute unquoting", function() {
 
 test("empty element hooks work correctly",function(){
 	
-	var text = '<div <%= function(e){ e.innerHTML = "1 Will show"; } %> />'+
-		'<div <%= function(e){ e.innerHTML = "2 Will not show"; } %> />'+
+	var text = '<div <%= function(e){ e.innerHTML = "1 Will show"; } %>></div>'+
+		'<div <%= function(e){ e.innerHTML = "2 Will not show"; } %>></div>'+
 		'3 Will not show';
 	
 	var compiled = new can.EJS({text: text}).render(),
