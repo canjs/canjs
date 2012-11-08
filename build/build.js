@@ -27,9 +27,8 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 	steal.File(testFolder).mkdirs();
 
 	_.each(libraries, function (lib) {
-		steal.File(outFolder + '/' + lib).mkdirs();
 		var options = libs[lib],
-			outFile = outFolder + '/' + lib + '/can.' + lib + '-' + version + '.js',
+			outFile = outFolder + '/can.' + lib + '-' + version + '.js',
 			testFile = testFolder + lib + '.html',
 			defaults = {
 				out : outFile,
@@ -38,17 +37,8 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 				skipAll : true
 			};
 
-		//console.log('Building ' + lib + ' ' + version + ' to ' + outFile);
-		//steal.build.pluginify("can/build/make/" + lib + ".js", _.extend(defaults, options));
-
-		options.exclude.push('dev.js', 'stealconfig.js');
-		steal.build.amdify('can/build/make/' + lib + '.js', {
-			out: outFolder + '/' + lib + '/amd',
-			exclude: options.exclude,
-			map: {
-				'can/construct/construct.js': 'can/construct'
-			}
-		});
+		console.log('Building ' + lib + ' ' + version + ' to ' + outFile);
+		steal.build.pluginify("can/build/make/" + lib + ".js", _.extend(defaults, options));
 
 		console.log('Creating distributable test HTML file ' + testFile);
 		render('can/build/templates/test.html.ejs', testFile, {
@@ -59,5 +49,13 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 		});
 		new steal.File('can/build/templates/qunit.js').copyTo(testFolder + '/qunit.js');
 		new steal.File('can/build/templates/index.html').copyTo(testFolder + '/index.html');
+	});
+
+	steal.build.amdify('can/build/make/jquery.js', {
+		out: outFolder + '/amd',
+		exclude: libs['jquery'].exclude,
+		map: {
+			'can/construct/construct.js': 'can/construct'
+		}
 	});
 });
