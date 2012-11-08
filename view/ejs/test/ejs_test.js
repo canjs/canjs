@@ -343,12 +343,15 @@ test("block live binding", function(){
 
 	div.appendChild(can.view.frag(compiled))
 	
-	// toUpperCase added to normalize cases for IE8
-	equals(div.getElementsByTagName('div')[0].innerHTML.toUpperCase(), "<span>Mr.</span>".toUpperCase(),"initial content")
+	// We have to test using nodeName and innerHTML (and not outerHTML) because IE 8 and under treats
+	// user-defined properties on nodes as attributes.
+	equals(div.getElementsByTagName('div')[0].firstChild.nodeName.toUpperCase(), "SPAN","initial span tag");
+	equals(div.getElementsByTagName('div')[0].firstChild.innerHTML, "Mr.","initial span content");
 	
 	obs.attr('sex','female')
 	
-	equals(div.getElementsByTagName('div')[0].innerHTML.toUpperCase(), "<label>Ms.</label>".toUpperCase(),"updated label")
+	equals(div.getElementsByTagName('div')[0].firstChild.nodeName.toUpperCase(), "LABEL","updated label tag");
+	equals(div.getElementsByTagName('div')[0].firstChild.innerHTML, "Ms.","updated label content");
 	
 })
 
@@ -370,14 +373,17 @@ test("hookups in tables", function(){
 
 	div.appendChild(can.view.frag(compiled));
 	
-	
-	equals(div.getElementsByTagName('tbody')[0].innerHTML.replace(/(\r|\n)+/g, "").toUpperCase(), 
-		"<tr><td>Mr.</td></tr>".toUpperCase(),"initial content")
+	// We have to test using nodeName and innerHTML (and not outerHTML) because IE 8 and under treats
+	// user-defined properties on nodes as attributes.
+	equals(div.getElementsByTagName('tbody')[0].firstChild.firstChild.nodeName, "TD","initial tag");
+	equals(div.getElementsByTagName('tbody')[0].firstChild.firstChild.innerHTML.replace(/(\r|\n)+/g, ""), 
+		"Mr.","initial content");
 	
 	obs.attr('sex','female')
 	
-	equals(div.getElementsByTagName('tbody')[0].innerHTML.replace(/(\r|\n)+/g, "").toUpperCase(), 
-		"<tr><td>Ms.</td></tr>".toUpperCase(),"updated label")
+	equals(div.getElementsByTagName('tbody')[0].firstChild.firstChild.nodeName, "TD","updated tag");
+	equals(div.getElementsByTagName('tbody')[0].firstChild.firstChild.innerHTML.replace(/(\r|\n)+/g, ""), 
+		"Ms.","updated content");
 })
 
 test('multiple hookups in a single attribute', function() {
@@ -998,7 +1004,8 @@ test("live binding textarea", function(){
 	var obs = new can.Observe({middle: "yes"}),
 		div = document.createElement('div');
 	
-	div.appendChild( can.view("textarea-test",{obs: obs}) )
+	var node = can.view("textarea-test", {obs: obs});
+	div.appendChild(node);
 	var textarea = div.firstChild
 	
 	equal(textarea.value, "BeforeyesAfter");
