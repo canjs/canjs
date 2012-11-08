@@ -1,4 +1,4 @@
-steal('can/util/can.js', './mootools-core-1.4.5.js', '../event.js','../fragment',
+steal('can/util/can.js', './mootools-core-1.4.3.js', '../event.js','../fragment',
 'can/util/array/each.js', 'can/util/object/isplain', 'can/util/object/extend',
 function(can) {
 	// mootools.js
