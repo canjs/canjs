@@ -90,15 +90,27 @@ function( can ){
 			 * Each token is defined as: ["token-name", "string representation", "optional regexp override"]
 			 */
 			tokens: [
-				["templateLeft", "{{$"], // Template	 ---- Not supported
-				["templateRight", "$}}"], // Right Template	---- Not supported
-				["returnLeft", "{{{", "{{[{&]"], // Return Unescaped
-				["commentFull", "{{!}}", "^[\\s\\t]*{{!.+?}}\\n"], // Full line comment
-				["commentLeft", "{{!", "(\\n[\\s\\t]*{{!|{{!)"], // Comment
-				["left", "{{~"], // Run
-				["escapeLeft", "{{"], // Return Escaped
+				// Return unescaped
+				["returnLeft", "{{{", "{{[{&]"],
+				// Full line comments
+				["commentFull", "{{!}}", "^[\\s\\t]*{{!.+?}}\\n"],
+				// Inline comments
+				["commentLeft", "{{!", "(\\n[\\s\\t]*{{!|{{!)"],
+				// Full line escapes
+				// This is used for detecting lines with only whitespace and an escaped tag
+				["escapeFull", "{{}}", "(^[\\s\\t]*{{[#/].+?}}\\n|\\n[\\s\\t]*{{[#/].+?}}\\n|\\n[\\s\\t]*{{[#/].+?}}$)", function(content) {
+					// console.log(content);
+					return {
+						before: /^\n.+?\n$/.test(content) ? '\n' : '',
+						content: content.match(/{{(.+?)}}/)[1] || ''
+					};
+				}],
+				// Return escaped
+				["escapeLeft", "{{"],
+				// Close return unescaped
 				["returnRight", "}}}"],
-				["right", "}}"] // Right -> All have same FOR Mustache ...
+				// Close tag
+				["right", "}}"]
 			],
 
 			helpers: [
