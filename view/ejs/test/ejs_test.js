@@ -887,26 +887,19 @@ test("nested properties", function(){
 });
 
 test("tags without chidren or ending with /> do not change the state", function(){
-	var ta = can.$('#qunit-test-area')[0]
-	ta.innerHTML = ""
 	
-	var hookup = can.view.hookup;
-	can.view.hookup = function(frag){
-		// check that there are no spans in this frag
-		can.append(  can.$('#qunit-test-area'), frag );
-		equal( ta.getElementsByTagName('span').length, 0, "there are no spans");
-		equal( ta.getElementsByTagName('td').length, 2, "there are 2 td");
-	}
 	var text = "<table><tr><td/><%== obs.attr('content') %></tr></div>"
 	var obs = new can.Observe({
 		content: "<td>Justin</td>"
 	})
 	var compiled = new can.EJS({text: text}).render({obs: obs});
-	
 	var div = document.createElement('div');
+	var html = can.view.frag(compiled);
+	
+	div.appendChild(html)
 
-	can.view.frag(compiled);
-	can.view.hookup = hookup;
+	equal( div.getElementsByTagName('span').length, 0, "there are no spans");
+	equal( div.getElementsByTagName('td').length, 2, "there are 2 td");
 })
 
 
