@@ -1,5 +1,11 @@
 steal('can/view', function(can){
-
+// text node expando test
+var canExpando = true;
+try {
+	document.createTextNode()._ = 0;
+} catch (ex) {
+	canExpando = false;
+}
 /**
  * Helper(s)
  */
@@ -97,15 +103,30 @@ var attrMap = {
 	},
 	// a mapping of element ids to nodeList ids
 	nodeMap = {},
+	// a mapping of ids to text nodes
+	textNodeMap = {},
 	// a mapping of nodeList ids to nodeList
 	nodeListMap = {},
 	expando = "ejs_"+Math.random(),
 	_id=0,
 	id = function(node){
-		if ( node[expando] ) {
-			return node[expando];
-		} else {
-			return node[expando] = (node.nodeName ? "element_" : "obj_")+(++_id);
+		if(canExpando || node.nodeType !== 3) {
+			if(node[expando]) {
+				return node[expando];
+			}
+			else {
+				return node[expando] = (node.nodeName ? "element_" : "obj_")+(++_id);
+			}
+		}
+		else {
+			for(var textNodeID in textNodeMap) {
+				if(textNodeMap[textNodeID] === node) {
+					return textNodeID;
+				}
+			}
+
+			textNodeMap["text_" + (++_id)] = node;
+			return "text_" + _id;
 		}
 	},
 	// removes a nodeListId from a node's nodeListIds
@@ -432,7 +453,9 @@ can.extend(can.view, {
 		});
 	},
 	
+	canExpando: canExpando,
 	// Node mappings
+	textNodeMap: textNodeMap,
 	nodeMap: nodeMap,
 	nodeListMap: nodeListMap
 });

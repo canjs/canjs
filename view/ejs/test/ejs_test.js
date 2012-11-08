@@ -246,6 +246,9 @@ test('list helper', function(){
 		Todos.splice(0, 2);
 		equals(div.getElementsByTagName('div').length, 0, '0 items in list')
 
+		Todos.push({id: 4, name: 'Pick up sticks'});
+		equals(div.getElementsByTagName('div').length, 1, '1 item in list again')
+
 });
 
 test("attribute single unescaped, html single unescaped", function(){
@@ -438,15 +441,18 @@ test('adding and removing multiple html content within a single element', functi
 
 	div.appendChild(can.view.frag(compiled));
 
-	equals(div.innerHTML.toUpperCase(), '<div>abc</div>'.toUpperCase(), 'initial render');
+	equals(div.firstChild.nodeName.toUpperCase(), 'DIV', 'initial render node name');
+	equals(div.firstChild.innerText, 'abc', 'initial render text')
 
 	obs.attr({a: '', b : '', c: ''});
 
-	equals(div.innerHTML.toUpperCase(), '<div></div>'.toUpperCase(), 'updated values');
+	equals(div.firstChild.nodeName.toUpperCase(), 'DIV', 'updated render node name');
+	equals(div.firstChild.innerText, '', 'updated render text')
 	
 	obs.attr({c: 'c'});
 	
-	equals(div.innerHTML.toUpperCase(), '<div>c</div>'.toUpperCase(), 'updated values');
+	equals(div.firstChild.nodeName.toUpperCase(), 'DIV', 'updated render node name');
+	equals(div.firstChild.innerText, 'c', 'updated render text')
 });
 
 test('live binding and removeAttr', function(){
@@ -1109,16 +1115,16 @@ test("live binding with parent dependent tags but without parent tag present in 
 	
 	table.appendChild(can.view.frag(compiled));
 	
-	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>Austin</td></tr><tr><td>McDaniel</td></tr>")
+	equal(table.innerHTML.replace(/<tr[\s]+[^>]*>/ig, '<tr>').replace(/[\s\n]/g,"").toLowerCase(),"<tr><td>Austin</td></tr><tr><td>McDaniel</td></tr>".toLowerCase())
 	
 	person.removeAttr('first')
-	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>McDaniel</td></tr>")
+	equal(table.innerHTML.replace(/<tr[\s]+[^>]*>/ig, '<tr>').replace(/[\s\n]/g,"").toLowerCase(),"<tr><td>McDaniel</td></tr>".toLowerCase())
 	person.removeAttr('last');
-	equal(table.innerHTML.replace(/[\s\n]/g,""),"");
+	equal(table.innerHTML.replace(/<tr[\s]+[^>]*>/ig, '<tr>').replace(/[\s\n]/g,"").toLowerCase(),"");
 	
 	person.attr('first',"Justin");
 	
-	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>Justin</td></tr>")
+	equal(table.innerHTML.replace(/<tr[\s]+[^>]*>/ig, '<tr>').replace(/[\s\n]/g,"").toLowerCase(),"<tr><td>Justin</td></tr>".toLowerCase())
 })
 
 
