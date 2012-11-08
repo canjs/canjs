@@ -3,7 +3,7 @@ var _ = this._;
 
 load("steal/rhino/rhino.js");
 steal('steal/build/pluginify', 'can/build/settings.js', function () {
-	// Use with ./js can/build/dist.js <outputfolder> <version> <library1> <library2>
+	// Use with ./js can/build/dist.js <outputfolder> <version> <library1> <library2> <libraryN>
 	var version = _args[1] || 'edge';
 	var outFolder = (_args[0] || 'can/dist/') + version + '/plugins/';
 	var wrapjQuery = {
