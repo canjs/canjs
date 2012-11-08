@@ -90,6 +90,10 @@ var getAttr = function(el, attrName){
 	}
 
 test("registerNode, unregisterNode, and replace work", function(){
+	// Reset the registered nodes
+	can.view.nodeMap = {};
+	can.view.nodeListMap = {};
+	
 	var ids = function(arr){
 		return can.map(arr, function(item){
 			return item.id

@@ -7,6 +7,7 @@
         .then('can/control/control_test.js')
         .then('can/model/model_test.js')
         .then('can/view/ejs/test/ejs_test.js')
+        .then('can/view/mustache/test/mustache_test.js')
     //	TODO .then('can/util/util_test.js')
         .then(function(){
             // Does the browser support window.onhashchange? Note that IE8 running in
