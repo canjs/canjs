@@ -13,7 +13,7 @@ steal("can/util", function( can ) {
 	$view = can.view = function(view, data, helpers, callback){
 		// Get the result.
 		var result = $view.render(view, data, helpers, callback);
-		if(can.isFunction(result))  {
+		if(isFunction(result))  {
 			return result;
 		}
 		if(can.isDeferred(result)){
@@ -402,7 +402,7 @@ steal("can/util", function( can ) {
 			}
 	
 			// Convert to a unique and valid id.
-			id = can.view.toId(url);
+			id = $view.toId(url);
 	
 			// If an absolute path, use `steal` to get it.
 			// You should only be using `//` if you are using `steal`.
@@ -471,8 +471,8 @@ steal("can/util", function( can ) {
 	
 	if ( window.steal ) {
 		steal.type("view js", function( options, success, error ) {
-			var type = can.view.types["." + options.type],
-				id = can.view.toId(options.id);
+			var type = $view.types["." + options.type],
+				id = $view.toId(options.id);
 			/**
 			 * should return something like steal("dependencies",function(EJS){
 			 * 	 return can.view.preload("ID", options.text)
@@ -484,20 +484,20 @@ steal("can/util", function( can ) {
 	}
 
 	//!steal-pluginify-remove-start
-	can.extend(can.view, {
+	can.extend($view, {
 		register: function( info ) {
 			this.types["." + info.suffix] = info;
 
 			if ( window.steal ) {
 				steal.type(info.suffix + " view js", function( options, success, error ) {
-					var type = can.view.types["." + options.type],
-						id = can.view.toId(options.id+'');
+					var type = $view.types["." + options.type],
+						id = $view.toId(options.id+'');
 
 					options.text = type.script(id, options.text)
 					success();
 				})
 			}
-			can.view[info.suffix] = function(id, text){
+			$view[info.suffix] = function(id, text){
 				$view.preload(id, info.renderer(id, text) )
 			}
 		},
@@ -505,7 +505,7 @@ steal("can/util", function( can ) {
 			return "can.view.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
 		},
 		preload: function( id, renderer ) {
-			can.view.cached[id] = new can.Deferred().resolve(function( data, helpers ) {
+			$view.cached[id] = new can.Deferred().resolve(function( data, helpers ) {
 				return renderer.call(data, data, helpers);
 			});
 			return function(){
