@@ -68,7 +68,7 @@ can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials',
 				// register the partials in the spec
 				if(t.partials){
 					for(var name in t.partials) {
-						Mustache.registerPartial(name, t.partials[name])
+						can.view.registerView(name, t.partials[name])
 					}
 				}
 				
@@ -321,7 +321,7 @@ test("Deeply nested partials", function() {
 		}
 	};
 	for(var name in t.partials) {
-		Mustache.registerPartial(name, t.partials[name])
+		can.view.registerView(name, t.partials[name])
 	}
 	
 	same(new can.Mustache({ text: t.template }).render(t.data), t.expected);

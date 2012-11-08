@@ -72,7 +72,7 @@ function( can ){
 	 */
 	render = function( object, extraHelpers ) {
 		object = object || {};
-		return this.template.fn.call(object, object, { _date: object });
+		return this.template.fn.call(object, object, { _data: object });
 	};
 
 	can.extend(Mustache.prototype, {
@@ -172,7 +172,7 @@ function( can ){
 				{
 					name: /^\s?data\s/,
 					fn: function(content, cmd){
-						var attr = content.replace(/^\s?data\s/, '').replace(/["']/g, '');
+						var attr = content.replace(/(^\s?data\s)|(["'])/g, '');;
 
 						// return a function which calls `can.data` on the element
 						// with the attribute name with the current context.
@@ -335,32 +335,6 @@ function( can ){
 	};
 
 	/**
-	 * @parent can.Mustache
-	 * @function registerPartial
-	 * Registers a partial you can call
-	 * later from inside the template.
-	 * @param  {[type]} id
-	 * @param  {[type]} text
-	 */
-	Mustache.registerPartial = function(id, text) {
-		// Get the renderer function.
-		var d = new can.Deferred(),
-			type = can.view.types[can.view.ext],
-			func = type.renderer(id, text);
-		
-		// Cache if we are caching.
-		if ( can.view.cache ) {
-			can.view.cached[id] = d;
-			d.__view_id = id;
-			can.view.cachedRenderers[id] = func;
-		}
-
-		// Return the objects for the response's `dataTypes`
-		// (in this case view).
-		d.resolve(func);
-	};
-	
-	/**
 	 * @param {String} [mode]	The mode to evaluate the section with: # for truthy, ^ for falsey
 	 */
 	Mustache.txt = function(context, mode, name) {
@@ -369,7 +343,7 @@ function( can ){
 					fn: function() {},
 					inverse: function() {}
 				}].concat(mode ? args.pop() : [])),
-			validArgs = args.length > 0 ? args : [name],
+			validArgs = args.length ? args : [name],
 			valid = true,
 			result = [],
 			i, helper;
@@ -670,5 +644,5 @@ function( can ){
 		}
 	});
 
-	return can.Mustache;
+	return Mustache;
 });

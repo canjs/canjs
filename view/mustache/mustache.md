@@ -188,7 +188,7 @@ __Registering Partials__
 You can call `can.Mustache.registerPartial` to register
 a template you can call from inside mustache.
 
-	Mustache.registerPartial('myTemplate', "MY body lies over {{.}}")
+	can.view.registerView('myTemplate', "MY body lies over {{.}}")
 
 Then later in my view I can do:
 
