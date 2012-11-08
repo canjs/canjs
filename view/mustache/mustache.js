@@ -11,7 +11,6 @@ function( can ){
 		CONTEXT = '___c0nt3xt',
 		HASH = '___h4sh',
 		STACK = '___st4ck',
-		// CONTEXT_STACK = '(can.isArray(' + CONTEXT + ') && ' + CONTEXT + '.concat([this])) || [' + CONTEXT + ']',
 		CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
 		isObserve = function(obj) {
 			return can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
@@ -75,7 +74,12 @@ function( can ){
 			text: {
 				start: 'var ' + CONTEXT + ' = []; ' + CONTEXT + '.' + STACK + ' = true;\
 					var ' + STACK + ' = function(context, self) {\
-						var s = context && context.' + STACK + ' ? context.concat([self]) : [context];\
+						var s;\
+						if (arguments.length == 1 && context) {\
+							s = !context.' + STACK + ' ? [context] : context;\
+						} else { \
+							s = context && context.' + STACK + ' ? context.concat([self]) : ' + STACK + '(context).concat([self]);\
+						}\
 						return (s.' + STACK + ' = true) && s;\
 					};'
 			},
@@ -86,15 +90,27 @@ function( can ){
 			 * Each token is defined as: ["token-name", "string representation", "optional regexp override"]
 			 */
 			tokens: [
-				["templateLeft", "{{$"], // Template	 ---- Not supported
-				["templateRight", "$}}"], // Right Template	---- Not supported
-				["returnLeft", "{{{", "{{[{&]"], // Return Unescaped
-				["commentFull", "{{!}}", "^[\\s\\t]*{{!.+?}}\\n"], // Full line comment
-				["commentLeft", "{{!", "(\\n[\\s\\t]*{{!|{{!)"], // Comment
-				["left", "{{~"], // Run
-				["escapeLeft", "{{"], // Return Escaped
+				// Return unescaped
+				["returnLeft", "{{{", "{{[{&]"],
+				// Full line comments
+				["commentFull", "{{!}}", "^[\\s\\t]*{{!.+?}}\\n"],
+				// Inline comments
+				["commentLeft", "{{!", "(\\n[\\s\\t]*{{!|{{!)"],
+				// Full line escapes
+				// This is used for detecting lines with only whitespace and an escaped tag
+				["escapeFull", "{{}}", "(^[\\s\\t]*{{[#/][^}]+?}}\\n|\\n[\\s\\t]*{{[#/][^}]+?}}\\n|\\n[\\s\\t]*{{[#/][^}]+?}}$)", function(content) {
+					console.log(content);
+					return {
+						before: /^\n.+?\n$/.test(content) ? '\n' : '',
+						content: content.match(/{{(.+?)}}/)[1] || ''
+					};
+				}],
+				// Return escaped
+				["escapeLeft", "{{"],
+				// Close return unescaped
 				["returnRight", "}}}"],
-				["right", "}}"] // Right -> All have same FOR Mustache ...
+				// Close tag
+				["right", "}}"]
 			],
 
 			helpers: [
@@ -119,7 +135,31 @@ function( can ){
 				{
 					name: /^>[\s|\w]\w*/,
 					fn:function(content, cmd){
-						return "can.view.render('" + can.trim(content.replace(/^>\s?/, '')) + "', can.extend({}, " + CONTEXT + ", this))";
+						return "can.view.render('" + can.trim(content.replace(/^>\s?/, '')) + "', " + CONTEXT_STACK + ".pop())";
+					}
+				},
+
+				/**
+				 * Data hookup helper.
+				 * 
+				 * It will attach the data property of `this` to the element
+				 * its found on using the first argument as the data attribute
+				 * key.
+				 *
+				 * 	For example:
+				 * 	
+				 *	 	<li id="nameli" {{ data 'name' }}></li>
+				 *
+				 *	then later you can access it like:
+				 *
+				 * 		can.$('#nameli').data('name');
+				 * 
+				 */
+				{
+					name: /^\s?data\s/,
+					fn: function(content, cmd){
+						var attr = content.replace(/^\s?data\s/, '').replace(/["']/g, '');
+						return "can.proxy(function(__){can.$(__).data('" + attr + "', this.pop()); }, " + CONTEXT_STACK + ")";
 					}
 				},
 
@@ -303,10 +343,12 @@ function( can ){
 		// Check for a registered helper or a helper-like function
 		if (helper = (Mustache.getHelper(name) || (can.isFunction(name) && { fn: name }))) {
 			// Update the options with a function/inverse (the inner templates of a section)
-			var opts = {
-				fn: can.proxy(options.fn, context),
-				inverse: can.proxy(options.inverse, context)
-			}, lastArg = args[args.length-1];
+			var context = (context[STACK] && context[context.length - 1]) || context,
+				opts = {
+					fn: can.proxy(options.fn, context),
+					inverse: can.proxy(options.inverse, context)
+				}, 
+				lastArg = args[args.length-1];
 			// Add the hash if one exists
 			if (lastArg && lastArg[HASH]) {
 				opts.hash = args.pop()[HASH];
@@ -338,7 +380,7 @@ function( can ){
 					return options.inverse.call(name || {}, context) || '';
 					break;
 				default:
-					return '' + (name || '');
+					return '' + (name !== undefined ? name : '');
 					break;
 			}
 		}
@@ -398,10 +440,9 @@ function( can ){
 		}
 		// Handle object resolution.
 		else if (!isHelper) {
-			while (value = contexts.pop()) {
-			// for (i = 0; i < contexts.length; i++) {
+			for (i = contexts.length - 1; i >= 0; i--) {
 				// Check the context for the reference
-				// value = contexts[i];
+				value = contexts[i];
 
 				// Make sure the context isn't a failed object before diving into it.
 				if (value !== undefined) {
@@ -502,16 +543,6 @@ function( can ){
 				if (!!expr) {
 					return options.fn(expr);
 				}
-			}
-		},
-
-		{
-			name: 'data',
-			fn: function(attr, options){
-				var obj = this;
-				return can.view.hook(function(el){
-					can.$(el).data(attr, obj);
-				}).replace(/\'/g, '');
 			}
 		}
 	];

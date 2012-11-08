@@ -458,5 +458,25 @@ test("startBatch and stopBatch and changed event", function(){
 	
 });
 
+test("nested observe attr", function() {
+	var person1 = new can.Observe( { name: {first: 'Josh' } } ),
+		person2 = new can.Observe( { name: {first: 'Justin', last: 'Meyer' } } ),
+		count = 0;
+
+	person1.bind("change", function(ev, attr, how, val, old){
+		equals(count, 0, 'change called once')
+		count++;
+		equals(attr, 'name');
+		equals(val.attr('first'), 'Justin');
+		equals(val.attr('last'), 'Meyer');
+	})
+
+	person1.attr('name', person2.attr('name'));
+
+	// Attempt to set the name attribute again, should not
+	// cause any triggers.
+	person1.attr('name', person2.attr('name'));
+})
+
 
 })();

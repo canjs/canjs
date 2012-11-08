@@ -57,6 +57,8 @@ var newLine = /(\r|\n)+/g,
 	quote = null,
 	// What was the text before the current quote? (used to get the `attr` name)
 	beforeQuote = null,
+	// Whether a rescan is in progress
+	rescan = null,
 	// Used to mark where the element is.
 	status = function(){
 		// `t` - `1`.
@@ -78,10 +80,26 @@ can.view.Scanner = Scanner = function( options ) {
 	this.tokenComplex = [];
 	this.tokenMap = {};
 	for (var i = 0, token; token = this.tokens[i]; i++) {
+		/**
+		 * Token data structure (complex token and rescan function are optional):
+		 * [
+		 *	"token name",
+		 *	"simple token or abbreviation",
+		 *	/complex token regexp/,
+		 *	function(content) {
+		 *		// Rescan Function
+		 *		return {
+		 *			before: '\n',
+		 *			content: content.trim(),
+		 *			after: '\n'
+		 *		}
+		 * ]
+		 */
+		
 		// Save complex mappings (custom regexp)
 		if (token[2]) {
 			this.tokenReg.push(token[2]);
-			this.tokenComplex.push({ abbr: token[1], re: new RegExp(token[2]) });
+			this.tokenComplex.push({ abbr: token[1], re: new RegExp(token[2]), rescan: token[3] });
 		}
 		// Save simple mappings (string only, no regexp)
 		else {
@@ -142,6 +160,10 @@ Scanner.prototype = {
 				for (var i = 0, token; token = complex[i]; i++) {
 					if (token.re.test(whole)) {
 						tokens.push(token.abbr);
+						// Push a rescan function if one exists
+						if (token.rescan) {
+							tokens.push(token.rescan(part));
+						}
 						break;
 					}
 				}
@@ -201,6 +223,22 @@ Scanner.prototype = {
 						put(content);
 					}
 					content = '';
+					break;
+				case tmap.escapeFull:
+					// This is a full line escape (a line that contains only whitespace and escaped logic)
+					// Break it up into escape left and right
+					magicInTag = htmlTag && 1;
+					rescan = 1;
+					startTag = tmap.escapeLeft;
+					if ( content.length ) {
+						put(content);
+					}
+					rescan = tokens[i++];
+					content = rescan.content || rescan;
+					if ( rescan.before ) {
+						put(rescan.before);
+					}
+					tokens.splice(i, 0, tmap.right);
 					break;
 				case tmap.commentFull:
 					// Ignore full line comments.
@@ -329,11 +367,9 @@ Scanner.prototype = {
 							});
 						} 
 
-						var escaped = startTag === tmap.escapeLeft ? 1 : 0;
-
-						// Go through and apply helpers
-						var matched = false,
+						var escaped = startTag === tmap.escapeLeft ? 1 : 0,
 							commands = { insert: insert_cmd, tagName: tagName, status: status() };
+
 						for(var ii = 0; ii < this.helpers.length;ii++){
 							// Match the helper based on helper
 							// regex name value
@@ -365,6 +401,11 @@ Scanner.prototype = {
 								// If not, add `doubleParent` to close push and text.
 								"}));"
 								);
+						}
+						
+						if (rescan && rescan.after && rescan.after.length) {
+							put(rescan.after.length);
+							rescan = null;
 						}
 						break;
 					}

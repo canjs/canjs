@@ -31,7 +31,7 @@
           title = 'Can ' + configuration.name + ' Tests';
       TESTINGLIBRARY = configuration.name;
 
-      document.getElementsByTagName('title')[0].innerHTML = title;
+      document.getElementsByTagName('title')[0].text = title;
       document.getElementById('qunit-header').innerHTML = title;
 
 		  steal(function() {
