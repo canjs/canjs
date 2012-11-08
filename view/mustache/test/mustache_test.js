@@ -448,8 +448,8 @@ test("unescapedContent", function(){
 	div.innerHTML = compiled;
 
 	equals(div.getElementsByTagName('span')[0].firstChild.nodeType, 1 );
-	equals(div.getElementsByTagName('div')[0].innerHTML, "<strong>foo</strong><strong>bar</strong>" );
-	equals(div.getElementsByTagName('span')[0].innerHTML, "<strong>foo</strong><strong>bar</strong>" );
+	equals(div.getElementsByTagName('div')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
+	equals(div.getElementsByTagName('span')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
 	equals(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"", "escapped no matter what" );
 });
 
@@ -547,6 +547,13 @@ test("attribute single unescaped, html single unescaped", function(){
 
 
 test("event binding / triggering on options", function(){
+	var addEventListener = function(el, name, fn) {
+		if (el.addEventListener) {
+			el.addEventListener(name, fn, false);
+		} else {
+			el['on'+name] = fn;
+		}
+	};
 	var frag = can.buildFragment("<select><option>a</option></select>",[document]);
 	var qta = document.getElementById('qunit-test-area');
 	qta.innerHTML = "";
@@ -558,21 +565,26 @@ test("event binding / triggering on options", function(){
 	
 
 	// destroyed events should not bubble
-	
-	
-	qta.getElementsByTagName("option")[0].addEventListener("foo", function(ev){
+	addEventListener(qta.getElementsByTagName("option")[0], "foo", function(ev){
 		ok(true,"option called");
-		ev.stopPropagation();
+		ev.stopPropagation && ev.stopPropagation();
 		//ev.cancelBubble = true;
-	}, false);
+	});
 	
-	qta.getElementsByTagName("select")[0].addEventListener("foo", function(){
+	addEventListener(qta.getElementsByTagName("select")[0], "foo", function(){
 		ok(true,"select called")
-	}, false)
+	});
 	
-	var ev = document.createEvent("HTMLEvents");
-	ev.initEvent("foo", true , true);
-	qta.getElementsByTagName("option")[0].dispatchEvent(ev); 
+	var ev = (document.createEvent || document.createEventObject)("HTMLEvents");
+	if (ev.initEvent)
+		ev.initEvent("foo", true , true);
+	else
+		ev.eventType = "foo";
+		
+	if (qta.getElementsByTagName("option")[0].dispatchEvent)
+		qta.getElementsByTagName("option")[0].dispatchEvent(ev); 
+	else
+		qta.getElementsByTagName("option")[0].onfoo(ev);
 	
 	//can.trigger(qta,"foo")
 	
@@ -594,10 +606,10 @@ test("select live binding", function() {
 
 		div.appendChild(can.view.frag(compiled))
 		equals(div.getElementsByTagName('option').length, 1, '1 item in list')
-
+		
 		Todos.push({id: 2, name: 'Laundry'})
 		equals(div.getElementsByTagName('option').length, 2, '2 items in list')
-
+		
 		Todos.splice(0, 2);
 		equals(div.getElementsByTagName('option').length, 0, '0 items in list')
 });  
