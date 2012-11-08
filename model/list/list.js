@@ -1,4 +1,4 @@
-steal('can/util', 'can/model/elements', function(can) {
+steal('can/util', 'can/observe/elements', function(can) {
 
 	var getArgs = function( args ) {
 		if ( args[0] && (can.isArray(args[0])) ) {
@@ -540,6 +540,9 @@ steal('can/util', 'can/model/elements', function(can) {
 
       if (itemsNotInList.length > 0){
         //splice everything onto end of list so as not to trigger change events for each push
+        if (this.constructor.namespace){
+        	itemsNotInList = can.makeArray(this.constructor.namespace.models(itemsNotInList));
+        }
         this.splice.apply(this, [this.length, 0].concat(itemsNotInList));
       }
 

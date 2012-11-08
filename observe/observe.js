@@ -724,12 +724,23 @@ steal('can/util','can/construct', function(can) {
 					remove && self.removeAttr(prop);
 					return;
 				}
-				if ( canMakeObserve(curVal) && canMakeObserve(newVal) && curVal.attr ) {
-					curVal.attr(newVal, remove)
-				} else if ( curVal != newVal ) {
-					self._set(prop, newVal)
-				} else {
+				if ( self.__convert ) {
+					newVal = self.__convert(prop, newVal);
+				}
 
+				if ( curVal !== newVal ) {
+					if ( curVal instanceof can.Observe && newVal instanceof can.Observe ) {
+						unhookup([curVal], self._cid);
+					}
+
+					if ( newVal instanceof can.Observe ) {
+						self._set(prop, newVal)
+					}
+					else if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {
+						curVal.attr(newVal, remove)
+					} else if ( curVal != newVal ) {
+						self._set(prop, newVal)
+					}
 				}
 				delete props[prop];
 			})
