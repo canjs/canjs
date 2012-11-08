@@ -49,7 +49,7 @@ var override = {
 // Add mustache specs to the test
 can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials', 'sections'/*, '~lambdas'*/], function(spec) {
 	can.ajax({
-		url: '../../mustache/spec/specs/' + spec + '.json',
+		url: steal.config().root.join('can/view/mustache/spec/specs/' + spec + '.json') + '',
 		dataType: 'json',
 		async: false
 	}).done(function(data) {
