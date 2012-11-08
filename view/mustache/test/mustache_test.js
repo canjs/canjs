@@ -199,7 +199,7 @@ test("Mustache live-binding with escaping", function() {
 	var template = "<span id='binder1'>{{ name }}</span><span id='binder2'>{{{name}}}</span>";
 
 	var teacher = new can.Observe({
-		name: "<strong>Mrs Peters</strong>",
+		name: "<strong>Mrs Peters</strong>"
 	});
 
 	var template = new can.Mustache({ text: template }).render(teacher);
