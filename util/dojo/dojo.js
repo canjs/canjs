@@ -1,10 +1,4 @@
-steal({
-	id : "./dojo-1.8.1.js",
-	_skip : true
-}, '../event.js').then(
-	'./trigger',
-	'can/util/array/each.js',
-	'can/util/object/isplain',
+steal("./dojo-1.8.1.js", '../event.js', './trigger', 'can/util/array/each.js', 'can/util/object/isplain',
 	function(){
 
 	// dojo.js

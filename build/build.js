@@ -53,6 +53,6 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 
 	steal.build.amdify('can/build/make/amd.js', {
 		out: outFolder + '/amd',
-		exclude: ["jquery", "jquery/jquery.js", "can/util/mvc.js"]
+		exclude: ["jquery", "jquery/jquery.js", "can/util/amd.js"]
 	});
 });
