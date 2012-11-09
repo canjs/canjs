@@ -246,6 +246,9 @@ test('list helper', function(){
 		Todos.splice(0, 2);
 		equals(div.getElementsByTagName('div').length, 0, '0 items in list')
 
+		Todos.push({id: 4, name: 'Pick up sticks'});
+		equals(div.getElementsByTagName('div').length, 1, '1 item in list again')
+
 });
 
 test("attribute single unescaped, html single unescaped", function(){
@@ -276,41 +279,26 @@ test("attribute single unescaped, html single unescaped", function(){
 });
 
 
-test("event binding / triggering on options", function(){
+test("event binding / triggering on options", 1, function(){
 	var frag = can.buildFragment("<select><option>a</option></select>",[document]);
 	var qta = document.getElementById('qunit-test-area');
 	qta.innerHTML = "";
 	qta.appendChild(frag);
 	
-	/*qta.addEventListener("foo", function(){
-		ok(false, "event handler called")
-	},false)*/
-	
 
 	// destroyed events should not bubble
-	
-	
-	qta.getElementsByTagName("option")[0].addEventListener("foo", function(ev){
+	can.addEvent.call(qta.getElementsByTagName("option")[0], 'foo', function(event) {
 		ok(true,"option called");
-		ev.stopPropagation();
-		//ev.cancelBubble = true;
-	}, false);
-	
-	qta.getElementsByTagName("select")[0].addEventListener("foo", function(){
+		event.stopPropagation();
+	});
+
+	can.addEvent.call(qta.getElementsByTagName("select")[0], 'foo', function(event) {
 		ok(true,"select called")
-	}, false)
-	
-	var ev = document.createEvent("HTMLEvents");
-	ev.initEvent("foo", true , true);
-	qta.getElementsByTagName("option")[0].dispatchEvent(ev); 
-	
-	//can.trigger(qta,"foo")
-	
-	stop();
-	setTimeout(function(){
-		start();
-		ok(true);
-	},100)
+	});
+
+	can.trigger(qta.getElementsByTagName('option')[0], 'foo');
+
+	qta.removeChild(qta.firstChild);
 })
 
 test("select live binding", function() {
@@ -438,15 +426,18 @@ test('adding and removing multiple html content within a single element', functi
 
 	div.appendChild(can.view.frag(compiled));
 
-	equals(div.innerHTML.toUpperCase(), '<div>abc</div>'.toUpperCase(), 'initial render');
+	equals(div.firstChild.nodeName.toUpperCase(), 'DIV', 'initial render node name');
+	equals(div.firstChild.innerText, 'abc', 'initial render text')
 
 	obs.attr({a: '', b : '', c: ''});
 
-	equals(div.innerHTML.toUpperCase(), '<div></div>'.toUpperCase(), 'updated values');
+	equals(div.firstChild.nodeName.toUpperCase(), 'DIV', 'updated render node name');
+	equals(div.firstChild.innerText, '', 'updated render text')
 	
 	obs.attr({c: 'c'});
 	
-	equals(div.innerHTML.toUpperCase(), '<div>c</div>'.toUpperCase(), 'updated values');
+	equals(div.firstChild.nodeName.toUpperCase(), 'DIV', 'updated render node name');
+	equals(div.firstChild.innerText, 'c', 'updated render text')
 });
 
 test('live binding and removeAttr', function(){
@@ -952,7 +943,7 @@ test("recursive views", function(){
 	
 	var div = document.createElement('div');
 	div.appendChild( can.view('//can/view/ejs/test/recursive.ejs',  {items: data}));
-	ok(/class="leaf"/.test(div.innerHTML), "we have a leaf")
+	ok(/class="leaf"|class=leaf/.test(div.innerHTML), "we have a leaf")
 	
 })
 
@@ -964,15 +955,14 @@ test("indirectly recursive views", function() {
 			]}
 		]}
 	]);
-
 	can.view.cache = false;
 	var div = document.createElement('div');
 	div.appendChild(can.view('//can/view/ejs/test/indirect1.ejs', {unordered: unordered}));
-	ok(can.trim(div.querySelectorAll('ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Uncached indirectly recursive EJS working.");
+	ok(can.trim(can.$('ul > li > ol > li > ul > li > ol > li', div)[0].innerHTML) === "1", "Uncached indirectly recursive EJS working.");
 
 	can.view.cache = true;
 	div.appendChild(can.view('//can/view/ejs/test/indirect1.ejs', {unordered: unordered}));
-	ok(can.trim(div.querySelectorAll('ul + ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Cached indirectly recursive EJS working.");
+	ok(can.trim(can.$('ul + ul > li > ol > li > ul > li > ol > li', div)[0].innerHTML) === "1", "Cached indirectly recursive EJS working.");
 });
 
 test("live binding select", function(){
@@ -1109,16 +1099,16 @@ test("live binding with parent dependent tags but without parent tag present in 
 	
 	table.appendChild(can.view.frag(compiled));
 	
-	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>Austin</td></tr><tr><td>McDaniel</td></tr>")
+	equal(table.innerHTML.replace(/<tr[\s]+[^>]*>/ig, '<tr>').replace(/[\s\n]/g,"").toLowerCase(),"<tr><td>Austin</td></tr><tr><td>McDaniel</td></tr>".toLowerCase())
 	
 	person.removeAttr('first')
-	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>McDaniel</td></tr>")
+	equal(table.innerHTML.replace(/<tr[\s]+[^>]*>/ig, '<tr>').replace(/[\s\n]/g,"").toLowerCase(),"<tr><td>McDaniel</td></tr>".toLowerCase())
 	person.removeAttr('last');
-	equal(table.innerHTML.replace(/[\s\n]/g,""),"");
+	equal(table.innerHTML.replace(/<tr[\s]+[^>]*>/ig, '<tr>').replace(/[\s\n]/g,"").toLowerCase(),"");
 	
 	person.attr('first',"Justin");
 	
-	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>Justin</td></tr>")
+	equal(table.innerHTML.replace(/<tr[\s]+[^>]*>/ig, '<tr>').replace(/[\s\n]/g,"").toLowerCase(),"<tr><td>Justin</td></tr>".toLowerCase())
 })
 
 

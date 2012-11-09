@@ -331,6 +331,7 @@ test("unsticky routes", function(){
 		iCanRoute.attr({type: "bar"});
 
 		setTimeout(function(){
+			console.log('HREF', loc.href)
 			var after = loc.href.substr(loc.href.indexOf("#"));
 			equal(after,"#!bar");
 			iCanRoute.attr({type: "bar", id: "\/"});
@@ -350,9 +351,9 @@ test("unsticky routes", function(){
 					setTimeout(arguments.callee, 30)
 				}
 				
-			},1)
+			},100)
 			
-		},1)
+		},100)
 
 
 	}
