@@ -9,6 +9,10 @@ sacrifices.
 Mustache and Handlebar templates are compatible with can.Mustache, 
 so you can import existing templates and automagically start live-binding.
 
+## Demos
+
+ - [TodoMVC](http://addyosmani.github.com/todomvc/labs/architecture-examples/canjs/) is a project which offers the same Todo application implemented using MV* concepts in most of the popular JavaScript MV* frameworks of today.
+
 ## Getting Started
 
 Mustache templates looks similar to normal HTML except
