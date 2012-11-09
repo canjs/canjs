@@ -1,4 +1,4 @@
-steal("./dojo-1.8.1.js", '../event.js', '../fragment.js').then('./trigger', 'can/util/array/each.js', 'can/util/object/isplain',
+steal("./dojo-1.8.1.js").then('../event.js', '../fragment.js').then('./trigger', 'can/util/array/each.js', 'can/util/object/isplain',
 	function(){
 
 	// dojo.js
@@ -169,7 +169,10 @@ steal("./dojo-1.8.1.js", '../event.js', '../fragment.js').then('./trigger', 'can
 	}
 	
 	can.trigger = function(item, event, args, bubble){
-		item = item instanceof dojo.NodeList ? item : item.nodeName ? can.$(item) : item;
+		if((! item instanceof dojo.NodeList) && (item.nodeName || item === window)) {
+			item = can.$(item);
+		}
+
 		if(item.trigger){
 			if(bubble === false){
 				if(!item[0] || item[0].nodeType === 3){
