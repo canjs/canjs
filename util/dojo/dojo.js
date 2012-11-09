@@ -1,4 +1,4 @@
-steal("./dojo-1.8.1.js", '../event.js', '../fragment.js', './trigger', 'can/util/array/each.js', 'can/util/object/isplain',
+steal("./dojo-1.8.1.js", '../event.js', '../fragment.js').then('./trigger', 'can/util/array/each.js', 'can/util/object/isplain',
 	function(){
 
 	// dojo.js
