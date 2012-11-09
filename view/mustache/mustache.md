@@ -52,12 +52,12 @@ to update your template, you can do:
 
 which will re-render the paragraph tag to say:
 
-	<p>You have 5 new message.</p>
+	<p>You have 5 new messages.</p>
 
 ## Escaping Values
 
 Mustache will escape values enclosed in a `{{  }}` expression.  If you would
-like Mustache to return the value un-escape, use the `{{{  }}}` expression.
+like Mustache to return the value without escaping, use the `{{{  }}}` expression.
 
 For example, the follow double expression.
 	
@@ -65,7 +65,7 @@ For example, the follow double expression.
 		friend: "<strong>Justin</strong>"
 	}
 
-	{{ friend }}
+	{{friend}}
 
 would return:
 
@@ -91,23 +91,23 @@ For example:
 		friends: [ 'Austin' ]
 	}
 
-	{{ #friends }}
-		{{ this }}
-	{{/friends}}
-
-The `this` would represent the 'Austin' attribute on the 
-object in the array.
-
-Additionally, you can use the `.` as a shorthand. So given
-the same friends object from above I could do:
-
 	{{#friends}}
 		{{.}}
 	{{/friends}}
 
+The `.` would represent the 'Austin' attribute on the 
+object in the array.
+
+Additionally, you can use the `this` as a shorthand. So given
+the same friends object from above I could do:
+
+	{{#friends}}
+		{{this}}
+	{{/friends}}
+
 Mustache also implements a system for which if it 
-doesn't find a match to a value your referencing in
-current context it can hop up into the parent section.
+doesn't find a match to an object that you are referencing in
+the current context it can hop up into the parent context.
 
 For example:
 	
@@ -130,9 +130,9 @@ For example:
 	}
 
 	{{#family}
-		{{ #brothers }}
+		{{#brothers}}
 			{{#sisters}}
-				{{ name }}
+				{{name}}
 			{{/sisters}}
 		{{/brothers}}
 	{{/family}}
