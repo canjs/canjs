@@ -1025,7 +1025,6 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 		div = can.$('#qunit-test-area')[0]
 		div.innerHTML = ""
 	
-	div.appendChild(can.view.frag(compiled))
 	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
 	
 	ok(div.getElementsByTagName('label')[0], "label exists")
@@ -1035,14 +1034,12 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 	equals(div.getElementsByTagName('label').length, 0, "label is removed")
 	equals(div.getElementsByTagName('p').length, 1, "label is replaced by p")
 	
-	
-	
 	items.push({
 		html: "<p>hola</p>"
 	});
 	
 	equals(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
-		
+	
 	can.remove( can.$(div.firstChild) )
 		
 	same(can.view.nodeMap, {} );
