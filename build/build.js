@@ -28,10 +28,10 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 
 	_.each(libraries, function (lib) {
 		var options = libs[lib],
-			outFile = outFolder + '/can.' + lib + '-' + version + '.js',
+			outFile = outFolder + '/can.' + lib + '-' + version,
 			testFile = testFolder + lib + '.html',
 			defaults = {
-				out : outFile,
+				out : outFile + '.js',
 				onefunc : true,
 				compress : false,
 				skipAll : true
@@ -39,6 +39,10 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 
 		console.log('Building ' + lib + ' ' + version + ' to ' + outFile);
 		steal.build.pluginify("can/build/make/" + lib + ".js", _.extend(defaults, options));
+		steal.build.pluginify("can/build/make/" + lib + ".js", _.extend(defaults, options, {
+			compress : true,
+			out : outFile + '.min.js'
+		}));
 
 		console.log('Creating distributable test HTML file ' + testFile);
 		render('can/build/templates/test.html.ejs', testFile, {

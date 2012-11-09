@@ -1,4 +1,4 @@
-steal('can/util/can.js', 'can/util/zepto/data.js', 'can/util/event', 'can/util/fragment.js', function(can) {
+steal('can/util/can.js', 'can/util/zepto/data.js', 'can/util/event.js', 'can/util/fragment.js', function(can) {
 	// zepto.js
 	// ---------
 	// _Zepto node list._
