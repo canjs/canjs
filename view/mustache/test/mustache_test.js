@@ -1134,7 +1134,7 @@ test("recursive views", function(){
 	
 	var div = document.createElement('div');
 	div.appendChild( can.view('//can/view/mustache/test/recursive.mustache',  {items: data}));
-	ok(/class="leaf"/.test(div.innerHTML), "we have a leaf")
+	ok(/class="?leaf"?/.test(div.innerHTML), "we have a leaf")
 	
 })
 
