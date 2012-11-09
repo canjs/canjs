@@ -287,15 +287,15 @@ test("event binding / triggering on options", 1, function(){
 	
 
 	// destroyed events should not bubble
-	can.addEvent.call(qta.getElementsByTagName("option")[0], 'foo', function(event) {
+	can.bind.call(qta.getElementsByTagName("option")[0], 'foo', function(event) {
 		ok(true,"option called");
-		event.stopPropagation();
+		event.stopPropagation && event.stopPropagation();
+		return false;
 	});
 
-	can.addEvent.call(qta.getElementsByTagName("select")[0], 'foo', function(event) {
+	can.bind.call(qta.getElementsByTagName("select")[0], 'foo', function(event) {
 		ok(true,"select called")
 	});
-
 	can.trigger(qta.getElementsByTagName('option')[0], 'foo');
 
 	qta.removeChild(qta.firstChild);
@@ -956,13 +956,16 @@ test("indirectly recursive views", function() {
 		]}
 	]);
 	can.view.cache = false;
-	var div = document.createElement('div');
+	var div = document.createElement('div');	
 	div.appendChild(can.view('//can/view/ejs/test/indirect1.ejs', {unordered: unordered}));
-	ok(can.trim(can.$('ul > li > ol > li > ul > li > ol > li', div)[0].innerHTML) === "1", "Uncached indirectly recursive EJS working.");
-
+	document.getElementById('qunit-test-area').appendChild(div);
+	ok(can.trim(can.$('#qunit-test-area ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Uncached indirectly recursive EJS working.");
+	
 	can.view.cache = true;
 	div.appendChild(can.view('//can/view/ejs/test/indirect1.ejs', {unordered: unordered}));
-	ok(can.trim(can.$('ul + ul > li > ol > li > ul > li > ol > li', div)[0].innerHTML) === "1", "Cached indirectly recursive EJS working.");
+	ok(can.trim(can.$('#qunit-test-area ul + ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Cached indirectly recursive EJS working.");
+	document.getElementById('qunit-test-area').removeChild(div);
+
 });
 
 test("live binding select", function(){
