@@ -278,25 +278,22 @@ test("attribute single unescaped, html single unescaped", function(){
 	equals(div.getElementsByTagName('div')[0].className,"complete", "class changed to complete")
 });
 
-
-test("event binding / triggering on options", 1, function(){
-	var frag = can.buildFragment("<select><option>a</option></select>",[document]);
+test("event binding / triggering on things other than options", 1, function(){
+	var frag = can.buildFragment("<ul><li>a</li></ul>",[document]);
 	var qta = document.getElementById('qunit-test-area');
 	qta.innerHTML = "";
 	qta.appendChild(frag);
 	
-
 	// destroyed events should not bubble
-	can.bind.call(qta.getElementsByTagName("option")[0], 'foo', function(event) {
-		ok(true,"option called");
-		event.stopPropagation && event.stopPropagation();
-		return false;
+	can.bind.call(qta.getElementsByTagName("li")[0], 'foo', function(event) {
+		ok(true,"li called :)");
 	});
 
-	can.bind.call(qta.getElementsByTagName("select")[0], 'foo', function(event) {
-		ok(true,"select called")
+	can.bind.call(qta.getElementsByTagName("ul")[0], 'foo', function(event) {
+		ok(false,"ul called :(");
 	});
-	can.trigger(qta.getElementsByTagName('option')[0], 'foo');
+
+	can.trigger(qta.getElementsByTagName('li')[0], 'foo', {}, false);
 
 	qta.removeChild(qta.firstChild);
 })
@@ -1087,31 +1084,40 @@ test("empty element hooks work correctly",function(){
 
 test("live binding with parent dependent tags but without parent tag present in template",function(){
 	
-	var text = ['<% if( person.attr("first") ){ %>',
+	var text = ['<tbody>',
+				'<% if( person.attr("first") ){ %>',
 				'<tr><td><%= person.first %></td></tr>',
 				'<% }%>',
 				'<% if( person.attr("last") ){ %>',
 				'<tr><td><%= person.last %></td></tr>',
-				'<% } %>'];
+				'<% } %>',
+				'</tbody>'];
 	var person = new can.Observe({first: "Austin", last: "McDaniel"});
-	
+
 	var compiled = new can.EJS({text: text.join("\n")}).render({person: person});
-	console.log(compiled)
 	var table = document.createElement('table');
-	//can.append( can.$('#qunit-test-area'), table )
 	
 	table.appendChild(can.view.frag(compiled));
-	
-	equal(table.innerHTML.replace(/<tr[\s]+[^>]*>/ig, '<tr>').replace(/[\s\n]/g,"").toLowerCase(),"<tr><td>Austin</td></tr><tr><td>McDaniel</td></tr>".toLowerCase())
-	
+
+
+	equals(table.getElementsByTagName('tr')[0].firstChild.nodeName.toUpperCase(), "TD");
+	equals(table.getElementsByTagName('tr')[0].firstChild.innerHTML, "Austin");
+	equals(table.getElementsByTagName('tr')[1].firstChild.nodeName.toUpperCase(), "TD");
+	equals(table.getElementsByTagName('tr')[1].firstChild.innerHTML, "McDaniel");
+
 	person.removeAttr('first')
-	equal(table.innerHTML.replace(/<tr[\s]+[^>]*>/ig, '<tr>').replace(/[\s\n]/g,"").toLowerCase(),"<tr><td>McDaniel</td></tr>".toLowerCase())
+
+	equals(table.getElementsByTagName('tr')[0].firstChild.nodeName.toUpperCase(), "TD");
+	equals(table.getElementsByTagName('tr')[0].firstChild.innerHTML, "McDaniel");
+
 	person.removeAttr('last');
-	equal(table.innerHTML.replace(/<tr[\s]+[^>]*>/ig, '<tr>').replace(/[\s\n]/g,"").toLowerCase(),"");
+
+	equals(table.getElementsByTagName('tr').length, 0);
 	
 	person.attr('first',"Justin");
 	
-	equal(table.innerHTML.replace(/<tr[\s]+[^>]*>/ig, '<tr>').replace(/[\s\n]/g,"").toLowerCase(),"<tr><td>Justin</td></tr>".toLowerCase())
+	equals(table.getElementsByTagName('tr')[0].firstChild.nodeName.toUpperCase(), "TD");
+	equals(table.getElementsByTagName('tr')[0].firstChild.innerHTML, "Justin");
 })
 
 

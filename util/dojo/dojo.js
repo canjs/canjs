@@ -1,4 +1,4 @@
-steal("./dojo-1.8.1.js", '../event.js', './trigger', 'can/util/array/each.js', 'can/util/object/isplain',
+steal("./dojo-1.8.1.js", '../event.js', '../fragment.js', './trigger', 'can/util/array/each.js', 'can/util/object/isplain',
 	function(){
 
 	// dojo.js
@@ -169,6 +169,7 @@ steal("./dojo-1.8.1.js", '../event.js', './trigger', 'can/util/array/each.js', '
 	}
 	
 	can.trigger = function(item, event, args, bubble){
+		item = item instanceof dojo.NodeList ? item : item.nodeName ? can.$(item) : item;
 		if(item.trigger){
 			if(bubble === false){
 				if(!item[0] || item[0].nodeType === 3){
@@ -280,23 +281,6 @@ steal("./dojo-1.8.1.js", '../event.js', './trigger', 'can/util/array/each.js', '
 		} else {
 			return new dojo.NodeList(selector);
 		}
-
-		
-	}
-	can.buildFragment = function(frag, node){
-		if(frag && can.isFunction(frag.replace)) {
-			// Fix "XHTML"-style tags in all browsers
-			frag = frag.replace(/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi, "<$1></$2>");
-		}
-
-		var owner = node && node.ownerDocument,
-			frag = dojo.toDom(frag, owner );
-		if(frag.nodeType !== 11){
-			var tmp = document.createDocumentFragment();
-			tmp.appendChild(frag)
-			frag = tmp;
-		}
-		return frag
 	}
 	
 	can.append = function(wrapped, html){

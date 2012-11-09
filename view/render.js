@@ -324,7 +324,7 @@ can.extend(can.view, {
 					
 					setupTeardownOnDestroy(parentNode);
 			//buildFragment, specifically innerHTML, in IE doesn't honor leading whitespace after empty elements
-			}) + ">.</" +tag+">";
+			}) + ">@@!!@@</" +tag+">";
 		// In a tag, but not in an attribute
 		} else if( status === 1 ) { 
 			// remember the old attr name
