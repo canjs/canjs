@@ -1,10 +1,4 @@
-steal('can/util',
-	  'can/view', 
-	  'can/util/string', 
-	  'can/observe/compute',
-	  'can/view/scanner.js',
-	  'can/view/render.js',
-function( can ) {
+steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/view/scanner.js', 'can/view/render.js', function( can ) {
 
 	// ## ejs.js
 	// `can.EJS`  

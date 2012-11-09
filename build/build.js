@@ -53,9 +53,6 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 
 	steal.build.amdify('can/build/make/jquery.js', {
 		out: outFolder + '/amd',
-		exclude: libs['jquery'].exclude,
-		map: {
-			'can/construct/construct.js': 'can/construct'
-		}
+		exclude: libs['jquery'].exclude
 	});
 });
