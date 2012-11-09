@@ -1,6 +1,8 @@
 # Change Log
 
-__1.1__
+__1.1__ ( October 9, 2012 )
+
+ - Added AMD module support for each dependency
 
  - can.util
  		- Updated jQuery to 1.8.2
