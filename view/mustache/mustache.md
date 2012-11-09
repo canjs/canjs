@@ -148,7 +148,7 @@ URL, or script tags in the markup.
 
 __Raw Text__
 
-You can Mustache plain text by passing an object with a `text`
+You can process plain text by passing an object with a `text`
 attribute containing your template and it will return a document fragment back.
 
 	var template = "My body lies over the {{.}}";
@@ -179,16 +179,16 @@ nicely organized seperating views from logic code.
 
 Since this makes XHR requests, in a big application with lots of views
 this could be a performance concern.  You should create a build step to 
-concat and include all the views in one file for high performance production
-instances.  If your using Steal, it will do this automatically at build 
+concatenate and include all of the views in one file for high performance production
+instances.  If you are using Steal, it will do this automatically at build 
 for you.
 
 __Registering Partials__
 
 You can call `can.Mustache.registerPartial` to register
-a template you can call from inside mustache.
+a partial template you can call from inside another Mustache template.
 
-	can.view.registerView('myTemplate', "MY body lies over {{.}}")
+	can.view.registerView('myTemplate', "My body lies over {{.}}")
 
 Then later in my view I can do:
 
@@ -202,16 +202,16 @@ information goto the Partials section.
 Sections are the army-knife of Mustache templates.  They will evaluate the token
 given the current context and render the block.  
 
-Once inside a section, it will reset the current context to the value for which its iterating.
+Once inside a section, it will reset the current context to the value for which it's iterating.
 
-This is useful for itterating over an array or just evaluating objects true/false.
+This is useful for iterating over an array or just evaluating an object's boolean equivalent.
 
-### Falsys or Empty Arrays
+### Falseys or Empty Arrays
 
 If the value returns a `false`, `undefined`, `null`, `""` or `[]` we consider
-that a 'fasly' value.
+that a *falsey* value.
 
-If the value is a falsy, the section will NOT render the block
+If the value is falsey, the section will **NOT** render the block
 between the pound and slash.
 
 	{ 
@@ -225,11 +225,11 @@ between the pound and slash.
 
 ### Arrays
 
-If the value is a non-empty array, sections will itterate over a 
-array of items rendering the items in the block between the pound and slash.
+If the value is a non-empty array, sections will iterate over the 
+array of items, rendering the items in the block between the pound and slash.
 
-For example, if I have a list of friends and I itterate
-over each of the items with a section.
+For example, if I have a list of friends, I can iterate
+over each of those items within a section.
 
 	{ 
 		friends: [ 
@@ -240,7 +240,7 @@ over each of the items with a section.
 
 	<ul>
 		{{#friends}}
-			<li>{name}</li>
+			<li>{{name}}</li>
 		{{/friends}}
 	</ul>
 
@@ -254,9 +254,9 @@ which would render:
 Reminder: It will reset the current context to the value for which its iterating.
 See the context section for more information.
 
-### Non-Falsys
+### Truthys
 
-When the value is non-false object but not a list, it will be used 
+When the value is non-falsey object but not a list, it is considered truthy and will be used 
 as the context for a single rendering of the block.
 
 	{
@@ -273,8 +273,8 @@ would render:
 
 ### Inverted
 
-Inverted sections do the inverse value of the key.  An inverted section 
-syntax is similar to regular sections except it begins with a caret rather than a pound.
+Inverted sections match falsey values. An inverted section 
+syntax is similar to regular sections except it begins with a caret rather than a pound. If the value referenced is falsey, the section will render.
 
 	{
 		friends: []
@@ -348,7 +348,7 @@ but you can register your own helper too.
 
 ### if
 
-In addition to section falsy evaluation, you can use an 
+In addition to section falsey evaluation, you can use an 
 explicit `if` condition to render a block.
 
 	{
