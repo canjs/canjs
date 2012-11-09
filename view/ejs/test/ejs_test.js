@@ -287,13 +287,13 @@ test("event binding / triggering on options", 1, function(){
 	
 
 	// destroyed events should not bubble
-	can.addEvent.call(qta.getElementsByTagName("option")[0], 'foo', function(event) {
+	can.bind.call(qta.getElementsByTagName("option")[0], 'foo', function(event) {
 		ok(true,"option called");
 		event.stopPropagation && event.stopPropagation();
 		return false;
 	});
 
-	can.addEvent.call(qta.getElementsByTagName("select")[0], 'foo', function(event) {
+	can.bind.call(qta.getElementsByTagName("select")[0], 'foo', function(event) {
 		ok(true,"select called")
 	});
 	can.trigger(qta.getElementsByTagName('option')[0], 'foo');
