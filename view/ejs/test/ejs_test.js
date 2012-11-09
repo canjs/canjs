@@ -287,9 +287,6 @@ test("event binding / triggering on things other than options", 1, function(){
 	// destroyed events should not bubble
 	can.bind.call(qta.getElementsByTagName("li")[0], 'foo', function(event) {
 		ok(true,"li called :)");
-		event.cancelBubble = true;
-		event.stopPropagation && event.stopPropagation();
-		return false;
 	});
 
 	can.bind.call(qta.getElementsByTagName("ul")[0], 'foo', function(event) {
@@ -1046,7 +1043,7 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 	
 	equals(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
 		
-	can.remove( can.$(div) )
+	can.remove( can.$(div.firstChild) )
 		
 	same(can.view.nodeMap, {} );
 	same(can.view.nodeListMap ,{} )
