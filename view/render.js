@@ -50,9 +50,10 @@ var attrMap = {
 		}
 	},
 	getAttr = function(el, attrName){
-		return attrMap[attrName]?
+		// Default to a blank string for IE7/8
+		return (attrMap[attrName]?
 			el[attrMap[attrName]]:
-			el.getAttribute(attrName);
+			el.getAttribute(attrName)) || '';
 	},
 	removeAttr = function(el, attrName){
 		if(can.inArray(attrName,bool) > -1){
@@ -150,11 +151,6 @@ var attrMap = {
 			}
 			nodeListIds.push(nodeListId);
 	};
-	
-// Fix option text content in IE7/8
-if (typeof document.createElement('option').textContent == 'undefined') {
-	tagToContentPropMap.option = 'innerText';
-}
 
 can.extend(can.view, {
 
