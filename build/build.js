@@ -51,11 +51,8 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 		new steal.File('can/build/templates/index.html').copyTo(testFolder + '/index.html');
 	});
 
-	steal.build.amdify('can/build/make/jquery.js', {
+	steal.build.amdify('can/build/make/amd.js', {
 		out: outFolder + '/amd',
-		exclude: libs['jquery'].exclude,
-		map: {
-			'can/construct/construct.js': 'can/construct'
-		}
+		exclude: ["jquery", "jquery/jquery.js", "can/util/mvc.js"]
 	});
 });
