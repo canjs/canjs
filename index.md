@@ -49,8 +49,6 @@ rich web applications easy. Use it because it's:
 
 {% include builder.html %}
 
-
-
 ## Get Canned
 
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core download 
