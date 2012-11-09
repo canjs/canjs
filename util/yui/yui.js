@@ -12,10 +12,7 @@
 //
 //	var url = "http://yui.yahooapis.com/combo?3.7.3/build/" + yuilibs.join("&3.7.3/build/")
 
-steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/isplain',{
-	id : './yui-3.7.3.js',
-	_skip : true
-}, function() {
+steal('../can.js', '../event.js', 'can/util/array/each.js', 'can/util/object/isplain', './yui-3.7.3.js', function () {
 
 	// ---------
 	// _YUI node list._
@@ -24,79 +21,79 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 	var Y = can.Y = can.Y || YUI().use('*');
 
 	// Map string helpers.
-	can.trim = function( s ) {
+	can.trim = function (s) {
 		return Y.Lang.trim(s);
 	}
 
 	// Map array helpers.
-	can.makeArray = function( arr ) {
-		if(!arr) {
+	can.makeArray = function (arr) {
+		if (!arr) {
 			return [];
 		}
 		return Y.Array(arr);
 	};
 	can.isArray = Y.Lang.isArray;
-	can.inArray = function( item, arr ) {
-		if(!arr) {
+	can.inArray = function (item, arr) {
+		if (!arr) {
 			return -1;
 		}
 		return Y.Array.indexOf(arr, item);
 	};
 
-	can.map = function( arr, fn ) {
+	can.map = function (arr, fn) {
 		return Y.Array.map(can.makeArray(arr || []), fn);
 	};
 
 	// Map object helpers.
-	can.extend = function( first ) {
+	can.extend = function (first) {
 		var deep = first === true ? 1 : 0,
 			target = arguments[deep],
 			i = deep + 1,
 			arg;
-		for (; arg = arguments[i]; i++ ) {
-			Y.mix(target, arg, true, null, null, !! deep);
+		for (; arg = arguments[i]; i++) {
+			Y.mix(target, arg, true, null, null, !!deep);
 		}
 		return target;
 	}
-	can.param = function( object ) {
-		return Y.QueryString.stringify(object, {arrayKey: true})
+	can.param = function (object) {
+		return Y.QueryString.stringify(object, {arrayKey : true})
 	}
-	can.isEmptyObject = function( object ) {
+	can.isEmptyObject = function (object) {
 		return Y.Object.isEmpty(object);
 	}
 
 	// Map function helpers.
-	can.proxy = function( func, context ) {
+	can.proxy = function (func, context) {
 		return Y.bind.apply(Y, arguments);
 	}
-	can.isFunction = function( f ) {
+	can.isFunction = function (f) {
 		return Y.Lang.isFunction(f);
 	}
 
 	// Element -- get the wrapped helper.
-	var prepareNodeList = function( nodelist ) {
-		nodelist.each(function( node, i ) {
+	var prepareNodeList = function (nodelist) {
+		nodelist.each(function (node, i) {
 			nodelist[i] = node.getDOMNode();
 		});
 		nodelist.length = nodelist.size();
 		return nodelist;
 	}
-	can.$ = function( selector ) {
-		if ( selector === window ) {
+	can.$ = function (selector) {
+		if (selector === window) {
 			return window;
-		} else if ( selector instanceof Y.NodeList ) {
+		} else if (selector instanceof Y.NodeList) {
 			return prepareNodeList(selector);
-		} else if ( typeof selector === "object" && !can.isArray(selector) && typeof selector.nodeType === "undefined" && !selector.getDOMNode ) {
+		} else if (typeof selector === "object" && !can.isArray(selector) && typeof selector.nodeType === "undefined" && !selector.getDOMNode) {
 			return selector;
 		} else {
 			return prepareNodeList(Y.all(selector));
 		}
 	}
-	can.get = function( wrapped, index ) {
+	can.get = function (wrapped, index) {
 		return wrapped._nodes[index];
 	}
-	can.buildFragment = function( html, node ) {
-		if(html && can.isFunction(html.replace)) {
+	can.buildFragment = function (html, node) {
+		if (html && can.isFunction(html.replace)) {
 			// Fix "XHTML"-style tags in all browsers
 			html = html.replace(/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi, "<$1></$2>");
 		}
@@ -104,38 +101,38 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 		var owner = node && node.ownerDocument,
 			frag = Y.Node.create(html, owner);
 		frag = (frag && frag.getDOMNode()) || document.createDocumentFragment();
-		if ( frag.nodeType !== 11 ) {
+		if (frag.nodeType !== 11) {
 			var tmp = document.createDocumentFragment();
 			tmp.appendChild(frag)
 			frag = tmp;
 		}
 		return frag;
 	}
-	can.append = function( wrapped, html ) {
-		wrapped.each(function( node ) {
-			if ( typeof html === 'string' ) {
+	can.append = function (wrapped, html) {
+		wrapped.each(function (node) {
+			if (typeof html === 'string') {
 				html = can.buildFragment(html, node)
 			}
 			node.append(html)
 		});
 	}
-	can.addClass = function( wrapped, className ) {
+	can.addClass = function (wrapped, className) {
 		return wrapped.addClass(className);
 	}
-	can.data = function( wrapped, key, value ) {
-		if ( value === undefined ) {
+	can.data = function (wrapped, key, value) {
+		if (value === undefined) {
 
 			return wrapped.item(0).getData(key)
 		} else {
 			return wrapped.item(0).setData(key, value)
 		}
 	}
-	can.remove = function( wrapped ) {
+	can.remove = function (wrapped) {
 		return wrapped.remove() && wrapped.destroy();
 	}
 	// Destroyed method.
 	can._yNodeDestroy = can._yNodeDestroy || Y.Node.prototype.destroy;
-	Y.Node.prototype.destroy = function() {
+	Y.Node.prototype.destroy = function () {
 		can.trigger(this, "destroyed", [], false)
 		can._yNodeDestroy.apply(this, arguments)
 	}
@@ -144,17 +141,17 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 
 	// Ajax
 	var optionsMap = {
-		type: "method",
-		success: undefined,
-		error: undefined
+		type : "method",
+		success : undefined,
+		error : undefined
 	}
-	var updateDeferred = function( request, d ) {
+	var updateDeferred = function (request, d) {
 		// `YUI` only returns a request if it is asynchronous.
-		if ( request && request.io ) {
+		if (request && request.io) {
 			var xhr = request.io;
-			for ( var prop in xhr ) {
-				if ( typeof d[prop] == 'function' ) {
-					d[prop] = function() {
+			for (var prop in xhr) {
+				if (typeof d[prop] == 'function') {
+					d[prop] = function () {
 						xhr[prop].apply(xhr, arguments)
 					}
 				} else {
@@ -163,12 +160,12 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 			}
 		}
 	}
-	can.ajax = function( options ) {
+	can.ajax = function (options) {
 		var d = can.Deferred(),
 			requestOptions = can.extend({}, options);
 
-		for ( var option in optionsMap ) {
-			if ( requestOptions[option] !== undefined ) {
+		for (var option in optionsMap) {
+			if (requestOptions[option] !== undefined) {
 				requestOptions[optionsMap[option]] = requestOptions[option];
 				delete requestOptions[option]
 			}
@@ -179,16 +176,16 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 			error = options.error;
 
 		requestOptions.on = {
-			success: function( transactionid, response ) {
+			success : function (transactionid, response) {
 				var data = response.responseText;
-				if ( options.dataType === 'json' ) {
+				if (options.dataType === 'json') {
 					data = eval("(" + data + ")")
 				}
 				updateDeferred(request, d);
 				d.resolve(data);
 				success && success(data, "success", request);
 			},
-			failure: function( transactionid, response ) {
+			failure : function (transactionid, response) {
 				updateDeferred(request, d);
 				d.reject(request, "error");
 				error && error(request, "error");
@@ -208,19 +205,19 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 	// and adds events data that has a map of events to
 	// `callbackId` to `remove` object.  It looks like
 	// `{click: {5: {remove: fn}}}`.
-		addBinding = function( nodelist, selector, ev, cb ) {
-			if ( nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode ) {
-				nodelist.each(function( node ) {
+		addBinding = function (nodelist, selector, ev, cb) {
+			if (nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode) {
+				nodelist.each(function (node) {
 					var node = can.$(node);
 					var events = can.data(node, "events"),
 						eventName = ev + ":" + selector;
-					if (!events ) {
+					if (!events) {
 						can.data(node, "events", events = {});
 					}
-					if (!events[eventName] ) {
+					if (!events[eventName]) {
 						events[eventName] = {};
 					}
-					if ( cb.__bindingsIds === undefined ) {
+					if (cb.__bindingsIds === undefined) {
 						cb.__bindingsIds = yuiEventId++;
 					}
 					events[eventName][cb.__bindingsIds] = selector ? node.item(0).delegate(ev, cb, selector) : node.item(0).on(ev, cb);
@@ -228,10 +225,10 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 			} else {
 				var obj = nodelist,
 					events = obj.__canEvents = obj.__canEvents || {};
-				if (!events[ev] ) {
+				if (!events[ev]) {
 					events[ev] = {};
 				}
-				if ( cb.__bindingsIds === undefined ) {
+				if (cb.__bindingsIds === undefined) {
 					cb.__bindingsIds = yuiEventId++;
 				}
 				events[ev][cb.__bindingsIds] = obj.on(ev, cb);
@@ -239,9 +236,9 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 		},
 	// Removes a binding on a `nodelist` by finding
 	// the remove object within the object's data.
-		removeBinding = function( nodelist, selector, ev, cb ) {
-			if ( nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode ) {
-				nodelist.each(function( node ) {
+		removeBinding = function (nodelist, selector, ev, cb) {
+			if (nodelist instanceof Y.NodeList || !nodelist.on || nodelist.getDOMNode) {
+				nodelist.each(function (node) {
 					var node = can.$(node),
 						events = can.data(node, "events"),
 						eventName = ev + ":" + selector,
@@ -249,10 +246,11 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 						handler = handlers[cb.__bindingsIds];
 					handler.detach();
 					delete handlers[cb.__bindingsIds];
-					if ( can.isEmptyObject(handlers) ) {
+					if (can.isEmptyObject(handlers)) {
 						delete events[ev];
 					}
-					if ( can.isEmptyObject(events) ) {}
+					if (can.isEmptyObject(events)) {
+					}
 				});
 			} else {
 				var obj = nodelist,
@@ -261,19 +259,20 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 					handler = handlers[cb.__bindingsIds];
 				handler.detach();
 				delete handlers[cb.__bindingsIds];
-				if ( can.isEmptyObject(handlers) ) {
+				if (can.isEmptyObject(handlers)) {
 					delete events[ev];
 				}
-				if ( can.isEmptyObject(events) ) {}
+				if (can.isEmptyObject(events)) {
+				}
 			}
 		}
-	can.bind = function( ev, cb ) {
+	can.bind = function (ev, cb) {
 		// If we can bind to it...
-		if ( this.bind && this.bind !== can.bind ) {
+		if (this.bind && this.bind !== can.bind) {
 			this.bind(ev, cb)
-		} else if ( this.on || this.nodeType ) {
+		} else if (this.on || this.nodeType) {
 			addBinding(can.$(this), undefined, ev, cb)
-		} else if ( this.addEvent ) {
+		} else if (this.addEvent) {
 			this.addEvent(ev, cb)
 		} else {
 			// Make it bind-able...
@@ -281,13 +280,13 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 		}
 		return this;
 	}
-	can.unbind = function( ev, cb ) {
+	can.unbind = function (ev, cb) {
 		// If we can bind to it...
-		if ( this.unbind && this.unbind !== can.unbind ) {
+		if (this.unbind && this.unbind !== can.unbind) {
 			this.unbind(ev, cb)
 		}
 
-		else if ( this.on || this.nodeType ) {
+		else if (this.on || this.nodeType) {
 			removeBinding(can.$(this), undefined, ev, cb);
 		} else {
 			// Make it bind-able...
@@ -295,20 +294,20 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 		}
 		return this;
 	}
-	can.trigger = function( item, event, args, bubble ) {
-		if ( item instanceof Y.NodeList ) {
+	can.trigger = function (item, event, args, bubble) {
+		if (item instanceof Y.NodeList) {
 			item = item.item(0);
 		}
-		if ( item.getDOMNode ) {
+		if (item.getDOMNode) {
 			item = item.getDOMNode();
 		}
 
-		if ( item.nodeName ) {
+		if (item.nodeName) {
 			item = Y.Node(item);
-			if ( bubble === false ) {
+			if (bubble === false) {
 				// Force stop propagation by listening to `on` and then
 				// immediately disconnecting
-				item.once(event, function( ev ) {
+				item.once(event, function (ev) {
 					ev.stopPropagation && ev.stopPropagation();
 					ev.cancelBubble = true;
 					ev._stopper && ev._stopper();
@@ -316,9 +315,9 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 			}
 			realTrigger(item.getDOMNode(), event, {})
 		} else {
-			if ( typeof event === 'string' ) {
+			if (typeof event === 'string') {
 				event = {
-					type: event
+					type : event
 				}
 			}
 			event.target = event.target || item
@@ -328,21 +327,21 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 	};
 	// Allow `dom` `destroyed` events.
 	Y.mix(Y.Node.DOM_EVENTS, {
-		destroyed: true
+		destroyed : true
 	});
 
-	can.delegate = function( selector, ev, cb ) {
-		if ( this.on || this.nodeType ) {
+	can.delegate = function (selector, ev, cb) {
+		if (this.on || this.nodeType) {
 			addBinding(can.$(this), selector, ev, cb)
-		} else if ( this.delegate ) {
+		} else if (this.delegate) {
 			this.delegate(selector, ev, cb)
 		}
 		return this;
 	}
-	can.undelegate = function( selector, ev, cb ) {
-		if ( this.on || this.nodeType ) {
+	can.undelegate = function (selector, ev, cb) {
+		if (this.on || this.nodeType) {
 			removeBinding(can.$(this), selector, ev, cb);
-		} else if ( this.undelegate ) {
+		} else if (this.undelegate) {
 			this.undelegate(selector, ev, cb)
 		}
 		return this;
@@ -350,18 +349,18 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 
 	// `realTrigger` taken from `dojo`.
 	var leaveRe = /mouse(enter|leave)/,
-		_fix = function( _, p ) {
+		_fix = function (_, p) {
 			return "mouse" + (p == "enter" ? "over" : "out");
 		},
 		realTrigger = document.createEvent ?
-			function( n, e, a ) {
+			function (n, e, a) {
 				// the same branch
 				var ev = document.createEvent("HTMLEvents");
 				e = e.replace(leaveRe, _fix);
 				ev.initEvent(e, true, true);
 				a && can.extend(ev, a);
 				n.dispatchEvent(ev);
-			} : function( n, e, a ) {
+			} : function (n, e, a) {
 			// the janktastic branch
 			var ev = "on" + e,
 				stop = false,
@@ -380,30 +379,30 @@ steal("../can.js", "../event.js",'can/util/array/each.js', 'can/util/object/ispl
 			} catch (er) {
 				// a lame duck to work with. we're probably a 'custom event'
 				var evdata = can.extend({
-					type: e,
-					target: n,
-					faux: true,
+					type : e,
+					target : n,
+					faux : true,
 					// HACK: [needs] added support for customStopper to _base/event.js
 					// some tests will fail until del._stopPropagation has support.
-					_stopper: function() {
+					_stopper : function () {
 						stop = this.cancelBubble;
 					}
 				}, a);
 				realTriggerHandler(n, e, evdata);
 
 				// handle bubbling of custom events, unless the event was stopped.
-				while (!stop && n !== document && n.parentNode ) {
+				while (!stop && n !== document && n.parentNode) {
 					n = n.parentNode;
 					realTriggerHandler(n, e, evdata);
 					//can.isFunction(n[ev]) && n[ev](evdata);
 				}
 			}
 		},
-		realTriggerHandler = function( n, e, evdata ) {
+		realTriggerHandler = function (n, e, evdata) {
 			var node = Y.Node(n),
 				handlers = can.Y.Event.getListeners(node._yuid, e);
-			if ( handlers ) {
-				for ( var i = 0; i < handlers.length; i++ ) {
+			if (handlers) {
+				for (var i = 0; i < handlers.length; i++) {
 					handlers[i].fire(evdata)
 				}
 			}
