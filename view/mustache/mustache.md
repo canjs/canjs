@@ -1,5 +1,6 @@
 @class can.Mustache
 @parent canjs
+@test can/view/mustache/test/qunit.html
 
 can.Mustache provides logic-less templates with live binding when used with [can.Observes](#can_observe).
 
@@ -8,6 +9,10 @@ sacrifices.
 
 Mustache and Handlebar templates are compatible with can.Mustache, 
 so you can import existing templates and automagically start live-binding.
+
+## Demos
+
+ - [TodoMVC](http://addyosmani.github.com/todomvc/labs/architecture-examples/canjs/) is a project which offers the same Todo application implemented using MV* concepts in most of the popular JavaScript MV* frameworks of today.
 
 ## Getting Started
 
