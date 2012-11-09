@@ -1,7 +1,10 @@
 @class can.Mustache
 @parent canjs
 
-can.Mustache provides logic-less templates with live binding.
+can.Mustache provides logic-less templates with live binding when used with [can.Observes](#can_observe).
+
+can.Mustache is designed to help seperate logic out of your view code without
+sacrifices.
 
 Mustache and Handlebar templates are compatible with can.Mustache, 
 so you can import existing templates and automagically start live-binding.
@@ -9,25 +12,26 @@ so you can import existing templates and automagically start live-binding.
 ## Getting Started
 
 Mustache templates looks similar to normal HTML except
-they contain tokens for inserting and performing actions.
+they contain contain keys for inserting data into the template
+and sections to enumerate and/or filter the enclosed template blocks.
 
-Take for example the following, it renders a welcome header for
+For example, the following renders a welcome header for
 a user and displays the number of messages.
 
 __Mustache Template__
 
 	<script id="template" type="text/mustache">
-		<h1>Welcome {{ user }}!</h1>
+		<h1>Welcome {{user}}!</h1>
 		<p>
 			{{#if messages}}
 				You have {{messages}} new messages.
 			{{else}}
 				You no messages.
-			{{/messages}}
+			{{/if}}
 		</p>
 	</script>
 
-The Mustache sytax is the `{{  }}` tokens above.
+The Mustache sytax is the `{{  }}` magic tags above.
 
 __JavaScript__
 
@@ -40,13 +44,12 @@ __JavaScript__
 
 	can.$(document.body).append(template);
 
-After you insert it, it will render:
+it will render:
 
 	<h1>Welcome Tina Fey!</h1>
 	<p>You no messages.</p>
 
-Now if you want to use the power of live-binding
-to update your template, you can do:
+Now if you want to use live-binding to update your template, you can do:
 
 	data.attr('message', 5)
 
@@ -73,7 +76,7 @@ would return:
 
 whereas if the template was:
 
-	{{{ friend }}}
+	{{{friend}}}
 
 it would return:
 
@@ -152,7 +155,8 @@ You can process plain text by passing an object with a `text`
 attribute containing your template and it will return a document fragment back.
 
 	var template = "My body lies over the {{.}}";
-	var fragment = new can.Mustache({ text: template }).render('water');
+	var fragment = new can.Mustache({ text: template })
+					.render('water');
 	can.append(can.$(document.body), can.view.frag(fragment));
 
 __Script Tags__
@@ -174,7 +178,8 @@ You can define templates in their own files and have Mustache fetch the
 files on demand.  This is the preferred way since it will keep your application
 nicely organized seperating views from logic code. 
 
-	var template = can.view('//lib/views/mytemplate.mustache',  dataToPass)
+	var template = can.view('//lib/views/mytemplate.mustache', 
+					dataToPass)
 	can.$(document.body).append(template);
 
 Since this makes XHR requests, in a big application with lots of views
@@ -299,7 +304,7 @@ would render:
 
 Comments, which do not appear in template output, begin a bang (!).
 
-	<h1>My friend is {{! Brian }}</h1>
+	<h1>My friend is {{!Brian}}</h1>
 
 Will render:
 
@@ -460,20 +465,21 @@ would render:
 	<h1>Hi Austin</h1>
 	<p>You have 1 new friend!</p>
 
-### plugin
+### Element Callbacks
 
 When rendering HTML with views, you often want to call some JavaScript
 such as intializing a jQuery plugin on the new HTML.
 
 Mustache makes it easy to define this code in the markup.  Using the
-arrow syntax we define the element we are going to pass followed by the arrow
+[ES5 Arrow Syntax](http://wiki.ecmascript.org/doku.php?id=strawman:arrow_function_syntax) 
+we define the element we are going to pass followed by the arrow
 and the function we want to execute on the element.
 
 	<div class="tabs" {{(el) -> el.jquery_tabs()}}></div>
 
 After rendering the HTML, `jquery_tabs` will be called on the tabs div.
 
-### data
+### Data Associations
 
 You can attach data to an element easily by calling the `data` helper.
 Call `data` followed by the attribute name you want to attach it as.
@@ -483,19 +489,19 @@ Call `data` followed by the attribute name you want to attach it as.
 	}
 
 	<ul>
-		<li id="foo" {{data 'name'}}>{{name}}</li>
+		<li id="foo" {{data 'person'}}>{{name}}</li>
 	</ul>
 
 Now I can access my object by doing:
 
-	var nameObject = can.$('#foo').data('name');
+	var nameObject = can.$('#foo').data('person');
 
 It automatically attaches the data to the
 element using [can.data] and the implied context of `this`.
 
 ### Registering Helpers
 
-You can register your own helper with the `registerHelper` method.
+You can register your own helper with the `Mustache.registerHelper` method.
 
 Localization is a good example of a custom helper you might implement
 in your application. The below example takes a given key and 
@@ -503,7 +509,9 @@ returns the localized value using
 [jQuery Globalize](https://github.com/jquery/globalize).
 
 	Mustache.registerHelper('l10n', function(str, options){
-		return (Globalize != undefined ? Globalize.localize(str) : str);
+		return Globalize != undefined 
+			? Globalize.localize(str) 
+			: str;
 	});
 
 Now in my template, I invoke the helper by calling the helper
@@ -534,7 +542,7 @@ If you want to use a helper with a section, you need to call
 string with the resulting evaluated section.
 
 Similarly, you can call `options.inverse(context)` to evaluate the 
-template between an `{{else}}` token and the closing token.
+template between an `{{else}}` magic tag and the closing magic tag.
 
 For example, when a route matches the string passed to our
 routing helper it will show/hide the text.
@@ -553,7 +561,8 @@ __Advanced Helpers__
 
 Helpers can be passed normal objects, native objects like numbers and strings, as well as a hash object. The hash object will be an object literal containing all ending arguments using the `key=value` syntax. The hash object will be provided to the helper as `options.hash`. Additionally, when using sections with the helper, you can set a custom context by passing the object instead of `this`.
 
-	Mustache.registerHelper('exercise', function(group, action, num, options){
+	Mustache.registerHelper('exercise', function(group, action, 
+											num, options){
 		if (group && group.length > 0 && action && num > 0) {
 			return options.fn({
 				group: group,
@@ -582,7 +591,8 @@ Helpers can be passed normal objects, native objects like numbers and strings, a
 	
 This would output:
 
-	Along with the cat, dog, parrot, we walked around the block 3 times this morning.
+	Along with the cat, dog, parrot, we walked around the block 
+	3 times this morning.
 	
 Whereas, an empty data object would output:
 
@@ -590,9 +600,8 @@ Whereas, an empty data object would output:
 
 ## Live binding
 
-So what is live binding?  Live binding is templates
-that update themselves as the data used in the tokens
-change.
+Live binding is templates that update themselves as the data 
+used in the magic tags change.
 
 It's very common as the page is interacted with that the underlying 
 data represented in the page changes.  Typically, you have callbacks 
