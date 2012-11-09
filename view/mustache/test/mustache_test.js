@@ -575,18 +575,25 @@ test("event binding / triggering on options", function(){
 		ok(true,"select called")
 	});
 	
-	var ev = (document.createEvent || document.createEventObject)("HTMLEvents");
+	var ev;
+	if (document.createEvent) {
+		ev = document.createEvent("HTMLEvents");
+	} else {
+		ev = document.createEventObject("HTMLEvents");
+	}
+	
 	if (ev.initEvent)
 		ev.initEvent("foo", true , true);
 	else
 		ev.eventType = "foo";
 		
-	if (qta.getElementsByTagName("option")[0].dispatchEvent)
+	if (qta.getElementsByTagName("option")[0].dispatchEvent) {
 		qta.getElementsByTagName("option")[0].dispatchEvent(ev); 
-	else
+	} else {
 		qta.getElementsByTagName("option")[0].onfoo(ev);
+	}
 	
-	//can.trigger(qta,"foo")
+	can.trigger(qta,"foo")
 	
 	stop();
 	setTimeout(function(){
@@ -845,10 +852,10 @@ test("hookup and live binding", function(){
 
 test('multiple curly braces in a block', function() {
 	var text =  '{{^obs.items}}' +
-				'<li>No items</li>' +
+					'<li>No items</li>' +
 				'{{/obs.items}}' +
 				'{{#obs.items}}' +
-						'<li>{{name}}</li>' +
+					'<li>{{name}}</li>' +
 				'{{/obs.items}}',
 
 	obs = new can.Observe({
@@ -860,10 +867,10 @@ test('multiple curly braces in a block', function() {
 	var ul = document.createElement('ul');
 	ul.appendChild(can.view.frag(compiled));
 
-	equals(ul.innerHTML, '<li>No items</li>', 'initial observable state');
+	equals(ul.getElementsByTagName('li')[0].innerHTML, 'No items', 'initial observable state');
 
 	obs.attr('items', [{ name: 'foo' }]);
-	equals(ul.innerHTML, '<li>foo</li>', 'updated observable');
+	equals(ul.getElementsByTagName('li')[0].innerHTML, 'foo', 'updated observable');
 });
 
 test("unescape bindings change", function(){
