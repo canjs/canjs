@@ -857,7 +857,7 @@ __Mustache Template__
   </script>
 {% endhighlight %}
 
-The Mustache syntax includes the `{{"{{"}} }} magic tags above.
+The Mustache syntax includes the `{{"{{"}} }}` magic tags above.
 
 __JavaScript__
 
