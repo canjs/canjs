@@ -1046,7 +1046,7 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 	
 	equals(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
 		
-	can.remove( can.$(div.firstChild) )
+	can.remove( can.$(div) )
 		
 	same(can.view.nodeMap, {} );
 	same(can.view.nodeListMap ,{} )
