@@ -65,6 +65,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-beautify');
 	grunt.loadTasks("./build/tasks");
 
-	grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist");
-	grunt.registerTask("latest", "build:latest strip:latest minify:edge")
+	grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist docco:edge");
+	grunt.registerTask("latest", "build:latest build:latestPlugins strip:latest beautify:dist docco:latest")
 };
