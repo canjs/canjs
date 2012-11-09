@@ -165,7 +165,9 @@
                         ok(true, 'Controller action delegated click triggered, too');
                     }
                 }),
-                div = document.createElement('div'),
+                div = document.createElement('div');
+
+            	can.append(can.$("#qunit-test-area"), div);
                 rb = new Tester(div);
 
             can.append(can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='javascript://' id='elsa'>click me</a></span></div>")
@@ -183,7 +185,7 @@
             ok(called, "delegate works")
             can.remove(els)
 
-            can.trigger(div, 'click');
+            can.trigger(can.$(div), 'click');
             can.trigger(window, 'click');
         });
     }
