@@ -295,6 +295,41 @@ test("Handlebars helpers", function() {
 	same(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
+test("Handlebars advanced helpers (from docs)", function() {
+	Mustache.registerHelper('exercise', function(group, action, num, options){
+		if (group && group.length > 0 && action && num > 0) {
+			return options.fn({
+				group: group,
+				action: action,
+				where: options.hash.where,
+				when: options.hash.when,
+				num: num
+			});
+		}
+		else {
+			return options.inverse(this);
+		}
+	});
+	
+	var t = {
+		template: "{{#exercise pets 'walked' 3 where='around the block' when=time}}" +
+				"Along with the {{#group}}{{.}}, {{/group}}" +
+				"we {{action}} {{where}} {{num}} times {{when}}." +
+			"{{else}}" +
+				"We were lazy today." +
+			"{{/exercise}}",
+		expected: "Along with the cat, dog, parrot, we walked around the block 3 times this morning.",
+		expected2: "We were lazy today.",
+		data: {
+			pets: ['cat', 'dog', 'parrot'],
+			time: 'this morning'
+		}
+	};
+	
+	same(new can.Mustache({ text: t.template }).render(t.data), t.expected);
+	same(new can.Mustache({ text: t.template }).render({}), t.expected2);
+});
+
 test("Passing functions as data, then executing them", function() {
 	var t = {
 		template: "{{#nested}}{{welcome name}}{{/nested}}",

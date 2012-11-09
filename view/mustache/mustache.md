@@ -309,10 +309,9 @@ Will render:
 ## Partials
 
 Partials are templates embedded in other templates which execute at runtime.  
-Partials begin with a greater than sign, like `{{> my_partial}}`.  
+Partials begin with a greater than sign, like `{{>my_partial}}`.  
 
-Partials are rendered at runtime, so recursive partials are possible. 
-Just avoid infinite loops.  They also inherit the calling context.
+Partials are rendered at runtime, so recursive partials are possible but make sure you avoid infinite loops. They also inherit the calling context.
 
 For example, this template and partial:
 
@@ -327,8 +326,7 @@ __user.mustache__
 
 	<strong>{{name}}</strong>
 
-Can be thought of as a single, expanded template at render time 
-which would look like:
+The resulting expanded template at render time would look like:
 
 	<h2>Names</h2>
 	{{#names}}
@@ -343,12 +341,12 @@ fetching partials.
 Helpers allow you to register functions that can be called 
 from any context in a template. 
 
-We have a number of built-in helpers that are listed below
+Mustache includes a number of built-in helpers that are listed below
 but you can register your own helper too.
 
 ### if
 
-In addition to section falsey evaluation, you can use an 
+In addition to truthy/falsey evaluation with sections, you can use an 
 explicit `if` condition to render a block.
 
 	{
@@ -362,22 +360,24 @@ explicit `if` condition to render a block.
 would render:
 
 	I have friends!
+	
+`if` acts similarly to a truthy `{{#section}}`.
 
 ### else
 
-When using an `if` or custom helper, you can specify the inverse
+When using `if` or a custom helper, you can specify the inverse
 of the evaluation by using the `else` helper.
 
 	{
-		friends: []
+		friend: false
 	}
 
 	<ul>
-		{{#friends}}
+		{{#if friends}}
 			</li>{{name}}</li>
 		{{else}}
 			<li>No friends.</li>
-		{{/friends}}
+		{{/if}}
 	</ul>
 
 would render:
@@ -386,9 +386,9 @@ would render:
 		<li>No friends.</li>
 	</ul>
 
-This is helpful because basic Mustache would
-require you to close the section and start a 
-new section with the inverse operator.
+`else` acts similarly to a falsey `{{^inverse}}`, but only applies when used within another helper.
+
+In this case, using the `if`/`else` helpers simplify your template by not requiring extra sections to be specified.
 
 ### unless
 
@@ -406,10 +406,12 @@ the block between the helper and the slash.
 would render:
 
 	You don't have any friends!
+	
+`unless` acts similarly to a falsey `{{^inverse}}`.
 
 ### each
 
-You can use the `each` helper to itterate over a array of items and
+You can use the `each` helper to iterate over an array of items and
 render the block between the helper and the slash.
 
 Like sections, it will reset the current context to the value for which its iterating.
@@ -424,7 +426,7 @@ See the context section for more information.
 
 	<ul>
 		{{#each friends}}
-			<li>{name}</li>
+			<li>{{name}}</li>
 		{{/each}}
 	</ul>
 
@@ -437,8 +439,8 @@ which would render:
 
 ### with
 
-Mustache typically applies the context passed in the section at compiled time.  However,
-if you want to override this context you can use the `with` helper.
+Mustache typically applies the context passed in the section at runtime.  However,
+you can override this context by using the `with` helper.
 
 For example, using the `with` helper I shift the context to the friends object.
 
@@ -448,8 +450,8 @@ For example, using the `with` helper I shift the context to the friends object.
 	}
 
 
-	<h1>Hi {{ name }}</h1>
-	{{ #with friends }}
+	<h1>Hi {{name}}</h1>
+	{{#with friends}}
 		<p>You have {{.}} new friend!</p>
 	{{/with}}
 
@@ -463,17 +465,17 @@ would render:
 When rendering HTML with views, you often want to call some JavaScript
 such as intializing a jQuery plugin on the new HTML.
 
-Mustache makes this easy to define this code in the mark-up.  Using the
+Mustache makes it easy to define this code in the markup.  Using the
 arrow syntax we define the element we are going to pass followed by the arrow
 and the function we want to execute on the element.
 
-	<div class="tabs" {{ (el) -> el.jquery_tabs() }}></div>
+	<div class="tabs" {{(el) -> el.jquery_tabs()}}></div>
 
 After rendering the HTML, `jquery_tabs` will be called on the tabs div.
 
 ### data
 
-You can attach data to a element easily by calling the `data` helper.
+You can attach data to an element easily by calling the `data` helper.
 Call `data` followed by the attribute name you want to attach it as.
 
 	{
@@ -489,7 +491,7 @@ Now I can access my object by doing:
 	var nameObject = can.$('#foo').data('name');
 
 It automatically attaches the data to the
-element using [can.data] with implied context of `this`.
+element using [can.data] and the implied context of `this`.
 
 ### Registering Helpers
 
@@ -527,20 +529,64 @@ that and the previous argument like so:
 
 __Evaluating Helpers__
 
-If you want to use a helper with a section, when you register
-the helper you need to call `options.fn(argsToEval)` in your
-return statement. 
+If you want to use a helper with a section, you need to call 
+`options.fn(context)` in your return statement. This will return a 
+string with the resulting evaluated section.
+
+Similarly, you can call `options.inverse(context)` to evaluate the 
+template between an `{{else}}` token and the closing token.
 
 For example, when a route matches the string passed to our
 routing helper it will show/hide the text.
 
 	Mustache.registerHelper('routing', function(str, options){
-		return options.fn(can.route.attr('filter') === str)
+		if (can.route.attr('filter') === str)
+			return options.fn(this);
+		}
 	});
 
 	{{#routing 'advanced'}}
 		You have applied the advanced filter.
 	{{/routing}}
+	
+__Advanced Helpers__
+
+Helpers can be passed normal objects, native objects like numbers and strings, as well as a hash object. The hash object will be an object literal containing all ending arguments using the `key=value` syntax. The hash object will be provided to the helper as `options.hash`. Additionally, when using sections with the helper, you can set a custom context by passing the object instead of `this`.
+
+	Mustache.registerHelper('exercise', function(group, action, num, options){
+		if (group && group.length > 0 && action && num > 0) {
+			return options.fn({
+				group: group,
+				action: action,
+				where: options.hash.where,
+				when: options.hash.when,
+				num: num
+			});
+		}
+		else {
+			return options.inverse(this);
+		}
+	});
+
+	{{#exercise pets 'walked' 3 where='around the block' when=time}}
+		Along with the {{#group}}{{.}}, {{/group}}
+		we {{action}} {{where}} {{num}} times {{when}}.
+	{{else}}
+		We were lazy today.
+	{{/exercise}}
+	
+	{
+		pets: ['cat', 'dog', 'parrot'],
+		time: 'this morning'
+	}
+	
+This would output:
+
+	Along with the cat, dog, parrot, we walked around the block 3 times this morning.
+	
+Whereas, an empty data object would output:
+
+	We were lazy today.
 
 ## Live binding
 
@@ -548,16 +594,16 @@ So what is live binding?  Live binding is templates
 that update themselves as the data used in the tokens
 change.
 
-It's very common as the page is interacted with the underlying 
+It's very common as the page is interacted with that the underlying 
 data represented in the page changes.  Typically, you have callbacks 
-in your AJAX methods or events and you find the control and update it
-manually.
+in your AJAX methods or events and then update the content of your 
+controls manually.
 
 In the first example of the documentation, we have a 
 simple user welcome screen.  In this example, we create a `can.Observe`
 object and pass it into the template.
 
-	<h1>Welcome {{ user }}!</h1>
+	<h1>Welcome {{user}}!</h1>
 	<p>
 		{{#if messages}}
 			You have {{messages}} new messages.
