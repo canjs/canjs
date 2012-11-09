@@ -1,4 +1,4 @@
-steal('can/util/dojo-1.8.1.js', 'can/util/event.js', 'can/util/fragment.js', 'can/util/array/each.js', 'can/util/object/isplain', function() {
+steal('can/util/dojo/dojo-1.8.1.js', 'can/util/event.js', 'can/util/fragment.js', 'can/util/array/each.js', 'can/util/object/isplain', function() {
 	define("plugd/trigger", ["dojo"], function( dojo ) {
 
 		var d = dojo,
