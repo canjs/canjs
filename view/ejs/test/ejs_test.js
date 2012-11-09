@@ -287,6 +287,9 @@ test("event binding / triggering on things other than options", 1, function(){
 	// destroyed events should not bubble
 	can.bind.call(qta.getElementsByTagName("li")[0], 'foo', function(event) {
 		ok(true,"li called :)");
+		event.cancelBubble = true;
+		event.stopPropagation();
+		return false;
 	});
 
 	can.bind.call(qta.getElementsByTagName("ul")[0], 'foo', function(event) {

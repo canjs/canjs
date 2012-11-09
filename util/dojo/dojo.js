@@ -169,7 +169,7 @@ steal("./dojo-1.8.1.js").then('../event.js', '../fragment.js').then('./trigger',
 	}
 	
 	can.trigger = function(item, event, args, bubble){
-		if((! item instanceof dojo.NodeList) && (item.nodeName || item === window)) {
+		if((! (item instanceof dojo.NodeList)) && (item.nodeName || item === window)) {
 			item = can.$(item);
 		}
 
