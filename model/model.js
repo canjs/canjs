@@ -25,7 +25,7 @@ steal('can/util','can/observe', function( can ) {
 		getId = function( inst ) {
 			// Instead of using attr, use __get for performance.
 			// Need to set reading
-			can.Observe.__reading && can.Observe.__reading(this, inst.constructor.id)
+			can.Observe.__reading && can.Observe.__reading(inst, inst.constructor.id)
 			return inst.__get(inst.constructor.id);
 		},
 		// Ajax `options` generator function
