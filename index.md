@@ -857,7 +857,7 @@ __Mustache Template__
   </script>
 {% endhighlight %}
 
-The Mustache syntax includes the `{{"{{"}}  }} magic tags above.
+The Mustache syntax includes the `{{"{{"}} }} magic tags above.
 
 __JavaScript__
 
@@ -1116,7 +1116,7 @@ it jumps up to the family object and resolves sisters there.
 ### Partials
 
 Partials are templates embedded in other templates which execute at runtime.
-Partials begin with a greater than sign, like `{{"{{>"}}my_partial}}.
+Partials begin with a greater than sign, like `{{"{{>"}}my_partial}}`.
 
 Partials are rendered at runtime, so recursive partials are possible but make sure you avoid infinite loops. They also inherit the calling context.
 
