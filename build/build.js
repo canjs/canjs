@@ -39,10 +39,10 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 
 		console.log('Building ' + lib + ' ' + version + ' to ' + outFile);
 		steal.build.pluginify("can/build/make/" + lib + ".js", _.extend(defaults, options));
-		steal.build.pluginify("can/build/make/" + lib + ".js", _.extend(defaults, options, {
-			compress : true,
-			out : outFile + '.min.js'
-		}));
+//		steal.build.pluginify("can/build/make/" + lib + ".js", _.extend(defaults, options, {
+//			compress : true,
+//			out : outFile + '.min.js'
+//		}));
 
 		console.log('Creating distributable test HTML file ' + testFile);
 		render('can/build/templates/test.html.ejs', testFile, {
@@ -55,8 +55,12 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 		new steal.File('can/build/templates/index.html').copyTo(testFolder + '/index.html');
 	});
 
+	var excludes = [ "can/util/amd.js", "can/util/util.js" ];
+	_.each(_.values(libs), function(val) {
+		excludes = excludes.concat(val.exclude);
+	});
 	steal.build.amdify('can/build/make/amd.js', {
 		out: outFolder + '/amd',
-		exclude: ["jquery", "jquery/jquery.js", "can/util/amd.js"]
+		exclude: excludes
 	});
 });
