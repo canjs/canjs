@@ -92,31 +92,9 @@ steal('../can.js', '../event.js', "../fragment.js", 'can/util/array/each.js', 'c
 	can.get = function (wrapped, index) {
 		return wrapped._nodes[index];
 	}
-<<<<<<< Updated upstream
-	can.buildFragment = function (html, node) {
-		if (html && can.isFunction(html.replace)) {
-			// Fix "XHTML"-style tags in all browsers
-			html = html.replace(/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi, "<$1></$2>");
-		}
-
-		var owner = node && node.ownerDocument,
-			frag = Y.Node.create(html, owner);
-		frag = (frag && frag.getDOMNode()) || document.createDocumentFragment();
-		if (frag.nodeType !== 11) {
-			var tmp = document.createDocumentFragment();
-			tmp.appendChild(frag)
-			frag = tmp;
-		}
-		return frag;
-	}
-	can.append = function (wrapped, html) {
-		wrapped.each(function (node) {
-			if (typeof html === 'string') {
-=======
 	can.append = function( wrapped, html ) {
 		wrapped.each(function( node ) {
 			if ( typeof html === 'string' ) {
->>>>>>> Stashed changes
 				html = can.buildFragment(html, node)
 			}
 			node.append(html)
@@ -333,12 +311,8 @@ steal('../can.js', '../event.js', "../fragment.js", 'can/util/array/each.js', 'c
 	};
 	// Allow `dom` `destroyed` events.
 	Y.mix(Y.Node.DOM_EVENTS, {
-<<<<<<< Updated upstream
-		destroyed : true
-=======
 		destroyed: true,
 		foo: true
->>>>>>> Stashed changes
 	});
 
 	can.delegate = function (selector, ev, cb) {
