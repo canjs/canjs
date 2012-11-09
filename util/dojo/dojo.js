@@ -1,4 +1,4 @@
-steal("./dojo-1.8.1.js", '../event.js', '../fragment.js').then('./trigger', 'can/util/array/each.js', 'can/util/object/isplain',
+steal("can/util/dojo/dojo-1.8.1.js", 'can/util/event.js', 'can/util/fragment.js').then('./trigger', 'can/util/array/each.js', 'can/util/object/isplain',
 	function(){
 
 	// dojo.js
@@ -390,4 +390,4 @@ steal("./dojo-1.8.1.js", '../event.js', '../fragment.js').then('./trigger', 'can
 	});
 
 	return can;
-}).then('../deferred.js')
+}).then('can/util/deferred.js')

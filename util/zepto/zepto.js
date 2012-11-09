@@ -1,7 +1,4 @@
-steal('../can.js',{
-	id: './zepto.1.0rc1.js',
-	_skip: true
-}, './data', '../event', '../fragment.js', function(can) {
+steal('can/util/can.js', 'can/util/zepto/data.js', 'can/util/event', 'can/util/fragment.js', function(can) {
 	// zepto.js
 	// ---------
 	// _Zepto node list._
@@ -195,4 +192,4 @@ can.$ = Zepto
 
 
 	return can;
-}).then('../deferred.js','can/util/array/each.js')
+}).then('can/util/deferred.js','can/util/array/each.js')

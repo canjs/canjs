@@ -1,4 +1,4 @@
-steal('can/util/can.js', './mootools-core-1.4.3.js', '../event.js','../fragment',
+steal('can/util/can.js', 'can/util/mootools/mootools-core-1.4.3.js', 'can/util/event.js','can/util/fragment',
 'can/util/array/each.js', 'can/util/object/isplain', 'can/util/object/extend',
 function(can) {
 	// mootools.js
@@ -271,4 +271,4 @@ function(can) {
 	}
 
 	return can;
-},'../deferred.js');
+},'can/util/deferred.js');
