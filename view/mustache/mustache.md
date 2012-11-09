@@ -594,16 +594,16 @@ So what is live binding?  Live binding is templates
 that update themselves as the data used in the tokens
 change.
 
-It's very common as the page is interacted with the underlying 
+It's very common as the page is interacted with that the underlying 
 data represented in the page changes.  Typically, you have callbacks 
-in your AJAX methods or events and you find the control and update it
-manually.
+in your AJAX methods or events and then update the content of your 
+controls manually.
 
 In the first example of the documentation, we have a 
 simple user welcome screen.  In this example, we create a `can.Observe`
 object and pass it into the template.
 
-	<h1>Welcome {{ user }}!</h1>
+	<h1>Welcome {{user}}!</h1>
 	<p>
 		{{#if messages}}
 			You have {{messages}} new messages.
