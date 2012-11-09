@@ -1,6 +1,6 @@
 # Change Log
 
-__1.1__ ( October 9, 2012 )
+__1.1__ ( November 9, 2012 )
 
  - Added AMD module support for each dependency
 
