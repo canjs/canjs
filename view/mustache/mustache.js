@@ -61,6 +61,9 @@ function( can ){
 	 */
 	Mustache.prototype.	 
 	/**
+	 * @parent can.Mustache
+	 * @function render
+	 * 
 	 * Renders an object with view helpers attached to the view.
 	 * 
 	 *		 new Mustache({text: "<%= message %>"}).render({
@@ -292,6 +295,10 @@ function( can ){
 		})
 	});
 
+	/** 
+	 * @Static
+	 */
+
 	/**
 	 * Addin default helpers first.  We could prob do this
 	 * differently if we didn't 'break' on every match.
@@ -303,7 +310,7 @@ function( can ){
 
 	/**
 	 * @parent can.Mustache
-	 * @class can.Mustache.Helpers
+	 * @function registerHelper
 	 * 
 	 * Registers a helper with the Mustache system.
 	 * Pass the name of the helper followed by the
@@ -318,7 +325,9 @@ function( can ){
 	};
 	
 	/**
-	 * @hide
+	 * @parent can.Mustache
+	 * @function getHelper
+	 * 
 	 * Returns a helper given the name.
 	 * 
 	 * @param  {[type]} name of the helper
