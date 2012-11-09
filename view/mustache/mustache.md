@@ -17,13 +17,13 @@ a user and displays the number of messages.
 __Mustache Template__
 
 	<script id="template" type="text/mustache">
-		<h1>Welcome {{ user }}!</h1>
+		<h1>Welcome {{user}}!</h1>
 		<p>
 			{{#if messages}}
 				You have {{messages}} new messages.
 			{{else}}
 				You no messages.
-			{{/messages}}
+			{{/if}}
 		</p>
 	</script>
 
@@ -73,7 +73,7 @@ would return:
 
 whereas if the template was:
 
-	{{{ friend }}}
+	{{{friend}}}
 
 it would return:
 
@@ -152,7 +152,8 @@ You can process plain text by passing an object with a `text`
 attribute containing your template and it will return a document fragment back.
 
 	var template = "My body lies over the {{.}}";
-	var fragment = new can.Mustache({ text: template }).render('water');
+	var fragment = new can.Mustache({ text: template })
+					.render('water');
 	can.append(can.$(document.body), can.view.frag(fragment));
 
 __Script Tags__
@@ -174,7 +175,8 @@ You can define templates in their own files and have Mustache fetch the
 files on demand.  This is the preferred way since it will keep your application
 nicely organized seperating views from logic code. 
 
-	var template = can.view('//lib/views/mytemplate.mustache',  dataToPass)
+	var template = can.view('//lib/views/mytemplate.mustache', 
+					dataToPass)
 	can.$(document.body).append(template);
 
 Since this makes XHR requests, in a big application with lots of views
@@ -299,7 +301,7 @@ would render:
 
 Comments, which do not appear in template output, begin a bang (!).
 
-	<h1>My friend is {{! Brian }}</h1>
+	<h1>My friend is {{!Brian}}</h1>
 
 Will render:
 
@@ -503,7 +505,9 @@ returns the localized value using
 [jQuery Globalize](https://github.com/jquery/globalize).
 
 	Mustache.registerHelper('l10n', function(str, options){
-		return (Globalize != undefined ? Globalize.localize(str) : str);
+		return Globalize != undefined 
+			? Globalize.localize(str) 
+			: str;
 	});
 
 Now in my template, I invoke the helper by calling the helper
@@ -553,7 +557,8 @@ __Advanced Helpers__
 
 Helpers can be passed normal objects, native objects like numbers and strings, as well as a hash object. The hash object will be an object literal containing all ending arguments using the `key=value` syntax. The hash object will be provided to the helper as `options.hash`. Additionally, when using sections with the helper, you can set a custom context by passing the object instead of `this`.
 
-	Mustache.registerHelper('exercise', function(group, action, num, options){
+	Mustache.registerHelper('exercise', function(group, action, 
+											num, options){
 		if (group && group.length > 0 && action && num > 0) {
 			return options.fn({
 				group: group,
@@ -582,7 +587,8 @@ Helpers can be passed normal objects, native objects like numbers and strings, a
 	
 This would output:
 
-	Along with the cat, dog, parrot, we walked around the block 3 times this morning.
+	Along with the cat, dog, parrot, we walked around the block 
+	3 times this morning.
 	
 Whereas, an empty data object would output:
 
