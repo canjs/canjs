@@ -424,17 +424,17 @@ test('adding and removing multiple html content within a single element', functi
 	div.appendChild(can.view.frag(compiled));
 
 	equals(div.firstChild.nodeName.toUpperCase(), 'DIV', 'initial render node name');
-	equals(div.firstChild.innerText, 'abc', 'initial render text')
+	equals(div.firstChild.innerHTML, 'abc', 'initial render text')
 
 	obs.attr({a: '', b : '', c: ''});
 
 	equals(div.firstChild.nodeName.toUpperCase(), 'DIV', 'updated render node name');
-	equals(div.firstChild.innerText, '', 'updated render text')
+	equals(div.firstChild.innerHTML, '', 'updated render text')
 	
 	obs.attr({c: 'c'});
 	
 	equals(div.firstChild.nodeName.toUpperCase(), 'DIV', 'updated render node name');
-	equals(div.firstChild.innerText, 'c', 'updated render text')
+	equals(div.firstChild.innerHTML, 'c', 'updated render text')
 });
 
 test('live binding and removeAttr', function(){

@@ -84,11 +84,8 @@ it would return:
 
 ## Paths and Context
 
-When using Mustache, the context will shift as you enter sections.  
-Once inside a section, it will reset the current context to the value for 
-which its iterating.
-
-For example:
+When Mustache is resolving a object in a section, it sets the current
+context to the value for which its iterating. For example:
 
 	{
 		friends: [ 'Austin' ]
@@ -98,22 +95,14 @@ For example:
 		{{.}}
 	{{/friends}}
 
-The `.` would represent the 'Austin' attribute on the 
-object in the array.
+The `.` would represent the 'Austin' value in the array.
 
-Additionally, you can use the `this` as a shorthand. So given
-the same friends object from above I could do:
-
-	{{#friends}}
-		{{this}}
-	{{/friends}}
-
-Mustache also implements a system for which if it 
-doesn't find a match to an object that you are referencing in
-the current context it can hop up into the parent context.
-
+Internally, Mustache keeps a stack of contexts as the template dives
+deeper into nested sections and helpers.  If a key is not found within 
+the current context, Mustache will look for the key in the parent context
+and so on until it resolves the object or reaches the parent most object.  
 For example:
-	
+
 	{
 		family: [
 			{
@@ -141,8 +130,7 @@ For example:
 	{{/family}}
 
 Since `sisters` isn't in the context of the brothers array,
-it hops up to the parent object's context.  It will continue to
-hop up the stack of contexts until it finds a match.
+it jumps up to the family object and resolves sisters there.
 
 ## Template Acquisition
 
@@ -190,7 +178,7 @@ for you.
 
 __Registering Partials__
 
-You can call `can.Mustache.registerPartial` to register
+You can call `can.view.registerView` to register
 a partial template you can call from inside another Mustache template.
 
 	can.view.registerView('myTemplate', "My body lies over {{.}}")
@@ -204,20 +192,16 @@ information goto the Partials section.
 
 ## Sections
 
-Sections are the army-knife of Mustache templates.  They will evaluate the token
-given the current context and render the block.  
-
-Once inside a section, it will reset the current context to the value for which it's iterating.
-
-This is useful for iterating over an array or just evaluating an object's boolean equivalent.
+Sections contain text blocks and evaluate whether to render it or not.  If
+the object evaluates to an array it will iterate over it and render the block
+for each item in the array.  here are four different types of sections.
 
 ### Falseys or Empty Arrays
 
 If the value returns a `false`, `undefined`, `null`, `""` or `[]` we consider
 that a *falsey* value.
 
-If the value is falsey, the section will **NOT** render the block
-between the pound and slash.
+If the value is falsey, the section will **NOT** render the block.
 
 	{ 
 		friends: false
@@ -231,7 +215,7 @@ between the pound and slash.
 ### Arrays
 
 If the value is a non-empty array, sections will iterate over the 
-array of items, rendering the items in the block between the pound and slash.
+array of items, rendering the items in the block.
 
 For example, if I have a list of friends, I can iterate
 over each of those items within a section.

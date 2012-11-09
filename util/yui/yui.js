@@ -12,7 +12,7 @@
 //
 //	var url = "http://yui.yahooapis.com/combo?3.7.3/build/" + yuilibs.join("&3.7.3/build/")
 
-steal('../can.js', '../event.js', "../fragment.js", 'can/util/array/each.js', 'can/util/object/isplain', './yui-3.7.3.js', function () {
+steal('can/util/can.js', 'can/util/event.js', "can/util/fragment.js", 'can/util/array/each.js', 'can/util/object/isplain', 'can/util/yui/yui-3.7.3.js', function () {
 
 	// ---------
 	// _YUI node list._
@@ -394,4 +394,4 @@ steal('../can.js', '../event.js', "../fragment.js", 'can/util/array/each.js', 'c
 		};
 
 	return can;
-}, "../deferred.js");
+}, "can/util/deferred.js");
