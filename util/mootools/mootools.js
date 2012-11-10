@@ -15,7 +15,18 @@ function(can) {
 		// All other libraries return a copy if item is an array.
 		// The original Mootools Array.from returned the same item so we need to slightly modify it
 		if (item == null) return [];
-		return (Type.isEnumerable(item) && typeof item != 'string') ? Array.prototype.slice.call(item) : [item];
+		try {
+			return (Type.isEnumerable(item) && typeof item != 'string') ? Array.prototype.slice.call(item) : [item];
+		} catch(ex) {
+			// some things like DOMNodeChildCollections don't slice so good.
+			// This pains me, but it has to be done.
+			var arr = [],
+				i;
+			for( i = 0; i < item.length; ++i) {
+				arr.push(item[i]);
+			}
+			return arr;
+		}
 	}
 
 	can.isArray = function(arr) {
