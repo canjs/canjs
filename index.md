@@ -1199,6 +1199,12 @@ in your application. The below example takes a given key and
 returns the localized value using
 [jQuery Globalize](https://github.com/jquery/globalize).
 
+{% highlight javascript %}
+  Mustache.registerHelper('l10n', function(str, options){
+    return (Globalize != undefined ? Globalize.localize(str) : str);
+  });
+{% endhighlight %}
+
 
 ## can.Control `can.Control(classProps, prototypeProps)`
 
