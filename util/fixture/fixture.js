@@ -809,5 +809,5 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 
 	//Expose this for fixture debugging
 	can.fixture.overwrites = overwrites;
-	return can;
+	return can.fixture;
 });
