@@ -8,9 +8,9 @@ steal('./setup.js').then(
 	, 'can/observe/validations/validations_test.js'
 	, 'can/observe/sort/sort_test.js'
 	, 'can/control/route/route_test.js'
-	, 'can/control/view/test/qunit/view_test.js',
-	// TODO , 'can/control/modifier/modifier_test.js'
-	function() {
+	, 'can/control/view/test/qunit/view_test.js'
+	, 'can/control/modifier/modifier_test.js'
+	, function() {
 		if(window.jQuery) {
 			steal('can/control/plugin/plugin_test.js', 'can/view/modifiers/modifiers_test.js');
 		}
