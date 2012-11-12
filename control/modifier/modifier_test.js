@@ -4,8 +4,6 @@ steal('can/util', 'can/control/modifier', function (can) {
 
 	test("nested selectors", function () {
 		var controllerClass = can.Control({
-		}, {
-
 			".cat .paw click" : function () {
 				paw++;
 			},
@@ -13,7 +11,6 @@ steal('can/util', 'can/control/modifier', function (can) {
 			".cat .tail click" : function () {
 				tail++;
 			}
-
 		});
 
 		$('#test-content').html("<div class='cat'><div class='paw'></div><div class='tail'></div></div>");
@@ -31,7 +28,15 @@ steal('can/util', 'can/control/modifier', function (can) {
 	asyncTest("pluginName", function () {
 
 		var controllerClass = can.Control({
-		}, {
+			defaults:{
+				binder: undefined
+			}
+		},{
+
+			init:function(){
+				this.options.binder = $(document.body);
+				this.on();
+			},
 
 			" click:debounce(30)" : function () {
 				ok(this instanceof can.Control, "Debounced function has the correct context.");
@@ -41,6 +46,10 @@ steal('can/util', 'can/control/modifier', function (can) {
 
 			"bar:debounce(30)" : function () {
 				run2++;
+			},
+
+			"{binder} click:debounce(50)":function(){
+				run2++
 			}
 
 		});
@@ -85,9 +94,10 @@ steal('can/util', 'can/control/modifier', function (can) {
 			$("#bar").trigger("click");
 			$("#foo").trigger("click");
 			$("#bar").trigger("click");
+			$(document.body).trigger('click');
 
 			setTimeout(function () {
-				ok(run === 4, "`run` is 4");
+				ok(run === 5, "`run` is 5");
 				start();
 			}, 40);
 		}, 40);
