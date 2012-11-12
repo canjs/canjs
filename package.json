@@ -2,13 +2,11 @@
   "name" : "CanJS",
   "description" : "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
   "version" : "1.1.0pre",
-  "maintainers" : [
-    {
-      "name" : "Bitovi",
-      "email" : "contact@bitovi.com",
-      "web" : "http://bitovi.com/"
-    }
-  ],
+  "author" : {
+    "name" : "Bitovi",
+    "email" : "contact@bitovi.com",
+    "web" : "http://bitovi.com/"
+  },
   "devDependencies" : {
     "grunt" : "~0.3.11",
     "grunt-closure-tools" : "~0.6.2",

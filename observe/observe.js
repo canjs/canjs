@@ -1333,12 +1333,13 @@ steal('can/util','can/construct', function(can) {
 
 		/**
 		 * @function join
-		 * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/join
 		 *
 		 * Joins the string representation of all elements into a string.
 		 *
 		 *      list = new can.Observe.List(["a","b","c"]);
 		 *      list.join(',') // -> "a, b, c"
+		 *
+		 * [MDN reference](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/join)
 		 *
 		 * @param {String} separator The element separator
 		 * @return {String} The joined string
@@ -1347,10 +1348,11 @@ steal('can/util','can/construct', function(can) {
 
 		/**
 		 * @function slice
-		 * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/slice
 		 *
 		 * Creates a flat copy of a section of the observable list and returns
 		 * a new observable list.
+		 *
+		 * [MDN reference](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/slice)
 		 *
 		 * @param {Integer} start The beginning index of the section to extract.
 		 * @param {Integer} [end] The end index of the section to extract.
@@ -1363,10 +1365,11 @@ steal('can/util','can/construct', function(can) {
 
 		/**
 		 * @function concat
-		 * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/concat
 		 *
 		 * Returns a new can.Observe.List comprised of this list joined with other
 		 * array(s), value(s) and can.Observe.Lists.
+		 *
+		 * [MDN reference](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/concat)
 		 *
 		 * @param {Array|can.Observe.List} args... One or more arrays or observable lists to concatenate
 		 * @return {can.Observe.List} The concatenated list
@@ -1381,11 +1384,12 @@ steal('can/util','can/construct', function(can) {
 
 		/**
 		 * @function forEach
-		 * @see https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/forEach
 		 *
 		 * Calls a function for each element in the list.
 		 *
 		 * > Note that [each can.Observe.each] will iterate over the actual properties.
+		 *
+		 * [MDN reference](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/forEach)
 		 *
 		 * @param {Function} callback The callback to execute.
 		 * It gets passed the element and the index in the list.

@@ -57,8 +57,11 @@ module.exports = function (grunt) {
 				out : 'can/<%= meta.out %>'
 			}
 		},
+		docco : {
+			edge : '<%= meta.out %>/edge/**/*!(.min).js',
+			latest : '<%= meta.out %>/<%= pkg.version %>/**/*!(.min).js'
+		},
 		strip : outPaths,
-		docco : outPaths,
 		minify : outPaths
 	});
 
