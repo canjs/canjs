@@ -38,6 +38,9 @@ steal('steal/build/pluginify', 'can/build/settings.js', function () {
 		"observe/validations/validations" : {
 			name : "observe.validations"
 		},
+		"view/mustache/mustache" : {
+			name : "view.mustache"
+		},
 		"view/modifiers/modifiers" : {
 			name : "view.modifiers",
 			options : wrapjQuery

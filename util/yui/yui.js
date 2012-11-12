@@ -12,7 +12,7 @@
 //
 //	var url = "http://yui.yahooapis.com/combo?3.7.3/build/" + yuilibs.join("&3.7.3/build/")
 
-steal('../can.js', '../event.js', 'can/util/array/each.js', 'can/util/object/isplain', './yui-3.7.3.js', function () {
+steal('can/util/can.js', 'can/util/event.js', "can/util/fragment.js", 'can/util/array/each.js', 'can/util/object/isplain', 'can/util/yui/yui-3.7.3.js', function () {
 
 	// ---------
 	// _YUI node list._
@@ -92,25 +92,9 @@ steal('../can.js', '../event.js', 'can/util/array/each.js', 'can/util/object/isp
 	can.get = function (wrapped, index) {
 		return wrapped._nodes[index];
 	}
-	can.buildFragment = function (html, node) {
-		if (html && can.isFunction(html.replace)) {
-			// Fix "XHTML"-style tags in all browsers
-			html = html.replace(/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi, "<$1></$2>");
-		}
-
-		var owner = node && node.ownerDocument,
-			frag = Y.Node.create(html, owner);
-		frag = (frag && frag.getDOMNode()) || document.createDocumentFragment();
-		if (frag.nodeType !== 11) {
-			var tmp = document.createDocumentFragment();
-			tmp.appendChild(frag)
-			frag = tmp;
-		}
-		return frag;
-	}
-	can.append = function (wrapped, html) {
-		wrapped.each(function (node) {
-			if (typeof html === 'string') {
+	can.append = function( wrapped, html ) {
+		wrapped.each(function( node ) {
+			if ( typeof html === 'string' ) {
 				html = can.buildFragment(html, node)
 			}
 			node.append(html)
@@ -327,7 +311,8 @@ steal('../can.js', '../event.js', 'can/util/array/each.js', 'can/util/object/isp
 	};
 	// Allow `dom` `destroyed` events.
 	Y.mix(Y.Node.DOM_EVENTS, {
-		destroyed : true
+		destroyed: true,
+		foo: true
 	});
 
 	can.delegate = function (selector, ev, cb) {
@@ -409,4 +394,4 @@ steal('../can.js', '../event.js', 'can/util/array/each.js', 'can/util/object/isp
 		};
 
 	return can;
-}, "../deferred.js");
+}, "can/util/deferred.js");

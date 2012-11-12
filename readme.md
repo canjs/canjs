@@ -11,4 +11,4 @@ rich web applications easy. Use it because it’s:
 - Easier 
 - Library-er
 
-Go to [http://canjs.us/](http://canjs.us/) for docs, downloads, tests, demos, and more.
+Go to [http://canjs.us/](http://canjs.us/) for docs, downloads, tests, demos, and more.  Join us on the Freenode IRC Channel #canjs.

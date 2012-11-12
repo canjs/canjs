@@ -4,16 +4,8 @@ steal('./can.js',function(can){
 	// ---------
 	// _DOM Fragment support._
 	
-	var table = document.createElement('table'),
-		tableRow = document.createElement('tr'),
-		containers = {
-		  'tr': document.createElement('tbody'),
-		  'tbody': table, 'thead': table, 'tfoot': table,
-		  'td': tableRow, 'th': tableRow,
-		  '*': document.createElement('div')
-		},
-		fragmentRE = /^\s*<(\w+)[^>]*>/,
-		fragment  = function(html, name) {
+	var fragmentRE = /^\s*<(\w+)[^>]*>/,
+		fragment  = function(html, name) {			
 			if (name === undefined) {
 				name = fragmentRE.test(html) && RegExp.$1;
 			}
@@ -23,17 +15,26 @@ steal('./can.js',function(can){
 				html = html.replace(/<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/gi, "<$1></$2>");
 			}
 
-			if (!(name in containers)) name = '*';
-			var container = containers[name];
+			var container = document.createElement('div'),
+				temp = document.createElement('div')
+
 			// IE's parser will strip any `<tr><td>` tags when `innerHTML`
 			// is called on a `tbody`. To get around this, we construct a 
 			// valid table with a `tbody` that has the `innerHTML` we want. 
 			// Then the container is the `firstChild` of the `tbody`.
 			// [source](http://www.ericvasilik.com/2006/07/code-karma.html).
-			if(name === "tr") {
-				var temp = document.createElement('div');
+			if(name === "tbody" || name === "tfoot" || name === "thead") {
+				temp.innerHTML = "<table>" + html + "</table>";
+				container = temp.firstChild.nodeType === 3 ? temp.lastChild : temp.firstChild;
+			} else if(name === "tr") {
 				temp.innerHTML = "<table><tbody>" + html + "</tbody></table>";
-				container = temp.firstChild.firstChild;
+				container = temp.firstChild.nodeType === 3 ? temp.lastChild : temp.firstChild.firstChild;
+			} else if(name === "td" || name === "th") {
+				temp.innerHTML = "<table><tbody><tr>" + html + "</tr></tbody></table>";
+				container = temp.firstChild.nodeType === 3 ? temp.lastChild : temp.firstChild.firstChild.firstChild;
+			} else if(name === 'option') {
+				temp.innerHTML = "<select>" + html + "</select>";
+				container = temp.firstChild.nodeType === 3 ? temp.lastChild : temp.firstChild;
 			} else {
 				container.innerHTML = '' + html;
 			}
@@ -50,10 +51,17 @@ steal('./can.js',function(can){
 	
 	can.buildFragment = function(html, nodes){
 		var parts = fragment(html),
+			hasSpecial = html.toString().match(/@@!!@@/g);
 			frag = document.createDocumentFragment();
-		parts.forEach(function(part){
+		hasSpecial = hasSpecial === null ? 0 : hasSpecial.length;
+		can.each(parts, function(part){
 			frag.appendChild(part);
 		})
+		//Special character for hookups (@@!!@@) in HTML will be in the last text node of the fragment if the hookup was on a table element
+		//So we remove these special characters from the text node if they exist
+		if(hasSpecial > 0 && frag.lastChild && frag.lastChild.nodeType === 3 && frag.lastChild.textContent && frag.lastChild.textContent.indexOf('@@!!@@') >= 0) {
+			frag.lastChild.textContent = frag.lastChild.textContent.substring(0, frag.lastChild.textContent.length - (6*frag.lastChild.textContent.length))
+		}
 		return frag;
 	};
 
