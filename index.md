@@ -826,6 +826,8 @@ can provides it as `can.data( NodeList, NAME, data )`.  Rewrite the above exampl
 <% } ) %>
 {% endhighlight %}
 
+<!--
+
 ## can.Mustache `new can.Mustache( options )`
 
 [can.Mustache](http://donejs.com/docs.html#!can.Mustache) provides
@@ -1205,6 +1207,7 @@ returns the localized value using
   });
 {% endhighlight %}
 
+-->
 
 ## can.Control `can.Control(classProps, prototypeProps)`
 
