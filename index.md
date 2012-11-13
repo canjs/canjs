@@ -2631,11 +2631,13 @@ Snowhit is a unique website offering all services to skiers in one place. It con
 ### BootSwatchr
 
 ThemeRoller for Twitter Bootstrap built on CanJS.  Visit it at [bootswatchr.com](http://bootswatchr.com/)
+
 ![bootswatchr.com](images/examples/bootswatchr.jpg "bootswatchr.com")
 
 ### Mindjet Action
 
 Mindjet Action is task mangement application built using CanJS.  Visit it at [action.mindjet.com](http://action.mindjet.com)
+
 ![action.mindjet.com](images/examples/cohuman.jpg "action.mindjet.com")
 
 ## Get Help
