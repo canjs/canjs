@@ -183,7 +183,11 @@ steal('can/util','can/construct', function(can) {
 			}
 		},
 		/**
-			* Iterates over an onbservable object to get an array of its keys.
+			* Iterates over an observable object to get an array of its keys.
+			*
+			*     o =  new can.Observe({ foo: 'bar', baz: 'qux' });
+			*     can.Observe.keys(o); //-> ['foo', 'baz']
+			*
 			* @param {can.Observe} observe The observe to iterate over
 			* @return {Array} array An array of the keys on the object.
 		 */
