@@ -17,6 +17,13 @@ define(['can/util', 'can/observe'], function (can) {
 		}, function () {
 			d.rejectWith(this, arguments);
 		});
+
+		if (typeof def.abort === 'function') {
+			d.abort = function () {
+				return def.abort();
+			}
+		}
+
 		return d;
 	},
 		modelNum = 0,
@@ -577,7 +584,12 @@ define(['can/util', 'can/observe'], function (can) {
 						can.Construct._overwrite(self, base, name, function () {
 							// increment the numer of requests
 							this._reqs++;
-							return newMethod.apply(this, arguments).then(clean, clean);
+							var def = newMethod.apply(this, arguments);
+							var then = def.then(clean, clean);
+							then.abort = def.abort;
+
+							// attach abort to our then and return it
+							return then;
 						})
 					}
 				});
@@ -1040,7 +1052,10 @@ define(['can/util', 'can/observe'], function (can) {
 	}, function (method, name) {
 		can.Model[name] = function (oldFind) {
 			return function (params, success, error) {
-				return pipe(oldFind.call(this, params), this, method).then(success, error);
+				var def = pipe(oldFind.call(this, params), this, method);
+				def.then(success, error);
+				// return the original promise
+				return def;
 			};
 		};
 	});

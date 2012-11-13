@@ -124,6 +124,16 @@
 	}
 
 	// ## can/util/fixture/fixture.js
+	var getUrl = function (url) {
+		if (typeof steal !== 'undefined') {
+			if (can.isFunction(steal.config)) {
+				return steal.config().root.mapJoin(url);
+			}
+			return steal.root.join(url)
+		}
+		return (can.fixture.rootUrl || '') + url;
+	}
+
 	var updateSettings = function (settings, originalOptions) {
 		if (!can.fixture.on) {
 			return;
@@ -173,7 +183,7 @@
 
 			if (/^\/\//.test(url)) {
 				// this lets us use rootUrl w/o having steal...
-				url = (typeof steal !== 'undefined') && (can.fixture.rootUrl === steal.config().root) ? steal.config().root.mapJoin(settings.fixture.substr(2)) + '' : (can.fixture.rootUrl || '') + settings.fixture.substr(2);
+				url = getUrl(settings.fixture.substr(2));
 			}
 
 			if (data) {
@@ -684,7 +694,7 @@
 	can.fixture.delay = 200;
 
 
-	can.fixture.rootUrl = window.steal ? steal.config().root : undefined;
+	can.fixture.rootUrl = getUrl('');
 
 	can.fixture["-handleFunction"] = function (settings) {
 		if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
