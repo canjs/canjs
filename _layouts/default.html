@@ -23,9 +23,14 @@
 		<div class='cf' id='buttons'>
 			<a href='https://forum.javascriptmvc.com/canjs'>Forums</a>
 			<a href='http://bitovi.com/blog/tag/canjs/'>Blog</a>
-			<a href='https://twitter.com/canjsus'>Twitter</a>
+			<a href='https://twitter.com/canjs'>Twitter</a>
 			<a href='http://webchat.freenode.net?channels=canjs'>IRC</a>
 		</div>
+		<div id="feeder-wrap">
+			<h4>Latest activity</h4>
+			<div id="feeder-latest"></div>
+		</div>
+		
 		<div id="inner-menu-wrap">
 			<ul id='menu'></ul>
 		</div>
@@ -44,6 +49,8 @@
 <script src="javascripts/can.jquery-1.0.2.js" type="text/javascript"></script>
 <script src="javascripts/can.construct.proxy.js" type="text/javascript"></script>
 <script src="javascripts/hover.js" type="text/javascript"></script>
+<script type="text/javascript" src="http://feeder-web.herokuapp.com/socket.io/socket.io.js"></script>
+<script src="http://feeder-web.herokuapp.com/widget/feeder-widget.js" type="text/javascript"></script>
 <script src="javascripts/application.js" type="text/javascript"></script>
 </body>
 </html>

@@ -177,7 +177,6 @@ em {
 }
 #buttons {
 	border-top: 1px solid #f0f1f0;
-	border-bottom: 1px solid #b5b6b5;
 	padding: 10px 0 2px 14px;
 }
 #buttons a {
@@ -208,7 +207,8 @@ em {
 #content a:hover { text-decoration: none }
 #content h1,
 #content h2,
-#content h3 {
+#content h3,
+#content h4 {
 	line-height: 32px;
 	font-size: 30px;
 	font-weight: bold;
@@ -227,6 +227,10 @@ em {
 #content h3 {
 	font-size: 20px;
 	line-height: 24px;
+}
+#content h4 {
+	font-size: 16px;
+	line-height: 20px;
 }
 #content h1 {
 	margin: 10px 0 20px;
@@ -439,4 +443,41 @@ html.lt-ie7 .github-fork img {
 
 #req_jquery {
 	font-size: 12px;
+}
+#feeder-wrap {
+	padding: 0px 15px 10px;
+	border-bottom: 1px solid #b5b6b5;
+}
+#feeder-wrap h4 {
+	font-weight: bold;
+	font-size: 10px;
+	margin: 3px 0;
+	color: #555;
+	text-shadow: 0 1px rgba(255, 255, 255, 0.7);
+	text-transform: uppercase;
+}
+#feeder-latest {
+	height: 16px;
+}
+#feeder-latest .event {
+	font-size: 12px;
+	line-height: 16px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	height: 16px;
+	white-space: nowrap;
+}
+#feeder-latest .event b {
+	float: left;
+	margin-right: 5px;
+	color: #222;
+	font-weight: bold;
+}
+#feeder-latest .event a {
+	color: #006FB8;
+	text-decoration: none;
+}
+#feeder-latest .event a:hover {
+	color: #006FB8;
+	text-decoration: underline;
 }

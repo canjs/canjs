@@ -49,8 +49,6 @@ rich web applications easy. Use it because it's:
 
 {% include builder.html %}
 
-
-
 ## Get Canned
 
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core download 
@@ -827,6 +825,389 @@ can provides it as `can.data( NodeList, NAME, data )`.  Rewrite the above exampl
   </li>
 <% } ) %>
 {% endhighlight %}
+
+<!--
+
+## can.Mustache `new can.Mustache( options )`
+
+[can.Mustache](http://donejs.com/docs.html#!can.Mustache) provides
+logic-less templates with live binding when used with [can.Observes](#can_observe).
+
+can.Mustache is designed to help seperate logic out of your view code without
+sacrifices.
+
+Mustache and Handlebar templates are compatible with can.Mustache,
+so you can import existing templates and automagically start live-binding.
+
+### Getting Started
+
+Mustache templates look similar to normal HTML except
+they contain keys for inserting data into the template
+and sections to enumerate and/or filter the enclosed template blocks.
+
+The following lists todo elements:
+
+__Mustache Template__
+
+{% highlight html %}
+  <script id="template" type="text/mustache">
+    <ul>
+      {{"{{#"}}todos}}
+        <li>{{"{{"}}.}}</li>
+      {{"{{/"}}todos}}
+    </ul>
+  </script>
+{% endhighlight %}
+
+The Mustache syntax includes the `{{"{{"}} }} magic tags above.
+
+__JavaScript__
+
+{% highlight javascript %}
+  var list = new can.Observe.List([ 'Take out the trash' ]);
+  var template = can.view("#template", list);
+  can.$(document.body).append(template);
+{% endhighlight %}
+
+This will render:
+
+{% highlight html %}
+  <ul>
+    <li>Take out the trash</li>
+  </ul>
+{% endhighlight %}
+
+Now we want to update the list with a new todo:
+
+{% highlight javascript %}
+  list.push('Get groceries');
+{% endhighlight %}
+
+which will re-render to:
+
+{% highlight html %}
+  <ul>
+    <li>Take out the trash</li>
+    <li>Get groceries</li>
+  </ul>
+{% endhighlight %}
+
+### Magic Tags
+
+Mustache has 3 different types of magic tags:
+
+ - `{{"{{"}} }}` Mustache will escape values enclosed in these tags.
+ - `{{"{{"}}{ }}}` Mustache will un-escape values enclosed in these tags.
+ - `{{"{{"}}! }}` Mustache will ignore values enclosed in these tags.
+
+### Keys and Sections
+
+Mustache HTML contains keys for inserting data into the template
+and sections to enumerate and/or filter the enclosed template blocks.
+
+#### Keys
+
+Keys insert data into the template.  They reference variables
+within the current context.  For example:
+
+{% highlight javascript %}
+  {
+    name: "Austin"
+  }
+{% endhighlight %}
+
+{% highlight html %}
+  {{"{{"}}name}}
+{% endhighlight %}
+
+would render:
+
+{% highlight html %}
+  "Austin"
+{% endhighlight %}
+
+Additionally, you can use `.` as a shorthand to reference the `this` object.
+For example:
+
+{% highlight html %}
+  "Austin"
+
+  {{"{{"}}.}}
+{% endhighlight %}
+
+would render:
+
+{% highlight html %}
+  "Austin"
+{% endhighlight %}
+
+### Sections
+
+Sections contain text blocks and evaluate whether to render it or not.  If
+the object evaluates to an array it will iterate over it and render the block
+for each item in the array.  There are four different types of sections.
+
+#### Falseys and Empty Arrays
+
+If the value returns a `false`, `undefined`, `null`, `""` or `[]` we consider
+that a *falsey* value.
+
+If the value is falsey, the section will **NOT** render the block
+between the pound and slash.
+
+{% highlight javascript %}
+  {
+    friends: false
+  }
+{% endhighlight %}
+{% highlight html %}
+  {{"{{#"}}friends}}
+    Never shown!
+  {{"{{/"}}friends}}
+{% endhighlight %}
+
+#### Arrays
+
+If the value is a non-empty array, sections will iterate over the
+array of items, rendering the items in the block between the pound and slash.
+
+For example, if I have a list of friends, I can iterate
+over each of those items within a section.
+
+{% highlight javascript %}
+  {
+    friends: [
+      { name: "Austin" },
+      { name: "Justin" }
+    ]
+  }
+{% endhighlight %}
+
+{% highlight html %}
+  <ul>
+    {{"{{#"}}friends}}
+      <li>{{"{{"}}name}}</li>
+    {{"{{/"}}friends}}
+  </ul>
+{% endhighlight %}
+
+would render:
+
+{% highlight html %}
+  <ul>
+    <li>Austin</li>
+    <li>Justin</li>
+  </ul>
+{% endhighlight %}
+
+#### Truthy
+
+When the value is non-falsey object but not a list, it is considered truthy and will be used
+as the context for a single rendering of the block.
+
+{% highlight javascript %}
+  {
+    friends: { name: "Jon" }
+  }
+{% endhighlight %}
+
+{% highlight html %}
+  <ul>
+    {{"{{#"}}friends}}
+      <li>{{"{{"}}name}}</li>
+    {{"{{/"}}friends}}
+  </ul>
+{% endhighlight %}
+
+would render:
+
+{% highlight html %}
+  <ul>
+    <li>Jon</li>
+  </ul>
+{% endhighlight %}
+
+#### Inverted
+
+Inverted sections match falsey values. An inverted section
+syntax is similar to regular sections except it begins with a caret rather than a pound. If the value referenced is falsey, the section will render.
+
+{% highlight javascript %}
+  {
+    friends: []
+  }
+{% endhighlight %}
+
+{% highlight html %}
+  <ul>
+    {{"{{#"}}friends}}
+      </li>{{"{{"}}name}}</li>
+    {{"{{/"}}friends}}
+    {{"{{^"}}friends}}
+      <li>No friends.</li>
+    {{"{{/"}}friends}}
+  </ul>
+{% endhighlight %}
+
+would render:
+
+{% highlight html %}
+  <ul>
+    <li>No friends.</li>
+  </ul>
+{% endhighlight %}
+
+### Paths and Context
+
+When Mustache is resolving a object in a section, it sets the current
+context to the value for which its iterating. For example:
+
+{% highlight javascript %}
+  {
+    friends: [ 'Austin' ]
+  }
+{% endhighlight %}
+
+{% highlight html %}
+  {{"{{#"}}friends}}
+    {{"{{"}}.}}
+  {{"{{/"}}friends}}
+{% endhighlight %}
+
+The `.` would represent the 'Austin' value in the array.
+
+Internally, Mustache keeps a stack of contexts as the template dives
+deeper into nested sections and helpers.  If a key is not found within
+the current context, Mustache will look for the key in the parent context
+and so on until it resolves the object or reaches the parent most object.
+For example:
+
+{% highlight javascript %}
+  {
+    family: [
+      {
+        name: 'Austin',
+        sisters: [
+          {
+            name: 'Katherine'
+          }
+        ],
+        brothers: [
+          {
+            name: 'Justin'
+          }
+        ]
+      }
+    ]
+  }
+{% endhighlight %}
+
+{% highlight html %}
+  {{"{{#"}}family}
+    {{"{{#"}}brothers}}
+      {{"{{#"}}sisters}}
+        {{"{{"}}name}}
+      {{"{{/"}}sisters}}
+    {{"{{/"}}brothers}}
+  {{"{{/"}}family}}
+{% endhighlight %}
+
+Since `sisters` isn't in the context of the brothers array,
+it jumps up to the family object and resolves sisters there.
+
+### Partials
+
+Partials are templates embedded in other templates which execute at runtime.
+Partials begin with a greater than sign, like `{{"{{>"}}my_partial}}`.
+
+Partials are rendered at runtime, so recursive partials are possible but make sure you avoid infinite loops. They also inherit the calling context.
+
+For example, this template and partial:
+
+__base.mustache__
+
+{% highlight html %}
+  <h2>Names</h2>
+  {{"{{#"}}names}}
+    {{"{{>"}}user}}
+  {{"{{/"}}names}}
+{% endhighlight %}
+
+__user.mustache__
+
+{% highlight html %}
+  <strong>{{"{{"}}name}}</strong>
+{% endhighlight %}
+
+The resulting expanded template at render time would look like:
+
+{% highlight html %}
+  <h2>Names</h2>
+  {{"{{#"}}names}}
+    <strong>{{"{{"}}name}}</strong>
+  {{"{{/"}}names}}
+{% endhighlight %}
+
+See the template acquisition section for more information on
+fetching partials.
+
+### Helpers
+
+Below is a short list of the helpers that are included with
+can.Mustache.  For more in-depth list [click here](http://donejs.com/docs.html#!can.Mustache).
+
+#### Element Callbacks
+
+When rendering the view, it's common to want to call some JavaScript
+on a specific element such as intializing a jQuery plugin on the new HTML.
+Mustache makes this easy  to define this code in the mark-up using [ES5 Arrow Syntax](http://wiki.ecmascript.org/doku.php?id=strawman:arrow_function_syntax).  For example:
+
+{% highlight html %}
+  <div class="tabs" {{"{{"}}(el) -> el.jquery_tabs()}}></div>
+{% endhighlight %}
+
+#### Data Helpers
+
+Associating data to an element is easy in Mustache.  Call the `data`
+helper followed by the attribute name you want to attach it as.  For example:
+
+{% highlight javascript %}
+  {
+    name: 'Austin'
+  }
+{% endhighlight %}
+
+{% highlight html %}
+  <ul>
+    <li id="foo" {{"{{"}}data 'person'}}>{{"{{"}}name}}</li>
+  </ul>
+{% endhighlight %}
+
+Now I can access my object by doing:
+
+{% highlight javascript %}
+  var nameObject = can.$('#foo').data('name');
+{% endhighlight %}
+
+It automatically attaches the data to the
+element using [can.data] with implied context of `this`.
+
+#### Registering Helpers
+
+To register your own helper, use the `Mustache.registerHelper` method.
+
+Localization is a good example of a custom helper you might implement
+in your application. The below example takes a given key and
+returns the localized value using
+[jQuery Globalize](https://github.com/jquery/globalize).
+
+{% highlight javascript %}
+  Mustache.registerHelper('l10n', function(str, options){
+    return (Globalize != undefined ? Globalize.localize(str) : str);
+  });
+{% endhighlight %}
+
+-->
 
 ## can.Control `can.Control(classProps, prototypeProps)`
 
@@ -2259,7 +2640,7 @@ There are several places you can go to ask questions or get help debugging probl
 
 ### Twitter
 
-Follow [@canjsus](https://twitter.com/#!/canjsus) for updates, announcements and quick answers to your questions.
+Follow [@canjs](https://twitter.com/#!/canjs) for updates, announcements and quick answers to your questions.
 
 ### Forums
 
@@ -2630,7 +3011,7 @@ __1.0.7__ (June 25nd 2012)
       - Fixed a [global collision](https://github.com/bitovi/canjs/commit/7aea62462f3d8d7855f71ccdf16330e60d59f6fa) with `can.Control`.
 
  - Removed globals
-      - Thanks [Danial Franz](https://github.com/daniel-franz)!
+      - Thanks [Daniel Franz](https://github.com/daniel-franz)!
 
 __1.0.6__ (June 22nd 2012)
 

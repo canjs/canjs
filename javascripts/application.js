@@ -75,6 +75,20 @@ can.Control('Menu', {
 		}
 		return build();
 	},
+	"a[href$='.zip'] click" : function(el, ev) {
+		_gaq.push([
+			'_trackEvent',
+			'downloads',
+			$(el).attr('href')
+		]);
+	},
+	"a[href$='.js'] click" : function(el, ev) {
+		_gaq.push([
+			'_trackEvent',
+			'downloads',
+			$(el).attr('href')
+		]);
+	},
 	"a click" : function(current, ev){
 		this._isClicking = true;
 		var active = this.element.find('#menu a.active');
@@ -210,8 +224,8 @@ can.Control('Menu', {
 	},
 	resizeMenu : function(){
 		var menuWrapHeight = this.element.find('#menu-wrapper').height(),
-				menuHeight     = this._menu.height(),
-				windowHeight   = $(window).height();
+			menuHeight     = this._menu.height(),
+			windowHeight   = $(window).height();
 		this.element.find('#inner-menu-wrap').css('maxHeight', (windowHeight - (menuWrapHeight - menuHeight) - 40) + "px");
 		if(this.element.find('#inner-menu-wrap').innerHeight() - menuHeight > 2){ // top and bottom borders
 			this._menuShouldScroll = true;
@@ -254,6 +268,7 @@ can.Control('Menu', {
 	positionActiveMenuItem : function(){
 		clearTimeout(this._positionTimeout);
 		this._positionTimeout = setTimeout(this.proxy(function(){
+			if(this._menuShouldScroll === false) return; // prevent scrolling if there is enough space
 			if(animationCount === 0){
 				var active = this.element.find('#menu a.active');
 				if(active.length === 0){
@@ -345,6 +360,12 @@ can.Control('Builder', {
 	},
 
 	'[type="submit"] click' : function(el, ev) {
+		var selectedLibrary = this.element.find('input:radio:checked').val();
+		_gaq.push([
+			'_trackEvent',
+			'downloads',
+			'Builder - ' + selectedLibrary
+		]);
 		el.hide();
 		var url = this.element.attr('action') + '?' + this.element.serialize(),
 			iframe = $('<iframe></iframe>').attr('src', url).hide().appendTo(this.element);
@@ -360,7 +381,7 @@ can.Control('Builder', {
 });
 
 new Builder('#builder');
-
+new FeederWidget('#feeder-latest');
 // google analytics
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-2302003-11']);
