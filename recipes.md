@@ -6,7 +6,7 @@ title: CanJS - Recipes
 # CanJS Recipes
 
 The following is a list of __CanJS__ recipes to help you learn CanJS.  To
-add your own, simply [edit this file](https://github.com/jupiterjs/canjs/edit/gh-pages/recipes.md). To
+add your own, simply [edit this file](https://github.com/bitovi/canjs/edit/gh-pages/recipes.md). To
 help create a JSFiddle, we've created the following fiddles you can fork:
 
  - [jQuery and CanJS](http://jsfiddle.net/donejs/qYdwR/)

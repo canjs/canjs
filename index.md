@@ -56,11 +56,11 @@ rich web applications easy. Use it because it's:
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core download 
 below or select the individual plugins above and click download:
 
- - [can.jquery.js](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.jquery-1.0.7.min.js)) - 8.5k
- - [can.zepto.js](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.zepto-1.0.7.min.js)) - 10.2k
- - [can.dojo.js](https://github.com/downloads/jupiterjs/canjs/can.dojo-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.dojo-1.0.7.min.js)) - 10.8k 
- - [can.mootools.js](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.mootools-1.0.7.min.js)) - 10.7k 
- - [can.yui.js](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.7.js) ([min](https://github.com/downloads/jupiterjs/canjs/can.yui-1.0.7.min.js)) - 10.2k
+ - [can.jquery.js](https://github.com/downloads/bitovi/canjs/can.jquery-1.0.7.js) ([min](https://github.com/downloads/bitovi/canjs/can.jquery-1.0.7.min.js)) - 8.5k
+ - [can.zepto.js](https://github.com/downloads/bitovi/canjs/can.zepto-1.0.7.js) ([min](https://github.com/downloads/bitovi/canjs/can.zepto-1.0.7.min.js)) - 10.2k
+ - [can.dojo.js](https://github.com/downloads/bitovi/canjs/can.dojo-1.0.7.js) ([min](https://github.com/downloads/bitovi/canjs/can.dojo-1.0.7.min.js)) - 10.8k 
+ - [can.mootools.js](https://github.com/downloads/bitovi/canjs/can.mootools-1.0.7.js) ([min](https://github.com/downloads/bitovi/canjs/can.mootools-1.0.7.min.js)) - 10.7k 
+ - [can.yui.js](https://github.com/downloads/bitovi/canjs/can.yui-1.0.7.js) ([min](https://github.com/downloads/bitovi/canjs/can.yui-1.0.7.min.js)) - 10.2k
 
 The [Use with other libraries](#use_with_other_libraries) 
 section details the minor differences among use 
@@ -2176,7 +2176,7 @@ can.fixture.on = false;
 ## Examples
 
 The following are some sweet apps built with CanJS.  The wiki includes a 
-[list of tutorials and blog posts](https://github.com/jupiterjs/canjs/wiki/CanJS-blog-posts,-tutorials,-and-examples). And
+[list of tutorials and blog posts](https://github.com/bitovi/canjs/wiki/CanJS-blog-posts,-tutorials,-and-examples). And
 make sure you checkout [CanJS Recipes](http://canjs.us/recipes.html)
 
 ### Todo
@@ -2527,14 +2527,14 @@ Steal as submodules that are used to generate the documentation and build the Ca
 
 ### Installing
 
- 1. `fork` [CanJS on github](https://github.com/jupiterjs/canjs).
+ 1. `fork` [CanJS on github](https://github.com/bitovi/canjs).
  2. Clone DoneJS with:
 
         git clone git@github.com:jupiterjs/donejs
         
  3. Open the donejs folder's .gitmodule file and change the URL of the `"can"` submodule:
 
-        url = git://github.com/jupiterjs/canjs.git
+        url = git://github.com/bitovi/canjs.git
         
     to your `fork`ed URL like
     
@@ -2581,15 +2581,15 @@ To develop CanJS:
 ### Documentation
 
 To edit CanJS.us, installing CanJS and DoneJS is not necessary.  Simply `fork` and edit the 
-github pages's [index.md page](https://github.com/jupiterjs/canjs/blob/gh-pages/index.md) online.  Don't forget to 
+github pages's [index.md page](https://github.com/bitovi/canjs/blob/gh-pages/index.md) online.  Don't forget to 
 submit a pull request.
 
 To edit the documentation at [DoneJS.com](http://doneJS.com/docs.html):
 
  1. [install](#developing_canjs-installing) CanJS and DoneJS.
- 2. Edit the markdown and js files in the [CanJS github repo](https://github.com/jupiterjs/canjs).  For example, to edit [can.Control's overview page](http://donejs.com/docs.html#!can.Control),
-change [can/control/control.md](https://github.com/jupiterjs/canjs/blob/master/control/control.md).  To edit [can.Control's destroy method](http://donejs.com/docs.html#!can.Control.prototype.destroy), 
-change [can/control/control.js](https://github.com/jupiterjs/canjs/blob/master/control/control.js#L939) 
+ 2. Edit the markdown and js files in the [CanJS github repo](https://github.com/bitovi/canjs).  For example, to edit [can.Control's overview page](http://donejs.com/docs.html#!can.Control),
+change [can/control/control.md](https://github.com/bitovi/canjs/blob/master/control/control.md).  To edit [can.Control's destroy method](http://donejs.com/docs.html#!can.Control.prototype.destroy), 
+change [can/control/control.js](https://github.com/bitovi/canjs/blob/master/control/control.js#L939) 
 where you find the `destroy` comment.
  3. Generate the docs with:
 
@@ -2616,10 +2616,10 @@ and [jQueryMX](https://github.com/jupiterjs/jquerymx/contributors), and the peop
 [Bitovi](http://bitovi.com/people/).  You deserve heaps of recognition as CanJS is direcly based 
 off JavaScriptMVC.  This page is for contributors after CanJS's launch.
 
-[yusufsafak](https://github.com/yusufsafak) - [observe bindings](https://github.com/jupiterjs/canjs/pull/30).  
-[verto](https://github.com/verto) - [destroy fix](https://github.com/jupiterjs/canjs/pull/32).  
-[WearyMonkey](https://github.com/WearyMonkey) - [recursive observes](https://github.com/jupiterjs/canjs/issues/27).  
-[cohuman](https://github.com/cohuman) - [model list dependencies](https://github.com/jupiterjs/canjs/pull/23), [docco fix](https://github.com/jupiterjs/canjs/pull/26).  
+[yusufsafak](https://github.com/yusufsafak) - [observe bindings](https://github.com/bitovi/canjs/pull/30).  
+[verto](https://github.com/verto) - [destroy fix](https://github.com/bitovi/canjs/pull/32).  
+[WearyMonkey](https://github.com/WearyMonkey) - [recursive observes](https://github.com/bitovi/canjs/issues/27).  
+[cohuman](https://github.com/cohuman) - [model list dependencies](https://github.com/bitovi/canjs/pull/23), [docco fix](https://github.com/bitovi/canjs/pull/26).  
 [roelmonnens](https://twitter.com/roelmonnens) - static model deferreds are now rejectable.
 
 ### Change Log
@@ -2627,7 +2627,7 @@ off JavaScriptMVC.  This page is for contributors after CanJS's launch.
 __1.0.7__ (June 25nd 2012)
 
  - can.compute
-      - Fixed a [global collision](https://github.com/jupiterjs/canjs/commit/7aea62462f3d8d7855f71ccdf16330e60d59f6fa) with `can.Control`.
+      - Fixed a [global collision](https://github.com/bitovi/canjs/commit/7aea62462f3d8d7855f71ccdf16330e60d59f6fa) with `can.Control`.
 
  - Removed globals
       - Thanks [Danial Franz](https://github.com/daniel-franz)!
@@ -2635,27 +2635,27 @@ __1.0.7__ (June 25nd 2012)
 __1.0.6__ (June 22nd 2012)
 
  - can.compute
-      - Added a [computed value type object](https://github.com/jupiterjs/canjs/commit/8eb7847d410c840da38f4dd5157726e560d0a5f5) that can be used to represent several observe properties or a single static value.
+      - Added a [computed value type object](https://github.com/bitovi/canjs/commit/8eb7847d410c840da38f4dd5157726e560d0a5f5) that can be used to represent several observe properties or a single static value.
 
  - can.ejs
-      - Fixed problem with [trailing text](https://github.com/jupiterjs/canjs/commit/419248bf190febe5c3ccacb188e9c812e997278e) not being added to template.
+      - Fixed problem with [trailing text](https://github.com/bitovi/canjs/commit/419248bf190febe5c3ccacb188e9c812e997278e) not being added to template.
 
 __1.0.5__ (June 2nd 2012)
 
  - can.model
-      - Added ability to [overwrite model crud operations](https://github.com/jupiterjs/canjs/commit/235097a46e45329d63da9b6d28a6c284c1b2a157) by defining a `make` prefixed static function, such as `makeFindAll`
+      - Added ability to [overwrite model crud operations](https://github.com/bitovi/canjs/commit/235097a46e45329d63da9b6d28a6c284c1b2a157) by defining a `make` prefixed static function, such as `makeFindAll`
 
  - can.EJS
-      - [Fixed problem](https://github.com/jupiterjs/canjs/commit/4d4d31f12a57db1ff81f47fa0c8b4261d8133dbb) with nested block statements.
+      - [Fixed problem](https://github.com/bitovi/canjs/commit/4d4d31f12a57db1ff81f47fa0c8b4261d8133dbb) with nested block statements.
 
  - can.each
-      - [Added optional third argument](https://github.com/jupiterjs/canjs/commit/bbd2ad5e38df90f0ebcc09a20f7ea216fe20bd72) that defines the context for the iterator function.
+      - [Added optional third argument](https://github.com/bitovi/canjs/commit/bbd2ad5e38df90f0ebcc09a20f7ea216fe20bd72) that defines the context for the iterator function.
 
  - can/util/function
-      - Added `can.defer` [method](https://github.com/jupiterjs/canjs/commit/64de5254ce8c284b20c3da487638497457152105) as an alias for `setTimeout(function(){}, 0)`.
+      - Added `can.defer` [method](https://github.com/bitovi/canjs/commit/64de5254ce8c284b20c3da487638497457152105) as an alias for `setTimeout(function(){}, 0)`.
 
  - can.view
-      - Fixed `toId` [so it will work](https://github.com/jupiterjs/canjs/commit/19c9ca0f07b00afe3c99bf439c089948c46464a6) with both older and newer `steal` versions.
+      - Fixed `toId` [so it will work](https://github.com/bitovi/canjs/commit/19c9ca0f07b00afe3c99bf439c089948c46464a6) with both older and newer `steal` versions.
 
 __1.0.4__ (May 22nd 2012)
 
@@ -2668,52 +2668,52 @@ __1.0.2__ (May 20th 2012)
 __1.0.1__ (May 18th 2012)
 
  - can.util
-     - fix: `can.each` now makes sure the [collection being iterated](https://github.com/jupiterjs/canjs/commit/c3016bc9d7075e5a31cc37576d944d9734457307) is not `undefined`
+     - fix: `can.each` now makes sure the [collection being iterated](https://github.com/bitovi/canjs/commit/c3016bc9d7075e5a31cc37576d944d9734457307) is not `undefined`
 
  - can.control
-     - add: Redirect to another controller [method using a string](https://github.com/jupiterjs/canjs/commit/cab9b518ac0193431815ac0d34938f1168e45d5f)
+     - add: Redirect to another controller [method using a string](https://github.com/bitovi/canjs/commit/cab9b518ac0193431815ac0d34938f1168e45d5f)
 
  - can.model
-     - fix: [Model instances in model store will be updated when `findAll` or `findOne` retrieves updated instances fixes](https://github.com/jupiterjs/canjs/commit/e4606906d37797d4ff551d1924d44f0c4d516fb7)
-     - fix: Static methods such as `findOne` and `findAll` can [now be rejected](https://github.com/jupiterjs/canjs/commit/ff17833b52162348413ebdc47baaa389a90464f9). Thanks [roelmonnens](https://twitter.com/roelmonnens)!
+     - fix: [Model instances in model store will be updated when `findAll` or `findOne` retrieves updated instances fixes](https://github.com/bitovi/canjs/commit/e4606906d37797d4ff551d1924d44f0c4d516fb7)
+     - fix: Static methods such as `findOne` and `findAll` can [now be rejected](https://github.com/bitovi/canjs/commit/ff17833b52162348413ebdc47baaa389a90464f9). Thanks [roelmonnens](https://twitter.com/roelmonnens)!
 
  - can.route
-    - add: Deliminating tokens now [configurable](https://github.com/jupiterjs/canjs/commit/ca98f8f2b781456a42866805e6f9879899dc38af)
-    - fix: [Current route wins if all else equal](https://github.com/jupiterjs/canjs/commit/863f37cc3d34f52517050444e0b31b7d63d6c784)
+    - add: Deliminating tokens now [configurable](https://github.com/bitovi/canjs/commit/ca98f8f2b781456a42866805e6f9879899dc38af)
+    - fix: [Current route wins if all else equal](https://github.com/bitovi/canjs/commit/863f37cc3d34f52517050444e0b31b7d63d6c784)
 
 __1.0__ (May 14st 2012)
 
- - [Registers itself as an AMD](https://github.com/jupiterjs/canjs/blob/master/util/exports.js) module if `define` is in the `window`
+ - [Registers itself as an AMD](https://github.com/bitovi/canjs/blob/master/util/exports.js) module if `define` is in the `window`
 
  - can.fixture
-    - add: [a fixture plugin](https://github.com/jupiterjs/canjs/tree/5277f6f526cfa2514954d66e6f759ec73c47bf09)
+    - add: [a fixture plugin](https://github.com/bitovi/canjs/tree/5277f6f526cfa2514954d66e6f759ec73c47bf09)
 
  - can.util
-    - add: [a util/function plugin](https://github.com/jupiterjs/canjs/commit/75e99f3b1545d4086ccdae259ccc87a3e8e7a018)
+    - add: [a util/function plugin](https://github.com/bitovi/canjs/commit/75e99f3b1545d4086ccdae259ccc87a3e8e7a018)
 
  - can.route
-    - fix: [favor current route when matching](https://github.com/jupiterjs/canjs/commit/863f37cc3d34f52517050444e0b31b7d63d6c784)
-    - fix: [uses defaults to match route better, and current route is not always selected](https://github.com/jupiterjs/canjs/commit/b0e59d287caba8fcb98871e4814b924588aef138)
+    - fix: [favor current route when matching](https://github.com/bitovi/canjs/commit/863f37cc3d34f52517050444e0b31b7d63d6c784)
+    - fix: [uses defaults to match route better, and current route is not always selected](https://github.com/bitovi/canjs/commit/b0e59d287caba8fcb98871e4814b924588aef138)
 
 __1.0 Beta 2__ (April 21st 2012)
 
  - can.util
-    - change: [reverse argument order of can.each](https://github.com/jupiterjs/canjs/commit/234fd3b9eca18abdbc3fdbea114be6a818bfe6e3)
-    - change/fix: [buildFragment returns non cached frag](https://github.com/jupiterjs/canjs/issues/33)
-    - fix: [zepto's isEmptyObject was broke](https://github.com/jupiterjs/canjs/commit/7fe391f59a1f54e3f197f31e20276646f82e7f2e)
+    - change: [reverse argument order of can.each](https://github.com/bitovi/canjs/commit/234fd3b9eca18abdbc3fdbea114be6a818bfe6e3)
+    - change/fix: [buildFragment returns non cached frag](https://github.com/bitovi/canjs/issues/33)
+    - fix: [zepto's isEmptyObject was broke](https://github.com/bitovi/canjs/commit/7fe391f59a1f54e3f197f31e20276646f82e7f2e)
  - can.observe
-    - feature: [recursive observes don't blow up](https://github.com/jupiterjs/canjs/issues/27)
-    - change: [reverse argument order of can.each](https://github.com/jupiterjs/canjs/commit/234fd3b9eca18abdbc3fdbea114be6a818bfe6e3)
-    - fix: [attr change events have old value](https://github.com/jupiterjs/canjs/commit/4081a9baf4441c1002467342baae3cdd885994c6)
+    - feature: [recursive observes don't blow up](https://github.com/bitovi/canjs/issues/27)
+    - change: [reverse argument order of can.each](https://github.com/bitovi/canjs/commit/234fd3b9eca18abdbc3fdbea114be6a818bfe6e3)
+    - fix: [attr change events have old value](https://github.com/bitovi/canjs/commit/4081a9baf4441c1002467342baae3cdd885994c6)
    
  - can.model
-    - fix: [findOne and findAll work with super](https://github.com/jupiterjs/canjs/commit/c93ae5478eea7fdb88fa6fc03211d81c8d4ca3bd)
-    - fix: [model using custom id for store](https://github.com/jupiterjs/canjs/commit/14d05c29e71ed8c462ba49b740d9eb8e342d3c85)
-    - fix: [destroy not working with templated id](https://github.com/jupiterjs/canjs/issues/32)
+    - fix: [findOne and findAll work with super](https://github.com/bitovi/canjs/commit/c93ae5478eea7fdb88fa6fc03211d81c8d4ca3bd)
+    - fix: [model using custom id for store](https://github.com/bitovi/canjs/commit/14d05c29e71ed8c462ba49b740d9eb8e342d3c85)
+    - fix: [destroy not working with templated id](https://github.com/bitovi/canjs/issues/32)
 
  - can.route
     - fix: a host of bugs in libaries other than jQuery because can.route was not properly tested in other libraries.
-    - fix: can.param fixed in [dojo](https://github.com/jupiterjs/canjs/commit/77dfa012b2f6baa7dfb0fe84f2d62aeb5b04fc90), 
+    - fix: can.param fixed in [dojo](https://github.com/bitovi/canjs/commit/77dfa012b2f6baa7dfb0fe84f2d62aeb5b04fc90), 
    
 __1.0 Beta 1__ (April 1st 2012)
 
