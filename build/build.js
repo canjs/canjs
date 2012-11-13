@@ -28,7 +28,7 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 
 	_.each(libraries, function (lib) {
 		var options = libs[lib],
-			outFile = outFolder + '/can.' + lib + '-' + version,
+			outFile = outFolder + '/can.' + lib,
 			testFile = testFolder + lib + '.html',
 			buildFile = "can/build/make/" + lib + ".js",
 			defaults = {
@@ -53,10 +53,9 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 			type : lib
 		});
 		new steal.File('can/build/templates/qunit.js').copyTo(testFolder + '/qunit.js');
-		new steal.File('can/build/templates/index.html').copyTo(testFolder + '/index.html');
 	});
 
-	var excludes = [ "can/util/amd.js", "can/util/util.js" ];
+	var excludes = [ "can/buid/make/amd.js", "can/util/util.js" ];
 	_.each(_.values(libs), function(val) {
 		excludes = excludes.concat(val.exclude);
 	});

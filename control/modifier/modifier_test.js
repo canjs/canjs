@@ -28,12 +28,12 @@ steal('can/util', 'can/control/modifier', function (can) {
 	asyncTest("pluginName", function () {
 
 		var controllerClass = can.Control({
-			defaults:{
-				binder: undefined
+			defaults : {
+				binder : undefined
 			}
-		},{
+		}, {
 
-			init:function(){
+			init : function () {
 				this.options.binder = $(document.body);
 				this.on();
 			},
@@ -48,7 +48,7 @@ steal('can/util', 'can/control/modifier', function (can) {
 				run2++;
 			},
 
-			"{binder} click:debounce(50)":function(){
+			"{binder} click:debounce(50)" : function () {
 				run2++
 			}
 

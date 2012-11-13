@@ -28,7 +28,6 @@ steal("can/util", "can/control", "can/util/function", function(can) {
 				var processorName = [event, mod].join( modifier.delim );
 				
 				processors[ processorName ] = function( el, nil, selector, methodName, control ) {
-
 					var callback = modifier.modify( mod, can.Control._shifter(control, methodName), control.options );
 					control[event] = callback;
 

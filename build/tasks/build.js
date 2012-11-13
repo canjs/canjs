@@ -16,7 +16,7 @@ module.exports = function( grunt ) {
 				args.push.apply(args, libraries);
 
 				grunt.verbose.writeflags(options, 'Options');
-				grunt.log.writeln('Running  ./js ' + args.toString());
+				grunt.log.writeln('Running  ./js ' + args.join(' '));
 
 				grunt.utils.exec({
 					cmd : "./js",

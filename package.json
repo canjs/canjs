@@ -12,12 +12,12 @@
     "grunt-closure-tools" : "~0.6.2",
     "http-server" : "0.5.1",
     "docco" : ">= 0.1.x",
-    "grunt-beautify" : "*"
+    "node-beautify" : "*"
   },
   "homepage" : "http://canjs.us/",
   "repository" : {
     "type" : "git",
-    "url" : "git://github.com/jupiterjs/canjs.git"
+    "url" : "git@github.com:bitovi/canjs.git"
   },
   "demos" : [
     "http://canjs.us/#examples",
