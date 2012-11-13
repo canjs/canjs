@@ -11,7 +11,7 @@ rich web applications easy. Use it because it's:
   <li>
     <a href="#why_canjs-size">Smaller</a>
     <div class="overlay oneliner">
-      Only 8.5k!
+      Only 11k!
       <div class="arrow"></div>
     </div>
   </li>
@@ -54,11 +54,11 @@ rich web applications easy. Use it because it's:
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core download 
 below or select the individual plugins above and click download:
 
- - [can.jquery.js](https://github.com/downloads/bitovi/canjs/can.jquery-1.0.7.js) ([min](https://github.com/downloads/bitovi/canjs/can.jquery-1.0.7.min.js)) - 8.5k
- - [can.zepto.js](https://github.com/downloads/bitovi/canjs/can.zepto-1.0.7.js) ([min](https://github.com/downloads/bitovi/canjs/can.zepto-1.0.7.min.js)) - 10.2k
- - [can.dojo.js](https://github.com/downloads/bitovi/canjs/can.dojo-1.0.7.js) ([min](https://github.com/downloads/bitovi/canjs/can.dojo-1.0.7.min.js)) - 10.8k 
- - [can.mootools.js](https://github.com/downloads/bitovi/canjs/can.mootools-1.0.7.js) ([min](https://github.com/downloads/bitovi/canjs/can.mootools-1.0.7.min.js)) - 10.7k 
- - [can.yui.js](https://github.com/downloads/bitovi/canjs/can.yui-1.0.7.js) ([min](https://github.com/downloads/bitovi/canjs/can.yui-1.0.7.min.js)) - 10.2k
+ - [can.jquery.js](https://github.com/downloads/bitovi/canjs/can.jquery-1.1.0pre.js) ([min](https://github.com/downloads/bitovi/canjs/can.jquery-1.1.0pre.min.js))
+ - [can.zepto.js](https://github.com/downloads/bitovi/canjs/can.zepto-1.1.0pre.js) ([min](https://github.com/downloads/bitovi/canjs/can.zepto-1.1.0pre.min.js))
+ - [can.dojo.js](https://github.com/downloads/bitovi/canjs/can.dojo-1.1.0pre.js) ([min](https://github.com/downloads/bitovi/canjs/can.dojo-1.1.0pre.min.js))
+ - [can.mootools.js](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.0pre.js) ([min](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.0pre.min.js))
+ - [can.yui.js](https://github.com/downloads/bitovi/canjs/can.yui-1.1.0pre.js) ([min](https://github.com/downloads/bitovi/canjs/can.yui-1.1.0pre.min.js))
 
 The [Use with other libraries](#use_with_other_libraries) 
 section details the minor differences among use 
@@ -826,12 +826,13 @@ can provides it as `can.data( NodeList, NAME, data )`.  Rewrite the above exampl
 <% } ) %>
 {% endhighlight %}
 
-<!--
-
 ## can.Mustache `new can.Mustache( options )`
 
 [can.Mustache](http://donejs.com/docs.html#!can.Mustache) provides
-logic-less templates with live binding when used with [can.Observes](#can_observe).
+logic-less templates with live binding when used with [can.Observes](#can_observe). It currently ships as a plugin:
+
+[Download can.Mustache](http://canjs.us/release/latest/can.view.mustache.js)
+([Annotated source](http://donejs.com/can/docs/can.view.mustache.html))
 
 can.Mustache is designed to help seperate logic out of your view code without
 sacrifices.
@@ -859,7 +860,7 @@ __Mustache Template__
   </script>
 {% endhighlight %}
 
-The Mustache syntax includes the `{{"{{"}} }} magic tags above.
+The Mustache syntax includes the `{{"{{"}} }}` magic tags above.
 
 __JavaScript__
 
@@ -1190,7 +1191,7 @@ Now I can access my object by doing:
 {% endhighlight %}
 
 It automatically attaches the data to the
-element using [can.data] with implied context of `this`.
+element using `can.data` with implied context of `this`.
 
 #### Registering Helpers
 
@@ -1206,8 +1207,6 @@ returns the localized value using
     return (Globalize != undefined ? Globalize.localize(str) : str);
   });
 {% endhighlight %}
-
--->
 
 ## can.Control `can.Control(classProps, prototypeProps)`
 
@@ -2177,6 +2176,7 @@ to __zepto.js__ when using Zepto 0.8.
 ### can.Construct.proxy `construct.proxy( methodname, [ curriedArgs ] )`
 
 [can.construct.proxy.js](http://canjs.us/release/latest/can.construct.proxy.js)
+([Annotated source](http://donejs.com/can/docs/can.construct.proxy.html))
 
 The [can.Construct.proxy](http://donejs.com/docs.html#!can.Construct.proxy)
 plugin adds a _proxy_ method that takes a function name and returns a new function
@@ -2205,6 +2205,7 @@ curriedCallback( '!' ); // -> 'Hi my name is John!'
 ### can.Construct.super
 
 [can.construct.super.js](http://canjs.us/release/latest/can.construct.super.js)
+([Annotated source](http://donejs.com/can/docs/can.construct.super.html))
 
 The [can.Construct.super](http://donejs.com/docs.html#!can.Construct.super) plugin
 provides access to overwritten methods using `this._super` when extending a can.Construct:
@@ -2229,6 +2230,7 @@ improvedPerson.sayName( 'To whom it may concern, I am ' );
 ### can.Observe.delegate `observe.delegate( name, event, handler )`
 
 [can.observe.delegate.js](http://canjs.us/release/latest/can.observe.delegate.js)
+([Annotated source](http://donejs.com/can/docs/can.observe.delegate.html))
 
 Use the [can.Observe.delegate](http://donejs.com/docs.html#!can.Observe.delegate) plugin
 to listen to _change_, _set_, _add_ and _remove_ on any direct, child or wildcard attribute:
@@ -2261,6 +2263,7 @@ observe.attr( 'foo.baz', 'Bye you' );
 ### can.Observe.setter
 
 [can.observe.setter.js](http://canjs.us/release/latest/can.observe.setter.js)
+([Annotated source](http://donejs.com/can/docs/can.observe.setter.html))
 
 With the [can.Observe.setter](http://donejs.com/docs.html#!can.Observe.setter) plugin
 you can use attribute setter methods to process the value being set:
@@ -2282,6 +2285,7 @@ instance.attr( 'name', 'doe' );
 ### can.Observe.attributes
 
 [can.observe.attributes.js](http://canjs.us/release/latest/can.observe.attributes.js)
+([Annotated source](http://donejs.com/can/docs/can.observe.attributes.html))
 
 The [can.Observe.attributes](http://donejs.com/docs.html#!can.Observe.attributes) plugin
 allows you to specify attributes with type converters and serializers. Serializers
@@ -2342,6 +2346,7 @@ var seralizedObj = brian.serialize();
 ### can.Observe.validations `observe.validate( attribute, validator )`
 
 [can.observe.validations.js](http://canjs.us/release/latest/can.observe.validations.js)
+([Annotated source](http://donejs.com/can/docs/can.observe.validations.html))
 
 [can.Observe.validations](http://donejs.com/docs.html#!can.Observe.validations) adds validation to a can.Observe.
 Call the _validate_ method in the _init_ constructor with the attribute name and the validation
@@ -2372,6 +2377,7 @@ john.errors();
 ### can.Observe.backup `observe.backup()`
 
 [can.observe.backup.js](http://canjs.us/release/latest/can.observe.backup.js)
+([Annotated source](http://donejs.com/can/docs/can.observe.backup.html))
 
 You can backup and restore can.Observe data using the [can.Observe.backup](http://donejs.com/docs.html#!can.Observe.backup)
 plugin. To backup the observe in its current state call _backup_. To revert it back to that state use _restore_:
@@ -2388,6 +2394,7 @@ todo.name // -> 'do the dishes'
 ### can.Control.plugin
 
 [can.control.plugin.js](http://canjs.us/release/latest/can.control.plugin.js)
+([Annotated source](http://donejs.com/can/docs/can.control.plugin.html))
 
 [can.Control.plugin](http://donejs.com/docs.html#!can.Control.plugin) registers a jQuery plugin function
 with a given _pluginName_ that instantiates a can.Control.
@@ -2435,6 +2442,7 @@ control.activate( 0 );
 ### can.Control.view `control.view( [ viewname ], [ data ] )`
 
 [can.control.view.js](http://canjs.us/release/latest/can.control.view.js)
+([Annotated source](http://donejs.com/can/docs/can.control.view.html))
 
 [can.Control.view](http://donejs.com/docs.html#!can.Control.view) renders a view from a URL in a
 _views/controlname_ folder. If no viewname is supplied it uses the current action name.
@@ -2461,6 +2469,7 @@ can.Control( 'Editor', {
 ### View modifiers
 
 [can.view.modifiers.js](http://canjs.us/release/latest/can.view.modifiers.js)
+([Annotated source](http://donejs.com/can/docs/can.view.modifiers.html))
 
 jQuery uses the modifiers [after](http://api.jquery.com/after/), [append](http://api.jquery.com/append/), 
 [before](http://api.jquery.com/before/), [html](http://api.jquery.com/html/), [prepend](http://api.jquery.com/prepend/), 
@@ -2486,6 +2495,7 @@ $( '#todos' ).html( 'todo/todos.ejs', [
 ### can.fixture
 
 [can.fixture.js](http://canjs.us/release/latest/can.fixture.js)
+([Annotated source](http://donejs.com/can/docs/can.fixture.html))
 
 [can.fixture](http://donejs.com/docs.html#!can.fixture) intercepts AJAX requests and simulates
 the response with a file or function. A __static__ fixture intercepting a request to `/todo`
@@ -2686,7 +2696,7 @@ The following are the reasons to use CanJS.
 
 ### Size 
 
-On top of jQuery, CanJS is 8.5k.  Here's some other frameworks for comparison:
+On top of jQuery, CanJS is ~11k.  Here's some other frameworks for comparison:
 
  - Backbone 8.97kb (with Underscore.js)
  - Angular 24kb
@@ -2901,11 +2911,6 @@ person.bind( 'change', function( ev, attr, how, newVal, oldVal ) {
 person.attr( 'name.last', 'Meyer' );
 {% endhighlight %}
 
-
-
-
-
-
 ## Developing CanJS
 
 To develop CanJS, add features, etc, you first must install DoneJS.  DoneJS is the 
@@ -3011,6 +3016,51 @@ off JavaScriptMVC.  This page is for contributors after CanJS's launch.
 
 ### Change Log
 
+# Change Log
+
+__1.1.0__ ( November 13, 2012 )
+
+ - Added AMD module support for each dependency
+
+ - can.util
+    - Updated jQuery to 1.8.2
+    - Updated Zepto to 1.0rc1
+    - Updated YUI to 3.7.3
+
+ - can.Mustache 
+    - Added Mustache/Handlebars support with Live Binding
+
+ - can.view
+    - Changed [passing jQuery a node list instead of a fragment in View Modifiers](https://github.com/bitovi/canjs/pull/131)
+
+ - can.EJS
+    - Fixed [the way EJS handles multiple hookups in the same attribute](https://github.com/bitovi/canjs/pull/134)
+    - Fixed [Nested Loops in EJS](https://github.com/bitovi/canjs/issues/135)
+    - Fixed [can.EJS template rendering issue](https://github.com/bitovi/canjs/issues/118)
+    - Fixed [multiline elements in EJS](https://github.com/bitovi/canjs/pull/76)
+
+ - can.route
+    - Fixed [hashchange binding with mootools broken](https://github.com/bitovi/canjs/issues/124)
+
+ - can.Control
+    - Added [Add/Update control actions without creating new control instance](https://github.com/bitovi/canjs/issues/138)
+    - Added [control does not listen to touchmove event on controller itself](https://github.com/bitovi/canjs/issues/104)
+
+ - can.Observe
+    - Added List [binding on .length of an object](https://github.com/bitovi/canjs/issues/142)
+    - Fixed [validation error that incorrectly labels an attribute with a value of 0 as empty](https://github.com/bitovi/canjs/pull/132)
+    - Added [you can now pluralise event names to listen to matching events of that type (rather than firing a single event)](https://github.com/bitovi/canjs/issues/122)
+    - Added [compound sets now behave correctly](https://github.com/bitovi/canjs/issues/119)
+    - Fixed [can.Observe.delegate sets wrong event.currentTarget](https://github.com/bitovi/canjs/issues/123)
+    - Added [ability to assign object as attribute type in can.Observe](https://github.com/bitovi/canjs/issues/107)
+
+ - can.Model
+    - Fixed [can.Model with attributes that are models gets corrupted when you call attr()](https://github.com/bitovi/canjs/pull/141)
+    - Added [missing dependency to can/model](https://github.com/bitovi/canjs/pull/140)
+    - Moved can/model/elements to can/observe/elements and renamed `models` to `instances`
+    - Fixed [can.Model.List doesn't fire the change event on the expando properties ](https://github.com/bitovi/canjs/issues/129)
+
+
 __1.0.7__ (June 25nd 2012)
 
  - can.compute
@@ -3092,7 +3142,7 @@ __1.0 Beta 2__ (April 21st 2012)
     - feature: [recursive observes don't blow up](https://github.com/bitovi/canjs/issues/27)
     - change: [reverse argument order of can.each](https://github.com/bitovi/canjs/commit/234fd3b9eca18abdbc3fdbea114be6a818bfe6e3)
     - fix: [attr change events have old value](https://github.com/bitovi/canjs/commit/4081a9baf4441c1002467342baae3cdd885994c6)
-   
+
  - can.model
     - fix: [findOne and findAll work with super](https://github.com/bitovi/canjs/commit/c93ae5478eea7fdb88fa6fc03211d81c8d4ca3bd)
     - fix: [model using custom id for store](https://github.com/bitovi/canjs/commit/14d05c29e71ed8c462ba49b740d9eb8e342d3c85)
@@ -3100,8 +3150,8 @@ __1.0 Beta 2__ (April 21st 2012)
 
  - can.route
     - fix: a host of bugs in libaries other than jQuery because can.route was not properly tested in other libraries.
-    - fix: can.param fixed in [dojo](https://github.com/bitovi/canjs/commit/77dfa012b2f6baa7dfb0fe84f2d62aeb5b04fc90), 
-   
+    - fix: can.param fixed in [dojo](https://github.com/bitovi/canjs/commit/77dfa012b2f6baa7dfb0fe84f2d62aeb5b04fc90),
+
 __1.0 Beta 1__ (April 1st 2012)
 
 Released!
