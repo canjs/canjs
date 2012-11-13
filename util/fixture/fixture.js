@@ -1,5 +1,15 @@
 steal('can/util','can/util/string','can/util/object', function (can) {
 
+	var getUrl = function(url) {
+		if(typeof steal !== 'undefined') {
+			if(can.isFunction(steal.config)) {
+				return steal.config().root.mapJoin(url);
+			}
+			return steal.root.join(url)
+		}
+		return (can.fixture.rootUrl || '') + url;
+	}
+
 	var updateSettings = function (settings, originalOptions) {
 			if (!can.fixture.on) {
 				return;
@@ -49,9 +59,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 
 				if (/^\/\//.test(url)) {
 					// this lets us use rootUrl w/o having steal...
-					url = (typeof steal !== 'undefined') && (can.fixture.rootUrl === steal.config().root) ?
-						steal.config().root.mapJoin(settings.fixture.substr(2)) + '' :
-						(can.fixture.rootUrl || '') + settings.fixture.substr(2);
+					url = getUrl(settings.fixture.substr(2));
 				}
 
 				if(data) {
@@ -787,7 +795,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 	 * If you are using StealJS it will use the Steal root
 	 * URL by default.
 	 */
-	can.fixture.rootUrl = window.steal ? steal.config().root : undefined;
+	can.fixture.rootUrl = getUrl('');
 
 	can.fixture["-handleFunction"] = function (settings) {
 		if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
