@@ -25,7 +25,7 @@ module.exports = function (grunt) {
 			return;
 		}
 
-		var command = grunt.template.process(data.command);
+		var command = grunt.template.process(this.file.src);
 		log.writeln('Running ' + command);
 		exec(command, data.execOptions, function (err, stdout, stderr) {
 			if (stdout) {

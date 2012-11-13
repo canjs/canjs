@@ -16,13 +16,14 @@ module.exports = function (grunt) {
 			}
 			var outFile = options.out ? path.join(options.out, path.basename(file)) : file;
 			// TODO use Grunt internals
-			grunt.log.writeln('Stripping ' + file + ' of all multiline comments, writing result to ' + outFile);
+			grunt.log.writeln('Stripping ' + file + ' of all multiline and empty inline comments');
 
 			// Put new index.html into production mode
 			var code = grunt.file.read(file);
 
 			// Remove multiline comments
-			code = code.replace(/\/\*([\s\S]*?)\*\//gim, "");
+			code = code.replace(/\/\*([\s\S]*?)\*\//gim, "")
+				.replace(/\/\/(\s*)\n/gim, "");
 
 			// Remove double semicolons from steal pluginify
 			code = code.replace(/;[\s]*;/gim, ";");
