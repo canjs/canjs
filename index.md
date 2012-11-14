@@ -60,7 +60,7 @@ below or select the individual plugins above and click download:
  - [can.mootools.js](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.0.js) ([min](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.0.min.js))
  - [can.yui.js](https://github.com/downloads/bitovi/canjs/can.yui-1.1.0.js) ([min](https://github.com/downloads/bitovi/canjs/can.yui-1.1.0.min.js))
 
-The [Use with other libraries](#use_with_other_libraries) 
+The [Using CanJS](#using_canjs)
 section details the minor differences among use 
 with other libraries. 
 
@@ -1880,16 +1880,39 @@ __HTMLElement 'destroyed' event__
 When an element is removed from the page using any library, CanJS triggers a 'destroyed' event on 
 the element.  This is used to teardown event handlers in can.Control.
 
-## Use with other libraries
+## Using CanJS
 
-CanJS can be used with jQuery, Dojo, Mootools, YUI, or Zepto.
+CanJS can be used with jQuery, Dojo, Mootools, YUI and Zepto and as AMD modules with any of these libraries.
+
+### AMD
+
+The [CanJS Download](https://github.com/downloads/bitovi/canjs/can.js.1.1.0.zip) contains an `AMD` folder which allows
+you to load any CanJS component and plugin using an AMD module loader like [RequireJS](http://requirejs.org/).
+You need to map the `can-library` module to `can/util/<libraryname>` for the library you are using. Here is an example
+for jQuery and RequireJS:
+
+{% highlight html %}
+<script type="text/javascript" src="require.js"></script>
+<script type="text/javascript">
+  require.config({
+    paths : {
+      "can-library" : "can/util/jquery",
+      "jquery" : "http://code.jquery.com/jquery-1.8.2"
+    }
+  });
+
+  require(['can/view/ejs', 'can/control'], function(can) {
+    // Use EJS and Control
+  });
+</script>
+{% endhighlight %}
 
 ### jQuery
 
-CanJS supports jQuery 1.7+. Include a copy of jQuery along with CanJS to get started.
+CanJS supports jQuery 1.8+. Include a copy of jQuery along with CanJS to get started.
 
 {% highlight html %}
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js">
 </script>
 <script src="can.jquery.js"></script>
 <script>
@@ -1905,7 +1928,7 @@ jQuery events. The jQuery UI Datepicker doesn't have built-in support for standa
 jQuery events, so for those cases, a workaround should be applied:
 
 {% highlight html %}
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js">
 </script>
 <script src="jquery.ui.core.js"></script>
 <script src="jquery.ui.datepicker.js"></script>
@@ -1979,7 +2002,7 @@ var dojoConfig = {
 }
 </script>
 <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/dojo/
-1.7.1/dojo/dojo.js'></script>
+1.8.1/dojo/dojo.js'></script>
 <script>
 require(['can/dojo'], function(can){
   // start using CanJS
@@ -2041,7 +2064,7 @@ Mootools Core has an issue where __focus__ and __blur__ events are not fired for
 Include Mootools More's Event.Pseudos module for __focus__ and __blur__ support.
 
 {% highlight html %}
-<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.4.3/
+<script src="https://ajax.googleapis.com/ajax/libs/mootools/1.4.5/
 mootools.js"></script>
 <!-- Mootools More Event.Pseudos module -->
 <script src="mootools-more-event_pseudos-1.4.0.1.js"></script>
