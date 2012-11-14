@@ -866,7 +866,7 @@ __JavaScript__
 
 {% highlight javascript %}
   var list = new can.Observe.List([ 'Take out the trash' ]);
-  var template = can.view("#template", list);
+  var template = can.view("#template", {todos: list});
   can.$(document.body).append(template);
 {% endhighlight %}
 
