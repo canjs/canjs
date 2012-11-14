@@ -3029,17 +3029,28 @@ The following lists everyone who's contributed something to CanJS.  If we've for
 First, thanks to everyone who's contributed to [JavaScriptMVC](https://github.com/jupiterjs/javascriptmvc/contributors) 
 and [jQueryMX](https://github.com/jupiterjs/jquerymx/contributors), and the people at 
 [Bitovi](http://bitovi.com/people/).  You deserve heaps of recognition as CanJS is direcly based 
-off JavaScriptMVC.  This page is for contributors after CanJS's launch.
+off JavaScriptMVC.  This page is for contributors after CanJS's launch. Thank you
 
-- [yusufsafak](https://github.com/yusufsafak) - [observe bindings](https://github.com/bitovi/canjs/pull/30).
-- [verto](https://github.com/verto) - [destroy fix](https://github.com/bitovi/canjs/pull/32).
-- [WearyMonkey](https://github.com/WearyMonkey) - [recursive observes](https://github.com/bitovi/canjs/issues/27).
-- [cohuman](https://github.com/cohuman) - [model list dependencies](https://github.com/bitovi/canjs/pull/23), [docco fix](https://github.com/bitovi/canjs/pull/26).
-- [roelmonnens](https://twitter.com/roelmonnens) - static model deferreds are now rejectable.
-- [thecountofzero](https://github.com/thecountofzero) - Always helping us find and fix issues
-- [iamnoah](https://github.com/iamnoah) - Submitted many great bugfixes
+Noah Sloan [1](https://github.com/bitovi/canjs/commit/8193e359cde3b77a44c683ca9f8a5268fc9df44b)
+[2](https://github.com/bitovi/canjs/commit/b865588710e7e7dd8a9588ebf8e8c0f4d19fd800)
+[3](https://github.com/bitovi/canjs/commit/83a48e7bcb05ed9f179159f540b181db4dcf6e9c)
+[4](https://github.com/Spredfast/canjs/commit/dc7ddd2dc619619f3955c31be1435c6f927b7a35),
+Mike Malamud [1](https://github.com/bitovi/canjs/commit/e920434fa53975013688d065ce2e304f225fae75)
+[2](https://github.com/bitovi/canjs/commit/8e98186e00b7d6b88869baeb97244877f143034e),
+roissard [1](https://github.com/bitovi/canjs/commit/44bc72063e429bbc3f8a9a696a3ae4a7e57d12c8)
+[2](https://github.com/bitovi/canjs/commit/c711fe05e1cdc99c72df8ac0f415c2ccb536d197),
+[Michael Kebbekus](https://github.com/bitovi/canjs/commit/d658d4910e8f3f391e9394449efe2f0c67581dbe),
+[Daniel Salet](https://github.com/bitovi/canjs/commit/92487178255360d40b75be49681dc65cbfbf3e18),
+[Daniel Franz](https://github.com/bitovi/canjs/commit/4aae36eea9d671a12f9c459733c48b6fd1e99af4),
+[trickeyone](https://github.com/trickeyone/canjs/commit/2c11f56e0a0511749243055276e3b806984b15fa),
+[rjg otten](https://github.com/bitovi/canjs/commit/92c98e7c80d5fd7357eae69a60313d3d06efbdcb),
+[Amy Chen](https://github.com/bitovi/canjs/commit/3eee6ba9c69410ac549b909b1c8f860e6d591612),
+[Max Sadrieh](https://github.com/bitovi/canjs/commit/06c5a4b3d50d14c5881ee55642fa10f37b71af0b), and
+[dimaf](https://github.com/bitovi/canjs/commit/fc8a4d57c99a280025eb7c613cef92de28c3c160)
 
-# Change Log
+for helping us with new features, bug fixes, and getting this out the door.
+
+### Change Log
 
 __1.1.0__ ( November 13, 2012 )
 
@@ -3066,11 +3077,10 @@ __1.1.0__ ( November 13, 2012 )
     - Fixed [hashchange binding with mootools broken](https://github.com/bitovi/canjs/issues/124)
 
  - can.Control
-    - Added [Add/Update control actions without creating new control instance](https://github.com/bitovi/canjs/issues/138)
     - Added [control does not listen to touchmove event on controller itself](https://github.com/bitovi/canjs/issues/104)
 
  - can.Observe
-    - Added List [binding on .length of an object](https://github.com/bitovi/canjs/issues/142)
+    - Added [List binding on .length of an object](https://github.com/bitovi/canjs/issues/142)
     - Fixed [validation error that incorrectly labels an attribute with a value of 0 as empty](https://github.com/bitovi/canjs/pull/132)
     - Added [you can now pluralise event names to listen to matching events of that type (rather than firing a single event)](https://github.com/bitovi/canjs/issues/122)
     - Added [compound sets now behave correctly](https://github.com/bitovi/canjs/issues/119)
