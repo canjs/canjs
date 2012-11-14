@@ -3057,6 +3057,12 @@ off JavaScriptMVC.  This page is for contributors after CanJS's launch. Thank yo
 ([1](https://github.com/bitovi/canjs/commit/06c5a4b3d50d14c5881ee55642fa10f37b71af0b))
 - [dimaf](https://github.com/dimaf)
 ([1](https://github.com/bitovi/canjs/commit/fc8a4d57c99a280025eb7c613cef92de28c3c160))
+- [yusufsafak](https://github.com/yusufsafak) ([1](https://github.com/bitovi/canjs/pull/30))
+- [verto](https://github.com/verto) ([1](https://github.com/bitovi/canjs/pull/32))
+- [WearyMonkey](https://github.com/WearyMonkey) ([1](https://github.com/bitovi/canjs/issues/27))
+- [cohuman](https://github.com/cohuman)
+([1](https://github.com/bitovi/canjs/pull/23), [2](https://github.com/bitovi/canjs/pull/26))
+- [roelmonnens](https://twitter.com/roelmonnens)
 
 for helping us with new features, bug fixes, and getting this out the door.
 
