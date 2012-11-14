@@ -133,6 +133,18 @@ test("replacing with an object that object becomes observable",function(){
 	ok(state.attr("properties").bind, "has bind function");
 });
 
+test("attr does not blow away old observable", function(){
+	var state = new can.Observe({
+		properties : {
+			brand: ['gain']
+		}
+	});
+	var oldCid = state.attr("properties.brand")._cid;
+	state.attr({properties:{brand:[]}});
+	same(state.attr("properties.brand")._cid, oldCid, "should be the same observe, so that views bound to the old one get updates")
+	equals(state.attr("properties.brand").length, 0, "list should be empty");
+});
+
 test("remove attr", function(){
 	var state = new can.Observe({
 		properties : {
