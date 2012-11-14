@@ -22,11 +22,12 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 		}).render(data);
 		steal.File(to).save(res);
 	}
-
-	steal.File(outFolder).mkdirs();
-	steal.File(testFolder).mkdirs();
-
-	_.each(libraries, function (lib) {
+	/**
+	 * Build CanJS and test files for a given library
+	 *
+	 * @param lib
+	 */
+	var buildLibrary = function (lib) {
 		var options = libs[lib],
 			outFile = outFolder + '/can.' + lib,
 			testFile = testFolder + lib + '.html',
@@ -54,15 +55,47 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 		});
 		new steal.File('can/build/templates/qunit.js').copyTo(testFolder + '/qunit.js');
 		new steal.File('can/build/templates/qunit.css').copyTo(testFolder + '/qunit.css');
-	});
+	};
+	/**
+	 * Build the AMD module distributable
+	 */
+	var buildAmd = function() {
+		var excludes = [ "can/build/make/amd.js", "can/util/util.js" ];
+		_.each(_.values(libs), function(val) {
+			excludes = excludes.concat(val.exclude);
+		});
+		steal.build.amdify('can/build/make/amd.js', {
+			out: outFolder + '/amd',
+			exclude: excludes
+		});
+		new steal.File('can/build/templates/amdutil.js').copyTo(outFolder + '/amd/can/util.js');
+	};
+	/**
+	 * Build can.jquery-all.js with all plugins.
+	 */
+	var buildjQueryAll = function() {
+		var options = libs.jquery,
+			outFile = outFolder + '/can.jquery-all',
+			buildFile = "can/build/make/all.js",
+			defaults = {
+				out : outFile + '.js',
+				onefunc : true,
+				compress : false,
+				skipAll : true
+			};
 
-	var excludes = [ "can/build/make/amd.js", "can/util/util.js" ];
-	_.each(_.values(libs), function(val) {
-		excludes = excludes.concat(val.exclude);
-	});
-	steal.build.amdify('can/build/make/amd.js', {
-		out: outFolder + '/amd',
-		exclude: excludes
-	});
-	new steal.File('can/build/templates/amdutil.js').copyTo(outFolder + '/amd/can/util.js');
+		console.log('Building ' + outFile + ' ' + version + ' to ' + outFile);
+		steal.build.pluginify(buildFile, _.extend(defaults, options));
+		steal.build.pluginify(buildFile, _.extend(defaults, options, {
+			compress : true,
+			out : outFile + '.min.js'
+		}));
+	};
+
+	steal.File(outFolder).mkdirs();
+	steal.File(testFolder).mkdirs();
+
+	_.each(libraries, buildLibrary);
+	buildAmd();
+	buildjQueryAll();
 });

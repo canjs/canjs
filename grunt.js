@@ -66,7 +66,7 @@ module.exports = function (grunt) {
 		shell : {
 			bundleLatest : 'cd <%= meta.out %> && zip -r can.js.<%= pkg.version %>.zip <%= pkg.version %>/',
 			getGhPages : 'git clone -b gh-pages <%= pkg.repository.url %> build/gh-pages',
-			copyLatest : 'rm -rf build/gh-page/release/<%= pkg.version %> && ' +
+			copyLatest : 'rm -rf build/gh-pages/release/<%= pkg.version %> && ' +
 				'cp -R <%= meta.out %>/<%= pkg.version %> build/gh-pages/release/<%= pkg.version %> && ' +
 				'rm -rf build/gh-pages/release/latest && ' +
 				'cp -R <%= meta.out %>/<%= pkg.version %> build/gh-pages/release/latest',
