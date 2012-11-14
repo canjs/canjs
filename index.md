@@ -54,11 +54,11 @@ rich web applications easy. Use it because it's:
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core download 
 below or select the individual plugins above and click download:
 
- - [can.jquery.js](https://github.com/downloads/bitovi/canjs/can.jquery-1.1.0pre.js) ([min](https://github.com/downloads/bitovi/canjs/can.jquery-1.1.0pre.min.js))
- - [can.zepto.js](https://github.com/downloads/bitovi/canjs/can.zepto-1.1.0pre.js) ([min](https://github.com/downloads/bitovi/canjs/can.zepto-1.1.0pre.min.js))
- - [can.dojo.js](https://github.com/downloads/bitovi/canjs/can.dojo-1.1.0pre.js) ([min](https://github.com/downloads/bitovi/canjs/can.dojo-1.1.0pre.min.js))
- - [can.mootools.js](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.0pre.js) ([min](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.0pre.min.js))
- - [can.yui.js](https://github.com/downloads/bitovi/canjs/can.yui-1.1.0pre.js) ([min](https://github.com/downloads/bitovi/canjs/can.yui-1.1.0pre.min.js))
+ - [can.jquery.js](https://github.com/downloads/bitovi/canjs/can.jquery-1.1.0.js) ([min](https://github.com/downloads/bitovi/canjs/can.jquery-1.1.0.min.js))
+ - [can.zepto.js](https://github.com/downloads/bitovi/canjs/can.zepto-1.1.0.js) ([min](https://github.com/downloads/bitovi/canjs/can.zepto-1.1.0.min.js))
+ - [can.dojo.js](https://github.com/downloads/bitovi/canjs/can.dojo-1.1.0.js) ([min](https://github.com/downloads/bitovi/canjs/can.dojo-1.1.0.min.js))
+ - [can.mootools.js](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.0.js) ([min](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.0.min.js))
+ - [can.yui.js](https://github.com/downloads/bitovi/canjs/can.yui-1.1.0.js) ([min](https://github.com/downloads/bitovi/canjs/can.yui-1.1.0.min.js))
 
 The [Use with other libraries](#use_with_other_libraries) 
 section details the minor differences among use 
