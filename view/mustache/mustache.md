@@ -181,20 +181,6 @@ concatenate and include all of the views in one file for high performance produc
 instances.  If you are using Steal, it will do this automatically at build 
 for you.
 
-__Registering Partials__
-
-You can call `can.view.registerView` to register
-a partial template you can call from inside another Mustache template.
-
-	can.view.registerView('myTemplate', "My body lies over {{.}}")
-
-Then later in my view I can do:
-
-	{{>myTemplate}}
-
-and it will apply the current context to my new template.  For more
-information goto the Partials section.
-
 ## Sections
 
 Sections contain text blocks and evaluate whether to render it or not.  If
@@ -313,7 +299,7 @@ __base.mustache__
 
 	<h2>Names</h2>
 	{{#names}}
-		{{>user}}
+		{{>user.mustache}}
 	{{/names}}
 
 __user.mustache__
@@ -327,8 +313,39 @@ The resulting expanded template at render time would look like:
 		<strong>{{name}}</strong>
 	{{/names}}
 
-See the template acquisition section for more information on
-fetching partials.
+__Acquiring Partials__
+
+You can manually register partial templates by calling
+`can.view.registerView` and passing the partial template key and text.  For example:
+
+	can.view.registerView('myTemplate', "My body lies over {{.}}")
+
+Then later in my view I can do:
+
+	{{>myTemplate}}
+
+and it will apply the current context to my new template.  Additionally, you can
+register them by using the techniques described in the template aquisition section.  
+For example, to call a partial thats in a script tag:
+
+	<script id="mytemplate" type="text/mustache">
+		{{>mypartial}}
+	</script>
+
+	<script id="mypartial" type="text/mustache">
+    	I am a partial.
+	</script>
+
+	var template = can.view("#mytemplate", {});
+
+You can also reference a file to be used as a partial.  For example:
+
+	<script id="template" type="text/mustache">
+    	{{>views/test_template.mustache}}
+	</script>
+
+	var template = can.view("#mytemplate", {});
+
 
 ## Helpers
 
