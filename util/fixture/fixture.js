@@ -1,5 +1,6 @@
 steal('can/util','can/util/string','can/util/object', function (can) {
 
+	// Get the URL from old Steal root, new Steal config or can.fixture.rootUrl
 	var getUrl = function(url) {
 		if(typeof steal !== 'undefined') {
 			if(can.isFunction(steal.config)) {

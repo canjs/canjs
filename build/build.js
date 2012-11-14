@@ -53,9 +53,10 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 			type : lib
 		});
 		new steal.File('can/build/templates/qunit.js').copyTo(testFolder + '/qunit.js');
+		new steal.File('can/build/templates/qunit.css').copyTo(testFolder + '/qunit.css');
 	});
 
-	var excludes = [ "can/buid/make/amd.js", "can/util/util.js" ];
+	var excludes = [ "can/build/make/amd.js", "can/util/util.js" ];
 	_.each(_.values(libs), function(val) {
 		excludes = excludes.concat(val.exclude);
 	});
@@ -63,4 +64,5 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 		out: outFolder + '/amd',
 		exclude: excludes
 	});
+	new steal.File('can/build/templates/amdutil.js').copyTo(outFolder + '/amd/can/util.js');
 });

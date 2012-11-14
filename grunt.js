@@ -89,5 +89,6 @@ module.exports = function (grunt) {
 
 	grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist");
 	grunt.registerTask("latest", "build:latest build:latestPlugins strip:latest beautify:dist docco:latest");
-	grunt.registerTask("deploy", "latest shell:getGhPages shell:copyLatest shell:updateGhPages shell:cleanup shell:bundleLatest downloads");
+	grunt.registerTask("ghpages", "shell:cleanup shell:getGhPages shell:copyLatest shell:updateGhPages shell:cleanup");
+	grunt.registerTask("deploy", "latest ghpages shell:bundleLatest downloads");
 };
