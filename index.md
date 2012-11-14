@@ -1886,7 +1886,7 @@ CanJS can be used with jQuery, Dojo, Mootools, YUI and Zepto and as AMD modules 
 
 ### AMD
 
-The [CanJS Download](https://github.com/downloads/bitovi/canjs/can.js.1.1.0.zip) contains an `AMD` folder which allows
+The [CanJS Download](https://github.com/downloads/bitovi/canjs/can.js.1.1.0.zip) contains an `amd` folder which allows
 you to load any CanJS component and plugin using an AMD module loader like [RequireJS](http://requirejs.org/).
 You need to map the `can-library` module to `can/util/<libraryname>` for the library you are using. Here is an example
 for jQuery and RequireJS:
@@ -3031,19 +3031,19 @@ and [jQueryMX](https://github.com/jupiterjs/jquerymx/contributors), and the peop
 [Bitovi](http://bitovi.com/people/).  You deserve heaps of recognition as CanJS is direcly based 
 off JavaScriptMVC.  This page is for contributors after CanJS's launch.
 
-[yusufsafak](https://github.com/yusufsafak) - [observe bindings](https://github.com/bitovi/canjs/pull/30).  
-[verto](https://github.com/verto) - [destroy fix](https://github.com/bitovi/canjs/pull/32).  
-[WearyMonkey](https://github.com/WearyMonkey) - [recursive observes](https://github.com/bitovi/canjs/issues/27).  
-[cohuman](https://github.com/cohuman) - [model list dependencies](https://github.com/bitovi/canjs/pull/23), [docco fix](https://github.com/bitovi/canjs/pull/26).  
-[roelmonnens](https://twitter.com/roelmonnens) - static model deferreds are now rejectable.
-
-### Change Log
+- [yusufsafak](https://github.com/yusufsafak) - [observe bindings](https://github.com/bitovi/canjs/pull/30).
+- [verto](https://github.com/verto) - [destroy fix](https://github.com/bitovi/canjs/pull/32).
+- [WearyMonkey](https://github.com/WearyMonkey) - [recursive observes](https://github.com/bitovi/canjs/issues/27).
+- [cohuman](https://github.com/cohuman) - [model list dependencies](https://github.com/bitovi/canjs/pull/23), [docco fix](https://github.com/bitovi/canjs/pull/26).
+- [roelmonnens](https://twitter.com/roelmonnens) - static model deferreds are now rejectable.
+- [thecountofzero](https://github.com/thecountofzero) - Always helping us find and fix issues
+- [iamnoah](https://github.com/iamnoah) - Submitted many great bugfixes
 
 # Change Log
 
 __1.1.0__ ( November 13, 2012 )
 
- - Added AMD module support for each dependency
+ - Added [AMD module](#using_canjs-amd) support for each dependency ([#46](https://github.com/bitovi/canjs/issues/46))
 
  - can.util
     - Updated jQuery to 1.8.2
