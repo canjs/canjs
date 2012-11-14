@@ -4,6 +4,13 @@ steal('can/util',
 	  'can/observe/compute',
 	  'can/view/render.js',
 function( can ){
+	
+	// # mustache.js
+	// `can.Mustache`: The Mustache templating engine.
+	// 
+	// See the [Transformation](#section-29) section within *Scanning Helpers* for a detailed explanation 
+	// of the runtime render code design. The majority of the Mustache engine implementation 
+	// occurs within the *Transformation* scanning helper.
 
 	// ## Initialization
 	//
@@ -41,7 +48,7 @@ function( can ){
 			return obj && obj.splice && typeof obj.length == 'number';
 		},
 		
-		// ## can.Mustache
+		// ## Mustache
 		/**
 		 * The Mustache templating engine.
 		 * @param {Object} options	Configuration options
@@ -234,7 +241,7 @@ function( can ){
 					}
 				},
 				
-				// ### Interpolation (default)
+				// ### Transformation (default)
 				//
 				// This transforms all content to its interpolated equivalent,
 				// including calls to the corresponding helpers as applicable. 
@@ -249,8 +256,201 @@ function( can ){
 				//		Whenever a token gets interpolated, it will check for a match against the 
 				//		last context in the stack, then iterate through the rest of the stack checking for matches.
 				//		The first match is the one that gets returned.
+				// * `Mustache.txt` - This serializes a collection of logic, optionally contained within a section.
+				//		If this is a simple interpolation, only the interpolation lookup will be passed.
+				//		If this is a section, then an `options` object populated by the truthy (`options.fn`) and 
+				//		falsey (`options.inverse`) encapsulated functions will also be passed. This section handling 
+				//		exists to support the runtime context nesting that Mustache supports.
+				// * `Mustache.get` - This resolves an interpolation reference given a stack of contexts.
+				// * `options` - An object containing methods for executing the inner contents of sections or helpers.  
+				//		`options.fn` - Contains the inner template logic for a truthy section.  
+				//		`options.inverse` - Contains the inner template logic for a falsey section.  
+				//		`options.hash` - Contains the merged hash object argument for custom helpers.
 				//
-				// #### Logic
+				// #### Design
+				//
+				// This covers the design of the render code that the transformation helper generates.
+				//
+				// ##### Pseudocode
+				// 
+				// A detailed explanation is provided in the following sections, but here is some brief pseudocode
+				// that gives a high level overview of what the generated render code does (with a template similar to  
+				// `"{{#a}}{{b.c.d.e.name}}{{/a}}" == "Phil"`).
+				//
+				// *Initialize the render code.*
+				// 
+				// 		view = []
+				// 		context = []
+				// 		stack = fn { context.concat([this]) }
+				// 		
+				// *Render the root section.*
+				//
+				// 		view.push( "string" )
+				// 		view.push( can.view.txt(
+				//
+				// *Render the nested section with `can.Mustache.txt`.*
+				//
+				// 			txt( 
+				//
+				// *Add the current context to the stack.*
+				//
+				// 				stack(), 
+				//
+				// *Flag this for truthy section mode.*
+				//
+				// 				"#",
+				//
+				// *Interpolate and check the `a` variable for truthyness using the stack with `can.Mustache.get`.*
+				// 
+				// 				get( "a", stack() ),
+				//
+				// *Include the nested section's inner logic.
+				// The stack argument is usually the parent section's copy of the stack, 
+				// but it can be an override context that was passed by a custom helper.
+				// Sections can nest `0..n` times -- **NESTCEPTION**.*
+				//
+				// 				{ fn: fn(stack) {
+				//
+				// *Render the nested section (everything between the `{{#a}}` and `{{/a}}` tokens).*
+				//
+				// 					view = []
+				// 					view.push( "string" )
+				// 					view.push(
+				//
+				// *Add the current context to the stack.*
+				//
+				// 						stack(),
+				//
+				// *Flag this as interpolation-only mode.*
+				//
+				// 						null,
+				//
+				// *Interpolate the `b.c.d.e.name` variable using the stack.*
+				//
+				// 						get( "b.c.d.e.name", stack() ),
+				// 					)
+				// 					view.push( "string" )
+				//
+				// *Return the result for the nested section.*
+				//
+				// 					return view.join()
+				// 				}}
+				// 			)
+				// 		))
+				// 		view.push( "string" )
+				//
+				// *Return the result for the root section, which includes all nested sections.*
+				//
+				// 		return view.join()
+				//
+				// ##### Initialization
+				//
+				// Each rendered template is started with the following initialization code:
+				//
+				// 		var ___v1ew = [];
+				// 		var ___c0nt3xt = [];
+				// 		___c0nt3xt.___st4ck = true;
+				// 		var ___st4ck = function(context, self) {
+				// 			var s;
+				// 			if (arguments.length == 1 && context) {
+				// 				s = !context.___st4ck ? [context] : context;
+				// 			} else {
+				// 				s = context && context.___st4ck 
+				//					? context.concat([self]) 
+				//					: ___st4ck(context).concat([self]);
+				// 			}
+				// 			return (s.___st4ck = true) && s;
+				// 		};
+				//
+				// The `___v1ew` is the the array used to serialize the view.
+				// The `___c0nt3xt` is a stacking array of contexts that slices and expands with each nested section.
+				// The `___st4ck` function is used to more easily update the context stack in certain situations.
+				// Usually, the stack function simply adds a new context (`self`/`this`) to a context stack. 
+				// However, custom helpers will occasionally pass override contexts that need their own context stack.
+				//
+				// ##### Sections
+				//
+				// Each section, `{{#section}} content {{/section}}`, within a Mustache template generates a section 
+				// context in the resulting render code. The template itself is treated like a root section, with the 
+				// same execution logic as any others. Each section can have `0..n` nested sections within it.
+				//
+				// Here's an example of a template without any descendent sections.  
+				// Given the template: `"{{a.b.c.d.e.name}}" == "Phil"`  
+				// Would output the following render code:
+				//
+				//		___v1ew.push("\"");
+				//		___v1ew.push(can.view.txt(1, '', 0, this, function() {
+				// 			return can.Mustache.txt(___st4ck(___c0nt3xt, this), null, 
+				//				can.Mustache.get("a.b.c.d.e.name", 
+				//					___st4ck(___c0nt3xt, this))
+				//			);
+				//		}));
+				//		___v1ew.push("\" == \"Phil\"");
+				//
+				// The simple strings will get appended to the view. Any interpolated references (like `{{a.b.c.d.e.name}}`) 
+				// will be pushed onto the view via `can.view.txt` in order to support live binding.
+				// The function passed to `can.view.txt` will call `can.Mustache.txt`, which serializes the object data by doing 
+				// a context lookup with `can.Mustache.get`.
+				//
+				// `can.Mustache.txt`'s first argument is a copy of the context stack with the local context `this` added to it.
+				// This stack will grow larger as sections nest.
+				//
+				// The second argument is for the section type. This will be `"#"` for truthy sections, `"^"` for falsey, 
+				// or `null` if it is an interpolation instead of a section.
+				//
+				// The third argument is the interpolated value retrieved with `can.Mustache.get`, which will perform the 
+				// context lookup and return the approriate string or object.
+				//
+				// Any additional arguments, if they exist, are used for passing arguments to custom helpers.
+				//
+				// For nested sections, the last argument is an `options` object that contains the nested section's logic.
+				//
+				// Here's an example of a template with a single nested section.  
+				// Given the template: `"{{#a}}{{b.c.d.e.name}}{{/a}}" == "Phil"`  
+				// Would output the following render code:
+				//
+				//		___v1ew.push("\"");
+				// 		___v1ew.push(can.view.txt(0, '', 0, this, function() {
+				// 			return can.Mustache.txt(___st4ck(___c0nt3xt, this), "#", 
+				//				can.Mustache.get("a", ___st4ck(___c0nt3xt, this)), 
+				//					[{
+				// 					_: function() {
+				// 						return ___v1ew.join("");
+				// 					}
+				// 				}, {
+				// 					fn: function(___c0nt3xt) {
+				// 						var ___v1ew = [];
+				// 						___v1ew.push(can.view.txt(1, '', 0, this, 
+				//								function() {
+				//  								return can.Mustache.txt(
+				// 									___st4ck(___c0nt3xt, this), 
+				// 									null, 
+				// 									can.Mustache.get("b.c.d.e.name", 
+				// 										___st4ck(___c0nt3xt, this))
+				// 								);
+				// 							}
+				// 						));
+				// 						return ___v1ew.join("");
+				// 					}
+				// 				}]
+				//			)
+				// 		}));
+				//		___v1ew.push("\" == \"Phil\"");
+				//
+				// This is specified as a truthy section via the `"#"` argument. The last argument includes an array of helper methods used with `options`.
+				// These act similarly to custom helpers: `options.fn` will be called for truthy sections, `options.inverse` will be called for falsey sections.
+				// The `options._` function only exists as a dummy function to make generating the section nesting easier (a section may have a `fn`, `inverse`,
+				// or both, but there isn't any way to determine that at compilation time).
+				// 
+				// Within the `fn` function is the section's render context, which in this case will render anything between the `{{#a}}` and `{{/a}}` tokens.
+				// This function has `___c0nt3xt` as an argument because custom helpers can pass their own override contexts. For any case where custom helpers
+				// aren't used, `___c0nt3xt` will be equivalent to the `___st4ck(___c0nt3xt, this)` stack created by its parent section. The `inverse` function
+				// works similarly, except that it is added when `{{^a}}` and `{{else}}` are used. `var ___v1ew = []` is specified in `fn` and `inverse` to 
+				// ensure that live binding in nested sections works properly.
+				//
+				// All of these nested sections will combine to return a compiled string that functions similar to EJS in its uses of `can.view.txt`.
+				//
+				// #### Implementation
 				{
 					name: /^.*$/,
 					fn: function(content, cmd) {
