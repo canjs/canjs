@@ -1,10 +1,12 @@
 ---
 layout: default
 title: CanJS
+version : 1.1.0
 ---
+
 # Welcome to CanJS!
 
-CanJS is a MIT-licensed, client-side, JavaScript framework that makes building 
+CanJS is a MIT-licensed, client-side, JavaScript framework that makes building
 rich web applications easy. Use it because it's:
 
 <ul class="checkmarks cf">
@@ -3031,22 +3033,30 @@ and [jQueryMX](https://github.com/jupiterjs/jquerymx/contributors), and the peop
 [Bitovi](http://bitovi.com/people/).  You deserve heaps of recognition as CanJS is direcly based 
 off JavaScriptMVC.  This page is for contributors after CanJS's launch. Thank you
 
-- [noah](https://github.com/iamnoah) [1](https://github.com/bitovi/canjs/commit/8193e359cde3b77a44c683ca9f8a5268fc9df44b)
-[2](https://github.com/bitovi/canjs/commit/b865588710e7e7dd8a9588ebf8e8c0f4d19fd800)
-[3](https://github.com/bitovi/canjs/commit/83a48e7bcb05ed9f179159f540b181db4dcf6e9c)
-[4](https://github.com/Spredfast/canjs/commit/dc7ddd2dc619619f3955c31be1435c6f927b7a35),
-- [thecountofzero](https://github.com/thecountofzero) [1](https://github.com/bitovi/canjs/commit/e920434fa53975013688d065ce2e304f225fae75)
-[2](https://github.com/bitovi/canjs/commit/8e98186e00b7d6b88869baeb97244877f143034e),
-- roissard [1](https://github.com/bitovi/canjs/commit/44bc72063e429bbc3f8a9a696a3ae4a7e57d12c8)
-[2](https://github.com/bitovi/canjs/commit/c711fe05e1cdc99c72df8ac0f415c2ccb536d197),
-- [Michael Kebbekus](https://github.com/bitovi/canjs/commit/d658d4910e8f3f391e9394449efe2f0c67581dbe),
-- [Daniel Salet](https://github.com/bitovi/canjs/commit/92487178255360d40b75be49681dc65cbfbf3e18),
-- [Daniel Franz](https://github.com/bitovi/canjs/commit/4aae36eea9d671a12f9c459733c48b6fd1e99af4),
-- [trickeyone](https://github.com/trickeyone/canjs/commit/2c11f56e0a0511749243055276e3b806984b15fa),
-- [rjg otten](https://github.com/bitovi/canjs/commit/92c98e7c80d5fd7357eae69a60313d3d06efbdcb),
-- [Amy Chen](https://github.com/bitovi/canjs/commit/3eee6ba9c69410ac549b909b1c8f860e6d591612),
-- [Max Sadrieh](https://github.com/bitovi/canjs/commit/06c5a4b3d50d14c5881ee55642fa10f37b71af0b), and
-- [dimaf](https://github.com/bitovi/canjs/commit/fc8a4d57c99a280025eb7c613cef92de28c3c160)
+- [noah](https://github.com/iamnoah)
+([1](https://github.com/bitovi/canjs/commit/8193e359cde3b77a44c683ca9f8a5268fc9df44b),
+[2](https://github.com/bitovi/canjs/commit/b865588710e7e7dd8a9588ebf8e8c0f4d19fd800),
+[3](https://github.com/bitovi/canjs/commit/83a48e7bcb05ed9f179159f540b181db4dcf6e9c),
+[4](https://github.com/Spredfast/canjs/commit/dc7ddd2dc619619f3955c31be1435c6f927b7a35))
+- [thecountofzero](https://github.com/thecountofzero)
+([1](https://github.com/bitovi/canjs/commit/e920434fa53975013688d065ce2e304f225fae75),
+[2](https://github.com/bitovi/canjs/commit/8e98186e00b7d6b88869baeb97244877f143034e))
+- [roissard](https://github.com/roissard) ([1](https://github.com/bitovi/canjs/commit/44bc72063e429bbc3f8a9a696a3ae4a7e57d12c8),
+[2](https://github.com/bitovi/canjs/commit/c711fe05e1cdc99c72df8ac0f415c2ccb536d197))
+- [Michael Kebbekus](https://github.com/makebbekus)
+([1](https://github.com/bitovi/canjs/commit/d658d4910e8f3f391e9394449efe2f0c67581dbe))
+- Daniel Salet ([1](https://github.com/bitovi/canjs/commit/92487178255360d40b75be49681dc65cbfbf3e18))
+- [Daniel Franz](https://github.com/daniel-franz)
+([1](https://github.com/bitovi/canjs/commit/4aae36eea9d671a12f9c459733c48b6fd1e99af4))
+- [trickeyone](https://github.com/trickeyone)
+([1](https://github.com/trickeyone/canjs/commit/2c11f56e0a0511749243055276e3b806984b15fa))
+- [rjgotten](https://github.com/rjgotten)
+([1](https://github.com/bitovi/canjs/commit/92c98e7c80d5fd7357eae69a60313d3d06efbdcb))
+- Amy Chen ([1](https://github.com/bitovi/canjs/commit/3eee6ba9c69410ac549b909b1c8f860e6d591612))
+- [Max Sadrieh](https://github.com/ms)
+([1](https://github.com/bitovi/canjs/commit/06c5a4b3d50d14c5881ee55642fa10f37b71af0b))
+- [dimaf](https://github.com/dimaf)
+([1](https://github.com/bitovi/canjs/commit/fc8a4d57c99a280025eb7c613cef92de28c3c160))
 
 for helping us with new features, bug fixes, and getting this out the door.
 
