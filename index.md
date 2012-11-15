@@ -1179,14 +1179,14 @@ helper followed by the attribute name you want to attach it as.  For example:
 
 {% highlight html %}
   <ul>
-    <li id="foo" {{"{{"}}data 'person'}}>{{"{{"}}name}}</li>
+    <li id="personli" {{"{{"}}data 'person'}}>{{"{{"}}name}}</li>
   </ul>
 {% endhighlight %}
 
 Now I can access my object by doing:
 
 {% highlight javascript %}
-  var nameObject = can.$('#foo').data('name');
+  var nameObject = can.data(can.$('#personli'), 'name');
 {% endhighlight %}
 
 It automatically attaches the data to the
