@@ -1132,7 +1132,7 @@ __base.mustache__
 {% highlight html %}
   <h2>Names</h2>
   {{"{{#"}}names}}
-    {{"{{>"}}user}}
+    {{"{{>"}}user.mustache}}
   {{"{{/"}}names}}
 {% endhighlight %}
 
@@ -1197,7 +1197,7 @@ element using `can.data` with implied context of `this`.
 
 #### Registering Helpers
 
-To register your own helper, use the `Mustache.registerHelper` method.
+To register your own helper, use the `can.Mustache.registerHelper` method.
 
 Localization is a good example of a custom helper you might implement
 in your application. The below example takes a given key and
@@ -1205,7 +1205,7 @@ returns the localized value using
 [jQuery Globalize](https://github.com/jquery/globalize).
 
 {% highlight javascript %}
-  Mustache.registerHelper('l10n', function(str, options){
+  can.Mustache.registerHelper('l10n', function(str, options){
     return (Globalize != undefined ? Globalize.localize(str) : str);
   });
 {% endhighlight %}
