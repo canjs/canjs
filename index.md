@@ -836,11 +836,8 @@ logic-less templates with live binding when used with [can.Observes](#can_observ
 [Download can.Mustache](http://canjs.us/release/latest/can.view.mustache.js)
 ([Annotated source](http://donejs.com/can/docs/can.view.mustache.html))
 
-can.Mustache is designed to help seperate logic out of your view code without
-sacrifices.
-
-Mustache and Handlebar templates are compatible with can.Mustache,
-so you can import existing templates and automagically start live-binding.
+[Mustache](https://github.com/janl/mustache.js/) and [Handlebar](http://handlebarsjs.com/) templates are compatible with can.Mustache,
+so you can import existing templates.
 
 ### Getting Started
 
