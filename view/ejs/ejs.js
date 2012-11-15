@@ -1,5 +1,4 @@
 steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/view/scanner.js', 'can/view/render.js', function( can ) {
-
 	// ## ejs.js
 	// `can.EJS`  
 	// _Embedded JavaScript Templates._
@@ -27,17 +26,22 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 			extend(this, options);
 			this.template = this.scanner.scan(this.text, this.name);
 		};
-	
+
+	/**
+	 * @add can.EJS
+	 */
 	can.EJS = EJS;
 
-	/** 
+
+	/**
 	 * @Prototype
 	 */
 	EJS.prototype.
 	/**
+	 * @function render
 	 * Renders an object with view helpers attached to the view.
 	 * 
-	 *     new EJS({text: "<%= message %>"}).render({
+	 *     new can.EJS({text: "<%= message %>"}).render({
 	 *       message: "foo"
 	 *     },{helper: function(){ ... }})
 	 *     
@@ -52,10 +56,12 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 	
 	extend(EJS.prototype, {
 		/**
+		 * @hide
 		 * Singleton scanner instance for parsing templates.
 		 */
 		scanner: new can.view.Scanner({
 			/**
+			 * @hide
 			 * An ordered token registry for the scanner.
 			 * This needs to be ordered by priority to prevent token parsing errors.
 			 * Each token is defined as: ["token-name", "string representation", "optional regexp override"]
@@ -73,9 +79,6 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 		})
 	});
 
-	/**
-	 * @Static
-	 */
 	/**
 	 * @class can.EJS.Helpers
 	 * @parent can.EJS
@@ -118,14 +121,8 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 		extend(this, extras);
 	};
 
-	/**
-	 * @prototype
-	 */
 	EJS.Helpers.prototype = {
 		/**
-		 * @function list
-		 * @hide
-		 * 
 		 * `can.EJS.Helpers.list` iterates over an observable list and
 		 * sets up live binding. `list` takes a list of observables and a callback 
 		 * function with the signature `callback( currentItem, index, itemList )`

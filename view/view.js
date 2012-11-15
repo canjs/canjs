@@ -79,7 +79,37 @@ steal("can/util", function( can ) {
 
 			return fragment;
 		},
-		
+
+		/**
+		 * @function ejs
+		 *
+		 * `can.view.ejs(id, template)` registers an EJS template string for a given id programatically.
+		 *
+		 *      can.view.ejs('myViewEJS', '<h2><%= message %></h2>');
+		 *      var text = can.view.render('myViewEJS', {
+		 *          message : 'Hello there!'
+		 *      });
+		 *      text // -> <h2>Hello there!</h2>
+		 *
+		 * @param {String} id The template id
+		 * @param {String} template The EJS template string
+		 */
+		//
+		/**
+		 * @function mustache
+		 *
+		 * `can.view.mustache(id, template)` registers an EJS template string for a given id programatically.
+		 *
+		 *      can.view.mustache('myViewEJS', '<h2>{{message}}</h2>');
+		 *      var text = can.view.render('myViewEJS', {
+		 *          message : 'Hello there!'
+		 *      });
+		 *      text // -> <h2>Hello there!</h2>
+		 *
+		 * @param {String} id The template id
+		 * @param {String} template The Mustache template string
+		 */
+		//
 		/**
 		 * @attribute hookups
 		 * @hide
@@ -208,7 +238,7 @@ steal("can/util", function( can ) {
 
 		/**
 		 * @function render
-		 * `can.view.render(view, data, [helpers], callback)` returns the rendered markup produced by the corresponding template
+		 * `can.view.render(view, [data], [helpers], callback)` returns the rendered markup produced by the corresponding template
 		 * engine as String. If you pass a deferred object in as data, render returns
 		 * a deferred resolving to the rendered markup.
 		 * 
@@ -234,12 +264,22 @@ steal("can/util", function( can ) {
 		 *         <%== can.view.render("item.ejs",item) %>
 		 *       <% }) %>
 		 *     </ul>
+		 *
+		 * ## Using renderer functions
+		 *
+		 * If you only pass the view path, `can.view will return a renderer function that can be called with
+		 * the data to render:
+		 *
+		 *     var renderer = can.view.render("welcome.ejs");
+		 *     // Do some more things
+		 *     renderer({hello: "world"}) // -> Document Fragment
 		 * 
 		 * @param {String|Object} view the path of the view template or a view object
-		 * @param {Object} data the object passed to a template
+		 * @param {Object} [data] the object passed to a template
 		 * @param {Object} [helpers] additional helper methods to be passed to the view template
 		 * @param {Function} [callback] function executed after template has been processed
-		 * @param {String|Object} returns a string of processed text or a deferred that resolves to the processed text
+		 * @param {String|Object|Function} returns a string of processed text or a deferred
+		 * that resolves to the processed text or a renderer function when no data are passed.
 		 * 
 		 */
 		render: function( view, data, helpers, callback ) {

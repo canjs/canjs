@@ -77,6 +77,9 @@ function( can ){
 			this.template = this.scanner.scan(this.text, this.name);
 		};
 
+	/**
+	 * @add can.Mustache
+	 */
 	// Put Mustache on the `can` object.
 	can.Mustache = window.Mustache = Mustache;
 
@@ -85,7 +88,6 @@ function( can ){
 	 */
 	Mustache.prototype.
 	/**
-	 * @parent can.Mustache
 	 * @function render
 	 * 
 	 * Renders an object with view helpers attached to the view.
@@ -175,15 +177,14 @@ function( can ){
 			//			// Only the first matching helper is executed.
 			//			name: /pattern to match/,
 			//
-			//			/**
-			//			 * The function to transform the content with.
-			//			 * @param {String} content   The content to transform.
-			//			 * @param {Object} cmd       Scanner helper data.
-			//			 *                           {
-			//			 *                             insert: "insert command",
-			//			 *                             tagName: "div",
-			//			 *                             status: 0
-			//			 *                           }
+			//			// The function to transform the content with.
+			//			// @param {String} content   The content to transform.
+			//			// @param {Object} cmd       Scanner helper data.
+			//			//                           {
+			//			//                             insert: "insert command",
+			//			//                             tagName: "div",
+			//			//                             status: 0
+			//			//                           }
 			//			fn: function(content, cmd) {
 			//				return 'for text injection' || 
 			//					{ raw: 'to bypass text injection' };
@@ -580,7 +581,9 @@ function( can ){
 	};
 
 	/**
+	 * @hide
 	 * Evaluates the resulting string based on the context/name.
+	 *
 	 * @param {Object|Array} context	The context stack to be used with evaluation.
 	 * @param {String} mode		The mode to evaluate the section with: # for truthy, ^ for falsey
 	 * @param {String|Object} name	The string (or sometimes object) to pass to the given helper method.
@@ -674,6 +677,8 @@ function( can ){
 	};
 	
 	/**
+	 * @hide
+	 *
 	 * Resolves a reference for a given object (and then a context if that fails).
 	 *	obj = this
 	 *	context = { a: true }
@@ -784,7 +789,10 @@ function( can ){
 		
 		return '';
 	};
-	
+
+	/**
+	 * @static
+	 */
 	// ## Helpers
 	//
 	// Helpers are functions that can be called from within a template.
@@ -807,7 +815,6 @@ function( can ){
 	// * `with` - Opens a context section: `{{#with var}} render {{/with}}`
 	
 	/**
-	 * @parent can.Mustache
 	 * @function registerHelper
 	 * 
 	 * Registers a helper with the Mustache system.
@@ -823,7 +830,6 @@ function( can ){
 	};
 	
 	/**
-	 * @parent can.Mustache
 	 * @function getHelper
 	 * 
 	 * Returns a helper given the name.
