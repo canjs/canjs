@@ -4,9 +4,9 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 	var getUrl = function(url) {
 		if(typeof steal !== 'undefined') {
 			if(can.isFunction(steal.config)) {
-				return steal.config().root.mapJoin(url);
+				return steal.config().root.mapJoin(url).toString();
 			}
-			return steal.root.join(url)
+			return steal.root.join(url).toString();
 		}
 		return (can.fixture.rootUrl || '') + url;
 	}
@@ -243,7 +243,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		 * Makes an attempt to guess where the id is at in the url and returns it.
 		 * @param {Object} settings
 		 */
-			getId = function (settings) {
+		getId = function (settings) {
 			var id = settings.data.id;
 
 			if (id === undefined && typeof settings.data === "number") {
