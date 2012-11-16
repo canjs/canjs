@@ -66,7 +66,11 @@ steal("can/util", function( can ) {
 					hookupEls.push(node);
 					hookupEls.push.apply(hookupEls, can.makeArray( node.getElementsByTagName('*')));
 				}
+				else if (node.nodeType === 3 && node.textContent) {
+					node.textContent = node.textContent.replace(/@@!!@@/g, '');
+				}
 			});
+
 
 			// Filter by `data-view-id` attribute.
 			can.each( hookupEls, function( el ) {
