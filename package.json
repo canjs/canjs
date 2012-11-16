@@ -12,6 +12,9 @@
     "type" : "git",
     "url" : "git@github.com:bitovi/canjs.git"
   },
+  "devDependencies" : {
+    "http-server" : "0.5.1"
+  },
   "demos" : [
     "http://canjs.us/#examples",
     "http://canjs.us/recipes"
