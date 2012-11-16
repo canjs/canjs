@@ -100,8 +100,8 @@ steal("can/util", function( can ) {
 		 *
 		 * `can.view.mustache(id, template)` registers an EJS template string for a given id programatically.
 		 *
-		 *      can.view.mustache('myViewEJS', '<h2>{{message}}</h2>');
-		 *      var text = can.view.render('myViewEJS', {
+		 *      can.view.mustache('myViewMustache', '<h2>{{message}}</h2>');
+		 *      var text = can.view.render('myViewMustache', {
 		 *          message : 'Hello there!'
 		 *      });
 		 *      text // -> <h2>Hello there!</h2>
