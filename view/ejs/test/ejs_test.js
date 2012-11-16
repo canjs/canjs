@@ -1157,4 +1157,23 @@ test("live binding with computes", function() {
 
 })
 
+test('testing for clean tables', function() {
+	var games = new can.Observe.List();
+  games.push({name: 'The Legend of Zelda', rating: 10});  
+  games.push({name: 'The Adventures of Link', rating: 9});  
+  games.push({name: 'Dragon Warrior', rating: 9});
+  games.push({name: 'A Dude Named Daffl', rating: 8.5});  
+
+	var res = can.view.render("//can/view/ejs/test/table_test.ejs",{
+		games: games
+	}),
+	div = document.createElement('div');
+
+	div.appendChild(can.view.frag(res));
+
+	console.log(div.innerHTML);
+	ok(!(/@@!!@@/.test(div.innerHTML)), "no placeholders" );
+
+})
+
 })();
