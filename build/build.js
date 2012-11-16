@@ -1,4 +1,4 @@
-load("can/build/underscore.js");
+load("build/underscore.js");
 var _ = this._;
 
 load("steal/rhino/rhino.js");

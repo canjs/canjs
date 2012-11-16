@@ -1,47 +1,48 @@
-# Change Log
+__1.1.1__
 
-__1.1__ ( November 9, 2012 )
+- Fixed [@@!!@@ Appears on Page With EJS and Table in non-IE Browsers](https://github.com/bitovi/canjs/issues/156)
+- Fixed [can.deparam leaks to global scope](https://github.com/bitovi/canjs/issues/152)
 
- - Added AMD module support for each dependency
+__1.1.0__ ( November 13, 2012 )
+
+ - Added [AMD module](#using_canjs-amd) support for each dependency ([#46](https://github.com/bitovi/canjs/issues/46))
 
  - can.util
- 		- Updated jQuery to 1.8.2
- 		- Updated Zepto to 1.0rc1
- 		- Updated YUI to 3.7.3
+    - Updated jQuery to 1.8.2
+    - Updated Zepto to 1.0rc1
+    - Updated YUI to 3.7.3
 
- - can.Mustache 
- 		- Added Mustache/Handlebars support with Live Binding
+ - can.Mustache
+    - Added Mustache/Handlebars support with Live Binding
 
  - can.view
- 		- Changed [passing jQuery a node list instead of a fragment in View Modifiers](https://github.com/jupiterjs/canjs/pull/131)
+    - Changed [passing jQuery a node list instead of a fragment in View Modifiers](https://github.com/bitovi/canjs/pull/131)
 
  - can.EJS
- 		- Fixed [the way EJS handles multiple hookups in the same attribute](https://github.com/jupiterjs/canjs/pull/134)
- 		- Fixed [Nested Loops in EJS](https://github.com/jupiterjs/canjs/issues/135)
- 		- Fixed [can.EJS template rendering issue](https://github.com/jupiterjs/canjs/issues/118)
- 		- Fixed [multiline elements in EJS](https://github.com/jupiterjs/canjs/pull/76)
+    - Fixed [the way EJS handles multiple hookups in the same attribute](https://github.com/bitovi/canjs/pull/134)
+    - Fixed [Nested Loops in EJS](https://github.com/bitovi/canjs/issues/135)
+    - Fixed [can.EJS template rendering issue](https://github.com/bitovi/canjs/issues/118)
+    - Fixed [multiline elements in EJS](https://github.com/bitovi/canjs/pull/76)
 
  - can.route
- 		- Fixed [hashchange binding with mootools broken](https://github.com/jupiterjs/canjs/issues/124)
+    - Fixed [hashchange binding with mootools broken](https://github.com/bitovi/canjs/issues/124)
 
  - can.Control
- 		- Added [Add/Update control actions without creating new control instance](https://github.com/jupiterjs/canjs/issues/138)
- 		- Added [control does not listen to touchmove event on controller itself](https://github.com/jupiterjs/canjs/issues/104)
+    - Added [control does not listen to touchmove event on controller itself](https://github.com/bitovi/canjs/issues/104)
 
  - can.Observe
- 		- Added List [binding on .length of an object](https://github.com/jupiterjs/canjs/issues/142)
- 		- Fixed [validation error that incorrectly labels an attribute with a value of 0 as empty](https://github.com/jupiterjs/canjs/pull/132)
- 		- Added [you can now pluralise event names to listen to matching events of that type](rather than firing a single event)(https://github.com/jupiterjs/canjs/issues/122)
- 		- Added [compound sets now behave correctly](https://github.com/jupiterjs/canjs/issues/119)
- 		- Fixed [can.Observe.delegate sets wrong event.currentTarget](https://github.com/jupiterjs/canjs/issues/123)
- 		- Added [ability to assign object as attribute type (in can.Observe)](https://github.com/jupiterjs/canjs/issues/107)
+    - Added [List binding on .length of an object](https://github.com/bitovi/canjs/issues/142)
+    - Fixed [validation error that incorrectly labels an attribute with a value of 0 as empty](https://github.com/bitovi/canjs/pull/132)
+    - Added [you can now pluralise event names to listen to matching events of that type (rather than firing a single event)](https://github.com/bitovi/canjs/issues/122)
+    - Added [compound sets now behave correctly](https://github.com/bitovi/canjs/issues/119)
+    - Fixed [can.Observe.delegate sets wrong event.currentTarget](https://github.com/bitovi/canjs/issues/123)
+    - Added [ability to assign object as attribute type in can.Observe](https://github.com/bitovi/canjs/issues/107)
 
  - can.Model
- 		- Fixed [can.Model with attributes that are models gets corrupted when you call attr()](https://github.com/jupiterjs/canjs/pull/141)
- 		- Added [missing dependency to can/model](https://github.com/jupiterjs/canjs/pull/140)
- 		- Moved can/model/elements to can/observe/elements and renamed `models` to `instances`
- 		- Fixed [can.Model.List doesn't fire the change event on the expando properties ](https://github.com/jupiterjs/canjs/issues/129)
-
+    - Fixed [can.Model with attributes that are models gets corrupted when you call attr()](https://github.com/bitovi/canjs/pull/141)
+    - Added [missing dependency to can/model](https://github.com/bitovi/canjs/pull/140)
+    - Moved can/model/elements to can/observe/elements and renamed `models` to `instances`
+    - Fixed [can.Model.List doesn't fire the change event on the expando properties ](https://github.com/bitovi/canjs/issues/129)
 
 __1.0.7__ (June 25nd 2012)
 
