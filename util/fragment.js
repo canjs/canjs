@@ -51,7 +51,7 @@ steal('./can.js',function(can){
 	
 	can.buildFragment = function(html, nodes){
 		var parts = fragment(html),
-			hasSpecial = html.toString().match(/@@!!@@/g);
+			hasSpecial = html.toString().match(/@@!!@@/g),
 			frag = document.createDocumentFragment();
 		hasSpecial = hasSpecial === null ? 0 : hasSpecial.length;
 		can.each(parts, function(part){

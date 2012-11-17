@@ -183,7 +183,7 @@ steal('can/util/dojo/dojo-1.8.1.js', 'can/util/event.js', 'can/util/fragment.js'
 
 	// Map array helpers.
 	can.makeArray = function( arr ) {
-		array = [];
+		var array = [];
 		dojo.forEach(arr, function( item ) {
 			array.push(item)
 		});
