@@ -29,23 +29,6 @@ test("shadowed id", function(){
 	equals(oldModel.foo(),'bar','method can coexist with attribute');
 });
 
-test("CRUD", function(){
-    
-	
-	return;
-	new Person({foo: "bar"}).save(function(inst, attrs, create){
-		equals(create, "create")
-		equals("bar", inst.foo)
-		equals("zed", inst.zoo)
-		ok(inst.save, "has save function");
-		person = inst;
-	});
-    person.update({zoo: "monkey"},function(inst, attrs, update){
-		equals(inst, person, "we get back the same instance");
-		equals(person.zoo, "monkeys", "updated to monkeys zoo!  This tests that you callback with the attrs")
-	})
-});
-
 test("findAll deferred", function(){
 	can.Model("Person",{
 		findAll : function(params, success, error){
@@ -950,6 +933,35 @@ test("extends defaults by calling base method", function(){
 	equal(M2.defaults.foo,"bar")
 	
 	
-})
+});
+
+test(".models updates existing list if passed", 4, function() {
+	var Model = can.Model({});
+	var list = Model.models([{
+		id : 1,
+		name : 'first'
+	}, {
+		id : 2,
+		name : 'second'
+	}]);
+
+	list.bind('add', function(ev, newData) {
+		equal(newData.length, 3, 'Got all new items at once');
+	});
+
+	var newList = Model.models([{
+		id : 3,
+		name : 'third'
+	}, {
+		id : 4,
+		name : 'fourth'
+	}, {
+		id : 5,
+		name : 'fifth'
+	}], list);
+	equal(list, newList, 'Lists are the same');
+	equal(newList.attr('length'), 3, 'List has new items');
+	equal(list[0].name, 'third', 'New item is the first one');
+});
 
 })();

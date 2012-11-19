@@ -259,5 +259,48 @@ test("attr() should respect convert functions for lists when updating", function
     equal(task.project.members[1] instanceof ListTest.User, true, "The user was converted to a model object");
 });
 
+test("plugin passes old value to converter", 2, function() {
+	var Ob = can.Observe('AttrOldVal', {
+		oldVal : function(val, oldVal) {
+			if(val === 'first') {
+				ok(!oldVal, 'First time does not have an old value');
+			}
+			if(val === 'second') {
+				equal(oldVal, 'first', 'Old value is correct');
+			}
+			return val;
+		},
+		attributes : {
+			test : 'AttrOldVal.oldVal'
+		}
+	}, {});
+
+	var o = new Ob({
+		test : 'first'
+	});
+
+	o.attr('test', 'second');
+});
+
+test("attr does not blow away old observable when going from empty to having items (#160)", function(){
+	can.Model('EmptyListTest.User', {}, {});
+	can.Model.List('EmptyListTest.User.List', {}, {});
+
+	can.Model('EmptyListTest.Project',{
+		attributes : {
+			members : "EmptyListTest.User.models"
+		}
+	}, {});
+
+	var project = EmptyListTest.Project.model({
+		id : 789,
+		members : []
+	});
+
+	var oldCid = project.attr("members")._cid;
+	project.attr({members:['bob']});
+	same(project.attr("members")._cid, oldCid, "should be the same observe, so that views bound to the old one get updates")
+	equals(project.attr("members").length, 1, "list should have bob in it");
+});
 
 })();

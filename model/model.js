@@ -692,11 +692,13 @@ steal('can/util','can/observe', function( can ) {
 		 *       count: 15000 //how many total items there might be
 		 *       data: [{id: 1, name : "justin"},{id:2, name: "brian"}, ...]
 		 *     }
-		 * 
+		 *
+		 * @param {can.Observe.List} [oldList] If passed, updates oldList with the converted instancesRawData
+		 * instead of returning a new model list.
 		 * @return {Array} a [can.Model.List] of instances.  Each instance is created with
 		 * [can.Model.model].
 		 */
-		models: function( instancesRawData ) {
+		models: function( instancesRawData, oldList ) {
 
 			if ( ! instancesRawData ) {
 				return;
@@ -708,7 +710,8 @@ steal('can/util','can/observe', function( can ) {
 
 			// Get the list type.
 			var self = this,
-				res = new( self.List || ML),
+				tmp = [],
+				res = oldList instanceof can.Observe.List ? oldList : new( self.List || ML),
 				// Did we get an `array`?
 				arr = can.isArray(instancesRawData),
 				
@@ -737,9 +740,16 @@ steal('can/util','can/observe', function( can ) {
 			}
 			//!steal-remove-end
 
+			if(res.length > 0) {
+				res.splice(0);
+			}
+
 			can.each(raw, function( rawPart ) {
-				res.push( self.model( rawPart ));
+				tmp.push( self.model( rawPart ));
 			});
+
+			// We only want one change event so push everything at once
+			res.push.apply(res, tmp);
 
 			if ( ! arr ) { // Push other stuff onto `array`.
 				can.each(instancesRawData, function(val, prop){
