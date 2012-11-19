@@ -550,12 +550,12 @@ steal('can/util', 'can/observe/elements', function(can) {
         var existingIds = this.map(function(element) {
               return getId(element);
             }),
-            itemIds = items.map(function(element){
+            itemIds = can.map(items, function(element){
               return getId(element);
             });
 
         can.each(existingIds, $.proxy(function(id){
-          if(itemIds.indexOf(id) == -1){
+          if(!~can.inArray(id,itemIds)){
             this.remove(id);
           }
         }, this));
