@@ -183,7 +183,7 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 
 	// Map array helpers.
 	can.makeArray = function( arr ) {
-		array = [];
+		var array = [];
 		dojo.forEach(arr, function( item ) {
 			array.push(item)
 		});

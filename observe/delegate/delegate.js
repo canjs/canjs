@@ -73,7 +73,6 @@ steal('can/util', 'can/observe', function(can) {
 				// reset match and values tests
 				hasMatch = undefined;
 				valuesEqual = true;
-				delegateMatches = false;
 
 				// yeah, all this under here has to be redone v
 				
