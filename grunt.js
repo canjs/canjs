@@ -1,13 +1,9 @@
 module.exports = function (grunt) {
 
 	var _ = grunt.utils._;
-	var excludes = [/\.min\./, /\/amd/, /qunit\.js/];
 	var outFiles = {
 		edge : '<%= meta.out %>/edge/**/*.js',
 		latest : '<%= meta.out %>/<%= pkg.version %>/**/*.js',
-		_options : {
-			exclude : excludes
-		}
 	};
 
 	grunt.initConfig({
@@ -21,11 +17,11 @@ module.exports = function (grunt) {
 				},
 				exclude : [/\.min\./, /qunit\.js/]
 			},
-			banner : '/*! <%= pkg.title || pkg.name %> - <%= pkg.version %> - ' +
-				'<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+			banner : '/*\n* <%= pkg.title || pkg.name %> - <%= pkg.version %> ' +
+				'(<%= grunt.template.today("yyyy-mm-dd") %>)\n' +
 				'<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
-				'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-				' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
+				'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>\n' +
+				'* Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n*/'
 		},
 		beautifier : {
 			codebase : '<config:meta.beautifier>',
@@ -81,14 +77,18 @@ module.exports = function (grunt) {
 			}
 		},
 		downloads : '<json:build/downloads.json>',
-		docco : outFiles,
-		strip : outFiles
+		docco : _.extend({_options : {
+				exclude : [/\.min\./, /\/amd/, /qunit\.js/]
+			}
+		}, outFiles),
+		strip : outFiles,
+		bannerize : outFiles
 	});
 
 	grunt.loadTasks("../build/tasks");
 
-	grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist");
-	grunt.registerTask("latest", "build:latest build:latestPlugins strip:latest beautify:dist docco:latest");
+	grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist bannerize:edge");
+	grunt.registerTask("latest", "build:latest build:latestPlugins strip:latest beautify:dist bannerize:latest docco:latest");
 	grunt.registerTask("ghpages", "shell:cleanup shell:getGhPages shell:copyLatest shell:updateGhPages shell:cleanup");
 	grunt.registerTask("deploy", "latest ghpages shell:bundleLatest downloads");
 };
