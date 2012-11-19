@@ -1,6 +1,6 @@
 steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
 	// _jQuery node list._
-	$.extend( can, jQuery, {
+	$.extend( can, $, {
 		trigger: function( obj, event, args ) {
 			if ( obj.trigger ) {
 				obj.trigger( event, args );
@@ -21,7 +21,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
 			var ret = $.buildFragment([result],$(element));
 			return ret.cacheable ? $.clone(ret.fragment) : ret.fragment;
 		},
-		$: jQuery,
+		$: $,
 		each: can.each
 	});
 
