@@ -31,7 +31,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					_logger( "log", Array.prototype.slice.call(arguments) );
 				}
 				else if (window.opera && window.opera.postError) {
-					opera.postError("fixture INFO: " + out);
+					opera.postError("fixture INFO: " + Array.prototype.join.call(arguments, ','));
 				}
 			}
 
