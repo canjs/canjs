@@ -57,20 +57,6 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 		new steal.File('can/build/templates/qunit.css').copyTo(testFolder + '/qunit.css');
 	};
 	/**
-	 * Build the AMD module distributable
-	 */
-	var buildAmd = function() {
-		var excludes = [ "can/build/make/amd.js", "can/util/util.js" ];
-		_.each(_.values(libs), function(val) {
-			excludes = excludes.concat(val.exclude);
-		});
-		steal.build.amdify('can/build/make/amd.js', {
-			out: outFolder + '/amd',
-			exclude: excludes
-		});
-		new steal.File('can/build/templates/amdutil.js').copyTo(outFolder + '/amd/can/util.js');
-	};
-	/**
 	 * Build can.jquery-all.js with all plugins.
 	 */
 	var buildjQueryAll = function() {
@@ -90,6 +76,22 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 			compress : true,
 			out : outFile + '.min.js'
 		}));
+	};
+	/**
+	 * Build the AMD module distributable
+	 */
+	var buildAmd = function() {
+		var excludes = [ "can/build/make/amd.js" ];
+		_.each(_.values(libs), function(val) {
+			excludes = excludes.concat(val.exclude);
+		});
+		steal.build.amdify('can/build/make/amd.js', {
+			out: outFolder + '/amd',
+			exclude: excludes,
+			map : {
+				'can/util' : 'can/util.js'
+			}
+		});
 	};
 
 	steal.File(outFolder).mkdirs();
