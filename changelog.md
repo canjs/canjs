@@ -1,4 +1,4 @@
-__1.1.1__ ( November 20, 2012 )
+__1.1.1__ ( November 19, 2012 )
 
 - Fixed [@@!!@@ Appears on Page With EJS and Table in non-IE Browsers](https://github.com/bitovi/canjs/issues/156)
 - Fixed [can.deparam leaks to global scope](https://github.com/bitovi/canjs/issues/152)
