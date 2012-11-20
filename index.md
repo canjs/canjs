@@ -1887,7 +1887,7 @@ CanJS can be used with jQuery, Dojo, Mootools, YUI and Zepto and as AMD modules 
 
 The [CanJS Download](https://github.com/downloads/bitovi/canjs/can.js.1.1.1.zip) contains an `amd` folder which allows
 you to load any CanJS component and plugin using an AMD module loader like [RequireJS](http://requirejs.org/).
-jQuery will be the default library so make sure the `jquery` module id points to the jQuery module.
+jQuery will be the default library so make sure the `jquery` module id points to the jQuery source.
 Here is an example for jQuery and RequireJS:
 
 {% highlight html %}
@@ -1923,12 +1923,14 @@ If you would like to use another library, map `can/util.js` to either:
 
 With RequireJS, it loks like:
 
+{% highlight javascript %}
 require.config({
   paths: {
     "can/util.js" : "can/util/zepto.js",
     "zepto" : "http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0rc1/zepto.min.js"
   }
 });
+{% endhighlight %}
 
 ### jQuery
 
