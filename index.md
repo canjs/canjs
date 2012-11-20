@@ -869,7 +869,7 @@ __JavaScript__
   can.$(document.body).append(template);
 {% endhighlight %}
 
-This will render:
+will render:
 
 {% highlight html %}
   <ul>
@@ -877,7 +877,7 @@ This will render:
   </ul>
 {% endhighlight %}
 
-Now we want to update the list with a new todo:
+Now to update the list with a new todo:
 
 {% highlight javascript %}
   list.push('Get groceries');
@@ -907,7 +907,7 @@ and sections to enumerate and/or filter the enclosed template blocks.
 
 #### Keys
 
-Keys insert data into the template.  They reference variables
+[Keys](http://donejs.com/docs.html#!Basics) insert data into the template.  They reference variables
 within the current context.  For example:
 
 {% highlight javascript %}
@@ -926,24 +926,9 @@ would render:
   "Austin"
 {% endhighlight %}
 
-Additionally, you can use `.` as a shorthand to reference the `this` object.
-For example:
-
-{% highlight html %}
-  "Austin"
-
-  {{"{{"}}.}}
-{% endhighlight %}
-
-would render:
-
-{% highlight html %}
-  "Austin"
-{% endhighlight %}
-
 ### Sections
 
-Sections contain text blocks and evaluate whether to render it or not.  If
+[Sections](http://donejs.com/docs.html#!Sections) contain text blocks and evaluate whether to render it or not.  If
 the object evaluates to an array it will iterate over it and render the block
 for each item in the array.  There are four different types of sections.
 
@@ -968,11 +953,9 @@ between the pound and slash.
 
 #### Arrays
 
-If the value is a non-empty array, sections will iterate over the
-array of items, rendering the items in the block between the pound and slash.
+If the value is a non-empty array, [sections](http://donejs.com/docs.html#!Sections) will iterate over the array of items, rendering the items in the block.
 
-For example, if I have a list of friends, I can iterate
-over each of those items within a section.
+For example, a list of friends will iterate over each of those items within a section.
 
 {% highlight javascript %}
   {
@@ -1002,8 +985,8 @@ would render:
 
 #### Truthy
 
-When the value is non-falsey object but not a list, it is considered truthy and will be used
-as the context for a single rendering of the block.
+[Truthy sections](http://donejs.com/docs.html#!Sections) match when the value is a non-falsey object but not a list
+and render the block accordingly.
 
 {% highlight javascript %}
   {
@@ -1029,8 +1012,9 @@ would render:
 
 #### Inverted
 
-Inverted sections match falsey values. An inverted section
-syntax is similar to regular sections except it begins with a caret rather than a pound. If the value referenced is falsey, the section will render.
+[Inverted sections](http://donejs.com/docs.html#!Sections) match falsey values. An inverted section
+syntax is similar to regular sections except it begins with a caret rather than a pound. 
+If the value referenced is falsey, the section will render.
 
 {% highlight javascript %}
   {
@@ -1058,6 +1042,8 @@ would render:
 {% endhighlight %}
 
 ### Paths and Context
+
+[Paths](http://donejs.com/docs.html#!Basics) allow you to reference variables relative to the current context.
 
 When Mustache is resolving a object in a section, it sets the current
 context to the value for which its iterating. For example:
@@ -1117,7 +1103,7 @@ it jumps up to the family object and resolves sisters there.
 
 ### Partials
 
-Partials are templates embedded in other templates which execute at runtime.
+[Partials](http://donejs.com/docs.html#!Partials) are templates embedded in other templates which execute at runtime.
 Partials begin with a greater than sign, like `{{"{{>"}}my_partial}}`.
 
 Partials are rendered at runtime, so recursive partials are possible but make sure you avoid infinite loops. They also inherit the calling context.
@@ -1148,13 +1134,10 @@ The resulting expanded template at render time would look like:
   {{"{{/"}}names}}
 {% endhighlight %}
 
-See the template acquisition section for more information on
-fetching partials.
-
 ### Helpers
 
-Below is a short list of the helpers that are included with
-can.Mustache.  For more in-depth list [click here](http://donejs.com/docs.html#!can.Mustache).
+[Helpers](http://donejs.com/docs.html#!Helpers) allow you to register functions that 
+can be called from any context in a template.
 
 #### Element Callbacks
 
