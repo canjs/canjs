@@ -1,7 +1,7 @@
 ---
 layout: default
 title: CanJS
-version : 1.1.0
+version : 1.1.1
 ---
 
 # Welcome to CanJS!
@@ -56,11 +56,11 @@ rich web applications easy. Use it because it's:
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core download 
 below or select the individual plugins above and click download:
 
- - [can.jquery.js](https://github.com/downloads/bitovi/canjs/can.jquery-1.1.0.js) ([min](https://github.com/downloads/bitovi/canjs/can.jquery-1.1.0.min.js))
- - [can.zepto.js](https://github.com/downloads/bitovi/canjs/can.zepto-1.1.0.js) ([min](https://github.com/downloads/bitovi/canjs/can.zepto-1.1.0.min.js))
- - [can.dojo.js](https://github.com/downloads/bitovi/canjs/can.dojo-1.1.0.js) ([min](https://github.com/downloads/bitovi/canjs/can.dojo-1.1.0.min.js))
- - [can.mootools.js](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.0.js) ([min](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.0.min.js))
- - [can.yui.js](https://github.com/downloads/bitovi/canjs/can.yui-1.1.0.js) ([min](https://github.com/downloads/bitovi/canjs/can.yui-1.1.0.min.js))
+ - [can.jquery.js](https://github.com/downloads/bitovi/canjs/can.jquery-1.1.1.js) ([min](https://github.com/downloads/bitovi/canjs/can.jquery-1.1.1.min.js))
+ - [can.zepto.js](https://github.com/downloads/bitovi/canjs/can.zepto-1.1.1.js) ([min](https://github.com/downloads/bitovi/canjs/can.zepto-1.1.1.min.js))
+ - [can.dojo.js](https://github.com/downloads/bitovi/canjs/can.dojo-1.1.1.js) ([min](https://github.com/downloads/bitovi/canjs/can.dojo-1.1.1.min.js))
+ - [can.mootools.js](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.1.js) ([min](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.1.min.js))
+ - [can.yui.js](https://github.com/downloads/bitovi/canjs/can.yui-1.1.1.js) ([min](https://github.com/downloads/bitovi/canjs/can.yui-1.1.1.min.js))
 
 The [Using CanJS](#using_canjs)
 section details the minor differences among use 
@@ -1888,17 +1888,16 @@ CanJS can be used with jQuery, Dojo, Mootools, YUI and Zepto and as AMD modules 
 
 ### AMD
 
-The [CanJS Download](https://github.com/downloads/bitovi/canjs/can.js.1.1.0.zip) contains an `amd` folder which allows
+The [CanJS Download](https://github.com/downloads/bitovi/canjs/can.js.1.1.1.zip) contains an `amd` folder which allows
 you to load any CanJS component and plugin using an AMD module loader like [RequireJS](http://requirejs.org/).
-You need to map the `can-library` module to `can/util/<libraryname>` for the library you are using. Here is an example
-for jQuery and RequireJS:
+jQuery will be the default library so make sure the `jquery` module id points to the jQuery module.
+Here is an example for jQuery and RequireJS:
 
 {% highlight html %}
 <script type="text/javascript" src="require.js"></script>
 <script type="text/javascript">
   require.config({
     paths : {
-      "can-library" : "can/util/jquery",
       "jquery" : "http://code.jquery.com/jquery-1.8.2"
     }
   });
@@ -1908,6 +1907,31 @@ for jQuery and RequireJS:
   });
 </script>
 {% endhighlight %}
+
+The `can` module is a shortcut that loads CanJS's core plugins (Construct, Control, route, Model, view, and EJS)
+and returns the `can` namespace.
+
+{% highlight javascript %}
+require(['can'], function(can) {
+  // Use can.Control, can.view, can.Model etc.
+});
+{% endhighlight %}
+
+If you would like to use another library, map `can/util.js` to either:
+
+- can/util/dojo
+- can/util/zepto
+- can/util/yui
+- can/util/mootools
+
+With RequireJS, it loks like:
+
+require.config({
+  paths: {
+    "can/util.js" : "can/util/zepto.js",
+    "zepto" : "http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0rc1/zepto.min.js"
+  }
+});
 
 ### jQuery
 
@@ -1974,89 +1998,12 @@ jQuery events, so for those cases, a workaround should be applied:
 ### Dojo
 
 CanJS supports Dojo 1.7+ using its new AMD loader in asynchronous or synchronous mode.
-CanJS depends on the following Dojo modules: __dojo__, __dojo/query__, __dojo/NodeList-dom__ and __dojo/NodeList-traverse__. It also uses the __plugd/trigger__ plugin for internal object and node event triggering.
+CanJS depends on the following Dojo modules: __dojo__, __dojo/query__, __dojo/NodeList-dom__ and __dojo/NodeList-traverse__.
+It also uses the __plugd/trigger__ plugin for internal object and node event triggering.
 
-Include a copy of Dojo and add the `'can/dojo'` module as a dependency in your require statement to get started.
+Because Dojo implements an AMD module loader you can refer to the [Using CanJS and AMD](#using_canjs-amd) section for loading
+CanJS using Dojo.
 
-{% highlight html %}
-<script type='text/javascript' src='path/to/js/dojo.js'></script>
-<script>
-require(['can/dojo'], function(can){ //will load path/to/js/can/dojo.js
-  // start using CanJS
-  Todo = can.Model({
-    ...
-  });
-});
-</script>
-{% endhighlight %}
-
-If you are including Dojo from a CDN or you want more control over your file structure, you will need to configure the packages path to `'can/dojo'`. This is done by declaring a variable named [dojoConfig](http://dojotoolkit.org/documentation/tutorials/1.7/dojo_config/) containing an array of package paths before including the Dojo library.
-
-{% highlight html %}
-<script>
-//Using dojoConfig to load can/dojo from a local directory
-var dojoConfig = {
-  packages: [{
-    name: "can/dojo",
-    location: location.pathname.replace(/\/[^/]+$/, ""),
-    main: "can.dojo.js"
-  }]
-}
-</script>
-<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/dojo/
-1.8.1/dojo/dojo.js'></script>
-<script>
-require(['can/dojo'], function(can){
-  // start using CanJS
-  Todo = can.Model({
-    ...
-  });
-});
-</script>
-{% endhighlight %}
-
-You can also configure package paths using the [require function](http://dojotoolkit.org/documentation/tutorials/1.7/modules/).
-
-{% highlight html %}
-<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/dojo/
-1.7.1/dojo/dojo.js'></script>
-<script>
-//Using require to load can/dojo from a local directory
-require({
-  packages: [{
-    name: "can/dojo",
-    location: location.pathname.replace(/\/[^/]+$/, ""),
-    main: "can.dojo"
-  }]
-}, ['can/dojo',], function(can){
-  // start using CanJS
-  Todo = can.Model({
-    ...
-  });
-});
-</script>
-{% endhighlight %}
-
-CanJS can bind to any Dijit, Dojox or custom widget events using [templated event binding](#can_control-templated_event_handlers_pt_2). Below is an example of binding to the __onChange__ event of the dijit.CalendarLite widget:
-
-{% highlight javascript %}
-require(['can/dojo', 
-  'dijit/CalendarLite'], 
-function(can, CalendarLite){
-  //Define a Control
-  Todo = can.Control({
-    //events are lowercase and don't use on (onChange -> change)
-    "{calendar} change" : function(calendar, newDate) {
-      //onChange handler: do something with the newDate selected
-    }
-  });
-  
-  //Initialize app with a calendar widget
-  new Todo('#todoList', {
-    calendar: new CalendarLite({}, "calendar")
-  });
-});
-{% endhighlight %}
 
 ### Mootools
 
@@ -3068,6 +3015,14 @@ for helping us with new features, bug fixes, and getting this out the door.
 
 ### Change Log
 
+__1.1.1__ ( November 19, 2012 )
+
+- Fixed [@@!!@@ Appears on Page With EJS and Table in non-IE Browsers](https://github.com/bitovi/canjs/issues/156)
+- Fixed [can.deparam leaks to global scope](https://github.com/bitovi/canjs/issues/152)
+- Fixed [nested attr() call on a model with List attributes blows away existing List](https://github.com/bitovi/canjs/pull/160)
+- Added [https://github.com/bitovi/canjs/issues/162](https://github.com/bitovi/canjs/issues/162)
+- Improved AMD support, see [#155](https://github.com/bitovi/canjs/issues/155)
+
 __1.1.0__ ( November 13, 2012 )
 
  - Added [AMD module](#using_canjs-amd) support for each dependency ([#46](https://github.com/bitovi/canjs/issues/46))
@@ -3108,7 +3063,6 @@ __1.1.0__ ( November 13, 2012 )
     - Added [missing dependency to can/model](https://github.com/bitovi/canjs/pull/140)
     - Moved can/model/elements to can/observe/elements and renamed `models` to `instances`
     - Fixed [can.Model.List doesn't fire the change event on the expando properties ](https://github.com/bitovi/canjs/issues/129)
-
 
 __1.0.7__ (June 25nd 2012)
 
