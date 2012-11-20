@@ -150,6 +150,14 @@ var attrMap = {
 				nodeListIds = nodeMap[id(node)] = [];
 			}
 			nodeListIds.push(nodeListId);
+	},
+	tagChildren = function(tagName) {
+		var newTag = tagMap[tagName] || "span";
+		if(newTag === "span") {
+			//innerHTML in IE doesn't honor leading whitespace after empty elements
+			return "@@!!@@";
+		}	
+		return "<" + newTag + ">" + tagChildren(newTag) + "</" + newTag + ">";
 	};
 
 can.extend(can.view, {
@@ -321,10 +329,9 @@ can.extend(can.view, {
 						// at this point, these nodes could be part of a documentFragment
 					makeAndPut(binding.value, [span]);
 					
-					
 					setupTeardownOnDestroy(parentNode);
-			//buildFragment, specifically innerHTML, in IE doesn't honor leading whitespace after empty elements
-			}) + ">@@!!@@</" +tag+">";
+			//children have to be properly nested HTML for buildFragment to work properly
+			}) + ">"+tagChildren(tag)+"</" +tag+">";
 		// In a tag, but not in an attribute
 		} else if( status === 1 ) { 
 			// remember the old attr name

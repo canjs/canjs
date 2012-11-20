@@ -913,7 +913,6 @@ test("nested live bindings", function(){
 	// nested objects
 
 	items[0].attr('is_done',true);
-	console.log("html -",div.innerHTML)
 });
 
 // Similar to the nested live bindings test, this makes sure templates with control blocks
@@ -1096,7 +1095,6 @@ test("live binding with parent dependent tags but without parent tag present in 
 	
 	table.appendChild(can.view.frag(compiled));
 
-
 	equals(table.getElementsByTagName('tr')[0].firstChild.nodeName.toUpperCase(), "TD");
 	equals(table.getElementsByTagName('tr')[0].firstChild.innerHTML, "Austin");
 	equals(table.getElementsByTagName('tr')[1].firstChild.nodeName.toUpperCase(), "TD");
@@ -1171,7 +1169,6 @@ test('testing for clean tables', function() {
 
 	div.appendChild(can.view.frag(res));
 
-	console.log(div.innerHTML);
 	ok(!(/@@!!@@/.test(div.innerHTML)), "no placeholders" );
 
 })
