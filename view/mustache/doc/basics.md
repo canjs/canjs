@@ -1,6 +1,24 @@
 @page Basics
 @parent can.Mustache 0
 
+## Keys
+
+## Keys
+
+Keys insert data into the template.  They reference variables
+within the current context.  For example:
+
+	{
+    		name: "Austin"
+	}
+
+	{{name}}
+
+would render:
+
+
+  "Austin"
+
 ## Escaping Values
 
 Mustache will escape values enclosed in a `{{  }}` expression.  For example:
