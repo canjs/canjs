@@ -1904,13 +1904,17 @@ If you would like to use another library, map `can/util.js` to either:
 - can/util/yui
 - can/util/mootools
 
-With RequireJS, it loks like:
+With RequireJS and Zepto, it loks like this:
 
 {% highlight javascript %}
 require.config({
-  paths: {
-    "can/util.js" : "can/util/zepto.js",
-    "zepto" : "http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0rc1/zepto.min.js"
+  map : {
+    '*' : {
+		  "can/util.js" : "can/util/zepto.js"
+  	}
+  },
+  paths: {    
+    "zepto" : "http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0rc1/zepto.min"
   }
 });
 {% endhighlight %}
