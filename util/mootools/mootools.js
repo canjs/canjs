@@ -177,6 +177,7 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 		}
 		// Mootools defaults to 'post', but Can expects a default of 'get'
 		requestOptions.method = requestOptions.method || 'get';
+		requestOptions.url = requestOptions.url.toString();
 
 		var success = options.success,
 			error = options.error;
