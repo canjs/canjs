@@ -836,11 +836,8 @@ logic-less templates with live binding when used with [can.Observes](#can_observ
 [Download can.Mustache](http://canjs.us/release/latest/can.view.mustache.js)
 ([Annotated source](http://donejs.com/can/docs/can.view.mustache.html))
 
-can.Mustache is designed to help seperate logic out of your view code without
-sacrifices.
-
-Mustache and Handlebar templates are compatible with can.Mustache,
-so you can import existing templates and automagically start live-binding.
+[Mustache](https://github.com/janl/mustache.js/) and [Handlebar](http://handlebarsjs.com/) templates are compatible with can.Mustache,
+so you can import existing templates.
 
 ### Getting Started
 
@@ -1132,7 +1129,7 @@ __base.mustache__
 {% highlight html %}
   <h2>Names</h2>
   {{"{{#"}}names}}
-    {{"{{>"}}user}}
+    {{"{{>"}}user.mustache}}
   {{"{{/"}}names}}
 {% endhighlight %}
 
@@ -1182,14 +1179,14 @@ helper followed by the attribute name you want to attach it as.  For example:
 
 {% highlight html %}
   <ul>
-    <li id="foo" {{"{{"}}data 'person'}}>{{"{{"}}name}}</li>
+    <li id="personli" {{"{{"}}data 'person'}}>{{"{{"}}name}}</li>
   </ul>
 {% endhighlight %}
 
 Now I can access my object by doing:
 
 {% highlight javascript %}
-  var nameObject = can.$('#foo').data('name');
+  var nameObject = can.data(can.$('#personli'), 'name');
 {% endhighlight %}
 
 It automatically attaches the data to the
@@ -1197,7 +1194,7 @@ element using `can.data` with implied context of `this`.
 
 #### Registering Helpers
 
-To register your own helper, use the `Mustache.registerHelper` method.
+To register your own helper, use the `can.Mustache.registerHelper` method.
 
 Localization is a good example of a custom helper you might implement
 in your application. The below example takes a given key and
@@ -1205,7 +1202,7 @@ returns the localized value using
 [jQuery Globalize](https://github.com/jquery/globalize).
 
 {% highlight javascript %}
-  Mustache.registerHelper('l10n', function(str, options){
+  can.Mustache.registerHelper('l10n', function(str, options){
     return (Globalize != undefined ? Globalize.localize(str) : str);
   });
 {% endhighlight %}
