@@ -85,6 +85,18 @@ the view name. The renderer function can be called with the template data at a l
     document.getElementById('recipes')
       .appendChild( renderer(recipeData ) )
 
+It is also possible to get a nameless renderer function when creating a template from a string:
+
+    var renderer = can.view.ejs('<strong><%= message %></strong>');
+    renderer({
+      message : 'Message form EJS'
+    }); // -> <strong>Message from EJS</strong>
+
+    renderer = can.view.mustache('<strong>{{message}}</strong>');
+    renderer({
+      message : 'Message form Mustache'
+    }); // -> <strong>Message from Mustache</strong>
+
 ## Supported Template Engines
 
 CanJS supports the following template languages:

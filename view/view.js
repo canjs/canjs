@@ -95,8 +95,15 @@ steal("can/util", function( can ) {
 		 *      });
 		 *      text // -> <h2>Hello there!</h2>
 		 *
-		 * @param {String} id The template id
-		 * @param {String} template The EJS template string
+		 * You can also retrieve nameless mustache renderers:
+		 *
+		 *      var renderer = can.view.mustache('<div><%= message %></div>');
+		 *      renderer({
+		 *          message : 'EJS'
+		 *      }); // -> <div>EJS</div>
+		 *
+		 * @param {String} id The template id or templates string to get a nameless renderer function
+		 * @param {String} [template] The EJS template string when registered with an id
 		 */
 		//
 		/**
@@ -110,8 +117,15 @@ steal("can/util", function( can ) {
 		 *      });
 		 *      text // -> <h2>Hello there!</h2>
 		 *
-		 * @param {String} id The template id
-		 * @param {String} template The Mustache template string
+		 * You can also retrieve nameless mustache renderers:
+		 *
+		 *      var renderer = can.view.mustache('<div>{{message}}</div>');
+		 *      renderer({
+		 *          message : 'Mustache'
+		 *      }); // -> <div>Mustache</div>
+		 *
+		 * @param {String} id The template id or templates string to get a nameless renderer function
+		 * @param {String} [template] The Mustache template string when registered with an id
 		 */
 		//
 		/**
@@ -542,7 +556,13 @@ steal("can/util", function( can ) {
 				})
 			}
 			$view[info.suffix] = function(id, text){
-				$view.preload(id, info.renderer(id, text) )
+				if(!text) {
+					// Return a nameless renderer
+					return info.renderer(null, id);
+				}
+
+				$view.preload(id, info.renderer(id, text));
+				return can.view(id);
 			}
 		},
 		registerScript: function( type, id, src ) {

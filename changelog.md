@@ -1,7 +1,9 @@
-__1.1.1__
+__1.1.1__ ( November 20, 2012 )
 
 - Fixed [@@!!@@ Appears on Page With EJS and Table in non-IE Browsers](https://github.com/bitovi/canjs/issues/156)
 - Fixed [can.deparam leaks to global scope](https://github.com/bitovi/canjs/issues/152)
+- Fixed [nested attr() call on a model with List attributes blows away existing List](https://github.com/bitovi/canjs/pull/160)
+- Added [https://github.com/bitovi/canjs/issues/162](https://github.com/bitovi/canjs/issues/162)
 
 __1.1.0__ ( November 13, 2012 )
 
