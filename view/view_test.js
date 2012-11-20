@@ -168,7 +168,9 @@
 
 
 	test("return renderer", function() {
-		var renderer = can.view.ejs('renderer_test', "This is a <%= test %>");
+		var directResult = can.view.ejs('renderer_test', "This is a <%= test %>");
+		var renderer = can.view('renderer_test');
+		ok(can.isFunction(directResult), 'Renderer returned directly');
 		ok(can.isFunction(renderer), 'Renderer is a function');
 		equal(renderer({ test : 'working test' }), 'This is a working test', 'Rendered');
 		renderer = can.view("//can/view/test/qunit/template.ejs");

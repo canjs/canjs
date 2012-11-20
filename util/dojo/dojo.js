@@ -1,4 +1,5 @@
-steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'can/util/array/each.js', 'can/util/object/isplain', function(can) {
+steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'can/util/array/each.js',
+'can/util/object/isplain', 'can/util/deferred.js', function(can) {
 	define("plugd/trigger", ["dojo"], function( dojo ) {
 
 		var d = dojo,
@@ -563,4 +564,4 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 	});
 
 	return can;
-}).then('can/util/deferred.js')
+});

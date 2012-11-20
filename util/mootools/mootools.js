@@ -1,6 +1,5 @@
-steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
-'can/util/array/each.js', 'can/util/object/isplain', 'can/util/object/extend',
-function(can) {
+steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js', 'can/util/deferred.js',
+'can/util/array/each.js', 'can/util/object/isplain', 'can/util/object/extend', function(can) {
 	// mootools.js
 	// ---------
 	// _MooTools node list._
@@ -282,4 +281,4 @@ function(can) {
 	}
 
 	return can;
-},'can/util/deferred.js');
+});

@@ -187,6 +187,7 @@
 
             can.trigger(can.$(div), 'click');
             can.trigger(window, 'click');
+	        rb.destroy();
         });
     }
 

@@ -1,5 +1,7 @@
-steal('can/util/can.js', 'zepto', 'can/util/event.js', 'can/util/fragment.js',function (can) {
+steal('can/util/can.js', 'zepto', 'can/util/event.js', 'can/util/fragment.js', 'can/util/deferred.js', 'can/util/array/each.js',
+function (can) {
 	var $ = Zepto;
+
 	// data.js
 	// ---------
 	// _jQuery-like data methods._
@@ -41,8 +43,10 @@ steal('can/util/can.js', 'zepto', 'can/util/event.js', 'can/util/fragment.js',fu
 	// ---------
 	// _Zepto node list._
 
+	var oldEach = can.each;
 	// Extend what you can out of Zepto.
 	$.extend(can, Zepto);
+	can.each = oldEach;
 
 	var arrHas = function (obj, name) {
 		return obj[0] && obj[0][name] || obj[name]
@@ -70,7 +74,7 @@ steal('can/util/can.js', 'zepto', 'can/util/event.js', 'can/util/fragment.js',fu
 
 	}
 
-	can.$ = Zepto
+	can.$ = Zepto;
 
 	can.bind = function (ev, cb) {
 		// If we can bind to it...
@@ -228,4 +232,4 @@ steal('can/util/can.js', 'zepto', 'can/util/event.js', 'can/util/fragment.js',fu
 
 
 	return can;
-}).then('can/util/deferred.js', 'can/util/array/each.js')
+});
