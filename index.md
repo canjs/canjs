@@ -2548,7 +2548,7 @@ __View the App__
 - [YUI with calendar widget](http://donejs.com/examples/todo/yui-widget/index.html)
 - [Zepto](http://donejs.com/examples/todo/zepto/index.html)
 
-[View the source on github](https://github.com/jupiterjs/cantodo)
+[View the source on github](https://github.com/bitovi/cantodo)
 
 ### CanPlay
 
@@ -2570,7 +2570,7 @@ Srchr searches several data sources for content and displays it to the user. It 
 
 [__View the App__](http://donejs.com/examples/srchr/index.html)
 
-[View the source on github](https://github.com/jupiterjs/srchr)
+[View the source on github](https://github.com/bitovi/srchr)
 
 ### Contacts
 
@@ -2670,7 +2670,7 @@ This site highlights the most important features of CanJS.  The library comes wi
 and examples on the [DoneJS documentation page](http://donejs.com/docs.html).  There are example apps for
 each library and several example for jQuery. 
 
-CanJS is also supported by Bitovi, formerly [Jupiter Consulting](http://jupiterjs.com).  We are extremely active on 
+CanJS is also supported by Bitovi, formerly [Jupiter Consulting](http://bitovi.com).  We are extremely active on 
 the [forums](https://forum.javascriptmvc.com/#Forum/canjs). And should the need arise, we provide support, training, and development.
 
 ### Safety
@@ -2880,7 +2880,7 @@ Steal as submodules that are used to generate the documentation and build the Ca
  1. `fork` [CanJS on github](https://github.com/bitovi/canjs).
  2. Clone DoneJS with:
 
-        git clone git@github.com:jupiterjs/donejs
+        git clone git@github.com:bitovi/donejs
         
  3. Open the donejs folder's .gitmodule file and change the URL of the `"can"` submodule:
 
@@ -2961,7 +2961,7 @@ It puts the downloads in `can/dist/edge`.
 
 The following lists everyone who's contributed something to CanJS.  If we've forgotten you, please add yourself.
 
-First, thanks to everyone who's contributed to [JavaScriptMVC](https://github.com/jupiterjs/javascriptmvc/contributors) 
+First, thanks to everyone who's contributed to [JavaScriptMVC](https://github.com/bitovi/javascriptmvc/contributors) 
 and [jQueryMX](https://github.com/jupiterjs/jquerymx/contributors), and the people at 
 [Bitovi](http://bitovi.com/people/).  You deserve heaps of recognition as CanJS is direcly based 
 off JavaScriptMVC.  This page is for contributors after CanJS's launch. Thank you
