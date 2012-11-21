@@ -282,11 +282,22 @@ hobbies.unshift( 'rocking parties' )
 
 ### can.compute `can.compute( [getterSetter,] [context] ) -> compute`
 
+(docs in progress ...)
+
 [can.compute](http://donejs.com/docs.html#!can.compute) represents some value that can be:
  - __read__ - by calling the compute like `compute()`
  - __updated__ - by passing a new value like `compute("new value")`
- - __listened__ to for changes - like `compute.bind("change", handler(ev,newVal,oldVal) )`
+ - __listened__ to for changes - like `compute.bind("change",handle(ev,newVal,oldVal))`
 
+The value the compute represents can be:
+
+ - A __static__ JavaScript value like `"Hello"` or `{foo: "bar"}`
+
+       {% highlight javascript %}
+       var percent = can.compute(55);
+       {% endhighlight %}  
+
+ - A __composite__
 
 
 ## can.Model `can.Model( [classProperties,] [prototypeProperties] )`
