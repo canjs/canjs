@@ -292,13 +292,10 @@ hobbies.unshift( 'rocking parties' )
 The value the compute represents can be:
 
  - A __static__ JavaScript value like `"Hello"` or `{foo: "bar"}`
+ - A __composite__ value of one or more [can.Observe](#can_observe) property values.
+ - A __converted__ value derived from another value.
 
-       {% highlight javascript %}
-       var percent = can.compute(55);
-       {% endhighlight %}  
-
- - A __composite__
-
+#### Static Values
 
 ## can.Model `can.Model( [classProperties,] [prototypeProperties] )`
 
