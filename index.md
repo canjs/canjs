@@ -297,6 +297,24 @@ The value the compute represents can be:
 
 #### Static Values
 
+`can.compute([value])` creates a computed with some value. For example
+
+{% highlight javascript %}
+// create a compute
+var age = can.compute(29);
+
+// read the value
+console.log("my age is currently", age());
+
+// listen to changes in age
+age.bind("change", function(ev, newVal, oldVal){
+  console.log("my age changed from",oldVal,"to",newVal)
+})
+// update the age
+age(30);
+{% endhighlight %}
+
+
 ## can.Model `can.Model( [classProperties,] [prototypeProperties] )`
 
 [can.Model](http://donejs.com/docs.html#!can.Model) is a [can.Observe](#can_observe) that connects
