@@ -280,6 +280,15 @@ hobbies.pop()
 hobbies.unshift( 'rocking parties' )
 {% endhighlight %}  
 
+### can.compute `can.compute( [getterSetter,] [context] ) -> compute`
+
+[can.compute](http://donejs.com/docs.html#!can.compute) represents some value that can be:
+ - __read__ - by calling the compute like `compute()`
+ - __updated__ - by passing a new value like `compute("new value")`
+ - __listened__ to for changes - like `compute.bind("change", handler(ev,newVal,oldVal) )`
+
+
+
 ## can.Model `can.Model( [classProperties,] [prototypeProperties] )`
 
 [can.Model](http://donejs.com/docs.html#!can.Model) is a [can.Observe](#can_observe) that connects
