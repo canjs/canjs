@@ -282,8 +282,6 @@ hobbies.unshift( 'rocking parties' )
 
 ### can.compute `can.compute( [getterSetter,] [context] ) -> compute`
 
-(docs in progress ...)
-
 [can.compute](http://donejs.com/docs.html#!can.compute) represents some value that can be:
  - __read__ - by calling the compute like `compute()`
  - __updated__ - by passing a new value like `compute("new value")`
@@ -314,6 +312,62 @@ age.bind("change", function(ev, newVal, oldVal){
 age(30);
 {% endhighlight %}
 
+#### Composite values
+
+`can.compute( getter(), context )` creates a compute that represents a composite value of one or more
+can.Observe properties and can.computes.  The following `fullName` compute
+represents the `person` observe's first and last name:
+
+{% highlight javascript %}
+var person = new can.Observe({
+  first : "Justin",
+  last : "Meyer"
+});
+var fullName = can.compute(function(){
+  return person.attr("first") +" "+ person.attr("last")
+})
+
+fullName() //-> "Justin Meyer"
+
+fullName.bind("change", function(ev, newVal, oldVal){
+  console.log("fullName changed from", oldVal,"to",newVal)
+});
+
+person.attr({
+  first: "David",
+  last: "Luecke"
+})
+{% endhighlight %}
+
+`can.compute` caches computed values so reads are fast.
+
+#### Converted Values
+
+`can.compute( getterSetter( [newVal] ) )` can be used to convert one value into another. The following
+creates a `percentage` compute that ranges from 0-100 that is cross bound to an observe's progress
+property that ranges from 0-1.
+
+{% highlight javascript %}
+var project = new can.Observe({
+  progress :  0.5
+});
+var percentage = can.compute(function(newVal){
+  // are we setting?
+  if(newVal !=== undefined){
+    project.attr("progress", newVal / 100)  
+  } else {
+    return project.attr("progress") * 100;  
+  }
+})
+
+// We can read from percentage.
+percentage() //-> 50
+
+// Write to percentage,
+percentage(75)
+// but it updates project!
+project.attr('progress') //-> 0.75
+{% endhighlight %}
 
 ## can.Model `can.Model( [classProperties,] [prototypeProperties] )`
 
