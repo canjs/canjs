@@ -1005,6 +1005,21 @@ test("live binding textarea", function(){
 	
 })
 
+test("reset on a live bound input", function(){
+	var text = "<input type='text' value='<%= person.attr('name') %>'><button type='reset'>Reset</button>",
+		person = new can.Observe({
+			name: "Bob"
+		}),
+		compiled = new can.EJS({text: text}).render({person: person}),
+		form = document.createElement('form'),
+		input;
+		
+		form.appendChild(can.view.frag(compiled))
+		input = form.getElementsByTagName('input')[0];
+		form.reset();
+		equals(input.value, "Bob", "value is correct");
+});
+
 test("A non-escaping live magic tag within a control structure and no leaks", function(){
 	
 	for(var prop in can.view.nodeMap){
