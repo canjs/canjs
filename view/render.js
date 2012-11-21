@@ -28,7 +28,7 @@ var attrMap = {
 	},	
 	attributePlaceholder = '__!!__',
 	attributeReplace = /__!!__/g,
-	tagToContentPropMap= {
+	tagToContentPropMap = {
 		option: "textContent",
 		textarea: "value"
 	},
@@ -40,15 +40,20 @@ var attrMap = {
 	getParentNode = function(el, defaultParentNode){
 		return defaultParentNode && el.parentNode.nodeType === 11 ? defaultParentNode : el.parentNode;
 	},
-	setAttr = function(el, attrName, val){
-		// if this is a special property
-		if ( attrMap[attrName] ) {
-			// set the value as true / false
-			el[attrMap[attrName]] = can.inArray(attrName,bool) > -1 ? true  : val;
-		} else {
-			el.setAttribute(attrName, val);
-		}
-	},
+	setAttr = function (el, attrName, val) {
+			var tagName = el.nodeName.toString().toLowerCase(),
+				prop = attrMap[attrName];
+			// if this is a special property
+			if (prop) {
+				// set the value as true / false
+				el[prop] = can.inArray(attrName, bool) > -1 ? true : val;
+				if(prop === "value" && tagName === "input") {
+					el.defaultValue = val;
+				}
+			} else {
+				el.setAttribute(attrName, val);
+			}
+		},
 	getAttr = function(el, attrName){
 		// Default to a blank string for IE7/8
 		return (attrMap[attrName]?
