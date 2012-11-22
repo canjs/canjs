@@ -378,7 +378,7 @@ following prevents all events from being triggered on `person` and `items` until
 after `can.Observe.stopBatch()` is called.
 
 {% highlight javascript %}
-var person = new can.Observe({first: "Josh", last: "Dean}),
+var person = new can.Observe({first: "Josh", last: "Dean"}),
     list = new can.Observe.List([
       {selected: false},
       {selected: true },
@@ -396,6 +396,7 @@ list.each( function( item ) {
 can.Observe.stopBatch();
 {% endhighlight %}
 
+Batching operations can improve performance, especially with live-binding.
 
 ## can.Model `can.Model( [classProperties,] [prototypeProperties] )`
 
