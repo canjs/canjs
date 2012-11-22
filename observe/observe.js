@@ -246,7 +246,11 @@ steal('can/util','can/construct', function(can) {
 			}
 		},
 		/**
-		 * Creates an event on item, but will not send immediately if collecting events.  
+		 * @parent can.Observe.batchEvents
+		 * 
+		 * Creates an event on item, but will not send 
+		 * immediately if collecting events.  
+		 * 
 		 * @param {can.Observe} item The item the event should happen on.  
 		 * @param {String|Object} event - The event name, ex: `change`, or an object with an event type, ex: `{type: 'change'}`.  
 		 * @param {Array} - The arguments to call back the function with.
