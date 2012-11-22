@@ -369,6 +369,34 @@ percentage(75)
 project.attr('progress') //-> 0.75
 {% endhighlight %}
 
+### Batch Operations
+
+Use [can.Observe.startBatch](http://donejs.com/docs.html#!can.Observe.static.startBatch) and
+[can.Observe.stopBatch](http://donejs.com/docs.html#!can.Observe.static.stopBatch) to
+enable [atomic/batch operations](http://donejs.com/docs.html#!can.Observe.batchEvents). The
+following prevents all events from being triggered on `person` and `items` until
+after `can.Observe.stopBatch()` is called.
+
+{% highlight javascript %}
+var person = new can.Observe({first: "Josh", last: "Dean}),
+    list = new can.Observe.List([
+      {selected: false},
+      {selected: true },
+      {selected: false}
+    ]);
+
+person.bind("change", function(){} );
+list.bind("change", function(){} );
+
+can.Observe.startBatch();
+person.attr("first", "Joshua");
+list.each( function( item ) {
+  item.attr('selected', true)
+})
+can.Observe.stopBatch();
+{% endhighlight %}
+
+
 ## can.Model `can.Model( [classProperties,] [prototypeProperties] )`
 
 [can.Model](http://donejs.com/docs.html#!can.Model) is a [can.Observe](#can_observe) that connects
