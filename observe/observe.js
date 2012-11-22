@@ -127,16 +127,101 @@ steal('can/util','can/construct', function(can) {
 		// takes a callback for after they are updated
 		// how could you hook into after ejs
 		/**
+		 * @parent can.Observe.batchEvents 
 		 * `can.Observe.startBatch([batchStopHandler])` starts a 
-		 * transaction. 
-		 * @param {Function} [batchStopHandler]
+		 * batch transaction. All change events caused by
+		 * [can.Observe::attr] will not be fired until [can.Observe.stopBatch]
+		 * is called.  In the following example, the `"first"` and `"change"`
+		 * event handlers are not called until [can.Observe.stopBatch] is called:
+		 * 
+		 *     var person = new can.Observe({
+		 * 	     first: "Alexis",
+		 *       last:  "Abril"
+		 *     });
+		 *     
+		 *     person.bind("first", function(){
+		 * 	     console.log("first changed")
+		 *     }).bind("change", function(){
+		 * 	     console.log("change")
+		 *     });
+		 *     
+		 *     can.Observe.startBatch();
+		 *     person.attr("first","Alex");
+		 *     
+		 *     setTimeout(function(){
+		 * 	     can.Observe.stopBatch();
+		 *     },100);
+		 * 
+		 * Pass a callback to `can.Observe.startBatch` and it will
+		 * be called immediately after all events have been triggered. Example:
+		 * 
+		 *     var date = can.compute(new Date);
+		 *     can.Observe.startBatch(function(){
+		 * 	     // after trigger
+		 *     });
+		 *     
+		 *     date(newDate);
+		 * 
+		 *     can.Observe.stopBatch()
+		 *     
+		 * Calling `can.Observe.startBatch()` increments a
+		 * counter that requires an equal number of `stopBatch`. Example:
+		 * 
+		 *     var selectAll = function(){
+		 * 	     can.Observe.startBatch();
+		 *       items.each(function(){
+		 * 	       item.attr('selected', true)
+		 *       })
+		 *       can.Observe.stopBatch();
+		 *     }
+		 * 
+		 *     can.Observe.startBatch();
+		 *     selectAll();
+		 *     person.attr('first','Justin')
+		 *     can.Observe.endBatch();
+		 *  
+		 * @param {Function} [batchStopHandler] A callback that gets called
+		 * after all events have been triggered.
 		 */
 		startBatch: function( batchStopHandler ) {
 			transactions++;
 			batchStopHandler && stopCallbacks.push(batchStopHandler);
 		},
 		/**
-		 * `can.Observe.stopBatch([force,] [callStart])`
+		 * @parent can.Observe.batchEvents
+		 * `can.Observe.stopBatch([force,] [callStart])` decrements the 
+		 * internal counter and potentially triggers all pending change events. Example:
+		 * 
+		 *     var person = new can.Observe({
+		 * 	     first: "Alexis",
+		 *       last:  "Abril"
+		 *     });
+		 *     
+		 *     person.bind("first", function(){
+		 * 	     console.log("first changed")
+		 *     }).bind("change", function(){
+		 * 	     console.log("change")
+		 *     });
+		 *     
+		 *     can.Observe.startBatch();
+		 *     person.attr("first","Alex");
+		 *     
+		 *     setTimeout(function(){
+		 * 	     can.Observe.stopBatch();
+		 *     },100);
+		 * 
+		 * `can.Observe.startBatch(true)` dispatches all
+		 * pending requests no matter what the internal transaction
+		 * counter is set to. Example:
+		 * 
+		 *     can.Observe.startBatch();
+		 *     can.Observe.startBatch();
+		 *     person.attr('first',"Julie");
+		 *     can.Observe.stopBatch(true);
+		 * 
+		 * `can.Observe.startBatch(true, true)` dispatches
+		 * all pending requests and immediately calls
+		 * `can.Observe.startBatch`.
 		 */
 		stopBatch: function(force, callStart){
 			if(force){
@@ -207,6 +292,11 @@ steal('can/util','can/construct', function(can) {
 		setup: function( obj ) {
 			// `_data` is where we keep the properties.
 			this._data = {};
+			/**
+			 * @attribute _cid
+			 *
+			 * A globally unique ID for this Observe instance.
+			 */
 			// The namespace this `object` uses to listen to events.
 			can.cid(this, ".observe");
 			// Sets all `attrs`.
@@ -218,12 +308,6 @@ steal('can/util','can/construct', function(can) {
 		_changes: function(ev, attr, how,newVal, oldVal){
 			Observe.triggerBatch(this, {type:attr, batchNum: ev.batchNum}, [newVal,oldVal]);
 		},
-		/**
-		 * @attribute _cid
-		 *
-		 * A globally unique ID for this Observe instance.
-		 */
-
 		/**
 		 * Get or set an attribute or attributes on the observe.
 		 * 

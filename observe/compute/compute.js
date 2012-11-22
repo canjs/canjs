@@ -194,6 +194,22 @@ steal('can/util', function(can) {
 	 * When an event handler is bound to fullName it starts
 	 * caching the computes value so additional reads are faster!
 	 * 
+	 * ### Computes with prototype functions
+	 * 
+	 * To make a compute of an object's prototype method,
+	 * pass the method and the context the function should be called with
+	 * to `can.compute`:
+	 * 
+	 *     var Person = can.Construct({
+	 *       fullName: function(){
+	 *         return this.attr('first')+' '+this.attr('last')
+	 *       }
+	 *     });
+	 * 
+	 * 	var josh = new Person({ first: "Josh",  last: "Dean" }),
+	 * 	
+	 * 		fullName = can.compute(josh.fullName, josh);
+	 * 
 	 * ## Converted values
 	 * 
 	 * `can.compute( getterSetter( [newVal] ) )` can be used to convert one observe's value into
@@ -226,7 +242,29 @@ steal('can/util', function(can) {
 	 *       val : percentage
 	 *     })
 	 * 
+	 * 
 	 * ## Using computes in building controls.
+	 * 
+	 * The following sudo-code slider cross binds to the 
+	 * percent compute. When the drag ends, it updates the
+	 * percent compute.  If the compute changes, it updates
+	 * the slider's position:  
+	 * 
+	 *     // A sudo-slider
+	 *     var Slider = can.Control({
+	 *       ".slider dragend": function(){
+	 * 	    var percent = this.calculatePercent();
+	 * 	    this.options.percent(percent)
+	 * 	  },
+	 * 	  "{percent} change": function(value, ev, newVal){
+	 * 	    // update position of slider to newVal
+	 * 	  },
+	 * 	  calculatePercent: function(){
+	 * 	    // check .slider's position and return a percent
+	 * 	  }
+	 * 	});
+	 * 	
+	 * 	new Slider("#slider", {percent: percent});
 	 * 
 	 * Widgets that listen to data changes and automatically update 
 	 * themselves kick ass. It's what the V in MVC is all about.  
