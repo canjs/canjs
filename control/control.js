@@ -138,11 +138,13 @@ steal('can/util','can/construct', function( can ) {
 			if ( options || ! paramReplacer.test( methodName )) {
 				// If we have options, run sub to replace templates `{}` with a
 				// value from the options or the window
-				var convertedName = options ? can.sub(methodName, [options, window]) : methodName,
-					
-					// If a `{}` template resolves to an object, `convertedName` will be
-					// an array
-					arr = can.isArray(convertedName),
+				var convertedName = options ? can.sub(methodName, [options, window]) : methodName;
+				if(!convertedName) {
+					return null;
+				}
+				// If a `{}` template resolves to an object, `convertedName` will be
+				// an array
+				var arr = can.isArray(convertedName),
 
 					// Get the name
 					name = arr ? convertedName[1] : convertedName,
@@ -550,14 +552,11 @@ steal('can/util','can/construct', function( can ) {
 					funcName, ready;
 					
 				for ( funcName in actions ) {
-					if ( actions.hasOwnProperty( funcName )) {
-						ready = actions[funcName] || cls._action(funcName, this.options);
-						bindings.push(
-							ready.processor(ready.delegate || element, 
-							                ready.parts[2], 
-											ready.parts[1], 
-											funcName, 
-											this));
+					// Only push if we have the action and no option is `undefined`
+					if ( actions.hasOwnProperty( funcName ) &&
+						(ready = actions[funcName] || cls._action(funcName, this.options))) {
+						bindings.push(ready.processor(ready.delegate || element,
+							ready.parts[2], ready.parts[1], funcName, this));
 					}
 				}
 	

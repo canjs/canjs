@@ -3,21 +3,26 @@ steal('funcunit/qunit', './string', function(qunit, can){
 module("can/util/string")
 
 test("can.sub", function(){
-	equals(can.sub("a{b}",{b: "c"}),"ac")
+	equals(can.sub("a{b}",{b: "c"}),"ac");
 
 	var foo = {b: "c"};
 
 	equals(can.sub("a{b}",foo,true),"ac");
-	ok(!foo.b,"b's value was removed")
+	ok(!foo.b,"b's value was removed");
+});
+
+test("can.sub with undefined values", function() {
+	var subbed = can.sub('test{exists} plus{noexists}', { exists : 'test' });
+	ok(subbed === null, 'Rendering with undefined values should return undefined');
 });
 
 test("can.sub double", function(){
 	equals(can.sub("{b} {d}",[{b: "c", d: "e"}]),"c e");
-})
+});
 
 test("String.underscore", function(){
 	equals(can.underscore("Foo.Bar.ZarDar"),"foo.bar.zar_dar")
-})
+});
 
 
 test("can.getObject", function(){

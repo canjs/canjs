@@ -25,18 +25,13 @@ steal('can/util', 'can/control/modifier', function (can) {
 	});
 
 
-	asyncTest("pluginName", function () {
-
+	test("pluginName", function () {
+		stop();
 		var controllerClass = can.Control({
 			defaults : {
 				binder : undefined
 			}
 		}, {
-
-			init : function () {
-				this.options.binder = $(document.body);
-				this.on();
-			},
 
 			" click:debounce(30)" : function () {
 				ok(this instanceof can.Control, "Debounced function has the correct context.");
@@ -57,8 +52,12 @@ steal('can/util', 'can/control/modifier', function (can) {
 		$('#test-content').html('<div id="foo"></div><div id="bar"></div>');
 
 		/**/
-		var controller1 = new controllerClass("#foo"),
-			controller2 = new controllerClass("#bar"),
+		var controller1 = new controllerClass("#foo", {
+				binder : $(document.body)
+			}),
+			controller2 = new controllerClass("#bar", {
+				binder : $(document.body)
+			}),
 			run = 0,
 			run2 = 0,
 			fooToTheBar;
@@ -97,7 +96,7 @@ steal('can/util', 'can/control/modifier', function (can) {
 			$(document.body).trigger('click');
 
 			setTimeout(function () {
-				ok(run === 5, "`run` is 5");
+				equal(run, 4, "`run` is 4");
 				start();
 			}, 40);
 		}, 40);

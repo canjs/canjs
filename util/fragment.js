@@ -1,4 +1,4 @@
-steal('./can.js',function(can){
+steal('can/util/can.js',function(can){
 
 	// fragment.js
 	// ---------

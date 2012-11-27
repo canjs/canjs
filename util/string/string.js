@@ -162,26 +162,31 @@ steal('can/util',function(can) {
 			 * @param {Object} data The data to be used to look for properties.  If it's an array, multiple
 			 * objects can be used.
 			 * @param {Boolean} [remove] if a match is found, remove the property from the object
+			 * @return The converted string or `null` if any data to render are `undefined`
 			 */
 			sub: function( str, data, remove ) {
-
 				var obs = [];
 
 				obs.push( str.replace( replacer, function( whole, inside ) {
 
 					// Convert inside to type.
 					var ob = can.getObject( inside, data, remove === undefined? remove : !remove );
-					
+
+					if(ob === undefined) {
+						obs = null;
+						return "";
+					}
+
 					// If a container, push into objs (which will return objects found).
-					if ( isContainer( ob ) ) {
+					if ( isContainer( ob ) && obs ) {
 						obs.push( ob );
 						return "";
-					} else {
-						return "" + ob;
 					}
+
+					return "" + ob;
 				}));
 				
-				return obs.length <= 1 ? obs[0] : obs;
+				return obs === null ? obs : (obs.length <= 1 ? obs[0] : obs);
 			},
 
 			// These regex's are used throughout the rest of can, so let's make

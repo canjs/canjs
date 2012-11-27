@@ -78,7 +78,7 @@ module.exports = function (grunt) {
 		},
 		downloads : '<json:build/downloads.json>',
 		docco : _.extend({_options : {
-				exclude : [/\.min\./, /\/amd/, /qunit\.js/]
+				exclude : [/\.min\./, /amd\//, /qunit\.js/]
 			}
 		}, outFiles),
 		strip : outFiles,

@@ -325,6 +325,22 @@
 
         can.trigger(item1, "foo");
         can.trigger(item2, "bar");
-    })
+    });
+
+	test("Don't bind if there are undefined values in templates", function() {
+		can.Control.processors.proc = function() {
+			ok(false, 'This processor should never be called');
+		}
+
+		var Control = can.Control({
+		}, {
+			'{noExistStuff} proc' : function() {
+
+			}
+		});
+
+		var c = new Control(document.createElement('div'));
+		equal(c._bindings.length, 1, 'There is only one binding');
+	});
 
 })();
