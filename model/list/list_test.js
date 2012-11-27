@@ -28,7 +28,7 @@ test("hookup with list", function(){
 		p.hookup( child[0] );
 		div.append(child)
 	}
-	var models = div.children().models();
+	var models = div.children().instances();
 	ok(models.constructor === Person.List, "correct type");
 	equals(models.length, 20,  "Got 20 people")
 
@@ -374,7 +374,7 @@ test("attr updates items based on id (when present), not position", function(){
     equal(people.attr('2.age'), 101, "Andy's age incremented by 100 years");
   });
 
-test("events - add", 4, function(){
+test("events - add", 2, function(){
 	var list = new Person.List;
 	list.bind("add", function(ev, items){
 		ok(1, "add called");
@@ -385,15 +385,7 @@ test("events - add", 4, function(){
 	
 	
 	list.push(person);
-	
-	// check that we are listening to updates on person ...
-	
-	ok( $._data(person,"events"), "person has events" );
-	
 	list.pop()
-	
-	ok( !$._data(person, "events"), "person has no events" );
-	
 });
 
 test("events - update", function(){

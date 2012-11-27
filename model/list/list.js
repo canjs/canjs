@@ -1,4 +1,4 @@
-steal('can/util', 'can/observe/elements', function(can) {
+steal('can/util', 'can/model', 'can/observe/elements', function(can) {
 
 	var getArgs = function( args ) {
 		if ( args[0] && (can.isArray(args[0])) ) {
