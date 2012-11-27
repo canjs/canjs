@@ -84,45 +84,59 @@ steal("can/util", function( can ) {
 		/**
 		 * @function ejs
 		 *
-		 * `can.view.ejs(id, template)` registers an EJS template string for a given id programatically.
+		 * `can.view.ejs([id,] template)` registers an EJS template string 
+		 * for a given id programatically. The following
+		 * registers `myViewEJS` and renders it into a documentFragment.
 		 *
 		 *      can.view.ejs('myViewEJS', '<h2><%= message %></h2>');
-		 *      var text = can.view.render('myViewEJS', {
+		 * 
+		 *      var frag = can.view('myViewEJS', {
 		 *          message : 'Hello there!'
 		 *      });
-		 *      text // -> <h2>Hello there!</h2>
+		 * 
+		 *      frag // -> <h2>Hello there!</h2>
 		 *
-		 * You can also retrieve nameless mustache renderers:
+		 * To convert the template into a render function, just pass 
+		 * the template. Call the render function with the data
+		 * you want to pass to the template and it returns the 
+		 * documentFragment.
 		 *
-		 *      var renderer = can.view.mustache('<div><%= message %></div>');
+		 *      var renderer = can.view.ejs('<div><%= message %></div>');
 		 *      renderer({
 		 *          message : 'EJS'
 		 *      }); // -> <div>EJS</div>
 		 *
-		 * @param {String} id The template id or templates string to get a nameless renderer function
-		 * @param {String} [template] The EJS template string when registered with an id
+		 * @param {String} [id] The template id 
+		 * @param {String} template The EJS template string
 		 */
 		//
 		/**
 		 * @function mustache
 		 *
-		 * `can.view.mustache(id, template)` registers an EJS template string for a given id programatically.
+		 * `can.view.mustache([id,] template)` registers an Mustache template string 
+		 * for a given id programatically. The following
+		 * registers `myStache` and renders it into a documentFragment.
 		 *
-		 *      can.view.mustache('myViewMustache', '<h2>{{message}}</h2>');
-		 *      var text = can.view.render('myViewMustache', {
+		 *      can.view.ejs('myStache', '<h2>{{message}}</h2>');
+		 * 
+		 *      var frag = can.view('myStache', {
 		 *          message : 'Hello there!'
 		 *      });
-		 *      text // -> <h2>Hello there!</h2>
+		 * 
+		 *      frag // -> <h2>Hello there!</h2>
 		 *
-		 * You can also retrieve nameless mustache renderers:
+		 * To convert the template into a render function, just pass 
+		 * the template. Call the render function with the data
+		 * you want to pass to the template and it returns the 
+		 * documentFragment.
 		 *
 		 *      var renderer = can.view.mustache('<div>{{message}}</div>');
 		 *      renderer({
 		 *          message : 'Mustache'
 		 *      }); // -> <div>Mustache</div>
 		 *
-		 * @param {String} id The template id or templates string to get a nameless renderer function
-		 * @param {String} [template] The Mustache template string when registered with an id
+		 * @param {String} [id] The template id 
+		 * @param {String} template The Mustache template string
 		 */
 		//
 		/**
@@ -551,7 +565,8 @@ steal("can/util", function( can ) {
 					options.text = type.script(id, options.text)
 					success();
 				})
-			}
+			};
+			
 			$view[info.suffix] = function(id, text){
 				if(!text) {
 					// Return a nameless renderer
