@@ -1,4 +1,4 @@
-steal('can/view', function(can){
+steal('can/view', 'can/util/string', function(can){
 // text node expando test
 var canExpando = true;
 try {
