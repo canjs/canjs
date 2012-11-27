@@ -492,7 +492,19 @@ test("nested observe attr", function() {
 	// Attempt to set the name attribute again, should not
 	// cause any triggers.
 	person1.attr('name', person2.attr('name'));
-})
+});
+
+test("Nested array conversion (#172)", 4, function() {
+	var original = [ [1, 2], [3, 4], [5, 6] ],
+		list = new can.Observe.List(original);
+
+	equal(list.length, 3, 'Observe list length is correct');
+	deepEqual(list.serialize(), original, 'Lists are the same');
+	list.unshift([10, 11], [12, 13]);
+	ok(list[0] instanceof can.Observe.List, 'Unshifted array converted to observe list');
+
+	deepEqual(list.serialize(), [[10, 11], [12, 13]].concat(original), 'Arrays unshifted properly');
+});
 
 
 })();

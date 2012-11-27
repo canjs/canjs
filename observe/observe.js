@@ -1316,7 +1316,7 @@ steal('can/util','can/construct', function(can) {
 	function( where, name ) {
 		list.prototype[name] = function() {
 			// Get the items being added.
-			var args = getArgs(arguments),
+			var args = can.makeArray(arguments),
 				// Where we are going to add items.
 				len = where ? this.length : 0;
 
