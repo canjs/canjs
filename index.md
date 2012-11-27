@@ -280,6 +280,124 @@ hobbies.pop()
 hobbies.unshift( 'rocking parties' )
 {% endhighlight %}  
 
+### can.compute `can.compute( [getterSetter,] [context] ) -> compute`
+
+[can.compute](http://donejs.com/docs.html#!can.compute) represents some value that can be:
+ - __read__ - by calling the compute like `compute()`
+ - __updated__ - by passing a new value like `compute("new value")`
+ - __listened__ to for changes - like `compute.bind("change",handle(ev,newVal,oldVal))`
+
+The value the compute represents can be:
+
+ - A __static__ JavaScript value like `"Hello"` or `{foo: "bar"}`
+ - A __composite__ value of one or more [can.Observe](#can_observe) property values.
+ - A __converted__ value derived from another value.
+
+#### Static Values
+
+`can.compute([value])` creates a computed with some value. For example
+
+{% highlight javascript %}
+// create a compute
+var age = can.compute(29);
+
+// read the value
+console.log("my age is currently", age());
+
+// listen to changes in age
+age.bind("change", function(ev, newVal, oldVal){
+  console.log("my age changed from",oldVal,"to",newVal)
+})
+// update the age
+age(30);
+{% endhighlight %}
+
+#### Composite values
+
+`can.compute( getter(), context )` creates a compute that represents a composite value of one or more
+can.Observe properties and can.computes.  The following `fullName` compute
+represents the `person` observe's first and last name:
+
+{% highlight javascript %}
+var person = new can.Observe({
+  first : "Justin",
+  last : "Meyer"
+});
+var fullName = can.compute(function(){
+  return person.attr("first") +" "+ person.attr("last")
+})
+
+fullName() //-> "Justin Meyer"
+
+fullName.bind("change", function(ev, newVal, oldVal){
+  console.log("fullName changed from", oldVal,"to",newVal)
+});
+
+person.attr({
+  first: "David",
+  last: "Luecke"
+})
+{% endhighlight %}
+
+`can.compute` caches computed values so reads are fast.
+
+#### Converted Values
+
+`can.compute( getterSetter( [newVal] ) )` can be used to convert one value into another. The following
+creates a `percentage` compute that ranges from 0-100 that is cross bound to an observe's progress
+property that ranges from 0-1.
+
+{% highlight javascript %}
+var project = new can.Observe({
+  progress :  0.5
+});
+var percentage = can.compute(function(newVal){
+  // are we setting?
+  if(newVal !=== undefined){
+    project.attr("progress", newVal / 100)  
+  } else {
+    return project.attr("progress") * 100;  
+  }
+})
+
+// We can read from percentage.
+percentage() //-> 50
+
+// Write to percentage,
+percentage(75)
+// but it updates project!
+project.attr('progress') //-> 0.75
+{% endhighlight %}
+
+### Batch Operations
+
+Use [can.Observe.startBatch](http://donejs.com/docs.html#!can.Observe.static.startBatch) and
+[can.Observe.stopBatch](http://donejs.com/docs.html#!can.Observe.static.stopBatch) to
+enable [atomic/batch operations](http://donejs.com/docs.html#!can.Observe.batchEvents). The
+following prevents all events from being triggered on `person` and `items` until
+after `can.Observe.stopBatch()` is called.
+
+{% highlight javascript %}
+var person = new can.Observe({first: "Josh", last: "Dean"}),
+    list = new can.Observe.List([
+      {selected: false},
+      {selected: true },
+      {selected: false}
+    ]);
+
+person.bind("change", function(){} );
+list.bind("change", function(){} );
+
+can.Observe.startBatch();
+person.attr("first", "Joshua");
+list.each( function( item ) {
+  item.attr('selected', true)
+})
+can.Observe.stopBatch();
+{% endhighlight %}
+
+Batching operations can improve performance, especially with live-binding.
+
 ## can.Model `can.Model( [classProperties,] [prototypeProperties] )`
 
 [can.Model](http://donejs.com/docs.html#!can.Model) is a [can.Observe](#can_observe) that connects
@@ -869,7 +987,7 @@ __JavaScript__
   can.$(document.body).append(template);
 {% endhighlight %}
 
-This will render:
+will render:
 
 {% highlight html %}
   <ul>
@@ -877,7 +995,7 @@ This will render:
   </ul>
 {% endhighlight %}
 
-Now we want to update the list with a new todo:
+Now to update the list with a new todo:
 
 {% highlight javascript %}
   list.push('Get groceries');
@@ -907,7 +1025,7 @@ and sections to enumerate and/or filter the enclosed template blocks.
 
 #### Keys
 
-Keys insert data into the template.  They reference variables
+[Keys](http://donejs.com/docs.html#!Basics) insert data into the template.  They reference variables
 within the current context.  For example:
 
 {% highlight javascript %}
@@ -926,24 +1044,9 @@ would render:
   "Austin"
 {% endhighlight %}
 
-Additionally, you can use `.` as a shorthand to reference the `this` object.
-For example:
-
-{% highlight html %}
-  "Austin"
-
-  {{"{{"}}.}}
-{% endhighlight %}
-
-would render:
-
-{% highlight html %}
-  "Austin"
-{% endhighlight %}
-
 ### Sections
 
-Sections contain text blocks and evaluate whether to render it or not.  If
+[Sections](http://donejs.com/docs.html#!Sections) contain text blocks and evaluate whether to render it or not.  If
 the object evaluates to an array it will iterate over it and render the block
 for each item in the array.  There are four different types of sections.
 
@@ -968,11 +1071,9 @@ between the pound and slash.
 
 #### Arrays
 
-If the value is a non-empty array, sections will iterate over the
-array of items, rendering the items in the block between the pound and slash.
+If the value is a non-empty array, [sections](http://donejs.com/docs.html#!Sections) will iterate over the array of items, rendering the items in the block.
 
-For example, if I have a list of friends, I can iterate
-over each of those items within a section.
+For example, a list of friends will iterate over each of those items within a section.
 
 {% highlight javascript %}
   {
@@ -1002,8 +1103,8 @@ would render:
 
 #### Truthy
 
-When the value is non-falsey object but not a list, it is considered truthy and will be used
-as the context for a single rendering of the block.
+[Truthy sections](http://donejs.com/docs.html#!Sections) match when the value is a non-falsey object but not a list
+and render the block accordingly.
 
 {% highlight javascript %}
   {
@@ -1029,8 +1130,9 @@ would render:
 
 #### Inverted
 
-Inverted sections match falsey values. An inverted section
-syntax is similar to regular sections except it begins with a caret rather than a pound. If the value referenced is falsey, the section will render.
+[Inverted sections](http://donejs.com/docs.html#!Sections) match falsey values. An inverted section
+syntax is similar to regular sections except it begins with a caret rather than a pound. 
+If the value referenced is falsey, the section will render.
 
 {% highlight javascript %}
   {
@@ -1058,6 +1160,8 @@ would render:
 {% endhighlight %}
 
 ### Paths and Context
+
+[Paths](http://donejs.com/docs.html#!Basics) allow you to reference variables relative to the current context.
 
 When Mustache is resolving a object in a section, it sets the current
 context to the value for which its iterating. For example:
@@ -1117,7 +1221,7 @@ it jumps up to the family object and resolves sisters there.
 
 ### Partials
 
-Partials are templates embedded in other templates which execute at runtime.
+[Partials](http://donejs.com/docs.html#!Partials) are templates embedded in other templates which execute at runtime.
 Partials begin with a greater than sign, like `{{"{{>"}}my_partial}}`.
 
 Partials are rendered at runtime, so recursive partials are possible but make sure you avoid infinite loops. They also inherit the calling context.
@@ -1148,13 +1252,10 @@ The resulting expanded template at render time would look like:
   {{"{{/"}}names}}
 {% endhighlight %}
 
-See the template acquisition section for more information on
-fetching partials.
-
 ### Helpers
 
-Below is a short list of the helpers that are included with
-can.Mustache.  For more in-depth list [click here](http://donejs.com/docs.html#!can.Mustache).
+[Helpers](http://donejs.com/docs.html#!Helpers) allow you to register functions that 
+can be called from any context in a template.
 
 #### Element Callbacks
 
@@ -1887,7 +1988,7 @@ CanJS can be used with jQuery, Dojo, Mootools, YUI and Zepto and as AMD modules 
 
 The [CanJS Download](https://github.com/downloads/bitovi/canjs/can.js.{{page.version}}.zip) contains an `amd` folder which allows
 you to load any CanJS component and plugin using an AMD module loader like [RequireJS](http://requirejs.org/).
-jQuery will be the default library so make sure the `jquery` module id points to the jQuery module.
+jQuery will be the default library so make sure the `jquery` module id points to the jQuery source.
 Here is an example for jQuery and RequireJS:
 
 {% highlight html %}
@@ -1921,14 +2022,20 @@ If you would like to use another library, map `can/util.js` to either:
 - can/util/yui
 - can/util/mootools
 
-With RequireJS, it loks like:
+With RequireJS and Zepto, it loks like this:
 
+{% highlight javascript %}
 require.config({
-  paths: {
-    "can/util.js" : "can/util/zepto.js",
-    "zepto" : "http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0rc1/zepto.min.js"
+  map : {
+    '*' : {
+		  "can/util.js" : "can/util/zepto.js"
+  	}
+  },
+  paths: {    
+    "zepto" : "http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0rc1/zepto.min"
   }
 });
+{% endhighlight %}
 
 ### jQuery
 
@@ -2559,7 +2666,7 @@ __View the App__
 - [YUI with calendar widget](http://donejs.com/examples/todo/yui-widget/index.html)
 - [Zepto](http://donejs.com/examples/todo/zepto/index.html)
 
-[View the source on github](https://github.com/jupiterjs/cantodo)
+[View the source on github](https://github.com/bitovi/cantodo)
 
 ### CanPlay
 
@@ -2581,7 +2688,7 @@ Srchr searches several data sources for content and displays it to the user. It 
 
 [__View the App__](http://donejs.com/examples/srchr/index.html)
 
-[View the source on github](https://github.com/jupiterjs/srchr)
+[View the source on github](https://github.com/bitovi/srchr)
 
 ### Contacts
 
@@ -2681,7 +2788,7 @@ This site highlights the most important features of CanJS.  The library comes wi
 and examples on the [DoneJS documentation page](http://donejs.com/docs.html).  There are example apps for
 each library and several example for jQuery. 
 
-CanJS is also supported by Bitovi, formerly [Jupiter Consulting](http://jupiterjs.com).  We are extremely active on 
+CanJS is also supported by Bitovi, formerly [Jupiter Consulting](http://bitovi.com).  We are extremely active on 
 the [forums](https://forum.javascriptmvc.com/#Forum/canjs). And should the need arise, we provide support, training, and development.
 
 ### Safety
@@ -2891,7 +2998,7 @@ Steal as submodules that are used to generate the documentation and build the Ca
  1. `fork` [CanJS on github](https://github.com/bitovi/canjs).
  2. Clone DoneJS with:
 
-        git clone git@github.com:jupiterjs/donejs
+        git clone git@github.com:bitovi/donejs
         
  3. Open the donejs folder's .gitmodule file and change the URL of the `"can"` submodule:
 
@@ -2972,7 +3079,7 @@ It puts the downloads in `can/dist/edge`.
 
 The following lists everyone who's contributed something to CanJS.  If we've forgotten you, please add yourself.
 
-First, thanks to everyone who's contributed to [JavaScriptMVC](https://github.com/jupiterjs/javascriptmvc/contributors) 
+First, thanks to everyone who's contributed to [JavaScriptMVC](https://github.com/bitovi/javascriptmvc/contributors) 
 and [jQueryMX](https://github.com/jupiterjs/jquerymx/contributors), and the people at 
 [Bitovi](http://bitovi.com/people/).  You deserve heaps of recognition as CanJS is direcly based 
 off JavaScriptMVC.  This page is for contributors after CanJS's launch. Thank you
