@@ -967,5 +967,5 @@ function( can ){
 		}
 	});
 
-	return Mustache;
+	return can;
 });
