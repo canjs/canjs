@@ -56,11 +56,11 @@ rich web applications easy. Use it because it's:
 CanJS's core supports jQuery, Zepto, Dojo, YUI and Mootools. Select your core download 
 below or select the individual plugins above and click download:
 
- - [can.jquery.js](https://github.com/downloads/bitovi/canjs/can.jquery-1.1.1.js) ([min](https://github.com/downloads/bitovi/canjs/can.jquery-1.1.1.min.js))
- - [can.zepto.js](https://github.com/downloads/bitovi/canjs/can.zepto-1.1.1.js) ([min](https://github.com/downloads/bitovi/canjs/can.zepto-1.1.1.min.js))
- - [can.dojo.js](https://github.com/downloads/bitovi/canjs/can.dojo-1.1.1.js) ([min](https://github.com/downloads/bitovi/canjs/can.dojo-1.1.1.min.js))
- - [can.mootools.js](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.1.js) ([min](https://github.com/downloads/bitovi/canjs/can.mootools-1.1.1.min.js))
- - [can.yui.js](https://github.com/downloads/bitovi/canjs/can.yui-1.1.1.js) ([min](https://github.com/downloads/bitovi/canjs/can.yui-1.1.1.min.js))
+ - [can.jquery.js](https://github.com/downloads/bitovi/canjs/can.jquery-{{page.version}}.js) ([min](https://github.com/downloads/bitovi/canjs/can.jquery-{{page.version}}.min.js))
+ - [can.zepto.js](https://github.com/downloads/bitovi/canjs/can.zepto-{{page.version}}.js) ([min](https://github.com/downloads/bitovi/canjs/can.zepto-{{page.version}}.min.js))
+ - [can.dojo.js](https://github.com/downloads/bitovi/canjs/can.dojo-{{page.version}}.js) ([min](https://github.com/downloads/bitovi/canjs/can.dojo-{{page.version}}.min.js))
+ - [can.mootools.js](https://github.com/downloads/bitovi/canjs/can.mootools-{{page.version}}.js) ([min](https://github.com/downloads/bitovi/canjs/can.mootools-{{page.version}}.min.js))
+ - [can.yui.js](https://github.com/downloads/bitovi/canjs/can.yui-{{page.version}}.js) ([min](https://github.com/downloads/bitovi/canjs/can.yui-{{page.version}}.min.js))
 
 The [Using CanJS](#using_canjs)
 section details the minor differences among use 
@@ -1885,7 +1885,7 @@ CanJS can be used with jQuery, Dojo, Mootools, YUI and Zepto and as AMD modules 
 
 ### AMD
 
-The [CanJS Download](https://github.com/downloads/bitovi/canjs/can.js.1.1.1.zip) contains an `amd` folder which allows
+The [CanJS Download](https://github.com/downloads/bitovi/canjs/can.js.{{page.version}}.zip) contains an `amd` folder which allows
 you to load any CanJS component and plugin using an AMD module loader like [RequireJS](http://requirejs.org/).
 jQuery will be the default library so make sure the `jquery` module id points to the jQuery module.
 Here is an example for jQuery and RequireJS:
