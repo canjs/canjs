@@ -1,5 +1,6 @@
 __1.1.2__
 
+- fix: [Solve issue when stealing mustache templates](https://github.com/bitovi/canjs/pull/175) - `can/view/mustache` returns `can` object now
 - fix: [Controls shouldn't bind to templated events that contain undefined values](https://github.com/bitovi/canjs/commit/e90bc56d9c1ec46ae01f084ccbcab43c9c611d0c)
 - fix: [Resetting a form changes input values to __!!__](https://github.com/bitovi/canjs/issues/166)
 - fix: [Further AMD build improvements](https://github.com/bitovi/canjs/issues/168)
