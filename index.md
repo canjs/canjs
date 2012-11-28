@@ -2024,7 +2024,7 @@ With RequireJS and Zepto, it loks like this:
 require.config({
   map : {
     '*' : {
-		  "can/util.js" : "can/util/zepto.js"
+		  "can/util/library" : "can/util/zepto"
   	}
   },
   paths: {    
