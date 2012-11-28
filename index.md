@@ -2654,11 +2654,10 @@ make sure you checkout [CanJS Recipes](http://canjs.us/recipes.html)
 ![TodoMVC](http://todomvc.com/site/img/screenshot.png "CanJS Todo App")
 
 [TodoMVC](http://todomvc.com/) implements the same Todo application in many different JavaScript MVC frameworks.
-There are examples for [CanJS](http://todomvc.com/labs/architecture-examples/canjs/) and [CanJS + RequireJS](http://todomvc.com/labs/dependency-examples/canjs-require/).
-TodoMVC is a good  example of the power of [EJS's live binding](#can_ejs-live_binding).
+There are two examples for CanJS, one for using CanJS with jQuery and the other for CanJS with jQuery and RequireJS:
 
-[CanJS TodoMVC source](https://github.com/addyosmani/todomvc/tree/gh-pages/labs/architecture-examples/canjs)
-[CanJS + RequireJS TodoMVC source](http://todomvc.com/labs/dependency-examples/canjs_require)
+- [CanJS](http://todomvc.com/labs/architecture-examples/canjs/) ([GitHub](https://github.com/addyosmani/todomvc/tree/gh-pages/labs/architecture-examples/canjs))
+- [CanJS + RequireJS](http://todomvc.com/labs/dependency-examples/canjs_require/) ([GitHub](https://github.com/addyosmani/todomvc/tree/gh-pages/labs/dependency-examples/canjs_require))
 
 ### CanPlay
 
