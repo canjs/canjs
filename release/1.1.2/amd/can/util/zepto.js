@@ -4,7 +4,7 @@
 * Copyright (c) 2012 Bitovi
 * Licensed MIT
 */
-define(['can/util/can', 'zepto', 'can/util/event', 'can/util/fragment', 'can/util/deferred', 'can/util/array/each'], function (can) {
+define(['can/util/can', 'zepto', 'can/util/object/isplain', 'can/util/event', 'can/util/fragment', 'can/util/deferred', 'can/util/array/each'], function (can) {
 	var $ = Zepto;
 
 	// data.js
