@@ -70,17 +70,18 @@ with other libraries.
 
 Our goal is to make learning CanJS as easy as possible. There are a number of resources to use:
 
-__[This Page](http://canjs.us)__ - Walks through the basics of CanJS by building a 
-small todo app with CanJS and jQuery. [Here's the app in action](http://canjs.us/recipes.html#everything_together-basic_todo).
+__[This Page](http://canjs.us)__ - Walks through the basics of CanJS by building the following 
+small todo app with CanJS and jQuery:
 
 <iframe style="width: 100%; height: 300px" 
         src="http://jsfiddle.net/donejs/5zpFz/embedded/result,html,js,css"
         allowfullscreen="allowfullscreen" 
         frameborder="0">JSFiddle</iframe>
 
+Click a todo to edit it.  Use the browser's forward and back buttons to change what todo is being edited.
 
 __[Getting Started With CanJS Video](http://www.youtube.com/watch?v=GdT4Oq6ZQ68)__ - An in-depth walkthrough of 
-CanJS. If you have 42 minuites, you will learn CanJS.
+CanJS. If you have 42 minuites, you will learn CanJS and how the todo app was built.
 
 __[In Depth Documentation](http://donejs.com/docs.html#!canjs)__ - Want to know the deepest details of CanJS's API? 
 
