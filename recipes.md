@@ -352,7 +352,7 @@ can select a todo and edit it's text.  You can also delete a todo.  The app is
 also history enabled, letting you move forward and back through different todos.
 
 <iframe style="width: 100%; height: 300px" 
-        src="http://jsfiddle.net/ADWhw/92/embedded/result,html,js,css"
+        src="http://jsfiddle.net/donejs/5zpFz/embedded/result,html,js,css"
         allowfullscreen="allowfullscreen" 
         frameborder="0">JSFiddle</iframe>
 
