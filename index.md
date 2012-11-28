@@ -82,10 +82,10 @@ __[Recipes](http://canjs.us/recipes.html)__ - Checkout some nifty functionality 
 
 __[Example Apps](#examples)__ - How CanJS has been put to good use. 
 
-__Annotated Source__ - for [jQuery](http://donejs.com/can/docs/can.jquery.html), [Zepto](http://donejs.com/can/docs/can.zepto.html),
-[Dojo](http://donejs.com/can/docs/can.dojo.html),
-[MooTools](http://donejs.com/can/docs/can.mootools.html),
-[YUI](http://donejs.com/can/docs/can.yui.html)
+__Annotated Source__ - for [jQuery](http://canjs.us/release/latest/docs/can.jquery.html), [Zepto](http://canjs.us/release/latest/docs/can.zepto.html),
+[Dojo](http://canjs.us/release/latest/docs/can.dojo.html),
+[MooTools](http://canjs.us/release/latest/docs/can.mootools.html),
+[YUI](http://canjs.us/release/latest/docs/can.yui.html)
 
 __[Test Suite](http://ci.javascriptmvc.com/jobs/can/test/test.html)__ - See how we poke around the API.
 
@@ -952,7 +952,7 @@ can provides it as `can.data( NodeList, NAME, data )`.  Rewrite the above exampl
 logic-less templates with live binding when used with [can.Observes](#can_observe). It currently ships as a plugin:
 
 [Download can.Mustache](http://canjs.us/release/latest/can.view.mustache.js)
-([Annotated source](http://donejs.com/can/docs/can.view.mustache.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.view.mustache.html))
 
 [Mustache](https://github.com/janl/mustache.js/) and [Handlebar](http://handlebarsjs.com/) templates are compatible with can.Mustache,
 so you can import existing templates.
@@ -2255,7 +2255,7 @@ to __zepto.js__ when using Zepto 0.8.
 ### can.Construct.proxy `construct.proxy( methodname, [ curriedArgs ] )`
 
 [can.construct.proxy.js](http://canjs.us/release/latest/can.construct.proxy.js)
-([Annotated source](http://donejs.com/can/docs/can.construct.proxy.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.construct.proxy.html))
 
 The [can.Construct.proxy](http://donejs.com/docs.html#!can.Construct.proxy)
 plugin adds a _proxy_ method that takes a function name and returns a new function
@@ -2284,7 +2284,7 @@ curriedCallback( '!' ); // -> 'Hi my name is John!'
 ### can.Construct.super
 
 [can.construct.super.js](http://canjs.us/release/latest/can.construct.super.js)
-([Annotated source](http://donejs.com/can/docs/can.construct.super.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.construct.super.html))
 
 The [can.Construct.super](http://donejs.com/docs.html#!can.Construct.super) plugin
 provides access to overwritten methods using `this._super` when extending a can.Construct:
@@ -2309,7 +2309,7 @@ improvedPerson.sayName( 'To whom it may concern, I am ' );
 ### can.Observe.delegate `observe.delegate( name, event, handler )`
 
 [can.observe.delegate.js](http://canjs.us/release/latest/can.observe.delegate.js)
-([Annotated source](http://donejs.com/can/docs/can.observe.delegate.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.observe.delegate.html))
 
 Use the [can.Observe.delegate](http://donejs.com/docs.html#!can.Observe.delegate) plugin
 to listen to _change_, _set_, _add_ and _remove_ on any direct, child or wildcard attribute:
@@ -2342,7 +2342,7 @@ observe.attr( 'foo.baz', 'Bye you' );
 ### can.Observe.setter
 
 [can.observe.setter.js](http://canjs.us/release/latest/can.observe.setter.js)
-([Annotated source](http://donejs.com/can/docs/can.observe.setter.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.observe.setter.html))
 
 With the [can.Observe.setter](http://donejs.com/docs.html#!can.Observe.setter) plugin
 you can use attribute setter methods to process the value being set:
@@ -2364,7 +2364,7 @@ instance.attr( 'name', 'doe' );
 ### can.Observe.attributes
 
 [can.observe.attributes.js](http://canjs.us/release/latest/can.observe.attributes.js)
-([Annotated source](http://donejs.com/can/docs/can.observe.attributes.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.observe.attributes.html))
 
 The [can.Observe.attributes](http://donejs.com/docs.html#!can.Observe.attributes) plugin
 allows you to specify attributes with type converters and serializers. Serializers
@@ -2425,7 +2425,7 @@ var seralizedObj = brian.serialize();
 ### can.Observe.validations `observe.validate( attribute, validator )`
 
 [can.observe.validations.js](http://canjs.us/release/latest/can.observe.validations.js)
-([Annotated source](http://donejs.com/can/docs/can.observe.validations.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.observe.validations.html))
 
 [can.Observe.validations](http://donejs.com/docs.html#!can.Observe.validations) adds validation to a can.Observe.
 Call the _validate_ method in the _init_ constructor with the attribute name and the validation
@@ -2456,7 +2456,7 @@ john.errors();
 ### can.Observe.backup `observe.backup()`
 
 [can.observe.backup.js](http://canjs.us/release/latest/can.observe.backup.js)
-([Annotated source](http://donejs.com/can/docs/can.observe.backup.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.observe.backup.html))
 
 You can backup and restore can.Observe data using the [can.Observe.backup](http://donejs.com/docs.html#!can.Observe.backup)
 plugin. To backup the observe in its current state call _backup_. To revert it back to that state use _restore_:
@@ -2473,7 +2473,7 @@ todo.name // -> 'do the dishes'
 ### can.Control.plugin
 
 [can.control.plugin.js](http://canjs.us/release/latest/can.control.plugin.js)
-([Annotated source](http://donejs.com/can/docs/can.control.plugin.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.control.plugin.html))
 
 [can.Control.plugin](http://donejs.com/docs.html#!can.Control.plugin) registers a jQuery plugin function
 with a given _pluginName_ that instantiates a can.Control.
@@ -2521,7 +2521,7 @@ control.activate( 0 );
 ### can.Control.view `control.view( [ viewname ], [ data ] )`
 
 [can.control.view.js](http://canjs.us/release/latest/can.control.view.js)
-([Annotated source](http://donejs.com/can/docs/can.control.view.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.control.view.html))
 
 [can.Control.view](http://donejs.com/docs.html#!can.Control.view) renders a view from a URL in a
 _views/controlname_ folder. If no viewname is supplied it uses the current action name.
@@ -2548,7 +2548,7 @@ can.Control( 'Editor', {
 ### View modifiers
 
 [can.view.modifiers.js](http://canjs.us/release/latest/can.view.modifiers.js)
-([Annotated source](http://donejs.com/can/docs/can.view.modifiers.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.view.modifiers.html))
 
 jQuery uses the modifiers [after](http://api.jquery.com/after/), [append](http://api.jquery.com/append/), 
 [before](http://api.jquery.com/before/), [html](http://api.jquery.com/html/), [prepend](http://api.jquery.com/prepend/), 
@@ -2574,7 +2574,7 @@ $( '#todos' ).html( 'todo/todos.ejs', [
 ### can.fixture
 
 [can.fixture.js](http://canjs.us/release/latest/can.fixture.js)
-([Annotated source](http://donejs.com/can/docs/can.fixture.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.fixture.html))
 
 [can.fixture](http://donejs.com/docs.html#!can.fixture) intercepts AJAX requests and simulates
 the response with a file or function. A __static__ fixture intercepting a request to `/todo`
