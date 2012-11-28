@@ -73,6 +73,12 @@ Our goal is to make learning CanJS as easy as possible. There are a number of re
 __[This Page](http://canjs.us)__ - Walks through the basics of CanJS by building a 
 small todo app with CanJS and jQuery. [Here's the app in action](http://canjs.us/recipes.html#everything_together-basic_todo).
 
+<iframe style="width: 100%; height: 300px" 
+        src="http://jsfiddle.net/donejs/5zpFz/embedded/result,html,js,css"
+        allowfullscreen="allowfullscreen" 
+        frameborder="0">JSFiddle</iframe>
+
+
 __[Getting Started With CanJS Video](http://www.youtube.com/watch?v=GdT4Oq6ZQ68)__ - An in-depth walkthrough of 
 CanJS. If you have 42 minuites, you will learn CanJS.
 
