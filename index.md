@@ -1,7 +1,7 @@
 ---
 layout: default
 title: CanJS
-version : 1.1.1
+version : 1.1.2
 ---
 
 # Welcome to CanJS!
@@ -2015,12 +2015,8 @@ require(['can'], function(can) {
 });
 {% endhighlight %}
 
-If you would like to use another library, map `can/util.js` to either:
-
-- can/util/dojo
-- can/util/zepto
-- can/util/yui
-- can/util/mootools
+If you would like to use another library, map the `can/util/library` module to `can/util/dojo`, `can/util/zepto`,
+`can/util/yui` or `can/util/mootools`.
 
 With RequireJS and Zepto, it loks like this:
 
@@ -2101,13 +2097,22 @@ jQuery events, so for those cases, a workaround should be applied:
 
 ### Dojo
 
-CanJS supports Dojo 1.7+ using its new AMD loader in asynchronous or synchronous mode.
-CanJS depends on the following Dojo modules: __dojo__, __dojo/query__, __dojo/NodeList-dom__ and __dojo/NodeList-traverse__.
-It also uses the __plugd/trigger__ plugin for internal object and node event triggering.
+CanJS supports Dojo 1.8+ using its new AMD loader in asynchronous or synchronous mode. Everything described in the
+[using CanJS and AMD](#using_canjs-amd) section applies to Dojo as well. An example configuration that uses the AMD files
+from the CanJS CDN can look like this:
 
-Because Dojo implements an AMD module loader you can refer to the [Using CanJS and AMD](#using_canjs-amd) section for loading
-CanJS using Dojo.
+{% highlight javascript %}
+require({
+    aliases:[
+        ['can/util/library', 'can/util/dojo']
+    ],
+    baseUrl : 'http://canjs.us/release/latest/amd/can.js',
+});
 
+require(['can/control'], function(Control) {
+  // Use Control
+});
+{% endhighlight %}
 
 ### Mootools
 
@@ -2166,32 +2171,30 @@ be included wherever `YUI().use('*')` is used.
 
 {% highlight html %}
 <!-- YUI Configurator: http://yuilibrary.com/yui/configurator/ -->
-<script src="http://yui.yahooapis.com/combo?3.4.1/build/yui-base/yui-base-min.
-js&3.4.1/build/oop/oop-min.js&3.4.1/build/event-custom-base/event-custom-base-
-min.js&3.4.1/build/features/features-min.js&3.4.1/build/dom-core/dom-core-min.
-js&3.4.1/build/dom-base/dom-base-min.js&3.4.1/build/selector-native/selector-n
-ative-min.js&3.4.1/build/selector/selector-min.js&3.4.1/build/node-core/node-c
-ore-min.js&3.4.1/build/node-base/node-base-min.js&3.4.1/build/event-base/event
--base-min.js&3.4.1/build/event-delegate/event-delegate-min.js&3.4.1/build/node
--event-delegate/node-event-delegate-min.js&3.4.1/build/pluginhost-base/pluginh
-ost-base-min.js&3.4.1/build/pluginhost-config/pluginhost-config-min.js&3.4.1/b
-uild/node-pluginhost/node-pluginhost-min.js&3.4.1/build/dom-style/dom-style-mi
-n.js&3.4.1/build/dom-screen/dom-screen-min.js&3.4.1/build/node-screen/node-scr
-een-min.js&3.4.1/build/node-style/node-style-min.js&3.4.1/build/querystring-st
-ringify-simple/querystring-stringify-simple-min.js&3.4.1/build/io-base/io-base
--min.js&3.4.1/build/array-extras/array-extras-min.js&3.4.1/build/querystring-p
-arse/querystring-parse-min.js&3.4.1/build/querystring-stringify/querystring-st
-ringify-min.js&3.4.1/build/event-custom-complex/event-custom-complex-min.js&3.
-4.1/build/event-synthetic/event-synthetic-min.js&3.4.1/build/event-focus/event
+<script src="http://yui.yahooapis.com/combo?3.7.3/build/yui-base/yui-base-min.
+js&3.7.3/build/oop/oop-min.js&3.7.3/build/event-custom-base/event-custom-base-
+min.js&3.7.3/build/features/features-min.js&3.7.3/build/dom-core/dom-core-min.
+js&3.7.3/build/dom-base/dom-base-min.js&3.7.3/build/selector-native/selector-n
+ative-min.js&3.7.3/build/selector/selector-min.js&3.7.3/build/node-core/node-c
+ore-min.js&3.7.3/build/node-base/node-base-min.js&3.7.3/build/event-base/event
+-base-min.js&3.7.3/build/event-delegate/event-delegate-min.js&3.7.3/build/node
+-event-delegate/node-event-delegate-min.js&3.7.3/build/pluginhost-base/pluginh
+ost-base-min.js&3.7.3/build/pluginhost-config/pluginhost-config-min.js&3.7.3/b
+uild/node-pluginhost/node-pluginhost-min.js&3.7.3/build/dom-style/dom-style-mi
+n.js&3.7.3/build/dom-screen/dom-screen-min.js&3.7.3/build/node-screen/node-scr
+een-min.js&3.7.3/build/node-style/node-style-min.js&3.7.3/build/querystring-st
+ringify-simple/querystring-stringify-simple-min.js&3.7.3/build/io-base/io-base
+-min.js&3.7.3/build/array-extras/array-extras-min.js&3.7.3/build/querystring-p
+arse/querystring-parse-min.js&3.7.3/build/querystring-stringify/querystring-st
+ringify-min.js&3.7.3/build/event-custom-complex/event-custom-complex-min.js&3.
+4.1/build/event-synthetic/event-synthetic-min.js&3.7.3/build/event-focus/event
 -focus-min.js"></script>
 <script src="can.yui.js"></script>
 <script>
-  YUI().use('*', function(Y) {
     // start using CanJS
     Todo = can.Model({
       ...
     });
-  });
 </script>
 {% endhighlight %}
 
@@ -3119,17 +3122,17 @@ for helping us with new features, bug fixes, and getting this out the door.
 
 ### Change Log
 
-__1.1.1__ ( November 19, 2012 )
+__1.1.1__ ( November 28, 2012 )
 
-- Fixed [@@!!@@ Appears on Page With EJS and Table in non-IE Browsers](https://github.com/bitovi/canjs/issues/156)
-- Fixed [can.deparam leaks to global scope](https://github.com/bitovi/canjs/issues/152)
-- Fixed [nested attr() call on a model with List attributes blows away existing List](https://github.com/bitovi/canjs/pull/160)
-- Added [https://github.com/bitovi/canjs/issues/162](https://github.com/bitovi/canjs/issues/162)
-- Improved AMD support, see [#155](https://github.com/bitovi/canjs/issues/155)
+- fix: [Solve issue when stealing mustache templates](https://github.com/bitovi/canjs/pull/175) - `can/view/mustache` returns `can` object now
+- fix: [Controls shouldn't bind to templated events that contain undefined values](https://github.com/bitovi/canjs/commit/e90bc56d9c1ec46ae01f084ccbcab43c9c611d0c)
+- fix: [Resetting a form changes input values to __!!__](https://github.com/bitovi/canjs/issues/166)
+- fix: [Further AMD build improvements](https://github.com/bitovi/canjs/issues/168)
+- fix: [Strange conversion of nested arrays to Observe.List](https://github.com/bitovi/canjs/issues/172)
 
 __1.1.0__ ( November 13, 2012 )
 
- - Added [AMD module](#using_canjs-amd) support for each dependency ([#46](https://github.com/bitovi/canjs/issues/46))
+ - add: [AMD module](#using_canjs-amd) support for each dependency ([#46](https://github.com/bitovi/canjs/issues/46))
 
  - can.util
     - Updated jQuery to 1.8.2
@@ -3137,41 +3140,41 @@ __1.1.0__ ( November 13, 2012 )
     - Updated YUI to 3.7.3
 
  - can.Mustache 
-    - Added Mustache/Handlebars support with Live Binding
+    - add: Mustache/Handlebars support with Live Binding
 
  - can.view
     - Changed [passing jQuery a node list instead of a fragment in View Modifiers](https://github.com/bitovi/canjs/pull/131)
 
  - can.EJS
-    - Fixed [the way EJS handles multiple hookups in the same attribute](https://github.com/bitovi/canjs/pull/134)
-    - Fixed [Nested Loops in EJS](https://github.com/bitovi/canjs/issues/135)
-    - Fixed [can.EJS template rendering issue](https://github.com/bitovi/canjs/issues/118)
-    - Fixed [multiline elements in EJS](https://github.com/bitovi/canjs/pull/76)
+    - fix: [the way EJS handles multiple hookups in the same attribute](https://github.com/bitovi/canjs/pull/134)
+    - fix: [Nested Loops in EJS](https://github.com/bitovi/canjs/issues/135)
+    - fix: [can.EJS template rendering issue](https://github.com/bitovi/canjs/issues/118)
+    - fix: [multiline elements in EJS](https://github.com/bitovi/canjs/pull/76)
 
  - can.route
-    - Fixed [hashchange binding with mootools broken](https://github.com/bitovi/canjs/issues/124)
+    - fix: [hashchange binding with mootools broken](https://github.com/bitovi/canjs/issues/124)
 
  - can.Control
-    - Added [control does not listen to touchmove event on controller itself](https://github.com/bitovi/canjs/issues/104)
+    - add: [control does not listen to touchmove event on controller itself](https://github.com/bitovi/canjs/issues/104)
 
  - can.Observe
-    - Added [List binding on .length of an object](https://github.com/bitovi/canjs/issues/142)
-    - Fixed [validation error that incorrectly labels an attribute with a value of 0 as empty](https://github.com/bitovi/canjs/pull/132)
-    - Added [you can now pluralise event names to listen to matching events of that type (rather than firing a single event)](https://github.com/bitovi/canjs/issues/122)
-    - Added [compound sets now behave correctly](https://github.com/bitovi/canjs/issues/119)
-    - Fixed [can.Observe.delegate sets wrong event.currentTarget](https://github.com/bitovi/canjs/issues/123)
-    - Added [ability to assign object as attribute type in can.Observe](https://github.com/bitovi/canjs/issues/107)
+    - add: [List binding on .length of an object](https://github.com/bitovi/canjs/issues/142)
+    - fix: [validation error that incorrectly labels an attribute with a value of 0 as empty](https://github.com/bitovi/canjs/pull/132)
+    - add: [you can now pluralise event names to listen to matching events of that type (rather than firing a single event)](https://github.com/bitovi/canjs/issues/122)
+    - add: [compound sets now behave correctly](https://github.com/bitovi/canjs/issues/119)
+    - fix: [can.Observe.delegate sets wrong event.currentTarget](https://github.com/bitovi/canjs/issues/123)
+    - add: [ability to assign object as attribute type in can.Observe](https://github.com/bitovi/canjs/issues/107)
 
  - can.Model
-    - Fixed [can.Model with attributes that are models gets corrupted when you call attr()](https://github.com/bitovi/canjs/pull/141)
-    - Added [missing dependency to can/model](https://github.com/bitovi/canjs/pull/140)
+    - fix: [can.Model with attributes that are models gets corrupted when you call attr()](https://github.com/bitovi/canjs/pull/141)
+    - add: [missing dependency to can/model](https://github.com/bitovi/canjs/pull/140)
     - Moved can/model/elements to can/observe/elements and renamed `models` to `instances`
-    - Fixed [can.Model.List doesn't fire the change event on the expando properties ](https://github.com/bitovi/canjs/issues/129)
+    - fix: [can.Model.List doesn't fire the change event on the expando properties ](https://github.com/bitovi/canjs/issues/129)
 
 __1.0.7__ (June 25nd 2012)
 
  - can.compute
-      - Fixed a [global collision](https://github.com/bitovi/canjs/commit/7aea62462f3d8d7855f71ccdf16330e60d59f6fa) with `can.Control`.
+      - fix: a [global collision](https://github.com/bitovi/canjs/commit/7aea62462f3d8d7855f71ccdf16330e60d59f6fa) with `can.Control`.
 
  - Removed globals
       - Thanks [Daniel Franz](https://github.com/daniel-franz)!
@@ -3179,35 +3182,35 @@ __1.0.7__ (June 25nd 2012)
 __1.0.6__ (June 22nd 2012)
 
  - can.compute
-      - Added a [computed value type object](https://github.com/bitovi/canjs/commit/8eb7847d410c840da38f4dd5157726e560d0a5f5) that can be used to represent several observe properties or a single static value.
+      - add: a [computed value type object](https://github.com/bitovi/canjs/commit/8eb7847d410c840da38f4dd5157726e560d0a5f5) that can be used to represent several observe properties or a single static value.
 
  - can.ejs
-      - Fixed problem with [trailing text](https://github.com/bitovi/canjs/commit/419248bf190febe5c3ccacb188e9c812e997278e) not being added to template.
+      - fix: problem with [trailing text](https://github.com/bitovi/canjs/commit/419248bf190febe5c3ccacb188e9c812e997278e) not being add: to template.
 
 __1.0.5__ (June 2nd 2012)
 
  - can.model
-      - Added ability to [overwrite model crud operations](https://github.com/bitovi/canjs/commit/235097a46e45329d63da9b6d28a6c284c1b2a157) by defining a `make` prefixed static function, such as `makeFindAll`
+      - add: ability to [overwrite model crud operations](https://github.com/bitovi/canjs/commit/235097a46e45329d63da9b6d28a6c284c1b2a157) by defining a `make` prefix: static function, such as `makeFindAll`
 
  - can.EJS
-      - [Fixed problem](https://github.com/bitovi/canjs/commit/4d4d31f12a57db1ff81f47fa0c8b4261d8133dbb) with nested block statements.
+      - [fix: problem](https://github.com/bitovi/canjs/commit/4d4d31f12a57db1ff81f47fa0c8b4261d8133dbb) with nested block statements.
 
  - can.each
-      - [Added optional third argument](https://github.com/bitovi/canjs/commit/bbd2ad5e38df90f0ebcc09a20f7ea216fe20bd72) that defines the context for the iterator function.
+      - [add: optional third argument](https://github.com/bitovi/canjs/commit/bbd2ad5e38df90f0ebcc09a20f7ea216fe20bd72) that defines the context for the iterator function.
 
  - can/util/function
-      - Added `can.defer` [method](https://github.com/bitovi/canjs/commit/64de5254ce8c284b20c3da487638497457152105) as an alias for `setTimeout(function(){}, 0)`.
+      - add: `can.defer` [method](https://github.com/bitovi/canjs/commit/64de5254ce8c284b20c3da487638497457152105) as an alias for `setTimeout(function(){}, 0)`.
 
  - can.view
-      - Fixed `toId` [so it will work](https://github.com/bitovi/canjs/commit/19c9ca0f07b00afe3c99bf439c089948c46464a6) with both older and newer `steal` versions.
+      - fix: `toId` [so it will work](https://github.com/bitovi/canjs/commit/19c9ca0f07b00afe3c99bf439c089948c46464a6) with both older and newer `steal` versions.
 
 __1.0.4__ (May 22nd 2012)
 
- - Fixed plugin build process
+ - fix: plugin build process
 
 __1.0.2__ (May 20th 2012)
 
- - Fixed breaking namespace issue.
+ - fix: breaking namespace issue.
 
 __1.0.1__ (May 18th 2012)
 
