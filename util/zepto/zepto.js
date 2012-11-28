@@ -1,4 +1,4 @@
-steal('can/util/can.js', 'zepto', 'can/util/event.js', 'can/util/fragment.js', 'can/util/deferred.js', 'can/util/array/each.js',
+steal('can/util/can.js', 'zepto', 'can/util/object/isplain', 'can/util/event.js', 'can/util/fragment.js', 'can/util/deferred.js', 'can/util/array/each.js',
 function (can) {
 	var $ = Zepto;
 

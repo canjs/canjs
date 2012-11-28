@@ -13,12 +13,6 @@ steal(function () {
 		},
 		"dojo" : {
 			exclude : ["dojo", "dojo/dojo.js"]
-			/* TODO probably needs to look somehow like this
-			 wrapInner : [
-			 '\ndefine("can/dojo", ["dojo/query", "dojo/NodeList-dom", "dojo/NodeList-traverse"], function(){\n',
-			 '\nreturn can;\n});\n'
-			 ]
-			 */
 		},
 		"yui" : {
 			exclude : ["yui", "yui/yui.js"]
