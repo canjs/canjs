@@ -2649,27 +2649,16 @@ The following are some sweet apps built with CanJS.  The wiki includes a
 [list of tutorials and blog posts](https://github.com/bitovi/canjs/wiki/CanJS-blog-posts,-tutorials,-and-examples). And
 make sure you checkout [CanJS Recipes](http://canjs.us/recipes.html)
 
-### Todo
+### TodoMVC
 
-![CanJS Todo App](images/examples/todo.png "CanJS Todo App")
+![TodoMVC](http://todomvc.com/site/img/screenshot.png "CanJS Todo App")
 
-A simple todo application written in the style of [TodoMVC](https://github.com/addyosmani/todomvc/). There is an 
-implementation for each library supported by CanJS including an __extra__  Dojo, YUI, and jQuery one
-using [templated event binding](#can_control-templated_event_handlers_pt_2) to bind to widget events. Todo is a good 
-example of the power of [EJS's live binding](#can_ejs-live_binding).
+[TodoMVC](http://todomvc.com/) implements the same Todo application in many different JavaScript MVC frameworks.
+There are examples for [CanJS](http://todomvc.com/labs/architecture-examples/canjs/) and [CanJS + RequireJS](http://todomvc.com/labs/dependency-examples/canjs-require/).
+TodoMVC is a good  example of the power of [EJS's live binding](#can_ejs-live_binding).
 
-__View the App__
-
-- [jQuery](http://donejs.com/examples/todo/jquery/index.html)
-- [jQuery with calendar widget](http://donejs.com/examples/todo/jquery-widget/index.html)
-- [Dojo](http://donejs.com/examples/todo/dojo/index.html)
-- [Dojo with calendar widget](http://donejs.com/examples/todo/dojo-widget/index.html)
-- [Mootools](http://donejs.com/examples/todo/mootools/index.html)
-- [YUI](http://donejs.com/examples/todo/yui/index.html)
-- [YUI with calendar widget](http://donejs.com/examples/todo/yui-widget/index.html)
-- [Zepto](http://donejs.com/examples/todo/zepto/index.html)
-
-[View the source on github](https://github.com/bitovi/cantodo)
+[CanJS TodoMVC source](https://github.com/addyosmani/todomvc/tree/gh-pages/labs/architecture-examples/canjs)
+[CanJS + RequireJS TodoMVC source](http://todomvc.com/labs/dependency-examples/canjs_require)
 
 ### CanPlay
 
