@@ -3041,7 +3041,7 @@ To develop CanJS:
  1. Edit the _feature's_ file.
  2. Add tests to the _feature's_ test file.
  3. Open the feature's test page. Make sure it passes.
- 4. Open `can/test/test.html` in every browser to test everything.
+ 4. Open `can/test/index.html` in every browser to test everything.
  5. Submit a pull request!
 
 ### Documentation
