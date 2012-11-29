@@ -3030,9 +3030,10 @@ Any plugins for that feature will be folders within the feature's folder.  Ex: `
 
 The `can/test` folder contains:
 
- - test pages for CanJS against each library: `can_dojo.html`, `can_jquery.html`, etc. 
- - a test page that tests all libraries and plugins: `test.html`
+ - a `test.html` page which tests jQuery by default. Load e.g. `test.html?library=mootools` to test another library.
+ - a test page that tests all libraries and plugins: `index.html`
  - a file that loads all _feature_ tests: `can_test.js`
+ - a `plugin_test.html` file that tests all plugins
 
 The `can/util` folder contains the compatibility layer for each library.
 
