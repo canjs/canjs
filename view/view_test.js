@@ -194,4 +194,29 @@
 		});
 		equal(result, '<h3>MUSTACHE!</h3>', 'Got MUSTACHE result rendered');
 	});
+
+	test("deferred resolves with data (#183)", function(){
+		var foo = new can.Deferred();
+		var bar = new can.Deferred();
+		var original = {
+			foo : foo,
+			bar : bar
+		};
+
+		stop();
+		ok(can.isDeferred(original.foo), 'Original foo property is a Deferred');
+		can.view.render("//can/view/test/qunit/deferred.ejs", original).then(function(result, data){
+			ok(data, 'Data exists');
+			equal(data.foo, 'FOO', 'Foo is resolved');
+			equal(data.bar, 'BAR', 'Bar is resolved');
+			ok(can.isDeferred(original.foo), 'Original property did not get modified');
+			start();
+		});
+		setTimeout(function(){
+			foo.resolve('FOO');
+		},100);
+		setTimeout(function() {
+			bar.resolve('BAR');
+		}, 50);
+	});
 })();
