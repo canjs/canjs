@@ -3118,6 +3118,7 @@ off JavaScriptMVC.  This page is for contributors after CanJS's launch. Thank yo
 - [cohuman](https://github.com/cohuman)
 ([1](https://github.com/bitovi/canjs/pull/23), [2](https://github.com/bitovi/canjs/pull/26))
 - [roelmonnens](https://twitter.com/roelmonnens)
+- [Craig Wickesser](https://github.com/mindscratch) ([1](https://github.com/bitovi/canjs/pull/188))
 
 for helping us with new features, bug fixes, and getting this out the door.
 
