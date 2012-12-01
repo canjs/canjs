@@ -2724,6 +2724,11 @@ Mindjet Action is task mangement application built using CanJS.  Visit it at [ac
 
 ![action.mindjet.com](images/examples/cohuman.jpg "action.mindjet.com")
 
+### canjs-rails
+
+A Ruby gem that provides CanJS (for jQuery) for your Rails 3.1+ application. Download the gem or learn more
+by visiting the [rubygems.org](https://rubygems.org/gems/canjs-rails) site.
+
 ## Get Help
 
 There are several places you can go to ask questions or get help debugging problems.
