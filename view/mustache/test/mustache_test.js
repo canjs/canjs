@@ -173,13 +173,13 @@ test("Model hookup", function(){
 	same(can.$('.moo').length, 1, 'new item popped off and deleted from ui');
 });
 
-test("Variable partials", function(){
+/*test("Variable partials", function(){
 	var template = "{{#items}}<span>{{>partial}}</span>{{/items}}";
 	var data = { items: [{}], partial: "test_template.mustache" }
 
 	var frag = new can.Mustache({ text: template }).render(data);
 	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
-});
+});*/
 
 /*
 // FIX THIS
