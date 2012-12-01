@@ -399,13 +399,21 @@ steal("can/util", function( can ) {
 							response = data ? renderer(data, helpers) : renderer;
 						});
 					}
-					
 				}
 	
 				return response;
 			}
 		},
 
+		/**
+		 * @hide
+		 * Registers a view with `cached` object.  This is used
+		 * internally by this class and Mustache to hookup views.
+		 * @param  {String} id
+		 * @param  {String} text
+		 * @param  {String} type
+		 * @param  {can.Deferred} def
+		 */
 		registerView: function( id, text, type, def ) {
 			// Get the renderer function.
 			var func = (type || $view.types[$view.ext]).renderer(id, text);
