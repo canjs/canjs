@@ -343,7 +343,7 @@ test("bind to specific attribute changes when an existing attribute's value is c
 	});
 	paginate.attr( 'offset', 200 );
 });
-test("bind to specific attribute changes when an attribute is removed", function() {
+test("bind to specific attribute changes when an attribute is removed", 2, function() {
 	var paginate = new can.Observe( { offset: 100, limit: 100, count: 2000 } );
 	paginate.bind( 'offset', function( ev, newVal, oldVal ) {
 		equals(newVal, undefined);

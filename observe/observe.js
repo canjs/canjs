@@ -272,13 +272,20 @@ steal('can/util','can/construct', function(can) {
 			}
 		},
 		/**
-			* Iterates over an observable object to get an array of its keys.
-			*
-			*     o =  new can.Observe({ foo: 'bar', baz: 'qux' });
-			*     can.Observe.keys(o); //-> ['foo', 'baz']
-			*
-			* @param {can.Observe} observe The observe to iterate over
-			* @return {Array} array An array of the keys on the object.
+		 * `can.Observe.keys( observe )` iterates over an 
+		 * observable object to get an array of 
+		 * its keys. It also 
+		 * 
+		 *     var styles = new can.Observe({
+		 *       color: "green",
+		 *       width: "20px",
+		 *       height: "20px"
+		 *     });
+		 *     
+		 *     can.Observe.keys
+		 * 
+		 * @param {can.Observe} observe The observe to iterate over
+		 * @return {Array} array An array of the keys on the object.
 		 */
 		keys: function(observe) {
 			var keys = [];
@@ -567,9 +574,9 @@ steal('can/util','can/construct', function(can) {
 						delete this[prop]
 					}
 					// Let others know the number of keys have changed
-					Observe.triggerBatch(this, "__keys", undefined);
+					Observe.triggerBatch(this, "__keys");
 					Observe.triggerBatch(this, "change", [prop, "remove", undefined, current]);
-					Observe.triggerBatch(this, prop, [undefined, current]);
+
 				}
 				return current;
 			}
@@ -617,11 +624,7 @@ steal('can/util','can/construct', function(can) {
 				if(this.__convert){
 					value = this.__convert(prop, value)
 				}
-				// If there is no current value, let others know that
-				// the the number of keys have changed
-				if(!current) {
-					Observe.triggerBatch(this, "__keys", undefined);
-				}
+				
 				this.__set(prop, value, current)
 			} else {
 				throw "can.Observe: Object does not exist"
@@ -648,8 +651,16 @@ steal('can/util','can/construct', function(can) {
 				// Value is normal.
 				value);
 
+				if(changeType == "add"){
+					// If there is no current value, let others know that
+					// the the number of keys have changed
+					
+					Observe.triggerBatch(this, "__keys", undefined);
+					
+				}
 				// `batchTrigger` the change event.
 				Observe.triggerBatch(this, "change", [prop, changeType, value, current]);
+				
 				//Observe.triggerBatch(this, prop, [value, current]);
 				// If we can stop listening to our old value, do it.
 				current && unhookup([current], this._cid);
@@ -803,7 +814,7 @@ steal('can/util','can/construct', function(can) {
 				return serialize(this, 'attr', {})
 			}
 
-			props = can.extend(true, {}, props);
+			props = can.extend({}, props);
 			var prop,
 				self = this,
 				newVal;
@@ -988,7 +999,7 @@ steal('can/util','can/construct', function(can) {
 			this.length = 0;
 			can.cid(this, ".observe")
 			this._init = 1;
-			this.push.apply(this, can.makeArray(instances || []));
+			this.push.apply(this, instances || []);
 			this.bind('change'+this._cid,can.proxy(this._changes,this));
 			can.extend(this, options);
 			delete this._init;
@@ -1314,22 +1325,27 @@ steal('can/util','can/construct', function(can) {
 	// `name` - The method name.
 	// `where` - Where items in the `array` should be added.
 	function( where, name ) {
+		var orig = [][name]
 		list.prototype[name] = function() {
 			// Get the items being added.
-			var args = can.makeArray(arguments),
+			var args = [],
 				// Where we are going to add items.
-				len = where ? this.length : 0;
+				len = where ? this.length : 0,
+				i = arguments.length,
+				res,
+				val,
+				constructor = this.constructor;
 
 			// Go through and convert anything to an `observe` that needs to be converted.
-			for ( var i = 0; i < args.length; i++ ) {
-				var val = args[i];
-				if ( canMakeObserve(val) ) {
-					args[i] = hookupBubble(val, "*", this, this.constructor.Observe, this.constructor);
-				}
+			while(i--){
+				val = arguments[i];
+				args[i] =  canMakeObserve(val) ?
+					hookupBubble(val, "*", this, this.constructor.Observe, this.constructor) :
+					val;
 			}
 			
 			// Call the original method.
-			var res = [][name].apply(this, args);
+			res = orig.apply(this, args);
 			
 			if ( !this.comparator || !args.length ) {
 				Observe.triggerBatch(this, "change", [""+len, "add", args, undefined])
