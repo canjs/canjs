@@ -3,10 +3,9 @@
 
 # Partials
 
-Partials are templates embedded in other templates which execute at runtime.  
-Partials begin with a greater than sign, like `{{>my_partial}}`.  
+Partials are templates embedded in other templates.  Partials begin with a greater than sign, like `{{>my_partial}}`.  Partials inherit the calling context.  
 
-Partials are rendered at runtime, so recursive partials are possible but make sure you avoid infinite loops. They also inherit the calling context.
+Partials render at runtime, so recursive partials are possible but make sure you avoid infinite loops.
 
 For example, this template and partial:
 
@@ -30,18 +29,20 @@ The resulting expanded template at render time would look like:
 
 ## Acquiring Partials
 
-You can manually register partial templates by calling
-`can.view.registerView` and passing an identifier and content.  For example:
+__Referencing Files__
 
-	can.view.registerView('myTemplate', "My body lies over {{.}}")
+Partials can reference a file path and file name in the template.  For example:
 
-then later in the view:
+	<script id="template" type="text/mustache">
+    	{{>views/test_template.mustache}}
+	</script>
 
-	{{>myTemplate}}
+	var template = can.view("#mytemplate", {});
 
-resulting in the template rendering with the current context applied to the partial.
+__Referencing by ID__
 
-Additionally, you can register partials that exist in script tags on the page.  For example:
+Partials can reference templates that exist in script tags on the page by 
+referencing the `id` of the partial in the template.  For example:
 
 	<script id="mytemplate" type="text/mustache">
 		{{>mypartial}}
@@ -53,10 +54,35 @@ Additionally, you can register partials that exist in script tags on the page.  
 
 	var template = can.view("#mytemplate", {});
 
-You can also reference a file as a partial.  For example:
+__Manually Registering__
 
-	<script id="template" type="text/mustache">
-    	{{>views/test_template.mustache}}
-	</script>
+Partials can be manually registered by calling `can.view.registerView` 
+and passing an identifier and content.  For example:
 
-	var template = can.view("#mytemplate", {});
+	can.view.registerView('myTemplate', "My body lies over {{.}}")
+
+in the template, you reference the template by the identifer you registered:
+
+	{{>myTemplate}}
+
+resulting in the template rendering with the current context applied to the partial.
+
+## Passing Partials in Options
+
+Partials can resolve the context object that contain partial identifiers in them.
+For example:
+
+	var template = can.view("#template", { 
+		items: []
+		itemsTemplate: "test_template.mustache" 
+	});
+
+	can.$(document.body).append(template);
+
+then reference the partial in the template just like:
+
+	<ul>
+	{{#items}}
+		<li>{{>itemsTemplate}}</li>
+	{{/items}}
+	</ul>
