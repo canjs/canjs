@@ -323,7 +323,8 @@ steal("can/util", function( can ) {
 
 			if ( deferreds.length ) { // Does data contain any deferreds?
 				// The deferred that resolves into the rendered content...
-				var deferred = new can.Deferred();
+				var deferred = new can.Deferred(),
+					dataCopy = can.extend({}, data);
 	
 				// Add the view request to the list of deferreds.
 				deferreds.push(get(view, true))
@@ -339,26 +340,26 @@ steal("can/util", function( can ) {
 	
 					// Make data look like the resolved deferreds.
 					if ( can.isDeferred(data) ) {
-						data = usefulPart(resolved);
+						dataCopy = usefulPart(resolved);
 					}
 					else {
 						// Go through each prop in data again and
 						// replace the defferreds with what they resolved to.
 						for ( var prop in data ) {
 							if ( can.isDeferred(data[prop]) ) {
-								data[prop] = usefulPart(objs.shift());
+								dataCopy[prop] = usefulPart(objs.shift());
 							}
 						}
 					}
 
 					// Get the rendered result.
-					result = renderer(data, helpers);
+					result = renderer(dataCopy, helpers);
 	
 					// Resolve with the rendered view.
-					deferred.resolve(result); 
+					deferred.resolve(result, dataCopy);
 
 					// If there's a `callback`, call it back with the result.
-					callback && callback(result);
+					callback && callback(result, dataCopy);
 				});
 				// Return the deferred...
 				return deferred;
@@ -399,13 +400,21 @@ steal("can/util", function( can ) {
 							response = data ? renderer(data, helpers) : renderer;
 						});
 					}
-					
 				}
 	
 				return response;
 			}
 		},
 
+		/**
+		 * @hide
+		 * Registers a view with `cached` object.  This is used
+		 * internally by this class and Mustache to hookup views.
+		 * @param  {String} id
+		 * @param  {String} text
+		 * @param  {String} type
+		 * @param  {can.Deferred} def
+		 */
 		registerView: function( id, text, type, def ) {
 			// Get the renderer function.
 			var func = (type || $view.types[$view.ext]).renderer(id, text);

@@ -214,7 +214,7 @@ function( can ){
 						// Get the template name and call back into the render method,
 						// passing the name and the current context.
 						var templateName = can.trim(content.replace(/^>\s?/, ''));
-						return "can.view.render('" + templateName + "', " + CONTEXT_STACK + ".pop())";
+						return "can.Mustache.render('" + templateName + "', " + CONTEXT_STACK + ".pop())";
 					}
 				},
 
@@ -855,6 +855,36 @@ function( can ){
 			}
 		}
 		return null;
+	};
+
+	/**
+	 * `Mustache.render` is a helper method that calls
+	 * into `can.view.render` passing the partial 
+	 * and the context object.  
+	 * 
+	 * Its purpose is to determine if the partial object 
+	 * being passed represents a template like:
+	 *
+	 * 		partial === "movember.mustache"
+	 *
+	 * or if the partial is a variable name that represents
+	 * a partial on the context object such as:
+	 *
+	 * 		context[partial] === "movember.mustache"
+	 * 
+	 * @param  {Object} partial
+	 * @param  {Object} context
+	 */
+	Mustache.render = function(partial, context){
+		// Make sure the partial being passed in
+		// isn't a variable like { partial: "foo.mustache" }
+		if(!can.view.cached[partial] && context[partial]){
+			partial = context[partial];
+		}
+
+		// Call into `can.view.render` passing the
+		// partial and context.
+		return can.view.render(partial, context);
 	};
 	
 	// The built-in Mustache helpers.
