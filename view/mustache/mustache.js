@@ -709,11 +709,17 @@ function( can ){
 	Mustache.get = function(ref, contexts, isHelper) {
 		// Split the reference (like `a.b.c`) into an array of key names.
 		var names = ref.split('.'),
+			namesLength = names.length,
 			// Assume the local object is the last context in the stack.
 			obj = contexts[contexts.length - 1],
 			// Assume the parent context is the second to last context in the stack.
 			context = contexts[contexts.length - 2],
-			lastValue, value, name, i, j;
+			lastValue, value, name, i, j,
+			// if we walk up and don't find a property, we default
+			// to listening on an undefined property of the first
+			// context that is an observe
+			defaultObserve,
+			defaultObserveName;
 		
 		// Handle `this` references for list iteration: {{.}} or {{this}}
 		if (/^\.|this$/.test(ref)) {
@@ -740,16 +746,17 @@ function( can ){
 
 				// Make sure the context isn't a failed object before diving into it.
 				if (value !== undefined) {
-					for (j = 0; j < names.length; j++) {
+					for (j = 0; j < namesLength; j++) {
 						// Keep running up the tree while there are matches.
 						if (typeof value[names[j]] != 'undefined') {
 							lastValue = value;
 							value = value[name = names[j]];
 						}
 						// If it's undefined, still match if the parent is an Observe.
-						else if (isObserve(value)) {
-							lastValue = value;
-							name = names[j];
+						else if ( isObserve(value) ) {
+							defaultObserve = value;
+							defaultObserveName = names[j];
+							lastValue = value = undefined;
 							break;
 						}
 						else {
@@ -777,7 +784,9 @@ function( can ){
 				}
 			}
 		}
-		
+		if( defaultObserve ) {
+			return defaultObserve.attr(defaultObserveName);
+		}
 		// Support helper-like functions as anonymous helpers
 		if (obj !== undefined && can.isFunction(obj[ref])) {
 			return obj[ref];
@@ -813,7 +822,7 @@ function( can ){
 	// * `unless` - Renders a falsey section: `{{#unless var}} render {{/unless}}`
 	// * `each` - Renders an array: `{{#each array}} render {{this}} {{/each}}`
 	// * `with` - Opens a context section: `{{#with var}} render {{/with}}`
-	
+	Mustache._helpers = {};
 	/**
 	 * @function registerHelper
 	 * 
@@ -826,7 +835,7 @@ function( can ){
 	 * @param  {Function} fn function to call
 	 */
 	Mustache.registerHelper = function(name, fn){
-		this._helpers.push({ name: name, fn: fn });
+		this._helpers[name]={ name: name, fn: fn };
 	};
 	
 	/**
@@ -838,7 +847,8 @@ function( can ){
 	 * @return {[type]} helper object
 	 */
 	Mustache.getHelper = function(name) {		
-		for (var i = 0, helper; helper = this._helpers[i]; i++) {
+		return this._helpers[name]
+		for (var i = 0, helper; helper = [i]; i++) {
 			// Find the correct helper
 			if (helper.name == name) {
 				return helper;
@@ -848,7 +858,7 @@ function( can ){
 	};
 	
 	// The built-in Mustache helpers.
-	Mustache._helpers = [
+	can.each({
 		// Implements the `if` built-in helper.
 		/**
 		 * @parent can.Mustache.Helpers
@@ -862,18 +872,14 @@ function( can ){
 		 *      	// else
 		 *      {{/if}}
 		 */
-		{
-			name: 'if',
-			fn: function(expr, options){
-				if (!!expr) {
-					return options.fn(this);
-				}
-				else {
-					return options.inverse(this);
-				}
+		'if': function(expr, options){
+			if (!!expr) {
+				return options.fn(this);
+			}
+			else {
+				return options.inverse(this);
 			}
 		},
-		
 		// Implements the `unless` built-in helper.
 		/**
 		 * @parent can.Mustache.Helpers
@@ -886,12 +892,9 @@ function( can ){
 		 *   		// unless
 		 *      {{/unless}}
 		 */
-		{
-			name: 'unless',
-			fn: function(expr, options){
-				if (!expr) {
-					return options.fn(this);
-				}
+		'unless': function(expr, options){
+			if (!expr) {
+				return options.fn(this);
 			}
 		},
 		
@@ -907,19 +910,15 @@ function( can ){
 		 *   		// each
 		 *      {{/each}}
 		 */
-		{
-			name: 'each',
-			fn: function(expr, options) {
-				if (!!expr && expr.length) {
-					var result = [];
-					for (var i = 0; i < expr.length; i++) {
-						result.push(options.fn(expr[i]));
-					}
-					return result.join('');
+		'each': function(expr, options) {
+			if (!!expr && expr.length) {
+				var result = [];
+				for (var i = 0; i < expr.length; i++) {
+					result.push(options.fn(expr[i]));
 				}
+				return result.join('');
 			}
 		},
-		
 		// Implements the `with` built-in helper.
 		/**
 		 * @parent can.Mustache.Helpers
@@ -933,15 +932,15 @@ function( can ){
 		 *   		// with
 		 *      {{/with}}
 		 */
-		{
-			name: 'with',
-			fn: function(expr, options){
-				if (!!expr) {
-					return options.fn(expr);
-				}
+		'with': function(expr, options){
+			if (!!expr) {
+				return options.fn(expr);
 			}
 		}
-	];
+		
+	}, function(fn, name){
+		Mustache.registerHelper(name, fn);
+	});
 	
 	// ## Registration
 	//

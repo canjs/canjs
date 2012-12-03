@@ -1181,4 +1181,18 @@ test("live binding textarea", function(){
 	
 })
 
+test("reading a property from a parent object when the current context is an observe", function(){
+	can.view.mustache("parent-object","{{#foos}}<span>{{bar}}</span>{{/foos}}")
+	var data = {
+		foos: new can.Observe.List([{name: "hi"},{name: 'bye'}]),
+		bar: "Hello World"
+	}
+	
+	var div = document.createElement('div');
+	var res = can.view("parent-object",data)
+	div.appendChild( res )
+	
+	equal(div.innerHTML,"<span>Hello World</span><span>Hello World</span>")
+})
+
 });
