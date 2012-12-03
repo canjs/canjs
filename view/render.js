@@ -2,7 +2,7 @@ steal('can/view', 'can/util/string', function(can){
 // text node expando test
 var canExpando = true;
 try {
-	document.createTextNode()._ = 0;
+	document.createTextNode('')._ = 0;
 } catch (ex) {
 	canExpando = false;
 }
