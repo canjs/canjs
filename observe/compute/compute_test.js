@@ -205,7 +205,7 @@ test("only one update on a start and end transaction",function(){
 	
 })
 
-test("Compute emits change events when an embbedded observe has properties added or removed", 3, function() {
+test("Compute emits change events when an embbedded observe has properties added or removed", 4, function() {
 	var obs = new can.Observe(),
 		compute1 = can.compute(function(){
 			var txt = obs.attr('foo');
@@ -218,7 +218,7 @@ test("Compute emits change events when an embbedded observe has properties added
 	compute1.bind('change', function(ev, newVal, oldVal) {
 		ok(true, 'change handler fired: ' + newVal);
 	})
-
+	// we're binding on adding / removing and foo
 	obs.attr('foo', 1);
 	obs.attr('bar', 2);
 	obs.attr('foo', 3);
