@@ -42,7 +42,7 @@ would return:
 
 ## Paths and Context
 
-When Mustache is resolving a object in a section, the current
+When Mustache is resolving a object in a [section](#Sections), the current
 context is the value that its iterating. For example:
 
 	{
@@ -85,7 +85,7 @@ then we could reference `author` and `publisher` like so:
 __Context Jumping__
 
 Internally, Mustache keeps a stack of contexts as the template dives
-deeper into nested sections and helpers.  If a key is not found within 
+deeper into nested [sections](#Sections) and [helpers](#Helpers).  If a key is not found within 
 the current context, Mustache will look for the key in the parent context
 and so on until it resolves the object or reaches the parent most object.  
 For example:

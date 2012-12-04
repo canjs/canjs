@@ -11,7 +11,7 @@ but you can register your own helper too.
 
 ## if
 
-In addition to truthy/falsey evaluation with sections, you can use an 
+In addition to truthy/falsey evaluation with [sections](#Sections), you can use an 
 explicit `if` condition to render a block.
 
 	{
@@ -53,7 +53,7 @@ would render:
 
 `else` acts similarly to a falsey `{{^inverse}}`, but only applies when used within another helper.
 
-In this case, using the `if`/`else` helpers simplify your template by not requiring extra sections to be specified.
+In this case, using the `if`/`else` helpers simplify your template by not requiring extra [sections](#Sections) to be specified.
 
 ## unless
 
@@ -79,7 +79,7 @@ would render:
 The`each` helper explicitly iterates over an array of items and
 renders the block.
 
-Like sections, it will reset the current context to the value for which its iterating.
+Like [sections](#Sections), it will reset the current context to the value for which its iterating.
 See the [basics of contexts](#Basics) for more information.
 
 	{ 
@@ -104,7 +104,7 @@ would render:
 
 ## with
 
-Mustache typically applies the context passed in the section at runtime.  However,
+Mustache typically applies the context passed in the [sections](#Sections) at runtime.  However,
 you can override this context by using the `with` helper.
 
 For example, using the `with` helper Mustache shifts the context to the friends object.
@@ -197,9 +197,9 @@ that and the previous argument like so:
 
 __Evaluating Helpers__
 
-If you want to use a helper with a section, you need to call 
+If you want to use a helper with as a [section](#Sections), you need to call 
 `options.fn(context)` in your return statement. This will return a 
-string with the resulting evaluated section.
+string with the resulting evaluated [section](#Sections).
 
 Similarly, you can call `options.inverse(context)` to evaluate the 
 template between an `{{else}}` magic tag and the closing magic tag.
@@ -222,7 +222,7 @@ __Advanced Helpers__
 Helpers can be passed normal objects, native objects like numbers and strings, 
 as well as a hash object. The hash object will be an object literal containing 
 all ending arguments using the `key=value` syntax. The hash object will be provided 
-to the helper as `options.hash`. Additionally, when using sections with the helper, 
+to the helper as `options.hash`. Additionally, when using [section](#Sections) with the helper, 
 you can set a custom context by passing the object instead of `this`.
 
 	Mustache.registerHelper('exercise', function(group, action, 
