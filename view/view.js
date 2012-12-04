@@ -579,7 +579,10 @@ steal("can/util", function( can ) {
 			$view[info.suffix] = function(id, text){
 				if(!text) {
 					// Return a nameless renderer
-					return info.renderer(null, id);
+					return function() {
+						var renderer = info.renderer(null, id);
+						return $view.frag(renderer.apply(renderer, arguments));
+					};
 				}
 
 				$view.preload(id, info.renderer(id, text));

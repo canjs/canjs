@@ -182,17 +182,27 @@
 		// }, 'Nonexistent template throws error');
 	});
 
-	test("nameless renderers (#162)", function() {
-		var nameless = can.view.ejs('<h2><%= message %></h2>');
-		var result = nameless({
-			message : 'HI!'
-		});
-		equal(result, '<h2>HI!</h2>', 'Got EJS result rendered');
+	test("nameless renderers (#162, #195)", 6, function() {
+		// EJS
+		var nameless = can.view.ejs('<h2><%= message %></h2>'),
+			result = nameless({
+				message : 'HI!'
+			}),
+			node = result.childNodes[0];
+
+		ok('ownerDocument' in result, 'Result is a document fragment');
+		equal(node.tagName.toLowerCase(), 'h2', 'Got h2 rendered');
+		equal(node.innerHTML, 'HI!', 'Got EJS result rendered');
+
+		// Mustache
 		nameless = can.view.mustache('<h3>{{message}}</h3>');
 		result = nameless({
 			message : 'MUSTACHE!'
 		});
-		equal(result, '<h3>MUSTACHE!</h3>', 'Got MUSTACHE result rendered');
+		node = result.childNodes[0]
+		ok('ownerDocument' in result, 'Result is a document fragment');
+		equal(node.tagName.toLowerCase(), 'h3', 'Got h3 rendered');
+		equal(node.innerHTML, 'MUSTACHE!', 'Got Mustache result rendered');
 	});
 
 	test("deferred resolves with data (#183)", function(){
