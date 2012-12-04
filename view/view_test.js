@@ -182,27 +182,32 @@
 		// }, 'Nonexistent template throws error');
 	});
 
-	test("nameless renderers (#162, #195)", 6, function() {
+	test("nameless renderers (#162, #195)", 8, function() {
 		// EJS
 		var nameless = can.view.ejs('<h2><%= message %></h2>'),
-			result = nameless({
+			data = {
 				message : 'HI!'
-			}),
+			},
+			result = nameless(data),
 			node = result.childNodes[0];
 
 		ok('ownerDocument' in result, 'Result is a document fragment');
 		equal(node.tagName.toLowerCase(), 'h2', 'Got h2 rendered');
-		equal(node.innerHTML, 'HI!', 'Got EJS result rendered');
+		equal(node.innerHTML, data.message, 'Got EJS result rendered');
+		equal(nameless.render(data), '<h2>HI!</h2>', '.render EJS works and returns HTML');
 
 		// Mustache
 		nameless = can.view.mustache('<h3>{{message}}</h3>');
-		result = nameless({
+		data = {
 			message : 'MUSTACHE!'
-		});
+		};
+		result = nameless(data);
 		node = result.childNodes[0]
+
 		ok('ownerDocument' in result, 'Result is a document fragment');
 		equal(node.tagName.toLowerCase(), 'h3', 'Got h3 rendered');
-		equal(node.innerHTML, 'MUSTACHE!', 'Got Mustache result rendered');
+		equal(node.innerHTML, data.message, 'Got Mustache result rendered');
+		equal(nameless.render(data), '<h3>MUSTACHE!</h3>', '.render Mustache works and returns HTML');
 	});
 
 	test("deferred resolves with data (#183)", function(){
