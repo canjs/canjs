@@ -1203,4 +1203,18 @@ test("reading a property from a parent object when the current context is an obs
 	equal(div.innerHTML,"<span>Hello World</span><span>Hello World</span>")
 })
 
+test("helper parameters don't convert functions", function() {
+	can.Mustache.registerHelper('helperWithFn', function(fn) {
+		ok(can.isFunction(fn), 'Parameter is a function');
+		equal(fn(), 'Hit me!', 'Got the expected function');
+	});
+
+	var renderer = can.view.mustache('{{helperWithFn test}}');
+	renderer({
+		test : function() {
+			return 'Hit me!';
+		}
+	});
+})
+
 });

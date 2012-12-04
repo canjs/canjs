@@ -539,7 +539,8 @@ function( can ){
 										CONTEXT_STACK +
 										// Flag as a helper method to aid performance, 
 										// if it is a known helper (anything with > 0 arguments).
-										(i == 0 && args.length > 1 ? ',true' : '') +
+										(i == 0 && args.length > 1 ? ',true' : ',false') +
+										(i > 0 ? ',true' : ',false') +
 										')');
 								}
 							}
@@ -706,7 +707,7 @@ function( can ){
 	 * @param {Object} context  The context to use for checking for a reference if it doesn't exist in the object.
 	 * @param {Boolean} [isHelper]  Whether the reference is a helper.
 	 */
-	Mustache.get = function(ref, contexts, isHelper) {
+	Mustache.get = function(ref, contexts, isHelper, isArgument) {
 		// Split the reference (like `a.b.c`) into an array of key names.
 		var names = ref.split('.'),
 			namesLength = names.length,
@@ -768,8 +769,11 @@ function( can ){
 
 				// Found a matched reference.
 				if (value !== undefined) {
-					// Support functions stored in objects.
-					if (can.isFunction(lastValue[name])) {
+					if(can.isFunction(lastValue[name]) && isArgument) {
+						// Don't execute functions if they are parameters for a helper
+						return lastValue[name];
+					} else if (can.isFunction(lastValue[name])) {
+						// Support functions stored in objects.
 						return lastValue[name]();
 					}
 					// Add support for observes
