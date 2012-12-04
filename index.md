@@ -2664,7 +2664,7 @@ make sure you checkout [CanJS Recipes](http://canjs.us/recipes.html)
 There are two examples for CanJS, one for using CanJS with jQuery and the other for CanJS with jQuery and RequireJS:
 
 - [CanJS](http://todomvc.com/labs/architecture-examples/canjs/) ([GitHub](https://github.com/addyosmani/todomvc/tree/gh-pages/labs/architecture-examples/canjs))
-- [CanJS + RequireJS](http://todomvc.com/labs/dependency-examples/canjs_require/) ([GitHub](https://github.com/addyosmani/todomvc/tree/gh-pages/labs/dependency-examples/canjs_require))
+- [CanJS + RequireJS](https://github.com/bitovi/todomvc/tree/canjs-require)
 
 ### CanPlay
 
