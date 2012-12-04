@@ -17,7 +17,7 @@ steal('can/util','can/construct', function( can ) {
 		each = can.each,
 		slice = [].slice,
 		paramReplacer = /\{([^\}]+)\}/g,
-		special = can.getObject("$.event.special") || {},
+		special = can.getObject("$.event.special", [can]) || {},
 
 		// Binds an element, returns a function that unbinds.
 		delegate = function( el, selector, ev, callback ) {
