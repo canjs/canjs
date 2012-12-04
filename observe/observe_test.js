@@ -506,5 +506,49 @@ test("Nested array conversion (#172)", 4, function() {
 	deepEqual(list.serialize(), [[10, 11], [12, 13]].concat(original), 'Arrays unshifted properly');
 });
 
+test("can.Observe.List.prototype.replace (#194)", 7, function() {
+	var list = new can.Observe.List(['a', 'b', 'c']),
+		replaceList = ['d', 'e', 'f', 'g'],
+		dfd = new can.Deferred();
+
+	list.bind('remove', function(ev, arr) {
+		equal(arr.length, 3, 'Three elements removed');
+	});
+
+	list.bind('add', function(ev, arr) {
+		equal(arr.length, 4, 'Four new elements added');
+	});
+
+	list.replace(replaceList);
+
+	deepEqual(list.serialize(), replaceList, 'Lists are the same');
+
+	list.unbind('remove');
+	list.unbind('add');
+
+	list.replace();
+	equal(list.length, 0, 'List has been emptied');
+	list.push('D');
+
+	stop();
+	list.replace(dfd);
+	setTimeout(function() {
+		var newList = ['x', 'y'];
+
+		list.bind('remove', function(ev, arr) {
+			equal(arr.length, 1, 'One element removed');
+		});
+
+		list.bind('add', function(ev, arr) {
+			equal(arr.length, 2, 'Two new elements added from Deferred');
+		});
+
+		dfd.resolve(newList);
+
+		deepEqual(list.serialize(), newList, 'Lists are the same');
+
+		start();
+	}, 100);
+});
 
 })();
