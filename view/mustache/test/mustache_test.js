@@ -367,6 +367,24 @@ test("Absolute partials", function() {
 	same(new can.Mustache({ text: t.template2 }).render({}), t.expected);
 });
 
+test("Partials and observes", function() {
+	var t = {
+		template: "<table><thead><tr>{{#data}}{{{>partial}}}{{/data}}</tr></thead></table>",
+		expected: "<table><thead><tr><th>hi</th><th>there</th></tr></thead></table>",
+		partials: { partial: '{{#list}}<th>{{.}}</th>{{/list}}' },
+		data: {
+			data : new can.Observe({
+				list: ["hi","there"]
+			})
+		}
+	};
+	for(var name in t.partials) {
+		can.view.registerView(name, t.partials[name])
+	}
+	
+	same(new can.Mustache({ text: t.template }).render(t.data), t.expected);
+});
+
 test("Deeply nested partials", function() {
 	var t = {
 		template: "{{#nest1}}{{#nest2}}{{>partial}}{{/nest2}}{{/nest1}}",
