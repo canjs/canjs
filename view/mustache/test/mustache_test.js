@@ -368,21 +368,15 @@ test("Absolute partials", function() {
 });
 
 test("Partials and observes", function() {
-	var t = {
-		template: "<table><thead><tr>{{#data}}{{{>partial}}}{{/data}}</tr></thead></table>",
-		expected: "<table><thead><tr><th>hi</th><th>there</th></tr></thead></table>",
-		partials: { partial: '{{#list}}<th>{{.}}</th>{{/list}}' },
-		data: {
-			data : new can.Observe({
-				list: ["hi","there"]
-			})
-		}
-	};
-	for(var name in t.partials) {
-		can.view.registerView(name, t.partials[name])
-	}
-	
-	same(new can.Mustache({ text: t.template }).render(t.data), t.expected);
+	var div = document.createElement('div');
+	var dom = can.view('//can/view/mustache/test/table.mustache', {
+		data : new can.Observe({
+			list: ["hi","there"]
+		})
+	});
+	div.appendChild(dom);
+	var expected = "<table><thead><tr><th>hi</th><th>there</th></tr></thead></table>";
+	same(div.innerHTML, expected);
 });
 
 test("Deeply nested partials", function() {
