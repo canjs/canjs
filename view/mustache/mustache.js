@@ -209,12 +209,11 @@ function( can ){
 				// 		user.mustache:
 				// 			<strong>{{name}}</strong>
 				{
-					name: /^>[\s|\w]\w*/,
+					name: /^>[\s]*\w*/,
 					fn:function(content, cmd){
 						// Get the template name and call back into the render method,
 						// passing the name and the current context.
 						var templateName = can.trim(content.replace(/^>\s?/, '')).replace(/["|']/g, "");
-						console.log('name', templateName)
 						return "can.Mustache.render('" + templateName + "', " + CONTEXT_STACK + ".pop())";
 					}
 				},
@@ -500,7 +499,7 @@ function( can ){
 							(can.trim(content)+' ').replace(/((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g, function(whole, part) {
 								args.push(part);
 							});
-								
+
 							// Start the content render block.
 							result.push('can.Mustache.txt(' + CONTEXT_STACK + ',' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
@@ -800,7 +799,7 @@ function( can ){
 		else if (value = Mustache.getHelper(ref)) {
 			return ref;
 		}
-		
+
 		return '';
 	};
 
@@ -851,7 +850,7 @@ function( can ){
 	 * @param  {[type]} name of the helper
 	 * @return {[type]} helper object
 	 */
-	Mustache.getHelper = function(name) {		
+	Mustache.getHelper = function(name) {
 		return this._helpers[name]
 		for (var i = 0, helper; helper = [i]; i++) {
 			// Find the correct helper

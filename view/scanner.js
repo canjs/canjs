@@ -378,7 +378,7 @@ Scanner.prototype = {
 								content = helper.fn(content, commands);
 
 								// dont escape partials
-								if(helper.name.source == /^>[\s|\w]\w*/.source){
+								if(helper.name.source == /^>[\s]*\w*/.source){
 									escaped = 0;
 								}	
 								break;
