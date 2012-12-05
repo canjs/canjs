@@ -42,7 +42,7 @@ __JavaScript__
 __HTML__
 
 	<h1>Welcome Tina Fey!</h1>
-	<p>You have {{messages}} messages.</p>
+	<p>You have 0 messages.</p>
 
 To update your template using live-binding:
 
