@@ -213,7 +213,8 @@ function( can ){
 					fn:function(content, cmd){
 						// Get the template name and call back into the render method,
 						// passing the name and the current context.
-						var templateName = can.trim(content.replace(/^>\s?/, ''));
+						var templateName = can.trim(content.replace(/^>\s?/, '')).replace(/["|']/g, "");
+						console.log('name', templateName)
 						return "can.Mustache.render('" + templateName + "', " + CONTEXT_STACK + ".pop())";
 					}
 				},

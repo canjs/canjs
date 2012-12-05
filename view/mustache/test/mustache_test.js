@@ -356,6 +356,21 @@ test("Passing functions as data, then executing them", function() {
 	same(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
+test("Absolute partials", function() {
+	var t = {
+		template1: "{{> //can/view/mustache/test/test_template.mustache}}",
+		template2: "{{>//can/view/mustache/test/test_template.mustache}}",
+		template3: "{{> '//can/view/mustache/test/test_template.mustache'}}",
+		template4: "{{>'//can/view/mustache/test/test_template.mustache'}}",
+		expected: "Partials Rock"
+	};
+	
+	same(new can.Mustache({ text: t.template1 }).render({}), t.expected);
+	same(new can.Mustache({ text: t.template2 }).render({}), t.expected);
+	same(new can.Mustache({ text: t.template3 }).render({}), t.expected);
+	same(new can.Mustache({ text: t.template4 }).render({}), t.expected);
+});
+
 test("Deeply nested partials", function() {
 	var t = {
 		template: "{{#nest1}}{{#nest2}}{{>partial}}{{/nest2}}{{/nest1}}",
