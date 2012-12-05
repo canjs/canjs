@@ -38,12 +38,12 @@ no message it will render:
 
 Now say we have a request that updates
 the `messages` attribute to have `5` messages.  We 
-call the `.attr` method on the `can.Observe` to update
+call the [attr](can.Observe.prototype.attr) method on the [can.Observe](can.Observe) to update
 the attribute to the new value.
 
 	data.attr('message', 5)
 
-After `can.Observe` recieves this update, it will
+After [can.Observe](can.Observe) recieves this update, it will
 update the paragraph tag to reflect the new value.
 
 	<p>You have 5 new message.</p>
