@@ -1,3 +1,10 @@
+__1.1.3__
+
+- fix: [can.Control will fail to find $.event.special in a $.noConflict(true) scenario](https://github.com/bitovi/canjs/issues/191)
+- fix: [Nameless view renderers should return document fragment](https://github.com/bitovi/canjs/issues/195)
+- add: [Add can.Observe.List.prototype.replace](https://github.com/bitovi/canjs/issues/194)
+- add: [Return resolved data models in view callback](https://github.com/bitovi/canjs/issues/183)
+
 __1.1.2__
 
 - fix: [Solve issue when stealing mustache templates](https://github.com/bitovi/canjs/pull/175) - `can/view/mustache` returns `can` object now

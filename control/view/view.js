@@ -66,6 +66,7 @@ steal('can/util', 'can/control', 'can/view',function(can) {
 	};
 
 	can.Control.prototype.view = function( view, data, myhelpers ) {
+		steal.dev.warn('can.Control.view is deprecated!');
 		//shift args if no view is provided
 		if ( typeof view != "string" && !myhelpers ) {
 			myhelpers = data;

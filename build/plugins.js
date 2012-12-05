@@ -23,9 +23,6 @@ steal('steal/build/pluginify', 'can/build/settings.js', function () {
 			name : "control.plugin",
 			options : wrapjQuery
 		},
-		"control/view/view" : {
-			name : "control.view"
-		},
 		"observe/attributes/attributes" : {
 			name : "observe.attributes"
 		},
