@@ -29,9 +29,8 @@ In this example, we have a simple user welcome screen.
 
 	var template = can.view("#template", data);
 
-The template evaluates the `messages` variable as if
-it were a regular object we created.  Since we have 
-no message it will render:
+The template evaluates the `messages` and adds the hooks for living-binding automatically.  
+Since we have no message it will render:
 
 	<h1>Welcome Tina Fey!</h1>
 	<p>You no messages.</p>
@@ -43,9 +42,9 @@ the attribute to the new value.
 
 	data.attr('message', 5)
 
-After [can.Observe](can.Observe) recieves this update, it will
+After [can.Observe](can.Observe) recieves this update, it will automatically
 update the paragraph tag to reflect the new value.
 
 	<p>You have 5 new message.</p>
 
-For more information visit the [can.Observe].
+For more information visit the [can.Observe](can.Observe).
