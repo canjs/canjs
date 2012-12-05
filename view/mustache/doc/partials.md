@@ -36,13 +36,13 @@ Partials can reference a file path and file name in the template.
 The following template uses a relative path (relative to the current page):
 
 	<script id="template" type="text/mustache">
-    	{{>views/test_template.mustache}}
+		{{>views/test_template.mustache}}
 	</script>
 
 The following template uses an absolute path (rooted to steal's root directory):
 
 	<script id="template" type="text/mustache">
-    	{{>//myapp/accordion/views/test_template.mustache}}
+		{{>//myapp/accordion/views/test_template.mustache}}
 	</script>
 
 __Referencing by ID__
