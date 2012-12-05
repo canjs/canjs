@@ -769,8 +769,8 @@ function( can ){
 
 				// Found a matched reference.
 				if (value !== undefined) {
-					if(can.isFunction(lastValue[name]) && isArgument) {
-						// Don't execute functions if they are parameters for a helper
+					if(can.isFunction(lastValue[name]) && isArgument && (!lastValue[name].isComputed)) {
+						// Don't execute functions if they are parameters for a helper and are not a can.compute
 						return lastValue[name];
 					} else if (can.isFunction(lastValue[name])) {
 						// Support functions stored in objects.
