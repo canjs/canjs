@@ -150,11 +150,11 @@ test("registerNode, unregisterNode, and replace work", function(){
 test("Model hookup", function(){
 	
 	// Single item hookup
-	var template = '<p id="foo" {{data "name" }}>data rocks</p>';
+	var template = '<p id="foo" {{data "name "   }}>data rocks</p>';
 	var obsvr = new can.Observe({ name: 'Austin' });
 	var frag = new can.Mustache({ text: template }).render(obsvr);
 	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
-	same(can.data(can.$('#foo'), 'name'), obsvr, 'data hooks worked and fetched');
+	same(can.data(can.$('#foo'), 'name '), obsvr, 'data hooks worked and fetched');
 
 	// Multi-item hookup
 	var listTemplate = '<ul id="list">{{#list}}<li class="moo" id="li-{{name}}" {{data "obsvr"}}>{{name}}</li>{{/#list}}</ul>';

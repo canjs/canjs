@@ -234,8 +234,7 @@ function( can ){
 				{
 					name: /^\s?data\s/,
 					fn: function(content, cmd){
-						var attr = content.replace(/(^\s?data\s)|(["'])/g, '');;
-
+						var attr = content.match(/["|'](.*)["|']/)[1];
 						// return a function which calls `can.data` on the element
 						// with the attribute name with the current context.
 						return "can.proxy(function(__){can.data(can.$(__),'" + attr + "', this.pop()); }, " + CONTEXT_STACK + ")";
@@ -499,6 +498,7 @@ function( can ){
 							(can.trim(content)+' ').replace(/((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g, function(whole, part) {
 								args.push(part);
 							});
+							console.log(args);
 
 							// Start the content render block.
 							result.push('can.Mustache.txt(' + CONTEXT_STACK + ',' + (mode ? '"'+mode+'"' : 'null') + ',');
