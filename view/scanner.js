@@ -369,7 +369,7 @@ Scanner.prototype = {
 						} 
 
 						var escaped = startTag === tmap.escapeLeft ? 1 : 0,
-							commands = { insert: insert_cmd, tagName: tagName, status: status() };
+							commands = { insert: insert_cmd, tagName: getTag(tagName, tokens, i), status: status() };
 
 						for(var ii = 0; ii < this.helpers.length;ii++){
 							// Match the helper based on helper
