@@ -1,6 +1,6 @@
 @page can.Mustache
 @parent canjs
-@test can/view/mustache/test/qunit.html
+@test can/view/mustache/test/.html
 
 can.Mustache provides logic-less templates with live binding 
 when used with [can.Observes](#can_observe). It currently ships as a plugin:

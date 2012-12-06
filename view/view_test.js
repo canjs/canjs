@@ -1,36 +1,19 @@
 (function() {
 	module("can/view");
 
-	/*test("Ajax transport", function(){
-		var order = 0;
-		$.ajax({
-			url: "//can/view/test/qunit/template.ejs",
-			dataType : "view",
-			async : false
-		}).done(function(view){
-			equals(++order,1, "called synchronously");
-			equals(view({message: "hi"}).indexOf("<h3>hi</h3>"), 0, "renders stuff!")
-		});
+	test("multiple template types work", function(){
+		var expected = '<h3>helloworld</h3>';
+		can.each(["micro","ejs","jaml"], function(ext){
+			var actual = can.view.render("//can/view/test//template." + ext, {
+				"message" :"helloworld"
+			});
 
-		equals(++order,2, "called synchronously");
-	})*/
-
-	if(window.Jaml){
-		test("multiple template types work", function(){
-			can.each(["micro","ejs","jaml"/*, "tmpl"*/], function( ext){
-				var div = can.$(document.createElement('div'));
-
-				can.append(div, can.view("//can/view/test/qunit/template."+ext,{"message" :"helloworld"}))
-
-
-				ok( div[0].getElementsByTagName('h3').length, ext+": h3 written for ")
-				ok( /helloworld\s*/.test( div[0].innerHTML ), ext+": hello world present for ")
-			})
-		});
-	}
+			equal(can.trim(actual), expected, "Text rendered");
+		})
+	});
 
 	test("buildFragment works right", function(){
-		can.append( can.$("#qunit-test-area"), can.view("//can/view/test/qunit/plugin.ejs",{}) )
+		can.append( can.$("#qunit-test-area"), can.view("//can/view/test//plugin.ejs",{}) )
 		ok(/something/.test( can.$("#something span")[0].firstChild.nodeValue ),"something has something");
 		can.remove( can.$("#something") );
 	});
@@ -41,7 +24,7 @@
 		stop();
 		var i = 0;
 
-		can.view.render("//can/view/test/qunit/temp.ejs",{"message" :"helloworld"}, function(text){
+		can.view.render("//can/view/test//temp.ejs",{"message" :"helloworld"}, function(text){
 			ok(/helloworld\s*/.test(text), "we got a rendered template");
 			i++;
 			equals(i, 2, "Ajax is not synchronous");
@@ -56,12 +39,12 @@
 		stop();
 		var startT = new Date(),
 			first;
-		can.view.render("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
+		can.view.render("//can/view/test//large.ejs",{"message" :"helloworld"}, function(text){
 			first = new Date();
 			ok(text, "we got a rendered template");
 
 
-			can.view.render("//can/view/test/qunit/large.ejs",{"message" :"helloworld"}, function(text){
+			can.view.render("//can/view/test//large.ejs",{"message" :"helloworld"}, function(text){
 				var lap2 = (new Date()) - first,
 					lap1 =  first-startT;
 				// ok( lap1 > lap2, "faster this time "+(lap1 - lap2) )
@@ -73,7 +56,7 @@
 	})
 	test("hookup", function(){
 
-		can.view("//can/view/test/qunit/hookup.ejs",{})
+		can.view("//can/view/test//hookup.ejs",{})
 
 	})
 
@@ -112,7 +95,7 @@
 		var foo = new can.Deferred(),
 			bar = new can.Deferred();
 		stop();
-		can.view.render("//can/view/test/qunit/deferreds.ejs",{
+		can.view.render("//can/view/test//deferreds.ejs",{
 			foo : typeof foo.promise == 'function' ? foo.promise() : foo,
 			bar : bar
 		}).then(function(result){
@@ -129,7 +112,7 @@
 	test("deferred", function(){
 		var foo = new can.Deferred();
 		stop();
-		can.view.render("//can/view/test/qunit/deferred.ejs",foo).then(function(result){
+		can.view.render("//can/view/test//deferred.ejs",foo).then(function(result){
 			equals(result, "FOO");
 			start();
 		});
@@ -140,10 +123,6 @@
 		},100);
 
 	});
-
-	/*test("bad url", function(){
-		can.render("//asfdsaf/sadf.ejs")
-	});*/
 
 	test("hyphen in type", function(){
 		var script = document.createElement('script');
@@ -173,7 +152,7 @@
 		ok(can.isFunction(directResult), 'Renderer returned directly');
 		ok(can.isFunction(renderer), 'Renderer is a function');
 		equal(renderer({ test : 'working test' }), 'This is a working test', 'Rendered');
-		renderer = can.view("//can/view/test/qunit/template.ejs");
+		renderer = can.view("//can/view/test//template.ejs");
 		ok(can.isFunction(renderer), 'Renderer is a function');
 		equal(renderer({ message : 'Rendered!' }), '<h3>Rendered!</h3>', 'Synchronous template loaded and rendered');
 		// TODO doesn't get caught in Zepto for whatever reason
@@ -220,7 +199,7 @@
 
 		stop();
 		ok(can.isDeferred(original.foo), 'Original foo property is a Deferred');
-		can.view.render("//can/view/test/qunit/deferred.ejs", original).then(function(result, data){
+		can.view.render("//can/view/test//deferred.ejs", original).then(function(result, data){
 			ok(data, 'Data exists');
 			equal(data.foo, 'FOO', 'Foo is resolved');
 			equal(data.bar, 'BAR', 'Bar is resolved');

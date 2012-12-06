@@ -12,7 +12,7 @@ test("modifier with a deferred", function(){
 	stop();
 	
 	var foo = can.Deferred();
-	can.$("#qunit-test-area").html("//can/view/test/qunit/deferred.ejs", foo );
+	can.$("#qunit-test-area").html("//can/view/test//deferred.ejs", foo );
 	setTimeout(function(){
 		foo.resolve({
 			foo: "FOO"
@@ -44,12 +44,12 @@ test("html takes promise", function(){
 });
 
 test("val set with a template within a hookup within another template", function(){
-	can.view("//can/view/test/qunit/hookupvalcall.ejs",{});
+	can.view("//can/view/test//hookupvalcall.ejs",{});
 });
 
 test("jQuery.fn.hookup", function(){
 	can.$("#qunit-test-area").html("");
-	var els = $(can.view.render("//can/view/test/qunit/hookup.ejs",{})).hookup();
+	var els = $(can.view.render("//can/view/test//hookup.ejs",{})).hookup();
 	can.$("#qunit-test-area").html(els); //makes sure no error happens
 });
 

@@ -17,7 +17,7 @@ var attrMap = {
 	tagMap = {
 		"": "span", 
 		table: "tr", 
-		tr: "td", 
+		tr: "td",
 		ol: "li", 
 		ul: "li", 
 		tbody: "tr",
