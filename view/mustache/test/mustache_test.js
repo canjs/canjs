@@ -356,6 +356,29 @@ test("Passing functions as data, then executing them", function() {
 	same(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
+test("Absolute partials", function() {
+	var t = {
+		template1: "{{> //can/view/mustache/test/test_template.mustache}}",
+		template2: "{{>//can/view/mustache/test/test_template.mustache}}",
+		expected: "Partials Rock"
+	};
+	
+	same(new can.Mustache({ text: t.template1 }).render({}), t.expected);
+	same(new can.Mustache({ text: t.template2 }).render({}), t.expected);
+});
+
+test("Partials and observes", function() {
+	var div = document.createElement('div');
+	var dom = can.view('//can/view/mustache/test/table.mustache', {
+		data : new can.Observe({
+			list: ["hi","there"]
+		})
+	});
+	div.appendChild(dom);
+	var expected = "<table><thead><tr><th>hi</th><th>there</th></tr></thead></table>";
+	same(div.innerHTML, expected);
+});
+
 test("Deeply nested partials", function() {
 	var t = {
 		template: "{{#nest1}}{{#nest2}}{{>partial}}{{/nest2}}{{/nest1}}",
@@ -1201,6 +1224,31 @@ test("reading a property from a parent object when the current context is an obs
 	div.appendChild( res )
 	
 	equal(div.innerHTML,"<span>Hello World</span><span>Hello World</span>")
+})
+
+test("helper parameters don't convert functions", function() {
+	can.Mustache.registerHelper('helperWithFn', function(fn) {
+		ok(can.isFunction(fn), 'Parameter is a function');
+		equal(fn(), 'Hit me!', 'Got the expected function');
+	});
+
+	var renderer = can.view.mustache('{{helperWithFn test}}');
+	renderer({
+		test : function() {
+			return 'Hit me!';
+		}
+	});
+})
+
+test("computes as helper parameters do get converted", function() {
+	can.Mustache.registerHelper('computeTest', function(no) {
+		equal(no, 5, 'Got computed calue');
+	});
+
+	var renderer = can.view.mustache('{{computeTest test}}');
+	renderer({
+		test : can.compute(5)
+	});
 })
 
 });

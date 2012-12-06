@@ -3,7 +3,7 @@ module.exports = function (grunt) {
 	var _ = grunt.utils._;
 	var outFiles = {
 		edge : '<%= meta.out %>/edge/**/*.js',
-		latest : '<%= meta.out %>/<%= pkg.version %>/**/*.js',
+		latest : '<%= meta.out %>/<%= pkg.version %>/**/*.js'
 	};
 
 	grunt.initConfig({
@@ -77,18 +77,32 @@ module.exports = function (grunt) {
 			}
 		},
 		downloads : '<json:build/downloads.json>',
-		docco : _.extend({_options : {
+		docco : {
+			edge : {
+				src : '<%= meta.out %>/edge/**/*.js',
+				docco : {
+					output : '<%= meta.out %>/edge/docs'
+				}
+			},
+			latest : {
+				src : '<%= meta.out %>/<%= pkg.version %>/**/*.js',
+				docco : {
+					output : '<%= meta.out %>/<%= pkg.version %>/docs'
+				}
+			},
+			_options : {
 				exclude : [/\.min\./, /amd\//, /qunit\.js/]
 			}
-		}, outFiles),
+		},
 		strip : outFiles,
 		bannerize : outFiles
 	});
 
 	grunt.loadTasks("../build/tasks");
 
-	grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist bannerize:edge");
+	grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist docco:edge bannerize:edge");
 	grunt.registerTask("latest", "build:latest build:latestPlugins strip:latest beautify:dist bannerize:latest docco:latest");
 	grunt.registerTask("ghpages", "shell:cleanup shell:getGhPages shell:copyLatest shell:updateGhPages shell:cleanup");
 	grunt.registerTask("deploy", "latest ghpages shell:bundleLatest downloads");
+
 };

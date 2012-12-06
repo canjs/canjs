@@ -545,8 +545,8 @@ steal("can/util", function( can ) {
 		usefulPart = function( resolved ) {
 			return can.isArray(resolved) && resolved[1] === 'success' ? resolved[0] : resolved
 		};
-	
-	
+
+	//!steal-pluginify-remove-start
 	if ( window.steal ) {
 		steal.type("view js", function( options, success, error ) {
 			var type = $view.types["." + options.type],
@@ -560,12 +560,13 @@ steal("can/util", function( can ) {
 			success();
 		})
 	}
+	//!steal-pluginify-remove-end
 
-	//!steal-pluginify-remove-start
 	can.extend($view, {
 		register: function( info ) {
 			this.types["." + info.suffix] = info;
 
+			//!steal-pluginify-remove-start
 			if ( window.steal ) {
 				steal.type(info.suffix + " view js", function( options, success, error ) {
 					var type = $view.types["." + options.type],
@@ -575,11 +576,19 @@ steal("can/util", function( can ) {
 					success();
 				})
 			};
+			//!steal-pluginify-remove-end
 			
 			$view[info.suffix] = function(id, text){
 				if(!text) {
 					// Return a nameless renderer
-					return info.renderer(null, id);
+					var renderer = function() {
+						return $view.frag(renderer.render.apply(this, arguments));
+					}
+					renderer.render = function() {
+						var renderer = info.renderer(null, id);
+						return renderer.apply(renderer, arguments);
+					}
+					return renderer;
 				}
 
 				$view.preload(id, info.renderer(id, text));
@@ -599,7 +608,6 @@ steal("can/util", function( can ) {
 		}
 
 	});
-	//!steal-pluginify-remove-end
 
 	return can;
 });

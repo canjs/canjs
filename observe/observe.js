@@ -1505,6 +1505,43 @@ steal('can/util','can/construct', function(can) {
 		 */
 		forEach : function( cb, thisarg ) {
 			can.each(this, cb, thisarg || this );
+		},
+
+		/**
+		 * @function replace
+		 *
+		 * Replaces the current list with another array, can.Observe.List or a Deferred that resolves
+		 * to a list:
+		 *
+		 *      var list = new can.Observe.List('a','b','c');
+		 *      list.replace(['x', 'y']); // -> Fires `remove` and `add` event
+		 *      list.serialize() // -> ['x', 'y']
+		 *
+		 * This allows you to initialize live-binding Controls like this:
+		 *
+		 *      can.Control({
+		 *          init : function () {
+		 *              this.list = new Recipe.List();
+		 *              this.element.html(can.view('list.ejs', this.list));
+		 *              this.list.replace(Recipe.findAll());
+		 *          }
+		 *      });
+		 *
+		 * Meaning that the list will be automatically populated once the Deferred returned by `Recipe.findAll()`
+		 * resolves.
+		 *
+		 * @param {can.Observe.List|Array|can.Deferred} [newList] The new list to use. If not passed, the list
+		 * will be emptied.
+		 * @return {can.Observe.List} The current list
+		 */
+		replace : function(newList) {
+			if(can.isDeferred(newList)) {
+				newList.then(can.proxy(this.replace, this));
+			} else {
+				this.splice.apply(this, [0, this.length].concat(newList || []));
+			}
+
+			return this;
 		}
 	});
 

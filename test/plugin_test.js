@@ -10,7 +10,6 @@ steal('./setup.js').then(
 	, 'can/control/route/route_test.js'
 	, 'can/control/modifier/modifier_test.js'
 	, 'can/control/modifier/key/key_test.js'
-	, 'can/control/view/test/qunit/view_test.js'
 	, 'can/util/fixture/fixture_test.js'
 	// TODO	, 'can/control/modifier/modifier_test.js'
 	, function() {
