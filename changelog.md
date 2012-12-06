@@ -1,5 +1,8 @@
 __1.1.3__
 
+- fix: [`data` Mustache helper doesn't parse attribute properly](https://github.com/bitovi/canjs/issues/200)
+- fix: [Partial Mustache views assume the right parent tag for live-binding](https://github.com/bitovi/canjs/commit/492a22f7655d1ff15c37b95213252c87a264fe3e)
+- fix: [Mustache partials don't parse properly](https://github.com/bitovi/canjs/issues/199)
 - fix: [can.Control will fail to find $.event.special in a $.noConflict(true) scenario](https://github.com/bitovi/canjs/issues/191)
 - fix: [Nameless view renderers should return document fragment](https://github.com/bitovi/canjs/issues/195)
 - add: [Add can.Observe.List.prototype.replace](https://github.com/bitovi/canjs/issues/194)

@@ -498,7 +498,6 @@ function( can ){
 							(can.trim(content)+' ').replace(/((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g, function(whole, part) {
 								args.push(part);
 							});
-							console.log(args);
 
 							// Start the content render block.
 							result.push('can.Mustache.txt(' + CONTEXT_STACK + ',' + (mode ? '"'+mode+'"' : 'null') + ',');
