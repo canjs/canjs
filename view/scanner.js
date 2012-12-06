@@ -20,6 +20,7 @@ var newLine = /(\r|\n)+/g,
 		tr:"tbody",
 		option:"select",
 		td:"tr",
+		th:"tr",
 		li: "ul"
 	},
 	// Returns a tagName to use as a temporary placeholder for live content
