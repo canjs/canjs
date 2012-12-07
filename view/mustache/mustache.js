@@ -232,7 +232,7 @@ function( can ){
 				// 
 				//		can.$('#nameli').data('name');
 				{
-					name: /^\s?data\s/,
+					name: /^\s*data\s/,
 					fn: function(content, cmd){
 						var attr = content.match(/["|'](.*)["|']/)[1];
 						// return a function which calls `can.data` on the element
