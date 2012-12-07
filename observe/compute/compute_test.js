@@ -225,4 +225,27 @@ test("Compute emits change events when an embbedded observe has properties added
 	obs.removeAttr('bar');
 	obs.removeAttr('bar');
 });
+
+test("compute only updates once when a list's contents are replaced",function(){
+	
+	var list = new can.Observe.List([{name: "Justin"}]),
+		computedCount = 0;
+	var compute = can.compute(function(){
+		computedCount++;
+		list.each(function(item){
+			item.attr('name')
+		})
+	})
+	equals(0,computedCount, "computes are not called until their value is read")
+	compute.bind("change", function(ev, newVal, oldVal){
+	
+	})
+
+	equals(1,computedCount, "binding computes to store the value");
+	list.replace([{name: "hank"}]);
+	equals(2,computedCount, "only one compute")
+
+})
+
+
 })();

@@ -319,6 +319,9 @@ steal('can/util','can/construct', function(can) {
 		_changes: function(ev, attr, how,newVal, oldVal){
 			Observe.triggerBatch(this, {type:attr, batchNum: ev.batchNum}, [newVal,oldVal]);
 		},
+		_triggerChange: function(attr, how,newVal, oldVal){
+			Observe.triggerBatch(this,"change",can.makeArray(arguments))
+		},
 		/**
 		 * Get or set an attribute or attributes on the observe.
 		 * 
@@ -575,7 +578,7 @@ steal('can/util','can/construct', function(can) {
 					}
 					// Let others know the number of keys have changed
 					Observe.triggerBatch(this, "__keys");
-					Observe.triggerBatch(this, "change", [prop, "remove", undefined, current]);
+					this._triggerChange(prop, "remove", undefined, current);
 
 				}
 				return current;
@@ -659,7 +662,7 @@ steal('can/util','can/construct', function(can) {
 					
 				}
 				// `batchTrigger` the change event.
-				Observe.triggerBatch(this, "change", [prop, changeType, value, current]);
+				this._triggerChange(prop, changeType, value, current);
 				
 				//Observe.triggerBatch(this, prop, [value, current]);
 				// If we can stop listening to our old value, do it.
@@ -1004,7 +1007,9 @@ steal('can/util','can/construct', function(can) {
 			can.extend(this, options);
 			delete this._init;
 		},
-		_changes : function(ev, attr, how, newVal, oldVal){
+		_triggerChange: function(attr, how, newVal, oldVal){
+			
+			Observe.prototype._triggerChange.apply(this,arguments)
 			// `batchTrigger` direct add and remove events...
 			if ( !~ attr.indexOf('.')){
 				
@@ -1019,7 +1024,7 @@ steal('can/util','can/construct', function(can) {
 				}
 				
 			}
-			Observe.prototype._changes.apply(this,arguments)
+			
 		},
 		__get : function(attr){
 			return attr ? this[attr] : this;
@@ -1116,13 +1121,15 @@ steal('can/util','can/construct', function(can) {
 				howMany = args[1] = this.length - index;
 			}
 			var removed = splice.apply(this, args);
+			can.Observe.startBatch()
 			if ( howMany > 0 ) {
-				Observe.triggerBatch(this, "change", [""+index, "remove", undefined, removed]);
+				this._triggerChange(""+index, "remove", undefined, removed);
 				unhookup(removed, this._cid);
 			}
 			if ( args.length > 2 ) {
-				Observe.triggerBatch(this, "change", [""+index, "add", args.slice(2), removed]);
+				this._triggerChange(""+index, "add", args.slice(2), removed);
 			}
+			can.Observe.stopBatch();
 			return removed;
 		},
 		/**
@@ -1348,7 +1355,7 @@ steal('can/util','can/construct', function(can) {
 			res = orig.apply(this, args);
 			
 			if ( !this.comparator || !args.length ) {
-				Observe.triggerBatch(this, "change", [""+len, "add", args, undefined])
+				this._triggerChange(""+len, "add", args, undefined);
 			}
 						
 			return res;
@@ -1412,7 +1419,7 @@ steal('can/util','can/construct', function(can) {
 			// `undefined` - The new values (there are none).
 			// `res` - The old, removed values (should these be unbound).
 			// `len` - Where these items were removed.
-			Observe.triggerBatch(this, "change", [""+len, "remove", undefined, [res]])
+			this._triggerChange(""+len, "remove", undefined, [res])
 
 			if ( res && res.unbind ) {
 				res.unbind("change" + this._cid)
