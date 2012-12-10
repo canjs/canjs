@@ -551,4 +551,24 @@ test("can.Observe.List.prototype.replace (#194)", 7, function() {
 	}, 100);
 });
 
+test("replace with a deferred that resoves to an Observe.List", function(){
+	
+	stop();
+	
+	var def = new can.Deferred();
+	def.resolve(new can.Observe.List([{name: "foo"},{name: "bar"}]));
+	var list = new can.Observe.List([{name: "1"},{name: "2"}]);
+	list.bind("change",function(){
+		start();
+		
+		equal(list.length, 2, "length is still 2");
+		equal(list[0].attr("name"),"foo", "set to foo")
+	})
+	list.replace(def);
+	
+	
+	
+	
+})
+
 })();

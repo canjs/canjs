@@ -1545,7 +1545,7 @@ steal('can/util','can/construct', function(can) {
 			if(can.isDeferred(newList)) {
 				newList.then(can.proxy(this.replace, this));
 			} else {
-				this.splice.apply(this, [0, this.length].concat(newList || []));
+				this.splice.apply(this, [0, this.length].concat(can.makeArray(newList || [])));
 			}
 
 			return this;
