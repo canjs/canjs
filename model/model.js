@@ -1008,10 +1008,10 @@ steal('can/util','can/observe', function( can ) {
 		 * model instance is removed from the store, freeing memory.  
 		 * 
 		 */
-		bind : function(eventName){
+		bind: function(eventName){
 			if ( ! ignoreHookup.test( eventName )) { 
 				if ( ! this._bindings ) {
-					this.constructor.store[getId(this)] = this;
+					this.constructor.store[this.__get(this.constructor.id)] = this;
 					this._bindings = 0;
 				}
 				this._bindings++;

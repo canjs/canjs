@@ -1,4 +1,4 @@
-steal('funcunit/syn', 'can/view/mustache', function(){
+steal('funcunit/syn', 'can/view/mustache', 'can/model', function(){
 	
 module("can/view/mustache, rendering",{
 	setup : function(){
@@ -1249,6 +1249,27 @@ test("computes as helper parameters do get converted", function() {
 	renderer({
 		test : can.compute(5)
 	});
+})
+
+test("Rendering models in tables produces different results than an equivalent observe (#202)", 2, function() {
+	var renderer = can.view.mustache('<table>{{#stuff}}<tbody>{{#rows}}<tr></tr>{{/rows}}</tbody>{{/stuff}}</table>');
+	var div = document.createElement('div');
+	var dom = renderer({
+		stuff : new can.Observe({
+			rows: [{ name : 'first' }]
+		})
+	});
+	div.appendChild(dom);
+	same(div.innerHTML, "<table><tbody><tr></tr></tbody></table>", "Observe generated expected HTML");
+
+	div = document.createElement('div');
+	dom = renderer({
+		stuff : new can.Model({
+			rows: [{ name : 'first' }]
+		})
+	});
+	div.appendChild(dom);
+	same(div.innerHTML, "<table><tbody><tr></tr></tbody></table>", "Model generated expected HTML");
 })
 
 });
