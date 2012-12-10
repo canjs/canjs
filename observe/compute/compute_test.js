@@ -245,7 +245,23 @@ test("compute only updates once when a list's contents are replaced",function(){
 	list.replace([{name: "hank"}]);
 	equals(2,computedCount, "only one compute")
 
-})
+});
 
+test("Generate computes from Observes with can.Observe.prototype.compute (#203)", 5, function() {
+	var obs = new can.Observe({
+		test : 'testvalue'
+	});
+
+	var compute = obs.compute('test');
+	ok(compute.isComputed, '`test` is computed');
+	equal(compute(), 'testvalue', 'Value is as expected');
+	obs.attr('test', 'observeValue');
+	equal(compute(), 'observeValue', 'Value is as expected');
+	obs.bind('change', function(ev, name, how, newVal) {
+		equal(newVal, 'computeValue', 'Got new value from compute');
+	});
+	compute('computeValue');
+	equal(compute(), 'computeValue', 'Got updated value');
+});
 
 })();

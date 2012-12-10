@@ -857,6 +857,40 @@ steal('can/util','can/construct', function(can) {
 			}
 			Observe.stopBatch()
 			return this;
+		},
+
+		/**
+		 * `compute(prop)` returns a [can.compute] bound to the given property:
+		 *
+		 *      var obs = new can.Observe({
+		 *          name : 'David'
+		 *      });
+		 *
+		 *      var name = obs.compute('name');
+		 *
+		 *      name.bind('change', function(ev, newName, oldName) {
+		 *          console.log('Name changed from ' + oldName + ' to ' + newName);
+		 *      });
+		 *
+		 *      name() // -> "David"
+		 *
+		 *      obs.attr('name', 'Curtis');
+		 *      name() // -> "Curtis"
+		 *
+		 *      name("Justin");
+		 *      name() // -> "Justin"
+		 *      obs.attr('name') // -> Justin
+		 *
+		 * @param prop The name of the property
+		 * @return {can.compute} A can.compute instance
+		 */
+		compute: function(prop) {
+			var self = this,
+				computer = function(val) {
+					return self.attr(prop, val);
+				};
+
+			return can.compute ? can.compute(computer) : computer;
 		}
 	});
 	// Helpers for `observable` lists.
@@ -1431,7 +1465,7 @@ steal('can/util','can/construct', function(can) {
 	can.extend(list.prototype, {
 		/**
 		 * @function indexOf
-		 * Returns the position of the item in the array.  Returns -1 if the
+		 * `indexOf(item)` returns the position of the item in the array.  Returns -1 if the
 		 * item is not in the array.  Examples:
 		 *
 		 *     list = new can.Observe.List(["a","b","c"]);
@@ -1449,7 +1483,7 @@ steal('can/util','can/construct', function(can) {
 		/**
 		 * @function join
 		 *
-		 * Joins the string representation of all elements into a string.
+		 * `join(separator)` joins the string representation of all elements into a string.
 		 *
 		 *      list = new can.Observe.List(["a","b","c"]);
 		 *      list.join(',') // -> "a, b, c"
@@ -1464,7 +1498,7 @@ steal('can/util','can/construct', function(can) {
 		/**
 		 * @function slice
 		 *
-		 * Creates a flat copy of a section of the observable list and returns
+		 * `slice(start [, end])` creates a flat copy of a section of the observable list and returns
 		 * a new observable list.
 		 *
 		 * [MDN reference](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/slice)
@@ -1481,7 +1515,7 @@ steal('can/util','can/construct', function(can) {
 		/**
 		 * @function concat
 		 *
-		 * Returns a new can.Observe.List comprised of this list joined with other
+		 * `concat(args...)` returns a new can.Observe.List comprised of this list joined with other
 		 * array(s), value(s) and can.Observe.Lists.
 		 *
 		 * [MDN reference](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/concat)
@@ -1500,7 +1534,7 @@ steal('can/util','can/construct', function(can) {
 		/**
 		 * @function forEach
 		 *
-		 * Calls a function for each element in the list.
+		 * `forEach(callback [, thisarg])` calls a function for each element in the list.
 		 *
 		 * > Note that [each can.Observe.each] will iterate over the actual properties.
 		 *
@@ -1517,8 +1551,8 @@ steal('can/util','can/construct', function(can) {
 		/**
 		 * @function replace
 		 *
-		 * Replaces the current list with another array, can.Observe.List or a Deferred that resolves
-		 * to a list:
+		 * `replace([newList]) replaces the current list with another array,
+		 * can.Observe.List or a Deferred that resolves to a list:
 		 *
 		 *      var list = new can.Observe.List('a','b','c');
 		 *      list.replace(['x', 'y']); // -> Fires `remove` and `add` event
