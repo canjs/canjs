@@ -213,4 +213,24 @@
 			bar.resolve('BAR');
 		}, 50);
 	});
+
+	test("Empty model displays __!!__ as input values (#196)", function() {
+		can.view.ejs("test196", "User id: <%= user.attr('id') || '-' %>" +
+			" User name: <%= user.attr('name') || '-' %>");
+
+		var frag = can.view('test196', {
+			user: new can.Observe()
+		});
+		var div = document.createElement('div');
+		div.appendChild(frag);
+		equal(div.innerHTML, 'User id: - User name: -', 'Got expected HTML content');
+
+		can.view('test196', {
+			user : new can.Observe()
+		}, function(frag) {
+			div = document.createElement('div');
+			div.appendChild(frag);
+			equal(div.innerHTML, 'User id: - User name: -', 'Got expected HTML content in callback as well');
+		});
+	});
 })();

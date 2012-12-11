@@ -11,19 +11,33 @@ steal("can/util", function( can ) {
 	 * @add can.view
 	 */
 	$view = can.view = function(view, data, helpers, callback){
-		// Get the result.
-		var result = $view.render(view, data, helpers, callback);
+		// If helpers is a `function`, it is actually a callback.
+		if ( isFunction( helpers )) {
+			callback = helpers;
+			helpers = undefined;
+		}
+
+		var pipe = function(result){
+				return $view.frag(result);
+			},
+			// In case we got a callback, we need to convert the can.view.render
+			// result to a document fragment
+			wrapCallback = isFunction(callback) ? function(frag) {
+				callback(pipe(frag));
+			} : null,
+			// Get the result.
+			result = $view.render(view, data, helpers, wrapCallback);
+
 		if(isFunction(result))  {
 			return result;
 		}
+
 		if(can.isDeferred(result)){
-			return result.pipe(function(result){
-				return $view.frag(result);
-			});
+			return result.pipe(pipe);
 		}
 		
 		// Convert it into a dom frag.
-		return $view.frag(result);
+		return pipe(result);
 	};
 
 	can.extend( $view, {
@@ -371,7 +385,7 @@ steal("can/util", function( can ) {
 					async = isFunction( callback ),
 					// Get the `view` type
 					deferred = get(view, async);
-	
+
 				// If we are `async`...
 				if ( async ) {
 					// Return the deferred
@@ -401,7 +415,7 @@ steal("can/util", function( can ) {
 						});
 					}
 				}
-	
+
 				return response;
 			}
 		},
