@@ -1,10 +1,15 @@
 __1.1.3__
 
+- fix: [Empty model displays __!!__ as input values](https://github.com/bitovi/canjs/issues/196)
+- fix: [Rendering models in tables produces different results than an equivalent observe](https://github.com/bitovi/canjs/issues/202)
 - fix: [`data` Mustache helper doesn't parse attribute properly](https://github.com/bitovi/canjs/issues/200)
 - fix: [Partial Mustache views assume the right parent tag for live-binding](https://github.com/bitovi/canjs/commit/492a22f7655d1ff15c37b95213252c87a264fe3e)
 - fix: [Mustache partials don't parse properly](https://github.com/bitovi/canjs/issues/199)
 - fix: [can.Control will fail to find $.event.special in a $.noConflict(true) scenario](https://github.com/bitovi/canjs/issues/191)
 - fix: [Nameless view renderers should return document fragment](https://github.com/bitovi/canjs/issues/195)
+- fix: [compute only updates once when a list's contents are replaced](https://github.com/bitovi/canjs/commit/9cb47dfabba5dbe3bef161e6aae4a5ce2965ac49)
+- add: [Updated jQuery hashchange plugin](https://github.com/bitovi/canjs/pull/201)
+- add: [Generate computes from an observe property](https://github.com/bitovi/canjs/issues/203)
 - add: [Add can.Observe.List.prototype.replace](https://github.com/bitovi/canjs/issues/194)
 - add: [Return resolved data models in view callback](https://github.com/bitovi/canjs/issues/183)
 
