@@ -36,17 +36,23 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 			compress : true,
 			out : outFile + '.min.js'
 		}));
-
-		// console.log('Creating distributable test HTML file ' + testFile);
-		// render('can/build/templates/test.html.ejs', testFile, {
-		//	name : testConfig[lib].name,
-		//	dist : testConfig[lib].dist,
-		//	version : version,
-		//	type : lib
-		// });
-		// new steal.File('can/build/templates/qunit.js').copyTo(testFolder + '/qunit.js');
-		// new steal.File('can/build/templates/qunit.css').copyTo(testFolder + '/qunit.css');
 	};
+	/*
+	var generateTestFiles = function() {
+		_.each(libs, function(lib) {
+
+		});
+		console.log('Creating distributable test HTML file ' + testFile);
+		render('can/build/templates/test.html.ejs', testFile, {
+			name : testConfig[lib].name,
+			dist : testConfig[lib].dist,
+			version : version,
+			type : lib
+		});
+		new steal.File('can/build/templates/qunit.js').copyTo(testFolder + '/qunit.js');
+		new steal.File('can/build/templates/qunit.css').copyTo(testFolder + '/qunit.css');
+	}
+	*/
 	/**
 	 * Build can.jquery-all.js with all plugins.
 	 */
@@ -56,7 +62,11 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 			buildFile = "can/build/make/all.js",
 			defaults = {
 				out : outFile + '.js',
-				onefunc : true,
+				// onefunc : true,
+				shim : {
+					jquery : 'jQuery',
+					'jquery/jquery.js' : 'jQuery'
+				},
 				compress : false,
 				skipAll : true
 			};
