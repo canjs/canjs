@@ -1,3 +1,7 @@
+__1.1.4__
+
+- fix: [Observe.List sort doesn't use custom method passed](https://github.com/bitovi/canjs/issues/169)
+
 __1.1.3__
 
 - fix: [Empty model displays __!!__ as input values](https://github.com/bitovi/canjs/issues/196)

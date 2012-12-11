@@ -58,7 +58,6 @@ test("list sort with func", function(){
 	list.sort(function(a, b){
 		return a.priority > b.priority;
 	});
-	console.log(list)
 	equals(list[0].name, 'high');
 })
 
