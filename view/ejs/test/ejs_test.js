@@ -1208,11 +1208,13 @@ test("inserting live-binding partials assume the correct parent tag", function()
 	var div = document.createElement('div');
 	var dom = can.view('tableView', data);
 	div.appendChild(dom);
+	var ths = div.getElementsByTagName('th');
 
+	equal(ths.length, 2, 'Got two table headings');
+	equal(ths[0].innerHTML, 'Test 1', 'First column heading correct');
+	equal(ths[1].innerHTML, 'Test 2', 'Second column heading correct');
 	equal(can.view.render('tableView', data).indexOf('<table><tbody><tr><td data-view-id='), 0, "Rendered output starts" +
 		"as expected");
-	equal(div.innerHTML, "<table><tbody><tr><th>Test 1</th><th>Test 2</th></tr></tbody></table>",
-		"Document Fragment live-bound output is correct");
 });
 
 })();

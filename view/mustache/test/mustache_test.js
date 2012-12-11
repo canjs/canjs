@@ -375,8 +375,11 @@ test("Partials and observes", function() {
 		})
 	});
 	div.appendChild(dom);
-	var expected = "<table><thead><tr><th>hi</th><th>there</th></tr></thead></table>";
-	same(div.innerHTML, expected);
+	var ths = div.getElementsByTagName('th');
+
+	equal(ths.length, 2, 'Got two table headings');
+	equal(ths[0].innerHTML, 'hi', 'First column heading correct');
+	equal(ths[1].innerHTML, 'there', 'Second column heading correct');
 });
 
 test("Deeply nested partials", function() {
@@ -1220,10 +1223,13 @@ test("reading a property from a parent object when the current context is an obs
 	}
 	
 	var div = document.createElement('div');
-	var res = can.view("parent-object",data)
-	div.appendChild( res )
-	
-	equal(div.innerHTML,"<span>Hello World</span><span>Hello World</span>")
+	var res = can.view("parent-object",data);
+	div.appendChild( res );
+	var spans = div.getElementsByTagName('span');
+
+	equal(spans.length, 2, 'Got two <span> elements');
+	equal(spans[0].innerHTML, 'Hello World', 'First span Hello World');
+	equal(spans[1].innerHTML, 'Hello World', 'Second span Hello World');
 })
 
 test("helper parameters don't convert functions", function() {
@@ -1260,7 +1266,8 @@ test("Rendering models in tables produces different results than an equivalent o
 		})
 	});
 	div.appendChild(dom);
-	same(div.innerHTML, "<table><tbody><tr></tr></tbody></table>", "Observe generated expected HTML");
+	var elements = div.getElementsByTagName('tbody');
+	equal(elements.length, 1, 'Only one <tbody> rendered');
 
 	div = document.createElement('div');
 	dom = renderer({
@@ -1269,7 +1276,8 @@ test("Rendering models in tables produces different results than an equivalent o
 		})
 	});
 	div.appendChild(dom);
-	same(div.innerHTML, "<table><tbody><tr></tr></tbody></table>", "Model generated expected HTML");
+	elements = div.getElementsByTagName('tbody');
+	equal(elements.length, 1, 'Only one <tbody> rendered');
 })
 
 });
