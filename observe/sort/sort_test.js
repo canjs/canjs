@@ -47,5 +47,19 @@ test("list events", function(){
 	list.splice(0,1);
 	list[0].attr('name',"Zed")
 })
+test("list sort with func", function(){
+	
+	var list = new can.Observe.List([
+		{priority: 4, name: "low"},
+		{priority: 1, name: "high"},
+		{priority: 2, name: "middle"},
+		{priority: 3, name: "mid"}])
+	
+	list.sort(function(a, b){
+		return a.priority > b.priority;
+	});
+	console.log(list)
+	equals(list[0].name, 'high');
+})
 
 })();
