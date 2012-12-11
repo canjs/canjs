@@ -1179,6 +1179,19 @@ test("nested live bindings", function(){
 	items[0].attr('is_done',true);
 });
 
+test("list nested in observe live bindings", function(){
+	can.view.mustache("list-test","<ul>{{#data.items}}<li>{{name}}</li>{{/data.items}}</ul>");
+	var data = new can.Observe({
+		items: [{name: "Brian"}, {name: "Fara"}]
+	});
+	var div = document.createElement('div');
+	div.appendChild( can.view("list-test", {data: data}) );
+	data.items.push(new can.Observe({name: "Scott"}))
+	ok(/Brian/.test(div.innerHTML), "added first name")
+	ok(/Fara/.test(div.innerHTML), "added 2nd name")
+	ok(/Scott/.test(div.innerHTML), "added name after push")
+});
+
 
 test("trailing text", function(){
 	can.view.mustache("count","There are {{ length }} todos")
