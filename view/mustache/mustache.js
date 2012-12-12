@@ -736,7 +736,7 @@ function( can ){
 				}
 				return '';
 			}
-		}
+		}	
 		// Handle object resolution (like `a.b.c`).
 		else if (!isHelper) {
 			// Reverse iterate through the contexts (last in, first out).
@@ -774,14 +774,16 @@ function( can ){
 					} else if (can.isFunction(lastValue[name])) {
 						// Support functions stored in objects.
 						return lastValue[name]();
+					} 
+					// Invoke the length to ensure that Observe.List events fire.
+					else if (isObserve(value) && isArrayLike(value) && value.attr('length')){
+						return value;
 					}
 					// Add support for observes
 					else if (isObserve(lastValue)) {
 						return lastValue.attr(name);
-					}
+					} 
 					else {
-						// Invoke the length to ensure that Observe.List events fire.
-						isObserve(value) && isArrayLike(value) && value.attr('length');
 						return value;
 					}
 				}
