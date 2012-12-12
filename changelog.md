@@ -1,5 +1,6 @@
 __1.1.4__
 
+- fix: [Live binding on observe.lists nested in an observe doesn't work](https://github.com/bitovi/canjs/issues/204)
 - fix: [Observe.List sort doesn't use custom method passed](https://github.com/bitovi/canjs/issues/169)
 
 __1.1.3__
