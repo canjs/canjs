@@ -13,7 +13,7 @@ can.view supports other templating languages, but using [can.EJS] is highly enco
 
 ## Use
 
-`can.view( idOrUrl, data)` loads template content from an element, a url or a string, renders
+`can.view( idOrUrl, data, helpers )` loads template content from an element, a url or a string, renders
 it with data, and converts it to a documentFragment so it can be easily and 
 efficiently inserted into the DOM.
 
