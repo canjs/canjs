@@ -53,13 +53,13 @@ function( can ){
 		 * The Mustache templating engine.
 		 * @param {Object} options	Configuration options
 		 */
-		Mustache = function(options) {
+		Mustache = function(options, helpers) {
 			// Support calling Mustache without the constructor.
 			// This returns a function that renders the template.
 			if ( this.constructor != Mustache ) {
-				var mustache = new Mustache(options);
-				return function(data) {
-					 return mustache.render(data);
+				var mustache = new Mustache(options, helpers);
+				return function(data, helpers) {
+					 return mustache.render(data, helpers);
 				};
 			}
 
@@ -101,6 +101,10 @@ function( can ){
 	 */
 	render = function( object, extraHelpers ) {
 		object = object || {};
+		for(var helper in extraHelpers){
+			console.log(helper)
+			Mustache.registerHelper(helper, extraHelpers[helper]);
+		}
 		return this.template.fn.call(object, object, { _data: object });
 	};
 
