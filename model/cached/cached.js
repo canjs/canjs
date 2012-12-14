@@ -6,7 +6,11 @@ can.Model("can.Model.Cached", {
 		can.Model.setup.apply(this, arguments);
 		console.log(this._shortName)
 		// setup data
-		this._cached = can.evalJSON(window.localStorage.getItem(this.cachedKey())) || {};
+		if(typeof window.localStorage != 'undefined'){
+			this._cached = can.evalJSON(window.localStorage.getItem(this.cachedKey())) || {};
+		} else {
+			this._cached = {};
+		}
 	},
 	cachedKey: function(){
 		return "cached"+this._shortName;
