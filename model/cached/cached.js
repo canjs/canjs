@@ -4,7 +4,6 @@ steal('can/model','can/util/object', 'can/util/json.js', function(){
 can.Model("can.Model.Cached", {
 	setup: function(){
 		can.Model.setup.apply(this, arguments);
-		console.log(this._shortName)
 		// setup data
 		this._cached = can.evalJSON(window.localStorage.getItem(this.cachedKey())) || {};
 	},
