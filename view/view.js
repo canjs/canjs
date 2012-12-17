@@ -616,9 +616,12 @@ steal("can/util", function( can ) {
 			$view.cached[id] = new can.Deferred().resolve(function( data, helpers ) {
 				return renderer.call(data, data, helpers);
 			});
-			return function(){
-				return $view.frag(renderer.apply(this,arguments))
-			};
+			function frag(){
+				return $view.frag(renderer.apply(this,arguments));
+			}
+			// expose the renderer for mustache
+			frag.render = renderer;
+			return frag;
 		}
 
 	});
