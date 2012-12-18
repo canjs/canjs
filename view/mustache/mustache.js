@@ -53,13 +53,13 @@ function( can ){
 		 * The Mustache templating engine.
 		 * @param {Object} options	Configuration options
 		 */
-		Mustache = function(options) {
+		Mustache = function(options, helpers) {
 			// Support calling Mustache without the constructor.
 			// This returns a function that renders the template.
 			if ( this.constructor != Mustache ) {
-				var mustache = new Mustache(options);
-				return function(data) {
-					 return mustache.render(data);
+				var mustache = new Mustache(options, helpers);
+				return function(data, helpers) {
+					 return mustache.render(data, helpers);
 				};
 			}
 
@@ -101,6 +101,10 @@ function( can ){
 	 */
 	render = function( object, extraHelpers ) {
 		object = object || {};
+		for(var helper in extraHelpers){
+			console.log(helper)
+			Mustache.registerHelper(helper, extraHelpers[helper]);
+		}
 		return this.template.fn.call(object, object, { _data: object });
 	};
 
@@ -736,7 +740,7 @@ function( can ){
 				}
 				return '';
 			}
-		}
+		}	
 		// Handle object resolution (like `a.b.c`).
 		else if (!isHelper) {
 			// Reverse iterate through the contexts (last in, first out).
@@ -774,14 +778,16 @@ function( can ){
 					} else if (can.isFunction(lastValue[name])) {
 						// Support functions stored in objects.
 						return lastValue[name]();
+					} 
+					// Invoke the length to ensure that Observe.List events fire.
+					else if (isObserve(value) && isArrayLike(value) && value.attr('length')){
+						return value;
 					}
 					// Add support for observes
 					else if (isObserve(lastValue)) {
 						return lastValue.attr(name);
-					}
+					} 
 					else {
-						// Invoke the length to ensure that Observe.List events fire.
-						isObserve(value) && isArrayLike(value) && value.attr('length');
 						return value;
 					}
 				}

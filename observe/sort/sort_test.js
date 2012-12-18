@@ -2,7 +2,7 @@ steal('can/util', 'can/observe/sort', function(can) {
 
 module("can/observe/sort");
 
-test("list events", function(){
+test("list events", 12, function(){
 	
 	var list = new can.Observe.List([
 		{name: 'Justin'},
@@ -46,6 +46,19 @@ test("list events", function(){
 	// now lets remove alexis ...
 	list.splice(0,1);
 	list[0].attr('name',"Zed")
+})
+test("list sort with func", 1, function(){
+	
+	var list = new can.Observe.List([
+		{priority: 4, name: "low"},
+		{priority: 1, name: "high"},
+		{priority: 2, name: "middle"},
+		{priority: 3, name: "mid"}])
+	
+	list.sort(function(a, b){
+		return a.priority > b.priority;
+	});
+	equals(list[0].name, 'high');
 })
 
 })();

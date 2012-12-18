@@ -3,9 +3,28 @@
 
 	test("multiple template types work", function(){
 		var expected = '<h3>helloworld</h3>';
-		can.each(["micro","ejs","jaml"], function(ext){
-			var actual = can.view.render("//can/view/test//template." + ext, {
+		can.each(["micro","ejs","jaml", "mustache"], function(ext){
+			var actual = can.view.render("//can/view/test/template." + ext, {
 				"message" :"helloworld"
+			}, {
+				helper: function(){
+					return "foo"
+				}
+			});
+
+			equal(can.trim(actual), expected, "Text rendered");
+		})
+	});
+
+	test("helpers work", function(){
+		var expected = '<h3>helloworld</h3><div>foo</div>';
+		can.each(["ejs", "mustache"], function(ext){
+			var actual = can.view.render("//can/view/test/helpers." + ext, {
+				"message" :"helloworld"
+			}, {
+				helper: function(){
+					return "foo"
+				}
 			});
 
 			equal(can.trim(actual), expected, "Text rendered");

@@ -39,7 +39,7 @@ can.extend(proto,{
 				a = a[comparator]
 				b = b[comparator]
 				return a === b ? 0 : (a < b ? -1 : 1);
-			}] : [],
+			}] : [method],
 			res = [].sort.apply(this, args);
 
 		!silent && can.trigger(this, "reset");

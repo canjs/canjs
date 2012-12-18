@@ -161,7 +161,8 @@ element using [can.data] and the implied context of `this`.
 
 ## Registering Helpers
 
-You can register your own helper with the `Mustache.registerHelper` method.
+You can register your own helper with the `Mustache.registerHelper` method, or 
+by passing in an object containing helper functions to can.view.
 
 Localization is a good example of a custom helper you might implement
 in your application. The below example takes a given key and 
@@ -173,6 +174,18 @@ returns the localized value using
 			? Globalize.localize(str) 
 			: str;
 	});
+
+Or another way to do this:
+
+	can.view("//path/to/template.mustache", data, {
+		l10n: function(str, options){
+			return Globalize != undefined 
+				? Globalize.localize(str) 
+				: str;
+		}
+	})
+
+Be aware that this creates a global Mustache helper called l10n.
 
 In the template, invoke the helper by calling the helper
 name followed by any additional arguments.
