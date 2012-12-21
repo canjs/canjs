@@ -1,5 +1,7 @@
 @page can.fixture
 @parent can.util
+@test can/util/fixture/qunit.html
+
 
 `can.util.fixture` intercepts an AJAX request and simulates
 the response with a file or function. They are a great technique
@@ -180,7 +182,7 @@ You can also set [can.fixture.on] to false:
 
 ## Make
 
-[can.fixture.make] makes a CRUD service layer that handles sorting, grouping, filtering and more. Use
+[can.fixture.store] makes a CRUD service layer that handles sorting, grouping, filtering and more. Use
 it with a [can.Model] like this:
 
     var Todo = can.Model({
@@ -191,7 +193,7 @@ it with a [can.Model] like this:
       destroy : 'DELETE /todos/{id}'
       }, {});
 
-    var store = can.fixture.make(100, function(i) {
+    var store = can.fixture.store(100, function(i) {
       return {
         id : i,
         name : 'Todo ' + i

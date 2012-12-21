@@ -111,9 +111,9 @@ if(typeof jQuery !== 'undefined') {
 	})
 }
 
-test("can.fixture.make fixtures",function(){
+test("can.fixture.store fixtures",function(){
 	stop();
-	can.fixture.make('thing', 1000, function(i){
+	can.fixture.store('thing', 1000, function(i){
 		return {
 			id: i,
 			name: "thing "+i
@@ -305,8 +305,8 @@ test("replacing and removing a fixture", function(){
 	});
 });
 
-test("can.fixture.make with can.Model", function() {
-	var store = can.fixture.make(100, function(i) {
+test("can.fixture.store with can.Model", function() {
+	var store = can.fixture.store(100, function(i) {
 			return {
 				id : i,
 				name : 'Object ' + i
