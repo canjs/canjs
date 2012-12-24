@@ -1,7 +1,10 @@
-__1.1.3__ ( December 11, 2012 )
+__1.1.4__
 
 - fix: [Live binding on observe.lists nested in an observe doesn't work](https://github.com/bitovi/canjs/issues/204)
 - fix: [Observe.List sort doesn't use custom method passed](https://github.com/bitovi/canjs/issues/169)
+
+__1.1.3__ ( December 11, 2012 )
+
 - fix: [Empty model displays __!!__ as input values](https://github.com/bitovi/canjs/issues/196)
 - fix: [Rendering models in tables produces different results than an equivalent observe](https://github.com/bitovi/canjs/issues/202)
 - fix: [`data` Mustache helper doesn't parse attribute properly](https://github.com/bitovi/canjs/issues/200)
