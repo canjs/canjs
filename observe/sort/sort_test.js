@@ -58,7 +58,11 @@ test("list sort with func", 1, function(){
 		{priority: 3, name: "mid"}])
 
 	list.sort(function(a, b){
-		return a.priority > b.priority;
+		// Sort functions always need to return the -1/0/1 integers
+		if(a.priority < b.priority) {
+			return -1;
+		}
+		return a.priority > b.priority ? 1 : 0;
 	});
 	equals(list[0].name, 'high');
 });
