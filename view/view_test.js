@@ -208,7 +208,7 @@
 		equal(nameless.render(data), '<h3>MUSTACHE!</h3>', '.render Mustache works and returns HTML');
 	});
 
-	test("deferred resolves with data (#183)", function(){
+	test("deferred resolves with data (#183, #209)", function(){
 		var foo = new can.Deferred();
 		var bar = new can.Deferred();
 		var original = {
@@ -218,7 +218,7 @@
 
 		stop();
 		ok(can.isDeferred(original.foo), 'Original foo property is a Deferred');
-		can.view.render("//can/view/test//deferred.ejs", original).then(function(result, data){
+		can.view("//can/view/test//deferred.ejs", original).then(function(result, data){
 			ok(data, 'Data exists');
 			equal(data.foo, 'FOO', 'Foo is resolved');
 			equal(data.bar, 'BAR', 'Bar is resolved');
