@@ -822,7 +822,7 @@ steal('can/util','can/construct', function(can) {
 				self = this,
 				newVal;
 			Observe.startBatch();
-			this.each(function(curVal, prop, toRemove){
+			this.each(function(curVal, prop){
 				newVal = props[prop];
 
 				// If we are merging...
@@ -843,7 +843,7 @@ steal('can/util','can/construct', function(can) {
 						self._set(prop, newVal)
 					}
 					else if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {
-						curVal.attr(newVal, toRemove)
+						curVal.attr(newVal, remove)
 					} else if ( curVal != newVal ) {
 						self._set(prop, newVal)
 					}
