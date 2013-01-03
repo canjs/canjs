@@ -1,3 +1,4 @@
+@page mustache.test
 Testing your Mustache implementation against this specification should be
 relatively simple.  If you have a readily available testing framework on your
 platform, your task may be even simpler.

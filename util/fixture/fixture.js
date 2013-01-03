@@ -759,7 +759,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				},
 				/**
 				 * @function can.fixture.store.reset
-				 * @parent can.fixture.reset
+				 * @parent can.fixture.store
 				 * 
 				 * `store.reset()` resets the store to contain its 
 				 * original data. This is useful for making tests that
