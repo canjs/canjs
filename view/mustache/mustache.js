@@ -724,7 +724,7 @@ function( can ){
 			// context that is an observe
 			defaultObserve,
 			defaultObserveName;
-		
+
 		// Handle `this` references for list iteration: {{.}} or {{this}}
 		if (/^\.|this$/.test(ref)) {
 			// If context isn't an object, then it was a value passed by a helper so use it as an override.
@@ -793,7 +793,10 @@ function( can ){
 				}
 			}
 		}
-		if( defaultObserve ) {
+		if( defaultObserve && 
+			// if there's not a helper by this name and no attribute with this name
+			!(Mustache.getHelper(ref) &&
+				can.Observe.keys(defaultObserve).indexOf(defaultObserveName) === -1) ) {
 			return defaultObserve.attr(defaultObserveName);
 		}
 		// Support helper-like functions as anonymous helpers
