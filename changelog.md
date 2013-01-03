@@ -3,7 +3,7 @@ __1.1.4__
 - fix: [Live binding on observe.lists nested in an observe doesn't work](https://github.com/bitovi/canjs/issues/204)
 - fix: [Observe.List sort doesn't use custom method passed](https://github.com/bitovi/canjs/issues/169)
 
-__1.1.3__
+__1.1.3__ ( December 11, 2012 )
 
 - fix: [Empty model displays __!!__ as input values](https://github.com/bitovi/canjs/issues/196)
 - fix: [Rendering models in tables produces different results than an equivalent observe](https://github.com/bitovi/canjs/issues/202)
@@ -18,7 +18,7 @@ __1.1.3__
 - add: [Add can.Observe.List.prototype.replace](https://github.com/bitovi/canjs/issues/194)
 - add: [Return resolved data models in view callback](https://github.com/bitovi/canjs/issues/183)
 
-__1.1.2__
+__1.1.2__ ( November 28, 2012 )
 
 - fix: [Solve issue when stealing mustache templates](https://github.com/bitovi/canjs/pull/175) - `can/view/mustache` returns `can` object now
 - fix: [Controls shouldn't bind to templated events that contain undefined values](https://github.com/bitovi/canjs/commit/e90bc56d9c1ec46ae01f084ccbcab43c9c611d0c)

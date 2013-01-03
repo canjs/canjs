@@ -367,6 +367,22 @@ test("Absolute partials", function() {
 	same(new can.Mustache({ text: t.template2 }).render({}), t.expected);
 });
 
+test("No arguments passed to helper", function() {
+
+	can.view.mustache("noargs","{{noargHelper}}");
+	can.Mustache.registerHelper("noargHelper", function(){
+		return "foo"
+	})
+	var div1 = document.createElement('div');
+	var div2 = document.createElement('div');
+
+	div1.appendChild( can.view("noargs", {}) );
+	div2.appendChild( can.view("noargs", new can.Observe() ) );
+
+	same(div1.innerHTML, "foo");
+	same(div2.innerHTML, "foo");
+});
+
 test("Partials and observes", function() {
 	var div = document.createElement('div');
 	var dom = can.view('//can/view/mustache/test/table.mustache', {

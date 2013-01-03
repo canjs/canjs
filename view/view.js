@@ -26,14 +26,18 @@ steal("can/util", function( can ) {
 				callback(pipe(frag));
 			} : null,
 			// Get the result.
-			result = $view.render(view, data, helpers, wrapCallback);
+			result = $view.render(view, data, helpers, wrapCallback),
+			deferred = can.Deferred();
 
 		if(isFunction(result))  {
 			return result;
 		}
 
 		if(can.isDeferred(result)){
-			return result.pipe(pipe);
+			result.done(function(result, data) {
+				deferred.resolve.call(deferred, pipe(result), data);
+			});
+			return deferred;
 		}
 		
 		// Convert it into a dom frag.
