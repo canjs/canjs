@@ -140,9 +140,34 @@ test("attr does not blow away old observable", function(){
 		}
 	});
 	var oldCid = state.attr("properties.brand")._cid;
-	state.attr({properties:{brand:[]}});
+	state.attr({properties:{brand:[]}}, true);
 	same(state.attr("properties.brand")._cid, oldCid, "should be the same observe, so that views bound to the old one get updates")
 	equals(state.attr("properties.brand").length, 0, "list should be empty");
+});
+
+test("sub observes respect attr remove parameter", function() {
+    var bindCalled = 0,
+        state = new can.Observe({
+        monkey : {
+            tail: 'brain'
+        }
+    });
+
+    state.bind("change", function(ev, attr, how, newVal, old){
+        bindCalled++;
+        equals(attr, "monkey.tail");
+        equals(old, "brain");
+        equals(how, "remove");
+    });
+
+    state.attr({monkey: {}});
+    equals("brain", state.attr("monkey.tail"), "should not remove attribute of sub observe when remove param is false");
+    equals(0, bindCalled, "remove event not fired for sub observe when remove param is false");
+
+    state.attr({monkey: {}}, true);
+
+    equals(undefined, state.attr("monkey.tail"), "should remove attribute of sub observe when remove param is false");
+    equals(1, bindCalled, "remove event fired for sub observe when remove param is false");
 });
 
 test("remove attr", function(){
