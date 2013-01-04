@@ -1217,4 +1217,25 @@ test("inserting live-binding partials assume the correct parent tag", function()
 		"as expected");
 });
 
+// http://forum.javascriptmvc.com/topic/live-binding-on-mustache-template-does-not-seem-to-be-working-with-nested-properties
+test("Observe with array attributes", function() {
+	var renderer = can.view.ejs('observe-array', '<ul><% can.each(todos, function(todo, i) { %><li><%= todos.attr(""+i) %></li><% }) %></ul><div><%= this.attr("message") %></div>');
+	var div = document.createElement('div');
+	var data = new can.Observe({ 
+	    todos: [ 'Line #1', 'Line #2', 'Line #3' ],
+	    message: 'Hello',
+	    count: 2   
+	});
+	div.appendChild(can.view('observe-array', data));
+	
+	equal(div.getElementsByTagName('li')[1].innerHTML, 'Line #2', 'Check initial array');
+	equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello', 'Check initial message');
+	
+	data.attr('todos.1', 'Line #2 changed');
+	data.attr('message', 'Hello again');
+	
+	equal(div.getElementsByTagName('li')[1].innerHTML, 'Line #2 changed', 'Check updated array');
+	equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello again', 'Check updated message');
+})
+
 })();
