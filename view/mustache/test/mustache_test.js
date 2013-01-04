@@ -1310,7 +1310,7 @@ test("Rendering models in tables produces different results than an equivalent o
 })
 
 // http://forum.javascriptmvc.com/topic/live-binding-on-mustache-template-does-not-seem-to-be-working-with-nested-properties
-test("Observe with array attributes", 2, function() {
+test("Observe with array attributes", function() {
 	var renderer = can.view.mustache('<ul><li></li><li>{{todos.1}}</li>{{#todos}}<li>{{.}}</li>{{/todos}}</ul><div>{{message}}</div>');
 	var div = document.createElement('div');
 	var data = new can.Observe({ 
@@ -1324,6 +1324,7 @@ test("Observe with array attributes", 2, function() {
 	equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello', 'Check initial message');
 	
 	data.attr('todos.1', 'Line #2 changed');
+	// data.todos.attr('1', 'Line #2 changed');
 	data.attr('message', 'Hello again');
 	
 	equal(div.getElementsByTagName('li')[1].innerHTML, 'Line #2 changed', 'Check updated array');
