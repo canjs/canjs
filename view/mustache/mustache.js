@@ -29,6 +29,7 @@ function( can ){
 		STACK = '___st4ck',
 		// An alias for the most used context stacking call.
 		CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
+		CONTEXT_OBJ = '{context:' + CONTEXT_STACK + ',options:options}',
 		
 		/**
 		 * Checks whether an object is a can.Observe.
@@ -57,9 +58,9 @@ function( can ){
 			// Support calling Mustache without the constructor.
 			// This returns a function that renders the template.
 			if ( this.constructor != Mustache ) {
-				var mustache = new Mustache(options, helpers);
-				return function(data, helpers) {
-					 return mustache.render(data, helpers);
+				var mustache = new Mustache(options);
+				return function(data,options) {
+					 return mustache.render(data,options);
 				};
 			}
 
@@ -99,13 +100,12 @@ function( can ){
 	 * @param {Object} object data to be rendered
 	 * @return {String} returns the result of the string
 	 */
-	render = function( object, extraHelpers ) {
+	render = function( object, options ) {
 		object = object || {};
-		for(var helper in extraHelpers){
-			console.log(helper)
-			Mustache.registerHelper(helper, extraHelpers[helper]);
-		}
-		return this.template.fn.call(object, object, { _data: object });
+		return this.template.fn.call(object, object, {
+			_data: object,
+			options: options || {}
+		});
 	};
 
 	can.extend(Mustache.prototype, {
@@ -218,7 +218,7 @@ function( can ){
 						// Get the template name and call back into the render method,
 						// passing the name and the current context.
 						var templateName = can.trim(content.replace(/^>\s?/, '')).replace(/["|']/g, "");
-						return "can.Mustache.render('" + templateName + "', " + CONTEXT_STACK + ".pop())";
+						return "options.partials && options.partials['"+templateName+"'] ? can.Mustache.renderPartial(options.partials['"+templateName+"']," + CONTEXT_STACK + ".pop(),options) : can.Mustache.render('" + templateName + "', " + CONTEXT_STACK + ".pop())";
 					}
 				},
 
@@ -504,7 +504,7 @@ function( can ){
 							});
 
 							// Start the content render block.
-							result.push('can.Mustache.txt(' + CONTEXT_STACK + ',' + (mode ? '"'+mode+'"' : 'null') + ',');
+							result.push('can.Mustache.txt('+CONTEXT_OBJ+',' + (mode ? '"'+mode+'"' : 'null') + ',');
 						
 							// Iterate through the helper arguments, if there are any.
 							for (; arg = args[i]; i++) {
@@ -525,7 +525,7 @@ function( can ){
 										}
 										
 										// Add the key/value.
-										result.push(m[4], ':', m[6] ? m[6] : 'can.Mustache.get("' + m[5].replace(/"/g,'\\"') + '",' + CONTEXT_STACK + ')');
+										result.push(m[4], ':', m[6] ? m[6] : 'can.Mustache.get("' + m[5].replace(/"/g,'\\"') + '",' + CONTEXT_OBJ + ')');
 										
 										// Close the hash if this was the last argument.
 										if (i == args.length - 1) {
@@ -539,7 +539,7 @@ function( can ){
 										// Include the reference name.
 										arg.replace(/"/g,'\\"') + '",' +
 										// Then the stack of context.
-										CONTEXT_STACK +
+										CONTEXT_OBJ +
 										// Flag as a helper method to aid performance, 
 										// if it is a known helper (anything with > 0 arguments).
 										(i == 0 && args.length > 1 ? ',true' : ',false') +
@@ -606,7 +606,13 @@ function( can ){
 			valid = true,
 			result = [],
 			i, helper;
-		
+
+		var extra = {};
+		if(context.context) {
+			extra = context.options;
+			context = context.context;
+		}
+
 		// Validate the arguments based on the section mode.
 		if (mode) {
 			for (i = 0; i < validArgs.length; i++) {
@@ -626,7 +632,7 @@ function( can ){
 		}
 		
 		// Check for a registered helper or a helper-like function.
-		if (helper = (Mustache.getHelper(name) || (can.isFunction(name) && { fn: name }))) {
+		if (helper = (Mustache.getHelper(name,extra) || (can.isFunction(name) && { fn: name }))) {
 			// Use the most recent context as `this` for the helper.
 			var context = (context[STACK] && context[context.length - 1]) || context,
 				// Update the options with a function/inverse (the inner templates of a section).
@@ -711,6 +717,8 @@ function( can ){
 	 * @param {Boolean} [isHelper]  Whether the reference is a helper.
 	 */
 	Mustache.get = function(ref, contexts, isHelper, isArgument) {
+		var options = contexts.options || {};
+		contexts = contexts.context || contexts;
 		// Split the reference (like `a.b.c`) into an array of key names.
 		var names = ref.split('.'),
 			namesLength = names.length,
@@ -804,7 +812,7 @@ function( can ){
 			return obj[ref];
 		}
 		// Support helpers without arguments, but only if there wasn't a matching data reference.
-		else if (value = Mustache.getHelper(ref)) {
+		else if (value = Mustache.getHelper(ref,options)) {
 			return ref;
 		}
 
@@ -858,8 +866,10 @@ function( can ){
 	 * @param  {[type]} name of the helper
 	 * @return {[type]} helper object
 	 */
-	Mustache.getHelper = function(name) {
-		return this._helpers[name]
+	Mustache.getHelper = function(name,options) {
+		return options && options.helpers && options.helpers[name] && {
+			fn: options.helpers[name]
+		} || this._helpers[name]
 		for (var i = 0, helper; helper = [i]; i++) {
 			// Find the correct helper
 			if (helper.name == name) {
@@ -898,7 +908,12 @@ function( can ){
 		// partial and context.
 		return can.view.render(partial, context);
 	};
-	
+
+	Mustache.renderPartial = function(partial,context,options) {
+		return partial.render ? partial.render(context,options) :
+			partial(context,options);
+	};
+
 	// The built-in Mustache helpers.
 	can.each({
 		// Implements the `if` built-in helper.

@@ -1,4 +1,4 @@
-steal('funcunit/syn', 'can/view/mustache', 'can/model', function(){
+steal('funcunit/syn', 'can/view/mustache', 'can/model', './hello.mustache', './fancy_name.mustache', './helper.mustache',function(_syn,_mustache,_model,hello,fancyName,helpers){
 	
 module("can/view/mustache, rendering",{
 	setup : function(){
@@ -1308,5 +1308,32 @@ test("Rendering models in tables produces different results than an equivalent o
 	elements = div.getElementsByTagName('tbody');
 	equal(elements.length, 1, 'Only one <tbody> rendered');
 })
+
+test("can pass in partials",function() {
+	var result = hello({
+		name: "World"
+	},{
+		partials: {
+			name: fancyName
+		}
+	});
+
+	equal(can.trim(can.$(result).text()),"Hello World");
+});
+
+
+test("can pass in helpers",function() {
+	var result = helpers({
+		name: "world"
+	},{
+		helpers: {
+			cap: function(name) {
+				return can.capitalize(name);
+			}
+		}
+	});
+
+	equal(can.trim(can.$(result).text()),"Hello World");
+});
 
 });
