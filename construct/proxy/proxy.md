@@ -1,4 +1,4 @@
- w@page can.Construct.proxy
+@page can.Construct.proxy
 @parent can.Construct
 @plugin can/construct/proxy
 @test can/construct/proxy/qunit.html
