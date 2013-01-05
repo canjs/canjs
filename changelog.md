@@ -1,6 +1,79 @@
-# Change Log
+__1.1.4__
 
-__1.0.8__
+- fix: [Live binding on observe.lists nested in an observe doesn't work](https://github.com/bitovi/canjs/issues/204)
+- fix: [Observe.List sort doesn't use custom method passed](https://github.com/bitovi/canjs/issues/169)
+
+__1.1.3__ ( December 11, 2012 )
+
+- fix: [Empty model displays __!!__ as input values](https://github.com/bitovi/canjs/issues/196)
+- fix: [Rendering models in tables produces different results than an equivalent observe](https://github.com/bitovi/canjs/issues/202)
+- fix: [`data` Mustache helper doesn't parse attribute properly](https://github.com/bitovi/canjs/issues/200)
+- fix: [Partial Mustache views assume the right parent tag for live-binding](https://github.com/bitovi/canjs/commit/492a22f7655d1ff15c37b95213252c87a264fe3e)
+- fix: [Mustache partials don't parse properly](https://github.com/bitovi/canjs/issues/199)
+- fix: [can.Control will fail to find $.event.special in a $.noConflict(true) scenario](https://github.com/bitovi/canjs/issues/191)
+- fix: [Nameless view renderers should return document fragment](https://github.com/bitovi/canjs/issues/195)
+- fix: [compute only updates once when a list's contents are replaced](https://github.com/bitovi/canjs/commit/9cb47dfabba5dbe3bef161e6aae4a5ce2965ac49)
+- add: [Updated jQuery hashchange plugin](https://github.com/bitovi/canjs/pull/201)
+- add: [Generate computes from an observe property](https://github.com/bitovi/canjs/issues/203)
+- add: [Add can.Observe.List.prototype.replace](https://github.com/bitovi/canjs/issues/194)
+- add: [Return resolved data models in view callback](https://github.com/bitovi/canjs/issues/183)
+
+__1.1.2__ ( November 28, 2012 )
+
+- fix: [Solve issue when stealing mustache templates](https://github.com/bitovi/canjs/pull/175) - `can/view/mustache` returns `can` object now
+- fix: [Controls shouldn't bind to templated events that contain undefined values](https://github.com/bitovi/canjs/commit/e90bc56d9c1ec46ae01f084ccbcab43c9c611d0c)
+- fix: [Resetting a form changes input values to __!!__](https://github.com/bitovi/canjs/issues/166)
+- fix: [Further AMD build improvements](https://github.com/bitovi/canjs/issues/168)
+- fix: [Strange conversion of nested arrays to Observe.List](https://github.com/bitovi/canjs/issues/172)
+
+__1.1.1__ ( November 19, 2012 )
+
+- fix: [@@!!@@ Appears on Page With EJS and Table in non-IE Browsers](https://github.com/bitovi/canjs/issues/156)
+- fix: [can.deparam leaks to global scope](https://github.com/bitovi/canjs/issues/152)
+- fix: [nested attr() call on a model with List attributes blows away existing List](https://github.com/bitovi/canjs/pull/160)
+- add: [https://github.com/bitovi/canjs/issues/162](https://github.com/bitovi/canjs/issues/162)
+- Improved AMD support, see [#155](https://github.com/bitovi/canjs/issues/155)
+
+__1.1.0__ ( November 13, 2012 )
+
+ - add: [AMD module](#using_canjs-amd) support for each dependency ([#46](https://github.com/bitovi/canjs/issues/46))
+
+ - can.util
+    - Updated jQuery to 1.8.2
+    - Updated Zepto to 1.0rc1
+    - Updated YUI to 3.7.3
+
+ - can.Mustache
+    - Added Mustache/Handlebars support with Live Binding
+
+ - can.view
+    - Changed [passing jQuery a node list instead of a fragment in View Modifiers](https://github.com/bitovi/canjs/pull/131)
+
+ - can.EJS
+    - fix: [the way EJS handles multiple hookups in the same attribute](https://github.com/bitovi/canjs/pull/134)
+    - fix: [Nested Loops in EJS](https://github.com/bitovi/canjs/issues/135)
+    - fix: [can.EJS template rendering issue](https://github.com/bitovi/canjs/issues/118)
+    - fix: [multiline elements in EJS](https://github.com/bitovi/canjs/pull/76)
+
+ - can.route
+    - fix: [hashchange binding with mootools broken](https://github.com/bitovi/canjs/issues/124)
+
+ - can.Control
+    - add: [control does not listen to touchmove event on controller itself](https://github.com/bitovi/canjs/issues/104)
+
+ - can.Observe
+    - add: [List binding on .length of an object](https://github.com/bitovi/canjs/issues/142)
+    - fix: [validation error that incorrectly labels an attribute with a value of 0 as empty](https://github.com/bitovi/canjs/pull/132)
+    - add: [you can now pluralise event names to listen to matching events of that type (rather than firing a single event)](https://github.com/bitovi/canjs/issues/122)
+    - add: [compound sets now behave correctly](https://github.com/bitovi/canjs/issues/119)
+    - fix: [can.Observe.delegate sets wrong event.currentTarget](https://github.com/bitovi/canjs/issues/123)
+    - add: [ability to assign object as attribute type in can.Observe](https://github.com/bitovi/canjs/issues/107)
+
+ - can.Model
+    - fix: [can.Model with attributes that are models gets corrupted when you call attr()](https://github.com/bitovi/canjs/pull/141)
+    - add: [missing dependency to can/model](https://github.com/bitovi/canjs/pull/140)
+    - Moved can/model/elements to can/observe/elements and renamed `models` to `instances`
+    - fix: [can.Model.List doesn't fire the change event on the expando properties ](https://github.com/bitovi/canjs/issues/129)
 
 __1.0.7__ (June 25nd 2012)
 

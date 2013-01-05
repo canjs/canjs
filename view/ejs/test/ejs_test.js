@@ -32,6 +32,17 @@ var getAttr = function(el, attrName){
 	}
 
 test("registerNode, unregisterNode, and replace work", function(){
+	// Reset the registered nodes
+	for (var key in can.view.nodeMap) {
+		if (can.view.nodeMap.hasOwnProperty(key)) {
+			delete can.view.nodeMap[key];
+		}
+	}
+	for (var key in can.view.nodeListMap) {
+		if (can.view.nodeListMap.hasOwnProperty(key)) {
+			delete can.view.nodeListMap[key];
+		}
+	}
 	
 	var ids = function(arr){
 		return can.map(arr, function(item){
@@ -235,6 +246,9 @@ test('list helper', function(){
 		Todos.splice(0, 2);
 		equals(div.getElementsByTagName('div').length, 0, '0 items in list')
 
+		Todos.push({id: 4, name: 'Pick up sticks'});
+		equals(div.getElementsByTagName('div').length, 1, '1 item in list again')
+
 });
 
 test("attribute single unescaped, html single unescaped", function(){
@@ -264,42 +278,24 @@ test("attribute single unescaped, html single unescaped", function(){
 	equals(div.getElementsByTagName('div')[0].className,"complete", "class changed to complete")
 });
 
-
-test("event binding / triggering on options", function(){
-	var frag = can.buildFragment("<select><option>a</option></select>",[document]);
+test("event binding / triggering on things other than options", 1, function(){
+	var frag = can.buildFragment("<ul><li>a</li></ul>",[document]);
 	var qta = document.getElementById('qunit-test-area');
 	qta.innerHTML = "";
 	qta.appendChild(frag);
 	
-	/*qta.addEventListener("foo", function(){
-		ok(false, "event handler called")
-	},false)*/
-	
-
 	// destroyed events should not bubble
-	
-	
-	qta.getElementsByTagName("option")[0].addEventListener("foo", function(ev){
-		ok(true,"option called");
-		ev.stopPropagation();
-		//ev.cancelBubble = true;
-	}, false);
-	
-	qta.getElementsByTagName("select")[0].addEventListener("foo", function(){
-		ok(true,"select called")
-	}, false)
-	
-	var ev = document.createEvent("HTMLEvents");
-	ev.initEvent("foo", true , true);
-	qta.getElementsByTagName("option")[0].dispatchEvent(ev); 
-	
-	//can.trigger(qta,"foo")
-	
-	stop();
-	setTimeout(function(){
-		start();
-		ok(true);
-	},100)
+	can.bind.call(qta.getElementsByTagName("li")[0], 'foo', function(event) {
+		ok(true,"li called :)");
+	});
+
+	can.bind.call(qta.getElementsByTagName("ul")[0], 'foo', function(event) {
+		ok(false,"ul called :(");
+	});
+
+	can.trigger(qta.getElementsByTagName('li')[0], 'foo', {}, false);
+
+	qta.removeChild(qta.firstChild);
 })
 
 test("select live binding", function() {
@@ -340,12 +336,15 @@ test("block live binding", function(){
 
 	div.appendChild(can.view.frag(compiled))
 	
-	// toUpperCase added to normalize cases for IE8
-	equals(div.getElementsByTagName('div')[0].innerHTML.toUpperCase(), "<span>Mr.</span>".toUpperCase(),"initial content")
+	// We have to test using nodeName and innerHTML (and not outerHTML) because IE 8 and under treats
+	// user-defined properties on nodes as attributes.
+	equals(div.getElementsByTagName('div')[0].firstChild.nodeName.toUpperCase(), "SPAN","initial span tag");
+	equals(div.getElementsByTagName('div')[0].firstChild.innerHTML, "Mr.","initial span content");
 	
 	obs.attr('sex','female')
 	
-	equals(div.getElementsByTagName('div')[0].innerHTML.toUpperCase(), "<label>Ms.</label>".toUpperCase(),"updated label")
+	equals(div.getElementsByTagName('div')[0].firstChild.nodeName.toUpperCase(), "LABEL","updated label tag");
+	equals(div.getElementsByTagName('div')[0].firstChild.innerHTML, "Ms.","updated label content");
 	
 })
 
@@ -367,14 +366,17 @@ test("hookups in tables", function(){
 
 	div.appendChild(can.view.frag(compiled));
 	
-	
-	equals(div.getElementsByTagName('tbody')[0].innerHTML.replace(/(\r|\n)+/g, "").toUpperCase(), 
-		"<tr><td>Mr.</td></tr>".toUpperCase(),"initial content")
+	// We have to test using nodeName and innerHTML (and not outerHTML) because IE 8 and under treats
+	// user-defined properties on nodes as attributes.
+	equals(div.getElementsByTagName('tbody')[0].firstChild.firstChild.nodeName, "TD","initial tag");
+	equals(div.getElementsByTagName('tbody')[0].firstChild.firstChild.innerHTML.replace(/(\r|\n)+/g, ""), 
+		"Mr.","initial content");
 	
 	obs.attr('sex','female')
 	
-	equals(div.getElementsByTagName('tbody')[0].innerHTML.replace(/(\r|\n)+/g, "").toUpperCase(), 
-		"<tr><td>Ms.</td></tr>".toUpperCase(),"updated label")
+	equals(div.getElementsByTagName('tbody')[0].firstChild.firstChild.nodeName, "TD","updated tag");
+	equals(div.getElementsByTagName('tbody')[0].firstChild.firstChild.innerHTML.replace(/(\r|\n)+/g, ""), 
+		"Ms.","updated content");
 })
 
 test('multiple hookups in a single attribute', function() {
@@ -421,15 +423,18 @@ test('adding and removing multiple html content within a single element', functi
 
 	div.appendChild(can.view.frag(compiled));
 
-	equals(div.innerHTML.toUpperCase(), '<div>abc</div>'.toUpperCase(), 'initial render');
+	equals(div.firstChild.nodeName.toUpperCase(), 'DIV', 'initial render node name');
+	equals(div.firstChild.innerHTML, 'abc', 'initial render text')
 
 	obs.attr({a: '', b : '', c: ''});
 
-	equals(div.innerHTML.toUpperCase(), '<div></div>'.toUpperCase(), 'updated values');
+	equals(div.firstChild.nodeName.toUpperCase(), 'DIV', 'updated render node name');
+	equals(div.firstChild.innerHTML, '', 'updated render text')
 	
 	obs.attr({c: 'c'});
 	
-	equals(div.innerHTML.toUpperCase(), '<div>c</div>'.toUpperCase(), 'updated values');
+	equals(div.firstChild.nodeName.toUpperCase(), 'DIV', 'updated render node name');
+	equals(div.firstChild.innerHTML, 'c', 'updated render text')
 });
 
 test('live binding and removeAttr', function(){
@@ -878,26 +883,19 @@ test("nested properties", function(){
 });
 
 test("tags without chidren or ending with /> do not change the state", function(){
-	var ta = can.$('#qunit-test-area')[0]
-	ta.innerHTML = ""
 	
-	var hookup = can.view.hookup;
-	can.view.hookup = function(frag){
-		// check that there are no spans in this frag
-		can.append(  can.$('#qunit-test-area'), frag );
-		equal( ta.getElementsByTagName('span').length, 0, "there are no spans");
-		equal( ta.getElementsByTagName('td').length, 2, "there are 2 td");
-	}
 	var text = "<table><tr><td/><%== obs.attr('content') %></tr></div>"
 	var obs = new can.Observe({
 		content: "<td>Justin</td>"
 	})
 	var compiled = new can.EJS({text: text}).render({obs: obs});
-	
 	var div = document.createElement('div');
+	var html = can.view.frag(compiled);
+	
+	div.appendChild(html)
 
-	can.view.frag(compiled);
-	can.view.hookup = hookup;
+	equal( div.getElementsByTagName('span').length, 0, "there are no spans");
+	equal( div.getElementsByTagName('td').length, 2, "there are 2 td");
 })
 
 
@@ -915,7 +913,6 @@ test("nested live bindings", function(){
 	// nested objects
 
 	items[0].attr('is_done',true);
-	console.log("html -",div.innerHTML)
 });
 
 // Similar to the nested live bindings test, this makes sure templates with control blocks
@@ -942,7 +939,7 @@ test("recursive views", function(){
 	
 	var div = document.createElement('div');
 	div.appendChild( can.view('//can/view/ejs/test/recursive.ejs',  {items: data}));
-	ok(/class="leaf"/.test(div.innerHTML), "we have a leaf")
+	ok(/class="leaf"|class=leaf/.test(div.innerHTML), "we have a leaf")
 	
 })
 
@@ -954,15 +951,17 @@ test("indirectly recursive views", function() {
 			]}
 		]}
 	]);
-
 	can.view.cache = false;
-	var div = document.createElement('div');
+	var div = document.createElement('div');	
 	div.appendChild(can.view('//can/view/ejs/test/indirect1.ejs', {unordered: unordered}));
-	ok(can.trim(div.querySelectorAll('ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Uncached indirectly recursive EJS working.");
-
+	document.getElementById('qunit-test-area').appendChild(div);
+	ok(can.trim(can.$('#qunit-test-area ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Uncached indirectly recursive EJS working.");
+	
 	can.view.cache = true;
 	div.appendChild(can.view('//can/view/ejs/test/indirect1.ejs', {unordered: unordered}));
-	ok(can.trim(div.querySelectorAll('ul + ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Cached indirectly recursive EJS working.");
+	ok(can.trim(can.$('#qunit-test-area ul + ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Cached indirectly recursive EJS working.");
+	document.getElementById('qunit-test-area').removeChild(div);
+
 });
 
 test("live binding select", function(){
@@ -995,7 +994,8 @@ test("live binding textarea", function(){
 	var obs = new can.Observe({middle: "yes"}),
 		div = document.createElement('div');
 	
-	div.appendChild( can.view("textarea-test",{obs: obs}) )
+	var node = can.view("textarea-test", {obs: obs});
+	div.appendChild(node);
 	var textarea = div.firstChild
 	
 	equal(textarea.value, "BeforeyesAfter");
@@ -1004,6 +1004,21 @@ test("live binding textarea", function(){
 	equal(textarea.value, "BeforeMiddleAfter")
 	
 })
+
+test("reset on a live bound input", function(){
+	var text = "<input type='text' value='<%= person.attr('name') %>'><button type='reset'>Reset</button>",
+		person = new can.Observe({
+			name: "Bob"
+		}),
+		compiled = new can.EJS({text: text}).render({person: person}),
+		form = document.createElement('form'),
+		input;
+		
+		form.appendChild(can.view.frag(compiled))
+		input = form.getElementsByTagName('input')[0];
+		form.reset();
+		equals(input.value, "Bob", "value is correct");
+});
 
 test("A non-escaping live magic tag within a control structure and no leaks", function(){
 	
@@ -1024,7 +1039,6 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 		div = can.$('#qunit-test-area')[0]
 		div.innerHTML = ""
 	
-	div.appendChild(can.view.frag(compiled))
 	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
 	
 	ok(div.getElementsByTagName('label')[0], "label exists")
@@ -1034,14 +1048,12 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 	equals(div.getElementsByTagName('label').length, 0, "label is removed")
 	equals(div.getElementsByTagName('p').length, 1, "label is replaced by p")
 	
-	
-	
 	items.push({
 		html: "<p>hola</p>"
 	});
 	
 	equals(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
-		
+	
 	can.remove( can.$(div.firstChild) )
 		
 	same(can.view.nodeMap, {} );
@@ -1068,8 +1080,8 @@ test("attribute unquoting", function() {
 
 test("empty element hooks work correctly",function(){
 	
-	var text = '<div <%= function(e){ e.innerHTML = "1 Will show"; } %> />'+
-		'<div <%= function(e){ e.innerHTML = "2 Will not show"; } %> />'+
+	var text = '<div <%= function(e){ e.innerHTML = "1 Will show"; } %>></div>'+
+		'<div <%= function(e){ e.innerHTML = "2 Will not show"; } %>></div>'+
 		'3 Will not show';
 	
 	var compiled = new can.EJS({text: text}).render(),
@@ -1083,31 +1095,39 @@ test("empty element hooks work correctly",function(){
 
 test("live binding with parent dependent tags but without parent tag present in template",function(){
 	
-	var text = ['<% if( person.attr("first") ){ %>',
+	var text = ['<tbody>',
+				'<% if( person.attr("first") ){ %>',
 				'<tr><td><%= person.first %></td></tr>',
 				'<% }%>',
 				'<% if( person.attr("last") ){ %>',
 				'<tr><td><%= person.last %></td></tr>',
-				'<% } %>'];
+				'<% } %>',
+				'</tbody>'];
 	var person = new can.Observe({first: "Austin", last: "McDaniel"});
-	
+
 	var compiled = new can.EJS({text: text.join("\n")}).render({person: person});
-	console.log(compiled)
 	var table = document.createElement('table');
-	//can.append( can.$('#qunit-test-area'), table )
 	
 	table.appendChild(can.view.frag(compiled));
-	
-	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>Austin</td></tr><tr><td>McDaniel</td></tr>")
-	
+
+	equals(table.getElementsByTagName('tr')[0].firstChild.nodeName.toUpperCase(), "TD");
+	equals(table.getElementsByTagName('tr')[0].firstChild.innerHTML, "Austin");
+	equals(table.getElementsByTagName('tr')[1].firstChild.nodeName.toUpperCase(), "TD");
+	equals(table.getElementsByTagName('tr')[1].firstChild.innerHTML, "McDaniel");
+
 	person.removeAttr('first')
-	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>McDaniel</td></tr>")
+
+	equals(table.getElementsByTagName('tr')[0].firstChild.nodeName.toUpperCase(), "TD");
+	equals(table.getElementsByTagName('tr')[0].firstChild.innerHTML, "McDaniel");
+
 	person.removeAttr('last');
-	equal(table.innerHTML.replace(/[\s\n]/g,""),"");
+
+	equals(table.getElementsByTagName('tr').length, 0);
 	
 	person.attr('first',"Justin");
 	
-	equal(table.innerHTML.replace(/[\s\n]/g,""),"<tr><td>Justin</td></tr>")
+	equals(table.getElementsByTagName('tr')[0].firstChild.nodeName.toUpperCase(), "TD");
+	equals(table.getElementsByTagName('tr')[0].firstChild.innerHTML, "Justin");
 })
 
 
@@ -1148,6 +1168,74 @@ test("live binding with computes", function() {
 	compute(true);
 	equal(span.innerHTML, 'true');
 
+})
+
+test("testing for clean tables", function() {
+	var games = new can.Observe.List();
+  games.push({name: 'The Legend of Zelda', rating: 10});  
+  games.push({name: 'The Adventures of Link', rating: 9});  
+  games.push({name: 'Dragon Warrior', rating: 9});
+  games.push({name: 'A Dude Named Daffl', rating: 8.5});  
+
+	var res = can.view.render("//can/view/ejs/test/table_test.ejs",{
+		games: games
+	}),
+	div = document.createElement('div');
+
+	div.appendChild(can.view.frag(res));
+
+	ok(!(/@@!!@@/.test(div.innerHTML)), "no placeholders" );
+
+})
+
+test("inserting live-binding partials assume the correct parent tag", function() {
+	can.view.ejs('rowView', '<% can.each(columns, function(col) { %>' +
+			'<th><%= col.attr("name") %></th>' +
+        '<% }) %>');
+
+	can.view.ejs('tableView', '<table><tbody><tr>' +
+			'<%== can.view.render("rowView", this) %>' +
+		'</tr></tbody></table>');
+
+	var data = {
+		columns : new can.Observe.List([{
+			name : 'Test 1'
+		}, {
+			name : 'Test 2'
+		}])
+	}
+
+	var div = document.createElement('div');
+	var dom = can.view('tableView', data);
+	div.appendChild(dom);
+	var ths = div.getElementsByTagName('th');
+
+	equal(ths.length, 2, 'Got two table headings');
+	equal(ths[0].innerHTML, 'Test 1', 'First column heading correct');
+	equal(ths[1].innerHTML, 'Test 2', 'Second column heading correct');
+	equal(can.view.render('tableView', data).indexOf('<table><tbody><tr><td data-view-id='), 0, "Rendered output starts" +
+		"as expected");
+});
+
+// http://forum.javascriptmvc.com/topic/live-binding-on-mustache-template-does-not-seem-to-be-working-with-nested-properties
+test("Observe with array attributes", function() {
+	var renderer = can.view.ejs('observe-array', '<ul><% can.each(todos, function(todo, i) { %><li><%= todos.attr(""+i) %></li><% }) %></ul><div><%= this.attr("message") %></div>');
+	var div = document.createElement('div');
+	var data = new can.Observe({ 
+	    todos: [ 'Line #1', 'Line #2', 'Line #3' ],
+	    message: 'Hello',
+	    count: 2   
+	});
+	div.appendChild(can.view('observe-array', data));
+	
+	equal(div.getElementsByTagName('li')[1].innerHTML, 'Line #2', 'Check initial array');
+	equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello', 'Check initial message');
+	
+	data.attr('todos.1', 'Line #2 changed');
+	data.attr('message', 'Hello again');
+	
+	equal(div.getElementsByTagName('li')[1].innerHTML, 'Line #2 changed', 'Check updated array');
+	equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello again', 'Check updated message');
 })
 
 })();

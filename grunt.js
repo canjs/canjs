@@ -1,6 +1,7 @@
 module.exports = function (grunt) {
 
-	var outPaths = {
+	var _ = grunt.utils._;
+	var outFiles = {
 		edge : '<%= meta.out %>/edge/**/*.js',
 		latest : '<%= meta.out %>/<%= pkg.version %>/**/*.js'
 	};
@@ -13,13 +14,14 @@ module.exports = function (grunt) {
 				options : {
 					indentSize : 1,
 					indentChar : "\t"
-				}
+				},
+				exclude : [/\.min\./, /qunit\.js/]
 			},
-			banner : '/*! <%= pkg.title || pkg.name %> - <%= pkg.version %> - ' +
-				'<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+			banner : '/*\n* <%= pkg.title || pkg.name %> - <%= pkg.version %> ' +
+				'(<%= grunt.template.today("yyyy-mm-dd") %>)\n' +
 				'<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
-				'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-				' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */'
+				'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>\n' +
+				'* Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n*/'
 		},
 		beautifier : {
 			codebase : '<config:meta.beautifier>',
@@ -57,14 +59,50 @@ module.exports = function (grunt) {
 				out : 'can/<%= meta.out %>'
 			}
 		},
-		strip : outPaths,
-		docco : outPaths,
-		minify : outPaths
+		shell : {
+			bundleLatest : 'cd <%= meta.out %> && zip -r can.js.<%= pkg.version %>.zip <%= pkg.version %>/',
+			getGhPages : 'git clone -b gh-pages <%= pkg.repository.url %> build/gh-pages',
+			copyLatest : 'rm -rf build/gh-pages/release/<%= pkg.version %> && ' +
+				'cp -R <%= meta.out %>/<%= pkg.version %> build/gh-pages/release/<%= pkg.version %> && ' +
+				'rm -rf build/gh-pages/release/latest && ' +
+				'cp -R <%= meta.out %>/<%= pkg.version %> build/gh-pages/release/latest',
+			copyEdge : 'rm -rf build/gh-pages/release/edge && ' +
+				'cp -R <%= meta.out %>/edge build/gh-pages/release/edge',
+			updateGhPages : 'cd build/gh-pages && git add . --all && git commit -m "Updating release (latest: <%= pkg.version %>)" && ' +
+				'git push origin',
+			cleanup : 'rm -rf build/gh-pages',
+			_options : {
+				stdout : true,
+				failOnError : true
+			}
+		},
+		downloads : '<json:build/downloads.json>',
+		docco : {
+			edge : {
+				src : '<%= meta.out %>/edge/**/*.js',
+				docco : {
+					output : '<%= meta.out %>/edge/docs'
+				}
+			},
+			latest : {
+				src : '<%= meta.out %>/<%= pkg.version %>/**/*.js',
+				docco : {
+					output : '<%= meta.out %>/<%= pkg.version %>/docs'
+				}
+			},
+			_options : {
+				exclude : [/\.min\./, /amd\//, /qunit\.js/]
+			}
+		},
+		strip : outFiles,
+		bannerize : outFiles
 	});
 
-	grunt.loadNpmTasks('grunt-beautify');
-	grunt.loadTasks("./build/tasks");
+	grunt.loadTasks("../build/tasks");
 
-	grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist");
-	grunt.registerTask("latest", "build:latest strip:latest minify:edge")
+	grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist docco:edge bannerize:edge");
+	grunt.registerTask("latest", "build:latest build:latestPlugins strip:latest beautify:dist bannerize:latest docco:latest");
+	grunt.registerTask("ghpages", "shell:cleanup shell:getGhPages shell:copyLatest shell:updateGhPages shell:cleanup");
+	grunt.registerTask("deploy", "latest ghpages shell:bundleLatest downloads");
+
 };

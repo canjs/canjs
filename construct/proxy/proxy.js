@@ -57,5 +57,13 @@ proxy = function( funcs ) {
 			}
 		}
 	can.Construct.proxy = can.Construct.prototype.proxy = proxy;
+	// this corrects the case where can/control loads after can/construct/proxy, so static props don't have proxy
+	var correctedClasses = [can.Control, can.Model],
+		i = 0;
+	for (; i < correctedClasses.length; i++ ) {
+		if(correctedClasses[i]){
+			correctedClasses[i].proxy = proxy;
+		}
+	}
 	return can;
 });

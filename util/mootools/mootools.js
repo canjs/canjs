@@ -1,6 +1,5 @@
-steal('can/util/can.js', './mootools-core-1.4.5.js', '../event.js','../fragment',
-'can/util/array/each.js', 'can/util/object/isplain', 'can/util/object/extend',
-function(can) {
+steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js', 'can/util/deferred.js',
+'can/util/array/each.js', 'can/util/object/isplain', 'can/util/object/extend', function(can) {
 	// mootools.js
 	// ---------
 	// _MooTools node list._
@@ -15,7 +14,18 @@ function(can) {
 		// All other libraries return a copy if item is an array.
 		// The original Mootools Array.from returned the same item so we need to slightly modify it
 		if (item == null) return [];
-		return (Type.isEnumerable(item) && typeof item != 'string') ? Array.prototype.slice.call(item) : [item];
+		try {
+			return (Type.isEnumerable(item) && typeof item != 'string') ? Array.prototype.slice.call(item) : [item];
+		} catch(ex) {
+			// some things like DOMNodeChildCollections don't slice so good.
+			// This pains me, but it has to be done.
+			var arr = [],
+				i;
+			for( i = 0; i < item.length; ++i) {
+				arr.push(item[i]);
+			}
+			return arr;
+		}
 	}
 
 	can.isArray = function(arr) {
@@ -167,6 +177,7 @@ function(can) {
 		}
 		// Mootools defaults to 'post', but Can expects a default of 'get'
 		requestOptions.method = requestOptions.method || 'get';
+		requestOptions.url = requestOptions.url.toString();
 
 		var success = options.success,
 			error = options.error;
@@ -271,4 +282,4 @@ function(can) {
 	}
 
 	return can;
-},'../deferred.js');
+});

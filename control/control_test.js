@@ -165,10 +165,12 @@
                         ok(true, 'Controller action delegated click triggered, too');
                     }
                 }),
-                div = document.createElement('div'),
+                div = document.createElement('div');
+
+            	can.append(can.$("#qunit-test-area"), div);
                 rb = new Tester(div);
 
-            can.append(can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
+            can.append(can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='javascript://' id='elsa'>click me</a></span></div>")
 
             var els = can.$("#els")
 
@@ -183,8 +185,9 @@
             ok(called, "delegate works")
             can.remove(els)
 
-            can.trigger(div, 'click');
+            can.trigger(can.$(div), 'click');
             can.trigger(window, 'click');
+	        rb.destroy();
         });
     }
 
@@ -322,6 +325,22 @@
 
         can.trigger(item1, "foo");
         can.trigger(item2, "bar");
-    })
+    });
+
+	test("Don't bind if there are undefined values in templates", function() {
+		can.Control.processors.proc = function() {
+			ok(false, 'This processor should never be called');
+		}
+
+		var Control = can.Control({
+		}, {
+			'{noExistStuff} proc' : function() {
+
+			}
+		});
+
+		var c = new Control(document.createElement('div'));
+		equal(c._bindings.length, 1, 'There is only one binding');
+	});
 
 })();

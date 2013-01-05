@@ -20,6 +20,7 @@ var newLine = /(\r|\n)+/g,
 		tr:"tbody",
 		option:"select",
 		td:"tr",
+		th:"tr",
 		li: "ul"
 	},
 	// Returns a tagName to use as a temporary placeholder for live content
@@ -256,7 +257,8 @@ Scanner.prototype = {
 					break;
 				case '>':
 					htmlTag = 0;
-					var emptyElement = content.substr(-1) == "/";
+					// content.substr(-1) doesn't work in IE7/8
+					var emptyElement = content.substr(content.length-1) == "/";
 					// if there was a magic tag
 					// or it's an element that has text content between its tags, 
 					// but content is not other tags add a hookup
@@ -300,7 +302,6 @@ Scanner.prototype = {
 					// Track the current tag
 					if(lastToken === '<'){
 						tagName = token.split(/\s/)[0];
-						// If 
 						if( tagName.indexOf("/") === 0 && tagNames.pop() === tagName.substr(1) ) {
 							// set tagName to the last tagName
 							// if there are no more tagNames, we'll rely on getTag.
@@ -368,7 +369,7 @@ Scanner.prototype = {
 						} 
 
 						var escaped = startTag === tmap.escapeLeft ? 1 : 0,
-							commands = { insert: insert_cmd, tagName: tagName, status: status() };
+							commands = { insert: insert_cmd, tagName: getTag(tagName, tokens, i), status: status() };
 
 						for(var ii = 0; ii < this.helpers.length;ii++){
 							// Match the helper based on helper
@@ -378,7 +379,7 @@ Scanner.prototype = {
 								content = helper.fn(content, commands);
 
 								// dont escape partials
-								if(helper.name.source == /^>[\s|\w]\w*/.source){
+								if(helper.name.source == /^>[\s]*\w*/.source){
 									escaped = 0;
 								}	
 								break;

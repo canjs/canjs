@@ -473,7 +473,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 	// extend route to have a similar property 
 	// that is often checked in mustache to determine
 	// an object's observability
-	can.route.prototype.canMakeObserve = can.Observe.canMakeObserve;
+	can.route.constructor.canMakeObserve = can.Observe.canMakeObserve;
 
 	return can.route;
 });

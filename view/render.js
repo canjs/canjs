@@ -1,5 +1,11 @@
-steal('can/view', function(can){
-
+steal('can/view', 'can/util/string', function(can){
+// text node expando test
+var canExpando = true;
+try {
+	document.createTextNode('')._ = 0;
+} catch (ex) {
+	canExpando = false;
+}
 /**
  * Helper(s)
  */
@@ -11,7 +17,7 @@ var attrMap = {
 	tagMap = {
 		"": "span", 
 		table: "tr", 
-		tr: "td", 
+		tr: "td",
 		ol: "li", 
 		ul: "li", 
 		tbody: "tr",
@@ -20,8 +26,9 @@ var attrMap = {
 		select: "option",
 		optgroup: "option"
 	},	
+	attributePlaceholder = '__!!__',
 	attributeReplace = /__!!__/g,
-	tagToContentPropMap= {
+	tagToContentPropMap = {
 		option: "textContent",
 		textarea: "value"
 	},
@@ -33,19 +40,25 @@ var attrMap = {
 	getParentNode = function(el, defaultParentNode){
 		return defaultParentNode && el.parentNode.nodeType === 11 ? defaultParentNode : el.parentNode;
 	},
-	setAttr = function(el, attrName, val){
-		// if this is a special property
-		if ( attrMap[attrName] ) {
-			// set the value as true / false
-			el[attrMap[attrName]] = can.inArray(attrName,bool) > -1 ? true  : val;
-		} else {
-			el.setAttribute(attrName, val);
-		}
-	},
+	setAttr = function (el, attrName, val) {
+			var tagName = el.nodeName.toString().toLowerCase(),
+				prop = attrMap[attrName];
+			// if this is a special property
+			if (prop) {
+				// set the value as true / false
+				el[prop] = can.inArray(attrName, bool) > -1 ? true : val;
+				if(prop === "value" && tagName === "input") {
+					el.defaultValue = val;
+				}
+			} else {
+				el.setAttribute(attrName, val);
+			}
+		},
 	getAttr = function(el, attrName){
-		return attrMap[attrName]?
+		// Default to a blank string for IE7/8
+		return (attrMap[attrName]?
 			el[attrMap[attrName]]:
-			el.getAttribute(attrName);
+			el.getAttribute(attrName)) || '';
 	},
 	removeAttr = function(el, attrName){
 		if(can.inArray(attrName,bool) > -1){
@@ -96,15 +109,30 @@ var attrMap = {
 	},
 	// a mapping of element ids to nodeList ids
 	nodeMap = {},
+	// a mapping of ids to text nodes
+	textNodeMap = {},
 	// a mapping of nodeList ids to nodeList
 	nodeListMap = {},
 	expando = "ejs_"+Math.random(),
 	_id=0,
 	id = function(node){
-		if ( node[expando] ) {
-			return node[expando];
-		} else {
-			return node[expando] = (node.nodeName ? "element_" : "obj_")+(++_id);
+		if(canExpando || node.nodeType !== 3) {
+			if(node[expando]) {
+				return node[expando];
+			}
+			else {
+				return node[expando] = (node.nodeName ? "element_" : "obj_")+(++_id);
+			}
+		}
+		else {
+			for(var textNodeID in textNodeMap) {
+				if(textNodeMap[textNodeID] === node) {
+					return textNodeID;
+				}
+			}
+
+			textNodeMap["text_" + (++_id)] = node;
+			return "text_" + _id;
 		}
 	},
 	// removes a nodeListId from a node's nodeListIds
@@ -127,24 +155,28 @@ var attrMap = {
 				nodeListIds = nodeMap[id(node)] = [];
 			}
 			nodeListIds.push(nodeListId);
+	},
+	tagChildren = function(tagName) {
+		var newTag = tagMap[tagName] || "span";
+		if(newTag === "span") {
+			//innerHTML in IE doesn't honor leading whitespace after empty elements
+			return "@@!!@@";
+		}	
+		return "<" + newTag + ">" + tagChildren(newTag) + "</" + newTag + ">";
 	};
 
 can.extend(can.view, {
 
 	pending: function() {
 		// TODO, make this only run for the right tagName
-		if(true  || pendingHookups.length) {
-			var hooks = pendingHookups.slice(0);
-			lastHookups = hooks;
-			pendingHookups = [];
-			return can.view.hook(function(el){
-				can.each(hooks, function(fn){
-					fn(el);
-				});
+		var hooks = pendingHookups.slice(0);
+		lastHookups = hooks;
+		pendingHookups = [];
+		return can.view.hook(function(el){
+			can.each(hooks, function(fn){
+				fn(el);
 			});
-		} else {
-			return "";
-		}
+		});
 	},
 
 	registerNode: function(nodeList){
@@ -263,8 +295,6 @@ can.extend(can.view, {
 						// update the nodes in the DOM with the new rendered value
 						if( attached ) {
 							makeAndPut(newVal);
-						} else {
-							// no longer attached
 						}
 						teardownCheck(nodes[0].parentNode);
 					};
@@ -304,10 +334,9 @@ can.extend(can.view, {
 						// at this point, these nodes could be part of a documentFragment
 					makeAndPut(binding.value, [span]);
 					
-					
 					setupTeardownOnDestroy(parentNode);
-					
-			}) + "></" +tag+">";
+			//children have to be properly nested HTML for buildFragment to work properly
+			}) + ">"+tagChildren(tag)+"</" +tag+">";
 		// In a tag, but not in an attribute
 		} else if( status === 1 ) { 
 			// remember the old attr name
@@ -363,9 +392,12 @@ can.extend(can.view, {
 					// Split the attribute value by the template.
 					// Only split out the first __!!__ so if we have multiple hookups in the same attribute, 
 					// they will be put in the right spot on first render
-					parts = attr.split(/__!!__(.+)?/, 2),
+					parts = attr.split(attributePlaceholder),
+					goodParts = [],
 					hook;
-				
+					goodParts.push(parts.shift(), 
+								   parts.join(attributePlaceholder));
+
 				// If we already had a hookup for this attribute...
 				if(hooks[attributeName]) {
 					// Just add to that attribute's list of `function`s.
@@ -389,16 +421,16 @@ can.extend(can.view, {
 				hook = hooks[attributeName];
 
 				// Insert the value in parts.
-				parts.splice(1,0,binding.value);
+				goodParts.splice(1,0,binding.value);
 
 				// Set the attribute.
-				setAttr(el, attributeName, parts.join(""), contentProp);
+				setAttr(el, attributeName, goodParts.join(""), contentProp);
 				
 				// Bind on change.
 				//liveBind(observed, el, binder,oldObserved);
 				setupTeardownOnDestroy(el);
 			});
-			return "__!!__";
+			return attributePlaceholder;
 		}
 	},
 
@@ -434,11 +466,12 @@ can.extend(can.view, {
 		});
 	},
 	
+	canExpando: canExpando,
 	// Node mappings
+	textNodeMap: textNodeMap,
 	nodeMap: nodeMap,
 	nodeListMap: nodeListMap
-
-})
+});
 
 return can;
 });

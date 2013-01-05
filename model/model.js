@@ -18,6 +18,13 @@ steal('can/util','can/observe', function( can ) {
 		},function(){
 			d.rejectWith(this, arguments);
 		});
+
+		if(typeof def.abort === 'function') {
+			d.abort = function() {
+				return def.abort();
+			}
+		}
+
 		return d;
 	},
 		modelNum = 0,
@@ -25,7 +32,7 @@ steal('can/util','can/observe', function( can ) {
 		getId = function( inst ) {
 			// Instead of using attr, use __get for performance.
 			// Need to set reading
-			can.Observe.__reading && can.Observe.__reading(this, inst.constructor.id)
+			can.Observe.__reading && can.Observe.__reading(inst, inst.constructor.id)
 			return inst.__get(inst.constructor.id);
 		},
 		// Ajax `options` generator function
@@ -579,7 +586,12 @@ steal('can/util','can/observe', function( can ) {
 					can.Construct._overwrite(self, base, name,function(){
 						// increment the numer of requests
 						this._reqs++;
-						return newMethod.apply(this, arguments).then(clean, clean);
+						var def = newMethod.apply(this, arguments);
+						var then = def.then(clean, clean);
+						then.abort = def.abort;
+
+						// attach abort to our then and return it
+						return then;
 					})
 				}
 			});
@@ -996,10 +1008,10 @@ steal('can/util','can/observe', function( can ) {
 		 * model instance is removed from the store, freeing memory.  
 		 * 
 		 */
-		bind : function(eventName){
+		bind: function(eventName){
 			if ( ! ignoreHookup.test( eventName )) { 
 				if ( ! this._bindings ) {
-					this.constructor.store[getId(this)] = this;
+					this.constructor.store[this.__get(this.constructor.id)] = this;
 					this._bindings = 0;
 				}
 				this._bindings++;
@@ -1056,7 +1068,10 @@ steal('can/util','can/observe', function( can ) {
 	}, function( method, name ) {
 		can.Model[name] = function( oldFind ) {
 			return function( params, success, error ) {
-				return pipe( oldFind.call( this, params ), this, method ).then( success, error );
+				var def = pipe( oldFind.call( this, params ), this, method );
+				def.then( success, error );
+				// return the original promise
+				return def;
 			};
 		};
 	});

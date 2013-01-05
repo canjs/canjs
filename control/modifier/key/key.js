@@ -8,7 +8,7 @@ steal('can/control/modifier', function(Control){
  * something easy to use and clear.
  *
  * This code is licensed under the MIT
- * For the full license see: http://keithamus.mit-license.org/
+ * For the full license see: http://keithamus.moit-license.org/
  * For more information see: http://keithamus.github.com/jwerty
  *
  * @author Keith Cirkel ('keithamus') <jwerty@keithcirkel.co.uk>

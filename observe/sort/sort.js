@@ -8,28 +8,28 @@ var proto = can.Observe.List.prototype,
 can.extend(proto,{
 	comparator: undefined,
 	sortIndexes: [],
-	
+
 	/**
 	 * @hide
 	 */
 	sortedIndex: function(item){
 		var itemCompare = item.attr(this.comparator),
 			equaled = 0, i;
-			
+
 		for(var i = 0, length = this.length; i < length; i++){
 			if(item === this[i]){
 				equaled = -1;
 				continue;
 			}
-			
+
 			if(itemCompare <= this[i].attr(this.comparator)) {
 				return i+equaled;
 			}
 		}
-		
+
 		return i + equaled;
 	},
-	
+
 	/**
 	 * @hide
 	 */
@@ -39,7 +39,7 @@ can.extend(proto,{
 				a = a[comparator]
 				b = b[comparator]
 				return a === b ? 0 : (a < b ? -1 : 1);
-			}] : [],
+			}] : [method],
 			res = [].sort.apply(this, args);
 
 		!silent && can.trigger(this, "reset");
@@ -47,7 +47,7 @@ can.extend(proto,{
 });
 
 // create push, pop, shift, and unshift
-// converts to an array of arguments 
+// converts to an array of arguments
 var getArgs = function( args ) {
 		return args[0] && can.isArray(args[0]) ?
 			args[0] :
@@ -58,22 +58,22 @@ can.each({
 	/**
 	 * @function push
 	 * Add items to the end of the list.
-	 * 
+	 *
 	 *     var l = new can.Observe.List([]);
-	 *     
-	 *     l.bind('change', function( 
+	 *
+	 *     l.bind('change', function(
 	 *         ev,        // the change event
-	 *         attr,      // the attr that was changed, for multiple items, "*" is used 
+	 *         attr,      // the attr that was changed, for multiple items, "*" is used
 	 *         how,       // "add"
 	 *         newVals,   // an array of new values pushed
 	 *         oldVals,   // undefined
 	 *         where      // the location where these items where added
 	 *         ) {
-	 *     
+	 *
 	 *     })
-	 *     
+	 *
 	 *     l.push('0','1','2');
-	 * 
+	 *
 	 * @return {Number} the number of items in the array
 	 */
 	push: "length",
@@ -81,11 +81,11 @@ can.each({
 	 * @function unshift
 	 * Add items to the start of the list.  This is very similar to
 	 * [can.Observe.List::push].  Example:
-	 * 
+	 *
 	 *     var l = new can.Observe.List(["a","b"]);
 	 *     l.unshift(1,2,3) //-> 5
 	 *     l.attr() //-> [1,2,3,"a","b"]
-	 * 
+	 *
 	 * @param {Object} [items...] items to add to the start of the list.
 	 * @return {Number} the length of the array.
 	 */
@@ -97,13 +97,13 @@ can.each({
 function( where , name ) {
 	var proto = can.Observe.List.prototype,
 		old = proto[name];
-		
+
 	proto[name] = function() {
 		// get the items being added
 		var args = getArgs(arguments),
 			// where we are going to add items
 			len = where ? this.length : 0;
-			
+
 		// call the original method
 		var res = old.apply(this, arguments);
 
@@ -114,7 +114,8 @@ function( where , name ) {
 		// undefined - the old value
 		if ( this.comparator && args.length ) {
 			this.sort(null, true);
-			can.Observe.triggerBatch(this,"reset", [args])
+			can.Observe.triggerBatch(this,"reset", [args]);
+			this._triggerChange(""+len, "add", args, undefined);
 		}
 
 		return res;
@@ -144,18 +145,18 @@ proto._changes = function(ev, attr, how, newVal, oldVal){
 				newVal,
 				oldVal
 			]);
-			
+
 			return;
 		}
 	}
-	
+
 	_changes.apply(this, arguments);
 };
 
 //- override setup for sorting
 proto.setup = function( instances, options ) {
 	setup.apply(this, arguments);
-	
+
 	if(this.comparator){
 		this.sort()
 	}

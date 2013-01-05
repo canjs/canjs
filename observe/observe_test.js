@@ -133,6 +133,43 @@ test("replacing with an object that object becomes observable",function(){
 	ok(state.attr("properties").bind, "has bind function");
 });
 
+test("attr does not blow away old observable", function(){
+	var state = new can.Observe({
+		properties : {
+			brand: ['gain']
+		}
+	});
+	var oldCid = state.attr("properties.brand")._cid;
+	state.attr({properties:{brand:[]}}, true);
+	same(state.attr("properties.brand")._cid, oldCid, "should be the same observe, so that views bound to the old one get updates")
+	equals(state.attr("properties.brand").length, 0, "list should be empty");
+});
+
+test("sub observes respect attr remove parameter", function() {
+    var bindCalled = 0,
+        state = new can.Observe({
+        monkey : {
+            tail: 'brain'
+        }
+    });
+
+    state.bind("change", function(ev, attr, how, newVal, old){
+        bindCalled++;
+        equals(attr, "monkey.tail");
+        equals(old, "brain");
+        equals(how, "remove");
+    });
+
+    state.attr({monkey: {}});
+    equals("brain", state.attr("monkey.tail"), "should not remove attribute of sub observe when remove param is false");
+    equals(0, bindCalled, "remove event not fired for sub observe when remove param is false");
+
+    state.attr({monkey: {}}, true);
+
+    equals(undefined, state.attr("monkey.tail"), "should remove attribute of sub observe when remove param is false");
+    equals(1, bindCalled, "remove event fired for sub observe when remove param is false");
+});
+
 test("remove attr", function(){
 	var state = new can.Observe({
 		properties : {
@@ -331,7 +368,7 @@ test("bind to specific attribute changes when an existing attribute's value is c
 	});
 	paginate.attr( 'offset', 200 );
 });
-test("bind to specific attribute changes when an attribute is removed", function() {
+test("bind to specific attribute changes when an attribute is removed", 2, function() {
 	var paginate = new can.Observe( { offset: 100, limit: 100, count: 2000 } );
 	paginate.bind( 'offset', function( ev, newVal, oldVal ) {
 		equals(newVal, undefined);
@@ -400,7 +437,11 @@ test("Only plain objects should be converted to Observes", function() {
 
 	var selected = can.$('body');
 	ob.attr('sel', selected);
-	equal(ob.attr('sel'), selected, 'can.$() should not be converted');
+	if(can.isArray(selected)) {
+		ok(ob.attr('sel')  instanceof can.Observe.List, 'can.$() as array converted into Observe.List');
+	} else {
+		equal(ob.attr('sel'), selected, 'can.$() should not be converted');
+	}
 
 	ob.attr('element', document.getElementsByTagName('body')[0]);
 	equal(ob.attr('element'), document.getElementsByTagName('body')[0], 'HTMLElement should not be converted');
@@ -476,7 +517,78 @@ test("nested observe attr", function() {
 	// Attempt to set the name attribute again, should not
 	// cause any triggers.
 	person1.attr('name', person2.attr('name'));
-})
+});
 
+test("Nested array conversion (#172)", 4, function() {
+	var original = [ [1, 2], [3, 4], [5, 6] ],
+		list = new can.Observe.List(original);
+
+	equal(list.length, 3, 'Observe list length is correct');
+	deepEqual(list.serialize(), original, 'Lists are the same');
+	list.unshift([10, 11], [12, 13]);
+	ok(list[0] instanceof can.Observe.List, 'Unshifted array converted to observe list');
+
+	deepEqual(list.serialize(), [[10, 11], [12, 13]].concat(original), 'Arrays unshifted properly');
+});
+
+test("can.Observe.List.prototype.replace (#194)", 7, function() {
+	var list = new can.Observe.List(['a', 'b', 'c']),
+		replaceList = ['d', 'e', 'f', 'g'],
+		dfd = new can.Deferred();
+
+	list.bind('remove', function(ev, arr) {
+		equal(arr.length, 3, 'Three elements removed');
+	});
+
+	list.bind('add', function(ev, arr) {
+		equal(arr.length, 4, 'Four new elements added');
+	});
+
+	list.replace(replaceList);
+
+	deepEqual(list.serialize(), replaceList, 'Lists are the same');
+
+	list.unbind('remove');
+	list.unbind('add');
+
+	list.replace();
+	equal(list.length, 0, 'List has been emptied');
+	list.push('D');
+
+	stop();
+	list.replace(dfd);
+	setTimeout(function() {
+		var newList = ['x', 'y'];
+
+		list.bind('remove', function(ev, arr) {
+			equal(arr.length, 1, 'One element removed');
+		});
+
+		list.bind('add', function(ev, arr) {
+			equal(arr.length, 2, 'Two new elements added from Deferred');
+		});
+
+		dfd.resolve(newList);
+
+		deepEqual(list.serialize(), newList, 'Lists are the same');
+
+		start();
+	}, 100);
+});
+
+test("replace with a deferred that resolves to an Observe.List", function(){
+	stop();
+	
+	var def = new can.Deferred();
+	def.resolve(new can.Observe.List([{name: "foo"},{name: "bar"}]));
+	var list = new can.Observe.List([{name: "1"},{name: "2"}]);
+	list.bind("change",function(){
+		start();
+		
+		equal(list.length, 2, "length is still 2");
+		equal(list[0].attr("name"),"foo", "set to foo")
+	})
+	list.replace(def);
+});
 
 })();

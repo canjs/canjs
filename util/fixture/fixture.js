@@ -1,5 +1,16 @@
 steal('can/util','can/util/string','can/util/object', function (can) {
 
+	// Get the URL from old Steal root, new Steal config or can.fixture.rootUrl
+	var getUrl = function(url) {
+		if(typeof steal !== 'undefined') {
+			if(can.isFunction(steal.config)) {
+				return steal.config().root.mapJoin(url).toString();
+			}
+			return steal.root.join(url).toString();
+		}
+		return (can.fixture.rootUrl || '') + url;
+	}
+
 	var updateSettings = function (settings, originalOptions) {
 			if (!can.fixture.on) {
 				return;
@@ -20,7 +31,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					_logger( "log", Array.prototype.slice.call(arguments) );
 				}
 				else if (window.opera && window.opera.postError) {
-					opera.postError("fixture INFO: " + out);
+					opera.postError("fixture INFO: " + Array.prototype.join.call(arguments, ','));
 				}
 			}
 
@@ -49,9 +60,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 
 				if (/^\/\//.test(url)) {
 					// this lets us use rootUrl w/o having steal...
-					url = can.fixture.rootUrl === steal.config().root ?
-						steal.config().root.mapJoin(settings.fixture.substr(2)) + '' :
-						can.fixture.rootUrl + settings.fixture.substr(2);
+					url = getUrl(settings.fixture.substr(2));
 				}
 
 				if(data) {
@@ -230,11 +239,8 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			}
 
 		},
-		/**
-		 * Makes an attempt to guess where the id is at in the url and returns it.
-		 * @param {Object} settings
-		 */
-			getId = function (settings) {
+		// Makes an attempt to guess where the id is at in the url and returns it.
+		getId = function (settings) {
 			var id = settings.data.id;
 
 			if (id === undefined && typeof settings.data === "number") {
@@ -270,36 +276,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			return id;
 		};
 
-	/**
-	 * @plugin can/util/fixture
-	 * @test can/util/fixture/qunit.html
-	 *
-	 * `can.fixture` intercept an AJAX request and simulates the response with a file or function.
-	 * Read more about the usage in the [overview can.fixture].
-	 *
-	 * @param {Object|String} settings Configures the AJAX requests the fixture should
-	 * intercept.  If an __object__ is passed, the object's properties and values
-	 * are matched against the settings passed to can.ajax.
-	 *
-	 * If a __string__ is passed, it can be used to match the url and type. Urls
-	 * can be templated, using <code>{NAME}</code> as wildcards.
-	 *
-	 * @param {Function|String} fixture The response to use for the AJAX
-	 * request. If a __string__ url is passed, the ajax request is redirected
-	 * to the url. If a __function__ is provided, it looks like:
-	 *
-	 *     fixture( originalSettings, settings, callback, headers)
-	 *
-	 * where:
-	 *
-	 *   - originalSettings - the orignal settings passed to can.ajax
-	 *   - settings - the settings after all filters have run
-	 *   - callback - a callback to call with the response if the fixture executes asynchronously
-	 *   - headers - request headers
-	 *
-	 * If __null__ is passed, and there is a fixture at settings, that fixture will be removed,
-	 * allowing the AJAX request to behave normally.
-	 */
+
 	var $fixture = can.fixture = function (settings, fixture) {
 		// if we provide a fixture ...
 		if (fixture !== undefined) {
@@ -373,17 +350,68 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			return data;
 		},
 
-		make : function (types, count, make, filter) {
+		store: function (types, count, make, filter) {
 			/**
-			 * @function can.fixture.make
+			 * @function can.fixture.store
 			 * @parent can.fixture
 			 *
-			 * `can.fixture.make` is used for findAll / findOne style requests.
-			 *
+			 * `can.fixture.store(count, generator(index,items))` is used
+			 * to create a store of items that can simulate a full CRUD service. Furthermore,
+			 * the store can do filtering, grouping, sorting, and paging.
+			 * 
+			 * ## Basic Example
+			 * 
+			 * The following creates a store for 100 todos:
+			 * 
+			 *     var todoStore = can.fixture.store(100, function(i){
+			 *       return {
+			 * 	       id: i,
+			 *         name: "todo number "+i,
+			 *         description: "a description of some todo",
+			 *         ownerId: can.fixture.rand(10)
+			 *       }
+			 *     })
+			 * 
+			 * `todoStore`'s methods can be used for the response to a REST service like:
+			 * 
+			 *      can.fixture({
+			 * 	      'GET /todos':         todoStore.findAll,
+			 *        'GET /todos/{id}':    todoStore.findOne,
+			 *        'POST /todos':        todoStore.create,
+			 *        'PUT /todos/{id}':    todoStore.update,
+			 *        'DELETE /todos/{id}': todoStore.destroy
+			 *      });
+			 * 
+			 * These fixtures, combined with a [can.Model] that connects to these services like:
+			 * 
+			 *      var Todo = can.Model({
+			 *          findAll : 'GET /todos',
+			 *          findOne : 'GET /todos/{id}',
+			 *          create  : 'POST /todos',
+			 *          update  : 'PUT /todos/{id}',
+			 *          destroy : 'DELETE /todos/{id}'
+			 *      }, {});
+			 * 
+			 * ... allows you to simulate requests for all of owner 5's todos like:
+			 * 
+			 *     Todo.findAll({ownerId: 5}, function(todos){
+			 *        	   
+			 *     })
+			 * 
+			 * ## Simulated Service
+			 * 
+			 * `can.fixture.store`'s [can.fixture.store.findAll findAll],
+			 * [can.fixture.store.findOne findOne],
+			 * [can.fixture.store.findOne create],
+			 * [can.fixture.store.findOne update], and
+			 * [can.fixture.store.findOne destroy] methods are used to
+			 * simulate a REST service that 
+			 * 
+			 * 
 			 * ## With can.ajax
 			 *
 			 *     //makes a nested list of messages
-			 *     can.fixture.make(["messages","message"], 1000,
+			 *     can.fixture.store(["messages","message"], 1000,
 			 *      function(i, messages){
 			 *       return {
 			 *         subject: "This is message "+i,
@@ -412,13 +440,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			 * `update` and `destroy` fixture functions you can map to a [can.Model] Ajax request.
 			 * Consider a model like this:
 			 *
-			 *      var Todo = can.Model({
-			 *          findAll : 'GET /todos',
-			 *          findOne : 'GET /todos/{id}',
-			 *          create  : 'POST /todos',
-			 *          update  : 'PUT /todos/{id}',
-			 *          destroy : 'DELETE /todos/{id}'
-			 *      }, {});
+			 *      
 			 *
 			 * And an unnamed generated fixture like this:
 			 *
@@ -431,11 +453,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			 *
 			 * You can map can.Model requests using the return value of `can.fixture.make`:
 			 *
-			 *      can.fixture('GET /todos', store.findAll);
-			 *      can.fixture('GET /todos/{id}', store.findOne);
-			 *      can.fixture('POST /todos', store.create);
-			 *      can.fixture('PUT /todos/{id}', store.update);
-			 *      can.fixture('DELETE /todos/{id}', store.destroy);
+
 			 *
 			 * @param {Array|String} types An array of the fixture names or the singular fixture name.
 			 * If an array, the first item is the plural fixture name (prefixed with -) and the second
@@ -481,13 +499,67 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 
 			// make all items
 			can.extend(methods, {
-				findAll : function (settings) {
+				/**
+				 * @function can.fixture.store.findAll
+				 * @parent can.fixture.store
+				 * 
+				 * `store.findAll(request)` simulates a request to 
+				 * get a list items from the server. It supports the
+				 * following params:
+				 * 
+				 *  - order - `order=name ASC` 
+				 *  - group - `group=name`
+				 *  - limit - `limit=20`
+				 *  - offset - `offset=60`
+				 *  - id filtering - `ownerId=5`
+				 * 
+				 * 
+				 * @param {AjaxRequest} request The ajax request object 
+				 * that contains a data object like:
+				 * 
+				 *     var response = store.findAll({
+				 *       data: {
+				 *         order: "name ASC"    
+				 *       }
+				 *     });
+				 * 
+				 * The `data` object may include any of the following properties
+				 * 
+				 * #### order
+				 * 
+				 * #### group
+				 * 
+				 * #### limit
+				 * 
+				 * #### offset
+				 * 
+				 * #### id properties
+				 * 
+				 * @return {Object} a response object like:
+				 * 
+				 *     {
+				 *       count: 1000,
+				 *       limit: 20,
+				 *       offset: 60,
+				 *       data: [item1, item2, ...]
+				 *     }
+				 * 
+				 * where:
+				 * 
+				 * - count - the number of items that match any filtering 
+				 *   before limit and offset is taken into account
+				 * - offset - the offset passed
+				 * - limit - the limit passed
+				 * - data - an array of JS objects with each item's properties
+				 * 
+				 */
+				findAll: function (request) {
 					//copy array of items
 					var retArr = items.slice(0);
-					settings.data = settings.data || {};
+					request.data = request.data || {};
 					//sort using order
 					//order looks like ["age ASC","gender DESC"]
-					can.each((settings.data.order || []).slice(0).reverse(), function (name) {
+					can.each((request.data.order || []).slice(0).reverse(), function (name) {
 						var split = name.split(" ");
 						retArr = retArr.sort(function (a, b) {
 							if (split[1].toUpperCase() !== "ASC") {
@@ -512,7 +584,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					});
 
 					//group is just like a sort
-					can.each((settings.data.group || []).slice(0).reverse(), function (name) {
+					can.each((request.data.group || []).slice(0).reverse(), function (name) {
 						var split = name.split(" ");
 						retArr = retArr.sort(function (a, b) {
 							return a[split[0]] > b[split[0]];
@@ -520,17 +592,17 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					});
 
 
-					var offset = parseInt(settings.data.offset, 10) || 0,
-						limit = parseInt(settings.data.limit, 10) || (items.length - offset),
+					var offset = parseInt(request.data.offset, 10) || 0,
+						limit = parseInt(request.data.limit, 10) || (items.length - offset),
 						i = 0;
 
 					//filter results if someone added an attr like parentId
-					for (var param in settings.data) {
+					for (var param in request.data) {
 						i = 0;
-						if (settings.data[param] !== undefined && // don't do this if the value of the param is null (ignore it)
+						if (request.data[param] !== undefined && // don't do this if the value of the param is null (ignore it)
 							(param.indexOf("Id") != -1 || param.indexOf("_id") != -1)) {
 							while (i < retArr.length) {
-								if (settings.data[param] != retArr[i][param]) {
+								if (request.data[param] != retArr[i][param]) {
 									retArr.splice(i, 1);
 								} else {
 									i++;
@@ -542,7 +614,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					if (filter) {
 						i = 0;
 						while (i < retArr.length) {
-							if (!filter(retArr[i], settings)) {
+							if (!filter(retArr[i], request)) {
 								retArr.splice(i, 1);
 							} else {
 								i++;
@@ -553,28 +625,67 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					//return data spliced with limit and offset
 					return {
 						"count" : retArr.length,
-						"limit" : settings.data.limit,
-						"offset" : settings.data.offset,
+						"limit" : request.data.limit,
+						"offset" : request.data.offset,
 						"data" : retArr.slice(offset, offset + limit)
 					};
 				},
-				findOne : function (orig, response) {
-					var item = findOne(getId(orig));
+				/**
+				 * @function can.fixture.store.findOne
+				 * @parent can.fixture.store
+				 * 
+				 * `store.findOne(request, response(item))` simulates a request to 
+				 * get a single item from the server by id.
+				 * 
+				 *     todosStore.findOne({
+				 *       url: "/todos/5"
+				 *     }, function(todo){
+				 *       
+				 *     });
+				 * 
+				 */
+				findOne : function (request, response) {
+					var item = findOne(getId(request));
 					response(item ? item : undefined);
 				},
-				update : function (orig,response) {
-					var id = getId(orig);
+				/**
+				 * @function can.fixture.store.update
+				 * @parent can.fixture.store
+				 * 
+				 * `store.update(request, response(props,headers))` simulates
+				 * a request to update an items properties on a server.
+				 * 
+				 *     todosStore.update({
+				 *       url: "/todos/5"
+				 *     }, function(props, headers){
+				 *       props.id //-> 5
+				 *       headers.location // "todos/5"
+				 *     });
+				 */
+				update: function (request,response) {
+					var id = getId(request);
 
 					// TODO: make it work with non-linear ids ..
-					can.extend(findOne(id), orig.data);
+					can.extend(findOne(id), request.data);
 					response({
-						id : getId(orig)
+						id : getId(request)
 					}, {
-						location : orig.url + "/" + getId(orig)
+						location : request.url || "/" + getId(request)
 					});
 				},
-				destroy : function (settings) {
-					var id = getId(settings);
+				/**
+				 * @function can.fixture.store.destroy
+				 * @parent can.fixture.store
+				 * 
+				 * `store.destroy(request, response())` simulates
+				 * a request to destroy an item from the server.
+				 * 
+				 *     todosStore.destroy({
+				 *       url: "/todos/5"
+				 *     }, function(){});
+				 */
+				destroy: function (request) {
+					var id = getId(request);
 					for (var i = 0; i < items.length; i++) {
 						if (items[i].id == id) {
 							items.splice(i, 1);
@@ -583,10 +694,16 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					}
 
 					// TODO: make it work with non-linear ids ..
-					can.extend(findOne(id) || {}, settings.data);
+					can.extend(findOne(id) || {}, request.data);
 					return {};
 				},
-				create : function (settings, response) {
+				/**
+				 * @function can.fixture.store.create
+				 * @parent can.fixture.store
+				 * 
+				 * `store.create(request, response)`
+				 */
+				create: function (settings, response) {
 					var item = make(items.length, items);
 
 					can.extend(item, settings.data);
@@ -605,31 +722,64 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				}
 			});
 
-			for (var i = 0; i < (count); i++) {
-				//call back provided make
-				var item = make(i, items);
-
-				if (!item.id) {
-					item.id = i;
+			var reset = function(){
+				items = [];
+				for (var i = 0; i < (count); i++) {
+					//call back provided make
+					var item = make(i, items);
+	
+					if (!item.id) {
+						item.id = i;
+					}
+					items.push(item);
 				}
-				items.push(item);
+				if(can.isArray(types)) {
+					can.fixture["~" + types[0]] = items;
+					can.fixture["-" + types[0]] = methods.findAll;
+					can.fixture["-" + types[1]] = methods.findOne;
+					can.fixture["-" + types[1]+"Update"] = methods.update;
+					can.fixture["-" + types[1]+"Destroy"] = methods.destroy;
+					can.fixture["-" + types[1]+"Create"] = methods.create;
+				}
 			}
-
+			reset()
 			// if we have types given add them to can.fixture
-			if(can.isArray(types)) {
-				can.fixture["~" + types[0]] = items;
-				can.fixture["-" + types[0]] = methods.findAll;
-				can.fixture["-" + types[1]] = methods.findOne;
-				can.fixture["-" + types[1]+"Update"] = methods.update;
-				can.fixture["-" + types[1]+"Destroy"] = methods.destroy;
-				can.fixture["-" + types[1]+"Create"] = methods.create;
-			}
+			
 
 			return can.extend({
 				getId: getId,
-				find : function(settings){
+				/**
+				 * @function can.fixture.store.find
+				 * @parent can.fixture.store
+				 * 
+				 * `store.find(settings)`
+				 */
+				find: function(settings){
 					return findOne( getId(settings) );
-				}
+				},
+				/**
+				 * @function can.fixture.store.reset
+				 * @parent can.fixture.store
+				 * 
+				 * `store.reset()` resets the store to contain its 
+				 * original data. This is useful for making tests that
+				 * operate independently.
+				 * 
+				 * ## Basic Example
+				 * 
+				 * After creating a `taskStore` and hooking it up to a 
+				 * `task` model in the "Basic Example" in [can.fixture.store store's docs],
+				 * a test might create several tasks like:
+				 * 
+				 *     new Task({name: "Take out trash", ownerId: 5}).save();
+				 * 
+				 * But, another test might need to operate on the original set of
+				 * tasks created by `can.fixture.store`. Reset the task store with:
+				 * 
+				 *     taskStore.reset()
+				 * 
+				 */
+				reset: reset
 			}, methods);
 		},
 		/**
@@ -787,7 +937,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 	 * If you are using StealJS it will use the Steal root
 	 * URL by default.
 	 */
-	can.fixture.rootUrl = window.steal ? steal.config().root : undefined;
+	can.fixture.rootUrl = getUrl('');
 
 	can.fixture["-handleFunction"] = function (settings) {
 		if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
@@ -809,5 +959,6 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 
 	//Expose this for fixture debugging
 	can.fixture.overwrites = overwrites;
-	return can;
+	can.fixture.make = can.fixture.store;
+	return can.fixture;
 });

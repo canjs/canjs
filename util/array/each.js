@@ -11,10 +11,12 @@ steal('can/util/can.js',function (can) {
 						break;
 					}
 				}
-			} else {
+			} else if(elements.hasOwnProperty) {
 				for (key in elements) {
-					if (callback.call(context || elements[key], elements[key], key, elements) === false) {
-						break;
+					if(elements.hasOwnProperty(key)) {
+						if (callback.call(context || elements[key], elements[key], key, elements) === false) {
+							break;
+						}
 					}
 				}
 			}

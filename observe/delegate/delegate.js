@@ -73,7 +73,6 @@ steal('can/util', 'can/observe', function(can) {
 				// reset match and values tests
 				hasMatch = undefined;
 				valuesEqual = true;
-				delegateMatches = false;
 
 				// yeah, all this under here has to be redone v
 				
@@ -295,7 +294,7 @@ steal('can/util', 'can/observe', function(can) {
 			// parse each property in the selector
 			while(matches = selectorRegex.exec(selector)) {
 				// we need to do a little doctoring to make up for the quotes.
-				if(matches[2] && ['"', "'"].indexOf(matches[2].substr(0, 1)) >= 0) {
+				if(matches[2] && $.inArray(matches[2].substr(0, 1), ['"', "'"]) >= 0) {
 					matches[2] = matches[2].substr(1, -1);
 				}
 				

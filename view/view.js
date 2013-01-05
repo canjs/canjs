@@ -11,19 +11,37 @@ steal("can/util", function( can ) {
 	 * @add can.view
 	 */
 	$view = can.view = function(view, data, helpers, callback){
-		// Get the result.
-		var result = $view.render(view, data, helpers, callback);
-		if(can.isFunction(result))  {
+		// If helpers is a `function`, it is actually a callback.
+		if ( isFunction( helpers )) {
+			callback = helpers;
+			helpers = undefined;
+		}
+
+		var pipe = function(result){
+				return $view.frag(result);
+			},
+			// In case we got a callback, we need to convert the can.view.render
+			// result to a document fragment
+			wrapCallback = isFunction(callback) ? function(frag) {
+				callback(pipe(frag));
+			} : null,
+			// Get the result.
+			result = $view.render(view, data, helpers, wrapCallback),
+			deferred = can.Deferred();
+
+		if(isFunction(result))  {
 			return result;
 		}
+
 		if(can.isDeferred(result)){
-			return result.pipe(function(result){
-				return $view.frag(result);
+			result.done(function(result, data) {
+				deferred.resolve.call(deferred, pipe(result), data);
 			});
+			return deferred;
 		}
 		
 		// Convert it into a dom frag.
-		return $view.frag(result);
+		return pipe(result);
 	};
 
 	can.extend( $view, {
@@ -68,6 +86,7 @@ steal("can/util", function( can ) {
 				}
 			});
 
+
 			// Filter by `data-view-id` attribute.
 			can.each( hookupEls, function( el ) {
 				if ( el.getAttribute && (id = el.getAttribute('data-view-id')) && (func = $view.hookups[id]) ) {
@@ -79,7 +98,65 @@ steal("can/util", function( can ) {
 
 			return fragment;
 		},
-		
+
+		/**
+		 * @function ejs
+		 *
+		 * `can.view.ejs([id,] template)` registers an EJS template string 
+		 * for a given id programatically. The following
+		 * registers `myViewEJS` and renders it into a documentFragment.
+		 *
+		 *      can.view.ejs('myViewEJS', '<h2><%= message %></h2>');
+		 * 
+		 *      var frag = can.view('myViewEJS', {
+		 *          message : 'Hello there!'
+		 *      });
+		 * 
+		 *      frag // -> <h2>Hello there!</h2>
+		 *
+		 * To convert the template into a render function, just pass 
+		 * the template. Call the render function with the data
+		 * you want to pass to the template and it returns the 
+		 * documentFragment.
+		 *
+		 *      var renderer = can.view.ejs('<div><%= message %></div>');
+		 *      renderer({
+		 *          message : 'EJS'
+		 *      }); // -> <div>EJS</div>
+		 *
+		 * @param {String} [id] The template id 
+		 * @param {String} template The EJS template string
+		 */
+		//
+		/**
+		 * @function mustache
+		 *
+		 * `can.view.mustache([id,] template)` registers an Mustache template string 
+		 * for a given id programatically. The following
+		 * registers `myStache` and renders it into a documentFragment.
+		 *
+		 *      can.view.ejs('myStache', '<h2>{{message}}</h2>');
+		 * 
+		 *      var frag = can.view('myStache', {
+		 *          message : 'Hello there!'
+		 *      });
+		 * 
+		 *      frag // -> <h2>Hello there!</h2>
+		 *
+		 * To convert the template into a render function, just pass 
+		 * the template. Call the render function with the data
+		 * you want to pass to the template and it returns the 
+		 * documentFragment.
+		 *
+		 *      var renderer = can.view.mustache('<div>{{message}}</div>');
+		 *      renderer({
+		 *          message : 'Mustache'
+		 *      }); // -> <div>Mustache</div>
+		 *
+		 * @param {String} [id] The template id 
+		 * @param {String} template The Mustache template string
+		 */
+		//
 		/**
 		 * @attribute hookups
 		 * @hide
@@ -208,7 +285,7 @@ steal("can/util", function( can ) {
 
 		/**
 		 * @function render
-		 * `can.view.render(view, data, [helpers], callback)` returns the rendered markup produced by the corresponding template
+		 * `can.view.render(view, [data], [helpers], callback)` returns the rendered markup produced by the corresponding template
 		 * engine as String. If you pass a deferred object in as data, render returns
 		 * a deferred resolving to the rendered markup.
 		 * 
@@ -234,12 +311,22 @@ steal("can/util", function( can ) {
 		 *         <%== can.view.render("item.ejs",item) %>
 		 *       <% }) %>
 		 *     </ul>
+		 *
+		 * ## Using renderer functions
+		 *
+		 * If you only pass the view path, `can.view will return a renderer function that can be called with
+		 * the data to render:
+		 *
+		 *     var renderer = can.view.render("welcome.ejs");
+		 *     // Do some more things
+		 *     renderer({hello: "world"}) // -> Document Fragment
 		 * 
 		 * @param {String|Object} view the path of the view template or a view object
-		 * @param {Object} data the object passed to a template
+		 * @param {Object} [data] the object passed to a template
 		 * @param {Object} [helpers] additional helper methods to be passed to the view template
 		 * @param {Function} [callback] function executed after template has been processed
-		 * @param {String|Object} returns a string of processed text or a deferred that resolves to the processed text
+		 * @param {String|Object|Function} returns a string of processed text or a deferred
+		 * that resolves to the processed text or a renderer function when no data are passed.
 		 * 
 		 */
 		render: function( view, data, helpers, callback ) {
@@ -254,7 +341,8 @@ steal("can/util", function( can ) {
 
 			if ( deferreds.length ) { // Does data contain any deferreds?
 				// The deferred that resolves into the rendered content...
-				var deferred = new can.Deferred();
+				var deferred = new can.Deferred(),
+					dataCopy = can.extend({}, data);
 	
 				// Add the view request to the list of deferreds.
 				deferreds.push(get(view, true))
@@ -270,26 +358,26 @@ steal("can/util", function( can ) {
 	
 					// Make data look like the resolved deferreds.
 					if ( can.isDeferred(data) ) {
-						data = usefulPart(resolved);
+						dataCopy = usefulPart(resolved);
 					}
 					else {
 						// Go through each prop in data again and
 						// replace the defferreds with what they resolved to.
 						for ( var prop in data ) {
 							if ( can.isDeferred(data[prop]) ) {
-								data[prop] = usefulPart(objs.shift());
+								dataCopy[prop] = usefulPart(objs.shift());
 							}
 						}
 					}
 
 					// Get the rendered result.
-					result = renderer(data, helpers);
+					result = renderer(dataCopy, helpers);
 	
 					// Resolve with the rendered view.
-					deferred.resolve(result); 
+					deferred.resolve(result, dataCopy);
 
 					// If there's a `callback`, call it back with the result.
-					callback && callback(result);
+					callback && callback(result, dataCopy);
 				});
 				// Return the deferred...
 				return deferred;
@@ -301,7 +389,7 @@ steal("can/util", function( can ) {
 					async = isFunction( callback ),
 					// Get the `view` type
 					deferred = get(view, async);
-	
+
 				// If we are `async`...
 				if ( async ) {
 					// Return the deferred
@@ -330,11 +418,36 @@ steal("can/util", function( can ) {
 							response = data ? renderer(data, helpers) : renderer;
 						});
 					}
-					
 				}
-	
+
 				return response;
 			}
+		},
+
+		/**
+		 * @hide
+		 * Registers a view with `cached` object.  This is used
+		 * internally by this class and Mustache to hookup views.
+		 * @param  {String} id
+		 * @param  {String} text
+		 * @param  {String} type
+		 * @param  {can.Deferred} def
+		 */
+		registerView: function( id, text, type, def ) {
+			// Get the renderer function.
+			var func = (type || $view.types[$view.ext]).renderer(id, text);
+			def = def || new can.Deferred();
+			
+			// Cache if we are caching.
+			if ( $view.cache ) {
+				$view.cached[id] = def;
+				def.__view_id = id;
+				$view.cachedRenderers[id] = func;
+			}
+
+			// Return the objects for the response's `dataTypes`
+			// (in this case view).
+			return def.resolve(func);
 		}
 	});
 
@@ -362,24 +475,7 @@ steal("can/util", function( can ) {
 			// the url for the template.
 			id, 
 			// The ajax request used to retrieve the template content.
-			jqXHR, 
-			// Used to generate the response.
-			response = function( text, d ) {
-				// Get the renderer function.
-				var func = type.renderer(id, text);
-				d = d || new can.Deferred();
-				
-				// Cache if we are caching.
-				if ( $view.cache ) {
-					$view.cached[id] = d;
-					d.__view_id = id;
-					$view.cachedRenderers[id] = func;
-				}
-				d.resolve(func);
-				// Return the objects for the response's `dataTypes`
-				// (in this case view).
-				return d;
-			};
+			jqXHR;
 
 			//If the url has a #, we assume we want to use an inline template
 			//from a script element and not current page's HTML
@@ -402,7 +498,7 @@ steal("can/util", function( can ) {
 			}
 	
 			// Convert to a unique and valid id.
-			id = can.view.toId(url);
+			id = $view.toId(url);
 	
 			// If an absolute path, use `steal` to get it.
 			// You should only be using `//` if you are using `steal`.
@@ -424,7 +520,7 @@ steal("can/util", function( can ) {
 			// Otherwise if we are getting this from a `<script>` element.
 			} else if ( el ) {
 				// Resolve immediately with the element's `innerHTML`.
-				return response(el.innerHTML);
+				return $view.registerView(id, el.innerHTML, type);
 			} else {
 				// Make an ajax request for text.
 				var d = new can.Deferred();
@@ -439,7 +535,7 @@ steal("can/util", function( can ) {
 					success: function( text ) {
 						// Make sure we got some text back.
 						checkText(text, url);
-						response(text, d)
+						$view.registerView(id, text, type, d)
 					}
 				});
 				return d;
@@ -467,12 +563,12 @@ steal("can/util", function( can ) {
 		usefulPart = function( resolved ) {
 			return can.isArray(resolved) && resolved[1] === 'success' ? resolved[0] : resolved
 		};
-	
-	
+
+	//!steal-pluginify-remove-start
 	if ( window.steal ) {
 		steal.type("view js", function( options, success, error ) {
-			var type = can.view.types["." + options.type],
-				id = can.view.toId(options.id);
+			var type = $view.types["." + options.type],
+				id = $view.toId(options.id);
 			/**
 			 * should return something like steal("dependencies",function(EJS){
 			 * 	 return can.view.preload("ID", options.text)
@@ -482,30 +578,46 @@ steal("can/util", function( can ) {
 			success();
 		})
 	}
+	//!steal-pluginify-remove-end
 
-	//!steal-pluginify-remove-start
-	can.extend(can.view, {
+	can.extend($view, {
 		register: function( info ) {
 			this.types["." + info.suffix] = info;
 
+			//!steal-pluginify-remove-start
 			if ( window.steal ) {
 				steal.type(info.suffix + " view js", function( options, success, error ) {
-					var type = can.view.types["." + options.type],
-						id = can.view.toId(options.id+'');
+					var type = $view.types["." + options.type],
+						id = $view.toId(options.id+'');
 
 					options.text = type.script(id, options.text)
 					success();
 				})
-			}
-			can.view[info.suffix] = function(id, text){
-				$view.preload(id, info.renderer(id, text) )
+			};
+			//!steal-pluginify-remove-end
+			
+			$view[info.suffix] = function(id, text){
+				if(!text) {
+					// Return a nameless renderer
+					var renderer = function() {
+						return $view.frag(renderer.render.apply(this, arguments));
+					}
+					renderer.render = function() {
+						var renderer = info.renderer(null, id);
+						return renderer.apply(renderer, arguments);
+					}
+					return renderer;
+				}
+
+				$view.preload(id, info.renderer(id, text));
+				return can.view(id);
 			}
 		},
 		registerScript: function( type, id, src ) {
 			return "can.view.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
 		},
 		preload: function( id, renderer ) {
-			can.view.cached[id] = new can.Deferred().resolve(function( data, helpers ) {
+			$view.cached[id] = new can.Deferred().resolve(function( data, helpers ) {
 				return renderer.call(data, data, helpers);
 			});
 			return function(){
@@ -514,7 +626,6 @@ steal("can/util", function( can ) {
 		}
 
 	});
-	//!steal-pluginify-remove-end
 
 	return can;
 });

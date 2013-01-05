@@ -66,6 +66,7 @@ steal('can/util', 'can/control', 'can/view',function(can) {
 	};
 
 	can.Control.prototype.view = function( view, data, myhelpers ) {
+		//WARN: can.Control.view is depreciated!
 		//shift args if no view is provided
 		if ( typeof view != "string" && !myhelpers ) {
 			myhelpers = data;

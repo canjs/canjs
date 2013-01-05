@@ -28,24 +28,17 @@ steal("can/util", "can/control", "can/util/function", function(can) {
 				var processorName = [event, mod].join( modifier.delim );
 				
 				processors[ processorName ] = function( el, nil, selector, methodName, control ) {
-
 					var callback = modifier.modify( mod, can.Control._shifter(control, methodName), control.options );
 					control[event] = callback;
 
-					if ( selector ) {
-						can.bind( el, event, callback );
-						return function() {
-							can.unbind( el, event, callback );
-						};
-					} else {
+					if ( !selector ) {
 						selector = can.trim( selector );
-						can.delegate.call(el, selector, event, callback);
-						return function() {
-							can.undelegate.call(el, selector, event, callback);
-						};
 					}
 
-
+					can.delegate.call(el, selector, event, callback);
+					return function() {
+						can.undelegate.call(el, selector, event, callback);
+					};
 				};
 			}
 		};
