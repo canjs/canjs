@@ -102,7 +102,6 @@ function( can ){
 	render = function( object, extraHelpers ) {
 		object = object || {};
 		for(var helper in extraHelpers){
-			console.log(helper)
 			Mustache.registerHelper(helper, extraHelpers[helper]);
 		}
 		return this.template.fn.call(object, object, { _data: object });
