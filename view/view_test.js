@@ -252,4 +252,32 @@
 			equal(div.innerHTML, 'User id: - User name: -', 'Got expected HTML content in callback as well');
 		});
 	});
+
+	test("Select live bound options don't contain __!!__", function() {
+		var domainList = new can.Observe.List([{
+		  id: 1,
+		  name: 'example.com'
+		}, {
+		  id: 2,
+		  name: 'google.com'
+		}, {
+		  id: 3,
+		  name: 'yahoo.com'
+		}, {
+		  id: 4,
+		  name: 'microsoft.com'
+		}]),
+		frag = can.view("//can/view/test/select.ejs", {
+			domainList: domainList
+		}),
+		div = document.createElement('div');
+
+		div.appendChild(frag);
+can.append( can.$("#qunit-test-area"), div)
+		equal(div.outerHTML.match(/__!!__/g), null, 'No __!!__ contained in HTML content')
+
+		//equal(can.$('#test-dropdown')[0].outerHTML, can.$('#test-dropdown2')[0].outerHTML, 'Live bound select and non-live bound select the same');
+
+		
+	})
 })();
