@@ -12,6 +12,7 @@ try {
 var attrMap = {
 		"class" : "className",
 		"value": "value",
+		"innerText" : "innerText",
 		"textContent" : "textContent"
 	},
 	tagMap = {
@@ -29,7 +30,7 @@ var attrMap = {
 	attributePlaceholder = '__!!__',
 	attributeReplace = /__!!__/g,
 	tagToContentPropMap = {
-		option: "textContent",
+		option: "textContent" in document.createElement("option") ? "textContent" : "innerText",
 		textarea: "value"
 	},
 	bool = can.each(["checked","disabled","readonly","required"], function(n){
@@ -262,7 +263,7 @@ can.extend(can.view, {
 			// example options should use textContent
 			contentProp = tagToContentPropMap[tagName];
 		
-		
+
 		// The magic tag is outside or between tags.
 		if ( status === 0 && !contentProp ) {
 			// Return an element tag with a hookup in place of the content
