@@ -652,8 +652,14 @@ function( can ){
 				case '#':
 					// Iterate over arrays
 					if (isArrayLike(name)) {
+						var isObserveList = isObserve(name);
+						
+						// Add the reference to the list in the contexts.
 						for (i = 0; i < name.length; i++) {
 							result.push(options.fn.call(name[i] || {}, context) || '');
+							
+							// Ensure that live update works on observable lists
+							isObserveList && name.attr(''+i);
 						}
 						return result.join('');
 					}
