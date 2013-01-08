@@ -1,12 +1,12 @@
-steal('jquery/model/list','jquery/lang/object',function($){
+steal('can/model/list','can/util/object',function(){
 
-var same = $.Object.same;
+var same = can.Object.same;
 
 
-can.Construct('jQuery.Model.Store',
+can.Construct('can.Model.Store',
 {
 	init : function(){
-		if(this.fullName === 'jQuery.Model.Store'){
+		if(this.fullName === 'can.Model.Store'){
 			return;
 		}
 		/**
@@ -16,8 +16,8 @@ can.Construct('jQuery.Model.Store',
 		this.data = {};
 		// listen on create and add ... listen on destroy and remove
 		
-		this.namespace.bind('destroyed', this.callback('remove'))
-		this.namespace.bind('updated', this.callback('updated'))
+		this.namespace.bind('destroyed', this.proxy('remove'))
+		this.namespace.bind('updated', this.proxy('updated'))
 	},
 	updated : function(ev, item){
 		// go through lists and remove this guy if he is in the list and should not be ...
