@@ -48,7 +48,7 @@ var attrMap = {
 			if (prop) {
 				// set the value as true / false
 				el[prop] = can.inArray(attrName, bool) > -1 ? true : val;
-				if(prop === "value" && tagName === "input") {
+				if(prop === "value" && (tagName === "input" || tagName === "textarea")) {
 					el.defaultValue = val;
 				}
 			} else {
