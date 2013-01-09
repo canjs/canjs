@@ -76,7 +76,6 @@ module.exports = function (grunt) {
 				failOnError : true
 			}
 		},
-		downloads : '<json:build/downloads.json>',
 		docco : {
 			edge : {
 				src : '<%= meta.out %>/edge/**/*.js',
@@ -103,6 +102,6 @@ module.exports = function (grunt) {
 	grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist docco:edge bannerize:edge");
 	grunt.registerTask("latest", "build:latest build:latestPlugins strip:latest beautify:dist bannerize:latest docco:latest");
 	grunt.registerTask("ghpages", "shell:cleanup shell:getGhPages shell:copyLatest shell:updateGhPages shell:cleanup");
-	grunt.registerTask("deploy", "latest ghpages shell:bundleLatest downloads");
+	grunt.registerTask("deploy", "latest ghpages shell:bundleLatest");
 
 };
