@@ -273,11 +273,31 @@
 		div = document.createElement('div');
 
 		div.appendChild(frag);
-can.append( can.$("#qunit-test-area"), div)
+		can.append( can.$("#qunit-test-area"), div)
 		equal(div.outerHTML.match(/__!!__/g), null, 'No __!!__ contained in HTML content')
 
 		//equal(can.$('#test-dropdown')[0].outerHTML, can.$('#test-dropdown2')[0].outerHTML, 'Live bound select and non-live bound select the same');
 
 		
-	})
+	});
+
+	test("Resetting a live-bound <textarea> changes its value to __!!__ (#223)", function() {
+		var template = can.view.ejs("<form><textarea><%= this.attr('test') %></textarea></form>"),
+			frag = template(new can.Observe({
+				test : 'testing'
+			})),
+			form, textarea;
+
+		can.append(can.$("#qunit-test-area"), frag);
+
+		form = document.getElementById('qunit-test-area').getElementsByTagName('form')[0];
+		textarea = form.children[0];
+
+		equal(textarea.value, 'testing', 'Textarea value set');
+		textarea.value = 'blabla';
+		equal(textarea.value, 'blabla', 'Textarea value updated');
+
+		form.reset();
+		equal(form.children[0].value, 'testing', 'Textarea value set back to original live-bound value');
+	});
 })();
