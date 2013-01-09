@@ -740,7 +740,7 @@ steal('can/util','can/observe', function( can ) {
 			}
 			//!steal-remove-end
 
-			if(res.length > 0) {
+			if(res.length) {
 				res.splice(0);
 			}
 
