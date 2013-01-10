@@ -176,7 +176,7 @@ can.each([ can.Observe, can.Model ], function(clss){
     	 */
    		validateFormatOf: function(attrNames, regexp, options) {
       		validate.call(this, attrNames, options, function(value) {
-         		if( (typeof value != 'undefined' && value != '')
+         		if( (typeof value != 'undefined' && value !== null && value != '')
          			&& String(value).match(regexp) == null ) {
             		return this.constructor.validationMessages.format;
          		}
@@ -225,13 +225,13 @@ can.each([ can.Observe, can.Model ], function(clss){
     	 * @param {Object} [options] Options for the validations.  Valid options include 'message' and 'testIf'.
     	 */
    		validateLengthOf: function(attrNames, min, max, options) {
-      		validate.call(this, attrNames, options, function(value) {
-         		if((typeof value == 'undefined' && min > 0) || value.length < min){
-            		return this.constructor.validationMessages.lengthShort + " (min=" + min + ")";
-         		} else if(typeof value != 'undefined' && value.length > max){
-					return this.constructor.validationMessages.lengthLong + " (max=" + max + ")";
-				}	
-      		});
+        validate.call(this, attrNames, options, function(value) {
+          if(((typeof value == 'undefined'||value===null) && min > 0) || (typeof value !== 'undefined' && value!==null && value.length < min)){
+            return this.constructor.validationMessages.lengthShort + " (min=" + min + ")";
+          }else if(typeof value != 'undefined' && value!==null && value.length > max){
+            return this.constructor.validationMessages.lengthLong + " (max=" + max + ")";
+          }
+      	});
    		},
 
    		/**
@@ -272,10 +272,10 @@ can.each([ can.Observe, can.Model ], function(clss){
     	 */
    		validateRangeOf: function(attrNames, low, hi, options) {
       		validate.call(this, attrNames, options, function(value) {
-         		if(typeof value != 'undefined' && value < low || value > hi){
-					return this.constructor.validationMessages.range + " [" + low + "," + hi + "]";
-				}
-      		});
+            if(((typeof value == 'undefined'||value===null) && low > 0) || (typeof value !== 'undefined' && value!==null && (value < low||value > hi) )){
+            return this.constructor.validationMessages.range + " [" + low + "," + hi + "]";
+          }
+				});
    		}
 	});
 });
