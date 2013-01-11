@@ -964,4 +964,15 @@ test(".models updates existing list if passed", 4, function() {
 	equal(list[0].name, 'third', 'New item is the first one');
 });
 
+test("calling destroy with unsaved model triggers destroyed event (#181)", function() {
+	var MyModel = can.Model({}, {}),
+		newModel = new MyModel(),
+		list = new MyModel.List();
+
+	list.push(newModel);
+	equal(list.attr('length'), 1, "List length as expected");
+	newModel.destroy();
+	equal(list.attr('length'), 0, "Unsaved model removed from list");
+});
+
 })();
