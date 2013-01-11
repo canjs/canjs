@@ -5,14 +5,14 @@ steal('can/util',function(can) {
 	// Several of the methods in this plugin use code adapated from Prototype
 	// Prototype JavaScript framework, version 1.6.0.1.
 	// © 2005-2007 Sam Stephenson
-	var undHash     = /_|-/,
-		colons      = /\=\=/,
-		words       = /([A-Z]+)([A-Z][a-z])/g,
-		lowUp       = /([a-z\d])([A-Z])/g,
-		dash        = /([a-z\d])([A-Z])/g,
-		replacer    = /\{([^\}]+)\}/g,
-		quote       = /"/g,
-		singleQuote = /'/g,
+	var strUndHash     = /_|-/,
+		strColons      = /\=\=/,
+		strWords       = /([A-Z]+)([A-Z][a-z])/g,
+		strLowUp       = /([a-z\d])([A-Z])/g,
+		strDash        = /([a-z\d])([A-Z])/g,
+		strReplacer    = /\{([^\}]+)\}/g,
+		strQuote       = /"/g,
+		strSingleQuote = /'/g,
 
 		// Returns the `prop` property from `obj`.
 		// If `add` is true and `prop` doesn't exist in `obj`, create it as an 
@@ -45,8 +45,8 @@ steal('can/util',function(can) {
 					.replace(/&/g, '&amp;')
 					.replace(/</g, '&lt;')
 					.replace(/>/g, '&gt;')
-					.replace(quote, '&#34;')
-					.replace(singleQuote, "&#39;");
+					.replace(strQuote, '&#34;')
+					.replace(strSingleQuote, "&#39;");
 			},
 			
 			/**
@@ -142,10 +142,10 @@ steal('can/util',function(can) {
 			 */
 			underscore: function( s ) {
 				return s
-					.replace(colons, '/')
-					.replace(words, '$1_$2')
-					.replace(lowUp, '$1_$2')
-					.replace(dash, '_')
+					.replace(strColons, '/')
+					.replace(strWords, '$1_$2')
+					.replace(strLowUp, '$1_$2')
+					.replace(strDash, '_')
 					.toLowerCase();
 			},
 			// Micro-templating.
@@ -167,7 +167,7 @@ steal('can/util',function(can) {
 			sub: function( str, data, remove ) {
 				var obs = [];
 
-				obs.push( str.replace( replacer, function( whole, inside ) {
+				obs.push( str.replace( strReplacer, function( whole, inside ) {
 
 					// Convert inside to type.
 					var ob = can.getObject( inside, data, remove === undefined? remove : !remove );
@@ -191,8 +191,8 @@ steal('can/util',function(can) {
 
 			// These regex's are used throughout the rest of can, so let's make
 			// them available.
-			replacer : replacer,
-			undHash : undHash
+			replacer : strReplacer,
+			undHash : strUndHash
 		});
 	return can;
 });
