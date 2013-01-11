@@ -971,7 +971,7 @@ test("calling destroy with unsaved model triggers destroyed event (#181)", funct
 
 	list.push(newModel);
 	equal(list.attr('length'), 1, "List length as expected");
-	newModel.destroy();
+	ok(can.isDeferred(newModel.destroy()), ".destroy returned a Deferred");
 	equal(list.attr('length'), 0, "Unsaved model removed from list");
 });
 
