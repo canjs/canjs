@@ -6,7 +6,7 @@ can.Mustache provides logic-less templates with live binding
 when used with [can.Observes](#can_observe). It currently ships as a plugin:
 
 [Download can.Mustache](http://canjs.us/release/latest/can.view.mustache.js)
-([Annotated source](http://donejs.com/can/docs/can.view.mustache.html))
+([Annotated source](http://canjs.us/release/latest/docs/can.view.mustache.html))
 
 [Mustache](https://github.com/janl/mustache.js/) and [Handlebar](http://handlebarsjs.com/) 
 templates are compatible with can.Mustache, so you can import existing templates.
@@ -63,4 +63,4 @@ can.Mustache provides a lot more functionality such as:
 
 ## Demos
 
- - [TodoMVC](http://addyosmani.github.com/todomvc/labs/architecture-examples/canjs/) is a project which offers the same Todo application implemented using MV* concepts in most of the popular JavaScript MV* frameworks of today. [Source Code](https://github.com/jupiterjs/todomvc/tree/gh-pages/architecture-examples/canjs)
+ - [TodoMVC](http://addyosmani.github.com/todomvc/architecture-examples/canjs/) is a project which offers the same Todo application implemented using MV* concepts in most of the popular JavaScript MV* frameworks of today. [Source Code](https://github.com/addyosmani/todomvc/tree/gh-pages/architecture-examples/canjs)
