@@ -967,12 +967,19 @@ test(".models updates existing list if passed", 4, function() {
 test("calling destroy with unsaved model triggers destroyed event (#181)", function() {
 	var MyModel = can.Model({}, {}),
 		newModel = new MyModel(),
-		list = new MyModel.List();
+		list = new MyModel.List(),
+		deferred;
 
 	list.push(newModel);
 	equal(list.attr('length'), 1, "List length as expected");
-	ok(can.isDeferred(newModel.destroy()), ".destroy returned a Deferred");
+
+	deferred = newModel.destroy();
+
+	ok(deferred, ".destroy returned a Deferred");
 	equal(list.attr('length'), 0, "Unsaved model removed from list");
+	deferred.done(function(data) {
+		ok(data == newModel, "Resolved with destroyed model as described in docs");
+	});
 });
 
 })();

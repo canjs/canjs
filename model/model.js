@@ -958,7 +958,7 @@ steal('can/util','can/observe', function( can ) {
 				var self = this;
 				return can.Deferred().done(function(data) {
 					self.destroyed(data)
-				}).resolve({});
+				}).resolve(self);
 			}
 			return makeRequest(this, 'destroy', success, error, 'destroyed');
 		},
