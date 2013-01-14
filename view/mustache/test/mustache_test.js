@@ -1330,4 +1330,27 @@ test("Observe with array attributes", function() {
 	equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello again', 'Check updated message');
 })
 
+test("Observe list returned from the function", function() {
+	var renderer = can.view.mustache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul>');
+	var div = document.createElement('div');
+	var presenter = can.Construct({
+		init : function(context){
+			this.context = context;
+		},
+		todos : function(){
+			return this.context.todos;
+		}
+	})
+	var data = new presenter({
+		todos : new can.Observe.List(["Todo #1"])
+	})
+	div.appendChild(renderer(data));
+
+
+	data.context.todos.push("Todo #2")
+	
+	equal(div.getElementsByTagName('li').length, 2, 'Todo is successfuly created');
+	equal(div.getElementsByTagName('li')[1].innerHTML, 'Todo #2', 'Pushing to the list works');
+})
+
 });
