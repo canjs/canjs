@@ -652,10 +652,11 @@ function( can ){
 				case '#':
 					// Iterate over arrays
 					if (isArrayLike(name)) {
-						var isObserveList = isObserve(name);
+						var isObserveList = isObserve(name),
+							length        = isObserveList ? name.attr('length') : name.length;
 						
 						// Add the reference to the list in the contexts.
-						for (i = 0; i < name.length; i++) {
+						for (i = 0; i < length; i++) {
 							result.push(options.fn.call(name[i] || {}, context) || '');
 							
 							// Ensure that live update works on observable lists
