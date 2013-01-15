@@ -1333,7 +1333,7 @@ test("Observe with array attributes", function() {
 test("Observe list returned from the function", function() {
 	var renderer = can.view.mustache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul>');
 	var div = document.createElement('div');
-	var todos = new can.Observe.List(["Todo #1"]);
+	var todos = new can.Observe.List();
 	var data = {
 		todos : function(){
 			return todos;
@@ -1341,10 +1341,10 @@ test("Observe list returned from the function", function() {
 	};
 	div.appendChild(renderer(data));
 
-	todos.push("Todo #2")
+	todos.push("Todo #1")
 	
-	equal(div.getElementsByTagName('li').length, 2, 'Todo is successfuly created');
-	equal(div.getElementsByTagName('li')[1].innerHTML, 'Todo #2', 'Pushing to the list works');
+	equal(div.getElementsByTagName('li').length, 1, 'Todo is successfuly created');
+	equal(div.getElementsByTagName('li')[0].innerHTML, 'Todo #1', 'Pushing to the list works');
 })
 
 });

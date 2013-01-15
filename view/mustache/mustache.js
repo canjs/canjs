@@ -604,21 +604,26 @@ function( can ){
 			// Whether the arguments meet the condition of the section.
 			valid = true,
 			result = [],
-			i, helper;
+			i, helper, argIsObserve, arg;
 		
 		// Validate the arguments based on the section mode.
 		if (mode) {
 			for (i = 0; i < validArgs.length; i++) {
+				arg          = validArgs[i];
+				argIsObserve = typeof arg !== 'undefined' && isObserve(arg);
 				// Array-like objects are falsey if their length = 0.
-				if (isArrayLike(validArgs[i])) {
-					valid = mode == '#' ? valid && !!validArgs[i].length
-						: mode == '^' ? valid && !validArgs[i].length
-						: valid;
+				if (isArrayLike(arg)) {
+					// Use .attr to trigger binding on empty lists returned from function
+					if(mode == '#'){
+						valid = valid && !!(argIsObserve ? arg.attr('length') : arg.length);
+					} else if(mode == '^'){
+						valid = valid && !(argIsObserve ? arg.attr('length') : arg.length);
+					}
 				}
 				// Otherwise just check if it is truthy or not.
 				else {
-					valid = mode == '#' ? valid && !!validArgs[i]
-						: mode == '^' ? valid && !validArgs[i]
+					valid = mode == '#' ? valid && !!arg
+						: mode == '^' ? valid && !arg
 						: valid;
 				}
 			}
@@ -652,11 +657,10 @@ function( can ){
 				case '#':
 					// Iterate over arrays
 					if (isArrayLike(name)) {
-						var isObserveList = isObserve(name),
-							length        = isObserveList ? name.attr('length') : name.length;
+						var isObserveList = isObserve(name);
 						
 						// Add the reference to the list in the contexts.
-						for (i = 0; i < length; i++) {
+						for (i = 0; i < name.length; i++) {
 							result.push(options.fn.call(name[i] || {}, context) || '');
 							
 							// Ensure that live update works on observable lists
