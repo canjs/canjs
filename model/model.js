@@ -954,6 +954,12 @@ steal('can/util','can/observe', function( can ) {
 		 * @return {can.Deferred} a deferred that resolves with the destroyed instance
 		 */
 		destroy: function( success, error ) {
+			if(this.isNew()) {
+				var self = this;
+				return can.Deferred().done(function(data) {
+					self.destroyed(data)
+				}).resolve(self);
+			}
 			return makeRequest(this, 'destroy', success, error, 'destroyed');
 		},
 		/**
