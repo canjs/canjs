@@ -127,26 +127,29 @@ proto._changes = function(ev, attr, how, newVal, oldVal){
 	if(this.comparator && /^\d+./.test(attr) ) {
 		// get the index
 		var index = +/^\d+/.exec(attr)[0],
-			// and item
-			item = this[index],
+		// and item
+			item = this[index];
+
+		if( typeof item != "undefined") {
 			// and the new item
-			newIndex = this.sortedIndex(item);
+			var newIndex = this.sortedIndex(item);
 
-		if(newIndex !== index){
-			// move ...
-			[].splice.call(this, index, 1);
-			[].splice.call(this, newIndex, 0, item);
+			if(newIndex !== index){
+				// move ...
+				[].splice.call(this, index, 1);
+				[].splice.call(this, newIndex, 0, item);
 
-			can.trigger(this, "move", [item, newIndex, index]);
-			ev.stopImmediatePropagation();
-			can.trigger(this,"change", [
-				attr.replace(/^\d+/,newIndex),
-				how,
-				newVal,
-				oldVal
-			]);
+				can.trigger(this, "move", [item, newIndex, index]);
+				ev.stopImmediatePropagation();
+				can.trigger(this,"change", [
+					attr.replace(/^\d+/,newIndex),
+					how,
+					newVal,
+					oldVal
+				]);
 
-			return;
+				return;
+			}
 		}
 	}
 
