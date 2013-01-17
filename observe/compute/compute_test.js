@@ -264,4 +264,29 @@ test("Generate computes from Observes with can.Observe.prototype.compute (#203)"
 	equal(compute(), 'computeValue', 'Got updated value');
 });
 
+test("compute of computes", function(){
+	expect(2)
+	var suggestedSearch = can.compute(null),
+		searchQuery = can.compute(''),
+		searchText = can.compute(function() {
+			var suggested = suggestedSearch();
+			if(suggested) {
+				return suggested
+			} else {
+				return searchQuery();
+			}
+		});
+
+	equal('',searchText(),"inital set");
+
+	searchText.bind("change", function(ev, newVal){
+		equal(newVal,"food", "food set");
+	})
+	
+	
+	searchQuery("food")
+})
+
+
+
 })();

@@ -614,5 +614,14 @@ function(s) for the success or failure state of both asynchronous and synchronou
 		// Returns `true` if something looks like a deferred.
 		return obj && isFunction(obj.then) && isFunction(obj.pipe);
 	};
+	
+	var cid = 0;
+	can.cid = function(object, name){
+		if(object._cid){
+			return object._cid
+		} else{
+			return object._cid = (name ||"" ) + (++cid)
+		}
+	}
 	return can;
 });

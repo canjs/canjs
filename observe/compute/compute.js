@@ -353,7 +353,7 @@ steal('can/util', function(can) {
 		 */
 		computed.isComputed = true;
 		
-
+		can.cid(computed,"compute")
 		/**
 		 * @function bind
 		 * `compute.bind("change", handler(event, newVal, oldVal))`

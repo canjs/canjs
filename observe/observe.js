@@ -102,14 +102,7 @@ steal('can/util','can/construct', function(can) {
 		batchEvents = [],
 		stopCallbacks = [];
 	
-	var cid = 0;
-	can.cid = function(object, name){
-		if(object._cid){
-			return object._cid
-		} else{
-			return object._cid = (name ||"" ) + (++cid)
-		}
-	}
+	
 		
 	/**
 	 * @add can.Observe
