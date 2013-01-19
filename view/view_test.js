@@ -300,4 +300,38 @@
 		form.reset();
 		equal(form.children[0].value, 'testing', 'Textarea value set back to original live-bound value');
 	});
+
+	test("Support passing document fragments created with can.view.fragment to templates", function(){
+		var mustache = can.view.mustache('<b>{{{ subview }}}</b>');
+		var ejs      = can.view.ejs('<b><%== subview() %></b>')
+
+		var subview   = can.view.mustache('Subview {{ foo }}');
+		var subviewFn = function(){
+			return subview({
+				foo : foo
+			})
+		}
+		var foo = can.compute("FOO")
+
+		var mustacheDiv = document.createElement('div');
+		var ejsDiv = document.createElement('div');
+
+		mustacheDiv.appendChild(mustache({
+			subview : subviewFn
+		}));
+
+		ejsDiv.appendChild(ejs({
+			subview : subviewFn
+		}));
+
+		equal(mustacheDiv.innerHTML, "<b>Subview FOO</b>", "Mustache works correctly")
+		equal(ejsDiv.innerHTML, "<b>Subview FOO</b>", "EJS works correctly")
+
+		foo("BAR")
+
+		equal(mustacheDiv.innerHTML, "<b>Subview BAR</b>", "Live binding in mustache works correctly")
+		equal(ejsDiv.innerHTML, "<b>Subview BAR</b>", "Live binding in EJS works correctly")
+
+	})
+
 })();

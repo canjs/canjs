@@ -56,9 +56,15 @@ steal("can/util", function( can ) {
 		// then hook it up
 		fragment: function(result){
 			var frag = can.buildFragment(result,document.body);
+			var dataId = $view.hook(function(el){
+				el.parentNode.replaceChild(frag, el);
+			})
 			// If we have an empty frag...
 			if(!frag.childNodes.length) { 
 				frag.appendChild(document.createTextNode(''));
+			}
+			frag.toString = function(){
+				return "<div" + dataId + "></div>";
 			}
 			return frag;
 		},
