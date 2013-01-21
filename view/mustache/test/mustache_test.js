@@ -422,9 +422,9 @@ test("Deeply nested partials", function() {
 
 test("Handlebars helper: if/else", function() {
 	var t = {
-		template: "{{#if name}}{{name}}{{/if}}{{#if missing}}{{else}} is missing!{{/if}}",
-		expected: "Andy is missing!",
-		data: { name: 'Andy' }
+		template: "{{#if name}}{{name}}{{/if}}{{#if missing}} is missing!{{/if}}",
+		expected: "Andy",
+		data: { name: 'Andy', missing: undefined }
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
