@@ -111,8 +111,12 @@ can.each([ can.Observe, can.Model ], function(clss){
 			"number": function( val ) {
 				return parseFloat(val);
 			},
-			"boolean": function( val ) {
-				return Boolean(val === "false" ? 0 : val);
+			"boolean": function (val) {
+				if(val === "true") val = true;
+				if(val === "1") val = true;
+				if(val === "false") val = false;
+				if(val === "0") val = false;
+				return Boolean(val);
 			},
 			"default": function( val, oldVal, error, type ) {
 				var construct = can.getObject(type),
