@@ -591,6 +591,31 @@ test("replace with a deferred that resolves to an Observe.List", function(){
 	list.replace(def);
 });
 
+test(".attr method doesn't merge nested objects (#207)", function() {
+	// From http://jsfiddle.net/andrewborovin/wsNZB/
+	var test = new can.Observe({
+		a: {
+			a1: 1,
+			a2: 2
+		},
+		b: {
+			b1: 1,
+			b2: 2
+		}
+	});
+
+	test.attr({
+		a: {
+			a2: 3
+		},
+		b: {
+			b1: 3
+		}
+	});
+
+	deepEqual(test.attr(), {"a":{"a1":1,"a2":3},"b":{"b1":3,"b2":2}}, "Object merged as expected");
+});
+
 test("IE8 error on list setup with Observe.List (#226)", function() {
 	var list = new can.Observe.List(['first', 'second', 'third']),
 		otherList = new can.Observe.List(list);
