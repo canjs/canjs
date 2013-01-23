@@ -255,7 +255,6 @@ test("attr deep array ", function(){
 	state.attr({
 		thing: thing
 	}, true);
-	debugger;
 	
 	ok(thing.arr === arr, "thing unmolested");
 });
@@ -266,7 +265,7 @@ test("attr array doesn't merge", function(){
 	});
 	
 	var initCid = state.arr._cid;
-	
+
 	state.attr({
 		arr: ["c"]
 	});
