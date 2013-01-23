@@ -303,4 +303,24 @@ test("attr does not blow away old observable when going from empty to having ite
 	equals(project.attr("members").length, 1, "list should have bob in it");
 });
 
+test("Boolean fix (#247)", function() {
+	var MyObserve = can.Observe({
+			attributes: {
+				enabled: 'boolean'
+			}
+		}, {}),
+		obs = new MyObserve({
+			enabled: 'false'
+		});
+
+	ok(!obs.attr('enabled'), "Attribute got converted to boolean false");
+	obs.attr('enabled', 'true');
+	ok(obs.attr('enabled'), "Attribute got converted to boolean true");
+
+	obs.attr('enabled', '0');
+	ok(!obs.attr('enabled'), "Attribute got converted to boolean false");
+	obs.attr('enabled', '1');
+	ok(obs.attr('enabled'), "Attribute got converted to boolean true");
+});
+
 })();
