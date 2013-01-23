@@ -303,24 +303,31 @@ test("attr does not blow away old observable when going from empty to having ite
 	equals(project.attr("members").length, 1, "list should have bob in it");
 });
 
-test("Boolean fix (#247)", function() {
+test("Default converters and boolean fix (#247)", function() {
 	var MyObserve = can.Observe({
 			attributes: {
-				enabled: 'boolean'
+				enabled: 'boolean',
+				time: 'date',
+				age: 'number'
 			}
 		}, {}),
 		obs = new MyObserve({
-			enabled: 'false'
+			enabled: 'false',
+			time: 1358980553275,
+			age: '26'
 		});
 
-	ok(!obs.attr('enabled'), "Attribute got converted to boolean false");
+	deepEqual(obs.attr('enabled'), false, "Attribute got converted to boolean false");
 	obs.attr('enabled', 'true');
-	ok(obs.attr('enabled'), "Attribute got converted to boolean true");
+	deepEqual(obs.attr('enabled'), true, "Attribute got converted to boolean true");
 
 	obs.attr('enabled', '0');
-	ok(!obs.attr('enabled'), "Attribute got converted to boolean false");
+	deepEqual(obs.attr('enabled'), false, "Attribute got converted to boolean false");
 	obs.attr('enabled', '1');
-	ok(obs.attr('enabled'), "Attribute got converted to boolean true");
+	deepEqual(obs.attr('enabled'), true, "Attribute got converted to boolean true");
+
+	deepEqual(obs.attr('age'), 26, "Age converted from string to number");
+	equal(obs.attr('time').toString(), 'Wed Jan 23 2013 15:35:53 GMT-0700 (MST)', "Attribute is expected date");
 });
 
 })();
