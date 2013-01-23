@@ -1,4 +1,4 @@
-steal('can/model','can/util/object', function(){
+steal('can/model','can/util/object', 'can/util/json.js', function(){
 	
 // Base model to handle reading / writing to local storage
 can.Model("can.Model.Cached", {
@@ -6,7 +6,11 @@ can.Model("can.Model.Cached", {
 		can.Model.setup.apply(this, arguments);
 		console.log(this._shortName)
 		// setup data
-		this._cached = window.localStorage.getItem(this.cachedKey()) || {};
+		if(typeof window.localStorage != 'undefined'){
+			this._cached = can.evalJSON(window.localStorage.getItem(this.cachedKey())) || {};
+		} else {
+			this._cached = {};
+		}
 	},
 	cachedKey: function(){
 		return "cached"+this._shortName;
