@@ -35,7 +35,9 @@ steal('can/util', 'can/route', function(can) {
                 // intercept routable links
                 can.$('body').on('click', 'a', function(e) {
                     // Fix for ie showing blank host, but blank host means current host.
-                    this.host == '' ? this.host = window.location.host : null;
+                    if(!this.host) {
+                      this.host = window.location.host;
+                    }
                     // HTML5 pushstate requires host to be the same. Don't prevent default for other hosts.
                     if(can.route.updateWith(this.pathname+this.search) && window.location.host == this.host) {
                         e.preventDefault();
