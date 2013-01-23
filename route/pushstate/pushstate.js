@@ -34,7 +34,8 @@ steal('can/util', 'can/route', function(can) {
             _setup: function() {
                 // intercept routable links
                 can.$('body').on('click', 'a', function(e) {
-                    if(can.route.updateWith(this.pathname+this.search)) {
+                    // HTML5 pushstate requires host to be the same. Don't prevent default for other hosts.
+                    if(can.route.updateWith(this.pathname+this.search) && window.location.host == this.host) {
                         e.preventDefault();
                     }
                 });
