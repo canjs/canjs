@@ -591,4 +591,11 @@ test("replace with a deferred that resolves to an Observe.List", function(){
 	list.replace(def);
 });
 
+test("IE8 error on list setup with Observe.List (#226)", function() {
+	var list = new can.Observe.List(['first', 'second', 'third']),
+		otherList = new can.Observe.List(list);
+
+	deepEqual(list.attr(), otherList.attr(), 'Lists are the same');
+});
+
 })();
