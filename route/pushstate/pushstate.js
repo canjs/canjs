@@ -34,14 +34,19 @@ steal('can/util', 'can/route', function(can) {
             _setup: function() {
                 // intercept routable links
                 can.$('body').on('click', 'a', function(e) {
-                    if(can.route.updateWith(this.pathname+this.search)) {
+                    // Fix for ie showing blank host, but blank host means current host.
+                    if(!this.host) {
+                      this.host = window.location.host;
+                    }
+                    // HTML5 pushstate requires host to be the same. Don't prevent default for other hosts.
+                    if(can.route.updateWith(this.pathname+this.search) && window.location.host == this.host) {
                         e.preventDefault();
                     }
                 });
                 can.route.history.bind('path',can.route.setState);
             },
-            updateWith: function(href) {
-                var curParams = can.route.deparam(href);
+            updateWith: function(pathname) {
+                var curParams = can.route.deparam(pathname);
 
                 if(curParams.route) {
                     can.route.attr(curParams, true);
