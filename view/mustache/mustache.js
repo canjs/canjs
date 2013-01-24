@@ -598,14 +598,42 @@ function( can ){
 			options = can.extend.apply(can, [{
 					fn: function() {},
 					inverse: function() {}
-				}].concat(mode ? args.pop() : [])),
-			// An array of arguments to check for truthyness when evaluating sections.
-			validArgs = args.length ? args : [name],
+			}].concat(mode ? args.pop() : []));
+			
+			
+
+		// Check for a registered helper or a helper-like function.
+		if (helper = (Mustache.getHelper(name) || (can.isFunction(name) && !name.isComputed && { fn: name }))) {
+			// Use the most recent context as `this` for the helper.
+			var context = (context[STACK] && context[context.length - 1]) || context,
+				// Update the options with a function/inverse (the inner templates of a section).
+				opts = {
+					fn: can.proxy(options.fn, context),
+					inverse: can.proxy(options.inverse, context)
+				}, 
+				lastArg = args[args.length-1];
+			
+			// Add the hash to `options` if one exists
+			if (lastArg && lastArg[HASH]) {
+				opts.hash = args.pop()[HASH];
+			}
+			args.push(opts);
+			
+			// Call the helper.
+			return helper.fn.apply(context, args) || '';
+		}
+
+		// if a compute, get the value
+		if( can.isFunction(name) && name.isComputed ){
+			name = name();
+		}
+
+		// An array of arguments to check for truthyness when evaluating sections.
+		var validArgs = args.length ? args : [name],
 			// Whether the arguments meet the condition of the section.
 			valid = true,
 			result = [],
 			i, helper, argIsObserve, arg;
-		
 		// Validate the arguments based on the section mode.
 		if (mode) {
 			for (i = 0; i < validArgs.length; i++) {
@@ -628,27 +656,8 @@ function( can ){
 				}
 			}
 		}
+
 		
-		// Check for a registered helper or a helper-like function.
-		if (helper = (Mustache.getHelper(name) || (can.isFunction(name) && { fn: name }))) {
-			// Use the most recent context as `this` for the helper.
-			var context = (context[STACK] && context[context.length - 1]) || context,
-				// Update the options with a function/inverse (the inner templates of a section).
-				opts = {
-					fn: can.proxy(options.fn, context),
-					inverse: can.proxy(options.inverse, context)
-				}, 
-				lastArg = args[args.length-1];
-			
-			// Add the hash to `options` if one exists
-			if (lastArg && lastArg[HASH]) {
-				opts.hash = args.pop()[HASH];
-			}
-			args.push(opts);
-			
-			// Call the helper.
-			return helper.fn.apply(context, args) || '';
-		}
 		
 		// Otherwise interpolate like normal.
 		if (valid) {
@@ -795,7 +804,7 @@ function( can ){
 					}
 					// Add support for observes
 					else if (isObserve(lastValue)) {
-						return lastValue.attr(name);
+						return lastValue.compute(name);
 					} 
 					else {
 						return value;
