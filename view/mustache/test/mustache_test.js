@@ -1345,6 +1345,49 @@ test("Observe list returned from the function", function() {
 	
 	equal(div.getElementsByTagName('li').length, 1, 'Todo is successfuly created');
 	equal(div.getElementsByTagName('li')[0].innerHTML, 'Todo #1', 'Pushing to the list works');
+});
+
+test("2 way binding helpers", function(){
+	
+	var Value = function(el, value){
+		this.updateElement = function(ev, newVal){
+			el.value = newVal;
+		};
+		value.bind("change",this.updateElement);
+		el.onchange = function(){
+			value(el.value)
+		}
+		this.teardown = function(){
+			value.unbind("change",this.updateElement);
+			el.onchange = null;
+		}
+		el.value = value();
+	}
+	var val;
+	can.Mustache.registerHelper('value', function(value){
+	    return function(el){
+	        val = new Value(el, value);
+	    }
+	});
+	
+	var renderer = can.view.mustache('<input {{value user.name}}/>');
+	var div = document.createElement('div'),
+		u = new can.Observe({name: "Justin"});
+	div.appendChild(renderer({
+		user: u
+	}));
+	var input = div.getElementsByTagName('input')[0];
+	
+	equal( input.value , "Justin", "Name is set correctly")
+	
+	u.attr('name','Eli')
+	
+	equal( input.value, "Eli","Changing observe updates value" );
+	
+	input.value = "Austin";
+	input.onchange();
+	equal(u.attr('name'), "Austin", "Name changed by input field" );
+	val.teardown();
 })
 
 });
