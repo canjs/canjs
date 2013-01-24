@@ -429,6 +429,10 @@ test("Handlebars helper: if/else", function() {
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
 	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+
+	t.data.missing = null;
+	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+	same(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("Handlebars helper: unless", function() {
