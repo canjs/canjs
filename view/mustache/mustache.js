@@ -816,7 +816,7 @@ function( can ){
 			// if there's not a helper by this name and no attribute with this name
 			!(Mustache.getHelper(ref) &&
 				can.inArray(defaultObserveName, can.Observe.keys(defaultObserve)) === -1) ) {
-			return defaultObserve.attr(defaultObserveName);
+			return defaultObserve.compute(defaultObserveName);
 		}
 		// Support helper-like functions as anonymous helpers
 		if (obj !== undefined && can.isFunction(obj[ref])) {
