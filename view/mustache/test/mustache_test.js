@@ -1275,9 +1275,9 @@ test("helper parameters don't convert functions", function() {
 	});
 })
 
-test("computes as helper parameters do get converted", function() {
+test("computes as helper parameters don't get converted", function() {
 	can.Mustache.registerHelper('computeTest', function(no) {
-		equal(no, 5, 'Got computed calue');
+		equal(no(), 5, 'Got computed calue');
 	});
 
 	var renderer = can.view.mustache('{{computeTest test}}');
