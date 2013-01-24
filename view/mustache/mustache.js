@@ -36,7 +36,7 @@ function( can ){
 		 * @return {Boolean} returns if the object is an observable.
 		 */
 		isObserve = function(obj) {
-			return can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
+			return obj !== null && can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
 		},
 		
 		/**
@@ -790,7 +790,7 @@ function( can ){
 				}
 
 				// Found a matched reference.
-				if (value !== undefined && value !== null) {
+				if (value !== undefined ) {
 					if(can.isFunction(lastValue[name]) && isArgument ) {
 						// Don't execute functions if they are parameters for a helper and are not a can.compute
 						return lastValue[name];

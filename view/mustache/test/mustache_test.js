@@ -1412,6 +1412,26 @@ test("2 way binding helpers", function(){
 	val.teardown();
 	
 	
+	var renderer = can.view.mustache('<input {{value user.name}}/>');
+	var div = document.createElement('div'),
+		u = new can.Observe({name: null});
+	div.appendChild(renderer({
+		user: u
+	}));
+	var input = div.getElementsByTagName('input')[0];
+	
+	equal( input.value , "", "Name is set correctly with null")
+	
+	u.attr('name','Eli')
+	
+	equal( input.value, "Eli","Changing observe updates value" );
+	
+	input.value = "Austin";
+	input.onchange();
+	equal(u.attr('name'), "Austin", "Name changed by input field" );
+	val.teardown();
+	
+	
 })
 
 });
