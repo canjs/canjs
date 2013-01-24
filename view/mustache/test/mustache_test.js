@@ -1371,7 +1371,7 @@ test("2 way binding helpers", function(){
 	    }
 	});
 	
-	/*var renderer = can.view.mustache('<input {{value user.name}}/>');
+	var renderer = can.view.mustache('<input {{value user.name}}/>');
 	var div = document.createElement('div'),
 		u = new can.Observe({name: "Justin"});
 	div.appendChild(renderer({
@@ -1388,7 +1388,7 @@ test("2 way binding helpers", function(){
 	input.value = "Austin";
 	input.onchange();
 	equal(u.attr('name'), "Austin", "Name changed by input field" );
-	val.teardown();*/
+	val.teardown();
 	
 	
 	
