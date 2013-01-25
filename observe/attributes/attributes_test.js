@@ -327,7 +327,8 @@ test("Default converters and boolean fix (#247)", function() {
 	deepEqual(obs.attr('enabled'), true, "Attribute got converted to boolean true");
 
 	deepEqual(obs.attr('age'), 26, "Age converted from string to number");
-	equal(obs.attr('time').toString().indexOf('Wed Jan 23 2013 15:35:53'), 0, "Attribute is expected date");
+	// It's ok to just check if it got converted to a date
+	ok(obs.attr('time') instanceof Date, "Attribute is a date");
 });
 
 })();
