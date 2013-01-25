@@ -1365,7 +1365,6 @@ test("2 way binding helpers", function(){
 			value.unbind("change",this.updateElement);
 			el.onchange = null;
 		}
-		console.log("calling value")
 		el.value = value() || "";
 	}
 	var val;

@@ -17,9 +17,24 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
 			return this;
 		},
 		// jquery caches fragments, we always needs a new one
-		buildFragment : function(result, element){
-			var ret = $.buildFragment([result],$(element));
-			return ret.cacheable ? $.clone(ret.fragment) : ret.fragment;
+		buildFragment : function(elems, context){
+			var oldFragment = $.buildFragment,
+				ret;
+
+			elems = [elems];
+			// Set context per 1.8 logic
+			context = context || document;
+			context = !context.nodeType && context[0] || context;
+			context = context.ownerDocument || context;
+
+			try {
+				ret = oldFragment.call( jQuery, elems, context);
+				// jQuery < 1.8 required arrayish context; jQuery 1.9 fails on it
+			} catch( x ) {
+				ret = oldFragment.call( jQuery, elems, context.nodeType ? [ context ] : context[ 0 ]);
+			}
+
+			return ret.cacheable ? $.clone(ret.fragment) : ret.fragment || ret;
 		},
 		$: $,
 		each: can.each
