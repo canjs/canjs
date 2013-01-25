@@ -379,6 +379,28 @@ test("hookups in tables", function(){
 		"Ms.","updated content");
 })
 
+test("multiple tbodies in table hookup", function(){
+	var text = "<table>" +
+			"<% can.each(people, function(person){ %>"+
+				"<tbody><tr><td><%= person.name %></td></tr>"+
+			"<% }) %>"+
+		"</table>",
+		people = new can.Observe.List([
+			{
+				name: "Steve"
+			},
+			{
+				name: "Doug"
+			}
+		]),
+		compiled = new can.EJS({text: text}).render({people: people}),
+		div = document.createElement('div');
+
+	div.appendChild(can.view.frag(compiled));
+
+	equals(div.getElementsByTagName('tbody').length, 2,"two tbodies");
+})
+
 test('multiple hookups in a single attribute', function() {
 	var text =	'<div class=\'<%= obs.attr("foo") %>a<%= obs.attr("bar") %>b<%= obs.attr("baz") %>\'></div>',
 
