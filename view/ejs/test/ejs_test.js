@@ -379,10 +379,11 @@ test("hookups in tables", function(){
 		"Ms.","updated content");
 })
 
+//Issue 233
 test("multiple tbodies in table hookup", function(){
 	var text = "<table>" +
 			"<% can.each(people, function(person){ %>"+
-				"<tbody><tr><td><%= person.name %></td></tr>"+
+				"<tbody><tr><td><%= person.name %></td></tr></tbody>"+
 			"<% }) %>"+
 		"</table>",
 		people = new can.Observe.List([
@@ -397,6 +398,7 @@ test("multiple tbodies in table hookup", function(){
 		div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled));
+	console.log(div.innerHTML)
 
 	equals(div.getElementsByTagName('tbody').length, 2,"two tbodies");
 })

@@ -1313,6 +1313,27 @@ test("Rendering models in tables produces different results than an equivalent o
 	equal(elements.length, 1, 'Only one <tbody> rendered');
 })
 
+//Issue 233
+test("multiple tbodies in table hookup", function(){
+	var text = "<table>" +
+			"{{#people}}"+
+				"<tbody><tr><td>{{name}}</td></tr></tbody>"+
+			"{{/people}}"+
+		"</table>",
+		people = new can.Observe.List([
+			{
+				name: "Steve"
+			},
+			{
+				name: "Doug"
+			}
+		]),
+		compiled = new can.Mustache({text: text}).render({people: people});
+
+		can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
+		equals(can.$('#qunit-test-area table tbody').length, 2,"two tbodies");
+})
+
 // http://forum.javascriptmvc.com/topic/live-binding-on-mustache-template-does-not-seem-to-be-working-with-nested-properties
 test("Observe with array attributes", function() {
 	var renderer = can.view.mustache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul><div>{{message}}</div>');
