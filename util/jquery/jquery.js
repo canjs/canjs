@@ -27,12 +27,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
 			context = !context.nodeType && context[0] || context;
 			context = context.ownerDocument || context;
 
-			try {
-				ret = oldFragment.call( jQuery, elems, context);
-				// jQuery < 1.8 required arrayish context; jQuery 1.9 fails on it
-			} catch( x ) {
-				ret = oldFragment.call( jQuery, elems, context.nodeType ? [ context ] : context[ 0 ]);
-			}
+			ret = oldFragment.call( jQuery, elems, context);
 
 			return ret.cacheable ? $.clone(ret.fragment) : ret.fragment || ret;
 		},
