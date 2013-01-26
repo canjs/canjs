@@ -340,7 +340,8 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 	// IE barfs if text node.
 	var idOf = Slick.uidOf;
 	Slick.uidOf = function(node){
-		if(node.nodeType === 1 || node === window){
+		// for some reason, in IE8, node will be the window but not equal it.
+		if(node.nodeType === 1 || node === window || node.document === document ) {
 			return idOf(node);
 		} else {
 			return Math.random();
