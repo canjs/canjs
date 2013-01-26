@@ -398,7 +398,6 @@ test("multiple tbodies in table hookup", function(){
 		div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled));
-	console.log(div.innerHTML)
 
 	equals(div.getElementsByTagName('tbody').length, 2,"two tbodies");
 })
@@ -1003,9 +1002,11 @@ test("live binding select", function(){
 		div.appendChild(can.view.frag(compiled))
 		equal(div.getElementsByTagName('option').length, 3, '3 items in list')
 
-		equal(div.getElementsByTagName('option')[0].value, ""+items[0].id,
+		var option = div.getElementsByTagName('option')[0] 
+		equal(option.value, ""+items[0].id,
 			   'value attr set');
-		equal(div.getElementsByTagName('option')[0].textContent, items[0].title,
+			  
+		equal(option.textContent || option.text, items[0].title,
 			   'content of option');
 
 		items.push({id: 3, name: 'Go to pub'})
