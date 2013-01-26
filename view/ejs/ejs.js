@@ -138,6 +138,7 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 		 */
 		// TODO Deprecated!!
 		list : function(list, cb){
+			console.log("calling list "+list.length);
 			can.each(list, function(item, i){
 				cb(item, i, list)
 			})

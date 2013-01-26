@@ -128,12 +128,15 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 	}
 	// Make this object so you can bind on it.
 	can.bind = function( ev, cb){
+		
 		// If we can bind to it...
 		if(this.bind && this.bind !== can.bind){
 			this.bind(ev, cb)
 		} else if(this.addEvent) {
 			this.addEvent(ev, cb)
-		} else {
+		} else if(this.nodeName && this.nodeType) {
+			$(this).addEvent(ev, cb)
+		}else {
 			// Make it bind-able...
 			can.addEvent.call(this, ev, cb)
 		}
