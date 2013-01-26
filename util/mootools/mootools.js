@@ -134,9 +134,9 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 			this.bind(ev, cb)
 		} else if(this.addEvent) {
 			this.addEvent(ev, cb)
-		} else if(this.nodeName && this.nodeType) {
+		} else if(this.nodeName && this.nodeType == 1) {
 			$(this).addEvent(ev, cb)
-		}else {
+		} else {
 			// Make it bind-able...
 			can.addEvent.call(this, ev, cb)
 		}
@@ -148,6 +148,8 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 			this.unbind(ev, cb)
 		} else if(this.removeEvent) {
 			this.removeEvent(ev, cb)
+		} if(this.nodeName && this.nodeType == 1) {
+			$(this).removeEvent(ev, cb)
 		} else {
 			// Make it bind-able...
 			can.removeEvent.call(this, ev, cb)
