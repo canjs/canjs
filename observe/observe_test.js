@@ -259,6 +259,24 @@ test("attr deep array ", function(){
 	ok(thing.arr === arr, "thing unmolested");
 });
 
+test("attr array doesn't merge", function(){
+	var state = new can.Observe({
+		arr: ["a", "b"]
+	});
+	
+	var initCid = state.arr._cid;
+
+	state.attr({
+		arr: ["c"]
+	});
+
+	equal(state.arr.length, 1, "the list has the new item");
+	equal(state.arr[0], "c", "the item is correct");
+	equal(initCid, state.arr._cid, "arr is the same observable")
+
+	
+});
+
 test('attr semi-serialize', function(){
 	var first = {
 			foo : {bar: 'car'},

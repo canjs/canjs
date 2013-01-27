@@ -1300,7 +1300,7 @@ steal('can/util','can/construct', function(can) {
 	      if ( items.length > this.length ) {
 	        // Add in the remaining props.
 	        this.push.apply( this, items.slice( this.length ) );
-	      } else if ( items.length < this.length && remove ) {
+	      } else if ( items.length < this.length ) {
 	        this.splice(items.length)
 	      }
 	    }

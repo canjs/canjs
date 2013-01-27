@@ -821,11 +821,9 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 *      {id: 1, name : "dishes"}
 		 * 
-		 * @param {Object} [remove] if provided, merges properties into existing properties.
-		 * 
 		 * @return {model} a model instance.
 		 */
-		model: function( attributes, remove ) {
+		model: function( attributes ) {
 			if ( ! attributes ) {
 				return;
 			}
@@ -833,7 +831,7 @@ steal('can/util','can/observe', function( can ) {
 				attributes = attributes.serialize();
 			}
 			var id = attributes[ this.id ],
-			    model = id && this.store[id] ? this.store[id].attr(attributes, remove) : new this( attributes );
+			    model = id && this.store[id] ? this.store[id].attr(attributes) : new this( attributes );
 			if(this._reqs){
 				this.store[attributes[this.id]] = model;
 			}
