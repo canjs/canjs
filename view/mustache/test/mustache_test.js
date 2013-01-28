@@ -1412,6 +1412,33 @@ test("Contexts are not always passed to partials properly", function() {
 	equal(div.getElementsByTagName('span')[1].innerHTML, "foo", 'Incorrect text in helper inner template');
 });
 
+// https://github.com/bitovi/canjs/issues/231
+test("Functions and helpers should be passed the same context", function() {
+	can.Mustache.registerHelper("to_upper", function(fn, options) {
+		if(arguments.length > 1) {
+			return typeof fn === "function" ? fn().toString().toUpperCase() : fn.toString().toUpperCase();
+		}
+		else {
+			//fn is options
+			return fn.fn(this).trim().toString().toUpperCase();
+		}
+	});
+	
+	var renderer = can.view.mustache('"{{next_level.text}}" uppercased should be "<span>{{to_upper next_level.text}}</span>"<br/>"{{next_level.text}}" uppercased with a workaround is "<span>{{#to_upper}}{{next_level.text}}{{/to_upper}}</span>"'),
+		data = {
+			next_level : {
+				text : function() { return this.other_text; },
+				other_text : "In the inner context"
+			}
+		},
+		div = document.createElement('div');
+	window.other_text = 'Window context';
+		
+	div.appendChild(renderer(data));
+	equal(div.getElementsByTagName('span')[0].innerHTML, data.next_level.other_text.toUpperCase(), 'Incorrect context passed to function');
+	equal(div.getElementsByTagName('span')[1].innerHTML, data.next_level.other_text.toUpperCase(), 'Incorrect context passed to helper');
+});
+
 test("2 way binding helpers", function(){
 	
 	var Value = function(el, value){
