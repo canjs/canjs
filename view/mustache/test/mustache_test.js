@@ -1489,6 +1489,32 @@ test("Functions and helpers should be passed the same context", function() {
 	equal(div.getElementsByTagName('span')[1].innerHTML, data.next_level.other_text.toUpperCase(), 'Incorrect context passed to helper');
 });
 
+// https://github.com/bitovi/canjs/issues/153
+test("Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node", function() {
+	var renderer = can.view.mustache('{{ #todos }}{{ name }}{{ /todos }}'),
+		renderer2 = can.view.mustache('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),
+		todos = [ {id: 1, name: 'Dishes'} ],
+		data = { 
+			todos: new can.Observe.List(todos)
+		},
+		arr = {
+			todos: todos
+		},
+		div = document.createElement('div');
+		
+	div.appendChild(renderer2(arr));
+	equal(div.innerHTML, "<span>Dishes</span>", 'Array item rendered with DOM container');
+	div.innerHTML = '';
+	div.appendChild(renderer2(data));
+	equal(div.innerHTML, "<span>Dishes</span>", 'List item rendered with DOM container');
+	div.innerHTML = '';
+	div.appendChild(renderer(arr));
+	equal(div.innerHTML, "Dishes", 'Array item rendered without DOM container');
+	div.innerHTML = '';
+	div.appendChild(renderer(data));
+	equal(div.innerHTML, "Dishes", 'List item rendered without DOM container');
+});
+
 test("2 way binding helpers", function(){
 	
 	var Value = function(el, value){
