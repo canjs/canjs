@@ -231,22 +231,22 @@ test("helpers", function() {
 test('list helper', function(){
 	
 	var text = "<% list(todos, function(todo){ %><div><%= todo.name %></div><% }) %>";
-	var	Todos = new can.Observe.List([
+	var	todos = new can.Observe.List([
 			{id: 1, name: 'Dishes'}
 		]),
-		compiled = new can.EJS({text: text}).render({todos: Todos}),
+		compiled = new can.EJS({text: text}).render({todos: todos}),
 		div = document.createElement('div');
 
 		div.appendChild(can.view.frag(compiled))
 		equals(div.getElementsByTagName('div').length, 1, '1 item in list')
 		
-		Todos.push({id: 2, name: 'Laundry'})
+		todos.push({id: 2, name: 'Laundry'})
 		equals(div.getElementsByTagName('div').length, 2, '2 items in list')
 		
-		Todos.splice(0, 2);
+		todos.splice(0, 2);
 		equals(div.getElementsByTagName('div').length, 0, '0 items in list')
 
-		Todos.push({id: 4, name: 'Pick up sticks'});
+		todos.push({id: 4, name: 'Pick up sticks'});
 		equals(div.getElementsByTagName('div').length, 1, '1 item in list again')
 
 });
@@ -377,6 +377,29 @@ test("hookups in tables", function(){
 	equals(div.getElementsByTagName('tbody')[0].firstChild.firstChild.nodeName, "TD","updated tag");
 	equals(div.getElementsByTagName('tbody')[0].firstChild.firstChild.innerHTML.replace(/(\r|\n)+/g, ""), 
 		"Ms.","updated content");
+})
+
+//Issue 233
+test("multiple tbodies in table hookup", function(){
+	var text = "<table>" +
+			"<% can.each(people, function(person){ %>"+
+				"<tbody><tr><td><%= person.name %></td></tr></tbody>"+
+			"<% }) %>"+
+		"</table>",
+		people = new can.Observe.List([
+			{
+				name: "Steve"
+			},
+			{
+				name: "Doug"
+			}
+		]),
+		compiled = new can.EJS({text: text}).render({people: people}),
+		div = document.createElement('div');
+
+	div.appendChild(can.view.frag(compiled));
+
+	equals(div.getElementsByTagName('tbody').length, 2,"two tbodies");
 })
 
 test('multiple hookups in a single attribute', function() {
@@ -979,9 +1002,11 @@ test("live binding select", function(){
 		div.appendChild(can.view.frag(compiled))
 		equal(div.getElementsByTagName('option').length, 3, '3 items in list')
 
-		equal(div.getElementsByTagName('option')[0].value, ""+items[0].id,
+		var option = div.getElementsByTagName('option')[0] 
+		equal(option.value, ""+items[0].id,
 			   'value attr set');
-		equal(div.getElementsByTagName('option')[0].textContent, items[0].title,
+			  
+		equal(option.textContent || option.text, items[0].title,
 			   'content of option');
 
 		items.push({id: 3, name: 'Go to pub'})

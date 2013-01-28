@@ -1313,6 +1313,27 @@ test("Rendering models in tables produces different results than an equivalent o
 	equal(elements.length, 1, 'Only one <tbody> rendered');
 })
 
+//Issue 233
+test("multiple tbodies in table hookup", function(){
+	var text = "<table>" +
+			"{{#people}}"+
+				"<tbody><tr><td>{{name}}</td></tr></tbody>"+
+			"{{/people}}"+
+		"</table>",
+		people = new can.Observe.List([
+			{
+				name: "Steve"
+			},
+			{
+				name: "Doug"
+			}
+		]),
+		compiled = new can.Mustache({text: text}).render({people: people});
+
+		can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
+		equals(can.$('#qunit-test-area table tbody').length, 2,"two tbodies");
+})
+
 // http://forum.javascriptmvc.com/topic/live-binding-on-mustache-template-does-not-seem-to-be-working-with-nested-properties
 test("Observe with array attributes", function() {
 	var renderer = can.view.mustache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul><div>{{message}}</div>');
@@ -1351,6 +1372,46 @@ test("Observe list returned from the function", function() {
 	equal(div.getElementsByTagName('li')[0].innerHTML, 'Todo #1', 'Pushing to the list works');
 });
 
+// https://github.com/bitovi/canjs/issues/228
+test("Contexts within helpers not always resolved correctly", function() {
+	can.Mustache.registerHelper("bad_context", function(context, options) {
+		return "<span>" + this.text + "</span> should not be " + options.fn(context);
+	});
+	
+	var renderer = can.view.mustache('{{#bad_context next_level}}<span>{{text}}</span><br/><span>{{other_text}}</span>{{/bad_context}}'),
+		data = {
+			next_level: {
+				text : "bar",
+				other_text : "In the inner context"
+			},
+			text : "foo"
+		},
+		div = document.createElement('div');
+		
+	div.appendChild(renderer(data));
+	equal(div.getElementsByTagName('span')[0].innerHTML, "foo", 'Incorrect context passed to helper');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "bar", 'Incorrect text in helper inner template');
+	equal(div.getElementsByTagName('span')[2].innerHTML, "In the inner context", 'Incorrect other_text in helper inner template');
+});
+
+// https://github.com/bitovi/canjs/issues/227
+test("Contexts are not always passed to partials properly", function() {
+	can.view.registerView('inner', '{{#if other_first_level}}{{other_first_level}}{{else}}{{second_level}}{{/if}}')
+	
+	var renderer = can.view.mustache('{{#first_level}}<span>{{> inner}}</span> should equal <span>{{other_first_level}}</span>{{/first_level}}'),
+		data = {
+			first_level: {
+				second_level : "bar"
+			},
+			other_first_level : "foo"
+		},
+		div = document.createElement('div');
+		
+	div.appendChild(renderer(data));
+	equal(div.getElementsByTagName('span')[0].innerHTML, "foo", 'Incorrect context passed to helper');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "foo", 'Incorrect text in helper inner template');
+});
+
 test("2 way binding helpers", function(){
 	
 	var Value = function(el, value){
@@ -1365,7 +1426,6 @@ test("2 way binding helpers", function(){
 			value.unbind("change",this.updateElement);
 			el.onchange = null;
 		}
-		console.log("calling value")
 		el.value = value() || "";
 	}
 	var val;

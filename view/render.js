@@ -17,7 +17,7 @@ var attrMap = {
 	},
 	tagMap = {
 		"": "span", 
-		table: "tr", 
+		table: "tbody", 
 		tr: "td",
 		ol: "li", 
 		ul: "li", 
@@ -327,8 +327,15 @@ can.extend(can.view, {
 								nodeList = nodes;
 								can.view.registerNode(nodes);
 							} else {
-								can.remove( can.$(nodes) );
+								// Update node Array's to point to new nodes
+								// and then remove the old nodes.
+								// It has to be in this order for Mootools
+								// and IE because somehow, after an element
+								// is removed from the DOM, it loses its
+								// expando values.
+								var nodesToRemove = can.makeArray(nodes);
 								can.view.replace(nodes,newNodes);
+								can.remove( can.$(nodesToRemove) );
 							}
 						};
 						// nodes are the nodes that any updates will replace
