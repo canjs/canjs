@@ -982,4 +982,44 @@ test("calling destroy with unsaved model triggers destroyed event (#181)", funct
 	});
 });
 
+test("model removeAttr (#245)", function() {
+	var MyModel = can.Model({}),
+		model;
+	MyModel._reqs++; // pretend it is live bound
+	model = MyModel.model({
+		id: 0,
+		index: 2,
+		name: 'test'
+	});
+
+	model = MyModel.model({
+		id: 0,
+		name: 'text updated'
+	});
+
+	equal(model.attr('name'), 'text updated', 'attribute updated');
+	equal(model.attr('index'), 2, 'Index attribute still remains');
+
+	MyModel = can.Model({
+		removeAttr: true
+	}, {});
+	MyModel._reqs++; // pretend it is live bound
+	model = MyModel.model({
+		id: 0,
+		index: 2,
+		name: 'test'
+	});
+
+	model = MyModel.model({
+		id: 0,
+		name: 'text updated'
+	});
+
+	equal(model.attr('name'), 'text updated', 'attribute updated');
+	deepEqual(model.attr(), {
+		id: 0,
+		name: 'text updated'
+	}, 'Index attribute got removed');
+});
+
 })();
