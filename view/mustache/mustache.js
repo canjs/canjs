@@ -119,6 +119,9 @@ function( can ){
 						'var s;' +
 						'if (arguments.length == 1 && context) {' +
 							's = !context.' + STACK + ' ? [context] : context;' +
+						// Handle helpers with custom contexts (#228)
+						'} else if (!context.' + STACK + ') {' +
+							's = [self, context];' +
 						'} else {' +
 							's = context && context.' + STACK + ' ? context.concat([self]) : ' + STACK + '(context).concat([self]);' +
 						'}' +

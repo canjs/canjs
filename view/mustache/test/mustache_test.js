@@ -1372,6 +1372,28 @@ test("Observe list returned from the function", function() {
 	equal(div.getElementsByTagName('li')[0].innerHTML, 'Todo #1', 'Pushing to the list works');
 });
 
+// https://github.com/bitovi/canjs/issues/228
+test("Contexts within helpers not always resolved correctly", function() {
+	can.Mustache.registerHelper("bad_context", function(context, options) {
+		return "<span>" + this.text + "</span> should not be " + options.fn(context);
+	});
+	
+	var renderer = can.view.mustache('{{#bad_context next_level}}<span>{{text}}</span><br/><span>{{other_text}}</span>{{/bad_context}}'),
+		data = {
+			next_level: {
+				text : "bar",
+				other_text : "In the inner context"
+			},
+			text : "foo"
+		},
+		div = document.createElement('div');
+		
+	div.appendChild(renderer(data));
+	equal(div.getElementsByTagName('span')[0].innerHTML, "foo", 'Incorrect context passed to helper');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "bar", 'Incorrect text in helper inner template');
+	equal(div.getElementsByTagName('span')[2].innerHTML, "In the inner context", 'Incorrect other_text in helper inner template');
+});
+
 test("2 way binding helpers", function(){
 	
 	var Value = function(el, value){
