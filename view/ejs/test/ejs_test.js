@@ -1263,4 +1263,30 @@ test("Observe with array attributes", function() {
 	equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello again', 'Check updated message');
 })
 
+// https://github.com/bitovi/canjs/issues/153
+test("Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node", function() {
+	var renderer = can.view.ejs('issue-153-no-dom', '<% can.each(todos, function(todo) { %><span><%= todo.attr("name") %></span><% }) %>'),
+		renderer2 = can.view.ejs('issue-153-dom', '<% can.each(todos, function(todo) { %><%= todo.attr("name") %><% }) %>'),
+		todos = [ new can.Observe({id: 1, name: 'Dishes'}) ],
+		data = { 
+			todos: new can.Observe.List(todos)
+		},
+		arr = {
+			todos: todos
+		},
+		div = document.createElement('div');
+		
+	div.appendChild(can.view('issue-153-no-dom', arr));
+	equal(div.innerHTML, "<span>Dishes</span>", 'Array item rendered with DOM container');
+	div.innerHTML = '';
+	div.appendChild(can.view('issue-153-no-dom', data));
+	equal(div.innerHTML, "<span>Dishes</span>", 'List item rendered with DOM container');
+	div.innerHTML = '';
+	div.appendChild(can.view('issue-153-dom', arr));
+	equal(div.innerHTML, "Dishes", 'Array item rendered without DOM container');
+	div.innerHTML = '';
+	div.appendChild(can.view('issue-153-dom', data));
+	equal(div.innerHTML, "Dishes", 'List item rendered without DOM container');
+});
+
 })();
