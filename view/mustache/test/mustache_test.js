@@ -1394,6 +1394,24 @@ test("Contexts within helpers not always resolved correctly", function() {
 	equal(div.getElementsByTagName('span')[2].innerHTML, "In the inner context", 'Incorrect other_text in helper inner template');
 });
 
+// https://github.com/bitovi/canjs/issues/227
+test("Contexts are not always passed to partials properly", function() {
+	can.view.registerView('inner', '{{#if other_first_level}}{{other_first_level}}{{else}}{{second_level}}{{/if}}')
+	
+	var renderer = can.view.mustache('{{#first_level}}<span>{{> inner}}</span> should equal <span>{{other_first_level}}</span>{{/first_level}}'),
+		data = {
+			first_level: {
+				second_level : "bar"
+			},
+			other_first_level : "foo"
+		},
+		div = document.createElement('div');
+		
+	div.appendChild(renderer(data));
+	equal(div.getElementsByTagName('span')[0].innerHTML, "foo", 'Incorrect context passed to helper');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "foo", 'Incorrect text in helper inner template');
+});
+
 test("2 way binding helpers", function(){
 	
 	var Value = function(el, value){

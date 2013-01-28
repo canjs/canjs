@@ -114,7 +114,7 @@ function( can ){
 			text: {
 				// This is the logic to inject at the beginning of a rendered template. 
 				// This includes initializing the `context` stack.
-				start: 'var ' + CONTEXT + ' = []; ' + CONTEXT + '.' + STACK + ' = true;' +
+				start: 'var ' + CONTEXT + ' = this && this.' + STACK + ' ? this : []; ' + CONTEXT + '.' + STACK + ' = true;' +
 					'var ' + STACK + ' = function(context, self) {' +
 						'var s;' +
 						'if (arguments.length == 1 && context) {' +
@@ -220,7 +220,7 @@ function( can ){
 						// Get the template name and call back into the render method,
 						// passing the name and the current context.
 						var templateName = can.trim(content.replace(/^>\s?/, '')).replace(/["|']/g, "");
-						return "can.Mustache.render('" + templateName + "', " + CONTEXT_STACK + ".pop())";
+						return "can.Mustache.render('" + templateName + "', " + CONTEXT_STACK + ")";
 					}
 				},
 
