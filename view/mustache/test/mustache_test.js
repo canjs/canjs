@@ -1527,6 +1527,7 @@ test("2 way binding helpers", function(){
 })
 
 test("can pass in partials",function() {
+	var div = document.createElement('div');
 	var result = hello({
 		name: "World"
 	},{
@@ -1534,12 +1535,14 @@ test("can pass in partials",function() {
 			name: fancyName
 		}
 	});
+	div.appendChild(result);
 
-	equal(can.trim(can.$(result).text()),"Hello World");
+	ok(/World/.test(div.innerHTML),"Hello World worked");
 });
 
 
 test("can pass in helpers",function() {
+	var div = document.createElement('div');
 	var result = helpers({
 		name: "world"
 	},{
@@ -1549,12 +1552,15 @@ test("can pass in helpers",function() {
 			}
 		}
 	});
+	div.appendChild(result);
 
-	equal(can.trim(can.$(result).text()),"Hello World");
+	ok(/World/.test(div.innerHTML),"Hello World worked");
 });
 
 
 test("avoid global helpers",function() {
+	var div = document.createElement('div'),
+		div2 = document.createElement('div');
 	var person = new can.Observe({
 		name: "Brian"
 	})
@@ -1572,11 +1578,13 @@ test("avoid global helpers",function() {
 			return name()+" rules"
 		}
 	});
+	div.appendChild(result);
+	div2.appendChild(result2);
 
 	person.attr("name", "Ajax")
 
-	equal(can.trim(can.$(result).text()),"Mr. Ajax");
-	equal(can.trim(can.$(result2).text()),"Ajax rules");
+	equal(div.innerHTML,"Mr. Ajax");
+	equal(div2.innerHTML,"Ajax rules");
 });
 
 });
