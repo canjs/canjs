@@ -1,4 +1,5 @@
-steal('funcunit/syn', 'can/view/mustache', 'can/model', function(){
+steal('funcunit/syn', 'can/view/mustache', 'can/model', './hello.mustache', './fancy_name.mustache', 
+	'./helper.mustache','./noglobals.mustache', function(_syn,_mustache,_model,hello,fancyName,helpers, noglobals){
 	
 module("can/view/mustache, rendering",{
 	setup : function(){
@@ -1524,5 +1525,66 @@ test("2 way binding helpers", function(){
 	
 	
 })
+
+test("can pass in partials",function() {
+	var div = document.createElement('div');
+	var result = hello({
+		name: "World"
+	},{
+		partials: {
+			name: fancyName
+		}
+	});
+	div.appendChild(result);
+
+	ok(/World/.test(div.innerHTML),"Hello World worked");
+});
+
+
+test("can pass in helpers",function() {
+	var div = document.createElement('div');
+	var result = helpers({
+		name: "world"
+	},{
+		helpers: {
+			cap: function(name) {
+				return can.capitalize(name);
+			}
+		}
+	});
+	div.appendChild(result);
+
+	ok(/World/.test(div.innerHTML),"Hello World worked");
+});
+
+
+test("avoid global helpers",function() {
+	var div = document.createElement('div'),
+		div2 = document.createElement('div');
+	var person = new can.Observe({
+		name: "Brian"
+	})
+	var result = noglobals({
+		person: person
+	},{
+		sometext: function(name){
+			return "Mr. "+name()
+		}
+	});
+	var result2 = noglobals({
+		person: person
+	},{
+		sometext: function(name){
+			return name()+" rules"
+		}
+	});
+	div.appendChild(result);
+	div2.appendChild(result2);
+
+	person.attr("name", "Ajax")
+
+	equal(div.innerHTML,"Mr. Ajax");
+	equal(div2.innerHTML,"Ajax rules");
+});
 
 });
