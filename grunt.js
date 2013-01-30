@@ -17,7 +17,7 @@ module.exports = function (grunt) {
 				},
 				exclude : [/\.min\./, /qunit\.js/]
 			},
-			banner : '/*\n* <%= pkg.title || pkg.name %> - <%= pkg.version %> ' +
+			banner : '/*!\n* <%= pkg.title || pkg.name %> - <%= pkg.version %> ' +
 				'(<%= grunt.template.today("yyyy-mm-dd") %>)\n' +
 				'<%= pkg.homepage ? "* " + pkg.homepage + "\n" : "" %>' +
 				'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>\n' +
