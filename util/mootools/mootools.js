@@ -126,6 +126,9 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 	can.isFunction = function(f){
 		return typeOf(f) == 'function'
 	}
+
+
+
 	// Make this object so you can bind on it.
 	can.bind = function( ev, cb){
 		
@@ -133,7 +136,7 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 		if(this.bind && this.bind !== can.bind){
 			this.bind(ev, cb)
 		} else if(this.addEvent) {
-			this.addEvent(ev, cb)
+			this.addEvent(ev, cb);
 		} else if(this.nodeName && this.nodeType == 1) {
 			$(this).addEvent(ev, cb)
 		} else {
@@ -352,6 +355,9 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 			return Math.random();
 		}
 	}
+
+	// Makes Mootools work with can.route (#216, #124), but only with native onhashchange
+	Element.NativeEvents.hashchange = 2;
 
 	return can;
 });

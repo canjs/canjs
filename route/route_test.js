@@ -331,7 +331,6 @@ test("unsticky routes", function(){
 		iCanRoute.attr({type: "bar"});
 
 		setTimeout(function(){
-			console.log('HREF', loc.href)
 			var after = loc.href.substr(loc.href.indexOf("#"));
 			equal(after,"#!bar");
 			iCanRoute.attr({type: "bar", id: "\/"});
@@ -416,7 +415,7 @@ test("param order matching", function(){
 	
 	res = can.route.param({recipe: "recipe1", task: "task2"});
 	equals(res,"/task2")
-})
+});
 
 test("dashes in routes", function(){
 	can.route.routes = {};
@@ -432,4 +431,26 @@ test("dashes in routes", function(){
 	window.location.hash = "qunit-header";
 	window.location.hash = "";
 });
+
+test("listening to hashchange (#216, #124)", function() {
+	var iframe = document.createElement('iframe');
+	stop();
+
+	window.routeTestReady = function(iCanRoute){
+		iCanRoute.ready(true);
+		ok(!iCanRoute.attr('bla'), 'Value not set yet');
+		iCanRoute.bind('change', function() {
+			equal(iCanRoute.attr('bla'), 'blu', 'Got route change event and value is as expected');
+			start();
+		});
+
+		setTimeout(function() {
+			iframe.src = iframe.src + '#!bla=blu';
+		}, 100);
+	};
+
+	iframe.src = steal.config().root.join("can/route/testing.html?1");
+	can.$("#qunit-test-area")[0].appendChild(iframe);
+});
+
 })();
