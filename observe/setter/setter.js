@@ -45,7 +45,7 @@ proto.__set = function(prop, value, current, success, error){
 		// this means the setter is async so we 
 		// do not call update property and return right away
 		( value = this[setName](value, 
-			function(){ old.call(self,prop, value, current, success, errorCallback) },
+			function(value ){ old.call(self,prop, value, current, success, errorCallback) },
 			errorCallback ) ) === undefined ) {
 		return;
 	}
