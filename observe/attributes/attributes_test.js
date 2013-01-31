@@ -331,4 +331,36 @@ test("Default converters and boolean fix (#247)", function() {
 	ok(obs.attr('time') instanceof Date, "Attribute is a date");
 });
 
+test("Nested converters called twice", function(){
+	var counter = 0;
+	var MyObserve = can.Observe({
+	    attributes: {
+	        nested: "nested"
+	    },
+	    convert: {
+	        nested: function(data) {
+	        	counter++;
+	            return data instanceof MyObserve ? data : new MyObserve(data);
+	        }
+	    }
+	},{
+	    
+	});
+
+	var obs = new MyObserve({
+	    nested: {
+	        name: "foo",
+	        count: 1
+	    }
+	});
+	var nested = obs.attr("nested");
+	obs.attr({
+	    nested: {
+	        count: 2
+	    }
+	});
+	equals(counter, 1, "only one call to converter");
+	same(nested, obs.attr("nested"), "same object");
+})
+
 })();
