@@ -1,4 +1,5 @@
-steal('funcunit/syn', 'can/view/mustache', 'can/model', function(){
+steal('funcunit/syn', 'can/view/mustache', 'can/model', './hello.mustache', './fancy_name.mustache', 
+	'./helper.mustache','./noglobals.mustache', function(_syn,_mustache,_model,hello,fancyName,helpers, noglobals){
 	
 module("can/view/mustache, rendering",{
 	setup : function(){
@@ -1372,6 +1373,73 @@ test("Observe list returned from the function", function() {
 	equal(div.getElementsByTagName('li')[0].innerHTML, 'Todo #1', 'Pushing to the list works');
 });
 
+// https://github.com/bitovi/canjs/issues/228
+test("Contexts within helpers not always resolved correctly", function() {
+	can.Mustache.registerHelper("bad_context", function(context, options) {
+		return "<span>" + this.text + "</span> should not be " + options.fn(context);
+	});
+	
+	var renderer = can.view.mustache('{{#bad_context next_level}}<span>{{text}}</span><br/><span>{{other_text}}</span>{{/bad_context}}'),
+		data = {
+			next_level: {
+				text : "bar",
+				other_text : "In the inner context"
+			},
+			text : "foo"
+		},
+		div = document.createElement('div');
+		
+	div.appendChild(renderer(data));
+	equal(div.getElementsByTagName('span')[0].innerHTML, "foo", 'Incorrect context passed to helper');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "bar", 'Incorrect text in helper inner template');
+	equal(div.getElementsByTagName('span')[2].innerHTML, "In the inner context", 'Incorrect other_text in helper inner template');
+});
+
+// https://github.com/bitovi/canjs/issues/227
+test("Contexts are not always passed to partials properly", function() {
+	can.view.registerView('inner', '{{#if other_first_level}}{{other_first_level}}{{else}}{{second_level}}{{/if}}')
+	
+	var renderer = can.view.mustache('{{#first_level}}<span>{{> inner}}</span> should equal <span>{{other_first_level}}</span>{{/first_level}}'),
+		data = {
+			first_level: {
+				second_level : "bar"
+			},
+			other_first_level : "foo"
+		},
+		div = document.createElement('div');
+		
+	div.appendChild(renderer(data));
+	equal(div.getElementsByTagName('span')[0].innerHTML, "foo", 'Incorrect context passed to helper');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "foo", 'Incorrect text in helper inner template');
+});
+
+// https://github.com/bitovi/canjs/issues/231
+test("Functions and helpers should be passed the same context", function() {
+	can.Mustache.registerHelper("to_upper", function(fn, options) {
+		if(arguments.length > 1) {
+			return typeof fn === "function" ? fn().toString().toUpperCase() : fn.toString().toUpperCase();
+		}
+		else {
+			//fn is options
+			return fn.fn(this).trim().toString().toUpperCase();
+		}
+	});
+	
+	var renderer = can.view.mustache('"{{next_level.text}}" uppercased should be "<span>{{to_upper next_level.text}}</span>"<br/>"{{next_level.text}}" uppercased with a workaround is "<span>{{#to_upper}}{{next_level.text}}{{/to_upper}}</span>"'),
+		data = {
+			next_level : {
+				text : function() { return this.other_text; },
+				other_text : "In the inner context"
+			}
+		},
+		div = document.createElement('div');
+	window.other_text = 'Window context';
+		
+	div.appendChild(renderer(data));
+	equal(div.getElementsByTagName('span')[0].innerHTML, data.next_level.other_text.toUpperCase(), 'Incorrect context passed to function');
+	equal(div.getElementsByTagName('span')[1].innerHTML, data.next_level.other_text.toUpperCase(), 'Incorrect context passed to helper');
+});
+
 test("2 way binding helpers", function(){
 	
 	var Value = function(el, value){
@@ -1457,5 +1525,66 @@ test("2 way binding helpers", function(){
 	
 	
 })
+
+test("can pass in partials",function() {
+	var div = document.createElement('div');
+	var result = hello({
+		name: "World"
+	},{
+		partials: {
+			name: fancyName
+		}
+	});
+	div.appendChild(result);
+
+	ok(/World/.test(div.innerHTML),"Hello World worked");
+});
+
+
+test("can pass in helpers",function() {
+	var div = document.createElement('div');
+	var result = helpers({
+		name: "world"
+	},{
+		helpers: {
+			cap: function(name) {
+				return can.capitalize(name);
+			}
+		}
+	});
+	div.appendChild(result);
+
+	ok(/World/.test(div.innerHTML),"Hello World worked");
+});
+
+
+test("avoid global helpers",function() {
+	var div = document.createElement('div'),
+		div2 = document.createElement('div');
+	var person = new can.Observe({
+		name: "Brian"
+	})
+	var result = noglobals({
+		person: person
+	},{
+		sometext: function(name){
+			return "Mr. "+name()
+		}
+	});
+	var result2 = noglobals({
+		person: person
+	},{
+		sometext: function(name){
+			return name()+" rules"
+		}
+	});
+	div.appendChild(result);
+	div2.appendChild(result2);
+
+	person.attr("name", "Ajax")
+
+	equal(div.innerHTML,"Mr. Ajax");
+	equal(div2.innerHTML,"Ajax rules");
+});
 
 });

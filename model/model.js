@@ -166,6 +166,28 @@ steal('can/util','can/observe', function( can ) {
 		 *       id: "Id"
 		 *     },{});
 		 */
+		/**
+		 * @attribute removeAttr
+		 * Sets whether model conversion should remove non existing attributes or merge with
+		 * the existing attributes. The default is `false`.
+		 * For example, if `Task.findOne({ id: 1 })` returns
+		 *
+		 *      { id: 1, name: 'Do dishes', index: 1, color: ['red', 'blue'] }
+		 *
+         * for the first request and
+		 *
+		 *      { id: 1, name: 'Really do dishes', color: ['green'] }
+		 *
+		 *  for the next request, the actual model attributes would look like:
+		 *
+		 *      { id: 1, name: 'Really do dishes', index: 1, color: ['green', 'blue'] }
+		 *
+		 *  Because the attributes of the original model and the updated model will
+		 *  be merged. Setting `removeAttr` to `true` will result in model attributes like
+		 *
+		 *      { id: 1, name: 'Really do dishes', color: ['green'] }
+		 *
+		 */
 	ajaxMethods = {
 		/**
 		 * @function create
@@ -820,12 +842,10 @@ steal('can/util','can/observe', function( can ) {
 		 * @param {Object} attributes An object of property name and values like:
 		 * 
 		 *      {id: 1, name : "dishes"}
-		 * 
-		 * @param {Object} [remove] if provided, merges properties into existing properties.
-		 * 
+		 *
 		 * @return {model} a model instance.
 		 */
-		model: function( attributes, remove ) {
+		model: function( attributes ) {
 			if ( ! attributes ) {
 				return;
 			}
@@ -833,7 +853,8 @@ steal('can/util','can/observe', function( can ) {
 				attributes = attributes.serialize();
 			}
 			var id = attributes[ this.id ],
-			    model = id && this.store[id] ? this.store[id].attr(attributes, remove) : new this( attributes );
+			    model = (id || id === 0) && this.store[id] ?
+				    this.store[id].attr(attributes, this.removeAttr || false) : new this( attributes );
 			if(this._reqs){
 				this.store[attributes[this.id]] = model;
 			}
