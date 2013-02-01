@@ -549,7 +549,6 @@ test("object definitions", function(){
 	// and notice when leaving one out the other is still there
 	ObjectDef.findAll({ start: 0, count: 10 }, function(data){
 		start();
-		console.log("DATA IS", data)
 		equals(data[0].myflag, undefined, 'my flag is undefined')
 	}); 
 })
@@ -868,7 +867,6 @@ test("model list attr", function() {
 	equal( list1.length, 0, "Initial empty list has length of 0")
 	list1.attr( list2 );
 	equal( list1.length, 2, "Merging using attr yields length of 2")
-	console.log( list1 )
 
 });
 
@@ -900,8 +898,6 @@ test("destroying a model impact the right list", function() {
 	list2[0].destroy();
 	equal( list1.length, 2, "After destroying list2[0] Person.List has length of 2")
 	equal( list2.length, 1, "After destroying list2[0] Organisation.List has length of 1")
-	console.log( list1 )
-	console.log( list2 )
 
 });
 
