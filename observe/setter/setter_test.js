@@ -47,6 +47,24 @@ test("error binding", 1, function(){
 	})
 	school.attr("name","");
 	
+});
+
+test("asyncronous setting", function(){
+	var Meyer = can.Observe({
+		setName: function(newVal, success){
+			setTimeout(function(){
+				success(newVal+" Meyer")
+			},1)
+		}
+	});
+	stop();
+	var me = new Meyer();
+	me.bind("name",function(ev, newVal){
+		equal(newVal, "Justin Meyer");
+		equal( me.attr("name"), "Justin Meyer");
+		start();
+	})
+	me.attr("name","Justin")
 })
 
 
