@@ -617,7 +617,7 @@ steal('can/util','can/construct', function(can) {
 				current._set(parts, value)
 			} else if (!parts.length ) {
 				// We're in "real" set territory.
-				if(this.__convert){
+				if(this.__convert ){
 					value = this.__convert(prop, value)
 				}
 				
@@ -813,7 +813,7 @@ steal('can/util','can/construct', function(can) {
 			props = can.extend({}, props);
 			var prop,
 				self = this,
-				newVal;
+				newVal, checkNewVal;
 			Observe.startBatch();
 			this.each(function(curVal, prop){
 				newVal = props[prop];
@@ -823,16 +823,19 @@ steal('can/util','can/construct', function(can) {
 					remove && self.removeAttr(prop);
 					return;
 				}
-				if ( self.__convert ) {
-					newVal = self.__convert(prop, newVal);
-				}
 
 				if ( curVal !== newVal ) {
 					if ( curVal instanceof can.Observe && newVal instanceof can.Observe ) {
 						unhookup([curVal], self._cid);
 					}
 
-					if ( newVal instanceof can.Observe ) {
+					// only call conver to check if we need to call _set or .attr
+					// _set calls convert itself, so don't save this value
+					if ( self.__convert ) {
+						checkNewVal = self.__convert(prop, newVal);
+					}
+
+					if ( newVal instanceof can.Observe || checkNewVal instanceof can.Observe) {
 						self._set(prop, newVal)
 					}
 					else if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {

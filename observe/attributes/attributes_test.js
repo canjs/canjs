@@ -331,4 +331,41 @@ test("Default converters and boolean fix (#247)", function() {
 	ok(obs.attr('time') instanceof Date, "Attribute is a date");
 });
 
+test("Nested converters called twice", function(){
+    OtherThing = can.Model({
+        attributes: {
+            score: 'capacity'
+        },
+        convert: {
+            capacity: function(val) {
+                return val * 10;
+            }
+        }
+    }, {});
+    
+    Thing = can.Model({
+        attributes: {
+            otherThing: 'OtherThing.model'
+        },
+        
+        findOne : 'GET /things/{id}'
+    }, {});
+	var t = new Thing({
+	    "name": "My Thing",
+	    "otherThing": {
+	        "score": 1
+	    },
+	    "id": "ALLCACHES"
+	})
+	t.attr({
+	    "otherThing": {
+	        "score": 2
+	    },
+	    "id": "ALLCACHES"
+	})
+
+	equal(t.attr("otherThing.score"), 20, "converter called correctly")
+
+})
+
 })();
