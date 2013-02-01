@@ -332,35 +332,40 @@ test("Default converters and boolean fix (#247)", function() {
 });
 
 test("Nested converters called twice", function(){
-	var counter = 0;
-	var MyObserve = can.Observe({
-	    attributes: {
-	        nested: "nested"
+    OtherThing = can.Model({
+        attributes: {
+            score: 'capacity'
+        },
+        convert: {
+            capacity: function(val) {
+                return val * 10;
+            }
+        }
+    }, {});
+    
+    Thing = can.Model({
+        attributes: {
+            otherThing: 'OtherThing.model'
+        },
+        
+        findOne : 'GET /things/{id}'
+    }, {});
+	var t = new Thing({
+	    "name": "My Thing",
+	    "otherThing": {
+	        "score": 1
 	    },
-	    convert: {
-	        nested: function(data) {
-	        	counter++;
-	            return data instanceof MyObserve ? data : new MyObserve(data);
-	        }
-	    }
-	},{
-	    
-	});
+	    "id": "ALLCACHES"
+	})
+	t.attr({
+	    "otherThing": {
+	        "score": 2
+	    },
+	    "id": "ALLCACHES"
+	})
 
-	var obs = new MyObserve({
-	    nested: {
-	        name: "foo",
-	        count: 1
-	    }
-	});
-	var nested = obs.attr("nested");
-	obs.attr({
-	    nested: {
-	        count: 2
-	    }
-	});
-	equals(counter, 1, "only one call to converter");
-	same(nested, obs.attr("nested"), "same object");
+	equal(t.attr("otherThing.score"), 20, "converter called correctly")
+
 })
 
 })();
