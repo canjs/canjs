@@ -468,6 +468,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		}, 1);
 	});
 	// `onready` event...
+	// TODO this works only for jQuery, all other libraries have to call can.route.ready()
 	can.bind.call(document,"ready",can.route.ready);
 
 	// extend route to have a similar property 

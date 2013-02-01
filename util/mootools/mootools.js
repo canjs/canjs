@@ -1,5 +1,5 @@
 steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js', 'can/util/deferred.js',
-'can/util/array/each.js', 'can/util/object/isplain', function(can) {
+'can/util/array/each.js', 'can/util/object/isplain', '../hashchange.js', function(can) {
 	// mootools.js
 	// ---------
 	// _MooTools node list._
@@ -355,9 +355,6 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 			return Math.random();
 		}
 	}
-
-	// Makes Mootools work with can.route (#216, #124), but only with native onhashchange
-	Element.NativeEvents.hashchange = 2;
 
 	return can;
 });
