@@ -829,6 +829,8 @@ steal('can/util','can/construct', function(can) {
 						unhookup([curVal], self._cid);
 					}
 
+					// only call conver to check if we need to call _set or .attr
+					// _set calls convert itself, so don't save this value
 					if ( self.__convert ) {
 						checkNewVal = self.__convert(prop, newVal);
 					}
