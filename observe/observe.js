@@ -823,24 +823,18 @@ steal('can/util','can/construct', function(can) {
 					remove && self.removeAttr(prop);
 					return;
 				}
-				if ( self.__convert ) {
-					newVal = self.__convert(prop, newVal);
+
+				// if we're dealing with models, want to call _set to let converter run
+				if( canMakeObserve(curVal) && curVal instanceof can.Model && canMakeObserve(newVal) ) {
+					self._set(prop, newVal)
+				// if its an object, let attr merge
+				} else if ( canMakeObserve(curVal) && canMakeObserve(newVal) && curVal.attr ) {
+					curVal.attr(newVal, remove)
+				// otherwise just set
+				} else if ( curVal != newVal ) {
+					self._set(prop, newVal)
 				}
 
-				if ( curVal !== newVal ) {
-					if ( curVal instanceof can.Observe && newVal instanceof can.Observe ) {
-						unhookup([curVal], self._cid);
-					}
-
-					if ( newVal instanceof can.Observe ) {
-						self._set(prop, newVal)
-					}
-					else if ( canMakeObserve(curVal) && canMakeObserve(newVal) ) {
-						curVal.attr(newVal, remove)
-					} else if ( curVal != newVal ) {
-						self._set(prop, newVal)
-					}
-				}
 				delete props[prop];
 			})
 			// Add remaining props.

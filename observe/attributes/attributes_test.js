@@ -298,7 +298,7 @@ test("attr does not blow away old observable when going from empty to having ite
 	});
 
 	var oldCid = project.attr("members")._cid;
-	project.attr({members:['bob']});
+	project.attr({members:[{id: 1, name: "bob"}]});
 	same(project.attr("members")._cid, oldCid, "should be the same observe, so that views bound to the old one get updates")
 	equals(project.attr("members").length, 1, "list should have bob in it");
 });
@@ -330,5 +330,75 @@ test("Default converters and boolean fix (#247)", function() {
 	// It's ok to just check if it got converted to a date
 	ok(obs.attr('time') instanceof Date, "Attribute is a date");
 });
+
+test("Nested converters called twice (#174)", function(){
+    OtherThing = can.Model({
+        attributes: {
+            score: 'capacity'
+        },
+        convert: {
+            capacity: function(val) {
+            	debugger;
+                return val * 10;
+            }
+        }
+    }, {});
+    
+    Thing = can.Model({
+        attributes: {
+            otherThing: 'OtherThing.model'
+        },
+        
+        findOne : 'GET /things/{id}'
+    }, {});
+	var t = new Thing({
+	    "name": "My Thing",
+	    "otherThing": {
+	        "score": 1
+	    },
+	    "id": "ALLCACHES"
+	})
+	t.attr({
+	    "otherThing": {
+	        "score": 2
+	    },
+	    "id": "ALLCACHES"
+	})
+
+	equal(t.attr("otherThing.score"), 20, "converter called correctly")
+
+})
+
+test("Nested converters called with merged data (#208)", function(){
+	var MyObserve = can.Observe({
+	    attributes: {
+	        nested: "nested"
+	    },
+	    convert: {
+	        nested: function(data) {
+	        	console.log('nested', data)
+	            var result = data instanceof MyObserve ? data : new MyObserve(data);
+	        	console.log('result', result);
+	        	return result;
+	        }
+	    }
+	},{
+
+	});
+
+	var obs = new MyObserve({
+	    nested: {
+	        name: "foo",
+	        count: 1
+	    }
+	});
+	var nested = obs.attr("nested");
+	obs.attr({
+	    nested: {
+	        count: 2
+	    }
+	});
+	same(nested, obs.attr("nested"), "same object");
+})
 
 })();
