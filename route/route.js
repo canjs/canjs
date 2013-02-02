@@ -468,8 +468,13 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		}, 1);
 	});
 	// `onready` event...
-	// TODO this works only for jQuery, all other libraries have to call can.route.ready()
 	can.bind.call(document,"ready",can.route.ready);
+
+	// Libraries other than jQuery don't execute the document `ready` listener
+	// if we are already DOM ready
+	if(document.readyState === 'complete' && onready) {
+		can.route.ready();
+	}
 
 	// extend route to have a similar property 
 	// that is often checked in mustache to determine
