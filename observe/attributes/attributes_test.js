@@ -338,7 +338,6 @@ test("Nested converters called twice (#174)", function(){
         },
         convert: {
             capacity: function(val) {
-            	debugger;
                 return val * 10;
             }
         }
@@ -376,10 +375,7 @@ test("Nested converters called with merged data (#208)", function(){
 	    },
 	    convert: {
 	        nested: function(data) {
-	        	console.log('nested', data)
-	            var result = data instanceof MyObserve ? data : new MyObserve(data);
-	        	console.log('result', result);
-	        	return result;
+	            return data instanceof MyObserve ? data : new MyObserve(data);
 	        }
 	    }
 	},{

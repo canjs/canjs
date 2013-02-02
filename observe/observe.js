@@ -620,7 +620,6 @@ steal('can/util','can/construct', function(can) {
 				if(this.__convert){
 					value = this.__convert(prop, value)
 				}
-				
 				this.__set(prop, value, current)
 			} else {
 				throw "can.Observe: Object does not exist"
@@ -672,6 +671,7 @@ steal('can/util','can/construct', function(can) {
 				this[prop] = val
 			}
 		},
+
 		/**
 		 * @function bind
 		 * `bind( eventType, handler )` Listens to changes on a can.Observe.
@@ -823,16 +823,20 @@ steal('can/util','can/construct', function(can) {
 					remove && self.removeAttr(prop);
 					return;
 				}
+				
+				if(self.__convert){
+					newVal = self.__convert(prop, newVal)
+				}
 
 				// if we're dealing with models, want to call _set to let converter run
-				if( canMakeObserve(curVal) && curVal instanceof can.Model && canMakeObserve(newVal) ) {
-					self._set(prop, newVal)
+				if( newVal instanceof can.Observe ) {
+					self.__set(prop, newVal, curVal)
 				// if its an object, let attr merge
 				} else if ( canMakeObserve(curVal) && canMakeObserve(newVal) && curVal.attr ) {
 					curVal.attr(newVal, remove)
 				// otherwise just set
 				} else if ( curVal != newVal ) {
-					self._set(prop, newVal)
+					self.__set(prop, newVal, curVal)
 				}
 
 				delete props[prop];
