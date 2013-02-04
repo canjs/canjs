@@ -22,6 +22,7 @@ steal.config({
 		css: "css",
 		less: "steal/less/less.js",
 		coffee: "steal/coffee/coffee.js",
-		ejs: "can/view/ejs/ejs.js"
+		ejs: "can/view/ejs/ejs.js",
+		mustache: "can/view/mustache/mustache.js"
 	}
 })
