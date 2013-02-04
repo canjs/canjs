@@ -437,7 +437,6 @@ test("listening to hashchange (#216, #124)", function() {
 	stop();
 
 	window.routeTestReady = function(iCanRoute){
-		iCanRoute.ready(true);
 		ok(!iCanRoute.attr('bla'), 'Value not set yet');
 		iCanRoute.bind('change', function() {
 			equal(iCanRoute.attr('bla'), 'blu', 'Got route change event and value is as expected');
