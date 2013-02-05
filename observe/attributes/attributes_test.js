@@ -374,9 +374,12 @@ test("Nested converters called with merged data (#208)", function(){
 	        nested: "nested"
 	    },
 	    convert: {
-	        nested: function(data) {
-	            return data instanceof MyObserve ? data : new MyObserve(data);
-	        }
+			nested: function(data, oldVal) {
+				if(oldVal instanceof MyObserve) {
+					return oldVal.attr(data);
+				}
+				return new MyObserve(data);
+			}
 	    }
 	},{
 
@@ -394,7 +397,7 @@ test("Nested converters called with merged data (#208)", function(){
 	        count: 2
 	    }
 	});
-	same(nested, obs.attr("nested"), "same object");
+	ok(nested === obs.attr("nested"), "same object");
 })
 
 })();
