@@ -368,7 +368,8 @@ test("Nested converters called twice (#174)", function(){
 
 })
 
-test("Nested converters called with merged data (#208)", function(){
+// tests that the workaround listed in #208 works with the correct call signature and data
+test("Nested converters called with merged data", function(){
 	var MyObserve = can.Observe({
 	    attributes: {
 	        nested: "nested"
@@ -381,9 +382,7 @@ test("Nested converters called with merged data (#208)", function(){
 				return new MyObserve(data);
 			}
 	    }
-	},{
-
-	});
+	},{});
 
 	var obs = new MyObserve({
 	    nested: {
