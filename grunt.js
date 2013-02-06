@@ -64,6 +64,7 @@ module.exports = function (grunt) {
 			getGhPages : 'git clone -b gh-pages <%= pkg.repository.url %> build/gh-pages',
 			copyLatest : 'rm -rf build/gh-pages/release/<%= pkg.version %> && ' +
 				'cp -R <%= meta.out %>/<%= pkg.version %> build/gh-pages/release/<%= pkg.version %> && ' +
+				'cp <%= meta.out %>/can.js.<%= pkg.version %>.zip build/gh-pages/downloads &&' +
 				'rm -rf build/gh-pages/release/latest && ' +
 				'cp -R <%= meta.out %>/<%= pkg.version %> build/gh-pages/release/latest',
 			copyEdge : 'rm -rf build/gh-pages/release/edge && ' +
@@ -102,6 +103,6 @@ module.exports = function (grunt) {
 	grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist docco:edge bannerize:edge");
 	grunt.registerTask("latest", "build:latest build:latestPlugins strip:latest beautify:dist bannerize:latest docco:latest");
 	grunt.registerTask("ghpages", "shell:cleanup shell:getGhPages shell:copyLatest shell:updateGhPages shell:cleanup");
-	grunt.registerTask("deploy", "latest ghpages shell:bundleLatest");
+	grunt.registerTask("deploy", "latest shell:bundleLatest ghpages");
 
 };
