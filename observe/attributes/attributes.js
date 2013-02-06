@@ -69,11 +69,28 @@ can.each([ can.Observe, can.Model ], function(clss){
 		 *		contact.attr('birthday', '4-26-2012') 
 		 *
 		 *		contact.attr('birthday'); //-> Date
+		 * 
+		 * If a property is set with an object as a value, the corresponding converter is called with the unmerged data (the raw object)
+		 * as the first argument, and the old value (a can.Observe) as the second:
+		 * 
+		 * 		var MyObserve = can.Observe({
+	    			attributes: {
+	        			nested: "nested"
+	    			},
+	    			convert: {
+						nested: function(data, oldVal) {
+							if(oldVal instanceof MyObserve) {
+								return oldVal.attr(data);
+							}
+							return new MyObserve(data);
+						}
+	    			}
+				},{});
 		 *
 		 * ## Assocations and Convert
 		 *
 		 * If you have assocations defined within your model(s), you can use convert to automatically
-		 * call seralize on those models.
+		 * call serialize on those models.
 		 * 
 		 * 		can.Model("Contact",{
 		 * 			attributes : {
