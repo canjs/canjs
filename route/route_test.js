@@ -452,4 +452,43 @@ test("listening to hashchange (#216, #124)", function() {
 	can.$("#qunit-test-area")[0].appendChild(iframe);
 });
 
+test("trigger value change only once for set same value as default or strigified", function() {
+	expect(1);
+	stop();
+
+	window.routeTestReady = function(iCanRoute, loc){
+		iCanRoute.bind('some_number', function() {
+			ok(true, "some_number has changed")
+		});
+
+		setTimeout(function(){
+			iCanRoute.attr('some_number', 1)
+		},10)
+
+		setTimeout(function(){
+			iCanRoute.attr('some_number', "1")
+		},20)
+
+		setTimeout(function(){
+			iCanRoute.attr({some_number: 1})
+		},30)
+
+		setTimeout(function(){
+			iCanRoute.attr({some_number: "1"})
+		},40)
+
+		setTimeout(function() {
+			start();
+			can.remove(can.$(iframe))
+		},100)
+	}
+
+	var iframe = document.createElement('iframe');
+	iframe.src = steal.config().root.join("can/route/testing.html?3");
+	can.$("#qunit-test-area")[0].appendChild(iframe);
+});
+
+
 })();
+
+
