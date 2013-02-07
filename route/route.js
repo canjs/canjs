@@ -61,8 +61,8 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 
       if(type === "object" || can.isArray(obj)) {
         return stringifyObject(can.extend({}, obj))
-      } else if(type !== "string") {
-          obj.toString()
+			} else if(obj !== undefined && obj !== null && can.isFunction(obj.toString)) {
+        return obj.toString()
       } else {
         return obj
       }
