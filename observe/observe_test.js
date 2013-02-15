@@ -623,4 +623,19 @@ test("IE8 error on list setup with Observe.List (#226)", function() {
 	deepEqual(list.attr(), otherList.attr(), 'Lists are the same');
 });
 
+test("initialize Observe.List with a deferred",function(){
+	stop()
+	var def = new can.Deferred();
+	var list = new can.Observe.List(def);
+	list.bind("add",function(ev, items, index){
+		same(items,["a","b"]);
+		equal(index, 0);
+		start();
+	});
+	setTimeout(function(){
+		def.resolve(["a","b"])
+	},10)
+})
+
+
 })();

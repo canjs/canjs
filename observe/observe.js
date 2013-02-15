@@ -1027,7 +1027,11 @@ steal('can/util','can/construct', function(can) {
 			this.length = 0;
 			can.cid(this, ".observe")
 			this._init = 1;
-			this.push.apply(this, can.makeArray(instances || []));
+			if( can.isDeferred(instances) ) {
+				this.replace(instances)
+			} else {
+				this.push.apply(this, can.makeArray(instances || []));
+			}
 			this.bind('change'+this._cid,can.proxy(this._changes,this));
 			can.extend(this, options);
 			delete this._init;
