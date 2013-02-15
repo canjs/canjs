@@ -57,7 +57,7 @@ var attrMap = {
 		},
 	getAttr = function(el, attrName){
 		// Default to a blank string for IE7/8
-		return (attrMap[attrName]?
+		return (attrMap[attrName] && el[attrMap[attrName]] ?
 			el[attrMap[attrName]]:
 			el.getAttribute(attrName)) || '';
 	},
