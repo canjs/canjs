@@ -1489,6 +1489,21 @@ steal('can/util','can/construct', function(can) {
 		 * @return {String} The joined string
 		 */
 		join : [].join,
+		
+		/**
+		 * @function reverse
+		 * 
+		 * `reverse()` method transposes the elements of the calling array object in place, 
+		 * mutating the array, and returning a reference to the array.
+		 * 
+		 * 	list = new can.Observe.List(["a","b","c"]);
+		 *      list.reverse() // -> ["c", "b", "a"]
+		 * 
+		 * [MDN reference](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/reverse)
+		 * 
+		 * @return {Array} reversed array
+		 */
+		reverse: [].reverse,
 
 		/**
 		 * @function slice

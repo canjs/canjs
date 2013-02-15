@@ -1283,6 +1283,7 @@ test("helper parameters don't convert functions", function() {
 test("computes as helper parameters don't get converted", function() {
 	can.Mustache.registerHelper('computeTest', function(no) {
 		equal(no(), 5, 'Got computed calue');
+		ok(no.isComputed, 'no is still a compute')
 	});
 
 	var renderer = can.view.mustache('{{computeTest test}}');
