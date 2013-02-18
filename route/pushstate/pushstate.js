@@ -34,7 +34,7 @@ steal('can/util', 'can/route', function(can) {
             _setup: function() {
                 // intercept routable links
                 can.$('body').on('click', 'a', function(e) {
-                	if($(this).attr('href') != '#') {
+                	if(!e.isDefaultPrevented()) {
 	                    // Fix for ie showing blank host, but blank host means current host.
 	                    if(!this.host) {
 	                      this.host = window.location.host;
