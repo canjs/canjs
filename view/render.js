@@ -223,7 +223,9 @@ can.extend(can.view, {
 		var binding = can.compute.binder(func, self, function(newVal, oldVal){
 			// call the update method we will define for each
 			// type of attribute
-			update(newVal, oldVal);
+			if (update) {
+				update(newVal, oldVal);
+			}
 		});
 		
 		// If we had no observes just return the value returned by func.
