@@ -11,7 +11,7 @@ steal('can/util', 'can/observe', function(can) {
 	// - parts - the attribute name of the delegate split in parts ['foo','*']
 	// - props - the split props of the event that happened ['foo','bar','0']
 	// - returns - the attribute to delegate too ('foo.bar'), or null if not a match 
-	var matches = function(parts, props){
+	var delegateMatches = function(parts, props){
 		//check props parts are the same or 
 		var len = parts.length,
 			i =0,
@@ -46,7 +46,7 @@ steal('can/util', 'can/observe', function(can) {
 	},
 		// gets a change event and tries to figure out which
 		// delegates to call
-		delegate = function(event, prop, how, newVal, oldVal){
+		delegateHandler = function(event, prop, how, newVal, oldVal){
 			// pre-split properties to save some regexp time
 			var props = prop.split("."),
 				delegates = (this._observe_delegates || []).slice(0),
@@ -82,7 +82,7 @@ steal('can/util', 'can/observe', function(can) {
 					attr = delegate.attrs[a];
 					
 					// check if it is a match
-					if(matchedAttr = matches(attr.parts, props)){
+					if(matchedAttr = delegateMatches(attr.parts, props)){
 						hasMatch = matchedAttr;
 					}
 					// if it has a value, make sure it's the right value
@@ -321,7 +321,7 @@ steal('can/util', 'can/observe', function(can) {
 				event: event
 			});
 			if(delegates.length === 1){
-				this.bind("change",delegate)
+				this.bind("change",delegateHandler)
 			}
 			return this;
 		},
@@ -361,12 +361,12 @@ steal('can/util', 'can/observe', function(can) {
 			}
 			if(!delegates.length){
 				//can.removeData(this, "_observe_delegates");
-				this.unbind("change",delegate)
+				this.unbind("change",delegateHandler)
 			}
 			return this;
 		}
 	});
 	// add helpers for testing .. 
-	can.Observe.prototype.delegate.matches = matches;
+	can.Observe.prototype.delegate.matches = delegateMatches;
 	return can.Observe;
 })
