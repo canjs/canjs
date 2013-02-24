@@ -52,7 +52,7 @@ steal('can/util/can.js',function(can){
 						df.resolve.apply(df, rp);
 					}
 				}).fail(function() {
-					df.reject(arguments);
+					df.reject((arguments.length === 1) ? arguments[0] : arguments);
 				});
 			});
 
