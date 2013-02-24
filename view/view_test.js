@@ -278,7 +278,7 @@
 
 		//equal(can.$('#test-dropdown')[0].outerHTML, can.$('#test-dropdown2')[0].outerHTML, 'Live bound select and non-live bound select the same');
 
-		
+
 	});
 
 	test('Live binding on number inputs', function(){
@@ -317,4 +317,43 @@
 		form.reset();
 		equal(form.children[0].value, 'testing', 'Textarea value set back to original live-bound value');
 	});
+
+	test("Deferred fails (#276)", function(){
+		var foo = new can.Deferred();
+		stop();
+		can.view.render("//can/view/test//deferred.ejs",foo)
+			.fail(function(error) {
+				equals(error.message, 'Deferred error');
+				start();
+			});
+
+		setTimeout(function(){
+			foo.reject({
+				message: 'Deferred error'
+			})
+		},100);
+	});
+
+	test("Object of deferreds fails (#276)", function() {
+		var foo = new can.Deferred(),
+			bar = new can.Deferred();
+
+		stop();
+		can.view.render("//can/view/test//deferreds.ejs",{
+			foo : typeof foo.promise == 'function' ? foo.promise() : foo,
+			bar : bar
+		}).fail(function(error){
+			equals(error.message, 'foo error');
+			start();
+		});
+
+		setTimeout(function(){
+			foo.reject({
+				message: 'foo error'
+			});
+		},100);
+
+		bar.resolve('Bar done');
+	});
+
 })();
