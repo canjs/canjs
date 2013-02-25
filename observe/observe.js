@@ -1143,14 +1143,14 @@ steal('can/util','can/construct', function(can) {
 			for ( i = 2; i < args.length; i++ ) {
 				var val = args[i];
 				if ( canMakeObserve(val) ) {
-					args[i] = hookupBubble(val, "*", this)
+					args[i] = hookupBubble(val, "*", this, this.constructor.Observe, this.constructor)
 				}
 			}
 			if ( howMany === undefined ) {
 				howMany = args[1] = this.length - index;
 			}
 			var removed = splice.apply(this, args);
-			can.Observe.startBatch()
+			can.Observe.startBatch();
 			if ( howMany > 0 ) {
 				this._triggerChange(""+index, "remove", undefined, removed);
 				unhookup(removed, this._cid);
