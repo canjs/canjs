@@ -278,8 +278,25 @@
 
 		//equal(can.$('#test-dropdown')[0].outerHTML, can.$('#test-dropdown2')[0].outerHTML, 'Live bound select and non-live bound select the same');
 
-		
+
 	});
+
+	test('Live binding on number inputs', function(){
+
+		var template = can.view.ejs('<input id="candy" type="number" value="<%== state.attr("number") %>" />');
+		var observe = new can.Observe({ number : 2 });
+		var frag = template({ state: observe });
+
+		can.append(can.$("#qunit-test-area"), frag);
+
+		var input = document.getElementById('candy');
+
+		equal(input.getAttribute('value'), 2, 'render workered');
+
+		observe.attr('number', 5);
+
+		equal(input.getAttribute('value'), 5, 'update workered');
+	})
 
 	test("Resetting a live-bound <textarea> changes its value to __!!__ (#223)", function() {
 		var template = can.view.ejs("<form><textarea><%= this.attr('test') %></textarea></form>"),
@@ -300,4 +317,43 @@
 		form.reset();
 		equal(form.children[0].value, 'testing', 'Textarea value set back to original live-bound value');
 	});
+
+	test("Deferred fails (#276)", function(){
+		var foo = new can.Deferred();
+		stop();
+		can.view.render("//can/view/test//deferred.ejs",foo)
+			.fail(function(error) {
+				equals(error.message, 'Deferred error');
+				start();
+			});
+
+		setTimeout(function(){
+			foo.reject({
+				message: 'Deferred error'
+			})
+		},100);
+	});
+
+	test("Object of deferreds fails (#276)", function() {
+		var foo = new can.Deferred(),
+			bar = new can.Deferred();
+
+		stop();
+		can.view.render("//can/view/test//deferreds.ejs",{
+			foo : typeof foo.promise == 'function' ? foo.promise() : foo,
+			bar : bar
+		}).fail(function(error){
+			equals(error.message, 'foo error');
+			start();
+		});
+
+		setTimeout(function(){
+			foo.reject({
+				message: 'foo error'
+			});
+		},100);
+
+		bar.resolve('Bar done');
+	});
+
 })();

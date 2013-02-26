@@ -226,6 +226,6 @@ var compareMethods = {
 	}
 }
 	
-return can;
+return can.Object;
 
 });

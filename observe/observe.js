@@ -1027,7 +1027,11 @@ steal('can/util','can/construct', function(can) {
 			this.length = 0;
 			can.cid(this, ".observe")
 			this._init = 1;
-			this.push.apply(this, can.makeArray(instances || []));
+			if( can.isDeferred(instances) ) {
+				this.replace(instances)
+			} else {
+				this.push.apply(this, can.makeArray(instances || []));
+			}
 			this.bind('change'+this._cid,can.proxy(this._changes,this));
 			can.extend(this, options);
 			delete this._init;
@@ -1139,14 +1143,14 @@ steal('can/util','can/construct', function(can) {
 			for ( i = 2; i < args.length; i++ ) {
 				var val = args[i];
 				if ( canMakeObserve(val) ) {
-					args[i] = hookupBubble(val, "*", this)
+					args[i] = hookupBubble(val, "*", this, this.constructor.Observe, this.constructor)
 				}
 			}
 			if ( howMany === undefined ) {
 				howMany = args[1] = this.length - index;
 			}
 			var removed = splice.apply(this, args);
-			can.Observe.startBatch()
+			can.Observe.startBatch();
 			if ( howMany > 0 ) {
 				this._triggerChange(""+index, "remove", undefined, removed);
 				unhookup(removed, this._cid);
@@ -1485,6 +1489,21 @@ steal('can/util','can/construct', function(can) {
 		 * @return {String} The joined string
 		 */
 		join : [].join,
+		
+		/**
+		 * @function reverse
+		 * 
+		 * `reverse()` method transposes the elements of the calling array object in place, 
+		 * mutating the array, and returning a reference to the array.
+		 * 
+		 * 	list = new can.Observe.List(["a","b","c"]);
+		 *      list.reverse() // -> ["c", "b", "a"]
+		 * 
+		 * [MDN reference](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/reverse)
+		 * 
+		 * @return {Array} reversed array
+		 */
+		reverse: [].reverse,
 
 		/**
 		 * @function slice

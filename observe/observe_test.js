@@ -421,6 +421,30 @@ test("instantiating can.Observe.List of correct type", function() {
 	equal(list[1].getName(), 'Another test', 'Pushed item gets converted as well');
 });
 
+test("can.Observe.List.prototype.splice converts objects (#253)", function() {
+	var Ob = can.Observe({
+		getAge : function() {
+			return this.attr('age') + 10;
+		}
+	});
+
+	var list = new Ob.List([ {
+		name: 'Tester',
+		age: 23
+	}, {
+		name: 'Tester 2',
+		age: 44
+	}]);
+
+	equal(list[0].getAge(), 33, 'Converted age');
+
+	list.splice(1, 1, {
+		name: 'Spliced',
+		age: 92
+	});
+
+	equal(list[1].getAge(), 102, 'Converted age of spliced');
+});
 
 test("removing an already missing attribute does not cause an event", function(){
 	var ob = new can.Observe();
@@ -622,5 +646,20 @@ test("IE8 error on list setup with Observe.List (#226)", function() {
 
 	deepEqual(list.attr(), otherList.attr(), 'Lists are the same');
 });
+
+test("initialize Observe.List with a deferred",function(){
+	stop()
+	var def = new can.Deferred();
+	var list = new can.Observe.List(def);
+	list.bind("add",function(ev, items, index){
+		same(items,["a","b"]);
+		equal(index, 0);
+		start();
+	});
+	setTimeout(function(){
+		def.resolve(["a","b"])
+	},10)
+})
+
 
 })();

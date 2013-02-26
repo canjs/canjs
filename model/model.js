@@ -43,7 +43,7 @@ steal('can/util','can/observe', function( can ) {
 			// If we get a string, handle it.
 			if ( typeof ajaxOb == "string" ) {
 				// If there's a space, it's probably the type.
-				var parts = ajaxOb.split(/\s/);
+				var parts = ajaxOb.split(/\s+/);
 				params.url = parts.pop();
 				if ( parts.length ) {
 					params.type = parts.pop();
