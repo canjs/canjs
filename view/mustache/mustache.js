@@ -783,6 +783,11 @@ function( can ){
 				// Check the context for the reference
 				value = contexts[i];
 
+        // Is the value a compute?
+        if(can.isFunction(value) && value.isComputed) {
+          value = value();
+        }
+
 				// Make sure the context isn't a failed object before diving into it.
 				if (value !== undefined) {
 					for (j = 0; j < namesLength; j++) {
