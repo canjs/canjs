@@ -963,6 +963,9 @@ function( can ){
 		 *      {{/if}}
 		 */
 		'if': function(expr, options){
+      if( can.isFunction(expr) && expr.isComputed ){
+        expr = expr();
+      }
 			if (!!expr) {
 				return options.fn(this);
 			}
@@ -983,6 +986,9 @@ function( can ){
 		 *      {{/unless}}
 		 */
 		'unless': function(expr, options){
+      if( can.isFunction(expr) && expr.isComputed ){
+        expr = expr();
+      }
 			if (!expr) {
 				return options.fn(this);
 			}
@@ -1001,6 +1007,9 @@ function( can ){
 		 *      {{/each}}
 		 */
 		'each': function(expr, options) {
+      if( can.isFunction(expr) && expr.isComputed ){
+        expr = expr();
+      }
 			if (!!expr && expr.length) {
 				var result = [];
 				for (var i = 0; i < expr.length; i++) {
@@ -1023,8 +1032,12 @@ function( can ){
 		 *      {{/with}}
 		 */
 		'with': function(expr, options){
+      var ctx = expr;
+      if( can.isFunction(expr) && expr.isComputed ){
+        expr = expr();
+      }
 			if (!!expr) {
-				return options.fn(expr);
+				return options.fn(ctx);
 			}
 		}
 		
