@@ -943,7 +943,57 @@ steal('can/util','can/observe', function( can ) {
 		 * after it has been created or updated.
 		 */
 		save: function( success, error ) {
-			return makeRequest(this, this.isNew() ? 'create' : 'update', success, error);
+			this._queuedRequests = this._queuedRequests || [];
+
+			var def = new can.Deferred,
+				self  = this,
+				queue = this._queuedRequests,
+				reqFn;
+
+			reqFn = (function(self, type, success, error){
+				// Function that performs actual request
+				return function(){
+					return makeRequest(self, type, success, error)
+				}
+			})(this, this.isNew() ? 'create' : 'update', function(){
+				// resolve deferred with results from the request
+				def.resolveWith(self, arguments);
+				// remove current deferred from the queue 
+				queue.splice(0, 1)
+				if(queue.length > 0){
+					// replace queued wrapper function with deferred
+					// returned from the makeRequest function so we 
+					// can access it's `abort` function
+					queue[0] = queue[0]();
+				}
+				
+			}, function(){
+				// reject deferred with results from the request
+				def.rejectWith(self, arguments);
+				// since we failed remove all pending requests from the queue
+				queue.splice(0);
+			})
+
+			// Add our fn to the queue
+			queue.push(reqFn);
+
+			// If there is only one request in the queue, run
+			// it immediately.
+			if(queue.length === 1){
+				// replace queued wrapper function with deferred
+				// returned from the makeRequest function so we 
+				// can access it's `abort` function
+				queue[0] = queue[0]();
+			}
+
+			def.abort = function(){
+				return queue[0].abort && queue[0].abort();
+			}
+			// deferred will be resolved with original success and
+			// error functions
+			def.then(success, error);
+
+			return def;
 		},
 		/**
 		 * Destroys the instance by calling 
