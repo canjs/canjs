@@ -1263,15 +1263,17 @@ test("Observe with array attributes", function() {
 	equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello again', 'Check updated message');
 })
 
-test('hookups `this` correctly', function(){
-	var milk = { from: "cows" };
-	var html = "<div <%= (el)-> can.append(can.$(el), this.from) %>></div>";
-	var compiled = new can.EJS({ text: html }).render(milk);
+test("hookup this correctly", function(){
+	var obj = { from: "cows" };
+	var html = "<span <%== (el) -> can.data(can.$(el), 'foo', this.from) %>>tea</span>";
+	var compiled = new can.EJS({ text: html }).render(obj);
 
 	var div = document.createElement('div');
 	div.appendChild(can.view.frag(compiled));
 
-	equal(div.getElementsByTagName('div')[0].innerHTML, 'cows', 'Check html for from');
-});
+	var span = div.getElementsByTagName('span')[0];
+
+	equals(can.data(can.$(span), 'foo'), obj.from, "object matches");
+})
 
 })();
