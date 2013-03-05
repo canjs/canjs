@@ -1,4 +1,4 @@
-steal('can/view', function(can){
+steal('can/view', 'can/construct/proxy', function(can){
 
 /**
  * Helper(s)
@@ -130,7 +130,7 @@ Scanner.prototype = {
 				var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
 					parts = content.match(quickFunc);
 
-				return "function(__){var " + parts[1] + "=can.$(__);" + parts[2] + "}";
+				return "can.proxy(function(__){var " + parts[1] + "=can.$(__);" + parts[2] + "}, this);";
 			}
 		}
 	],
