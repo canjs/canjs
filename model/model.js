@@ -67,8 +67,12 @@ steal('can/util','can/observe', function( can ) {
 			}, params ));
 		},
 		makeRequest = function( self, type, success, error, method ) {
+			// if we pass an array as `self` it it means we are coming from
+			// the queued request, and we're passing already serialized data
+			// self's signature will be: [self, serializedData]
+			self = can.isArray(self) ? self[0] : self;
 			var deferred,
-				args = [self.serialize()],
+				args = [can.isArray(self) ? self[1] : self.serialize()],
 				// The model.
 				model = self.constructor,
 				jqXHR;
@@ -943,23 +947,25 @@ steal('can/util','can/observe', function( can ) {
 		 * after it has been created or updated.
 		 */
 		save: function( success, error ) {
-			this._queuedRequests = this._queuedRequests || [];
+			this._requestQueue = this._requestQueue || [];
 
-			var def = new can.Deferred,
+			var def   = new can.Deferred,
 				self  = this,
-				queue = this._queuedRequests,
-				reqFn;
+				queue = this._requestQueue,
+				reqFn, index;
 
 			reqFn = (function(self, type, success, error){
 				// Function that performs actual request
 				return function(){
 					return makeRequest(self, type, success, error)
 				}
+				// we shouldn't pass this, instead we need to pass something like
+				// [this, this.serialize()]
 			})(this, this.isNew() ? 'create' : 'update', function(){
 				// resolve deferred with results from the request
 				def.resolveWith(self, arguments);
 				// remove current deferred from the queue 
-				queue.splice(0, 1)
+				queue.splice(0, 1);
 				if(queue.length > 0){
 					// replace queued wrapper function with deferred
 					// returned from the makeRequest function so we 
@@ -975,7 +981,7 @@ steal('can/util','can/observe', function( can ) {
 			})
 
 			// Add our fn to the queue
-			queue.push(reqFn);
+			index = queue.push(reqFn) - 1;
 
 			// If there is only one request in the queue, run
 			// it immediately.
@@ -987,7 +993,15 @@ steal('can/util','can/observe', function( can ) {
 			}
 
 			def.abort = function(){
-				return queue[0].abort && queue[0].abort();
+				var abort;
+				// check if this request is running, if it's not
+				// just remove it from the queue
+				// 
+				// also all subsequent requests should be removed too
+				abort = queue[index].abort && queue[index].abort();
+				// remove aborted request and any requests after it
+				queue.splice(index);
+				return abort;
 			}
 			// deferred will be resolved with original success and
 			// error functions
