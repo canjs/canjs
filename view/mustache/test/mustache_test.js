@@ -1292,6 +1292,54 @@ test("computes as helper parameters don't get converted", function() {
 	});
 })
 
+test("computes are supported in default helpers", function() {
+
+  var staches = {
+    "if" : "{{#if test}}if{{else}}else{{/if}}"
+    , "not_if"  :"not_{{^if test}}not{{/if}}if"
+    , "each" : "{{#each test}}{{.}}{{/each}}"
+    , "with" : "wit{{#with test}}<span>{{3}}</span>{{/with}}"
+  };
+  
+    can.view.mustache("count","There are {{ length }} todos")
+  var div = document.createElement('div');
+  div.appendChild( can.view("count", new can.Observe.List([{},{}])) );
+  ok(/There are 2 todos/.test(div.innerHTML), "got all text")
+
+  can.each(Object.keys(staches), function(result) {
+    var renderer = can.view.mustache("compute_" + result, staches[result]);
+    var data = ["e", "a", "c", "h"];
+    var div = document.createElement("div");
+    var actual = can.view("compute_" + result, { test : can.compute(data) });
+    div.appendChild(actual);
+    can.each(div.getElementsByTagName("span"), function(span) {
+      div.replaceChild(span.firstChild, span)
+    });
+    actual = div.innerHTML;
+
+    equal(actual, result, "can.compute resolved for helper " + result);
+  });
+
+  var inv_staches = {
+    "else" : "{{#if test}}if{{else}}else{{/if}}"
+    , "not_not_if" : "not_{{^if test}}not_{{/if}}if"
+    , "not_each" : "not_{{#each test}}_{{/each}}each"
+    , "not_with" : "not{{#with test}}_{{/with}}_with"
+  };
+
+  can.each(Object.keys(inv_staches), function(result) {
+    var renderer = can.view.mustache("compute_" + result, inv_staches[result]);
+    var data = null;
+    var div = document.createElement("div");
+    var actual = can.view("compute_" + result, { test : can.compute(data) });
+    div.appendChild(actual);
+    actual = div.innerHTML;
+
+    equal(actual, result, "can.compute resolved for helper " + result);
+  });
+
+});
+
 test("Rendering models in tables produces different results than an equivalent observe (#202)", 2, function() {
 	var renderer = can.view.mustache('<table>{{#stuff}}<tbody>{{#rows}}<tr></tr>{{/rows}}</tbody>{{/stuff}}</table>');
 	var div = document.createElement('div');
