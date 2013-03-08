@@ -162,7 +162,7 @@ steal('can/util',function(can) {
 			 * @param {Object} data The data to be used to look for properties.  If it's an array, multiple
 			 * objects can be used.
 			 * @param {Boolean} [remove] if a match is found, remove the property from the object
-			 * @return The converted string or `null` if any data to render are `undefined`
+			 * @return {String} The converted string or `null` if any data to render are `undefined`
 			 */
 			sub: function( str, data, remove ) {
 				var obs = [];
