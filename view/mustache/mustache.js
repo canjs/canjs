@@ -643,34 +643,34 @@ function( can ){
 		}
 		
 		// Otherwise interpolate like normal.
-		if (valid) {
-			switch (mode) {
-				// Truthy section.
-				case '#':
-					// Iterate over arrays
-					if (isArrayLike(name)) {
-						for (i = 0; i < name.length; i++) {
-							result.push(options.fn.call(name[i] || {}, context) || '');
-						}
-						return result.join('');
+		switch (true) {
+			// Truthy section.
+			case mode === '#' && valid:
+			case mode === '^' && !valid:
+				// Iterate over arrays
+				if (isArrayLike(name)) {
+					for (i = 0; i < name.length; i++) {
+						result.push(options.fn.call(name[i] || {}, context) || '');
 					}
-					// Normal case.
-					else {
-						return options.fn.call(name || {}, context) || '';
-					}
-					break;
-				// Falsey section.
-				case '^':
-					return options.inverse.call(name || {}, context) || '';
-					break;
-				default:
-					// Add + '' to convert things like numbers to strings.
-					// This can cause issues if you are trying to
-					// eval on the length but this is the more
-					// common case.
-					return '' + (name !== undefined ? name : '');
-					break;
-			}
+					return result.join('');
+				}
+				// Normal case.
+				else {
+					return options.fn.call(name || {}, context) || '';
+				}
+				break;
+			// Falsey section.
+			case mode === '#' && !valid:
+			case mode === '^' && valid:
+				return options.inverse.call(name || {}, context) || '';
+				break;
+			case valid:
+				// Add + '' to convert things like numbers to strings.
+				// This can cause issues if you are trying to
+				// eval on the length but this is the more
+				// common case.
+				return '' + (name !== undefined ? name : '');
+				break;
 		}
 		
 		return '';
@@ -745,10 +745,10 @@ function( can ){
 				value = contexts[i];
 
 				// Make sure the context isn't a failed object before diving into it.
-				if (value !== undefined) {
+				if (typeof value !== 'undefined' && value !== null) {
 					for (j = 0; j < namesLength; j++) {
 						// Keep running up the tree while there are matches.
-						if (typeof value[names[j]] != 'undefined') {
+						if (typeof value[names[j]] !== 'undefined' && value[names[j]] !== null) {
 							lastValue = value;
 							value = value[name = names[j]];
 						}
@@ -791,7 +791,7 @@ function( can ){
 			return defaultObserve.attr(defaultObserveName);
 		}
 		// Support helper-like functions as anonymous helpers
-		if (obj !== undefined && can.isFunction(obj[ref])) {
+		if (typeof obj !== 'undefined' && obj !== null && can.isFunction(obj[ref])) {
 			return obj[ref];
 		}
 		// Support helpers without arguments, but only if there wasn't a matching data reference.
