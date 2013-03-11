@@ -31,10 +31,121 @@ test("queued requests will not overwrite attrs", function(){
 	stop();
 	personD.then(function(person){
 		start()
-		equals(person.name, "Brian", "attrs were not overwritten");
+		equals(person.name, "Brian", "attrs were not overwritten with the data from the server");
 		can.fixture.delay = delay;
 		
 	});
+})
+
+test("error will clean up the queue", 2, function(){
+	can.Model("User",{
+		create : "POST /users",
+		update : "PUT /users/{id}"
+	},{});
+
+	can.fixture('POST /users', function(req){
+		return {
+			id : 1
+		}
+	})
+
+	can.fixture('PUT /users/{id}', function(req, respondWith){
+		respondWith(500)
+	})
+
+	var u = new User({name : "Goku"});
+
+	stop();
+
+	u.save()
+	var err = u.save();
+	u.save();
+	u.save();
+	u.save();
+
+	err.fail(function(){
+		start();
+		equals(u._requestQueue.attr('length'), 4, "Four requests are in the queue");
+		stop();
+		u._requestQueue.bind('change', function(){
+			start();
+			equals(u._requestQueue.attr('length'), 0, "Request queue was emptied");
+		});
+	})
+})
+
+test("backup works as expected", function(){
+	can.Model("User",{
+		create : "POST /users",
+		update : "PUT /users/{id}"
+	},{});
+
+	can.fixture('POST /users', function(req){
+		return {
+			id : 1,
+			name : "Goku"
+		}
+	})
+
+	can.fixture('PUT /users/{id}', function(req, respondWith){
+		respondWith(500)
+	})
+
+	var u = new User({name : "Goku"});
+
+	stop();
+
+	var save = u.save()
+
+	u.attr('name', 'Krillin');
+
+	save.then(function(){
+		start();
+		equal(u.attr('name'), 'Krillin', "Name is not overwritten when save is successful");
+		stop();
+	})
+
+	var err = u.save();
+
+	err.fail(function(){
+		u.restore(true);
+		start();
+		equal(u.attr('name'), 'Goku', "Name was restored to the last value successfuly returned from the server");
+	})
+})
+
+test("abort will remove requests made after the aborted request", function(){
+	can.Model("User",{
+		create : "POST /users",
+		update : "PUT /users/{id}"
+	},{});
+
+	can.fixture('POST /users', function(req){
+		return {
+			id : 1,
+			name : "Goku"
+		}
+	})
+
+	can.fixture('PUT /users/{id}', function(req, respondWith){
+		return req.data;
+	})
+
+	var u = new User({name : "Goku"});
+
+	u.save();
+	u.save();
+
+	var abort = u.save();
+	u.save();
+	u.save();
+
+	equals(u._requestQueue.attr('length'), 5);
+
+	abort.abort();
+
+	equals(u._requestQueue.attr('length'), 2);
+
 })
 
 })();
