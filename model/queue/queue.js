@@ -16,7 +16,6 @@ steal('can/util', 'can/model', 'can/observe/backup', function(can){
 			return newAttrs;
 		},
 		queueRequests = function( success, error, method, callback) {
-			this._requestQueue = this._requestQueue || [];
 			this._changedAttrs = this._changedAttrs || [];
 
 			var def          = new can.Deferred,
@@ -86,7 +85,8 @@ steal('can/util', 'can/model', 'can/observe/backup', function(can){
 			return def;
 		},
 		_changes  = can.Model.prototype._changes,
-		destroyFn = can.Model.prototype.destroy;
+		destroyFn = can.Model.prototype.destroy,
+		setupFn   = can.Model.prototype.setup;
 
 	can.each(["created", "updated", "destroyed"], function(fn){
 		var prototypeFn = can.Model.prototype[fn];
@@ -102,13 +102,17 @@ steal('can/util', 'can/model', 'can/observe/backup', function(can){
 	})
 
 	can.extend(can.Model.prototype, {
+		setup: function(){
+			setupFn.apply(this, arguments);
+			this._requestQueue = new can.Observe.List;
+		},
 		_changes: function(ev, attr, how,newVal, oldVal){
 			// record changes if there is a request running
 			this._changedAttrs && this._changedAttrs.push(attr);
 			_changes.apply(this, arguments);
 		},
 		hasQueuedRequests : function(){
-			return this._requestQueue && this._requestQueue.length > 1;
+			return this._requestQueue.attr('length') > 1;
 		},
 		save : function(){
 			return queueRequests.apply(this, arguments);
