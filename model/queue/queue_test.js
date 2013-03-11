@@ -148,4 +148,33 @@ test("abort will remove requests made after the aborted request", function(){
 
 })
 
+test("id will be set correctly, although update data is serialized before create is done", function(){
+	var delay = can.fixture.delay;
+	can.fixture.delay = 1000;
+	can.Model("Hero",{
+		create : "POST /superheroes",
+		update : "PUT /superheroes/{id}"
+	},{});
+
+	can.fixture('POST /superheroes', function(req){
+		return {
+			id : "FOOBARBAZ"
+		}
+	})
+
+	can.fixture('PUT /superheroes/{id}', function(req, respondWith){
+		start();
+		equal(req.data.id, "FOOBARBAZ", "Correct id is set");
+		can.fixture.delay = delay;
+		return req.data;
+	})
+
+	var u = new Hero({name : "Goku"});
+	u.save();
+	u.save();
+	stop();
+
+
+})
+
 })();
