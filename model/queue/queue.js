@@ -104,6 +104,9 @@ steal('can/util', 'can/model', function(can){
 			this._changedAttrs && this._changedAttrs.push(attr);
 			_changes.apply(this, arguments);
 		},
+		hasQueuedRequests : function(){
+			return this._requestQueue && this._requestQueue.length > 1;
+		},
 		save : function(){
 			queueRequests.apply(this, arguments);
 		},

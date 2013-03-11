@@ -31,10 +31,11 @@
 
 				can.fixture.delay = 1000;
 
-				can.fixture('POST /people', function(req){
-					var attrs = req.data;
-					attrs.id  = ++counter;
-					attrs.foo = "bar";
+				can.fixture('/people', function(req){
+					var attrs   = req.data;
+					attrs.id    = ++counter;
+					attrs.foo   = "bar";
+					attrs.extra = "EXTRA!";
 					return attrs;
 				})
 
@@ -45,11 +46,11 @@
 				}, {})
 				p = new Person({name: "Mihael", socialnetworks : {twitter : 'retro'}});
 				p.save(function(){
-					console.log(p.attr())
+					console.log("Changed arguments are preserved after save call returns", p.attr())
 				});
 				p.attr('socialnetworks.twitter', 'mihaelkonjevic');
 				p.save(function(){
-					console.log(p.attr())
+					console.log("Changed arguments are preserved after save call returns", p.attr())
 				});
 				p.attr('foo', 'baz');
 			})
