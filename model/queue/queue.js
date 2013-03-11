@@ -14,7 +14,7 @@ steal('can/util', 'can/model', function(can){
 			}
 			return attrs;
 		},
-		queueRequests = function( success, error ) {
+		queueRequests = function( success, error, method, callback) {
 			this._requestQueue = this._requestQueue || [];
 			this._changedAttrs = this._changedAttrs || [];
 
@@ -28,11 +28,11 @@ steal('can/util', 'can/model', function(can){
 			reqFn = (function(self, type, success, error){
 				// Function that performs actual request
 				return function(){
-					return self.constructor._makeRequest([self, attrs], type, success, error)
+					return self.constructor._makeRequest([self, attrs], type, success, error, callback)
 				}
 				// we shouldn't pass this, instead we need to pass something like
 				// [this, this.serialize()]
-			})(this, this.isNew() ? 'create' : 'update', function(){
+			})(this, method || (this.isNew() ? 'create' : 'update'), function(){
 				// resolve deferred with results from the request
 				def.resolveWith(self, arguments);
 				// remove current deferred from the queue 
@@ -84,7 +84,8 @@ steal('can/util', 'can/model', function(can){
 
 			return def;
 		},
-		_changes  = can.Model.prototype._changes;
+		_changes  = can.Model.prototype._changes,
+		destroyFn = can.Model.prototype.destroy;
 
 	can.each(["created", "updated", "destroyed"], function(fn){
 		var prototypeFn = can.Model.prototype[fn];
@@ -108,10 +109,13 @@ steal('can/util', 'can/model', function(can){
 			return this._requestQueue && this._requestQueue.length > 1;
 		},
 		save : function(){
-			queueRequests.apply(this, arguments);
+			return queueRequests.apply(this, arguments);
 		},
-		destroy : function(){
-			queueRequests.apply(this, arguments);
+		destroy : function(success, error){
+			if(this.isNew()){
+				return destroyFn.call(this, success, error);
+			}
+			return queueRequests.call(this, success, error, 'destroy', 'destroyed');
 		}
 	})
 })
