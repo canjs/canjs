@@ -1,10 +1,11 @@
-steal('can/util', 'can/model', function(can){
+steal('can/util', 'can/model', 'can/observe/backup', function(can){
 
 	var cleanAttrs = function(changedAttrs, attrs){
-			var attr, current, path;
+			var newAttrs = can.extend(true, {}, attrs),
+				attr, current, path;
 			if(changedAttrs){
 				for(var i = 0; i < changedAttrs.length; i++){
-					current = attrs;
+					current = newAttrs;
 					path    = changedAttrs[i].split('.');
 					while(path.length > 1){
 						current = current && current[path.shift()];
@@ -12,7 +13,7 @@ steal('can/util', 'can/model', function(can){
 					current && delete current[path.shift()];
 				}
 			}
-			return attrs;
+			return newAttrs;
 		},
 		queueRequests = function( success, error, method, callback) {
 			this._requestQueue = this._requestQueue || [];
@@ -93,6 +94,7 @@ steal('can/util', 'can/model', function(can){
 		can.Model.prototype[fn] = function(attrs){
 			if(attrs && typeof attrs == 'object'){
 				attrs = attrs.attr ? attrs.attr() : attrs;
+				this._backupStore = attrs;
 				attrs = cleanAttrs(this._changedAttrs || [], attrs);
 			}
 			prototypeFn.call(this, attrs);
