@@ -64,6 +64,10 @@ Indentation with tabs, not spaces.
 	if(foo){
 
 	}
+	
+Spaces after commas.  For example:
+
+	myfn = function(foo, bar, moo){ ... }
 
 ### Assignments
 
