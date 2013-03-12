@@ -90,7 +90,10 @@ steal('can/util','can/construct', function(can) {
 		},
 		bind = $method('addEvent'),
 		unbind = $method('removeEvent'),
-		attrParts = function(attr){
+		attrParts = function(attr, keepKey) {
+			if(keepKey) {
+				return [attr];
+			}
 			return can.isArray(attr) ? attr : (""+attr).split(".");
 		},
 		// Which batch of events this is for -- might not want to send multiple
@@ -579,6 +582,11 @@ steal('can/util','can/construct', function(can) {
 		},
 		// Reads a property from the `object`.
 		_get: function( attr ) {
+			var value = typeof attr === 'string' && !!~attr.indexOf('.') && this.__get(attr);
+			if(value) {
+				return value;
+			}
+
 			// break up the attr (`"foo.bar"`) into `["foo","bar"]`
 			var parts = attrParts(attr),
 				// get the value of the first attr name (`"foo"`)
@@ -603,9 +611,9 @@ steal('can/util','can/construct', function(can) {
 		// Sets `attr` prop as value on this object where.
 		// `attr` - Is a string of properties or an array  of property values.
 		// `value` - The raw value to set.
-		_set: function( attr, value ) {
+		_set: function( attr, value, keepKey) {
 			// Convert `attr` to attr parts (if it isn't already).
-			var parts = attrParts(attr),
+			var parts = attrParts(attr, keepKey),
 				// The immediate prop we are setting.
 				prop = parts.shift(),
 				// The current value.
@@ -844,7 +852,7 @@ steal('can/util','can/construct', function(can) {
 			// Add remaining props.
 			for ( var prop in props ) {
 				newVal = props[prop];
-				this._set(prop, newVal)
+				this._set(prop, newVal, true)
 			}
 			Observe.stopBatch()
 			return this;

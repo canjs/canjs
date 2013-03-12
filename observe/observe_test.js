@@ -659,7 +659,29 @@ test("initialize Observe.List with a deferred",function(){
 	setTimeout(function(){
 		def.resolve(["a","b"])
 	},10)
-})
+});
 
+test("dot separated keys (#257, #296)", function() {
+	var ob = new can.Observe({
+		'test.value': 'testing',
+		other: {
+			test: 'value'
+		}
+	});
+
+	equal(ob['test.value'], 'testing', 'Set value with dot separated key properly');
+	equal(ob.attr('test.value'), 'testing', 'Could retrieve value with .attr');
+	equal(ob.attr('other.test'), 'value', 'Still getting dot separated value');
+
+	ob.attr({
+		'other.bla': 'othervalue'
+	});
+	equal(ob['other.bla'], 'othervalue', 'Key is not split');
+	equal(ob.attr('other.bla'), 'othervalue', 'Could retrieve value with .attr');
+
+	ob.attr('other.stuff', 'thinger');
+	equal(ob.attr('other.stuff'), 'thinger', 'Set dot separated value');
+	deepEqual(ob.attr('other').serialize(), { test: 'value', stuff: 'thinger' }, 'Object set properly');
+});
 
 })();
