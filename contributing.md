@@ -106,7 +106,7 @@ For example:
 	var foo = [];
 	if(!foo.length){ ... }
 
- ###  Quotations
+###  Quotes
 
 Use double quotes.
 
