@@ -67,8 +67,18 @@ steal('can/util','can/observe', function( can ) {
 			}, params ));
 		},
 		makeRequest = function( self, type, success, error, method ) {
+			var args;
+			// if we pass an array as `self` it it means we are coming from
+			// the queued request, and we're passing already serialized data
+			// self's signature will be: [self, serializedData]
+			if(can.isArray(self)){
+				args = self[1];
+				self = self[0];
+			} else {
+				args = self.serialize();
+			}
+			args = [args];
 			var deferred,
-				args = [self.serialize()],
 				// The model.
 				model = self.constructor,
 				jqXHR;
@@ -626,6 +636,7 @@ steal('can/util','can/observe', function( can ) {
 			this._url = this._shortName+"/{"+this.id+"}"
 		},
 		_ajax : ajaxMaker,
+		_makeRequest : makeRequest,
 		_clean : function(){
 			this._reqs--;
 			if(!this._reqs){

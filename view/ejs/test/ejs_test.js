@@ -1274,6 +1274,26 @@ test("hookup this correctly", function(){
 	var span = div.getElementsByTagName('span')[0];
 
 	equals(can.data(can.$(span), 'foo'), obj.from, "object matches");
-})
+});
+
+//Issue 271
+test('live binding with html comment', function(){
+	var text = '<table><tr><th>Todo</th></tr><!-- do not bother with me -->' +
+			'<% todos.each(function(todo){ %><tr><td><%= todo.name %></td></tr><% }) %></table>',
+		Todos = new can.Observe.List([
+			{id: 1, name: 'Dishes'},
+		]),
+		compiled = new can.EJS({text: text}).render({todos: Todos}),
+		div = document.createElement('div');
+
+	div.appendChild(can.view.frag(compiled));
+	equals(div.getElementsByTagName('table')[0].getElementsByTagName('td').length, 1, '1 item in list');
+
+	Todos.push({id: 2, name: 'Laundry'});
+	equals(div.getElementsByTagName('table')[0].getElementsByTagName('td').length, 2, '2 items in list');
+
+	Todos.splice(0, 2);
+	equals(div.getElementsByTagName('table')[0].getElementsByTagName('td').length, 0, '0 items in list');
+});
 
 })();

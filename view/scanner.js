@@ -258,7 +258,7 @@ Scanner.prototype = {
 				case '>':
 					htmlTag = 0;
 					// content.substr(-1) doesn't work in IE7/8
-					var emptyElement = content.substr(content.length-1) == "/";
+					var emptyElement = content.substr(content.length-1) == "/" || content.substr(content.length-2) == "--";
 					// if there was a magic tag
 					// or it's an element that has text content between its tags, 
 					// but content is not other tags add a hookup
