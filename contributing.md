@@ -106,9 +106,9 @@ For example:
 	var foo = [];
 	if(!foo.length){ ... }
 
- ###  Quotes
+ ###  Quotations
 
-jQuery uses double quotes.
+Use double quotes.
 
 	var double = "I am wrapped in double quotes";
 
