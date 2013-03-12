@@ -92,7 +92,7 @@ steal('can/util','can/construct', function(can) {
 		unbind = $method('removeEvent'),
 		attrParts = function(attr, keepKey) {
 			if(keepKey) {
-				return can.makeArray(attr);
+				return [attr];
 			}
 			return can.isArray(attr) ? attr : (""+attr).split(".");
 		},
