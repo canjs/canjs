@@ -140,4 +140,6 @@ steal('can/util', 'can/model', 'can/observe/backup', function(can){
 			return queueRequests.call(this, success, error, 'destroy', 'destroyed');
 		}
 	})
+
+	return can;
 })
