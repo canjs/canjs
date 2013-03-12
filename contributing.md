@@ -90,7 +90,7 @@ Strict equality checks `===` should be used in favor of `==`. The only exception
 	if(bar == "can"){ ... }
 
 	// Good
-	if(bar ==== "can"){ ... }
+	if(bar === "can"){ ... }
 
 If the statement is a truthey or falsey, use implied operators.  Falseys are when variables return `false`, `undefined`, `null`, or `0`.  Trutheys are when variables return `true`, `1`, or anything defined.
 
