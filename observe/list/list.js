@@ -71,7 +71,7 @@ steal('can/util', 'can/observe', 'can/observe/compute', function(can) {
 					mapped.splice(index, 1, val);
 				});
 
-				mapped.push(compute());
+				mapped.splice(index, 0, compute());
 			}
 
 			this.forEach(generator);
