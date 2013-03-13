@@ -15,7 +15,7 @@ rich web applications easy. Use it because it’s:
 Go to [http://canjs.us/](http://canjs.us/) for docs, downloads, tests, demos, and more.
 
 ### Support / Contributing
-Before you make an issue, please read our [Contributing](contributing) guide.
+Before you make an issue, please read our [Contributing](CONTRIBUTNIG) guide.
 
 You can find the core team in [#canjs on irc.freenode.net](irc://irc.freenode.net/#canjs).
 
