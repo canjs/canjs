@@ -41,7 +41,7 @@ steal('can/util', function(can) {
 		// Calls `callback(newVal, oldVal)` everytime an observed property
 		// called within `getterSetter` is changed and creates a new result of `getterSetter`.
 		// Also returns an object that can teardown all event handlers.
-		computeBinder = function(getterSetter, context, callback){
+		computeBinder = function(getterSetter, context, callback, computeState){
 			// track what we are observing
 			var observing = {},
 				// a flag indicating if this observe/attr pair is already bound
@@ -63,6 +63,11 @@ steal('can/util', function(can) {
 			
 			// when a property value is changed
 			var onchanged = function(ev){
+				// If the compute is no longer bound (because the same change event led to an unbind)
+				// then do not call getValueAndBind, or we will leak bindings.
+				if ( computeState && !computeState.bound ) {
+					return;
+				}
 				if(ev.batchNum === undefined || ev.batchNum !== batchNum) {
 					// store the old value
 					var oldValue = data.value,
@@ -354,6 +359,7 @@ steal('can/util', function(can) {
 		computed.isComputed = true;
 		
 		can.cid(computed,"compute")
+		var computeState = { bound: false };
 		/**
 		 * @function bind
 		 * `compute.bind("change", handler(event, newVal, oldVal))`
@@ -361,10 +367,11 @@ steal('can/util', function(can) {
 		computed.bind = function(ev, handler){
 			can.addEvent.apply(computed, arguments);
 			if( bindings === 0 && canbind){
+				computeState.bound = true;
 				// setup live-binding
 				computedData = computeBinder(getterSetter, context || this, function(newValue, oldValue){
 					can.Observe.triggerBatch(computed, "change",[newValue, oldValue])
-				});
+				}, computeState);
 			}
 			bindings++;
 		}
@@ -377,6 +384,7 @@ steal('can/util', function(can) {
 			bindings--;
 			if( bindings === 0 && canbind){
 				computedData.teardown();
+				computeState.bound = false;
 			}
 			
 		};
