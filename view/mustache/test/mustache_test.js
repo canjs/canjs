@@ -1636,4 +1636,33 @@ test("avoid global helpers",function() {
 	equal(div2.innerHTML,"Ajax rules");
 });
 
+test("HTML comment with helper", function(){
+	var text = ["<ul>",
+				"{{#todos}}",
+				"<li {{data 'todo'}}>",
+				"<!-- html comment #1 -->",
+				"{{name}}",
+				"<!-- html comment #2 -->",
+				"</li>",
+				"{{/todos}}",
+				"</ul>"],
+		Todos = new can.Observe.List([
+			{id: 1, name: "Dishes"}
+		]),
+		compiled = new can.Mustache({text: text.join("\n")}).render({todos: Todos}),
+		div = document.createElement("div")
+
+	div.appendChild(can.view.frag(compiled));
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 1, "1 item in list");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
+
+	Todos.push({id: 2, name: "Laundry"});
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 2, "2 items in list");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[1].childNodes.length, 7, "7 nodes in item #2");
+
+	Todos.splice(0, 2);
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
+})
+
 });
