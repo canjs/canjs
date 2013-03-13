@@ -15,13 +15,13 @@ rich web applications easy. Use it because it’s:
 Go to [http://canjs.us/](http://canjs.us/) for docs, downloads, tests, demos, and more.
 
 ### Support / Contributing
-Before you make an issue, please read our [Contributing](CONTRIBUTNIG) guide.
+Before you make an issue, please read our [Contributing](contributing.md) guide.
 
 You can find the core team in [#canjs on irc.freenode.net](irc://irc.freenode.net/#canjs).
 
 ### Release History
-See the [Changelog](changelog).
+See the [Changelog](changelog.md).
 
 ### License
-MIT License, see [License](license).
+MIT License, see [License](license.md).
 
