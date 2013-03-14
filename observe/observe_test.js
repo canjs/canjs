@@ -523,27 +523,29 @@ test("startBatch and stopBatch and changed event", 5, function(){
 	
 });
 
-test("startBatch callback", 5, function(){
+test("startBatch callback", 4, function(){
 	
-	var ob = new can.Observe({game: {name: "Legend of Zelda"}, hearts: 15}),
+	var ob = new can.Observe({
+			game: {
+				name: "Legend of Zelda"
+			}, 
+			hearts: 15
+		}),
 		callbackCalled = false;
 	
 	ob.bind("change", function(){
-		equals(callbackCalled, false, 'callback not called yet');
+		equals(callbackCalled, false, 'startBatch callback not called yet');
 	});
 
 	can.Observe.startBatch(function(){
-		ok(true, "batch callback called");
+		ok(true, "startBatch callback called");
 		callbackCalled = true;
 	});
 	
-	ob.attr('hearts',16);
-
-	equals(callbackCalled, false, 'callback not called yet');
-
+	ob.attr('hearts', 16);
+	equals(callbackCalled, false, 'startBatch callback not called yet');
 	can.Observe.stopBatch();
-	
-	equals(callbackCalled, true, 'callback called');
+	equals(callbackCalled, true, 'startBatch callback called');
 });
 
 test("nested observe attr", function() {
