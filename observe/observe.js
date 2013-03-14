@@ -1382,8 +1382,9 @@ steal('can/util','can/construct', function(can) {
 			
 			// Call the original method.
 			res = orig.apply(this, args);
-			
-			if ( (this.sort && !this.comparator) || args.length ) {
+
+			if ( !this.comparator || args.length ) {
+
 				this._triggerChange(""+len, "add", args, undefined);
 			}
 						
