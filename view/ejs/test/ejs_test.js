@@ -1312,4 +1312,33 @@ test("HTML comment with element callback", function(){
 	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
 })
 
+// https://github.com/bitovi/canjs/issues/153
+test("Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node", function() {
+	var renderer = can.view.ejs('issue-153-no-dom', '<% can.each(todos, function(todo) { %><span><%= todo.attr("name") %></span><% }) %>'),
+		renderer2 = can.view.ejs('issue-153-dom', '<% can.each(todos, function(todo) { %><%= todo.attr("name") %><% }) %>'),
+		todos = [ new can.Observe({id: 1, name: 'Dishes'}), new can.Observe({id: 2, name: 'Forks'}) ],
+		data = { 
+			todos: new can.Observe.List(todos)
+		},
+		arr = {
+			todos: todos
+		},
+		div = document.createElement('div');
+		
+	div.appendChild(can.view('issue-153-no-dom', arr));
+	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'Array item rendered with DOM container');
+	div.innerHTML = '';
+	div.appendChild(can.view('issue-153-no-dom', data));
+	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'List item rendered with DOM container');
+	div.innerHTML = '';
+	div.appendChild(can.view('issue-153-dom', arr));
+	equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
+	div.innerHTML = '';
+	div.appendChild(can.view('issue-153-dom', data));
+	equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
+	data.todos[1].attr('name', 'Glasses');
+	data.todos.push(new can.Observe({ id: 3, name: 'Knives' }));
+	equal(div.innerHTML, "DishesGlassesKnives", 'New list item rendered without DOM container');
+});
+
 })();
