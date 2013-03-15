@@ -288,5 +288,48 @@ test("compute of computes", function(){
 })
 
 
+test("compute doesn't rebind and leak with 0 bindings", function() {
+	var state = new can.Observe({
+		foo: "bar"
+	});
+	var computedA = 0, computedB = 0;
+	var computeA = can.compute(function() {
+		computedA++;
+		return state.attr("foo") === "bar";
+	});
+	var computeB = can.compute(function() {
+		computedB++;
+		return state.attr("foo") === "bar" || 15;
+	});
 
+	function aChange(ev, newVal) {
+		if(newVal) {
+			computeB.bind("change.computeA", function() {
+				// noop
+			});
+		} else {
+			computeB.unbind("change.computeA");
+		}
+	}
+
+	computeA.bind("change", aChange);
+	aChange(null, computeA());
+
+	equal(computedA, 1, "binding A computes the value");
+	equal(computedB, 1, "A=true, so B is bound, computing the value");
+
+	state.attr("foo", "baz");
+	equal(computedA, 2, "A recomputed and unbound B");
+	equal(computedB, 1, "B was unbound, so not recomputed");
+
+	state.attr("foo", "bar");
+	equal(computedA, 3, "A recomputed => true");
+	equal(computedB, 2, "A=true so B is rebound and recomputed");
+
+	computeA.unbind("change", aChange);
+	computeB.unbind("change.computeA");
+	state.attr("foo", "baz");
+	equal(computedA, 3, "unbound, so didn't recompute A");
+	equal(computedB, 2, "unbound, so didn't recompute B");
+});
 })();
