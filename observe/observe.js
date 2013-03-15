@@ -234,7 +234,7 @@ steal('can/util','can/construct', function(can) {
 					can.trigger.apply(can, args);
 				});
 				can.each(callbacks, function( cb ) {
-					cb;
+					cb();
 				});
 			}
 		},
