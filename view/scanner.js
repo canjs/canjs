@@ -272,6 +272,7 @@ Scanner.prototype = {
 							put(content, ",can.view.pending(),\">\"");
 						}
 						content = '';
+						magicInTag = 0;
 					} else {
 						content += token;
 					}
