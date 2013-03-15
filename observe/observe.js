@@ -254,12 +254,13 @@ steal('can/util','can/construct', function(can) {
 				if (transactions == 0 ) {
 					return can.trigger(item, event, args);
 				} else {
+					event = typeof event === "string" ?
+						{ type: event } : 
+						event;
+					event.batchNum = batchNum;
 					batchEvents.push([
 					item,
-					{
-						type: event,
-						batchNum : batchNum
-					}, 
+					event, 
 					args ] );
 				}
 			}

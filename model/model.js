@@ -1150,6 +1150,11 @@ steal('can/util','can/observe', function( can ) {
 
 			// Call event on the instance
 			can.trigger(this,funcName);
+			
+			// triggers change event that bubble's like
+			// handler( 'change','1.destroyed' ). This is used
+			// to remove items on destroyed from Model Lists.
+			// but there should be a better way.
 			can.trigger(this,"change",funcName)
 			//!steal-remove-start
 			steal.dev.log("Model.js - "+ constructor.shortName+" "+ funcName);

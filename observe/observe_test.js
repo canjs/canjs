@@ -659,6 +659,25 @@ test("initialize Observe.List with a deferred",function(){
 	setTimeout(function(){
 		def.resolve(["a","b"])
 	},10)
+});
+
+test("triggering a event while in a batch (#291)", function(){
+	// normally a change event will not be triggered just
+	// by changing properties. 
+	// however, model does this in  destroyed
+	// so a "change","destroyed" event bubbles.
+	// this test errors if things are broken
+	stop();
+	var observe = new can.Observe();
+	
+	can.Observe.startBatch();
+	can.trigger(observe, "change","random")
+	
+	setTimeout(function(){
+		can.Observe.stopBatch();
+		start()
+	},10);
+	
 })
 
 
