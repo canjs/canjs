@@ -486,7 +486,7 @@ test("bind on deep properties",function(){
 	
 });
 
-test("startBatch and stopBatch and changed event", function(){
+test("startBatch and stopBatch and changed event", 5, function(){
 	
 	var ob = new can.Observe({name: {first: "Brian"}, age: 29}),
 		bothSet = false,
@@ -521,6 +521,31 @@ test("startBatch and stopBatch and changed event", function(){
 	
 	
 	
+});
+
+test("startBatch callback", 4, function(){
+	
+	var ob = new can.Observe({
+			game: {
+				name: "Legend of Zelda"
+			}, 
+			hearts: 15
+		}),
+		callbackCalled = false;
+	
+	ob.bind("change", function(){
+		equals(callbackCalled, false, 'startBatch callback not called yet');
+	});
+
+	can.Observe.startBatch(function(){
+		ok(true, "startBatch callback called");
+		callbackCalled = true;
+	});
+	
+	ob.attr('hearts', 16);
+	equals(callbackCalled, false, 'startBatch callback not called yet');
+	can.Observe.stopBatch();
+	equals(callbackCalled, true, 'startBatch callback called');
 });
 
 test("nested observe attr", function() {
