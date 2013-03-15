@@ -16,7 +16,9 @@ var page = require('webpage').create();
 
 // Route "console.log()" calls from within the Page context to the main Phantom context (i.e. current "this")
 page.onConsoleMessage = function(msg) {
-    console.log(msg);
+	if(!!~msg.indexOf('__QUNIT__ ')) {
+		console.log(msg.replace('__QUNIT__ ', ''));
+	}
 };
 
 page.open(url, function(status){
@@ -68,7 +70,6 @@ page.onResourceReceived = function(data) {
 
 		setZeroTimeout(function() {
 			if(window.QUnit && !window.QUnit.__logging) {
-				console.log('Adding logging');
 				addLogging();
 				window.QUnit.__logging = true;
 			}
@@ -90,39 +91,43 @@ function onfinishedTests() {
 }
 
 function addLogging() {
+	var buffer = "";
 	var print = function(msg) {
-		console.log(msg);
+		console.log('__QUNIT__ ' + msg);
 	};
+	var buf = function() {
+		print(buffer);
+		buffer = '';
+	}
 
 	QUnit.begin(function() {
 		print("Starting ...");
+	});
+
+	QUnit.moduleStart(function(o){
+		buf();
+		print("\n" + o.name);
 	});
 
 	QUnit.log(function(o){
 		var result = o.result,
 			message = o.message || 'okay';
 
-		// Testdox layout
 		if(result) {
-			print('    [x] ' + message);
+			buffer += '.';
 		} else {
-			print('    [ ] ' + message);
+			buf();
+			print('\n[X] ' + message);
 			if(o.expected) {
-				print('        Actual: ' + o.actual);
-				print('        Expected: ' + o.expected);
+				print('    Actual: ' + o.actual);
+				print('    Expected: ' + o.expected);
 			}
+			print('');
 		}
 	});
 
-	QUnit.testStart(function(o){
-		print('  ' + o.name);
-	});
-
-	QUnit.moduleStart(function(o){
-		print("\n" + o.name);
-	});
-
 	QUnit.done(function(o) {
+		print(buffer);
 		if(o.failed > 0) {
 			print("\n" + 'FAILURES!');
 			print('Tests: ' + o.total
