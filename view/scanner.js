@@ -38,6 +38,7 @@ var newLine = /(\r|\n)+/g,
 				i++;
 			}
 		}
+		return '';
 	},
 	bracketNum = function(content){
 		return (--content.split("{").length) - (--content.split("}").length);

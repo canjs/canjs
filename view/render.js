@@ -281,8 +281,18 @@ can.extend(can.view, {
 					var parent = getParentNode(el, parentNode),
 						node = document.createTextNode(binding.value);
 						
-					parent.insertBefore(node, el);
-					parent.removeChild(el);
+					// When iterating through an Observe.List with no DOM
+					// elements containing the individual items, the parent 
+					// is sometimes incorrect not the true parent of the 
+					// source element. (#153)
+					if ( el.parentNode !== parent ) {
+						parent = el.parentNode;
+						parent.insertBefore(node, el);
+						parent.removeChild(el);
+					} else {
+						parent.insertBefore(node, el);
+						parent.removeChild(el);
+					}
 					setupTeardownOnDestroy(parent);
 				} 
 				:
