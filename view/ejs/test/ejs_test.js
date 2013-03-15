@@ -1283,4 +1283,33 @@ test('live binding with html comment', function(){
 	equals(div.getElementsByTagName('table')[0].getElementsByTagName('td').length, 0, '0 items in list');
 })
 
+test("HTML comment with element callback", function(){
+	var text = ["<ul>",
+				"<% todos.each(function(todo) { %>",
+				"<li<%= (el) -> can.data(can.$(el),'todo',todo) %>>",
+				"<!-- html comment #1 -->",
+				"<%= todo.name %>",
+				"<!-- html comment #2 -->",
+				"</li>",
+				"<% }) %>",
+				"</ul>"],
+		Todos = new can.Observe.List([
+			{id: 1, name: "Dishes"}
+		]),
+		compiled = new can.EJS({text: text.join("\n")}).render({todos: Todos}),
+		div = document.createElement("div")
+
+	div.appendChild(can.view.frag(compiled));
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 1, "1 item in list");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 5, "5 nodes in item #1");
+
+	Todos.push({id: 2, name: "Laundry"});
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 2, "2 items in list");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 5, "5 nodes in item #1");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[1].childNodes.length, 5, "5 nodes in item #2");
+
+	Todos.splice(0, 2);
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
+})
+
 })();
