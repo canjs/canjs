@@ -5,6 +5,9 @@ can.each([ can.Observe, can.Model ], function(clss){
 	if(clss === undefined){
 		return;
 	}
+	var isObject = function( obj ) {
+		return typeof obj === 'object' && obj !== null && obj;
+	};
 	
 	can.extend(clss, {
 		/**
