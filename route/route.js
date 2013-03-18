@@ -57,7 +57,9 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		extend = can.extend,
     // Helper for convert any object (or value) to stringified object (or value)
 		stringify = function(obj) {
-			if(typeof obj === "object") {
+			if(obj === undefined || obj === null &&) {
+        obj = ""
+			} else if(typeof obj === "object") {
 				if(obj instanceof can.Observe) { // Get native object or array from Observe or Observe.List
 					obj = obj.attr()
 				} else { // Clone object to prevent change original values
@@ -65,12 +67,13 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 				}
 				// Convert each object property or array item into stringified new
 				can.each(obj, function(val, prop) { obj[prop] = stringify(val) })
-		  } else if(obj !== undefined && obj !== null && can.isFunction(obj.toString)) {
+		  } else if(can.isFunction(obj.toString)) {
         obj = obj.toString()
 			}
 
 			return obj
 		}
+
 
 	can.route = function( url, defaults ) {
         defaults = defaults || {};
