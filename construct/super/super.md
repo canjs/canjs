@@ -8,13 +8,13 @@ The __super__ provides a `this._super` reference in functions that points to the
 the following creates a `Vehicle` constructor and `Car` constructor that
 inherits from it.  `Car`'s `init` function calls `Vehicle`'s base `init` function. 
 
-	var Vehicle = can.Construct({
+    var Vehicle = can.Construct({
       init: function(wheels){
         this.wheels=wheels;
       }
     });
 
-    var Car = can.Construct({
+    var Car = Vehicle({
       init: function(speed){
         this._super(4);
         this.speed = speed;
