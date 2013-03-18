@@ -522,7 +522,7 @@ steal('can/util','can/construct', function(can) {
 		 *         equals( value,'bar' );
 		 *       });
 		 * 
-		 * @param {function} handler( attrName, value ) A function that will get 
+		 * @param {function} handler( value, attrName ) A function that will get 
 		 * called back with the name and value of each attribute on the observe.
 		 * 
 		 * Returning `false` breaks the looping. The following will never
