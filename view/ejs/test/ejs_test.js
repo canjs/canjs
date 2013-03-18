@@ -1341,4 +1341,16 @@ test("Interpolated values when iterating through an Observe.List should still re
 	equal(div.innerHTML, "DishesGlassesKnives", 'New list item rendered without DOM container');
 });
 
+test("correctness of data-view-id and only in tag opening", function(){
+	var text = ["<textarea><select><% can.each(this.items, function(item) { %>",
+				"<option<%= (el) -> el.data('item', item) %>><%= item.title %></option>",
+				"<% }) %></select></textarea>"],
+		items = [{id: 1, title: "One"}, {id: 2, title: "Two"}],
+		compiled = new can.EJS({text: text.join("")}).render({items: items}),
+		expected = "^<textarea data-view-id='[0-9]+'><select><option data-view-id='[0-9]+'>One</option>" +
+			"<option data-view-id='[0-9]+'>Two</option></select></textarea>$";
+
+	ok(compiled.search(expected) === 0, "Rendered output is as expected");
+});
+
 })();

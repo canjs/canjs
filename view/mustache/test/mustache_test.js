@@ -1691,6 +1691,18 @@ test("HTML comment with helper", function(){
 
 	Todos.splice(0, 2);
 	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
-})
+});
+
+test("correctness of data-view-id and only in tag opening", function(){
+	var text = ["<textarea><select>{{#items}}",
+				"<option{{data 'item'}}>{{title}}</option>",
+				"{{/items}}</select></textarea>"],
+		items = [{id: 1, title: "One"}, {id: 2, title: "Two"}],
+		compiled = new can.Mustache({text: text.join("")}).render({items: items}),
+		expected = "^<textarea data-view-id='[0-9]+'><select><option data-view-id='[0-9]+'>One</option>" +
+			"<option data-view-id='[0-9]+'>Two</option></select></textarea>$";
+
+	ok(compiled.search(expected) === 0, "Rendered output is as expected");
+});
 
 });
