@@ -2,7 +2,7 @@ steal('can/util', 'can/observe/sort', 'can/view/mustache', function(can) {
 
 module("can/observe/sort");
 
-test("list events", 12, function(){
+test("list events", 16, function(){
 
 	var list = new can.Observe.List([
 		{name: 'Justin'},

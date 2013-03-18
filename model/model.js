@@ -43,7 +43,7 @@ steal('can/util','can/observe', function( can ) {
 			// If we get a string, handle it.
 			if ( typeof ajaxOb == "string" ) {
 				// If there's a space, it's probably the type.
-				var parts = ajaxOb.split(/\s/);
+				var parts = ajaxOb.split(/\s+/);
 				params.url = parts.pop();
 				if ( parts.length ) {
 					params.type = parts.pop();
@@ -67,8 +67,18 @@ steal('can/util','can/observe', function( can ) {
 			}, params ));
 		},
 		makeRequest = function( self, type, success, error, method ) {
+			var args;
+			// if we pass an array as `self` it it means we are coming from
+			// the queued request, and we're passing already serialized data
+			// self's signature will be: [self, serializedData]
+			if(can.isArray(self)){
+				args = self[1];
+				self = self[0];
+			} else {
+				args = self.serialize();
+			}
+			args = [args];
 			var deferred,
-				args = [self.serialize()],
 				// The model.
 				model = self.constructor,
 				jqXHR;
@@ -626,6 +636,7 @@ steal('can/util','can/observe', function( can ) {
 			this._url = this._shortName+"/{"+this.id+"}"
 		},
 		_ajax : ajaxMaker,
+		_makeRequest : makeRequest,
 		_clean : function(){
 			this._reqs--;
 			if(!this._reqs){
@@ -1139,6 +1150,11 @@ steal('can/util','can/observe', function( can ) {
 
 			// Call event on the instance
 			can.trigger(this,funcName);
+			
+			// triggers change event that bubble's like
+			// handler( 'change','1.destroyed' ). This is used
+			// to remove items on destroyed from Model Lists.
+			// but there should be a better way.
 			can.trigger(this,"change",funcName)
 			//!steal-remove-start
 			steal.dev.log("Model.js - "+ constructor.shortName+" "+ funcName);

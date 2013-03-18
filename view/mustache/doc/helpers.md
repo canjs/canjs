@@ -161,8 +161,8 @@ element using [can.data] and the implied context of `this`.
 
 ## Registering Helpers
 
-You can register your own helper with the `Mustache.registerHelper` method, or 
-by passing in an object containing helper functions to can.view.
+You can register your own global helper with the `Mustache.registerHelper` method, or 
+a local helper (just accessible by the template you're rendering) by passing in an object containing helper functions to can.view.
 
 Localization is a good example of a custom helper you might implement
 in your application. The below example takes a given key and 
@@ -185,8 +185,6 @@ Or another way to do this:
 		}
 	})
 
-Be aware that this creates a global Mustache helper called l10n.
-
 In the template, invoke the helper by calling the helper
 name followed by any additional arguments.
 
@@ -195,6 +193,23 @@ name followed by any additional arguments.
 will render:
 
 	<span>my string localized</span>
+
+__Helpers with can.Observe attributes__
+
+If a can.Observe attribute is passed as an argument to a helper, it is converted to a can.compute getter/setter function.  This is to allow creating 2-way binding type functionality between a can.Observe attribute and a form element. For example in your template:
+
+	<div>{{addPrefix name}}</div>
+
+Your helper would look like:
+
+	var item = new can.Observe({name: "Brian"}),
+	    frag = can.view("#template", item, {
+	      addPrefix: function(name){
+	        return "Mr." + name()
+	      }
+	    });
+
+Note we're calling `name()` in order to read its contents.
 
 __Multiple Arguments__
 

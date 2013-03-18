@@ -132,7 +132,8 @@ test("basic observe associations", function(){
 test("single seralize w/ attr name", function(){
 	var Breakfast = can.Observe({
 		attributes: {
-			time: "date"
+			time: "date",
+			name: 'default'
 		},
 		serialize: {
 			date: function(d){
@@ -143,10 +144,12 @@ test("single seralize w/ attr name", function(){
 	
 	var time = new Date();
 	var b = new Breakfast({
-		time: time
+		time: time,
+		name: 'eggs'
 	});
 	
 	equals(b.serialize('time'), time.getTime());
+	ok(b.serialize())
 });
 
 test("defaults", function(){

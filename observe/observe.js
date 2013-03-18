@@ -90,7 +90,10 @@ steal('can/util','can/construct', function(can) {
 		},
 		bind = $method('addEvent'),
 		unbind = $method('removeEvent'),
-		attrParts = function(attr){
+		attrParts = function(attr, keepKey) {
+			if(keepKey) {
+				return [attr];
+			}
 			return can.isArray(attr) ? attr : (""+attr).split(".");
 		},
 		// Which batch of events this is for -- might not want to send multiple
@@ -234,7 +237,7 @@ steal('can/util','can/construct', function(can) {
 					can.trigger.apply(can, args);
 				});
 				can.each(callbacks, function( cb ) {
-					cb;
+					cb();
 				});
 			}
 		},
@@ -254,12 +257,13 @@ steal('can/util','can/construct', function(can) {
 				if (transactions == 0 ) {
 					return can.trigger(item, event, args);
 				} else {
+					event = typeof event === "string" ?
+						{ type: event } : 
+						event;
+					event.batchNum = batchNum;
 					batchEvents.push([
 					item,
-					{
-						type: event,
-						batchNum : batchNum
-					}, 
+					event, 
 					args ] );
 				}
 			}
@@ -518,7 +522,7 @@ steal('can/util','can/construct', function(can) {
 		 *         equals( value,'bar' );
 		 *       });
 		 * 
-		 * @param {function} handler( attrName, value ) A function that will get 
+		 * @param {function} handler( value, attrName ) A function that will get 
 		 * called back with the name and value of each attribute on the observe.
 		 * 
 		 * Returning `false` breaks the looping. The following will never
@@ -579,6 +583,11 @@ steal('can/util','can/construct', function(can) {
 		},
 		// Reads a property from the `object`.
 		_get: function( attr ) {
+			var value = typeof attr === 'string' && !!~attr.indexOf('.') && this.__get(attr);
+			if(value) {
+				return value;
+			}
+
 			// break up the attr (`"foo.bar"`) into `["foo","bar"]`
 			var parts = attrParts(attr),
 				// get the value of the first attr name (`"foo"`)
@@ -603,9 +612,9 @@ steal('can/util','can/construct', function(can) {
 		// Sets `attr` prop as value on this object where.
 		// `attr` - Is a string of properties or an array  of property values.
 		// `value` - The raw value to set.
-		_set: function( attr, value ) {
+		_set: function( attr, value, keepKey) {
 			// Convert `attr` to attr parts (if it isn't already).
-			var parts = attrParts(attr),
+			var parts = attrParts(attr, keepKey),
 				// The immediate prop we are setting.
 				prop = parts.shift(),
 				// The current value.
@@ -844,7 +853,7 @@ steal('can/util','can/construct', function(can) {
 			// Add remaining props.
 			for ( var prop in props ) {
 				newVal = props[prop];
-				this._set(prop, newVal)
+				this._set(prop, newVal, true)
 			}
 			Observe.stopBatch()
 			return this;
@@ -1027,7 +1036,11 @@ steal('can/util','can/construct', function(can) {
 			this.length = 0;
 			can.cid(this, ".observe")
 			this._init = 1;
-			this.push.apply(this, can.makeArray(instances || []));
+			if( can.isDeferred(instances) ) {
+				this.replace(instances)
+			} else {
+				this.push.apply(this, can.makeArray(instances || []));
+			}
 			this.bind('change'+this._cid,can.proxy(this._changes,this));
 			can.extend(this, options);
 			delete this._init;
@@ -1139,14 +1152,14 @@ steal('can/util','can/construct', function(can) {
 			for ( i = 2; i < args.length; i++ ) {
 				var val = args[i];
 				if ( canMakeObserve(val) ) {
-					args[i] = hookupBubble(val, "*", this)
+					args[i] = hookupBubble(val, "*", this, this.constructor.Observe, this.constructor)
 				}
 			}
 			if ( howMany === undefined ) {
 				howMany = args[1] = this.length - index;
 			}
 			var removed = splice.apply(this, args);
-			can.Observe.startBatch()
+			can.Observe.startBatch();
 			if ( howMany > 0 ) {
 				this._triggerChange(""+index, "remove", undefined, removed);
 				unhookup(removed, this._cid);
@@ -1378,8 +1391,9 @@ steal('can/util','can/construct', function(can) {
 			
 			// Call the original method.
 			res = orig.apply(this, args);
-			
-			if ( !this.comparator || !args.length ) {
+
+			if ( !this.comparator || args.length ) {
+
 				this._triggerChange(""+len, "add", args, undefined);
 			}
 						
@@ -1485,6 +1499,21 @@ steal('can/util','can/construct', function(can) {
 		 * @return {String} The joined string
 		 */
 		join : [].join,
+		
+		/**
+		 * @function reverse
+		 * 
+		 * `reverse()` method transposes the elements of the calling array object in place, 
+		 * mutating the array, and returning a reference to the array.
+		 * 
+		 * 	list = new can.Observe.List(["a","b","c"]);
+		 *      list.reverse() // -> ["c", "b", "a"]
+		 * 
+		 * [MDN reference](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/reverse)
+		 * 
+		 * @return {Array} reversed array
+		 */
+		reverse: [].reverse,
 
 		/**
 		 * @function slice

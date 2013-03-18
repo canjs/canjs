@@ -421,6 +421,30 @@ test("instantiating can.Observe.List of correct type", function() {
 	equal(list[1].getName(), 'Another test', 'Pushed item gets converted as well');
 });
 
+test("can.Observe.List.prototype.splice converts objects (#253)", function() {
+	var Ob = can.Observe({
+		getAge : function() {
+			return this.attr('age') + 10;
+		}
+	});
+
+	var list = new Ob.List([ {
+		name: 'Tester',
+		age: 23
+	}, {
+		name: 'Tester 2',
+		age: 44
+	}]);
+
+	equal(list[0].getAge(), 33, 'Converted age');
+
+	list.splice(1, 1, {
+		name: 'Spliced',
+		age: 92
+	});
+
+	equal(list[1].getAge(), 102, 'Converted age of spliced');
+});
 
 test("removing an already missing attribute does not cause an event", function(){
 	var ob = new can.Observe();
@@ -462,7 +486,7 @@ test("bind on deep properties",function(){
 	
 });
 
-test("startBatch and stopBatch and changed event", function(){
+test("startBatch and stopBatch and changed event", 5, function(){
 	
 	var ob = new can.Observe({name: {first: "Brian"}, age: 29}),
 		bothSet = false,
@@ -497,6 +521,31 @@ test("startBatch and stopBatch and changed event", function(){
 	
 	
 	
+});
+
+test("startBatch callback", 4, function(){
+	
+	var ob = new can.Observe({
+			game: {
+				name: "Legend of Zelda"
+			}, 
+			hearts: 15
+		}),
+		callbackCalled = false;
+	
+	ob.bind("change", function(){
+		equals(callbackCalled, false, 'startBatch callback not called yet');
+	});
+
+	can.Observe.startBatch(function(){
+		ok(true, "startBatch callback called");
+		callbackCalled = true;
+	});
+	
+	ob.attr('hearts', 16);
+	equals(callbackCalled, false, 'startBatch callback not called yet');
+	can.Observe.stopBatch();
+	equals(callbackCalled, true, 'startBatch callback called');
 });
 
 test("nested observe attr", function() {
@@ -621,6 +670,61 @@ test("IE8 error on list setup with Observe.List (#226)", function() {
 		otherList = new can.Observe.List(list);
 
 	deepEqual(list.attr(), otherList.attr(), 'Lists are the same');
+});
+
+test("initialize Observe.List with a deferred",function(){
+	stop()
+	var def = new can.Deferred();
+	var list = new can.Observe.List(def);
+	list.bind("add",function(ev, items, index){
+		same(items,["a","b"]);
+		equal(index, 0);
+		start();
+	});
+	setTimeout(function(){
+		def.resolve(["a","b"])
+	},10)
+});
+
+test("triggering a event while in a batch (#291)", function(){
+	// normally a change event will not be triggered just
+	// by changing properties. 
+	// however, model does this in  destroyed
+	// so a "change","destroyed" event bubbles.
+	// this test errors if things are broken
+	stop();
+	var observe = new can.Observe();
+	
+	can.Observe.startBatch();
+	can.trigger(observe, "change","random")
+	
+	setTimeout(function(){
+		can.Observe.stopBatch();
+		start()
+	},10);
+	
+});
+
+test("dot separated keys (#257, #296)", function() {
+	var ob = new can.Observe({
+		'test.value': 'testing',
+		other: {
+			test: 'value'
+		}
+	});
+	equal(ob['test.value'], 'testing', 'Set value with dot separated key properly');
+	equal(ob.attr('test.value'), 'testing', 'Could retrieve value with .attr');
+	equal(ob.attr('other.test'), 'value', 'Still getting dot separated value');
+
+	ob.attr({
+		'other.bla': 'othervalue'
+	});
+	equal(ob['other.bla'], 'othervalue', 'Key is not split');
+	equal(ob.attr('other.bla'), 'othervalue', 'Could retrieve value with .attr');
+
+	ob.attr('other.stuff', 'thinger');
+	equal(ob.attr('other.stuff'), 'thinger', 'Set dot separated value');
+	deepEqual(ob.attr('other').serialize(), { test: 'value', stuff: 'thinger' }, 'Object set properly');
 });
 
 })();

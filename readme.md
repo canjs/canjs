@@ -11,4 +11,17 @@ rich web applications easy. Use it because it’s:
 - Easier 
 - Library-er
 
-Go to [http://canjs.us/](http://canjs.us/) for docs, downloads, tests, demos, and more.  Join us on the Freenode IRC Channel #canjs.
+### Demos and Docs
+Go to [http://canjs.us/](http://canjs.us/) for docs, downloads, tests, demos, and more.
+
+### Support / Contributing
+Before you make an issue, please read our [Contributing](contributing.md) guide.
+
+You can find the core team in [#canjs on irc.freenode.net](irc://irc.freenode.net/#canjs).
+
+### Release History
+See the [Changelog](changelog.md).
+
+### License
+MIT License, see [License](license.md).
+

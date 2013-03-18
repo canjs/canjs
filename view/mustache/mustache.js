@@ -783,6 +783,11 @@ function( can ){
 				// Check the context for the reference
 				value = contexts[i];
 
+        // Is the value a compute?
+        if(can.isFunction(value) && value.isComputed) {
+          value = value();
+        }
+
 				// Make sure the context isn't a failed object before diving into it.
 				if (value !== undefined) {
 					for (j = 0; j < namesLength; j++) {
@@ -808,9 +813,14 @@ function( can ){
 				// Found a matched reference.
 				if (value !== undefined ) {
 					if(can.isFunction(lastValue[name]) && isArgument ) {
+						if(lastValue[name].isComputed){
+							return lastValue[name];
+						}
 						// Don't execute functions if they are parameters for a helper and are not a can.compute
 						// Need to bind it to the original context so that that information doesn't get lost by the helper
-						return function() { return lastValue[name].apply(lastValue, arguments); };
+						return function() { 
+							return lastValue[name].apply(lastValue, arguments); 
+						};
 					} else if (can.isFunction(lastValue[name])) {
 						// Support functions stored in objects.
 						return lastValue[name]();
@@ -958,6 +968,9 @@ function( can ){
 		 *      {{/if}}
 		 */
 		'if': function(expr, options){
+      if( can.isFunction(expr) && expr.isComputed ){
+        expr = expr();
+      }
 			if (!!expr) {
 				return options.fn(this);
 			}
@@ -978,6 +991,9 @@ function( can ){
 		 *      {{/unless}}
 		 */
 		'unless': function(expr, options){
+      if( can.isFunction(expr) && expr.isComputed ){
+        expr = expr();
+      }
 			if (!expr) {
 				return options.fn(this);
 			}
@@ -996,6 +1012,9 @@ function( can ){
 		 *      {{/each}}
 		 */
 		'each': function(expr, options) {
+      if( can.isFunction(expr) && expr.isComputed ){
+        expr = expr();
+      }
 			if (!!expr && expr.length) {
 				var result = [];
 				for (var i = 0; i < expr.length; i++) {
@@ -1018,8 +1037,12 @@ function( can ){
 		 *      {{/with}}
 		 */
 		'with': function(expr, options){
+      var ctx = expr;
+      if( can.isFunction(expr) && expr.isComputed ){
+        expr = expr();
+      }
 			if (!!expr) {
-				return options.fn(expr);
+				return options.fn(ctx);
 			}
 		}
 		

@@ -38,6 +38,9 @@ steal('steal/build/pluginify', 'can/build/settings.js', function () {
 		"view/mustache/mustache" : {
 			name : "view.mustache"
 		},
+		"model/queue/queue" : {
+			name : "model.queue"
+		},
 		"view/modifiers/modifiers" : {
 			name : "view.modifiers",
 			options : wrapjQuery

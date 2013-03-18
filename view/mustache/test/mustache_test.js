@@ -1283,6 +1283,7 @@ test("helper parameters don't convert functions", function() {
 test("computes as helper parameters don't get converted", function() {
 	can.Mustache.registerHelper('computeTest', function(no) {
 		equal(no(), 5, 'Got computed calue');
+		ok(no.isComputed, 'no is still a compute')
 	});
 
 	var renderer = can.view.mustache('{{computeTest test}}');
@@ -1290,6 +1291,54 @@ test("computes as helper parameters don't get converted", function() {
 		test : can.compute(5)
 	});
 })
+
+test("computes are supported in default helpers", function() {
+
+  var staches = {
+    "if" : "{{#if test}}if{{else}}else{{/if}}"
+    , "not_if"  :"not_{{^if test}}not{{/if}}if"
+    , "each" : "{{#each test}}{{.}}{{/each}}"
+    , "with" : "wit{{#with test}}<span>{{3}}</span>{{/with}}"
+  };
+  
+    can.view.mustache("count","There are {{ length }} todos")
+  var div = document.createElement('div');
+  div.appendChild( can.view("count", new can.Observe.List([{},{}])) );
+  ok(/There are 2 todos/.test(div.innerHTML), "got all text")
+
+  can.each(Object.keys(staches), function(result) {
+    var renderer = can.view.mustache("compute_" + result, staches[result]);
+    var data = ["e", "a", "c", "h"];
+    var div = document.createElement("div");
+    var actual = can.view("compute_" + result, { test : can.compute(data) });
+    div.appendChild(actual);
+    can.each(div.getElementsByTagName("span"), function(span) {
+      div.replaceChild(span.firstChild, span)
+    });
+    actual = div.innerHTML;
+
+    equal(actual, result, "can.compute resolved for helper " + result);
+  });
+
+  var inv_staches = {
+    "else" : "{{#if test}}if{{else}}else{{/if}}"
+    , "not_not_if" : "not_{{^if test}}not_{{/if}}if"
+    , "not_each" : "not_{{#each test}}_{{/each}}each"
+    , "not_with" : "not{{#with test}}_{{/with}}_with"
+  };
+
+  can.each(Object.keys(inv_staches), function(result) {
+    var renderer = can.view.mustache("compute_" + result, inv_staches[result]);
+    var data = null;
+    var div = document.createElement("div");
+    var actual = can.view("compute_" + result, { test : can.compute(data) });
+    div.appendChild(actual);
+    actual = div.innerHTML;
+
+    equal(actual, result, "can.compute resolved for helper " + result);
+  });
+
+});
 
 test("Rendering models in tables produces different results than an equivalent observe (#202)", 2, function() {
 	var renderer = can.view.mustache('<table>{{#stuff}}<tbody>{{#rows}}<tr></tr>{{/rows}}</tbody>{{/stuff}}</table>');
@@ -1440,6 +1489,34 @@ test("Functions and helpers should be passed the same context", function() {
 	equal(div.getElementsByTagName('span')[1].innerHTML, data.next_level.other_text.toUpperCase(), 'Incorrect context passed to helper');
 });
 
+// https://github.com/bitovi/canjs/issues/153
+test("Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node", function() {
+	var renderer = can.view.mustache('{{ #todos }}{{ name }}{{ /todos }}'),
+		renderer2 = can.view.mustache('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),
+		todos = [ {id: 1, name: 'Dishes'}, {id: 2, name: 'Forks'} ],
+		data = { 
+			todos: new can.Observe.List(todos)
+		},
+		arr = {
+			todos: todos
+		},
+		div = document.createElement('div');
+		
+	div.appendChild(renderer2(arr));
+	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'Array item rendered with DOM container');
+	div.innerHTML = '';
+	div.appendChild(renderer2(data));
+	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'List item rendered with DOM container');
+	div.innerHTML = '';
+	div.appendChild(renderer(arr));
+	equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
+	div.innerHTML = '';
+	div.appendChild(renderer(data));
+	equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
+	data.todos.push({ id: 3, name: 'Knives' });
+	equal(div.innerHTML, "DishesForksKnives", 'New list item rendered without DOM container');
+});
+
 test("2 way binding helpers", function(){
 	
 	var Value = function(el, value){
@@ -1586,5 +1663,34 @@ test("avoid global helpers",function() {
 	equal(div.innerHTML,"Mr. Ajax");
 	equal(div2.innerHTML,"Ajax rules");
 });
+
+test("HTML comment with helper", function(){
+	var text = ["<ul>",
+				"{{#todos}}",
+				"<li {{data 'todo'}}>",
+				"<!-- html comment #1 -->",
+				"{{name}}",
+				"<!-- html comment #2 -->",
+				"</li>",
+				"{{/todos}}",
+				"</ul>"],
+		Todos = new can.Observe.List([
+			{id: 1, name: "Dishes"}
+		]),
+		compiled = new can.Mustache({text: text.join("\n")}).render({todos: Todos}),
+		div = document.createElement("div")
+
+	div.appendChild(can.view.frag(compiled));
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 1, "1 item in list");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
+
+	Todos.push({id: 2, name: "Laundry"});
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 2, "2 items in list");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[1].childNodes.length, 7, "7 nodes in item #2");
+
+	Todos.splice(0, 2);
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
+})
 
 });
