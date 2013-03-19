@@ -775,7 +775,7 @@ function( can ){
 				}
 				return '';
 			}
-		}	
+		} 
 		// Handle object resolution (like `a.b.c`).
 		else if (!isHelper) {
 			// Reverse iterate through the contexts (last in, first out).
@@ -790,11 +790,17 @@ function( can ){
 
 				// Make sure the context isn't a failed object before diving into it.
 				if (value !== undefined) {
+					var isHelper = Mustache.getHelper(ref,options);
 					for (j = 0; j < namesLength; j++) {
 						// Keep running up the tree while there are matches.
 						if (typeof value[names[j]] != 'undefined') {
 							lastValue = value;
 							value = value[name = names[j]];
+						}
+						// if there's a name conflict between property and helper
+						// property wins
+						else if(isHelper) {
+							return ref;
 						}
 						// If it's undefined, still match if the parent is an Observe.
 						else if ( isObserve(value) ) {
