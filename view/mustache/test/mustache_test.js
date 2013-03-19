@@ -369,7 +369,6 @@ test("Absolute partials", function() {
 });
 
 test("No arguments passed to helper", function() {
-
 	can.view.mustache("noargs","{{noargHelper}}");
 	can.Mustache.registerHelper("noargHelper", function(){
 		return "foo"
@@ -382,6 +381,24 @@ test("No arguments passed to helper", function() {
 
 	same(div1.innerHTML, "foo");
 	same(div2.innerHTML, "foo");
+});
+
+test("No arguments passed to helper with list", function() {
+	can.view.mustache("noargs","{{#items}}{{noargHelper}}{{/items}}");
+	var div = document.createElement('div');
+
+	div.appendChild( can.view("noargs", {
+		items: new can.Observe.List([{
+			name: "Brian"
+		}]) 
+	},
+	{
+		noargHelper: function(){
+			return "foo"
+		}
+	}) );
+
+	same(div.innerHTML, "foo");
 });
 
 test("Partials and observes", function() {
