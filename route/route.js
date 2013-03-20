@@ -57,23 +57,24 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		extend = can.extend,
     // Helper for convert any object (or value) to stringified object (or value)
 		stringify = function(obj) {
-			if(obj === undefined || obj === null &&) {
-        obj = ""
-			} else if(typeof obj === "object") {
-				if(obj instanceof can.Observe) { // Get native object or array from Observe or Observe.List
+			// Object is array, plain object, Observe or List
+			if(obj && typeof obj === "object") {
+				// Get native object or array from Observe or Observe.List
+				if(obj instanceof can.Observe) {
 					obj = obj.attr()
-				} else { // Clone object to prevent change original values
+				// Clone object to prevent change original values
+				} else {
 					obj = can.isFunction(obj.slice) ? obj.slice() : can.extend({}, obj)
 				}
 				// Convert each object property or array item into stringified new
 				can.each(obj, function(val, prop) { obj[prop] = stringify(val) })
-		  } else if(can.isFunction(obj.toString)) {
+			// Object supports toString function
+		  } else if(obj !== undefined && obj !== null && can.isFunction(obj.toString)) {
         obj = obj.toString()
-			}
+      }
 
 			return obj
 		}
-
 
 	can.route = function( url, defaults ) {
         defaults = defaults || {};
@@ -450,20 +451,24 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
   // It will fire event with adding of "2" (string) to 'some_number' property
   // But when you after this set can.route.attr({some_number: 2}) or can.route.attr('some_number', 2). it fires another event with change of 'some_number' from "2" (string) to 2 (integer)
   // This wont happen again with this normalization
-  can.route.attr = function(attr, val) {
-    var newArguments;
+	can.route.attr = function(attr, val) {
+		var type = typeof attr,
+				newArguments;
 
-		var type = typeof attr;
-		if (type !== "string" && type !== "number") {
-			newArguments = [stringify(attr), val];
-		} else if (val === undefined) {
+		// Reading
+		if(attr === undefined) {
 			newArguments = arguments;
+		// Sets object
+		} else if (type !== "string" && type !== "number") {
+			newArguments = [stringify(attr), val];
+		// Sets key - value
 		} else {
 			newArguments = [attr, stringify(val)];
 		}
 
-    return can.route.data.attr.apply(can.route.data, newArguments)
-  }
+		return can.route.data.attr.apply(can.route.data, newArguments)
+	}
+
 
 	var // A ~~throttled~~ debounced function called multiple times will only fire once the
         // timer runs down. Each call resets the timer.
