@@ -1733,4 +1733,26 @@ test("Empty strings in arrays within Observes that are iterated should return bl
 	equal(div.getElementsByTagName('option')[0].innerHTML, "", "Blank string should return blank");
 });
 
+test("Null properties do not throw errors in Mustache.get", function() {
+	var renderer = can.view.mustache("Foo bar {{#foo.bar}}exists{{/foo.bar}}{{^foo.bar}}does not exist{{/foo.bar}}")
+	, div = document.createElement('div')
+	, div2 = document.createElement('div')
+	, frag, frag2;
+
+	try {
+		frag = renderer(new can.Observe({
+			foo : null
+		}))
+	} catch(e) {
+		ok(false, "rendering with null threw an error");
+	}
+	frag2 = renderer(new can.Observe({
+		foo : {bar : "baz"}
+	}))
+	div.appendChild(frag);
+	div2.appendChild(frag2);
+	equal(div.innerHTML, "Foo bar does not exist");
+	equal(div2.innerHTML, "Foo bar exists");
+})
+
 });
