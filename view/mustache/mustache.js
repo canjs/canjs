@@ -787,11 +787,11 @@ function( can ){
         }
 
 				// Make sure the context isn't a failed object before diving into it.
-				if (value !== undefined) {
+				if (typeof value !== 'undefined' && value !== null) {
 					var isHelper = Mustache.getHelper(ref,options);
 					for (j = 0; j < namesLength; j++) {
 						// Keep running up the tree while there are matches.
-						if (typeof value[names[j]] != 'undefined') {
+						if (typeof value[names[j]] !== 'undefined' && value[names[j]] !== null) {
 							lastValue = value;
 							value = value[name = names[j]];
 						}
@@ -850,7 +850,7 @@ function( can ){
 			return defaultObserve.compute(defaultObserveName);
 		}
 		// Support helper-like functions as anonymous helpers
-		if (obj !== undefined && can.isFunction(obj[ref])) {
+		if (typeof obj !== 'undefined' && obj !== null && can.isFunction(obj[ref])) {
 			return obj[ref];
 		}
 		// Support helpers without arguments, but only if there wasn't a matching data reference.
