@@ -1722,4 +1722,15 @@ test("correctness of data-view-id and only in tag opening", function(){
 	ok(compiled.search(expected) === 0, "Rendered output is as expected");
 });
 
+test("Empty strings in arrays within Observes that are iterated should return blank strings", function(){
+	var data = new can.Observe({
+			colors: ["", 'red', 'green', 'blue'],
+		}),
+		compiled = new can.Mustache({text: "<select>{{#colors}}<option>{{.}}</option>{{/colors}}</select>"}).render(data),
+		div = document.createElement('div');
+		
+	div.appendChild(can.view.frag(compiled));
+	equal(div.getElementsByTagName('option')[0].innerHTML, "", "Blank string should return blank");
+});
+
 });
