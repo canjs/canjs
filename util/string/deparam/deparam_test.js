@@ -32,6 +32,15 @@ test("Nested deparam",function(){
 	equals(data.a[1],2)
 });
 
+test("Remaining ampersand", function() {
+	var data = can.deparam("a[b]=1&a[c]=2&")
+	same(data, {
+		a: {
+			b: 1,
+			c: 2
+		}
+	})
+})
 
 /** /
 test("deparam an array", function(){
