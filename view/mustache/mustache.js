@@ -827,30 +827,7 @@ function( can ){
 			
 				// Found a matched reference.
 				if (value !== undefined ) {
-					if(can.isFunction(lastValue[name]) && isArgument ) {
-						if(lastValue[name].isComputed){
-							return lastValue[name];
-						}
-						// Don't execute functions if they are parameters for a helper and are not a can.compute
-						// Need to bind it to the original context so that that information doesn't get lost by the helper
-						return function() { 
-							return lastValue[name].apply(lastValue, arguments); 
-						};
-					} else if (can.isFunction(lastValue[name])) {
-						// Support functions stored in objects.
-						return lastValue[name]();
-					} 
-					// Invoke the length to ensure that Observe.List events fire.
-					else if (isObserve(value) && isArrayLike(value) && value.attr('length')){
-						return value;
-					}
-					// Add support for observes
-					else if (isObserve(lastValue)) {
-						return lastValue.compute(name);
-					} 
-					else {
-						return value;
-					}
+					return Mustache.resolve(value, lastValue, name, isArgument);
 				}
 			}
 		}
@@ -870,6 +847,47 @@ function( can ){
 		}
 
 		return '';
+	};
+	
+	/**
+	 * @hide
+	 *
+	 * Resolves an object to its truthy equivalent.
+	 *
+	 * @param {Object} value    The object to resolve.
+	 * @param {Object} [lastValue]  	Only used with Mustache.get.
+	 * @param {Object} [name]  				Only used with Mustache.get.
+	 * @param {Boolean} [isArgument]  Only used with Mustache.get.
+	 * @return {Object} The resolved object.
+	 */
+	Mustache.resolve = function(value, lastValue, name, isArgument) {
+		if(lastValue && can.isFunction(lastValue[name]) && isArgument) {
+			if(lastValue[name].isComputed){
+				return lastValue[name];
+			}
+			// Don't execute functions if they are parameters for a helper and are not a can.compute
+			// Need to bind it to the original context so that that information doesn't get lost by the helper
+			return function() { 
+				return lastValue[name].apply(lastValue, arguments); 
+			};
+		} else if (lastValue && can.isFunction(lastValue[name])) {
+			// Support functions stored in objects.
+			return lastValue[name]();
+		} 
+		// Invoke the length to ensure that Observe.List events fire.
+		else if (isObserve(value) && isArrayLike(value) && value.attr('length')){
+			return value;
+		}
+		// Add support for observes
+		else if (lastValue && isObserve(lastValue)) {
+			return lastValue.compute(name);
+		} 
+		else if (can.isFunction(value)) {
+			return value();
+		}
+		else {
+			return value;
+		}
 	};
 	
 	/**
@@ -983,10 +1001,7 @@ function( can ){
 		 *      {{/if}}
 		 */
 		'if': function(expr, options){
-      if( can.isFunction(expr) && expr.isComputed ){
-        expr = expr();
-      }
-			if (!!expr) {
+			if (!!Mustache.resolve(expr)) {
 				return options.fn(options.contexts || this);
 			}
 			else {
@@ -1006,10 +1021,7 @@ function( can ){
 		 *      {{/unless}}
 		 */
 		'unless': function(expr, options){
-      if( can.isFunction(expr) && expr.isComputed ){
-        expr = expr();
-      }
-			if (!expr) {
+			if (!Mustache.resolve(expr)) {
 				return options.fn(options.contexts || this);
 			}
 		},
@@ -1027,9 +1039,7 @@ function( can ){
 		 *      {{/each}}
 		 */
 		'each': function(expr, options) {
-      if( can.isFunction(expr) && expr.isComputed ){
-        expr = expr();
-      }
+      expr = Mustache.resolve(expr);
 			if (!!expr && expr.length) {
 				var result = [];
 				for (var i = 0; i < expr.length; i++) {
@@ -1053,9 +1063,7 @@ function( can ){
 		 */
 		'with': function(expr, options){
       var ctx = expr;
-      if( can.isFunction(expr) && expr.isComputed ){
-        expr = expr();
-      }
+      expr = Mustache.resolve(expr);
 			if (!!expr) {
 				return options.fn(ctx);
 			}
