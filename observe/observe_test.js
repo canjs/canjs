@@ -193,6 +193,68 @@ test("remove attr", function(){
 	equals(undefined,  state.attr("properties") );
 });
 
+test("remove nested attr", function(){
+	var state = new can.Observe({
+		properties : {
+			nested: true
+		}
+	});
+	
+	state.bind("change", function(ev, attr, how, newVal, old){
+		equals(attr, "properties.nested");
+		equals(how, "remove")
+		same(old , true);
+	})
+	
+	state.removeAttr("properties.nested");
+	equals(undefined,  state.attr("properties.nested") );
+});
+
+test("remove item in nested array", function(){
+	var state = new can.Observe({
+		array : ["a", "b"]
+	});
+	
+	state.bind("change", function(ev, attr, how, newVal, old){
+		equals(attr, "array.1");
+		equals(how, "remove")
+		same(old, ["b"]);
+	})
+	
+	state.removeAttr("array.1");
+	equals(undefined,  state.attr("array.1") );
+});
+
+test("remove nested property in item of array", function(){
+	var state = new can.Observe({
+		array : [{
+			nested: true
+		}]
+	});
+	
+	state.bind("change", function(ev, attr, how, newVal, old){
+		equals(attr, "array.0.nested");
+		equals(how, "remove")
+		same(old, true);
+	})
+	
+	state.removeAttr("array.0.nested");
+	equals(undefined,  state.attr("array.0.nested") );
+});
+
+test("remove nested property in item of array observe", function(){
+	var state = new can.Observe.List([{nested: true}]);
+	
+	state.bind("change", function(ev, attr, how, newVal, old){
+		equals(attr, "0.nested");
+		equals(how, "remove")
+		same(old, true);
+	})
+	
+	state.removeAttr("0.nested");
+	equals(undefined,  state.attr("0.nested") );
+});
+
 test("attr with an object", function(){
 	var state = new can.Observe({
 		properties : {
@@ -703,7 +765,28 @@ test("triggering a event while in a batch (#291)", function(){
 		start()
 	},10);
 	
-})
+});
 
+test("dot separated keys (#257, #296)", function() {
+	var ob = new can.Observe({
+		'test.value': 'testing',
+		other: {
+			test: 'value'
+		}
+	});
+	equal(ob['test.value'], 'testing', 'Set value with dot separated key properly');
+	equal(ob.attr('test.value'), 'testing', 'Could retrieve value with .attr');
+	equal(ob.attr('other.test'), 'value', 'Still getting dot separated value');
+
+	ob.attr({
+		'other.bla': 'othervalue'
+	});
+	equal(ob['other.bla'], 'othervalue', 'Key is not split');
+	equal(ob.attr('other.bla'), 'othervalue', 'Could retrieve value with .attr');
+
+	ob.attr('other.stuff', 'thinger');
+	equal(ob.attr('other.stuff'), 'thinger', 'Set dot separated value');
+	deepEqual(ob.attr('other').serialize(), { test: 'value', stuff: 'thinger' }, 'Object set properly');
+});
 
 })();
