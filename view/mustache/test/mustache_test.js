@@ -1755,4 +1755,45 @@ test("Null properties do not throw errors in Mustache.get", function() {
 	equal(div2.innerHTML, "Foo bar exists");
 })
 
+// Issue #288
+test("Data helper should set proper data instead of a context stack", function() {
+	var partials = {
+		'nested_data': '<span id="has_data" {{data "attr"}}></span>',
+		'nested_data2': '{{#this}}<span id="has_data" {{data "attr"}}></span>{{/this}}',
+		'nested_data3': '{{#bar}}<span id="has_data" {{data "attr"}}></span>{{/bar}}'
+	};
+	for (var name in partials) {
+		can.view.registerView(name, partials[name])
+	}
+	
+	var renderer = can.view.mustache("{{#bar}}{{> #nested_data}}{{/bar}}"),
+		renderer2 = can.view.mustache("{{#bar}}{{> #nested_data2}}{{/bar}}"),
+		renderer3 = can.view.mustache("{{#bar}}{{> #nested_data3}}{{/bar}}"),
+		div = document.createElement('div'),
+		data = new can.Observe({
+        foo : "bar",
+        bar : new can.Observe({})
+    }),
+		span;
+	console.log(data);
+
+	div.innerHTML = '';
+	div.appendChild(renderer(data));
+	span = can.$(div.getElementsByTagName('span')[0]);
+	strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 1 should have correct data');
+	console.log(can.data(span, 'attr'));
+
+	div.innerHTML = '';
+	div.appendChild(renderer2(data));
+	span = can.$(div.getElementsByTagName('span')[0]);
+	strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 2 should have correct data');
+	console.log(can.data(span, 'attr'));
+	
+	div.innerHTML = '';
+	div.appendChild(renderer3(data));
+	span = can.$(div.getElementsByTagName('span')[0]);
+	strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 3 should have correct data');
+	console.log(can.data(span, 'attr'));
+})
+
 });
