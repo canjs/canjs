@@ -1775,25 +1775,38 @@ test("Data helper should set proper data instead of a context stack", function()
         bar : new can.Observe({})
     }),
 		span;
-	console.log(data);
 
 	div.innerHTML = '';
 	div.appendChild(renderer(data));
 	span = can.$(div.getElementsByTagName('span')[0]);
 	strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 1 should have correct data');
-	console.log(can.data(span, 'attr'));
 
 	div.innerHTML = '';
 	div.appendChild(renderer2(data));
 	span = can.$(div.getElementsByTagName('span')[0]);
 	strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 2 should have correct data');
-	console.log(can.data(span, 'attr'));
 	
 	div.innerHTML = '';
 	div.appendChild(renderer3(data));
 	span = can.$(div.getElementsByTagName('span')[0]);
 	strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 3 should have correct data');
-	console.log(can.data(span, 'attr'));
+})
+
+// Issue #333
+test("Functions passed to default helpers should be evaluated", function() {
+	var renderer = can.view.mustache("{{#if hasDucks}}Ducks: {{ducks}}{{else}}No ducks!{{/if}}"),
+		div = document.createElement('div'),
+		data = new can.Observe({
+			ducks: "",
+			hasDucks: function() {
+				return this.attr("ducks").length > 0;
+			}
+		});
+
+	div.innerHTML = '';
+	div.appendChild(renderer(data));
+	span = can.$(div.getElementsByTagName('span')[0]);
+	equal(div.innerHTML, 'No ducks!', 'The function evaluated should evaluate false');
 })
 
 });
