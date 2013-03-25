@@ -180,6 +180,14 @@ module.exports = function (grunt) {
 				files: '<%= meta.out %>/edge/**/*.js',
 				banner: '<%= meta.banner %>'
 			}
+		},
+		changelog: {
+			log: {
+				repo: 'canjs',
+				user: 'bitovi',
+				milestone: 6,
+				version: '<%= pkg.version %>'
+			}
 		}
 	});
 
