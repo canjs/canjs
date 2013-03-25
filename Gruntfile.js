@@ -5,6 +5,14 @@ module.exports = function (grunt) {
 		stdout: true,
 		failOnError: true
 	};
+	var fileFilter = function () {
+		var excludes = _.toArray(arguments);
+		return function (file) {
+			return !_.some(excludes, function (exclude) {
+				return exclude.test(file);
+			});
+		}
+	}
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
@@ -86,7 +94,8 @@ module.exports = function (grunt) {
 			},
 
 			updateGhPages: {
-				command: 'cd build/gh-pages && git add . --all && git commit -m "Updating release (latest: <%= pkg.version %>)" && ' +
+				command: 'cd build/gh-pages && git add . --all && ' +
+					'git commit -m "Updating release (latest: <%= pkg.version %>)" && ' +
 					'git push origin',
 				options: shellOpts
 			},
@@ -113,45 +122,62 @@ module.exports = function (grunt) {
 			}
 		},
 		'string-replace': {
-			dist: {
+			latest: {
 				files: [
 					{
 						src: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
 						dest: './',
+						cwd: './',
 						filter: function (filepath) {
 							return !/\.min/.test(filepath);
 						}
 					}
-				],
-				options: {
-					replacements: [
-						{
-							pattern: /\/\*([\s\S]*?)\*\//gim, // multiline comments
-							replacement: ''
-						},
-						{
-							pattern: /\/\/(\s*)\n/gim,
-							replacement: ''
-						},
-						{
-							pattern: /;[\s]*;/gim, // double ;;
-							replacement: ';'
-						},
-						{
-							pattern: /(\/\/.*)\n[\s]*;/gi,
-							replacement: '$1'
-						},
-						{
-							pattern: /(\n){3,}/gim, //single new lines
-							replacement: '\n\n'
+				]
+			},
+			edge: {
+				files: [
+					{
+						src: '<%= meta.out %>/edge/**/*.js',
+						dest: './',
+						cwd: './',
+						filter: function (filepath) {
+							return !/\.min/.test(filepath);
 						}
-					]
-				}
+					}
+				]
+			},
+			options: {
+				replacements: [
+					{
+						pattern: /\/\*([\s\S]*?)\*\//gim, // multiline comments
+						replacement: ''
+					},
+					{
+						pattern: /\/\/(\s*)\n/gim,
+						replacement: ''
+					},
+					{
+						pattern: /;[\s]*;/gim, // double ;;
+						replacement: ';'
+					},
+					{
+						pattern: /(\/\/.*)\n[\s]*;/gi,
+						replacement: '$1'
+					},
+					{
+						pattern: /(\n){3,}/gim, //single new lines
+						replacement: '\n\n'
+					}
+				]
 			}
 		},
 		bannerize: {
 			latest: {
 				files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
+				banner: '<%= meta.banner %>'
+			},
+			edge: {
+				files: '<%= meta.out %>/edge/**/*.js',
 				banner: '<%= meta.banner %>'
 			}
 		}
@@ -162,8 +188,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-shell');
 
-	// grunt.registerTask("edge", "build:edge build:edgePlugins strip:edge beautify:dist docco:edge bannerize:edge");
-	grunt.registerTask('latest', ['build:latest', 'build:latestPlugins', 'string-replace', 'beautify:dist', 'bannerize:latest', 'docco:latest']);
+	grunt.registerTask('edge', ['build:edge', 'build:edgePlugins', 'string-replace:edge', 'beautify:dist', 'bannerize:edge', 'docco:edge']);
+	grunt.registerTask('latest', ['build:latest', 'build:latestPlugins', 'string-replace:latest', 'beautify:dist', 'bannerize:latest', 'docco:latest']);
 	grunt.registerTask('ghpages', ['shell:cleanup', 'shell:getGhPages', 'shell:copyLatest', 'shell:updateGhPages', 'shell:cleanup']);
 	grunt.registerTask('deploy', ['latest', 'shell:bundleLatest', 'ghpages']);
 
