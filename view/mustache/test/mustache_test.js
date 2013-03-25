@@ -1753,7 +1753,7 @@ test("Null properties do not throw errors in Mustache.get", function() {
 	div2.appendChild(frag2);
 	equal(div.innerHTML, "Foo bar does not exist");
 	equal(div2.innerHTML, "Foo bar exists");
-})
+});
 
 // Issue #288
 test("Data helper should set proper data instead of a context stack", function() {
@@ -1790,7 +1790,7 @@ test("Data helper should set proper data instead of a context stack", function()
 	div.appendChild(renderer3(data));
 	span = can.$(div.getElementsByTagName('span')[0]);
 	strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 3 should have correct data');
-})
+});
 
 // Issue #333
 test("Functions passed to default helpers should be evaluated", function() {
@@ -1807,6 +1807,25 @@ test("Functions passed to default helpers should be evaluated", function() {
 	div.appendChild(renderer(data));
 	span = can.$(div.getElementsByTagName('span')[0]);
 	equal(div.innerHTML, 'No ducks!', 'The function evaluated should evaluate false');
-})
+});
+
+test("Helpers always have priority (#258)", function() {
+	can.Mustache.registerHelper('callMe', function(arg) {
+		return arg + ' called me!';
+	});
+
+	var t = {
+		template: "<div>{{callMe 'Tester'}}</div>",
+		expected: "<div>Tester called me!</div>",
+		data: {
+			callMe: function(arg) {
+				return arg + ' hanging up!';
+			}
+		}
+	};
+
+	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+});
 
 });
