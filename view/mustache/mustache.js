@@ -643,7 +643,7 @@ function( can ){
 				opts.hash = args.pop()[HASH];
 			}
 			args.push(opts);
-			
+
 			// Call the helper.
 			return helper.fn.apply(context, args) || '';
 		}
@@ -831,19 +831,20 @@ function( can ){
 				}
 			}
 		}
+
 		if( defaultObserve && 
 			// if there's not a helper by this name and no attribute with this name
 			!(Mustache.getHelper(ref) &&
 				can.inArray(defaultObserveName, can.Observe.keys(defaultObserve)) === -1) ) {
 			return defaultObserve.compute(defaultObserveName);
 		}
-		// Support helper-like functions as anonymous helpers
-		if (typeof obj !== 'undefined' && obj !== null && can.isFunction(obj[ref])) {
-			return obj[ref];
-		}
 		// Support helpers without arguments, but only if there wasn't a matching data reference.
-		else if (value = Mustache.getHelper(ref,options)) {
+		// Helpers have priority over local function, see https://github.com/bitovi/canjs/issues/258
+		if (value = Mustache.getHelper(ref,options)) {
 			return ref;
+		} else if (typeof obj !== 'undefined' && obj !== null && can.isFunction(obj[ref])) {
+			// Support helper-like functions as anonymous helpers
+			return obj[ref];
 		}
 
 		return '';
