@@ -555,18 +555,22 @@ steal('can/util','can/construct', function(can) {
 		 * @return {Object} the value that was removed.
 		 */
 		removeAttr: function( attr ) {
-			// Convert the `attr` into parts (if nested).
-			var parts = attrParts(attr),
+				// Info if this is List or not
+			var isList = this instanceof can.Observe.List,
+				// Convert the `attr` into parts (if nested).
+				parts = attrParts(attr),
 				// The actual property to remove.
 				prop = parts.shift(),
 				// The current value.
-				current = this._data[prop];
+				current = isList ? this[prop] : this._data[prop];
 
 			// If we have more parts, call `removeAttr` on that part.
 			if ( parts.length ) {
 				return current.removeAttr(parts)
 			} else {
-				if( prop in this._data ){
+				if(isList) {
+					this.splice(prop, 1)
+				} else if( prop in this._data ){
 					// Otherwise, `delete`.
 					delete this._data[prop];
 					// Create the event.

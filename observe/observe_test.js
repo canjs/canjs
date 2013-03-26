@@ -193,6 +193,68 @@ test("remove attr", function(){
 	equals(undefined,  state.attr("properties") );
 });
 
+test("remove nested attr", function(){
+	var state = new can.Observe({
+		properties : {
+			nested: true
+		}
+	});
+	
+	state.bind("change", function(ev, attr, how, newVal, old){
+		equals(attr, "properties.nested");
+		equals(how, "remove")
+		same(old , true);
+	})
+	
+	state.removeAttr("properties.nested");
+	equals(undefined,  state.attr("properties.nested") );
+});
+
+test("remove item in nested array", function(){
+	var state = new can.Observe({
+		array : ["a", "b"]
+	});
+	
+	state.bind("change", function(ev, attr, how, newVal, old){
+		equals(attr, "array.1");
+		equals(how, "remove")
+		same(old, ["b"]);
+	})
+	
+	state.removeAttr("array.1");
+	equals(undefined,  state.attr("array.1") );
+});
+
+test("remove nested property in item of array", function(){
+	var state = new can.Observe({
+		array : [{
+			nested: true
+		}]
+	});
+	
+	state.bind("change", function(ev, attr, how, newVal, old){
+		equals(attr, "array.0.nested");
+		equals(how, "remove")
+		same(old, true);
+	})
+	
+	state.removeAttr("array.0.nested");
+	equals(undefined,  state.attr("array.0.nested") );
+});
+
+test("remove nested property in item of array observe", function(){
+	var state = new can.Observe.List([{nested: true}]);
+	
+	state.bind("change", function(ev, attr, how, newVal, old){
+		equals(attr, "0.nested");
+		equals(how, "remove")
+		same(old, true);
+	})
+	
+	state.removeAttr("0.nested");
+	equals(undefined,  state.attr("0.nested") );
+});
+
 test("attr with an object", function(){
 	var state = new can.Observe({
 		properties : {
