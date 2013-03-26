@@ -4,7 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="<%= root %>/lib/qunit/qunit.css"/>
 </head>
 <body>
-<h1 id="qunit-header"><%= module.definition.name %> Test Suite</h1>
+<h1 id="qunit-header"><%= configuration.name %> Test Suite</h1>
 
 <h2 id="qunit-banner"></h2>
 
@@ -16,7 +16,25 @@
 <script type="text/javascript" src="<%= root %>/../steal/steal.js"></script>
 <script type="text/javascript" src="<%= root %>/lib/qunit/qunit.js"></script>
 <script type="text/javascript">
-	steal("<%= module.id %>").then("<%= module.id %>/<%= module.name %>_test.js");
+	require.config(<%= JSON.stringify(requirejs) %>);
+
+	<!--
+	require.config({
+		"map": {
+			"*": {
+				"can/util/util.js?": "can/util/dojo/dojo.js?"
+			}
+		},
+		"shim": {
+			"can/construct/construct_test": {
+				"deps": "can/construct",
+				"exports": null
+			}
+		}
+	});
+	-->
+
+	require(["<%= modules.join('", "') %>"]);
 </script>
 </body>
 </html>

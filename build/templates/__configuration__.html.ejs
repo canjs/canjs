@@ -4,7 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="<%= root %>/lib/qunit/qunit.css"/>
 </head>
 <body>
-<h1 id="qunit-header"><%= module.definition.name %> Test Suite</h1>
+<h1 id="qunit-header"><%= configuration.name %> Test Suite</h1>
 
 <h2 id="qunit-banner"></h2>
 
@@ -16,7 +16,9 @@
 <script type="text/javascript" src="<%= root %>/../steal/steal.js"></script>
 <script type="text/javascript" src="<%= root %>/lib/qunit/qunit.js"></script>
 <script type="text/javascript">
-	steal("<%= module.id %>").then("<%= module.id %>/<%= module.name %>_test.js");
+	steal(function() {
+		steal.config(<%= JSON.stringify(configuration.steal) %>);
+	}, "<%= modules.join('", "') %>").then("<%= tests.join('", "') %>");
 </script>
 </body>
 </html>

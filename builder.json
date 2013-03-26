@@ -1,0 +1,151 @@
+{
+	"modules": {
+		"can/construct": {
+			"name": "can.Construct",
+			"description": "Inheritable constructor functions",
+			"type": "core",
+			"isDefault": true
+		},
+		"can/observe": {
+			"name": "can.Observe",
+			"description": "Observable key-value bindings",
+			"type": "core",
+			"isDefault": true
+		},
+		"can/model": {
+			"name": "can.Model",
+			"description": "Observes connected to a RESTful JSON interface",
+			"type": "core",
+			"isDefault": true
+		},
+		"can/view": {
+			"name": "can.view",
+			"description": "Template loading, caching, rendering",
+			"type": "core",
+			"isDefault": true
+		},
+		"can/view/ejs": {
+			"name": "can.EJS",
+			"description": "Live-binding Embedded JavaScript",
+			"type": "core",
+			"isDefault": true
+		},
+		"can/control": {
+			"name": "can.Control",
+			"description": "Declarative event bindings",
+			"type": "core",
+			"isDefault": true
+		},
+		"can/route": {
+			"name": "can.route",
+			"description": "Back button and bookmarking support",
+			"type": "core",
+			"isDefault": true
+		},
+		"can/control/route": {
+			"name": "can.Control.route",
+			"description": "Declare routes in your Control",
+			"type": "core",
+			"isDefault": true
+		},
+		"can/view/mustache": {
+			"name": "can.Mustache",
+			"type": "plugin",
+			"description": "Live-binding Handlebars and Mustache views"
+		},
+		"can/construct/super": {
+			"name": "can.Construct.super",
+			"type": "plugin",
+			"description": "Call super methods"
+		},
+		"can/observe/delegate": {
+			"name": "can.Observe.delegate",
+			"type": "plugin",
+			"description": "Listen to Observe attributes"
+		},
+		"can/observe/setter": {
+			"name": "can.Observe.setter",
+			"type": "plugin",
+			"description": "Use setter methods on Observes"
+		},
+		"can/observe/attributes": {
+			"name": "can.Observe.attributes",
+			"type": "plugin",
+			"description": "Define Observe attributes"
+		},
+		"can/observe/validations": {
+			"name": "can.Observe.validations",
+			"type": "plugin",
+			"description": "Validate Observe attributes"
+		},
+		"can/observe/backup": {
+			"name": "can.Observe.backup",
+			"type": "plugin",
+			"description": "Backup and restore an Observe's state"
+		},
+		"can/control/plugin": {
+			"name": "can.Control.plugin",
+			"type": "plugin",
+			"description": "Registers a jQuery plugin function for Controls",
+			"configurations": ["jquery"]
+		},
+		"can/view/modifiers": {
+			"name": "can.view.modifiers",
+			"type": "plugin",
+			"description": "Use jQuery modifiers to render views",
+			"configurations": ["jquery"]
+		}
+	},
+	"configurations": {
+		"jquery": {
+			"name": "jQuery",
+			"steal": {
+				"map": {
+					"*": {
+						"can/util/util.js": "can/util/jquery/jquery.js"
+					}
+				}
+			}
+		},
+		"zepto": {
+			"name": "Zepto",
+			"steal": {
+				"map": {
+					"*": {
+						"can/util/util.js": "can/util/zepto/zepto.js"
+					}
+				}
+			}
+		},
+		"mootools": {
+			"name": "mootools",
+			"steal": {
+				"map": {
+					"*": {
+						"can/util/util.js": "can/util/mootools/mootools.js"
+					}
+				}
+			}
+		},
+		"yui": {
+			"name": "YUI",
+			"steal": {
+				"map": {
+					"*": {
+						"can/util/util.js": "can/util/yui/yui.js"
+					}
+				}
+			}
+		},
+		"dojo": {
+			"name": "Dojo",
+			"steal": {
+				"map": {
+					"*": {
+						"can/util/util.js": "can/util/dojo/dojo.js"
+					}
+				}
+			}
+		}
+	}
+}
