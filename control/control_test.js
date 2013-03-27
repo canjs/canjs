@@ -57,7 +57,7 @@
         can.append(can.$("#qunit-test-area"), "<div id='things'>div<span>span</span></div>")
         var thing1 = new Things("#things", {});
         var thing2 = new Things("#things", {});
-        equals(can.data(can.$('#things'), "controls").length, 2, "there are 2 items in the data array")
+        equal(can.data(can.$('#things'), "controls").length, 2, "there are 2 items in the data array")
         can.remove(can.$('#things'));
     })
 
@@ -292,10 +292,10 @@
         var Rebinder = can.Control({
             "{item} foo":function (item, ev) {
                 if (first) {
-                    equals(item.id, 1, "first item");
+                    equal(item.id, 1, "first item");
                     first = false;
                 } else {
-                    equals(item.id, 2, "first item");
+                    equal(item.id, 2, "first item");
                 }
             }
         });

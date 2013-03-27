@@ -142,7 +142,7 @@ steal('funcunit/qunit','can/model/cached','can/util/fixture',function(){
 		Task.findAll({}, function(tasks){
 			tasks[0].destroy(function(){
 				Task.findAll({},function(tasks2){
-					equals(tasks2.length, 1);
+					equal(tasks2.length, 1);
 					tasks2.bind("change", function(){
 						ok(true, "updated list")
 						start();

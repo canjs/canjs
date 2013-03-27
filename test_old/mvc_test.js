@@ -25,7 +25,7 @@ test("Class basics", function(){
 	})
 	
 	var n = new PrivateNote("Hello World");
-	equals(n.author(),"Hello World")
+	equal(n.author(),"Hello World")
 });
 
 test("Model basics",function(){
@@ -51,8 +51,8 @@ test("Model basics",function(){
 	stop();
 	Task.findAll({}, function(tasks){
 
-		equals(tasks.length, 1,"we have an array")
-		equals(tasks[0].id, 1, "we have the objects")
+		equal(tasks.length, 1,"we have an array")
+		equal(tasks[0].id, 1, "we have the objects")
 		ok(tasks[0] instanceof Task, "we have an instance of task")
 
 		// add a task
@@ -94,7 +94,7 @@ test("Control Basics",3,function(){
 	
 	new Task({id: 1}).created();
 	
-	equals(can.$('#qunit-test-area')[0].className, "")
+	equal(can.$('#qunit-test-area')[0].className, "")
 	
 	tasks.destroy();
 	

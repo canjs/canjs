@@ -16,9 +16,9 @@ test("Basic Observe",9,function(){
 	var added;
 	
 	state.bind("change", function(ev, attr, how, val, old){
-		equals(attr, "properties.brand.0", "correct change name")
-		equals(how, "add")
-		equals(val[0].attr("foo"),"bar", "correct")
+		equal(attr, "properties.brand.0", "correct change name")
+		equal(how, "add")
+		equal(val[0].attr("foo"),"bar", "correct")
 		
 		added = val[0];
 	});
@@ -30,14 +30,14 @@ test("Basic Observe",9,function(){
 	state.unbind("change");
 	
 	added.bind("change", function(ev, attr, how, val, old){
-		equals(attr, "foo","foo property set on added")
-		equals(how, "set","added")
-		equals(val, "zoo","added")
+		equal(attr, "foo","foo property set on added")
+		equal(how, "set","added")
+		equal(val, "zoo","added")
 	})
 	state.bind("change", function(ev, attr, how, val, old){
-		equals(attr, "properties.brand.0.foo")
-		equals(how, "set")
-		equals(val,"zoo")
+		equal(attr, "properties.brand.0.foo")
+		equal(how, "set")
+		equal(val,"zoo")
 	});
 	added.attr("foo", "zoo");
 	
@@ -46,7 +46,7 @@ test("Basic Observe",9,function(){
 test("list attr changes length", function(){
 	var l = new can.Observe.List([0,1,2])
 	l.attr(3,3)
-	equals(l.length, 4);
+	equal(l.length, 4);
 })
 
 test("list splice", function(){
@@ -56,13 +56,13 @@ test("list splice", function(){
 	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
 		equals (attr, "1")
 		// where comes from the attr ...
-		//equals(where, 1)
+		//equal(where, 1)
 		if(first){
-			equals( how, "remove", "removing items" )
-			equals( newVals, undefined, "no new Vals" )
+			equal( how, "remove", "removing items" )
+			equal( newVals, undefined, "no new Vals" )
 		} else {
 			same( newVals, ["a","b"] , "got the right newVals")
-			equals( how, "add", "adding items" )
+			equal( how, "add", "adding items" )
 		}
 	
 		first = false;
@@ -80,8 +80,8 @@ test("list pop", function(){
 	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
 		equals (attr, "3")
 		
-		equals( how, "remove" )
-		equals( newVals, undefined )
+		equal( how, "remove" )
+		equal( newVals, undefined )
 		same( oldVals, [3] )
 	})
 	
@@ -104,12 +104,12 @@ test("changing an object unbinds", function(){
 	var  brand = state.attr("properties.brand");
 	
 	state.bind("change", function(ev, attr, how, val, old){
-		equals(attr,"properties.brand");
+		equal(attr,"properties.brand");
 		
-		equals(count, 0, "count called once");
+		equal(count, 0, "count called once");
 		count++;
-		equals(how, "set")
-		equals(val[0], "hi")
+		equal(how, "set")
+		equal(val[0], "hi")
 	});
 	state.attr("properties.brand",["hi"]);
 	
@@ -142,7 +142,7 @@ test("attr does not blow away old observable", function(){
 	var oldCid = state.attr("properties.brand")._cid;
 	state.attr({properties:{brand:[]}}, true);
 	same(state.attr("properties.brand")._cid, oldCid, "should be the same observe, so that views bound to the old one get updates")
-	equals(state.attr("properties.brand").length, 0, "list should be empty");
+	equal(state.attr("properties.brand").length, 0, "list should be empty");
 });
 
 test("sub observes respect attr remove parameter", function() {
@@ -155,19 +155,19 @@ test("sub observes respect attr remove parameter", function() {
 
     state.bind("change", function(ev, attr, how, newVal, old){
         bindCalled++;
-        equals(attr, "monkey.tail");
-        equals(old, "brain");
-        equals(how, "remove");
+        equal(attr, "monkey.tail");
+        equal(old, "brain");
+        equal(how, "remove");
     });
 
     state.attr({monkey: {}});
-    equals("brain", state.attr("monkey.tail"), "should not remove attribute of sub observe when remove param is false");
-    equals(0, bindCalled, "remove event not fired for sub observe when remove param is false");
+    equal("brain", state.attr("monkey.tail"), "should not remove attribute of sub observe when remove param is false");
+    equal(0, bindCalled, "remove event not fired for sub observe when remove param is false");
 
     state.attr({monkey: {}}, true);
 
-    equals(undefined, state.attr("monkey.tail"), "should remove attribute of sub observe when remove param is false");
-    equals(1, bindCalled, "remove event fired for sub observe when remove param is false");
+    equal(undefined, state.attr("monkey.tail"), "should remove attribute of sub observe when remove param is false");
+    equal(1, bindCalled, "remove event fired for sub observe when remove param is false");
 });
 
 test("remove attr", function(){
@@ -180,8 +180,8 @@ test("remove attr", function(){
 	});
 	
 	state.bind("change", function(ev, attr, how, newVal, old){
-		equals(attr, "properties");
-		equals(how, "remove")
+		equal(attr, "properties");
+		equal(how, "remove")
 		same(old.serialize() ,{
 		  brand: [],
 		  model : [],
@@ -190,7 +190,7 @@ test("remove attr", function(){
 	})
 	
 	state.removeAttr("properties");
-	equals(undefined,  state.attr("properties") );
+	equal(undefined,  state.attr("properties") );
 });
 
 test("remove nested attr", function(){
@@ -201,13 +201,13 @@ test("remove nested attr", function(){
 	});
 	
 	state.bind("change", function(ev, attr, how, newVal, old){
-		equals(attr, "properties.nested");
-		equals(how, "remove")
+		equal(attr, "properties.nested");
+		equal(how, "remove")
 		same(old , true);
 	})
 	
 	state.removeAttr("properties.nested");
-	equals(undefined,  state.attr("properties.nested") );
+	equal(undefined,  state.attr("properties.nested") );
 });
 
 test("remove item in nested array", function(){
@@ -216,13 +216,13 @@ test("remove item in nested array", function(){
 	});
 	
 	state.bind("change", function(ev, attr, how, newVal, old){
-		equals(attr, "array.1");
-		equals(how, "remove")
+		equal(attr, "array.1");
+		equal(how, "remove")
 		same(old, ["b"]);
 	})
 	
 	state.removeAttr("array.1");
-	equals(undefined,  state.attr("array.1") );
+	equal(undefined,  state.attr("array.1") );
 });
 
 test("remove nested property in item of array", function(){
@@ -233,26 +233,26 @@ test("remove nested property in item of array", function(){
 	});
 	
 	state.bind("change", function(ev, attr, how, newVal, old){
-		equals(attr, "array.0.nested");
-		equals(how, "remove")
+		equal(attr, "array.0.nested");
+		equal(how, "remove")
 		same(old, true);
 	})
 	
 	state.removeAttr("array.0.nested");
-	equals(undefined,  state.attr("array.0.nested") );
+	equal(undefined,  state.attr("array.0.nested") );
 });
 
 test("remove nested property in item of array observe", function(){
 	var state = new can.Observe.List([{nested: true}]);
 	
 	state.bind("change", function(ev, attr, how, newVal, old){
-		equals(attr, "0.nested");
-		equals(how, "remove")
+		equal(attr, "0.nested");
+		equal(how, "remove")
 		same(old, true);
 	})
 	
 	state.removeAttr("0.nested");
-	equals(undefined,  state.attr("0.nested") );
+	equal(undefined,  state.attr("0.nested") );
 });
 
 test("attr with an object", function(){
@@ -264,8 +264,8 @@ test("attr with an object", function(){
 	});
 	
 	state.bind("change", function(ev, attr, how, newVal){
-		equals(attr, "properties.foo")
-		equals(newVal, "bad")
+		equal(attr, "properties.foo")
+		equal(newVal, "bad")
 	})
 	
 	state.attr({
@@ -285,8 +285,8 @@ test("attr with an object", function(){
 	state.unbind("change");
 	
 	state.bind("change", function(ev, attr, how, newVal){
-		equals(attr, "properties.brand.0")
-		equals(how,"add")
+		equal(attr, "properties.brand.0")
+		equal(how,"add")
 		same(newVal, ["bad"])
 	});
 	
@@ -302,7 +302,7 @@ test("attr with an object", function(){
 test("empty get", function(){
 	var state = new can.Observe({});
 	
-	equals(state.attr('foo.bar'), undefined)
+	equal(state.attr('foo.bar'), undefined)
 });
 
 test("attr deep array ", function(){
@@ -338,16 +338,16 @@ test('attr semi-serialize', function(){
 test("attr sends events after it is done", function(){
 	var state = new can.Observe({foo: 1, bar: 2})
 	state.bind('change', function(){
-		equals(state.attr('foo'), -1, "foo set");
-		equals(state.attr('bar'), -2, "bar set")
+		equal(state.attr('foo'), -1, "foo set");
+		equal(state.attr('bar'), -2, "bar set")
 	})
 	state.attr({foo: -1, bar: -2});
 })
 
 test("direct property access", function(){
 	var state = new can.Observe({foo: 1, attr: 2});
-	equals(state.foo,1);
-	equals(typeof state.attr, 'function')
+	equal(state.foo,1);
+	equal(typeof state.attr, 'function')
 })
 
 test("pop unbinds", function(){
@@ -358,17 +358,17 @@ test("pop unbinds", function(){
 		count++;
 		if(count == 1){
 			// the prop change
-			equals(attr, '0.foo', "count is set");
+			equal(attr, '0.foo', "count is set");
 		} else if(count === 2 ){
-			equals(how, "remove");
-			equals(attr, "0")
+			equal(how, "remove");
+			equal(attr, "0")
 		} else {
 			ok(false, "called too many times")
 		}
 		
 	})
 	
-	equals( o.attr('foo') , 'bar');
+	equal( o.attr('foo') , 'bar');
 	
 	o.attr('foo','car')
 	l.pop();
@@ -383,17 +383,17 @@ test("splice unbinds", function(){
 		count++;
 		if(count == 1){
 			// the prop change
-			equals(attr, '0.foo', "count is set");
+			equal(attr, '0.foo', "count is set");
 		} else if(count === 2 ){
-			equals(how, "remove");
-			equals(attr, "0")
+			equal(how, "remove");
+			equal(attr, "0")
 		} else {
 			ok(false, "called too many times")
 		}
 		
 	})
 	
-	equals( o.attr('foo') , 'bar');
+	equal( o.attr('foo') , 'bar');
 	
 	o.attr('foo','car')
 	l.splice(0,1);
@@ -408,7 +408,7 @@ test("always gets right attr even after moving array items", function(){
 	
 	
 	l.bind('change', function(ev, attr, how){
-		equals(attr, "1.foo")
+		equal(attr, "1.foo")
 	})
 	
 	
@@ -425,16 +425,16 @@ test("recursive observers do not cause stack overflow", function() {
 test("bind to specific attribute changes when an existing attribute's value is changed", function() {
 	var paginate = new can.Observe( { offset: 100, limit: 100, count: 2000 } );
 	paginate.bind( 'offset', function( ev, newVal, oldVal ) {
-		equals(newVal, 200);
-		equals(oldVal, 100);
+		equal(newVal, 200);
+		equal(oldVal, 100);
 	});
 	paginate.attr( 'offset', 200 );
 });
 test("bind to specific attribute changes when an attribute is removed", 2, function() {
 	var paginate = new can.Observe( { offset: 100, limit: 100, count: 2000 } );
 	paginate.bind( 'offset', function( ev, newVal, oldVal ) {
-		equals(newVal, undefined);
-		equals(oldVal, 100);
+		equal(newVal, undefined);
+		equal(oldVal, 100);
 	});
 	paginate.removeAttr( 'offset' );
 });
@@ -596,7 +596,7 @@ test("startBatch callback", 4, function(){
 		callbackCalled = false;
 	
 	ob.bind("change", function(){
-		equals(callbackCalled, false, 'startBatch callback not called yet');
+		equal(callbackCalled, false, 'startBatch callback not called yet');
 	});
 
 	can.Observe.startBatch(function(){
@@ -605,9 +605,9 @@ test("startBatch callback", 4, function(){
 	});
 	
 	ob.attr('hearts', 16);
-	equals(callbackCalled, false, 'startBatch callback not called yet');
+	equal(callbackCalled, false, 'startBatch callback not called yet');
 	can.Observe.stopBatch();
-	equals(callbackCalled, true, 'startBatch callback called');
+	equal(callbackCalled, true, 'startBatch callback called');
 });
 
 test("nested observe attr", function() {
@@ -616,11 +616,11 @@ test("nested observe attr", function() {
 		count = 0;
 
 	person1.bind("change", function(ev, attr, how, val, old){
-		equals(count, 0, 'change called once')
+		equal(count, 0, 'change called once')
 		count++;
-		equals(attr, 'name');
-		equals(val.attr('first'), 'Justin');
-		equals(val.attr('last'), 'Meyer');
+		equal(attr, 'name');
+		equal(val.attr('first'), 'Justin');
+		equal(val.attr('last'), 'Meyer');
 	})
 
 	person1.attr('name', person2.attr('name'));

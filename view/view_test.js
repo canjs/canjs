@@ -46,11 +46,11 @@
 		can.view.render("//can/view/test//temp.ejs",{"message" :"helloworld"}, function(text){
 			ok(/helloworld\s*/.test(text), "we got a rendered template");
 			i++;
-			equals(i, 2, "Ajax is not synchronous");
+			equal(i, 2, "Ajax is not synchronous");
 			start();
 		});
 		i++;
-		equals(i, 1, "Ajax is not synchronous")
+		equal(i, 1, "Ajax is not synchronous")
 	})
 	test("caching works", function(){
 		// this basically does a large ajax request and makes sure
@@ -104,7 +104,7 @@
 		div.appendChild(can.view('#test_ejs', {name: 'Henry'}));
 
 		//make sure we aren't returning the current document as the template
-		equals(div.getElementsByTagName("script").length, 0, "Current document was not used as template")
+		equal(div.getElementsByTagName("script").length, 0, "Current document was not used as template")
 		if(div.getElementsByTagName("span").length === 1) {
 			equal( div.getElementsByTagName("span")[0].firstChild.nodeValue , 'Henry');
 		}
@@ -118,7 +118,7 @@
 			foo : typeof foo.promise == 'function' ? foo.promise() : foo,
 			bar : bar
 		}).then(function(result){
-			equals(result, "FOO and BAR");
+			equal(result, "FOO and BAR");
 			start();
 		});
 		setTimeout(function(){
@@ -132,7 +132,7 @@
 		var foo = new can.Deferred();
 		stop();
 		can.view.render("//can/view/test//deferred.ejs",foo).then(function(result){
-			equals(result, "FOO");
+			equal(result, "FOO");
 			start();
 		});
 		setTimeout(function(){
@@ -323,7 +323,7 @@
 		stop();
 		can.view.render("//can/view/test//deferred.ejs",foo)
 			.fail(function(error) {
-				equals(error.message, 'Deferred error');
+				equal(error.message, 'Deferred error');
 				start();
 			});
 
@@ -343,7 +343,7 @@
 			foo : typeof foo.promise == 'function' ? foo.promise() : foo,
 			bar : bar
 		}).fail(function(error){
-			equals(error.message, 'foo error');
+			equal(error.message, 'foo error');
 			start();
 		});
 

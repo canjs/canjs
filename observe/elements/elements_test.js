@@ -12,7 +12,7 @@ test("identity uses the real id", function(){
     }
   })
 
-  equals(new Person({ssn:'987-65-4321'}).identity(),'Person_987-65-4321');
+  equal(new Person({ssn:'987-65-4321'}).identity(),'Person_987-65-4321');
 })
 
 })

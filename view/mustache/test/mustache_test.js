@@ -488,16 +488,16 @@ test("Handlebars helper: with", function() {
 
 test("render with left bracket", function(){
 	var compiled = new can.Mustache({text: this.squareBrackets, type: '['}).render({animals: this.animals})
-	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders with bracket")
+	equal(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders with bracket")
 })
 test("render with with", function(){
 	var compiled = new can.Mustache({text: this.squareBracketsNoThis, type: '['}).render({animals: this.animals}) ;
-	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders bracket with no this")
+	equal(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "renders bracket with no this")
 })
 test("default carrot", function(){
 	var compiled = new can.Mustache({text: this.angleBracketsNoThis}).render({animals: this.animals}) ;
 
-	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>")
+	equal(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>")
 })
 test("render with double angle", function(){
 	var text = "{{& replace_me }}{{{ replace_me_too }}}"+
@@ -505,7 +505,7 @@ test("render with double angle", function(){
 	               "<li>{{.}}</li>" + 
 		      "{{/animals}}</ul>";
 	var compiled = new can.Mustache({text: text}).render({animals: this.animals}) ;
-	equals(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "works")
+	equal(compiled, "<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "works")
 });
 
 test("comments", function(){
@@ -514,14 +514,14 @@ test("comments", function(){
 	               "<li>{{.}}</li>" + 
 		      "{{/animals}}</ul>";
 	var compiled = new can.Mustache({text: text}).render({animals: this.animals}) ;
-	equals(compiled,"<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>" )
+	equal(compiled,"<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>" )
 });
 
 test("multi line", function(){
 	var text = "a \n b \n c",
 		result = new can.Mustache({text: text}).render({}) ;
 		
-	equals(result, text)
+	equal(result, text)
 })
 
 test("multi line elements", function(){
@@ -540,10 +540,10 @@ test("escapedContent", function(){
 	var div = document.createElement('div');
 	div.innerHTML = compiled;
 	
-	equals(div.getElementsByTagName('span')[0].firstChild.nodeValue, "foo < bar < car > zar > poo" );
-	equals(div.getElementsByTagName('strong')[0].firstChild.nodeValue, 123 );
-	equals(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"" );
-	equals(div.getElementsByTagName('label')[0].innerHTML, "&amp;" );
+	equal(div.getElementsByTagName('span')[0].firstChild.nodeValue, "foo < bar < car > zar > poo" );
+	equal(div.getElementsByTagName('strong')[0].firstChild.nodeValue, 123 );
+	equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"" );
+	equal(div.getElementsByTagName('label')[0].innerHTML, "&amp;" );
 })
 
 test("unescapedContent", function(){
@@ -554,10 +554,10 @@ test("unescapedContent", function(){
 	var div = document.createElement('div');
 	div.innerHTML = compiled;
 
-	equals(div.getElementsByTagName('span')[0].firstChild.nodeType, 1 );
-	equals(div.getElementsByTagName('div')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
-	equals(div.getElementsByTagName('span')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
-	equals(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"", "escapped no matter what" );
+	equal(div.getElementsByTagName('span')[0].firstChild.nodeType, 1 );
+	equal(div.getElementsByTagName('div')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
+	equal(div.getElementsByTagName('span')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
+	equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"", "escapped no matter what" );
 });
 
 /*
@@ -574,7 +574,7 @@ test("returning blocks", function(){
 		});
 	// make sure expected values are in res
 	ok(/\s4\s/.test(res), "first block called" );
-	equals(res.match(/ItemsLength4/g).length, 4, "innerBlock and each")
+	equal(res.match(/ItemsLength4/g).length, 4, "innerBlock and each")
 }); */
 
 test("easy hookup", function(){
@@ -594,8 +594,8 @@ test('multiple function hookups in a tag', function(){
 	div.appendChild(can.view.frag(compiled));
 	var span = div.getElementsByTagName('span')[0];
 
-	equals(can.data(can.$(span), 'foo'), 'bar', "first hookup");
-	equals(can.data(can.$(span), 'baz'), 'qux', "second hookup");
+	equal(can.data(can.$(span), 'foo'), 'bar', "first hookup");
+	equal(can.data(can.$(span), 'baz'), 'qux', "second hookup");
 
 })
 
@@ -616,12 +616,12 @@ test("helpers", function() {
 	
 	var text = "<div>{{ simpleHelper() }}</div>";
 	var compiled = new can.Mustache({text: text}).render() ;
-	equals(compiled, "<div>Simple</div>");
+	equal(compiled, "<div>Simple</div>");
 	
 	text = "<div id=\"hookup\" {{ elementHelper() }}></div>";
 	compiled = new can.Mustache({text: text}).render() ;
 	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
-	equals(can.$('#hookup')[0].innerHTML, "Simple");
+	equal(can.$('#hookup')[0].innerHTML, "Simple");
 }); */
 
 
@@ -638,18 +638,18 @@ test("attribute single unescaped, html single unescaped", function(){
 	div.appendChild(can.view.frag(compiled))
 	
 
-	equals(div.getElementsByTagName('div')[0].innerHTML,"dishes", "html correctly dishes")
-	equals(div.getElementsByTagName('div')[0].className,"", "class empty")
+	equal(div.getElementsByTagName('div')[0].innerHTML,"dishes", "html correctly dishes")
+	equal(div.getElementsByTagName('div')[0].className,"", "class empty")
 	
 	
 	task.attr('name','lawn')
 	
-	equals(div.getElementsByTagName('div')[0].innerHTML,"lawn", "html correctly lawn")
-	equals(div.getElementsByTagName('div')[0].className,"", "class empty")
+	equal(div.getElementsByTagName('div')[0].innerHTML,"lawn", "html correctly lawn")
+	equal(div.getElementsByTagName('div')[0].className,"", "class empty")
 	
 	task.attr('completed', true);
 	
-	equals(div.getElementsByTagName('div')[0].className, "complete", "class changed to complete")
+	equal(div.getElementsByTagName('div')[0].className, "complete", "class changed to complete")
 });
 
 
@@ -719,13 +719,13 @@ test("select live binding", function() {
 		div = document.createElement('div');
 
 		div.appendChild(can.view.frag(compiled))
-		equals(div.getElementsByTagName('option').length, 1, '1 item in list')
+		equal(div.getElementsByTagName('option').length, 1, '1 item in list')
 		
 		Todos.push({id: 2, name: 'Laundry'})
-		equals(div.getElementsByTagName('option').length, 2, '2 items in list')
+		equal(div.getElementsByTagName('option').length, 2, '2 items in list')
 		
 		Todos.splice(0, 2);
-		equals(div.getElementsByTagName('option').length, 0, '0 items in list')
+		equal(div.getElementsByTagName('option').length, 0, '0 items in list')
 });  
 
 test('multiple hookups in a single attribute', function() {
@@ -749,19 +749,19 @@ test('multiple hookups in a single attribute', function() {
 	
  	var innerDiv = div.childNodes[0];
  
-	equals(getAttr(innerDiv, 'class'), "abcd", 'initial render');
+	equal(getAttr(innerDiv, 'class'), "abcd", 'initial render');
  
  	obs.attr('bar', 'e');
  
-	equals(getAttr(innerDiv, 'class'), "aecd", 'initial render');
+	equal(getAttr(innerDiv, 'class'), "aecd", 'initial render');
  	
  	obs.attr('bar', 'f');
  
-	equals(getAttr(innerDiv, 'class'), "afcd", 'initial render');
+	equal(getAttr(innerDiv, 'class'), "afcd", 'initial render');
 	
 	obs.nest.attr('what', 'g');
 	
-	equals(getAttr(innerDiv, 'class'), "afcg", 'nested observe');
+	equal(getAttr(innerDiv, 'class'), "afcg", 'nested observe');
 });
 
 test('adding and removing multiple html content within a single element', function(){
@@ -780,15 +780,15 @@ test('adding and removing multiple html content within a single element', functi
 
 	div.appendChild(can.view.frag(compiled));
 
-	equals(div.childNodes[0].innerHTML, 'abc', 'initial render');
+	equal(div.childNodes[0].innerHTML, 'abc', 'initial render');
 
 	obs.attr({a: '', b : '', c: ''});
 
-	equals(div.childNodes[0].innerHTML, '', 'updated values');
+	equal(div.childNodes[0].innerHTML, '', 'updated values');
 	
 	obs.attr({c: 'c'});
 	
-	equals(div.childNodes[0].innerHTML, 'c', 'updated values');
+	equal(div.childNodes[0].innerHTML, 'c', 'updated values');
 });
 
 test('live binding and removeAttr', function(){
@@ -814,46 +814,46 @@ test('live binding and removeAttr', function(){
 	var p = div.getElementsByTagName('p')[0],
 		span = p.getElementsByTagName('span')[0];
 	
-	equals(p.getAttribute("some"), "myText", 'initial render attr');
-	equals(getAttr(p, "class"), "myMessage", 'initial render class');
-	equals(span.innerHTML, 'Live long and prosper', 'initial render innerHTML');
+	equal(p.getAttribute("some"), "myText", 'initial render attr');
+	equal(getAttr(p, "class"), "myMessage", 'initial render class');
+	equal(span.innerHTML, 'Live long and prosper', 'initial render innerHTML');
 	
 	obs.removeAttr('className');
 	
-	equals(getAttr(p, "class"), '', 'class is undefined');
+	equal(getAttr(p, "class"), '', 'class is undefined');
 	
 	obs.attr('className', 'newClass');
 	
-	equals(getAttr(p, "class"), 'newClass', 'class updated');
+	equal(getAttr(p, "class"), 'newClass', 'class updated');
 	
 	obs.removeAttr('attributes');
 	
-	equals(p.getAttribute('some'), null, 'attribute is undefined');
+	equal(p.getAttribute('some'), null, 'attribute is undefined');
 	
 	obs.attr('attributes', 'some="newText"');
 	
-	equals(p.getAttribute('some'), 'newText', 'attribute updated');
+	equal(p.getAttribute('some'), 'newText', 'attribute updated');
 	
 	obs.removeAttr('message');
 	
-	equals(span.innerHTML, '', 'text node value is empty');
+	equal(span.innerHTML, '', 'text node value is empty');
 	
 	obs.attr('message', 'Warp drive, Mr. Sulu');
 	
-	equals(span.innerHTML, 'Warp drive, Mr. Sulu', 'text node updated');
+	equal(span.innerHTML, 'Warp drive, Mr. Sulu', 'text node updated');
 	
 	obs.removeAttr('show');
 	
-	equals(div.innerHTML, '', 'value in block statement is undefined');
+	equal(div.innerHTML, '', 'value in block statement is undefined');
 	
 	obs.attr('show', true);
 	
 	var p = div.getElementsByTagName('p')[0],
 		span = p.getElementsByTagName('span')[0];
 	
-	equals(p.getAttribute("some"), "newText", 'value in block statement updated attr');
-	equals(getAttr(p, "class"), "newClass", 'value in block statement updated class');
-	equals(span.innerHTML, 'Warp drive, Mr. Sulu', 'value in block statement updated innerHTML');
+	equal(p.getAttribute("some"), "newText", 'value in block statement updated attr');
+	equal(getAttr(p, "class"), "newClass", 'value in block statement updated class');
+	equal(span.innerHTML, 'Warp drive, Mr. Sulu', 'value in block statement updated innerHTML');
 
 });
 
@@ -872,21 +872,21 @@ test('hookup within a tag', function () {
 	div.appendChild(can.view.frag(compiled));
 	var anchor = div.getElementsByTagName('div')[0];
 
-	equals(getAttr(anchor, 'class'), 'a');
-	equals(anchor.getAttribute('some'), 'property');
+	equal(getAttr(anchor, 'class'), 'a');
+	equal(anchor.getAttribute('some'), 'property');
 
 	obs.attr('foo', 'class="b"');
-	equals(getAttr(anchor, 'class'), 'b');
-	equals(anchor.getAttribute('some'), 'property');
+	equal(getAttr(anchor, 'class'), 'b');
+	equal(anchor.getAttribute('some'), 'property');
 
 	obs.attr('baz', 'some=\'new property\'');
-	equals(getAttr(anchor, 'class'), 'b');
-	equals(anchor.getAttribute('some'), 'new property');
+	equal(getAttr(anchor, 'class'), 'b');
+	equal(anchor.getAttribute('some'), 'new property');
 
 	obs.attr('foo', 'class=""');
 	obs.attr('baz', '');
-	equals(getAttr(anchor, 'class'), "", 'anchor class blank');
-	equals(anchor.getAttribute('some'), undefined, 'attribute "some" is undefined');
+	equal(getAttr(anchor, 'class'), "", 'anchor class blank');
+	equal(anchor.getAttribute('some'), undefined, 'attribute "some" is undefined');
 });
 
 test('single escaped tag, removeAttr', function () {
@@ -902,13 +902,13 @@ test('single escaped tag, removeAttr', function () {
 	div.appendChild(can.view.frag(compiled));
 	var anchor = div.getElementsByTagName('div')[0];
 
-	equals(anchor.getAttribute('data-bar'), "john doe's bar");
+	equal(anchor.getAttribute('data-bar'), "john doe's bar");
 
 	obs.removeAttr('foo');
-	equals(anchor.getAttribute('data-bar'), null);
+	equal(anchor.getAttribute('data-bar'), null);
 
 	obs.attr('foo', 'data-bar="baz"');
-	equals(anchor.getAttribute('data-bar'), 'baz');
+	equal(anchor.getAttribute('data-bar'), 'baz');
 });
 
 
@@ -944,7 +944,7 @@ test("hookup and live binding", function(){
 	var child = div.getElementsByTagName('div')[0];
 	ok( child.className.indexOf("false") > -1, "is incomplete" )
 	ok( !!can.data(can.$(child), 'task'), "has data" )
-	equals(child.innerHTML, "My Name", "has name")
+	equal(child.innerHTML, "My Name", "has name")
 	
 	task.attr({
 		completed: true,
@@ -952,7 +952,7 @@ test("hookup and live binding", function(){
 	});
 	
 	ok( child.className.indexOf("true") != -1, "is complete" )
-	equals(child.innerHTML, "New Name", "has new name")
+	equal(child.innerHTML, "New Name", "has new name")
 	
 })
 
@@ -974,10 +974,10 @@ test('multiple curly braces in a block', function() {
 	var ul = document.createElement('ul');
 	ul.appendChild(can.view.frag(compiled));
 
-	equals(ul.getElementsByTagName('li')[0].innerHTML, 'No items', 'initial observable state');
+	equal(ul.getElementsByTagName('li')[0].innerHTML, 'No items', 'initial observable state');
 
 	obs.attr('items', [{ name: 'foo' }]);
-	equals(ul.getElementsByTagName('li')[0].innerHTML, 'foo', 'updated observable');
+	equal(ul.getElementsByTagName('li')[0].innerHTML, 'foo', 'updated observable');
 });
 
 test("unescape bindings change", function(){
@@ -1006,21 +1006,21 @@ test("unescape bindings change", function(){
 	div.appendChild(can.view.frag(compiled));
 	
 	var child = div.getElementsByTagName('div')[0];
-	equals(child.innerHTML, "2", "at first there are 2 true bindings");
+	equal(child.innerHTML, "2", "at first there are 2 true bindings");
 	var item = new can.Observe({complete: true, id: "THIS ONE"})
 	l.push(item);
 	
-	equals(child.innerHTML, "3", "now there are 3 complete");
+	equal(child.innerHTML, "3", "now there are 3 complete");
 	
 	item.attr('complete',false);
 	
-	equals(child.innerHTML, "2", "now there are 2 complete");
+	equal(child.innerHTML, "2", "now there are 2 complete");
 	
 	l.pop();
 	
 	item.attr('complete',true);
 	
-	equals(child.innerHTML, "2", "there are still 2 complete");
+	equal(child.innerHTML, "2", "there are still 2 complete");
 });
 
 
@@ -1050,15 +1050,15 @@ test("escape bindings change", function(){
 	div.appendChild(can.view.frag(compiled));
 	
 	var child = div.getElementsByTagName('div')[0];
-	equals(child.innerHTML, "2", "at first there are 2 true bindings");
+	equal(child.innerHTML, "2", "at first there are 2 true bindings");
 	var item = new can.Observe({complete: true})
 	l.push(item);
 	
-	equals(child.innerHTML, "3", "now there are 3 complete");
+	equal(child.innerHTML, "3", "now there are 3 complete");
 	
 	item.attr('complete',false);
 	
-	equals(child.innerHTML, "2", "now there are 2 complete");
+	equal(child.innerHTML, "2", "now there are 2 complete");
 });
 
 
@@ -1088,15 +1088,15 @@ test("tag bindings change", function(){
 	div.appendChild(can.view.frag(compiled));
 	
 	var child = div.getElementsByTagName('div')[0];
-	equals(child.getAttribute("items"), "2", "at first there are 2 true bindings");
+	equal(child.getAttribute("items"), "2", "at first there are 2 true bindings");
 	var item = new can.Observe({complete: true})
 	l.push(item);
 	
-	equals(child.getAttribute("items"), "3", "now there are 3 complete");
+	equal(child.getAttribute("items"), "3", "now there are 3 complete");
 	
 	item.attr('complete',false);
 	
-	equals(child.getAttribute("items"), "2", "now there are 2 complete");
+	equal(child.getAttribute("items"), "2", "now there are 2 complete");
 })
 
 test("attribute value bindings change", function(){
@@ -1125,15 +1125,15 @@ test("attribute value bindings change", function(){
 	div.appendChild(can.view.frag(compiled));
 	
 	var child = div.getElementsByTagName('div')[0];
-	equals(child.getAttribute("items"), "2", "at first there are 2 true bindings");
+	equal(child.getAttribute("items"), "2", "at first there are 2 true bindings");
 	var item = new can.Observe({complete: true})
 	l.push(item);
 	
-	equals(child.getAttribute("items"), "3", "now there are 3 complete");
+	equal(child.getAttribute("items"), "3", "now there are 3 complete");
 	
 	item.attr('complete',false);
 	
-	equals(child.getAttribute("items"), "2", "now there are 2 complete");
+	equal(child.getAttribute("items"), "2", "now there are 2 complete");
 })
 
 test("in tag toggling", function(){
@@ -1154,8 +1154,8 @@ test("in tag toggling", function(){
 	obs.attr('val','foo="bar"')
 	var d2 = div.getElementsByTagName('div')[0];
 	// toUpperCase added to normalize cases for IE8
-	equals( d2.getAttribute("foo") , "bar","bar set");
-	equals( d2.getAttribute("bar") , null,"bar set")
+	equal( d2.getAttribute("foo") , "bar","bar set");
+	equal( d2.getAttribute("bar") , null,"bar set")
 });
 
 
@@ -1177,11 +1177,11 @@ test("nested properties", function(){
 	
 	var div = div.getElementsByTagName('div')[0];
 
-	equals(div.innerHTML, "Justin")
+	equal(div.innerHTML, "Justin")
 
 	obs.attr('name.first',"Brian")
 
-	equals(div.innerHTML, "Brian")
+	equal(div.innerHTML, "Brian")
 	
 });
 
@@ -1398,7 +1398,7 @@ test("multiple tbodies in table hookup", function(){
 		compiled = new can.Mustache({text: text}).render({people: people});
 
 		can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
-		equals(can.$('#qunit-test-area table tbody').length, 2,"two tbodies");
+		equal(can.$('#qunit-test-area table tbody').length, 2,"two tbodies");
 })
 
 // http://forum.javascriptmvc.com/topic/live-binding-on-mustache-template-does-not-seem-to-be-working-with-nested-properties
@@ -1698,16 +1698,16 @@ test("HTML comment with helper", function(){
 		div = document.createElement("div")
 
 	div.appendChild(can.view.frag(compiled));
-	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 1, "1 item in list");
-	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
+	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 1, "1 item in list");
+	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
 
 	Todos.push({id: 2, name: "Laundry"});
-	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 2, "2 items in list");
-	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
-	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[1].childNodes.length, 7, "7 nodes in item #2");
+	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 2, "2 items in list");
+	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
+	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[1].childNodes.length, 7, "7 nodes in item #2");
 
 	Todos.splice(0, 2);
-	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
+	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
 });
 
 test("correctness of data-view-id and only in tag opening", function(){

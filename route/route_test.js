@@ -85,10 +85,10 @@ test("param", function(){
 	})
 
 	var res = can.route.param({page: "foo"});
-	equals(res, "pages/foo")
+	equal(res, "pages/foo")
 
 	res = can.route.param({page: "foo", index: "bar"});
-	equals(res, "pages/foo&index=bar")
+	equal(res, "pages/foo&index=bar")
 
 	can.route("pages/:page/:foo",{
 		page: "index",
@@ -96,19 +96,19 @@ test("param", function(){
 	})
 
     res = can.route.param({page: "foo", foo: "bar", where: "there"});
-	equals(res, "pages/foo/&where=there")
+	equal(res, "pages/foo/&where=there")
 
     // There is no matching route so the hash should be empty.
     res = can.route.param({});
-	equals(res, "")
+	equal(res, "")
 
     can.route.routes = {};
     
     res = can.route.param({page: "foo", bar: "baz", where: "there"});
-	equals(res, "&page=foo&bar=baz&where=there")
+	equal(res, "&page=foo&bar=baz&where=there")
 
     res = can.route.param({});
-	equals(res, "")
+	equal(res, "")
 });
 
 test("symmetry", function(){
@@ -129,7 +129,7 @@ test("light param", function(){
 	})
 
 	var res = can.route.param({page: "index"});
-	equals(res, "")
+	equal(res, "")
 
     can.route("pages/:p1/:p2/:p3",{
 		p1: "index",
@@ -138,10 +138,10 @@ test("light param", function(){
 	})
 
     res = can.route.param({p1: "index", p2: "foo", p3: "bar"});
-	equals(res, "pages///")
+	equal(res, "pages///")
 
     res = can.route.param({p1: "index", p2: "baz", p3: "bar"});
-	equals(res, "pages//baz/")
+	equal(res, "pages//baz/")
 });
 
 test('param doesnt add defaults to params', function(){
@@ -151,7 +151,7 @@ test('param doesnt add defaults to params', function(){
         p2: "foo"
 	})
 	var res = can.route.param({p1: "index", p2: "foo"});
-	equals(res, "pages/index")
+	equal(res, "pages/index")
 })
 
 test("param-deparam", function(){
@@ -200,7 +200,7 @@ test("deparam-param", function(){
 	can.route.routes = {};
 	can.route(":foo/:bar",{foo: 1, bar: 2});
 	var res = can.route.param({foo: 1, bar: 2});
-	equals(res,"/","empty slash")
+	equal(res,"/","empty slash")
 	
 	var deparamed = can.route.deparam("/")
 	same(deparamed, {foo: 1, bar: 2, route: ":foo/:bar"})
@@ -411,10 +411,10 @@ test("param order matching", function(){
 	
 	res = can.route.param({recipe: "recipe1", task: "task3"});
 	
-	equals(res, "", "picks the first match of everything");
+	equal(res, "", "picks the first match of everything");
 	
 	res = can.route.param({recipe: "recipe1", task: "task2"});
-	equals(res,"/task2")
+	equal(res,"/task2")
 });
 
 test("dashes in routes", function(){

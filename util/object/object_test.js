@@ -91,8 +91,8 @@ test("searchText", function(){
 		},
 		compare = {
 			searchText : function(items, paramsText, itemr, params){
-				equals(item,itemr);
-				equals(searchText, params)
+				equal(item,itemr);
+				equal(searchText, params)
 				return true;
 			}
 		};

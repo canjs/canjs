@@ -18,7 +18,7 @@ test("modifier with a deferred", function(){
 			foo: "FOO"
 		});
 		start();
-		equals(can.$("#qunit-test-area").html(), "FOO", "worked!");
+		equal(can.$("#qunit-test-area").html(), "FOO", "worked!");
 	},100);
 
 });
@@ -27,7 +27,7 @@ test("modifier with a deferred", function(){
   $("#qunit-test-area").html("<textarea></textarea>");
   can.render.hookup(function(){});
   $("#qunit-test-area textarea").val("asdf");
-  equals($("#qunit-test-area textarea").val(), "asdf");
+  equal($("#qunit-test-area textarea").val(), "asdf");
 });*/
 
 test("html takes promise", function(){
@@ -35,7 +35,7 @@ test("html takes promise", function(){
 	can.$("#qunit-test-area").html(d);
 	stop();
 	d.done(function(){
-		equals(can.$("#qunit-test-area").html(), "Hello World", "deferred is working");
+		equal(can.$("#qunit-test-area").html(), "Hello World", "deferred is working");
 		start();
 	})
 	setTimeout(function(){

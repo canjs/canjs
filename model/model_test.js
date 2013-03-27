@@ -26,7 +26,7 @@ test("shadowed id", function(){
 	ok(newModel.isNew(),'new model is isNew');
 	var oldModel = new MyModel({foo:'bar'});
 	ok(!oldModel.isNew(),'old model is not new');
-	equals(oldModel.foo(),'bar','method can coexist with attribute');
+	equal(oldModel.foo(),'bar','method can coexist with attribute');
 });
 
 test("findAll deferred", function(){
@@ -46,9 +46,9 @@ test("findAll deferred", function(){
 	stop();
 	var people = Person.findAll({});
 	people.then(function(people){
-		equals(people.length, 1, "we got a person back");
-		equals(people[0].name, "Justin", "Got a name back");
-		equals(people[0].constructor.shortName, "Person", "got a class back");
+		equal(people.length, 1, "we got a person back");
+		equal(people[0].name, "Justin", "Got a name back");
+		equal(people[0].constructor.shortName, "Person", "got a class back");
 		start();
 	})
 });
@@ -159,8 +159,8 @@ test("findOne deferred", function(){
 	stop();
 	var person = Person.findOne({});
 	person.then(function(person){
-		equals(person.name, "Justin", "Got a name back");
-		equals(person.constructor.shortName, "Person", "got a class back");
+		equal(person.name, "Justin", "Got a name back");
+		equal(person.constructor.shortName, "Person", "got a class back");
 		start();
 	})
 });
@@ -188,7 +188,7 @@ test("save deferred", function(){
 	stop();
 	personD.then(function(person){
 		start()
-		equals(person.id, 5, "we got an id")
+		equal(person.id, 5, "we got an id")
 		
 	});
 	
@@ -217,7 +217,7 @@ test("update deferred", function(){
 	stop();
 	personD.then(function(person){
 		start()
-		equals(person.thing, "er", "we got updated")
+		equal(person.thing, "er", "we got updated")
 		
 	});
 	
@@ -245,7 +245,7 @@ test("destroy deferred", function(){
 	stop();
 	personD.then(function(person){
 		start()
-		equals(person.thing, "er", "we got destroyed")
+		equal(person.thing, "er", "we got destroyed")
 		
 	});
 });
@@ -262,7 +262,7 @@ test("models", function(){
 	var people = Person.models([
 		{id: 1, name: "Justin"}
 	])
-	equals(people[0].prettyName(),"Mr. Justin","wraps wrapping works")
+	equal(people[0].prettyName(),"Mr. Justin","wraps wrapping works")
 });
 
 test(".models with custom id", function() {
@@ -276,9 +276,9 @@ test(".models with custom id", function() {
 	});
 	stop();
 	CustomId.findAll().done(function(results) {
-		equals(results.length, 2, 'Got two items back');
-		equals(results[0].name, 'Justin', 'First name right');
-		equals(results[1].name, 'Brian', 'Second name right');
+		equal(results.length, 2, 'Got two items back');
+		equal(results[0].name, 'Justin', 'First name right');
+		equal(results[1].name, 'Brian', 'Second name right');
 		start();
 	});
 });
@@ -301,7 +301,7 @@ test("async setters", function(){
 	var model = new Test.AsyncModel({
 		name : "justin"
 	});
-	equals(model.name, "justin","property set right away")
+	equal(model.name, "justin","property set right away")
 	
 	//makes model think it is no longer new
 	model.id = 1;
@@ -309,8 +309,8 @@ test("async setters", function(){
 	var count = 0;
 	
 	model.bind('name', function(ev, newName){
-		equals(newName, "Brian",'new name');
-		equals(++count, 1, "called once");
+		equal(newName, "Brian",'new name');
+		equal(++count, 1, "called once");
 		ok(new Date() - now > 0, "time passed")
 		start();
 	})
@@ -325,7 +325,7 @@ test("binding", 2,function(){
 	
 	inst.bind("foo", function(ev, val){
 		ok(true,"updated")	
-		equals(val, "baz", "values match")
+		equal(val, "baz", "values match")
 	});
 	
 	inst.attr("foo","baz");
@@ -346,20 +346,20 @@ test("auto methods",function(){
 	stop();
 	School.findAll({type:"schools"}, function(schools){
 		ok(schools,"findAll Got some data back");
-		equals(schools[0].constructor.shortName,"School","there are schools")
+		equal(schools[0].constructor.shortName,"School","there are schools")
 		
 		School.findOne({id : "4"}, function(school){
 			ok(school,"findOne Got some data back");
-			equals(school.constructor.shortName,"School","a single school");
+			equal(school.constructor.shortName,"School","a single school");
 			
 			
 			new School({name: "Highland"}).save(function(school){
 				
-				equals(school.name,"Highland","create gets the right name")
+				equal(school.name,"Highland","create gets the right name")
 				
 				school.attr({name: "LHS"}).save( function(){
 					start();
-					equals(school.name,"LHS","create gets the right name")
+					equal(school.name,"LHS","create gets the right name")
 					
 					can.fixture.on = true;
 				})
@@ -385,8 +385,8 @@ test("findAll string", function(){
 	},{});
 	stop();
 	Test.Thing.findAll({},function(things){
-		equals(things.length, 1, "got an array");
-		equals(things[0].id, 1, "an array of things");
+		equal(things.length, 1, "got an array");
+		equal(things[0].id, 1, "an array of things");
 		start();
 		can.fixture.on = true;
 	})
@@ -404,7 +404,7 @@ test("Empty uses fixtures", function(){
 	stop();
 	Test.Thing.findAll({}, function(things){
 		start();
-		equals(things.length, 10,"got 10 things")
+		equal(things.length, 10,"got 10 things")
 	})
 });*/
 
@@ -434,18 +434,18 @@ test("Model events" , function(){
 		
 		ok(this === Test.Event, "got model")
 		ok(passedItem === item, "got instance")
-		equals(++order, 1, "order");
+		equal(++order, 1, "order");
 		passedItem.save();
 		
 	}).bind('updated', function(ev, passedItem){
-		equals(++order, 2, "order");
+		equal(++order, 2, "order");
 		ok(this === Test.Event, "got model")
 		ok(passedItem === item, "got instance")
 		
 		passedItem.destroy();
 		
 	}).bind('destroyed', function(ev, passedItem){
-		equals(++order, 3, "order");
+		equal(++order, 3, "order");
 		ok(this === Test.Event, "got model")
 		ok(passedItem === item, "got instance")
 		
@@ -465,12 +465,12 @@ test("Model events" , function(){
 test("removeAttr test", function(){
 	can.Model("Person");
 	var person = new Person({foo: "bar"})
-	equals(person.foo, "bar", "property set");
+	equal(person.foo, "bar", "property set");
 	person.removeAttr('foo')
 	
-	equals(person.foo, undefined, "property removed");
+	equal(person.foo, undefined, "property removed");
 	var attrs = person.attr()
-	equals(attrs.foo, undefined, "attrs removed");
+	equal(attrs.foo, undefined, "attrs removed");
 });
 
 
@@ -523,7 +523,7 @@ test("object definitions", function(){
 	},{})
 	
 	can.fixture("GET /objectdef/{id}", function(original){
-		equals(original.timeout,1000,"timeout set");
+		equal(original.timeout,1000,"timeout set");
 		return {yes: true}
 	});
 
@@ -541,7 +541,7 @@ test("object definitions", function(){
 	// Do find all, pass some attrs
 	ObjectDef.findAll({ start: 0, count: 10, myflag: 1}, function(data){
 		start();
-		equals(data[0].myflag, 1, 'my flag set')
+		equal(data[0].myflag, 1, 'my flag set')
 	});
 
 	stop();
@@ -549,7 +549,7 @@ test("object definitions", function(){
 	// and notice when leaving one out the other is still there
 	ObjectDef.findAll({ start: 0, count: 10 }, function(data){
 		start();
-		equals(data[0].myflag, undefined, 'my flag is undefined')
+		equal(data[0].myflag, undefined, 'my flag is undefined')
 	}); 
 })
 
@@ -656,8 +656,8 @@ test("store ajax binding", function(){
 	can.when( Guy.findOne({id: 1}),
 		Guy.findAll()).then(function(guyRes, guysRes2){
 		
-		equals(guyRes.id,1, "got a guy id 1 back");
-		equals(guysRes2[0].id, 1, "got guys w/ id 1 back")
+		equal(guyRes.id,1, "got a guy id 1 back");
+		equal(guysRes2[0].id, 1, "got guys w/ id 1 back")
 		ok(guyRes === guysRes2[0], "guys are the same");
 		// check the store is empty
 		setTimeout(function(){
@@ -688,12 +688,12 @@ test("store instance updates", function(){
     	start();
         guys[0].bind('updated', function(){});
         ok(Guy.store[1], 'instance stored');
-    	equals(Guy.store[1].updateCount, 0, 'updateCount is 0')
-    	equals(Guy.store[1].nested.count, 0, 'nested.count is 0')
+    	equal(Guy.store[1].updateCount, 0, 'updateCount is 0')
+    	equal(Guy.store[1].nested.count, 0, 'nested.count is 0')
     })
     Guy.findAll({}, function(guys){
-    	equals(Guy.store[1].updateCount, 1, 'updateCount is 1')
-    	equals(Guy.store[1].nested.count, 1, 'nested.count is 1')
+    	equal(Guy.store[1].updateCount, 1, 'updateCount is 1')
+    	equal(Guy.store[1].nested.count, 1, 'nested.count is 1')
     })
 	
 })
@@ -722,14 +722,14 @@ test("store instance update removed fields", function(){
     	start();
         guys[0].bind('updated', function(){});
         ok(Guy.store[1], 'instance stored');
-    	equals(Guy.store[1].name, 'mikey', 'name is mikey')
-    	equals(Guy.store[1].likes.length, 4, 'mikey has 4 likes')
-    	equals(Guy.store[1].dislikes.length, 2, 'mikey has 2 dislikes')
+    	equal(Guy.store[1].name, 'mikey', 'name is mikey')
+    	equal(Guy.store[1].likes.length, 4, 'mikey has 4 likes')
+    	equal(Guy.store[1].dislikes.length, 2, 'mikey has 2 dislikes')
     })
     Guy.findAll({}, function(guys){
-    	equals(Guy.store[1].name, undefined, 'name is undefined')
-    	equals(Guy.store[1].likes.length, 0, 'no likes')
-    	equals(Guy.store[1].dislikes, undefined, 'dislikes removed')
+    	equal(Guy.store[1].name, undefined, 'name is undefined')
+    	equal(Guy.store[1].likes.length, 0, 'no likes')
+    	equal(Guy.store[1].dislikes, undefined, 'dislikes removed')
     })
 	
 })
@@ -742,7 +742,7 @@ test("templated destroy", function(){
 	
 	can.fixture("/destroyplace/{id}", function(original){
 		ok(true,"fixture called");
-		equals(original.url, "/destroyplace/5", "urls match")
+		equal(original.url, "/destroyplace/5", "urls match")
 		return {};
 	})
 	stop();
@@ -753,7 +753,7 @@ test("templated destroy", function(){
 
 
 	can.fixture("/product/{id}", function( original ) {
-		equals(original.data.id, 9001, "Changed ID is correctly set.");
+		equal(original.data.id, 9001, "Changed ID is correctly set.");
 		start();
 		return {};
 	});
@@ -838,14 +838,14 @@ test("overwrite makeFindAll", function(){
 		food.bind("name", function(){
 			ok(true, "name changed");
 			equal(count, 2, "after last find one")
-			equals(this.name, "ice water");
+			equal(this.name, "ice water");
 			start();
 		})
 		
 		Food.findOne({id: 1}, function(food2){
 			count = 2;
 			ok(food2 === food, "same instances")
-			equals(food2.name, "hot dog")
+			equal(food2.name, "hot dog")
 		});
 	});
 });

@@ -22,24 +22,24 @@ test("list events", 16, function(){
 	// a move directly on this list
 	list.bind('move', function(ev, item, newPos, oldPos){
 		ok(true,"move called");
-		equals(item.name, "Zed");
-		equals(newPos, 3);
-		equals(oldPos, 0);
+		equal(item.name, "Zed");
+		equal(newPos, 3);
+		equal(oldPos, 0);
 	});
 
 	// a remove directly on this list
 	list.bind('remove', function(ev, items, oldPos){
 		ok(true,"remove called");
-		equals(items.length,1);
-		equals(items[0].name, 'Alexis');
-		equals(oldPos, 0, "put in right spot")
+		equal(items.length,1);
+		equal(items[0].name, 'Alexis');
+		equal(oldPos, 0, "put in right spot")
 	})
 	list.bind('add', function(ev, items, newLength){
 		ok(true,"add called");
-		equals(items.length,1);
-		equals(items[0].name, 'Alexis');
+		equal(items.length,1);
+		equal(items[0].name, 'Alexis');
 		// .push returns the new length not the current position
-		equals(newLength, 4, "got new length");
+		equal(newLength, 4, "got new length");
 	});
 
 	list.push({name: 'Alexis'});
@@ -64,7 +64,7 @@ test("list sort with func", 1, function(){
 		}
 		return a.priority > b.priority ? 1 : 0;
 	});
-	equals(list[0].name, 'high');
+	equal(list[0].name, 'high');
 });
 
 test("live binding with comparator (#170)", function() {
@@ -78,13 +78,13 @@ test("live binding with comparator (#170)", function() {
 		items : items
 	}));
 
-	equals(el.getElementsByTagName('li').length, 1, "Found one li");
+	equal(el.getElementsByTagName('li').length, 1, "Found one li");
 
 	items.push({
 		text : 'Second'
 	});
 
-	equals(el.getElementsByTagName('li').length, 2, "Live binding rendered second li");
+	equal(el.getElementsByTagName('li').length, 2, "Live binding rendered second li");
 });
 
 })();

@@ -88,8 +88,8 @@ steal('can/util', 'can/control/modifier', function (can) {
 		// Check if
 		setTimeout(function () {
 			ok(fooToTheBar, "`fooToTheBar` is true.");
-			equals(run, 2, "`run` is 2");
-			equals(run2, 1, "`run2` is 1");
+			equal(run, 2, "`run` is 2");
+			equal(run2, 1, "`run2` is 1");
 
 			// Do a bunch more clicks!
 			$("#foo").trigger("click");
@@ -101,7 +101,7 @@ steal('can/util', 'can/control/modifier', function (can) {
 			$(document.body).trigger('click');
 
 			setTimeout(function () {
-				equals(run3, 1, "`run3` is 1");
+				equal(run3, 1, "`run3` is 1");
 				equal(run, 4, "`run` is 4");
 				$('#foo').remove();
 				start();
