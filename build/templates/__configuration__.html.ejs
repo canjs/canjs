@@ -16,6 +16,8 @@
 <script type="text/javascript" src="<%= root %>/lib/steal.js"></script>
 <script type="text/javascript" src="<%= root %>/lib/qunit/qunit.js"></script>
 <script type="text/javascript">
+	QUnit.config.autostart = false;
+
 	steal(function() {
 		window.CONFIGURATION = {
 			steal: <%- JSON.stringify(configuration.steal) %>
@@ -23,7 +25,9 @@
 
 		steal.config(<%- JSON.stringify(configuration.steal) %>);
 	}, "<%- modules.join('", "') %>")
-	.then("<%- tests.join('", "') %>");
+	.then("<%- tests.join('", "') %>", function() {
+		QUnit.start();
+	});
 </script>
 </body>
 </html>

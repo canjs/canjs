@@ -104,7 +104,13 @@
 			"steal": {
 				"map": {
 					"*": {
+						"jquery/jquery.js": "can/lib/jquery.1.9.1.js",
 						"can/util/util.js": "can/util/jquery/jquery.js"
+					}
+				},
+				"shim": {
+					"jquery": {
+						"exports": "jQuery"
 					}
 				}
 			}

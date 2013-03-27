@@ -16,6 +16,7 @@ module.exports = function (grunt) {
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
+		builder: grunt.file.readJSON('builder.json'),
 		meta: {
 			out: "dist/",
 			beautifier: {
@@ -32,7 +33,24 @@ module.exports = function (grunt) {
 				'* Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n*/\n'
 		},
 		testify: {
-			builder: grunt.file.readJSON('builder.json')
+			libs: {
+				template: 'build/templates/__configuration__.html.ejs',
+				builder: '<%= builder %>',
+				root: '..',
+				out: 'test/'
+			},
+			dist: {
+				template: 'build/templates/__configuration__-dist.html.ejs',
+				builder: '<%= builder %>',
+				root: '../../..',
+				out: 'dist/<%= pkg.version %>/test/'
+			},
+			amd: {
+				template: 'build/templates/__configuration__-amd.html.ejs',
+				builder: '<%= builder %>',
+				root: '../../../..',
+				out: 'dist/<%= pkg.version %>/test/amd/'
+			}
 		},
 		beautifier: {
 			codebase: '<%= meta.beautifier %>',
