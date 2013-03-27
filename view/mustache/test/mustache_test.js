@@ -78,7 +78,7 @@ can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials',
 					t.data.lambda = eval('(' + t.data.lambda.js + ')');
 				}
 
-				same(new can.Mustache({ text: t.template }).render(t.data), expected);
+				deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 			});
 		});
 	});
@@ -119,33 +119,33 @@ test("registerNode, unregisterNode, and replace work", function(){
 	var newLabel = {id: 4}
 	can.view.replace(listTwo, [newLabel])
 	
-	same( ids(listOne), [1,4,3], "replaced" )
-	same( ids(listTwo), [4] );
+	deepEqual( ids(listOne), [1,4,3], "replaced" )
+	deepEqual( ids(listTwo), [4] );
 	
 	can.view.replace(listTwo,[{id: 5},{id: 6}]);
 	
-	same( ids(listOne), [1,5,6,3], "replaced" );
+	deepEqual( ids(listOne), [1,5,6,3], "replaced" );
 	
-	same( ids(listTwo), [5,6], "replaced" );
+	deepEqual( ids(listTwo), [5,6], "replaced" );
 	
 	can.view.replace(listTwo,[{id: 7}])
 	
-	same( ids(listOne), [1,7,3], "replaced" );
+	deepEqual( ids(listOne), [1,7,3], "replaced" );
 	
-	same( ids(listTwo), [7], "replaced" );
+	deepEqual( ids(listTwo), [7], "replaced" );
 	
 	can.view.replace( listOne, [{id: 8}])
 	
-	same( ids(listOne), [8], "replaced" );
-	same( ids(listTwo), [7], "replaced" );
+	deepEqual( ids(listOne), [8], "replaced" );
+	deepEqual( ids(listTwo), [7], "replaced" );
 	
 	can.view.unregisterNode(listOne);
 	can.view.unregisterNode(listTwo);
 	
 	
 	
-	same(can.view.nodeMap, {} );
-	same(can.view.nodeListMap ,{} )
+	deepEqual(can.view.nodeMap, {} );
+	deepEqual(can.view.nodeListMap ,{} )
 });
 
 test("Model hookup", function(){
@@ -155,23 +155,23 @@ test("Model hookup", function(){
 	var obsvr = new can.Observe({ name: 'Austin' });
 	var frag = new can.Mustache({ text: template }).render(obsvr);
 	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
-	same(can.data(can.$('#foo'), 'name '), obsvr, 'data hooks worked and fetched');
+	deepEqual(can.data(can.$('#foo'), 'name '), obsvr, 'data hooks worked and fetched');
 
 	// Multi-item hookup
 	var listTemplate = '<ul id="list">{{#list}}<li class="moo" id="li-{{name}}" {{data "obsvr"}}>{{name}}</li>{{/#list}}</ul>';
 	var obsvrList = new can.Observe.List([ obsvr ]);
 	var listFrag = new can.Mustache({ text: listTemplate }).render({ list: obsvrList });
 	can.append(can.$('#qunit-test-area'), can.view.frag(listFrag));
-	same(can.data(can.$('#li-Austin'), 'obsvr'), obsvr, 'data hooks for list worked and fetched');
+	deepEqual(can.data(can.$('#li-Austin'), 'obsvr'), obsvr, 'data hooks for list worked and fetched');
 
 	// Mulit-item update with hookup
 	var obsvr2 = new can.Observe({ name: 'Justin' });
 	obsvrList.push(obsvr2);
-	same(can.data(can.$('#li-Justin'), 'obsvr'), obsvr2, 'data hooks for list push worked and fetched');
+	deepEqual(can.data(can.$('#li-Justin'), 'obsvr'), obsvr2, 'data hooks for list push worked and fetched');
 
 	// Delete last item added
 	obsvrList.pop();
-	same(can.$('.moo').length, 1, 'new item popped off and deleted from ui');
+	deepEqual(can.$('.moo').length, 1, 'new item popped off and deleted from ui');
 });
 
 /*test("Variable partials", function(){
@@ -192,7 +192,7 @@ test('Helpers sections not returning values', function(){
 	var template = "<div id='sectionshelper'>{{#filter}}moo{{/filter}}</div>";
 	var frag = new can.Mustache({ text: template }).render({ });;
 	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
-	same(can.$('#sectionshelper')[0].innerHTML, "moo", 'helper section worked');
+	deepEqual(can.$('#sectionshelper')[0].innerHTML, "moo", 'helper section worked');
 
 });
 
@@ -206,10 +206,10 @@ test('Helpers with obvservables in them', function(){
 	var obsvr = new can.Observe({ filter: 'moo' });
 	var frag = new can.Mustache({ text: template }).render({ filter: obsvr });;
 	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
-	same(can.$('#sectionshelper')[0].innerHTML, "", 'helper section showed none');
+	deepEqual(can.$('#sectionshelper')[0].innerHTML, "", 'helper section showed none');
 
 	obsvr.attr('filter', 'poo')
-	same(can.$('#sectionshelper')[0].innerHTML, "poo", 'helper section worked');
+	deepEqual(can.$('#sectionshelper')[0].innerHTML, "poo", 'helper section worked');
 });
 */
 
@@ -217,7 +217,7 @@ test('Tokens returning 0 where they should diplay the number', function(){
 	var template = "<div id='zero'>{{completed}}</div>";
 	var frag = new can.Mustache({ text: template }).render({ completed: 0 });;
 	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
-	same(can.$('#zero')[0].innerHTML, "0", 'zero shown');
+	deepEqual(can.$('#zero')[0].innerHTML, "0", 'zero shown');
 })
 
 test('Inverted section function returning numbers',function() {
@@ -233,11 +233,11 @@ test('Inverted section function returning numbers',function() {
 	// check hidden there
 	var frag = new can.Mustache({ text: template }).render({ todos: todos });
 	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
-	same(can.$('#completed')[0].innerHTML, "hidden", 'hidden shown');
+	deepEqual(can.$('#completed')[0].innerHTML, "hidden", 'hidden shown');
 	
 	// now update the named attribute
 	obsvr.attr('named', true);
-	same(can.$('#completed')[0].innerHTML, "", 'hidden gone');
+	deepEqual(can.$('#completed')[0].innerHTML, "", 'hidden gone');
 });
 
 test("Mustache live-binding with escaping", function() {
@@ -250,13 +250,13 @@ test("Mustache live-binding with escaping", function() {
 	var template = new can.Mustache({ text: template }).render(teacher);
 	can.append( can.$('#qunit-test-area'), can.view.frag(template));
 
-	same(can.$('#binder1')[0].innerHTML, "&lt;strong&gt;Mrs Peters&lt;/strong&gt;");
-	same(can.$('#binder2')[0].getElementsByTagName('strong')[0].innerHTML, "Mrs Peters");
+	deepEqual(can.$('#binder1')[0].innerHTML, "&lt;strong&gt;Mrs Peters&lt;/strong&gt;");
+	deepEqual(can.$('#binder2')[0].getElementsByTagName('strong')[0].innerHTML, "Mrs Peters");
 
 	teacher.attr('name', '<i>Mr Scott</i>');
 
-	same(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
-	same(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott")
+	deepEqual(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
+	deepEqual(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott")
 });
 
 test("Mustache truthy", function() {
@@ -267,7 +267,7 @@ test("Mustache truthy", function() {
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("Mustache falsey", function() {
@@ -278,7 +278,7 @@ test("Mustache falsey", function() {
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("Handlebars helpers", function() {
@@ -301,7 +301,7 @@ test("Handlebars helpers", function() {
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("Handlebars advanced helpers (from docs)", function() {
@@ -335,8 +335,8 @@ test("Handlebars advanced helpers (from docs)", function() {
 		}
 	};
 	
-	same(new can.Mustache({ text: t.template }).render(t.data), t.expected);
-	same(new can.Mustache({ text: t.template }).render({}), t.expected2);
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), t.expected);
+	deepEqual(new can.Mustache({ text: t.template }).render({}), t.expected2);
 });
 
 test("Passing functions as data, then executing them", function() {
@@ -354,7 +354,7 @@ test("Passing functions as data, then executing them", function() {
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("Absolute partials", function() {
@@ -364,8 +364,8 @@ test("Absolute partials", function() {
 		expected: "Partials Rock"
 	};
 	
-	same(new can.Mustache({ text: t.template1 }).render({}), t.expected);
-	same(new can.Mustache({ text: t.template2 }).render({}), t.expected);
+	deepEqual(new can.Mustache({ text: t.template1 }).render({}), t.expected);
+	deepEqual(new can.Mustache({ text: t.template2 }).render({}), t.expected);
 });
 
 test("No arguments passed to helper", function() {
@@ -379,8 +379,8 @@ test("No arguments passed to helper", function() {
 	div1.appendChild( can.view("noargs", {}) );
 	div2.appendChild( can.view("noargs", new can.Observe() ) );
 
-	same(div1.innerHTML, "foo");
-	same(div2.innerHTML, "foo");
+	deepEqual(div1.innerHTML, "foo");
+	deepEqual(div2.innerHTML, "foo");
 });
 
 test("No arguments passed to helper with list", function() {
@@ -398,7 +398,7 @@ test("No arguments passed to helper with list", function() {
 		}
 	}) );
 
-	same(div.innerHTML, "foo");
+	deepEqual(div.innerHTML, "foo");
 });
 
 test("Partials and observes", function() {
@@ -435,7 +435,7 @@ test("Deeply nested partials", function() {
 		can.view.registerView(name, t.partials[name])
 	}
 	
-	same(new can.Mustache({ text: t.template }).render(t.data), t.expected);
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), t.expected);
 });
 
 test("Handlebars helper: if/else", function() {
@@ -446,11 +446,11 @@ test("Handlebars helper: if/else", function() {
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 
 	t.data.missing = null;
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("Handlebars helper: unless", function() {
@@ -461,7 +461,7 @@ test("Handlebars helper: unless", function() {
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("Handlebars helper: each", function() {
@@ -472,7 +472,7 @@ test("Handlebars helper: each", function() {
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("Handlebars helper: with", function() {
@@ -483,7 +483,7 @@ test("Handlebars helper: with", function() {
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("render with left bracket", function(){
@@ -1825,7 +1825,7 @@ test("Helpers always have priority (#258)", function() {
 	};
 
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 });

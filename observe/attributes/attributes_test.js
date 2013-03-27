@@ -302,7 +302,7 @@ test("attr does not blow away old observable when going from empty to having ite
 
 	var oldCid = project.attr("members")._cid;
 	project.attr({members:[{id: 1, name: "bob"}]});
-	same(project.attr("members")._cid, oldCid, "should be the same observe, so that views bound to the old one get updates")
+	deepEqual(project.attr("members")._cid, oldCid, "should be the same observe, so that views bound to the old one get updates")
 	equal(project.attr("members").length, 1, "list should have bob in it");
 });
 

@@ -210,13 +210,13 @@ test("_getData with double character value", function(){
 });
 
 test("_compare", function(){
-	var same = can.Object.same(
+	var same = can.Object.deepEqual(
 		{url : "/thingers/5"},
 		{url : "/thingers/{id}"}, can.fixture._compare)
 	
 	ok(same, "they are similar");
 	
-	same = can.Object.same(
+	same = can.Object.deepEqual(
 		{url : "/thingers/5"},
 		{url : "/thingers"}, can.fixture._compare);
 		

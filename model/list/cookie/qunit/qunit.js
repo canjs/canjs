@@ -20,7 +20,7 @@ test("storing and retrieving",function(){
 	store.store("list");
 	
 	var store2 = new Search.Store([]).retrieve("list");
-	equals(store2.length, 2, "there are 2 items")
+	equal(store2.length, 2, "there are 2 items")
 	
 })
 	

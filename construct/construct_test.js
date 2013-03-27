@@ -135,10 +135,10 @@
 		equal(protoSetup, 3);
 		equal(protoInit, 4);
 
-		same(can.makeArray(staticInitArgs), ["something"] )
-		same(can.makeArray(protoInitArgs),["Ford: geo"] )
+		deepEqual(can.makeArray(staticInitArgs), ["something"] )
+		deepEqual(can.makeArray(protoInitArgs),["Ford: geo"] )
 
-		same(can.makeArray(staticSetupArgs),[can.Construct, "Car",staticProps, protoProps] ,"static construct");
+		deepEqual(can.makeArray(staticSetupArgs),[can.Construct, "Car",staticProps, protoProps] ,"static construct");
 
 
 		//now see if staticSetup gets called again ...

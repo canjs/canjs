@@ -8,19 +8,19 @@ test("deparam", function(){
 	});
 
 	var obj = can.route.deparam("can.Control");
-	same(obj, {
+	deepEqual(obj, {
 		page : "can.Control",
 		route: ":page"
 	});
 
 	obj = can.route.deparam("");
-	same(obj, {
+	deepEqual(obj, {
 		page : "index",
 		route: ":page"
 	});
 
 	obj = can.route.deparam("can.Control&where=there");
-	same(obj, {
+	deepEqual(obj, {
 		page : "can.Control",
 		where: "there",
 		route: ":page"
@@ -33,7 +33,7 @@ test("deparam", function(){
 	});
 
     obj = can.route.deparam("can.Control/&where=there");
-	same(obj, {
+	deepEqual(obj, {
 		page : "can.Control",
         index: "foo",
 		where: "there",
@@ -52,12 +52,12 @@ test("deparam of invalid url", function(){
     // This path does not match the above route, and since the hash is not 
     // a &key=value list there should not be data.
     obj = can.route.deparam("pages//");
-	same(obj, {});
+	deepEqual(obj, {});
 
     // A valid path with invalid parameters should return the path data but
     // ignore the parameters.
     obj = can.route.deparam("pages/val1/val2/val3&invalid-parameters");
-	same(obj, {
+	deepEqual(obj, {
         var1: 'val1',
         var2: 'val2',
         var3: 'val3',
@@ -71,7 +71,7 @@ test("deparam of url with non-generated hash (manual override)", function(){
 	// This won't be set like this by route, but it could easily happen via a 
 	// user manually changing the URL or when porting a prior URL structure.
 	obj = can.route.deparam("page=foo&bar=baz&where=there");
-	same(obj, {
+	deepEqual(obj, {
 		page: 'foo',
 		bar: 'baz',
 		where: 'there'
@@ -119,7 +119,7 @@ test("symmetry", function(){
 	var res = can.route.param(obj)
 	
 	var o2 = can.route.deparam(res)
-	same(o2, obj)
+	deepEqual(o2, obj)
 })
 
 test("light param", function(){
@@ -168,32 +168,32 @@ test("param-deparam", function(){
     var res = can.route.param(data);
     var obj = can.route.deparam(res);
 	delete obj.route
-	same(obj,data )
+	deepEqual(obj,data )
 	return;
     data = {page: "can.Control", type: "foo", bar: "baz", where: "there"};
     res = can.route.param(data);
     obj = can.route.deparam(res);
 	delete obj.route;
-	same(data, obj)
+	deepEqual(data, obj)
 	
 	data = {page: " a ", type: " / "};
     res = can.route.param(data);
     obj = can.route.deparam(res);
 	delete obj.route;
-	same(obj ,data ,"slashes and spaces")
+	deepEqual(obj ,data ,"slashes and spaces")
 
     data = {page: "index", type: "foo", bar: "baz", where: "there"};
     res = can.route.param(data);
     obj = can.route.deparam(res);
 	delete obj.route;
-	same(data, obj)
+	deepEqual(data, obj)
 
     can.route.routes = {};
     
     data = {page: "foo", bar: "baz", where: "there"};
     res = can.route.param(data);
     obj = can.route.deparam(res);
-	same(data, obj)
+	deepEqual(data, obj)
 })
 
 test("deparam-param", function(){
@@ -203,7 +203,7 @@ test("deparam-param", function(){
 	equal(res,"/","empty slash")
 	
 	var deparamed = can.route.deparam("/")
-	same(deparamed, {foo: 1, bar: 2, route: ":foo/:bar"})
+	deepEqual(deparamed, {foo: 1, bar: 2, route: ":foo/:bar"})
 })
 
 test("precident", function(){
@@ -212,13 +212,13 @@ test("precident", function(){
 	can.route("search/:search");
 
 	var obj = can.route.deparam("can.Control");
-	same(obj, {
+	deepEqual(obj, {
 		who : "can.Control",
 		route: ":who"
 	});
 
 	obj = can.route.deparam("search/can.Control");
-	same(obj, {
+	deepEqual(obj, {
 		search : "can.Control",
 		route: "search/:search"
 	},"bad deparam");
@@ -369,7 +369,7 @@ test("empty default is matched even if last", function(){
 	can.route("",{foo: "bar"})
 
 	var obj = can.route.deparam("");
-	same(obj, {
+	deepEqual(obj, {
 		foo : "bar",
 		route: ""
 	});
@@ -381,7 +381,7 @@ test("order matched", function(){
 	can.route(":bar")
 	
 	var obj = can.route.deparam("abc");
-	same(obj, {
+	deepEqual(obj, {
 		foo : "abc",
 		route: ":foo"
 	});
@@ -422,7 +422,7 @@ test("dashes in routes", function(){
 	can.route(":foo-:bar");
 	
 	var obj = can.route.deparam("abc-def");
-	same(obj, {
+	deepEqual(obj, {
 		foo : "abc",
 		bar : "def",
 		route: ":foo-:bar"

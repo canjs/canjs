@@ -60,33 +60,33 @@ test("registerNode, unregisterNode, and replace work", function(){
 	var newLabel = {id: 4}
 	can.view.replace(listTwo, [newLabel])
 	
-	same( ids(listOne), [1,4,3], "replaced" )
-	same( ids(listTwo), [4] );
+	deepEqual( ids(listOne), [1,4,3], "replaced" )
+	deepEqual( ids(listTwo), [4] );
 	
 	can.view.replace(listTwo,[{id: 5},{id: 6}]);
 	
-	same( ids(listOne), [1,5,6,3], "replaced" );
+	deepEqual( ids(listOne), [1,5,6,3], "replaced" );
 	
-	same( ids(listTwo), [5,6], "replaced" );
+	deepEqual( ids(listTwo), [5,6], "replaced" );
 	
 	can.view.replace(listTwo,[{id: 7}])
 	
-	same( ids(listOne), [1,7,3], "replaced" );
+	deepEqual( ids(listOne), [1,7,3], "replaced" );
 	
-	same( ids(listTwo), [7], "replaced" );
+	deepEqual( ids(listTwo), [7], "replaced" );
 	
 	can.view.replace( listOne, [{id: 8}])
 	
-	same( ids(listOne), [8], "replaced" );
-	same( ids(listTwo), [7], "replaced" );
+	deepEqual( ids(listOne), [8], "replaced" );
+	deepEqual( ids(listTwo), [7], "replaced" );
 	
 	can.view.unregisterNode(listOne);
 	can.view.unregisterNode(listTwo);
 	
 	
 	
-	same(can.view.nodeMap, {} );
-	same(can.view.nodeListMap ,{} )
+	deepEqual(can.view.nodeMap, {} );
+	deepEqual(can.view.nodeListMap ,{} )
 	
 	
 });
@@ -1081,8 +1081,8 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 	
 	can.remove( can.$(div.firstChild) )
 		
-	same(can.view.nodeMap, {} );
-	same(can.view.nodeListMap ,{} )
+	deepEqual(can.view.nodeMap, {} );
+	deepEqual(can.view.nodeListMap ,{} )
 });
 
 

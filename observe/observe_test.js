@@ -54,14 +54,14 @@ test("list splice", function(){
 		first = true;
   
 	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
-		equals (attr, "1")
+		equal(attr, "1")
 		// where comes from the attr ...
 		//equal(where, 1)
 		if(first){
 			equal( how, "remove", "removing items" )
 			equal( newVals, undefined, "no new Vals" )
 		} else {
-			same( newVals, ["a","b"] , "got the right newVals")
+			deepEqual( newVals, ["a","b"] , "got the right newVals")
 			equal( how, "add", "adding items" )
 		}
 	
@@ -69,7 +69,7 @@ test("list splice", function(){
 	})
 	
 	l.splice(1,2, "a", "b"); 
-	same(l.serialize(), [0,"a","b", 3], "serialized")
+	deepEqual(l.serialize(), [0,"a","b", 3], "serialized")
 });
 
 
@@ -78,15 +78,15 @@ test("list pop", function(){
 	var l = new can.Observe.List([0,1,2,3]);
   
 	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
-		equals (attr, "3")
+		equal(attr, "3")
 		
 		equal( how, "remove" )
 		equal( newVals, undefined )
-		same( oldVals, [3] )
+		deepEqual( oldVals, [3] )
 	})
 	
 	l.pop(); 
-	same(l.serialize(), [0,1,2])
+	deepEqual(l.serialize(), [0,1,2])
 })
 
 test("changing an object unbinds", function(){
@@ -141,7 +141,7 @@ test("attr does not blow away old observable", function(){
 	});
 	var oldCid = state.attr("properties.brand")._cid;
 	state.attr({properties:{brand:[]}}, true);
-	same(state.attr("properties.brand")._cid, oldCid, "should be the same observe, so that views bound to the old one get updates")
+	deepEqual(state.attr("properties.brand")._cid, oldCid, "should be the same observe, so that views bound to the old one get updates")
 	equal(state.attr("properties.brand").length, 0, "list should be empty");
 });
 
@@ -182,7 +182,7 @@ test("remove attr", function(){
 	state.bind("change", function(ev, attr, how, newVal, old){
 		equal(attr, "properties");
 		equal(how, "remove")
-		same(old.serialize() ,{
+		deepEqual(old.serialize() ,{
 		  brand: [],
 		  model : [],
 		  price : []
@@ -203,7 +203,7 @@ test("remove nested attr", function(){
 	state.bind("change", function(ev, attr, how, newVal, old){
 		equal(attr, "properties.nested");
 		equal(how, "remove")
-		same(old , true);
+		deepEqual(old , true);
 	})
 	
 	state.removeAttr("properties.nested");
@@ -218,7 +218,7 @@ test("remove item in nested array", function(){
 	state.bind("change", function(ev, attr, how, newVal, old){
 		equal(attr, "array.1");
 		equal(how, "remove")
-		same(old, ["b"]);
+		deepEqual(old, ["b"]);
 	})
 	
 	state.removeAttr("array.1");
@@ -235,7 +235,7 @@ test("remove nested property in item of array", function(){
 	state.bind("change", function(ev, attr, how, newVal, old){
 		equal(attr, "array.0.nested");
 		equal(how, "remove")
-		same(old, true);
+		deepEqual(old, true);
 	})
 	
 	state.removeAttr("array.0.nested");
@@ -248,7 +248,7 @@ test("remove nested property in item of array observe", function(){
 	state.bind("change", function(ev, attr, how, newVal, old){
 		equal(attr, "0.nested");
 		equal(how, "remove")
-		same(old, true);
+		deepEqual(old, true);
 	})
 	
 	state.removeAttr("0.nested");
@@ -287,7 +287,7 @@ test("attr with an object", function(){
 	state.bind("change", function(ev, attr, how, newVal){
 		equal(attr, "properties.brand.0")
 		equal(how,"add")
-		same(newVal, ["bad"])
+		deepEqual(newVal, ["bad"])
 	});
 	
 	state.attr({
@@ -332,7 +332,7 @@ test('attr semi-serialize', function(){
 		};
 	
 	var res = new can.Observe(first).attr();
-	same(res,compare, "test")
+	deepEqual(res,compare, "test")
 })
 	
 test("attr sends events after it is done", function(){
@@ -739,7 +739,7 @@ test("initialize Observe.List with a deferred",function(){
 	var def = new can.Deferred();
 	var list = new can.Observe.List(def);
 	list.bind("add",function(ev, items, index){
-		same(items,["a","b"]);
+		deepEqual(items,["a","b"]);
 		equal(index, 0);
 		start();
 	});

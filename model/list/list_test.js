@@ -138,7 +138,7 @@ test("update a list", function(){
 	can.fixture('PUT /person/updateAll', function(orig){
 		ok(true, "called right fixture");
 		ok(orig.data.ids.length, 2, "got 2 ids")
-		same(orig.data.attrs, updateWith, "got the same attrs")
+		deepEqual(orig.data.attrs, updateWith, "got the same attrs")
 		return newProps;
 	})
 	
@@ -150,7 +150,7 @@ test("update a list", function(){
 	people.update(updateWith,function(updated){
 		ok(true, "updated callback called");
 		ok(updated.length, 2, "got back deleted items");
-		same(updated[0].attr(),$.extend({id : 1},newProps, updateWith ));
+		deepEqual(updated[0].attr(),$.extend({id : 1},newProps, updateWith ));
 		start();
 	});
 })
