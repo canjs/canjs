@@ -419,7 +419,6 @@ test("recursive observers do not cause stack overflow", function() {
 	var a = new can.Observe();
 	var b = new can.Observe({a: a});
 	a.attr("b", b);
-
 });
 
 test("bind to specific attribute changes when an existing attribute's value is changed", function() {
@@ -509,6 +508,7 @@ test("can.Observe.List.prototype.splice converts objects (#253)", function() {
 });
 
 test("removing an already missing attribute does not cause an event", function(){
+	expect(0);
 	var ob = new can.Observe();
 	ob.bind("change", function(){
 		ok(false)
