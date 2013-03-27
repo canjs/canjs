@@ -17,8 +17,9 @@
 <script type="text/javascript" src="<%= root %>/lib/qunit/qunit.js"></script>
 <script type="text/javascript">
 	steal(function() {
-		steal.config(<%= JSON.stringify(configuration.steal) %>);
-	}, "<%= modules.join('", "') %>").then("<%= tests.join('", "') %>");
+		steal.config(<%- JSON.stringify(configuration.steal) %>);
+	}, "<%- modules.join('", "') %>")
+	.then("<%- tests.join('", "') %>");
 </script>
 </body>
 </html>

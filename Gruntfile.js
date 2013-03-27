@@ -31,6 +31,9 @@ module.exports = function (grunt) {
 				'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>\n' +
 				'* Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n*/\n'
 		},
+		testify: {
+			builder: grunt.file.readJSON('builder.json')
+		},
 		beautifier: {
 			codebase: '<%= meta.beautifier %>',
 			dist: '<%= meta.beautifier %>'
@@ -192,6 +195,7 @@ module.exports = function (grunt) {
 	});
 
 	grunt.loadTasks("../build/tasks");
+	grunt.loadTasks("build/tasks");
 
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-shell');
