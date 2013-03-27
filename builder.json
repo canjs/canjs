@@ -28,6 +28,7 @@
 			"name": "can.EJS",
 			"description": "Live-binding Embedded JavaScript",
 			"type": "core",
+			"skipTest": true,
 			"isDefault": true
 		},
 		"can/control": {
@@ -51,6 +52,7 @@
 		"can/view/mustache": {
 			"name": "can.Mustache",
 			"type": "plugin",
+			"skipTest": true,
 			"description": "Live-binding Handlebars and Mustache views"
 		},
 		"can/construct/super": {
