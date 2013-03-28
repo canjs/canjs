@@ -43,7 +43,31 @@ module.exports = function (grunt) {
 				template: 'build/templates/__configuration__-dist.html.ejs',
 				builder: '<%= builder %>',
 				root: '../../..',
-				out: 'dist/<%= pkg.version %>/test/'
+				out: 'dist/<%= pkg.version %>/test/',
+				transform: {
+					modules: function(modules) {
+						for(var m in modules) {
+							if(!modules[m].isDefault) {
+								modules[m.replace(/\//g, '.')] = modules[m];
+							}
+
+							delete modules[m];
+						}
+
+						return modules;
+					},
+
+					options: function(config) {
+						return {
+							dist: 'can.' + config
+						}
+					}
+				},
+				options: function(name) {
+					return {
+						dist: 'can.' + name
+					}
+				}
 			},
 			amd: {
 				template: 'build/templates/__configuration__-amd.html.ejs',

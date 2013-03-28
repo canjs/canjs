@@ -15,8 +15,8 @@
 
 <script type="text/javascript" src="<%= root %>/lib/qunit/qunit.js"></script>
 <script type="text/javascript" src="../<%= dist %>.js"></script>
-<% plugins.forEach(function(plugin) { %>
-<script type="text/javascript" src="../<%= plugin %>.js"></script><% }); %>
+<% modules.forEach(function(module) { %>
+<script type="text/javascript" src="../<%= module %>.js"></script><% }); %>
 <% tests.forEach(function(test) { %>
 <script type="text/javascript" src="<%= test %>"></script><% }); %>
 

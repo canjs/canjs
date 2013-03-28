@@ -6,79 +6,45 @@ module.exports = function(grunt) {
 	grunt.registerMultiTask('testify', 'Generates test runners for CanJS', function() {
 		var done = this.async(),
 		template = grunt.file.read(this.data.template),
-		builder = this.data.builder;
+		transform = this.data.transform,
+		modules = this.data.builder.modules,
+		configurations = this.data.builder.configurations;
 
-		processors[this.target].call(this, done, builder, template);
-	});
-
-	var processors = {};
-
-	processors.libs = function(done, builder, template) {
-		var modules = [],
+		var keys = [],
 		tests = [];
 
-		for(var module in builder.modules) {
-			modules.push(module);
+		if(transform && transform.modules) {
+			modules = transform.modules(modules);
+		};
 
-			var name = module.substr(module.lastIndexOf('/') + 1);
-			if(!builder.modules[module].skipTest) {
-				tests.push(module + '/' + name + '_test.js');
-			}
+		for(var m in modules) {
+			keys.push(m);
 		}
 
-		for(var c in builder.configurations) {
-			var config = builder.configurations[c];
+		for(var c in configurations) {
+			var config = configurations[c],
+
+			options = {
+				configuration: config,
+				modules: keys,
+				tests: tests,
+				root: this.data.root
+			};
 
 			_.extend(config.steal, {
 				root: '../..'
 			});
 
-			var lib = ejs.render(template, {
-				configuration: config,
-				modules: modules,
-				tests: tests,
-				root: this.data.root
-			});
+			if(transform && transform.options) {
+				_.extend(options, transform.options.call(config, c));
+			}
+
+			var lib = ejs.render(template, options);
 
 			grunt.log.writeln('Generating ' + this.data.out + c + '.html');
 			grunt.file.write(this.data.out + c + '.html', lib);
 		}
 
 		done();
-	};
-
-	processors.dist = function(done, builder, template) {
-		var plugins = [],
-		tests = [];
-
-		for(var module in builder.modules) {
-			if(!builder.modules[module].isDefault) {
-				plugins.push(module.replace(/\//g, '.'));
-			}
-
-			var name = module.substr(module.lastIndexOf('/') + 1);
-			if(!builder.modules[module].skipTest) {
-				tests.push(this.data.root + module.replace('can', '') + '/' + name + '_test.js');
-			}
-		}
-
-		for(var c in builder.configurations) {
-			var lib = ejs.render(template, {
-				configuration: builder.configurations[c],
-				dist: 'can.' + c,
-				plugins: plugins,
-				tests: tests,
-				root: this.data.root,
-			});
-
-			grunt.log.writeln('Generating ' + this.data.out + c + '.html');
-			grunt.file.write(this.data.out + c + '.html', lib);
-		}
-
-		done();
-	};
-
-	processors.amd = function(done, builder, template) {
-		done();
-	};
+	});
 };
