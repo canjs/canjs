@@ -24,6 +24,14 @@ test("String.underscore", function(){
 	equals(can.underscore("Foo.Bar.ZarDar"),"foo.bar.zar_dar")
 });
 
+test("can.sub remove", function(){
+  var obj = {a: 'a'}
+  equals(can.sub("{a}", obj, false), "a");
+  deepEqual(obj, {a: 'a'});
+
+  equals(can.sub("{a}", obj, true), "a");
+  deepEqual(obj, {});
+});
 
 test("can.getObject", function(){
 	var obj = can.getObject("foo", [{a: 1}, {foo: 'bar'}]);
