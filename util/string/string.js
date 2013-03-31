@@ -171,7 +171,7 @@ steal('can/util',function(can) {
 				obs.push( str.replace( strReplacer, function( whole, inside ) {
 
 					// Convert inside to type.
-					var ob = can.getObject( inside, data, remove === undefined? remove : !remove );
+          var ob = can.getObject( inside, data, remove === true ? false : undefined );
 
 					if(ob === undefined) {
 						obs = null;
