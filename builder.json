@@ -1,4 +1,6 @@
 {
+	"filename": "can.custom.js",
+	"banner": "/*!\n * <%= name %> - <%= version %>\n * <%= homepage %>\n * Copyright (c) <%= new Date().getFullYear() %> <%= author.name %>\n * <%= new Date().toUTCString() %>\n * Licensed <%= licenses[0].type %>\n */\n",
 	"modules": {
 		"can/construct": {
 			"name": "can.Construct",
@@ -101,6 +103,7 @@
 	"configurations": {
 		"jquery": {
 			"name": "jQuery",
+			"isDefault": true,
 			"steal": {
 				"map": {
 					"*": {
