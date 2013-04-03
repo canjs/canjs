@@ -1,4 +1,4 @@
-steal('can/util', 'can/model', 'can/model/list', 'can/observe/attributes', function(can) {
+(function() {
 
 module("can/observe/attributes");
 

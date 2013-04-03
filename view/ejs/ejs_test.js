@@ -583,17 +583,16 @@ test('single escaped tag, removeAttr', function () {
 
 
 test('html comments', function(){
-	var text =	'<!-- bind to changes in the todo list --> <div> '
-	+ '<%= obs.attr("foo") %></div>',
-
-	obs = new can.Observe({
-		foo: 'foo'
-	})
+	var text =	'<!-- bind to changes in the todo list --> <div><%= obs.attr("foo") %></div>',
+		obs = new can.Observe({
+			foo: 'foo'
+		});
 
 	compiled = new can.EJS({ text: text }).render({ obs: obs });
 
 	var div = document.createElement('div');
 	div.appendChild(can.view.frag(compiled));
+	equal(div.children[0].innerHTML, 'foo', 'Element as expected');
 })
 
 test("hookup and live binding", function(){
@@ -923,7 +922,9 @@ test("tags without chidren or ending with /> do not change the state", function(
 
 
 
-test("nested live bindings", function(){
+test("nested live bindings", function() {
+	expect(0);
+
 	var items  = new can.Observe.List([
 		{title: 0, is_done: false, id: 0}
 	]);

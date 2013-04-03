@@ -1,4 +1,4 @@
-steal('can/util', 'can/control').then('can/construct/proxy', function(can) {
+(function() {
 	var isDist = (/dist/.test(location.href));
 
 	module("can/construct/proxy");
@@ -60,4 +60,4 @@ steal('can/util', 'can/control').then('can/construct/proxy', function(can) {
 		})
 	}
 
-});
+})();

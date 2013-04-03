@@ -1,33 +1,30 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-	<link rel="stylesheet" type="text/css" href="<%= root %>/lib/qunit/qunit.css"/>
-</head>
+	<head>
+		<title><%= configuration.name %> Test Suite</title>
+		<link rel="stylesheet" type="text/css" href="<%= root %>/lib/qunit/qunit.css"/>
+	</head>
 <body>
-<h1 id="qunit-header"><%= configuration.name %> Test Suite</h1>
+	<h1 id="qunit-header"><%= configuration.name %> Test Suite</h1>
+	<h2 id="qunit-banner"></h2>
+	<div id="qunit-testrunner-toolbar"></div>
+	<h2 id="qunit-userAgent"></h2>
+	<ol id="qunit-tests"></ol>
+	<div id="qunit-test-area"></div>
 
-<h2 id="qunit-banner"></h2>
+	<script type="text/javascript" src="<%= root %>/lib/steal.js"></script>
+	<script type="text/javascript" src="<%= root %>/lib/qunit/qunit.js"></script>
+	<script type="text/javascript">
+		QUnit.config.autostart = false;
 
-<div id="qunit-testrunner-toolbar"></div>
-<h2 id="qunit-userAgent"></h2>
-<ol id="qunit-tests"></ol>
-<div id="qunit-test-area"></div>
+		steal(function() {
+			var config = window.CONFIGURATION = <%- JSON.stringify(configuration.steal) %>;
 
-<script type="text/javascript" src="<%= root %>/lib/steal.js"></script>
-<script type="text/javascript" src="<%= root %>/lib/qunit/qunit.js"></script>
-<script type="text/javascript">
-	QUnit.config.autostart = false;
-
-	steal(function() {
-		window.CONFIGURATION = {
-			steal: <%- JSON.stringify(configuration.steal) %>
-		};
-
-		steal.config(<%- JSON.stringify(configuration.steal) %>);
-	}, "<%- modules.join('", "') %>")
-	.then("<%- tests.join('", "') %>", function() {
-		QUnit.start();
-	});
-</script>
+			steal.config(config);
+		}, "can/util/fixture", "can/view/jaml", "can/view/micro", "<%- modules.join('", "') %>")
+		.then("<%- tests.join('")\n.then("') %>", function() {
+			QUnit.start();
+		});
+	</script>
 </body>
 </html>

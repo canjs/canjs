@@ -1,4 +1,4 @@
-steal('can/util', 'can/observe/delegate', function(can) {
+(function() {
 
 
 module('can/observe/delegate')

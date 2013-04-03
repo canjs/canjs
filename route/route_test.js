@@ -334,7 +334,7 @@ test("unsticky routes", function(){
 			var after = loc.href.substr(loc.href.indexOf("#"));
 			equal(after,"#!bar");
 			iCanRoute.attr({type: "bar", id: "\/"});
-			
+
 			// check for 1 second
 			var time = new Date()
 			setTimeout(function(){
@@ -349,9 +349,9 @@ test("unsticky routes", function(){
 				} else {
 					setTimeout(arguments.callee, 30)
 				}
-				
+
 			},100)
-			
+
 		},100)
 
 
