@@ -1,4 +1,4 @@
-steal('can/util', 'can/observe/setter', function(can) {
+(function() {
 
 module("can/observe/setter");
 
@@ -68,4 +68,4 @@ test("asyncronous setting", function(){
 })
 
 
-})()
+})();

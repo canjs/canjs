@@ -74,10 +74,9 @@
 		})
 	})
 	test("hookup", function(){
-
-		can.view("//can/view/test//hookup.ejs",{})
-
-	})
+		can.view("//can/view/test//hookup.ejs",{});
+		equal(window.hookedUp, 'dummy', 'Hookup ran and got element');
+	});
 
 	test("inline templates other than 'tmpl' like ejs", function(){
 		var script = document.createElement('script');

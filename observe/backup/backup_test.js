@@ -1,4 +1,4 @@
-steal('can/util', 'can/observe/backup', function() {
+(function() {
 	
 module("can/observe/backup",{
 	setup : function(){
@@ -117,4 +117,4 @@ test("backup restore nested observables", function() {
 	equal(observe.attr('nested').attr('test'), 'property', 'Nested object got restored');
 });
 
-})()
+})();

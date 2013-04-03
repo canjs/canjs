@@ -104,14 +104,16 @@
 			"steal": {
 				"map": {
 					"*": {
-						"jquery/jquery.js": "can/lib/jquery.1.9.1.js",
 						"can/util/util.js": "can/util/jquery/jquery.js"
 					}
 				},
 				"shim": {
-					"jquery": {
+					"jquery/jquery.js": {
 						"exports": "jQuery"
 					}
+				},
+				"paths": {
+					"jquery/jquery.js": "can/lib/jquery.1.9.1.js"
 				}
 			}
 		},
@@ -122,6 +124,9 @@
 					"*": {
 						"can/util/util.js": "can/util/zepto/zepto.js"
 					}
+				},
+				"paths": {
+					"zepto/zepto.js": "can/lib/zepto.1.0rc1.js"
 				}
 			}
 		},
@@ -132,6 +137,9 @@
 					"*": {
 						"can/util/util.js": "can/util/mootools/mootools.js"
 					}
+				},
+				"paths": {
+					"mootools/mootools.js": "can/lib/mootools-core-1.4.5.js"
 				}
 			}
 		},
@@ -142,6 +150,9 @@
 					"*": {
 						"can/util/util.js": "can/util/yui/yui.js"
 					}
+				},
+				"paths": {
+					"yui/yui.js": "can/lib/yui-3.7.3.js"
 				}
 			}
 		},
@@ -152,6 +163,9 @@
 					"*": {
 						"can/util/util.js": "can/util/dojo/dojo.js"
 					}
+				},
+				"paths": {
+					"dojo/dojo.js": "can/util/dojo/dojo-1.8.1.js"
 				}
 			}
 		}

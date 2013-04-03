@@ -1,4 +1,4 @@
-steal('can/util', 'can/observe/validations', function(can) {
+(function() {
 
 module("can/observe/validations",{
 	setup : function(){

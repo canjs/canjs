@@ -903,10 +903,12 @@ test("destroying a model impact the right list", function() {
 
 
 test("uses attr with isNew", function(){
-	expect(1)
+	expect(2);
+
 	var old = can.Observe.__reading;
-	can.Observe.__reading = function(object, attribute){
+	can.Observe.__reading = function(object, attribute) {
 		if(attribute == "id") {
+			console.log('__reading', attribute, object)
 			ok(true, "used attr")
 		}
 	}

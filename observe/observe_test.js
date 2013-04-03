@@ -416,6 +416,8 @@ test("always gets right attr even after moving array items", function(){
 })
  
 test("recursive observers do not cause stack overflow", function() {
+	expect(0);
+
 	var a = new can.Observe();
 	var b = new can.Observe({a: a});
 	a.attr("b", b);
@@ -688,17 +690,14 @@ test("can.Observe.List.prototype.replace (#194)", 7, function() {
 });
 
 test("replace with a deferred that resolves to an Observe.List", function(){
-	stop();
-	
 	var def = new can.Deferred();
 	def.resolve(new can.Observe.List([{name: "foo"},{name: "bar"}]));
 	var list = new can.Observe.List([{name: "1"},{name: "2"}]);
 	list.bind("change",function(){
-		start();
-		
 		equal(list.length, 2, "length is still 2");
-		equal(list[0].attr("name"),"foo", "set to foo")
-	})
+		equal(list[0].attr("name"),"foo", "set to foo");
+	});
+
 	list.replace(def);
 });
 
@@ -749,6 +748,8 @@ test("initialize Observe.List with a deferred",function(){
 });
 
 test("triggering a event while in a batch (#291)", function(){
+	expect(0);
+
 	// normally a change event will not be triggered just
 	// by changing properties. 
 	// however, model does this in  destroyed
