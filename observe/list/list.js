@@ -72,7 +72,7 @@ steal('can/util', 'can/observe', 'can/observe/compute', function(can) {
 				});
 
 				mapped.splice(index, 0, compute());
-			}
+			};
 
 			this.forEach(generator);
 
@@ -88,9 +88,46 @@ steal('can/util', 'can/observe', 'can/observe/compute', function(can) {
 			this.bind('remove', function(ev, data, index) {
 				// The indices in the mapped list are the same so lets just splice it out
 				mapped.splice(index, data.length);
-			})
+			});
 
 			return mapped;
+		},
+		/**
+		 * The slice method selects a part of an array, and returns another instance of this model list's class.
+		 * 
+		 *     list.slice(start, end)
+		 *
+		 * @param {Number} start the start index to select
+		 * @param {Number} end the last index to select
+		 */
+		slice: function() {
+			return new this.constructor(Array.prototype.slice.apply(this, arguments));
+		},
+		/**
+		 * Finds the instances of the list which satisfy a callback filter function. The original array is not affected.
+		 * 
+		 *     var matchedList = list.grep(function(instanceInList, indexInArray){
+		 *        return instanceInList.date < new Date();
+		 *     });
+		 * 
+		 * @param {Function} callback the function to call back.  This function has the same call pattern as what jQuery.grep provides.
+		 * @param {Object} args
+		 */
+		grep: function( callback, args ) {
+			return new this.constructor(can.$.grep(this, callback, args));
+		},
+		/**
+		 * Returns a list of all instances who's property matches the given value.
+		 *
+		 *     list.match('candy', 'snickers')
+		 * 
+		 * @param {String} property the property to match
+		 * @param {Object} value the value to be equal
+		 */
+		match: function( property, value ) {
+			return this.grep(function( inst ) {
+				return inst[property] === value;
+			});
 		}
 
 		/* TODO

@@ -1,4 +1,4 @@
-(function(){
+(function() {
 	module("can/observe/list");
 
 	test("filter", 8, function() {
@@ -21,9 +21,8 @@
 			}
 		]);
 
-		var state = new can.Observe({ minAge : 20 });
-
-		var filtered = original.filter(function(element) {
+		var state		= new can.Observe({ minAge : 20 });
+		var filtered	= original.filter(function(element) {
 			return element.attr('age') > state.attr('minAge');
 		});
 
@@ -47,58 +46,59 @@
 			name : 'Pushed tester 2',
 			age : 30
 		});
+		
 		equal(filtered.length, 2, 'Newly pushed element got updated according to filter');
 		original.pop();
 		equal(filtered.length, 1, 'Removed element also removed from filter');
 		equal(filtered[0].attr('name'), 'Test 2', 'Older element remains');
 	});
 
-  test("attr updates items in position order", function(){
-    var original = new can.Observe.List([
-      {
-        id : 1,
-        name : 'Test 1',
-        age : 20
-      },
-      {
-        id : 2,
-        name : 'Test 2',
-        age : 80
-      },
-      {
-        id : 3,
-        name : 'Test 3',
-        age : 1
-      }
-    ]);
+	test("attr updates items in position order", function() {
+		var original = new can.Observe.List([
+			{
+				id : 1,
+				name : 'Test 1',
+				age : 20
+			},
+			{
+				id : 2,
+				name : 'Test 2',
+				age : 80
+			},
+			{
+				id : 3,
+				name : 'Test 3',
+				age : 1
+			}
+		]);
 
-    original.attr([
-      {
-        id : 1,
-        name : 'Test 1',
-        age : 120
-      },
-      {
-        id : 2,
-        name : 'Test 2',
-        age : 180
-      },
-      {
-        id : 3,
-        name : 'Test 3',
-        age : 101
-      }
-    ]);
+		original.attr([
+			{
+				id : 1,
+				name : 'Test 1',
+				age : 120
+			},
+			{
+				id : 2,
+				name : 'Test 2',
+				age : 180
+			},
+			{
+				id : 3,
+				name : 'Test 3',
+				age : 101
+			}
+		]);
 
-    equal(original.attr('0.id'), 1);
-    equal(original.attr('0.age'), 120, "Test 1's age incremented by 100 years");
+		equal(original.attr('0.id'), 1);
+		equal(original.attr('0.age'), 120, "Test 1's age incremented by 100 years");
 
-    equal(original.attr('1.id'), 2);
-    equal(original.attr('1.age'), 180, "Test 2's age incremented by 100 years");
+		equal(original.attr('1.id'), 2);
+		equal(original.attr('1.age'), 180, "Test 2's age incremented by 100 years");
 
-    equal(original.attr('2.id'), 3);
-    equal(original.attr('2.age'), 101, "Test 3's age incremented by 100 years");
-  });
+		equal(original.attr('2.id'), 3);
+		equal(original.attr('2.age'), 101, "Test 3's age incremented by 100 years");
+	});
 
 	test("map", function() {
 		var original = new can.Observe.List([
@@ -134,5 +134,94 @@
 		equal(mapped[mapped.length - 1], 'Push test (' + 99 + ')');
 		original.shift();
 		equal(mapped.length, 3, 'Item got removed');
+	});
+
+	test("slice", function() {
+		var original = new can.Observe.List([
+			{
+				name : 'Test 1',
+				age : 20
+			},
+			{
+				name : 'Test 2',
+				age : 80
+			},
+			{
+				name : 'Test 3',
+				age : 1
+			},
+			{
+				name : 'Test 4',
+				age : 21
+			}
+		]);
+
+		var slice = original.slice(2, 4);
+		equal(slice.length, 2, 'Correct number of items sliced');
+		equal(slice[0].attr('name'), 'Test 3', 'Correct items sliced');
+		equal(original.length, 4, 'Slice did not touch original list');
+		ok(slice.constructor === can.Observe.List, 'slice returns correct object');
+	});
+
+	test("grep", function() {
+		var original = new can.Observe.List([
+			{
+				name : 'Test 1',
+				age : 20
+			},
+			{
+				name : 'Test 2',
+				age : 80
+			},
+			{
+				name : 'Test 3',
+				age : 1
+			},
+			{
+				name : 'Test 4',
+				age : 21
+			}
+		]);
+
+		var grep = original.grep(function(instanceInList, indexInArray) {
+			return instanceInList.age > 20; 
+		});
+
+		equal(grep.length, 2, 'Correct number of items grepped');
+		equal(grep[0].attr('name'), 'Test 2', 'Correct items grepped');
+		equal(original.length, 4, 'grep did not touch original list');
+		ok(grep.constructor === can.Observe.List, 'grep returns correct object');
+	});
+
+	test("match", function() {
+		var original = new can.Observe.List([
+			{
+				name : 'Test 1',
+				age : 20
+			},
+			{
+				name : 'Test 2',
+				age : 80
+			},
+			{
+				name : 'Test 3',
+				age : 1
+			},
+			{
+				name : 'Test 4',
+				age : 21
+			},
+			{
+				name : 'Test 5',
+				age : 20
+			}
+		]);
+
+		var match = original.match('age', 20);
+
+		equal(match.length, 2, 'Correct number of items matched');
+		equal(match[0].attr('name'), 'Test 1', 'Correct items matched');
+		equal(original.length, 5, 'match did not touch original list');
+		ok(match.constructor === can.Observe.List, 'match returns correct object');
 	});
 })();
