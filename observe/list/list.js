@@ -102,32 +102,6 @@ steal('can/util', 'can/observe', 'can/observe/compute', function(can) {
 		 */
 		slice: function() {
 			return new this.constructor(Array.prototype.slice.apply(this, arguments));
-		},
-		/**
-		 * Finds the instances of the list which satisfy a callback filter function. The original array is not affected.
-		 * 
-		 *     var matchedList = list.grep(function(instanceInList, indexInArray){
-		 *        return instanceInList.date < new Date();
-		 *     });
-		 * 
-		 * @param {Function} callback the function to call back.  This function has the same call pattern as what jQuery.grep provides.
-		 * @param {Object} args
-		 */
-		grep: function( callback, args ) {
-			return new this.constructor(can.grep(this, callback, args));
-		},
-		/**
-		 * Returns a list of all instances who's property matches the given value.
-		 *
-		 *     list.match('candy', 'snickers')
-		 * 
-		 * @param {String} property the property to match
-		 * @param {Object} value the value to be equal
-		 */
-		match: function( property, value ) {
-			return this.grep(function( inst ) {
-				return inst[property] === value;
-			});
 		}
 
 		/* TODO
