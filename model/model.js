@@ -1271,7 +1271,7 @@ steal('can/util','can/observe', function( can ) {
 				return [];
 			}
 
-			return can.$.grep(this, function(item) { 
+			return can.grep(this, function(item) { 
 				return getId(item) === id; 
 			});
 		}

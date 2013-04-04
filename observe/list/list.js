@@ -114,7 +114,7 @@ steal('can/util', 'can/observe', 'can/observe/compute', function(can) {
 		 * @param {Object} args
 		 */
 		grep: function( callback, args ) {
-			return new this.constructor(can.$.grep(this, callback, args));
+			return new this.constructor(can.grep(this, callback, args));
 		},
 		/**
 		 * Returns a list of all instances who's property matches the given value.
