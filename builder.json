@@ -100,9 +100,13 @@
 			"configurations": ["jquery"]
 		}
 	},
+	"types": {
+		"core": "CanJS core",
+		"plugin": "Plugins"
+	},
 	"configurations": {
 		"jquery": {
-			"name": "jQuery",
+			"description": "jQuery",
 			"isDefault": true,
 			"steal": {
 				"map": {
@@ -121,7 +125,7 @@
 			}
 		},
 		"zepto": {
-			"name": "Zepto",
+			"description": "Zepto",
 			"steal": {
 				"map": {
 					"*": {
@@ -134,7 +138,7 @@
 			}
 		},
 		"mootools": {
-			"name": "mootools",
+			"description": "Mootools",
 			"steal": {
 				"map": {
 					"*": {
@@ -147,7 +151,7 @@
 			}
 		},
 		"yui": {
-			"name": "YUI",
+			"description": "YUI",
 			"steal": {
 				"map": {
 					"*": {
@@ -160,7 +164,7 @@
 			}
 		},
 		"dojo": {
-			"name": "Dojo",
+			"description": "Dojo",
 			"steal": {
 				"map": {
 					"*": {
