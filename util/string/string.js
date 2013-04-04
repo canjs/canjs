@@ -73,37 +73,38 @@ steal('can/util',function(can) {
             length =  parts.length,
             current,
             r = 0,
-            i, container;
+            i, container, rootsLength;
 
         // Make sure roots is an `array`.
         roots = can.isArray(roots) ? roots : [roots || window];
+
+        rootsLength = roots.length
 
         if ( ! length ) {
           return roots[0];
         }
 
         // For each root, mark it as current.
-        while ( roots[r] ) {
+        for (r; r < rootsLength; r++) {
           current = roots[r];
+          container = undefined;
 
           // Walk current to the 2nd to last object or until there
           // is not a container.
           for (i = 0; i < length && isContainer( current ); i++ ) {
           	container = current;
-            current = getNext( current, parts[i]);
+            current = getNext( container, parts[i]);
           }
 
           // If we found property break cycle
-          if(current !== undefined) {
+          if(container !== undefined && current !== undefined) {
           	break
           }
-
-          r++;
         }
 
-        // Remove property from found
+        // Remove property from found container
         if(add === false && current !== undefined) {
-        	delete container[parts[parts.length - 1]]
+        	delete container[parts[i - 1]]
         }
 
         // When adding property add it to the first root
