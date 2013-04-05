@@ -47,4 +47,16 @@ test("can.reduce", function() {
   equal("zabcd", can.reduce(array, add, "z"));
 });
 
+test("can.reduceRight", function() {
+  equal(undefined, can.reduceRight(null));
+  var array = ["a", "b", "c", "d"], add = function(a, b) { return a+b; };
+  equal("dcba", can.reduceRight(array, add));
+  equal("zdcba", can.reduceRight(array, add, "z"));
+  
+  array.reduceRight = null; //override native reduce
+  equal("dcba", can.reduceRight(array, add));
+  equal("zdcba", can.reduceRight(array, add, "z"));
+});
+
+
 });
