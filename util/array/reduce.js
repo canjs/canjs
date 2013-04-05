@@ -1,12 +1,12 @@
-steal('can/util/can.js','can/util/array/each.js',function (can) {
+steal('can/util/can.js','can/util/array/each.js','can/util/array/makeArray.js',function (can) {
 	can.reduce = function (elements, callback, initial) {
-    var current = initial;
+    var current = initial, args;
 
-    function(a, f, i) { var j = i==null ? a[0] : i; can.each(a.slice(i==null ? 1 : 0), function(b, x) { j = f(j, b, x, a); }); return j };
     if (elements && elements.reduce) {
-      current = elements.reduce.call(elements, callback, initial);
+      args = can.makeArray(arguments).slice(1);
+      current = elements.reduce.apply(elements, args);
     } else if(elements && elements.length) {
-      if(initial == null) {
+      if(arguments.length < 3) {
         current = elements[0];
         elements = elements.slice(1);
       }
