@@ -25,7 +25,7 @@ test("String.underscore", function(){
 });
 
 
-test("can.getObject", function(){
+test("can.getObject Single root", function(){
 
 	// ## Single root
 	var root, result;
@@ -69,6 +69,9 @@ test("can.getObject", function(){
 	deepEqual(result, {}, "got '{}'")
 	deepEqual(root, {foo: 'bar', baz: {}}, "added 'baz: {}' into root")
 
+})
+
+test("can.getObject Multiple root", function(){
 
 	// ## Multiple roots
 	var root1, root2, roots, result;
@@ -176,6 +179,9 @@ test("can.getObject", function(){
 	equals(root1, undefined, "root is same")
 	deepEqual(root2, {b:2}, "root is same")
 
+})
+
+test("can.getObject Deep objects", function(){
 	// ## Deep objects
 	var root, result;
 
