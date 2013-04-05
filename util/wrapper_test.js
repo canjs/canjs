@@ -1,3 +1,5 @@
+steal("can/util/array/makeArray.js","can/util/array/reduce.js",function(){ 
+
 // Tests that a library wrapper has to pass
 module("Library wrapper");
 
@@ -43,4 +45,6 @@ test("can.reduce", function() {
   array.reduce = null; //override native reduce
   equal("abcd", can.reduce(array, add));
   equal("zabcd", can.reduce(array, add, "z"));
+});
+
 });
