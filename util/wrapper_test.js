@@ -49,13 +49,22 @@ test("can.reduce", function() {
 
 test("can.reduceRight", function() {
   equal(undefined, can.reduceRight(null));
-  var array = ["a", "b", "c", "d"], add = function(a, b) { return a+b; };
+  var array = ["a", "b", "c", "d"], 
+      add = function(a, b) { return a+b; },
+      verify = function(t, b, i, arr) { 
+        equal(arr, array); 
+        ok(i < t, "iterating in reverse. i = " + i + " t = " + t); 
+        return i; }
+      ;
   equal("dcba", can.reduceRight(array, add));
   equal("zdcba", can.reduceRight(array, add, "z"));
   
   array.reduceRight = null; //override native reduce
   equal("dcba", can.reduceRight(array, add));
   equal("zdcba", can.reduceRight(array, add, "z"));
+
+  //test that the array passed is not reversed
+  can.reduceRight(array, verify, array.length);
 });
 
 
