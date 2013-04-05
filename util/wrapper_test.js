@@ -32,3 +32,15 @@ test("can.extend", function () {
 test("can.isEmptyObject", function () {
 
 });
+
+test("can.reduce", function() {
+  equal(undefined, can.reduce(null));
+  var array = [1,2,3,4], add = function(a, b) { return a+b; };
+  equal(10, can.reduce(array, add));
+  equal(25, can.reduce(array, add, 15));
+  
+  array = ["a","b","c","d"];
+  array.reduce = null; //override native reduce
+  equal("abcd", can.reduce(array, add));
+  equal("zabcd", can.reduce(array, add, "z"));
+});
