@@ -1,4 +1,4 @@
-steal("can/util/array/makeArray.js","can/util/array/reduce.js",function(){ 
+steal("can/util/array/makeArray.js","can/util/array/reduce.js",function(can){ 
 
 // Tests that a library wrapper has to pass
 module("Library wrapper");
@@ -54,8 +54,8 @@ test("can.reduceRight", function() {
       verify = function(t, b, i, arr) { 
         equal(arr, array); 
         ok(i < t, "iterating in reverse. i = " + i + " t = " + t); 
-        return i; }
-      ;
+        return i; 
+      };
   equal("dcba", can.reduceRight(array, add));
   equal("zdcba", can.reduceRight(array, add, "z"));
   
