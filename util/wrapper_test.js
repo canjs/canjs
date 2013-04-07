@@ -47,6 +47,15 @@ test("can.reduce", function() {
   equal("zabcd", can.reduce(array, add, "z"));
 });
 
+test("can.reduce over Object", function() {
+
+  var obj = { a : "x", b : "y", c : "z"}
+  equal("xyz", can.reduce(obj, function(a, b) { return a + b }, ""));
+  equal("xyz", can.reduce(obj, function(a, b) { return a + b }));
+
+  equal("abc", can.reduce(obj, function(a, b, i) { return a + i}, ""));
+});
+
 test("can.reduceRight", function() {
   equal(undefined, can.reduceRight(null));
   var array = ["a", "b", "c", "d"], 

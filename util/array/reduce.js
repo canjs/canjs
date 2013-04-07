@@ -69,28 +69,31 @@ steal('can/util/can.js','can/util/array/each.js','can/util/array/makeArray.js',f
      * @return {Any} The result of applying the callback over the array
      */
     , reduceRight : function(index, elements) {
-      return elements.length - index - 1;
+      return typeof index === "number" ? (elements.length - index - 1) : index;
     }
   }, function(idxfunc, reducefunc) {
     can[reducefunc] = function (elements, callback, initial) {
-      var current = initial, args, els;
+      var current = initial, args = arguments, els;
 
       if (elements && elements[reducefunc]) {
         args = can.makeArray(arguments).slice(1);
         current = elements[reducefunc].apply(elements, args);
-      } else if(elements && elements.length) {
-        els = elements.slice(0)
-        if(reducefunc === "reduceRight") {
-          els.reverse();
+      } else if(elements) {
+        els = elements
+        if(elements.length) {
+          els = elements.slice(0)
+          if(reducefunc === "reduceRight") {
+            els.reverse();
+          }
         }
-
-        if(arguments.length < 3) {
-          current = els[0];
-          els = els.slice(1);
-        }
-  			
+        
         can.each(els, function(element, index) { 
-          current = callback.call(element, current, element, idxfunc(index, els), elements);
+          if(args.length < 3 && !current) {
+            current = element;
+            els = els.slice ? els.slice(1) : els;
+          } else {
+            current = callback.call(element, current, element, idxfunc(index, els), elements);
+          }
         });
       }
   		return current;
