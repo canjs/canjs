@@ -10,30 +10,36 @@ steal('can/util/can.js','can/util/array/each.js','can/util/array/makeArray.js',f
     /**
      * @function can.reduce
      * @parent can.util
-     * Iterates over an array and returns a single value.  At each step
-     * in iteration the previous return value is supplied alongside the
-     * current array element.
+     * Iterates over an object (array-like or not) and returns a single value.  
+     * At each step in iteration the previous return value is supplied alongside 
+     * the current element.
      *
      *     can.reduce([1, 2, 3], function(t, n){ return t + n; }, 10) 
+     *          // -> 16
+     *     can.reduce({a: 1, b: 2, c: 3}, function(t, n){ return t + n; }, 10) 
      *          // -> 16
      *
      * Supplying an optional initial element passes it through to the first
      * iteration.  If no initial element is supplied, the first iteration will
-     * execute with the first and second elements from the array.
+     * execute with the first and second elements.
      *
      *     can.reduce([1, 2, 3], function(t, n){ return t + n; }) 
      *          // -> 6
      *     
-     * The current index and original array are passed in as the third and fourth 
-     * positional parameters.
+     * The current index/key and original object are passed in as the third and 
+     * fourth positional parameters.
      * 
      *     can.reduce(["a", "b", "c"], 
      *        function(t, n, i, a){ 
      *           return t + i + n + (a.length - 1 === i ? "" : " "); 
      *        }, "") 
      *          // -> "0a 1b 2c"
+     *
+     * It is always recommended to use an initial value if passing in a plain
+     * object as the first argument and using keys in the callback: the key from 
+     * the first element is not accessible.
      * 
-     * @param {Array} elements The arrary of elements to be iterated over
+     * @param {Array|Object} elements The elements to be iterated over
      * @param {Function} callback The callback to execute each iteration
      * @param {Any} [initial] An optional initial value
      * @return {Any} The result of applying the callback over the array
@@ -63,7 +69,11 @@ steal('can/util/can.js','can/util/array/each.js','can/util/array/makeArray.js',f
      *     can.reduceRight(["b", "a"], function(t, n) { return t + n; })
      *          // -> "ab"
      * 
-     * @param {Array} elements The arrary of elements to be iterated over
+     * When called on a plain object (not an array-like), <code>reduceRight</code>
+     * functions the same as <code>reduce</code>, since objects in JS do
+     * not have defined property order.
+     *
+     * @param {ArrayObject} elements The elements to be iterated over
      * @param {Function} callback The callback to execute each iteration
      * @param {Any} [initial] An optional initial value
      * @return {Any} The result of applying the callback over the array
