@@ -19,7 +19,7 @@ steal('can/util', function(can) {
 				// to `observed`
 				observed.push({
 					obj: obj,
-					attr: attr
+					attr: attr+""
 				});
 			};
 		}
@@ -329,7 +329,8 @@ steal('can/util', function(can) {
 			// sets the value
 			set = function(newVal){
 				value = newVal;
-			}
+			},
+			canReadForChangeEvent = true;
 
 		computed = function(newVal){
 			// setting ...
@@ -353,8 +354,8 @@ steal('can/util', function(can) {
 				}
 				return value;
 			} else {
-				// always let others konw to listen to changes in this compute
-				if( can.Observe.__reading ) {
+				// Let others konw to listen to changes in this compute
+				if( can.Observe.__reading && canReadForChangeEvent) {
 					can.Observe.__reading(computed,'change');
 				}
 				// if we are bound, use the cached value
@@ -369,15 +370,16 @@ steal('can/util', function(can) {
 		if(typeof getterSetter === "function"){
 			set = getterSetter;
 			get = getterSetter;
-			
+			canReadForChangeEvent = eventName === false ? false : true;
+			computed.hasDependencies = false;
 			on = function(update){
 				computedData = computeBinder(getterSetter, context || this, update, computeState);
+				computed.hasDependencies = computedData.isListening
 				value = computedData.value;
 			}
 			off = function(){
 				computedData.teardown();
 			}
-
 		} else if(context) {
 			
 			if(typeof context == "string"){
