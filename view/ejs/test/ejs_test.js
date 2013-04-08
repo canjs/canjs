@@ -32,15 +32,17 @@ var getAttr = function(el, attrName){
 	}
 
 test("registerNode, unregisterNode, and replace work", function(){
+	var nodeLists = can.view.live.nodeLists;
+
 	// Reset the registered nodes
-	for (var key in can.view.nodeMap) {
-		if (can.view.nodeMap.hasOwnProperty(key)) {
-			delete can.view.nodeMap[key];
+	for (var key in nodeLists.nodeMap) {
+		if (nodeLists.hasOwnProperty(key)) {
+			delete nodeLists.nodeMap[key];
 		}
 	}
-	for (var key in can.view.nodeListMap) {
-		if (can.view.nodeListMap.hasOwnProperty(key)) {
-			delete can.view.nodeListMap[key];
+	for (var key in nodeLists.nodeListMap) {
+		if (nodeLists.hasOwnProperty(key)) {
+			delete nodeLists.nodeListMap[key];
 		}
 	}
 	
@@ -52,41 +54,41 @@ test("registerNode, unregisterNode, and replace work", function(){
 		two = {id: 2},
 		listOne = [{id: 1},two,{id: 3}];
 		
-	can.view.registerNode(listOne);
+	nodeLists.register(listOne);
 	var listTwo = [two];
 	
-	can.view.registerNode(listTwo);
+	nodeLists.register(listTwo);
 	
 	var newLabel = {id: 4}
-	can.view.replace(listTwo, [newLabel])
+	nodeLists.replace(listTwo, [newLabel])
 	
 	same( ids(listOne), [1,4,3], "replaced" )
 	same( ids(listTwo), [4] );
 	
-	can.view.replace(listTwo,[{id: 5},{id: 6}]);
+	nodeLists.replace(listTwo,[{id: 5},{id: 6}]);
 	
 	same( ids(listOne), [1,5,6,3], "replaced" );
 	
 	same( ids(listTwo), [5,6], "replaced" );
 	
-	can.view.replace(listTwo,[{id: 7}])
+	nodeLists.replace(listTwo,[{id: 7}])
 	
 	same( ids(listOne), [1,7,3], "replaced" );
 	
 	same( ids(listTwo), [7], "replaced" );
 	
-	can.view.replace( listOne, [{id: 8}])
+	nodeLists.replace( listOne, [{id: 8}])
 	
 	same( ids(listOne), [8], "replaced" );
 	same( ids(listTwo), [7], "replaced" );
 	
-	can.view.unregisterNode(listOne);
-	can.view.unregisterNode(listTwo);
+	nodeLists.unregister(listOne);
+	nodeLists.unregister(listTwo);
 	
 	
 	
-	same(can.view.nodeMap, {} );
-	same(can.view.nodeListMap ,{} )
+	same(nodeLists.nodeMap, {} );
+	same(nodeLists.nodeListMap ,{} )
 	
 	
 });
@@ -1047,11 +1049,12 @@ test("reset on a live bound input", function(){
 
 test("A non-escaping live magic tag within a control structure and no leaks", function(){
 	
-	for(var prop in can.view.nodeMap){
-		delete can.view.nodeMap[prop]
+	var nodeLists = can.view.live.nodeLists;
+	for(var prop in nodeLists.nodeMap){
+		delete nodeLists.nodeMap[prop]
 	}
-	for(var prop in can.view.nodeListMap){
-		delete can.view.nodeListMap[prop]
+	for(var prop in nodeLists.nodeListMap){
+		delete nodeLists.nodeListMap[prop]
 	}
 	
 	var text = "<div><% items.each(function(ob) { %>" +
@@ -1081,8 +1084,8 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 	
 	can.remove( can.$(div.firstChild) )
 		
-	same(can.view.nodeMap, {} );
-	same(can.view.nodeListMap ,{} )
+	same(nodeLists.nodeMap, {} );
+	same(nodeLists.nodeListMap ,{} )
 });
 
 
@@ -1352,5 +1355,129 @@ test("correctness of data-view-id and only in tag opening", function(){
 
 	ok(compiled.search(expected) === 0, "Rendered output is as expected");
 });
+
+test("return blocks within element tags", function(){
+
+
+
+	var animals = new can.Observe.List(['sloth', 'bear']),
+		template = "<ul>"+
+					"<%==lister(animals, function(animal){%>"+
+						"<li><%=animal %></li>"+
+					"<%})%>"+
+					"</ul>";
+
+	var renderer = can.view.ejs(template)
+
+	var div = document.createElement('div')
+
+	var frag = renderer({
+		lister: function(items, callback){
+			return function(el){
+				equal(el.nodeName.toLowerCase(), "li", "got the LI it created")
+			}
+		},
+		animals: animals
+	});
+	div.appendChild(frag)
+
+	$("#qunit-test-area").html(div);
+
+	//div.getElementsByTagName('label')[0].myexpando = "EXPANDO-ED";
+
+})
+
+
+test("Each does not redraw items",function(){
+
+	var animals = new can.Observe.List(['sloth', 'bear']),
+		template = "<div>my<b>favorite</b>animals:"+
+					"<%==each(animals, function(animal){%>"+
+						"<label>Animal=</label> <span><%=animal %></span>"+
+					"<%})%>"+
+					"!</div>";
+
+	var renderer = can.view.ejs(template)
+
+	var div = document.createElement('div')
+
+	var frag = renderer({animals: animals});
+	div.appendChild(frag)
+
+	div.getElementsByTagName('label')[0].myexpando = "EXPANDO-ED";
+
+	//animals.push("dog")
+	equal(div.getElementsByTagName('label').length, 2, "There are 2 labels")
+
+	animals.push("turtle")
+
+	equal(div.getElementsByTagName('label')[0].myexpando, "EXPANDO-ED", "same expando");
+
+	equal(div.getElementsByTagName('span')[2].innerHTML, "turtle", "turtle added");
+
+});
+
+
+test("list works within another branch", function(){
+	var animals = new can.Observe.List([]),
+		template = "<div>Animals:"+
+					"<% if( animals.attr('length') ){ %>~"+
+						"<% animals.each(function(animal){%>"+
+							"<span><%=animal %></span>"+
+						"<%})%>"+
+					"<% } else { %>"+
+						"No animals"+
+					"<% } %>"+
+					"!</div>";
+
+	var renderer = can.view.ejs(template)
+
+	var div = document.createElement('div');
+
+	$("#qunit-test-area").html(div);
+
+	var frag = renderer({animals: animals});
+	div.appendChild(frag)
+
+	equal( div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!" );
+
+	animals.push('sloth');
+
+	equal(div.getElementsByTagName('span').length, 1, "There is 1 sloth");
+
+	animals.pop();
+
+	equal( div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!" );
+})
+
+test("each works within another branch", function(){
+	var animals = new can.Observe.List([]),
+		template = "<div>Animals:"+
+					"<% if( animals.attr('length') ){ %>~"+
+						"<%==each(animals, function(animal){%>"+
+							"<span><%=animal %></span>"+
+						"<%})%>"+
+					"<% } else { %>"+
+						"No animals"+
+					"<% } %>"+
+					"!</div>";
+
+	var renderer = can.view.ejs(template)
+
+	var div = document.createElement('div');
+
+
+
+	var frag = renderer({animals: animals});
+	div.appendChild(frag)
+
+	equal( div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!" );
+	animals.push('sloth');
+
+	equal(div.getElementsByTagName('span').length, 1, "There is 1 sloth");
+	animals.pop();
+
+	equal( div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!" );
+})
 
 })();
