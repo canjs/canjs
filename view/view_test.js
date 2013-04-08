@@ -356,4 +356,20 @@
 		bar.resolve('Bar done');
 	});
 
+	test("Using '=' in attribute does not truncate the value", function() {
+		var template = can.view.ejs("<div id='equalTest' <%= this.attr('class') %>></div>"),
+			obs = new can.Observe({
+				class : 'class="someClass"'
+			}),
+			frag = template(obs), div;
+
+		can.append(can.$("#qunit-test-area"), frag);
+
+		div = document.getElementById('equalTest');
+		obs.attr('class', 'class="do=not=truncate=me"');
+
+		equal(div.className, 'do=not=truncate=me', 'class is right');
+	});
+
+
 })();
