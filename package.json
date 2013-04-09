@@ -18,6 +18,9 @@
     "grunt-string-replace" : "0.2.2",
     "grunt-shell" : "0.2.1"
   },
+  "scripts": {
+	"test": "grunt test"
+  },
   "demos" : [
     "http://canjs.us/#examples",
     "http://canjs.us/recipes"

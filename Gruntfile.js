@@ -33,15 +33,14 @@ module.exports = function (grunt) {
 				out: 'test/dist/',
 				transform: {
 					modules: function(modules) {
-						for(var m in modules) {
-							if(!modules[m].isDefault) {
-								modules[m.replace(/\//g, '.')] = modules[m];
+						var mods = {};
+						_.each(modules, function(mod, name) {
+							if(!mod.isDefault) {
+								mods[name.replace(/\//g, '.')] = mod;
 							}
+						});
 
-							delete modules[m];
-						}
-
-						return modules;
+						return mods;
 					},
 
 					options: function(config) {
