@@ -21,16 +21,16 @@ module.exports = function (grunt) {
 		},
 		testify: {
 			libs: {
-				template: 'build/templates/__configuration__.html.ejs',
+				template: 'test/templates/__configuration__.html.ejs',
 				builder: '<%= builder %>',
 				root: '..',
 				out: 'test/'
 			},
 			dist: {
-				template: 'build/templates/__configuration__-dist.html.ejs',
+				template: 'test/templates/__configuration__-dist.html.ejs',
 				builder: '<%= builder %>',
-				root: '../../..',
-				out: 'dist/<%= info.version %>/test/',
+				root: '../..',
+				out: 'test/dist/',
 				transform: {
 					modules: function(modules) {
 						for(var m in modules) {
@@ -57,10 +57,10 @@ module.exports = function (grunt) {
 				}
 			},
 			amd: {
-				template: 'build/templates/__configuration__-amd.html.ejs',
+				template: 'test/templates/__configuration__-amd.html.ejs',
 				builder: '<%= builder %>',
-				root: '../../../..',
-				out: 'dist/<%= info.version %>/test/amd/'
+				root: '../..',
+				out: 'test/amd/'
 			}
 		},
 		beautifier: {
