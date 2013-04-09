@@ -1,36 +1,39 @@
 {
-  "name" : "CanJS",
-  "description" : "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-  "version" : "1.1.5",
-  "author" : {
-    "name" : "Bitovi",
-    "email" : "contact@bitovi.com",
-    "web" : "http://bitovi.com/"
+  "name": "CanJS",
+  "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
+  "version": "1.1.5",
+  "author": {
+    "name": "Bitovi",
+    "email": "contact@bitovi.com",
+    "web": "http://bitovi.com/"
   },
-  "homepage" : "http://canjs.us/",
-  "repository" : {
-    "type" : "git",
-    "url" : "git@github.com:bitovi/canjs.git"
+  "homepage": "http://canjs.us/",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:bitovi/canjs.git"
   },
-  "devDependencies" : {
-    "http-server" : "0.5.1",
-    "grunt" : "0.4.0",
-    "grunt-string-replace" : "0.2.2",
-    "grunt-shell" : "0.2.1",
-    "grunt-contrib-qunit" : "0.2.1",
-    "grunt-contrib-connect" : "0.2.0"
+  "devDependencies": {
+    "http-server": "0.5.1",
+    "grunt": "0.4.0",
+    "grunt-string-replace": "0.2.2",
+    "grunt-shell": "0.2.1",
+    "grunt-contrib-qunit": "0.2.1",
+    "grunt-contrib-connect": "0.2.0"
   },
   "scripts": {
-	"test": "grunt test"
+    "test": "grunt test"
   },
-  "demos" : [
+  "demos": [
     "http://canjs.us/#examples",
     "http://canjs.us/recipes"
   ],
-  "licenses" : [
+  "licenses": [
     {
-      "type" : "MIT",
-      "url" : "http://opensource.org/licenses/mit-license.php"
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/mit-license.php"
     }
-  ]
+  ],
+  "dependencies": {
+    "grunt-cli": "~0.1.7"
+  }
 }
