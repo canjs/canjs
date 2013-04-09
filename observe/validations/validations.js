@@ -10,7 +10,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 		}
 
 		options = options || {};
-		attrNames = can.makeArray(attrNames)
+		attrNames = typeof attrNames == 'string' ? [attrNames] : can.makeArray(attrNames);
 
 		// run testIf if it exists
 		if (options.testIf && !options.testIf.call(this)) {
@@ -204,11 +204,13 @@ steal('can/util', 'can/observe/attributes', function (can) {
 						return;
 					}
 
-					if (can.grep(inArray,function (elm) {
-						return (elm == value);
-					}).length == 0) {
-						return this.constructor.validationMessages.inclusion;
+					for(var i = 0; i < inArray.length; i++) {
+						if(inArray[i] == value) {
+							return;
+						}
 					}
+
+					return this.constructor.validationMessages.inclusion;
 				});
 			},
 

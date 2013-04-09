@@ -45,7 +45,7 @@ test("static super", function(){
 
 test("findAll super", function(){
 
-	var Parent = can.Model({
+	var Parent = can.Construct({
 		findAll: function(){
 			equal(this.shortName, 'child');
 			return new can.Deferred();

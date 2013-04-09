@@ -294,7 +294,7 @@ steal('can/util', 'can/observe', function(can) {
 			// parse each property in the selector
 			while(matches = selectorRegex.exec(selector)) {
 				// we need to do a little doctoring to make up for the quotes.
-				if(matches[2] && $.inArray(matches[2].substr(0, 1), ['"', "'"]) >= 0) {
+				if(matches[2] && can.inArray(matches[2].substr(0, 1), ['"', "'"]) >= 0) {
 					matches[2] = matches[2].substr(1, -1);
 				}
 				
@@ -339,7 +339,7 @@ steal('can/util', 'can/observe', function(can) {
 		 * @return {jQuery.Delegate} the delegate for chaining
 		 */
 		undelegate : function(selector, event, handler){
-			selector = can.trim(selector);
+			selector = selector && can.trim(selector);
 			
 			var i =0,
 				delegates = this._observe_delegates || [],

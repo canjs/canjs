@@ -1,6 +1,6 @@
 {
 	"filename": "can.custom.js",
-	"banner": "/*!\n * <%= info.title || info.name %> - <%= info.version %>\n * <%= info.homepage %>\n * Copyright (c) <%= new Date().getFullYear() %> <%= info.author.name %>\n * <%= new Date().toUTCString() %>\n * Licensed <%= info.licenses[0].type %>\n * Download from: <%= url %>\n */\n",
+	"banner": "/*!\n * <%= info.title || info.name %> - <%= info.version %>\n * <%= info.homepage %>\n * Copyright (c) <%= new Date().getFullYear() %> <%= info.author.name %>\n * <%= new Date().toUTCString() %>\n * Licensed <%= info.licenses[0].type %><% if(typeof url !== 'undefined') { %>\n * Download from: <%= url %>\n<% } %> */\n",
 	"modules": {
 		"can/construct": {
 			"name": "can.Construct",
@@ -146,7 +146,7 @@
 					}
 				},
 				"paths": {
-					"mootools/mootools.js": "can/lib/mootools-core-1.4.5.js"
+					"mootools/mootools.js": "can/lib/mootools-core-1.4.3.js"
 				}
 			}
 		},

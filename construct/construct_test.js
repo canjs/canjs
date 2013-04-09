@@ -147,8 +147,6 @@
 
 	});
 
-
-
 	test("Creating without extend", function(){
 		can.Construct("Bar",{
 			ok : function(){

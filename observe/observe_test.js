@@ -22,25 +22,23 @@ test("Basic Observe",9,function(){
 		
 		added = val[0];
 	});
-	
-	
-	
+
 	state.attr("properties.brand").push({foo: "bar"});
-	
+
 	state.unbind("change");
-	
+
 	added.bind("change", function(ev, attr, how, val, old){
 		equal(attr, "foo","foo property set on added")
 		equal(how, "set","added")
 		equal(val, "zoo","added")
-	})
+	});
 	state.bind("change", function(ev, attr, how, val, old){
 		equal(attr, "properties.brand.0.foo")
 		equal(how, "set")
 		equal(val,"zoo")
 	});
 	added.attr("foo", "zoo");
-	
+
 });
 
 test("list attr changes length", function(){

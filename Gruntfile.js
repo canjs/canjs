@@ -5,17 +5,9 @@ module.exports = function (grunt) {
 		stdout: true,
 		failOnError: true
 	};
-	var fileFilter = function () {
-		var excludes = _.toArray(arguments);
-		return function (file) {
-			return !_.some(excludes, function (exclude) {
-				return exclude.test(file);
-			});
-		}
-	}
 
 	grunt.initConfig({
-		pkg: grunt.file.readJSON('package.json'),
+		info: grunt.file.readJSON('package.json'),
 		builder: grunt.file.readJSON('builder.json'),
 		meta: {
 			out: "dist/",
@@ -25,12 +17,7 @@ module.exports = function (grunt) {
 					indentChar: "\t"
 				},
 				exclude: [/\.min\./, /qunit\.js/]
-			},
-			banner: '/*!\n* <%= pkg.title || pkg.name %> - <%= pkg.version %> ' +
-				'(<%= grunt.template.today("yyyy-mm-dd") %>)\n' +
-				'<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-				'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>\n' +
-				'* Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n*/\n'
+			}
 		},
 		testify: {
 			libs: {
@@ -43,7 +30,7 @@ module.exports = function (grunt) {
 				template: 'build/templates/__configuration__-dist.html.ejs',
 				builder: '<%= builder %>',
 				root: '../../..',
-				out: 'dist/<%= pkg.version %>/test/',
+				out: 'dist/<%= info.version %>/test/',
 				transform: {
 					modules: function(modules) {
 						for(var m in modules) {
@@ -73,7 +60,7 @@ module.exports = function (grunt) {
 				template: 'build/templates/__configuration__-amd.html.ejs',
 				builder: '<%= builder %>',
 				root: '../../../..',
-				out: 'dist/<%= pkg.version %>/test/amd/'
+				out: 'dist/<%= info.version %>/test/amd/'
 			}
 		},
 		beautifier: {
@@ -103,32 +90,32 @@ module.exports = function (grunt) {
 			},
 			latest: {
 				src: "can/build/build.js",
-				version: '<%= pkg.version %>',
+				version: '<%= info.version %>',
 				out: 'can/<%= meta.out %>'
 			},
 			latestPlugins: {
 				src: "can/build/plugins.js",
-				version: '<%= pkg.version %>',
+				version: '<%= info.version %>',
 				out: 'can/<%= meta.out %>'
 			}
 		},
 		shell: {
 			bundleLatest: {
-				command: 'cd <%= meta.out %> && zip -r can.js.<%= pkg.version %>.zip <%= pkg.version %>/',
+				command: 'cd <%= meta.out %> && zip -r can.js.<%= info.version %>.zip <%= info.version %>/',
 				options: shellOpts
 			},
 
 			getGhPages: {
-				command: 'git clone -b gh-pages <%= pkg.repository.url %> build/gh-pages',
+				command: 'git clone -b gh-pages <%= info.repository.url %> build/gh-pages',
 				options: shellOpts
 			},
 
 			copyLatest: {
-				command: 'rm -rf build/gh-pages/release/<%= pkg.version %> && ' +
-					'cp -R <%= meta.out %>/<%= pkg.version %> build/gh-pages/release/<%= pkg.version %> && ' +
-					'cp <%= meta.out %>/can.js.<%= pkg.version %>.zip build/gh-pages/downloads &&' +
+				command: 'rm -rf build/gh-pages/release/<%= info.version %> && ' +
+					'cp -R <%= meta.out %>/<%= info.version %> build/gh-pages/release/<%= info.version %> && ' +
+					'cp <%= meta.out %>/can.js.<%= info.version %>.zip build/gh-pages/downloads &&' +
 					'rm -rf build/gh-pages/release/latest && ' +
-					'cp -R <%= meta.out %>/<%= pkg.version %> build/gh-pages/release/latest',
+					'cp -R <%= meta.out %>/<%= info.version %> build/gh-pages/release/latest',
 				options: shellOpts
 			},
 
@@ -140,7 +127,7 @@ module.exports = function (grunt) {
 
 			updateGhPages: {
 				command: 'cd build/gh-pages && git add . --all && ' +
-					'git commit -m "Updating release (latest: <%= pkg.version %>)" && ' +
+					'git commit -m "Updating release (latest: <%= info.version %>)" && ' +
 					'git push origin',
 				options: shellOpts
 			},
@@ -157,9 +144,9 @@ module.exports = function (grunt) {
 				}
 			},
 			latest: {
-				files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
+				files: '<%= meta.out %>/<%= info.version %>/**/*.js',
 				docco: {
-					output: '<%= meta.out %>/<%= pkg.version %>/docs'
+					output: '<%= meta.out %>/<%= info.version %>/docs'
 				}
 			},
 			options: {
@@ -170,7 +157,7 @@ module.exports = function (grunt) {
 			latest: {
 				files: [
 					{
-						src: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
+						src: '<%= meta.out %>/<%= info.version %>/**/*.js',
 						dest: './',
 						cwd: './',
 						filter: function (filepath) {
@@ -218,7 +205,7 @@ module.exports = function (grunt) {
 		},
 		bannerize: {
 			latest: {
-				files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
+				files: '<%= meta.out %>/<%= info.version %>/**/*.js',
 				banner: '<%= meta.banner %>'
 			},
 			edge: {
@@ -231,7 +218,7 @@ module.exports = function (grunt) {
 				repo: 'canjs',
 				user: 'bitovi',
 				milestone: 6,
-				version: '<%= pkg.version %>'
+				version: '<%= info.version %>'
 			}
 		}
 	});

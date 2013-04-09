@@ -270,7 +270,6 @@ steal("can/util/string", function(can) {
 				 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
 				 * 
 				 */
-				shortName: shortName,
 				_shortName : _shortName,
 				/**
 				 * @attribute fullName 
@@ -285,6 +284,11 @@ steal("can/util/string", function(can) {
 				fullName: fullName,
 				_fullName: _fullName
 			});
+
+			// Dojo and YUI extend undefined
+			if(shortName !== undefined) {
+				Constructor.shortName = shortName;
+			}
 
 			// Make sure our prototype looks nice.
 			Constructor.prototype.constructor = Constructor;
