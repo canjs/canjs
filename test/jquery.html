@@ -1,4 +1,3 @@
-<!-- AUTO GENERATED - DO NOT MODIFY -->
 <!DOCTYPE HTML>
 <html>
     
@@ -22,6 +21,13 @@
         <script type="text/javascript">
             QUnit.config.autostart = false;
 
+             //TODO: steal.dev.logLevel is set in builder.json
+             //however, _logger exists in fixtures.js - this should be removed...
+            console = {
+                log: function() {},
+                error: function() {}
+            };
+
             steal(function() {
                 var config = window.CONFIGURATION = {
                     "map": {
@@ -37,6 +43,7 @@
                     "paths": {
                         "jquery/jquery.js": "can/lib/jquery.1.9.1.js"
                     },
+                    "logLevel": 2,
                     "root": "../.."
                 };
 

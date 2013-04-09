@@ -219,14 +219,38 @@ module.exports = function (grunt) {
 				milestone: 6,
 				version: '<%= info.version %>'
 			}
+		},
+		connect: {
+			server: {
+				options: {
+					port: 8000,
+					base: '..',
+				},
+			},
+		},
+		qunit: {
+			all: {
+				options: {
+					urls: [
+						'http://localhost:8000/can/test/dojo.html',
+						'http://localhost:8000/can/test/jquery.html',
+						// 'http://localhost:8000/can/test/zepto.html', TODO: this doesn't work in phantom
+						'http://localhost:8000/can/test/mootools.html',
+						'http://localhost:8000/can/test/yui.html',
+					]
+				}
+			}
 		}
 	});
 
 	grunt.loadTasks("../build/tasks");
-	grunt.loadTasks("build/tasks");
 
 	grunt.loadNpmTasks('grunt-string-replace');
+	grunt.loadNpmTasks('grunt-contrib-connect');
+	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-shell');
+
+	grunt.registerTask('test', ['connect', 'qunit']);
 
 	grunt.registerTask('edge', ['build:edge', 'build:edgePlugins', 'string-replace:edge', 'beautify:dist', 'bannerize:edge', 'docco:edge']);
 	grunt.registerTask('latest', ['build:latest', 'build:latestPlugins', 'string-replace:latest', 'beautify:dist', 'bannerize:latest', 'docco:latest']);
