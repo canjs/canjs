@@ -433,6 +433,7 @@ test("dashes in routes", function(){
 });
 
 test("listening to hashchange (#216, #124)", function() {
+	var testarea = document.getElementById('qunit-test-area');
 	var iframe = document.createElement('iframe');
 	stop();
 
@@ -440,6 +441,7 @@ test("listening to hashchange (#216, #124)", function() {
 		ok(!iCanRoute.attr('bla'), 'Value not set yet');
 		iCanRoute.bind('change', function() {
 			equal(iCanRoute.attr('bla'), 'blu', 'Got route change event and value is as expected');
+			testarea.innerHTML = '';
 			start();
 		});
 
@@ -449,7 +451,7 @@ test("listening to hashchange (#216, #124)", function() {
 	};
 
 	iframe.src = steal.config().root.join("can/route/testing.html?1");
-	can.$("#qunit-test-area")[0].appendChild(iframe);
+	testarea.appendChild(iframe);
 });
 
 })();
