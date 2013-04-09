@@ -15,13 +15,20 @@
 <div id="qunit-test-area"></div>
 
 <script type="text/javascript" src="<%= root %>/lib/qunit/qunit.js"></script>
-<script type="text/javascript" src="../../dist/<%= dist %>.js"></script>
+<script type="text/javascript" src="<%= root %>/<%= _.first(_.values(configuration.steal.paths)).replace('can/', '') %>"></script>
+<script type="text/javascript" src="<%= root %>/dist/<%= dist %>.js"></script>
+<script type="text/javascript" src="<%= root %>/dist/can.fixture.js"></script>
 <% modules.forEach(function(module) { %>
-	<script type="text/javascript" src="../../dist/<%= module %>.js"></script>
+	<% if(!module.isDefault) { %>
+	<script type="text/javascript" src="<%= root %>/dist/<%= module %>.js"></script>
+	<% } %>
 <% }); %>
 <% tests.forEach(function(test) { %>
-	<script type="text/javascript" src="<%= test %>"></script>
+	<script type="text/javascript" src="<%= root %>/<%= test %>"></script>
 <% }); %>
+<script type="text/javascript">
+	can.fixture.rootUrl = '<%= root %>/../';
+</script>
 
 </body>
 </html>

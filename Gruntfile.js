@@ -32,26 +32,23 @@ module.exports = function (grunt) {
 				root: '../..',
 				out: 'test/dist/',
 				transform: {
-					modules: function(modules) {
-						var mods = {};
-						_.each(modules, function(mod, name) {
-							if(!mod.isDefault) {
-								mods[name.replace(/\//g, '.')] = mod;
-							}
-						});
-
-						return mods;
+					'module': function(definition, name) {
+						if(!definition.isDefault) {
+							return name.replace(/\//g, '.');
+						}
+						return null;
 					},
 
-					options: function(config) {
+					'test': function(definition, key) {
+						var name = key.substr(key.lastIndexOf('/') + 1);
+						var path = key.replace('can/', '') + '/';
+						return path + name + '_test.js';
+					},
+
+					'options': function(config) {
 						return {
 							dist: 'can.' + config
 						}
-					}
-				},
-				options: function(name) {
-					return {
-						dist: 'can.' + name
 					}
 				}
 			},

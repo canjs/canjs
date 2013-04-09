@@ -1,0 +1,12 @@
+2013-04-09T21:45:47.235Z - debug: Creating server
+2013-04-09T21:45:47.240Z - debug: Listening on port 3996
+2013-04-09T21:45:47.249Z - debug: Setting up tunnel: port=3996, tunnel=local
+2013-04-09T21:45:47.250Z - debug: Tunnel is up at: http://localhost:3996
+2013-04-09T21:45:52.238Z - debug: Creating server
+2013-04-09T21:45:52.242Z - debug: Listening on port 3996
+2013-04-09T21:45:52.249Z - debug: Setting up tunnel: port=3996, tunnel=local
+2013-04-09T21:45:52.250Z - debug: Tunnel is up at: http://localhost:3996
+2013-04-09T21:46:09.096Z - debug: Creating server
+2013-04-09T21:46:09.099Z - debug: Listening on port 3996
+2013-04-09T21:46:09.107Z - debug: Setting up tunnel: port=3996, tunnel=local
+2013-04-09T21:46:09.107Z - debug: Tunnel is up at: http://localhost:3996

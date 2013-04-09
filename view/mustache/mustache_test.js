@@ -1332,7 +1332,9 @@ test("computes are supported in default helpers", function() {
     var actual = can.view("compute_" + result, { test : can.compute(data) });
     div.appendChild(actual);
     can.each(div.getElementsByTagName("span"), function(span) {
-      div.replaceChild(span.firstChild, span)
+      if(span.firstChild) {
+        div.replaceChild(span.firstChild, span);
+      }
     });
     actual = div.innerHTML;
 
