@@ -22,7 +22,6 @@ steal('can/util',function(can) {
 				obj[ prop ] : 
 				( add && ( obj[ prop ] = {} ));
 		},
-
 		// Returns `true` if the object can have properties (no `null`s).
 		isContainer = function( current ) {
 			return (/^f|^o/).test( typeof current );
@@ -66,52 +65,59 @@ steal('can/util',function(can) {
 			 *  not modify the root object
 			 * @return {Object} The object.
 			 */
-			getObject : function( name, roots, add ) {
-			
-				// The parts of the name we are looking up  
-				// `['App','Models','Recipe']`
-				var	parts = name ? name.split('.') : [],
-					length =  parts.length,
-					current,
-					r = 0,
-					ret, i;
+      getObject : function( name, roots, add ) {
 
-				// Make sure roots is an `array`.
-				roots = can.isArray(roots) ? roots : [roots || window];
-				
-				if ( ! length ) {
-					return roots[0];
-				}
+        // The parts of the name we are looking up
+        // `['App','Models','Recipe']`
+        var parts = name ? name.split('.') : [],
+            length =  parts.length,
+            current,
+            r = 0,
+            i, container, rootsLength;
 
-				// For each root, mark it as current.
-				while ( roots[r] ) {
-					current = roots[r];
+        // Make sure roots is an `array`.
+        roots = can.isArray(roots) ? roots : [roots || window];
 
-					// Walk current to the 2nd to last object or until there 
-					// is not a container.
-					for (i =0; i < length - 1 && isContainer( current ); i++ ) {
-						current = getNext( current, parts[i], add );
-					}
+        rootsLength = roots.length
 
-					// If we can get a property from the 2nd to last object...
-					if( isContainer(current) ) {
-						
-						// Get (and possibly set) the property.
-						ret = getNext(current, parts[i], add); 
-						
-						// If there is a value, we exit.
-						if ( ret !== undefined ) {
-							// If `add` is `false`, delete the property
-							if ( add === false ) {
-								delete current[parts[i]];
-							}
-							return ret;
-							
-						}
-					}
-					r++;
-				}
-			},
+        if ( ! length ) {
+          return roots[0];
+        }
+
+        // For each root, mark it as current.
+        for (r; r < rootsLength; r++) {
+          current = roots[r];
+          container = undefined;
+
+          // Walk current to the 2nd to last object or until there
+          // is not a container.
+          for (i = 0; i < length && isContainer( current ); i++ ) {
+          	container = current;
+            current = getNext( container, parts[i]);
+          }
+
+          // If we found property break cycle
+          if(container !== undefined && current !== undefined) {
+          	break
+          }
+        }
+
+        // Remove property from found container
+        if(add === false && current !== undefined) {
+        	delete container[parts[i - 1]]
+        }
+
+        // When adding property add it to the first root
+        if(add === true && current === undefined) {
+        	current = roots[0]
+
+        	for (i = 0; i < length && isContainer( current ); i++ ) {
+           	current = getNext( current, parts[i], true );
+         	}
+        }
+
+        return current;
+      },
 			// Capitalizes a string.
 			/**
 			 * @function can.capitalize

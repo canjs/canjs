@@ -25,17 +25,205 @@ test("String.underscore", function(){
 });
 
 
-test("can.getObject", function(){
-	var obj = can.getObject("foo", [{a: 1}, {foo: 'bar'}]);
+test("can.getObject Single root", function(){
 
-	equals(obj,'bar', 'got bar')
+	// ## Single root
+	var root, result;
+
+	// # Only get
+	root = {foo: 'bar'}
+
+	// exists
+	result = can.getObject('foo', root)
+	equals(result, 'bar', "got 'bar'")
+
+	// not exists
+	result = can.getObject('baz', root)
+	equals(result, undefined, "got 'undefined'")
+
+	// # With remove
+
+	// exists
+	root = {foo: 'bar'}
+	result = can.getObject('foo', root, false)
+	equals(result, 'bar', "got 'bar'")
+	deepEqual(root, {}, "root is empty")
+
+	// not exists
+	root = {foo: 'bar'}
+	result = can.getObject('baz', root, false)
+	equals(result, undefined, "got 'undefined'")
+	deepEqual(root, {foo: 'bar'}, "root is same")
+
+	// # With add
+
+	// exists
+	root = {foo: 'bar'}
+	result = can.getObject('foo', root, true)
+	equals(result, 'bar', "got 'bar'")
+	deepEqual(root, {foo: 'bar'}, "root is same")
+
+	// not exists
+	root = {foo: 'bar'}
+	result = can.getObject('baz', root, true)
+	deepEqual(result, {}, "got '{}'")
+	deepEqual(root, {foo: 'bar', baz: {}}, "added 'baz: {}' into root")
+
+})
+
+test("can.getObject Multiple root", function(){
+
+	// ## Multiple roots
+	var root1, root2, roots, result;
+
+	// # Only get
+	root1 = {a: 1}
+	root2 = {b: 2}
+	roots = [root1, root2]
+
+	// exists in first root
+	result = can.getObject('a', roots)
+	equals(result, 1, "got '1'")
+
+	// exists in second root
+	result = can.getObject('b', roots)
+	equals(result, 2, "got '2'")
+
+	// not exists anywhere
+	result = can.getObject('c', roots)
+	equals(result, undefined, "got 'undefined'")
+
+	// # With remove
+
+	// exists in first root
+	root1 = {a: 1}
+	root2 = {b: 2}
+	roots = [root1, root2]
+	result = can.getObject('a', roots, false)
+	equals(result, 1, "got '1'")
+	deepEqual(root1, {}, "root is empty")
+	deepEqual(root2, {b:2}, "root is same")
+
+	// exists in second root
+	root1 = {a: 1}
+	root2 = {b: 2}
+	roots = [root1, root2]
+	result = can.getObject('b', roots, false)
+	equals(result, 2, "got '2'")
+	deepEqual(root1, {a:1}, "root is same")
+	deepEqual(root2, {}, "root is empty")
+
+	// not exists anywhere
+	root1 = {a: 1}
+	root2 = {b: 2}
+	roots = [root1, root2]
+	result = can.getObject('c', roots, false)
+	equals(result, undefined, "got 'undefined'")
+	deepEqual(root1, {a:1}, "root is same")
+	deepEqual(root2, {b:2}, "root is same")
 
 
-	// test null data
+	// # With add
+	// exists in first root
+	root1 = {a: 1}
+	root2 = {b: 2}
+	roots = [root1, root2]
+	result = can.getObject('a', roots, true)
+	equals(result, 1, "got '1'")
+	deepEqual(root1, {a:1}, "root is same")
+	deepEqual(root2, {b:2}, "root is same")
 
-	var obj = can.getObject("foo", [{a: 1}, {foo: 0}]);
 
-	equals(obj,0, 'got 0 (falsey stuff)')
+	// exists in second root
+	root1 = {a: 1}
+	root2 = {b: 2}
+	roots = [root1, root2]
+	result = can.getObject('b', roots, true)
+	equals(result, 2, "got '2'")
+	deepEqual(root1, {a:1}, "root is same")
+	deepEqual(root2, {b:2}, "root is same")
+
+	// not exists anywhere
+	root1 = {a: 1}
+	root2 = {b: 2}
+	roots = [root1, root2]
+	result = can.getObject('c', roots, true)
+	deepEqual(result, {}, "got '{}'")
+	deepEqual(root1, {a:1, c:{}}, "added 'c: {}' into first root")
+	deepEqual(root2, {b:2}, "root is same")
+
+	// # One of roots is not an object
+
+	// exists in second root
+	root1 = undefined
+	root2 = {b: 2}
+	roots = [root1, root2]
+	result = can.getObject('b', roots)
+	equals(result, 2, "got '2'")
+
+	// exists in second root and remove
+	root1 = undefined
+	root2 = {b: 2}
+	roots = [root1, root2]
+	result = can.getObject('b', roots, false)
+	equals(result, 2, "got '2'")
+	equals(root1, undefined, "got 'undefined'")
+	deepEqual(root2, {}, "deleted 'b' from root")
+
+	// not exists in any root and add
+	root1 = undefined
+	root2 = {b: 2}
+	roots = [root1, root2]
+	result = can.getObject('a', roots, true)
+	equals(result, undefined, "got 'undefined'")
+	equals(root1, undefined, "root is same")
+	deepEqual(root2, {b:2}, "root is same")
+
+})
+
+test("can.getObject Deep objects", function(){
+	// ## Deep objects
+	var root, result;
+
+	// # Only get
+	root = {foo : {bar: 'baz'}}
+
+	// exists
+	result = can.getObject('foo.bar', root)
+	equals(result, 'baz', "got 'baz'")
+
+	// not exists
+	result = can.getObject('foo.world', root)
+	equals(result, undefined, "got 'undefined'")
+
+	// # With remove
+
+	// exists
+	root = {foo : {bar: 'baz'}}
+	result = can.getObject('foo.bar', root, false)
+	equals(result, 'baz', "got 'baz'")
+	deepEqual(root, {foo: {}}, "deep object is empty")
+
+	// not exists
+	root = {foo : {bar: 'baz'}}
+	result = can.getObject('foo.world', root, false)
+	equals(result, undefined, "got 'undefined'")
+	deepEqual(root, {foo: {bar:'baz'}}, "root is same")
+
+	// # With add
+
+	// exists
+	root = {foo : {bar: 'baz'}}
+	result = can.getObject('foo.bar', root, true)
+	equals(result, 'baz', "got 'baz'")
+	deepEqual(root, {foo: {bar: 'baz'}}, "root is same")
+
+	// not exists
+	root = {foo : {bar: 'baz'}}
+	result = can.getObject('foo.world', root, true)
+	deepEqual(result, {}, "got '{}'")
+	deepEqual(root, {foo: {bar: 'baz', world: {}}}, "added 'world: {}' into deep object")
+
 });
 
 test("can.esc",function(){
