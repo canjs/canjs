@@ -121,7 +121,8 @@
 				},
 				"paths": {
 					"jquery/jquery.js": "can/lib/jquery.1.9.1.js"
-				}
+				},
+				"logLevel": 2
 			}
 		},
 		"zepto": {
