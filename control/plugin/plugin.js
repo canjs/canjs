@@ -87,7 +87,7 @@ $.fn.extend({
 	 *
 	 *		$('.widgets').controls('MyBox') //-> [ MyBox ]
 	 *
-	 * @param {Object} control (optional) if exists the control instance(s) with that constructor function or type will be returned.
+	 * @param {Object} control if exists the control instance(s) with that constructor function or type will be returned.
 	 * @return {Array} an array of control instance(s).
 	 */
 	controls: function() {
@@ -125,7 +125,7 @@ $.fn.extend({
 	 *
 	 *		$('.widgets').controls() //-> MyBox
 	 *
-	 * @param {Object} control (optional) if exists the first control instance with that constructor function or type will be returned.
+	 * @param {Object} [control] if exists the first control instance with that constructor function or type will be returned.
 	 * @return {can.Control} the first control.
 	 */
 	control: function( control ) {

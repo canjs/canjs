@@ -345,7 +345,7 @@
 		 *
 		 * @param Object actual
 		 * @param Object expected
-		 * @param String message (optional)
+		 * @param String [message]
 		 */
 		equal: function (actual, expected, message) {
 			QUnit.push(expected == actual, actual, expected, message);

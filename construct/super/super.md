@@ -4,43 +4,98 @@
 @test can/construct/super/qunit.html
 @download http://donejs.com/can/dist/can.construct.super.js
 
-The __super__ provides a `this._super` reference in functions that points to the base function.  For example,
-the following creates a `Vehicle` constructor and `Car` constructor that
-inherits from it.  `Car`'s `init` function calls `Vehicle`'s base `init` function. 
+can.Construct.super is a plugin that makes it easier to call base
+functions from inside inheriting functions.
 
-    var Vehicle = can.Construct({
-      init: function(wheels){
-        this.wheels=wheels;
-      }
-    });
+@function _super
+@signature _super([...args])
+@param {...[*]} args parameters to pass to the base function
 
-    var Car = Vehicle({
-      init: function(speed){
-        this._super(4);
-        this.speed = speed;
-      }
-    })
+With this plugin, functions that are inheriting from base functions
+are provided with a specialized `this._super` reference to the base
+function from which they inherit.
 
-`this._super` also works from static properties.  The following example creates methods that can be
-raised to the first and second power:
+This is especially useful for calling base classes' `[can.Construct::init|init]` and `[can.Construct::setup|ssetup]`, but it can be used in any inheriting function.
 
-    First = can.Construct({
-        raise: function(n) { return n;}
-    },{})
-    
-    Second = First({
-        raise: function(n) { return this._super(n)*n;}
-    },{})
-    
-    First.raise(2)  // -> 2
-    Second.raise(2) // -> 4
+The `Person` and `Programmer` examples from `[can.Construct::init|init]` demonstrate `_super`'s use.
+Here's how those classes look without can.Construct.super:
 
-If you want to pass all arguments to `_super` use
-[apply](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/apply):
+@codestart
+can.Construct("Person", {
+    init: function(first, last) {
+        this.first = first;
+        this.last  = last;
+    }
+});
 
-	var EvenBetterTodo = BetterTodo({
-		init : function(text, status) {
-			this._super.apply(this, arguments);
-			this.isEvenbetter = true;
-		}
-	});
+Person("Programmer", {
+    init: function(first, last, language) {
+        // call base's init
+        Person.prototype.init.apply(this, arguments);
+
+        // other initialization code
+        this.language = language;
+    },
+    bio: function() {
+        return 'Hi! I'm ' + this.first + ' ' + this.last +
+            ' and I write ' + this.language + '.';
+    }
+});
+@codeend
+
+And here's how `Programmer` works using `_super`:
+
+@codestart
+Person("Programmer", {
+    init: function(first, last, language) {
+        // call base's init
+        this._super(first, last);
+
+        // other initialization code
+        this.language = language;
+    },
+    bio: function() {
+        return 'Hi! I'm ' + this.first + ' ' + this.last +
+            ' and I write ' + this.language + '.';
+    }
+});
+@codeend
+
+If you want to pass an array of arguments (or an arguments object) to `_super`, use [apply](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/apply):
+
+@codestart
+Person("Programmer", {
+    init: function(first, last, language) {
+        // call base's init
+        this._super.apply(this, arguments);
+
+        // other initialization code
+        this.language = language;
+    },
+    bio: function() {
+        return 'Hi! I'm ' + this.first + ' ' + this.last +
+            ' and I write ' + this.language + '.';
+    }
+});
+@codeend
+
+## `_super` on constructors
+
+can.Construct.super also adds `super` to the constructor, so you
+can use it in static functions.
+
+Here is a base class that has a method that squares numbers and an inherited class that has a method that cubes numbers:
+
+@codestart
+can.Construct('Squarer', {
+    raise: function(n) {
+        return n*n;
+    }
+}, {});
+
+Squarer('Cuber', {
+    raise: function(n) {
+        return n * this_super(n);
+    }
+}, {});
+@codeend

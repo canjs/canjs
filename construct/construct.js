@@ -26,26 +26,29 @@ steal("can/util/string", function(can) {
 	can.extend(can.Construct, {
 		/**
 		 * @function newInstance
-		 * Creates a new instance of the constructor function.  This method is useful for creating new instances
-		 * with arbitrary parameters.  Typically you want to simply use the __new__ operator instead.
+		 * Creates a new instance of the constructor function. This method is useful for creating new instances
+		 * with arbitrary parameters. Typically, however, you will simply want to call the constructor with the
+		 * __new__ operator.
 		 * 
 		 * ## Example
 		 * 
-		 * The following creates a `Person` Construct and then creates a new instance of person, but
-		 * by using `apply` on newInstance to pass arbitrary parameters.
+		 * The following creates a `Person` Construct and then creates a new instance of Person,
+		 * using `apply` on newInstance to pass arbitrary parameters.
 		 * 
-		 *     var Person = can.Construct({
-		 *       init : function(first, middle, last) {
-		 *         this.first = first;
-		 *         this.middle = middle;
-		 *         this.last = last;
-		 *       }
-		 *     });
+		 * @codestart
+		 * var Person = can.Construct({
+		 *   init : function(first, middle, last) {
+		 *     this.first = first;
+		 *     this.middle = middle;
+		 *     this.last = last;
+		 *   }
+		 * });
 		 * 
-		 *     var args = ["Justin","Barry","Meyer"],
-		 *         justin = new Person.newInstance.apply(null, args);
+		 * var args = ["Justin","Barry","Meyer"],
+		 *     justin = new Person.newInstance.apply(null, args);
+		 * @codeend
 		 * 
-		 * @param {Object} [args] arguments that get passed to [can.Construct::setup] and [can.Construct::init]. Note
+		 * @param {...*} [args] arguments that get passed to [can.Construct::setup] and [can.Construct::init]. Note
 		 * that if [can.Construct::setup] returns an array, those arguments will be passed to [can.Construct::init]
 		 * instead.
 		 * @return {class} instance of the class
@@ -86,50 +89,54 @@ steal("can/util/string", function(can) {
 		// object's `defaults`. If you overwrite this method, make sure to
 		// include option merging logic.
 		/**
-		 * Setup is called immediately after a constructor function is created and 
-		 * set to inherit from its base constructor.  It is called with a base constructor and
-		 * the params used to extend the base constructor. It is useful for setting up additional inheritance work.
+		 * The static `setup` method is called immediately after a constructor function is created and 
+		 * set to inherit from its base constructor. It is useful for setting up additional inheritance work.
+		 * Do not confuse this with the prototype `[can.Construct::setup]` method.
 		 * 
-		 * ## Example
-		 * 
-		 * The following creates a `Base` class that when extended, adds a reference to the base
-		 * class.
-		 * 
-		 * 
-		 *     Base = can.Construct({
-		 *       setup : function(base, fullName, staticProps, protoProps){
-		 * 	       this.base = base;
-		 *         // call base functionality
-		 *         can.Construct.setup.apply(this, arguments)
-		 *       }
-		 *     },{});
-		 * 
-		 *     Base.base //-> can.Construct
-		 *     
-		 *     Inherting = Base({});
-		 * 
-		 *     Inheriting.base //-> Base
-		 * 
-		 * ## Base Functionality
+		 * ## Setup Extends Defaults
 		 * 
 		 * Setup deeply extends the static `defaults` property of the base constructor with 
 		 * properties of the inheriting constructor.  For example:
 		 * 
-		 *     MyBase = can.Construct({
-		 *       defaults : {
-		 *         foo: 'bar'
-		 *       }
-		 *     },{})
+		 * @codestart
+		 * Parent = can.Construct({
+		 *   defaults : {
+		 *     parentProp: 'foo'
+		 *   }
+		 * },{})
 		 * 
-		 *     Inheriting = MyBase({
-		 *       defaults : {
-		 *         newProp : 'newVal'
-		 *       }
-		 *     },{}
+		 * Child = Parent({
+		 *   defaults : {
+		 *     childProp : 'bar'
+		 *   }
+		 * },{}
 		 *     
-		 *     Inheriting.defaults // -> {foo: 'bar', 'newProp': 'newVal'}
+		 * Child.defaults // {parentProp: 'foo', 'childProp': 'bar'}
+		 * @codeend
 		 * 
-		 * @param {Object} base the base constructor that is being inherited from
+		 * ## Example
+		 * 
+		 * This `Parent` class adds a reference to its base class to itself, and
+		 * so do all the classes that inherit from it.
+		 * 
+		 * @codestart
+		 * Parent = can.Construct({
+		 *   setup : function(base, fullName, staticProps, protoProps){
+		 *     this.base = base;
+		 * 
+		 *     // call base functionality
+		 *     can.Construct.setup.apply(this, arguments)
+		 *   }
+		 * },{});
+		 * 
+		 * Parent.base; // can.Construct
+		 *     
+		 * Child = Parent({});
+		 * 
+		 * Child.base; // Parent
+		 * @codeend
+		 * 
+		 * @param {constructor} base the base constructor that is being inherited from
 		 * @param {String} [fullName] the name of the new constructor
 		 * @param {Object} [staticProps] the static properties of the new constructor
 		 * @param {Object} [protoProps] the prototype properties of the new constructor
@@ -164,7 +171,7 @@ steal("can/util/string", function(can) {
 		 *     // with just a className
 		 *     can.Construct('Task')
 		 * 
-		 * You no longer have to use <code>.extend</code>.  Instead, you can pass those options directly to
+		 * You no longer have to use `extend`.  Instead, you can pass those options directly to
 		 * can.Construct (and any inheriting classes):
 		 * 
 		 *     // with className, static and prototype functions
@@ -174,9 +181,9 @@ steal("can/util/string", function(can) {
 		 *     // with just a className
 		 *     can.Construct('Task')
 		 * 
-		 * @param {String} [fullName]  the classes name (used for classes w/ introspection)
-		 * @param {Object} [klass]  the new classes static/class functions
-		 * @param {Object} [proto]  the new classes prototype functions
+		 * @param {String} [fullName]  the class's name (used for classes w/ introspection)
+		 * @param {Object.<string, function>} [klass]  the new class's static functions
+		 * @param {Object.<string, function>} [proto]  the new class's prototype functions
 		 * 
 		 * @return {can.Construct} returns the new class
 		 */
@@ -251,36 +258,43 @@ steal("can/util/string", function(can) {
 				constructor: Constructor,
 				prototype: prototype,
 				/**
-				 * @attribute namespace 
-				 * The namespace keyword is used to declare a scope. This enables you to organize
-				 * code and provides a way to create globally unique types.
+				 * @property {String} namespace 
+				 * The `namespace` property returns the namespace your constructor is in.
+				 * This provides a way organize code and ensure globally unique types.
 				 * 
-				 *     can.Construct("MyOrg.MyConstructor",{},{})
-				 *     MyOrg.MyConstructor.namespace //-> MyOrg
-				 * 
+				 * @codestart
+				 * can.Construct("MyApplication.MyConstructor",{},{});
+				 * MyApplication.MyConstructor.namespace // "MyApplication"
+				 * MyApplication.MyConstructor.shortName // "MyConstructor"
+				 * MyApplication.MyConstructor.fullName  // "MyApplication.MyConstructor"
+				 * @codeend
 				 */
 				namespace: namespace,
 				/**
-				 * @attribute shortName
+				 * @property {String} shortName
 				 * If you pass a name when creating a Construct, the `shortName` property will be set to the
-				 * actual name without the namespace:
+				 * name you passed without the namespace.
 				 * 
-				 *     can.Construct("MyOrg.MyConstructor",{},{})
-				 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
-				 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
-				 * 
+				 * @codestart
+				 * can.Construct("MyApplication.MyConstructor",{},{});
+				 * MyApplication.MyConstructor.namespace // "MyApplication"
+				 * MyApplication.MyConstructor.shortName // "MyConstructor"
+				 * MyApplication.MyConstructor.fullName  // "MyApplication.MyConstructor"
+				 * @codeend
 				 */
 				shortName: shortName,
 				_shortName : _shortName,
 				/**
 				 * @attribute fullName 
 				 * If you pass a name when creating a Construct, the `fullName` property will be set to
-				 * the actual name including the full namespace:
+				 * the name you passed.
 				 * 
-				 *     can.Construct("MyOrg.MyConstructor",{},{})
-				 *     MyOrg.MyConstructor.shortName //-> 'MyConstructor'
-				 *     MyOrg.MyConstructor.fullName //->  'MyOrg.MyConstructor'
-				 * 
+				 * @codestart
+				 * can.Construct("MyApplication.MyConstructor",{},{});
+				 * MyApplication.MyConstructor.namespace // "MyApplication"
+				 * MyApplication.MyConstructor.shortName // "MyConstructor"
+				 * MyApplication.MyConstructor.fullName  // "MyApplication.MyConstructor"
+				 * @codeend
 				 */
 				fullName: fullName,
 				_fullName: _fullName
@@ -304,130 +318,137 @@ steal("can/util/string", function(can) {
 			return Constructor;
 			/** 
 			 * @function setup
+			 * @param {...*} args the arguments passed to the constructor.
+			 * @return {Array|undefined} if an array is returned, the elements of that array are passed as
+			 * arguments to [can.Construct::init]. Otherwise, the arguments to the
+			 * constructor are passed to [can.Construct::init] and the return value of `setup` is discarded.
 			 * 
 			 * If a prototype `setup` method is provided, it is called when a new 
-			 * instance is created.  It is passed the same arguments that
-			 * were passed to the Constructor constructor 
-			 * function (`new Constructor( arguments ... )`).  If `setup` returns an
-			 * array, those arguments are passed to [can.Construct::init] instead
-			 * of the original arguments.
+			 * instance is created. It is passed the same arguments that were passed
+			 * to the constructor.
+			 *
+			 * Because `setup` is not defined on `can.Construct` itself, calling super from
+			 * directly-inheriting classes will break. In other words, don't do this:
 			 * 
-			 * Typically, you should only provide [can.Construct::init] methods to 
-			 * handle initilization code. Use `setup` for:
+			 * @codestart
+			 * can.Construct('Snowflake', {
+			 *     setup: function() {
+			 *         this._super(); // this will break!
+			 *     }
+			 * });
+			 * @codeend
 			 * 
-			 *   - initialization code that you want to run before inheriting constructor's 
-			 *     init method is called.
-			 *   - initialization code that should run without inheriting constructors having to 
-			 *     call base methods (ex: `MyBase.prototype.init.call(this, arg1)`).
-			 *   - passing modified/normalized arguments to `init`.
+			 * ## `setup` vs. `init`
+			 * Usually, you should use [can.Construct::init] to do your class's initialization.
+			 * Use `setup` instead for:
 			 * 
-			 * ## Examples
+			 *   - initialization code that you want to run before the inheriting constructor's 
+			 *     `init` method is called.
+			 *   - initialization code that should run whether or not inheriting constructors
+			 *     call their base's `init` methods.
+			 *   - modifying the arguments that will get passed to `init`.
 			 * 
-			 * The following is similar to code in [can.Control]'s setup method that
-			 * converts the first argument to a jQuery collection and extends the 
-			 * second argument with the constructor's [can.Construct.defaults defaults]:
+			 * ## Example
 			 * 
-			 *     can.Construct("can.Control",{
-			 *       setup: function( htmlElement, rawOptions ) {
-			 *         // set this.element
-			 *         this.element = $(htmlElement);
+			 * This code is a simplified version of the code in [can.Control]'s setup
+			 * method. It converts the first argument to a jQuery collection and
+			 * extends the controller's defaults with the options that were passed.
 			 * 
-			 *         // set this.options
-			 *         this.options = can.extend( {}, 
-			 * 	                               this.constructor.defaults, 
-			 * 	                               rawOptions );
+			 * @codestart
+			 * can.Construct("can.Control", {
+			 *     setup: function(domElement, rawOptions) {
+			 *         // set up this.element
+			 *         this.element = $(domElement);
 			 * 
-			 *         // pass the wrapped element and extended options
-			 *         return [this.element, this.options] 
-			 *       }
-			 *     })
+			 *         // set up this.options
+			 *         this.options = can.extend({},
+			 *                                   this.constructor.defaults,
+			 *                                   rawOptions
+			 *                                  );
 			 * 
-			 * ## Base Functionality
-			 * 
-			 * Setup is not defined on can.Construct itself, so calling super in inherting classes
-			 * will break.  Don't do the following:
-			 * 
-			 *     Thing = can.Construct({
-			 *       setup : function(){
-			 *         this._super(); // breaks!
-			 *       }
-			 *     })
-			 * 
-			 * @return {Array|undefined} If an array is return, [can.Construct.prototype.init] is 
-			 * called with those arguments; otherwise, the original arguments are used.
+			 *         // pass this.element and this.options to init.
+			 *         return [this.element, this.options];        
+			 *     }
+			 * });
+			 * @codeend
 			 */
 			//  
 			/** 
 			 * @function init
+			 * @param {...*} args the arguments passed to the constructor (or the elements of the array returned from [can.Construct::setup])
+			 * @return {undefined} there is no reason to return anything from `init`.
 			 * 
-			 * If a prototype `init` method is provided, it gets called after [can.Construct::setup] when a new instance
-			 * is created. The `init` method is where your constructor code should go. Typically,
-			 * you will find it saving the arguments passed to the constructor function for later use. 
+			 * If a prototype `init` method is provided, it is called when a new Construct is created,
+			 * after [can.Construct::setup]. The `init` method is where the bulk of your initialization code
+			 * should go, and a common thing to do in `init` is to save the arguments passed into the constructor.
 			 * 
 			 * ## Examples
 			 * 
-			 * The following creates a Person constructor with a first and last name property:
-			 * 
-			 *     var Person = can.Construct({
-			 *       init : function(first, last){
+			 * First, we'll make a Person constructor that has a first and last name:
+			 *
+			 * @codestart
+			 * can.Construct("Person", {
+			 *     init: function(first, last) {
 			 *         this.first = first;
-			 *         this.last = last;
-			 *       }
-			 *     })
+			 *         this.last  = last;
+			 *     }
+			 * });
 			 * 
-			 *     var justin = new Person("Justin","Meyer");
-			 *     justin.first //-> "Justin"
-			 *     justin.last  //-> "Meyer"
+			 * var justin = new Person("Justin", "Meyer");
+			 * justin.first; // "Justin"
+			 * justin.last; // "Meyer"
+			 * @codeend
 			 * 
-			 * The following extends person to create a Programmer constructor
+			 * Then we'll extend Person into Programmer and add a favorite language:
 			 * 
-			 *     var Programmer = Person({
-			 *       init : function(first, last, lang){
-			 *         // call base functionality
-			 *         Person.prototype.init.call(this, first, last);
+			 * @codestart
+			 * Person("Programmer", {
+			 *     init: function(first, last, language) {
+			 *         // call base's init
+			 *         Person.prototype.init.apply(this, arguments);
+			 *
+			 *         // other initialization code
+			 *         this.language = language;
+			 *     },
+			 *     bio: function() {
+			 *         return 'Hi! I'm ' + this.first + ' ' + this.last +
+			 *             ' and I write ' + this.language + '.';
+			 *     }
+			 * });
 			 * 
-			 *         // save the lang
-			 *         this.lang = lang
-			 *       },
-			 *       greet : function(){
-			 *         return "I am " + this.first + " " + this.last + ". " +
-			 *                "I write " + this.lang + ".";
-			 *       }
-			 *     })
+			 * var brian = new Programmer("Brian", "Moschel", 'ECMAScript');
+			 * brian.bio(); // "Hi! I'm Brian Moschel and I write ECMAScript.";
+			 * @codeend
 			 * 
-			 *     var brian = new Programmer("Brian","Moschel","ECMAScript")
-			 *     brian.greet() //-> "I am Brian Moschel.\
-			 *                   //    I write ECMAScript."
+			 * ## Be Aware
 			 * 
-			 * ## Notes
-			 * 
-			 * [can.Construct::setup] is able to modify the arguments passed to init.
-			 * 
-			 * It doesn't matter what init returns because the `new` keyword always
-			 * returns the new object.
+			 * [can.Construct::setup] is able to modify the arguments passed to `init`.
+			 * If you aren't receiving the right arguments to `init`, check to make sure
+			 * that they aren't being changed by `setup` somewhere along the inheritance chain.
 			 */
 			//  
 			/**
-			 * @attribute constructor
+			 * @property constructor
 			 * 
-			 * A reference to the constructor function that created the instance. It allows you to access
-			 * the constructor function's static properties from an instance.
+			 * A reference to the constructor function that created the instance. This allows you to access
+			 * the constructor's static properties from an instance.
 			 * 
 			 * ## Example
 			 * 
-			 * Incrementing a static counter, that counts how many instances have been created:
-			 * 
-			 *     Counter = can.Construct({
-			 * 	     count : 0
-			 *     },{
-			 *       init : function(){
+			 * This class has a static counter that counts how mane instances have been created:
+			 *
+			 * @codestart
+			 * can.Construct("Counter", {
+			 *     count: 0
+			 * }, {
+			 *     init: function() {
 			 *         this.constructor.count++;
-			 *       }
-			 *     })
+			 *     }
+			 * });
 			 * 
-			 *     new Counter();
-			 *     Counter.count //-> 1; 
-			 * 
+			 * new Counter();
+			 * Counter.count; // 1
+			 * @codeend 
 			 */
 		}
 

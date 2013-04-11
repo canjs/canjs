@@ -253,10 +253,10 @@ var jwerty = {
      *
      *   @param {Mixed} jwertyCode can be an array, or string of key
      *      combinations, which includes optinals and or sequences
-     *   @param {Function} callbackFucntion is a function (or boolean) which
+     *   @param {Function} callbackFunction is a function (or boolean) which
      *      is fired when jwertyCode is matched. Return false to
      *      preventDefault()
-     *   @param {Object} callbackContext (Optional) The context to call
+     *   @param {Object} [callbackContext] The context to call
      *      `callback` with (i.e this)
      *      
      */
@@ -324,7 +324,7 @@ var jwerty = {
      *   @param {Mixed} jwertyCode can be an array, or string of key
      *      combinations, which includes optinals and or sequences
      *   @param {KeyboardEvent} event is the KeyboardEvent to assert against
-     *   @param {Integer} i (Optional) checks the `i` key in jwertyCode
+     *   @param {Integer} [i] checks the `i` key in jwertyCode
      *      sequence
      *      
      */

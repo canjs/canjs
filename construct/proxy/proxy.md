@@ -4,105 +4,135 @@
 @test can/construct/proxy/qunit.html
 @download http://donejs.com/can/dist/can.construct.proxy.js
 
-`can.Construct.prototype.proxy( funcName, [args...] )` takes a 
-function name and returns a new function that
-will call the original function with the same `this` 
-from which it was created. `proxy` is useful 
-for creating callback functions that have 'this' 
-set correctly.
+can.Construct.proxy is a plugin that helps you manage scope when creating
+callback functions by ensuring that `this` is set correctly and sensibly
+inside callbacks.
 
-The following example increments a `Counter`'s `count`
-every second:
+@function can.Construct.prototype.proxy proxy
+@signature proxy(callback, [...args])
+@param {Function|String|Array.<Function|String>} callback the function or functions to proxy
+@param {...[*]} args parameters to curry into the proxied functions
+@return {Function} a function that calls `callback` with the same context as the current context
 
-	Counter = can.Construct({
-	  init : function(){
-	    this.count = 0;
-	    setTimeout( this.proxy(function(){
-	      this.count++;
-	    }), 1000 );
-	  }
-	})
-	var counter = new Counter();
-	// later check count
-	setTimeout(function(){
-	  console.log(counter.count)
-	},5000)
-	
-`proxy` also accepts a method name like `this.proxy('methodName')`, allowing 
-the previous example to work like:
+`can.Construct.prototype.proxy` takes a function and returns a new function that, when invoked,
+calls the given function with the same `this` as `proxy` was called with.
 
-	Counter = can.Construct({
-	  init : function(){
-	    this.count = 0;
-	    setTimeout( this.proxy('increment'), 1000);
-	  },
-	  increment : function(){
-	    this.count++;
-	  }
-	})
+Here is a counter that increments its count after a second:
 
-## Currying Arguments
+@codestart
+can.Construct('DelayedCounter', {
+    init: function() {
+        this.count = 0;
+        setTimeout(this.proxy(function() {
+            this.count++;
+        }), 1000);
+    }
+});
 
-Pass additional arguments to `proxy` and it will 
-fill in arguments on the returning function.  When invoked,
-the additional arguments will appear first in the methods
-parameters followed by the callback's arguments.
+var counter = new DelayedCounter();
+// check counter's value later
+setTimeout(function() {
+    counter.count; // 1
+}, 5000);
+@codeend
 
-The `Counter` constructor accepts a `by` argument which is used
-to increment the count by the `by` amount specified.  
+(Recall that setTimeout executes its callback in the global scope.)
 
-	Counter = can.Construct({
-	  init : function( by ) {
-	    this.count = 0;
-	    setTimeout( this.proxy('increment', by), 1000);
-	  },
-	  increment : function( by ) {
-	    this.count += by;
-	  }
-	})
-    
-    // create a counter that increments by 10
-    new Counter(10)
-	
-## 	Piping Functions
+If you pass the name of a function on the `this` that `proxy` is called with,
+`proxy` will use that function. Here's how you write the previous example using
+this technique:
 
-`proxy` can take an array of functions to call as 
-the first argument.  When the returned callback function
-is called each function in the array is passed the return 
-value of the prior function.  This is often used
-to eliminate currying callback functions.
+@codestart
+can.Construct('DelayedCounter', {
+    init: function() {
+        this.count = 0;
+        setTimeout(this.proxy('increment'), 1000);
+    },
+    increment: function() {
+        this.count++;
+    }
+});
 
-The `Counter` accepts a callback that will be called with 
-the count every second.
+var counter = new DelayedCounter();
+// check counter's value later
+setTimeout(function() {
+    counter.count; // 1
+}, 5000);
+@codeend
 
-	Counter = can.Construct({
-	  init : function( by , callback) {
-	    this.count = 0;
-	    setTimeout( this.proxy(['increment', callback], by), 1000);
-	  },
-	  increment : function( by ) {
-	    this.count += by;
-	    // return the arguments passed to the next function
-	    return [this.count]
-	  }
-	})
-	
-	new Counter(10, function(count){
-	  console.log(count);
-	})
+## Currying arguments
 
-## `proxy` on Constructors
+If you pass more than one parameter to `proxy`, the additional parameters will
+be passed as parameters to the callback before any parameters passed to the
+proxied function.
 
-`proxy` is also available on constructor functions.  Example:
+Here's a delayed counter that increments by a given amount:
 
-	Counter = can.Construct({
-	  start : function(){
-	    this.count = 0;
-	    setTimeout( this.proxy('increment'), 1000);
-	  },
-	  increment : function(){
-	    this.count++;
-	  }
-	},{});
-	
-    Counter.start();
+@codestart
+can.Construct('IncrementalCounter', {
+    init: function(amount) {
+        this.count = 0;
+        setTimeout(this.proxy(function(amount) {
+            this.count += amount;
+        }, amount), 1000);
+    }
+});
+
+var counter = new IncrementalCounter(5);
+// check counter's value later
+setTimeout(function() { 
+    counter.count; // 5
+}, 5000);
+@codeend
+
+## Piping callbacks
+
+If you pass an array of functions and strings as the first parameter to `proxy`,
+`proxy` will call the callbacks in sequence, passing the return value of each
+as a parameter to the next. This is useful to avoid having to curry callbacks.
+
+Here's a delayed counter that takes a callback to call after incrementing by a given amount:
+
+@codestart
+can.Construct('IncrementalCounter', {
+    init: function(amount, callback) {
+        this.count = 0;
+        setTimeout(this.proxy([function(amount) {
+            this.count += amount;
+            return this.count;
+        }, callback], amount), 1000);
+    }
+});
+
+var counter = new IncrementalCounter(5, function(count) {
+    console.log('The count is ' + count + '.');
+});
+
+// after 1 second, the log says "The count is 5."
+@codeend
+
+## `proxy` on constructors
+
+can.Construct.proxy also adds `proxy` to the constructor, so you can use it
+in static functions with the constructor as `this`.
+
+Here's a counter construct that keeps its count staticly and increments after one second:
+
+@codestart
+can.Construct('DelayedStaticCounter', {
+    setup: function() {
+        this.count = 0;
+    }
+    incrementSoon: function() {
+        setTimeout(this.proxy(function() {
+            this.count++;
+        }), 1000);
+    }
+}, {});
+
+DelayedStaticCounter.incrementSoon();
+@codeend
+
+## See also
+
+[can.proxy] is a way to proxy callbacks outside of `can.Construct`s.

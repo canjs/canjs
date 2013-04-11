@@ -301,7 +301,7 @@ can.Observe.prototype.__convert = function(prop, value){
  *
  *		contact.serialize('birthday') //-> 'YYYY-MM-DD'
  *
- * @param {Object} attrName (optional) when passed returns only that attribute name
+ * @param {Object} [attrName] when passed returns only that attribute name
  */
 can.Observe.prototype.serialize = function(attrName){
 	var where = {},
