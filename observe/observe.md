@@ -1,4 +1,4 @@
-@class can.Observe
+@page can.Observe
 @parent canjs
 @test can/observe/qunit.html
 
@@ -10,11 +10,11 @@ working with deep properties. Observable arrays are also available with
 
 @function can.Observe
 @constructor
-@signature can.Observe([props])
+@signature `can.Observe([props])`
 @param {Object} [props] properties and values to seed the Observe with
 @return {can.Observe} an instance of `can.Observe` with the properties from _props_
 
-## Working with `can.Observe`s
+## Working with Observes
 
 To create an Observe, use `new can.Observe([props])`. This will return a
 copy of `props` that emits events when its properties are changed with

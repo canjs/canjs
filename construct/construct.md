@@ -1,4 +1,4 @@
-@class can.Construct
+@page can.Construct
 @parent canjs
 
 `can.Construct` provides a way to easily use the power of prototypal inheritance without worrying

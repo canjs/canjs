@@ -123,7 +123,8 @@ steal('can/util','can/construct', function(can) {
 		// takes a callback for after they are updated
 		// how could you hook into after ejs
 		/**
-		 * @parent can.Observe.batchEvents 
+		 * @parent can.Observe.batchEvents
+		 * @description Begin an event batch.
 		 * @param {Function} [batchStopHandler] a callback that gets called after all batched events have been called
 		 *
 		 * `startBatch` causes can.Observe to begin an event batch. Until `[can.Observe.stopBatch]` is called, any
@@ -220,6 +221,7 @@ steal('can/util','can/construct', function(can) {
 		},
 		/**
 		 * @parent can.Observe.batchEvents
+		 * @description End an event batch.
 		 * @param {bool} [force=false] whether to stop batching events immediately
 		 * @param {bool} [callStart=false] whether to call `[can.Observe.startBatch startBatch]` after firing batched events
 		 * 
@@ -287,7 +289,8 @@ steal('can/util','can/construct', function(can) {
 		},
 		/**
 		 * @parent can.Observe.batchEvents
-		 * @signature can.Observe.batchEvents(item, event [, args])
+		 * @description Trigger an event to be added to the current batch.
+		 * @signature `can.Observe.triggerBatch(item, event [, args])`
 		 * @param {can.Observe} item the target of the event
 		 * @param {String|{type: String}} event the type of event, or an event object with a type given
 		 * @param {Array} [args] the parameters to trigger the event with.
@@ -314,6 +317,7 @@ steal('can/util','can/construct', function(can) {
 			}
 		},
 		/**
+		 * @description Iterate over the keys of an Observe.
 		 * @param {can.Observe} observe the `can.Observe` to get the keys from
 		 * @return {Array} array An array containing the keys from _observe_.
 		 * 
@@ -365,20 +369,21 @@ steal('can/util','can/construct', function(can) {
 			Observe.triggerBatch(this,"change",can.makeArray(arguments))
 		},
 		/**
-		 * @signature attr()
+		 * @description Get or set properties on an Observe.
+		 * @signature `attr()`
 		 * 
 		 * Gets a collection of all the properties in this `can.Observe`.
 		 * 
 		 * @return {Object<String, *>} an object with all the properties in this `can.Observe`.
 		 * 
-		 * @signature attr(key)
+		 * @signature `attr(key)`
 		 * 
 		 * Reads a property from this `can.Observe`.
 		 * 
 		 * @param {String} key the property to read
 		 * @return {*} the value assigned to _key_.
 		 *
-		 * @signature attr(key, value)
+		 * @signature `attr(key, value)`
 		 * 
 		 * Assigns _value_ to a property on this `can.Observe` called _key_.
 		 * 
@@ -386,7 +391,7 @@ steal('can/util','can/construct', function(can) {
 		 * @param {*} the value to assign to _key_.
 		 * @return {can.Observe} this Observe, for chaining
 		 * 
-		 * @signature attr(obj[, removeOthers])
+		 * @signature `attr(obj[, removeOthers])`
 		 * 
 		 * Assigns each value in _obj_ to a property on this `can.Observe` named after the corresponding key in _obj_.
 		 * 
@@ -508,7 +513,8 @@ steal('can/util','can/construct', function(can) {
 			}
 		},
 		/**
-		 * @signature each(callback)
+		 * @description Call a function on each property of an Observe.
+		 * @signature `each(callback)`
 		 * 
 		 * `each` iterates through the Observe, calling a function
 		 * for each property value and key.
@@ -545,7 +551,8 @@ steal('can/util','can/construct', function(can) {
 			return can.each.apply(undefined, [this.__get()].concat(can.makeArray(arguments)))
 		},
 		/**
-		 * @signature removeAttr(attrName)
+		 * @description Remove a property from an Observe.
+		 * @signature `removeAttr(attrName)`
 		 * @param {String} attrName the name of the property to remove
 		 * @return {*} the value of the property that was removed
 		 * 
@@ -696,8 +703,9 @@ steal('can/util','can/construct', function(can) {
 		},
 
 		/**
-		 * @function bind
-		 * @signature bind(eventType, handler)
+		 * @function can.Observe.prototype.bind bind
+		 * @description Bind event handlers to an Observe.
+		 * @signature `bind(eventType, handler)`
 		 * @param {String} eventType the type of event to bind this handler to
 		 * @param {Function} handler the handler to be called when this type of event fires
 		 * The signature of the handler depends on the type of event being bound. See below
@@ -803,7 +811,8 @@ steal('can/util','can/construct', function(can) {
 		bind: bind,
 		/**
 		 * @function unbind
-		 * @signature unbind(eventType[, handler])
+		 * @description Unbind event handlers from an Observe.
+		 * @signature `unbind(eventType[, handler])`
 		 * @param {String} eventType the type of event to unbind, exactly as passed to `bind`
 		 * @param {Function} [handler] the handler to unbind
 		 *
@@ -906,7 +915,8 @@ steal('can/util','can/construct', function(can) {
 		},
 
 		/**
-		 * @signature compute(attrName)
+		 * @description Make a can.compute from an observable property.
+		 * @signature `compute(attrName)`
 		 * @param {String} attrName the property to bind to
 		 * @return {can.compute} a [can.compute] bound to _attrName_
 		 *
@@ -939,7 +949,7 @@ steal('can/util','can/construct', function(can) {
 	});
 	// Helpers for `observable` lists.
 	/**
-	 * @class can.Observe.List
+	 * @page can.Observe.List
 	 * @inherits can.Observe
 	 * @parent canjs
 	 *
@@ -949,11 +959,11 @@ steal('can/util','can/construct', function(can) {
 	 * 
 	 * @function can.Observe.List
 	 * @constructor
-	 * @signature can.Observe.List([elements])
+	 * @signature `can.Observe.List([elements])`
 	 * @param {Array} [elements] elements to seed the List with
 	 * @return {can.Observe.List} an instance of `can.Observe.List` with the elements from _elements_
 	 *
-	 * ## Working with `can.Observe.List`s
+	 * ## Working with Lists
 	 * 
 	 * `can.Observe.List` extends `[can.Observe]`, so all the ways that you're used to working with
 	 * Observes also work here, including [can.Observe.prototype.bind bind], [can.Observe.prototype.unbind unbind],
@@ -1091,7 +1101,8 @@ steal('can/util','can/construct', function(can) {
 		},
 		/**
 		 * @function can.Observe.List.each each
-		 * @signature each(callback)
+		 * @description Call a function on each element of a List.
+		 * @signature `each(callback)`
 		 * 
 		 * `each` iterates through the Observe, calling a function
 		 * for each element.
@@ -1124,7 +1135,8 @@ steal('can/util','can/construct', function(can) {
 		 */
 		//  
 		/**
-		 * @signature splice(index[, howMany[, ...newElements]])
+		 * @description Insert and remove elements from a List.
+		 * @signature `splice(index[, howMany[, ...newElements]])`
 		 * @param {Number} index where to start removing or inserting elements
 		 * 
 		 * @param {Number} [howMany] the number of elements to remove
@@ -1210,21 +1222,22 @@ steal('can/util','can/construct', function(can) {
 			return removed;
 		},
 		/**
+		 * @description Get or set elements in a List.
 		 * @function attr
-		 * @signature attr()
+		 * @signature `attr()`
 		 * 
 		 * Gets a collection of all the elements in this `can.Observe.List`.
 		 * 
 		 * @return {Array} array with all the elements in this List.
 		 * 
-		 * @signature attr(index)
+		 * @signature `attr(index)`
 		 * 
 		 * Reads a element from this `can.Observe.List`.
 		 * 
 		 * @param {Number} index the element to read
 		 * @return {*} the value at _index_.
 		 *
-		 * @signature attr(index, value)
+		 * @signature `attr(index, value)`
 		 * 
 		 * Assigns _value_ to the index _index_ on this `can.Observe.List`, expanding the list if necessary.
 		 * 
@@ -1232,7 +1245,7 @@ steal('can/util','can/construct', function(can) {
 		 * @param {*} the value to assign at _index_
 		 * @return {can.Observe.List} this List, for chaining
 		 * 
-		 * @signature attr(elements[, replaceCompletely])
+		 * @signature `attr(elements[, replaceCompletely])`
 		 * 
 		 * Merges the members of _elements_ into this List, replacing each from the beginning in order. If
 		 * _elements_ is longer than the current List, the current List will be expanded. If _elements_
@@ -1518,7 +1531,8 @@ steal('can/util','can/construct', function(can) {
 	can.each({
 		/**
 		 * @function push
-		 * @signature push(...elements)
+		 * @description Add elements to the end of a list.
+		 * @signature `push(...elements)`
 		 *
 		 * `push` adds elements onto the end of a List.]
 		 * 
@@ -1558,7 +1572,8 @@ steal('can/util','can/construct', function(can) {
 		push: "length",
 		/**
 		 * @function unshift
-		 * @signature unshift(...elements)
+		 * @description Add elements to the beginning of a List.
+		 * @signature `unshift(...elements)`
 		 *
 		 * `unshift` adds elements onto the beginning of a List.
 		 * 
@@ -1635,7 +1650,8 @@ steal('can/util','can/construct', function(can) {
 	can.each({
 		/**
 		 * @function pop
-		 * @signature push()
+		 * @description Remove an element from the end of a List.
+		 * @signature `pop()`
 		 *
 		 * `push` removes an element from the end of a List.
 		 * 
@@ -1668,7 +1684,8 @@ steal('can/util','can/construct', function(can) {
 		pop: "length",
 		/**
 		 * @function shift
-		 * @signature shift()
+		 * @description Remove en element from the front of a list.
+		 * @signature `shift()`
 		 *
 		 * `shift` removes an element from the beginning of a List.
 		 *
@@ -1727,7 +1744,8 @@ steal('can/util','can/construct', function(can) {
 	can.extend(list.prototype, {
 		/**
 		 * @function indexOf
-		 * @signature indexOf(item)
+		 * @description Look for an item in a List.
+		 * @signature `indexOf(item)`
 		 *
 		 * `indexOf` finds the position of a given item in the List.
 		 *
@@ -1756,7 +1774,8 @@ steal('can/util','can/construct', function(can) {
 
 		/**
 		 * @function join
-		 * @signature join(separator)
+		 * @description Join a List's elements into a string.
+		 * @signature `join(separator)`
 		 *
 		 * `join` turns a List into a string by inserting _separator_ between the string representations
 		 * of all the elements of the List.
@@ -1777,7 +1796,8 @@ steal('can/util','can/construct', function(can) {
 		
 		/**
 		 * @function reverse
-		 * @signature reverse()
+		 * @description Reverse the order of a List.
+		 * @signature `reverse()`
 		 *
 		 * `reverse` reverses the elements of the List in place.
 		 *
@@ -1795,7 +1815,8 @@ steal('can/util','can/construct', function(can) {
 
 		/**
 		 * @function slice
-		 * @signature slice([start[, end]])
+		 * @description Make a copy of a part of a List.
+		 * @signature `slice([start[, end]])`
 		 *
 		 * `slice` creates a copy of a portion of the List.
 		 *
@@ -1829,7 +1850,8 @@ steal('can/util','can/construct', function(can) {
 
 		/**
 		 * @function concat
-		 * @signature concat(...args)
+		 * @description Merge many collections together into a List.
+		 * @signature `concat(...args)`
 		 * 
 		 * `concat` makes a new List with the elements of the List followed by the elements of the parameters.
 		 * 
@@ -1858,7 +1880,8 @@ steal('can/util','can/construct', function(can) {
 
 		/**
 		 * @function forEach
-		 * @signature forEach(callback[, thisArg])
+		 * @description Call a function for each element of a List.
+		 * @signature `forEach(callback[, thisArg])`
 		 * 
 		 * `forEach` calls a callback for each element in the List.
 		 *
@@ -1882,7 +1905,8 @@ steal('can/util','can/construct', function(can) {
 
 		/**
 		 * @function replace
-		 * @signature replace(collection)
+		 * @description Replace all the elements of a List.
+		 * @signature `replace(collection)`
 		 *
 		 * `replace` replaces all the elements of this List with new ones.
 		 *

@@ -285,7 +285,7 @@ steal("can/util/string", function(can) {
 				shortName: shortName,
 				_shortName : _shortName,
 				/**
-				 * @attribute fullName 
+				 * @property fullName 
 				 * If you pass a name when creating a Construct, the `fullName` property will be set to
 				 * the name you passed.
 				 * 
