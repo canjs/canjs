@@ -4,7 +4,7 @@
 	test("multiple template types work", function(){
 		var expected = '<h3>helloworld</h3>';
 		can.each(["micro","ejs","jaml", "mustache"], function(ext){
-			var actual = can.view.render("//can/view/test/template." + ext, {
+			var actual = can.view.render(can.test.path("view/test/template." + ext), {
 				"message" :"helloworld"
 			}, {
 				helper: function(){
@@ -19,7 +19,7 @@
 	test("helpers work", function(){
 		var expected = '<h3>helloworld</h3><div>foo</div>';
 		can.each(["ejs", "mustache"], function(ext){
-			var actual = can.view.render("//can/view/test/helpers." + ext, {
+			var actual = can.view.render(can.test.path("view/test/helpers." + ext), {
 				"message" :"helloworld"
 			}, {
 				helper: function(){
@@ -32,7 +32,7 @@
 	});
 
 	test("buildFragment works right", function(){
-		can.append( can.$("#qunit-test-area"), can.view("//can/view/test//plugin.ejs",{}) )
+		can.append( can.$("#qunit-test-area"), can.view(can.test.path("view/test//plugin.ejs"),{}) )
 		ok(/something/.test( can.$("#something span")[0].firstChild.nodeValue ),"something has something");
 		can.remove( can.$("#something") );
 	});
@@ -43,7 +43,7 @@
 		stop();
 		var i = 0;
 
-		can.view.render("//can/view/test//temp.ejs",{"message" :"helloworld"}, function(text){
+		can.view.render(can.test.path("view/test//temp.ejs"), {"message" :"helloworld"}, function(text){
 			ok(/helloworld\s*/.test(text), "we got a rendered template");
 			i++;
 			equal(i, 2, "Ajax is not synchronous");
@@ -58,12 +58,12 @@
 		stop();
 		var startT = new Date(),
 			first;
-		can.view.render("//can/view/test//large.ejs",{"message" :"helloworld"}, function(text){
+		can.view.render(can.test.path("view/test//large.ejs"),{"message" :"helloworld"}, function(text){
 			first = new Date();
 			ok(text, "we got a rendered template");
 
 
-			can.view.render("//can/view/test//large.ejs",{"message" :"helloworld"}, function(text){
+			can.view.render(can.test.path("view/test//large.ejs"),{"message" :"helloworld"}, function(text){
 				var lap2 = (new Date()) - first,
 					lap1 =  first-startT;
 				// ok( lap1 > lap2, "faster this time "+(lap1 - lap2) )
@@ -74,7 +74,7 @@
 		})
 	})
 	test("hookup", function(){
-		can.view("//can/view/test//hookup.ejs",{});
+		can.view(can.test.path("view/test//hookup.ejs"),{});
 		equal(window.hookedUp, 'dummy', 'Hookup ran and got element');
 	});
 
@@ -113,7 +113,7 @@
 		var foo = new can.Deferred(),
 			bar = new can.Deferred();
 		stop();
-		can.view.render("//can/view/test//deferreds.ejs",{
+		can.view.render(can.test.path("view/test//deferreds.ejs"),{
 			foo : typeof foo.promise == 'function' ? foo.promise() : foo,
 			bar : bar
 		}).then(function(result){
@@ -130,7 +130,7 @@
 	test("deferred", function(){
 		var foo = new can.Deferred();
 		stop();
-		can.view.render("//can/view/test//deferred.ejs",foo).then(function(result){
+		can.view.render(can.test.path("view/test//deferred.ejs"),foo).then(function(result){
 			equal(result, "FOO");
 			start();
 		});
@@ -170,7 +170,7 @@
 		ok(can.isFunction(directResult), 'Renderer returned directly');
 		ok(can.isFunction(renderer), 'Renderer is a function');
 		equal(renderer({ test : 'working test' }), 'This is a working test', 'Rendered');
-		renderer = can.view("//can/view/test//template.ejs");
+		renderer = can.view(can.test.path("view/test//template.ejs"));
 		ok(can.isFunction(renderer), 'Renderer is a function');
 		equal(renderer({ message : 'Rendered!' }), '<h3>Rendered!</h3>', 'Synchronous template loaded and rendered');
 		// TODO doesn't get caught in Zepto for whatever reason
@@ -217,7 +217,7 @@
 
 		stop();
 		ok(can.isDeferred(original.foo), 'Original foo property is a Deferred');
-		can.view("//can/view/test//deferred.ejs", original).then(function(result, data){
+		can.view(can.test.path("view/test//deferred.ejs"), original).then(function(result, data){
 			ok(data, 'Data exists');
 			equal(data.foo, 'FOO', 'Foo is resolved');
 			equal(data.bar, 'BAR', 'Bar is resolved');
@@ -266,7 +266,7 @@
 		  id: 4,
 		  name: 'microsoft.com'
 		}]),
-		frag = can.view("//can/view/test/select.ejs", {
+		frag = can.view(can.test.path("view/test/select.ejs"), {
 			domainList: domainList
 		}),
 		div = document.createElement('div');
@@ -320,7 +320,7 @@
 	test("Deferred fails (#276)", function(){
 		var foo = new can.Deferred();
 		stop();
-		can.view.render("//can/view/test//deferred.ejs",foo)
+		can.view.render(can.test.path("view/test/deferred.ejs"),foo)
 			.fail(function(error) {
 				equal(error.message, 'Deferred error');
 				start();
@@ -338,7 +338,7 @@
 			bar = new can.Deferred();
 
 		stop();
-		can.view.render("//can/view/test//deferreds.ejs",{
+		can.view.render(can.test.path("view/test//deferreds.ejs"),{
 			foo : typeof foo.promise == 'function' ? foo.promise() : foo,
 			bar : bar
 		}).fail(function(error){

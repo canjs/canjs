@@ -6,12 +6,6 @@ module("can/model", {
 })
 
 var isDojo = (typeof dojo !== "undefined");
-var getPath = function(path) {
-	if(typeof steal !== 'undefined') {
-		return steal.config().root.join(path) + '';
-	}
-	return path;
-}
 
 test("shadowed id", function(){
 	var MyModel = can.Model({
@@ -36,7 +30,7 @@ test("findAll deferred", function(){
 			return can.ajax({
 				url : "/people",
 				data : params,
-				fixture: "//can/model/test/people.json",
+				fixture: can.test.fixture("model/test/people.json"),
 				dataType : "json"
 			}).pipe(function(data){
 				return self.models(data);
@@ -144,7 +138,7 @@ test("findOne deferred", function(){
 				return can.ajax({
 					url : "/people/5",
 					data : params,
-					fixture: "//can/model/test/person.json",
+					fixture: can.test.fixture("model/test/person.json"),
 					dataType : "json"
 				}).pipe(function(data){
 					return self.model(data);
@@ -153,7 +147,7 @@ test("findOne deferred", function(){
 		},{});
 	} else {
 		can.Model("Person",{
-			findOne : getPath("can/model/test/person.json")
+			findOne : can.test.fixture("model/test/person.json")
 		},{});
 	}
 	stop();
@@ -267,20 +261,24 @@ test("models", function(){
 
 test(".models with custom id", function() {
 	can.Model("CustomId", {
-		findAll : getPath("can/model/test") + "/customids.json",
+		findAll : can.test.path("model/test/customids.json"),
 		id : '_id'
 	}, {
 		getName : function() {
 			return this.name;
 		}
 	});
-	stop();
-	CustomId.findAll().done(function(results) {
-		equal(results.length, 2, 'Got two items back');
-		equal(results[0].name, 'Justin', 'First name right');
-		equal(results[1].name, 'Brian', 'Second name right');
-		start();
-	});
+	var results = CustomId.models([{
+			"_id" : 1,
+			"name" : "Justin"
+		}, {
+			"_id" : 2,
+			"name" : "Brian"
+		}]);
+
+	equal(results.length, 2, 'Got two items back');
+	equal(results[0].name, 'Justin', 'First name right');
+	equal(results[1].name, 'Brian', 'Second name right');
 });
 
 
@@ -338,10 +336,10 @@ test("auto methods",function(){
 	//turn off fixtures
 	can.fixture.on = false;
 	var School = can.Model.extend("Jquery.Model.Models.School",{
-	   findAll : getPath("can/model/test")+"/{type}.json",
-	   findOne : getPath("can/model/test")+"/{id}.json",
-	   create : "GET " + getPath("can/model/test")+"/create.json",
-	   update : "GET "+ getPath("can/model/test")+"/update{id}.json"
+	   findAll : can.test.path("model/test/{type}.json"),
+	   findOne : can.test.path("model/test/{id}.json"),
+	   create : "GET " + can.test.path("model/test/create.json"),
+	   update : "GET "+ can.test.path("model/test/update{id}.json")
 	},{})
 	stop();
 	School.findAll({type:"schools"}, function(schools){
@@ -381,7 +379,7 @@ test("isNew", function(){
 test("findAll string", function(){
 	can.fixture.on = false;
 	can.Model("Test.Thing",{
-		findAll : getPath("can/model/test/findAll.json")+''
+		findAll : can.test.path("model/test/findAll.json")+''
 	},{});
 	stop();
 	Test.Thing.findAll({},function(things){

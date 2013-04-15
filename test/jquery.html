@@ -22,18 +22,13 @@
         <script type="text/javascript">
             QUnit.config.autostart = false;
 
-             //TODO: steal.dev.logLevel is set in builder.json
-             //however, _logger exists in fixtures.js - this should be removed...
-            console = {
-                log: function() {},
-                error: function() {}
-            };
-
             steal(function() {
                 var config = window.CONFIGURATION = {
                     "map": {
                         "*": {
-                            "can/util/util.js": "can/util/jquery/jquery.js"
+                            "can/util/util.js": "can/util/jquery/jquery.js",
+                            "jquery/jquery.js": "can/lib/jquery.1.9.1.js",
+                            "can/": ""
                         }
                     },
                     "shim": {
@@ -41,11 +36,7 @@
                             "exports": "jQuery"
                         }
                     },
-                    "paths": {
-                        "jquery/jquery.js": "can/lib/jquery.1.9.1.js"
-                    },
-                    "logLevel": 2,
-                    "root": "../.."
+                    "root": "../"
                 };
 
                 steal.config(config);
@@ -57,7 +48,8 @@
                 "can/observe/setter", "can/observe/attributes",
                 "can/observe/validations", "can/observe/backup",
                 "can/control/plugin", "can/view/modifiers")
-                .then("can/construct/construct_test.js")
+                .then("can/test").then(
+                "can/construct/construct_test.js")
                 .then("can/observe/observe_test.js")
                 .then("can/model/model_test.js")
                 .then("can/view/view_test.js")

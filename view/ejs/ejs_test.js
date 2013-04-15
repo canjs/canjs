@@ -174,7 +174,7 @@ test("returning blocks", function(){
 	}
 	
 	var res = can.view.
-		render("//can/view/ejs/test/test_template.ejs",{
+		render(can.test.path("view/ejs/test/test_template.ejs"),{
 			something: somethingHelper, 
 			items: ['a','b']
 		});
@@ -185,7 +185,7 @@ test("returning blocks", function(){
 
 test("easy hookup", function(){
 	var div = document.createElement('div');
-	div.appendChild(can.view("//can/view/ejs/test/easyhookup.ejs",{text: "yes"}))
+	div.appendChild(can.view(can.test.path("view/ejs/test/easyhookup.ejs"),{text: "yes"}))
 	
 	ok( div.getElementsByTagName('div')[0].className.indexOf("yes") != -1, "has yes" )
 });
@@ -930,7 +930,7 @@ test("nested live bindings", function() {
 	]);
 	
 	var div = document.createElement('div');
-	div.appendChild(can.view("//can/view/ejs/test/nested_live_bindings.ejs",{items: items}))
+	div.appendChild(can.view(can.test.path("view/ejs/test/nested_live_bindings.ejs"),{items: items}))
 	
 	items.push({title: 1, is_done: false, id: 1});
 	// this will throw an error unless EJS protects against
@@ -962,7 +962,7 @@ test("recursive views", function(){
 		])
 	
 	var div = document.createElement('div');
-	div.appendChild( can.view('//can/view/ejs/test/recursive.ejs',  {items: data}));
+	div.appendChild( can.view(can.test.path('view/ejs/test/recursive.ejs'),  {items: data}));
 	ok(/class="leaf"|class=leaf/.test(div.innerHTML), "we have a leaf")
 	
 })
@@ -977,12 +977,12 @@ test("indirectly recursive views", function() {
 	]);
 	can.view.cache = false;
 	var div = document.createElement('div');	
-	div.appendChild(can.view('//can/view/ejs/test/indirect1.ejs', {unordered: unordered}));
+	div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
 	document.getElementById('qunit-test-area').appendChild(div);
 	ok(can.trim(can.$('#qunit-test-area ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Uncached indirectly recursive EJS working.");
 	
 	can.view.cache = true;
-	div.appendChild(can.view('//can/view/ejs/test/indirect1.ejs', {unordered: unordered}));
+	div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
 	ok(can.trim(can.$('#qunit-test-area ul + ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Cached indirectly recursive EJS working.");
 	document.getElementById('qunit-test-area').removeChild(div);
 
@@ -1203,7 +1203,7 @@ test("testing for clean tables", function() {
   games.push({name: 'Dragon Warrior', rating: 9});
   games.push({name: 'A Dude Named Daffl', rating: 8.5});  
 
-	var res = can.view.render("//can/view/ejs/test/table_test.ejs",{
+	var res = can.view.render(can.test.path("view/ejs/test/table_test.ejs"),{
 		games: games
 	}),
 	div = document.createElement('div');

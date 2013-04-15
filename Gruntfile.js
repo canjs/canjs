@@ -221,9 +221,9 @@ module.exports = function (grunt) {
 			server: {
 				options: {
 					port: 8000,
-					base: '..',
-				},
-			},
+					base: '..'
+				}
+			}
 		},
 		qunit: {
 			all: {

@@ -1,5 +1,4 @@
-steal('funcunit/syn', 'can/view/mustache', 'can/model', './test/hello.mustache', './test/fancy_name.mustache',
-	'./test/helper.mustache','./test/noglobals.mustache', function(_syn,_mustache,_model,hello,fancyName,helpers, noglobals){
+(function() {
 
 module("can/view/mustache, rendering",{
 	setup : function(){
@@ -50,7 +49,7 @@ var override = {
 // Add mustache specs to the test
 can.each(['comments', /*'delimiters',*/ 'interpolation', 'inverted', 'partials', 'sections'/*, '~lambdas'*/], function(spec) {
 	can.ajax({
-		url: steal.config().root.join('can/view/mustache/spec/specs/' + spec + '.json') + '',
+		url: can.test.path('view/mustache/spec/specs/' + spec + '.json'),
 		dataType: 'json',
 		async: false
 	}).done(function(data) {
@@ -358,9 +357,10 @@ test("Passing functions as data, then executing them", function() {
 });
 
 test("Absolute partials", function() {
+	var test_template = can.test.path('view/mustache/test/test_template.mustache');
 	var t = {
-		template1: "{{> //can/view/mustache/test/test_template.mustache}}",
-		template2: "{{>//can/view/mustache/test/test_template.mustache}}",
+		template1: "{{> " + test_template + "}}",
+		template2: "{{> " + test_template + "}}",
 		expected: "Partials Rock"
 	};
 
@@ -403,7 +403,7 @@ test("No arguments passed to helper with list", function() {
 
 test("Partials and observes", function() {
 	var div = document.createElement('div');
-	var dom = can.view('//can/view/mustache/test/table.mustache', {
+	var dom = can.view(can.test.path('view/mustache/test/table.mustache'), {
 		data : new can.Observe({
 			list: ["hi","there"]
 		})
@@ -579,7 +579,7 @@ test("returning blocks", function(){
 
 test("easy hookup", function(){
 	var div = document.createElement('div');
-	div.appendChild(can.view("//can/view/mustache/test/easyhookup.mustache",{text: "yes"}))
+	div.appendChild(can.view(can.test.path("view/mustache/test/easyhookup.mustache"),{text: "yes"}))
 
 	ok( div.getElementsByTagName('div')[0].className.indexOf("yes") != -1, "has yes" )
 });
@@ -1210,7 +1210,7 @@ test("nested live bindings", function(){
 	]);
 
 	var div = document.createElement('div');
-	div.appendChild(can.view("//can/view/mustache/test/nested_live_bindings.mustache",{items: items}))
+	div.appendChild(can.view(can.test.path("view/mustache/test/nested_live_bindings.mustache"), { items: items }));
 
 	items.push({title: 1, is_done: false, id: 1});
 	// this will throw an error unless Mustache protects against
@@ -1247,7 +1247,7 @@ test("recursive views", function(){
         ])
 
 	var div = document.createElement('div');
-	div.appendChild( can.view('//can/view/mustache/test/recursive.mustache',  {items: data}));
+	div.appendChild( can.view(can.test.path('view/mustache/test/recursive.mustache'),  {items: data}));
 	ok(/class="?leaf"?/.test(div.innerHTML), "we have a leaf")
 
 })
@@ -1626,6 +1626,8 @@ test("2 way binding helpers", function(){
 
 test("can pass in partials",function() {
 	var div = document.createElement('div');
+	var hello = can.view(can.test.path('view/mustache/test/hello.mustache'));
+	var fancyName = can.view(can.test.path('view/mustache/test/fancy_name.mustache'));
 	var result = hello({
 		name: "World"
 	},{
@@ -1641,6 +1643,7 @@ test("can pass in partials",function() {
 
 test("can pass in helpers",function() {
 	var div = document.createElement('div');
+	var helpers = can.view(can.test.path('view/mustache/test/helper.mustache'));
 	var result = helpers({
 		name: "world"
 	},{
@@ -1661,7 +1664,8 @@ test("avoid global helpers",function() {
 		div2 = document.createElement('div');
 	var person = new can.Observe({
 		name: "Brian"
-	})
+	});
+	var noglobals = can.view(can.test.path('view/mustache/test/noglobals.mustache'));
 	var result = noglobals({
 		person: person
 	},{
@@ -1832,4 +1836,4 @@ test("Helpers always have priority (#258)", function() {
 	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
-});
+})();

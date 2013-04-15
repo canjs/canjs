@@ -17,19 +17,12 @@
 	<script type="text/javascript">
 		QUnit.config.autostart = false;
 
-		//TODO: steal.dev.logLevel is set in builder.json
-		//however, _logger exists in fixtures.js - this should be removed...
-		console = {
-			log: function() {},
-			error: function() {}
-		};
-
 		steal(function() {
 			var config = window.CONFIGURATION = <%- JSON.stringify(configuration.steal) %>;
 
 			steal.config(config);
 		}, "can/util/fixture", "can/view/jaml", "can/view/micro", "<%- modules.join('", "') %>")
-		.then("<%- tests.join('")\n.then("') %>", function() {
+		.then("can/test").then("<%- tests.join('")\n.then("') %>", function() {
 			QUnit.start();
 		});
 	</script>
