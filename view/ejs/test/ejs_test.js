@@ -1296,4 +1296,74 @@ test('live binding with html comment', function(){
 	equals(div.getElementsByTagName('table')[0].getElementsByTagName('td').length, 0, '0 items in list');
 });
 
+test("HTML comment with element callback", function(){
+	var text = ["<ul>",
+				"<% todos.each(function(todo) { %>",
+				"<li<%= (el) -> can.data(can.$(el),'todo',todo) %>>",
+				"<!-- html comment #1 -->",
+				"<%= todo.name %>",
+				"<!-- html comment #2 -->",
+				"</li>",
+				"<% }) %>",
+				"</ul>"],
+		Todos = new can.Observe.List([
+			{id: 1, name: "Dishes"}
+		]),
+		compiled = new can.EJS({text: text.join("\n")}).render({todos: Todos}),
+		div = document.createElement("div")
+
+	div.appendChild(can.view.frag(compiled));
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 1, "1 item in list");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 5, "5 nodes in item #1");
+
+	Todos.push({id: 2, name: "Laundry"});
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 2, "2 items in list");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 5, "5 nodes in item #1");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[1].childNodes.length, 5, "5 nodes in item #2");
+
+	Todos.splice(0, 2);
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
+})
+
+// https://github.com/bitovi/canjs/issues/153
+test("Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node", function() {
+	var renderer = can.view.ejs('issue-153-no-dom', '<% can.each(todos, function(todo) { %><span><%= todo.attr("name") %></span><% }) %>'),
+		renderer2 = can.view.ejs('issue-153-dom', '<% can.each(todos, function(todo) { %><%= todo.attr("name") %><% }) %>'),
+		todos = [ new can.Observe({id: 1, name: 'Dishes'}), new can.Observe({id: 2, name: 'Forks'}) ],
+		data = { 
+			todos: new can.Observe.List(todos)
+		},
+		arr = {
+			todos: todos
+		},
+		div = document.createElement('div');
+		
+	div.appendChild(can.view('issue-153-no-dom', arr));
+	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'Array item rendered with DOM container');
+	div.innerHTML = '';
+	div.appendChild(can.view('issue-153-no-dom', data));
+	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'List item rendered with DOM container');
+	div.innerHTML = '';
+	div.appendChild(can.view('issue-153-dom', arr));
+	equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
+	div.innerHTML = '';
+	div.appendChild(can.view('issue-153-dom', data));
+	equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
+	data.todos[1].attr('name', 'Glasses');
+	data.todos.push(new can.Observe({ id: 3, name: 'Knives' }));
+	equal(div.innerHTML, "DishesGlassesKnives", 'New list item rendered without DOM container');
+});
+
+test("correctness of data-view-id and only in tag opening", function(){
+	var text = ["<textarea><select><% can.each(this.items, function(item) { %>",
+				"<option<%= (el) -> el.data('item', item) %>><%= item.title %></option>",
+				"<% }) %></select></textarea>"],
+		items = [{id: 1, title: "One"}, {id: 2, title: "Two"}],
+		compiled = new can.EJS({text: text.join("")}).render({items: items}),
+		expected = "^<textarea data-view-id='[0-9]+'><select><option data-view-id='[0-9]+'>One</option>" +
+			"<option data-view-id='[0-9]+'>Two</option></select></textarea>$";
+
+	ok(compiled.search(expected) === 0, "Rendered output is as expected");
+});
+
 })();

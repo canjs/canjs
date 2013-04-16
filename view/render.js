@@ -281,8 +281,18 @@ can.extend(can.view, {
 					var parent = getParentNode(el, parentNode),
 						node = document.createTextNode(binding.value);
 						
-					parent.insertBefore(node, el);
-					parent.removeChild(el);
+					// When iterating through an Observe.List with no DOM
+					// elements containing the individual items, the parent 
+					// is sometimes incorrect not the true parent of the 
+					// source element. (#153)
+					if ( el.parentNode !== parent ) {
+						parent = el.parentNode;
+						parent.insertBefore(node, el);
+						parent.removeChild(el);
+					} else {
+						parent.insertBefore(node, el);
+						parent.removeChild(el);
+					}
 					setupTeardownOnDestroy(parent);
 				} 
 				:
@@ -352,7 +362,7 @@ can.extend(can.view, {
 			pendingHookups.push(function(el) {
 				update = function(newVal){
 					var parts = (newVal|| "").replace(/['"]/g, '').split('='),
-						newAttrName = parts[0];
+						newAttrName = parts.shift();
 					
 					// Remove if we have a change and used to have an `attrName`.
 					if((newAttrName != attrName) && attrName){
@@ -360,7 +370,7 @@ can.extend(can.view, {
 					}
 					// Set if we have a new `attrName`.
 					if(newAttrName){
-						setAttr(el, newAttrName, parts[1]);
+						setAttr(el, newAttrName, parts.join('='));
 						attrName = newAttrName;
 					}
 				};

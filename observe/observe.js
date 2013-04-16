@@ -90,7 +90,10 @@ steal('can/util','can/construct', function(can) {
 		},
 		bind = $method('addEvent'),
 		unbind = $method('removeEvent'),
-		attrParts = function(attr){
+		attrParts = function(attr, keepKey) {
+			if(keepKey) {
+				return [attr];
+			}
 			return can.isArray(attr) ? attr : (""+attr).split(".");
 		},
 		// Which batch of events this is for -- might not want to send multiple
@@ -234,7 +237,7 @@ steal('can/util','can/construct', function(can) {
 					can.trigger.apply(can, args);
 				});
 				can.each(callbacks, function( cb ) {
-					cb;
+					cb();
 				});
 			}
 		},
@@ -254,12 +257,13 @@ steal('can/util','can/construct', function(can) {
 				if (transactions == 0 ) {
 					return can.trigger(item, event, args);
 				} else {
+					event = typeof event === "string" ?
+						{ type: event } : 
+						event;
+					event.batchNum = batchNum;
 					batchEvents.push([
 					item,
-					{
-						type: event,
-						batchNum : batchNum
-					}, 
+					event, 
 					args ] );
 				}
 			}
@@ -518,7 +522,7 @@ steal('can/util','can/construct', function(can) {
 		 *         equals( value,'bar' );
 		 *       });
 		 * 
-		 * @param {function} handler( attrName, value ) A function that will get 
+		 * @param {function} handler( value, attrName ) A function that will get 
 		 * called back with the name and value of each attribute on the observe.
 		 * 
 		 * Returning `false` breaks the looping. The following will never
@@ -551,18 +555,22 @@ steal('can/util','can/construct', function(can) {
 		 * @return {Object} the value that was removed.
 		 */
 		removeAttr: function( attr ) {
-			// Convert the `attr` into parts (if nested).
-			var parts = attrParts(attr),
+				// Info if this is List or not
+			var isList = this instanceof can.Observe.List,
+				// Convert the `attr` into parts (if nested).
+				parts = attrParts(attr),
 				// The actual property to remove.
 				prop = parts.shift(),
 				// The current value.
-				current = this._data[prop];
+				current = isList ? this[prop] : this._data[prop];
 
 			// If we have more parts, call `removeAttr` on that part.
 			if ( parts.length ) {
 				return current.removeAttr(parts)
 			} else {
-				if( prop in this._data ){
+				if(isList) {
+					this.splice(prop, 1)
+				} else if( prop in this._data ){
 					// Otherwise, `delete`.
 					delete this._data[prop];
 					// Create the event.
@@ -579,6 +587,11 @@ steal('can/util','can/construct', function(can) {
 		},
 		// Reads a property from the `object`.
 		_get: function( attr ) {
+			var value = typeof attr === 'string' && !!~attr.indexOf('.') && this.__get(attr);
+			if(value) {
+				return value;
+			}
+
 			// break up the attr (`"foo.bar"`) into `["foo","bar"]`
 			var parts = attrParts(attr),
 				// get the value of the first attr name (`"foo"`)
@@ -603,9 +616,9 @@ steal('can/util','can/construct', function(can) {
 		// Sets `attr` prop as value on this object where.
 		// `attr` - Is a string of properties or an array  of property values.
 		// `value` - The raw value to set.
-		_set: function( attr, value ) {
+		_set: function( attr, value, keepKey) {
 			// Convert `attr` to attr parts (if it isn't already).
-			var parts = attrParts(attr),
+			var parts = attrParts(attr, keepKey),
 				// The immediate prop we are setting.
 				prop = parts.shift(),
 				// The current value.
@@ -844,7 +857,7 @@ steal('can/util','can/construct', function(can) {
 			// Add remaining props.
 			for ( var prop in props ) {
 				newVal = props[prop];
-				this._set(prop, newVal)
+				this._set(prop, newVal, true)
 			}
 			Observe.stopBatch()
 			return this;
@@ -1340,6 +1353,15 @@ steal('can/util','can/construct', function(can) {
 		 *     list.push('0','1','2'); 
 		 *     list.attr() // -> ['0', '1', '2']
 		 * 
+		 * If you have 2 lists that you wish to merge the contents of,
+		 * simply doing a push will push the source list as a new entry
+		 * in the list rather than merging it.  Instead do:
+		 * 
+		 * 	var target = new can.Observe.List([ 1, 2, 3 ]);
+		 * 	var source = new can.Observe.List([ 4, 5, 6 ]);
+		 * 
+		 * 	source.push.apply(source, target); //-> [ 1, 2, 3, 4, 5, 6 ]
+		 * 
 		 * @return {Number} the number of items in the array
 		 */
 		push: "length",
@@ -1382,8 +1404,9 @@ steal('can/util','can/construct', function(can) {
 			
 			// Call the original method.
 			res = orig.apply(this, args);
-			
-			if ( !this.comparator || !args.length ) {
+
+			if ( !this.comparator || args.length ) {
+
 				this._triggerChange(""+len, "add", args, undefined);
 			}
 						

@@ -369,7 +369,6 @@ test("Absolute partials", function() {
 });
 
 test("No arguments passed to helper", function() {
-
 	can.view.mustache("noargs","{{noargHelper}}");
 	can.Mustache.registerHelper("noargHelper", function(){
 		return "foo"
@@ -382,6 +381,24 @@ test("No arguments passed to helper", function() {
 
 	same(div1.innerHTML, "foo");
 	same(div2.innerHTML, "foo");
+});
+
+test("No arguments passed to helper with list", function() {
+	can.view.mustache("noargs","{{#items}}{{noargHelper}}{{/items}}");
+	var div = document.createElement('div');
+
+	div.appendChild( can.view("noargs", {
+		items: new can.Observe.List([{
+			name: "Brian"
+		}]) 
+	},
+	{
+		noargHelper: function(){
+			return "foo"
+		}
+	}) );
+
+	same(div.innerHTML, "foo");
 });
 
 test("Partials and observes", function() {
@@ -1489,6 +1506,34 @@ test("Functions and helpers should be passed the same context", function() {
 	equal(div.getElementsByTagName('span')[1].innerHTML, data.next_level.other_text.toUpperCase(), 'Incorrect context passed to helper');
 });
 
+// https://github.com/bitovi/canjs/issues/153
+test("Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node", function() {
+	var renderer = can.view.mustache('{{ #todos }}{{ name }}{{ /todos }}'),
+		renderer2 = can.view.mustache('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),
+		todos = [ {id: 1, name: 'Dishes'}, {id: 2, name: 'Forks'} ],
+		data = { 
+			todos: new can.Observe.List(todos)
+		},
+		arr = {
+			todos: todos
+		},
+		div = document.createElement('div');
+		
+	div.appendChild(renderer2(arr));
+	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'Array item rendered with DOM container');
+	div.innerHTML = '';
+	div.appendChild(renderer2(data));
+	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'List item rendered with DOM container');
+	div.innerHTML = '';
+	div.appendChild(renderer(arr));
+	equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
+	div.innerHTML = '';
+	div.appendChild(renderer(data));
+	equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
+	data.todos.push({ id: 3, name: 'Knives' });
+	equal(div.innerHTML, "DishesForksKnives", 'New list item rendered without DOM container');
+});
+
 test("2 way binding helpers", function(){
 	
 	var Value = function(el, value){
@@ -1634,6 +1679,153 @@ test("avoid global helpers",function() {
 
 	equal(div.innerHTML,"Mr. Ajax");
 	equal(div2.innerHTML,"Ajax rules");
+});
+
+test("HTML comment with helper", function(){
+	var text = ["<ul>",
+				"{{#todos}}",
+				"<li {{data 'todo'}}>",
+				"<!-- html comment #1 -->",
+				"{{name}}",
+				"<!-- html comment #2 -->",
+				"</li>",
+				"{{/todos}}",
+				"</ul>"],
+		Todos = new can.Observe.List([
+			{id: 1, name: "Dishes"}
+		]),
+		compiled = new can.Mustache({text: text.join("\n")}).render({todos: Todos}),
+		div = document.createElement("div")
+
+	div.appendChild(can.view.frag(compiled));
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 1, "1 item in list");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
+
+	Todos.push({id: 2, name: "Laundry"});
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 2, "2 items in list");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[1].childNodes.length, 7, "7 nodes in item #2");
+
+	Todos.splice(0, 2);
+	equals(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
+});
+
+test("correctness of data-view-id and only in tag opening", function(){
+	var text = ["<textarea><select>{{#items}}",
+				"<option{{data 'item'}}>{{title}}</option>",
+				"{{/items}}</select></textarea>"],
+		items = [{id: 1, title: "One"}, {id: 2, title: "Two"}],
+		compiled = new can.Mustache({text: text.join("")}).render({items: items}),
+		expected = "^<textarea data-view-id='[0-9]+'><select><option data-view-id='[0-9]+'>One</option>" +
+			"<option data-view-id='[0-9]+'>Two</option></select></textarea>$";
+
+	ok(compiled.search(expected) === 0, "Rendered output is as expected");
+});
+
+test("Empty strings in arrays within Observes that are iterated should return blank strings", function(){
+	var data = new can.Observe({
+			colors: ["", 'red', 'green', 'blue'],
+		}),
+		compiled = new can.Mustache({text: "<select>{{#colors}}<option>{{.}}</option>{{/colors}}</select>"}).render(data),
+		div = document.createElement('div');
+		
+	div.appendChild(can.view.frag(compiled));
+	equal(div.getElementsByTagName('option')[0].innerHTML, "", "Blank string should return blank");
+});
+
+test("Null properties do not throw errors in Mustache.get", function() {
+	var renderer = can.view.mustache("Foo bar {{#foo.bar}}exists{{/foo.bar}}{{^foo.bar}}does not exist{{/foo.bar}}")
+	, div = document.createElement('div')
+	, div2 = document.createElement('div')
+	, frag, frag2;
+
+	try {
+		frag = renderer(new can.Observe({
+			foo : null
+		}))
+	} catch(e) {
+		ok(false, "rendering with null threw an error");
+	}
+	frag2 = renderer(new can.Observe({
+		foo : {bar : "baz"}
+	}))
+	div.appendChild(frag);
+	div2.appendChild(frag2);
+	equal(div.innerHTML, "Foo bar does not exist");
+	equal(div2.innerHTML, "Foo bar exists");
+});
+
+// Issue #288
+test("Data helper should set proper data instead of a context stack", function() {
+	var partials = {
+		'nested_data': '<span id="has_data" {{data "attr"}}></span>',
+		'nested_data2': '{{#this}}<span id="has_data" {{data "attr"}}></span>{{/this}}',
+		'nested_data3': '{{#bar}}<span id="has_data" {{data "attr"}}></span>{{/bar}}'
+	};
+	for (var name in partials) {
+		can.view.registerView(name, partials[name])
+	}
+	
+	var renderer = can.view.mustache("{{#bar}}{{> #nested_data}}{{/bar}}"),
+		renderer2 = can.view.mustache("{{#bar}}{{> #nested_data2}}{{/bar}}"),
+		renderer3 = can.view.mustache("{{#bar}}{{> #nested_data3}}{{/bar}}"),
+		div = document.createElement('div'),
+		data = new can.Observe({
+        foo : "bar",
+        bar : new can.Observe({})
+    }),
+		span;
+
+	div.innerHTML = '';
+	div.appendChild(renderer(data));
+	span = can.$(div.getElementsByTagName('span')[0]);
+	strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 1 should have correct data');
+
+	div.innerHTML = '';
+	div.appendChild(renderer2(data));
+	span = can.$(div.getElementsByTagName('span')[0]);
+	strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 2 should have correct data');
+	
+	div.innerHTML = '';
+	div.appendChild(renderer3(data));
+	span = can.$(div.getElementsByTagName('span')[0]);
+	strictEqual(can.data(span, 'attr'), data.bar, 'Nested data 3 should have correct data');
+});
+
+// Issue #333
+test("Functions passed to default helpers should be evaluated", function() {
+	var renderer = can.view.mustache("{{#if hasDucks}}Ducks: {{ducks}}{{else}}No ducks!{{/if}}"),
+		div = document.createElement('div'),
+		data = new can.Observe({
+			ducks: "",
+			hasDucks: function() {
+				return this.attr("ducks").length > 0;
+			}
+		});
+
+	div.innerHTML = '';
+	div.appendChild(renderer(data));
+	span = can.$(div.getElementsByTagName('span')[0]);
+	equal(div.innerHTML, 'No ducks!', 'The function evaluated should evaluate false');
+});
+
+test("Helpers always have priority (#258)", function() {
+	can.Mustache.registerHelper('callMe', function(arg) {
+		return arg + ' called me!';
+	});
+
+	var t = {
+		template: "<div>{{callMe 'Tester'}}</div>",
+		expected: "<div>Tester called me!</div>",
+		data: {
+			callMe: function(arg) {
+				return arg + ' hanging up!';
+			}
+		}
+	};
+
+	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
+	same(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 });

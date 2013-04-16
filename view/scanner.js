@@ -38,6 +38,7 @@ var newLine = /(\r|\n)+/g,
 				i++;
 			}
 		}
+		return '';
 	},
 	bracketNum = function(content){
 		return (--content.split("{").length) - (--content.split("}").length);
@@ -200,6 +201,8 @@ Scanner.prototype = {
 			tagName = '',
 			// stack of tagNames
 			tagNames = [],
+			// Pop from tagNames?
+			popTagName = false,
 			// Declared here.
 			bracketCount,
 			i = 0,
@@ -264,7 +267,7 @@ Scanner.prototype = {
 					// but content is not other tags add a hookup
 					// TODO: we should only add `can.EJS.pending()` if there's a magic tag 
 					// within the html tags.
-					if(magicInTag || tagToContentPropMap[ tagNames[tagNames.length -1] ]){
+					if(magicInTag || !popTagName && tagToContentPropMap[ tagNames[tagNames.length -1] ]){
 						// make sure / of /> is on the left of pending
 						if(emptyElement){
 							put(content.substr(0,content.length-1), ",can.view.pending(),\"/>\"");
@@ -272,15 +275,18 @@ Scanner.prototype = {
 							put(content, ",can.view.pending(),\">\"");
 						}
 						content = '';
+						magicInTag = 0;
 					} else {
 						content += token;
 					}
 					// if it's a tag like <input/>
-					if(emptyElement){
+					if(emptyElement || popTagName){
 						// remove the current tag in the stack
 						tagNames.pop();
 						// set the current tag to the previous parent
 						tagName = tagNames[tagNames.length-1];
+						// Don't pop next time
+						popTagName = false;
 					}
 					break;
 				case "'":
@@ -302,10 +308,11 @@ Scanner.prototype = {
 					// Track the current tag
 					if(lastToken === '<'){
 						tagName = token.split(/\s/)[0];
-						if( tagName.indexOf("/") === 0 && tagNames.pop() === tagName.substr(1) ) {
+						if( tagName.indexOf("/") === 0 && tagNames[tagNames.length-1] === tagName.substr(1) ) {
 							// set tagName to the last tagName
 							// if there are no more tagNames, we'll rely on getTag.
 							tagName = tagNames[tagNames.length-1];
+							popTagName = true;
 						} else {
 							tagNames.push(tagName);
 						}

@@ -33,7 +33,7 @@ function (testConfig, pluginify, amdify, EJS, libs) {
 		console.log('Building ' + lib + ' ' + version + ' to ' + outFile);
 		steal.build.pluginify(buildFile, _.extend(defaults, options));
 		steal.build.pluginify(buildFile, _.extend(defaults, options, {
-			compress : true,
+			minify : true,
 			out : outFile + '.min.js'
 		}));
 	};
