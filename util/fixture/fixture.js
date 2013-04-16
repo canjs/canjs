@@ -26,12 +26,8 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				}
 			},
 			log = function () {
-				if (window.console && console.log) {
-					Array.prototype.unshift.call(arguments, 'fixture INFO:');
-					_logger( "log", Array.prototype.slice.call(arguments) );
-				}
-				else if (window.opera && window.opera.postError) {
-					opera.postError("fixture INFO: " + Array.prototype.join.call(arguments, ','));
+				if(typeof steal !== 'undefined' && steal.dev) {
+					steal.dev.log('fixture INFO: ' + Array.prototype.slice.call(arguments).join(' '));
 				}
 			}
 

@@ -132,6 +132,11 @@
 						"zepto/zepto.js": "can/lib/zepto.1.0rc1.js",
 						"can/": ""
 					}
+				},
+				"shim": {
+					"zepto/zepto.js": {
+						"exports": "Zepto"
+					}
 				}
 			}
 		},

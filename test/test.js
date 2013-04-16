@@ -2,7 +2,7 @@
 	can.test = {
 		fixture: function (path) {
 			if (typeof steal !== 'undefined') {
-				return '//' + steal.id(path).toString();
+				return steal.config('root').toString() + '/' + path;
 			}
 			return path;
 		},

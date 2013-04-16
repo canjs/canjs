@@ -23,7 +23,7 @@ module.exports = function (grunt) {
 			libs: {
 				template: 'test/templates/__configuration__.html.ejs',
 				builder: '<%= builder %>',
-				root: '..',
+				root: '../',
 				out: 'test/'
 			},
 			dist: {
@@ -231,9 +231,9 @@ module.exports = function (grunt) {
 					urls: [
 						'http://localhost:8000/can/test/dojo.html',
 						'http://localhost:8000/can/test/jquery.html',
-						// 'http://localhost:8000/can/test/zepto.html', TODO: this doesn't work in phantom
+						// 'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/can/test/mootools.html',
-						'http://localhost:8000/can/test/yui.html',
+						'http://localhost:8000/can/test/yui.html'
 					]
 				}
 			}

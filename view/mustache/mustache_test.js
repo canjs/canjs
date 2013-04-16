@@ -1625,7 +1625,6 @@ test("2 way binding helpers", function(){
 })
 
 test("can pass in partials",function() {
-	var div = document.createElement('div');
 	var hello = can.view(can.test.path('view/mustache/test/hello.mustache'));
 	var fancyName = can.view(can.test.path('view/mustache/test/fancy_name.mustache'));
 	var result = hello({
@@ -1635,14 +1634,12 @@ test("can pass in partials",function() {
 			name: fancyName
 		}
 	});
-	div.appendChild(result);
 
-	ok(/World/.test(div.innerHTML),"Hello World worked");
+	ok(/World/.test(result.toString()),"Hello World worked");
 });
 
 
 test("can pass in helpers",function() {
-	var div = document.createElement('div');
 	var helpers = can.view(can.test.path('view/mustache/test/helper.mustache'));
 	var result = helpers({
 		name: "world"
@@ -1653,40 +1650,8 @@ test("can pass in helpers",function() {
 			}
 		}
 	});
-	div.appendChild(result);
 
-	ok(/World/.test(div.innerHTML),"Hello World worked");
-});
-
-
-test("avoid global helpers",function() {
-	var div = document.createElement('div'),
-		div2 = document.createElement('div');
-	var person = new can.Observe({
-		name: "Brian"
-	});
-	var noglobals = can.view(can.test.path('view/mustache/test/noglobals.mustache'));
-	var result = noglobals({
-		person: person
-	},{
-		sometext: function(name){
-			return "Mr. "+name()
-		}
-	});
-	var result2 = noglobals({
-		person: person
-	},{
-		sometext: function(name){
-			return name()+" rules"
-		}
-	});
-	div.appendChild(result);
-	div2.appendChild(result2);
-
-	person.attr("name", "Ajax")
-
-	equal(div.innerHTML,"Mr. Ajax");
-	equal(div2.innerHTML,"Ajax rules");
+	ok(/World/.test(result.toString()),"Hello World worked");
 });
 
 test("HTML comment with helper", function(){
@@ -1835,5 +1800,40 @@ test("Helpers always have priority (#258)", function() {
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
 	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
+
+if(typeof steal !== 'undefined') {
+	test("avoid global helpers",function() {
+		stop();
+		steal('view/mustache/test/noglobals.mustache', function(noglobals) {
+			var div = document.createElement('div'),
+				div2 = document.createElement('div');
+			var person = new can.Observe({
+				name: "Brian"
+			});
+			var result = noglobals({
+				person: person
+			},{
+				sometext: function(name){
+					return "Mr. "+name()
+				}
+			});
+			var result2 = noglobals({
+				person: person
+			},{
+				sometext: function(name){
+					return name()+" rules"
+				}
+			});
+			div.appendChild(result);
+			div2.appendChild(result2);
+
+			person.attr("name", "Ajax")
+
+			equal(div.innerHTML,"Mr. Ajax");
+			equal(div2.innerHTML,"Ajax rules");
+			start();
+		});
+	});
+}
 
 })();
