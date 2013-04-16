@@ -1353,6 +1353,15 @@ steal('can/util','can/construct', function(can) {
 		 *     list.push('0','1','2'); 
 		 *     list.attr() // -> ['0', '1', '2']
 		 * 
+		 * If you have 2 lists that you wish to merge the contents of,
+		 * simply doing a push will push the source list as a new entry
+		 * in the list rather than merging it.  Instead do:
+		 * 
+		 * 	var target = new can.Observe.List([ 1, 2, 3 ]);
+		 * 	var source = new can.Observe.List([ 4, 5, 6 ]);
+		 * 
+		 * 	source.push.apply(source, target); //-> [ 1, 2, 3, 4, 5, 6 ]
+		 * 
 		 * @return {Number} the number of items in the array
 		 */
 		push: "length",

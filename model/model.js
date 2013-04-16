@@ -1238,7 +1238,7 @@ steal('can/util','can/observe', function( can ) {
    *         console.log(oldVals[indx].attr("name") + " removed")
    *     })
    *
-   *     todo1.destory(); // console shows "Do the dishes removed"
+   *     todo1.destroy(); // console shows "Do the dishes removed"
    *
    *
    */
