@@ -679,21 +679,25 @@ test("store instance updates", function(){
     updateCount = 0;
     
     can.fixture("GET /guys", function(){
-    	var guys = [{id: 1, updateCount: updateCount, nested: {count: updateCount}}];
-    	updateCount++;
+	    	var guys = [{id: 1, updateCount: updateCount, nested: {count: updateCount}}];
+	    	updateCount++;
         return guys;
     });
     stop();
+    
     Guy.findAll({}, function(guys){
-    	start();
+    		console.log("1st callback, store is empty",can.isEmptyObject(Guy.store))
+    		start();
+    		console.log("binding on item",can.isEmptyObject(Guy.store))
         guys[0].bind('updated', function(){});
         ok(Guy.store[1], 'instance stored');
-    	equals(Guy.store[1].updateCount, 0, 'updateCount is 0')
-    	equals(Guy.store[1].nested.count, 0, 'nested.count is 0')
+	    	equals(Guy.store[1].updateCount, 0, 'updateCount is 0')
+	    	equals(Guy.store[1].nested.count, 0, 'nested.count is 0')
     })
     Guy.findAll({}, function(guys){
-    	equals(Guy.store[1].updateCount, 1, 'updateCount is 1')
-    	equals(Guy.store[1].nested.count, 1, 'nested.count is 1')
+    		console.log("2nd callback")
+	    	equals(Guy.store[1].updateCount, 1, 'updateCount is 1')
+	    	equals(Guy.store[1].nested.count, 1, 'nested.count is 1')
     })
 	
 })
@@ -886,18 +890,25 @@ test("destroying a model impact the right list", function() {
 			return def;
 		}
 	},{});
-	var list1 = new Person.List([ new Person({ id : 1 }), new Person({ id : 2 }) ]),
-		list2 = new Organisation.List([ new Organisation({ id : 1 }), new Organisation({ id : 2 }) ]);
+	var people = new Person.List([ new Person({ id : 1 }), new Person({ id : 2 }) ]),
+		orgs = new Organisation.List([ new Organisation({ id : 1 }), new Organisation({ id : 2 }) ]);
+
+	// you must be bound to the list to get this
+	people.bind("length",function(){})
+	orgs.bind("length",function(){})
 
 	// set each person to have an organization
-	list1[0].attr('organisation', list2[0]);
-	list1[1].attr('organisation', list2[1]);
+	people[0].attr('organisation', orgs[0]);
+	people[1].attr('organisation', orgs[1]);
 
-	equal( list1.length, 2, "Initial Person.List has length of 2")
-	equal( list2.length, 2, "Initial Organisation.List has length of 2")
-	list2[0].destroy();
-	equal( list1.length, 2, "After destroying list2[0] Person.List has length of 2")
-	equal( list2.length, 1, "After destroying list2[0] Organisation.List has length of 1")
+	equal( people.length, 2, "Initial Person.List has length of 2")
+	equal( orgs.length, 2, "Initial Organisation.List has length of 2");
+	
+	orgs[0].destroy();
+	
+	equal( people.length, 2, "After destroying orgs[0] Person.List has length of 2");
+	
+	equal( orgs.length, 1, "After destroying orgs[0] Organisation.List has length of 1")
 
 });
 
@@ -965,7 +976,8 @@ test("calling destroy with unsaved model triggers destroyed event (#181)", funct
 		newModel = new MyModel(),
 		list = new MyModel.List(),
 		deferred;
-
+	// you must bind to a list for this feature
+	list.bind("length",function(){});
 	list.push(newModel);
 	equal(list.attr('length'), 1, "List length as expected");
 

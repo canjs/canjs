@@ -1048,16 +1048,9 @@ steal('can/util','can/observe', function( can ) {
 		 * model instance is removed from the store, freeing memory.  
 		 * 
 		 */
-		bind: function(eventName){
-			if ( ! ignoreHookup.test( eventName )) { 
-				if ( ! this._bindings ) {
-					this.constructor.store[this.__get(this.constructor.id)] = this;
-					this._bindings = 0;
-				}
-				this._bindings++;
-			}
-			
-			return can.Observe.prototype.bind.apply( this, arguments );
+		_bindsetup: function(){
+			this.constructor.store[this.__get(this.constructor.id)] = this;
+			return can.Observe.prototype._bindsetup.apply( this, arguments );
 		},
 		/**
 		 * @function unbind
@@ -1083,14 +1076,10 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * @return {model} the model instance.
 		 */
-		unbind : function(eventName){
-			if(!ignoreHookup.test(eventName)) { 
-				this._bindings--;
-				if(!this._bindings){
-					delete this.constructor.store[getId(this)];
-				}
-			}
-			return can.Observe.prototype.unbind.apply(this, arguments);
+		_bindteardown: function(){
+			console.log("removing",getId(this))
+			delete this.constructor.store[getId(this)];
+			return can.Observe.prototype._bindteardown.apply( this, arguments );;
 		},
 		// Change `id`.
 		___set: function( prop, val ) {
@@ -1243,18 +1232,15 @@ steal('can/util','can/observe', function( can ) {
    *
    */
 	var ML = can.Model.List = can.Observe.List({
-		setup : function(){
-			can.Observe.List.prototype.setup.apply(this, arguments );
-			// Send destroy events.
-			var self = this;
-			this.bind('change', function(ev, how){
-				if(/\w+\.destroyed/.test(how)){
-					var index = self.indexOf(ev.target);
-					if (index != -1) {
-						self.splice(index, 1);
-					}
+		_changes: function(ev, attr){
+			can.Observe.List.prototype._changes.apply(this, arguments );
+			if(/\w+\.destroyed/.test(attr)){
+				console.log("destroyed on", this._cid)
+				var index = this.indexOf(ev.target);
+				if (index != -1) {
+					this.splice(index, 1);
 				}
-			})
+			}
 		}
 	})
 
