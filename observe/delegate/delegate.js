@@ -282,7 +282,7 @@ steal('can/util', 'can/observe', function(can) {
 		 *  - oldVal - the old value set on the observe
 		 *  - prop - the prop name that was changed
 		 * 
-		 * @return {jQuery.Delegate} the delegate for chaining
+		 * @return {can.Observe} the observe for chaining
 		 */
 		delegate :  function(selector, event, handler){
 			selector = can.trim(selector);
@@ -336,7 +336,7 @@ steal('can/util', 'can/observe', function(can) {
 		 * @param {String} selector the attribute name of the object you want to undelegate from.
 		 * @param {String} event the event name
 		 * @param {Function} handler the callback handler
-		 * @return {jQuery.Delegate} the delegate for chaining
+		 * @return {can.Observe} the observe for chaining
 		 */
 		undelegate : function(selector, event, handler){
 			selector = can.trim(selector);

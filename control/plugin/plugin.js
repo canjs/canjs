@@ -21,7 +21,7 @@ can.Control.setup = function() {
 	if ( this !== can.Control ) {
 
 		/**
-		 * @attribute can.Control.plugin.static.pluginName
+		 * @property can.Control.plugin.static.pluginName
 		 * @parent can.Control.plugin
 		 *
 		 * Setting the static `pluginName` property allows you to override the default name
@@ -87,7 +87,7 @@ $.fn.extend({
 	 *
 	 *		$('.widgets').controls('MyBox') //-> [ MyBox ]
 	 *
-	 * @param {Object} control if exists the control instance(s) with that constructor function or type will be returned.
+	 * @param {constructor|String} [control] if exists the control instance(s) with that constructor function or type will be returned.
 	 * @return {Array} an array of control instance(s).
 	 */
 	controls: function() {
@@ -125,7 +125,7 @@ $.fn.extend({
 	 *
 	 *		$('.widgets').controls() //-> MyBox
 	 *
-	 * @param {Object} [control] if exists the first control instance with that constructor function or type will be returned.
+	 * @param {constructor|String} [control] if exists the first control instance with that constructor function or type will be returned.
 	 * @return {can.Control} the first control.
 	 */
 	control: function( control ) {

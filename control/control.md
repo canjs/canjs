@@ -1,4 +1,4 @@
-@class can.Control
+@constructor can.Control
 @parent canjs
 @plugin can/control
 @download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/control/control.js

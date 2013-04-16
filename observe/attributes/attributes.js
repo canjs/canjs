@@ -11,7 +11,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 	
 	can.extend(clss, {
 		/**
-		 * @attribute can.Observe.static.attributes
+		 * @property can.Observe.static.attributes
 		 * @parent can.Observe.static
 		 *
 		 * `can.Observe.attributes` is a property that contains key/value pair(s) of an attribute's name and its
@@ -29,7 +29,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 		attributes : {},
 		
 		/**
-		 * @attribute can.Observe.static.convert
+		 * @property can.Observe.static.convert
 		 * @parent can.Observe.static
 		 *
 		 * You often want to convert from what the observe sends you to a form more useful to JavaScript. 
@@ -152,7 +152,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 			}
 		},
 		/**
-		 * @attribute can.Observe.static.serialize
+		 * @property can.Observe.static.serialize
 		 * @parent can.Observe.static
 		 *
 		 * `can.Observe.static.seralize` is object of name-function pairs that are used to 
@@ -199,7 +199,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 	
 	/**
 	 * @hide
-	 * @attribute can.Observe.static.setup
+	 * @function can.Observe.static.setup
 	 * @parent can.Observe.attributes
 	 *
 	 * `can.Observe.static.setup` overrides default `can.Observe` setup to provide

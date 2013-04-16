@@ -1,10 +1,10 @@
-@class can.route
+@page can.route
 @inherits can.Observe
 @plugin can/route
 @parent canjs
 
 
-`can.route(route, defults)` helps manage browser history (and
+`can.route(route, defaults)` helps manage browser history (and
 client state) by
 synchronizing the window.location.hash with
 an [can.Observe].

@@ -1,4 +1,4 @@
-@class can.Model
+@constructor can.Model
 @parent canjs
 
 Model adds service encapsulation to [can.Observe].  Model lets you:

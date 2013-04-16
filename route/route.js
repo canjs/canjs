@@ -259,8 +259,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 */
 		data: new can.Observe({}),
         /**
-         * @attribute
-         * @type Object
+         * @property {Object} routes
 		 * @hide
 		 * 
          * A list of routes recognized by the router indixed by the url used to add it.

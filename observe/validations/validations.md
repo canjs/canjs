@@ -5,7 +5,7 @@
 @test can/observe/validations/qunit.html
 
 The `can/observe/validations` plugin provides validations on observes. Validations
-are s on [can.Observe]'s __static__ `init` function.
+are set on [can.Observe]'s __static__ `init` function.
 
 The following validates the `birthday` attribute in Contacts:
 

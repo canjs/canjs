@@ -117,7 +117,7 @@ steal('can/util','can/observe', function( can ) {
 	//		`type` - The default http request type
 	//		`data` - A method that takes the `arguments` and returns `data` used for ajax.
 	/** 
-	 * @Static
+	 * @static
 	 */
 	//
 		/**
@@ -136,7 +136,7 @@ steal('can/util','can/observe', function( can ) {
 		 * @param {String} eventType The type of event.  It must be
 		 * `"created"`, `"udpated"`, `"destroyed"`.
 		 * 
-		 * @param {Function} handler(event,instance) A callback function
+		 * @param {function(Event,can.Model)} handler A callback function
 		 * that gets called with the event and instance that was
 		 * created, destroyed, or updated.
 		 * 
@@ -160,14 +160,14 @@ steal('can/util','can/observe', function( can ) {
 		 * @param {String} eventType The type of event.  It must be
 		 * `"created"`, `"udpated"`, `"destroyed"`.
 		 * 
-		 * @param {Function} handler(event,instance) A callback function
+		 * @param {function(Event,can.Model)} handler A callback function
 		 * that was passed to `bind`.
 		 * 
 		 * @return {can.Model} the model constructor function.
 		 */
 		// 
 		/**
-		 * @attribute id
+		 * @property id
 		 * The name of the id field.  Defaults to 'id'. Change this if it is something different.
 		 * 
 		 * For example, it's common in .NET to use Id.  Your model might look like:
@@ -177,7 +177,7 @@ steal('can/util','can/observe', function( can ) {
 		 *     },{});
 		 */
 		/**
-		 * @attribute removeAttr
+		 * @property removeAttr
 		 * Sets whether model conversion should remove non existing attributes or merge with
 		 * the existing attributes. The default is `false`.
 		 * For example, if `Task.findOne({ id: 1 })` returns
@@ -245,7 +245,7 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * 
 		 * @param {Object} attrs Attributes on the model instance
-		 * @return {Deferred} A deferred that resolves to 
+		 * @return {can.Deferred} A deferred that resolves to 
 		 * an object with the id of the new instance and
 		 * other properties that should be set on the instance.
 		 */
@@ -317,9 +317,9 @@ steal('can/util','can/observe', function( can ) {
 		 *     },{});
 		 * 
 		 * 
-		 * @param {String} id the id of the model instance
+		 * @param {String|Number} id the id of the model instance
 		 * @param {Object} attrs Attributes on the model instance
-		 * @return {Deferred} A deferred that resolves to
+		 * @return {can.Deferred} A deferred that resolves to
 		 * an object of attribute / value pairs of property changes the client doesn't already 
 		 * know about. For example, when you update a name property, the server might 
 		 * update other properties as well (such as updatedAt). The server should send 
@@ -378,7 +378,7 @@ steal('can/util','can/observe', function( can ) {
 		 * Destroy just needs to return a deferred that resolves.
 		 * 
 		 * @param {String|Number} id the id of the instance you want destroyed
-		 * @return {Deferred} a deferred that resolves when the model instance is destroyed.
+		 * @return {can.Deferred} a deferred that resolves when the model instance is destroyed.
 		 */
 		destroy : {
 			type : "delete",
@@ -453,17 +453,17 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 *     Recipe.findAll({limit: 20})
 		 * 
-		 * @param {Function} [success(items)] called with a [can.Model.List] of model 
+		 * @param {function(can.Model.List)} [success] called with a [can.Model.List] of model 
 		 * instances.  The model isntances are created from the Deferred's resolved data.
 		 * 
 		 *     Recipe.findAll({limit: 20}, function(recipes){
 		 *       recipes.constructor //-> can.Model.List
 		 *     })
 		 * 
-		 * @param {Function} error(xhr) `error` is called if the Deferred is rejected with the
+		 * @param {function(XmlHttpRequest)} error `error` is called if the Deferred is rejected with the
 		 * xhr handler.
 		 * 
-		 * @return {Deferred} a [can.Deferred Deferred] that __resolves__ to
+		 * @return {can.Deferred} a [can.Deferred Deferred] that __resolves__ to
 		 * a [can.Model.List] of the model instances and __rejects__ to the XHR object.
 		 * 
 		 *     Recipe.findAll()
@@ -542,17 +542,17 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 *     Recipe.findAll({id: 20})
 		 *
-		 * @param {Function} [success(item)] called with a model 
+		 * @param {function(can.Model)} [success] called with a model 
 		 * instance.  The model isntance is created from the Deferred's resolved data.
 		 * 
 		 *     Recipe.findOne({id: 20}, function(recipe){
 		 *       recipe.constructor //-> Recipe
 		 *     })
 		 * 
-		 * @param {Function} error(xhr) `error` is called if the Deferred is rejected with the
+		 * @param {function(XmlHttpRequest)} error `error` is called if the Deferred is rejected with the
 		 * xhr handler.
 		 * 
-		 * @return {Deferred} a [can.Deferred Deferred] that __resolves__ to
+		 * @return {can.Deferred} a [can.Deferred Deferred] that __resolves__ to
 		 * the model instance and __rejects__ to the XHR object.
 		 * 
 		 *     Recipe.findOne({id: 20})
@@ -715,7 +715,7 @@ steal('can/util','can/observe', function( can ) {
 		 * `can.Model.models` passes each intstance's data to `can.Model.model` to
 		 * create the individual instances.
 		 * 
-		 * @param {Array|Objects} instancesRawData An array of raw name - value pairs objects like:
+		 * @param {Array<Object>} instancesRawData An array of raw name - value pairs objects like:
 		 * 
 		 *      [{id: 1, name : "dishes"},{id:2, name: "laundry"}, ...]
 		 * 
@@ -728,7 +728,7 @@ steal('can/util','can/observe', function( can ) {
 		 *
 		 * @param {can.Observe.List} [oldList] If passed, updates oldList with the converted instancesRawData
 		 * instead of returning a new model list.
-		 * @return {Array} a [can.Model.List] of instances.  Each instance is created with
+		 * @return {can.Model.List} a [can.Model.List] of instances.  Each instance is created with
 		 * [can.Model.model].
 		 */
 		models: function( instancesRawData, oldList ) {
@@ -854,7 +854,7 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 *      {id: 1, name : "dishes"}
 		 *
-		 * @return {model} a model instance.
+		 * @return {can.Model} a model instance.
 		 */
 		model: function( attributes ) {
 			if ( ! attributes ) {
@@ -945,9 +945,9 @@ steal('can/util','can/observe', function( can ) {
 		 *     });
 		 * 
 		 * 
-		 * @param {Function} [success(instance,data)]  Called if a successful save.
+		 * @param {function(can.Model,Object)} [success]  Called if a successful save.
 		 * 
-		 * @param {Function} [error(xhr)] Called with (jqXHR) if the 
+		 * @param {function(XmlHttpRequest)} [error] Called with (jqXHR) if the 
 		 * save was not successful. It is passed the ajax request's jQXHR object.
 		 * 
 		 * @return {can.Deferred} a deferred that resolves to the instance
@@ -983,8 +983,8 @@ steal('can/util','can/observe', function( can ) {
 		 *       recipe.destroy();
 		 *     })
 		 * 
-		 * @param {Function} [success(instance)] called if a successful destroy
-		 * @param {Function} [error(xhr)] called if an unsuccessful destroy
+		 * @param {function(can.Model)} [success] called if a successful destroy
+		 * @param {function(XmlHttpRequest)} [error] called if an unsuccessful destroy
 		 * @return {can.Deferred} a deferred that resolves with the destroyed instance
 		 */
 		destroy: function( success, error ) {
@@ -1078,10 +1078,10 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * @param {String} eventName The type of event.  
 		 * 
-		 * @param {Function} handler(event,args...) A callback function
+		 * @param {Function} handler A callback function
 		 * that was passed to `bind`.
 		 * 
-		 * @return {model} the model instance.
+		 * @return {can.Model} the model instance.
 		 */
 		unbind : function(eventName){
 			if(!ignoreHookup.test(eventName)) { 
@@ -1168,7 +1168,7 @@ steal('can/util','can/observe', function( can ) {
   // Model lists are just like `Observe.List` except that when their items are 
   // destroyed, it automatically gets removed from the list.
   /**
-   * @class can.Model.List
+   * @constructor can.Model.List
    * @inherits can.Observe.List
    * @parent canjs
    *
