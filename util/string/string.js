@@ -17,11 +17,12 @@ steal('can/util',function(can) {
 		// Returns the `prop` property from `obj`.
 		// If `add` is true and `prop` doesn't exist in `obj`, create it as an 
 		// empty object.
-		getNext = function( obj, prop, add ) {
-			return prop in obj ?
-				obj[ prop ] : 
-				( add && ( obj[ prop ] = {} ));
-		},
+    getNext = function( obj, prop, add ) {
+      var result = obj[prop];
+
+      if(result === undefined && add === true) { result = obj[prop] = {} }
+      return result
+    },
 
 		// Returns `true` if the object can have properties (no `null`s).
 		isContainer = function( current ) {

@@ -12,8 +12,11 @@ test("can.sub", function(){
 });
 
 test("can.sub with undefined values", function() {
-	var subbed = can.sub('test{exists} plus{noexists}', { exists : 'test' });
-	ok(subbed === null, 'Rendering with undefined values should return undefined');
+  var subbed = can.sub('test{exists} plus{noexists}', { exists : 'test' });
+  same(subbed, null, 'Rendering with undefined values should return null');
+
+  var subbed = can.sub('test{exists} plus{noexists}', { exists : 'test' }, true);
+  same(subbed, null, 'Rendering with undefined values should return null even when remove param is true');
 });
 
 test("can.sub double", function(){
@@ -36,6 +39,11 @@ test("can.getObject", function(){
 	var obj = can.getObject("foo", [{a: 1}, {foo: 0}]);
 
 	equals(obj,0, 'got 0 (falsey stuff)')
+
+	// Remove
+
+	var obj = can.getObject("foo", {}, false)
+	equals(obj, undefined, "got 'undefined'")
 });
 
 test("can.esc",function(){
