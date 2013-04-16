@@ -2,7 +2,8 @@
 <html>
 <head>
 	<title><%= configuration.description %> Test Suite</title>
-	<link rel="stylesheet" type="text/css" href="<%= root %>/lib/qunit/qunit.css"/>
+	<base href="<%= root %>" />
+	<link rel="stylesheet" type="text/css" href="lib/qunit/qunit.css"/>
 </head>
 <body>
 <h1 id="qunit-header"><%= configuration.description %> Test Suite</h1>
@@ -14,21 +15,19 @@
 <ol id="qunit-tests"></ol>
 <div id="qunit-test-area"></div>
 
-<script type="text/javascript" src="<%= root %>/lib/qunit/qunit.js"></script>
-<script type="text/javascript" src="<%= root %>/dist/<%= dist %>.js"></script>
-<script type="text/javascript" src="<%= root %>/dist/can.fixture.js"></script>
-<script type="text/javascript" src="<%= root %>/test/test.js"></script>
+<script type="text/javascript" src="lib/qunit/qunit.js"></script>
+<script type="text/javascript" src="<%= configuration.library %>"></script>
+<script type="text/javascript" src="dist/<%= dist %>.js"></script>
+<script type="text/javascript" src="dist/can.fixture.js"></script>
+<script type="text/javascript" src="test/test.js"></script>
 <% modules.forEach(function(module) { %>
 	<% if(!module.isDefault) { %>
-	<script type="text/javascript" src="<%= root %>/dist/<%= module %>.js"></script>
+	<script type="text/javascript" src="dist/<%= module %>.js"></script>
 	<% } %>
 <% }); %>
 <% tests.forEach(function(test) { %>
-	<script type="text/javascript" src="<%= root %>/<%= test %>"></script>
+	<script type="text/javascript" src="<%= test %>"></script>
 <% }); %>
-<script type="text/javascript">
-	can.fixture.rootUrl = '<%= root %>/../';
-</script>
 
 </body>
 </html>

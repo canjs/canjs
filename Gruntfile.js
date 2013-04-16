@@ -24,7 +24,15 @@ module.exports = function (grunt) {
 				template: 'test/templates/__configuration__.html.ejs',
 				builder: '<%= builder %>',
 				root: '../',
-				out: 'test/'
+				out: 'test/',
+				transform: {
+					options: function(config) {
+						this.steal.map = (this.steal && this.steal.map) || {};
+						this.steal.map['*'] = this.steal.map['*'] || {};
+						this.steal.map['*']['can/'] = '';
+						return this;
+					}
+				}
 			},
 			dist: {
 				template: 'test/templates/__configuration__-dist.html.ejs',

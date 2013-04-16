@@ -352,29 +352,29 @@ test("dashes in routes", function(){
 	window.location.hash = "";
 });
 
-test("listening to hashchange (#216, #124)", function() {
-	var testarea = document.getElementById('qunit-test-area');
-	var iframe = document.createElement('iframe');
-	stop();
-
-	window.routeTestReady = function(iCanRoute){
-		ok(!iCanRoute.attr('bla'), 'Value not set yet');
-		iCanRoute.bind('change', function() {
-			equal(iCanRoute.attr('bla'), 'blu', 'Got route change event and value is as expected');
-			testarea.innerHTML = '';
-			start();
-		});
-
-		setTimeout(function() {
-			iframe.src = iframe.src + '#!bla=blu';
-		}, 100);
-	};
-
-	iframe.src = can.test.path("route/testing.html?1");
-	testarea.appendChild(iframe);
-});
-
 if(typeof steal !== 'undefined') {
+	test("listening to hashchange (#216, #124)", function() {
+		var testarea = document.getElementById('qunit-test-area');
+		var iframe = document.createElement('iframe');
+		stop();
+
+		window.routeTestReady = function(iCanRoute){
+			ok(!iCanRoute.attr('bla'), 'Value not set yet');
+			iCanRoute.bind('change', function() {
+				equal(iCanRoute.attr('bla'), 'blu', 'Got route change event and value is as expected');
+				testarea.innerHTML = '';
+				start();
+			});
+
+			setTimeout(function() {
+				iframe.src = iframe.src + '#!bla=blu';
+			}, 100);
+		};
+
+		iframe.src = can.test.path("route/testing.html?1");
+		testarea.appendChild(iframe);
+	});
+
 	test("updating the hash", function(){
 		stop();
 		window.routeTestReady = function(iCanRoute, loc){
@@ -454,4 +454,5 @@ if(typeof steal !== 'undefined') {
 		can.$("#qunit-test-area")[0].appendChild(iframe);
 	});
 }
+
 })();
