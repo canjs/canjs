@@ -230,6 +230,10 @@ function (can) {
 		return wrapped[index];
 	}
 
+  var IN_ARRAY = $.inArray;
+  can.inArray = $.inArray = function(element, array, i) {
+    return IN_ARRAY.call($, element, array || [], i);
+  }
 
 	return can;
 });
