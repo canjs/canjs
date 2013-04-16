@@ -221,7 +221,7 @@ module.exports = function (grunt) {
 			server: {
 				options: {
 					port: 8000,
-					base: '..'
+					base: '.'
 				}
 			}
 		},
@@ -229,11 +229,11 @@ module.exports = function (grunt) {
 			all: {
 				options: {
 					urls: [
-						'http://localhost:8000/can/test/dojo.html',
-						'http://localhost:8000/can/test/jquery.html',
+						'http://localhost:8000/test/dojo.html',
+						'http://localhost:8000/test/jquery.html',
 						// 'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/can/test/mootools.html',
-						'http://localhost:8000/can/test/yui.html'
+						'http://localhost:8000/test/mootools.html',
+						'http://localhost:8000/test/yui.html'
 					]
 				}
 			}
