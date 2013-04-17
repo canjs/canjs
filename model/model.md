@@ -1,6 +1,21 @@
 @constructor can.Model
 @parent canjs
 
+@signature `can.Model([name,] staticProperties, instanceProperties)`
+Creates a can.Model class constructor. (See [can.Construct] for more details on this syntax.)
+@param {String} [name] If given, this will be the globally-available name of the constructor function.
+@param {Object} staticProperties The static properties of the class. See below for properties with
+special meanings to `can.Model`.
+@param {Object} instanceProperties The instance properties of instances of the class. These will usually
+be functions.
+@return {Function} A can.Model constructor.
+
+@signature `new ModelConstructor([options])`
+Creates a new instance of _ModelConstructor_.
+@param {Object} [options] Options to pass to `setup` or `init`.
+@return {can.Model} A new instance of _ModelConstructor_.
+
+@body
 Model adds service encapsulation to [can.Observe].  Model lets you:
 
  - Get and modify data from the server
@@ -8,7 +23,6 @@ Model adds service encapsulation to [can.Observe].  Model lets you:
  - Unifying service data into the same objects
  
 ## Get and modify data fron the server
-
 
 can.Model makes connecting to a JSON REST service 
 really easy.  The following models `todos` by

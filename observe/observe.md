@@ -1,4 +1,4 @@
-@page can.Observe
+@constructor can.Observe
 @parent canjs
 @test can/observe/qunit.html
 

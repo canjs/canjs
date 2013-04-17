@@ -108,7 +108,7 @@ steal('can/util','can/construct', function(can) {
 	
 		
 	/**
-	 * @add can.Observe
+	 * @constructor can.Observe
 	 */
 	var Observe = can.Observe = can.Construct( {
 	/**
@@ -1100,7 +1100,7 @@ steal('can/util','can/construct', function(can) {
 			return serialize(this, 'serialize', []);
 		},
 		/**
-		 * @function can.Observe.List.each each
+		 * @function can.Observe.List.prototype.each each
 		 * @description Call a function on each element of a List.
 		 * @signature `each(callback)`
 		 * 

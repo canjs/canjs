@@ -1,3 +1,6 @@
+/**
+ * @documentjs-ignore
+ */
 steal('can/control/modifier', function(Control){
 
 /*

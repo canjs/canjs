@@ -1,4 +1,4 @@
-@page can.Construct
+@constructor can.Construct
 @parent canjs
 
 `can.Construct` provides a way to easily use the power of prototypal inheritance without worrying
@@ -6,7 +6,6 @@ about hooking up all the particulars yourself. It is inspired by John Resig's
 [http://ejohn.org/blog/simple-javascript-inheritance/|Simple JavaScript Inheritance] concept.
 
 @function can.Construct
-@constructor
 @signature `can.Construct([name, [staticProperties,]] instanceProperties)`
 @param {String} [name] the namespace and name of the constructor
 @param {Object} [staticProperties] properties that will belong to the constructor

@@ -37,11 +37,11 @@ steal('can/util','can/construct', function( can ) {
 		basicProcessor;
 	
 	/**
-	 * @add can.Control
+	 * @constructor can.Control
 	 */
 	var Control = can.Control = can.Construct(
 	/** 
-	 * @Static
+	 * @static
 	 */
 	{
 		// Setup pre-processes which methods are event listeners.
@@ -243,12 +243,21 @@ steal('can/util','can/construct', function( can ) {
 		defaults: {}
 	},
 	/** 
-	 * @Prototype
+	 * @prototype
 	 */
 	{
 		// Sets `this.element`, saves the control in `data, binds event
 		// handlers.
 		/**
+		 * @description Perform pre-initialization logic.
+		 * @signature `setup(element, options)`
+		 * @param {HTMLElement} element the element this instance operates on.
+		 * @param {Object} [options] option values for the control.  These get added to
+		 * this.options and merged with [can.Control.static.defaults defaults].
+		 * @return {undefined|Array} return an array if you want to change what init is called with. By
+		 * default it is called with the element and options passed to the control.
+		 * 
+		 * @body
 		 * Setup is where most of control's magic happens.  It does the following:
 		 * 
 		 * ### Sets this.element
@@ -277,13 +286,7 @@ steal('can/util','can/construct', function( can ) {
 		 * 
 		 * ### Binds event handlers
 		 * 
-		 * Setup does the event binding described in [can.control.listening Listening To Events].
-		 * 
-		 * @param {HTMLElement} element the element this instance operates on.
-		 * @param {Object} [options] option values for the control.  These get added to
-		 * this.options and merged with [can.Control.static.defaults defaults].
-		 * @return {undefined|Array} return an array if you want to change what init is called with. By
-		 * default it is called with the element and options passed to the control.
+		 * Setup does the event binding described in [can.Control.listening Listening To Events].
 		 */
 		setup: function( element, options ) {
 
@@ -351,6 +354,7 @@ steal('can/util','can/construct', function( can ) {
 
 			// Gets passed into `init`.
 			/**
+			 * @description The element the Control is associated with.
 			 * @property element
 			 * 
 			 * The control instance's HTMLElement (or window) wrapped by the 
@@ -452,7 +456,25 @@ steal('can/util','can/construct', function( can ) {
 			return [this.element, this.options];
 		},
 		/**
-		 * `this.on( [element, selector, eventName, handler] )` is used to rebind 
+		 * @description Bind an event handler to a Control, or rebind all event handlers on a Control.
+		 * @signature `on([el,] selector, eventName, func)`
+		 * @param {HTMLElement|jQuery collection|Object} [el=this.element]
+		 * The element to be bound.  If no element is provided, the control's element is used instead.
+		 * @param {String} selector A css selector for event delegation.
+		 * @param {String} eventName The event to listen for.
+		 * @param {Function|String} func A callback function or the String name of a control function.  If a control
+		 * function name is given, the control function is called back with the bound element and event as the first
+		 * and second parameter.  Otherwise the function is called back like a normal bind.
+		 * @return {Number} The id of the binding in this._bindings
+		 * 
+		 * @body
+		 * `on(el, selector, eventName, func)` binds an event handler for an event to a selector under the scope of the given element.
+		 *
+		 * @signature `on()`
+		 * @return {Number} The number of handlers bound to this Control.
+		 *
+		 * @body
+		 * `this.on()` is used to rebind 
 		 * all event handlers when [can.Control::options this.options] has changed.  It
 		 * can also be used to bind or delegate from other elements or objects.
 		 * 
@@ -525,16 +547,6 @@ steal('can/util','can/construct', function( can ) {
 		 *     somethingClicked: function( el, ev ) {
 		 *       
 		 *     }
-		 * 
-		 * @signature on([el,] selector, eventName, func)
-		 * @param {HTMLElement|jQuery collection|Object} [el=this.element]
-		 * The element to be bound.  If no element is provided, the control's element is used instead.
-		 * @param {String} selector A css selector for event delegation.
-		 * @param {String} eventName The event to listen for.
-		 * @param {Function|String} func A callback function or the String name of a control function.  If a control
-		 * function name is given, the control function is called back with the bound element and event as the first
-		 * and second parameter.  Otherwise the function is called back like a normal bind.
-		 * @return {Number} The id of the binding in this._bindings
 		 */
 		on: function( el, selector, eventName, func ) {
 			if ( ! el ) {
@@ -607,7 +619,9 @@ steal('can/util','can/construct', function( can ) {
 		},
 		// Prepares a `control` for garbage collection
 		/**
-		 * @function destroy
+		 * @description Clean up after a Control that has been removed.
+		 * @signature `destroy()`
+		 * 
 		 * `destroy` prepares a control for garbage collection and is a place to
 		 * reset any changes the control has made.  
 		 * 

@@ -1,3 +1,6 @@
+/**
+ * @documentjs-ignore
+ */
 /** @license ES6/DOM4 polyfill for IE8 | @version 0.7 final | MIT License | github.com/termi */
 
 // ==ClosureCompiler==

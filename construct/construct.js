@@ -12,7 +12,7 @@ steal("can/util/string", function(can) {
 	var initializing = 0;
 
 	/** 
-	 * @add can.Construct 
+	 * @constructor can.Construct 
 	 */
 	can.Construct = function() {
 		if (arguments.length) {

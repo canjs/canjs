@@ -1,4 +1,7 @@
 /**
+ * @documentjs-ignore
+ */
+/**
  * QUnit 1.1.0 - A JavaScript Unit Testing Framework
  *
  * http://docs.jquery.com/QUnit
