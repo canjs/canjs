@@ -1,5 +1,5 @@
 // 1.69
-steal('can/util','can/construct', function(can) {
+steal('can/util','can/util/bind','can/construct', function(can, bind) {
 	// ## observe.js  
 	// `can.Observe`  
 	// _Provides the observable pattern for JavaScript Objects._  
@@ -90,35 +90,6 @@ steal('can/util','can/construct', function(can) {
 			});
 			return where;
 		},
-		bind = function(){
-			can.addEvent.apply(this, arguments);
-			if(!this._init){
-				if(!this._bindings ){
-					// setup live-binding
-					this._bindsetup && this._bindsetup();
-					this._bindings = 0;
-				}
-				this._bindings++;
-			}
-			
-			return this;
-		},
-		unbind = function(ev, handler){
-			can.removeEvent.apply(this, arguments);
-			if(!handler){
-				// This is not correct. We need to 
-				// have a way to know the number of event handlers
-				// for a given item.
-				this._bindings = 0
-			} else {
-				this._bindings--;
-			}
-			
-			if(!this._bindings){
-				this._bindteardown && this._bindteardown();
-			}
-			return this;
-		},
 		attrParts = function(attr, keepKey) {
 			if(keepKey) {
 				return [attr];
@@ -154,8 +125,8 @@ steal('can/util','can/construct', function(can) {
 	 * @static
 	 */
 		// keep so it can be overwritten
-		bind : bind,
-		unbind: unbind,
+		bind : bind.bind,
+		unbind: bind.unbind,
 		id: "id",
 		canMakeObserve : canMakeObserve,
 		// starts collecting events
@@ -819,7 +790,7 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * @return {can.Observe} the observe for chaining.
 		 */
-		bind: bind,
+		bind: bind.bind,
 		/**
 		 * @function unbind
 		 * Unbinds an event listener.  This works similar to jQuery's unbind.  This means you can 
@@ -843,7 +814,7 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * @return {can.Observe} the original observe for chaining.
 		 */
-		unbind: unbind,
+		unbind: bind.unbind,
 		/**
 		 * @hide
 		 * Get the serialized Object form of the observe.  Serialized

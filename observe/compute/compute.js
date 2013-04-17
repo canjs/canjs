@@ -1,4 +1,4 @@
-steal('can/util', function(can) {
+steal('can/util', 'can/util/bind', function(can, bind) {
 	
 	// returns the
     // - observes and attr methods are called by func
@@ -439,36 +439,35 @@ steal('can/util', function(can) {
 			value = newValue;
 			// might need a way to look up new and oldVal
 			can.Observe.triggerBatch(computed, "change",[newValue, oldValue])
+		}
 
-		}
-		/**
-		 * @function bind
-		 * `compute.bind("change", handler(event, newVal, oldVal))`
-		 */
-		computed.bind = function(ev, handler){
-			can.addEvent.apply(computed, arguments);
-			if( bindings === 0 ){
-				computeState.bound = true;
-				// setup live-binding
-				on.call(this, updater)
-				
-			}
-			bindings++;
-		}
-		/**
-		 * @function unbind
-		 * `compute.unbind("change", handler)`
-		 */
-		computed.unbind = function(ev, handler){
-			can.removeEvent.apply(computed, arguments);
-			bindings--;
-			if( bindings === 0 ){
-				off.call(this,updater)
-				computeState.bound = false;
-			}
-			
-		};
-		return computed;
+		return can.extend(computed,{
+			_bindsetup: function(){
+				if( bindings === 0 ){
+					computeState.bound = true;
+					// setup live-binding
+					on.call(this, updater)				
+				}
+				bindings++;
+			},
+			_bindteardown: function(){
+				bindings--;
+				if( bindings === 0 ){
+					off.call(this,updater)
+					computeState.bound = false;
+				}
+			},
+			/**
+			 * @function bind
+			 * `compute.bind("change", handler(event, newVal, oldVal))`
+			 */
+			bind: bind.bind,
+			/**
+			 * @function unbind
+			 * `compute.unbind("change", handler(event, newVal, oldVal))`
+			 */
+			unbind: bind.unbind
+		});
 	};
 	can.compute.binder = computeBinder;
 	return can.compute;
