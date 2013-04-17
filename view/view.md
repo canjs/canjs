@@ -11,6 +11,13 @@
  
 can.view supports other templating languages, but using [can.EJS] is highly encouraged.
 
+@signature `can.view(view, data, helpers)`
+@param {String} view The URL to a template or the ID of a template.
+@param {Object} data Data to populate the template with.
+@param {Object.<String, function>} helpers Helpers referenced in the template.
+@return {String} The template with the data interpolated into it.
+
+@body
 ## Use
 
 `can.view( idOrUrl, data, helpers )` loads template content from an element, a url or a string, renders
@@ -103,6 +110,9 @@ CanJS supports the following template languages:
 
 - EmbeddedJS (ejs)
   <pre><code>&lt;h2>&lt;%= message %>&lt;/h2></code></pre>
+
+- Mustache (mustache)
+  <pre><code>&lt;h2{{message}}&lt/h2></code></pre>
   
 - JAML (jaml)
   <pre><code>h2(data.message);</code></pre>

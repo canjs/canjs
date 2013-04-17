@@ -100,7 +100,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 * @description Get a route URL from given data.
 		 * @signature `param(data)`
 		 * @param {data} object The data to populate the route with.
-		 * @return The route, with the data populated in it.
+		 * @return {String} The route, with the data populated in it.
 		 *
 		 * @body
 		 * Parameterizes the raw JS object representation provided in data.

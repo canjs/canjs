@@ -1,4 +1,4 @@
-@page Basics
+@page can.Mustache.Basics Basics
 @parent can.Mustache 0
 
 ## Keys

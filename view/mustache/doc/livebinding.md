@@ -1,7 +1,5 @@
-@page Binding
+@page can.Mustache.Binding Live Binding
 @parent can.Mustache 5
-
-# Live binding
 
 Live binding is templates that update themselves as the data 
 used in the magic tags change.

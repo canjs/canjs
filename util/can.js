@@ -1,66 +1,79 @@
 steal(function(){
 /**
- @function can.isDeferred
- @parent can.util
+@description Check if an object is a Deferred.
+@function can.isDeferred
+@parent can.util
+@signature `can.isDeferred(subject)`
+@param {*} subject The object to check
+@return {Boolean} Whether __subject__ is a Deferred.
 
- `can.isDeferred` returns if an object is an instance of [can.Deferred].
+@body
+`can.isDeferred` returns if an object is an instance of [can.Deferred].
 
- ## Example
- Convert any value to a Deferred:
+## Example
+Convert any value to a Deferred:
 
- function convertDeferred(dfd) {
- return can.isDeferred(dfd) ? dfd : can.Deferred(dfd);
- }
-
- @param {String} str the string to trim
- @return {String} the value of the string
- */
-
+function convertDeferred(dfd) {
+	return can.isDeferred(dfd) ? dfd : can.Deferred(dfd);
+}
+*/
+//
 /**
+@description Trim whitespace off a string.
 @function can.trim
 @parent can.util
+@signature `can.trim(str)`
+@param {String} str The string to trim.
+@return {String} The trimmed string.
 
-`can.trim(string)` removes leading and trailing whitespace from a string.  It will also
+@body
+`can.trim(str)` removes leading and trailing whitespace from a string.  It will also
 remove all newlines, spaces including non-breaking, and tabs.  If these occur in the middle
 of the string, then they will be persisted.
 
     can.trim( " foo " ) // -> "foo"
-
-@param {String} str the string to trim
-@return {String} the value of the string
  */
 //
 /**
+@description Convert an array-like object to an Array.
 @function can.makeArray
 @parent can.util
+@signature `can.makeArray(arrLike)`
+@param {Object} arrLike An array-like object.
+@return {Array} The converted object.
 
-`can.makeArray(object)` convert an array-like object into a array.
+`can.makeArray(arrLike)` converts an array-like object into a array.
 
     can.makeArray({0 : "zero", 1: "one", length: 2})
        // -> ["zero","one"]
-
-@param {Object} object to transform into array
-@return {Array} converted array
- */
-//
-/**
-@function can.isArray
-@parent can.util
-
-`can.array(object)` returns if the object is an Array.
-
-    can.isArray([]) //-> true
-    can.isArray(false)
-
-@param {Array} arr any JS object
-@return {Boolean} true if an array
 */
 //
 /**
+@description Check if an object is an array.
+@function can.isArray
+@parent can.util
+@signature `can.isArray(obj)`
+@param {*} obj The object to check.
+@return {Boolean} Whether __obj__ is an Array.
+
+@body
+`can.isArray(object)` returns if the object is an Array.
+
+    can.isArray([]) //-> true
+    can.isArray(false)
+*/
+//
+/**
+@description Iterate through an array or object.
 @function can.each
 @parent can.util
+@signature `can.each(collection, callback)`
+@param {Object} collection The object to iterate through.
+@param {Function} callback A function to call for each item in __collection__.
+__callback__ will recieve the item's value first and its key second.
 
-`can.each(object, function)` iterates through an array or object like
+@body
+`can.each(collection, callback)` iterates through an array or object like
 like [http://api.jquery.com/jQuery.each/ jQuery.each].
 
     can.each([{prop: "val1"}, {prop: "val2"}], 
@@ -69,15 +82,18 @@ like [http://api.jquery.com/jQuery.each/ jQuery.each].
       //  index=0 value={prop: "val1"}
       //  index=1 value={prop: "val2"}
     })
-
-@param {Object} arr any JS object or array
-@return {Object} the function passed to can.each
 */
 //
 /**
+@description Merge objects together.
 @function can.extend
 @parent can.util
+@signature `can.extend(target, ...obj)`
+@param {Object} target The object to merge properties into.
+@param {Object} obj Objects containing properties to merge.
+@return {Object} __target__, post-merge.
 
+@body
 `can.extend(target, objectN)` merges the contents of two or more objects together into the first object
 similarly to [http://api.jquery.com/jQuery.extend/ jQuery.extend].
 
@@ -87,75 +103,89 @@ similarly to [http://api.jquery.com/jQuery.extend/ jQuery.extend].
 
     can.extend(first, second, third); //-> first
 
-    first  //-> {a: "b",c : "d"}
+    first  //-> {a: "b", c: "d"}
     second //-> {a: "b"}
-    thrid  //-> {c: "d"}
-
-@param {Object} target The target object to extend
-@param {Object} [object1] An object containing properties to merge
-@param {Object} [objectN] Additional objects containing properties to merge
-@return {Object} The target object
+    third  //-> {c: "d"}
 */
 //
 /**
+@description Serialize an object into a query string.
 @function can.param
 @parent can.util
+@signature `can.param(obj)`
+@param {Object} obj An array or object to serialize.
+@return {String} The serialized string.
+
+@body
 Parameterizes an object into a query string
 like [http://api.jquery.com/jQuery.param/ jQuery.param].
 
     can.param({a: "b", c: "d"}) //-> "a=b&c=d"
-
-@param {Object} obj An array or object to serialize
-@return {String} The serialized object
 */
 //
 /**
+@description Check if an object has no properties.
 @function can.isEmptyObject
 @parent can.util
-`can.isEmptyObject(object)` returns if an object has no properties similar to
+@signature `can.isEmptyObject(obj)`
+@param {Object} obj The object to check.
+@param {Boolean} Whether the object is empty.
+
+@body
+`can.isEmptyObject(obj)` returns if an object has no properties similar to
 [http://api.jquery.com/jQuery.isEmptyObject/ jQuery.isEmptyObject].
 
     can.isEmptyObject({})      //-> true
     can.isEmptyObject({a:"b"}) //-> false
-
-@param {Object} object to evaluate if empty or not
-@param {Boolean} Whether the object is empty
 */
 //
 /**
+@description Bind a function to its context.
 @function can.proxy
 @parent can.util
-`can.proxy(function)` accepts a function and returns a 
-new one that will always the context from which it was 
+@signature `can.proxy(fn, context)`
+@param {Function} fn The function to bind to a context.
+@param {Object} context The context to bind the function to.
+@return {Function} A function that calls __fn__ in the context of __context__.
+
+@body
+`can.proxy(fn, context)` accepts a function and returns a 
+new one that will always have the context from which it was 
 called.  This works similar to [http://api.jquery.com/jQuery.proxy/ jQuery.proxy].
 
      var func = can.proxy(function(one){
        return this.a + one
      }, {a: "b"}); 
      func("two") //-> "btwo" 
-
-@param {Function} function to return in the same context
-@param {Object} context The context for the new function
-@return {Function} The new function
 */
 //
 /**
+@description Check if an Object is a function.
 @function can.isFunction
 @parent can.util
+@signature `can.isFunction(obj)`
+@param {Object} obj The object to check.
+@return {Boolean} Whether __obj__ is a function.
+
+@body
 `can.isFunction(object)` returns if an object is a function similar to
 [http://api.jquery.com/jQuery.isFunction/ jQuery.isFunction].
 
      can.isFunction({})           //-> false
      can.isFunction(function(){}) //-> true
-
-@param {Object} object to evaluate if is function
-@return {Boolean} Whether the object is a function
 */
 //
 /**
+@description Listen for events on an object.
 @function can.bind
 @parent can.util
+@signature `can.bind.call(target, eventName, handler)`
+@param {Object} target The object that emits events.
+@param {String} eventName The name of the event to listen for.
+@param {Function} handler The function to execute when the event occurs.
+@return {Object} The __target__.
 
+@body
 `can.bind(eventName, handler)` binds a callback handler
 on an object for a given event.  It works on:
 
@@ -185,16 +215,19 @@ __Binding to an HTMLElement__
     can.bind.call(el, "click", function(ev){
       this // el
     })
-
-@param {String} eventName The type of event to bind to
-@param {Function} handler The handler for the event
-@return {Object} this
 */
 //
 /**
+@description Stop listening for events on an object.
 @function can.unbind
 @parent can.util
+@signature `can.unbind.call(target, eventName, handler)`
+@param {Object} target The object that emits events.
+@param {String} eventName The name of the event to listen for.
+@param {Function} handler The function to unbind.
+@return {Object} The __target__.
 
+@body
 `can.unbind(eventName, handler)` unbinds a callback handler
 from an object for a given event.  It works on:
 
@@ -228,16 +261,20 @@ __Binding/unbinding to an HTMLElement__
       };
     can.bind.call(el, "click", handler)
     can.unbind.call(el, "click", handler)
-
-@param {String} eventName The type of event to unbind from
-@param {Function} handler The handler for the event
-@return {Object} this
 */
 //
 /**
+@description Listen for events from the children of an element.
 @function can.delegate
 @parent can.util
+@signature `can.delegate.call(element, selector, eventName, handler)`
+@param {HTMLElement} element The HTML element to bind to.
+@param {String} selector A selector for delegating downward.
+@param {String} eventName The name of the event to listen for.
+@param {Function} handler The function to execute when the event occurs.
+@return {Object} The __element__.
 
+@body
 `can.delegate(selector, eventName, handler)` binds a delegate handler
 on an object for a given event.  It works on:
 
@@ -255,16 +292,18 @@ __Delegate binding to an HTMLElement__
     can.delegate.call(el, ".selector", "click", function(ev){
       this // el
     })
-
-@param {String} selector The selector to delegate
-@param {String} eventName The type of event to bind to
-@param {Function} handler The handler for the event
-@return {Object} this
 */
 //
 /**
+@description Stop listening for events from the children of an element.
 @function can.undelegate
 @parent can.util
+@signature `can.undelegate.call(element, selector, eventName, handler)`
+@param {HTMLElement} element The HTML element to unbind from.
+@param {String} selector A selector for delegating downward.
+@param {String} eventName The name of the event to listen for.
+@param {Function} handler The function that was bound.
+@return {Object} The __element__.
 
 `can.undelegate(selector, eventName, handler)` unbinds a delegate handler
 on an object for a given event.  It works on:
@@ -285,28 +324,30 @@ __Delegate/undelegate binding to an HTMLElement__
       };
     can.delegate.call(el, ".selector", "click", handler)
     can.undelegate.call(el, ".selector", "click", handler)
-
-@param {String} selector The selector to undelegate
-@param {String} eventName The type of event to unbind from
-@param {Function} handler The handler for the event
-@return {Object} this
 */
 //
 /**
+@description Trigger an event.
 @function can.trigger
 @parent can.util
+@signature `can.trigger(target, eventName[, args])`
+@param {Object} target The object to trigger the event on.
+@param {String} eventName The event to trigger.
+@param {Array.<*>} [args] The event data.
 
 Trigger an event on an element or object.
-
-@param {can.$|Object} obj The object to trigger the event on
-@param {String} event The event to trigger
-@param {Array} [args] The event data
- */
+*/
 //
 /**
+@description Make an AJAX request.
 @function can.ajax
 @parent can.util
+@signature `can.ajax(settings)`
+@param {Object} settings Configuration options for the AJAX request.
+The list of configuration options is the same as for [jQuery.ajax()](http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings).
+@return {Deferred} A can.Deferred that resolves to the data.
 
+@body
 `can.ajax( settings )` is used to make an asynchronous HTTP (Ajax) request 
 similar to [http://api.jquery.com/jQuery.ajax/ jQuery.ajax].
 
@@ -316,16 +357,19 @@ similar to [http://api.jquery.com/jQuery.ajax/ jQuery.ajax].
 			can.$('.farm').html(animals);
 		}
 	});
-
-@param {Object} options Ajax request configuration options
-@return {Deferred}
 */
 //
 /**
+@description Make a library's nodelist.
 @function can.$
 @parent can.util
+@signature `can.$(element)`
+@param {String|Element|NodeList} element The selector, HTML element, or nodelist
+to pass to the underlying library.
+@return {NodeList} The nodelist as constructed by the underlying library.
 
-`can.$(selector|element|elements)` returns the the underlying
+@body
+`can.$(element)` returns the the underlying
 library's NodeList.  It can be passed
 a css selector, a HTMLElement or an array of HTMLElements.
 
@@ -336,26 +380,30 @@ The following lists how the NodeList is created by each library:
  - __Dojo__ `new dojo.NodeList( HTMLElement )`
  - __Mootools__ `$$( HTMLElement )`
  - __YUI__ `Y.all(selector)` or `Y.NodeList`
-
-@param {String|Element|NodeList} selector The selector to pass to the underlying library
-@return {NodeList}
 */
 //
 /**
+@description Make a document fragment.
 @function can.buildFragment
 @parent can.util
+@signature `can.buildFragment(html, node)`
+@param {String} html A string of HTML.
+@param {DOM Node} node A node used to access a document to make the fragment with.
+@return {DocumentFragment} A document fragment made from __html__.
 
+@body
 `can.buildFragment(html, node)` returns a document fragment for the HTML passed.
-
-@param {String} html HTML strings
-@param {Array} node element used for accessing the ownerDocument
-@return {DocumentFragment}
 */
 //
 /**
+@description Append content to elements.
 @function can.append
 @parent can.util
+@signature `can.append(nodeList, html)`
+@param {NodeList} nodeList A nodelist of the elements to append content to.
+@param {String} html The HTML to append to the end of the elements in __nodeList__.
 
+@body
 `can.append( wrappedNodeList, html )` inserts content to the end of each wrapped node list item(s) passed.
 
 	// Before
@@ -365,27 +413,37 @@ The following lists how the NodeList is created by each library:
 	
 	// After
 	<div id="demo">Demos are fun!</div>
-
-@param {Object} wrappedNodeList
-@param {String} html string to append
 */
 //
 /**
+@description Remove elements from the DOM.
 @function can.remove
 @parent can.util
+@signature `can.remode(nodeList)`
+@param {NodeList} nodeList A nodelist of elements to remove.
 
+@body
 `can.remove( wrappedNodeList )` removes the set of matched element(s) from the DOM.
 
 	<div id="wrap"/>
 	can.remove(can.$('#wrap')) //-> removes 'wrap'
-	
-@param {Object} wrappedNodeList of elements to remove from dom.
 */
 //
 /**
+@description Associate data with or retrieve data from DOM nodes.
 @function can.data
 @parent can.util
+@signature `can.data(nodeList, key, value)`
+@param {NodeList} nodeList The list of nodes to add this data to.
+@param {String} key The key to store this data under.
+@param {*} value The data to store.
 
+@signature `can.data(nodeList, key)`
+@param {NodeList} nodeList The list of nodes data was stored under.
+@param {String} key The key to retrieve.
+@return {*} The data stored under __key__.
+
+@body
 `can.data` enables the associatation of arbitrary data with DOM nodes and JavaScript objects.
 
 ### Setting Data
@@ -405,17 +463,17 @@ The following lists how the NodeList is created by each library:
 
 Due to the way browsers security restrictions with plugins and external code, 
 the _data_ method cannot be used on `object` (unless it's a Flash plugin), `applet` or `embed` elements.
-
-@param {NodeList} wrapped The wrapped node list to associate data with
-@param {String} key The data property to access
-@param {Object} [value] The data value to store
-@return {Object} The value for the given key
 */
 //
 /**
+@description Add a class to elements.
 @function can.addClass
 @parent can.util
+@signature `can.addClass(nodeList, className)`
+@param {NodeList} nodeList The list of HTML elements to add the class to.
+@param {String} className The class to add.
 
+@body
 `can.addClass( nodelist, className )` adds the specified class(es) to
 nodelist's HTMLElements.  It does NOT replace any existing class(es)
 already defined.
@@ -440,15 +498,19 @@ set also.
 	<div id="foo" class="monkey bar man" />
 	
 This works similarly to [http://api.jquery.com/addClass/ jQuery.fn.addClass].
-
-@param {String} class name to add to the wrapped node list
 */
 //
 /**
+@description Call a callback when a Deferred resolves.
 @function can.when
 @parent can.util
+@signature `can.when(deferred)`
+@param {Deferred|Object} deferred The Deferred, AJAX, or normal Objects to call the callback on.
+@return {Deferred} __deferred__ if __deferred__ is a Deferred,
+otherwise a Deferred that resolves to __deferred__.
 
-`can.when(args)` provides the ability to execute callback function(s) 
+@body
+`can.when(deferred)` provides the ability to execute callback function(s) 
 typically based on a Deferred or AJAX object.
 
 	can.when( can.ajax('api/farm/animals') ).then(function(animals){ 
@@ -460,17 +522,17 @@ You can also use this for regular JavaScript objects.
 	$.when( { animals: [ 'cat' ] } ).done(function(animals){ 
 		alert(animals[0]); //-> alerts 'cat' 
 	});
-
-@param {Object} deferreds ajax or JavaScript objects
 */
 //
 /**
-@class can.Deferred
+@constructor can.Deferred
 @parent can.util
 
 `can.Deferred` is a object that allows users to assign and chain callback 
 function(s) for the success or failure state of both asynchronous and synchronous function(s).
 
+@signature `can.Deferred()`
+@return {can.Deferred} A new Deferred object.
 */
 //
 /*
@@ -478,8 +540,14 @@ function(s) for the success or failure state of both asynchronous and synchronou
  */
 //
 /**
-@function pipe
-`deferred.pipe(done, fail)` is a utility to filter Deferred(s).
+@description Add callbacks to a Deferred.
+@function can.Deferred.prototype.pipe
+@signature `pipe(doneCallback[, failCallback])`
+@param {Function} doneCallback A function called when the Deferred is resolved.
+@param {Function} failCallback A function called when the Deferred is rejected.
+
+@body
+`deferred.pipe(doneCallback, failCallback)` is a utility to filter Deferred(s).
 
 	var def = can.Deferred(),
 		filtered = def.pipe(function(val) {
@@ -491,48 +559,58 @@ function(s) for the success or failure state of both asynchronous and synchronou
 	filtered.done(function(value) {
 		alert(value); // Alerts: 'Can is awesome!'
 	});
-
-@param {Object} doneCallbacks A function called when the Deferred is resolved.
-@param {Object} failCallbacks A function called when the Deferred is rejected.
 */
 //
 /**
+@description Resolve a Deferred in a particular context.
 @function resolveWith
-`deferred.resolveWith(context, doneCallbacks)` resolves a Deferred and calls the `doneCallbacks` give the arguments.
+@signature `resolveWith(context[, arguments])`
+@param {Object} context Context passed to the `doneCallbacks` as the `this` object.
+@param {Object} [arguments] Array of arguments that are passed to the `doneCallbacks`.
+
+@body
+`deferred.resolveWith(context, arguments)` resolves a Deferred and calls the `doneCallbacks` with the given arguments.
 
 	var def = can.Deferred();
 	def.resolveWith(this, { animals: [ 'cows', 'monkey', 'panda' ] })
-	
-@param {Object} context Context passed to the `doneCallbacks` as the `this` object.
-@param {Object} args Optional array of args that are passed to the `doneCallbacks`.
 */
 //
 /**
+@description Reject a Deferred in a particular context.
 @function rejectWith
-`deferred.rejectWith(context, failCallbacks)` rejects a Deferred and calls the `failCallbacks` give the arguments.
+@signature `rejectWith(context[, arguments])`
+@param {Object} context Context passed to the `failCallbacks` as the `this` object.
+@param {Object} [arguments] Array of arguments that are passed to the `failCallbacks`.
+
+@body
+`deferred.rejectWith(context, arguments)` rejects a Deferred and calls the `failCallbacks` with the given arguments.
 
 	var def = can.Deferred();
 	def.rejectWith(this, { error: "Animals are gone." })
-	
-@param {Object} context Context passed to the `doneCallbacks` as the `this` object.
-@param {Object} args Optional array of args that are passed to the `failCallbacks`.
 */
 //
 /**
+@description Add a callback to be called when a Deferred is resolved.
 @function done
-`deferred.done(successCallbacks)` adds handler(s) to be called when the Deferred object is resolved.
+@signature `done(doneCallback)`
+@param {Function} doneCallback A callback to be called when the Deferred is resolved.
+
+@body
+`deferred.done(doneCallback)` adds handler(s) to be called when the Deferred object is resolved.
 
 	var def = can.Deferred();
 	def.done(function(){
 		//- Deferred is done.
 	});
-
-@param {Object} successCallbacks function that is called when the Deferred is resolved.
  */
 /**
- * @function fail
+@description Add a callback to be called when a Deferred is rejected.
+@function fail
+@signature `fail(failCallback)`
+@param {Function} failCallback A callback to be called when the Deferred is rejected.
 
-`deferred.fail(successCallbacks)` adds handler(s) to be called when the Deferred object is rejected.
+@body
+`deferred.fail(failCallback)` adds handler(s) to be called when the Deferred object is rejected.
 
  var def = can.Deferred();
  def.fail(function(){
@@ -541,20 +619,29 @@ function(s) for the success or failure state of both asynchronous and synchronou
  */
 //
 /**
+@description Add a callback to be unconditionally called.
 @function always
+@signature `always(alwaysCallback)`
+@param {Function} alwaysCallback A callback to be called whether the Deferred is resolved or rejected.
+
+@body
 `deferred.always( alwaysCallbacks )` adds handler(s) to be called when the Deferred object is either resolved or rejected.
 
 	var def = can.Deferred();
 	def.always( function(){
 		//- Called whether the handler fails or is success.
 	});
-
-@param {Object} alwaysCallbacks A function called when the Deferred is resolved or rejected.
 */
 //
 /**
+@description Add callbacks to a Deferred.
 @function then
-`deferred.then( doneCallbacks, failCallbacks )` adds handler(s) to be called when the Deferred object to be called after its resolved.
+@signature `then(doneCallback[, failCallback])`
+@param {Function} doneCallback A function called when the Deferred is resolved.
+@param {Function} [failCallback] A function called when the Deferred is rejected.
+
+@body
+`deferred.then( doneCallback, failCallback )` adds handler(s) to be called when the Deferred object to be called after its resolved.
 
 	var def = can.Deferred();
 	def.then(function(){
@@ -562,21 +649,27 @@ function(s) for the success or failure state of both asynchronous and synchronou
 	}, function(){
 		//- Called when the deferred fails.
 	})
-
-@param {Object} doneCallbacks A function called when the Deferred is resolved.
-@param {Object} failCallbacks A function called when the Deferred is rejected.
 */
 //
 /**
+@description Determine whether a Deferred has been resolved.
 @function isResolved
+@signature `isResolved()`
+@return {Boolean} Whether this Boolean has been resolved.
+
+@body
 `deferred.isResolved()` returns whether a Deferred object has been resolved.
 
 	var def = can.Deferred();
 	var resolved = def.isResolved(); 
-	
 */
 /**
+@description Determine whether a Deferred has been rejected.
 @function isRejected
+@signature `isRejected()`
+@return {Boolean} Whether this Boolean has been rejected.
+
+@body
 `deferred.isRejected()` returns whether a Deferred object has been rejected.
 
 	var def = can.Deferred();
@@ -585,23 +678,29 @@ function(s) for the success or failure state of both asynchronous and synchronou
 */
 //
 /**
+@description Reject a Deferred.
 @function reject
+@signature `reject([argument])`
+@param {Object} [argument] The argument to call the `failCallback` with.
+
+@body
 `deferred.reject( args )` rejects the Deferred object and calls the fail callbacks with the given arguments.
 
 	var def = can.Deferred();
 	def.reject({ error: 'Thats not an animal.' })
-
-@param {Object} arguments Optional arguments that are passed to the fail callbacks.
 */
 //
 /**
+@description Resolve a Deferred.
 @function resolve
+@signature `resolve([argument])`
+@param {Object} [argument] The argument to call the `doneCallback` with.
+
+@body
 `deferred.resolve( args )` resolves a Deferred object and calls the done callbacks with the given arguments.
 
 	var def = can.Deferred();
 	def.resolve({ animals: [ 'pig', 'cow' ] })
-
-@param {Object} arguments Optional arguments that are passed to the done callbacks.
 */
 
 	var can = window.can || {};

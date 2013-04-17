@@ -25,7 +25,15 @@ steal("can/util/string", function(can) {
 	 */
 	can.extend(can.Construct, {
 		/**
-		 * @function newInstance
+		 * @function can.Construct.static.newInstance newInstance
+		 * @description Create a new instance of a Construct.
+		 * @signature `newInstance([...args])`
+		 * @param {*} [args] arguments that get passed to [can.Construct::setup] and [can.Construct::init]. Note
+		 * that if [can.Construct::setup] returns an array, those arguments will be passed to [can.Construct::init]
+		 * instead.
+		 * @return {class} instance of the class
+		 *
+		 * @body
 		 * Creates a new instance of the constructor function. This method is useful for creating new instances
 		 * with arbitrary parameters. Typically, however, you will simply want to call the constructor with the
 		 * __new__ operator.
@@ -47,11 +55,6 @@ steal("can/util/string", function(can) {
 		 * var args = ["Justin","Barry","Meyer"],
 		 *     justin = new Person.newInstance.apply(null, args);
 		 * @codeend
-		 * 
-		 * @param {...*} [args] arguments that get passed to [can.Construct::setup] and [can.Construct::init]. Note
-		 * that if [can.Construct::setup] returns an array, those arguments will be passed to [can.Construct::init]
-		 * instead.
-		 * @return {class} instance of the class
 		 */
 		newInstance: function() {
 			// Get a raw instance object (`init` is not called).
@@ -89,6 +92,15 @@ steal("can/util/string", function(can) {
 		// object's `defaults`. If you overwrite this method, make sure to
 		// include option merging logic.
 		/**
+		 * @function can.Construct.static.setup setup
+		 * @parent can.Construct.static
+		 * @description Perform initialization logic for a constructor function.
+		 * @param {constructor} base the base constructor that is being inherited from
+		 * @param {String} [fullName] the name of the new constructor
+		 * @param {Object} [staticProps] the static properties of the new constructor
+		 * @param {Object} [protoProps] the prototype properties of the new constructor
+		 *
+		 * @body
 		 * The static `setup` method is called immediately after a constructor function is created and 
 		 * set to inherit from its base constructor. It is useful for setting up additional inheritance work.
 		 * Do not confuse this with the prototype `[can.Construct::setup]` method.
@@ -135,11 +147,6 @@ steal("can/util/string", function(can) {
 		 * 
 		 * Child.base; // Parent
 		 * @codeend
-		 * 
-		 * @param {constructor} base the base constructor that is being inherited from
-		 * @param {String} [fullName] the name of the new constructor
-		 * @param {Object} [staticProps] the static properties of the new constructor
-		 * @param {Object} [protoProps] the prototype properties of the new constructor
 		 */
 		setup: function( base, fullName ) {
 			this.defaults = can.extend(true,{}, base.defaults, this.defaults);
@@ -317,12 +324,15 @@ steal("can/util/string", function(can) {
 			 */
 			return Constructor;
 			/** 
-			 * @function setup
-			 * @param {...*} args the arguments passed to the constructor.
+			 * @function can.Construct.prototype.setup setup
+			 * @parent can.Construct.prototype
+			 * @signature `setup(...args)`
+			 * @param {*} args the arguments passed to the constructor.
 			 * @return {Array|undefined} if an array is returned, the elements of that array are passed as
 			 * arguments to [can.Construct::init]. Otherwise, the arguments to the
 			 * constructor are passed to [can.Construct::init] and the return value of `setup` is discarded.
 			 * 
+			 * @body
 			 * If a prototype `setup` method is provided, it is called when a new 
 			 * instance is created. It is passed the same arguments that were passed
 			 * to the constructor.
@@ -374,10 +384,12 @@ steal("can/util/string", function(can) {
 			 */
 			//  
 			/** 
-			 * @function init
-			 * @param {...*} args the arguments passed to the constructor (or the elements of the array returned from [can.Construct::setup])
-			 * @return {undefined} there is no reason to return anything from `init`.
+			 * @function can.Construct.prototype.init init
+			 * @parent can.Construct.prototype
+			 * @signature `init(...args)`
+			 * @param {*} args the arguments passed to the constructor (or the elements of the array returned from [can.Construct::setup])
 			 * 
+			 * @body
 			 * If a prototype `init` method is provided, it is called when a new Construct is created,
 			 * after [can.Construct::setup]. The `init` method is where the bulk of your initialization code
 			 * should go, and a common thing to do in `init` is to save the arguments passed into the constructor.
@@ -428,7 +440,8 @@ steal("can/util/string", function(can) {
 			 */
 			//  
 			/**
-			 * @property constructor
+			 * @property {Function} constructor
+			 * @parent can.Construct.prototype
 			 * 
 			 * A reference to the constructor function that created the instance. This allows you to access
 			 * the constructor's static properties from an instance.

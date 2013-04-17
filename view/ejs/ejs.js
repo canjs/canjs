@@ -34,20 +34,24 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 
 
 	/**
-	 * @Prototype
+	 * @prototype
 	 */
 	EJS.prototype.
 	/**
-	 * @function render
+	 * @function can.EJS.prototype.render render
+	 * @parent can.EJS
+	 * @description Render a view object with data and helpers.
+	 * @signature `render(data[, helpers])`
+	 * @param {Object} [data] The data to populate the template with.
+	 * @param {Object.<String, function>} [helpers] Helper methods referenced in the template.
+	 * @return {String} The template with interpolated data.
+	 *
+	 * @body	 
 	 * Renders an object with view helpers attached to the view.
 	 * 
 	 *     new can.EJS({text: "<%= message %>"}).render({
 	 *       message: "foo"
 	 *     },{helper: function(){ ... }})
-	 *     
-	 * @param {Object} object data to be rendered
-	 * @param {Object} [extraHelpers] an object with view helpers
-	 * @return {String} returns the result of the string
 	 */
 	render = function( object, extraHelpers ) {
 		object = object || {};
@@ -80,8 +84,10 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 	});
 
 	/**
-	 * @class can.EJS.Helpers
+	 * @page can.EJS.Helpers Helpers
 	 * @parent can.EJS
+	 *
+	 * @body
 	 * By adding functions to can.EJS.Helpers.prototype, those functions will be available in the 
 	 * views.
 	 * 
@@ -108,12 +114,6 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 	 * In your EJS view you can then call the helper on an element tag:
 	 * 
 	 * 	<div <%= upperHtml('javascriptmvc') %>></div>
-	 * 
-	 * 
-	 * @constructor Creates a view helper.  This function 
-	 * is called internally.  You should never call it.
-	 * @param {Object} data The data passed to the 
-	 * view.  Helpers have access to it through this._data
 	 */
 	EJS.Helpers = function( data, extras ) {
 		this._data = data;
