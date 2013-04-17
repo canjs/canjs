@@ -104,6 +104,18 @@
 		"core": "CanJS core",
 		"plugin": "Plugins"
 	},
+	"pluginify": {
+		"shim": {
+			"can/lib/jquery.1.9.1.js": "jQuery",
+			"can/lib/zepto.1.0rc1.js": "Zepto",
+			"can/lib/mootools-core-1.4.3.js": "{}",
+			"can/util/dojo/dojo-1.8.1.js": "{}",
+			"can/lib/yui-3.7.3.js": "YUI"
+		},
+		"exports": {
+			"can/util/can.js": "can"
+		}
+	},
 	"configurations": {
 		"jquery": {
 			"description": "jQuery",
