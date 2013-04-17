@@ -1,4 +1,4 @@
-@page can.fixture
+@page can.fixture can.fixture
 @parent can.util
 @test can/util/fixture/qunit.html
 

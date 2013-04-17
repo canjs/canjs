@@ -318,9 +318,11 @@ steal('can/util','can/construct', function(can) {
 		},
 		/**
 		 * @description Iterate over the keys of an Observe.
+		 * @signature `can.Observe.keys(observe)`
 		 * @param {can.Observe} observe the `can.Observe` to get the keys from
 		 * @return {Array} array An array containing the keys from _observe_.
 		 * 
+		 * @body
 		 * `keys` iterates over an observe to get an array of its keys.
 		 * 
 		 * @codestart
@@ -519,7 +521,7 @@ steal('can/util','can/construct', function(can) {
 		 * `each` iterates through the Observe, calling a function
 		 * for each property value and key.
 		 * 
-		 * @param {function(*, String)} callback the function to call for each property
+		 * @param {function} callback the function to call for each property
 		 * The value and key of each property will be passed as the first and second
 		 * arguments, respectively, to the callback. If the callback returns false,
 		 * the loop will stop.
@@ -1142,7 +1144,7 @@ steal('can/util','can/construct', function(can) {
 		 * @param {Number} [howMany] the number of elements to remove
 		 * If _howMany_ is not provided, `splice` will all elements from `index` to the end of the List.
 		 *
-		 * @param {...*} ...newElements elements to insert into the List
+		 * @param {*} newElements elements to insert into the List
 		 *
 		 * @return {Array} the elements removed by `splice`
 		 *
@@ -1536,7 +1538,7 @@ steal('can/util','can/construct', function(can) {
 		 *
 		 * `push` adds elements onto the end of a List.]
 		 * 
-		 * @param {...*} ...elements the elements to add to the List
+		 * @param {*} elements the elements to add to the List
 		 *
 		 * @return {Number} the new length of the List
 		 *
@@ -1577,7 +1579,7 @@ steal('can/util','can/construct', function(can) {
 		 *
 		 * `unshift` adds elements onto the beginning of a List.
 		 * 
-		 * @param {...*} ...elements the elements to add to the List
+		 * @param {*} elements the elements to add to the List
 		 *
 		 * @return {Number} the new length of the List
 		 *
@@ -1855,7 +1857,7 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * `concat` makes a new List with the elements of the List followed by the elements of the parameters.
 		 * 
-		 * @param {...Array|can.Observe.List|*} args Any number of arrays, Lists, or values to add in
+		 * @param {Array|can.Observe.List|*} args Any number of arrays, Lists, or values to add in
 		 * For each parameter given, if it is an Array or a List, each of its elements will be added to
 		 * the end of the concatenated List. Otherwise, the parameter itself will be added.
 		 *

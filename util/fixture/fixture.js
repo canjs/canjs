@@ -352,9 +352,35 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 
 		store: function (types, count, make, filter) {
 			/**
+			 * @description Make a store of objects to use when making requests against fixtures.
 			 * @function can.fixture.store
 			 * @parent can.fixture
+			 * @signature `can.fixture.store([types,] count, make[, filter])`
+			 * @param {Array|String} [types] An array of the fixture names or the singular fixture name.
+			 * If an array, the first item is the plural fixture name (prefixed with -) and the second
+			 * item is the singular name.  If a string, it's assumed to be the singular fixture name.  Make
+			 * will simply add s to the end of it for the plural name. If this parameter is not an array
+			 * or a String the fixture won't be added and only return the generator object.
+			 * @param {Number} count The number of items to create.
+			 * @param {Function} make A function that will return the JavaScript object. The
+			 * make function is called back with the id and the current array of items.
+			 * @param {Function} [filter] A function used to further filter results. Used for to simulate
+			 * server params like searchText or startDate.
+			 * The function should return true if the item passes the filter,
+			 * false otherwise. For example:
 			 *
+			 *
+			 *     function(item, settings){
+			 *       if(settings.data.searchText){
+			 *            var regex = new RegExp("^"+settings.data.searchText)
+			 *           return regex.test(item.name);
+			 *       }
+			 *     }
+			 *
+			 * @return {Object} A generator object providing fixture functions for *findAll*, *findOne*, *create*,
+			 * *update* and *destroy*.
+			 *
+			 * @body
 			 * `can.fixture.store(count, generator(index,items))` is used
 			 * to create a store of items that can simulate a full CRUD service. Furthermore,
 			 * the store can do filtering, grouping, sorting, and paging.
@@ -452,32 +478,6 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			 *      });
 			 *
 			 * You can map can.Model requests using the return value of `can.fixture.make`:
-			 *
-
-			 *
-			 * @param {Array|String} types An array of the fixture names or the singular fixture name.
-			 * If an array, the first item is the plural fixture name (prefixed with -) and the second
-			 * item is the singular name.  If a string, it's assumed to be the singular fixture name.  Make
-			 * will simply add s to the end of it for the plural name. If this parameter is not an array
-			 * or a String the fixture won't be added and only return the generator object.
-			 * @param {Number} count the number of items to create
-			 * @param {Function} make a function that will return the JavaScript object. The
-			 * make function is called back with the id and the current array of items.
-			 * @param {Function} filter (optional) a function used to further filter results. Used for to simulate
-			 * server params like searchText or startDate.
-			 * The function should return true if the item passes the filter,
-			 * false otherwise. For example:
-			 *
-			 *
-			 *     function(item, settings){
-			 *       if(settings.data.searchText){
-			 *            var regex = new RegExp("^"+settings.data.searchText)
-			 *           return regex.test(item.name);
-			 *       }
-			 *     }
-			 *
-			 * @return {Object} A generator object providing fixture functions for *findAll*, *findOne*, *create*,
-			 * *update* and *destroy*.
 			 */
 			var items = [], // TODO: change this to a hash
 				findOne = function (id) {
@@ -500,8 +500,10 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			// make all items
 			can.extend(methods, {
 				/**
+				 * @description Simulate a findAll to a fixture.
 				 * @function can.fixture.store.findAll
 				 * @parent can.fixture.store
+				 * @signature `findAll(request)`
 				 * 
 				 * `store.findAll(request)` simulates a request to 
 				 * get a list items from the server. It supports the
@@ -514,26 +516,17 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				 *  - id filtering - `ownerId=5`
 				 * 
 				 * 
-				 * @param {AjaxRequest} request The ajax request object 
-				 * that contains a data object like:
-				 * 
-				 *     var response = store.findAll({
-				 *       data: {
-				 *         order: "name ASC"    
-				 *       }
-				 *     });
-				 * 
-				 * The `data` object may include any of the following properties
-				 * 
-				 * #### order
-				 * 
-				 * #### group
-				 * 
-				 * #### limit
-				 * 
-				 * #### offset
-				 * 
-				 * #### id properties
+				 * @param {{}} request The ajax request object. The available parameters are:
+				 * @option {String} order The order of the results.
+				 * `order: 'name ASC'`
+				 * @option {String} group How to group the results.
+				 * `group: 'name'`
+				 * @option {String} limit A limit on the number to retrieve.
+				 * `limit: 20`
+				 * @option {String} offset The offset of the results.
+				 * `offset: 60`
+				 * @option {String} id Filtering by ID.
+				 * `id: 5`
 				 * 
 				 * @return {Object} a response object like:
 				 * 
@@ -631,9 +624,14 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					};
 				},
 				/**
+				 * @description Simulate a findOne request on a fixture.
 				 * @function can.fixture.store.findOne
 				 * @parent can.fixture.store
+				 * @signature `findOne(request, callback)`
+				 * @param {Object} request Parameters for the request.
+				 * @param {Function} callback A function to call with the retrieved item.
 				 * 
+				 * @body
 				 * `store.findOne(request, response(item))` simulates a request to 
 				 * get a single item from the server by id.
 				 * 
@@ -649,9 +647,14 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					response(item ? item : undefined);
 				},
 				/**
+				 * @description Simulate an update on a fixture.
 				 * @function can.fixture.store.update
 				 * @parent can.fixture.store
+				 * @signature `update(request, callback)`
+				 * @param {Object} request Parameters for the request.
+				 * @param {Function} callback A function to call with the updated item and headers.
 				 * 
+				 * @body
 				 * `store.update(request, response(props,headers))` simulates
 				 * a request to update an items properties on a server.
 				 * 
@@ -674,9 +677,14 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					});
 				},
 				/**
+				 * @description Simulate destroying a Model on a fixture.
 				 * @function can.fixture.store.destroy
 				 * @parent can.fixture.store
+				 * @signature `destroy(request, callback)`
+				 * @param {Object} request Parameters for the request.
+				 * @param {Function} callback A function to call after destruction.
 				 * 
+				 * @body
 				 * `store.destroy(request, response())` simulates
 				 * a request to destroy an item from the server.
 				 * 
@@ -698,8 +706,12 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					return {};
 				},
 				/**
+				 * @description Simulate creating a Model with a fixture.
 				 * @function can.fixture.store.create
 				 * @parent can.fixture.store
+				 * @signature `create(request, callback)`
+				 * @param {Object} request Parameters for the request.
+				 * @param {Function} callback A function to call with the created item.
 				 * 
 				 * `store.create(request, response)`
 				 */
@@ -749,18 +761,26 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			return can.extend({
 				getId: getId,
 				/**
+				 * @description Get an item from the store by ID.
 				 * @function can.fixture.store.find
 				 * @parent can.fixture.store
+				 * @signature `find(settings)`
+				 * @param {Object} settings An object containing an `id` key
+				 * corresponding to the item to find.
 				 * 
+				 * @body
 				 * `store.find(settings)`
 				 */
 				find: function(settings){
 					return findOne( getId(settings) );
 				},
 				/**
+				 * @description Reset the fixture store.
 				 * @function can.fixture.store.reset
 				 * @parent can.fixture.store
+				 * @signature `can.fixture.store.reset()`
 				 * 
+				 * @body
 				 * `store.reset()` resets the store to contain its 
 				 * original data. This is useful for making tests that
 				 * operate independently.
@@ -783,9 +803,21 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			}, methods);
 		},
 		/**
+		 * @description Create a random number or selection.
 		 * @function can.fixture.rand
 		 * @parent can.fixture
+		 * @signature `rand([min,] max)`
+		 * @param {Number} [min=0] The lower bound on integers to select.
+		 * @param {Number} max The upper bound on integers to select.
+		 * @return {Number} A random integer in the range [__min__, __max__).
 		 *
+		 * @signature `rand(choices, min[ ,max])`
+		 * @param {Array} choices An array of things to choose from.
+		 * @param {Number} min The minimum number of times to choose from __choices__.
+		 * @param {Number} [max=min] The maximum number of times to choose from __choices__.
+		 * @return {Array} An array of between __min__ and __max__ random choices from __choices__.
+		 *
+		 * @body
 		 * `can.fixture.rand` creates random integers or random arrays of
 		 * other arrays.
 		 *
@@ -810,16 +842,6 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		 *
 		 *     // pick between 2 and 3 items at random
 		 *     rand(["j","m","v","c"],2,3)
-		 *
-		 *
-		 * @param {Array|Number} arr An array of items to select from.
-		 * If a number is provided, a random number is returned.
-		 * If min and max are not provided, a random number of items are selected
-		 * from this array.
-		 * @param {Number} [min] If only min is provided, min items
-		 * are selected.
-		 * @param {Number} [max] If min and max are provided, a random number of
-		 * items between min and max (inclusive) is selected.
 		 */
 		rand : function (arr, min, max) {
 			if (typeof arr == 'number') {
@@ -901,7 +923,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			}, xhr);
 		},
 		/**
-		 * @attribute can.fixture.on
+		 * @property {Boolean} can.fixture.on
 		 * @parent can.fixture
 		 *
 		 * `can.fixture.on` lets you programatically turn off fixtures. This is mostly used for testing.
@@ -914,7 +936,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		on : true
 	});
 	/**
-	 * @attribute can.fixture.delay
+	 * @property {Number} can.fixture.delay
 	 * @parent can.fixture
 	 *
 	 * `can.fixture.delay` indicates the delay in milliseconds between an ajax request is made and
@@ -930,7 +952,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 	can.fixture.delay = 200;
 
 	/**
-	 * @attribute can.fixture.rootUrl
+	 * @property {String} can.fixture.rootUrl
 	 * @parent can.fixture
 	 *
 	 * `can.fixture.rootUrl` contains the root URL for fixtures to use.

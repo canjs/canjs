@@ -95,10 +95,11 @@ steal("can/util/string", function(can) {
 		 * @function can.Construct.static.setup setup
 		 * @parent can.Construct.static
 		 * @description Perform initialization logic for a constructor function.
-		 * @param {constructor} base the base constructor that is being inherited from
-		 * @param {String} [fullName] the name of the new constructor
-		 * @param {Object} [staticProps] the static properties of the new constructor
-		 * @param {Object} [protoProps] the prototype properties of the new constructor
+		 * @signature `setup(base, fullName, staticProps, protoProps)`
+		 * @param {constructor} base The base constructor that is being inherited from.
+		 * @param {String} fullName The name of the new constructor.
+		 * @param {Object} staticProps The static properties of the new constructor.
+		 * @param {Object} protoProps The prototype properties of the new constructor.
 		 *
 		 * @body
 		 * The static `setup` method is called immediately after a constructor function is created and 
