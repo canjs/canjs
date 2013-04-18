@@ -442,16 +442,16 @@ test("compute bound to observe",function(){
 });
 
 test("compute bound to input value",function(){
-	var input = $("<input value='Justin'/>");
-	$("#qunit-test-area").append(input);
+	var input = document.createElement('input');
+	input.value = 'Justin';
 
-	var value = can.compute(input[0], "value","change")
+	var value = can.compute(input, "value","change")
 
 	equal(value(),"Justin");
 
 	value("Justin M.");
 
-	equal(input.val(),"Justin M.","input change correctly");
+	equal(input.value,"Justin M.","input change correctly");
 
 
 	var handler = function(ev, newVal, oldVal){
@@ -462,11 +462,11 @@ test("compute bound to input value",function(){
 	value.bind("change", handler);
 
 
-	input.val("Justin Meyer").change();
+	input.value = "Justin Meyer";
 
 	value.unbind("change", handler);
 
-	input.val("Brian Moschel").change();
+	input.value = "Brian Moschel";
 
 	equal(value(),"Brian Moschel");
 

@@ -1,5 +1,5 @@
 (function() {
-	
+
 module("can/view/ejs, rendering",{
 	setup : function(){
 
@@ -30,68 +30,6 @@ var getAttr = function(el, attrName){
 			el.className:
 			el.getAttribute(attrName);
 	}
-
-test("registerNode, unregisterNode, and replace work", function(){
-	var nodeLists = can.view.live.nodeLists;
-
-	// Reset the registered nodes
-	for (var key in nodeLists.nodeMap) {
-		if (nodeLists.hasOwnProperty(key)) {
-			delete nodeLists.nodeMap[key];
-		}
-	}
-	for (var key in nodeLists.nodeListMap) {
-		if (nodeLists.hasOwnProperty(key)) {
-			delete nodeLists.nodeListMap[key];
-		}
-	}
-	
-	var ids = function(arr){
-		return can.map(arr, function(item){
-			return item.id
-		})
-	},
-		two = {id: 2},
-		listOne = [{id: 1},two,{id: 3}];
-		
-	nodeLists.register(listOne);
-	var listTwo = [two];
-	
-	nodeLists.register(listTwo);
-	
-	var newLabel = {id: 4}
-	nodeLists.replace(listTwo, [newLabel])
-	
-	same( ids(listOne), [1,4,3], "replaced" )
-	same( ids(listTwo), [4] );
-	
-	nodeLists.replace(listTwo,[{id: 5},{id: 6}]);
-	
-	same( ids(listOne), [1,5,6,3], "replaced" );
-	
-	same( ids(listTwo), [5,6], "replaced" );
-	
-	nodeLists.replace(listTwo,[{id: 7}])
-	
-	same( ids(listOne), [1,7,3], "replaced" );
-	
-	same( ids(listTwo), [7], "replaced" );
-	
-	nodeLists.replace( listOne, [{id: 8}])
-	
-	same( ids(listOne), [8], "replaced" );
-	same( ids(listTwo), [7], "replaced" );
-	
-	nodeLists.unregister(listOne);
-	nodeLists.unregister(listTwo);
-	
-	
-	
-	same(nodeLists.nodeMap, {} );
-	same(nodeLists.nodeListMap ,{} )
-	
-	
-});
 
 
 
@@ -1048,8 +986,9 @@ test("reset on a live bound input", function(){
 });
 
 test("A non-escaping live magic tag within a control structure and no leaks", function(){
-	
+
 	var nodeLists = can.view.live.nodeLists;
+	
 	for(var prop in nodeLists.nodeMap){
 		delete nodeLists.nodeMap[prop]
 	}
@@ -1381,7 +1320,7 @@ test("return blocks within element tags", function(){
 	});
 	div.appendChild(frag)
 
-	$("#qunit-test-area").html(div);
+	// $("#qunit-test-area").html(div);
 
 	//div.getElementsByTagName('label')[0].myexpando = "EXPANDO-ED";
 
@@ -1481,7 +1420,7 @@ test("list works within another branch", function(){
 
 	var div = document.createElement('div');
 
-	$("#qunit-test-area").html(div);
+	// $("#qunit-test-area").html(div);
 
 	var frag = renderer({animals: animals});
 	div.appendChild(frag)
