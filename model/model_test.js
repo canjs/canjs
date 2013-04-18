@@ -1018,4 +1018,42 @@ test("model removeAttr (#245)", function() {
 	}, 'Index attribute got removed');
 });
 
+	test("get", function() {
+
+		can.Model("Todo", {}, {});
+
+		var original = new Todo.List([
+			{
+				id		: 1,
+				name	: 'Todo 1'
+			},
+			{
+				id		: 2,
+				name	: 'Todo 2'
+			},
+			{
+				id		: 3,
+				name	: 'Todo 3'
+			},
+			{
+				id		: 4,
+				name	: 'Todo 4'
+			},
+			{
+				id		: 5,
+				name	: 'Todo 5'
+			},
+		]);
+
+		var models = original.get(3);
+
+		equal(models.length, 1, 'Get returns one model');
+		equal(original.length, 5, 'Get does not affect the original list');
+		equal(models[0].attr('name'), 'Todo 3', 'Get returns the correct model');
+		ok(models[0].constructor === Todo, 'Get returns correct item');
+
+		models[0].attr('name', 'Todo 3.0');
+
+		equal(original[2].attr('name'), 'Todo 3.0', 'Get returns the element from the original list');
+	});
 })();

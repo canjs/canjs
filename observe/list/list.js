@@ -72,7 +72,7 @@ steal('can/util', 'can/observe', 'can/observe/compute', function(can) {
 				});
 
 				mapped.splice(index, 0, compute());
-			}
+			};
 
 			this.forEach(generator);
 
@@ -88,9 +88,20 @@ steal('can/util', 'can/observe', 'can/observe/compute', function(can) {
 			this.bind('remove', function(ev, data, index) {
 				// The indices in the mapped list are the same so lets just splice it out
 				mapped.splice(index, data.length);
-			})
+			});
 
 			return mapped;
+		},
+		/**
+		 * The slice method selects a part of an array, and returns another instance of this model list's class.
+		 * 
+		 *     list.slice(start, end)
+		 *
+		 * @param {Number} start the start index to select
+		 * @param {Number} end the last index to select
+		 */
+		slice: function() {
+			return new this.constructor(Array.prototype.slice.apply(this, arguments));
 		}
 
 		/* TODO

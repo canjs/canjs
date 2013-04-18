@@ -1250,13 +1250,32 @@ steal('can/util','can/observe', function( can ) {
 			this.bind('change', function(ev, how){
 				if(/\w+\.destroyed/.test(how)){
 					var index = self.indexOf(ev.target);
-					if (index != -1) {
+					if (index !== -1) {
 						self.splice(index, 1);
 					}
 				}
-			})
+			});
+		},
+		/**
+		* Gets a list of elements by ID.
+		*
+		* To fetch by id:
+		*		var match = list.get(23);
+		* 
+		* @param {Integer} id to retrieve.
+		* 
+		* @return {Array} A array with the elements that were queried.
+		*/
+		get: function(id) {
+			if(!this.length ) {
+				return [];
+			}
+
+			return can.grep(this, function(item) { 
+				return getId(item) === id; 
+			});
 		}
-	})
+	});
 
 	return can.Model;
-})
+});
