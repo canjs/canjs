@@ -144,7 +144,13 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 			})
 		},
 		each: function(list, cb){
-			can.view.lists(list, cb);
+			// Normal arrays don't get live updated
+			if (can.isArray(list)) {
+				this.list(list, cb);
+			}
+			else {
+				can.view.lists(list, cb);
+			}
 		}
 	};
 
