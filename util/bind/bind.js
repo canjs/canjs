@@ -29,14 +29,16 @@ steal('can/util',function(can){
 		unbind: function(ev, handler){
 			// Remove the event handler
 			can.removeEvent.apply(this, arguments);
-			if(!handler){
-				// This is not correct. We need to 
-				// have a way to know the number of event handlers
-				// for a given item.
-				this._bindings = 0
-			} else {
-				this._bindings--;
-			}
+			// This doesn't work as handler is never passed
+			// if(!handler){
+			// 	// This is not correct. We need to 
+			// 	// have a way to know the number of event handlers
+			// 	// for a given item.
+			// 	this._bindings = 0
+			// } else {
+			// 	this._bindings--;
+			// }
+			this._bindings--;
 			// If there are no longer any bindings and
 			// there is a bindteardown method, call it.
 			if(!this._bindings){

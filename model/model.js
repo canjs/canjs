@@ -1077,7 +1077,6 @@ steal('can/util','can/observe', function( can ) {
 		 * @return {model} the model instance.
 		 */
 		_bindteardown: function(){
-			console.log("removing",getId(this))
 			delete this.constructor.store[getId(this)];
 			return can.Observe.prototype._bindteardown.apply( this, arguments );;
 		},
@@ -1235,7 +1234,6 @@ steal('can/util','can/observe', function( can ) {
 		_changes: function(ev, attr){
 			can.Observe.List.prototype._changes.apply(this, arguments );
 			if(/\w+\.destroyed/.test(attr)){
-				console.log("destroyed on", this._cid)
 				var index = this.indexOf(ev.target);
 				if (index != -1) {
 					this.splice(index, 1);

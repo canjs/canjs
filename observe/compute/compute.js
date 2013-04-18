@@ -446,7 +446,7 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 				if( bindings === 0 ){
 					computeState.bound = true;
 					// setup live-binding
-					on.call(this, updater)				
+					on.call(this, updater)
 				}
 				bindings++;
 			},
