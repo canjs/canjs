@@ -1041,12 +1041,19 @@ function( can ){
 		 */
 		'each': function(expr, options) {
       expr = Mustache.resolve(expr);
-			if (!!expr && expr.length) {
-				var result = [];
-				for (var i = 0; i < expr.length; i++) {
-					result.push(options.fn(expr[i]));
+			if (!!expr && isArrayLike(expr)) {
+				if (isObserve(expr) && expr.attr('length')) {
+					return can.view.lists && can.view.lists(expr, function(item) {
+						return options.fn(item);
+					});
 				}
-				return result.join('');
+				else {
+					var result = [];
+					for (var i = 0; i < expr.length; i++) {
+						result.push(options.fn(expr[i]));
+					}
+					return result.join('');
+				}
 			}
 		},
 		// Implements the `with` built-in helper.

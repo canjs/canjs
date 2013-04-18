@@ -1387,7 +1387,6 @@ test("return blocks within element tags", function(){
 
 })
 
-
 test("Each does not redraw items",function(){
 
 	var animals = new can.Observe.List(['sloth', 'bear']),
@@ -1410,6 +1409,54 @@ test("Each does not redraw items",function(){
 	equal(div.getElementsByTagName('label').length, 2, "There are 2 labels")
 
 	animals.push("turtle")
+
+	equal(div.getElementsByTagName('label')[0].myexpando, "EXPANDO-ED", "same expando");
+
+	equal(div.getElementsByTagName('span')[2].innerHTML, "turtle", "turtle added");
+
+});
+
+test("Each works with no elements",function(){
+
+	var animals = new can.Observe.List(['sloth', 'bear']),
+		template = "<%==each(animals, function(animal){%>"+
+						"<%=animal %> "+
+					"<%})%>";
+
+	var renderer = can.view.ejs(template)
+
+	var div = document.createElement('div')
+
+	var frag = renderer({animals: animals});
+	div.appendChild(frag)
+	animals.push("turtle")
+
+	equal(div.innerHTML, "sloth bear turtle ", "turtle added");
+
+});
+
+test("Each does not redraw items (normal array)",function(){
+
+	var animals = ['sloth', 'bear', 'turtle'],
+		template = "<div>my<b>favorite</b>animals:"+
+					"<%each(animals, function(animal){%>"+
+						"<label>Animal=</label> <span><%=animal %></span>"+
+					"<%})%>"+
+					"!</div>";
+
+	var renderer = can.view.ejs(template)
+
+	var div = document.createElement('div')
+
+	var frag = renderer({animals: animals});
+	div.appendChild(frag)
+
+	div.getElementsByTagName('label')[0].myexpando = "EXPANDO-ED";
+
+	//animals.push("dog")
+	equal(div.getElementsByTagName('label').length, 3, "There are 2 labels")
+
+	equal(div.getElementsByTagName('label')[0].myexpando, "EXPANDO-ED", "same expando");
 
 	equal(div.getElementsByTagName('label')[0].myexpando, "EXPANDO-ED", "same expando");
 

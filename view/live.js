@@ -120,7 +120,7 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 					can.remove( can.$(itemsToRemove) );
 				},
 				parentNode = elements.getParentNode(el, parentNode),
-				text = document.createTextNode("^");
+				text = document.createTextNode("");
 
 			// Setup binding and teardown to add and remove events
 			setup(parentNode, function(){
@@ -196,7 +196,10 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 
 			// setup listening right away so we don't have to re-calculate value
 			var data  = listen( el.parentNode !== parent ? el.parentNode : parent, compute, function(ev, newVal, oldVal){
-				node.nodeValue = ""+newVal;
+				// Sometimes this is 'unknown' in IE and will throw an exception if it is
+				if ( typeof node.nodeValue != 'unknown' ) {
+					node.nodeValue = ""+newVal;
+				}
 				data.teardownCheck(node.parentNode);
 			});
 
