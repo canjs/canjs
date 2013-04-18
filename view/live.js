@@ -217,7 +217,7 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 		attributes: function(el, compute, currentValue){
 			var setAttrs = function(newVal){
 				var parts = getAttributeParts(newVal),
-					newAttrName = parts[0];
+					newAttrName = parts.shift();
 				
 				// Remove if we have a change and used to have an `attrName`.
 				if((newAttrName != attrName) && attrName){
@@ -225,7 +225,7 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 				}
 				// Set if we have a new `attrName`.
 				if(newAttrName){
-					elements.setAttr(el, newAttrName, parts[1]);
+					elements.setAttr(el, newAttrName, parts.join('='));
 					attrName = newAttrName;
 				}
 			}
