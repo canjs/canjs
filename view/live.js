@@ -281,9 +281,12 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 				hooks[attributeName] = {
 					render: function() {
 						var i =0,
-							newAttr = attr.replace(live.attributeReplace, function() {
-								return elements.contentText( hook.computes[i++]() );
-							});
+							// attr doesn't have a value in IE
+							newAttr = attr
+								? attr.replace(live.attributeReplace, function() {
+										return elements.contentText( hook.computes[i++]() );
+									})
+								: elements.contentText( hook.computes[i++]() );
 						return newAttr;
 					},
 					computes: [compute],
