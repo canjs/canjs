@@ -623,5 +623,6 @@ function(s) for the success or failure state of both asynchronous and synchronou
 			return object._cid = (name ||"" ) + (++cid)
 		}
 	}
+	can.VERSION = '@VERSION';
 	return can;
 });
