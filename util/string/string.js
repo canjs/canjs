@@ -167,6 +167,8 @@ steal('can/util',function(can) {
 			 */
 			sub: function( str, data, remove ) {
 				var obs = [];
+				
+				str = str || '';
 
 				obs.push( str.replace( strReplacer, function( whole, inside ) {
 
