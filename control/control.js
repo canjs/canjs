@@ -699,6 +699,10 @@ steal('can/util','can/construct', function( can ) {
 		 * 
 		 */
 		destroy: function() {
+			//Control already destroyed
+			if(this.element === null) {
+				return;
+			}
 			var Class = this.constructor,
 				pluginName = Class.pluginName || Class._fullName,
 				controls;
