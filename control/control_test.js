@@ -343,7 +343,7 @@
 		equal(c._bindings.length, 1, 'There is only one binding');
 	});
 
-	test("Multiple calls to destroy", 3, function() {
+	test("Multiple calls to destroy", 2, function() {
 
 		var Control = can.Control({
 			destroy: function() {
@@ -354,7 +354,6 @@
 		div = document.createElement('div'),
 		c = new Control(div);
 
-		can.$(div).remove();
 		c.destroy();
 		c.destroy();
 	});

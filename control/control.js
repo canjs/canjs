@@ -701,6 +701,9 @@ steal('can/util','can/construct', function( can ) {
 		destroy: function() {
 			//Control already destroyed
 			if(this.element === null) {
+				//!steal-remove-start
+				steal.dev.warn("Control.js - Control already destroyed");
+				//!steal-remove-end
 				return;
 			}
 			var Class = this.constructor,
