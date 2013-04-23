@@ -167,7 +167,11 @@ module.exports = function (grunt) {
 					{
 						pattern: /(\n){3,}/gim, //single new lines
 						replacement: '\n\n'
-					}
+					},
+					{
+						pattern: /@EDGE/gim, //version property
+						replacement: '<%= pkg.version %>'
+					},
 				]
 			}
 		},
@@ -179,18 +183,6 @@ module.exports = function (grunt) {
 			edge: {
 				files: '<%= meta.out %>/edge/**/*.js',
 				banner: '<%= meta.banner %>'
-			}
-		},
-		updateversion: {
-			latest: {
-				files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
-				symbol: /@VERSION/g,
-				version: '<%= pkg.version %>'
-			},
-			edge: {
-				files: '<%= meta.out %>/edge/**/*.js',
-				symbol: /@VERSION/g,
-				version: '<%= pkg.version %> (edge)'
 			}
 		},
 		changelog: {
