@@ -1,5 +1,5 @@
 // 1.69
-steal('can/util','can/construct', function(can) {
+steal('can/util','can/util/bind','can/construct', function(can, bind) {
 	// ## observe.js  
 	// `can.Observe`  
 	// _Provides the observable pattern for JavaScript Objects._  
@@ -17,34 +17,44 @@ steal('can/util','can/construct', function(can) {
 				}
 			});
 		},
-		// Listens to changes on `val` and "bubbles" the event up.  
-		// `val` - The object to listen for changes on.  
+		// Listens to changes on `child` and "bubbles" the event up.  
+		// `child` - The object to listen for changes on.  
 		// `prop` - The property name is at on.  
 		// `parent` - The parent object of prop.
 		// `ob` - (optional) The Observe object constructor
 		// `list` - (optional) The observable list constructor
-		hookupBubble = function( val, prop, parent, Ob, List ) {
+		hookupBubble = function( child, prop, parent, Ob, List ) {
 			Ob = Ob || Observe;
 			List = List || Observe.List;
 
-			// If it's an `array` make a list, otherwise a val.
-			if (val instanceof Observe){
+			// If it's an `array` make a list, otherwise a child.
+			if (child instanceof Observe){
 				// We have an `observe` already...
 				// Make sure it is not listening to this already
-				unhookup([val], parent._cid);
-			} else if ( can.isArray(val) ) {
-				val = new List(val);
+				// It's only listening if it has bindings already.
+				parent._bindings &&unhookup([child], parent._cid);
+			} else if ( can.isArray(child) ) {
+				child = new List(child);
 			} else {
-				val = new Ob(val);
+				child = new Ob(child);
+			}
+			// only listen if something is listening to you
+			if(parent._bindings){
+				// Listen to all changes and `batchTrigger` upwards.
+				bindToChildAndBubbleToParent(child, prop, parent)
 			}
 			
-			// Listen to all changes and `batchTrigger` upwards.
-			val.bind("change" + parent._cid, function( /* ev, attr */ ) {
+
+			return child;
+		},
+		bindToChildAndBubbleToParent = function(child, prop, parent){
+			child.bind("change" + parent._cid, 
+				function( /* ev, attr */ ) {
 				// `batchTrigger` the type on this...
 				var args = can.makeArray(arguments),
 					ev = args.shift();
 					args[0] = (prop === "*" ? 
-						[ parent.indexOf( val ), args[0]] :
+						[ parent.indexOf( child ), args[0]] :
 						[ prop, args[0]] ).join(".");
 
 				// track objects dispatched on this observe		
@@ -61,10 +71,7 @@ steal('can/util','can/construct', function(can) {
 				// send modified attr event to parent
 				//can.trigger(parent, args[0], args);
 			});
-
-			return val;
-		},
-		
+		}
 		// An `id` to track events for a given observe.
 		observeId = 0,
 		// A helper used to serialize an `Observe` or `Observe.List`.  
@@ -83,13 +90,6 @@ steal('can/util','can/construct', function(can) {
 			});
 			return where;
 		},
-		$method = function( name ) {
-			return function() {
-				return can[name].apply(this, arguments );
-			};
-		},
-		bind = $method('addEvent'),
-		unbind = $method('removeEvent'),
 		attrParts = function(attr, keepKey) {
 			if(keepKey) {
 				return [attr];
@@ -103,7 +103,17 @@ steal('can/util','can/construct', function(can) {
 		transactions = 0,
 		// an array of events within a transaction
 		batchEvents = [],
-		stopCallbacks = [];
+		stopCallbacks = [],
+		makeBindSetup = function(wildcard){
+			return function(){
+				var parent = this;
+				this._each(function(child, prop){
+					if(child && child.bind){
+						bindToChildAndBubbleToParent(child, wildcard || prop, parent)
+					}
+				})
+			};
+		};
 	
 	
 		
@@ -115,8 +125,8 @@ steal('can/util','can/construct', function(can) {
 	 * @static
 	 */
 		// keep so it can be overwritten
-		bind : bind,
-		unbind: unbind,
+		bind : bind.bind,
+		unbind: bind.unbind,
 		id: "id",
 		canMakeObserve : canMakeObserve,
 		// starts collecting events
@@ -313,11 +323,27 @@ steal('can/util','can/construct', function(can) {
 			this.bind('change'+this._cid,can.proxy(this._changes,this));
 			delete this._init;
 		},
+		_bindsetup: makeBindSetup(),
+		_bindteardown: function(){
+			var cid = this._cid;
+			this._each(function(child){
+				unhookup([child], cid)
+			})
+		},
 		_changes: function(ev, attr, how,newVal, oldVal){
 			Observe.triggerBatch(this, {type:attr, batchNum: ev.batchNum}, [newVal,oldVal]);
 		},
 		_triggerChange: function(attr, how,newVal, oldVal){
 			Observe.triggerBatch(this,"change",can.makeArray(arguments))
+		},
+		// no live binding iterator
+		_each: function(callback){
+			var data = this.__get();
+			for(var prop in data){
+				if(data.hasOwnProperty(prop)){
+					callback(data[prop],prop)
+				}
+			}
 		},
 		/**
 		 * Get or set an attribute or attributes on the observe.
@@ -764,7 +790,7 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * @return {can.Observe} the observe for chaining.
 		 */
-		bind: bind,
+		bind: bind.bind,
 		/**
 		 * @function unbind
 		 * Unbinds an event listener.  This works similar to jQuery's unbind.  This means you can 
@@ -788,7 +814,7 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * @return {can.Observe} the original observe for chaining.
 		 */
-		unbind: unbind,
+		unbind: bind.unbind,
 		/**
 		 * @hide
 		 * Get the serialized Object form of the observe.  Serialized
@@ -1045,6 +1071,7 @@ steal('can/util','can/construct', function(can) {
 			} else {
 				this.push.apply(this, can.makeArray(instances || []));
 			}
+			// this change needs to be ignored
 			this.bind('change'+this._cid,can.proxy(this._changes,this));
 			can.extend(this, options);
 			delete this._init;
@@ -1077,6 +1104,13 @@ steal('can/util','can/construct', function(can) {
 				this.length = (+attr+1)
 			}
 		},
+		_each: function(callback){
+			var data = this.__get();
+			for(var i =0; i < data.length; i++){
+				callback(data[i],i)
+			}
+		},
+		_bindsetup: makeBindSetup("*"),
 		// Returns the serialized form of this list.
 		/**
 		 * @hide
@@ -1352,6 +1386,15 @@ steal('can/util','can/construct', function(can) {
 		 *     
 		 *     list.push('0','1','2'); 
 		 *     list.attr() // -> ['0', '1', '2']
+		 * 
+		 * If you have 2 lists that you wish to merge the contents of,
+		 * simply doing a push will push the source list as a new entry
+		 * in the list rather than merging it.  Instead do:
+		 * 
+		 * 	var target = new can.Observe.List([ 1, 2, 3 ]);
+		 * 	var source = new can.Observe.List([ 4, 5, 6 ]);
+		 * 
+		 * 	source.push.apply(source, target); //-> [ 1, 2, 3, 4, 5, 6 ]
 		 * 
 		 * @return {Number} the number of items in the array
 		 */

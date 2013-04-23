@@ -48,7 +48,7 @@ CanJS supports the following browsers:
 - Chrome Current-1
 - Safari Current-1
 - Firefox Current-1
-- IE 6+
+- IE 7+
 - Opera Current-1
 
 ## Style Guide
