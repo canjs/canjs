@@ -12,7 +12,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 	can.extend(clss, {
 		/**
 		 * @attribute can.Observe.static.attributes
-		 * @parent can.Observe.attributes
+		 * @parent can.Observe.static
 		 *
 		 * `can.Observe.attributes` is a property that contains key/value pair(s) of an attribute's name and its
 		 * respective type for using in [can.Observe.static.convert convert] and [can.Observe.prototype.serialize serialize].
@@ -30,7 +30,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 		
 		/**
 		 * @attribute can.Observe.static.convert
-		 * @parent can.Observe.attributes
+		 * @parent can.Observe.static
 		 *
 		 * You often want to convert from what the observe sends you to a form more useful to JavaScript. 
 		 * For example, contacts might be returned from the server with dates that look like: "1982-10-20". 
@@ -153,7 +153,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 		},
 		/**
 		 * @attribute can.Observe.static.serialize
-		 * @parent can.Observe.attributes
+		 * @parent can.Observe.static
 		 *
 		 * `can.Observe.static.seralize` is object of name-function pairs that are used to 
 		 * serialize attributes.
