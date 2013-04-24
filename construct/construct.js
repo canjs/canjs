@@ -12,7 +12,7 @@ steal("can/util/string", function(can) {
 	var initializing = 0;
 
 	/** 
-	 * @constructor can.Construct 
+	 * @add can.Construct
 	 */
 	can.Construct = function() {
 		if (arguments.length) {
@@ -266,7 +266,8 @@ steal("can/util/string", function(can) {
 				constructor: Constructor,
 				prototype: prototype,
 				/**
-				 * @property {String} namespace 
+				 * @property {String} can.Construct.static.namespace namespace
+				 *
 				 * The `namespace` property returns the namespace your constructor is in.
 				 * This provides a way organize code and ensure globally unique types.
 				 * 
@@ -279,7 +280,8 @@ steal("can/util/string", function(can) {
 				 */
 				namespace: namespace,
 				/**
-				 * @property {String} shortName
+				 * @property {String} can.Construct.static.shortName shortName
+				 *
 				 * If you pass a name when creating a Construct, the `shortName` property will be set to the
 				 * name you passed without the namespace.
 				 * 
@@ -293,7 +295,8 @@ steal("can/util/string", function(can) {
 				shortName: shortName,
 				_shortName : _shortName,
 				/**
-				 * @property fullName 
+				 * @property {String} can.Construct.static.fullName fullName
+				 *
 				 * If you pass a name when creating a Construct, the `fullName` property will be set to
 				 * the name you passed.
 				 * 
@@ -441,9 +444,9 @@ steal("can/util/string", function(can) {
 			 */
 			//  
 			/**
-			 * @property {Function} constructor
+			 * @property {Function} can.Construct.prototype.constructor constructor
 			 * @parent can.Construct.prototype
-			 * 
+			 *
 			 * A reference to the constructor function that created the instance. This allows you to access
 			 * the constructor's static properties from an instance.
 			 * 

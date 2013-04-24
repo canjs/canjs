@@ -649,6 +649,7 @@ steal('can/util','can/observe', function( can ) {
 			return arguments[0];
 		},
 		/**
+		 * @function can.Model.static.models models
 		 * @description Convert raw data into can.Model instances.
 		 * @signature `models(data[, oldList])`
 		 * @param {Array<Object>} data The raw data from a `[can.Model.findAll findAll()]` request.
@@ -786,6 +787,7 @@ steal('can/util','can/observe', function( can ) {
 			return res;
 		},
 		/**
+		 * @function can.Model.static.model model
 		 * @description Convert raw data into a can.Model instance.
 		 * @signature `model(data)`
 		 * @param {Object} data The data to convert to a can.Model instance.
@@ -869,6 +871,7 @@ steal('can/util','can/observe', function( can ) {
 	 */
 	{
 		/**
+		 * @function can.Model.prototype.isNew isNew
 		 * @description Check if a Model has yet to be saved on the server.
 		 * @signature `isNew()`
 		 * @return {Boolean} Whether an instance has been saved on the server.
@@ -886,6 +889,7 @@ steal('can/util','can/observe', function( can ) {
 			return ! ( id || id === 0 ); // If `null` or `undefined`
 		},
 		/**
+		 * @function can.Model.prototype.save save
 		 * @description Save a model back to the server.
 		 * @signature `save([success[, error]])`
 		 * @param {function} [success] A callback to call on successful save. The callback recieves
@@ -955,6 +959,7 @@ steal('can/util','can/observe', function( can ) {
 			return makeRequest(this, this.isNew() ? 'create' : 'update', success, error);
 		},
 		/**
+		 * @function can.Model.prototype.destroy destroy
 		 * @description Destroy a Model on the server.
 		 * @signature `destroy([success[, error]])`
 		 * @param {function} [success] A callback to call on successful destruction. The callback recieves
@@ -1001,7 +1006,7 @@ steal('can/util','can/observe', function( can ) {
 		},
 		/**
 		 * @description Listen to events on this Model.
-		 * @function bind
+		 * @function can.Model.prototype.bind bind
 		 * @signature `bind(eventName, handler)`
 		 * @param {String} eventName The event to bind to.
 		 * @param {function} handler The function to call when the
@@ -1069,7 +1074,7 @@ steal('can/util','can/observe', function( can ) {
 			return can.Observe.prototype.bind.apply( this, arguments );
 		},
 		/**
-		 * @function unbind
+		 * @function can.Model.prototype.unbind unbind
 		 * @description Stop listening to events on this Model.
 		 * @signature `unbind(eventName[, handler])`
 		 * @param {String} eventName The event to unbind from.

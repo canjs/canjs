@@ -37,8 +37,9 @@ steal('can/util','can/construct', function( can ) {
 		basicProcessor;
 	
 	/**
-	 * @constructor can.Control
+	 * @add can.Control
 	 */
+
 	var Control = can.Control = can.Construct(
 	/** 
 	 * @static
@@ -163,7 +164,8 @@ steal('can/util','can/construct', function( can ) {
 		// An object of `{eventName : function}` pairs that Control uses to 
 		// hook up events auto-magically.
 		/**
-		 * @property processors
+		 * @property can.Control.static.processors processors
+		 * 
 		 * An object of `{eventName : function}` pairs that Control uses to hook up events
 		 * auto-magically.  A processor function looks like:
 		 * 
@@ -219,11 +221,12 @@ steal('can/util','can/construct', function( can ) {
 		processors: {},
 		// A object of name-value pairs that act as default values for a 
 		// control instance
+		defaults: {}
 		/**
-		 * @property defaults
-		 * A object of name-value pairs that act as default values for a control's 
+		 * @property can.Control.static.defaults defaults
+		 * A object of name-value pairs that act as default values for a control's
 		 * [can.Control::options this.options].
-		 * 
+		 *
 		 *     Message = can.Control({
 		 *       defaults: {
 		 *         message: "Hello World"
@@ -233,14 +236,13 @@ steal('can/util','can/construct', function( can ) {
 		 *         this.element.text( this.options.message );
 		 *       }
 		 *     });
-		 *     
+		 *
 		 *     new Message( "#el1" ); //writes "Hello World"
 		 *     new Message( "#el12", { message: "hi" } ); //writes hi
-		 *     
+		 *
 		 * In [can.Control::setup] the options passed to the control
 		 * are merged with defaults.  This is not a deep merge.
 		 */
-		defaults: {}
 	},
 	/** 
 	 * @prototype
@@ -249,6 +251,7 @@ steal('can/util','can/construct', function( can ) {
 		// Sets `this.element`, saves the control in `data, binds event
 		// handlers.
 		/**
+		 * @function can.Control.prototype.setup setup
 		 * @description Perform pre-initialization logic.
 		 * @signature `setup(element, options)`
 		 * @param {HTMLElement} element the element this instance operates on.
@@ -307,7 +310,7 @@ steal('can/util','can/construct', function( can ) {
 			
 			// Option merging.
 			/**
-			 * @property options
+			 * @property can.Control.prototype.options options
 			 * 
 			 * Options are used to configure a control.  They are
 			 * the 2nd argument
@@ -355,7 +358,7 @@ steal('can/util','can/construct', function( can ) {
 			// Gets passed into `init`.
 			/**
 			 * @description The element the Control is associated with.
-			 * @property element
+			 * @property can.Control.prototype.element
 			 * 
 			 * The control instance's HTMLElement (or window) wrapped by the 
 			 * util library for ease of use. It is set by the first
@@ -456,6 +459,7 @@ steal('can/util','can/construct', function( can ) {
 			return [this.element, this.options];
 		},
 		/**
+		 * @function can.Control.prototype.on on
 		 * @description Bind an event handler to a Control, or rebind all event handlers on a Control.
 		 * @signature `on([el,] selector, eventName, func)`
 		 * @param {HTMLElement|jQuery collection|Object} [el=this.element]
