@@ -10,7 +10,8 @@
   "homepage" : "http://canjs.us/",
   "repository" : {
     "type" : "git",
-    "url" : "git@github.com:bitovi/canjs.git"
+    "url" : "git@github.com:bitovi/canjs.git",
+    "github": "https://github.com/bitovi/canjs"
   },
   "devDependencies" : {
     "http-server" : "0.5.1",

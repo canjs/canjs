@@ -1,7 +1,7 @@
 @constructor can.Control
 @parent canjs
-
-@plugin can/control
+@download can/route
+@test can/route/qunit.html
 @test can/control/qunit.html
 @inherits can.Construct
 @description widget factory with declarative event binding.

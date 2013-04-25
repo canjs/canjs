@@ -1,6 +1,7 @@
 @constructor can.Observe
 @parent canjs
 @test can/observe/qunit.html
+@download can/observe
 
 `can.Observe` provides a way for you to listen for and keep track of changes
 to objects. When you use the getters and setters provided by `can.Observe`,

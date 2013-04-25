@@ -956,104 +956,106 @@ steal('can/util','can/construct', function(can) {
 		}
 	});
 	// Helpers for `observable` lists.
-	/**
-	 * @page can.Observe.List
-	 * @inherits can.Observe
-	 * @parent canjs
-	 *
-	 * `can.Observe.List` provides a way for you to use `can.Observe`s with arrays. Much like `can.Observe`,
-	 * when you use the getters and setters on `can.Observe.List`, events are fired that you can listen for
-	 * and react to.
-	 * 
-	 * @function can.Observe.List
-	 * @constructor
-	 * @signature `can.Observe.List([elements])`
-	 * @param {Array} [elements] elements to seed the List with
-	 * @return {can.Observe.List} an instance of `can.Observe.List` with the elements from _elements_
-	 *
-	 * ## Working with Lists
-	 * 
-	 * `can.Observe.List` extends `[can.Observe]`, so all the ways that you're used to working with
-	 * Observes also work here, including [can.Observe.prototype.bind bind], [can.Observe.prototype.unbind unbind],
-	 * and [can.Observe.prototype.each each]. And just as you can directly read properties normally
-	 * off of an Observe, you can use array accessors ([]) to read elements directly off of a List.
-	 *
-	 * The one function of `can.Observe` that works slightly differently is `attr`. As expected when working with
-	 * arrays, top-level keys passed into `attr` are required to be numeric. (Strings may still be used when getting
-	 * or modifying deep properties). Any top-level keys that are non-numeric are ignored. In addition, as might be
-	 * expected, a call to argument-less `attr` returns an array instead of an object.
-	 * 
-	 * Just as you shouldn't set properties of an Observe directly, you shouldn't change elements
-	 * of a List directly. Always use `attr` to set the elements of a List, or use [can.Observe.List.push push],
-	 * [can.Observe.List.pop pop], [can.Observe.List.shift shift], [can.Observe.List.unshift unshift], or [can.Observe.List.splice splice].
-	 *
-	 * Here is a tour through the forms of `can.Observe.List`'s `attr` that parallels the one found under [can.Observe.prototype.attr attr]:
-	 *
-	 * @codestart
-	 * var people = new can.Observe.List(['Alex', 'Bill']);
-	 * 
-	 * // set an element:
-	 * people.attr(0, 'Adam');
-	 * people[0] = 'Adam'; // don't do this!
-	 * 
-	 * // get an element:
-	 * people.attr(0); // 'Adam'
-	 * people[0]; // 'Adam'
-	 *
-	 * // get all elements:
-	 * people.attr(); // ['Adam', 'Bill']
-	 *
-	 * // extend the array:
-	 * people.attr(4, 'Charlie');
-	 * people.attr(); // ['Adam', 'Bill', undefined, undefined, 'Charlie']
-	 *
-	 * // merge the elements:
-	 * people.attr(['Alice', 'Bob', 'Eve']);
-	 * people.attr(); // ['Alice', 'Bob', 'Eve', undefined, 'Charlie']
-	 * @codeend
-	 * 
-	 * ## Listening to changes
-	 * 
-	 * As with `can.Observe`s, the real power of observable arrays comes from being able to
-	 * react to changes in the member elements of the array. Lists emit five types of events:
-	 * - the _change_ event fires on every change to a List.
-	 * - the _set_ event is fired when an element is set.
-	 * - the _add_ event is fired when an element is added to the List.
-	 * - the _remove_ event is fired when an element is removed from the List.
-	 * - the _length_ event is fired when the length of the List changes.
-	 *
-	 * This example presents a brief concrete survey of the times these events are fired:
-	 *
-	 * @codestart
-	 * var list = new can.Observe.List(['Alice', 'Bob', 'Eve']);
-	 * 
-	 * list.bind('change', function() { console.log('An element changed.'); });
-	 * list.bind('set', function() { console.log('An element was set.'); });
-	 * list.bind('add', function() { console.log('An element was added.'); });
-	 * list.bind('remove', function() { console.log('An element was removed.'); });
-	 * list.bind('length', function() { console.log('The length of the list changed.'); });
-	 *
-	 * list.attr(0, 'Alexis'); // 'An element changed.'
-	 *                         // 'An element was set.'
-	 * 
-	 * list.attr(3, 'Xerxes'); // 'An element changed.'
-	 *                         // 'An element was added.'
-	 *                         // 'The length of the list was changed.'
-	 *
-	 * list.attr(['Adam', 'Bill']); // 'An element changed.'
-	 *                              // 'An element was set.'
-	 *                              // 'An element was changed.'
-	 *                              // 'An element was set.'
-	 * 
-	 * list.pop(); // 'An element changed.'
-	 *             // 'An element was removed.'
-	 *             // 'The length of the list was changed.'
-	 * @codeend
-	 *
-	 * More information about binding to these events can be found under [can.Observe.List.attr attr].
-	 */
 	var splice = [].splice,
-		list = Observe(
+		/**
+		 * @page can.Observe.List
+		 * @inherits can.Observe
+		 * @download can/observe
+		 * @test can/observe/qunit.html
+		 * @parent canjs
+		 *
+		 * `can.Observe.List` provides a way for you to use `can.Observe`s with arrays. Much like `can.Observe`,
+		 * when you use the getters and setters on `can.Observe.List`, events are fired that you can listen for
+		 * and react to.
+		 *
+		 * @function can.Observe.List
+		 * @constructor
+		 * @signature `can.Observe.List([elements])`
+		 * @param {Array} [elements] elements to seed the List with
+		 * @return {can.Observe.List} an instance of `can.Observe.List` with the elements from _elements_
+		 *
+		 * ## Working with Lists
+		 *
+		 * `can.Observe.List` extends `[can.Observe]`, so all the ways that you're used to working with
+		 * Observes also work here, including [can.Observe.prototype.bind bind], [can.Observe.prototype.unbind unbind],
+		 * and [can.Observe.prototype.each each]. And just as you can directly read properties normally
+		 * off of an Observe, you can use array accessors ([]) to read elements directly off of a List.
+		 *
+		 * The one function of `can.Observe` that works slightly differently is `attr`. As expected when working with
+		 * arrays, top-level keys passed into `attr` are required to be numeric. (Strings may still be used when getting
+		 * or modifying deep properties). Any top-level keys that are non-numeric are ignored. In addition, as might be
+		 * expected, a call to argument-less `attr` returns an array instead of an object.
+		 *
+		 * Just as you shouldn't set properties of an Observe directly, you shouldn't change elements
+		 * of a List directly. Always use `attr` to set the elements of a List, or use [can.Observe.List.push push],
+		 * [can.Observe.List.pop pop], [can.Observe.List.shift shift], [can.Observe.List.unshift unshift], or [can.Observe.List.splice splice].
+		 *
+		 * Here is a tour through the forms of `can.Observe.List`'s `attr` that parallels the one found under [can.Observe.prototype.attr attr]:
+		 *
+		 * @codestart
+		 * var people = new can.Observe.List(['Alex', 'Bill']);
+		 *
+		 * // set an element:
+		 * people.attr(0, 'Adam');
+		 * people[0] = 'Adam'; // don't do this!
+		 *
+		 * // get an element:
+		 * people.attr(0); // 'Adam'
+		 * people[0]; // 'Adam'
+		 *
+		 * // get all elements:
+		 * people.attr(); // ['Adam', 'Bill']
+		 *
+		 * // extend the array:
+		 * people.attr(4, 'Charlie');
+		 * people.attr(); // ['Adam', 'Bill', undefined, undefined, 'Charlie']
+		 *
+		 * // merge the elements:
+		 * people.attr(['Alice', 'Bob', 'Eve']);
+		 * people.attr(); // ['Alice', 'Bob', 'Eve', undefined, 'Charlie']
+		 * @codeend
+		 *
+		 * ## Listening to changes
+		 *
+		 * As with `can.Observe`s, the real power of observable arrays comes from being able to
+		 * react to changes in the member elements of the array. Lists emit five types of events:
+		 * - the _change_ event fires on every change to a List.
+		 * - the _set_ event is fired when an element is set.
+		 * - the _add_ event is fired when an element is added to the List.
+		 * - the _remove_ event is fired when an element is removed from the List.
+		 * - the _length_ event is fired when the length of the List changes.
+		 *
+		 * This example presents a brief concrete survey of the times these events are fired:
+		 *
+		 * @codestart
+		 * var list = new can.Observe.List(['Alice', 'Bob', 'Eve']);
+		 *
+		 * list.bind('change', function() { console.log('An element changed.'); });
+		 * list.bind('set', function() { console.log('An element was set.'); });
+		 * list.bind('add', function() { console.log('An element was added.'); });
+		 * list.bind('remove', function() { console.log('An element was removed.'); });
+		 * list.bind('length', function() { console.log('The length of the list changed.'); });
+		 *
+		 * list.attr(0, 'Alexis'); // 'An element changed.'
+		 *                         // 'An element was set.'
+		 *
+		 * list.attr(3, 'Xerxes'); // 'An element changed.'
+		 *                         // 'An element was added.'
+		 *                         // 'The length of the list was changed.'
+		 *
+		 * list.attr(['Adam', 'Bill']); // 'An element changed.'
+		 *                              // 'An element was set.'
+		 *                              // 'An element was changed.'
+		 *                              // 'An element was set.'
+		 *
+		 * list.pop(); // 'An element changed.'
+		 *             // 'An element was removed.'
+		 *             // 'The length of the list was changed.'
+		 * @codeend
+		 *
+		 * More information about binding to these events can be found under [can.Observe.List.attr attr].
+		 */
+			list = Observe(
 	/**
 	 * @prototype
 	 */

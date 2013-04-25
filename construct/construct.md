@@ -1,5 +1,5 @@
 @constructor can.Construct
-@plugin can/construct
+@download can/construct
 @test can/construct/qunit.html
 @parent canjs
 

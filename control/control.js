@@ -165,6 +165,7 @@ steal('can/util','can/construct', function( can ) {
 		// hook up events auto-magically.
 		/**
 		 * @property can.Control.static.processors processors
+		 * @parent can.Control.static
 		 * 
 		 * An object of `{eventName : function}` pairs that Control uses to hook up events
 		 * auto-magically.  A processor function looks like:
@@ -224,6 +225,8 @@ steal('can/util','can/construct', function( can ) {
 		defaults: {}
 		/**
 		 * @property can.Control.static.defaults defaults
+		 * @parent can.Control.static
+		 *
 		 * A object of name-value pairs that act as default values for a control's
 		 * [can.Control::options this.options].
 		 *
@@ -244,14 +247,15 @@ steal('can/util','can/construct', function( can ) {
 		 * are merged with defaults.  This is not a deep merge.
 		 */
 	},
-	/** 
-	 * @prototype
-	 */
 	{
+		/**
+		 * @prototype
+		 */
 		// Sets `this.element`, saves the control in `data, binds event
 		// handlers.
 		/**
 		 * @function can.Control.prototype.setup setup
+		 * @parent can.Control.prototype
 		 * @description Perform pre-initialization logic.
 		 * @signature `setup(element, options)`
 		 * @param {HTMLElement} element the element this instance operates on.
@@ -311,6 +315,7 @@ steal('can/util','can/construct', function( can ) {
 			// Option merging.
 			/**
 			 * @property can.Control.prototype.options options
+			 * @parent can.Control.prototype
 			 * 
 			 * Options are used to configure a control.  They are
 			 * the 2nd argument
@@ -358,7 +363,8 @@ steal('can/util','can/construct', function( can ) {
 			// Gets passed into `init`.
 			/**
 			 * @description The element the Control is associated with.
-			 * @property can.Control.prototype.element
+			 * @property can.Control.prototype.element element
+			 * @parent can.Control.prototype
 			 * 
 			 * The control instance's HTMLElement (or window) wrapped by the 
 			 * util library for ease of use. It is set by the first
@@ -460,6 +466,7 @@ steal('can/util','can/construct', function( can ) {
 		},
 		/**
 		 * @function can.Control.prototype.on on
+		 * @parent can.Control.prototype
 		 * @description Bind an event handler to a Control, or rebind all event handlers on a Control.
 		 * @signature `on([el,] selector, eventName, func)`
 		 * @param {HTMLElement|jQuery collection|Object} [el=this.element]
@@ -625,6 +632,8 @@ steal('can/util','can/construct', function( can ) {
 		/**
 		 * @description Clean up after a Control that has been removed.
 		 * @signature `destroy()`
+		 * @function can.Control.prototype.destroy destroy
+		 * @parent can.Control.prototype
 		 * 
 		 * `destroy` prepares a control for garbage collection and is a place to
 		 * reset any changes the control has made.  
