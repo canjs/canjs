@@ -171,7 +171,7 @@ module.exports = function (grunt) {
 					{
 						pattern: /@EDGE/gim, //version property
 						replacement: '<%= pkg.version %>'
-					},
+					}
 				]
 			}
 		},
