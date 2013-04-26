@@ -38,7 +38,7 @@ module.exports = function (grunt) {
 				template: 'test/templates/__configuration__-dist.html.ejs',
 				builder: '<%= builder %>',
 				root: '../..',
-				out: 'test/dist/',
+				out: 'test/build/',
 				transform: {
 					'module': function(definition, name) {
 						if(!definition.isDefault) {
