@@ -38,7 +38,7 @@ module.exports = function (grunt) {
 				template: 'test/templates/__configuration__-dist.html.ejs',
 				builder: '<%= builder %>',
 				root: '../..',
-				out: 'test/build/',
+				out: 'test/dist/',
 				transform: {
 					'module': function(definition, name) {
 						if(!definition.isDefault) {
@@ -256,7 +256,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-shell');
 
-	grunt.registerTask('test', ['connect', 'qunit']);
+	grunt.registerTask('test', ['edge', 'testify', 'connect', 'qunit']);
 
 	grunt.registerTask('edge', ['build:edge', 'build:edgePlugins', 'string-replace:edge', 'beautify:dist', 'bannerize:edge', 'docco:edge']);
 	grunt.registerTask('latest', ['build:latest', 'build:latestPlugins', 'string-replace:latest', 'beautify:dist', 'bannerize:latest', 'docco:latest']);
