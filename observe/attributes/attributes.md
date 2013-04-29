@@ -1,4 +1,4 @@
-@page can.Observe.attributes
+@page can.Observe.attributes attributes
 @parent can.Observe
 @plugin can/observe/attributes
 @test can/observe/attributes/qunit.html
@@ -10,6 +10,7 @@ helpful when used with [can.Model] \(because the serialization aids in sending d
 but you can use it with any Observe you plan to make instances
 from.
 
+@body
 There are three important static properties to give the class you want to use attributes with:
 - `[can.Observe.attributes.attributes attributes]` lists the properties that will be normalized
 and the types those properties should be.

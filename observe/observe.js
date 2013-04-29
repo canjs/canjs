@@ -398,7 +398,8 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * @signature `attr(obj[, removeOthers])`
 		 * 
-		 * Assigns each value in _obj_ to a property on this `can.Observe` named after the corresponding key in _obj_.
+		 * Assigns each value in _obj_ to a property on this `can.Observe` named after the
+		 * corresponding key in _obj_, effectively merging _obj_ into the Observe.
 		 * 
 		 * @param {Object<String, *>} obj a collection of key-value pairs to set.
 		 * If any properties already exist on the `can.Observe`, they will be overwritten.
@@ -408,6 +409,7 @@ steal('can/util','can/construct', function(can) {
 		 *
 		 * @return {can.Observe} this Observe, for chaining
 		 * 
+		 * @body
 		 * `attr` gets or sets properties on the `can.Observe` it's called on. Here's a tour through
 		 * how all of its forms work:
 		 *
@@ -532,6 +534,7 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * @return {can.Observe} this Observe, for chaining
 		 *
+		 * @body
 		 * @codestart
 		 * var names = [];
 		 * new can.Observe({a: 'Alice', b: 'Bob', e: 'Eve'}).each(function(value, key) {
@@ -563,6 +566,7 @@ steal('can/util','can/construct', function(can) {
 		 * @param {String} attrName the name of the property to remove
 		 * @return {*} the value of the property that was removed
 		 * 
+		 * @body
 		 * `removeAttr` removes a property by name from an Observe.
 		 * 
 		 * @codestart
@@ -719,6 +723,7 @@ steal('can/util','can/construct', function(can) {
 		 * for details.
 		 * @return {can.Observe} this Observe, for chaining
 		 * 
+		 * @body
 		 * `bind` binds event handlers to property changes on `can.Observe`s. When you change
 		 * a property using `attr`, two events are fired on the Observe, allowing other parts
 		 * of your application to observe the changes to the object.
@@ -928,6 +933,7 @@ steal('can/util','can/construct', function(can) {
 		 * @param {String} attrName the property to bind to
 		 * @return {can.compute} a [can.compute] bound to _attrName_
 		 *
+		 * @body
 		 * `compute` is a convenience method for making computes from properties
 		 * of Observes. More information about computes can be found under [can.compute].
 		 *
@@ -974,6 +980,7 @@ steal('can/util','can/construct', function(can) {
 		 * @param {Array} [elements] elements to seed the List with
 		 * @return {can.Observe.List} an instance of `can.Observe.List` with the elements from _elements_
 		 *
+		 * @body
 		 * ## Working with Lists
 		 *
 		 * `can.Observe.List` extends `[can.Observe]`, so all the ways that you're used to working with
@@ -1124,6 +1131,7 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * @return {can.Observe.List} this List, for chaining
 		 *
+		 * @body
 		 * @codestart
 		 * var i = 0;
 		 * new can.Observe([1, 10, 100]).each(function(element, index) {
@@ -1157,6 +1165,7 @@ steal('can/util','can/construct', function(can) {
 		 *
 		 * @return {Array} the elements removed by `splice`
 		 *
+		 * @body
 		 * `splice` lets you remove elements from and insert elements into a List.
 		 *
 		 * This example demonstrates how to do surgery on a list of numbers:
@@ -1271,6 +1280,7 @@ steal('can/util','can/construct', function(can) {
 		 *
 		 * @return {can.Observe.List} this List, for chaining
 		 * 
+		 * @body
 		 * `attr` gets or sets elements on the `can.Observe.List` it's called on. Here's a tour through
 		 * how all of its forms work:
 		 *
@@ -1551,6 +1561,7 @@ steal('can/util','can/construct', function(can) {
 		 *
 		 * @return {Number} the new length of the List
 		 *
+		 * @body
 		 * `push` is fairly straightforward:
 		 *
 		 * @codestart
@@ -1592,6 +1603,7 @@ steal('can/util','can/construct', function(can) {
 		 *
 		 * @return {Number} the new length of the List
 		 *
+		 * @body
 		 * `unshift` adds elements to the front of the list in bulk in the order specified:
 		 *
 		 * @codestart
@@ -1668,6 +1680,7 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * @return {*} the element just popped off the List, or `undefined` if the List was empty
 		 *
+		 * @body
 		 * `pop` is the opposite action from `[can.Observe.List.push push]`:
 		 *
 		 * @codestart
@@ -1702,6 +1715,7 @@ steal('can/util','can/construct', function(can) {
 		 *
 		 * @return {*} the element just shifted off the List, or `undefined` if the List is empty
 		 *
+		 * @body
 		 * `shift` is the opposite action from `[can.Observe.List.unshift unshift]`:
 		 *
 		 * @codestart
@@ -1764,6 +1778,7 @@ steal('can/util','can/construct', function(can) {
 		 *
 		 * @return {Number} the position of the item in the List, or -1 if the item is not found.
 		 *
+		 * @body
 		 * @codestart
 		 * var list = new can.Observe.List(['Alice', 'Bob', 'Eve']);
 		 * list.indexOf('Alice');   // 0
@@ -1795,6 +1810,7 @@ steal('can/util','can/construct', function(can) {
 		 *
 		 * @return {String} the joined string
 		 *
+		 * @body
 		 * @codestart
 		 * var list = new can.Observe.List(['Alice', 'Bob', 'Eve']);
 		 * list.join(', '); // 'Alice, Bob, Eve'
@@ -1814,6 +1830,7 @@ steal('can/util','can/construct', function(can) {
 		 *
 		 * @return {can.Observe.List} the List, for chaining
 		 *
+		 * @body
 		 * @codestart
 		 * var list = new can.Observe.List(['Alice', 'Bob', 'Eve']);
 		 * var reversedList = list.reverse();
@@ -1838,6 +1855,7 @@ steal('can/util','can/construct', function(can) {
 		 *
 		 * @return {can.Observe.List} a new `can.Observe.List` with the extracted elements
 		 *
+		 * @body
 		 * @codestart
 		 * var list = new can.Observe.List(['Alice', 'Bob', 'Charlie', 'Daniel', 'Eve']);
 		 * var newList = list.slice(1, 4);
