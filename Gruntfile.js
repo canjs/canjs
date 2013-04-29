@@ -250,6 +250,7 @@ module.exports = function (grunt) {
 
 	grunt.loadTasks("../build/tasks");
 
+	grunt.loadNpmTasks('testify');
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
