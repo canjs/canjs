@@ -1,9 +1,12 @@
 @constructor can.Construct
+@download can/construct
+@test can/construct/qunit.html
 @parent canjs
 
 `can.Construct` provides a way to easily use the power of prototypal inheritance without worrying
 about hooking up all the particulars yourself. It is inspired by John Resig's 
 [http://ejohn.org/blog/simple-javascript-inheritance/|Simple JavaScript Inheritance] concept.
+
 
 @function can.Construct
 @signature `can.Construct([name, [staticProperties,]] instanceProperties)`

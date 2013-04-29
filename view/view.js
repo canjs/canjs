@@ -183,7 +183,7 @@ steal("can/util", function( can ) {
 
 		/**
 		 * @description Create a hookup to insert into templates.
-		 * @function hook
+		 * @function can.view.hook hook
 		 * @signature `can.view.hook(callback)`
 		 * @param {Function} callback A callback function to be called with the element.
 		 *
@@ -265,7 +265,7 @@ steal("can/util", function( can ) {
 		types: {},
 
 		/**
-		 * @property {String} ext
+		 * @property {String} can.view.ext ext
 		 * The default suffix to use if none is provided in the view's url.  
 		 * This is set to `.ejs` by default.
 		 *

@@ -1,7 +1,7 @@
 @constructor can.Control
 @parent canjs
-
-@download http://jmvcsite.heroku.com/pluginify?plugins[]=can/control/control.js
+@download can/route
+@test can/route/qunit.html
 @test can/control/qunit.html
 @inherits can.Construct
 @description widget factory with declarative event binding.
