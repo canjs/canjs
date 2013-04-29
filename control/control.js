@@ -164,7 +164,6 @@ steal('can/util','can/construct', function( can ) {
 		// An object of `{eventName : function}` pairs that Control uses to 
 		// hook up events auto-magically.
 		/**
-<<<<<<< HEAD
 		 * @property can.Control.processors processors
 		 * @description A collection of hookups for custom events on Controls.
 		 *
@@ -176,27 +175,6 @@ steal('can/util','can/construct', function( can ) {
 		 * a function that processes calls to bind to the event.
 		 *
 		 * The processor function takes five arguments:
-=======
-		 * @property can.Control.static.processors processors
-		 * @parent can.Control.static
-		 * 
-		 * An object of `{eventName : function}` pairs that Control uses to hook up events
-		 * auto-magically.  A processor function looks like:
-		 * 
-		 *     can.Control.processors.
-		 *       myprocessor = function( el, event, selector, cb, control ) {
-		 *          //el - the control's element
-		 *          //event - the event (myprocessor)
-		 *          //selector - the left of the selector
-		 *          //cb - the function to call
-		 *          //control - the binding control
-		 *       };
-		 * 
-		 * This would bind anything like: "foo~3242 myprocessor".
-		 * 
-		 * The processor must return a function that when called, 
-		 * unbinds the event handler.
->>>>>>> 3ecec3a71ce4da08f3c52821d70f98e7832436b4
 		 * 
 		 * - _el_: The Control's element.
 		 * - _event_: The event type.
@@ -284,7 +262,6 @@ steal('can/util','can/construct', function( can ) {
 		// control instance
 		defaults: {}
 		/**
-<<<<<<< HEAD
 		 * @property can.Control.defaults defaults
 		 * @description Default values for the Control's options.
 		 *
@@ -294,14 +271,6 @@ steal('can/util','can/construct', function( can ) {
 		 * into the values from defaults in [can.Control::setup], and
 		 * the result will be stored in `[can.Control::options this.options]`.
 		 * 
-=======
-		 * @property can.Control.static.defaults defaults
-		 * @parent can.Control.static
-		 *
-		 * A object of name-value pairs that act as default values for a control's
-		 * [can.Control::options this.options].
-		 *
->>>>>>> 3ecec3a71ce4da08f3c52821d70f98e7832436b4
 		 *     Message = can.Control({
 		 *       defaults: {
 		 *         message: "Hello World"
@@ -314,12 +283,6 @@ steal('can/util','can/construct', function( can ) {
 		 *
 		 *     new Message( "#el1" ); //writes "Hello World"
 		 *     new Message( "#el12", { message: "hi" } ); //writes hi
-<<<<<<< HEAD
-=======
-		 *
-		 * In [can.Control::setup] the options passed to the control
-		 * are merged with defaults.  This is not a deep merge.
->>>>>>> 3ecec3a71ce4da08f3c52821d70f98e7832436b4
 		 */
 	},
 	{
@@ -329,7 +292,6 @@ steal('can/util','can/construct', function( can ) {
 		// Sets `this.element`, saves the control in `data, binds event
 		// handlers.
 		/**
-<<<<<<< HEAD
 		 * @property {NodeList} can.Control.prototype.element element
 		 * @parent can.Control.prototype
 		 * @description The element associated with this control.
@@ -346,8 +308,6 @@ steal('can/util','can/construct', function( can ) {
 		 */
 		//
 		/**
-=======
->>>>>>> 3ecec3a71ce4da08f3c52821d70f98e7832436b4
 		 * @function can.Control.prototype.setup setup
 		 * @parent can.Control.prototype
 		 * @description Perform pre-initialization logic.
@@ -409,10 +369,7 @@ steal('can/util','can/construct', function( can ) {
 			// Option merging.
 			/**
 			 * @property can.Control.prototype.options options
-<<<<<<< HEAD
-=======
 			 * @parent can.Control.prototype
->>>>>>> 3ecec3a71ce4da08f3c52821d70f98e7832436b4
 			 * 
 			 * @body
 			 * Options are used to configure a control.  They are
