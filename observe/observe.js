@@ -371,6 +371,7 @@ steal('can/util','can/construct', function(can) {
 			Observe.triggerBatch(this,"change",can.makeArray(arguments))
 		},
 		/**
+		 * @function can.Observe.prototype.attr attr
 		 * @description Get or set properties on an Observe.
 		 * @signature `attr()`
 		 * 
@@ -395,7 +396,8 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * @signature `attr(obj[, removeOthers])`
 		 * 
-		 * Assigns each value in _obj_ to a property on this `can.Observe` named after the corresponding key in _obj_.
+		 * Assigns each value in _obj_ to a property on this `can.Observe` named after the
+		 * corresponding key in _obj_, effectively merging _obj_ into the Observe.
 		 * 
 		 * @param {Object<String, *>} obj a collection of key-value pairs to set.
 		 * If any properties already exist on the `can.Observe`, they will be overwritten.
@@ -515,6 +517,7 @@ steal('can/util','can/construct', function(can) {
 			}
 		},
 		/**
+		 * @function can.Observe.prototype.each each
 		 * @description Call a function on each property of an Observe.
 		 * @signature `each(callback)`
 		 * 
@@ -553,6 +556,7 @@ steal('can/util','can/construct', function(can) {
 			return can.each.apply(undefined, [this.__get()].concat(can.makeArray(arguments)))
 		},
 		/**
+		 * @function can.Observe.prototype.removeAttr removeAttr
 		 * @description Remove a property from an Observe.
 		 * @signature `removeAttr(attrName)`
 		 * @param {String} attrName the name of the property to remove
@@ -812,7 +816,7 @@ steal('can/util','can/construct', function(can) {
 		 */
 		bind: bind,
 		/**
-		 * @function unbind
+		 * @function can.Observe.prototype.unbind unbind
 		 * @description Unbind event handlers from an Observe.
 		 * @signature `unbind(eventType[, handler])`
 		 * @param {String} eventType the type of event to unbind, exactly as passed to `bind`
@@ -917,6 +921,7 @@ steal('can/util','can/construct', function(can) {
 		},
 
 		/**
+		 * @function can.Observe.prototype.compute compute
 		 * @description Make a can.compute from an observable property.
 		 * @signature `compute(attrName)`
 		 * @param {String} attrName the property to bind to
@@ -1137,6 +1142,7 @@ steal('can/util','can/construct', function(can) {
 		 */
 		//  
 		/**
+		 * @function can.Observe.List.prototype.splice splice
 		 * @description Insert and remove elements from a List.
 		 * @signature `splice(index[, howMany[, ...newElements]])`
 		 * @param {Number} index where to start removing or inserting elements
@@ -1225,7 +1231,7 @@ steal('can/util','can/construct', function(can) {
 		},
 		/**
 		 * @description Get or set elements in a List.
-		 * @function attr
+		 * @function can.Observe.List.prototype.attr attr
 		 * @signature `attr()`
 		 * 
 		 * Gets a collection of all the elements in this `can.Observe.List`.

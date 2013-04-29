@@ -163,25 +163,76 @@ steal('can/util','can/construct', function( can ) {
 		// An object of `{eventName : function}` pairs that Control uses to 
 		// hook up events auto-magically.
 		/**
-		 * @property processors
-		 * An object of `{eventName : function}` pairs that Control uses to hook up events
-		 * auto-magically.  A processor function looks like:
+		 * @property can.Control.processors processors
+		 * @description A collection of hookups for custom events on Controls.
+		 *
+		 * @body
+		 * `processors` is an object that allows you to add new events to bind
+		 * to on a control, or to change how existent events are bound. Each
+		 * key-value pair of `processors` is a specification that pertains to
+		 * an event where the key is the name of the event, and the value is
+		 * a function that processes calls to bind to the event.
+		 *
+		 * The processor function takes five arguments:
 		 * 
-		 *     can.Control.processors.
-		 *       myprocessor = function( el, event, selector, cb, control ) {
-		 *          //el - the control's element
-		 *          //event - the event (myprocessor)
-		 *          //selector - the left of the selector
-		 *          //cb - the function to call
-		 *          //control - the binding control
-		 *       };
+		 * - _el_: The Control's element.
+		 * - _event_: The event type.
+		 * - _selector_: The selector preceding the event in the binding used on the Control.
+		 * - _callback_: The callback function being bound.
+		 * - _control_: The Control the event is bound on.
+		 *
+		 * Inside your processor function, you should bind _callback_ to the event, and
+		 * return a function for can.Control to call when _callback_ needs to be unbound.
+		 * (If _selector_ is defined, you will likely want to use some form of delegation
+		 * to bind the event.)
+		 *
+		 * Here is a Control with a custom event processor set and two callbacks bound
+		 * to that event:
+		 *
+		 * @codestart
+		 * can.Control.processors.birthday = function(el, ev, selector, callback, control) {
+		 *   if(selector) {
+		 *     myFramework.delegate(ev, el, selector, callback);
+		 *     return function() { myFramework.undelegate(ev, el, selector, callback); };
+		 *   } else {
+	     *     myFramework.bind(ev, el, callback);
+		 *     return function() { myFramework.unbind(ev, el, callback); };  
+		 *   }
+		 * };
+		 *
+		 * can.Control("EventTarget", { }, {
+		 *   'birthday': function(el, ev) {
+		 *     // do something appropriate for the occasion
+		 *   },
+		 *   '.grandchild birthday': function(el, ev) {
+		 *     // do something appropriate for the occasion
+		 *   }
+		 * });
+		 *
+		 * var target = new EventTarget('#person');
+		 * @codeend
+		 *
+		 * When `target` is initialized, can.Control will call `can.Control.processors.birthday`
+		 * twice (because there are two event hookups for the _birthday_ event). The first
+		 * time it's called, the arguments will be:
 		 * 
-		 * This would bind anything like: "foo~3242 myprocessor".
+		 * - _el_: A NodeList that wraps the element with id 'person'.
+		 * - _ev_: `'birthday'`
+		 * - _selector_: `''`
+		 * - _callback_: The function assigned to `' birthday'` in the prototype section of `EventTarget`'s
+		 * definition.
+		 * - _control_: `target` itself.
 		 * 
-		 * The processor must return a function that when called, 
-		 * unbinds the event handler.
+		 * The second time, the arguments are slightly different:
 		 * 
-		 * Control already has processors for the following events:
+		 * - _el_: A NodeList that wraps the element with id 'person'.
+		 * - _ev_: `'birthday'`
+		 * - _selector_: `'.grandchild'`
+		 * - _callback_: The function assigned to `'.grandchild birthday'` in the prototype section of `EventTarget`'s
+		 * definition.
+		 * - _control_: `target` itself.
+		 *
+		 * can.Control already has processors for these events:
 		 * 
 		 *   - change 
 		 *   - click 
@@ -204,25 +255,19 @@ steal('can/util','can/construct', function( can ) {
 		 *   - scroll 
 		 *   - select 
 		 *   - submit  
-		 * 
-		 * Listen to events on the document or window 
-		 * with templated event handlers:
-		 * 
-		 *     Sized = can.Control({
-		 *       "{window} resize": function(){
-		 *         this.element.width( this.element.parent().width() / 2 );
-		 *       }
-		 *     });
-		 *     
-		 *     new Sized( $( '#foo' ) );
 		 */
 		processors: {},
 		// A object of name-value pairs that act as default values for a 
 		// control instance
 		/**
-		 * @property defaults
-		 * A object of name-value pairs that act as default values for a control's 
-		 * [can.Control::options this.options].
+		 * @property can.Control.defaults defaults
+		 * @description Default values for the Control's options.
+		 *
+		 * @body
+		 * `defaults` provides default values for a Control's options.
+		 * Options passed into the constructor function will be shallowly merged
+		 * into the values from defaults in [can.Control::setup], and
+		 * the result will be stored in `[can.Control::options this.options]`.
 		 * 
 		 *     Message = can.Control({
 		 *       defaults: {
@@ -236,9 +281,6 @@ steal('can/util','can/construct', function( can ) {
 		 *     
 		 *     new Message( "#el1" ); //writes "Hello World"
 		 *     new Message( "#el12", { message: "hi" } ); //writes hi
-		 *     
-		 * In [can.Control::setup] the options passed to the control
-		 * are merged with defaults.  This is not a deep merge.
 		 */
 		defaults: {}
 	},
@@ -249,9 +291,27 @@ steal('can/util','can/construct', function( can ) {
 		// Sets `this.element`, saves the control in `data, binds event
 		// handlers.
 		/**
+		 * @property {NodeList} can.Control.prototype.element element
+		 * @parent can.Control.prototype
+		 * @description The element associated with this control.
+		 * 
+		 * @body
+		 * The library-wrapped element this control is associated with,
+		 * as passed into the constructor. If you want to change the element
+		 * that a Control will attach to, you should do it in [can.Control::setup setup].
+		 * If you change the element later, make sure to call [can.Control::on on]
+		 * to rebind all the bindings.
+		 *
+		 * If `element` is removed from the DOM, [can.Control::destroy] will
+		 * be called and the Control will be destroyed.
+		 */
+		//
+		/**
+		 * @function can.Control.prototype.setup setup
+		 * @parent can.Control.prototype
 		 * @description Perform pre-initialization logic.
 		 * @signature `setup(element, options)`
-		 * @param {HTMLElement} element the element this instance operates on.
+		 * @param {HTMLElement|NodeList|String} element The element as passed to the constructor.
 		 * @param {Object} [options] option values for the control.  These get added to
 		 * this.options and merged with [can.Control.static.defaults defaults].
 		 * @return {undefined|Array} return an array if you want to change what init is called with. By
@@ -286,7 +346,7 @@ steal('can/util','can/construct', function( can ) {
 		 * 
 		 * ### Binds event handlers
 		 * 
-		 * Setup does the event binding described in [can.Control.listening Listening To Events].
+		 * Setup does the event binding described in [can.Control].
 		 */
 		setup: function( element, options ) {
 
@@ -307,8 +367,9 @@ steal('can/util','can/construct', function( can ) {
 			
 			// Option merging.
 			/**
-			 * @property options
+			 * @property can.Control.prototype.options options
 			 * 
+			 * @body
 			 * Options are used to configure a control.  They are
 			 * the 2nd argument
 			 * passed to a control (or the first argument passed to the 
@@ -342,10 +403,6 @@ steal('can/util','can/construct', function( can ) {
 			 *     
 			 *     new Tabs( $( "#tabs1" ) ); // adds 'ui-active-state'
 			 *     new Tabs( $( "#tabs2" ), { activeClass : 'active' } ); // adds 'active'
-			 *     
-			 * Options are typically updated by calling 
-			 * [can.Control.prototype.update update];
-			 *
 			 */
 			this.options = extend({}, cls.defaults, options);
 
@@ -619,7 +676,7 @@ steal('can/util','can/construct', function( can ) {
 		},
 		// Prepares a `control` for garbage collection
 		/**
-		 * @description Clean up after a Control that has been removed.
+		 * @description Remove a Control from an element and clean up the Control.
 		 * @signature `destroy()`
 		 * 
 		 * `destroy` prepares a control for garbage collection and is a place to

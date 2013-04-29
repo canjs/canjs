@@ -1,4 +1,5 @@
 @constructor can.Observe
+@inherits can.Construct
 @parent canjs
 @test can/observe/qunit.html
 
