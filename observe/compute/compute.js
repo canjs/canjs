@@ -130,7 +130,7 @@ steal('can/util', function(can) {
 	// if no one is listening ... we can not calculate every time
 	/**
 	 * @page can.compute
-	 * @parent can.util
+	 * @parent canjs
 	 * @signature `can.compute(getterSetter[, context])`
 	 * @param {Function} getterSetter A function that gets and optionally sets the value of the compute.
 	 * When called with no parameters, _getterSetter_ should return the current value of the compute. When

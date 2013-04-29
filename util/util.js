@@ -525,7 +525,7 @@
 //
 /**
  @constructor can.Deferred
- @parent can.util
+ @parent canjs
 
  `can.Deferred` is a object that allows users to assign and chain callback
  function(s) for the success or failure state of both asynchronous and synchronous function(s).
