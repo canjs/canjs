@@ -4,7 +4,8 @@
 @test can/control/view/qunit.html
 @download http://donejs.com/can/dist/can.control.route.js
 
-The can.Control.route plugin adds a __route__ [can.Control.static.processors processor] to [can.Control].
+@body
+The can.Control.route plugin adds a __route__ [can.Control.processors processor] to [can.Control].
 This allows creating routes and binding to [can.route] in a single step by listening to the _route_ event
 and a route part. Route events will be triggered whenever the route changes to the route part
 the control is listening to. For example:
