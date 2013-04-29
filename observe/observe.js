@@ -128,7 +128,7 @@ steal('can/util','can/construct', function(can) {
 		 * @param {Function} [batchStopHandler] a callback that gets called after all batched events have been called
 		 *
 		 * `startBatch` causes can.Observe to begin an event batch. Until `[can.Observe.stopBatch]` is called, any
-		 * events that would result from calls to `[can.Observe::attr|attr]` are held back from firing. If you have
+		 * events that would result from calls to `[can.Observe::attr attr]` are held back from firing. If you have
 		 * lots of changes to make to can.Observes, batching them together can help performance &emdash; especially if
 		 * those can.Observes are live-bound to the DOM.
 		 *
@@ -405,7 +405,7 @@ steal('can/util','can/construct', function(can) {
 		 * If any properties already exist on the `can.Observe`, they will be overwritten.
 		 *
 		 * @param {bool} [removeOthers=false] whether to remove keys not present in _obj_.
-		 * To remove keys without setting other keys, use `[can.Observe::removeAttr|removeAttr]`.
+		 * To remove keys without setting other keys, use `[can.Observe::removeAttr removeAttr]`.
 		 *
 		 * @return {can.Observe} this Observe, for chaining
 		 * 
@@ -772,7 +772,7 @@ steal('can/util','can/construct', function(can) {
 		 * o.removeAttr('a');     // [object Object], a, remove, undefined, Alice
 		 * @codeend
 		 *
-		 * (See also `[can.Observe::removeAttr|removeAttr]`, which removes properties).
+		 * (See also `[can.Observe::removeAttr removeAttr]`, which removes properties).
 		 * 
 		 * ## The _property name_ event
 		 * 

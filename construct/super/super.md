@@ -15,9 +15,9 @@ With this plugin, functions that are inheriting from base functions
 are provided with a specialized `this._super` reference to the base
 function from which they inherit.
 
-This is especially useful for calling base classes' `[can.Construct::init|init]` and `[can.Construct::setup|ssetup]`, but it can be used in any inheriting function.
+This is especially useful for calling base classes' `[can.Construct::init init]` and `[can.Construct::setup ssetup]`, but it can be used in any inheriting function.
 
-The `Person` and `Programmer` examples from `[can.Construct::init|init]` demonstrate `_super`'s use.
+The `Person` and `Programmer` examples from `[can.Construct::init init]` demonstrate `_super`'s use.
 Here's how those classes look without can.Construct.super:
 
 @codestart
