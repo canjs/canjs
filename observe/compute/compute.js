@@ -461,12 +461,12 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 			 * @function bind
 			 * `compute.bind("change", handler(event, newVal, oldVal))`
 			 */
-			bind: bind.bindAndSetup,
+			bind: can.bindAndSetup,
 			/**
 			 * @function unbind
 			 * `compute.unbind("change", handler(event, newVal, oldVal))`
 			 */
-			unbind: bind.unbindAndTeardown
+			unbind: can.unbindAndTeardown
 		});
 	};
 	can.compute.binder = computeBinder;
