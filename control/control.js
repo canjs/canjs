@@ -327,7 +327,7 @@ steal('can/util','can/construct', function( can ) {
 		 * an element.  This gets converted to a Wrapped NodeList element and set as
 		 * [can.Control.prototype.element this.element].
 		 * 
-		 * ### Adds the control's name to the element's className.
+		 * ### Adds the control's name to the element's className
 		 * 
 		 * Control adds it's plugin name to the element's className for easier 
 		 * debugging.  For example, if your Control is named "Foo.Bar", it adds
@@ -375,7 +375,7 @@ steal('can/util','can/construct', function( can ) {
 			 * Options are used to configure a control.  They are
 			 * the 2nd argument
 			 * passed to a control (or the first argument passed to the 
-			 * [can.Control.plugin control's jQuery plugin]).
+			 * [can.Control.plugin control]'s jQuery plugin).
 			 * 
 			 * For example:
 			 * 
@@ -686,6 +686,7 @@ steal('can/util','can/construct', function( can ) {
 		 * @function can.Control.prototype.destroy destroy
 		 * @parent can.Control.prototype
 		 * 
+		 * @body
 		 * `destroy` prepares a control for garbage collection and is a place to
 		 * reset any changes the control has made.  
 		 * 

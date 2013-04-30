@@ -15,6 +15,7 @@ about hooking up all the particulars yourself. It is inspired by John Resig's
 @param {Object} instanceProperties properties that will belong to instances made with the constructor
 @return {function} The constructor.
 
+@body
 In the example below, `Animal` is a constructor function. All instances of `Animal` will have a `breathe`
 method, and the `Animal` constructor itself has a `legs` property.
 
@@ -42,7 +43,7 @@ var Robot = can.Construct({
 });
 @codeend
 
-You can make instances by calling your constructor with the `new` keyword. When you do, the [can.Construct::init|init]
+You can make instances by calling your constructor with the `new` keyword. When you do, the [can.Construct::init init]
 method gets called (if you supplied one):
 
 @codestart
@@ -85,7 +86,7 @@ Note that `Animal`'s `init` does not get called.
 
 If you pass all three arguments to can.Construct, the second one will be attached directy to the
 constructor, allowing you to imitate static properties and functions. You can access these
-properties through the `[can.Construct::constructor|this.constructor]` property.
+properties through the `[can.Construct::constructor this.constructor]` property.
 
 Static properties can get overridden through inheritance just like instance properties. Let's see
 how this works with `Animal` and `Snake`:

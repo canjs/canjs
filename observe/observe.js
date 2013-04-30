@@ -125,10 +125,12 @@ steal('can/util','can/construct', function(can) {
 		/**
 		 * @function can.Observe.static.startBatch startBatch
 		 * @description Begin an event batch.
+		 * @signature `startBatch([batchStopHandler])`
 		 * @param {Function} [batchStopHandler] a callback that gets called after all batched events have been called
 		 *
+		 * @body
 		 * `startBatch` causes can.Observe to begin an event batch. Until `[can.Observe.stopBatch]` is called, any
-		 * events that would result from calls to `[can.Observe::attr|attr]` are held back from firing. If you have
+		 * events that would result from calls to `[can.Observe::attr attr]` are held back from firing. If you have
 		 * lots of changes to make to can.Observes, batching them together can help performance &emdash; especially if
 		 * those can.Observes are live-bound to the DOM.
 		 *
@@ -222,9 +224,11 @@ steal('can/util','can/construct', function(can) {
 		/**
 		 * @function can.Observe.static.stopBatch stopBatch
 		 * @description End an event batch.
+		 * @signature `stopBatch([force[, callStart]])`
 		 * @param {bool} [force=false] whether to stop batching events immediately
 		 * @param {bool} [callStart=false] whether to call `[can.Observe.startBatch startBatch]` after firing batched events
 		 * 
+		 * @body
 		 * `stopBatch` matches an earlier `[can.Observe.startBatch]` call. If `stopBatch` has been
 		 * called as many times as `startBatch` (or if _force_ is true), all batched events will be
 		 * fired and any callbacks passed to `startBatch` since the beginning of the batch will be
@@ -295,6 +299,7 @@ steal('can/util','can/construct', function(can) {
 		 * @param {String|{type: String}} event the type of event, or an event object with a type given
 		 * @param {Array} [args] the parameters to trigger the event with.
 		 * 
+		 * @body
 		 * If events are currently being batched, calling `triggerBatch` adds an event
 		 * to the batch. If events are not currently being batched, the event is triggered
 		 * immediately.
@@ -405,7 +410,7 @@ steal('can/util','can/construct', function(can) {
 		 * If any properties already exist on the `can.Observe`, they will be overwritten.
 		 *
 		 * @param {bool} [removeOthers=false] whether to remove keys not present in _obj_.
-		 * To remove keys without setting other keys, use `[can.Observe::removeAttr|removeAttr]`.
+		 * To remove keys without setting other keys, use `[can.Observe::removeAttr removeAttr]`.
 		 *
 		 * @return {can.Observe} this Observe, for chaining
 		 * 
@@ -742,18 +747,11 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * The parameters of the event handler for the _change_ event are:
 		 *
-		 * @param {Event} ev the event object
-		 * 
-		 * @param {String} attr which property changed
-		 * 
-		 * @param {String} how whether the property was added, removed, or set
-		 * Possible values are `'add'`, `'remove'`, or `'set'`.
-		 * 
-		 * @param {*} newVal the value of the property after the change
-		 * `newVal` will be `undefined` if the property was removed.
-		 * 
-		 * @param {*} oldVal the value of the property before the change
-		 * `oldVal` will be `undefined` if the property was added.
+		 * - _ev_ The event object.
+		 * - _attr_ Which property changed.
+		 * - _how_ Whether the property was added, removed, or set. Possible values are `'add'`, `'remove'`, or `'set'`.
+		 * - _newVal_ The value of the property after the change. `newVal` will be `undefined` if the property was removed.
+		 * - _oldVal_ Thishe value of the property before the change. `oldVal` will be `undefined` if the property was added.
 		 * 
 		 * Here is a concrete tour through the _change_ event handler's arguments:
 		 * 
@@ -772,7 +770,7 @@ steal('can/util','can/construct', function(can) {
 		 * o.removeAttr('a');     // [object Object], a, remove, undefined, Alice
 		 * @codeend
 		 *
-		 * (See also `[can.Observe::removeAttr|removeAttr]`, which removes properties).
+		 * (See also `[can.Observe::removeAttr removeAttr]`, which removes properties).
 		 * 
 		 * ## The _property name_ event
 		 * 
@@ -788,13 +786,9 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * The parameters of the event handler for the _property name_ event are:
 		 *
-		 * @param {Event} ev the event object
-		 * 
-		 * @param {*} newVal the value of the property after the change
-		 * `newVal` will be `undefined` if the property was removed.
-		 * 
-		 * @param {*} oldVal the value of the property before the change
-		 * `oldVal` will be `undefined` if the property was added.
+		 * - _ev_ The event object.
+		 * - _newVal_ The value of the property after the change. `newVal` will be `undefined` if the property was removed.
+		 * - _oldVal_ The value of the property before the change. `oldVal` will be `undefined` if the property was added.
 		 * 
 		 * Here is a concrete tour through the _property name_ event handler's arguments:
 		 * 
@@ -828,6 +822,7 @@ steal('can/util','can/construct', function(can) {
 		 * @param {String} eventType the type of event to unbind, exactly as passed to `bind`
 		 * @param {Function} [handler] the handler to unbind
 		 *
+		 * @body
 		 * `unbind` unbinds event handlers previously bound with [can.Observe.prototype.bind|`bind`].
 		 * If no _handler_ is passed, all handlers for the given event type will be unbound.
 		 *
@@ -1351,18 +1346,14 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * The parameters of the event handler for the _change_ event are:
 		 *
-		 * @param {Event} ev the event object
-		 * 
-		 * @param {Index} index where the change took place
-		 * 
-		 * @param {String} how whether elements were added, removed, or set
+		 * - _ev_ The event object.
+		 * - _index_ Where the change took place.
+		 * - _how_ Whether elements were added, removed, or set.
 		 * Possible values are `'add'`, `'remove'`, or `'set'`.
-		 * 
-		 * @param {*|Array|undefined} newVal the elements affected after the change
-		 * _newVal_ will be a single value when an index is set, an Array when elements
+		 * - _newVal_ The elements affected after the change
+		 *  _newVal_ will be a single value when an index is set, an Array when elements
 		 * were added, and `undefined` if elements were removed.
-		 * 
-		 * @param {*|Array|undefined} oldVal the elements affected before the change
+		 * - _oldVal_ The elements affected before the change.
 		 * _newVal_ will be a single value when an index is set, an Array when elements
 		 * were removed, and `undefined` if elements were added.
 		 * 
@@ -1391,11 +1382,9 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * The parameters of the event handler for the _set_ event are:
 		 *
-		 * @param {Event} ev the event object
-		 *
-		 * @param {*} newVal the new value of the element
-		 * 
-		 * @param {Index} index where the set took place
+		 * - _ev_ The event object.
+		 * - _newVal_ The new value of the element.
+		 * - _index_ where the set took place.
 		 *
 		 * Here is a concrete tour through the _set_ event handler's arguments:
 		 * 
@@ -1420,13 +1409,11 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * The parameters of the event handler for the _add_ event are:
 		 *
-		 * @param {Event} ev the event object
-		 *
-		 * @param {Array|*} newElements the new elements
+		 * - _ev_ The event object.
+		 * - _newElements_ The new elements.
 		 * If more than one element is added, _newElements_ will be an array.
 		 * Otherwise, it is simply the new element itself.
-		 * 
-		 * @param {Index} index where the add or insert took place
+		 * - _index_ Where the add or insert took place.
 		 *
 		 * Here is a concrete tour through the _add_ event handler's arguments:
 		 * 
@@ -1450,13 +1437,11 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * The parameters of the event handler for the _remove_ event are:
 		 *
-		 * @param {Event} ev the event object
-		 *
-		 * @param {Array|*} removedElements the removed elements
+		 * - _ev_ The event object.
+		 * - _removedElements_ The removed elements.
 		 * If more than one element was removed, _removedElements_ will be an array.
 		 * Otherwise, it is simply the element itself.
-		 * 
-		 * @param {Index} index where the removal took place
+		 * - _index_ Where the removal took place.
 		 *
 		 * Here is a concrete tour through the _remove_ event handler's arguments:
 		 * 
@@ -1480,9 +1465,8 @@ steal('can/util','can/construct', function(can) {
 		 * 
 		 * The parameters of the event handler for the _length_ event are:
 		 *
-		 * @param {Event} ev the event object
-		 *
-		 * @param {Number} length the current length of the list
+		 * - _ev_ The event object.
+		 *- _length_ The current length of the list.
 		 * If events were batched when the _length_ event was triggered, _length_
 		 * will have the length of the list when `stopBatch` was called. Because
 		 * of this, you may recieve multiple _length_ events with the same
@@ -1881,12 +1865,12 @@ steal('can/util','can/construct', function(can) {
 		 * @function can.Observe.List.prototype.concat concat
 		 * @description Merge many collections together into a List.
 		 * @signature `concat(...args)`
-		 * 
-		 * `concat` makes a new List with the elements of the List followed by the elements of the parameters.
-		 * 
 		 * @param {Array|can.Observe.List|*} args Any number of arrays, Lists, or values to add in
 		 * For each parameter given, if it is an Array or a List, each of its elements will be added to
 		 * the end of the concatenated List. Otherwise, the parameter itself will be added.
+		 *
+		 * @body
+		 * `concat` makes a new List with the elements of the List followed by the elements of the parameters.
 		 *
 		 * @codestart
 		 * var list = new can.Observe.List();
@@ -1911,14 +1895,13 @@ steal('can/util','can/construct', function(can) {
 		 * @function can.Observe.List.prototype.forEach forEach
 		 * @description Call a function for each element of a List.
 		 * @signature `forEach(callback[, thisArg])`
-		 * 
-		 * `forEach` calls a callback for each element in the List.
-		 *
 		 * @param {function(element, index, list)} callback a function to call with each element of the List
 		 * The three parameters that _callback_ gets passed are _element_, the element at _index_, _index_ the
 		 * current element of the list, and _list_ the List the elements are coming from.
-		 *
 		 * @param {Object} [thisArg] the object to use as `this` inside the callback
+		 *
+		 * @body
+		 * `forEach` calls a callback for each element in the List.
 		 *
 		 * @codestart
 		 * var list = new can.Observe.List([1, 2, 3]);
@@ -1936,12 +1919,12 @@ steal('can/util','can/construct', function(can) {
 		 * @function can.Observe.List.prototype.replace replace
 		 * @description Replace all the elements of a List.
 		 * @signature `replace(collection)`
-		 *
-		 * `replace` replaces all the elements of this List with new ones.
-		 *
 		 * @param {Array|can.Observe.List|can.Deferred} collection the collection of new elements to use
 		 * If a [can.Deferred] is passed, it must resolve to an `Array` or `can.Observe.List`.
 		 * The elements of the list are not actually removed until the Deferred resolves.
+		 *
+		 * @body
+		 * `replace` replaces all the elements of this List with new ones.
 		 *
 		 * `replace` is especially useful when `can.Observe.List`s are live-bound into `[can.Control]`s,
 		 * and you intend to populate them with the results of a `[can.Model]` call:

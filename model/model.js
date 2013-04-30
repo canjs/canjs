@@ -175,9 +175,9 @@ steal('can/util','can/observe', function( can ) {
 		/**
 		 * @property {String} can.Model.static.id id
 		 * @parent can.Model.static
-		 * The name of the id field.  Defaults to 'id'. Change this if it is something different.
+		 * The name of the id field.  Defaults to `'id'`. Change this if it is something different.
 		 * 
-		 * For example, it's common in .NET to use Id.  Your model might look like:
+		 * For example, it's common in .NET to use `'Id'`.  Your model might look like:
 		 * 
 		 *     Friend = can.Model({
 		 *       id: "Id"
@@ -423,11 +423,11 @@ steal('can/util','can/observe', function( can ) {
 		/**
 		 * @description Retrieve multiple resources from a server.
 		 * @function can.Model.static.findAll findAll
-		 * @signature `findAll(filters[, success[, error]])`
-		 * @param {Object} filters Values to filter the request or results with.
-		 * @param {function} success A callback to call on successful retrieval. The callback recieves
+		 * @signature `findAll(params[, success[, error]])`
+		 * @param {Object} params Values to filter the request or results with.
+		 * @param {function} [success] A callback to call on successful retrieval. The callback recieves
 		 * a can.Model.List of the retrieved resources.
-		 * @param {function} error A callback to call when an error occurs. The callback receives the
+		 * @param {function} [error] A callback to call when an error occurs. The callback receives the
 		 * XmlHttpRequest object.
 		 * @return {can.Deferred} A deferred that resolves to a [can.Model.List] of retrieved models.
 		 *
@@ -495,11 +495,11 @@ steal('can/util','can/observe', function( can ) {
 		/**
 		 * @description Retrieve a resource from a server.
 		 * @function can.Model.static.findOne findOne
-		 * @signature `findOne(filters[, success[, error]])`
-		 * @param {Object} filters Values to filter the request or results with.
-		 * @param {function} success A callback to call on successful retrieval. The callback recieves
+		 * @signature `findOne(params[, success[, error]])`
+		 * @param {Object} params Values to filter the request or results with.
+		 * @param {function} [success] A callback to call on successful retrieval. The callback recieves
 		 * the retrieved resource as a can.Model.
-		 * @param {function} error A callback to call when an error occurs. The callback receives the
+		 * @param {function} [error] A callback to call when an error occurs. The callback receives the
 		 * XmlHttpRequest object.
 		 * @return {can.Deferred} A deferred that resolves to a [can.Model.List] of retrieved models.
 		 *
@@ -879,8 +879,8 @@ steal('can/util','can/observe', function( can ) {
 		 *
 		 * @body
 		 * `isNew()` returns if the instance is has been created 
-		 * on the server.  
-		 * This is essentially if the [can.Model.id] property is null or undefined.
+		 * on the server. This is essentially if the [can.Model.id]
+		 * property is null or undefined.
 		 * 
 		 *     new Recipe({id: 1}).isNew() //-> false
 		 */
@@ -1014,6 +1014,7 @@ steal('can/util','can/observe', function( can ) {
 		 * Model instance.
 		 * @return {can.Model} The Model, for chaining.
 		 * 
+		 * @body
 		 * `bind(eventName, handler(ev, args...) )` is used to listen
 		 * to events on this model instance.  Example:
 		 * 
