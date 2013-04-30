@@ -204,8 +204,8 @@ steal("can/util", function( can ) {
 		},
 
 		/**
-		 * @property {Object} cached
 		 * @hide
+		 * @property {Object} cached
 		 * Cached are put in this object
 		 */
 		cached: {},
