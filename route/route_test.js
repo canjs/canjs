@@ -452,4 +452,89 @@ test("listening to hashchange (#216, #124)", function() {
 	can.$("#qunit-test-area")[0].appendChild(iframe);
 });
 
+test("correct stringiing", function(){
+	var route = can.route
+
+	route.attr('number', 1)
+	same(route.attr(), {'number': "1"})
+
+	route.attr({bool: true}, true)
+	same(route.attr(), {'bool': "true"})
+
+	route.attr({string: "hello"}, true)
+	same(route.attr(), {'string': "hello"})
+
+	route.attr({array: [1, true, "hello"]}, true)
+	same(route.attr(), {'array': ["1", "true", "hello"]})
+
+	route.attr({
+		number: 1,
+		bool: 	true,
+		string: "hello",
+		array:  [2, false, "world"],
+		obj:    {number: 3, array: [4, true]}
+	}, true)
+
+	same(route.attr(),{
+		number: "1",
+		bool: 	"true",
+		string: "hello",
+		array:  ["2", "false", "world"],
+		obj:    {
+			number: "3",
+			array: 	["4", "true"]
+		}
+	})
+
+	route.routes = {};
+	route(":type/:id");
+
+	route.attr({type: 'page', id: 10, sort_by_name: true}, true)
+
+	same(route.attr(), {
+		type: 				"page",
+		id: 					"10",
+		sort_by_name: "true"
+	});
+});
+
+test("trigger value change only once for set same value as default or strigified", function() {
+	expect(1);
+	stop();
+
+	window.routeTestReady = function(iCanRoute, loc){
+		iCanRoute.bind('some_number', function() {
+			ok(true, "some_number has changed")
+		});
+
+		setTimeout(function(){
+			iCanRoute.attr('some_number', 1)
+		},10)
+
+		setTimeout(function(){
+			iCanRoute.attr('some_number', "1")
+		},20)
+
+		setTimeout(function(){
+			iCanRoute.attr({some_number: 1})
+		},30)
+
+		setTimeout(function(){
+			iCanRoute.attr({some_number: "1"})
+		},40)
+
+		setTimeout(function() {
+			start();
+			can.remove(can.$(iframe))
+		},100)
+	}
+
+	var iframe = document.createElement('iframe');
+	iframe.src = steal.config().root.join("can/route/testing.html?3");
+	can.$("#qunit-test-area")[0].appendChild(iframe);
+});
+
+
 })();
+
+

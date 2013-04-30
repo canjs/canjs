@@ -54,8 +54,27 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			return (str+'').replace(/([.?*+\^$\[\]\\(){}|\-])/g, "\\$1");
 		},
 		each = can.each,
-		extend = can.extend;
+		extend = can.extend,
+    // Helper for convert any object (or value) to stringified object (or value)
+		stringify = function(obj) {
+			// Object is array, plain object, Observe or List
+			if(obj && typeof obj === "object") {
+				// Get native object or array from Observe or Observe.List
+				if(obj instanceof can.Observe) {
+					obj = obj.attr()
+				// Clone object to prevent change original values
+				} else {
+					obj = can.isFunction(obj.slice) ? obj.slice() : can.extend({}, obj)
+				}
+				// Convert each object property or array item into stringified new
+				can.each(obj, function(val, prop) { obj[prop] = stringify(val) })
+			// Object supports toString function
+		  } else if(obj !== undefined && obj !== null && can.isFunction(obj.toString)) {
+        obj = obj.toString()
+      }
 
+			return obj
+		}
 
 	can.route = function( url, defaults ) {
         defaults = defaults || {};
@@ -415,15 +434,41 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			return path;
 		}
 	});
-	
-	
-    // The functions in the following list applied to `can.route` (e.g. `can.route.attr('...')`) will
-    // instead act on the `can.route.data` observe.
-	each(['bind','unbind','delegate','undelegate','attr','removeAttr'], function(name){
-		can.route[name] = function(){
-			return can.route.data[name].apply(can.route.data, arguments)
+
+
+  // The functions in the following list applied to `can.route` (e.g. `can.route.attr('...')`) will
+  // instead act on the `can.route.data` observe.
+  each(['bind','unbind','delegate','undelegate','removeAttr'], function(name){
+    can.route[name] = function(){
+      return can.route.data[name].apply(can.route.data, arguments)
+    }
+  })
+
+  // Because everything in hashbang is in fact a string this will automaticaly convert new values to string. Works with single value, or deep hashes.
+  // Main motivation for this is to prevent double route event call for same value.
+  // Example (the problem):
+  // When you load page with hashbang like #!&some_number=2 and bind 'some_number' on routes.
+  // It will fire event with adding of "2" (string) to 'some_number' property
+  // But when you after this set can.route.attr({some_number: 2}) or can.route.attr('some_number', 2). it fires another event with change of 'some_number' from "2" (string) to 2 (integer)
+  // This wont happen again with this normalization
+	can.route.attr = function(attr, val) {
+		var type = typeof attr,
+				newArguments;
+
+		// Reading
+		if(attr === undefined) {
+			newArguments = arguments;
+		// Sets object
+		} else if (type !== "string" && type !== "number") {
+			newArguments = [stringify(attr), val];
+		// Sets key - value
+		} else {
+			newArguments = [attr, stringify(val)];
 		}
-	})
+
+		return can.route.data.attr.apply(can.route.data, newArguments)
+	}
+
 
 	var // A ~~throttled~~ debounced function called multiple times will only fire once the
         // timer runs down. Each call resets the timer.
