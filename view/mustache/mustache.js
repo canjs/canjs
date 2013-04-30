@@ -52,6 +52,7 @@ function( can ){
 		
 		// ## Mustache
 		/**
+		 * @hide
 		 * The Mustache templating engine.
 		 * @param {Object} options	Configuration options
 		 */
@@ -96,6 +97,7 @@ function( can ){
 	 * @param {Object} data Data to interpolate into the template.
 	 * @return {String} The template with interpolated data, in string form.
 	 * 
+	 * @body
 	 * Renders an object with view helpers attached to the view.
 	 * 
 	 *		 new Mustache({text: "<%= message %>"}).render({
@@ -958,6 +960,12 @@ function( can ){
 	};
 
 	/**
+	 * 
+	 * @signature `Mustache.render(partial, context)`
+	 * @param {Object} partial
+	 * @param {Object} context
+	 *
+	 * @body
 	 * `Mustache.render` is a helper method that calls
 	 * into `can.view.render` passing the partial 
 	 * and the context object.  
@@ -971,9 +979,6 @@ function( can ){
 	 * a partial on the context object such as:
 	 *
 	 * 		context[partial] === "movember.mustache"
-	 * 
-	 * @param  {Object} partial
-	 * @param  {Object} context
 	 */
 	Mustache.render = function(partial, context){
 		// Make sure the partial being passed in

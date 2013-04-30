@@ -333,6 +333,7 @@ steal('can/util', function(can) {
 		 * The only event type that computes emit is _change_.
 		 * @param {function({Object},{*},{*})} handler The handler to call when the event happens.
 		 * The handler should have three parameters:
+		 *
 		 * - _event_ is the event object.
 		 * - _newVal_ is the newly-computed value of the compute.
 		 * - _oldVal_ is the value of the compute before it changed.
