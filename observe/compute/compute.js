@@ -318,7 +318,7 @@ steal('can/util', function(can) {
 			canbind = false;
 		}
 		/**
-		 * @property isComputed
+		 * @property can.compute.isComputed isComputed
 		 * Whether the value of the compute has been computed yet.
 		 */
 		computed.isComputed = true;

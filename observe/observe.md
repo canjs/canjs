@@ -10,8 +10,6 @@ events are fired that you can react to. `can.Observe` also has support for
 working with deep properties. Observable arrays are also available with
 `[can.Observe.List]`, which is based on `can.Observe`.
 
-@function can.Observe
-@constructor
 @signature `can.Observe([props])`
 @param {Object} [props] properties and values to seed the Observe with
 @return {can.Observe} an instance of `can.Observe` with the properties from _props_

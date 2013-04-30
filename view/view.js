@@ -205,7 +205,8 @@ steal("can/util", function( can ) {
 
 		/**
 		 * @hide
-		 * @property {Object} cached
+		 * @property {Object} can.view.cached view
+		 * @parent can.view
 		 * Cached are put in this object
 		 */
 		cached: {},
@@ -213,7 +214,8 @@ steal("can/util", function( can ) {
 		cachedRenderers: {},
 
 		/**
-		 * @property {Boolean} cache
+		 * @property {Boolean} can.view.cache view
+		 * @parent can.view
 		 * By default, views are cached on the client.  If you'd like the
 		 * the views to reload from the server, you can set the `cache` attribute to `false`.
 		 *

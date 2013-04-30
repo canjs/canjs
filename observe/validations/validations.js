@@ -74,8 +74,11 @@ steal('can/util', 'can/observe/attributes', function (can) {
 				}
 			},
 			/**
-			 * @function can.Observe.static.validate
-			 * @parent can.Observe.validations
+			 * @static
+			 */
+			/**
+			 * @function can.Observe.validate
+			 * @parent can.Observe.validations.static
 			 * `validate(attrNames, [options,] validateProc(value, attrName) )` validates each of the
 			 * specified attributes with the given `validateProc` function.  The function
 			 * should return a value if there is an error.  By default, the return value is
@@ -123,8 +126,8 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			validate : validate,
 
 			/**
-			 * @property can.Observe.static.validationMessages
-			 * @parent can.Observe.validations
+			 * @property can.Observe.validationMessages
+			 * @parent can.Observe.validations.static
 			 *
 			 * `validationMessages` has the default validation error messages that will be returned by the builtin
 			 * validation methods. These can be overwritten by assigning new messages
@@ -157,8 +160,8 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.static.validateFormatOf
-			 * @parent can.Observe.validations
+			 * @function can.Observe.validateFormatOf
+			 * @parent can.Observe.validations.static
 			 *
 			 * `validateFormatOf(attrNames, regexp, options)` validates where the values of
 			 * specified attributes are of the correct form by
@@ -184,8 +187,8 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.static.validateInclusionOf
-			 * @parent can.Observe.validations
+			 * @function can.Observe.validateInclusionOf
+			 * @parent can.Observe.validations.static
 			 *
 			 * Validates whether the values of the specified attributes are available in a particular
 			 * array.
@@ -213,8 +216,8 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.static.validateLengthOf
-			 * @parent can.Observe.validations
+			 * @function can.Observe.validateLengthOf
+			 * @parent can.Observe.validations.static
 			 *
 			 * Validates that the specified attributes' lengths are in the given range.
 			 *
@@ -239,8 +242,8 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.static.validatePresenceOf
-			 * @parent can.Observe.validations
+			 * @function can.Observe.validatePresenceOf
+			 * @parent can.Observe.validations.static
 			 *
 			 * Validates that the specified attributes are not blank.
 			 *
@@ -260,8 +263,8 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.static.validateRangeOf
-			 * @parent can.Observe.validations
+			 * @function can.Observe.validateRangeOf
+			 * @parent can.Observe.validations.static
 			 *
 			 * Validates that the specified attributes are in the given numeric range.
 			 *
@@ -287,8 +290,11 @@ steal('can/util', 'can/observe/attributes', function (can) {
 
 	can.extend(can.Observe.prototype, {
 		/**
+		 * @prototype
+		 */
+		/**
 		 * @function can.Observe.prototype.errors
-		 * @parent can.Observe.validations
+		 * @parent can.Observe.validations.prototype
 		 *
 		 * Runs the validations on this observe.  You can
 		 * also pass it an array of attributes to run only those attributes.

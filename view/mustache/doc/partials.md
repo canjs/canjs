@@ -102,9 +102,7 @@ var template = can.view("#template", {
 	items: []
 	itemsTemplate: "test_template.mustache" 
 });
-@codeend
 
-@codestart
 can.$(document.body).append(template);
 @codeend
 

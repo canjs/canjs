@@ -27,14 +27,14 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 			this.template = this.scanner.scan(this.text, this.name);
 		};
 
+	can.EJS = EJS;
 	/**
 	 * @add can.EJS
 	 */
-	can.EJS = EJS;
-
 
 	/**
 	 * @prototype
+	 * @parent can.EJS
 	 */
 	EJS.prototype.
 	/**
