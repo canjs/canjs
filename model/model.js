@@ -121,7 +121,7 @@ steal('can/util','can/observe', function( can ) {
 	 */
 	//
 		/**
-		 * @function can.Model.static.bind bind
+		 * @function can.Model.bind bind
 		 * @parent can.Model.static
 		 * @description Listen for events on a Model class.
 		 *
@@ -147,7 +147,7 @@ steal('can/util','can/observe', function( can ) {
 		 */
 		// 
 		/**
-		 * @function can.Model.static.unbind unbind
+		 * @function can.Model.unbind unbind
 		 * @parent can.Model.static
 		 * @description Stop listening for events on a Model class.
 		 * 
@@ -173,7 +173,7 @@ steal('can/util','can/observe', function( can ) {
 		 */
 		// 
 		/**
-		 * @property {String} can.Model.static.id id
+		 * @property {String} can.Model.id id
 		 * @parent can.Model.static
 		 * The name of the id field.  Defaults to `'id'`. Change this if it is something different.
 		 * 
@@ -184,7 +184,7 @@ steal('can/util','can/observe', function( can ) {
 		 *     },{});
 		 */
 		/**
-		 * @property {Boolean} can.Model.static.removeAttr removeAttr
+		 * @property {Boolean} can.Model.removeAttr removeAttr
 		 * @parent can.Model.static
 		 * Sets whether model conversion should remove non existing attributes or merge with
 		 * the existing attributes. The default is `false`.
@@ -209,7 +209,8 @@ steal('can/util','can/observe', function( can ) {
 	ajaxMethods = {
 		/**
 		 * @description Create a new resource on the server.
-		 * @function can.Model.static.create create
+		 * @function can.Model.create create
+		 * @parent can.Model.static
 		 * @signature `[METHOD] /path/to/resource`
 		 * If you provide a URL, the Model will send a request to that URL using
 		 * the method specified (or POST if none is specified) when saving a
@@ -271,7 +272,8 @@ steal('can/util','can/observe', function( can ) {
 		},
 		/**
 		 * @description Update a resource on the server.
-		 * @function can.Model.static.update update
+		 * @function can.Model.update update
+		 * @parent can.Model.static
 		 * @signature `[METHOD] /path/to/resource`
 		 * If you provide a URL, the Model will send a request to that URL using
 		 * the method specified (or PUT if none is specified) when updating an
@@ -362,7 +364,8 @@ steal('can/util','can/observe', function( can ) {
 		},
 		/**
 		 * @description Destroy a resource on the server.
-		 * @function can.Model.static.destroy destroy
+		 * @function can.Model.destroy destroy
+		 * @parent can.Model.static
 		 * @signature `[METHOD] /path/to/resource`
 		 * If you provide a URL, the Model will send a request to that URL using
 		 * the method specified (or DELETE if none is specified) when deleting an
@@ -422,7 +425,8 @@ steal('can/util','can/observe', function( can ) {
 		},
 		/**
 		 * @description Retrieve multiple resources from a server.
-		 * @function can.Model.static.findAll findAll
+		 * @function can.Model.findAll findAll
+		 * @parent can.Model.static
 		 * @signature `findAll(params[, success[, error]])`
 		 * @param {Object} params Values to filter the request or results with.
 		 * @param {function} [success] A callback to call on successful retrieval. The callback recieves
@@ -494,7 +498,8 @@ steal('can/util','can/observe', function( can ) {
 		},
 		/**
 		 * @description Retrieve a resource from a server.
-		 * @function can.Model.static.findOne findOne
+		 * @function can.Model.findOne findOne
+		 * @parent can.Model.static
 		 * @signature `findOne(params[, success[, error]])`
 		 * @param {Object} params Values to filter the request or results with.
 		 * @param {function} [success] A callback to call on successful retrieval. The callback recieves
@@ -649,7 +654,8 @@ steal('can/util','can/observe', function( can ) {
 			return arguments[0];
 		},
 		/**
-		 * @function can.Model.static.models models
+		 * @function can.Model.models models
+		 * @parent can.Model.static
 		 * @description Convert raw data into can.Model instances.
 		 * @signature `models(data[, oldList])`
 		 * @param {Array<Object>} data The raw data from a `[can.Model.findAll findAll()]` request.
@@ -787,7 +793,8 @@ steal('can/util','can/observe', function( can ) {
 			return res;
 		},
 		/**
-		 * @function can.Model.static.model model
+		 * @function can.Model.model model
+		 * @parent can.Model.static
 		 * @description Convert raw data into a can.Model instance.
 		 * @signature `model(data)`
 		 * @param {Object} data The data to convert to a can.Model instance.
@@ -1135,21 +1142,21 @@ steal('can/util','can/observe', function( can ) {
 				
 		can.each([
 	/**
-	 * @function created
+	 * @function can.Model.prototype.created created
 	 * @hide
 	 * Called by save after a new instance is created.  Publishes 'created'.
 	 * @param {Object} attrs
 	 */
 	"created",
 	/**
-	 * @function updated
+	 * @function can.Model.prototype.updated updated
 	 * @hide
 	 * Called by save after an instance is updated.  Publishes 'updated'.
 	 * @param {Object} attrs
 	 */
 	"updated",
 	/**
-	 * @function destroyed
+	 * @function can.Model.prototype.destroyed destroyed
 	 * @hide
 	 * Called after an instance is destroyed.  
 	 *   - Publishes "shortName.destroyed".

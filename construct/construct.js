@@ -25,7 +25,8 @@ steal("can/util/string", function(can) {
 	 */
 	can.extend(can.Construct, {
 		/**
-		 * @function can.Construct.static.newInstance newInstance
+		 * @function can.Construct.newInstance newInstance
+		 * @parent can.Construct.static
 		 * @description Create a new instance of a Construct.
 		 * @signature `newInstance([...args])`
 		 * @param {*} [args] arguments that get passed to [can.Construct::setup] and [can.Construct::init]. Note
@@ -92,7 +93,7 @@ steal("can/util/string", function(can) {
 		// object's `defaults`. If you overwrite this method, make sure to
 		// include option merging logic.
 		/**
-		 * @function can.Construct.static.setup setup
+		 * @function can.Construct.setup setup
 		 * @parent can.Construct.static
 		 * @description Perform initialization logic for a constructor function.
 		 * @signature `setup(base, fullName, staticProps, protoProps)`
@@ -266,7 +267,8 @@ steal("can/util/string", function(can) {
 				constructor: Constructor,
 				prototype: prototype,
 				/**
-				 * @property {String} can.Construct.static.namespace namespace
+				 * @property {String} can.Construct.namespace namespace
+				 * @parent can.Construct.static
 				 *
 				 * The `namespace` property returns the namespace your constructor is in.
 				 * This provides a way organize code and ensure globally unique types.
@@ -280,7 +282,8 @@ steal("can/util/string", function(can) {
 				 */
 				namespace: namespace,
 				/**
-				 * @property {String} can.Construct.static.shortName shortName
+				 * @property {String} can.Construct.shortName shortName
+				 * @parent can.Construct.static
 				 *
 				 * If you pass a name when creating a Construct, the `shortName` property will be set to the
 				 * name you passed without the namespace.
@@ -295,7 +298,8 @@ steal("can/util/string", function(can) {
 				shortName: shortName,
 				_shortName : _shortName,
 				/**
-				 * @property {String} can.Construct.static.fullName fullName
+				 * @property {String} can.Construct.fullName fullName
+				 * @parent can.Construct.static
 				 *
 				 * If you pass a name when creating a Construct, the `fullName` property will be set to
 				 * the name you passed.
