@@ -237,7 +237,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 	
 	/**
 	 * @hide
-	 * @function can.Observe.static.setup
+	 * @function can.Observe.setup
 	 * @parent can.Observe.attributes
 	 *
 	 * `can.Observe.static.setup` overrides default `can.Observe` setup to provide

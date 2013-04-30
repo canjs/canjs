@@ -105,12 +105,11 @@ steal('can/util','can/construct', function(can) {
 		batchEvents = [],
 		stopCallbacks = [];
 	
-	
-		
+	var Observe = can.Observe = can.Construct( {
 	/**
 	 * @add can.Observe
 	 */
-	var Observe = can.Observe = can.Construct( {
+	//
 	/**
 	 * @static
 	 */
@@ -123,7 +122,8 @@ steal('can/util','can/construct', function(can) {
 		// takes a callback for after they are updated
 		// how could you hook into after ejs
 		/**
-		 * @function can.Observe.static.startBatch startBatch
+		 * @function can.Observe.startBatch startBatch
+		 * @parent can.Observe.static
 		 * @description Begin an event batch.
 		 * @signature `startBatch([batchStopHandler])`
 		 * @param {Function} [batchStopHandler] a callback that gets called after all batched events have been called
@@ -222,7 +222,8 @@ steal('can/util','can/construct', function(can) {
 			batchStopHandler && stopCallbacks.push(batchStopHandler);
 		},
 		/**
-		 * @function can.Observe.static.stopBatch stopBatch
+		 * @function can.Observe.stopBatch stopBatch
+		 * @parent can.Observe.static
 		 * @description End an event batch.
 		 * @signature `stopBatch([force[, callStart]])`
 		 * @param {bool} [force=false] whether to stop batching events immediately
@@ -292,7 +293,8 @@ steal('can/util','can/construct', function(can) {
 			}
 		},
 		/**
-		 * @function can.Observe.static.triggerBatch triggerBatch
+		 * @function can.Observe.triggerBatch triggerBatch
+		 * @parent can.Observe.static
 		 * @description Trigger an event to be added to the current batch.
 		 * @signature `can.Observe.triggerBatch(item, event [, args])`
 		 * @param {can.Observe} item the target of the event
@@ -322,7 +324,8 @@ steal('can/util','can/construct', function(can) {
 			}
 		},
 		/**
-		 * @function can.Observe.static.keys keys
+		 * @function can.Observe.keys keys
+		 * @parent can.Observe.static
 		 * @description Iterate over the keys of an Observe.
 		 * @signature `can.Observe.keys(observe)`
 		 * @param {can.Observe} observe the `can.Observe` to get the keys from
@@ -358,7 +361,7 @@ steal('can/util','can/construct', function(can) {
 			// `_data` is where we keep the properties.
 			this._data = {};
 			/**
-			 * @property {String} can.Observe.static._cid
+			 * @property {String} can.Observe.prototype._cid
 			 * @hide
 			 *
 			 * A globally unique ID for this `can.Observe` instance.

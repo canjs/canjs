@@ -35,12 +35,12 @@ steal('can/util','can/construct', function( can ) {
 		},
 		
 		basicProcessor;
-	
+
+	var Control = can.Control = can.Construct(
 	/**
 	 * @add can.Control
 	 */
-
-	var Control = can.Control = can.Construct(
+	//
 	/** 
 	 * @static
 	 */
@@ -165,6 +165,7 @@ steal('can/util','can/construct', function( can ) {
 		// hook up events auto-magically.
 		/**
 		 * @property can.Control.processors processors
+		 * @parent can.Control.static
 		 * @description A collection of hookups for custom events on Controls.
 		 *
 		 * @body
@@ -263,6 +264,7 @@ steal('can/util','can/construct', function( can ) {
 		defaults: {}
 		/**
 		 * @property can.Control.defaults defaults
+		 * @parent can.Control.static
 		 * @description Default values for the Control's options.
 		 *
 		 * @body
