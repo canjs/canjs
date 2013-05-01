@@ -263,6 +263,9 @@ test("Generate computes from Observes with can.Observe.prototype.compute (#203)"
 	equal(compute(), 'testvalue', 'Value is as expected');
 	obs.attr('test', 'observeValue');
 	equal(compute(), 'observeValue', 'Value is as expected');
+	compute.bind('change', function(ev, newVal) {
+		equal(newVal, 'computeValue', 'new value from compute');
+	});
 	obs.bind('change', function(ev, name, how, newVal) {
 		equal(newVal, 'computeValue', 'Got new value from compute');
 	});
