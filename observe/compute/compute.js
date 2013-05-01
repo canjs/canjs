@@ -348,6 +348,11 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 				// setter is for a value maintained exclusively by this compute
 				var setVal = set.call(context,newVal, old);
 
+				// if this has dependencies return the current value
+				if(computed.hasDependencies){
+					return get.call(context);
+				}
+
 				if(setVal === undefined) {
 					// it's possible, like with the DOM, setting does not
 					// fire a change event, so we must read
@@ -355,9 +360,8 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 				} else {
 					value = setVal;
 				}
-				// if computed has dependencies, changes to those dependencies will 
 				// fire the change
-				if( old !== value && !computed.hasDependencies){
+				if( old !== value){
 					can.Observe.triggerBatch(computed, "change",[value, old] );
 				}
 				return value;

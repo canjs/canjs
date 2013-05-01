@@ -125,8 +125,8 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 	 * @static
 	 */
 		// keep so it can be overwritten
-		bind : can.bindAndSetup,
-		unbind: can.unbindAndTeardown,
+		bind : bind.bindAndSetup,
+		unbind: bind.unbindAndTeardown,
 		id: "id",
 		canMakeObserve : canMakeObserve,
 		// starts collecting events
@@ -790,7 +790,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * 
 		 * @return {can.Observe} the observe for chaining.
 		 */
-		bind: can.bindAndSetup,
+		bind: bind.bindAndSetup,
 		/**
 		 * @function unbind
 		 * Unbinds an event listener.  This works similar to jQuery's unbind.  This means you can 
@@ -814,7 +814,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * 
 		 * @return {can.Observe} the original observe for chaining.
 		 */
-		unbind: can.unbindAndTeardown,
+		unbind: bind.unbindAndTeardown,
 		/**
 		 * @hide
 		 * Get the serialized Object form of the observe.  Serialized
@@ -915,7 +915,12 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * @return {can.compute} A can.compute instance
 		 */
 		compute: function(prop) {
-			return can.compute(this,prop)
+			var self = this,
+				computer = function(val) {
+					return self.attr(prop, val);
+				};
+
+			return can.compute ? can.compute(computer) : computer;
 		}
 	});
 	// Helpers for `observable` lists.
