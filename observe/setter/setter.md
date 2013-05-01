@@ -1,4 +1,4 @@
-@page can.Observe.setter
+@page can.Observe.setter setter
 @parent can.Observe
 @plugin can/observe/setter
 @download http://donejs.com/can/dist/can.observe.setter.js
@@ -54,10 +54,7 @@ different from [can.Observe::attr attr]'s normal behavior. Specifically, when th
 property's current value is an Observe or List, and an Observe or List is returned
 from a setter, the effect will not be to merge the values into the current value as
 if the return value was fed straight into `attr`, but to replace the value with the
-new Observe or List completely.
-
-If you would rather have the new Observe or List merged into the current value, call
-`attr` directly on the property instead of on the Observe:
+new Observe or List completely:
 
 @codestart
 var Contact = can.Observe({
@@ -73,10 +70,26 @@ alice.info._cid; // '.observe1'
 alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
 alice.attr(); // {name: 'Allison Wonderland', 'phone': '888-888-8888'}
 alice.info._cid; // '.observe2'
+@codeend
 
-alice.info.attr({email: 'alice@wonderland.com', phone: '000-000-0000'});
-alice.attr(); // {name: 'Allison Wonderland', email: 'alice@wonderland.com', 'phone': '000-000-0000'}
-alice.info._cid; // '.observe2'
+If you would rather have the new Observe or List merged into the current value, call
+`attr` inside the setter:
+
+@codestart
+var Contact = can.Observe({
+	setInfo: function(raw) {
+      this.info.attr(raw);
+      return this.info;
+	}
+});
+
+var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
+alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
+alice.info._cid; // '.observe1'
+
+alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
+alice.attr(); // {name: 'Allison Wonderland', email: 'alice@liddell.com', 'phone': '888-888-8888'}
+alice.info._cid; // '.observe1'
 @codeend
 
 ## Error Handling

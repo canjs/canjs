@@ -1,4 +1,4 @@
-@page can.Observe.backup 
+@page can.Observe.backup backup
 @parent can.Observe
 @plugin can/observe/backup
 @test can/observe/backup/qunit.html
