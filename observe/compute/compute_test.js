@@ -253,7 +253,7 @@ test("compute only updates once when a list's contents are replaced",function(){
 
 });
 
-test("Generate computes from Observes with can.Observe.prototype.compute (#203)", 5, function() {
+test("Generate computes from Observes with can.Observe.prototype.compute (#203)", 6, function() {
 	var obs = new can.Observe({
 		test : 'testvalue'
 	});
@@ -263,6 +263,9 @@ test("Generate computes from Observes with can.Observe.prototype.compute (#203)"
 	equal(compute(), 'testvalue', 'Value is as expected');
 	obs.attr('test', 'observeValue');
 	equal(compute(), 'observeValue', 'Value is as expected');
+	compute.bind('change', function(ev, newVal) {
+		equal(newVal, 'computeValue', 'new value from compute');
+	});
 	obs.bind('change', function(ev, name, how, newVal) {
 		equal(newVal, 'computeValue', 'Got new value from compute');
 	});
@@ -339,11 +342,11 @@ test("compute doesn't rebind and leak with 0 bindings", function() {
 	equal(computedB, 2, "unbound, so didn't recompute B");
 });
 
-/*
+
 test("compute setter without external value", function(){
 
 	var age = can.compute(0,function(newVal, oldVal){
-		 var num = +newVal
+		var num = +newVal
 	    if(! isNaN(num) && 0 <= num && num <= 120 ){
 	        return num;
 	    } else {
@@ -352,16 +355,17 @@ test("compute setter without external value", function(){
 	})
 	equal(age(), 0, "initial value set");
 	age.bind("change", function(ev, newVal, oldVal){
-		equal(ev, newVal)
+		equal(5, newVal)
+		age.unbind("change",arguments.callee)
 	});
 
 	age(5);
 	equal(age(), 5, "5 set")
 
 	age("invalid");
-	equal(age(), 5, "5 set")
+	equal(age(), 5, "5 kept")
 
-})*/
+})
 
 test("compute value",function(){
 	expect(9)

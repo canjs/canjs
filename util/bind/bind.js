@@ -16,11 +16,14 @@ steal('can/util',function(can){
 		// call bindsetup if the function exists.
 		if(!this._init){
 			if(!this._bindings ){
+				this._bindings = 1;
 				// setup live-binding
 				this._bindsetup && this._bindsetup();
-				this._bindings = 0;
+				
+			} else {
+				this._bindings++;
 			}
-			this._bindings++;
+			
 		}
 		
 		return this;
@@ -29,15 +32,7 @@ steal('can/util',function(can){
 	can.unbindAndTeardown = function(ev, handler) {
 		// Remove the event handler
 		can.removeEvent.apply(this, arguments);
-		// This doesn't work as handler is never passed
-		// if(!handler){
-		// 	// This is not correct. We need to 
-		// 	// have a way to know the number of event handlers
-		// 	// for a given item.
-		// 	this._bindings = 0
-		// } else {
-		// 	this._bindings--;
-		// }
+
 		this._bindings--;
 		// If there are no longer any bindings and
 		// there is a bindteardown method, call it.
