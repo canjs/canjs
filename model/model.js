@@ -1092,7 +1092,9 @@ steal('can/util','can/observe', function( can ) {
 	
 	can.each({
 		makeFindAll : "models",
-		makeFindOne: "model"
+		makeFindOne: "model",
+		makeCreate: "model",
+		makeUpdate: "model"
 	}, function( method, name ) {
 		can.Model[name] = function( oldFind ) {
 			return function( params, success, error ) {

@@ -1030,4 +1030,53 @@ test("model removeAttr (#245)", function() {
 	}, 'Index attribute got removed');
 });
 
+test(".model on create and update (#301)", function() {
+	var MyModel = can.Model({
+		create: 'POST /todo',
+		update: 'PUT /todo',
+		model: function(data) {
+            return can.Model.model.call(this, data.item);
+        }
+	}, {}),
+		id = 0,
+    	updateTime;
+
+	can.fixture('POST /todo', function(original, respondWith, settings) {
+		id++;
+        return {
+            item: can.extend(original.data, {
+                id: id
+            })
+        };
+    });
+    can.fixture('PUT /todo', function(original, respondWith, settings) {
+    	updateTime = new Date().getTime();
+        return {
+            item: {
+            	updatedAt: updateTime
+            }
+        };
+    });
+
+	stop();
+    MyModel.bind('created', function(ev, created) {
+    	start();
+    	deepEqual(created.attr(), {id: 1, name: 'Dishes'}, '.model works for create');
+    }).bind('updated', function(ev, updated) {
+    	start();
+    	deepEqual(updated.attr(), {id: 1, name: 'Laundry', updatedAt: updateTime}, '.model works for update');
+    });
+
+    var instance = new MyModel({
+    	name: 'Dishes'
+    }),
+    saveD = instance.save();
+
+    stop();
+    saveD.then(function() {
+    	instance.attr('name', 'Laundry').save();
+    })
+
+});
+
 })();
