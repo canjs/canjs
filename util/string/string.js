@@ -65,9 +65,10 @@ steal('can/util',function(can) {
 			 * @param {Boolean} [add] true to add missing objects to 
 			 *  the path. false to remove found properties. undefined to 
 			 *  not modify the root object
+			 * @param {mixed} [value] Leaf value to add
 			 * @return {Object} The object.
 			 */
-			getObject : function( name, roots, add ) {
+			getObject : function( name, roots, add, value ) {
 			
 				// The parts of the name we are looking up  
 				// `['App','Models','Recipe']`
@@ -99,6 +100,11 @@ steal('can/util',function(can) {
 						
 						// Get (and possibly set) the property.
 						ret = getNext(current, parts[i], add); 
+						
+						// Set value a value is given in parameter
+						if ( add && value) {
+							current[parts[i]] = value;
+						}
 						
 						// If there is a value, we exit.
 						if ( ret !== undefined ) {
