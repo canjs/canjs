@@ -915,12 +915,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * @return {can.compute} A can.compute instance
 		 */
 		compute: function(prop) {
-			var self = this,
-				computer = function(val) {
-					return self.attr(prop, val);
-				};
-
-			return can.compute ? can.compute(computer) : computer;
+			return can.compute(this,prop);
 		}
 	});
 	// Helpers for `observable` lists.
