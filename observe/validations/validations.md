@@ -1,4 +1,4 @@
-@page can.Observe.validations
+@page can.Observe.validations validations
 @parent can.Observe
 @plugin can/observe/validations
 @download http://donejs.com/can/dist/can.observe.validations.js

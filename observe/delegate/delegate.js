@@ -132,7 +132,7 @@ steal('can/util', 'can/observe', function(can) {
 		
 	can.extend(can.Observe.prototype,{
 		/**
-		 * @function can.Observe.prototype.delegate
+		 * @function can.Observe.prototype.delegate delegate
 		 * @parent can.Observe.delegate
 		 * @plugin can/observe/delegate
 		 * 
@@ -326,7 +326,7 @@ steal('can/util', 'can/observe', function(can) {
 			return this;
 		},
 		/**
-		 * @function can.Observe.prototype.undelegate
+		 * @function can.Observe.prototype.undelegate undelegate
 		 * @parent can.Observe.delegate
 		 * 
 		 * `undelegate( selector, event, handler )` removes a delegated event handler from an observe.
