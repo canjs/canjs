@@ -21,7 +21,11 @@ can.Control.setup = function() {
 	if ( this !== can.Control ) {
 
 		/**
+<<<<<<< HEAD
 		 * @property can.Control.plugin.static.pluginName can.Control.pluginName
+=======
+		 * @property can.Control.pluginName pluginName
+>>>>>>> b20b94a3bf66e78ac9394815d674b6b7c5fc4269
 		 * @parent can.Control.plugin
 		 *
 		 * Setting the static `pluginName` property allows you to override the default name
@@ -171,7 +175,11 @@ can.Control.plugin = function(pluginname){
 }
 
 /**
+<<<<<<< HEAD
  * @function can.Control.plugin.prototype.update update
+=======
+ * @function can.Control.prototype.update update
+>>>>>>> b20b94a3bf66e78ac9394815d674b6b7c5fc4269
  * @parent can.Control.plugin
  * 
  * @description Reconfigure a control.
