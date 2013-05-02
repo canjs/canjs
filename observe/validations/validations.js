@@ -66,6 +66,9 @@ steal('can/util', 'can/observe/attributes', function (can) {
 		}
 		var oldSetup = clss.setup;
 
+		/**
+		 * @static
+		 */
 		can.extend(clss, {
 			setup : function (superClass) {
 				oldSetup.apply(this, arguments);
@@ -74,10 +77,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 				}
 			},
 			/**
-			 * @static
-			 */
-			/**
-			 * @function can.Observe.validations.static.validate can.Observe.validate
+			 * @function can.Observe.validations.static.validate validate
 			 * @parent can.Observe.validations
 			 * `validate(attrNames, [options,] validateProc(value, attrName) )` validates each of the
 			 * specified attributes with the given `validateProc` function.  The function
@@ -126,7 +126,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			validate : validate,
 
 			/**
-			 * @property can.Observe.validations.static.validationMessages can.Observe.validationMessages
+			 * @property can.Observe.validations.static.validationMessages validationMessages
 			 * @parent can.Observe.validations
 			 *
 			 * `validationMessages` has the default validation error messages that will be returned by the builtin
@@ -160,7 +160,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.validations.static.validateFormatOf can.Observe.validateFormatOf
+			 * @function can.Observe.validations.static.validateFormatOf validateFormatOf
 			 * @parent can.Observe.validations
 			 *
 			 * `validateFormatOf(attrNames, regexp, options)` validates where the values of
@@ -187,7 +187,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.validations.static.validateInclusionOf can.Observe.validateInclusionOf
+			 * @function can.Observe.validations.static.validateInclusionOf validateInclusionOf
 			 * @parent can.Observe.validations
 			 *
 			 * Validates whether the values of the specified attributes are available in a particular
@@ -216,7 +216,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.validations.static.validateLengthOf can.Observe.validateLengthOf
+			 * @function can.Observe.validations.static.validateLengthOf validateLengthOf
 			 * @parent can.Observe.validations
 			 *
 			 * Validates that the specified attributes' lengths are in the given range.
@@ -242,7 +242,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.validations.static.validatePresenceOf can.Observe.validatePresenceOf
+			 * @function can.Observe.validations.static.validatePresenceOf validatePresenceOf
 			 * @parent can.Observe.validations
 			 *
 			 * Validates that the specified attributes are not blank.
@@ -263,7 +263,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.validations.static.validateRangeOf can.Observe.validateRangeOf
+			 * @function can.Observe.validations.static.validateRangeOf validateRangeOf
 			 * @parent can.Observe.validations
 			 *
 			 * Validates that the specified attributes are in the given numeric range.
