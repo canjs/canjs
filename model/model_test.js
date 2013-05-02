@@ -686,16 +686,13 @@ test("store instance updates", function(){
     stop();
     
     Guy.findAll({}, function(guys){
-    		console.log("1st callback, store is empty",can.isEmptyObject(Guy.store))
     		start();
-    		console.log("binding on item",can.isEmptyObject(Guy.store))
         guys[0].bind('updated', function(){});
         ok(Guy.store[1], 'instance stored');
 	    	equals(Guy.store[1].updateCount, 0, 'updateCount is 0')
 	    	equals(Guy.store[1].nested.count, 0, 'nested.count is 0')
     })
     Guy.findAll({}, function(guys){
-    		console.log("2nd callback")
 	    	equals(Guy.store[1].updateCount, 1, 'updateCount is 1')
 	    	equals(Guy.store[1].nested.count, 1, 'nested.count is 1')
     })
@@ -1078,5 +1075,31 @@ test(".model on create and update (#301)", function() {
     })
 
 });
+
+test("List params uses findAll",function(){
+	stop()
+	can.fixture("/things",function(request){
+		
+		equal(request.data.param,"value","params passed")
+		
+		return [{
+			id: 1,
+			name: "Thing One"
+		}];
+	})
+	
+	var Model = can.Model({
+		findAll: "/things"
+	},{});
+	
+	var items = new Model.List({param: "value"});
+	
+	items.bind("add",function(ev, items, index){
+		equal(items[0].name, "Thing One", "items added");
+		start()
+	})
+	
+	
+})
 
 })();

@@ -1235,6 +1235,14 @@ steal('can/util','can/observe', function( can ) {
    *
    */
 	var ML = can.Model.List = can.Observe.List({
+		setup: function(params){
+			if( can.isPlainObject(params) && ! can.isArray(params) ){
+				can.Observe.List.prototype.setup.apply(this);
+				this.replace(this.constructor.Observe.findAll(params))
+			} else {
+				can.Observe.List.prototype.setup.apply(this,arguments);
+			}
+		},
 		_changes: function(ev, attr){
 			can.Observe.List.prototype._changes.apply(this, arguments );
 			if(/\w+\.destroyed/.test(attr)){
