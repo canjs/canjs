@@ -125,8 +125,8 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 	 * @static
 	 */
 		// keep so it can be overwritten
-		bind : bind.bindAndSetup,
-		unbind: bind.unbindAndTeardown,
+		bind : can.bindAndSetup,
+		unbind: can.unbindAndTeardown,
 		id: "id",
 		canMakeObserve : canMakeObserve,
 		// starts collecting events
@@ -790,7 +790,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * 
 		 * @return {can.Observe} the observe for chaining.
 		 */
-		bind: bind.bindAndSetup,
+		bind: can.bindAndSetup,
 		/**
 		 * @function unbind
 		 * Unbinds an event listener.  This works similar to jQuery's unbind.  This means you can 
@@ -814,7 +814,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * 
 		 * @return {can.Observe} the original observe for chaining.
 		 */
-		unbind: bind.unbindAndTeardown,
+		unbind: can.unbindAndTeardown,
 		/**
 		 * @hide
 		 * Get the serialized Object form of the observe.  Serialized
