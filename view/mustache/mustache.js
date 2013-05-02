@@ -92,7 +92,7 @@ function( can ){
 	Mustache.prototype.
 	/**
 	 * @function can.Mustache.prototype.render render
-	 * @parent can.Mustache
+	 * @parent can.Mustache.prototype
 	 * @signature `render(data)`
 	 * @param {Object} data Data to interpolate into the template.
 	 * @return {String} The template with interpolated data, in string form.
@@ -960,7 +960,8 @@ function( can ){
 	};
 
 	/**
-	 * 
+	 * @function can.Mustache.static.render render
+	 * @parent can.Mustache.static
 	 * @signature `Mustache.render(partial, context)`
 	 * @param {Object} partial
 	 * @param {Object} context

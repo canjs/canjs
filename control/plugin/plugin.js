@@ -21,7 +21,7 @@ can.Control.setup = function() {
 	if ( this !== can.Control ) {
 
 		/**
-		 * @property can.Control.plugin.static.pluginName can.Control.pluginName
+		 * @property can.Control.plugin.static.pluginName pluginName
 		 * @parent can.Control.plugin
 		 *
 		 * Setting the static `pluginName` property allows you to override the default name

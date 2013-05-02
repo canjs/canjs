@@ -1,5 +1,5 @@
 @page can.fixture can.fixture
-@parent can.util
+@parent canjs
 @test can/util/fixture/qunit.html
 
 

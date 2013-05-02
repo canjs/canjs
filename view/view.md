@@ -1,5 +1,7 @@
 @function can.view
 @parent canjs
+@group can.view.static static
+@group can.view.plugins plugins
 @description A JavaScript template framework.
 
 `can.view` is a JavaScript template framework that provides:

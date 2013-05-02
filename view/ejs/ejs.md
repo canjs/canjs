@@ -1,4 +1,4 @@
-@page can.EJS can.EJS
+@constructor can.EJS
 @parent canjs
 
 EJS provides __live__ ERB-style client-side templates. Use EJS 

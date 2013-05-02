@@ -89,14 +89,17 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		return can.route;
 	};
 
+	/**
+	 * @static
+	 */
 	extend(can.route, {
 
 		_querySeparator: '&',
 		_paramsMatcher: paramsMatcher,
 
 		/**
-		 * @function can.route.param
-		 * @parent can.route
+		 * @function can.route.param param
+		 * @parent can.route.static
 		 * @description Get a route URL from given data.
 		 * @signature `param(data)`
 		 * @param {data} object The data to populate the route with.
@@ -183,8 +186,8 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			return can.isEmptyObject(data) ? "" : can.route._querySeparator + can.param(data);
 		},
 		/**
-		 * @function can.route.deparam
-		 * @parent can.route
+		 * @function can.route.deparam deparam
+		 * @parent can.route.static
 		 * @description Extract data from a route URL.
 		 * @signature `deparam(url)`
 		 * @param {String} url A URL to extract data from.
@@ -284,8 +287,8 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
          */
 		routes: {},
 		/**
-		 * @function can.route.ready
-		 * @parent can.route
+		 * @function can.route.ready ready
+		 * @parent can.route.static
 		 * @signature `ready(readyYet)`
 		 * @param {Boolean} [readyYet] Whether the ready event should be fired yet.
 		 * @return {can.route} The `can.route` object.
@@ -311,8 +314,8 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			return can.route;
 		},
 		/**
-		 * @function can.route.url
-		 * @parent can.route
+		 * @function can.route.url url
+		 * @parent can.route.static
 		 * @signature `url(options[, merge])`
 		 * @param {Object} options The data to populate the route with.
 		 * @param {Boolean} [merge] Whether the given options should be merged into the current state of the route.
@@ -341,8 +344,8 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			return "#!" + can.route.param(options);
 		},
 		/**
-		 * @function can.route.link
-		 * @parent can.route
+		 * @function can.route.link link
+		 * @parent can.route.static
 		 * @signature `link(innerText, options, props[, merge])
 		 * @param {Object} innerText The text inside the link.
 		 * @param {Object} options The data to populate the route with.
@@ -387,8 +390,8 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			}, props)) + ">" + name + "</a>";
 		},
 		/**
-		 * @function can.route.current
-		 * @parent can.route
+		 * @function can.route.current current
+		 * @parent can.route.static
 		 * @signature `current(options)`
 		 * @param {Object} options Data to check agains the current route.
          * @return {Boolean} Whether the data matches the current URL.

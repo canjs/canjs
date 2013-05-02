@@ -102,8 +102,8 @@ steal("can/util", function( can ) {
 		},
 
 		/**
-		 * @function can.view.ejs
-		 * @parent can.view
+		 * @function can.view.ejs ejs
+		 * @parent can.view.static
 		 * @description Register an EJS template string or create a renderer function.
 		 *
 		 * @signature `can.view.ejs(id, template)`
@@ -115,21 +115,21 @@ steal("can/util", function( can ) {
 		 * @return {function} A renderer function that takes data and helpers.
 		 *
 		 * @body
-		 * `can.view.ejs([id,] template)` registers an EJS template string 
+		 * `can.view.ejs([id,] template)` registers an EJS template string
 		 * for a given id programatically. The following
 		 * registers `myViewEJS` and renders it into a documentFragment.
 		 *
 		 *      can.view.ejs('myViewEJS', '<h2><%= message %></h2>');
-		 * 
+		 *
 		 *      var frag = can.view('myViewEJS', {
 		 *          message : 'Hello there!'
 		 *      });
-		 * 
+		 *
 		 *      frag // -> <h2>Hello there!</h2>
 		 *
-		 * To convert the template into a render function, just pass 
+		 * To convert the template into a render function, just pass
 		 * the template. Call the render function with the data
-		 * you want to pass to the template and it returns the 
+		 * you want to pass to the template and it returns the
 		 * documentFragment.
 		 *
 		 *      var renderer = can.view.ejs('<div><%= message %></div>');
@@ -139,8 +139,8 @@ steal("can/util", function( can ) {
 		 */
 		//
 		/**
-		 * @function can.view.mustache
-		 * @parent can.view
+		 * @function can.view.mustache mustache
+		 * @parent can.view.static
 		 * @description Register a Mustache template string or create a renderer function.
 		 *
 		 * @signature `can.view.mustache(id, template)`
@@ -184,6 +184,7 @@ steal("can/util", function( can ) {
 		/**
 		 * @description Create a hookup to insert into templates.
 		 * @function can.view.hook hook
+		 * @parent can.view.static
 		 * @signature `can.view.hook(callback)`
 		 * @param {Function} callback A callback function to be called with the element.
 		 *
@@ -214,8 +215,8 @@ steal("can/util", function( can ) {
 		cachedRenderers: {},
 
 		/**
-		 * @property {Boolean} can.view.cache view
-		 * @parent can.view
+		 * @property {Boolean} can.view.cache cache
+		 * @parent can.view.static
 		 * By default, views are cached on the client.  If you'd like the
 		 * the views to reload from the server, you can set the `cache` attribute to `false`.
 		 *
@@ -226,7 +227,8 @@ steal("can/util", function( can ) {
 		cache: true,
 
 		/**
-		 * @function can.view.register
+		 * @function can.view.register register
+		 * @parent can.view.static
 		 * @description Register a templating language.
 		 * @signature `can.view.register(info)`
 		 * @param {{}} info Information about the templating language.
@@ -268,6 +270,7 @@ steal("can/util", function( can ) {
 
 		/**
 		 * @property {String} can.view.ext ext
+		 * @parent can.view.static
 		 * The default suffix to use if none is provided in the view's url.  
 		 * This is set to `.ejs` by default.
 		 *
@@ -296,7 +299,8 @@ steal("can/util", function( can ) {
 		preload: function( ) {},
 
 		/**
-		 * @function can.view.render
+		 * @function can.view.render render
+		 * @parent can.view.static
 		 * @description Render a template.
 		 * @signature `can.view.render(template[, callback])`
 		 * @param {String|Object} view The path of the view template or a view object.

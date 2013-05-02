@@ -1,4 +1,5 @@
-@page can.route can.route
+@function can.route can.route
+@group can.route.static static
 @inherits can.Observe
 @download can/route
 @test can/route/qunit.html

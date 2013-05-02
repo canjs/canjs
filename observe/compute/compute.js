@@ -133,6 +133,7 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 	/**
 	 * @page can.compute
 	 * @parent canjs
+	 * @group can.compute.prototype prototype
 	 * @signature `can.compute(getterSetter[, context])`
 	 * @param {Function} getterSetter A function that gets and optionally sets the value of the compute.
 	 * When called with no parameters, _getterSetter_ should return the current value of the compute. When
@@ -421,6 +422,7 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 		}
 		/**
 		 * @property can.compute.isComputed isComputed
+		 * @parent can.compute.prototype
 		 * Whether the value of the compute has been computed yet.
 		 */
 		computed.isComputed = true;
@@ -445,6 +447,7 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 			},
 			/**
 			 * @function can.compute.bind bind
+			 * @parent can.compute.prototype
 			 * @description Bind an event handler to a compute.
 			 * @signature `bind(eventType, handler)`
 			 * @param {String} eventType The event to bind this handler to.
@@ -471,6 +474,7 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 			bind: can.bindAndSetup,
 			/**
 			 * @function can.compute.unbind unbind
+			 * @parent can.compute.prototype
 			 * @description Unbind an event handler from a compute.
 			 * @signature `unbind(eventType[, handler])`
 			 * @param {String} eventType The type of event to unbind.

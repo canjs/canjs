@@ -28,18 +28,15 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 		};
 
 	can.EJS = EJS;
-	/**
-	 * @add can.EJS
-	 */
 
 	/**
+	 * @add can.EJS
 	 * @prototype
-	 * @parent can.EJS
 	 */
 	EJS.prototype.
 	/**
 	 * @function can.EJS.prototype.render render
-	 * @parent can.EJS
+	 * @parent can.EJS.prototype
 	 * @description Render a view object with data and helpers.
 	 * @signature `render(data[, helpers])`
 	 * @param {Object} [data] The data to populate the template with.
@@ -84,36 +81,10 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 	});
 
 	/**
-	 * @page can.EJS.Helpers Helpers
-	 * @parent can.EJS
-	 *
-	 * @body
-	 * By adding functions to can.EJS.Helpers.prototype, those functions will be available in the 
-	 * views.
-	 * 
-	 * The following helper converts a given string to upper case:
-	 * 
-	 * 	can.EJS.Helpers.prototype.toUpper = function(params)
-	 * 	{
-	 * 		return params.toUpperCase();
-	 * 	}
-	 * 
-	 * Use it like this in any EJS template:
-	 * 
-	 * 	<%= toUpper('javascriptmvc') %>
-	 * 
-	 * To access the current DOM element return a function that takes the element as a parameter:
-	 * 
-	 * 	can.EJS.Helpers.prototype.upperHtml = function(params)
-	 * 	{
-	 * 		return function(el) {
-	 * 			$(el).html(params.toUpperCase());
-	 * 		}
-	 * 	}
-	 * 
-	 * In your EJS view you can then call the helper on an element tag:
-	 * 
-	 * 	<div <%= upperHtml('javascriptmvc') %>></div>
+	 * @static
+	 * @param data
+	 * @param extras
+	 * @constructor
 	 */
 	EJS.Helpers = function( data, extras ) {
 		this._data = data;
@@ -121,21 +92,39 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 		extend(this, extras);
 	};
 
+	/**
+	 * @page can.EJS.Helpers Helpers
+	 * @parent can.EJS.static
+	 *
+	 * @body
+	 * By adding functions to can.EJS.Helpers.prototype, those functions will be available in the
+	 * views.
+	 *
+	 * The following helper converts a given string to upper case:
+	 *
+	 * 	can.EJS.Helpers.prototype.toUpper = function(params)
+	 * 	{
+	 * 		return params.toUpperCase();
+	 * 	}
+	 *
+	 * Use it like this in any EJS template:
+	 *
+	 * 	<%= toUpper('javascriptmvc') %>
+	 *
+	 * To access the current DOM element return a function that takes the element as a parameter:
+	 *
+	 * 	can.EJS.Helpers.prototype.upperHtml = function(params)
+	 * 	{
+	 * 		return function(el) {
+	 * 			$(el).html(params.toUpperCase());
+	 * 		}
+	 * 	}
+	 *
+	 * In your EJS view you can then call the helper on an element tag:
+	 *
+	 * 	<div <%= upperHtml('javascriptmvc') %>></div>
+	 */
 	EJS.Helpers.prototype = {
-		/**
-		 * `can.EJS.Helpers.list` iterates over an observable list and
-		 * sets up live binding. `list` takes a list of observables and a callback 
-		 * function with the signature `callback( currentItem, index, itemList )`
-		 *
-		 * Typically, this will look like:
-		 *
-		 *     <% list(items, function(item){ %>
-		 *          <li><%= item.attr('name') %></li>
-		 *     <% }) %>
-		 *
-		 * Whenever the list of observables changes, such as when an item is added or removed, 
-		 * the EJS view will redraw the list in the DOM.
-		 */
 		// TODO Deprecated!!
 		list : function(list, cb){
 			

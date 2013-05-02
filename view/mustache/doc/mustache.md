@@ -1,5 +1,6 @@
-@page can.Mustache can.Mustache
+@constructor can.Mustache
 @parent canjs
+@group can.Mustache.pages Pages
 
 @test can/view/mustache/test/qunit.html
 @plugin can/view/mustache

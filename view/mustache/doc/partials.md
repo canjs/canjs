@@ -1,5 +1,5 @@
 @page can.Mustache.Partials Partials
-@parent can.Mustache 2
+@parent can.Mustache.pages 2
 
 @body
 Partials are templates embedded in other templates.  Partials begin with a greater than sign, like `{{>my_partial}}`.  Partials inherit the calling context.  
