@@ -1,8 +1,3 @@
-<!--
-  @page changelog Changelog
-  @parent guides
--->
-
 __1.1.5__ ( Mar 28 2013 )
 
 - change: [Added Mustache.resolve to evaluate truthyness in a common way #333](https://github.com/bitovi/canjs/issues/335)
@@ -48,7 +43,7 @@ __1.1.4__ ( February 5, 2013 )
 - fix: [Mustache: registered helpers do not create the context stack correctly](https://github.com/bitovi/canjs/issues/228)
 - fix: [Mustache: only the current context is passed to partials, instead of the full stack](https://github.com/bitovi/canjs/issues/227)
 - fix: [IE8 error when setting up observe list](https://github.com/bitovi/canjs/pull/226)
-- fix: [Resetting a live-bound `<textarea>` changes its value to \_\_!!\_\_](https://github.com/bitovi/canjs/pull/223)
+- fix: [Resetting a live-bound <textarea> changes its value to __!!__](https://github.com/bitovi/canjs/pull/223)
 - fix: [hashchange binding still broken in mootools](https://github.com/bitovi/canjs/issues/216)
 - fix: [can.Mustache - with context lost in nested sections](https://github.com/bitovi/canjs/issues/215)
 - fix: [Enabled passing in helpers and partials to Mustache views](https://github.com/bitovi/canjs/pull/214), ([1](https://github.com/bitovi/canjs/pull/260))

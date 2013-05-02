@@ -167,6 +167,10 @@ module.exports = function (grunt) {
 					{
 						pattern: /(\n){3,}/gim, //single new lines
 						replacement: '\n\n'
+					},
+					{
+						pattern: /@EDGE/gim, //version property
+						replacement: '<%= pkg.version %>'
 					}
 				]
 			}
@@ -197,7 +201,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-shell');
 
 	grunt.registerTask('edge', ['build:edge', 'build:edgePlugins', 'string-replace:edge', 'beautify:dist', 'bannerize:edge', 'docco:edge']);
-	grunt.registerTask('latest', ['build:latest', 'build:latestPlugins', 'string-replace:latest', 'beautify:dist', 'bannerize:latest', 'docco:latest']);
+	grunt.registerTask('latest', ['build:latest', 'build:latestPlugins', 'string-replace:latest', 'beautify:dist', 'bannerize:latest']); //commenting docco task until we update
 	grunt.registerTask('ghpages', ['shell:cleanup', 'shell:getGhPages', 'shell:copyLatest', 'shell:updateGhPages', 'shell:cleanup']);
 	grunt.registerTask('deploy', ['latest', 'shell:bundleLatest', 'ghpages']);
 

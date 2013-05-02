@@ -1,6 +1,7 @@
 steal('funcunit/syn', 'can/view/mustache', 'can/model', './hello.mustache', './fancy_name.mustache', 
 	'./helper.mustache','./noglobals.mustache', function(_syn,_mustache,_model,hello,fancyName,helpers, noglobals){
 	
+
 module("can/view/mustache, rendering",{
 	setup : function(){
 
@@ -89,64 +90,6 @@ var getAttr = function(el, attrName){
 			el.className:
 			el.getAttribute(attrName);
 	}
-
-test("registerNode, unregisterNode, and replace work", function(){
-	// Reset the registered nodes
-	for (var key in can.view.nodeMap) {
-		if (can.view.nodeMap.hasOwnProperty(key)) {
-			delete can.view.nodeMap[key];
-		}
-	}
-	for (var key in can.view.nodeListMap) {
-		if (can.view.nodeListMap.hasOwnProperty(key)) {
-			delete can.view.nodeListMap[key];
-		}
-	}
-	
-	var ids = function(arr){
-		return can.map(arr, function(item){
-			return item.id
-		})
-	},
-		two = {id: 2},
-		listOne = [{id: 1},two,{id: 3}];
-		
-	can.view.registerNode(listOne);
-	var listTwo = [two];
-	
-	can.view.registerNode(listTwo);
-	
-	var newLabel = {id: 4}
-	can.view.replace(listTwo, [newLabel])
-	
-	same( ids(listOne), [1,4,3], "replaced" )
-	same( ids(listTwo), [4] );
-	
-	can.view.replace(listTwo,[{id: 5},{id: 6}]);
-	
-	same( ids(listOne), [1,5,6,3], "replaced" );
-	
-	same( ids(listTwo), [5,6], "replaced" );
-	
-	can.view.replace(listTwo,[{id: 7}])
-	
-	same( ids(listOne), [1,7,3], "replaced" );
-	
-	same( ids(listTwo), [7], "replaced" );
-	
-	can.view.replace( listOne, [{id: 8}])
-	
-	same( ids(listOne), [8], "replaced" );
-	same( ids(listTwo), [7], "replaced" );
-	
-	can.view.unregisterNode(listOne);
-	can.view.unregisterNode(listTwo);
-	
-	
-	
-	same(can.view.nodeMap, {} );
-	same(can.view.nodeListMap ,{} )
-});
 
 test("Model hookup", function(){
 	
@@ -468,11 +411,18 @@ test("Handlebars helper: each", function() {
 	var t = {
 		template: "{{#each names}}{{this}} {{/each}}",
 		expected: "Andy Austin Justin ",
-		data: { names: ['Andy', 'Austin', 'Justin'] }
+		data: { names: ['Andy', 'Austin', 'Justin'] },
+		data2: { names: new can.Observe.List(['Andy', 'Austin', 'Justin']) }
 	};
 	
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	same(new can.Mustache({ text: t.template }).render(t.data), expected);
+	same(new can.Mustache({ text: t.template }).render(t.data), expected, 'Using array');
+	
+	
+	var div = document.createElement('div');
+	div.appendChild(can.view.mustache(t.template)(t.data2));
+	same(div.innerHTML, expected, 'Using Observe.List');
+	t.data2.names.push('What');
 });
 
 test("Handlebars helper: with", function() {
@@ -1558,11 +1508,13 @@ test("2 way binding helpers", function(){
 	});
 	
 	var renderer = can.view.mustache('<input {{value user.name}}/>');
+
 	var div = document.createElement('div'),
 		u = new can.Observe({name: "Justin"});
 	div.appendChild(renderer({
 		user: u
 	}));
+	return;
 	var input = div.getElementsByTagName('input')[0];
 	
 	equal( input.value , "Justin", "Name is set correctly")
@@ -1827,5 +1779,58 @@ test("Helpers always have priority (#258)", function() {
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
 	same(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
+
+test("Each does not redraw items",function(){
+
+	var animals = new can.Observe.List(['sloth', 'bear']),
+		renderer = can.view.mustache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
+
+	var div = document.createElement('div')
+
+	var frag = renderer({animals: animals});
+	div.appendChild(frag)
+
+	div.getElementsByTagName('label')[0].myexpando = "EXPANDO-ED";
+
+	//animals.push("dog")
+	equal(div.getElementsByTagName('label').length, 2, "There are 2 labels")
+
+	animals.push("turtle")
+
+	equal(div.getElementsByTagName('label')[0].myexpando, "EXPANDO-ED", "same expando");
+
+	equal(div.getElementsByTagName('span')[2].innerHTML, "turtle", "turtle added");
+
+});
+
+test("each works within another branch", function(){
+	var animals = new can.Observe.List([]),
+		template = "<div>Animals:"+
+					"{{#if animals.length}}~"+
+						"{{#each animals}}"+
+							"<span>{{.}}</span>"+
+						"{{/each}}"+
+					"{{else}}"+
+						"No animals"+
+					"{{/if}}"+
+					"!</div>";
+
+	var renderer = can.view.mustache(template)
+
+	var div = document.createElement('div');
+
+
+
+	var frag = renderer({animals: animals});
+	div.appendChild(frag)
+
+	equal( div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!" );
+	animals.push('sloth');
+
+	equal(div.getElementsByTagName('span').length, 1, "There is 1 sloth");
+	animals.pop();
+
+	equal( div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!" );
+})
 
 });

@@ -1,8 +1,3 @@
-<!--
-  @page contributing Contributing
-  @parent guides
--->
-
 # Contributing to CanJS
 
 ## Contributing
