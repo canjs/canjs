@@ -18,5 +18,6 @@ steal(function(){
 			return object._cid = (name ||"" ) + (++cid)
 		}
 	}
+	can.VERSION = '@EDGE';
 	return can;
 });

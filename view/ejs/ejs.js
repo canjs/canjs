@@ -138,9 +138,19 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 		 */
 		// TODO Deprecated!!
 		list : function(list, cb){
+			
 			can.each(list, function(item, i){
 				cb(item, i, list)
 			})
+		},
+		each: function(list, cb){
+			// Normal arrays don't get live updated
+			if (can.isArray(list)) {
+				this.list(list, cb);
+			}
+			else {
+				can.view.lists(list, cb);
+			}
 		}
 	};
 

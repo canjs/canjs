@@ -1070,16 +1070,9 @@ steal('can/util','can/observe', function( can ) {
 		 * the model instance.  When there are no bindings, the 
 		 * model instance is removed from the store, freeing memory.  
 		 */
-		bind: function(eventName){
-			if ( ! ignoreHookup.test( eventName )) { 
-				if ( ! this._bindings ) {
-					this.constructor.store[this.__get(this.constructor.id)] = this;
-					this._bindings = 0;
-				}
-				this._bindings++;
-			}
-			
-			return can.Observe.prototype.bind.apply( this, arguments );
+		_bindsetup: function(){
+			this.constructor.store[this.__get(this.constructor.id)] = this;
+			return can.Observe.prototype._bindsetup.apply( this, arguments );
 		},
 		/**
 		 * @function can.Model.prototype.unbind unbind
@@ -1107,14 +1100,9 @@ steal('can/util','can/observe', function( can ) {
 		 * Unbind will also remove the instance from the store
 		 * if there are no other listeners.
 		 */
-		unbind : function(eventName){
-			if(!ignoreHookup.test(eventName)) { 
-				this._bindings--;
-				if(!this._bindings){
-					delete this.constructor.store[getId(this)];
-				}
-			}
-			return can.Observe.prototype.unbind.apply(this, arguments);
+		_bindteardown: function(){
+			delete this.constructor.store[getId(this)];
+			return can.Observe.prototype._bindteardown.apply( this, arguments );;
 		},
 		// Change `id`.
 		___set: function( prop, val ) {
@@ -1128,12 +1116,16 @@ steal('can/util','can/observe', function( can ) {
 	
 	can.each({
 		makeFindAll : "models",
-		makeFindOne: "model"
+		makeFindOne: "model",
+		makeCreate: "model",
+		makeUpdate: "model"
 	}, function( method, name ) {
-		can.Model[name] = function( oldFind ) {
-			return function( params, success, error ) {
-				var def = pipe( oldFind.call( this, params ), this, method );
-				def.then( success, error );
+		can.Model[name] = function( oldMethod ) {
+			return function() {
+				var args = can.makeArray(arguments),
+					oldArgs = can.isFunction( args[1] ) ? args.splice( 0, 1 ) : args.splice( 0, 2 ),
+					def = pipe( oldMethod.apply( this, oldArgs ), this, method );
+					def.then( args[0], args[1] );
 				// return the original promise
 				return def;
 			};
@@ -1269,18 +1261,22 @@ steal('can/util','can/observe', function( can ) {
    *
    */
 	var ML = can.Model.List = can.Observe.List({
-		setup : function(){
-			can.Observe.List.prototype.setup.apply(this, arguments );
-			// Send destroy events.
-			var self = this;
-			this.bind('change', function(ev, how){
-				if(/\w+\.destroyed/.test(how)){
-					var index = self.indexOf(ev.target);
-					if (index != -1) {
-						self.splice(index, 1);
-					}
+		setup: function(params){
+			if( can.isPlainObject(params) && ! can.isArray(params) ){
+				can.Observe.List.prototype.setup.apply(this);
+				this.replace(this.constructor.Observe.findAll(params))
+			} else {
+				can.Observe.List.prototype.setup.apply(this,arguments);
+			}
+		},
+		_changes: function(ev, attr){
+			can.Observe.List.prototype._changes.apply(this, arguments );
+			if(/\w+\.destroyed/.test(attr)){
+				var index = this.indexOf(ev.target);
+				if (index != -1) {
+					this.splice(index, 1);
 				}
-			})
+			}
 		}
 	})
 

@@ -34,10 +34,10 @@ test("Nested deparam",function(){
 
 test("Remaining ampersand", function() {
 	var data = can.deparam("a[b]=1&a[c]=2&")
-	same(data, {
+	deepEqual(data, {
 		a: {
-			b: 1,
-			c: 2
+			b: "1",
+			c: "2"
 		}
 	})
 })
