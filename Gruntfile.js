@@ -105,22 +105,35 @@ module.exports = function (grunt) {
 			}
 		},
 		docco: {
-			edge: {
-				files: '<%= meta.out %>/edge/**/*.js',
-				docco: {
-					output: '<%= meta.out %>/edge/docs'
-				}
-			},
 			latest: {
-				files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
-				docco: {
+				files: [{
+					src: '<%= meta.out/<%= pkg.version %>/**/*.js',
+					filter: function (filepath) {
+						return !/(min\.js|amd\/|qunit\.js)/.test(filepath);
+					}
+				}],
+				options: {
 					output: '<%= meta.out %>/<%= pkg.version %>/docs'
 				}
-			},
-			options: {
-				exclude: [/\.min\./, /amd\//, /qunit\.js/]
 			}
 		},
+		// docco: {
+		// 	edge: {
+		// 		files: '<%= meta.out %>/edge/**/*.js',
+		// 		docco: {
+		// 			output: '<%= meta.out %>/edge/docs'
+		// 		}
+		// 	},
+		// 	latest: {
+		// 		files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
+		// 		docco: {
+		// 			output: '<%= meta.out %>/<%= pkg.version %>/docs'
+		// 		}
+		// 	},
+		// 	options: {
+		// 		exclude: [/\.min\./, /amd\//, /qunit\.js/]
+		// 	}
+		// },
 		'string-replace': {
 			latest: {
 				files: [
@@ -199,6 +212,7 @@ module.exports = function (grunt) {
 
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-shell');
+	grunt.loadNpmTasks('grunt-docco');
 
 	grunt.registerTask('edge', ['build:edge', 'build:edgePlugins', 'string-replace:edge', 'beautify:dist', 'bannerize:edge', 'docco:edge']);
 	grunt.registerTask('latest', ['build:latest', 'build:latestPlugins', 'string-replace:latest', 'beautify:dist', 'bannerize:latest']); //commenting docco task until we update
