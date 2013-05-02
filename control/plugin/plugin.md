@@ -1,5 +1,5 @@
-@page can.Control.plugin can.Control.plugin
-@parent can.Control
+@page can.Control.plugin plugin
+@parent can.Control.plugins
 @plugin can/control/plugin
 @test can/control/plugin/qunit.html
 @download http://donejs.com/can/dist/can.control.plugin.js

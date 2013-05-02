@@ -1,5 +1,5 @@
 @page can.Observe.validations validations
-@parent can.Observe
+@parent can.Observe.plugins
 @plugin can/observe/validations
 @download http://donejs.com/can/dist/can.observe.validations.js
 @test can/observe/validations/qunit.html

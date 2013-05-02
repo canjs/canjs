@@ -1,5 +1,5 @@
 @page can.Observe.delegate delegate
-@parent can.Observe
+@parent can.Observe.plugins
 @plugin can/observe/delegate
 @test can/observe/delegate/qunit.html
 @download http://donejs.com/can/dist/can.observe.delegate.js

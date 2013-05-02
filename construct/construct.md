@@ -2,6 +2,7 @@
 @download can/construct
 @test can/construct/qunit.html
 @parent canjs
+@group can.Construct.plugins plugins
 
 `can.Construct` provides a way to easily use the power of prototypal inheritance without worrying
 about hooking up all the particulars yourself. It is inspired by John Resig's 

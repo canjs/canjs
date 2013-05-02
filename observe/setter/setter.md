@@ -1,5 +1,5 @@
 @page can.Observe.setter setter
-@parent can.Observe
+@parent can.Observe.plugins
 @plugin can/observe/setter
 @download http://donejs.com/can/dist/can.observe.setter.js
 @test can/observe/setter/qunit.html

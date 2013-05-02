@@ -1,6 +1,7 @@
 @constructor can.Observe
 @inherits can.Construct
 @parent canjs
+@group can.Observe.plugins plugins
 @test can/observe/qunit.html
 @download can/observe
 

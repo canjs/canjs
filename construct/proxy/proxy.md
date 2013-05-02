@@ -1,6 +1,5 @@
 @page can.Construct.proxy
-@parent can.Construct
-@plugin can/construct/proxy
+@parent can.Construct.plugins
 @test can/construct/proxy/qunit.html
 @download http://donejs.com/can/dist/can.construct.proxy.js
 

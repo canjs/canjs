@@ -1,5 +1,5 @@
 @page can.Construct.super
-@parent can.Construct
+@parent can.Construct.plugins
 @plugin can/construct/super
 @test can/construct/super/qunit.html
 @download http://donejs.com/can/dist/can.construct.super.js

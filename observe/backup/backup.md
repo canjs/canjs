@@ -1,5 +1,5 @@
 @page can.Observe.backup backup
-@parent can.Observe
+@parent can.Observe.plugins
 @plugin can/observe/backup
 @test can/observe/backup/qunit.html
 @download http://donejs.com/can/dist/can.observe.backup.js
