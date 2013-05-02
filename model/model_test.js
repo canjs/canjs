@@ -1027,4 +1027,32 @@ test("model removeAttr (#245)", function() {
 	}, 'Index attribute got removed');
 });
 
+test("List params uses findAll",function(){
+	stop()
+	can.fixture("/things",function(request){
+		
+		equal(request.data.param,"value","params passed")
+		
+		return [{
+			id: 1,
+			name: "Thing One"
+		}];
+	})
+	
+	var Model = can.Model({
+		findAll: "/things"
+	},{});
+	
+	var items = new Model.List({param: "value"});
+	
+	items.bind("add",function(ev, items, index){
+		equal(items[0].name, "Thing One", "items added");
+		start()
+	})
+	
+	
+})
+
+
+
 })();
