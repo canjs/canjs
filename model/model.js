@@ -1092,12 +1092,16 @@ steal('can/util','can/observe', function( can ) {
 	
 	can.each({
 		makeFindAll : "models",
-		makeFindOne: "model"
+		makeFindOne: "model",
+		makeCreate: "model",
+		makeUpdate: "model"
 	}, function( method, name ) {
-		can.Model[name] = function( oldFind ) {
-			return function( params, success, error ) {
-				var def = pipe( oldFind.call( this, params ), this, method );
-				def.then( success, error );
+		can.Model[name] = function( oldMethod ) {
+			return function() {
+				var args = can.makeArray(arguments),
+					oldArgs = can.isFunction( args[1] ) ? args.splice( 0, 1 ) : args.splice( 0, 2 ),
+					def = pipe( oldMethod.apply( this, oldArgs ), this, method );
+					def.then( args[0], args[1] );
 				// return the original promise
 				return def;
 			};
