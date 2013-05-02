@@ -1,4 +1,4 @@
-@page can.Observe.delegate
+@page can.Observe.delegate delegate
 @parent can.Observe
 @plugin can/observe/delegate
 @test can/observe/delegate/qunit.html

@@ -8,8 +8,7 @@ can.Construct.proxy is a plugin that helps you manage scope when creating
 callback functions by ensuring that `this` is set correctly and sensibly
 inside callbacks.
 
-@function can.Construct.prototype.proxy proxy
-@signature proxy(callback, [...args])
+@signature `proxy(callback, [...args])`
 @param {Function|String|Array.<Function|String>} callback the function or functions to proxy
 @param {...[*]} args parameters to curry into the proxied functions
 @return {Function} a function that calls `callback` with the same context as the current context

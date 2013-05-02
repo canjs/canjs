@@ -13,9 +13,9 @@ steal('can/util', 'can/observe', 'can/util/object', function (can) {
 	can.extend(can.Observe.prototype, {
 
 		/**
-		 * @function can.Observe.prototype.backup backup
+		 * @function can.Observe.backup.prototype.backup backup
 		 * @plugin can/observe/backup
-		 * @parent backup
+		 * @parent can.Observe.backup
 		 *
 		 * @description Save the values of the properties of an Observe.
 		 *
@@ -62,9 +62,9 @@ steal('can/util', 'can/observe', 'can/util/object', function (can) {
 		},
 
 		/**
-		 * @function can.Observe.prototype.isDirty isDirty
+		 * @function can.Observe.backup.prototype.isDirty isDirty
 		 * @plugin can/observe/backup
-		 * @parent backup
+		 * @parent can.Observe.backup
 		 *
 		 * @description Check whether an Observe has changed since the last time it was backed up.
 		 *
@@ -127,9 +127,9 @@ steal('can/util', 'can/observe', 'can/util/object', function (can) {
 		},
 
 		/**
-		 * @function can.Observe.prototype.restore restore
+		 * @function can.Observe.backup.prototype.restore restore
 		 * @plugin can/observe/backup
-		 * @parent backup
+		 * @parent can.Observe.backup
 		 * 
 		 * @description Restore saved values of an Observe's properties.
 		 *
