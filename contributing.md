@@ -1,6 +1,6 @@
 <!--
 @page contributing Contributing to CanJS
-@parent guides 3
+@parent guides 4
 -->
 
 ## Contributing
