@@ -1,4 +1,4 @@
-@page can.Control.plugin plugin
+@page can.Control.plugin jQuery plugin
 @parent can.Control.plugins
 @plugin can/control/plugin
 @test can/control/plugin/qunit.html
