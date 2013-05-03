@@ -1,6 +1,6 @@
 <!--
 @page changelog Changelog
-@parent guides 5
+@parent guides 4
 -->
 
 __1.1.5__ ( Mar 28 2013 )
