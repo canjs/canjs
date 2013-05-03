@@ -1,3 +1,8 @@
+<!--
+@page changelog Changelog
+@parent guides 5
+-->
+
 __1.1.5__ ( Mar 28 2013 )
 
 - change: [Added Mustache.resolve to evaluate truthyness in a common way #333](https://github.com/bitovi/canjs/issues/335)

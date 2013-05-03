@@ -1,3 +1,8 @@
+<!--
+@page license License
+@parent guides 6
+-->
+
 Copyright (C) 2013 [Bitovi](http://bitovi.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

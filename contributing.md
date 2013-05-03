@@ -1,4 +1,7 @@
-# Contributing to CanJS
+<!--
+@page contributing Contributing to CanJS
+@parent guides 4
+-->
 
 ## Contributing
 
