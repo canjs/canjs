@@ -1,17 +1,12 @@
-@page canjs CanJS
+@page canjs CanJS API
 @parent index 0
-@description CanJS API Documentation.
 
-## CanJS API Documentation
+@body
 
-### What is CanJS?
+This is the detailed documentation of the API for CanJS, a framework for building
+web applications that provides a lightweight inheritance system, observable
+objects and values, and a powerful MVC core with live-bound templates, among other
+resources. You can use it out of the box on top of jQuery, Zepto, YUI, and Mootools,
+and it's only 13K.
 
-CanJS makes building rich web applications easy. It provides a lightweight inheritance system,
-bookmark and back-button support, a powerful MVC core with live templates, and more &mdash;
-all for about 8k (minified and gzipped).
-
-
-CanJS is built to work with jQuery, Zepto, Dojo, YUI and Mootools right out of the box.
-
-[CanJS.us](http://canjs.us/) is an overview and getting started guide to CanJS. Get up to
-speed on CanJS, then come back here for a more detailed reference.
+If you are just starting with CanJS, you may want to try our [getting started guide](../guides/Tutorial.html).
