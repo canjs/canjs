@@ -409,7 +409,7 @@ test("Empty uses fixtures", function(){
 });*/
 
 test("Model events" , function(){
-
+	expect(12)
 	var order = 0;
 	can.Model("Test.Event",{
 		create : function(attrs){
@@ -454,6 +454,13 @@ test("Model events" , function(){
 	})
 	
 	var item = new Test.Event();
+	item.bind("created",function(){
+		ok(true, "created")
+	}).bind("updated",function(){
+		ok(true, "updated")
+	}).bind("destroyed",function(){
+		ok(true, "destroyed")
+	})
 	item.save();
 	
 });
