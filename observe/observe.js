@@ -120,7 +120,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 	/**
 	 * @add can.Observe
 	 */
-	var Observe = can.Observe = can.Construct( {
+	var Observe = can.Map = can.Observe = can.Construct( {
 	/**
 	 * @static
 	 */
@@ -1648,7 +1648,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		}
 	});
 
-	Observe.List = list;
+	can.List = Observe.List = list;
 	Observe.setup = function(){
 		can.Construct.setup.apply(this, arguments);
 		// I would prefer not to do it this way. It should
