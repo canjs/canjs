@@ -16,9 +16,9 @@ test("Basic Observe",9,function(){
 	var added;
 	
 	state.bind("change", function(ev, attr, how, val, old){
-		equals(attr, "properties.brand.0", "correct change name")
-		equals(how, "add")
-		equals(val[0].attr("foo"),"bar", "correct")
+		equals(attr, "properties.brand.0", "Adding to a list - correct change name")
+		equals(how, "add", "Adding to a list - correct change type")
+		equals(val[0].attr("foo"),"bar", "correct", "Adding to a list - correct newVal")
 		
 		added = val[0];
 	});
@@ -30,9 +30,9 @@ test("Basic Observe",9,function(){
 	state.unbind("change");
 	
 	added.bind("change", function(ev, attr, how, val, old){
-		equals(attr, "foo","foo property set on added")
-		equals(how, "set","added")
-		equals(val, "zoo","added")
+		equals(attr, "foo","Middle bubble - foo property set on added")
+		equals(how, "set","Middle bubble - added")
+		equals(val, "zoo","Middle bubble - added")
 	})
 	state.bind("change", function(ev, attr, how, val, old){
 		equals(attr, "properties.brand.0.foo")
@@ -403,15 +403,18 @@ test("splice unbinds", function(){
 
 test("always gets right attr even after moving array items", function(){
 	var l = new can.Observe.List([{foo: 'bar'}]);
+	
+	// get the first item
 	var o = l.attr(0);
+	// add a new item
 	l.unshift("A new Value")
 	
-	
+	// listen to change
 	l.bind('change', function(ev, attr, how){
 		equals(attr, "1.foo")
 	})
 	
-	
+	// this should have bubbled right
 	o.attr('foo','led you')
 })
  
@@ -788,5 +791,30 @@ test("dot separated keys (#257, #296)", function() {
 	equal(ob.attr('other.stuff'), 'thinger', 'Set dot separated value');
 	deepEqual(ob.attr('other').serialize(), { test: 'value', stuff: 'thinger' }, 'Object set properly');
 });
+
+test("cycle binding",function(){
+	
+	var first = new can.Observe(),
+		second= new can.Observe();
+		
+	first.attr('second',second);
+	
+	second.attr('first',second);
+	
+	var handler = function(){}
+	
+	first.bind('change',handler);
+	
+	ok(first._bindings,"has bindings")
+	
+	first.unbind('change',handler);
+	
+	ok(!first._bindings,"bindings removed");
+});
+
+
+
+
+
 
 })();

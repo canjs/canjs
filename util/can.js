@@ -1,5 +1,13 @@
 steal(function(){
 /**
+ @attribute can.VERSION
+ @parent can.util
+
+ `can.VERSION` is a String representing the CanJS version number. A version of `@EDGE` 
+ denotes the bleeding edge CanJS version.
+ */
+
+/**
  @function can.isDeferred
  @parent can.util
 
@@ -623,5 +631,6 @@ function(s) for the success or failure state of both asynchronous and synchronou
 			return object._cid = (name ||"" ) + (++cid)
 		}
 	}
+	can.VERSION = '@EDGE';
 	return can;
 });
