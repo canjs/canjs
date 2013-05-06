@@ -41,7 +41,7 @@ You can also post on the [Forums](https://forum.javascriptmvc.com/canjs) or talk
 
 Its important that all tests pass before sending a pull request.  TravisCI will determine if your commits pass the tests, but while your developing you can run the QUnit tests locally.  
 
-Open `~/can/test/tests.html` in a web browser to run the tests locally.  Each module has its own tests too, you can run them by opening the `qunit.html` in each folder.
+Open `~/can/test/test.html` in a web browser to run the tests locally.  Each module has its own tests too, you can run them by opening the `qunit.html` in each folder.
 
 CanJS supports the following browsers:
 
