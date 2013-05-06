@@ -421,7 +421,13 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
     // instead act on the `can.route.data` observe.
 	each(['bind','unbind','delegate','undelegate','attr','removeAttr'], function(name){
 		can.route[name] = function(){
-			return can.route.data[name].apply(can.route.data, arguments)
+			// `delegate` and `undelegate` require
+			// the `can/observe/delegate` plugin
+			if(!can.route.data[name]) {
+            	return;
+			}
+
+			return can.route.data[name].apply(can.route.data, arguments);
 		}
 	})
 
