@@ -986,43 +986,43 @@ test("reset on a live bound input", function(){
 test("A non-escaping live magic tag within a control structure and no leaks", function(){
 
 	var nodeLists = can.view.live.nodeLists;
-	
+
 	for(var prop in nodeLists.nodeMap){
 		delete nodeLists.nodeMap[prop]
 	}
 	for(var prop in nodeLists.nodeListMap){
 		delete nodeLists.nodeListMap[prop]
 	}
-	
+
 	var text = "<div><% items.each(function(ob) { %>" +
-		"<%== ob.attr('html') %>" +
-		"<% }); %></div>",
+			"<%== ob.attr('html') %>" +
+			"<% }); %></div>",
 		items	 = new can.Observe.List([
 			{html: "<label>Hello World</label>"}
 		]),
 		compiled = new can.EJS({text: text}).render({items: items}),
 		div = can.$('#qunit-test-area')[0]
-		div.innerHTML = ""
-	
+	div.innerHTML = ""
+
 	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
-	
+
 	ok(div.getElementsByTagName('label')[0], "label exists")
-	
+
 	items[0].attr("html","<p>hi</p>");
-	
+
 	equal(div.getElementsByTagName('label').length, 0, "label is removed")
 	equal(div.getElementsByTagName('p').length, 1, "label is replaced by p")
-	
+
 	items.push({
 		html: "<p>hola</p>"
 	});
-	
+
 	equal(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
-	
+
 	can.remove( can.$(div.firstChild) )
-		
-	deepEqual(can.view.nodeMap, {} );
-	deepEqual(can.view.nodeListMap ,{} )
+
+	deepEqual(nodeLists.nodeMap, {} );
+	deepEqual(nodeLists.nodeListMap ,{} )
 });
 
 

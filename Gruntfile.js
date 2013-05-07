@@ -256,7 +256,7 @@ module.exports = function (grunt) {
 					urls: [
 						'http://localhost:8000/test/dojo.html',
 						'http://localhost:8000/test/jquery.html',
-						// 'http://localhost:8000/can/test/zepto.html',
+						// TODO 'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/mootools.html',
 						'http://localhost:8000/test/yui.html'
 					]
@@ -274,7 +274,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('grunt-docco');
 
-	grunt.registerTask('test', ['edge', 'testify', 'connect', 'qunit']);
+	grunt.registerTask('test', ['connect', 'qunit']);
 
 	grunt.registerTask('edge', ['build:edge', 'build:edgePlugins', 'string-replace:edge', 'beautify:dist', 'bannerize:edge', 'docco:edge']);
 	grunt.registerTask('latest', ['build:latest', 'build:latestPlugins', 'string-replace:latest', 'beautify:dist', 'bannerize:latest']); //commenting docco task until we update
