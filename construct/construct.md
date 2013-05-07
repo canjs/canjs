@@ -1,7 +1,7 @@
 @constructor can.Construct
-@download can/construct
-@test can/construct/qunit.html
+@test can/construct/test.html
 @parent canjs
+@plugin can/construct
 @group can.Construct.plugins plugins
 
 `can.Construct` provides a way to easily use the power of prototypal inheritance without worrying

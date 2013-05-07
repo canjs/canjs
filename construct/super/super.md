@@ -1,8 +1,7 @@
 @page can.Construct.super
 @parent can.Construct.plugins
 @plugin can/construct/super
-@test can/construct/super/qunit.html
-@download http://donejs.com/can/dist/can.construct.super.js
+@test can/construct/super/test.html
 
 can.Construct.super is a plugin that makes it easier to call base
 functions from inside inheriting functions.
