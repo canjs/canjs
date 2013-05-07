@@ -26,70 +26,10 @@ module("can/view/ejs, rendering",{
 })
 
 var getAttr = function(el, attrName){
-		return attrName === "class"?
-			el.className:
-			el.getAttribute(attrName);
-	}
-
-test("registerNode, unregisterNode, and replace work", function(){
-	// Reset the registered nodes
-	for (var key in can.view.nodeMap) {
-		if (can.view.nodeMap.hasOwnProperty(key)) {
-			delete can.view.nodeMap[key];
-		}
-	}
-	for (var key in can.view.nodeListMap) {
-		if (can.view.nodeListMap.hasOwnProperty(key)) {
-			delete can.view.nodeListMap[key];
-		}
-	}
-	
-	var ids = function(arr){
-		return can.map(arr, function(item){
-			return item.id
-		})
-	},
-		two = {id: 2},
-		listOne = [{id: 1},two,{id: 3}];
-		
-	can.view.registerNode(listOne);
-	var listTwo = [two];
-	
-	can.view.registerNode(listTwo);
-	
-	var newLabel = {id: 4}
-	can.view.replace(listTwo, [newLabel])
-	
-	deepEqual( ids(listOne), [1,4,3], "replaced" )
-	deepEqual( ids(listTwo), [4] );
-	
-	can.view.replace(listTwo,[{id: 5},{id: 6}]);
-	
-	deepEqual( ids(listOne), [1,5,6,3], "replaced" );
-	
-	deepEqual( ids(listTwo), [5,6], "replaced" );
-	
-	can.view.replace(listTwo,[{id: 7}])
-	
-	deepEqual( ids(listOne), [1,7,3], "replaced" );
-	
-	deepEqual( ids(listTwo), [7], "replaced" );
-	
-	can.view.replace( listOne, [{id: 8}])
-	
-	deepEqual( ids(listOne), [8], "replaced" );
-	deepEqual( ids(listTwo), [7], "replaced" );
-	
-	can.view.unregisterNode(listOne);
-	can.view.unregisterNode(listTwo);
-	
-	
-	
-	deepEqual(can.view.nodeMap, {} );
-	deepEqual(can.view.nodeListMap ,{} )
-	
-	
-});
+	return attrName === "class"?
+		el.className:
+		el.getAttribute(attrName);
+}
 
 test("render with left bracket", function(){
 	var compiled = new can.EJS({text: this.squareBrackets, type: '['}).render({animals: this.animals})
