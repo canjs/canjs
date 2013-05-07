@@ -2,7 +2,7 @@
 @parent can.Observe
 @plugin can/observe/sort
 @download http://donejs.com/can/dist/can.observe.sort.js
-@test can/observe/sort/qunit.html
+@test observe/sort/qunit.html
 
 `list.sort(sortfunc)`
 

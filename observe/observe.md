@@ -2,7 +2,7 @@
 @inherits can.Construct
 @parent canjs
 @group can.Observe.plugins plugins
-@test can/observe/test.html
+@test observe/test.html
 @plugin can/observe
 
 `can.Observe` provides a way for you to listen for and keep track of changes

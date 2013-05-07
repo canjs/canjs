@@ -1,7 +1,7 @@
 @page can.view.modifiers jQuery modifiers
 @parent can.view.plugins
 @plugin can/view/modifiers
-@test can/view/modifiers/test.html
+@test view/modifiers/test.html
 
 The can/view/modifiers plugin extends the jQuery view modifiers
 

@@ -1,7 +1,7 @@
 @constructor can.Mustache
 @parent canjs
 @group can.Mustache.pages Pages
-@test can/view/mustache/test.html
+@test view/mustache/test.html
 @plugin can/view/mustache
 
 can.Mustache provides logic-less templates with live binding 

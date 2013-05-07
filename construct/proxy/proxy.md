@@ -1,6 +1,6 @@
 @page can.Construct.proxy
 @parent can.Construct.plugins
-@test can/construct/proxy/test.html
+@test construct/proxy/test.html
 @plugin can/construct/proxy
 
 can.Construct.proxy is a plugin that helps you manage scope when creating

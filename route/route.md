@@ -1,7 +1,7 @@
 @function can.route can.route
 @inherits can.Observe
 @plugin can/route
-@test can/route/test.html
+@test route/test.html
 @parent canjs
 @group can.route.static static
 

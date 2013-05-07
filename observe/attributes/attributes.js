@@ -11,7 +11,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 	
 	can.extend(clss, {
 		/**
-		 * @property can.Observe.attributes.static.attributes attributes (static)
+		 * @property can.Observe.attributes.static.attributes attributes
 		 * @parent can.Observe.attributes
 		 *
 		 * `can.Observe.attributes` is a property that contains key/value pair(s) of an attribute's name and its
@@ -190,7 +190,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 			}
 		},
 		/**
-		 * @property can.Observe.attributes.static.serialize serialize (static)
+		 * @property can.Observe.attributes.static.serialize serialize
 		 * @parent can.Observe.attributes
 		 *
 		 * `can.Observe.serialize` is an object of name-function pairs that are used to 
@@ -307,7 +307,7 @@ can.Observe.prototype.__convert = function(prop, value){
 };
 
 /**
- * @function can.Observe.prototype.attributes.serialize serialize (prototype)
+ * @function can.Observe.prototype.attributes.serialize serialize
  * @parent can.Observe.attributes
  *
  * @description `can.Observe.prototype.serialize` serializes an object for the object. 

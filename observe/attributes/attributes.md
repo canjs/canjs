@@ -1,7 +1,7 @@
 @page can.Observe.attributes attributes
 @parent can.Observe.plugins
 @plugin can/observe/attributes
-@test can/observe/attributes/test.html
+@test observe/attributes/test.html
 
 can.Observe.attributes is a plugin that helps convert and normalize data being set on an Observe
 and allows you to specify the way complex types get serialized. The attributes plugin is most

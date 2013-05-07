@@ -1,7 +1,7 @@
 @page can.Observe.delegate delegate
 @parent can.Observe.plugins
 @plugin can/observe/delegate
-@test can/observe/delegate/test.html
+@test observe/delegate/test.html
 
 The __delegate__ plugin allows you to listen to more specific event changes on 
 [can.Observe Observes].  It allows you to specify:

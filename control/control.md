@@ -1,7 +1,7 @@
 @constructor can.Control
 @parent canjs
 @plugin can/control
-@test can/control/test.html
+@test control/test.html
 @inherits can.Construct
 @description widget factory with declarative event binding.
 @group can.Control.plugins plugins

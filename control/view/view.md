@@ -2,7 +2,7 @@
 @hide
 @parent can.Control
 @plugin can/control/view
-@test can/control/view/qunit.html
+@test control/view/qunit.html
 @download http://donejs.com/can/dist/can.control.view.js
 
 __DEPRECATED__

@@ -1,5 +1,5 @@
 @constructor can.Construct
-@test can/construct/test.html
+@test construct/test.html
 @parent canjs
 @plugin can/construct
 @group can.Construct.plugins plugins

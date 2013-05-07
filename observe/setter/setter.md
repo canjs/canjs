@@ -1,7 +1,7 @@
 @page can.Observe.setter setter
 @parent can.Observe.plugins
 @plugin can/observe/setter
-@test can/observe/setter/test.html
+@test observe/setter/test.html
 
 `can.Observe.setter(name, success(value), error(errors))` extends the Observe object 
 to provide convenient helper methods for setting attributes on a observable.

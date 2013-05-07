@@ -1,7 +1,7 @@
 @page can.Control.route 
 @parent can.Control.plugins
 @plugin can/control/route
-@test can/control/test.html
+@test control/test.html
 
 @body
 The can.Control.route plugin adds a __route__ [can.Control.processors processor] to [can.Control].
