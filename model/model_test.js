@@ -407,7 +407,7 @@ test("Empty uses fixtures", function(){
 });*/
 
 test("Model events" , function(){
-
+	expect(12)
 	var order = 0;
 	can.Model("Test.Event",{
 		create : function(attrs){
@@ -452,6 +452,13 @@ test("Model events" , function(){
 	})
 	
 	var item = new Test.Event();
+	item.bind("created",function(){
+		ok(true, "created")
+	}).bind("updated",function(){
+		ok(true, "updated")
+	}).bind("destroyed",function(){
+		ok(true, "destroyed")
+	})
 	item.save();
 	
 });
@@ -677,13 +684,14 @@ test("store instance updates", function(){
     updateCount = 0;
     
     can.fixture("GET /guys", function(){
-    	var guys = [{id: 1, updateCount: updateCount, nested: {count: updateCount}}];
-    	updateCount++;
+	    	var guys = [{id: 1, updateCount: updateCount, nested: {count: updateCount}}];
+	    	updateCount++;
         return guys;
     });
     stop();
+    
     Guy.findAll({}, function(guys){
-    	start();
+    		start();
         guys[0].bind('updated', function(){});
         ok(Guy.store[1], 'instance stored');
     	equal(Guy.store[1].updateCount, 0, 'updateCount is 0')
@@ -693,7 +701,7 @@ test("store instance updates", function(){
     	equal(Guy.store[1].updateCount, 1, 'updateCount is 1')
     	equal(Guy.store[1].nested.count, 1, 'nested.count is 1')
     })
-	
+
 })
 
 /** /
@@ -884,18 +892,25 @@ test("destroying a model impact the right list", function() {
 			return def;
 		}
 	},{});
-	var list1 = new Person.List([ new Person({ id : 1 }), new Person({ id : 2 }) ]),
-		list2 = new Organisation.List([ new Organisation({ id : 1 }), new Organisation({ id : 2 }) ]);
+	var people = new Person.List([ new Person({ id : 1 }), new Person({ id : 2 }) ]),
+		orgs = new Organisation.List([ new Organisation({ id : 1 }), new Organisation({ id : 2 }) ]);
+
+	// you must be bound to the list to get this
+	people.bind("length",function(){})
+	orgs.bind("length",function(){})
 
 	// set each person to have an organization
-	list1[0].attr('organisation', list2[0]);
-	list1[1].attr('organisation', list2[1]);
+	people[0].attr('organisation', orgs[0]);
+	people[1].attr('organisation', orgs[1]);
 
-	equal( list1.length, 2, "Initial Person.List has length of 2")
-	equal( list2.length, 2, "Initial Organisation.List has length of 2")
-	list2[0].destroy();
-	equal( list1.length, 2, "After destroying list2[0] Person.List has length of 2")
-	equal( list2.length, 1, "After destroying list2[0] Organisation.List has length of 1")
+	equal( people.length, 2, "Initial Person.List has length of 2")
+	equal( orgs.length, 2, "Initial Organisation.List has length of 2");
+	
+	orgs[0].destroy();
+	
+	equal( people.length, 2, "After destroying orgs[0] Person.List has length of 2");
+	
+	equal( orgs.length, 1, "After destroying orgs[0] Organisation.List has length of 1")
 
 });
 
@@ -964,7 +979,8 @@ test("calling destroy with unsaved model triggers destroyed event (#181)", funct
 		newModel = new MyModel(),
 		list = new MyModel.List(),
 		deferred;
-
+	// you must bind to a list for this feature
+	list.bind("length",function(){});
 	list.push(newModel);
 	equal(list.attr('length'), 1, "List length as expected");
 
@@ -1016,5 +1032,80 @@ test("model removeAttr (#245)", function() {
 		name: 'text updated'
 	}, 'Index attribute got removed');
 });
+
+test(".model on create and update (#301)", function() {
+	var MyModel = can.Model({
+		create: 'POST /todo',
+		update: 'PUT /todo',
+		model: function(data) {
+            return can.Model.model.call(this, data.item);
+        }
+	}, {}),
+		id = 0,
+    	updateTime;
+
+	can.fixture('POST /todo', function(original, respondWith, settings) {
+		id++;
+        return {
+            item: can.extend(original.data, {
+                id: id
+            })
+        };
+    });
+    can.fixture('PUT /todo', function(original, respondWith, settings) {
+    	updateTime = new Date().getTime();
+        return {
+            item: {
+            	updatedAt: updateTime
+            }
+        };
+    });
+
+	stop();
+    MyModel.bind('created', function(ev, created) {
+    	start();
+    	deepEqual(created.attr(), {id: 1, name: 'Dishes'}, '.model works for create');
+    }).bind('updated', function(ev, updated) {
+    	start();
+    	deepEqual(updated.attr(), {id: 1, name: 'Laundry', updatedAt: updateTime}, '.model works for update');
+    });
+
+    var instance = new MyModel({
+    	name: 'Dishes'
+    }),
+    saveD = instance.save();
+
+    stop();
+    saveD.then(function() {
+    	instance.attr('name', 'Laundry').save();
+    })
+
+});
+
+test("List params uses findAll",function(){
+	stop()
+	can.fixture("/things",function(request){
+		
+		equal(request.data.param,"value","params passed")
+		
+		return [{
+			id: 1,
+			name: "Thing One"
+		}];
+	})
+	
+	var Model = can.Model({
+		findAll: "/things"
+	},{});
+	
+	var items = new Model.List({param: "value"});
+	
+	items.bind("add",function(ev, items, index){
+		equal(items[0].name, "Thing One", "items added");
+		start()
+	})
+	
+	
+})
 
 })();

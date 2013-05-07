@@ -19,7 +19,6 @@ test("Basic Observe",9,function(){
 		equal(attr, "properties.brand.0", "correct change name")
 		equal(how, "add")
 		equal(val[0].attr("foo"),"bar", "correct")
-		
 		added = val[0];
 	});
 
@@ -32,6 +31,7 @@ test("Basic Observe",9,function(){
 		equal(how, "set","added")
 		equal(val, "zoo","added")
 	});
+
 	state.bind("change", function(ev, attr, how, val, old){
 		equal(attr, "properties.brand.0.foo")
 		equal(how, "set")
@@ -401,15 +401,18 @@ test("splice unbinds", function(){
 
 test("always gets right attr even after moving array items", function(){
 	var l = new can.Observe.List([{foo: 'bar'}]);
+	
+	// get the first item
 	var o = l.attr(0);
+	// add a new item
 	l.unshift("A new Value")
 	
-	
+	// listen to change
 	l.bind('change', function(ev, attr, how){
 		equal(attr, "1.foo")
 	})
 	
-	
+	// this should have bubbled right
 	o.attr('foo','led you')
 })
  
@@ -786,6 +789,36 @@ test("dot separated keys (#257, #296)", function() {
 	ob.attr('other.stuff', 'thinger');
 	equal(ob.attr('other.stuff'), 'thinger', 'Set dot separated value');
 	deepEqual(ob.attr('other').serialize(), { test: 'value', stuff: 'thinger' }, 'Object set properly');
+});
+
+test("cycle binding",function(){
+	
+	var first = new can.Observe(),
+		second= new can.Observe();
+		
+	first.attr('second',second);
+	
+	second.attr('first',second);
+	
+	var handler = function(){}
+	
+	first.bind('change',handler);
+	
+	ok(first._bindings,"has bindings")
+	
+	first.unbind('change',handler);
+	
+	ok(!first._bindings,"bindings removed");
+});
+
+test("Deferreds are not converted", function() {
+	var dfd = can.Deferred(),
+		ob = new can.Observe({
+			test: dfd
+		});
+
+	ok(can.isDeferred(ob.attr('test')), 'Attribute is a deferred');
+	ok(!ob.attr('test')._cid, 'Does not have a _cid');
 });
 
 })();

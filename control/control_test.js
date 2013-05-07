@@ -343,4 +343,18 @@
 		equal(c._bindings.length, 1, 'There is only one binding');
 	});
 
+	test("Multiple calls to destroy", 2, function() {
+
+		var Control = can.Control({
+			destroy: function() {
+				ok(true);	
+				can.Control.prototype.destroy.call(this);
+			}
+		}),
+		div = document.createElement('div'),
+		c = new Control(div);
+
+		c.destroy();
+		c.destroy();
+	});
 })();

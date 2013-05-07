@@ -220,4 +220,50 @@ test("validatesRangeOf", function(){
 	equal(errors3.undefinedValue2.length,1,"one error on undefinedValue2");
 });
 
+test("validatesNumericalityOf", function(){
+	Person.validatesNumericalityOf(["foo"]);
+	
+	var errors = new Person({foo: 0}).errors();
+	ok(!errors, "no errors");
+	
+	var errors = new Person({foo: 1}).errors();
+	ok(!errors, "no errors");
+	
+	var errors = new Person({foo: 1.5}).errors();
+	ok(!errors, "no errors");
+	
+	var errors = new Person({foo: -1.5}).errors();
+	ok(!errors, "no errors");
+	
+	var errors = new Person({foo: "1"}).errors();
+	ok(!errors, "no errors");
+	
+	var errors = new Person({foo: "1.5"}).errors();
+	ok(!errors, "no errors");
+	
+	var errors = new Person({foo: ".5"}).errors();
+	ok(!errors, "no errors");
+	
+	var errors = new Person({foo: "-1.5"}).errors();
+	ok(!errors, "no errors");
+	
+	var errors = new Person({foo: " "}).errors();
+	equal(errors.foo.length,1,"one error on foo");
+	
+	var errors = new Person({foo: "1f"}).errors();
+	equal(errors.foo.length,1,"one error on foo");
+	
+	var errors = new Person({foo: "f1"}).errors();
+	equal(errors.foo.length,1,"one error on foo");
+	
+	var errors = new Person({foo: "1.5.5"}).errors();
+	equal(errors.foo.length,1,"one error on foo");
+	
+	var errors = new Person({foo: "\t\t"}).errors();
+	equal(errors.foo.length,1,"one error on foo");
+	
+	var errors = new Person({foo: "\n\r"}).errors();
+	equal(errors.foo.length,1,"one error on foo");
+});
+
 })();
