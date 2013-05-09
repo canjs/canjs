@@ -380,7 +380,6 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 				}
 			}
 		}
-
 		if(typeof getterSetter === "function"){
 			set = getterSetter;
 			get = getterSetter;
@@ -424,11 +423,15 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 						update(get(), value)
 					};
 					can.bind.call(getterSetter, eventName || propertyName,handler)
+					
+					// use getValueAndObserved because
+					// we should not be indicating that some parent
+					// reads this property if it happens to be binding on it
+					value = getValueAndObserved(get).value
 				}
 				off = function(){
 					can.unbind.call(getterSetter, eventName || propertyName,handler)
 				}
-				//value = get();
 
 			} else {
 				// `can.compute(initialValue, setter)`
