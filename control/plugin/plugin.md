@@ -1,7 +1,8 @@
 @page can.Control.plugin jQuery plugin
 @parent can.Control.plugins
 @plugin can/control/plugin
-@test control/plugin/test.html
+@test can/control/plugin/qunit.html
+@download http://donejs.com/can/dist/can.control.plugin.js
 
 The `can.Control.plugin` extension is a plugin for creating and accessing 
 controls with jQuery helper methods.  It uses the control's [can.Construct.fullName fullName] 

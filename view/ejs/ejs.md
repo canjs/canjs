@@ -1,6 +1,4 @@
 @constructor can.EJS
-@plugin can/view/ejs
-@test view/ejs/test.html
 @parent canjs
 
 EJS provides __live__ ERB-style client-side templates. Use EJS 

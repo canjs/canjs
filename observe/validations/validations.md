@@ -1,7 +1,8 @@
 @page can.Observe.validations validations
 @parent can.Observe.plugins
 @plugin can/observe/validations
-@test observe/validations/qunit.html
+@download http://donejs.com/can/dist/can.observe.validations.js
+@test can/observe/validations/qunit.html
 
 The `can/observe/validations` plugin provides validations on observes. Validations
 are set on [can.Observe]'s __static__ `init` function.

@@ -985,8 +985,8 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		/**
 		 * @page can.Observe.List
 		 * @inherits can.Observe
-		 * @plugin can/observe
-		 * @test observe/test.html
+		 * @download can/observe
+		 * @test can/observe/qunit.html
 		 * @parent canjs
 		 *
 		 * `can.Observe.List` provides a way for you to use `can.Observe`s with arrays. Much like `can.Observe`,

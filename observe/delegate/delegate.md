@@ -1,7 +1,8 @@
 @page can.Observe.delegate delegate
 @parent can.Observe.plugins
 @plugin can/observe/delegate
-@test observe/delegate/test.html
+@test can/observe/delegate/qunit.html
+@download http://donejs.com/can/dist/can.observe.delegate.js
 
 The __delegate__ plugin allows you to listen to more specific event changes on 
 [can.Observe Observes].  It allows you to specify:

@@ -1,7 +1,7 @@
 @page can.fixture can.fixture
 @parent canjs
-@test util/fixture/test.html
-@plugin can/util/fixture
+@test can/util/fixture/qunit.html
+
 
 `can.util.fixture` intercepts an AJAX request and simulates
 the response with a file or function. They are a great technique

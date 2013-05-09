@@ -1,9 +1,9 @@
 @function can.route can.route
-@inherits can.Observe
-@plugin can/route
-@test route/test.html
-@parent canjs
 @group can.route.static static
+@inherits can.Observe
+@download can/route
+@test can/route/qunit.html
+@parent canjs
 
 can.route is a plugin that helps manage browser history and
 client state by synchronizing the window.location.hash with

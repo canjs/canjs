@@ -1,7 +1,8 @@
 @page can.Control.route 
 @parent can.Control.plugins
 @plugin can/control/route
-@test control/test.html
+@test can/control/view/qunit.html
+@download http://donejs.com/can/dist/can.control.route.js
 
 @body
 The can.Control.route plugin adds a __route__ [can.Control.processors processor] to [can.Control].
