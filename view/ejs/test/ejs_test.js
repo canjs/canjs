@@ -1466,4 +1466,32 @@ test("each works within another branch", function(){
 	equal( div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!" );
 })
 
+test("JS blocks within EJS tags shouldn't require isolation", function(){
+	var isolatedBlocks = can.view.ejs(
+			"<% if (true) { %>" +
+				"<% if (true) { %>" +
+					"hi" + 
+				"<% } %>" +
+			"<% } %>"),
+		sharedBlocks = can.view.ejs(
+			"<% if (true) { %>" +
+				"<% if (true) { %>" +
+					"hi" + 
+				"<% }" +
+			"} %>");
+
+	var div = document.createElement('div');
+
+	try {
+		div.appendChild(isolatedBlocks());
+	} catch (ex) { }
+	equal( div.innerHTML, "hi", "Rendered isolated blocks" );
+
+	div.innerHTML = "";
+	try {
+		div.appendChild(sharedBlocks());
+	} catch (ex) { }
+	equal( div.innerHTML, "hi", "Rendered shared blocks" );
+})
+
 })();
