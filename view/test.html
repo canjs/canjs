@@ -4,7 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="../lib/qunit/qunit.css"/>
 </head>
 <body>
-<h1 id="qunit-header">can.Construct Test Suite</h1>
+<h1 id="qunit-header">can.view Test Suite</h1>
 
 <h2 id="qunit-banner"></h2>
 
@@ -21,7 +21,12 @@
 		steal.config({
 			root: '../'
 		});
-	},"can/construct").then("can/construct/construct_test.js", function() {
+	}, "can/view", "can/view/micro",
+			"can/view/ejs",
+			"can/view/jaml",
+			"can/view/mustache",
+			"can/observe",
+			"can/view/tmpl").then("can/test", "can/util/fixture", "can/view/view_test.js", function() {
 		QUnit.start();
 	});
 </script>

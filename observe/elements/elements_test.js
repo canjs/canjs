@@ -1,4 +1,4 @@
-steal("can/observe/elements", 'funcunit/qunit', function(){
+(function() {
 
 module("jquery/observe/elements")
 
@@ -15,4 +15,4 @@ test("identity uses the real id", function(){
   equal(new Person({ssn:'987-65-4321'}).identity(),'Person_987-65-4321');
 })
 
-})
+})()

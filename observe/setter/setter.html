@@ -14,9 +14,13 @@
 <div id="demo-html">
 <input type="text" id="input" value="Brian" />
 </div>	
-<script type='text/javascript' src='../../../steal/steal.js'></script>
+<script type='text/javascript' src='../../lib/steal/steal.js'></script>
 <script type='text/javascript' id="demo-source">   
-steal('can/observe/setter', 'can/control')
+steal(function() {
+	steal.config({
+		root: '../../'
+	});
+}).then('can/observe/setter', 'can/control')
 .then(function(){
 	
 var School = can.Observe({
