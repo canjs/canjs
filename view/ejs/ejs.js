@@ -95,6 +95,26 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 					var brackets = [], 
 						foundBracketPair, 
 						i;
+					
+					// Break up new lines and semicolons
+					var inside = [];
+					part = part.replace(/([\r\n;]+|[('")])/gm, function(part) {
+						if (!inside.length && part.match(/([\r\n;]+)/)) {
+							inside.pop();
+							return part + ' %><% ';
+						}
+						// Make sure it isn't inside something with higher priority like a string or for loop
+						else if (part.match(/[('"]/)) {
+							var last = inside[inside.length-1];
+							if (last == part || (part == ')' && last == '(')) {
+								inside.pop();
+							}
+							else {
+								inside.push(part);
+							}
+						}
+						return part;
+					});
 
 					// Look for brackets (for removing self-contained blocks)
 					part.replace(/[{}]/gm, function(bracket, offset) {
@@ -133,7 +153,7 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 					}
 					// Otherwise return the original
 					else {
-						return whole;
+						return '<%' + part + '%>';
 					}
 				});
 			}

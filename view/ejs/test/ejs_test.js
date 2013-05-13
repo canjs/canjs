@@ -1581,4 +1581,24 @@ test("JS blocks within EJS tags shouldn't require isolation", function(){
 	ok( div.innerHTML.match(/^\s*hi\s*hi\s*hi\s*$/), "Rendered iterated shared blocks file");
 })
 
+test("EJS shouldn't lose variables with shared blocks", function() {
+	var template = can.view.ejs(
+		'<% ' +
+		'	var m = "Mark";' +
+		'	can.each(this, function( todo ) {' +
+		'%>' +
+		'    <span><%= todo.name %></span>' +
+		'<% }); %>' +
+		'<div><%== m %></div>');
+
+	var div = document.createElement('div');
+
+	div.appendChild(template([
+		{id: 1, name: "wake up", complete: true},
+		{id: 2, name: "take out trash", complete: false},
+		{id: 3, name: "do dishes", complete: false}
+	]));
+	equal( div.getElementsByTagName('div')[0].innerHTML, "Mark", "Didn't lose variables" );
+})
+
 })();
