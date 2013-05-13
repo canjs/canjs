@@ -96,10 +96,13 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 						foundBracketPair, 
 						i;
 					
-					// Break up new lines and semicolons
+					// Break up semicolons
+					// It would be nice to break up new lines too but it is too 
+					// difficult to determine whether you're in the middle of an 
+					// expression without completely parsing the JS.
 					var inside = [];
-					part = part.replace(/([\r\n;]+|[('")])/gm, function(part) {
-						if (!inside.length && part.match(/([\r\n;]+)/)) {
+					part = part.replace(/(;+|[('")])/gm, function(part) {
+						if (!inside.length && part.match(/(;+)/)) {
 							inside.pop();
 							return part + ' %><% ';
 						}
