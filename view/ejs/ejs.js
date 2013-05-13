@@ -114,13 +114,18 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 					} while (foundBracketPair);
 
 					// Unmatched brackets found, inject EJS tags
-					if (brackets.length) {
+					if (brackets.length >= 2) {
 						var result = ['<%'],
 							bracket,
 							last = 0;
 						for (i = 0; bracket = brackets[i]; i++) {
 							result.push(part.substring(last, last = bracket[1]));
-							result.push(bracket[0] == '{' ? '{ %><% ' : ' %><% }');
+							if ((bracket[0] == '{' && i < brackets.length - 1) || (bracket[0] == '}' && i > 0)) {
+								result.push(bracket[0] == '{' ? '{ %><% ' : ' %><% }');
+							}
+							else {
+								result.push(bracket[0]);
+							}
 							++last;
 						}
 						result.push(part.substring(last), '%>');

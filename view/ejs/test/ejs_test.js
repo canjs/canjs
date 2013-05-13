@@ -1469,7 +1469,7 @@ test("each works within another branch", function(){
 test("JS blocks within EJS tags shouldn't require isolation", function(){
 	var isolatedBlocks = can.view.ejs(
 			"<% if (true) { %>" +
-				"<% if (true) { %>" +
+				"<% if (true) {%>" +
 					"hi" + 
 				"<% } %>" +
 			"<% } %>"),
@@ -1479,19 +1479,92 @@ test("JS blocks within EJS tags shouldn't require isolation", function(){
 					"hi" + 
 				"<% }" +
 			"} %>");
+		complexIsolatedBlocks = can.view.ejs(
+			"<% if (true) { %><% if (1) { %>" +
+				"<% if ({ dumb: 'literal' }) { %>" +
+					"<% list(items, function(item) { %>" + 
+						"<%== item %>" +
+						"<%== something(function(items){ %><%== items.length %><% }) %>" +
+					"<% }) %>" + 
+				"<% } %>" +
+			"<% } %><% } %>");
+		complexSharedBlocks = can.view.ejs(
+			"<% if (true) { if (1) { %>" +
+				"<% if ({ dumb: 'literal' }) { %>" +
+					"<% list(items, function(item) { %>" + 
+						"<%== item %>" +
+						"<%== something(function(items){ %><%== items.length %><% }) %>" +
+					"<% }) %>" + 
+				"<% }" +
+			"} } %>"),
+		iteratedSharedBlocks = can.view.ejs(
+			"<% for (var i = 0; i < items.length; i++) { %>" +
+				"<% if (this.items) { if (1) { %>" +
+					"hi" + 
+				"<% } } else { %>" +
+					"nope" +
+			"<% } } %>"),
+		iteratedString = can.view.ejs('<% for(var i = 0; i < items.length; i++) { %>\
+				\
+				<% if(this.mode !== "RESULTS") {\
+					if(items[i] !== "SOME_FAKE_VALUE") { %>\
+						hi\
+					<% }\
+				} else { %>\
+					nope\
+				<% }\
+			} %>'),
+		data = {
+			items: ['one', 'two', 'three'],
+			mode: 'SOMETHING',
+			something: function(cb){
+				return cb([1,2,3,4])
+			}
+		};
 
 	var div = document.createElement('div');
 
 	try {
-		div.appendChild(isolatedBlocks());
+		div.appendChild(isolatedBlocks(data));
 	} catch (ex) { }
 	equal( div.innerHTML, "hi", "Rendered isolated blocks" );
 
 	div.innerHTML = "";
 	try {
-		div.appendChild(sharedBlocks());
+		div.appendChild(sharedBlocks(data));
 	} catch (ex) { }
 	equal( div.innerHTML, "hi", "Rendered shared blocks" );
+
+	div.innerHTML = "";
+	try {
+		div.appendChild(complexIsolatedBlocks(data));
+	} catch (ex) { }
+	equal( div.innerHTML, "one4two4three4", "Rendered complex isolated blocks with helpers and object literals" );
+
+	div.innerHTML = "";
+	try {
+		div.appendChild(complexSharedBlocks(data));
+	} catch (ex) { }
+	equal( div.innerHTML, "one4two4three4", "Rendered complex shared blocks with helpers and object literals" );
+
+	div.innerHTML = "";
+	try {
+		div.appendChild(iteratedSharedBlocks(data));
+	} catch (ex) { }
+	equal( div.innerHTML, "hihihi", "Rendered iterated shared blocks" );
+
+	div.innerHTML = "";
+	try {
+		div.appendChild(iteratedString(data));
+	} catch (ex) { }
+	ok( div.innerHTML.match(/^\s*hi\s*hi\s*hi\s*$/), "Rendered iterated shared blocks string");
+
+	// For some reason this template fails when loaded via can.view.render in a template file instead of a string.
+	var iteratedFile = can.view.render("//can/view/ejs/test/shared_blocks.ejs", {
+		items: ['one', 'two', 'three'],
+		mode: 'SOMETHING'
+	});
+	equal(iteratedFile, "hihihi", "Rendered iterated shared blocks file");
 })
 
 })();
