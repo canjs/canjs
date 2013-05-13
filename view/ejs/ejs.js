@@ -91,13 +91,13 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 			 * 	<% if (1) { %><% %><% if (1) { %><% %> hi <% } %><% } %> 
 			 */
 			transform: function(source) {
-				return source.replace(/<%(.+?)%>/g, function(whole, part) {
+				return source.replace(/<%([\s\S]+?)%>/gm, function(whole, part) {
 					var brackets = [], 
 						foundBracketPair, 
 						i;
 
 					// Look for brackets (for removing self-contained blocks)
-					part.replace(/[{}]/g, function(bracket, offset) {
+					part.replace(/[{}]/gm, function(bracket, offset) {
 						brackets.push([ bracket, offset ]);
 					});
 

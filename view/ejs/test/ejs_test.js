@@ -1504,16 +1504,25 @@ test("JS blocks within EJS tags shouldn't require isolation", function(){
 				"<% } } else { %>" +
 					"nope" +
 			"<% } } %>"),
-		iteratedString = can.view.ejs('<% for(var i = 0; i < items.length; i++) { %>\
-				\
-				<% if(this.mode !== "RESULTS") {\
-					if(items[i] !== "SOME_FAKE_VALUE") { %>\
-						hi\
-					<% }\
-				} else { %>\
-					nope\
-				<% }\
-			} %>'),
+		// This only breaks with new line characters
+		iteratedString = can.view.ejs('<% for(var i = 0; i < items.length; i++) { %>' +
+			'	<% if(this.mode !== "RESULTS") {' +
+			'		if(items[i] !== "SOME_FAKE_VALUE") { %>' +
+			'			hi' +
+			'		<% }' +
+			'	} else { %>' +
+			'		nope' +
+			'	<% }' +
+			'} %>'),
+		iteratedStringNewLines = can.view.ejs('<% for(var i = 0; i < items.length; i++) { %>' +
+			'	<% if(this.mode !== "RESULTS") {\n' +
+			'		if(items[i] !== "SOME_FAKE_VALUE") { %>' +
+			'			hi' +
+			'		<% }\n' +
+			'	} else { %>' +
+			'		nope' +
+			'	<% }\n' +
+			'} %>'),
 		data = {
 			items: ['one', 'two', 'three'],
 			mode: 'SOMETHING',
@@ -1559,12 +1568,17 @@ test("JS blocks within EJS tags shouldn't require isolation", function(){
 	} catch (ex) { }
 	ok( div.innerHTML.match(/^\s*hi\s*hi\s*hi\s*$/), "Rendered iterated shared blocks string");
 
-	// For some reason this template fails when loaded via can.view.render in a template file instead of a string.
+	div.innerHTML = "";
+	try {
+		div.appendChild(iteratedStringNewLines(data));
+	} catch (ex) { }
+	ok( div.innerHTML.match(/^\s*hi\s*hi\s*hi\s*$/), "Rendered iterated shared blocks string (with new lines)");
+
 	var iteratedFile = can.view.render("//can/view/ejs/test/shared_blocks.ejs", {
 		items: ['one', 'two', 'three'],
 		mode: 'SOMETHING'
 	});
-	equal(iteratedFile, "hihihi", "Rendered iterated shared blocks file");
+	ok( div.innerHTML.match(/^\s*hi\s*hi\s*hi\s*$/), "Rendered iterated shared blocks file");
 })
 
 })();
