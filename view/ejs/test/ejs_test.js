@@ -1466,4 +1466,140 @@ test("each works within another branch", function(){
 	equal( div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!" );
 })
 
+test("JS blocks within EJS tags shouldn't require isolation", function(){
+	var isolatedBlocks = can.view.ejs(
+			"<% if (true) { %>" +
+				"<% if (true) {%>" +
+					"hi" + 
+				"<% } %>" +
+			"<% } %>"),
+		sharedBlocks = can.view.ejs(
+			"<% if (true) { %>" +
+				"<% if (true) { %>" +
+					"hi" + 
+				"<% }" +
+			"} %>");
+		complexIsolatedBlocks = can.view.ejs(
+			"<% if (true) { %><% if (1) { %>" +
+				"<% if ({ dumb: 'literal' }) { %>" +
+					"<% list(items, function(item) { %>" + 
+						"<%== item %>" +
+						"<%== something(function(items){ %><%== items.length %><% }) %>" +
+					"<% }) %>" + 
+				"<% } %>" +
+			"<% } %><% } %>");
+		complexSharedBlocks = can.view.ejs(
+			"<% if (true) { if (1) { %>" +
+				"<% if ({ dumb: 'literal' }) { %>" +
+					"<% list(items, function(item) { %>" + 
+						"<%== item %>" +
+						"<%== something(function(items){ %><%== items.length %><% }) %>" +
+					"<% }) %>" + 
+				"<% }" +
+			"} } %>"),
+		iteratedSharedBlocks = can.view.ejs(
+			"<% for (var i = 0; i < items.length; i++) { %>" +
+				"<% if (this.items) { if (1) { %>" +
+					"hi" + 
+				"<% } } else { %>" +
+					"nope" +
+			"<% } } %>"),
+		// This only breaks with new line characters
+		iteratedString = can.view.ejs('<% for(var i = 0; i < items.length; i++) { %>' +
+			'	<% if(this.mode !== "RESULTS") {' +
+			'		if(items[i] !== "SOME_FAKE_VALUE") { %>' +
+			'			hi' +
+			'		<% }' +
+			'	} else { %>' +
+			'		nope' +
+			'	<% }' +
+			'} %>'),
+		iteratedStringNewLines = can.view.ejs('<% for(var i = 0; i < items.length; i++) { %>' +
+			'	<% if(this.mode !== "RESULTS") {\n' +
+			'		if(items[i] !== "SOME_FAKE_VALUE") { %>' +
+			'			hi' +
+			'		<% }\n' +
+			'	} else { %>' +
+			'		nope' +
+			'	<% }\n' +
+			'} %>'),
+		data = {
+			items: ['one', 'two', 'three'],
+			mode: 'SOMETHING',
+			something: function(cb){
+				return cb([1,2,3,4])
+			}
+		};
+
+	var div = document.createElement('div');
+
+	try {
+		div.appendChild(isolatedBlocks(data));
+	} catch (ex) { }
+	equal( div.innerHTML, "hi", "Rendered isolated blocks" );
+
+	div.innerHTML = "";
+	try {
+		div.appendChild(sharedBlocks(data));
+	} catch (ex) { }
+	equal( div.innerHTML, "hi", "Rendered shared blocks" );
+
+	div.innerHTML = "";
+	try {
+		div.appendChild(complexIsolatedBlocks(data));
+	} catch (ex) { }
+	equal( div.innerHTML, "one4two4three4", "Rendered complex isolated blocks with helpers and object literals" );
+
+	div.innerHTML = "";
+	try {
+		div.appendChild(complexSharedBlocks(data));
+	} catch (ex) { }
+	equal( div.innerHTML, "one4two4three4", "Rendered complex shared blocks with helpers and object literals" );
+
+	div.innerHTML = "";
+	try {
+		div.appendChild(iteratedSharedBlocks(data));
+	} catch (ex) { }
+	equal( div.innerHTML, "hihihi", "Rendered iterated shared blocks" );
+
+	div.innerHTML = "";
+	try {
+		div.appendChild(iteratedString(data));
+	} catch (ex) { }
+	ok( div.innerHTML.match(/^\s*hi\s*hi\s*hi\s*$/), "Rendered iterated shared blocks string");
+
+	div.innerHTML = "";
+	try {
+		div.appendChild(iteratedStringNewLines(data));
+	} catch (ex) { }
+	ok( div.innerHTML.match(/^\s*hi\s*hi\s*hi\s*$/), "Rendered iterated shared blocks string (with new lines)");
+
+	var iteratedFile = can.view.render("//can/view/ejs/test/shared_blocks.ejs", {
+		items: ['one', 'two', 'three'],
+		mode: 'SOMETHING'
+	});
+	ok( div.innerHTML.match(/^\s*hi\s*hi\s*hi\s*$/), "Rendered iterated shared blocks file");
+})
+
+test("EJS shouldn't lose variables with shared blocks", function() {
+	var template = can.view.ejs(
+		'<% ' +
+		'	var m = "Mark";' +
+		' [1,\n2,\n3];'+
+		'	can.each(this, function( todo ) {' +
+		'%>' +
+		'    <span><%= todo.name %></span>' +
+		'<% }); %>' +
+		'<div><%== m %></div>');
+
+	var div = document.createElement('div');
+
+	div.appendChild(template([
+		{id: 1, name: "wake up", complete: true},
+		{id: 2, name: "take out trash", complete: false},
+		{id: 3, name: "do dishes", complete: false}
+	]));
+	equal( div.getElementsByTagName('div')[0].innerHTML, "Mark", "Didn't lose variables" );
+})
+
 })();
