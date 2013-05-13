@@ -107,9 +107,9 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 							return part + ' %><% ';
 						}
 						// Make sure it isn't inside something with higher priority like a string or for loop
-						else if (part.match(/[('"]/)) {
+						else if (part.match(/[('")]/)) {
 							var last = inside[inside.length-1];
-							if (last == part || (part == ')' && last == '(')) {
+							if ((part.match(/['"]/) && last == part) || (part == ')' && last == '(')) {
 								inside.pop();
 							}
 							else {
