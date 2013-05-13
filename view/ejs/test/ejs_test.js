@@ -1585,7 +1585,8 @@ test("EJS shouldn't lose variables with shared blocks", function() {
 	var template = can.view.ejs(
 		'<% ' +
 		'	var m = "Mark";' +
-		' [1,\n2,\n3];'+
+		' [1,\n2,\n3];' +
+		' for (var i = 0; (i < this.length); i++) { }; ' +
 		'	can.each(this, function( todo ) {' +
 		'%>' +
 		'    <span><%= todo.name %></span>' +
