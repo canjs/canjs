@@ -10,7 +10,7 @@ steal("can/util", function( can ) {
 	/**
 	 * @add can.view
 	 */
-	$view = can.view = function(view, data, helpers, callback){
+	$view = can.view = can.template = function(view, data, helpers, callback){
 		// If helpers is a `function`, it is actually a callback.
 		if ( isFunction( helpers )) {
 			callback = helpers;

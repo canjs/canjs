@@ -1163,9 +1163,6 @@ steal('can/util','can/observe', function( can ) {
 
 			// Update attributes if attributes have been passed
 			stub = attrs && typeof attrs == 'object' && this.attr(attrs.attr ? attrs.attr() : attrs);
-
-			// Call event on the instance
-			can.trigger(this,funcName);
 			
 			// triggers change event that bubble's like
 			// handler( 'change','1.destroyed' ). This is used
