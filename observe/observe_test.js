@@ -812,9 +812,14 @@ test("cycle binding",function(){
 	ok(!first._bindings,"bindings removed");
 });
 
+test("Deferreds are not converted", function() {
+	var dfd = can.Deferred(),
+		ob = new can.Observe({
+			test: dfd
+		});
 
-
-
-
+	ok(can.isDeferred(ob.attr('test')), 'Attribute is a deferred');
+	ok(!ob.attr('test')._cid, 'Does not have a _cid');
+});
 
 })();

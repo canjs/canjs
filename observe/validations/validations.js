@@ -156,7 +156,8 @@ steal('can/util', 'can/observe/attributes', function (can) {
 				lengthShort : "is too short",
 				lengthLong : "is too long",
 				presence : "can't be empty",
-				range : "is out of range"
+				range : "is out of range",
+				numericality: "must be a number"
 			},
 
 			/**
@@ -282,6 +283,27 @@ steal('can/util', 'can/observe/attributes', function (can) {
 					if (((typeof value == 'undefined' || value === null) && low > 0) ||
 							(typeof value !== 'undefined' && value !== null && (value < low || value > hi) )) {
 						return this.constructor.validationMessages.range + " [" + low + "," + hi + "]";
+					}
+				});
+			},
+			
+			/**
+			 * @function can.Observe.static.validatesNumericalityOf
+			 * @parent can.Observe.validations
+			 *
+			 * Validates that the specified attributes is a valid Number.
+			 *
+			 *     init : function(){
+			 *       this.validatesNumericalityOf(["age"]);
+			 *     }
+			 *
+			 * @param {Array|String} attrNames Attribute name(s) to to validate
+			 */
+			validatesNumericalityOf : function (attrNames) {
+				validate.call(this, attrNames, function (value) {
+					var res = !isNaN(parseFloat(value)) && isFinite(value);
+					if (!res) {
+						return this.constructor.validationMessages.numericality;
 					}
 				});
 			}
