@@ -288,7 +288,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 			
 			/**
-			 * @function can.Observe.static.validatesNumericalityOf
+			 * @function can.Observe.validations.static.validatesNumericalityOf validatesNumericalityOf
 			 * @parent can.Observe.validations
 			 *
 			 * Validates that the specified attributes is a valid Number.
