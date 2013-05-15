@@ -1,5 +1,5 @@
 <!--
-@page contributing Contributing to CanJS
+@page contributing How to Contribute
 @parent guides 4
 -->
 
