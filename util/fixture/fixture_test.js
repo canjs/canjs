@@ -406,4 +406,19 @@ test("can.fixture with response callback", 4, function() {
 	});
 });
 
+test("store create works with an empty array of items",function(){
+	var store = can.fixture.store(0, function(){
+		return {};
+	});
+	store.create({
+		data: {
+			
+		}
+	}, function(responseData, responseHeaders){
+		equal(responseData.id, 0, "the first id is 0")
+	})
+})
+
+
+
 });

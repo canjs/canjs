@@ -554,6 +554,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				 * 
 				 */
 				findAll: function (request) {
+					request =  request || {}
 					//copy array of items
 					var retArr = items.slice(0);
 					request.data = request.data || {};
@@ -713,11 +714,10 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					}
 
 					items.push(item);
-					var id = item.id || parseInt(Math.random() * 100000, 10);
 					response({
-						id : id
+						id : item.id
 					}, {
-						location : settings.url + "/" + id
+						location : settings.url + "/" + item.id
 					})
 				}
 			});
