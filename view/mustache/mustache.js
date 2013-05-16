@@ -1,9 +1,10 @@
 steal('can/util',
+	  './scope.js',
 	  'can/view',
 	  'can/view/scanner.js',
 	  'can/observe/compute',
 	  'can/view/render.js',
-function( can ){
+function( can, Scope ){
 	
 	// # mustache.js
 	// `can.Mustache`: The Mustache templating engine.
@@ -29,7 +30,8 @@ function( can ){
 		STACK = '___st4ck',
 		STACKED = '___st4ck3d',
 		// An alias for the most used context stacking call.
-		CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
+		CONTEXT_STACK = STACK+"="+STACK+".add(this)",
+		//CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
 		CONTEXT_OBJ = '{context:' + CONTEXT_STACK + ',options:options}',
 		
 		/**
@@ -120,7 +122,9 @@ function( can ){
 			text: {
 				// This is the logic to inject at the beginning of a rendered template. 
 				// This includes initializing the `context` stack.
-				start: 'var ' + CONTEXT + ' = this && this.' + STACKED + ' ? this : [];' + CONTEXT + '.' + STACKED + ' = true;' +
+				start: "var "+STACK+"= this instanceof can.view.Scope? this : new can.view.Scope(this);"
+				
+				/*'var ' + CONTEXT + ' = this && this.' + STACKED + ' ? this : [];' + CONTEXT + '.' + STACKED + ' = true;' +
 					'var ' + STACK + ' = function(context, self) {' +
 						'var s;' +
 						'if (arguments.length == 1 && context) {' +
@@ -134,7 +138,7 @@ function( can ){
 							's = context && context.' + STACKED + ' ? context.concat([self]) : ' + STACK + '(context).concat([self]);' +
 						'}' +
 						'return (s.' + STACKED + ' = true) && s;' +
-					'};'
+					'};'*/
 			},
 			
 			// An ordered token registry for the scanner.

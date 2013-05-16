@@ -81,7 +81,7 @@ steal('can/construct','can/observe',function(Construct,Observe){
 			}
 		},
 		attr: function(attr, value){
-			if(arguments.length){
+			if(arguments.length > 1){
 				this._data.attr(attr, value)
 				return this;
 			} else {
@@ -90,13 +90,18 @@ steal('can/construct','can/observe',function(Construct,Observe){
 			
 		},
 		add: function(data){
-			return new Scope( new can.Observe(data), this );
+			if(data !== this._data){
+				return new Scope( new can.Observe(data), this );
+			} else {
+				return this;
+			}
+			
 		},
 		bind: function(){
 			
 		}
 	});
-	
+	can.view.Scope = Scope;
 	return Scope;
 	
 })

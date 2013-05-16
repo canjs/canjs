@@ -50,12 +50,16 @@ var newLine = /(\r|\n)+/g,
 	beforeQuote = null,
 	// Whether a rescan is in progress
 	rescan = null,
+	getAttrName = function(){
+		var matches = beforeQuote.match(attrReg);
+		return matches && matches[1];
+	},
 	// Used to mark where the element is.
 	status = function(){
 		// `t` - `1`.
 		// `h` - `0`.
 		// `q` - String `beforeQuote`.
-		return quote ? "'"+beforeQuote.match(attrReg)[1]+"'" : (htmlTag ? 1 : 0);
+		return quote ? "'"+getAttrName()+"'" : (htmlTag ? 1 : 0);
 	};
 
 can.view.Scanner = Scanner = function( options ) {
@@ -103,6 +107,12 @@ can.view.Scanner = Scanner = function( options ) {
 	// Cache the token registry.
 	this.tokenReg = new RegExp("(" + this.tokenReg.slice(0).concat(["<", ">", '"', "'"]).join("|") + ")","g");
 };
+var attributes = {};
+
+Scanner.attribute = function(attribute, callback){
+	attributes[attribute] = callback;
+}
+
 
 /**
  * Extend can.View to add scanner support.
@@ -186,6 +196,8 @@ Scanner.prototype = {
 			startTag = null,
 			// Was there a magic tag inside an html tag?
 			magicInTag = false,
+			// was there a special attribute
+			attributeHookup = false,
 			// The current tag name.
 			tagName = '',
 			// stack of tagNames
@@ -256,7 +268,7 @@ Scanner.prototype = {
 					// but content is not other tags add a hookup
 					// TODO: we should only add `can.EJS.pending()` if there's a magic tag 
 					// within the html tags.
-					if(magicInTag || !popTagName && elements.tagToContentPropMap[ tagNames[tagNames.length -1] ]){
+					if(magicInTag || (!popTagName && elements.tagToContentPropMap[ tagNames[tagNames.length -1] ] ) || attributeHookup ){
 						// make sure / of /> is on the left of pending
 						if(emptyElement){
 							put(content.substr(0,content.length-1), ",can.view.pending(),\"/>\"");
@@ -277,6 +289,7 @@ Scanner.prototype = {
 						// Don't pop next time
 						popTagName = false;
 					}
+					attributeHookup = false;
 					break;
 				case "'":
 				case '"':
@@ -288,6 +301,10 @@ Scanner.prototype = {
 							quote = null;
 							// Otherwise we are creating a quote.
 							// TODO: does this handle `\`?
+							var attr = getAttrName();
+							if(attributes[attr]){
+								attributeHookup = true;
+							}
 						} else if(quote === null){
 							quote = token;
 							beforeQuote = lastToken;
@@ -431,6 +448,7 @@ Scanner.prototype = {
 			out = {
 				out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"
 			};
+			console.log(template)
 		// Use `eval` instead of creating a function, because it is easier to debug.
 		myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
 
