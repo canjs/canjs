@@ -336,6 +336,8 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 			set = function(newVal){
 				value = newVal;
 			},
+			// this compute can be a dependency of other computes
+			// 
 			canReadForChangeEvent = true;
 
 		computed = function(newVal){
@@ -366,7 +368,7 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 				}
 				return value;
 			} else {
-				// Let others konw to listen to changes in this compute
+				// Let others know to listen to changes in this compute
 				if( can.Observe.__reading && canReadForChangeEvent) {
 					can.Observe.__reading(computed,'change');
 				}
@@ -426,7 +428,7 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 				off = function(){
 					can.unbind.call(getterSetter, eventName || propertyName,handler)
 				}
-				value = get();
+				//value = get();
 
 			} else {
 				// `can.compute(initialValue, setter)`
