@@ -22,13 +22,13 @@ function( can, Scope ){
 	//
 	// An alias for the context variable used for tracking a stack of contexts.
 	// This is also used for passing to helper functions to maintain proper context.
-	var CONTEXT = '___c0nt3xt',
+	var CONTEXT = '___st4ck',
 		// An alias for the variable used for the hash object that can be passed
 		// to helpers via `options.hash`.
 		HASH = '___h4sh',
 		// An alias for the function that adds a new context to the context stack.
 		STACK = '___st4ck',
-		STACKED = '___st4ck3d',
+		//STACKED = '___st4ck3d',
 		// An alias for the most used context stacking call.
 		CONTEXT_STACK = STACK+"="+STACK+".add(this)",
 		//CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
@@ -122,7 +122,7 @@ function( can, Scope ){
 			text: {
 				// This is the logic to inject at the beginning of a rendered template. 
 				// This includes initializing the `context` stack.
-				start: "var "+STACK+"= this instanceof can.view.Scope? this : new can.view.Scope(this);"
+				start: "var "+STACK+"= this instanceof can.view.Scope? this : new can.view.Scope(this);\n"
 				
 				/*'var ' + CONTEXT + ' = this && this.' + STACKED + ' ? this : [];' + CONTEXT + '.' + STACKED + ' = true;' +
 					'var ' + STACK + ' = function(context, self) {' +
@@ -259,7 +259,7 @@ function( can, Scope ){
 						return "can.proxy(function(__){" +
 							// "var context = this[this.length-1];" +
 							// "context = context." + STACKED + " ? context[context.length-2] : context; console.warn(this, context);" +
-							"can.data(can.$(__),'" + attr + "', this.pop()); }, " + CONTEXT_STACK + ")";
+							"can.data(can.$(__),'" + attr + "', this.attr('.')); }, " + CONTEXT_STACK + ")";
 					}
 				},
 				
@@ -522,7 +522,7 @@ function( can, Scope ){
 							});
 
 							// Start the content render block.
-							result.push('can.Mustache.txt('+CONTEXT_OBJ+',' + (mode ? '"'+mode+'"' : 'null') + ',');
+							result.push('can.Mustache.txt(\n'+CONTEXT_OBJ+',\n' + (mode ? '"'+mode+'"' : 'null') + ',\n');
 						
 							// Iterate through the helper arguments, if there are any.
 							for (; arg = args[i]; i++) {
@@ -543,7 +543,7 @@ function( can, Scope ){
 										}
 										
 										// Add the key/value.
-										result.push(m[4], ':', m[6] ? m[6] : 'can.Mustache.get("' + m[5].replace(/"/g,'\\"') + '",' + CONTEXT_OBJ + ')');
+										result.push(m[4], ':', m[6] ? m[6] : 'can.Mustache.get(\n"' + m[5].replace(/"/g,'\\"') + '",\n' + CONTEXT_OBJ + ')\n');
 										
 										// Close the hash if this was the last argument.
 										if (i == args.length - 1) {
@@ -568,17 +568,17 @@ function( can, Scope ){
 						}
 						
 						// Create an option object for sections of code.
-						mode && mode != 'else' && result.push(',[{_:function(){');
+						mode && mode != 'else' && result.push(',[\n{_:function(){\n');
 						switch (mode) {
 							// Truthy section
 							case '#':
-								result.push('return ___v1ew.join("");}},{fn:function(' + CONTEXT + '){var ___v1ew = [];');
+								result.push('return ___v1ew.join("");\n}},{fn:function(' + CONTEXT + '){var ___v1ew = [];');
 								break;
 							// If/else section
 							// Falsey section
 							case 'else':
 							case '^':
-								result.push('return ___v1ew.join("");}},{inverse:function(' + CONTEXT + '){var ___v1ew = [];');
+								result.push('return ___v1ew.join("");}},\n{inverse:function(' + CONTEXT + '){\nvar ___v1ew = [];');
 								break;
 							// Not a section
 							default:
@@ -629,19 +629,20 @@ function( can, Scope ){
 		// Check for a registered helper or a helper-like function.
 		if (helper = (Mustache.getHelper(name,extra) || (can.isFunction(name) && !name.isComputed && { fn: name }))) {
 			// Use the most recent context as `this` for the helper.
-			var stack = context[STACKED] && context,
-				context = (stack && context[context.length - 1]) || context,
+			var partialContext = context.attr("."),
+			//var stack = context[STACKED] && context,
+			//	context = (stack && context[context.length - 1]) || context,
 				// Update the options with a function/inverse (the inner templates of a section).
 				opts = {
-					fn: can.proxy(options.fn, context),
-					inverse: can.proxy(options.inverse, context)
+					fn: can.proxy(options.fn, partialContext),
+					inverse: can.proxy(options.inverse, partialContext)
 				}, 
 				lastArg = args[args.length-1];
 			
 			// Store the context stack in the options if one exists
-			if (stack) {
-				opts.contexts = stack;
-			}
+			
+			opts.contexts = context;
+			
 			// Add the hash to `options` if one exists
 			if (lastArg && lastArg[HASH]) {
 				opts.hash = args.pop()[HASH];
@@ -649,7 +650,7 @@ function( can, Scope ){
 			args.push(opts);
 
 			// Call the helper.
-			return helper.fn.apply(context, args) || '';
+			return helper.fn.apply(partialContext, args) || '';
 		}
 
 		// if a compute, get the value
@@ -757,6 +758,52 @@ function( can, Scope ){
 	 * @param {Boolean} [isHelper]  Whether the reference is a helper.
 	 */
 	Mustache.get = function(ref, contexts, isHelper, isArgument) {
+		if(isHelper){
+			return ref;
+		}
+		
+		var options = contexts.options || {};
+		
+		
+		var data = contexts.context.get(ref);
+		
+		// use value over helper only if within top scope
+		
+		if(Mustache.getHelper(ref, options) && data.scope != contexts.context){
+			return ref
+		}
+		
+		
+		
+		
+		
+		// special behaviors if an argument
+		if(isArgument){
+			if(can.isFunction(data.value)){
+				if(data.value.isComputed){
+					return data.value
+				} else {
+					return function() { 
+						return data.value.apply(data.parent, arguments); 
+					};
+				}
+			} 
+		}
+		// Invoke the length to ensure that Observe.List events fire.
+		if (data.value && isObserve(data.value) && isArrayLike(data.value) && data.value.attr('length')){
+			return data.value;
+		}
+		// Add support for observes
+		else if ( data.parent && isObserve(data.parent)) {
+			return data.parent.compute(data.name);
+		} else if( can.isFunction(data.value) ){
+			return data.value.call(data.parent)
+		}
+	
+		
+		
+		return data.value;
+		
 		var options = contexts.options || {};
 		contexts = contexts.context || contexts;
 		// Assume the local object is the last context in the stack.

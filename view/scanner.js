@@ -39,7 +39,7 @@ var newLine = /(\r|\n)+/g,
 	// Commands for caching.
 	startTxt = 'var ___v1ew = [];',
 	finishTxt = "return ___v1ew.join('')",
-	put_cmd = "___v1ew.push(",
+	put_cmd = "___v1ew.push(\n",
 	insert_cmd = put_cmd,
 	// Global controls (used by other functions to know where we are).
 	// Are we inside a tag?
@@ -377,7 +377,7 @@ Scanner.prototype = {
 							// When we return to the same # of `{` vs `}` end with a `doubleParent`.
 							endStack.push({
 								before : finishTxt,
-								after: "}));"
+								after: "}));\n"
 							});
 						} 
 
@@ -407,13 +407,13 @@ Scanner.prototype = {
 						} else {
 							// If we have `<%== a(function(){ %>` then we want
 							// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-							buff.push(insert_cmd, "can.view.txt(" + escaped + ",'"+tagName+"'," + status() +",this,function(){ " + (this.text.escape || '') + "return ", content, 
+							buff.push(insert_cmd, "can.view.txt(\n" + escaped + ",\n'"+tagName+"',\n" + status() +",\nthis,\nfunction(){ " + (this.text.escape || '') + "return ", content, 
 								// If we have a block.
 								bracketCount ? 
 								// Start with startTxt `"var _v1ew = [];"`.
 								startTxt : 
 								// If not, add `doubleParent` to close push and text.
-								"}));"
+								"}));\n"
 								);
 						}
 						

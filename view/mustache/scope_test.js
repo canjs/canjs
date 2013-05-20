@@ -26,7 +26,7 @@ steal('./scope','funcunit/qunit',function(Scope){
 		expect(1);
 		
 		var base = new Scope({}),
-			cur = base.add();
+			cur = base.add(new can.Observe());
 		
 		
 		cur._data.bind("items",function(ev, newVal, oldVal){
@@ -37,6 +37,27 @@ steal('./scope','funcunit/qunit',function(Scope){
 		
 	})
 	
+	test("current context",function(){
+		var base = new Scope({}),
+			cur = base.add("foo")
+			
+		equal( cur.get(".").value, "foo", ". returns value");
+		
+		equal( cur.attr("."), "foo", ". returns value");
+	})
+	
+	test("highest scope observe is parent observe",function(){
+		var parent = new can.Observe({name: "Justin"})
+		var child = new can.Observe({vals: "something"})
+		
+		var base = new Scope(parent),
+			cur = base.add(child);
+			
+		var data = cur.get("bar")
+		
+		equal(data.parent, parent, "gives highest parent observe")
+		equal(data.value, undefined, "no value")
+	})
 	
 	
 })

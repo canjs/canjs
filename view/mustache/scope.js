@@ -1,4 +1,4 @@
-steal('can/construct','can/observe',function(Construct,Observe){
+steal('can/construct','can/observe','can/view',function(Construct,Observe, can){
 	
 	var isObserve = function(obj) {
 		return obj !== null && can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
@@ -11,13 +11,17 @@ steal('can/construct','can/observe',function(Construct,Observe){
 			this._parent = parent;
 		},
 		get: function(attr){
+			if(attr == "."){
+				return {value: this._data};
+			}
+			
+			
 			var names = attr.split('.'),
 				namesLength = names.length,
 				defaultObserve,
 				defaultObserveName,
 				j,
 				lastValue,
-				isHelper,
 				ref;
 			
 			var scope = this;
@@ -26,17 +30,11 @@ steal('can/construct','can/observe',function(Construct,Observe){
 				value = scope._data
 				
 				if (typeof value !== 'undefined' && value !== null) {
-					var isHelper //= Mustache.getHelper(ref, options);
 					for (j = 0; j < namesLength; j++) {
 						// Keep running up the tree while there are matches.
 						if (typeof value[names[j]] !== 'undefined' && value[names[j]] !== null) {
 							lastValue = value;
 							value = value[name = names[j]];
-						}
-						// if there's a name conflict between property and helper
-						// property wins
-						else if(isHelper) {
-							return ref;
 						}
 						// If it's undefined, still match if the parent is an Observe.
 						else if ( isObserve(value) ) {
@@ -72,12 +70,18 @@ steal('can/construct','can/observe',function(Construct,Observe){
 				/*!Mustache.getHelper(ref) &&*/ can.inArray(defaultObserveName, can.Observe.keys(defaultObserve)) === -1 ) {
 				{
 					return {
-						scope: scope,
+						//scope: scope,
 						parent: defaultObserve,
 						name: defaultObserveName,
 						value: undefined
 					}
 				}
+			}
+			return {
+				//scope: this,
+				parent: null,
+				name: attr,
+				value: undefined
 			}
 		},
 		attr: function(attr, value){
@@ -91,7 +95,7 @@ steal('can/construct','can/observe',function(Construct,Observe){
 		},
 		add: function(data){
 			if(data !== this._data){
-				return new Scope( new can.Observe(data), this );
+				return new Scope( data, this );
 			} else {
 				return this;
 			}

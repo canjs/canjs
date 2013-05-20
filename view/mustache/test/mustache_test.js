@@ -105,7 +105,7 @@ test("Model hookup", function(){
 	var obsvrList = new can.Observe.List([ obsvr ]);
 	var listFrag = new can.Mustache({ text: listTemplate }).render({ list: obsvrList });
 	can.append(can.$('#qunit-test-area'), can.view.frag(listFrag));
-	same(can.data(can.$('#li-Austin'), 'obsvr'), obsvr, 'data hooks for list worked and fetched');
+	same(can.data(can.$('#li-Austin'), 'obsvr'), obsvr, 'data hooks for list worked and fetched for multi-item hookup');
 
 	// Mulit-item update with hookup
 	var obsvr2 = new can.Observe({ name: 'Justin' });
@@ -193,13 +193,13 @@ test("Mustache live-binding with escaping", function() {
 	var template = new can.Mustache({ text: template }).render(teacher);
 	can.append( can.$('#qunit-test-area'), can.view.frag(template));
 
-	same(can.$('#binder1')[0].innerHTML, "&lt;strong&gt;Mrs Peters&lt;/strong&gt;");
-	same(can.$('#binder2')[0].getElementsByTagName('strong')[0].innerHTML, "Mrs Peters");
+	same(can.$('#binder1')[0].innerHTML, "&lt;strong&gt;Mrs Peters&lt;/strong&gt;","escaped works");
+	same(can.$('#binder2')[0].getElementsByTagName('strong')[0].innerHTML, "Mrs Peters","unescaped works");
 
 	teacher.attr('name', '<i>Mr Scott</i>');
 
-	same(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;");
-	same(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott")
+	same(can.$('#binder1')[0].innerHTML, "&lt;i&gt;Mr Scott&lt;/i&gt;","escaped mr scott");
+	same(can.$('#binder2')[0].getElementsByTagName('i')[0].innerHTML, "Mr Scott","unescapped mr scott")
 });
 
 test("Mustache truthy", function() {
