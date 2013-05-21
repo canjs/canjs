@@ -132,6 +132,9 @@ Scanner.prototype = {
 			complex = this.tokenComplex;
 		
 		source = source.replace(newLine, "\n");
+		if (this.transform) {
+			source = this.transform(source);
+		}
 		source.replace(this.tokenReg, function(whole, part){
 			// offset is the second to last argument
 			var offset = arguments[arguments.length-2];

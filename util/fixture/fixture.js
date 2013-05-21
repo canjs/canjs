@@ -480,6 +480,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			 * *update* and *destroy*.
 			 */
 			var items = [], // TODO: change this to a hash
+				currentId = 0,
 				findOne = function (id) {
 					for (var i = 0; i < items.length; i++) {
 						if (id == items[i].id) {
@@ -554,6 +555,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				 * 
 				 */
 				findAll: function (request) {
+					request =  request || {}
 					//copy array of items
 					var retArr = items.slice(0);
 					request.data = request.data || {};
@@ -709,15 +711,14 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					can.extend(item, settings.data);
 
 					if (!item.id) {
-						item.id = items.length;
+						item.id = currentId++;
 					}
 
 					items.push(item);
-					var id = item.id || parseInt(Math.random() * 100000, 10);
 					response({
-						id : id
+						id : item.id
 					}, {
-						location : settings.url + "/" + id
+						location : settings.url + "/" + item.id
 					})
 				}
 			});
@@ -731,6 +732,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					if (!item.id) {
 						item.id = i;
 					}
+					currentId = Math.max(item.id+1, currentId+1) || items.length;
 					items.push(item);
 				}
 				if(can.isArray(types)) {
@@ -741,6 +743,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					can.fixture["-" + types[1]+"Destroy"] = methods.destroy;
 					can.fixture["-" + types[1]+"Create"] = methods.create;
 				}
+				
 			}
 			reset()
 			// if we have types given add them to can.fixture

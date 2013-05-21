@@ -16,7 +16,8 @@
     "http-server" : "0.5.1",
     "grunt" : "0.4.0",
     "grunt-string-replace" : "0.2.2",
-    "grunt-shell" : "0.2.1"
+    "grunt-shell" : "0.2.1",
+    "grunt-docco" : "0.2.0"
   },
   "demos" : [
     "http://canjs.us/#examples",
