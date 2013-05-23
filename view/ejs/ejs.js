@@ -76,7 +76,68 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 				["left", "<%"], // Run --- this is hack for now
 				["right", "%>"], // Right -> All have same FOR Mustache ...
 				["returnRight", "%>"]
-			]
+			],
+
+			/**
+			 * @hide
+			 * Transforms the EJS template to add support for shared blocks.
+			 * Essentially, this breaks up EJS tags into multiple EJS tags 
+			 * if they contained unmatched brackets.
+			 *
+			 * For example, this doesn't work:
+			 * 	<% if (1) { %><% if (1) { %> hi <% } } %>
+			 * ...without isolated EJS blocks:
+			 * 	<% if (1) { %><% if (1) { %> hi <% } %><% } %> 
+			 * The result of transforming:
+			 * 	<% if (1) { %><% %><% if (1) { %><% %> hi <% } %><% } %> 
+			 */
+			transform: function(source) {
+				return source.replace(/<%([\s\S]+?)%>/gm, function(whole, part) {
+					var brackets = [], 
+						foundBracketPair, 
+						i;
+
+					// Look for brackets (for removing self-contained blocks)
+					part.replace(/[{}]/gm, function(bracket, offset) {
+						brackets.push([ bracket, offset ]);
+					});
+
+					// Remove bracket pairs from the list of replacements
+					do {
+						foundBracketPair = false;
+						for (i = brackets.length - 2; i >= 0; i--) {
+							if (brackets[i][0] == '{' && brackets[i+1][0] == '}') {
+								brackets.splice(i, 2);
+								foundBracketPair = true;
+								break;
+							}
+						}
+					} while (foundBracketPair);
+
+					// Unmatched brackets found, inject EJS tags
+					if (brackets.length >= 2) {
+						var result = ['<%'],
+							bracket,
+							last = 0;
+						for (i = 0; bracket = brackets[i]; i++) {
+							result.push(part.substring(last, last = bracket[1]));
+							if ((bracket[0] == '{' && i < brackets.length - 1) || (bracket[0] == '}' && i > 0)) {
+								result.push(bracket[0] == '{' ? '{ %><% ' : ' %><% }');
+							}
+							else {
+								result.push(bracket[0]);
+							}
+							++last;
+						}
+						result.push(part.substring(last), '%>');
+						return result.join('');
+					}
+					// Otherwise return the original
+					else {
+						return '<%' + part + '%>';
+					}
+				});
+			}
 		})
 	});
 
