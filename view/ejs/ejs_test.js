@@ -1203,6 +1203,19 @@ test("Observe with array attributes", function() {
 	equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello again', 'Check updated message');
 });
 
+test("hookup this correctly", function(){
+	var obj = { from: "cows" };
+	var html = "<span <%== (el) -> can.data(can.$(el), 'foo', this.from) %>>tea</span>";
+	var compiled = new can.EJS({ text: html }).render(obj);
+
+	var div = document.createElement('div');
+	div.appendChild(can.view.frag(compiled));
+
+	var span = div.getElementsByTagName('span')[0];
+
+	equal(can.data(can.$(span), 'foo'), obj.from, "object matches");
+});
+
 //Issue 271
 test('live binding with html comment', function(){
 	var text = '<table><tr><th>Todo</th></tr><!-- do not bother with me -->' +
