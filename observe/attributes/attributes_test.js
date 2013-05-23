@@ -1,4 +1,4 @@
-steal('can/util', 'can/model', 'can/model/list', 'can/observe/attributes', function(can) {
+(function() {
 
 module("can/observe/attributes");
 
@@ -48,12 +48,12 @@ test("literal converters and serializes", function(){
 		createdAt: d,
 		name:"Task2"
 	});
-	equals(task1.createdAt, "feb", "Task1 model convert");
-	equals(task2.createdAt, "jun", "Task2 model convert");
-	equals(task1.serialize().createdAt, 1, "Task1 model serialize");
-	equals(task2.serialize().createdAt, 2, "Task2 model serialize");
-	equals(task1.serialize().name, "Task1", "Task1 model default serialized");
-	equals(task2.serialize().name, "Task2", "Task2 model default serialized");
+	equal(task1.createdAt, "feb", "Task1 model convert");
+	equal(task2.createdAt, "jun", "Task2 model convert");
+	equal(task1.serialize().createdAt, 1, "Task1 model serialize");
+	equal(task2.serialize().createdAt, 2, "Task2 model serialize");
+	equal(task1.serialize().name, "Task1", "Task1 model default serialized");
+	equal(task2.serialize().name, "Task2", "Task2 model default serialized");
 });
 
 var makeClasses= function(){
@@ -92,7 +92,7 @@ var makeClasses= function(){
 
 test("default converters", function(){
 	var num = 1318541064012;
-	equals( can.Observe.convert.date(num).getTime(), num, "converted to a date with a number" );
+	equal( can.Observe.convert.date(num).getTime(), num, "converted to a date with a number" );
 })
 
 test("basic observe associations", function(){
@@ -116,15 +116,15 @@ test("basic observe associations", function(){
 		]
 	});
 	
-	equals(c.person.name, "Justin", "association present");
+	equal(c.person.name, "Justin", "association present");
 	
-	equals(c.person.constructor, AttrTest.Person, "belongs to association typed");
+	equal(c.person.constructor, AttrTest.Person, "belongs to association typed");
 	
-	equals(c.issues.length, 0);
+	equal(c.issues.length, 0);
 	
-	equals(c.loans.length, 2);
+	equal(c.loans.length, 2);
 	
-	equals(c.loans[0].constructor, AttrTest.Loan);
+	equal(c.loans[0].constructor, AttrTest.Loan);
 	
 	
 });
@@ -148,7 +148,7 @@ test("single seralize w/ attr name", function(){
 		name: 'eggs'
 	});
 	
-	equals(b.serialize('time'), time.getTime());
+	equal(b.serialize('time'), time.getTime());
 	ok(b.serialize())
 });
 
@@ -166,8 +166,8 @@ test("defaults", function(){
 		rupees: 255
 	});
 	
-	equals(link.attr('sword'), 'Wooden Sword');
-	equals(link.attr('rupees'), 255);
+	equal(link.attr('sword'), 'Wooden Sword');
+	equal(link.attr('rupees'), 255);
 });
 
 test("nested model attr", function(){
@@ -302,8 +302,8 @@ test("attr does not blow away old observable when going from empty to having ite
 
 	var oldCid = project.attr("members")._cid;
 	project.attr({members:[{id: 1, name: "bob"}]});
-	same(project.attr("members")._cid, oldCid, "should be the same observe, so that views bound to the old one get updates")
-	equals(project.attr("members").length, 1, "list should have bob in it");
+	deepEqual(project.attr("members")._cid, oldCid, "should be the same observe, so that views bound to the old one get updates")
+	equal(project.attr("members").length, 1, "list should have bob in it");
 });
 
 test("Default converters and boolean fix (#247)", function() {

@@ -8,19 +8,19 @@ test("deparam", function(){
 	});
 
 	var obj = can.route.deparam("can.Control");
-	same(obj, {
+	deepEqual(obj, {
 		page : "can.Control",
 		route: ":page"
 	});
 
 	obj = can.route.deparam("");
-	same(obj, {
+	deepEqual(obj, {
 		page : "index",
 		route: ":page"
 	});
 
 	obj = can.route.deparam("can.Control&where=there");
-	same(obj, {
+	deepEqual(obj, {
 		page : "can.Control",
 		where: "there",
 		route: ":page"
@@ -33,7 +33,7 @@ test("deparam", function(){
 	});
 
     obj = can.route.deparam("can.Control/&where=there");
-	same(obj, {
+	deepEqual(obj, {
 		page : "can.Control",
         index: "foo",
 		where: "there",
@@ -52,12 +52,12 @@ test("deparam of invalid url", function(){
     // This path does not match the above route, and since the hash is not 
     // a &key=value list there should not be data.
     obj = can.route.deparam("pages//");
-	same(obj, {});
+	deepEqual(obj, {});
 
     // A valid path with invalid parameters should return the path data but
     // ignore the parameters.
     obj = can.route.deparam("pages/val1/val2/val3&invalid-parameters");
-	same(obj, {
+	deepEqual(obj, {
         var1: 'val1',
         var2: 'val2',
         var3: 'val3',
@@ -71,7 +71,7 @@ test("deparam of url with non-generated hash (manual override)", function(){
 	// This won't be set like this by route, but it could easily happen via a 
 	// user manually changing the URL or when porting a prior URL structure.
 	obj = can.route.deparam("page=foo&bar=baz&where=there");
-	same(obj, {
+	deepEqual(obj, {
 		page: 'foo',
 		bar: 'baz',
 		where: 'there'
@@ -85,10 +85,10 @@ test("param", function(){
 	})
 
 	var res = can.route.param({page: "foo"});
-	equals(res, "pages/foo")
+	equal(res, "pages/foo")
 
 	res = can.route.param({page: "foo", index: "bar"});
-	equals(res, "pages/foo&index=bar")
+	equal(res, "pages/foo&index=bar")
 
 	can.route("pages/:page/:foo",{
 		page: "index",
@@ -96,19 +96,19 @@ test("param", function(){
 	})
 
     res = can.route.param({page: "foo", foo: "bar", where: "there"});
-	equals(res, "pages/foo/&where=there")
+	equal(res, "pages/foo/&where=there")
 
     // There is no matching route so the hash should be empty.
     res = can.route.param({});
-	equals(res, "")
+	equal(res, "")
 
     can.route.routes = {};
     
     res = can.route.param({page: "foo", bar: "baz", where: "there"});
-	equals(res, "&page=foo&bar=baz&where=there")
+	equal(res, "&page=foo&bar=baz&where=there")
 
     res = can.route.param({});
-	equals(res, "")
+	equal(res, "")
 });
 
 test("symmetry", function(){
@@ -119,7 +119,7 @@ test("symmetry", function(){
 	var res = can.route.param(obj)
 	
 	var o2 = can.route.deparam(res)
-	same(o2, obj)
+	deepEqual(o2, obj)
 })
 
 test("light param", function(){
@@ -129,7 +129,7 @@ test("light param", function(){
 	})
 
 	var res = can.route.param({page: "index"});
-	equals(res, "")
+	equal(res, "")
 
     can.route("pages/:p1/:p2/:p3",{
 		p1: "index",
@@ -138,10 +138,10 @@ test("light param", function(){
 	})
 
     res = can.route.param({p1: "index", p2: "foo", p3: "bar"});
-	equals(res, "pages///")
+	equal(res, "pages///")
 
     res = can.route.param({p1: "index", p2: "baz", p3: "bar"});
-	equals(res, "pages//baz/")
+	equal(res, "pages//baz/")
 });
 
 test('param doesnt add defaults to params', function(){
@@ -151,7 +151,7 @@ test('param doesnt add defaults to params', function(){
         p2: "foo"
 	})
 	var res = can.route.param({p1: "index", p2: "foo"});
-	equals(res, "pages/index")
+	equal(res, "pages/index")
 })
 
 test("param-deparam", function(){
@@ -168,42 +168,42 @@ test("param-deparam", function(){
     var res = can.route.param(data);
     var obj = can.route.deparam(res);
 	delete obj.route
-	same(obj,data )
+	deepEqual(obj,data )
 	return;
     data = {page: "can.Control", type: "foo", bar: "baz", where: "there"};
     res = can.route.param(data);
     obj = can.route.deparam(res);
 	delete obj.route;
-	same(data, obj)
+	deepEqual(data, obj)
 	
 	data = {page: " a ", type: " / "};
     res = can.route.param(data);
     obj = can.route.deparam(res);
 	delete obj.route;
-	same(obj ,data ,"slashes and spaces")
+	deepEqual(obj ,data ,"slashes and spaces")
 
     data = {page: "index", type: "foo", bar: "baz", where: "there"};
     res = can.route.param(data);
     obj = can.route.deparam(res);
 	delete obj.route;
-	same(data, obj)
+	deepEqual(data, obj)
 
     can.route.routes = {};
     
     data = {page: "foo", bar: "baz", where: "there"};
     res = can.route.param(data);
     obj = can.route.deparam(res);
-	same(data, obj)
+	deepEqual(data, obj)
 })
 
 test("deparam-param", function(){
 	can.route.routes = {};
 	can.route(":foo/:bar",{foo: 1, bar: 2});
 	var res = can.route.param({foo: 1, bar: 2});
-	equals(res,"/","empty slash")
+	equal(res,"/","empty slash")
 	
 	var deparamed = can.route.deparam("/")
-	same(deparamed, {foo: 1, bar: 2, route: ":foo/:bar"})
+	deepEqual(deparamed, {foo: 1, bar: 2, route: ":foo/:bar"})
 })
 
 test("precident", function(){
@@ -212,13 +212,13 @@ test("precident", function(){
 	can.route("search/:search");
 
 	var obj = can.route.deparam("can.Control");
-	same(obj, {
+	deepEqual(obj, {
 		who : "can.Control",
 		route: ":who"
 	});
 
 	obj = can.route.deparam("search/can.Control");
-	same(obj, {
+	deepEqual(obj, {
 		search : "can.Control",
 		route: "search/:search"
 	},"bad deparam");
@@ -282,86 +282,6 @@ test("strange characters", function(){
 	equal(res, "bar/"+encodeURIComponent("\/"))
 });
 
-test("updating the hash", function(){
-	stop();
-	window.routeTestReady = function(iCanRoute, loc){
-		iCanRoute(":type/:id");
-		iCanRoute.attr({type: "bar", id: "\/"});
-
-		setTimeout(function(){
-			var after = loc.href.substr(loc.href.indexOf("#"));
-			equal(after,"#!bar/"+encodeURIComponent("\/"));
-			start();
-
-			can.remove(can.$(iframe))
-
-		},30);
-	}
-	var iframe = document.createElement('iframe');
-	iframe.src = steal.config().root.join("can/route/testing.html");
-	can.$("#qunit-test-area")[0].appendChild(iframe);
-});
-
-test("sticky enough routes", function(){
-	stop();
-	window.routeTestReady = function(iCanRoute, loc){
-		iCanRoute("active");
-		iCanRoute("");
-		loc.hash = "#!active"
-
-		setTimeout(function(){
-			var after = loc.href.substr(loc.href.indexOf("#"));
-			equal(after,"#!active");
-			start();
-
-			can.remove(can.$(iframe))
-
-		},30);
-	}
-	var iframe = document.createElement('iframe');
-	iframe.src = steal.config().root.join("can/route/testing.html?2");
-	can.$("#qunit-test-area")[0].appendChild(iframe);
-});
-
-test("unsticky routes", function(){
-	stop();
-	window.routeTestReady = function(iCanRoute, loc){
-		iCanRoute(":type")
-		iCanRoute(":type/:id");
-		iCanRoute.attr({type: "bar"});
-
-		setTimeout(function(){
-			var after = loc.href.substr(loc.href.indexOf("#"));
-			equal(after,"#!bar");
-			iCanRoute.attr({type: "bar", id: "\/"});
-			
-			// check for 1 second
-			var time = new Date()
-			setTimeout(function(){
-				var after = loc.href.substr(loc.href.indexOf("#"));
-				if(after == "#!bar/"+encodeURIComponent("\/")){
-					equal(after,"#!bar/"+encodeURIComponent("\/"),"should go to type/id");
-					can.remove(can.$(iframe))
-					start();
-				} else if( new Date() - time > 2000){
-					ok(false, "hash is "+after);
-					can.remove(can.$(iframe))
-				} else {
-					setTimeout(arguments.callee, 30)
-				}
-				
-			},100)
-			
-		},100)
-
-
-	}
-	var iframe = document.createElement('iframe');
-	iframe.src = steal.config().root.join("can/route/testing.html?1");
-	can.$("#qunit-test-area")[0].appendChild(iframe);
-});
-
-
 test("empty default is matched even if last", function(){
 	
 	can.route.routes = {};
@@ -369,7 +289,7 @@ test("empty default is matched even if last", function(){
 	can.route("",{foo: "bar"})
 
 	var obj = can.route.deparam("");
-	same(obj, {
+	deepEqual(obj, {
 		foo : "bar",
 		route: ""
 	});
@@ -381,7 +301,7 @@ test("order matched", function(){
 	can.route(":bar")
 	
 	var obj = can.route.deparam("abc");
-	same(obj, {
+	deepEqual(obj, {
 		foo : "abc",
 		route: ":foo"
 	});
@@ -411,10 +331,10 @@ test("param order matching", function(){
 	
 	res = can.route.param({recipe: "recipe1", task: "task3"});
 	
-	equals(res, "", "picks the first match of everything");
+	equal(res, "", "picks the first match of everything");
 	
 	res = can.route.param({recipe: "recipe1", task: "task2"});
-	equals(res,"/task2")
+	equal(res,"/task2")
 });
 
 test("dashes in routes", function(){
@@ -422,7 +342,7 @@ test("dashes in routes", function(){
 	can.route(":foo-:bar");
 	
 	var obj = can.route.deparam("abc-def");
-	same(obj, {
+	deepEqual(obj, {
 		foo : "abc",
 		bar : "def",
 		route: ":foo-:bar"
@@ -432,24 +352,107 @@ test("dashes in routes", function(){
 	window.location.hash = "";
 });
 
-test("listening to hashchange (#216, #124)", function() {
-	var iframe = document.createElement('iframe');
-	stop();
+if(typeof steal !== 'undefined') {
+	test("listening to hashchange (#216, #124)", function() {
+		var testarea = document.getElementById('qunit-test-area');
+		var iframe = document.createElement('iframe');
+		stop();
 
-	window.routeTestReady = function(iCanRoute){
-		ok(!iCanRoute.attr('bla'), 'Value not set yet');
-		iCanRoute.bind('change', function() {
-			equal(iCanRoute.attr('bla'), 'blu', 'Got route change event and value is as expected');
-			start();
-		});
+		window.routeTestReady = function(iCanRoute){
+			ok(!iCanRoute.attr('bla'), 'Value not set yet');
+			iCanRoute.bind('change', function() {
+				equal(iCanRoute.attr('bla'), 'blu', 'Got route change event and value is as expected');
+				testarea.innerHTML = '';
+				start();
+			});
 
-		setTimeout(function() {
-			iframe.src = iframe.src + '#!bla=blu';
-		}, 100);
-	};
+			setTimeout(function() {
+				iframe.src = iframe.src + '#!bla=blu';
+			}, 100);
+		};
 
-	iframe.src = steal.config().root.join("can/route/testing.html?1");
-	can.$("#qunit-test-area")[0].appendChild(iframe);
-});
+		iframe.src = can.test.path("route/testing.html?1");
+		testarea.appendChild(iframe);
+	});
+
+	test("updating the hash", function(){
+		stop();
+		window.routeTestReady = function(iCanRoute, loc){
+			iCanRoute(":type/:id");
+			iCanRoute.attr({type: "bar", id: "\/"});
+
+			setTimeout(function(){
+				var after = loc.href.substr(loc.href.indexOf("#"));
+				equal(after,"#!bar/"+encodeURIComponent("\/"));
+				start();
+
+				can.remove(can.$(iframe))
+
+			},30);
+		}
+		var iframe = document.createElement('iframe');
+		iframe.src = can.test.path("route/testing.html");
+		can.$("#qunit-test-area")[0].appendChild(iframe);
+	});
+
+	test("sticky enough routes", function(){
+		stop();
+		window.routeTestReady = function(iCanRoute, loc){
+			iCanRoute("active");
+			iCanRoute("");
+			loc.hash = "#!active"
+
+			setTimeout(function(){
+				var after = loc.href.substr(loc.href.indexOf("#"));
+				equal(after,"#!active");
+				start();
+
+				can.remove(can.$(iframe))
+
+			},30);
+		}
+		var iframe = document.createElement('iframe');
+		iframe.src = can.test.path("route/testing.html?2");
+		can.$("#qunit-test-area")[0].appendChild(iframe);
+	});
+
+	test("unsticky routes", function(){
+		stop();
+		window.routeTestReady = function(iCanRoute, loc){
+			iCanRoute(":type")
+			iCanRoute(":type/:id");
+			iCanRoute.attr({type: "bar"});
+
+			setTimeout(function(){
+				var after = loc.href.substr(loc.href.indexOf("#"));
+				equal(after,"#!bar");
+				iCanRoute.attr({type: "bar", id: "\/"});
+
+				// check for 1 second
+				var time = new Date()
+				setTimeout(function(){
+					var after = loc.href.substr(loc.href.indexOf("#"));
+					if(after == "#!bar/"+encodeURIComponent("\/")){
+						equal(after,"#!bar/"+encodeURIComponent("\/"),"should go to type/id");
+						can.remove(can.$(iframe))
+						start();
+					} else if( new Date() - time > 2000){
+						ok(false, "hash is "+after);
+						can.remove(can.$(iframe))
+					} else {
+						setTimeout(arguments.callee, 30)
+					}
+
+				},100)
+
+			},100)
+
+
+		}
+		var iframe = document.createElement('iframe');
+		iframe.src = can.test.path("route/testing.html?1");
+		can.$("#qunit-test-area")[0].appendChild(iframe);
+	});
+}
 
 })();

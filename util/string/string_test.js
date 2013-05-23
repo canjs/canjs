@@ -3,28 +3,28 @@ steal('funcunit/qunit', './string', function(qunit, can){
 module("can/util/string")
 
 test("can.sub", function(){
-	equals(can.sub("a{b}",{b: "c"}),"ac");
+	equal(can.sub("a{b}",{b: "c"}),"ac");
 
 	var foo = {b: "c"};
 
-	equals(can.sub("a{b}",foo,true),"ac");
+	equal(can.sub("a{b}",foo,true),"ac");
 	ok(!foo.b,"b's value was removed");
 });
 
 test("can.sub with undefined values", function() {
   var subbed = can.sub('test{exists} plus{noexists}', { exists : 'test' });
-  same(subbed, null, 'Rendering with undefined values should return null');
+  deepEqual(subbed, null, 'Rendering with undefined values should return null');
 
   var subbed = can.sub('test{exists} plus{noexists}', { exists : 'test' }, true);
-  same(subbed, null, 'Rendering with undefined values should return null even when remove param is true');
+	deepEqual(subbed, null, 'Rendering with undefined values should return null even when remove param is true');
 });
 
 test("can.sub double", function(){
-	equals(can.sub("{b} {d}",[{b: "c", d: "e"}]),"c e");
+	equal(can.sub("{b} {d}",[{b: "c", d: "e"}]),"c e");
 });
 
 test("String.underscore", function(){
-	equals(can.underscore("Foo.Bar.ZarDar"),"foo.bar.zar_dar")
+	equal(can.underscore("Foo.Bar.ZarDar"),"foo.bar.zar_dar")
 });
 
 test("can.sub remove", function(){
@@ -39,19 +39,17 @@ test("can.sub remove", function(){
 test("can.getObject", function(){
 	var obj = can.getObject("foo", [{a: 1}, {foo: 'bar'}]);
 
-	equals(obj,'bar', 'got bar')
+	equal(obj,'bar', 'got bar')
 
 
 	// test null data
 
 	var obj = can.getObject("foo", [{a: 1}, {foo: 0}]);
 
-	equals(obj,0, 'got 0 (falsey stuff)')
-
-	// Remove
+	equal(obj,0, 'got 0 (falsey stuff)')
 
 	var obj = can.getObject("foo", {}, false)
-	equals(obj, undefined, "got 'undefined'")
+	equal(obj, undefined, "got 'undefined'")
 });
 
 test("can.esc",function(){
@@ -75,7 +73,7 @@ test("can.esc",function(){
 test("$.String.niceName", function(){
 	var str = "some_underscored_string";
 	var niceStr = $.String.niceName(str);
-	equals(niceStr, 'Some Underscored String', 'got correct niceName');
+	equal(niceStr, 'Some Underscored String', 'got correct niceName');
 })*/
 
 

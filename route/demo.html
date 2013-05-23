@@ -98,9 +98,13 @@
 	</tbody>
 </table>
 </div>
-<script type='text/javascript' src='../../steal/steal.js'></script>
+<script type='text/javascript' src='../lib/steal/steal.js'></script>
 <script type='text/javascript'>
-steal('can/route', 
+steal(function() {
+	steal.config({
+		root: '../'
+	});
+}).then('can/route',
 	'can/util/json.js',
 	'can/observe',
 	'can/view/ejs',

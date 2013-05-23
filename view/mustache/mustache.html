@@ -12,9 +12,13 @@
 <div id="demo"></div>
 <button id="button">Click to change</button>
 
-<script type='text/javascript' src='../../../steal/steal.js'></script>
+<script type='text/javascript' src='../../lib/steal/steal.js'></script>
 <script type='text/javascript'>
-	steal('can/view/mustache', 'can/observe', function() {
+	steal(function() {
+		steal.config({
+			root: '../../'
+		});
+	}).then('can/view/mustache', 'can/observe', function() {
 		
 		var compute = can.compute("holler")
 

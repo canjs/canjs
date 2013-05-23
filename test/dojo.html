@@ -1,0 +1,68 @@
+<!-- AUTO GENERATED - DO NOT MODIFY -->
+<!DOCTYPE HTML>
+<html>
+    
+    <head>
+        <title>Dojo Test Suite</title>
+        <link rel="stylesheet" type="text/css" href="..//lib/qunit/qunit.css" />
+    </head>
+    
+    <body>
+        	<h1 id="qunit-header">Dojo Test Suite</h1>
+
+        	<h2 id="qunit-banner"></h2>
+
+        <div id="qunit-testrunner-toolbar"></div>
+        	<h2 id="qunit-userAgent"></h2>
+
+        <ol id="qunit-tests"></ol>
+        <div id="qunit-test-area"></div>
+        <script type="text/javascript" src="..//lib/steal/steal.js"></script>
+        <script type="text/javascript" src="..//lib/qunit/qunit.js"></script>
+        <script type="text/javascript">
+            QUnit.config.autostart = false;
+
+            steal(function() {
+                var config = window.CONFIGURATION = {
+                    "map": {
+                        "*": {
+                            "can/util/util.js": "can/util/dojo/dojo.js",
+                            "dojo/dojo.js": "can/util/dojo/dojo-1.8.1.js",
+                            "can/": ""
+                        }
+                    },
+                    "root": "../"
+                };
+
+                steal.config(config);
+            }, "can/util/fixture", "can/view/jaml", "can/view/micro",
+                "can/construct", "can/observe", "can/model",
+                "can/view", "can/view/ejs", "can/control",
+                "can/route", "can/control/route", "can/view/mustache",
+                "can/construct/super", "can/observe/delegate",
+                "can/observe/setter", "can/observe/attributes",
+                "can/observe/validations", "can/observe/backup")
+                .then("can/test").then(
+                "can/construct/construct_test.js")
+                .then("can/observe/observe_test.js")
+                .then("can/model/model_test.js")
+                .then("can/view/view_test.js")
+                .then("can/view/ejs/ejs_test.js")
+                .then("can/control/control_test.js")
+                .then("can/route/route_test.js")
+                .then("can/control/route/route_test.js")
+                .then("can/view/mustache/mustache_test.js")
+                .then("can/construct/super/super_test.js")
+                .then("can/observe/delegate/delegate_test.js")
+                .then("can/observe/setter/setter_test.js")
+                .then("can/observe/attributes/attributes_test.js")
+                .then("can/observe/validations/validations_test.js")
+                .then("can/observe/backup/backup_test.js", function() {
+                steal.dev.log = function() {};
+                steal.dev.warn = function() {};
+                QUnit.start();
+            });
+        </script>
+    </body>
+
+</html>

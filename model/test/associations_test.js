@@ -56,14 +56,14 @@ test("associations work", function(){
 			}
 		]
 	})
-	equals(c.person.name, "Justin", "association present");
-	equals(c.person.Class, MyTest.Person, "belongs to association typed");
+	equal(c.person.name, "Justin", "association present");
+	equal(c.person.Class, MyTest.Person, "belongs to association typed");
 	
-	equals(c.issues.length, 0);
+	equal(c.issues.length, 0);
 	
-	equals(c.loans.length, 2);
+	equal(c.loans.length, 2);
 	
-	equals(c.loans[0].Class, MyTest.Loan);
+	equal(c.loans[0].Class, MyTest.Loan);
 });
 
 test("Model association serialize on save", function(){
@@ -81,7 +81,7 @@ test("Model association serialize on save", function(){
 	stop();
 	cSave.then(function(customer){
 		start()
-		equals(customer.personAttr, "My name is thecountofzero", "serialization works");
+		equal(customer.personAttr, "My name is thecountofzero", "serialization works");
 		
 	});
 	
@@ -112,7 +112,7 @@ test("Model.List association serialize on save", function(){
 	cSave.then(function(customer){
 		start()
 		ok(true, "called back")
-		equals(customer.loansAttr.constructor, can.Observe.List, "we get an observe list back")
+		equal(customer.loansAttr.constructor, can.Observe.List, "we get an observe list back")
 		/*ok(customer.loansAttr._namespace === undefined, "_namespace does not exist");
 		ok(customer.loansAttr._data === undefined, "_data does not exist");
 		ok(customer.loansAttr._use_call === undefined, "_use_call does not exist");

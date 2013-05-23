@@ -32,7 +32,7 @@ steal('funcunit/qunit','can/model/cached','can/util/fixture',function(){
 						
 			setTimeout(function(){
 				Task.findAll({}, function(secondTasks){
-					same(tasks.attr(), secondTasks.attr())
+					deepEqual(tasks.attr(), secondTasks.attr())
 					
 					secondTasks.bind("change", function(ev, attr, how, newVal,oldVal){
 						start();
@@ -68,7 +68,7 @@ steal('funcunit/qunit','can/model/cached','can/util/fixture',function(){
 						
 			setTimeout(function(){
 				Task.findOne({id: 1}, function(secondTask){
-					same(task.attr(), secondTask.attr())
+					deepEqual(task.attr(), secondTask.attr())
 					
 					secondTask.bind("change", function(ev, attr, how, newVal,oldVal){
 						start();
@@ -107,7 +107,7 @@ steal('funcunit/qunit','can/model/cached','can/util/fixture',function(){
 						
 			setTimeout(function(){
 				Task.findOne({id: 1}, function(task){
-					same(tasks[0].attr(),task.attr())
+					deepEqual(tasks[0].attr(),task.attr())
 					
 					task.bind("change", function(ev, attr, how, newVal,oldVal){
 						start();
@@ -142,7 +142,7 @@ steal('funcunit/qunit','can/model/cached','can/util/fixture',function(){
 		Task.findAll({}, function(tasks){
 			tasks[0].destroy(function(){
 				Task.findAll({},function(tasks2){
-					equals(tasks2.length, 1);
+					equal(tasks2.length, 1);
 					tasks2.bind("change", function(){
 						ok(true, "updated list")
 						start();

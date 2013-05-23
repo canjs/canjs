@@ -1,4 +1,4 @@
-steal('can/util', 'can/view/modifiers', function(can) {
+(function() {
 
 // this only applied to jQuery libs
 if(!window.jQuery){
@@ -12,13 +12,13 @@ test("modifier with a deferred", function(){
 	stop();
 	
 	var foo = can.Deferred();
-	can.$("#qunit-test-area").html("//can/view/test//deferred.ejs", foo );
+	can.$("#qunit-test-area").html(can.test.path("view/test/deferred.ejs"), foo );
 	setTimeout(function(){
 		foo.resolve({
 			foo: "FOO"
 		});
 		start();
-		equals(can.$("#qunit-test-area").html(), "FOO", "worked!");
+		equal(can.$("#qunit-test-area").html(), "FOO", "worked!");
 	},100);
 
 });
@@ -27,7 +27,7 @@ test("modifier with a deferred", function(){
   $("#qunit-test-area").html("<textarea></textarea>");
   can.render.hookup(function(){});
   $("#qunit-test-area textarea").val("asdf");
-  equals($("#qunit-test-area textarea").val(), "asdf");
+  equal($("#qunit-test-area textarea").val(), "asdf");
 });*/
 
 test("html takes promise", function(){
@@ -35,7 +35,7 @@ test("html takes promise", function(){
 	can.$("#qunit-test-area").html(d);
 	stop();
 	d.done(function(){
-		equals(can.$("#qunit-test-area").html(), "Hello World", "deferred is working");
+		equal(can.$("#qunit-test-area").html(), "Hello World", "deferred is working");
 		start();
 	})
 	setTimeout(function(){
@@ -44,13 +44,15 @@ test("html takes promise", function(){
 });
 
 test("val set with a template within a hookup within another template", function(){
-	can.view("//can/view/test//hookupvalcall.ejs",{});
+	var frag = can.view(can.test.path("view/test/hookupvalcall.ejs"), {});
+	equal(can.trim($('<div>').append(frag).html()), '<div><h3>in div</h3></div>', 'Rendered withing other template');
 });
 
 test("jQuery.fn.hookup", function(){
 	can.$("#qunit-test-area").html("");
-	var els = $(can.view.render("//can/view/test//hookup.ejs",{})).hookup();
+	var els = $(can.view.render(can.test.path("view/test/hookup.ejs"),{})).hookup();
 	can.$("#qunit-test-area").html(els); //makes sure no error happens
+	equal(can.$("#qunit-test-area").html(), '<div id="dummy"></div>', 'Element hooked up');
 });
 
 test("hookups don't break script execution (issue #130)", function(){

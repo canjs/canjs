@@ -61,16 +61,16 @@
 	    new this.Animal();
 	    var ajax = new this.Ajax(1000);
 
-	    equals(2, this.Animal.count, "right number of animals");
-	    equals(1, this.Dog.count, "right number of animals")
+	    equal(2, this.Animal.count, "right number of animals");
+	    equal(1, this.Dog.count, "right number of animals")
 	    ok(this.Dog.match, "right number of animals")
 	    ok(!this.Animal.match, "right number of animals")
 	    ok(this.Dog.test(), "right number of animals")
 	    ok(!this.Animal.test(), "right number of animals")
-	    equals(1, this.Ajax.count, "right number of animals")
-	    equals(2, this.Animal.count, "right number of animals");
-	    equals(true, ajax.eyes, "right number of animals");
-	    equals(1000, ajax.hairs, "right number of animals");
+	    equal(1, this.Ajax.count, "right number of animals")
+	    equal(2, this.Animal.count, "right number of animals");
+	    equal(true, ajax.eyes, "right number of animals");
+	    equal(1000, ajax.hairs, "right number of animals");
 
 	    ok(a1 instanceof this.Animal)
 	    ok(a1 instanceof can.Construct)
@@ -79,7 +79,7 @@
 
 	test("new instance",function(){
 	    var d = this.Ajax.newInstance(6);
-	    equals(6, d.hairs);
+	    equal(6, d.hairs);
 	})
 
 
@@ -90,8 +90,8 @@
 
 		var fb = can.Construct.extend("Foo.Bar")
 		ok(Foo.Bar === fb, "returns class")
-		equals(fb.shortName, "Bar", "short name is right");
-		equals(fb.fullName, "Foo.Bar","fullName is right")
+		equal(fb.shortName, "Bar", "short name is right");
+		equal(fb.fullName, "Foo.Bar","fullName is right")
 
 	})
 
@@ -130,24 +130,22 @@
 		can.Construct.extend("Car",staticProps,protoProps);
 
 		var geo = new Car("geo");
-		equals(staticSetup, 1);
-		equals(staticInit, 2);
-		equals(protoSetup, 3);
-		equals(protoInit, 4);
+		equal(staticSetup, 1);
+		equal(staticInit, 2);
+		equal(protoSetup, 3);
+		equal(protoInit, 4);
 
-		same(can.makeArray(staticInitArgs), ["something"] )
-		same(can.makeArray(protoInitArgs),["Ford: geo"] )
+		deepEqual(can.makeArray(staticInitArgs), ["something"] )
+		deepEqual(can.makeArray(protoInitArgs),["Ford: geo"] )
 
-		same(can.makeArray(staticSetupArgs),[can.Construct, "Car",staticProps, protoProps] ,"static construct");
+		deepEqual(can.makeArray(staticSetupArgs),[can.Construct, "Car",staticProps, protoProps] ,"static construct");
 
 
 		//now see if staticSetup gets called again ...
 		Car.extend("Truck");
-		equals(staticSetup, 5, "Static setup is called if overwriting");
+		equal(staticSetup, 5, "Static setup is called if overwriting");
 
 	});
-
-
 
 	test("Creating without extend", function(){
 		can.Construct("Bar",{

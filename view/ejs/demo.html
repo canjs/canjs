@@ -49,9 +49,13 @@
 		</tr>
 	</table>
 </div>
-<script type='text/javascript' src='../../../steal/steal.js'></script>
+<script type='text/javascript' src='../../lib/steal/steal.js'></script>
 <script type='text/javascript'>
-steal('can/view/ejs', 
+steal(function() {
+	steal.config({
+		root: '../../'
+	});
+}).then('can/view/ejs',
 	'can/util/json.js',
 	'can/observe',
 	'can/util/demos/observer.js',

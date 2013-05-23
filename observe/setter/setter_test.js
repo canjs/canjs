@@ -1,4 +1,4 @@
-steal('can/util', 'can/observe/setter', function(can) {
+(function() {
 
 module("can/observe/setter");
 
@@ -18,17 +18,17 @@ test("setter testing works", function(){
 		contact = new Contact({birthday: date.getTime()});
 	
 	// set via constructor
-	equals(contact.birthday.getTime(), date.getTime(), "set as birthday")
+	equal(contact.birthday.getTime(), date.getTime(), "set as birthday")
 	
 	// set via attr method
 	date = new Date();
 	contact.attr('birthday', date.getTime())
-	equals(contact.birthday.getTime(), date.getTime(), "set via attr")
+	equal(contact.birthday.getTime(), date.getTime(), "set via attr")
 	
 	// set via attr method w/ multiple attrs
 	date = new Date();
 	contact.attr({ birthday: date.getTime() })
-	equals(contact.birthday.getTime(), date.getTime(), "set as birthday")
+	equal(contact.birthday.getTime(), date.getTime(), "set as birthday")
 });
 
 test("error binding", 1, function(){
@@ -43,7 +43,7 @@ test("error binding", 1, function(){
 	})
 	var school = new School();
 	school.bind("error", function(ev, attr, error){
-		equals(error, "no name", "error message provided")
+		equal(error, "no name", "error message provided")
 	})
 	school.attr("name","");
 	
@@ -68,4 +68,4 @@ test("asyncronous setting", function(){
 })
 
 
-})()
+})();

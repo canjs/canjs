@@ -1,4 +1,4 @@
-steal('can/util', 'can/observe/delegate', function(can) {
+(function() {
 
 
 module('can/observe/delegate')
@@ -6,20 +6,20 @@ module('can/observe/delegate')
 var matches = can.Observe.prototype.delegate.matches;
 
 test("matches", function(){
-	equals( matches(['**'], ['foo','bar','0']) ,
+	equal( matches(['**'], ['foo','bar','0']) ,
 		'foo.bar.0' , "everything" );
 		
-	equals( matches(['*.**'], ['foo']) ,
+	equal( matches(['*.**'], ['foo']) ,
 		null , "everything at least one level deep" )
 	
-	equals( matches(['foo','*'], ['foo','bar','0']) ,
+	equal( matches(['foo','*'], ['foo','bar','0']) ,
 		'foo.bar' )
 	
-	equals(matches(['*'], 
+	equal(matches(['*'], 
 					['foo','bar','0']) ,
 					'foo' );
 					
-	equals( matches([ '*', 'bar' ], 
+	equal( matches([ '*', 'bar' ], 
 					['foo','bar','0']) ,
 					'foo.bar' )
 	// - props - 
@@ -39,9 +39,9 @@ test("delegate", 4,function(){
 	var prices = state.attr('properties.prices');
 	
 	state.delegate("properties.prices","change", function(ev, attr, how, val, old){
-		equals(attr, "0", "correct change name")
-		equals(how, "add")
-		equals(val[0].attr("foo"),"bar", "correct")
+		equal(attr, "0", "correct change name")
+		equal(how, "add")
+		equal(val[0].attr("foo"),"bar", "correct")
 		ok(this === prices, "rooted element")
 	});
 	
@@ -57,7 +57,7 @@ test("delegate on add", 2, function(){
 	
 	state.delegate("foo","add", function(ev, newVal){
 		ok(true, "called");
-		equals(newVal, "bar","got newVal")
+		equal(newVal, "bar","got newVal")
 	}).delegate("foo","remove", function(){
 		ok(false,"remove should not be called")
 	});
@@ -71,7 +71,7 @@ test("delegate set is called on add", 2, function(){
 	
 	state.delegate("foo","set", function(ev, newVal){
 		ok(true, "called");
-		equals(newVal, "bar","got newVal")
+		equal(newVal, "bar","got newVal")
 	});
 	state.attr("foo","bar")
 });
@@ -92,11 +92,11 @@ test("delegate's this", 5, function(){
 	// listen to person name changes
 	state.delegate("person.name","set", check = function(ev, newValue, oldVal, from){
 		// make sure we are getting back the person.name
-		equals(this, n)
-		equals(newValue, "Brian");
-		equals(oldVal, "justin");
+		equal(this, n)
+		equal(newValue, "Brian");
+		equal(oldVal, "justin");
 		// and how to get there
-		equals(from,"first")
+		equal(from,"first")
 	});
 	n.attr('first',"Brian");
 	state.undelegate("person.name",'set',check)
@@ -104,7 +104,7 @@ test("delegate's this", 5, function(){
 	
 	// now listen to changes in prop
 	state.delegate("prop","set", function(){
-		equals(this, 'food');
+		equal(this, 'food');
 	}); // this is weird, probably need to support direct bind ...
 	
 	// update the prop
@@ -123,8 +123,8 @@ test("delegate on deep properties with *", function(){
 	});
 	
 	state.delegate("person","set", function(ev, newVal, oldVal, attr){
-		equals(this, state.attr('person'), "this is set right")
-		equals(attr, "name.first")
+		equal(this, state.attr('person'), "this is set right")
+		equal(attr, "name.first")
 	});
 	state.attr("person.name.first","brian")
 });
@@ -137,36 +137,36 @@ test("compound sets", function(){
 	});
 	var count = 0;
 	state.delegate("type=person id","set", function(){
-		equals(state.type, "person","type is person")
+		equal(state.type, "person","type is person")
 		ok(state.id !== undefined, "id has value");
 		count++;
 	})
 	
 	// should trigger a change
 	state.attr("id",0);
-	equals(count, 1, "changing the id to 0 caused a change");
+	equal(count, 1, "changing the id to 0 caused a change");
 	
 	// should not fire a set
 	state.removeAttr("id")
-	equals(count, 1, "removing the id changed nothing");
+	equal(count, 1, "removing the id changed nothing");
 	
 	state.attr("id",3)
-	equals(count, 2, "adding an id calls callback");
+	equal(count, 2, "adding an id calls callback");
 	
 	state.attr("type","peter")
-	equals(count, 2, "changing the type does not fire callback");
+	equal(count, 2, "changing the type does not fire callback");
 	
 	state.removeAttr("type");
 	state.removeAttr("id");
 	
-	equals(count, 2, "");
+	equal(count, 2, "");
 	
 	state.attr({
 		type : "person",
 		id: "5"
 	});
 	
-	equals(count, 3, "setting person and id only fires 1 event");
+	equal(count, 3, "setting person and id only fires 1 event");
 	
 	state.removeAttr("type");
 	state.removeAttr("id");
@@ -174,7 +174,7 @@ test("compound sets", function(){
 	state.attr({
 		type : "person"
 	});
-	equals(count, 3, "setting person does not fire anything");
+	equal(count, 3, "setting person does not fire anything");
 });
 
 test("undelegate within event loop",1, function(){

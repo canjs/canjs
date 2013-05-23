@@ -1,4 +1,4 @@
-steal('can/util', 'can/observe/validations', function(can) {
+(function() {
 
 module("can/observe/validations",{
 	setup : function(){
@@ -18,15 +18,15 @@ test("observe can validate, events, callbacks", 7,function(){
 		
 	
 	ok(errors, "There are errors");
-	equals(errors.age.length, 1, "there is one error");
-	equals(errors.age[0], "it's a date type", "error message is right");
+	equal(errors.age.length, 1, "there is one error");
+	equal(errors.age[0], "it's a date type", "error message is right");
 	
 	task.bind("error.age", function(ev, attr, errs){
 		ok(this === task, "we get task back by binding");
 		
 		ok(errs, "There are errors");
-		equals(errs.age.length, 1, "there is one error");
-		equals(errs.age[0], "it's a date type", "error message is right");
+		equal(errs.age.length, 1, "there is one error");
+		equal(errs.age[0], "it's a date type", "error message is right");
 	})
 	
 	task.attr("age","blah");
@@ -45,15 +45,15 @@ test("validatesFormatOf", function(){
 	var errors = new Person({thing: "foobar"}).errors();
 	
 	ok(errors, "there are errors")
-	equals(errors.thing.length,1,"one error on thing");
+	equal(errors.thing.length,1,"one error on thing");
 	
-	equals(errors.thing[0],"is invalid","basic message");
+	equal(errors.thing[0],"is invalid","basic message");
 	
 	Person.validateFormatOf("otherThing",/\d/,{message: "not a digit"})
 	
 	var errors2 = new Person({thing: "1-2", otherThing: "a"}).errors();
 	
-	equals(errors2.otherThing[0],"not a digit", "can supply a custom message")
+	equal(errors2.otherThing[0],"not a digit", "can supply a custom message")
 	
 	ok(!new Person({thing: "1-2", otherThing: null}).errors(),"can handle null")
 	ok(!new Person({thing: "1-2"}).errors(),"can handle undefiend")
@@ -67,15 +67,15 @@ test("validatesInclusionOf", function(){
 	var errors = new Person({thing: "foobar"}).errors();
 
 	ok(errors, "there are errors");
-	equals(errors.thing.length,1,"one error on thing");
+	equal(errors.thing.length,1,"one error on thing");
 
-	equals(errors.thing[0],"is not a valid option (perhaps out of range)","basic message");
+	equal(errors.thing[0],"is not a valid option (perhaps out of range)","basic message");
 
 	Person.validateInclusionOf("otherThing", ["yes", "no", "maybe"],{message: "not a valid option"});
 	
 	var errors2 = new Person({thing: "yes", otherThing: "maybe not"}).errors();
 	
-	equals(errors2.otherThing[0],"not a valid option", "can supply a custom message");
+	equal(errors2.otherThing[0],"not a valid option", "can supply a custom message");
 });
 
 test("validatesLengthOf", function(){
@@ -88,21 +88,21 @@ test("validatesLengthOf", function(){
 	var errors = new Person({thing: "foobar"}).errors();
 
 	ok(errors, "there are errors");
-	equals(errors.thing.length,1,"one error on thing");
+	equal(errors.thing.length,1,"one error on thing");
 
-	equals(errors.thing[0],"is too long (max=5)","basic message");
+	equal(errors.thing[0],"is too long (max=5)","basic message");
 
 	Person.validateLengthOf("otherThing", 2, 5, {message: "invalid length"});
 
 	var errors2 = new Person({thing: "yes", otherThing: "too long"}).errors();
 
-	equals(errors2.otherThing[0],"invalid length", "can supply a custom message");
+	equal(errors2.otherThing[0],"invalid length", "can supply a custom message");
 	Person.validateLengthOf("undefinedValue2", 1, 5);
 	Person.validateLengthOf("nullValue2", 1, 5);
 	var errors3 = new Person({thing: "yes",nullValue2:null}).errors();
 
-	equals(errors3.undefinedValue2.length,1, "can handle undefined");
-	equals(errors3.nullValue2.length,1, "can handle null");
+	equal(errors3.undefinedValue2.length,1, "can handle undefined");
+	equal(errors3.nullValue2.length,1, "can handle null");
 });
 
 test("validatesPresenceOf", function(){
@@ -118,7 +118,7 @@ test("validatesPresenceOf", function(){
 	
 	ok(errors)
 	ok(errors.dueDate)
-	equals(errors.dueDate[0], "can't be empty" , "right message");
+	equal(errors.dueDate[0], "can't be empty" , "right message");
 	
     //test for null
 	task = new Task({dueDate: null});
@@ -126,7 +126,7 @@ test("validatesPresenceOf", function(){
 	
 	ok(errors)
 	ok(errors.dueDate)
-	equals(errors.dueDate[0], "can't be empty" , "right message");
+	equal(errors.dueDate[0], "can't be empty" , "right message");
 
     //test for ""
 	task = new Task({dueDate: ""});
@@ -134,7 +134,7 @@ test("validatesPresenceOf", function(){
 	
 	ok(errors)
 	ok(errors.dueDate)
-	equals(errors.dueDate[0], "can't be empty" , "right message");
+	equal(errors.dueDate[0], "can't be empty" , "right message");
 
 	//Affirmative test
 	task = new Task({dueDate : "yes"});
@@ -164,7 +164,7 @@ test("validatesPresenceOf with numbers and a 0 value", function() {
 
   ok(errors)
   ok(errors.age)
-  equals(errors.age[0], "can't be empty", "A new Person with no age generates errors.");
+  equal(errors.age[0], "can't be empty", "A new Person with no age generates errors.");
 
   //test for null
   person = new Person({age: null});
@@ -172,7 +172,7 @@ test("validatesPresenceOf with numbers and a 0 value", function() {
 
   ok(errors)
   ok(errors.age)
-  equals(errors.age[0], "can't be empty" , "A new Person with null age generates errors.");
+  equal(errors.age[0], "can't be empty" , "A new Person with null age generates errors.");
 
   //test for ""
   person = new Person({age: ""});
@@ -180,7 +180,7 @@ test("validatesPresenceOf with numbers and a 0 value", function() {
 
   ok(errors)
   ok(errors.age)
-  equals(errors.age[0], "can't be empty" , "A new Person with an empty string age generates errors.");
+  equal(errors.age[0], "can't be empty" , "A new Person with an empty string age generates errors.");
 
   //Affirmative test
   person = new Person({age: 12});
@@ -204,20 +204,20 @@ test("validatesRangeOf", function(){
 	var errors = new Person({thing: 6}).errors();
 
 	ok(errors, "there are errors")
-	equals(errors.thing.length,1,"one error on thing");
+	equal(errors.thing.length,1,"one error on thing");
 
-	equals(errors.thing[0],"is out of range [2,5]","basic message");
+	equal(errors.thing[0],"is out of range [2,5]","basic message");
 
 	Person.validateRangeOf("otherThing", 2, 5, {message: "value out of range"});
 
 	var errors2 = new Person({thing: 4, otherThing: 6}).errors();
 
-	equals(errors2.otherThing[0],"value out of range", "can supply a custom message");
+	equal(errors2.otherThing[0],"value out of range", "can supply a custom message");
 	Person.validateRangeOf("nullValue2", 1, 5);
 	Person.validateRangeOf("undefinedValue2", 1, 5);
 	var errors3 = new Person({thing: 2,nullValue2:null}).errors();
-	equals(errors3.nullValue2.length,1,"one error on nullValue2");
-	equals(errors3.undefinedValue2.length,1,"one error on undefinedValue2");
+	equal(errors3.nullValue2.length,1,"one error on nullValue2");
+	equal(errors3.undefinedValue2.length,1,"one error on undefinedValue2");
 });
 
 test("validatesNumericalityOf", function(){
@@ -248,23 +248,22 @@ test("validatesNumericalityOf", function(){
 	ok(!errors, "no errors");
 	
 	var errors = new Person({foo: " "}).errors();
-	equals(errors.foo.length,1,"one error on foo");
+	equal(errors.foo.length,1,"one error on foo");
 	
 	var errors = new Person({foo: "1f"}).errors();
-	console.log(errors)
-	equals(errors.foo.length,1,"one error on foo");
+	equal(errors.foo.length,1,"one error on foo");
 	
 	var errors = new Person({foo: "f1"}).errors();
-	equals(errors.foo.length,1,"one error on foo");
+	equal(errors.foo.length,1,"one error on foo");
 	
 	var errors = new Person({foo: "1.5.5"}).errors();
-	equals(errors.foo.length,1,"one error on foo");
+	equal(errors.foo.length,1,"one error on foo");
 	
 	var errors = new Person({foo: "\t\t"}).errors();
-	equals(errors.foo.length,1,"one error on foo");
+	equal(errors.foo.length,1,"one error on foo");
 	
 	var errors = new Person({foo: "\n\r"}).errors();
-	equals(errors.foo.length,1,"one error on foo");
+	equal(errors.foo.length,1,"one error on foo");
 });
 
 })();

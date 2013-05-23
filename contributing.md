@@ -4,19 +4,14 @@
 
 When contributing, include tests with new features or bug fixes in a feature branch until you're ready to submit the code for consideration; then fork the repository, push to the fork, and issue a pull request.
 
-Clone the branch and create a new feature branch.
+Clone the repository and create a new feature branch.
 
-	$ git clone git://github.com/bitovi/canjs.git
-	$ git branch html5-fix
-	$ git checkout html5-fix
-
-Add the new remote to your local repository on your local machine.
-
-	$ git remote add github git@github.com:bitovi/canjs.git
+	$ git clone git@github.com:bitovi/canjs.git
+	$ git checkout -b html5-fix
 
 Once your happy with your changes, push to the feature branch.
 
-	$ git push github html5-fix
+	$ git push origin html5-fix
 
 Now that we have pushed all the changes to the repo, we need to submit a Pull Request to the main branch.  Navigate to [Pull Requests](https://github.com/bitovi/canjs/pulls) and click 'Pull Request' in the top navigation bar.  Fill in some details about your potential patch including a meaningful title. When finished, press "Send pull request". The core team will be notified about your submission and let you know of any problems or targeted release date.
 

@@ -173,8 +173,7 @@ Even Internet Explorer 8 running in IE7 compatibility mode reports `true`
 for `onhashchange` in window, even though the event isn't supported.
 
 If you are using jQuery, you can include Ben Alman's [HashChange Plugin http://benalman.com/projects/jquery-hashchange-plugin/]
-to support the event in the unsupported browser(s).  Include `can/route/hashchange.js`
-in your file to support those browsers.
+to support the event in the unsupported browser(s).
 
 ## Using routes with `can.Control`
 
