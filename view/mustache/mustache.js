@@ -52,6 +52,7 @@ function( can ){
 		
 		// ## Mustache
 		/**
+		 * @hide
 		 * The Mustache templating engine.
 		 * @param {Object} options	Configuration options
 		 */
@@ -86,20 +87,22 @@ function( can ){
 	can.Mustache = window.Mustache = Mustache;
 
 	/** 
-	 * @Prototype
+	 * @prototype
 	 */
 	Mustache.prototype.
 	/**
-	 * @function render
+	 * @function can.Mustache.prototype.render render
+	 * @parent can.Mustache.prototype
+	 * @signature `render(data)`
+	 * @param {Object} data Data to interpolate into the template.
+	 * @return {String} The template with interpolated data, in string form.
 	 * 
+	 * @body
 	 * Renders an object with view helpers attached to the view.
 	 * 
 	 *		 new Mustache({text: "<%= message %>"}).render({
 	 *			 message: "foo"
 	 *		 })
-	 *		 
-	 * @param {Object} object data to be rendered
-	 * @return {String} returns the result of the string
 	 */
 	render = function( object, options ) {
 		object = object || {};
@@ -916,27 +919,32 @@ function( can ){
 	// * `with` - Opens a context section: `{{#with var}} render {{/with}}`
 	Mustache._helpers = {};
 	/**
-	 * @function registerHelper
+	 * @description Register a helper.
+	 * @function can.Mustache.registerHelper registerHelper
+	 * @signature `Mustache.registerHelper(name, helper)`
+	 * @param {String} name The name of the helper.
+	 * @param {Function} helper The helper function.
 	 * 
+	 * @body
 	 * Registers a helper with the Mustache system.
 	 * Pass the name of the helper followed by the
 	 * function to which Mustache should invoke.
-	 * These are ran at runtime.
-	 * 
-	 * @param  {[String]} name name of helper
-	 * @param  {Function} fn function to call
+	 * These are run at runtime.
 	 */
 	Mustache.registerHelper = function(name, fn){
 		this._helpers[name]={ name: name, fn: fn };
 	};
 	
 	/**
-	 * @function getHelper
-	 * 
+	 * @description Retrieve a helper.
+	 * @function can.Mustache.getHelper getHelper
+	 * @signature `Mustache.getHelper(name)`
+	 * @param {String} name The name of the helper.
+	 * @return {Function|null} The helper, or `null` if
+	 * no helper by that name is found.
+	 *
+	 * @body 
 	 * Returns a helper given the name.
-	 * 
-	 * @param  {[type]} name of the helper
-	 * @return {[type]} helper object
 	 */
 	Mustache.getHelper = function(name,options) {
 		return options && options.helpers && options.helpers[name] && {
@@ -952,6 +960,13 @@ function( can ){
 	};
 
 	/**
+	 * @function can.Mustache.static.render render
+	 * @parent can.Mustache.static
+	 * @signature `Mustache.render(partial, context)`
+	 * @param {Object} partial
+	 * @param {Object} context
+	 *
+	 * @body
 	 * `Mustache.render` is a helper method that calls
 	 * into `can.view.render` passing the partial 
 	 * and the context object.  
@@ -965,9 +980,6 @@ function( can ){
 	 * a partial on the context object such as:
 	 *
 	 * 		context[partial] === "movember.mustache"
-	 * 
-	 * @param  {Object} partial
-	 * @param  {Object} context
 	 */
 	Mustache.render = function(partial, context){
 		// Make sure the partial being passed in

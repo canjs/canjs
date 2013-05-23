@@ -1,5 +1,5 @@
-@page can.Observe.setter
-@parent can.Observe
+@page can.Observe.setter setter
+@parent can.Observe.plugins
 @plugin can/observe/setter
 @download http://donejs.com/can/dist/can.observe.setter.js
 @test can/observe/setter/qunit.html
@@ -7,6 +7,7 @@
 `can.Observe.setter(name, success(value), error(errors))` extends the Observe object 
 to provide convenient helper methods for setting attributes on a observable.
 
+@body
 The `attr` function looks for a `setATTRNAME` function to handle setting 
 the `ATTRNAME` property.
 
@@ -45,6 +46,51 @@ we can make our observes automatically convert data.
 	
 If the returned value is `undefined`, this means the setter is either in an async 
 event or the attribute(s) were not set. 
+
+## Differences From `attr`
+
+The way that return values from setters affect the value of an Observe's property is
+different from [can.Observe::attr attr]'s normal behavior. Specifically, when the 
+property's current value is an Observe or List, and an Observe or List is returned
+from a setter, the effect will not be to merge the values into the current value as
+if the return value was fed straight into `attr`, but to replace the value with the
+new Observe or List completely:
+
+@codestart
+var Contact = can.Observe({
+	setInfo: function(raw) {
+      return raw;
+	}
+});
+
+var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
+alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
+alice.info._cid; // '.observe1'
+
+alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
+alice.attr(); // {name: 'Allison Wonderland', 'phone': '888-888-8888'}
+alice.info._cid; // '.observe2'
+@codeend
+
+If you would rather have the new Observe or List merged into the current value, call
+`attr` inside the setter:
+
+@codestart
+var Contact = can.Observe({
+	setInfo: function(raw) {
+      this.info.attr(raw);
+      return this.info;
+	}
+});
+
+var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
+alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
+alice.info._cid; // '.observe1'
+
+alice.attr('info', {name: 'Allison Wonderland', phone: '888-888-8888'});
+alice.attr(); // {name: 'Allison Wonderland', email: 'alice@liddell.com', 'phone': '888-888-8888'}
+alice.info._cid; // '.observe1'
+@codeend
 
 ## Error Handling
 

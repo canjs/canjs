@@ -1,7 +1,5 @@
-@page Sections
-@parent can.Mustache 1
-
-# Sections
+@page can.Mustache.Sections Sections
+@parent can.Mustache.pages 1
 
 Sections contain text blocks and evaluate whether to render it or not.  If
 the object evaluates to an array it will iterate over it and render the block

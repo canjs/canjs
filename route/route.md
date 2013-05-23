@@ -1,14 +1,25 @@
-@class can.route
+@function can.route can.route
+@group can.route.static static
 @inherits can.Observe
-@plugin can/route
+@download can/route
+@test can/route/qunit.html
 @parent canjs
 
-
-`can.route(route, defults)` helps manage browser history (and
-client state) by
-synchronizing the window.location.hash with
+can.route is a plugin that helps manage browser history and
+client state by synchronizing the window.location.hash with
 an [can.Observe].
 
+@signature `can.route(template[, defaults])`
+@param {String} template the fragment identifier to match.  The fragment identifier
+should start with either a character (a-Z) or colon (:).  Examples:
+
+    can.route(":foo")
+    can.route("foo/:bar")
+
+@param {Object} [defaults] an object of default values
+@return {can.route}
+
+@body
 ## Background Information
 
 To support the browser's back button and bookmarking
@@ -235,13 +246,3 @@ and show a specific recipe when __id__ was set, you could do something like:
 If we didn't only listen to when recipe is set, then every time we chose to
 show a single recipe, we would create and show the list of recipes again which 
 would not very efficient.
-
-
-@param {String} url the fragment identifier to match.  The fragment identifier
-should start with either a character (a-Z) or colon (:).  Examples
-
-    can.route(":foo")
-    can.route("foo/:bar")
-
-@param {Object} [defaults] an object of default values
-@return {can.route} 

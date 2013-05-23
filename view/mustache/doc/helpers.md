@@ -1,5 +1,5 @@
-@page Helpers
-@parent can.Mustache 4
+@page can.Mustache.Helpers Helpers
+@parent can.Mustache.pages 4
 
 # Helpers
 

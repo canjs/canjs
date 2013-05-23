@@ -3,7 +3,7 @@
  */
 steal('jquery', 'can/util').then(function($, can) {
 	/**
-	 * @attribute destroyed
+	 * @property {Event} destroyed
 	 * @parent specialevents
 	 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/dom/destroyed/destroyed.js
 	 * @test jquery/event/destroyed/qunit.html

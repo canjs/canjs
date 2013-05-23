@@ -1,7 +1,7 @@
-@class can.EJS
+@constructor can.EJS
 @parent canjs
 
-EJS provides __live__ ERB style client-side templates. Use EJS 
+EJS provides __live__ ERB-style client-side templates. Use EJS 
 with [can.view] and for live templating use EJS with [can.Observe].
 
 ## Basic Example

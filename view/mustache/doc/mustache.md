@@ -1,12 +1,14 @@
-@page can.Mustache
+@constructor can.Mustache
 @parent canjs
-@test can/view/mustache/test/.html
+@group can.Mustache.pages Pages
+
+@test can/view/mustache/test/qunit.html
+@plugin can/view/mustache
+@download http://canjs.us/release/latest/can.view.mustache.js
 
 can.Mustache provides logic-less templates with live binding 
-when used with [can.Observes](#can_observe). It currently ships as a plugin:
-
-[Download can.Mustache](http://canjs.us/release/latest/can.view.mustache.js)
-([Annotated source](http://canjs.us/release/latest/docs/can.view.mustache.html))
+when used with [can.Observes](#can_observe). It currently ships as a plugin,
+and you can view the [annotated source](http://canjs.us/release/latest/docs/can.view.mustache.html).
 
 [Mustache](https://github.com/janl/mustache.js/) and [Handlebar](http://handlebarsjs.com/) 
 templates are compatible with can.Mustache, so you can import existing templates.

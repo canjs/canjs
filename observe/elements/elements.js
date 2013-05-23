@@ -30,7 +30,7 @@ var unique = function( items ) {
 		 * you can set the `escapeIdentity` on the observe instance's constructor
 		 * which will `encodeURIComponent` the `id` of the observe.
 		 *
-		 * @return {String}
+		 * @return {String} The unique identifier for this instance.
 		 */
 		identity: function() {
 			var constructor = this.constructor,
@@ -40,8 +40,8 @@ var unique = function( items ) {
 			return (name + (constructor.escapeIdentity ? encodeURIComponent(id) : id)).replace(/ /g, '_');
 		},
 		/**
-		 * Returns elements that represent this observe instance.  For this to work, your element's should
-		 * us the [$.Observe.prototype.identity identity] function in their class name.  Example:
+		 * Returns elements that represent this observe instance.  For this to work, your element should
+		 * use the [$.Observe.prototype.identity identity] function in their class name.  Example:
 		 * 
 		 *     <div class='todo <%= todo.identity() %>'> ... </div>
 		 * 

@@ -132,7 +132,7 @@ steal('can/util', 'can/observe', function(can) {
 		
 	can.extend(can.Observe.prototype,{
 		/**
-		 * @function can.Observe.prototype.delegate
+		 * @function can.Observe.prototype.delegate delegate
 		 * @parent can.Observe.delegate
 		 * @plugin can/observe/delegate
 		 * 
@@ -282,7 +282,7 @@ steal('can/util', 'can/observe', function(can) {
 		 *  - oldVal - the old value set on the observe
 		 *  - prop - the prop name that was changed
 		 * 
-		 * @return {jQuery.Delegate} the delegate for chaining
+		 * @return {can.Observe} the observe for chaining
 		 */
 		delegate :  function(selector, event, handler){
 			selector = can.trim(selector);
@@ -326,7 +326,7 @@ steal('can/util', 'can/observe', function(can) {
 			return this;
 		},
 		/**
-		 * @function can.Observe.prototype.undelegate
+		 * @function can.Observe.prototype.undelegate undelegate
 		 * @parent can.Observe.delegate
 		 * 
 		 * `undelegate( selector, event, handler )` removes a delegated event handler from an observe.
@@ -336,7 +336,7 @@ steal('can/util', 'can/observe', function(can) {
 		 * @param {String} selector the attribute name of the object you want to undelegate from.
 		 * @param {String} event the event name
 		 * @param {Function} handler the callback handler
-		 * @return {jQuery.Delegate} the delegate for chaining
+		 * @return {can.Observe} the observe for chaining
 		 */
 		undelegate : function(selector, event, handler){
 			selector = selector && can.trim(selector);

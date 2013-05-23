@@ -1,6 +1,7 @@
-@page can.fixture
-@parent can.util
+@page can.fixture can.fixture
+@parent canjs
 @test can/util/fixture/qunit.html
+@group can.fixture.plugins plugins
 
 
 `can.util.fixture` intercepts an AJAX request and simulates

@@ -74,6 +74,7 @@ can.each({
 	 *
 	 *     l.push('0','1','2');
 	 *
+	 * @param {...*} [...items] items to add to the end of the list.
 	 * @return {Number} the number of items in the array
 	 */
 	push: "length",
@@ -86,7 +87,7 @@ can.each({
 	 *     l.unshift(1,2,3) //-> 5
 	 *     l.attr() //-> [1,2,3,"a","b"]
 	 *
-	 * @param {Object} [items...] items to add to the start of the list.
+	 * @param {...*} [...items] items to add to the start of the list.
 	 * @return {Number} the length of the array.
 	 */
 	unshift: 0

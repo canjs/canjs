@@ -1,135 +1,116 @@
-@class can.Observe
+@constructor can.Observe
+@inherits can.Construct
 @parent canjs
+@group can.Observe.plugins plugins
 @test can/observe/qunit.html
+@download can/observe
 
-can.Observe provides the observable pattern for
-JavaScript Objects. It lets you
+`can.Observe` provides a way for you to listen for and keep track of changes
+to objects. When you use the getters and setters provided by `can.Observe`,
+events are fired that you can react to. `can.Observe` also has support for
+working with deep properties. Observable arrays are also available with
+`[can.Observe.List]`, which is based on `can.Observe`.
 
-  - Set and remove property or property values on objects
-  - Listen for changes in objects and arrays
-  - Work with nested properties
+@signature `can.Observe([props])`
+@param {Object} [props] properties and values to seed the Observe with
+@return {can.Observe} an instance of `can.Observe` with the properties from _props_
+
+@body
+## Working with Observes
+
+To create an Observe, use `new can.Observe([props])`. This will return a
+copy of `props` that emits events when its properties are changed with
+`[can.Observe.prototype.attr attr]`.
+
+You can read the values of properties on Observes directly, but you should
+never set them directly. You can also read property values using `attr`.
+Usually, you will want to do this when creating a `[can.compute]` or when
+live-binding properties in an [can.EJS EJS] template. (If you are using
+[can.Mustache Mustache], you don't need to use `attr`.)
+
+@codestart
+var aName = {a: 'Alexis'},
+    observe = can.Observe(aName);
+
+// Observes are copies of data:
+aName === observe; // false
+
+// reading from an Observe:
+observe.attr();    // {a: 'Alexis'}
+observe.a;         // 'Alexis'
+observe.attr('a'); // 'Alexis'
+
+// setting an Observe's property:
+observe.attr('a, 'Alice');
+observe.a; // Alice
+
+// removing an Observe's property;
+observe.removeAttr('a');
+observe.attr(); // {}
+
+// Don't do this!
+observe.a = 'Adam'; // wrong!
+@codeend
+
+Find out more about manipulating properties of Observes under
+[can.Observe.protoype.attr attr] and [can.Observe.protoype.removeAtt removeAttr].
+
+## Listening to changes
+
+The real power of observable objects comes from being able to react to
+properties being added, set, and removed. Observes emit events when
+properties are changed that you can bind to.
+
+`can.Observe` has two types of events that fire due to changes on an Observe:
+- the _change_ event fires on every change to an Observe.
+- an event named after the property name fires on every change to that property.
+
+@codestart
+var o = new can.Observe({});
+o.bind('change', function(ev, attr, how, newVal, oldVal) {
+    console.log('Something on o changed.');
+});
+o.bind('a', function(ev, newVal, oldVal) {
+    console.log('a was changed.');
+});
+
+o.attr('a', 'Alexis'); // 'Something on o changed.'
+                       // 'a was changed.'
+o.attr({
+    'a': 'Alice',      // 'Something on o changed.' (for a's change)
+    'b': 'Bob'         // 'Something on o changed.' (for b's change)
+});                    // 'a was changed.'
+
+o.removeAttr('a');     // 'Something on o changed.'
+                       // 'a was changed.'
+@codeend
+
+For more detail on how to use these events, see [can.Observe.prototype.bind bind] and
+[can.Observe.prototype.unbind unbind]. There is also a plugin called [can.Observe.delegate]
+that makes binding to specific types of events easier:
+
+@codestart
+var o = new can.Observe({});
+o.delegate('a', 'add' function(ev, newVal, oldVal) {
+    console.log('a was added.');
+});
+o.delegate('a', 'set' function(ev, newVal, oldVal) {
+    console.log('a was set.');
+});
+o.delegate('a', 'remove' function(ev, newVal, oldVal) {
+    console.log('a was removed.');
+});
+o.delegate('a', 'change' function(ev, newVal, oldVal) {
+    console.log('a was changed.');
+});
+
+o.attr('a', 'Alexis'); // 'a was added.'
+                       // 'a was changed.'
+
+o.attr('a', 'Alice'); // 'a was set.'
+                      // 'a was changed.'
 
 
-## Creating an Observe
-
-To create an observable object, use `new can.Observe( [obj] )` like:
-
-    var person = new can.Observe({ name: 'justin', age: 29 });
-    
-To create an observable array, use `new can.Observe.List( [array] )` like:
-
-    var hobbies = new can.Observe.List([
-    					'programming', 
-                        'basketball',
-                        'nose picking'
-    ]);
-
-  
-can.Observe and [can.Observe.List] are very similar. In fact,
-can.Observe.List inherits can.Observe and only adds a few extra methods for
-manipulating arrays, like [can.Observe.List::push push].  See
-[can.Observe.List] for more information about lists.
-
-`Observe` works with nested objects and arrays, so the following works:
-
-    var data = { 
-      addresses: [
-        {
-          city: 'Chicago',
-          state: 'IL'
-        },
-        {
-          city: 'Boston',
-          state: 'MA'
-        }
-      ],
-      name: 'Justin Meyer'
-    },
-    o = new can.Observe( data );
-    
-_o_ now represents an observable copy of _data_.  
-
-Observe is inherited by [can.Model].
-
-## Getting and Setting Properties
-
-Use [can.Observe::attr attr] to get and set properties.
-
-For example, you can __read__ the property values of _o_ with
-`observe.attr( name )` like:
-
-    // read name
-    o.attr( 'name' ) //-> Justin Meyer
-    
-And __set__ property names of _o_ with 
-`observe.attr( name, value )` like:
-
-    // update name
-    o.attr( 'name', 'Brian Moschel' ) //-> o
-
-Observe handles nested data.  Nested Objects and
-Arrays are converted to can.Observe and 
-can.Observe.Lists.  This lets you read nested properties 
-and use can.Observe methods on them.  The following 
-updates the second address (Boston) to 'New York':
-
-    o.attr( 'addresses.1' ).attr({
-      city: 'New York',
-      state: 'NY'
-    });
-
-`attr()` can be used to get all properties back from the observe:
-
-    o.attr() // -> 
-    { 
-      addresses: [
-        {
-          city: 'Chicago',
-          state: 'IL'
-        },
-        {
-          city: 'New York',
-          state: 'MA'
-        }
-      ],
-      name: 'Brian Moschel'
-    }
-
-
-## Listening to property changes
-
-When a property value is changed, observe fires a `change` event.
-Calling `bind( 'change', handler( ev, attr, how, newVal, oldVal ) )` listens
-to any attribute change that happens on the observe. The handler will be
-invoked with the property name that was changed, how it was changed
-('add', 'remove', or 'set'), the new value, and the old value:
-
-	o = new can.Observe({});
-    o.bind( 'change', function( ev, attr, how, nevVal, oldVal ) {
-		// ev    -> { type: 'change' }
-		// attr  -> "name"
-		// how   -> "add"
-		// newVal-> "Justin"
-		// oldVal-> undefined 
-    });
-
-    o.attr( 'name', 'Justin' );
-
-A more powerful delegation mechanism is also available through the
-[can.Observe.delegate] plugin. Calling
-`delegate( attr, event, handler( ev, newVal, oldVal ) )` listens
-to a specific event on a specific attribute or pattern:
-
-    // listen for name changes
-    o = new can.Observe({});
-    o.delegate( 'name', 'set', function( ev, newVal, oldVal ) {
-    	// ev     -> { type: 'change' }
-    	// newVal -> 'Justin'
-    	// oldVal -> undefined
-    });
-
-    o.attr( 'name', 'Justin' );
-
-@constructor Creates a new Observe with its data.
-
-@param {Object} [obj] a JavaScript Object that will be converted to an observable
+o.removeAttr('a'); // 'a was removed.'
+                   // 'a was changed.'
+@codeend

@@ -141,35 +141,22 @@ module.exports = function (grunt) {
 			}
 		},
 		docco: {
+			edge: {
+				files: '<%= meta.out %>/edge/**/*.js',
+				docco: {
+					output: '<%= meta.out %>/edge/docs'
+				}
+			},
 			latest: {
-				files: [{
-					src: '<%= meta.out/<%= pkg.version %>/**/*.js',
-					filter: function (filepath) {
-						return !/(min\.js|amd\/|qunit\.js)/.test(filepath);
-					}
-				}],
-				options: {
+				files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
+				docco: {
 					output: '<%= meta.out %>/<%= pkg.version %>/docs'
 				}
+			},
+			options: {
+				exclude: [/\.min\./, /amd\//, /qunit\.js/]
 			}
 		},
-		// docco: {
-		// 	edge: {
-		// 		files: '<%= meta.out %>/edge/**/*.js',
-		// 		docco: {
-		// 			output: '<%= meta.out %>/edge/docs'
-		// 		}
-		// 	},
-		// 	latest: {
-		// 		files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
-		// 		docco: {
-		// 			output: '<%= meta.out %>/<%= pkg.version %>/docs'
-		// 		}
-		// 	},
-		// 	options: {
-		// 		exclude: [/\.min\./, /amd\//, /qunit\.js/]
-		// 	}
-		// },
 		'string-replace': {
 			latest: {
 				files: [
@@ -272,7 +259,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-shell');
-	grunt.loadNpmTasks('grunt-docco');
 
 	grunt.registerTask('test', ['connect', 'qunit']);
 

@@ -1,7 +1,5 @@
-@page Acquisition
-@parent can.Mustache 3
-
-# Template Acquisition
+@page can.Mustache.Acquisition Template Acquisition
+@parent can.Mustache.pages 3
 
 There are number of ways to acquire templates such as: raw text,
 URL, or script tags in the markup.

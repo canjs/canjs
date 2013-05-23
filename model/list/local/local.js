@@ -1,8 +1,8 @@
 steal('jquery/dom/cookie','jquery/model/list').then(function($){
 /**
- * @class jQuery.Model.List.Local
+ * @constructor jQuery.Model.List.Local
  * @plugin jquery/model/list/local
- * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/list/local/local.js
+ * @download http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/list/local/local.js
  * @parent jQuery.Model.List
  * Works exactly the same as [jQuery.Model.List.Cookie] except uses
  * a local store instead of cookies.
