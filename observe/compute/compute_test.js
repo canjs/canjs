@@ -442,6 +442,22 @@ test("compute bound to observe",function(){
 	equal(bindCount, 0);
 });
 
+test("binding to a compute on an observe before reading",function(){
+	var me = new can.Observe({name: "Justin"});
+
+	var name = can.compute(me,"name")
+
+	
+	var handler = function(ev, newVal, oldVal){
+		equal(newVal, "Justin Meyer");
+		equal(oldVal, "Justin")
+	}
+
+	name.bind("change",handler)
+
+	equal(name(), "Justin");
+})
+
 test("compute bound to input value",function(){
 	var input = document.createElement('input');
 	input.value = 'Justin';

@@ -1504,9 +1504,9 @@ test("2 way binding helpers", function(){
 	}
 	var val;
 	can.Mustache.registerHelper('value', function(value){
-	    return function(el){
-	        val = new Value(el, value);
-	    }
+		return function(el){
+			val = new Value(el, value);
+		}
 	});
 
 	var renderer = can.view.mustache('<input {{value user.name}}/>');
@@ -1519,7 +1519,7 @@ test("2 way binding helpers", function(){
 
 	var input = div.getElementsByTagName('input')[0];
 
-	// TODO ? equal( input.value , "Justin", "Name is set correctly")
+	equal( input.value , "Justin", "Name is set correctly")
 
 	u.attr('name','Eli')
 
@@ -1531,7 +1531,7 @@ test("2 way binding helpers", function(){
 	val.teardown();
 
 
-
+	// name is undefined
 	var renderer = can.view.mustache('<input {{value user.name}}/>');
 	var div = document.createElement('div'),
 		u = new can.Observe({});
@@ -1551,7 +1551,7 @@ test("2 way binding helpers", function(){
 	equal(u.attr('name'), "Austin", "Name changed by input field" );
 	val.teardown();
 
-
+	// name is null
 	var renderer = can.view.mustache('<input {{value user.name}}/>');
 	var div = document.createElement('div'),
 		u = new can.Observe({name: null});
@@ -1572,7 +1572,7 @@ test("2 way binding helpers", function(){
 	val.teardown();
 
 
-})
+});
 
 test("can pass in partials",function() {
 	var hello = can.view(can.test.path('view/mustache/test/hello.mustache'));
@@ -1837,6 +1837,26 @@ test("each works within another branch", function(){
 	animals.pop();
 
 	equal( div.getElementsByTagName('div')[0].innerHTML, "Animals:No animals!" );
+});
+
+test("a compute gets passed to a plugin",function(){
+	
+	can.Mustache.registerHelper('iamhungryforcomputes', function(value){
+		ok(value.isComputed,"value is a compute")
+	    return function(el){
+	        
+	    }
+	});
+
+	var renderer = can.view.mustache('<input {{iamhungryforcomputes userName}}/>');
+
+	var div = document.createElement('div'),
+		u = new can.Observe({name: "Justin"});
+		
+	div.appendChild(renderer({
+		userName: u.compute("name")
+	}));
+
 });
 
 })();
