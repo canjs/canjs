@@ -353,8 +353,8 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		store: function (types, count, make, filter) {
 			/**
 			 * @description Make a store of objects to use when making requests against fixtures.
-			 * @function can.fixture.store
-			 * @parent can.fixture
+			 * @function can.fixture.store store
+			 * @parent can.fixture.plugins
 			 * @signature `can.fixture.store([types,] count, make[, filter])`
 			 * @param {Array|String} [types] An array of the fixture names or the singular fixture name.
 			 * If an array, the first item is the plural fixture name (prefixed with -) and the second
@@ -690,9 +690,11 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				 * `store.destroy(request, response())` simulates
 				 * a request to destroy an item from the server.
 				 * 
-				 *     todosStore.destroy({
-				 *       url: "/todos/5"
-				 *     }, function(){});
+				 * @codestart
+				 * todosStore.destroy({
+				 *   url: "/todos/5"
+				 * }, function(){});
+				 * @codeend
 				 */
 				destroy: function (request) {
 					var id = getId(request);
@@ -715,6 +717,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				 * @param {Object} request Parameters for the request.
 				 * @param {Function} callback A function to call with the created item.
 				 * 
+				 * @body
 				 * `store.create(request, response)`
 				 */
 				create: function (settings, response) {
@@ -807,7 +810,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		},
 		/**
 		 * @description Create a random number or selection.
-		 * @function can.fixture.rand
+		 * @function can.fixture.rand rand
 		 * @parent can.fixture
 		 * @signature `rand([min,] max)`
 		 * @param {Number} [min=0] The lower bound on integers to select.
@@ -926,7 +929,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			}, xhr);
 		},
 		/**
-		 * @property {Boolean} can.fixture.on
+		 * @property {Boolean} can.fixture.on on
 		 * @parent can.fixture
 		 *
 		 * `can.fixture.on` lets you programatically turn off fixtures. This is mostly used for testing.
@@ -939,7 +942,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		on : true
 	});
 	/**
-	 * @property {Number} can.fixture.delay
+	 * @property {Number} can.fixture.delay delay
 	 * @parent can.fixture
 	 *
 	 * `can.fixture.delay` indicates the delay in milliseconds between an ajax request is made and
@@ -955,7 +958,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 	can.fixture.delay = 200;
 
 	/**
-	 * @property {String} can.fixture.rootUrl
+	 * @property {String} can.fixture.rootUrl rootUrl
 	 * @parent can.fixture
 	 *
 	 * `can.fixture.rootUrl` contains the root URL for fixtures to use.
