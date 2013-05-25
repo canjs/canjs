@@ -361,9 +361,13 @@ can.Observe.prototype.serialize = function(attrName, stack) {
 	can.each(attrs, function( val, name ) {
 		var type, converter;
 
-		if(val instanceof can.Observe) {
-			where[name] = stack.indexOf(val._cid) !== -1 ? val.serialize(undefined, stack) : undefined;
-		} else {
+		// If this is an observe, check that it wasn't serialized earlier in the stack.
+		if(val instanceof can.Observe && stack.indexOf(val._cid) > -1) {
+			// Since this object has already been serialized once,
+			// just reference the id (or undefined if it doesn't exist).
+			where[name] = val.attr('id');
+		} 
+		else {
 			type = Class.attributes ? Class.attributes[name] : 0;
 			converter = Class.serialize ? Class.serialize[type] : 0;
 
@@ -380,7 +384,6 @@ can.Observe.prototype.serialize = function(attrName, stack) {
 		}
 	});
 
-	console.log(where)
 	return attrName != undefined ? where[attrName] : where;
 };
 return can.Observe;
