@@ -1592,4 +1592,18 @@ test("JS blocks within EJS tags shouldn't require isolation", function(){
 	ok( div.innerHTML.match(/^\s*hi\s*hi\s*hi\s*$/), "Rendered iterated shared blocks file");
 })
 
+//Issue 267
+test('Access .length with nested dot notation', function() {
+	var template = '<ul><li>Nested: <span id="nested"><%= this.attr("list.length") %></span></li>' + 
+				   '<li>Un-nested: <span id="unnested"><%= this.list.attr("length") %></span></li></ul>',
+		obj = new can.Observe({list: [0, 1, 2, 3]}),
+		renderer = can.view.ejs(template),
+		div = document.createElement('div');
+
+	div.appendChild(renderer(obj));
+
+	ok($('#nested', div).text() === '4', 'Nested dot notation.');
+	ok($('#unnested', div).text() === '4', 'Not-nested dot notation.');
+});
+
 })();
