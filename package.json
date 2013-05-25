@@ -18,7 +18,6 @@
 		"grunt-shell": "0.2.1",
 		"grunt-contrib-qunit": "0.2.1",
 		"grunt-contrib-connect": "0.2.0",
-		"testify": "git://github.com/bitovi/testify.git",
 		"grunt-docco": "0.2.0"
 	},
 	"scripts": {
