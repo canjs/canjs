@@ -1145,4 +1145,15 @@ test("Creating nested models adds them to the store (#357)", function(){
     ok(people[0].company === people[2].company, "found the same company instance")
 })
 
+
+test("destroy not calling callback for new instances (#403)", function(){
+    var Recipe = can.Model({},{})
+	expect(1);
+	stop();
+	new Recipe({name: "mow grass"}).destroy(function(recipe) {
+		ok( true ,"Destroy called" )
+		start();
+	});
+});
+
 })();
