@@ -1592,6 +1592,34 @@ test("JS blocks within EJS tags shouldn't require isolation", function(){
 	ok( div.innerHTML.match(/^\s*hi\s*hi\s*hi\s*$/), "Rendered iterated shared blocks file");
 })
 
+// Issue #242
+test("Variables declared in shared EJS blocks shouldn't get lost", function() {
+	var template = can.view.ejs(
+		"<%" +
+			"var bestTeam = teams[0];" +
+			"can.each(teams, function(team) { %>" +
+				"<div><%== team.name %></div>" +
+			"<% }) %>" +
+		"<div class='best'><%== bestTeam.name %>!</div>"),
+		data = {
+			teams: new can.Observe.List([
+				{ name: "Packers", rank: 1 },
+				{ name: "Bears", rank: 2 },
+				{ name: "Vikings", rank: 3 },
+				{ name: "Lions", rank: 4 },
+			])
+		},
+		div = document.createElement('div');
+
+		try {
+			div.appendChild(template(data));
+		} catch (ex) { }
+		var children = div.getElementsByTagName('div');
+		equal( children.length, 5, "Rendered all teams and the best team");
+		equal( children[1].innerHTML, "Bears", "Lost again");
+		equal( children[4].innerHTML, "Packers!", "#1 team");
+});
+
 //Issue 267
 test('Access .length with nested dot notation', function() {
 	var template = '<span id="nested"><%= this.attr("list.length") %></span>' +
