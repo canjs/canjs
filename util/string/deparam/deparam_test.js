@@ -1,4 +1,4 @@
-steal('funcunit/qunit','./deparam', function(qunit, can) {
+steal('./deparam', function( can) {
 	
 module('can/util/string/deparam')
 

@@ -1,4 +1,4 @@
-steal('funcunit/qunit', './string',function (qunit, can) {
+steal( './string',function (can) {
 
 	module("can/util/string")
 
