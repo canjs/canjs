@@ -1593,6 +1593,8 @@ test("JS blocks within EJS tags shouldn't require isolation", function(){
 })
 
 // Issue #242
+// This won't be fixed as it would require a full JS parser
+/*
 test("Variables declared in shared EJS blocks shouldn't get lost", function() {
 	var template = can.view.ejs(
 		"<%" +
@@ -1619,6 +1621,7 @@ test("Variables declared in shared EJS blocks shouldn't get lost", function() {
 		equal( children[1].innerHTML, "Bears", "Lost again");
 		equal( children[4].innerHTML, "Packers!", "#1 team");
 });
+*/
 
 //Issue 267
 test('Access .length with nested dot notation', function() {
