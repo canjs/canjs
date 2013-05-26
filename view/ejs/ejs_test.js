@@ -1594,16 +1594,16 @@ test("JS blocks within EJS tags shouldn't require isolation", function(){
 
 //Issue 267
 test('Access .length with nested dot notation', function() {
-	var template = '<ul><li>Nested: <span id="nested"><%= this.attr("list.length") %></span></li>' + 
-				   '<li>Un-nested: <span id="unnested"><%= this.list.attr("length") %></span></li></ul>',
+	var template = '<span id="nested"><%= this.attr("list.length") %></span>' +
+				   '<span id="unnested"><%= this.list.attr("length") %></span>',
 		obj = new can.Observe({list: [0, 1, 2, 3]}),
 		renderer = can.view.ejs(template),
 		div = document.createElement('div');
 
 	div.appendChild(renderer(obj));
 
-	ok($('#nested', div).text() === '4', 'Nested dot notation.');
-	ok($('#unnested', div).text() === '4', 'Not-nested dot notation.');
+	ok(div.getElementsByTagName('span')[0].innerHTML === '4', 'Nested dot notation.');
+	ok(div.getElementsByTagName('span')[1].innerHTML === '4', 'Not-nested dot notation.');
 });
 
 })();
