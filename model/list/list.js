@@ -464,11 +464,14 @@ steal('can/util', 'can/model', 'can/observe/elements', function(can) {
 		destroy: function( success, error ) {
 			var ids = this.map(getIds),
 				items = can.makeArray(this),
-				construct = this.constructor;
+				construct = this.constructor,
+                list = this;
 
 			if ( ids.length ) {
 				this.constructor.destroy(ids).then( function() {
 					can.each(items, function(item){
+                        // remove this item from this list
+                        list.remove(item.id);
 						item.destroyed()
 					});
 					success && success(items)
