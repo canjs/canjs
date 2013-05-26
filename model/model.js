@@ -1011,7 +1011,9 @@ steal('can/util','can/observe', function( can ) {
 		destroy: function( success, error ) {
 			if(this.isNew()) {
 				var self = this;
-				return can.Deferred().done(function(data) {
+				var def = can.Deferred();
+				def.then(success, error);
+				return def.done(function(data) {
 					self.destroyed(data)
 				}).resolve(self);
 			}
