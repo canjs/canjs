@@ -1859,4 +1859,25 @@ test("a compute gets passed to a plugin",function(){
 
 });
 
+test("Object references can escape periods for key names containing periods", function() {
+	var template = can.view.mustache("{{#foo.bar}}" +
+			"{{some\\\\.key\\\\.name}} {{some\\\\.other\\\\.key.with\\\\.more}}" +
+		"{{/foo.bar}}"),
+		data = {
+			foo: {
+				bar: [{
+					"some.key.name": 100,
+					"some.other.key": {
+						"with.more": "values"
+					}
+				}]
+			}
+		};
+
+	var div = document.createElement('div');
+	div.appendChild(template(data))
+
+	equal( div.innerHTML, "100 values" );
+})
+
 })();
