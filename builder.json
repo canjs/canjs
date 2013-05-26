@@ -98,6 +98,11 @@
 			"type": "plugin",
 			"description": "Use jQuery modifiers to render views",
 			"configurations": ["jquery"]
+		},
+		"can/util/object": {
+			"name": "can.Object",
+			"type": "plugin",
+			"description": "Helper methods for object comparison"
 		}
 	},
 	"types": {
