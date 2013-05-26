@@ -645,9 +645,7 @@ steal('can/util','can/observe', function( can ) {
 		_makeRequest : makeRequest,
 		_clean : function(){
 			can.Model._reqs--;
-			console.log('cleaning', can.Model._reqs)
 			if(!can.Model._reqs){
-				debugger;
 				for(var id in this.store) {
 					if(!this.store[id]._bindings){
 						delete this.store[id];
