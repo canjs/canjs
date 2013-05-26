@@ -344,35 +344,46 @@ can.Observe.prototype.__convert = function(prop, value){
  *
  *		contact.serialize('birthday') //-> 'YYYY-MM-DD'
  */
-can.Observe.prototype.serialize = function(attrName){
+can.Observe.prototype.serialize = function(attrName, stack) {
 	var where = {},
 		Class = this.constructor,
 		attrs = {};
-		
-	if(attrName != undefined){
+
+	stack = can.isArray(stack) ? stack : [];
+	stack.push(this._cid);
+
+	if(attrName !== undefined){
 		attrs[attrName] = this[attrName];
 	} else {
 		attrs = this.__get();
 	}
-		
+
 	can.each(attrs, function( val, name ) {
 		var type, converter;
-		
-		type = Class.attributes ? Class.attributes[name] : 0;
-		converter = Class.serialize ? Class.serialize[type] : 0;
-			
-		// if the value is an object, and has a attrs or serialize function
-		where[name] = val && typeof val.serialize == 'function' ?
-		// call attrs or serialize to get the original data back
-		val.serialize() :
-		// otherwise if we have  a converter
-		converter ? 
-			// use the converter
-			converter(val, type) : 
-			// or return the val
-			val
+
+		// If this is an observe, check that it wasn't serialized earlier in the stack.
+		if(val instanceof can.Observe && stack.indexOf(val._cid) > -1) {
+			// Since this object has already been serialized once,
+			// just reference the id (or undefined if it doesn't exist).
+			where[name] = val.attr('id');
+		} 
+		else {
+			type = Class.attributes ? Class.attributes[name] : 0;
+			converter = Class.serialize ? Class.serialize[type] : 0;
+
+			// if the value is an object, and has a attrs or serialize function
+			where[name] = val && typeof val.serialize == 'function' ?
+			// call attrs or serialize to get the original data back
+			val.serialize(undefined, stack) :
+			// otherwise if we have  a converter
+			converter ?
+				// use the converter
+				converter(val, type) :
+				// or return the val
+				val;
+		}
 	});
-	
+
 	return attrName != undefined ? where[attrName] : where;
 };
 return can.Observe;
