@@ -763,7 +763,21 @@ function( can ){
 			// Assume the parent context is the second to last context in the stack.
 			context = contexts[contexts.length - 2],
 			// Split the reference (like `a.b.c`) into an array of key names.
-			names = ref.split('.'),
+			names = ref.indexOf('\\.') == -1 
+				// Reference doesn't contain escaped periods
+				? ref.split('.')
+				// Reference contains escaped periods (`a.b\c.foo` == `a["b.c"].foo)
+				: (function() {
+						var names = [], last = 0;
+						ref.replace(/(\\)?\./g, function($0, $1, index) {
+							if (!$1) {
+								names.push(ref.slice(last, index).replace(/\\\./g,'.'));
+								last = index + $0.length;
+							}
+						});
+						names.push(ref.slice(last).replace(/\\\./g,'.'));
+						return names;
+					})(),
 			namesLength = names.length,
 			value, lastValue, name, i, j,
 			// if we walk up and don't find a property, we default
@@ -771,6 +785,7 @@ function( can ){
 			// context that is an observe
 			defaultObserve,
 			defaultObserveName;
+		console.log(names, ref);
 
 		// Handle `this` references for list iteration: {{.}} or {{this}}
 		if (/^\.|this$/.test(ref)) {
