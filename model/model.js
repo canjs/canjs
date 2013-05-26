@@ -590,6 +590,7 @@ steal('can/util','can/observe', function( can ) {
 	
 	can.Model = can.Observe({
 		fullName: "can.Model",
+		_reqs: 0,
 		setup : function(base){
 			// create store here if someone wants to use model without inheriting from it
 			this.store = {};
@@ -622,7 +623,7 @@ steal('can/util','can/observe', function( can ) {
 					var newMethod = self["make"+can.capitalize(name)](self[name]);
 					can.Construct._overwrite(self, base, name,function(){
 						// increment the numer of requests
-						this._reqs++;
+						can.Model._reqs++;
 						var def = newMethod.apply(this, arguments);
 						var then = def.then(clean, clean);
 						then.abort = def.abort;
@@ -637,14 +638,16 @@ steal('can/util','can/observe', function( can ) {
 				self.fullName = "Model"+(++modelNum);
 			}
 			// Add ajax converters.
-			this._reqs = 0;
+			can.Model._reqs = 0;
 			this._url = this._shortName+"/{"+this.id+"}"
 		},
 		_ajax : ajaxMaker,
 		_makeRequest : makeRequest,
 		_clean : function(){
-			this._reqs--;
-			if(!this._reqs){
+			can.Model._reqs--;
+			console.log('cleaning', can.Model._reqs)
+			if(!can.Model._reqs){
+				debugger;
 				for(var id in this.store) {
 					if(!this.store[id]._bindings){
 						delete this.store[id];
@@ -731,7 +734,8 @@ steal('can/util','can/observe', function( can ) {
 		 * create the individual instances.
 		 */
 		models: function( instancesRawData, oldList ) {
-
+			// until "end of turn", increment reqs counter so instances will be added to the store
+			can.Model._reqs++;
 			if ( ! instancesRawData ) {
 				return;
 			}
@@ -790,6 +794,8 @@ steal('can/util','can/observe', function( can ) {
 					}
 				})
 			}
+			// at "end of turn", clean up the store
+			setTimeout(can.proxy(this._clean, this), 1);
 			return res;
 		},
 		/**
@@ -867,12 +873,14 @@ steal('can/util','can/observe', function( can ) {
 			var id = attributes[ this.id ],
 			    model = (id || id === 0) && this.store[id] ?
 				    this.store[id].attr(attributes, this.removeAttr || false) : new this( attributes );
-			if(this._reqs){
+			if(can.Model._reqs){
 				this.store[attributes[this.id]] = model;
 			}
 			return model;
 		}
 	},
+
+
 	/**
 	 * @prototype
 	 */
