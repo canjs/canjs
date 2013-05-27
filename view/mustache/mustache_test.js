@@ -872,7 +872,7 @@ test('html comments', function(){
 
 	var div = document.createElement('div');
 	div.appendChild(can.view.frag(compiled));
-	equal(div.children[0].innerHTML, 'foo', 'Element as expected');
+	equal(div.getElementsByTagName('div')[0].innerHTML, 'foo', 'Element as expected');
 })
 
 test("hookup and live binding", function(){
@@ -1273,21 +1273,21 @@ test("computes are supported in default helpers", function() {
   div.appendChild( can.view("count", new can.Observe.List([{},{}])) );
   ok(/There are 2 todos/.test(div.innerHTML), "got all text")
 
-  can.each(Object.keys(staches), function(result) {
+  var result;
+  for (result in staches) {
     var renderer = can.view.mustache("compute_" + result, staches[result]);
     var data = ["e", "a", "c", "h"];
     var div = document.createElement("div");
     var actual = can.view("compute_" + result, { test : can.compute(data) });
     div.appendChild(actual);
-    can.each(div.getElementsByTagName("span"), function(span) {
-      if(span.firstChild) {
+    var span = div.getElementsByTagName("span")[0];
+    if (span && span.firstChild) {
         div.replaceChild(span.firstChild, span);
-      }
-    });
+    }
     actual = div.innerHTML;
 
     equal(actual, result, "can.compute resolved for helper " + result);
-  });
+  };
 
   var inv_staches = {
     "else" : "{{#if test}}if{{else}}else{{/if}}"
@@ -1296,7 +1296,7 @@ test("computes are supported in default helpers", function() {
     , "not_with" : "not{{#with test}}_{{/with}}_with"
   };
 
-  can.each(Object.keys(inv_staches), function(result) {
+  for (result in inv_staches) {
     var renderer = can.view.mustache("compute_" + result, inv_staches[result]);
     var data = null;
     var div = document.createElement("div");
@@ -1305,7 +1305,7 @@ test("computes are supported in default helpers", function() {
     actual = div.innerHTML;
 
     equal(actual, result, "can.compute resolved for helper " + result);
-  });
+  };
 
 });
 
@@ -1439,7 +1439,7 @@ test("Functions and helpers should be passed the same context", function() {
 		}
 		else {
 			//fn is options
-			return fn.fn(this).trim().toString().toUpperCase();
+			return can.trim(fn.fn(this)).toString().toUpperCase();
 		}
 	});
 
@@ -1472,10 +1472,12 @@ test("Interpolated values when iterating through an Observe.List should still re
 		div = document.createElement('div');
 
 	div.appendChild(renderer2(arr));
-	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'Array item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'Array item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'Array item rendered with DOM container');
 	div.innerHTML = '';
 	div.appendChild(renderer2(data));
-	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'List item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'List item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'List item rendered with DOM container');
 	div.innerHTML = '';
 	div.appendChild(renderer(arr));
 	equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
