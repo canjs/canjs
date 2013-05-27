@@ -1892,4 +1892,25 @@ test("Computes should be resolved prior to accessing attributes", function() {
 	equal( div.innerHTML, "0" );
 })
 
+test("Helpers can be passed . or this for the active context", function() {
+	can.Mustache.registerHelper('rsvp', function(attendee, event) {
+		return attendee.name + ' is attending ' + event.name;
+	});
+	var template = can.view.mustache("{{#attendee}}{{#events}}<div>{{rsvp attendee .}}</div>{{/events}}{{/#attendee}}"),
+		data = {
+			attendee: { name: 'Justin' },
+			events: [
+				{ name: 'Reception' },
+				{ name: 'Wedding' }
+			]
+		};
+
+	var div = document.createElement('div');
+	div.appendChild(template(data));
+	var children = div.getElementsByTagName('div');
+
+	equal( children[0].innerHTML, 'Justin is attending Reception' );
+	equal( children[1].innerHTML, 'Justin is attending Wedding' );
+})
+
 })();
