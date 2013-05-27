@@ -785,7 +785,6 @@ function( can ){
 			// context that is an observe
 			defaultObserve,
 			defaultObserveName;
-		console.log(names, ref);
 
 		// Handle `this` references for list iteration: {{.}} or {{this}}
 		if (/^\.|this$/.test(ref)) {
