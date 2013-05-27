@@ -7,8 +7,8 @@ module.exports = function (grunt) {
 	};
 
 	grunt.initConfig({
-		info: grunt.file.readJSON('package.json'),
-		builder: grunt.file.readJSON('builder.json'),
+		pkg: grunt.file.readJSON('package.json'),
+		builderJSON: grunt.file.readJSON('builder.json'),
 		meta: {
 			out: "dist/",
 			beautifier: {
@@ -22,11 +22,11 @@ module.exports = function (grunt) {
 		testify: {
 			libs: {
 				template: 'test/templates/__configuration__.html.ejs',
-				builder: '<%= builder %>',
+				builder: '<%= builderJSON %>',
 				root: '../',
 				out: 'test/',
 				transform: {
-					options: function(config) {
+					options: function (config) {
 						this.steal.map = (this.steal && this.steal.map) || {};
 						this.steal.map['*'] = this.steal.map['*'] || {};
 						this.steal.map['*']['can/'] = '';
@@ -36,24 +36,24 @@ module.exports = function (grunt) {
 			},
 			dist: {
 				template: 'test/templates/__configuration__-dist.html.ejs',
-				builder: '<%= builder %>',
-				root: '../..',
+				builder: '<%= builderJSON %>',
+				root: '../../',
 				out: 'test/dist/',
 				transform: {
-					'module': function(definition, name) {
-						if(!definition.isDefault) {
-							return name.replace(/\//g, '.');
+					'module': function (definition, name) {
+						if (!definition.isDefault) {
+							return definition.name.toLowerCase();
 						}
 						return null;
 					},
 
-					'test': function(definition, key) {
+					'test': function (definition, key) {
 						var name = key.substr(key.lastIndexOf('/') + 1);
 						var path = key.replace('can/', '') + '/';
 						return path + name + '_test.js';
 					},
 
-					'options': function(config) {
+					'options': function (config) {
 						return {
 							dist: 'can.' + config
 						}
@@ -62,7 +62,7 @@ module.exports = function (grunt) {
 			},
 			amd: {
 				template: 'test/templates/__configuration__-amd.html.ejs',
-				builder: '<%= builder %>',
+				builder: '<%= builderJSON %>',
 				root: '../..',
 				out: 'test/amd/'
 			}
@@ -83,137 +83,43 @@ module.exports = function (grunt) {
 			],
 			dist: '<%= meta.out %>/**/*.js'
 		},
-		build: {
-			edge: {
-				src: "can/build/build.js",
-				out: 'can/<%= meta.out %>'
+		builder: {
+			options: {
+				url: 'http://canjs.com',
+				pluginify: {
+					ignore: [ /\/lib\//, /util\/dojo-(.*?).js/ ]
+				},
+				pkg: "<%= pkg %>",
+				builder: "<%= builderJSON %>",
+				steal: {
+					map: {
+						'*': {
+							'can/': ''
+						}
+					},
+					root: __dirname
+				}
 			},
-			edgePlugins: {
-				src: "can/build/plugins.js",
-				out: 'can/<%= meta.out %>'
-			},
-			latest: {
-				src: "can/build/build.js",
-				version: '<%= info.version %>',
-				out: 'can/<%= meta.out %>'
-			},
-			latestPlugins: {
-				src: "can/build/plugins.js",
-				version: '<%= info.version %>',
-				out: 'can/<%= meta.out %>'
-			}
-		},
-		shell: {
-			bundleLatest: {
-				command: 'cd <%= meta.out %> && zip -r can.js.<%= info.version %>.zip <%= info.version %>/',
-				options: shellOpts
-			},
-
-			getGhPages: {
-				command: 'git clone -b gh-pages <%= info.repository.url %> build/gh-pages',
-				options: shellOpts
-			},
-
-			copyLatest: {
-				command: 'rm -rf build/gh-pages/release/<%= info.version %> && ' +
-					'cp -R <%= meta.out %>/<%= info.version %> build/gh-pages/release/<%= info.version %> && ' +
-					'cp <%= meta.out %>/can.js.<%= info.version %>.zip build/gh-pages/downloads &&' +
-					'rm -rf build/gh-pages/release/latest && ' +
-					'cp -R <%= meta.out %>/<%= info.version %> build/gh-pages/release/latest',
-				options: shellOpts
-			},
-
-			copyEdge: {
-				command: 'rm -rf build/gh-pages/release/edge && ' +
-					'cp -R <%= meta.out %>/edge build/gh-pages/release/edge',
-				options: shellOpts
-			},
-
-			updateGhPages: {
-				command: 'cd build/gh-pages && git add . --all && ' +
-					'git commit -m "Updating release (latest: <%= info.version %>)" && ' +
-					'git push origin',
-				options: shellOpts
-			},
-			cleanup: {
-				command: 'rm -rf build/gh-pages',
-				options: shellOpts
+			dist: {
+				options: {
+					prefix: 'can.'
+				},
+				files: {
+					'dist/': '.'
+				}
 			}
 		},
 		docco: {
-			edge: {
-				files: '<%= meta.out %>/edge/**/*.js',
-				docco: {
-					output: '<%= meta.out %>/edge/docs'
+			dist: {
+				src: ['dist/*.js'],
+				options: {
+					output: 'dist/docs'
 				}
-			},
-			latest: {
-				files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
-				docco: {
-					output: '<%= meta.out %>/<%= pkg.version %>/docs'
-				}
-			},
-			options: {
-				exclude: [/\.min\./, /amd\//, /qunit\.js/]
-			}
-		},
-		'string-replace': {
-			latest: {
-				files: [
-					{
-						src: '<%= meta.out %>/<%= info.version %>/**/*.js',
-						dest: './',
-						cwd: './',
-						filter: function (filepath) {
-							return !/\.min/.test(filepath);
-						}
-					}
-				]
-			},
-			edge: {
-				files: [
-					{
-						src: '<%= meta.out %>/edge/**/*.js',
-						dest: './',
-						cwd: './',
-						filter: function (filepath) {
-							return !/\.min/.test(filepath);
-						}
-					}
-				]
-			},
-			options: {
-				replacements: [
-					{
-						pattern: /\/\*([\s\S]*?)\*\//gim, // multiline comments
-						replacement: ''
-					},
-					{
-						pattern: /\/\/(\s*)\n/gim,
-						replacement: ''
-					},
-					{
-						pattern: /;[\s]*;/gim, // double ;;
-						replacement: ';'
-					},
-					{
-						pattern: /(\/\/.*)\n[\s]*;/gi,
-						replacement: '$1'
-					},
-					{
-						pattern: /(\n){3,}/gim, //single new lines
-						replacement: '\n\n'
-					},
-					{
-						pattern: /@EDGE/gim, //version property
-						replacement: '<%= pkg.version %>'
-					}
-				]
 			}
 		},
 		bannerize: {
 			latest: {
-				files: '<%= meta.out %>/<%= info.version %>/**/*.js',
+				files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
 				banner: '<%= meta.banner %>'
 			},
 			edge: {
@@ -226,7 +132,7 @@ module.exports = function (grunt) {
 				repo: 'canjs',
 				user: 'bitovi',
 				milestone: 6,
-				version: '<%= info.version %>'
+				version: '<%= pkg.version %>'
 			}
 		},
 		connect: {
@@ -241,30 +147,24 @@ module.exports = function (grunt) {
 			all: {
 				options: {
 					urls: [
-						'http://localhost:8000/test/dojo.html',
-						'http://localhost:8000/test/jquery.html',
-						// TODO 'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/mootools.html',
-						'http://localhost:8000/test/yui.html'
+						'http://localhost:8000/test/dist/dojo.html',
+						'http://localhost:8000/test/dist/jquery.html',
+						//'http://localhost:8000/can/test/zepto.html',
+						'http://localhost:8000/test/dist/mootools.html',
+						'http://localhost:8000/test/dist/yui.html'
 					]
 				}
 			}
 		}
 	});
 
-	grunt.loadTasks("../build/tasks");
-
-	grunt.loadNpmTasks('testify');
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-shell');
+	grunt.loadNpmTasks('bitovi-tools');
 
-	grunt.registerTask('test', ['connect', 'qunit']);
 
-	grunt.registerTask('edge', ['build:edge', 'build:edgePlugins', 'string-replace:edge', 'beautify:dist', 'bannerize:edge', 'docco:edge']);
-	grunt.registerTask('latest', ['build:latest', 'build:latestPlugins', 'string-replace:latest', 'beautify:dist', 'bannerize:latest']); //commenting docco task until we update
-	grunt.registerTask('ghpages', ['shell:cleanup', 'shell:getGhPages', 'shell:copyLatest', 'shell:updateGhPages', 'shell:cleanup']);
-	grunt.registerTask('deploy', ['latest', 'shell:bundleLatest', 'ghpages']);
-
+	grunt.registerTask('build', ['builder', 'testify']);
+	grunt.registerTask('test', ['connect', 'build', 'qunit']);
 };

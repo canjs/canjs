@@ -1,4 +1,4 @@
-steal( './string',function (can) {
+(function () {
 
 	module("can/util/string")
 
@@ -256,4 +256,4 @@ steal( './string',function (can) {
 		equal(text, "&lt;div&gt;&amp;nbsp;&lt;/div&gt;", "HTML escaped properly");
 	});
 
-}).then('./deparam/deparam_test');
+})();
