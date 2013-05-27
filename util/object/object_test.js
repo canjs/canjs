@@ -1,15 +1,15 @@
-steal('funcunit/qunit','./object',function(){
+steal('./object',function(){
 
 module("can/util/object");
 
 test("same", function(){
 	
 	
-	ok( can.Object.deepEqual({type: "FOLDER"},{type: "FOLDER", count: 5}, {
+	ok( can.Object.same({type: "FOLDER"},{type: "FOLDER", count: 5}, {
 		count: null
 	}), "count ignored" );
 	
-	ok(can.Object.deepEqual({type: "folder"},{type: "FOLDER"}, {
+	ok(can.Object.same({type: "folder"},{type: "FOLDER"}, {
 		type: "i"
 	}), "folder case ignored" );
 })

@@ -1,12 +1,12 @@
-steal("can/util/fixture", "can/model",'funcunit/qunit', function(){
+steal("can/util/fixture", "can/model", function(){
 
 module("can/util/fixture");
 
 test("static fixtures", function(){
 	stop();
 	
-	can.fixture("GET something", "//can/util/fixture/fixtures/test.json");
-	can.fixture("POST something", "//can/util/fixture/fixtures/test.json");
+	can.fixture("GET something", "//util/fixture/fixtures/test.json");
+	can.fixture("POST something", "//util/fixture/fixtures/test.json");
 
 	can.ajax({
 		url : 'something',
@@ -28,7 +28,7 @@ test("static fixtures", function(){
 test("templated static fixtures", function() {
 	stop();
 
-	can.fixture("GET some/{id}", "//can/util/fixture/fixtures/stuff.{id}.json");
+	can.fixture("GET some/{id}", "//util/fixture/fixtures/stuff.{id}.json");
 
 	can.ajax({
 		url : 'some/3',
@@ -57,15 +57,15 @@ test("dynamic fixtures",function(){
 
 test("fixture function", 3, function(){
 	stop();
-	var url = steal.config().root.join("can/util/fixture/fixtures/foo.json")+'';
-	can.fixture(url,"//can/util/fixture/fixtures/foobar.json" );
+	var url = steal.config().root.join("util/fixture/fixtures/foo.json")+'';
+	can.fixture(url,"//util/fixture/fixtures/foobar.json" );
 
 	can.ajax({
 		url : url,
 		dataType : 'json'
 	}).done(function(data){
 		equal(data.sweet,"ner","url passed works");
-		can.fixture(url,"//can/util/fixture/fixtures/test.json" );
+		can.fixture(url,"//util/fixture/fixtures/test.json" );
 
 		can.ajax({
 			url : url,
@@ -90,7 +90,7 @@ if(typeof jQuery !== 'undefined') {
 	test("fixtures with converters", function(){
 		stop();
 		can.ajax( {
-		  url : steal.config().root.join("can/util/fixture/fixtures/foobar.json")+'',
+		  url : steal.config().root.join("util/fixture/fixtures/foobar.json")+'',
 		  dataType: "json fooBar",
 		  converters: {
 		    "json fooBar": function( data ) {
@@ -210,13 +210,13 @@ test("_getData with double character value", function(){
 });
 
 test("_compare", function(){
-	var same = can.Object.deepEqual(
+	var same = can.Object.same(
 		{url : "/thingers/5"},
 		{url : "/thingers/{id}"}, can.fixture._compare)
 	
 	ok(same, "they are similar");
 	
-	same = can.Object.deepEqual(
+	same = can.Object.same(
 		{url : "/thingers/5"},
 		{url : "/thingers"}, can.fixture._compare);
 		
@@ -272,7 +272,7 @@ test("fixture function gets id", function(){
 });
 
 test("replacing and removing a fixture", function(){
-	var url = steal.config().root.join("can/util/fixture/fixtures/remove.json")+''
+	var url = steal.config().root.join("util/fixture/fixtures/remove.json")+''
 	can.fixture("GET "+url, function(){
 		return {weird: "ness!"}
 	});
