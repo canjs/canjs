@@ -14,12 +14,6 @@
 			"type": "core",
 			"isDefault": true
 		},
-		"can/observe/list": {
-			"name": "can.Observe.List",
-			"description": "Observable collections of objects",
-			"type": "core",
-			"isDefault": true
-		},
 		"can/observe/compute": {
 			"name": "can.compute",
 			"description": "can.compute lets you make observable values",
@@ -42,7 +36,6 @@
 			"name": "can.EJS",
 			"description": "Live-binding Embedded JavaScript",
 			"type": "core",
-			"skipTest": true,
 			"isDefault": true
 		},
 		"can/control": {
@@ -66,7 +59,6 @@
 		"can/view/mustache": {
 			"name": "can.Mustache",
 			"type": "plugin",
-			"skipTest": true,
 			"description": "Live-binding Handlebars and Mustache views"
 		},
 		"can/model/queue": {
@@ -89,11 +81,6 @@
 			"type": "plugin",
 			"description": "Use setter methods on Observes"
 		},
-		"can/observe/sort": {
-			"name": "can.Observe.List.sort",
-			"type": "plugin",
-			"description": "Soring support for Observe.List"
-		},
 		"can/observe/attributes": {
 			"name": "can.Observe.attributes",
 			"type": "plugin",
@@ -114,11 +101,6 @@
 			"type": "plugin",
 			"description": "Registers a jQuery plugin function for Controls",
 			"configurations": ["jquery"]
-		},
-		"can/control/modifier/key": {
-			"name": "can.Control.modifier.key",
-			"type": "plugin",
-			"description": "Easy key event mapping for can.Control"
 		},
 		"can/view/modifiers": {
 			"name": "can.view.modifiers",
