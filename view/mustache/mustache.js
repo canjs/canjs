@@ -528,7 +528,7 @@ function( can ){
 								i && result.push(',');
 								
 								// Check for special helper arguments (string/number/boolean/hashes).
-								if (i && (m = arg.match(/^(('.*?'|".*?"|[0-9.]+|true|false)|((.+?)=(('.*?'|".*?"|[0-9.]+|true|false)|(.+))))$/))) {
+								if (i && (m = arg.match(/^(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|((.+?)=(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|(.+))))$/))) {
 									// Found a native type like string/number/boolean.
 									if (m[2]) {
 										result.push(m[0]);
