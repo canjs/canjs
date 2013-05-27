@@ -257,7 +257,7 @@ function( can ){
 						// with the attribute name with the current context.
 						return "can.proxy(function(__){" +
 							// "var context = this[this.length-1];" +
-							// "context = context." + STACKED + " ? context[context.length-2] : context; console.warn(this, context);" +
+							// "context = context." + STACKED + " ? context[context.length-2] : context;" +
 							"can.data(can.$(__),'" + attr + "', this.pop()); }, " + CONTEXT_STACK + ")";
 					}
 				},
@@ -888,8 +888,13 @@ function( can ){
 			return function() { 
 				return lastValue[name].apply(lastValue, arguments); 
 			};
-		} else if (lastValue && can.isFunction(lastValue[name])) {
-			// Support functions stored in objects.
+		}
+		// Support attributes on compute objects
+		else if(lastValue && can.isFunction(lastValue) && lastValue.isComputed) {
+			return lastValue()[name];
+		}
+		// Support functions stored in objects.
+		else if (lastValue && can.isFunction(lastValue[name])) {
 			return lastValue[name]();
 		} 
 		// Invoke the length to ensure that Observe.List events fire.
