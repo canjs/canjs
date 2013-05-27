@@ -380,6 +380,23 @@ test("Deeply nested partials", function() {
 	deepEqual(new can.Mustache({ text: t.template }).render(t.data), t.expected);
 });
 
+test("Partials correctly set context", function() {
+	var t = {
+		template: "{{#users}}{{>partial}}{{/users}}",
+		expected: "foo - bar",
+		partials: { partial: '{{ name }} - {{ company }}' },
+		data: {
+			users : [{name : 'foo'}],
+			company : 'bar'
+		}
+	};
+	for(var name in t.partials) {
+		can.view.registerView(name, t.partials[name])
+	}
+
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), t.expected);
+});
+
 test("Handlebars helper: if/else", function() {
 	var t = {
 		template: "{{#if name}}{{name}}{{/if}}{{#if missing}} is missing!{{/if}}",
