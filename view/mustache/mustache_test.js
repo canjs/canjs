@@ -889,7 +889,7 @@ test('html comments', function(){
 
 	var div = document.createElement('div');
 	div.appendChild(can.view.frag(compiled));
-	equal(div.children[0].innerHTML, 'foo', 'Element as expected');
+	equal(div.getElementsByTagName('div')[0].innerHTML, 'foo', 'Element as expected');
 })
 
 test("hookup and live binding", function(){
@@ -1290,21 +1290,21 @@ test("computes are supported in default helpers", function() {
   div.appendChild( can.view("count", new can.Observe.List([{},{}])) );
   ok(/There are 2 todos/.test(div.innerHTML), "got all text")
 
-  can.each(Object.keys(staches), function(result) {
+  var result;
+  for (result in staches) {
     var renderer = can.view.mustache("compute_" + result, staches[result]);
     var data = ["e", "a", "c", "h"];
     var div = document.createElement("div");
     var actual = can.view("compute_" + result, { test : can.compute(data) });
     div.appendChild(actual);
-    can.each(div.getElementsByTagName("span"), function(span) {
-      if(span.firstChild) {
+    var span = div.getElementsByTagName("span")[0];
+    if (span && span.firstChild) {
         div.replaceChild(span.firstChild, span);
-      }
-    });
+    }
     actual = div.innerHTML;
 
     equal(actual, result, "can.compute resolved for helper " + result);
-  });
+  };
 
   var inv_staches = {
     "else" : "{{#if test}}if{{else}}else{{/if}}"
@@ -1313,7 +1313,7 @@ test("computes are supported in default helpers", function() {
     , "not_with" : "not{{#with test}}_{{/with}}_with"
   };
 
-  can.each(Object.keys(inv_staches), function(result) {
+  for (result in inv_staches) {
     var renderer = can.view.mustache("compute_" + result, inv_staches[result]);
     var data = null;
     var div = document.createElement("div");
@@ -1322,7 +1322,7 @@ test("computes are supported in default helpers", function() {
     actual = div.innerHTML;
 
     equal(actual, result, "can.compute resolved for helper " + result);
-  });
+  };
 
 });
 
@@ -1456,7 +1456,7 @@ test("Functions and helpers should be passed the same context", function() {
 		}
 		else {
 			//fn is options
-			return fn.fn(this).trim().toString().toUpperCase();
+			return can.trim(fn.fn(this)).toString().toUpperCase();
 		}
 	});
 
@@ -1489,10 +1489,12 @@ test("Interpolated values when iterating through an Observe.List should still re
 		div = document.createElement('div');
 
 	div.appendChild(renderer2(arr));
-	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'Array item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'Array item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'Array item rendered with DOM container');
 	div.innerHTML = '';
 	div.appendChild(renderer2(data));
-	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'List item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'List item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'List item rendered with DOM container');
 	div.innerHTML = '';
 	div.appendChild(renderer(arr));
 	equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
@@ -1635,19 +1637,28 @@ test("HTML comment with helper", function(){
 			{id: 1, name: "Dishes"}
 		]),
 		compiled = new can.Mustache({text: text.join("\n")}).render({todos: Todos}),
-		div = document.createElement("div")
+		div = document.createElement("div"),
+		li,
+		comments = function(el) {
+			var count = 0;
+			for (var i = 0; i < el.childNodes.length; i++) {
+				if (el.childNodes[i].nodeType == 8) ++count;
+			}
+			return count;
+		};
 
 	div.appendChild(can.view.frag(compiled));
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 1, "1 item in list");
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
+	li = div.getElementsByTagName("ul")[0].getElementsByTagName("li");
+	equal(li.length, 1, "1 item in list");
+	equal(comments(li[0]), 2, "2 comments in item #1");
 
 	Todos.push({id: 2, name: "Laundry"});
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 2, "2 items in list");
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[1].childNodes.length, 7, "7 nodes in item #2");
+	equal(li.length, 2, "2 items in list");
+	equal(comments(li[0]), 2, "2 comments in item #1");
+	equal(comments(li[1]), 2, "2 comments in item #2");
 
 	Todos.splice(0, 2);
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
+	equal(li.length, 0, "0 items in list");
 });
 
 test("correctness of data-view-id and only in tag opening", function(){
