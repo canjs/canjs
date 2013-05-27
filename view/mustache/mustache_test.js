@@ -1880,4 +1880,16 @@ test("Object references can escape periods for key names containing periods", fu
 	equal( div.innerHTML, "100 values" );
 })
 
+test("Computes should be resolved prior to accessing attributes", function() {
+	var template = can.view.mustache("{{list.length}}"),
+		data = {
+			list: can.compute(new can.Observe.List)
+		};
+
+	var div = document.createElement('div');
+	div.appendChild(template(data))
+
+	equal( div.innerHTML, "0" );
+})
+
 })();
