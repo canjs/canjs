@@ -418,7 +418,7 @@
 	test("Using '=' in attribute does not truncate the value", function() {
 		var template = can.view.ejs("<div id='equalTest' <%= this.attr('class') %>></div>"),
 			obs = new can.Observe({
-				class : 'class="someClass"'
+				'class' : 'class="someClass"'
 			}),
 			frag = template(obs), div;
 

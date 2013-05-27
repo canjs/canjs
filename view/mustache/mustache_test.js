@@ -1618,19 +1618,28 @@ test("HTML comment with helper", function(){
 			{id: 1, name: "Dishes"}
 		]),
 		compiled = new can.Mustache({text: text.join("\n")}).render({todos: Todos}),
-		div = document.createElement("div")
+		div = document.createElement("div"),
+		li,
+		comments = function(el) {
+			var count = 0;
+			for (var i = 0; i < el.childNodes.length; i++) {
+				if (el.childNodes[i].nodeType == 8) ++count;
+			}
+			return count;
+		};
 
 	div.appendChild(can.view.frag(compiled));
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 1, "1 item in list");
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
+	li = div.getElementsByTagName("ul")[0].getElementsByTagName("li");
+	equal(li.length, 1, "1 item in list");
+	equal(comments(li[0]), 2, "2 comments in item #1");
 
 	Todos.push({id: 2, name: "Laundry"});
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 2, "2 items in list");
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[1].childNodes.length, 7, "7 nodes in item #2");
+	equal(li.length, 2, "2 items in list");
+	equal(comments(li[0]), 2, "2 comments in item #1");
+	equal(comments(li[1]), 2, "2 comments in item #2");
 
 	Todos.splice(0, 2);
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
+	equal(li.length, 0, "0 items in list");
 });
 
 test("correctness of data-view-id and only in tag opening", function(){
