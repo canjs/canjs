@@ -146,7 +146,6 @@ module.exports = function (grunt) {
 		qunit: {
 			all: {
 				options: {
-					timeout: 30000,
 					urls: [
 						'http://localhost:8000/test/dist/dojo.html',
 						'http://localhost:8000/test/dist/jquery.html',

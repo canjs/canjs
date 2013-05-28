@@ -304,7 +304,7 @@ test("replacing and removing a fixture", function(){
 		});
 	});
 });
-	
+
 if(typeof steal !== "undefined"){
 test("can.fixture.store with can.Model", function() {
 	var store = can.fixture.store(100, function(i) {
