@@ -6,6 +6,7 @@
 @inherits can.Construct
 @description widget factory with declarative event binding.
 @group can.Control.plugins plugins
+@body
 
 can.Control helps create organized, memory-leak free, rapidly performing,
 stateful controls. Use it to create UI controls like tabs, grids, and context menus,
@@ -337,7 +338,3 @@ to listen to a specific model and change it:
 
     // switch it to the second todo
     editor.todo( todo2 );
-
-Here's the full todo list manager in action:
-
-@iframe can/test/demo.html 400
