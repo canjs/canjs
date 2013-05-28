@@ -57,7 +57,7 @@ test("dynamic fixtures",function(){
 
 test("fixture function", 3, function(){
 	stop();
-	var url = steal.config().root.join("util/fixture/fixtures/foo.json")+'';
+	var url = can.test.path("util/fixture/fixtures/foo.json");
 	can.fixture(url,"//util/fixture/fixtures/foobar.json" );
 
 	can.ajax({
@@ -90,7 +90,7 @@ if(typeof jQuery !== 'undefined') {
 	test("fixtures with converters", function(){
 		stop();
 		can.ajax( {
-		  url : steal.config().root.join("util/fixture/fixtures/foobar.json")+'',
+		  url : can.test.path("util/fixture/fixtures/foobar.json"),
 		  dataType: "json fooBar",
 		  converters: {
 		    "json fooBar": function( data ) {
@@ -272,7 +272,7 @@ test("fixture function gets id", function(){
 });
 
 test("replacing and removing a fixture", function(){
-	var url = steal.config().root.join("util/fixture/fixtures/remove.json")+''
+	var url = can.test.path("util/fixture/fixtures/remove.json");
 	can.fixture("GET "+url, function(){
 		return {weird: "ness!"}
 	});
@@ -304,7 +304,8 @@ test("replacing and removing a fixture", function(){
 		});
 	});
 });
-
+	
+if(typeof steal !== "undefined"){
 test("can.fixture.store with can.Model", function() {
 	var store = can.fixture.store(100, function(i) {
 			return {
@@ -362,6 +363,7 @@ test("can.fixture.store with can.Model", function() {
 		});
 	});
 });
+}
 
 test("can.fixture with response callback", 4, function() {
 	can.fixture.delay = 10;

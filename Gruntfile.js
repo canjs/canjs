@@ -37,7 +37,7 @@ module.exports = function (grunt) {
 			dist: {
 				template: 'test/templates/__configuration__-dist.html.ejs',
 				builder: '<%= builderJSON %>',
-				root: '../..',
+				root: '../../',
 				out: 'test/dist/',
 				transform: {
 					'module': function (definition, name) {
@@ -89,8 +89,8 @@ module.exports = function (grunt) {
 				pluginify: {
 					ignore: [ /\/lib\//, /util\/dojo-(.*?).js/ ]
 				},
-				pkg : "<%= pkg %>",
-				builder : "<%= builderJSON %>",
+				pkg: "<%= pkg %>",
+				builder: "<%= builderJSON %>",
 				steal: {
 					map: {
 						'*': {
@@ -110,7 +110,7 @@ module.exports = function (grunt) {
 			}
 		},
 		docco: {
-			dist : {
+			dist: {
 				src: ['dist/*.js'],
 				options: {
 					output: 'dist/docs'
@@ -146,12 +146,13 @@ module.exports = function (grunt) {
 		qunit: {
 			all: {
 				options: {
+					timeout: 30000,
 					urls: [
-						'http://localhost:8000/test/dojo.html',
-						'http://localhost:8000/test/jquery.html',
-						// TODO 'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/mootools.html',
-						'http://localhost:8000/test/yui.html'
+						'http://localhost:8000/test/dist/dojo.html',
+						'http://localhost:8000/test/dist/jquery.html',
+						//'http://localhost:8000/can/test/zepto.html',
+						'http://localhost:8000/test/dist/mootools.html',
+						'http://localhost:8000/test/dist/yui.html'
 					]
 				}
 			}
