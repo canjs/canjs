@@ -41,13 +41,16 @@
             });
              -->
 
-            require(["can/construct", "can/observe", "can/model",
-                    "can/view", "can/view/ejs", "can/control",
-                    "can/route", "can/control/route",
-                    "can/view/mustache", "can/construct/super",
+            require(["can/construct", "can/observe",
+                    "can/observe/compute", "can/model", "can/view",
+                    "can/view/ejs", "can/control", "can/route",
+                    "can/control/route", "can/view/mustache",
+                    "can/model/queue", "can/construct/super",
                     "can/observe/delegate", "can/observe/setter",
                     "can/observe/attributes",
-                    "can/observe/validations", "can/observe/backup"
+                    "can/observe/validations", "can/observe/backup",
+                    "can/util/object", "can/util/string",
+                    "can/util/fixture"
             ]);
         </script>
     </body>

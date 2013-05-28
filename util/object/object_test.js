@@ -1,4 +1,4 @@
-steal('./object',function(){
+(function(){
 
 module("can/util/object");
 
@@ -101,4 +101,4 @@ test("searchText", function(){
 });
 
 
-});
+})();

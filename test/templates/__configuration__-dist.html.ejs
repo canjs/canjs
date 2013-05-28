@@ -21,12 +21,10 @@
 </script>
 
 <script type="text/javascript" src="<%= configuration.library %>"></script>
-<script type="text/javascript" src="dist/edge/<%= dist %>.js"></script>
-<script type="text/javascript" src="dist/edge/can.fixture.js"></script>
-<script type="text/javascript" src="test/test.js"></script>
+<script type="text/javascript" src="dist/<%= dist %>.js"></script>
 <% modules.forEach(function(module) { %>
 	<% if(!module.isDefault) { %>
-	<script type="text/javascript" src="dist/edge/<%= module %>.js"></script>
+	<script type="text/javascript" src="dist/<%= module %>.js"></script>
 	<% } %>
 <% }); %>
 <% tests.forEach(function(test) { %>
