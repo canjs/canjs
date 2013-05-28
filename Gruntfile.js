@@ -67,22 +67,6 @@ module.exports = function (grunt) {
 				out: 'test/amd/'
 			}
 		},
-		beautifier: {
-			codebase: '<%= meta.beautifier %>',
-			dist: '<%= meta.beautifier %>'
-		},
-		beautify: {
-			codebase: [
-				'construct/**/*.js',
-				'control/**/*.js',
-				'model/**/*.js',
-				'observe/**/*.js',
-				'route/**/*.js',
-				'test/**/*.js',
-				'util/**/*.js'
-			],
-			dist: '<%= meta.out %>/**/*.js'
-		},
 		builder: {
 			options: {
 				url: 'http://canjs.com',
@@ -117,21 +101,11 @@ module.exports = function (grunt) {
 				}
 			}
 		},
-		bannerize: {
-			latest: {
-				files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
-				banner: '<%= meta.banner %>'
-			},
-			edge: {
-				files: '<%= meta.out %>/edge/**/*.js',
-				banner: '<%= meta.banner %>'
-			}
-		},
 		changelog: {
 			log: {
 				repo: 'canjs',
 				user: 'bitovi',
-				milestone: 6,
+				milestone: 7,
 				version: '<%= pkg.version %>'
 			}
 		},
@@ -151,7 +125,13 @@ module.exports = function (grunt) {
 						'http://localhost:8000/test/dist/jquery.html',
 						//'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/dist/mootools.html',
-						'http://localhost:8000/test/dist/yui.html'
+						'http://localhost:8000/test/dist/yui.html',
+
+						'http://localhost:8000/test/dojo.html',
+						'http://localhost:8000/test/jquery.html',
+						//'http://localhost:8000/can/test/zepto.html',
+						'http://localhost:8000/test/mootools.html',
+						'http://localhost:8000/test/yui.html'
 					]
 				}
 			}
@@ -163,7 +143,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
-
 
 	grunt.registerTask('build', ['builder', 'testify']);
 	grunt.registerTask('test', ['connect', 'build', 'qunit']);
