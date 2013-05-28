@@ -12,11 +12,11 @@ from.
 
 @body
 There are three important static properties to give the class you want to use attributes with:
-- `[can.Observe.attributes.attributes attributes]` lists the properties that will be normalized
+- `[can.Observe.attributes.static.attributes attributes]` lists the properties that will be normalized
 and the types those properties should be.
-- `[can.Observe.attributes.convert convert]` lists how to convert and normalize arbitrary values
+- `[can.Observe.attributes.static.convert convert]` lists how to convert and normalize arbitrary values
 to the types this class uses.
-- `[can.Observe.attributes.serialize serialize]` lists serialization algorithms for the types
+- `[can.Observe.attributes.static.serialize serialize]` lists serialization algorithms for the types
 this class uses.
 
 Together, the functions in _convert_ and _serialize_ make up the type definitions for the class.
@@ -47,7 +47,7 @@ alice.serialize(); // { birthday: 481161600000, weight: 120 }
 
 ### Demo
 
-When a user enters a new date in the format of _YYYY-DD-MM_, the control 
+When a user enters a new date in the format of _YYYY-MM-DD_, the control 
 listens for changes in the input box and updates the Observable using 
 the `attr` method which then converts the string into a JavaScript date object.  
 
