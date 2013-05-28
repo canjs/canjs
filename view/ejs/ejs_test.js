@@ -529,7 +529,7 @@ test('html comments', function(){
 
 	var div = document.createElement('div');
 	div.appendChild(can.view.frag(compiled));
-	equal(div.children[0].innerHTML, 'foo', 'Element as expected');
+	equal(div.getElementsByTagName('div')[0].innerHTML, 'foo', 'Element as expected');
 })
 
 test("hookup and live binding", function(){
@@ -1250,19 +1250,28 @@ test("HTML comment with element callback", function(){
 			{id: 1, name: "Dishes"}
 		]),
 		compiled = new can.EJS({text: text.join("\n")}).render({todos: Todos}),
-		div = document.createElement("div")
+		div = document.createElement("div"),
+		li,
+		comments = function(el) {
+			var count = 0;
+			for (var i = 0; i < el.childNodes.length; i++) {
+				if (el.childNodes[i].nodeType == 8) ++count;
+			}
+			return count;
+		};
 
 	div.appendChild(can.view.frag(compiled));
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 1, "1 item in list");
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 5, "5 nodes in item #1");
+	li = div.getElementsByTagName("ul")[0].getElementsByTagName("li");
+	equal(li.length, 1, "1 item in list");
+	equal(comments(li[0]), 2, "2 comments in item #1");
 
 	Todos.push({id: 2, name: "Laundry"});
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 2, "2 items in list");
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 5, "5 nodes in item #1");
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[1].childNodes.length, 5, "5 nodes in item #2");
+	equal(li.length, 2, "2 items in list");
+	equal(comments(li[0]), 2, "2 comments in item #1");
+	equal(comments(li[1]), 2, "2 comments in item #2");
 
 	Todos.splice(0, 2);
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
+	equal(li.length, 0, "0 items in list");
 })
 
 // https://github.com/bitovi/canjs/issues/153
@@ -1279,19 +1288,20 @@ test("Interpolated values when iterating through an Observe.List should still re
 		div = document.createElement('div');
 		
 	div.appendChild(can.view('issue-153-no-dom', arr));
-	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'Array item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'Array item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'Array item rendered with DOM container');
 	div.innerHTML = '';
 	div.appendChild(can.view('issue-153-no-dom', data));
-	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'List item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'List item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'List item rendered with DOM container');
 	div.innerHTML = '';
 	div.appendChild(can.view('issue-153-dom', arr));
 	equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
 	div.innerHTML = '';
 	div.appendChild(can.view('issue-153-dom', data));
 	equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
-	data.todos[1].attr('name', 'Glasses');
 	data.todos.push(new can.Observe({ id: 3, name: 'Knives' }));
-	equal(div.innerHTML, "DishesGlassesKnives", 'New list item rendered without DOM container');
+	equal(div.innerHTML, "DishesForksKnives", 'New list item rendered without DOM container');
 });
 
 test("correctness of data-view-id and only in tag opening", function(){

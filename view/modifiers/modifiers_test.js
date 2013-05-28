@@ -45,14 +45,16 @@ test("html takes promise", function(){
 
 test("val set with a template within a hookup within another template", function(){
 	var frag = can.view(can.test.path("view/test/hookupvalcall.ejs"), {});
-	equal(can.trim($('<div>').append(frag).html()), '<div><h3>in div</h3></div>', 'Rendered withing other template');
+	var div = document.createElement('div');
+	div.appendChild(frag);
+	equal(div.getElementsByTagName('div')[0].getElementsByTagName('h3')[0].innerHTML, 'in div', 'Rendered withing other template');
 });
 
 test("jQuery.fn.hookup", function(){
 	can.$("#qunit-test-area").html("");
 	var els = $(can.view.render(can.test.path("view/test/hookup.ejs"),{})).hookup();
 	can.$("#qunit-test-area").html(els); //makes sure no error happens
-	equal(can.$("#qunit-test-area").html(), '<div id="dummy"></div>', 'Element hooked up');
+	equal(can.$("#qunit-test-area")[0].getElementsByTagName('div')[0].id, 'dummy', 'Element hooked up');
 });
 
 test("hookups don't break script execution (issue #130)", function(){

@@ -362,7 +362,7 @@ can.Observe.prototype.serialize = function(attrName, stack) {
 		var type, converter;
 
 		// If this is an observe, check that it wasn't serialized earlier in the stack.
-		if(val instanceof can.Observe && stack.indexOf(val._cid) > -1) {
+		if(val instanceof can.Observe && can.inArray(val._cid, stack) > -1) {
 			// Since this object has already been serialized once,
 			// just reference the id (or undefined if it doesn't exist).
 			where[name] = val.attr('id');
