@@ -1,7 +1,7 @@
 /**
 @description Check if an object is a Deferred.
 @function can.isDeferred
-@parent can.util.functions
+@parent can.util
 @signature `can.isDeferred(subject)`
 @param {*} subject The object to check.
 @return {Boolean} Whether __subject__ is a Deferred.
@@ -22,7 +22,7 @@ function convertDeferred(dfd) {
 /**
 @description Trim whitespace off a string.
 @function can.trim
-@parent can.util.functions
+@parent can.util
 @signature `can.trim(str)`
 @param {String} str The string to trim.
 @return {String} The trimmed string.
@@ -40,7 +40,7 @@ can.trim(" foo ") // "foo"
 /**
 @description Convert an array-like object to an Array.
 @function can.makeArray
-@parent can.util.functions
+@parent can.util
 @signature `can.makeArray(arrLike)`
 @param {Object} arrLike An array-like object.
 @return {Array} The converted object.
@@ -56,7 +56,7 @@ can.makeArray({0 : "zero", 1: "one", length: 2}); // ["zero","one"]
 /**
 @description Check if an object is an array.
 @function can.isArray
-@parent can.util.functions
+@parent can.util
 @signature `can.isArray(obj)`
 @param {*} obj The object to check.
 @return {Boolean} Whether __obj__ is an Array.
@@ -73,7 +73,7 @@ can.isArray(false); // false
 /**
 @description Iterate through an array or object.
 @function can.each
-@parent can.util.functions
+@parent can.util
 @signature `can.each(collection, callback)`
 @param {Object} collection The object to iterate through.
 @param {Function} callback A function to call for each item in __collection__.
@@ -97,7 +97,7 @@ can.each([{prop: "val1"}, {prop: "val2"}],
 /**
 @description Merge objects together.
 @function can.extend
-@parent can.util.functions
+@parent can.util
 @signature `can.extend(target, ...obj)`
 @param {Object} target The object to merge properties into.
 @param {Object} obj Objects containing properties to merge.
@@ -123,7 +123,7 @@ third  //-> {c: "d"}
 /**
 @description Serialize an object into a query string.
 @function can.param
-@parent can.util.functions
+@parent can.util
 @signature `can.param(obj)`
 @param {Object} obj An array or object to serialize.
 @return {String} The serialized string.
@@ -140,7 +140,7 @@ can.param({a: "b", c: "d"}) //-> "a=b&c=d"
 /**
 @description Check if an object has no properties.
 @function can.isEmptyObject
-@parent can.util.functions
+@parent can.util
 @signature `can.isEmptyObject(obj)`
 @param {Object} obj The object to check.
 @param {Boolean} Whether the object is empty.
@@ -158,7 +158,7 @@ can.isEmptyObject({a:"b"}) //-> false
 /**
 @description Bind a function to its context.
 @function can.proxy
-@parent can.util.functions
+@parent can.util
 @signature `can.proxy(fn, context)`
 @param {Function} fn The function to bind to a context.
 @param {Object} context The context to bind the function to.
@@ -180,7 +180,7 @@ func("two") //-> "btwo"
 /**
 @description Check if an Object is a function.
 @function can.isFunction
-@parent can.util.functions
+@parent can.util
 @signature `can.isFunction(obj)`
 @param {Object} obj The object to check.
 @return {Boolean} Whether __obj__ is a function.
@@ -198,7 +198,7 @@ can.isFunction(function(){}) //-> true
 /**
 @description Listen for events on an object.
 @function can.bind
-@parent can.util.functions
+@parent can.util
 @signature `can.bind.call(target, eventName, handler)`
 @param {Object} target The object that emits events.
 @param {String} eventName The name of the event to listen for.
@@ -244,7 +244,7 @@ can.bind.call(el, "click", function(ev){
 /**
 @description Stop listening for events on an object.
 @function can.unbind
-@parent can.util.functions
+@parent can.util
 @signature `can.unbind.call(target, eventName, handler)`
 @param {Object} target The object that emits events.
 @param {String} eventName The name of the event to listen for.
@@ -293,7 +293,7 @@ can.unbind.call(el, "click", handler)
 /**
 @description Listen for events from the children of an element.
 @function can.delegate
-@parent can.util.functions
+@parent can.util
 @signature `can.delegate.call(element, selector, eventName, handler)`
 @param {HTMLElement} element The HTML element to bind to.
 @param {String} selector A selector for delegating downward.
@@ -326,7 +326,7 @@ can.delegate.call(el, ".selector", "click", function(ev){
 /**
 @description Stop listening for events from the children of an element.
 @function can.undelegate
-@parent can.util.functions
+@parent can.util
 @signature `can.undelegate.call(element, selector, eventName, handler)`
 @param {HTMLElement} element The HTML element to unbind from.
 @param {String} selector A selector for delegating downward.
@@ -360,7 +360,7 @@ can.undelegate.call(el, ".selector", "click", handler)
 /**
 @description Trigger an event.
 @function can.trigger
-@parent can.util.functions
+@parent can.util
 @signature `can.trigger(target, eventName[, args])`
 @param {Object} target The object to trigger the event on.
 @param {String} eventName The event to trigger.
@@ -372,7 +372,7 @@ Trigger an event on an element or object.
 /**
 @description Make an AJAX request.
 @function can.ajax
-@parent can.util.functions
+@parent can.util
 @signature `can.ajax(settings)`
 @param {Object} settings Configuration options for the AJAX request.
 The list of configuration options is the same as for [jQuery.ajax()](http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings).
@@ -395,7 +395,7 @@ can.ajax({
 /**
 @description Make a library's nodelist.
 @function can.$
-@parent can.util.functions
+@parent can.util
 @signature `can.$(element)`
 @param {String|Element|NodeList} element The selector, HTML element, or nodelist
 to pass to the underlying library.
@@ -418,7 +418,7 @@ The following lists how the NodeList is created by each library:
 /**
 @description Make a document fragment.
 @function can.buildFragment
-@parent can.util.functions
+@parent can.util
 @signature `can.buildFragment(html, node)`
 @param {String} html A string of HTML.
 @param {DOM Node} node A node used to access a document to make the fragment with.
@@ -431,7 +431,7 @@ The following lists how the NodeList is created by each library:
 /**
 @description Append content to elements.
 @function can.append
-@parent can.util.functions
+@parent can.util
 @signature `can.append(nodeList, html)`
 @param {NodeList} nodeList A nodelist of the elements to append content to.
 @param {String} html The HTML to append to the end of the elements in __nodeList__.
@@ -453,7 +453,7 @@ can.append( can.$('#demo'), 'Demos are fun!' );
 /**
 @description Remove elements from the DOM.
 @function can.remove
-@parent can.util.functions
+@parent can.util
 @signature `can.remode(nodeList)`
 @param {NodeList} nodeList A nodelist of elements to remove.
 
@@ -469,7 +469,7 @@ can.remove(can.$('#wrap')) //-> removes 'wrap'
 /**
 @description Associate data with or retrieve data from DOM nodes.
 @function can.data
-@parent can.util.functions
+@parent can.util
 @signature `can.data(nodeList, key, value)`
 @param {NodeList} nodeList The list of nodes to add this data to.
 @param {String} key The key to store this data under.
@@ -505,7 +505,7 @@ the _data_ method cannot be used on `object` (unless it's a Flash plugin), `appl
 /**
 @description Add a class to elements.
 @function can.addClass
-@parent can.util.functions
+@parent can.util
 @signature `can.addClass(nodeList, className)`
 @param {NodeList} nodeList The list of HTML elements to add the class to.
 @param {String} className The class to add.
@@ -544,7 +544,7 @@ This works similarly to [http://api.jquery.com/addClass/ jQuery.fn.addClass].
 /**
 @description Call a callback when a Deferred resolves.
 @function can.when
-@parent can.util.functions
+@parent can.util
 @signature `can.when(deferred)`
 @param {Deferred|Object} deferred The Deferred, AJAX, or normal Objects to call the callback on.
 @return {Deferred} __deferred__ if __deferred__ is a Deferred,
