@@ -1,4 +1,4 @@
-steal("can/util/fixture").then(function() {
+(function() {
 
 module("can/observe/attributes");
 
