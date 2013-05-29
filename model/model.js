@@ -7,7 +7,7 @@ steal('can/util','can/observe', function( can ) {
 	//  
 	// Generic deferred piping function
 	/**
-	 * @constructor can.Model
+	 * @add can.Model
 	 */
 	var	pipe = function( def, model, func ) {
 		var d = new can.Deferred();
