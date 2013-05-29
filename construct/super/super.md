@@ -10,6 +10,7 @@ functions from inside inheriting functions.
 @signature `_super([...args])`
 @param {...[*]} args parameters to pass to the base function
 
+@body
 With this plugin, functions that are inheriting from base functions
 are provided with a specialized `this._super` reference to the base
 function from which they inherit.

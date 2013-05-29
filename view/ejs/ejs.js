@@ -141,12 +141,6 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 		})
 	});
 
-	/**
-	 * @static
-	 * @param data
-	 * @param extras
-	 * @constructor
-	 */
 	EJS.Helpers = function( data, extras ) {
 		this._data = data;
 		this._extras = extras;
@@ -155,7 +149,7 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 
 	/**
 	 * @page can.EJS.Helpers Helpers
-	 * @parent can.EJS.static
+	 * @parent can.EJS
 	 *
 	 * @body
 	 * By adding functions to can.EJS.Helpers.prototype, those functions will be available in the

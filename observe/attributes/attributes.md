@@ -3,6 +3,8 @@
 @plugin can/observe/attributes
 @test can/observe/attributes/qunit.html
 @download http://donejs.com/can/dist/can.observe.attributes.js
+@group can.Observe.attributes.static static
+@group can.Observe.attributes.prototype prototype
 
 can.Observe.attributes is a plugin that helps convert and normalize data being set on an Observe
 and allows you to specify the way complex types get serialized. The attributes plugin is most
@@ -12,6 +14,7 @@ from.
 
 @body
 There are three important static properties to give the class you want to use attributes with:
+
 - `[can.Observe.attributes.static.attributes attributes]` lists the properties that will be normalized
 and the types those properties should be.
 - `[can.Observe.attributes.static.convert convert]` lists how to convert and normalize arbitrary values

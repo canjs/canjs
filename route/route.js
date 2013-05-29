@@ -346,7 +346,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		/**
 		 * @function can.route.link link
 		 * @parent can.route.static
-		 * @signature `link(innerText, options, props[, merge])
+		 * @signature `link(innerText, options, props[, merge])`
 		 * @param {Object} innerText The text inside the link.
 		 * @param {Object} options The data to populate the route with.
 		 * @param {Object} props Properties for the anchor other than `href`.

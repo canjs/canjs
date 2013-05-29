@@ -1209,7 +1209,7 @@ steal('can/util','can/observe', function( can ) {
    *     var todos = new Todo.List( [todo1, todo2] );
    *
    * ### Model Lists in `can.Model`
-   * [can.Model.static.findAll can.Model.findAll] or [can.Model.models] will
+   * [can.Model.findAll can.Model.findAll] or [can.Model.models] will
    * almost always be used to return a `can.Model.List` object, even though it
    * is possible to create new lists like below:
    *

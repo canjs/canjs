@@ -12,6 +12,7 @@ inside callbacks.
 @param {...[*]} args parameters to curry into the proxied functions
 @return {Function} a function that calls `callback` with the same context as the current context
 
+@body
 `can.Construct.prototype.proxy` takes a function and returns a new function that, when invoked,
 calls the given function with the same `this` as `proxy` was called with.
 
