@@ -1,5 +1,5 @@
 @page canjs CanJS
-@parent index 0
+@parent javascriptmvc 0
 
 @body
 
