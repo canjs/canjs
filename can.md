@@ -1,4 +1,4 @@
-@page canjs CanJS API
+@page canjs CanJS
 @parent index 0
 
 @body
