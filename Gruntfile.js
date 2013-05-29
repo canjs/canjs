@@ -144,6 +144,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
 
-	grunt.registerTask('build', ['builder', 'testify']);
-	grunt.registerTask('test', ['connect', 'build', 'qunit']);
+	grunt.registerTask('build', ['builder', 'testify', 'docco']);
+	grunt.registerTask('test', ['connect', 'builder', 'testify', 'qunit']);
 };
