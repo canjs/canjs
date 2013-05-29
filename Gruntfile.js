@@ -1,10 +1,6 @@
 module.exports = function (grunt) {
 
 	var _ = grunt.util._;
-	var shellOpts = {
-		stdout: true,
-		failOnError: true
-	};
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
@@ -93,6 +89,24 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+		amdify: {
+			options: {
+				steal: {
+					root: '../'
+				},
+				map: {
+					'can/util': 'can/util/library'
+				}
+			},
+			all: {
+				options: {
+					ids: ['can'].concat(_.keys(grunt.file.readJSON('builder.json').modules))
+				},
+				files: {
+					'dist/amd/': '.'
+				}
+			}
+		},
 		docco: {
 			dist: {
 				src: ['dist/*.js'],
@@ -144,6 +158,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
 
-	grunt.registerTask('build', ['builder', 'testify']);
-	grunt.registerTask('test', ['connect', 'build', 'qunit']);
+	grunt.registerTask('build', [ 'builder', 'docco', 'amdify' ]);
+	grunt.registerTask('test', [ 'connect', 'build', 'qunit' ]);
 };
