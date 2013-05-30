@@ -1,4 +1,4 @@
-(function() {
+(function(undefined) {
 module('can/observe')
 
 test("Basic Observe",9,function(){
@@ -821,6 +821,15 @@ test("Deferreds are not converted", function() {
 
 	ok(can.isDeferred(ob.attr('test')), 'Attribute is a deferred');
 	ok(!ob.attr('test')._cid, 'Does not have a _cid');
+});
+
+test("Setting property to undefined", function(){
+	var ob = new can.Observe({
+		"foo": "bar"
+	});
+	ob.attr("foo", undefined);
+
+	equal(ob.attr("foo"), undefined, "foo has a value.");
 });
 
 })();
