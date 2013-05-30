@@ -543,7 +543,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 			var type = typeof attr;
 			if ( type !== "string" && type !== "number" ) {
 				return this._attrs(attr, val)
-			} else if ( val === undefined ) {// If we are getting a value.
+			} else if ( arguments.length === 1 ) {// If we are getting a value.
 				// Let people know we are reading.
 				Observe.__reading && Observe.__reading(this, attr)
 				return this._get(attr)
