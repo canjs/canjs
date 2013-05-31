@@ -159,7 +159,8 @@ can.each([ can.Observe, can.Model ], function(clss){
 			"date": function( str ) {
 				var type = typeof str;
 				if ( type === "string" ) {
-					return isNaN(Date.parse(str)) ? null : Date.parse(str)
+					str = Date.parse(str);
+					return isNaN(str) ? null : new Date(str);
 				} else if ( type === 'number' ) {
 					return new Date(str)
 				} else {
