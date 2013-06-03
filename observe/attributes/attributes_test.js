@@ -93,6 +93,9 @@ var makeClasses= function(){
 test("default converters", function(){
 	var num = 1318541064012;
 	equal( can.Observe.convert.date(num).getTime(), num, "converted to a date with a number" );
+
+	var str = "Dec 25, 1995";
+	ok( can.Observe.convert.date(str) instanceof Date, "converted to a date with a string" );
 })
 
 test("basic observe associations", function(){
