@@ -3,6 +3,11 @@ module.exports = function (grunt) {
 	var _ = grunt.util._;
 	var builderJSON = grunt.file.readJSON('builder.json');
 	var pkg = grunt.file.readJSON('package.json');
+	var banner = _.template(builderJSON.banner, {
+		pkg: pkg,
+		ids: [ 'CanJS default build' ],
+		url: pkg.homepage
+	});
 
 	grunt.initConfig({
 		pkg: pkg,
@@ -98,7 +103,8 @@ module.exports = function (grunt) {
 				},
 				map: {
 					'can/util': 'can/util/library'
-				}
+				},
+				banner: banner
 			},
 			all: {
 				options: {
@@ -154,11 +160,7 @@ module.exports = function (grunt) {
 		},
 		uglify: {
 			options: {
-				banner: _.template(builderJSON.banner, {
-					pkg: pkg,
-					ids: [ 'CanJS default build' ],
-					url: pkg.homepage
-				})
+				banner: banner
 			},
 			all: {
 				files: {

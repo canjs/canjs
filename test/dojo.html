@@ -40,11 +40,11 @@
                 "can/model", "can/view", "can/view/ejs",
                 "can/control", "can/route", "can/control/route",
                 "can/view/mustache", "can/model/queue",
-                "can/construct/super", "can/observe/delegate",
-                "can/observe/setter", "can/observe/attributes",
-                "can/observe/validations", "can/observe/backup",
-                "can/util/object", "can/util/string",
-                "can/util/fixture")
+                "can/construct/super", "can/construct/proxy",
+                "can/observe/delegate", "can/observe/setter",
+                "can/observe/attributes", "can/observe/validations",
+                "can/observe/backup", "can/util/object",
+                "can/util/string", "can/util/fixture")
                 .then("can/test").then(
                 "can/construct/construct_test.js")
                 .then("can/observe/observe_test.js")
@@ -58,6 +58,7 @@
                 .then("can/view/mustache/mustache_test.js")
                 .then("can/model/queue/queue_test.js")
                 .then("can/construct/super/super_test.js")
+                .then("can/construct/proxy/proxy_test.js")
                 .then("can/observe/delegate/delegate_test.js")
                 .then("can/observe/setter/setter_test.js")
                 .then("can/observe/attributes/attributes_test.js")
