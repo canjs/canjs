@@ -29,7 +29,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 		attributes : {},
 		
 		/**
-		 * @property can.Observe.attributes.static.convert
+		 * @property can.Observe.attributes.static.convert convert
 		 * @parent can.Observe.attributes.static
 		 *
 		 * You often want to convert from what the observe sends you to a form more useful to JavaScript. 
