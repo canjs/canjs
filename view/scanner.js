@@ -448,7 +448,6 @@ Scanner.prototype = {
 			out = {
 				out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"
 			};
-			console.log(template)
 		// Use `eval` instead of creating a function, because it is easier to debug.
 		myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
 

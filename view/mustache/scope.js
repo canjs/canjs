@@ -1,4 +1,4 @@
-steal('can/construct','can/observe','can/view',function(Construct,Observe, can){
+steal('can/construct','can/observe','can/view','can/observe/compute',function(Construct,Observe, can){
 	
 	var isObserve = function(obj) {
 		return obj !== null && can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
@@ -11,7 +11,7 @@ steal('can/construct','can/observe','can/view',function(Construct,Observe, can){
 			this._parent = parent;
 		},
 		get: function(attr){
-			if(attr == "."){
+			if(attr == "." || attr == "this"){
 				return {value: this._data};
 			}
 			
@@ -28,6 +28,12 @@ steal('can/construct','can/observe','can/view',function(Construct,Observe, can){
 			while(scope){
 				
 				value = scope._data
+				
+				// if it's a compute, read the compute's value
+				if(can.isFunction(value) && value.isComputed) {
+					value = value();
+				}
+				
 				
 				if (typeof value !== 'undefined' && value !== null) {
 					for (j = 0; j < namesLength; j++) {

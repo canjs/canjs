@@ -44,6 +44,10 @@ steal('./scope','funcunit/qunit',function(Scope){
 		equal( cur.get(".").value, "foo", ". returns value");
 		
 		equal( cur.attr("."), "foo", ". returns value");
+		
+		equal( cur.get("this").value, "foo", "this returns value");
+		
+		equal( cur.attr("this"), "foo", "this returns value");
 	})
 	
 	test("highest scope observe is parent observe",function(){
@@ -57,6 +61,14 @@ steal('./scope','funcunit/qunit',function(Scope){
 		
 		equal(data.parent, parent, "gives highest parent observe")
 		equal(data.value, undefined, "no value")
+	})
+	
+	test("computes on scope",function(){
+		var base = new Scope({}),
+			cur = base.add(can.compute({name: {first: "justin"}}));
+			
+		var data = cur.get("name.first");
+		equal(data.value, "justin", "computes on path will be evaluted")
 	})
 	
 	
