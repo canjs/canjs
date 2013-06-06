@@ -1,7 +1,7 @@
 @page can.Observe.attributes attributes
 @parent can.Observe.plugins
 @plugin can/observe/attributes
-@test can/observe/attributes/qunit.html
+@test can/observe/attributes/test.html
 @download http://donejs.com/can/dist/can.observe.attributes.js
 @group can.Observe.attributes.static static
 @group can.Observe.attributes.prototype prototype

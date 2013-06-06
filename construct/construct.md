@@ -1,6 +1,6 @@
 @constructor can.Construct
 @download can/construct
-@test can/construct/qunit.html
+@test can/construct/test.html
 @parent canjs
 @group can.Construct.plugins plugins
 

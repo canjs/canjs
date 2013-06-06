@@ -1,7 +1,7 @@
 @constructor can.Model
 @parent canjs
 @download can/model
-@test can/model/qunit.html
+@test can/model/test.html
 
 @signature `can.Model([name,] staticProperties, instanceProperties)`
 Creates a can.Model class constructor. (See [can.Construct] for more details on this syntax.)

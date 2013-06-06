@@ -1,8 +1,7 @@
 @page can.Observe.backup backup
 @parent can.Observe.plugins
 @plugin can/observe/backup
-@test can/observe/backup/qunit.html
-@download http://donejs.com/can/dist/can.observe.backup.js
+@test can/observe/backup/test.html
 
 can.Observe.backup is a plugin that provides a dirty bit for properties on an Observe,
 and lets you restore the original values of an Observe's properties after they are changed.

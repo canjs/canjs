@@ -1,7 +1,7 @@
 @page can.Control.route 
 @parent can.Control.plugins
 @plugin can/control/route
-@test can/control/view/qunit.html
+@test can/control/view/test.html
 @download http://donejs.com/can/dist/can.control.route.js
 
 @body
