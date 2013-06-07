@@ -28,7 +28,7 @@ Within each feature folder, for example `construct`, you’ll find a file for:
 * a demo of the feature - `construct.html`
 * an overview documentation page - `construct.md`
 * the feature’s tests - `construct_test.js`
-* a page to run those tests - `qunit.html`
+* a page to run those tests - `test.html`
 
 Any plugins for that feature will be folders within the feature’s folder. Ex: `proxy`, `super`.
 
@@ -70,7 +70,7 @@ You can also post on the [Forums](https://forum.javascriptmvc.com/canjs) or talk
 
 Its important that all tests pass before sending a pull request.  TravisCI will determine if your commits pass the tests, but while your developing you can run the QUnit tests locally.  
 
-Open `~/can/test/test.html` in a web browser to run the tests locally.  Each module has its own tests too, you can run them by opening the `qunit.html` in each folder.
+Open `~/can/test/test.html` in a web browser to run the tests locally.  Each module has its own tests too, you can run them by opening the `test.html` in each folder.
 
 CanJS supports the following browsers:
 

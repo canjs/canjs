@@ -1,6 +1,6 @@
 @page can.fixture can.fixture
 @parent canjs
-@test can/util/fixture/qunit.html
+@test can/util/fixture/test.html
 @group can.fixture.plugins plugins
 
 

@@ -1,14 +1,17 @@
 module.exports = function (grunt) {
 
 	var _ = grunt.util._;
-	var shellOpts = {
-		stdout: true,
-		failOnError: true
-	};
+	var builderJSON = grunt.file.readJSON('builder.json');
+	var pkg = grunt.file.readJSON('package.json');
+	var banner = _.template(builderJSON.banner, {
+		pkg: pkg,
+		ids: [ 'CanJS default build' ],
+		url: pkg.homepage
+	});
 
 	grunt.initConfig({
-		pkg: grunt.file.readJSON('package.json'),
-		builderJSON: grunt.file.readJSON('builder.json'),
+		pkg: pkg,
+		builderJSON: builderJSON,
 		meta: {
 			out: "dist/",
 			beautifier: {
@@ -93,6 +96,25 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+		amdify: {
+			options: {
+				steal: {
+					root: '../'
+				},
+				map: {
+					'can/util': 'can/util/library'
+				},
+				banner: banner
+			},
+			all: {
+				options: {
+					ids: ['can'].concat(_.keys(grunt.file.readJSON('builder.json').modules))
+				},
+				files: {
+					'dist/amd/': '.'
+				}
+			}
+		},
 		docco: {
 			dist: {
 				src: ['dist/*.js'],
@@ -135,15 +157,30 @@ module.exports = function (grunt) {
 					]
 				}
 			}
+		},
+		uglify: {
+			options: {
+				banner: banner
+			},
+			all: {
+				files: {
+					'dist/can.jquery.min.js': 'dist/can.jquery.js',
+					'dist/can.zepto.min.js': 'dist/can.zepto.js',
+					'dist/can.mootools.min.js': 'dist/can.mootools.js',
+					'dist/can.dojo.min.js': 'dist/can.dojo.js',
+					'dist/can.yui.min.js': 'dist/can.yui.js'
+				}
+			}
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
 
-	grunt.registerTask('build', ['builder', 'testify', 'docco']);
+	grunt.registerTask('build', ['builder', 'testify', 'amdify', 'uglify', 'docco']);
 	grunt.registerTask('test', ['connect', 'builder', 'testify', 'qunit']);
 };

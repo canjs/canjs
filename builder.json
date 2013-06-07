@@ -71,6 +71,11 @@
 			"type": "plugin",
 			"description": "Call super methods"
 		},
+		"can/construct/proxy": {
+			"name": "can.Construct.proxy",
+			"type": "plugin",
+			"description": "Proxy construct methods"
+		},
 		"can/observe/delegate": {
 			"name": "can.Observe.delegate",
 			"type": "plugin",

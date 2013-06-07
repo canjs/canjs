@@ -2,7 +2,7 @@
 @group can.route.static static
 @inherits can.Observe
 @download can/route
-@test can/route/qunit.html
+@test can/route/test.html
 @parent canjs
 
 can.route is a plugin that helps manage browser history and

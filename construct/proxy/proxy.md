@@ -1,6 +1,6 @@
 @page can.Construct.proxy
 @parent can.Construct.plugins
-@test can/construct/proxy/qunit.html
+@test can/construct/proxy/test.html
 @download http://donejs.com/can/dist/can.construct.proxy.js
 
 can.Construct.proxy is a plugin that helps you manage scope when creating

@@ -2,7 +2,7 @@
 @parent canjs
 @group can.Mustache.pages Pages
 
-@test can/view/mustache/test/qunit.html
+@test can/view/mustache/test/test.html
 @plugin can/view/mustache
 @download http://canjs.us/release/latest/can.view.mustache.js
 

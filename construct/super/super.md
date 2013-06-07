@@ -1,7 +1,7 @@
 @page can.Construct.super
 @parent can.Construct.plugins
 @plugin can/construct/super
-@test can/construct/super/qunit.html
+@test can/construct/super/test.html
 @download http://donejs.com/can/dist/can.construct.super.js
 
 can.Construct.super is a plugin that makes it easier to call base
