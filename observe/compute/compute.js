@@ -357,7 +357,7 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 				value = computedData.value;
 			}
 			off = function(){
-				computedData.teardown();
+				computedData && computedData.teardown();
 			}
 		} else if(context) {
 			
