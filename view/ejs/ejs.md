@@ -88,9 +88,9 @@ helpful, but it does nothing fancy.
 Next, turn your teacher into a `new can.Observe(object)` and pass
 that to `can.view`:
 
-    var teacher = can.Observe({
+    var teacher = new can.Observe({
       name : "Mr. Smith",
-      grade : "a"
+      grade : "a",
       students : [
         {name : "Suzy"},
         {name : "Payal"},
