@@ -41,7 +41,7 @@ Next, create a teacher and use can.view to render the template:
     };
     
     document.getElementById('teacher')
-      .appendChild( can.view("teacherEjs", teacher) )
+      .appendChild( can.view("teacherEJS", teacher) )
 
 This results in HTML like:
 
@@ -100,7 +100,7 @@ that to `can.view`:
     });
     
     document.getElementById('teacher')
-      .appendChild( can.view("teacherEjs", teacher) );
+      .appendChild( can.view("teacherEJS", teacher) );
       
 Finally, update some properties of teacher and slap your 
 head with disbelief ...
