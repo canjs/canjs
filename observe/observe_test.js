@@ -832,4 +832,15 @@ test("Setting property to undefined", function(){
 	equal(ob.attr("foo"), undefined, "foo has a value.");
 });
 
+test("removing list items containing computes", function(){
+	var list = new can.Observe.List([{
+        comp: can.compute(function(){
+            return false;
+        })
+    }]);
+	list.pop();
+
+	equal(list.length, 0, "list is empty");
+});
+
 })();
