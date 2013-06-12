@@ -56,12 +56,11 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 	 * @body
 	 * 
 	 * `can.Model.Collection` is a high level class for managing item collections. It combines
-	 * the observable `params` and the model instances `list` under one system. This allows
-	 * easier and less verbose management of requests and returned items.
+	 * the observable `params` and the model instances `list` under one object.
 	 *
-	 * `can.Model.Collection` uses model's `findAll` function to make the request:
+	 * `can.Model.Collection` uses model's `findAll` function to make a request:
 	 *
-	 *     var collection = new Image.Collection
+	 *     var collection = new Image.Collection();
 	 *     collection.load() // uses Image.findAll function
 	 *
 	 * `can.Model.Collection` instance exposes the following API:
@@ -70,17 +69,18 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 	 * - `collectionInstance.params` - reference to the `params` observe
 	 * - `collectionInstance.list`   - list of the loaded model instances
 	 * - `collectionInstance.errors` - observe object containing any errors that happened during request
+	 * - `collection.count()`        - total count of items in the collection, set from the `list.count` expando
 	 * 
-	 * `can.Model.Collection` can work in two modes:
+	 * `can.Model.Collection` works in two modes:
 	 *
-	 * 1. Auto mode
-	 * 2. Manual mode
+	 * 1. Auto mode   - makes request on the param change
+	 * 2. Manual mode - requires explicit call to the `load` function to make the request
 	 *
 	 * ## Auto mode
 	 *
 	 * This is a default mode, and it will make request on any `params` attribute change:
 	 *
-	 *     var collection = new Image.Collection;
+	 *     var collection = new Image.Collection();
 	 *     collection.params.attr({foo: 'bar'}); // this will cause a new request
 	 *
 	 * In this mode `can.Model.Collection` will wait amount of miliseconds defined in the `debounce`
@@ -88,7 +88,7 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 	 *
 	 * ## Manual mode
 	 *
-	 * In this mode every request has to be done manually:
+	 * In this mode every request is done manually:
 	 *
 	 *     var collection = new Image.Collection({}, {autoLoad: false});
 	 *     collection.params.attr({foo: 'bar'}); // nothing happens
@@ -97,23 +97,23 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 	 * ## Data treatment
 	 *
 	 * Default behavior of the `can.Model.Collection` is to replace the existing list data with the
-	 * new items sent from the API. If you need to customize this behavior, `can.Model.Collection` 
-	 * you can override the default `can.Model.Collection.prototype.loaded` function. 
+	 * new items sent from the API. If there's a need to customize this behavior, 
+	 * `can.Model.Collection.prototype.loaded` function can be overriden.
 	 *
-	 * `can.Model.Collection` keeps track of any params changed between requests to make it easier
-	 * to decide how should new data be handled.
+	 * `can.Model.Collection` keeps track of any param changes between. This can be used to treat the 
+	 * data differently based on the changes to the params.
 	 *
-	 * Let's consider an example with this business rules:
+	 * Let's consider an example with the following business rules:
 	 *
 	 * 1. Display a list of contacts
-	 * 2. When user scrolls to the bottom of the list, load a new page and append items to the list
-	 * 3. When user applies filters, replace current items
+	 * 2. When user scrolls to the bottom of the list, load a new page and append the items to the list
+	 * 3. When user applies the filter, replace the current items in the list
 	 *
-	 * This can be implemented easy with the `can.Model.Collection`:
+	 * With the `can.Model.Collection` it would be implemented like this:
 	 *
 	 *     var Contact = can.Model({});
 	 *     Contact.Collection = can.Model.Collection({
-	 *         loaded : function(data, changedParamAttrs, paramsDiff){
+	 *         loaded : function(data, changedParamAttrs, paramsDiff, req){
 	 *             if(changedParamAttrs.length === 1 && changedParamAttrs[0] === 'offset'){
 	 *                 this.list.push.apply(this.list, data); // append data to the list
 	 *             } else {
@@ -124,8 +124,8 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 	 *
 	 * ## Params
 	 *
-	 * By default `can.Observe` object is used to handle the `params`. `can.Observe.prototype.serialize`
-	 * is used to serialize params object. If you need a different serialization behavior, it is easy to 
+	 * `can.Observe` object is used to handle the `params`. `can.Observe.prototype.serialize` is used 
+	 * to serialize the params object. If there's a need for a different serialization behavior, it is easy to 
 	 * change it:
 	 *
 	 *     var Contact = can.Model({});
@@ -139,9 +139,8 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 	 * 
 	 * ## Errors
 	 *
-	 * By default any errors returned from the API will be stored in the `can.Observe` object.
-	 * If you need a different behavior, `can.Model.Collection` gives you a way to define a different
-	 * object:
+	 * Any errors returned from the API will be stored in the `can.Observe` object. If there's a need for a 
+	 * different behavior, `can.Model.Collection.Errors` property can be set to a different object:
 	 *
 	 *     var Contact = can.Model({});
 	 *     Contact.Collection.Errors = can.Observe({
@@ -150,16 +149,16 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 	 *         }
 	 *     });
 	 *
-	 * You could change collection to use `can.Observe.List` : 
+	 * To use the `can.Observe.List` for the errors it can be set like this: 
 	 *
 	 *     var Contact = can.Model({});
 	 *     Contact.Collection.Errors = can.Observe.List;
 	 *
-	 * When assigning errors, `can.Models.Collection` knows if it's working with the `can.Observe` or
+	 * When assigning errors, `can.Model.Collection` knows if it's working with the `can.Observe` or
 	 * the `can.Observe.List` object and will set the data accordingly.
 	 *
-	 * If you need to customize how the errors are parsed from the API response you can override the 
-	 * `can.Model.Collection.prototype.errored` function:
+	 * To customize how the errors are parsed from the API response 
+	 * `can.Model.Collection.prototype.errored` function can be overriden:
 	 *
 	 *     var Contact = can.Model({});
 	 *     Contact.Collection = can.Model.Collection({
@@ -255,7 +254,6 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 		 *     collection.load() // make the first request
 		 *     collection.params.attr({offset: 50, baz: 'qux'}, true);
 		 *     collection.load() // make second request
-		 *     collection.count() // total count of items in the collectio, set from the list.count expando
 		 *
 		 * When second request is done, and `loaded` is called it will have following arguments passed 
 		 * to it:
@@ -282,7 +280,6 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 		 *         }
 		 *     }
 		 *
-		 * This allows you to make a decision how to handle data based on the params changes.
 		 */
 		loaded : function(data, changedParamAttrs, paramDiff, req){
 			this.list.replace(data);
@@ -294,8 +291,8 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 		 * @param {{}} req request object
 		 *
 		 * @body
-		 * This function is called when the API returns an error. Overriding it allows you to
-		 * handle errors in a way that your API expects.
+		 * This function is called when the API returns an error. Overriding it allows handling
+		 * errors in a way that is compatible with the API.
 		 *
 		 */
 		errored : function(req){
