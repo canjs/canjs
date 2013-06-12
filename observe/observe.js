@@ -23,9 +23,9 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		// `parent` - The parent object of prop.
 		// `ob` - (optional) The Observe object constructor
 		// `list` - (optional) The observable list constructor
-		hookupBubble = function( child, prop, parent, Ob, List ) {
-			Ob = Ob || Observe;
-			List = List || Observe.List;
+		hookupBubble = function( child, prop, parent) {
+			var Ob = parent.constructor.Observe || Observe;
+			var List = (parent.constructor instanceof Observe.List && parent.constructor) || Observe.List;
 
 			// If it's an `array` make a list, otherwise a child.
 			if (child instanceof Observe){
@@ -129,6 +129,8 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		unbind: can.unbindAndTeardown,
 		id: "id",
 		canMakeObserve : canMakeObserve,
+		hookupBubble: hookupBubble,
+		unhookup: unhookup,
 		// starts collecting events
 		// takes a callback for after they are updated
 		// how could you hook into after ejs
@@ -1182,21 +1184,29 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 			var args = can.makeArray(arguments),
 				i;
 
-			for ( i = 2; i < args.length; i++ ) {
-				var val = args[i];
-				if ( canMakeObserve(val) ) {
-					args[i] = hookupBubble(val, "*", this, this.constructor.Observe, this.constructor)
-				}
-			}
 			if ( howMany === undefined ) {
 				howMany = args[1] = this.length - index;
 			}
-			var removed = splice.apply(this, args);
+			
 			can.Observe.startBatch();
+			
 			if ( howMany > 0 ) {
+				var removed = [].slice.call(this,+args[0],+args[0]+howMany);
 				this._triggerChange(""+index, "remove", undefined, removed);
-				unhookup(removed, this._cid);
+				this.constructor.unhookup(removed, this._cid, index, this);
 			}
+			for ( i = 2; i < args.length; i++ ) {
+				var val = args[i];
+				if ( canMakeObserve(val) ) {
+					args[i] = this.constructor.hookupBubble(val, "*", this, (i-2)+this.length)
+				}
+			}
+			
+			
+			var removed = splice.apply(this, args);
+			
+			
+			
 			if ( args.length > 2 ) {
 				this._triggerChange(""+index, "add", args.slice(2), removed);
 			}
@@ -1427,7 +1437,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 			while(i--){
 				val = arguments[i];
 				args[i] =  canMakeObserve(val) ?
-					hookupBubble(val, "*", this, this.constructor.Observe, this.constructor) :
+					this.constructor.hookupBubble(val, "*", this, len+i) :
 					val;
 			}
 			
