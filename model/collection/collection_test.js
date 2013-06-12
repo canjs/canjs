@@ -10,6 +10,12 @@ var store = can.fixture.store(100, function(i){
 		title : "Image " + i,
 		url: 'image/url/' + i
 	}
+}, function(image, req){
+	var filter = req.data && req.data.filter;
+	if(filter){
+		return image.id % filter === 0;
+	}
+	return true;
 });
 
 can.fixture({
@@ -164,6 +170,19 @@ test('Params diffs are calculated correctly even after first request is aborted'
 			}
 		}, 'Diff is calculated correctly');
 	}
+})
+
+test('Count is set correctly', 1, function(){
+	var collection = new ImageModel.Collection({filter: 3}, {autoLoad : false}),
+		req;
+
+	stop();
+
+	req = collection.load();
+	req.done(function(){
+		start();
+		equal(collection.count(), 33, 'Correct count')
+	})
 })
 
 

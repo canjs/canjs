@@ -187,6 +187,7 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 			this.list      = new this.constructor.Model.List;
 			this.errors    = new this.constructor.Errors;
 			this.isLoading = can.compute(null);
+			this.count     = can.compute(null);
 
 			this._prevParamsDiff    = {};
 			this._currentParamsDiff = {};
@@ -206,7 +207,7 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 		 * Triggers an AJAX request to load the data with the current params.
 		 */
 		load : function(){
-			var paramsDiff = this._currentParamsDiff;
+			var paramsDiff = this._currentParamsDiff, req;
 
 			clearTimeout(this._reqTimeout);
 
@@ -215,7 +216,7 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 				this._currentReq.abort();
 			}
 
-			this._currentReq = this.constructor.Model.findAll(this.params.serialize()),
+			req = this._currentReq = this.constructor.Model.findAll(this.params.serialize()),
 
 			this._prevParamsDiff    = paramsDiff;
 			this._currentParamsDiff = {};
@@ -223,7 +224,8 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 			this._currentReq.always(can.proxy(this._resetState, this));
 
 			this._currentReq.done(can.proxy(function(data){
-				this.loaded(data, can.map(paramsDiff, function(v, k){ return k }), paramsDiff);
+				this.count(data.count);
+				this.loaded(data, can.map(paramsDiff, function(v, k){ return k }), paramsDiff, req);
 			}, this));
 
 			this._currentReq.fail(can.proxy(this.errored, this));
@@ -239,6 +241,7 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 		 * @param {can.Model.List} data data returned from the API
 		 * @param {Array} changedParamAttrs array of param attrs changed since the last request
 		 * @param {{}} paramDiff object containing how params were changed since the last request
+		 * @param {{}} req request object
 		 *
 		 * @body
 		 * This function is called when data is returned from the API. Default behavior is to replace
@@ -252,6 +255,7 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 		 *     collection.load() // make the first request
 		 *     collection.params.attr({offset: 50, baz: 'qux'}, true);
 		 *     collection.load() // make second request
+		 *     collection.count() // total count of items in the collectio, set from the list.count expando
 		 *
 		 * When second request is done, and `loaded` is called it will have following arguments passed 
 		 * to it:
@@ -280,7 +284,7 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 		 *
 		 * This allows you to make a decision how to handle data based on the params changes.
 		 */
-		loaded : function(data, changedParamAttrs, paramDiff){
+		loaded : function(data, changedParamAttrs, paramDiff, req){
 			this.list.replace(data);
 		},
 		/**
