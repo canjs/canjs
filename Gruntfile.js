@@ -11,25 +11,14 @@ module.exports = function (grunt) {
 
 	grunt.initConfig({
 		pkg: pkg,
-		builderJSON: builderJSON,
-		meta: {
-			out: "dist/",
-			beautifier: {
-				options: {
-					indentSize: 1,
-					indentChar: "\t"
-				},
-				exclude: [/\.min\./, /qunit\.js/]
-			}
-		},
 		testify: {
 			libs: {
 				template: 'test/templates/__configuration__.html.ejs',
-				builder: '<%= builderJSON %>',
+				builder: builderJSON,
 				root: '../',
 				out: 'test/',
 				transform: {
-					options: function (config) {
+					options: function () {
 						this.steal.map = (this.steal && this.steal.map) || {};
 						this.steal.map['*'] = this.steal.map['*'] || {};
 						this.steal.map['*']['can/'] = '';
@@ -39,24 +28,24 @@ module.exports = function (grunt) {
 			},
 			dist: {
 				template: 'test/templates/__configuration__-dist.html.ejs',
-				builder: '<%= builderJSON %>',
+				builder: builderJSON,
 				root: '../../',
 				out: 'test/dist/',
 				transform: {
-					'module': function (definition, name) {
+					module: function (definition) {
 						if (!definition.isDefault) {
 							return definition.name.toLowerCase();
 						}
 						return null;
 					},
 
-					'test': function (definition, key) {
+					test: function (definition, key) {
 						var name = key.substr(key.lastIndexOf('/') + 1);
 						var path = key.replace('can/', '') + '/';
 						return path + name + '_test.js';
 					},
 
-					'options': function (config) {
+					options: function (config) {
 						return {
 							dist: 'can.' + config
 						}
@@ -65,7 +54,7 @@ module.exports = function (grunt) {
 			},
 			amd: {
 				template: 'test/templates/__configuration__-amd.html.ejs',
-				builder: '<%= builderJSON %>',
+				builder: builderJSON,
 				root: '../..',
 				out: 'test/amd/'
 			}
@@ -76,8 +65,8 @@ module.exports = function (grunt) {
 				pluginify: {
 					ignore: [ /\/lib\//, /util\/dojo-(.*?).js/ ]
 				},
-				pkg: "<%= pkg %>",
-				builder: "<%= builderJSON %>",
+				pkg: pkg,
+				builder: builderJSON,
 				steal: {
 					map: {
 						'*': {
@@ -108,7 +97,7 @@ module.exports = function (grunt) {
 			},
 			all: {
 				options: {
-					ids: ['can'].concat(_.keys(grunt.file.readJSON('builder.json').modules))
+					ids: ['can'].concat(_.keys(builderJSON.modules))
 				},
 				files: {
 					'dist/amd/': '.'
@@ -128,7 +117,7 @@ module.exports = function (grunt) {
 				repo: 'canjs',
 				user: 'bitovi',
 				milestone: 7,
-				version: '<%= pkg.version %>'
+				version: pkg.version
 			}
 		},
 		connect: {
@@ -171,6 +160,25 @@ module.exports = function (grunt) {
 					'dist/can.yui.min.js': 'dist/can.yui.js'
 				}
 			}
+		},
+		'string-replace': {
+			version: {
+				options: {
+					replacements: [
+						{
+							pattern: /@EDGE/gim, //version property
+							replacement: pkg.version
+						}
+					]
+				},
+				files: [
+					{
+						src: 'dist/**/*.js',
+						dest: './',
+						cwd: './'
+					}
+				]
+			}
 		}
 	});
 
@@ -181,6 +189,10 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
 
-	grunt.registerTask('build', ['builder', 'testify', 'amdify', 'uglify', 'docco']);
+	grunt.registerTask('build', ['builder', 'amdify', 'uglify', 'docco']);
 	grunt.registerTask('test', ['connect', 'builder', 'testify', 'qunit']);
+	grunt.registerTask('default', ['build']);
+
+	// TODO possibly use grunt-release
+	grunt.registerTask('release', ['build', 'string-replace', 'test']);
 };
