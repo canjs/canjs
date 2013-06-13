@@ -1,90 +1,93 @@
 steal('can/util','can/observe','./nested_reference',function(can){
 	
-var canMakeObserve = function( obj ) {
+	var canMakeObserve = function( obj ) {
+		// returns `true` if something should/could be converted to can.Observe
 		return obj && !can.isDeferred(obj) && (can.isArray(obj) || can.isPlainObject( obj ) || ( obj instanceof can.Observe ));
 	},
-	convertAndWireUp = function(){
-		
-	},
-	makeObserve = function(child, parent){
-		if (child instanceof can.Observe){
-			// We have an `observe` already...
-			// Make sure it is not listening to this already
-			// It's only listening if it has bindings already.
-			parent._bindings && unhookup([child], parent._cid);
-		} else if ( can.isArray(child) ) {
-			child = new can.LazyList(child);
-		} else if( canMakeObserve(child) ) {
-			child = new can.LazyMap(child);
-		}
-		return child;
-	}
-	attrParts = function(attr, keepKey) {
-		if(keepKey) {
-			return [attr];
-		}
-		return can.isArray(attr) ? attr : (""+attr).split(".");
-	},
-	isObserve = function(obj){
-		return obj instanceof can.Observe	
-	},
+		convertAndWireUp = function(){
+			
+		},
+		makeObserve = function(child, parent){
+			if (child instanceof can.Observe){
+				// We have an `observe` already...
+				// Make sure it is not listening to this already
+				// It's only listening if it has bindings already.
+				parent._bindings && unhookup([child], parent._cid);
+			} else if ( can.isArray(child) ) {
+				// else if array create LazyList
+				child = new can.LazyList(child);
+			} else if( canMakeObserve(child) ) {
+				// or try to make LazyMap
+				child = new can.LazyMap(child);
+			} 
+			return child;
+		},
+		attrParts = function(attr, keepKey) {
+			if(keepKey) {
+				return [attr];
+			}
+			// break attr path into array
+			return can.isArray(attr) ? attr : (""+attr).split(".");
+		},
+		isObserve = function(obj){
+			return obj instanceof can.Observe	
+		},
 		bindToChildAndBubbleToParent = function(child, ref, parent){
+			// binds on child and triggers event on parent --> bubbles events from child to parent
 			child.bind("change" + parent._cid, 
-				function( /* ev, attr */ ) {
-				// `batchTrigger` the type on this...
-				var args = can.makeArray(arguments),
-					ev = args.shift();
-					args[0] = [ ref(), args[0]].join(".");
+					   function( /* ev, attr */ ) {
+						   // `batchTrigger` the type on this...
+						   var args = can.makeArray(arguments),
+							   ev = args.shift();
 
-				// track objects dispatched on this observe		
-				ev.triggeredNS = ev.triggeredNS || {};
+						   // update path
+						   args[0] = [ ref(), args[0]].join(".");
 
-				// if it has already been dispatched exit
-				if (ev.triggeredNS[parent._cid]) {
-					return;
-				}
+						   // track objects dispatched on this observe		
+						   ev.triggeredNS = ev.triggeredNS || {};
 
-				ev.triggeredNS[parent._cid] = true;
-				// send change event with modified attr to parent	
-				can.trigger(parent, ev, args);
-				// send modified attr event to parent
-				//can.trigger(parent, args[0], args);
-			});
+						   // if it has already been dispatched exit
+						   if (ev.triggeredNS[parent._cid]) {
+							   return;
+						   }
+
+						   ev.triggeredNS[parent._cid] = true;
+						   // send change event with modified attr to parent	
+						   can.trigger(parent, ev, args);
+						   // send modified attr event to parent
+						   //can.trigger(parent, args[0], args);
+					   });
 		},
 		unhookup = function(items, namespace){
+			// unbind listeners on `items`
 			return can.each(items, function(item){
 				if(item && item.unbind){
 					item.unbind("change" + namespace);
 				}
 			});
-		}
-	
-	var makeBindSetup = function(wildcard){
-		return function(){
-			var parent = this;
-			can.each(this._nestedObserves, function(child, prop){
-				if(child && child.bind){
-					bindToChildAndBubbleToParent(child, wildcard || prop, parent)
-				}
-			})
+		},
+		makeBindSetup = function(wildcard){
+			return function(){
+				var parent = this;
+				can.each(this._nestedObserves, function(child, prop){
+					if(child && child.bind){
+						bindToChildAndBubbleToParent(child, wildcard || prop, parent)
+					}
+				})
+			};
 		};
-	}
 	
 	can.LazyMap = can.Observe({
-		setup: function(obj){
+		setup: function( obj ) {
+			// keep 'plain' object in `_data` 
 			this._data = obj;
-			/**
-			 * @attribute {Object.<String,{child:can.LazyMap,indexedParent:can.LazyMap}>}
-			 * 
-			 */
+			
+			// keep references to Observes in `_data`
 			this._nestedReference = new can.NestedReference(this._data);
-			/**
-			 * @attribute _cid
-			 *
-			 * A globally unique ID for this Observe instance.
-			 */
+			
 			// The namespace this `object` uses to listen to events.
 			can.cid(this, ".observe");
+			
 			// Sets all `attrs`.
 			this._init = 1;
 			this.bind('change'+this._cid,can.proxy(this._changes,this));
@@ -92,6 +95,8 @@ var canMakeObserve = function( obj ) {
 		},
 		_bindsetup: function(){
 			var parent = this;
+
+			// Bind on all nested observes in reference list.
 			this._nestedReference.each(function(child, ref){
 				if(child && child.bind){
 					bindToChildAndBubbleToParent(child, ref, parent)
@@ -100,30 +105,40 @@ var canMakeObserve = function( obj ) {
 		},
 		_bindteardown: function(){
 			var cid = this._cid;
+
+			// Remove bindings from all nested observes in reference list.
 			this._nestedReference.each(function(child, ref){
 				unhookup([child], cid)
 			})
 		},
+
+		// todo: function should be renamed
 		_addChild: function(path, newChild, setNewChild){
 			var self = this;
+
+			// remove 'old' references that are starting with `path` and do rewiring
 			this._nestedReference.removeChildren(path, function(oldChild, oldChildPath){
+				// unhook every current child on path
 				unhookup(oldChild, self._cid);
+				// if `newChild` passed bind it to every child and make references (1st step: rewiring to bottom/children)
 				if(newChild){
 					var newChildPath = oldChildPath.replace(path+".","");
 					var reference = newChild._nestedReference.make( newChildPath );
 					self._bindings && bindToChildAndBubbleToParent(oldChild, reference, newChild);
 				}
 			})
-			
+
+			// callback
 			setNewChild && setNewChild()
 			
-			// child should bubble to us
+			// bind parent on `newChild` and make reference (2st step: rewiring to top/parent)
 			if(newChild){
 				var reference = this._nestedReference.make( path );
 				this._bindings && bindToChildAndBubbleToParent(newChild, reference,this);
 			}
 			return newChild;
 		},
+		
 		removeAttr: function( attr ) {
 			var data = this._goto(attr);
 			// if there are more attr parts remaining, it means we
@@ -155,12 +170,13 @@ var canMakeObserve = function( obj ) {
 				prev,
 				path = [],
 				part;
+			
 			while(cur && !isObserve(cur) && parts.length){
 				part !== undefined && path.push(part)
 				prev = cur;
-				cur = cur[part = parts.shift()];
-				
+				cur = cur[part = parts.shift()];				
 			}
+			
 			return {
 				parts: parts,
 				prop: part,
@@ -169,22 +185,26 @@ var canMakeObserve = function( obj ) {
 				path: path
 			}
 		},
-			// Reads a property from the `object`.
+		// Reads a property from the `object`.
 		_get: function( attr ) {
 			var data = this._goto(attr);
+
+			// if it's already observe return it
 			if(isObserve(data.value)){
 				if(data.parts.length){
 					return data.value._get(data.parts)	
 				} else {
 					return data.value;	
 				}
-			} else if(data.value && typeof data.value == "object"){
+			} else if (data.value && typeof data.value == "object"){
+				// if object create LazyMap/LazyList
 				var converted;
 				if(can.isArray(data.value)){
 					converted = new can.LazyList(data.value)
 				} else {
 					converted = new can.LazyMap(data.value)	
 				}
+				// ... and replace it 
 				this._addChild(attr, converted, function(){
 					data.parent[data.prop] = converted;
 				})
@@ -193,7 +213,7 @@ var canMakeObserve = function( obj ) {
 				return data.value;	
 			}
 		},
-				// Reads a property directly if an `attr` is provided, otherwise
+		// Reads a property directly if an `attr` is provided, otherwise
 		// returns the "real" data object itself.
 		__get: function( attr ) {
 			return attr ? this._data[attr] : this._data;
@@ -213,7 +233,7 @@ var canMakeObserve = function( obj ) {
 			}
 		},
 		__set : function(prop, value, current, data){
-		
+			
 			// Otherwise, we are setting it on this `object`.
 			// TODO: Check if value is object and transform
 			// are we changing the value.
@@ -247,9 +267,7 @@ var canMakeObserve = function( obj ) {
 				}
 				// `batchTrigger` the change event.
 				this._triggerChange(prop, changeType, value, current);
-
 			}
-
 		},
 		// Directly sets a property on this `object`.
 		___set: function( prop, val, data ) {
@@ -267,15 +285,16 @@ var canMakeObserve = function( obj ) {
 		 */
 		_attrs: function( props, remove ) {
 
-			if ( props === undefined ) {
-				return serialize(this, 'attr', {})
+			if ( props === undefined ) {	
+			return serialize(this, 'attr', {})
 			}
 
 			props = can.extend({}, props);
 			var prop,
 				self = this,
 				newVal;
-			Observe.startBatch();
+			can.Observe.startBatch();
+
 			this.each(function(curVal, prop){
 				newVal = props[prop];
 
@@ -292,10 +311,10 @@ var canMakeObserve = function( obj ) {
 				// if we're dealing with models, want to call _set to let converter run
 				if( newVal instanceof can.Observe ) {
 					self.__set(prop, newVal, curVal)
-				// if its an object, let attr merge
+					// if its an object, let attr merge
 				} else if ( canMakeObserve(curVal) && canMakeObserve(newVal) && curVal.attr ) {
 					curVal.attr(newVal, remove)
-				// otherwise just set
+					// otherwise just set
 				} else if ( curVal != newVal ) {
 					self.__set(prop, newVal, curVal)
 				}
@@ -307,78 +326,76 @@ var canMakeObserve = function( obj ) {
 				newVal = props[prop];
 				this._set(prop, newVal, true)
 			}
-			Observe.stopBatch()
+			can.Observe.stopBatch()
 			return this;
 		}
 	});
 	
 	
 	can.LazyList = can.Observe.List(
-	{
-		hookupBubble: function( child, prop, parent, indexHint ) {
-			var Ob = parent.constructor.Observe || can.LazyMap;
-			var List = (parent.constructor instanceof can.Observe.List && parent.constructor) || can.LazyList;
-
-			// If it's an `array` make a list, otherwise a child.
-			if (child instanceof can.Observe){
-				// We have an `observe` already...
-				// Make sure it is not listening to this already
-				// It's only listening if it has bindings already.
-				parent._bindings && unhookup([child], parent._cid);
-			} else if ( can.isArray(child) ) {
-				child = new can.LazyList(child);
-			} else {
-				child = new can.LazyMap(child);
-			}
-			
-			// add reference manually
-			
-			var reference = function(){
-				return ""+parent.indexOf(child)
-			};
-			
-			parent._nestedReference.references.push(reference)
-			
-			
-			// only listen if something is listening to you
-			if(parent._bindings){
-				// Listen to all changes and `batchTrigger` upwards.
-				bindToChildAndBubbleToParent(child, reference, parent)
-			}
-			
-
-			return child;
-		},
-		unhookup: function(items, namespace, index, parent){
-			return can.each(items, function(item){
-				if(item && item.unbind){
-					item.unbind("change" + namespace);
+		{
+			hookupBubble: function( child, prop, parent, indexHint ) {
+				var Ob = parent.constructor.Observe || can.LazyMap;
+				var List = (parent.constructor instanceof can.Observe.List && parent.constructor) || can.LazyList;
+				
+				// If it's an `array` make a list, otherwise a child.
+				if (child instanceof can.Observe){
+					// We have an `observe` already...
+					// Make sure it is not listening to this already
+					// It's only listening if it has bindings already.
+					parent._bindings && unhookup([child], parent._cid);
+				} else if ( can.isArray(child) ) {
+					child = new can.LazyList(child);
+				} else {
+					child = new can.LazyMap(child);
 				}
-			});
-			for(var i = index; i < index+items.length; i++){
-				// unbinds everything
-				parent._addChild(""+i)
+				
+				// add reference manually
+				
+				var reference = function(){
+					return ""+parent.indexOf(child)
+				};
+				
+				parent._nestedReference.references.push(reference)
+				
+				
+				// only listen if something is listening to you
+				if(parent._bindings){
+					// Listen to all changes and `batchTrigger` upwards.
+					bindToChildAndBubbleToParent(child, reference, parent)
+				}
+				
+
+				return child;
+			},
+			unhookup: function(items, namespace, index, parent){
+				return can.each(items, function(item){
+					if(item && item.unbind){
+						item.unbind("change" + namespace);
+					}
+				});
+				for(var i = index; i < index+items.length; i++){
+					// unbinds everything
+					parent._addChild(""+i)
+				}				
 			}
-			
-		},
-	},
-	{
-		setup: function( instances, options ) {
-			this._nestedReference = new can.NestedReference(this);
-			can.Observe.List.prototype.setup.apply(this,arguments)
-		},
-		removeAttr: can.LazyMap.prototype.removeAttr,
-		_bindsetup: can.LazyMap.prototype._bindsetup,
-		_bindteardown: can.LazyMap.prototype._bindteardown,
-		_addChild: can.LazyMap.prototype._addChild,
-		___set : function(attr, val){
-			if(data){
-				data.parent[data.prop] = value;
-			} else {
-				return can.Observe.List.prototype.___set.apply(this, arguments)
+		}, {
+			setup: function( instances, options ) {
+				this._nestedReference = new can.NestedReference(this);
+				can.Observe.List.prototype.setup.apply(this,arguments)
+			},
+			removeAttr: can.LazyMap.prototype.removeAttr,
+			_bindsetup: can.LazyMap.prototype._bindsetup,
+			_bindteardown: can.LazyMap.prototype._bindteardown,
+			_addChild: can.LazyMap.prototype._addChild,
+			___set : function(attr, val){
+				if(data){
+					data.parent[data.prop] = value;
+				} else {
+					return can.Observe.List.prototype.___set.apply(this, arguments)
+				}
 			}
-		}
-	})
+		})
 	
 	
 	
