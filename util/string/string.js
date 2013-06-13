@@ -171,7 +171,7 @@ steal('can/util', function (can) {
 		 * @param {Object} data The data to be used to look for properties.  If it's an array, multiple
 		 * objects can be used.
 		 * @param {Boolean} [remove] if a match is found, remove the property from the object
-		 * @return {String} The converted string or `null` if any data to render are `undefined`
+		 * @return {String} The converted string or `null` if any data to render are `undefined` or `null`
 		 */
 		sub: function (str, data, remove) {
 			var obs = [];
@@ -183,7 +183,7 @@ steal('can/util', function (can) {
 				// Convert inside to type.
 				var ob = can.getObject(inside, data, remove === true ? false : undefined);
 
-				if (ob === undefined) {
+				if (ob == undefined) {//undefined or null
 					obs = null;
 					return "";
 				}
