@@ -1073,7 +1073,7 @@ function( can ){
 		'each': function(expr, options) {
       expr = Mustache.resolve(expr);
 			if (!!expr && isArrayLike(expr)) {
-				if (isObserve(expr) && expr.attr('length')) {
+				if (isObserve(expr) && typeof expr.attr('length') !== 'undefined') {
 					return can.view.lists && can.view.lists(expr, function(item) {
 						return options.fn(item);
 					});

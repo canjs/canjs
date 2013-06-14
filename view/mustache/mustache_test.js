@@ -1837,6 +1837,27 @@ test("Each does not redraw items",function(){
 
 });
 
+test("Each works with the empty list",function(){
+
+	var animals = new can.Observe.List([]),
+		renderer = can.view.mustache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
+
+	var div = document.createElement('div')
+
+	var frag = renderer({animals: animals});
+	div.appendChild(frag)
+
+	animals.push('sloth', 'bear')
+
+	//animals.push("dog")
+	equal(div.getElementsByTagName('label').length, 2, "There are 2 labels")
+
+	animals.push("turtle")
+
+	equal(div.getElementsByTagName('span')[2].innerHTML, "turtle", "turtle added");
+
+});
+
 test("each works within another branch", function(){
 	var animals = new can.Observe.List([]),
 		template = "<div>Animals:"+
