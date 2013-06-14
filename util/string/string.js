@@ -183,7 +183,7 @@ steal('can/util', function (can) {
 				// Convert inside to type.
 				var ob = can.getObject(inside, data, remove === true ? false : undefined);
 
-				if (ob == undefined) {//undefined or null
+				if (ob === undefined || ob === null) {
 					obs = null;
 					return "";
 				}
