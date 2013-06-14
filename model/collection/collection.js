@@ -168,6 +168,19 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 	 *         }
 	 *     }); 
 	 *
+	 * ## Inheriting from the `can.Model.Collection`
+	 *
+	 * Inheriting from the `can.Model.Collection` requires explicit setting of the `Model` static
+	 * property:
+	 *
+	 *     ImageModel.Collection = can.Model.Collection({
+	 *         Model : ImageModel
+	 *     },{
+	 *         init : function(){
+	 *             ...
+	 *         }
+	 *     })
+	 * 
 	 */
 
 	MC = can.Model.Collection = can.Construct({
