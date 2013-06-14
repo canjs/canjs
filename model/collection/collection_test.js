@@ -185,5 +185,25 @@ test('Count is set correctly', 1, function(){
 	})
 })
 
+test('Requests triggered rapidly with the same params should return the same object', function(){
+	can.fixture.delay = 100;
+	var collection = new ImageModel.Collection({filter: 3}, {autoLoad : false}),
+		req, req2;
+
+	stop();
+
+	collection.params.attr({foo : 'baz'});
+
+	req  = collection.load();
+	req2 = collection.load();
+
+	req.done(function(){
+		start();
+		can.fixture.delay = 0;
+		equal(req, req2, 'Same requests');
+
+	})
+})
+
 
 })();

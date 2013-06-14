@@ -210,7 +210,10 @@ steal('can/util', 'can/model', 'can/observe/compute', function(can){
 
 			clearTimeout(this._reqTimeout);
 
-			if(this._currentReq){
+			if(this._currentReq && can.isEmptyObject(this._currentParamsDiff)){
+				// request with the same params is already happening so just return it
+				return this._currentReq;
+			} else if(this._currentReq){
 				paramsDiff = extendParamsDiff(this._prevParamsDiff, paramsDiff); 
 				this._currentReq.abort();
 			}
