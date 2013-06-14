@@ -335,121 +335,9 @@ steal("can/util/string", function(can) {
 			 * @prototype
 			 */
 			return Constructor;
-			/** 
-			 * @function can.Construct.prototype.setup setup
-			 * @parent can.Construct.prototype
-			 * @signature `setup(...args)`
-			 * @param {*} args the arguments passed to the constructor.
-			 * @return {Array|undefined} if an array is returned, the elements of that array are passed as
-			 * arguments to [can.Construct::init]. Otherwise, the arguments to the
-			 * constructor are passed to [can.Construct::init] and the return value of `setup` is discarded.
-			 * 
-			 * @body
-			 * If a prototype `setup` method is provided, it is called when a new 
-			 * instance is created. It is passed the same arguments that were passed
-			 * to the constructor.
-			 *
-			 * Because `setup` is not defined on `can.Construct` itself, calling super from
-			 * directly-inheriting classes will break. In other words, don't do this:
-			 * 
-			 * @codestart
-			 * can.Construct('Snowflake', {
-			 *     setup: function() {
-			 *         this._super(); // this will break!
-			 *     }
-			 * });
-			 * @codeend
-			 * 
-			 * ## `setup` vs. `init`
-			 * Usually, you should use [can.Construct::init] to do your class's initialization.
-			 * Use `setup` instead for:
-			 * 
-			 *   - initialization code that you want to run before the inheriting constructor's 
-			 *     `init` method is called.
-			 *   - initialization code that should run whether or not inheriting constructors
-			 *     call their base's `init` methods.
-			 *   - modifying the arguments that will get passed to `init`.
-			 * 
-			 * ## Example
-			 * 
-			 * This code is a simplified version of the code in [can.Control]'s setup
-			 * method. It converts the first argument to a jQuery collection and
-			 * extends the controller's defaults with the options that were passed.
-			 * 
-			 * @codestart
-			 * can.Construct("can.Control", {
-			 *     setup: function(domElement, rawOptions) {
-			 *         // set up this.element
-			 *         this.element = $(domElement);
-			 * 
-			 *         // set up this.options
-			 *         this.options = can.extend({},
-			 *                                   this.constructor.defaults,
-			 *                                   rawOptions
-			 *                                  );
-			 * 
-			 *         // pass this.element and this.options to init.
-			 *         return [this.element, this.options];        
-			 *     }
-			 * });
-			 * @codeend
-			 */
-			//  
-			/** 
-			 * @function can.Construct.prototype.init init
-			 * @parent can.Construct.prototype
-			 * @signature `init(...args)`
-			 * @param {*} args the arguments passed to the constructor (or the elements of the array returned from [can.Construct::setup])
-			 * 
-			 * @body
-			 * If a prototype `init` method is provided, it is called when a new Construct is created,
-			 * after [can.Construct::setup]. The `init` method is where the bulk of your initialization code
-			 * should go, and a common thing to do in `init` is to save the arguments passed into the constructor.
-			 * 
-			 * ## Examples
-			 * 
-			 * First, we'll make a Person constructor that has a first and last name:
-			 *
-			 * @codestart
-			 * can.Construct("Person", {
-			 *     init: function(first, last) {
-			 *         this.first = first;
-			 *         this.last  = last;
-			 *     }
-			 * });
-			 * 
-			 * var justin = new Person("Justin", "Meyer");
-			 * justin.first; // "Justin"
-			 * justin.last; // "Meyer"
-			 * @codeend
-			 * 
-			 * Then we'll extend Person into Programmer and add a favorite language:
-			 * 
-			 * @codestart
-			 * Person("Programmer", {
-			 *     init: function(first, last, language) {
-			 *         // call base's init
-			 *         Person.prototype.init.apply(this, arguments);
-			 *
-			 *         // other initialization code
-			 *         this.language = language;
-			 *     },
-			 *     bio: function() {
-			 *         return 'Hi! I'm ' + this.first + ' ' + this.last +
-			 *             ' and I write ' + this.language + '.';
-			 *     }
-			 * });
-			 * 
-			 * var brian = new Programmer("Brian", "Moschel", 'ECMAScript');
-			 * brian.bio(); // "Hi! I'm Brian Moschel and I write ECMAScript.";
-			 * @codeend
-			 * 
-			 * ## Be Aware
-			 * 
-			 * [can.Construct::setup] is able to modify the arguments passed to `init`.
-			 * If you aren't receiving the right arguments to `init`, check to make sure
-			 * that they aren't being changed by `setup` somewhere along the inheritance chain.
-			 */
+
+			
+			
 			//  
 			/**
 			 * @property {Function} can.Construct.prototype.constructor constructor
@@ -478,5 +366,131 @@ steal("can/util/string", function(can) {
 		}
 
 	});
+	/** 
+	 * @function can.Construct.prototype.setup setup
+	 * @parent can.Construct.prototype
+	 * 
+	 * @signature `setup(...args)`
+	 * 
+	 * A setup function for the instantiation of a constructor function.
+	 * 
+	 * @param {*} args The arguments passed to the constructor.
+	 * 
+	 * @return {Array|undefined} If an array is returned, the array's items are passed as
+	 * arguments to [can.Construct::init init]. The following example always makes 
+	 * sure that init is called with a jQuery wrapped element:
+	 * 
+	 *     WidgetFactory = can.Construct.extend({
+	 *         setup: function(element){
+	 *             return [$(element)]
+	 *         }
+	 *     })
+	 *     
+	 *     MyWidget = WidgetFactory.extend({
+	 *         init: function($el){
+	 *             $el.html("My Widget!!")
+	 *         }
+	 *     })
+	 * 
+	 * Otherwise, the arguments to the
+	 * constructor are passed to [can.Construct::init] and the return value of `setup` is discarded.
+	 * 
+	 * @body
+	 * 
+	 * ## Deciding between `setup` and `init`
+	 * 
+	 * 
+	 * Usually, you should use [can.Construct::init init] to do your constructor function's initialization.
+	 * Use `setup` instead for:
+	 * 
+	 *   - initialization code that you want to run before the inheriting constructor's 
+	 *     `init` method is called.
+	 *   - initialization code that should run whether or not inheriting constructors
+	 *     call their base's `init` methods.
+	 *   - modifying the arguments that will get passed to `init`.
+	 * 
+	 * ## Example
+	 * 
+	 * This code is a simplified version of the code in [can.Control]'s setup
+	 * method. It converts the first argument to a jQuery collection and
+	 * extends the controller's defaults with the options that were passed.
+	 * 
+	 * 
+	 *     can.Control = can.Construct.extend({
+	 *         setup: function(domElement, rawOptions) {
+	 *             // set up this.element
+	 *             this.element = $(domElement);
+	 *     
+	 *             // set up this.options
+	 *             this.options = can.extend({},
+	 *                                   this.constructor.defaults,
+	 *                                   rawOptions
+	 *                                  );
+	 * 
+	 *             // pass this.element and this.options to init.
+	 *             return [this.element, this.options];        
+	 *         }
+	 *     });
+	 * 
+	 */
+	can.Construct.prototype.setup = function(){};
+	/** 
+	 * @function can.Construct.prototype.init init
+	 * @parent can.Construct.prototype
+	 * @signature `init(...args)`
+	 * @param {*} args the arguments passed to the constructor (or the elements of the array returned from [can.Construct::setup])
+	 * 
+	 * @body
+	 * If a prototype `init` method is provided, it is called when a new Construct is created,
+	 * after [can.Construct::setup]. The `init` method is where the bulk of your initialization code
+	 * should go, and a common thing to do in `init` is to save the arguments passed into the constructor.
+	 * 
+	 * ## Examples
+	 * 
+	 * First, we'll make a Person constructor that has a first and last name:
+	 *
+	 * @codestart
+	 * can.Construct("Person", {
+	 *     init: function(first, last) {
+	 *         this.first = first;
+	 *         this.last  = last;
+	 *     }
+	 * });
+	 * 
+	 * var justin = new Person("Justin", "Meyer");
+	 * justin.first; // "Justin"
+	 * justin.last; // "Meyer"
+	 * @codeend
+	 * 
+	 * Then we'll extend Person into Programmer and add a favorite language:
+	 * 
+	 * @codestart
+	 * Person("Programmer", {
+	 *     init: function(first, last, language) {
+	 *         // call base's init
+	 *         Person.prototype.init.apply(this, arguments);
+	 *
+	 *         // other initialization code
+	 *         this.language = language;
+	 *     },
+	 *     bio: function() {
+	 *         return 'Hi! I'm ' + this.first + ' ' + this.last +
+	 *             ' and I write ' + this.language + '.';
+	 *     }
+	 * });
+	 * 
+	 * var brian = new Programmer("Brian", "Moschel", 'ECMAScript');
+	 * brian.bio(); // "Hi! I'm Brian Moschel and I write ECMAScript.";
+	 * @codeend
+	 * 
+	 * ## Be Aware
+	 * 
+	 * [can.Construct::setup] is able to modify the arguments passed to `init`.
+	 * If you aren't receiving the right arguments to `init`, check to make sure
+	 * that they aren't being changed by `setup` somewhere along the inheritance chain.
+	 */
+	can.Construct.prototype.init = function(){};
+
+	
 	return can.Construct;
 })
