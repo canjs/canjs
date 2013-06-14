@@ -1,71 +1,70 @@
 steal('can/util',function(can){
-	
-	
+
+	// iterates through `propPath`
+	// and calls `callback` with current object and path part
 	var pathIterator = function(root, propPath, callback){
 		var props = propPath.split("."),
 			cur = root,
 			part;
-		while(part = props.shift()){
-			cur = cur[part]
-			callback && callback(cur,part)
+		while( part = props.shift() ){
+			cur = cur[part];
+			callback && callback(cur, part);
 		}
 		return cur;
 	}
-	
-	
-	var NestedReference = function(root){
-		this.root = root;
-		this.references = [];
-	}
-	
+
+	// has `array` and `item` props, toString() returns item's index in `array`
 	var ArrIndex = function(array){
 		this.array = array;
 	}
 	ArrIndex.prototype.toString = function(){
-		return ""+can.inArray(this.item, this.array)
+		return "" + can.inArray(this.item, this.array)
 	}
-	
+
+	// `root` points to actual data
+	// `references` keeps path functions to certain nodes within `root`
+	var NestedReference = function(root){
+		this.root = root;
+		this.references = [];
+	}
+		
 	NestedReference.ArrIndex = ArrIndex;
-	
+
 	can.extend(NestedReference.prototype, {
+
+		// pushes path func to `references`
 		make: function(propPath){
-			
-			// [ {array: data, item: data[1]},
-			//   "items",
-			//   {array: data[1].items, item: data[1].items[1]} ]
-			var path = [],
-				arrIndex;
-			
+			var path = [], // holds path elements
+				arrIndex; 
+
 			if(can.isArray(this.root) || this.root instanceof can.LazyList){
 				arrIndex = new ArrIndex(this.root);
 			}
-			
+
+			// iter through `propPath` and keep path elements in `path`
 			pathIterator(this.root, propPath, function(item, prop){
-				
-				
-				if(arrIndex){
+				if( arrIndex ){
 					arrIndex.item = item;
 					path.push(arrIndex);
 					arrIndex = undefined;
-				} else {
-					
-					path.push(prop);
-					
-					if(can.isArray(item)){
+				} else {					
+					path.push(prop);					
+					if( can.isArray(item) ){
 						arrIndex = new ArrIndex(item)
 					}
 				}
-				
 			});
-			
-			
-			var pathFunc = function(){
+
+			// finally push path func to references and return
+			var pathFunc = function() {
 				return path.join(".")
 			}
 			this.references.push(pathFunc)
-
 			return pathFunc;
 		},
+
+		// removes all references that starts with `path`
+		// calls `callback` with object on the current path and path itself
 		removeChildren: function(path, callback){
 			var i =0; 
 			while(i < this.references.length){
@@ -78,19 +77,24 @@ steal('can/util',function(can){
 				}
 			}
 		},
+
+		// returns node on the `path`
 		get: function(path){
 			return pathIterator(this.root, path)
 		},
-		each: function(cb){
+
+		// iterates through references and calls `callback`
+		// with actual object, path func and path
+		each: function( callback ){
 			var self = this;
 			can.each(this.references, function(ref){
 				var path = ref();
-				cb(self.get(path), ref, path)
+				callback(self.get(path), ref, path)
 			})
 		}
 		
 	});
-	
-	can.NestedReference = NestedReference;
-	
+
+	// expose
+	can.NestedReference = NestedReference;	
 })
