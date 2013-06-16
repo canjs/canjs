@@ -58,8 +58,7 @@ test('observe can validate nested properties', function(){
 
 	deepEqual(person.errors(), {
 		'company.name' : [
-			'company name validated from parent',
-			'name is wrong'
+			'company name validated from parent'
 		]
 	}, 'Parent objects correctly validate children');
 
@@ -85,7 +84,6 @@ test('observe can validate arrays of nested properties', function(){
 
 test('complex nested validation scenarios', function(){
 	Person.validate('company.phoneNumbers.*.countryCode', function(val, attr){
-		console.log(val, attr)
 		if(val !== 1 && val !== 385){
 			return 'wrong country code'
 		}
@@ -115,7 +113,6 @@ test('complex nested validation scenarios', function(){
 
 test('complex deeply nested validation scenarios', function(){
 	Person.validate('company.phoneNumbers.*.countryCode.*', function(val, attr){
-		console.log(val, attr)
 		if(val !== 1 && val !== 385){
 			return 'wrong country code'
 		}
