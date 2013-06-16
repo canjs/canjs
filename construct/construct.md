@@ -30,8 +30,7 @@ to [can.Construct.prototype.setup setup] and [can.Construct.prototype.init init]
 
 @signature `can.Construct([name,] [staticProperties,] instanceProperties)`
 
-Calling a constructor function without `new` currently 
-creates a new extended constructor function. Example:
+Currently creates a new extended constructor function. Example:
 
     Animal = can.Construct({
       sayHi: function(){

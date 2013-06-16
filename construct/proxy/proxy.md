@@ -3,14 +3,27 @@
 @test can/construct/proxy/test.html
 @download http://donejs.com/can/dist/can.construct.proxy.js
 
-can.Construct.proxy is a plugin that helps you manage scope when creating
-callback functions by ensuring that `this` is set correctly and sensibly
-inside callbacks.
 
-@signature `proxy(callback, [...args])`
+@description Creates callback functions that have `this` set correctly.
+
+@signature `can.Construct.proxy(callback, [...args])`
+
+Creates a static callback function that has `this` set to the constructor
+function.
+
 @param {Function|String|Array.<Function|String>} callback the function or functions to proxy
 @param {...[*]} args parameters to curry into the proxied functions
 @return {Function} a function that calls `callback` with the same context as the current context
+
+@signature `construct.proxy(callback, [...args])`
+
+Creates a static callback function that has `this` set to an instance of the constructor
+function.
+
+@param {Function|String|Array.<Function|String>} callback the function or functions to proxy.
+@param {...[*]} args parameters to curry into the proxied functions
+@return {Function} a function that calls `callback` with the same context as the current context
+
 
 @body
 `can.Construct.prototype.proxy` takes a function and returns a new function that, when invoked,

@@ -8,6 +8,9 @@
 @group can.Control.plugins plugins
 @body
 
+
+@signature `can.Control()
+
 can.Control helps create organized, memory-leak free, rapidly performing,
 stateful controls. Use it to create UI controls like tabs, grids, and context menus,
 and organize them into higher-order business rules with

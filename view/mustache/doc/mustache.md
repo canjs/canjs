@@ -6,14 +6,26 @@
 @plugin can/view/mustache
 @download http://canjs.us/release/latest/can.view.mustache.js
 
-can.Mustache provides logic-less templates with live binding 
-when used with [can.Observes](#can_observe). It currently ships as a plugin,
-and you can view the [annotated source](http://canjs.us/release/latest/docs/can.view.mustache.html).
+@description Logic-less [http://mustache.github.io/ mustache] templates with live binding 
+when used with [can.Observes](#can_observe).
+
+@signature `new can.Mustache(options)`
+
+Creates an instance of a mustache template. This is typically not used directly in 
+favor of [can.view] or [can.view.mustache].
+
+@param {{}} options An options object with the following properties:
+
+@option {String} text The text of the mustache template.
+@option {String} [name] The name of the template used to identify it to
+debugging tools.
+
+@body
+
+## Use
 
 [Mustache](https://github.com/janl/mustache.js/) and [Handlebar](http://handlebarsjs.com/) 
-templates are compatible with can.Mustache, so you can import existing templates.
-
-## Getting Started
+templates are compatible with can.Mustache.
 
 Mustache templates looks similar to normal HTML except
 they contain contain keys for inserting data into the template

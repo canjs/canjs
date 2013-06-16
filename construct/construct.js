@@ -25,10 +25,35 @@ steal("can/util/string", function(can) {
 	 */
 	can.extend(can.Construct, {
 		/**
+		 * @property {Boolean} can.Construct.constructorExtends constructorExtends
+		 * @parent can.Construct.static
+		 * 
+		 * @description
+		 * 
+		 * Toggles the behavior of a constructor function called
+		 * without `new` to extend the constructor function or
+		 * create a new instance.
+		 * 
+		 * @body
+		 * 
+		 * If `constructorExtends` is:
+		 * 
+		 *  - `true` - the constructor extends
+		 *  - `false` - a new instance of the constructor is created
+		 * 
+		 * For 1.1, `constructorExtends` defaults to true. For
+		 * 1.2, `constructorExtends` will default to false.
+		 */
+		constructorExtends: true,
+		/**
 		 * @function can.Construct.newInstance newInstance
 		 * @parent can.Construct.static
-		 * @description Create a new instance of a Construct.
-		 * @signature `newInstance([...args])`
+		 * 
+		 * @description Returns an instance of `can.Construct`. This method
+		 * can be overridden to return a cached instance.
+		 * 
+		 * @signature `can.Construct.newInstance([...args])`
+		 * 
 		 * @param {*} [args] arguments that get passed to [can.Construct::setup] and [can.Construct::init]. Note
 		 * that if [can.Construct::setup] returns an array, those arguments will be passed to [can.Construct::init]
 		 * instead.
@@ -95,16 +120,40 @@ steal("can/util/string", function(can) {
 		/**
 		 * @function can.Construct.setup setup
 		 * @parent can.Construct.static
+		 * 
 		 * @description Perform initialization logic for a constructor function.
-		 * @signature `setup(base, fullName, staticProps, protoProps)`
+		 * 
+		 * @signature `can.Construct.setup(base, fullName, staticProps, protoProps)`
+		 * 
+		 * A static `setup` method provides inheritable setup functionality
+		 * for a Constructor function. The following example
+		 * creates a Group constructor function.  Any constructor
+		 * functions that inherit from Group will be added to 
+		 * `Group.childGroups`.
+		 * 
+		 * 
+		 *     Group = can.Construct.extend({
+		 *       setup: function(Construct, fullName, staticProps, protoProps){
+		 *         this.childGroups = [];
+		 *         if(Construct !== can.Construct){
+		 *           this.childGroups(Construct)
+		 *         }
+		 *         Construct.setup.apply(this, arguments)
+		 *       }   
+		 *     },{})
+		 *     var Flock = Group.extend(...)
+		 *     Group.childGroups[0] //-> Flock
+		 * 
 		 * @param {constructor} base The base constructor that is being inherited from.
 		 * @param {String} fullName The name of the new constructor.
 		 * @param {Object} staticProps The static properties of the new constructor.
 		 * @param {Object} protoProps The prototype properties of the new constructor.
 		 *
 		 * @body
-		 * The static `setup` method is called immediately after a constructor function is created and 
-		 * set to inherit from its base constructor. It is useful for setting up additional inheritance work.
+		 * The static `setup` method is called immediately after a constructor 
+		 * function is created and 
+		 * set to inherit from its base constructor. It is useful for setting up 
+		 * additional inheritance work.
 		 * Do not confuse this with the prototype `[can.Construct::setup]` method.
 		 * 
 		 * ## Setup Extends Defaults
@@ -169,32 +218,68 @@ steal("can/util/string", function(can) {
 		},
 		// Extends classes.
 		/**
-		 * @hide
-		 * Extends a class with new static and prototype functions.  There are a variety of ways
-		 * to use extend:
+		 * @function can.Construct.extend extend
+		 * @parent can.Construct.static
 		 * 
-		 *     // with className, static and prototype functions
-		 *     can.Construct('Task',{ STATIC },{ PROTOTYPE })
-		 *     // with just classname and prototype functions
-		 *     can.Construct('Task',{ PROTOTYPE })
-		 *     // with just a className
-		 *     can.Construct('Task')
+		 * @signature `can.Construct.extend([name, [staticProperties,]] instanceProperties)`
 		 * 
-		 * You no longer have to use `extend`.  Instead, you can pass those options directly to
-		 * can.Construct (and any inheriting classes):
+		 * Extends `can.Construct`, or constructor functions derived from `can.Construct`, 
+		 * to create a new constructor function. Example:
 		 * 
-		 *     // with className, static and prototype functions
-		 *     can.Construct('Task',{ STATIC },{ PROTOTYPE })
-		 *     // with just classname and prototype functions
-		 *     can.Construct('Task',{ PROTOTYPE })
-		 *     // with just a className
-		 *     can.Construct('Task')
+		 *     Animal = can.Construct.extend({
+		 *       sayHi: function(){
+		 *         console.log("hi")
+		 *       }
+		 *     })
+		 *     var animal = new Animal()
+		 *     animal.sayHi();
 		 * 
-		 * @param {String} [fullName]  the class's name (used for classes w/ introspection)
-		 * @param {Object.<string, function>} [klass]  the new class's static functions
-		 * @param {Object.<string, function>} [proto]  the new class's prototype functions
+		 * @param {String} [name] Creates the necessary properties and 
+		 * objects that point from the `window` to the created constructor function. The following:
 		 * 
-		 * @return {can.Construct} returns the new class
+		 *     can.Construct.extend("company.project.Constructor",{})
+		 *     
+		 * creates a `company` object on window if it does not find one, a 
+		 * `project` object on `company` if it does not find one, and it will set the
+		 * `Constructor` property on the `project` object to point to the constructor function.
+		 * 
+		 * Finally, it sets "company.project.Constructor" as [can.Construct.fullName fullName]
+		 * and "Constructor" as [can.Construct.shortName shortName].
+		 * 
+		 * @param {Object} [staticProperties] Properties that are added the constructor 
+		 * function directly. For example:
+		 * 
+		 *     Animal = can.Construct.extend({
+		 *       findAll: function(){
+		 *         return can.ajax({url: "/animals"})
+		 *       }
+		 *     },{});
+		 *     
+		 *     Animal.findAll().then(function(json){ ... })
+		 * 
+		 * The [can.Construct.setup static setup] method can be used to 
+		 * specify inheritable behavior when a Constructor function is created.
+		 * 
+		 * @param {Object} instanceProperties Properties that belong to 
+		 * instances made with the constructor. These properties are added to the
+		 * constructor's `prototype` object. Example:
+		 * 
+		 *     Animal = can.Construct.extend({
+		 *       init: function(name){
+		 *         this.name = name;
+		 *       },
+		 *       sayHi: function(){
+		 *         console.log(this.name,"says hi")
+		 *       }
+		 *     })
+		 *     var animal = new Animal()
+		 *     animal.sayHi();
+		 * 
+		 * The [can.Construct::init init] and [can.Construct::setup setup] properties
+		 * are used for initialization.
+		 * 
+		 * @return {function} The constructor function.
+		 * 
 		 */
 		extend: function( fullName, klass, proto ) {
 			// Figure out what was passed and normalize it.
@@ -225,11 +310,11 @@ steal("can/util/string", function(can) {
 			function Constructor() {
 				// All construction is actually done in the init method.
 				if ( ! initializing ) {
-					return this.constructor !== Constructor && arguments.length ?
+					return this.constructor !== Constructor && arguments.length && Constructor.constructorExtends?
 						// We are being called without `new` or we are extending.
 						arguments.callee.extend.apply(arguments.callee, arguments) :
 						// We are being called with `new`.
-						this.constructor.newInstance.apply(this.constructor, arguments);
+						Constructor.newInstance.apply(Constructor, arguments);
 				}
 			}
 
@@ -370,7 +455,7 @@ steal("can/util/string", function(can) {
 	 * @function can.Construct.prototype.setup setup
 	 * @parent can.Construct.prototype
 	 * 
-	 * @signature `setup(...args)`
+	 * @signature `construct.setup(...args)`
 	 * 
 	 * A setup function for the instantiation of a constructor function.
 	 * 
@@ -420,7 +505,7 @@ steal("can/util/string", function(can) {
 	 *         setup: function(domElement, rawOptions) {
 	 *             // set up this.element
 	 *             this.element = $(domElement);
-	 *     
+	 *         
 	 *             // set up this.options
 	 *             this.options = can.extend({},
 	 *                                   this.constructor.defaults,
@@ -437,7 +522,10 @@ steal("can/util/string", function(can) {
 	/** 
 	 * @function can.Construct.prototype.init init
 	 * @parent can.Construct.prototype
-	 * @signature `init(...args)`
+	 * 
+	 * @description Called when a new instance of a can.Construct is created.
+	 * 
+	 * @signature `construct.init(...args)`
 	 * @param {*} args the arguments passed to the constructor (or the elements of the array returned from [can.Construct::setup])
 	 * 
 	 * @body
