@@ -2,6 +2,36 @@ steal('can/util', 'can/observe/attributes', function (can) {
 //validations object is by property.  You can have validations that
 //span properties, but this way we know which ones to run.
 //  proc should return true if there's an error or the error message
+//  
+	var _objValidations = {},
+		getExtendedValidations = function(validations, cid){
+			var extendedValidations = {};
+
+			if(!_currentErrorCid){
+				return validations || {};
+			}
+
+			cid = [_currentErrorCid, cid].join('/')
+
+			can.each(validations || {}, function(v, k){
+				if(k.indexOf('.') === -1){
+					extendedValidations[k] = v.slice();
+				}
+			})
+			can.each(_objValidations[cid] || {}, function(v, k){
+				var newV = [];
+				if(extendedValidations[k]){
+					extendedValidations[k].push.apply(extendedValidations[k], v)
+				} else {
+					extendedValidations[k] = v.slice();
+				}
+			})
+			return extendedValidations;
+		},
+		_currentErrorCid = null;
+
+
+
 	var validate = function (attrNames, options, proc) {
 		// normalize argumetns
 		if (!proc) {
@@ -50,6 +80,24 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			};
 
 		old.call(self, prop, value, current, success, errorCallback);
+
+		var value           = this.__get(prop),
+			thisValidations = this.constructor.validations;
+
+		if(value){
+			can.each(thisValidations || {}, function(val, k){
+				var cid = [self._cid, value._cid].join('/'),
+					propSubstr = k.substr(0, prop.length),
+					restSubstr = k.substr(prop.length + 1);
+				if(propSubstr === prop && k.length > prop.length){
+					_objValidations[cid]             = _objValidations[cid] || {};
+					_objValidations[cid][restSubstr] = _objValidations[cid][restSubstr] || [];
+					_objValidations[cid][restSubstr].push.apply(_objValidations[cid][restSubstr], val);
+				}
+			})
+		}
+
+		validations = getExtendedValidations(validations, this._cid);
 
 		if (validations && validations[prop]) {
 			var errors = self.errors(prop);
@@ -383,12 +431,16 @@ steal('can/util', 'can/observe/attributes', function (can) {
 
 					});
 				},
-				validations = this.constructor.validations,
+				validations = this.constructor.validations || {},
 				isTest = attrs && attrs.length === 1 && arguments.length === 2;
+
+
+
+			validations = getExtendedValidations(validations, this._cid);
 
 			// go through each attribute or validation and
 			// add any errors
-			can.each(attrs || validations || {}, function (funcs, attr) {
+			can.each(attrs || validations, function (funcs, attr) {
 				// if we are iterating through an array, use funcs
 				// as the attr name
 				if (typeof attr == 'number') {
@@ -398,6 +450,14 @@ steal('can/util', 'can/observe/attributes', function (can) {
 				// add errors to the
 				addErrors(attr, funcs || []);
 			});
+
+			this.each(function(prop, attr){
+				_currentErrorCid = self._cid;
+				can.each(prop && prop.errors && prop.errors() || {}, function(error, nestedAttr){
+					errors[attr + '.' + nestedAttr] = error;
+				});
+				_currentErrorCid = null;
+			})
 
 			// return errors as long as we have one
 			return can.isEmptyObject(errors) ? null : isTest ? errors[attrs[0]] : errors;

@@ -37,6 +37,33 @@ test("observe can validate, events, callbacks", 7,function(){
 	
 })
 
+test('observe can validate nested properties', function(){
+	Person.validate('company.name', function(){
+		return 'company name validated from parent'
+	})
+
+	var Company = can.Observe({})
+
+	Company.validate('name', function(){
+		return 'name is wrong'
+	})
+
+	var company = new Company;
+
+	var person = new Person({company: company})
+
+	deepEqual(person.errors(), {
+		'company.name' : [
+			'name is wrong',
+			'company name validated from parent'
+		]
+	}, 'Parent objects correctly validate children');
+
+	deepEqual(company.errors(), {
+		name : ['name is wrong']
+	}, 'Parent validations are not run when errors is called on the child')
+})
+
 test("validatesFormatOf", function(){
 	Person.validateFormatOf("thing",/\d-\d/)
 	
