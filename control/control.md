@@ -6,15 +6,44 @@
 @inherits can.Construct
 @description widget factory with declarative event binding.
 @group can.Control.plugins plugins
-@body
 
-
-@signature `can.Control()
-
-can.Control helps create organized, memory-leak free, rapidly performing,
-stateful controls. Use it to create UI controls like tabs, grids, and context menus,
+@description Create organized, memory-leak free, rapidly performing,
+stateful controls with declarative event binding. Use it to create UI 
+controls like tabs, grids, and context menus,
 and organize them into higher-order business rules with
 [can.route]. It can serve as both a traditional view and a traditional controller.
+
+@signature `can.Control( [staticProperties,] instanceProperties )`
+
+Create a new, extended, control constructor 
+function. This functionality is inherited from [can.Construct] and is deprecated in favor of using 
+[can.Control.extend]. 
+
+@param {Object} [staticProperties] Properties that are added the constructor 
+function directly. The most common property to add is [can.Control.defaults].
+
+@param {Object} instanceProperties Properties that belong to 
+instances made with the constructor. These properties are added to the
+constructor's `prototype` object. Properties that
+look like event handlers (ex: `"click"` or `"li mouseenter"`) are setup
+as event handlers (see [Listening to events](#section_Listeningtoevents)).
+
+
+@return {can.Control} A control constructor function that has been
+extended with the provided `staticProperties` and `instanceProperties`.
+
+
+@signature `new can.Control( element, options )`
+
+Create an instance of a control. 
+
+@param {HTMLElement|NodeList|String} element The element as passed to the constructor.
+@param {Object} [options] option values for the control.  These get added to
+this.options and merged with [can.Control.defaults defaults].
+@return {undefined|Array} return an array if you want to change what init is called with. By
+default it is called with the element and options passed to the control.
+
+@body
 
 ## Todo Example
 

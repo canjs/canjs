@@ -74,7 +74,10 @@ steal('can/util','can/construct', function( can ) {
 				}
 			}
 		},
-
+		/**
+		 * @function can.Control.extend
+		 * @parent can.Control.static
+		 */
 		// Moves `this` to the first argument, wraps it with `jQuery` if it's an element
 		_shifter : function( context, name ) {
 
@@ -313,7 +316,7 @@ steal('can/util','can/construct', function( can ) {
 		 * @function can.Control.prototype.setup setup
 		 * @parent can.Control.prototype
 		 * @description Perform pre-initialization logic.
-		 * @signature `setup(element, options)`
+		 * @signature `control.setup(element, options)`
 		 * @param {HTMLElement|NodeList|String} element The element as passed to the constructor.
 		 * @param {Object} [options] option values for the control.  These get added to
 		 * this.options and merged with [can.Control.static.defaults defaults].
@@ -520,8 +523,10 @@ steal('can/util','can/construct', function( can ) {
 		/**
 		 * @function can.Control.prototype.on on
 		 * @parent can.Control.prototype
+		 * 
 		 * @description Bind an event handler to a Control, or rebind all event handlers on a Control.
-		 * @signature `on([el,] selector, eventName, func)`
+		 * 
+		 * @signature `control.on([el,] selector, eventName, func)`
 		 * @param {HTMLElement|jQuery collection|Object} [el=this.element]
 		 * The element to be bound.  If no element is provided, the control's element is used instead.
 		 * @param {String} selector A css selector for event delegation.
@@ -534,7 +539,10 @@ steal('can/util','can/construct', function( can ) {
 		 * @body
 		 * `on(el, selector, eventName, func)` binds an event handler for an event to a selector under the scope of the given element.
 		 *
-		 * @signature `on()`
+		 * @signature `control.on()`
+		 * 
+		 * Rebind all of a control's event handlers.
+		 * 
 		 * @return {Number} The number of handlers bound to this Control.
 		 *
 		 * @body
@@ -684,7 +692,7 @@ steal('can/util','can/construct', function( can ) {
 		// Prepares a `control` for garbage collection
 		/**
 		 * @description Remove a Control from an element and clean up the Control.
-		 * @signature `destroy()`
+		 * @signature `control.destroy()`
 		 * @function can.Control.prototype.destroy destroy
 		 * @parent can.Control.prototype
 		 * 

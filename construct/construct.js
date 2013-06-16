@@ -221,7 +221,7 @@ steal("can/util/string", function(can) {
 		 * @function can.Construct.extend extend
 		 * @parent can.Construct.static
 		 * 
-		 * @signature `can.Construct.extend([name, [staticProperties,]] instanceProperties)`
+		 * @signature `can.Construct.extend([name,] [staticProperties,] instanceProperties)`
 		 * 
 		 * Extends `can.Construct`, or constructor functions derived from `can.Construct`, 
 		 * to create a new constructor function. Example:

@@ -30,7 +30,7 @@ to [can.Construct.prototype.setup setup] and [can.Construct.prototype.init init]
 
 @signature `can.Construct([name,] [staticProperties,] instanceProperties)`
 
-Currently creates a new extended constructor function. Example:
+Creates a new extended constructor function. Example:
 
     Animal = can.Construct({
       sayHi: function(){
