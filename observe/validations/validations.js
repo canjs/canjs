@@ -1,36 +1,36 @@
 steal('can/util', 'can/observe/attributes', function (can) {
+  
+	var addRecursiveErrors = function(item, attr, addErrors, funcs, path){
+
+		var currentPath = attr.shift().replace(/\.$/, '').replace(/^\./, ''),
+			items       = currentPath !== '' ? item.attr(currentPath) : [item],
+			itemPath;
+
+		path.push(currentPath);
+
+		for(var i = 0; i < items.length; i++){
+			if(attr.length > 1){
+				itemPath = path.slice(0);
+				itemPath.push(i)
+				addRecursiveErrors(items[i], attr.slice(0), addErrors, funcs, itemPath)
+			} else {
+				itemPath = path.slice(0)
+				if(attr[0] === ''){
+					itemPath.push(i);
+					addErrors(itemPath.join('.'), funcs)
+				} else {
+					itemPath.push(i, attr[0].replace(/\.$/, '').replace(/^\./, ''));
+					addErrors(itemPath.join('.'), funcs)
+				}
+			}
+		}
+	}
+
+
 //validations object is by property.  You can have validations that
 //span properties, but this way we know which ones to run.
 //  proc should return true if there's an error or the error message
-//  
-	var _objValidations = {},
-		getExtendedValidations = function(validations, cid){
-			var extendedValidations = {};
-
-			if(!_currentErrorCid){
-				return validations || {};
-			}
-
-			cid = [_currentErrorCid, cid].join('/')
-
-			can.each(validations || {}, function(v, k){
-				if(k.indexOf('.') === -1){
-					extendedValidations[k] = v.slice();
-				}
-			})
-			can.each(_objValidations[cid] || {}, function(v, k){
-				var newV = [];
-				if(extendedValidations[k]){
-					extendedValidations[k].push.apply(extendedValidations[k], v)
-				} else {
-					extendedValidations[k] = v.slice();
-				}
-			})
-			return extendedValidations;
-		},
-		_currentErrorCid = null;
-
-
+//
 
 	var validate = function (attrNames, options, proc) {
 		// normalize argumetns
@@ -62,49 +62,33 @@ steal('can/util', 'can/observe/attributes', function (can) {
 		});
 	};
 
-	var old = can.Observe.prototype.__set;
-	can.Observe.prototype.__set = function (prop, value, current, success, error) {
+	var validator = function(ev, prop, how, newValue, oldValue){
 		var self = this,
 			validations = self.constructor.validations,
 			errorCallback = function (errors) {
-				var stub = error && error.call(self, errors);
-
-				// if 'setter' is on the page it will trigger
-				// the error itself and we dont want to trigger
-				// the event twice. :)
-				if (stub !== false) {
-					can.trigger(self, "error", [prop, errors], true);
-				}
-
+				can.trigger(self, "error", [prop, errors], true);
 				return false;
-			};
-
-		old.call(self, prop, value, current, success, errorCallback);
-
-		var value           = this.__get(prop),
-			thisValidations = this.constructor.validations;
-
-		if(value){
-			can.each(thisValidations || {}, function(val, k){
-				var cid = [self._cid, value._cid].join('/'),
-					propSubstr = k.substr(0, prop.length),
-					restSubstr = k.substr(prop.length + 1);
-				if(propSubstr === prop && k.length > prop.length){
-					_objValidations[cid]             = _objValidations[cid] || {};
-					_objValidations[cid][restSubstr] = _objValidations[cid][restSubstr] || [];
-					_objValidations[cid][restSubstr].push.apply(_objValidations[cid][restSubstr], val);
-				}
-			})
-		}
-
-		validations = getExtendedValidations(validations, this._cid);
+			}
 
 		if (validations && validations[prop]) {
 			var errors = self.errors(prop);
 			errors && errorCallback(errors)
 		}
+	}
 
-		return this;
+	var setup = can.Observe.prototype.setup;
+	can.Observe.prototype.setup = function(){
+		setup.apply(this, arguments);
+		if(this.constructor.validations){
+			this.bind('change', can.proxy(validator, this));
+		}
+	}
+
+	var bindteardown = can.Observe.prototype._bindteardown;
+
+	can.Observe.prototype._bindteardown = function(){
+		bindteardown.apply(this, arguments);
+		this.unbind('change');
 	}
 
 	can.each([ can.Observe, can.Model ], function (clss) {
@@ -421,7 +405,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 					can.each(funcs, function (func) {
 						var res = func.call(self, isTest ? ( self.__convert ?
 							self.__convert(attr, newVal) :
-							newVal ) : self[attr]);
+							newVal ) : self.attr(attr));
 						if (res) {
 							if (!errors[attr]) {
 								errors[attr] = [];
@@ -434,29 +418,35 @@ steal('can/util', 'can/observe/attributes', function (can) {
 				validations = this.constructor.validations || {},
 				isTest = attrs && attrs.length === 1 && arguments.length === 2;
 
-
-
-			validations = getExtendedValidations(validations, this._cid);
-
 			// go through each attribute or validation and
 			// add any errors
-			can.each(attrs || validations, function (funcs, attr) {
+			can.each(attrs || validations || {}, function (funcs, attr) {
+				var convertedAttr;
 				// if we are iterating through an array, use funcs
 				// as the attr name
 				if (typeof attr == 'number') {
 					attr = funcs;
-					funcs = validations[attr];
+					convertedAttr = attr.replace(/(^|\.)\d+(\.|$)/g, function(match, leadingDot, trailingDot){ 
+						return leadingDot + '*' + trailingDot;
+					})
+					funcs = validations[convertedAttr];
 				}
 				// add errors to the
-				addErrors(attr, funcs || []);
+				if(attr.indexOf('*') !== -1){
+					addRecursiveErrors(self, attr.split('*'), addErrors, funcs || [], [])
+				} else {
+					addErrors(attr, funcs || []);
+				}
+				
 			});
 
 			this.each(function(prop, attr){
-				_currentErrorCid = self._cid;
 				can.each(prop && prop.errors && prop.errors() || {}, function(error, nestedAttr){
-					errors[attr + '.' + nestedAttr] = error;
+					var path = attr + '.' + nestedAttr;
+					errors[path] = errors[path] || [];
+					errors[path].push.apply(errors[path], error)
+
 				});
-				_currentErrorCid = null;
 			})
 
 			// return errors as long as we have one

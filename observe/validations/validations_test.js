@@ -54,14 +54,113 @@ test('observe can validate nested properties', function(){
 
 	deepEqual(person.errors(), {
 		'company.name' : [
-			'name is wrong',
-			'company name validated from parent'
+			'company name validated from parent',
+			'name is wrong'
 		]
 	}, 'Parent objects correctly validate children');
 
 	deepEqual(company.errors(), {
 		name : ['name is wrong']
 	}, 'Parent validations are not run when errors is called on the child')
+})
+
+test('observe can validate arrays of nested properties', function(){
+	Person.validate('phoneNumbers.*', function(val, attr){
+		return val > 2 ? 'number too big' : null;
+	})
+
+	var person = new Person({phoneNumbers : [1,2,3]})
+
+	person.attr('phoneNumbers').push(4);
+
+	deepEqual(person.errors(), {
+		"phoneNumbers.2" : ['number too big'],
+		"phoneNumbers.3" : ['number too big'],
+	})
+})
+
+test('complex nested validation scenarios', function(){
+	Person.validate('company.phoneNumbers.*.countryCode', function(val, attr){
+		console.log(val, attr)
+		if(val !== 1 && val !== 385){
+			return 'wrong country code'
+		}
+	})
+	var person = new Person;
+
+	person.attr('company', {
+		phoneNumbers : [{
+			number : 12345,
+			countryCode : 1
+		},{
+			number : 12345,
+			countryCode : 385
+		},{
+			number : 12345,
+			countryCode : 41
+		},{
+			number : 12345,
+			countryCode : 1
+		}]
+	});
+
+	deepEqual(person.errors(), {
+		'company.phoneNumbers.2.countryCode' : ['wrong country code']
+	}, 'Error is set on the correct path')
+})
+
+test('complex deeply nested validation scenarios', function(){
+	Person.validate('company.phoneNumbers.*.countryCode.*', function(val, attr){
+		console.log(val, attr)
+		if(val !== 1 && val !== 385){
+			return 'wrong country code'
+		}
+	})
+	Person.validate('company.phoneNumbers.*.address.*.street', function(val, attr){
+		if(val === ''){
+			return 'street is mandatory'
+		}
+	})
+	var person = new Person;
+
+	person.attr('company', {
+		phoneNumbers : [{
+			number : 12345,
+			countryCode : [1, 2],
+			address : [{
+				street : 'foo'
+			}]
+		},{
+			number : 12345,
+			countryCode : [385, 32],
+			address : [{
+				street : 'foo'
+			}]
+		},{
+			number : 12345,
+			countryCode : [41, 23],
+			address : [{
+				street : 'foo'
+			}]
+		},{
+			number : 12345,
+			countryCode : [1],
+			address : [{
+				street : 'foo'
+			}, {
+				street : ''
+			}]
+		}]
+	});
+
+	deepEqual(person.errors(), {
+		'company.phoneNumbers.0.countryCode.1' : ['wrong country code'],
+		'company.phoneNumbers.1.countryCode.1' : ['wrong country code'],
+		'company.phoneNumbers.2.countryCode.0' : ['wrong country code'],
+		'company.phoneNumbers.2.countryCode.1' : ['wrong country code'],
+		"company.phoneNumbers.3.address.1.street" : ["street is mandatory"]
+	}, 'Error is set on the correct path')
+	
 })
 
 test("validatesFormatOf", function(){

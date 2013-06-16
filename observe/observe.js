@@ -700,7 +700,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 				throw "can.Observe: Object does not exist"
 			}
 		},
-		__set : function(prop, value, current){
+		__set: function(prop, value, current){
 		
 			// Otherwise, we are setting it on this `object`.
 			// TODO: Check if value is object and transform
