@@ -58,7 +58,8 @@ test('observe can validate nested properties', function(){
 
 	deepEqual(person.errors(), {
 		'company.name' : [
-			'company name validated from parent'
+			'company name validated from parent',
+			'name is wrong'
 		]
 	}, 'Parent objects correctly validate children');
 
