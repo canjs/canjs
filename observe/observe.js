@@ -71,7 +71,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 				// send modified attr event to parent
 				//can.trigger(parent, args[0], args);
 			});
-		}
+		},
 		// An `id` to track events for a given observe.
 		observeId = 0,
 		// A helper used to serialize an `Observe` or `Observe.List`.  
