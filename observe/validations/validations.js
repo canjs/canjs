@@ -1,7 +1,8 @@
 steal('can/util', 'can/observe/attributes', function (can) {
   
-	var addRecursiveErrors = function(item, attr, addErrors, funcs, path){
 
+	// adds errors recursively for the object
+	var addRecursiveErrors = function(item, attr, addErrors, funcs, path){
 		var currentPath = attr.shift().replace(/\.$/, '').replace(/^\./, ''),
 			items       = currentPath !== '' ? item.attr(currentPath) : [item],
 			itemPath;
@@ -14,13 +15,13 @@ steal('can/util', 'can/observe/attributes', function (can) {
 				itemPath.push(i)
 				addRecursiveErrors(items[i], attr.slice(0), addErrors, funcs, itemPath)
 			} else {
-				itemPath = path.slice(0)
+				itemPath = path.slice(0);
 				if(attr[0] === ''){
 					itemPath.push(i);
-					addErrors(itemPath.join('.'), funcs)
+					addErrors(itemPath.join('.'), funcs);
 				} else {
 					itemPath.push(i, attr[0].replace(/\.$/, '').replace(/^\./, ''));
-					addErrors(itemPath.join('.'), funcs)
+					addErrors(itemPath.join('.'), funcs);
 				}
 			}
 		}
@@ -76,19 +77,36 @@ steal('can/util', 'can/observe/attributes', function (can) {
 		}
 	}
 
-	var setup = can.Observe.prototype.setup;
-	can.Observe.prototype.setup = function(){
-		setup.apply(this, arguments);
-		if(this.constructor.validations){
-			this.bind('change', can.proxy(validator, this));
+	var boundObserves = {};
+
+	var bind = can.Observe.prototype.bind;
+
+	// Only bind to changes if something else is also bound to this object
+	// so there wouldn't be memory leaks
+	can.Observe.prototype.bind = function(){
+		var self = bind.apply(this, arguments);
+
+		if(this.constructor.validations && !boundObserves[this._cid]){
+			boundObserves[this._cid] = true;
+			this.bind('change' + this._cid, can.proxy(validator, this));
 		}
+
+		return self;
 	}
 
-	var bindteardown = can.Observe.prototype._bindteardown;
+	var unbind = can.Observe.prototype.unbind;
 
-	can.Observe.prototype._bindteardown = function(){
-		bindteardown.apply(this, arguments);
-		this.unbind('change');
+	// if there is only one binding left, and there was a binding because
+	// of the validations, then unbind it
+	can.Observe.prototype.unbind = function(){
+		var self = unbind.apply(this, arguments);
+
+		if(this._bindings === 1 && boundObserves[this._cid]){
+			delete boundObserves[this._cid];
+			this.unbind('change' + this._cid);
+		}
+
+		return self;
 	}
 
 	can.each([ can.Observe, can.Model ], function (clss) {

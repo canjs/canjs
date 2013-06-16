@@ -50,7 +50,11 @@ test('observe can validate nested properties', function(){
 
 	var company = new Company;
 
-	var person = new Person({company: company})
+	var person = new Person;
+
+	person.attr('company', company)
+
+	person.attr('company.name', 'foo')
 
 	deepEqual(person.errors(), {
 		'company.name' : [
