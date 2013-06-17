@@ -1,10 +1,15 @@
 steal('can/util', 'can/observe/attributes', function (can) {
   
 
+	var removeOuterDots = function(str){
+		return str.replace(/\.$/, '').replace(/^\./, '');
+	}
+
 	// adds errors recursively for the object
 	var addRecursiveErrors = function(item, attr, addErrors, funcs, path){
-		var currentPath = attr.shift().replace(/\.$/, '').replace(/^\./, ''),
-			items       = currentPath !== '' ? item.attr(currentPath) : [item],
+
+		var currentPath = removeOuterDots(attr.shift()),
+			items       = currentPath !== '' ? item.attr(currentPath) : (item.length ? item : [item]),
 			itemPath;
 
 		path.push(currentPath);
@@ -18,10 +23,10 @@ steal('can/util', 'can/observe/attributes', function (can) {
 				itemPath = path.slice(0);
 				if(attr[0] === ''){
 					itemPath.push(i);
-					addErrors(itemPath.join('.'), funcs);
+					addErrors(removeOuterDots(itemPath.join('.')), funcs);
 				} else {
 					itemPath.push(i, attr[0].replace(/\.$/, '').replace(/^\./, ''));
-					addErrors(itemPath.join('.'), funcs);
+					addErrors(removeOuterDots(itemPath.join('.')), funcs);
 				}
 			}
 		}
@@ -109,7 +114,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 		return self;
 	}
 
-	can.each([ can.Observe, can.Model ], function (clss) {
+	can.each([ can.Observe, can.Model, can.Observe.List ], function (clss) {
 		// in some cases model might not be defined quite yet.
 		if (clss === undefined) {
 			return;
@@ -439,7 +444,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			// go through each attribute or validation and
 			// add any errors
 			can.each(attrs || validations || {}, function (funcs, attr) {
-				var convertedAttr;
+				var convertedAttr, attributes;
 				// if we are iterating through an array, use funcs
 				// as the attr name
 				if (typeof attr == 'number') {

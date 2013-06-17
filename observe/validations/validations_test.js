@@ -165,6 +165,46 @@ test('complex deeply nested validation scenarios', function(){
 	
 })
 
+test('validations of the list objects', function(){
+	var ContractNumbers = can.Observe.List({});
+
+	ContractNumbers.validate('*', function(val){
+		return val === '' ? 'contract number is mandatory' : null;
+	})
+
+	var contractNumbers = new ContractNumbers(['foo', 'bar', 123, '']);
+
+	deepEqual(contractNumbers.errors(), {
+		3 : ['contract number is mandatory']
+	})
+})
+
+test('validations on the list objects work when called from the parent', function(){
+	window.ContractNumbers = can.Observe.List({
+		items : function(items){
+			return new this(items)
+		}
+	}, {});
+
+	ContractNumbers.validate('*', function(val){
+		return val === '' ? 'contract number is mandatory' : null;
+	})
+
+	var Customer = can.Observe({
+		attributes : {
+			contractNumbers : 'ContractNumbers.items'
+		}
+	}, {})
+
+	var customer = new Customer({contractNumbers : ['foo', 'bar', 123, '']});
+
+	deepEqual(customer.errors(), {
+		'contractNumbers.3' : ['contract number is mandatory']
+	})
+
+	delete window.ContractNumbers;
+})
+
 test("validatesFormatOf", function(){
 	Person.validateFormatOf("thing",/\d-\d/)
 	
