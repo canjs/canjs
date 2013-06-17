@@ -37,6 +37,35 @@ test("observe can validate, events, callbacks", 7,function(){
 	
 })
 
+test("observe can validate, events, callbacks with nested props", 7,function(){
+	Person.validate("info.age", {message : "it's a date type"},function(val){
+					return ! ( this.date instanceof Date )
+				})
+
+	var task = new Person({info : {age: "bad"}}),
+		errors = task.errors()
+		
+	
+	ok(errors, "There are errors");
+	equal(errors['info.age'].length, 1, "there is one error");
+	equal(errors['info.age'][0], "it's a date type", "error message is right");
+	
+	task.bind("error.info.age", function(ev, attr, errs){
+		ok(this === task, "we get task back by binding");
+		
+		ok(errs, "There are errors");
+		equal(errs['info.age'].length, 1, "there is one error");
+		equal(errs['info.age'][0], "it's a date type", "error message is right");
+	})
+	
+	task.attr("info.age","blah");
+
+	task.unbind("error.info.age");
+	
+	task.attr("info.age", "blaher");
+	
+})
+
 test('observe can validate nested properties', function(){
 	Person.validate('company.name', function(){
 		return 'company name validated from parent'
@@ -163,6 +192,22 @@ test('complex deeply nested validation scenarios', function(){
 		"company.phoneNumbers.3.address.1.street" : ["street is mandatory"]
 	}, 'Error is set on the correct path')
 	
+})
+
+test('correct attr is sent to the validation function', function(){
+	Person.validate('company.phoneNumbers.*.countryCode.*', function(val, attr){
+		equal(attr, 'company.phoneNumbers.0.countryCode.0', 'Correct attr is sent')
+	})
+
+	var person = new Person({
+		company : {
+			phoneNumbers : [{
+				countryCode : [1]
+			}]
+		}
+	})
+
+	person.errors();
 })
 
 test('validations of the list objects', function(){

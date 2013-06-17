@@ -17,8 +17,8 @@ steal('can/util', 'can/observe/attributes', function (can) {
 		for(var i = 0; i < items.length; i++){
 			if(attr.length > 1){
 				itemPath = path.slice(0);
-				itemPath.push(i)
-				addRecursiveErrors(items[i], attr.slice(0), addErrors, funcs, itemPath)
+				itemPath.push(i);
+				addRecursiveErrors(items[i], attr.slice(0), addErrors, funcs, itemPath);
 			} else {
 				itemPath = path.slice(0);
 				if(attr[0] === ''){
@@ -39,6 +39,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 //
 
 	var validate = function (attrNames, options, proc) {
+
 		// normalize argumetns
 		if (!proc) {
 			proc = options;
@@ -60,9 +61,9 @@ steal('can/util', 'can/observe/attributes', function (can) {
 				self.validations[attrName] = [];
 			}
 
-			self.validations[attrName].push(function (newVal) {
+			self.validations[attrName].push(function (newVal, realAttrName) {
 				// if options has a message return that, otherwise, return the error
-				var res = proc.call(this, newVal, attrName);
+				var res = proc.call(this, newVal, realAttrName);
 				return res === undefined ? undefined : (options.message || res);
 			})
 		});
@@ -78,7 +79,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 
 		if (validations && validations[prop]) {
 			var errors = self.errors(prop);
-			errors && errorCallback(errors)
+			errors && errorCallback(errors);
 		}
 	}
 
@@ -428,7 +429,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 					can.each(funcs, function (func) {
 						var res = func.call(self, isTest ? ( self.__convert ?
 							self.__convert(attr, newVal) :
-							newVal ) : self.attr(attr));
+							newVal ) : self.attr(attr), attr);
 						if (res) {
 							if (!errors[attr]) {
 								errors[attr] = [];
@@ -451,12 +452,12 @@ steal('can/util', 'can/observe/attributes', function (can) {
 					attr = funcs;
 					convertedAttr = attr.replace(/(^|\.)\d+(\.|$)/g, function(match, leadingDot, trailingDot){ 
 						return leadingDot + '*' + trailingDot;
-					})
+					});
 					funcs = validations[convertedAttr];
 				}
 				// add errors to the
 				if(attr.indexOf('*') !== -1){
-					addRecursiveErrors(self, attr.split('*'), addErrors, funcs || [], [])
+					addRecursiveErrors(self, attr.split('*'), addErrors, funcs || [], []);
 				} else {
 					addErrors(attr, funcs || []);
 				}
@@ -467,8 +468,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 				can.each(prop && prop.errors && prop.errors() || {}, function(error, nestedAttr){
 					var path = attr + '.' + nestedAttr;
 					errors[path] = errors[path] || [];
-					errors[path].push.apply(errors[path], error)
-
+					errors[path].push.apply(errors[path], error);
 				});
 			})
 
