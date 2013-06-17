@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = function (grunt) {
 
 	var _ = grunt.util._;
@@ -91,13 +93,18 @@ module.exports = function (grunt) {
 					root: '../'
 				},
 				map: {
-					'can/util': 'can/util/library'
+					'can/util': 'can/util/library',
+					'can/': path.basename(__dirname) + '/'
 				},
 				banner: banner
 			},
 			all: {
 				options: {
-					ids: ['can'].concat(_.keys(builderJSON.modules))
+					ids: ['can'].concat(_.map(
+						_.keys(builderJSON.configurations), function(name) {
+							return 'can/util/' + name;
+						}),
+						_.keys(builderJSON.modules))
 				},
 				files: {
 					'dist/amd/': '.'
@@ -129,20 +136,36 @@ module.exports = function (grunt) {
 			}
 		},
 		qunit: {
-			all: {
+			steal: {
+				options: {
+					urls: [
+						'http://localhost:8000/test/dojo.html',
+						'http://localhost:8000/test/jquery.html',
+						//'http://localhost:8000/can/test/zepto.html',
+						'http://localhost:8000/test/mootools.html',
+						'http://localhost:8000/test/yui.html'
+					]
+				}
+			},
+			dist: {
 				options: {
 					urls: [
 						'http://localhost:8000/test/dist/dojo.html',
 						'http://localhost:8000/test/dist/jquery.html',
 						//'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/dist/mootools.html',
-						'http://localhost:8000/test/dist/yui.html',
-
-						'http://localhost:8000/test/dojo.html',
-						'http://localhost:8000/test/jquery.html',
+						'http://localhost:8000/test/dist/yui.html'
+					]
+				}
+			},
+			amd: {
+				options: {
+					urls: [
+						// TODO AMD & DOJO 'http://localhost:8000/test/amd/dojo.html',
+						'http://localhost:8000/test/amd/jquery.html',
 						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/mootools.html',
-						'http://localhost:8000/test/yui.html'
+						'http://localhost:8000/test/amd/mootools.html',
+						'http://localhost:8000/test/amd/yui.html'
 					]
 				}
 			}
@@ -186,11 +209,10 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
 
 	grunt.registerTask('build', ['builder', 'amdify', 'uglify', 'docco']);
-	grunt.registerTask('test', ['connect', 'builder', 'testify', 'qunit']);
+	grunt.registerTask('test', ['connect', 'builder', 'amdify', 'testify', 'qunit']);
 	grunt.registerTask('default', ['build']);
 
 	// TODO possibly use grunt-release

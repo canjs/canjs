@@ -4,7 +4,8 @@
     
     <head>
         <title>Dojo Test Suite</title>
-        <link rel="stylesheet" type="text/css" href="../../lib/qunit/qunit.css" />
+        <base href="../.." />
+        <link rel="stylesheet" type="text/css" href="lib/qunit/qunit.css" />
     </head>
     
     <body>
@@ -20,38 +21,98 @@
 
         <ol id="qunit-tests"></ol>
         <div id="qunit-test-area"></div>
-        <script type="text/javascript" src="../../lib/require.js"></script>
-        <script type="text/javascript" src="../../lib/qunit/qunit.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js"></script>
+        <script type="text/javascript" src="lib/qunit/qunit.js"></script>
         <script type="text/javascript">
-            require.config({});
+            QUnit.config.autostart = false;
 
-             <!--
             require.config({
+                "paths": {
+                    "can": "dist/amd/can",
+                    "test": "./",
+                    "dojo": "util/dojo/dojo-1.8.1"
+                },
                 "map": {
                     "*": {
-                        "can/util/util.js?": "can/util/dojo/dojo.js?"
+                        "can/util/library": "can/util/dojo"
                     }
                 },
                 "shim": {
-                    "can/construct/construct_test": {
-                        "deps": "can/construct",
-                        "exports": null
-                    }
+                    "test/test/test": ["can"],
+                    "test/construct/construct_test": ["can/construct"],
+                    "test/observe/observe_test": ["can/observe"],
+                    "test/observe/compute/compute_test": [
+                            "can/observe/compute"
+                    ],
+                    "test/model/model_test": ["can/model"],
+                    "test/view/view_test": ["can/view"],
+                    "test/view/ejs/ejs_test": ["can/view/ejs"],
+                    "test/control/control_test": ["can/control"],
+                    "test/route/route_test": ["can/route"],
+                    "test/control/route/route_test": [
+                            "can/control/route"
+                    ],
+                    "test/view/mustache/mustache_test": [
+                            "can/view/mustache"
+                    ],
+                    "test/model/queue/queue_test": ["can/model/queue"],
+                    "test/construct/super/super_test": [
+                            "can/construct/super"
+                    ],
+                    "test/construct/proxy/proxy_test": [
+                            "can/construct/proxy"
+                    ],
+                    "test/observe/delegate/delegate_test": [
+                            "can/observe/delegate"
+                    ],
+                    "test/observe/setter/setter_test": [
+                            "can/observe/setter"
+                    ],
+                    "test/observe/attributes/attributes_test": [
+                            "can/observe/attributes"
+                    ],
+                    "test/observe/validations/validations_test": [
+                            "can/observe/validations"
+                    ],
+                    "test/observe/backup/backup_test": [
+                            "can/observe/backup"
+                    ],
+                    "test/util/object/object_test": [
+                            "can/util/object"
+                    ],
+                    "test/util/string/string_test": [
+                            "can/util/string"
+                    ],
+                    "test/util/fixture/fixture_test": [
+                            "can/util/fixture"
+                    ]
                 }
             });
-             -->
 
-            require(["can/construct", "can/observe",
-                    "can/observe/compute", "can/model", "can/view",
-                    "can/view/ejs", "can/control", "can/route",
-                    "can/control/route", "can/view/mustache",
-                    "can/model/queue", "can/construct/super",
-                    "can/construct/proxy", "can/observe/delegate",
-                    "can/observe/setter", "can/observe/attributes",
-                    "can/observe/validations", "can/observe/backup",
-                    "can/util/object", "can/util/string",
-                    "can/util/fixture"
-            ]);
+            require(["can/util/fixture", "test/test/test",
+                    "test/construct/construct_test",
+                    "test/observe/observe_test",
+                    "test/observe/compute/compute_test",
+                    "test/model/model_test", "test/view/view_test",
+                    "test/view/ejs/ejs_test",
+                    "test/control/control_test",
+                    "test/route/route_test",
+                    "test/control/route/route_test",
+                    "test/view/mustache/mustache_test",
+                    "test/model/queue/queue_test",
+                    "test/construct/super/super_test",
+                    "test/construct/proxy/proxy_test",
+                    "test/observe/delegate/delegate_test",
+                    "test/observe/setter/setter_test",
+                    "test/observe/attributes/attributes_test",
+                    "test/observe/validations/validations_test",
+                    "test/observe/backup/backup_test",
+                    "test/util/object/object_test",
+                    "test/util/string/string_test",
+                    "test/util/fixture/fixture_test"
+            ], function() {
+                QUnit.start();
+            });
         </script>
     </body>
 
