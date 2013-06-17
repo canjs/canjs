@@ -92,6 +92,14 @@ steal('can/util','can/observe','./nested_reference',function(can){
 			this._init = 1;
 			this.bind('change'+this._cid,can.proxy(this._changes,this));
 			delete this._init;
+
+			// Add properties directly on object for easy access;
+			for( var key in obj ) {
+				// do not overwrite existing methods on prototype
+				if( !(key in this.constructor.prototype) ) {
+					this[key] = obj[key];
+				}
+			}
 		},
 		_bindsetup: function(){
 			var parent = this;
