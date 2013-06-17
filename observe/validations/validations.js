@@ -444,7 +444,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			// go through each attribute or validation and
 			// add any errors
 			can.each(attrs || validations || {}, function (funcs, attr) {
-				var convertedAttr, attributes;
+				var convertedAttr;
 				// if we are iterating through an array, use funcs
 				// as the attr name
 				if (typeof attr == 'number') {
