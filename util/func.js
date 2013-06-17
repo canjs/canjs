@@ -777,3 +777,52 @@ def.resolve({ animals: [ 'pig', 'cow' ] })
 @codeend
 */
 var a = function() {};
+/**
+ * @typedef {{}} can.NodeList NodeList
+ * @inherits From-Your-Base-Library
+ *  
+ * A "NodeList" is __Library Specific__ implementation of 
+ * an array of DOM elements. [can.$] returns a "NodeList"
+ * and [can.Control::element] is a "NodeList".
+ * 
+ * The following details the "NodeList" object used 
+ * by each library.
+ * 
+ * ## jQuery `jQuery( HTMLElement )`
+ * 
+ * A [http://api.jquery.com/jQuery/ jQuery-wrapped] list of elements.
+ * 
+ *     nodeList.text("Hello World")
+ * 
+ * ## Zepto `Zepto( HTMLElement )`
+ * 
+ * A Zepto-wrapped list of elements.
+ * 
+ *     nodeList.text("Hello World")
+ * 
+ * ## Dojo `new dojo.NodeList( HTMLElement )`
+ * 
+ * Dojo's [http://dojotoolkit.org/reference-guide/1.9/dojo/NodeList.html dojo.NodeList] constructor function.
+ * 
+ *     nodeList.text("Hello World")
+ * 
+ * 
+ * ## Mootools `$$( HTMLElement )`
+ * 
+ * The Mootools [Elements object](http://mootools.net/docs/core/Element/Element#Elements).
+ * 
+ *     nodeList.empty().appendText("Hello World")
+ * 
+ * ## YUI
+ * 
+ * YUI's [NodeList](http://yuilibrary.com/yui/docs/node/).
+ * 
+ *     nodeList.set('text',"Hello World")
+ */
+//
+/**
+ * @typedef {String} CSSSelectorString
+ * 
+ * A [http://www.w3.org/TR/CSS2/selector.html CSS Selector] in a string like: `"#content .title"`.
+ */
+//

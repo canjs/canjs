@@ -74,10 +74,6 @@ steal('can/util','can/construct', function( can ) {
 				}
 			}
 		},
-		/**
-		 * @function can.Control.extend
-		 * @parent can.Control.static
-		 */
 		// Moves `this` to the first argument, wraps it with `jQuery` if it's an element
 		_shifter : function( context, name ) {
 

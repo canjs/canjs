@@ -4,6 +4,8 @@
 @parent canjs
 @group can.Construct.plugins plugins
 
+@description 
+
 Provides a way to easily use the power of prototypal inheritance 
 without worrying about hooking up all the particulars yourself. Use
 [can.Construct.extend can.Construct.extend] to create a inheritable
