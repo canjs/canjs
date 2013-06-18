@@ -1,4 +1,4 @@
-steal("can/observe", function(can) {
+steal("can/util", "can/observe", "can/model", "can/construct/super", function(can) {
 
   /**
    * @class can.Observe.Clone
@@ -9,6 +9,8 @@ steal("can/observe", function(can) {
    * to be merged back to the original later.
    *
    * Clones cook, look, and taste like their original objects
+   * but can have their attributes set independently for later
+   * merging back into the original object.
    */
   var Observe = can.Observe
   , oldsetup = can.Observe.setup
@@ -16,25 +18,28 @@ steal("can/observe", function(can) {
     
     //Don't make clones all the way down.
     //  A clone's clone class is itself.
-    if(obs.isClone)
+    if(obs.prototype.merge)
       return obs;
 
     return obs({
      
     }, {
       setup : function(opts) {
-        var that = this;
+        var that = this
+        , orig = opts.original;
         Observe.prototype.setup.apply(this);
         can.extend(this, {
           _deep : opts.deep
           , _original : opts.original
           , _dirty : {}
-          , isClone : true      
+          , isClone : true 
         });
 
-        opts.original.each(function(val, key) {
+        orig.each(function(val, key) {
           if(opts.deep && val instanceof Observe && !val._original) {
             that.attr(key, val.clone());
+          } else if(orig instanceof can.Model && key === orig.constructor.id) {
+          	that.attr(that.constructor.id, val);
           } else {
             that.attr(key, val);
           }
@@ -47,10 +52,12 @@ steal("can/observe", function(can) {
         , orig = this._original;
         this.each(function(val, key) {
         	var newVal = that[key];
-	        if(that._deep && newVal.isClone &&) {
+	        if(that._deep && newVal.isClone) {
 	          newVal = newVal.merge();
 	        }
-          orig.attr(key, that[key]);
+        	if(that._dirty[key]) {
+	          orig.attr(key, newVal);
+	        }
           delete that[key];
           delete that._dirty[key];
 	      });
@@ -63,7 +70,7 @@ steal("can/observe", function(can) {
       	if(arguments.length > 1 && typeof name !== "object") {
       		this._dirty[name] = true;
       	}
-      	this._super.apply(this, arguments);
+      	return this._super.apply(this, arguments);
       }
     });
   };
@@ -74,13 +81,14 @@ steal("can/observe", function(can) {
     oldsetup.apply(this, arguments);
     this.Clone = makeClone(this);
 
-    if(this.prototype instanceof can.Model) {
+    if(can.Model && this.prototype instanceof can.Model) {
     	//don't want to have a collision in the Model store, so rename
     	// the id field.
     	this.Clone.id = "original_" + this.id;
     	this.Clone.prototype.save = function() {
+    		var that = this;
     		return this._original.save.apply(this, arguments).then(function(nv) {
-    			return nv.merge();
+    			return that.merge().attr(nv._data ? nv._data : nv);
     		});
     	};
     	//overriding serialize allows save to function with the renamed id field
