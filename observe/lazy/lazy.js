@@ -127,12 +127,25 @@ steal('can/util','can/observe','./nested_reference',function(can){
 			// remove 'old' references that are starting with `path` and do rewiring
 			this._nestedReference.removeChildren(path, function(oldChild, oldChildPath){
 				// unhook every current child on path
-				unhookup(oldChild, self._cid);
+				unhookup([oldChild], self._cid);
+
 				// if `newChild` passed bind it to every child and make references (1st step: rewiring to bottom/children)
 				if(newChild){
-					var newChildPath = oldChildPath.replace(path+".","");
-					var reference = newChild._nestedReference.make( newChildPath );
-					self._bindings && bindToChildAndBubbleToParent(oldChild, reference, newChild);
+					var newChildPath = oldChildPath.replace(path+".", "");
+					
+					// check if we are replacing existing observe or inserting new one
+					if( path === newChildPath ) {
+						//
+						oldChild._nestedReference.each(function( obj, path ) {
+							newChild._nestedReference.make( path );
+							self._bindings && bindToChildAndBubbleToParent(obj, path, newChild);
+						});
+						//
+					} else {
+						var reference = newChild._nestedReference.make( newChildPath );
+						self._bindings && bindToChildAndBubbleToParent(oldChild, reference, newChild);
+					}
+					
 				}
 			})
 
@@ -151,7 +164,7 @@ steal('can/util','can/observe','./nested_reference',function(can){
 			var data = this._goto(attr);
 			// if there are more attr parts remaining, it means we
 			// hit an internal observable
-			if(data.parts.length){
+			if( data.parts.length ){
 				// ask that observable to remove the attr
 				return data.value.removeAttr(data.parts)
 			} else {
@@ -165,7 +178,9 @@ steal('can/util','can/observe','./nested_reference',function(can){
 					this._triggerChange(attr, "remove", undefined, makeObserve( data.value, this) );
 				}
 				// unhookup anything that was in here
-				this._addChild(attr);
+				//this._addChild(attr); --> CHECK THIS ONE! (previous bug was causing this to work even if it shouldn't,)
+				// instead remove all references, do not unbind as _addChild does
+				this._nestedReference.removeChildren();
 				return data.value;
 			}
 		},
@@ -212,7 +227,7 @@ steal('can/util','can/observe','./nested_reference',function(can){
 				} else {
 					converted = new can.LazyMap(data.value)	
 				}
-				// ... and replace it 
+				// ... and replace it
 				this._addChild(attr, converted, function(){
 					data.parent[data.prop] = converted;
 				})
@@ -245,10 +260,12 @@ steal('can/util','can/observe','./nested_reference',function(can){
 			// Otherwise, we are setting it on this `object`.
 			// TODO: Check if value is object and transform
 			// are we changing the value.
+
 			if ( value !== current ) {
 				// Check if we are adding this for the first time --
 				// if we are, we need to create an `add` event.
-				var changeType = data.parent.hasOwnProperty(prop) ? "set" : "add";
+
+				var changeType = data.parent.hasOwnProperty( data.prop ) ? "set" : "add";
 
 
 				// if it is or should be a Lazy
@@ -396,7 +413,7 @@ steal('can/util','can/observe','./nested_reference',function(can){
 			_bindsetup: can.LazyMap.prototype._bindsetup,
 			_bindteardown: can.LazyMap.prototype._bindteardown,
 			_addChild: can.LazyMap.prototype._addChild,
-			___set : function(attr, val){
+			___set : function(attr, val, data){
 				if(data){
 					data.parent[data.prop] = value;
 				} else {
