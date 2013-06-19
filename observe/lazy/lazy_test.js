@@ -2,7 +2,7 @@
 	
 	module("can/observe/lazy")
 
-	test("Basics", 4, function() {
+	test("Basics", 5, function() {
 		var person = new can.LazyMap({
 			name: {
 				first: "Justin",
@@ -19,8 +19,7 @@
 		var firstFact = person.attr("name.facts.0");
 
 		// check lazy conversion on .attr()
-		//ok(person.name.facts[0] instanceof can.LazyMap, "Nested attribute converted to LazyMap");
-		//TODO ^^^^^^^^^^^ make props accessable as on plain object
+		ok(person.name.facts[0] instanceof can.LazyMap, "Nested attribute converted to LazyMap");
 
 		// listen changes on parent, checks bubbling
 		person.bind("change", function(ev, attr, how, newVal, oldVal) {
@@ -75,7 +74,7 @@
 	});
 
 
-	test("LazyMap set", 1, function(){
+	test("Setting an attribute", 1, function(){
 		var person = new can.LazyMap({});
 		
 		person.bind("change",function(ev, attr, how, newVal){
@@ -87,7 +86,7 @@
 		})		
 	})
 
-	test("Internal array reordering", 6, function(){
+	test("Internal array reordering", 7, function(){
 
 		var ll = new can.LazyMap({
 			id: 1,
@@ -103,6 +102,7 @@
 			count++;
 			if( count == 1 ){
 				equal(attr, "items.1.name", "Second element in list gets the attribute")
+				equal(newVal, "A", "Second element in list gets the right value")
 			} else if( count == 2 ){
 				equal(attr, "items.0", "First element is removed from array - correct attr")
 				equal(how, "remove", "First element is removed from array - correct how")
@@ -126,6 +126,79 @@
 
 		// trigger change on 1.1 again, but now it's first element in the array
 		onePointOne.attr("name", "B");
+	})
+
+	test("changing an object unbinds", 4, function(){
+		var state = new can.LazyMap({
+			category : 5,
+			productType : 4,
+			properties : {
+				brand: [],
+				model : [],
+				price : []
+			}
+		}),
+			count = 0;
+
+		// converts to LazyList
+		var brand = state.attr("properties.brand");
+
+		state.bind("change", function(ev, attr, how, val, old){
+			equals(attr, "properties.brand", "Right attribute changed.");
+			equals(count, 0, "Called only once");
+			count++;
+			equals(how, "set", "Right method used.")
+			equals(val[0], "hi", "Right value set.")
+		});
+		 
+		// replace previous LazyList with a new one
+		state.attr("properties.brand", ["hi"]);
+
+		// this shouldn't trigger 'change' any more
+		brand.push(1,2,3);
+	});
+	 
+	/* LazyList specific tests */
+
+	test("LazyList - adding attribute changes length", 1, function(){
+		var l = new can.LazyList([0,1,2])
+		l.attr(3,3)
+		equals(l.length, 4, "Got the right lenght after adding an attribute.");
+	})
+
+	test("LazyList - splice", 7, function(){
+		var l = new can.LazyList([0,1,2,3]),
+			first = true;
+		
+		l.bind('change', function( ev, attr, how, newVals, oldVals ) {
+			equals (attr, "1", "Right index to splice.")
+			if(first){
+				equals( how, "remove", "Removing existing items ..." )
+				equals( newVals, undefined, " ... without new values." )
+			} else {
+				equals( how, "add", "Adding new items ..." )
+				same( newVals, ["a","b"] , "... with right new values.")
+			}			
+			first = false;
+		})
+		
+		l.splice(1,2, "a", "b"); 
+		same(l.serialize(), [0,"a","b", 3], "Serialized!")
+	});
+
+	test("LazyList - pop", 5, function(){
+		var l = new can.LazyList([0,1,2,3]);
+		
+		l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
+			equals (attr, "3", "Right index to pop.")
+			
+			equals( how, "remove", "Removing the item" )
+			equals( newVals, undefined, "Without new value" )
+			same( oldVals, [3], "Old value equals to last element in list." )
+		})
+		
+		l.pop(); 
+		same(l.serialize(), [0,1,2], "Serialized!")
 	})
 	
 })()
