@@ -1,4 +1,4 @@
-steal("can/util", "can/observe", "can/model", "can/construct/super", function(can) {
+steal("can/util", "can/observe", "can/construct/super", function(can) {
 
   /**
    * @class can.Observe.Clone
