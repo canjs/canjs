@@ -29,8 +29,11 @@ steal('can/util','can/observe','./nested_reference',function(can){
 			// break attr path into array
 			return can.isArray(attr) ? attr : (""+attr).split(".");
 		},
-		isObserve = function(obj){
+		isObserve = function( obj ){
 			return obj instanceof can.Observe	
+		},
+		isPrimitive = function( obj ) {
+			return typeof obj === "number" || typeof obj === "string"
 		},
 		bindToChildAndBubbleToParent = function(child, ref, parent){
 			// binds on child and triggers event on parent --> bubbles events from child to parent
@@ -213,13 +216,13 @@ steal('can/util','can/observe','./nested_reference',function(can){
 			var data = this._goto(attr);
 
 			// if it's already observe return it
-			if(isObserve(data.value)){
-				if(data.parts.length){
+			if( isObserve(data.value) ){
+				if( data.parts.length ){
 					return data.value._get(data.parts)	
 				} else {
 					return data.value;	
 				}
-			} else if (data.value && typeof data.value == "object"){
+			} else if (data.value && canMakeObserve(data.value)){
 				// if object create LazyMap/LazyList
 				var converted;
 				if(can.isArray(data.value)){
@@ -256,7 +259,6 @@ steal('can/util','can/observe','./nested_reference',function(can){
 			}
 		},
 		__set : function(prop, value, current, data){
-			
 			// Otherwise, we are setting it on this `object`.
 			// TODO: Check if value is object and transform
 			// are we changing the value.
@@ -266,7 +268,6 @@ steal('can/util','can/observe','./nested_reference',function(can){
 				// if we are, we need to create an `add` event.
 
 				var changeType = data.parent.hasOwnProperty( data.prop ) ? "set" : "add";
-
 
 				// if it is or should be a Lazy
 				if( canMakeObserve(value) ) {
@@ -310,47 +311,87 @@ steal('can/util','can/observe','./nested_reference',function(can){
 		 */
 		_attrs: function( props, remove ) {
 
+			//debugger;
+			
 			if ( props === undefined ) {	
-			return serialize(this, 'attr', {})
+				return serialize(this, 'attr', {})
 			}
 
 			props = can.extend({}, props);
-			var prop,
-				self = this,
+			var self = this,
+				prop,
+				data,
 				newVal;
+
 			can.Observe.startBatch();
 
-			this.each(function(curVal, prop){
+			// Update existing props
+			this.each(function( curVal, prop ){
 				newVal = props[prop];
+				data = self._goto(prop);
 
-				// If we are merging...
+				// remove existing prop and return if there is no new prop to merge and `remove` param exists
 				if ( newVal === undefined ) {
 					remove && self.removeAttr(prop);
 					return;
 				}
 				
+				// ? 
 				if(self.__convert){
 					newVal = self.__convert(prop, newVal)
 				}
 
+				// isObserve (has .attr)
+				// isPlainObject
+				// isArray
+				// isPrimitive
+
+				
+				/*
+				if( isObserve( curVal ) ) {
+					if( can.isPlainObject( newVal ) || isObserve( newVal ) || can.isArray( newVal ) ) {
+						curVal._attrs( newVal, remove );
+					} else {
+						// transform `curVal` to `newVal`
+					}
+				} else if( can.isPlainObject( curVal ) ) {
+					if( isObserve( newVal )) {
+						// insert newVal (addChild) 
+					} else if( isPrimitive( newVal )) {
+						// remove children on curVal path
+						// curVal = newVal
+					} else if( can.isPlainObject( newVal ) ) {
+					};
+				} else {
+					if( isObserve( newVal )) {
+					} else {
+					}
+					// curVal = newVal; add childldren
+				}
+				*/
+				
 				// if we're dealing with models, want to call _set to let converter run
 				if( newVal instanceof can.Observe ) {
-					self.__set(prop, newVal, curVal)
+					self.__set(prop, newVal, curVal, data)
 					// if its an object, let attr merge
 				} else if ( canMakeObserve(curVal) && canMakeObserve(newVal) && curVal.attr ) {
 					curVal.attr(newVal, remove)
 					// otherwise just set
 				} else if ( curVal != newVal ) {
-					self.__set(prop, newVal, curVal)
+					// OK till here
+					self.__set(prop, newVal, curVal, data)
 				}
-
+				
+				// delete passed prop after setting
 				delete props[prop];
 			})
-			// Add remaining props.
-			for ( var prop in props ) {
+			
+			// add remaining props
+			for ( prop in props ) {
 				newVal = props[prop];
 				this._set(prop, newVal, true)
 			}
+
 			can.Observe.stopBatch()
 			return this;
 		}
