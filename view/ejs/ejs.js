@@ -38,7 +38,7 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 	 * @function can.EJS.prototype.render render
 	 * @parent can.EJS.prototype
 	 * @description Render a view object with data and helpers.
-	 * @signature `render(data[, helpers])`
+	 * @signature `ejs.render(data[, helpers])`
 	 * @param {Object} [data] The data to populate the template with.
 	 * @param {Object.<String, function>} [helpers] Helper methods referenced in the template.
 	 * @return {String} The template with interpolated data.

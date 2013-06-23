@@ -125,7 +125,7 @@ steal('can/util','can/observe', function( can ) {
 		 * @parent can.Model.static
 		 * @description Listen for events on a Model class.
 		 *
-		 * @signature `bind(eventType, handler)`
+		 * @signature `can.Model.bind(eventType, handler)`
 		 * @param {String} eventType The type of event.  It must be
 		 * `"created"`, `"udpated"`, `"destroyed"`.
 		 * @param {function} handler A callback function
@@ -151,7 +151,7 @@ steal('can/util','can/observe', function( can ) {
 		 * @parent can.Model.static
 		 * @description Stop listening for events on a Model class.
 		 * 
-		 * @signature `unbind(eventType, handler)`
+		 * @signature `can.Model.unbind(eventType, handler)`
 		 * @param {String} eventType The type of event. It must be
 		 * `"created"`, `"udpated"`, `"destroyed"`.
 		 * @param {function} handler A callback function
@@ -211,18 +211,31 @@ steal('can/util','can/observe', function( can ) {
 		 * @description Create a new resource on the server.
 		 * @function can.Model.create create
 		 * @parent can.Model.static
-		 * @signature `[METHOD] /path/to/resource`
+		 * 
+		 * @signature `can.Model.create: "[METHOD] /path/to/resource"`
+		 * 
+		 * Specify a HTTP method and url to create persistent instances.
+		 * 
 		 * If you provide a URL, the Model will send a request to that URL using
 		 * the method specified (or POST if none is specified) when saving a
 		 * new instance on the server. (See below for more details.)
+		 * 
 		 * @return {can.Deferred} A Deferred that resolves to the created model.
 		 *
-		 * @signature `function(serialized)`
+		 * @signature `can.Model.create: function(serialized) -> can.Deferred`
+		 * 
+		 * Specify a function to create persistent instances.
+		 * 
 		 * If you provide a function, the Model will expect you to do your own AJAX requests.
 		 * @param {Object} serialized The [can.Observe::serialize serialized] properties of
 		 * the model to create.
 		 * @return {can.Deferred} A Deferred that resolves to the created model.
 		 *
+		 * @signature `can.Model.create: {AjaxOptions}`
+		 * 
+		 * Specify an options object that is used to make a HTTP request to create
+		 * persistent instances.
+		 * 
 		 * @body
 		 * `create(attributes) -> Deferred` is used by [can.Model::save save] to create a 
 		 * model instance on the server. 
@@ -274,13 +287,13 @@ steal('can/util','can/observe', function( can ) {
 		 * @description Update a resource on the server.
 		 * @function can.Model.update update
 		 * @parent can.Model.static
-		 * @signature `[METHOD] /path/to/resource`
+		 * @signature `can.Model.update: "[METHOD] /path/to/resource"`
 		 * If you provide a URL, the Model will send a request to that URL using
 		 * the method specified (or PUT if none is specified) when updating an
 		 * instance on the server. (See below for more details.)
 		 * @return {can.Deferred} A Deferred that resolves to the updated model.
 		 *
-		 * @signature `function(id, serialized)`
+		 * @signature `can.Model.update: function(id, serialized) -> can.Deffered`
 		 * If you provide a function, the Model will expect you to do your own AJAX requests.
 		 * @param {*} id The ID of the model to update.
 		 * @param {Object} serialized The [can.Observe::serialize serialized] properties of
@@ -313,7 +326,7 @@ steal('can/util','can/observe', function( can ) {
 		 *  
 		 * If your server doesn't use PUT, you can change it to post like:
 		 * 
-		 *     $.Model("Recipe",{
+		 *     can.Model("Recipe",{
 		 *       update: "POST /recipes/{id}"
 		 *     },{});
 		 * 
@@ -366,13 +379,13 @@ steal('can/util','can/observe', function( can ) {
 		 * @description Destroy a resource on the server.
 		 * @function can.Model.destroy destroy
 		 * @parent can.Model.static
-		 * @signature `[METHOD] /path/to/resource`
+		 * @signature `can.Model.destroy: "[METHOD] /path/to/resource"`
 		 * If you provide a URL, the Model will send a request to that URL using
 		 * the method specified (or DELETE if none is specified) when deleting an
 		 * instance on the server. (See below for more details.)
 		 * @return {can.Deferred} A Deferred that resolves to the destroyed model.
 		 *
-		 * @signature `function(id)`
+		 * @signature `can.Model.destroy: function(id)`
 		 * If you provide a function, the Model will expect you to do your own AJAX requests.
 		 * @param {*} id The ID of the resource to destroy.
 		 * @return {can.Deferred} A Deferred that resolves to the destroyed model.
@@ -427,7 +440,8 @@ steal('can/util','can/observe', function( can ) {
 		 * @description Retrieve multiple resources from a server.
 		 * @function can.Model.findAll findAll
 		 * @parent can.Model.static
-		 * @signature `findAll(params[, success[, error]])`
+		 * 
+		 * @signature `can.Model.findAll(params[, success[, error]])`
 		 * @param {Object} params Values to filter the request or results with.
 		 * @param {function} [success] A callback to call on successful retrieval. The callback recieves
 		 * a can.Model.List of the retrieved resources.
@@ -435,6 +449,10 @@ steal('can/util','can/observe', function( can ) {
 		 * XmlHttpRequest object.
 		 * @return {can.Deferred} A deferred that resolves to a [can.Model.List] of retrieved models.
 		 *
+		 * @signature `can.Model.findAll: "[METHOD] /path/to/resource"`
+		 * 
+		 * Specify a HTTP method and url to retrieve instances. 
+		 * 
 		 * @body
 		 * `findAll( params, success(instances), error(xhr) ) -> Deferred` is used to retrieve model 
 		 * instances from the server. Before you can use `findAll`, you must implement it.
@@ -500,7 +518,7 @@ steal('can/util','can/observe', function( can ) {
 		 * @description Retrieve a resource from a server.
 		 * @function can.Model.findOne findOne
 		 * @parent can.Model.static
-		 * @signature `findOne(params[, success[, error]])`
+		 * @signature `can.Model.findOne(params[, success[, error]])`
 		 * @param {Object} params Values to filter the request or results with.
 		 * @param {function} [success] A callback to call on successful retrieval. The callback recieves
 		 * the retrieved resource as a can.Model.
@@ -658,7 +676,7 @@ steal('can/util','can/observe', function( can ) {
 		 * @function can.Model.models models
 		 * @parent can.Model.static
 		 * @description Convert raw data into can.Model instances.
-		 * @signature `models(data[, oldList])`
+		 * @signature `can.Model.models(data[, oldList])`
 		 * @param {Array<Object>} data The raw data from a `[can.Model.findAll findAll()]` request.
 		 * @param {can.Model.List} [oldList] If supplied, this List will be updated with the data from
 		 * __data__.
@@ -800,7 +818,7 @@ steal('can/util','can/observe', function( can ) {
 		 * @function can.Model.model model
 		 * @parent can.Model.static
 		 * @description Convert raw data into a can.Model instance.
-		 * @signature `model(data)`
+		 * @signature `can.Model.model(data)`
 		 * @param {Object} data The data to convert to a can.Model instance.
 		 * @return {can.Model} An instance of can.Model made with the given data.
 		 * 
@@ -886,7 +904,7 @@ steal('can/util','can/observe', function( can ) {
 		/**
 		 * @function can.Model.prototype.isNew isNew
 		 * @description Check if a Model has yet to be saved on the server.
-		 * @signature `isNew()`
+		 * @signature `model.isNew()`
 		 * @return {Boolean} Whether an instance has been saved on the server.
 		 * (This is determined by whether `id` has a value set yet.)
 		 *
@@ -904,7 +922,7 @@ steal('can/util','can/observe', function( can ) {
 		/**
 		 * @function can.Model.prototype.save save
 		 * @description Save a model back to the server.
-		 * @signature `save([success[, error]])`
+		 * @signature `model.save([success[, error]])`
 		 * @param {function} [success] A callback to call on successful save. The callback recieves
 		 * the can.Model after saving.
 		 * @param {function} [error] A callback to call when an error occurs. The callback receives the
@@ -974,7 +992,7 @@ steal('can/util','can/observe', function( can ) {
 		/**
 		 * @function can.Model.prototype.destroy destroy
 		 * @description Destroy a Model on the server.
-		 * @signature `destroy([success[, error]])`
+		 * @signature `model.destroy([success[, error]])`
 		 * @param {function} [success] A callback to call on successful destruction. The callback recieves
 		 * the can.Model as it was just prior to destruction.
 		 * @param {function} [error] A callback to call when an error occurs. The callback receives the
@@ -1022,7 +1040,7 @@ steal('can/util','can/observe', function( can ) {
 		/**
 		 * @description Listen to events on this Model.
 		 * @function can.Model.prototype.bind bind
-		 * @signature `bind(eventName, handler)`
+		 * @signature `model.bind(eventName, handler)`
 		 * @param {String} eventName The event to bind to.
 		 * @param {function} handler The function to call when the
 		 * event occurs. __handler__ is passed the event and the
@@ -1085,7 +1103,7 @@ steal('can/util','can/observe', function( can ) {
 		/**
 		 * @function can.Model.prototype.unbind unbind
 		 * @description Stop listening to events on this Model.
-		 * @signature `unbind(eventName[, handler])`
+		 * @signature `model.unbind(eventName[, handler])`
 		 * @param {String} eventName The event to unbind from.
 		 * @param {function} [handler] A handler previously bound with `bind`.
 		 * If __handler__ is not passed, `unbind` will remove all handlers

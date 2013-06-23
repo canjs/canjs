@@ -32,7 +32,7 @@ The following modules are typically distributed as plugins:
  - [can.Observe.validations] - Validate attributes
  - [can.Observe.backup] - Backup and restore an Observe's state
  - [can.Control.plugin] - Registers a jQuery plugin function for Controls[1]
- - [View modifiers] - Use jQuery modifiers to render views[1]
+ - [can.view.modifiers View modifiers] - Use jQuery modifiers to render views[1]
 
 
 You can use it out of the box on top of jQuery, Zepto, YUI, and Mootools,

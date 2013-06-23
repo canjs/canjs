@@ -376,7 +376,7 @@ Trigger an event on an element or object.
 @signature `can.ajax(settings)`
 @param {Object} settings Configuration options for the AJAX request.
 The list of configuration options is the same as for [jQuery.ajax()](http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings).
-@return {Deferred} A can.Deferred that resolves to the data.
+@return {can.Deferred} A can.Deferred that resolves to the data.
 
 @body
 `can.ajax( settings )` is used to make an asynchronous HTTP (Ajax) request
@@ -571,7 +571,7 @@ $.when( { animals: [ 'cat' ] } ).done(function(animals){
 //
 /**
 @constructor can.Deferred
-@parent canjs
+@parent can.util
 
 `can.Deferred` is a object that allows users to assign and chain callback
 function(s) for the success or failure state of both asynchronous and synchronous function(s).

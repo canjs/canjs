@@ -163,8 +163,9 @@ steal('can/util','can/construct', function( can ) {
 		// An object of `{eventName : function}` pairs that Control uses to 
 		// hook up events auto-magically.
 		/**
-		 * @property can.Control.processors processors
+		 * @property {Object.<can.Control.processor>} can.Control.processors processors
 		 * @parent can.Control.static
+		 * 
 		 * @description A collection of hookups for custom events on Controls.
 		 *
 		 * @body
@@ -262,7 +263,7 @@ steal('can/util','can/construct', function( can ) {
 		// control instance
 		defaults: {}
 		/**
-		 * @property can.Control.defaults defaults
+		 * @property {Object} can.Control.defaults defaults
 		 * @parent can.Control.static
 		 * @description Default values for the Control's options.
 		 *
@@ -270,9 +271,9 @@ steal('can/util','can/construct', function( can ) {
 		 * `defaults` provides default values for a Control's options.
 		 * Options passed into the constructor function will be shallowly merged
 		 * into the values from defaults in [can.Control::setup], and
-		 * the result will be stored in `[can.Control::options this.options]`.
+		 * the result will be stored in [can.Control::options this.options].
 		 * 
-		 *     Message = can.Control({
+		 *     Message = can.Control.extend({
 		 *       defaults: {
 		 *         message: "Hello World"
 		 *       }
@@ -369,43 +370,51 @@ steal('can/util','can/construct', function( can ) {
 			
 			// Option merging.
 			/**
-			 * @property can.Control.prototype.options options
+			 * @property {Object} can.Control.prototype.options options
 			 * @parent can.Control.prototype
 			 * 
+			 * @description
+			 * 
+			 * Options used to configure a control.
+			 * 
 			 * @body
-			 * Options are used to configure a control.  They are
-			 * the 2nd argument
-			 * passed to a control (or the first argument passed to the 
-			 * [can.Control.plugin control]'s jQuery plugin).
 			 * 
-			 * For example:
+			 * The `this.options` property is an Object that contains
+			 * configuration data passed to a control when it is
+			 * created (`new can.Control(element, options)`). 
 			 * 
-			 *     can.Control('Hello')
+			 * In the following example, an options object with
+			 * a message is passed to a `Greeting` control. The 
+			 * `Greeting` control changes the text of its [can.Control::element element] 
+			 * to the options' message value.
+			 * 
+			 *     var Greeting = can.Control.extend({
+			 *       init: function(){
+			 *         this.element.text( this.options.message )  
+			 *       }  
+			 *     })
 			 *     
-			 *     var h1 = new Hello( $( '#content1' ), { message: 'World' } );
-			 *     equal( h1.options.message , "World" );
-			 *     
-			 *     var h2 = $( '#content2' ).hello({ message: 'There' })
-			 *                              .control();
-			 *     equal( h2.options.message , "There" );
+			 *     new Greeting("#greeting",{messgae: "I understand this.options"})
 			 * 
-			 * Options are merged with [can.Control.static.defaults defaults] in
+			 * The options argument passed when creating the control
+			 * is merged with [can.Control.defaults defaults] in
 			 * [can.Control.prototype.setup setup].
 			 * 
-			 * For example:
+			 * In the following example, if no message property is provided,
+			 * the defaults' messgae property is used.
 			 * 
-			 *     Tabs = can.Control({
-			 *        defaults: {
-			 *          activeClass: "ui-active-state"
-			 *        }
-			 *     }, {
-			 *        init: function(){
-			 *          this.element.addClass( this.options.activeClass );
-			 *        }
-			 *     });
+			 *     var Greeting = can.Control.extend({
+			 *       defaults: {
+			 *         message: "Defaults merged into this.options"
+			 *       }
+			 *     },{
+			 *       init: function(){
+			 *         this.element.text( this.options.message )  
+			 *       }  
+			 *     })
 			 *     
-			 *     new Tabs( $( "#tabs1" ) ); // adds 'ui-active-state'
-			 *     new Tabs( $( "#tabs2" ), { activeClass : 'active' } ); // adds 'active'
+			 *     new Greeting("#greeting")
+			 * 
 			 */
 			this.options = extend({}, cls.defaults, options);
 
@@ -414,15 +423,18 @@ steal('can/util','can/construct', function( can ) {
 
 			// Gets passed into `init`.
 			/**
+			 * @property {can.NodeList} can.Control.prototype.element element
+			 * 
 			 * @description The element the Control is associated with.
-			 * @property can.Control.prototype.element element
+			 * 
 			 * @parent can.Control.prototype
+			 * 
+			 * @body
 			 * 
 			 * The control instance's HTMLElement (or window) wrapped by the 
 			 * util library for ease of use. It is set by the first
 			 * parameter to `new can.Construct( element, options )` 
-			 * in [can.Control::setup].  Control listens on `this.element`
-			 * for events.
+			 * in [can.Control::setup].  By default, a control listens to events on `this.element`.
 			 * 
 			 * ### Quick Example
 			 * 
@@ -525,7 +537,7 @@ steal('can/util','can/construct', function( can ) {
 		 * @signature `control.on([el,] selector, eventName, func)`
 		 * @param {HTMLElement|jQuery collection|Object} [el=this.element]
 		 * The element to be bound.  If no element is provided, the control's element is used instead.
-		 * @param {String} selector A css selector for event delegation.
+		 * @param {CSSSelectorString} selector A css selector for event delegation.
 		 * @param {String} eventName The event to listen for.
 		 * @param {Function|String} func A callback function or the String name of a control function.  If a control
 		 * function name is given, the control function is called back with the bound element and event as the first
@@ -689,12 +701,15 @@ steal('can/util','can/construct', function( can ) {
 		/**
 		 * @description Remove a Control from an element and clean up the Control.
 		 * @signature `control.destroy()`
+		 * 
+		 * Prepares a control for garbage collection and is a place to
+		 * reset any changes the control has made.  
+		 * 
 		 * @function can.Control.prototype.destroy destroy
 		 * @parent can.Control.prototype
 		 * 
 		 * @body
-		 * `destroy` prepares a control for garbage collection and is a place to
-		 * reset any changes the control has made.  
+		 * 
 		 * 
 		 * ## Allowing Garbage Collection
 		 * 
@@ -756,7 +771,7 @@ steal('can/util','can/construct', function( can ) {
 		 * The following example changes an element's text when the control is
 		 * created and sets it back when the control is removed:
 		 * 
-		 *     Changer = can.Control({
+		 *     Changer = can.Control.extend({
 		 *       init: function() {
 		 *         this.oldText = this.element.text();
 		 *         this.element.text( "Changed!!!" );

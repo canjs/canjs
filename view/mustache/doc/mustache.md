@@ -1,6 +1,8 @@
 @constructor can.Mustache
 @parent canjs
 @group can.Mustache.pages Pages
+@group can.Mustache.tags Tags
+@group can.Mustache.types Types
 
 @test can/view/mustache/test/test.html
 @plugin can/view/mustache
@@ -41,8 +43,6 @@ __Mustache Template__
 		<p>You have {{messages}} messages.</p>
 	</script>
 
-The Mustache sytax is the `{{  }}` magic tags above.
-
 __JavaScript__
 
 	var data = new can.Observe({
@@ -51,20 +51,22 @@ __JavaScript__
 	});
 
 	var template = can.view("#template", data)
-	can.$(document.body).append(template);
+	document.body.appendChild(template);
 
-__HTML__
+__HTML Result__
 
 	<h1>Welcome Tina Fey!</h1>
 	<p>You have 0 messages.</p>
 
-To update your template using live-binding:
+To update the html using live-binding, change an observable value:
 
 	data.attr('message', 5)
 
-which will re-render the paragraph tag to say:
+This updates the text to say:
 
 	<p>You have 5 messages.</p>
+
+
 
 can.Mustache provides a lot more functionality such as:
 
@@ -75,6 +77,6 @@ can.Mustache provides a lot more functionality such as:
 - [Helpers](#Helpers)
 - [Live Binding](#Binding)
 
-## Demos
+## Tags
 
- - [TodoMVC](http://addyosmani.github.com/todomvc/architecture-examples/canjs/) is a project which offers the same Todo application implemented using MV* concepts in most of the popular JavaScript MV* frameworks of today. [Source Code](https://github.com/addyosmani/todomvc/tree/gh-pages/architecture-examples/canjs)
+@api can.Mustache.tags
