@@ -1048,7 +1048,7 @@ function( can ){
 								 * @function can.Mustache.helpers.inverse {{^key}}
 								 * @parent can.Mustache.tags 4
 								 * 
-								 * @signature `{{^key}}B{{/key}}`
+								 * @signature `{{^key}}BLOCK{{/key}}`
 								 * 
 								 * Render blocks of text if the value of the key
 								 * is falsey.  An inverted section syntax is similar to regular 

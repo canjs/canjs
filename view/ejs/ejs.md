@@ -1,5 +1,6 @@
 @constructor can.EJS
 @parent canjs
+@group can.EJS.tags Tags
 
 @description EJS provides __live__ ERB-style client-side templates.
 

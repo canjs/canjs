@@ -1,5 +1,5 @@
-@page can.EJS.tags tags
-@parent can.EJS
+@function can.EJS.tags.scriptlet <% CODE %>
+@parent can.EJS.tags 0
 
 @signature `<% CODE %>`
 
@@ -34,34 +34,3 @@ their own dedicated tags. Live binding leverages this hinting to ensure that log
         <tr> .... </tr>
     <% }) %>
     <span><%= address.attr('street') %><span>
-    
-@signature `<%= CODE %>`
-
-Runs JS Code and writes the _escaped_ result into the result of the template.
-
-The following results in the user seeing "my favorite element is &lt;blink>BLINK&lt;blink>" and not
-<blink>BLINK</blink>.
-
-     <div>my favorite element is <%= '<blink>BLINK</blink>' %>.</div>
-     
-@signature `<%== CODE %>`
-
-Runs JS Code and writes the _unescaped_ result into the result of the template.
-
-The following results in "my favorite element is <B>B</B>.". Using `<%==` is useful
-for sub-templates.
-     
-         <div>my favorite element is <%== '<B>B</B>' %>.</div>
-         
-@signature `<%% CODE %>` 
-
- Writes <% CODE %> to the result of the template.  This is useful for generators.
-     
-         <%%= 'hello world' %>
-
-@signature `<%# CODE %>`
-
-Used for comments.  This does nothing.
-     
-         <%# 'hello world' %>
-         
