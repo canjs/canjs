@@ -165,11 +165,12 @@ steal('can/util','can/observe','./nested_reference',function(can){
 		
 		removeAttr: function( attr ) {
 			var data = this._goto(attr);
+
 			// if there are more attr parts remaining, it means we
 			// hit an internal observable
 			if( data.parts.length ){
 				// ask that observable to remove the attr
-				return data.value.removeAttr(data.parts)
+				return data.value.removeAttr( data.parts.join(".") )
 			} else {
 				// otherwise, are we removing a property from an array
 				if(can.isArray(data.parent)){
@@ -181,7 +182,7 @@ steal('can/util','can/observe','./nested_reference',function(can){
 					this._triggerChange(attr, "remove", undefined, makeObserve( data.value, this) );
 				}
 				// unhookup anything that was in here
-				//this._addChild(attr); --> CHECK THIS ONE! (previous bug was causing this to work even if it shouldn't,)
+				//this._addChild(attr); // --> CHECK THIS ONE! (previous bug was causing this to work even if it shouldn't,)
 				// instead remove all references, do not unbind as _addChild does
 				this._nestedReference.removeChildren();
 				return data.value;
@@ -192,11 +193,13 @@ steal('can/util','can/observe','./nested_reference',function(can){
 		// if it finds something else, it uses __get
 		_goto: function(attr){
 			var parts = attrParts(attr),
-				cur = this.__get(),
 				prev,
 				path = [],
-				part;
-			
+				part;			
+
+			// are we dealing with list or map
+			var cur = this instanceof can.Observe.List ? this[parts.shift()] : this.__get();
+
 			while(cur && !isObserve(cur) && parts.length){
 				part !== undefined && path.push(part)
 				prev = cur;
@@ -258,10 +261,13 @@ steal('can/util','can/observe','./nested_reference',function(can){
 				throw "can.LazyMap: object does note exist"
 			}
 		},
-		__set : function(prop, value, current, data){
+		__set : function(prop, value, current, data, convert){
 			// Otherwise, we are setting it on this `object`.
 			// TODO: Check if value is object and transform
 			// are we changing the value.
+
+			// maybe not needed at all
+			convert = convert || true;
 
 			if ( value !== current ) {
 				// Check if we are adding this for the first time --
@@ -270,7 +276,7 @@ steal('can/util','can/observe','./nested_reference',function(can){
 				var changeType = data.parent.hasOwnProperty( data.prop ) ? "set" : "add";
 
 				// if it is or should be a Lazy
-				if( canMakeObserve(value) ) {
+				if( convert && canMakeObserve(value) ) {
 					// make it a lazy
 					value = makeObserve(value, this);
 					var self = this;
@@ -311,8 +317,6 @@ steal('can/util','can/observe','./nested_reference',function(can){
 		 */
 		_attrs: function( props, remove ) {
 
-			//debugger;
-			
 			if ( props === undefined ) {	
 				return serialize(this, 'attr', {})
 			}
@@ -334,42 +338,16 @@ steal('can/util','can/observe','./nested_reference',function(can){
 				if ( newVal === undefined ) {
 					remove && self.removeAttr(prop);
 					return;
+				} else if( !isObserve(curVal) && canMakeObserve(curVal) ) {
+					// convert curVal to observe
+					curVal = self.attr(prop);
 				}
-				
-				// ? 
+
+				//
 				if(self.__convert){
 					newVal = self.__convert(prop, newVal)
 				}
 
-				// isObserve (has .attr)
-				// isPlainObject
-				// isArray
-				// isPrimitive
-
-				
-				/*
-				if( isObserve( curVal ) ) {
-					if( can.isPlainObject( newVal ) || isObserve( newVal ) || can.isArray( newVal ) ) {
-						curVal._attrs( newVal, remove );
-					} else {
-						// transform `curVal` to `newVal`
-					}
-				} else if( can.isPlainObject( curVal ) ) {
-					if( isObserve( newVal )) {
-						// insert newVal (addChild) 
-					} else if( isPrimitive( newVal )) {
-						// remove children on curVal path
-						// curVal = newVal
-					} else if( can.isPlainObject( newVal ) ) {
-					};
-				} else {
-					if( isObserve( newVal )) {
-					} else {
-					}
-					// curVal = newVal; add childldren
-				}
-				*/
-				
 				// if we're dealing with models, want to call _set to let converter run
 				if( newVal instanceof can.Observe ) {
 					self.__set(prop, newVal, curVal, data)
@@ -448,19 +426,23 @@ steal('can/util','can/observe','./nested_reference',function(can){
 		}, {
 			setup: function( instances, options ) {
 				this._nestedReference = new can.NestedReference(this);
+				
+				// TODO: currently all items get converted to observes
 				can.Observe.List.prototype.setup.apply(this,arguments)
 			},
+			_goto: can.LazyMap.prototype._goto,
 			removeAttr: can.LazyMap.prototype.removeAttr,
 			_bindsetup: can.LazyMap.prototype._bindsetup,
 			_bindteardown: can.LazyMap.prototype._bindteardown,
 			_addChild: can.LazyMap.prototype._addChild,
 			___set : function(attr, val, data){
 				if(data){
-					data.parent[data.prop] = value;
+					data.parent[data.prop] = val;
 				} else {
 					return can.Observe.List.prototype.___set.apply(this, arguments)
 				}
 			}
+			
 		})
 	
 	
