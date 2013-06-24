@@ -507,10 +507,8 @@
 		paginate.removeAttr( 'offset' );
 	});
 
-
-	/*
 	test("Instantiating can.Observe.List of correct type", function() {
-		var Ob = can.Observe({
+		var Ob = can.LazyMap({
 			getName : function() {
 				return this.attr('name');
 			}
@@ -529,11 +527,9 @@
 		});
 		equal(list[1].getName(), 'Another test', 'Pushed item gets converted as well');
 	});
-	 */
 	
-	/*
 	test("can.Observe.List.prototype.splice converts objects (#253)", function() {
-		var Ob = can.Observe({
+		var Ob = can.LazyMap({
 			getAge : function() {
 				return this.attr('age') + 10;
 			}
@@ -556,18 +552,16 @@
 
 		equal(list[1].getAge(), 102, 'Converted age of spliced');
 	});
-	 */
 
-	/* 
 	test("Removing an already missing attribute does not cause an event", function(){
-		var lm = new can.LazyMap({});
+		var lm = new can.LazyMap();
 	 
 		lm.bind("change", function(){
 			ok(false)
 		})
+		
 		lm.removeAttr("foo")
 	});
-	 */
 	 
 	test("Only plain objects should be converted to Observes", function() {
 		var lm = new can.LazyMap({});

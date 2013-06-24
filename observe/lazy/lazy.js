@@ -83,7 +83,7 @@ steal('can/util','can/observe','./nested_reference',function(can){
 	can.LazyMap = can.Observe({
 		setup: function( obj ) {
 			// keep 'plain' object in `_data` 
-			this._data = obj;
+			this._data = obj || {};
 			
 			// keep references to Observes in `_data`
 			this._nestedReference = new can.NestedReference(this._data);
@@ -173,13 +173,16 @@ steal('can/util','can/observe','./nested_reference',function(can){
 				return data.value.removeAttr( data.parts.join(".") )
 			} else {
 				// otherwise, are we removing a property from an array
-				if(can.isArray(data.parent)){
-					data.parent.splice(data.prop,1);
+				if(can.isArray( data.parent )){
+					data.parent.splice(data.prop, 1)
 					this._triggerChange(attr, "remove", undefined, [makeObserve(data.value, this)]);
 				} else {
-					delete data.parent[data.prop];
-					can.Observe.triggerBatch(this, data.path.length? data.path.join(".")+".__keys" : "__keys");
-					this._triggerChange(attr, "remove", undefined, makeObserve( data.value, this) );
+					// do not trigger if prop does not exists
+					if( data.parent[data.prop] ) {
+						delete data.parent[data.prop];
+						can.Observe.triggerBatch(this, data.path.length ? data.path.join(".")+".__keys" : "__keys");
+						this._triggerChange(attr, "remove", undefined, makeObserve( data.value, this) );
+					}
 				}
 				// unhookup anything that was in here
 				//this._addChild(attr); // --> CHECK THIS ONE! (previous bug was causing this to work even if it shouldn't,)
