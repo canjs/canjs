@@ -172,7 +172,6 @@
 		ok(state.attr("properties").bind, "After replacement still has bind function.");
 	});
 
-	/*	
 	test(".attr does not blow away old observable", 2, function(){
 		var state = new can.LazyMap({
 			properties : {
@@ -191,7 +190,7 @@
 		 
 	});
 
-	test("sub observes respect attr remove parameter", function() {
+	test("Sub observes respect attr 'remove' parameter", function() {
 		var bindCalled = 0,
 			state = new can.LazyMap({
 				monkey : {
@@ -207,15 +206,15 @@
 		});
 
 		state.attr({monkey: {}});
-		equals("brain", state.attr("monkey.tail"), "should not remove attribute of sub observe when remove param is false");
-		equals(0, bindCalled, "remove event not fired for sub observe when remove param is false");
+		
+		equals("brain", state.attr("monkey.tail"), "Should not remove attribute of sub observe when remove param is false.");
+		equals(0, bindCalled, "Remove event not fired for sub observe when remove param is false.");
 
 		state.attr({monkey: {}}, true);
 
-		equals(undefined, state.attr("monkey.tail"), "should remove attribute of sub observe when remove param is false");
-		equals(1, bindCalled, "remove event fired for sub observe when remove param is false");
+		equals(undefined, state.attr("monkey.tail"), "Should remove attribute of sub observe when remove param is false.");
+		equals(1, bindCalled, "Remove event fired for sub observe when remove param is false.");
 	});
-	 */
 
 	// TODO: check nested references
 	test("Remove attr", 4, function(){
@@ -275,7 +274,7 @@
 		equals(undefined,  state.attr("array.1"), "Removed item isn't accessable." );
 	});
 
-	test("Remove nested property in item of array", function(){
+	test("Remove nested property in item of array", 4, function(){
 		var state = new can.LazyMap({
 			array : [{
 				nested: true
@@ -287,12 +286,11 @@
 			equals(how, "remove", "... with right method")
 			same(old, true, "... and right old value.");
 		})
-		
+
 		state.removeAttr("array.0.nested");
 		equals(undefined,  state.attr("array.0.nested"), "Removed prop is not accessable.");
 	});
 
-	/*
 	test("Remove nested property in item of array observe", function(){
 		var state = new can.LazyList([{nested: true}]);
 		
@@ -301,14 +299,12 @@
 			equals(how, "remove", "... with right method")
 			same(old, true, "... and right old value");
 		})
-		
+
 		state.removeAttr("0.nested");
 		equals(undefined, state.attr("0.nested"), "Removed prop is not accessable.");
 	});
-	 */
 
-	/* FIX: _attrs
-	test("Attr with an object", function(){
+	test("Attr with an object", 5, function(){
 		var state = new can.LazyMap({
 			properties : {
 				foo: "bar",
@@ -350,7 +346,6 @@
 			}
 		});		
 	});
-	 */
 
 	test("Empty get", 1, function(){
 		var state = new can.LazyMap({});
@@ -381,21 +376,23 @@
 		same(res, compare, "Serialized result matches.")
 	})
 
-	/* FIX: _attrs
+	/* fails with can.Observe as well?!
 	test("Attr sends events after it is done", 2, function(){
-		var state = new can.LazyMap({foo: 1, bar: 2})
+		var state = new can.LazyMap({foo: 1, bar: 2});
 		
 		state.bind('change', function(){
 			equals(state.attr('foo'), -1, "attr 'foo' set with right value");
 			equals(state.attr('bar'), -2, "attr 'bar' set with right value")
 		})
+
 		state.attr({foo: -1, bar: -2});
 	})
 	 */
-
+	 
 	// Do we need direct prop access on LazyMap ?!
 	test("Direct property access", 2, function(){
 		var state = new can.LazyMap({foo: 1, attr: 2});
+		
 		equals(state.foo, 1, "Right value on direct access");
 		equals(typeof state.attr, 'function', "'.attr' exists.")
 	})
@@ -532,7 +529,9 @@
 		});
 		equal(list[1].getName(), 'Another test', 'Pushed item gets converted as well');
 	});
+	 */
 	
+	/*
 	test("can.Observe.List.prototype.splice converts objects (#253)", function() {
 		var Ob = can.Observe({
 			getAge : function() {
@@ -559,7 +558,7 @@
 	});
 	 */
 
-	/* failing ...
+	/* 
 	test("Removing an already missing attribute does not cause an event", function(){
 		var lm = new can.LazyMap({});
 	 
@@ -569,8 +568,7 @@
 		lm.removeAttr("foo")
 	});
 	 */
-
-	/* FIX, currently converts everything
+	 
 	test("Only plain objects should be converted to Observes", function() {
 		var lm = new can.LazyMap({});
 
@@ -591,7 +589,6 @@
 		lm.attr('window', window);
 		equal(lm.attr('window'), window, 'Window object should not be converted');		
 	});
-	 */
 	
 	test("startBatch and stopBatch and changed event", 5, function(){
 		
@@ -738,8 +735,7 @@
 		list.replace(def);
 	});
 
-	/* .attrs
-	test(".attr method doesn't merge nested objects (#207)", function() {
+	test(".attr method doesn't merge nested objects (#207)", 1, function() {
 		// From http://jsfiddle.net/andrewborovin/wsNZB/
 		var test = new can.LazyMap({
 			a: {
@@ -752,6 +748,8 @@
 			}
 		});
 
+		var result = {a: {a1: 1, a2: 3}, b: {b1: 3, b2: 2 }}
+
 		test.attr({
 			a: {
 				a2: 3
@@ -761,9 +759,8 @@
 			}
 		});
 
-		deepEqual(test.attr(), {"a":{"a1":1,"a2":3},"b":{"b1":3,"b2":2}}, "Object merged as expected");
+		deepEqual(test.attr(), result, "Object merged as expected");
 	});
-	 */
 	
 	test("IE8 error on list setup with Observe.List (#226)", 1, function() {
 		var list = new can.LazyList(['first', 'second', 'third']),
