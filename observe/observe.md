@@ -5,17 +5,30 @@
 @test can/observe/test.html
 @plugin can/observe
 
+@description Create observable objects.
+
+@signature `new can.Observe([props])`
+
+@param {Object} [props] Properties and values to seed the Observe with.
+@return {can.Observe} An instance of `can.Observe` with the properties from _props_.
+
+@signature `can.Observe([name,] [staticProperties,] instanceProperties)`
+
+Creates a new extended constructor function. 
+    
+This is deprecated. In CanJS 1.2, by default, calling the constructor function
+without `new` will create a `new` instance. Use [can.Construct.extend can.Observe.extend] 
+instead of calling the constructor to extend.
+
+
+@body
+
 `can.Observe` provides a way for you to listen for and keep track of changes
 to objects. When you use the getters and setters provided by `can.Observe`,
 events are fired that you can react to. `can.Observe` also has support for
 working with deep properties. Observable arrays are also available with
 `[can.Observe.List]`, which is based on `can.Observe`.
 
-@signature `can.Observe([props])`
-@param {Object} [props] properties and values to seed the Observe with
-@return {can.Observe} an instance of `can.Observe` with the properties from _props_
-
-@body
 ## Working with Observes
 
 To create an Observe, use `new can.Observe([props])`. This will return a

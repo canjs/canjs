@@ -311,10 +311,10 @@ can.Observe.prototype.__convert = function(prop, value){
  * @function can.Observe.prototype.attributes.serialize serialize
  * @parent can.Observe.attributes.prototype
  *
- * @description `can.Observe.prototype.serialize` serializes an object for the object. 
- * Serialized data is typically used to send back to a server.
+ * @description Serializes the observe's properties using 
+ * the [can.Observe.attributes attribute plugin].
  *
- * @signature `serialize([attrName])`
+ * @signature `observe.serialize([attrName])`
  * @param {String} [attrName] If passed, returns only a serialization of the named attribute.
  * @return {String} A serialization of this Observe.
  *

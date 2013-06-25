@@ -441,21 +441,77 @@ steal('can/util','can/observe', function( can ) {
 		 * @function can.Model.findAll findAll
 		 * @parent can.Model.static
 		 * 
-		 * @signature `can.Model.findAll(params[, success[, error]])`
+		 * @signature `can.Model.findAll( params[, success[, error]] )`
+		 * 
+		 * Retrieve multiple resources from a server.
+		 * 
 		 * @param {Object} params Values to filter the request or results with.
-		 * @param {function} [success] A callback to call on successful retrieval. The callback recieves
+		 * @param {function(can.Model.List)} [success(list)] A callback to call on successful retrieval. The callback recieves
 		 * a can.Model.List of the retrieved resources.
-		 * @param {function} [error] A callback to call when an error occurs. The callback receives the
+		 * @param {function(can.AjaxSettings)} [error(xhr)] A callback to call when an error occurs. The callback receives the
 		 * XmlHttpRequest object.
 		 * @return {can.Deferred} A deferred that resolves to a [can.Model.List] of retrieved models.
 		 *
+		 * 
+		 * @signature `can.Model.findAll: findAllData( params ) -> deferred`
+		 * 
+		 * Implements `findAll` with a [can.Model.findAllData function]. This function
+		 * is passed to [can.Model.makeFindAll makeFindAll] to create the external 
+		 * `findAll` method.
+		 * 
+		 *     findAll: function(params){
+		 *       return $.get("/tasks",params)  
+		 *     }
+		 * 
+		 * @param {can.Model.findAllData} findAllData A function that accepts parameters
+		 * specifying a list of instance data to retreive and returns a [can.Deferred]
+		 * that resolves to a list of those instances.
+		 * 
 		 * @signature `can.Model.findAll: "[METHOD] /path/to/resource"`
 		 * 
-		 * Specify a HTTP method and url to retrieve instances. 
+		 * Implements `findAll` with a HTTP method and url to retrieve instance data. 
+		 * 
+		 *     findAll: "GET /tasks"
+		 * 
+		 * If `findAll` is implemented with a string, this gets converted to 
+		 * a [can.Model.findAllData findAllData function]
+		 * which is passed to [can.Model.makeFindAll makeFindAll] to create the external 
+		 * `findAll` method.
+		 * 
+		 * @param {HttpMethod} METHOD An HTTP method. Defaults to `"GET"`.
+		 * 
+		 * @param {STRING} url The URL of the service to retrieve JSON data.
+		 * 
+		 * @signature `can.Model.findAll: ajaxSettings`
+		 * 
+		 * Implements `findAll` with a [can.AjaxSettings ajax settings object].
+		 * 
+		 *     findAll: {url: "/tasks", dataType: "json"}
+		 * 
+		 * If `findAll` is implemented with an object, it gets converted to 
+		 * a [can.Model.findAllData findAllData function]
+		 * which is passed to [can.Model.makeFindAll makeFindAll] to create the external 
+		 * `findAll` method.
+		 * 
+		 * @param {can.AjaxSettings} ajaxSettings A settings object that
+		 * specifies the options available to pass to [can.ajax].
 		 * 
 		 * @body
+		 * 
+		 * ## Use
+		 * 
 		 * `findAll( params, success(instances), error(xhr) ) -> Deferred` is used to retrieve model 
-		 * instances from the server. Before you can use `findAll`, you must implement it.
+		 * instances from the server. After implementing `findAll`, use it to retrieve instances of the model
+		 * like:
+		 * 
+		 *     Recipe.findAll({favorite: true}, function(recipes){
+		 *       recipes[0].attr('name') //-> "Ice Water"
+		 *     }, function( xhr ){
+		 *       // called if an error
+		 *     }) //-> Deferred
+		 * 
+		 * 
+		 * Before you can use `findAll`, you must implement it.
 		 * 
 		 * ## Implement with a URL
 		 * 
@@ -499,17 +555,6 @@ steal('can/util','can/observe', function( can ) {
 		 *       }
 		 *     },{})
 		 * 
-		 * ## Use
-		 * 
-		 * After implementing `findAll`, you can use it to retrieve instances of the model
-		 * like:
-		 * 
-		 *     Recipe.findAll({favorite: true}, function(recipes){
-		 *       recipes[0].attr('name') //-> "Ice Water"
-		 *     }, function( xhr ){
-		 *       // called if an error
-		 *     }) //-> Deferred
-		 * 
 		 */
 		findAll : {
 			url : "_shortName"
@@ -518,17 +563,79 @@ steal('can/util','can/observe', function( can ) {
 		 * @description Retrieve a resource from a server.
 		 * @function can.Model.findOne findOne
 		 * @parent can.Model.static
-		 * @signature `can.Model.findOne(params[, success[, error]])`
+		 * 
+		 * @signature `can.Model.findOne( params[, success[, error]] )`
+		 * 
+		 * Retrieve a single instance from the server.
+		 * 
 		 * @param {Object} params Values to filter the request or results with.
-		 * @param {function} [success] A callback to call on successful retrieval. The callback recieves
+		 * @param {function(can.Model)} [success(model)] A callback to call on successful retrieval. The callback recieves
 		 * the retrieved resource as a can.Model.
-		 * @param {function} [error] A callback to call when an error occurs. The callback receives the
+		 * @param {function(can.AjaxSettings)} [error(xhr)] A callback to call when an error occurs. The callback receives the
 		 * XmlHttpRequest object.
 		 * @return {can.Deferred} A deferred that resolves to a [can.Model.List] of retrieved models.
-		 *
+		 * 
+		 * @signature `can.Model.findOne: findOneData( params ) -> deferred`
+		 * 
+		 * Implements `findOne` with a [can.Model.findOneData function]. This function
+		 * is passed to [can.Model.makeFindOne makeFindOne] to create the external 
+		 * `findOne` method.
+		 * 
+		 *     findOne: function(params){
+		 *       return $.get("/task/"+params.id)  
+		 *     }
+		 * 
+		 * @param {can.Model.findOneData} findOneData A function that accepts parameters
+		 * specifying an instance to retreive and returns a [can.Deferred]
+		 * that resolves to that instance.
+		 * 
+		 * @signature `can.Model.findOne: "[METHOD] /path/to/resource"`
+		 * 
+		 * Implements `findOne` with a HTTP method and url to retrieve an instance's data. 
+		 * 
+		 *     findOne: "GET /tasks/{id}"
+		 * 
+		 * If `findOne` is implemented with a string, this gets converted to 
+		 * a [can.Model.makeFindOne makeFindOne function]
+		 * which is passed to [can.Model.makeFindOne makeFindOne] to create the external 
+		 * `findOne` method.
+		 * 
+		 * @param {HttpMethod} METHOD An HTTP method. Defaults to `"GET"`.
+		 * 
+		 * @param {STRING} url The URL of the service to retrieve JSON data.
+		 * 
+		 * @signature `can.Model.findOne: ajaxSettings`
+		 * 
+		 * Implements `findOne` with a [can.AjaxSettings ajax settings object].
+		 * 
+		 *     findOne: {url: "/tasks/{id}", dataType: "json"}
+		 * 
+		 * If `findOne` is implemented with an object, it gets converted to 
+		 * a [can.Model.makeFindOne makeFindOne function]
+		 * which is passed to [can.Model.makeFindOne makeFindOne] to create the external 
+		 * `findOne` method.
+		 * 
+		 * @param {can.AjaxSettings} ajaxSettings A settings object that
+		 * specifies the options available to pass to [can.ajax].
+		 * 
+		 * 
+		 * 
 		 * @body
+		 * 
+		 * ## Use
+		 * 
 		 * `findOne( params, success(instance), error(xhr) ) -> Deferred` is used to retrieve a model 
-		 * instance from the server. Before you can use `findOne`, you must implement it.
+		 * instance from the server. 
+		 * 
+		 * Implementing `findOne` like:
+		 * 
+		 *     Recipe.findOne({id: 57}, function(recipe){
+		 * 	     recipe.attr('name') //-> "Ice Water"
+		 *     }, function( xhr ){
+		 * 	     // called if an error
+		 *     }) //-> Deferred
+		 * 
+		 * Before you can use `findOne`, you must implement it.
 		 * 
 		 * ## Implement with a URL
 		 * 
@@ -574,16 +681,7 @@ steal('can/util','can/observe', function( can ) {
 		 *       }
 		 *     },{})
 		 * 
-		 * ## Use
 		 * 
-		 * After implementing `findOne`, you can use it to retrieve an instance of the model
-		 * like:
-		 * 
-		 *     Recipe.findOne({id: 57}, function(recipe){
-		 * 	     recipe.attr('name') //-> "Ice Water"
-		 *     }, function( xhr ){
-		 * 	     // called if an error
-		 *     }) //-> Deferred
 		 */
 		findOne: {}
 	},
@@ -1141,7 +1239,153 @@ steal('can/util','can/observe', function( can ) {
 	});
 	
 	can.each({
+		/**
+		 * @function can.Model.makeFindAll
+		 * @parent can.Model.static
+		 * 
+		 * @signature `can.Model.makeFindAll: function(findAllData) -> findAll`
+		 * 
+		 * Returns the external `findAll` method given the implemented [can.Model.findAllData findAllData] function.
+		 * 
+		 * @params {can.Model.findAllData}
+		 * 
+		 * [can.Model.findAll] is implemented with a `String`, [can.AjaxSettings ajax settings object], or 
+		 * [can.Model.findAllData findAllData] function. If it is implemented as
+		 * a `String` or [can.AjaxSettings ajax settings object], those values are used
+		 * to create a [can.Model.findAllData findAllData] function.
+		 * 
+		 * The [can.Model.findAllData findAllData] function is passed to `makeFindAll`. `makeFindAll`
+		 * should use `findAllData` internally to get the raw data for the request. 
+		 * 
+		 * @return {function(params,success,error):can.Deferred}
+		 * 
+		 * Returns function that implements the external API of `findAll`. 
+		 * 
+		 * @body 
+		 * 
+		 * ## Use
+		 * 
+		 * `makeFindAll` can be used to implement base models that perform special 
+		 * behavior. `makeFindAll` is passed a [can.Model.findAllData findAllData] function that retrieves raw
+		 * data. It should return a function that when called, uses
+		 * the findAllData function to get the raw data, convert them to model instances with
+		 * [can.Model.models models].
+		 * 
+		 * ## Caching
+		 * 
+		 * The following uses `makeFindAll` to create a base `CachedModel`:
+		 * 
+		 *     CachedModel = can.Model({
+		 *       makeFindAll: function(findAllData){
+		 *         // A place to store requests
+		 *         var cachedRequests = {};
+		 * 
+		 *         return function(params, success, error){
+		 *           // is this not cached?
+		 *           if(! cachedRequests[JSON.stringify(params)] ) {
+		 *             var self = this;
+		 *             // make the request for data, save deferred
+		 *             cachedRequests[JSON.stringify(params)] = 
+		 *               findAllData(params).then(function(data){
+		 *                 // convert the raw data into instances
+		 *                 return self.models(data)
+		 *               })
+		 *           }
+		 *           // get the saved request
+		 *           var def = cachedRequests[JSON.stringify(params)]
+		 *           // hookup success and error
+		 *           def.then(success,error)
+		 *           return def;
+		 *         }  
+		 *       }
+		 *     },{})
+		 * 
+		 * The following Todo model will never request the same list of todo's twice:
+		 * 
+		 *     Todo = CachedModel({
+		 *       findAll: "/todos"
+		 *     },{})
+		 * 
+		 *     // widget 1
+		 *     Todo.findAll({})
+		 * 
+		 *     // widget 2
+		 *     Todo.findAll({})
+		 */
 		makeFindAll : "models",
+		/**
+		 * @function can.Model.makeFindOne
+		 * @parent can.Model.static
+		 * 
+		 * @signature `can.Model.makeFindOne: function(findOneData) -> findOne`
+		 * 
+		 * Returns the external `findOne` method given the implemented [can.Model.findOneData findOneData] function.
+		 * 
+		 * @params {can.Model.findOneData}
+		 * 
+		 * [can.Model.findOne] is implemented with a `String`, [can.AjaxSettings ajax settings object], or 
+		 * [can.Model.findOneData findOneData] function. If it is implemented as
+		 * a `String` or [can.AjaxSettings ajax settings object], those values are used
+		 * to create a [can.Model.findOneData findOneData] function.
+		 * 
+		 * The [can.Model.findOneData findOneData] function is passed to `makeFindOne`. `makeFindOne`
+		 * should use `findOneData` internally to get the raw data for the request. 
+		 * 
+		 * @return {function(params,success,error):can.Deferred}
+		 * 
+		 * Returns function that implements the external API of `findOne`. 
+		 * 
+		 * @body
+		 * 
+		 * ## Use
+		 * 
+		 * `makeFindOne` can be used to implement base models that perform special 
+		 * behavior. `makeFindOne` is passed a [can.Model.findOneData findOneData] function that retrieves raw
+		 * data. It should return a function that when called, uses
+		 * the findOneData function to get the raw data, convert them to model instances with
+		 * [can.Model.models models].
+		 * 
+		 * ## Caching
+		 * 
+		 * The following uses `makeFindOne` to create a base `CachedModel`:
+		 * 
+		 *     CachedModel = can.Model({
+		 *       makeFindOne: function(findOneData){
+		 *         // A place to store requests
+		 *         var cachedRequests = {};
+		 * 
+		 *         return function(params, success, error){
+		 *           // is this not cached?
+		 *           if(! cachedRequests[JSON.stringify(params)] ) {
+		 *             var self = this;
+		 *             // make the request for data, save deferred
+		 *             cachedRequests[JSON.stringify(params)] = 
+		 *               findOneData(params).then(function(data){
+		 *                 // convert the raw data into instances
+		 *                 return self.models(data)
+		 *               })
+		 *           }
+		 *           // get the saved request
+		 *           var def = cachedRequests[JSON.stringify(params)]
+		 *           // hookup success and error
+		 *           def.then(success,error)
+		 *           return def;
+		 *         }  
+		 *       }
+		 *     },{})
+		 * 
+		 * The following Todo model will never request the same todo twice:
+		 * 
+		 *     Todo = CachedModel({
+		 *       findOne: "/todos/{id}"
+		 *     },{})
+		 * 
+		 *     // widget 1
+		 *     Todo.findOne({id: 5})
+		 * 
+		 *     // widget 2
+		 *     Todo.findOne({id: 5})
+		 */
 		makeFindOne: "model",
 		makeCreate: "model",
 		makeUpdate: "model"

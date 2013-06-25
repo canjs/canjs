@@ -108,10 +108,10 @@ steal("can/util", function( can ) {
 		/**
 		 * @function can.view.ejs ejs
 		 * @parent can.view.static
-		 * 
-		 * @description Register an EJS template string and create a renderer function.
 		 *
 		 * @signature `can.view.ejs( [id,] template )`
+		 * 
+		 * Register an EJS template string and create a renderer function.
 		 * 
 		 *     var renderer = can.view.ejs("<h1><%= message %></h1>");
 		 *     renderer({message: "Hello"}) //-> docFrag[ <h1>Hello</h1> ]
@@ -152,9 +152,10 @@ steal("can/util", function( can ) {
 		/**
 		 * @function can.view.mustache mustache
 		 * @parent can.view.static
-		 * @description Register a Mustache template string and create a renderer function.
-		 *
+		 * 
 		 * @signature `can.view.mustache( [id,] template )`
+		 * 
+		 * Register a Mustache template string and create a renderer function.
 		 * 
 		 *     var renderer = can.view.mustache("<h1>{{message}}</h1>");
 		 *     renderer({message: "Hello"}) //-> docFrag[ <h1>Hello</h1> ]

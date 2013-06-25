@@ -345,136 +345,90 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			})
 			return data;
 		},
-
+		/**
+		 * @description Make a store of objects to use when making requests against fixtures.
+		 * @function can.fixture.store store
+		 * @parent can.fixture
+		 * 
+		 * @signature `can.fixture.store(count, make[, filter])`
+		 * 
+		 * @param {Number} count The number of items to create.
+		 * 
+		 * @param {Function} make A function that will return the JavaScript object. The
+		 * make function is called back with the id and the current array of items.
+		 * 
+		 * @param {Function} [filter] A function used to further filter results. Used for to simulate
+		 * server params like searchText or startDate.
+		 * The function should return true if the item passes the filter,
+		 * false otherwise. For example:
+		 *
+		 *
+		 *     function(item, settings){
+		 *       if(settings.data.searchText){
+		 *            var regex = new RegExp("^"+settings.data.searchText)
+		 *           return regex.test(item.name);
+		 *       }
+		 *     }
+		 *
+		 * @return {can.fixture.Store} A generator object providing fixture functions for *findAll*, *findOne*, *create*,
+		 * *update* and *destroy*.
+		 *
+		 * @body
+		 * `can.fixture.store(count, generator(index,items))` is used
+		 * to create a store of items that can simulate a full CRUD service. Furthermore,
+		 * the store can do filtering, grouping, sorting, and paging.
+		 * 
+		 * ## Basic Example
+		 * 
+		 * The following creates a store for 100 todos:
+		 * 
+		 *     var todoStore = can.fixture.store(100, function(i){
+		 *       return {
+		 *         id: i,
+		 *         name: "todo number "+i,
+		 *         description: "a description of some todo",
+		 *         ownerId: can.fixture.rand(10)
+		 *       }
+		 *     })
+		 * 
+		 * `todoStore`'s methods:
+		 * 
+		 *  - [can.fixture.types.Store.findAll findAll],
+		 *  - [can.fixture.types.Store.findOne findOne],
+		 *  - [can.fixture.types.Store.create create],
+		 *  - [can.fixture.types.Store.update update], and
+		 *  - [can.fixture.types.Store.destroy destroy] 
+		 * 
+		 * Can be used to simulate a REST service like:
+		 * 
+		 *      can.fixture({
+		 *        'GET /todos':         todoStore.findAll,
+		 *        'GET /todos/{id}':    todoStore.findOne,
+		 *        'POST /todos':        todoStore.create,
+		 *        'PUT /todos/{id}':    todoStore.update,
+		 *        'DELETE /todos/{id}': todoStore.destroy
+		 *      });
+		 * 
+		 * These fixtures, combined with a [can.Model] that connects to these services like:
+		 * 
+		 *      var Todo = can.Model({
+		 *          findAll : 'GET /todos',
+		 *          findOne : 'GET /todos/{id}',
+		 *          create  : 'POST /todos',
+		 *          update  : 'PUT /todos/{id}',
+		 *          destroy : 'DELETE /todos/{id}'
+		 *      }, {});
+		 * 
+		 * ... allows you to simulate requests for all of owner 5's todos like:
+		 * 
+		 *     Todo.findAll({ownerId: 5}, function(todos){
+		 *        	   
+		 *     })
+		 * 
+		 * 
+		 */
 		store: function (types, count, make, filter) {
-			/**
-			 * @description Make a store of objects to use when making requests against fixtures.
-			 * @function can.fixture.store store
-			 * @parent can.fixture.plugins
-			 * @signature `can.fixture.store([types,] count, make[, filter])`
-			 * @param {Array|String} [types] An array of the fixture names or the singular fixture name.
-			 * If an array, the first item is the plural fixture name (prefixed with -) and the second
-			 * item is the singular name.  If a string, it's assumed to be the singular fixture name.  Make
-			 * will simply add s to the end of it for the plural name. If this parameter is not an array
-			 * or a String the fixture won't be added and only return the generator object.
-			 * @param {Number} count The number of items to create.
-			 * @param {Function} make A function that will return the JavaScript object. The
-			 * make function is called back with the id and the current array of items.
-			 * @param {Function} [filter] A function used to further filter results. Used for to simulate
-			 * server params like searchText or startDate.
-			 * The function should return true if the item passes the filter,
-			 * false otherwise. For example:
-			 *
-			 *
-			 *     function(item, settings){
-			 *       if(settings.data.searchText){
-			 *            var regex = new RegExp("^"+settings.data.searchText)
-			 *           return regex.test(item.name);
-			 *       }
-			 *     }
-			 *
-			 * @return {Object} A generator object providing fixture functions for *findAll*, *findOne*, *create*,
-			 * *update* and *destroy*.
-			 *
-			 * @body
-			 * `can.fixture.store(count, generator(index,items))` is used
-			 * to create a store of items that can simulate a full CRUD service. Furthermore,
-			 * the store can do filtering, grouping, sorting, and paging.
-			 * 
-			 * ## Basic Example
-			 * 
-			 * The following creates a store for 100 todos:
-			 * 
-			 *     var todoStore = can.fixture.store(100, function(i){
-			 *       return {
-			 * 	       id: i,
-			 *         name: "todo number "+i,
-			 *         description: "a description of some todo",
-			 *         ownerId: can.fixture.rand(10)
-			 *       }
-			 *     })
-			 * 
-			 * `todoStore`'s methods can be used for the response to a REST service like:
-			 * 
-			 *      can.fixture({
-			 * 	      'GET /todos':         todoStore.findAll,
-			 *        'GET /todos/{id}':    todoStore.findOne,
-			 *        'POST /todos':        todoStore.create,
-			 *        'PUT /todos/{id}':    todoStore.update,
-			 *        'DELETE /todos/{id}': todoStore.destroy
-			 *      });
-			 * 
-			 * These fixtures, combined with a [can.Model] that connects to these services like:
-			 * 
-			 *      var Todo = can.Model({
-			 *          findAll : 'GET /todos',
-			 *          findOne : 'GET /todos/{id}',
-			 *          create  : 'POST /todos',
-			 *          update  : 'PUT /todos/{id}',
-			 *          destroy : 'DELETE /todos/{id}'
-			 *      }, {});
-			 * 
-			 * ... allows you to simulate requests for all of owner 5's todos like:
-			 * 
-			 *     Todo.findAll({ownerId: 5}, function(todos){
-			 *        	   
-			 *     })
-			 * 
-			 * ## Simulated Service
-			 * 
-			 * `can.fixture.store`'s [can.fixture.store.findAll findAll],
-			 * [can.fixture.store.findOne findOne],
-			 * [can.fixture.store.findOne create],
-			 * [can.fixture.store.findOne update], and
-			 * [can.fixture.store.findOne destroy] methods are used to
-			 * simulate a REST service that 
-			 * 
-			 * 
-			 * ## With can.ajax
-			 *
-			 *     //makes a nested list of messages
-			 *     can.fixture.store(["messages","message"], 1000,
-			 *      function(i, messages){
-			 *       return {
-			 *         subject: "This is message "+i,
-			 *         body: "Here is some text for this message",
-			 *         date: Math.floor( new Date().getTime() ),
-			 *         parentId : i < 100 ? null : Math.floor(Math.random()*i)
-			 *       }
-			 *     })
-			 *     //uses the message fixture to return messages limited by
-			 *     // offset, limit, order, etc.
-			 *     can.ajax({
-			 *       url: "messages",
-			 *       data: {
-			 *          offset: 100,
-			 *          limit: 50,
-			 *          order: ["date ASC"],
-			 *          parentId: 5},
-			 *        },
-			 *        fixture: "-messages",
-			 *        success: function( messages ) {  ... }
-			 *     });
-			 *
-			 * ## With can.Model
-			 *
-			 * `can.fixture.make` returns a model store that offers `findAll`, `findOne`, `create`,
-			 * `update` and `destroy` fixture functions you can map to a [can.Model] Ajax request.
-			 * Consider a model like this:
-			 *
-			 *      
-			 *
-			 * And an unnamed generated fixture like this:
-			 *
-			 *      var store = can.fixture.make(100, function(i) {
-			 *          return {
-			 *              id : i,
-			 *              name : 'Todo ' + i
-			 *          }
-			 *      });
-			 *
-			 * You can map can.Model requests using the return value of `can.fixture.make`:
-			 */
+
 			var items = [], // TODO: change this to a hash
 				currentId = 0,
 				findOne = function (id) {
@@ -498,9 +452,9 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			can.extend(methods, {
 				/**
 				 * @description Simulate a findAll to a fixture.
-				 * @function can.fixture.store.findAll
-				 * @parent can.fixture.store
-				 * @signature `findAll(request)`
+				 * @function can.fixture.types.Store.findAll
+				 * @parent can.fixture.types.Store
+				 * @signature `store.findAll(request)`
 				 * 
 				 * `store.findAll(request)` simulates a request to 
 				 * get a list items from the server. It supports the
@@ -623,9 +577,9 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				},
 				/**
 				 * @description Simulate a findOne request on a fixture.
-				 * @function can.fixture.store.findOne
-				 * @parent can.fixture.store
-				 * @signature `findOne(request, callback)`
+				 * @function can.fixture.types.Store.findOne
+				 * @parent can.fixture.types.Store
+				 * @signature `store.findOne(request, callback)`
 				 * @param {Object} request Parameters for the request.
 				 * @param {Function} callback A function to call with the retrieved item.
 				 * 
@@ -646,9 +600,9 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				},
 				/**
 				 * @description Simulate an update on a fixture.
-				 * @function can.fixture.store.update
-				 * @parent can.fixture.store
-				 * @signature `update(request, callback)`
+				 * @function can.fixture.types.Store.update
+				 * @parent can.fixture.types.Store
+				 * @signature `store.update(request, callback)`
 				 * @param {Object} request Parameters for the request.
 				 * @param {Function} callback A function to call with the updated item and headers.
 				 * 
@@ -676,9 +630,9 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				},
 				/**
 				 * @description Simulate destroying a Model on a fixture.
-				 * @function can.fixture.store.destroy
-				 * @parent can.fixture.store
-				 * @signature `destroy(request, callback)`
+				 * @function can.fixture.types.Store.destroy
+				 * @parent can.fixture.types.Store
+				 * @signature `store.destroy(request, callback)`
 				 * @param {Object} request Parameters for the request.
 				 * @param {Function} callback A function to call after destruction.
 				 * 
@@ -707,9 +661,9 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				},
 				/**
 				 * @description Simulate creating a Model with a fixture.
-				 * @function can.fixture.store.create
-				 * @parent can.fixture.store
-				 * @signature `create(request, callback)`
+				 * @function can.fixture.types.Store.create
+				 * @parent can.fixture.types.Store
+				 * @signature `store.create(request, callback)`
 				 * @param {Object} request Parameters for the request.
 				 * @param {Function} callback A function to call with the created item.
 				 * 
@@ -764,9 +718,9 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				getId: getId,
 				/**
 				 * @description Get an item from the store by ID.
-				 * @function can.fixture.store.find
-				 * @parent can.fixture.store
-				 * @signature `find(settings)`
+				 * @function can.fixture.types.Store.find
+				 * @parent can.fixture.types.Store
+				 * @signature `store.find(settings)`
 				 * @param {Object} settings An object containing an `id` key
 				 * corresponding to the item to find.
 				 * 
@@ -778,9 +732,9 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				},
 				/**
 				 * @description Reset the fixture store.
-				 * @function can.fixture.store.reset
-				 * @parent can.fixture.store
-				 * @signature `can.fixture.store.reset()`
+				 * @function can.fixture.types.Store.reset
+				 * @parent can.fixture.types.Store
+				 * @signature `store.reset()`
 				 * 
 				 * @body
 				 * `store.reset()` resets the store to contain its 
@@ -808,12 +762,12 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		 * @description Create a random number or selection.
 		 * @function can.fixture.rand rand
 		 * @parent can.fixture
-		 * @signature `rand([min,] max)`
+		 * @signature `can.fixture.rand([min,] max)`
 		 * @param {Number} [min=0] The lower bound on integers to select.
 		 * @param {Number} max The upper bound on integers to select.
 		 * @return {Number} A random integer in the range [__min__, __max__).
 		 *
-		 * @signature `rand(choices, min[ ,max])`
+		 * @signature `can.fixture.rand(choices, min[ ,max])`
 		 * @param {Array} choices An array of things to choose from.
 		 * @param {Number} min The minimum number of times to choose from __choices__.
 		 * @param {Number} [max=min] The maximum number of times to choose from __choices__.
