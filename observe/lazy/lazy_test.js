@@ -19,7 +19,7 @@
 		var firstFact = person.attr("name.facts.0");
 
 		// check lazy conversion on .attr()
-		ok(person.name.facts[0] instanceof can.LazyMap, "Nested attribute converted to LazyMap");
+		ok(person.attr('name.facts.0') instanceof can.LazyMap, "Nested attribute converted to LazyMap");
 
 		// listen changes on parent, checks bubbling
 		person.bind("change", function(ev, attr, how, newVal, oldVal) {
@@ -390,12 +390,14 @@
 	 */
 	 
 	// Do we need direct prop access on LazyMap ?!
+	/*
 	test("Direct property access", 2, function(){
 		var state = new can.LazyMap({foo: 1, attr: 2});
 		
 		equals(state.foo, 1, "Right value on direct access");
 		equals(typeof state.attr, 'function', "'.attr' exists.")
 	})
+	 */
 
 	// TODO: check `oldVal`, doesn't return oldVal in can.Observe.List as well
 	test("Pop unbinds", 6, function(){
