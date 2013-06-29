@@ -1,10 +1,97 @@
-@page can.Observe.attributes
-@parent can.Observe
+@page can.Observe.attributes attributes
+@parent can.Observe.plugins
 @plugin can/observe/attributes
-@test can/observe/attributes/qunit.html
+@test can/observe/attributes/test.html
 @download http://donejs.com/can/dist/can.observe.attributes.js
+@group can.Observe.attributes.static static
+@group can.Observe.attributes.prototype prototype
 
-The Attributes plugin provides  functionality for converting data attributes from raw types and 
+can.Observe.attributes is a plugin that helps convert and normalize data being set on an Observe
+and allows you to specify the way complex types get serialized. The attributes plugin is most
+helpful when used with [can.Model] \(because the serialization aids in sending data to a server),
+but you can use it with any Observe you plan to make instances
+from.
+
+@body
+There are three important static properties to give the class you want to use attributes with:
+
+- `[can.Observe.attributes.static.attributes attributes]` lists the properties that will be normalized
+and the types those properties should be.
+- `[can.Observe.attributes.static.convert convert]` lists how to convert and normalize arbitrary values
+to the types this class uses.
+- `[can.Observe.attributes.static.serialize serialize]` lists serialization algorithms for the types
+this class uses.
+
+Together, the functions in _convert_ and _serialize_ make up the type definitions for the class.
+The attributes plugin comes with three useful predefined types: `'date'`, `'number'`, and `'boolean'`.
+
+Here is a quick example of an Observe-based class using the attributes plugin to convert and normalize
+its data, and then to serialize the instance:
+
+@codestart
+can.Observe('Bio', {
+	attributes: {
+		birthday: 'date',
+		weight: 'number'
+	}
+	// Bio only uses built-in types, so no
+	// need to specify serialize or convert.
+}, {});
+
+var alice = new Bio({
+	birthday: Date.parse('1985-04-01'), // 481161600000
+	weight: '120'
+});
+
+alice.attr();      // { birthday: Date(481161600000), weight: 120 }
+alice.serialize(); // { birthday: 481161600000, weight: 120 }
+
+@codeend
+
+### Demo
+
+When a user enters a new date in the format of _YYYY-MM-DD_, the control 
+listens for changes in the input box and updates the Observable using 
+the `attr` method which then converts the string into a JavaScript date object.  
+
+Additionally, the control also listens for changes on the Observable and 
+updates the age in the page for the new birthdate of the contact.
+
+@demo can/observe/attributes/attributes.html
+
+### Reference types
+
+Types listed in `attributes` can also be a functions, such as the `model` or
+`models` methods of a [can.Model]. When data of this kind of type is set, this
+function is used to convert the raw data into an instance of the Model.
+
+This example builds on the previous one to demonstrate these reference types.
+
+can.Observe('Bio', {
+	attributes: {
+		birthday: 'date',
+		weight: 'number'
+	}
+	// Contact only uses built-in types, so you don't have
+	// to specify serialize or convert.
+}, {});
+
+can.Observe('Contact', {
+  attributes: {
+    bio: 'Bio.newInstance'
+  }
+}, {});
+
+var alice = new Contact({
+  first: 'Alice',
+  last: 'Liddell',
+  bio: {
+	birthday: Date.parse('1985-04-01'), // 481161600000
+	weight: 120
+  }
+});
+
+The Attributes plugin provides functionality for converting data attributes from raw types and 
 serializing complex types for the server.
 
 Below is an example code of an Observe providing serialization and conversion for dates and numbers.  
@@ -69,16 +156,7 @@ as well.  Lastly, `serialize` is invoked converting the new attributes to raw ty
 	var seralizedObj = brian.serialize();
 	//-> { 'birthday': '11-29-1983', 'weight': '300' }
 	
-### Demo
 
-When a user enters a new date in the format of _YYYY-DD-MM_, the control 
-listens for changes in the input box and updates the Observable using 
-the `attr` method which then converts the string into a JavaScript date object.  
-
-Additionally, the control also listens for changes on the Observable and 
-updates the age in the page for the new birthdate of the contact.
-
-@demo can/observe/attributes/attributes.html
 	
 ## Associations
 

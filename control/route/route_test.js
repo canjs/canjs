@@ -11,6 +11,7 @@ module("can/control/route",{
 });
 
 test("routes changed", function () {
+	can.route.ready();
 	expect(3);
 
 	//setup controller
@@ -43,6 +44,7 @@ test("routes changed", function () {
 });
 
 test("route pointers", function(){
+	can.route.ready();
 	expect(1);
 	var Tester = can.Control({
 		"lol/:wat route" : "meth",

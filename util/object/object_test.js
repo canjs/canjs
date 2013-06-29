@@ -1,4 +1,4 @@
-steal('funcunit/qunit','./object',function(){
+(function(){
 
 module("can/util/object");
 
@@ -19,17 +19,17 @@ test("subsets", function(){
 	var res1 = can.Object.subsets({parentId: 5, type: "files"},
 		[{parentId: 6}, {type: "folders"}, {type: "files"}]);
 		
-	same(res1,[{type: "files"}])
+	deepEqual(res1,[{type: "files"}])
 	
 	var res2 = can.Object.subsets({parentId: 5, type: "files"},
 		[{}, {type: "folders"}, {type: "files"}]);
 		
-	same(res2,[{},{type: "files"}]);
+	deepEqual(res2,[{},{type: "files"}]);
 	
 	var res3 = can.Object.subsets({parentId: 5, type: "folders"},
 		[{parentId: 5},{type: "files"}]);
 		
-	same(res3,[{parentId: 5}])
+	deepEqual(res3,[{parentId: 5}])
 });
 
 test("subset compare", function(){
@@ -91,8 +91,8 @@ test("searchText", function(){
 		},
 		compare = {
 			searchText : function(items, paramsText, itemr, params){
-				equals(item,itemr);
-				equals(searchText, params)
+				equal(item,itemr);
+				equal(searchText, params)
 				return true;
 			}
 		};
@@ -101,4 +101,4 @@ test("searchText", function(){
 });
 
 
-});
+})();

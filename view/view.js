@@ -48,6 +48,10 @@ steal("can/util", function( can ) {
 
 	can.extend( $view, {
 		// creates a frag and hooks it up all at once
+		/**
+		 * @function can.view.frag frag
+		 * @parent can.view.static
+		 */
 		frag: function(result, parentNode ){
 			return $view.hookup( $view.fragment(result), parentNode );
 		},
@@ -102,42 +106,76 @@ steal("can/util", function( can ) {
 		},
 
 		/**
-		 * @function ejs
+		 * @function can.view.ejs ejs
+		 * @parent can.view.static
 		 *
-		 * `can.view.ejs([id,] template)` registers an EJS template string 
+		 * @signature `can.view.ejs( [id,] template )`
+		 * 
+		 * Register an EJS template string and create a renderer function.
+		 * 
+		 *     var renderer = can.view.ejs("<h1><%= message %></h1>");
+		 *     renderer({message: "Hello"}) //-> docFrag[ <h1>Hello</h1> ]
+		 * 
+		 * @param {String} [id] An optional ID to register the template.
+		 * 
+		 *     can.view.ejs("greet","<h1><%= message %></h1>");
+		 *     can.view("greet",{message: "Hello"}) //-> docFrag[<h1>Hello</h1>]
+		 * 
+		 * @param {String} template An EJS template in string form.
+		 * @return {can.view.renderer} A renderer function that takes data and helpers.
+		 * 
+		 *
+		 * @body
+		 * `can.view.ejs([id,] template)` registers an EJS template string
 		 * for a given id programatically. The following
 		 * registers `myViewEJS` and renders it into a documentFragment.
 		 *
 		 *      can.view.ejs('myViewEJS', '<h2><%= message %></h2>');
-		 * 
+		 *
 		 *      var frag = can.view('myViewEJS', {
 		 *          message : 'Hello there!'
 		 *      });
-		 * 
+		 *
 		 *      frag // -> <h2>Hello there!</h2>
 		 *
-		 * To convert the template into a render function, just pass 
+		 * To convert the template into a render function, just pass
 		 * the template. Call the render function with the data
-		 * you want to pass to the template and it returns the 
+		 * you want to pass to the template and it returns the
 		 * documentFragment.
 		 *
 		 *      var renderer = can.view.ejs('<div><%= message %></div>');
 		 *      renderer({
 		 *          message : 'EJS'
 		 *      }); // -> <div>EJS</div>
-		 *
-		 * @param {String} [id] The template id 
-		 * @param {String} template The EJS template string
 		 */
-		//
+		// auj
 		/**
-		 * @function mustache
+		 * @function can.view.mustache mustache
+		 * @parent can.view.static
+		 * 
+		 * @signature `can.view.mustache( [id,] template )`
+		 * 
+		 * Register a Mustache template string and create a renderer function.
+		 * 
+		 *     var renderer = can.view.mustache("<h1>{{message}}</h1>");
+		 *     renderer({message: "Hello"}) //-> docFrag[ <h1>Hello</h1> ]
+		 * 
+		 * @param {String} [id] An optional ID for the template.
+		 * 
+		 *     can.view.ejs("greet","<h1>{{message}}</h1>");
+		 *     can.view("greet",{message: "Hello"}) //-> docFrag[<h1>Hello</h1>]
+		 * 
+		 * @param {String} template A Mustache template in string form.
 		 *
+		 * @return {can.view.renderer} A renderer function that takes data and helpers.
+		 *
+		 * @body
+		 * 
 		 * `can.view.mustache([id,] template)` registers an Mustache template string 
 		 * for a given id programatically. The following
 		 * registers `myStache` and renders it into a documentFragment.
 		 *
-		 *      can.view.ejs('myStache', '<h2>{{message}}</h2>');
+		 *      can.viewmustache('myStache', '<h2>{{message}}</h2>');
 		 * 
 		 *      var frag = can.view('myStache', {
 		 *          message : 'Hello there!'
@@ -154,33 +192,32 @@ steal("can/util", function( can ) {
 		 *      renderer({
 		 *          message : 'Mustache'
 		 *      }); // -> <div>Mustache</div>
-		 *
-		 * @param {String} [id] The template id 
-		 * @param {String} template The Mustache template string
 		 */
-		//
+		// heir
 		/**
-		 * @attribute hookups
+		 * @property hookups
 		 * @hide
 		 * A list of pending 'hookups'
 		 */
 		hookups: {},
 
 		/**
-		 * @function hook
+		 * @description Create a hookup to insert into templates.
+		 * @function can.view.hook hook
+		 * @parent can.view.static
+		 * @signature `can.view.hook(callback)`
+		 * @param {Function} callback A callback function to be called with the element.
+		 *
+		 * @body
 		 * Registers a hookup function that can be called back after the html is 
 		 * put on the page.  Typically this is handled by the template engine.  Currently
 		 * only EJS supports this functionality.
 		 * 
-		 *     var id = can.View.hookup(function(el){
+		 *     var id = can.view.hook(function(el){
 		 *            //do something with el
 		 *         }),
 		 *         html = "<div data-view-id='"+id+"'>"
 		 *     $('.foo').html(html);
-		 * 
-		 * 
-		 * @param {Function} cb a callback function to be called with the element
-		 * @param {Number} the hookup number
 		 */
 		hook: function( cb ) {
 			$view.hookups[++hookupId] = cb;
@@ -188,8 +225,9 @@ steal("can/util", function( can ) {
 		},
 
 		/**
-		 * @attribute cached
 		 * @hide
+		 * @property {Object} can.view.cached view
+		 * @parent can.view
 		 * Cached are put in this object
 		 */
 		cached: {},
@@ -197,7 +235,8 @@ steal("can/util", function( can ) {
 		cachedRenderers: {},
 
 		/**
-		 * @attribute cache
+		 * @property {Boolean} can.view.cache cache
+		 * @parent can.view.static
 		 * By default, views are cached on the client.  If you'd like the
 		 * the views to reload from the server, you can set the `cache` attribute to `false`.
 		 *
@@ -208,7 +247,18 @@ steal("can/util", function( can ) {
 		cache: true,
 
 		/**
-		 * @function register
+		 * @function can.view.register register
+		 * @parent can.view.static
+		 * @description Register a templating language.
+		 * @signature `can.view.register(info)`
+		 * @param {{}} info Information about the templating language.
+		 * @option {String} plugin The location of the templating language's plugin.
+		 * @option {String} suffix Files with this suffix will use this templating language's plugin by default.
+		 * @option {function} renderer A function that returns a function that, given data, will render the template with that data.
+		 * The __renderer__ function receives the id of the template and the text of the template.
+		 * @option {function} script A function that returns the string form of the processed template.
+		 *
+		 * @body
 		 * Registers a template engine to be used with 
 		 * view helpers and compression.  
 		 * 
@@ -231,24 +281,6 @@ steal("can/util", function( can ) {
 		 * 	}
 		 * })
 		 * @codeend
-		 * Here's what each property does:
-		 * 
-		 *    * plugin - the location of the plugin
-		 *    * suffix - files that use this suffix will be processed by this template engine
-		 *    * renderer - returns a function that will render the template provided by text
-		 *    * script - returns a string form of the processed template function.
-		 * 
-		 * @param {Object} info a object of method and properties 
-		 * 
-		 * that enable template integration:
-		 * <ul>
-		 *   <li>plugin - the location of the plugin.  EX: 'jquery/view/ejs'</li>
-		 *   <li>suffix - the view extension.  EX: 'ejs'</li>
-		 *   <li>script(id, src) - a function that returns a string that when evaluated returns a function that can be 
-		 *    used as the render (i.e. have func.call(data, data, helpers) called on it).</li>
-		 *   <li>renderer(id, text) - a function that takes the id of the template and the text of the template and
-		 *    returns a render function.</li>
-		 * </ul>
 		 */
 		register: function( info ) {
 			this.types["." + info.suffix] = info;
@@ -257,7 +289,8 @@ steal("can/util", function( can ) {
 		types: {},
 
 		/**
-		 * @attribute ext
+		 * @property {String} can.view.ext ext
+		 * @parent can.view.static
 		 * The default suffix to use if none is provided in the view's url.  
 		 * This is set to `.ejs` by default.
 		 *
@@ -286,7 +319,24 @@ steal("can/util", function( can ) {
 		preload: function( ) {},
 
 		/**
-		 * @function render
+		 * @function can.view.render render
+		 * @parent can.view.static
+		 * @description Render a template.
+		 * @signature `can.view.render(template[, callback])`
+		 * @param {String|Object} view The path of the view template or a view object.
+		 * @param {Function} [callback] A function executed after the template has been processed.
+		 * @return {Function|can.Deferred} A renderer function to be called with data and helpers
+		 * or a Deferred that resolves to a renderer function.
+		 *
+		 * @signature `can.view.render(template, data[, [helpers,] callback])`
+		 * @param {String|Object} view The path of the view template or a view object.
+		 * @param {Object} [data] The data to populate the template with.
+		 * @param {Object.<String, function>} [helpers] Helper methods referenced in the template.
+		 * @param {Function} [callback] A function executed after the template has been processed.
+		 * @return {String|can.Deferred} The template with interpolated data in string form
+		 * or a Deferred that resolves to the template with interpolated data.
+		 *
+		 * @body
 		 * `can.view.render(view, [data], [helpers], callback)` returns the rendered markup produced by the corresponding template
 		 * engine as String. If you pass a deferred object in as data, render returns
 		 * a deferred resolving to the rendered markup.
@@ -322,13 +372,6 @@ steal("can/util", function( can ) {
 		 *     var renderer = can.view.render("welcome.ejs");
 		 *     // Do some more things
 		 *     renderer({hello: "world"}) // -> Document Fragment
-		 * 
-		 * @param {String|Object} view the path of the view template or a view object
-		 * @param {Object} [data] the object passed to a template
-		 * @param {Object} [helpers] additional helper methods to be passed to the view template
-		 * @param {Function} [callback] function executed after template has been processed
-		 * @param {String|Object|Function} returns a string of processed text or a deferred
-		 * that resolves to the processed text or a renderer function when no data are passed.
 		 * 
 		 */
 		render: function( view, data, helpers, callback ) {
@@ -510,7 +553,7 @@ steal("can/util", function( can ) {
 				var sub = url.substr(2);
 				url = ! window.steal ? 
 					sub :
-					steal.config().root.mapJoin(sub);
+					steal.config().root.mapJoin(""+steal.id(sub));
 			}
 	
 			// Set the template engine type.
@@ -574,6 +617,7 @@ steal("can/util", function( can ) {
 			var type = $view.types["." + options.type],
 				id = $view.toId(options.id);
 			/**
+			 * @hide
 			 * should return something like steal("dependencies",function(EJS){
 			 * 	 return can.view.preload("ID", options.text)
 			 * })

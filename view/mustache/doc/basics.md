@@ -1,5 +1,5 @@
-@page Basics
-@parent can.Mustache 0
+@page can.Mustache.Basics Basics
+@parent can.Mustache.pages 0
 
 ## Keys
 
@@ -80,6 +80,16 @@ then we could reference `author` and `publisher` like so:
 
 	{{book.author}}
 	{{book.publisher}}
+
+For keys containing periods, the period should be escaped with `\.`:
+
+	{
+		localization: {
+			"hello.world": "Hello World!"
+		}
+	}
+
+	{{localization.hello\.world}}
 
 
 __Context Jumping__

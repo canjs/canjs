@@ -1,104 +1,166 @@
-@class can.Construct
+@constructor can.Construct
+@download can/construct
+@test can/construct/test.html
 @parent canjs
+@group can.Construct.plugins plugins
+
+@description 
+
+Provides a way to easily use the power of prototypal inheritance 
+without worrying about hooking up all the particulars yourself. Use
+[can.Construct.extend can.Construct.extend] to create a inheritable
+constructor function of your own.
 
 
-can.Construct provides easy prototypal inheritance for JavaScript by creating constructor
-functions that can be used with the __new__ keyword. It  is based off John Resig's
-[http://ejohn.org/blog/simple-javascript-inheritance/|Simple JavaScript Inheritance] library.
+@signature `new can.Construct([args..])`
 
-## Creating Constructor Functions
+Create a new instance of a constructor function. `new` is not
+used with `can.Construct` directly. Instead, it is used with a constructor 
+function returned by [can.Construct.extend can.Construct.extend]. For
+example:
 
-To create a constructor function,  call `can.Construct( [ NAME, staticProperties, ] instanceProperties )`.
-
-	var Animal = can.Construct({
-		breathe : function () {
-			console.log('Breathing');
-		}
-	});
-
-`Animal` is a constructor function and instances of Animal have a `breathe()` method. We 
-can create a `new Animal` object and call `breathe()` on it like:
-
-    var man = new Animal();
-    man.breathe();
-    man instanceof Animal //-> true
-
-If you want to create a sub-class (a constructor function that inherits properties from a base constructor function),
-call the the  base constructor function with the new constructor function's properties:
-
-    Dog = Animal({
-    	bark : function () {
-    		console.log('Woof!');
-    	}
-    });
-
-    var dog = new Dog;
-    dog.bark();
-    dog.breathe();
-
-## Instantiation
-
-When a new class instance is created, it calls the class's `init` method with the arguments passed
-to the constructor function:
-
-	var Person = can.Construct({
-		init : function (name) {
-			this.name = name;
-		},
-		speak : function () {
-			return "I am " + this.name + ".";
-		}
-	});
+    Animal = can.Construct.extend({
+      sayHi: function(){
+        console.log("hi")
+      }
+    })
+    var animal = new Animal()
+    animal.sayHi();
     
-    var payal = new Person("Payal");
-    console.log(payal.speak());
-    // -> I am Payal.
+Any arguments passed to the construction function are passed 
+to [can.Construct.prototype.setup setup] and [can.Construct.prototype.init init].
 
-## Static Inheritance 
+@signature `can.Construct([name,] [staticProperties,] instanceProperties)`
 
-If you pass two objects to can.Construct, the first one will be attached directly to the constructor function.
-This is pretty much the same as static properties in most class based languages.
-You can access static properties directly on the construct object or in a prototype method by accessing the
-[can.Construct::constructor] using `this.constructor`. The following example creates a Person construct
-that increments a counter for each instance created:
+Creates a new extended constructor function. Example:
 
-	var Person = can.Construct({
-		count : 0
-	}, {
-		init : function(name) {
-			this.name = name;
-			this.constructor.count++;
-		}
-	});
+    Animal = can.Construct({
+      sayHi: function(){
+        console.log("hi")
+      }
+    })
+    
+This is deprecated. In CanJS 1.2, by default, calling the constructor function
+without `new` will create a `new` instance.  This behavior is controlled
+by the [can.Construct.constructorExtends constructorExtends] property.
 
-	var justin = new Person('Justin');
-	console.log(Person.count); // -> 1
+Use [can.Construct.extend can.Construct.extend] 
+instead of calling the constructor to extend.
 
-## Introspection
+@signature `can.Construct([args...])`
 
-Constructor functions are anonymous, meaning that they don't carry any naming or namespace information.
-You can however pass a namespace string when defining a can.Construct which will make the constructor
-function available globally in that namespace and also set the
-[can.Construct.static.shortName], [can.Construct.static.fullName] and [can.Construct.static.namespace]
-static properties.
+Create a new instance of a constructor function if
+[can.Construct.constructorExtends constructorExtends] is 
+false. `can.Construct([args...])` is not used with `can.Construct`
+directly. Instead it is used on constructor functions
+extended from [can.Construct].
 
-    can.Construct("Bitovi.Person", {
-        init : function(name) {
-            this.name = name;
+    Animal = can.Construct.extend({
+       constructorExtends: false
+    },{
+      sayHi: function(){
+        console.log("hi")
+      }
+    })
+    var animal = Animal();
+
+
+This will be the default behavior in CanJS 1.2.
+
+
+
+@body
+
+
+## Use
+
+In the example below, `Animal` is a constructor function. All instances of `Animal` will have a `speak`
+method, and the `Animal` constructor itself has a `legs` property.
+
+
+    Animal = can.Construct.extend({
+        legs: 4
+    }, {
+        init: function(sound) {
+            this.sound = sound;
+        },
+        speak: function() {
+            console.log(this.sound);
         }
     });
 
-    console.log(Bitovi.Person.shortName); // -> 'Person'
-    console.log(Bitovi.Person.fullName);  //-> 'Bitovi.Person'
-    console.log(Bitovi.Person.namespace); //-> [Object]
+
+You can make instances by calling your constructor with the `new` keyword. When you do, the [can.Construct::init init]
+method gets called (if you supplied one):
+
+    var panther = new Animal('growl');
+    panther.speak(); // "growl"
+    panther instanceof Animal; // true
+
+
+## Inheritance
+
+Creating "subclasses" with `can.Construct` is simple. All you need to do is call the base constructor
+with the new function's static and instance properties. For example, we want our `Snake` to
+be an `Animal`, but there are some differences:
+
+
+    Snake = Animal({
+        legs: 0
+    }, {
+        init: function() {
+            Animal.prototype.init.call(this, 'ssssss');
+        },
+        slither: function() {
+            console.log('slithering...');
+        }
+    });
     
-    var person = new Bitovi.Person();
-    console.log(person.constructor.shortName); // -> 'Person'
+    var baslisk = new Snake();
+    baslisk.speak();   // "ssssss"
+    baslisk.slither(); // "slithering..."
+    baslisk instanceof Snake;  // true
+    baslisk instanceof Animal; // true
+
+
+## Static properties and inheritance
+
+If you pass all three arguments to can.Construct, the second one will be attached directy to the
+constructor, allowing you to imitate static properties and functions. You can access these
+properties through the `[can.Construct::constructor this.constructor]` property.
+
+Static properties can get overridden through inheritance just like instance properties. Let's see
+how this works with `Animal` and `Snake`:
+
+@codestart
+can.Construct('Animal', {
+    legs: 4
+}, {
+    init: function(sound) {
+        this.sound = sound;
+    }
+    speak: function() {
+        console.log(this.sound);
+    }
+});
+
+Animal('Snake', {
+    legs: 0
+}, {
+    init: function() {
+        this.sound = 'ssssss';
+    },
+    slither: function() {
+        console.log('slithering...');
+    }
+});
+
+Animal.legs; // 4
+Snake.legs; // 0
+@codeend
 
 ## Plugins
 
-can.Construct can be used with these two plugins:
-
-[can.Construct.super]: Adds access to the prototype by adding `this._super` to overwritten methods
-
-[can.Construct.proxy]: Is a flexible way to create callbacks from constructor functions
+There are two plugins available to help make using `can.Construct` even simpler.
+* [can.Construct.super] allows you to easily call base methods by making `this._super` available in inherited methods.
+* [can.Construct.proxy] helps you keep your scope straight when creating callbacks inside constructors.

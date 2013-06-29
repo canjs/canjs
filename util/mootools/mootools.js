@@ -1,5 +1,5 @@
 steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js', 'can/util/deferred.js',
-'can/util/array/each.js', 'can/util/object/isplain', '../hashchange.js', function(can) {
+'can/util/array/each.js', 'can/util/object/isplain', function(can) {
 	// mootools.js
 	// ---------
 	// _MooTools node list._
@@ -268,7 +268,7 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 		requestOptions.onFailure = function(){
 			updateDeferred(request.xhr, d);
 			d.reject(request.xhr,"error");
-			error(request.xhr,"error");
+			error && error(request.xhr,"error");
 		}
 
 		if(options.dataType ==='json'){

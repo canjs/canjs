@@ -8,10 +8,10 @@ steal('can/util', 'can/construct', function(can, Construct){
 		}) ? /\b_super\b/ : /.*/;
 		
 		// overwrites a single property so it can still call super
-		can.Construct._overwrite = function(addTo, base, name, val){
+		can.Construct._overwrite = function(addTo, base, name, val) {
 			// Check if we're overwriting an existing function
-			addTo[name] = isFunction(val) && 
-							  isFunction(base[name]) && 
+			addTo[name] = isFunction(val) &&
+							  isFunction(base[name]) &&
 							  fnTest.test(val) ? (function( name, fn ) {
 					return function() {
 						var tmp = this._super,
@@ -29,6 +29,7 @@ steal('can/util', 'can/construct', function(can, Construct){
 					};
 				})(name, val) : val;
 		}
+
 		// overwrites an object with methods, sets up _super
 		//   newProps - new properties
 		//   oldProps - where the old properties might be

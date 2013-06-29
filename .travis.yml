@@ -1,10 +1,3 @@
 language: node_js
 node_js: 0.8
-before_script: build/ci/init.sh
-script:
-  # TODO Zepto running in Phantom - phantomjs build/ci/phantom.js http://localhost:8000/can/test/can_zepto.html
-  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/test.html?library=dojo
-  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/test.html?library=jquery
-  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/test.html?library=mootools
-  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/test.html?library=yui
-  - phantomjs build/ci/phantom.js http://localhost:8000/can/test/plugin_test.html
+script: npm test

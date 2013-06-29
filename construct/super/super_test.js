@@ -1,4 +1,4 @@
-steal('can/construct/super', function(can) {
+(function() {
 
 module("can/construct/super");
 
@@ -45,7 +45,7 @@ test("static super", function(){
 
 test("findAll super", function(){
 
-	var Parent = can.Model({
+	var Parent = can.Construct({
 		findAll: function(){
 			equal(this.shortName, 'child');
 			return new can.Deferred();
@@ -85,4 +85,4 @@ test("Super in derived when parent doesn't have init", function(){
 	}
 })*/
 
-});
+})();

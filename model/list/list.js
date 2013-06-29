@@ -17,9 +17,9 @@ steal('can/util', 'can/model', 'can/observe/elements', function(can) {
 		ajaxMaker = can.Model._ajax,
 
 		/**
-		 * @class jQuery.Model.List
+		 * @constructor jQuery.Model.List
 		 * @parent jQuery.Model
-		 * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/list/list.js
+		 * @download http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/list/list.js
 		 * @test jquery/model/list/qunit.html
 		 * @plugin jquery/model/list
 		 * 
@@ -406,7 +406,7 @@ steal('can/util', 'can/model', 'can/observe/elements', function(can) {
 		},
 		/**
 		 * Returns elements that represent this list.  For this to work, your element's should
-		 * us the [jQuery.Model.prototype.identity identity] function in their class name.  Example:
+		 * use the [jQuery.Model.prototype.identity identity] function in their class name.  Example:
 		 * 
 		 *     <div class='todo <%= todo.identity() %>'> ... </div>
 		 * 
@@ -420,8 +420,8 @@ steal('can/util', 'can/model', 'can/observe/elements', function(can) {
 		 *       todo.elements(this.element).remove();
 		 *     }
 		 * 
-		 * @param {String|jQuery|element} context If provided, only elements inside this element that represent this model will be returned.
-		 * @return {jQuery} Returns a jQuery wrapped nodelist of elements that have these model instances identities in their class names.
+		 * @param {selector|jQuery|element} context If provided, only elements inside this element that represent this model will be returned.
+		 * @return {jQuery collection} Returns a jQuery wrapped nodelist of elements that have these model instances identities in their class names.
 		 */
 		elements: function( context ) {
 			// TODO : this can probably be done with 1 query.
@@ -464,11 +464,14 @@ steal('can/util', 'can/model', 'can/observe/elements', function(can) {
 		destroy: function( success, error ) {
 			var ids = this.map(getIds),
 				items = can.makeArray(this),
-				construct = this.constructor;
+				construct = this.constructor,
+                list = this;
 
 			if ( ids.length ) {
 				this.constructor.destroy(ids).then( function() {
 					can.each(items, function(item){
+                        // remove this item from this list
+                        list.remove(item.id);
 						item.destroyed()
 					});
 					success && success(items)

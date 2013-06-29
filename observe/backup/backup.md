@@ -1,41 +1,42 @@
-@page can.Observe.backup 
-@parent can.Observe
+@page can.Observe.backup backup
+@parent can.Observe.plugins
 @plugin can/observe/backup
-@test can/observe/backup/qunit.html
-@download http://donejs.com/can/dist/can.observe.backup.js
+@test can/observe/backup/test.html
 
-You can backup and restore [can.Observe] data with the can.Observe.backup plugin.
-To backup an observe instance call [can.Observe.prototype.backup backup] like:
+can.Observe.backup is a plugin that provides a dirty bit for properties on an Observe,
+and lets you restore the original values of an Observe's properties after they are changed.
 
-	var recipe = new can.Observe({
-      name : 'Pancakes',
-      ingredients : [{
-          name : "eggs",
-          amount : '1'
-      }, {
-          name : "flour",
-          amount : '1 cup'
-      }, {
-          name : "milk",
-          amount : '1 1/4 cup'
-      }]
-	});
+Here is an example showing how to use `[can.Observe.prototype.backup backup]` to save values,
+`[can.Observe.prototype.restore restore]` to restore them, and `[can.Observe.prototype.isDirty isDirty]`
+to check if the Observe has changed:
 
-	recipe.backup();
+@codestart
+var recipe = new can.Observe({
+  title: 'Pancake Mix',
+  yields: '3 batches',
+  ingredients: [{
+    ingredient: 'flour',
+    quantity: '6 cups'
+  },{
+    ingredient: 'baking soda',
+    quantity: '1 1/2 teaspoons'
+  },{
+    ingredient: 'baking powder',
+    quantity: '3 teaspoons'
+  },{
+    ingredient: 'salt',
+    quantity: '1 tablespoon'
+  },{
+    ingredient: 'sugar',
+    quantity: '2 tablespoons'
+  }]
+});
+recipe.backup();
 
-You can check if the instance has changed with [can.Observe.prototype.isDirty isDirty]:
+recipe.attr('title', 'Flapjack Mix');
+recipe.title;     // 'Flapjack Mix'
+recipe.isDirty(); // true
 
-	recipe.attr('name', 'Potcakes');
-	recipe.isDirty() //-> true
-
-Finally, you can restore the original attributes with [can.Observe.prototype.restore restore]:
-
-	recipe.restore();
-	recipe.name // -> "Pancakes"
-
-By default only direct attributes are checked and restored. Pass true if you want _isDirty_ and
-_restore_ to also include nested observe instances and [can.Model] associations.
-
-See this in action:
-
-@demo can/observe/backup/backup.html
+recipe.restore();
+recipe.title;     // 'Pancake Mix'
+@codeend

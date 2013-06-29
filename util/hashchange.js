@@ -1,8 +1,7 @@
 steal(function() {
 	// This is a workaround for libraries that don't natively listen to the window hashchange event
 	!function() {
-		var routeReadyCalled = false,
-			addEvent = function (el, ev, fn) {
+		var addEvent = function (el, ev, fn) {
 				if (el.addEventListener) {
 					el.addEventListener(ev, fn, false);
 				} else if (el.attachEvent) {

@@ -1,3 +1,6 @@
+/**
+ * @documentjs-ignore
+ */
 steal('can/control/modifier', function(Control){
 
 /*
@@ -251,12 +254,12 @@ var jwerty = {
      *  keyword `this` will be set to `callbackContext` inside the
      *  `callbackFunction` function.
      *
-     *   @param {Mixed} jwertyCode can be an array, or string of key
-     *      combinations, which includes optinals and or sequences
-     *   @param {Function} callbackFucntion is a function (or boolean) which
+     *   @param {Array|String} jwertyCode can be an array, or string of key
+     *      combinations, which includes optionals and or sequences
+     *   @param {Function} callbackFunction is a function (or boolean) which
      *      is fired when jwertyCode is matched. Return false to
      *      preventDefault()
-     *   @param {Object} callbackContext (Optional) The context to call
+     *   @param {Object} [callbackContext] The context to call
      *      `callback` with (i.e this)
      *      
      */
@@ -321,10 +324,10 @@ var jwerty = {
      *  `jwerty.is` will return `true`. If they don't, `jwerty.is` will
      *  return `false`.
      *
-     *   @param {Mixed} jwertyCode can be an array, or string of key
-     *      combinations, which includes optinals and or sequences
+     *   @param {Array|String} jwertyCode can be an array, or string of key
+     *      combinations, which includes optionals and or sequences
      *   @param {KeyboardEvent} event is the KeyboardEvent to assert against
-     *   @param {Integer} i (Optional) checks the `i` key in jwertyCode
+     *   @param {Integer} [i] checks the `i` key in jwertyCode
      *      sequence
      *      
      */
@@ -361,7 +364,7 @@ var jwerty = {
 };
 
 /**
- * @class can.control.key
+ * @page can.control.key
  * @parent can.control
  *
  * Add templated event binding with keydown specific binding.

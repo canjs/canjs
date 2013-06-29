@@ -1,4 +1,4 @@
-steal('can/util', 'can/observe/backup', function() {
+(function() {
 	
 module("can/observe/backup",{
 	setup : function(){
@@ -21,7 +21,7 @@ test("backing up", function(){
 	
 	ok(!recipe.isDirty(), "restored, clean");
 	
-	equals(recipe.name, "cheese" ,"name back");
+	equal(recipe.name, "cheese" ,"name back");
 	
 });
 
@@ -69,7 +69,7 @@ test("backup / restore with associations", function(){
 	
 	ok(!recipe.isDirty(), "restored, clean");
 	
-	equals(recipe.name, "cheese burger" ,"name back");
+	equal(recipe.name, "cheese burger" ,"name back");
 	
 	// test belongs too
 	
@@ -87,7 +87,7 @@ test("backup / restore with associations", function(){
 	
 	ok(!recipe.isDirty(true), "recipe is now clean with checking associations");
 	
-	equals(recipe.cookbook.title, "Justin's Grillin Times" ,"cookbook title back");
+	equal(recipe.cookbook.title, "Justin's Grillin Times" ,"cookbook title back");
 	
 	//try belongs to recursive restore
 	
@@ -117,4 +117,4 @@ test("backup restore nested observables", function() {
 	equal(observe.attr('nested').attr('test'), 'property', 'Nested object got restored');
 });
 
-})()
+})();

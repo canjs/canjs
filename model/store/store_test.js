@@ -22,7 +22,7 @@ test("smart findAll", function(){
 	
 	
 	var items = this.store.findAll({parentId: 7});
-	equals( items.length, 2 , "got the wrong number of items"); 
+	equal( items.length, 2 , "got the wrong number of items"); 
 	$.each(items, function(i, item){
 		if(item.parentId != 7){
 			ok(false,"got a bad parentId")
@@ -101,7 +101,7 @@ test("Store Compare", function(){
 		ok(list.length)
 		start()
 		var list2 = Item.Store.findAll({count: 500});
-		equals(list2.length, list.length, "lists have the same items");
+		equal(list2.length, list.length, "lists have the same items");
 		ok(list2 === list,"lists are equal")
 	})
 })
@@ -134,7 +134,7 @@ test("Store Remove", function(){
 	})
 	list.bind("remove", function(ev, items){
 		ok(items[0] === first, "removed first item");
-		equals(list.length, len - 1, "length adjusted")
+		equal(list.length, len - 1, "length adjusted")
 		var list2 = Item.Store.findAll({parentId: 1});
 		ok(list2.get(first.id)[0] === undefined, "Model Store remove callback");
 		start();
@@ -175,14 +175,14 @@ test("Store Update", function(){
 	});
 	list1.bind("remove", function(ev, items){
 		console.log("1 removed")
-		equals(items[0].id, first.id, "first removed")
+		equal(items[0].id, first.id, "first removed")
 	})
 	list2.bind("add", function(ev, items){
 		console.log("2 added")
 		if(!updating){
 			def2.resolve(true);
 		} else {
-			equals(items[0].id, first.id, "item added to second list")
+			equal(items[0].id, first.id, "item added to second list")
 			start();
 		}
 	});

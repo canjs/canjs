@@ -8,10 +8,10 @@ test("Basic Compute",function(){
 		return o.attr("first") + " " +o.attr("last")
 	})
 	
-	equals(prop(), "Justin Meyer");
+	equal(prop(), "Justin Meyer");
 	var handler =  function(ev, newVal, oldVal){
-		equals(newVal, "Brian Meyer")
-		equals(oldVal, "Justin Meyer")	
+		equal(newVal, "Brian Meyer")
+		equal(oldVal, "Justin Meyer")	
 	}
 	prop.bind("change", handler);
 	
@@ -36,7 +36,7 @@ test("compute on prototype", function(){
 	});
 	var fullName = can.compute( me.fullName, me );
 	
-	equals(fullName(), "Justin Meyer");
+	equal(fullName(), "Justin Meyer");
 	
 	var called = 0;
 	
@@ -68,14 +68,14 @@ test("setter compute", function(){
 		}
 	});
 	
-	equals(computed(), 50, "the value is right");
+	equal(computed(), 50, "the value is right");
 	computed(25);
-	equals(project.attr('progress'), 0.25);
-	equals(computed(),25 );
+	equal(project.attr('progress'), 0.25);
+	equal(computed(),25 );
 	
 	computed.bind("change", function(ev, newVal, oldVal){
-		equals(newVal, 75);
-		equals(oldVal, 25)
+		equal(newVal, 75);
+		equal(oldVal, 25)
 	})
 	
 	computed(75);
@@ -96,7 +96,7 @@ test("compute a compute", function() {
 	});
 	percent.named = "PERCENT";
 
-	equals(percent(),50,'percent starts right');
+	equal(percent(),50,'percent starts right');
 	percent.bind('change',function() {
 		// noop
 	});
@@ -114,19 +114,19 @@ test("compute a compute", function() {
 		// noop
 	});
 
-	equals(fraction(),'50/100','fraction starts right');
+	equal(fraction(),'50/100','fraction starts right');
 
 	percent(25);
 
-	equals(percent(),25);
-	equals(project.attr('progress'),0.25,'progress updated');
-	equals(fraction(),'25/100','fraction updated');
+	equal(percent(),25);
+	equal(project.attr('progress'),0.25,'progress updated');
+	equal(fraction(),'25/100','fraction updated');
 
 	fraction('15/100');
 
-	equals(fraction(),'15/100');
-	equals(project.attr('progress'),0.15,'progress updated');
-	equals(percent(),15,'% updated');
+	equal(fraction(),'15/100');
+	equal(project.attr('progress'),0.15,'progress updated');
+	equal(percent(),15,'% updated');
 });
 
 test("compute with a simple compute", function() {
@@ -238,18 +238,15 @@ test("compute only updates once when a list's contents are replaced",function(){
 		list.each(function(item){
 			item.attr('name')
 		})
-	});
-
-	equals(0,computedCount, "computes are not called until their value is read")
-
-
+	})
+	equal(0,computedCount, "computes are not called until their value is read")
 	compute.bind("change", function(ev, newVal, oldVal){
 	
 	})
 
-	equals(1,computedCount, "binding computes to store the value");
+	equal(1,computedCount, "binding computes to store the value");
 	list.replace([{name: "hank"}]);
-	equals(2,computedCount, "only one compute")
+	equal(2,computedCount, "only one compute")
 
 });
 
