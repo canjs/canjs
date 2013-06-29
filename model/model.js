@@ -487,7 +487,7 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * @param {can.Model.findAllData} findAllData A function that accepts parameters
 		 * specifying a list of instance data to retreive and returns a [can.Deferred]
-		 * that resolves to a list of those instances.
+		 * that resolves to an array of those instances.
 		 * 
 		 * @signature `can.Model.findAll: "[METHOD] /path/to/resource"`
 		 * 
@@ -503,6 +503,22 @@ steal('can/util','can/observe', function( can ) {
 		 * @param {HttpMethod} METHOD An HTTP method. Defaults to `"GET"`.
 		 * 
 		 * @param {STRING} url The URL of the service to retrieve JSON data.
+		 * 
+		 * @return {JSON} The service should return a JSON object like:
+		 * 
+		 *     {
+		 *       "data": [
+		 *         { "id" : 1, "name" : "do the dishes" },
+		 *         { "id" : 2, "name" : "mow the lawn" },
+		 *         { "id" : 3, "name" : "iron my shirts" }
+		 *       ]
+		 *     }
+		 * 
+		 * This object is passed to [can.Model.models] to turn it into instances.
+		 * 
+		 * _Note: .findAll can also accept an array, but you 
+		 * probably [should not be doing that](http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx)._
+		 * 
 		 * 
 		 * @signature `can.Model.findAll: {ajaxSettings}`
 		 * 
@@ -727,6 +743,14 @@ steal('can/util','can/observe', function( can ) {
 	can.Model = can.Observe({
 		fullName: "can.Model",
 		_reqs: 0,
+		/**
+		 * @hide
+		 * @function can.Model.setup
+		 * @parent can.Model.static
+		 * 
+		 * Configures 
+		 * 
+		 */
 		setup : function(base){
 			// create store here if someone wants to use model without inheriting from it
 			this.store = {};
