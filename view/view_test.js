@@ -4,7 +4,7 @@
 	test("registerNode, unregisterNode, and replace work", function(){
 
 		var nodeLists = can.view.live.nodeLists;
-		
+
 		// Reset the registered nodes
 		for (var key in nodeLists.nodeMap) {
 			if (nodeLists.hasOwnProperty(key)) {
@@ -16,7 +16,7 @@
 				delete nodeLists.nodeListMap[key];
 			}
 		}
-	
+
 		var ids = function(arr){
 			return can.map(arr, function(item){
 				return item.id
@@ -24,45 +24,45 @@
 		},
 			two = {id: 2},
 			listOne = [{id: 1},two,{id: 3}];
-		
+
 		nodeLists.register(listOne);
 		var listTwo = [two];
-	
+
 		nodeLists.register(listTwo);
-	
+
 		var newLabel = {id: 4}
 		nodeLists.replace(listTwo, [newLabel])
-	
+
 		deepEqual( ids(listOne), [1,4,3], "replaced" )
 		deepEqual( ids(listTwo), [4] );
-	
+
 		nodeLists.replace(listTwo,[{id: 5},{id: 6}]);
-	
+
 		deepEqual( ids(listOne), [1,5,6,3], "replaced" );
-	
+
 		deepEqual( ids(listTwo), [5,6], "replaced" );
-	
+
 		nodeLists.replace(listTwo,[{id: 7}])
-	
+
 		deepEqual( ids(listOne), [1,7,3], "replaced" );
-	
+
 		deepEqual( ids(listTwo), [7], "replaced" );
-	
+
 		nodeLists.replace( listOne, [{id: 8}])
-	
+
 		deepEqual( ids(listOne), [8], "replaced" );
 		deepEqual( ids(listTwo), [7], "replaced" );
-	
+
 		nodeLists.unregister(listOne);
 		nodeLists.unregister(listTwo);
-	
+
 		deepEqual(nodeLists.nodeMap, {} );
 		deepEqual(nodeLists.nodeListMap ,{} )
 	});
 
 	test("multiple template types work", function(){
 		var expected = '<h3>helloworld</h3>';
-		can.each(["micro","ejs","jaml", "mustache"], function(ext){
+		can.each(["ejs","mustache"], function(ext){
 			var actual = can.view.render(can.test.path("view/test/template." + ext), {
 				"message" :"helloworld"
 			}, {
@@ -418,7 +418,7 @@
 	test("Using '=' in attribute does not truncate the value", function() {
 		var template = can.view.ejs("<div id='equalTest' <%= this.attr('class') %>></div>"),
 			obs = new can.Observe({
-				class : 'class="someClass"'
+				'class' : 'class="someClass"'
 			}),
 			frag = template(obs), div;
 

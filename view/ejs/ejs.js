@@ -38,7 +38,7 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 	 * @function can.EJS.prototype.render render
 	 * @parent can.EJS.prototype
 	 * @description Render a view object with data and helpers.
-	 * @signature `render(data[, helpers])`
+	 * @signature `ejs.render(data[, helpers])`
 	 * @param {Object} [data] The data to populate the template with.
 	 * @param {Object.<String, function>} [helpers] Helper methods referenced in the template.
 	 * @return {String} The template with interpolated data.
@@ -141,12 +141,6 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 		})
 	});
 
-	/**
-	 * @static
-	 * @param data
-	 * @param extras
-	 * @constructor
-	 */
 	EJS.Helpers = function( data, extras ) {
 		this._data = data;
 		this._extras = extras;
@@ -155,7 +149,7 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 
 	/**
 	 * @page can.EJS.Helpers Helpers
-	 * @parent can.EJS.static
+	 * @parent can.EJS
 	 *
 	 * @body
 	 * By adding functions to can.EJS.Helpers.prototype, those functions will be available in the

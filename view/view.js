@@ -48,6 +48,10 @@ steal("can/util", function( can ) {
 
 	can.extend( $view, {
 		// creates a frag and hooks it up all at once
+		/**
+		 * @function can.view.frag frag
+		 * @parent can.view.static
+		 */
 		frag: function(result, parentNode ){
 			return $view.hookup( $view.fragment(result), parentNode );
 		},
@@ -104,15 +108,22 @@ steal("can/util", function( can ) {
 		/**
 		 * @function can.view.ejs ejs
 		 * @parent can.view.static
-		 * @description Register an EJS template string or create a renderer function.
 		 *
-		 * @signature `can.view.ejs(id, template)`
-		 * @param {String} id An ID for the template.
+		 * @signature `can.view.ejs( [id,] template )`
+		 * 
+		 * Register an EJS template string and create a renderer function.
+		 * 
+		 *     var renderer = can.view.ejs("<h1><%= message %></h1>");
+		 *     renderer({message: "Hello"}) //-> docFrag[ <h1>Hello</h1> ]
+		 * 
+		 * @param {String} [id] An optional ID to register the template.
+		 * 
+		 *     can.view.ejs("greet","<h1><%= message %></h1>");
+		 *     can.view("greet",{message: "Hello"}) //-> docFrag[<h1>Hello</h1>]
+		 * 
 		 * @param {String} template An EJS template in string form.
-		 *
-		 * @signature `can.view.ejs(template)`
-		 * @param {String} template An EJS template in string form.
-		 * @return {function} A renderer function that takes data and helpers.
+		 * @return {can.view.renderer} A renderer function that takes data and helpers.
+		 * 
 		 *
 		 * @body
 		 * `can.view.ejs([id,] template)` registers an EJS template string
@@ -137,25 +148,34 @@ steal("can/util", function( can ) {
 		 *          message : 'EJS'
 		 *      }); // -> <div>EJS</div>
 		 */
-		//
+		// auj
 		/**
 		 * @function can.view.mustache mustache
 		 * @parent can.view.static
-		 * @description Register a Mustache template string or create a renderer function.
-		 *
-		 * @signature `can.view.mustache(id, template)`
-		 * @param {String} id An ID for the template.
+		 * 
+		 * @signature `can.view.mustache( [id,] template )`
+		 * 
+		 * Register a Mustache template string and create a renderer function.
+		 * 
+		 *     var renderer = can.view.mustache("<h1>{{message}}</h1>");
+		 *     renderer({message: "Hello"}) //-> docFrag[ <h1>Hello</h1> ]
+		 * 
+		 * @param {String} [id] An optional ID for the template.
+		 * 
+		 *     can.view.ejs("greet","<h1>{{message}}</h1>");
+		 *     can.view("greet",{message: "Hello"}) //-> docFrag[<h1>Hello</h1>]
+		 * 
 		 * @param {String} template A Mustache template in string form.
 		 *
-		 * @signature `can.view.mustache(template)`
-		 * @param {String} template A Mustache template in string form.
-		 * @return {function} A renderer function that takes data and helpers.
+		 * @return {can.view.renderer} A renderer function that takes data and helpers.
 		 *
+		 * @body
+		 * 
 		 * `can.view.mustache([id,] template)` registers an Mustache template string 
 		 * for a given id programatically. The following
 		 * registers `myStache` and renders it into a documentFragment.
 		 *
-		 *      can.view.ejs('myStache', '<h2>{{message}}</h2>');
+		 *      can.viewmustache('myStache', '<h2>{{message}}</h2>');
 		 * 
 		 *      var frag = can.view('myStache', {
 		 *          message : 'Hello there!'
@@ -173,7 +193,7 @@ steal("can/util", function( can ) {
 		 *          message : 'Mustache'
 		 *      }); // -> <div>Mustache</div>
 		 */
-		//
+		// heir
 		/**
 		 * @property hookups
 		 * @hide

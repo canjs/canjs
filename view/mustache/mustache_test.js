@@ -380,6 +380,23 @@ test("Deeply nested partials", function() {
 	deepEqual(new can.Mustache({ text: t.template }).render(t.data), t.expected);
 });
 
+test("Partials correctly set context", function() {
+	var t = {
+		template: "{{#users}}{{>partial}}{{/users}}",
+		expected: "foo - bar",
+		partials: { partial: '{{ name }} - {{ company }}' },
+		data: {
+			users : [{name : 'foo'}],
+			company : 'bar'
+		}
+	};
+	for(var name in t.partials) {
+		can.view.registerView(name, t.partials[name])
+	}
+
+	deepEqual(new can.Mustache({ text: t.template }).render(t.data), t.expected);
+});
+
 test("Handlebars helper: if/else", function() {
 	var t = {
 		template: "{{#if name}}{{name}}{{/if}}{{#if missing}} is missing!{{/if}}",
@@ -872,7 +889,7 @@ test('html comments', function(){
 
 	var div = document.createElement('div');
 	div.appendChild(can.view.frag(compiled));
-	equal(div.children[0].innerHTML, 'foo', 'Element as expected');
+	equal(div.getElementsByTagName('div')[0].innerHTML, 'foo', 'Element as expected');
 })
 
 test("hookup and live binding", function(){
@@ -1273,21 +1290,21 @@ test("computes are supported in default helpers", function() {
   div.appendChild( can.view("count", new can.Observe.List([{},{}])) );
   ok(/There are 2 todos/.test(div.innerHTML), "got all text")
 
-  can.each(Object.keys(staches), function(result) {
+  var result;
+  for (result in staches) {
     var renderer = can.view.mustache("compute_" + result, staches[result]);
     var data = ["e", "a", "c", "h"];
     var div = document.createElement("div");
     var actual = can.view("compute_" + result, { test : can.compute(data) });
     div.appendChild(actual);
-    can.each(div.getElementsByTagName("span"), function(span) {
-      if(span.firstChild) {
+    var span = div.getElementsByTagName("span")[0];
+    if (span && span.firstChild) {
         div.replaceChild(span.firstChild, span);
-      }
-    });
+    }
     actual = div.innerHTML;
 
     equal(actual, result, "can.compute resolved for helper " + result);
-  });
+  };
 
   var inv_staches = {
     "else" : "{{#if test}}if{{else}}else{{/if}}"
@@ -1296,7 +1313,7 @@ test("computes are supported in default helpers", function() {
     , "not_with" : "not{{#with test}}_{{/with}}_with"
   };
 
-  can.each(Object.keys(inv_staches), function(result) {
+  for (result in inv_staches) {
     var renderer = can.view.mustache("compute_" + result, inv_staches[result]);
     var data = null;
     var div = document.createElement("div");
@@ -1305,7 +1322,7 @@ test("computes are supported in default helpers", function() {
     actual = div.innerHTML;
 
     equal(actual, result, "can.compute resolved for helper " + result);
-  });
+  };
 
 });
 
@@ -1439,7 +1456,7 @@ test("Functions and helpers should be passed the same context", function() {
 		}
 		else {
 			//fn is options
-			return fn.fn(this).trim().toString().toUpperCase();
+			return can.trim(fn.fn(this)).toString().toUpperCase();
 		}
 	});
 
@@ -1472,10 +1489,12 @@ test("Interpolated values when iterating through an Observe.List should still re
 		div = document.createElement('div');
 
 	div.appendChild(renderer2(arr));
-	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'Array item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'Array item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'Array item rendered with DOM container');
 	div.innerHTML = '';
 	div.appendChild(renderer2(data));
-	equal(div.innerHTML, "<span>Dishes</span><span>Forks</span>", 'List item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'List item rendered with DOM container');
+	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'List item rendered with DOM container');
 	div.innerHTML = '';
 	div.appendChild(renderer(arr));
 	equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
@@ -1618,19 +1637,28 @@ test("HTML comment with helper", function(){
 			{id: 1, name: "Dishes"}
 		]),
 		compiled = new can.Mustache({text: text.join("\n")}).render({todos: Todos}),
-		div = document.createElement("div")
+		div = document.createElement("div"),
+		li,
+		comments = function(el) {
+			var count = 0;
+			for (var i = 0; i < el.childNodes.length; i++) {
+				if (el.childNodes[i].nodeType == 8) ++count;
+			}
+			return count;
+		};
 
 	div.appendChild(can.view.frag(compiled));
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 1, "1 item in list");
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
+	li = div.getElementsByTagName("ul")[0].getElementsByTagName("li");
+	equal(li.length, 1, "1 item in list");
+	equal(comments(li[0]), 2, "2 comments in item #1");
 
 	Todos.push({id: 2, name: "Laundry"});
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 2, "2 items in list");
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[0].childNodes.length, 7, "7 nodes in item #1");
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li")[1].childNodes.length, 7, "7 nodes in item #2");
+	equal(li.length, 2, "2 items in list");
+	equal(comments(li[0]), 2, "2 comments in item #1");
+	equal(comments(li[1]), 2, "2 comments in item #2");
 
 	Todos.splice(0, 2);
-	equal(div.getElementsByTagName("ul")[0].getElementsByTagName("li").length, 0, "0 items in list");
+	equal(li.length, 0, "0 items in list");
 });
 
 test("correctness of data-view-id and only in tag opening", function(){
@@ -1809,6 +1837,27 @@ test("Each does not redraw items",function(){
 
 });
 
+test("Each works with the empty list",function(){
+
+	var animals = new can.Observe.List([]),
+		renderer = can.view.mustache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
+
+	var div = document.createElement('div')
+
+	var frag = renderer({animals: animals});
+	div.appendChild(frag)
+
+	animals.push('sloth', 'bear')
+
+	//animals.push("dog")
+	equal(div.getElementsByTagName('label').length, 2, "There are 2 labels")
+
+	animals.push("turtle")
+
+	equal(div.getElementsByTagName('span')[2].innerHTML, "turtle", "turtle added");
+
+});
+
 test("each works within another branch", function(){
 	var animals = new can.Observe.List([]),
 		template = "<div>Animals:"+
@@ -1858,5 +1907,59 @@ test("a compute gets passed to a plugin",function(){
 	}));
 
 });
+
+test("Object references can escape periods for key names containing periods", function() {
+	var template = can.view.mustache("{{#foo.bar}}" +
+			"{{some\\\\.key\\\\.name}} {{some\\\\.other\\\\.key.with\\\\.more}}" +
+		"{{/foo.bar}}"),
+		data = {
+			foo: {
+				bar: [{
+					"some.key.name": 100,
+					"some.other.key": {
+						"with.more": "values"
+					}
+				}]
+			}
+		};
+
+	var div = document.createElement('div');
+	div.appendChild(template(data))
+
+	equal( div.innerHTML, "100 values" );
+})
+
+test("Computes should be resolved prior to accessing attributes", function() {
+	var template = can.view.mustache("{{list.length}}"),
+		data = {
+			list: can.compute(new can.Observe.List)
+		};
+
+	var div = document.createElement('div');
+	div.appendChild(template(data))
+
+	equal( div.innerHTML, "0" );
+})
+
+test("Helpers can be passed . or this for the active context", function() {
+	can.Mustache.registerHelper('rsvp', function(attendee, event) {
+		return attendee.name + ' is attending ' + event.name;
+	});
+	var template = can.view.mustache("{{#attendee}}{{#events}}<div>{{rsvp attendee .}}</div>{{/events}}{{/#attendee}}"),
+		data = {
+			attendee: { name: 'Justin' },
+			events: [
+				{ name: 'Reception' },
+				{ name: 'Wedding' }
+			]
+		};
+
+	var div = document.createElement('div');
+	div.appendChild(template(data));
+	var children = div.getElementsByTagName('div');
+
+	equal( children[0].innerHTML, 'Justin is attending Reception' );
+	equal( children[1].innerHTML, 'Justin is attending Wedding' );
+})
 
 })();

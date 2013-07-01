@@ -22,10 +22,15 @@ var isArray = can.isArray,
 	};
 
 /**
- * @class can.Object
- * @parent can.util
+ * @page can.Object can.Object
+ * @parent canjs
  * 
+<<<<<<< HEAD
  * `can.Object` contains several helper methods that 
+=======
+ * @body
+ * Object contains several helper methods that 
+>>>>>>> c05adbf41b09b2497acee0bbe24c8b47f0ddc7e8
  * help compare objects.
  * 
  * ## same

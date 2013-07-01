@@ -1,8 +1,7 @@
 @page can.Observe.setter setter
 @parent can.Observe.plugins
 @plugin can/observe/setter
-@download http://donejs.com/can/dist/can.observe.setter.js
-@test can/observe/setter/qunit.html
+@test can/observe/setter/test.html
 
 `can.Observe.setter(name, success(value), error(errors))` extends the Observe object 
 to provide convenient helper methods for setting attributes on a observable.

@@ -11,8 +11,8 @@ can.each([ can.Observe, can.Model ], function(clss){
 	
 	can.extend(clss, {
 		/**
-		 * @property can.Observe.attributes.static.attributes attributes (static)
-		 * @parent can.Observe.attributes
+		 * @property can.Observe.attributes.static.attributes attributes
+		 * @parent can.Observe.attributes.static
 		 *
 		 * `can.Observe.attributes` is a property that contains key/value pair(s) of an attribute's name and its
 		 * respective type for using in [can.Observe.attributes.static.convert convert] and [can.Observe.prototype.serialize serialize].
@@ -30,7 +30,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 		
 		/**
 		 * @property can.Observe.attributes.static.convert convert
-		 * @parent can.Observe.attributes
+		 * @parent can.Observe.attributes.static
 		 *
 		 * You often want to convert from what the observe sends you to a form more useful to JavaScript. 
 		 * For example, contacts might be returned from the server with dates that look like: "1982-10-20". 
@@ -159,7 +159,8 @@ can.each([ can.Observe, can.Model ], function(clss){
 			"date": function( str ) {
 				var type = typeof str;
 				if ( type === "string" ) {
-					return isNaN(Date.parse(str)) ? null : Date.parse(str)
+					str = Date.parse(str);
+					return isNaN(str) ? null : new Date(str);
 				} else if ( type === 'number' ) {
 					return new Date(str)
 				} else {
@@ -190,8 +191,8 @@ can.each([ can.Observe, can.Model ], function(clss){
 			}
 		},
 		/**
-		 * @property can.Observe.attributes.static.serialize serialize (static)
-		 * @parent can.Observe.attributes
+		 * @property can.Observe.attributes.static.serialize serialize
+		 * @parent can.Observe.attributes.static
 		 *
 		 * `can.Observe.serialize` is an object of name-function pairs that are used to 
 		 * serialize attributes.
@@ -307,13 +308,13 @@ can.Observe.prototype.__convert = function(prop, value){
 };
 
 /**
- * @function can.Observe.prototype.attributes.serialize serialize (prototype)
- * @parent can.Observe.attributes
+ * @function can.Observe.prototype.attributes.serialize serialize
+ * @parent can.Observe.attributes.prototype
  *
- * @description `can.Observe.prototype.serialize` serializes an object for the object. 
- * Serialized data is typically used to send back to a server.
+ * @description Serializes the observe's properties using 
+ * the [can.Observe.attributes attribute plugin].
  *
- * @signature `serialize([attrName])`
+ * @signature `observe.serialize([attrName])`
  * @param {String} [attrName] If passed, returns only a serialization of the named attribute.
  * @return {String} A serialization of this Observe.
  *
@@ -344,35 +345,46 @@ can.Observe.prototype.__convert = function(prop, value){
  *
  *		contact.serialize('birthday') //-> 'YYYY-MM-DD'
  */
-can.Observe.prototype.serialize = function(attrName){
+can.Observe.prototype.serialize = function(attrName, stack) {
 	var where = {},
 		Class = this.constructor,
 		attrs = {};
-		
-	if(attrName != undefined){
+
+	stack = can.isArray(stack) ? stack : [];
+	stack.push(this._cid);
+
+	if(attrName !== undefined){
 		attrs[attrName] = this[attrName];
 	} else {
 		attrs = this.__get();
 	}
-		
+
 	can.each(attrs, function( val, name ) {
 		var type, converter;
-		
-		type = Class.attributes ? Class.attributes[name] : 0;
-		converter = Class.serialize ? Class.serialize[type] : 0;
-			
-		// if the value is an object, and has a attrs or serialize function
-		where[name] = val && typeof val.serialize == 'function' ?
-		// call attrs or serialize to get the original data back
-		val.serialize() :
-		// otherwise if we have  a converter
-		converter ? 
-			// use the converter
-			converter(val, type) : 
-			// or return the val
-			val
+
+		// If this is an observe, check that it wasn't serialized earlier in the stack.
+		if(val instanceof can.Observe && can.inArray(val._cid, stack) > -1) {
+			// Since this object has already been serialized once,
+			// just reference the id (or undefined if it doesn't exist).
+			where[name] = val.attr('id');
+		} 
+		else {
+			type = Class.attributes ? Class.attributes[name] : 0;
+			converter = Class.serialize ? Class.serialize[type] : 0;
+
+			// if the value is an object, and has a attrs or serialize function
+			where[name] = val && typeof val.serialize == 'function' ?
+			// call attrs or serialize to get the original data back
+			val.serialize(undefined, stack) :
+			// otherwise if we have  a converter
+			converter ?
+				// use the converter
+				converter(val, type) :
+				// or return the val
+				val;
+		}
 	});
-	
+
 	return attrName != undefined ? where[attrName] : where;
 };
 return can.Observe;

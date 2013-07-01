@@ -2,14 +2,17 @@
 @group can.route.static static
 @inherits can.Observe
 @download can/route
-@test can/route/qunit.html
+@test can/route/test.html
 @parent canjs
 
-can.route is a plugin that helps manage browser history and
+@description Manage browser history and
 client state by synchronizing the window.location.hash with
 an [can.Observe].
 
-@signature `can.route(template[, defaults])`
+@signature `can.route( template [, defaults] )`
+
+Create a route matching rule.
+
 @param {String} template the fragment identifier to match.  The fragment identifier
 should start with either a character (a-Z) or colon (:).  Examples:
 

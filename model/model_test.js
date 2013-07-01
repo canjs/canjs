@@ -996,7 +996,7 @@ test("calling destroy with unsaved model triggers destroyed event (#181)", funct
 test("model removeAttr (#245)", function() {
 	var MyModel = can.Model({}),
 		model;
-	MyModel._reqs++; // pretend it is live bound
+	can.Model._reqs++; // pretend it is live bound
 	model = MyModel.model({
 		id: 0,
 		index: 2,
@@ -1014,7 +1014,7 @@ test("model removeAttr (#245)", function() {
 	MyModel = can.Model({
 		removeAttr: true
 	}, {});
-	MyModel._reqs++; // pretend it is live bound
+	can.Model._reqs++; // pretend it is live bound
 	model = MyModel.model({
 		id: 0,
 		index: 2,
@@ -1107,5 +1107,53 @@ test("List params uses findAll",function(){
 	
 	
 })
+
+test("Creating nested models adds them to the store (#357)", function(){
+
+   // Raw data. Nested object is there twice
+    var employees = [
+        {
+            id:1, name:"David",
+            company: { id:2, name: "Google" }
+        },
+        {
+            id:2, name:"Tom",
+            company: { id:3, name: "Amazon" }
+        },
+        {
+            id:3, name:"John",
+            company: { id:2, name: "Google" }
+        }
+    ]
+
+    // Company model
+    Company = can.Model({},{})
+
+    // Person model with nested Company
+    Person = can.Model({
+        attributes: {
+            company: 'Company.model'
+        }
+    },{})
+
+    // Initialize raw data as Model instances
+    var people = Person.models(employees)
+
+    // Suddenly Google was bought by Bitovi! and we need to change name.
+    people[0].company.attr('name', "Bitovi")
+
+    ok(people[0].company === people[2].company, "found the same company instance")
+})
+
+
+test("destroy not calling callback for new instances (#403)", function(){
+    var Recipe = can.Model({},{})
+	expect(1);
+	stop();
+	new Recipe({name: "mow grass"}).destroy(function(recipe) {
+		ok( true ,"Destroy called" )
+		start();
+	});
+});
 
 })();

@@ -41,15 +41,19 @@
 
                 steal.config(config);
             }, "can/util/fixture", "can/view/jaml", "can/view/micro",
-                "can/construct", "can/observe", "can/model",
-                "can/view", "can/view/ejs", "can/control",
-                "can/route", "can/control/route", "can/view/mustache",
-                "can/construct/super", "can/observe/delegate",
-                "can/observe/setter", "can/observe/attributes",
-                "can/observe/validations", "can/observe/backup")
+                "can/construct", "can/observe", "can/observe/compute",
+                "can/model", "can/view", "can/view/ejs",
+                "can/control", "can/route", "can/control/route",
+                "can/view/mustache", "can/model/queue",
+                "can/construct/super", "can/construct/proxy",
+                "can/observe/delegate", "can/observe/setter",
+                "can/observe/attributes", "can/observe/validations",
+                "can/observe/backup", "can/util/object",
+                "can/util/string", "can/util/fixture")
                 .then("can/test").then(
                 "can/construct/construct_test.js")
                 .then("can/observe/observe_test.js")
+                .then("can/observe/compute/compute_test.js")
                 .then("can/model/model_test.js")
                 .then("can/view/view_test.js")
                 .then("can/view/ejs/ejs_test.js")
@@ -57,12 +61,17 @@
                 .then("can/route/route_test.js")
                 .then("can/control/route/route_test.js")
                 .then("can/view/mustache/mustache_test.js")
+                .then("can/model/queue/queue_test.js")
                 .then("can/construct/super/super_test.js")
+                .then("can/construct/proxy/proxy_test.js")
                 .then("can/observe/delegate/delegate_test.js")
                 .then("can/observe/setter/setter_test.js")
                 .then("can/observe/attributes/attributes_test.js")
                 .then("can/observe/validations/validations_test.js")
-                .then("can/observe/backup/backup_test.js", function() {
+                .then("can/observe/backup/backup_test.js")
+                .then("can/util/object/object_test.js")
+                .then("can/util/string/string_test.js")
+                .then("can/util/fixture/fixture_test.js", function() {
                 steal.dev.log = function() {};
                 steal.dev.warn = function() {};
                 QUnit.start();

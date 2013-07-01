@@ -1,19 +1,33 @@
 @constructor can.Mustache
 @parent canjs
 @group can.Mustache.pages Pages
+@group can.Mustache.tags Tags
+@group can.Mustache.types Types
 
-@test can/view/mustache/test/qunit.html
+@test can/view/mustache/test/test.html
 @plugin can/view/mustache
 @download http://canjs.us/release/latest/can.view.mustache.js
 
-can.Mustache provides logic-less templates with live binding 
-when used with [can.Observes](#can_observe). It currently ships as a plugin,
-and you can view the [annotated source](http://canjs.us/release/latest/docs/can.view.mustache.html).
+@description Logic-less [http://mustache.github.io/ mustache] templates with live binding 
+when used with [can.Observes](#can_observe).
+
+@signature `new can.Mustache(options)`
+
+Creates an instance of a mustache template. This is typically not used directly in 
+favor of [can.view] or [can.view.mustache].
+
+@param {{}} options An options object with the following properties:
+
+@option {String} text The text of the mustache template.
+@option {String} [name] The name of the template used to identify it to
+debugging tools.
+
+@body
+
+## Use
 
 [Mustache](https://github.com/janl/mustache.js/) and [Handlebar](http://handlebarsjs.com/) 
-templates are compatible with can.Mustache, so you can import existing templates.
-
-## Getting Started
+templates are compatible with can.Mustache.
 
 Mustache templates looks similar to normal HTML except
 they contain contain keys for inserting data into the template
@@ -29,8 +43,6 @@ __Mustache Template__
 		<p>You have {{messages}} messages.</p>
 	</script>
 
-The Mustache sytax is the `{{  }}` magic tags above.
-
 __JavaScript__
 
 	var data = new can.Observe({
@@ -39,20 +51,22 @@ __JavaScript__
 	});
 
 	var template = can.view("#template", data)
-	can.$(document.body).append(template);
+	document.body.appendChild(template);
 
-__HTML__
+__HTML Result__
 
 	<h1>Welcome Tina Fey!</h1>
 	<p>You have 0 messages.</p>
 
-To update your template using live-binding:
+To update the html using live-binding, change an observable value:
 
 	data.attr('message', 5)
 
-which will re-render the paragraph tag to say:
+This updates the text to say:
 
 	<p>You have 5 messages.</p>
+
+
 
 can.Mustache provides a lot more functionality such as:
 
@@ -63,6 +77,6 @@ can.Mustache provides a lot more functionality such as:
 - [Helpers](#Helpers)
 - [Live Binding](#Binding)
 
-## Demos
+## Tags
 
- - [TodoMVC](http://addyosmani.github.com/todomvc/architecture-examples/canjs/) is a project which offers the same Todo application implemented using MV* concepts in most of the popular JavaScript MV* frameworks of today. [Source Code](https://github.com/addyosmani/todomvc/tree/gh-pages/architecture-examples/canjs)
+@api can.Mustache.tags
