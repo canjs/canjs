@@ -356,7 +356,8 @@ steal("can/util/string", function(can) {
 				 * @parent can.Construct.static
 				 *
 				 * The `namespace` property returns the namespace your constructor is in.
-				 * This provides a way organize code and ensure globally unique types.
+				 * This provides a way organize code and ensure globally unique types. The
+				 * `namespace` is the [can.Construct.fullName fullName] you passed without the [can.Construct.shortName shortName].
 				 * 
 				 * @codestart
 				 * can.Construct("MyApplication.MyConstructor",{},{});
@@ -371,7 +372,7 @@ steal("can/util/string", function(can) {
 				 * @parent can.Construct.static
 				 *
 				 * If you pass a name when creating a Construct, the `shortName` property will be set to the
-				 * name you passed without the namespace.
+				 * name you passed without the [can.Construct.namespace namespace].
 				 * 
 				 * @codestart
 				 * can.Construct("MyApplication.MyConstructor",{},{});
@@ -386,7 +387,8 @@ steal("can/util/string", function(can) {
 				 * @parent can.Construct.static
 				 *
 				 * If you pass a name when creating a Construct, the `fullName` property will be set to
-				 * the name you passed.
+				 * the name you passed. The `fullName` consists of the [can.Construct.namespace namespace] and 
+				 * the [can.Construct.shortName shortName].
 				 * 
 				 * @codestart
 				 * can.Construct("MyApplication.MyConstructor",{},{});
