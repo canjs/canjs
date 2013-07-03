@@ -1,8 +1,19 @@
 var path = require('path');
+// Returns mappings for AMDify
+var getAmdifyMap = function(baseName) {
+	var amdifyMap = {};
+
+	amdifyMap[baseName + 'util'] = 'can/util/library';
+	amdifyMap[baseName] = 'can/';
+	amdifyMap['can/can'] = 'can';
+
+	return amdifyMap;
+}
 
 module.exports = function (grunt) {
 
 	var _ = grunt.util._;
+	var baseName = path.basename(__dirname) + '/';
 	var builderJSON = grunt.file.readJSON('builder.json');
 	var pkg = grunt.file.readJSON('package.json');
 	var banner = _.template(builderJSON.banner, {
@@ -90,12 +101,14 @@ module.exports = function (grunt) {
 		amdify: {
 			options: {
 				steal: {
-					root: '../'
+					root: '../',
+					map: {
+						'*': {
+							'can/': baseName
+						}
+					}
 				},
-				map: {
-					'can/util': 'can/util/library',
-					'can/': path.basename(__dirname) + '/'
-				},
+				map: getAmdifyMap(baseName),
 				banner: banner
 			},
 			all: {
@@ -103,8 +116,7 @@ module.exports = function (grunt) {
 					ids: ['can'].concat(_.map(
 						_.keys(builderJSON.configurations), function(name) {
 							return 'can/util/' + name;
-						}),
-						_.keys(builderJSON.modules))
+						}), _.keys(builderJSON.modules))
 				},
 				files: {
 					'dist/amd/': '.'
