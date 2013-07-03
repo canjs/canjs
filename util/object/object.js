@@ -57,9 +57,18 @@ can.Object = {};
 
 /**
  * @function same
- * Returns if two objects are the same.  It takes an optional compares object that
- * can be used to make comparisons.
- * 
+ * @description Checks if two objects are the same.
+ * @signature `same(a, b[, compares])`
+ * @param {Object} a An object to compare against `b`.
+ * @param {Object} b An object to compare against `a`.
+ * @param {Object} [compares] An object that specifies how to compare properties.
+ * The keys of the `compares` object are names of properties in the objects to compare,
+ * and the values are functions that compare those properties. You can also pass `'i'`
+ * to compare values as case-insensitive strings, or `null` not to compare the properties
+ * at all.
+ * @return {{boolean}} Whether the two objects have the same properties and values.
+ *
+ * @body
  * This function does not work with objects that create circular references.
  * 
  * ## Examples
@@ -95,20 +104,6 @@ can.Object = {};
  *                           return a === b;
  *                         }})      //-> true
  * 
- * @param {Object} a an object to compare
- * @param {Object} b an object to compare
- * @param {Object} [compares] an object that indicates how to 
- * compare specific properties. 
- * Typically this is a name / value pair
- * 
- *     can.Object.same({name: "Justin"},{name: "JUSTIN"},{name: "i"})
- *     
- * There are two compare functions that you can specify with a string:
- * 
- *   - 'i' - ignores case
- *   - null - ignores this property
- * 
- * @param {Object} [deep] used internally
  */
 var same = can.Object.same = function(a, b, compares, aParent, bParent, deep){
 	var aType = typeof a,

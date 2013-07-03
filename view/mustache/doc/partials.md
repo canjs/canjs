@@ -1,7 +1,35 @@
-@page can.Mustache.Partials Partials
-@parent can.Mustache.pages 2
+@function can.Mustache.helpers.partial {{>key}}
+@parent can.Mustache.tags
+
+@signature `{{>key}}`
+
+Render another template within the current template.
+
+@param {can.Mustache.key} key A key that references a value within the current or parent 
+[can.Mustache.context context]. If the value is a function or [can.compute], the 
+function's return value is used.
+
+If the key value is:
+
+ - `undefined` - the key's name (ex: user.mustache in `{{>user.mustaceh}}`) is used to 
+   look up a template using [can.view].
+
+ - `string` - the string value is used to lookup a view in [can.view].
+
+ - `function` - the function is called with the current scope.
+
+[can.view] looks for a template in the following places:
+
+1. A registered view
+2. An id of an element
+3. A url to load the template.
+
+@return {String} The value of the rendered template is inserted into
+the page.
+
 
 @body
+
 Partials are templates embedded in other templates.  Partials begin with a greater than sign, like `{{>my_partial}}`.  Partials inherit the calling context.  
 
 Partials render at runtime, so recursive partials are possible but make sure you avoid infinite loops.

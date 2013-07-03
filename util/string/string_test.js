@@ -19,6 +19,14 @@
 		deepEqual(subbed, null, 'Rendering with undefined values should return null even when remove param is true');
 	});
 
+	test("can.sub with null values", function () {
+		var subbed = can.sub('test{exists} plus{noexists}', { exists: 'test', noexists: null });
+		deepEqual(subbed, null, 'Rendering with null values should return null');
+
+		var subbed = can.sub('test{exists} plus{noexists}', { exists: 'test', noexists: null }, true);
+		deepEqual(subbed, null, 'Rendering with null values should return null even when remove param is true');
+	});
+
 	test("can.sub double", function () {
 		equal(can.sub("{b} {d}", [
 			{b: "c", d: "e"}

@@ -376,7 +376,7 @@ Trigger an event on an element or object.
 @signature `can.ajax(settings)`
 @param {Object} settings Configuration options for the AJAX request.
 The list of configuration options is the same as for [jQuery.ajax()](http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings).
-@return {Deferred} A can.Deferred that resolves to the data.
+@return {can.Deferred} A can.Deferred that resolves to the data.
 
 @body
 `can.ajax( settings )` is used to make an asynchronous HTTP (Ajax) request
@@ -571,9 +571,9 @@ $.when( { animals: [ 'cat' ] } ).done(function(animals){
 //
 /**
 @constructor can.Deferred
-@parent canjs
+@parent can.util
 
-`can.Deferred` is a object that allows users to assign and chain callback
+@description `can.Deferred` is a object that allows users to assign and chain callback
 function(s) for the success or failure state of both asynchronous and synchronous function(s).
 
 @signature `can.Deferred()`
@@ -587,7 +587,7 @@ function(s) for the success or failure state of both asynchronous and synchronou
 /**
 @description Add callbacks to a Deferred.
 @function can.Deferred.prototype.pipe
-@signature `pipe(doneCallback[, failCallback])`
+@signature `deferred.pipe(doneCallback[, failCallback])`
 @param {Function} doneCallback A function called when the Deferred is resolved.
 @param {Function} failCallback A function called when the Deferred is rejected.
 
@@ -612,7 +612,7 @@ filtered.done(function(value) {
 @description Resolve a Deferred in a particular context.
 @function can.Deferred.prototype.resolveWith resolveWith
 @parent can.Deferred.prototype
-@signature `resolveWith(context[, arguments])`
+@signature `deferred.resolveWith(context[, arguments])`
 @param {Object} context Context passed to the `doneCallbacks` as the `this` object.
 @param {Object} [arguments] Array of arguments that are passed to the `doneCallbacks`.
 
@@ -629,7 +629,7 @@ def.resolveWith(this, { animals: [ 'cows', 'monkey', 'panda' ] })
 @description Reject a Deferred in a particular context.
 @function can.Deferred.prototype.rejectWith rejectWith
 @parent can.Deferred.prototype
-@signature `rejectWith(context[, arguments])`
+@signature `deferred.rejectWith(context[, arguments])`
 @param {Object} context Context passed to the `failCallbacks` as the `this` object.
 @param {Object} [arguments] Array of arguments that are passed to the `failCallbacks`.
 
@@ -646,7 +646,7 @@ def.rejectWith(this, { error: "Animals are gone." })
 @description Add a callback to be called when a Deferred is resolved.
 @function can.Deferred.prototype.done done
 @parent can.Deferred.prototype
-@signature `done(doneCallback)`
+@signature `deferred.done(doneCallback)`
 @param {Function} doneCallback A callback to be called when the Deferred is resolved.
 
 @body
@@ -663,7 +663,7 @@ def.done(function(){
 @description Add a callback to be called when a Deferred is rejected.
 @function can.Deferred.prototype.fail fail
 @parent can.Deferred.prototype
-@signature `fail(failCallback)`
+@signature `deferred.fail(failCallback)`
 @param {Function} failCallback A callback to be called when the Deferred is rejected.
 
 @body
@@ -681,7 +681,7 @@ def.fail(function(){
 @description Add a callback to be unconditionally called.
 @function can.Deferred.prototype.always always
 @parent can.Deferred.prototype
-@signature `always(alwaysCallback)`
+@signature `deferred.always(alwaysCallback)`
 @param {Function} alwaysCallback A callback to be called whether the Deferred is resolved or rejected.
 
 @body
@@ -699,7 +699,7 @@ def.always( function(){
 @description Add callbacks to a Deferred.
 @function can.Deferred.prototype.then then
 @parent can.Deferred.prototype
-@signature `then(doneCallback[, failCallback])`
+@signature `deferred.then(doneCallback[, failCallback])`
 @param {Function} doneCallback A function called when the Deferred is resolved.
 @param {Function} [failCallback] A function called when the Deferred is rejected.
 
@@ -720,7 +720,7 @@ def.then(function(){
 @description Determine whether a Deferred has been resolved.
 @function can.Deferred.prototype.isResolved isResolved
 @parent can.Deferred.prototype
-@signature `isResolved()`
+@signature `deferred.isResolved()`
 @return {Boolean} Whether this Boolean has been resolved.
 
 @body
@@ -734,7 +734,7 @@ var resolved = def.isResolved();
 /**
 @description Determine whether a Deferred has been rejected.
 @function can.Deferred.prototype.isRejected isRejected
-@signature `isRejected()`
+@signature `deferred.isRejected()`
 @return {Boolean} Whether this Boolean has been rejected.
 
 @body
@@ -750,7 +750,7 @@ var rejected = def.isRejected()
 @description Reject a Deferred.
 @function can.Deferred.prototype.reject reject
 @parent can.Deferred.prototype
-@signature `reject([argument])`
+@signature `deferred.reject([argument])`
 @param {Object} [argument] The argument to call the `failCallback` with.
 
 @body
@@ -765,7 +765,7 @@ def.reject({ error: 'Thats not an animal.' })
 /**
 @description Resolve a Deferred.
 @function can.Deferred.prototype.resolve resolve
-@signature `resolve([argument])`
+@signature `deferred.resolve([argument])`
 @param {Object} [argument] The argument to call the `doneCallback` with.
 
 @body
@@ -777,3 +777,57 @@ def.resolve({ animals: [ 'pig', 'cow' ] })
 @codeend
 */
 var a = function() {};
+/**
+ * @typedef {{}} can.NodeList NodeList
+ * @inherits From-Your-Base-Library
+ *  
+ * A "NodeList" is __Library Specific__ implementation of 
+ * an array of DOM elements. [can.$] returns a "NodeList"
+ * and [can.Control::element] is a "NodeList".
+ * 
+ * The following details the "NodeList" object used 
+ * by each library.
+ * 
+ * ## jQuery `jQuery( HTMLElement )`
+ * 
+ * A [http://api.jquery.com/jQuery/ jQuery-wrapped] list of elements.
+ * 
+ *     nodeList.text("Hello World")
+ * 
+ * ## Zepto `Zepto( HTMLElement )`
+ * 
+ * A Zepto-wrapped list of elements.
+ * 
+ *     nodeList.text("Hello World")
+ * 
+ * ## Dojo `new dojo.NodeList( HTMLElement )`
+ * 
+ * Dojo's [http://dojotoolkit.org/reference-guide/1.9/dojo/NodeList.html dojo.NodeList] constructor function.
+ * 
+ *     nodeList.text("Hello World")
+ * 
+ * 
+ * ## Mootools `$$( HTMLElement )`
+ * 
+ * The Mootools [Elements object](http://mootools.net/docs/core/Element/Element#Elements).
+ * 
+ *     nodeList.empty().appendText("Hello World")
+ * 
+ * ## YUI
+ * 
+ * YUI's [NodeList](http://yuilibrary.com/yui/docs/node/).
+ * 
+ *     nodeList.set('text',"Hello World")
+ */
+//
+/**
+ * @typedef {String} CSSSelectorString
+ * 
+ * A [http://www.w3.org/TR/CSS2/selector.html CSS Selector] in a string like: `"#content .title"`.
+ */
+//
+/**
+ * @typedef {String} HttpMethod
+ * 
+ * One of: `GET`, `POST`, `PUT`, or `DELETE`.
+ */

@@ -7,7 +7,10 @@
 can.Construct.super is a plugin that makes it easier to call base
 functions from inside inheriting functions.
 
-@signature `_super([...args])`
+@signature `construct._super([...args])`
+
+Calls the base constructor function's method.
+
 @param {...[*]} args parameters to pass to the base function
 
 @body

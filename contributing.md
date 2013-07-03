@@ -1,7 +1,7 @@
-<!--
 @page contributing How to Contribute
 @parent guides 4
--->
+
+@body
 
 ## Contributing
 
@@ -17,6 +17,29 @@ Once your happy with your changes, push to the feature branch.
 	$ git push origin html5-fix
 
 Now that we have pushed all the changes to the repo, we need to submit a Pull Request to the main branch.  Navigate to [Pull Requests](https://github.com/bitovi/canjs/pulls) and click 'Pull Request' in the top navigation bar.  Fill in some details about your potential patch including a meaningful title. When finished, press "Send pull request". The core team will be notified about your submission and let you know of any problems or targeted release date.
+
+## Installing 
+
+1.) Fork CanJS on GitHub.
+
+2.) Clone JavaScriptMVC with:
+		
+	$ git clone git@github.com:bitovi/javascriptmvc
+
+3.) Open the donejs folder’s .gitmodule file and change the URL of the "can" submodule:
+		
+	$ url = git://github.com/bitovi/canjs.git
+
+to your forked URL like
+		
+	$ url = git://github.com/justinbmeyer/canjs.git
+
+4.) Install all submodules by running
+
+	$ cd javascriptmvc
+	$ git submodule update --init --recursive
+
+Depending on your version of git, you might need to cd into each submodule and run git checkout.
 
 ## Developing
 
@@ -53,6 +76,20 @@ To develop CanJS:
 
 If your pull request affects the public API, make relevant changes to the documentation.  Documentation is found either inline or in markdown files in the respective directory.
 
+To edit the documentation at JavaScriptMVC.com:
+
+1.) Install CanJS and JavaScriptMVC.
+
+2.) Edit the markdown and js files in the CanJS github repo. For example, to edit can.Control’s overview page, change can/control/control.md. To edit can.Control’s destroy method, change can/control/control.js where you find the destroy comment.
+
+3.) Generate the docs with:
+
+	$ ./js site/scripts/doc.js
+
+4.) View them at docs/index.html
+
+5.) Submit a pull request.
+
 ## Reporting Bugs
 
 To report a bug, please visit [GitHub Issues](https://github.com/bitovi/canjs/issues).  
@@ -79,6 +116,14 @@ CanJS supports the following browsers:
 - Firefox Current-1
 - IE 7+
 - Opera Current-1
+
+## Making a build
+
+To make the CanJS builds, run:
+
+	$ ./js can/build/build.js
+
+It puts the downloads in `can/dist/edge`.
 
 ## Style Guide
 

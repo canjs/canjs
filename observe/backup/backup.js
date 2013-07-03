@@ -19,7 +19,7 @@ steal('can/util', 'can/observe', 'can/util/object', function (can) {
 		 *
 		 * @description Save the values of the properties of an Observe.
 		 *
-		 * @signature `backup()`
+		 * @signature `observe.backup()`
 		 * @return {can.Observe} The Observe, for chaining.
 		 *
 		 * `backup` backs up the current state of the properties of an Observe and marks
@@ -68,7 +68,7 @@ steal('can/util', 'can/observe', 'can/util/object', function (can) {
 		 *
 		 * @description Check whether an Observe has changed since the last time it was backed up.
 		 *
-		 * @signature `isDirty([deep])`
+		 * @signature `observe.isDirty([deep])`
 		 * @param {bool} [deep=false] whether to check nested Observes
 		 * @return {bool} Whether the Observe has changed since the last time it was [can.Observe.prototype.backup backed up].
 		 * If the Observe has never been backed up, `isDirty` returns `undefined`.
@@ -133,7 +133,7 @@ steal('can/util', 'can/observe', 'can/util/object', function (can) {
 		 * 
 		 * @description Restore saved values of an Observe's properties.
 		 *
-		 * @signature `restore([deep])`
+		 * @signature `observe.restore( [deep] )`
 		 * @param {bool} [deep=false] whether to restore properties in nested Observes
 		 * @return {can.Observe} The Observe, for chaining.
 		 *

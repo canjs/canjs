@@ -1,8 +1,14 @@
 @constructor can.EJS
 @parent canjs
+@group can.EJS.tags Tags
 
-EJS provides __live__ ERB-style client-side templates. Use EJS 
-with [can.view] and for live templating use EJS with [can.Observe].
+@description EJS provides __live__ ERB-style client-side templates.
+
+@signature `new can.EJS(options)`
+
+Creates an EmbeddedJS template. Use EJS with [can.view] or [can.view.ejs].
+
+@body
 
 ## Basic Example
 
@@ -125,35 +131,7 @@ are editable, so experiment!
 
 EJS uses 5 types of tags:
  
-__`<% CODE %>`__ - Runs JS Code.
 
-This type of magic tag does not modify the template but is used for JS control statements like for-loops, if/else, switch, etc.  An example:
-
-    <% if( items.attr('length') === 0 ) { %>
-        <tr><td>You have no items</td></tr>
-    <% } else { %>
-        <% list(items, function(){ %>
-          <tr> .... </tr>
-        <% }) %>
-    <% } %>
-
-Variable declarations and control blocks should always be defined in their own dedicated tags. Live binding leverages this hinting to ensure that logic is declared and executed at its intended scope.
-	
-	<!-- Each statement has its own dedicated EJS tag -->
-    <% var address = person.attr('address') %>
-    <% list(items, function() { %>
-        <tr> .... </tr>
-    <% }) %>
-    <span><%= address.attr('street') %><span>
-    
-    <!-- This won't work! -->
-    <%
-      var address = person.attr('address');
-      list(items, function() {
-    %>
-        <tr> .... </tr>
-    <% }) %>
-    <span><%= address.attr('street') %><span>
 
 __`<%= CODE %>`__ - Runs JS Code and writes the _escaped_ result into the result of the template.
 
@@ -258,3 +236,33 @@ __Note:__ The object passed into the view becomes "this" within the view templat
 
     var todos = Todo.findAll({}); //returns a can.Model.List
     can.view('//todo/views/init.ejs', todos)
+
+## Element Callbacks
+
+If a function is returned by the `<%= %>` or `<%== %>` magic tags within an element’s tag like:
+
+    <div <%= function( element ) { element.style.display = 'none' } %> >
+      Hello
+    </div>
+
+The function is called back with the HTMLElement as the first argument. This is useful to initialize functionality on an element within the view. This is so common that EJS supports ES5 arrow functions that get passed the NodeList wrapped element. Using jQuery, this lets you write the above callback as:
+
+    <div <%= (el) -> el.hide() %> >
+      Hello
+    </div>
+
+This technique is commonly used to add data, especially model instances, to an element like:
+
+    <% todos.each( function( todo ) { %>
+      <li <%= (el) -> el.data( 'todo', todo ) %>>
+        <%= todo.attr( 'name' ) %>
+      </li>
+    <% } ) %>
+
+jQuery’s `el.data( NAME, data )` adds data to an element. If your library does not support this, can provides it as `can.data( NodeList, NAME, data )`. Rewrite the above example as:
+
+    <% list(todos, function( todo ) { %>
+      <li <%= (el) -> can.data( el, 'todo', todo ) %>>
+        <%= todo.attr( 'name' ) %>
+      </li>
+    <% } ) %>

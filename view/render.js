@@ -90,26 +90,33 @@ can.extend(can.view, {
 	},
 
 	/**
+	 * @function can.view.txt
 	 * @hide
-	 * called to setup unescaped text
-	 * Called to return the content within a magic tag like `<%= %>`.
-	 *
-	 * - escape - if the content returned should be escaped
-	 * - tagName - the tag name the magic tag is within or the one that proceeds the magic tag
-	 * - status - where the tag is in.  The status can be:
-	 *   - _STRING_ - The name of the attribute the magic tag is within
-	 *    - `1` - The magic tag is within a tag like `<div <%= %>>`
-	 *    - `0` - The magic tag is outside (or between) tags like `<div><%= %></div>`
-	 * - self - the `this` the template was called with
-	 * - func - the "wrapping" function.  For example:  `<%= task.attr('name') %>` becomes
+	 * 
+	 * A helper function used to insert the 
+	 * value of the contents of a magic tag into 
+	 * a template's output. It detects if an observable value is
+	 * read and will setup live binding.
+	 * 
+	 * @signature `can.view.txt(escape, tagName, status, self, func)`
+	 * 
+	 * @param {Number} 1 if the content returned should be escaped, 0 if otherwise.
+	 * @param {String} tagName the name of the tag the magic tag is most immediately
+	 * within. Ex: `"li"`.
+	 * @param {String|Number} status A flag indicates which part of a tag the
+	 * magic tag is within. Status can be:
+	 * 
+	 *  - _STRING_ - The name of the attribute the magic tag is within. Ex: `"class"`
+	 *  - `1` - The magic tag is within a tag like `<div <%= %>>`
+	 *  - `0` - The magic tag is outside (or between) tags like `<div><%= %></div>`
+	 * 
+	 * @param {*} self The `this` of the current context template. `func` is called with
+	 * self as this.
+	 *   
+	 * @param {function} func The "wrapping" function. For 
+	 * example:  `<%= task.attr('name') %>` becomes
 	 *   `(function(){return task.attr('name')})
 	 *
-	 * @param {Number|String} status
-	 *   - "string" - the name of the attribute  <div string="HERE">
-	 *   - 1 - in an html tag <div HERE></div>
-	 *   - 0 - in the content of a tag <div>HERE</div>
-	 * @param {Object} self
-	 * @param {Object} func
 	 */
 	txt: function(escape, tagName, status, self, func){
 		var listTeardown = can.view.setupLists(),
