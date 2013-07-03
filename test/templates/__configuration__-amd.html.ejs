@@ -27,7 +27,7 @@
 			tests.forEach(function(test) {
 				var mod = moduleName(test);
 				var dependency = mod.substring(0, mod.lastIndexOf('/'));
-				results[mod.replace('can/', 'test/')] = [dependency];
+				results[mod.replace('can/', 'test/')] = [dependency, 'test/test/test'];
 			});
 			return results;
 		}

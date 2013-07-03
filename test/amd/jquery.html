@@ -39,58 +39,76 @@
                 },
                 "shim": {
                     "test/test/test": ["can"],
-                    "test/construct/construct_test": ["can/construct"],
-                    "test/observe/observe_test": ["can/observe"],
-                    "test/observe/compute/compute_test": [
-                            "can/observe/compute"
+                    "test/construct/construct_test": ["can/construct",
+                            "test/test/test"
                     ],
-                    "test/model/model_test": ["can/model"],
-                    "test/view/view_test": ["can/view"],
-                    "test/view/ejs/ejs_test": ["can/view/ejs"],
-                    "test/control/control_test": ["can/control"],
-                    "test/route/route_test": ["can/route"],
+                    "test/observe/observe_test": ["can/observe",
+                            "test/test/test"
+                    ],
+                    "test/observe/compute/compute_test": [
+                            "can/observe/compute", "test/test/test"
+                    ],
+                    "test/model/model_test": ["can/model",
+                            "test/test/test"
+                    ],
+                    "test/view/view_test": ["can/view",
+                            "test/test/test"
+                    ],
+                    "test/view/ejs/ejs_test": ["can/view/ejs",
+                            "test/test/test"
+                    ],
+                    "test/control/control_test": ["can/control",
+                            "test/test/test"
+                    ],
+                    "test/route/route_test": ["can/route",
+                            "test/test/test"
+                    ],
                     "test/control/route/route_test": [
-                            "can/control/route"
+                            "can/control/route", "test/test/test"
                     ],
                     "test/view/mustache/mustache_test": [
-                            "can/view/mustache"
+                            "can/view/mustache", "test/test/test"
                     ],
-                    "test/model/queue/queue_test": ["can/model/queue"],
+                    "test/model/queue/queue_test": ["can/model/queue",
+                            "test/test/test"
+                    ],
                     "test/construct/super/super_test": [
-                            "can/construct/super"
+                            "can/construct/super", "test/test/test"
                     ],
                     "test/construct/proxy/proxy_test": [
-                            "can/construct/proxy"
+                            "can/construct/proxy", "test/test/test"
                     ],
                     "test/observe/delegate/delegate_test": [
-                            "can/observe/delegate"
+                            "can/observe/delegate", "test/test/test"
                     ],
                     "test/observe/setter/setter_test": [
-                            "can/observe/setter"
+                            "can/observe/setter", "test/test/test"
                     ],
                     "test/observe/attributes/attributes_test": [
-                            "can/observe/attributes"
+                            "can/observe/attributes",
+                            "test/test/test"
                     ],
                     "test/observe/validations/validations_test": [
-                            "can/observe/validations"
+                            "can/observe/validations",
+                            "test/test/test"
                     ],
                     "test/observe/backup/backup_test": [
-                            "can/observe/backup"
+                            "can/observe/backup", "test/test/test"
                     ],
                     "test/control/plugin/plugin_test": [
-                            "can/control/plugin"
+                            "can/control/plugin", "test/test/test"
                     ],
                     "test/view/modifiers/modifiers_test": [
-                            "can/view/modifiers"
+                            "can/view/modifiers", "test/test/test"
                     ],
                     "test/util/object/object_test": [
-                            "can/util/object"
+                            "can/util/object", "test/test/test"
                     ],
                     "test/util/string/string_test": [
-                            "can/util/string"
+                            "can/util/string", "test/test/test"
                     ],
                     "test/util/fixture/fixture_test": [
-                            "can/util/fixture"
+                            "can/util/fixture", "test/test/test"
                     ]
                 }
             });
