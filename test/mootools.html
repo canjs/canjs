@@ -43,7 +43,7 @@
                 "can/construct/super", "can/construct/proxy",
                 "can/observe/delegate", "can/observe/setter",
                 "can/observe/attributes", "can/observe/validations",
-                "can/observe/backup", "can/util/object",
+                "can/observe/backup", "can/observe/clone", "can/util/object",
                 "can/util/string", "can/util/fixture")
                 .then("can/test").then(
                 "can/construct/construct_test.js")
@@ -64,6 +64,7 @@
                 .then("can/observe/attributes/attributes_test.js")
                 .then("can/observe/validations/validations_test.js")
                 .then("can/observe/backup/backup_test.js")
+                .then("can/observe/clone/clone_test.js")
                 .then("can/util/object/object_test.js")
                 .then("can/util/string/string_test.js")
                 .then("can/util/fixture/fixture_test.js", function() {
