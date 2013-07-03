@@ -23,7 +23,7 @@
 			var config = window.CONFIGURATION = <%- JSON.stringify(configuration.steal) %>;
 
 			steal.config(config);
-		}, "can/util/fixture", "can/view/jaml", "can/view/micro", "<%- modules.join('", "') %>")
+		}, "can/util/fixture", "<%- modules.join('", "') %>")
 		.then("can/test").then("<%- tests.join('")\n.then("') %>", function() {
 			steal.dev.log = function() {};
 			steal.dev.warn = function() {};

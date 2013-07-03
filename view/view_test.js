@@ -60,21 +60,6 @@
 		deepEqual(nodeLists.nodeListMap ,{} )
 	});
 
-	test("multiple template types work", function(){
-		var expected = '<h3>helloworld</h3>';
-		can.each(["ejs","mustache"], function(ext){
-			var actual = can.view.render(can.test.path("view/test/template." + ext), {
-				"message" :"helloworld"
-			}, {
-				helper: function(){
-					return "foo"
-				}
-			});
-
-			equal(can.trim(actual), expected, "Text rendered");
-		})
-	});
-
 	test("helpers work", function(){
 		var expected = '<h3>helloworld</h3><div>foo</div>';
 		can.each(["ejs", "mustache"], function(ext){
@@ -429,21 +414,4 @@
 
 		equal(div.className, 'do=not=truncate=me', 'class is right');
 	});
-
-	if(typeof steal !== 'undefined') {
-		test("multiple template types work", function(){
-			var expected = '<h3>helloworld</h3>';
-			can.each(["micro","ejs","jaml", "mustache"], function(ext){
-				var actual = can.view.render(can.test.path("view/test/template." + ext), {
-					"message" :"helloworld"
-				}, {
-					helper: function(){
-						return "foo"
-					}
-				});
-
-				equal(can.trim(actual), expected, "Text rendered");
-			})
-		});
-	}
 })();
