@@ -34,10 +34,10 @@ Any plugins for that feature will be folders within the feature’s folder. Ex: 
 
 The `can/test` folder contains:
 
-* a `test.html` page which tests jQuery by default. Load e.g. `test.html?library=mootools` to test another library.
-* a test page that tests all libraries and plugins: `index.html`
-* a file that loads all feature tests: `can_test.js`
-* a `plugin_test.html` file that tests all plugins
+* an `index.html` page which runs all tests for each library in an iFrame.
+* a test page for each library e.g. `jquery.html` which loads dependencies using our package manager StealJS
+* a `build` folder which contains the same set of test files but for testing the build artifacts (like `can.jquery.js` etc.) you get from the download)
+* an `amd` folder which runs the same tests for the AMD modules using RequireJS
 
 The `can/util` folder contains the compatibility layer for each library.
 
