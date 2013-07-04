@@ -2,7 +2,8 @@
 <html>
 <head>
 	<title><%= configuration.description %> Test Suite</title>
-	<link rel="stylesheet" type="text/css" href="<%= root %>/lib/qunit/qunit.css"/>
+	<base href="<%= root %>" />
+	<link rel="stylesheet" type="text/css" href="lib/qunit/qunit.css"/>
 </head>
 <body>
 <h1 id="qunit-header"><%= configuration.description %> Test Suite</h1>
@@ -14,28 +15,43 @@
 <ol id="qunit-tests"></ol>
 <div id="qunit-test-area"></div>
 
-<script type="text/javascript" src="<%= root %>/lib/require.js"></script>
-<script type="text/javascript" src="<%= root %>/lib/qunit/qunit.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js"></script>
+<script type="text/javascript" src="lib/qunit/qunit.js"></script>
 <script type="text/javascript">
-	require.config(<%= JSON.stringify({}) %>);
-
-	<!--
-	require.config({
-		"map": {
-			"*": {
-				"can/util/util.js?": "can/util/dojo/dojo.js?"
-			}
-		},
-		"shim": {
-			"can/construct/construct_test": {
-				"deps": "can/construct",
-				"exports": null
-			}
+	QUnit.config.autostart = false;
+	<%  function moduleName(file) { return file.substring(0, file.lastIndexOf('.')); }
+		function testShims(tests) {
+			var results = {
+				'test/test/test': ['can']
+			};
+			tests.forEach(function(test) {
+				var mod = moduleName(test);
+				var dependency = mod.substring(0, mod.lastIndexOf('/'));
+				results[mod.replace('can/', 'test/')] = [dependency, 'test/test/test'];
+			});
+			return results;
 		}
-	});
-	-->
+		var configName = configuration.description.toLowerCase();
+		var requireConfig = {
+			paths : {
+				can: 'dist/amd/can',
+				test: './'
+			},
+			map : {
+				'*' : {
+					"can/util/library" : "can/util/" + configName
+				}
+			},
+			shim: testShims(tests)
+		};
 
-	require(["<%- modules.join('", "') %>"]);
+		requireConfig.paths[configName] = moduleName(configuration.library);
+	%>
+	require.config(<%- JSON.stringify(requireConfig) %>);
+
+	require(<%- JSON.stringify(['can/util/fixture'].concat(_.keys(testShims(tests)))) %>, function() {
+		QUnit.start();
+	});
 </script>
 </body>
 </html>

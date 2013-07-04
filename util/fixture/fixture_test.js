@@ -307,7 +307,7 @@ test("replacing and removing a fixture", function(){
 /*
 removed test, makes phantom js build fail. does not fail browser tests. Opened issue #408 to track, for milestone 1.2
 //TODO re-enable test and determine why it fails in phantom but not in real browser. https://github.com/bitovi/canjs/issues/408
-
+*/
 test("can.fixture.store with can.Model", function() {
 	var store = can.fixture.store(100, function(i) {
 			return {
@@ -333,39 +333,30 @@ test("can.fixture.store with can.Model", function() {
 	Model.findAll().done(function(models) {
 		equal(models.length, 100, 'Got 100 models for findAll with no parameters');
 		equal(models[95].name, 'Object 95', 'All models generated properly');
-		start();
-	});
-
-	stop();
-	Model.findOne({ id : 51 }).done(function(data) {
-		equal(data.id, 51, 'Got correct object id');
-		equal('Object 51', data.name, 'Object name generated correctly');
-		start();
-	});
-
-	stop();
-	new Model({
-		name : 'My test object'
-	}).save().done(function(newmodel) {
-			equal(newmodel.id, 100, 'Id got incremented');
-			equal(newmodel.name, 'My test object');
-			start();
-		});
-
-	stop();
-	// Tests creating, deleting, updating
-	Model.findOne({ id : 100 }).done(function(model) {
-		equal(model.id, 100, 'Loaded new object');
-		model.attr('name', 'Updated test object');
-		model.save().done(function(model) {
-			equal(model.name, 'Updated test object', 'Successfully updated object');
-			model.destroy().done(function(deleted) {
-				start();
+		Model.findOne({ id : 51 }).done(function(data) {
+			equal(data.id, 51, 'Got correct object id');
+			equal('Object 51', data.name, 'Object name generated correctly');
+			new Model({
+				name : 'My test object'
+			}).save().done(function(newmodel) {
+				equal(newmodel.id, 100, 'Id got incremented');
+				equal(newmodel.name, 'My test object');
+				// Tests creating, deleting, updating
+				Model.findOne({ id : 100 }).done(function(model) {
+					equal(model.id, 100, 'Loaded new object');
+					model.attr('name', 'Updated test object');
+					model.save().done(function(model) {
+						equal(model.name, 'Updated test object', 'Successfully updated object');
+						model.destroy().done(function(deleted) {
+							start();
+						});
+					});
+				});
 			});
 		});
 	});
 });
-*/
+
 test("can.fixture with response callback", 4, function() {
 	can.fixture.delay = 10;
 	can.fixture("responseCb", function(orig, response) {
