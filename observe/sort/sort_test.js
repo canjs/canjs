@@ -1,4 +1,4 @@
-steal('can/util', 'can/observe/sort', 'can/view/mustache', function(can) {
+steal('can/util', 'can/observe/sort', 'can/view/mustache', 'can/observe/compute', function(can) {
 
 module("can/observe/sort");
 
@@ -8,7 +8,7 @@ test("list events", 16, function(){
 		{name: 'Justin'},
 		{name: 'Brian'},
 		{name: 'Austin'},
-		{name: 'Mihael'}])
+		{name: 'Mihael'}]);
 	list.comparator = 'name';
 	list.sort();
 	// events on a list
@@ -32,7 +32,7 @@ test("list events", 16, function(){
 		ok(true,"remove called");
 		equal(items.length,1);
 		equal(items[0].name, 'Alexis');
-		equal(oldPos, 0, "put in right spot")
+		equal(oldPos, 0, "put in right spot");
 	})
 	list.bind('add', function(ev, items, newLength){
 		ok(true,"add called");
@@ -46,7 +46,7 @@ test("list events", 16, function(){
 
 	// now lets remove alexis ...
 	list.splice(0,1);
-	list[0].attr('name',"Zed")
+	list[0].attr('name',"Zed");
 });
 
 test("list sort with func", 1, function(){
@@ -55,7 +55,7 @@ test("list sort with func", 1, function(){
 		{priority: 4, name: "low"},
 		{priority: 1, name: "high"},
 		{priority: 2, name: "middle"},
-		{priority: 3, name: "mid"}])
+		{priority: 3, name: "mid"}]);
 
 	list.sort(function(a, b){
 		// Sort functions always need to return the -1/0/1 integers
@@ -65,6 +65,25 @@ test("list sort with func", 1, function(){
 		return a.priority > b.priority ? 1 : 0;
 	});
 	equal(list[0].name, 'high');
+});
+
+test("list sort with comparator function", 4, function() {
+
+
+	var list = new can.Observe.List([
+			new can.Observe({text: 'Bbb', func: can.compute(function() {return 'bbb';})}),
+			new can.Observe({text: 'abb', func: can.compute(function() {return 'abb';})}),
+			new can.Observe({text: 'Aaa', func: can.compute(function() {return 'aaa';})}),
+			new can.Observe({text: 'baa', func: can.compute(function() {return 'baa';})})
+		]);
+
+	list.comparator = 'func';
+	list.sort();
+	equal(list.attr()[0].text, 'Aaa');
+	equal(list.attr()[1].text, 'abb');
+	equal(list.attr()[2].text, 'baa');
+	equal(list.attr()[3].text, 'Bbb');
+
 });
 
 test("live binding with comparator (#170)", function() {
