@@ -11,7 +11,7 @@ To report a bug, please visit [GitHub Issues](https://github.com/bitovi/canjs/is
 
 When filing a bug, it is helpful to include:
 
-- Small examples using tools like [JSFiddle](http://jsfiddle.com/). You can fork the following CanJS Fiddles:
+- Small examples using tools like [JSFiddle](http://jsfiddle.com/). You can fork the following CanJS fiddles:
   - [jQuery](http://jsfiddle.net/donejs/qYdwR/)
   - [Zepto](http://jsfiddle.net/donejs/7Yaxk/)
   - [Dojo](http://jsfiddle.net/donejs/9x96n/)
@@ -29,6 +29,7 @@ When contributing, include tests with new features or bug fixes in a feature bra
 Fork and clone the repository and create a new feature branch.
 
 > $ git clone git@github.com:<yourusername>/canjs.git
+> $ cd canjs
 > $ git checkout -b html5-fix
 
 Once your happy with your changes, push to the feature branch.
@@ -45,8 +46,11 @@ Now that we have pushed all the changes to the repo, we need to submit a Pull Re
 		
 > $ git clone git@github.com:<your username>/canjs
 
-Alternatively you can also `git clone git@github.com:bitovi/canjs` directly (but you will need your own fork to
-submit pull requests).
+Alternatively you can also
+
+> $ git clone git@github.com:bitovi/canjs`
+
+directly (but you will need your own fork to submit pull requests).
 
 ## Developing
 
