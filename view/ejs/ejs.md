@@ -236,3 +236,33 @@ __Note:__ The object passed into the view becomes "this" within the view templat
 
     var todos = Todo.findAll({}); //returns a can.Model.List
     can.view('//todo/views/init.ejs', todos)
+
+## Element Callbacks
+
+If a function is returned by the `<%= %>` or `<%== %>` magic tags within an element’s tag like:
+
+    <div <%= function( element ) { element.style.display = 'none' } %> >
+      Hello
+    </div>
+
+The function is called back with the HTMLElement as the first argument. This is useful to initialize functionality on an element within the view. This is so common that EJS supports ES5 arrow functions that get passed the NodeList wrapped element. Using jQuery, this lets you write the above callback as:
+
+    <div <%= (el) -> el.hide() %> >
+      Hello
+    </div>
+
+This technique is commonly used to add data, especially model instances, to an element like:
+
+    <% todos.each( function( todo ) { %>
+      <li <%= (el) -> el.data( 'todo', todo ) %>>
+        <%= todo.attr( 'name' ) %>
+      </li>
+    <% } ) %>
+
+jQuery’s `el.data( NAME, data )` adds data to an element. If your library does not support this, can provides it as `can.data( NodeList, NAME, data )`. Rewrite the above example as:
+
+    <% list(todos, function( todo ) { %>
+      <li <%= (el) -> can.data( el, 'todo', todo ) %>>
+        <%= todo.attr( 'name' ) %>
+      </li>
+    <% } ) %>

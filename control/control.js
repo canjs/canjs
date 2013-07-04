@@ -458,7 +458,7 @@ steal('can/util','can/construct', function( can ) {
 			 *     this.element[0] //-> HTMLElement
 			 * 
 			 * The following details the NodeList used by each library with 
-			 * an example of updating it's text:
+			 * an example of updating its text:
 			 * 
 			 * __jQuery__ `jQuery( HTMLElement )`
 			 * 
@@ -470,15 +470,15 @@ steal('can/util','can/construct', function( can ) {
 			 * 
 			 * __Dojo__ `new dojo.NodeList( HTMLElement )`
 			 * 
-			 *     // TODO
+			 *     this.element.text("Hello World")
 			 * 
 			 * __Mootools__ `$$( HTMLElement )`
 			 * 
-			 *    this.element.empty().appendText("Hello World")
+			 *     this.element.empty().appendText("Hello World")
 			 * 
 			 * __YUI__ 
 			 * 
-			 *    // TODO
+			 *     this.element.set("text", "Hello World")
 			 * 
 			 * 
 			 * ## Changing `this.element`
@@ -499,7 +499,7 @@ steal('can/util','can/construct', function( can ) {
 			 *          this.oldElement = $( el );
 			 *          var newEl = $( '<div/>' );
 			 *          this.oldElement.wrap( newEl );
-			 *          can.Controll.prototype.setup.call( this, newEl, options );
+			 *          can.Control.prototype.setup.call( this, newEl, options );
 			 *       },
 			 *       init: function() {
 			 *          this.element //-> the div
@@ -583,7 +583,7 @@ steal('can/util','can/construct', function( can ) {
 		 *     });
 		 * 
 		 * To update the taskstriker's task, add a task method that updates
-		 * this.options and calls rebind like:
+		 * this.options and rebinds the event handlers for the new task like:
 		 * 
 		 *     TaskStriker = can.Control({
 		 *       "{task} completed": function(){
@@ -758,7 +758,8 @@ steal('can/util','can/construct', function( can ) {
 		 * 
 		 * __YUI__
 		 * 
-		 *   - TODO!
+		 *   - Y.Node.prototype.remove
+		 *   - Y.Node.prototype.destroy
 		 * 
 		 * 
 		 * ## Teardown in Destroy
