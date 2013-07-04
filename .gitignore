@@ -8,7 +8,3 @@ standalone*
 docs*
 *.DS_Store
 .idea
-build/ci/can
-build/ci/funcunit
-build/ci/steal
-build/gh-pages
