@@ -1,5 +1,5 @@
 (function() {
-	var isDist = (/dist/.test(location.href));
+	var isSteal = typeof steal !== 'undefined';
 
 	module("can/construct/proxy");
 
@@ -40,7 +40,7 @@
 	});
 
 	// this won't work in dist mode (this functionality is removed)
-	if(!isDist){
+	if(isSteal){
 		test("proxy error", 1,function(){
 			can.Construct("Car",{
 				show: function( value ) {

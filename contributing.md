@@ -1,22 +1,56 @@
 <!--
 @page contributing How to Contribute
 @parent guides 4
+
+@body
 -->
+
+## Reporting Bugs
+
+To report a bug, please visit [GitHub Issues](https://github.com/bitovi/canjs/issues).
+
+When filing a bug, it is helpful to include:
+
+- Small examples using tools like [JSFiddle](http://jsfiddle.com/). You can fork the following CanJS fiddles:
+  - [jQuery](http://jsfiddle.net/donejs/qYdwR/)
+  - [Zepto](http://jsfiddle.net/donejs/7Yaxk/)
+  - [Dojo](http://jsfiddle.net/donejs/9x96n/)
+  - [YUI](http://jsfiddle.net/donejs/w6m73/)
+  - [Mootools](http://jsfiddle.net/donejs/mnNJX/)
+- Breaking unit tests (optional
+- Proposed fix solutions (optional)
+
+Search for previous tickets, if there is one add to that one rather than creating another. You can also post on the [Forums](https://forum.javascriptmvc.com/canjs) or talk to us in [IRC #canjs channel](http://webchat.freenode.net/?channels=canjs).
 
 ## Contributing
 
 When contributing, include tests with new features or bug fixes in a feature branch until you're ready to submit the code for consideration; then fork the repository, push to the fork, and issue a pull request.
 
-Clone the repository and create a new feature branch.
+Fork and clone the repository and create a new feature branch.
 
-	$ git clone git@github.com:bitovi/canjs.git
-	$ git checkout -b html5-fix
+> $ git clone git@github.com:<yourusername>/canjs.git
+> $ cd canjs
+> $ git checkout -b html5-fix
 
 Once your happy with your changes, push to the feature branch.
 
-	$ git push origin html5-fix
+> $ git push origin html5-fix
 
 Now that we have pushed all the changes to the repo, we need to submit a Pull Request to the main branch.  Navigate to [Pull Requests](https://github.com/bitovi/canjs/pulls) and click 'Pull Request' in the top navigation bar.  Fill in some details about your potential patch including a meaningful title. When finished, press "Send pull request". The core team will be notified about your submission and let you know of any problems or targeted release date.
+
+## Installing 
+
+1.) Fork CanJS on GitHub.
+
+2.) Clone it with:
+		
+> $ git clone git@github.com:<your username>/canjs
+
+Alternatively you can also
+
+> $ git clone git@github.com:bitovi/canjs`
+
+directly (but you will need your own fork to submit pull requests).
 
 ## Developing
 
@@ -34,10 +68,10 @@ Any plugins for that feature will be folders within the feature’s folder. Ex: 
 
 The `can/test` folder contains:
 
-* a `test.html` page which tests jQuery by default. Load e.g. `test.html?library=mootools` to test another library.
-* a test page that tests all libraries and plugins: `index.html`
-* a file that loads all feature tests: `can_test.js`
-* a `plugin_test.html` file that tests all plugins
+* an `index.html` page which runs all tests for each library in an iFrame.
+* a test page for each library e.g. `jquery.html` which loads dependencies using our package manager StealJS
+* a `build` folder which contains the same set of test files but for testing the build artifacts (like `can.jquery.js` etc.) you get from the download)
+* an `amd` folder which runs the same tests for the AMD modules using RequireJS
 
 The `can/util` folder contains the compatibility layer for each library.
 
@@ -51,24 +85,11 @@ To develop CanJS:
 
 ## Documentation
 
-If your pull request affects the public API, make relevant changes to the documentation.  Documentation is found either inline or in markdown files in the respective directory.
-
-## Reporting Bugs
-
-To report a bug, please visit [GitHub Issues](https://github.com/bitovi/canjs/issues).  
-
-When filing a bug, its helpful to include:
-
-- Small examples using tools like [JSBin](http://jsbin.com/)
-- Breaking unit tests
-- Proposed fix solutions
-- Search for previous tickets, if there is one add to that one rather than creating another.
-
-You can also post on the [Forums](https://forum.javascriptmvc.com/canjs) or talk to us in [IRC #canjs channel](http://webchat.freenode.net/?channels=canjs).
+If your pull request affects the public API, make relevant changes to the documentation. Documentation is found either inline or in markdown files in the respective directory.
 
 ## Running Tests Locally
 
-Its important that all tests pass before sending a pull request.  TravisCI will determine if your commits pass the tests, but while your developing you can run the QUnit tests locally.  
+Its important that all tests pass before sending a pull request. TravisCI will determine if your commits pass the tests, but while your developing you can run the QUnit tests locally.
 
 Open `~/can/test/test.html` in a web browser to run the tests locally.  Each module has its own tests too, you can run them by opening the `test.html` in each folder.
 
@@ -79,6 +100,22 @@ CanJS supports the following browsers:
 - Firefox Current-1
 - IE 7+
 - Opera Current-1
+
+## Making a build
+
+To make a build (standalone and AMD version) and run tests from the command line you will need [NodeJS](http://nodejs.com) and [Grunt](http://gruntjs.com) (`npm install grunt-cli -g`) installed. Then, in the CanJS repository folder run:
+
+> $ npm install
+
+Then you can run:
+
+> $ grunt build
+
+It puts the downloads in `can/dist`.
+
+You can also run the tests from the command line by executing:
+
+> $ grunt test
 
 ## Style Guide
 
