@@ -1452,6 +1452,8 @@ function( can, Scope ){
 						return data.value.apply(data.parent, arguments); 
 					};
 				}
+			}  else if( isObserve(data.parent) ) {
+				return data.parent.compute(data.name);
 			} 
 		}
 		// Invoke the length to ensure that Observe.List events fire.

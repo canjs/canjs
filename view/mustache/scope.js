@@ -36,21 +36,29 @@ steal('can/construct','can/observe','can/view','can/observe/compute',function(Co
 				defaultObserveName,
 				j,
 				lastValue,
-				ref;
+				ref,
+				value;
 			
 			var scope = this;
 			while(scope){
 				
 				value = scope._data
 				
-				// if it's a compute, read the compute's value
-				if(can.isFunction(value) && value.isComputed) {
-					value = value();
-				}
 				
 				
-				if (typeof value !== 'undefined' && value !== null) {
+				
+				if (value != null) {
+					// if it's a compute, read the compute's value
+					
+					
 					for (j = 0; j < namesLength; j++) {
+						
+						// convert computes to read properties from them ...
+						// better would be to generate another compute that reads this compute
+						if(can.isFunction(value) && value.isComputed) {
+							value = value();
+						}
+						
 						// Keep running up the tree while there are matches.
 						if (typeof value[names[j]] !== 'undefined' && value[names[j]] !== null) {
 							lastValue = value;
@@ -67,6 +75,8 @@ steal('can/construct','can/observe','can/view','can/observe/compute',function(Co
 							lastValue = value = undefined;
 							break;
 						}
+						
+						
 					}
 				}
 				// Found a matched reference.
@@ -85,9 +95,11 @@ steal('can/construct','can/observe','can/view','can/observe/compute',function(Co
 				scope = scope._parent;
 			}
 			
-			if( defaultObserve && 
+			if( defaultObserve /*&& 
 			// if there's not a helper by this name and no attribute with this name
-				/*!Mustache.getHelper(ref) &&*/ can.inArray(defaultObserveName, can.Observe.keys(defaultObserve)) === -1 ) {
+			// this was never actually doing the above.  Actually
+			// checking the keys triggers a __reading call which we don't want
+			!Mustache.getHelper(ref) && can.inArray(defaultObserveName, can.Observe.keys(defaultObserve)) === -1*/ ) {
 				{
 					return {
 						//scope: scope,
