@@ -30,23 +30,23 @@ test("hookup with list", function(){
 	}
 	var models = div.children().instances();
 	ok(models.constructor === Person.List, "correct type");
-	equals(models.length, 20,  "Got 20 people")
+	equal(models.length, 20,  "Got 20 people")
 
 
 })
 
 test("create", function(){
 	
-	equals(this.people.length, 20)
+	equal(this.people.length, 20)
 	
-	equals(this.people.get("a2")[0].id,"a2" , "get works")
+	equal(this.people.get("a2")[0].id,"a2" , "get works")
 })
 
 
 test("splice", function(){
 	ok(this.people.get("a1").length,"something where a1 is")
 	this.people.splice(1,1)
-	equals(this.people.length, 19)
+	equal(this.people.length, 19)
 	ok(!this.people.get("a1").length,"nothing where a1 is")
 	
 })
@@ -55,7 +55,7 @@ test("remove", function(){
 	var res = this.people.remove("a1")
 	ok(!this.people.get("a1").length,"nothing where a1 is")
 	ok(res.length, "got something array like")
-	equals(res[0].id, "a1")
+	equal(res[0].id, "a1")
 })
 
 test("remove with a shadowed id", function(){
@@ -72,8 +72,8 @@ test("remove with a shadowed id", function(){
 		new MyModel({ foo: 'baz' })
 	]);
 	list.remove('bar');
-	equals(list.length,1,'bar was removed');
-	equals(list[0].attr('foo'),'baz');
+	equal(list.length,1,'bar was removed');
+	equal(list[0].attr('foo'),'baz');
 });
 
 test("list from models", function(){
@@ -138,7 +138,7 @@ test("update a list", function(){
 	can.fixture('PUT /person/updateAll', function(orig){
 		ok(true, "called right fixture");
 		ok(orig.data.ids.length, 2, "got 2 ids")
-		same(orig.data.attrs, updateWith, "got the same attrs")
+		deepEqual(orig.data.attrs, updateWith, "got the same attrs")
 		return newProps;
 	})
 	
@@ -150,7 +150,7 @@ test("update a list", function(){
 	people.update(updateWith,function(updated){
 		ok(true, "updated callback called");
 		ok(updated.length, 2, "got back deleted items");
-		same(updated[0].attr(),$.extend({id : 1},newProps, updateWith ));
+		deepEqual(updated[0].attr(),$.extend({id : 1},newProps, updateWith ));
 		start();
 	});
 })
@@ -378,7 +378,7 @@ test("events - add", 2, function(){
 	var list = new Person.List;
 	list.bind("add", function(ev, items){
 		ok(1, "add called");
-		equals(items.length, 1, "we get an array")
+		equal(items.length, 1, "we get an array")
 	});
 	
 	var person = new Person({id: 1, name: "alex"});
@@ -394,7 +394,7 @@ test("events - update", function(){
 		ok(1, "update called");
 		ok(person === updated, "we get the person back");
 		
-		equals(updated.name, "Alex", "got the right name")
+		equal(updated.name, "Alex", "got the right name")
 	});
 	
 	var person = new Person({id: 1, name: "justin"});

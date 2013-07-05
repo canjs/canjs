@@ -1,7 +1,7 @@
 steal('jquery/dom/cookie','jquery/model/list').then(function($){
 
 /**
- * @class jQuery.Model.List.Cookie
+ * @constructor jQuery.Model.List.Cookie
  * @plugin jquery/model/list/cookie
  * @test jquery/model/list/cookie/qunit.html
  * @download  http://jmvcsite.heroku.com/pluginify?plugins[]=jquery/model/list/cookie/cookie.js

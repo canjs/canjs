@@ -27,27 +27,28 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 			this.template = this.scanner.scan(this.text, this.name);
 		};
 
-	/**
-	 * @add can.EJS
-	 */
 	can.EJS = EJS;
 
-
 	/**
-	 * @Prototype
+	 * @add can.EJS
+	 * @prototype
 	 */
 	EJS.prototype.
 	/**
-	 * @function render
+	 * @function can.EJS.prototype.render render
+	 * @parent can.EJS.prototype
+	 * @description Render a view object with data and helpers.
+	 * @signature `ejs.render(data[, helpers])`
+	 * @param {Object} [data] The data to populate the template with.
+	 * @param {Object.<String, function>} [helpers] Helper methods referenced in the template.
+	 * @return {String} The template with interpolated data.
+	 *
+	 * @body	 
 	 * Renders an object with view helpers attached to the view.
 	 * 
 	 *     new can.EJS({text: "<%= message %>"}).render({
 	 *       message: "foo"
 	 *     },{helper: function(){ ... }})
-	 *     
-	 * @param {Object} object data to be rendered
-	 * @param {Object} [extraHelpers] an object with view helpers
-	 * @return {String} returns the result of the string
 	 */
 	render = function( object, extraHelpers ) {
 		object = object || {};
@@ -75,67 +76,110 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 				["left", "<%"], // Run --- this is hack for now
 				["right", "%>"], // Right -> All have same FOR Mustache ...
 				["returnRight", "%>"]
-			]
+			],
+
+			/**
+			 * @hide
+			 * Transforms the EJS template to add support for shared blocks.
+			 * Essentially, this breaks up EJS tags into multiple EJS tags 
+			 * if they contained unmatched brackets.
+			 *
+			 * For example, this doesn't work:
+			 * 	<% if (1) { %><% if (1) { %> hi <% } } %>
+			 * ...without isolated EJS blocks:
+			 * 	<% if (1) { %><% if (1) { %> hi <% } %><% } %> 
+			 * The result of transforming:
+			 * 	<% if (1) { %><% %><% if (1) { %><% %> hi <% } %><% } %> 
+			 */
+			transform: function(source) {
+				return source.replace(/<%([\s\S]+?)%>/gm, function(whole, part) {
+					var brackets = [], 
+						foundBracketPair, 
+						i;
+
+					// Look for brackets (for removing self-contained blocks)
+					part.replace(/[{}]/gm, function(bracket, offset) {
+						brackets.push([ bracket, offset ]);
+					});
+
+					// Remove bracket pairs from the list of replacements
+					do {
+						foundBracketPair = false;
+						for (i = brackets.length - 2; i >= 0; i--) {
+							if (brackets[i][0] == '{' && brackets[i+1][0] == '}') {
+								brackets.splice(i, 2);
+								foundBracketPair = true;
+								break;
+							}
+						}
+					} while (foundBracketPair);
+
+					// Unmatched brackets found, inject EJS tags
+					if (brackets.length >= 2) {
+						var result = ['<%'],
+							bracket,
+							last = 0;
+						for (i = 0; bracket = brackets[i]; i++) {
+							result.push(part.substring(last, last = bracket[1]));
+							if ((bracket[0] == '{' && i < brackets.length - 1) || (bracket[0] == '}' && i > 0)) {
+								result.push(bracket[0] == '{' ? '{ %><% ' : ' %><% }');
+							}
+							else {
+								result.push(bracket[0]);
+							}
+							++last;
+						}
+						result.push(part.substring(last), '%>');
+						return result.join('');
+					}
+					// Otherwise return the original
+					else {
+						return '<%' + part + '%>';
+					}
+				});
+			}
 		})
 	});
 
-	/**
-	 * @class can.EJS.Helpers
-	 * @parent can.EJS
-	 * By adding functions to can.EJS.Helpers.prototype, those functions will be available in the 
-	 * views.
-	 * 
-	 * The following helper converts a given string to upper case:
-	 * 
-	 * 	can.EJS.Helpers.prototype.toUpper = function(params)
-	 * 	{
-	 * 		return params.toUpperCase();
-	 * 	}
-	 * 
-	 * Use it like this in any EJS template:
-	 * 
-	 * 	<%= toUpper('javascriptmvc') %>
-	 * 
-	 * To access the current DOM element return a function that takes the element as a parameter:
-	 * 
-	 * 	can.EJS.Helpers.prototype.upperHtml = function(params)
-	 * 	{
-	 * 		return function(el) {
-	 * 			$(el).html(params.toUpperCase());
-	 * 		}
-	 * 	}
-	 * 
-	 * In your EJS view you can then call the helper on an element tag:
-	 * 
-	 * 	<div <%= upperHtml('javascriptmvc') %>></div>
-	 * 
-	 * 
-	 * @constructor Creates a view helper.  This function 
-	 * is called internally.  You should never call it.
-	 * @param {Object} data The data passed to the 
-	 * view.  Helpers have access to it through this._data
-	 */
 	EJS.Helpers = function( data, extras ) {
 		this._data = data;
 		this._extras = extras;
 		extend(this, extras);
 	};
 
+	/**
+	 * @page can.EJS.Helpers Helpers
+	 * @parent can.EJS
+	 *
+	 * @body
+	 * By adding functions to can.EJS.Helpers.prototype, those functions will be available in the
+	 * views.
+	 *
+	 * The following helper converts a given string to upper case:
+	 *
+	 * 	can.EJS.Helpers.prototype.toUpper = function(params)
+	 * 	{
+	 * 		return params.toUpperCase();
+	 * 	}
+	 *
+	 * Use it like this in any EJS template:
+	 *
+	 * 	<%= toUpper('javascriptmvc') %>
+	 *
+	 * To access the current DOM element return a function that takes the element as a parameter:
+	 *
+	 * 	can.EJS.Helpers.prototype.upperHtml = function(params)
+	 * 	{
+	 * 		return function(el) {
+	 * 			$(el).html(params.toUpperCase());
+	 * 		}
+	 * 	}
+	 *
+	 * In your EJS view you can then call the helper on an element tag:
+	 *
+	 * 	<div <%= upperHtml('javascriptmvc') %>></div>
+	 */
 	EJS.Helpers.prototype = {
-		/**
-		 * `can.EJS.Helpers.list` iterates over an observable list and
-		 * sets up live binding. `list` takes a list of observables and a callback 
-		 * function with the signature `callback( currentItem, index, itemList )`
-		 *
-		 * Typically, this will look like:
-		 *
-		 *     <% list(items, function(item){ %>
-		 *          <li><%= item.attr('name') %></li>
-		 *     <% }) %>
-		 *
-		 * Whenever the list of observables changes, such as when an item is added or removed, 
-		 * the EJS view will redraw the list in the DOM.
-		 */
 		// TODO Deprecated!!
 		list : function(list, cb){
 			

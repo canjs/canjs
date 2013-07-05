@@ -1,9 +1,13 @@
 <html>
 <head></head>
 <body>
-	<script src='../../../steal/steal.js'></script>
+	<script src='../../lib/steal/steal.js'></script>
 	<script>
-	steal('can/observe/validations').then('can/model',function(){
+	steal(function() {
+		steal.config({
+			root: '../../'
+		});
+	}).then('can/observe/validations').then('can/model',function(){
 		var Person = can.Model.extend({
 			init: function(){
 				this.validate("birthday",function(birthday){

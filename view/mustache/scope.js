@@ -16,7 +16,21 @@ steal('can/construct','can/observe','can/view','can/observe/compute',function(Co
 			}
 			
 			
-			var names = attr.split('.'),
+			var names = attr.indexOf('\\.') == -1 
+				// Reference doesn't contain escaped periods
+				? attr.split('.')
+				// Reference contains escaped periods (`a.b\c.foo` == `a["b.c"].foo)
+				: (function() {
+						var names = [], last = 0;
+						attr.replace(/(\\)?\./g, function($0, $1, index) {
+							if (!$1) {
+								names.push(attr.slice(last, index).replace(/\\\./g,'.'));
+								last = index + $0.length;
+							}
+						});
+						names.push(attr.slice(last).replace(/\\\./g,'.'));
+						return names;
+					})(),
 				namesLength = names.length,
 				defaultObserve,
 				defaultObserveName,

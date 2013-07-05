@@ -15,10 +15,13 @@
 <div id="control"></div>
 <button>Update myPlugin</button>
 </div>	
-<script type='text/javascript' src='../../../steal/steal.js'></script>
+<script type='text/javascript' src='../../lib/steal/steal.js'></script>
 <script type='text/javascript' id="demo-source">
-steal('can/construct/super')
-.then('can/control/plugin')
+steal(function() {
+	steal.config({
+		root: '../../'
+	});
+}).then('can/construct/super', 'can/control/plugin')
 .then(function(){
 	
 var Plugin = can.Control({

@@ -10,7 +10,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 		}
 
 		options = options || {};
-		attrNames = can.makeArray(attrNames)
+		attrNames = typeof attrNames == 'string' ? [attrNames] : can.makeArray(attrNames);
 
 		// run testIf if it exists
 		if (options.testIf && !options.testIf.call(this)) {
@@ -66,6 +66,9 @@ steal('can/util', 'can/observe/attributes', function (can) {
 		}
 		var oldSetup = clss.setup;
 
+		/**
+		 * @static
+		 */
 		can.extend(clss, {
 			setup : function (superClass) {
 				oldSetup.apply(this, arguments);
@@ -74,7 +77,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 				}
 			},
 			/**
-			 * @function can.Observe.static.validate
+			 * @function can.Observe.validations.static.validate validate
 			 * @parent can.Observe.validations
 			 * `validate(attrNames, [options,] validateProc(value, attrName) )` validates each of the
 			 * specified attributes with the given `validateProc` function.  The function
@@ -109,12 +112,12 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			 *       }
 			 *     },{})
 			 *
-			 * @param {Array|String} attrNames Attribute name(s) to to validate
+			 * @param {Array<String>|String} attrNames Attribute name(s) to to validate
 			 *
 			 * @param {Object} [options] Options for the
 			 * validations.  Valid options include 'message' and 'testIf'.
 			 *
-			 * @param {Function} validateProc(value,attrName) Function used to validate each
+			 * @param {function(*,String)} validateProc(value,attrName) Function used to validate each
 			 * given attribute. Returns nothing if valid and an error message
 			 * otherwise. Function is called in the instance context and takes the
 			 * `value` and `attrName` to validate.
@@ -123,7 +126,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			validate : validate,
 
 			/**
-			 * @attribute can.Observe.static.validationMessages
+			 * @property can.Observe.validations.static.validationMessages validationMessages
 			 * @parent can.Observe.validations
 			 *
 			 * `validationMessages` has the default validation error messages that will be returned by the builtin
@@ -153,11 +156,12 @@ steal('can/util', 'can/observe/attributes', function (can) {
 				lengthShort : "is too short",
 				lengthLong : "is too long",
 				presence : "can't be empty",
-				range : "is out of range"
+				range : "is out of range",
+				numericality: "must be a number"
 			},
 
 			/**
-			 * @function can.Observe.static.validateFormatOf
+			 * @function can.Observe.validations.static.validateFormatOf validateFormatOf
 			 * @parent can.Observe.validations
 			 *
 			 * `validateFormatOf(attrNames, regexp, options)` validates where the values of
@@ -170,7 +174,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			 *       })
 			 *     }
 			 *
-			 * @param {Array|String} attrNames Attribute name(s) to to validate
+			 * @param {Array<String>|String} attrNames Attribute name(s) to to validate
 			 * @param {RegExp} regexp Regular expression used to match for validation
 			 * @param {Object} [options] Options for the validations.  Valid options include 'message' and 'testIf'.
 			 */
@@ -184,7 +188,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.static.validateInclusionOf
+			 * @function can.Observe.validations.static.validateInclusionOf validateInclusionOf
 			 * @parent can.Observe.validations
 			 *
 			 * Validates whether the values of the specified attributes are available in a particular
@@ -194,7 +198,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			 *       this.validateInclusionOf(["salutation"],["Mr.","Mrs.","Dr."])
 			 *     }
 			 *
-			 * @param {Array|String} attrNames Attribute name(s) to to validate
+			 * @param {Array<String>|String} attrNames Attribute name(s) to to validate
 			 * @param {Array} inArray Array of options to test for inclusion
 			 * @param {Object} [options] Options for the validations.  Valid options include 'message' and 'testIf'.
 			 */
@@ -204,16 +208,18 @@ steal('can/util', 'can/observe/attributes', function (can) {
 						return;
 					}
 
-					if (can.grep(inArray,function (elm) {
-						return (elm == value);
-					}).length == 0) {
-						return this.constructor.validationMessages.inclusion;
+					for(var i = 0; i < inArray.length; i++) {
+						if(inArray[i] == value) {
+							return;
+						}
 					}
+
+					return this.constructor.validationMessages.inclusion;
 				});
 			},
 
 			/**
-			 * @function can.Observe.static.validateLengthOf
+			 * @function can.Observe.validations.static.validateLengthOf validateLengthOf
 			 * @parent can.Observe.validations
 			 *
 			 * Validates that the specified attributes' lengths are in the given range.
@@ -222,6 +228,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			 *       this.validateInclusionOf(["suffix"],3,5)
 			 *     }
 			 *
+			 * @param {Array<String>|String} attrNames Attribute name(s) to to validate
 			 * @param {Number} min Minimum length (inclusive)
 			 * @param {Number} max Maximum length (inclusive)
 			 * @param {Object} [options] Options for the validations.  Valid options include 'message' and 'testIf'.
@@ -238,7 +245,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.static.validatePresenceOf
+			 * @function can.Observe.validations.static.validatePresenceOf validatePresenceOf
 			 * @parent can.Observe.validations
 			 *
 			 * Validates that the specified attributes are not blank.
@@ -247,7 +254,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			 *       this.validatePresenceOf(["name"])
 			 *     }
 			 *
-			 * @param {Array|String} attrNames Attribute name(s) to to validate
+			 * @param {Array<String>|String} attrNames Attribute name(s) to to validate
 			 * @param {Object} [options] Options for the validations.  Valid options include 'message' and 'testIf'.
 			 */
 			validatePresenceOf : function (attrNames, options) {
@@ -259,7 +266,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			},
 
 			/**
-			 * @function can.Observe.static.validateRangeOf
+			 * @function can.Observe.validations.static.validateRangeOf validateRangeOf
 			 * @parent can.Observe.validations
 			 *
 			 * Validates that the specified attributes are in the given numeric range.
@@ -268,7 +275,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			 *       this.validateRangeOf(["age"],21, 130);
 			 *     }
 			 *
-			 * @param {Array|String} attrNames Attribute name(s) to to validate
+			 * @param {Array<String>|String} attrNames Attribute name(s) to to validate
 			 * @param {Number} low Minimum value (inclusive)
 			 * @param {Number} hi Maximum value (inclusive)
 			 * @param {Object} [options] (optional) Options for the validations.  Valid options include 'message' and 'testIf'.
@@ -280,14 +287,38 @@ steal('can/util', 'can/observe/attributes', function (can) {
 						return this.constructor.validationMessages.range + " [" + low + "," + hi + "]";
 					}
 				});
+			},
+			
+			/**
+			 * @function can.Observe.validations.static.validatesNumericalityOf validatesNumericalityOf
+			 * @parent can.Observe.validations
+			 *
+			 * Validates that the specified attributes is a valid Number.
+			 *
+			 *     init : function(){
+			 *       this.validatesNumericalityOf(["age"]);
+			 *     }
+			 *
+			 * @param {Array|String} attrNames Attribute name(s) to to validate
+			 */
+			validatesNumericalityOf : function (attrNames) {
+				validate.call(this, attrNames, function (value) {
+					var res = !isNaN(parseFloat(value)) && isFinite(value);
+					if (!res) {
+						return this.constructor.validationMessages.numericality;
+					}
+				});
 			}
 		});
 	});
 
 	can.extend(can.Observe.prototype, {
 		/**
-		 * @function can.Observe.prototype.errors
-		 * @parent can.Observe.validations
+		 * @prototype
+		 */
+		/**
+		 * @function can.Observe.validations.prototype.errors errors
+		 * @parent can.Observe.validations.prototype
 		 *
 		 * Runs the validations on this observe.  You can
 		 * also pass it an array of attributes to run only those attributes.
@@ -308,7 +339,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 		 *
 		 *     errors.dueDate[0] //-> "can't be empty"
 		 *
-		 * @param {Array|String} [attrs] An optional list of attributes to get errors for:
+		 * @param {Array<String>|String} [attrs] An optional list of attributes to get errors for:
 		 *
 		 *     task.errors(['dueDate','name']);
 		 *
@@ -320,9 +351,9 @@ steal('can/util', 'can/observe/attributes', function (can) {
 		 * on the observe.  If `newVal` is provided,
 		 * it returns the errors on the observe if `newVal` was set.
 		 *
-		 * @return {Object} an object of attributeName : [errors] like:
+		 * @return {Object<String, Array<String>>} an object of attributeName : [errors] like:
 		 *
-		 *     task.errors() // -> {dueDate: ["cant' be empty"]}
+		 *     task.errors() // -> {dueDate: ["can't be empty"]}
 		 *
 		 * or `null` if there are no errors.
 		 */

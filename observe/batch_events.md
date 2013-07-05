@@ -1,9 +1,9 @@
-@page can.Observe.batchEvents
+@page can.Observe.batchEvents Batch Events
 @parent can.Observe
 
 `can.Observe.startBatch( batchStopHandler )` and
 `can.Observe.stopBatch( force, callStart )`
-are used specify atomic operations. `startBatch`
+are used to specify atomic operations. `startBatch`
 prevents change events from being fired until `stopBatch` is called.
 
 The following listens to changes on a `player`:

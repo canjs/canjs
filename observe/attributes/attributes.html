@@ -16,11 +16,14 @@
 <div id="printer"></div>
 </div>	
 <script type='text/javascript' 
-        src='../../../steal/steal.js'>   
+        src='../../lib/steal/steal.js'>
 </script>
 <script type='text/javascript' id="demo-source">   
-steal('can/observe/attributes', 'can/control')
-.then(function(){
+steal(function() {
+	steal.config({
+		root: '../../'
+	});
+}).then('can/observe/attributes', 'can/control', function(){
 	
 var Contact = can.Observe({
   attributes : { 

@@ -1,21 +1,17 @@
 module.exports = function (grunt) {
 
 	var _ = grunt.util._;
-	var shellOpts = {
-		stdout: true,
-		failOnError: true
-	};
-	var fileFilter = function () {
-		var excludes = _.toArray(arguments);
-		return function (file) {
-			return !_.some(excludes, function (exclude) {
-				return exclude.test(file);
-			});
-		}
-	}
+	var builderJSON = grunt.file.readJSON('builder.json');
+	var pkg = grunt.file.readJSON('package.json');
+	var banner = _.template(builderJSON.banner, {
+		pkg: pkg,
+		ids: [ 'CanJS default build' ],
+		url: pkg.homepage
+	});
 
 	grunt.initConfig({
-		pkg: grunt.file.readJSON('package.json'),
+		pkg: pkg,
+		builderJSON: builderJSON,
 		meta: {
 			out: "dist/",
 			beautifier: {
@@ -24,199 +20,167 @@ module.exports = function (grunt) {
 					indentChar: "\t"
 				},
 				exclude: [/\.min\./, /qunit\.js/]
-			},
-			banner: '/*!\n* <%= pkg.title || pkg.name %> - <%= pkg.version %> ' +
-				'(<%= grunt.template.today("yyyy-mm-dd") %>)\n' +
-				'<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-				'* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>\n' +
-				'* Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %>\n*/\n'
-		},
-		beautifier: {
-			codebase: '<%= meta.beautifier %>',
-			dist: '<%= meta.beautifier %>'
-		},
-		beautify: {
-			codebase: [
-				'construct/**/*.js',
-				'control/**/*.js',
-				'model/**/*.js',
-				'observe/**/*.js',
-				'route/**/*.js',
-				'test/**/*.js',
-				'util/**/*.js'
-			],
-			dist: '<%= meta.out %>/**/*.js'
-		},
-		build: {
-			edge: {
-				src: "can/build/build.js",
-				out: 'can/<%= meta.out %>'
-			},
-			edgePlugins: {
-				src: "can/build/plugins.js",
-				out: 'can/<%= meta.out %>'
-			},
-			latest: {
-				src: "can/build/build.js",
-				version: '<%= pkg.version %>',
-				out: 'can/<%= meta.out %>'
-			},
-			latestPlugins: {
-				src: "can/build/plugins.js",
-				version: '<%= pkg.version %>',
-				out: 'can/<%= meta.out %>'
 			}
 		},
-		shell: {
-			bundleLatest: {
-				command: 'cd <%= meta.out %> && zip -r can.js.<%= pkg.version %>.zip <%= pkg.version %>/',
-				options: shellOpts
-			},
-
-			getGhPages: {
-				command: 'git clone -b gh-pages <%= pkg.repository.url %> build/gh-pages',
-				options: shellOpts
-			},
-
-			copyLatest: {
-				command: 'rm -rf build/gh-pages/release/<%= pkg.version %> && ' +
-					'cp -R <%= meta.out %>/<%= pkg.version %> build/gh-pages/release/<%= pkg.version %> && ' +
-					'cp <%= meta.out %>/can.js.<%= pkg.version %>.zip build/gh-pages/downloads &&' +
-					'rm -rf build/gh-pages/release/latest && ' +
-					'cp -R <%= meta.out %>/<%= pkg.version %> build/gh-pages/release/latest',
-				options: shellOpts
-			},
-
-			copyEdge: {
-				command: 'rm -rf build/gh-pages/release/edge && ' +
-					'cp -R <%= meta.out %>/edge build/gh-pages/release/edge',
-				options: shellOpts
-			},
-
-			updateGhPages: {
-				command: 'cd build/gh-pages && git add . --all && ' +
-					'git commit -m "Updating release (latest: <%= pkg.version %>)" && ' +
-					'git push origin',
-				options: shellOpts
-			},
-			cleanup: {
-				command: 'rm -rf build/gh-pages',
-				options: shellOpts
-			}
-		},
-		docco: {
-			latest: {
-				files: [{
-					src: '<%= meta.out/<%= pkg.version %>/**/*.js',
-					filter: function (filepath) {
-						return !/(min\.js|amd\/|qunit\.js)/.test(filepath);
+		testify: {
+			libs: {
+				template: 'test/templates/__configuration__.html.ejs',
+				builder: '<%= builderJSON %>',
+				root: '../',
+				out: 'test/',
+				transform: {
+					options: function (config) {
+						this.steal.map = (this.steal && this.steal.map) || {};
+						this.steal.map['*'] = this.steal.map['*'] || {};
+						this.steal.map['*']['can/'] = '';
+						return this;
 					}
-				}],
+				}
+			},
+			dist: {
+				template: 'test/templates/__configuration__-dist.html.ejs',
+				builder: '<%= builderJSON %>',
+				root: '../../',
+				out: 'test/dist/',
+				transform: {
+					'module': function (definition, name) {
+						if (!definition.isDefault) {
+							return definition.name.toLowerCase();
+						}
+						return null;
+					},
+
+					'test': function (definition, key) {
+						var name = key.substr(key.lastIndexOf('/') + 1);
+						var path = key.replace('can/', '') + '/';
+						return path + name + '_test.js';
+					},
+
+					'options': function (config) {
+						return {
+							dist: 'can.' + config
+						}
+					}
+				}
+			},
+			amd: {
+				template: 'test/templates/__configuration__-amd.html.ejs',
+				builder: '<%= builderJSON %>',
+				root: '../..',
+				out: 'test/amd/'
+			}
+		},
+		builder: {
+			options: {
+				url: 'http://canjs.com',
+				pluginify: {
+					ignore: [ /\/lib\//, /util\/dojo-(.*?).js/ ]
+				},
+				pkg: "<%= pkg %>",
+				builder: "<%= builderJSON %>",
+				steal: {
+					map: {
+						'*': {
+							'can/': ''
+						}
+					},
+					root: __dirname
+				}
+			},
+			dist: {
 				options: {
-					output: '<%= meta.out %>/<%= pkg.version %>/docs'
+					prefix: 'can.'
+				},
+				files: {
+					'dist/': '.'
 				}
 			}
 		},
-		// docco: {
-		// 	edge: {
-		// 		files: '<%= meta.out %>/edge/**/*.js',
-		// 		docco: {
-		// 			output: '<%= meta.out %>/edge/docs'
-		// 		}
-		// 	},
-		// 	latest: {
-		// 		files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
-		// 		docco: {
-		// 			output: '<%= meta.out %>/<%= pkg.version %>/docs'
-		// 		}
-		// 	},
-		// 	options: {
-		// 		exclude: [/\.min\./, /amd\//, /qunit\.js/]
-		// 	}
-		// },
-		'string-replace': {
-			latest: {
-				files: [
-					{
-						src: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
-						dest: './',
-						cwd: './',
-						filter: function (filepath) {
-							return !/\.min/.test(filepath);
-						}
-					}
-				]
-			},
-			edge: {
-				files: [
-					{
-						src: '<%= meta.out %>/edge/**/*.js',
-						dest: './',
-						cwd: './',
-						filter: function (filepath) {
-							return !/\.min/.test(filepath);
-						}
-					}
-				]
-			},
+		amdify: {
 			options: {
-				replacements: [
-					{
-						pattern: /\/\*([\s\S]*?)\*\//gim, // multiline comments
-						replacement: ''
-					},
-					{
-						pattern: /\/\/(\s*)\n/gim,
-						replacement: ''
-					},
-					{
-						pattern: /;[\s]*;/gim, // double ;;
-						replacement: ';'
-					},
-					{
-						pattern: /(\/\/.*)\n[\s]*;/gi,
-						replacement: '$1'
-					},
-					{
-						pattern: /(\n){3,}/gim, //single new lines
-						replacement: '\n\n'
-					},
-					{
-						pattern: /@EDGE/gim, //version property
-						replacement: '<%= pkg.version %>'
-					}
-				]
+				steal: {
+					root: '../'
+				},
+				map: {
+					'can/util': 'can/util/library'
+				},
+				banner: banner
+			},
+			all: {
+				options: {
+					ids: ['can'].concat(_.keys(grunt.file.readJSON('builder.json').modules))
+				},
+				files: {
+					'dist/amd/': '.'
+				}
 			}
 		},
-		bannerize: {
-			latest: {
-				files: '<%= meta.out %>/<%= pkg.version %>/**/*.js',
-				banner: '<%= meta.banner %>'
-			},
-			edge: {
-				files: '<%= meta.out %>/edge/**/*.js',
-				banner: '<%= meta.banner %>'
+		docco: {
+			dist: {
+				src: ['dist/*.js'],
+				options: {
+					output: 'dist/docs'
+				}
 			}
 		},
 		changelog: {
 			log: {
 				repo: 'canjs',
 				user: 'bitovi',
-				milestone: 6,
+				milestone: 7,
 				version: '<%= pkg.version %>'
+			}
+		},
+		connect: {
+			server: {
+				options: {
+					port: 8000,
+					base: '.'
+				}
+			}
+		},
+		qunit: {
+			all: {
+				options: {
+					urls: [
+						'http://localhost:8000/test/dist/dojo.html',
+						'http://localhost:8000/test/dist/jquery.html',
+						//'http://localhost:8000/can/test/zepto.html',
+						'http://localhost:8000/test/dist/mootools.html',
+						'http://localhost:8000/test/dist/yui.html',
+
+						'http://localhost:8000/test/dojo.html',
+						'http://localhost:8000/test/jquery.html',
+						//'http://localhost:8000/can/test/zepto.html',
+						'http://localhost:8000/test/mootools.html',
+						'http://localhost:8000/test/yui.html'
+					]
+				}
+			}
+		},
+		uglify: {
+			options: {
+				banner: banner
+			},
+			all: {
+				files: {
+					'dist/can.jquery.min.js': 'dist/can.jquery.js',
+					'dist/can.zepto.min.js': 'dist/can.zepto.js',
+					'dist/can.mootools.min.js': 'dist/can.mootools.js',
+					'dist/can.dojo.min.js': 'dist/can.dojo.js',
+					'dist/can.yui.min.js': 'dist/can.yui.js'
+				}
 			}
 		}
 	});
 
-	grunt.loadTasks("../build/tasks");
-
 	grunt.loadNpmTasks('grunt-string-replace');
+	grunt.loadNpmTasks('grunt-contrib-connect');
+	grunt.loadNpmTasks('grunt-contrib-qunit');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-shell');
-	grunt.loadNpmTasks('grunt-docco');
+	grunt.loadNpmTasks('bitovi-tools');
 
-	grunt.registerTask('edge', ['build:edge', 'build:edgePlugins', 'string-replace:edge', 'beautify:dist', 'bannerize:edge', 'docco:edge']);
-	grunt.registerTask('latest', ['build:latest', 'build:latestPlugins', 'string-replace:latest', 'beautify:dist', 'bannerize:latest']); //commenting docco task until we update
-	grunt.registerTask('ghpages', ['shell:cleanup', 'shell:getGhPages', 'shell:copyLatest', 'shell:updateGhPages', 'shell:cleanup']);
-	grunt.registerTask('deploy', ['latest', 'shell:bundleLatest', 'ghpages']);
-
+	grunt.registerTask('build', ['builder', 'testify', 'amdify', 'uglify', 'docco']);
+	grunt.registerTask('test', ['connect', 'builder', 'testify', 'qunit']);
 };

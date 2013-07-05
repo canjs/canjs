@@ -124,8 +124,8 @@ steal('jquery', 'can/view', function($, can) {
 	};
 
 	/**
-	 *  @add jQuery.fn
-	 *  @parent can.View
+	 *  @function jQuery.fn.hookup
+	 *  @parent can.view.modifiers
 	 *  Called on a jQuery collection that was rendered with can.View with pending hookups.  can.View can render a 
 	 *  template with hookups, but not actually perform the hookup, because it returns a string without actual DOM 
 	 *  elements to hook up to.  So hookup performs the hookup and clears the pending hookups, preventing errors in 
@@ -140,9 +140,6 @@ steal('jquery', 'can/view', function($, can) {
 		return this;
 	};
 
-	/**
-	 *  @add jQuery.fn
-	 */
 	can.each([
 	/**
 	 *  @function jQuery.fn.prepend

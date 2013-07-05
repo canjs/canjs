@@ -21,7 +21,7 @@ can.Control.setup = function() {
 	if ( this !== can.Control ) {
 
 		/**
-		 * @attribute can.Control.plugin.static.pluginName
+		 * @property can.Control.plugin.static.pluginName pluginName
 		 * @parent can.Control.plugin
 		 *
 		 * Setting the static `pluginName` property allows you to override the default name
@@ -57,9 +57,14 @@ can.Control.setup = function() {
 $.fn.extend({
 
 	/**
-	 * @function jQuery.fn.controls
+	 * @function jQuery.fn.controls jQuery.fn.controls
 	 * @parent can.Control.plugin
-	 * 
+	 * @description Get the Controls associated with elements.
+	 * @signature `jQuery.fn.controls([type])`
+	 * @param {String|can.Control} [control] The type of Controls to find.
+	 * @return {can.Control} The controls associated with the given elements.
+	 *
+	 * @body 
 	 * When the widget is initialized, the plugin control creates an array 
 	 * of control instance(s) with the DOM element it was initialized on using 
 	 * [can.data] method.
@@ -86,9 +91,6 @@ $.fn.extend({
 	 *		<div class="widgets my_clock" />
 	 *
 	 *		$('.widgets').controls('MyBox') //-> [ MyBox ]
-	 *
-	 * @param {Object} control (optional) if exists the control instance(s) with that constructor function or type will be returned.
-	 * @return {Array} an array of control instance(s).
 	 */
 	controls: function() {
 		var controllerNames = makeArray(arguments),
@@ -112,11 +114,16 @@ $.fn.extend({
 	},
 	
 	/**
-	 * @function jQuery.fn.control
+	 * @function jQuery.fn.control jQuery.fn.control
 	 * @parent can.Control.plugin
-	 * 
-	 * The `control` does the same as [jQuery.fn.controls controls] execept it only 
-	 * returns the first instance found.
+	 * @description Get the Control associated with elements.
+	 * @signature `jQuery.fn.control([type])`
+	 * @param {String|can.Control} [control] The type of Control to find.
+	 * @return {can.Control} The first control found.
+	 *
+	 * @body
+	 * This is ths same as [jQuery.fn.controls $().controls] except that
+	 * it only returns the first Control found.
 	 *
 	 *		//- Init MyBox widget
 	 *		$('.widgets').my_box();
@@ -124,9 +131,6 @@ $.fn.extend({
 	 *		<div class="widgets my_box" />
 	 *
 	 *		$('.widgets').controls() //-> MyBox
-	 *
-	 * @param {Object} control (optional) if exists the first control instance with that constructor function or type will be returned.
-	 * @return {can.Control} the first control.
 	 */
 	control: function( control ) {
 		return this.controls.apply(this, arguments)[0];
@@ -167,9 +171,14 @@ can.Control.plugin = function(pluginname){
 }
 
 /**
- * @function can.Control.prototype.update
+ * @function can.Control.plugin.prototype.update update
  * @parent can.Control.plugin
  * 
+ * @description Reconfigure a control.
+ * @signature `update(newOptions)`
+ * @param {Object} newOptions Options to merge into the current options.
+ * 
+ * @body
  * Update extends [can.Control.prototype.options options] 
  * with the `options` argument and rebinds all events.  It 
  * re-configures the control.

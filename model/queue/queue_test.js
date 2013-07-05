@@ -31,7 +31,7 @@ test("queued requests will not overwrite attrs", function(){
 	stop();
 	personD.then(function(person){
 		start()
-		equals(person.name, "Brian", "attrs were not overwritten with the data from the server");
+		equal(person.name, "Brian", "attrs were not overwritten with the data from the server");
 		can.fixture.delay = delay;
 		
 	});
@@ -65,11 +65,11 @@ test("error will clean up the queue", 2, function(){
 
 	err.fail(function(){
 		start();
-		equals(u._requestQueue.attr('length'), 4, "Four requests are in the queue");
+		equal(u._requestQueue.attr('length'), 4, "Four requests are in the queue");
 		stop();
 		u._requestQueue.bind('change', function(){
 			start();
-			equals(u._requestQueue.attr('length'), 0, "Request queue was emptied");
+			equal(u._requestQueue.attr('length'), 0, "Request queue was emptied");
 		});
 	})
 })
@@ -140,11 +140,11 @@ test("abort will remove requests made after the aborted request", function(){
 	u.save();
 	u.save();
 
-	equals(u._requestQueue.attr('length'), 5);
+	equal(u._requestQueue.attr('length'), 5);
 
 	abort.abort();
 
-	equals(u._requestQueue.attr('length'), 2);
+	equal(u._requestQueue.attr('length'), 2);
 
 })
 

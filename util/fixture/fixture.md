@@ -1,9 +1,61 @@
-@page can.fixture
-@parent can.util
-@test can/util/fixture/qunit.html
+@function can.fixture can.fixture
+@parent canjs
+@test can/util/fixture/test.html
+@group can.fixture.types Types
+
+Simulate AJAX requests.
 
 
-`can.util.fixture` intercepts an AJAX request and simulates
+@signature `can.fixture(fromUrl, toUrl)`
+
+Trap requests from one url and redirect them from another.
+
+@param {String} fromUrl
+
+Trap requests made by [can.ajax] to this url.
+
+@param {String} toUrl
+
+Redirect requests to this url.
+
+@signature `can.fixture(url, handler(request, response))`
+
+Trap requests to a url and provide the response with a
+callback function.
+
+@param {String} url Trap requests made 
+by [can.ajax] to this url. 
+
+The url can be templated with tags that
+look like `{TEMPLATE}`. For example: "/users/{id}". Any templated
+values get added to the `handler`'s request object's data.
+
+@param {can.fixture.types.requestHandler} handler
+
+Specifies the response of the fixture. `handler` gets called with
+the [can.ajax] [can.AjaxSettings settings object] and a [can.fixture.types.responseHandler response handler]
+that is used to specify the response.
+
+@signature `can.fixture(fixtures)`
+
+Configures multiple ajax traps.
+
+@param {Object.<url,can.fixture.types.requestHandler|String>} fixtures
+
+An mapping of templated urls to redirect urls 
+or [can.fixture.types.requestHandler request handler functions].
+
+    can.fixture({
+      "/tasks": "/fixtures/tasks.json",
+      "DESTROY /tasks/{id}": function(){
+      	return {};
+      }
+    })
+
+@body
+
+
+`can.fixture` intercepts an AJAX request and simulates
 the response with a file or function. They are a great technique
 when you want to develop JavaScript
 independently of the backend.
@@ -21,10 +73,9 @@ The other common option is to generate the Ajax response with
 a function.  The following intercepts updating tasks at
 `/tasks/ID.json` and responds with updated data:
 
-    can.fixture("PUT /tasks/{id}.json",
-      function(original, respondWith, settings){
-         respondWith({ updatedAt : new Date().getTime() });
-      })
+    can.fixture("GET /tasks/{id}",function(request,response){
+      response(200,"success",{id: request.data.id, name: "fix tires."})
+    })
 
 We categorize fixtures into the following types:
 
@@ -59,21 +110,21 @@ request from your server.
 For example, the following returns a successful response with JSON data from the server:
 
     can.fixture("/foobar.json",
-      function(original, respondWith, settings){
-        respondWith(200, "success", { json: {foo: "bar" } }, {})
+      function(original, response){
+        response(200, "success", { json: {foo: "bar" } }, {})
       })
 
 The fixture function has the following signature:
 
-    function( originalOptions, respondWith, options) {
-      respond(status, statusText, responses, responseHeaders);
+    function( originalOptions, response) {
+      response(status, statusText, responses, responseHeaders);
     }
 
 where the fixture function is called with:
 
   - `originalOptions` - are the options provided to the ajax method, unmodified,
     and thus, without defaults from ajaxSettings
-  - `respondWith` - the response callback. It can be called with:
+  - `response` - the response callback. It can be called with:
       - `status` - the HTTP status code of the response.
       - `statusText` - the status text of the response
       - `responses` - a map of dataType/value that contains the responses for each data format supported
@@ -85,24 +136,24 @@ However, can.fixture handles the common case where you want a successful respons
 The previous can be written like:
 
     can.fixture("/foobar.json",
-      function(original, respondWith, settings){
-        respondWith({ foo: "bar" });
+      function(original, response){
+        response({ foo: "bar" });
       })
 
-Since `respondWith` is called asynchronously you can also set a custom fixture timeout like this:
+Since `response` is called asynchronously you can also set a custom fixture timeout like this:
 
     can.fixture("/foobar.json",
-    function(original, respondWith, settings){
+    function(original, response){
         setTimeout(function() {
-          respondWith({ foo: "bar" });
+          response({ foo: "bar" });
         }, 1000);
       })
 
 If you want to return an array of data respond like this:
 
     can.fixture("/tasks.json",
-      function(original, respondWith, settings){
-        respondWith([ "first", "second", "third"]);
+      function(original, response){
+        response([ "first", "second", "third"]);
       })
 
 __Note:__ A fixture function can also return its response directly like this:
@@ -131,17 +182,17 @@ The following example simulates services that get and update 100 todos.
       }
     }
     can.fixture("GET /todos/{id}",
-      function(original, respondWith, settings){
+      function(original, response, settings){
         // return the JSON data
         // notice that id is pulled from the url and added to data
-        respondWith(todos[orig.data.id]);
+        response(todos[orig.data.id]);
       })
 
     can.fixture("PUT /todos/{id}",
-      function(original, respondWith, settings){
+      function(original, response, settings){
         // update the todo's data
         can.extend(todos[orig.data.id], orig.data );
-        respondWith({});
+        response({});
       })
 
 Notice that data found in templated urls (ex: `{id}`) is added to the original data object.
@@ -152,8 +203,8 @@ The following simulates an unauthorized request
 to `/foo`.
 
     can.fixture("/foo",
-      function(original, respondWith, settings) {
-        respondWith(401,"{type: 'unauthorized'}");
+      function(original, response) {
+        response(401,"{type: 'unauthorized'}");
       });
 
 This could be received by the following Ajax request:
@@ -180,7 +231,7 @@ You can also set [can.fixture.on] to false:
 
     can.fixture.on = false;
 
-## Make
+## can.fixture.store
 
 [can.fixture.store] makes a CRUD service layer that handles sorting, grouping, filtering and more. Use
 it with a [can.Model] like this:
@@ -214,7 +265,7 @@ Dynamic fixtures are awesome for performance testing.  Want to see what
 What to see what the app feels like when a request takes 5 seconds to return?  Set
 [can.fixture.delay] to 5000.
 
-## Organizing fixture
+## Organizing fixtures
 
 The __best__ way of organizing fixtures is to have a 'fixtures.js' file that steals
 <code>can/util/fixture</code> and defines all your fixtures.  For example,
@@ -237,8 +288,8 @@ have <code>todo/fixtures/fixtures.js</code> look like:
           type: 'post',
           url: '/services/todos.json'
         },
-        function(original, respondWith, settings){
-            respondWith({
+        function(original, response, settings){
+            response({
                 id: Math.random(),
                 name: settings.data.name
             })

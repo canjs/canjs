@@ -4,7 +4,7 @@
 	test("registerNode, unregisterNode, and replace work", function(){
 
 		var nodeLists = can.view.live.nodeLists;
-		
+
 		// Reset the registered nodes
 		for (var key in nodeLists.nodeMap) {
 			if (nodeLists.hasOwnProperty(key)) {
@@ -16,7 +16,7 @@
 				delete nodeLists.nodeListMap[key];
 			}
 		}
-	
+
 		var ids = function(arr){
 			return can.map(arr, function(item){
 				return item.id
@@ -24,46 +24,46 @@
 		},
 			two = {id: 2},
 			listOne = [{id: 1},two,{id: 3}];
-		
+
 		nodeLists.register(listOne);
 		var listTwo = [two];
-	
+
 		nodeLists.register(listTwo);
-	
+
 		var newLabel = {id: 4}
 		nodeLists.replace(listTwo, [newLabel])
-	
-		same( ids(listOne), [1,4,3], "replaced" )
-		same( ids(listTwo), [4] );
-	
+
+		deepEqual( ids(listOne), [1,4,3], "replaced" )
+		deepEqual( ids(listTwo), [4] );
+
 		nodeLists.replace(listTwo,[{id: 5},{id: 6}]);
-	
-		same( ids(listOne), [1,5,6,3], "replaced" );
-	
-		same( ids(listTwo), [5,6], "replaced" );
-	
+
+		deepEqual( ids(listOne), [1,5,6,3], "replaced" );
+
+		deepEqual( ids(listTwo), [5,6], "replaced" );
+
 		nodeLists.replace(listTwo,[{id: 7}])
-	
-		same( ids(listOne), [1,7,3], "replaced" );
-	
-		same( ids(listTwo), [7], "replaced" );
-	
+
+		deepEqual( ids(listOne), [1,7,3], "replaced" );
+
+		deepEqual( ids(listTwo), [7], "replaced" );
+
 		nodeLists.replace( listOne, [{id: 8}])
-	
-		same( ids(listOne), [8], "replaced" );
-		same( ids(listTwo), [7], "replaced" );
-	
+
+		deepEqual( ids(listOne), [8], "replaced" );
+		deepEqual( ids(listTwo), [7], "replaced" );
+
 		nodeLists.unregister(listOne);
 		nodeLists.unregister(listTwo);
-	
-		same(nodeLists.nodeMap, {} );
-		same(nodeLists.nodeListMap ,{} )
+
+		deepEqual(nodeLists.nodeMap, {} );
+		deepEqual(nodeLists.nodeListMap ,{} )
 	});
 
 	test("multiple template types work", function(){
 		var expected = '<h3>helloworld</h3>';
-		can.each(["micro","ejs","jaml", "mustache"], function(ext){
-			var actual = can.view.render("//can/view/test/template." + ext, {
+		can.each(["ejs","mustache"], function(ext){
+			var actual = can.view.render(can.test.path("view/test/template." + ext), {
 				"message" :"helloworld"
 			}, {
 				helper: function(){
@@ -78,7 +78,7 @@
 	test("helpers work", function(){
 		var expected = '<h3>helloworld</h3><div>foo</div>';
 		can.each(["ejs", "mustache"], function(ext){
-			var actual = can.view.render("//can/view/test/helpers." + ext, {
+			var actual = can.view.render(can.test.path("view/test/helpers." + ext), {
 				"message" :"helloworld"
 			}, {
 				helper: function(){
@@ -91,7 +91,7 @@
 	});
 
 	test("buildFragment works right", function(){
-		can.append( can.$("#qunit-test-area"), can.view("//can/view/test//plugin.ejs",{}) )
+		can.append( can.$("#qunit-test-area"), can.view(can.test.path("view/test//plugin.ejs"),{}) )
 		ok(/something/.test( can.$("#something span")[0].firstChild.nodeValue ),"something has something");
 		can.remove( can.$("#something") );
 	});
@@ -102,14 +102,14 @@
 		stop();
 		var i = 0;
 
-		can.view.render("//can/view/test//temp.ejs",{"message" :"helloworld"}, function(text){
+		can.view.render(can.test.path("view/test//temp.ejs"), {"message" :"helloworld"}, function(text){
 			ok(/helloworld\s*/.test(text), "we got a rendered template");
 			i++;
-			equals(i, 2, "Ajax is not synchronous");
+			equal(i, 2, "Ajax is not synchronous");
 			start();
 		});
 		i++;
-		equals(i, 1, "Ajax is not synchronous")
+		equal(i, 1, "Ajax is not synchronous")
 	})
 	test("caching works", function(){
 		// this basically does a large ajax request and makes sure
@@ -117,12 +117,12 @@
 		stop();
 		var startT = new Date(),
 			first;
-		can.view.render("//can/view/test//large.ejs",{"message" :"helloworld"}, function(text){
+		can.view.render(can.test.path("view/test//large.ejs"),{"message" :"helloworld"}, function(text){
 			first = new Date();
 			ok(text, "we got a rendered template");
 
 
-			can.view.render("//can/view/test//large.ejs",{"message" :"helloworld"}, function(text){
+			can.view.render(can.test.path("view/test//large.ejs"),{"message" :"helloworld"}, function(text){
 				var lap2 = (new Date()) - first,
 					lap1 =  first-startT;
 				// ok( lap1 > lap2, "faster this time "+(lap1 - lap2) )
@@ -133,10 +133,9 @@
 		})
 	})
 	test("hookup", function(){
-
-		can.view("//can/view/test//hookup.ejs",{})
-
-	})
+		can.view(can.test.path("view/test//hookup.ejs"),{});
+		equal(window.hookedUp, 'dummy', 'Hookup ran and got element');
+	});
 
 	test("inline templates other than 'tmpl' like ejs", function(){
 		var script = document.createElement('script');
@@ -163,7 +162,7 @@
 		div.appendChild(can.view('#test_ejs', {name: 'Henry'}));
 
 		//make sure we aren't returning the current document as the template
-		equals(div.getElementsByTagName("script").length, 0, "Current document was not used as template")
+		equal(div.getElementsByTagName("script").length, 0, "Current document was not used as template")
 		if(div.getElementsByTagName("span").length === 1) {
 			equal( div.getElementsByTagName("span")[0].firstChild.nodeValue , 'Henry');
 		}
@@ -173,11 +172,11 @@
 		var foo = new can.Deferred(),
 			bar = new can.Deferred();
 		stop();
-		can.view.render("//can/view/test//deferreds.ejs",{
+		can.view.render(can.test.path("view/test//deferreds.ejs"),{
 			foo : typeof foo.promise == 'function' ? foo.promise() : foo,
 			bar : bar
 		}).then(function(result){
-			equals(result, "FOO and BAR");
+			equal(result, "FOO and BAR");
 			start();
 		});
 		setTimeout(function(){
@@ -190,8 +189,8 @@
 	test("deferred", function(){
 		var foo = new can.Deferred();
 		stop();
-		can.view.render("//can/view/test//deferred.ejs",foo).then(function(result){
-			equals(result, "FOO");
+		can.view.render(can.test.path("view/test//deferred.ejs"),foo).then(function(result){
+			equal(result, "FOO");
 			start();
 		});
 		setTimeout(function(){
@@ -230,7 +229,7 @@
 		ok(can.isFunction(directResult), 'Renderer returned directly');
 		ok(can.isFunction(renderer), 'Renderer is a function');
 		equal(renderer({ test : 'working test' }), 'This is a working test', 'Rendered');
-		renderer = can.view("//can/view/test//template.ejs");
+		renderer = can.view(can.test.path("view/test//template.ejs"));
 		ok(can.isFunction(renderer), 'Renderer is a function');
 		equal(renderer({ message : 'Rendered!' }), '<h3>Rendered!</h3>', 'Synchronous template loaded and rendered');
 		// TODO doesn't get caught in Zepto for whatever reason
@@ -277,7 +276,7 @@
 
 		stop();
 		ok(can.isDeferred(original.foo), 'Original foo property is a Deferred');
-		can.view("//can/view/test//deferred.ejs", original).then(function(result, data){
+		can.view(can.test.path("view/test//deferred.ejs"), original).then(function(result, data){
 			ok(data, 'Data exists');
 			equal(data.foo, 'FOO', 'Foo is resolved');
 			equal(data.bar, 'BAR', 'Bar is resolved');
@@ -326,7 +325,7 @@
 		  id: 4,
 		  name: 'microsoft.com'
 		}]),
-		frag = can.view("//can/view/test/select.ejs", {
+		frag = can.view(can.test.path("view/test/select.ejs"), {
 			domainList: domainList
 		}),
 		div = document.createElement('div');
@@ -381,9 +380,9 @@
 	test("Deferred fails (#276)", function(){
 		var foo = new can.Deferred();
 		stop();
-		can.view.render("//can/view/test//deferred.ejs",foo)
+		can.view.render(can.test.path("view/test/deferred.ejs"),foo)
 			.fail(function(error) {
-				equals(error.message, 'Deferred error');
+				equal(error.message, 'Deferred error');
 				start();
 			});
 
@@ -399,11 +398,11 @@
 			bar = new can.Deferred();
 
 		stop();
-		can.view.render("//can/view/test//deferreds.ejs",{
+		can.view.render(can.test.path("view/test//deferreds.ejs"),{
 			foo : typeof foo.promise == 'function' ? foo.promise() : foo,
 			bar : bar
 		}).fail(function(error){
-			equals(error.message, 'foo error');
+			equal(error.message, 'foo error');
 			start();
 		});
 
@@ -419,7 +418,7 @@
 	test("Using '=' in attribute does not truncate the value", function() {
 		var template = can.view.ejs("<div id='equalTest' <%= this.attr('class') %>></div>"),
 			obs = new can.Observe({
-				class : 'class="someClass"'
+				'class' : 'class="someClass"'
 			}),
 			frag = template(obs), div;
 
@@ -431,5 +430,20 @@
 		equal(div.className, 'do=not=truncate=me', 'class is right');
 	});
 
+	if(typeof steal !== 'undefined') {
+		test("multiple template types work", function(){
+			var expected = '<h3>helloworld</h3>';
+			can.each(["micro","ejs","jaml", "mustache"], function(ext){
+				var actual = can.view.render(can.test.path("view/test/template." + ext), {
+					"message" :"helloworld"
+				}, {
+					helper: function(){
+						return "foo"
+					}
+				});
 
+				equal(can.trim(actual), expected, "Text rendered");
+			})
+		});
+	}
 })();

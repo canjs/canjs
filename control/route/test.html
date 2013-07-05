@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="../../lib/qunit/qunit.css"/>
+</head>
+<body>
+<h1 id="qunit-header">can.Control.plugin Test Suite</h1>
+
+<h2 id="qunit-banner"></h2>
+
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="qunit-test-area"></div>
+
+<script type="text/javascript" src="../../lib/steal/steal.js"></script>
+<script type="text/javascript" src="../../lib/qunit/qunit.js"></script>
+<script type="text/javascript">
+	QUnit.config.autostart = false;
+	steal(function() {
+		steal.config({
+			root: '../../'
+		});
+	},"can/control/route").then("can/control/route/route_test.js", function() {
+		QUnit.start();
+	});
+</script>
+</body>
+</html>

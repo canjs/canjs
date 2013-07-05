@@ -117,11 +117,23 @@ steal('can/util','can/observe', function( can ) {
 	//		`type` - The default http request type
 	//		`data` - A method that takes the `arguments` and returns `data` used for ajax.
 	/** 
-	 * @Static
+	 * @static
 	 */
 	//
 		/**
-		 * @function bind
+		 * @function can.Model.bind bind
+		 * @parent can.Model.static
+		 * @description Listen for events on a Model class.
+		 *
+		 * @signature `can.Model.bind(eventType, handler)`
+		 * @param {String} eventType The type of event.  It must be
+		 * `"created"`, `"udpated"`, `"destroyed"`.
+		 * @param {function} handler A callback function
+		 * that gets called with the event and instance that was
+		 * created, destroyed, or updated.
+		 * @return {can.Model} The model constructor function.
+		 *
+		 * @body
 		 * `bind(eventType, handler(event, instance))` listens to
 		 * __created__, __updated__, __destroyed__ events on all 
 		 * instances of the model.
@@ -132,19 +144,21 @@ steal('can/util','can/observe', function( can ) {
 		 *     })
 		 *     
 		 *     new Task({name: "Dishes"}).save();
-		 * 
-		 * @param {String} eventType The type of event.  It must be
-		 * `"created"`, `"udpated"`, `"destroyed"`.
-		 * 
-		 * @param {Function} handler(event,instance) A callback function
-		 * that gets called with the event and instance that was
-		 * created, destroyed, or updated.
-		 * 
-		 * @return {can.Model} the model constructor function.
 		 */
 		// 
 		/**
-		 * @function unbind
+		 * @function can.Model.unbind unbind
+		 * @parent can.Model.static
+		 * @description Stop listening for events on a Model class.
+		 * 
+		 * @signature `can.Model.unbind(eventType, handler)`
+		 * @param {String} eventType The type of event. It must be
+		 * `"created"`, `"udpated"`, `"destroyed"`.
+		 * @param {function} handler A callback function
+		 * that was passed to `bind`.
+		 * @return {can.Model} The model constructor function.
+		 *
+		 * @body
 		 * `unbind(eventType, handler)` removes a listener
 		 * attached with [can.Model.bind].
 		 * 
@@ -156,28 +170,22 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * You have to pass the same function to `unbind` that you
 		 * passed to `bind`.
-		 * 
-		 * @param {String} eventType The type of event.  It must be
-		 * `"created"`, `"udpated"`, `"destroyed"`.
-		 * 
-		 * @param {Function} handler(event,instance) A callback function
-		 * that was passed to `bind`.
-		 * 
-		 * @return {can.Model} the model constructor function.
 		 */
 		// 
 		/**
-		 * @attribute id
-		 * The name of the id field.  Defaults to 'id'. Change this if it is something different.
+		 * @property {String} can.Model.id id
+		 * @parent can.Model.static
+		 * The name of the id field.  Defaults to `'id'`. Change this if it is something different.
 		 * 
-		 * For example, it's common in .NET to use Id.  Your model might look like:
+		 * For example, it's common in .NET to use `'Id'`.  Your model might look like:
 		 * 
-		 *     Friend = can.Model({
+		 *     Friend = can.Model.extend({
 		 *       id: "Id"
 		 *     },{});
 		 */
 		/**
-		 * @attribute removeAttr
+		 * @property {Boolean} can.Model.removeAttr removeAttr
+		 * @parent can.Model.static
 		 * Sets whether model conversion should remove non existing attributes or merge with
 		 * the existing attributes. The default is `false`.
 		 * For example, if `Task.findOne({ id: 1 })` returns
@@ -200,7 +208,48 @@ steal('can/util','can/observe', function( can ) {
 		 */
 	ajaxMethods = {
 		/**
-		 * @function create
+		 * @description Specifies how to create a new resource on the server. `create(serialized)` is called 
+		 * by [can.Model.prototype.save save] if the model instance [can.Model.prototype.isNew is new].
+		 * @function can.Model.create create
+		 * @parent can.Model.static
+		 * 
+		 * 
+		 * @signature `can.Model.create: function(serialized) -> seferred`
+		 * 
+		 * Specify a function to create persistent instances. The function will
+		 * typically perform an AJAX request to a service that results in
+		 * creating a record in a database.
+		 * 
+		 * @param {Object} serialized The [can.Observe::serialize serialized] properties of
+		 * the model to create.
+		 * @return {can.Deferred} A Deferred that resolves to an object of attributes
+		 * that will be added to the created model isntance.  The object __MUST__ contain
+		 * an [can.Model.id id] property so that future calls to [can.Model.prototype.save save]
+		 * will call [can.Model.update].
+		 * 
+		 * 
+		 * @signature `can.Model.create: "[METHOD] /path/to/resource"`
+		 * 
+		 * Specify a HTTP method and url to create persistent instances.
+		 * 
+		 * If you provide a URL, the Model will send a request to that URL using
+		 * the method specified (or POST if none is specified) when saving a
+		 * new instance on the server. (See below for more details.)
+		 * 
+		 * @param {HttpMethod} METHOD An HTTP method. Defaults to `"POST"`.
+		 * @param {STRING} url The URL of the service to retrieve JSON data.
+		 * 
+		 * 
+		 * @signature `can.Model.create: {ajaxSettings}`
+		 * 
+		 * Specify an options object that is used to make a HTTP request to create
+		 * persistent instances.
+		 * 
+		 * @param {can.AjaxSettings} ajaxSettings A settings object that
+		 * specifies the options available to pass to [can.ajax].
+		 * 
+		 * @body
+		 * 
 		 * `create(attributes) -> Deferred` is used by [can.Model::save save] to create a 
 		 * model instance on the server. 
 		 * 
@@ -209,7 +258,7 @@ steal('can/util','can/observe', function( can ) {
 		 * The easiest way to implement create is to give it the url 
 		 * to post data to:
 		 * 
-		 *     var Recipe = can.Model({
+		 *     var Recipe = can.Model.extend({
 		 *       create: "/recipes"
 		 *     },{})
 		 *     
@@ -237,24 +286,34 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * The code looks like:
 		 * 
-		 *     can.Model("Recipe", {
+		 *     can.Model.extend("Recipe", {
 		 *       create : function( attrs ){
 		 *         return $.post("/recipes.json",attrs, undefined ,"json");
 		 *       }
 		 *     },{})
-		 * 
-		 * 
-		 * @param {Object} attrs Attributes on the model instance
-		 * @return {Deferred} A deferred that resolves to 
-		 * an object with the id of the new instance and
-		 * other properties that should be set on the instance.
 		 */
 		create : {
 			url : "_shortName",
 			type :"post"
 		},
 		/**
-		 * @function update
+		 * @description Update a resource on the server.
+		 * @function can.Model.update update
+		 * @parent can.Model.static
+		 * @signature `can.Model.update: "[METHOD] /path/to/resource"`
+		 * If you provide a URL, the Model will send a request to that URL using
+		 * the method specified (or PUT if none is specified) when updating an
+		 * instance on the server. (See below for more details.)
+		 * @return {can.Deferred} A Deferred that resolves to the updated model.
+		 *
+		 * @signature `can.Model.update: function(id, serialized) -> can.Deffered`
+		 * If you provide a function, the Model will expect you to do your own AJAX requests.
+		 * @param {*} id The ID of the model to update.
+		 * @param {Object} serialized The [can.Observe::serialize serialized] properties of
+		 * the model to update.
+		 * @return {can.Deferred} A Deferred that resolves to the updated model.
+		 *
+		 * @body
 		 * `update( id, attrs ) -> Deferred` is used by [can.Model::save save] to 
 		 * update a model instance on the server. 
 		 * 
@@ -262,7 +321,7 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * The easist way to implement update is to just give it the url to `PUT` data to:
 		 * 
-		 *     Recipe = can.Model({
+		 *     Recipe = can.Model.extend({
 		 *       update: "/recipes/{id}"
 		 *     },{});
 		 *     
@@ -280,7 +339,7 @@ steal('can/util','can/observe', function( can ) {
 		 *  
 		 * If your server doesn't use PUT, you can change it to post like:
 		 * 
-		 *     $.Model("Recipe",{
+		 *     Recipe = can.Model.extend({
 		 *       update: "POST /recipes/{id}"
 		 *     },{});
 		 * 
@@ -310,20 +369,11 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * The code looks like:
 		 * 
-		 *     Recipe = can.Model({
+		 *     Recipe = can.Model.extend({
 		 *       update : function(id, attrs ) {
 		 *         return $.post("/recipes/"+id+".json",attrs, null,"json");
 		 *       }
 		 *     },{});
-		 * 
-		 * 
-		 * @param {String} id the id of the model instance
-		 * @param {Object} attrs Attributes on the model instance
-		 * @return {Deferred} A deferred that resolves to
-		 * an object of attribute / value pairs of property changes the client doesn't already 
-		 * know about. For example, when you update a name property, the server might 
-		 * update other properties as well (such as updatedAt). The server should send 
-		 * these properties as the response to updates.  
 		 */
 		update : {
 			data : function(id, attrs){
@@ -339,7 +389,30 @@ steal('can/util','can/observe', function( can ) {
 			type : "put"
 		},
 		/**
-		 * @function destroy
+		 * @description Destroy a resource on the server.
+		 * @function can.Model.destroy destroy
+		 * @parent can.Model.static
+		 * 
+		 * @signature `can.Model.destroy: function(id) -> deferred`
+		 * 
+		 * 
+		 * 
+		 * If you provide a function, the Model will expect you to do your own AJAX requests.
+		 * @param {*} id The ID of the resource to destroy.
+		 * @return {can.Deferred} A Deferred that resolves to the destroyed model.
+		 * 
+		 * 
+		 * @signature `can.Model.destroy: "[METHOD] /path/to/resource"`
+		 * 
+		 * If you provide a URL, the Model will send a request to that URL using
+		 * the method specified (or DELETE if none is specified) when deleting an
+		 * instance on the server. (See below for more details.)
+		 * 
+		 * @return {can.Deferred} A Deferred that resolves to the destroyed model.
+		 *
+		 *
+		 *
+		 * @body
 		 * `destroy(id) -> Deferred` is used by [can.Model::destroy] remove a model 
 		 * instance from the server.
 		 * 
@@ -347,7 +420,7 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * You can implement destroy with a string like:
 		 * 
-		 *     Recipe = can.Model({
+		 *     Recipe = can.Model.extend({
 		 *       destroy : "/recipe/{id}"
 		 *     },{})
 		 * 
@@ -361,7 +434,7 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * If your server does not support `DELETE` you can override it like:
 		 * 
-		 *     Recipe = can.Model({
+		 *     Recipe = can.Model.extend({
 		 *       destroy : "POST /recipe/destroy/{id}"
 		 *     },{})
 		 * 
@@ -369,16 +442,13 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * Implement destroy with a function like:
 		 * 
-		 *     Recipe = can.Model({
+		 *     Recipe = can.Model.extend({
 		 *       destroy : function(id){
 		 *         return $.post("/recipe/destroy/"+id,{});
 		 *       }
 		 *     },{})
 		 * 
 		 * Destroy just needs to return a deferred that resolves.
-		 * 
-		 * @param {String|Number} id the id of the instance you want destroyed
-		 * @return {Deferred} a deferred that resolves when the model instance is destroyed.
 		 */
 		destroy : {
 			type : "delete",
@@ -389,15 +459,103 @@ steal('can/util','can/observe', function( can ) {
 			}
 		},
 		/**
-		 * @function findAll
+		 * @description Retrieve multiple resources from a server.
+		 * @function can.Model.findAll findAll
+		 * @parent can.Model.static
+		 * 
+		 * @signature `can.Model.findAll( params[, success[, error]] )`
+		 * 
+		 * Retrieve multiple resources from a server.
+		 * 
+		 * @param {Object} params Values to filter the request or results with.
+		 * @param {function(can.Model.List)} [success(list)] A callback to call on successful retrieval. The callback recieves
+		 * a can.Model.List of the retrieved resources.
+		 * @param {function(can.AjaxSettings)} [error(xhr)] A callback to call when an error occurs. The callback receives the
+		 * XmlHttpRequest object.
+		 * @return {can.Deferred} A deferred that resolves to a [can.Model.List] of retrieved models.
+		 *
+		 * 
+		 * @signature `can.Model.findAll: findAllData( params ) -> deferred`
+		 * 
+		 * Implements `findAll` with a [can.Model.findAllData function]. This function
+		 * is passed to [can.Model.makeFindAll makeFindAll] to create the external 
+		 * `findAll` method.
+		 * 
+		 *     findAll: function(params){
+		 *       return $.get("/tasks",params)  
+		 *     }
+		 * 
+		 * @param {can.Model.findAllData} findAllData A function that accepts parameters
+		 * specifying a list of instance data to retreive and returns a [can.Deferred]
+		 * that resolves to an array of those instances.
+		 * 
+		 * @signature `can.Model.findAll: "[METHOD] /path/to/resource"`
+		 * 
+		 * Implements `findAll` with a HTTP method and url to retrieve instance data. 
+		 * 
+		 *     findAll: "GET /tasks"
+		 * 
+		 * If `findAll` is implemented with a string, this gets converted to 
+		 * a [can.Model.findAllData findAllData function]
+		 * which is passed to [can.Model.makeFindAll makeFindAll] to create the external 
+		 * `findAll` method.
+		 * 
+		 * @param {HttpMethod} METHOD An HTTP method. Defaults to `"GET"`.
+		 * 
+		 * @param {STRING} url The URL of the service to retrieve JSON data.
+		 * 
+		 * @return {JSON} The service should return a JSON object like:
+		 * 
+		 *     {
+		 *       "data": [
+		 *         { "id" : 1, "name" : "do the dishes" },
+		 *         { "id" : 2, "name" : "mow the lawn" },
+		 *         { "id" : 3, "name" : "iron my shirts" }
+		 *       ]
+		 *     }
+		 * 
+		 * This object is passed to [can.Model.models] to turn it into instances.
+		 * 
+		 * _Note: .findAll can also accept an array, but you 
+		 * probably [should not be doing that](http://haacked.com/archive/2008/11/20/anatomy-of-a-subtle-json-vulnerability.aspx)._
+		 * 
+		 * 
+		 * @signature `can.Model.findAll: {ajaxSettings}`
+		 * 
+		 * Implements `findAll` with a [can.AjaxSettings ajax settings object].
+		 * 
+		 *     findAll: {url: "/tasks", dataType: "json"}
+		 * 
+		 * If `findAll` is implemented with an object, it gets converted to 
+		 * a [can.Model.findAllData findAllData function]
+		 * which is passed to [can.Model.makeFindAll makeFindAll] to create the external 
+		 * `findAll` method.
+		 * 
+		 * @param {can.AjaxSettings} ajaxSettings A settings object that
+		 * specifies the options available to pass to [can.ajax].
+		 * 
+		 * @body
+		 * 
+		 * ## Use
+		 * 
 		 * `findAll( params, success(instances), error(xhr) ) -> Deferred` is used to retrieve model 
-		 * instances from the server. Before you can use `findAll`, you must implement it.
+		 * instances from the server. After implementing `findAll`, use it to retrieve instances of the model
+		 * like:
+		 * 
+		 *     Recipe.findAll({favorite: true}, function(recipes){
+		 *       recipes[0].attr('name') //-> "Ice Water"
+		 *     }, function( xhr ){
+		 *       // called if an error
+		 *     }) //-> Deferred
+		 * 
+		 * 
+		 * Before you can use `findAll`, you must implement it.
 		 * 
 		 * ## Implement with a URL
 		 * 
 		 * Implement findAll with a url like:
 		 * 
-		 *     Recipe = can.Model({
+		 *     Recipe = can.Model.extend({
 		 *       findAll : "/recipes.json"
 		 *     },{});
 		 * 
@@ -413,7 +571,7 @@ steal('can/util','can/observe', function( can ) {
 		 * Implement findAll with an object that specifies the parameters to
 		 * `can.ajax` (jQuery.ajax) like:
 		 * 
-		 *     Recipe = can.Model({
+		 *     Recipe = can.Model.extend({
 		 *       findAll : {
 		 *         url: "/recipes.xml",
 		 *         dataType: "xml"
@@ -426,7 +584,7 @@ steal('can/util','can/observe', function( can ) {
 		 * the instances retrieved from the server and it should return a
 		 * deferred that resolves to an array of model data. For example:
 		 * 
-		 *     Recipe = can.Model({
+		 *     Recipe = can.Model.extend({
 		 *       findAll : function(params){
 		 *         return $.ajax({
 		 *           url: '/recipes.json',
@@ -435,57 +593,91 @@ steal('can/util','can/observe', function( can ) {
 		 *       }
 		 *     },{})
 		 * 
-		 * ## Use
-		 * 
-		 * After implementing `findAll`, you can use it to retrieve instances of the model
-		 * like:
-		 * 
-		 *     Recipe.findAll({favorite: true}, function(recipes){
-		 *       recipes[0].attr('name') //-> "Ice Water"
-		 *     }, function( xhr ){
-		 *       // called if an error
-		 *     }) //-> Deferred
-		 * 
-		 * The following API details the use of `findAll`.
-		 * 
-		 * @param {Object} params data to refine the results.  An example might be passing {limit : 20} to
-		 * limit the number of items retrieved.
-		 * 
-		 *     Recipe.findAll({limit: 20})
-		 * 
-		 * @param {Function} [success(items)] called with a [can.Model.List] of model 
-		 * instances.  The model isntances are created from the Deferred's resolved data.
-		 * 
-		 *     Recipe.findAll({limit: 20}, function(recipes){
-		 *       recipes.constructor //-> can.Model.List
-		 *     })
-		 * 
-		 * @param {Function} error(xhr) `error` is called if the Deferred is rejected with the
-		 * xhr handler.
-		 * 
-		 * @return {Deferred} a [can.Deferred Deferred] that __resolves__ to
-		 * a [can.Model.List] of the model instances and __rejects__ to the XHR object.
-		 * 
-		 *     Recipe.findAll()
-		 *           .then(function(recipes){
-		 * 	
-		 *           }, function(xhr){
-		 * 	
-		 *           })
 		 */
 		findAll : {
 			url : "_shortName"
 		},
 		/**
-		 * @function findOne
+		 * @description Retrieve a resource from a server.
+		 * @function can.Model.findOne findOne
+		 * @parent can.Model.static
+		 * 
+		 * @signature `can.Model.findOne( params[, success[, error]] )`
+		 * 
+		 * Retrieve a single instance from the server.
+		 * 
+		 * @param {Object} params Values to filter the request or results with.
+		 * @param {function(can.Model)} [success(model)] A callback to call on successful retrieval. The callback recieves
+		 * the retrieved resource as a can.Model.
+		 * @param {function(can.AjaxSettings)} [error(xhr)] A callback to call when an error occurs. The callback receives the
+		 * XmlHttpRequest object.
+		 * @return {can.Deferred} A deferred that resolves to a [can.Model.List] of retrieved models.
+		 * 
+		 * @signature `can.Model.findOne: findOneData( params ) -> deferred`
+		 * 
+		 * Implements `findOne` with a [can.Model.findOneData function]. This function
+		 * is passed to [can.Model.makeFindOne makeFindOne] to create the external 
+		 * `findOne` method.
+		 * 
+		 *     findOne: function(params){
+		 *       return $.get("/task/"+params.id)  
+		 *     }
+		 * 
+		 * @param {can.Model.findOneData} findOneData A function that accepts parameters
+		 * specifying an instance to retreive and returns a [can.Deferred]
+		 * that resolves to that instance.
+		 * 
+		 * @signature `can.Model.findOne: "[METHOD] /path/to/resource"`
+		 * 
+		 * Implements `findOne` with a HTTP method and url to retrieve an instance's data. 
+		 * 
+		 *     findOne: "GET /tasks/{id}"
+		 * 
+		 * If `findOne` is implemented with a string, this gets converted to 
+		 * a [can.Model.makeFindOne makeFindOne function]
+		 * which is passed to [can.Model.makeFindOne makeFindOne] to create the external 
+		 * `findOne` method.
+		 * 
+		 * @param {HttpMethod} METHOD An HTTP method. Defaults to `"GET"`.
+		 * 
+		 * @param {STRING} url The URL of the service to retrieve JSON data.
+		 * 
+		 * @signature `can.Model.findOne: {ajaxSettings}`
+		 * 
+		 * Implements `findOne` with a [can.AjaxSettings ajax settings object].
+		 * 
+		 *     findOne: {url: "/tasks/{id}", dataType: "json"}
+		 * 
+		 * If `findOne` is implemented with an object, it gets converted to 
+		 * a [can.Model.makeFindOne makeFindOne function]
+		 * which is passed to [can.Model.makeFindOne makeFindOne] to create the external 
+		 * `findOne` method.
+		 * 
+		 * @param {can.AjaxSettings} ajaxSettings A settings object that
+		 * specifies the options available to pass to [can.ajax].
+		 * 
+		 * @body
+		 * 
+		 * ## Use
+		 * 
 		 * `findOne( params, success(instance), error(xhr) ) -> Deferred` is used to retrieve a model 
-		 * instance from the server. Before you can use `findOne`, you must implement it.
+		 * instance from the server. 
+		 * 
+		 * Use `findOne` like:
+		 * 
+		 *     Recipe.findOne({id: 57}, function(recipe){
+		 * 	     recipe.attr('name') //-> "Ice Water"
+		 *     }, function( xhr ){
+		 * 	     // called if an error
+		 *     }) //-> Deferred
+		 * 
+		 * Before you can use `findOne`, you must implement it.
 		 * 
 		 * ## Implement with a URL
 		 * 
 		 * Implement findAll with a url like:
 		 * 
-		 *     Recipe = can.Model({
+		 *     Recipe = can.Model.extend({
 		 *       findOne : "/recipes/{id}.json"
 		 *     },{});
 		 * 
@@ -502,7 +694,7 @@ steal('can/util','can/observe', function( can ) {
 		 * Implement `findOne` with an object that specifies the parameters to
 		 * `can.ajax` (jQuery.ajax) like:
 		 * 
-		 *     Recipe = can.Model({
+		 *     Recipe = can.Model.extend({
 		 *       findOne : {
 		 *         url: "/recipes/{id}.xml",
 		 *         dataType: "xml"
@@ -516,7 +708,7 @@ steal('can/util','can/observe', function( can ) {
 		 * deferred that resolves to the model data.  Also notice that you now need to
 		 * build the URL manually. For example:
 		 * 
-		 *     Recipe = can.Model({
+		 *     Recipe = can.Model.extend({
 		 *       findOne : function(params){
 		 *         return $.ajax({
 		 *           url: '/recipes/' + params.id,
@@ -525,42 +717,7 @@ steal('can/util','can/observe', function( can ) {
 		 *       }
 		 *     },{})
 		 * 
-		 * ## Use
 		 * 
-		 * After implementing `findOne`, you can use it to retrieve an instance of the model
-		 * like:
-		 * 
-		 *     Recipe.findOne({id: 57}, function(recipe){
-		 * 	     recipe.attr('name') //-> "Ice Water"
-		 *     }, function( xhr ){
-		 * 	     // called if an error
-		 *     }) //-> Deferred
-		 * 
-		 * The following API details the use of `findOne`.
-		 * 
-		 * @param {Object} params data to specify the instance. 
-		 * 
-		 *     Recipe.findAll({id: 20})
-		 *
-		 * @param {Function} [success(item)] called with a model 
-		 * instance.  The model isntance is created from the Deferred's resolved data.
-		 * 
-		 *     Recipe.findOne({id: 20}, function(recipe){
-		 *       recipe.constructor //-> Recipe
-		 *     })
-		 * 
-		 * @param {Function} error(xhr) `error` is called if the Deferred is rejected with the
-		 * xhr handler.
-		 * 
-		 * @return {Deferred} a [can.Deferred Deferred] that __resolves__ to
-		 * the model instance and __rejects__ to the XHR object.
-		 * 
-		 *     Recipe.findOne({id: 20})
-		 *           .then(function(recipe){
-		 * 	
-		 *           }, function(xhr){
-		 * 	
-		 *           })
 		 */
 		findOne: {}
 	},
@@ -585,6 +742,15 @@ steal('can/util','can/observe', function( can ) {
 	
 	can.Model = can.Observe({
 		fullName: "can.Model",
+		_reqs: 0,
+		/**
+		 * @hide
+		 * @function can.Model.setup
+		 * @parent can.Model.static
+		 * 
+		 * Configures 
+		 * 
+		 */
 		setup : function(base){
 			// create store here if someone wants to use model without inheriting from it
 			this.store = {};
@@ -617,7 +783,7 @@ steal('can/util','can/observe', function( can ) {
 					var newMethod = self["make"+can.capitalize(name)](self[name]);
 					can.Construct._overwrite(self, base, name,function(){
 						// increment the numer of requests
-						this._reqs++;
+						can.Model._reqs++;
 						var def = newMethod.apply(this, arguments);
 						var then = def.then(clean, clean);
 						then.abort = def.abort;
@@ -632,14 +798,14 @@ steal('can/util','can/observe', function( can ) {
 				self.fullName = "Model"+(++modelNum);
 			}
 			// Add ajax converters.
-			this._reqs = 0;
+			can.Model._reqs = 0;
 			this._url = this._shortName+"/{"+this.id+"}"
 		},
 		_ajax : ajaxMaker,
 		_makeRequest : makeRequest,
 		_clean : function(){
-			this._reqs--;
-			if(!this._reqs){
+			can.Model._reqs--;
+			if(!can.Model._reqs){
 				for(var id in this.store) {
 					if(!this.store[id]._bindings){
 						delete this.store[id];
@@ -649,6 +815,16 @@ steal('can/util','can/observe', function( can ) {
 			return arguments[0];
 		},
 		/**
+		 * @function can.Model.models models
+		 * @parent can.Model.static
+		 * @description Convert raw data into can.Model instances.
+		 * @signature `can.Model.models(data[, oldList])`
+		 * @param {Array<Object>} data The raw data from a `[can.Model.findAll findAll()]` request.
+		 * @param {can.Model.List} [oldList] If supplied, this List will be updated with the data from
+		 * __data__.
+		 * @return {can.Model.List} A List of Models made from the raw data.
+		 * 
+		 * @body
 		 * `can.Model.models(data, xhr)` is used to 
 		 * convert the raw response of a [can.Model.findAll] request 
 		 * into a [can.Model.List] of model instances.  
@@ -666,7 +842,7 @@ steal('can/util','can/observe', function( can ) {
 		 * The following uses models to convert to a [can.Model.List] of model
 		 * instances.
 		 * 
-		 *     Task = can.Model({},{})
+		 *     Task = can.Model.extend({},{})
 		 *     var tasks = Task.models([
 		 *       {id: 1, name : "dishes", complete : false},
 		 *       {id: 2, name: "laundry", compelte: true}
@@ -706,7 +882,7 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * You will want to overwrite models to pass the base models what it expects like:
 		 * 
-		 *     Task = can.Model({
+		 *     Task = can.Model.extend({
 		 *       models : function(data){
 		 *         return can.Model.models.call(this,data.thingsToDo);
 		 *       }
@@ -714,25 +890,10 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * `can.Model.models` passes each intstance's data to `can.Model.model` to
 		 * create the individual instances.
-		 * 
-		 * @param {Array|Objects} instancesRawData An array of raw name - value pairs objects like:
-		 * 
-		 *      [{id: 1, name : "dishes"},{id:2, name: "laundry"}, ...]
-		 * 
-		 * Or an Object with a data property and other expando properties like:
-		 * 
-		 *     {
-		 *       count: 15000 //how many total items there might be
-		 *       data: [{id: 1, name : "justin"},{id:2, name: "brian"}, ...]
-		 *     }
-		 *
-		 * @param {can.Observe.List} [oldList] If passed, updates oldList with the converted instancesRawData
-		 * instead of returning a new model list.
-		 * @return {Array} a [can.Model.List] of instances.  Each instance is created with
-		 * [can.Model.model].
 		 */
 		models: function( instancesRawData, oldList ) {
-
+			// until "end of turn", increment reqs counter so instances will be added to the store
+			can.Model._reqs++;
 			if ( ! instancesRawData ) {
 				return;
 			}
@@ -791,9 +952,19 @@ steal('can/util','can/observe', function( can ) {
 					}
 				})
 			}
+			// at "end of turn", clean up the store
+			setTimeout(can.proxy(this._clean, this), 1);
 			return res;
 		},
 		/**
+		 * @function can.Model.model model
+		 * @parent can.Model.static
+		 * @description Convert raw data into a can.Model instance.
+		 * @signature `can.Model.model(data)`
+		 * @param {Object} data The data to convert to a can.Model instance.
+		 * @return {can.Model} An instance of can.Model made with the given data.
+		 * 
+		 * @body
 		 * `can.Model.model(attributes)` is used to convert data from the server into
 		 * a model instance.  It is rarely called directly.  Instead it is invoked as 
 		 * a result of [can.Model.findOne] or [can.Model.findAll].  
@@ -806,7 +977,7 @@ steal('can/util','can/observe', function( can ) {
 		 * The following uses `model` to convert to a model
 		 * instance.
 		 * 
-		 *     Task = can.Model({},{})
+		 *     Task = can.Model.extend({},{})
 		 *     var task = Task.model({id: 1, name : "dishes", complete : false})
 		 *     
 		 *     tasks.attr("complete", true)
@@ -844,17 +1015,11 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * Overwrite `model` like:
 		 * 
-		 *     Task = can.Model({
+		 *     Task = can.Model.extend({
 		 *       model : function(data){
 		 *         return can.Model.model.call(this,data.todo);
 		 *       }
 		 *     },{});
-		 * 
-		 * @param {Object} attributes An object of property name and values like:
-		 * 
-		 *      {id: 1, name : "dishes"}
-		 *
-		 * @return {model} a model instance.
 		 */
 		model: function( attributes ) {
 			if ( ! attributes ) {
@@ -866,29 +1031,47 @@ steal('can/util','can/observe', function( can ) {
 			var id = attributes[ this.id ],
 			    model = (id || id === 0) && this.store[id] ?
 				    this.store[id].attr(attributes, this.removeAttr || false) : new this( attributes );
-			if(this._reqs){
+			if(can.Model._reqs){
 				this.store[attributes[this.id]] = model;
 			}
 			return model;
 		}
 	},
+
+
 	/**
 	 * @prototype
 	 */
 	{
 		/**
+		 * @function can.Model.prototype.isNew isNew
+		 * @description Check if a Model has yet to be saved on the server.
+		 * @signature `model.isNew()`
+		 * @return {Boolean} Whether an instance has been saved on the server.
+		 * (This is determined by whether `id` has a value set yet.)
+		 *
+		 * @body
 		 * `isNew()` returns if the instance is has been created 
-		 * on the server.  
-		 * This is essentially if the [can.Model.id] property is null or undefined.
+		 * on the server. This is essentially if the [can.Model.id]
+		 * property is null or undefined.
 		 * 
 		 *     new Recipe({id: 1}).isNew() //-> false
-		 * @return {Boolean} false if an id is set, true if otherwise.
 		 */
 		isNew: function() {
 			var id = getId(this);
 			return ! ( id || id === 0 ); // If `null` or `undefined`
 		},
 		/**
+		 * @function can.Model.prototype.save save
+		 * @description Save a model back to the server.
+		 * @signature `model.save([success[, error]])`
+		 * @param {function} [success] A callback to call on successful save. The callback recieves
+		 * the can.Model after saving.
+		 * @param {function} [error] A callback to call when an error occurs. The callback receives the
+		 * XmlHttpRequest object.
+		 * @return {can.Deferred} A Deferred that resolves to the Model after it has been saved.
+		 *
+		 * @body
 		 * `model.save([success(model)],[error(xhr)])` creates or updates 
 		 * the model instance using [can.Model.create] or
 		 * [can.Model.update] depending if the instance
@@ -944,19 +1127,21 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 *     });
 		 * 
-		 * 
-		 * @param {Function} [success(instance,data)]  Called if a successful save.
-		 * 
-		 * @param {Function} [error(xhr)] Called with (jqXHR) if the 
-		 * save was not successful. It is passed the ajax request's jQXHR object.
-		 * 
-		 * @return {can.Deferred} a deferred that resolves to the instance
-		 * after it has been created or updated.
 		 */
 		save: function( success, error ) {
 			return makeRequest(this, this.isNew() ? 'create' : 'update', success, error);
 		},
 		/**
+		 * @function can.Model.prototype.destroy destroy
+		 * @description Destroy a Model on the server.
+		 * @signature `model.destroy([success[, error]])`
+		 * @param {function} [success] A callback to call on successful destruction. The callback recieves
+		 * the can.Model as it was just prior to destruction.
+		 * @param {function} [error] A callback to call when an error occurs. The callback receives the
+		 * XmlHttpRequest object.
+		 * @return {can.Deferred} A Deferred that resolves to the Model as it was before destruction.
+		 *
+		 * @body
 		 * Destroys the instance by calling 
 		 * [Can.Model.destroy] with the id of the instance.
 		 * 
@@ -966,7 +1151,7 @@ steal('can/util','can/observe', function( can ) {
 		 * Model constructor function which can be listened to with
 		 * [can.Model::bind] and [can.Model.bind]. 
 		 * 
-		 *     Recipe = can.Model({
+		 *     Recipe = can.Model.extend({
 		 *       destroy : "DELETE /services/recipes/{id}",
 		 *       findOne : "/services/recipes/{id}"
 		 *     },{})
@@ -982,27 +1167,33 @@ steal('can/util','can/observe', function( can ) {
 		 *       })
 		 *       recipe.destroy();
 		 *     })
-		 * 
-		 * @param {Function} [success(instance)] called if a successful destroy
-		 * @param {Function} [error(xhr)] called if an unsuccessful destroy
-		 * @return {can.Deferred} a deferred that resolves with the destroyed instance
 		 */
 		destroy: function( success, error ) {
 			if(this.isNew()) {
 				var self = this;
-				return can.Deferred().done(function(data) {
+				var def = can.Deferred();
+				def.then(success, error);
+				return def.done(function(data) {
 					self.destroyed(data)
 				}).resolve(self);
 			}
 			return makeRequest(this, 'destroy', success, error, 'destroyed');
 		},
 		/**
-		 * @function bind
+		 * @description Listen to events on this Model.
+		 * @function can.Model.prototype.bind bind
+		 * @signature `model.bind(eventName, handler)`
+		 * @param {String} eventName The event to bind to.
+		 * @param {function} handler The function to call when the
+		 * event occurs. __handler__ is passed the event and the
+		 * Model instance.
+		 * @return {can.Model} The Model, for chaining.
 		 * 
+		 * @body
 		 * `bind(eventName, handler(ev, args...) )` is used to listen
 		 * to events on this model instance.  Example:
 		 * 
-		 *     Task = can.Model()
+		 *     Task = can.Model.extend()
 		 *     var task = new Task({name : "dishes"})
 		 *     task.bind("name", function(ev, newVal, oldVal){})
 		 * 
@@ -1019,7 +1210,7 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * like:
 		 * 
-		 *     Task = can.Model()
+		 *     Task = can.Model.extend()
 		 *     var task = new Task({name : "dishes"})
 		 * 
 		 *     task.bind("created", function(ev, newTask){
@@ -1046,14 +1237,22 @@ steal('can/util','can/observe', function( can ) {
 		 * of event bindings on this object which is used to store
 		 * the model instance.  When there are no bindings, the 
 		 * model instance is removed from the store, freeing memory.  
-		 * 
 		 */
 		_bindsetup: function(){
 			this.constructor.store[this.__get(this.constructor.id)] = this;
 			return can.Observe.prototype._bindsetup.apply( this, arguments );
 		},
 		/**
-		 * @function unbind
+		 * @function can.Model.prototype.unbind unbind
+		 * @description Stop listening to events on this Model.
+		 * @signature `model.unbind(eventName[, handler])`
+		 * @param {String} eventName The event to unbind from.
+		 * @param {function} [handler] A handler previously bound with `bind`.
+		 * If __handler__ is not passed, `unbind` will remove all handlers
+		 * for the given event.
+		 * @return {can.Model} The Model, for chaining.
+		 *
+		 * @body
 		 * `unbind(eventName, handler)` removes a listener
 		 * attached with [can.Model::bind].
 		 * 
@@ -1068,13 +1267,6 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * Unbind will also remove the instance from the store
 		 * if there are no other listeners.
-		 * 
-		 * @param {String} eventName The type of event.  
-		 * 
-		 * @param {Function} handler(event,args...) A callback function
-		 * that was passed to `bind`.
-		 * 
-		 * @return {model} the model instance.
 		 */
 		_bindteardown: function(){
 			delete this.constructor.store[getId(this)];
@@ -1091,7 +1283,153 @@ steal('can/util','can/observe', function( can ) {
 	});
 	
 	can.each({
+		/**
+		 * @function can.Model.makeFindAll
+		 * @parent can.Model.static
+		 * 
+		 * @signature `can.Model.makeFindAll: function(findAllData) -> findAll`
+		 * 
+		 * Returns the external `findAll` method given the implemented [can.Model.findAllData findAllData] function.
+		 * 
+		 * @params {can.Model.findAllData}
+		 * 
+		 * [can.Model.findAll] is implemented with a `String`, [can.AjaxSettings ajax settings object], or 
+		 * [can.Model.findAllData findAllData] function. If it is implemented as
+		 * a `String` or [can.AjaxSettings ajax settings object], those values are used
+		 * to create a [can.Model.findAllData findAllData] function.
+		 * 
+		 * The [can.Model.findAllData findAllData] function is passed to `makeFindAll`. `makeFindAll`
+		 * should use `findAllData` internally to get the raw data for the request. 
+		 * 
+		 * @return {function(params,success,error):can.Deferred}
+		 * 
+		 * Returns function that implements the external API of `findAll`. 
+		 * 
+		 * @body 
+		 * 
+		 * ## Use
+		 * 
+		 * `makeFindAll` can be used to implement base models that perform special 
+		 * behavior. `makeFindAll` is passed a [can.Model.findAllData findAllData] function that retrieves raw
+		 * data. It should return a function that when called, uses
+		 * the findAllData function to get the raw data, convert them to model instances with
+		 * [can.Model.models models].
+		 * 
+		 * ## Caching
+		 * 
+		 * The following uses `makeFindAll` to create a base `CachedModel`:
+		 * 
+		 *     CachedModel = can.Model.extend({
+		 *       makeFindAll: function(findAllData){
+		 *         // A place to store requests
+		 *         var cachedRequests = {};
+		 * 
+		 *         return function(params, success, error){
+		 *           // is this not cached?
+		 *           if(! cachedRequests[JSON.stringify(params)] ) {
+		 *             var self = this;
+		 *             // make the request for data, save deferred
+		 *             cachedRequests[JSON.stringify(params)] = 
+		 *               findAllData(params).then(function(data){
+		 *                 // convert the raw data into instances
+		 *                 return self.models(data)
+		 *               })
+		 *           }
+		 *           // get the saved request
+		 *           var def = cachedRequests[JSON.stringify(params)]
+		 *           // hookup success and error
+		 *           def.then(success,error)
+		 *           return def;
+		 *         }  
+		 *       }
+		 *     },{})
+		 * 
+		 * The following Todo model will never request the same list of todo's twice:
+		 * 
+		 *     Todo = CachedModel({
+		 *       findAll: "/todos"
+		 *     },{})
+		 * 
+		 *     // widget 1
+		 *     Todo.findAll({})
+		 * 
+		 *     // widget 2
+		 *     Todo.findAll({})
+		 */
 		makeFindAll : "models",
+		/**
+		 * @function can.Model.makeFindOne
+		 * @parent can.Model.static
+		 * 
+		 * @signature `can.Model.makeFindOne: function(findOneData) -> findOne`
+		 * 
+		 * Returns the external `findOne` method given the implemented [can.Model.findOneData findOneData] function.
+		 * 
+		 * @params {can.Model.findOneData}
+		 * 
+		 * [can.Model.findOne] is implemented with a `String`, [can.AjaxSettings ajax settings object], or 
+		 * [can.Model.findOneData findOneData] function. If it is implemented as
+		 * a `String` or [can.AjaxSettings ajax settings object], those values are used
+		 * to create a [can.Model.findOneData findOneData] function.
+		 * 
+		 * The [can.Model.findOneData findOneData] function is passed to `makeFindOne`. `makeFindOne`
+		 * should use `findOneData` internally to get the raw data for the request. 
+		 * 
+		 * @return {function(params,success,error):can.Deferred}
+		 * 
+		 * Returns function that implements the external API of `findOne`. 
+		 * 
+		 * @body
+		 * 
+		 * ## Use
+		 * 
+		 * `makeFindOne` can be used to implement base models that perform special 
+		 * behavior. `makeFindOne` is passed a [can.Model.findOneData findOneData] function that retrieves raw
+		 * data. It should return a function that when called, uses
+		 * the findOneData function to get the raw data, convert them to model instances with
+		 * [can.Model.models models].
+		 * 
+		 * ## Caching
+		 * 
+		 * The following uses `makeFindOne` to create a base `CachedModel`:
+		 * 
+		 *     CachedModel = can.Model.extend({
+		 *       makeFindOne: function(findOneData){
+		 *         // A place to store requests
+		 *         var cachedRequests = {};
+		 * 
+		 *         return function(params, success, error){
+		 *           // is this not cached?
+		 *           if(! cachedRequests[JSON.stringify(params)] ) {
+		 *             var self = this;
+		 *             // make the request for data, save deferred
+		 *             cachedRequests[JSON.stringify(params)] = 
+		 *               findOneData(params).then(function(data){
+		 *                 // convert the raw data into instances
+		 *                 return self.models(data)
+		 *               })
+		 *           }
+		 *           // get the saved request
+		 *           var def = cachedRequests[JSON.stringify(params)]
+		 *           // hookup success and error
+		 *           def.then(success,error)
+		 *           return def;
+		 *         }  
+		 *       }
+		 *     },{})
+		 * 
+		 * The following Todo model will never request the same todo twice:
+		 * 
+		 *     Todo = CachedModel({
+		 *       findOne: "/todos/{id}"
+		 *     },{})
+		 * 
+		 *     // widget 1
+		 *     Todo.findOne({id: 5})
+		 * 
+		 *     // widget 2
+		 *     Todo.findOne({id: 5})
+		 */
 		makeFindOne: "model",
 		makeCreate: "model",
 		makeUpdate: "model"
@@ -1110,21 +1448,21 @@ steal('can/util','can/observe', function( can ) {
 				
 		can.each([
 	/**
-	 * @function created
+	 * @function can.Model.prototype.created created
 	 * @hide
 	 * Called by save after a new instance is created.  Publishes 'created'.
 	 * @param {Object} attrs
 	 */
 	"created",
 	/**
-	 * @function updated
+	 * @function can.Model.prototype.updated updated
 	 * @hide
 	 * Called by save after an instance is updated.  Publishes 'updated'.
 	 * @param {Object} attrs
 	 */
 	"updated",
 	/**
-	 * @function destroyed
+	 * @function can.Model.prototype.destroyed destroyed
 	 * @hide
 	 * Called after an instance is destroyed.  
 	 *   - Publishes "shortName.destroyed".
@@ -1157,9 +1495,11 @@ steal('can/util','can/observe', function( can ) {
   // Model lists are just like `Observe.List` except that when their items are 
   // destroyed, it automatically gets removed from the list.
   /**
-   * @class can.Model.List
+   * @constructor can.Model.List
    * @inherits can.Observe.List
    * @parent canjs
+   * @download can/model
+   * @test can/model/qunit.html
    *
    * Works exactly like [can.Observe.List] and has all of the same properties,
    * events, and functions as an observable list. The only difference is that 
@@ -1175,7 +1515,7 @@ steal('can/util','can/observe', function( can ) {
    *     var todos = new Todo.List( [todo1, todo2] );
    *
    * ### Model Lists in `can.Model`
-   * [can.Model.static.findAll can.Model.findAll] or [can.Model.models] will
+   * [can.Model.findAll can.Model.findAll] or [can.Model.models] will
    * almost always be used to return a `can.Model.List` object, even though it
    * is possible to create new lists like below:
    *

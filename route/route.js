@@ -89,14 +89,23 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		return can.route;
 	};
 
+	/**
+	 * @static
+	 */
 	extend(can.route, {
 
 		_querySeparator: '&',
 		_paramsMatcher: paramsMatcher,
 
 		/**
-		 * @function can.route.param
-		 * @parent can.route
+		 * @function can.route.param param
+		 * @parent can.route.static
+		 * @description Get a route path from given data.
+		 * @signature `can.route.param( data )`
+		 * @param {data} object The data to populate the route with.
+		 * @return {String} The route, with the data populated in it.
+		 *
+		 * @body
 		 * Parameterizes the raw JS object representation provided in data.
 		 *
 		 *     can.route.param( { type: "video", id: 5 } ) 
@@ -111,9 +120,6 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 *     can.route.param( { type: "video", id: 5 } ) // -> "video/5"
 		 *     can.route.param( { type: "video", id: 5, isNew: false } ) 
 		 *          // -> "video/5&isNew=false"
-		 * 
-		 * @param {Object} data Data object containing key/value properies to be parameterized
-		 * @return {String} The route URL and &amp; separated parameters.
 		 */
 		param: function( data , _setRoute ) {
 			// Check if the provided data keys match the names in any routes;
@@ -180,9 +186,14 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			return can.isEmptyObject(data) ? "" : can.route._querySeparator + can.param(data);
 		},
 		/**
-		 * @function can.route.deparam
-		 * @parent can.route
+		 * @function can.route.deparam deparam
+		 * @parent can.route.static
+		 * @description Extract data from a route path.
+		 * @signature `can.route.deparam( url )`
+		 * @param {String} url A route fragment to extract data from.
+		 * @return {Object} An object containing the extracted data.
 		 * 
+		 * @body
 		 * Creates a data object based on the query string passed into it. This is 
 		 * useful to create an object based on the `location.hash`.
 		 *
@@ -207,9 +218,6 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 *
 		 *     can.route.deparam("videos/5");
 		 *          // -> { id: 5, route: ":type/:id", type: "videos" }
-		 *
-		 * @param {String} url Query string to be turned into an object.
-		 * @return {Object} Data object containing properties and values from the string
 		 */
 		deparam: function( url ) {
 			// See if the url matches any routes by testing it against the `route.test` `RegExp`.
@@ -259,8 +267,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 */
 		data: new can.Observe({}),
         /**
-         * @attribute
-         * @type Object
+         * @property {Object} routes
 		 * @hide
 		 * 
          * A list of routes recognized by the router indixed by the url used to add it.
@@ -280,8 +287,17 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
          */
 		routes: {},
 		/**
-		 * @function can.route.ready
-		 * @parent can.route
+		 * @function can.route.ready ready
+		 * @parent can.route.static
+		 * 
+		 * @signature `can.route.ready( readyYet )`
+		 * 
+		 * Pause and resume the initialization of can.route.
+		 * 
+		 * @param {Boolean} [readyYet] Whether the ready event should be fired yet.
+		 * @return {can.route} The `can.route` object.
+		 *
+		 * @body
 		 * Indicates that all routes have been added and sets can.route.data
 		 * based upon the routes and the current hash.
 		 * 
@@ -290,9 +306,6 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 * 
 		 *     can.route.ready(false); //prevents firing by the ready event
 		 *     can.route.ready(true); // fire the first route change
-		 * 
-		 * @param {Boolean} [val] Whether or not to fire the ready event.
-		 * @return {can.route} `can.route` object.
 		 */
 		ready: function(val) {
 			if( val === false ) {
@@ -305,9 +318,18 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			return can.route;
 		},
 		/**
-		 * @function can.route.url
-		 * @parent can.route
+		 * @function can.route.url url
+		 * @parent can.route.static
+		 * @signature `can.route.url( data [, merge] )`
 		 * 
+		 * Make a URL fragment that when set to window.location.hash will update can.route's properties
+		 * to match those in `data`.
+		 * 
+		 * @param {Object} data The data to populate the route with.
+		 * @param {Boolean} [merge] Whether the given options should be merged into the current state of the route.
+		 * @return {String} The route URL and query string.
+		 *
+		 * @body 
 		 * Similar to [can.route.link], but instead of creating an anchor tag, `can.route.url` creates 
 		 * only the URL based on the route options passed into it.
 		 *
@@ -322,11 +344,6 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 *     can.route.url( { type: "videos", id: 5 } ) // -> "#!videos/5"
 		 *     can.route.url( { type: "video", id: 5, isNew: false } ) 
 		 *          // -> "#!video/5&isNew=false"
-		 *
-		 *
-		 * @param {Object} options The route options (variables)
-		 * @param {Boolean} merge true if the options should be merged with the current options
-		 * @return {String} The route URL & separated parameters
 		 */
 		url: function( options, merge ) {
 			if (merge) {
@@ -335,9 +352,20 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			return "#!" + can.route.param(options);
 		},
 		/**
-		 * @function can.route.link
-		 * @parent can.route
+		 * @function can.route.link link
+		 * @parent can.route.static
+		 * @signature `can.route.link( innerText, data, props [, merge] )`
 		 * 
+		 * Make an anchor tag (`<A>`) that when clicked on will update can.route's properties
+		 * to match those in `data`.
+		 * 
+		 * @param {Object} innerText The text inside the link.
+		 * @param {Object} data The data to populate the route with.
+		 * @param {Object} props Properties for the anchor other than `href`.
+		 * @param {Boolean} [merge] Whether the given options should be merged into the current state of the route.
+		 * @return {String} A string with an anchor tag that points to the populated route.
+		 * 
+		 * @body
 		 * Creates and returns an anchor tag with an href of the route 
 		 * attributes passed into it, as well as any properies desired
 		 * for the tag.
@@ -366,11 +394,6 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 *          // -> <a href="#!type=pictures&id=5">The zoo</true>
 		 *
 		 *
-		 * @param {Object} name The text of the link.
-		 * @param {Object} options The route options (variables)
-		 * @param {Object} props Properties of the &lt;a&gt; other than href.
-		 * @param {Boolean} merge true if the options should be merged with the current options
-		 * @return {string} String containing the formatted &lt;a&gt; HTML element
 		 */
 		link: function( name, options, props, merge ) {
 			return "<a " + makeProps(
@@ -379,9 +402,16 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			}, props)) + ">" + name + "</a>";
 		},
 		/**
-		 * @function can.route.current
-		 * @parent can.route
+		 * @function can.route.current current
+		 * @parent can.route.static
+		 * @signature `can.route.current( data )`
 		 * 
+		 * Check if data represents the current route.
+		 * 
+		 * @param {Object} data Data to check agains the current route.
+         * @return {Boolean} Whether the data matches the current URL.
+		 * 
+		 * @body
 		 * Checks the page's current URL to see if the route represents the options passed 
 		 * into the function.
 		 *
@@ -394,10 +424,6 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 *     can.route.attr('type', 'videos') 
 		 *            // location.hash -> #!id=5&type=videos
 		 *     can.route.current({ id: 5, type: 'videos' }) // -> true
-		 * 
-		 * 
-		 * @param {Object} options Data object containing properties and values that might represent the route.
-         * @return {Boolean} Whether or not the options match the current URL.
 		 */
 		current: function( options ) {
 			return location.hash == "#!" + can.route.param(options)
@@ -421,7 +447,13 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
     // instead act on the `can.route.data` observe.
 	each(['bind','unbind','delegate','undelegate','attr','removeAttr'], function(name){
 		can.route[name] = function(){
-			return can.route.data[name].apply(can.route.data, arguments)
+			// `delegate` and `undelegate` require
+			// the `can/observe/delegate` plugin
+			if(!can.route.data[name]) {
+            	return;
+			}
+
+			return can.route.data[name].apply(can.route.data, arguments);
 		}
 	})
 

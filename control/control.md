@@ -1,36 +1,78 @@
-@class can.Control
+@constructor can.Control
 @parent canjs
-@plugin can/control
-@download  http://jmvcsite.heroku.com/pluginify?plugins[]=can/control/control.js
-@test can/control/qunit.html
+@download can/route
+@test can/route/test.html
+@test can/control/test.html
 @inherits can.Construct
 @description widget factory with declarative event binding.
+@group can.Control.plugins plugins
 
-can.Control helps create organized, memory-leak free, rapidly performing,
-stateful controls. Use it to create UI controls like tabs, grids, and context menus,
+@description Create organized, memory-leak free, rapidly performing,
+stateful controls with declarative event binding. Use `can.Control` to create UI 
+controls like tabs, grids, and context menus,
 and organize them into higher-order business rules with
 [can.route]. It can serve as both a traditional view and a traditional controller.
 
-## Todo Example
+@signature `can.Control( [staticProperties,] instanceProperties )`
 
-Here is an example of how to build a simple tab widget using can.Control:
+Create a new, extended, control constructor 
+function. This functionality is inherited from [can.Construct] and is deprecated in favor of using 
+[can.Control.extend]. 
 
-@demo can/control/control.html
+@param {Object} [staticProperties] An object of properties and methods that are added the control constructor 
+function directly. The most common property to add is [can.Control.defaults].
 
-## Creating a Control
+@param {Object} instanceProperties An object of properties and methods that belong to 
+instances of the `can.Control` constructor function. These properties are added to the
+control's `prototype` object. Properties that
+look like event handlers (ex: `"click"` or `"li mouseenter"`) are setup
+as event handlers (see [Listening to events](#section_Listeningtoevents)).
+
+@return {function(new:can.Construct,element,options)} A control constructor function that has been
+extended with the provided `staticProperties` and `instanceProperties`.
+
+
+@signature `new can.Control( element, options )`
+
+Create an instance of a control. [can.Control.prototype.setup] processes
+the arguments and sets up event binding. Write your initialization
+code in [can.Control.prototype.init]. Note, you never call `new can.Control()` directly,
+instead, you call it on constructor functions extended from `can.Control`.
+
+@param {HTMLElement|can.NodeList|CSSSelectorString} element Specifies the element the control 
+will be created on.
+
+@param {Object} [options] Option values merged with [can.Control.defaults can.Control.defaults]
+and set as [can.Control.prototype.options this.options].
+
+@return {can.Control} A new instance of the constructor function extending can.Control.
+
+@body
+
+## The Control Lifecycle
+
+The following walks through a control's lifecycle
+with an example todo list widget.  It's broken up into the following
+lifecycle events:
+
+ - Extending a control
+ - Creating a control instance
+ - Listening to events
+ - Destroying a control
+
+## Extending a control
 
 The following example builds up a basic todos widget for listing 
 and completing todo items. Start by creating a control constructor 
 function of your own by extending can.Control:
 
-    var Todos = can.Control({
+    var Todos = can.Control.extend({
       init: function( element, options ) {
-        var self = this;
-        Todo.findAll( {}, function( todos ) {
-          self.element.html( 'todos.ejs', todos );
-        });
+        self.element.html('todos.ejs', new Todo.List({}) )
       }
     });
+
+## Creating a control instance
 
 Create an instance of the Todos control on the `todos` element with:
 
@@ -38,16 +80,16 @@ Create an instance of the Todos control on the `todos` element with:
 
 The control's associated [can.EJS EJS] template looks like:
 
-    <% list( todos, function( todo ) { %>
+    <% todos.each(function( todo ) { %>
       <li <%= (el) -> el.data( 'todo', todo ) %> >
         <%= todo.attr( 'name' ) %>
         <a href="javascript://" class="destroy">
       </li>
     <% }) %>
 
-## init `can.Control.prototype.init( element, options )`
+### `init(element, options)`
 
-`init` is called when a new can.Control instance is created. It is called with:
+[can.Control::init] is called when a new can.Control instance is created. It is called with:
 
 - __element__ - The wrapped element passed to the 
                 control. Control accepts a
@@ -59,7 +101,7 @@ The control's associated [can.EJS EJS] template looks like:
 
 and any other arguments passed to `new can.Control()`. For example:
 
-    var Todos = can.Control({
+    var Todos = can.Control.extend({
       defaults : { view: 'todos.ejs' }
     }, {
       init: function( element , options ) {
@@ -76,7 +118,7 @@ and any other arguments passed to `new can.Control()`. For example:
     // overwrite the template option
     new Todos( $( '#todos' ), { template: 'specialTodos.ejs' } );
 
-## element `this.element`
+### `this.element`
 
 [can.Control::element] is the 
 NodeList consisting of the element the control is created on. 
@@ -87,7 +129,7 @@ NodeList consisting of the element the control is created on.
 Each library wraps elements differently. If you are using jQuery, for example,
 the element is wrapped with `jQuery( element )`.
 
-## options `this.options`
+### `this.options`
 
 [can.Control::options] is the second argument passed to 
 `new can.Control()`, merged with the control's static __defaults__ property.
@@ -97,7 +139,7 @@ the element is wrapped with `jQuery( element )`.
 Control automatically binds prototype methods that look
 like event handlers. Listen to __click__s on `<li>` elements like:
 
-    var Todos = can.Control({
+    var Todos = can.Control.extend({
       init: function( element , options ) {
         var self = this;
         Todo.findAll( {}, function( todos ) {
@@ -124,7 +166,7 @@ event handlers.
 To destroy a todo when its `<a href="javascript://" class="destroy">` link 
 is clicked:
 
-    var Todos = can.Control({
+    var Todos = can.Control.extend({
       init: function( element, options ) {
         var self = this;
         Todo.findAll( {}, function( todos ) {
@@ -150,13 +192,13 @@ is clicked:
 
 When the todo is destroyed, EJS's live binding will remove its LI automatically.
 
-## Templated Event Handlers Part 1 `"{eventName}"`
+### Templated Event Handlers Part 1 `"{eventName}"`
 
 Customize event handler behavior with `"{NAME}"` in
 the event handler name.  The following allows customization 
 of the event that destroys a todo:
 
-    var Todos = can.Control( 'Todos', {
+    var Todos = can.Control.extend({
       init: function( element , options ) { ... },
       
       'li click': function( li ) { ... },
@@ -172,7 +214,7 @@ of the event that destroys a todo:
 Values inside `{NAME}` are looked up on the control's `this.options` first,
 and then the `window`. For example, we could customize it instead like:
 
-    var Todos = can.Control( 'Todos', {
+    var Todos = can.Control.extend({
       init: function( element , options ) { ... },
       
       'li click': function( li ) { ... },
@@ -190,7 +232,7 @@ and then the `window`. For example, we could customize it instead like:
 
 The selector can also be templated.
 
-    var Todos = can.Control( 'Todos', {
+    var Todos = can.Control.extend({
       init: function( element , options ) { ... },
       
       '{listElement} click': function( li ) { ... },
@@ -206,7 +248,7 @@ The selector can also be templated.
       listElement: 'li' 
     } );
 
-## Templated Event Handlers Part 2 `"{objectName}"`
+### Templated Event Handlers Part 2 `"{objectName}"`
 
 Control can also bind to objects other than `this.element` with
 templated event handlers.  This is _critical_
@@ -216,7 +258,7 @@ If the value inside `{NAME}` is an object, Control will bind to that
 object to listen for events. For example, the following tooltip listens to 
 clicks on the window:
 
-    var Tooltip = can.Control({
+    var Tooltip = can.Control.extend({
       '{window} click': function( el, ev ) {
         // hide only if we clicked outside the tooltip
         if ( !this.element.has( ev.target ) ) {
@@ -232,7 +274,7 @@ This is convenient when listening for model changes. If EJS were not
 taking care of removing `<li>`s after their associated models were destroyed,
 we could implement it in `Todos` like:
 
-    var Todos = can.Control({
+    var Todos = can.Control.extend({
       init: function( element, options ) {
         var self = this;
         Todo.findAll( {}, function( todos ) {
@@ -266,38 +308,12 @@ we could implement it in `Todos` like:
 
     new Todos( '#todos' );
 
-## destroy `control.destroy()`
-
-[can.Control::destroy] unbinds a control's
-event handlers and releases its element, but does not remove 
-the element from the page. 
-
-    var todo = new Todos( '#todos' );
-    todo.destroy();
-
-When a control's element is removed from the page
-__destroy__ is called automatically.
-
-    new Todos( '#todos' );
-    $( '#todos' ).remove();
-    
-All event handlers bound with Control are unbound when the control 
-is destroyed (or its element is removed).
-
-_Brief aside on destroy and templated event binding. Taken 
-together, templated event binding, and control's automatic
-clean-up make it almost impossible 
-to write leaking applications. An application that uses
-only templated event handlers on controls within the body
-could free up all 
-data by calling `$(document.body).empty()`._
-
-## on `control.on()`
+### `on()`
 
 [can.Control::on] rebinds a control's event handlers. This is useful when you want
 to listen to a specific model and change it:
 
-    var Editor = can.Control({
+    var Editor = can.Control.extend({
       todo: function( todo ) {
         this.options.todo = todo;
         this.on();
@@ -336,7 +352,36 @@ to listen to a specific model and change it:
 
     // switch it to the second todo
     editor.todo( todo2 );
+    
 
-Here's the full todo list manager in action:
+## Destroying a control
 
-@iframe can/test/demo.html 400
+[can.Control::destroy] unbinds a control's
+event handlers and releases its element, but does not remove 
+the element from the page. 
+
+    var todo = new Todos( '#todos' );
+    todo.destroy();
+
+When a control's element is removed from the page
+__destroy__ is called automatically.
+
+    new Todos( '#todos' );
+    $( '#todos' ).remove();
+    
+All event handlers bound with Control are unbound when the control 
+is destroyed (or its element is removed).
+
+_Brief aside on destroy and templated event binding. Taken 
+together, templated event binding, and control's automatic
+clean-up make it almost impossible 
+to write leaking applications. An application that uses
+only templated event handlers on controls within the body
+could free up all 
+data by calling `$(document.body).empty()`._
+
+## Tabs Example
+
+Here is an example of how to build a simple tab widget using can.Control:
+
+@demo can/control/control.html

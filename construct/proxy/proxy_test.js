@@ -1,4 +1,4 @@
-steal('can/util', 'can/control').then('can/construct/proxy', function(can) {
+(function() {
 	var isDist = (/dist/.test(location.href));
 
 	module("can/construct/proxy");
@@ -9,7 +9,7 @@ steal('can/util', 'can/control').then('can/construct/proxy', function(can) {
 		expect(2);
 		can.Control("Car",{
 			show: function( value ) {
-				equals(curVal, value)
+				equal(curVal, value)
 			}
 		},{})
 		var cb = Car.proxy('show');
@@ -27,7 +27,7 @@ steal('can/util', 'can/control').then('can/construct/proxy', function(can) {
 		expect(2);
 		can.Construct("Car",{
 			show: function( value ) {
-				equals(curVal, value)
+				equal(curVal, value)
 			}
 		},{})
 		var cb = Car.proxy('show');
@@ -44,7 +44,7 @@ steal('can/util', 'can/control').then('can/construct/proxy', function(can) {
 		test("proxy error", 1,function(){
 			can.Construct("Car",{
 				show: function( value ) {
-					equals(curVal, value)
+					equal(curVal, value)
 				}
 			},{
 				show: function( value ) {
@@ -60,4 +60,4 @@ steal('can/util', 'can/control').then('can/construct/proxy', function(can) {
 		})
 	}
 
-});
+})();

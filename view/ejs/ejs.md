@@ -1,8 +1,14 @@
-@class can.EJS
+@constructor can.EJS
 @parent canjs
+@group can.EJS.tags Tags
 
-EJS provides __live__ ERB style client-side templates. Use EJS 
-with [can.view] and for live templating use EJS with [can.Observe].
+@description EJS provides __live__ ERB-style client-side templates.
+
+@signature `new can.EJS(options)`
+
+Creates an EmbeddedJS template. Use EJS with [can.view] or [can.view.ejs].
+
+@body
 
 ## Basic Example
 
@@ -41,7 +47,7 @@ Next, create a teacher and use can.view to render the template:
     };
     
     document.getElementById('teacher')
-      .appendChild( can.view("teacherEjs", teacher) )
+      .appendChild( can.view("teacherEJS", teacher) )
 
 This results in HTML like:
 
@@ -88,9 +94,9 @@ helpful, but it does nothing fancy.
 Next, turn your teacher into a `new can.Observe(object)` and pass
 that to `can.view`:
 
-    var teacher = can.Observe({
+    var teacher = new can.Observe({
       name : "Mr. Smith",
-      grade : "a"
+      grade : "a",
       students : [
         {name : "Suzy"},
         {name : "Payal"},
@@ -100,7 +106,7 @@ that to `can.view`:
     });
     
     document.getElementById('teacher')
-      .appendChild( can.view("teacherEjs", teacher) );
+      .appendChild( can.view("teacherEJS", teacher) );
       
 Finally, update some properties of teacher and slap your 
 head with disbelief ...
@@ -125,22 +131,7 @@ are editable, so experiment!
 
 EJS uses 5 types of tags:
  
-__`<% CODE %>`__ - Runs JS Code.
 
-This type of magic tag does not modify the template but is used for JS control statements 
-like for-loops, if/else, switch, etc.  Some examples:
-
-    <% if( items.attr('length') === 0 ) { %>
-        <tr><td>You have no items</td></tr>
-    <% } else { %>
-        <% list(items, function(){ %>
-          <tr> .... </tr>
-        <% }) %>
-    <% } %>
-
-
-    <% var address = person.attr('address') %>
-    <span><%= address.attr('street') %><span>
 
 __`<%= CODE %>`__ - Runs JS Code and writes the _escaped_ result into the result of the template.
 
