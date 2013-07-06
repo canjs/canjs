@@ -22,7 +22,18 @@
         <script type="text/javascript">
             QUnit.config.autostart = false;
 
-            steal("can/util/fixture", "can/construct", "can/observe",
+            steal(function() {
+                var config = window.CONFIGURATION = {
+                    "map": {
+                        "*": {
+                            "can/util/util.js": "can/util/jquery/jquery.js",
+                            "jquery/jquery.js": "can/lib/jquery.1.9.1.js"
+                        }
+                    }
+                };
+
+                steal.config(config);
+            }, "can/util/fixture", "can/construct", "can/observe",
                 "can/observe/compute", "can/model", "can/view",
                 "can/view/ejs", "can/control", "can/route",
                 "can/control/route", "can/view/mustache",
