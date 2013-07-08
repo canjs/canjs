@@ -20,15 +20,13 @@
 <div id='contacts'></div>
 </div>
 		
-<script type='text/javascript' 
-        src='../../../steal/steal.js'>
-</script>
+<script type="text/javascript" src="../../lib/steal/steal.js"></script>
 <script type='text/javascript'  id="demo-source">
-steal('jquery/model',
-		'jquery/dom/fixture',
-		'jquery/model/list').then(function(){
+steal('can/model',
+    'can/observe/attributes',
+    'can/util/fixture',function(){
 			
-$.Model.convert.date =  function(raw){
+can.Model.convert.date =  function(raw){
 	if(typeof raw == 'string'){
 		var matches = raw.match(/(\d+)-(\d+)-(\d+)/)
 		return new Date( +matches[1], 
@@ -39,17 +37,17 @@ $.Model.convert.date =  function(raw){
 	}
 };
 
-$.fixture("/contacts.json", function(){
-	return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20',
+can.fixture("/contacts.json", function(){
+	return [{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20',
 				tasks : [{id: 1, title: "write up model layer", due: "2010-10-5"}]},
 		 {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10',
 		 		tasks : [{id: 2, title: "write up funcunit", due: "2009-5-1"}, 
 				         {id: 3, title: "test funcunit", due: "2010-3-15"}]},
-		 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
+		 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}];
 })
 
 // A task model that has a date
-$.Model("Task",{
+can.Model("Task",{
 	attributes : {
 		due : 'date'
 	}
@@ -61,7 +59,7 @@ $.Model("Task",{
 })
 
 // A contact model that has many tasks
-$.Model("Contact",{
+can.Model("Contact",{
 	attributes : { 
 		birthday : 'date',
 		tasks: "Task.models"

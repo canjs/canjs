@@ -19,24 +19,27 @@
 <div id="demo-html">
 <ul id='contacts'></ul>
 </div>	
-<script type='text/javascript' 
-        src='../../steal/steal.js'>   
-</script>
+<script type="text/javascript" src="../../lib/steal/steal.js"></script>
 
 <script type='text/javascript' id="demo-source">   
-steal('jquery/model',
-		'jquery/dom/fixture',
-		'jquery/model/list',
-		function(){
+steal('can/model',
+    'can/observe/attributes',
+    'can/observe/setter',
+    'can/util/fixture',
+    'can/view/ejs',
+    'can/control',
+    'can/construct/proxy',
+    'jquerypp/dom/form_params',
+    function(){
 
-$.fixture("/contacts.json", function(orig, settings, headers){
-	return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
+can.fixture("/contacts.json", function(orig, settings, headers){
+	return [{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
 			 {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10'},
-			 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
+			 {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}];
 });
 
 // A contact model
-$.Model("Contact",{
+can.Model("Contact",{
 	findAll : "/contacts.json"
 },{
 	// converts dates

@@ -19,22 +19,20 @@
 <div id="demo-html">
 <ul id='contacts'></ul>
 </div>	
-<script type='text/javascript' 
-        src='../../steal/steal.js'>   
-</script>
+<script type="text/javascript" src="../../lib/steal/steal.js"></script>
 <script type='text/javascript' id="demo-source">   
-steal('jquery/model', 
-      'jquery/dom/fixture',
-      function(){
+steal('can/model',
+    'can/observe/attributes',
+    'can/util/fixture',function(){
 	
-	$.fixture("/foobar.json", function( ) {
-	  return [[{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
+	can.fixture("/foobar.json", function( ) {
+	  return [{'id': 1,'name' : 'Justin Meyer','birthday': '1982-10-20'},
 	       {'id': 2,'name' : 'Brian Moschel','birthday': '1983-11-10'},
-	       {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}]];
+	       {'id': 3,'name' : 'Alex Gomes','birthday': '1980-2-10'}];
 	});
 	
 	
-$.Model("Contact",{
+can.Model("Contact",{
   attributes : { 
     // labels birthday a date
     birthday : 'date'

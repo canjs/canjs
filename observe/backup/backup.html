@@ -39,19 +39,15 @@
 
 <script type='text/javascript' src='../../lib/steal/steal.js'></script>
 <script type='text/javascript'>
-steal(function() {
-	steal.config({
-		root: '../../'
-	});
-}).then('can/observe/backup',
+steal('can/observe/backup',
 	  'can/observe/delegate',
-	  'can/observe/attributes')
-.then('can/model',
+	  'can/observe/attributes',
+	  'can/model',
 	  'can/util/fixture',
-	  'can/view/ejs')
-.then(function(){
+	  'can/view/ejs',
+	  function(){
 	can.fixture("/contacts.json", function(orig, settings, headers){
-	return [[
+	return [
 			{
 				'id': 1,
 				'name' : 'Justin Meyer',
@@ -67,10 +63,10 @@ steal(function() {
 				'name' : 'Motley Crew',
 				'birthday': '1980-2-10'
 			}
-		]];
+		];
 	});
 
-	can.Model("Contact",{
+	Contact = can.Model.extend({
 		attributes : {
 			birthday : 'date'
 		},

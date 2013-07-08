@@ -4,7 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="../../lib/qunit/qunit.css"/>
 </head>
 <body>
-<h1 id="qunit-header">can.compute Test Suite</h1>
+<h1 id="qunit-header">can.Observe sort Test Suite</h1>
 
 <h2 id="qunit-banner"></h2>
 
@@ -18,8 +18,10 @@
 <script type="text/javascript">
 	QUnit.config.autostart = false;
 	steal("can/observe")
-		.then("can/observe/compute")
-		.then("can/test", "can/observe/compute/compute_test.js", function() {
+		.then("can/observe/sort", 
+			"can/test", 
+			"can/view/mustache",
+			"can/observe/sort/sort_test.js", function() {
 		QUnit.start();
 	});
 </script>

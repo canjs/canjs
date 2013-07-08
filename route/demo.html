@@ -48,7 +48,7 @@
     			default values. <a id='changeRoute' href="javascript://">Show Me</a></td>
     	</tr>
     	<tr>
-    		<td colspan="2"><h2>can.link(name, data)</h2></td>
+    		<td colspan="2"><h2>can.route.link(name, data)</h2></td>
     	</tr>
     	<tr>
     		<td><div id='link'></div></td>
@@ -59,7 +59,7 @@
     		</td>
     	</tr>
     	<tr>
-    		<td colspan="2"><h2>can.url(data)</h2></td>
+    		<td colspan="2"><h2>can.route.url(data)</h2></td>
     	</tr>
     	<tr>
     		<td><div id='url'></div></td>
@@ -100,11 +100,7 @@
 </div>
 <script type='text/javascript' src='../lib/steal/steal.js'></script>
 <script type='text/javascript'>
-steal(function() {
-	steal.config({
-		root: '../'
-	});
-}).then('can/route',
+steal('can/route',
 	'can/util/json.js',
 	'can/observe',
 	'can/view/ejs',

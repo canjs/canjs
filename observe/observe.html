@@ -19,11 +19,7 @@
 
 	<script src='../lib/steal/steal.js'></script>
 	<script type='text/javascript'>
-		steal(function() {
-			steal.config({
-				root: '../'
-			});
-		}).then('can',function(){
+		steal('can',function(){
 			
 			Stat = can.Model({
 		        id: "name",
