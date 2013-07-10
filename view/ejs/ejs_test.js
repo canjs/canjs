@@ -916,13 +916,45 @@ test("indirectly recursive views", function() {
 	var div = document.createElement('div');	
 	div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
 	document.getElementById('qunit-test-area').appendChild(div);
-	ok(can.trim(can.$('#qunit-test-area ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Uncached indirectly recursive EJS working.");
+	var el = can.$('#qunit-test-area ul > li > ol > li > ul > li > ol > li')[0];
+	ok(!!el && can.trim(el.innerHTML) === "1", "Uncached indirectly recursive EJS working.");
 	
 	can.view.cache = true;
 	div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
-	ok(can.trim(can.$('#qunit-test-area ul + ul > li > ol > li > ul > li > ol > li')[0].innerHTML) === "1", "Cached indirectly recursive EJS working.");
+	el = can.$('#qunit-test-area ul + ul > li > ol > li > ul > li > ol > li')[0];
+	ok(!!el && can.trim(el.innerHTML) === "1", "Cached indirectly recursive EJS working.");
 	document.getElementById('qunit-test-area').removeChild(div);
 
+});
+
+test("recursive views of previously stolen files shouldn't fail", function() {
+	stop();
+	steal(
+		'view/ejs/test/indirect1.ejs', 
+		'view/ejs/test/indirect2.ejs',
+		function() {
+			start();
+			var unordered = new can.Observe.List([
+				{ ol: [
+					{ ul: [
+						{ ol: [1, 2, 3] }
+					]}
+				]}
+			]);
+			can.view.cache = false;
+			var div = document.createElement('div');	
+			div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
+			document.getElementById('qunit-test-area').appendChild(div);
+			var el = can.$('#qunit-test-area ul > li > ol > li > ul > li > ol > li')[0];
+			ok(!!el && can.trim(el.innerHTML) === "1", "Uncached indirectly recursive EJS working.");
+			
+			can.view.cache = true;
+			div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
+			el = can.$('#qunit-test-area ul + ul > li > ol > li > ul > li > ol > li')[0];
+			ok(!!el && can.trim(el.innerHTML) === "1", "Cached indirectly recursive EJS working.");
+			document.getElementById('qunit-test-area').removeChild(div);
+		}
+	);
 });
 
 test("live binding select", function(){
