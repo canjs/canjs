@@ -138,6 +138,25 @@ can.param({a: "b", c: "d"}) //-> "a=b&c=d"
 */
 //
 /**
+@function can.deparam
+@parent can.util
+@description Takes a string of name value pairs and returns a Object literal that represents those params.
+
+@signature `can.param(params)`
+@param {String} params a string like <code>"foo=bar&person[age]=3"</code>
+@return {Object} A JavaScript Object that represents the params:
+
+@codestart
+{
+  foo: "bar",
+  person: {
+    age: "3"
+  }
+}
+@codeend
+*/
+//
+/**
 @description Check if an object has no properties.
 @function can.isEmptyObject
 @parent can.util
@@ -659,6 +678,7 @@ def.done(function(){
 });
 @codeend
 */
+//
 /**
 @description Add a callback to be called when a Deferred is rejected.
 @function can.Deferred.prototype.fail fail
@@ -775,6 +795,86 @@ def.reject({ error: 'Thats not an animal.' })
 var def = can.Deferred();
 def.resolve({ animals: [ 'pig', 'cow' ] })
 @codeend
+*/
+//
+/**
+@function can.capitalize
+@parent can.util
+@description Capitalize the first letter of a string.
+
+@codestart
+can.capitalize('candy is fun!'); //-> Returns: 'Candy is fun!'
+@codeend 
+
+@signature `can.capitalize(str)`
+@param {String} str The string to capitalize.
+@return {String} The string with the first letter capitalized.
+*/
+//
+/**
+@function can.sub
+@parent can.util
+@description Returns a string with {param} replaced values from data.
+
+@codestart
+can.sub("foo {bar}",{bar: "far"}) //-> "foo far"
+@codeend
+
+@signature `can.sub(str, data, remove, s)`
+@param {String} str The string to make substitutes on
+@param {Object} data The data to be used to look for properties.  If it's an array, multiple objects can be used.
+@param {Boolean} [remove] if a match is found, remove the property from the object
+@param {String} s The string to replace
+@return {String} The converted string or `null` if any data to render are `undefined` or `null`
+*/
+//
+
+/**
+@function can.underscore
+@parent can.util
+
+@description Takes a CamelCase or mixedCase string and underscores the string on the capital letter. If parts of the string are not CamelCase or mixedCase, it will not change them. `can.underscore` will lower case the entire string as well.
+
+@codestart
+can.underscore("OneTwo") //-> "one_two"
+can.underscore("OneTwo threeFour") //-> "one_two three_four"
+@codeend
+
+@signature `can.underscore(str)`
+@param {String} str The string to underscore
+@return {String} the underscored string
+ */ 
+//
+/**
+@function can.esc
+@parent can.util
+
+@description Escapes a string for insertion into HTML.
+
+@codestart
+can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
+@codeend
+
+@signature `can.esc(str)`
+@param {String} str The string to escape
+@return {String} The HTML escaped string.
+*/
+//
+/**
+@function can.getObject
+@parent can.util
+@description Gets an object from a string.  It can also modify objects on the 'object path' by removing or adding properties.
+
+@codestart
+Foo = {Bar: {Zar: {"Ted"}}}
+can.getObject("Foo.Bar.Zar") //-> "Ted"
+@codeend
+
+@signature can.getObject(name, roots, add)
+@param {String} name the name of the object to look for
+@param {Array} [roots] an array of root objects to look for the name.  If roots is not provided, the window is used.
+@param {Boolean} [add] true to add missing objects to the path. false to remove found properties. undefined to not modify the root object
+@return {Object} The object.
 */
 var a = function() {};
 /**

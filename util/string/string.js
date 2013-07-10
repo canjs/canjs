@@ -123,7 +123,7 @@ steal('can/util', function (can) {
 		// Capitalizes a string.
 		/**
 		 * @function can.capitalize
-		 * @parent can.util.
+		 * @parent can.util
 		 * @description Capitalize the first letter of a string.
 		 * @signature `can.capitalize(str)`
 		 * @param {String} str The string to capitalize.
