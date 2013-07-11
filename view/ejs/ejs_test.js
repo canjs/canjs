@@ -928,33 +928,53 @@ test("indirectly recursive views", function() {
 });
 
 test("recursive views of previously stolen files shouldn't fail", function() {
-	stop();
-	steal(
-		'view/ejs/test/indirect1.ejs', 
-		'view/ejs/test/indirect2.ejs',
-		function() {
-			start();
-			var unordered = new can.Observe.List([
-				{ ol: [
-					{ ul: [
-						{ ol: [1, 2, 3] }
-					]}
-				]}
-			]);
-			can.view.cache = false;
-			var div = document.createElement('div');	
-			div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
-			document.getElementById('qunit-test-area').appendChild(div);
-			var el = can.$('#qunit-test-area ul > li > ol > li > ul > li > ol > li')[0];
-			ok(!!el && can.trim(el.innerHTML) === "1", "Uncached indirectly recursive EJS working.");
-			
-			can.view.cache = true;
-			div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
-			el = can.$('#qunit-test-area ul + ul > li > ol > li > ul > li > ol > li')[0];
-			ok(!!el && can.trim(el.innerHTML) === "1", "Cached indirectly recursive EJS working.");
-			document.getElementById('qunit-test-area').removeChild(div);
-		}
-	);
+	// Using preload to bypass steal dependency (necessary for "grunt test")
+	can.view.preload("view_ejs_test_indirect1_ejs", can.EJS({text: 
+		"<ul>"+
+		"<% unordered.each(function(item) { %>"+
+			"<li>"+
+				"<% if(item.ol) { %>"+
+				"<%== can.view.render(can.test.path('view/ejs/test/indirect2.ejs'), { ordered: item.ol }) %>"+
+				"<% } else { %>"+
+				"<%= item.toString() %>"+
+				"<% } %>"+
+			"</li>"+
+		"<% }) %>"+
+		"</ul>"
+	}));
+	can.view.preload("view_ejs_test_indirect2_ejs", can.EJS({text: 
+		"<ol>"+
+		"<% ordered.each(function(item) { %>"+
+			"<li>"+
+				"<% if(item.ul) { %>"+
+				"<%== can.view.render(can.test.path('view/ejs/test/indirect1.ejs'), { unordered: item.ul }) %>"+
+				"<% } else { %>"+
+				"<%= item.toString() %>"+
+				"<% } %>"+
+			"</li>"+
+		"<% }) %>"+
+		"</ol>"
+	}));
+	
+	var unordered = new can.Observe.List([
+		{ ol: [
+			{ ul: [
+				{ ol: [1, 2, 3] }
+			]}
+		]}
+	]);
+	can.view.cache = false;
+	var div = document.createElement('div');	
+	div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
+	document.getElementById('qunit-test-area').appendChild(div);
+	var el = can.$('#qunit-test-area ul > li > ol > li > ul > li > ol > li')[0];
+	ok(!!el && can.trim(el.innerHTML) === "1", "Uncached indirectly recursive EJS working.");
+	
+	can.view.cache = true;
+	div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
+	el = can.$('#qunit-test-area ul + ul > li > ol > li > ul > li > ol > li')[0];
+	ok(!!el && can.trim(el.innerHTML) === "1", "Cached indirectly recursive EJS working.");
+	document.getElementById('qunit-test-area').removeChild(div);
 });
 
 test("live binding select", function(){
