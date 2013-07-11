@@ -37,6 +37,219 @@ test("observe can validate, events, callbacks", 7,function(){
 	
 })
 
+test("observe can validate, events, callbacks with nested props", 7,function(){
+	Person.validate("info.age", {message : "it's a date type"},function(val){
+					return ! ( this.date instanceof Date )
+				})
+
+	var task = new Person({info : {age: "bad"}}),
+		errors = task.errors()
+		
+	
+	ok(errors, "There are errors");
+	equal(errors['info.age'].length, 1, "there is one error");
+	equal(errors['info.age'][0], "it's a date type", "error message is right");
+	
+	task.bind("error.info.age", function(ev, attr, errs){
+		ok(this === task, "we get task back by binding");
+		
+		ok(errs, "There are errors");
+		equal(errs['info.age'].length, 1, "there is one error");
+		equal(errs['info.age'][0], "it's a date type", "error message is right");
+	})
+	
+	task.attr("info.age","blah");
+
+	task.unbind("error.info.age");
+	
+	task.attr("info.age", "blaher");
+	
+})
+
+test('observe can validate nested properties', function(){
+	Person.validate('company.name', function(){
+		return 'company name validated from parent'
+	})
+
+	var Company = can.Observe({})
+
+	Company.validate('name', function(){
+		return 'name is wrong'
+	})
+
+	var company = new Company;
+
+	var person = new Person;
+
+	person.attr('company', company)
+
+	person.attr('company.name', 'foo')
+
+	deepEqual(person.errors(), {
+		'company.name' : [
+			'company name validated from parent',
+			'name is wrong'
+		]
+	}, 'Parent objects correctly validate children');
+
+	deepEqual(company.errors(), {
+		name : ['name is wrong']
+	}, 'Parent validations are not run when errors is called on the child')
+})
+
+test('observe can validate arrays of nested properties', function(){
+	Person.validate('phoneNumbers.*', function(val, attr){
+		return val > 2 ? 'number too big' : null;
+	})
+
+	var person = new Person({phoneNumbers : [1,2,3]})
+
+	person.attr('phoneNumbers').push(4);
+
+	deepEqual(person.errors(), {
+		"phoneNumbers.2" : ['number too big'],
+		"phoneNumbers.3" : ['number too big'],
+	})
+})
+
+test('complex nested validation scenarios', function(){
+	Person.validate('company.phoneNumbers.*.countryCode', function(val, attr){
+		if(val !== 1 && val !== 385){
+			return 'wrong country code'
+		}
+	})
+	var person = new Person;
+
+	person.attr('company', {
+		phoneNumbers : [{
+			number : 12345,
+			countryCode : 1
+		},{
+			number : 12345,
+			countryCode : 385
+		},{
+			number : 12345,
+			countryCode : 41
+		},{
+			number : 12345,
+			countryCode : 1
+		}]
+	});
+
+	deepEqual(person.errors(), {
+		'company.phoneNumbers.2.countryCode' : ['wrong country code']
+	}, 'Error is set on the correct path')
+})
+
+test('complex deeply nested validation scenarios', function(){
+	Person.validate('company.phoneNumbers.*.countryCode.*', function(val, attr){
+		if(val !== 1 && val !== 385){
+			return 'wrong country code'
+		}
+	})
+	Person.validate('company.phoneNumbers.*.address.*.street', function(val, attr){
+		if(val === ''){
+			return 'street is mandatory'
+		}
+	})
+	var person = new Person;
+
+	person.attr('company', {
+		phoneNumbers : [{
+			number : 12345,
+			countryCode : [1, 2],
+			address : [{
+				street : 'foo'
+			}]
+		},{
+			number : 12345,
+			countryCode : [385, 32],
+			address : [{
+				street : 'foo'
+			}]
+		},{
+			number : 12345,
+			countryCode : [41, 23],
+			address : [{
+				street : 'foo'
+			}]
+		},{
+			number : 12345,
+			countryCode : [1],
+			address : [{
+				street : 'foo'
+			}, {
+				street : ''
+			}]
+		}]
+	});
+
+	deepEqual(person.errors(), {
+		'company.phoneNumbers.0.countryCode.1' : ['wrong country code'],
+		'company.phoneNumbers.1.countryCode.1' : ['wrong country code'],
+		'company.phoneNumbers.2.countryCode.0' : ['wrong country code'],
+		'company.phoneNumbers.2.countryCode.1' : ['wrong country code'],
+		"company.phoneNumbers.3.address.1.street" : ["street is mandatory"]
+	}, 'Error is set on the correct path')
+	
+})
+
+test('correct attr is sent to the validation function', function(){
+	Person.validate('company.phoneNumbers.*.countryCode.*', function(val, attr){
+		equal(attr, 'company.phoneNumbers.0.countryCode.0', 'Correct attr is sent')
+	})
+
+	var person = new Person({
+		company : {
+			phoneNumbers : [{
+				countryCode : [1]
+			}]
+		}
+	})
+
+	person.errors();
+})
+
+test('validations of the list objects', function(){
+	var ContractNumbers = can.Observe.List({});
+
+	ContractNumbers.validate('*', function(val){
+		return val === '' ? 'contract number is mandatory' : null;
+	})
+
+	var contractNumbers = new ContractNumbers(['foo', 'bar', 123, '']);
+
+	deepEqual(contractNumbers.errors(), {
+		3 : ['contract number is mandatory']
+	})
+})
+
+test('validations on the list objects work when called from the parent', function(){
+	window.ContractNumbers = can.Observe.List({
+		items : function(items){
+			return new this(items)
+		}
+	}, {});
+
+	ContractNumbers.validate('*', function(val){
+		return val === '' ? 'contract number is mandatory' : null;
+	})
+
+	var Customer = can.Observe({
+		attributes : {
+			contractNumbers : 'ContractNumbers.items'
+		}
+	}, {})
+
+	var customer = new Customer({contractNumbers : ['foo', 'bar', 123, '']});
+
+	deepEqual(customer.errors(), {
+		'contractNumbers.3' : ['contract number is mandatory']
+	})
+
+	delete window.ContractNumbers;
+})
+
 test("validatesFormatOf", function(){
 	Person.validateFormatOf("thing",/\d-\d/)
 	

@@ -1,8 +1,45 @@
 steal('can/util', 'can/observe/attributes', function (can) {
+  
+
+	var removeOuterDots = function(str){
+		return str.replace(/\.$/, '').replace(/^\./, '');
+	}
+
+	// adds errors recursively for the object
+	var addRecursiveErrors = function(item, attr, addErrors, funcs, path){
+
+		var currentPath = removeOuterDots(attr.shift()),
+			items       = currentPath !== '' ? item.attr(currentPath) : (item.length ? item : [item]),
+			itemPath;
+
+		path.push(currentPath);
+
+		for(var i = 0; i < items.length; i++){
+			if(attr.length > 1){
+				itemPath = path.slice(0);
+				itemPath.push(i);
+				addRecursiveErrors(items[i], attr.slice(0), addErrors, funcs, itemPath);
+			} else {
+				itemPath = path.slice(0);
+				if(attr[0] === ''){
+					itemPath.push(i);
+					addErrors(removeOuterDots(itemPath.join('.')), funcs);
+				} else {
+					itemPath.push(i, attr[0].replace(/\.$/, '').replace(/^\./, ''));
+					addErrors(removeOuterDots(itemPath.join('.')), funcs);
+				}
+			}
+		}
+	}
+
+
 //validations object is by property.  You can have validations that
 //span properties, but this way we know which ones to run.
 //  proc should return true if there's an error or the error message
+//
+
 	var validate = function (attrNames, options, proc) {
+
 		// normalize argumetns
 		if (!proc) {
 			proc = options;
@@ -24,42 +61,61 @@ steal('can/util', 'can/observe/attributes', function (can) {
 				self.validations[attrName] = [];
 			}
 
-			self.validations[attrName].push(function (newVal) {
+			self.validations[attrName].push(function (newVal, realAttrName) {
 				// if options has a message return that, otherwise, return the error
-				var res = proc.call(this, newVal, attrName);
+				var res = proc.call(this, newVal, realAttrName);
 				return res === undefined ? undefined : (options.message || res);
 			})
 		});
 	};
 
-	var old = can.Observe.prototype.__set;
-	can.Observe.prototype.__set = function (prop, value, current, success, error) {
+	var validator = function(ev, prop, how, newValue, oldValue){
 		var self = this,
 			validations = self.constructor.validations,
 			errorCallback = function (errors) {
-				var stub = error && error.call(self, errors);
-
-				// if 'setter' is on the page it will trigger
-				// the error itself and we dont want to trigger
-				// the event twice. :)
-				if (stub !== false) {
-					can.trigger(self, "error", [prop, errors], true);
-				}
-
+				can.trigger(self, "error", [prop, errors], true);
 				return false;
-			};
-
-		old.call(self, prop, value, current, success, errorCallback);
+			}
 
 		if (validations && validations[prop]) {
 			var errors = self.errors(prop);
-			errors && errorCallback(errors)
+			errors && errorCallback(errors);
 		}
-
-		return this;
 	}
 
-	can.each([ can.Observe, can.Model ], function (clss) {
+	var boundObserves = {};
+
+	var bind = can.Observe.prototype.bind;
+
+	// Only bind to changes if something else is also bound to this object
+	// so there wouldn't be memory leaks
+	can.Observe.prototype.bind = function(){
+		var self = bind.apply(this, arguments);
+
+		if(this.constructor.validations && !boundObserves[this._cid]){
+			boundObserves[this._cid] = true;
+			this.bind('change' + this._cid, can.proxy(validator, this));
+		}
+
+		return self;
+	}
+
+	var unbind = can.Observe.prototype.unbind;
+
+	// if there is only one binding left, and there was a binding because
+	// of the validations, then unbind it
+	can.Observe.prototype.unbind = function(){
+		var self = unbind.apply(this, arguments);
+
+		if(this._bindings === 1 && boundObserves[this._cid]){
+			delete boundObserves[this._cid];
+			this.unbind('change' + this._cid);
+		}
+
+		return self;
+	}
+
+	can.each([ can.Observe, can.Model, can.Observe.List ], function (clss) {
 		// in some cases model might not be defined quite yet.
 		if (clss === undefined) {
 			return;
@@ -373,7 +429,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 					can.each(funcs, function (func) {
 						var res = func.call(self, isTest ? ( self.__convert ?
 							self.__convert(attr, newVal) :
-							newVal ) : self[attr]);
+							newVal ) : self.attr(attr), attr);
 						if (res) {
 							if (!errors[attr]) {
 								errors[attr] = [];
@@ -383,21 +439,38 @@ steal('can/util', 'can/observe/attributes', function (can) {
 
 					});
 				},
-				validations = this.constructor.validations,
+				validations = this.constructor.validations || {},
 				isTest = attrs && attrs.length === 1 && arguments.length === 2;
 
 			// go through each attribute or validation and
 			// add any errors
 			can.each(attrs || validations || {}, function (funcs, attr) {
+				var convertedAttr;
 				// if we are iterating through an array, use funcs
 				// as the attr name
 				if (typeof attr == 'number') {
 					attr = funcs;
-					funcs = validations[attr];
+					convertedAttr = attr.replace(/(^|\.)\d+(\.|$)/g, function(match, leadingDot, trailingDot){ 
+						return leadingDot + '*' + trailingDot;
+					});
+					funcs = validations[convertedAttr];
 				}
 				// add errors to the
-				addErrors(attr, funcs || []);
+				if(attr.indexOf('*') !== -1){
+					addRecursiveErrors(self, attr.split('*'), addErrors, funcs || [], []);
+				} else {
+					addErrors(attr, funcs || []);
+				}
+				
 			});
+
+			this.each(function(prop, attr){
+				can.each(prop && prop.errors && prop.errors() || {}, function(error, nestedAttr){
+					var path = attr + '.' + nestedAttr;
+					errors[path] = errors[path] || [];
+					errors[path].push.apply(errors[path], error);
+				});
+			})
 
 			// return errors as long as we have one
 			return can.isEmptyObject(errors) ? null : isTest ? errors[attrs[0]] : errors;
