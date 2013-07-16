@@ -1025,7 +1025,7 @@ steal('can/util','can/observe', function( can ) {
 			if ( ! attributes ) {
 				return;
 			}
-			if ( attributes instanceof this ) {
+			if ( typeof attributes.serialize === 'function' ) {
 				attributes = attributes.serialize();
 			}
 			var id = attributes[ this.id ],
