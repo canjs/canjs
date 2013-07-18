@@ -1156,4 +1156,15 @@ test("destroy not calling callback for new instances (#403)", function(){
 	});
 });
 
+test(".model should always serialize Observes (#444)", function() {
+	var ConceptualDuck = can.Model({
+		defaults: {
+			sayeth: "Abstractly 'quack'"
+		}
+	}, {});
+	var ObserveableDuck = can.Observe({}, {});
+
+	equal("quack", ConceptualDuck.model(new ObserveableDuck({sayeth: "quack"})).sayeth);
+});
+
 })();
