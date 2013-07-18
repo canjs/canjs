@@ -198,7 +198,7 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 				return value;
 			} else {
 				// Let others know to listen to changes in this compute
-				if( can.Observe.__reading && canReadForChangeEvent) {
+				if(can.Observe && can.Observe.__reading && canReadForChangeEvent) {
 					can.Observe.__reading(computed,'change');
 				}
 				// if we are bound, use the cached value

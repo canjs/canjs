@@ -489,6 +489,15 @@ test("compute bound to input value",function(){
 
 })
 
+test("compute reads without observe", function() {
+	var oldObserve = can.Observe;
+	delete can.Observe;
 
+	var comp = can.compute(5);
+
+	equal(comp(), 5, "Got compute value");
+
+	can.Observe = oldObserve;
+})
 
 })();
