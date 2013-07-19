@@ -266,4 +266,27 @@ test("validatesNumericalityOf", function(){
 	equal(errors.foo.length,1,"one error on foo");
 });
 
+test("Validate with compute (#410)", function() {
+	expect(4);
+
+	Person.validate("age", {
+		message : "it's a date type"
+	},function(val){
+		return ! ( this.date instanceof Date )
+	});
+
+	var task = new Person({ age: 20 }),
+		errors = can.compute(function() {
+			return task.errors();
+		});
+
+	errors.bind('change', function(ev, errorObj) {
+		equal(errorObj.age.length, 1, "there is one error");
+		equal(errorObj.age.length, 1, "there is one error");
+	});
+
+	task.attr('age', 'bad');
+	task.attr('age', 'still bad');
+});
+
 })();
