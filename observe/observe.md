@@ -43,7 +43,7 @@ live-binding properties in an [can.EJS EJS] template. (If you are using
 
 @codestart
 var aName = {a: 'Alexis'},
-    observe = can.Observe(aName);
+    observe = new can.Observe(aName);
 
 // Observes are copies of data:
 aName === observe; // false
