@@ -13,8 +13,12 @@ steal('can/util','can/observe', function( can ) {
 		var d = new can.Deferred();
 		def.then(function(){
 			var args = can.makeArray( arguments );
-			args[0] = model[func](args[0]);
-			d.resolveWith(d, args);
+			try {
+				args[0] = model[func](args[0]);
+				d.resolveWith(d, args);
+			} catch(e) {
+				d.rejectWith(d, [e].concat(args));
+			}
 		},function(){
 			d.rejectWith(this, arguments);
 		});
@@ -927,6 +931,10 @@ steal('can/util','can/observe', function( can ) {
 				// Get the object's data.
 				instancesRawData.data),
 				i = 0;
+
+			if(typeof raw === 'undefined') {
+				throw new Error('Could not get any raw data while converting using .models');
+			}
 
 			//!steal-remove-start
 			if ( ! raw.length ) {
