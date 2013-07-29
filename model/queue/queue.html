@@ -1,59 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>Model Queue Demo</title>
-		<style type='text/css'>
-		body {font-family: verdana}
-		li {border: solid 1px gray; padding: 5px; width: 250px;}
-		li a {color: red; font-weight: bold;}
-		p {width: 400px;}
-		</style>
-	</head>
-	<body>
-		<div id="demo-instructions">
-			<h1>Model Queue Demo</h1>
-			<p>This demo shows how queue works with the model</p>
-		</div>
-		<div id="demo-html">
-
-		</div>
+<head>
+	<meta charset="utf-8">
+	<title>Model Queue Demo</title>
+</head>
+<body>
+	
+	<div id='task'></div>
 
 
-		<script type='text/javascript' src='../../../steal/steal.js'>
-		</script>
-		<script type='text/javascript' id="demo-source">
-		steal('can/model',
-			'can/util/fixture',
-			'can/model/queue', 
-			function(){
-				
-				var counter = 0;
+	<script id="taskEJS" type="text/ejs">
+		Insert task, it will be saved on every keystroke, but requests will be done in the correct order<br>
+		<input placeholder='Task...' style='width: 300px; font-size: 16px' /><br><span><%= pending() %></span> pending requests
+	</script>
 
-				can.fixture.delay = 1000;
+	<script src='../../lib/steal/steal.js'></script>
+	<script type='text/javascript'>
+	steal(function() {
+		steal.config({
+			root: '../../'
+		});
+	}).then('can', 'can/model/queue', 'can/control', 'can/util/fixture', function(){
+		var Task  = can.Model({
+			create : 'POST /task',
+			update : 'PUT /task/{id}'
+		}, {});
 
-				can.fixture('/people', function(req){
-					var attrs   = req.data;
-					attrs.id    = ++counter;
-					attrs.foo   = "bar";
-					attrs.extra = "EXTRA!";
-					return attrs;
-				})
+		can.fixture('POST /task', function(req){
+			var task = req.data;
+			task.id = 1;
+			return task;
+		})
 
-				var Person = can.Model({
-					create  : "POST /people",
-					update  : "PUT /people/{id}",
-					destroy : "DESTROY /people/{id}"
-				}, {})
-				p = new Person({name: "Mihael", socialnetworks : {twitter : 'retro'}});
-				p.save(function(){
-					console.log("Changed arguments are preserved after save call returns", p.attr())
-				});
-				p.attr('socialnetworks.twitter', 'mihaelkonjevic');
-				p.save(function(){
-					console.log("Changed arguments are preserved after save call returns", p.attr())
-				});
-				p.attr('foo', 'baz');
-			})
-		</script>
-	</body>
+		can.fixture('PUT /task/1', function(req){
+			return req.data;
+		})
+
+		can.fixture.delay = 1000;
+
+		var TaskControl = can.Control({
+			init : function(){
+				this.pending = can.compute(0);
+				this.element.html(can.view('taskEJS', {
+					pending : this.pending
+				}));
+				this.task = new Task
+			},
+			'input keyup' : function(el, ev){
+				this.task.attr('title', el.val());
+				this.task.save($.proxy(this.saved,this));
+				this.pending(this.pending() + 1);
+			},
+			saved : function(){
+				this.pending(this.pending() - 1);
+			}
+		})
+
+		new TaskControl('#task');
+	
+	});
+</script>
+</body>
 </html>
