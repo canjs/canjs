@@ -1,4 +1,4 @@
-@typedef {function} can.fixture.types.responseHandler responseHandler
+@typedef {function(Number,String,Object.<typeName,*>,headers)} can.fixture.types.responseHandler(status,statusText,responses,headers) responseHandler
 @parent can.fixture.types
 
 @description Specifies the response of an AJAX request.
