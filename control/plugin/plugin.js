@@ -122,7 +122,7 @@ $.fn.extend({
 	 * @return {can.Control} The first control found.
 	 *
 	 * @body
-	 * This is ths same as [jQuery.fn.controls $().controls] except that
+	 * This is the same as [jQuery.fn.controls $().controls] except that
 	 * it only returns the first Control found.
 	 *
 	 *		//- Init MyBox widget
