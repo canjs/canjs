@@ -582,7 +582,7 @@ steal('can/util','can/construct', function( can ) {
 		 *       task: new Task({ completed: 'true' }) 
 		 *     });
 		 * 
-		 * To update the taskstriker's task, add a task method that updates
+		 * To update the `taskstriker`'s task, add a task method that updates
 		 * this.options and rebinds the event handlers for the new task like:
 		 * 
 		 *     TaskStriker = can.Control({
