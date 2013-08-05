@@ -76,10 +76,10 @@ would render:
 
 ## each
 
-The`each` helper explicitly iterates over an array of items and
+The `each` helper explicitly iterates over an array of items and
 renders the block.
 
-Like [sections](#Sections), it will reset the current context to the value for which its iterating.
+Like [sections](#Sections), it will reset the current context to the value for which it is iterating.
 See the [basics of contexts](#Basics) for more information.
 
 	{ 
@@ -128,11 +128,11 @@ would render:
 ## Element Callbacks
 
 When rendering HTML with views, you often want to call some JavaScript
-such as intializing a jQuery plugin on the new HTML.
+such as initializing a jQuery plugin on the new HTML.
 
 Mustache makes it easy to define this code in the markup.  Using the
 [ES5 Arrow Syntax](http://wiki.ecmascript.org/doku.php?id=strawman:arrow_function_syntax) 
-its easy to define the element for which is passed followed by the arrow
+it is easy to define the element which is passed followed by the arrow
 and the function to execute on the element.
 
 	<div class="tabs" {{(el) -> el.jquery_tabs()}}></div>
@@ -225,7 +225,7 @@ that and the previous argument like so:
 
 __Evaluating Helpers__
 
-If you want to use a helper with as a [section](#Sections), you need to call 
+If you want to use a helper with a [section](#Sections), you need to call
 `options.fn(context)` in your return statement. This will return a 
 string with the resulting evaluated [section](#Sections).
 
@@ -286,6 +286,6 @@ This would output:
 	Along with the cat, dog, parrot, we walked around the block 
 	3 times this morning.
 	
-Whereas, an empty data object would output:
+Whereas an empty data object would output:
 
 	We were lazy today.

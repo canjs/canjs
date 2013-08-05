@@ -28,7 +28,7 @@ If a [can.Mustache.key] represents a [can.Observe] attribute,
 it is converted to a [can.compute] getter/setter 
 function. This enables 2-way binding helpers.  
 
-For example, the following helper two-way binds input elemnet's
+For example, the following helper two-way binds an input element's
 value to a [can.compute]:
 
     can.Mustache.registerHelper('value',function(value){

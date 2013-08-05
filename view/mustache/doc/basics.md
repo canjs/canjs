@@ -7,7 +7,7 @@ Keys insert data into the template.  They reference variables
 within the current context.  For example:
 
 	{
-    		name: "Austin"
+    	name: "Austin"
 	}
 
 	{{name}}

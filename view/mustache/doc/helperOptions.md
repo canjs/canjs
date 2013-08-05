@@ -1,7 +1,7 @@
 @typedef {{fn:function,inverse:function,hash:Object}} can.Mustache.helperOptions helperOptions
 @parent can.Mustache.types 
 
-@description The options argument pass to a [can.Mustache.helper helper function].
+@description The options argument passed to a [can.Mustache.helper helper function].
 
 @option {function(*)} [fn(context)] Provided if a 
 [can.Mustache.helpers.sectionHelper section helper] is called.  Call `fn` to
