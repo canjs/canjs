@@ -30,7 +30,7 @@ debugging tools.
 templates are compatible with can.Mustache.
 
 Mustache templates looks similar to normal HTML except
-they contain contain keys for inserting data into the template
+they contain keys for inserting data into the template
 and [sections](#Sections) to enumerate and/or filter the enclosed template blocks.
 
 For example, the following renders a welcome header for

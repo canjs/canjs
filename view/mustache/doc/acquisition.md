@@ -30,15 +30,15 @@ key Mustache will use for look up.
 
 __URL__
 
-Templates can be defined in its own file and  Mustache will fetch the 
+Templates can be defined in their own files and  Mustache will fetch the
 files on render.  This is the preferred way since it will keep your application
 nicely organized seperating views from logic code. 
 
 	var template = can.view('//lib/views/mytemplate.mustache', 
-					dataToPass)
+					dataToPass);
 	can.$(document.body).append(template);
 
 Since could potentially make several XHR requests, in a big application
 this could be a performance concern.  Creating a build step to 
-concatenate and include all of the views in one file would be one way to optimize performance.  
+concatenate and include all of the views in one file would be one way to optimize performance.
 If you are using Steal, it will do this automatically at build for you.

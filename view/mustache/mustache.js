@@ -380,7 +380,7 @@ function( can ){
 				 * 
 				 * ## Use 
 				 * 
-				 * Its common you want some data in the template to be available 
+				 * It is common for you to want some data in the template to be available
 				 * on an element.  `{{data name}}` allows you to save the 
 				 * context so it can later be retrieved by [can.data] or 
 				 * `$.fn.data`. For example,
@@ -719,7 +719,7 @@ function( can ){
 								 *         <li>Justin</li>
 								 *     </ul>
 								 * 
-								 * Reminder: Sections will reset the current context to the value for which its iterating.
+								 * Reminder: Sections will reset the current context to the value for which it is iterating.
 								 * See the [basics of contexts](#Basics) for more information.
 								 * 
 								 * ## Truthys
@@ -1791,7 +1791,7 @@ function( can ){
 	 	 * 
 	 	 * ## Use
 	 	 * 
-	 	 * Use the `each` helper to itterate over a array 
+	 	 * Use the `each` helper to iterate over a array
 		 * of items and render the block between the helper and the slash. For example,
 		 * 
 		 * The template:

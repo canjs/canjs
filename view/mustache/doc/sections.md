@@ -6,7 +6,7 @@
 
 ## Comments
 
-Comments, which do not appear in template output, begin a bang (!).
+Comments, which do not appear in template output, begin with a bang (!).
 
 	<h1>My friend is {{!Brian}}</h1>
 

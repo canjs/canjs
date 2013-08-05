@@ -11,7 +11,7 @@ function's return value is used.
 
 If the key value is:
 
- - `undefined` - the key's name (ex: user.mustache in `{{>user.mustaceh}}`) is used to 
+ - `undefined` - the key's name (ex: user.mustache in `{{>user.mustache}}`) is used to
    look up a template using [can.view].
 
  - `string` - the string value is used to lookup a view in [can.view].
