@@ -15,14 +15,6 @@
 > git clone git@github.com:<your username>/canjs
 @codeend
 
-Alternatively you can also
-
-@codestart
-> git clone git@github.com:bitovi/canjs
-@codeend
-
-directly (but you will need your own fork to submit pull requests).
-
 ## Developing
 
 After installing CanJS, you’ll find a folder for each feature of CanJS: `construct`, `control`, `model`, etc.
@@ -56,7 +48,7 @@ To develop CanJS:
 
 ## Contributing
 
-When contributing, include tests with new features or bug fixes in a feature branch until you're ready to submit the code for consideration; then fork the repository, push to the fork, and issue a pull request.
+When contributing, include tests with new features or bug fixes in a feature branch until you're ready to submit the code for consideration; then push to the fork, and submit a pull request.
 
 Move into the directory of your cloned repository and create a new feature branch.
 
@@ -71,7 +63,7 @@ Once your happy with your changes, push to the feature branch.
 > git push origin html5-fix
 @codeend
 
-Now that we have pushed all the changes to the repo, we need to submit a Pull Request to the main branch.  Navigate to [Pull Requests](https://github.com/bitovi/canjs/pulls) and click 'Pull Request' in the top navigation bar.  Fill in some details about your potential patch including a meaningful title. When finished, press "Send pull request". The core team will be notified about your submission and let you know of any problems or targeted release date.
+Now you'll need to submit a Pull Request. Navigate to [Pull Requests](https://github.com/bitovi/canjs/pulls) and click the 'New Pull Request' button. Fill in some details about your potential patch including a meaningful title. When finished, press "Send pull request". The core team will be notified about your submission and let you know of any problems or targeted release date.
 
 ## Reporting Bugs
 
@@ -96,7 +88,7 @@ If your pull request affects the public API, make relevant changes to the docume
 
 @codestart
 > git clone git@github.com:bitovi/canjs.com.git
-> cd canjs.us
+> cd canjs.com
 > git submodule update --init --recursive
 > npm install
 > grunt
