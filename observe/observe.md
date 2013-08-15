@@ -54,7 +54,7 @@ observe.a;         // 'Alexis'
 observe.attr('a'); // 'Alexis'
 
 // setting an Observe's property:
-observe.attr('a, 'Alice');
+observe.attr('a', 'Alice');
 observe.a; // Alice
 
 // removing an Observe's property;
@@ -66,7 +66,7 @@ observe.a = 'Adam'; // wrong!
 @codeend
 
 Find out more about manipulating properties of Observes under
-[can.Observe.protoype.attr attr] and [can.Observe.protoype.removeAtt removeAttr].
+[can.Observe.prototype.attr attr] and [can.Observe.prototype.removeAttr removeAttr].
 
 ## Listening to changes
 
@@ -104,16 +104,16 @@ that makes binding to specific types of events easier:
 
 @codestart
 var o = new can.Observe({});
-o.delegate('a', 'add' function(ev, newVal, oldVal) {
+o.delegate('a', 'add', function(ev, newVal, oldVal) {
     console.log('a was added.');
 });
-o.delegate('a', 'set' function(ev, newVal, oldVal) {
+o.delegate('a', 'set', function(ev, newVal, oldVal) {
     console.log('a was set.');
 });
-o.delegate('a', 'remove' function(ev, newVal, oldVal) {
+o.delegate('a', 'remove', function(ev, newVal, oldVal) {
     console.log('a was removed.');
 });
-o.delegate('a', 'change' function(ev, newVal, oldVal) {
+o.delegate('a', 'change', function(ev, newVal, oldVal) {
     console.log('a was changed.');
 });
 

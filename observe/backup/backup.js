@@ -105,7 +105,7 @@ steal('can/util', 'can/observe', 'can/util/object', function (can) {
 		 * recipe.attr('title', 'Flapjack Mix');
 		 * recipe.isDirty();     // true
 		 * recipe.restore();
-		 * * recipe.isDirty();   // false
+		 * recipe.isDirty();   // false
 		 *
 		 * recipe.attr('ingredients.0.quantity', '7 cups');
 		 * recipe.isDirty();     // false
@@ -181,7 +181,7 @@ steal('can/util', 'can/observe', 'can/util/object', function (can) {
 		 * 
 		 * ## Events
 		 * When `restore` sets values or re-adds properties, the same events will be fired (including
-		 * _change_, _add_, and _set_) as if the values of the properties had been set using `[can.Observe.attr attr]`.
+		 * _change_, _add_, and _set_) as if the values of the properties had been set using `[can.Observe.prototype.attr attr]`.
 		 */
 		restore : function (restoreAssociations) {
 			var props = restoreAssociations ? this._backupStore : flatProps(this._backupStore)

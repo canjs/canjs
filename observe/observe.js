@@ -141,7 +141,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * @param {Function} [batchStopHandler] a callback that gets called after all batched events have been called
 		 *
 		 * @body
-		 * `startBatch` causes can.Observe to begin an event batch. Until `[can.Observe.stopBatch]` is called, any
+		 * `startBatch` causes [can.Observe] to begin an event batch. Until `[can.Observe.stopBatch]` is called, any
 		 * events that would result from calls to `[can.Observe::attr attr]` are held back from firing. If you have
 		 * lots of changes to make to can.Observes, batching them together can help performance &emdash; especially if
 		 * those can.Observes are live-bound to the DOM.
@@ -156,7 +156,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * });
 		 *
 		 * person.bind('first', function() {
-		 *     console.log("First name changed."");
+		 *     console.log("First name changed.");
 		 * }).bind('change', function() {
 		 *     console.log("Something changed.");
 		 * });
@@ -310,7 +310,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * @description Trigger an event to be added to the current batch.
 		 * @signature `can.Observe.triggerBatch(item, event [, args])`
 		 * @param {can.Observe} item the target of the event
-		 * @param {String|{type: String}} event the type of event, or an event object with a type given
+		 * @param {String|Object} event the type of event (e.g. "change"), or an event object with a type given (e.g. {type: "change"})
 		 * @param {Array} [args] the parameters to trigger the event with.
 		 * 
 		 * @body
@@ -429,7 +429,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * Assigns _value_ to a property on this `can.Observe` called _key_.
 		 * 
 		 * @param {String} key the property to set
-		 * @param {*} the value to assign to _key_.
+		 * @param {*} value the value to assign to _key_.
 		 * @return {can.Observe} this Observe, for chaining
 		 * 
 		 * @signature `observe.attr(obj[, removeOthers])`
@@ -856,7 +856,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * @param {Function} [handler] the handler to unbind
 		 *
 		 * @body
-		 * `unbind` unbinds event handlers previously bound with [can.Observe.prototype.bind|`bind`].
+		 * `unbind` unbinds event handlers previously bound with [can.Observe.prototype.bind `bbind`].
 		 * If no _handler_ is passed, all handlers for the given event type will be unbound.
 		 *
 		 * @codestart

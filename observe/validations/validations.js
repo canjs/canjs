@@ -312,13 +312,13 @@ steal('can/util', 'can/observe/attributes', function (can) {
 		});
 	});
 
+	/**
+	 * @prototype
+	 */
 	can.extend(can.Observe.prototype, {
 		/**
-		 * @prototype
-		 */
-		/**
 		 * @function can.Observe.validations.prototype.errors errors
-		 * @parent can.Observe.validations.prototype
+		 * @parent can.Observe.validations
 		 *
 		 * Runs the validations on this observe.  You can
 		 * also pass it an array of attributes to run only those attributes.

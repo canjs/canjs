@@ -21,7 +21,7 @@ The following validates the `birthday` attribute in Contacts:
     
     var contact = new Contact({birthday: new Date(2012,0) })
 
-Use [can.Observe::errors errors] `( [attrs...], newVal )` to read errors
+Use [can.Observe.validations.prototype.errors errors] `( [attrs...], newVal )` to read errors
 or to test if setting a value would create an error:
 
     // Check if there are errors on the instance
@@ -47,20 +47,20 @@ or to test if setting a value would create an error:
 
 ## Validation Methods
 
-The most basic validate method is [can.Observe.validate validate]<code>()</code>.  
+The most basic validate method is [can.Observe.validations.static.validate validate]<code>()</code>.  
 
 There are several built-in validation methods so you don't have to define your own in all cases like in the birthday example above.
 
-- [can.Observe.validate]<code>(attrNames, options, proc)</code> Attributes validated with function.
-- [can.Observe.validateFormatOf]<code>(attrNames, regexp, options)</code> Attributes match the regular expression.	
-- [can.Observe.validateInclusionOf]<code>( attrNames, inArray, [options] )</code> Attributes are available in a particular array.	
-- [can.Observe.validateLengthOf validateLengthOf]<code>(attrNames, min, max, [options])</code> Attributes' lengths are in the given range.	
-- [can.Observe.validatePresenceOf validatePresenceOf]<code>( attrNames, [options] )</code> Attributes are not blank.	
-- [can.Observe.validateRangeOf validateRangeOf]<code>(attrNames, low, hi, [options])</code> Attributes are in the given numeric range.
+- [can.Observe.validations.static.validate can.Observe.validate]<code>(attrNames, options, proc)</code> Attributes validated with function.
+- [can.Observe.validations.static.validateFormatOf can.Observe.validateFormatOf]<code>(attrNames, regexp, options)</code> Attributes match the regular expression.	
+- [can.Observe.validations.static.validateInclusionOf can.Observe.validateInclusionOf]<code>( attrNames, inArray, [options] )</code> Attributes are available in a particular array.	
+- [can.Observe.validations.static.validateLengthOf can.Observe.validateLengthOf]<code>(attrNames, min, max, [options])</code> Attributes' lengths are in the given range.	
+- [can.Observe.validations.static.validatePresenceOf can.Observe.validatePrese]<code>( attrNames, [options] )</code> Attributes are not blank.	
+- [can.Observe.validations.static.validateRangeOf can.Observe.validateRangeOf]<code>(attrNames, low, hi, [options])</code> Attributes are in the given numeric range.
 
 ## Error Method
 
-[can.Observe::errors]() runs the validations on this model. You can also pass it an array 
+[can.Observe.validations.prototype.errors can.Observe.errors]<code>()</code> runs the validations on this model. You can also pass it an array 
 of attributes to run only those attributes. It returns 
 nothing if there are no errors, or an object of errors by attribute.
 

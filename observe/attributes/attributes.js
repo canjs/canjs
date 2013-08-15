@@ -113,7 +113,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 		 *       return data;
 		 * 	}
 		 *   }
-		 * }, {}));
+		 * }, {});
 		 * 
 		 * var alice = new Contact({info: {name: 'Alice Liddell', email: 'alice@liddell.com'}});
 		 * alice.attr(); // {name: 'Alice Liddell', 'email': 'alice@liddell.com'}
@@ -151,7 +151,7 @@ can.each([ can.Observe, can.Model ], function(clss){
 		 * 			}) ]
 		 * 		});
 		 * 
-		 * 		contact.seralize(); 
+		 * 		contact.serialize(); 
 		 * 		//-> { tasks: [ { due: 1333219754627 } ] }
 		 * 
 		 */

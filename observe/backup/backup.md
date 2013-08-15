@@ -6,8 +6,8 @@
 can.Observe.backup is a plugin that provides a dirty bit for properties on an Observe,
 and lets you restore the original values of an Observe's properties after they are changed.
 
-Here is an example showing how to use `[can.Observe.prototype.backup backup]` to save values,
-`[can.Observe.prototype.restore restore]` to restore them, and `[can.Observe.prototype.isDirty isDirty]`
+Here is an example showing how to use `[can.Observe.backup.prototype.backup backup]` to save values,
+`[can.Observe.backup.prototype.restore restore]` to restore them, and `[can.Observe.backup.prototype.isDirty isDirty]`
 to check if the Observe has changed:
 
 @codestart

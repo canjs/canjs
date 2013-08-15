@@ -62,14 +62,14 @@ the `can/observe/setter` plugin as follows:
     var player =   new Player({song: "Amish Paradise"});
 
     player.bind("change", function( ev, attr, how, newVal, oldVal ){
-      console.log("changed", attr, how, s.attr() );
+      console.log("changed", attr, how, player.attr() );
     });
  
     console.log("start")
-    s.attr("tvshow","Breaking Bad");
+    player.attr("tvshow","Breaking Bad");
     console.log("end")
 
-Use `statBatch` and `stopBatch` to make sure events 
+Use `startBatch` and `stopBatch` to make sure events 
 are triggered when an observe is in a valid state. 
 
 ## Performance
@@ -140,4 +140,4 @@ operations. Set this up with:
     },10);
 
 This batches everything that happens within the same thread of execution
-and/or within 10 ms of ech other. 
+and/or within 10 ms of each other. 
