@@ -1,5 +1,5 @@
 @function can.Mustache.helpers.partial {{>key}}
-@parent can.Mustache.tags
+@parent can.Mustache.tags 6
 
 @signature `{{>key}}`
 
