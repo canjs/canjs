@@ -1,8 +1,9 @@
 @constructor can.Mustache
 @parent canjs
-@group can.Mustache.pages Pages
-@group can.Mustache.tags Tags
-@group can.Mustache.types Types
+@group can.Mustache.pages 0 Pages
+@group can.Mustache.types 1 Types
+@group can.Mustache.tags 2 Basic Tags
+@group can.Mustache.htags 3 Helper Tags
 
 @test can/view/mustache/test/test.html
 @plugin can/view/mustache

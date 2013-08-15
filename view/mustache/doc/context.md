@@ -1,20 +1,60 @@
-@page can.Mustache.context Context
-@parent can.Mustache.pages
+@page can.Mustache.context Paths and Contexts
+@parent can.Mustache.pages 1
 
-Every part of a mustache template is rendered with 
+When using [can.Mustache.Basics tags] in Mustache, the `key` in `[can.Mustache.tags.escaped {{key}}]` 
+references a property on the current context object. The default context always points to the data 
+object initially passed to the template.
 
-A key references a value within the current [can.Mustache.context context] of a 
-template being rendered. In the following example, the 
-key is `name`:
+Instead of simply referencing a key matching a property on the current context object, a full path can 
+be included instead. When a path is found, Mustache will look for a matching property using the entire path:
 
-    <h1>{{name}}</h1>
-    
-If this template is rendered with:
+	Template:
+		{{person.name}}
 
-    {
-      name: "Austin"
-    }
+	Data:
+		{ 
+			person: {
+				name: "Austin"
+			}
+		}
 
-The template writes out:
+	Result:
+		Austin
 
-    <h1>Austin</h1>
+Additionally, the current context can be changed by using [can.Mustache.Sections sections]. Anytime a section 
+is opened, any tags inside of it will use that object as the local context for any key lookups:
+
+	Template:
+		{{#person}}
+			{{name}}
+		{{/person}}
+
+	Data:
+		{ 
+			person: {
+				name: "Austin"
+			}
+		}
+
+	Result:
+		Austin
+
+If the key used within a section is not found on the local context, Mustache will look up the 
+stack of contexts until it finds a matching key:
+
+	Template:
+		{{#person}}
+			{{name}} is {{age}}
+		{{/person}}
+
+	Data:
+		{ 
+			person: {
+				name: "Austin"
+			}
+			age: 29
+		}
+
+	Result:
+		Austin is 29
+		

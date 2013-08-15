@@ -1,129 +1,130 @@
 @page can.Mustache.Helpers Helpers
-@parent can.Mustache.pages 4
+@parent can.Mustache.pages 3
 
 # Helpers
 
-Helpers allow you to register functions that can be called 
-from any context in a template. 
+Helpers are functions that can be registered and called from within templates. While Mustache is 
+intended to be logic-less, helpers enable the execution of logic from within a Mustache template.
 
-Mustache includes a number of built-in helpers that are listed below
-but you can register your own helper too.
+Mustache includes a number of built-in helpers, but custom helpers can be registered as well. 
+The majority of these built-in helpers have [can.Mustache.Basics basic tag] equivalents.
 
-## if
+## Built-in Helpers
 
-In addition to truthy/falsey evaluation with [sections](#Sections), you can use an 
-explicit `if` condition to render a block.
+The `[can.Mustache.helpers.section {{#if key}}]` helper is used for **if** statements. The **if** helper is equivalent 
+to using a `[can.Mustache.helpers.section {{#key}}]` section. If they key passed to the helper is **truthy**, the 
+section will be rendered.
 
-	{
-		friends: true
-	}
-
-	{{#if friends}}
-		I have friends!
-	{{/if}}
-
-would render:
-
-	I have friends!
-	
-`if` acts similarly to a truthy `{{#section}}`.
-
-## else
-
-When using `if` or a custom helper, you can specify the inverse
-of the evaluation by using the `else` helper.
-
-	{
-		friend: false
-	}
-
-	<ul>
+	Template: 
 		{{#if friends}}
-			</li>{{name}}</li>
-		{{else}}
-			<li>No friends.</li>
+			I have friends!
 		{{/if}}
-	</ul>
 
-would render:
+	Data: 
+		{
+			friends: true
+		}
 
-	<ul>
-		<li>No friends.</li>
-	</ul>
+	Result:
+		I have friends!
 
-`else` acts similarly to a falsey `{{^inverse}}`, but only applies when used within another helper.
+When using the `[can.Mustache.helpers.section {{#if key}}]` helper, or any other helper for that matter, 
+the special `[can.Mustache.helpers.else {{else}}] helper becomes available. `{{else}}` is equivalent to 
+an [can.Mustache.helpers.inverse {{^key}}] inverse section (rendering **falsey** data), except that it 
+only uses a single tag and exists inside 
+a helper section.
 
-In this case, using the `if`/`else` helpers simplify your template by not requiring extra [sections](#Sections) to be specified.
+	Template: 
+		<ul>
+			{{#if friends}}
+				</li>{{name}}</li>
+			{{else}}
+				<li>No friends.</li>
+			{{/if}}
+		</ul>
 
-## unless
+	Data: 
+		{
+			friends: false
+		}
 
-The `unless` helper evaluates the inverse of the value of the key and renders 
-the block between the helper and the slash.
+	Result:
+		<ul>
+			<li>No friends.</li>
+		</ul>
 
-	{
-		friends: []
-	}
+The `[can.Mustache.helpers.unless {{#unless key}}]` helper is equivalent to using a 
+`[can.Mustache.helpers.inverse {{^key}}]` inverse section. If they key passed to the helper is **falsey**, the 
+section will be rendered.
 
-	{{#unless friends}}
+	Template: 
+		{{#unless friends}}
+			You don't have any friends!
+		{{/unless}}
+
+	Data: 
+		{
+			friends: []
+		}
+
+	Result:
 		You don't have any friends!
-	{{/unless}}
 
-would render:
+The `[can.Mustache.helpers.each {{#each key}}]` helper is equivalent to using a 
+`[can.Mustache.helpers.section {{#key}}]` section for iterating an array. In this case, the entire array 
+will be rendered using the inner text item by item.
 
-	You don't have any friends!
-	
-`unless` acts similarly to a falsey `{{^inverse}}`.
+	Template: 
+		<ul>
+			{{#each friends}}
+				<li>{{name}}</li>
+			{{/each}}
+		</ul>
 
-## each
+	Data: 
+		{ 
+			friends: [ 
+				{ name: "Austin" }, 
+				{ name: "Justin" } 
+			] 
+		}
 
-The `each` helper explicitly iterates over an array of items and
-renders the block.
+	Result:
+		<ul>
+			<li>Austin</li>
+			<li>Justin</li>
+		</ul>
 
-Like [sections](#Sections), it will reset the current context to the value for which it is iterating.
-See the [basics of contexts](#Basics) for more information.
+The `[can.Mustache.helpers.with {{#with key}}]` helper is equivalent to using a 
+`[can.Mustache.helpers.section {{#key}}]` section for regular objects. The helper will change 
+the current context so that all tags inside will look for keys on the local context first.
 
-	{ 
-		friends: [ 
-			{ name: "Austin" }, 
-			{ name: "Justin" } 
-		] 
-	}
+	Template: 
+		<h1>Hi {{name}}</h1>
+		{{#with friend}}
+			<p>You have a new friend: {{name}}</p>
+		{{/with}}
 
-	<ul>
-		{{#each friends}}
-			<li>{{name}}</li>
-		{{/each}}
-	</ul>
+	Data: 
+		{
+			name: "Andy",
+			friend: { name: "Justin" } 
+		}
 
-would render:
+	Result:
+		<h1>Hi Austin</h1>
+		<p>You have a new friend: Justin</p>
 
-	<ul>
-		<li>Austin</li>
-		<li>Justin</li>
-	</ul>
+The `[can.Mustache.helpers.elementCallback {{(el)->CODE}}]` helper is a special helper for element callbacks that 
+will pass the active DOM element within the template to a function made up of inline code. This 
+is most useful for tasks such as initializing a jQuery plugin on the new HTML.
 
-## with
+	<div class="tabs" {{(el) -> el.jquery_tabs()}}></div>
 
-Mustache typically applies the context passed in the [sections](#Sections) at runtime.  However,
-you can override this context by using the `with` helper.
-
-For example, using the `with` helper Mustache shifts the context to the friends object.
-
-	{
-		name: "Austin"
-		friends: 1
-	}
+The `[can.Mustache.helpers.data {{data key}}]` helper is another special helper for data associations that 
+will save the current context on the active DOM element with [can.data].
 
 
-	<h1>Hi {{name}}</h1>
-	{{#with friends}}
-		<p>You have {{.}} new friend!</p>
-	{{/with}}
-
-would render:
-
-	<h1>Hi Austin</h1>
-	<p>You have 1 new friend!</p>
 
 ## Element Callbacks
 
@@ -135,34 +136,23 @@ Mustache makes it easy to define this code in the markup.  Using the
 it is easy to define the element which is passed followed by the arrow
 and the function to execute on the element.
 
-	<div class="tabs" {{(el) -> el.jquery_tabs()}}></div>
+	Template:
+		<ul>
+			<li id="personli" {{data 'person'}}>{{name}}</li>
+		</ul>
 
-After rendering the HTML, `jquery_tabs` will be called on the tabs div.
+	Data:
+		{
+			name: 'Austin'
+		}
 
-## Data Associations
-
-Attaching data to an element is done by calling the `data` helper
-followed by the attribute name you want to attach it as.
-
-	{
-		name: 'Austin'
-	}
-
-	<ul>
-		<li id="personli" {{data 'person'}}>{{name}}</li>
-	</ul>
-
-Now the data can be access by doing:
-
-	var nameObject = can.data(can.$('#personli'), 'person');
-
-It automatically attaches the data to the
-element using [can.data] and the implied context of `this`.
+	The data can be retrieved later with:
+		var nameObject = can.data(can.$('#personli'), 'person'); 
 
 ## Registering Helpers
 
-You can register your own global helper with the `Mustache.registerHelper` method, or 
-a local helper (just accessible by the template you're rendering) by passing in an object containing helper functions to can.view.
+You can register your own global helper with the `[can.Mustache.registerHelper registerHelper]` method, or 
+a local helper (just accessible by the template being rendered) by passing in an object containing helper functions to [can.view].
 
 Localization is a good example of a custom helper you might implement
 in your application. The below example takes a given key and 
@@ -187,12 +177,12 @@ Or another way to do this:
 
 In the template, invoke the helper by calling the helper
 name followed by any additional arguments.
+	
+	Template:
+		<span>{{l10n 'mystring'}}</span>
 
-	<span>{{l10n 'mystring'}}</span>
-
-will render:
-
-	<span>my string localized</span>
+	Result:
+		<span>my string localized</span>
 
 __Helpers with can.Observe attributes__
 
@@ -230,7 +220,7 @@ If you want to use a helper with a [section](#Sections), you need to call
 string with the resulting evaluated [section](#Sections).
 
 Similarly, you can call `options.inverse(context)` to evaluate the 
-template between an `{{else}}` magic tag and the closing magic tag.
+template between an `{{else}}` tag and the closing tag.
 
 For example, when a route matches the string passed to our
 routing helper it will show/hide the text.

@@ -96,6 +96,7 @@ function( can ){
 	 * @signature `mustache.render( data [, helpers] )`
 	 * @param {Object} data Data to interpolate into the template.
 	 * @return {String} The template with interpolated data, in string form.
+	 * @hide
 	 * 
 	 * @body
 	 * Renders an object with view helpers attached to the view.
@@ -264,6 +265,22 @@ function( can ){
 				["returnLeft", "{{{", "{{[{&]"],
 				// Full line comments
 				["commentFull", "{{!}}", "^[\\s\\t]*{{!.+?}}\\n"],
+				/**
+				 * @function can.Mustache.tags.comment {{!key}}
+				 * 
+				 * @parent can.Mustache.tags 7
+				 * 
+				 * @description A comment that doesn't get inserted into the rendered result.
+				 * 
+				 * @signature `{{!key}}`
+				 * 
+				 * The comment tag operates similarly to a `<!-- -->` tag in HTML. It exists in your template but never shows up.
+				 * 
+				 * @param {can.Mustache.key} key A key that references a value within the current or parent 
+				 * context. If the value is a function or can.compute, the function's return value is used.
+				 * @return {String} 
+				 * 
+				 */
 				// Inline comments
 				["commentLeft", "{{!", "(\\n[\\s\\t]*{{!|{{!)"],
 				/**
@@ -283,6 +300,26 @@ function( can ){
 				 * context. If the value is a function or can.compute, the function's return value is used.
 				 * @return {String|Function|*} 
 				 * 
+				 * 
+				 */
+				//
+				/**
+				 * @function can.Mustache.tags.unescaped2 {{&key}}
+				 * 
+				 * @parent can.Mustache.tags 2
+				 * 
+				 * @description Insert the unescaped value of the [can.Mustache.key key] into the 
+				 * output of the template.
+				 * 
+				 * @signature `{{&key}}`
+				 * 
+				 * The `{{&key}}` tag is an alias for [can.Mustache.tags.unescaped {{{key}}}], behaving just 
+				 * like [can.Mustache.tags.escaped {{key}}] and [can.Mustache.helpers.helper {{helper}}] but does not
+				 * escape the result. 
+				 * 
+				 * @param {can.Mustache.key} key A key that references a value within the current or parent 
+				 * context. If the value is a function or can.compute, the function's return value is used.
+				 * @return {String|Function|*} 
 				 * 
 				 */
 				// Full line escapes
@@ -367,7 +404,7 @@ function( can ){
 				//		can.$('#nameli').data('name');
 				/**
 				 * @function can.Mustache.helpers.data {{data name}}
-				 * @parent can.Mustache.tags
+				 * @parent can.Mustache.htags 7
 				 * @signature `{{data name}}`
 				 * 
 				 * Adds the current [can.Mustache.context context] to the
@@ -644,7 +681,7 @@ function( can ){
 							switch (mode) {
 								/**
 								 * @function can.Mustache.helpers.section {{#key}}
-								 * @parent can.Mustache.tags 2
+								 * @parent can.Mustache.tags 3
 								 * 
 								 * @signature `{{#key}}BLOCK{{/key}}`
 								 * 
@@ -742,7 +779,7 @@ function( can ){
 								// 
 								/**
 								 * @function can.Mustache.helpers.helper {{helper args hashes}}
-								 * @parent can.Mustache.tags 5
+								 * @parent can.Mustache.htags 0
 								 * 
 								 * @description Calls a mustache helper function and inserts its return value into
 								 * the rendered template.
@@ -907,7 +944,7 @@ function( can ){
 								// 
 								/**
 								 * @function can.Mustache.helpers.sectionHelper {{#helper args hashes}}
-								 * @parent can.Mustache.tags 6
+								 * @parent can.Mustache.htags 1
 								 * 
 								 * Calls a mustache helper function with a block, and optional inverse 
 								 * block.
@@ -1046,7 +1083,7 @@ function( can ){
 								case '#':
 								/**
 								 * @function can.Mustache.helpers.inverse {{^key}}
-								 * @parent can.Mustache.tags 4
+								 * @parent can.Mustache.tags 5
 								 * 
 								 * @signature `{{^key}}BLOCK{{/key}}`
 								 * 
@@ -1108,7 +1145,7 @@ function( can ){
 								// Close the prior section.
 								/**
 								 * @function can.Mustache.helpers.close {{/key}}
-								 * @parent can.Mustache.tags 3
+								 * @parent can.Mustache.tags 4
 								 * 
 								 * @signature `{{/key}}`
 								 * 
@@ -1199,7 +1236,7 @@ function( can ){
 							// Falsey section
 							/**
 							 * @function can.Mustache.helpers.else {{else}}
-							 * @parent can.Mustache.tags 8
+							 * @parent can.Mustache.htags 3
 							 *
 							 * @signature `{{#helper}}BLOCK{{else}}INVERSE{{/helper}}`
 							 * 
@@ -1672,7 +1709,7 @@ function( can ){
 		// Implements the `if` built-in helper.
 		/**
 		 * @function can.Mustache.helpers.if {{#if key}}
-		 * @parent can.Mustache.tags 7
+		 * @parent can.Mustache.htags 2
 		 * @signature `{{#if key}}BLOCK{{/if}}`
 	 	 * 
 	 	 * Renders the `BLOCK` template within the current template.
@@ -1739,7 +1776,7 @@ function( can ){
 		// Implements the `unless` built-in helper.
 		/**
 		 * @function can.Mustache.helpers.unless {{#unless key}}
-		 * @parent can.Mustache.tags 10
+		 * @parent can.Mustache.htags 4
 		 * 
 	 	 * @signature `{{#unless key}}BLOCK{{/unless}}`
 	 	 * 
@@ -1770,7 +1807,7 @@ function( can ){
 		// Implements the `each` built-in helper.
 		/**
 		 * @function can.Mustache.helpers.each {{#each key}}
-	 	 * @parent can.Mustache.tags 9
+	 	 * @parent can.Mustache.htags 5
 	 	 * 
 	 	 * @signature `{{#each key}}BLOCK{{/each}}`
 	 	 * 
@@ -1834,7 +1871,7 @@ function( can ){
 		// Implements the `with` built-in helper.
 		/**
 		 * @function can.Mustache.helpers.with {{#with key}}
-		 * @parent can.Mustache.tags 11
+		 * @parent can.Mustache.htags 6
 		 * 
 		 * @signature `{{#with key}}BLOCK{{/with}}`
 		 * 
@@ -1867,8 +1904,9 @@ function( can ){
 		
 		/**
 		 * @function can.Mustache.helpers.elementCallback {{(el)->CODE}}
-		 * @parent can.Mustache.tags
-		 * @hide
+		 *
+		 * @parent can.Mustache.htags 8
+		 *
 		 * @signature `{{(el) -> CODE}}`
 		 * 
 		 * Runs a callback on the element.
