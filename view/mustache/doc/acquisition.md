@@ -1,12 +1,12 @@
 @page can.Mustache.Acquisition Template Acquisition
-@parent can.Mustache.pages 3
+@parent can.Mustache.pages 4
 
 There are number of ways to acquire templates such as: raw text,
 URL, or script tags in the markup.
 
 __Raw Text__
 
-Raw text can by templated by passing an object with a `text`
+Raw text can be templated by passing an object with a `text`
 attribute containing your template and Mustache will return a 
 document fragment back.  For example:
 
@@ -38,7 +38,7 @@ nicely organized seperating views from logic code.
 					dataToPass);
 	can.$(document.body).append(template);
 
-Since could potentially make several XHR requests, in a big application
+Since this could potentially make several XHR requests, in a big application
 this could be a performance concern.  Creating a build step to 
 concatenate and include all of the views in one file would be one way to optimize performance.
 If you are using Steal, it will do this automatically at build for you.
