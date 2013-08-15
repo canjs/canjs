@@ -276,8 +276,7 @@ function( can ){
 				 * 
 				 * The comment tag operates similarly to a `<!-- -->` tag in HTML. It exists in your template but never shows up.
 				 * 
-				 * @param {can.Mustache.key} key A key that references a value within the current or parent 
-				 * context. If the value is a function or can.compute, the function's return value is used.
+				 * @param {can.Mustache.key} key Everything within this tag is completely ignored.
 				 * @return {String} 
 				 * 
 				 */
@@ -1909,8 +1908,19 @@ function( can ){
 		 *
 		 * @signature `{{(el) -> CODE}}`
 		 * 
-		 * Runs a callback on the element.
+		 * Executes an element callback with the inline code on the element.
 		 * 
+		 * @param {String} code The inline code to execute on the element.
+		 * 
+		 * @body
+		 * 
+		 * ## Use 
+		 * 
+		 * It is common for you to want to execute some code on a given 
+		 * DOM element. An example would be for initializing a jQuery plugin 
+		 * on the new HTML.
+		 * 
+		 * 		<div class="tabs" {{(el) -> el.jquery_tabs()}}></div>
 		 * 
 		 */
 		//

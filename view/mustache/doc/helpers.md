@@ -124,18 +124,6 @@ is most useful for tasks such as initializing a jQuery plugin on the new HTML.
 The `[can.Mustache.helpers.data {{data key}}]` helper is another special helper for data associations that 
 will save the current context on the active DOM element with [can.data].
 
-
-
-## Element Callbacks
-
-When rendering HTML with views, you often want to call some JavaScript
-such as initializing a jQuery plugin on the new HTML.
-
-Mustache makes it easy to define this code in the markup.  Using the
-[ES5 Arrow Syntax](http://wiki.ecmascript.org/doku.php?id=strawman:arrow_function_syntax) 
-it is easy to define the element which is passed followed by the arrow
-and the function to execute on the element.
-
 	Template:
 		<ul>
 			<li id="personli" {{data 'person'}}>{{name}}</li>
