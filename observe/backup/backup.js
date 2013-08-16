@@ -20,11 +20,12 @@ steal('can/util', 'can/observe', 'can/util/object', function (can) {
 		 * @description Save the values of the properties of an Observe.
 		 *
 		 * @signature `observe.backup()`
-		 * @return {can.Observe} The Observe, for chaining.
-		 *
+
 		 * `backup` backs up the current state of the properties of an Observe and marks
 		 * the Observe as clean. If any of the properties change value, the original
-		 * values can be restored with `[can.Observe.prototype.restore]`:
+		 * values can be restored with `[can.Observe.backup.prototype.restore can.Observe.prototype.restore]`:
+		 * @return {can.Observe} The Observe, for chaining.
+		 *
 		 *
 		 * @codestart
 		 * var recipe = new can.Observe({
@@ -69,13 +70,13 @@ steal('can/util', 'can/observe', 'can/util/object', function (can) {
 		 * @description Check whether an Observe has changed since the last time it was backed up.
 		 *
 		 * @signature `observe.isDirty([deep])`
-		 * @param {bool} [deep=false] whether to check nested Observes
-		 * @return {bool} Whether the Observe has changed since the last time it was [can.Observe.prototype.backup backed up].
-		 * If the Observe has never been backed up, `isDirty` returns `undefined`.
 		 *
 		 * `isDirty` checks whether any properties have changed value or whether any properties have
 		 * been added or removed since the last time the Observe was backed up. If _deep_ is `true`,
+		 * If the Observe has never been backed up, `isDirty` returns `undefined`.
 		 * `isDirty` will include nested Observes in its checks.
+		 * @param {bool} [deep=false] whether to check nested Observes
+		 * @return {bool} Whether the Observe has changed since the last time it was [can.Observe.backup.prototype.backup backed up].
 		 *
 		 * @codestart
 		 * var recipe = new can.Observe({
@@ -134,15 +135,15 @@ steal('can/util', 'can/observe', 'can/util/object', function (can) {
 		 * @description Restore saved values of an Observe's properties.
 		 *
 		 * @signature `observe.restore( [deep] )`
-		 * @param {bool} [deep=false] whether to restore properties in nested Observes
-		 * @return {can.Observe} The Observe, for chaining.
 		 *
 		 * `restore` sets the properties of an Observe back to what they were the last time 
-		 * [can.Observe.prototype.backup backup] was called. If _deep_ is `true`,
+		 * [can.Observe.backup.prototype.backup backup] was called. If _deep_ is `true`,
 		 * `restore` will also restore the properties of nested Observes.
 		 * 
 		 * `restore` will not remove properties that were added since the last backup, but it
 		 * will re-add properties that have been removed.
+		 * @param {bool} [deep=false] whether to restore properties in nested Observes
+		 * @return {can.Observe} The Observe, for chaining.
 		 * 
 		 * @codestart
 		 * var recipe = new can.Observe({

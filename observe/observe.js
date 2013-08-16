@@ -341,7 +341,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * @description Iterate over the keys of an Observe.
 		 * @signature `can.Observe.keys(observe)`
 		 * @param {can.Observe} observe the `can.Observe` to get the keys from
-		 * @return {Array} array An array containing the keys from _observe_.
+		 * @return {Array} An array containing the keys from _observe_.
 		 * 
 		 * @body
 		 * `keys` iterates over an observe to get an array of its keys.
