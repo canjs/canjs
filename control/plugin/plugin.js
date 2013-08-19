@@ -21,8 +21,14 @@ can.Control.setup = function() {
 	if ( this !== can.Control ) {
 
 		/**
-		 * @property can.Control.plugin.static.pluginName pluginName
+		 * @property {String} can.Control.plugin.static.pluginName pluginName
 		 * @parent can.Control.plugin
+		 *
+		 * @description
+		 *
+		 * Allows you to define the name of the jQuery plugin.
+		 *
+		 * @body
 		 *
 		 * Setting the static `pluginName` property allows you to override the default name
 		 * with your own.
