@@ -56,11 +56,15 @@ of the string, then they will be persisted.
 @return {Boolean} Whether __obj__ is an Array.
 
 @body
-`can.isArray(object)` returns if the object is an Array.
+`can.isArray(object)` returns if the object is an explicitly an Array. If `can.isArray` 
+is passed an array-like object, it will return `false`.
 
     can.isArray([]);    // true
-    can.isArray(false); // false
-    can.isArray(can.$("a")); // false
+    can.isArray([1, 2, 3]);    // true
+    can.isArray(can.makeArray({0: "foo", 1: "bar"})); // true
+    (function() { return can.isArray(arguments); })(); // false
+    can.isArray(document.querySelectorAll("p")); // false
+    can.isArray(true); // false
 */
 //
 /**
@@ -125,12 +129,11 @@ like [http://api.jquery.com/jQuery.param/ jQuery.param].
 */
 //
 /**
+@description Takes a string of name value pairs and returns a Object literal that represents those params.
 @function can.deparam
 @parent can.util
-@description Takes a string of name value pairs and returns a Object literal that represents those params.
-
-@signature `can.param(params)`
-@param {String} params a string like <code>"foo=bar&person[age]=3"</code>
+@signature `can.deparam(params)`
+@param {String} params A string like <code>"foo=bar&person[age]=3"</code>
 @return {Object} A JavaScript Object that represents the params:
 
     {
@@ -139,6 +142,10 @@ like [http://api.jquery.com/jQuery.param/ jQuery.param].
         age: "3"
       }
     }
+
+@body
+
+can.depararm will take any string 
 */
 //
 /**
@@ -346,7 +353,7 @@ __Delegate/undelegate binding to an HTMLElement__
 */
 //
 /**
-@description Trigger an event.
+@description Trigger an event on an object.
 @function can.trigger
 @parent can.util
 @signature `can.trigger(target, eventName[, args])`
@@ -354,7 +361,19 @@ __Delegate/undelegate binding to an HTMLElement__
 @param {String} eventName The event to trigger.
 @param {Array.<*>} [args] The event data.
 
-Trigger an event on an element or object.
+@body
+
+`can.trigger(target, eventName)` triggers an artificial event on an object and fires all
+associated callback handlers [can.bind that were bound to it.] This is exceptionally handly
+for simulating events. Such as the following:
+
+    var button = document.createElement('button');
+
+    can.bind.call(button, 'click', function() {
+        console.log('I have been clicked');
+    })
+
+    can.trigger(button, 'click');
 */
 //
 /**
@@ -612,14 +631,14 @@ function(s) for the success or failure state of both asynchronous and synchronou
 */
 //
 /**
-@description Add a callback to be called when a Deferred is resolved.
+@description Add one or more callbacks to be called when a Deferred is resolved.
 @function can.Deferred.prototype.done done
 @parent can.Deferred.prototype
-@signature `deferred.done(doneCallback)`
-@param {Function} doneCallback A callback to be called when the Deferred is resolved.
+@signature `deferred.done(doneCallbacks)`
+@param {Function} doneCallbacks A function, or an array of functions, to be called when the Deferred is resolved.
 
 @body
-`deferred.done(doneCallback)` adds handler(s) to be called when the Deferred object is resolved.
+`deferred.done(doneCallbacks)` adds one or more functions to be called when the Deferred object is resolved.
 
     var def = can.Deferred();
     def.done(function(){
@@ -631,11 +650,11 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @description Add a callback to be called when a Deferred is rejected.
 @function can.Deferred.prototype.fail fail
 @parent can.Deferred.prototype
-@signature `deferred.fail(failCallback)`
-@param {Function} failCallback A callback to be called when the Deferred is rejected.
+@signature `deferred.fail(failCallbacks)`
+@param {Function} failCallbacks A function, or an array of functions, to be called when the Deferred is rejected.
 
 @body
-`deferred.fail(failCallback)` adds handler(s) to be called when the Deferred object is rejected.
+`deferred.fail(failCallbacks)` adds one or more functions to be called when the Deferred object is rejected.
 
     var def = can.Deferred();
     def.fail(function(){
@@ -644,14 +663,14 @@ function(s) for the success or failure state of both asynchronous and synchronou
 */
 //
 /**
-@description Add a callback to be unconditionally called.
+@description Add one or more callbacks to be unconditionally called when a Deferred is resolved or rejected.
 @function can.Deferred.prototype.always always
 @parent can.Deferred.prototype
-@signature `deferred.always(alwaysCallback)`
-@param {Function} alwaysCallback A callback to be called whether the Deferred is resolved or rejected.
+@signature `deferred.always(alwaysCallbacks)`
+@param {Function} alwaysCallbacks A function, or an array of functions, to be called whether the Deferred is resolved or rejected.
 
 @body
-`deferred.always( alwaysCallbacks )` adds handler(s) to be called when the Deferred object is either resolved or rejected.
+`deferred.always( alwaysCallbacks )` adds one or more functions to be called when the Deferred object is either resolved or rejected.
 
     var def = can.Deferred();
     def.always( function(){
@@ -722,6 +741,7 @@ function(s) for the success or failure state of both asynchronous and synchronou
 /**
 @description Resolve a Deferred.
 @function can.Deferred.prototype.resolve resolve
+@parent can.Deferred.prototype
 @signature `deferred.resolve([argument])`
 @param {Object} [argument] The argument to call the `doneCallback` with.
 

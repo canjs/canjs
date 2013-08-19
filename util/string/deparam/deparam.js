@@ -12,21 +12,6 @@ steal('can/util','can/util/string', function( can ){
 	
 
 	can.extend(can, { 
-		/**
-		 * @function can.deparam
-		 * @parent can.util.function
-		 * Takes a string of name value pairs and returns a Object literal that represents those params.
-		 * 
-		 * @param {String} params a string like <code>"foo=bar&person[age]=3"</code>
-		 * @return {Object} A JavaScript Object that represents the params:
-		 * 
-		 *     {
-		 *       foo: "bar",
-		 *       person: {
-		 *         age: "3"
-		 *       }
-		 *     }
-		 */
 		deparam: function(params){
 		
 			var data = {},
