@@ -1,4 +1,4 @@
-steal('can/util', 'can/observe/sort', 'can/view/mustache', function(can) {
+(function() {
 
 module("can/observe/sort");
 

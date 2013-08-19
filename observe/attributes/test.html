@@ -17,11 +17,7 @@
 <script type="text/javascript" src="../../lib/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
-	steal(function() {
-		steal.config({
-			root: '../../'
-		});
-	}, "can/observe/attributes", "can/model", "can/util/fixture").then("can/test", "can/observe/attributes/attributes_test.js", function() {
+	steal("can/observe/attributes", "can/model", "can/util/fixture").then("can/test", "can/observe/attributes/attributes_test.js", function() {
 		QUnit.start();
 	});
 </script>

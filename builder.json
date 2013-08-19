@@ -156,11 +156,6 @@
 						"can/util/util.js": "can/util/jquery/jquery.js",
 						"jquery/jquery.js": "can/lib/jquery.1.9.1.js"
 					}
-				},
-				"shim": {
-					"jquery/jquery.js": {
-						"exports": "jQuery"
-					}
 				}
 			}
 		},
@@ -172,11 +167,6 @@
 					"*": {
 						"can/util/util.js": "can/util/zepto/zepto.js",
 						"zepto/zepto.js": "can/lib/zepto.1.0rc1.js"
-					}
-				},
-				"shim": {
-					"zepto/zepto.js": {
-						"exports": "Zepto"
 					}
 				}
 			}

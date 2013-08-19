@@ -18,24 +18,25 @@
 <div id="demo-html">
 <ul id='contacts'></ul>
 </div>	
-<script type='text/javascript' 
-        src='../../steal/steal.js'>   
-</script>
+<script type="text/javascript" src="../../lib/steal/steal.js"></script>
 <script type='text/javascript'  id="demo-source">
-steal('jquery/model','jquery/dom/fixture').then(function(){
+steal('can/model',
+    'can/observe/attributes',
+    'can/observe/elements',
+    'can/util/fixture',function(){
 
-$.fixture("GET /contacts.json", function(){
-	return [[{id: 1, name: 'Justin Meyer', birthday: 403938000000},
+can.fixture("GET /contacts.json", function(){
+	return [{id: 1, name: 'Justin Meyer', birthday: 403938000000},
 			 {id: 2, name: 'Brian Moschel', birthday: 437205600000},
-			 {id: 3, name: 'Mihael Konjevic', birthday: 483771600000}]];
+			 {id: 3, name: 'Mihael Konjevic', birthday: 483771600000}];
 });
 
-$.fixture("DELETE /contacts.json", function(){
+can.fixture("DELETE /contacts.json", function(){
 	return true;
 })
 		
 // A contact model
-$.Model.extend("Contact",{
+can.Model.extend("Contact",{
 	attributes : { 
 		birthday : 'date'
 	},
@@ -52,18 +53,18 @@ $.Model.extend("Contact",{
 Contact.findAll({},function(contacts){
   var contactsEl = $('#contacts');
   for(var i =0; i < contacts.length; i++){
-   $('<li>').model(contacts[i])
+   $('<li>').instance(contacts[i])
             .html(contacts[i].ageThisYear()+
                   " <a>DELETE</a>")
             .appendTo(contactsEl)
   }
 });
-$("#contacts a").live('click', function(){
+$(document.body).on('click',"#contacts a", function(){
   //get the element for this recipe
   var contactEl = $(this).closest('.contact')
   
   // get the conctact instance
-  contactEl.model()
+  contactEl.instance()
            // call destroy on the instance
            .destroy(function(){
                       // remove the element

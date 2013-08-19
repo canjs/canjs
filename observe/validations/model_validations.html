@@ -3,11 +3,7 @@
 <body>
 	<script src='../../lib/steal/steal.js'></script>
 	<script>
-	steal(function() {
-		steal.config({
-			root: '../../'
-		});
-	}).then('can/observe/validations').then('can/model',function(){
+	steal('can/observe/validations','can/model',function(){
 		var Person = can.Model.extend({
 			init: function(){
 				this.validate("birthday",function(birthday){

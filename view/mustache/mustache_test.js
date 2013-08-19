@@ -347,7 +347,13 @@ test("No arguments passed to helper with list", function() {
 
 test("Partials and observes", function() {
 	var div = document.createElement('div');
-	var dom = can.view(can.test.path('view/mustache/test/table.mustache'), {
+	
+	var template = can.view.mustache("table","<table><thead><tr>{{#data}}{{{>"+
+		can.test.path('view/mustache/test/partial.mustache')
+		+"}}}{{/data}}</tr></thead></table>")
+	
+	
+	var dom = can.view("table", {
 		data : new can.Observe({
 			list: ["hi","there"]
 		})

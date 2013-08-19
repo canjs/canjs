@@ -13,7 +13,6 @@
 			configuration[key] = window.parent.CONFIGURATION[key];
 		}
 	}
-	configuration.paths = configuration.paths || {};
 	// TODO pretty hacky. For some reason the original configuration object
 	// gets changed by Steal
 	configuration.shim = {
@@ -21,7 +20,7 @@
 			"exports": "jQuery"
 		}
 	};
-	configuration.root = configuration.root+"../../";
+	
 
 	steal.config(configuration);
 	steal('can/route', function (route) {

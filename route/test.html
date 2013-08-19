@@ -4,7 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="../lib/qunit/qunit.css"/>
 </head>
 <body>
-<h1 id="qunit-header">can.Observe Test Suite</h1>
+<h1 id="qunit-header">can.route Test Suite</h1>
 
 <h2 id="qunit-banner"></h2>
 
@@ -17,7 +17,9 @@
 <script type="text/javascript" src="../lib/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
-	steal("can/observe","can/observe/compute").then("can/test", "can/observe/observe_test.js", function() {
+	steal("can/route")
+		.then("can/test")
+		.then("can/route/route_test.js", function() {
 		QUnit.start();
 	});
 </script>

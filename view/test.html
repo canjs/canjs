@@ -17,11 +17,7 @@
 <script type="text/javascript" src="../lib/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
-	steal(function() {
-		steal.config({
-			root: '../'
-		});
-	}, "can/view", "can/view/micro",
+	steal("can/view", "can/view/micro",
 			"can/view/ejs",
 			"can/view/jaml",
 			"can/view/mustache",

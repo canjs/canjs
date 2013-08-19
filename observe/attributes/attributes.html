@@ -19,13 +19,9 @@
         src='../../lib/steal/steal.js'>
 </script>
 <script type='text/javascript' id="demo-source">   
-steal(function() {
-	steal.config({
-		root: '../../'
-	});
-}).then('can/observe/attributes', 'can/control', function(){
+steal('can/observe/attributes', 'can/control', function(){
 	
-var Contact = can.Observe({
+var Contact = can.Observe.extend({
   attributes : { 
     // labels birthday a date
     birthday : 'date'
@@ -59,7 +55,7 @@ var Contact = can.Observe({
   }
 });
 
-var AgeWidget = can.Control({
+var AgeWidget = can.Control.extend({
   init:function(){
     this.element.find('#input').val(
       this.options.contact.serialize('birthday'));
@@ -82,7 +78,7 @@ new AgeWidget('#demo-html', {
   })
 });
 
-})
+});
 </script>
     </body>
 </html>
