@@ -75,7 +75,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
 		})
 	}
 	$.event.special.inserted = {};
-	$.event.special.destroyed = {};
+	$.event.special.removed = {};
 
 	var inserted= function(elem){
 		if(elem.getElementsByTagName && $(document).has(elem).length ){

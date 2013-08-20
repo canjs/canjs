@@ -124,6 +124,7 @@ can.view.Scanner = Scanner = function( options ) {
 	// Cache the token registry.
 	this.tokenReg = new RegExp("(" + this.tokenReg.slice(0).concat(["<", ">", '"', "'"]).join("|") + ")","g");
 };
+
 var attributes = {};
 
 Scanner.attribute = function(attribute, callback){
@@ -241,7 +242,7 @@ Scanner.prototype = {
 			magicInTag = false,
 			// was there a special state
 			specialStates = {
-				attributeHookup: false,
+				attributeHookups: [],
 				// a stack of tagHookups
 				tagHookups: []
 			},
@@ -312,24 +313,32 @@ Scanner.prototype = {
 				case '>':
 					htmlTag = 0;
 					// content.substr(-1) doesn't work in IE7/8
-					var emptyElement = content.substr(content.length-1) == "/" || content.substr(content.length-2) == "--";
+					var emptyElement = (content.substr(content.length-1) == "/" || content.substr(content.length-2) == "--"),
+						attrs = "";
 					// if there was a magic tag
 					// or it's an element that has text content between its tags, 
 					// but content is not other tags add a hookup
 					// TODO: we should only add `can.EJS.pending()` if there's a magic tag 
 					// within the html tags.
+					if(specialStates.attributeHookups.length) {
+						attrs = "attrs: ['"+specialStates.attributeHookups.join("','")+"'], ";
+						specialStates.attributeHookups = [];
+					}
+					
+					
 					if(tagName === top(specialStates.tagHookups)){
 						
 						buff.push(put_cmd, 
 								 '"', clean(content), '"', 
-								 ",can.view.Scanner.hookupTag({scope: "+(this.text.scope || "this")+", subtemplate: function(){\n"+ startTxt+this.text.start || '' );
+								 ",can.view.Scanner.hookupTag({"+(attrs)+"scope: "+(this.text.scope || "this")+", subtemplate: function(){\n"+ startTxt+this.text.start || '' );
 						content = '';
-					} else if(magicInTag || (!popTagName && elements.tagToContentPropMap[ tagNames[tagNames.length -1] ] ) || specialStates.attributeHookup ){
+						
+					} else if(magicInTag || (!popTagName && elements.tagToContentPropMap[ tagNames[tagNames.length -1] ] ) || attrs ){
 						// make sure / of /> is on the right of pending
 						if(emptyElement){
-							put(content.substr(0,content.length-1), ",can.view.pending(),\"/>\"");
+							put(content.substr(0,content.length-1), ",can.view.pending({"+attrs+"scope: "+(this.text.scope || "this")+"}),\"/>\"");
 						} else {
-							put(content, ",can.view.pending(),\">\"");
+							put(content, ",can.view.pending({"+attrs+"scope: "+(this.text.scope || "this")+"}),\">\"");
 						}
 						content = '';
 						magicInTag = 0;
@@ -348,7 +357,7 @@ Scanner.prototype = {
 						// Don't pop next time
 						popTagName = false;
 					}
-					specialStates.attributeHookup = false;
+					specialStates.attributeHookups = [];
 					break;
 				case "'":
 				case '"':
@@ -362,7 +371,7 @@ Scanner.prototype = {
 							// TODO: does this handle `\`?
 							var attr = getAttrName();
 							if(attributes[attr]){
-								specialStates.attributeHookup = true;
+								specialStates.attributeHookups.push(attr);
 							}
 						} else if(quote === null){
 							quote = token;

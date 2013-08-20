@@ -434,8 +434,7 @@
 	});
 	
 	test("sub hookup", function(){
-		
-		
+
 		can.view.Scanner.tag("tabs",function(el, options){
 			
 			var frag = can.view.frag( options.subtemplate.call(options.scope) );
@@ -451,9 +450,7 @@
 			//ok( !options.subtemplate, "no subtemplate")
 			
 		})
-		
-	
-		
+
 		var template = can.view.mustache("<tabs>"+
 				"{{#each foodTypes}}"+
 				"<panel title='{{title}}'>{{content}}</panel>"+
@@ -469,17 +466,18 @@
 		var result = template({
 			foodTypes: foodTypes
 		}) 
-	
-	
-		
-		
-		
-		
-		
 		
 	})
 	
-	
+	test("on-event action",function(){
+		
+		can.view.Scanner.attribute(/^on-[\w\.]/, function(){
+			return function( el ){
+				
+			}
+		})
+		
+	})
 	
 	
 })();

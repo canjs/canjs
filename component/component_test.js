@@ -16,9 +16,9 @@ test("basic tabs",function(){
 			addPanel: function(panel){
 				this.attr("panels").push(panel)
 			},
-			removePanel: function(){
-				var panel = this.attr("panels");
-				panel.splice(panel.indexOf(panel),1)
+			removePanel: function(panel){
+				var panels = this.attr("panels");
+				panels.splice(panels.indexOf(panel),1)
 			},
 			setActive: function(scope){
 				this.attr("active",scope);
@@ -38,7 +38,6 @@ test("basic tabs",function(){
 		},
 		events: {
 			inserted: function(){
-				console.log("inserted")
 				this.element.parent().scope().addPanel( this.scope );
 			},
 			removed: function(){
@@ -64,8 +63,37 @@ var template = can.view.mustache("<tabs>\
 	can.append(can.$("#qunit-test-area"), template({
 		foodTypes: foodTypes
 	}) )
+
+	var testArea = can.$("#qunit-test-area")[0],
+		lis = testArea.getElementsByTagName("li");
+	equal( lis.length, 3, "three lis added");
 	
-	window.foodTypes = foodTypes
+	foodTypes.each(function(type, i){
+		equal(lis[i].innerHTML, type.attr("title"),"li "+i+" has the right content")
+	})
+	
+	foodTypes.push({
+		title: "Vegies",
+		content: "carrots, kale"
+	});
+	
+	lis = testArea.getElementsByTagName("li");
+	equal( lis.length, 4, "li added");
+	
+	foodTypes.each(function(type, i){
+		equal(lis[i].innerHTML, type.attr("title"),"li "+i+" has the right content")
+	})
+	
+	equal( testArea.getElementsByTagName("panel").length, 4, "panel added");
+	
+	foodTypes.shift();
+	
+	equal( lis.length, 3, "removed li");
+	
+	foodTypes.each(function(type, i){
+		equal(lis[i].innerHTML, type.attr("title"),"li "+i+" has the right content")
+	})
+	
 })
 	
 })()
