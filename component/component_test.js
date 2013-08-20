@@ -31,7 +31,6 @@ test("basic tabs",function(){
 			}
 		}
 	});
-	var count = 0;
 	can.Component.extend({
 		tag:"panel",
 		scope: {
@@ -39,11 +38,6 @@ test("basic tabs",function(){
 		},
 		events: {
 			inserted: function(){
-				console.log("inserted")
-				count++;
-				if(count> 10){
-					return;
-				}
 				this.element.parent().scope().addPanel( this.scope );
 			},
 			removed: function(){
