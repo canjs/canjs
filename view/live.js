@@ -25,6 +25,7 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 			data = {
 				teardownCheck: function(parent){
 					if(!parent){
+						console.log("tearing down")
 						teardown();
 					}
 				}
@@ -59,9 +60,9 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 					
 			// Insert it in the `document` or `documentFragment`
 			if( last.nextSibling ){
-				last.parentNode.insertBefore(newFrag, last.nextSibling);
+				can.insertBefore(last.parentNode, newFrag, last.nextSibling)
 			} else {
-				last.parentNode.appendChild(newFrag);
+				can.appendChild(last.parentNode, newFrag);
 			}
 		};
 
@@ -96,7 +97,7 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 								nodesMap[index-1], frag)
 					} else {
 						var el = nodesMap[index][0];
-						el.parentNode.insertBefore(frag, el)
+						can.insertBefore(el.parentNode, frag, el);
 					}
 					// register each item
 					can.each(newMappings,function(nodeList){
@@ -162,6 +163,7 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 
 			var nodes,
 				makeAndPut = function(val){
+					console.log("make and put",val)
 					// create the fragment, but don't hook it up
 					// we need to insert it into the document first
 					var frag = can.view.frag(val, parentNode),

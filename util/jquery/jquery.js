@@ -68,15 +68,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
 	$.fn.domManip = function(args, table, callback){
 		return oldDomManip.call(this,args,table, function(elem){
 			var ret = callback.apply(this, arguments);
-			if(elem.getElementsByTagName){
-				var elems = can.makeArray( elem.getElementsByTagName("*") );
-				$(elem).triggerHandler("inserted");
-				
-				for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
-					// Trigger the destroyed event
-					$(elem).triggerHandler("inserted");
-				}
-			}
+			inserted(elem)
 			
 			
 			return ret
@@ -84,6 +76,42 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
 	}
 	$.event.special.inserted = {};
 	$.event.special.destroyed = {};
+
+	var inserted= function(elem){
+		if(elem.getElementsByTagName && $(document).has(elem).length ){
+			var elems = can.makeArray( elem.getElementsByTagName("*") );
+			$(elem).triggerHandler("inserted");
+			
+			for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
+				// Trigger the destroyed event
+				$(elem).triggerHandler("inserted");
+			}
+		}
+	}
+	var manyInserted = function(elems){
+		for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
+			inserted(elem)
+		}
+	}
+
+	can.appendChild = function(el, child){
+		if(child.nodeType === 11){
+			var children = can.makeArray(child.childNodes);
+		} else {
+			var children = [child]
+		}
+		el.appendChild(child);
+		manyInserted(children)
+	}
+	can.insertBefore = function(el, child, ref){
+		if(child.nodeType === 11){
+			var children = can.makeArray(child.childNodes);
+		} else {
+			var children = [child];
+		}
+		el.insertBefore(child, ref);
+		manyInserted(children)
+	}
 
 	return can;
 });

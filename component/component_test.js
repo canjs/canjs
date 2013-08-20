@@ -38,6 +38,7 @@ test("basic tabs",function(){
 		},
 		events: {
 			inserted: function(){
+				console.log("inserted")
 				this.element.parent().scope().addPanel( this.scope );
 			},
 			removed: function(){
@@ -64,7 +65,7 @@ var template = can.view.mustache("<tabs>\
 		foodTypes: foodTypes
 	}) )
 	
-	
+	window.foodTypes = foodTypes
 })
 	
 })()
