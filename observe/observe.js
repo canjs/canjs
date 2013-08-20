@@ -119,7 +119,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 	 * @add can.Observe
 	 */
 	//
-	var Observe = can.Map = can.Observe = can.Construct( {
+	var Observe = can.Map = can.Observe = can.Construct.extend( {
 	/**
 	 * @static
 	 */
@@ -371,7 +371,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 	{
 		setup: function( obj ) {
 			// `_data` is where we keep the properties.
-			this._data = {};
+			this._data = {}
 			/**
 			 * @property {String} can.Observe.prototype._cid
 			 * @hide
@@ -382,7 +382,8 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 			can.cid(this, ".observe");
 			// Sets all `attrs`.
 			this._init = 1;
-			this.attr(obj);
+			var data = can.extend( can.extend(true,{},this.constructor.defaults || {}), obj )
+			this.attr(data);
 			this.bind('change'+this._cid,can.proxy(this._changes,this));
 			delete this._init;
 		},
@@ -2039,10 +2040,24 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 
 	can.List = Observe.List = list;
 	Observe.setup = function(){
-		can.Construct.setup.apply(this, arguments);
-		// I would prefer not to do it this way. It should
-		// be using the attributes plugin to do this type of conversion.
-		this.List = Observe.List({ Observe : this }, {});
+
+		can.Construct.setup.apply( this, arguments );
+		
+		
+		if(can.Map){
+			if(!this.defaults){
+				this.defaults = {};
+			}
+			for(var prop in this.prototype){
+				if(typeof this.prototype[prop] !== "function"){
+					this.defaults[prop] = this.prototype[prop];
+				}
+			}
+		}
+		if(can.List){
+			this.List = Observe.List({ Observe : this }, {});
+		}
+
 	}
 	return Observe;
 });

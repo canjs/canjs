@@ -655,9 +655,9 @@ steal('can/util','can/construct', function( can ) {
 	
 				// Setup to be destroyed...  
 				// don't bind because we don't want to remove it.
-				can.bind.call(element,"destroyed", destroyCB);
+				can.bind.call(element,"removed", destroyCB);
 				bindings.push(function( el ) {
-					can.unbind.call(el,"destroyed", destroyCB);
+					can.unbind.call(el,"removed", destroyCB);
 				});
 				return bindings.length;
 			}

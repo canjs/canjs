@@ -125,23 +125,8 @@ function( can, Scope ){
 			text: {
 				// This is the logic to inject at the beginning of a rendered template. 
 				// This includes initializing the `context` stack.
-				start: "var "+STACK+"= this instanceof can.view.Scope? this : new can.view.Scope(this);\n"
-				
-				/*'var ' + CONTEXT + ' = this && this.' + STACKED + ' ? this : [];' + CONTEXT + '.' + STACKED + ' = true;' +
-					'var ' + STACK + ' = function(context, self) {' +
-						'var s;' +
-						'if (arguments.length == 1 && context) {' +
-							's = !context.' + STACKED + ' ? [context] : context;' +
-						// Handle helpers with custom contexts (#228)
-						'} else if (!context.' + STACKED + ') {' +
-							's = [self, context];' +
-						'} else if (context && context === self && context.' + STACKED + ') {' +
-							's = context.slice(0);' +
-						'} else {' +
-							's = context && context.' + STACKED + ' ? context.concat([self]) : ' + STACK + '(context).concat([self]);' +
-						'}' +
-						'return (s.' + STACKED + ' = true) && s;' +
-					'};'*/
+				start: "var "+STACK+"= this instanceof can.view.Scope? this : new can.view.Scope(this);\n",
+				scope: "___st4ck"
 			},
 			
 			// An ordered token registry for the scanner.

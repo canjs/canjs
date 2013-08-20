@@ -17,12 +17,10 @@
 <script type="text/javascript" src="../lib/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
-	steal("can/view", "can/view/micro",
+	steal("can/view",
 			"can/view/ejs",
-			"can/view/jaml",
 			"can/view/mustache",
-			"can/observe",
-			"can/view/tmpl").then("can/test", "can/util/fixture", "can/view/view_test.js", function() {
+			"can/observe").then("can/test", "can/util/fixture", "can/view/view_test.js", function() {
 		QUnit.start();
 	});
 </script>

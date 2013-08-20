@@ -1,22 +1,74 @@
 (function(){
 	
 	
-test("basic select",function(){
+test("basic tabs",function(){
 	
-var template = "<canui-select can-data='Items' can-value='thing.itemId'>\
-	<option value='{{id}}'>{{title}}</option>\
-</canui-select>"
-	
-	
-	can.component("canui-select",{
-		init: function(){
-			var Model = this.scope(this.element.attr('can-data'));
-			
-			this.prop('items', new this.prop('data').List({}))
-		},
-		template: "{{#items}}{{>userTemplate}}{{/items}}"
+	can.Component.extend({
+		tag: "tabs",
+		template: 	"<ul>\
+			    		 {{#panels}}\
+			    			<li {{#isActive}}class='active'{{/isActive}} on-click='setActive'>{{title}}</li>\
+			    		 {{/panels}}\
+			    	</ul>\
+			    	<content></content>",
+		scope: {
+			panels: [],
+			addPanel: function(panel){
+				this.attr("panels").push(panel)
+			},
+			removePanel: function(){
+				var panel = this.attr("panels");
+				panel.splice(panel.indexOf(panel),1)
+			},
+			setActive: function(scope){
+				this.attr("active",scope);
+			},
+			// this is scope, not mustache
+			isActive: function( activeScope, title,options ) {
+				if(this.attr('active') == title){
+					return true;
+				}
+			}
+		}
 	});
+	var count = 0;
+	can.Component.extend({
+		tag:"panel",
+		scope: {
+			title: "@"
+		},
+		events: {
+			inserted: function(){
+				console.log("inserted")
+				count++;
+				if(count> 10){
+					return;
+				}
+				this.element.parent().scope().addPanel( this.scope );
+			},
+			removed: function(){
+				this.element.parent().scope().removePanel( this.scope );
+			}
+		}
+	})
 	
+	
+	
+var template = can.view.mustache("<tabs>\
+  {{#each foodTypes}}\
+    <panel title='{{title}}'>{{content}}</panel>\
+  {{/each}}\
+</tabs>")
+	
+	var foodTypes= new can.List([
+		{title: "Fruits", content: "oranges, apples"},
+		{title: "Breads", content: "pasta, cereal"},
+		{title: "Sweets", content: "ice cream, candy"}
+	])
+
+	can.append(can.$("#qunit-test-area"), template({
+		foodTypes: foodTypes
+	}) )
 	
 	
 })

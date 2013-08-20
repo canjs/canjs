@@ -57,11 +57,33 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
 	$.cleanData = function( elems ) {
 		$.each( elems, function( i, elem ) {
 			if ( elem ) {
-				can.trigger(elem,"destroyed",[],false);
+				can.trigger(elem,"removed",[],false);
 			}
 		});
 		oldClean(elems);
 	};
+	
+	var oldDomManip = $.fn.domManip;
+	
+	$.fn.domManip = function(args, table, callback){
+		return oldDomManip.call(this,args,table, function(elem){
+			var ret = callback.apply(this, arguments);
+			if(elem.getElementsByTagName){
+				var elems = can.makeArray( elem.getElementsByTagName("*") );
+				$(elem).triggerHandler("inserted");
+				
+				for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
+					// Trigger the destroyed event
+					$(elem).triggerHandler("inserted");
+				}
+			}
+			
+			
+			return ret
+		})
+	}
+	$.event.special.inserted = {};
+	$.event.special.destroyed = {};
 
 	return can;
 });

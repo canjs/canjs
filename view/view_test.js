@@ -415,4 +415,71 @@
 
 		equal(div.className, 'do=not=truncate=me', 'class is right');
 	});
+	
+	
+	test("basic scanner hookup", function(){
+		
+		can.view.Scanner.tag("panel",function(el, options){
+			
+			equal( options.scope.attr('foo'),"bar", "got scope and can read from it" );
+			equal( options.subtemplate.call({message: "hi"}), "<p>sub says hi</p>"  )
+			
+		})
+		
+		var template = can.view.mustache("<panel title='foo'><p>sub says {{message}}</p></panel>")
+		
+		
+		template({foo:"bar"})
+		
+	});
+	
+	test("sub hookup", function(){
+		
+		
+		can.view.Scanner.tag("tabs",function(el, options){
+			
+			var frag = can.view.frag( options.subtemplate.call(options.scope) );
+			var div = document.createElement("div");
+			div.appendChild(frag);
+			equal( div.innerHTML, "<panel title=\"Fruits\">oranges, apples</panel>"  )
+			
+		})
+		
+		can.view.Scanner.tag("panel",function( el, options ) {
+			ok( options.scope, "got scope");
+			return options.scope;
+			//ok( !options.subtemplate, "no subtemplate")
+			
+		})
+		
+	
+		
+		var template = can.view.mustache("<tabs>"+
+				"{{#each foodTypes}}"+
+				"<panel title='{{title}}'>{{content}}</panel>"+
+				"{{/each}}"+
+				"</tabs>");
+	
+		var foodTypes= new can.List([
+			{title: "Fruits", content: "oranges, apples"}//,
+			//{title: "Breads", content: "pasta, cereal"},
+			//{title: "Sweets", content: "ice cream, candy"}
+		])
+		
+		var result = template({
+			foodTypes: foodTypes
+		}) 
+	
+	
+		
+		
+		
+		
+		
+		
+	})
+	
+	
+	
+	
 })();

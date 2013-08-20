@@ -79,16 +79,19 @@ can.extend(can.view, {
 	},
 	pending: function() {
 		// TODO, make this only run for the right tagName
-		var hooks = pendingHookups.slice(0);
-		lastHookups = hooks;
-		pendingHookups = [];
+		var hooks = can.view.getHooks();
 		return can.view.hook(function(el){
 			can.each(hooks, function(fn){
 				fn(el);
 			});
 		});
 	},
-
+	getHooks: function(){
+		var hooks = pendingHookups.slice(0);
+		lastHookups = hooks;
+		pendingHookups = [];
+		return hooks;
+	},
 	/**
 	 * @function can.view.txt
 	 * @hide

@@ -60,11 +60,28 @@ var newLine = /(\r|\n)+/g,
 		// `h` - `0`.
 		// `q` - String `beforeQuote`.
 		return quote ? "'"+getAttrName()+"'" : (htmlTag ? 1 : 0);
+	},
+	// returns the top of a stack
+	top = function(stack){
+		return stack[stack.length-1]
 	};
+
+/**
+ * @constructor can.view.Scanner
+ * 
+ * @param {{text: can.view.Scanner.text, tokens: Array<can.view.Scanner.token>, helpers: Array<can.view.Scanner.helpers>}}
+ */
+//
+/**
+ * @typedef {{0:String,}}
+ */
 
 can.view.Scanner = Scanner = function( options ) {
   // Set options on self
   can.extend(this, {
+  		/**
+  		 * @typedef {{start: String, escape: String, scope: String}}  can.view.Scanner.text
+  		 */
 		text: {},
   	tokens: []
   }, options);
@@ -112,7 +129,30 @@ var attributes = {};
 Scanner.attribute = function(attribute, callback){
 	attributes[attribute] = callback;
 }
-
+var tags =  {};
+Scanner.tag = function( tagName, callback){
+	tags[tagName.toLowerCase()] = callback;
+}
+Scanner.hookupTag = function(options){
+	var hooks = can.view.getHooks();
+	return can.view.hook(function(el){
+		can.each(hooks, function(fn){
+			fn(el);
+		});
+		var res = tags[el.nodeName.toLowerCase() ](el, options),
+			scope = options.scope;
+		
+		if(res){
+			
+			if(scope !== res){
+				scope = scope.add(res)
+			}
+			
+			el.appendChild( can.view.frag( options.subtemplate.call(scope) ) );
+		}
+	});
+	
+}
 
 /**
  * Extend can.View to add scanner support.
@@ -199,8 +239,12 @@ Scanner.prototype = {
 			startTag = null,
 			// Was there a magic tag inside an html tag?
 			magicInTag = false,
-			// was there a special attribute
-			attributeHookup = false,
+			// was there a special state
+			specialStates = {
+				attributeHookup: false,
+				// a stack of tagHookups
+				tagHookups: []
+			},
 			// The current tag name.
 			tagName = '',
 			// stack of tagNames
@@ -260,7 +304,10 @@ Scanner.prototype = {
 						htmlTag = 1;
 						magicInTag = 0;
 					}
+					
 					content += token;
+					
+					
 					break;
 				case '>':
 					htmlTag = 0;
@@ -271,8 +318,14 @@ Scanner.prototype = {
 					// but content is not other tags add a hookup
 					// TODO: we should only add `can.EJS.pending()` if there's a magic tag 
 					// within the html tags.
-					if(magicInTag || (!popTagName && elements.tagToContentPropMap[ tagNames[tagNames.length -1] ] ) || attributeHookup ){
-						// make sure / of /> is on the left of pending
+					if(tagName === top(specialStates.tagHookups)){
+						
+						buff.push(put_cmd, 
+								 '"', clean(content), '"', 
+								 ",can.view.Scanner.hookupTag({scope: "+(this.text.scope || "this")+", subtemplate: function(){\n"+ startTxt+this.text.start || '' );
+						content = '';
+					} else if(magicInTag || (!popTagName && elements.tagToContentPropMap[ tagNames[tagNames.length -1] ] ) || specialStates.attributeHookup ){
+						// make sure / of /> is on the right of pending
 						if(emptyElement){
 							put(content.substr(0,content.length-1), ",can.view.pending(),\"/>\"");
 						} else {
@@ -283,6 +336,9 @@ Scanner.prototype = {
 					} else {
 						content += token;
 					}
+					
+					
+					
 					// if it's a tag like <input/>
 					if(emptyElement || popTagName){
 						// remove the current tag in the stack
@@ -292,7 +348,7 @@ Scanner.prototype = {
 						// Don't pop next time
 						popTagName = false;
 					}
-					attributeHookup = false;
+					specialStates.attributeHookup = false;
 					break;
 				case "'":
 				case '"':
@@ -306,7 +362,7 @@ Scanner.prototype = {
 							// TODO: does this handle `\`?
 							var attr = getAttrName();
 							if(attributes[attr]){
-								attributeHookup = true;
+								specialStates.attributeHookup = true;
 							}
 						} else if(quote === null){
 							quote = token;
@@ -317,14 +373,47 @@ Scanner.prototype = {
 					// Track the current tag
 					if(lastToken === '<'){
 						tagName = token.split(/\s/)[0];
-						if( tagName.indexOf("/") === 0 && tagNames[tagNames.length-1] === tagName.substr(1) ) {
-							// set tagName to the last tagName
-							// if there are no more tagNames, we'll rely on getTag.
-							tagName = tagNames[tagNames.length-1];
-							popTagName = true;
+						var isClosingTag = false;
+						
+						if( tagName.indexOf("/") === 0 ) {
+							isClosingTag = true;
+							var cleanedTagName = tagName.substr(1);
+						}
+						
+						if( isClosingTag ) { // </tag>
+							
+							// when we enter a new tag, pop the tag name stack
+							if( top( tagNames ) === cleanedTagName ) {
+								// set tagName to the last tagName
+								// if there are no more tagNames, we'll rely on getTag.
+								tagName = cleanedTagName;
+								popTagName = true;
+							}
+							
+							// if we are in a closing tag of a custom tag
+							if( top( specialStates.tagHookups) == cleanedTagName ) {
+								
+								// remove the last < from the content
+								put(content.substr(0, content.length-1));
+								
+								// finish the "section"
+								buff.push(finishTxt+"}}) );" );
+								
+								// the < belongs to the outside
+								content = "><"
+								specialStates.tagHookups.pop()
+							} 
+	
 						} else {
 							tagNames.push(tagName);
+							
+							if(tags[tagName]){
+								// we will hookup at the ending tag>
+								specialStates.tagHookups.push(tagName);
+							}
+
 						}
+						
 					}
 					content += token;
 					break;
@@ -446,7 +535,7 @@ Scanner.prototype = {
 			put(content);
 		}
 		buff.push(";");
-		
+		console.log(buff.join(''))
 		var template = buff.join(''),
 			out = {
 				out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"
