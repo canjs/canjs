@@ -5,7 +5,7 @@ steal('can/construct','can/observe','can/view','can/observe/compute',function(Co
 	}
 	
 	
-	var Scope = Construct({
+	var Scope = Construct.extend({
 		init: function(data, parent){
 			this._data = data;
 			this._parent = parent;
@@ -133,8 +133,20 @@ steal('can/construct','can/observe','can/view','can/observe/compute',function(Co
 			}
 			
 		},
-		bind: function(){
+		compute: function(attr){
+			var data = this.get(attr);
 			
+			if( isObserve(data.parent) ) {
+				return data.parent.compute(data.name);
+			} else {
+				can.compute(function(newValue){
+					if( arguments.length ) {
+						data.parent[data.name] = newValue;
+					} else {
+						return data.parent[data.name];
+					}
+				})
+			}
 		}
 	});
 	can.view.Scope = Scope;

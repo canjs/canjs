@@ -32,7 +32,7 @@ var newLine = /(\r|\n)+/g,
 	bracketNum = function(content){
 		return (--content.split("{").length) - (--content.split("}").length);
 	},
-	 myEval = function( script ) {
+	myEval = function( script ) {
 		eval(script);
 	},
 	attrReg = /([^\s]+)[\s]*=[\s]*$/,
@@ -125,22 +125,52 @@ can.view.Scanner = Scanner = function( options ) {
 	this.tokenReg = new RegExp("(" + this.tokenReg.slice(0).concat(["<", ">", '"', "'"]).join("|") + ")","g");
 };
 
-var attributes = {};
+Scanner.attributes = {};
+Scanner.regExpAttributes = {};
 
 Scanner.attribute = function(attribute, callback){
-	attributes[attribute] = callback;
+	if(typeof attribute == "string"){
+		Scanner.attributes[attribute] = callback;
+	} else {
+		Scanner.regExpAttributes[attribute] = {
+			match: attribute,
+			callback: callback
+		};
+	}
+	
 }
-var tags =  {};
+Scanner.hookupAttributes = function(options, el){
+	can.each(options && options.attrs || [], function(attr){
+		options.attr = attr;
+		if(Scanner.attributes[attr]) {
+			Scanner.attributes[attr](options,el);
+		} else {
+			can.each(Scanner.regExpAttributes,function(attrMatcher){
+				if(attrMatcher.match.test(attr)){
+					attrMatcher.callback(options, el)
+				}
+			})
+		}
+		
+	})
+}
 Scanner.tag = function( tagName, callback){
-	tags[tagName.toLowerCase()] = callback;
+	Scanner.tags[tagName.toLowerCase()] = callback;
 }
+Scanner.tags = {};
+
 Scanner.hookupTag = function(options){
 	var hooks = can.view.getHooks();
 	return can.view.hook(function(el){
 		can.each(hooks, function(fn){
 			fn(el);
 		});
-		var res = tags[el.nodeName.toLowerCase() ](el, options),
+		
+		var optionsTags = options.options._tags,
+			tagName= el.nodeName.toLowerCase(),
+			tagCallback = ( optionsTags && optionsTags[tagName] ) || Scanner.tags[tagName]
+			
+		var res = tagCallback(el, options),
 			scope = options.scope;
 		
 		if(res){
@@ -151,6 +181,7 @@ Scanner.hookupTag = function(options){
 			
 			el.appendChild( can.view.frag( options.subtemplate.call(scope) ) );
 		}
+		can.view.Scanner.hookupAttributes(options, el);
 	});
 	
 }
@@ -330,15 +361,15 @@ Scanner.prototype = {
 						
 						buff.push(put_cmd, 
 								 '"', clean(content), '"', 
-								 ",can.view.Scanner.hookupTag({"+(attrs)+"scope: "+(this.text.scope || "this")+", subtemplate: function(){\n"+ startTxt+this.text.start || '' );
+								 ",can.view.Scanner.hookupTag({"+(attrs)+"scope: "+(this.text.scope || "this")+",options: options, subtemplate: function(){\n"+ startTxt+this.text.start || '' );
 						content = '';
 						
 					} else if(magicInTag || (!popTagName && elements.tagToContentPropMap[ tagNames[tagNames.length -1] ] ) || attrs ){
 						// make sure / of /> is on the right of pending
 						if(emptyElement){
-							put(content.substr(0,content.length-1), ",can.view.pending({"+attrs+"scope: "+(this.text.scope || "this")+"}),\"/>\"");
+							put(content.substr(0,content.length-1), ",can.view.pending({"+attrs+"scope: "+(this.text.scope || "this")+",options: options}),\"/>\"");
 						} else {
-							put(content, ",can.view.pending({"+attrs+"scope: "+(this.text.scope || "this")+"}),\">\"");
+							put(content, ",can.view.pending({"+attrs+"scope: "+(this.text.scope || "this")+",options:options}),\">\"");
 						}
 						content = '';
 						magicInTag = 0;
@@ -370,9 +401,18 @@ Scanner.prototype = {
 							// Otherwise we are creating a quote.
 							// TODO: does this handle `\`?
 							var attr = getAttrName();
-							if(attributes[attr]){
+							if(Scanner.attributes[attr]){
 								specialStates.attributeHookups.push(attr);
+							} else {
+								can.each(Scanner.regExpAttributes,function(attrMatcher){
+									if( attrMatcher.match.test(attr) ) {
+										specialStates.attributeHookups.push(attr);
+									}
+								});
 							}
+							
+							
+							
 						} else if(quote === null){
 							quote = token;
 							beforeQuote = lastToken;
@@ -416,7 +456,7 @@ Scanner.prototype = {
 						} else {
 							tagNames.push(tagName);
 							
-							if(tags[tagName]){
+							if(Scanner.tags[tagName]){
 								// we will hookup at the ending tag>
 								specialStates.tagHookups.push(tagName);
 							}
@@ -554,6 +594,10 @@ Scanner.prototype = {
 		return out;
 	}
 };
+
+can.view.Scanner.tag("content",function(el, options){
+	return options.scope;
+})
 
 return Scanner;
 });

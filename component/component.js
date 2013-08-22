@@ -1,4 +1,4 @@
-steal("can/util","can/control","can/observe","can/view/mustache",function(can){
+steal("can/util","can/control","can/observe","can/view/mustache","can/view/mustache/bindings",function(can){
 	
 	var Component = can.Component = can.Construct.extend({
 		setup: function(){
@@ -58,19 +58,24 @@ steal("can/util","can/control","can/observe","can/view/mustache",function(can){
 			
 			
 			if( this.constructor.renderer ) {
-				
-				
-				var frag = this.constructor.renderer( renderedScope, this.helpers );
-				// render subtemplate
-				if(options.subtemplate){
-					var subtemplate = can.view.frag( options.subtemplate.call(renderedScope) );
-					// find content
-					var children = $(frag).children("content");
-					if(!children.length){
-						children = $(frag).children().find("content")
-					} 
-					children.replaceWith(subtemplate)
+				// add content to tags
+				var helpers = this.helpers || {};
+				if(!helpers._tags){
+					helpers._tags = {};
 				}
+				helpers._tags.content = function(el, rendererOptions){
+					console.log("holler?")
+					if(options.subtemplate){
+						var subtemplate = can.view.frag( options.subtemplate.call(renderedScope) );
+						$(el).replaceWith(subtemplate)
+					} else {
+						return rendererOptions.scope;
+					}
+				}
+				// somehow need to get <content>, and put subtemplate in there
+				var frag = this.constructor.renderer( renderedScope, helpers);
+				// render subtemplate
+				
 			} else {
 				var frag = can.view.frag( options.subtemplate.call(renderedScope) );
 			}

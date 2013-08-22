@@ -71,5 +71,46 @@ steal('./scope','funcunit/qunit',function(Scope){
 		equal(data.value, "justin", "computes on path will be evaluted")
 	})
 	
+	test("functions on an observe get called with this correctly", function(){
+		
+		var Person = can.Map.extend({
+			fullName: function(){
+				equal( this.attr('first'), "Justin" )
+			}
+		})
+		
+		var me = new Person({name: "Justin"})
+		var base = new Scope(me),
+			cur = base.add({other: "foo"})
+		
+		var data = cur.get("fullName");
+		
+		equal(data.value, Person.prototype.fullName, "got the raw function");
+		equal(data.parent, me, "parent provided")
+		
+	})
+	
+	test("Scope.prototype.compute", function(){
+		
+		var map = new can.Map()
+		
+		var base = new Scope( map )
+		
+		var age = base.compute("age")
+		
+		equal(age(), undefined, "age is not set")
+		
+		age.bind("change", function(ev, newVal, oldVal){
+			equal(newVal, 31, "newVal is provided correctly");
+			equal(oldVal, undefined,"oldVal is undefined")
+		})
+		
+		age(31);
+		
+		equal( map.attr("age"), 31, "maps age is set correctly");
+		
+		
+	})
+	
 	
 })

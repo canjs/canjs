@@ -1,5 +1,22 @@
 (function() {
-	module("can/view");
+	
+	var Scanner = can.view.Scanner;
+	
+	module("can/view",{
+		setup: function(){
+			this.scannerAttributes = Scanner.attributes;
+			this.scannerRegExpAttributes = Scanner.regExpAttributes;
+			this.scannerTags = Scanner.tags;
+			Scanner.attributes = {};
+			Scanner.regExpAttributes = {};
+			Scanner.tags = can.extend({}, Scanner.tags);
+		},
+		teardown: function(){
+			Scanner.attributes = this.scannerAttributes;
+			Scanner.regExpAttributes = this.scannerRegExpAttributes;
+			Scanner.tags = this.scannerTags;
+		}
+	});
 
 	test("registerNode, unregisterNode, and replace work", function(){
 
@@ -417,7 +434,7 @@
 	});
 	
 	
-	test("basic scanner hookup", function(){
+	test("basic scanner custom tags", function(){
 		
 		can.view.Scanner.tag("panel",function(el, options){
 			
@@ -469,15 +486,111 @@
 		
 	})
 	
-	test("on-event action",function(){
+	test("attribute matching",function(){
+		var item = 0;
 		
-		can.view.Scanner.attribute(/^on-[\w\.]/, function(){
-			return function( el ){
+		can.view.Scanner.attribute("on-click",function(data, el){
+			
+			ok(true, "attribute called");
+			equal(data.attr,"on-click","attr is on click")
+			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
+			var cur = data.scope.attr(".");
+			equal(foodTypes[item],cur, "can get the current scope");
+			var attr = el.getAttribute("on-click");
+			
+			equal( data.scope.attr(attr), doSomething, "can call a parent's function" )
+			
+			item++;
+		});
+		
+		var template = can.view.mustache("<div>"+
+				"{{#each foodTypes}}"+
+				"<p on-click='doSomething'>{{content}}</p>"+
+				"{{/each}}"+
+				"</div>");
+		
+		var foodTypes= new can.List([
+			{title: "Fruits", content: "oranges, apples"},
+			{title: "Breads", content: "pasta, cereal"},
+			{title: "Sweets", content: "ice cream, candy"}
+		])
+		var doSomething = function(){
 				
-			}
+		}
+		template({
+			foodTypes: foodTypes,
+			doSomething: doSomething
+		})
+	});
+	
+	test("regex attribute matching",function(){
+		var item = 0;
+		
+		can.view.Scanner.attribute(/on-[\w\.]+/,function(data, el){
+			
+			ok(true, "attribute called");
+			equal(data.attr,"on-click","attr is on click")
+			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
+			var cur = data.scope.attr(".");
+			
+			equal(foodTypes[item],cur, "can get the current scope");
+			
+			var attr = el.getAttribute("on-click");
+			
+			equal( data.scope.attr(attr), doSomething, "can call a parent's function" )
+			
+			item++;
 		})
 		
-	})
+		var template = can.view.mustache("<div>"+
+				"{{#each foodTypes}}"+
+				"<p on-click='doSomething'>{{content}}</p>"+
+				"{{/each}}"+
+				"</div>");
+		
+		var foodTypes= new can.List([
+			{title: "Fruits", content: "oranges, apples"},
+			{title: "Breads", content: "pasta, cereal"},
+			{title: "Sweets", content: "ice cream, candy"}
+		])
+		var doSomething = function(){
+				
+		}
+		template({
+			foodTypes: foodTypes,
+			doSomething: doSomething
+		})
+	});
 	
+	test("content element", function(){
+
+		var template = can.view.mustache("{{#foo}}<content></content>{{/foo}}");
+		
+		var context = new can.Map({foo: "bar"});
+		var frag = template(context,{
+			_tags: {
+				content: function(el, options){
+					equal(el.nodeName.toLowerCase() ,"content", "got an element");
+					equal(options.scope.attr('.'), "bar", "got the context of content");
+					el.innerHTML = "updated"
+				}
+			}
+		});
+		
+		equal(frag.childNodes[0].nodeName.toLowerCase(),"content")
+		
+		equal(frag.childNodes[0].innerHTML, "updated", "content is updated")
+		
+		context.removeAttr("foo");
+		
+		equal(frag.childNodes[0].nodeType,3, "only a text element remains");
+		
+		context.attr("foo","bar");
+		
+		equal(frag.childNodes[0].nodeName.toLowerCase(),"content")
+		
+		equal(frag.childNodes[0].innerHTML, "updated", "content is updated")
+		
+	})
 	
 })();

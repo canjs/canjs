@@ -1287,7 +1287,7 @@ function( can, Scope ){
 			if (lastArg && lastArg[HASH]) {
 				opts.hash = args.pop()[HASH];
 			}
-			args.push(opts);
+			args.push(opts, partialContext);
 
 			// Call the helper.
 			return helper.fn.apply(partialContext, args) || '';
@@ -1423,10 +1423,6 @@ function( can, Scope ){
 			return ref
 		}
 		
-		
-		
-		
-		
 		// special behaviors if an argument
 		if(isArgument){
 			if(can.isFunction(data.value)){
@@ -1444,6 +1440,11 @@ function( can, Scope ){
 		// Invoke the length to ensure that Observe.List events fire.
 		if (data.value && isObserve(data.value) && isArrayLike(data.value) && data.value.attr('length')){
 			return data.value;
+		}
+		// If it's a function on an observe's prototype
+		else if( can.isFunction(data.value) && isObserve(data.parent) && data.parent.constructor.prototype[data.name] === data.value  ){
+			// make sure the value is a function that calls the value
+			return can.proxy(data.value, data.parent)
 		}
 		// Add support for observes
 		else if ( data.parent && isObserve(data.parent)) {
