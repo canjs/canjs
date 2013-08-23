@@ -126,7 +126,8 @@ function( can, Scope ){
 				// This is the logic to inject at the beginning of a rendered template. 
 				// This includes initializing the `context` stack.
 				start: "var "+STACK+"= this instanceof can.view.Scope? this : new can.view.Scope(this);\n",
-				scope: "___st4ck"
+				scope: "___st4ck",
+				options: ",options: options"
 			},
 			
 			// An ordered token registry for the scanner.
@@ -1270,7 +1271,7 @@ function( can, Scope ){
 				// Update the options with a function/inverse (the inner templates of a section).
 				opts = {
 					fn: function(updatedContext){
-						if(updatedContext){
+						if(updatedContext && !(updatedContext instanceof  Scope)){
 							updatedContext = context.add(updatedContext)
 						}
 						return options.fn(updatedContext)

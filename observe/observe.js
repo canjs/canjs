@@ -382,10 +382,19 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 			can.cid(this, ".observe");
 			// Sets all `attrs`.
 			this._init = 1;
+			this._setupComputes();
 			var data = can.extend( can.extend(true,{},this.constructor.defaults || {}), obj )
 			this.attr(data);
 			this.bind('change'+this._cid,can.proxy(this._changes,this));
 			delete this._init;
+		},
+		_setupComputes: function(){
+			var prototype = this.constructor.prototype
+			for(var prop in prototype){
+				if(prototype[prop] && prototype[prop].isComputed){
+					this[prop] = prototype[prop].clone(this);
+				}
+			}
 		},
 		_bindsetup: makeBindSetup(),
 		_bindteardown: function(){
@@ -676,7 +685,15 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		// Reads a property directly if an `attr` is provided, otherwise
 		// returns the "real" data object itself.
 		__get: function( attr ) {
-			return attr ? this._data[attr] : this._data;
+			if(attr){
+				if(this[attr] && this[attr].isComputed){
+					return this[attr]()
+				} else {
+					return this._data[attr]
+				}
+			} else {
+				return this._data;
+			}
 		},
 		// Sets `attr` prop as value on this object where.
 		// `attr` - Is a string of properties or an array  of property values.
@@ -742,6 +759,11 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		},
 		// Directly sets a property on this `object`.
 		___set: function( prop, val ) {
+			
+			if(this[prop] && this[prop].isComputed){
+				this[prop](val)
+			}
+			
 			this._data[prop] = val;
 			// Add property directly for easy writing.
 			// Check if its on the `prototype` so we don't overwrite methods like `attrs`.

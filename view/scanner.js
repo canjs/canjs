@@ -77,14 +77,16 @@ var newLine = /(\r|\n)+/g,
  */
 
 can.view.Scanner = Scanner = function( options ) {
-  // Set options on self
-  can.extend(this, {
+	// Set options on self
+	can.extend(this, {
   		/**
-  		 * @typedef {{start: String, escape: String, scope: String}}  can.view.Scanner.text
+  		 * @typedef {{start: String, escape: String, scope: String, options: String}}  can.view.Scanner.text
   		 */
 		text: {},
-  	tokens: []
-  }, options);
+		tokens: []
+	}, options);
+	// make sure it's an empty string if it's not
+	this.text.options = this.text.options || ""
 	
 	// Cache a token lookup
 	this.tokenReg = [];
@@ -356,20 +358,28 @@ Scanner.prototype = {
 						specialStates.attributeHookups = [];
 					}
 					
-					
-					if(tagName === top(specialStates.tagHookups)){
+					if(tagName === top(specialStates.tagHookups) ){
 						
 						buff.push(put_cmd, 
 								 '"', clean(content), '"', 
-								 ",can.view.Scanner.hookupTag({"+(attrs)+"scope: "+(this.text.scope || "this")+",options: options, subtemplate: function(){\n"+ startTxt+this.text.start || '' );
-						content = '';
+								 ",can.view.Scanner.hookupTag({"+(attrs)+"scope: "+(this.text.scope || "this")+this.text.options)
 						
+						// if it's an empty tag	 
+						if( tokens[i] === "<" &&  tokens[i+1] === "/"+tagName ){
+							buff.push("}));");
+							content = token;
+							specialStates.tagHookups.pop()
+						} else {
+							buff.push(",subtemplate: function(){\n"+ startTxt+this.text.start || '' );
+							content = '';
+						}
+
 					} else if(magicInTag || (!popTagName && elements.tagToContentPropMap[ tagNames[tagNames.length -1] ] ) || attrs ){
 						// make sure / of /> is on the right of pending
 						if(emptyElement){
-							put(content.substr(0,content.length-1), ",can.view.pending({"+attrs+"scope: "+(this.text.scope || "this")+",options: options}),\"/>\"");
+							put(content.substr(0,content.length-1), ",can.view.pending({"+attrs+"scope: "+(this.text.scope || "this")+this.text.options+"}),\"/>\"");
 						} else {
-							put(content, ",can.view.pending({"+attrs+"scope: "+(this.text.scope || "this")+",options:options}),\">\"");
+							put(content, ",can.view.pending({"+attrs+"scope: "+(this.text.scope || "this")+this.text.options+"}),\">\"");
 						}
 						content = '';
 						magicInTag = 0;
@@ -584,6 +594,7 @@ Scanner.prototype = {
 			put(content);
 		}
 		buff.push(";");
+		console.log(buff.join(''))
 		var template = buff.join(''),
 			out = {
 				out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"

@@ -39,6 +39,9 @@
                 },
                 "shim": {
                     "test/test/test": ["can"],
+                    "test/component/component_test": ["can/component",
+                            "test/test/test"
+                    ],
                     "test/construct/construct_test": ["can/construct",
                             "test/test/test"
                     ],
@@ -68,6 +71,10 @@
                     ],
                     "test/view/mustache/mustache_test": [
                             "can/view/mustache", "test/test/test"
+                    ],
+                    "test/view/mustache/bindings/bindings_test": [
+                            "can/view/mustache/bindings",
+                            "test/test/test"
                     ],
                     "test/model/queue/queue_test": ["can/model/queue",
                             "test/test/test"
@@ -108,6 +115,7 @@
             });
 
             require(["can/util/fixture", "test/test/test",
+                    "test/component/component_test",
                     "test/construct/construct_test",
                     "test/observe/observe_test",
                     "test/observe/compute/compute_test",
@@ -117,6 +125,7 @@
                     "test/route/route_test",
                     "test/control/route/route_test",
                     "test/view/mustache/mustache_test",
+                    "test/view/mustache/bindings/bindings_test",
                     "test/model/queue/queue_test",
                     "test/construct/super/super_test",
                     "test/construct/proxy/proxy_test",

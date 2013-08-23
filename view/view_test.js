@@ -450,6 +450,20 @@
 		
 	});
 	
+	test("custom tags without subtemplate", function(){
+		can.view.Scanner.tag("empty-tag",function(el, options){
+			
+			
+			ok( !options.subtemplate, "There is no subtemplate"  )
+			
+		})
+		
+		var template = can.view.mustache("<empty-tag title='foo'></empty-tag>")
+		
+		
+		template({foo:"bar"})
+	})
+	
 	test("sub hookup", function(){
 
 		can.view.Scanner.tag("tabs",function(el, options){
@@ -591,6 +605,7 @@
 		
 		equal(frag.childNodes[0].innerHTML, "updated", "content is updated")
 		
-	})
+	});
+	
 	
 })();

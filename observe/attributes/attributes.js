@@ -263,25 +263,6 @@ can.each([ can.Observe, can.Model ], function(clss){
 	};
 });
 
-var oldSetup = can.Observe.prototype.setup;
-
-can.Observe.prototype.setup = function(obj) {
-
-	var diff = {};
-
-	oldSetup.call(this, obj);
-
-	can.each( this.constructor.defaults, function( value, key ) {
-		if ( ! this.hasOwnProperty( key )) {
-			diff[key] = value;
-		}
-	}, this);
-
-	this._init = 1;
-	this.attr( diff );
-	delete this._init;
-};
-
 /**
  * @hide
  * @function can.Observe.prototype.convert

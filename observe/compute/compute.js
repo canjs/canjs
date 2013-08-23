@@ -166,8 +166,9 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 				value = newVal;
 			},
 			// this compute can be a dependency of other computes
-			// 
-			canReadForChangeEvent = true;
+			canReadForChangeEvent = true,
+			// save for clone
+			args = can.makeArray(arguments);
 
 		computed = function(newVal){
 			// setting ...
@@ -349,7 +350,13 @@ steal('can/util', 'can/util/bind', function(can, bind) {
 			 * If _handler_ is not supplied, all handlers bound to _eventType_
 			 * will be removed.
 			 */
-			unbind: can.unbindAndTeardown
+			unbind: can.unbindAndTeardown,
+			clone: function(context){
+				if(context){
+					args[1] = context
+				}
+				return can.compute.apply(can,args);
+			}
 		});
 	};
 	can.compute.binder = computeBinder;

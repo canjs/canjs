@@ -489,6 +489,44 @@ test("compute bound to input value",function(){
 
 })
 
+test("compute on the prototype", function(){
+	var Person = can.Map.extend({
+		fullName: can.compute(function(fullName){
+			if(arguments.length){
+				var parts = fullName.split(" ");
+				this.attr({
+					first:parts[0],
+					last: parts[1]
+				})
+			} else {
+				return this.attr('first')+" "+this.attr('last')
+			}
+			
+		})
+	});
+	
+	var me = new Person();
+	
+	var fn = me.attr({
+		first: "Justin",
+		last: "Meyer"
+	}).attr("fullName");
+	
+	equal(fn, "Justin Meyer", "can read attr")
+	
+	me.attr("fullName","Brian Moschel");
+	
+	equal(me.attr("first"),"Brian","set first name");
+	equal(me.attr("last"),"Moschel","set last name")
+	
+	
+})
+
+
+
+
+
+
 
 
 })();

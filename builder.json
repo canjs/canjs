@@ -2,6 +2,12 @@
 	"filename": "can.custom.js",
 	"banner": "/*!\n * <%= pkg.title || pkg.name %> - <%= pkg.version %>\n * <%= pkg.homepage %>\n * Copyright (c) <%= new Date().getFullYear() %> <%= pkg.author.name %>\n * <%= new Date().toUTCString() %>\n * Licensed <%= pkg.licenses[0].type %><% if(typeof url !== \"undefined\") { %>\n * Includes: <%= ids %>\n * Download from: <%= url %>\n<% } %> */\n",
 	"modules": {
+		"can/component": {
+			"name": "can.Component",
+			"description": "Custom elements and widgets",
+			"type": "core",
+			"isDefault": true
+		},
 		"can/construct": {
 			"name": "can.Construct",
 			"description": "Inheritable constructor functions",
@@ -57,9 +63,14 @@
 			"isDefault": true
 		},
 		"can/view/mustache": {
-			"name": "can.View.Mustache",
+			"name": "can.view.Mustache",
 			"type": "plugin",
 			"description": "Live-binding Handlebars and Mustache views"
+		},
+		"can/view/mustache/bindings": {
+			"name": "can.view.bindings",
+			"type": "plugin",
+			"description": "Two way bindings and in-template declarative event handlers."
 		},
 		"can/model/queue": {
 			"name": "can.Model.Queue",

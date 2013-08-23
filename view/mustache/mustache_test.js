@@ -1459,7 +1459,7 @@ test("Contexts are not always passed to partials properly", function() {
 // https://github.com/bitovi/canjs/issues/231
 test("Functions and helpers should be passed the same context", function() {
 	can.Mustache.registerHelper("to_upper", function(fn, options) {
-		if(arguments.length > 1) {
+		if(!fn.fn) {
 			return typeof fn === "function" ? fn().toString().toUpperCase() : fn.toString().toUpperCase();
 		}
 		else {

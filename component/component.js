@@ -38,12 +38,34 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 	},{
 		setup: function(el, options){
 			
-			var data = {};
+			var data = {},
+				component = this;
+			
 			can.each(this.constructor.attributeScopeMappings,function(val, prop){
 				data[prop] = el.getAttribute(val)
 			})
 			
-			this.scope = new this.constructor.Map(data);
+			can.each(can.makeArray(el.attributes), function(node, index){
+				var name = node.nodeName.toLowerCase();
+				
+				if(!component.constructor.attributeScopeMappings[name] && name !== "data-view-id"){
+					data[name] = options.scope.attr(name);
+					var compute = options.scope.compute(name),
+						handler = function(ev, newVal){
+							componentScope.attr(name, newVal)
+						}
+					// compute only given if bindable
+					if(compute){
+						compute.bind("change", handler);
+						can.bind.call(el,"removed",function(){
+							compute.unbind("change", handler);
+						})
+					}
+					
+				}
+			})
+			
+			var componentScope = this.scope = new this.constructor.Map(data);
 			
 			$(el).data("scope", this.scope)
 			
@@ -55,8 +77,6 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 			var renderer = typeof options.subtemplate == "string" ?
 				can.view.mustache(options.subtemplate) : options.subtemplate;
 			
-			
-			
 			if( this.constructor.renderer ) {
 				// add content to tags
 				var helpers = this.helpers || {};
@@ -64,7 +84,6 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 					helpers._tags = {};
 				}
 				helpers._tags.content = function(el, rendererOptions){
-					console.log("holler?")
 					if(options.subtemplate){
 						var subtemplate = can.view.frag( options.subtemplate.call(renderedScope) );
 						$(el).replaceWith(subtemplate)
