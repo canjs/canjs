@@ -594,7 +594,7 @@ Scanner.prototype = {
 			put(content);
 		}
 		buff.push(";");
-		console.log(buff.join(''))
+		//console.log(buff.join(''))
 		var template = buff.join(''),
 			out = {
 				out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"

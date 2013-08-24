@@ -89,6 +89,12 @@ var getAttr = function(el, attrName){
 		el.getAttribute(attrName);
 }
 
+test("basics", function(){
+	var template = can.view.mustache("<ul>{{#items}}<li>{{helper foo}}</li>{{/items}}</ul>");
+	template()
+	ok(true,"just to force the issue")
+})
+
 test("Model hookup", function(){
 
 	// Single item hookup
@@ -1968,6 +1974,10 @@ test("Helpers can be passed . or this for the active context", function() {
 
 	equal( children[0].innerHTML, 'Justin is attending Reception' );
 	equal( children[1].innerHTML, 'Justin is attending Wedding' );
-})
+});
+
+
+
+
 
 })();

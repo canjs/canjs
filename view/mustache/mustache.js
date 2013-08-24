@@ -28,13 +28,28 @@ function( can, Scope ){
 		HASH = '___h4sh',
 		// An alias for the function that adds a new context to the context stack.
 		STACK = '___st4ck',
-		//STACKED = '___st4ck3d',
+		// STACKED = '___st4ck3d',
 		// An alias for the most used context stacking call.
 		CONTEXT_STACK = STACK,//+"="+STACK+".add(this)",
-		//CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
+		// CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
 		CONTEXT_OBJ = '{context:' + CONTEXT_STACK + ',options:options}',
 		
-		/**
+		// matches arguments inside a {{ }}
+		argumentsRegExp = /((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
+		
+		// matches a literal number, string or regexp 
+		literalNumberStringBooleanRegExp = /^(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|((.+?)=(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|(.+))))$/,
+		
+		// returns an object literal that we can use to look up a value in the current scope
+		makeLookupLiteral = function(type){
+			return '{get:"'+type.replace(/"/g,'\\"')+'"}'
+		},
+		// returns if the object is a lookup
+		isLookup = function(obj){
+			return obj && typeof obj.get == "string"
+		},
+		
+		/*
 		 * Checks whether an object is a can.Observe.
 		 * @param  {[can.Observe]}  observable
 		 * @return {Boolean} returns if the object is an observable.
@@ -43,7 +58,7 @@ function( can, Scope ){
 			return obj != null && can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
 		},
 		
-		/**
+		/*
 		 * Tries to determine if the object passed is an array.
 		 * @param  {Array}  obj The object to check.
 		 * @return {Boolean} returns if the object is an array.
@@ -1125,46 +1140,34 @@ function( can, Scope ){
 								hashing = false,
 								arg, split, m;
 							
+							// Start the content render block.
+							result.push('can.Mustache.txt(\n'+CONTEXT_OBJ+',\n' + (mode ? '"'+mode+'"' : 'null') + ',');
+							
 							// Parse the helper arguments.
 							// This needs uses this method instead of a split(/\s/) so that 
 							// strings with spaces can be correctly parsed.
-							(can.trim(content)+' ').replace(/((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g, function(whole, part) {
-								args.push(part);
-							});
-
-							// Start the content render block.
-							result.push('can.Mustache.txt(\n'+CONTEXT_OBJ+',\n' + (mode ? '"'+mode+'"' : 'null') + ',\n');
-						
-							// Iterate through the helper arguments, if there are any.
-							for (; arg = args[i]; i++) {
-								i && result.push(',');
+							var args = [],
+								hashes = [];
+							
+							(can.trim(content)+' ').replace(argumentsRegExp, function(whole, arg) {
 								
 								// Check for special helper arguments (string/number/boolean/hashes).
-								if (i && (m = arg.match(/^(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|((.+?)=(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|(.+))))$/))) {
+								if (i && (m = arg.match(literalNumberStringBooleanRegExp))) {
 									// Found a native type like string/number/boolean.
 									if (m[2]) {
-										result.push(m[0]);
+										args.push(m[0]);
 									}
 									// Found a hash object.
 									else {
 										// Open the hash object.
-										if (!hashing) {
-											hashing = true;
-											result.push('{' + HASH + ':{');
-										}
 										
-										// Add the key/value.
-										result.push(m[4], ':', m[6] ? m[6] : 'can.Mustache.get(\n"' + m[5].replace(/"/g,'\\"') + '",\n' + CONTEXT_OBJ + ')\n');
-										
-										// Close the hash if this was the last argument.
-										if (i == args.length - 1) {
-											result.push('}}');
-										}
+										hashes.push(m[4]+":"+(m[6] ? m[6] : makeLookupLiteral(m[5])))
 									}
 								}
 								// Otherwise output a normal interpolation reference.
 								else {
-									result.push('can.Mustache.get("' + 
+									args.push( makeLookupLiteral(arg) );
+									/*result.push('can.Mustache.get("' + 
 										// Include the reference name.
 										arg.replace(/"/g,'\\"') + '",' +
 										// Then the stack of context.
@@ -1173,17 +1176,26 @@ function( can, Scope ){
 										// if it is a known helper (anything with > 0 arguments).
 										(i == 0 && args.length > 1 ? ',true' : ',false') +
 										(i > 0 ? ',true' : ',false') +
-										')');
+										')');*/
 								}
+								i++;
+								
+							});
+
+							result.push(args.join(","));
+							if( hashes.length ) {
+								result.push(",{"+HASH+":{"+hashes.join(",")+"}}")
 							}
+							
+						
 						}
 						
 						// Create an option object for sections of code.
-						mode && mode != 'else' && result.push(',[\n{_:function(){\n');
+						mode && mode != 'else' && result.push(',[\n\n');
 						switch (mode) {
 							// Truthy section
 							case '#':
-								result.push('return ___v1ew.join("");\n}},{fn:function(' + CONTEXT + '){var ___v1ew = [];');
+								result.push('{fn:function(' + CONTEXT + '){var ___v1ew = [];');
 								break;
 							// If/else section
 							// Falsey section
@@ -1211,10 +1223,13 @@ function( can, Scope ){
 							 * 
 							 */
 							case 'else':
-							case '^':
 								result.push('return ___v1ew.join("");}},\n{inverse:function(' + CONTEXT + '){\nvar ___v1ew = [];');
 								break;
-							// Not a section
+							case '^':
+								result.push('{inverse:function(' + CONTEXT + '){\nvar ___v1ew = [];');
+								break;
+							
+							// Not a section, no mode
 							default:
 								result.push(');');
 								break;
@@ -1247,14 +1262,38 @@ function( can, Scope ){
 	 * @param {String|Object} name	The string (or sometimes object) to pass to the given helper method.
 	 */
 	Mustache.txt = function(context, mode, name) {
-		// Grab the extra arguments to pass to helpers.
-		var args = Array.prototype.slice.call(arguments, 3),
-			// Create a default `options` object to pass to the helper.
-			options = can.extend.apply(can, [{
-					fn: function() {},
-					inverse: function() {}
-			}].concat(mode ? args.pop() : []));
-			
+		
+		var args = [],
+			options = {
+				fn: function() {},
+				inverse: function() {}
+			},
+			hash; //Array.prototype.slice.call(arguments, 3)
+		
+		// convert lookup values to actual values in name, arguments, and hash
+		for(var i =3; i < arguments.length;i++){
+			var arg = arguments[i]
+			if(mode && can.isArray( arg )){
+				// merge into options
+				options = can.extend.apply(can, [options].concat(arg))
+			} else if(arg[HASH]){
+				hash = arg[HASH];
+				// get values on hash
+				for(var prop in hash){
+					if(isLookup(hash[prop]) ){
+						hash[prop] = Mustache.get(hash[prop].get, context)
+					}
+				}
+			} else if(isLookup(arg)){
+				args.push( Mustache.get(arg.get, context, false, true) );
+			} else {
+				args.push(arg)
+			}
+		}
+		
+		if( isLookup(name) ){
+			name = Mustache.get(name.get, context, args.length , false)
+		}	
 			
 		var extra = {};
 		if(context.context) {
@@ -1287,9 +1326,8 @@ function( can, Scope ){
 			opts.contexts = context;
 
 			// Add the hash to `options` if one exists
-			if (lastArg && lastArg[HASH]) {
-				opts.hash = args.pop()[HASH];
-			}
+			opts.hash = hash;
+			
 			args.push(opts)
 			// Call the helper.
 			return helper.fn.apply(partialContext, args) || '';
