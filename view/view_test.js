@@ -478,7 +478,6 @@
 		can.view.Scanner.tag("panel",function( el, options ) {
 			ok( options.scope, "got scope");
 			return options.scope;
-			//ok( !options.subtemplate, "no subtemplate")
 			
 		})
 
@@ -498,7 +497,52 @@
 			foodTypes: foodTypes
 		}) 
 		
+	});
+	
+	
+	test("sub hookup passes helpers", function(){
+
+		can.view.Scanner.tag("tabs",function(el, options){
+			
+			var frag = can.view.frag( options.subtemplate.call(options.scope,{
+				helpers: {
+					tabsHelper: function(){
+						return "TabsHelper"
+					}
+				}
+			}) );
+			var div = document.createElement("div");
+			div.appendChild(frag);
+			equal( div.innerHTML, "<panel title=\"Fruits\">TabsHelperoranges, apples</panel>"  )
+			
+		})
+		
+		can.view.Scanner.tag("panel",function( el, options ) {
+			ok( options.scope, "got scope");
+			return options.scope;
+			
+		})
+
+		var template = can.view.mustache("<tabs>"+
+				"{{#each foodTypes}}"+
+				"<panel title='{{title}}'>{{tabsHelper}}{{content}}</panel>"+
+				"{{/each}}"+
+				"</tabs>");
+	
+		var foodTypes= new can.List([
+			{title: "Fruits", content: "oranges, apples"}//,
+			//{title: "Breads", content: "pasta, cereal"},
+			//{title: "Sweets", content: "ice cream, candy"}
+		])
+		
+		var result = template({
+			foodTypes: foodTypes
+		}) 
+		
 	})
+	
+	
+	
 	
 	test("attribute matching",function(){
 		var item = 0;

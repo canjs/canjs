@@ -15,7 +15,7 @@ test("basic tabs",function(){
 		template: 	
 			"<ul>"+
 	    		 "{{#panels}}"+
-	    			"<li {{#isActive}}class='active'{{/isActive}} can-click='updateActive'>{{title}}</li>"+
+	    			"<li {{#isActive}}class='active'{{/isActive}} can-click='makeActive'>{{title}}</li>"+
 	    		 "{{/panels}}"+
 	    	"</ul>"+
 	    	"<content></content>",
@@ -41,10 +41,6 @@ test("basic tabs",function(){
 				}
 				can.Map.stopBatch()
 			},
-			// ev.context, ev.scope
-			updateActive: function(el, ev, panel){
-				this.makeActive(panel)
-			},
 			makeActive: function(panel){
 				this.attr("active",panel);
 				this.attr("panels").each(function(panel){
@@ -55,10 +51,8 @@ test("basic tabs",function(){
 			},
 			// this is scope, not mustache
 			// consider removing scope as arg
-			isActive: function(options, panel) {
-				if(this.attr('active') == panel){
-					return options.fn(panel);
-				}
+			isActive: function( panel ) {
+				return this.attr('active') == panel
 			}
 		}
 	});
@@ -171,7 +165,7 @@ test("treecombo", function(){
 			breadcrumb: [],
 			selected: [],
 			title: "@",
-			selectableItems: can.compute(function(){
+			selectableItems: function(){
 				var breadcrumb = this.attr("breadcrumb");
 		      	
 				// if there's an item in the breadcrumb
@@ -184,27 +178,20 @@ test("treecombo", function(){
 					// return the top list of items
 					return this.attr('items');
 				}
-			}),
-			isSelected: function( options, panel ){
-				if(this.attr("selected").indexOf(panel) > -1){
-					return options.fn();
-				} else {
-					return options.inverse()
-				}
 			},
-			showChildren: function( el, ev, item ) {
+			showChildren: function( item, el, ev ) {
 				ev.stopPropagation();
 				this.attr('breadcrumb').push(item)
 			},
 			emptyBreadcrumb: function( ) {
 				this.attr("breadcrumb").attr([], true)
 			},
-			updateBreadcrumb: function( el, ev, item ){
+			updateBreadcrumb: function( item ){
 				var breadcrumb = this.attr("breadcrumb"),
 					index = breadcrumb.indexOf(item);
 				breadcrumb.splice(index+1, breadcrumb.length - index- 1 );
 			},
-			toggle: function(el, ev, item){
+			toggle: function(item){
 				var selected = this.attr('selected'),
 					index = selected.indexOf(item);
 			    if(index === -1 ){
@@ -212,6 +199,15 @@ test("treecombo", function(){
 			    } else {
 			      	selected.splice(index, 1) 
 			    }
+			}
+		},
+		helpers: {
+			isSelected: function( options ){
+				if(this.attr("selected").indexOf( options.context ) > -1){
+					return options.fn();
+				} else {
+					return options.inverse()
+				}
 			}
 		}
 	})

@@ -1263,7 +1263,7 @@ function( can, Scope ){
 		}
 
 		// Check for a registered helper or a helper-like function.
-		if (helper = (Mustache.getHelper(name,extra) || (can.isFunction(name) && !name.isComputed && { fn: name }))) {
+		if (helper = (Mustache.getHelper(name,extra) || (can.isFunction(name) && !name.isComputed && !name.isObserveMethod && { fn: name }))) {
 			// Use the most recent context as `this` for the helper.
 			var partialContext = context.attr("."),
 			//var stack = context[STACKED] && context,
@@ -1276,27 +1276,32 @@ function( can, Scope ){
 						}
 						return options.fn(updatedContext)
 					},
-					inverse: can.proxy(options.inverse, partialContext)
+					inverse: can.proxy(options.inverse, partialContext),
+					context: partialContext,
+					scope: context
 				}, 
 				lastArg = args[args.length-1];
 			
 			// Store the context stack in the options if one exists
 			
 			opts.contexts = context;
-			
+
 			// Add the hash to `options` if one exists
 			if (lastArg && lastArg[HASH]) {
 				opts.hash = args.pop()[HASH];
 			}
-			args.push(opts, partialContext);
-
+			args.push(opts)
 			// Call the helper.
 			return helper.fn.apply(partialContext, args) || '';
 		}
 
-		// if a compute, get the value
-		if( can.isFunction(name) && name.isComputed ){
-			name = name();
+		
+		if( can.isFunction(name)  ){
+			if ( name.isComputed ) {
+				name = name();
+			} else if( name.isObserveMethod){
+				name = name(context.attr('.'), context);
+			}
 		}
 
 		// An array of arguments to check for truthyness when evaluating sections.
@@ -1400,6 +1405,7 @@ function( can, Scope ){
 	 * @param {Boolean} [isHelper]  Whether the reference is seen as a helper.
 	 */
 	Mustache.get = function(ref, contexts, isHelper, isArgument) {
+		
 		if(isHelper){
 			// highest priority to registered helpers
 			if(Mustache.getHelper(ref, options)){
@@ -1445,7 +1451,10 @@ function( can, Scope ){
 		// If it's a function on an observe's prototype
 		else if( can.isFunction(data.value) && isObserve(data.parent) && data.parent.constructor.prototype[data.name] === data.value  ){
 			// make sure the value is a function that calls the value
-			return can.proxy(data.value, data.parent)
+			var val = can.proxy(data.value, data.parent);
+			// mark val as method
+			val.isObserveMethod = true;
+			return val;
 		}
 		// Add support for observes
 		else if ( data.parent && isObserve(data.parent)) {

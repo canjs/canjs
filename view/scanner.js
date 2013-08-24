@@ -370,7 +370,7 @@ Scanner.prototype = {
 							content = token;
 							specialStates.tagHookups.pop()
 						} else {
-							buff.push(",subtemplate: function(){\n"+ startTxt+this.text.start || '' );
+							buff.push(",subtemplate: function(helpers){can.extend(options.helpers,helpers);\n"+ startTxt+this.text.start || '' );
 							content = '';
 						}
 

@@ -85,12 +85,20 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 				}
 				helpers._tags.content = function(el, rendererOptions){
 					if(options.subtemplate){
-						var subtemplate = can.view.frag( options.subtemplate.call(renderedScope) );
+						var subtemplate = can.view.frag( options.subtemplate.call(renderedScope, helpers) );
 						$(el).replaceWith(subtemplate)
 					} else {
 						return rendererOptions.scope;
 					}
 				}
+				can.each(helpers, function(val, prop){
+					if(can.isFunction(val)) {
+						helpers[prop] = function(){
+							return val.apply(componentScope, arguments)
+						}
+					}
+				});
+				
 				// somehow need to get <content>, and put subtemplate in there
 				var frag = this.constructor.renderer( renderedScope, helpers);
 				// render subtemplate

@@ -20,7 +20,7 @@
 			{title: "Breads", content: "pasta, cereal"},
 			{title: "Sweets", content: "ice cream, candy"}
 		])
-		var doSomething = function(el , ev, foodType){
+		var doSomething = function(foodType, el , ev){
 			ok(true, "doSomething called")
 			equal(el[0].nodeName.toLowerCase(), "p", "this is the element");
 			equal(ev.type, "click","1st argument is the event");

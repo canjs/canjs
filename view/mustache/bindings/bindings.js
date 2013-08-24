@@ -39,7 +39,7 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			scopeData = data.scope.get(attr),
 			handler = function(ev){
 				
-				return scopeData.value.call(scopeData.parent, $(this), ev, data.scope.attr(".") )
+				return scopeData.value.call(scopeData.parent,data.scope.attr("."), $(this), ev )
 			};
 		
 		can.bind.call( el, event, handler);
