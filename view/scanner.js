@@ -193,21 +193,7 @@ Scanner.hookupTag = function(options){
  */
 Scanner.prototype = {
 
-	helpers: [
-		/**
-		 * Check if its a func like `()->`.
-		 * @param {String} content
-		 */
-		{
-			name:/\s*\(([\$\w]+)\)\s*->([^\n]*)/,
-			fn: function(content){
-				var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
-					parts = content.match(quickFunc);
-
-				return "can.proxy(function(__){var " + parts[1] + "=can.$(__);" + parts[2] + "}, this);";
-			}
-		}
-	],
+	helpers: [],
 
 	scan: function(source, name){
 		var tokens = [],
@@ -594,13 +580,12 @@ Scanner.prototype = {
 			put(content);
 		}
 		buff.push(";");
-		//console.log(buff.join(''))
 		var template = buff.join(''),
 			out = {
-				out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"
+				out: (this.text.outStart||"") + template + " "+finishTxt+(this.text.outEnd || "")
 			};
 		// Use `eval` instead of creating a function, because it is easier to debug.
-		myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
+		myEval.call(out, 'this.fn = (function('+this.text.argNames+'){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
 
 		return out;
 	}

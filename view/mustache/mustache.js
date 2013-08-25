@@ -22,17 +22,19 @@ function( can, Scope ){
 	//
 	// An alias for the context variable used for tracking a stack of contexts.
 	// This is also used for passing to helper functions to maintain proper context.
-	var CONTEXT = '___st4ck',
+	var CONTEXT = '__sc0pe',
 		// An alias for the variable used for the hash object that can be passed
 		// to helpers via `options.hash`.
 		HASH = '___h4sh',
 		// An alias for the function that adds a new context to the context stack.
-		STACK = '___st4ck',
+		STACK = '__sc0pe',
 		// STACKED = '___st4ck3d',
 		// An alias for the most used context stacking call.
 		CONTEXT_STACK = STACK,//+"="+STACK+".add(this)",
 		// CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
 		CONTEXT_OBJ = '{context:' + CONTEXT_STACK + ',options:options}',
+		// argument names used to start the function (used by scanner and steal)
+		ARG_NAMES = STACK+",options",
 		
 		// matches arguments inside a {{ }}
 		argumentsRegExp = /((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
@@ -121,16 +123,19 @@ function( can, Scope ){
 	 *			 message: "foo"
 	 *		 })
 	 */
-	render = function( object, options ) {
-		object = object || {};
+	render = function( data, options ) {
+		if(!(data instanceof can.view.Scope)){
+			data = new can.view.Scope(data || {});
+		}
+		
 		options = options || {};
 		if(!options.helpers && !options.partials){
-			options.helpers = options;
+			options = {
+				helpers: options
+			};
 		}
-		return this.template.fn.call(object, object, {
-			_data: object,
-			options: options
-		});
+		
+		return this.template.fn.call(data, data, options);
 	};
 
 	can.extend(Mustache.prototype, {
@@ -140,9 +145,10 @@ function( can, Scope ){
 			text: {
 				// This is the logic to inject at the beginning of a rendered template. 
 				// This includes initializing the `context` stack.
-				start: "var "+STACK+"= this instanceof can.view.Scope? this : new can.view.Scope(this);\n",
-				scope: "___st4ck",
-				options: ",options: options"
+				start: "",//"var "+STACK+"= this instanceof can.view.Scope? this : new can.view.Scope(this);\n",
+				scope: "__sc0pe",
+				options: ",options: options",
+				argNames: ARG_NAMES
 			},
 			
 			// An ordered token registry for the scanner.
@@ -352,7 +358,7 @@ function( can, Scope ){
 						// Get the template name and call back into the render method,
 						// passing the name and the current context.
 						var templateName = can.trim(content.replace(/^>\s?/, '')).replace(/["|']/g, "");
-						return "options.partials && options.partials['"+templateName+"'] ? can.Mustache.renderPartial(options.partials['"+templateName+"']," + 
+						return "options.partials &&\noptions.partials['"+templateName+"'] ? can.Mustache.renderPartial(options.partials['"+templateName+"']," + 
 							CONTEXT_STACK + ",options) : can.Mustache.render('" + templateName + "', " + CONTEXT_STACK + ")";
 					}
 				},
@@ -418,7 +424,16 @@ function( can, Scope ){
 							"can.data(can.$(__),'" + attr + "', this.attr('.')); }, " + CONTEXT_STACK + ")";
 					}
 				},
-				
+				{
+					name:/\s*\(([\$\w]+)\)\s*->([^\n]*)/,
+					fn: function(content){
+						var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
+							parts = content.match(quickFunc);
+						
+						//find 
+						return "can.proxy(function(__){var " + parts[1] + "=can.$(__);with("+STACK+".attr('.')){" + parts[2] + "}}, this);";
+					}
+				},
 				// ### Transformation (default)
 				//
 				// This transforms all content to its interpolated equivalent,
@@ -527,22 +542,22 @@ function( can, Scope ){
 				//
 				// 		var ___v1ew = [];
 				// 		var ___c0nt3xt = [];
-				// 		___c0nt3xt.___st4ck = true;
-				// 		var ___st4ck = function(context, self) {
+				// 		___c0nt3xt.__sc0pe = true;
+				// 		var __sc0pe = function(context, self) {
 				// 			var s;
 				// 			if (arguments.length == 1 && context) {
-				// 				s = !context.___st4ck ? [context] : context;
+				// 				s = !context.__sc0pe ? [context] : context;
 				// 			} else {
-				// 				s = context && context.___st4ck 
+				// 				s = context && context.__sc0pe 
 				//					? context.concat([self]) 
-				//					: ___st4ck(context).concat([self]);
+				//					: __sc0pe(context).concat([self]);
 				// 			}
-				// 			return (s.___st4ck = true) && s;
+				// 			return (s.__sc0pe = true) && s;
 				// 		};
 				//
 				// The `___v1ew` is the the array used to serialize the view.
 				// The `___c0nt3xt` is a stacking array of contexts that slices and expands with each nested section.
-				// The `___st4ck` function is used to more easily update the context stack in certain situations.
+				// The `__sc0pe` function is used to more easily update the context stack in certain situations.
 				// Usually, the stack function simply adds a new context (`self`/`this`) to a context stack. 
 				// However, custom helpers will occasionally pass override contexts that need their own context stack.
 				//
@@ -558,9 +573,9 @@ function( can, Scope ){
 				//
 				//		___v1ew.push("\"");
 				//		___v1ew.push(can.view.txt(1, '', 0, this, function() {
-				// 			return can.Mustache.txt(___st4ck(___c0nt3xt, this), null, 
+				// 			return can.Mustache.txt(__sc0pe(___c0nt3xt, this), null, 
 				//				can.Mustache.get("a.b.c.d.e.name", 
-				//					___st4ck(___c0nt3xt, this))
+				//					__sc0pe(___c0nt3xt, this))
 				//			);
 				//		}));
 				//		___v1ew.push("\" == \"Phil\"");
@@ -589,8 +604,8 @@ function( can, Scope ){
 				//
 				//		___v1ew.push("\"");
 				// 		___v1ew.push(can.view.txt(0, '', 0, this, function() {
-				// 			return can.Mustache.txt(___st4ck(___c0nt3xt, this), "#", 
-				//				can.Mustache.get("a", ___st4ck(___c0nt3xt, this)), 
+				// 			return can.Mustache.txt(__sc0pe(___c0nt3xt, this), "#", 
+				//				can.Mustache.get("a", __sc0pe(___c0nt3xt, this)), 
 				//					[{
 				// 					_: function() {
 				// 						return ___v1ew.join("");
@@ -601,10 +616,10 @@ function( can, Scope ){
 				// 						___v1ew.push(can.view.txt(1, '', 0, this, 
 				//								function() {
 				//  								return can.Mustache.txt(
-				// 									___st4ck(___c0nt3xt, this), 
+				// 									__sc0pe(___c0nt3xt, this), 
 				// 									null, 
 				// 									can.Mustache.get("b.c.d.e.name", 
-				// 										___st4ck(___c0nt3xt, this))
+				// 										__sc0pe(___c0nt3xt, this))
 				// 								);
 				// 							}
 				// 						));
@@ -622,7 +637,7 @@ function( can, Scope ){
 				// 
 				// Within the `fn` function is the section's render context, which in this case will render anything between the `{{#a}}` and `{{/a}}` tokens.
 				// This function has `___c0nt3xt` as an argument because custom helpers can pass their own override contexts. For any case where custom helpers
-				// aren't used, `___c0nt3xt` will be equivalent to the `___st4ck(___c0nt3xt, this)` stack created by its parent section. The `inverse` function
+				// aren't used, `___c0nt3xt` will be equivalent to the `__sc0pe(___c0nt3xt, this)` stack created by its parent section. The `inverse` function
 				// works similarly, except that it is added when `{{^a}}` and `{{else}}` are used. `var ___v1ew = []` is specified in `fn` and `inverse` to 
 				// ensure that live binding in nested sections works properly.
 				//
@@ -1262,7 +1277,6 @@ function( can, Scope ){
 	 * @param {String|Object} name	The string (or sometimes object) to pass to the given helper method.
 	 */
 	Mustache.txt = function(context, mode, name) {
-		
 		var args = [],
 			options = {
 				fn: function() {},
@@ -1881,7 +1895,7 @@ function( can, Scope ){
 
 		// Returns a `function` that renders the view.
 		script: function( id, src ) {
-			return "can.Mustache(function(_CONTEXT,_VIEW) { " + new Mustache({
+			return "can.Mustache(function("+ARG_NAMES+") { " + new Mustache({
 				text: src,
 				name: id
 			}).template.out + " })";
