@@ -580,6 +580,7 @@ Scanner.prototype = {
 			put(content);
 		}
 		buff.push(";");
+		console.log(buff.join(''))
 		var template = buff.join(''),
 			out = {
 				out: (this.text.outStart||"") + template + " "+finishTxt+(this.text.outEnd || "")

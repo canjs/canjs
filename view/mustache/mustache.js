@@ -22,19 +22,14 @@ function( can, Scope ){
 	//
 	// An alias for the context variable used for tracking a stack of contexts.
 	// This is also used for passing to helper functions to maintain proper context.
-	var CONTEXT = '__sc0pe',
+	var SCOPE = 'scope',
 		// An alias for the variable used for the hash object that can be passed
 		// to helpers via `options.hash`.
 		HASH = '___h4sh',
-		// An alias for the function that adds a new context to the context stack.
-		STACK = '__sc0pe',
-		// STACKED = '___st4ck3d',
 		// An alias for the most used context stacking call.
-		CONTEXT_STACK = STACK,//+"="+STACK+".add(this)",
-		// CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
-		CONTEXT_OBJ = '{context:' + CONTEXT_STACK + ',options:options}',
+		CONTEXT_OBJ = '{scope:' + SCOPE + ',options:options}',
 		// argument names used to start the function (used by scanner and steal)
-		ARG_NAMES = STACK+",options",
+		ARG_NAMES = SCOPE+",options",
 		
 		// matches arguments inside a {{ }}
 		argumentsRegExp = /((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
@@ -145,8 +140,8 @@ function( can, Scope ){
 			text: {
 				// This is the logic to inject at the beginning of a rendered template. 
 				// This includes initializing the `context` stack.
-				start: "",//"var "+STACK+"= this instanceof can.view.Scope? this : new can.view.Scope(this);\n",
-				scope: "__sc0pe",
+				start: "",//"var "+SCOPE+"= this instanceof can.view.Scope? this : new can.view.Scope(this);\n",
+				scope: SCOPE,
 				options: ",options: options",
 				argNames: ARG_NAMES
 			},
@@ -359,7 +354,7 @@ function( can, Scope ){
 						// passing the name and the current context.
 						var templateName = can.trim(content.replace(/^>\s?/, '')).replace(/["|']/g, "");
 						return "options.partials &&\noptions.partials['"+templateName+"'] ? can.Mustache.renderPartial(options.partials['"+templateName+"']," + 
-							CONTEXT_STACK + ",options) : can.Mustache.render('" + templateName + "', " + CONTEXT_STACK + ")";
+							SCOPE + ",options) : can.Mustache.render('" + templateName + "', " + SCOPE + ")";
 					}
 				},
 
@@ -421,7 +416,7 @@ function( can, Scope ){
 						return "can.proxy(function(__){" +
 							// "var context = this[this.length-1];" +
 							// "context = context." + STACKED + " ? context[context.length-2] : context; console.warn(this, context);" +
-							"can.data(can.$(__),'" + attr + "', this.attr('.')); }, " + CONTEXT_STACK + ")";
+							"can.data(can.$(__),'" + attr + "', this.attr('.')); }, " + SCOPE + ")";
 					}
 				},
 				{
@@ -431,7 +426,7 @@ function( can, Scope ){
 							parts = content.match(quickFunc);
 						
 						//find 
-						return "can.proxy(function(__){var " + parts[1] + "=can.$(__);with("+STACK+".attr('.')){" + parts[2] + "}}, this);";
+						return "can.proxy(function(__){var " + parts[1] + "=can.$(__);with("+SCOPE+".attr('.')){" + parts[2] + "}}, this);";
 					}
 				},
 				// ### Transformation (default)
@@ -1210,7 +1205,7 @@ function( can, Scope ){
 						switch (mode) {
 							// Truthy section
 							case '#':
-								result.push('{fn:function(' + CONTEXT + '){var ___v1ew = [];');
+								result.push('{fn:function(' + SCOPE + '){var ___v1ew = [];');
 								break;
 							// If/else section
 							// Falsey section
@@ -1238,10 +1233,10 @@ function( can, Scope ){
 							 * 
 							 */
 							case 'else':
-								result.push('return ___v1ew.join("");}},\n{inverse:function(' + CONTEXT + '){\nvar ___v1ew = [];');
+								result.push('return ___v1ew.join("");}},\n{inverse:function(' + SCOPE + '){\nvar ___v1ew = [];');
 								break;
 							case '^':
-								result.push('{inverse:function(' + CONTEXT + '){\nvar ___v1ew = [];');
+								result.push('{inverse:function(' + SCOPE + '){\nvar ___v1ew = [];');
 								break;
 							
 							// Not a section, no mode
@@ -1276,9 +1271,11 @@ function( can, Scope ){
 	 * @param {String} mode		The mode to evaluate the section with: # for truthy, ^ for falsey
 	 * @param {String|Object} name	The string (or sometimes object) to pass to the given helper method.
 	 */
-	Mustache.txt = function(context, mode, name) {
-		var args = [],
-			options = {
+	Mustache.txt = function(scopeAndOptions, mode, name) {
+		var scope = scopeAndOptions.scope,
+			options = scopeAndOptions.options,
+			args = [],
+			helperOptions = {
 				fn: function() {},
 				inverse: function() {}
 			},
@@ -1289,58 +1286,50 @@ function( can, Scope ){
 			var arg = arguments[i]
 			if(mode && can.isArray( arg )){
 				// merge into options
-				options = can.extend.apply(can, [options].concat(arg))
+				helperOptions = can.extend.apply(can, [helperOptions].concat(arg))
 			} else if(arg[HASH]){
 				hash = arg[HASH];
 				// get values on hash
 				for(var prop in hash){
 					if(isLookup(hash[prop]) ){
-						hash[prop] = Mustache.get(hash[prop].get, context)
+						hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions)
 					}
 				}
 			} else if(isLookup(arg)){
-				args.push( Mustache.get(arg.get, context, false, true) );
+				args.push( Mustache.get(arg.get, scopeAndOptions, false, true) );
 			} else {
 				args.push(arg)
 			}
 		}
 		
 		if( isLookup(name) ){
-			name = Mustache.get(name.get, context, args.length , false)
+			name = Mustache.get(name.get, scopeAndOptions, args.length , false)
 		}	
 			
-		var extra = {};
-		if(context.context) {
-			extra = context.options;
-			context = context.context;
-		}
 
 		// Check for a registered helper or a helper-like function.
-		if (helper = (Mustache.getHelper(name,extra) || (can.isFunction(name) && !name.isComputed && !name.isObserveMethod && { fn: name }))) {
-			// Use the most recent context as `this` for the helper.
-			var partialContext = context.attr("."),
-			//var stack = context[STACKED] && context,
-			//	context = (stack && context[context.length - 1]) || context,
-				// Update the options with a function/inverse (the inner templates of a section).
+		if (helper = (Mustache.getHelper(name,options) || (can.isFunction(name) && !name.isComputed && !name.isObserveMethod && { fn: name }))) {
+			// Use the most recent scope as `this` for the helper.
+			var partialContext = scope.attr("."),
+				// Update the helperOptions with a function/inverse that always gets called with a scope object
 				opts = {
 					fn: function(updatedContext){
 						if(updatedContext && !(updatedContext instanceof  Scope)){
-							updatedContext = context.add(updatedContext)
+							updatedContext = scope.add(updatedContext)
 						}
-						return options.fn(updatedContext)
+						return helperOptions.fn(updatedContext)
 					},
-					inverse: can.proxy(options.inverse, partialContext),
-					context: partialContext,
-					scope: context
-				}, 
-				lastArg = args[args.length-1];
-			
-			// Store the context stack in the options if one exists
-			
-			opts.contexts = context;
-
-			// Add the hash to `options` if one exists
-			opts.hash = hash;
+					inverse: function(updatedContext){
+						if(updatedContext && !(updatedContext instanceof  Scope)){
+							updatedContext = scope.add(updatedContext)
+						}
+						return helperOptions.inverse(updatedContext)
+					},
+					scope: partialContext,
+					scope: scope,
+					contexts: scope,
+					hash: hash
+				};
 			
 			args.push(opts)
 			// Call the helper.
@@ -1352,7 +1341,7 @@ function( can, Scope ){
 			if ( name.isComputed ) {
 				name = name();
 			} else if( name.isObserveMethod){
-				name = name(context.attr('.'), context);
+				name = name(scope.attr('.'), scope);
 			}
 		}
 
@@ -1396,7 +1385,7 @@ function( can, Scope ){
 						
 						// Add the reference to the list in the contexts.
 						for (i = 0; i < name.length; i++) {
-							result.push(options.fn(context.add(name[i]|| '')) );
+							result.push(helperOptions.fn(scope.add(name[i]|| '')) );
 							
 							// Ensure that live update works on observable lists
 							isObserveList && name.attr(''+i);
@@ -1405,12 +1394,12 @@ function( can, Scope ){
 					}
 					// Normal case.
 					else {
-						return options.fn(context.add(name || {})) || '';
+						return helperOptions.fn(scope.add(name || {})) || '';
 					}
 					break;
 				// Falsey section.
 				case '^':
-					return options.inverse(context.add(name || {})) || '';
+					return helperOptions.inverse(scope.add(name || {})) || '';
 					break;
 				default:
 					// Add + '' to convert things like numbers to strings.
@@ -1456,29 +1445,29 @@ function( can, Scope ){
 	 * @param {Object} context  The context to use for checking for a reference if it doesn't exist in the object.
 	 * @param {Boolean} [isHelper]  Whether the reference is seen as a helper.
 	 */
-	Mustache.get = function(ref, contexts, isHelper, isArgument) {
+	Mustache.get = function(ref, scopeAndOptions, isHelper, isArgument) {
 		
 		if(isHelper){
 			// highest priority to registered helpers
-			if(Mustache.getHelper(ref, options)){
+			if(Mustache.getHelper(ref, scopeAndOptions.options)){
 				return ref
 			}
 			// Support helper-like functions as anonymous helpers
 			// Check if there is a method directly in the "top" context
-			if(contexts.context && can.isFunction(contexts.context._data[ref]) ){
-				return contexts.context._data[ref];
+			if(scopeAndOptions.scope && can.isFunction(scopeAndOptions.scope.attr('.')[ref]) ){
+				return scopeAndOptions.scope.attr('.')[ref];
 			}
 			
 		}
 		
-		var options = contexts.options || {};
+		var options = scopeAndOptions.options || {};
 		
 		
-		var data = contexts.context.get(ref);
+		var data = scopeAndOptions.scope.get(ref);
 		
 		// use value over helper only if within top scope
 		
-		if(Mustache.getHelper(ref, options) && data.scope != contexts.context){
+		if(Mustache.getHelper(ref, options) && data.scope != scopeAndOptions.scope){
 			return ref
 		}
 		
