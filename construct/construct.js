@@ -528,7 +528,7 @@ steal("can/util/string", function(can) {
 	 * @description Called when a new instance of a can.Construct is created.
 	 * 
 	 * @signature `construct.init(...args)`
-	 * @param {*} args the arguments passed to the constructor (or the elements of the array returned from [can.Construct::setup])
+	 * @param {*} args the arguments passed to the constructor (or the items of the array returned from [can.Construct::setup])
 	 * 
 	 * @body
 	 * If a prototype `init` method is provided, it is called when a new Construct is created,
@@ -564,8 +564,8 @@ steal("can/util/string", function(can) {
 	 *         this.language = language;
 	 *     },
 	 *     bio: function() {
-	 *         return 'Hi! I'm ' + this.first + ' ' + this.last +
-	 *             ' and I write ' + this.language + '.';
+	 *         return "Hi! I'm "" + this.first + " " + this.last +
+	 *             " and I write " + this.language + ".";
 	 *     }
 	 * });
 	 * 
@@ -573,11 +573,12 @@ steal("can/util/string", function(can) {
 	 * brian.bio(); // "Hi! I'm Brian Moschel and I write ECMAScript.";
 	 * @codeend
 	 * 
-	 * ## Be Aware
+	 * ## Modifying Arguments
 	 * 
 	 * [can.Construct::setup] is able to modify the arguments passed to `init`.
-	 * If you aren't receiving the right arguments to `init`, check to make sure
-	 * that they aren't being changed by `setup` somewhere along the inheritance chain.
+	 * If you aren't receiving the exact arguments as those passed to `new Construct(args)`,
+	 * check to make sure that they aren't being changed by `setup` somewhere along 
+	 * the inheritance chain.
 	 */
 	can.Construct.prototype.init = function(){};
 
