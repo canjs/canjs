@@ -130,9 +130,7 @@ constructor, allowing you to imitate static properties and functions. You can ac
 properties through the `[can.Construct::constructor this.constructor]` property.
 
 Static properties can get overridden through inheritance just like instance properties. In the example below,
-we override both the legs static property as well as the the init function for each instance.
- Let's see
-how this works with `Animal` and `Snake`:
+we override both the legs static property as well as the the init function for each instance:
 
 @codestart
 can.Construct('Animal', {
