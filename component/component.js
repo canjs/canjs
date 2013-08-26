@@ -36,75 +36,89 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 			
 		}
 	},{
-		setup: function(el, options){
-			
-			var data = {},
+		setup: function(el, hookupOptions){
+			// Setup values passed to component
+			var initalScopeData = {},
 				component = this;
 			
+			// scope prototype properties marked with an "@" are added here
 			can.each(this.constructor.attributeScopeMappings,function(val, prop){
-				data[prop] = el.getAttribute(val)
+				initalScopeData[prop] = el.getAttribute(val)
 			})
 			
+			// get the value in the scope for each attribute
 			can.each(can.makeArray(el.attributes), function(node, index){
+				
 				var name = node.nodeName.toLowerCase();
 				
-				if(!component.constructor.attributeScopeMappings[name] && name !== "data-view-id"){
-					data[name] = options.scope.attr(name);
-					var compute = options.scope.compute(name),
-						handler = function(ev, newVal){
-							componentScope.attr(name, newVal)
-						}
-					// compute only given if bindable
-					if(compute){
-						compute.bind("change", handler);
-						can.bind.call(el,"removed",function(){
-							compute.unbind("change", handler);
-						})
+				// ignore attributes already in ScopeMappings
+				if(component.constructor.attributeScopeMappings[name] || name === "data-view-id"){
+					return;
+				}
+				
+				// get the value from the current scope
+				initalScopeData[name] = hookupOptions.scope.attr(name);
+				
+				// if this is something that we can auto-update, lets do that
+				var compute = hookupOptions.scope.compute(name),
+					handler = function(ev, newVal){
+						componentScope.attr(name, newVal)
 					}
-					
+				// compute only returned if bindable
+				if(compute){
+					compute.bind("change", handler);
+					can.bind.call(el,"removed",function(){
+						compute.unbind("change", handler);
+					})
 				}
 			})
 			
-			var componentScope = this.scope = new this.constructor.Map(data);
-			
+			// save the scope
+			var componentScope = this.scope = new this.constructor.Map(initalScopeData);
 			$(el).data("scope", this.scope)
 			
+			// create a real Scope object out of the scope property
+			var renderedScope = hookupOptions.scope.add( this.scope ),
 			
-			var renderedScope = options.scope.add( this.scope );
+				// setup helpers to callback with `this` as the component
+				helpers = this.helpers || {};
+			can.each(helpers, function(val, prop){
+				if(can.isFunction(val)) {
+					helpers[prop] = function(){
+						return val.apply(componentScope, arguments)
+					}
+				}
+			});
 			
+			// create a control to listen to events
 			this._control = new this.constructor.Control(el, {scope: this.scope});
 			
-			var renderer = typeof options.subtemplate == "string" ?
-				can.view.mustache(options.subtemplate) : options.subtemplate;
-			
+			// if this component has a template (that we've already converted to a renderer)
 			if( this.constructor.renderer ) {
 				// add content to tags
-				var helpers = this.helpers || {};
 				if(!helpers._tags){
 					helpers._tags = {};
 				}
+				
+				// we need be alerted to when a <content> element is rendered so we can put the original contents of the widget in its place
 				helpers._tags.content = function(el, rendererOptions){
-					if(options.subtemplate){
-						var subtemplate = can.view.frag( options.subtemplate.call(renderedScope, helpers) );
+					
+					// if there was html within the original element
+					if(hookupOptions.subtemplate){
+						// render it with this component's scope and helpers
+						var subtemplate = can.view.frag( hookupOptions.subtemplate(renderedScope, rendererOptions.options.add(helpers) ) );
+						// swap out its html
 						$(el).replaceWith(subtemplate)
 					} else {
+						// if there was nothing within the original element, use template within <content> as a default
 						return rendererOptions.scope;
 					}
 				}
-				can.each(helpers, function(val, prop){
-					if(can.isFunction(val)) {
-						helpers[prop] = function(){
-							return val.apply(componentScope, arguments)
-						}
-					}
-				});
-				
-				// somehow need to get <content>, and put subtemplate in there
+				// render the component's template
 				var frag = this.constructor.renderer( renderedScope, helpers);
-				// render subtemplate
-				
 			} else {
-				var frag = can.view.frag( options.subtemplate.call(renderedScope) );
+				// otherwise render the contents between the 
+				var frag = can.view.frag( hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(helpers)) );
 			}
 			$(el).html(  frag )
 		}

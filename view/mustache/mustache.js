@@ -63,6 +63,19 @@ function( can, Scope ){
 		isArrayLike = function(obj) {
 			return obj && obj.splice && typeof obj.length == 'number';
 		},
+		// used to make sure .fn and .inverse are always called with a Scope like object
+		makeConvertToScopes = function(orignal, scope, options){
+			return function(updatedScope, updatedOptions){
+				if(updatedScope != null && !(updatedScope instanceof  Scope)){
+					updatedScope = scope.add(updatedScope)
+				}
+				if(updatedOptions != null && !(updatedOptions instanceof  OptionsScope)){
+					updatedOptions = options.add(updatedOptions)
+				}
+				return orignal(updatedScope, updatedOptions || options)
+			}
+		}
+		
 		
 		// ## Mustache
 		/**
@@ -122,13 +135,10 @@ function( can, Scope ){
 		if(!(data instanceof can.view.Scope)){
 			data = new can.view.Scope(data || {});
 		}
-		
-		options = options || {};
-		if(!options.helpers && !options.partials){
-			options = {
-				helpers: options
-			};
+		if( ! (options instanceof OptionsScope) ){
+			options = new OptionsScope(options || {})
 		}
+		options = options || {};
 		
 		return this.template.fn.call(data, data, options);
 	};
@@ -353,8 +363,7 @@ function( can, Scope ){
 						// Get the template name and call back into the render method,
 						// passing the name and the current context.
 						var templateName = can.trim(content.replace(/^>\s?/, '')).replace(/["|']/g, "");
-						return "options.partials &&\noptions.partials['"+templateName+"'] ? can.Mustache.renderPartial(options.partials['"+templateName+"']," + 
-							SCOPE + ",options) : can.Mustache.render('" + templateName + "', " + SCOPE + ")";
+						return "can.Mustache.renderPartial('"+templateName+"'," + ARG_NAMES + ")";
 					}
 				},
 
@@ -1169,7 +1178,7 @@ function( can, Scope ){
 									}
 									// Found a hash object.
 									else {
-										// Open the hash object.
+										// Addd to the hash object.
 										
 										hashes.push(m[4]+":"+(m[6] ? m[6] : makeLookupLiteral(m[5])))
 									}
@@ -1177,19 +1186,8 @@ function( can, Scope ){
 								// Otherwise output a normal interpolation reference.
 								else {
 									args.push( makeLookupLiteral(arg) );
-									/*result.push('can.Mustache.get("' + 
-										// Include the reference name.
-										arg.replace(/"/g,'\\"') + '",' +
-										// Then the stack of context.
-										CONTEXT_OBJ +
-										// Flag as a helper method to aid performance, 
-										// if it is a known helper (anything with > 0 arguments).
-										(i == 0 && args.length > 1 ? ',true' : ',false') +
-										(i > 0 ? ',true' : ',false') +
-										')');*/
 								}
 								i++;
-								
 							});
 
 							result.push(args.join(","));
@@ -1205,7 +1203,7 @@ function( can, Scope ){
 						switch (mode) {
 							// Truthy section
 							case '#':
-								result.push('{fn:function(' + SCOPE + '){var ___v1ew = [];');
+								result.push('{fn:function(' + ARG_NAMES + '){var ___v1ew = [];');
 								break;
 							// If/else section
 							// Falsey section
@@ -1233,10 +1231,10 @@ function( can, Scope ){
 							 * 
 							 */
 							case 'else':
-								result.push('return ___v1ew.join("");}},\n{inverse:function(' + SCOPE + '){\nvar ___v1ew = [];');
+								result.push('return ___v1ew.join("");}},\n{inverse:function(' + ARG_NAMES + '){\nvar ___v1ew = [];');
 								break;
 							case '^':
-								result.push('{inverse:function(' + SCOPE + '){\nvar ___v1ew = [];');
+								result.push('{inverse:function(' + ARG_NAMES + '){\nvar ___v1ew = [];');
 								break;
 							
 							// Not a section, no mode
@@ -1279,7 +1277,8 @@ function( can, Scope ){
 				fn: function() {},
 				inverse: function() {}
 			},
-			hash; //Array.prototype.slice.call(arguments, 3)
+			hash,
+			context = scope.attr("."); 
 		
 		// convert lookup values to actual values in name, arguments, and hash
 		for(var i =3; i < arguments.length;i++){
@@ -1306,34 +1305,24 @@ function( can, Scope ){
 			name = Mustache.get(name.get, scopeAndOptions, args.length , false)
 		}	
 			
+		// overwrite fn and inverse to always convert to scopes
+		helperOptions.fn = makeConvertToScopes(helperOptions.fn, scope, options);
+		helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options)
 
 		// Check for a registered helper or a helper-like function.
 		if (helper = (Mustache.getHelper(name,options) || (can.isFunction(name) && !name.isComputed && !name.isObserveMethod && { fn: name }))) {
-			// Use the most recent scope as `this` for the helper.
-			var partialContext = scope.attr("."),
-				// Update the helperOptions with a function/inverse that always gets called with a scope object
-				opts = {
-					fn: function(updatedContext){
-						if(updatedContext && !(updatedContext instanceof  Scope)){
-							updatedContext = scope.add(updatedContext)
-						}
-						return helperOptions.fn(updatedContext)
-					},
-					inverse: function(updatedContext){
-						if(updatedContext && !(updatedContext instanceof  Scope)){
-							updatedContext = scope.add(updatedContext)
-						}
-						return helperOptions.inverse(updatedContext)
-					},
-					scope: partialContext,
-					scope: scope,
-					contexts: scope,
-					hash: hash
-				};
+			// Add additional data to be used by helper functions
 			
-			args.push(opts)
+			can.extend(helperOptions,{
+				context: context,
+				scope: scope,
+				contexts: scope,
+				hash: hash
+			})
+
+			args.push(helperOptions)
 			// Call the helper.
-			return helper.fn.apply(partialContext, args) || '';
+			return helper.fn.apply(context, args) || '';
 		}
 
 		
@@ -1341,7 +1330,7 @@ function( can, Scope ){
 			if ( name.isComputed ) {
 				name = name();
 			} else if( name.isObserveMethod){
-				name = name(scope.attr('.'), scope);
+				name = name(context, scope);
 			}
 		}
 
@@ -1385,7 +1374,7 @@ function( can, Scope ){
 						
 						// Add the reference to the list in the contexts.
 						for (i = 0; i < name.length; i++) {
-							result.push(helperOptions.fn(scope.add(name[i]|| '')) );
+							result.push(helperOptions.fn(name[i]|| '') );
 							
 							// Ensure that live update works on observable lists
 							isObserveList && name.attr(''+i);
@@ -1394,12 +1383,12 @@ function( can, Scope ){
 					}
 					// Normal case.
 					else {
-						return helperOptions.fn(scope.add(name || {})) || '';
+						return helperOptions.fn(name || {}) || '';
 					}
 					break;
 				// Falsey section.
 				case '^':
-					return helperOptions.inverse(scope.add(name || {})) || '';
+					return helperOptions.inverse(name || {}) || '';
 					break;
 				default:
 					// Add + '' to convert things like numbers to strings.
@@ -1558,6 +1547,19 @@ function( can, Scope ){
 	/**
 	 * @static
 	 */
+	
+	var OptionsScope = Scope.extend({
+		init: function(data, parent){
+			if(!data.helpers && !data.partials){
+				data = {
+					helpers: data
+				}
+			}
+			Scope.prototype.init.apply(this, arguments)
+		}
+	})
+	
+	
 	// ## Helpers
 	//
 	// Helpers are functions that can be called from within a template.
@@ -1609,16 +1611,8 @@ function( can, Scope ){
 	 * Returns a helper given the name.
 	 */
 	Mustache.getHelper = function(name,options) {
-		return options && options.helpers && options.helpers[name] && {
-			fn: options.helpers[name]
-		} || this._helpers[name]
-		for (var i = 0, helper; helper = [i]; i++) {
-			// Find the correct helper
-			if (helper.name == name) {
-				return helper;
-			}
-		}
-		return null;
+		var helper = options.attr("helpers."+name)
+		return helper ? { fn: helper } : this._helpers[name];	
 	};
 
 	/**
@@ -1644,21 +1638,26 @@ function( can, Scope ){
 	 *
 	 * 		context[partial] === "movember.mustache"
 	 */
-	Mustache.render = function(partial, context){
+	Mustache.render = function(partial, context, options){
 		// Make sure the partial being passed in
 		// isn't a variable like { partial: "foo.mustache" }
-		if(!can.view.cached[partial] && context[partial]){
-			partial = context[partial];
+		if(!can.view.cached[partial] && context.attr('partial')){
+			partial = context.attr('partial');
 		}
 
 		// Call into `can.view.render` passing the
 		// partial and context.
-		return can.view.render(partial, context);
+		return can.view.render(partial, context/*, options*/);
 	};
 
-	Mustache.renderPartial = function(partial,context,options) {
-		return partial.render ? partial.render(context,options) :
-			partial(context,options);
+	Mustache.renderPartial = function(partialName,scope,options) {
+		var partial = options.attr("partials."+partialName)
+		if(partial){
+			return partial.render ? partial.render(scope,options) :
+					partial(scope,options);
+		} else {
+			return can.Mustache.render(partialName,scope,options);
+		}
 	};
 
 	// The built-in Mustache helpers.

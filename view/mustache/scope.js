@@ -127,7 +127,7 @@ steal('can/construct','can/observe','can/view','can/observe/compute',function(Co
 		},
 		add: function(data){
 			if(data !== this._data){
-				return new Scope( data, this );
+				return new this.constructor( data, this );
 			} else {
 				return this;
 			}

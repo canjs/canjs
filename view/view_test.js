@@ -438,15 +438,18 @@
 		
 		can.view.Scanner.tag("panel",function(el, options){
 			
+			ok(options.options.attr('helpers.myhelper')(), "got a helper")
 			equal( options.scope.attr('foo'),"bar", "got scope and can read from it" );
-			equal( options.subtemplate.call({message: "hi"}), "<p>sub says hi</p>"  )
+			equal( options.subtemplate( options.scope.add({message: "hi"}), options.options ), "<p>sub says hi</p>"  )
 			
 		})
 		
 		var template = can.view.mustache("<panel title='foo'><p>sub says {{message}}</p></panel>")
 		
 		
-		template({foo:"bar"})
+		template({foo:"bar"},{myhelper: function(){
+			return true
+		}})
 		
 	});
 	
@@ -466,18 +469,18 @@
 	
 	test("sub hookup", function(){
 
-		can.view.Scanner.tag("tabs",function(el, options){
+		can.view.Scanner.tag("tabs",function(el, hookupOptions){
 			
-			var frag = can.view.frag( options.subtemplate.call(options.scope) );
+			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, hookupOptions.options ) );
 			var div = document.createElement("div");
 			div.appendChild(frag);
 			equal( div.innerHTML, "<panel title=\"Fruits\">oranges, apples</panel>"  )
 			
 		})
 		
-		can.view.Scanner.tag("panel",function( el, options ) {
-			ok( options.scope, "got scope");
-			return options.scope;
+		can.view.Scanner.tag("panel",function( el, hookupOptions ) {
+			ok( hookupOptions.scope, "got scope");
+			return hookupOptions.scope;
 			
 		})
 
@@ -502,24 +505,23 @@
 	
 	test("sub hookup passes helpers", function(){
 
-		can.view.Scanner.tag("tabs",function(el, options){
+		can.view.Scanner.tag("tabs",function(el, hookupOptions){
 			
-			var frag = can.view.frag( options.subtemplate.call(options.scope,{
-				helpers: {
+			var optionsScope = hookupOptions.options.add({
 					tabsHelper: function(){
 						return "TabsHelper"
 					}
-				}
-			}) );
+			});
+			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, optionsScope) );
 			var div = document.createElement("div");
 			div.appendChild(frag);
 			equal( div.innerHTML, "<panel title=\"Fruits\">TabsHelperoranges, apples</panel>"  )
 			
 		})
 		
-		can.view.Scanner.tag("panel",function( el, options ) {
-			ok( options.scope, "got scope");
-			return options.scope;
+		can.view.Scanner.tag("panel",function( el, hookupOptions ) {
+			ok( hookupOptions.scope, "got scope");
+			return hookupOptions.scope;
 			
 		})
 

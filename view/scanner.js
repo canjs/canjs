@@ -161,29 +161,29 @@ Scanner.tag = function( tagName, callback){
 }
 Scanner.tags = {};
 
-Scanner.hookupTag = function(options){
+Scanner.hookupTag = function(hookupOptions){
 	var hooks = can.view.getHooks();
 	return can.view.hook(function(el){
 		can.each(hooks, function(fn){
 			fn(el);
 		});
 		
-		var optionsTags = options.options._tags,
+		var helperTags = hookupOptions.options.attr('helpers._tags'),
 			tagName= el.nodeName.toLowerCase(),
-			tagCallback = ( optionsTags && optionsTags[tagName] ) || Scanner.tags[tagName]
+			tagCallback = ( helperTags && helperTags[tagName] ) || Scanner.tags[tagName]
 			
-		var res = tagCallback(el, options),
-			scope = options.scope;
-		
+		var res = tagCallback(el, hookupOptions),
+			scope = hookupOptions.scope;
+
 		if(res){
 			
 			if(scope !== res){
 				scope = scope.add(res)
 			}
 			
-			el.appendChild( can.view.frag( options.subtemplate.call(scope) ) );
+			el.appendChild( can.view.frag( hookupOptions.subtemplate(scope, hookupOptions.options) ) );
 		}
-		can.view.Scanner.hookupAttributes(options, el);
+		can.view.Scanner.hookupAttributes(hookupOptions, el);
 	});
 	
 }
@@ -356,7 +356,7 @@ Scanner.prototype = {
 							content = token;
 							specialStates.tagHookups.pop()
 						} else {
-							buff.push(",subtemplate: function(helpers){can.extend(options.helpers,helpers);\n"+ startTxt+this.text.start || '' );
+							buff.push(",subtemplate: function("+this.text.argNames+"){\n"+ startTxt+(this.text.start || '') );
 							content = '';
 						}
 
@@ -580,7 +580,6 @@ Scanner.prototype = {
 			put(content);
 		}
 		buff.push(";");
-		console.log(buff.join(''))
 		var template = buff.join(''),
 			out = {
 				out: (this.text.outStart||"") + template + " "+finishTxt+(this.text.outEnd || "")
