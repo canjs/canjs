@@ -427,7 +427,7 @@ steal("can/util/string", function(can) {
 			
 			//  
 			/**
-			 * @property {Function} can.Construct.prototype.constructor constructor
+			 * @property {Object} can.Construct.prototype.constructor constructor
 			 * @parent can.Construct.prototype
 			 *
 			 * A reference to the constructor function that created the instance. This allows you to access
@@ -435,10 +435,10 @@ steal("can/util/string", function(can) {
 			 * 
 			 * ## Example
 			 * 
-			 * This class has a static counter that counts how mane instances have been created:
+			 * This can.Construct has a static counter that counts how many instances have been created:
 			 *
 			 * @codestart
-			 * can.Construct("Counter", {
+			 * can.Construct.extend("Counter", {
 			 *     count: 0
 			 * }, {
 			 *     init: function() {
