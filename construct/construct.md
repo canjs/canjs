@@ -105,7 +105,7 @@ with the new function's static and instance properties. For example, we want our
 be an `Animal`, but there are some differences:
 
 
-    Snake = Animal({
+    Snake = Animal.extend({
         legs: 0
     }, {
         init: function() {
@@ -133,18 +133,18 @@ Static properties can get overridden through inheritance just like instance prop
 we override both the legs static property as well as the the init function for each instance:
 
 @codestart
-can.Construct('Animal', {
+var Animal = can.Construct.extend({
     legs: 4
 }, {
     init: function(sound) {
         this.sound = sound;
-    }
+    },
     speak: function() {
         console.log(this.sound);
     }
 });
 
-Animal('Snake', {
+var Snake = Animal.extend({
     legs: 0
 }, {
     init: function() {
@@ -160,7 +160,7 @@ Snake.legs; // 0
 var dog = new Animal('woof');
 var blackMamba = new Snake();
 dog.speak(); // 'woof'
-snake.speak(); // 'ssssss'
+blackMamba.speak(); // 'ssssss'
 @codeend
 
 ## Plugins

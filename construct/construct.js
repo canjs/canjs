@@ -70,7 +70,7 @@ steal("can/util/string", function(can) {
 		 * using `apply` on newInstance to pass arbitrary parameters.
 		 * 
 		 * @codestart
-		 * var Person = can.Construct({
+		 * var Person = can.Construct.extend({
 		 *   init : function(first, middle, last) {
 		 *     this.first = first;
 		 *     this.middle = middle;
@@ -162,13 +162,13 @@ steal("can/util/string", function(can) {
 		 * properties of the inheriting constructor.  For example:
 		 * 
 		 * @codestart
-		 * Parent = can.Construct({
+		 * Parent = can.Construct.extend({
 		 *   defaults : {
 		 *     parentProp: 'foo'
 		 *   }
 		 * },{})
 		 * 
-		 * Child = Parent({
+		 * Child = Parent.extend({
 		 *   defaults : {
 		 *     childProp : 'bar'
 		 *   }
@@ -183,7 +183,7 @@ steal("can/util/string", function(can) {
 		 * so do all the classes that inherit from it.
 		 * 
 		 * @codestart
-		 * Parent = can.Construct({
+		 * Parent = can.Construct.extend({
 		 *   setup : function(base, fullName, staticProps, protoProps){
 		 *     this.base = base;
 		 * 
@@ -540,7 +540,7 @@ steal("can/util/string", function(can) {
 	 * First, we'll make a Person constructor that has a first and last name:
 	 *
 	 * @codestart
-	 * can.Construct("Person", {
+	 * var Person = can.Construct.extend({
 	 *     init: function(first, last) {
 	 *         this.first = first;
 	 *         this.last  = last;
@@ -555,7 +555,7 @@ steal("can/util/string", function(can) {
 	 * Then we'll extend Person into Programmer and add a favorite language:
 	 * 
 	 * @codestart
-	 * Person("Programmer", {
+	 * var Programmer = Person.extend({
 	 *     init: function(first, last, language) {
 	 *         // call base's init
 	 *         Person.prototype.init.apply(this, arguments);
@@ -573,7 +573,7 @@ steal("can/util/string", function(can) {
 	 * brian.bio(); // "Hi! I'm Brian Moschel and I write ECMAScript.";
 	 * @codeend
 	 * 
-	 * ## Modifying Arguments
+	 * ## Modified Arguments
 	 * 
 	 * [can.Construct::setup] is able to modify the arguments passed to `init`.
 	 * If you aren't receiving the exact arguments as those passed to `new Construct(args)`,
