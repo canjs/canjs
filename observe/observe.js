@@ -767,7 +767,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 			this._data[prop] = val;
 			// Add property directly for easy writing.
 			// Check if its on the `prototype` so we don't overwrite methods like `attrs`.
-			if (!(prop in this.constructor.prototype)) {
+			if (!(can.isFunction(this.constructor.prototype[prop]))) {
 				this[prop] = val
 			}
 		},
@@ -1009,7 +1009,12 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * name(); // 'Alice'
 		 */
 		compute: function(prop) {
-			return can.compute(this,prop);
+			if(can.isFunction( this.constructor.prototype[prop] )){
+				return can.compute(this[prop], this);
+			} else {
+				return can.compute(this,prop);
+			}
+			
 		}
 	});
 	// Helpers for `observable` lists.

@@ -169,7 +169,7 @@ Scanner.hookupTag = function(hookupOptions){
 		});
 		
 		var helperTags = hookupOptions.options.attr('helpers._tags'),
-			tagName= el.nodeName.toLowerCase(),
+			tagName= hookupOptions.tagName,
 			tagCallback = ( helperTags && helperTags[tagName] ) || Scanner.tags[tagName]
 			
 		var res = tagCallback(el, hookupOptions),
@@ -180,8 +180,9 @@ Scanner.hookupTag = function(hookupOptions){
 			if(scope !== res){
 				scope = scope.add(res)
 			}
-			
-			el.appendChild( can.view.frag( hookupOptions.subtemplate(scope, hookupOptions.options) ) );
+			var frag = can.view.frag( hookupOptions.subtemplate(scope, hookupOptions.options) );
+			can.insertBefore(el.parentNode, frag, el);
+			can.remove( can.$(el) );
 		}
 		can.view.Scanner.hookupAttributes(hookupOptions, el);
 	});
@@ -348,7 +349,7 @@ Scanner.prototype = {
 						
 						buff.push(put_cmd, 
 								 '"', clean(content), '"', 
-								 ",can.view.Scanner.hookupTag({"+(attrs)+"scope: "+(this.text.scope || "this")+this.text.options)
+								 ",can.view.Scanner.hookupTag({tagName:'"+tagName+"',"+(attrs)+"scope: "+(this.text.scope || "this")+this.text.options)
 						
 						// if it's an empty tag	 
 						if( tokens[i] === "<" &&  tokens[i+1] === "/"+tagName ){
@@ -450,12 +451,22 @@ Scanner.prototype = {
 							} 
 	
 						} else {
-							tagNames.push(tagName);
+							
 							
 							if(Scanner.tags[tagName]){
+								// if the content tag is inside something it doesn't belong ...
+								if(tagName === "content" && elements.tagMap[top(tagNames)]){
+									// convert it to an element that will work
+									token = token.replace("content",elements.tagMap[top(tagNames)])
+								}
 								// we will hookup at the ending tag>
 								specialStates.tagHookups.push(tagName);
 							}
+							
+							
+							tagNames.push(tagName);
+							
+							
 
 						}
 						

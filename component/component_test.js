@@ -7,6 +7,50 @@ module("can/component",{
 })
 	
 	
+var Paginate = can.Map.extend({
+  count: Infinity,
+  offset: 0,
+  limit: 100,
+  // Prevent negative counts
+  setCount: function(newCount, success, error){
+    return newCount < 0 ? 0 : newCount;
+  },
+  // Prevent negative offsets
+  setOffset: function(newOffset){
+    return newOffset < 0 ? 
+        0 : 
+        Math.min(newOffset, ! isNaN(this.count - 1) ? 
+                 this.count - 1 : 
+                 Infinity )
+  },
+  // move next
+  next: function(){
+    this.attr('offset', this.offset+this.limit);
+  },
+  prev : function(){
+    this.attr('offset', this.offset - this.limit )
+  },
+  canNext : function(){
+    return this.attr('offset') < this.attr('count') - 
+            this.attr('limit')
+  },
+  canPrev: function(){
+    return this.attr('offset') > 0
+  },
+  page: function(newVal){
+  	if(newVal === undefined){
+  	  return Math.floor( this.attr('offset') / this.attr('limit') )+1;
+  	} else {
+	  this.attr('offset', ( parseInt(newVal) - 1 ) * this.attr('limit') );
+  	}
+  },
+  pageCount: function(){
+  	return this.attr('count') ? 
+  		Math.ceil( this.attr('count')  / this.attr('limit') )
+  		: null;
+  }
+});	
+	
 test("basic tabs",function(){
 	
 	// new Tabs() .. 
@@ -250,8 +294,9 @@ test("treecombo", function(){
 	
 	setTimeout(function(){
 		
-		base.attr('items',items);
-		var itemsList = base.attr('items');
+		base.attr('locations',items);
+
+		var itemsList = base.attr('locations');
 		
 		// check that the DOM is right
 		var ta = can.$("#qunit-test-area")[0];
@@ -265,7 +310,7 @@ test("treecombo", function(){
 		equal(breadcrumbLIs[0].innerHTML, "Locations", "The correct title from the attribute is shown")
 		
 		equal(optionsLis.length, itemsList.length, "first level items are displayed")
-		
+
 		// Test toggling selected, first by clicking
 		can.trigger(optionsLis[0],"click");
 		
@@ -308,6 +353,156 @@ test("treecombo", function(){
 
 
 
+test("deferred grid",function(){
+
+	can.Component.extend({
+		tag:"grid",
+		scope: {
+			items: [],
+			waiting: true
+		},
+		template: "<table><tbody><content></content></tbody></table>",
+		events: {
+			init: function(){
+				this.update()
+			},
+			"{deferreddata} change": "update",
+			update: function(){
+				var deferred = this.scope.attr('deferreddata'),
+					scope = this.scope,
+					el = this.element;
+				if(can.isDeferred( deferred )){
+					this.scope.attr("waiting", true)
+					deferred.then(function(items){
+						scope.attr('items').attr(items, true)
+					});
+				} else {
+					scope.attr('items').attr(deferred, true)
+				}
+			},
+			"{items} change": function(){
+				this.scope.attr("waiting",false)
+			}
+		}
+	});
+	
+	
+	var SimulatedScope = can.Map.extend({
+		set: 0,
+		deferredData: can.compute(function(){
+			var deferred = new can.Deferred();
+			var set = this.attr('set');
+			if(set == 0 ){
+				setTimeout(function(){
+					deferred.resolve([{first: "Justin", last: "Meyer"}])
+				},100)
+			} else if(set == 1 ){
+				setTimeout(function(){
+					deferred.resolve([{first: "Brian", last: "Moschel"}])
+				},100)
+			}
+			return deferred;
+		})
+	})
+	var scope = new SimulatedScope();
+	
+	var template = can.view.mustache("<grid deferreddata='scope.deferredData'>"+
+						"{{#each items}}"+
+							"<tr>"+
+						  	  	"<td width='40%'>{{first}}</td>"+
+						  	  	"<td width='70%'>{{last}}</td>"+
+						  	"</tr>"+
+						"{{/each}}"+
+					"</grid>");
+
+	can.append(can.$("#qunit-test-area"), template({
+		scope: scope
+	}));
+	
+	var gridScope = can.scope("#qunit-test-area grid")
+	equal( gridScope.attr("waiting"), true, "waiting is true")
+	stop();
+	gridScope.bind("waiting", function(){
+		gridScope.unbind("waiting", arguments.callee)
+		setTimeout(function(){
+			var tds = can.$("#qunit-test-area td")
+			equal(tds.length, 2, "there are 2 tds")
+			
+			
+			gridScope.bind("waiting", function(ev, newVal){
+				if(newVal === false){
+					setTimeout(function(){
+						equal(tds[0].innerHTML, "Brian", "td changed to brian");
+						start();
+					},10)
+					
+				}
+			})
+			
+			
+			
+			scope.attr("set",1);
+			
+		},10)
+		
+	})
+	
+	
+})
+
+test("nextprev", function(){
+	
+	can.Component.extend({
+		tag: "next-prev",
+		template: '<a href="javascript://"'+
+		     			'class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}" can-click="paginate.prev">Prev</a>'+
+		  			'<a href="javascript://"'+
+		     			'class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}" can-click="paginate.next">Next</a>'
+	})
+	
+	
+	var paginator = new Paginate({limit: 20, offset: 0, count: 100})
+	
+	var template = can.view.mustache("<next-prev paginate='paginator'></next-prev>");
+
+	can.append(can.$("#qunit-test-area"), template({
+		paginator: paginator
+	}));
+	
+	var prev = can.$("#qunit-test-area .prev")[0],
+		next = can.$("#qunit-test-area .next")[0];
+	
+	ok(!/enabled/.test(prev.className), "prev is not enabled");
+	ok(/enabled/.test(next.className), "next is  enabled");
+	
+	can.trigger(next,"click");
+	ok(/enabled/.test(prev.className), "prev is enabled");
+});
+
+test("page-count",function(){
+	
+	can.Component.extend({
+		tag: "page-count",
+		template: 'Page <span>{{page}}</span> of <span>{{count}}</span>.'
+	})
+	
+	
+	var paginator = new Paginate({limit: 20, offset: 0, count: 100})
+	
+	var template = can.view.mustache("<page-count page='paginator.page' count='paginator.pageCount'></page-count>");
+
+	can.append(can.$("#qunit-test-area"), template({
+		paginator: paginator
+	}));
+	
+	var spans = can.$("#qunit-test-area span")
+	equal(spans[0].innerHTML,"1")
+	paginator.next();
+	equal(spans[0].innerHTML,"2")
+	paginator.next();
+	equal(spans[0].innerHTML,"3")
+	
+})
 
 
 	

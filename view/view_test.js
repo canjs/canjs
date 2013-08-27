@@ -517,7 +517,7 @@
 			div.appendChild(frag);
 			equal( div.innerHTML, "<panel title=\"Fruits\">TabsHelperoranges, apples</panel>"  )
 			
-		})
+		});
 		
 		can.view.Scanner.tag("panel",function( el, hookupOptions ) {
 			ok( hookupOptions.scope, "got scope");
@@ -653,5 +653,21 @@
 		
 	});
 	
-	
+	test("content element inside tbody", function(){
+		
+		var template = can.view.mustache("<table><tbody><content></content></tbody></table>");
+		
+		var context = new can.Map({foo: "bar"});
+		var frag = template(context,{
+			_tags: {
+				content: function(el, options){
+					equal(el.parentNode.nodeName.toLowerCase() ,"tbody", "got an element in a tbody");
+					equal(options.scope.attr('.'),context, "got the context of content");
+					el.innerHTML = "updated"
+				}
+			}
+		});
+		
+		
+	})
 })();

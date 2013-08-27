@@ -138,7 +138,7 @@ steal('can/util','can/construct', function( can ) {
 			if ( options || ! paramReplacer.test( methodName )) {
 				// If we have options, run sub to replace templates `{}` with a
 				// value from the options or the window
-				var convertedName = options ? can.sub(methodName, [options, window]) : methodName;
+				var convertedName = options ? can.sub(methodName, this._lookup(options)) : methodName;
 				if(!convertedName) {
 					return null;
 				}
@@ -159,6 +159,9 @@ steal('can/util','can/construct', function( can ) {
 					delegate : arr ? convertedName[0] : undefined
 				};
 			}
+		},
+		_lookup: function(options){
+			return [options, window]
 		},
 		// An object of `{eventName : function}` pairs that Control uses to 
 		// hook up events auto-magically.
