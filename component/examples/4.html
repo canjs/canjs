@@ -1,7 +1,6 @@
-<body>
-	<style>
+<style>
 		* {
-		font: 13px/16px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+			font: 13px/16px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
 		    color: #333;
 		}
 		table {
@@ -25,8 +24,8 @@
 		    padding: 5px;
 		    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 		}
-		next-prev { margin: 5px auto;text-align: center;display: block; }
-		next-prev a {
+		#next-prev { margin: 5px auto;text-align: center;display: block; }
+		#next-prev a {
 		    border-radius: 3px;
 		    padding: 4px 14px;
 		    text-decoration: none;
@@ -35,46 +34,38 @@
 		    border: 1px solid #bbbbbb;
 		    border-color: #e6e6e6 #e6e6e6 #bfbfbf;
 		}
-		next-prev a.enabled {
+		#next-prev a.enabled {
 		    color: #ffffff;
 		    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 		    background-color: #49afcd;
 		    border-color: #2f96b4 #2f96b4 #1f6377;
 		}
-		page-count {
-			display: block;
-		}
-		page-count, page-count * {
-		    font-size: 11px;
-		    color: #ccc;
-		    text-align: center;
-		}
 	</style>
-	<div id='out'></div>
-	<script id="appMustache" type='text/mustache'>
-		<app>
-			<grid deferredData='websitesDeferred'>
-				{{#each items}}
-					<tr>
-				  	  	<td width='40%'>{{name}}</td>
-				  	  	<td width='70%'>{{url}}</td>
-				  	</tr>
-				{{/each}}
-			</grid>
-			<next-prev paginate='paginate'></next-prev>
-			<page-count page='paginate.page' count='paginate.pageCount'></page-count>
-		</app>
-	</script>
-	<script src="../../../steal/steal.js"></script>
-	<script type='text/javascript'> 
+
+<table id="websites"></table>
+<div id='next-prev'></div>
+
+<script id="sites" type="text/mustache">
+  {{#websites}}
+    <tr>
+      <td width='40%'>{{name}}</td>
+	  <td width='70%'>{{url}}</td>
+	</tr>
+  {{/websites}}
+</script>
+
+<script id="next-prev-stache" type="text/mustache">
+  <a href="javascript://" 
+     class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}">Prev</a>
+  <a href="javascript://" 
+     class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}">Next</a>
+</script>
+
+<script src="../../../steal/steal.js"></script>
+<script type='text/javascript'>
 steal("can/util", "can/component", "can/observe/setter", "can/util/fixture",
-  "can/model", function (can) {
+	 "can/model", function (can) {
 
-
-
-var Website = can.Model.extend({
-  findAll: "/websites"
-}, {});
 
 var websites = [{id:1,name:"CanJS",url:"http://canjs.us"},{id: 2,name:"jQuery++",url:"http://jquerypp.com"},
 	          {id:3,name:"JavaScriptMVC",url:"http://javascriptmvc.com"},{id: 4,name:"Bitovi",url:"http://bitovi.com"},
@@ -92,6 +83,10 @@ can.fixture("/websites", function (request) {
     data: websites.slice(start, end)
   }
 });
+	 	
+var Website = can.Model.extend({
+  findAll: "/websites"
+}, {});
 
 
 
@@ -135,83 +130,51 @@ var Paginate = can.Map.extend({
   }
 });
 
+paginate = new Paginate();
 
-
-can.Component.extend({
-  tag: "app",
-  scope: function () {
-    return {
-      paginate: new Paginate({
-        limit: 5
-      }),
-      websitesDeferred: can.compute(function () {
-        var params = {
-          limit: this.attr('paginate.limit'),
-          offset: this.attr('paginate.offset')
-        },
-          websitesDeferred = Website.findAll(params),
-          self = this;
-
-        websitesDeferred.then(function (websites) {
-          self.attr('paginate.count', websites.count)
-        });
-
-        return websitesDeferred;
-      })
-    }
-  }
+var websitesCompute = can.compute(function(){
+	var param = {
+		limit: paginate.attr('limit'),
+		offset: paginate.attr('offset')
+	}
+	return Website.findAll(param);
 });
 
+var writeWebsites = function(websites){
+	$("#websites").html( can.view("sites",{
+	  websites: websites
+	}));
+	paginate.attr("count", websites.count)
+}
+
+websitesCompute.bind("change", function(ev, websitesDeferred){
+	websitesDeferred.then(writeWebsites)
+})
+
+websitesCompute().then(writeWebsites)
 
 
-can.Component.extend({
-  tag: "grid",
-  scope: {
-    items: [],
-    waiting: true
+
+
+
+var NextPrev = can.Control({
+  init: function(){
+    this.element.html( 
+       can.view('next-prev-stache',this.options) );     
   },
-  template: "<table><tbody><content></content></tbody></table>",
-  events: {
-    init: function () {
-      this.update()
-    },
-    "{deferreddata} change": "update",
-    update: function () {
-      var deferred = this.scope.attr('deferreddata'),
-        scope = this.scope,
-        el = this.element;
-      if (can.isDeferred(deferred)) {
-        this.scope.attr("waiting", true);
-        this.element.find('tbody').css('opacity', 0.5)
-        deferred.then(function (items) {
-          scope.attr('items').replace(items)
-        });
-      } else {
-        scope.attr('items').attr(deferred, true)
-      }
-    },
-    "{items} change": function () {
-      this.scope.attr("waiting", false);
-      this.element.find('tbody').css('opacity', 1);
-    }
+  ".next click" : function(){
+    this.options.paginate.next();
+  },
+  ".prev click" : function(){
+    this.options.paginate.prev();
   }
 });
 
-can.Component.extend({
-  tag: "next-prev",
-  template: 
-    '<a href="javascript://"' + 
-      'class="prev {{#paginate.canPrev}}enabled{{/paginate.canPrev}}" can-click="paginate.prev">Prev</a>' + 
-    '<a href="javascript://"' + 
-      'class="next {{#paginate.canNext}}enabled{{/paginate.canNext}}" can-click="paginate.next">Next</a>'
-})
 
-can.Component.extend({
-  tag: "page-count",
-  template: 'Page <span>{{page}}</span> of <span>{{count}}</span>.'
-})
+new NextPrev("#next-prev",{
+	paginate: paginate
+});
 
-$("#out").html(can.view("appMustache", {}))
-  })
-	</script>
-</body>
+
+})
+</script>

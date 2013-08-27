@@ -5,18 +5,18 @@ steal("can/view/mustache/bindings",function(){
 		
 var HyperLoop = can.Map.extend({
   travelTime: function(){
-    return this.attr('distance') /
+    return this.attr('dist') /
 			962 /* km/h */
   }
 })
 
-var loop = new HyperLoop({
-	distance: 3429.19 /* Chi to SF */
+loop = new HyperLoop({
+	dist: 3429.19 /* Chi to SF */
 })
 
 var template = can.view.mustache(
   "<p>Distance:\
-      <input can-model='distance'/>\
+      <input can-model='dist'/>\
   </p>\
   <p>Time:\
      {{travelTime}} hrs\
