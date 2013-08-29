@@ -157,6 +157,12 @@ Scanner.hookupAttributes = function(options, el){
 	})
 }
 Scanner.tag = function( tagName, callback){
+	// if we have html5shive ... re-generate
+	if(window.html5){
+		html5.elements += " "+tagName
+		html5.shivDocument();
+	}
+	
 	Scanner.tags[tagName.toLowerCase()] = callback;
 }
 Scanner.tags = {};

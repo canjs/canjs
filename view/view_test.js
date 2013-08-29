@@ -468,22 +468,30 @@
 	})
 	
 	test("sub hookup", function(){
-
+		var tabs = document.createElement("tabs");
+		
+		document.body.appendChild(tabs);
+		
+		var panel = document.createElement("panel");
+		
+		document.body.appendChild(panel)
+		
 		can.view.Scanner.tag("tabs",function(el, hookupOptions){
-			
 			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, hookupOptions.options ) );
+			
+			
 			var div = document.createElement("div");
 			div.appendChild(frag);
-			equal( div.innerHTML, "<panel title=\"Fruits\">oranges, apples</panel>"  )
+			var panels = div.getElementsByTagName("panel")
+			equal(panels.length, 1, "there is one panel");
+			equal(panels[0].nodeName.toUpperCase(), "PANEL");
+			equal(panels[0].getAttribute("title"),"Fruits","attribute left correctly");
+			equal(panels[0].innerHTML,"oranges, apples","innerHTML");
 			
 		})
 		
 		can.view.Scanner.tag("panel",function( el, hookupOptions ) {
 			ok( hookupOptions.scope, "got scope");
-			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, hookupOptions.options ) );
-			var div = document.createElement("div");
-			div.appendChild(frag);
-			console.log(div.innerHTML)
 			return hookupOptions.scope;
 			
 		})
@@ -519,7 +527,11 @@
 			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, optionsScope) );
 			var div = document.createElement("div");
 			div.appendChild(frag);
-			equal( div.innerHTML, "<panel title=\"Fruits\">TabsHelperoranges, apples</panel>"  )
+			var panels = div.getElementsByTagName("panel");
+			equal(panels.length, 1, "there is one panel");
+			equal(panels[0].nodeName.toUpperCase(), "PANEL");
+			equal(panels[0].getAttribute("title"),"Fruits","attribute left correctly");
+			equal(panels[0].innerHTML,"TabsHelperoranges, apples","innerHTML");
 			
 		});
 		
@@ -667,7 +679,6 @@
 				content: function(el, options){
 					equal(el.parentNode.nodeName.toLowerCase() ,"tbody", "got an element in a tbody");
 					equal(options.scope.attr('.'),context, "got the context of content");
-					el.innerHTML = "updated"
 				}
 			}
 		});

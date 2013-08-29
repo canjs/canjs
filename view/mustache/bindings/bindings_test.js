@@ -39,7 +39,6 @@
 		
 		
 		// remove from the DOM and try again ..
-		
 		can.remove( can.$(ta.getElementsByTagName("div")[0]) )
 		
 		can.trigger( p0, "click" )

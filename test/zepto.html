@@ -27,22 +27,23 @@
                     "map": {
                         "*": {
                             "can/util/util.js": "can/util/zepto/zepto.js",
-                            "zepto/zepto.js": "can/lib/zepto.1.0rc1.js"
+                            "zepto/zepto.js": "can/lib/zepto.1.0.js"
                         }
                     }
                 };
 
                 steal.config(config);
-            }, "can/util/fixture", "can/component", "can/construct",
-                "can/observe", "can/observe/compute", "can/model",
-                "can/view", "can/view/ejs", "can/control",
-                "can/route", "can/control/route", "can/view/mustache",
-                "can/view/mustache/bindings", "can/model/queue",
-                "can/construct/super", "can/construct/proxy",
-                "can/observe/delegate", "can/observe/setter",
-                "can/observe/attributes", "can/observe/validations",
-                "can/observe/backup", "can/util/object",
-                "can/util/string", "can/util/fixture")
+            }).then("can/util/fixture", "can/component",
+                "can/construct", "can/observe", "can/observe/compute",
+                "can/model", "can/view", "can/view/ejs",
+                "can/control", "can/route", "can/control/route",
+                "can/view/mustache", "can/view/mustache/bindings",
+                "can/model/queue", "can/construct/super",
+                "can/construct/proxy", "can/observe/delegate",
+                "can/observe/setter", "can/observe/attributes",
+                "can/observe/validations", "can/observe/backup",
+                "can/util/object", "can/util/string",
+                "can/util/fixture")
                 .then("can/test").then(
                 "can/component/component_test.js")
                 .then("can/construct/construct_test.js")

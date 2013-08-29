@@ -1,4 +1,4 @@
-steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
+steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted",function($, can) {
 	// _jQuery node list._
 	$.extend( can, $, {
 		trigger: function( obj, event, args ) {
@@ -45,7 +45,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
 	});
 
 	// Wrap modifier functions.
-	$.each(["append","filter","addClass","remove","data","get"], function(i,name){
+	$.each(["append","filter","addClass","remove","data","get","has"], function(i,name){
 		can[name] = function(wrapped){
 			return wrapped[name].apply(wrapped, can.makeArray(arguments).slice(1));
 		};
@@ -71,55 +71,12 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
 				var elems = can.makeArray(elem.childNodes);
 			}
 			var ret = callback.apply(this, arguments);
-			if(elems){
-				manyInserted(elems)
-			} else {
-				inserted(elem)
-			}
-			
-			
-			
+			can.inserted(elems? elems : [elem])
 			return ret
 		})
 	}
 	$.event.special.inserted = {};
 	$.event.special.removed = {};
-
-	var inserted= function(elem){
-		if(elem.getElementsByTagName && $(document).has(elem).length ){
-			var elems = can.makeArray( elem.getElementsByTagName("*") );
-			$(elem).triggerHandler("inserted");
-			
-			for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
-				// Trigger the destroyed event
-				$(elem).triggerHandler("inserted");
-			}
-		}
-	}
-	var manyInserted = function(elems){
-		for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
-			inserted(elem)
-		}
-	}
-
-	can.appendChild = function(el, child){
-		if(child.nodeType === 11){
-			var children = can.makeArray(child.childNodes);
-		} else {
-			var children = [child]
-		}
-		el.appendChild(child);
-		manyInserted(children)
-	}
-	can.insertBefore = function(el, child, ref){
-		if(child.nodeType === 11){
-			var children = can.makeArray(child.childNodes);
-		} else {
-			var children = [child];
-		}
-		el.insertBefore(child, ref);
-		manyInserted(children)
-	}
 
 	return can;
 });

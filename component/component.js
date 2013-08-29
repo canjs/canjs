@@ -159,7 +159,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 				// otherwise render the contents between the 
 				var frag = can.view.frag( hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(helpers)) );
 			}
-			$(el).html(  frag )
+			can.appendChild(el, frag);
 		}
 	})
 	

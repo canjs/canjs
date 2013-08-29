@@ -11,7 +11,7 @@
 		},
 		path: function (path) {
 			if (typeof steal !== 'undefined') {
-				return steal.config('root').toString() + '/' + steal.id(path).toString();
+				return ""+steal.idToUri(steal.id("can/"+path).toString())  ;
 			}
 			if(typeof requirejs !== 'undefined') {
 				return requirejs.s.contexts._.config.baseUrl + path;

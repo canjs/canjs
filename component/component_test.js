@@ -108,10 +108,10 @@ test("basic tabs",function(){
 			active: false
 		},
 		events: {
-			inserted: function(){
+			" inserted": function(){
 				this.element.parent().scope().addPanel( this.scope );
 			},
-			removed: function(){
+			" removed": function(){
 				this.element.parent().scope().removePanel( this.scope );
 			}
 		}
@@ -154,8 +154,8 @@ test("basic tabs",function(){
 	equal( testArea.getElementsByTagName("panel").length, 4, "panel added");
 	
 	foodTypes.shift();
-	
-	equal( lis.length, 3, "removed li");
+
+	equal( lis.length, 3, "removed li after shifting a foodType");
 	
 	foodTypes.each(function(type, i){
 		equal(lis[i].innerHTML, type.attr("title"),"li "+i+" has the right content")
@@ -174,8 +174,9 @@ test("basic tabs",function(){
 	equal( lis[0].className, "", "the first element is not active"  )
 	
 	equal( panels[0].innerHTML, "", "the second content is removed"  )
-	equal( panels[1].innerHTML, "ice cream, candy", "the second content is shown"  )
+	equal( panels[1].innerHTML, "ice cream, candy", "the second content is shown"  );
 	
+	can.remove( can.$("#qunit-test-area *") );
 });
 
 
@@ -462,12 +463,13 @@ test("nextprev", function(){
 	
 	
 	var paginator = new Paginate({limit: 20, offset: 0, count: 100})
-	
 	var template = can.view.mustache("<next-prev paginate='paginator'></next-prev>");
-
-	can.append(can.$("#qunit-test-area"), template({
+	
+	var frag = template({
 		paginator: paginator
-	}));
+	});
+
+	can.append(can.$("#qunit-test-area"), frag);
 	
 	var prev = can.$("#qunit-test-area .prev")[0],
 		next = can.$("#qunit-test-area .next")[0];
