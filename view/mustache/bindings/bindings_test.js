@@ -46,9 +46,9 @@
 		
 	});
 	
-	test("can-model input text", function(){
+	test("can-value input text", function(){
 		
-		var template = can.view.mustache("<input can-model='age'/>")
+		var template = can.view.mustache("<input can-value='age'/>")
 		
 		var map = new can.Map({age: "30"})
 		
@@ -74,13 +74,13 @@
 	})
 	
 	
-	test("can-model input radio", function(){
+	test("can-value input radio", function(){
 		
 		
 		
 		var template = can.view.mustache(
-			"<input type='radio' can-model='color' value='red'/> Red<br/>"+
-			"<input type='radio' can-model='color' value='green'/> Green<br/>")
+			"<input type='radio' can-value='color' value='red'/> Red<br/>"+
+			"<input type='radio' can-value='color' value='green'/> Green<br/>")
 		
 		var map = new can.Map({color: "red"})
 		

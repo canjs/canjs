@@ -144,16 +144,13 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 				
 				// we need be alerted to when a <content> element is rendered so we can put the original contents of the widget in its place
 				helpers._tags.content = function(el, rendererOptions){
-					
-					// if there was html within the original element
-					if(hookupOptions.subtemplate){
-						// render it with this component's scope and helpers
-						var subtemplate = can.view.frag( hookupOptions.subtemplate(renderedScope, rendererOptions.options.add(helpers) ) );
-						// swap out its html
-						$(el).replaceWith(subtemplate)
-					} else {
-						// if there was nothing within the original element, use template within <content> as a default
-						return rendererOptions.scope;
+					// first check if there was content within the custom tag
+					// otherwise, render what was within <content>, the default code
+					var subtemplate = hookupOptions.subtemplate || rendererOptions.subtemplate
+					if(subtemplate) {
+						var frag = can.view.frag( subtemplate(renderedScope, rendererOptions.options.add(helpers) ) );
+						can.insertBefore(el.parentNode, frag, el);
+						can.remove( can.$(el) );
 					}
 				}
 				// render the component's template

@@ -1,8 +1,8 @@
 steal("can/util","can/view/mustache", "can/control", function(can){
 	
-	can.view.Scanner.attribute("can-model", function(data, el){
+	can.view.Scanner.attribute("can-value", function(data, el){
 		
-		var attr = el.getAttribute("can-model"),
+		var attr = el.getAttribute("can-value"),
 			value = data.scope.compute(attr);
 		
 		if(el.nodeName.toLowerCase() === "input"){

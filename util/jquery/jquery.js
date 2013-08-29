@@ -67,8 +67,16 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
 	
 	$.fn.domManip = function(args, table, callback){
 		return oldDomManip.call(this,args,table, function(elem){
+			if(elem.nodeType === 11){
+				var elems = can.makeArray(elem.childNodes);
+			}
 			var ret = callback.apply(this, arguments);
-			inserted(elem)
+			if(elems){
+				manyInserted(elems)
+			} else {
+				inserted(elem)
+			}
+			
 			
 			
 			return ret

@@ -480,6 +480,10 @@
 		
 		can.view.Scanner.tag("panel",function( el, hookupOptions ) {
 			ok( hookupOptions.scope, "got scope");
+			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, hookupOptions.options ) );
+			var div = document.createElement("div");
+			div.appendChild(frag);
+			console.log(div.innerHTML)
 			return hookupOptions.scope;
 			
 		})

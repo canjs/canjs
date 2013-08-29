@@ -181,8 +181,7 @@ Scanner.hookupTag = function(hookupOptions){
 				scope = scope.add(res)
 			}
 			var frag = can.view.frag( hookupOptions.subtemplate(scope, hookupOptions.options) );
-			can.insertBefore(el.parentNode, frag, el);
-			can.remove( can.$(el) );
+			can.appendChild(el, frag);
 		}
 		can.view.Scanner.hookupAttributes(hookupOptions, el);
 	});
