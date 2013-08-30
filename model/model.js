@@ -12,12 +12,16 @@ steal('can/util','can/observe', function( can ) {
 	var	pipe = function( def, model, func ) {
 		var d = new can.Deferred();
 		def.then(function(){
-			var args = can.makeArray( arguments );
+			var args = can.makeArray( arguments ),
+			    success = true;
 			try {
 				args[0] = model[func](args[0]);
-				d.resolveWith(d, args);
 			} catch(e) {
+				success = false;
 				d.rejectWith(d, [e].concat(args));
+			}
+			if (success) {
+				d.resolveWith(d, args);
 			}
 		},function(){
 			d.rejectWith(this, arguments);
