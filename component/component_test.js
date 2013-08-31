@@ -109,10 +109,10 @@ test("basic tabs",function(){
 		},
 		events: {
 			" inserted": function(){
-				this.element.parent().scope().addPanel( this.scope );
+				can.scope(this.element[0].parentNode).addPanel( this.scope );
 			},
 			" removed": function(){
-				this.element.parent().scope().removePanel( this.scope );
+				can.scope(this.element[0].parentNode).removePanel( this.scope );
 			}
 		}
 	})
@@ -317,11 +317,11 @@ test("treecombo", function(){
 		
 		equal(optionsLis[0].className, "active", "toggling something not selected adds active");
 		ok(optionsLis[0].getElementsByTagName('input')[0].checked, "toggling something not selected checks checkbox");
-		equal( $(treecombo).scope("selected").length, 1 , "there is one selected item")
-		equal( $(treecombo).scope("selected.0"), itemsList.attr("0") , "the midwest is in selected")
+		equal( can.scope(treecombo,"selected").length, 1 , "there is one selected item")
+		equal( can.scope(treecombo,"selected.0"), itemsList.attr("0") , "the midwest is in selected")
 		
 		// adjust the state and everything should update
-		$(treecombo).scope("selected").pop()
+		can.scope(treecombo,"selected").pop()
 		equal(optionsLis[0].className, "", "toggling something not selected adds active");
 		
 		// Test going in a location

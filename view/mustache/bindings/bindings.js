@@ -39,7 +39,7 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			scopeData = data.scope.get(attr),
 			handler = function(ev){
 				
-				return scopeData.value.call(scopeData.parent,data.scope.attr("."), $(this), ev )
+				return scopeData.value.call(scopeData.parent,data.scope.attr("."), can.$(this), ev )
 			};
 		
 		can.bind.call( el, event, handler);
@@ -53,7 +53,7 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 	
 	var Value = can.Control.extend({
 		init: function(){
-			if(this.element.prop('nodeName').toUpperCase() === "SELECT"){
+			if(this.element[0].nodeName.toUpperCase() === "SELECT"){
 				// need to wait until end of turn ...
 				setTimeout($.proxy(this.set,this),1)
 			} else {
@@ -63,32 +63,33 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 		},
 		"{value} change": "set",
 		set: function(){
-			this.element.val(this.options.value())
+			this.element[0].value = this.options.value()
 		},
 		"change": function(){
-			this.options.value(this.element.val())
+			this.options.value(this.element[0].value)
 		}
 	})
 	
 	var Checked = can.Control.extend({
 		init: function(){
+			this.isCheckebox = (this.element[0].type.toLowerCase() == "checkbox");
 			this.check()
 		},
 		"{value} change": "check",
 		"{trueValue} change": "check",
 		"{falseValue} change": "check",
 		check: function(){
-			if(this.element.prop("type") == "checkbox"){
+			if(this.isCheckebox){
 				var value =  this.options.value(),
 					trueValue = this.options.trueValue() || true,
 					falseValue = this.options.falseValue() || false;
 					
-				this.element.prop("checked", value == trueValue )
+				this.element[0].checked = ( value == trueValue )
 			} else {
-				if(this.options.value() === this.element.val()){
-					this.element.prop("checked", true)
+				if(this.options.value() === this.element[0].value){
+					this.element[0].checked = true //.prop("checked", true)
 				} else {
-					this.element.prop("checked", false)
+					this.element[0].checked = false //.prop("checked", false)
 				}
 			}
 			
@@ -96,11 +97,11 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 		},
 		"change": function(){
 			
-			if(this.element.prop("type") == "checkbox"){
-				this.options.value( this.element.is(":checked") ? this.options.trueValue() : this.options.falseValue() );
+			if(this.isCheckebox){
+				this.options.value( this.element[0].checked? this.options.trueValue() : this.options.falseValue() );
 			} else {
-				if(this.element.is(":checked")){
-					this.options.value( this.element.val() );
+				if(this.element[0].checked){
+					this.options.value( this.element[0].value );
 				}
 			}
 			

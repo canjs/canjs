@@ -116,8 +116,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 			}
 			
 			this.scope = componentScope;
-			
-			$(el).data("scope", this.scope)
+			can.data(can.$(el),"scope", this.scope)
 			
 			// create a real Scope object out of the scope property
 			var renderedScope = hookupOptions.scope.add( this.scope ),
@@ -163,14 +162,16 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 		}
 	})
 	
-	
-	$.fn.scope = function(attr){
-		if( attr ) {
-			return this.data("scope").attr(attr)
-		} else {
-			return this.data("scope")
+	if($ && $.fn){
+		$.fn.scope = function(attr){
+			if( attr ) {
+				return this.data("scope").attr(attr)
+			} else {
+				return this.data("scope")
+			}
 		}
 	}
+	
 	
 	can.scope = function(el, attr){
 		var el = can.$(el);
