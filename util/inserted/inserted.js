@@ -18,7 +18,7 @@ steal('can/util/can.js',function (can) {
 				}
 			}
 			
-			if(inDocument){
+			if(inDocument && elem.getElementsByTagName){
 				can.trigger(elem,"inserted",[],false);
 				children = can.makeArray( elem.getElementsByTagName("*") );
 				for ( var j = 0, child; (child = children[j]) !== undefined; j++ ) {

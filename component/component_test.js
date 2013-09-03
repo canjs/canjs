@@ -509,6 +509,31 @@ test("page-count",function(){
 	
 })
 
+test("hello-world", function(){
+	
+can.Component.extend({
+  tag: "hello-world",
+  template: "{{#if visible}}{{message}}{{else}}Click me{{/if}}",
+  scope: {
+    visible: false,
+    message: "Hello There!"
+  },
+  events: {
+    click: function(){
+    	this.scope.attr("visible", true)
+    }
+  }
+});
+	
 
+var template = can.view.mustache("  <hello-world></hello-world>  ");
+
+can.append(can.$("#qunit-test-area"), template({}));
+
+can.trigger( can.$("#qunit-test-area hello-world"), "click" );
+
+equal(can.$("#qunit-test-area hello-world")[0].innerHTML, "Hello There!")
+
+})
 	
 })()
