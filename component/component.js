@@ -8,7 +8,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 				var self = this;
 				this.Control = can.Control.extend({
 					_lookup: function(options){
-						return [options.scope]
+						return [options.scope, window]
 					}
 				},can.extend({
 					setup: function(el, options){
