@@ -693,7 +693,7 @@ steal('can/util','can/construct', function( can ) {
 		 * be calling this unless in use with [can.Control::on].
 		 */
 		off : function(){
-			var el = this.element[0]
+			var el = this.element[0];
 			each(this._bindings || [], function( value ) {
 				value(el);
 			});

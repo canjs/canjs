@@ -162,7 +162,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 		}
 	})
 	
-	if($ && $.fn){
+	if(window.$ && $.fn){
 		$.fn.scope = function(attr){
 			if( attr ) {
 				return this.data("scope").attr(attr)

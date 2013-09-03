@@ -2,7 +2,7 @@
 	
 module("can/component",{
 	setup: function(){
-		can.remove( can.$("#qunit-test-area *") );
+		can.remove( can.$("#qunit-test-area>*") );
 	}
 })
 	
@@ -112,6 +112,9 @@ test("basic tabs",function(){
 				can.scope(this.element[0].parentNode).addPanel( this.scope );
 			},
 			" removed": function(){
+				if( !can.scope(this.element[0].parentNode) ){
+					console.log("bruke")
+				}
 				can.scope(this.element[0].parentNode).removePanel( this.scope );
 			}
 		}
@@ -176,7 +179,7 @@ test("basic tabs",function(){
 	equal( panels[0].innerHTML, "", "the second content is removed"  )
 	equal( panels[1].innerHTML, "ice cream, candy", "the second content is shown"  );
 	
-	can.remove( can.$("#qunit-test-area *") );
+	can.remove( can.$("#qunit-test-area>*") );
 });
 
 

@@ -198,11 +198,15 @@ function (can) {
 	}
 
 	$.fn.remove = function () {
-		$.cleanData(this);
 		this.each(function () {
 			if (this.parentNode != null) {
 				// might be a text node
-				this.getElementsByTagName && $.cleanData(this.getElementsByTagName('*'))
+				
+				if( this.getElementsByTagName ){
+					console.log()
+					$.cleanData( [this].concat( can.makeArray(this.getElementsByTagName('*')) )  );
+				} 
+				
 				this.parentNode.removeChild(this);
 			}
 		});
