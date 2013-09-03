@@ -1,12 +1,12 @@
-steal('./scope','funcunit/qunit',function(Scope){
+(function(){
 	
 	test("basics",function(){
 		
 		var items = { people: [{name: "Justin"},[{name: "Brian"}]], count: 1000 }; 
 		
-		var itemsScope = new Scope(items),
-			arrayScope = new Scope(itemsScope.attr('people'), itemsScope),
-			firstItem = new Scope( arrayScope.attr('0'), arrayScope );
+		var itemsScope = new can.view.Scope(items),
+			arrayScope = new can.view.Scope(itemsScope.attr('people'), itemsScope),
+			firstItem = new can.view.Scope( arrayScope.attr('0'), arrayScope );
 		
 		var nameInfo = firstItem.get('name');
 		equal(nameInfo.name, "name");
@@ -25,7 +25,7 @@ steal('./scope','funcunit/qunit',function(Scope){
 	test("adding items",function(){
 		expect(1);
 		
-		var base = new Scope({}),
+		var base = new can.view.Scope({}),
 			cur = base.add(new can.Observe());
 		
 		
@@ -38,7 +38,7 @@ steal('./scope','funcunit/qunit',function(Scope){
 	})
 	
 	test("current context",function(){
-		var base = new Scope({}),
+		var base = new can.view.Scope({}),
 			cur = base.add("foo")
 			
 		equal( cur.get(".").value, "foo", ". returns value");
@@ -54,7 +54,7 @@ steal('./scope','funcunit/qunit',function(Scope){
 		var parent = new can.Observe({name: "Justin"})
 		var child = new can.Observe({vals: "something"})
 		
-		var base = new Scope(parent),
+		var base = new can.view.Scope(parent),
 			cur = base.add(child);
 			
 		var data = cur.get("bar")
@@ -64,7 +64,7 @@ steal('./scope','funcunit/qunit',function(Scope){
 	})
 	
 	test("computes on scope",function(){
-		var base = new Scope({}),
+		var base = new can.view.Scope({}),
 			cur = base.add(can.compute({name: {first: "justin"}}));
 			
 		var data = cur.get("name.first");
@@ -80,7 +80,7 @@ steal('./scope','funcunit/qunit',function(Scope){
 		})
 		
 		var me = new Person({name: "Justin"})
-		var base = new Scope(me),
+		var base = new can.view.Scope(me),
 			cur = base.add({other: "foo"})
 		
 		var data = cur.get("fullName");
@@ -90,11 +90,11 @@ steal('./scope','funcunit/qunit',function(Scope){
 		
 	})
 	
-	test("Scope.prototype.compute", function(){
+	test("can.view.Scope.prototype.compute", function(){
 		
 		var map = new can.Map()
 		
-		var base = new Scope( map )
+		var base = new can.view.Scope( map )
 		
 		var age = base.compute("age")
 		
@@ -113,4 +113,4 @@ steal('./scope','funcunit/qunit',function(Scope){
 	})
 	
 	
-})
+})()

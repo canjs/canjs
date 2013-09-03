@@ -72,6 +72,11 @@
 			"type": "plugin",
 			"description": "Two way bindings and in-template declarative event handlers."
 		},
+		"can/view/scope": {
+			"name": "can.view.Scope",
+			"type": "plugin",
+			"description": "Looks up a value in parent contexts."
+		},
 		"can/model/queue": {
 			"name": "can.Model.Queue",
 			"type": "plugin",
@@ -148,7 +153,7 @@
 		"shim": {
 			"can/lib/jquery.1.9.1.js": "jQuery",
 			"can/lib/zepto.1.0rc1.js": "Zepto",
-			"can/lib/mootools-core-1.4.3.js": "{}",
+			"can/lib/mootools-core-1.4.5.js": "{}",
 			"can/util/dojo/dojo-1.8.1.js": "{}",
 			"can/lib/yui-3.7.3.js": "YUI"
 		},
@@ -184,12 +189,12 @@
 		},
 		"mootools": {
 			"description": "Mootools",
-			"library": "lib/mootools-core-1.4.3.js",
+			"library": "lib/mootools-core-1.4.5.js",
 			"steal": {
 				"map": {
 					"*": {
 						"can/util/util.js": "can/util/mootools/mootools.js",
-						"mootools/mootools.js": "can/lib/mootools-core-1.4.3.js"
+						"mootools/mootools.js": "can/lib/mootools-core-1.4.5.js"
 					}
 				}
 			}

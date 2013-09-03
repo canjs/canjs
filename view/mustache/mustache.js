@@ -1,10 +1,10 @@
 steal('can/util',
-	  './scope.js',
+	  'can/view/scope',
 	  'can/view',
 	  'can/view/scanner.js',
 	  'can/observe/compute',
 	  'can/view/render.js',
-function( can, Scope ){
+function( can ){
 	
 	// # mustache.js
 	// `can.Mustache`: The Mustache templating engine.
@@ -66,7 +66,7 @@ function( can, Scope ){
 		// used to make sure .fn and .inverse are always called with a Scope like object
 		makeConvertToScopes = function(orignal, scope, options){
 			return function(updatedScope, updatedOptions){
-				if(updatedScope != null && !(updatedScope instanceof  Scope)){
+				if(updatedScope != null && !(updatedScope instanceof  can.view.Scope)){
 					updatedScope = scope.add(updatedScope)
 				}
 				if(updatedOptions != null && !(updatedOptions instanceof  OptionsScope)){
@@ -1548,14 +1548,14 @@ function( can, Scope ){
 	 * @static
 	 */
 	
-	var OptionsScope = Scope.extend({
+	var OptionsScope = can.view.Scope.extend({
 		init: function(data, parent){
 			if(!data.helpers && !data.partials){
 				data = {
 					helpers: data
 				}
 			}
-			Scope.prototype.init.apply(this, arguments)
+			can.view.Scope.prototype.init.apply(this, arguments)
 		}
 	})
 	

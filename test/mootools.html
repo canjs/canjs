@@ -27,7 +27,7 @@
                     "map": {
                         "*": {
                             "can/util/util.js": "can/util/mootools/mootools.js",
-                            "mootools/mootools.js": "can/lib/mootools-core-1.4.3.js"
+                            "mootools/mootools.js": "can/lib/mootools-core-1.4.5.js"
                         }
                     }
                 };
@@ -38,12 +38,12 @@
                 "can/model", "can/view", "can/view/ejs",
                 "can/control", "can/route", "can/control/route",
                 "can/view/mustache", "can/view/mustache/bindings",
-                "can/model/queue", "can/construct/super",
-                "can/construct/proxy", "can/observe/delegate",
-                "can/observe/setter", "can/observe/attributes",
-                "can/observe/validations", "can/observe/backup",
-                "can/util/object", "can/util/string",
-                "can/util/fixture")
+                "can/view/scope", "can/model/queue",
+                "can/construct/super", "can/construct/proxy",
+                "can/observe/delegate", "can/observe/setter",
+                "can/observe/attributes", "can/observe/validations",
+                "can/observe/backup", "can/util/object",
+                "can/util/string", "can/util/fixture")
                 .then("can/test").then(
                 "can/component/component_test.js")
                 .then("can/construct/construct_test.js")
@@ -57,6 +57,7 @@
                 .then("can/control/route/route_test.js")
                 .then("can/view/mustache/mustache_test.js")
                 .then("can/view/mustache/bindings/bindings_test.js")
+                .then("can/view/scope/scope_test.js")
                 .then("can/model/queue/queue_test.js")
                 .then("can/construct/super/super_test.js")
                 .then("can/construct/proxy/proxy_test.js")

@@ -335,7 +335,8 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 		return filtered;
 	}
 	can.has = function(wrapped, element){
-		if(wrapped[0].contains(element)){
+		// this way work in mootools
+		if( Slick.contains(wrapped[0], element) ){
 			return wrapped
 		} else {
 			return []

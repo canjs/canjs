@@ -1,11 +1,11 @@
-steal('can/construct','can/observe','can/view','can/observe/compute',function(Construct,Observe, can){
+steal('can/util','can/construct','can/observe','can/view','can/observe/compute',function(can){
 	
 	var isObserve = function(obj) {
 		return obj !== null && can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
 	}
 	
 	
-	var Scope = Construct.extend({
+	var Scope = can.Construct.extend({
 		init: function(data, parent){
 			this._data = data;
 			this._parent = parent;

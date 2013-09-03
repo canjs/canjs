@@ -574,7 +574,7 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 	}
 
 	can.has = function(wrapped, element){
-		if(wrapped[0].contains(element)){
+		if( dojo.isDescendant(element, wrapped[0]) ){
 			return wrapped
 		} else {
 			return []
