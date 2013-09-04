@@ -30,7 +30,7 @@ of the `ATTR-VALUE` is desired, this can be specified like:
 
 ## Use
 
-To create a `can.Component`, you must first [can.Component.extend] `can.Component` 
+To create a `can.Component`, you must first [can.Component.extend extend] `can.Component` 
 with the methods and properties of how your component behaves:
 
     can.Component.extend({
@@ -59,14 +59,23 @@ Typically, you do not append a single component at a time.  Instead,
 you'll render a template with many custom tags like:
 
     <srchr-app>
-        <srchr-search>
-          
-        </srchr-search>
+      <srchr-search models="models">
+        <input name="search"/>
+      </srchr-search>
+      <ui-panel>
+        <srchr-history/>
+        <srchr-results models="models"/>
+      </ui-panel>
     </srchr-app>
 
 ## Extending can.Component
 
+Use [can.Component.extend] to create a can.Component constructor function
+that will automatically get initialized whenever it's matching 
+
 ## Tag
+
+
 
 ## Template
 
