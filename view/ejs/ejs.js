@@ -46,9 +46,11 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 	 * @body	 
 	 * Renders an object with view helpers attached to the view.
 	 * 
-	 *     new can.EJS({text: "<%= message %>"}).render({
+	 *     var rendered = new can.EJS({text: "<h1><%= message %>"</h1>}).render({
 	 *       message: "foo"
 	 *     },{helper: function(){ ... }})
+	 *     
+	 *     console.log(rendered); // "<h1>foo</h1>"
 	 */
 	render = function( object, extraHelpers ) {
 		object = object || {};

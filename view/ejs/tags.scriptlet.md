@@ -11,7 +11,7 @@ like for-loops, if/else, switch, etc.  An example:
     <% if( items.attr('length') === 0 ) { %>
         <tr><td>You have no items</td></tr>
     <% } else { %>
-        <% list(items, function(){ %>
+        <% items.each(function(item){ %>
           <tr> .... </tr>
         <% }) %>
     <% } %>
@@ -21,7 +21,7 @@ their own dedicated tags. Live binding leverages this hinting to ensure that log
 	
 	<!-- Each statement has its own dedicated EJS tag -->
     <% var address = person.attr('address') %>
-    <% list(items, function() { %>
+    <% items.each(function(item){ %>
         <tr> .... </tr>
     <% }) %>
     <span><%= address.attr('street') %><span>
@@ -29,7 +29,7 @@ their own dedicated tags. Live binding leverages this hinting to ensure that log
     <!-- This won't work! -->
     <%
       var address = person.attr('address');
-      list(items, function() {
+      items.each(function(item) {
     %>
         <tr> .... </tr>
     <% }) %>
