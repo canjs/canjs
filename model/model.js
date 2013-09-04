@@ -850,7 +850,7 @@ steal('can/util','can/observe', function( can ) {
 		 * The following uses models to convert to a [can.Model.List] of model
 		 * instances.
 		 * 
-		 *     Task = can.Model.extend({},{})
+		 *     Task = can.Model.extend()
 		 *     var tasks = Task.models([
 		 *       {id: 1, name : "dishes", complete : false},
 		 *       {id: 2, name: "laundry", compelte: true}
