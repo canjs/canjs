@@ -41,4 +41,4 @@ nicely organized seperating views from logic code.
 Since this could potentially make several XHR requests, in a big application
 this could be a performance concern.  Creating a build step to 
 concatenate and include all of the views in one file would be one way to optimize performance.
-If you are using Steal, it will do this automatically at build for you.
+If you are using <a href="http://javascriptmvc.com/docs/#!stealjs">Steal</a>, it will do this automatically at build for you.
