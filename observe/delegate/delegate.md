@@ -42,9 +42,9 @@ __add__
 
 An add event is fired when a new property has been added.
 
-    var o = new can.Control({});
+    var o = new can.Observe({});
     o.delegate("name","add", function(ev, value){
-      // called once
+      // will be called once
       can.$('#name').show()
     })
     o.attr('name',"Justin")
@@ -59,7 +59,7 @@ Set events are fired when a property takes on a new value.  set events are
 always fired after an add.
 
     o.delegate("name","set", function(ev, value){
-      // called twice
+      // will be called twice
       can.$('#name').text(value)
     })
     o.attr('name',"Justin")
@@ -70,7 +70,7 @@ __remove__
 Remove events are fired after a property is removed.
 
     o.delegate("name","remove", function(ev){
-      // called once
+      // will be called once
       $('#name').text(value)
     })
     o.attr('name',"Justin");
@@ -83,7 +83,7 @@ of an observe has changed. Delegate lets you use wildcards to
 match any property name.  The following listens for any change
 on an attribute of the params attribute:
 
-    var o = can.Control({
+    var o = new can.Observe({
       options : {
         limit : 100,
         offset: 0,

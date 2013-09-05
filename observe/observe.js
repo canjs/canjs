@@ -856,7 +856,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * @param {Function} [handler] the handler to unbind
 		 *
 		 * @body
-		 * `unbind` unbinds event handlers previously bound with [can.Observe.prototype.bind `bbind`].
+		 * `unbind` unbinds event handlers previously bound with [can.Observe.prototype.bind `bind`].
 		 * If no _handler_ is passed, all handlers for the given event type will be unbound.
 		 *
 		 * @codestart

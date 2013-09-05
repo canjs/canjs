@@ -13,7 +13,7 @@ the `ATTRNAME` property.
 By providing a function that takes the raw data and returns a form useful for JavaScript, 
 we can make our observes automatically convert data.
 
-	var Contact = can.Observe({
+	var Contact = can.Observe.extend({
 		setBirthday : function(raw){
 			if(typeof raw == 'number'){
 				return new Date( raw )
@@ -56,7 +56,7 @@ if the return value was fed straight into `attr`, but to replace the value with 
 new Observe or List completely:
 
 @codestart
-var Contact = can.Observe({
+var Contact = can.Observe.extend({
 	setInfo: function(raw) {
       return raw;
 	}
@@ -75,7 +75,7 @@ If you would rather have the new Observe or List merged into the current value, 
 `attr` inside the setter:
 
 @codestart
-var Contact = can.Observe({
+var Contact = can.Observe.extend({
 	setInfo: function(raw) {
       this.info.attr(raw);
       return this.info;
@@ -98,7 +98,7 @@ Setters can trigger errors if values passed didn't meet your defined validation(
 Below is an example of a _School_ observable that accepts a name property and errors
 when no value or a empty string is passed.
 
-	var School = can.Observe({
+	var School = can.Observe.extend({
 		setName : function(name, success, error){
 			if(!name){
 				error("no name");

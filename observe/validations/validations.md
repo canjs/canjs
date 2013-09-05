@@ -8,7 +8,7 @@ are set on [can.Observe]'s __static__ `init` function.
 
 The following validates the `birthday` attribute in Contacts:
 
-    Contact = can.Observe({
+    Contact = can.Observe.extend({
     	init : function(){
     		// validates that birthday is in the future
     		this.validate("birthday",function(birthday){
@@ -66,7 +66,7 @@ nothing if there are no errors, or an object of errors by attribute.
 
 To use validations, it's required you use the _observe/validations_ plugin.
 
-	can.Observe("Task",{
+	Task = can.Observe.extend({
 		init : function(){
 			this.validatePresenceOf("dueDate")
 		}

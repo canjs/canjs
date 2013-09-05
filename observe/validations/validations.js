@@ -83,7 +83,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			 * @body
 			 * The following example validates that a person's age is a number:
 			 *
-			 *     Person = can.Observe({
+			 *     Person = can.Observe.extend({
 			 *         init : function(){
 			 *           this.validate(["age"], function(val){
 			 *             if( typeof val === 'number' ){
@@ -96,7 +96,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 			 *
 			 * The error message can be overwritten with `options` __message__ property:
 			 *
-			 *     Person = can.Observe({
+			 *     Person = can.Observe.extend({
 			 *         init : function(){
 			 *           this.validate(
 			 *             "age",
@@ -367,7 +367,7 @@ steal('can/util', 'can/observe/attributes', function (can) {
 		 * To use validations, it's suggested you use the
 		 * observe/validations plugin.
 		 *
-		 *     can.Observe("Task",{
+		 *     Task = can.Observe.extend({
 		 *       init : function(){
 		 *         this.validatePresenceOf("dueDate")
 		 *       }

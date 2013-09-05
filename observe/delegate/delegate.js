@@ -144,7 +144,7 @@ steal('can/util', 'can/observe', function(can) {
 		 * 
 		 *     
 		 *     // create an observable
-		 *     var observe = can.Observe({
+		 *     var observe = new can.Observe({
 		 *       foo : {
 		 *         bar : "Hello World"
 		 *       }

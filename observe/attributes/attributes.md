@@ -28,7 +28,7 @@ The attributes plugin comes with three useful predefined types: `'date'`, `'numb
 Here is a quick example of an Observe-based class using the attributes plugin to convert and normalize
 its data, and then to serialize the instance:
 
-    can.Observe('Bio', {
+    Bio = can.Observe.extend({
         attributes: {
         birthday: 'date',
         weight: 'number'
@@ -64,7 +64,7 @@ function is used to convert the raw data into an instance of the Model.
 
 This example builds on the previous one to demonstrate these reference types.
 
-    can.Observe('Bio', {
+    Bio = can.Observe.extend({
         attributes: {
         birthday: 'date',
         weight: 'number'
@@ -73,7 +73,7 @@ This example builds on the previous one to demonstrate these reference types.
     // to specify serialize or convert.
     }, {});
 
-    can.Observe('Contact', {
+    Contact = can.Observe.extend({
         attributes: {
             bio: 'Bio.newInstance'
         }
@@ -97,9 +97,9 @@ When `Contact` is initialized, the `weight` attribute is set and converted to a 
 converter we provided.  Next the `birthday` attribute is set using the `attr` method and gets converted
 as well.  Lastly, `serialize` is invoked converting the new attributes to raw types for the server.
 
-	var Contact = new can.Observe({
+	var Contact = can.Observe.extend({
 		attributes: {
-			birthday: 'date'
+			birthday: 'date',
 			weight: 'number'
 		},
 		serialize : {
@@ -109,7 +109,7 @@ as well.  Lastly, `serialize` is invoked converting the new attributes to raw ty
 						"-" + (val.getMonth() + 1) + 
 						"-" + val.getDate(); 
 			},
-			number: (val){
+			number: function(val){
 				return val + '';
 			}
 		},
