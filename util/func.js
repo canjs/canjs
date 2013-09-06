@@ -145,7 +145,7 @@ like [http://api.jquery.com/jQuery.param/ jQuery.param].
 
 @body
 
-can.depararm will take any string 
+can.depararm will take any string and convert it into an Object literal that represents the string passed into it.
 */
 //
 /**
@@ -765,11 +765,11 @@ function(s) for the success or failure state of both asynchronous and synchronou
 */
 //
 /**
+
 @function can.sub
 @parent can.util
-@description Returns a string with {param} replaced values from data.
 
-    can.sub("foo {bar}",{bar: "far"}) //-> "foo far"
+@description Returns a string with {param} replaced values from data.
 
 @signature `can.sub(str, data, remove, s)`
 @param {String} str The string to make substitutes on
@@ -777,6 +777,12 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @param {Boolean} [remove] if a match is found, remove the property from the object
 @param {String} s The string to replace
 @return {String} The converted string or `null` if any data to render are `undefined` or `null`
+
+@body
+
+`can.sub` returns a string with {param} replaced values from data, where `param` is the name of an object property.
+
+    can.sub("foo {bar}", {bar: "far"}) //-> "foo far"
 */
 //
 
@@ -784,15 +790,19 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @function can.underscore
 @parent can.util
 
-@description Takes a CamelCase or mixedCase string and underscores the string on the capital letter. If parts of the string are not CamelCase or mixedCase, it will not change them. `can.underscore` will lower case the entire string as well.
-
-    can.underscore("OneTwo") //-> "one_two"
-    can.underscore("OneTwo threeFour") //-> "one_two three_four"
+@description Takes a CamelCase or mixedCase string and underscores the string on the capital letter.
 
 @signature `can.underscore(str)`
 @param {String} str The string to underscore
 @return {String} the underscored string
- */ 
+
+@body
+
+`can.underscore` takes a CamelCase or mixedCase string and underscores the string on the capital letter. If parts of the string are not CamelCase or mixedCase, it will not change them. `can.underscore` will lower case the entire string as well.
+
+    can.underscore("OneTwo") //-> "one_two"
+    can.underscore("OneTwo threeFour") //-> "one_two three_four"
+*/ 
 //
 /**
 @function can.esc
@@ -800,26 +810,30 @@ function(s) for the success or failure state of both asynchronous and synchronou
 
 @description Escapes a string for insertion into HTML.
 
-    can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
-
 @signature `can.esc(str)`
 @param {String} str The string to escape
 @return {String} The HTML escaped string.
+
+@body
+
+    can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
 */
 //
 /**
 @function can.getObject
 @parent can.util
-@description Gets an object from a string.  It can also modify objects on the 'object path' by removing or adding properties.
-
-    Foo = {Bar: {Zar: {"Ted"}}}
-    can.getObject("Foo.Bar.Zar") //-> "Ted"
-
-@signature can.getObject(name, roots, add)
+@signature `can.getObject(name, roots, add)`
+Gets an object from a string.
 @param {String} name the name of the object to look for
 @param {Array} [roots] an array of root objects to look for the name.  If roots is not provided, the window is used.
 @param {Boolean} [add] true to add missing objects to the path. false to remove found properties. undefined to not modify the root object
 @return {Object} The object.
+@body
+
+Gets an object from a string.  It can also modify objects on the 'object path' by removing or adding properties.
+
+    Foo = {Bar: {Zar: {"Ted"}}}
+    can.getObject("Foo.Bar.Zar") //-> "Ted"
 */
 var a = function() {};
 /**
