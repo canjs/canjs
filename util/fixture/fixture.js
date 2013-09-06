@@ -411,7 +411,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		 * 
 		 * These fixtures, combined with a [can.Model] that connects to these services like:
 		 * 
-		 *      var Todo = can.Model({
+		 *      var Todo = can.Model.extend({
 		 *          findAll : 'GET /todos',
 		 *          findOne : 'GET /todos/{id}',
 		 *          create  : 'POST /todos',
@@ -668,7 +668,14 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				 * @param {Function} callback A function to call with the created item.
 				 * 
 				 * @body
-				 * `store.create(request, response)`
+				 * `store.destroy(request, callback)` simulates
+				 * a request to destroy an item from the server.
+				 * 
+				 * @codestart
+				 * todosStore.create({
+				 *   url: "/todos"
+				 * }, function(){});
+				 * @codeend
 				 */
 				create: function (settings, response) {
 					var item = make(items.length, items);
@@ -726,6 +733,14 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				 * 
 				 * @body
 				 * `store.find(settings)`
+				 * `store.destroy(request, callback)` simulates a request to 
+				 * get a single item from the server.
+				 * 
+				 * @codestart
+				 * todosStore.find({
+				 *   url: "/todos/5"
+				 * }, function(){});
+				 * @codeend
 				 */
 				find: function(settings){
 					return findOne( getId(settings) );
