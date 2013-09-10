@@ -39,11 +39,11 @@ value to a [can.compute]:
             el.value = newVal;
           })
           el.onchange = function(){
-            value(this.value)
+            value(this.value);
           }
-          el.value = value()
+          el.value = value();
         }
-    })
+    });
     
 And used by the following template:
 
@@ -81,25 +81,25 @@ The returned function is called with the `<ul>` element:
 
     can.Mustache.registerHelper("sortable",function(){
       return function(el){
-        $(el).slider()
+        $(el).slider();
       }
-    })
+    });
 
 If the helper is called __between tags__ like:
 
     <ul>{{items}}</ul>
     
 The returned function is called with a temporary element. The 
-following helper would be called with a temporary `<LI>` element:
+following helper would be called with a temporary `<li>` element:
 
     can.Mustache.registerHelper("items",function(){
       return function(li){
         
       }
-    })
+    });
 
 The temporary element depends on the parent element. The default temporary element
-is a `<SPAN>` element.
+is a `<span>` element.
 
 
 

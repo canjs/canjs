@@ -28,7 +28,7 @@ section will be rendered.
 	Result:
 		I have friends!
 
-When using the `[can.Mustache.helpers.section {{#if key}}]` helper, or any other helper for that matter, 
+When using the `[can.Mustache.helpers.if {{#if key}}]` helper, or any other helper for that matter, 
 the special `[can.Mustache.helpers.else {{else}}] helper becomes available. `{{else}}` is equivalent to 
 an [can.Mustache.helpers.inverse {{^key}}] inverse section (rendering **falsey** data), except that it 
 only uses a single tag and exists inside 
@@ -203,9 +203,9 @@ that and the previous argument like so:
 
 __Evaluating Helpers__
 
-If you want to use a helper with a [section](#Sections), you need to call
+If you want to use a helper with a [can.Mustache.Sections section], you need to call
 `options.fn(context)` in your return statement. This will return a 
-string with the resulting evaluated [section](#Sections).
+string with the resulting evaluated [can.Mustache.Sections section].
 
 Similarly, you can call `options.inverse(context)` to evaluate the 
 template between an `{{else}}` tag and the closing tag.
@@ -228,7 +228,7 @@ __Advanced Helpers__
 Helpers can be passed normal objects, native objects like numbers and strings, 
 as well as a hash object. The hash object will be an object literal containing 
 all ending arguments using the `key=value` syntax. The hash object will be provided 
-to the helper as `options.hash`. Additionally, when using [section](#Sections) with the helper, 
+to the helper as `options.hash`. Additionally, when using [can.Mustache.Sections section] with the helper, 
 you can set a custom context by passing the object instead of `this`.
 
 	Mustache.registerHelper('exercise', function(group, action, 

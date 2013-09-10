@@ -122,7 +122,7 @@ resulting in the template rendering with the current context applied to the part
 
 ## Passing Partials in Options
 
-Partials can resolve the context object that contain partial identifiers in them.
+Partials can resolve the context object that contains partial identifiers.
 For example:
 
 @codestart

@@ -829,8 +829,8 @@ function( can ){
 								 * 
 								 * ## Use
 								 * 
-								 * The `{{helper}}` syntax is used to call out to Mustache [can.Mustache.helper helper functions] that may do
-								 * more complex functionality. `helper` is a [can.Mustache.key key] that must match either:
+								 * The `{{helper}}` syntax is used to call out to Mustache [can.Mustache.helper helper functions] functions 
+								 * that may contain more complex functionality. `helper` is a [can.Mustache.key key] that must match either:
 								 * 
 								 *  - a [can.Mustache.registerHelper registered helper function], or
 								 *  - a function in the current or parent [can.Mustache.context contexts]
