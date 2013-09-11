@@ -49,6 +49,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			return count;
 		},
 		onready = !0,
+		readyCalled = 0,
 		location = window.location,
 		wrapQuote = function(str) {
 			return (str+'').replace(/([.?*+\^$\[\]\\(){}|\-])/g, "\\$1");
@@ -311,8 +312,9 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			if( val === false ) {
 				onready = val;
 			}
-			if( val === true || onready === true ) {
+			if( !readyCalled && (val === true || onready === true) ) {
 				can.route._setup();
+				readyCalled = true;
 				setState();
 			}
 			return can.route;
