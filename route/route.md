@@ -1,13 +1,13 @@
 @function can.route can.route
 @group can.route.static static
-@inherits can.Observe
+@inherits can.Map
 @download can/route
 @test can/route/test.html
 @parent canjs
 
 @description Manage browser history and
 client state by synchronizing the window.location.hash with
-an [can.Observe].
+an [can.Map].
 
 @signature `can.route( template [, defaults] )`
 
@@ -43,7 +43,7 @@ create history enabled Ajax websites.  However,
 
 ## How it works
 
-<code>can.route</code> is a [can.Observe] that represents the
+<code>can.route</code> is a [can.Map] that represents the
 <code>window.location.hash</code> as an 
 object.  For example, if the hash looks like:
 
@@ -57,19 +57,19 @@ the data in <code>can.route</code> looks like:
 `can.route` keeps the state of the hash in-sync with the `data` contained within 
 `can.route`.
 
-## can.Observe
+## can.Map
 
-`can.route` is a [can.Observe]. Understanding
-`can.Observe` is essential for using `can.route` correctly.
+`can.route` is a [can.Map]. Understanding
+`can.Map` is essential for using `can.route` correctly.
 
 You can listen to changes in an Observe with `bind(eventName, handler(ev, args...))` and
 change can.route's properties with 
-[can.Observe.prototype.attr attr].
+[can.Map.prototype.attr attr].
 
 ### Listening to changes in an Observable
 
 Listen to changes in history 
-by [can.Observe.prototype.bind bind]ing to
+by [can.Map.prototype.bind bind]ing to
 changes in <code>can.route</code> like:
 
     can.route.bind('change', function(ev, attr, how, newVal, oldVal) {
@@ -81,7 +81,7 @@ changes in <code>can.route</code> like:
  - `newVal`/`oldVal` - the new and old values of the attribute
 
 You can also listen to specific changes 
-with [can.Observe.delegate delegate]:
+with [can.Map.delegate delegate]:
 
     can.route.delegate('id','change', function(){ ... })
 
@@ -97,7 +97,7 @@ behavior, <code>remove</code> is useful for teardown.
 
 ### Updating an observable
 
-Create changes in the route data with [can.Observe.prototype.attr attr] like:
+Create changes in the route data with [can.Map.prototype.attr attr] like:
 
     can.route.attr('type','images');
 
@@ -228,11 +228,11 @@ in a control:
     }
 
 
-### Getting more specific with the `can.Observe.delegate` plugin
+### Getting more specific with the `can.Map.delegate` plugin
 
 Sometimes, you might only want to trigger a function when the route changes
 only once, even if the route change gets called multiple times. By using the 
-[can.Observe.delegate] plugin, this is extremely easy. This plugin allows you to 
+[can.Map.delegate] plugin, this is extremely easy. This plugin allows you to 
 listen to change, set, add, and remove on `can.route`.
 
 If you wanted to, say, show a list of recipes when  __type__ was set to recipe

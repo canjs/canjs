@@ -2,7 +2,7 @@ steal('can/util',
 	  'can/view/scope',
 	  'can/view',
 	  'can/view/scanner.js',
-	  'can/observe/compute',
+	  'can/compute',
 	  'can/view/render.js',
 function( can ){
 	
@@ -47,12 +47,12 @@ function( can ){
 		},
 		
 		/*
-		 * Checks whether an object is a can.Observe.
-		 * @param  {[can.Observe]}  observable
+		 * Checks whether an object is a can.Map.
+		 * @param  {[can.Map]}  observable
 		 * @return {Boolean} returns if the object is an observable.
 		 */
 		isObserve = function(obj) {
-			return obj != null && can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
+			return obj instanceof can.Map;
 		},
 		
 		/*
@@ -684,7 +684,7 @@ function( can ){
 								 * 
 								 * Depending on the value's type, the following actions happen:
 								 * 
-								 * - `Array` or [can.Observe.List] - the block is rendered for 
+								 * - `Array` or [can.List] - the block is rendered for 
 								 *   each item in the array. The [can.Mustache.context context] is set to 
 								 *   the item within each block rendering.
 								 * - A `truthy` value - the block is rendered with the [can.Mustache.context context]
@@ -800,7 +800,7 @@ function( can ){
 								 * @param {...can.Mustache.key|String|Number} [args] Space seperated arguments
 								 * that get passed to the helper function as arguments. If the key's value is a:
 								 * 
-								 *  - [can.Observe] - A getter/setter [can.compute] is passed.
+								 *  - [can.Map] - A getter/setter [can.compute] is passed.
 								 *  - [can.compute] - The can.compute is passed.
 								 *  - `function` - The function's return value is passed.
 								 * 
@@ -868,7 +868,7 @@ function( can ){
 								 *         // number -> 4
 								 *     });
 								 * 
-								 * If an argument `key` value is a [can.Observe] property, the Observe's 
+								 * If an argument `key` value is a [can.Map] property, the Observe's 
 								 * property is converted to a getter/setter [can.compute]. For example:
 								 * 
 								 * The template:
@@ -877,7 +877,7 @@ function( can ){
 								 * 
 								 * Rendered with:
 								 * 
-								 *     {user: new can.Observe({name: "Slim Shady"})}
+								 *     {user: new can.Map({name: "Slim Shady"})}
 								 * 
 								 * Needs the helper to check if name is a function or not:
 								 * 
@@ -971,7 +971,7 @@ function( can ){
 								 * @param {...can.Mustache.key|String|Number} [args] Space seperated arguments
 								 * that get passed to the helper function as arguments. If the key's value is a:
 								 * 
-								 *  - [can.Observe] - A getter/setter [can.compute] is passed.
+								 *  - [can.Map] - A getter/setter [can.compute] is passed.
 								 *  - [can.compute] - The can.compute is passed.
 								 *  - `function` - The function's return value is passed.
 								 * 
@@ -1030,7 +1030,7 @@ function( can ){
 								 * @param {...can.Mustache.key|String|Number} [args] Space seperated arguments
 								 * that get passed to the helper function as arguments. If the key's value is a:
 								 * 
-								 *  - [can.Observe] - A getter/setter [can.compute] is passed.
+								 *  - [can.Map] - A getter/setter [can.compute] is passed.
 								 *  - [can.compute] - The can.compute is passed.
 								 *  - `function` - The function's return value is passed.
 								 * 
@@ -1773,7 +1773,7 @@ function( can ){
 		 * context. If the value is a function or can.compute, the function's 
 		 * return value is used.
 		 * 
-		 * If the value of the key is a [can.Observe.List], the resulting HTML is updated when the
+		 * If the value of the key is a [can.List], the resulting HTML is updated when the
 		 * list changes. When a change in the list happens, only the minimum amount of DOM
 		 * element changes occur.
 	 	 * 

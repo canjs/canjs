@@ -15,12 +15,12 @@
 			"isDefault": true
 		},
 		"can/observe": {
-			"name": "can.Observe",
-			"description": "Observable key-value bindings",
+			"name": "can.Map, can.List, can.compute",
+			"description": "Observables and key-value bindings",
 			"type": "core",
 			"isDefault": true
 		},
-		"can/observe/compute": {
+		"can/compute": {
 			"name": "can.compute",
 			"description": "can.compute lets you make observable values",
 			"type": "core",
@@ -67,7 +67,7 @@
 			"type": "plugin",
 			"description": "Live-binding Handlebars and Mustache views"
 		},
-		"can/view/mustache/bindings": {
+		"can/view/bindings": {
 			"name": "can.view.bindings",
 			"type": "plugin",
 			"description": "Two way bindings and in-template declarative event handlers."
@@ -92,27 +92,27 @@
 			"type": "plugin",
 			"description": "Proxy construct methods"
 		},
-		"can/observe/delegate": {
+		"can/map/delegate": {
 			"name": "can.Observe.delegate",
 			"type": "plugin",
 			"description": "Listen to Observe attributes"
 		},
-		"can/observe/setter": {
+		"can/map/setter": {
 			"name": "can.Observe.setter",
 			"type": "plugin",
 			"description": "Use setter methods on Observes"
 		},
-		"can/observe/attributes": {
+		"can/map/attributes": {
 			"name": "can.Observe.attributes",
 			"type": "plugin",
 			"description": "Define Observe attributes"
 		},
-		"can/observe/validations": {
+		"can/map/validations": {
 			"name": "can.Observe.validations",
 			"type": "plugin",
 			"description": "Validate Observe attributes"
 		},
-		"can/observe/backup": {
+		"can/map/backup": {
 			"name": "can.Observe.backup",
 			"type": "plugin",
 			"description": "Backup and restore an Observes state"

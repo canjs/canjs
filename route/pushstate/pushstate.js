@@ -28,7 +28,7 @@ steal('can/util', 'can/route', function(can) {
         var param = can.route.param,
             paramsMatcher = /^\?(?:[^=]+=[^&]*&)*[^=]+=[^&]*/;
         can.extend(can.route, {
-            history: new can.Observe({path:getPath()}),
+            history: new can.Map({path:getPath()}),
             _paramsMatcher: paramsMatcher,
             _querySeparator: '?',
             _setup: function() {

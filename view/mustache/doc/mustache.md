@@ -9,7 +9,7 @@
 @download http://canjs.us/release/latest/can.view.mustache.js
 
 @description Logic-less [http://mustache.github.io/ mustache] templates with live binding 
-when used with [can.Observes](#can_observe).
+when used with [can.Maps](#can_observe).
 
 @signature `new can.Mustache(options)`
 
@@ -45,7 +45,7 @@ __Mustache Template__
 
 __JavaScript__
 
-	var data = new can.Observe({
+	var data = new can.Map({
 		user: 'Tina Fey',
 		messages: 0
 	});

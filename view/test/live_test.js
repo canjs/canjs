@@ -1,6 +1,6 @@
 steal('can/view/live.js',
-	'can/observe/compute',
-	'can/observe',
+	'can/compute',
+	'can/map',
 	'funcunit/qunit',
 	function(live, compute, Observe){
 
@@ -13,7 +13,7 @@ steal('can/view/live.js',
 
 		div.appendChild(span)
 		
-		var items = new can.Observe.List(['one','two']);
+		var items = new can.List(['one','two']);
 
 		var html = compute(function(){
 			var html = "";
@@ -43,7 +43,7 @@ steal('can/view/live.js',
 
 		div.appendChild(span)
 		
-		var items = new can.Observe.List(['one','two']);
+		var items = new can.List(['one','two']);
 
 		var text = compute(function(){
 			var html = "";
@@ -66,7 +66,7 @@ steal('can/view/live.js',
 
 		var div = document.createElement('div');
 		
-		var items = new can.Observe.List(['class','foo']);
+		var items = new can.List(['class','foo']);
 
 		var text = compute(function(){
 			var html = "";
@@ -95,13 +95,13 @@ steal('can/view/live.js',
 		var div = document.createElement('div');
 		div.className = "foo "+live.attributePlaceholder+" "+live.attributePlaceholder+" end";
 
-		var firstObject = new can.Observe({});
+		var firstObject = new can.Map({});
 
 		var first = compute(function(){
 			return firstObject.attr('selected') ? "selected" : ""
 		})
 
-		var secondObject = new can.Observe({});
+		var secondObject = new can.Map({});
 
 		var second = compute(function(){
 			return secondObject.attr('active') ? "active" : ""
@@ -130,7 +130,7 @@ steal('can/view/live.js',
 	test("list", function(){
 
 		var div = document.createElement('div'),
-			list = new can.Observe.List(['sloth', 'bear']),
+			list = new can.List(['sloth', 'bear']),
 			template = function(animal){
 				return "<label>Animal=</label> <span>"+animal+"</span>"
 			}

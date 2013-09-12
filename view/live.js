@@ -3,7 +3,7 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 	// ## live.js
 	// 
 	// The live module provides live binding for computes
-	// and can.Observe.List.
+	// and can.List.
 	// 
 	// Currently, it's API is designed for `can/view/render`, but
 	// it could easily be used for other purposes.

@@ -299,14 +299,14 @@
 			" User name: <%= user.attr('name') || '-' %>");
 
 		var frag = can.view('test196', {
-			user: new can.Observe()
+			user: new can.Map()
 		});
 		var div = document.createElement('div');
 		div.appendChild(frag);
 		equal(div.innerHTML, 'User id: - User name: -', 'Got expected HTML content');
 
 		can.view('test196', {
-			user : new can.Observe()
+			user : new can.Map()
 		}, function(frag) {
 			div = document.createElement('div');
 			div.appendChild(frag);
@@ -315,7 +315,7 @@
 	});
 
 	test("Select live bound options don't contain __!!__", function() {
-		var domainList = new can.Observe.List([{
+		var domainList = new can.List([{
 		  id: 1,
 		  name: 'example.com'
 		}, {
@@ -346,7 +346,7 @@
 	test('Live binding on number inputs', function(){
 
 		var template = can.view.ejs('<input id="candy" type="number" value="<%== state.attr("number") %>" />');
-		var observe = new can.Observe({ number : 2 });
+		var observe = new can.Map({ number : 2 });
 		var frag = template({ state: observe });
 
 		can.append(can.$("#qunit-test-area"), frag);
@@ -362,7 +362,7 @@
 
 	test("Resetting a live-bound <textarea> changes its value to __!!__ (#223)", function() {
 		var template = can.view.ejs("<form><textarea><%= this.attr('test') %></textarea></form>"),
-			frag = template(new can.Observe({
+			frag = template(new can.Map({
 				test : 'testing'
 			})),
 			form, textarea;
@@ -420,7 +420,7 @@
 
 	test("Using '=' in attribute does not truncate the value", function() {
 		var template = can.view.ejs("<div id='equalTest' <%= this.attr('class') %>></div>"),
-			obs = new can.Observe({
+			obs = new can.Map({
 				'class' : 'class="someClass"'
 			}),
 			frag = template(obs), div;

@@ -16,7 +16,7 @@
 		<script type='text/javascript'>
 			QUnit.config.autostart = false;
 			steal('can/util','can/model', 'can/model/queue', 
-			      'can/util/fixture','can/observe/attributes',function(CAN){
+			      'can/util/fixture','can/map/attributes',function(CAN){
 				window.can = CAN;
 			}).then("can/test").then('can/model/model_test.js', 'can/model/queue/queue_test.js',function(){
 				QUnit.start();

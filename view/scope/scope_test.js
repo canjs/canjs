@@ -26,7 +26,7 @@
 		expect(1);
 		
 		var base = new can.view.Scope({}),
-			cur = base.add(new can.Observe());
+			cur = base.add(new can.Map());
 		
 		
 		cur._data.bind("items",function(ev, newVal, oldVal){
@@ -51,8 +51,8 @@
 	})
 	
 	test("highest scope observe is parent observe",function(){
-		var parent = new can.Observe({name: "Justin"})
-		var child = new can.Observe({vals: "something"})
+		var parent = new can.Map({name: "Justin"})
+		var child = new can.Map({vals: "something"})
 		
 		var base = new can.view.Scope(parent),
 			cur = base.add(child);

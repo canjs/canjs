@@ -1,7 +1,7 @@
-steal('can/util','can/construct','can/observe','can/view','can/observe/compute',function(can){
+steal('can/util','can/construct','can/map','can/view','can/compute',function(can){
 	
 	var isObserve = function(obj) {
-		return obj !== null && can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
+		return obj instanceof can.Map;
 	}
 	
 	
@@ -99,7 +99,7 @@ steal('can/util','can/construct','can/observe','can/view','can/observe/compute',
 			// if there's not a helper by this name and no attribute with this name
 			// this was never actually doing the above.  Actually
 			// checking the keys triggers a __reading call which we don't want
-			!Mustache.getHelper(ref) && can.inArray(defaultObserveName, can.Observe.keys(defaultObserve)) === -1*/ ) {
+			!Mustache.getHelper(ref) && can.inArray(defaultObserveName, can.Map.keys(defaultObserve)) === -1*/ ) {
 				{
 					return {
 						//scope: scope,

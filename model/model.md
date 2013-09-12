@@ -18,7 +18,7 @@ Creates a new instance of _ModelConstructor_.
 @return {can.Model} A new instance of _ModelConstructor_.
 
 @body
-Model adds service encapsulation to [can.Observe].  Model lets you:
+Model adds service encapsulation to [can.Map].  Model lets you:
 
  - Get and modify data from the server
  - Listen to changes by the server

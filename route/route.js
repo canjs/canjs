@@ -1,9 +1,9 @@
-steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
+steal('can/util','can/map', 'can/util/string/deparam', function(can) {
 
 	// ## route.js  
 	// `can.route`  
 	// _Helps manage browser history (and client state) by synchronizing the 
-	// `window.location.hash` with a `can.Observe`._  
+	// `window.location.hash` with a `can.Map`._  
 	//   
     // Helper methods used for matching routes.
 	var 
@@ -263,9 +263,9 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		},
 		/**
 		 * @hide
-		 * A can.Observe that represents the state of the history.
+		 * A can.Map that represents the state of the history.
 		 */
-		data: new can.Observe({}),
+		data: new can.Map({}),
         /**
          * @property {Object} routes
 		 * @hide
@@ -448,7 +448,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 	each(['bind','unbind','delegate','undelegate','attr','removeAttr'], function(name){
 		can.route[name] = function(){
 			// `delegate` and `undelegate` require
-			// the `can/observe/delegate` plugin
+			// the `can/map/delegate` plugin
 			if(!can.route.data[name]) {
             	return;
 			}
@@ -507,11 +507,6 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 	if( (document.readyState === 'complete' || document.readyState === "interactive") && onready) {
 		can.route.ready();
 	}
-
-	// extend route to have a similar property 
-	// that is often checked in mustache to determine
-	// an object's observability
-	can.route.constructor.canMakeObserve = can.Observe.canMakeObserve;
 
 	return can.route;
 });

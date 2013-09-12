@@ -15,7 +15,7 @@ __1.1.6__ ( May 30 2013 )
 - change: [Binding to an Observe.compute value is broken](https://github.com/bitovi/canjs/issues/372)
 - change: [Added validatesNumericalityOf to validations](https://github.com/bitovi/canjs/issues/370)
 - change: [Include can.Object in CanJS distribution](https://github.com/bitovi/canjs/issues/368)
-- change: [can.Observe makes can.Deferred into an observable](https://github.com/bitovi/canjs/issues/367)
+- change: [can.Map makes can.Deferred into an observable](https://github.com/bitovi/canjs/issues/367)
 - change: [Update sub to not break when str is undefined](https://github.com/bitovi/canjs/issues/365)
 - change: [List memory leak fix](https://github.com/bitovi/canjs/issues/363)
 - change: [Integrated incremental live lists](https://github.com/bitovi/canjs/issues/361)
@@ -65,7 +65,7 @@ __1.1.5__ ( Mar 28 2013 )
 - change: [fixing computes from converting type](https://github.com/bitovi/canjs/issues/278)
 - change: [can.view with Deferreds doesn't pass failures](https://github.com/bitovi/canjs/issues/276)
 - change: [HTML comments trip EJS rendering](https://github.com/bitovi/canjs/issues/271)
-- change: [can.Observe.prototype.each overrides {{#each}} Mustache helper.](https://github.com/bitovi/canjs/issues/258)
+- change: [can.Map.prototype.each overrides {{#each}} Mustache helper.](https://github.com/bitovi/canjs/issues/258)
 - change: [Any model with a &quot;.&quot; in the key name will cause observe.js _set() to throw and error](https://github.com/bitovi/canjs/issues/257)
 - change: [Item.List splice method does not convert inserted elements to Item type](https://github.com/bitovi/canjs/issues/253)
 - change: [Mustache: DOM exception when applying certain block patterns](https://github.com/bitovi/canjs/issues/243)
@@ -93,7 +93,7 @@ __1.1.4__ ( February 5, 2013 )
 - fix: [Observe.List sort doesn't use custom method passed](https://github.com/bitovi/canjs/issues/169)
 - fix: [test&fix: null values crashing validations](https://github.com/bitovi/canjs/pull/145)
 - fix: [EJS rendering null value](https://github.com/bitovi/canjs/pull/118)
-- fix: [can.Observe sort plugin doesn't trigger add events](https://github.com/bitovi/canjs/issues/205)
+- fix: [can.Map sort plugin doesn't trigger add events](https://github.com/bitovi/canjs/issues/205)
 - fix: [Observe.List sort plugin erroring on item removal](https://github.com/bitovi/canjs/pull/88)
 - fix: [Live binding on observe.lists nested in an observe doesn't work](https://github.com/bitovi/canjs/issues/204)
 - fix: [Observe.List sort doesn't use custom method passed](https://github.com/bitovi/canjs/issues/169)
@@ -114,7 +114,7 @@ __1.1.3__ ( December 11, 2012 )
 - fix: [compute only updates once when a list's contents are replaced](https://github.com/bitovi/canjs/commit/9cb47dfabba5dbe3bef161e6aae4a5ce2965ac49)
 - add: [Updated jQuery hashchange plugin](https://github.com/bitovi/canjs/pull/201)
 - add: [Generate computes from an observe property](https://github.com/bitovi/canjs/issues/203)
-- add: [Add can.Observe.List.prototype.replace](https://github.com/bitovi/canjs/issues/194)
+- add: [Add can.List.prototype.replace](https://github.com/bitovi/canjs/issues/194)
 - add: [Return resolved data models in view callback](https://github.com/bitovi/canjs/issues/1log
 83)
 
@@ -161,18 +161,18 @@ __1.1.0__ ( November 13, 2012 )
  - can.Control
     - add: [control does not listen to touchmove event on controller itself](https://github.com/bitovi/canjs/issues/104)
 
- - can.Observe
+ - can.Map
     - add: [List binding on .length of an object](https://github.com/bitovi/canjs/issues/142)
     - fix: [validation error that incorrectly labels an attribute with a value of 0 as empty](https://github.com/bitovi/canjs/pull/132)
     - add: [you can now pluralise event names to listen to matching events of that type (rather than firing a single event)](https://github.com/bitovi/canjs/issues/122)
     - add: [compound sets now behave correctly](https://github.com/bitovi/canjs/issues/119)
-    - fix: [can.Observe.delegate sets wrong event.currentTarget](https://github.com/bitovi/canjs/issues/123)
-    - add: [ability to assign object as attribute type in can.Observe](https://github.com/bitovi/canjs/issues/107)
+    - fix: [can.Map.delegate sets wrong event.currentTarget](https://github.com/bitovi/canjs/issues/123)
+    - add: [ability to assign object as attribute type in can.Map](https://github.com/bitovi/canjs/issues/107)
 
  - can.Model
     - fix: [can.Model with attributes that are models gets corrupted when you call attr()](https://github.com/bitovi/canjs/pull/141)
     - add: [missing dependency to can/model](https://github.com/bitovi/canjs/pull/140)
-    - Moved can/model/elements to can/observe/elements and renamed `models` to `instances`
+    - Moved can/model/elements to can/map/elements and renamed `models` to `instances`
     - fix: [can.Model.List doesn't fire the change event on the expando properties ](https://github.com/bitovi/canjs/issues/129)
 
 __1.0.7__ (June 25nd 2012)

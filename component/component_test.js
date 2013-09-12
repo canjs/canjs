@@ -74,7 +74,7 @@ test("basic tabs",function(){
 			},
 			removePanel: function(panel){
 				var panels = this.attr("panels");
-				can.Map.startBatch();
+				can.batch.start();
 				panels.splice(panels.indexOf(panel),1);
 				if(panel === this.attr("active")){
 					if(panels.length){
@@ -83,7 +83,7 @@ test("basic tabs",function(){
 						this.removeAttr("active")
 					}
 				}
-				can.Map.stopBatch()
+				can.batch.stop()
 			},
 			makeActive: function(panel){
 				this.attr("active",panel);

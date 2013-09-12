@@ -34,21 +34,21 @@
 
                 steal.config(config);
             }).then("can/util/fixture", "can/component",
-                "can/construct", "can/observe", "can/observe/compute",
+                "can/construct", "can/observe", "can/compute",
                 "can/model", "can/view", "can/view/ejs",
                 "can/control", "can/route", "can/control/route",
-                "can/view/mustache", "can/view/mustache/bindings",
+                "can/view/mustache", "can/view/bindings",
                 "can/view/scope", "can/model/queue",
                 "can/construct/super", "can/construct/proxy",
-                "can/observe/delegate", "can/observe/setter",
-                "can/observe/attributes", "can/observe/validations",
-                "can/observe/backup", "can/util/object",
+                "can/map/delegate", "can/map/setter",
+                "can/map/attributes", "can/map/validations",
+                "can/map/backup", "can/util/object",
                 "can/util/string", "can/util/fixture")
                 .then("can/test").then(
                 "can/component/component_test.js")
                 .then("can/construct/construct_test.js")
                 .then("can/observe/observe_test.js")
-                .then("can/observe/compute/compute_test.js")
+                .then("can/compute/compute_test.js")
                 .then("can/model/model_test.js")
                 .then("can/view/view_test.js")
                 .then("can/view/ejs/ejs_test.js")
@@ -56,16 +56,16 @@
                 .then("can/route/route_test.js")
                 .then("can/control/route/route_test.js")
                 .then("can/view/mustache/mustache_test.js")
-                .then("can/view/mustache/bindings/bindings_test.js")
+                .then("can/view/bindings/bindings_test.js")
                 .then("can/view/scope/scope_test.js")
                 .then("can/model/queue/queue_test.js")
                 .then("can/construct/super/super_test.js")
                 .then("can/construct/proxy/proxy_test.js")
-                .then("can/observe/delegate/delegate_test.js")
-                .then("can/observe/setter/setter_test.js")
-                .then("can/observe/attributes/attributes_test.js")
-                .then("can/observe/validations/validations_test.js")
-                .then("can/observe/backup/backup_test.js")
+                .then("can/map/delegate/delegate_test.js")
+                .then("can/map/setter/setter_test.js")
+                .then("can/map/attributes/attributes_test.js")
+                .then("can/map/validations/validations_test.js")
+                .then("can/map/backup/backup_test.js")
                 .then("can/util/object/object_test.js")
                 .then("can/util/string/string_test.js")
                 .then("can/util/fixture/fixture_test.js", function() {

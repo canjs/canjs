@@ -1,4 +1,4 @@
-steal("can/util","can/control","can/observe","can/view/mustache","can/view/mustache/bindings",function(can){
+steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindings",function(can){
 	
 	var ignoreAttributesRegExp = /data-view-id|class|id/i
 	/**

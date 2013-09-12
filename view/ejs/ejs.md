@@ -68,8 +68,8 @@ This is nice, but what if we change properties of the teacher?
 
 ## Basic Live Binding Example
 
-EJS sets up live templating binding when a [can.Observe]'s properties are read 
-via [can.Observe::attr attr] within a magic tag.  To make this template
+EJS sets up live templating binding when a [can.Map]'s properties are read 
+via [can.Map::attr attr] within a magic tag.  To make this template
 respond to changes in the teacher data, first rewrite the template
 to use the attr method to read properties and `list( observeList, cb(item, i) )`
 to iterate through a list like:
@@ -91,10 +91,10 @@ to iterate through a list like:
 __Note:__ The end of this page discusses why using `list` is 
 helpful, but it does nothing fancy.
 
-Next, turn your teacher into a `new can.Observe(object)` and pass
+Next, turn your teacher into a `new can.Map(object)` and pass
 that to `can.view`:
 
-    var teacher = new can.Observe({
+    var teacher = new can.Map({
       name : "Mr. Smith",
       grade : "a",
       students : [
@@ -162,7 +162,7 @@ to update an observable object, these functions are executed to return the new v
 
     // Suppose an observable "foo":
 
-    var foo = can.Observe({
+    var foo = can.Map({
       count: '0'
     });
 

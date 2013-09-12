@@ -20,7 +20,7 @@ In this example, we have a simple user welcome screen.
 		{{/messages}}
 	</p>
 
-	var data = new can.Observe({
+	var data = new can.Map({
 		user: 'Tina Fey',
 		messages: 0
 	});
@@ -35,14 +35,14 @@ Since we have no message it will render:
 
 Now say we have a request that updates
 the `messages` attribute to have `5` messages.  We 
-call the [attr](can.Observe.prototype.attr) method on the [can.Observe](can.Observe) to update
+call the [attr](can.Map.prototype.attr) method on the [can.Map](can.Map) to update
 the attribute to the new value.
 
 	data.attr('message', 5)
 
-After [can.Observe](can.Observe) recieves this update, it will automatically
+After [can.Map](can.Map) recieves this update, it will automatically
 update the paragraph tag to reflect the new value.
 
 	<p>You have 5 new message.</p>
 
-For more information visit the [can.Observe](can.Observe).
+For more information visit the [can.Map](can.Map).

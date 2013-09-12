@@ -24,7 +24,7 @@ Will call a `madLib` helper with the following arguements.
         // number -> 4
     });
     
-If a [can.Mustache.key] represents a [can.Observe] attribute,
+If a [can.Mustache.key] represents a [can.Map] attribute,
 it is converted to a [can.compute] getter/setter 
 function. This enables 2-way binding helpers.  
 
@@ -49,7 +49,7 @@ And used by the following template:
     
 And rendered with:
     
-    {me: new can.Observe({name: "Payal"})}
+    {me: new can.Map({name: "Payal"})}
 
 @param {can.Mustache.helperOptions} options An options object
 that gets populated with optional:

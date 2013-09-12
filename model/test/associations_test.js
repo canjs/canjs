@@ -112,7 +112,7 @@ test("Model.List association serialize on save", function(){
 	cSave.then(function(customer){
 		start()
 		ok(true, "called back")
-		equal(customer.loansAttr.constructor, can.Observe.List, "we get an observe list back")
+		equal(customer.loansAttr.constructor, can.List, "we get an observe list back")
 		/*ok(customer.loansAttr._namespace === undefined, "_namespace does not exist");
 		ok(customer.loansAttr._data === undefined, "_data does not exist");
 		ok(customer.loansAttr._use_call === undefined, "_use_call does not exist");
