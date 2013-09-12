@@ -351,13 +351,25 @@ Scanner.prototype = {
 					}
 					
 					if(tagName === top(specialStates.tagHookups) ){
-						
+						// If it's a self closing tag (like <content/>) make sure we put the / at the end
+						if(emptyElement) {
+							content = content.substr(0,content.length-1)
+						}
 						buff.push(put_cmd, 
 								 '"', clean(content), '"', 
 								 ",can.view.Scanner.hookupTag({tagName:'"+tagName+"',"+(attrs)+"scope: "+(this.text.scope || "this")+this.text.options)
 						
+						
+						
+						
+						// if it's a self closing tag (like <content/>) close and end the tag
+						if(emptyElement) {
+							buff.push("}));");
+							content = "/>";
+							specialStates.tagHookups.pop()
+						} 
 						// if it's an empty tag	 
-						if( tokens[i] === "<" &&  tokens[i+1] === "/"+tagName ){
+						else if( tokens[i] === "<" &&  tokens[i+1] === "/"+tagName ){
 							buff.push("}));");
 							content = token;
 							specialStates.tagHookups.pop()
@@ -456,8 +468,12 @@ Scanner.prototype = {
 							} 
 	
 						} else {
-							
-							
+							if( tagName.lastIndexOf("/") === tagName.length -1 ) {
+								tagName = tagName.substr(0, tagName.length -1);
+								
+								
+							} 
+								
 							if(Scanner.tags[tagName]){
 								// if the content tag is inside something it doesn't belong ...
 								if(tagName === "content" && elements.tagMap[top(tagNames)]){
@@ -470,6 +486,11 @@ Scanner.prototype = {
 							
 							
 							tagNames.push(tagName);
+								
+								
+							
+							
+							
 							
 							
 

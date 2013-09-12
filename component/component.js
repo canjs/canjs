@@ -1,6 +1,14 @@
 steal("can/util","can/control","can/observe","can/view/mustache","can/view/mustache/bindings",function(can){
 	
-	var Component = can.Component = can.Construct.extend({
+	var ignoreAttributesRegExp = /data-view-id|class|id/i
+	/**
+	 * @add can.Component
+	 */
+	var Component = can.Component = can.Construct.extend(
+	/**
+	 * @static
+	 */
+	{
 		setup: function(){
 			can.Construct.setup.apply( this, arguments );
 			
@@ -8,7 +16,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 				var self = this;
 				this.Control = can.Control.extend({
 					_lookup: function(options){
-						return [options.scope, window]
+						return [options.scope, options, window]
 					}
 				},can.extend({
 					setup: function(el, options){
@@ -61,6 +69,9 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 			
 		}
 	},{
+		/**
+		 * @prototype
+		 */
 		setup: function(el, hookupOptions){
 			// Setup values passed to component
 			var initalScopeData = {},
@@ -72,13 +83,14 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 			})
 			
 			// get the value in the scope for each attribute
+			// the hookup should probably happen after?
 			can.each(can.makeArray(el.attributes), function(node, index){
 				
 				var name = node.nodeName.toLowerCase(),
 					value = node.value;
 				
 				// ignore attributes already in ScopeMappings
-				if(component.constructor.attributeScopeMappings[name] || name === "data-view-id"){
+				if(component.constructor.attributeScopeMappings[name] || ignoreAttributesRegExp.test(name)){
 					return;
 				}
 				
@@ -112,7 +124,16 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/musta
 			if(this.constructor.Map){
 				componentScope = new this.constructor.Map(initalScopeData);
 			} else if(can.isFunction(this.scope)){
-				componentScope = new ( can.Map.extend(this.scope(el)) )(initalScopeData);
+				var scopeResult = this.scope(initalScopeData, hookupOptions.scope, el);
+				// if the function returns a can.Map, use that as the scope
+				if(scopeResult instanceof can.Map){
+					componentScope = scopeResult
+				} else if(typeof scopeResult == "function" && typeof scopeResult.extend == "function"){
+					componentScope = new scopeResult(initalScopeData);
+				} else {
+					componentScope = new ( can.Map.extend(scopeResult) )(initalScopeData);
+				}
+				
 			}
 			
 			this.scope = componentScope;

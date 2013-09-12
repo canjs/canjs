@@ -37,28 +37,28 @@
 </style>
 <div id='out'></div>
 <script id="app" type="text/mustache">
-	<div><treecombo items='locations' title='Locations'></treecombo></div>
+  <div><treecombo items='locations' title='Locations'/></div>
 </script>
 <script id="tree-combo-stash" type='text/mustache'>
-	<ul class='breadcrumb'>
-		<li can-click='emptyBreadcrumb'>{{title}}</li>
-			{{#each breadcrumb}}
-				<li can-click='updateBreadcrumb'>{{title}}</li>
-			{{/each}}
-		</ul>
-		<ul class='options'>
-			<content>
-				{{#selectableItems}}
-					<li {{#isSelected}}class='active'{{/isSelected}} can-click='toggle'>
-						<input type='checkbox' {{#isSelected}}checked{{/isSelected}}/>
-						{{title}}
-						{{#if children.length}}
-							<button class='showChildren' can-click='showChildren'>+</button>
-						{{/if}}
-					</li>
-				{{/selectableItems}}
-			</content>
-		</ul>
+  <ul class='breadcrumb'>
+    <li can-click='emptyBreadcrumb'>{{title}}</li>
+    {{#each breadcrumb}}
+      <li can-click='updateBreadcrumb'>{{title}}</li>
+    {{/each}}
+  </ul>
+  <ul class='options'>
+    <content>
+      {{#selectableItems}}
+        <li {{#isSelected}}class='active'{{/isSelected}} can-click='toggle'>
+          <input type='checkbox' {{#isSelected}}checked{{/isSelected}}/>
+            {{title}}
+          {{#if children.length}}
+            <button class='showChildren' can-click='showChildren'>+</button>
+          {{/if}}
+        </li>
+      {{/selectableItems}}
+    </content>
+  </ul>
 </script>
 <script src="../../lib/steal/steal.js"></script>
 <script type='text/javascript'>

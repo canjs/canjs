@@ -1,37 +1,47 @@
 <style type="text/css">
-    body {font-family: verdana}
-    tabs ul {
-        padding: 0px; margin: 0px;
-    }
-    tabs li {
-        float: left;
-        padding: 10px;
-        background-color: #F6F6F6;
-        list-style: none;
-        margin-left: 10px;
-    }
-    tabs li {
-        color: #1C94C4;
-        font-weight: bold;
-        text-decoration: none;
-    }
-    tabs li.active {
-        color: #F6A828;
-        cursor: default;
-    }
-    panel {
-       
-        clear: both;
-        display: block;
-    }
-    /* clearfix from jQueryUI */
-     tabs ul:after  { content: "."; display: block; height: 1px; clear: both; visibility: hidden; }
-     tabs ul { display: inline-block; }
-
-    </style>
+body {font-family: verdana}
+tabs {
+	margin-top: 20px;
+}
+button {clear: both;}
+tabs ul {
+    padding: 0px; margin: 0px;
+}
+tabs li {
+    float: left;
+    padding: 10px;
+    background-color: #F6F6F6;
+    list-style: none;
+    margin-left: 10px;
+}
+tabs li {
+    color: #1C94C4;
+    font-weight: bold;
+    text-decoration: none;
+}
+tabs li.active {
+    color: #F6A828;
+    cursor: default;
+}
+panel {
+   
+    clear: both;
+    display: block;
+}
+/* clearfix from jQueryUI */
+tabs ul:after  { content: "."; display: block; height: 1px; clear: both; visibility: hidden; }
+tabs ul { display: inline-block; }
+</style>
 <div id='out'></div>
 <script id="app" type="text/mustache">
-	<tabs>{{#each foodTypes}}<panel title='title'>{{content}}</panel>{{/each}}</tabs>
+  <p><button can-click="addVegies">Add Vegetables</button></p>
+  <tabs>
+    {{#each foodTypes}}
+      <panel title='title'>{{content}}</panel>
+    {{/each}}
+  </tabs>
+  
+  
 </script>
 <script src="../../lib/steal/steal.js"></script>
 <script>
@@ -42,7 +52,10 @@ can.Component.extend({
 	template: 	
 		"<ul>"+
     		 "{{#panels}}"+
-    			"<li {{#isActive}}class='active'{{/isActive}} can-click='makeActive'>{{title}}</li>"+
+    			"<li {{#isActive}}class='active'{{/isActive}} "+
+    			    "can-click='makeActive'>"+
+    			  "{{title}}"+
+    			"</li>"+
     		 "{{/panels}}"+
     	"</ul>"+
     	"<content></content>",
@@ -83,8 +96,8 @@ can.Component.extend({
 		}
 	}
 });
+
 can.Component.extend({
-	// make sure <content/> works
 	template: "{{#if active}}<content></content>{{/if}}",
 	tag:"panel",
 	scope: {
@@ -107,7 +120,13 @@ var foodTypes= new can.List([
 ])
 
 $("#out").html( can.view("app",{
-	foodTypes: foodTypes
+	foodTypes: foodTypes,
+	addVegies: function(){
+		foodTypes.push({
+			title: "Vegetables",
+			content: "Carrots, peas, kale"
+		})
+	}
 }) )
 
 

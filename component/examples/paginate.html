@@ -50,27 +50,25 @@
 		    text-align: center;
 		}
 	</style>
-	<div id='out'></div>
-	<script id="appMustache" type='text/mustache'>
-		<app>
-			<grid deferredData='websitesDeferred'>
-				{{#each items}}
-					<tr>
-				  	  	<td width='40%'>{{name}}</td>
-				  	  	<td width='70%'>{{url}}</td>
-				  	</tr>
-				{{/each}}
-			</grid>
-			<next-prev paginate='paginate'></next-prev>
-			<page-count page='paginate.page' count='paginate.pageCount'></page-count>
-		</app>
-	</script>
-	<script src="../../lib/steal/steal.js"></script>
-	<script type='text/javascript'> 
+<div id='out'></div>
+<script id="appMustache" type='text/mustache'>
+  <app>
+    <grid deferredData='websitesDeferred'>
+      {{#each items}}
+        <tr>
+          <td width='40%'>{{name}}</td>
+          <td width='70%'>{{url}}</td>
+        </tr>
+      {{/each}}
+    </grid>
+    <next-prev paginate='paginate'></next-prev>
+    <page-count page='paginate.page' count='paginate.pageCount'></page-count>
+  </app>
+</script>
+<script src="../../lib/steal/steal.js"></script>
+<script type='text/javascript'> 
 steal("can/util", "can/component", "can/observe/setter", "can/util/fixture",
   "can/model", function (can) {
-
-
 
 var Website = can.Model.extend({
   findAll: "/websites"
@@ -83,7 +81,8 @@ var websites = [{id:1,name:"CanJS",url:"http://canjs.us"},{id: 2,name:"jQuery++"
 	          {id:9,name:"Dojo",url:"http://dojo.com"},{id: 10,name:"YUI",url:"http://yui.com"},
 	          {id:11,name:"DoneJS",url:"http://donejs.com"},{id: 12,name:"Mindjet Connect",url:"http://connect.mindjet.com"},
 	          {id:13,name:"JSFiddle",url:"http://jsfiddle.net"},{id: 14,name:"Zepto",url:"http://zepto.com"},
-	          {id:15,name:"Spill",url:"http://spill.com"},{id: 16,name:"Github",url:"http://github.com"}]
+	          {id:15,name:"Spill",url:"http://spill.com"},{id: 16,name:"Github",url:"http://github.com"}];
+	          
 can.fixture("/websites", function (request) {
   var start = request.data.offset || 0
   end = start + (request.data.limit || websites.length);
@@ -92,8 +91,6 @@ can.fixture("/websites", function (request) {
     data: websites.slice(start, end)
   }
 });
-
-
 
 var Paginate = can.Map.extend({
   count: Infinity,
@@ -135,8 +132,6 @@ var Paginate = can.Map.extend({
   }
 });
 
-
-
 can.Component.extend({
   tag: "app",
   scope: function () {
@@ -161,8 +156,6 @@ can.Component.extend({
     }
   }
 });
-
-
 
 can.Component.extend({
   tag: "grid",
@@ -212,6 +205,7 @@ can.Component.extend({
 })
 
 $("#out").html(can.view("appMustache", {}))
-  })
+
+});
 	</script>
 </body>

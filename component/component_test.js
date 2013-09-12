@@ -509,31 +509,54 @@ test("page-count",function(){
 	
 })
 
-test("hello-world", function(){
+test("hello-world and whitespace around custom elements", function(){
 	
-can.Component.extend({
-  tag: "hello-world",
-  template: "{{#if visible}}{{message}}{{else}}Click me{{/if}}",
-  scope: {
-    visible: false,
-    message: "Hello There!"
-  },
-  events: {
-    click: function(){
-    	this.scope.attr("visible", true)
-    }
-  }
+	can.Component.extend({
+	  tag: "hello-world",
+	  template: "{{#if visible}}{{message}}{{else}}Click me{{/if}}",
+	  scope: {
+	    visible: false,
+	    message: "Hello There!"
+	  },
+	  events: {
+	    click: function(){
+	    	this.scope.attr("visible", true)
+	    }
+	  }
+	});
+		
+	
+	var template = can.view.mustache("  <hello-world></hello-world>  ");
+	
+	can.append(can.$("#qunit-test-area"), template({}));
+	
+	can.trigger( can.$("#qunit-test-area hello-world"), "click" );
+	
+	equal(can.$("#qunit-test-area hello-world")[0].innerHTML, "Hello There!")
+
 });
+
+test("self closing content tags", function(){
 	
-
-var template = can.view.mustache("  <hello-world></hello-world>  ");
-
-can.append(can.$("#qunit-test-area"), template({}));
-
-can.trigger( can.$("#qunit-test-area hello-world"), "click" );
-
-equal(can.$("#qunit-test-area hello-world")[0].innerHTML, "Hello There!")
-
+	can.Component({
+	    "tag": "my-greeting",
+	    template: "<h1><content/></h1>",
+	    scope: {
+	      title: "can.Component"
+	    }
+	})
+	
+	var template = can.view.mustache("<my-greeting><span>{{site}} - {{title}}</span></my-greeting>");
+	
+	can.append(can.$("#qunit-test-area"), template({
+		site: "CanJS"
+	}));
+	
+	
+	equal(can.$("#qunit-test-area span").length, 1, "there is an h1")
 })
+
+
+
 	
 })()
