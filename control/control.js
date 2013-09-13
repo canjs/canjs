@@ -397,14 +397,14 @@ steal('can/util','can/construct', function( can ) {
 			 *       }  
 			 *     })
 			 *     
-			 *     new Greeting("#greeting",{messgae: "I understand this.options"})
+			 *     new Greeting("#greeting",{message: "I understand this.options"})
 			 * 
 			 * The options argument passed when creating the control
 			 * is merged with [can.Control.defaults defaults] in
 			 * [can.Control.prototype.setup setup].
 			 * 
 			 * In the following example, if no message property is provided,
-			 * the defaults' messgae property is used.
+			 * the defaults' message property is used.
 			 * 
 			 *     var Greeting = can.Control.extend({
 			 *       defaults: {
@@ -455,7 +455,7 @@ steal('can/util','can/construct', function( can ) {
 			 * ## Wrapped NodeList
 			 * 
 			 * `this.element` is a wrapped NodeList of one HTMLELement (or window).  This
-			 * is for convience in libraries like jQuery where all methods operate only on a
+			 * is for convenience in libraries like jQuery where all methods operate only on a
 			 * NodeList.  To get the raw HTMLElement, write:
 			 * 
 			 *     this.element[0] //-> HTMLElement
@@ -585,7 +585,7 @@ steal('can/util','can/construct', function( can ) {
 		 *       task: new Task({ completed: 'true' }) 
 		 *     });
 		 * 
-		 * To update the taskstriker's task, add a task method that updates
+		 * To update the `taskstriker`'s task, add a task method that updates
 		 * this.options and rebinds the event handlers for the new task like:
 		 * 
 		 *     TaskStriker = can.Control({
@@ -616,7 +616,7 @@ steal('can/util','can/construct', function( can ) {
 		 * ## Adding new events
 		 * 
 		 * If events need to be bound to outside of the control and templated event handlers
-		 * are not sufficent, you can call this.on to bind or delegate programatically:
+		 * are not sufficient, you can call this.on to bind or delegate programmatically:
 		 * 
 		 *     init: function() {
 		 *        // calls somethingClicked( el, ev )

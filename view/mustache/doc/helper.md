@@ -24,11 +24,17 @@ Will call a `madLib` helper with the following arguements.
         // number -> 4
     });
     
+<<<<<<< HEAD
 If a [can.Mustache.key] represents a [can.Map] attribute,
+=======
+While keys are normally resolved as basic objects like strings or numbers, there are some special cases where they act differently than a normal tag. Whenever a [can.compute] or function object is an argument for a helper, the original object is used as the argument instead of the value that the function returns.
+
+If a [can.Mustache.key] represents a [can.Map] attribute,
+>>>>>>> master
 it is converted to a [can.compute] getter/setter 
 function. This enables 2-way binding helpers.  
 
-For example, the following helper two-way binds input elemnet's
+For example, the following helper two-way binds an input element's
 value to a [can.compute]:
 
     can.Mustache.registerHelper('value',function(value){
@@ -37,11 +43,11 @@ value to a [can.compute]:
             el.value = newVal;
           })
           el.onchange = function(){
-            value(this.value)
+            value(this.value);
           }
-          el.value = value()
+          el.value = value();
         }
-    })
+    });
     
 And used by the following template:
 
@@ -79,25 +85,25 @@ The returned function is called with the `<ul>` element:
 
     can.Mustache.registerHelper("sortable",function(){
       return function(el){
-        $(el).slider()
+        $(el).slider();
       }
-    })
+    });
 
 If the helper is called __between tags__ like:
 
     <ul>{{items}}</ul>
     
 The returned function is called with a temporary element. The 
-following helper would be called with a temporary `<LI>` element:
+following helper would be called with a temporary `<li>` element:
 
     can.Mustache.registerHelper("items",function(){
       return function(li){
         
       }
-    })
+    });
 
 The temporary element depends on the parent element. The default temporary element
-is a `<SPAN>` element.
+is a `<span>` element.
 
 
 

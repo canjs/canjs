@@ -1,5 +1,5 @@
 @function can.Mustache.helpers.partial {{>key}}
-@parent can.Mustache.tags
+@parent can.Mustache.tags 6
 
 @signature `{{>key}}`
 
@@ -11,7 +11,7 @@ function's return value is used.
 
 If the key value is:
 
- - `undefined` - the key's name (ex: user.mustache in `{{>user.mustaceh}}`) is used to 
+ - `undefined` - the key's name (ex: user.mustache in `{{>user.mustache}}`) is used to
    look up a template using [can.view].
 
  - `string` - the string value is used to lookup a view in [can.view].
@@ -122,7 +122,7 @@ resulting in the template rendering with the current context applied to the part
 
 ## Passing Partials in Options
 
-Partials can resolve the context object that contain partial identifiers in them.
+Partials can resolve the context object that contains partial identifiers.
 For example:
 
 @codestart

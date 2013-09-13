@@ -37,7 +37,7 @@ _route_ attribute.
 ## Demo
 
 The following demo shows the above control in action.
-You can edit the hash, follow some example links or directly change the can.route atttributes.
+You can edit the hash, follow some example links or directly change the can.route attributes.
 At the top it shows the control action being called and the data passed to it:
 
 @iframe can/control/route/demo.html 700

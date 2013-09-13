@@ -6,8 +6,10 @@
 can.Map.backup is a plugin that provides a dirty bit for properties on an Observe,
 and lets you restore the original values of an Observe's properties after they are changed.
 
-Here is an example showing how to use `[can.Map.prototype.backup backup]` to save values,
-`[can.Map.prototype.restore restore]` to restore them, and `[can.Map.prototype.isDirty isDirty]`
+
+Here is an example showing how to use `[can.Map.backup.prototype.backup backup]` to save values,
+`[can.Map.backup.prototype.restore restore]` to restore them, and `[can.Map.backup.prototype.isDirty isDirty]`
+
 to check if the Observe has changed:
 
 @codestart

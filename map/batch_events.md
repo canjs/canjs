@@ -1,8 +1,10 @@
 @page can.Map.batchEvents Batch Events
 @parent can.Map
 
-`can.batch.start( batchStopHandler )` and
-`can.batch.stop( force, callStart )`
+
+[can.Map.startBatch `can.Map.startBatch( batchStopHandler )`] and
+[can.Map.stopBatch  `can.Map.stopBatch( force, callStart )`]
+
 are used to specify atomic operations. `startBatch`
 prevents change events from being fired until `stopBatch` is called.
 
@@ -37,7 +39,7 @@ state. For example, the previous `player` should have
 a `tvshow` or `song` property, but not both. Event listeners should 
 never be called in an intermediate state.  We can make this happen 
 with `startBatch`, `stopBatch` and
-the `can/map/setter` plugin as follows:
+the [can.Map.setter `can/map/setter`] plugin as follows:
 
     // Selection constructor function inherits from Observe
     Player = can.Map({
@@ -62,14 +64,14 @@ the `can/map/setter` plugin as follows:
     var player =   new Player({song: "Amish Paradise"});
 
     player.bind("change", function( ev, attr, how, newVal, oldVal ){
-      console.log("changed", attr, how, s.attr() );
+      console.log("changed", attr, how, player.attr() );
     });
  
     console.log("start")
-    s.attr("tvshow","Breaking Bad");
+    player.attr("tvshow","Breaking Bad");
     console.log("end")
 
-Use `statBatch` and `stopBatch` to make sure events 
+Use `startBatch` and `stopBatch` to make sure events 
 are triggered when an observe is in a valid state. 
 
 ## Performance
@@ -140,4 +142,4 @@ operations. Set this up with:
     },10);
 
 This batches everything that happens within the same thread of execution
-and/or within 10 ms of ech other. 
+and/or within 10 ms of each other. 

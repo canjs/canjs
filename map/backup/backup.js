@@ -1,4 +1,4 @@
-//allows you to backup and restore a observe instance
+//allows you to backup and restore a map instance
 steal('can/util', 'can/map', 'can/util/object', function (can) {
 	var flatProps = function (a) {
 		var obj = {};
@@ -17,14 +17,19 @@ steal('can/util', 'can/map', 'can/util/object', function (can) {
 		 * @plugin can/map/backup
 		 * @parent can.Map.backup
 		 *
-		 * @description Save the values of the properties of an Observe.
+		 * @description Save the values of the properties of an Map.
 		 *
-		 * @signature `observe.backup()`
-		 * @return {can.Map} The Observe, for chaining.
-		 *
+		 * @signature `map.backup()`
+		 * 
 		 * `backup` backs up the current state of the properties of an Observe and marks
 		 * the Observe as clean. If any of the properties change value, the original
-		 * values can be restored with `[can.Map.prototype.restore]`:
+		 * values can be restored with [can.Map.backup.prototype.restore restore].
+		 * 
+		 * @return {can.Map} The map, for chaining.
+		 *
+		 * @body
+		 * 
+		 * ## Example
 		 *
 		 * @codestart
 		 * var recipe = new can.Map({
@@ -68,14 +73,15 @@ steal('can/util', 'can/map', 'can/util/object', function (can) {
 		 *
 		 * @description Check whether an Observe has changed since the last time it was backed up.
 		 *
-		 * @signature `observe.isDirty([deep])`
-		 * @param {bool} [deep=false] whether to check nested Observes
-		 * @return {bool} Whether the Observe has changed since the last time it was [can.Map.prototype.backup backed up].
-		 * If the Observe has never been backed up, `isDirty` returns `undefined`.
+		 * @signature `map.isDirty([deep])`
 		 *
 		 * `isDirty` checks whether any properties have changed value or whether any properties have
 		 * been added or removed since the last time the Observe was backed up. If _deep_ is `true`,
+		 * If the Observe has never been backed up, `isDirty` returns `undefined`.
 		 * `isDirty` will include nested Observes in its checks.
+		 * 
+		 * @param {bool} [deep=false] whether to check nested Observes
+		 * @return {bool} Whether the Observe has changed since the last time it was [can.Map.backup.prototype.backup backed up].
 		 *
 		 * @codestart
 		 * var recipe = new can.Map({
@@ -105,7 +111,7 @@ steal('can/util', 'can/map', 'can/util/object', function (can) {
 		 * recipe.attr('title', 'Flapjack Mix');
 		 * recipe.isDirty();     // true
 		 * recipe.restore();
-		 * * recipe.isDirty();   // false
+		 * recipe.isDirty();   // false
 		 *
 		 * recipe.attr('ingredients.0.quantity', '7 cups');
 		 * recipe.isDirty();     // false
@@ -133,16 +139,19 @@ steal('can/util', 'can/map', 'can/util/object', function (can) {
 		 * 
 		 * @description Restore saved values of an Observe's properties.
 		 *
-		 * @signature `observe.restore( [deep] )`
-		 * @param {bool} [deep=false] whether to restore properties in nested Observes
-		 * @return {can.Map} The Observe, for chaining.
+		 * @signature `map.restore( [deep] )`
 		 *
 		 * `restore` sets the properties of an Observe back to what they were the last time 
-		 * [can.Map.prototype.backup backup] was called. If _deep_ is `true`,
+		 * [can.Map.backup.prototype.backup backup] was called. If _deep_ is `true`,
 		 * `restore` will also restore the properties of nested Observes.
 		 * 
 		 * `restore` will not remove properties that were added since the last backup, but it
 		 * will re-add properties that have been removed.
+		 * 
+		 * @param {bool} [deep=false] whether to restore properties in nested Observes
+		 * @return {can.Map} The Observe, for chaining.
+		 * 
+		 * 
 		 * 
 		 * @codestart
 		 * var recipe = new can.Map({
@@ -181,7 +190,7 @@ steal('can/util', 'can/map', 'can/util/object', function (can) {
 		 * 
 		 * ## Events
 		 * When `restore` sets values or re-adds properties, the same events will be fired (including
-		 * _change_, _add_, and _set_) as if the values of the properties had been set using `[can.Map.attr attr]`.
+		 * _change_, _add_, and _set_) as if the values of the properties had been set using `[can.Map.prototype.attr attr]`.
 		 */
 		restore : function (restoreAssociations) {
 			var props = restoreAssociations ? this._backupStore : flatProps(this._backupStore)

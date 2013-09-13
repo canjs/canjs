@@ -63,7 +63,7 @@
 			"isDefault": true
 		},
 		"can/view/mustache": {
-			"name": "can.view.Mustache",
+			"name": "can.Mustache",
 			"type": "plugin",
 			"description": "Live-binding Handlebars and Mustache views"
 		},

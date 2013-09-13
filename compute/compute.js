@@ -199,7 +199,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 				return value;
 			} else {
 				// Let others know to listen to changes in this compute
-				if( can.Map.__reading && canReadForChangeEvent) {
+				if( can.Map && can.Map.__reading && canReadForChangeEvent) {
 					can.Map.__reading(computed,'change');
 				}
 				// if we are bound, use the cached value

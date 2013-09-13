@@ -31,7 +31,7 @@ really easy.  The following models `todos` by
 describing the services that can create, retrieve,
 update, and delete todos. 
 
-    Todo = can.Model({
+    Todo = can.Model.extend({
       findAll: 'GET /todos.json',
       findOne: 'GET /todos/{id}.json',
       create:  'POST /todos.json',
@@ -143,6 +143,6 @@ __Listening with can.Control__
 
 You should be using can.Control to listen to model changes like:
 
-    Todos = can.Control({
+    Todos = can.Control.extend({
       "{Todo} updated" : function(Todo, ev, todo) {...}
     })

@@ -22,8 +22,9 @@ var isArray = can.isArray,
 	};
 
 /**
+ * @hide
  * @page can.Object can.Object
- * @parent canjs
+ * @parent can.util
  * 
  * @body
  * Object contains several helper methods that 
@@ -56,9 +57,10 @@ var isArray = can.isArray,
 can.Object = {};
 
 /**
- * @function same
+ * @function can.Object.same
+ * @parent can.util
  * @description Checks if two objects are the same.
- * @signature `same(a, b[, compares])`
+ * @signature `can.Object.same(a, b, compares, aParent, bParent, deep)`
  * @param {Object} a An object to compare against `b`.
  * @param {Object} b An object to compare against `a`.
  * @param {Object} [compares] An object that specifies how to compare properties.
@@ -72,38 +74,33 @@ can.Object = {};
  * This function does not work with objects that create circular references.
  * 
  * ## Examples
- * 
- *     can.Object.same({name: "Justin"},
- *                   {name: "JUSTIN"}) //-> false
+ * @codestart
+ * can.Object.same({name: "Justin"}, {name: "JUSTIN"}) //-> false
  *     
- *     // ignore the name property
- *     can.Object.same({name: "Brian"},
- *                   {name: "JUSTIN"},
- *                   {name: null})      //-> true
- *     
- *     // ignore case
- *     can.Object.same({name: "Justin"},
- *                   {name: "JUSTIN"},
- *                   {name: "i"})      //-> true
- *     
- *     // deep rule
- *     can.Object.same({ person : { name: "Justin" } },
- *                   { person : { name: "JUSTIN" } },
- *                   { person : { name: "i"      } }) //-> true
+ * // ignore the name property
+ * can.Object.same({name: "Brian"}, {name: "JUSTIN"}, {name: null}) //-> true
+ *
+ * // ignore case
+ * can.Object.same({name: "Justin"}, {name: "JUSTIN"}, {name: "i"}) //-> true
+ *
+ * // deep rule
+ * can.Object.same({ person : { name: "Justin" } },
+ *     { person : { name: "JUSTIN" } },
+ *     { person : { name: "i"      } }) //-> true
  *                   
- *     // supplied compare function
- *     can.Object.same({age: "Thirty"},
- *                   {age: 30},
- *                   {age: function( a, b ){
- *                           if( a == "Thirty" ) { 
- *                             a = 30
- *                           }
- *                           if( b == "Thirty" ) {
- *                             b = 30
- *                           }
- *                           return a === b;
- *                         }})      //-> true
- * 
+ * // supplied compare function
+ * can.Object.same({age: "Thirty"},
+ *     {age: 30},
+ *     {age: function( a, b ){
+ *     if( a == "Thirty" ) { 
+ *         a = 30
+ *     }
+ *     if( b == "Thirty" ) {
+ *         b = 30
+ *     }
+ *     return a === b;
+ * }})      //-> true
+ * @codeend
  */
 var same = can.Object.same = function(a, b, compares, aParent, bParent, deep){
 	var aType = typeof a,
@@ -165,10 +162,21 @@ var same = can.Object.same = function(a, b, compares, aParent, bParent, deep){
 };
 
 /**
- * @function subsets
- * Returns the sets in 'sets' that are a subset of checkSet
+ * @function can.Object.subsets
+ * @parent can.util
+ * @description Returns the sets in 'sets' that are a subset of checkSet
+ * @codestart
+ * can.Object.subsets({userId: 20},
+ * [
+ * 	{userId: 20, limit: 30},
+ * 	{userId: 5},
+ * 	{}
+ * ]) //-> [{userId: 20, limit: 30}]
+ * @codeend
+ * @signature `can.Object.subsets(checkSet, sets, compares)`
  * @param {Object} checkSet
  * @param {Object} sets
+ * @param {Object} compares
  */
 can.Object.subsets = function(checkSet, sets, compares){
 	var len = sets.length,
@@ -186,12 +194,17 @@ can.Object.subsets = function(checkSet, sets, compares){
 	return subsets;
 };
 /**
- * @function subset
- * Compares if checkSet is a subset of set
- * @param {Object} checkSet
+ * @function can.Object.subset
+ * @parent can.util
+ * @description Compares if subset is a subset of set. Returns true if an object is a set of another set
+ * @codestart
+ * can.Object.subset({}, {foo: "bar"} ) //-> true
+ * @codeend
+ * @signature `can.Object.subset(subset, set, compares)`
+ * @param {Object} subset
  * @param {Object} set
- * @param {Object} [compares]
- * @param {Object} [checkPropCount]
+ * @param {Object} compares
+ * @returns {Boolean} Whether or not subset is a subset of set
  */
 can.Object.subset = function(subset, set, compares){
 	// go through set {type: 'folder'} and make sure every property

@@ -28,25 +28,24 @@ The attributes plugin comes with three useful predefined types: `'date'`, `'numb
 Here is a quick example of an Observe-based class using the attributes plugin to convert and normalize
 its data, and then to serialize the instance:
 
-@codestart
-can.Map('Bio', {
-	attributes: {
-		birthday: 'date',
-		weight: 'number'
-	}
-	// Bio only uses built-in types, so no
-	// need to specify serialize or convert.
-}, {});
 
-var alice = new Bio({
-	birthday: Date.parse('1985-04-01'), // 481161600000
-	weight: '120'
-});
+    Bio = can.Map.extend({
+        attributes: {
+        birthday: 'date',
+        weight: 'number'
+    }
+    // Bio only uses built-in types, so no
+    // need to specify serialize or convert.
+    }, {});
 
-alice.attr();      // { birthday: Date(481161600000), weight: 120 }
-alice.serialize(); // { birthday: 481161600000, weight: 120 }
+    var alice = new Bio({
+        birthday: Date.parse('1985-04-01'), // 481161600000
+        weight: '120'
+    });
 
-@codeend
+    alice.attr();      // { birthday: Date(481161600000), weight: 120 }
+    alice.serialize(); // { birthday: 481161600000, weight: 120 }
+
 
 ### Demo
 
@@ -67,29 +66,29 @@ function is used to convert the raw data into an instance of the Model.
 
 This example builds on the previous one to demonstrate these reference types.
 
-can.Map('Bio', {
-	attributes: {
-		birthday: 'date',
-		weight: 'number'
-	}
-	// Contact only uses built-in types, so you don't have
-	// to specify serialize or convert.
-}, {});
+    Bio = can.Map.extend({
+        attributes: {
+        birthday: 'date',
+        weight: 'number'
+    }
+    // Contact only uses built-in types, so you don't have
+    // to specify serialize or convert.
+    }, {});
 
-can.Map('Contact', {
-  attributes: {
-    bio: 'Bio.newInstance'
-  }
-}, {});
+    Contact = can.Map.extend({
+        attributes: {
+            bio: 'Bio.newInstance'
+        }
+    }, {});
 
-var alice = new Contact({
-  first: 'Alice',
-  last: 'Liddell',
-  bio: {
-	birthday: Date.parse('1985-04-01'), // 481161600000
-	weight: 120
-  }
-});
+    var alice = new Contact({
+        first: 'Alice',
+        last: 'Liddell',
+        bio: {
+            birthday: Date.parse('1985-04-01'), // 481161600000
+            weight: 120
+        }
+    });
 
 The Attributes plugin provides functionality for converting data attributes from raw types and 
 serializing complex types for the server.
@@ -100,9 +99,10 @@ When `Contact` is initialized, the `weight` attribute is set and converted to a 
 converter we provided.  Next the `birthday` attribute is set using the `attr` method and gets converted
 as well.  Lastly, `serialize` is invoked converting the new attributes to raw types for the server.
 
-	var Contact = new can.Map({
+
+	var Contact = can.Map.extend({
 		attributes: {
-			birthday: 'date'
+			birthday: 'date',
 			weight: 'number'
 		},
 		serialize : {
@@ -112,7 +112,7 @@ as well.  Lastly, `serialize` is invoked converting the new attributes to raw ty
 						"-" + (val.getMonth() + 1) + 
 						"-" + val.getDate(); 
 			},
-			number: (val){
+			number: function(val){
 				return val + '';
 			}
 		},
@@ -164,16 +164,16 @@ Attribute type values can also represent the name of a function. The most common
 
 For example, a `Deliverable` might have many tasks and an owner (which is a Person). The attributes property might look like:
 
-	var Deliverable = new can.Map({
-		attributes : {
-			tasks : "App.Models.Task.models"
-			owner: "App.Models.Person.model"
-		}
-	});
+    var Deliverable = new can.Map.extend({
+        attributes : {
+            tasks : "App.Models.Task.models"
+            owner: "App.Models.Person.model"
+        }
+    },{});
 
 This points tasks and owner properties to use _Task_ and _Person_ to convert the raw data into an array of Tasks and a Person.
 
-Its important to note that the full names of the models themselves are _App.Models.Task_ and _App.Models.Person_. The `.model` 
+It's important to note that the full names of the models themselves are _App.Models.Task_ and _App.Models.Person_. The `.model` 
 and `.models` parts are appended for the benefit of convert to identify the types as models.
 
 ### Demo

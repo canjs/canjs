@@ -36,8 +36,8 @@ can.extend(proto,{
 	sort: function(method, silent){
 		var comparator = this.comparator,
 			args = comparator ? [function(a, b){
-				a = a[comparator]
-				b = b[comparator]
+				a = typeof(a[comparator] === 'function')?a[comparator]():a[comparator];
+				b = typeof(b[comparator] === 'function')?b[comparator]():b[comparator];
 				return a === b ? 0 : (a < b ? -1 : 1);
 			}] : [method],
 			res = [].sort.apply(this, args);

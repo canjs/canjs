@@ -676,7 +676,7 @@ steal("can/util", function( can ) {
 			return "can.view.preload('" + id + "'," + $view.types["." + type].script(id, src) + ");";
 		},
 		preload: function( id, renderer ) {
-			$view.cached[id] = new can.Deferred().resolve(function( data, helpers ) {
+			var def = $view.cached[id] = new can.Deferred().resolve(function( data, helpers ) {
 				return renderer.call(data, data, helpers);
 			});
 			function frag(){
@@ -684,6 +684,11 @@ steal("can/util", function( can ) {
 			}
 			// expose the renderer for mustache
 			frag.render = renderer;
+
+			// set cache references (otherwise preloaded recursive views won't recurse properly)
+			def.__view_id = id;
+			$view.cachedRenderers[id] = renderer;
+
 			return frag;
 		}
 

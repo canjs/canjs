@@ -47,6 +47,29 @@ test("findAll deferred", function(){
 	})
 });
 
+test("findAll rejects non-array (#384)", function() {
+	var Person = can.Model({
+		findAll : function(params, success, error){
+			var dfd = can.Deferred();
+			setTimeout(function() {
+				dfd.resolve({
+					stuff: {}
+				});
+			}, 100);
+			return dfd;
+		}
+	},{});
+
+	stop();
+	Person.findAll({}).then(function() {
+		ok(false, 'This should not succeed');
+	}, function(err) {
+		ok(err instanceof Error, 'Got an error');
+		equal(err.message, 'Could not get any raw data while converting using .models');
+		start();
+	});
+});
+
 asyncTest("findAll deferred reject", function() {
 	// This test is automatically paused
 
@@ -1154,6 +1177,17 @@ test("destroy not calling callback for new instances (#403)", function(){
 		ok( true ,"Destroy called" )
 		start();
 	});
+});
+
+test(".model should always serialize Observes (#444)", function() {
+	var ConceptualDuck = can.Model({
+		defaults: {
+			sayeth: "Abstractly 'quack'"
+		}
+	}, {});
+	var ObserveableDuck = can.Map({}, {});
+
+	equal("quack", ConceptualDuck.model(new ObserveableDuck({sayeth: "quack"})).sayeth);
 });
 
 })();

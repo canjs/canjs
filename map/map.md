@@ -9,6 +9,8 @@
 
 @signature `new can.Map([props])`
 
+Creates a new instance of can.Map.
+
 @param {Object} [props] Properties and values to seed the Observe with.
 @return {can.Map} An instance of `can.Map` with the properties from _props_.
 
@@ -43,30 +45,30 @@ live-binding properties in an [can.EJS EJS] template. (If you are using
 
 @codestart
 var aName = {a: 'Alexis'},
-    observe = can.Map(aName);
+    map = new can.Map(aName);
 
 // Observes are copies of data:
-aName === observe; // false
+aName === map; // false
 
 // reading from an Observe:
-observe.attr();    // {a: 'Alexis'}
-observe.a;         // 'Alexis'
-observe.attr('a'); // 'Alexis'
+map.attr();    // {a: 'Alexis'}
+map.a;         // 'Alexis'
+map.attr('a'); // 'Alexis'
 
 // setting an Observe's property:
-observe.attr('a, 'Alice');
-observe.a; // Alice
+map.attr('a', 'Alice');
+map.a; // Alice
 
 // removing an Observe's property;
-observe.removeAttr('a');
-observe.attr(); // {}
+map.removeAttr('a');
+map.attr(); // {}
 
 // Don't do this!
-observe.a = 'Adam'; // wrong!
+map.a = 'Adam'; // wrong!
 @codeend
 
 Find out more about manipulating properties of Observes under
-[can.Map.protoype.attr attr] and [can.Map.protoype.removeAtt removeAttr].
+[can.Map.prototype.attr attr] and [can.Map.prototype.removeAttr removeAttr].
 
 ## Listening to changes
 
@@ -104,16 +106,16 @@ that makes binding to specific types of events easier:
 
 @codestart
 var o = new can.Map({});
-o.delegate('a', 'add' function(ev, newVal, oldVal) {
+o.delegate('a', 'add', function(ev, newVal, oldVal) {
     console.log('a was added.');
 });
-o.delegate('a', 'set' function(ev, newVal, oldVal) {
+o.delegate('a', 'set', function(ev, newVal, oldVal) {
     console.log('a was set.');
 });
-o.delegate('a', 'remove' function(ev, newVal, oldVal) {
+o.delegate('a', 'remove', function(ev, newVal, oldVal) {
     console.log('a was removed.');
 });
-o.delegate('a', 'change' function(ev, newVal, oldVal) {
+o.delegate('a', 'change', function(ev, newVal, oldVal) {
     console.log('a was changed.');
 });
 

@@ -18,7 +18,7 @@
 <script type='text/javascript' id="demo-source">   
 steal('can/map/setter', 'can/control',function(){
 	
-var School = can.Observe({
+var School = can.Map({
   setName: function(name, success, error){
     if(!name){
       error("no name");

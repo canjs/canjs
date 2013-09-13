@@ -1,8 +1,8 @@
 @page can.Mustache.Binding Live Binding
 @parent can.Mustache.pages 5
 
-Live binding is templates that update themselves as the data 
-used in the magic tags change.
+Live binding refers to templates which update themselves 
+as the data used in the mustache tags change.
 
 It's very common as the page is interacted with that the underlying 
 data represented in the page changes.  Typically, you have callbacks 
@@ -27,7 +27,7 @@ In this example, we have a simple user welcome screen.
 
 	var template = can.view("#template", data);
 
-The template evaluates the `messages` and adds the hooks for living-binding automatically.  
+The template evaluates the `messages` and adds the hooks for live binding automatically.
 Since we have no message it will render:
 
 	<h1>Welcome Tina Fey!</h1>
@@ -40,9 +40,11 @@ the attribute to the new value.
 
 	data.attr('message', 5)
 
-After [can.Map](can.Map) recieves this update, it will automatically
+
+After [can.Map] receives this update, it will automatically
 update the paragraph tag to reflect the new value.
 
 	<p>You have 5 new message.</p>
 
-For more information visit the [can.Map](can.Map).
+
+For more information visit the [can.Map] documentation.

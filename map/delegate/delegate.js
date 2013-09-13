@@ -135,6 +135,7 @@ steal('can/util', 'can/map', function(can) {
 		 * @function can.Map.prototype.delegate delegate
 		 * @parent can.Map.delegate
 		 * @plugin can/map/delegate
+		 * @signature `observe.delegate( selector, event, handler )`
 		 * 
 		 * `delegate( selector, event, handler(ev,newVal,oldVal,from) )` listen for changes 
 		 * in a child attribute from the parent. The child attribute
@@ -142,7 +143,7 @@ steal('can/util', 'can/map', function(can) {
 		 * 
 		 *     
 		 *     // create an observable
-		 *     var observe = can.Map({
+		 *     var observe = new can.Map({
 		 *       foo : {
 		 *         bar : "Hello World"
 		 *       }
@@ -328,7 +329,9 @@ steal('can/util', 'can/map', function(can) {
 		/**
 		 * @function can.Map.prototype.undelegate undelegate
 		 * @parent can.Map.delegate
+		 * @plugin can/map/delegate
 		 * 
+		 * @signature `observe.undelegate( selector, event, handler )`
 		 * `undelegate( selector, event, handler )` removes a delegated event handler from an observe.
 		 * 
 		 *     observe.undelegate("name","set", handler )

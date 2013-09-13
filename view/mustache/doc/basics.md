@@ -1,130 +1,145 @@
 @page can.Mustache.Basics Basics
 @parent can.Mustache.pages 0
 
-## Keys
+Mustache templates are logic-less templates with a simple syntax. The goal
+with Mustache is to keep your templates as simple as possible.
 
-Keys insert data into the template.  They reference variables
-within the current context.  For example:
+Here's a quick example of what Mustache templates look like:
 
-	{
-    		name: "Austin"
-	}
+	{{#loggedIn}}
+		Welcome back, {{name}}!
+		You have {{messages.length}} new messages.
+	{{/loggedIn}}
+	{{^loggedIn}}
+		Do you want to login?
+	{{/loggedIn}}
 
-	{{name}}
-
-would render:
-
-
-	"Austin"
-
-## Escaping Values
-
-Mustache will escape values enclosed in a `{{  }}` expression.  For example:
-	
-	{
-		friend: "<strong>Justin</strong>"
-	}
-
-	{{friend}}
-
-would return:
-
-	&lt;strong&gt;Justin&lt;/strong&gt;
-
-If you would like Mustache to return the value without 
-escaping, use the `{{{  }}}` expression.  For example:
-
-	{{{friend}}}
-
-would return:
-
-	<strong>Justin</strong>
-
-## Paths and Context
-
-When Mustache is resolving a object in a [section](#Sections), the current
-context is the value that its iterating. For example:
+Given the following data object:
 
 	{
-		friends: [ 'Austin' ]
+		name: "Austin",
+		loggedIn: true,
+		messages: new Array(10)
 	}
 
-	{{#friends}}
-		{{this}}
-	{{/friends}}
+The template would render the following:
 
-__Dot Notation__
+	Welcome back, Austin!
+	You have 10 new messages.
 
-The dot notation lets the template reference the current context implicitly.  So taking the above example
-we could do:
+In general, it's best to try to ensure that the data passed to the template
+already has any logic applied to it. However, CanJS's Mustache implementation
+provides [can.Mustache.Helpers helper tags] in addition to the basic tags which can be used for richer
+functionality where modifying the data ahead of time isn't viable.
 
-	{{#friends}}
-		{{.}}
-	{{/friends}}
+Just like [can.EJS EJS], Mustache can be used for [can.Mustache.Binding live binding] templates. As opposed to
+EJS, however, Mustache will automatically inject the `attr()` calls on
+observable and compute objects to wire it up.
 
-and the `.` would represent the 'Austin' value in the array similar to `this` does too.
+## Tags
 
-__Nested Paths__
+Mustache templates are intended to be logic-less in that there are no `if`
+statements or `for` loops. Tags handle all of the data injection for the template, 
+taking in a key reference and then converting the result to a string.
 
-Mustache supports nested paths, making it possible to look up 
-properties nested below the current context.  For example:
+Tags in Mustache are surrounded by double curly braces (a.k.a. mustaches) like
+`{{key}}`. In this example, `key` references the `key` property on the context
+scope passed to the template.
 
-	{ 
-		book: {
-			author: "James Cameron",
-			publisher: "Cengage"
-		}
-	}
+There are a number of basic tags that can be used to inject data into the template.
 
-then we could reference `author` and `publisher` like so:
+`[can.Mustache.tags.escaped {{key}}]` will render the value referenced within the tag, 
+escaping any HTML:
 
-	{{book.author}}
-	{{book.publisher}}
+	Template:
+		{{name}}
 
-For keys containing periods, the period should be escaped with `\.`:
+	Data:
+		{ name: "Austin" }
 
-	{
-		localization: {
-			"hello.world": "Hello World!"
-		}
-	}
+	Result:
+		Austin
 
-	{{localization.hello\.world}}
+`[can.Mustache.tags.unescaped {{{key}}}]` or `[can.Mustache.tags.unescaped2 {{&key}}]` will render the value referenced within the tag unescaped:
 
+	Template:
+		<div>{{name}}</div>
 
-__Context Jumping__
+	Data:
+		{ name: "<b>Austin</b>" }
 
-Internally, Mustache keeps a stack of contexts as the template dives
-deeper into nested [sections](#Sections) and [helpers](#Helpers).  If a key is not found within 
-the current context, Mustache will look for the key in the parent context
-and so on until it resolves the object or reaches the parent most object.  
-For example:
+	Result:
+		<div><b>Austin</b></div>
 
-	{
-		family: [
-			{
-				name: 'Austin',
-				sisters: [
-					{
-						name: 'Katherine'
-					}
-				],
-				brothers: [
-					{
-						name: 'Justin'
-					}
-				]
+`[can.Mustache.helpers.section {{#key}}]` followed by `[can.Mustache.helpers.close {{/key}}]` signify a [can.Mustache.Sections section]. Sections will only render if the `key` references a value that is considered **truthy**. If the key 
+is a reference to an object, it will also add a local context which can be referenced by 
+tags within the section. Sections can also be used to iterate through an array, if that was 
+the value referenced. In this example, the name will only be rendered if there is a 
+person exists whom also has a name:
+
+	Template:
+		{{#person}}
+			{{name}}
+		{{/person}}
+
+	Data:
+		{
+			person: {
+				name: "Austin"
 			}
-		]
-	}
+		}
 
-	{{#family}
-		{{#brothers}}
-			{{#sisters}}
-				{{name}}
-			{{/sisters}}
-		{{/brothers}}
-	{{/family}}
+	Result:
+		Austin
 
-Since `sisters` isn't in the context of the brothers array,
-it jumps up to the family object and resolves sisters there.
+`[can.Mustache.helpers.inverse {{^key}}]` followed by `[can.Mustache.helpers.close {{/key}}]` signify an inverse [can.Mustache.Sections section]. Inverted sections will only render if the `key` references a value that is considered **falsey**:
+
+	Template:
+		{{#person}}
+			{{name}}
+		{{/person}}
+		{{^person}}
+			No one.
+		{{/person}}
+
+	Data:
+		{
+			nobodyHere: true
+		}
+
+	Result:
+		No one.
+
+`[can.Mustache.helpers.partial {{>key}}]` renders a partial template. Partials are used to nest other templates within another template:
+
+	init.mustache:
+		<div>
+			<h1>{{title}}</h1>
+			{{>person}}
+		</div>
+
+	person.mustache:
+		Hi {{name}}!
+
+	Data:
+		{
+			title: "Welcome",
+			name: "Austin"
+		}
+
+	Result:
+		<div>
+			<h1>Welcome</h1>
+			Hi Austin!
+		</div>
+
+`[can.Mustache.tags.comment {{!key}}]` are comment tags. Comments won't get rendered (they're similar to HTML comments):
+
+	Template:
+		12345{{!These are numbers}}67890
+
+	Data:
+		{}
+
+	Result:
+		1234567890

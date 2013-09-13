@@ -79,14 +79,11 @@ steal('can/util', 'can/map/attributes', function (can) {
 			/**
 			 * @function can.Map.validations.static.validate validate
 			 * @parent can.Map.validations
-			 * `validate(attrNames, [options,] validateProc(value, attrName) )` validates each of the
-			 * specified attributes with the given `validateProc` function.  The function
-			 * should return a value if there is an error.  By default, the return value is
-			 * the error message.  Validations should be set in the Constructor's static init method.
 			 *
+			 * @body
 			 * The following example validates that a person's age is a number:
 			 *
-			 *     Person = can.Map({
+			 *     Person = can.Map.extend({
 			 *         init : function(){
 			 *           this.validate(["age"], function(val){
 			 *             if( typeof val === 'number' ){
@@ -99,7 +96,7 @@ steal('can/util', 'can/map/attributes', function (can) {
 			 *
 			 * The error message can be overwritten with `options` __message__ property:
 			 *
-			 *     Person = can.Map({
+			 *     Person = can.Map.extend({
 			 *         init : function(){
 			 *           this.validate(
 			 *             "age",
@@ -112,6 +109,8 @@ steal('can/util', 'can/map/attributes', function (can) {
 			 *       }
 			 *     },{})
 			 *
+			 * @signature `observe.validate(attrNames, [options,] validateProc)`
+			 *
 			 * @param {Array<String>|String} attrNames Attribute name(s) to to validate
 			 *
 			 * @param {Object} [options] Options for the
@@ -122,6 +121,10 @@ steal('can/util', 'can/map/attributes', function (can) {
 			 * otherwise. Function is called in the instance context and takes the
 			 * `value` and `attrName` to validate.
 			 *
+			 * `validate(attrNames, [options,] validateProc(value, attrName) )` validates each of the
+			 * specified attributes with the given `validateProc` function.  The function
+			 * should return a value if there is an error.  By default, the return value is
+			 * the error message.  Validations should be set in the Constructor's static init method.
 			 */
 			validate : validate,
 
@@ -164,6 +167,14 @@ steal('can/util', 'can/map/attributes', function (can) {
 			 * @function can.Map.validations.static.validateFormatOf validateFormatOf
 			 * @parent can.Map.validations
 			 *
+			 * @signature `observe.validateFormatOf(attrNames, regexp, options)`
+			 *
+			 * @param {Array<String>|String} attrNames Attribute name(s) to to validate
+			 * @param {RegExp} regexp Regular expression used to match for validation
+			 * @param {Object} [options] Options for the validations.  Valid options include 'message' and 'testIf'.
+			 *
+			 * @body
+			 *
 			 * `validateFormatOf(attrNames, regexp, options)` validates where the values of
 			 * specified attributes are of the correct form by
 			 * matching it against the regular expression provided.
@@ -174,9 +185,6 @@ steal('can/util', 'can/map/attributes', function (can) {
 			 *       })
 			 *     }
 			 *
-			 * @param {Array<String>|String} attrNames Attribute name(s) to to validate
-			 * @param {RegExp} regexp Regular expression used to match for validation
-			 * @param {Object} [options] Options for the validations.  Valid options include 'message' and 'testIf'.
 			 */
 			validateFormatOf : function (attrNames, regexp, options) {
 				validate.call(this, attrNames, options, function (value) {
@@ -190,6 +198,8 @@ steal('can/util', 'can/map/attributes', function (can) {
 			/**
 			 * @function can.Map.validations.static.validateInclusionOf validateInclusionOf
 			 * @parent can.Map.validations
+			 *
+			 * @signature `observe.validateInclusionOf(attrNames, inArray, options)`
 			 *
 			 * Validates whether the values of the specified attributes are available in a particular
 			 * array.
@@ -222,6 +232,8 @@ steal('can/util', 'can/map/attributes', function (can) {
 			 * @function can.Map.validations.static.validateLengthOf validateLengthOf
 			 * @parent can.Map.validations
 			 *
+			 * @signature `observe.validateLengthOf(attrNames, min, max, options)`
+			 *
 			 * Validates that the specified attributes' lengths are in the given range.
 			 *
 			 *     init : function(){
@@ -248,6 +260,8 @@ steal('can/util', 'can/map/attributes', function (can) {
 			 * @function can.Map.validations.static.validatePresenceOf validatePresenceOf
 			 * @parent can.Map.validations
 			 *
+			 * @signature `observe.validatePresenceOf(attrNames, options)`
+			 *
 			 * Validates that the specified attributes are not blank.
 			 *
 			 *     init : function(){
@@ -268,6 +282,8 @@ steal('can/util', 'can/map/attributes', function (can) {
 			/**
 			 * @function can.Map.validations.static.validateRangeOf validateRangeOf
 			 * @parent can.Map.validations
+			 *
+			 * @signature `observe.validateRangeOf(attrNames, low, hi, options)`
 			 *
 			 * Validates that the specified attributes are in the given numeric range.
 			 *
@@ -293,6 +309,8 @@ steal('can/util', 'can/map/attributes', function (can) {
 			 * @function can.Map.validations.static.validatesNumericalityOf validatesNumericalityOf
 			 * @parent can.Map.validations
 			 *
+			 * @signature `observe.validatesNumericalityOf(attrNames)`
+			 *
 			 * Validates that the specified attributes is a valid Number.
 			 *
 			 *     init : function(){
@@ -312,33 +330,15 @@ steal('can/util', 'can/map/attributes', function (can) {
 		});
 	});
 
+
+	/**
+	 * @prototype
+	 */
 	can.extend(can.Map.prototype, {
 		/**
-		 * @prototype
-		 */
-		/**
 		 * @function can.Map.validations.prototype.errors errors
-		 * @parent can.Map.validations.prototype
-		 *
-		 * Runs the validations on this observe.  You can
-		 * also pass it an array of attributes to run only those attributes.
-		 * It returns nothing if there are no errors, or an object
-		 * of errors by attribute.
-		 *
-		 * To use validations, it's suggested you use the
-		 * observe/validations plugin.
-		 *
-		 *     can.Map("Task",{
-		 *       init : function(){
-		 *         this.validatePresenceOf("dueDate")
-		 *       }
-		 *     },{});
-		 *
-		 *     var task = new Task(),
-		 *         errors = task.errors()
-		 *
-		 *     errors.dueDate[0] //-> "can't be empty"
-		 *
+		 * @parent can.Map.validations
+		 * @signature `observe.errors(attrs, newVal)`
 		 * @param {Array<String>|String} [attrs] An optional list of attributes to get errors for:
 		 *
 		 *     task.errors(['dueDate','name']);
@@ -356,6 +356,29 @@ steal('can/util', 'can/map/attributes', function (can) {
 		 *     task.errors() // -> {dueDate: ["can't be empty"]}
 		 *
 		 * or `null` if there are no errors.
+		 *
+		 * @body
+		 *
+		 *
+		 * Runs the validations on this observe.  You can
+		 * also pass it an array of attributes to run only those attributes.
+		 * It returns nothing if there are no errors, or an object
+		 * of errors by attribute.
+		 *
+		 * To use validations, it's suggested you use the
+		 * observe/validations plugin.
+		 *
+		 *     Task = can.Map.extend({
+		 *       init : function(){
+		 *         this.validatePresenceOf("dueDate")
+		 *       }
+		 *     },{});
+		 *
+		 *     var task = new Task(),
+		 *         errors = task.errors()
+		 *
+		 *     errors.dueDate[0] //-> "can't be empty"
+		 *
 		 */
 		errors : function (attrs, newVal) {
 			// convert attrs to an array
@@ -373,7 +396,7 @@ steal('can/util', 'can/map/attributes', function (can) {
 					can.each(funcs, function (func) {
 						var res = func.call(self, isTest ? ( self.__convert ?
 							self.__convert(attr, newVal) :
-							newVal ) : self[attr]);
+							newVal ) : self.attr(attr));
 						if (res) {
 							if (!errors[attr]) {
 								errors[attr] = [];

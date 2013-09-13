@@ -12,9 +12,17 @@ steal('can/util','can/map', 'can/list',function( can ) {
 	var	pipe = function( def, model, func ) {
 		var d = new can.Deferred();
 		def.then(function(){
-			var args = can.makeArray( arguments );
-			args[0] = model[func](args[0]);
-			d.resolveWith(d, args);
+			var args = can.makeArray( arguments ),
+			    success = true;
+			try {
+				args[0] = model[func](args[0]);
+			} catch(e) {
+				success = false;
+				d.rejectWith(d, [e].concat(args));
+			}
+			if (success) {
+				d.resolveWith(d, args);
+			}
 		},function(){
 			d.rejectWith(this, arguments);
 		});
@@ -842,7 +850,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		 * The following uses models to convert to a [can.Model.List] of model
 		 * instances.
 		 * 
-		 *     Task = can.Model.extend({},{})
+		 *     Task = can.Model.extend()
 		 *     var tasks = Task.models([
 		 *       {id: 1, name : "dishes", complete : false},
 		 *       {id: 2, name: "laundry", compelte: true}
@@ -927,6 +935,10 @@ steal('can/util','can/map', 'can/list',function( can ) {
 				// Get the object's data.
 				instancesRawData.data),
 				i = 0;
+
+			if(typeof raw === 'undefined') {
+				throw new Error('Could not get any raw data while converting using .models');
+			}
 
 			//!steal-remove-start
 			if ( ! raw.length ) {
@@ -1025,7 +1037,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 			if ( ! attributes ) {
 				return;
 			}
-			if ( attributes instanceof this ) {
+			if ( typeof attributes.serialize === 'function' ) {
 				attributes = attributes.serialize();
 			}
 			var id = attributes[ this.id ],

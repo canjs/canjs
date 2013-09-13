@@ -112,7 +112,7 @@ function() {
     // DRAW ROUTES
     
     // route observe that get smapped to routes
-    var routes = new can.Observe.List([
+    var routes = new can.Map.List([
     	{route : ":type/:id", def : {}},
     	{route : ":type", def : {type : "recipe"}}
     ]);
@@ -137,7 +137,7 @@ function() {
     	
     	new Observer( $("<pre>").appendTo("#link"),
     		{
-    			observe : new can.Observe({type: "recipe", id: "5"}),
+    			observe : new can.Map({type: "recipe", id: "5"}),
     			fullName : "can.route.link('click me',",
     			end : function(){
     	
@@ -152,7 +152,7 @@ function() {
     		});
     	new Observer( $("<pre>").appendTo("#url"),
     		{
-    			observe : new can.Observe({type: "recipe"}),
+    			observe : new can.Map({type: "recipe"}),
     			fullName : "can.route.url(",
     			end : function(){
     				

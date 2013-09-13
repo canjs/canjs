@@ -4,6 +4,6 @@
 
 @signature `<%# CODE %>`
 
-Used for comments.  This does nothing.
+Used for explicitly for comments.  This will not render anything.
      
          <%# 'hello world' %>

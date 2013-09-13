@@ -279,7 +279,7 @@ var project = new Observe({
     percentDone: .35
 });
 
-can.Control('SimpleSlider', { }, {
+SimpleSlider = can.Control.extend({ }, {
     init: function() {
         this.element.html(can.view(this.options.view, this.options));
     },

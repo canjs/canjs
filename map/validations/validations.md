@@ -8,7 +8,8 @@ are set on [can.Map]'s __static__ `init` function.
 
 The following validates the `birthday` attribute in Contacts:
 
-    Contact = can.Map({
+
+    Contact = can.Map.extend({
     	init : function(){
     		// validates that birthday is in the future
     		this.validate("birthday",function(birthday){
@@ -21,7 +22,8 @@ The following validates the `birthday` attribute in Contacts:
     
     var contact = new Contact({birthday: new Date(2012,0) })
 
-Use [can.Map::errors errors] `( [attrs...], newVal )` to read errors
+
+Use [can.Map.validations.prototype.errors errors] `( [attrs...], newVal )` to read errors
 or to test if setting a value would create an error:
 
     // Check if there are errors on the instance
@@ -47,26 +49,27 @@ or to test if setting a value would create an error:
 
 ## Validation Methods
 
-The most basic validate method is [can.Map.validate validate]<code>()</code>.  
+
+The most basic validate method is [can.Map.validations.static.validate validate]<code>()</code>.  
 
 There are several built-in validation methods so you don't have to define your own in all cases like in the birthday example above.
 
-- [can.Map.validate]<code>(attrNames, options, proc)</code> Attributes validated with function.
-- [can.Map.validateFormatOf]<code>(attrNames, regexp, options)</code> Attributes match the regular expression.	
-- [can.Map.validateInclusionOf]<code>( attrNames, inArray, [options] )</code> Attributes are available in a particular array.	
-- [can.Map.validateLengthOf validateLengthOf]<code>(attrNames, min, max, [options])</code> Attributes' lengths are in the given range.	
-- [can.Map.validatePresenceOf validatePresenceOf]<code>( attrNames, [options] )</code> Attributes are not blank.	
-- [can.Map.validateRangeOf validateRangeOf]<code>(attrNames, low, hi, [options])</code> Attributes are in the given numeric range.
+- [can.Map.validations.static.validate can.Map.validate]<code>(attrNames, options, proc)</code> Attributes validated with function.
+- [can.Map.validations.static.validateFormatOf can.Map.validateFormatOf]<code>(attrNames, regexp, options)</code> Attributes match the regular expression.	
+- [can.Map.validations.static.validateInclusionOf can.Map.validateInclusionOf]<code>( attrNames, inArray, [options] )</code> Attributes are available in a particular array.	
+- [can.Map.validations.static.validateLengthOf can.Map.validateLengthOf]<code>(attrNames, min, max, [options])</code> Attributes' lengths are in the given range.	
+- [can.Map.validations.static.validatePresenceOf can.Map.validatePrese]<code>( attrNames, [options] )</code> Attributes are not blank.	
+- [can.Map.validations.static.validateRangeOf can.Map.validateRangeOf]<code>(attrNames, low, hi, [options])</code> Attributes are in the given numeric range.
 
 ## Error Method
 
-[can.Map::errors]() runs the validations on this model. You can also pass it an array 
+[can.Map.validations.prototype.errors can.Map.errors]<code>()</code> runs the validations on this model. You can also pass it an array 
 of attributes to run only those attributes. It returns 
 nothing if there are no errors, or an object of errors by attribute.
 
 To use validations, it's required you use the _observe/validations_ plugin.
 
-	can.Map("Task",{
+	Task = can.Map.extend({
 		init : function(){
 			this.validatePresenceOf("dueDate")
 		}

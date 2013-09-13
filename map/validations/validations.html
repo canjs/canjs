@@ -36,7 +36,7 @@ steal('can/map/validations',
 
 // Create a Person Observe Constructor
 // that converts dates
-Person = can.Observe.extend({
+Person = can.Map.extend({
   convert : {
     date : function(raw){
       if(typeof raw == 'string'){
