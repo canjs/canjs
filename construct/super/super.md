@@ -24,14 +24,14 @@ The `Person` and `Programmer` examples from `[can.Construct::init init]` demonst
 Here's how those classes look without can.Construct.super:
 
 @codestart
-can.Construct("Person", {
+var Person = can.Construct.extend({
     init: function(first, last) {
         this.first = first;
         this.last  = last;
     }
 });
 
-Person("Programmer", {
+var Programmer = Person.extend({
     init: function(first, last, language) {
         // call base's init
         Person.prototype.init.apply(this, arguments);
@@ -40,8 +40,8 @@ Person("Programmer", {
         this.language = language;
     },
     bio: function() {
-        return 'Hi! I'm ' + this.first + ' ' + this.last +
-            ' and I write ' + this.language + '.';
+        return "Hi! I'm " + this.first + " " + this.last +
+            " and I write " + this.language + ".";
     }
 });
 @codeend
@@ -49,7 +49,7 @@ Person("Programmer", {
 And here's how `Programmer` works using `_super`:
 
 @codestart
-Person("Programmer", {
+var Programmer = Person.extend({
     init: function(first, last, language) {
         // call base's init
         this._super(first, last);
@@ -58,8 +58,8 @@ Person("Programmer", {
         this.language = language;
     },
     bio: function() {
-        return 'Hi! I'm ' + this.first + ' ' + this.last +
-            ' and I write ' + this.language + '.';
+        return "Hi! I'm " + this.first + " " + this.last +
+            " and I write " + this.language + ".";
     }
 });
 @codeend
@@ -67,7 +67,7 @@ Person("Programmer", {
 If you want to pass an array of arguments (or an arguments object) to `_super`, use [apply](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/apply):
 
 @codestart
-Person("Programmer", {
+var Programmer = Person.extend({
     init: function(first, last, language) {
         // call base's init
         this._super.apply(this, arguments);
@@ -76,8 +76,8 @@ Person("Programmer", {
         this.language = language;
     },
     bio: function() {
-        return 'Hi! I'm ' + this.first + ' ' + this.last +
-            ' and I write ' + this.language + '.';
+        return "Hi! I'm " + this.first + " " + this.last +
+            " and I write " + this.language + ".";
     }
 });
 @codeend
@@ -90,13 +90,13 @@ can use it in static functions.
 Here is a base class that has a method that squares numbers and an inherited class that has a method that cubes numbers:
 
 @codestart
-can.Construct('Squarer', {
+var Squarer = can.Construct.extend({
     raise: function(n) {
         return n*n;
     }
 }, {});
 
-Squarer('Cuber', {
+var Cuber = Squarer.extend({
     raise: function(n) {
         return n * this_super(n);
     }

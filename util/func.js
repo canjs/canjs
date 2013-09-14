@@ -56,11 +56,15 @@ of the string, then they will be persisted.
 @return {Boolean} Whether __obj__ is an Array.
 
 @body
-`can.isArray(object)` returns if the object is an Array.
+`can.isArray(object)` returns if the object is an explicitly an Array. If `can.isArray` 
+is passed an array-like object, it will return `false`.
 
     can.isArray([]);    // true
-    can.isArray(false); // false
-    can.isArray(can.$("a")); // false
+    can.isArray([1, 2, 3]);    // true
+    can.isArray(can.makeArray({0: "foo", 1: "bar"})); // true
+    (function() { return can.isArray(arguments); })(); // false
+    can.isArray(document.querySelectorAll("p")); // false
+    can.isArray(true); // false
 */
 //
 /**
@@ -125,12 +129,11 @@ like [http://api.jquery.com/jQuery.param/ jQuery.param].
 */
 //
 /**
+@description Takes a string of name value pairs and returns a Object literal that represents those params.
 @function can.deparam
 @parent can.util
-@description Takes a string of name value pairs and returns a Object literal that represents those params.
-
-@signature `can.param(params)`
-@param {String} params a string like <code>"foo=bar&person[age]=3"</code>
+@signature `can.deparam(params)`
+@param {String} params A string like <code>"foo=bar&person[age]=3"</code>
 @return {Object} A JavaScript Object that represents the params:
 
     {
@@ -139,6 +142,10 @@ like [http://api.jquery.com/jQuery.param/ jQuery.param].
         age: "3"
       }
     }
+
+@body
+
+can.depararm will take any string and convert it into an Object literal that represents the string passed into it.
 */
 //
 /**
@@ -346,7 +353,7 @@ __Delegate/undelegate binding to an HTMLElement__
 */
 //
 /**
-@description Trigger an event.
+@description Trigger an event on an object.
 @function can.trigger
 @parent can.util
 @signature `can.trigger(target, eventName[, args])`
@@ -354,7 +361,19 @@ __Delegate/undelegate binding to an HTMLElement__
 @param {String} eventName The event to trigger.
 @param {Array.<*>} [args] The event data.
 
-Trigger an event on an element or object.
+@body
+
+`can.trigger(target, eventName)` triggers an artificial event on an object and fires all
+associated callback handlers [can.bind that were bound to it.] This is exceptionally handly
+for simulating events. Such as the following:
+
+    var button = document.createElement('button');
+
+    can.bind.call(button, 'click', function() {
+        console.log('I have been clicked');
+    })
+
+    can.trigger(button, 'click');
 */
 //
 /**
@@ -612,14 +631,14 @@ function(s) for the success or failure state of both asynchronous and synchronou
 */
 //
 /**
-@description Add a callback to be called when a Deferred is resolved.
+@description Add one or more callbacks to be called when a Deferred is resolved.
 @function can.Deferred.prototype.done done
 @parent can.Deferred.prototype
-@signature `deferred.done(doneCallback)`
-@param {Function} doneCallback A callback to be called when the Deferred is resolved.
+@signature `deferred.done(doneCallbacks)`
+@param {Function} doneCallbacks A function, or an array of functions, to be called when the Deferred is resolved.
 
 @body
-`deferred.done(doneCallback)` adds handler(s) to be called when the Deferred object is resolved.
+`deferred.done(doneCallbacks)` adds one or more functions to be called when the Deferred object is resolved.
 
     var def = can.Deferred();
     def.done(function(){
@@ -631,11 +650,11 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @description Add a callback to be called when a Deferred is rejected.
 @function can.Deferred.prototype.fail fail
 @parent can.Deferred.prototype
-@signature `deferred.fail(failCallback)`
-@param {Function} failCallback A callback to be called when the Deferred is rejected.
+@signature `deferred.fail(failCallbacks)`
+@param {Function} failCallbacks A function, or an array of functions, to be called when the Deferred is rejected.
 
 @body
-`deferred.fail(failCallback)` adds handler(s) to be called when the Deferred object is rejected.
+`deferred.fail(failCallbacks)` adds one or more functions to be called when the Deferred object is rejected.
 
     var def = can.Deferred();
     def.fail(function(){
@@ -644,14 +663,14 @@ function(s) for the success or failure state of both asynchronous and synchronou
 */
 //
 /**
-@description Add a callback to be unconditionally called.
+@description Add one or more callbacks to be unconditionally called when a Deferred is resolved or rejected.
 @function can.Deferred.prototype.always always
 @parent can.Deferred.prototype
-@signature `deferred.always(alwaysCallback)`
-@param {Function} alwaysCallback A callback to be called whether the Deferred is resolved or rejected.
+@signature `deferred.always(alwaysCallbacks)`
+@param {Function} alwaysCallbacks A function, or an array of functions, to be called whether the Deferred is resolved or rejected.
 
 @body
-`deferred.always( alwaysCallbacks )` adds handler(s) to be called when the Deferred object is either resolved or rejected.
+`deferred.always( alwaysCallbacks )` adds one or more functions to be called when the Deferred object is either resolved or rejected.
 
     var def = can.Deferred();
     def.always( function(){
@@ -722,6 +741,7 @@ function(s) for the success or failure state of both asynchronous and synchronou
 /**
 @description Resolve a Deferred.
 @function can.Deferred.prototype.resolve resolve
+@parent can.Deferred.prototype
 @signature `deferred.resolve([argument])`
 @param {Object} [argument] The argument to call the `doneCallback` with.
 
@@ -745,11 +765,11 @@ function(s) for the success or failure state of both asynchronous and synchronou
 */
 //
 /**
+
 @function can.sub
 @parent can.util
-@description Returns a string with {param} replaced values from data.
 
-    can.sub("foo {bar}",{bar: "far"}) //-> "foo far"
+@description Returns a string with {param} replaced values from data.
 
 @signature `can.sub(str, data, remove, s)`
 @param {String} str The string to make substitutes on
@@ -757,6 +777,12 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @param {Boolean} [remove] if a match is found, remove the property from the object
 @param {String} s The string to replace
 @return {String} The converted string or `null` if any data to render are `undefined` or `null`
+
+@body
+
+`can.sub` returns a string with {param} replaced values from data, where `param` is the name of an object property.
+
+    can.sub("foo {bar}", {bar: "far"}) //-> "foo far"
 */
 //
 
@@ -764,15 +790,19 @@ function(s) for the success or failure state of both asynchronous and synchronou
 @function can.underscore
 @parent can.util
 
-@description Takes a CamelCase or mixedCase string and underscores the string on the capital letter. If parts of the string are not CamelCase or mixedCase, it will not change them. `can.underscore` will lower case the entire string as well.
-
-    can.underscore("OneTwo") //-> "one_two"
-    can.underscore("OneTwo threeFour") //-> "one_two three_four"
+@description Takes a CamelCase or mixedCase string and underscores the string on the capital letter.
 
 @signature `can.underscore(str)`
 @param {String} str The string to underscore
 @return {String} the underscored string
- */ 
+
+@body
+
+`can.underscore` takes a CamelCase or mixedCase string and underscores the string on the capital letter. If parts of the string are not CamelCase or mixedCase, it will not change them. `can.underscore` will lower case the entire string as well.
+
+    can.underscore("OneTwo") //-> "one_two"
+    can.underscore("OneTwo threeFour") //-> "one_two three_four"
+*/ 
 //
 /**
 @function can.esc
@@ -780,26 +810,30 @@ function(s) for the success or failure state of both asynchronous and synchronou
 
 @description Escapes a string for insertion into HTML.
 
-    can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
-
 @signature `can.esc(str)`
 @param {String} str The string to escape
 @return {String} The HTML escaped string.
+
+@body
+
+    can.esc( "<foo>&<bar>" ) //-> "&lt;foo&lt;&amp;&lt;bar&lt;"
 */
 //
 /**
 @function can.getObject
 @parent can.util
-@description Gets an object from a string.  It can also modify objects on the 'object path' by removing or adding properties.
-
-    Foo = {Bar: {Zar: {"Ted"}}}
-    can.getObject("Foo.Bar.Zar") //-> "Ted"
-
-@signature can.getObject(name, roots, add)
+@signature `can.getObject(name, roots, add)`
+Gets an object from a string.
 @param {String} name the name of the object to look for
 @param {Array} [roots] an array of root objects to look for the name.  If roots is not provided, the window is used.
 @param {Boolean} [add] true to add missing objects to the path. false to remove found properties. undefined to not modify the root object
 @return {Object} The object.
+@body
+
+Gets an object from a string.  It can also modify objects on the 'object path' by removing or adding properties.
+
+    Foo = {Bar: {Zar: {"Ted"}}}
+    can.getObject("Foo.Bar.Zar") //-> "Ted"
 */
 var a = function() {};
 /**

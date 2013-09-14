@@ -162,8 +162,8 @@ to update an observable object, these functions are executed to return the new v
 
     // Suppose an observable "foo":
 
-    var foo = can.Observe({
-      count: '0'
+    var foo = new can.Observe({
+      bar: 'baz'
     });
 
     // Suppose also, the above observable is passed to our view:
@@ -195,9 +195,9 @@ This is because it gets turned into:
 When the wrapping function is called again, `i` will 
 not be the index of the item, but instead be items.length.
 
-The [can.EJS.Helpers::view view]<code>(observeList,function(item,index,list){})</code> method in EJS should be used to iterate through observe lists:
+The [can.Observe.List.prototype.each can.Observe.List.each] method on all observable lists should be used to iterate through it:
 
-    <% list(items, function(item){ %>
+    <% items.each(function(item){ %>
       <li><%= item.attr('name') %></li>
     <% }) %>
     
@@ -261,7 +261,7 @@ This technique is commonly used to add data, especially model instances, to an e
 
 jQuery’s `el.data( NAME, data )` adds data to an element. If your library does not support this, can provides it as `can.data( NodeList, NAME, data )`. Rewrite the above example as:
 
-    <% list(todos, function( todo ) { %>
+    <% todos.each( function( todo ) { %>
       <li <%= (el) -> can.data( el, 'todo', todo ) %>>
         <%= todo.attr( 'name' ) %>
       </li>

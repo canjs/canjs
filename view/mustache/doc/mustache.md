@@ -32,7 +32,7 @@ templates are compatible with can.Mustache.
 
 Mustache templates looks similar to normal HTML except
 they contain keys for inserting data into the template
-and [sections](#Sections) to enumerate and/or filter the enclosed template blocks.
+and [can.Mustache.Sections sections] to enumerate and/or filter the enclosed template blocks.
 
 For example, the following renders a welcome header for
 a user and displays the number of messages.
@@ -63,20 +63,20 @@ To update the html using live-binding, change an observable value:
 
 	data.attr('message', 5)
 
-This updates the text to say:
+This updates this paragraph in the HTML Result to:
 
 	<p>You have 5 messages.</p>
 
 
 
-can.Mustache provides a lot more functionality such as:
+can.Mustache provides significantly more functionality such as:
 
-- [Context and Path Basics](#Basics)
-- [Sections](#Sections)
-- [Partials](#Partials)
-- [Acquiring Templates](#Acquisition)
-- [Helpers](#Helpers)
-- [Live Binding](#Binding)
+- [can.Mustache.Basics Context and Path Basics]
+- [can.Mustache.Sections Sections]
+- [can.Mustache.helpers.partial Partials]
+- [can.Mustache.Acquisition Acquiring Templates]
+- [can.Mustache.Helpers Helpers]
+- [can.Mustache.Binding Live Binding]
 
 ## Tags
 

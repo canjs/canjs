@@ -105,7 +105,7 @@ with the new function's static and instance properties. For example, we want our
 be an `Animal`, but there are some differences:
 
 
-    Snake = Animal({
+    Snake = Animal.extend({
         legs: 0
     }, {
         init: function() {
@@ -129,22 +129,22 @@ If you pass all three arguments to can.Construct, the second one will be attache
 constructor, allowing you to imitate static properties and functions. You can access these
 properties through the `[can.Construct::constructor this.constructor]` property.
 
-Static properties can get overridden through inheritance just like instance properties. Let's see
-how this works with `Animal` and `Snake`:
+Static properties can get overridden through inheritance just like instance properties. In the example below,
+we override both the legs static property as well as the the init function for each instance:
 
 @codestart
-can.Construct('Animal', {
+var Animal = can.Construct.extend({
     legs: 4
 }, {
     init: function(sound) {
         this.sound = sound;
-    }
+    },
     speak: function() {
         console.log(this.sound);
     }
 });
 
-Animal('Snake', {
+var Snake = Animal.extend({
     legs: 0
 }, {
     init: function() {
@@ -157,10 +157,15 @@ Animal('Snake', {
 
 Animal.legs; // 4
 Snake.legs; // 0
+var dog = new Animal('woof');
+var blackMamba = new Snake();
+dog.speak(); // 'woof'
+blackMamba.speak(); // 'ssssss'
 @codeend
 
 ## Plugins
 
 There are two plugins available to help make using `can.Construct` even simpler.
-* [can.Construct.super] allows you to easily call base methods by making `this._super` available in inherited methods.
-* [can.Construct.proxy] helps you keep your scope straight when creating callbacks inside constructors.
+
+-   [can.Construct.super] allows you to easily call base methods by making `this._super` available in inherited methods.
+-   [can.Construct.proxy] helps you keep your scope straight when creating callbacks inside constructors.

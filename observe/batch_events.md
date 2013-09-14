@@ -1,8 +1,8 @@
 @page can.Observe.batchEvents Batch Events
 @parent can.Observe
 
-`can.Observe.startBatch( batchStopHandler )` and
-`can.Observe.stopBatch( force, callStart )`
+[can.Observe.startBatch `can.Observe.startBatch( batchStopHandler )`] and
+[can.Observe.stopBatch  `can.Observe.stopBatch( force, callStart )`]
 are used to specify atomic operations. `startBatch`
 prevents change events from being fired until `stopBatch` is called.
 
@@ -37,7 +37,7 @@ state. For example, the previous `player` should have
 a `tvshow` or `song` property, but not both. Event listeners should 
 never be called in an intermediate state.  We can make this happen 
 with `startBatch`, `stopBatch` and
-the `can/observe/setter` plugin as follows:
+the [can.Observe.setter `can/observe/setter`] plugin as follows:
 
     // Selection constructor function inherits from Observe
     Player = can.Observe({

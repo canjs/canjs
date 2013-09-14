@@ -1,8 +1,8 @@
 @page can.Mustache.Binding Live Binding
 @parent can.Mustache.pages 5
 
-Live binding templates update themselves as the data 
-used within the tags changes.
+Live binding refers to templates which update themselves 
+as the data used in the mustache tags change.
 
 It's very common as the page is interacted with that the underlying 
 data represented in the page changes.  Typically, you have callbacks 

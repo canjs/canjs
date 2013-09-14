@@ -143,6 +143,6 @@ __Listening with can.Control__
 
 You should be using can.Control to listen to model changes like:
 
-    Todos = can.Control({
+    Todos = can.Control.extend({
       "{Todo} updated" : function(Todo, ev, todo) {...}
     })

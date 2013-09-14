@@ -179,7 +179,7 @@ You can also set [can.fixture.on] to false:
 [can.fixture.store] makes a CRUD service layer that handles sorting, grouping, filtering and more. Use
 it with a [can.Model] like this:
 
-    var Todo = can.Model({
+    var Todo = can.Model.extend({
       findAll : 'GET /todos',
       findOne : 'GET /todos/{id}',
       create  : 'POST /todos',

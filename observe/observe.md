@@ -9,6 +9,8 @@
 
 @signature `new can.Observe([props])`
 
+Creates a new instance of can.Observe.
+
 @param {Object} [props] Properties and values to seed the Observe with.
 @return {can.Observe} An instance of `can.Observe` with the properties from _props_.
 

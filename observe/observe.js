@@ -341,7 +341,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * @description Iterate over the keys of an Observe.
 		 * @signature `can.Observe.keys(observe)`
 		 * @param {can.Observe} observe the `can.Observe` to get the keys from
-		 * @return {Array} array An array containing the keys from _observe_.
+		 * @return {Array} An array containing the keys from _observe_.
 		 * 
 		 * @body
 		 * `keys` iterates over an observe to get an array of its keys.
@@ -856,7 +856,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * @param {Function} [handler] the handler to unbind
 		 *
 		 * @body
-		 * `unbind` unbinds event handlers previously bound with [can.Observe.prototype.bind `bbind`].
+		 * `unbind` unbinds event handlers previously bound with [can.Observe.prototype.bind `bind`].
 		 * If no _handler_ is passed, all handlers for the given event type will be unbound.
 		 *
 		 * @codestart
@@ -1030,8 +1030,8 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * expected, a call to argument-less `attr` returns an array instead of an object.
 		 *
 		 * Just as you shouldn't set properties of an Observe directly, you shouldn't change elements
-		 * of a List directly. Always use `attr` to set the elements of a List, or use [can.Observe.List.push push],
-		 * [can.Observe.List.pop pop], [can.Observe.List.shift shift], [can.Observe.List.unshift unshift], or [can.Observe.List.splice splice].
+		 * of a List directly. Always use `attr` to set the elements of a List, or use [can.Observe.List.prototype.push push],
+		 * [can.Observe.List.prototype.pop pop], [can.Observe.List.prototype.shift shift], [can.Observe.List.prototype.unshift unshift], or [can.Observe.List.prototype.splice splice].
 		 *
 		 * Here is a tour through the forms of `can.Observe.List`'s `attr` that parallels the one found under [can.Observe.prototype.attr attr]:
 		 *
@@ -1096,7 +1096,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 *             // 'The length of the list was changed.'
 		 * @codeend
 		 *
-		 * More information about binding to these events can be found under [can.Observe.List.attr attr].
+		 * More information about binding to these events can be found under [can.Observe.List.prototype.attr attr].
 		 */
 			list = Observe(
 	/**
@@ -1162,6 +1162,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		},
 		/**
 		 * @function can.Observe.List.prototype.each each
+		 * @parent can.Observe.List.prototype
 		 * @description Call a function on each element of a List.
 		 * @signature `list.each( callback(item, index) )`
 		 * 
@@ -1258,7 +1259,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 *                                    // length: 5, ['a', 'b', 'Alice', 'Bob', 'd']
 		 * @codeend
 		 *
-		 * More information about binding to these events can be found under [can.Observe.List.attr attr].
+		 * More information about binding to these events can be found under [can.Observe.List.prototype.attr attr].
 		 */
 		splice: function( index, howMany ) {
 			var args = can.makeArray(arguments),
@@ -1286,69 +1287,17 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 			return removed;
 		},
 		/**
-		 * @description Get or set elements in a List.
 		 * @function can.Observe.List.prototype.attr attr
+		 * @description Get or set elements in a List.
 		 * @signature `list.attr()`
 		 * 
 		 * Gets a collection of all the elements in this `can.Observe.List`.
 		 * 
 		 * @return {Array} array with all the elements in this List.
 		 * 
-		 * @signature `list.attr(index)`
-		 * 
-		 * Reads a element from this `can.Observe.List`.
-		 * 
-		 * @param {Number} index the element to read
-		 * @return {*} the value at _index_.
-		 *
-		 * @signature `list.attr(index, value)`
-		 * 
-		 * Assigns _value_ to the index _index_ on this `can.Observe.List`, expanding the list if necessary.
-		 * 
-		 * @param {Number} index the element to set
-		 * @param {*} the value to assign at _index_
-		 * @return {can.Observe.List} this List, for chaining
-		 * 
-		 * @signature `list.attr(elements[, replaceCompletely])`
-		 * 
-		 * Merges the members of _elements_ into this List, replacing each from the beginning in order. If
-		 * _elements_ is longer than the current List, the current List will be expanded. If _elements_
-		 * is shorter than the current List, the extra existing members are not affected (unless
-		 * _replaceCompletely_ is `true`). To remove elements without replacing them, use `[can.Observe.List.prototype.removeAttr removeAttr]`.
-		 * 
-		 * @param {Array} elements an array of elements to merge in
-		 *
-		 * @param {bool} [replaceCompletely=false] whether to completely replace the elements of List
-		 * If _replaceCompletely_ is `true` and _elements_ is shorter than the List, the existing
-		 * extra members of the List will be removed.
-		 *
-		 * @return {can.Observe.List} this List, for chaining
-		 * 
 		 * @body
 		 * `attr` gets or sets elements on the `can.Observe.List` it's called on. Here's a tour through
 		 * how all of its forms work:
-		 *
-		 * @codestart
-		 * var people = new can.Observe.List(['Alex', 'Bill']);
-		 * 
-		 * // set an element:
-		 * people.attr(0, 'Adam');
-		 * 
-		 * // get an element:
-		 * people.attr(0); // 'Adam'
-		 * people[0]; // 'Adam'
-		 *
-		 * // get all elements:
-		 * people.attr(); // ['Adam', 'Bill']
-		 *
-		 * // extend the array:
-		 * people.attr(4, 'Charlie');
-		 * people.attr(); // ['Adam', 'Bill', undefined, undefined, 'Charlie']
-		 *
-		 * // merge the elements:
-		 * people.attr(['Alice', 'Bob', 'Eve']);
-		 * people.attr(); // ['Alice', 'Bob', 'Eve', undefined, 'Charlie']
-		 * @codeend
 		 * 
 		 * ## Deep properties
 		 * 
@@ -1369,7 +1318,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * people.attr(); // [{name: 'Alice'}, {name: 'Bob'}]
 		 * @codeend
 		 *
-		 * The discussion of deep properties under `[can.Observe.prototype.attr]` may also
+		 * The discussion of deep properties under `[can.Observe.prototype.attr attr]` may also
 		 * be enlightening.
 		 *
 		 * ## Events
@@ -1381,7 +1330,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * - the _remove_ event is fired when an element is removed from the List.
 		 * - the _length_ event is fired when the length of the List changes.
 		 *
-		 * * ## The _change_ event
+		 * ## The _change_ event
 		 * 
 		 * The first event that is fired is the _change_ event. The _change_ event is useful
 		 * if you want to react to all changes on an List.
@@ -1515,7 +1464,8 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * The parameters of the event handler for the _length_ event are:
 		 *
 		 * - _ev_ The event object.
-		 *- _length_ The current length of the list.
+		 * - _length_ The current length of the list.
+		 *
 		 * If events were batched when the _length_ event was triggered, _length_
 		 * will have the length of the list when `stopBatch` was called. Because
 		 * of this, you may recieve multiple _length_ events with the same
@@ -1621,8 +1571,8 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 *
 		 * ## See also
 		 *
-		 * `push` has a counterpart in [can.Observe.List.pop pop], or you may be
-		 * looking for [can.Observe.List.unshift unshift] and its counterpart [can.Observe.List.shift shift].
+		 * `push` has a counterpart in [can.Observe.List.prototype.pop pop], or you may be
+		 * looking for [can.Observe.List.prototype.unshift unshift] and its counterpart [can.Observe.List.prototype.shift shift].
 		 */
 		push: "length",
 		/**
@@ -1663,8 +1613,8 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 *
 		 * ## See also
 		 *
-		 * `unshift` has a counterpart in [can.Observe.List.shift shift], or you may be
-		 * looking for [can.Observe.List.push push] and its counterpart [can.Observe.List.pop pop].
+		 * `unshift` has a counterpart in [can.Observe.List.prototype.shift shift], or you may be
+		 * looking for [can.Observe.List.prototype.push push] and its counterpart [can.Observe.List.prototype.pop pop].
 		 */
 		unshift: 0
 	},
@@ -1714,7 +1664,7 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 * @return {*} the element just popped off the List, or `undefined` if the List was empty
 		 *
 		 * @body
-		 * `pop` is the opposite action from `[can.Observe.List.push push]`:
+		 * `pop` is the opposite action from `[can.Observe.List.prototype.push push]`:
 		 *
 		 * @codestart
 		 * var list = new can.Observe.List(['Alice']);
@@ -1735,8 +1685,8 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 *
 		 * ## See also
 		 *
-		 * `pop` has its counterpart in [can.Observe.List.push push], or you may be
-		 * looking for [can.Observe.List.unshift unshift] and its counterpart [can.Observe.List.shift shift].
+		 * `pop` has its counterpart in [can.Observe.List.prototype.push push], or you may be
+		 * looking for [can.Observe.List.prototype.unshift unshift] and its counterpart [can.Observe.List.prototype.shift shift].
 		 */
 		pop: "length",
 		/**
@@ -1770,8 +1720,8 @@ steal('can/util','can/util/bind','can/construct', function(can, bind) {
 		 *
 		 * ## See also
 		 *
-		 * `shift` has a counterpart in [can.Observe.List.unshift unshift], or you may be
-		 * looking for [can.Observe.List.push push] and its counterpart [can.Observe.List.pop pop].
+		 * `shift` has a counterpart in [can.Observe.List.prototype.unshift unshift], or you may be
+		 * looking for [can.Observe.List.prototype.push push] and its counterpart [can.Observe.List.prototype.pop pop].
 		 */
 		shift: 0
 	},
