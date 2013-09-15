@@ -6,7 +6,10 @@
 <body>
 	
 <script id="template" type="text/mustache">
-	<p  {{placeholder compute}}>If Statements {{#name}} <strong>hi!</strong> {{/name}}</p>
+<p> My fav color is <span {{ (el) -> el.css('color', 'blue') }}>blue</span></p>
+	<p>My fav teacher is: <span>{{ name }}</span></p>
+	<p>My fav book is: <span>{{{ book }}}</span></p>
+	<p>Comments {{! 'ignored' }}</p>
 </script>
 
 <div id="demo"></div>
@@ -14,19 +17,12 @@
 
 <script type='text/javascript' src='../../lib/steal/steal.js'></script>
 <script type='text/javascript'>
-	steal(function() {
-		steal.config({
-			root: '../../'
-		});
-	}).then('can/view/mustache', 'can/observe', function() {
-		
-		var compute = can.compute("holler")
+	steal('can/view/mustache', 'can/map','can/compute', function() {
 
-		var teacher = new can.Observe({
+		var teacher = new can.Map({
 			name: "<strong>Mrs Peters</strong>",
 			book: "Harry Potter",
-			movie: false,
-			compute: compute
+			movie: false
 		});
 
 		var template = can.view("#template", teacher);
@@ -36,7 +32,7 @@
 			teacher.attr('name', 'Mr Scott')
 			teacher.attr('book', '<strong>Eat, Pray, Love</strong>')
 		});
-		
+
 	});
 </script>
 </body>

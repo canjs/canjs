@@ -302,7 +302,7 @@ test("updating the url", function(){
 		},30);
 	}
 	var iframe = document.createElement('iframe');
-	iframe.src = steal.root.join("can/route/pushstate/testing.html");
+	iframe.src = can.test.path("route/pushstate/testing.html");
 	can.$("#qunit-test-area")[0].appendChild(iframe);
 });
 
@@ -323,7 +323,7 @@ test("sticky enough routes", function(){
 		},30);
 	}
 	var iframe = document.createElement('iframe');
-	iframe.src = steal.root.join("can/route/pushstate/testing.html?2");
+	iframe.src = can.test.path("route/pushstate/testing.html?2");
 	can.$("#qunit-test-area")[0].appendChild(iframe);
 });
 
@@ -361,7 +361,7 @@ test("unsticky routes", function(){
 
 	}
 	var iframe = document.createElement('iframe');
-	iframe.src = steal.root.join("can/route/pushstate/testing.html?1");
+	iframe.src = can.test.path("route/pushstate/testing.html?1");
 	can.$("#qunit-test-area")[0].appendChild(iframe);
 });
 

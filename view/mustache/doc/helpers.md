@@ -172,15 +172,15 @@ name followed by any additional arguments.
 	Result:
 		<span>my string localized</span>
 
-__Helpers with can.Observe attributes__
+__Helpers with can.Map attributes__
 
-If a can.Observe attribute is passed as an argument to a helper, it is converted to a can.compute getter/setter function.  This is to allow creating 2-way binding type functionality between a can.Observe attribute and a form element. For example in your template:
+If a can.Map attribute is passed as an argument to a helper, it is converted to a can.compute getter/setter function.  This is to allow creating 2-way binding type functionality between a can.Map attribute and a form element. For example in your template:
 
 	<div>{{addPrefix name}}</div>
 
 Your helper would look like:
 
-	var item = new can.Observe({name: "Brian"}),
+	var item = new can.Map({name: "Brian"}),
 	    frag = can.view("#template", item, {
 	      addPrefix: function(name){
 	        return "Mr." + name()

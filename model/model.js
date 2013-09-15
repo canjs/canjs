@@ -1,9 +1,9 @@
 // this file should not be stolen directly
-steal('can/util','can/observe', function( can ) {
+steal('can/util','can/map', 'can/list',function( can ) {
 	
 	// ## model.js  
 	// `can.Model`  
-	// _A `can.Observe` that connects to a RESTful interface._
+	// _A `can.Map` that connects to a RESTful interface._
 	//  
 	// Generic deferred piping function
 	/**
@@ -40,7 +40,7 @@ steal('can/util','can/observe', function( can ) {
 		getId = function( inst ) {
 			// Instead of using attr, use __get for performance.
 			// Need to set reading
-			can.Observe.__reading && can.Observe.__reading(inst, inst.constructor.id)
+			can.__reading && can.__reading(inst, inst.constructor.id)
 			return inst.__get(inst.constructor.id);
 		},
 		// Ajax `options` generator function
@@ -228,7 +228,7 @@ steal('can/util','can/observe', function( can ) {
 		 * typically perform an AJAX request to a service that results in
 		 * creating a record in a database.
 		 * 
-		 * @param {Object} serialized The [can.Observe::serialize serialized] properties of
+		 * @param {Object} serialized The [can.Map::serialize serialized] properties of
 		 * the model to create.
 		 * @return {can.Deferred} A Deferred that resolves to an object of attributes
 		 * that will be added to the created model isntance.  The object __MUST__ contain
@@ -278,7 +278,7 @@ steal('can/util','can/observe', function( can ) {
 		 * ## Implement with a Function
 		 * 
 		 * You can also implement create by yourself. Create gets called 
-		 * with `attrs`, which are the [can.Observe::serialize serialized] model 
+		 * with `attrs`, which are the [can.Map::serialize serialized] model 
 		 * attributes.  Create returns a `Deferred` 
 		 * that contains the id of the new instance and any other 
 		 * properties that should be set on the instance.
@@ -317,7 +317,7 @@ steal('can/util','can/observe', function( can ) {
 		 * @signature `can.Model.update: function(id, serialized) -> can.Deffered`
 		 * If you provide a function, the Model will expect you to do your own AJAX requests.
 		 * @param {*} id The ID of the model to update.
-		 * @param {Object} serialized The [can.Observe::serialize serialized] properties of
+		 * @param {Object} serialized The [can.Map::serialize serialized] properties of
 		 * the model to update.
 		 * @return {can.Deferred} A Deferred that resolves to the updated model.
 		 *
@@ -748,7 +748,7 @@ steal('can/util','can/observe', function( can ) {
 
 	
 	
-	can.Model = can.Observe({
+	can.Model = can.Map({
 		fullName: "can.Model",
 		_reqs: 0,
 		/**
@@ -762,7 +762,7 @@ steal('can/util','can/observe', function( can ) {
 		setup : function(base){
 			// create store here if someone wants to use model without inheriting from it
 			this.store = {};
-			can.Observe.setup.apply(this, arguments);
+			can.Map.setup.apply(this, arguments);
 			// Set default list as model list
 			if(!can.Model){
 				return;
@@ -913,7 +913,7 @@ steal('can/util','can/observe', function( can ) {
 			// Get the list type.
 			var self = this,
 				tmp = [],
-				res = oldList instanceof can.Observe.List ? oldList : new( self.List || ML),
+				res = oldList instanceof can.List ? oldList : new( self.List || ML),
 				// Did we get an `array`?
 				arr = can.isArray(instancesRawData),
 				
@@ -1210,7 +1210,7 @@ steal('can/util','can/observe', function( can ) {
 		 *     task.bind("name", function(ev, newVal, oldVal){})
 		 * 
 		 * Use `bind` the
-		 * same as [can.Observe::bind] which should be used as
+		 * same as [can.Map::bind] which should be used as
 		 * a reference for listening to property changes.
 		 * 
 		 * Bind on model can be used to listen to when 
@@ -1245,14 +1245,14 @@ steal('can/util','can/observe', function( can ) {
 		 *     
 		 * 
 		 * `bind` also extends the inherited 
-		 * behavior of [can.Observe::bind] to track the number
+		 * behavior of [can.Map::bind] to track the number
 		 * of event bindings on this object which is used to store
 		 * the model instance.  When there are no bindings, the 
 		 * model instance is removed from the store, freeing memory.  
 		 */
 		_bindsetup: function(){
 			this.constructor.store[this.__get(this.constructor.id)] = this;
-			return can.Observe.prototype._bindsetup.apply( this, arguments );
+			return can.Map.prototype._bindsetup.apply( this, arguments );
 		},
 		/**
 		 * @function can.Model.prototype.unbind unbind
@@ -1282,11 +1282,11 @@ steal('can/util','can/observe', function( can ) {
 		 */
 		_bindteardown: function(){
 			delete this.constructor.store[getId(this)];
-			return can.Observe.prototype._bindteardown.apply( this, arguments );;
+			return can.Map.prototype._bindteardown.apply( this, arguments );;
 		},
 		// Change `id`.
 		___set: function( prop, val ) {
-			can.Observe.prototype.___set.call(this,prop, val)
+			can.Map.prototype.___set.call(this,prop, val)
 			// If we add an `id`, move it to the store.
 			if(prop === this.constructor.id && this._bindings){
 				this.constructor.store[getId(this)] = this;
@@ -1508,12 +1508,12 @@ steal('can/util','can/observe', function( can ) {
   // destroyed, it automatically gets removed from the list.
   /**
    * @constructor can.Model.List
-   * @inherits can.Observe.List
+   * @inherits can.List
    * @parent canjs
    * @download can/model
    * @test can/model/qunit.html
    *
-   * Works exactly like [can.Observe.List] and has all of the same properties,
+   * Works exactly like [can.List] and has all of the same properties,
    * events, and functions as an observable list. The only difference is that 
    * when an item from the list is destroyed, it will automatically get removed
    * from the list.
@@ -1570,7 +1570,7 @@ steal('can/util','can/observe', function( can ) {
    *
    * ## Removing models from model list
    *
-   * The advantage that `can.Model.List` has over a traditional `can.Observe.List`
+   * The advantage that `can.Model.List` has over a traditional `can.List`
    * is that when you destroy a model, if it is in that list, it will automatically
    * be removed from the list. 
    *
@@ -1583,17 +1583,17 @@ steal('can/util','can/observe', function( can ) {
    *
    *
    */
-	var ML = can.Model.List = can.Observe.List({
+	var ML = can.Model.List = can.List({
 		setup: function(params){
 			if( can.isPlainObject(params) && ! can.isArray(params) ){
-				can.Observe.List.prototype.setup.apply(this);
+				can.List.prototype.setup.apply(this);
 				this.replace(this.constructor.Observe.findAll(params))
 			} else {
-				can.Observe.List.prototype.setup.apply(this,arguments);
+				can.List.prototype.setup.apply(this,arguments);
 			}
 		},
 		_changes: function(ev, attr){
-			can.Observe.List.prototype._changes.apply(this, arguments );
+			can.List.prototype._changes.apply(this, arguments );
 			if(/\w+\.destroyed/.test(attr)){
 				var index = this.indexOf(ev.target);
 				if (index != -1) {

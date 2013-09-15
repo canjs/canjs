@@ -24,9 +24,14 @@ Will call a `madLib` helper with the following arguements.
         // number -> 4
     });
     
-While keys are normally resolved as basic objects like strings or numbers, there are some special cases where they act differently than a normal tag. Whenever a [can.compute] or function object is an argument for a helper, the original object is used as the argument instead of the value that the function returns.
 
-If a [can.Mustache.key] represents a [can.Observe] attribute,
+While keys are normally resolved as basic objects like strings or numbers, 
+there are special cases where they act differently than a normal 
+tag. Whenever a [can.compute] or function 
+object is an argument for a helper, the original object is used 
+as the argument instead of the value that the function returns.
+
+If a [can.Mustache.key] represents a [can.Map] attribute,
 it is converted to a [can.compute] getter/setter 
 function. This enables 2-way binding helpers.  
 
@@ -51,7 +56,7 @@ And used by the following template:
     
 And rendered with:
     
-    {me: new can.Observe({name: "Payal"})}
+    {me: new can.Map({name: "Payal"})}
 
 @param {can.Mustache.helperOptions} options An options object
 that gets populated with optional:

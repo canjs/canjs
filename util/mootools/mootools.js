@@ -1,5 +1,5 @@
 steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js', 'can/util/deferred.js',
-'can/util/array/each.js', 'can/util/object/isplain', function(can) {
+'can/util/array/each.js', 'can/util/object/isplain', "can/util/inserted",function(can) {
 	// mootools.js
 	// ---------
 	// _MooTools node list._
@@ -162,16 +162,21 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 	can.trigger = function(item, event, args, bubble){
 		// Defaults to `true`.
 		bubble = (bubble === undefined ? true : bubble);
-		args = args || []
+		args = args || [];
+		var propagating = true;
+		
 		if(item.fireEvent){
 			item = item[0] || item;
 			// walk up parents to simulate bubbling .
-			while(item) {
+			while(item && propagating) {
 			// Handle walking yourself.
 				if(!event.type){
 					event = {
 						type : event,
-						target : item
+						target : item,
+						stopPropagation: function(){
+							propagating = false;
+						}
 					}
 				}
 				var events = (item !== window ?
@@ -179,7 +184,7 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 					item.retrieve('events') );
 				if (events && events[event.type]) {
 					events[event.type].keys.each(function(fn){
-						fn.apply(this, [event].concat(args));
+						fn.apply(item, [event].concat(args));
 					}, this);
 				}
 				// If we are bubbling, get parent node.
@@ -329,17 +334,37 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 		filtered.destroy();
 		return filtered;
 	}
+	can.has = function(wrapped, element){
+		// this way work in mootools
+		if( Slick.contains(wrapped[0], element) ){
+			return wrapped
+		} else {
+			return []
+		}
+	}
 
 	// Destroyed method.
-	var destroy = Element.prototype.destroy;
+	var destroy = Element.prototype.destroy,
+		grab = Element.prototype.grab;
 	Element.implement({
 		destroy : function(){
-			can.trigger(this,"destroyed",[],false)
+			can.trigger(this,"removed",[],false)
 			var elems = this.getElementsByTagName("*");
 			for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
-				can.trigger(elem,"destroyed",[],false);
+				can.trigger(elem,"removed",[],false);
 			}
 			destroy.apply(this, arguments)
+		},
+		grab: function(el){
+			var elems;
+			if(el && el.nodeType === 11){
+				elems = can.makeArray(el.childNodes);
+			} else {
+				elems = [el]
+			}
+			var ret = grab.apply(this,arguments);
+			can.inserted( elems );
+			return ret;
 		}
 	});
 	can.get = function(wrapped, index){
@@ -357,6 +382,6 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 			return Math.random();
 		}
 	}
-
+	Element.NativeEvents["hashchange"] = 2;
 	return can;
 });

@@ -89,24 +89,32 @@ var getAttr = function(el, attrName){
 		el.getAttribute(attrName);
 }
 
+test("basics", function(){
+	var template = can.view.mustache("<ul>{{#items}}<li>{{helper foo}}</li>{{/items}}</ul>");
+	template()
+	ok(true,"just to force the issue")
+})
+
 test("Model hookup", function(){
 
 	// Single item hookup
 	var template = '<p id="foo" {{  data "name "   }}>data rocks</p>';
-	var obsvr = new can.Observe({ name: 'Austin' });
+	var obsvr = new can.Map({ name: 'Austin' });
 	var frag = new can.Mustache({ text: template }).render(obsvr);
 	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
 	deepEqual(can.data(can.$('#foo'), 'name '), obsvr, 'data hooks worked and fetched');
 
 	// Multi-item hookup
 	var listTemplate = '<ul id="list">{{#list}}<li class="moo" id="li-{{name}}" {{data "obsvr"}}>{{name}}</li>{{/#list}}</ul>';
-	var obsvrList = new can.Observe.List([ obsvr ]);
+	var obsvrList = new can.List([ obsvr ]);
 	var listFrag = new can.Mustache({ text: listTemplate }).render({ list: obsvrList });
 	can.append(can.$('#qunit-test-area'), can.view.frag(listFrag));
+
 	deepEqual(can.data(can.$('#li-Austin'), 'obsvr'), obsvr, 'data hooks for list worked and fetched');
 
+
 	// Mulit-item update with hookup
-	var obsvr2 = new can.Observe({ name: 'Justin' });
+	var obsvr2 = new can.Map({ name: 'Justin' });
 	obsvrList.push(obsvr2);
 	deepEqual(can.data(can.$('#li-Justin'), 'obsvr'), obsvr2, 'data hooks for list push worked and fetched');
 
@@ -144,7 +152,7 @@ test('Helpers with obvservables in them', function(){
 	});
 
 	var template = "<div id='sectionshelper'>{{#filter 'moo'}}moo{{/filter}}</div>";
-	var obsvr = new can.Observe({ filter: 'moo' });
+	var obsvr = new can.Map({ filter: 'moo' });
 	var frag = new can.Mustache({ text: template }).render({ filter: obsvr });;
 	can.append( can.$('#qunit-test-area'), can.view.frag(frag));
 	deepEqual(can.$('#sectionshelper')[0].innerHTML, "", 'helper section showed none');
@@ -163,7 +171,7 @@ test('Tokens returning 0 where they should diplay the number', function(){
 
 test('Inverted section function returning numbers',function() {
 	var template = "<div id='completed'>{{^todos.completed}}hidden{{/todos.completed}}</div>";
-	var obsvr = new can.Observe({ named: false });
+	var obsvr = new can.Map({ named: false });
 
 	var todos = {
 		completed: function(){
@@ -184,7 +192,7 @@ test('Inverted section function returning numbers',function() {
 test("Mustache live-binding with escaping", function() {
 	var template = "<span id='binder1'>{{ name }}</span><span id='binder2'>{{{name}}}</span>";
 
-	var teacher = new can.Observe({
+	var teacher = new can.Map({
 		name: "<strong>Mrs Peters</strong>"
 	});
 
@@ -319,7 +327,7 @@ test("No arguments passed to helper", function() {
 	var div2 = document.createElement('div');
 
 	div1.appendChild( can.view("noargs", {}) );
-	div2.appendChild( can.view("noargs", new can.Observe() ) );
+	div2.appendChild( can.view("noargs", new can.Map() ) );
 
 	deepEqual(div1.innerHTML, "foo");
 	deepEqual(div2.innerHTML, "foo");
@@ -330,7 +338,7 @@ test("No arguments passed to helper with list", function() {
 	var div = document.createElement('div');
 
 	div.appendChild( can.view("noargs", {
-		items: new can.Observe.List([{
+		items: new can.List([{
 			name: "Brian"
 		}])
 	},
@@ -345,8 +353,14 @@ test("No arguments passed to helper with list", function() {
 
 test("Partials and observes", function() {
 	var div = document.createElement('div');
-	var dom = can.view(can.test.path('view/mustache/test/table.mustache'), {
-		data : new can.Observe({
+	
+	var template = can.view.mustache("table","<table><thead><tr>{{#data}}{{{>"+
+		can.test.path('view/mustache/test/partial.mustache')
+		+"}}}{{/data}}</tr></thead></table>")
+	
+	
+	var dom = can.view("table", {
+		data : new can.Map({
 			list: ["hi","there"]
 		})
 	});
@@ -428,7 +442,7 @@ test("Handlebars helper: each", function() {
 		template: "{{#each names}}{{this}} {{/each}}",
 		expected: "Andy Austin Justin ",
 		data: { names: ['Andy', 'Austin', 'Justin'] },
-		data2: { names: new can.Observe.List(['Andy', 'Austin', 'Justin']) }
+		data2: { names: new can.List(['Andy', 'Austin', 'Justin']) }
 	};
 
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
@@ -593,7 +607,7 @@ test("helpers", function() {
 test("attribute single unescaped, html single unescaped", function(){
 
 	var text = "<div id='me' class='{{#task.completed}}complete{{/task.completed}}'>{{ task.name }}</div>";
-	var task = new can.Observe({
+	var task = new can.Map({
 		name : 'dishes'
 	})
 	var compiled = new can.Mustache({text: text}).render({ task: task }) ;
@@ -677,7 +691,7 @@ test("event binding / triggering on options", function(){
 
 test("select live binding", function() {
 	var text = "<select>{{ #todos }}<option>{{ name }}</option>{{ /todos }}</select>";
-		Todos = new can.Observe.List([
+		Todos = new can.List([
 			{id: 1, name: 'Dishes'}
 		]),
 		compiled = new can.Mustache({text: text}).render({todos: Todos}),
@@ -697,11 +711,11 @@ test('multiple hookups in a single attribute', function() {
 	var text =	'<div class=\'{{ obs.foo }}' +
 							'{{ obs.bar }}{{ obs.baz }}{{ obs.nest.what }}\'></div>',
 
-	obs = new can.Observe({
+	obs = new can.Map({
 		foo: 'a',
 		bar: 'b',
 		baz: 'c',
-		nest: new can.Observe({
+		nest: new can.Map({
 			what: 'd'
 		})
 	}),
@@ -733,7 +747,7 @@ test('adding and removing multiple html content within a single element', functi
 
 	var text =	'<div>{{ obs.a }}{{ obs.b }}{{ obs.c }}</div>',
 
-	obs = new can.Observe({
+	obs = new can.Map({
 		a: 'a',
 		b: 'b',
 		c: 'c'
@@ -762,7 +776,7 @@ test('live binding and removeAttr', function(){
 			'<p {{ obs.attributes }} class="{{ obs.className }}"><span>{{ obs.message }}</span></p>' +
 		'{{ /obs.show }}',
 
-		obs = new can.Observe({
+		obs = new can.Map({
 			show: true,
 			className: 'myMessage',
 			attributes: 'some=\"myText\"',
@@ -826,7 +840,7 @@ test('hookup within a tag', function () {
 	var text =	'<div {{ obs.foo }} '
 		+ '{{ obs.baz }}>lorem ipsum</div>',
 
-	obs = new can.Observe({
+	obs = new can.Map({
 		foo: 'class="a"',
 		baz: 'some=\'property\''
 	}),
@@ -857,7 +871,7 @@ test('hookup within a tag', function () {
 test('single escaped tag, removeAttr', function () {
 	var text =	'<div {{ obs.foo }}>lorem ipsum</div>',
 
-	obs = new can.Observe({
+	obs = new can.Map({
 		foo: 'data-bar="john doe\'s bar"'
 	}),
 
@@ -881,7 +895,7 @@ test('single escaped tag, removeAttr', function () {
 test('html comments', function(){
 	var text =	'<!-- bind to changes in the todo list --> <div>{{obs.foo}}</div>',
 
-	obs = new can.Observe({
+	obs = new can.Map({
 		foo: 'foo'
 	})
 
@@ -897,7 +911,7 @@ test("hookup and live binding", function(){
 	var text = "<div class='{{ task.completed }}' {{ (el)-> can.data(can.$(el),'task',task) }}>" +
 		"{{ task.name }}" +
 		"</div>",
-		task = new can.Observe({
+		task = new can.Map({
 			completed: false,
 			className: 'someTask',
 			name: 'My Name'
@@ -930,7 +944,7 @@ test('multiple curly braces in a block', function() {
 					'<li>{{name}}</li>' +
 				'{{/obs.items}}',
 
-	obs = new can.Observe({
+	obs = new can.Map({
 		items: []
 	}),
 
@@ -946,7 +960,7 @@ test('multiple curly braces in a block', function() {
 });
 
 test("unescape bindings change", function(){
-	var l = new can.Observe.List([
+	var l = new can.List([
 		{complete: true},
 		{complete: false},
 		{complete: true}
@@ -972,7 +986,7 @@ test("unescape bindings change", function(){
 
 	var child = div.getElementsByTagName('div')[0];
 	equal(child.innerHTML, "2", "at first there are 2 true bindings");
-	var item = new can.Observe({complete: true, id: "THIS ONE"})
+	var item = new can.Map({complete: true, id: "THIS ONE"})
 	l.push(item);
 
 	equal(child.innerHTML, "3", "now there are 3 complete");
@@ -990,7 +1004,7 @@ test("unescape bindings change", function(){
 
 
 test("escape bindings change", function(){
-	var l = new can.Observe.List([
+	var l = new can.List([
 		{complete: true},
 		{complete: false},
 		{complete: true}
@@ -1016,7 +1030,7 @@ test("escape bindings change", function(){
 
 	var child = div.getElementsByTagName('div')[0];
 	equal(child.innerHTML, "2", "at first there are 2 true bindings");
-	var item = new can.Observe({complete: true})
+	var item = new can.Map({complete: true})
 	l.push(item);
 
 	equal(child.innerHTML, "3", "now there are 3 complete");
@@ -1028,7 +1042,7 @@ test("escape bindings change", function(){
 
 
 test("tag bindings change", function(){
-	var l = new can.Observe.List([
+	var l = new can.List([
 		{complete: true},
 		{complete: false},
 		{complete: true}
@@ -1054,7 +1068,7 @@ test("tag bindings change", function(){
 
 	var child = div.getElementsByTagName('div')[0];
 	equal(child.getAttribute("items"), "2", "at first there are 2 true bindings");
-	var item = new can.Observe({complete: true})
+	var item = new can.Map({complete: true})
 	l.push(item);
 
 	equal(child.getAttribute("items"), "3", "now there are 3 complete");
@@ -1065,7 +1079,7 @@ test("tag bindings change", function(){
 })
 
 test("attribute value bindings change", function(){
-	var l = new can.Observe.List([
+	var l = new can.List([
 		{complete: true},
 		{complete: false},
 		{complete: true}
@@ -1091,7 +1105,7 @@ test("attribute value bindings change", function(){
 
 	var child = div.getElementsByTagName('div')[0];
 	equal(child.getAttribute("items"), "2", "at first there are 2 true bindings");
-	var item = new can.Observe({complete: true})
+	var item = new can.Map({complete: true})
 	l.push(item);
 
 	equal(child.getAttribute("items"), "3", "now there are 3 complete");
@@ -1105,7 +1119,7 @@ test("in tag toggling", function(){
 		var text = "<div {{ obs.val }}></div>"
 
 
-	var obs = new can.Observe({
+	var obs = new can.Map({
 		val : 'foo="bar"'
 	})
 
@@ -1130,7 +1144,7 @@ test("nested properties", function(){
 	var text = "<div>{{ obs.name.first }}</div>"
 
 
-	var obs = new can.Observe({
+	var obs = new can.Map({
 		name : {first : "Justin"}
 	})
 
@@ -1153,7 +1167,7 @@ test("nested properties", function(){
 test("tags without chidren or ending with /> do not change the state", function(){
 
 	var text = "<table><tr><td/>{{{ obs.content }}}</tr></div>"
-	var obs = new can.Observe({
+	var obs = new can.Map({
 		content: "<td>Justin</td>"
 	})
 	var compiled = new can.Mustache({text: text}).render({obs: obs});
@@ -1170,7 +1184,7 @@ test("tags without chidren or ending with /> do not change the state", function(
 test("nested live bindings", function(){
 	expect(0);
 
-	var items  = new can.Observe.List([
+	var items  = new can.List([
 		{title: 0, is_done: false, id: 0}
 	]);
 
@@ -1186,12 +1200,12 @@ test("nested live bindings", function(){
 
 test("list nested in observe live bindings", function(){
 	can.view.mustache("list-test","<ul>{{#data.items}}<li>{{name}}</li>{{/data.items}}</ul>");
-	var data = new can.Observe({
+	var data = new can.Map({
 		items: [{name: "Brian"}, {name: "Fara"}]
 	});
 	var div = document.createElement('div');
 	div.appendChild( can.view("list-test", {data: data}) );
-	data.items.push(new can.Observe({name: "Scott"}))
+	data.items.push(new can.Map({name: "Scott"}))
 	ok(/Brian/.test(div.innerHTML), "added first name")
 	ok(/Fara/.test(div.innerHTML), "added 2nd name")
 	ok(/Scott/.test(div.innerHTML), "added name after push")
@@ -1201,13 +1215,13 @@ test("list nested in observe live bindings", function(){
 test("trailing text", function(){
 	can.view.mustache("count","There are {{ length }} todos")
 	var div = document.createElement('div');
-	div.appendChild( can.view("count", new can.Observe.List([{},{}])) );
+	div.appendChild( can.view("count", new can.List([{},{}])) );
 	ok(/There are 2 todos/.test(div.innerHTML), "got all text")
 })
 
 test("recursive views", function(){
 
-	var data = new can.Observe.List([
+	var data = new can.List([
             {label:'branch1', children:[{id:2, label:'branch2'}]}
         ])
 
@@ -1220,7 +1234,7 @@ test("recursive views", function(){
 test("live binding textarea", function(){
 	can.view.mustache("textarea-test","<textarea>Before{{ obs.middle }}After</textarea>");
 
-	var obs = new can.Observe({middle: "yes"}),
+	var obs = new can.Map({middle: "yes"}),
 		div = document.createElement('div');
 
 	div.appendChild( can.view("textarea-test",{obs: obs}) )
@@ -1236,7 +1250,7 @@ test("live binding textarea", function(){
 test("reading a property from a parent object when the current context is an observe", function(){
 	can.view.mustache("parent-object","{{#foos}}<span>{{bar}}</span>{{/foos}}")
 	var data = {
-		foos: new can.Observe.List([{name: "hi"},{name: 'bye'}]),
+		foos: new can.List([{name: "hi"},{name: 'bye'}]),
 		bar: "Hello World"
 	}
 
@@ -1287,7 +1301,7 @@ test("computes are supported in default helpers", function() {
 
     can.view.mustache("count","There are {{ length }} todos")
   var div = document.createElement('div');
-  div.appendChild( can.view("count", new can.Observe.List([{},{}])) );
+  div.appendChild( can.view("count", new can.List([{},{}])) );
   ok(/There are 2 todos/.test(div.innerHTML), "got all text")
 
   var result;
@@ -1330,7 +1344,7 @@ test("Rendering models in tables produces different results than an equivalent o
 	var renderer = can.view.mustache('<table>{{#stuff}}<tbody>{{#rows}}<tr></tr>{{/rows}}</tbody>{{/stuff}}</table>');
 	var div = document.createElement('div');
 	var dom = renderer({
-		stuff : new can.Observe({
+		stuff : new can.Map({
 			rows: [{ name : 'first' }]
 		})
 	});
@@ -1356,7 +1370,7 @@ test("multiple tbodies in table hookup", function(){
 				"<tbody><tr><td>{{name}}</td></tr></tbody>"+
 			"{{/people}}"+
 		"</table>",
-		people = new can.Observe.List([
+		people = new can.List([
 			{
 				name: "Steve"
 			},
@@ -1374,7 +1388,7 @@ test("multiple tbodies in table hookup", function(){
 test("Observe with array attributes", function() {
 	var renderer = can.view.mustache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul><div>{{message}}</div>');
 	var div = document.createElement('div');
-	var data = new can.Observe({
+	var data = new can.Map({
 	    todos: [ 'Line #1', 'Line #2', 'Line #3' ],
 	    message: 'Hello',
 	    count: 2
@@ -1394,7 +1408,7 @@ test("Observe with array attributes", function() {
 test("Observe list returned from the function", function() {
 	var renderer = can.view.mustache('<ul>{{#todos}}<li>{{.}}</li>{{/todos}}</ul>');
 	var div = document.createElement('div');
-	var todos = new can.Observe.List();
+	var todos = new can.List();
 	var data = {
 		todos : function(){
 			return todos;
@@ -1451,7 +1465,7 @@ test("Contexts are not always passed to partials properly", function() {
 // https://github.com/bitovi/canjs/issues/231
 test("Functions and helpers should be passed the same context", function() {
 	can.Mustache.registerHelper("to_upper", function(fn, options) {
-		if(arguments.length > 1) {
+		if(!fn.fn) {
 			return typeof fn === "function" ? fn().toString().toUpperCase() : fn.toString().toUpperCase();
 		}
 		else {
@@ -1481,7 +1495,7 @@ test("Interpolated values when iterating through an Observe.List should still re
 		renderer2 = can.view.mustache('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),
 		todos = [ {id: 1, name: 'Dishes'}, {id: 2, name: 'Forks'} ],
 		data = {
-			todos: new can.Observe.List(todos)
+			todos: new can.List(todos)
 		},
 		arr = {
 			todos: todos
@@ -1531,7 +1545,7 @@ test("2 way binding helpers", function(){
 	var renderer = can.view.mustache('<input {{value user.name}}/>');
 
 	var div = document.createElement('div'),
-		u = new can.Observe({name: "Justin"});
+		u = new can.Map({name: "Justin"});
 	div.appendChild(renderer({
 		user: u
 	}));
@@ -1553,7 +1567,7 @@ test("2 way binding helpers", function(){
 	// name is undefined
 	var renderer = can.view.mustache('<input {{value user.name}}/>');
 	var div = document.createElement('div'),
-		u = new can.Observe({});
+		u = new can.Map({});
 	div.appendChild(renderer({
 		user: u
 	}));
@@ -1573,7 +1587,7 @@ test("2 way binding helpers", function(){
 	// name is null
 	var renderer = can.view.mustache('<input {{value user.name}}/>');
 	var div = document.createElement('div'),
-		u = new can.Observe({name: null});
+		u = new can.Map({name: null});
 	div.appendChild(renderer({
 		user: u
 	}));
@@ -1633,7 +1647,7 @@ test("HTML comment with helper", function(){
 				"</li>",
 				"{{/todos}}",
 				"</ul>"],
-		Todos = new can.Observe.List([
+		Todos = new can.List([
 			{id: 1, name: "Dishes"}
 		]),
 		compiled = new can.Mustache({text: text.join("\n")}).render({todos: Todos}),
@@ -1674,7 +1688,7 @@ test("correctness of data-view-id and only in tag opening", function(){
 });
 
 test("Empty strings in arrays within Observes that are iterated should return blank strings", function(){
-	var data = new can.Observe({
+	var data = new can.Map({
 			colors: ["", 'red', 'green', 'blue']
 		}),
 		compiled = new can.Mustache({text: "<select>{{#colors}}<option>{{.}}</option>{{/colors}}</select>"}).render(data),
@@ -1691,13 +1705,13 @@ test("Null properties do not throw errors in Mustache.get", function() {
 	, frag, frag2;
 
 	try {
-		frag = renderer(new can.Observe({
+		frag = renderer(new can.Map({
 			foo : null
 		}))
 	} catch(e) {
 		ok(false, "rendering with null threw an error");
 	}
-	frag2 = renderer(new can.Observe({
+	frag2 = renderer(new can.Map({
 		foo : {bar : "baz"}
 	}))
 	div.appendChild(frag);
@@ -1721,9 +1735,9 @@ test("Data helper should set proper data instead of a context stack", function()
 		renderer2 = can.view.mustache("{{#bar}}{{> #nested_data2}}{{/bar}}"),
 		renderer3 = can.view.mustache("{{#bar}}{{> #nested_data3}}{{/bar}}"),
 		div = document.createElement('div'),
-		data = new can.Observe({
+		data = new can.Map({
         foo : "bar",
-        bar : new can.Observe({})
+        bar : new can.Map({})
     }),
 		span;
 
@@ -1747,7 +1761,7 @@ test("Data helper should set proper data instead of a context stack", function()
 test("Functions passed to default helpers should be evaluated", function() {
 	var renderer = can.view.mustache("{{#if hasDucks}}Ducks: {{ducks}}{{else}}No ducks!{{/if}}"),
 		div = document.createElement('div'),
-		data = new can.Observe({
+		data = new can.Map({
 			ducks: "",
 			hasDucks: function() {
 				return this.attr("ducks").length > 0;
@@ -1785,7 +1799,7 @@ if(typeof steal !== 'undefined') {
 		steal('view/mustache/test/noglobals.mustache', function(noglobals) {
 			var div = document.createElement('div'),
 				div2 = document.createElement('div');
-			var person = new can.Observe({
+			var person = new can.Map({
 				name: "Brian"
 			});
 			var result = noglobals({
@@ -1816,7 +1830,7 @@ if(typeof steal !== 'undefined') {
 
 test("Each does not redraw items",function(){
 
-	var animals = new can.Observe.List(['sloth', 'bear']),
+	var animals = new can.List(['sloth', 'bear']),
 		renderer = can.view.mustache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
 
 	var div = document.createElement('div')
@@ -1839,7 +1853,7 @@ test("Each does not redraw items",function(){
 
 test("Each works with the empty list",function(){
 
-	var animals = new can.Observe.List([]),
+	var animals = new can.List([]),
 		renderer = can.view.mustache("<div>my<b>favorite</b>animals:{{#each animals}}<label>Animal=</label> <span>{{this}}</span>{{/}}!</div>");
 
 	var div = document.createElement('div')
@@ -1859,7 +1873,7 @@ test("Each works with the empty list",function(){
 });
 
 test("each works within another branch", function(){
-	var animals = new can.Observe.List([]),
+	var animals = new can.List([]),
 		template = "<div>Animals:"+
 					"{{#if animals.length}}~"+
 						"{{#each animals}}"+
@@ -1900,7 +1914,7 @@ test("a compute gets passed to a plugin",function(){
 	var renderer = can.view.mustache('<input {{iamhungryforcomputes userName}}/>');
 
 	var div = document.createElement('div'),
-		u = new can.Observe({name: "Justin"});
+		u = new can.Map({name: "Justin"});
 		
 	div.appendChild(renderer({
 		userName: u.compute("name")
@@ -1932,7 +1946,7 @@ test("Object references can escape periods for key names containing periods", fu
 test("Computes should be resolved prior to accessing attributes", function() {
 	var template = can.view.mustache("{{list.length}}"),
 		data = {
-			list: can.compute(new can.Observe.List)
+			list: can.compute(new can.List)
 		};
 
 	var div = document.createElement('div');
@@ -1960,6 +1974,31 @@ test("Helpers can be passed . or this for the active context", function() {
 
 	equal( children[0].innerHTML, 'Justin is attending Reception' );
 	equal( children[1].innerHTML, 'Justin is attending Wedding' );
+});
+
+test("helpers only called once (#477)", function(){
+	
+	var bar = [], 
+		baz = [],
+		callCount = 0;
+    Mustache.registerHelper("foo", function(text) {
+    	callCount++;
+    	equal(callCount, 1, "call count is only ever one")
+        return "result";
+    });
+    
+    var obs = new can.Map({
+        quux : false
+    });
+    
+    var template = can.view.mustache("Foo text is: {{#if quux}}{{foo 'bar'}}{{/if}}");
+    
+    var frag = template(obs);
+    obs.attr("quux", true);
+	
+	
 })
+
+
 
 })();

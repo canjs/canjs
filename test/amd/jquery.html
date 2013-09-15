@@ -39,14 +39,17 @@
                 },
                 "shim": {
                     "test/test/test": ["can"],
+                    "test/component/component_test": ["can/component",
+                            "test/test/test"
+                    ],
                     "test/construct/construct_test": ["can/construct",
                             "test/test/test"
                     ],
                     "test/observe/observe_test": ["can/observe",
                             "test/test/test"
                     ],
-                    "test/observe/compute/compute_test": [
-                            "can/observe/compute", "test/test/test"
+                    "test/compute/compute_test": ["can/compute",
+                            "test/test/test"
                     ],
                     "test/model/model_test": ["can/model",
                             "test/test/test"
@@ -69,6 +72,12 @@
                     "test/view/mustache/mustache_test": [
                             "can/view/mustache", "test/test/test"
                     ],
+                    "test/view/bindings/bindings_test": [
+                            "can/view/bindings", "test/test/test"
+                    ],
+                    "test/view/scope/scope_test": ["can/view/scope",
+                            "test/test/test"
+                    ],
                     "test/model/queue/queue_test": ["can/model/queue",
                             "test/test/test"
                     ],
@@ -78,22 +87,20 @@
                     "test/construct/proxy/proxy_test": [
                             "can/construct/proxy", "test/test/test"
                     ],
-                    "test/observe/delegate/delegate_test": [
-                            "can/observe/delegate", "test/test/test"
+                    "test/map/delegate/delegate_test": [
+                            "can/map/delegate", "test/test/test"
                     ],
-                    "test/observe/setter/setter_test": [
-                            "can/observe/setter", "test/test/test"
-                    ],
-                    "test/observe/attributes/attributes_test": [
-                            "can/observe/attributes",
+                    "test/map/setter/setter_test": ["can/map/setter",
                             "test/test/test"
                     ],
-                    "test/observe/validations/validations_test": [
-                            "can/observe/validations",
-                            "test/test/test"
+                    "test/map/attributes/attributes_test": [
+                            "can/map/attributes", "test/test/test"
                     ],
-                    "test/observe/backup/backup_test": [
-                            "can/observe/backup", "test/test/test"
+                    "test/map/validations/validations_test": [
+                            "can/map/validations", "test/test/test"
+                    ],
+                    "test/map/backup/backup_test": ["can/map/backup",
+                            "test/test/test"
                     ],
                     "test/control/plugin/plugin_test": [
                             "can/control/plugin", "test/test/test"
@@ -114,23 +121,26 @@
             });
 
             require(["can/util/fixture", "test/test/test",
+                    "test/component/component_test",
                     "test/construct/construct_test",
                     "test/observe/observe_test",
-                    "test/observe/compute/compute_test",
+                    "test/compute/compute_test",
                     "test/model/model_test", "test/view/view_test",
                     "test/view/ejs/ejs_test",
                     "test/control/control_test",
                     "test/route/route_test",
                     "test/control/route/route_test",
                     "test/view/mustache/mustache_test",
+                    "test/view/bindings/bindings_test",
+                    "test/view/scope/scope_test",
                     "test/model/queue/queue_test",
                     "test/construct/super/super_test",
                     "test/construct/proxy/proxy_test",
-                    "test/observe/delegate/delegate_test",
-                    "test/observe/setter/setter_test",
-                    "test/observe/attributes/attributes_test",
-                    "test/observe/validations/validations_test",
-                    "test/observe/backup/backup_test",
+                    "test/map/delegate/delegate_test",
+                    "test/map/setter/setter_test",
+                    "test/map/attributes/attributes_test",
+                    "test/map/validations/validations_test",
+                    "test/map/backup/backup_test",
                     "test/control/plugin/plugin_test",
                     "test/view/modifiers/modifiers_test",
                     "test/util/object/object_test",

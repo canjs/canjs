@@ -2,6 +2,12 @@
 	"filename": "can.custom.js",
 	"banner": "/*!\n * <%= pkg.title || pkg.name %> - <%= pkg.version %>\n * <%= pkg.homepage %>\n * Copyright (c) <%= new Date().getFullYear() %> <%= pkg.author.name %>\n * <%= new Date().toUTCString() %>\n * Licensed <%= pkg.licenses[0].type %><% if(typeof url !== \"undefined\") { %>\n * Includes: <%= ids %>\n * Download from: <%= url %>\n<% } %> */\n",
 	"modules": {
+		"can/component": {
+			"name": "can.Component",
+			"description": "Custom elements and widgets",
+			"type": "core",
+			"isDefault": true
+		},
 		"can/construct": {
 			"name": "can.Construct",
 			"description": "Inheritable constructor functions",
@@ -9,12 +15,12 @@
 			"isDefault": true
 		},
 		"can/observe": {
-			"name": "can.Observe",
-			"description": "Observable key-value bindings",
+			"name": "can.Map, can.List, can.compute",
+			"description": "Observables and key-value bindings",
 			"type": "core",
 			"isDefault": true
 		},
-		"can/observe/compute": {
+		"can/compute": {
 			"name": "can.compute",
 			"description": "can.compute lets you make observable values",
 			"type": "core",
@@ -61,6 +67,16 @@
 			"type": "plugin",
 			"description": "Live-binding Handlebars and Mustache views"
 		},
+		"can/view/bindings": {
+			"name": "can.view.bindings",
+			"type": "plugin",
+			"description": "Two way bindings and in-template declarative event handlers."
+		},
+		"can/view/scope": {
+			"name": "can.view.Scope",
+			"type": "plugin",
+			"description": "Looks up a value in parent contexts."
+		},
 		"can/model/queue": {
 			"name": "can.Model.Queue",
 			"type": "plugin",
@@ -76,27 +92,27 @@
 			"type": "plugin",
 			"description": "Proxy construct methods"
 		},
-		"can/observe/delegate": {
+		"can/map/delegate": {
 			"name": "can.Observe.delegate",
 			"type": "plugin",
 			"description": "Listen to Observe attributes"
 		},
-		"can/observe/setter": {
+		"can/map/setter": {
 			"name": "can.Observe.setter",
 			"type": "plugin",
 			"description": "Use setter methods on Observes"
 		},
-		"can/observe/attributes": {
+		"can/map/attributes": {
 			"name": "can.Observe.attributes",
 			"type": "plugin",
 			"description": "Define Observe attributes"
 		},
-		"can/observe/validations": {
+		"can/map/validations": {
 			"name": "can.Observe.validations",
 			"type": "plugin",
 			"description": "Validate Observe attributes"
 		},
-		"can/observe/backup": {
+		"can/map/backup": {
 			"name": "can.Observe.backup",
 			"type": "plugin",
 			"description": "Backup and restore an Observes state"
@@ -137,7 +153,7 @@
 		"shim": {
 			"can/lib/jquery.1.9.1.js": "jQuery",
 			"can/lib/zepto.1.0rc1.js": "Zepto",
-			"can/lib/mootools-core-1.4.3.js": "{}",
+			"can/lib/mootools-core-1.4.5.js": "{}",
 			"can/util/dojo/dojo-1.8.1.js": "{}",
 			"can/lib/yui-3.7.3.js": "YUI"
 		},
@@ -156,39 +172,29 @@
 						"can/util/util.js": "can/util/jquery/jquery.js",
 						"jquery/jquery.js": "can/lib/jquery.1.9.1.js"
 					}
-				},
-				"shim": {
-					"jquery/jquery.js": {
-						"exports": "jQuery"
-					}
 				}
 			}
 		},
 		"zepto": {
 			"description": "Zepto",
-			"library": "lib/zepto.1.0rc1.js",
+			"library": "lib/zepto.1.0.js",
 			"steal": {
 				"map": {
 					"*": {
 						"can/util/util.js": "can/util/zepto/zepto.js",
-						"zepto/zepto.js": "can/lib/zepto.1.0rc1.js"
-					}
-				},
-				"shim": {
-					"zepto/zepto.js": {
-						"exports": "Zepto"
+						"zepto/zepto.js": "can/lib/zepto.1.0.js"
 					}
 				}
 			}
 		},
 		"mootools": {
 			"description": "Mootools",
-			"library": "lib/mootools-core-1.4.3.js",
+			"library": "lib/mootools-core-1.4.5.js",
 			"steal": {
 				"map": {
 					"*": {
 						"can/util/util.js": "can/util/mootools/mootools.js",
-						"mootools/mootools.js": "can/lib/mootools-core-1.4.3.js"
+						"mootools/mootools.js": "can/lib/mootools-core-1.4.5.js"
 					}
 				}
 			}

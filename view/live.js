@@ -3,7 +3,7 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 	// ## live.js
 	// 
 	// The live module provides live binding for computes
-	// and can.Observe.List.
+	// and can.List.
 	// 
 	// Currently, it's API is designed for `can/view/render`, but
 	// it could easily be used for other purposes.
@@ -20,7 +20,7 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 	var setup = function(el, bind, unbind){
 		var teardown = function(){
 			unbind(data)
-			can.unbind.call(el,'destroyed', teardown);
+			can.unbind.call(el,'removed', teardown);
 		},
 			data = {
 				teardownCheck: function(parent){
@@ -30,7 +30,7 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 				}
 			}
 
-		can.bind.call(el,'destroyed', teardown);
+		can.bind.call(el,'removed', teardown);
 		bind(data)
 		return data;
 	},
@@ -59,9 +59,9 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 					
 			// Insert it in the `document` or `documentFragment`
 			if( last.nextSibling ){
-				last.parentNode.insertBefore(newFrag, last.nextSibling);
+				can.insertBefore(last.parentNode, newFrag, last.nextSibling)
 			} else {
-				last.parentNode.appendChild(newFrag);
+				can.appendChild(last.parentNode, newFrag);
 			}
 		};
 
@@ -96,7 +96,7 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 								nodesMap[index-1], frag)
 					} else {
 						var el = nodesMap[index][0];
-						el.parentNode.insertBefore(frag, el)
+						can.insertBefore(el.parentNode, frag, el);
 					}
 					// register each item
 					can.each(newMappings,function(nodeList){
@@ -152,13 +152,13 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 			var parentNode = elements.getParentNode(el, parentNode),
 
 				data = listen(parentNode, compute, function(ev, newVal, oldVal){
-				var attached = nodes[0].parentNode;
-				// update the nodes in the DOM with the new rendered value
-				if( attached ) {
-					makeAndPut(newVal);
-				}
-				data.teardownCheck(nodes[0].parentNode);
-			});
+					var attached = nodes[0].parentNode;
+					// update the nodes in the DOM with the new rendered value
+					if( attached ) {
+						makeAndPut(newVal);
+					}
+					data.teardownCheck(nodes[0].parentNode);
+				});
 
 			var nodes,
 				makeAndPut = function(val){
