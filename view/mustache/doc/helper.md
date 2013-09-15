@@ -24,13 +24,14 @@ Will call a `madLib` helper with the following arguements.
         // number -> 4
     });
     
-<<<<<<< HEAD
-If a [can.Mustache.key] represents a [can.Map] attribute,
-=======
-While keys are normally resolved as basic objects like strings or numbers, there are some special cases where they act differently than a normal tag. Whenever a [can.compute] or function object is an argument for a helper, the original object is used as the argument instead of the value that the function returns.
+
+While keys are normally resolved as basic objects like strings or numbers, 
+there are special cases where they act differently than a normal 
+tag. Whenever a [can.compute] or function 
+object is an argument for a helper, the original object is used 
+as the argument instead of the value that the function returns.
 
 If a [can.Mustache.key] represents a [can.Map] attribute,
->>>>>>> master
 it is converted to a [can.compute] getter/setter 
 function. This enables 2-way binding helpers.  
 

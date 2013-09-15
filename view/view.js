@@ -432,9 +432,9 @@ steal("can/util", function( can ) {
 			else {
 				// get is called async but in 
 				// ff will be async so we need to temporarily reset
-				if(can.Map && can.Map.__reading){
-					var reading = can.Map.__reading;
-					can.Map.__reading = null;
+				if(can.__reading){
+					var reading = can.__reading;
+					can.__reading = null;
 				}
 				
 				// No deferreds! Render this bad boy.
@@ -444,8 +444,8 @@ steal("can/util", function( can ) {
 					// Get the `view` type
 					deferred = get(view, async);
 					
-				if(can.Map && can.Map.__reading){
-					can.Map.__reading = reading;
+				if(can.Map && can.__reading){
+					can.__reading = reading;
 				}
 				
 				// If we are `async`...

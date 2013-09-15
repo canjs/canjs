@@ -168,7 +168,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		 */
 		keys: function(map) {
 			var keys = [];
-			Map.__reading && Map.__reading(map, '__keys');
+			can.__reading && can.__reading(map, '__keys');
 			for(var keyName in map._data) {
 				keys.push(keyName);
 			}
@@ -367,7 +367,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 				return this._attrs(attr, val)
 			} else if ( arguments.length === 1 ) {// If we are getting a value.
 				// Let people know we are reading.
-				Map.__reading && Map.__reading(this, attr)
+				can.__reading && can.__reading(this, attr)
 				return this._get(attr)
 			} else {
 				// Otherwise we are setting.
@@ -412,7 +412,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		 * @codeend
 		 */
 		each: function() {
-			Map.__reading && Map.__reading(this, '__keys');
+			can.__reading && can.__reading(this, '__keys');
 			return can.each.apply(undefined, [this.__get()].concat(can.makeArray(arguments)))
 		},
 		/**

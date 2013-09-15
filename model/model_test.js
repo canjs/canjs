@@ -941,8 +941,8 @@ test("destroying a model impact the right list", function() {
 test("uses attr with isNew", function(){
 	// TODO this does not seem to be consistent expect(2);
 
-	var old = can.Map.__reading;
-	can.Map.__reading = function(object, attribute) {
+	var old = can.__reading;
+	can.__reading = function(object, attribute) {
 		if(attribute == "id") {
 			ok(true, "used attr")
 		}
@@ -952,7 +952,7 @@ test("uses attr with isNew", function(){
 	
 	m.isNew();
 	
-	can.Map.__reading = old;
+	can.__reading = old;
 });
 
 test("extends defaults by calling base method", function(){

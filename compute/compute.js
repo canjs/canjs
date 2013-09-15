@@ -7,22 +7,22 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 	var getValueAndObserved = function(func, self){
 		
 		var oldReading;
-		if (can.Map) {
-			// Set a callback on can.Map to know
-			// when an attr is read.
-			// Keep a reference to the old reader
-			// if there is one.  This is used
-			// for nested live binding.
-			oldReading = can.Map.__reading;
-			can.Map.__reading = function(obj, attr){
-				// Add the observe and attr that was read
-				// to `observed`
-				observed.push({
-					obj: obj,
-					attr: attr+""
-				});
-			};
-		}
+		
+		// Set a callback on can.Map to know
+		// when an attr is read.
+		// Keep a reference to the old reader
+		// if there is one.  This is used
+		// for nested live binding.
+		oldReading = can.__reading;
+		can.__reading = function(obj, attr){
+			// Add the observe and attr that was read
+			// to `observed`
+			observed.push({
+				obj: obj,
+				attr: attr+""
+			});
+		};
+		
 		
 		var observed = [],
 			// Call the "wrapping" function to get the value. `observed`
@@ -30,9 +30,8 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 			value = func.call(self);
 
 		// Set back so we are no longer reading.
-		if(can.Map){
-			can.Map.__reading = oldReading;
-		}
+		can.__reading = oldReading;
+		
 		return {
 			value : value,
 			observed : observed
@@ -198,16 +197,23 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 				}
 				return value;
 			} else {
+				var oldReading = can.__reading,
+					ret;
 				// Let others know to listen to changes in this compute
-				if( can.Map && can.Map.__reading && canReadForChangeEvent) {
-					can.Map.__reading(computed,'change');
+				if( can.__reading && canReadForChangeEvent) {
+					can.__reading(computed,'change');
+					// but we are going to bind on this compute,
+					// so we don't want to bind on what it is binding to
+					delete can.__reading;
 				}
 				// if we are bound, use the cached value
 				if( computeState.bound ) {
-					return value;
+					ret = value;
 				} else {
-					return get.call(context);
+					ret = get.call(context);
 				}
+				can.__reading = oldReading;
+				return ret;
 			}
 		}
 		if(typeof getterSetter === "function"){

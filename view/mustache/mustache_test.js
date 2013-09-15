@@ -1976,7 +1976,28 @@ test("Helpers can be passed . or this for the active context", function() {
 	equal( children[1].innerHTML, 'Justin is attending Wedding' );
 });
 
-
+test("helpers only called once (#477)", function(){
+	
+	var bar = [], 
+		baz = [],
+		callCount = 0;
+    Mustache.registerHelper("foo", function(text) {
+    	callCount++;
+    	equal(callCount, 1, "call count is only ever one")
+        return "result";
+    });
+    
+    var obs = new can.Map({
+        quux : false
+    });
+    
+    var template = can.view.mustache("Foo text is: {{#if quux}}{{foo 'bar'}}{{/if}}");
+    
+    var frag = template(obs);
+    obs.attr("quux", true);
+	
+	
+})
 
 
 
