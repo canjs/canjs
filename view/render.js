@@ -50,10 +50,10 @@ var pendingHookups = [],
 		return "" + input;
 	},
 	// Returns escaped/sanatized content for anything other than a live-binding
-	contentEscape = function( txt ) {
+	contentEscape = function( txt , tag) {
 		return (typeof txt == 'string' || typeof txt == 'number') ?
 			can.esc( txt ) :
-			contentText(txt);
+			contentText(txt, tag);
 	};
 
 

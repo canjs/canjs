@@ -1997,6 +1997,20 @@ test("helpers only called once (#477)", function(){
     obs.attr("quux", true);
 	
 	
+});
+
+test("helpers between tags (#469)", function(){
+	
+	can.Mustache.registerHelper("items",function(){
+	  return function(li){
+	  	equal(li.nodeName.toLowerCase(), "li","right node name")
+	  }
+	});
+	
+	var template = can.view.mustache("<ul>{{items}}</ul>");
+	var frag = template();
+	
+	
 })
 
 
