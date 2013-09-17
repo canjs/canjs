@@ -93,7 +93,7 @@ steal('can/util', 'can/observe', 'can/observe/compute', function(can) {
 			return mapped;
 		}
 
-		/* TODO
+		/** TODO
 		,
 
 		every : function() {

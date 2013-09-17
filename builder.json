@@ -101,6 +101,11 @@
 			"type": "plugin",
 			"description": "Backup and restore an Observes state"
 		},
+    "can/observe/list": {
+      "name": "can.Observe.List",
+      "type": "plugin",
+      "description": "Live-updating mapped and filtered observe lists"
+    },
 		"can/control/plugin": {
 			"name": "can.Control.plugin",
 			"type": "plugin",
