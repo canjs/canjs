@@ -56,6 +56,12 @@
 			"type": "core",
 			"isDefault": true
 		},
+		"can/util/string": {
+			"name": "can.util.string",
+			"type": "core",
+			"description": "Helper methods for strings",
+			"isDefault": true
+		},
 		"can/view/mustache": {
 			"name": "can.Mustache",
 			"type": "plugin",
@@ -101,11 +107,11 @@
 			"type": "plugin",
 			"description": "Backup and restore an Observes state"
 		},
-    "can/observe/list": {
-      "name": "can.Observe.List",
-      "type": "plugin",
-      "description": "Live-updating mapped and filtered observe lists"
-    },
+		"can/observe/list": {
+			"name": "can.Observe.List",
+			"type": "plugin",
+			"description": "Live-updating mapped and filtered observe lists"
+		},
 		"can/control/plugin": {
 			"name": "can.Control.plugin",
 			"type": "plugin",
@@ -122,11 +128,6 @@
 			"name": "can.Object",
 			"type": "plugin",
 			"description": "Helper methods for object comparison"
-		},
-		"can/util/string": {
-			"name": "can.util.string",
-			"type": "plugin",
-			"description": "Helper methods for strings"
 		},
 		"can/util/fixture": {
 			"name": "can.fixture",
