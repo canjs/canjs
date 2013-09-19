@@ -33,7 +33,11 @@ steal('can/util',function(can){
 		// Remove the event handler
 		can.removeEvent.apply(this, arguments);
 
-		this._bindings--;
+		if(this._bindings == null) {
+			this._bindings = 0;
+		} else {
+			this._bindings--;
+		}
 		// If there are no longer any bindings and
 		// there is a bindteardown method, call it.
 		if(!this._bindings){
