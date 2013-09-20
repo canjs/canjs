@@ -1,9 +1,10 @@
 steal('can/util',
+	  './scope.js',
 	  'can/view',
 	  'can/view/scanner.js',
 	  'can/observe/compute',
 	  'can/view/render.js',
-function( can ){
+function( can, Scope ){
 	
 	// # mustache.js
 	// `can.Mustache`: The Mustache templating engine.
@@ -21,15 +22,16 @@ function( can ){
 	//
 	// An alias for the context variable used for tracking a stack of contexts.
 	// This is also used for passing to helper functions to maintain proper context.
-	var CONTEXT = '___c0nt3xt',
+	var CONTEXT = '___st4ck',
 		// An alias for the variable used for the hash object that can be passed
 		// to helpers via `options.hash`.
 		HASH = '___h4sh',
 		// An alias for the function that adds a new context to the context stack.
 		STACK = '___st4ck',
-		STACKED = '___st4ck3d',
+		//STACKED = '___st4ck3d',
 		// An alias for the most used context stacking call.
-		CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
+		CONTEXT_STACK = STACK,//+"="+STACK+".add(this)",
+		//CONTEXT_STACK = STACK + '(' + CONTEXT + ',this)',
 		CONTEXT_OBJ = '{context:' + CONTEXT_STACK + ',options:options}',
 		
 		/**
@@ -38,7 +40,7 @@ function( can ){
 		 * @return {Boolean} returns if the object is an observable.
 		 */
 		isObserve = function(obj) {
-			return obj !== null && can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
+			return obj != null && can.isFunction(obj.attr) && obj.constructor && !!obj.constructor.canMakeObserve;
 		},
 		
 		/**
@@ -124,7 +126,9 @@ function( can ){
 			text: {
 				// This is the logic to inject at the beginning of a rendered template. 
 				// This includes initializing the `context` stack.
-				start: 'var ' + CONTEXT + ' = this && this.' + STACKED + ' ? this : [];' + CONTEXT + '.' + STACKED + ' = true;' +
+				start: "var "+STACK+"= this instanceof can.view.Scope? this : new can.view.Scope(this);\n"
+				
+				/*'var ' + CONTEXT + ' = this && this.' + STACKED + ' ? this : [];' + CONTEXT + '.' + STACKED + ' = true;' +
 					'var ' + STACK + ' = function(context, self) {' +
 						'var s;' +
 						'if (arguments.length == 1 && context) {' +
@@ -138,7 +142,7 @@ function( can ){
 							's = context && context.' + STACKED + ' ? context.concat([self]) : ' + STACK + '(context).concat([self]);' +
 						'}' +
 						'return (s.' + STACKED + ' = true) && s;' +
-					'};'
+					'};'*/
 			},
 			
 			// An ordered token registry for the scanner.
@@ -445,8 +449,8 @@ function( can ){
 						// with the attribute name with the current context.
 						return "can.proxy(function(__){" +
 							// "var context = this[this.length-1];" +
-							// "context = context." + STACKED + " ? context[context.length-2] : context;" +
-							"can.data(can.$(__),'" + attr + "', this.pop()); }, " + CONTEXT_STACK + ")";
+							// "context = context." + STACKED + " ? context[context.length-2] : context; console.warn(this, context);" +
+							"can.data(can.$(__),'" + attr + "', this.attr('.')); }, " + CONTEXT_STACK + ")";
 					}
 				},
 				
@@ -1179,7 +1183,7 @@ function( can ){
 							});
 
 							// Start the content render block.
-							result.push('can.Mustache.txt('+CONTEXT_OBJ+',' + (mode ? '"'+mode+'"' : 'null') + ',');
+							result.push('can.Mustache.txt(\n'+CONTEXT_OBJ+',\n' + (mode ? '"'+mode+'"' : 'null') + ',\n');
 						
 							// Iterate through the helper arguments, if there are any.
 							for (; arg = args[i]; i++) {
@@ -1200,7 +1204,7 @@ function( can ){
 										}
 										
 										// Add the key/value.
-										result.push(m[4], ':', m[6] ? m[6] : 'can.Mustache.get("' + m[5].replace(/"/g,'\\"') + '",' + CONTEXT_OBJ + ')');
+										result.push(m[4], ':', m[6] ? m[6] : 'can.Mustache.get(\n"' + m[5].replace(/"/g,'\\"') + '",\n' + CONTEXT_OBJ + ')\n');
 										
 										// Close the hash if this was the last argument.
 										if (i == args.length - 1) {
@@ -1225,11 +1229,11 @@ function( can ){
 						}
 						
 						// Create an option object for sections of code.
-						mode && mode != 'else' && result.push(',[{_:function(){');
+						mode && mode != 'else' && result.push(',[\n{_:function(){\n');
 						switch (mode) {
 							// Truthy section
 							case '#':
-								result.push('return ___v1ew.join("");}},{fn:function(' + CONTEXT + '){var ___v1ew = [];');
+								result.push('return ___v1ew.join("");\n}},{fn:function(' + CONTEXT + '){var ___v1ew = [];');
 								break;
 							// If/else section
 							// Falsey section
@@ -1258,7 +1262,7 @@ function( can ){
 							 */
 							case 'else':
 							case '^':
-								result.push('return ___v1ew.join("");}},{inverse:function(' + CONTEXT + '){var ___v1ew = [];');
+								result.push('return ___v1ew.join("");}},\n{inverse:function(' + CONTEXT + '){\nvar ___v1ew = [];');
 								break;
 							// Not a section
 							default:
@@ -1311,19 +1315,25 @@ function( can ){
 		// Check for a registered helper or a helper-like function.
 		if (helper = (Mustache.getHelper(name,extra) || (can.isFunction(name) && !name.isComputed && { fn: name }))) {
 			// Use the most recent context as `this` for the helper.
-			var stack = context[STACKED] && context,
-				context = (stack && context[context.length - 1]) || context,
+			var partialContext = context.attr("."),
+			//var stack = context[STACKED] && context,
+			//	context = (stack && context[context.length - 1]) || context,
 				// Update the options with a function/inverse (the inner templates of a section).
 				opts = {
-					fn: can.proxy(options.fn, context),
-					inverse: can.proxy(options.inverse, context)
+					fn: function(updatedContext){
+						if(updatedContext){
+							updatedContext = context.add(updatedContext)
+						}
+						return options.fn(updatedContext)
+					},
+					inverse: can.proxy(options.inverse, partialContext)
 				}, 
 				lastArg = args[args.length-1];
 			
 			// Store the context stack in the options if one exists
-			if (stack) {
-				opts.contexts = stack;
-			}
+			
+			opts.contexts = context;
+			
 			// Add the hash to `options` if one exists
 			if (lastArg && lastArg[HASH]) {
 				opts.hash = args.pop()[HASH];
@@ -1331,7 +1341,7 @@ function( can ){
 			args.push(opts);
 
 			// Call the helper.
-			return helper.fn.apply(context, args) || '';
+			return helper.fn.apply(partialContext, args) || '';
 		}
 
 		// if a compute, get the value
@@ -1379,7 +1389,7 @@ function( can ){
 						
 						// Add the reference to the list in the contexts.
 						for (i = 0; i < name.length; i++) {
-							result.push(options.fn.call(name[i], context) || '');
+							result.push(options.fn(context.add(name[i]|| '')) );
 							
 							// Ensure that live update works on observable lists
 							isObserveList && name.attr(''+i);
@@ -1388,12 +1398,12 @@ function( can ){
 					}
 					// Normal case.
 					else {
-						return options.fn.call(name || {}, context) || '';
+						return options.fn(context.add(name || {})) || '';
 					}
 					break;
 				// Falsey section.
 				case '^':
-					return options.inverse.call(name || {}, context) || '';
+					return options.inverse(context.add(name || {})) || '';
 					break;
 				default:
 					// Add + '' to convert things like numbers to strings.
@@ -1437,118 +1447,65 @@ function( can ){
 	 * @param {String} ref      The reference to check for on the obj/context.
 	 * @param {Object} obj  		The object to use for checking for a reference.
 	 * @param {Object} context  The context to use for checking for a reference if it doesn't exist in the object.
-	 * @param {Boolean} [isHelper]  Whether the reference is a helper.
+	 * @param {Boolean} [isHelper]  Whether the reference is seen as a helper.
 	 */
 	Mustache.get = function(ref, contexts, isHelper, isArgument) {
-		var options = contexts.options || {};
-		contexts = contexts.context || contexts;
-		// Assume the local object is the last context in the stack.
-		var obj = contexts[contexts.length - 1],
-			// Assume the parent context is the second to last context in the stack.
-			context = contexts[contexts.length - 2],
-			// Split the reference (like `a.b.c`) into an array of key names.
-			names = ref.indexOf('\\.') == -1 
-				// Reference doesn't contain escaped periods
-				? ref.split('.')
-				// Reference contains escaped periods (`a.b\c.foo` == `a["b.c"].foo)
-				: (function() {
-						var names = [], last = 0;
-						ref.replace(/(\\)?\./g, function($0, $1, index) {
-							if (!$1) {
-								names.push(ref.slice(last, index).replace(/\\\./g,'.'));
-								last = index + $0.length;
-							}
-						});
-						names.push(ref.slice(last).replace(/\\\./g,'.'));
-						return names;
-					})(),
-			namesLength = names.length,
-			value, lastValue, name, i, j,
-			// if we walk up and don't find a property, we default
-			// to listening on an undefined property of the first
-			// context that is an observe
-			defaultObserve,
-			defaultObserveName;
-
-		// Handle `this` references for list iteration: {{.}} or {{this}}
-		if (/^\.|this$/.test(ref)) {
-			// If context isn't an object, then it was a value passed by a helper so use it as an override.
-			if (!/^object|undefined$/.test(typeof context)) {
-				return context || '';
+		if(isHelper){
+			// highest priority to registered helpers
+			if(Mustache.getHelper(ref, options)){
+				return ref
 			}
-			// Otherwise just return the closest object.
-			else {
-				while (value = contexts.pop()) {
-					if (typeof value !== 'undefined') {
-						return value;
-					} 
-				}
-				return '';
-			}
-		} 
-		// Handle object resolution (like `a.b.c`).
-		else if (!isHelper) {
-			// Reverse iterate through the contexts (last in, first out).
-			for (i = contexts.length - 1; i >= 0; i--) {
-				// Check the context for the reference
-				value = contexts[i];
-			
-				// Is the value a compute?
-				if(can.isFunction(value) && value.isComputed) {
-					value = value();
-				}
-			
-				// Make sure the context isn't a failed object before diving into it.
-				if (typeof value !== 'undefined' && value !== null) {
-					var isHelper = Mustache.getHelper(ref, options);
-					for (j = 0; j < namesLength; j++) {
-						// Keep running up the tree while there are matches.
-						if (typeof value[names[j]] !== 'undefined' && value[names[j]] !== null) {
-							lastValue = value;
-							value = value[name = names[j]];
-						}
-						// if there's a name conflict between property and helper
-						// property wins
-						else if(isHelper) {
-							return ref;
-						}
-						// If it's undefined, still match if the parent is an Observe.
-						else if ( isObserve(value) ) {
-							defaultObserve = value;
-							defaultObserveName = names[j];
-							lastValue = value = undefined;
-							break;
-						}
-						else {
-							lastValue = value = undefined;
-							break;
-						}
-					}
-				}
-			
-				// Found a matched reference.
-				if (value !== undefined ) {
-					return Mustache.resolve(value, lastValue, name, isArgument);
-				}
-			}
-		}
-
-		if( defaultObserve && 
-			// if there's not a helper by this name and no attribute with this name
-			!(Mustache.getHelper(ref) &&
-				can.inArray(defaultObserveName, can.Observe.keys(defaultObserve)) === -1) ) {
-			return defaultObserve.compute(defaultObserveName);
-		}
-		// Support helpers without arguments, but only if there wasn't a matching data reference.
-		// Helpers have priority over local function, see https://github.com/bitovi/canjs/issues/258
-		if (value = Mustache.getHelper(ref,options)) {
-			return ref;
-		} else if (typeof obj !== 'undefined' && obj !== null && can.isFunction(obj[ref])) {
 			// Support helper-like functions as anonymous helpers
-			return obj[ref];
+			// Check if there is a method directly in the "top" context
+			if(contexts.context && can.isFunction(contexts.context._data[ref]) ){
+				return contexts.context._data[ref];
+			}
+			
 		}
-
-		return '';
+		
+		var options = contexts.options || {};
+		
+		
+		var data = contexts.context.get(ref);
+		
+		// use value over helper only if within top scope
+		
+		if(Mustache.getHelper(ref, options) && data.scope != contexts.context){
+			return ref
+		}
+		
+		
+		
+		
+		
+		// special behaviors if an argument
+		if(isArgument){
+			if(can.isFunction(data.value)){
+				if(data.value.isComputed){
+					return data.value
+				} else {
+					return function() { 
+						return data.value.apply(data.parent, arguments); 
+					};
+				}
+			}  else if( isObserve(data.parent) ) {
+				return data.parent.compute(data.name);
+			} 
+		}
+		// Invoke the length to ensure that Observe.List events fire.
+		if (data.value && isObserve(data.value) && isArrayLike(data.value) && data.value.attr('length')){
+			return data.value;
+		}
+		// Add support for observes
+		else if ( data.parent && isObserve(data.parent)) {
+			return data.parent.compute(data.name);
+		} else if( can.isFunction(data.value) ){
+			return data.value.call(data.parent)
+		}
+	
+		
+		
+		return data.value;
 	};
 	
 	/**

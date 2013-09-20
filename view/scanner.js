@@ -39,7 +39,7 @@ var newLine = /(\r|\n)+/g,
 	// Commands for caching.
 	startTxt = 'var ___v1ew = [];',
 	finishTxt = "return ___v1ew.join('')",
-	put_cmd = "___v1ew.push(",
+	put_cmd = "___v1ew.push(\n",
 	insert_cmd = put_cmd,
 	// Global controls (used by other functions to know where we are).
 	// Are we inside a tag?
@@ -50,12 +50,16 @@ var newLine = /(\r|\n)+/g,
 	beforeQuote = null,
 	// Whether a rescan is in progress
 	rescan = null,
+	getAttrName = function(){
+		var matches = beforeQuote.match(attrReg);
+		return matches && matches[1];
+	},
 	// Used to mark where the element is.
 	status = function(){
 		// `t` - `1`.
 		// `h` - `0`.
 		// `q` - String `beforeQuote`.
-		return quote ? "'"+beforeQuote.match(attrReg)[1]+"'" : (htmlTag ? 1 : 0);
+		return quote ? "'"+getAttrName()+"'" : (htmlTag ? 1 : 0);
 	};
 
 can.view.Scanner = Scanner = function( options ) {
@@ -103,6 +107,12 @@ can.view.Scanner = Scanner = function( options ) {
 	// Cache the token registry.
 	this.tokenReg = new RegExp("(" + this.tokenReg.slice(0).concat(["<", ">", '"', "'"]).join("|") + ")","g");
 };
+var attributes = {};
+
+Scanner.attribute = function(attribute, callback){
+	attributes[attribute] = callback;
+}
+
 
 /**
  * Extend can.View to add scanner support.
@@ -189,6 +199,8 @@ Scanner.prototype = {
 			startTag = null,
 			// Was there a magic tag inside an html tag?
 			magicInTag = false,
+			// was there a special attribute
+			attributeHookup = false,
 			// The current tag name.
 			tagName = '',
 			// stack of tagNames
@@ -259,7 +271,7 @@ Scanner.prototype = {
 					// but content is not other tags add a hookup
 					// TODO: we should only add `can.EJS.pending()` if there's a magic tag 
 					// within the html tags.
-					if(magicInTag || !popTagName && elements.tagToContentPropMap[ tagNames[tagNames.length -1] ]){
+					if(magicInTag || (!popTagName && elements.tagToContentPropMap[ tagNames[tagNames.length -1] ] ) || attributeHookup ){
 						// make sure / of /> is on the left of pending
 						if(emptyElement){
 							put(content.substr(0,content.length-1), ",can.view.pending(),\"/>\"");
@@ -280,6 +292,7 @@ Scanner.prototype = {
 						// Don't pop next time
 						popTagName = false;
 					}
+					attributeHookup = false;
 					break;
 				case "'":
 				case '"':
@@ -291,6 +304,10 @@ Scanner.prototype = {
 							quote = null;
 							// Otherwise we are creating a quote.
 							// TODO: does this handle `\`?
+							var attr = getAttrName();
+							if(attributes[attr]){
+								attributeHookup = true;
+							}
 						} else if(quote === null){
 							quote = token;
 							beforeQuote = lastToken;
@@ -363,7 +380,7 @@ Scanner.prototype = {
 							// When we return to the same # of `{` vs `}` end with a `doubleParent`.
 							endStack.push({
 								before : finishTxt,
-								after: "}));"
+								after: "}));\n"
 							});
 						} 
 
@@ -393,13 +410,13 @@ Scanner.prototype = {
 						} else {
 							// If we have `<%== a(function(){ %>` then we want
 							// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-							buff.push(insert_cmd, "can.view.txt(" + escaped + ",'"+tagName+"'," + status() +",this,function(){ " + (this.text.escape || '') + "return ", content, 
+							buff.push(insert_cmd, "can.view.txt(\n" + escaped + ",\n'"+tagName+"',\n" + status() +",\nthis,\nfunction(){ " + (this.text.escape || '') + "return ", content, 
 								// If we have a block.
 								bracketCount ? 
 								// Start with startTxt `"var _v1ew = [];"`.
 								startTxt : 
 								// If not, add `doubleParent` to close push and text.
-								"}));"
+								"}));\n"
 								);
 						}
 						

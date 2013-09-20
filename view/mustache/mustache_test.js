@@ -103,7 +103,9 @@ test("Model hookup", function(){
 	var obsvrList = new can.Observe.List([ obsvr ]);
 	var listFrag = new can.Mustache({ text: listTemplate }).render({ list: obsvrList });
 	can.append(can.$('#qunit-test-area'), can.view.frag(listFrag));
+
 	deepEqual(can.data(can.$('#li-Austin'), 'obsvr'), obsvr, 'data hooks for list worked and fetched');
+
 
 	// Mulit-item update with hookup
 	var obsvr2 = new can.Observe({ name: 'Justin' });
