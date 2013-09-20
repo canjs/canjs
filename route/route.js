@@ -504,7 +504,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 
 	// Libraries other than jQuery don't execute the document `ready` listener
 	// if we are already DOM ready
-	if( (document.readyState === 'complete' || document.readyState === "interactive") && onready) {
+	if( !window.jQuery && ((document.readyState === 'complete' || document.readyState === "interactive") && onready)) {
 		can.route.ready();
 	}
 
