@@ -62,5 +62,24 @@ test("route pointers", function(){
 	tester.destroy();
 })
 
+test("dont overwrite defaults (#474)", function(){
+	
+	expect(1);
+	
+	can.route("content/:type",{type: "videos" });
+	
+	var Tester = can.Control.extend({
+		"content/:type route" : function(params){
+			equal(params.type, "videos")
+		} 
+	});
+	var tester = new Tester(document.body);
+	window.location.hash = "#!content/";
+	can.trigger(window, 'hashchange');
+	tester.destroy();
+	
+	
+})
+
 
 })();
