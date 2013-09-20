@@ -56,6 +56,11 @@
 			"type": "core",
 			"isDefault": true
 		},
+		"can/route/pushstate": {
+			"name": "can.route.pushstate",
+			"description": "can.route with pushstate",
+			"type": "plugin"
+		},
 		"can/control/route": {
 			"name": "can.Control.route",
 			"description": "Declare routes in your Control",

@@ -3,19 +3,24 @@
 module("can/control/route",{
 	setup : function(){
 		stop();
+		can.route.routes = {};
+		can.route._teardown();
+		can.route.defaultBinding = "hashchange";
+		can.route.ready();
 		window.location.hash = "";
 		setTimeout(function(){
+			
 			start();
-		},13)
+		},13);
+		
 	}
 });
 
 test("routes changed", function () {
-	can.route.ready();
 	expect(3);
 
 	//setup controller
-	can.Control("Router", {
+	can.Control.extend("Router", {
 		"foo/:bar route" : function () {
 			ok(true, 'route updated to foo/:bar')
 		},
@@ -44,9 +49,8 @@ test("routes changed", function () {
 });
 
 test("route pointers", function(){
-	can.route.ready();
 	expect(1);
-	var Tester = can.Control({
+	var Tester = can.Control.extend({
 		"lol/:wat route" : "meth",
 		meth : function(){
 			ok(true, "method pointer called")

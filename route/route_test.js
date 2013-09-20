@@ -1,5 +1,10 @@
 (function() {
-module("can/route")
+module("can/route",{
+	setup: function(){
+		can.route._teardown();
+		can.route.defaultBinding = "hashchange";
+	}
+})
 
 test("deparam", function(){
 	can.route.routes = {};
@@ -38,7 +43,7 @@ test("deparam", function(){
         index: "foo",
 		where: "there",
 		route: ":page/:index"
-	});
+	}, "default value and queryparams");
 })
 
 test("deparam of invalid url", function(){
@@ -365,7 +370,7 @@ if(typeof steal !== 'undefined') {
 				testarea.innerHTML = '';
 				start();
 			});
-
+			iCanRoute.ready()
 			setTimeout(function() {
 				iframe.src = iframe.src + '#!bla=blu';
 			}, 100);
@@ -378,6 +383,7 @@ if(typeof steal !== 'undefined') {
 	test("updating the hash", function(){
 		stop();
 		window.routeTestReady = function(iCanRoute, loc){
+			iCanRoute.ready()
 			iCanRoute(":type/:id");
 			iCanRoute.attr({type: "bar", id: "\/"});
 
@@ -398,6 +404,7 @@ if(typeof steal !== 'undefined') {
 	test("sticky enough routes", function(){
 		stop();
 		window.routeTestReady = function(iCanRoute, loc){
+			iCanRoute.ready()
 			iCanRoute("active");
 			iCanRoute("");
 			loc.hash = "#!active"
@@ -419,6 +426,7 @@ if(typeof steal !== 'undefined') {
 	test("unsticky routes", function(){
 		stop();
 		window.routeTestReady = function(iCanRoute, loc){
+			iCanRoute.ready()
 			iCanRoute(":type")
 			iCanRoute(":type/:id");
 			iCanRoute.attr({type: "bar"});
@@ -454,5 +462,23 @@ if(typeof steal !== 'undefined') {
 		can.$("#qunit-test-area")[0].appendChild(iframe);
 	});
 }
+
+
+test("escaping periods", function(){
+	
+	can.route.routes = {};
+	can.route(":page\\.html",{
+		page: "index"
+	});
+
+	var obj = can.route.deparam("can.Control.html");
+	deepEqual(obj, {
+		page : "can.Control",
+		route: ":page\\.html"
+	});
+	
+	equal( can.route.param({page: "can.Control"}), "can.Control.html");
+	
+})
 
 })();

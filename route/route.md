@@ -4,6 +4,7 @@
 @download can/route
 @test can/route/test.html
 @parent canjs
+@group can.route.plugins plugins
 
 @description Manage browser history and
 client state by synchronizing the window.location.hash with

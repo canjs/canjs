@@ -151,8 +151,8 @@ module.exports = function (grunt) {
 			steal: {
 				options: {
 					urls: [
-						'http://localhost:8000/test/dojo.html',
 						'http://localhost:8000/test/jquery.html',
+						'http://localhost:8000/test/dojo.html',
 						//'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/mootools.html',
 						'http://localhost:8000/test/yui.html'

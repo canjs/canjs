@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>can.route pushstate test page</title>
+	<title>can.route test page</title>
 </head>
 <body>
 <p>This is a dummy page to use<br/> for testing route goodness</p>
@@ -22,12 +22,14 @@
 	};
 	
 
-	steal.config(configuration);
-	steal('can/route/pushstate', function (route) {
+	
+	steal(function(){
+		steal.config(configuration);
+	}).then('can/route/pushstate', function () {
 
 		// make sure it's after ready
 		setTimeout(function () {
-			window.parent.routeTestReady(can.route, window.location, window.history)
+			window.parent.routeTestReady && window.parent.routeTestReady(can.route, window.location, window.history)
 		}, 30)
 	})
 </script>

@@ -36,15 +36,16 @@
             }).then("can/util/fixture", "can/component",
                 "can/construct", "can/observe", "can/compute",
                 "can/model", "can/view", "can/view/ejs",
-                "can/control", "can/route", "can/control/route",
-                "can/view/mustache", "can/view/bindings",
-                "can/view/scope", "can/model/queue",
-                "can/construct/super", "can/construct/proxy",
-                "can/map/delegate", "can/map/setter",
-                "can/map/attributes", "can/map/validations",
-                "can/map/backup", "can/control/plugin",
-                "can/view/modifiers", "can/util/object",
-                "can/util/string", "can/util/fixture")
+                "can/control", "can/route", "can/route/pushstate",
+                "can/control/route", "can/view/mustache",
+                "can/view/bindings", "can/view/scope",
+                "can/model/queue", "can/construct/super",
+                "can/construct/proxy", "can/map/delegate",
+                "can/map/setter", "can/map/attributes",
+                "can/map/validations", "can/map/backup",
+                "can/control/plugin", "can/view/modifiers",
+                "can/util/object", "can/util/string",
+                "can/util/fixture")
                 .then("can/test").then(
                 "can/component/component_test.js")
                 .then("can/construct/construct_test.js")
@@ -55,6 +56,7 @@
                 .then("can/view/ejs/ejs_test.js")
                 .then("can/control/control_test.js")
                 .then("can/route/route_test.js")
+                .then("can/route/pushstate/pushstate_test.js")
                 .then("can/control/route/route_test.js")
                 .then("can/view/mustache/mustache_test.js")
                 .then("can/view/bindings/bindings_test.js")

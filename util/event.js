@@ -23,7 +23,7 @@ can.removeEvent = function(event, fn){
 		return;
 	}
 	var i =0,
-		events = this.__bindEvents[event.split(".")[0]],
+		events = this.__bindEvents[event.split(".")[0]] || [],
 		ev;
 	while(i < events.length){
 		ev = events[i]

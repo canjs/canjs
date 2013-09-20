@@ -1,7 +1,13 @@
+(function(){
+	
 var originalPath = location.pathname;
 module("can/route/pushstate",{
+	setup: function(){
+		can.route._teardown();
+		can.route.defaultBinding = "pushstate";
+	},
 	teardown: function() {
-		history.replaceState(null,null,originalPath);
+		
 	}
 });
 
@@ -286,85 +292,111 @@ test("strange characters", function(){
 	equal(res, "bar/"+encodeURIComponent("\/"))
 });
 
-test("updating the url", function(){
-	stop();
-	window.routeTestReady = function(iCanRoute, loc){
-		iCanRoute("/:type/:id");
-		iCanRoute.attr({type: "bar", id: "\/"});
-
-		setTimeout(function(){
-			var after = loc.pathname;
-			equal(after,"/bar/"+encodeURIComponent("\/"));
-			start();
-
-			can.remove(can.$(iframe))
-
-		},30);
-	}
-	var iframe = document.createElement('iframe');
-	iframe.src = can.test.path("route/pushstate/testing.html");
-	can.$("#qunit-test-area")[0].appendChild(iframe);
-});
-
-test("sticky enough routes", function(){
-	stop();
-	window.routeTestReady = function(iCanRoute, loc, history){
-		iCanRoute("/active");
-		iCanRoute("");
-		history.pushState(null,null,"/active");
-
-		setTimeout(function(){
-			var after = loc.pathname;
-			equal(after,"/active");
-			start();
-
-			can.remove(can.$(iframe))
-
-		},30);
-	}
-	var iframe = document.createElement('iframe');
-	iframe.src = can.test.path("route/pushstate/testing.html?2");
-	can.$("#qunit-test-area")[0].appendChild(iframe);
-});
-
-test("unsticky routes", function(){
-	stop();
-	window.routeTestReady = function(iCanRoute, loc){
-		iCanRoute("/:type")
-		iCanRoute("/:type/:id");
-		iCanRoute.attr({type: "bar"});
-
-		setTimeout(function(){
-			var after = loc.pathname;
-			equal(after,"/bar");
-			iCanRoute.attr({type: "bar", id: "\/"});
+if( window.history && history.pushState) {
+	test("updating the url", function(){
+		stop();
+		window.routeTestReady = function(iCanRoute, loc){
+			iCanRoute.ready()
+			iCanRoute("/:type/:id");
+			iCanRoute.attr({type: "bar", id: "5"});
 			
-			// check for 1 second
-			var time = new Date()
+	
 			setTimeout(function(){
 				var after = loc.pathname;
-				if(after == "/bar/"+encodeURIComponent("\/")){
-					equal(after,"/bar/"+encodeURIComponent("\/"),"should go to type/id");
+				equal(after,"/bar/5", "path is "+after);
+				start();
+	
+				can.remove(can.$(iframe))
+	
+			},100);
+		}
+		var iframe = document.createElement('iframe');
+		iframe.src = can.test.path("route/pushstate/testing.html");
+		can.$("#qunit-test-area")[0].appendChild(iframe);
+	});
+	
+	test("sticky enough routes", function(){
+		stop();
+		window.routeTestReady = function(iCanRoute, loc, history){
+			iCanRoute("/active");
+			iCanRoute("");
+			history.pushState(null,null,"/active");
+	
+			setTimeout(function(){
+				var after = loc.pathname;
+				equal(after,"/active");
+				start();
+	
+				can.remove(can.$(iframe))
+			},30);
+		}
+		var iframe = document.createElement('iframe');
+		iframe.src = can.test.path("route/pushstate/testing.html?2");
+		can.$("#qunit-test-area")[0].appendChild(iframe);
+	});
+	
+	test("unsticky routes", function(){
+		
+		stop();
+		window.routeTestReady = function(iCanRoute, loc, iframeHistory){
+			// check if we can even test this
+			iframeHistory.pushState(null,null,"/bar/"+encodeURIComponent("\/"));
+			setTimeout(function(){
+				
+				if( "/bar/"+encodeURIComponent("\/") === loc.pathname ){
+					runTest();	
+					
+				} else if(loc.pathname.indexOf("/bar/") >=0 ){
+					//  encoding doesn't actually work
+					console.log("can/route/pushstate/pushstate_test.js: win.location is automatically unescaping, can not test")
+					ok(true,"can't test!");
 					can.remove(can.$(iframe))
-					start();
-				} else if( new Date() - time > 2000){
-					ok(false, "hash is "+after);
-					can.remove(can.$(iframe))
+					start()
 				} else {
 					setTimeout(arguments.callee, 30)
 				}
+			},30)
+			var runTest = function(){
+				iCanRoute.ready();
+				iCanRoute("/:type");
+				iCanRoute("/:type/:id");
+				iCanRoute.attr({type: "bar"});
 				
-			},1)
+				setTimeout(function(){
+					var after = loc.pathname;
+					equal(after,"/bar","only type is set");
+					iCanRoute.attr({type: "bar", id: "\/"});
+					
+					// check for 1 second
+					var time = new Date()
+					setTimeout(function(){
+						var after = loc.pathname;
+						
+						if(after == "/bar/"+encodeURIComponent("\/")){
+							equal(after,"/bar/"+encodeURIComponent("\/"),"should go to type/id");
+							can.remove(can.$(iframe))
+							start();
+						} else if( new Date() - time > 2000){
+							ok(false, "hash is "+after);
+							can.remove(can.$(iframe))
+						} else {
+							setTimeout(arguments.callee, 30)
+						}
+						
+					},30)
+					
+				},30)
+			}
 			
-		},1)
+	
+	
+		}
+		var iframe = document.createElement('iframe');
+		iframe.src = can.test.path("route/pushstate/testing.html?1");
+		can.$("#qunit-test-area")[0].appendChild(iframe);
+	});
 
-
-	}
-	var iframe = document.createElement('iframe');
-	iframe.src = can.test.path("route/pushstate/testing.html?1");
-	can.$("#qunit-test-area")[0].appendChild(iframe);
-});
-
+}
 
 test("empty default is matched even if last", function(){
 	
@@ -432,3 +464,5 @@ test("dashes in routes", function(){
 		route: ":foo-:bar"
 	});
 })
+
+})();

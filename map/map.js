@@ -440,7 +440,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		 */
 		removeAttr: function( attr ) {
 				// Info if this is List or not
-			var isList = this instanceof can.List,
+			var isList = can.List && this instanceof can.List,
 				// Convert the `attr` into parts (if nested).
 				parts = attrParts(attr),
 				// The actual property to remove.

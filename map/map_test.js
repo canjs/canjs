@@ -47,6 +47,13 @@ test("Nested Map", 5, function(){
 	
 })
 
-
+test("remove attr", function(){
+	var state = new can.Map({
+		category : 5,
+		productType : 4
+	});
+	state.removeAttr("category");
+	deepEqual( can.Map.keys(state), ["productType"], "one property" );
+})
 
 })();

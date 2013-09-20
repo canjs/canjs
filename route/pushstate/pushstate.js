@@ -2,86 +2,88 @@ steal('can/util', 'can/route', function(can) {
     "use strict";
 
     if(window.history && history.pushState) {
-
-        var getPath = function() {
-            return location.pathname + location.search;
-        };
-
-        // popstate only fires on back/forward.
-        // To detect when someone calls push/replaceState, we need to wrap each method.
-        can.each(['pushState','replaceState'],function(method) {
-            var orig = history[method];
-            history[method] = function(state) {
-                var result = orig.apply(history, arguments);
-                can.route.history.attr('path',getPath());
-                can.route.history.attr('type',method);
-                return result;
-            };
-        });
-        // Bind to popstate for back/forward
-        can.bind.call(window, 'popstate', function() {
-            can.route.history.attr('path',getPath());
-            can.route.history.attr('type','popState');
-        });
-
-
-        var param = can.route.param,
-            paramsMatcher = /^\?(?:[^=]+=[^&]*&)*[^=]+=[^&]*/;
-        can.extend(can.route, {
-            history: new can.Map({path:getPath()}),
-            _paramsMatcher: paramsMatcher,
-            _querySeparator: '?',
-            _setup: function() {
+		can.route.bindings.pushstate = {
+			/**
+        	 * @property can.route.pushstate.root
+        	 * @parent can.route.pushstate
+        	 * 
+        	 */
+        	root: "/",
+        	paramsMatcher: /^\?(?:[^=]+=[^&]*&)*[^=]+=[^&]*/,
+	        querySeparator: '?',
+	        bind: function() {
                 // intercept routable links
-                can.$('body').on('click', 'a', function(e) {
-                	if(!e.isDefaultPrevented()) {
-	                    // Fix for ie showing blank host, but blank host means current host.
-	                    if(!this.host) {
-	                      this.host = window.location.host;
-	                    }
-	                    // HTML5 pushstate requires host to be the same. Don't prevent default for other hosts.
-	                    if(can.route.updateWith(this.pathname+this.search) && window.location.host == this.host) {
-	                        e.preventDefault();
-	                    }
-                	}
-                });
-                can.route.history.bind('path',can.route.setState);
+                can.delegate.call(can.$(document.documentElement),'click', 'a', anchorClickFix);
+                
+                // popstate only fires on back/forward.
+		        // To detect when someone calls push/replaceState, we need to wrap each method.
+		        can.each(['pushState','replaceState'],function(method) {
+		            originalMethods[method] = window.history[method];
+		            window.history[method] = function(state) {
+		                var result = originalMethods[method].apply(window.history, arguments);
+		                can.route.setState();
+		                return result;
+		            };
+		        });
+		        
+		        // Bind to popstate for back/forward
+		        can.bind.call(window, 'popstate', can.route.setState);
             },
-            updateWith: function(pathname) {
-                var curParams = can.route.deparam(pathname);
-
-                if(curParams.route) {
-                    can.route.attr(curParams, true);
-                    return true;
-                }
-                return false;
+	        unbind: function(){
+        		can.undelegate.call(can.$(document.documentElement),'click', 'a', anchorClickFix);
+        	
+            	can.each(['pushState','replaceState'],function(method) {
+		            window.history[method] = originalMethods[method];
+		        });
+            	can.unbind.call(window, 'popstate', can.route.setState);
             },
-            _getHash: getPath,
-            _setHash: function(serialized) {
-                var path = can.route.param(serialized, true);
-                if(path !== can.route._getHash()) {
-                    can.route.updateLocation(path);
-                }
+	        matchingPartOfURL: function(){
+            	var root = cleanRoot(),
+            		loc = (location.pathname + location.search),
+            		index = loc.indexOf(root);
+            	
+            	return loc.substr(index+root.length);
+            },
+            setURL: function(path) {
+            	window.history.pushState(null, null, can.route._call("root")+path);
                 return path;
-            },
-            current: function( options ) {
-                return this._getHash() === can.route.param(options);
-            },
-            /**
-             * This is a blunt hook for updating the window.location.
-             * You may prefer to use replaceState instead of pushState in some circumstances,
-             * in which case you can overwrite this method and handle the change yourself.
-             */
-            updateLocation: function(path) {
-                history.pushState(null, null, path);
-            },
-            url: function( options, merge ) {
-                if (merge) {
-                    options = can.extend({}, can.route.deparam( this._getHash()), options);
-                }
-                return can.route.param(options);
             }
-        });
+		}
+		
+		
+        var anchorClickFix = function(e) {
+        	if(!e.isDefaultPrevented()) {
+                // Fix for ie showing blank host, but blank host means current host.
+                if(!this.host) {
+                  this.host = window.location.host;
+                }
+                // if link is within the same domain
+                if(window.location.host == this.host){
+                	// check if a route matches
+                    var curParams = can.route.deparam(this.pathname+this.search);
+                    // if a route matches
+                    if(curParams.route) {
+                    	// update the data
+                    	can.route.attr(curParams, true);
+                    	e.preventDefault();
+                	}
+                }
+        	}
+		},
+			cleanRoot = function(){
+        		var domain = location.protocol+"//"+location.host,
+        			root = can.route._call("root"),
+        			index = root.indexOf( domain );
+        		if( index == 0 ) {
+        			return can.route.root.substr(domain.length)
+        		}
+        		return root
+	        },
+	        // a collection of methods on history that we are overwriting
+	        originalMethods = {};
+	        
+        can.route.defaultBinding = "pushstate";
+        
     }
 
 	return can;
