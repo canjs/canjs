@@ -40,7 +40,7 @@ steal('can/util', 'can/route', function(can) {
 	                      this.host = window.location.host;
 	                    }
 	                    // HTML5 pushstate requires host to be the same. Don't prevent default for other hosts.
-	                    if(can.route.updateWith(this.pathname+this.search) && window.location.host == this.host) {
+	                    if(window.location.host == this.host && can.route.updateWith(this.pathname+this.search)) {
 	                        e.preventDefault();
 	                    }
                 	}
