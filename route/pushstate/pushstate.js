@@ -54,11 +54,9 @@ steal('can/util', 'can/route', function(can) {
         var anchorClickFix = function(e) {
         	if(!e.isDefaultPrevented()) {
                 // Fix for ie showing blank host, but blank host means current host.
-                if(!this.host) {
-                  this.host = window.location.host;
-                }
+                var linksHost = this.host || window.location.host;
                 // if link is within the same domain
-                if(window.location.host == this.host){
+                if(window.location.host == linksHost){
                 	// check if a route matches
                     var curParams = can.route.deparam(this.pathname+this.search);
                     // if a route matches
