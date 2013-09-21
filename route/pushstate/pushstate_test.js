@@ -1,5 +1,14 @@
 (function(){
+
+/*var orgTest = window.test;
+var test = function(name, fn){
 	
+	orgTest(name, function(){
+		console.log(name+"\n");
+		return fn.apply(this, arguments)
+	})
+}*/
+
 var originalPath = location.pathname;
 module("can/route/pushstate",{
 	setup: function(){
@@ -212,7 +221,8 @@ test("deparam-param", function(){
 	var res = can.route.param({foo: 1, bar: 2});
 	equal(res,"/","empty slash")
 	
-	var deparamed = can.route.deparam("/")
+	// you really should deparam with root ..
+	var deparamed = can.route.deparam("//")
 	deepEqual(deparamed, {foo: 1, bar: 2, route: ":foo/:bar"})
 })
 
@@ -348,7 +358,6 @@ if( window.history && history.pushState) {
 					
 				} else if(loc.pathname.indexOf("/bar/") >=0 ){
 					//  encoding doesn't actually work
-					console.log("can/route/pushstate/pushstate_test.js: win.location is automatically unescaping, can not test")
 					ok(true,"can't test!");
 					can.remove(can.$(iframe))
 					start()
@@ -393,6 +402,50 @@ if( window.history && history.pushState) {
 		}
 		var iframe = document.createElement('iframe');
 		iframe.src = can.test.path("route/pushstate/testing.html?1");
+		can.$("#qunit-test-area")[0].appendChild(iframe);
+	});
+
+	test("clicked hashes work (#259)", function(){
+		
+		stop();
+		window.routeTestReady = function(iCanRoute, loc, hist, win) {
+			
+			iCanRoute(win.location.pathname,{
+				page: "index"
+			})
+			
+			iCanRoute(":type/:id");
+			iCanRoute.ready();
+			
+			window.win = win;
+			var link = win.document.createElement("a");
+			link.href="/articles/17#references";
+			link.innerHTML = "Click Me"
+			
+			win.document.body.appendChild(link);
+			
+			win.can.trigger(win.can.$(link), "click")
+			
+			//link.click()
+			
+			setTimeout(function(){
+				
+				deepEqual(can.extend({},iCanRoute.attr()),{
+					type: "articles",
+					id: "17",
+					route: ":type/:id"
+				},"articles are right")
+				
+				equal( win.location.hash, "#references", "includes hash");
+				
+				start();
+	
+				can.remove(can.$(iframe))
+	
+			},100);
+		}
+		var iframe = document.createElement('iframe');
+		iframe.src = can.test.path("route/pushstate/testing.html");
 		can.$("#qunit-test-area")[0].appendChild(iframe);
 	});
 

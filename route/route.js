@@ -265,6 +265,14 @@ steal('can/util','can/map', 'can/util/string/deparam', function(can) {
 		 *          // -> { id: 5, route: ":type/:id", type: "videos" }
 		 */
 		deparam: function( url ) {
+			
+			// remove the url
+			var root = can.route._call("root");
+	        if(root.lastIndexOf("/") == root.length - 1 &&
+	        	url.indexOf("/") === 0) {
+	        	url = url.substr(1);
+	        }
+			
 			// See if the url matches any routes by testing it against the `route.test` `RegExp`.
             // By comparing the URL length the most specialized route that matches is used.
 			var route = {
