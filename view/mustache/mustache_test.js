@@ -2014,5 +2014,40 @@ test("helpers between tags (#469)", function(){
 })
 
 
+test("hiding image srcs (#157)", function(){
+	var template = can.view.mustache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />'),
+		data = new can.Map({
+			image: null
+		}),
+		url = "http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png";
+	
+	var frag = template(data),
+		img = frag.childNodes[0];
+	
+	equal( img.hasAttribute('src'), false, "there is no src");
+	
+	data.attr("image",url)
+	equal(img.hasAttribute('src'), true, 'Image should have src')
+	equal( img.src, url, "images src is correct" );
+	
+	var renderer = can.view.mustache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />{{image}}'),
+		url = 'http://farm8.staticflickr.com/7102/6999583228_99302b91ac_n.jpg',
+		data = new can.Map({
+	        user: 'Tina Fey',
+	        messages: 0
+	    }),
+			div = document.createElement('div');
+
+	div.appendChild(renderer(data));
+
+	var img = div.getElementsByTagName('img')[0];
+	equal(img.hasAttribute('src'), false, 'Image should not have src');
+
+	data.attr('messages', 5);
+	data.attr('image', url);
+	equal(img.hasAttribute('src'), true, 'Image should have src');
+	equal(img.src, url, 'Image should have src URL');
+})
+
 
 })();
