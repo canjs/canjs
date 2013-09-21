@@ -2047,6 +2047,42 @@ test("hiding image srcs (#157)", function(){
 	data.attr('image', url);
 	equal(img.hasAttribute('src'), true, 'Image should have src');
 	equal(img.src, url, 'Image should have src URL');
+});
+
+test("backtracks in mustache (#163)", function(){
+	
+	var template = can.view.mustache(
+		"{{#grid.rows}}"+
+			"{{#grid.cols}}"+
+    			"<div>{{columnData ../. .}}</div>"+
+  			"{{/grid.cols}}"+
+		"{{/grid.rows}}");
+	
+	var grid = new can.Map({
+		rows: [{first: "Justin",last: "Meyer"},{first: "Brian",last: "Moschel"}],
+		cols: [{prop: "first"},{prop: "last"}]
+	})
+	
+	var frag = template({
+		grid: grid
+	},{
+		columnData: function(row, col){
+			return row.attr(col.attr("prop"))
+		}
+	});
+	
+	var divs = frag.childNodes;
+	equal(divs.length, 4, "there are 4 divs");
+	
+	var vals = can.map(divs, function(div){
+		return div.innerHTML
+	});
+	
+	deepEqual(vals,["Justin","Meyer","Brian","Moschel"],"div values are the same");
+	
+	
+	
+	
 })
 
 

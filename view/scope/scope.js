@@ -1,4 +1,4 @@
-steal('can/util','can/construct','can/map','can/view','can/compute',function(can){
+steal('can/util','can/construct','can/map','can/list','can/view','can/compute',function(can){
 	
 	var isObserve = function(obj) {
 		return obj instanceof can.Map;
@@ -11,7 +11,12 @@ steal('can/util','can/construct','can/map','can/view','can/compute',function(can
 			this._parent = parent;
 		},
 		get: function(attr){
-			if(attr == "." || attr == "this"){
+			
+			if( attr.substr(0,3) === "../" ) {
+				return this._parent.get( attr.substr(3) )
+			} else if(attr == ".."){
+				return {value: this._parent._data}
+			} else if(attr == "." || attr == "this"){
 				return {value: this._data};
 			}
 			

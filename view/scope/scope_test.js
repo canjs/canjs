@@ -110,6 +110,20 @@
 		equal( map.attr("age"), 31, "maps age is set correctly");
 		
 		
+	});
+	
+	test("backtrack path (#163)", function(){
+		var row = new can.Map({first: "Justin"}),
+			col = {format: "str"},
+			base = new can.view.Scope( row ),
+			cur = base.add(col);
+			
+		equal(cur.attr("."), col, "got col");
+		
+		equal(cur.attr(".."), row, "got row");
+		
+		equal(cur.attr("../first"), "Justin", "got row");
+		
 	})
 	
 	
