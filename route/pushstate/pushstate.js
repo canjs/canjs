@@ -4,8 +4,37 @@ steal('can/util', 'can/route', function(can) {
     if(window.history && history.pushState) {
 		can.route.bindings.pushstate = {
 			/**
-        	 * @property can.route.pushstate.root
+        	 * @property {String} can.route.pushstate.root
         	 * @parent can.route.pushstate
+        	 * 
+        	 * @description Configure the base url that will not be modified.
+        	 * 
+        	 * @option {String} Represents the base url that pushstate will prepend to all 
+        	 * routes.  `root` defaults to: `"/"`.
+        	 * 
+        	 * @body
+        	 * 
+        	 * ## Use
+        	 * 
+        	 * By default, a route like:
+        	 * 
+        	 *     can.route(":type/:id")
+        	 * 
+        	 * Matches urls like:
+        	 * 
+        	 *     http://domain.com/contact/5
+        	 * 
+        	 * But sometimes, you only want to match pages within a certain directory.  For 
+        	 * example, an application that is a filemanager.  You might want to 
+        	 * specify root and routes like:
+        	 * 
+        	 *     can.route.pushstate.root = "/filemanager/"
+        	 *     can.route("file-:fileId");
+        	 *     can.route("folder-:fileId")
+        	 * 
+        	 * Which matches urls like:
+        	 * 
+        	 *     http://domain.com/filemanager/file-34234
         	 * 
         	 */
         	root: "/",

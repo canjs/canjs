@@ -346,22 +346,24 @@ steal('can/util','can/map', 'can/util/string/deparam', function(can) {
 		 * @function can.route.ready ready
 		 * @parent can.route.static
 		 * 
-		 * @signature `can.route.ready( readyYet )`
+		 * Initialize can.route.
 		 * 
-		 * Pause and resume the initialization of can.route.
+		 * @signature `can.route.ready()`
 		 * 
-		 * @param {Boolean} [readyYet] Whether the ready event should be fired yet.
+		 * Sets up the two-way binding between the hash and the can.route observable map and
+		 * sets the can.route map to its initial values.
+		 * 
 		 * @return {can.route} The `can.route` object.
 		 *
 		 * @body
-		 * Indicates that all routes have been added and sets can.route.data
-		 * based upon the routes and the current hash.
 		 * 
-		 * By default, ready is fired on jQuery's ready event.  Sometimes
-		 * you might want it to happen sooner or earlier.  To do this, call:
+		 * ## Use
 		 * 
-		 *     can.route.ready(false); //prevents firing by the ready event
-		 *     can.route.ready(true); // fire the first route change
+		 * After setting all your routes, call can.route.ready().
+		 * 
+		 *     can.route("overview/:dateStart-:dateEnd");
+		 *     can.route(":type/:id")
+		 *     can.route.ready()
 		 */
 		ready: function(val) {
 			if( val !== true ) {

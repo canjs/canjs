@@ -924,11 +924,17 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		 * @function can.Model.models models
 		 * @parent can.Model.static
 		 * @description Convert raw data into can.Model instances.
+		 * 
 		 * @signature `can.Model.models(data[, oldList])`
 		 * @param {Array<Object>} data The raw data from a `[can.Model.findAll findAll()]` request.
 		 * @param {can.Model.List} [oldList] If supplied, this List will be updated with the data from
 		 * __data__.
 		 * @return {can.Model.List} A List of Models made from the raw data.
+		 * 
+		 * @signature `models: "PROPERTY"`
+		 * 
+		 * Creates a `models` function that looks for the array of instance data in the PROPERTY
+		 * property of the raw response data of [can.Model.findAll].
 		 * 
 		 * @body
 		 * `can.Model.models(data, xhr)` is used to 
@@ -1005,6 +1011,11 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		 * @signature `can.Model.model(data)`
 		 * @param {Object} data The data to convert to a can.Model instance.
 		 * @return {can.Model} An instance of can.Model made with the given data.
+		 * 
+		 * @signature `model: "PROPERTY"`
+		 * 
+		 * Creates a `model` function that looks for the attributes object in the PROPERTY
+		 * property of raw instance data.
 		 * 
 		 * @body
 		 * `can.Model.model(attributes)` is used to convert data from the server into

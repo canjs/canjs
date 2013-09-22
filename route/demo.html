@@ -246,6 +246,7 @@ function() {
 		routes[1].attr({ route: ":type", def: {type: "recipe",foo: "bar"} }, true)
 		window.location.hash ="#!"
 	})
+	can.route.ready()
 })
 </script>
 <script type='text/ejs' id='linksEJS'>

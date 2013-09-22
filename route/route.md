@@ -24,6 +24,7 @@ should start with either a character (a-Z) or colon (:).  Examples:
 @return {can.route}
 
 @body
+
 ## Background Information
 
 To support the browser's back button and bookmarking
@@ -67,7 +68,7 @@ You can listen to changes in an Observe with `bind(eventName, handler(ev, args..
 change can.route's properties with 
 [can.Map.prototype.attr attr].
 
-### Listening to changes in an Observable
+### Listening to changes in can.route
 
 Listen to changes in history 
 by [can.Map.prototype.bind bind]ing to
@@ -81,22 +82,7 @@ changes in <code>can.route</code> like:
  - `how` - the type of Observe change event (add, set or remove)
  - `newVal`/`oldVal` - the new and old values of the attribute
 
-You can also listen to specific changes 
-with [can.Map.delegate delegate]:
-
-    can.route.delegate('id','change', function(){ ... })
-
-Observe lets you listen to the following events:
-
- - change - any change to the object
- - add - a property is added
- - set - a property value is added or changed
- - remove - a property is removed
-
-Listening for <code>add</code> is useful for widget setup
-behavior, <code>remove</code> is useful for teardown.
-
-### Updating an observable
+### Updating can.route
 
 Create changes in the route data with [can.Map.prototype.attr attr] like:
 
@@ -143,21 +129,16 @@ Default values can also be added:
     location.hash = "#!content/"
     // can.route -> {type : "videos"}
     
-## Delay setting can.route
+## Initializing can.route
 
-By default, <code>can.route</code> sets its initial data
-on document ready.  Sometimes, you want to wait to set 
-this data.  To wait, call:
+After your application has created all of its routes, call [can.route.ready]
+to set can.route's data to match the current hash:
 
-    can.route.ready(false);
-
-and when ready, call:
-
-    can.route.ready(true);
+     can.route.ready()
 
 ## Changing the route.
 
-Typically, you never want to set <code>location.hash</code>
+Typically, you don't set <code>location.hash</code>
 directly.  Instead, you can change properties on <code>can.route</code>
 like:
 
