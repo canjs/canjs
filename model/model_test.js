@@ -8,7 +8,7 @@ module("can/model", {
 var isDojo = (typeof dojo !== "undefined");
 
 test("shadowed id", function(){
-	var MyModel = can.Model({
+	var MyModel = can.Model.extend({
 		id: 'foo'
 	},{
 		foo: function() {
@@ -48,7 +48,7 @@ test("findAll deferred", function(){
 });
 
 test("findAll rejects non-array (#384)", function() {
-	var Person = can.Model({
+	var Person = can.Model.extend({
 		findAll : function(params, success, error){
 			var dfd = can.Deferred();
 			setTimeout(function() {
@@ -504,7 +504,7 @@ test("removeAttr test", function(){
 
 
 test("save error args", function(){
-	var Foo = can.Model('Testin.Models.Foo',{
+	var Foo = can.Model.extend('Testin.Models.Foo',{
 		create : "/testinmodelsfoos.json"
 	},{
 		
@@ -669,7 +669,7 @@ test("store binding", function(){
 })
 
 test("store ajax binding", function(){
-	var Guy = can.Model({
+	var Guy = can.Model.extend({
 		findAll : "/guys",
 		findOne : "/guy/{id}"
 	},{});
@@ -701,7 +701,7 @@ test("store ajax binding", function(){
 
 test("store instance updates", function(){
 	var Guy, updateCount;
-    Guy = can.Model({
+    Guy = can.Model.extend({
         findAll : 'GET /guys'
     },{});
     updateCount = 0;
@@ -731,7 +731,7 @@ test("store instance updates", function(){
 test("store instance update removed fields", function(){
 	var Guy, updateCount, remove;
 
-    Guy = can.Model({
+    Guy = can.Model.extend({
         findAll : 'GET /guys'
     },{});
     remove = false;
@@ -765,7 +765,7 @@ test("store instance update removed fields", function(){
 /**/
 
 test("templated destroy", function(){
-	var MyModel = can.Model({
+	var MyModel = can.Model.extend({
 		destroy : "/destroyplace/{id}"
 	},{});
 	
@@ -787,7 +787,7 @@ test("templated destroy", function(){
 		return {};
 	});
 
-	Base = can.Model({
+	Base = can.Model.extend({
 		id:'_id'
 	}, {
 	});
@@ -809,7 +809,7 @@ test("overwrite makeFindAll", function(){
 	
 	var store = {};
 	
-	var LocalModel = can.Model({
+	var LocalModel = can.Model.extend({
 		makeFindOne : function(findOne){
 			return function(params, success, error){
 				var def = new can.Deferred(),
@@ -880,8 +880,8 @@ test("overwrite makeFindAll", function(){
 });
 
 test("inheriting unique model names", function(){
-	var Foo = can.Model({});
-	var Bar = can.Model({});
+	var Foo = can.Model.extend({});
+	var Bar = can.Model.extend({});
 	ok(Foo.fullName != Bar.fullName, "fullNames not the same")
 })
 
@@ -957,7 +957,7 @@ test("uses attr with isNew", function(){
 
 test("extends defaults by calling base method", function(){
 	
-	var M1 = can.Model({
+	var M1 = can.Model.extend({
 		defaults: {foo: "bar"}
 	},{});
 	
@@ -969,7 +969,7 @@ test("extends defaults by calling base method", function(){
 });
 
 test(".models updates existing list if passed", 4, function() {
-	var Model = can.Model({});
+	var Model = can.Model.extend({});
 	var list = Model.models([{
 		id : 1,
 		name : 'first'
@@ -998,7 +998,7 @@ test(".models updates existing list if passed", 4, function() {
 });
 
 test("calling destroy with unsaved model triggers destroyed event (#181)", function() {
-	var MyModel = can.Model({}, {}),
+	var MyModel = can.Model.extend({}, {}),
 		newModel = new MyModel(),
 		list = new MyModel.List(),
 		deferred;
@@ -1017,7 +1017,7 @@ test("calling destroy with unsaved model triggers destroyed event (#181)", funct
 });
 
 test("model removeAttr (#245)", function() {
-	var MyModel = can.Model({}),
+	var MyModel = can.Model.extend({}),
 		model;
 	can.Model._reqs++; // pretend it is live bound
 	model = MyModel.model({
@@ -1034,7 +1034,7 @@ test("model removeAttr (#245)", function() {
 	equal(model.attr('name'), 'text updated', 'attribute updated');
 	equal(model.attr('index'), 2, 'Index attribute still remains');
 
-	MyModel = can.Model({
+	MyModel = can.Model.extend({
 		removeAttr: true
 	}, {});
 	can.Model._reqs++; // pretend it is live bound
@@ -1057,7 +1057,7 @@ test("model removeAttr (#245)", function() {
 });
 
 test(".model on create and update (#301)", function() {
-	var MyModel = can.Model({
+	var MyModel = can.Model.extend({
 		create: 'POST /todo',
 		update: 'PUT /todo',
 		model: function(data) {
@@ -1117,7 +1117,7 @@ test("List params uses findAll",function(){
 		}];
 	})
 	
-	var Model = can.Model({
+	var Model = can.Model.extend({
 		findAll: "/things"
 	},{});
 	
@@ -1150,10 +1150,10 @@ test("Creating nested models adds them to the store (#357)", function(){
     ]
 
     // Company model
-    Company = can.Model({},{})
+    Company = can.Model.extend({},{})
 
     // Person model with nested Company
-    Person = can.Model({
+    Person = can.Model.extend({
         attributes: {
             company: 'Company.model'
         }
@@ -1170,7 +1170,7 @@ test("Creating nested models adds them to the store (#357)", function(){
 
 
 test("destroy not calling callback for new instances (#403)", function(){
-    var Recipe = can.Model({},{})
+    var Recipe = can.Model.extend({},{})
 	expect(1);
 	stop();
 	new Recipe({name: "mow grass"}).destroy(function(recipe) {
@@ -1180,7 +1180,7 @@ test("destroy not calling callback for new instances (#403)", function(){
 });
 
 test(".model should always serialize Observes (#444)", function() {
-	var ConceptualDuck = can.Model({
+	var ConceptualDuck = can.Model.extend({
 		defaults: {
 			sayeth: "Abstractly 'quack'"
 		}
@@ -1189,5 +1189,27 @@ test(".model should always serialize Observes (#444)", function() {
 
 	equal("quack", ConceptualDuck.model(new ObserveableDuck({sayeth: "quack"})).sayeth);
 });
+
+test("string configurable model and models functions (#128)", function(){
+	var StrangeProp = can.Model.extend({
+		model: "foo",
+		models: "bar"
+	},{});
+	
+	
+	var strangers = StrangeProp.models({
+		bar: [
+			{foo: {id: 1, name: "one"}},
+			{foo: {id: 2, name: "two"}}
+		]
+	})
+	
+	deepEqual( strangers.attr(),[
+		{id: 1, name: "one"},
+		{id: 2, name: "two"}
+	])
+	
+})
+
 
 })();

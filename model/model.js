@@ -118,7 +118,101 @@ steal('can/util','can/map', 'can/list',function( can ) {
 			deferred.then(success,error);
 			return deferred;
 		},
-	
+		initializers = {
+			// makes a models function that looks up the data in a particular property
+			models: function(prop){
+				return function( instancesRawData, oldList ) {
+					// until "end of turn", increment reqs counter so instances will be added to the store
+					can.Model._reqs++;
+					if ( ! instancesRawData ) {
+						return;
+					}
+		      
+					if ( instancesRawData instanceof this.List ) {
+						return instancesRawData;
+					}
+		
+					// Get the list type.
+					var self = this,
+						tmp = [],
+						res = oldList instanceof can.List ? oldList : new( self.List || ML),
+						// Did we get an `array`?
+						arr = can.isArray(instancesRawData),
+						
+						// Did we get a model list?
+						ml = (instancesRawData instanceof ML),
+		
+						// Get the raw `array` of objects.
+						raw = arr ?
+		
+						// If an `array`, return the `array`.
+						instancesRawData :
+		
+						// Otherwise if a model list.
+						(ml ?
+		
+						// Get the raw objects from the list.
+						instancesRawData.serialize() :
+		
+						// Get the object's data.
+						can.getObject( prop||"data", instancesRawData)),
+						i = 0;
+		
+					if(typeof raw === 'undefined') {
+						throw new Error('Could not get any raw data while converting using .models');
+					}
+		
+					//!steal-remove-start
+					if ( ! raw.length ) {
+						steal.dev.warn("model.js models has no data.")
+					}
+					//!steal-remove-end
+		
+					if(res.length) {
+						res.splice(0);
+					}
+		
+					can.each(raw, function( rawPart ) {
+						tmp.push( self.model( rawPart ));
+					});
+		
+					// We only want one change event so push everything at once
+					res.push.apply(res, tmp);
+		
+					if ( ! arr ) { // Push other stuff onto `array`.
+						can.each(instancesRawData, function(val, prop){
+							if ( prop !== 'data' ) {
+								res.attr(prop, val);
+							}
+						})
+					}
+					// at "end of turn", clean up the store
+					setTimeout(can.proxy(this._clean, this), 1);
+					return res;
+				}
+			},
+			model: function( prop ) {
+				return function( attributes ) {
+					if ( ! attributes ) {
+						return;
+					}
+					if ( typeof attributes.serialize === 'function' ) {
+						attributes = attributes.serialize();
+					}
+					if(prop){
+						attributes = can.getObject( prop||"data", attributes );
+					}
+					
+					var id = attributes[ this.id ],
+					    model = (id || id === 0) && this.store[id] ?
+						    this.store[id].attr(attributes, this.removeAttr || false) : new this( attributes );
+					
+					return model;
+				}
+			}
+		}
+		
+		
 	// This object describes how to make an ajax request for each ajax method.  
 	// The available properties are:
 	//		`url` - The default url to use as indicated as a property on the model.
@@ -801,7 +895,11 @@ steal('can/util','can/map', 'can/list',function( can ) {
 					})
 				}
 			});
-
+			can.each(initializers, function(makeInitializer, name){
+				if( typeof self[name] === "string" ) {
+					can.Construct._overwrite( self, base, name, makeInitializer( self[name] ) )
+				}
+			})
 			if(self.fullName == "can.Model" || !self.fullName){
 				self.fullName = "Model"+(++modelNum);
 			}
@@ -899,75 +997,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		 * `can.Model.models` passes each intstance's data to `can.Model.model` to
 		 * create the individual instances.
 		 */
-		models: function( instancesRawData, oldList ) {
-			// until "end of turn", increment reqs counter so instances will be added to the store
-			can.Model._reqs++;
-			if ( ! instancesRawData ) {
-				return;
-			}
-      
-			if ( instancesRawData instanceof this.List ) {
-				return instancesRawData;
-			}
-
-			// Get the list type.
-			var self = this,
-				tmp = [],
-				res = oldList instanceof can.List ? oldList : new( self.List || ML),
-				// Did we get an `array`?
-				arr = can.isArray(instancesRawData),
-				
-				// Did we get a model list?
-				ml = (instancesRawData instanceof ML),
-
-				// Get the raw `array` of objects.
-				raw = arr ?
-
-				// If an `array`, return the `array`.
-				instancesRawData :
-
-				// Otherwise if a model list.
-				(ml ?
-
-				// Get the raw objects from the list.
-				instancesRawData.serialize() :
-
-				// Get the object's data.
-				instancesRawData.data),
-				i = 0;
-
-			if(typeof raw === 'undefined') {
-				throw new Error('Could not get any raw data while converting using .models');
-			}
-
-			//!steal-remove-start
-			if ( ! raw.length ) {
-				steal.dev.warn("model.js models has no data.")
-			}
-			//!steal-remove-end
-
-			if(res.length) {
-				res.splice(0);
-			}
-
-			can.each(raw, function( rawPart ) {
-				tmp.push( self.model( rawPart ));
-			});
-
-			// We only want one change event so push everything at once
-			res.push.apply(res, tmp);
-
-			if ( ! arr ) { // Push other stuff onto `array`.
-				can.each(instancesRawData, function(val, prop){
-					if ( prop !== 'data' ) {
-						res.attr(prop, val);
-					}
-				})
-			}
-			// at "end of turn", clean up the store
-			setTimeout(can.proxy(this._clean, this), 1);
-			return res;
-		},
+		models: initializers.models("data"),
 		/**
 		 * @function can.Model.model model
 		 * @parent can.Model.static
@@ -1033,19 +1063,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		 *       }
 		 *     },{});
 		 */
-		model: function( attributes ) {
-			if ( ! attributes ) {
-				return;
-			}
-			if ( typeof attributes.serialize === 'function' ) {
-				attributes = attributes.serialize();
-			}
-			var id = attributes[ this.id ],
-			    model = (id || id === 0) && this.store[id] ?
-				    this.store[id].attr(attributes, this.removeAttr || false) : new this( attributes );
-			
-			return model;
-		}
+		model: initializers.model()
 	},
 
 
