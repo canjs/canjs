@@ -1043,9 +1043,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 			var id = attributes[ this.id ],
 			    model = (id || id === 0) && this.store[id] ?
 				    this.store[id].attr(attributes, this.removeAttr || false) : new this( attributes );
-			if(can.Model._reqs){
-				this.store[attributes[this.id]] = model;
-			}
+			
 			return model;
 		}
 	},
@@ -1055,6 +1053,15 @@ steal('can/util','can/map', 'can/list',function( can ) {
 	 * @prototype
 	 */
 	{
+		setup: function(attrs){
+			// try to add things as early as possible to the store (#457)
+			// we add things to the store before any properties are even set
+			var id = attrs && attrs[this.constructor.id];
+			if(can.Model._reqs && id != null ){
+				this.constructor.store[id] = this;
+			}
+			can.Map.prototype.setup.apply(this, arguments)
+		},
 		/**
 		 * @function can.Model.prototype.isNew isNew
 		 * @description Check if a Model has yet to be saved on the server.

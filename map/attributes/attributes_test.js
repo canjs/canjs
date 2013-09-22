@@ -533,6 +533,66 @@ test("Recursive attributes", function() {
 		});
 	});
 
-})
+});
+
+test("store instances (#457)", function() {
+	var Game = can.Model.extend({
+        attributes: {
+            players: "players"
+        },
+        convert: {
+        	players: function(data){
+            	return Player.models(data)
+            }
+        },
+        findOne: "GET /games/{id}"
+    }, {});
+    
+    var Player = can.Model.extend({
+        attributes: {
+            games: "games"
+        },
+        convert: {
+        	"games": function(data){
+            	return Game.models(data)
+            }
+        }
+    }, {});
+    
+    can.Model._reqs++;
+    
+    var game = Game.model({
+        "id": "1",
+        "name": "Fantasy Baseball",
+        "league": "League of Kings",
+        "players": [
+            {
+                "id": "55",
+                "name": "Malamonsters",
+                "games": [
+                    {
+                        "id": "1",
+                        "name": "Fantasy Baseball",
+                        "league": "League of Kings"
+                    }
+                ]
+            }
+        ]
+    });
+    
+    var mismatchFound = false;
+    
+    game.attr('players').each(function(p) {
+        p.attr('games').each(function(g) {
+            if(game.attr('id') === g.attr('id') && game._cid !== g._cid) {
+                mismatchFound = true;
+            }
+        });
+    });
+    equal(mismatchFound, false, "Model instances match");
+    
+	can.Model._reqs--;
+});
+
 
 })();
