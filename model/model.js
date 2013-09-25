@@ -1454,7 +1454,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		 *             cachedRequests[JSON.stringify(params)] = 
 		 *               findOneData(params).then(function(data){
 		 *                 // convert the raw data into instances
-		 *                 return self.models(data)
+		 *                 return self.model(data)
 		 *               })
 		 *           }
 		 *           // get the saved request

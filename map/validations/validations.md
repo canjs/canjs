@@ -30,7 +30,7 @@ or to test if setting a value would create an error:
     contact.errors() //-> null - there are no errors
     
     // Test if setting birthday to new Date(3013,0) would error
-    contact.errros("birthday", 
+    contact.errors("birthday", 
                    new Date(3013,0) ) 
                    //-> ["your birthday needs to be in the past"] 
     

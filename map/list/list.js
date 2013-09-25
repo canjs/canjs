@@ -1,4 +1,4 @@
-steal('can/util', 'can/map', 'can/compute', function(can) {
+steal('can/util', 'can/map', 'can/list', 'can/compute', function(can) {
 	can.extend(can.List.prototype, {
 		filter : function(callback) {
 			// The filtered list
@@ -93,7 +93,7 @@ steal('can/util', 'can/map', 'can/compute', function(can) {
 			return mapped;
 		}
 
-		/* TODO
+		/** TODO
 		,
 
 		every : function() {

@@ -98,7 +98,7 @@ var Squarer = can.Construct.extend({
 
 var Cuber = Squarer.extend({
     raise: function(n) {
-        return n * this_super(n);
+        return n * this._super(n);
     }
 }, {});
 @codeend

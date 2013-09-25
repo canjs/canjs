@@ -123,19 +123,11 @@ module.exports = function (grunt) {
 				}
 			}
 		},
-		docco: {
-			dist: {
-				src: ['dist/*.js'],
-				options: {
-					output: 'dist/docs'
-				}
-			}
-		},
 		changelog: {
 			log: {
 				repo: 'canjs',
 				user: 'bitovi',
-				milestone: 7,
+				milestone: 10,
 				version: pkg.version
 			}
 		},
@@ -223,7 +215,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('bitovi-tools');
 
-	grunt.registerTask('build', ['builder', 'amdify', 'uglify', 'docco']);
+	grunt.registerTask('build', ['builder', 'amdify', 'uglify']);
 	grunt.registerTask('test', ['connect', 'builder', 'amdify', 'testify', 'qunit']);
 	grunt.registerTask('default', ['build']);
 
