@@ -44,6 +44,10 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', function($, can) {
 		};
 	});
 
+	// Aliases
+	can.on = can.bind;
+	can.off = can.unbind;
+
 	// Wrap modifier functions.
 	$.each(["append","filter","addClass","remove","data","get"], function(i,name){
 		can[name] = function(wrapped){

@@ -280,6 +280,11 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', "can/util/fragment.js", 'ca
 		}
 		return this;
 	}
+
+	// Alias on/off to bind/unbind respectively
+	can.on = can.bind;
+	can.off = can.unbind;
+	
 	can.trigger = function (item, event, args, bubble) {
 		if (item instanceof Y.NodeList) {
 			item = item.item(0);

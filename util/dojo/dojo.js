@@ -339,6 +339,10 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 			return this;
 		}
 
+		// Alias on/off to bind/unbind respectively
+		can.on = can.bind;
+		can.off = can.unbind;
+
 		can.trigger = function( item, event, args, bubble ) {
 			if ((!(item instanceof dojo.NodeList)) && (item.nodeName || item === window)) {
 				item = can.$(item);
