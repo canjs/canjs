@@ -415,4 +415,18 @@
 
 		equal(div.className, 'do=not=truncate=me', 'class is right');
 	});
+
+	test("Pass renderer function to can.view", function() {
+		var script = document.createElement('script');
+		script.setAttribute('type', 'test/ejs')
+		script.setAttribute('id', 'test_ejs')
+		script.text = '<span id="new_name"><%= name %></span>';
+		document.getElementById("qunit-test-area").appendChild(script);
+
+		var div = document.createElement('div');
+		var renderer = can.view('test_ejs');
+		div.appendChild(can.view(renderer, {name: 'Henry'}))
+
+		equal( div.getElementsByTagName("span")[0].firstChild.nodeValue , 'Henry');
+	})
 })();

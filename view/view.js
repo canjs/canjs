@@ -25,8 +25,8 @@ steal("can/util", function( can ) {
 			wrapCallback = isFunction(callback) ? function(frag) {
 				callback(pipe(frag));
 			} : null,
-			// Get the result.
-			result = $view.render(view, data, helpers, wrapCallback),
+			// Get the result, if a renderer function is passed in, then we just use that to render the data
+			result = isFunction(view) ? view(data, helpers, wrapCallback) : $view.render(view, data, helpers, wrapCallback),
 			deferred = can.Deferred();
 
 		if(isFunction(result))  {
