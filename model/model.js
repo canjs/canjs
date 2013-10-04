@@ -135,7 +135,7 @@ steal('can/util','can/observe', function( can ) {
 		 *
 		 * @signature `can.Model.bind(eventType, handler)`
 		 * @param {String} eventType The type of event.  It must be
-		 * `"created"`, `"udpated"`, `"destroyed"`.
+		 * `"created"`, `"updated"`, `"destroyed"`.
 		 * @param {function} handler A callback function
 		 * that gets called with the event and instance that was
 		 * created, destroyed, or updated.
@@ -161,7 +161,7 @@ steal('can/util','can/observe', function( can ) {
 		 * 
 		 * @signature `can.Model.unbind(eventType, handler)`
 		 * @param {String} eventType The type of event. It must be
-		 * `"created"`, `"udpated"`, `"destroyed"`.
+		 * `"created"`, `"updated"`, `"destroyed"`.
 		 * @param {function} handler A callback function
 		 * that was passed to `bind`.
 		 * @return {can.Model} The model constructor function.
@@ -222,7 +222,7 @@ steal('can/util','can/observe', function( can ) {
 		 * @parent can.Model.static
 		 * 
 		 * 
-		 * @signature `can.Model.create: function(serialized) -> seferred`
+		 * @signature `can.Model.create: function(serialized) -> deferred`
 		 * 
 		 * Specify a function to create persistent instances. The function will
 		 * typically perform an AJAX request to a service that results in
@@ -231,7 +231,7 @@ steal('can/util','can/observe', function( can ) {
 		 * @param {Object} serialized The [can.Observe::serialize serialized] properties of
 		 * the model to create.
 		 * @return {can.Deferred} A Deferred that resolves to an object of attributes
-		 * that will be added to the created model isntance.  The object __MUST__ contain
+		 * that will be added to the created model instance.  The object __MUST__ contain
 		 * an [can.Model.id id] property so that future calls to [can.Model.prototype.save save]
 		 * will call [can.Model.update].
 		 * 
@@ -352,7 +352,7 @@ steal('can/util','can/observe', function( can ) {
 		 *     },{});
 		 * 
 		 * The server should send back an object with any new attributes the model 
-		 * should have.  For example if your server udpates the "updatedAt" property, it
+		 * should have.  For example if your server updates the "updatedAt" property, it
 		 * should send back something like:
 		 * 
 		 *     // PUT /recipes/4 {name: "Food"} ->
@@ -363,7 +363,7 @@ steal('can/util','can/observe', function( can ) {
 		 * ## Implement with a Function
 		 * 
 		 * You can also implement update by yourself.  Update takes the `id` and
-		 * `attributes` of the instance to be udpated.  Update must return
+		 * `attributes` of the instance to be updated.  Update must return
 		 * a [can.Deferred Deferred] that resolves to an object that contains any 
 		 * properties that should be set on the instance.
 		 *  
@@ -494,7 +494,7 @@ steal('can/util','can/observe', function( can ) {
 		 *     }
 		 * 
 		 * @param {can.Model.findAllData} findAllData A function that accepts parameters
-		 * specifying a list of instance data to retreive and returns a [can.Deferred]
+		 * specifying a list of instance data to retrieve and returns a [can.Deferred]
 		 * that resolves to an array of those instances.
 		 * 
 		 * @signature `can.Model.findAll: "[METHOD] /path/to/resource"`
@@ -896,7 +896,7 @@ steal('can/util','can/observe', function( can ) {
 		 *       }
 		 *     },{})
 		 * 
-		 * `can.Model.models` passes each intstance's data to `can.Model.model` to
+		 * `can.Model.models` passes each instance's data to `can.Model.model` to
 		 * create the individual instances.
 		 */
 		models: function( instancesRawData, oldList ) {
