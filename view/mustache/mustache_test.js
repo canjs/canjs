@@ -123,6 +123,21 @@ test("Model hookup", function(){
 	deepEqual(can.$('.moo').length, 1, 'new item popped off and deleted from ui');
 });
 
+test("Route hookup", function() {
+	var template = '<div id="route">{{#route.type}}{{route.type}}{{/route.type}}</div>';
+	var expected = "videos";
+	var frag = new can.Mustache({text: template}).render({route: can.route});
+	can.append( can.$('#qunit-test-area'), can.view.frag(frag) );
+
+	can.route.attr('type', expected);
+
+	deepEqual(can.$('#route')[0].innerHTML, expected);
+
+	can.route.removeAttr('type');
+
+	deepEqual(can.$('#route')[0].innerHTML, '');	
+})
+
 /*test("Variable partials", function(){
 	var template = "{{#items}}<span>{{>partial}}</span>{{/items}}";
 	var data = { items: [{}], partial: "test_template.mustache" }

@@ -159,6 +159,11 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 		}
 		return this;
 	}
+
+	// Alias on/off to bind/unbind respectively
+	can.on = can.bind;
+	can.off = can.unbind;
+
 	can.trigger = function(item, event, args, bubble){
 		// Defaults to `true`.
 		bubble = (bubble === undefined ? true : bubble);

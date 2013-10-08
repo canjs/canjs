@@ -13,7 +13,7 @@
 Convert any value to a Deferred:
 
     function convertDeferred(dfd) {
-	    return can.isDeferred(dfd) ? dfd : can.Deferred(dfd);
+        return can.isDeferred(dfd) ? dfd : can.Deferred(dfd);
     }
 */
 //
@@ -219,7 +219,7 @@ on an object for a given event.  It works on:
 - Objects
 - Objects with bind / unbind methods
 
-The idea is that bind can be used on anything that produces events
+The idea is that `can.bind` can be used on anything that produces events
 and it will figure out the appropriate way to
 bind to it.  Typically, `can.bind` is only used internally to
 CanJS; however, if you are making libraries or extensions, use
@@ -244,6 +244,45 @@ __Binding to an HTMLElement__
 */
 //
 /**
+@description Listen for events on an object.
+@function can.on
+@parent can.util
+@signature `can.on.call(target, eventName, handler)`
+@param {Object} target The object that emits events.
+@param {String} eventName The name of the event to listen for.
+@param {Function} handler The function to execute when the event occurs.
+@return {Object} The __target__.
+
+@body
+`can.on(eventName, handler)` is an alias for [can.bind `can.bind(eventName, handler)`]
+and binds a callback handler on an object for a given event.  It works on:
+
+- HTML elements and the window
+- Objects
+- Objects with bind / unbind methods
+
+The idea is that `can.on` can be used on anything that produces events
+and it will figure out the appropriate way to bind to it. 
+
+
+__Binding to an object__
+
+    var obj = {};
+    can.on.call(obj,"something", function(ev, arg1, arg){
+        arg1 // 1
+        arg2 // 2
+    })
+    can.trigger(obj,"something",[1,2])
+
+__Binding to an HTMLElement__
+
+    var el = document.getElementById('foo')
+    can.on.call(el, "click", function(ev){
+        this // el
+    });
+*/
+//
+/**
 @description Stop listening for events on an object.
 @function can.unbind
 @parent can.util
@@ -261,7 +300,7 @@ from an object for a given event.  It works on:
 - Objects
 - Objects with bind / unbind methods
 
-The idea is that unbind can be used on anything that produces events
+The idea is that `can.unbind` can be used on anything that produces events
 and it will figure out the appropriate way to
 unbind to it.  Typically, `can.unbind` is only used internally to
 CanJS; however, if you are making libraries or extensions, use
@@ -287,6 +326,52 @@ __Binding/unbinding to an HTMLElement__
     };
     can.bind.call(el, "click", handler)
     can.unbind.call(el, "click", handler)
+*/
+//
+/**
+@description Stop listening for events on an object.
+@function can.off
+@parent can.util
+@signature `can.off.call(target, eventName, handler)`
+@param {Object} target The object that emits events.
+@param {String} eventName The name of the event to listen for.
+@param {Function} handler The function to unbind.
+@return {Object} The __target__.
+
+@body
+`can.off(eventName, handler)` is an alias for [can.unbind `can.unbind(eventName, handler)`]
+and unbinds a callback handler from an object for a given event.  It works on:
+
+- HTML elements and the window
+- Objects
+- Objects with bind / unbind methods
+
+The idea is that `can.unbind` can be used on anything that produces events
+and it will figure out the appropriate way to
+unbind to it.  Typically, `can.off` is only used internally to
+CanJS; however, if you are making libraries or extensions, use
+`can.on` to listen to events independent of the underlying library.
+
+__Binding/unbinding to an object__
+
+    var obj = {},
+    handler = function(ev, arg1, arg) {
+        arg1 // 1
+        arg2 // 2
+    };2
+    can.on.call(obj,"something", handler)
+    can.trigger(obj,"something",[1,2])
+    can.off.call(obj,"something", handler)
+
+__Binding/unbinding to an HTMLElement__
+
+
+    var el = document.getElementById('foo'),
+    handler = function(ev){
+        this // el
+    };
+    can.on.call(el, "click", handler)
+    can.off.call(el, "click", handler)
 */
 //
 /**

@@ -103,6 +103,11 @@ function (can) {
 		}
 		return this;
 	}
+
+	// Alias on/off to bind/unbind respectively
+	can.on = can.bind;
+	can.off = can.unbind;
+	
 	can.delegate = function (selector, ev, cb) {
 		if (this.delegate) {
 			this.delegate(selector, ev, cb)
