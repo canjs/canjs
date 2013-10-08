@@ -47,11 +47,16 @@ function( can ){
 		},
 		
 		/*
-		 * Checks whether an object is a can.Map.
+		 * Checks whether an object is like a can.Map. This takes into
+		 * fact that can.route is can.Map like.
 		 * @param  {[can.Map]}  observable
-		 * @return {Boolean} returns if the object is an observable.
+		 * @return {Boolean} returns if the object is observable like.
 		 */
-		isObserve = function(obj) {
+		isObserveLike = function(obj) {
+			if(obj instanceof Function && obj.data) {
+				return isObserveLike(obj.data);
+			}
+
 			return obj instanceof can.Map;
 		},
 		
@@ -1380,7 +1385,7 @@ function( can ){
 		if (mode) {
 			for (i = 0; i < validArgs.length; i++) {
 				arg          = validArgs[i];
-				argIsObserve = typeof arg !== 'undefined' && isObserve(arg);
+				argIsObserve = typeof arg !== 'undefined' && isObserveLike(arg);
 				// Array-like objects are falsey if their length = 0.
 				if (isArrayLike(arg)) {
 					// Use .attr to trigger binding on empty lists returned from function
@@ -1406,7 +1411,7 @@ function( can ){
 				case '#':
 					// Iterate over arrays
 					if (isArrayLike(name)) {
-						var isObserveList = isObserve(name);
+						var isObserveList = isObserveLike(name);
 						
 						// Add the reference to the list in the contexts.
 						for (i = 0; i < name.length; i++) {
@@ -1506,16 +1511,16 @@ function( can ){
 						return data.value.apply(data.parent, arguments); 
 					};
 				}
-			}  else if( isObserve(data.parent) ) {
+			}  else if( isObserveLike(data.parent) ) {
 				return data.parent.compute(data.name);
 			} 
 		}
 		// Invoke the length to ensure that Observe.List events fire.
-		if (data.value && isObserve(data.value) && isArrayLike(data.value) && data.value.attr('length')){
+		if (data.value && isObserveLike(data.value) && isArrayLike(data.value) && data.value.attr('length')){
 			return data.value;
 		}
 		// If it's a function on an observe's prototype
-		else if( can.isFunction(data.value) && isObserve(data.parent) && data.parent.constructor.prototype[data.name] === data.value  ){
+		else if( can.isFunction(data.value) && isObserveLike(data.parent) && data.parent.constructor.prototype[data.name] === data.value  ){
 			// make sure the value is a function that calls the value
 			var val = can.proxy(data.value, data.parent);
 			// mark val as method
@@ -1523,7 +1528,7 @@ function( can ){
 			return val;
 		}
 		// Add support for observes
-		else if ( data.parent && isObserve(data.parent)) {
+		else if ( data.parent && isObserveLike(data.parent)) {
 			return data.parent.compute(data.name);
 		} else if( can.isFunction(data.value) ){
 			return data.value.call(data.parent)
@@ -1565,11 +1570,11 @@ function( can ){
 			return lastValue[name]();
 		} 
 		// Invoke the length to ensure that Observe.List events fire.
-		else if (isObserve(value) && isArrayLike(value) && value.attr('length')){
+		else if (isObserveLike(value) && isArrayLike(value) && value.attr('length')){
 			return value;
 		}
 		// Add support for observes
-		else if (lastValue && isObserve(lastValue)) {
+		else if (lastValue && isObserveLike(lastValue)) {
 			return lastValue.compute(name);
 		} 
 		else if (can.isFunction(value)) {
@@ -1846,7 +1851,7 @@ function( can ){
 		'each': function(expr, options) {
       		expr = Mustache.resolve(expr);
 			if (!!expr && isArrayLike(expr)) {
-				if (isObserve(expr) && typeof expr.attr('length') !== 'undefined') {
+				if (isObserveLike(expr) && typeof expr.attr('length') !== 'undefined') {
 					return can.view.lists && can.view.lists(expr, function(item) {
 						return options.fn(item);
 					});

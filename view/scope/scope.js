@@ -1,6 +1,10 @@
 steal('can/util','can/construct','can/map','can/list','can/view','can/compute',function(can){
 	
-	var isObserve = function(obj) {
+	var isObserveLike = function(obj) {
+		if(obj instanceof Function && obj.data) {
+			return isObserveLike(obj.data);
+		}
+
 		return obj instanceof can.Map;
 	}
 	
@@ -70,7 +74,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 							value = value[name = names[j]];
 						}
 						// If it's undefined, still match if the parent is an Observe.
-						else if ( isObserve(value) ) {
+						else if ( isObserveLike(value) ) {
 							defaultObserve = value;
 							defaultObserveName = names[j];
 							lastValue = value = undefined;
@@ -141,7 +145,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 		compute: function(attr){
 			var data = this.get(attr);
 			
-			if( isObserve(data.parent) ) {
+			if( isObserveLike(data.parent) ) {
 				return data.parent.compute(data.name);
 			} else {
 				can.compute(function(newValue){
