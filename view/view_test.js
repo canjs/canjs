@@ -683,6 +683,33 @@
 			}
 		});
 		
+	});
+	
+	/*
+	You can't use self closing tags with -
+	test("two self closed tags within a parent", function(){
 		
-	})
+		can.view.Scanner.tag("todos-app", function(el, hookupOptions){
+			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, hookupOptions.options) );
+			el.appendChild(frag)
+		})
+		
+		can.view.Scanner.tag("todos-list",function(el, options){
+			
+		});
+		can.view.Scanner.tag("todos-editor", function(el, options){
+			
+		})
+		
+		var template = can.view.mustache("\n<todos-app>\n	<todos-list/>\n	<todos-editor/>\n</todos-app>")
+		
+		var frag = template()
+		
+		var div = document.createElement('div');
+		div.appendChild(frag);
+		console.log(div.innerHTML)
+	})*/
+	
+	
+	
 })();

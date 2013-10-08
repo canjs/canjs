@@ -30,7 +30,20 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 		}
 		
 		new Value(el,{value: value})
-	})
+	});
+	
+	var special = {
+		enter: function(data, el, original){
+			return {
+				event: "keyup",
+				handler: function(ev){
+					if(ev.keyCode == 13) {
+						return original(ev)
+					}
+				}
+			}
+		}
+	}
 	
 	can.view.Scanner.attribute(/can-[\w\.]+/,function(data, el){
 		
@@ -41,6 +54,12 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 				
 				return scopeData.value.call(scopeData.parent,data.scope.attr("."), can.$(this), ev )
 			};
+		
+		if(special[event]){
+			var specialData = special[event](data, el, handler);
+			handler = specialData.handler;
+			event = specialData.event;
+		}
 		
 		can.bind.call( el, event, handler);
 		// not all libraries automatically remove bindings

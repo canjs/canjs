@@ -109,6 +109,25 @@
 		
 	})
 	
+	test("can-enter", function(){
+		var template = can.view.mustache("<input can-enter='update'/>");
+		
+		var called = 0;
+		
+		var frag = template({
+			update: function(){
+				called++;
+				ok( called, 1, "update called once" );
+			}
+		})
+		
+		var input = frag.childNodes[0];
+		
+		can.trigger( input, {type: "keyup", keyCode: 38})
+		
+		can.trigger( input, {type: "keyup", keyCode: 13})
+		
+	})
 	
 	
 })()

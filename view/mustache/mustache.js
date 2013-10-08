@@ -34,8 +34,8 @@ function( can ){
 		// matches arguments inside a {{ }}
 		argumentsRegExp = /((([^\s]+?=)?('.*?'|".*?"))|.*?)\s/g,
 		
-		// matches a literal number, string or regexp 
-		literalNumberStringBooleanRegExp = /^(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|((.+?)=(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|(.+))))$/,
+		// matches a literal number, string, null or regexp
+		literalNumberStringBooleanRegExp = /^(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false|null|undefined)|((.+?)=(('.*?'|".*?"|[0-9]+\.?[0-9]*|true|false)|(.+))))$/,
 		
 		// returns an object literal that we can use to look up a value in the current scope
 		makeLookupLiteral = function(type){
@@ -1322,7 +1322,7 @@ function( can ){
 			if(mode && can.isArray( arg )){
 				// merge into options
 				helperOptions = can.extend.apply(can, [helperOptions].concat(arg))
-			} else if(arg[HASH]){
+			} else if(arg && arg[HASH]){
 				hash = arg[HASH];
 				// get values on hash
 				for(var prop in hash){
@@ -1330,7 +1330,7 @@ function( can ){
 						hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions)
 					}
 				}
-			} else if(isLookup(arg)){
+			} else if(arg && isLookup(arg)){
 				args.push( Mustache.get(arg.get, scopeAndOptions, false, true) );
 			} else {
 				args.push(arg)

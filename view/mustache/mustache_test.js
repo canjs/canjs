@@ -2080,10 +2080,20 @@ test("backtracks in mustache (#163)", function(){
 	
 	deepEqual(vals,["Justin","Meyer","Brian","Moschel"],"div values are the same");
 	
+})
+
+test("support null and undefined as an argument", function(){
 	
+	var template = can.view.mustache("{{aHelper null undefined}}")
+	
+	template({},{
+		aHelper: function(arg1, arg2){
+			ok(arg1 === null);
+			ok(arg2 === undefined)
+		}
+	})
 	
 	
 })
-
 
 })();
