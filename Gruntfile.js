@@ -1,6 +1,6 @@
 var path = require('path');
 // Returns mappings for AMDify
-var getAmdifyMap = function(baseName) {
+var getAmdifyMap = function (baseName) {
 	var amdifyMap = {};
 
 	amdifyMap[baseName + 'util'] = 'can/util/library';
@@ -114,12 +114,36 @@ module.exports = function (grunt) {
 			all: {
 				options: {
 					ids: ['can'].concat(_.map(
-						_.keys(builderJSON.configurations), function(name) {
+						_.keys(builderJSON.configurations), function (name) {
 							return 'can/util/' + name;
 						}), _.keys(builderJSON.modules))
 				},
 				files: {
 					'dist/amd/': '.'
+				}
+			}
+		},
+		stealify: {
+			options: {
+				steal: {
+					root: '../',
+					map: {
+						'*': {
+							'can/': baseName
+						}
+					}
+				},
+				banner: banner
+			},
+			all: {
+				options: {
+					ids: ['can'].concat(_.map(
+						_.keys(builderJSON.configurations), function (name) {
+							return 'can/util/' + name;
+						}), _.keys(builderJSON.modules))
+				},
+				files: {
+					'dist/steal/': '.'
 				}
 			}
 		},
@@ -188,6 +212,9 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+		clean: {
+			build: ['dist/']
+		},
 		'string-replace': {
 			version: {
 				options: {
@@ -213,10 +240,11 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('bitovi-tools');
 
-	grunt.registerTask('build', ['builder', 'amdify', 'uglify']);
-	grunt.registerTask('test', ['connect', 'builder', 'amdify', 'testify', 'qunit']);
+	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify']);
+	grunt.registerTask('test', ['connect', 'build', 'testify', 'qunit']);
 	grunt.registerTask('default', ['build']);
 
 	// TODO possibly use grunt-release
