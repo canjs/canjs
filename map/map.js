@@ -80,7 +80,9 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		},
 		// keep so it can be overwritten
 		bind : can.bindAndSetup,
+		on : can.bindAndSetup,
 		unbind: can.unbindAndTeardown,
+		off: can.unbindAndTeardown,
 		id: "id",
 		helpers: {
 			canMakeObserve : function( obj ) {
@@ -681,6 +683,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		 * For a more specific way to changes on Observes, see the [can.Map.delegate] plugin.
 		 */
 		bind: can.bindAndSetup,
+		on: can.bindAndSetup,
 		/**
 		 * @function can.Map.prototype.unbind unbind
 		 * @description Unbind event handlers from an Map.
@@ -713,6 +716,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		 * @codeend
 		 */
 		unbind: can.unbindAndTeardown,
+		off: can.unbindAndTeardown,
 		/**
 		 * @function can.Map.prototype.serialize serialize
 		 * @description Serialize this object to something that

@@ -481,4 +481,17 @@ test("escaping periods", function(){
 	
 })
 
+test("on/off binding", function() {
+	expect(1)
+	can.route.on('foo', function() {
+		ok(true, "foo called");
+
+		can.route.off('foo');
+
+		can.route.attr('foo', 'baz');
+	});
+
+	can.route.attr('foo', 'bar');
+})
+
 })();
