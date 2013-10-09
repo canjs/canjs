@@ -62,6 +62,11 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 			};
 
 		d._trigger = function( node, event, extraArgs ) {
+			if(typeof event !== "string"){
+				extraArgs = event;
+				event=extraArgs.type;
+				delete extraArgs.type;
+			}
 			// summary:
 			//		Helper for `dojo.trigger`, which handles the DOM cases. We should never
 			//		be here without a domNode reference and a string eventname.

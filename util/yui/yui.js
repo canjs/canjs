@@ -347,7 +347,14 @@ steal('can/util/can.js', 'yui', 'can/util/event.js',
 					ev._stopper && ev._stopper();
 				})
 			}
-			realTrigger(item.getDOMNode(), event, {})
+			
+			if(typeof event !== "string"){
+				args = event;
+				event = args.type;
+				delete args.type;
+			}
+			
+			realTrigger(item.getDOMNode(), event, args || {})
 		} else {
 			if (typeof event === 'string') {
 				event = {
