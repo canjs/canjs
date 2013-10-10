@@ -53,7 +53,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 	 * @add can.Map
 	 */
 	//
-	var Map = can.Map = can.Map = can.Construct.extend( {
+	var Map = can.Map = can.Construct.extend( {
 	/**
 	 * @static
 	 */
