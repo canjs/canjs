@@ -2036,13 +2036,14 @@ test("hiding image srcs (#157)", function(){
 		}),
 		url = "http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png";
 	
+	debugger;
 	var frag = template(data),
 		img = frag.childNodes[0];
 	
-	equal( img.hasAttribute('src'), false, "there is no src");
+	equal( img.src, "", "there is no src");
 	
 	data.attr("image",url)
-	equal(img.hasAttribute('src'), true, 'Image should have src')
+	notEqual(img.src, "", 'Image should have src')
 	equal( img.src, url, "images src is correct" );
 	
 	var renderer = can.view.mustache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />{{image}}'),
@@ -2056,11 +2057,11 @@ test("hiding image srcs (#157)", function(){
 	div.appendChild(renderer(data));
 
 	var img = div.getElementsByTagName('img')[0];
-	equal(img.hasAttribute('src'), false, 'Image should not have src');
+	equal(img.src, "", 'Image should not have src');
 
 	data.attr('messages', 5);
 	data.attr('image', url);
-	equal(img.hasAttribute('src'), true, 'Image should have src');
+	notEqual(img.src, "", 'Image should have src');
 	equal(img.src, url, 'Image should have src URL');
 });
 
