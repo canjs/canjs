@@ -1,8 +1,8 @@
 steal('can/util','can/construct','can/map','can/list','can/view','can/compute',function(can){
 	
-	var isObserveLike = function(obj) {
+	var isObserve = function(obj) {
 		if(obj instanceof Function && obj.data) {
-			return isObserveLike(obj.data);
+			return isObserve(obj.data);
 		}
 
 		return obj instanceof can.Map;
@@ -147,7 +147,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 		compute: function(attr){
 			var data = this.get(attr);
 			
-			if( isObserveLike(data.parent) ) {
+			if( isObserve(data.parent) ) {
 				return data.parent.compute(data.name);
 			} else {
 				can.compute(function(newValue){

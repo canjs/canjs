@@ -36,8 +36,8 @@ var override = {
 	},
 	partials: {
 		'Standalone Line Endings': '|\n>\n|',
-		'Standalone Without Previous Line': '  >\n>\n>',
 		'Standalone Without Newline': '>\n  >\n>',
+		'Standalone Without Previous Line': '  >\n>\n>',
 		'Standalone Indentation': '\\\n |\n<\n->\n|\n\n/\n'
 	},
 	sections: {
@@ -2036,7 +2036,6 @@ test("hiding image srcs (#157)", function(){
 		}),
 		url = "http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png";
 	
-	debugger;
 	var frag = template(data),
 		img = frag.childNodes[0];
 	
