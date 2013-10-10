@@ -50,7 +50,7 @@
 		equal( cur.attr("this"), "foo", "this returns value");
 	})
 	
-	test("highest scope observe is parent observe",function(){
+	/*test("highest scope observe is parent observe",function(){
 		var parent = new can.Map({name: "Justin"})
 		var child = new can.Map({vals: "something"})
 		
@@ -61,7 +61,7 @@
 		
 		equal(data.parent, parent, "gives highest parent observe")
 		equal(data.value, undefined, "no value")
-	})
+	})*/
 	
 	test("computes on scope",function(){
 		var base = new can.view.Scope({}),
@@ -124,6 +124,41 @@
 		
 		equal(cur.attr("../first"), "Justin", "got row");
 		
+	});
+	
+	test("use highest default observe in stack", function(){
+		var bottom = new can.Map({
+			name: "bottom"
+		});
+		var top = new can.Map({
+			name: "top"
+		});
+		
+		var base = new can.view.Scope( bottom ),
+			cur = base.add(top);
+			
+		var fooInfo = cur.get("foo");
+		ok(fooInfo.parent ===  top, "we pick the current if we have no leads");
+		
+	})
+	
+	test("use highest default observe in stack unless you've found your way in something that does exist", function(){
+		var bottom = new can.Map({
+			name: {first: "Justin"}
+		});
+		var middle = new can.Map({
+			name: {first: "Brian"}
+		});
+		var top = new can.Map({
+			title: "top"
+		});
+		
+		var cur = new can.view.Scope( bottom ).add(middle).add(top);
+			
+		var lastNameInfo = cur.get("name.last");
+		
+		
+		ok(lastNameInfo.parent ===  middle.attr('name'), "pick the default observe with the highest depth");
 	})
 	
 	

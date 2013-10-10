@@ -861,7 +861,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 			if(!can.Model){
 				return;
 			}
-			this.List = ML({Observe: this},{});
+			this.List = ML({Map: this},{});
 			var self = this,
 				clean = can.proxy(this._clean, self);
 			
@@ -1540,7 +1540,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		};
 	});
   
-  // Model lists are just like `Observe.List` except that when their items are 
+  // Model lists are just like `Map.List` except that when their items are 
   // destroyed, it automatically gets removed from the list.
   /**
    * @constructor can.Model.List
@@ -1623,7 +1623,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		setup: function(params){
 			if( can.isPlainObject(params) && ! can.isArray(params) ){
 				can.List.prototype.setup.apply(this);
-				this.replace(this.constructor.Observe.findAll(params))
+				this.replace(this.constructor.Map.findAll(params))
 			} else {
 				can.List.prototype.setup.apply(this,arguments);
 			}

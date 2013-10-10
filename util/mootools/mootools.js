@@ -193,7 +193,7 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 					}, this);
 				}
 				// If we are bubbling, get parent node.
-				if(bubble && item.parentNode){
+				if(bubble && item.parentNode && item.parentNode.nodeType != 11){
 					item = item.parentNode
 				} else {
 					item = null;

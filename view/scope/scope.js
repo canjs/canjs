@@ -41,6 +41,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 						return names;
 					})(),
 				namesLength = names.length,
+				defaultPropertyDepth = -1,
 				defaultObserve,
 				defaultObserveName,
 				j,
@@ -74,9 +75,10 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 							value = value[name = names[j]];
 						}
 						// If it's undefined, still match if the parent is an Observe.
-						else if ( isObserveLike(value) ) {
+						else if ( isObserve(value) && j > defaultPropertyDepth) {
 							defaultObserve = value;
 							defaultObserveName = names[j];
+							defaultPropertyDepth = j;
 							lastValue = value = undefined;
 							break;
 						}

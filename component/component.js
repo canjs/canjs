@@ -177,7 +177,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				var frag = this.constructor.renderer( renderedScope, helpers);
 			} else {
 				// otherwise render the contents between the 
-				var frag = can.view.frag( hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(helpers)) );
+				var frag = can.view.frag( hookupOptions.subtemplate ? hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(helpers)) : "");
 			}
 			can.appendChild(el, frag);
 		}
