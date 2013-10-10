@@ -91,10 +91,6 @@ steal('can/util','can/observe', function( can ) {
 				model = self.constructor,
 				jqXHR;
 
-			// `destroy` does not need data.
-			if ( type == 'destroy' ) {
-				args.shift();
-			}
 			// `update` and `destroy` need the `id`.
 			if ( type !== 'create' ) {
 				args.unshift(getId(self));
@@ -460,10 +456,10 @@ steal('can/util','can/observe', function( can ) {
 		 */
 		destroy : {
 			type : "delete",
-			data : function(id){
-				var args = {};
-				args.id = args[this.id] = id;
-				return args;
+			data : function(id, attrs){
+				attrs = attrs || {};
+				attrs.id = attrs[this.id] = id;
+				return attrs;
 			}
 		},
 		/**
