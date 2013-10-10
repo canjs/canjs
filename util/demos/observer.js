@@ -1,4 +1,4 @@
-steal('can/observe', 
+steal('can/map', 
 	'can/util/json.js',
 	'can/control',
 function(){
@@ -15,7 +15,7 @@ function(){
 			init : function(){
 				// draw
 				var data = this.options.observe.attr()
-				this.options.obs = new can.Observe(data);
+				this.options.obs = new can.Map(data);
 				this.on();
 				this.render();
 			},
@@ -60,8 +60,8 @@ function(){
 				
 				frag.appendChild( propName[0] )
 				
-				if(value instanceof can.Observe) {
-					var isList = value instanceof can.Observe.List,
+				if(value instanceof can.Map) {
+					var isList = value instanceof can.List,
 						obs = $("<span><span class='start'>"+
 							(isList ? "[" : "{") 
 						+"</span></span>")
@@ -281,7 +281,7 @@ function(){
 					indent = obsEl.data("indent") || 0,
 					space = new Array(indent*4).join(" "),
 					observe = observe = obsEl.data("observe") || this.options.obs,
-					isList = observe instanceof can.Observe.List;
+					isList = observe instanceof can.List;
 				// get the element before end ... ad an input
 				el.prev().after("<span class='temp'>\n"+space+"<span class='insert'> </span>"
 					+(isList ? "" : " : ")+"</span>");

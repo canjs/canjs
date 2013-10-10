@@ -1,7 +1,7 @@
 {
 	"name": "CanJS",
 	"description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-	"version": "1.1.8",
+	"version": "2.0.0-pre",
 	"author": {
 		"name": "Bitovi",
 		"email": "contact@bitovi.com",
@@ -21,7 +21,8 @@
 		"grunt-docco": "0.2.0",
 		"bitovi-tools": "https://github.com/bitovi/bitovi-tools/tarball/master",
 		"steal": "https://github.com/bitovi/steal-build/tarball/master",
-		"grunt-contrib-uglify": "~0.2.1"
+		"grunt-contrib-uglify": "~0.2.1",
+		"grunt-contrib-clean": "~0.5.0"
 	},
 	"scripts": {
 		"test": "grunt test"

@@ -3,19 +3,24 @@
 module("can/control/route",{
 	setup : function(){
 		stop();
+		can.route.routes = {};
+		can.route._teardown();
+		can.route.defaultBinding = "hashchange";
+		can.route.ready();
 		window.location.hash = "";
 		setTimeout(function(){
+			
 			start();
-		},13)
+		},13);
+		
 	}
 });
 
 test("routes changed", function () {
-	can.route.ready();
 	expect(3);
 
 	//setup controller
-	can.Control("Router", {
+	can.Control.extend("Router", {
 		"foo/:bar route" : function () {
 			ok(true, 'route updated to foo/:bar')
 		},
@@ -44,9 +49,8 @@ test("routes changed", function () {
 });
 
 test("route pointers", function(){
-	can.route.ready();
 	expect(1);
-	var Tester = can.Control({
+	var Tester = can.Control.extend({
 		"lol/:wat route" : "meth",
 		meth : function(){
 			ok(true, "method pointer called")
@@ -56,6 +60,25 @@ test("route pointers", function(){
 	window.location.hash = '!lol/wat';
 	can.trigger(window, 'hashchange');
 	tester.destroy();
+})
+
+test("dont overwrite defaults (#474)", function(){
+	
+	expect(1);
+	
+	can.route("content/:type",{type: "videos" });
+	
+	var Tester = can.Control.extend({
+		"content/:type route" : function(params){
+			equal(params.type, "videos")
+		} 
+	});
+	var tester = new Tester(document.body);
+	window.location.hash = "#!content/";
+	can.trigger(window, 'hashchange');
+	tester.destroy();
+	
+	
 })
 
 

@@ -1,4 +1,4 @@
-steal('can/util', 'can/model', 'can/observe/elements', function(can) {
+steal('can/util', 'can/model', 'can/map/elements', function(can) {
 
 	var getArgs = function( args ) {
 		if ( args[0] && (can.isArray(args[0])) ) {
@@ -531,7 +531,7 @@ steal('can/util', 'can/model', 'can/observe/elements', function(can) {
         newVal = items[i];
         curVal = null;
 
-        if ( can.Observe.canMakeObserve(newVal) && getId(newVal)) {
+        if ( can.Map.helpers.canMakeObserve(newVal) && getId(newVal)) {
           curVal = this.get(getId(newVal))[0];
           if (curVal){
             curVal.attr(newVal, remove)

@@ -9,11 +9,7 @@
 		<script type='text/javascript'  src='../../lib/steal/steal.js'>
         </script>
 		<script type='text/javascript'>
-			steal(function() {
-				steal.config({
-					root: '../../'
-				});
-			}).then('can/construct/proxy', function(can) {
+			steal('can/construct/proxy', function(can) {
 				var Person = can.Construct({
 					defaultName : 'John',
 					getPerson : function() {

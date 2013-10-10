@@ -12,7 +12,32 @@
 //
 //	var url = "http://yui.yahooapis.com/combo?3.7.3/build/" + yuilibs.join("&3.7.3/build/")
 
-steal('can/util/can.js', 'yui', 'can/util/event.js', "can/util/fragment.js", 'can/util/array/each.js', 'can/util/object/isplain', 'can/util/deferred.js', '../hashchange.js', function (can) {
+steal('can/util/can.js', 'yui', 'can/util/event.js', 
+	"can/util/fragment.js", 'can/util/array/each.js', 
+	'can/util/object/isplain', 'can/util/deferred.js', 
+	'../hashchange.js', "can/util/inserted",function (can) {
+
+	// lets overwrite 
+	YUI.add('can-modifications', function (Y, NAME) {
+		var addHTML = Y.DOM.addHTML;
+	
+		Y.DOM.addHTML = function(node, content, where){
+			if(typeof content === "string" || typeof content == "number"){
+				content = can.buildFragment(content);
+			}
+			var elems;
+			if( content.nodeType === 11 ) {
+				elems = can.makeArray(content.childNodes);
+			} else {
+				elems = [content]
+			}
+			var ret = addHTML.call(this, node, content, where);
+			
+			can.inserted( elems );
+			
+			return ret;
+		}
+	},'3.7.3', {"requires": ["node-base"]})
 
 	// ---------
 	// _YUI node list._
@@ -114,14 +139,37 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', "can/util/fragment.js", 'ca
 	can.remove = function (wrapped) {
 		return wrapped.remove() && wrapped.destroy();
 	}
+	can.has = function(wrapped, node){
+		if( Y.DOM.contains(wrapped[0], node) ){
+			return wrapped;
+		} else {
+			return [];
+		}
+	}
 	// Destroyed method.
-	can._yNodeDestroy = can._yNodeDestroy || Y.Node.prototype.destroy;
-	Y.Node.prototype.destroy = function () {
-		can.trigger(this, "destroyed", [], false)
-		can._yNodeDestroy.apply(this, arguments)
+	can._yNodeRemove = can._yNodeRemove || Y.Node.prototype.remove;
+	Y.Node.prototype.remove = function () {
+		// make sure this is only fired on normal nodes, if it
+		// is fired on a text node, it will bubble because
+		// the method used to stop bubbling (listening to an event)
+		// does not work on text nodes
+		var node = this.getDOMNode();
+		if( node.nodeType === 1 ){
+			can.trigger(this, "removed", [], false);
+			
+			var elems = node.getElementsByTagName('*');
+			
+			for ( var i = 0, elem;  (elem = elems[i]) !== undefined; i++ ) {
+				can.trigger(elem, "removed", [], false);
+			}
+		}
+		can._yNodeRemove.apply(this, arguments)
 	}
 	// Let `nodelist` know about the new destroy...
-	Y.NodeList.addMethod("destroy", Y.Node.prototype.destroy);
+	Y.NodeList.addMethod("remove", Y.Node.prototype.remove);
+
+
+	
 
 	// Ajax
 	var optionsMap = {
@@ -304,7 +352,14 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', "can/util/fragment.js", 'ca
 					ev._stopper && ev._stopper();
 				})
 			}
-			realTrigger(item.getDOMNode(), event, {})
+			
+			if(typeof event !== "string"){
+				args = event;
+				event = args.type;
+				delete args.type;
+			}
+			
+			realTrigger(item.getDOMNode(), event, args || {})
 		} else {
 			if (typeof event === 'string') {
 				event = {
@@ -318,7 +373,8 @@ steal('can/util/can.js', 'yui', 'can/util/event.js', "can/util/fragment.js", 'ca
 	};
 	// Allow `dom` `destroyed` events.
 	Y.mix(Y.Node.DOM_EVENTS, {
-		destroyed: true,
+		removed: true,
+		inserted: true,
 		foo: true
 	});
 

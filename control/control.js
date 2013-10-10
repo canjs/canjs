@@ -138,7 +138,7 @@ steal('can/util','can/construct', function( can ) {
 			if ( options || ! paramReplacer.test( methodName )) {
 				// If we have options, run sub to replace templates `{}` with a
 				// value from the options or the window
-				var convertedName = options ? can.sub(methodName, [options, window]) : methodName;
+				var convertedName = options ? can.sub(methodName, this._lookup(options)) : methodName;
 				if(!convertedName) {
 					return null;
 				}
@@ -159,6 +159,9 @@ steal('can/util','can/construct', function( can ) {
 					delegate : arr ? convertedName[0] : undefined
 				};
 			}
+		},
+		_lookup: function(options){
+			return [options, window]
 		},
 		// An object of `{eventName : function}` pairs that Control uses to 
 		// hook up events auto-magically.
@@ -655,9 +658,9 @@ steal('can/util','can/construct', function( can ) {
 	
 				// Setup to be destroyed...  
 				// don't bind because we don't want to remove it.
-				can.bind.call(element,"destroyed", destroyCB);
+				can.bind.call(element,"removed", destroyCB);
 				bindings.push(function( el ) {
-					can.unbind.call(el,"destroyed", destroyCB);
+					can.unbind.call(el,"removed", destroyCB);
 				});
 				return bindings.length;
 			}
@@ -690,7 +693,7 @@ steal('can/util','can/construct', function( can ) {
 		 * be calling this unless in use with [can.Control::on].
 		 */
 		off : function(){
-			var el = this.element[0]
+			var el = this.element[0];
 			each(this._bindings || [], function( value ) {
 				value(el);
 			});

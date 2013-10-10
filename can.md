@@ -15,7 +15,7 @@ framework:
 
  - [can.Construct] - inheritable constructor functions
  - [can.Control] - declarative event bindings
- - [can.Observe], [can.Observe.List], [can.compute] - observable objects, list, and values.
+ - [can.Map], [can.List], [can.compute] - observable objects, list, and values.
  - [can.Model] -  observes connected to a RESTful JSON interface
  - [can.view] - template loading, caching, rendering
  - [can.EJS] - live binding templates
@@ -26,11 +26,11 @@ The following modules are typically distributed as plugins:
  - [can.Mustache] - Live binding Handlebars and Mustache templates
  - [can.Construct.proxy] - Proxy construct methods
  - [can.Construct.super] - Call super methods
- - [can.Observe.delegate] - Listen to Observe attributes
- - [can.Observe.setter] - Use setter methods on Observes
- - [can.Observe.attributes] - Define Observe attributes
- - [can.Observe.validations] - Validate attributes
- - [can.Observe.backup] - Backup and restore an Observe's state
+ - [can.Map.delegate] - Listen to Observe attributes
+ - [can.Map.setter] - Use setter methods on Observes
+ - [can.Map.attributes] - Define Observe attributes
+ - [can.Map.validations] - Validate attributes
+ - [can.Map.backup] - Backup and restore an Observe's state
  - [can.Control.plugin] - Registers a jQuery plugin function for Controls[1]
  - [can.view.modifiers View modifiers] - Use jQuery modifiers to render views[1]
 

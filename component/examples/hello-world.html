@@ -1,0 +1,27 @@
+<div id='out'></div>
+<script id="app" type="text/mustache">
+	<hello-world></hello-world>
+</script>
+<script src="../../lib/steal/steal.js"></script>
+<script>
+steal("can/component",function(){
+	
+can.Component.extend({
+  tag: "hello-world",
+  template: "{{#if visible}}<b>{{message}}</b>{{else}}<i>Click me</i>{{/if}}",
+  scope: {
+    visible: false,
+    message: "Hello There!"
+  },
+  events: {
+    click: function(){
+    	this.scope.attr("visible", true)
+    }
+  }
+});
+
+$("#out").html( can.view("app",{}) )
+
+})
+</script>
+

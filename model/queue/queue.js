@@ -1,4 +1,4 @@
-steal('can/util', 'can/model', 'can/observe/backup', function(can){
+steal('can/util', 'can/model', 'can/map/backup', function(can){
 
 	var cleanAttrs = function(changedAttrs, attrs){
 			var newAttrs = can.extend(true, {}, attrs),
@@ -118,7 +118,7 @@ steal('can/util', 'can/model', 'can/observe/backup', function(can){
 	can.extend(can.Model.prototype, {
 		setup: function(){
 			setupFn.apply(this, arguments);
-			this._requestQueue = new can.Observe.List;
+			this._requestQueue = new can.List;
 		},
 		_changes: function(ev, attr, how,newVal, oldVal){
 			// record changes if there is a request running

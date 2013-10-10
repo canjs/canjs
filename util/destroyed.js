@@ -32,7 +32,7 @@ steal('jquery', 'can/util').then(function($, can) {
 
 	can.cleanData = function( elems ) {
 		can.each( elems, function( elem ) {
-			can.$(elem).triggerHandler("destroyed");
+			can.$(elem).triggerHandler("removed");
 		});
 		oldClean(elems);
 	};

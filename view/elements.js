@@ -87,9 +87,12 @@ steal(function(){
 		},
 		// removes the attribute
 		removeAttr: function(el, attrName){
-			if( elements.attrMap[attrName] === true ) {
+			var setter = elements.attrMap[attrName];
+			if( setter === true ) {
 				el[attrName] = false;
-			} else{
+			} else if(typeof setter === "string"){
+				el[setter] = "";
+			} else {
 				el.removeAttribute(attrName);
 			}
 		},

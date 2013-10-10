@@ -1,0 +1,30 @@
+<div id='out'></div>
+<script src="../../../../steal/steal.js"></script>
+<script>
+steal("can/view/bindings",function(){
+		
+var HyperLoop = can.Map.extend({
+  travelTime: function(){
+    return this.attr('dist') /
+			962 /* km/h */
+  }
+})
+
+loop = new HyperLoop({
+	dist: 3429.19 /* Chi to SF */
+})
+
+var template = can.view.mustache(
+  "<p>Distance:\
+      <input can-model='dist'/>\
+  </p>\
+  <p>Time:\
+     {{travelTime}} hrs\
+  </p>")
+	
+$("#out").html( template(loop) )
+
+
+})
+</script>
+

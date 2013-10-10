@@ -5,7 +5,9 @@ steal('can/util','can/route','can/control', function(can){
 	
 	can.Control.processors.route = function( el, event, selector, funcName, controller ) {
 		selector = selector || "";
-		can.route( selector );
+		if ( !can.route.routes[selector] ) {
+			can.route( selector );
+		}
 		var batchNum,
 			check = function( ev, attr, how ) {
 				if ( can.route.attr('route') === ( selector ) && 

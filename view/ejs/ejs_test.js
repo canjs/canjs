@@ -168,7 +168,7 @@ test("helpers", function() {
 test('list helper', function(){
 	
 	var text = "<% list(todos, function(todo){ %><div><%= todo.name %></div><% }) %>";
-	var	todos = new can.Observe.List([
+	var	todos = new can.List([
 			{id: 1, name: 'Dishes'}
 		]),
 		compiled = new can.EJS({text: text}).render({todos: todos}),
@@ -191,7 +191,7 @@ test('list helper', function(){
 test("attribute single unescaped, html single unescaped", function(){
 
 	var text = "<div id='me' class='<%== task.attr('completed') ? 'complete' : ''%>'><%== task.attr('name') %></div>";
-	var task = new can.Observe({
+	var task = new can.Map({
 		name : 'dishes'
 	})
 	var compiled = new can.EJS({text: text}).render({task:  task}) ;
@@ -237,7 +237,7 @@ test("event binding / triggering on things other than options", 1, function(){
 
 test("select live binding", function() {
 	var text = "<select><% todos.each(function(todo){ %><option><%= todo.name %></option><% }) %></select>";
-		Todos = new can.Observe.List([
+		Todos = new can.List([
 			{id: 1, name: 'Dishes'}
 		]),
 		compiled = new can.EJS({text: text}).render({todos: Todos}),
@@ -263,7 +263,7 @@ test("block live binding", function(){
 		"</div>"
 	
 	
-	var obs = new can.Observe({
+	var obs = new can.Map({
 		sex : 'male'
 	})
 	
@@ -293,7 +293,7 @@ test("hookups in tables", function(){
 		"<% } %>"+
 		"</tbody></table>"
 		
-	var obs = new can.Observe({
+	var obs = new can.Map({
 		sex : 'male'
 	})
 	
@@ -323,7 +323,7 @@ test("multiple tbodies in table hookup", function(){
 				"<tbody><tr><td><%= person.name %></td></tr></tbody>"+
 			"<% }) %>"+
 		"</table>",
-		people = new can.Observe.List([
+		people = new can.List([
 			{
 				name: "Steve"
 			},
@@ -342,7 +342,7 @@ test("multiple tbodies in table hookup", function(){
 test('multiple hookups in a single attribute', function() {
 	var text =	'<div class=\'<%= obs.attr("foo") %>a<%= obs.attr("bar") %>b<%= obs.attr("baz") %>\'></div>',
 
-	obs = new can.Observe({
+	obs = new can.Map({
 		foo: '1',
 		bar: '2',
 		baz: '3'
@@ -371,7 +371,7 @@ test('adding and removing multiple html content within a single element', functi
 	
 	var text =	'<div><%== obs.attr("a") %><%== obs.attr("b") %><%== obs.attr("c") %></div>',
 
-	obs = new can.Observe({
+	obs = new can.Map({
 		a: 'a',
 		b: 'b',
 		c: 'c'
@@ -403,7 +403,7 @@ test('live binding and removeAttr', function(){
 			'<p <%== obs.attr("attributes") %> class="<%= obs.attr("className")%>"><span><%= obs.attr("message") %></span></p>' + 
 		'<% } %>',
 
-		obs = new can.Observe({
+		obs = new can.Map({
 			show: true,
 			className: 'myMessage',
 			attributes: 'some=\"myText\"',
@@ -467,7 +467,7 @@ test('hookup within a tag', function () {
 	var text =	'<div <%== obs.attr("foo") %> '
 		+ '<%== obs.attr("baz") %>>lorem ipsum</div>',
 
-	obs = new can.Observe({
+	obs = new can.Map({
 		foo: 'class="a"',
 		baz: 'some=\'property\''
 	}),
@@ -498,7 +498,7 @@ test('hookup within a tag', function () {
 test('single escaped tag, removeAttr', function () {
 	var text =	'<div <%= obs.attr("foo") %>>lorem ipsum</div>',
 
-	obs = new can.Observe({
+	obs = new can.Map({
 		foo: 'data-bar="john doe\'s bar"'
 	}),
 
@@ -521,7 +521,7 @@ test('single escaped tag, removeAttr', function () {
 
 test('html comments', function(){
 	var text =	'<!-- bind to changes in the todo list --> <div><%= obs.attr("foo") %></div>',
-		obs = new can.Observe({
+		obs = new can.Map({
 			foo: 'foo'
 		});
 
@@ -537,7 +537,7 @@ test("hookup and live binding", function(){
 	var text = "<div class='<%= task.attr('completed') ? 'complete' : '' %>' <%= (el)-> can.data(can.$(el),'task',task) %>>" +
 		"<%== task.attr('name') %>" +
 		"</div>",
-		task = new can.Observe({
+		task = new can.Map({
 			completed: false,
 			className: 'someTask',
 			name: 'My Name'
@@ -570,7 +570,7 @@ test('multiple curly braces in a block', function() {
 						'<li><%= item.attr("name") %></li>' +
 				'<% }) }%>',
 
-	obs = new can.Observe({
+	obs = new can.Map({
 		items: []
 	}),
 
@@ -587,7 +587,7 @@ test('multiple curly braces in a block', function() {
 */
 
 test("unescape bindings change", function(){
-	var l = new can.Observe.List([
+	var l = new can.List([
 		{complete: true},
 		{complete: false},
 		{complete: true}
@@ -613,7 +613,7 @@ test("unescape bindings change", function(){
 	
 	var child = div.getElementsByTagName('div')[0];
 	equal(child.innerHTML, "2", "at first there are 2 true bindings");
-	var item = new can.Observe({complete: true, id: "THIS ONE"})
+	var item = new can.Map({complete: true, id: "THIS ONE"})
 	l.push(item);
 	
 	equal(child.innerHTML, "3", "now there are 3 complete");
@@ -631,7 +631,7 @@ test("unescape bindings change", function(){
 
 
 test("escape bindings change", function(){
-	var l = new can.Observe.List([
+	var l = new can.List([
 		{complete: true},
 		{complete: false},
 		{complete: true}
@@ -657,7 +657,7 @@ test("escape bindings change", function(){
 	
 	var child = div.getElementsByTagName('div')[0];
 	equal(child.innerHTML, "2", "at first there are 2 true bindings");
-	var item = new can.Observe({complete: true})
+	var item = new can.Map({complete: true})
 	l.push(item);
 	
 	equal(child.innerHTML, "3", "now there are 3 complete");
@@ -669,7 +669,7 @@ test("escape bindings change", function(){
 
 
 test("tag bindings change", function(){
-	var l = new can.Observe.List([
+	var l = new can.List([
 		{complete: true},
 		{complete: false},
 		{complete: true}
@@ -695,7 +695,7 @@ test("tag bindings change", function(){
 	
 	var child = div.getElementsByTagName('div')[0];
 	equal(child.getAttribute("items"), "2", "at first there are 2 true bindings");
-	var item = new can.Observe({complete: true})
+	var item = new can.Map({complete: true})
 	l.push(item);
 	
 	equal(child.getAttribute("items"), "3", "now there are 3 complete");
@@ -706,7 +706,7 @@ test("tag bindings change", function(){
 })
 
 test("attribute value bindings change", function(){
-	var l = new can.Observe.List([
+	var l = new can.List([
 		{complete: true},
 		{complete: false},
 		{complete: true}
@@ -732,7 +732,7 @@ test("attribute value bindings change", function(){
 	
 	var child = div.getElementsByTagName('div')[0];
 	equal(child.getAttribute("items"), "2", "at first there are 2 true bindings");
-	var item = new can.Observe({complete: true})
+	var item = new can.Map({complete: true})
 	l.push(item);
 	
 	equal(child.getAttribute("items"), "3", "now there are 3 complete");
@@ -746,7 +746,7 @@ test("in tag toggling", function(){
 		var text = "<div <%== obs.attr('val') %>></div>"
 	
 	
-	var obs = new can.Observe({
+	var obs = new can.Map({
 		val : 'foo="bar"'
 	})
 	
@@ -770,7 +770,7 @@ test("parent is right with bock", function(){
 				'<% } else { %> <%== obs.attr("content") %>'+
 				'<% } %></ul>',
 
-	obs = new can.Observe({
+	obs = new can.Map({
 		content : "<li>Hello</li>",
 		items: [{name : "Justin"}]
 	}),
@@ -793,7 +793,7 @@ test("property name only attributes", function(){
 	var text = "<input type='checkbox' <%== obs.attr('val') ? 'checked' : '' %>/>"
 	
 	
-	var obs = new can.Observe({
+	var obs = new can.Map({
 		val : true
 	})
 	
@@ -821,7 +821,7 @@ test("nested properties", function(){
 	var text = "<div><%= obs.attr('name.first')%></div>"
 	
 	
-	var obs = new can.Observe({
+	var obs = new can.Map({
 		name : {first : "Justin"}
 	})
 	
@@ -844,7 +844,7 @@ test("nested properties", function(){
 test("tags without chidren or ending with /> do not change the state", function(){
 	
 	var text = "<table><tr><td/><%== obs.attr('content') %></tr></div>"
-	var obs = new can.Observe({
+	var obs = new can.Map({
 		content: "<td>Justin</td>"
 	})
 	var compiled = new can.EJS({text: text}).render({obs: obs});
@@ -862,7 +862,7 @@ test("tags without chidren or ending with /> do not change the state", function(
 test("nested live bindings", function() {
 	expect(0);
 
-	var items  = new can.Observe.List([
+	var items  = new can.List([
 		{title: 0, is_done: false, id: 0}
 	]);
 	
@@ -888,13 +888,13 @@ test("nested live bindings", function() {
 test("trailing text", function(){
 	can.view.ejs("count","There are <%= this.attr('length') %> todos")
 	var div = document.createElement('div');
-	div.appendChild( can.view("count", new can.Observe.List([{},{}])) );
+	div.appendChild( can.view("count", new can.List([{},{}])) );
 	ok(/There are 2 todos/.test(div.innerHTML), "got all text")
 })
 
 test("recursive views", function(){
 	
-	var data = new can.Observe.List([
+	var data = new can.List([
 			{label:'branch1', children:[{id:2, label:'branch2'}]}
 		])
 	
@@ -905,7 +905,7 @@ test("recursive views", function(){
 })
 
 test("indirectly recursive views", function() {
-	var unordered = new can.Observe.List([
+	var unordered = new can.List([
 		{ ol: [
 			{ ul: [
 				{ ol: [1, 2, 3] }
@@ -956,7 +956,7 @@ test("recursive views of previously stolen files shouldn't fail", function() {
 		"</ol>"
 	}));
 	
-	var unordered = new can.Observe.List([
+	var unordered = new can.Map.List([
 		{ ol: [
 			{ ul: [
 				{ ol: [1, 2, 3] }
@@ -981,7 +981,7 @@ test("live binding select", function(){
 	var text = "<select><% items.each(function(ob) { %>" +
 		"<option value='<%= ob.attr('id') %>'><%= ob.attr('title') %></option>" +
 		"<% }); %></select>",
-		items	 = new can.Observe.List([
+		items	 = new can.List([
 			{title: "Make bugs", is_done: true, id: 0},
 			{title: "Find bugs", is_done: false, id: 1},
 			{title: "Fix bugs", is_done: false, id: 2}
@@ -1006,7 +1006,7 @@ test("live binding select", function(){
 test("live binding textarea", function(){
 	can.view.ejs("textarea-test","<textarea>Before<%= obs.attr('middle') %>After</textarea>");
 	
-	var obs = new can.Observe({middle: "yes"}),
+	var obs = new can.Map({middle: "yes"}),
 		div = document.createElement('div');
 	
 	var node = can.view("textarea-test", {obs: obs});
@@ -1022,7 +1022,7 @@ test("live binding textarea", function(){
 
 test("reset on a live bound input", function(){
 	var text = "<input type='text' value='<%= person.attr('name') %>'><button type='reset'>Reset</button>",
-		person = new can.Observe({
+		person = new can.Map({
 			name: "Bob"
 		}),
 		compiled = new can.EJS({text: text}).render({person: person}),
@@ -1049,7 +1049,7 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 	var text = "<div><% items.each(function(ob) { %>" +
 			"<%== ob.attr('html') %>" +
 			"<% }); %></div>",
-		items	 = new can.Observe.List([
+		items	 = new can.List([
 			{html: "<label>Hello World</label>"}
 		]),
 		compiled = new can.EJS({text: text}).render({items: items}),
@@ -1082,7 +1082,7 @@ test("attribute unquoting", function() {
 	var text = '<input type="radio" ' +
 		'<%== facet.single ? \'name="facet-\' + facet.attr("id") + \'"\' : "" %> ' +
 		'value="<%= facet.single ? "facet-" + facet.attr("id") : "" %>" />',
-	facet = new can.Observe({
+	facet = new can.Map({
 		id: 1,
 		single: true
 	}),
@@ -1120,7 +1120,7 @@ test("live binding with parent dependent tags but without parent tag present in 
 				'<tr><td><%= person.last %></td></tr>',
 				'<% } %>',
 				'</tbody>'];
-	var person = new can.Observe({first: "Austin", last: "McDaniel"});
+	var person = new can.Map({first: "Austin", last: "McDaniel"});
 
 	var compiled = new can.EJS({text: text.join("\n")}).render({person: person});
 	var table = document.createElement('table');
@@ -1188,7 +1188,7 @@ test("live binding with computes", function() {
 })
 
 test("testing for clean tables", function() {
-	var games = new can.Observe.List();
+	var games = new can.List();
   games.push({name: 'The Legend of Zelda', rating: 10});  
   games.push({name: 'The Adventures of Link', rating: 9});  
   games.push({name: 'Dragon Warrior', rating: 9});
@@ -1215,7 +1215,7 @@ test("inserting live-binding partials assume the correct parent tag", function()
 		'</tr></tbody></table>');
 
 	var data = {
-		columns : new can.Observe.List([{
+		columns : new can.List([{
 			name : 'Test 1'
 		}, {
 			name : 'Test 2'
@@ -1238,7 +1238,7 @@ test("inserting live-binding partials assume the correct parent tag", function()
 test("Observe with array attributes", function() {
 	var renderer = can.view.ejs('observe-array', '<ul><% can.each(todos, function(todo, i) { %><li><%= todos.attr(""+i) %></li><% }) %></ul><div><%= this.attr("message") %></div>');
 	var div = document.createElement('div');
-	var data = new can.Observe({ 
+	var data = new can.Map({ 
 	    todos: [ 'Line #1', 'Line #2', 'Line #3' ],
 	    message: 'Hello',
 	    count: 2   
@@ -1272,7 +1272,7 @@ test("hookup this correctly", function(){
 test('live binding with html comment', function(){
 	var text = '<table><tr><th>Todo</th></tr><!-- do not bother with me -->' +
 			'<% todos.each(function(todo){ %><tr><td><%= todo.name %></td></tr><% }) %></table>',
-		Todos = new can.Observe.List([
+		Todos = new can.List([
 			{id: 1, name: 'Dishes'}
 		]),
 		compiled = new can.EJS({text: text}).render({todos: Todos}),
@@ -1298,7 +1298,7 @@ test("HTML comment with element callback", function(){
 				"</li>",
 				"<% }) %>",
 				"</ul>"],
-		Todos = new can.Observe.List([
+		Todos = new can.List([
 			{id: 1, name: "Dishes"}
 		]),
 		compiled = new can.EJS({text: text.join("\n")}).render({todos: Todos}),
@@ -1330,9 +1330,9 @@ test("HTML comment with element callback", function(){
 test("Interpolated values when iterating through an Observe.List should still render when not surrounded by a DOM node", function() {
 	var renderer = can.view.ejs('issue-153-no-dom', '<% can.each(todos, function(todo) { %><span><%= todo.attr("name") %></span><% }) %>'),
 		renderer2 = can.view.ejs('issue-153-dom', '<% can.each(todos, function(todo) { %><%= todo.attr("name") %><% }) %>'),
-		todos = [ new can.Observe({id: 1, name: 'Dishes'}), new can.Observe({id: 2, name: 'Forks'}) ],
+		todos = [ new can.Map({id: 1, name: 'Dishes'}), new can.Map({id: 2, name: 'Forks'}) ],
 		data = { 
-			todos: new can.Observe.List(todos)
+			todos: new can.List(todos)
 		},
 		arr = {
 			todos: todos
@@ -1352,7 +1352,7 @@ test("Interpolated values when iterating through an Observe.List should still re
 	div.innerHTML = '';
 	div.appendChild(can.view('issue-153-dom', data));
 	equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
-	data.todos.push(new can.Observe({ id: 3, name: 'Knives' }));
+	data.todos.push(new can.Map({ id: 3, name: 'Knives' }));
 	equal(div.innerHTML, "DishesForksKnives", 'New list item rendered without DOM container');
 });
 
@@ -1372,7 +1372,7 @@ test("return blocks within element tags", function(){
 
 
 
-	var animals = new can.Observe.List(['sloth', 'bear']),
+	var animals = new can.List(['sloth', 'bear']),
 		template = "<ul>"+
 					"<%==lister(animals, function(animal){%>"+
 						"<li><%=animal %></li>"+
@@ -1401,7 +1401,7 @@ test("return blocks within element tags", function(){
 
 test("Each does not redraw items",function(){
 
-	var animals = new can.Observe.List(['sloth', 'bear']),
+	var animals = new can.List(['sloth', 'bear']),
 		template = "<div>my<b>favorite</b>animals:"+
 					"<%==each(animals, function(animal){%>"+
 						"<label>Animal=</label> <span><%=animal %></span>"+
@@ -1430,7 +1430,7 @@ test("Each does not redraw items",function(){
 
 test("Each works with no elements",function(){
 
-	var animals = new can.Observe.List(['sloth', 'bear']),
+	var animals = new can.List(['sloth', 'bear']),
 		template = "<%==each(animals, function(animal){%>"+
 						"<%=animal %> "+
 					"<%})%>";
@@ -1478,7 +1478,7 @@ test("Each does not redraw items (normal array)",function(){
 
 
 test("list works within another branch", function(){
-	var animals = new can.Observe.List([]),
+	var animals = new can.List([]),
 		template = "<div>Animals:"+
 					"<% if( animals.attr('length') ){ %>~"+
 						"<% animals.each(function(animal){%>"+
@@ -1510,7 +1510,7 @@ test("list works within another branch", function(){
 })
 
 test("each works within another branch", function(){
-	var animals = new can.Observe.List([]),
+	var animals = new can.List([]),
 		template = "<div>Animals:"+
 					"<% if( animals.attr('length') ){ %>~"+
 						"<%==each(animals, function(animal){%>"+
@@ -1666,7 +1666,7 @@ test("Variables declared in shared EJS blocks shouldn't get lost", function() {
 			"<% }) %>" +
 		"<div class='best'><%== bestTeam.name %>!</div>"),
 		data = {
-			teams: new can.Observe.List([
+			teams: new can.List([
 				{ name: "Packers", rank: 1 },
 				{ name: "Bears", rank: 2 },
 				{ name: "Vikings", rank: 3 },
@@ -1689,7 +1689,7 @@ test("Variables declared in shared EJS blocks shouldn't get lost", function() {
 test('Access .length with nested dot notation', function() {
 	var template = '<span id="nested"><%= this.attr("list.length") %></span>' +
 				   '<span id="unnested"><%= this.list.attr("length") %></span>',
-		obj = new can.Observe({list: [0, 1, 2, 3]}),
+		obj = new can.Map({list: [0, 1, 2, 3]}),
 		renderer = can.view.ejs(template),
 		div = document.createElement('div');
 
