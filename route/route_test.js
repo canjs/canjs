@@ -481,7 +481,56 @@ test("escaping periods", function(){
 	
 })
 
+test("correct stringing", function(){
+	var route = can.route;
+
+	route.routes = {};
+
+	route.attr('number', 1);
+	deepEqual(route.attr(), {'number': "1"});
+
+	route.attr({bool: true}, true)
+	deepEqual(route.attr(), {'bool': "true"});
+
+	route.attr({string: "hello"}, true);
+	deepEqual(route.attr(), {'string': "hello"});
+
+	route.attr({array: [1, true, "hello"]}, true);
+	deepEqual(route.attr(), {'array': ["1", "true", "hello"]});
+
+	route.attr({
+		number: 1,
+		bool: 	true,
+		string: "hello",
+		array:  [2, false, "world"],
+		obj:    {number: 3, array: [4, true]}
+	}, true);
+
+	deepEqual(route.attr(), {
+		number: "1",
+		bool: 	"true",
+		string: "hello",
+		array:  ["2", "false", "world"],
+		obj:    {
+			number: "3",
+			array: 	["4", "true"]
+		}
+	})
+
+	route.routes = {};
+	route(":type/:id");
+
+	route.attr({type: 'page', id: 10, sort_by_name: true}, true)
+	deepEqual(route.attr(), {
+		type: 				"page",
+		id: 					"10",
+		sort_by_name: "true"
+	});
+});
+
+
 test("on/off binding", function() {
+	can.route.routes = {};
 	expect(1)
 	can.route.on('foo', function() {
 		ok(true, "foo called");
@@ -493,5 +542,6 @@ test("on/off binding", function() {
 
 	can.route.attr('foo', 'bar');
 })
+
 
 })();
