@@ -481,6 +481,8 @@ test("escaping periods", function(){
 	
 })
 
+if(typeof require === 'undefined') {
+
 test("correct stringing", function(){
 	var route = can.route;
 
@@ -528,6 +530,7 @@ test("correct stringing", function(){
 	});
 });
 
+}
 
 test("on/off binding", function() {
 	can.route.routes = {};
