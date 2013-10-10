@@ -1190,4 +1190,49 @@ test(".model should always serialize Observes (#444)", function() {
 	equal("quack", ConceptualDuck.model(new ObserveableDuck({sayeth: "quack"})).sayeth);
 });
 
+test("Model Store Instances (#457)", function() {
+	Game = can.Model({
+        attributes: {
+            players: 'Player.models'
+        },
+        findOne: "GET /games/{id}"
+    }, {});
+    
+    Player = can.Model({
+        attributes: {
+            games: 'Game.models'
+        }
+    }, {});
+    
+    var game = new Game({
+        "id": "1",
+        "name": "Fantasy Baseball",
+        "league": "League of Kings",
+        "players": [
+            {
+                "id": "55",
+                "name": "Malamonsters",
+                "games": [
+                    {
+                        "id": "1",
+                        "name": "Fantasy Baseball",
+                        "league": "League of Kings"
+                    }
+                ]
+            }
+        ]
+    });
+    
+    var mismatchFound = false;
+    
+    game.attr('players').each(function(p) {
+        p.attr('games').each(function(g) {
+            if(game.attr('id') === g.attr('id') && game._cid !== g._cid) {
+                mismatchFound = true;
+            }
+        });
+    });
+    equal(mismatchFound, false, "Model instances match");
+});
+
 })();
