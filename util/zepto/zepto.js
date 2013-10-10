@@ -1,4 +1,5 @@
-steal('can/util/can.js', 'zepto', 'can/util/object/isplain', 'can/util/event.js', 'can/util/fragment.js', 'can/util/deferred.js', 'can/util/array/each.js',
+steal('can/util/can.js', 'zepto', 'can/util/object/isplain', 'can/util/event.js',
+'can/util/fragment.js', 'can/util/deferred.js', 'can/util/array/each.js', 'can/util/inserted',
 function (can) {
 	var $ = Zepto;
 
@@ -31,12 +32,16 @@ function (can) {
 			});
 	};
 	$.cleanData = function(elems){
+		// trigger all the events ... then remove the data
+		for ( var i = 0, elem;  (elem = elems[i]) !== undefined; i++ ) {
+			can.trigger(elem,"removed",[],false);
+		}
 		for ( var i = 0, elem;
 		      (elem = elems[i]) !== undefined; i++ ) {
-			can.trigger(elem,"destroyed",[],false)
-			var id = elem[exp]
+			var id = elem[exp];
 			delete data[id];
 		}
+		
 	}
 
 	// zepto.js
@@ -118,7 +123,7 @@ function (can) {
 		}
 	}
 
-	$.each(["append", "filter", "addClass", "remove", "data"], function (i, name) {
+	$.each(["append", "filter", "addClass", "remove", "data","has"], function (i, name) {
 		can[name] = function (wrapped) {
 			return wrapped[name].apply(wrapped, can.makeArray(arguments).slice(1))
 		}
@@ -198,11 +203,15 @@ function (can) {
 	}
 
 	$.fn.remove = function () {
-		$.cleanData(this);
 		this.each(function () {
 			if (this.parentNode != null) {
 				// might be a text node
-				this.getElementsByTagName && $.cleanData(this.getElementsByTagName('*'))
+				
+				if( this.getElementsByTagName ){
+					console.log()
+					$.cleanData( [this].concat( can.makeArray(this.getElementsByTagName('*')) )  );
+				} 
+				
 				this.parentNode.removeChild(this);
 			}
 		});
@@ -234,6 +243,33 @@ function (can) {
 	can.get = function (wrapped, index) {
 		return wrapped[index];
 	}
+
+	// setup inserted calls
+	can.each([ 'after','prepend', 'before', 'append','html'], function(name){
+		var original = Zepto.fn[name];
+		Zepto.fn[name] = function(){
+			var elems,
+				args = can.makeArray(arguments);
+			
+			if( args[0] != null ){
+				// documentFragment
+				if( typeof args[0] == "string" ) {
+					args[0] = $.zepto.fragment(args[0]);	
+				} 
+				if(args[0].nodeType === 11){
+					elems = can.makeArray(args[0].childNodes);
+				} else {
+					elems = [args[0]]
+				}
+			}
+			
+			var ret = original.apply(this,args);
+			
+			can.inserted( elems );
+			
+			return ret;
+		}
+	})
 
 
 	return can;

@@ -1,5 +1,5 @@
 steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'can/util/array/each.js',
-'can/util/object/isplain', 'can/util/deferred.js', '../hashchange.js', function(can) {
+'can/util/object/isplain', 'can/util/deferred.js', '../hashchange.js', "can/util/inserted",function(can) {
 	define("plugd/trigger", ["dojo"], function( dojo ) {
 
 		var d = dojo,
@@ -18,8 +18,8 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 				// the sane branch
 				var ev = d.doc.createEvent("HTMLEvents");
 				e = e.replace(leaveRe, _fix);
-				// destroyed events should not bubble
-				ev.initEvent(e, e === "destroyed" ? false : true, true);
+				// removed / inserted events should not bubble
+				ev.initEvent(e, e === "removed" || e === "inserted"? false : true, true);
 				a && mix(ev, a);
 				n.dispatchEvent(ev);
 			} : function( n, e, a ) {
@@ -62,6 +62,11 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 			};
 
 		d._trigger = function( node, event, extraArgs ) {
+			if(typeof event !== "string"){
+				extraArgs = event;
+				event=extraArgs.type;
+				delete extraArgs.type;
+			}
 			// summary:
 			//		Helper for `dojo.trigger`, which handles the DOM cases. We should never
 			//		be here without a domNode reference and a string eventname.
@@ -504,7 +509,7 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 	};
 
 	var cleanData = function( elems ) {
-		can.trigger(new dojo.NodeList(elems), "destroyed", [], false)
+		can.trigger(new dojo.NodeList(elems), "removed", [], false)
 		for ( var i = 0, elem;
 		(elem = elems[i]) !== undefined; i++ ) {
 			var id = elem[exp]
@@ -529,23 +534,60 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 	var destroy = dojo.destroy;
 	dojo.destroy = function( node ) {
 		node = dojo.byId(node);
-		cleanData([node]);
-		node.getElementsByTagName && cleanData(node.getElementsByTagName('*'))
+		// we must call clean data at one time
+		var nodes = [node];
+		node.getElementsByTagName && nodes.concat(can.makeArray(node.getElementsByTagName('*')))
+		cleanData(nodes);
 
 		return destroy.apply(dojo, arguments);
 	};
+	var place = dojo.place;
+	dojo.place = function(/*DOMNode|String*/ node, /*DOMNode|String*/ refNode, /*String|Number?*/ position){
+		if(typeof node === "string" && /^\s*</.test(node)){
+			node = can.buildFragment(node);
+		}
+		var elems;
+		if( node.nodeType === 11 ) {
+			elems = can.makeArray(node.childNodes);
+		} else {
+			elems = [node]
+		}
+		var ret = place.call(this, node, refNode, position);
+		
+		can.inserted( elems );
+		
+		return ret;
+	}
+
 
 	can.addClass = function( wrapped, className ) {
 		return wrapped.addClass(className);
 	}
 
+	// removes a NodeList ... but it doesn't seem like dojo's NodeList has a destroy method?
 	can.remove = function( wrapped ) {
 		// We need to remove text nodes ourselves.
-		wrapped.forEach(dojo.destroy);
+		
+		var nodes = [];
+		wrapped.forEach(function(node){
+			nodes.push(node);
+			node.getElementsByTagName && nodes.push.apply(nodes,can.makeArray(node.getElementsByTagName('*')))
+		})
+		cleanData(nodes);
+		wrapped.forEach(destroy);
+		return wrapped;
 	}
 
 	can.get = function( wrapped, index ) {
 		return wrapped[index];
+	}
+
+	can.has = function(wrapped, element){
+		if( dojo.isDescendant(element, wrapped[0]) ){
+			return wrapped
+		} else {
+			return []
+		}
 	}
 
 	// Add pipe to `dojo.Deferred`.

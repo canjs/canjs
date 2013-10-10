@@ -1,4 +1,4 @@
-steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/view/scanner.js', 'can/view/render.js', function( can ) {
+steal('can/util', 'can/view', 'can/util/string', 'can/compute', 'can/view/scanner.js', 'can/view/render.js', function( can ) {
 	// ## ejs.js
 	// `can.EJS`  
 	// _Embedded JavaScript Templates._
@@ -63,6 +63,11 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 		 * Singleton scanner instance for parsing templates.
 		 */
 		scanner: new can.view.Scanner({
+			text: {
+				outStart: 'with(_VIEW) { with (_CONTEXT) {',
+				outEnd: "}}",
+				argNames: '_CONTEXT,_VIEW'
+			},
 			/**
 			 * @hide
 			 * An ordered token registry for the scanner.
@@ -79,7 +84,20 @@ steal('can/util', 'can/view', 'can/util/string', 'can/observe/compute', 'can/vie
 				["right", "%>"], // Right -> All have same FOR Mustache ...
 				["returnRight", "%>"]
 			],
-
+			helpers: [
+			/**
+			 * Check if its a func like `()->`.
+			 * @param {String} content
+			 */
+				{
+					name:/\s*\(([\$\w]+)\)\s*->([^\n]*)/,
+					fn: function(content){
+						var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
+							parts = content.match(quickFunc);
+		
+						return "can.proxy(function(__){var " + parts[1] + "=can.$(__);" + parts[2] + "}, this);";
+					}
+				}],
 			/**
 			 * @hide
 			 * Transforms the EJS template to add support for shared blocks.

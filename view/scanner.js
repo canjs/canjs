@@ -32,14 +32,14 @@ var newLine = /(\r|\n)+/g,
 	bracketNum = function(content){
 		return (--content.split("{").length) - (--content.split("}").length);
 	},
-	 myEval = function( script ) {
+	myEval = function( script ) {
 		eval(script);
 	},
 	attrReg = /([^\s]+)[\s]*=[\s]*$/,
 	// Commands for caching.
 	startTxt = 'var ___v1ew = [];',
 	finishTxt = "return ___v1ew.join('')",
-	put_cmd = "___v1ew.push(",
+	put_cmd = "___v1ew.push(\n",
 	insert_cmd = put_cmd,
 	// Global controls (used by other functions to know where we are).
 	// Are we inside a tag?
@@ -50,20 +50,43 @@ var newLine = /(\r|\n)+/g,
 	beforeQuote = null,
 	// Whether a rescan is in progress
 	rescan = null,
+	getAttrName = function(){
+		var matches = beforeQuote.match(attrReg);
+		return matches && matches[1];
+	},
 	// Used to mark where the element is.
 	status = function(){
 		// `t` - `1`.
 		// `h` - `0`.
 		// `q` - String `beforeQuote`.
-		return quote ? "'"+beforeQuote.match(attrReg)[1]+"'" : (htmlTag ? 1 : 0);
+		return quote ? "'"+getAttrName()+"'" : (htmlTag ? 1 : 0);
+	},
+	// returns the top of a stack
+	top = function(stack){
+		return stack[stack.length-1]
 	};
 
+/**
+ * @constructor can.view.Scanner
+ * 
+ * @param {{text: can.view.Scanner.text, tokens: Array<can.view.Scanner.token>, helpers: Array<can.view.Scanner.helpers>}}
+ */
+//
+/**
+ * @typedef {{0:String,}}
+ */
+
 can.view.Scanner = Scanner = function( options ) {
-  // Set options on self
-  can.extend(this, {
+	// Set options on self
+	can.extend(this, {
+  		/**
+  		 * @typedef {{start: String, escape: String, scope: String, options: String}}  can.view.Scanner.text
+  		 */
 		text: {},
-  	tokens: []
-  }, options);
+		tokens: []
+	}, options);
+	// make sure it's an empty string if it's not
+	this.text.options = this.text.options || ""
 	
 	// Cache a token lookup
 	this.tokenReg = [];
@@ -104,26 +127,79 @@ can.view.Scanner = Scanner = function( options ) {
 	this.tokenReg = new RegExp("(" + this.tokenReg.slice(0).concat(["<", ">", '"', "'"]).join("|") + ")","g");
 };
 
+Scanner.attributes = {};
+Scanner.regExpAttributes = {};
+
+Scanner.attribute = function(attribute, callback){
+	if(typeof attribute == "string"){
+		Scanner.attributes[attribute] = callback;
+	} else {
+		Scanner.regExpAttributes[attribute] = {
+			match: attribute,
+			callback: callback
+		};
+	}
+	
+}
+Scanner.hookupAttributes = function(options, el){
+	can.each(options && options.attrs || [], function(attr){
+		options.attr = attr;
+		if(Scanner.attributes[attr]) {
+			Scanner.attributes[attr](options,el);
+		} else {
+			can.each(Scanner.regExpAttributes,function(attrMatcher){
+				if(attrMatcher.match.test(attr)){
+					attrMatcher.callback(options, el)
+				}
+			})
+		}
+		
+	})
+}
+Scanner.tag = function( tagName, callback){
+	// if we have html5shive ... re-generate
+	if(window.html5){
+		html5.elements += " "+tagName
+		html5.shivDocument();
+	}
+	
+	Scanner.tags[tagName.toLowerCase()] = callback;
+}
+Scanner.tags = {};
+
+Scanner.hookupTag = function(hookupOptions){
+	var hooks = can.view.getHooks();
+	return can.view.hook(function(el){
+		can.each(hooks, function(fn){
+			fn(el);
+		});
+		
+		var helperTags = hookupOptions.options.attr('helpers._tags'),
+			tagName= hookupOptions.tagName,
+			tagCallback = ( helperTags && helperTags[tagName] ) || Scanner.tags[tagName]
+			
+		var res = tagCallback(el, hookupOptions),
+			scope = hookupOptions.scope;
+
+		if(res){
+			
+			if(scope !== res){
+				scope = scope.add(res)
+			}
+			var frag = can.view.frag( hookupOptions.subtemplate(scope, hookupOptions.options) );
+			can.appendChild(el, frag);
+		}
+		can.view.Scanner.hookupAttributes(hookupOptions, el);
+	});
+	
+}
+
 /**
  * Extend can.View to add scanner support.
  */
 Scanner.prototype = {
 
-	helpers: [
-		/**
-		 * Check if its a func like `()->`.
-		 * @param {String} content
-		 */
-		{
-			name:/\s*\(([\$\w]+)\)\s*->([^\n]*)/,
-			fn: function(content){
-				var quickFunc = /\s*\(([\$\w]+)\)\s*->([^\n]*)/,
-					parts = content.match(quickFunc);
-
-				return "can.proxy(function(__){var " + parts[1] + "=can.$(__);" + parts[2] + "}, this);";
-			}
-		}
-	],
+	helpers: [],
 
 	scan: function(source, name){
 		var tokens = [],
@@ -189,6 +265,12 @@ Scanner.prototype = {
 			startTag = null,
 			// Was there a magic tag inside an html tag?
 			magicInTag = false,
+			// was there a special state
+			specialStates = {
+				attributeHookups: [],
+				// a stack of tagHookups
+				tagHookups: []
+			},
 			// The current tag name.
 			tagName = '',
 			// stack of tagNames
@@ -248,29 +330,69 @@ Scanner.prototype = {
 						htmlTag = 1;
 						magicInTag = 0;
 					}
+					
 					content += token;
+					
+					
 					break;
 				case '>':
 					htmlTag = 0;
 					// content.substr(-1) doesn't work in IE7/8
-					var emptyElement = content.substr(content.length-1) == "/" || content.substr(content.length-2) == "--";
+					var emptyElement = (content.substr(content.length-1) == "/" || content.substr(content.length-2) == "--"),
+						attrs = "";
 					// if there was a magic tag
 					// or it's an element that has text content between its tags, 
 					// but content is not other tags add a hookup
 					// TODO: we should only add `can.EJS.pending()` if there's a magic tag 
 					// within the html tags.
-					if(magicInTag || !popTagName && elements.tagToContentPropMap[ tagNames[tagNames.length -1] ]){
-						// make sure / of /> is on the left of pending
-						if(emptyElement){
-							put(content.substr(0,content.length-1), ",can.view.pending(),\"/>\"");
+					if(specialStates.attributeHookups.length) {
+						attrs = "attrs: ['"+specialStates.attributeHookups.join("','")+"'], ";
+						specialStates.attributeHookups = [];
+					}
+					
+					if(tagName === top(specialStates.tagHookups) ){
+						// If it's a self closing tag (like <content/>) make sure we put the / at the end
+						if(emptyElement) {
+							content = content.substr(0,content.length-1)
+						}
+						buff.push(put_cmd, 
+								 '"', clean(content), '"', 
+								 ",can.view.Scanner.hookupTag({tagName:'"+tagName+"',"+(attrs)+"scope: "+(this.text.scope || "this")+this.text.options)
+						
+						
+						
+						
+						// if it's a self closing tag (like <content/>) close and end the tag
+						if(emptyElement) {
+							buff.push("}));");
+							content = "/>";
+							specialStates.tagHookups.pop()
+						} 
+						// if it's an empty tag	 
+						else if( tokens[i] === "<" &&  tokens[i+1] === "/"+tagName ){
+							buff.push("}));");
+							content = token;
+							specialStates.tagHookups.pop()
 						} else {
-							put(content, ",can.view.pending(),\">\"");
+							buff.push(",subtemplate: function("+this.text.argNames+"){\n"+ startTxt+(this.text.start || '') );
+							content = '';
+						}
+
+					} else if(magicInTag || (!popTagName && elements.tagToContentPropMap[ tagNames[tagNames.length -1] ] ) || attrs ){
+						// make sure / of /> is on the right of pending
+						if(emptyElement){
+							put(content.substr(0,content.length-1), ",can.view.pending({"+attrs+"scope: "+(this.text.scope || "this")+this.text.options+"}),\"/>\"");
+						} else {
+							put(content, ",can.view.pending({"+attrs+"scope: "+(this.text.scope || "this")+this.text.options+"}),\">\"");
 						}
 						content = '';
 						magicInTag = 0;
 					} else {
 						content += token;
 					}
+					
+					
+					
 					// if it's a tag like <input/>
 					if(emptyElement || popTagName){
 						// remove the current tag in the stack
@@ -280,6 +402,7 @@ Scanner.prototype = {
 						// Don't pop next time
 						popTagName = false;
 					}
+					specialStates.attributeHookups = [];
 					break;
 				case "'":
 				case '"':
@@ -291,6 +414,19 @@ Scanner.prototype = {
 							quote = null;
 							// Otherwise we are creating a quote.
 							// TODO: does this handle `\`?
+							var attr = getAttrName();
+							if(Scanner.attributes[attr]){
+								specialStates.attributeHookups.push(attr);
+							} else {
+								can.each(Scanner.regExpAttributes,function(attrMatcher){
+									if( attrMatcher.match.test(attr) ) {
+										specialStates.attributeHookups.push(attr);
+									}
+								});
+							}
+							
+							
+							
 						} else if(quote === null){
 							quote = token;
 							beforeQuote = lastToken;
@@ -300,14 +436,66 @@ Scanner.prototype = {
 					// Track the current tag
 					if(lastToken === '<'){
 						tagName = token.split(/\s/)[0];
-						if( tagName.indexOf("/") === 0 && tagNames[tagNames.length-1] === tagName.substr(1) ) {
-							// set tagName to the last tagName
-							// if there are no more tagNames, we'll rely on getTag.
-							tagName = tagNames[tagNames.length-1];
-							popTagName = true;
-						} else {
-							tagNames.push(tagName);
+						var isClosingTag = false;
+						
+						if( tagName.indexOf("/") === 0 ) {
+							isClosingTag = true;
+							var cleanedTagName = tagName.substr(1);
 						}
+						
+						if( isClosingTag ) { // </tag>
+							
+							// when we enter a new tag, pop the tag name stack
+							if( top( tagNames ) === cleanedTagName ) {
+								// set tagName to the last tagName
+								// if there are no more tagNames, we'll rely on getTag.
+								tagName = cleanedTagName;
+								popTagName = true;
+							}
+							
+							// if we are in a closing tag of a custom tag
+							if( top( specialStates.tagHookups) == cleanedTagName ) {
+								
+								// remove the last < from the content
+								put(content.substr(0, content.length-1));
+								
+								// finish the "section"
+								buff.push(finishTxt+"}}) );" );
+								
+								// the < belongs to the outside
+								content = "><"
+								specialStates.tagHookups.pop()
+							} 
+	
+						} else {
+							if( tagName.lastIndexOf("/") === tagName.length -1 ) {
+								tagName = tagName.substr(0, tagName.length -1);
+								
+								
+							} 
+								
+							if(Scanner.tags[tagName]){
+								// if the content tag is inside something it doesn't belong ...
+								if(tagName === "content" && elements.tagMap[top(tagNames)]){
+									// convert it to an element that will work
+									token = token.replace("content",elements.tagMap[top(tagNames)])
+								}
+								// we will hookup at the ending tag>
+								specialStates.tagHookups.push(tagName);
+							}
+							
+							
+							tagNames.push(tagName);
+								
+								
+							
+							
+							
+							
+							
+
+						}
+						
 					}
 					content += token;
 					break;
@@ -363,7 +551,7 @@ Scanner.prototype = {
 							// When we return to the same # of `{` vs `}` end with a `doubleParent`.
 							endStack.push({
 								before : finishTxt,
-								after: "}));"
+								after: "}));\n"
 							});
 						} 
 
@@ -393,13 +581,13 @@ Scanner.prototype = {
 						} else {
 							// If we have `<%== a(function(){ %>` then we want
 							// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-							buff.push(insert_cmd, "can.view.txt(" + escaped + ",'"+tagName+"'," + status() +",this,function(){ " + (this.text.escape || '') + "return ", content, 
+							buff.push(insert_cmd, "can.view.txt(\n" + escaped + ",\n'"+tagName+"',\n" + status() +",\nthis,\nfunction(){ " + (this.text.escape || '') + "return ", content, 
 								// If we have a block.
 								bracketCount ? 
 								// Start with startTxt `"var _v1ew = [];"`.
 								startTxt : 
 								// If not, add `doubleParent` to close push and text.
-								"}));"
+								"}));\n"
 								);
 						}
 						
@@ -429,17 +617,20 @@ Scanner.prototype = {
 			put(content);
 		}
 		buff.push(";");
-		
 		var template = buff.join(''),
 			out = {
-				out: 'with(_VIEW) { with (_CONTEXT) {' + template + " "+finishTxt+"}}"
+				out: (this.text.outStart||"") + template + " "+finishTxt+(this.text.outEnd || "")
 			};
 		// Use `eval` instead of creating a function, because it is easier to debug.
-		myEval.call(out, 'this.fn = (function(_CONTEXT,_VIEW){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
+		myEval.call(out, 'this.fn = (function('+this.text.argNames+'){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
 
 		return out;
 	}
 };
+
+can.view.Scanner.tag("content",function(el, options){
+	return options.scope;
+})
 
 return Scanner;
 });

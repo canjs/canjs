@@ -1,4 +1,4 @@
-steal('funcunit/qunit','can/model/cached','can/util/fixture',function(){
+(function(){
 	module("can/model/cached")
 	
 	test("findAll",function(){
@@ -17,8 +17,7 @@ steal('funcunit/qunit','can/model/cached','can/util/fixture',function(){
 			} else {
 				return [
 					{id: 1, name: "First"},
-					{id: 2, name: "second"},
-					{id: 3, name: "third"}
+					{id: 2, name: "second"}
 				]
 			};
 		})
@@ -40,10 +39,12 @@ steal('funcunit/qunit','can/model/cached','can/util/fixture',function(){
 					
 					
 				})
-			},13)
+			},13);
+			
 		})
 		
-	})
+	});
+	
 	test("findOne",function(){
 		stop();
 	
@@ -71,7 +72,10 @@ steal('funcunit/qunit','can/model/cached','can/util/fixture',function(){
 					deepEqual(task.attr(), secondTask.attr())
 					
 					secondTask.bind("change", function(ev, attr, how, newVal,oldVal){
-						start();
+						if(attr !== "updated"){
+							start();
+						}
+						
 					})
 					
 					
@@ -110,7 +114,9 @@ steal('funcunit/qunit','can/model/cached','can/util/fixture',function(){
 					deepEqual(tasks[0].attr(),task.attr())
 					
 					task.bind("change", function(ev, attr, how, newVal,oldVal){
-						start();
+						if(attr !== "updated"){
+							start();
+						}
 					})
 					
 					
@@ -128,7 +134,7 @@ steal('funcunit/qunit','can/model/cached','can/util/fixture',function(){
 		can.fixture("GET /tasks", function(data){
 			return TASKS;
 		});
-		can.fixture("DESTROY /tasks/{id}", function(options){
+		can.fixture("DELETE /tasks/{id}", function(options){
 			//TASKS.splice( (+options.data.id)-1,1)
 			return {};
 		})
@@ -136,23 +142,21 @@ steal('funcunit/qunit','can/model/cached','can/util/fixture',function(){
 		Task = can.Model.Cached({
 			findAll: "/tasks",
 			destroy: "/tasks/{id}"
-		},{})
+		},{});
+		
 		Task.cacheClear();
 		
 		Task.findAll({}, function(tasks){
 			tasks[0].destroy(function(){
 				Task.findAll({},function(tasks2){
 					equal(tasks2.length, 1);
-					tasks2.bind("change", function(){
-						ok(true, "updated list")
-						start();
-					})
+					equal(tasks2[0].name,"second")
 					
-					
+					start()
 				})
 			})
 		})
 		
 		
 	})
-})
+})()

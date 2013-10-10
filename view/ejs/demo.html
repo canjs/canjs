@@ -51,16 +51,12 @@
 </div>
 <script type='text/javascript' src='../../lib/steal/steal.js'></script>
 <script type='text/javascript'>
-steal(function() {
-	steal.config({
-		root: '../../'
-	});
-}).then('can/view/ejs',
+steal('can/view/ejs',
 	'can/util/json.js',
-	'can/observe',
+	'can/map',
 	'can/util/demos/observer.js',
 function() {
-	var teacher = new can.Observe({
+	var teacher = new can.Map({
 		  name : "Mr. Smith",
 		  grade : "a",
 		  students : [
@@ -73,7 +69,7 @@ function() {
 	new Observer( $("#ejs-data"),
 		{
 			observe : teacher,
-			fullName : "new can.Observe("
+			fullName : "new can.Map("
 		});
 		
 	var reapply = function(){

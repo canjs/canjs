@@ -1,9 +1,9 @@
-steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
+steal('can/util','can/map', 'can/util/string/deparam', function(can) {
 
 	// ## route.js  
 	// `can.route`  
 	// _Helps manage browser history (and client state) by synchronizing the 
-	// `window.location.hash` with a `can.Observe`._  
+	// `window.location.hash` with a `can.Map`._  
 	//   
     // Helper methods used for matching routes.
 	var 
@@ -54,29 +54,97 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			return (str+'').replace(/([.?*+\^$\[\]\\(){}|\-])/g, "\\$1");
 		},
 		each = can.each,
-		extend = can.extend;
+		extend = can.extend,
+		    // Helper for convert any object (or value) to stringified object (or value)
+		stringify = function(obj) {
+			// Object is array, plain object, Map or List
+			if(obj && typeof obj === "object") {
+				// Get native object or array from Map or List
+				if(obj instanceof can.Map) {
+					obj = obj.attr()
+				// Clone object to prevent change original values
+				} else {
+					obj = can.isFunction(obj.slice) ? obj.slice() : can.extend({}, obj)
+				}
+				// Convert each object property or array item into stringified new
+				can.each(obj, function(val, prop) { obj[prop] = stringify(val) })
+			// Object supports toString function
+		  } else if(obj !== undefined && obj !== null && can.isFunction(obj.toString)) {
+        obj = obj.toString()
+      }
+
+			return obj
+		},
+		removeBackslash = function(str){
+			return str.replace(/\\/g,"")
+		},
+		// A ~~throttled~~ debounced function called multiple times will only fire once the
+        // timer runs down. Each call resets the timer.
+		timer,
+        // Intermediate storage for `can.route.data`.
+        curParams,
+		// The last hash caused by a data change
+		lastHash,
+		// Are data changes pending that haven't yet updated the hash
+		changingData,
+		// If the `can.route.data` changes, update the hash.
+	    // Using `.serialize()` retrieves the raw data contained in the `observable`.
+	    // This function is ~~throttled~~ debounced so it only updates once even if multiple values changed.
+	    // This might be able to use batchNum and avoid this.
+		onRouteDataChange = function(ev, attr, how, newval) {
+			// indicate that data is changing
+			changingData = 1;
+			clearTimeout( timer );
+			timer = setTimeout(function() {
+				// indicate that the hash is set to look like the data
+				changingData = 0;
+				var serialized = can.route.data.serialize(),
+					path = can.route.param(serialized, true);
+				can.route._call("setURL",path);
+				
+				lastHash = path
+			}, 10);
+		};
 
 
 	can.route = function( url, defaults ) {
+        // if route ends with a / and url starts with a /, remove the leading / of the url
+        var root = can.route._call("root");
+        
+        if(root.lastIndexOf("/") == root.length - 1 &&
+        	url.indexOf("/") === 0) {
+        	url = url.substr(1);
+        }
+        
+        
         defaults = defaults || {};
         // Extract the variable names and replace with `RegExp` that will match
 		// an atual URL with values.
 		var names = [],
-			test = url.replace(matcher, function( whole, name, i ) {
-				names.push(name);
-				var next = "\\"+( url.substr(i+whole.length,1) || can.route._querySeparator );
-				// a name without a default value HAS to have a value
-				// a name that has a default value can be empty
-				// The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
-				return "([^" +next+"]"+(defaults[name] ? "*" : "+")+")";
-			});
-
+			res,
+			test = "",
+			lastIndex = matcher.lastIndex = 0,
+			next,
+			querySeparator = can.route._call("querySeparator");
+			
+		// res will be something like [":foo","foo"]
+		while(res = matcher.exec(url)){
+			names.push(res[1]);
+			test += removeBackslash( url.substring(lastIndex, matcher.lastIndex - res[0].length) );
+			next = "\\"+( removeBackslash(url.substr(matcher.lastIndex,1)) || querySeparator );
+			// a name without a default value HAS to have a value
+			// a name that has a default value can be empty
+			// The `\\` is for string-escaping giving single `\` for `RegExp` escaping.
+			test += "([^" +next+"]"+(defaults[res[1]] ? "*" : "+")+")";
+			lastIndex = matcher.lastIndex;
+		}
+		test += url.substr(lastIndex).replace("\\","")
 		// Add route in a form that can be easily figured out.
 		can.route.routes[url] = {
             // A regular expression that will match the route when variable values 
             // are present; i.e. for `:page/:type` the `RegExp` is `/([\w\.]*)/([\w\.]*)/` which
             // will match for any value of `:page` and `:type` (word chars or period).
-			test: new RegExp("^" + test+"($|"+wrapQuote(can.route._querySeparator)+")"),
+			test: new RegExp("^" + test+"($|"+wrapQuote(querySeparator)+")"),
             // The original URL, same as the index for this entry in routes.
 			route: url,
             // An `array` of all the variable names in this route.
@@ -93,10 +161,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 	 * @static
 	 */
 	extend(can.route, {
-
-		_querySeparator: '&',
-		_paramsMatcher: paramsMatcher,
-
+		
 		/**
 		 * @function can.route.param param
 		 * @parent can.route.static
@@ -163,7 +228,7 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 					res = route.route.replace(matcher, function( whole, name ) {
                         delete cpy[name];
                         return data[name] === route.defaults[name] ? "" : encodeURIComponent( data[name] );
-                    }),
+                    }).replace("\\",""),
                     after;
 				// Remove matching default values
 				each(route.defaults, function(val,name){
@@ -180,10 +245,10 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 				if(_setRoute){
 					can.route.attr('route',route.route);
 				}
-				return res + (after ? can.route._querySeparator + after : "");
+				return res + (after ? can.route._call("querySeparator") + after : "");
 			}
             // If no route was found, there is no hash URL, only paramters.
-			return can.isEmptyObject(data) ? "" : can.route._querySeparator + can.param(data);
+			return can.isEmptyObject(data) ? "" : can.route._call("querySeparator") + can.param(data);
 		},
 		/**
 		 * @function can.route.deparam deparam
@@ -220,11 +285,22 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 *          // -> { id: 5, route: ":type/:id", type: "videos" }
 		 */
 		deparam: function( url ) {
+			
+			// remove the url
+			var root = can.route._call("root");
+	        if(root.lastIndexOf("/") == root.length - 1 &&
+	        	url.indexOf("/") === 0) {
+	        	url = url.substr(1);
+	        }
+			
 			// See if the url matches any routes by testing it against the `route.test` `RegExp`.
             // By comparing the URL length the most specialized route that matches is used.
 			var route = {
 				length: -1
-			};
+			},
+				querySeparator = can.route._call("querySeparator"),
+				paramsMatcher = can.route._call("paramsMatcher");
+				
 			each(can.route.routes, function(temp, name){
 				if ( temp.test.test(url) && temp.length > route.length ) {
 					route = temp;
@@ -239,16 +315,16 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
                     // Start will contain the full matched string; parts contain the variable values.
 					start = parts.shift(),
                     // The remainder will be the `&amp;key=value` list at the end of the URL.
-					remainder = url.substr(start.length - (parts[parts.length-1] === can.route._querySeparator ? 1 : 0) ),
+					remainder = url.substr(start.length - (parts[parts.length-1] === querySeparator ? 1 : 0) ),
                     // If there is a remainder and it contains a `&amp;key=value` list deparam it.
-                    obj = (remainder && can.route._paramsMatcher.test(remainder)) ? can.deparam( remainder.slice(1) ) : {};
+                    obj = (remainder && paramsMatcher.test(remainder)) ? can.deparam( remainder.slice(1) ) : {};
 
                 // Add the default values for this route.
 				obj = extend(true, {}, route.defaults, obj);
                 // Overwrite each of the default values in `obj` with those in 
 				// parts if that part is not empty.
 				each(parts,function(part,  i){
-					if ( part && part !== can.route._querySeparator) {
+					if ( part && part !== querySeparator ) {
 						obj[route.names[i]] = decodeURIComponent( part );
 					}
 				});
@@ -256,16 +332,16 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 				return obj;
 			}
             // If no route was matched, it is parsed as a `&amp;key=value` list.
-			if ( url.charAt(0) !== can.route._querySeparator ) {
-				url = can.route._querySeparator + url;
+			if ( url.charAt(0) !== querySeparator ) {
+				url = querySeparator + url;
 			}
-			return can.route._paramsMatcher.test(url) ? can.deparam( url.slice(1) ) : {};
+			return paramsMatcher.test(url) ? can.deparam( url.slice(1) ) : {};
 		},
 		/**
 		 * @hide
-		 * A can.Observe that represents the state of the history.
+		 * A can.Map that represents the state of the history.
 		 */
-		data: new can.Observe({}),
+		data: new can.Map({}),
         /**
          * @property {Object} routes
 		 * @hide
@@ -290,30 +366,29 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 * @function can.route.ready ready
 		 * @parent can.route.static
 		 * 
-		 * @signature `can.route.ready( readyYet )`
+		 * Initialize can.route.
 		 * 
-		 * Pause and resume the initialization of can.route.
+		 * @signature `can.route.ready()`
 		 * 
-		 * @param {Boolean} [readyYet] Whether the ready event should be fired yet.
+		 * Sets up the two-way binding between the hash and the can.route observable map and
+		 * sets the can.route map to its initial values.
+		 * 
 		 * @return {can.route} The `can.route` object.
 		 *
 		 * @body
-		 * Indicates that all routes have been added and sets can.route.data
-		 * based upon the routes and the current hash.
 		 * 
-		 * By default, ready is fired on jQuery's ready event.  Sometimes
-		 * you might want it to happen sooner or earlier.  To do this, call:
+		 * ## Use
 		 * 
-		 *     can.route.ready(false); //prevents firing by the ready event
-		 *     can.route.ready(true); // fire the first route change
+		 * After setting all your routes, call can.route.ready().
+		 * 
+		 *     can.route("overview/:dateStart-:dateEnd");
+		 *     can.route(":type/:id")
+		 *     can.route.ready()
 		 */
 		ready: function(val) {
-			if( val === false ) {
-				onready = val;
-			}
-			if( val === true || onready === true ) {
+			if( val !== true ) {
 				can.route._setup();
-				setState();
+				can.route.setState();
 			}
 			return can.route;
 		},
@@ -346,10 +421,11 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 *          // -> "#!video/5&isNew=false"
 		 */
 		url: function( options, merge ) {
+			
 			if (merge) {
-				options = extend({}, curParams, options)
-			}
-			return "#!" + can.route.param(options);
+                options = can.extend({}, can.route.deparam( can.route._call("matchingPartOfURL")), options);
+            }
+            return can.route._call("root") + can.route.param(options);
 		},
 		/**
 		 * @function can.route.link link
@@ -426,29 +502,83 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		 *     can.route.current({ id: 5, type: 'videos' }) // -> true
 		 */
 		current: function( options ) {
-			return location.hash == "#!" + can.route.param(options)
+			return this._call("matchingPartOfURL") === can.route.param(options);
 		},
+		bindings: {
+			hashchange : {
+				paramsMatcher: paramsMatcher,
+				querySeparator: "&",
+				bind: function(){
+					can.bind.call(window,'hashchange', setState);
+				},
+				unbind: function(){
+					can.unbind.call(window,'hashchange', setState);
+				},
+				// Gets the part of the url we are determinging the route from.
+				// For hashbased routing, it's everything after the #, for
+				// pushState it's configurable
+				matchingPartOfURL: function() {
+					return location.href.split(/#!?/)[1] || "";
+				},
+				// gets called with the serialized can.route data after a route has changed
+				// returns what the url has been updated to (for matching purposes)
+				setURL: function(path) {
+					location.hash = "#!" + path;
+					return path;
+				},
+				root: "#!"
+			}
+		},
+		defaultBinding: "hashchange",
+		currentBinding: null,
+		// ready calls setup
+		// setup binds and listens to data changes
+			// bind listens to whatever you should be listening to
+			// data changes tries to set the path
+		
+		// we need to be able to
+		// easily kick off calling setState
+		// 	teardown whatever is there
+		//  turn on a particular binding
+		
+		// called when the route is ready
 		_setup: function() {
-			// If the hash changes, update the `can.route.data`.
-			can.bind.call(window,'hashchange', setState);
+			if(!can.route.currentBinding){
+				can.route._call("bind");
+				can.route.bind("change", onRouteDataChange);
+				can.route.currentBinding = can.route.defaultBinding;
+			}
 		},
-		_getHash: function() {
-			return location.href.split(/#!?/)[1] || "";
+		_teardown: function(){
+			if( can.route.currentBinding ) {
+				can.route._call("unbind");
+				can.route.unbind("change", onRouteDataChange);
+				can.route.currentBinding = null;
+			}
+			clearTimeout(timer);
+			changingData = 0;
 		},
-		_setHash: function(serialized) {
-			var path = (can.route.param(serialized, true));
-			location.hash = "#!" + path;
-			return path;
+		// a helper to get stuff from the current or default bindings
+		_call: function(){
+			var args = can.makeArray(arguments),
+				prop = args.shift(),
+				binding = can.route.bindings[can.route.currentBinding || can.route.defaultBinding]
+				method = binding[prop];
+			if(typeof method === "function"){
+				return method.apply(binding,args)
+			} else {
+				return method;
+			}
 		}
 	});
 	
 	
     // The functions in the following list applied to `can.route` (e.g. `can.route.attr('...')`) will
     // instead act on the `can.route.data` observe.
-	each(['bind','unbind','delegate','undelegate','attr','removeAttr', 'compute'], function(name){
+	each(['bind','unbind','on','off','delegate','undelegate','removeAttr', 'compute'], function(name){
 		can.route[name] = function(){
 			// `delegate` and `undelegate` require
-			// the `can/observe/delegate` plugin
+			// the `can/map/delegate` plugin
 			if(!can.route.data[name]) {
             	return;
 			}
@@ -457,19 +587,39 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 		}
 	})
 
-	var // A ~~throttled~~ debounced function called multiple times will only fire once the
-        // timer runs down. Each call resets the timer.
-		timer,
-        // Intermediate storage for `can.route.data`.
-        curParams,
-        // Deparameterizes the portion of the hash of interest and assign the
+	// Because everything in hashbang is in fact a string this will automaticaly convert new values to string. Works with single value, or deep hashes.
+  // Main motivation for this is to prevent double route event call for same value.
+  // Example (the problem):
+  // When you load page with hashbang like #!&some_number=2 and bind 'some_number' on routes.
+  // It will fire event with adding of "2" (string) to 'some_number' property
+  // But when you after this set can.route.attr({some_number: 2}) or can.route.attr('some_number', 2). it fires another event with change of 'some_number' from "2" (string) to 2 (integer)
+  // This wont happen again with this normalization
+	can.route.attr = function(attr, val) {
+		var type = typeof attr,
+				newArguments;
+
+		// Reading
+		if(val === undefined) {
+			newArguments = arguments;
+		// Sets object
+		} else if (type !== "string" && type !== "number") {
+			newArguments = [stringify(attr), val];
+		// Sets key - value
+		} else {
+			newArguments = [attr, stringify(val)];
+		}
+
+		return can.route.data.attr.apply(can.route.data, newArguments)
+	}
+
+	var // Deparameterizes the portion of the hash of interest and assign the
         // values to the `can.route.data` removing existing values no longer in the hash.
         // setState is called typically by hashchange which fires asynchronously
         // So it's possible that someone started changing the data before the 
         // hashchange event fired.  For this reason, it will not set the route data
         // if the data is changing or the hash already matches the hash that was set.
         setState = can.route.setState = function() {
-			var hash = can.route._getHash();
+			var hash = can.route._call("matchingPartOfURL");
 			curParams = can.route.deparam( hash );
 			
 			// if the hash data is currently changing, or
@@ -477,41 +627,11 @@ steal('can/util','can/observe', 'can/util/string/deparam', function(can) {
 			if(!changingData || hash !== lastHash){
 				can.route.attr(curParams, true);
 			}
-		},
-		// The last hash caused by a data change
-		lastHash,
-		// Are data changes pending that haven't yet updated the hash
-		changingData;
+		};
+		
+	
 
-	// If the `can.route.data` changes, update the hash.
-    // Using `.serialize()` retrieves the raw data contained in the `observable`.
-    // This function is ~~throttled~~ debounced so it only updates once even if multiple values changed.
-    // This might be able to use batchNum and avoid this.
-	can.route.bind("change", function(ev, attr) {
-		// indicate that data is changing
-		changingData = 1;
-		clearTimeout( timer );
-		timer = setTimeout(function() {
-			// indicate that the hash is set to look like the data
-			changingData = 0;
-			var serialized = can.route.data.serialize();
-
-			lastHash = can.route._setHash(serialized);
-		}, 1);
-	});
-	// `onready` event...
-	can.bind.call(document,"ready",can.route.ready);
-
-	// Libraries other than jQuery don't execute the document `ready` listener
-	// if we are already DOM ready
-	if( (document.readyState === 'complete' || document.readyState === "interactive") && onready) {
-		can.route.ready();
-	}
-
-	// extend route to have a similar property 
-	// that is often checked in mustache to determine
-	// an object's observability
-	can.route.constructor.canMakeObserve = can.Observe.canMakeObserve;
+	
 
 	return can.route;
 });
