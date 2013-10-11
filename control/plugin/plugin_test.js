@@ -1,5 +1,4 @@
 (function() {
-
 	module("can/control/plugin")
 
 	test("pluginName", function () {
@@ -74,5 +73,27 @@
 		ta.callTest();
 		ok(ta.callTest('setName', 'Tester') instanceof jQuery, 'Got jQuery element as return value');
 		equal(ta.callTest('returnTest'), 'Hi Tester', 'Got correct return value');
+	});
+
+	test('always use pluginName first in .control(name) (#448)', 4, function() {
+		var Control = can.Control('SomeName', {
+			pluginName : 'someTest'
+		}, {});
+
+		var OtherControl = can.Control( {
+			pluginName : 'otherTest'
+		}, {});
+
+		var ta = can.$("<div/>").appendTo($("#qunit-test-area"));
+		ta.someTest();
+		ta.otherTest();
+
+		var control = ta.control('someTest');
+		ok(control, 'Got a control from pluginName');
+		equal(control.constructor.pluginName, 'someTest', 'Got correct control');
+
+		control = ta.control('otherTest');
+		ok(control, 'Got a control from pluginName');
+		equal(control.constructor.pluginName, 'otherTest', 'Got correct control');
 	});
 })();

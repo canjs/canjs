@@ -3,8 +3,9 @@ steal('jquery', 'can/util', 'can/control', function($, can) {
 //controllers can be strings or classes
 var i, 
 	isAControllerOf = function( instance, controllers ) {
+		var name = instance.constructor.pluginName || instance.constructor._shortName;
 		for ( i = 0; i < controllers.length; i++ ) {
-			if ( typeof controllers[i] == 'string' ? instance.constructor._shortName == controllers[i] : instance instanceof controllers[i] ) {
+			if ( typeof controllers[i] == 'string' ? name == controllers[i] : instance instanceof controllers[i] ) {
 				return true;
 			}
 		}
@@ -75,28 +76,26 @@ $.fn.extend({
 	 * of control instance(s) with the DOM element it was initialized on using 
 	 * [can.data] method.
 	 *
-	 * The `controls` method allows you to get the control instance(s) for any element.  
+	 * The `controls` method allows you to get the control instance(s) for any element
+	 * either by their type or pluginName.
+	 *
+	 *      var MyBox = can.Control({
+	 *          pluginName : 'myBox'
+	 *      }, {});
+	 *
+	 *      var MyClock = can.Control({
+	 *          pluginName : 'myClock'
+	 *      }, {});
+	 *
 	 *
 	 *		//- Inits the widgets
-	 *		$('.widgets:eq(0)').my_box();
-	 *		$('.widgets:eq(1)').my_clock();
-	 *
-	 *		<div class="widgets my_box" />
-	 *		<div class="widgets my_clock" />
+	 *		$('.widgets:eq(0)').myBox();
+	 *		$('.widgets:eq(1)').myClock();
 	 *
 	 *		$('.widgets').controls() //-> [ MyBox, MyClock ]
+	 *	    $('.widgets').controls('myBox') // -> [MyBox]
+	 *	    $('.widgets').controls(MyClock) // -> MyClock
 	 *
-	 * Additionally, you can invoke it passing the name of a control
-	 * to fetch a specific instance(s).
-	 *
-	 *		//- Inits the widgets
-	 *		$('.widgets:eq(0)').my_box();
-	 *		$('.widgets:eq(1)').my_clock();
-	 *
-	 *		<div class="widgets my_box" />
-	 *		<div class="widgets my_clock" />
-	 *
-	 *		$('.widgets').controls('MyBox') //-> [ MyBox ]
 	 */
 	controls: function() {
 		var controllerNames = makeArray(arguments),
