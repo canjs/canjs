@@ -178,12 +178,12 @@ can.each([ can.Map, can.Model ], function(clss){
 			},
 			"default": function( val, oldVal, error, type ) {
 				// Convert can.Model types using .model and .models
-				if(Map.prototype.isPrototypeOf(type.prototype) &&
+				if(can.Map.prototype.isPrototypeOf(type.prototype) &&
 						typeof type.model === 'function' && typeof type.models === 'function') {
 					return type[can.isArray(val) ? 'models' : 'model'](val);
 				}
 
-				if(Map.prototype.isPrototypeOf(type.prototype)) {
+				if(can.Map.prototype.isPrototypeOf(type.prototype)) {
 					if(can.isArray(val) && typeof type.List === 'function') {
 						return new type.List(val);
 					}
