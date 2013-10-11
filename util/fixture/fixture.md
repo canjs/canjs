@@ -5,6 +5,7 @@
 
 @description Simulate AJAX requests.
 
+> Note: can.fixture depends on the can.object plugin. If you are not using the AMD or Steal version of CanJS you need to include [can.object.js](http://canjs.com/release/latest/can.object.js) __before__ can.fixture.
 
 @signature `can.fixture( url, toUrl )`
 
