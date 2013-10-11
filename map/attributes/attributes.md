@@ -157,24 +157,72 @@ as well.  Lastly, `serialize` is invoked converting the new attributes to raw ty
 	//-> { 'birthday': '11-29-1983', 'weight': '300' }
 	
 
-	
+## Converter functions
+
+Another common case is to create converter functions (`function(value, oldValue) {}`) that return a converted value:
+
+	var ValueMap = can.Map.extend({
+		attributes: {
+			value: function(orig) {
+				return orig * 100;
+			}
+		}
+	},{});
+
+	console.log(new ValueMap({ value: 0.83 }).attr('value'));
+
+
 ## Associations
 
-Attribute type values can also represent the name of a function. The most common case this is used is for associated data.
+The attribute plugin also allows setting up data associations between Maps or Models. This means
+that nested data structures can be automatically converted into their Map or Model (using `Model.models`) representations by passing them as the attribute.
+If the value to convert is an array it will be converted into its `can.Map.List` or `can.Model.List` (using `can.Model.models`) representation:
 
-For example, a `Deliverable` might have many tasks and an owner (which is a Person). The attributes property might look like:
+	var Sword = can.Model.extend({
+		findAll: 'GET /swords'
+	}, {
+		getPower: function() {
+			return this.attr('power') * 100;
+		}
+	});
 
-    var Deliverable = new can.Map.extend({
-        attributes : {
-            tasks : "App.Models.Task.models"
-            owner: "App.Models.Person.model"
+	var Level = can.Model.extend({
+		findAll: 'GET /levels'
+	}, {
+		getName: function() {
+            return 'Level: ' + this.attr('name');
         }
-    },{});
+	});
 
-This points tasks and owner properties to use _Task_ and _Person_ to convert the raw data into an array of Tasks and a Person.
+	var Zelda = can.Model.extend({
+		findOne: 'GET /zelda/{id}'
+		attributes: {
+			sword: Sword,
+			levelsCompleted: Level
+		}
+	},{});
 
-It's important to note that the full names of the models themselves are _App.Models.Task_ and _App.Models.Person_. The `.model` 
-and `.models` parts are appended for the benefit of convert to identify the types as models.
+
+Assuming that `Zelda.findOne({ id: 'link' })` will return something like:
+
+	{
+        sword: {
+            name: 'Wooden Sword',
+            power: 0.2
+        },
+        levelsCompleted : [
+            {id: 1, name: 'Aquamentus'},
+            {id: 2, name: 'Dodongo'}
+        ]
+    }
+
+The converted data will contain a list or Levels and a sword Model:
+
+	Zelda.findOne({ id: 'link' }).then(function(link) {
+		console.log(link.attr('sword').getPower()); // -> 20
+		console.log(link.attr('levelsCompleted')[0].getName());
+		// -> 'Level: Aquamentus'
+	});
 
 ### Demo
 

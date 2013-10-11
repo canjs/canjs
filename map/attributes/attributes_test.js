@@ -594,5 +594,103 @@ test("store instances (#457)", function() {
 	can.Model._reqs--;
 });
 
+test("Converter functions", function() {
+	var Value = can.Map.extend({
+		attributes: {
+			value: function(orig) {
+				return orig * 100;
+			}
+		}
+	}, {});
+
+	var testValue = new Value({ value: 0.823 });
+
+	equal(testValue.attr('value'), 82.3, 'Value got multiplied');
+});
+
+test("Convert can.Map constructs passed as attributes (#293)", 4, function() {
+	var Sword = can.Map.extend({
+		getPower: function() {
+			return this.attr('power') * 100;
+		}
+	});
+
+	var Level = can.Map.extend({
+		getName: function() {
+			return 'Level: ' + this.attr('name');
+		}
+	});
+
+	var Zelda = can.Map.extend({
+		attributes: {
+			sword: Sword,
+			levelsCompleted: Level
+		}
+	},{});
+
+	var link = new Zelda({
+		sword: {
+			name: 'Wooden Sword',
+			power: 0.2
+		},
+		levelsCompleted : [
+			{id: 1, name: 'Aquamentus'},
+			{id: 2, name: 'Dodongo'}
+		]
+	});
+
+	ok(link.attr('sword') instanceof Sword, 'Sword got converted');
+	equal(link.attr('sword').getPower(), 20, 'Got sword power!');
+	ok(link.attr('levelsCompleted') instanceof Level.List, 'Got a level list');
+	equal(link.attr('levelsCompleted.0').getName(), 'Level: Aquamentus', 'Entry got converted as well');
+});
+
+test("Convert can.Model using .model and .models (#293)", 5, function() {
+	var Sword = can.Model.extend({
+		findAll: 'GET /swords',
+		model: function(data) {
+			data.test = 'Used .model'
+			return new this(data);
+		}
+	}, {
+		getPower: function() {
+			return this.attr('power') * 100;
+		}
+	});
+
+	var Level = can.Model.extend({
+		findAll: 'GET /levels',
+		models: function(array) {
+			can.each(array, function(current, index) {
+				current.index = index;
+			});
+			return can.Model.models.call(this, array);
+		}
+	}, {});
+
+	var Zelda = can.Model.extend({
+		attributes: {
+			sword: Sword,
+			levelsCompleted: Level
+		}
+	},{});
+
+	var link = Zelda.model({
+		sword: {
+			name: 'Wooden Sword',
+			power: 0.2
+		},
+		levelsCompleted : [
+			{id: 1, name: 'Aquamentus'},
+			{id: 2, name: 'Dodongo'}
+		]
+	});
+
+	ok(link.attr('sword') instanceof Sword, 'Sword got converted');
+	equal(link.attr('sword').getPower(), 20, 'Got sword power!');
+	equal(link.attr('sword.test'), 'Used .model', 'Data ran through Sword.model');
+	ok(link.attr('levelsCompleted') instanceof Level.List, 'Got a level list');
+	equal(link.attr('levelsCompleted.1.index'), 1, 'Data ran through Level.models');
+});
 
 })();
