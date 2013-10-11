@@ -91,6 +91,10 @@ steal('can/util','can/observe', function( can ) {
 				model = self.constructor,
 				jqXHR;
 
+			// `destroy` only keeps data if needed
+			if ( type == 'destroy' && !this.destroy.needs_attrs) {
+				args.shift();
+			}
 			// `update` and `destroy` need the `id`.
 			if ( type !== 'create' ) {
 				args.unshift(getId(self));
@@ -777,6 +781,7 @@ steal('can/util','can/observe', function( can ) {
 					// use ajaxMaker to convert that into a function
 					// that returns a deferred with the data
 					self[name] = ajaxMaker(method, self[name]);
+					self[name].needs_attrs = true;
 				}
 				// check if there's a make function like makeFindAll
 				// these take deferred function and can do special
