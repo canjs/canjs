@@ -64,7 +64,7 @@ can.Model.convert.date = function(raw){
 };
 
 // A task model that has a date
-can.Model("Task",{
+var Task = can.Model({
   attributes : {
     due : 'date'
   }
@@ -76,10 +76,10 @@ can.Model("Task",{
 });
 
 // A contact model that has many tasks
-can.Model("Contact",{
+var Contact = can.Model({
   attributes : { 
     birthday : 'date',
-    tasks: "Task.models"
+    tasks: Task
   },
   findAll : "/contacts.json"
 },{
