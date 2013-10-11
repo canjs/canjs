@@ -1,7 +1,7 @@
 (function() {
-	
+
 	var Scanner = can.view.Scanner;
-	
+
 	module("can/view",{
 		setup: function(){
 			this.scannerAttributes = Scanner.attributes;
@@ -432,54 +432,54 @@
 
 		equal(div.className, 'do=not=truncate=me', 'class is right');
 	});
-	
-	
+
+
 	test("basic scanner custom tags", function(){
-		
+
 		can.view.Scanner.tag("panel",function(el, options){
-			
+
 			ok(options.options.attr('helpers.myhelper')(), "got a helper")
 			equal( options.scope.attr('foo'),"bar", "got scope and can read from it" );
 			equal( options.subtemplate( options.scope.add({message: "hi"}), options.options ), "<p>sub says hi</p>"  )
-			
+
 		})
-		
+
 		var template = can.view.mustache("<panel title='foo'><p>sub says {{message}}</p></panel>")
-		
-		
+
+
 		template({foo:"bar"},{myhelper: function(){
 			return true
 		}})
-		
+
 	});
-	
+
 	test("custom tags without subtemplate", function(){
 		can.view.Scanner.tag("empty-tag",function(el, options){
-			
-			
+
+
 			ok( !options.subtemplate, "There is no subtemplate"  )
-			
+
 		})
-		
+
 		var template = can.view.mustache("<empty-tag title='foo'></empty-tag>")
-		
-		
+
+
 		template({foo:"bar"})
 	})
-	
+
 	test("sub hookup", function(){
 		var tabs = document.createElement("tabs");
-		
+
 		document.body.appendChild(tabs);
-		
+
 		var panel = document.createElement("panel");
-		
+
 		document.body.appendChild(panel)
-		
+
 		can.view.Scanner.tag("tabs",function(el, hookupOptions){
 			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, hookupOptions.options ) );
-			
-			
+
+
 			var div = document.createElement("div");
 			div.appendChild(frag);
 			var panels = div.getElementsByTagName("panel")
@@ -487,13 +487,13 @@
 			equal(panels[0].nodeName.toUpperCase(), "PANEL");
 			equal(panels[0].getAttribute("title"),"Fruits","attribute left correctly");
 			equal(panels[0].innerHTML,"oranges, apples","innerHTML");
-			
+
 		})
-		
+
 		can.view.Scanner.tag("panel",function( el, hookupOptions ) {
 			ok( hookupOptions.scope, "got scope");
 			return hookupOptions.scope;
-			
+
 		})
 
 		var template = can.view.mustache("<tabs>"+
@@ -501,24 +501,24 @@
 				"<panel title='{{title}}'>{{content}}</panel>"+
 				"{{/each}}"+
 				"</tabs>");
-	
+
 		var foodTypes= new can.List([
 			{title: "Fruits", content: "oranges, apples"}//,
 			//{title: "Breads", content: "pasta, cereal"},
 			//{title: "Sweets", content: "ice cream, candy"}
 		])
-		
+
 		var result = template({
 			foodTypes: foodTypes
-		}) 
-		
+		})
+
 	});
-	
-	
+
+
 	test("sub hookup passes helpers", function(){
 
 		can.view.Scanner.tag("tabs",function(el, hookupOptions){
-			
+
 			var optionsScope = hookupOptions.options.add({
 					tabsHelper: function(){
 						return "TabsHelper"
@@ -532,13 +532,13 @@
 			equal(panels[0].nodeName.toUpperCase(), "PANEL");
 			equal(panels[0].getAttribute("title"),"Fruits","attribute left correctly");
 			equal(panels[0].innerHTML,"TabsHelperoranges, apples","innerHTML");
-			
+
 		});
-		
+
 		can.view.Scanner.tag("panel",function( el, hookupOptions ) {
 			ok( hookupOptions.scope, "got scope");
 			return hookupOptions.scope;
-			
+
 		})
 
 		var template = can.view.mustache("<tabs>"+
@@ -546,102 +546,102 @@
 				"<panel title='{{title}}'>{{tabsHelper}}{{content}}</panel>"+
 				"{{/each}}"+
 				"</tabs>");
-	
+
 		var foodTypes= new can.List([
 			{title: "Fruits", content: "oranges, apples"}//,
 			//{title: "Breads", content: "pasta, cereal"},
 			//{title: "Sweets", content: "ice cream, candy"}
 		])
-		
+
 		var result = template({
 			foodTypes: foodTypes
-		}) 
-		
+		})
+
 	})
-	
-	
-	
-	
+
+
+
+
 	test("attribute matching",function(){
 		var item = 0;
-		
+
 		can.view.Scanner.attribute("on-click",function(data, el){
-			
+
 			ok(true, "attribute called");
 			equal(data.attr,"on-click","attr is on click")
 			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
 			var cur = data.scope.attr(".");
 			equal(foodTypes[item],cur, "can get the current scope");
 			var attr = el.getAttribute("on-click");
-			
+
 			equal( data.scope.attr(attr), doSomething, "can call a parent's function" )
-			
+
 			item++;
 		});
-		
+
 		var template = can.view.mustache("<div>"+
 				"{{#each foodTypes}}"+
 				"<p on-click='doSomething'>{{content}}</p>"+
 				"{{/each}}"+
 				"</div>");
-		
+
 		var foodTypes= new can.List([
 			{title: "Fruits", content: "oranges, apples"},
 			{title: "Breads", content: "pasta, cereal"},
 			{title: "Sweets", content: "ice cream, candy"}
 		])
 		var doSomething = function(){
-				
+
 		}
 		template({
 			foodTypes: foodTypes,
 			doSomething: doSomething
 		})
 	});
-	
+
 	test("regex attribute matching",function(){
 		var item = 0;
-		
+
 		can.view.Scanner.attribute(/on-[\w\.]+/,function(data, el){
-			
+
 			ok(true, "attribute called");
 			equal(data.attr,"on-click","attr is on click")
 			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
 			var cur = data.scope.attr(".");
-			
+
 			equal(foodTypes[item],cur, "can get the current scope");
-			
+
 			var attr = el.getAttribute("on-click");
-			
+
 			equal( data.scope.attr(attr), doSomething, "can call a parent's function" )
-			
+
 			item++;
 		})
-		
+
 		var template = can.view.mustache("<div>"+
 				"{{#each foodTypes}}"+
 				"<p on-click='doSomething'>{{content}}</p>"+
 				"{{/each}}"+
 				"</div>");
-		
+
 		var foodTypes= new can.List([
 			{title: "Fruits", content: "oranges, apples"},
 			{title: "Breads", content: "pasta, cereal"},
 			{title: "Sweets", content: "ice cream, candy"}
 		])
 		var doSomething = function(){
-				
+
 		}
 		template({
 			foodTypes: foodTypes,
 			doSomething: doSomething
 		})
 	});
-	
+
 	test("content element", function(){
 
 		var template = can.view.mustache("{{#foo}}<content></content>{{/foo}}");
-		
+
 		var context = new can.Map({foo: "bar"});
 		var frag = template(context,{
 			_tags: {
@@ -652,27 +652,27 @@
 				}
 			}
 		});
-		
+
 		equal(frag.childNodes[0].nodeName.toLowerCase(),"content")
-		
+
 		equal(frag.childNodes[0].innerHTML, "updated", "content is updated")
-		
+
 		context.removeAttr("foo");
-		
+
 		equal(frag.childNodes[0].nodeType,3, "only a text element remains");
-		
+
 		context.attr("foo","bar");
-		
+
 		equal(frag.childNodes[0].nodeName.toLowerCase(),"content")
-		
+
 		equal(frag.childNodes[0].innerHTML, "updated", "content is updated")
-		
+
 	});
-	
+
 	test("content element inside tbody", function(){
-		
+
 		var template = can.view.mustache("<table><tbody><content></content></tbody></table>");
-		
+
 		var context = new can.Map({foo: "bar"});
 		var frag = template(context,{
 			_tags: {
@@ -682,34 +682,26 @@
 				}
 			}
 		});
-		
 	});
-	
-	/*
-	You can't use self closing tags with -
-	test("two self closed tags within a parent", function(){
-		
-		can.view.Scanner.tag("todos-app", function(el, hookupOptions){
-			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, hookupOptions.options) );
-			el.appendChild(frag)
-		})
-		
-		can.view.Scanner.tag("todos-list",function(el, options){
-			
-		});
-		can.view.Scanner.tag("todos-editor", function(el, options){
-			
-		})
-		
-		var template = can.view.mustache("\n<todos-app>\n	<todos-list/>\n	<todos-editor/>\n</todos-app>")
-		
-		var frag = template()
-		
+
+	test("extensionless views, enforcing engine (#193)", 1, function() {
+		var path = can.test.path('view/test/extensionless');
+
+		// Because we don't have an extension and if we are using Steal we will get
+		// view/test/extensionless/extensionless.js which we need to fix in this case
+		if(path.indexOf('.js', this.length - 3) !== -1) {
+			path = path.substring(0, path.lastIndexOf('/'));
+		}
+
+		var frag = can.view({
+			url: path,
+			engine: 'mustache'
+		}, { message: 'Hi test' });
+
 		var div = document.createElement('div');
 		div.appendChild(frag);
-		console.log(div.innerHTML)
-	})*/
-	
-	
-	
+
+		equal(div.getElementsByTagName("h3")[0].innerHTML, 'Hi test',
+			'Got expected test from extensionless template');
+	});
 })();
