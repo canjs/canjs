@@ -2106,9 +2106,31 @@ test("support null and undefined as an argument", function(){
 			ok(arg1 === null);
 			ok(arg2 === undefined)
 		}
-	})
-	
-	
-})
+	});
+});
+
+test("passing can.List to helper (#438)", function() {
+	var renderer = can.view.mustache('<ul><li {{helper438 observeList}}>observeList broken</li>' +
+		'<li {{helper438 array}}>plain arrays work</li></ul>')
+
+	can.Mustache.registerHelper('helper438', function(classnames) {
+		return function(el) {
+			el.innerHTML = 'Helper called';
+		};
+	});
+
+	var frag = renderer({
+		observeList: new can.List([ { test: 'first' }, { test: 'second' }]),
+		array: [ { test: 'first' }, { test: 'second' }]
+	});
+	var div = document.createElement('div');
+
+	div.appendChild(frag);
+
+	var ul = div.children[0];
+
+	equal(ul.children[0].innerHTML, 'Helper called', 'Helper called');
+	equal(ul.children[1].innerHTML, 'Helper called', 'Helper called');
+});
 
 })();

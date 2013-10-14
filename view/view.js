@@ -522,18 +522,19 @@ steal("can/util", function( can ) {
 		// `url` - The url to the template.  
 		// `async` - If the ajax request should be asynchronous.  
 		// Returns a deferred.
-		get = function( url, async ) {
-			var suffix = url.match(/\.[\w\d]+$/),
-			type, 
-			// If we are reading a script element for the content of the template,
-			// `el` will be set to that script element.
-			el, 
-			// A unique identifier for the view (used for caching).
-			// This is typically derived from the element id or
-			// the url for the template.
-			id, 
-			// The ajax request used to retrieve the template content.
-			jqXHR;
+		get = function( obj, async ) {
+			var url = typeof obj === 'string' ? obj : obj.url,
+				suffix = obj.engine || url.match(/\.[\w\d]+$/),
+				type,
+				// If we are reading a script element for the content of the template,
+				// `el` will be set to that script element.
+				el,
+				// A unique identifier for the view (used for caching).
+				// This is typically derived from the element id or
+				// the url for the template.
+				id,
+				// The ajax request used to retrieve the template content.
+				jqXHR;
 
 			//If the url has a #, we assume we want to use an inline template
 			//from a script element and not current page's HTML
