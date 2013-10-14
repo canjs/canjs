@@ -279,6 +279,10 @@ Scanner.prototype = {
 			popTagName = false,
 			// Declared here.
 			bracketCount,
+			
+			// in a special attr like src= or style=
+			specialAttribute = false,
+			
 			i = 0,
 			token,
 			tmap = this.tokenMap;
@@ -425,11 +429,34 @@ Scanner.prototype = {
 								});
 							}
 							
+							if(specialAttribute) {
+								
+								content += token;
+								put(content);
+								buff.push(finishTxt, "}));\n")
+								content = ""
+								specialAttribute = false;
+								
+								break;
+							}
 							
 							
 						} else if(quote === null){
 							quote = token;
 							beforeQuote = lastToken;
+							// TODO check if there's magic 
+							if( tagName == "img" && getAttrName() == "src" ) {
+								// put content that was before the attr name, but don't include the src=
+								put(content.replace(attrReg,""));
+								content = "";
+								
+								specialAttribute = true;
+								
+								buff.push(insert_cmd, "can.view.txt(2,'"+getTag(tagName,tokens, i)+"'," + status() + ",this,function(){", startTxt);
+								put(getAttrName()+"="+token);
+								break;
+							}
+							
 						}
 					}
 				default:
@@ -486,14 +513,7 @@ Scanner.prototype = {
 							
 							
 							tagNames.push(tagName);
-								
-								
 							
-							
-							
-							
-							
-
 						}
 						
 					}
@@ -556,7 +576,12 @@ Scanner.prototype = {
 						} 
 
 						var escaped = startTag === tmap.escapeLeft ? 1 : 0,
-							commands = { insert: insert_cmd, tagName: getTag(tagName, tokens, i), status: status() };
+							commands = { 
+								insert: insert_cmd, 
+								tagName: getTag(tagName, tokens, i), 
+								status: status(),
+								specialAttribute: specialAttribute
+							};
 
 						for(var ii = 0; ii < this.helpers.length;ii++){
 							// Match the helper based on helper
@@ -578,6 +603,8 @@ Scanner.prototype = {
 							if (content.raw) {
 								buff.push(content.raw);
 							}
+						} else if (specialAttribute) {
+							buff.push(insert_cmd, content, ');');
 						} else {
 							// If we have `<%== a(function(){ %>` then we want
 							// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.

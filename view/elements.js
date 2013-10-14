@@ -32,8 +32,17 @@ steal(function(){
 			"checked": true,
 			"disabled": true,
 			"readonly": true,
-			"required": true
+			"required": true,
+			src: function(el, val){
+				if(val == null || val == ""){
+					el.removeAttribute("src")
+				} else {
+					el.setAttribute("src",val)
+				}
+			}
 		},
+		// matches the attrName of a regexp
+		attrReg: /([^\s]+)[\s]*=[\s]*/,
 		// elements whos default value we should set
 		defaultValue : ["input","textarea"],
 		// a map of parent element to child elements
@@ -66,7 +75,9 @@ steal(function(){
 			var tagName = el.nodeName.toString().toLowerCase(),
 				prop = elements.attrMap[attrName];
 			// if this is a special property
-			if(prop === true) {
+			if(typeof prop === "function"){
+				prop(el, val)
+			} else if(prop === true) {
 				el[attrName]  = true;
 			} else if (prop) {
 				// set the value as true / false
@@ -88,7 +99,9 @@ steal(function(){
 		// removes the attribute
 		removeAttr: function(el, attrName){
 			var setter = elements.attrMap[attrName];
-			if( setter === true ) {
+			if(typeof prop === "function"){
+				prop(el, undefined)
+			} if( setter === true ) {
 				el[attrName] = false;
 			} else if(typeof setter === "string"){
 				el[setter] = "";

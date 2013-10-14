@@ -93,6 +93,9 @@ can.extend(can.view, {
 		pendingHookups = [];
 		return hooks;
 	},
+	onlytxt: function(self, func){
+		return contentEscape(func.call(self))
+	},
 	/**
 	 * @function can.view.txt
 	 * @hide
@@ -137,7 +140,6 @@ can.extend(can.view, {
 			listData = listTeardown(),
 			value = compute();
 		
-
 		if(listData){
 			return "<" +tag+can.view.hook(function(el, parentNode){
 				live.list(el, listData.list, listData.renderer, self, parentNode);
@@ -147,7 +149,7 @@ can.extend(can.view, {
 		// If we had no observes just return the value returned by func.
 		if(!compute.hasDependencies || typeof value === "function"){
 			unbind();
-			return (escape || status !== 0? contentEscape : contentText)(value, status === 0 && tag);
+			return (  (escape || status !== 0) && escape !== 2  ? contentEscape : contentText)(value, status === 0 && tag);
 		}
 
 
@@ -182,6 +184,14 @@ can.extend(can.view, {
 				live.attributes(el, compute, compute());
 				unbind();
 			});
+			return compute();
+		} else if( escape === 2 ) { // In a special attribute like src or style
+			
+			var attributeName = status;
+			pendingHookups.push(function(el){
+				live.specialAttribute(el, attributeName, compute);
+				unbind();
+			})
 			return compute();
 		} else { // In an attribute...
 			var attributeName = status === 0 ? contentProp : status;
