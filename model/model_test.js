@@ -805,6 +805,47 @@ test("templated destroy", function(){
 
 });
 
+test("extended templated destroy", function(){
+
+	var MyModel = can.Model({
+		destroy : "/destroyplace/{attr1}/{attr2}/{id}"
+	},{});
+
+	can.fixture("/destroyplace/{attr1}/{attr2}/{id}", function(original){
+		ok(true,"fixture called");
+		equal(original.url, "/destroyplace/foo/bar/5", "urls match")
+		return {};
+	})
+	stop();
+        new MyModel({id: 5, attr1: "foo", attr2: "bar"}).destroy(function(){
+	        start();
+	})
+
+	can.fixture("/product/{attr3}/{id}", function( original ) {
+		equal(original.data.id, 9001, "Changed ID is correctly set.");
+		start();
+		return {};
+	});
+
+	Base = can.Model({
+	    id:'_id',
+	}, {
+	});
+
+	Product = Base({
+		destroy:'DELETE /product/{attr3}/{id}'
+	},{
+	});
+
+	var prod = new Product({
+	        _id: 9001,
+                attr3: "great",
+	}).destroy();
+
+	stop();
+
+});
+
 test("overwrite makeFindAll", function(){
 	
 	var store = {};
