@@ -3,8 +3,17 @@
 <head>
 	<title><%= configuration.description %> Test Suite</title>
 	<base href="<%= root %>" />
+    <!--[if IE]><script type="text/javascript">
+    // Fix for IE ignoring relative base tags.
+    (function() {
+        var baseTag = document.getElementsByTagName('base')[0];
+        var loc = window.location.toString();
+        var location = loc.substring(0, loc.lastIndexOf('/') + 1);
+        baseTag.href = location + baseTag.href;
+    })();
+    </script><![endif]-->
 	<link rel="stylesheet" type="text/css" href="lib/qunit/qunit.css"/>
-    <script type="text/javascript" src="../lib/html5shiv.js"></script>
+    <script type="text/javascript" src="../../lib/html5shiv.js"></script>
 </head>
 <body>
 <h1 id="qunit-header"><%= configuration.description %> Test Suite</h1>
