@@ -1,0 +1,29 @@
+<div id='out'></div>
+<script src="../../../steal/steal.js"></script>
+<script>
+steal("can/view/bindings",function(){
+		
+var template = can.view.mustache(
+  "<p>Attending? "+
+     "<input type='radio' can-value='attending' value='yes'/> Yes, "+
+     "<input type='radio' can-value='attending' value='no'/> No, "+
+     "<input type='radio' can-value='attending' value='maybe'/> Maybe"+
+  "</p>"+
+  "<p>You {{attendence}}.</p>")
+		
+var person = new can.Map({
+  attending: null
+})
+
+$("#out").html( template(person, {
+  attendence: function(){
+    return person.attr("attending") ? 
+      "are a " + person.attr("attending") :
+      "have not responded"
+    
+  }
+}) )
+
+
+})
+</script>
