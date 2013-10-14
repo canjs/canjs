@@ -669,8 +669,7 @@ steal("can/util", function( can ) {
 					return renderer;
 				}
 
-				$view.preload(id, info.renderer(id, text));
-				return can.view(id);
+				return $view.preload(id, info.renderer(id, text));
 			}
 		},
 		registerScript: function( type, id, src ) {
