@@ -828,7 +828,7 @@ test("extended templated destroy", function(){
 	});
 
 	Base = can.Model({
-	    id:'_id',
+	    id:'_id'
 	}, {
 	});
 
@@ -839,7 +839,7 @@ test("extended templated destroy", function(){
 
 	var prod = new Product({
 	        _id: 9001,
-                attr3: "great",
+                attr3: "great"
 	}).destroy();
 
 	stop();
