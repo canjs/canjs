@@ -1,13 +1,18 @@
 steal('can/util','can/construct','can/map','can/list','can/view','can/compute',function(can){
 	
 	var isObserve = function(obj) {
-		if(obj instanceof Function && obj.data) {
-			return isObserve(obj.data);
-		}
-
-		return obj instanceof can.Map;
+		return obj instanceof can.Map || (obj && !!obj.__get);
 	}
-	
+	var getProp = function(obj, prop){
+		var val = obj[prop];
+
+		if(typeof val !== "function" && obj.__get) {
+			return obj.__get(prop);
+		}
+		else {
+			return val;
+		}
+	}
 	
 	var Scope = can.Construct.extend({
 		init: function(data, parent){
@@ -68,12 +73,19 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 						if(can.isFunction(value) && value.isComputed) {
 							value = value();
 						}
-						
+						var tempValue = getProp(value,names[j]);
 						// Keep running up the tree while there are matches.
-						if (typeof value[names[j]] !== 'undefined' && value[names[j]] !== null) {
+						if(typeof tempValue !== 'undefined' && tempValue !== null) {
+						// //if(typeof tempValue !== 'undefined' && tempValue !== null) {
+						// //if (typeof value[names[j]] !== 'undefined' && value[names[j]] !== null) {
+							lastValue = value;
+							value = tempValue;
+							name = names[j];
+						}
+						/*if (typeof value[names[j]] !== 'undefined' && value[names[j]] !== null) {
 							lastValue = value;
 							value = value[name = names[j]];
-						}
+						}*/
 						// If it's undefined, still match if the parent is an Observe.
 						else if ( isObserve(value) && j > defaultPropertyDepth) {
 							defaultObserve = value;

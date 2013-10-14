@@ -16,7 +16,7 @@
 <script type="text/javascript" src="../../lib/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
-	steal("can/view/scope").then("can/test").then("can/view/scope/scope_test.js", function() {
+	steal("can/view/scope", "can/route").then("can/test").then("can/view/scope/scope_test.js", function() {
 		QUnit.start();
 	});
 </script>
