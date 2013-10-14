@@ -91,8 +91,8 @@ steal('can/util','can/map', 'can/list',function( can ) {
 				model = self.constructor,
 				jqXHR;
 
-			// `destroy` does not need data.
-			if ( type == 'destroy' ) {
+			// `destroy` only keeps data if needed
+			if ( type == 'destroy' && !this.destroy.needs_attrs) {
 				args.shift();
 			}
 			// `update` and `destroy` need the `id`.
@@ -554,10 +554,10 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		 */
 		destroy : {
 			type : "delete",
-			data : function(id){
-				var args = {};
-				args.id = args[this.id] = id;
-				return args;
+			data : function(id, attrs){
+				attrs = attrs || {};
+				attrs.id = attrs[this.id] = id;
+				return attrs;
 			}
 		},
 		/**
@@ -875,6 +875,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 					// use ajaxMaker to convert that into a function
 					// that returns a deferred with the data
 					self[name] = ajaxMaker(method, self[name]);
+					self[name].needs_attrs = true;
 				}
 				// check if there's a make function like makeFindAll
 				// these take deferred function and can do special

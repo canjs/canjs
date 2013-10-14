@@ -123,21 +123,6 @@ test("Model hookup", function(){
 	deepEqual(can.$('.moo').length, 1, 'new item popped off and deleted from ui');
 });
 
-/*test("Route hookup", function() {
-	var template = '<div id="route">{{#route.type}}{{route.type}}{{/route.type}}</div>';
-	var expected = "videos";
-	var frag = new can.Mustache({text: template}).render({route: can.route});
-	can.append( can.$('#qunit-test-area'), can.view.frag(frag) );
-
-	can.route.attr('type', expected);
-
-	deepEqual(can.$('#route')[0].innerHTML, expected);
-
-	can.route.removeAttr('type');
-
-	deepEqual(can.$('#route')[0].innerHTML, '');	
-})*/
-
 /*test("Variable partials", function(){
 	var template = "{{#items}}<span>{{>partial}}</span>{{/items}}";
 	var data = { items: [{}], partial: "test_template.mustache" }
@@ -2176,5 +2161,21 @@ test("hiding image srcs with complex content (#494)", function(){
 	notEqual(img.src, "", 'Image should have src');
 	equal( img.src, url, "images src is correct" );
 });
+
+test("style property is live-bindable in IE (#494)", function(){
+	
+	var template = can.view.mustache('<div style="width: {{width}}px">hi</div>')
+	
+	var dims = new can.Map({
+		width: 5
+	})
+	var div = template(dims).childNodes[0]
+	equal(div.style.width, "5px");
+	
+	dims.attr("width", 10);
+	
+	equal(div.style.width, "10px");
+	
+})
 
 })();

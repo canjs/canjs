@@ -285,7 +285,8 @@ Scanner.prototype = {
 			
 			i = 0,
 			token,
-			tmap = this.tokenMap;
+			tmap = this.tokenMap,
+			attrName;
 
 		// Reinitialize the tag state goodness.
 		htmlTag = quote = beforeQuote = null;
@@ -444,8 +445,9 @@ Scanner.prototype = {
 						} else if(quote === null){
 							quote = token;
 							beforeQuote = lastToken;
-							// TODO check if there's magic 
-							if( tagName == "img" && getAttrName() == "src" ) {
+							attrName = getAttrName()
+							// TODO: check if there's magic!!!!
+							if( (tagName == "img" && attrName == "src") || attrName === "style" ) {
 								// put content that was before the attr name, but don't include the src=
 								put(content.replace(attrReg,""));
 								content = "";
@@ -453,7 +455,7 @@ Scanner.prototype = {
 								specialAttribute = true;
 								
 								buff.push(insert_cmd, "can.view.txt(2,'"+getTag(tagName,tokens, i)+"'," + status() + ",this,function(){", startTxt);
-								put(getAttrName()+"="+token);
+								put(attrName+"="+token);
 								break;
 							}
 							

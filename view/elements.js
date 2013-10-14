@@ -121,5 +121,18 @@ steal(function(){
 		}
 	};
 	
+	// feature detect if setAttribute works with styles
+	(function(){
+		// feature detect if 
+		var div = document.createElement('div')
+		div.setAttribute("style","width: 5px")
+		div.setAttribute("style","width: 10px");
+		// make style use cssText
+		elements.attrMap.style = function(el, val){
+			el.style.cssText = val || ""
+		}
+	})();
+	
+	
 	return elements;
 })
