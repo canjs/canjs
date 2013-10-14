@@ -1164,7 +1164,11 @@ function( can ){
 								 *     </ul>
 								 */
 								case '^':
-									result.push(cmd.insert + 'can.view.txt(0,\'' + cmd.tagName + '\',' + cmd.status + ',this,function(){ return ');
+									if(cmd.specialAttribute) {
+										result.push(cmd.insert + 'can.view.onlytxt(this,function(){ return ');
+									} else {
+										result.push(cmd.insert + 'can.view.txt(0,\'' + cmd.tagName + '\',' + cmd.status + ',this,function(){ return ');
+									}
 									break;
 								// Close the prior section.
 								/**
@@ -1276,7 +1280,7 @@ function( can ){
 							
 							// Not a section, no mode
 							default:
-								result.push(');');
+								result.push(')');
 								break;
 						}
 						
