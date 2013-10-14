@@ -160,6 +160,16 @@
 		
 		ok(lastNameInfo.parent ===  middle.attr('name'), "pick the default observe with the highest depth");
 	})
+
+	test("use observe like objects, e.g. can.route, within scope properly", function() {
+		var expected = "video"
+		var cur = new can.view.Scope({}).add(can.route);
+		can.route.attr('type', expected);
+		var type = cur.get('type'); 
+
+		equal(type.value, expected);
+		equal(type.parent, can.route);
+	})
 	
 	
 })()

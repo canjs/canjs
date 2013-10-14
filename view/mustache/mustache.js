@@ -53,11 +53,7 @@ function( can ){
 		 * @return {Boolean} returns if the object is observable like.
 		 */
 		isObserveLike = function(obj) {
-			if(obj instanceof Function && obj.data) {
-				return isObserveLike(obj.data);
-			}
-
-			return obj instanceof can.Map;
+			return obj instanceof can.Map || (obj && !!obj._get);
 		},
 		
 		/*
