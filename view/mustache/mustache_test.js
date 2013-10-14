@@ -2162,20 +2162,25 @@ test("hiding image srcs with complex content (#494)", function(){
 	equal( img.src, url, "images src is correct" );
 });
 
-test("style property is live-bindable in IE (#494)", function(){
+test("style property is live-bindable in IE (#494)", 4, function(){
 	
-	var template = can.view.mustache('<div style="width: {{width}}px">hi</div>')
+	var template = can.view.mustache('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
 	
 	var dims = new can.Map({
-		width: 5
-	})
+		width: 5,
+		color: 'red'
+	});
+
 	var div = template(dims).childNodes[0]
+
 	equal(div.style.width, "5px");
+	equal(div.style.backgroundColor, "red");
 	
 	dims.attr("width", 10);
-	
+	dims.attr('color', 'blue');
+
 	equal(div.style.width, "10px");
-	
-})
+	equal(div.style.backgroundColor, "blue");
+});
 
 })();
