@@ -306,8 +306,23 @@ steal('can/util', './elements.js','can/view','./node_lists.js',
 
 
 
+		},
+		specialAttribute: function(el, attributeName, compute){
+			
+			listen(el, compute, function(ev, newVal){
+				elements.setAttr( el, attributeName, getValue( newVal ) );
+			});
+			
+			elements.setAttr(el, attributeName, getValue( compute() ) );
 		}
 	}
+	
+	var getValue = function(val){
+		val = val.replace(elements.attrReg,"");
+		// check if starts and ends with " or '
+		return /^["'].*["']$/.test(val) ? val.substr(1, val.length-2) : val
+	}
+	
 	return live;
 
 })

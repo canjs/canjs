@@ -2030,7 +2030,7 @@ test("hiding image srcs (#157)", function(){
 	notEqual(img.src, "", 'Image should have src')
 	equal( img.src, url, "images src is correct" );
 	
-	var renderer = can.view.mustache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />{{image}}'),
+	/*var renderer = can.view.mustache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />{{image}}'),
 		url = 'http://farm8.staticflickr.com/7102/6999583228_99302b91ac_n.jpg',
 		data = new can.Map({
 	        user: 'Tina Fey',
@@ -2046,7 +2046,7 @@ test("hiding image srcs (#157)", function(){
 	data.attr('messages', 5);
 	data.attr('image', url);
 	notEqual(img.src, "", 'Image should have src');
-	equal(img.src, url, 'Image should have src URL');
+	equal(img.src, url, 'Image should have src URL');*/
 });
 
 test("backtracks in mustache (#163)", function(){
@@ -2116,6 +2116,71 @@ test("passing can.List to helper (#438)", function() {
 
 	equal(ul.children[0].innerHTML, 'Helper called', 'Helper called');
 	equal(ul.children[1].innerHTML, 'Helper called', 'Helper called');
+});
+
+test("hiding image srcs (#494)", function(){
+	var template = can.view.mustache('<img src="{{image}}"/>'),
+		data = new can.Map({
+			image: ""
+		}),
+		url = "http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png";
+	
+	var str = template.render(data);
+	
+	ok( str.indexOf('__!!__') == -1, "no __!!___ "+str)
+	
+	var frag = template(data),
+		img = frag.childNodes[0];
+	
+	equal( img.src, "", "there is no src");
+	
+	data.attr("image",url);
+	notEqual(img.src, "", 'Image should have src');
+	equal( img.src, url, "images src is correct" );
+});
+
+test("hiding image srcs with complex content (#494)", function(){
+	var template = can.view.mustache('<img src="{{#image}}http://{{domain}}/{{loc}}.png{{/image}}"/>'),
+		data = new can.Map({}),
+		imgData = {
+			domain: "canjs.us",
+			loc: "scripts/static/img/canjs_logo_yellow_small"
+		},
+		url = "http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png";
+	
+	var str = template.render(data);
+	
+	ok( str.indexOf('__!!__') == -1, "no __!!__")
+	
+	var frag = template(data),
+		img = frag.childNodes[0];
+	
+	equal( img.src, "", "there is no src");
+	
+	data.attr("image",imgData);
+	notEqual(img.src, "", 'Image should have src');
+	equal( img.src, url, "images src is correct" );
+});
+
+test("style property is live-bindable in IE (#494)", 4, function(){
+	
+	var template = can.view.mustache('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
+	
+	var dims = new can.Map({
+		width: 5,
+		color: 'red'
+	});
+
+	var div = template(dims).childNodes[0]
+
+	equal(div.style.width, "5px");
+	equal(div.style.backgroundColor, "red");
+	
+	dims.attr("width", 10);
+	dims.attr('color', 'blue');
+
+	equal(div.style.width, "10px");
+	equal(div.style.backgroundColor, "blue");
 });
 
 })();
