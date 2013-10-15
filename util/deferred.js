@@ -164,7 +164,9 @@ steal('can/util/can.js',function(can){
 			this._status = st;
 
 			can.each(dst, function(d){
-				d.apply(context, args);
+				if(typeof d.apply === 'function') {
+					d.apply(context, args);
+				}
 			});
 
 			return this;
