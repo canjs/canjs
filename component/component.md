@@ -6,7 +6,7 @@
 @description Create widgets that use a template, a view-model 
 and custom tags.
 
-@signature `<TAG [ATTR-NAME=ATTR-VALUE]>`
+@signature `< TAG [ATTR-NAME=ATTR-VALUE] >`
 
 Create an instance of a component on a particular 
 tag. Currently, this only works within [can.Mustache] templates.
