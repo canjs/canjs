@@ -1,12 +1,11 @@
-@page can.Map.batchEvents Batch Events
-@parent can.Map
+@page can.batch
+@parent can.util
 
 
-[can.Map.startBatch `can.Map.startBatch( batchStopHandler )`] and
-[can.Map.stopBatch  `can.Map.stopBatch( force, callStart )`]
-
-are used to specify atomic operations. `startBatch`
-prevents change events from being fired until `stopBatch` is called.
+[can.batch.start `can.batch.start( batchStopHandler )`] and
+[can.batch.end  `can.batch.end( force, callStart )`] are used to specify 
+atomic operations. `start`
+prevents change events from being fired until `stop` is called.
 
 The following listens to changes on a `player`:
 
