@@ -2184,16 +2184,19 @@ test("style property is live-bindable in IE (#494)", 4, function(){
 });
 
 test("empty lists update", 2, function() {
-	var template = can.view.mustache('<div>{{#list}}{{.}}{{/list}}</div>');
+	var template = can.view.mustache('<p>{{#list}}{{.}}{{/list}}</p>');
 	var map = new can.Map({
 		list: ['something']
 	});
 
 	var frag = template(map);
+	var div = document.createElement('div');
 
-	equal(frag.children[0].innerHTML, 'something', 'initial list content set');
+	div.appendChild(frag);
+
+	equal(div.children[0].innerHTML, 'something', 'initial list content set');
 	map.attr('list', ['one', 'two']);
-	equal(frag.children[0].innerHTML, 'onetwo', 'updated list content set');
+	equal(div.children[0].innerHTML, 'onetwo', 'updated list content set');
 });
 
 })();
