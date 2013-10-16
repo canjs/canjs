@@ -41,8 +41,7 @@
 		"can/view/ejs": {
 			"name": "can.EJS",
 			"description": "Live-binding Embedded JavaScript",
-			"type": "core",
-			"isDefault": true
+			"type": "plugin"
 		},
 		"can/control": {
 			"name": "can.Control",
@@ -75,18 +74,21 @@
 		},
 		"can/view/mustache": {
 			"name": "can.Mustache",
-			"type": "plugin",
-			"description": "Live-binding Handlebars and Mustache views"
+			"description": "Live-binding Handlebars and Mustache views",
+			"type": "core",
+			"isDefault": true
 		},
 		"can/view/bindings": {
 			"name": "can.view.bindings",
 			"type": "plugin",
-			"description": "Two way bindings and in-template declarative event handlers."
+			"description": "Two way bindings and in-template declarative event handlers.",
+			"hidden":true
 		},
 		"can/view/scope": {
 			"name": "can.view.Scope",
 			"type": "plugin",
-			"description": "Looks up a value in parent contexts."
+			"description": "Looks up a value in parent contexts.",
+			"hidden":true
 		},
 		"can/model/queue": {
 			"name": "can.Model.Queue",
@@ -104,32 +106,32 @@
 			"description": "Proxy construct methods"
 		},
 		"can/map/delegate": {
-			"name": "can.Observe.delegate",
+			"name": "can.Map.delegate",
 			"type": "plugin",
 			"description": "Listen to Observe attributes"
 		},
 		"can/map/setter": {
-			"name": "can.Observe.setter",
+			"name": "can.Map.setter",
 			"type": "plugin",
 			"description": "Use setter methods on Observes"
 		},
 		"can/map/attributes": {
-			"name": "can.Observe.attributes",
+			"name": "can.Map.attributes",
 			"type": "plugin",
 			"description": "Define Observe attributes"
 		},
 		"can/map/validations": {
-			"name": "can.Observe.validations",
+			"name": "can.Map.validations",
 			"type": "plugin",
 			"description": "Validate Observe attributes"
 		},
 		"can/map/backup": {
-			"name": "can.Observe.backup",
+			"name": "can.Map.backup",
 			"type": "plugin",
 			"description": "Backup and restore an Observes state"
 		},
 		"can/map/list": {
-			"name": "can.Observe.List",
+			"name": "can.Map.List",
 			"type": "plugin",
 			"description": "Live-updating mapped and filtered observe lists"
 		},
