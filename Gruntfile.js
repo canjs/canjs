@@ -151,7 +151,7 @@ module.exports = function (grunt) {
 			log: {
 				repo: 'canjs',
 				user: 'bitovi',
-				milestone: 10,
+				milestone: 3,
 				version: pkg.version
 			}
 		},
