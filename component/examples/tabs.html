@@ -32,6 +32,7 @@ panel {
 tabs ul:after  { content: "."; display: block; height: 1px; clear: both; visibility: hidden; }
 tabs ul { display: inline-block; }
 </style>
+<div id="demo-html">
 <div id='out'></div>
 <script id="app" type="text/mustache">
   <p><button can-click="addVegies">Add Vegetables</button></p>
@@ -43,8 +44,9 @@ tabs ul { display: inline-block; }
   
   
 </script>
+</div>
 <script src="../../lib/steal/steal.js"></script>
-<script>
+<script id="demo-source">
 steal("can/component",function(){
 	
 can.Component.extend({
