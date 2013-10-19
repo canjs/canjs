@@ -716,4 +716,25 @@
 		ok(withId({ message: 'With id'}) instanceof DocumentFragment,
 			'View with id returned document fragment');
 	});
+	
+	
+	test("create a template before the custom element works with slash and colon", function(){
+		can.view.mustache("theid","<unique-name></unique-name><can:something></can:something><ignore-this>content</ignore-this>");
+		
+		can.view.Scanner.tag("unique-name",function(el, hookupOptions){
+			ok(true, "unique-name called!")
+		});
+		
+		can.view.Scanner.tag("can:something",function(el, hookupOptions){
+			ok(true, "can:something called!")
+		});
+		
+		
+		
+		can.view("theid",{})
+		
+		
+	})
+	
+	
 })();

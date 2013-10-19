@@ -64,7 +64,9 @@ var newLine = /(\r|\n)+/g,
 	// returns the top of a stack
 	top = function(stack){
 		return stack[stack.length-1]
-	};
+	},
+	// characters that automatically mean a custom element
+	automaticCustomElementCharacters = /[-\:]/;
 
 /**
  * @constructor can.view.Scanner
@@ -177,8 +179,10 @@ Scanner.hookupTag = function(hookupOptions){
 		var helperTags = hookupOptions.options.attr('helpers._tags'),
 			tagName= hookupOptions.tagName,
 			tagCallback = ( helperTags && helperTags[tagName] ) || Scanner.tags[tagName]
-			
-		var res = tagCallback(el, hookupOptions),
+		
+		
+		// if this was an element like <foo-bar> that doesn't have a component, just render its content
+		var res = tagCallback ? tagCallback(el, hookupOptions) : scope,
 			scope = hookupOptions.scope;
 
 		if(res){
@@ -503,7 +507,7 @@ Scanner.prototype = {
 								
 							} 
 								
-							if(Scanner.tags[tagName]){
+							if(Scanner.tags[tagName]  || automaticCustomElementCharacters.test(tagName)){
 								// if the content tag is inside something it doesn't belong ...
 								if(tagName === "content" && elements.tagMap[top(tagNames)]){
 									// convert it to an element that will work

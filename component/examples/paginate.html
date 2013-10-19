@@ -114,10 +114,10 @@ var Paginate = can.Map.extend({
   },
   canNext: function () {
     return this.attr('offset') < this.attr('count') -
-      this.attr('limit')
+      this.attr('limit');
   },
   canPrev: function () {
-    return this.attr('offset') > 0
+    return this.attr('offset') > 0;
   },
   page: function (newVal) {
     if (newVal === undefined) {
