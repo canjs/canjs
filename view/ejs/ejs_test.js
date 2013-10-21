@@ -1700,11 +1700,11 @@ test('Access .length with nested dot notation', function() {
 });
 
 test("attributes in truthy section", function() {
-	var template1 = can.view.ejs('<p <% if(attribute) {%>data-test="<%=attribute%>"<% } %>></p>');
+	var template = can.view.ejs('<p <% if(attribute) {%>data-test="<%=attribute%>"<% } %>></p>');
 	var data1 = {
 		attribute: "test-value"
 	};
-	var frag1 = template1(data1);
+	var frag1 = template(data1);
 	var div1 = document.createElement('div');
 
 	div1.appendChild(frag1);
