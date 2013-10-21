@@ -2199,4 +2199,52 @@ test("empty lists update", 2, function() {
 	equal(div.children[0].innerHTML, 'onetwo', 'updated list content set');
 });
 
+test("attributes in truthy section", function() {
+	var template = can.view.mustache('<p {{#attribute}}data-test="{{attribute}}"{{/attribute}}></p>');
+	var data1 = {
+		attribute: "test-value"
+	};
+	var frag1 = template(data1);
+	var div1 = document.createElement('div');
+
+	div1.appendChild(frag1);
+	equal(div1.children[0].getAttribute('data-test'), 'test-value', 'hyphenated attribute value');
+
+	var data2 = {
+		attribute: "test value"
+	};
+	var frag2 = template(data2);
+	var div2 = document.createElement('div');
+
+	div2.appendChild(frag2);
+	equal(div2.children[0].getAttribute('data-test'), 'test value', 'whitespace in attribute value');
+});
+
+test("outputting array of attributes", function() {
+	var template = can.view.mustache('<p {{#attribute}}{{name}}="{{value}}"{{/attribute}}></p>');
+	var data = {
+		attribute: [
+			{
+				"name": "data-test1",
+				"value": "value1"
+			},
+			{
+				"name": "data-test2",
+				"value": "value2"
+			},
+			{
+				"name": "data-test3",
+				"value": "value3"
+			}
+		]
+	};
+	var frag = template(data);
+	var div = document.createElement('div');
+
+	div.appendChild(frag);
+	equal(div.children[0].getAttribute('data-test1'), 'value1', 'first value');
+	equal(div.children[0].getAttribute('data-test2'), 'value2', 'second value');
+	equal(div.children[0].getAttribute('data-test3'), 'value3', 'third value');
+});
+
 })();

@@ -1699,4 +1699,52 @@ test('Access .length with nested dot notation', function() {
 	ok(div.getElementsByTagName('span')[1].innerHTML === '4', 'Not-nested dot notation.');
 });
 
+test("attributes in truthy section", function() {
+	var template = can.view.ejs('<p <% if(attribute) {%>data-test="<%=attribute%>"<% } %>></p>');
+	var data1 = {
+		attribute: "test-value"
+	};
+	var frag1 = template(data1);
+	var div1 = document.createElement('div');
+
+	div1.appendChild(frag1);
+	equal(div1.children[0].getAttribute('data-test'), 'test-value', 'hyphenated attribute value');
+
+
+	var data2 = {
+		attribute: "test value"
+	};
+	var frag2 = template(data2);
+	var div2 = document.createElement('div');
+
+	div2.appendChild(frag2);
+	equal(div2.children[0].getAttribute('data-test'), 'test value', 'whitespace in attribute value');
+});
+
+test("outputting array of attributes", function() {
+	var template = can.view.ejs('<p <% for(var i = 0; i < attribute.length; i++) { %><%=attribute[i].name%>="<%=attribute[i].value%>"<%}%>></p>');
+	var data = {
+		attribute: [
+			{
+				"name": "data-test1",
+				"value": "value1"
+			},
+			{
+				"name": "data-test2",
+				"value": "value2"
+			},
+			{
+				"name": "data-test3",
+				"value": "value3"
+			}
+		]
+	};
+	var frag = template(data);
+	var div = document.createElement('div');
+
+	div.appendChild(frag);
+	equal(div.children[0].getAttribute('data-test1'), 'value1', 'first value');
+	equal(div.children[0].getAttribute('data-test2'), 'value2', 'second value');
+	equal(div.children[0].getAttribute('data-test3'), 'value3', 'third value');
+});
 })();
