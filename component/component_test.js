@@ -556,7 +556,57 @@ test("self closing content tags", function(){
 	equal(can.$("#qunit-test-area span").length, 1, "there is an h1")
 })
 
-
+test("setting passed variables - two way binding", function(){
+	can.Component({
+	    tag: "my-toggler",
+	    template: "{{#if visible}}<content/>{{/if}}",
+	    scope: {
+	        visible: true,
+	        show: function(){
+	            this.attr('visible', true)
+	        },
+	        hide: function(){
+	            this.attr("visible", false)
+	        }
+	    }
+	})
+	
+	
+	can.Component({
+	    tag: "my-app",
+	    scope: {
+	        visible: true,
+	        show: function(){
+	          this.attr('visible', true)              
+	        }
+	    }
+	})
+    var template = can.view.mustache("<my-app>"+
+        '{{^visible}}<button can-click="show">show</button>{{/visible}}'+
+        '<my-toggler visible="visible">'+
+        	'content'+
+            '<button can-click="hide">hide</button>'+
+        '</my-toggler>'+
+    '</my-app>')
+    
+    
+    can.append(can.$("#qunit-test-area"), template({}));
+    
+    var testArea = can.$("#qunit-test-area")[0],
+		buttons = testArea.getElementsByTagName("button")
+    
+    equal(buttons.length, 1, "there is one button")
+    equal(buttons[0].innerHTML, "hide", "the button's text is hide")
+    
+    can.trigger(buttons[0],"click");
+    
+    equal(buttons.length, 1, "there is one button")
+    equal(buttons[0].innerHTML, "show", "the button's text is show");
+    
+    can.trigger(buttons[0],"click");
+    equal(buttons.length, 1, "there is one button")
+    equal(buttons[0].innerHTML, "hide", "the button's text is hide")
+})
 
 	
 })()
