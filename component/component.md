@@ -210,7 +210,9 @@ only renders friendly messages:
 
     can.Component.extend({
       tag: "hello-world",
-      template: "{{#isFriendly message}}<h1>{{message}}</h1>{{/isFriendly}}",
+      template: "{{#isFriendly message}}"+
+                  "<h1>{{message}}</h1>"+
+                "{{/isFriendly}}",
       helpers: {
         isFriendly: function(message, options){
           if( /hi|hello|howdy/.test(message) ) {
