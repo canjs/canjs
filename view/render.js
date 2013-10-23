@@ -149,7 +149,7 @@ can.extend(can.view, {
 		// If we had no observes just return the value returned by func.
 		if(!compute.hasDependencies || typeof value === "function"){
 			unbind();
-			return (  (escape || status !== 0) && escape !== 2  ? contentEscape : contentText)(value, status === 0 && tag);
+			return (  (escape || typeof status === 'string') && escape !== 2  ? contentEscape : contentText)(value, status === 0 && tag);
 		}
 
 

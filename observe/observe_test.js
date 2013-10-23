@@ -1336,6 +1336,7 @@ test("compute bound to input value",function(){
 })
 
 test("compute on the prototype", function(){
+	expect(4)
 	var Person = can.Map.extend({
 		fullName: can.compute(function(fullName){
 			if(arguments.length){
@@ -1365,8 +1366,18 @@ test("compute on the prototype", function(){
 	equal(me.attr("first"),"Brian","set first name");
 	equal(me.attr("last"),"Moschel","set last name")
 	
+	var handler = function(ev, newVal, oldVal){
+		ok(newVal,"Brian M")
+	}
+	me.bind("fullName", handler);
 	
-})
+	me.attr("last","M")
+	
+	me.unbind("fullName", handler);
+	
+	me.attr("first","B");
+	
+});
 
 
 

@@ -507,7 +507,7 @@ Scanner.prototype = {
 								
 							} 
 								
-							if(Scanner.tags[tagName]  || automaticCustomElementCharacters.test(tagName)){
+							if(tagName !== "!--" && ( Scanner.tags[tagName]  || automaticCustomElementCharacters.test(tagName) )){
 								// if the content tag is inside something it doesn't belong ...
 								if(tagName === "content" && elements.tagMap[top(tagNames)]){
 									// convert it to an element that will work

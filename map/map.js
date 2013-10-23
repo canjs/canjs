@@ -79,8 +79,8 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 	
 		},
 		// keep so it can be overwritten
-		bind : can.bindAndSetup,
-		on : can.bindAndSetup,
+		bind: can.bindAndSetup,
+		on: can.bindAndSetup,
 		unbind: can.unbindAndTeardown,
 		off: can.unbindAndTeardown,
 		id: "id",
@@ -201,12 +201,17 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 			delete this._init;
 		},
 		_setupComputes: function(){
-			var prototype = this.constructor.prototype
+			var prototype = this.constructor.prototype;
+			this._computedBindings = {}
 			for(var prop in prototype){
 				if(prototype[prop] && prototype[prop].isComputed){
 					this[prop] = prototype[prop].clone(this);
+					this._computedBindings[prop] = {
+						count: 0
+					}
 				}
 			}
+			
 		},
 		_bindsetup: makeBindSetup(),
 		_bindteardown: function(){
@@ -682,8 +687,24 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		 * 
 		 * For a more specific way to changes on Observes, see the [can.Map.delegate] plugin.
 		 */
-		bind: can.bindAndSetup,
-		on: can.bindAndSetup,
+		bind: function(eventName, handler){
+			var computedBinding = this._computedBindings && this._computedBindings[eventName]
+			if( computedBinding ) {
+				if( !computedBinding.count ) {
+					computedBinding.count = 1;
+					var self =  this;
+					computedBinding.handler = function(ev, newVal, oldVal){
+						can.batch.trigger(self, {type: eventName, batchNum: ev.batchNum}, [newVal, oldVal] )
+					}
+					this[eventName].bind("change", computedBinding.handler)
+				} else {
+					computedBinding.count++
+				}
+				
+			}
+			return can.bindAndSetup.apply(this, arguments);
+			
+		},
 		/**
 		 * @function can.Map.prototype.unbind unbind
 		 * @description Unbind event handlers from an Map.
@@ -715,8 +736,21 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		 * i; // 8
 		 * @codeend
 		 */
-		unbind: can.unbindAndTeardown,
-		off: can.unbindAndTeardown,
+		unbind: function(eventName, handler){
+			var computedBinding = this._computedBindings && this._computedBindings[eventName]
+			if( computedBinding ) {
+				if( computedBinding.count == 1 ) {
+					computedBinding.count = 0;
+					this[eventName].unbind("change", computedBinding.handler);
+					delete computedBinding.handler;
+				} else {
+					computedBinding.count++
+				}
+				
+			}
+			return can.unbindAndTeardown.apply(this, arguments);
+			
+		},
 		/**
 		 * @function can.Map.prototype.serialize serialize
 		 * @description Serialize this object to something that
@@ -831,6 +865,9 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 			
 		}
 	});
+	
+	Map.prototype.on = Map.prototype.bind;
+	Map.prototype.off = Map.prototype.unbind;
 
 	return Map;
 });

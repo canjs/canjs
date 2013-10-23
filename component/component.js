@@ -75,7 +75,8 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 		setup: function(el, hookupOptions){
 			// Setup values passed to component
 			var initalScopeData = {},
-				component = this;
+				component = this,
+				twoWayBindings = {};
 			
 			// scope prototype properties marked with an "@" are added here
 			can.each(this.constructor.attributeScopeMappings,function(val, prop){
@@ -94,16 +95,24 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 					return;
 				}
 				
-				// get the value from the current scope
-				var scopeValue = hookupOptions.scope.attr(value);
-				if(can.isFunction(scopeValue) && !scopeValue.isComputed){
+				// Cross-bind the value in the scope to this 
+				// component's scope
+				
+				var propertyDataFromScope = hookupOptions.scope.get(value),
+					propertyValue = propertyDataFromScope.value;
+				
+				// If the value is a function, but not a compute
+				if(can.isFunction(propertyValue) && !propertyValue.isComputed){
 					
-					var data = hookupOptions.scope.get(value)
+					// get the value by reading the function
+					propertyValue = propertyDataFromScope.value.call(propertyDataFromScope.parent)
 					
-					scopeValue = data.value.call(data.parent)
-					
-				} 
-				initalScopeData[name] = scopeValue;
+				} else if( propertyDataFromScope.parent instanceof can.Map ) {
+					// there's a value, setup two-way binding ...
+					twoWayBindings[name] = propertyDataFromScope.parent
+				}
+				// set the value
+				initalScopeData[name] = propertyValue;
 				
 				// if this is something that we can auto-update, lets do that
 				var compute = hookupOptions.scope.compute(value),
@@ -135,6 +144,20 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				}
 				
 			}
+			var handlers = {};
+			// setup reverse bindings
+			can.each(twoWayBindings, function(parent, prop){
+				handlers[prop] = function(ev, newVal){
+					parent.attr(prop, newVal)
+				}
+				componentScope.bind(prop, handlers[prop])
+			});
+			// teardown reverse bindings when element is removed
+			can.bind.call(el,"removed",function(){
+				can.each(handlers, function(handler, prop){
+					componentScope.unbind(prop, handlers[prop])
+				})
+			})
 			
 			this.scope = componentScope;
 			can.data(can.$(el),"scope", this.scope)
