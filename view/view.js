@@ -298,7 +298,7 @@ steal("can/util", function( can ) {
 		 * 		can.view.ext = 'txt';
 		 *
 		 */
-		ext: ".mustache",
+		ext: ".ejs",
 
 		/**
 		 * Returns the text that 
@@ -542,16 +542,10 @@ steal("can/util", function( can ) {
 				url = url.substr(1);
 			}
 			// If we have an inline template, derive the suffix from the `text/???` part.
-      // This no longer only supports `<script>` tags.
-      if (el = document.getElementById(url)) {
-          var type = el.getAttribute('type');
-          if(type) {
-              suffix = "." + type.match(/\/(x\-)?(.+)/)[2];
-          }
-          else {
-              suffix = $view.ext;
-          }
-      }
+			// This only supports `<script>` tags.
+			if ( el = document.getElementById(url) ) {
+				suffix = "."+el.type.match(/\/(x\-)?(.+)/)[2];
+			}
 	
 			// If there is no suffix, add one.
 			if (!suffix && !$view.cached[url] ) {
