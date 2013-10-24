@@ -710,10 +710,10 @@
 		var withId = can.view.mustache('test-485', template);
 		var withoutId = can.view.mustache(template);
 
-		ok(withoutId({ message: 'Without id'}).nodeType == 11,
+		ok(withoutId({ message: 'Without id'}) instanceof DocumentFragment,
 			'View without id returned document fragment');
 
-		ok(withId({ message: 'With id'}).nodeType == 11,
+		ok(withId({ message: 'With id'}) instanceof DocumentFragment,
 			'View with id returned document fragment');
 	});
 	
