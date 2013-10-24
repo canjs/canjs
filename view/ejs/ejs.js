@@ -3,6 +3,11 @@ steal('can/util', 'can/view', 'can/util/string', 'can/compute', 'can/view/scanne
 	// `can.EJS`  
 	// _Embedded JavaScript Templates._
 
+	// ## Initialization
+	//
+	// Define the view extension.
+	can.view.ext = ".ejs";
+
 	// Helper methods.
 	var extend = can.extend,
 		EJS = function( options ) {
