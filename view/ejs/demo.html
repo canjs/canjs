@@ -17,7 +17,7 @@
 </h2>
 
 <ul>
-  <% list(teacher.students, 
+  <% can.each(teacher.students, 
 	function(student){ %>
 	<li>
 	  <%= student.attr('name') %>
@@ -54,6 +54,7 @@
 steal('can/view/ejs',
 	'can/util/json.js',
 	'can/map',
+	'can/list',
 	'can/util/demos/observer.js',
 function() {
 	var teacher = new can.Map({
