@@ -1250,6 +1250,31 @@ test("string configurable model and models functions (#128)", function(){
 		{id: 2, name: "two"}
 	])
 	
+});
+
+
+test("create deferred does not resolve to the same instance", function(){
+	var Todo = can.Model.extend({
+	  create: function(){
+	     return $.Deferred().resolve({id: 5})
+	  }
+	},{});
+	var handler = function(){}
+	
+	
+	var t = new Todo({name: "Justin"})
+	t.bind("name",handler)
+	var def = t.save();
+	stop();
+	
+	def.then(function(todo){
+		ok(todo === t, "same instance");
+		start();
+		ok( Todo.store[5] === t,  "instance put in store");
+		
+		t.unbind("name",handler)
+	})
+
 })
 
 
