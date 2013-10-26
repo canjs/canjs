@@ -51,7 +51,7 @@ says "Hello There!".  To create a a instance of this component on the page,
 add `<hello-world></hello-world>` to a mustache template, render
 the template and insert the result in the page like:
 
-    var template = can.view.mustache("<hello-world/>");
+    var template = can.view.mustache("<hello-world></hello-world>");
     $(document.body).append( template() );
 
 Check this out here:
@@ -103,7 +103,7 @@ The following component:
       template: "<h1>Hello World</h1>"
     });
 
-Changes `<hello-world/>` elements into:
+Changes `<hello-world></hello-world>` elements into:
 
     <hello-world><h1>Hello World</h1></hello-world>
 

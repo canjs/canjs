@@ -32,7 +32,7 @@ the matching attribute values are used.  For example:
    
 With source HTML like:
 
-    <my-tag title="hello"/>
+    <my-tag title="hello"></my-tag>
     
 Results in:
 
@@ -134,7 +134,7 @@ component shows the current page number based off a `limit` and `offset` value:
 
 If this component HTML was inserted into the page like:
 
-    var template = can.view.mustache("<my-paginate/>")
+    var template = can.view.mustache("<my-paginate></my-paginate>")
     $("body").append(template())
 
 It would result in:
@@ -186,7 +186,7 @@ limit:
 
 If `<my-paginate>`'s source html is rendered like:
 
-    var template = can.view.mustache("<my-paginate offset='index' limit='size'/>");
+    var template = can.view.mustache("<my-paginate offset='index' limit='size'></my-paginate>");
     
     var pageInfo = new can.Map({
       index: 0,
@@ -222,7 +222,7 @@ properties with values of "@".  For example:
    
 With source HTML like:
 
-    <my-tag title="hello"/>
+    <my-tag title="hello"></my-tag>
     
 Results in:
 

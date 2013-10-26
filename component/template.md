@@ -166,7 +166,7 @@ change the component to look like:
 
 And rendered with source html like:
 
-    <my-greeting/>
+    <my-greeting></my-greeting>
 
 Produces:
 
