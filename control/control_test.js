@@ -22,12 +22,12 @@
             var foo = {
                 bind:function (event, cb) {
                     ok(true, "bind called");
-                    equal(event, "bar");
+                    equal(event, "bar","bind given bar");
                     ok(cb, "called with a callback")
                 },
                 unbind:function (event, cb) {
                     ok(true, "unbind called");
-                    equal(event, "bar")
+                    equal(event, "bar", "unbind given bar")
                     ok(cb, "called with a callback")
                 }
             }
@@ -42,6 +42,7 @@
             equal(clickCount, 2, "click called twice");
 
             things.destroy();
+            
             can.trigger(can.$('#things span'), 'click');
 
             new Things("#things", {foo:foo});

@@ -91,11 +91,13 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 				var info = getValueAndObserved( getterSetter, context ),
 					newObserveSet = info.observed;
 				
-				var value = info.value;
-				matched = !matched;
+				var value = info.value,
+					ob;
+					matched = !matched;
 				
 				// go through every attribute read by this observe
-				can.each(newObserveSet, function(ob){
+				for ( var i = 0, len = newObserveSet.length; i < len; i++ ) {
+					ob = newObserveSet[i]
 					// if the observe/attribute pair is being observed
 					if(observing[ob.obj._cid+"|"+ob.attr]){
 						// mark at as observed
@@ -108,7 +110,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 						};
 						ob.obj.bind(ob.attr, onchanged);
 					}
-				});
+				}
 				
 				// Iterate through oldObserved, looking for observe/attributes
 				// that are no longer being bound and unbind them

@@ -9,11 +9,11 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			}
 		},
 		addEvent: function(ev, cb){
-			$([this]).bind(ev, cb);
+			$.event.add(this, ev, cb);
 			return this;
 		},
 		removeEvent: function(ev, cb){
-			$([this]).unbind(ev, cb);
+			$.event.remove(this, ev, cb);
 			return this;
 		},
 		// jquery caches fragments, we always needs a new one

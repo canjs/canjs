@@ -265,7 +265,7 @@ test("attr with an object", function(){
 	});
 	
 	state.bind("change", function(ev, attr, how, newVal){
-		equal(attr, "properties.foo")
+		equal(attr, "properties.foo", "foo has changed")
 		equal(newVal, "bad")
 	})
 	
