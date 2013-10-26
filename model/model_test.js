@@ -1256,7 +1256,9 @@ test("string configurable model and models functions (#128)", function(){
 test("create deferred does not resolve to the same instance", function(){
 	var Todo = can.Model.extend({
 	  create: function(){
-	     return $.Deferred().resolve({id: 5})
+	  	var def = new can.Deferred();
+	  	def.resolve({id: 5})
+	    return def;
 	  }
 	},{});
 	var handler = function(){}
