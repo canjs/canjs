@@ -737,4 +737,12 @@
 	})
 	
 	
+	test("loaded live element test", function(){
+		
+		var t = can.view.mustache("<div><my-el {{#if foo}}checked{{/if}} class='{{bar}}' >inner</my-el></div>")
+		t();
+		ok(true)
+	})
+	
+	
 })();

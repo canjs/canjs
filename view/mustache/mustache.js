@@ -1761,7 +1761,16 @@ function( can ){
 		 *     Miss
 		 */
 		'if': function(expr, options){
-			if (!!Mustache.resolve(expr)) {
+			var value;
+			// if it's a function, wrap its value in a compute
+			// that will only change values from true to false
+			if(can.isFunction(expr)){
+				value = can.compute.truthy(expr)()
+			} else {
+				value = !!Mustache.resolve(expr)
+			}
+			
+			if ( value ) {
 				return options.fn(options.contexts || this);
 			}
 			else {

@@ -2247,4 +2247,22 @@ test("outputting array of attributes", function() {
 	equal(div.children[0].getAttribute('data-test3'), 'value3', 'third value');
 });
 
+test("incremental updating of #each within an if", function(){
+	var template = can.view.mustache('{{#if items.length}}<ul>{{#each items}}<li/>{{/each}}</ul>{{/if}}');
+		
+	var items = new can.List([{},{}]);
+	var div = document.createElement('div');
+	div.appendChild(template({items: items}));
+
+	var ul = div.getElementsByTagName('ul')[0]
+	ul.setAttribute("original","yup")
+	items.push({})
+	ok(ul === div.getElementsByTagName('ul')[0], "ul is still the same")
+	
+});
+
+
+
+
+
 })();

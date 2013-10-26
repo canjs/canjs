@@ -366,5 +366,10 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 		});
 	};
 	can.compute.binder = computeBinder;
+	can.compute.truthy = function(compute){
+		return can.compute(function(){
+			return !!compute()
+		})
+	}
 	return can.compute;
 })
