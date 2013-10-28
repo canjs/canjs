@@ -1,21 +1,21 @@
-steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted",function($, can) {
+steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted","can/util/event.js",function($, can) {
 	// _jQuery node list._
 	$.extend( can, $, {
 		trigger: function( obj, event, args ) {
-			if ( obj.trigger ) {
+			if(obj.nodeName || obj === window) {
+				$.event.trigger( event, args, obj, true );
+			} else if ( obj.trigger ) {
 				obj.trigger( event, args );
 			} else {
-				$.event.trigger( event, args, obj, true );
+				if(typeof event === 'string'){
+					event = {type: event}
+				}
+				event.target = event.target || obj;
+				can.dispatch.call(obj, event, args);
 			}
 		},
-		addEvent: function(ev, cb){
-			$.event.add(this, ev, cb);
-			return this;
-		},
-		removeEvent: function(ev, cb){
-			$.event.remove(this, ev, cb);
-			return this;
-		},
+		addEvent: can.addEvent,
+		removeEvent: can.removeEvent,
 		// jquery caches fragments, we always needs a new one
 		buildFragment : function(elems, context){
 			var oldFragment = $.buildFragment,
@@ -32,17 +32,64 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			return ret.cacheable ? $.clone(ret.fragment) : ret.fragment || ret;
 		},
 		$: $,
-		each: can.each
+		each: can.each,
+		bind: function( ev, cb){
+			// If we can bind to it...
+			if(this.bind && this.bind !== can.bind){
+				this.bind(ev, cb)
+			} else if(this.nodeName && this.nodeType == 1 || this === window) {
+				$.event.add(this, ev, cb);
+			} else {
+				// Make it bind-able...
+				can.addEvent.call(this, ev, cb)
+			}
+			return this;
+		},
+		unbind: function(ev, cb){
+			// If we can bind to it...
+			if(this.unbind && this.unbind !== can.unbind){
+				this.unbind(ev, cb)
+			} else if(this.nodeName && this.nodeType == 1 || this === window) {
+				$.event.remove(this, ev, cb);
+			} else {
+				// Make it bind-able...
+				can.removeEvent.call(this, ev, cb)
+			}
+			return this;
+		},
+		delegate: function(selector, ev , cb){
+			if(this.delegate) {
+				this.delegate(selector, ev , cb)
+			}
+			 else if(this.nodeName && this.nodeType == 1 || this === window) {
+				$(this).delegate(selector, ev, cb)
+			} else {
+				// make it bind-able ...
+			}
+			return this;
+		},
+		undelegate: function(selector, ev , cb){
+			if(this.undelegate) {
+				this.undelegate(selector, ev , cb)
+			}
+			 else if(this.nodeName && this.nodeType == 1 || this === window) {
+				$(this).undelegate(selector, ev, cb)
+			} else {
+				// make it bind-able ...
+	
+			}
+			return this;
+		}
 	});
 
 	// Wrap binding functions.
-	$.each(['bind','unbind','undelegate','delegate'],function(i,func){
+	/*$.each(['bind','unbind','undelegate','delegate'],function(i,func){
 		can[func] = function(){
 			var t = this[func] ? this : $([this]);
 			t[func].apply(t, arguments);
 			return this;
 		};
-	});
+	});*/
 
 	// Aliases
 	can.on = can.bind;

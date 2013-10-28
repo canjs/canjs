@@ -126,7 +126,7 @@ steal("can/util","can/map", function(can, Map){
 				this.push.apply(this, can.makeArray(instances || []));
 			}
 			// this change needs to be ignored
-			this.bind('change'+this._cid,can.proxy(this._changes,this));
+			this.bind('change',can.proxy(this._changes,this));
 			can.extend(this, options);
 			delete this._init;
 		},
@@ -290,7 +290,7 @@ steal("can/util","can/map", function(can, Map){
 			can.batch.start();
 			if ( howMany > 0 ) {
 				this._triggerChange(""+index, "remove", undefined, removed);
-				Map.helpers.unhookup(removed, this._cid);
+				Map.helpers.unhookup(removed, this);
 			}
 			if ( args.length > 2 ) {
 				this._triggerChange(""+index, "add", args.slice(2), removed);
@@ -806,7 +806,7 @@ steal("can/util","can/map", function(can, Map){
 			this._triggerChange(""+len, "remove", undefined, [res])
 
 			if ( res && res.unbind ) {
-				res.unbind("change" + this._cid)
+				can.stopListening.call(this, res, "change");
 			}
 			return res;
 		}

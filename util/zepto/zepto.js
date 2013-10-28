@@ -73,8 +73,7 @@ function (can) {
 				event = {type : event}
 			}
 			event.target = event.target || obj;
-			event.data = args;
-			can.dispatch.call(obj, event)
+			can.dispatch.call(obj, event, args)
 		}
 
 	}
@@ -208,7 +207,6 @@ function (can) {
 				// might be a text node
 				
 				if( this.getElementsByTagName ){
-					console.log()
 					$.cleanData( [this].concat( can.makeArray(this.getElementsByTagName('*')) )  );
 				} 
 				

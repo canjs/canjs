@@ -54,6 +54,24 @@ test("remove attr", function(){
 	});
 	state.removeAttr("category");
 	deepEqual( can.Map.keys(state), ["productType"], "one property" );
+});
+
+test("nested event handlers are not run by changing the parent property (#280)", function(){
+	
+	var person = new can.Map({
+		name: {first: "Justin"}
+	})
+	person.bind("name.first", function(ev, newName){
+		ok(false,"name.first should never be called")
+		//equal(newName, "hank", "name.first handler called back with correct new name")
+	});
+	person.bind("name", function(){
+		ok(true, "name event triggered")
+	})
+	
+	person.attr("name",{first: "Hank"});
+	
 })
+
 
 })();

@@ -9,8 +9,8 @@ module("can/map/validations",{
 
 test("observe can validate, events, callbacks", 7,function(){
 	Person.validate("age", {message : "it's a date type"},function(val){
-					return ! ( this.date instanceof Date )
-				})
+		return ! ( this.date instanceof Date )
+	})
 	
 	
 	var task = new Person({age: "bad"}),
@@ -21,7 +21,7 @@ test("observe can validate, events, callbacks", 7,function(){
 	equal(errors.age.length, 1, "there is one error");
 	equal(errors.age[0], "it's a date type", "error message is right");
 	
-	task.bind("error.age", function(ev, attr, errs){
+	task.bind("error", function(ev, attr, errs){
 		ok(this === task, "we get task back by binding");
 		
 		ok(errs, "There are errors");
@@ -31,7 +31,7 @@ test("observe can validate, events, callbacks", 7,function(){
 	
 	task.attr("age","blah");
 
-	task.unbind("error.age");
+	task.unbind("error");
 	
 	task.attr("age", "blaher");
 	
