@@ -2261,6 +2261,33 @@ test("incremental updating of #each within an if", function(){
 	
 });
 
+test("can.Mustache.safeString", function() {
+  var text = "Google",
+    url = "http://google.com/",
+    templateEscape = can.view.mustache('{{link "' + text + '" "' + url + '"}}'),
+    templateUnescape = can.view.mustache('{{{link "' + text + '" "' + url + '"}}}');
+  can.Mustache.registerHelper('link', function(text, url) {
+    var link = '<a href="' + url + '">' + text + '</a>';
+    return new can.Mustache.safeString(link);
+  });
+
+  var div = document.createElement('div');
+  div.appendChild(templateEscape({}));
+
+  equal(div.children.length, 1, 'rendered a DOM node');
+  equal(div.children[0].nodeName, 'A', 'rendered an anchor tag');
+  equal(div.children[0].innerHTML, text, 'rendered the text properly');
+  equal(div.children[0].getAttribute('href'), url, 'rendered the href properly');
+
+  div = document.createElement('div');
+  div.appendChild(templateUnescape({}));
+
+  equal(div.children.length, 1, 'rendered a DOM node');
+  equal(div.children[0].nodeName, 'A', 'rendered an anchor tag');
+  equal(div.children[0].innerHTML, text, 'rendered the text properly');
+  equal(div.children[0].getAttribute('href'), url, 'rendered the href properly');
+});
+
 
 
 
