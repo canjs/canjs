@@ -355,16 +355,17 @@ test("pop unbinds", function(){
 	var l = new can.List([{foo: 'bar'}]);
 	var o = l.attr(0),
 		count = 0;
+		
 	l.bind('change', function(ev, attr, how, newVal, oldVal){
 		count++;
 		if(count == 1){
 			// the prop change
 			equal(attr, '0.foo', "count is set");
 		} else if(count === 2 ){
-			equal(how, "remove");
-			equal(attr, "0")
+			equal(how, "remove", "remove event called");
+			equal(attr, "0", "remove event called with correct index")
 		} else {
-			ok(false, "called too many times")
+			ok(false, "change handler called too many times")
 		}
 		
 	})

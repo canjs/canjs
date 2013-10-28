@@ -6,8 +6,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 	//  
 		// Removes all listeners.
 	var	bindToChildAndBubbleToParent = function(child, prop, parent){
-			child.bind("change" + parent._cid, 
-				function( /* ev, attr */ ) {
+			can.listenTo.call(parent,child,"change", function( /* ev, attr */ ) {
 				// `batchTrigger` the type on this...
 				var args = can.makeArray(arguments),
 					ev = args.shift();
@@ -88,10 +87,10 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 			canMakeObserve : function( obj ) {
 				return obj && !can.isDeferred(obj) && (can.isArray(obj) || can.isPlainObject( obj ) || ( obj instanceof can.Map ));
 			},
-			unhookup: function(items, namespace){
+			unhookup: function(items, parent){
 				return can.each(items, function(item){
 					if(item && item.unbind){
-						item.unbind("change" + namespace);
+						can.stopListening.call(parent, item,"change");
 					}
 				});
 			},
@@ -110,7 +109,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 					// We have an `map` already...
 					// Make sure it is not listening to this already
 					// It's only listening if it has bindings already.
-					parent._bindings && Map.helpers.unhookup([child], parent._cid);
+					parent._bindings && Map.helpers.unhookup([child], parent);
 				} else if ( can.isArray(child) ) {
 					child = new List(child);
 				} else {
@@ -197,7 +196,9 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 			this._setupComputes();
 			var data = can.extend( can.extend(true,{},this.constructor.defaults || {}), obj )
 			this.attr(data);
-			this.bind('change'+this._cid,can.proxy(this._changes,this));
+			
+			this.bind('change',can.proxy(this._changes,this));
+			
 			delete this._init;
 		},
 		_setupComputes: function(){
@@ -215,9 +216,9 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		},
 		_bindsetup: makeBindSetup(),
 		_bindteardown: function(){
-			var cid = this._cid;
+			var self = this;
 			this._each(function(child){
-				Map.helpers.unhookup([child], cid)
+				Map.helpers.unhookup([child], self)
 			})
 		},
 		_changes: function(ev, attr, how,newVal, oldVal){
@@ -570,7 +571,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 				
 				//can.batch.trigger(this, prop, [value, current]);
 				// If we can stop listening to our old value, do it.
-				current && Map.helpers.unhookup([current], this._cid);
+				current && Map.helpers.unhookup([current], this);
 			}
 
 		},

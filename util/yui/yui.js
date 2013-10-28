@@ -366,9 +366,8 @@ steal('can/util/can.js', 'yui', 'can/util/event.js',
 					type : event
 				}
 			}
-			event.target = event.target || item
-			event.data = args
-			can.dispatch.call(item, event)
+			event.target = event.target || item;
+			can.dispatch.call(item, event, args)
 		}
 	};
 	// Allow `dom` `destroyed` events.

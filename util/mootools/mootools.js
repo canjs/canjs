@@ -207,8 +207,7 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 				event = {type: event}
 			}
 			event.target = event.target || item;
-			event.data = args
-			can.dispatch.call(item, event)
+			can.dispatch.call(item, event, args)
 		}
 	}
 	can.delegate = function(selector, ev , cb){

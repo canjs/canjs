@@ -379,9 +379,8 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 						type: event
 					}
 				}
-				event.data = args
 				event.target = event.target || item;
-				can.dispatch.call(item, event)
+				can.dispatch.call(item, event, args)
 			}
 		}
 
