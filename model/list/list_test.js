@@ -2,8 +2,9 @@ steal("can/model/list", 'funcunit/qunit', 'can/util/fixture', function(){
 	 
 module("jquery/model/list", {
 	setup: function() {
-		can.Model.extend("Person")
-	
+		can.Model.extend("Person",{
+			findAll : "GET /person/findAll"
+		},{});
 		can.Model.List("Person.List",{
 			destroy : "DELETE /person/destroyAll",
 			update : "PUT /person/updateAll"
@@ -401,6 +402,25 @@ test("events - update", function(){
 	list.push(person);
 	
 	person.updated({name: "Alex"})
+});
+
+test("findAll on model list", 2, function() {
+	// Test fixture
+	var findAllResults = [
+		{ id: 1, name: 'William' },
+		{ id: 2, name: 'Laura' }
+	];
+	can.fixture('GET /person/findAll', function(){
+		ok(true, "called right fixture");
+		return findAllResults;
+	})
+	stop();
+
+	var people = new Person.List;
+	people.findAll({}, function(){
+        equal(people.length, 2, "list has 2 items added");
+		start();
+    });
 });
 
 })
