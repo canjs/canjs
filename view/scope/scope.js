@@ -162,7 +162,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			if( isObserve(data.parent) ) {
 				return data.parent.compute(data.name);
 			} else {
-				can.compute(function(newValue){
+				return can.compute(function(newValue){
 					if( arguments.length ) {
 						data.parent[data.name] = newValue;
 					} else {
