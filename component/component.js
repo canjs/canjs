@@ -166,7 +166,8 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 			var renderedScope = hookupOptions.scope.add( this.scope ),
 			
 				// setup helpers to callback with `this` as the component
-				helpers = this.helpers || {};
+				helpers = can.extend({}, this.helpers);
+
 			can.each(helpers, function(val, prop){
 				if(can.isFunction(val)) {
 					helpers[prop] = function(){
