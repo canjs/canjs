@@ -608,5 +608,31 @@ test("setting passed variables - two way binding", function(){
     equal(buttons[0].innerHTML, "hide", "the button's text is hide")
 })
 
+test("make sure that multiple tags of the same type have the correct context (#515)", function() {
+	expect(2);
+	can.Component({    
+	  tag: 'my-text',    
+	  template: '<p>{{valueHelper}}</p>',   
+	  scope: {
+	      value: '@'
+	  },
+	  helpers: {
+			valueHelper: function(){
+				return this.attr('value');
+			}
+	  }                 
+	});
+
+	var template = can.view.mustache('<my-text value="value1"></my-text><my-text value="value2"></my-text>');
+
+	can.append(can.$('#qunit-test-area'), template({}));
+
+  var testArea = can.$("#qunit-test-area")[0],
+	myTexts = testArea.getElementsByTagName("my-text");
+
+	equal(myTexts[0].children[0].innerHTML, 'value1');
+	equal(myTexts[1].children[0].innerHTML,'value2');
+})
+
 	
 })()
