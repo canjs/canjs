@@ -27,14 +27,17 @@ steal('can/util', function (can) {
 	// Returns `true` if the object can have properties (no `null`s).
 		isContainer = function (current) {
 			return (/^f|^o/).test(typeof current);
+		},
+		convertBadValues = function(content) {
+			// Convert bad values into empty strings
+			var isInvalid = content === null || content === undefined || (isNaN(content) && ("" + content === 'NaN'));
+			return ( "" + ( isInvalid ? '' : content ) )
 		};
 
 	can.extend(can, {
 		// Escapes strings for HTML.
 		esc: function (content) {
-			// Convert bad values into empty strings
-			var isInvalid = content === null || content === undefined || (isNaN(content) && ("" + content === 'NaN'));
-			return ( "" + ( isInvalid ? '' : content ) )
+			return convertBadValues(content)
 				.replace(/&/g, '&amp;')
 				.replace(/</g, '&lt;')
 				.replace(/>/g, '&gt;')
@@ -110,6 +113,40 @@ steal('can/util', function (can) {
 		capitalize: function (s, cache) {
 			// Used to make newId.
 			return s.charAt(0).toUpperCase() + s.slice(1);
+		},
+
+		/**
+		 * @function can.camelize
+		 * @parent can.util
+		 * @description Takes a hyphenated string and converts it to a camelCase string..
+		 * @signature `can.camelize(str)`
+		 * @param {String} str The string to camelCase.
+		 * @return {String} The original string camelCased.
+		 *
+		 *        can.camelize('array-count'); //-> Returns: 'arrayCount'
+		 *
+		 */
+		camelize: function(str){ 
+			return convertBadValues(str).replace(/-+(.)?/g, function(match, chr){ 
+				return chr ? chr.toUpperCase() : '' 
+			}) 
+		},
+
+		/**
+		 * @function can.hyphenate
+		 * @parent can.util
+		 * @description Hypenates a camelCase string, and makes it lower case.
+		 * @signature `can.capitalize(str)`
+		 * @param {String} str The camelCase string to hyphenate.
+		 * @return {String} The string hyphenated.
+		 *
+		 *        can.hyphenate('fooBarBaz'); //-> Returns: 'foo-bar-baz'
+		 *
+		 */
+		hyphenate: function(str) {
+			return convertBadValues(str).replace(/[a-z][A-Z]/g, function(str, offset) {
+				return str[0] + '-' + str[1].toLowerCase();
+			});
 		},
 
 		// Underscores a string.

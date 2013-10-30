@@ -632,6 +632,32 @@ test("make sure that multiple tags of the same type have the correct context (#5
 
 	equal(myTexts[0].children[0].innerHTML, 'value1');
 	equal(myTexts[1].children[0].innerHTML,'value2');
+});
+
+test('access hypenated attributes via camelCase or hypenated', function() {
+	can.Component({
+		tag: 'hyphen',
+		scope: {
+			'camelCase': '@'
+		},
+		template: '<p>{{valueHelper}}</p>',
+		helpers: {
+			valueHelper: function() {
+				return this.attr('camelCase');
+			}
+		}
+	});
+
+	var template = can.view.mustache('<hyphen camel-case="value1"></hyphen>');
+
+	can.append(can.$('#qunit-test-area'), template({}));
+
+  var testArea = can.$("#qunit-test-area")[0],
+	hyphen = testArea.getElementsByTagName("hyphen");
+
+	debugger;
+	equal(hyphen[0].children[0].innerHTML, 'value1');
+
 })
 
 	

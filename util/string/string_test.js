@@ -264,4 +264,45 @@
 		equal(text, "&lt;div&gt;&amp;nbsp;&lt;/div&gt;", "HTML escaped properly");
 	});
 
+	test("can.camelize", function() {
+		var text = can.camelize(0);
+		equal(text, "0", "0 value properly rendered");
+
+		text = can.camelize(null);
+		equal(text, "", "null value returns empty string");
+
+		text = can.camelize();
+		equal(text, "", "undefined returns empty string");
+
+		text = can.camelize(NaN);
+		equal(text, "", "NaN returns empty string");
+
+		text = can.camelize('-moz-index');
+		equal(text, 'MozIndex');
+
+		text = can.camelize('foo-bar');
+		equal(text, 'fooBar');
+	})
+
+	test("can.hyphenate", function() {
+		var text = can.hyphenate(0);
+		equal(text, "0", "0 value properly rendered");
+
+		text = can.hyphenate(null);
+		equal(text, "", "null value returns empty string");
+
+		text = can.hyphenate();
+		equal(text, "", "undefined returns empty string");
+
+		text = can.hyphenate(NaN);
+		equal(text, "", "NaN returns empty string");
+
+		text = can.hyphenate("ABC");
+		equal(text, "ABC")
+
+		text = can.hyphenate("dataNode");
+		equal(text, "data-node");
+
+	})
+
 })();
