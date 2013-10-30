@@ -608,7 +608,7 @@ test("setting passed variables - two way binding", function(){
     equal(buttons[0].innerHTML, "hide", "the button's text is hide")
 })
 
-test("make sure that multiple tags of the same type have the correct context (#515)", function() {
+test("helpers reference the correct instance (#515)", function() {
 	expect(2);
 	can.Component({    
 	  tag: 'my-text',    
@@ -627,7 +627,7 @@ test("make sure that multiple tags of the same type have the correct context (#5
 
 	can.append(can.$('#qunit-test-area'), template({}));
 
-  var testArea = can.$("#qunit-test-area")[0],
+	var testArea = can.$("#qunit-test-area")[0],
 	myTexts = testArea.getElementsByTagName("my-text");
 
 	equal(myTexts[0].children[0].innerHTML, 'value1');
@@ -655,10 +655,42 @@ test('access hypenated attributes via camelCase or hypenated', function() {
   var testArea = can.$("#qunit-test-area")[0],
 	hyphen = testArea.getElementsByTagName("hyphen");
 
-	debugger;
 	equal(hyphen[0].children[0].innerHTML, 'value1');
 
 })
 
+test("a map as scope", function(){
+	
+	var me = new can.Map({
+		name: "Justin"
+	})
+	
+	can.Component.extend({
+		tag: 'my-scope',
+		scope: me
+	})
+	
+	var template = can.view.mustache('<my-scope>{{name}}</my-scope>');
+	equal(template().childNodes[0].innerHTML, "Justin")
+	
+});
+
+test("content in a list", function(){
+	var template = can.view.mustache('<my-list>{{name}}</my-list>');
+	
+	can.Component.extend({
+		tag: "my-list",
+		template: "{{#each items}}<li><content/></li>{{/each}}",
+		scope: {
+			items: new can.List([{name: "one"},{name: "two"}])
+		}
+	});
+	
+	var lis = template().childNodes[0].getElementsByTagName("li");
+	
+	equal( lis[0].innerHTML, "one", "first li has correct content")
+	equal( lis[1].innerHTML, "two", "second li has correct content")
+	
+})
 	
 })()
