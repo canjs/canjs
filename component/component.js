@@ -1,6 +1,6 @@
 steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindings",function(can){
 	
-	var ignoreAttributesRegExp = /data-view-id|class|id/i
+	var ignoreAttributesRegExp = /dataViewId|class|id/i
 	/**
 	 * @add can.Component
 	 */
@@ -36,6 +36,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				// go through scope and get attribute ones
 				can.each(this.prototype.scope, function(val, prop){
 					if(val === "@") {
+						debugger;
 						attributeScopeMappings[prop] = prop;
 					}
 				}) 
@@ -80,14 +81,14 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 			
 			// scope prototype properties marked with an "@" are added here
 			can.each(this.constructor.attributeScopeMappings,function(val, prop){
-				initalScopeData[prop] = el.getAttribute(val)
+				initalScopeData[prop] = el.getAttribute(can.hyphenate(val));
 			})
 			
 			// get the value in the scope for each attribute
 			// the hookup should probably happen after?
 			can.each(can.makeArray(el.attributes), function(node, index){
 				
-				var name = node.nodeName.toLowerCase(),
+				var name = can.camelize(node.nodeName.toLowerCase()),
 					value = node.value;
 				
 				// ignore attributes already in ScopeMappings
