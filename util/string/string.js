@@ -13,7 +13,8 @@ steal('can/util', function (can) {
 		strReplacer = /\{([^\}]+)\}/g,
 		strQuote = /"/g,
 		strSingleQuote = /'/g,
-
+		strHyphenMatch = /-+(.)?/g,
+		strCamelMatch = /[a-z][A-Z]/g,
 	// Returns the `prop` property from `obj`.
 	// If `add` is true and `prop` doesn't exist in `obj`, create it as an
 	// empty object.
@@ -121,13 +122,13 @@ steal('can/util', function (can) {
 		 * @description Takes a hyphenated string and converts it to a camelCase string..
 		 * @signature `can.camelize(str)`
 		 * @param {String} str The string to camelCase.
-		 * @return {String} The original string camelCased.
+		 * @return {String} The camelCased string.
 		 *
-		 *        can.camelize('array-count'); //-> Returns: 'arrayCount'
+		 *        can.camelize('array-count'); //-> 'arrayCount'
 		 *
 		 */
 		camelize: function(str){ 
-			return convertBadValues(str).replace(/-+(.)?/g, function(match, chr){ 
+			return convertBadValues(str).replace(strHyphenMatch, function(match, chr){ 
 				return chr ? chr.toUpperCase() : '' 
 			}) 
 		},
@@ -138,13 +139,13 @@ steal('can/util', function (can) {
 		 * @description Hypenates a camelCase string, and makes it lower case.
 		 * @signature `can.capitalize(str)`
 		 * @param {String} str The camelCase string to hyphenate.
-		 * @return {String} The string hyphenated.
+		 * @return {String} The hyphenated string.
 		 *
-		 *        can.hyphenate('fooBarBaz'); //-> Returns: 'foo-bar-baz'
+		 *        can.hyphenate('fooBarBaz'); //-> 'foo-bar-baz'
 		 *
 		 */
 		hyphenate: function(str) {
-			return convertBadValues(str).replace(/[a-z][A-Z]/g, function(str, offset) {
+			return convertBadValues(str).replace(strCamelMatch, function(str, offset) {
 				return str[0] + '-' + str[1].toLowerCase();
 			});
 		},
