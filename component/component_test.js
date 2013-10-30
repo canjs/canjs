@@ -608,5 +608,72 @@ test("setting passed variables - two way binding", function(){
     equal(buttons[0].innerHTML, "hide", "the button's text is hide")
 })
 
+test("helpers reference the correct instance", function(){
+	
+	can.Component.extend({    
+	    tag: 'some-text',    
+	    
+	    template: '<p>{{valueHelper}}</p>',   
+	    scope: {
+	        value: '@'
+	    },
+	    
+	    helpers: {
+	        valueHelper: function(){
+	            return this.attr('value')
+	        }
+	    }
+	                         
+	})
+
+
+	var template = can.view.mustache('<some-text value="value1"></some-text><some-text value="value2"></some-text>')
+	
+	var div = document.createElement('div')
+	
+	div.appendChild(template());
+		
+	equal(div.getElementsByTagName('p')[0].innerHTML, "value1");
+	equal(div.getElementsByTagName('p')[1].innerHTML, "value2")
+})
+
+
+
+	
+test("a map as scope", function(){
+	
+	var me = new can.Map({
+		name: "Justin"
+	})
+	
+	can.Component.extend({
+		tag: 'my-scope',
+		scope: me
+	})
+	
+	var template = can.view.mustache('<my-scope>{{name}}</my-scope>');
+	equal(template().childNodes[0].innerHTML, "Justin")
+	
+});
+
+
+test(" content in a list", function(){
+	var template = can.view.mustache('<my-list>{{name}}</my-list>');
+	
+	can.Component.extend({
+		tag: "my-list",
+		template: "{{#each items}}<li><content/></li>{{/each}}",
+		scope: {
+			items: new can.List([{name: "one"},{name: "two"}])
+		}
+	});
+	
+	var lis = template().childNodes[0].getElementsByTagName("li");
+	
+	equal( lis[0].innerHTML, "one", "first li has correct content")
+	equal( lis[1].innerHTML, "two", "second li has correct content")
+	
+})
+	
 	
 })()

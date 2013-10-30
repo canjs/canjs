@@ -132,6 +132,8 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 			// save the scope
 			if(this.constructor.Map){
 				componentScope = new this.constructor.Map(initalScopeData);
+			} else if(this.scope instanceof can.Map) {
+				componentScope = this.scope;
 			} else if(can.isFunction(this.scope)){
 				var scopeResult = this.scope(initalScopeData, hookupOptions.scope, el);
 				// if the function returns a can.Map, use that as the scope
@@ -166,7 +168,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 			var renderedScope = hookupOptions.scope.add( this.scope ),
 			
 				// setup helpers to callback with `this` as the component
-				helpers = this.helpers || {};
+				helpers = can.extend({},this.helpers || {});
 			can.each(helpers, function(val, prop){
 				if(can.isFunction(val)) {
 					helpers[prop] = function(){
@@ -191,7 +193,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 					// otherwise, render what was within <content>, the default code
 					var subtemplate = hookupOptions.subtemplate || rendererOptions.subtemplate
 					if(subtemplate) {
-						var frag = can.view.frag( subtemplate(renderedScope, rendererOptions.options.add(helpers) ) );
+						var frag = can.view.frag( subtemplate(rendererOptions.scope, rendererOptions.options.add(helpers) ) );
 						can.insertBefore(el.parentNode, frag, el);
 						can.remove( can.$(el) );
 					}
