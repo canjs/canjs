@@ -1902,20 +1902,19 @@ function( can ){
 		 * 
 		 */
 		'each': function(expr, options) {
-      		expr = Mustache.resolve(expr);
+			if(expr.isComputed || isObserveLike(expr) && typeof expr.attr('length') !== 'undefined'){
+				return can.view.lists && can.view.lists(expr, function(item) {
+					return options.fn(item);
+				});
+			}
+			expr = Mustache.resolve(expr);
+			
 			if (!!expr && isArrayLike(expr)) {
-				if (isObserveLike(expr) && typeof expr.attr('length') !== 'undefined') {
-					return can.view.lists && can.view.lists(expr, function(item) {
-						return options.fn(item);
-					});
+				var result = [];
+				for (var i = 0; i < expr.length; i++) {
+					result.push(options.fn(expr[i]));
 				}
-				else {
-					var result = [];
-					for (var i = 0; i < expr.length; i++) {
-						result.push(options.fn(expr[i]));
-					}
-					return result.join('');
-				}
+				return result.join('');
 			}
 		},
 		// Implements the `with` built-in helper.

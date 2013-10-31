@@ -1,4 +1,4 @@
-steal('can/view','./elements','./live', 'can/util/string', function(can, elements, live){
+steal('can/view','./elements','can/view/live', 'can/util/string', function(can, elements, live){
 
 /**
  * Helper(s)
@@ -61,6 +61,10 @@ var current;
 
 can.extend(can.view, {
 	live: live,
+	// called in text to make a temporary 
+	// can.view.lists function that can be called with
+	// the list to iterate over and the template
+	// used to produce the content within the list
 	setupLists: function(){
 
 		var old = can.view.lists,
@@ -71,7 +75,9 @@ can.extend(can.view, {
 				list: list,
 				renderer: renderer
 			}
+			return Math.random()
 		}
+		// sets back to the old data
 		return function(){
 			can.view.lists = old;
 			return data;
