@@ -147,11 +147,6 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 		}
 		
 		can.bind.call( el, event, handler);
-		// not all libraries automatically remove bindings
-		can.bind.call( el, "removed",function(){
-			can.unbind.call( el, event, handler);
-		})
-		
 	});
 	
 	

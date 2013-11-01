@@ -296,9 +296,15 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 		dojoRemoveBinding = function( nodelist, ev, cb ) {
 			nodelist.forEach(function( node ) {
 				var node = new dojo.NodeList(node),
-					events = can.data(node, "events"),
-					handlers = events[ev],
-					handler = handlers[cb.__bindingsIds];
+					events = can.data(node, "events");
+				if(!events){
+					return
+				}
+				var handlers = events[ev];
+				if(!handlers){
+					return
+				}
+				var handler = handlers[cb.__bindingsIds];
 
 				dojo.disconnect(handler);
 				delete handlers[cb.__bindingsIds];
