@@ -46,8 +46,41 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 					}
 				})
 			};
+		},
+		// A map that temporarily houses a reference 
+		// to maps that have already been made for a plain ole JS object
+		madeMap = null,
+		addToMap = function(obj, instance){
+			var teardown = false;
+			if(!madeMap){
+				teardown = true;
+				madeMap = {}
+			}
+			// record if it has a Cid before we add one
+			var hasCid = obj._cid;
+			var cid = can.cid(obj);
+			
+			// only update if there already isn't one
+			if( !madeMap[cid] ){
+			
+				madeMap[cid] = {
+					obj: obj,
+					instance: instance,
+					added: hasCid
+				}
+			}
 		};
-	
+		teardownMap = function(){
+			for(var cid in madeMap){
+				if(madeMap[cid].added) {
+					delete madeMap[cid].obj._cid;
+				}
+			}
+			madeMap = null;
+		},
+		getMapFromObject = function(obj){
+			return madeMap && madeMap[obj._cid] && madeMap[obj._cid].instance
+		}
 	/**
 	 * @add can.Map
 	 */
@@ -111,9 +144,9 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 					// It's only listening if it has bindings already.
 					parent._bindings && Map.helpers.unhookup([child], parent);
 				} else if ( can.isArray(child) ) {
-					child = new List(child);
+					child = getMapFromObject(child) || new List(child);
 				} else {
-					child = new Ob(child);
+					child = getMapFromObject(child) || new Ob(child);
 				}
 				// only listen if something is listening to you
 				if(parent._bindings){
@@ -194,9 +227,12 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 			// Sets all `attrs`.
 			this._init = 1;
 			this._setupComputes();
+			var teardownMapping = obj && addToMap(obj, this)
 			var data = can.extend( can.extend(true,{},this.constructor.defaults || {}), obj )
 			this.attr(data);
-			
+			if(teardownMapping){
+				teardownMap()
+			}
 			this.bind('change',can.proxy(this._changes,this));
 			
 			delete this._init;
@@ -797,6 +833,10 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 				newVal;
 			can.batch.start();
 			this.each(function(curVal, prop){
+				// you can not have a _cid property!
+				if(prop === "_cid"){
+					return;
+				}
 				newVal = props[prop];
 
 				// If we are merging...
@@ -824,8 +864,11 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 			})
 			// Add remaining props.
 			for ( var prop in props ) {
-				newVal = props[prop];
-				this._set(prop, newVal, true)
+				if(prop !== "_cid"){
+					newVal = props[prop];
+					this._set(prop, newVal, true)
+				}
+				
 			}
 			can.batch.stop()
 			return this;
