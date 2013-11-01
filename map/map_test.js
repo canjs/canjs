@@ -71,6 +71,25 @@ test("nested event handlers are not run by changing the parent property (#280)",
 	
 	person.attr("name",{first: "Hank"});
 	
+});
+
+test("cyclical objects (#521)", function(){
+	
+	var foo = {};
+	foo.foo = foo;
+	
+	var fooed = new can.Map(foo);
+	
+	ok(true, "did not cause infinate recursion");
+	
+	ok(  fooed.attr('foo') === fooed, "map points to itself")
+	
+	var me = {name: "Justin"}
+	var references = {husband: me, friend: me}
+	var ref = new can.Map(references)
+	
+	ok( ref.attr('husband') === ref.attr('friend'),  "multiple properties point to the same thing")
+	
 })
 
 
