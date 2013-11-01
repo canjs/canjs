@@ -1,4 +1,4 @@
-steal('can/util', 'can/map', function(can) {
+steal('can/util', 'can/map', 'can/list', function(can) {
 
 var proto = can.List.prototype,
 	_changes = proto._changes,
