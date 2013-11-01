@@ -865,7 +865,9 @@ steal("can/util","can/map", function(can, Map){
 		 * beatles.join('&'); // 'John&Paul&Ringo&George'
 		 * @codeend
 		 */
-		join : [].join,
+		join: function(){
+			return [].join.apply(this.attr(), arguments)
+		},
 		
 		/**
 		 * @function can.List.prototype.reverse reverse
@@ -974,7 +976,7 @@ steal("can/util","can/map", function(can, Map){
 		 * @codeend
 		 */
 		forEach : function( cb, thisarg ) {
-			can.each(this, cb, thisarg || this );
+			return can.each(this, cb, thisarg || this );
 		},
 
 		/**

@@ -1380,6 +1380,23 @@ test("compute on the prototype", function(){
 	
 });
 
+test("join is computable (#519)", function(){
+	expect(2)
+	var l = new can.List(["a","b"]);
+	
+	var joined = can.compute(function(){
+		return l.join(",")
+	})
+	
+	joined.bind("change", function(ev, newVal, oldVal){
+		equal( oldVal, "a,b" );
+		equal( newVal, "a,b,c" );
+	})
+	
+	l.push("c")
+	
+	
+})
 
 
 })();
