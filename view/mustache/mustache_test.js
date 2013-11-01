@@ -2288,7 +2288,23 @@ test("can.Mustache.safeString", function() {
   equal(div.children[0].getAttribute('href'), url, 'rendered the href properly');
 });
 
-
+test("changing the list works with each", function(){
+	var template = can.view.mustache("<ul>{{#each list}}<li>{{name}}</li>{{/each}}</ul>");
+	
+	var map = new can.Map({
+		list: ["foo"]
+	});
+	
+	var lis = template(map).childNodes[0].getElementsByTagName('li');
+	
+	equal(lis.length, 1, "one li")
+	
+	
+	map.attr("list", new can.List(["bar","car"]) );
+	
+	equal(lis.length, 2, "two lis")
+	
+})
 
 
 

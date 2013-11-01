@@ -35,13 +35,7 @@
 		var ta = document.getElementById("qunit-test-area");
 		ta.appendChild(frag);
 		var p0 = ta.getElementsByTagName("p")[0]
-		can.trigger( p0, "click" )
-		
-		
-		// remove from the DOM and try again ..
-		can.remove( can.$(ta.getElementsByTagName("div")[0]) )
-		
-		can.trigger( p0, "click" )
+		can.trigger( p0, "click" );
 		
 	});
 	

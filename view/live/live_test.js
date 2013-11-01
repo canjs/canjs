@@ -1,8 +1,4 @@
-steal('can/view/live.js',
-	'can/compute',
-	'can/map',
-	'funcunit/qunit',
-	function(live, compute, Observe){
+(function(){
 
 	module("can/view/live");
 
@@ -15,7 +11,7 @@ steal('can/view/live.js',
 		
 		var items = new can.List(['one','two']);
 
-		var html = compute(function(){
+		var html = can.compute(function(){
 			var html = "";
 			items.each(function(item){
 				html += "<label>"+item+"</label>"
@@ -23,7 +19,7 @@ steal('can/view/live.js',
 			return html;
 		}) 
 
-		live.html(span,html, div)
+		can.view.live.html(span,html, div)
 
 		equal(div.getElementsByTagName('label').length, 2);
 
@@ -45,7 +41,7 @@ steal('can/view/live.js',
 		
 		var items = new can.List(['one','two']);
 
-		var text = compute(function(){
+		var text = can.compute(function(){
 			var html = "";
 			items.each(function(item){
 				html += "<label>"+item+"</label>"
@@ -53,7 +49,7 @@ steal('can/view/live.js',
 			return html;
 		}) 
 
-		live.text(span,text, div)
+		can.view.live.text(span,text, div)
 
 		equal(div.innerHTML, esc( "<label>one</label><label>two</label>"));
 
@@ -68,7 +64,7 @@ steal('can/view/live.js',
 		
 		var items = new can.List(['class','foo']);
 
-		var text = compute(function(){
+		var text = can.compute(function(){
 			var html = "";
 			if(items.attr(0) && items.attr(1)){
 				html += items.attr(0)+"='"+items.attr(1)+"'"
@@ -76,7 +72,7 @@ steal('can/view/live.js',
 			return html;
 		}) 
 
-		live.attributes(div,text)
+		can.view.live.attributes(div,text)
 
 		equal(div.className, 'foo');
 
@@ -93,23 +89,23 @@ steal('can/view/live.js',
 	test("attribute", function(){
 
 		var div = document.createElement('div');
-		div.className = "foo "+live.attributePlaceholder+" "+live.attributePlaceholder+" end";
+		div.className = "foo "+can.view.live.attributePlaceholder+" "+can.view.live.attributePlaceholder+" end";
 
 		var firstObject = new can.Map({});
 
-		var first = compute(function(){
+		var first = can.compute(function(){
 			return firstObject.attr('selected') ? "selected" : ""
 		})
 
 		var secondObject = new can.Map({});
 
-		var second = compute(function(){
+		var second = can.compute(function(){
 			return secondObject.attr('active') ? "active" : ""
 		});
 
-		live.attribute(div, "class", first);
+		can.view.live.attribute(div, "class", first);
 
-		live.attribute(div, "class", second);
+		can.view.live.attribute(div, "class", second);
 
 		equal(div.className, "foo   end");
 
@@ -138,7 +134,7 @@ steal('can/view/live.js',
 		div.innerHTML = "my <b>fav</b> animals: <span></span> !"
 		var el = div.getElementsByTagName('span')[0];
 
-		live.list(el, list, template,{});
+		can.view.live.list(el, list, template,{});
 
 		equal(div.getElementsByTagName('label').length, 2, "There are 2 labels")
 		div.getElementsByTagName('label')[0].myexpando = "EXPANDO-ED";
@@ -149,6 +145,68 @@ steal('can/view/live.js',
 
 		equal(div.getElementsByTagName('span')[2].innerHTML, "turtle", "turtle added");
 
-	})
+	});
+	
+	
+	test("list with a compute", function(){
+		var div = document.createElement('div'),
+			map = new can.Map({animals: ['bear',"turtle"]}),
+			template = function(animal){
+				return "<label>Animal=</label> <span>"+animal+"</span>"
+			}
 
-})
+		var compute = can.compute(function(){
+			return map.attr("animals");
+		})
+
+
+		div.innerHTML = "my <b>fav</b> animals: <span></span> !"
+		var el = div.getElementsByTagName('span')[0];
+
+		can.view.live.list(el, compute, template,{});
+
+		equal(div.getElementsByTagName('label').length, 2, "There are 2 labels")
+		div.getElementsByTagName('label')[0].myexpando = "EXPANDO-ED";
+
+		map.attr("animals").push("turtle");
+
+		equal(div.getElementsByTagName('label')[0].myexpando, "EXPANDO-ED", "same expando");
+
+		equal(div.getElementsByTagName('span')[2].innerHTML, "turtle", "turtle added");
+		
+		map.attr("animals", new can.List(['sloth', 'bear',"turtle"]) );
+		
+		var spans = div.getElementsByTagName('span')
+		equal(spans.length, 3, "there are 3 spans");
+		
+		
+		ok(!div.getElementsByTagName('label')[0].myexpando, "no expando");
+		
+		
+	});
+	
+	
+	test("list with a compute that returns a list", function(){
+		var div = document.createElement('div'),
+			template = function(num){
+				return "<label>num=</label> <span>"+num+"</span>"
+			}
+
+		var compute = can.compute([0,1])
+
+
+		div.innerHTML = "my <b>fav</b> nums: <span></span> !"
+		var el = div.getElementsByTagName('span')[0];
+
+		can.view.live.list(el, compute, template,{});
+
+		equal(div.getElementsByTagName('label').length, 2, "There are 2 labels")
+		
+		compute([0,1,2])
+		
+		var spans = div.getElementsByTagName('span')
+		equal(spans.length, 3, "there are 3 spans");
+	})
+	
+
+})();
