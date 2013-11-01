@@ -1,18 +1,31 @@
 steal('can/util','can/construct','can/map','can/list','can/view','can/compute',function(can){
 	
 	var isObserve = function(obj) {
-		return obj instanceof can.Map || (obj && !!obj.__get);
-	}
-	var getProp = function(obj, prop){
-		var val = obj[prop];
-
-		if(typeof val !== "function" && obj.__get) {
-			return obj.__get(prop);
+		return obj instanceof can.Map || (obj && obj.__get);
+	},
+		getProp = function(obj, prop){
+			var val = obj[prop];
+	
+			if(typeof val !== "function" && obj.__get) {
+				return obj.__get(prop);
+			}
+			else {
+				return val;
+			}
+		},
+		escapeReg = /(\\)?\./g,
+		escapeDotReg = /\\\./g,
+		getNames = function(attr){
+			var names = [], last = 0;
+			attr.replace(escapeReg, function($0, $1, index) {
+				if (!$1) {
+					names.push(attr.slice(last, index).replace(escapeDotReg,'.'));
+					last = index + $0.length;
+				}
+			});
+			names.push(attr.slice(last).replace(escapeDotReg,'.'));
+			return names;
 		}
-		else {
-			return val;
-		}
-	}
 	
 	var Scope = can.Construct.extend({
 		init: function(data, parent){
@@ -34,17 +47,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				// Reference doesn't contain escaped periods
 				? attr.split('.')
 				// Reference contains escaped periods (`a.b\c.foo` == `a["b.c"].foo)
-				: (function() {
-						var names = [], last = 0;
-						attr.replace(/(\\)?\./g, function($0, $1, index) {
-							if (!$1) {
-								names.push(attr.slice(last, index).replace(/\\\./g,'.'));
-								last = index + $0.length;
-							}
-						});
-						names.push(attr.slice(last).replace(/\\\./g,'.'));
-						return names;
-					})(),
+				: getNames(attr),
 				namesLength = names.length,
 				defaultPropertyDepth = -1,
 				defaultObserve,
@@ -52,9 +55,9 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				j,
 				lastValue,
 				ref,
-				value;
-			
-			var scope = this;
+				value,
+				scope = this;
+				
 			while(scope){
 				
 				value = scope._data
@@ -63,29 +66,21 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				
 				
 				if (value != null) {
-					// if it's a compute, read the compute's value
-					
 					
 					for (j = 0; j < namesLength; j++) {
 						
 						// convert computes to read properties from them ...
 						// better would be to generate another compute that reads this compute
-						if(can.isFunction(value) && value.isComputed) {
+						if( value.isComputed) {
 							value = value();
 						}
 						var tempValue = getProp(value,names[j]);
 						// Keep running up the tree while there are matches.
-						if(typeof tempValue !== 'undefined' && tempValue !== null) {
-						// //if(typeof tempValue !== 'undefined' && tempValue !== null) {
-						// //if (typeof value[names[j]] !== 'undefined' && value[names[j]] !== null) {
+						if( tempValue != null ) {
 							lastValue = value;
 							value = tempValue;
 							name = names[j];
 						}
-						/*if (typeof value[names[j]] !== 'undefined' && value[names[j]] !== null) {
-							lastValue = value;
-							value = value[name = names[j]];
-						}*/
 						// If it's undefined, still match if the parent is an Observe.
 						else if ( isObserve(value) && j > defaultPropertyDepth) {
 							defaultObserve = value;
@@ -110,9 +105,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 						value: value,
 						name: name
 					}; // Mustache.resolve(value, lastValue, name, isArgument);
-				} else {
-					
-				}
+				} 
 				
 				// move up to the next scope
 				scope = scope._parent;
@@ -137,7 +130,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				parent: null,
 				name: attr,
 				value: undefined
-			}
+			};
 		},
 		attr: function(attr, value){
 			if(arguments.length > 1){

@@ -82,7 +82,11 @@ steal("can", "can/util/fixture",function(){
 		findAll: "/services/todos",
 		create: "/services/todos",
 		destroy: "/services/todos/{id}",
-		update: "/services/todos/{id}"
+		update: "/services/todos/{id}",
+		models: function(){
+			time = new Date();
+			return can.Model.models.apply(this, arguments)
+		}
 	},{})
 	
 	Todo.List = can.Model.List.extend({
@@ -202,7 +206,7 @@ steal("can", "can/util/fixture",function(){
 				var todos = this.scope.attr('todos');
 			
 				Todo.findAll({}, function(list){
-					var time = new Date();
+					
 					todos.replace(list);
 					console.log( new Date - time )
 				})
