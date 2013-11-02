@@ -116,16 +116,23 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 	
 	var oldDomManip = $.fn.domManip;
 	
-	$.fn.domManip = function(args, table, callback){
-		return oldDomManip.call(this,args,table, function(elem){
-			if(elem.nodeType === 11){
-				var elems = can.makeArray(elem.childNodes);
-			}
-			var ret = callback.apply(this, arguments);
-			can.inserted(elems? elems : [elem])
-			return ret
-		})
-	}
+	$.fn.domManip = function(){
+		var args = can.makeArray(arguments),
+			isNew$ = $.fn.jquery >= "2.0.0",
+			cbIndex = isNew$ ? 1 : 2,
+			callback = args[cbIndex];
+
+		args[cbIndex] = function(elem) {
+			var isFragment = elem.nodeType === Node.DOCUMENT_FRAGMENT_NODE,
+				targets = isFragment ? can.makeArray(elem.childNodes) : [elem],
+				ret = callback.apply(this, arguments);
+			can.inserted(targets);
+			return ret;
+		};
+
+		return oldDomManip.apply(this, args);
+	};
+
 	$.event.special.inserted = {};
 	$.event.special.removed = {};
 
