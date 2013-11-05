@@ -1,0 +1,16 @@
+{
+  "name": "CanJS",
+  "repo": "bitovi/canjs",
+  "description": "Can do JavaScript MVC",
+  "main": "can.jquery.js",
+  "keywords": [
+    "mvc",
+    "component",
+    "amd"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "qunit": "~1.12.0",
+    "jquery": "~2.0.3"
+  }
+}
