@@ -13,7 +13,6 @@
     "qunit": "~1.12.0",
     "jquery": "~2.0.3",
     "jquery-legacy": "jquery#1.10",
-    "mootools": "~1.4.5",
     "zepto": "~1.0.0"
   }
 }
