@@ -3,7 +3,7 @@
 <html>
     
     <head>
-        <title>jQuery Test Suite</title>
+        <title>jQuery legacy (1.x) Test Suite</title>
         <base href="../.." />
         <link rel="stylesheet" type="text/css" href="bower_components/qunit/qunit/qunit.css" />
         <script type="text/javascript" src="../../lib/html5shiv.js"></script>
@@ -11,7 +11,7 @@
     
     <body>
         
-<h1 id="qunit-header">jQuery Test Suite</h1>
+<h1 id="qunit-header">jQuery legacy (1.x) Test Suite</h1>
 
         
 <h2 id="qunit-banner"></h2>
@@ -31,11 +31,11 @@
                 "paths": {
                     "can": "dist/amd/can",
                     "test": "./",
-                    "jquery": "bower_components/jquery/jquery"
+                    "jquery legacy (1.x)": "bower_components/jquery-legacy/jquery"
                 },
                 "map": {
                     "*": {
-                        "can/util/library": "can/util/jquery"
+                        "can/util/library": "can/util/jquery legacy (1.x)"
                     }
                 },
                 "shim": {
@@ -112,12 +112,6 @@
                     "test/map/list/list_test": ["can/map/list",
                             "test/test/test"
                     ],
-                    "test/control/plugin/plugin_test": [
-                            "can/control/plugin", "test/test/test"
-                    ],
-                    "test/view/modifiers/modifiers_test": [
-                            "can/view/modifiers", "test/test/test"
-                    ],
                     "test/util/object/object_test": [
                             "can/util/object", "test/test/test"
                     ],
@@ -151,8 +145,6 @@
                     "test/map/validations/validations_test",
                     "test/map/backup/backup_test",
                     "test/map/list/list_test",
-                    "test/control/plugin/plugin_test",
-                    "test/view/modifiers/modifiers_test",
                     "test/util/object/object_test",
                     "test/util/fixture/fixture_test"
             ], function() {

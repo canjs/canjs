@@ -164,8 +164,8 @@
 	},
 	"pluginify": {
 		"shim": {
-			"can/lib/jquery.1.9.1.js": "jQuery",
-			"can/lib/zepto.1.0.js": "Zepto",
+			"can/bower_components/jquery/jquery.js": "jQuery",
+			"can/bower_components/zepto/zepto.js": "Zepto",
 			"can/lib/mootools-core-1.4.5.js": "{}",
 			"can/util/dojo/dojo-1.8.1.js": "{}",
 			"can/lib/yui-3.7.3.js": "YUI"
@@ -178,24 +178,37 @@
 		"jquery": {
 			"description": "jQuery",
 			"isDefault": true,
-			"library": "lib/jquery.1.9.1.js",
+			"library": "bower_components/jquery/jquery.js",
 			"steal": {
 				"map": {
 					"*": {
 						"can/util/util.js": "can/util/jquery/jquery.js",
-						"jquery/jquery.js": "can/lib/jquery.1.9.1.js"
+						"jquery/jquery.js": "can/bower_components/jquery/jquery.js"
+					}
+				}
+			}
+		},
+		"jquery-legacy": {
+			"description": "jQuery legacy (1.x)",
+			"isDefault": true,
+			"library": "bower_components/jquery-legacy/jquery.js",
+			"steal": {
+				"map": {
+					"*": {
+						"can/util/util.js": "can/util/jquery/jquery.js",
+						"jquery/jquery.js": "can/bower_components/jquery-legacy/jquery.js"
 					}
 				}
 			}
 		},
 		"zepto": {
 			"description": "Zepto",
-			"library": "lib/zepto.1.0.js",
+			"library": "bower_components/zepto/zepto.js",
 			"steal": {
 				"map": {
 					"*": {
 						"can/util/util.js": "can/util/zepto/zepto.js",
-						"zepto/zepto.js": "can/lib/zepto.1.0.js"
+						"zepto/zepto.js": "can/bower_components/zepto/zepto.js"
 					}
 				}
 			}
