@@ -8,3 +8,4 @@ standalone*
 docs*
 *.DS_Store
 .idea
+bower_components/

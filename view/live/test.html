@@ -1,6 +1,6 @@
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="../../lib/qunit/qunit.css"/>
+	<link rel="stylesheet" type="text/css" href="../../bower_components/qunit/qunit/qunit.css"/>
 <title>can/view/mustache/live</title>
 </head>
 <body>
@@ -13,7 +13,7 @@
 <ol id="qunit-tests"></ol>
 <div id="qunit-test-area"></div>
 <script type="text/javascript" src="../../lib/steal/steal.js"></script>
-<script type="text/javascript" src="../../lib/qunit/qunit.js"></script>
+<script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
 	steal("can/view/live", "can/observe").then("can/test").then("can/view/live/live_test.js", function() {
