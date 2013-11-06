@@ -59,7 +59,7 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 	can.view.Scanner.attribute("can-value", function(data, el){
 		
 		var attr = el.getAttribute("can-value"),
-			value = data.scope.compute(attr);
+			value = data.scope.computeData(attr,{args:[]}).compute;
 		
 		if(el.nodeName.toLowerCase() === "input"){
 			if(el.type === "checkbox") {

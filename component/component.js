@@ -97,6 +97,38 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				
 				// Cross-bind the value in the scope to this 
 				// component's scope
+				var computeData = hookupOptions.scope.computeData(value, {args: []}),
+					compute = computeData.compute;
+				
+				// bind on this, check it's value, if it has dependencies
+				var handler = function(ev, newVal){
+					componentScope.attr(name, newVal)
+				}
+				// compute only returned if bindable
+				
+				compute.bind("change", handler);
+				
+				// set the value to be added to the scope
+				initalScopeData[name] = compute();
+				
+				if(!compute.hasDependencies) {
+					compute.unbind("change", handler);
+				} else {
+					// make sure we unbind (there's faster ways of doing this)
+					can.bind.call(el,"removed",function(){
+						compute.unbind("change", handler);
+					})
+					// setup two-way binding
+					twoWayBindings[name] = computeData
+				}
+				
+				return;
+				
+				
+				// if it has dependencies, setup one directional binding
+				
+				// if it's parent is an observe, setup 
+				
 				
 				var propertyDataFromScope = hookupOptions.scope.get(value),
 					propertyValue = propertyDataFromScope.value;
@@ -115,7 +147,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				initalScopeData[name] = propertyValue;
 				
 				// if this is something that we can auto-update, lets do that
-				var compute = hookupOptions.scope.compute(value),
+				var compute = hookupOptions.scope.computeData(value).compute,
 					handler = function(ev, newVal){
 						componentScope.attr(name, newVal)
 					}
@@ -148,9 +180,9 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 			}
 			var handlers = {};
 			// setup reverse bindings
-			can.each(twoWayBindings, function(parent, prop){
+			can.each(twoWayBindings, function(computeData, prop){
 				handlers[prop] = function(ev, newVal){
-					parent.attr(prop, newVal)
+					computeData.compute(newVal)
 				}
 				componentScope.bind(prop, handlers[prop])
 			});

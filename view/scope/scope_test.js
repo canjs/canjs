@@ -1,5 +1,7 @@
 (function(){
 	
+	module("can/view/scope")
+	
 	test("basics",function(){
 		
 		var items = { people: [{name: "Justin"},[{name: "Brian"}]], count: 1000 }; 
@@ -90,13 +92,13 @@
 		
 	})
 	
-	test("can.view.Scope.prototype.compute", function(){
+	test("can.view.Scope.prototype.computeData", function(){
 		
 		var map = new can.Map()
 		
 		var base = new can.view.Scope( map )
 		
-		var age = base.compute("age")
+		var age = base.computeData("age").compute
 		
 		equal(age(), undefined, "age is not set")
 		
@@ -169,6 +171,97 @@
 
 		equal(type.value, expected);
 		equal(type.parent, can.route);
+	})
+	
+	test("nested properties with compute", function(){
+		var me = new can.Map({
+			name: {first: "Justin"}
+		})
+		
+		var cur = new can.view.Scope(me);
+		
+
+		var compute = cur.computeData("name.first").compute
+		
+		
+		
+		var changes = 0;
+		compute.bind("change", function(ev, newVal, oldVal){
+			if(changes === 0){
+				equal(oldVal, "Justin");
+				equal(newVal, "Brian")
+			} else if(changes === 1 ){
+				equal(oldVal, "Brian");
+				equal(newVal, undefined)
+			} else if(changes === 2 ){
+				equal(oldVal, undefined);
+				equal(newVal, "Payal")
+			} else if(changes === 3 ){
+				equal(oldVal, "Payal");
+				equal(newVal, "Curtis")
+			}
+			changes++;
+		})
+		
+		equal(compute(), "Justin");
+		
+		me.attr("name.first","Brian");
+		
+		me.removeAttr("name");
+		
+		me.attr("name",{
+			first: "Payal"
+		});
+		
+		me.attr("name", new can.Map({first: "Curtis"}))
+		
+	});
+	
+	test("function at the end", function(){
+		var compute = new can.view.Scope({
+			me: {info: function(){
+				return "Justin"
+			}}
+		}).computeData("me.info").compute;
+		
+		equal(compute(), "Justin");
+		
+		var fn = function(){
+				return this.name
+			}
+		
+		var compute2 = new can.view.Scope({
+			me: {info: fn, name: "Hank"}
+		}).computeData("me.info", {isArgument: true, args: []}).compute;
+		
+		equal(compute2()(), "Hank");
+		
+	});
+	
+	test("binds to the right scope only", function(){
+		var baseMap = new can.Map({
+			me: {name: {first:"Justin"}}
+		})
+		
+		var base = new can.view.Scope(baseMap);
+		var topMap = new can.Map({
+			me: {name: {}}
+		});
+		var scope = base.add(topMap);
+		
+		var compute = scope.computeData("me.name.first").compute;
+		
+		
+		compute.bind("change", function(ev, newVal, oldVal){
+			equal(oldVal, "Justin");
+			equal(newVal, "Brian")
+		});
+		equal( compute(), "Justin");
+		
+		// this should do nothing
+		topMap.attr("me.name.first","Payal")
+		
+		baseMap.attr("me.name.first","Brian")
 	})
 	
 	

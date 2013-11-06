@@ -75,6 +75,23 @@ function( can ){
 				}
 				return orignal(updatedScope, updatedOptions || options)
 			}
+		},
+		// temp function to bind and unbind
+		k = function(){},
+		computes,
+		// 
+		temporarilyBindCompute = function(compute){
+			compute.bind(k)
+			if(!computes){
+				computes = [];
+				setTimeout(unbindComputes,100)
+			} 
+			computes.push(compute)
+		},
+		unbindComputes = function(){
+			for( var i =0, len = computes.length; i < len; i++ ) {
+				computes[i].unbind(k)
+			}
 		}
 		
 		
@@ -1351,7 +1368,7 @@ function( can ){
 		helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options)
 
 		// Check for a registered helper or a helper-like function.
-		if (helper = (Mustache.getHelper(name,options) || (can.isFunction(name) && !name.isComputed && !name.isObserveMethod && { fn: name }))) {
+		if (helper = ( (typeof name === "string" && Mustache.getHelper(name,options)  )|| (can.isFunction(name) && !name.isComputed && { fn: name }))) {
 			// Add additional data to be used by helper functions
 			
 			can.extend(helperOptions,{
@@ -1370,9 +1387,7 @@ function( can ){
 		if( can.isFunction(name)  ){
 			if ( name.isComputed ) {
 				name = name();
-			} else if( name.isObserveMethod){
-				name = name(context, scope);
-			}
+			} 
 		}
 
 		// An array of arguments to check for truthyness when evaluating sections.
@@ -1476,7 +1491,7 @@ function( can ){
 	 * @param {Boolean} [isHelper]  Whether the reference is seen as a helper.
 	 */
 	Mustache.get = function(ref, scopeAndOptions, isHelper, isArgument) {
-		
+		var context = scopeAndOptions.scope.attr('.')
 		if(isHelper){
 			// highest priority to registered helpers
 			if(Mustache.getHelper(ref, scopeAndOptions.options)){
@@ -1484,8 +1499,8 @@ function( can ){
 			}
 			// Support helper-like functions as anonymous helpers
 			// Check if there is a method directly in the "top" context
-			if(scopeAndOptions.scope && can.isFunction(scopeAndOptions.scope.attr('.')[ref]) ){
-				return scopeAndOptions.scope.attr('.')[ref];
+			if(scopeAndOptions.scope && can.isFunction(context[ref]) ){
+				return context[ref];
 			}
 			
 		}
@@ -1493,12 +1508,30 @@ function( can ){
 		var options = scopeAndOptions.options || {};
 		
 		
-		var data = scopeAndOptions.scope.get(ref);
+		
+		
+		var computeData = scopeAndOptions.scope.computeData(ref, {isArgument:isArgument, args: [context, scopeAndOptions.scope]}),
+			compute = computeData.compute;
+			
+			
+		temporarilyBindCompute(compute);
 		
 		// use value over helper only if within top scope
-		
-		if(Mustache.getHelper(ref, options) && data.scope != scopeAndOptions.scope){
+		if(Mustache.getHelper(ref, options) && computeData.scope != scopeAndOptions.scope){
+			
 			return ref
+		}
+		
+		
+		
+		if( ! compute.hasDependencies ) {
+			var currentReading = can.__clearReading();
+			// ignore this compute read
+			var val = compute()
+			can.__setReading(currentReading);
+			return val;
+		} else {
+			return compute;
 		}
 		
 		// special behaviors if an argument
