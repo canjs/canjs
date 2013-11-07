@@ -1905,11 +1905,19 @@ function( can ){
 		 *     </ul>
 		 * 
 		 * Rendered with:
+<<<<<<< HEAD
 		 * 
 		 *     {person: {name: 'Josh', age: 27}}
 		 * 
 		 * Renders:
 		 * 
+=======
+		 * 
+		 *     {person: {name: 'Josh', age: 27}}
+		 * 
+		 * Renders:
+		 * 
+>>>>>>> e94ea9695fa692ff3224dc70213ecf6e07fad9e1
 		 *     <ul>
 		 *       <li>Josh</li>
 		 *       <li>27</li>

@@ -2338,6 +2338,7 @@ test("nested properties binding (#525)", function(){
 test("Rendering indicies of an array with @index", function() {
 	var template = can.view.mustache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
 	var list = [0, 1, 2, 3];
+<<<<<<< HEAD
 
 	var lis = template({list: list}).childNodes[0].getElementsByTagName('li');
 
@@ -2366,6 +2367,36 @@ test("Rendering live bound indicies with #each, @index and a simple can.List", f
 	equal(lis[3].innerHTML, '3 d', "fourth index and value are correct");
 	equal(lis[4].innerHTML, '4 e', "fifth index and value are correct");
 
+=======
+
+	var lis = template({list: list}).childNodes[0].getElementsByTagName('li');
+
+	for(var i = 0; i < lis.length; i++) {
+		equal(lis[i].innerHTML, (i + ' ' + i), 'rendered index and value are correct');
+	}
+});
+
+test("Rendering live bound indicies with #each, @index and a simple can.List", function() {
+	var list = new can.List(['a', 'b', 'c']);
+	var template = can.view.mustache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
+
+	var lis = template({list: list}).childNodes[0].getElementsByTagName('li');
+
+	equal(lis.length, 3, "three lis");
+
+	equal(lis[0].innerHTML, '0 a', "first index and value are correct");
+	equal(lis[1].innerHTML, '1 b', "second index and value are correct");
+	equal(lis[2].innerHTML, '2 c', "third index and value are correct");
+
+	// add a few more items
+	list.push('d', 'e');
+
+	equal(lis.length, 5, "five lis");
+
+	equal(lis[3].innerHTML, '3 d', "fourth index and value are correct");
+	equal(lis[4].innerHTML, '4 e', "fifth index and value are correct");
+
+>>>>>>> e94ea9695fa692ff3224dc70213ecf6e07fad9e1
 	// splice off a few items and add some more
 	list.splice(0, 2, 'z', 'y');
 
