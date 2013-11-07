@@ -2074,33 +2074,6 @@ function( can ){
 		 *       <li> 2 - David </li>
 		 *     </ul>
 		 * 
-		 * ## Offset
-		 *
-		 * While being able to render the index of an item in an array is nice, typically
-		 * we might not not care about the zero-based value. Thankfully you can optionally pass
-		 * an offset number to modify the rendered index value. For example,
-		 *
-		 * The template:
-		 * 
-		 *     <ul>
-		 *       {{#each items}}
-		 *         <li> {{.}} is #{{@index 1}} </li>
-		 *       {{/each}}
-		 *     </ul>
-		 * 
-		 * Rendered with:
-		 * 
-		 *     { items: ['Josh', 'Eli', 'David'] }
-		 * 
-		 * Renders:
-		 * 
-		 *     <ul>
-		 *       <li> Josh is #1 </li>
-		 *       <li> Eli is #2 </li>
-		 *       <li> David is #3 </li>
-		 *     </ul>
-		 * 
-		 * 
 		 */
 		 //
 		/**
