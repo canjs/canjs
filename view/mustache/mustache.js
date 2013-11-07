@@ -2013,7 +2013,18 @@ function( can ){
 				return options.fn(ctx);
 			}
 		},
-
+		/**
+		 * @function can.Mustache.helpers.log {{log}}
+		 * @parent can.Mustache.htags 9
+		 * 
+		 * @signature `{{#log [message]}}`
+		 * 
+		 * Logs the context of the current block with an optional message.
+		 * 
+		 * @param {*} message An optional message to log out in addition to the 
+		 * current context.
+		 *
+		 */
 		'log': function(expr, options) {
 			if(console !== undefined) {
 				if(!options) {
@@ -2050,7 +2061,7 @@ function( can ){
 		/**
 		 * @function can.Mustache.helpers.index {{@index}}
 		 *
-		 * @parent can.Mustache.htags 9
+		 * @parent can.Mustache.htags 10
 		 *
 		 * @signature `{{@index [offset]}}`
 		 * 
@@ -2122,7 +2133,7 @@ function( can ){
 		/**
 		 * @function can.Mustache.helpers.key {{@key}}
 		 *
-		 * @parent can.Mustache.htags 10
+		 * @parent can.Mustache.htags 11
 		 *
 		 * @signature `{{@key}}`
 		 * 
