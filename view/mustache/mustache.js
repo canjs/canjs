@@ -75,6 +75,23 @@ function( can ){
 				}
 				return orignal(updatedScope, updatedOptions || options)
 			}
+		},
+		// temp function to bind and unbind
+		k = function(){},
+		computes,
+		// 
+		temporarilyBindCompute = function(compute){
+			compute.bind(k)
+			if(!computes){
+				computes = [];
+				setTimeout(unbindComputes,100)
+			} 
+			computes.push(compute)
+		},
+		unbindComputes = function(){
+			for( var i =0, len = computes.length; i < len; i++ ) {
+				computes[i].unbind(k)
+			}
 		}
 		
 		
@@ -1351,7 +1368,7 @@ function( can ){
 		helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options)
 
 		// Check for a registered helper or a helper-like function.
-		if (helper = (Mustache.getHelper(name,options) || (can.isFunction(name) && !name.isComputed && !name.isObserveMethod && { fn: name }))) {
+		if (helper = ( (typeof name === "string" && Mustache.getHelper(name,options)  )|| (can.isFunction(name) && !name.isComputed && { fn: name }))) {
 			// Add additional data to be used by helper functions
 			
 			can.extend(helperOptions,{
@@ -1370,9 +1387,7 @@ function( can ){
 		if( can.isFunction(name)  ){
 			if ( name.isComputed ) {
 				name = name();
-			} else if( name.isObserveMethod){
-				name = name(context, scope);
-			}
+			} 
 		}
 
 		// An array of arguments to check for truthyness when evaluating sections.
@@ -1448,7 +1463,7 @@ function( can ){
 	 * @function can.Mustache.get
 	 * @hide
 	 *
-	 * Resolves a reference for a given object (and then a context if that fails).
+	 * Resolves a key for a given object (and then a context if that fails).
 	 *	obj = this
 	 *	context = { a: true }
 	 *	ref = 'a.b.c'
@@ -1470,71 +1485,54 @@ function( can ){
 	 *		{ a: { d: 1 } }
 	 *		=> ""
 	 *
-	 * @param {String} ref      The reference to check for on the obj/context.
+	 * @param {can.Mustache.key} key      The reference to check for on the obj/context.
 	 * @param {Object} obj  		The object to use for checking for a reference.
 	 * @param {Object} context  The context to use for checking for a reference if it doesn't exist in the object.
 	 * @param {Boolean} [isHelper]  Whether the reference is seen as a helper.
 	 */
-	Mustache.get = function(ref, scopeAndOptions, isHelper, isArgument) {
+	Mustache.get = function(key, scopeAndOptions, isHelper, isArgument) {
 		
+		// Cache a reference to the current context and options, we will use them a bunch.
+		var context = scopeAndOptions.scope.attr('.'),
+			options = scopeAndOptions.options || {};;
+		
+		// If key is called as a helper,
 		if(isHelper){
-			// highest priority to registered helpers
-			if(Mustache.getHelper(ref, scopeAndOptions.options)){
-				return ref
+			// try to find a registered helper.
+			if(Mustache.getHelper(key, options)){
+				return key
 			}
-			// Support helper-like functions as anonymous helpers
-			// Check if there is a method directly in the "top" context
-			if(scopeAndOptions.scope && can.isFunction(scopeAndOptions.scope.attr('.')[ref]) ){
-				return scopeAndOptions.scope.attr('.')[ref];
+			// Support helper-like functions as anonymous helpers.
+			// Check if there is a method directly in the "top" context.
+			if(scopeAndOptions.scope && can.isFunction(context[key]) ){
+				return context[key];
 			}
 			
 		}
 		
-		var options = scopeAndOptions.options || {};
 		
+		// Get a compute (and some helper data) that represents key's value in the current scope
+		var computeData = scopeAndOptions.scope.computeData(key, {isArgument:isArgument, args: [context, scopeAndOptions.scope]}),
+			compute = computeData.compute;
+			
+		// Bind on the compute to cache its value. We will unbind in a timeout later.
+		temporarilyBindCompute(compute);
 		
-		var data = scopeAndOptions.scope.get(ref);
+		// computeData gives us an initial value
+		var initialValue = computeData.initialValue;
 		
-		// use value over helper only if within top scope
-		
-		if(Mustache.getHelper(ref, options) && data.scope != scopeAndOptions.scope){
-			return ref
+		// Use helper over the found value if the found value isn't in the current context
+		if( (initialValue === undefined || computeData.scope != scopeAndOptions.scope) &&  Mustache.getHelper(key, options) ){
+			return key
 		}
 		
-		// special behaviors if an argument
-		if(isArgument){
-			if(can.isFunction(data.value)){
-				if(data.value.isComputed){
-					return data.value
-				} else {
-					return function() { 
-						return data.value.apply(data.parent, arguments); 
-					};
-				}
-			}  else if( isObserveLike(data.parent) ) {
-				return data.parent.compute(data.name);
-			} 
-		}
-		// Invoke the length to ensure that Observe.List events fire.
-		data.value && isObserveLike(data.value) && isArrayLike(data.value) && data.value.attr('length')
-		//	return data.value;
-
-		// If it's a function on an observe's prototype
-		if( can.isFunction(data.value) && isObserveLike(data.parent) && data.parent.constructor.prototype[data.name] === data.value  ){
-			// make sure the value is a function that calls the value
-			var val = can.proxy(data.value, data.parent);
-			// mark val as method
-			val.isObserveMethod = true;
-			return val;
-		}
-		// Add support for observes
-		else if ( data.parent && isObserveLike(data.parent)) {
-			return data.parent.compute(data.name);
-		} else if( can.isFunction(data.value) ){
-			return data.value.call(data.parent)
-		}
 		
-		return data.value;
+		// If there are no dependencies, just return the value.
+		if( ! compute.hasDependencies ) {
+			return initialValue;
+		} else {
+			return compute;
+		}
 	};
 	
 	/**
@@ -1543,39 +1541,12 @@ function( can ){
 	 * Resolves an object to its truthy equivalent.
 	 *
 	 * @param {Object} value    The object to resolve.
-	 * @param {Object} [lastValue]  	Only used with Mustache.get.
-	 * @param {Object} [name]  				Only used with Mustache.get.
-	 * @param {Boolean} [isArgument]  Only used with Mustache.get.
 	 * @return {Object} The resolved object.
 	 */
-	Mustache.resolve = function(value, lastValue, name, isArgument) {
-		if(lastValue && can.isFunction(lastValue[name]) && isArgument) {
-			if(lastValue[name].isComputed){
-				return lastValue[name];
-			}
-			// Don't execute functions if they are parameters for a helper and are not a can.compute
-			// Need to bind it to the original context so that that information doesn't get lost by the helper
-			return function() { 
-				return lastValue[name].apply(lastValue, arguments); 
-			};
-		}
-		// Support attributes on compute objects
-		else if(lastValue && can.isFunction(lastValue) && lastValue.isComputed) {
-			return lastValue()[name];
-		}
-		// Support functions stored in objects.
-		else if (lastValue && can.isFunction(lastValue[name])) {
-			return lastValue[name]();
-		} 
-		// Invoke the length to ensure that Observe.List events fire.
-		else if (isObserveLike(value) && isArrayLike(value) && value.attr('length')){
+	Mustache.resolve = function(value) {
+		if (isObserveLike(value) && isArrayLike(value) && value.attr('length')){
 			return value;
-		}
-		// Add support for observes
-		else if (lastValue && isObserveLike(lastValue)) {
-			return lastValue.compute(name);
-		} 
-		else if (can.isFunction(value)) {
+		} else if (can.isFunction(value)) {
 			return value();
 		}
 		else {

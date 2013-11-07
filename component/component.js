@@ -97,35 +97,31 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				
 				// Cross-bind the value in the scope to this 
 				// component's scope
+				var computeData = hookupOptions.scope.computeData(value, {args: []}),
+					compute = computeData.compute;
 				
-				var propertyDataFromScope = hookupOptions.scope.get(value),
-					propertyValue = propertyDataFromScope.value;
-				
-				// If the value is a function, but not a compute
-				if(can.isFunction(propertyValue) && !propertyValue.isComputed){
-					
-					// get the value by reading the function
-					propertyValue = propertyDataFromScope.value.call(propertyDataFromScope.parent)
-					
-				} else if( propertyDataFromScope.parent instanceof can.Map ) {
-					// there's a value, setup two-way binding ...
-					twoWayBindings[name] = propertyDataFromScope.parent
+				// bind on this, check it's value, if it has dependencies
+				var handler = function(ev, newVal){
+					componentScope.attr(name, newVal)
 				}
-				// set the value
-				initalScopeData[name] = propertyValue;
-				
-				// if this is something that we can auto-update, lets do that
-				var compute = hookupOptions.scope.compute(value),
-					handler = function(ev, newVal){
-						componentScope.attr(name, newVal)
-					}
 				// compute only returned if bindable
-				if(compute){
-					compute.bind("change", handler);
+				
+				compute.bind("change", handler);
+				
+				// set the value to be added to the scope
+				initalScopeData[name] = compute();
+				
+				if(!compute.hasDependencies) {
+					compute.unbind("change", handler);
+				} else {
+					// make sure we unbind (there's faster ways of doing this)
 					can.bind.call(el,"removed",function(){
 						compute.unbind("change", handler);
 					})
+					// setup two-way binding
+					twoWayBindings[name] = computeData
 				}
+				
 			})
 			
 			var componentScope
@@ -148,9 +144,9 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 			}
 			var handlers = {};
 			// setup reverse bindings
-			can.each(twoWayBindings, function(parent, prop){
+			can.each(twoWayBindings, function(computeData, prop){
 				handlers[prop] = function(ev, newVal){
-					parent.attr(prop, newVal)
+					computeData.compute(newVal)
 				}
 				componentScope.bind(prop, handlers[prop])
 			});
