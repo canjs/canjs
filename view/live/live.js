@@ -92,8 +92,8 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 					// Collect new html and mappings
 					var frag = document.createDocumentFragment(),
 						newMappings = [];
-					can.each(items, function(item){
-						var itemHTML = func.call(context,item),
+					can.each(items, function(item, key){
+						var itemHTML = func.call(context, item, (key + index)),
 							itemFrag = can.view.frag(itemHTML, parentNode);
 
 						newMappings.push(can.makeArray(itemFrag.childNodes));

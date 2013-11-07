@@ -185,7 +185,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		 * @description Iterate over the keys of an Map.
 		 * @signature `can.Map.keys(map)`
 		 * @param {can.Map} map the `can.Map` to get the keys from
-		 * @return {Array} array An array containing the keys from _observe_.
+		 * @return {Array} array An array containing the keys from _map_.
 		 * 
 		 * @body
 		 * `keys` iterates over an map to get an array of its keys.
