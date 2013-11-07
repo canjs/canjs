@@ -68,10 +68,18 @@ function( can ){
 		makeConvertToScopes = function(orignal, scope, options){
 			return function(updatedScope, updatedOptions){
 				if(updatedScope != null && !(updatedScope instanceof  can.view.Scope)){
-					var key = updatedScope.key;
+					var key = updatedScope.key,
+						index = updatedScope.index,
+						value = updatedScope.value;
+					// If we have a key property, add @key to the scope
 					if(key != null) {
-						updatedScope = scope.add(updatedScope.value);
-						updatedScope._key = key;
+						updatedScope = scope.add({'@key': key});
+						updatedScope = updatedScope.add(value);
+					}
+					// If we have a index property, add @index to the scope
+					else if(index != null) {
+						updatedScope = scope.add({'@index': index});
+						updatedScope = updatedScope.add(value);
 					}
 					else {
 						updatedScope = scope.add(updatedScope)	
@@ -1910,11 +1918,12 @@ function( can ){
 		'each': function(expr, options) {
 			if(expr.isComputed || isObserveLike(expr) && typeof expr.attr('length') !== 'undefined'){
 				return can.view.lists && can.view.lists(expr, function(item, key) {
+					// Create a compute that listens to whenever the index of the item in our list changes.
 					var keyCompute = can.compute(function() {
 						var exprResolved = Mustache.resolve(expr);
 						return (exprResolved).indexOf(item);
 					});
-					return options.fn({value: item, key: keyCompute});
+					return options.fn({value: item, index: keyCompute});
 				});
 			}
 			expr = Mustache.resolve(expr);
@@ -1926,12 +1935,13 @@ function( can ){
 						return i;
 					};
 
-					result.push(options.fn({value:expr[i], key: key}));
+					result.push(options.fn({value:expr[i], index: key}));
 				}
 				return result.join('');
 			}
 			else if(isObserveLike(expr)) {
 				var result = [],
+					// listen to keys changing so we can livebind lists of attributes.
 					keys = can.Map.keys(expr);
 				for (var i = 0; i < keys.length; i++) {
 					var key = keys[i];
@@ -2002,7 +2012,7 @@ function( can ){
 					console.log(expr, options.context);	
 				}
 			}
-		},
+		}
 		/**
 		 * @function can.Mustache.helpers.elementCallback {{(el)->CODE}}
 		 *
@@ -2092,12 +2102,7 @@ function( can ){
 		 * 
 		 * 
 		 */
-		'@index': function(expr, options) {
-			if(arguments.length > 1) {
-				return (options.scope._key() + expr) + "";
-			}
-			return expr.scope._key() + "";
-		},
+		 //
 		/**
 		 * @function can.Mustache.helpers.key {{@key}}
 		 *
@@ -2134,9 +2139,6 @@ function( can ){
 		 *     </ul>
 		 * 
 		 */
-		'@key': function(expr, options) {
-			return expr.scope._key + "";
-		}
 	}, function(fn, name){
 		Mustache.registerHelper(name, fn);
 	});

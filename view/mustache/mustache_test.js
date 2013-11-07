@@ -446,7 +446,6 @@ test("Handlebars helper: each", function() {
 	};
 
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	debugger;
 	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 
 	var div = document.createElement('div');
@@ -2341,7 +2340,6 @@ test("Rendering indicies of an array with @index", function() {
 	var list = [0, 1, 2, 3];
 
 	var lis = template({list: list}).childNodes[0].getElementsByTagName('li');
-	debugger;
 
 	for(var i = 0; i < lis.length; i++) {
 		equal(lis[i].innerHTML, (i + ' ' + i), 'rendered index and value are correct');
@@ -2388,6 +2386,7 @@ test("Rendering live bound indicies with #each, @index and a simple can.List", f
 });
 
 test('Rendering keys of an object with #each and @key', function() {
+	delete can.Mustache._helpers['foo'];
 	var template = can.view.mustache("<ul>{{#each obj}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
 	var obj = {
 		foo: 'string',
@@ -2405,6 +2404,7 @@ test('Rendering keys of an object with #each and @key', function() {
 });
 
 test('Live bound iteration of keys of a can.Map with #each and @key', function() {
+	delete can.Mustache._helpers['foo'];
 	var template = can.view.mustache("<ul>{{#each map}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
 	var map = new can.Map({
 		foo: 'string',
