@@ -6,13 +6,10 @@ steal('can/util/can.js',function(can){
 	// ---------
 	// _Basic event wrapper._
 can.addEvent = function( event, fn ) {
-	if( !this.__bindEvents ) {
-		this.__bindEvents = {};
-	}
-	if(!this.__bindEvents[event]){
-		this.__bindEvents[event] = [];
-	}
-	this.__bindEvents[event].push({
+	var allEvents = this.__bindEvents || (this.__bindEvents = {}),
+		eventList = allEvents[event] || (allEvents[event] = []);
+	
+	eventList.push({
 		handler: fn,
 		name: event
 	});

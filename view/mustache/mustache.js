@@ -1541,39 +1541,12 @@ function( can ){
 	 * Resolves an object to its truthy equivalent.
 	 *
 	 * @param {Object} value    The object to resolve.
-	 * @param {Object} [lastValue]  	Only used with Mustache.get.
-	 * @param {Object} [name]  				Only used with Mustache.get.
-	 * @param {Boolean} [isArgument]  Only used with Mustache.get.
 	 * @return {Object} The resolved object.
 	 */
-	Mustache.resolve = function(value, lastValue, name, isArgument) {
-		if(lastValue && can.isFunction(lastValue[name]) && isArgument) {
-			if(lastValue[name].isComputed){
-				return lastValue[name];
-			}
-			// Don't execute functions if they are parameters for a helper and are not a can.compute
-			// Need to bind it to the original context so that that information doesn't get lost by the helper
-			return function() { 
-				return lastValue[name].apply(lastValue, arguments); 
-			};
-		}
-		// Support attributes on compute objects
-		else if(lastValue && can.isFunction(lastValue) && lastValue.isComputed) {
-			return lastValue()[name];
-		}
-		// Support functions stored in objects.
-		else if (lastValue && can.isFunction(lastValue[name])) {
-			return lastValue[name]();
-		} 
-		// Invoke the length to ensure that Observe.List events fire.
-		else if (isObserveLike(value) && isArrayLike(value) && value.attr('length')){
+	Mustache.resolve = function(value) {
+		if (isObserveLike(value) && isArrayLike(value) && value.attr('length')){
 			return value;
-		}
-		// Add support for observes
-		else if (lastValue && isObserveLike(lastValue)) {
-			return lastValue.compute(name);
-		} 
-		else if (can.isFunction(value)) {
+		} else if (can.isFunction(value)) {
 			return value();
 		}
 		else {

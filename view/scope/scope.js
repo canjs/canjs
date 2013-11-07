@@ -25,6 +25,12 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			});
 			names.push(attr.slice(last).replace(escapeDotReg,'.'));
 			return names;
+		},
+		extend = function(d, s){
+			for(var prop in s){
+				d[prop] = s[prop]
+			}
+			return d;
 		}
 	
 
@@ -54,17 +60,22 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 		 * always calls the original function with this as the parent. 
 		 */
 		read: function(parent, reads, options){
+			// `cur` is the current value.
 			var cur = parent,
 				type,
+				// `prev` is the object we are reading from.
 				prev,
+				// `foundObs` did we find an observable.
 				foundObs;
 			for( var i = 0, readLength = reads.length ; i < readLength; i++ ) {
+				// Update what we are reading from.
 				prev = cur;
-				// set cur to new value
+				// Read from the compute. We can't read a property yet.
 				if( prev && prev.isComputed ) {
 					options.foundObservable && options.foundObservable(prev, i)
-					cur = cur()
+					prev = prev()
 				}
+				// Look to read a property from something.
 				if( isObserve(prev) ) {
 					!foundObs && options.foundObservable && options.foundObservable(prev, i);
 					foundObs = 1;
@@ -84,7 +95,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					
 				} else {
 					// just do the dot operator
-					cur = cur[reads[i]]
+					cur = prev[reads[i]]
 				}
 				// if it's a compute, get the compute's value
 				if( cur && cur.isComputed && (!options.isArgument && i < readLength - 1) ) {
@@ -100,9 +111,11 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					return {value: undefined, parent: prev};
 				}
 			}
+			// if we don't have a value, exit early.
 			if( cur === undefined ){
 				options.earlyExit && options.earlyExit(prev, i - 1)
 			}
+			// handle an ending function
 			if(typeof cur === "function"){
 				if( options.isArgument ) {
 					if( ! cur.isComputed && options.proxyMethods !== false) {
@@ -114,17 +127,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				
 			}
 			return {value: cur, parent: prev};
-		}/*,
-		compute: function(computer){
-			var writeReads = computer.reads.slice(computer.reads.slice(0, computer.reads.length-2))
-			return can.compute(function(newValue){
-				if(arguments.length){
-					Scope.read(computer.rootObserve,writeReads).attr(computer.reads[computer.reads.length-1])
-				} else {
-					return Scope.read(computer.rootObserve,computer.reads);
-				}
-			})
-		}*/
+		}
 	},{
 		init: function(data, parent){
 			this._data = data;
@@ -265,7 +268,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					
 					
 					// Lets try this context
-					var data = Scope.read(context, names, can.extend({
+					var data = Scope.read(context, names, extend({
 						// Called when an observable is found.
 						foundObservable: function(observe, nameIndex){
 							// Save the current observe.

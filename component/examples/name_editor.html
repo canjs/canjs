@@ -3,11 +3,6 @@
 <script src="../../lib/steal/steal.js"></script>
 
 
-<form>
-	<content>Editing</content>
-	<input can-value='first' placeholder='{{firstPlaceholder}}'/>
-	<input can-value='last' placeholder='{{lastPlaceholder}}'/>
-</form>
 
 <script type='text/mustache' id='app-template'>
 <h1>{{#me}}{{first}} {{last}}{{/me}}</h1>
@@ -20,7 +15,7 @@ steal("can/component", function() {
 
 	can.Component.extend({
 		tag: "name-editor",
-		/*scope: {
+		scope: {
 			firstPH: "first",
 			lastPH: "last",
 			honorific: function(){
@@ -30,11 +25,11 @@ steal("can/component", function() {
 					return "Mrs."
 				}
 			}
-		},*/
+		},
 		template: 
-			"<form>"+
-				"<input value='{{first}}'/>"+
-				"<input value='{{last}}'/>"+
+			"<form><content/>"+
+				"<input can-value='first'/>"+
+				"<input can-value='last'/>"+
 			"</form>"	
 	});
 
