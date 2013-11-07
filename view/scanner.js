@@ -186,7 +186,7 @@ Scanner.hookupTag = function(hookupOptions){
 			fn(el);
 		});
 		
-		var helperTags = hookupOptions.options.computer('helpers._tags',{}).value,
+		var helperTags = hookupOptions.options.read('helpers._tags',{}).value,
 			tagName= hookupOptions.tagName,
 			tagCallback = ( helperTags && helperTags[tagName] ) || Scanner.tags[tagName]
 		

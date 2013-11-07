@@ -114,7 +114,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				
 			}
 			return {value: cur, parent: prev};
-		},
+		}/*,
 		compute: function(computer){
 			var writeReads = computer.reads.slice(computer.reads.slice(0, computer.reads.length-2))
 			return can.compute(function(newValue){
@@ -124,21 +124,15 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					return Scope.read(computer.rootObserve,computer.reads);
 				}
 			})
-		}
+		}*/
 	},{
 		init: function(data, parent){
 			this._data = data;
 			this._parent = parent;
 		},
-		attr: function(attr, value){
-			if(arguments.length > 1){
-				debugger;
-				this._data.attr(attr, value)
-				return this;
-			} else {
-				return this.computer(attr,{isArgument: true, returnObserveMethods:true, proxyMethods: false}).value
-			}
-			
+		attr: function(attr){
+			return this.read(attr,{isArgument: true, returnObserveMethods:true, proxyMethods: false}).value
+
 		},
 		add: function(data){
 			if(data !== this._data){
@@ -146,9 +140,24 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			} else {
 				return this;
 			}
-			
 		},
-		// this crazy function does a lot
+		/**
+		 * @function an.view.Scope.prototype.computeData
+		 * 
+		 * Returns an object that has a compute that represents reading this path. When the 
+		 * compute is called, it caches the read data so that future reads are faster and
+		 * sets data on that object so can.Mustache can make some decisions. The compute
+		 * is writable too.
+		 * 
+		 * @param {can.Mustache.key} attr A dot seperated path.  Use `"\."` if you have a property name that includes a dot. 
+		 * @param {can.view.Scope.ReadOptions} [options] that configure how this gets read.
+		 * 
+		 * @return {}
+		 * 
+		 * @option {can.compute} compute
+		 * @option {can.view.Scope} scope
+		 * @option {*} initialData
+		 */
 		computeData: function(attr, options ){
 			options = options || {args: []};
 			var self = this,
@@ -164,31 +173,50 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 								return Scope.read(rootObserve, rootReads,  options).value
 							}
 							// otherwise, go get the value
-							var data = self.computer(attr, options);
+							var data = self.read(attr, options);
 							rootObserve = data.rootObserve;
 							rootReads = data.reads;
-							computeData.scope = data.scope
-							computeData.parent = data.parent
-							return data.value
+							computeData.scope = data.scope;
+							computeData.initialValue = data.value;
+							return data.value;
 						}
 					})
 				};
 			return computeData
 			
 		},
-		// either gives you a compute that will give you the value of the path
-		// or the value of what you asked for if there was no observable data to read through
-		computer : function(attr, options){
+		/**
+		 * @function can.view.Scope.prototype.read
+		 * 
+		 * Read a key value from the scope and provide useful information
+		 * about what was found along the way.
+		 * 
+		 * 
+		 * @param {can.Mustache.key} attr A dot seperated path.  Use `"\."` if you have a property name that includes a dot. 
+		 * @param {can.view.Scope.ReadOptions} options that configure how this gets read.
+		 * 
+		 * @return {} 
+		 * 
+		 * @option {*} value the found value
+		 * 
+		 * @option {Object} parent the value's immediate parent
+		 * 
+		 * @option {can.Map|can.compute} rootObserve the first observable to read from.
+		 * 
+		 * @option {Array<String>} reads An array of properties that can be used to read from the rootObserve to get the value.
+		 */
+		read : function(attr, options){
 			
+			// check if we should be running this on a parent.
 			if( attr.substr(0,3) === "../" ) {
-				return this._parent.computer( attr.substr(3), options )
+				return this._parent.read( attr.substr(3), options )
 			} else if(attr == ".."){
 				return {value: this._parent._data}
 			} else if(attr == "." || attr == "this"){
 				return {value: this._data};
 			}
 			
-			
+			// Split the name up.
 			var names = attr.indexOf('\\.') == -1 
 				// Reference doesn't contain escaped periods
 				? attr.split('.')
@@ -196,44 +224,64 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				: getNames(attr),
 				namesLength = names.length,
 				j,
-				lastValue,
-				ref,
-				value,
+				// The current context (a scope is just data and a parent scope).
+				context,
+				// The current scope.
 				scope = this,
-				// how to read from the defaultObserve
-				defaultReads = [],
+				// While we are looking for a value, we track the most likely place this value will be found.  
+				// This is so if there is no me.name.first, we setup a listener on me.name.
+				// The most likely canidate is the one with the most "read matches" "lowest" in the
+				// context chain.
+				// By "read matches", we mean the most number of values along the key.
+				// By "lowest" in the context chain, we mean the closest to the current context.
+				// We track the starting position of the likely place with `defaultObserve`.
 				defaultObserve,
+				// Tracks how to read from the defaultObserve.
+				defaultReads = [],
+				// Tracks the highest found number of "read matches".
 				defaultPropertyDepth = -1,
-				defaultObserveName,
-				defaultParent,
+				// `scope.read` is designed to be called within a compute, but
+				// for performance reasons only listens to observables within one context.
+				// This is to say, if you have me.name in the current context, but me.name.first and
+				// we are looking for me.name.first, we don't setup bindings on me.name and me.name.first.
+				// To make this happen, we clear readings if they do not find a value.  But,
+				// if that path turns out to be the default read, we need to restore them.  This
+				// variable remembers those reads so they can be restored.
 				defaultComputeReadings,
+				// Tracks the default's scope.
+				defaultScope,
+				// Tracks the first found observe.
 				currentObserve,
+				// Tracks the reads to get the value for a scope.
 				currentReads;
 				
+			// While there is a scope/context to look in.
 			while(scope){
 				
-				value = scope._data;
-				if(isObserve(value)){
-					currentObserve = value;
-					currentReads = names;
-				}
-				
-				if (value != null) {
-					// lets try this scope
-					var data = Scope.read(value, names, can.extend({
+				// get the context
+				context = scope._data;
+
+				if (context != null) {
+					
+					
+					// Lets try this context
+					var data = Scope.read(context, names, can.extend({
+						// Called when an observable is found.
 						foundObservable: function(observe, nameIndex){
-							// save the current observe
+							// Save the current observe.
 							currentObserve = observe;
 							currentReads = names.slice(nameIndex);
 						},
+						// Called when we were unable to find a value.
 						earlyExit: function(parentValue, nameIndex){
-							// we didn't read the whole object path and get a value
+							// If this has more matching values,
 							if(nameIndex > defaultPropertyDepth) {
-								defaultParent= parentValue;
+								// save the state.
 								defaultObserve = currentObserve;
 								defaultReads = currentReads;
 								defaultPropertyDepth = nameIndex;
-								// clear so next attempt does not use these readings
+								defaultScope = scope;
+								// Clear and save readings so next attempt does not use these readings
 								defaultComputeReadings = can.__clearReading && can.__clearReading();
 							}
 							
@@ -244,35 +292,30 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					if (data.value !== undefined ) {
 						return {
 							scope: scope,
-							name: names[namesLength-1],
-							parent: data.lastValue,    // TODO! should be parent?
 							rootObserve: currentObserve,
 							value: data.value,
 							reads: currentReads
 						}; 
 					} 
 				}
-				// prevent prior readings
+				// Prevent prior readings.
 				can.__clearReading && can.__clearReading();
-				// move up to the next scope
+				// Move up to the next scope.
 				scope = scope._parent;
 			}
-			
+			// If there was a likely observe.
 			if( defaultObserve ) {
-				// restore reading for previous compute
+				// Restore reading for previous compute
 				can.__setReading && can.__setReading(defaultComputeReadings)
 				return {
-					//scope: scope,
+					scope: defaultScope,
 					rootObserve: defaultObserve,
-					parent: defaultParent,
-					name: defaultObserveName,
 					reads: defaultReads,
 					value: undefined
 				}
 			} else {
+				// we found nothing and no observable
 				return {
-					//scope: this,
-					parent: null,
 					names: names,
 					value: undefined
 				};

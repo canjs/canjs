@@ -159,10 +159,11 @@
 		
 		var cur = new can.view.Scope( bottom ).add(middle).add(top);
 			
-		var lastNameInfo = cur.computer("name.last",{});
+		var lastNameInfo = cur.read("name.last",{});
 		
 		
-		ok(lastNameInfo.parent ===  middle.attr('name'), "pick the default observe with the highest depth");
+		ok(lastNameInfo.rootObserve ===  middle, "pick the default observe with the highest depth");
+		deepEqual(lastNameInfo.reads, ["name","last"], "pick the default observe with the highest depth");
 	})
 
 /*	test("use observe like objects, e.g. can.route, within scope properly", function() {
@@ -278,6 +279,23 @@
 		}
 		var res = can.view.Scope.read(data,["map","foo"],{returnObserveMethods: true, isArgument: true});
 		res.value(true)
+	})
+	
+	test("rooted observable is able to update correctly", function(){
+		var baseMap = new can.Map({
+			name: {first: "Justin"}
+		});
+		
+		var scope = new can.view.Scope(baseMap);
+		
+		
+		var compute = scope.computeData("name.first").compute;
+		
+		equal( compute(), "Justin" );
+		
+		baseMap.attr("name",new can.Map({first: "Brian"}))
+		
+		equal( compute(), "Brian" );
 	})
 	
 	

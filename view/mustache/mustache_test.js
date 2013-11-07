@@ -2256,13 +2256,11 @@ test("incremental updating of #each within an if", function(){
 	var items = new can.List([{},{}]);
 	var div = document.createElement('div');
 	div.appendChild(template({items: items}));
-	console.log("test: rendered")
 
 	var ul = div.getElementsByTagName('ul')[0]
 	ul.setAttribute("original","yup");
 	
-	items.push({})
-	console.log("test: updated")
+	items.push({});
 	ok(ul === div.getElementsByTagName('ul')[0], "ul is still the same")
 	
 });

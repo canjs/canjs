@@ -1463,7 +1463,7 @@ function( can ){
 	 * @function can.Mustache.get
 	 * @hide
 	 *
-	 * Resolves a reference for a given object (and then a context if that fails).
+	 * Resolves a key for a given object (and then a context if that fails).
 	 *	obj = this
 	 *	context = { a: true }
 	 *	ref = 'a.b.c'
@@ -1485,90 +1485,54 @@ function( can ){
 	 *		{ a: { d: 1 } }
 	 *		=> ""
 	 *
-	 * @param {String} ref      The reference to check for on the obj/context.
+	 * @param {can.Mustache.key} key      The reference to check for on the obj/context.
 	 * @param {Object} obj  		The object to use for checking for a reference.
 	 * @param {Object} context  The context to use for checking for a reference if it doesn't exist in the object.
 	 * @param {Boolean} [isHelper]  Whether the reference is seen as a helper.
 	 */
-	Mustache.get = function(ref, scopeAndOptions, isHelper, isArgument) {
-		var context = scopeAndOptions.scope.attr('.')
+	Mustache.get = function(key, scopeAndOptions, isHelper, isArgument) {
+		
+		// Cache a reference to the current context and options, we will use them a bunch.
+		var context = scopeAndOptions.scope.attr('.'),
+			options = scopeAndOptions.options || {};;
+		
+		// If key is called as a helper,
 		if(isHelper){
-			// highest priority to registered helpers
-			if(Mustache.getHelper(ref, scopeAndOptions.options)){
-				return ref
+			// try to find a registered helper.
+			if(Mustache.getHelper(key, options)){
+				return key
 			}
-			// Support helper-like functions as anonymous helpers
-			// Check if there is a method directly in the "top" context
-			// Can this ever be true?
-			if(scopeAndOptions.scope && can.isFunction(scopeAndOptions.scope._data[ref]) ){
-				return scopeAndOptions.scope._data[ref];
+			// Support helper-like functions as anonymous helpers.
+			// Check if there is a method directly in the "top" context.
+			if(scopeAndOptions.scope && can.isFunction(context[key]) ){
+				return context[key];
 			}
 			
 		}
 		
-		var options = scopeAndOptions.options || {};
 		
-		
-		
-		
-		var computeData = scopeAndOptions.scope.computeData(ref, {isArgument:isArgument, args: [context, scopeAndOptions.scope]}),
+		// Get a compute (and some helper data) that represents key's value in the current scope
+		var computeData = scopeAndOptions.scope.computeData(key, {isArgument:isArgument, args: [context, scopeAndOptions.scope]}),
 			compute = computeData.compute;
 			
-			
+		// Bind on the compute to cache its value. We will unbind in a timeout later.
 		temporarilyBindCompute(compute);
 		
-		// use value over helper only if within top scope
-		if(Mustache.getHelper(ref, options) && computeData.scope != scopeAndOptions.scope){
-			
-			return ref
+		// computeData gives us an initial value
+		var initialValue = computeData.initialValue;
+		
+		// Use helper over the found value if the found value isn't in the current context
+		if( (initialValue === undefined || computeData.scope != scopeAndOptions.scope) &&  Mustache.getHelper(key, options) ){
+			return key
 		}
 		
 		
-		
+		// If there are no dependencies, just return the value.
 		if( ! compute.hasDependencies ) {
-			var currentReading = can.__clearReading();
-			// ignore this compute read
-			var val = compute()
-			can.__setReading(currentReading);
-			return val;
+			return initialValue;
 		} else {
 			return compute;
 		}
-		
-		// special behaviors if an argument
-		if(isArgument){
-			if(can.isFunction(data.value)){
-				if(data.value.isComputed){
-					return data.value
-				} else {
-					return function() { 
-						return data.value.apply(data.parent, arguments); 
-					};
-				}
-			}  else if( isObserveLike(data.parent) ) {
-				return data.parent.compute(data.name);
-			} 
-		}
-		// Invoke the length to ensure that Observe.List events fire.
-		data.value && isObserveLike(data.value) && isArrayLike(data.value) && data.value.attr('length')
-		//	return data.value;
-
-		// If it's a function on an observe's prototype
-		if( can.isFunction(data.value) && isObserveLike(data.parent) && data.parent.constructor.prototype[data.name] === data.value  ){
-			// make sure the value is a function that calls the value
-			var val = can.proxy(data.value, data.parent);
-			// mark val as method
-			val.isObserveMethod = true;
-			return val;
-		}
-		// Add support for observes
-		else if ( data.parent && isObserveLike(data.parent)) {
-			return data.parent.compute(data.name);
-		} else if( can.isFunction(data.value) ){
-			return data.value.call(data.parent)
-		}
-		
-		return data.value;
 	};
 	
 	/**
