@@ -136,27 +136,6 @@
     });
 
 
-    test("bind to document", function () {
-
-        var called = false,
-            BodyBind = can.Control("", {
-                "{document} body click":function () {
-                    called = true;
-                }
-            })
-
-        can.append(can.$("#qunit-test-area"), "<div id='weird'>")
-
-
-        new BodyBind("#weird")
-
-        can.trigger(can.$(document.body), 'click')
-        ok(called, "got body click event");
-
-        can.remove(can.$("#weird"));
-    });
-
-
 // there is a bug in opera with dojo with on/trigger, so skip that case
 // can.append( can.$("#qunit-test-area"), "<div id='els'><span id='elspan'><a href='#' id='elsa'>click me</a></span></div>")
 // dojo.query("#els span").on("a:click", function(){

@@ -37,7 +37,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			// If we can bind to it...
 			if(this.bind && this.bind !== can.bind){
 				this.bind(ev, cb)
-			} else if(this.nodeName && this.nodeType == 1 || this === window) {
+			} else if(this.nodeName && (this.nodeType == 1 || this.nodeType == 9) || this === window) {
 				$.event.add(this, ev, cb);
 			} else {
 				// Make it bind-able...
@@ -49,7 +49,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			// If we can bind to it...
 			if(this.unbind && this.unbind !== can.unbind){
 				this.unbind(ev, cb)
-			} else if(this.nodeName && this.nodeType == 1 || this === window) {
+			} else if(this.nodeName && (this.nodeType == 1 || this.nodeType == 9) || this === window) {
 				$.event.remove(this, ev, cb);
 			} else {
 				// Make it bind-able...
@@ -61,7 +61,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			if(this.delegate) {
 				this.delegate(selector, ev , cb)
 			}
-			 else if(this.nodeName && this.nodeType == 1 || this === window) {
+			 else if(this.nodeName && (this.nodeType == 1 || this.nodeType == 9) || this === window) {
 				$(this).delegate(selector, ev, cb)
 			} else {
 				// make it bind-able ...
@@ -72,7 +72,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			if(this.undelegate) {
 				this.undelegate(selector, ev , cb)
 			}
-			 else if(this.nodeName && this.nodeType == 1 || this === window) {
+			 else if(this.nodeName && (this.nodeType == 1 || this.nodeType == 9) || this === window) {
 				$(this).undelegate(selector, ev, cb)
 			} else {
 				// make it bind-able ...
