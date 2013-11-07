@@ -122,42 +122,6 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 					twoWayBindings[name] = computeData
 				}
 				
-				return;
-				
-				
-				// if it has dependencies, setup one directional binding
-				
-				// if it's parent is an observe, setup 
-				
-				
-				var propertyDataFromScope = hookupOptions.scope.get(value),
-					propertyValue = propertyDataFromScope.value;
-				
-				// If the value is a function, but not a compute
-				if(can.isFunction(propertyValue) && !propertyValue.isComputed){
-					
-					// get the value by reading the function
-					propertyValue = propertyDataFromScope.value.call(propertyDataFromScope.parent)
-					
-				} else if( propertyDataFromScope.parent instanceof can.Map ) {
-					// there's a value, setup two-way binding ...
-					twoWayBindings[name] = propertyDataFromScope.parent
-				}
-				// set the value
-				initalScopeData[name] = propertyValue;
-				
-				// if this is something that we can auto-update, lets do that
-				var compute = hookupOptions.scope.computeData(value).compute,
-					handler = function(ev, newVal){
-						componentScope.attr(name, newVal)
-					}
-				// compute only returned if bindable
-				if(compute){
-					compute.bind("change", handler);
-					can.bind.call(el,"removed",function(){
-						compute.unbind("change", handler);
-					})
-				}
 			})
 			
 			var componentScope

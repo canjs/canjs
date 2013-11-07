@@ -1499,8 +1499,9 @@ function( can ){
 			}
 			// Support helper-like functions as anonymous helpers
 			// Check if there is a method directly in the "top" context
-			if(scopeAndOptions.scope && can.isFunction(context[ref]) ){
-				return context[ref];
+			// Can this ever be true?
+			if(scopeAndOptions.scope && can.isFunction(scopeAndOptions.scope._data[ref]) ){
+				return scopeAndOptions.scope._data[ref];
 			}
 			
 		}

@@ -133,11 +133,10 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 	can.view.Scanner.attribute(/can-[\w\.]+/,function(data, el){
 		
 		var event = data.attr.substr("can-".length),
-			attr = el.getAttribute(data.attr),
-			scopeData = data.scope.get(attr),
 			handler = function(ev){
-				
-				return scopeData.value.call(scopeData.parent,data.scope.attr("."), can.$(this), ev )
+				var attr = el.getAttribute(data.attr),
+					scopeData = data.scope.computer(attr,{returnObserveMethods: true, isArgument: true});
+				return scopeData.value.call(scopeData.parent,data.scope._data, can.$(this), ev )
 			};
 		
 		if(special[event]){

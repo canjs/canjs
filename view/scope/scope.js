@@ -27,8 +27,32 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			return names;
 		}
 	
+
+	
 	var Scope = can.Construct.extend({
 		// reads properties from a parent.  A much more complex version of getObject.
+		/**
+		 * @param {can.Map|can.compute} parent A parent observe to read properties from
+		 * @param {Array<String>} reads An array of properties to read
+		 * @param {can.view.Scope.ReadOptions}
+		 */
+		//
+		/**
+		 * @typedef {{}} can.view.Scope.ReadOptions
+		 * 
+		 * @option {function(can.compute|can.Map,Number)} [foundObservable(observe, readIndex)] Is called when the first observable is found.
+		 * 
+		 * @option {function(can.compute|can.Map,Number)} [earlyExit(observe, readIndex)] Is called if a value is not found.
+		 * 
+		 * @option {Boolean} [isArgument] If true, and the last value is a function or compute, returns that function instead of calling it.
+		 * 
+		 * @option {Array} args An array of arguments to pass to observable prototype methods. 
+		 * 
+		 * @option {Boolean} [returnObserveMethods] If true, returns methods found on an observable.
+		 * 
+		 * @option {Boolean} [proxyMethods=true] Set to false to return just the function, preventing returning a function that
+		 * always calls the original function with this as the parent. 
+		 */
 		read: function(parent, reads, options){
 			var cur = parent,
 				type,
@@ -47,7 +71,12 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					// is it a method on the prototype?
 					if(typeof prev[reads[i]] === "function" && prev.constructor.prototype[reads[i]] === prev[reads[i]] ){
 						// call that method
-						cur = prev[ reads[i] ].apply(prev, options.args ||[])
+						if(options.returnObserveMethods){
+							cur = cur[reads[i]]
+						} else {
+							cur = prev[ reads[i] ].apply(prev, options.args ||[])
+						}
+						
 					} else {
 						// use attr to get that value
 						cur = cur.attr( reads[i] );
@@ -72,11 +101,11 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				}
 			}
 			if( cur === undefined ){
-				options.earlyExit && options.earlyExit(prev, i - 1, cur)
+				options.earlyExit && options.earlyExit(prev, i - 1)
 			}
 			if(typeof cur === "function"){
 				if( options.isArgument ) {
-					if( ! cur.isComputed ) {
+					if( ! cur.isComputed && options.proxyMethods !== false) {
 						cur = can.proxy(cur, prev)
 					}
 				} else {
@@ -101,109 +130,13 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			this._data = data;
 			this._parent = parent;
 		},
-		get: function(attr){
-			
-			if( attr.substr(0,3) === "../" ) {
-				return this._parent.get( attr.substr(3) )
-			} else if(attr == ".."){
-				return {value: this._parent._data}
-			} else if(attr == "." || attr == "this"){
-				return {value: this._data};
-			}
-			
-			
-			var names = attr.indexOf('\\.') == -1 
-				// Reference doesn't contain escaped periods
-				? attr.split('.')
-				// Reference contains escaped periods (`a.b\c.foo` == `a["b.c"].foo)
-				: getNames(attr),
-				namesLength = names.length,
-				defaultPropertyDepth = -1,
-				defaultObserve,
-				defaultObserveName,
-				j,
-				lastValue,
-				ref,
-				value,
-				scope = this;
-				
-			while(scope){
-				
-				value = scope._data
-				
-				if (value != null) {
-					
-					for (j = 0; j < namesLength; j++) {
-						
-						// convert computes to read properties from them ...
-						// better would be to generate another compute that reads this compute
-						if( value.isComputed) {
-							value = value();
-						}
-						var tempValue = getProp(value,names[j]);
-						// Keep running up the tree while there are matches.
-						if( tempValue != null ) {
-							lastValue = value;
-							value = tempValue;
-							name = names[j];
-						}
-						// If it's undefined, still match if the parent is an Observe.
-						else if ( isObserve(value) && j > defaultPropertyDepth) {
-							defaultObserve = value;
-							defaultObserveName = names[j];
-							defaultPropertyDepth = j;
-							lastValue = value = undefined;
-							break;
-						}
-						else {
-							lastValue = value = undefined;
-							break;
-						}
-						
-						
-					}
-				}
-				// Found a matched reference.
-				if (value !== undefined ) {
-					return {
-						scope: scope,
-						parent: lastValue || scope._data,
-						value: value,
-						name: name
-					}; // Mustache.resolve(value, lastValue, name, isArgument);
-				} 
-				
-				// move up to the next scope
-				scope = scope._parent;
-			}
-			
-			if( defaultObserve /*&& 
-			// if there's not a helper by this name and no attribute with this name
-			// this was never actually doing the above.  Actually
-			// checking the keys triggers a __reading call which we don't want
-			!Mustache.getHelper(ref) && can.inArray(defaultObserveName, can.Map.keys(defaultObserve)) === -1*/ ) {
-				{
-					return {
-						//scope: scope,
-						parent: defaultObserve,
-						name: defaultObserveName,
-						value: undefined
-					}
-				}
-			}
-			return {
-				//scope: this,
-				parent: null,
-				name: attr,
-				value: undefined
-			};
-		},
 		attr: function(attr, value){
 			if(arguments.length > 1){
+				debugger;
 				this._data.attr(attr, value)
 				return this;
 			} else {
-				return this.get(attr).value
+				return this.computer(attr,{isArgument: true, returnObserveMethods:true, proxyMethods: false}).value
 			}
 			
 		},
@@ -235,6 +168,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 							rootObserve = data.rootObserve;
 							rootReads = data.reads;
 							computeData.scope = data.scope
+							computeData.parent = data.parent
 							return data.value
 						}
 					})
@@ -247,9 +181,9 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 		computer : function(attr, options){
 			
 			if( attr.substr(0,3) === "../" ) {
-				return this._parent.get( attr.substr(3) )
+				return this._parent.computer( attr.substr(3), options )
 			} else if(attr == ".."){
-				return this._parent._data
+				return {value: this._parent._data}
 			} else if(attr == "." || attr == "this"){
 				return {value: this._data};
 			}
@@ -295,7 +229,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 						earlyExit: function(parentValue, nameIndex){
 							// we didn't read the whole object path and get a value
 							if(nameIndex > defaultPropertyDepth) {
-								defaultParent= value;
+								defaultParent= parentValue;
 								defaultObserve = currentObserve;
 								defaultReads = currentReads;
 								defaultPropertyDepth = nameIndex;
@@ -311,7 +245,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 						return {
 							scope: scope,
 							name: names[namesLength-1],
-							parent: data.lastValue,
+							parent: data.lastValue,    // TODO! should be parent?
 							rootObserve: currentObserve,
 							value: data.value,
 							reads: currentReads
