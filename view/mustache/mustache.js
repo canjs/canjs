@@ -68,7 +68,22 @@ function( can ){
 		makeConvertToScopes = function(orignal, scope, options){
 			return function(updatedScope, updatedOptions){
 				if(updatedScope != null && !(updatedScope instanceof  can.view.Scope)){
-					updatedScope = scope.add(updatedScope)
+					var key = updatedScope.key,
+						index = updatedScope.index,
+						value = updatedScope.value;
+					// If we have a key property, add @key to the scope
+					if(key != null) {
+						updatedScope = scope.add({'@key': key});
+						updatedScope = updatedScope.add(value);
+					}
+					// If we have a index property, add @index to the scope
+					else if(index != null) {
+						updatedScope = scope.add({'@index': index});
+						updatedScope = updatedScope.add(value);
+					}
+					else {
+						updatedScope = scope.add(updatedScope)	
+					}
 				}
 				if(updatedOptions != null && !(updatedOptions instanceof  OptionsScope)){
 					updatedOptions = options.add(updatedOptions)
@@ -1841,6 +1856,10 @@ function( can ){
 		 * If the value of the key is a [can.List], the resulting HTML is updated when the
 		 * list changes. When a change in the list happens, only the minimum amount of DOM
 		 * element changes occur.
+		 *
+		 * If the value of the key is a [can.Map], the resulting HTML is updated whenever
+		 * attributes are added or removed. When a change in the map happens, only 
+		 * the minimum amount of DOM element changes occur.
 	 	 * 
 	 	 * @param {can.Mustache} BLOCK A template that is rendered for each item in 
 	 	 * the `key`'s value. The `BLOCK` is rendered with the context set to the item being rendered.
@@ -1870,12 +1889,49 @@ function( can ){
 		 *       <li>Austin</li>
 		 *       <li>Justin</li>
 		 *     </ul>
+		 *
+		 * ## Object iteration
+		 *
+		 * As of 2.1, you can now iterate over properties of objects and attributes with
+		 * the `each` helper. When iterating over [can.Map] it will only iterate over the
+		 * map's [keys](can.Map.keys.html) and none of the hidden properties of a can.Map. For example,
 		 * 
+		 * The template:
+		 * 
+		 *     <ul>
+		 *       {{#each person}}
+		 *         <li>{{.}}</li>
+		 *       {{/each}}
+		 *     </ul>
+		 * 
+		 * Rendered with:
+<<<<<<< HEAD
+		 * 
+		 *     {person: {name: 'Josh', age: 27}}
+		 * 
+		 * Renders:
+		 * 
+=======
+		 * 
+		 *     {person: {name: 'Josh', age: 27}}
+		 * 
+		 * Renders:
+		 * 
+>>>>>>> e94ea9695fa692ff3224dc70213ecf6e07fad9e1
+		 *     <ul>
+		 *       <li>Josh</li>
+		 *       <li>27</li>
+		 *     </ul>
 		 */
 		'each': function(expr, options) {
 			if(expr.isComputed || isObserveLike(expr) && typeof expr.attr('length') !== 'undefined'){
-				return can.view.lists && can.view.lists(expr, function(item) {
-					return options.fn(item);
+				return can.view.lists && can.view.lists(expr, function(item, key) {
+					// Create a compute that listens to whenever the index of the item in our list changes.
+					var keyCompute = can.compute(function() {
+						var exprResolved = Mustache.resolve(expr);
+						return (exprResolved).indexOf(item);
+					});
+					return options.fn({value: item, index: keyCompute});
 				});
 			}
 			expr = Mustache.resolve(expr);
@@ -1883,9 +1939,31 @@ function( can ){
 			if (!!expr && isArrayLike(expr)) {
 				var result = [];
 				for (var i = 0; i < expr.length; i++) {
-					result.push(options.fn(expr[i]));
+					var key = function() {
+						return i;
+					};
+
+					result.push(options.fn({value:expr[i], index: key}));
 				}
 				return result.join('');
+			}
+			else if(isObserveLike(expr)) {
+				var result = [],
+					// listen to keys changing so we can livebind lists of attributes.
+					keys = can.Map.keys(expr);
+				for (var i = 0; i < keys.length; i++) {
+					var key = keys[i];
+					result.push(options.fn({value:expr[key], key: key}));
+				}
+				return result.join('');
+			}
+			else if(expr instanceof Object) {
+				var result = [];
+				for (var key in expr) {
+					result.push(options.fn({value:expr[key], key: key}));
+				}
+				return result.join('');
+
 			}
 		},
 		// Implements the `with` built-in helper.
@@ -1920,8 +1998,29 @@ function( can ){
 			if (!!expr) {
 				return options.fn(ctx);
 			}
+		},
+		/**
+		 * @function can.Mustache.helpers.log {{log}}
+		 * @parent can.Mustache.htags 9
+		 * 
+		 * @signature `{{#log [message]}}`
+		 * 
+		 * Logs the context of the current block with an optional message.
+		 * 
+		 * @param {*} message An optional message to log out in addition to the 
+		 * current context.
+		 *
+		 */
+		'log': function(expr, options) {
+			if(console !== undefined) {
+				if(!options) {
+					console.log(expr.context);
+				}
+				else {
+					console.log(expr, options.context);	
+				}
+			}
 		}
-		
 		/**
 		 * @function can.Mustache.helpers.elementCallback {{(el)->CODE}}
 		 *
@@ -1945,6 +2044,82 @@ function( can ){
 		 * 
 		 */
 		//
+		/**
+		 * @function can.Mustache.helpers.index {{@index}}
+		 *
+		 * @parent can.Mustache.htags 10
+		 *
+		 * @signature `{{@index [offset]}}`
+		 * 
+		 * Insert the index of an Array or can.List we are iterating on with [#each](can.Mustache.helpers.each)
+		 * 
+		 * @param {Number} offset The number to optionally offset the index by.
+		 * 
+		 * @body
+		 * 
+		 * ## Use 
+		 * 
+		 * When iterating over and array or list of items, you might need to render the index
+		 * of the item. Use the `@index` directive to do so. For example,
+		 *
+		 * The template:
+		 * 
+		 *     <ul>
+		 *       {{#each items}}
+		 *         <li> {{@index}} - {{.}} </li>
+		 *       {{/each}}
+		 *     </ul>
+		 * 
+		 * Rendered with:
+		 * 
+		 *     { items: ['Josh', 'Eli', 'David'] }
+		 * 
+		 * Renders:
+		 * 
+		 *     <ul>
+		 *       <li> 0 - Josh </li>
+		 *       <li> 1 - Eli </li>
+		 *       <li> 2 - David </li>
+		 *     </ul>
+		 * 
+		 */
+		 //
+		/**
+		 * @function can.Mustache.helpers.key {{@key}}
+		 *
+		 * @parent can.Mustache.htags 11
+		 *
+		 * @signature `{{@key}}`
+		 * 
+		 * Insert the property name of an Object or attribute name of a can.Map that we iterate over with [#each](can.Mustache.helpers.each)
+		 * 
+		 * @body
+		 * 
+		 * ## Use 
+		 * 
+		 * Use `{{@key}}` to render the property or attribute name of an Object or can.Map, when iterating over it with [#each](can.Mustache.helpers.each). For example,
+		 * 
+		 * The template:
+		 * 
+		 *     <ul>
+		 *       {{#each person}}
+		 *         <li> {{@key}}: {{.}} </li>
+		 *       {{/each}}
+		 *     </ul>
+		 * 
+		 * Rendered with:
+		 * 
+		 *     { person: {name: 'Josh', age: 27, likes: 'Mustache, JavaScript, High Fives'} }
+		 * 
+		 * Renders:
+		 * 
+		 *     <ul>
+		 *       <li> name: Josh </li>
+		 *       <li> age: 27 </li>
+		 *       <li> likes: Mustache, JavaScript, High Fives </li>
+		 *     </ul>
+		 * 
+		 */
 	}, function(fn, name){
 		Mustache.registerHelper(name, fn);
 	});
