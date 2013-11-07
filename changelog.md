@@ -1,4 +1,9 @@
-__2.0.0__ ( Oct 17 2013 )
+<!--
+@page changelog Changelog
+@parent guides 5
+-->
+
+__2.0.0__ ( Nov 07 2013 )
 
 - change: [Replacing lists live-binding](https://github.com/bitovi/canjs/pull/502)
 - change: [Fix destroy params](https://github.com/bitovi/canjs/pull/499)
@@ -46,11 +51,6 @@ __2.0.0__ ( Oct 17 2013 )
 - change: [Live-bound dynamic attributes don't get updated properly if they don't exist on initial execution](https://github.com/bitovi/canjs/issues/157)
 - change: [The can.Model.models arrayName should be configurable like observable's 'id' property](https://github.com/bitovi/canjs/issues/128)
 - change: [can.observe.delegate fails on compound selectors with wildcards](https://github.com/bitovi/canjs/issues/119)
-
-<!--
-@page changelog Changelog
-@parent guides 5
--->
 
 __1.1.8__ ( Sep 24 2013 )
 
