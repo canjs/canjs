@@ -1,19 +1,11 @@
 steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 	
-	// returns the
-    // - observes and attr methods are called by func
-	// - the value returned by func
-	// ex: `{value: 100, observed: [{obs: o, attr: "completed"}]}`
-	var getValueAndObserved = function(func, self){
-		
-		var oldReading;
-		
-		// Set a callback on can.Map to know
-		// when an attr is read.
-		// Keep a reference to the old reader
-		// if there is one.  This is used
-		// for nested live binding.
-		oldReading = can.__reading;
+	var names = ["__reading","__clearReading","__setReading"];
+	var setup = function(observed){
+		var old = {};
+		for(var i =0; i < names.length; i++){
+			old[names[i]] = can[names[i]]
+		}
 		can.__reading = function(obj, attr){
 			// Add the observe and attr that was read
 			// to `observed`
@@ -22,15 +14,28 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 				attr: attr+""
 			});
 		};
-		
+		can.__clearReading = function(){
+			return observed.splice(0, observed.length);
+		}
+		can.__setReading = function(o){
+			[].splice.apply(observed, [0, observed.length].concat(o))
+		}
+		return old;
+	}
+	// returns the
+    // - observes and attr methods are called by func
+	// - the value returned by func
+	// ex: `{value: 100, observed: [{obs: o, attr: "completed"}]}`
+	var getValueAndObserved = function(func, self){
 		
 		var observed = [],
+			old = setup(observed),
 			// Call the "wrapping" function to get the value. `observed`
 			// will have the observe/attribute pairs that were read.
 			value = func.call(self);
 
 		// Set back so we are no longer reading.
-		can.__reading = oldReading;
+		can.extend(can,old);
 		
 		return {
 			value : value,
@@ -97,7 +102,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 				
 				// go through every attribute read by this observe
 				for ( var i = 0, len = newObserveSet.length; i < len; i++ ) {
-					ob = newObserveSet[i]
+					ob = newObserveSet[i];
 					// if the observe/attribute pair is being observed
 					if(observing[ob.obj._cid+"|"+ob.attr]){
 						// mark at as observed
@@ -202,7 +207,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 				var oldReading = can.__reading,
 					ret;
 				// Let others know to listen to changes in this compute
-				if( can.__reading && canReadForChangeEvent) {
+				if( can.__reading && canReadForChangeEvent ) {
 					can.__reading(computed,'change');
 					// but we are going to bind on this compute,
 					// so we don't want to bind on what it is binding to
@@ -314,7 +319,11 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 			_bindsetup: function(){
 				computeState.bound = true;
 				// setup live-binding
-				on.call(this, updater)
+				// while binding, this does not count as a read
+				var oldReading = can.__reading;
+				delete can.__reading;
+				on.call(this, updater);
+				can.__reading = oldReading;
 			},
 			_bindteardown: function(){
 				off.call(this,updater)
@@ -370,7 +379,11 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 	can.compute.binder = computeBinder;
 	can.compute.truthy = function(compute){
 		return can.compute(function(){
-			return !!compute()
+			var res = compute();
+			if(typeof res === "function"){
+				res = res()
+			}
+			return !!res;
 		})
 	}
 	return can.compute;

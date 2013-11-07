@@ -1546,6 +1546,7 @@ test("2 way binding helpers", function(){
 
 	var div = document.createElement('div'),
 		u = new can.Map({name: "Justin"});
+		
 	div.appendChild(renderer({
 		user: u
 	}));
@@ -1560,7 +1561,9 @@ test("2 way binding helpers", function(){
 
 	input.value = "Austin";
 	input.onchange();
+	
 	equal(u.attr('name'), "Austin", "Name changed by input field" );
+	
 	val.teardown();
 
 
@@ -2255,8 +2258,9 @@ test("incremental updating of #each within an if", function(){
 	div.appendChild(template({items: items}));
 
 	var ul = div.getElementsByTagName('ul')[0]
-	ul.setAttribute("original","yup")
-	items.push({})
+	ul.setAttribute("original","yup");
+	
+	items.push({});
 	ok(ul === div.getElementsByTagName('ul')[0], "ul is still the same")
 	
 });
@@ -2303,6 +2307,31 @@ test("changing the list works with each", function(){
 	map.attr("list", new can.List(["bar","car"]) );
 	
 	equal(lis.length, 2, "two lis")
+	
+});
+
+test("nested properties binding (#525)", function(){
+	var template = can.view.mustache("<label>{{name.first}}</label>");
+	
+	var me = new can.Map()
+	
+	var label = template(me).childNodes[0];
+	me.attr("name",{
+		first: "Justin"
+	});
+	equal(label.innerHTML, "Justin", "set name object");
+	
+	me.attr("name",{
+		first: "Brian"
+	});
+	equal(label.innerHTML, "Brian", "merged name object");
+	
+	me.removeAttr("name");
+	me.attr({name:{
+		first: "Payal"
+	}});
+	
+	equal(label.innerHTML, "Payal", "works after parent removed");
 	
 })
 
