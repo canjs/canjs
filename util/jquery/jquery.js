@@ -1,4 +1,8 @@
 steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted","can/util/event.js",function($, can) {
+	var isBindableElement = function(node){
+		return (node.nodeName && (node.nodeType == 1 || node.nodeType == 9) || node === window);
+	};
+
 	// _jQuery node list._
 	$.extend( can, $, {
 		trigger: function( obj, event, args ) {
@@ -37,7 +41,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			// If we can bind to it...
 			if(this.bind && this.bind !== can.bind){
 				this.bind(ev, cb)
-			} else if(this.nodeName && (this.nodeType == 1 || this.nodeType == 9) || this === window) {
+			} else if(isBindableElement(this)) {
 				$.event.add(this, ev, cb);
 			} else {
 				// Make it bind-able...
@@ -49,7 +53,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			// If we can bind to it...
 			if(this.unbind && this.unbind !== can.unbind){
 				this.unbind(ev, cb)
-			} else if(this.nodeName && (this.nodeType == 1 || this.nodeType == 9) || this === window) {
+			} else if(isBindableElement(this)) {
 				$.event.remove(this, ev, cb);
 			} else {
 				// Make it bind-able...
@@ -61,7 +65,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			if(this.delegate) {
 				this.delegate(selector, ev , cb)
 			}
-			 else if(this.nodeName && (this.nodeType == 1 || this.nodeType == 9) || this === window) {
+			 else if(isBindableElement(this)) {
 				$(this).delegate(selector, ev, cb)
 			} else {
 				// make it bind-able ...
@@ -72,7 +76,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			if(this.undelegate) {
 				this.undelegate(selector, ev , cb)
 			}
-			 else if(this.nodeName && (this.nodeType == 1 || this.nodeType == 9) || this === window) {
+			 else if(isBindableElement(this)) {
 				$(this).undelegate(selector, ev, cb)
 			} else {
 				// make it bind-able ...
