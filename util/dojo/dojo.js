@@ -37,7 +37,9 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 					//						// fireEvent. /me sighs. http://gist.github.com/315318
 					//						throw("janktastic");
 					//					}
-					n.fireEvent(ev);
+					var evObj = document.createEventObject();
+					mix(evObj, a);
+					n.fireEvent(ev, evObj);
 				} catch (er) {
 					// a lame duck to work with. we're probably a 'custom event'
 					var evdata = mix({
