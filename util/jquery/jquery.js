@@ -1,6 +1,8 @@
 steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted","can/util/event.js",function($, can) {
 	var isBindableElement = function(node){
-		return (node.nodeName && (node.nodeType == 1 || node.nodeType == 9) || node === window);
+		console.log(node === window);
+		//console.log((node.nodeName && (node.nodeType == 1 || node.nodeType == 9) || node === window))
+		return (node.nodeName && (node.nodeType == 1 || node.nodeType == 9) || node == window);
 	};
 
 	// _jQuery node list._
