@@ -127,7 +127,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			callback = args[cbIndex];
 
 		args[cbIndex] = function(elem) {
-			var isFragment = elem.nodeType === Node.DOCUMENT_FRAGMENT_NODE,
+			var isFragment = elem.nodeType === 11, //Node.DOCUMENT_FRAGMENT_NODE,
 				targets = isFragment ? can.makeArray(elem.childNodes) : [elem],
 				ret = callback.apply(this, arguments);
 			can.inserted(targets);
