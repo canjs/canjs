@@ -141,7 +141,6 @@ proto._changes = function(ev, attr, how, newVal, oldVal){
 				[].splice.call(this, newIndex, 0, item);
 
 				can.trigger(this, "move", [item, newIndex, index]);
-				ev.stopImmediatePropagation();
 				can.trigger(this,"change", [
 					attr.replace(/^\d+/,newIndex),
 					how,
