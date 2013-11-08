@@ -338,9 +338,9 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 			elements.setAttr(el, attributeName, getValue( compute() ) );
 		}
 	}
-	
+	var newLine = /(\r|\n)+/g;
 	var getValue = function(val){
-		val = val.replace(elements.attrReg,"");
+		val = val.replace(elements.attrReg,"").replace(newLine,"");
 		// check if starts and ends with " or '
 		return /^["'].*["']$/.test(val) ? val.substr(1, val.length-2) : val
 	}
