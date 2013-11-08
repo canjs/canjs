@@ -1546,6 +1546,7 @@ test("2 way binding helpers", function(){
 
 	var div = document.createElement('div'),
 		u = new can.Map({name: "Justin"});
+		
 	div.appendChild(renderer({
 		user: u
 	}));
@@ -1560,7 +1561,9 @@ test("2 way binding helpers", function(){
 
 	input.value = "Austin";
 	input.onchange();
+	
 	equal(u.attr('name'), "Austin", "Name changed by input field" );
+	
 	val.teardown();
 
 
@@ -2255,8 +2258,9 @@ test("incremental updating of #each within an if", function(){
 	div.appendChild(template({items: items}));
 
 	var ul = div.getElementsByTagName('ul')[0]
-	ul.setAttribute("original","yup")
-	items.push({})
+	ul.setAttribute("original","yup");
+	
+	items.push({});
 	ok(ul === div.getElementsByTagName('ul')[0], "ul is still the same")
 	
 });
@@ -2304,8 +2308,132 @@ test("changing the list works with each", function(){
 	
 	equal(lis.length, 2, "two lis")
 	
+});
+
+test("nested properties binding (#525)", function(){
+	var template = can.view.mustache("<label>{{name.first}}</label>");
+	
+	var me = new can.Map()
+	
+	var label = template(me).childNodes[0];
+	me.attr("name",{
+		first: "Justin"
+	});
+	equal(label.innerHTML, "Justin", "set name object");
+	
+	me.attr("name",{
+		first: "Brian"
+	});
+	equal(label.innerHTML, "Brian", "merged name object");
+	
+	me.removeAttr("name");
+	me.attr({name:{
+		first: "Payal"
+	}});
+	
+	equal(label.innerHTML, "Payal", "works after parent removed");
+	
 })
 
+test("Rendering indicies of an array with @index", function() {
+	var template = can.view.mustache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
+	var list = [0, 1, 2, 3];
 
+	var lis = template({list: list}).childNodes[0].getElementsByTagName('li');
+
+	for(var i = 0; i < lis.length; i++) {
+		equal(lis[i].innerHTML, (i + ' ' + i), 'rendered index and value are correct');
+	}
+});
+
+test("Rendering live bound indicies with #each, @index and a simple can.List", function() {
+	var list = new can.List(['a', 'b', 'c']);
+	var template = can.view.mustache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
+
+	var lis = template({list: list}).childNodes[0].getElementsByTagName('li');
+
+	equal(lis.length, 3, "three lis");
+
+	equal(lis[0].innerHTML, '0 a', "first index and value are correct");
+	equal(lis[1].innerHTML, '1 b', "second index and value are correct");
+	equal(lis[2].innerHTML, '2 c', "third index and value are correct");
+
+	// add a few more items
+	list.push('d', 'e');
+
+	equal(lis.length, 5, "five lis");
+
+	equal(lis[3].innerHTML, '3 d', "fourth index and value are correct");
+	equal(lis[4].innerHTML, '4 e', "fifth index and value are correct");
+
+	// splice off a few items and add some more
+	list.splice(0, 2, 'z', 'y');
+
+	equal(lis.length, 5, "five lis");
+	equal(lis[0].innerHTML, '0 z', "first item updated");
+	equal(lis[1].innerHTML, '1 y', "second item udpated");
+	equal(lis[2].innerHTML, '2 c', "third item the same");
+	equal(lis[3].innerHTML, '3 d', "fourth item the same");
+	equal(lis[4].innerHTML, '4 e', "fifth item the same");
+
+	// splice off from the middle
+	list.splice(2, 2);
+
+	equal(lis.length, 3, "three lis");
+	equal(lis[0].innerHTML, '0 z', "first item the same");
+	equal(lis[1].innerHTML, '1 y', "second item the same");
+	equal(lis[2].innerHTML, '2 e', "fifth item now the 3rd item");
+});
+
+test('Rendering keys of an object with #each and @key', function() {
+	delete can.Mustache._helpers['foo'];
+	var template = can.view.mustache("<ul>{{#each obj}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
+	var obj = {
+		foo: 'string',
+		bar: 1,
+		baz: false
+	};
+
+	var lis = template({obj: obj}).childNodes[0].getElementsByTagName('li');
+
+	equal(lis.length, 3, "three lis");
+
+	equal(lis[0].innerHTML, 'foo string', "first key value pair rendered");
+	equal(lis[1].innerHTML, 'bar 1', "second key value pair rendered");
+	equal(lis[2].innerHTML, 'baz false', "third key value pair rendered");
+});
+
+test('Live bound iteration of keys of a can.Map with #each and @key', function() {
+	delete can.Mustache._helpers['foo'];
+	var template = can.view.mustache("<ul>{{#each map}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
+	var map = new can.Map({
+		foo: 'string',
+		bar: 1,
+		baz: false
+	});
+
+	var lis = template({map: map}).childNodes[0].getElementsByTagName('li');
+
+	equal(lis.length, 3, "three lis");
+
+	equal(lis[0].innerHTML, 'foo string', "first key value pair rendered");
+	equal(lis[1].innerHTML, 'bar 1', "second key value pair rendered");
+	equal(lis[2].innerHTML, 'baz false', "third key value pair rendered");
+
+	map.attr('qux', true);
+
+	equal(lis.length, 4, "four lis");
+
+	equal(lis[3].innerHTML, 'qux true', "fourth key value pair rendered");
+
+	map.removeAttr('foo');
+
+
+	equal(lis.length, 3, "three lis");
+
+	equal(lis[0].innerHTML, 'bar 1', "new first key value pair rendered");
+	equal(lis[1].innerHTML, 'baz false', "new second key value pair rendered");
+	equal(lis[2].innerHTML, 'qux true', "new third key value pair rendered");
+});
 
 })();

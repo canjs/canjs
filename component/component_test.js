@@ -319,6 +319,7 @@ test("treecombo", function(){
 		can.trigger(optionsLis[0],"click");
 		
 		equal(optionsLis[0].className, "active", "toggling something not selected adds active");
+		
 		ok(optionsLis[0].getElementsByTagName('input')[0].checked, "toggling something not selected checks checkbox");
 		equal( can.scope(treecombo,"selected").length, 1 , "there is one selected item")
 		equal( can.scope(treecombo,"selected.0"), itemsList.attr("0") , "the midwest is in selected")
@@ -370,7 +371,7 @@ test("deferred grid",function(){
 			init: function(){
 				this.update()
 			},
-			"{deferreddata} change": "update",
+			"{scope} deferreddata": "update",
 			update: function(){
 				var deferred = this.scope.attr('deferreddata'),
 					scope = this.scope,
@@ -393,7 +394,7 @@ test("deferred grid",function(){
 	
 	var SimulatedScope = can.Map.extend({
 		set: 0,
-		deferredData: can.compute(function(){
+		deferredData: function(){
 			var deferred = new can.Deferred();
 			var set = this.attr('set');
 			if(set == 0 ){
@@ -406,7 +407,7 @@ test("deferred grid",function(){
 				},100)
 			}
 			return deferred;
-		})
+		}
 	})
 	var scope = new SimulatedScope();
 	
@@ -426,7 +427,9 @@ test("deferred grid",function(){
 	var gridScope = can.scope("#qunit-test-area grid")
 	equal( gridScope.attr("waiting"), true, "waiting is true")
 	stop();
+	
 	gridScope.bind("waiting", function(){
+		
 		gridScope.unbind("waiting", arguments.callee)
 		setTimeout(function(){
 			var tds = can.$("#qunit-test-area td")
@@ -441,10 +444,7 @@ test("deferred grid",function(){
 					},10)
 					
 				}
-			})
-			
-			
-			
+			});
 			scope.attr("set",1);
 			
 		},10)
@@ -488,13 +488,13 @@ test("page-count",function(){
 	
 	can.Component.extend({
 		tag: "page-count",
-		template: 'Page <span>{{page}}</span> of <span>{{count}}</span>.'
+		template: 'Page <span>{{page}}</span>.'
 	})
 	
 	
 	var paginator = new Paginate({limit: 20, offset: 0, count: 100})
 	
-	var template = can.view.mustache("<page-count page='paginator.page' count='paginator.pageCount'></page-count>");
+	var template = can.view.mustache("<page-count page='paginator.page'></page-count>");
 
 	can.append(can.$("#qunit-test-area"), template({
 		paginator: paginator

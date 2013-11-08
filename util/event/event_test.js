@@ -137,6 +137,30 @@ test("stopListening on something you've never listened to ", function(){
 	
 	
 })
+test("bind on document", function(){
+	var called = false,
+		handler = function(){
+			called = true;
+		}
+	can.bind.call(document, "click", handler)
+    can.trigger(can.$(document), 'click')
+    ok(called, "got click event");
+	ok(true, "did not error")
+	can.unbind(document, "click", handler)
+	
+})
+test("delegate on document", function(){
+	var called = false,
+		handler = function(){
+			called = true;
+		}
+	can.delegate.call(document, "body", "click", handler)
+    can.trigger(can.$(document.body), 'click')
+    ok(called, "got click event");
+	ok(true, "did not error")
+	can.undelegate.call(document, "body", "click", handler)
+	
+})
 
 	
 })()

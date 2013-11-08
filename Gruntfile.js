@@ -28,13 +28,11 @@ module.exports = function (grunt) {
 			libs: {
 				template: 'test/templates/__configuration__.html.ejs',
 				builder: builderJSON,
-				//root: '../',
 				out: 'test/',
 				transform: {
 					options: function () {
 						this.steal.map = (this.steal && this.steal.map) || {};
 						this.steal.map['*'] = this.steal.map['*'] || {};
-						//this.steal.map['*']['can/'] = '';
 						return this;
 					}
 				}
@@ -148,10 +146,9 @@ module.exports = function (grunt) {
 			}
 		},
 		changelog: {
-			log: {
+			options: {
 				repo: 'canjs',
 				user: 'bitovi',
-				milestone: 3,
 				version: pkg.version
 			}
 		},

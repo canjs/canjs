@@ -40,7 +40,7 @@
 </script>
 <script type='text/mustache' id='todos-list-template'>
 <ul id="todo-list">
-	{{#todos}}
+	{{#each todos}}
 		<li class="todo {{#completed}}completed{{/completed}} {{#editing}}editing{{/editing}}" 
 			can-dblclick='edit'>
 			<div class="view">
@@ -203,17 +203,21 @@ steal("can", "can/util/fixture",function(){
 				})
 			},
 			"{window} click": function(){
-				var todos = this.scope.attr('todos');
+				if(!done){
+					var todos = this.scope.attr('todos');
 			
-				Todo.findAll({}, function(list){
-					
-					todos.replace(list);
-					console.log( new Date - time )
-				})
+					Todo.findAll({}, function(list){
+						
+						todos.replace(list);
+						console.log( new Date - time )
+					})
+				}
+				done = true;
+				
 			}
 		}
 	})
-	
+	var done = false;
 	can.route.ready()
 	var frag = can.view("todos-app-template",{});
 	$("#app").append(frag);

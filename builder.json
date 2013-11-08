@@ -70,7 +70,8 @@
 			"name": "can.util.string",
 			"type": "core",
 			"description": "Helper methods for strings",
-			"isDefault": true
+			"isDefault": true,
+      "hidden": true
 		},
 		"can/view/mustache": {
 			"name": "can.Mustache",
