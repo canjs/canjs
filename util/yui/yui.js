@@ -422,7 +422,7 @@ steal('can/util/can.js', 'yui', 'can/util/event.js',
 				// // fireEvent. /me sighs. http://gist.github.com/315318
 				// throw("janktastic");
 				// }
-				n.fireEvent(ev);
+				n.fireEvent(ev, a);
 			} catch (er) {
 				// a lame duck to work with. we're probably a 'custom event'
 				var evdata = can.extend({
