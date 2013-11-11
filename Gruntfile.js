@@ -230,7 +230,8 @@ module.exports = function (grunt) {
 					}
 				]
 			}
-		}
+		},
+		release: {}
 	});
 
 	grunt.loadNpmTasks('grunt-string-replace');
@@ -238,12 +239,15 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-release-steps');
+	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
+
+	grunt.registerTask('publish:patch', ['release:bump:patch', 'changelog', 'release:add:commit:push:tag:pushTags']);
+	grunt.registerTask('publish:minor', ['release:bump:minor', 'changelog', 'release:add:commit:push:tag:pushTags']);
 
 	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify']);
 	grunt.registerTask('test', ['connect', 'build', 'testify', 'qunit']);
 	grunt.registerTask('default', ['build']);
 
-	// TODO possibly use grunt-release
-	grunt.registerTask('release', ['build', 'string-replace', 'test']);
 };

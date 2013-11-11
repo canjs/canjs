@@ -66,30 +66,11 @@
 			"type": "core",
 			"isDefault": true
 		},
-		"can/util/string": {
-			"name": "can.util.string",
-			"type": "core",
-			"description": "Helper methods for strings",
-			"isDefault": true,
-      "hidden": true
-		},
 		"can/view/mustache": {
 			"name": "can.Mustache",
 			"description": "Live-binding Handlebars and Mustache views",
 			"type": "core",
 			"isDefault": true
-		},
-		"can/view/bindings": {
-			"name": "can.view.bindings",
-			"type": "plugin",
-			"description": "Two way bindings and in-template declarative event handlers.",
-			"hidden":true
-		},
-		"can/view/scope": {
-			"name": "can.view.Scope",
-			"type": "plugin",
-			"description": "Looks up a value in parent contexts.",
-			"hidden":true
 		},
 		"can/model/queue": {
 			"name": "can.Model.Queue",
@@ -136,6 +117,11 @@
 			"type": "plugin",
 			"description": "Live-updating mapped and filtered observe lists"
 		},
+		"can/map/sort": {
+			"name": "can.List.Sort",
+			"type": "plugin",
+			"description": "Sort observable lists"
+		},
 		"can/control/plugin": {
 			"name": "can.Control.plugin",
 			"type": "plugin",
@@ -157,6 +143,26 @@
 			"name": "can.fixture",
 			"type": "plugin",
 			"description": "Intercepts an AJAX request and simulates the response with a file or function"
+		},
+		"can/view/bindings": {
+			"name": "can.view.bindings",
+			"type": "plugin",
+			"hidden": true
+		},
+		"can/view/live": {
+			"name": "can.view.live",
+			"type": "plugin",
+			"hidden": true
+		},
+		"can/view/scope": {
+			"name": "can.view.Scope",
+			"type": "plugin",
+			"hidden": true
+		},
+		"can/util/string": {
+			"name": "can.util.string",
+			"type": "core",
+			"hidden": true
 		}
 	},
 	"types": {
