@@ -146,22 +146,26 @@
 		},
 		"can/view/bindings": {
 			"name": "can.view.bindings",
-			"type": "plugin",
+			"type": "core",
+			"isDefault": true,
 			"hidden": true
 		},
 		"can/view/live": {
 			"name": "can.view.live",
-			"type": "plugin",
+			"type": "core",
+			"isDefault": true,
 			"hidden": true
 		},
 		"can/view/scope": {
 			"name": "can.view.Scope",
-			"type": "plugin",
+			"type": "core",
+			"isDefault": true,
 			"hidden": true
 		},
 		"can/util/string": {
 			"name": "can.util.string",
 			"type": "core",
+			"isDefault": true,
 			"hidden": true
 		}
 	},
