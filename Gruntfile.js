@@ -246,7 +246,11 @@ module.exports = function (grunt) {
 				command: 'git add changelog.md && git commit -m "Updating changelog." && git push origin'
 			}
 		},
-		release: {},
+		release: {
+			options: {
+				tagName: 'v<%= version %>'
+			}
+		},
 		publish: {}
 	});
 
