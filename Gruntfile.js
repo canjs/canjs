@@ -11,7 +11,6 @@ var getAmdifyMap = function (baseName) {
 }
 
 module.exports = function (grunt) {
-
 	var _ = grunt.util._;
 	var baseName = path.basename(__dirname) + '/';
 	var builderJSON = grunt.file.readJSON('builder.json');
@@ -25,11 +24,12 @@ module.exports = function (grunt) {
 	grunt.registerTask('publish', 'Publish a a release (patch, minor, major).', function () {
 		var type = this.args[0];
 
-		if (!(type in ['patch', 'minor', 'major'])) {
+		if (['patch', 'minor', 'major'].indexOf(type) === -1) {
 			throw new Error(type + ' is not a valid release version bump (patch, minor, major)');
 		}
 
-		grunt.task.run(['release:bump:' + type, 'changelog', 'release:add:commit:push:tag:pushTags']);
+		grunt.task.run(['release:bump:' + type, 'changelog', 'shell:updateChangelog',
+			'release:add:commit:push:tag:pushTags']);
 	});
 
 	grunt.initConfig({
@@ -239,6 +239,11 @@ module.exports = function (grunt) {
 						cwd: './'
 					}
 				]
+			}
+		},
+		shell: {
+			updateChangelog: {
+				command: 'git add changelog.md && git commit -m "Updating changelog." && git push origin'
 			}
 		},
 		release: {},
