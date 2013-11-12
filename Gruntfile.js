@@ -22,6 +22,16 @@ module.exports = function (grunt) {
 		url: pkg.homepage
 	});
 
+	grunt.registerTask('publish', 'Publish a a release (patch, minor, major).', function () {
+		var type = this.args[0];
+
+		if (!(type in ['patch', 'minor', 'major'])) {
+			throw new Error(type + ' is not a valid release version bump (patch, minor, major)');
+		}
+
+		grunt.task.run(['release:bump:' + type, 'changelog', 'release:add:commit:push:tag:pushTags']);
+	});
+
 	grunt.initConfig({
 		pkg: pkg,
 		testify: {
@@ -231,7 +241,8 @@ module.exports = function (grunt) {
 				]
 			}
 		},
-		release: {}
+		release: {},
+		publish: {}
 	});
 
 	grunt.loadNpmTasks('grunt-string-replace');
@@ -242,9 +253,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-release-steps');
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
-
-	grunt.registerTask('publish:patch', ['release:bump:patch', 'changelog', 'release:add:commit:push:tag:pushTags']);
-	grunt.registerTask('publish:minor', ['release:bump:minor', 'changelog', 'release:add:commit:push:tag:pushTags']);
 
 	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify']);
 	grunt.registerTask('test', ['connect', 'build', 'testify', 'qunit']);
