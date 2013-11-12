@@ -1,4 +1,4 @@
-steal('can/util', 'can/map', function(can) {
+steal('can/util', 'can/list', function(can) {
 
 var proto = can.List.prototype,
 	_changes = proto._changes,
@@ -141,7 +141,6 @@ proto._changes = function(ev, attr, how, newVal, oldVal){
 				[].splice.call(this, newIndex, 0, item);
 
 				can.trigger(this, "move", [item, newIndex, index]);
-				ev.stopImmediatePropagation();
 				can.trigger(this,"change", [
 					attr.replace(/^\d+/,newIndex),
 					how,
