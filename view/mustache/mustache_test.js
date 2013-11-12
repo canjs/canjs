@@ -2436,4 +2436,13 @@ test('Live bound iteration of keys of a can.Map with #each and @key', function()
 	equal(lis[2].innerHTML, 'qux true', "new third key value pair rendered");
 });
 
+test('Make sure data passed into template does not call helper by mistake', function(){
+	var template = can.view.mustache("<h1>{{text}}</h1>");
+	var data = {text: 'with'};
+
+	var h1 = template(data).childNodes[0];
+
+	equal(h1.innerHTML, "with");
+})
+
 })();

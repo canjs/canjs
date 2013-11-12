@@ -1351,7 +1351,8 @@ function( can ){
 				inverse: function() {}
 			},
 			hash,
-			context = scope.attr("."); 
+			context = scope.attr("."),
+			getHelper = true; 
 		
 		// convert lookup values to actual values in name, arguments, and hash
 		for(var i =3; i < arguments.length;i++){
@@ -1375,7 +1376,13 @@ function( can ){
 		}
 		
 		if( isLookup(name) ){
-			name = Mustache.get(name.get, scopeAndOptions, args.length , false)
+			var get = name.get;
+			name = Mustache.get(name.get, scopeAndOptions, args.length , false);
+			
+			// Base whether or not we will get a helper on whether or not the original
+			// name.get and Mustache.get resolve to the same thing. Saves us from running
+			// into issues like {{text}} / {text: 'with'}
+			getHelper = (get === name);
 		}	
 			
 		// overwrite fn and inverse to always convert to scopes
@@ -1383,7 +1390,7 @@ function( can ){
 		helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options)
 
 		// Check for a registered helper or a helper-like function.
-		if (helper = ( (typeof name === "string" && Mustache.getHelper(name,options)  )|| (can.isFunction(name) && !name.isComputed && { fn: name }))) {
+		if (helper = ( getHelper && (typeof name === "string" && Mustache.getHelper(name,options)  )|| (can.isFunction(name) && !name.isComputed && { fn: name }))) {
 			// Add additional data to be used by helper functions
 			
 			can.extend(helperOptions,{
@@ -1905,19 +1912,11 @@ function( can ){
 		 *     </ul>
 		 * 
 		 * Rendered with:
-<<<<<<< HEAD
 		 * 
 		 *     {person: {name: 'Josh', age: 27}}
 		 * 
 		 * Renders:
 		 * 
-=======
-		 * 
-		 *     {person: {name: 'Josh', age: 27}}
-		 * 
-		 * Renders:
-		 * 
->>>>>>> e94ea9695fa692ff3224dc70213ecf6e07fad9e1
 		 *     <ul>
 		 *       <li>Josh</li>
 		 *       <li>27</li>
