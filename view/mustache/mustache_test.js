@@ -1519,6 +1519,31 @@ test("Interpolated values when iterating through an Observe.List should still re
 	equal(div.innerHTML, "DishesForksKnives", 'New list item rendered without DOM container');
 });
 
+test("objects with a 'key' or 'index' property should work in helpers", function() {
+	var renderer = can.view.mustache('{{ #obj }}{{ show_name }}{{ /obj }}'),
+		div = document.createElement('div');
+
+	div.appendChild(renderer({
+		obj: {id: 2, name: 'Forks', key: 'bar'}
+	}, {
+		show_name: function(){
+			return this.name;
+		}
+	}));
+	equal(div.innerHTML, "Forks", 'item name rendered');
+
+	div.innerHTML = '';
+
+	div.appendChild(renderer({
+		obj: {id: 2, name: 'Forks', index: 'bar'}
+	}, {
+		show_name: function(){
+			return this.name;
+		}
+	}));
+	equal(div.innerHTML, "Forks", 'item name rendered');
+});
+
 test("2 way binding helpers", function(){
 
 	var Value = function(el, value){
