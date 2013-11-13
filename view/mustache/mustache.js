@@ -1992,7 +1992,7 @@ function( can ){
 		 * Logs the context of the current block with an optional message.
 		 * 
 		 * @param {*} message An optional message to log out in addition to the 
-		 * current context.
+		 * current context. 
 		 *
 		 */
 		'log': function(expr, options) {
