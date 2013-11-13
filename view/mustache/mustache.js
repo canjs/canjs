@@ -68,22 +68,7 @@ function( can ){
 		makeConvertToScopes = function(orignal, scope, options){
 			return function(updatedScope, updatedOptions){
 				if(updatedScope != null && !(updatedScope instanceof  can.view.Scope)){
-					var key = updatedScope.key,
-						index = updatedScope.index,
-						value = updatedScope.value;
-					// If we have a key property, add @key to the scope
-					if(key != null) {
-						updatedScope = scope.add({'@key': key});
-						updatedScope = updatedScope.add(value);
-					}
-					// If we have a index property, add @index to the scope
-					else if(index != null) {
-						updatedScope = scope.add({'@index': index});
-						updatedScope = updatedScope.add(value);
-					}
-					else {
-						updatedScope = scope.add(updatedScope)	
-					}
+					updatedScope = scope.add(updatedScope)	
 				}
 				if(updatedOptions != null && !(updatedOptions instanceof  OptionsScope)){
 					updatedOptions = options.add(updatedOptions)
@@ -1926,11 +1911,11 @@ function( can ){
 			if(expr.isComputed || isObserveLike(expr) && typeof expr.attr('length') !== 'undefined'){
 				return can.view.lists && can.view.lists(expr, function(item, key) {
 					// Create a compute that listens to whenever the index of the item in our list changes.
-					var keyCompute = can.compute(function() {
+					var indexCompute = can.compute(function() {
 						var exprResolved = Mustache.resolve(expr);
 						return (exprResolved).indexOf(item);
 					});
-					return options.fn({value: item, index: keyCompute});
+					return options.fn( options.scope.add({"@index": indexCompute}).add(item) );
 				});
 			}
 			expr = Mustache.resolve(expr);
@@ -1938,11 +1923,11 @@ function( can ){
 			if (!!expr && isArrayLike(expr)) {
 				var result = [];
 				for (var i = 0; i < expr.length; i++) {
-					var key = function() {
+					var index = function() {
 						return i;
 					};
-
-					result.push(options.fn({value:expr[i], index: key}));
+					
+					result.push(options.fn(options.scope.add({"@index": index}).add(expr[i])));
 				}
 				return result.join('');
 			}
@@ -1952,14 +1937,14 @@ function( can ){
 					keys = can.Map.keys(expr);
 				for (var i = 0; i < keys.length; i++) {
 					var key = keys[i];
-					result.push(options.fn({value:expr[key], key: key}));
+					result.push(options.fn(options.scope.add({"@key": key}).add(expr[key])));
 				}
 				return result.join('');
 			}
 			else if(expr instanceof Object) {
 				var result = [];
 				for (var key in expr) {
-					result.push(options.fn({value:expr[key], key: key}));
+					result.push(options.fn(options.scope.add({"@key": key}).add(expr[key])));
 				}
 				return result.join('');
 
