@@ -81,7 +81,7 @@ function( can ){
 		computes,
 		// 
 		temporarilyBindCompute = function(compute){
-			compute.bind(k)
+			compute.bind("change",k)
 			if(!computes){
 				computes = [];
 				setTimeout(unbindComputes,100)
@@ -90,8 +90,9 @@ function( can ){
 		},
 		unbindComputes = function(){
 			for( var i =0, len = computes.length; i < len; i++ ) {
-				computes[i].unbind(k)
+				computes[i].unbind("change",k)
 			}
+			computes = null;
 		}
 		
 		

@@ -2468,6 +2468,36 @@ test('Make sure data passed into template does not call helper by mistake', func
 	var h1 = template(data).childNodes[0];
 
 	equal(h1.innerHTML, "with");
+});
+
+test("no memory leaks with #each (#545)", function(){
+	var tmp = can.view.mustache( "<ul>{{#each children}}<li></li>{{/each}}</ul>");
+	
+	var data = new can.Map({
+		children: [
+			{name: 'A1'},
+        	{name: 'A2'},
+        	{name: 'A3'}
+		]
+	});
+	
+	can.append( can.$('#qunit-test-area'), tmp(data) );
+	
+	stop();
+	setTimeout(function(){
+		console.log(data._bindings, data.__bindEvents)
+	
+		$('#qunit-test-area').empty()
+		
+		equal(data._bindings, 0, "there are no bindings")
+		
+		start()
+	},100)
+	
+	
+	
 })
+
+
 
 })();
