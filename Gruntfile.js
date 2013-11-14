@@ -246,7 +246,11 @@ module.exports = function (grunt) {
 				command: 'git add changelog.md && git commit -m "Updating changelog." && git push origin'
 			}
 		},
-		release: {},
+		release: {
+			options: {
+				tagName: 'v<%= version %>'
+			}
+		},
 		publish: {}
 	});
 
@@ -259,7 +263,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
 
-	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify']);
+	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify', 'string-replace:version']);
 	grunt.registerTask('test', ['connect', 'build', 'testify', 'qunit']);
 	grunt.registerTask('default', ['build']);
 
