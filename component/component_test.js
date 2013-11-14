@@ -731,6 +731,30 @@ test("don't update computes unnecessarily", function(){
 	
 	age(31)
 	
-})
+});
+
+
+test("component does not respect can.compute passed via attributes (#540)", function(){
+	
+	var data = {
+		compute: can.compute(30)
+	}
+	
+	can.Component.extend({
+		tag: "my-component",
+		template: "<span>{{blocks}}</span>"
+	})
+	
+	var template = can.view.mustache("<my-component blocks='compute'></my-component>");
+	
+	var frag  = template(data)
+	
+	equal(frag.childNodes[0].childNodes[0].innerHTML, "30")
+	
+	
+});
+
+
+
 	
 })()
