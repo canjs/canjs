@@ -615,10 +615,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		___set: function( prop, val ) {
 			
 			if(this[prop] && this[prop].isComputed && can.isFunction(this.constructor.prototype[prop])){
-				this[prop](val)
-				//this._data[prop](val);
-
-				//return;
+				this[prop](val);
 			}
 			
 			this._data[prop] = val;
