@@ -496,9 +496,9 @@ test("page-count",function(){
 	
 	var template = can.view.mustache("<page-count page='paginator.page'></page-count>");
 
-	can.append(can.$("#qunit-test-area"), template({
+	can.append(can.$("#qunit-test-area"), template(new can.Map({
 		paginator: paginator
-	}));
+	})));
 	
 	var spans = can.$("#qunit-test-area span")
 	equal(spans[0].innerHTML,"1")
@@ -690,6 +690,43 @@ test("content in a list", function(){
 	
 	equal( lis[0].innerHTML, "one", "first li has correct content")
 	equal( lis[1].innerHTML, "two", "second li has correct content")
+	
+});
+
+test("don't update computes unnecessarily", function(){
+	var sourceAge = 30,
+		timesComputeIsCalled = 0;
+	var age = can.compute(function(newVal){
+		timesComputeIsCalled++;
+		if(timesComputeIsCalled === 1){
+			ok(true, "reading initial value to set as years")
+		} else if(timesComputeIsCalled === 2){
+			equal(newVal, 31, "updating value to 31")
+		} else {
+			ok(false,"You've called the callback "+timesComputeIsCalled+" times")
+		}
+		
+		
+		if(arguments.length){
+			sourceAge = newVal;
+		} else {
+			return sourceAge;
+		}
+	})
+	
+	can.Component.extend({
+		tag: "age-er"
+	})
+	
+	var template = can.view.mustache("<age-er years='age'></age-er>")
+	
+	
+	var frag = template({
+		age: age
+	})
+	
+	
+	age(31)
 	
 })
 	

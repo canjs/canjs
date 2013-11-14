@@ -296,6 +296,36 @@
 		baseMap.attr("name",new can.Map({first: "Brian"}))
 		
 		equal( compute(), "Brian" );
+	});
+	
+	test("computeData reading an object with a compute", function(){
+		var sourceAge = 21;
+		var age = can.compute(function(newVal){
+			if(newVal){
+				sourceAge = newVal
+			} else {
+				return sourceAge;
+			}
+		})
+		
+		var scope = new can.view.Scope({
+			
+			person:{
+				age: age
+			}
+			
+		})
+		
+		var computeData = scope.computeData("person.age");
+		
+		var value = computeData.compute();
+		equal(value,21, "correct value");
+		
+		
+		computeData.compute(31);
+		
+		equal(age(),31,"age updated");
+		
 	})
 	
 	

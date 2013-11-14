@@ -2492,9 +2492,7 @@ test("no memory leaks with #each (#545)", function(){
 		equal(data._bindings, 0, "there are no bindings")
 		
 		start()
-	},100)
-	
-	
+	},50)
 	
 })
 

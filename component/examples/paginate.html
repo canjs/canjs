@@ -139,7 +139,7 @@ can.Component.extend({
       paginate: new Paginate({
         limit: 5
       }),
-      websitesDeferred: can.compute(function () {
+      websitesDeferred: function () {
         var params = {
           limit: this.attr('paginate.limit'),
           offset: this.attr('paginate.offset')
@@ -152,7 +152,7 @@ can.Component.extend({
         });
 
         return websitesDeferred;
-      })
+      }
     }
   }
 });
@@ -168,7 +168,7 @@ can.Component.extend({
     init: function () {
       this.update()
     },
-    "{deferreddata} change": "update",
+    "{scope} deferreddata": "update",
     update: function () {
       var deferred = this.scope.attr('deferreddata'),
         scope = this.scope,

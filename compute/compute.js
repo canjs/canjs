@@ -27,7 +27,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 	// - the value returned by func
 	// ex: `{value: 100, observed: [{obs: o, attr: "completed"}]}`
 	var getValueAndObserved = function(func, self){
-		
+		console.log("  >",can.__reading)
 		var observed = [],
 			old = setup(observed),
 			// Call the "wrapping" function to get the value. `observed`
@@ -36,7 +36,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 
 		// Set back so we are no longer reading.
 		can.extend(can,old);
-		
+		console.log("  <",can.__reading)
 		return {
 			value : value,
 			observed : observed
@@ -45,7 +45,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 		// Calls `callback(newVal, oldVal)` everytime an observed property
 		// called within `getterSetter` is changed and creates a new result of `getterSetter`.
 		// Also returns an object that can teardown all event handlers.
-		computeBinder = function(getterSetter, context, callback, computeState){
+		computeBinder = function(getterSetter, context, callback, computeState, computed){
 			// track what we are observing
 			var observing = {},
 				// a flag indicating if this observe/attr pair is already bound
@@ -63,10 +63,12 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 						}
 					}
 				},
-				batchNum;
+				batchNum,
+				cid = computed._cid;
 			
 			// when a property value is changed
 			var onchanged = function(ev){
+				console.log("   change re=evaluating", cid, !(computeState && !computeState.bound) )
 				// If the compute is no longer bound (because the same change event led to an unbind)
 				// then do not call getValueAndBind, or we will leak bindings.
 				if ( computeState && !computeState.bound ) {
@@ -207,10 +209,14 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 				var oldReading = can.__reading,
 					ret;
 				// Let others know to listen to changes in this compute
+				console.log("can.__reading?",can.__reading)
 				if( can.__reading && canReadForChangeEvent ) {
 					can.__reading(computed,'change');
-					// but we are going to bind on this compute,
-					// so we don't want to bind on what it is binding to
+					// We are going to bind on this compute.
+					// If we are not bound, we should bind so that
+					// we don't have to re-read to get the value of this compute.
+					!computeState.bound && can.compute.temporarilyBind(computed)
+					// Clear reading
 					delete can.__reading;
 				}
 				// if we are bound, use the cached value
@@ -229,7 +235,7 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 			canReadForChangeEvent = eventName === false ? false : true;
 			computed.hasDependencies = false;
 			on = function(update){
-				computedData = computeBinder(getterSetter, context || this, update, computeState);
+				computedData = computeBinder(getterSetter, context || this, update, computeState, computed);
 				computed.hasDependencies = computedData.isListening
 				value = computedData.value;
 			}
@@ -376,6 +382,27 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 			}
 		});
 	};
+	
+	// temp function to bind and unbind
+	var	k = function(){},
+		computes,
+		unbindComputes = function(){
+			for( var i =0, len = computes.length; i < len; i++ ) {
+				computes[i].unbind("change",k)
+			}
+			computes = null;
+		}
+	
+	// Binds computes for a moment to retain their value and prevent caching
+	can.compute.temporarilyBind = function(compute){
+			compute.bind("change",k)
+			if(!computes){
+				computes = [];
+				setTimeout(unbindComputes,10)
+			} 
+			computes.push(compute)
+		},
+	
 	can.compute.binder = computeBinder;
 	can.compute.truthy = function(compute){
 		return can.compute(function(){

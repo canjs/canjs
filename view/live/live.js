@@ -78,7 +78,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 		 */
 		list: function(el, compute, func, context, parentNode){
 			
-			
+			console.log("list called", el, parentNode)
 			
 			
 			// A mapping of the index to an array
