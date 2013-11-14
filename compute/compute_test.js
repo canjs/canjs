@@ -125,6 +125,7 @@ test("a binding compute does not double read", function(){
 	
 	
 	equal(info(),"I am 31");
+
 })
 
 

@@ -2493,6 +2493,7 @@ test("no memory leaks with #each (#545)", function(){
 		
 		start()
 	},50)
+
 	
 })
 
