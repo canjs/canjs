@@ -25,12 +25,6 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			});
 			names.push(attr.slice(last).replace(escapeDotReg,'.'));
 			return names;
-		},
-		extend = function(d, s){
-			for(var prop in s){
-				d[prop] = s[prop]
-			}
-			return d;
 		}
 	
 
@@ -60,6 +54,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 		 * always calls the original function with this as the parent. 
 		 */
 		read: function(parent, reads, options){
+			options = options || {};
 			// `cur` is the current value.
 			var cur = parent,
 				type,
@@ -97,9 +92,10 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					// just do the dot operator
 					cur = prev[reads[i]]
 				}
-				// if it's a compute, get the compute's value
+				// If it's a compute, get the compute's value
+				// unless we are at the end of the 
 				if( cur && cur.isComputed && (!options.isArgument && i < readLength - 1) ) {
-					options.foundObservable && options.foundObservable(prev, i+1)
+					!foundObs && options.foundObservable && options.foundObservable(prev, i+1)
 					cur = cur()
 				}
 				
@@ -122,6 +118,10 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 						cur = can.proxy(cur, prev)
 					}
 				} else {
+					
+					cur.isComputed && !foundObs && options.foundObservable && options.foundObservable(cur, i)
+					
+					
 					cur = cur.call(prev)
 				}
 				
@@ -169,8 +169,13 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				computeData = {
 					compute: can.compute(function(newVal){
 						if(arguments.length){
-							var last = rootReads.length-1;
-							Scope.read(rootObserve,rootReads.slice(0, last)).value.attr(rootReads[last], newVal)
+							// check that there's just a compute with nothing from it ...
+							if(rootObserve.isComputed && !rootReads.length){
+								rootObserve(newVal)
+							} else {
+								var last = rootReads.length-1;
+								Scope.read(rootObserve,rootReads.slice(0, last)).value.attr(rootReads[last], newVal)
+							}
 						} else {
 							if( rootObserve ) {
 								return Scope.read(rootObserve, rootReads,  options).value
@@ -268,7 +273,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					
 					
 					// Lets try this context
-					var data = Scope.read(context, names, extend({
+					var data = Scope.read(context, names, can.simpleExtend({
 						// Called when an observable is found.
 						foundObservable: function(observe, nameIndex){
 							// Save the current observe.

@@ -75,24 +75,7 @@ function( can ){
 				}
 				return orignal(updatedScope, updatedOptions || options)
 			}
-		},
-		// temp function to bind and unbind
-		k = function(){},
-		computes,
-		// 
-		temporarilyBindCompute = function(compute){
-			compute.bind(k)
-			if(!computes){
-				computes = [];
-				setTimeout(unbindComputes,100)
-			} 
-			computes.push(compute)
-		},
-		unbindComputes = function(){
-			for( var i =0, len = computes.length; i < len; i++ ) {
-				computes[i].unbind(k)
-			}
-		}
+		};
 		
 		
 		// ## Mustache
@@ -1517,13 +1500,12 @@ function( can ){
 			
 		}
 		
-		
 		// Get a compute (and some helper data) that represents key's value in the current scope
 		var computeData = scopeAndOptions.scope.computeData(key, {isArgument:isArgument, args: [context, scopeAndOptions.scope]}),
 			compute = computeData.compute;
 			
 		// Bind on the compute to cache its value. We will unbind in a timeout later.
-		temporarilyBindCompute(compute);
+		can.compute.temporarilyBind(compute);
 		
 		// computeData gives us an initial value
 		var initialValue = computeData.initialValue;

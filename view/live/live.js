@@ -77,10 +77,6 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 		 * @param {Object} parentNode
 		 */
 		list: function(el, compute, func, context, parentNode){
-			
-			
-			
-			
 			// A mapping of the index to an array
 			// of elements that represent the item.
 			// Each array is registered so child or parent
