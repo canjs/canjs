@@ -2485,7 +2485,6 @@ test("no memory leaks with #each (#545)", function(){
 	
 	stop();
 	setTimeout(function(){
-		console.log(data._bindings, data.__bindEvents)
 	
 		$('#qunit-test-area').empty()
 		
