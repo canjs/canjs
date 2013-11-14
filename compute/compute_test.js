@@ -128,7 +128,18 @@ test("a binding compute does not double read", function(){
 
 })
 
-
+test("cloning a setter compute (#547)", function(){
+	
+	var name = can.compute("",function(newVal){
+		return this.txt+newVal
+	})
+	
+	var cloned = name.clone({txt: "."})
+	
+	cloned("-")
+	
+	equal(cloned(),".-")
+})
 
 
 })();

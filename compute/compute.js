@@ -177,12 +177,14 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 			// this compute can be a dependency of other computes
 			canReadForChangeEvent = true,
 			// save for clone
-			args = arguments,
+			args = can.makeArray(arguments),
 			updater= function(newValue, oldValue){
 				value = newValue;
 				// might need a way to look up new and oldVal
 				can.batch.trigger(computed, "change",[newValue, oldValue])
-			};
+			},
+			// the form of the arguments
+			form;
 
 		computed = function(newVal){
 			// setting ...
@@ -287,6 +289,8 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 				if(typeof context === "function"){
 					value = getterSetter;
 					set = context;
+					context = eventName;
+					form = "setter";
 				} else {
 					// `can.compute(initialValue,{get:, set:, on:, off:})`
 					value = getterSetter;
@@ -371,17 +375,20 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 			 */
 			unbind: can.unbindAndTeardown,
 			clone: function(context){
-				var arrayArgs = can.makeArray(args);
 				if(context){
-					arrayArgs[1] = context
+					if(form == "setter"){
+						args[2] = context
+					} else {
+						args[1] = context
+					}
 				}
-				return can.compute.apply(can,arrayArgs);
+				return can.compute.apply(can,args);
 			}
 		});
 	};
 	
 	// a list of temporarily bound computes
-	var	computes,
+	var computes,
 		unbindComputes = function(){
 			for( var i =0, len = computes.length; i < len; i++ ) {
 				computes[i].unbind("change",k)
