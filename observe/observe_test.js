@@ -1,7 +1,7 @@
 (function(undefined) {
 
 module('can/observe map+list')
-/*
+
 test("Basic Map",9,function(){
 	
 	var state = new can.Map({
@@ -568,7 +568,13 @@ test("startBatch and stopBatch and changed event", 5, function(){
 		ok(!changedCalled, "changed not called yet")
 		changeCallCount++;
 	})
-
+	// The following tests how changed events should fire
+	/*ob.bind("changed", function(ev, attrs){
+		equal(changeCallCount, 2, "two change events")
+		
+		equal(attrs.length, 2, "changed events include bubbling change events");
+		changedCalled = true;
+	})*/
 	stop();
 	can.batch.start(function(){
 		ok(true, "batch callback called")
@@ -1132,7 +1138,7 @@ test("compute of computes", function(){
 	
 	
 	searchQuery("food")
-})*/
+})
 
 
 test("compute doesn't rebind and leak with 0 bindings", function() {
@@ -1149,63 +1155,38 @@ test("compute doesn't rebind and leak with 0 bindings", function() {
 		return state.attr("foo") === "bar" || 15;
 	});
 
-	var k = function() {
-				// noop
-		};
-
 	function aChange(ev, newVal) {
 		if(newVal) {
-			computeB.bind("change", k);
+			computeB.bind("change.computeA", function() {
+				// noop
+			});
 		} else {
-			computeB.unbind("change", k);
+			computeB.unbind("change.computeA");
 		}
 	}
-	console.log("A. about to bind cA",can.__reading)
-	
+
 	computeA.bind("change", aChange);
-	
-	console.log("B. bound cA",can.__reading);
-	
-	console.log("C. about to bind cB", can.__reading)
 	aChange(null, computeA());
-	console.log("D. bound cB", can.__reading)
 
 	equal(computedA, 1, "binding A computes the value");
 	equal(computedB, 1, "A=true, so B is bound, computing the value");
 
-
-	// change the state so computeA returns false,
-	// this will unbind compute B
-	window.WHAT = true
-	
 	state.attr("foo", "baz");
-	console.log("E. unbound cB.", can.__reading)
 	equal(computedA, 2, "A recomputed and unbound B");
 	equal(computedB, 1, "B was unbound, so not recomputed");
-	
-
 
 	state.attr("foo", "bar");
-	
 	equal(computedA, 3, "A recomputed => true");
 	equal(computedB, 2, "A=true so B is rebound and recomputed");
 
 	computeA.unbind("change", aChange);
 	computeB.unbind("change.computeA");
-	
-	stop();
-	setTimeout(function(){
-		console.log("X. after timeout", can.__reading)
-		start();
-		state.attr("foo", "baz");
-		equal(computedA, 3, "unbound, so didn't recompute A");
-		equal(computedB, 2, "unbound, so didn't recompute B");
-	},50)
-	
-	
+	state.attr("foo", "baz");
+	equal(computedA, 3, "unbound, so didn't recompute A");
+	equal(computedB, 2, "unbound, so didn't recompute B");
 });
 
-/*
+
 test("compute setter without external value", function(){
 
 	var age = can.compute(0,function(newVal, oldVal){
@@ -1228,18 +1209,16 @@ test("compute setter without external value", function(){
 	age("invalid");
 	equal(age(), 5, "5 kept")
 
-})*/
+})
 
 test("compute value",function(){
-	console.log("0. Test start",can.__reading)
 	expect(9)
 	var input = {
 		value: 1
 	}
-	console.log("1. Creating Compute")
+
 	var value = can.compute("",{
 		get: function(){
-			console.log("3. Get Called")
 			return input.value;
 		},
 		set: function(newVal){
@@ -1253,10 +1232,8 @@ test("compute value",function(){
 			delete input.onchange;
 		}
 	})
-	console.log("2. Reading Value")
+
 	equal(value(), 1, "original value");
-	console.log("4. Returned value")
-	
 	ok(!input.onchange, "nothing bound");
 	value(2);
 
@@ -1277,7 +1254,7 @@ test("compute value",function(){
 	ok(!input.onchange, "removed binding")
 	equal(value(), 3);
 });
-return;
+
 test("compute bound to observe",function(){
 	var me = new can.Map({name: "Justin"});
 

@@ -127,7 +127,7 @@ steal("can/util","can/map", function(can, Map){
 			}
 			// this change needs to be ignored
 			this.bind('change',can.proxy(this._changes,this));
-			can.extend(this, options);
+			can.simpleExtend(this, options);
 			delete this._init;
 		},
 		_triggerChange: function(attr, how, newVal, oldVal){

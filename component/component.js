@@ -91,7 +91,6 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				
 				var name = can.camelize(node.nodeName.toLowerCase()),
 					value = node.value;
-				console.log("hooking up attribute", name)
 				// ignore attributes already in ScopeMappings
 				if(component.constructor.attributeScopeMappings[name] || ignoreAttributesRegExp.test(name)){
 					return;
@@ -104,9 +103,9 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				
 				// bind on this, check it's value, if it has dependencies
 				var handler = function(ev, newVal){
-					//scopePropertyUpdating = name;
+					scopePropertyUpdating = name;
 					componentScope.attr(name, newVal);
-					//scopePropertyUpdating = null;
+					scopePropertyUpdating = null;
 				}
 				// compute only returned if bindable
 				
@@ -150,8 +149,11 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 			// setup reverse bindings
 			can.each(twoWayBindings, function(computeData, prop){
 				handlers[prop] = function(ev, newVal){
-					console.log("setting back",prop, ev.batchNum)
-					computeData.compute(newVal)
+					// check that this property is not being changed because
+					// it's source value just changed
+					if(scopePropertyUpdating !== prop){
+						computeData.compute(newVal)
+					}
 				}
 				componentScope.bind(prop, handlers[prop])
 			});

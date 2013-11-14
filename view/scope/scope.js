@@ -25,12 +25,6 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			});
 			names.push(attr.slice(last).replace(escapeDotReg,'.'));
 			return names;
-		},
-		extend = function(d, s){
-			for(var prop in s){
-				d[prop] = s[prop]
-			}
-			return d;
 		}
 	
 
@@ -279,7 +273,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					
 					
 					// Lets try this context
-					var data = Scope.read(context, names, extend({
+					var data = Scope.read(context, names, can.simpleExtend({
 						// Called when an observable is found.
 						foundObservable: function(observe, nameIndex){
 							// Save the current observe.

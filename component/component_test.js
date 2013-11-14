@@ -557,6 +557,7 @@ test("self closing content tags", function(){
 })
 
 test("setting passed variables - two way binding", function(){
+	
 	can.Component({
 	    tag: "my-toggler",
 	    template: "{{#if visible}}<content/>{{/if}}",
@@ -702,6 +703,8 @@ test("don't update computes unnecessarily", function(){
 			ok(true, "reading initial value to set as years")
 		} else if(timesComputeIsCalled === 2){
 			equal(newVal, 31, "updating value to 31")
+		} else if(timesComputeIsCalled === 3){
+			ok(true, "called back another time after set to get the value")
 		} else {
 			ok(false,"You've called the callback "+timesComputeIsCalled+" times")
 		}

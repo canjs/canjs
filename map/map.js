@@ -827,7 +827,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 				return Map.helpers.serialize(this, 'attr', {})
 			}
 
-			props = can.extend({}, props);
+			props = can.simpleExtend({}, props);
 			var prop,
 				self = this,
 				newVal;
