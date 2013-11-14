@@ -540,7 +540,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		// returns the "real" data object itself.
 		__get: function( attr ) {
 			if(attr){
-				if(this[attr] && this[attr].isComputed){
+				if(this[attr] && this[attr].isComputed && can.isFunction(this.constructor.prototype[attr])){
 					return this[attr]()
 				} else {
 					return this._data[attr]
@@ -614,8 +614,11 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		// Directly sets a property on this `object`.
 		___set: function( prop, val ) {
 			
-			if(this[prop] && this[prop].isComputed){
+			if(this[prop] && this[prop].isComputed && can.isFunction(this.constructor.prototype[prop])){
 				this[prop](val)
+				//this._data[prop](val);
+
+				//return;
 			}
 			
 			this._data[prop] = val;
