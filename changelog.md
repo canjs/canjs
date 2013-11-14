@@ -3,6 +3,14 @@
 @parent guides 5
 -->
 
+__2.0.2__ ( Nov 14 2013 )
+
+- change: [Event listeners leak in 2.0.1](https://github.com/bitovi/canjs/issues/545)
+- change: [can.VERSION for 2.0.1 says @EDGE rather than 2.0.1](https://github.com/bitovi/canjs/issues/544)
+- change: ['key' property breaks mustache helpers](https://github.com/bitovi/canjs/pull/542)
+- change: [component does not respect can.compute passed via attributes](https://github.com/bitovi/canjs/issues/540)
+- change: [Wrapping can.compute in can.Map breaks live-binding](https://github.com/bitovi/canjs/issues/530)
+
 __2.0.1__ ( Nov 12 2013 )
 
 - change: [Fixes #538 helpers aren't called is data passed to the template happens ...](https://github.com/bitovi/canjs/pull/541)
