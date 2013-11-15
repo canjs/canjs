@@ -233,8 +233,6 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			can.each(can.makeArray(newVal), function(id){
 				self._set(id);
 			});
-
-			this.element[0].value = this.get().join(';');
 		},
 
 		get: function(){
