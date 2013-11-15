@@ -84,6 +84,13 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 				return;
 			}
 		}
+
+		if(el.nodeName.toLowerCase() === "select" && el.multiple) {
+			new Multiselect(el, {
+				value: value
+			});
+			return;
+		}
 		
 		new Value(el,{value: value})
 	});
@@ -167,9 +174,7 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 		"change": function(){
 			this.options.value(this.element[0].value)
 		}
-	})
-	
-	var Checked = can.Control.extend({
+	}), Checked = can.Control.extend({
 		init: function(){
 			this.isCheckebox = (this.element[0].type.toLowerCase() == "checkbox");
 			this.check()
@@ -205,6 +210,45 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			}
 			
 		}
-	});
+	}), Multiselect = Value.extend({
+		init: function() {
+			this.set();
+		},
+
+		_set: function(newVal){
+			var selectedItem = this.element.find("option[value='" + newVal + "']");
+			
+			if(selectedItem.length && !selectedItem.is(':selected')) {
+				selectedItem.attr('selected', 'selected');
+			}
+		},
+
+		set: function() {
+			var newVal = this.options.value(), self = this;
+
+			//unset every option
+			this.element.find('option').removeAttr('selected');
+
+			//reselect the newly selected options
+			can.each(can.makeArray(newVal), function(id){
+				self._set(id);
+			});
+
+			this.element[0].value = this.get().join(';');
+		},
+
+		get: function(){
+			var arr = this.element.find('option:selected')
+				.map(function(){
+					return this.value;
+				});
+
+			return can.makeArray(arr);
+		},
+
+		'change': function() {
+			this.options.value(this.get());
+		}
+	})
 	
 })

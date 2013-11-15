@@ -148,5 +148,90 @@
 		can.trigger( input, {type: "click"})
 	})
 	
+	test("can-value select single", function(){
+		var template = can.view.mustache(
+			"<select can-value='color'>"+
+				"<option value='red'>Red</option>"+
+				"<option value='green'>Green</option>"+
+			"</select>");
+		
+		var map = new can.Map({color: "red"})
+		
+		var frag = template( map )
+		
+		
+		var ta = document.getElementById("qunit-test-area");
+		ta.appendChild(frag);
+		
+		var inputs = ta.getElementsByTagName("select");
+		
+		
+		equal(inputs[0].value, 'red', "default value set");
+		
+		map.attr("color", "green");
+		equal(inputs[0].value, 'green', "alternate value set");
+				
+		can.each(document.getElementsByTagName('option'), function(opt) { 
+			if(opt.value==='red') {
+				opt.selected = 'selected';
+			}
+		});
+
+		equal(map.attr("color"), "green", "not yet updated from input");
+		can.trigger(inputs[0], "change")
+		equal(map.attr("color"), "red", "updated from input");
+
+		can.each(document.getElementsByTagName('option'), function(opt) { 
+			if(opt.value==='green') {
+				opt.selected = 'selected';
+			}
+		});
+		equal(map.attr("color"), "red", "not yet updated from input");
+		can.trigger(inputs[0], "change")
+		equal(map.attr("color"), "green", "updated from input");
+	})
+
+	test("can-value select multiple", function(){
+		var template = can.view.mustache(
+			"<select can-value='color' multiple>"+
+				"<option value='red'>Red</option>"+
+				"<option value='green'>Green</option>"+
+			"</select>");
+		
+		var map = new can.Map({color: "red"})
+		
+		var frag = template( map )
+		
+		
+		var ta = document.getElementById("qunit-test-area");
+		ta.appendChild(frag);
+		
+		var inputs = ta.getElementsByTagName("select");
+		
+		
+		equal(inputs[0].value, 'red', "default value set");
+		
+		map.attr("color", "green");
+		equal(inputs[0].value, 'green', "alternate value set");
+				
+		can.each(document.getElementsByTagName('option'), function(opt) { 
+			if(opt.value==='red') {
+				opt.selected = 'selected';
+			}
+		});
+
+		equal(map.attr("color"), "green", "not yet updated from input");
+		can.trigger(inputs[0], "change")
+		equal(""+[map.attr("color.0"), map.attr("color.1")], ""+["red", "green"], "updated from input");
+		
+		map.removeAttr("color");
+		can.each(document.getElementsByTagName('option'), function(opt) { 
+			if(opt.value==='green') {
+				opt.selected = 'selected';
+			}
+		});
+		can.trigger(inputs[0], "change")
+		equal(map.attr("color.0"), "green", "updated from input");
+	})
 	
 })()
