@@ -839,9 +839,9 @@ steal("can/util","can/map", function(can, Map){
 		 * }
 		 * @codeend
 		 */
-		indexOf: function(item) {
+		indexOf: function(item, fromIndex) {
 			this.attr('length')
-			return can.inArray(item, this)
+			return can.inArray(item, this, fromIndex)
 		},
 
 		/**
