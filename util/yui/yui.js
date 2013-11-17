@@ -58,11 +58,11 @@ steal('can/util/can.js', 'yui', 'can/util/event.js',
 		return Y.Array(arr);
 	};
 	can.isArray = Y.Lang.isArray;
-	can.inArray = function (item, arr) {
+	can.inArray = function (item, arr, fromIndex) {
 		if (!arr) {
 			return -1;
 		}
-		return Y.Array.indexOf(arr, item);
+		return Y.Array.indexOf(arr, item, fromIndex);
 	};
 
 	can.map = function (arr, fn) {
