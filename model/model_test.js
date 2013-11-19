@@ -1277,6 +1277,38 @@ test("create deferred does not resolve to the same instance", function(){
 		t.unbind("name",handler)
 	})
 
+});
+
+test("Model#update doesn't replace attributes with default values", function(){
+	
+	var Person = can.Model("Person",{
+		update : function(id, attrs, success, error){
+			return can.ajax({
+				url : "/people/"+id,
+				data : attrs,
+				type : 'post',
+				dataType : "json",
+				fixture: function(){
+					return {createdAt: "now"}
+				},
+				success : success
+			})
+		},
+		defaults: {
+			name: 'Example name'
+		}
+	},{});
+	
+	var person = new Person({id:5, name: 'Justin'}),
+		personD = person.save();
+	
+	stop();
+	
+	personD.then(function(person){
+		start();
+		equal(person.name, "Justin", "Model name is correct after update");
+		
+	});
 })
 
 
