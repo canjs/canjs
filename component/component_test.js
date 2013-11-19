@@ -754,7 +754,34 @@ test("component does not respect can.compute passed via attributes (#540)", func
 	
 });
 
+test("component nested attributes only one way bound", function(){
 
+    var data = new can.Map({prop: { nested: 1}})
+
+    can.Component.extend({
+        tag: "my-component",
+        template: "<span>{{prop}}</span>",
+
+        events: {
+            inserted: function(){
+                // after this, data.prop.nested should be equal 2
+                this.scope.attr('prop', 2)
+            }
+        }
+    })
+
+    var template = can.view.mustache("<my-component prop='prop.nested'></my-component>");
+
+    var frag  = template(data)
+
+    equal(data.prop.nested, "2")
+
+    // this binding is done correctly
+    data.attr('prop.nested', 3)
+
+    equal(frag.childNodes[0].childNodes[0].innerHTML, "3")
+
+});
 
 	
 })()
