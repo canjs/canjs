@@ -23,19 +23,40 @@ arguments listed as `name=value` pairs for the helper.
 		position: "top"
 	}
 
-@option {Array} contexts An array containing the context lookup stack for the current helper.
+@option {*} context The current context the mustache helper is called within.
 
-	{{#section}}
-		{{#someObj}}
-			{{#panels}}
-				{{helper}}
-			{{/panels}}
-		{{/someObj}}
-	{{/section}}
+    
+    
+    var temp = can.view.mustache(
+      "{{#person.name}}{{helper}}{{/person.name}}");
+    
+    var data = {person: {name: {first: "Justin"}}};
+    
+    can.Mustache.registerHelper("helper", function(options){
+    
+      options.context === data.person //-> true
+      
+    })
+    
+    
+    temp(data);
+    
+    
 
-	options.contexts = [
-		<root_scope>,
-		<context_lookup>.section,
-		<context_lookup>.someObj,
-		panel
-	]
+@option {can.view.Scope} scope An object that represents the current context and all parent 
+contexts.  It can be used to look up [can.Mustache.key key] values in the current scope.
+
+    var temp = can.view.mustache(
+      "{{#person.name}}{{helper}}{{/person.name}}");
+    
+    var data = {person: {name: {first: "Justin"}}};
+    
+    can.Mustache.registerHelper("helper", function(options){
+    
+      options.scope.attr("first")   //-> "Justin"
+      options.scope.attr("person")  //-> data.person
+      
+    })
+    
+    
+    temp(data);
