@@ -754,7 +754,28 @@ test("component does not respect can.compute passed via attributes (#540)", func
 	
 });
 
-
+test("defined view models (#563)", function(){
+	
+	var HelloWorldModel = can.Map.extend({
+		visible: true,
+		toggle: function(){
+			this.attr("visible", !this.attr("visible"))
+		}
+	});
+	
+	can.Component.extend({
+		tag: "my-helloworld",
+		template: "<h1>{{#if visible}}visible{{else}}invisible{{/if}}</h1>",
+		scope: HelloWorldModel
+	});
+	
+	var template = can.view.mustache("<my-helloworld></my-helloworld>");
+	
+	
+	var frag  = template({})
+	
+	equal(frag.childNodes[0].innerHTML, "<h1>visible</h1>")
+})
 
 	
 })()
