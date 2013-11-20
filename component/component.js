@@ -149,7 +149,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				// if the function returns a can.Map, use that as the scope
 				if(scopeResult instanceof can.Map){
 					componentScope = scopeResult
-				} else if( this.scopescopeResult.prototype instanceof can.Map ){
+				} else if( scopeResult.prototype instanceof can.Map ){
 					componentScope = new scopeResult(initalScopeData);
 				} else {
 					componentScope = new ( can.Map.extend(scopeResult) )(initalScopeData);
