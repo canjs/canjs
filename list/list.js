@@ -4,114 +4,73 @@ steal("can/util","can/map", function(can, Map){
 	
 	// Helpers for `observable` lists.
 	var splice = [].splice,
+	/**
+	 * @add can.List
+	 */
+	list = Map(
+	/**
+	 * @static
+	 */
+	{
 		/**
-		 * @constructor can.List
-		 * @inherits can.Map
-		 * @download can/map
-		 * @test can/map/qunit.html
-		 * @parent canjs
+		 * @property {can.Map} can.List.Map
 		 * 
-		 * Use for observable array-like objects.
+		 * @description Specify the Map type used to make objects added to this list observable.
 		 * 
-		 * @signature `new can.List([array])`
+		 * @option {can.Map} When objects are added to a can.List, those objects are
+		 * converted into can.Map instances.  For example:
 		 * 
-		 * Create an observable array-like object.
-		 * 
-		 * @param {Array} [array] items to seed the List with
-		 * @return {can.List} an instance of `can.List` with the elements from _array_
-		 * 
-		 * @signature `can.List([name,] [staticProperties,] instanceProperties)`
-		 * 
-		 * Creates a new extended constructor function. 
+		 *     var list = new can.List();
+		 *     list.push({name: "Justin"});
 		 *     
-		 * This is deprecated. In CanJS 1.2, by default, calling the constructor function
-		 * without `new` will create a `new` instance. Use [can.Construct.extend can.Map.extend] 
-		 * instead of calling the constructor to extend.
+		 *     var map = list.attr(0);
+		 *     map.attr("name") //-> "Justin"
+		 * 
+		 * By changing [can.List.Map], you can specify a different type of Map instance to 
+		 * create. For example:
+		 * 
+		 *     var User = can.Map.extend({
+		 *       fullName: function(){
+		 *         return this.attr("first")+" "+this.attr("last")
+		 *       }
+		 *     });
+		 * 
+		 *     User.List = can.List.extend({
+		 *       Map: User
+		 *     });
+		 * 
+		 *     var list = new User.List();
+		 *     list.push({first: "Justin", last: "Meyer"});
+		 * 
+		 *     var user = list.attr(0);
+		 *     user.fullName() //-> "Justin Meyer"
+		 * 
+		 * 
+		 * 
+		 */
+		Map: Map
+		/**
+		 * @function can.Map.extend
+		 * 
+		 * @signature `can.List.extend([name,] [staticProperties,] instanceProperties)`
+		 * 
+		 * Creates a new extended constructor function. Learn more at [can.Construct.extend].
+ 		 *    
+		 * @param {String} [name] If provided, adds the extened List constructor function
+		 * to the window at the given name.
+		 * 
+		 * @param {Object} [staticProperties] Properties and methods 
+		 * directly on the constructor function. The most common property to set is [can.List.Map].
+		 * 
+		 * @param {Object} [instanceProperties] Properties and methods on instances of this list type.
 		 * 
 		 * @body
 		 * 
-		 * ## Working with Lists
-		 *
-		 * `can.List` extends `[can.Map]`, so all the ways that you're used to working with
-		 * Observes also work here, including [can.Map.prototype.bind bind], [can.Map.prototype.unbind unbind],
-		 * and [can.Map.prototype.each each]. And just as you can directly read properties normally
-		 * off of an Map, you can use array accessors ([]) to read elements directly off of a List.
-		 *
-		 * The one function of `can.Map` that works slightly differently is `attr`. As expected when working with
-		 * arrays, top-level keys passed into `attr` are required to be numeric. (Strings may still be used when getting
-		 * or modifying deep properties). Any top-level keys that are non-numeric are ignored. In addition, as might be
-		 * expected, a call to argument-less `attr` returns an array instead of an object.
-		 *
-		 * Just as you shouldn't set properties of an Map directly, you shouldn't change elements
-		 * of a List directly. Always use `attr` to set the elements of a List, or use [can.List.push push],
-		 * [can.List.pop pop], [can.List.shift shift], [can.List.unshift unshift], or [can.List.splice splice].
-		 *
-		 * Here is a tour through the forms of `can.List`'s `attr` that parallels the one found under [can.Map.prototype.attr attr]:
-		 *
-		 * @codestart
-		 * var people = new can.List(['Alex', 'Bill']);
-		 *
-		 * // set an element:
-		 * people.attr(0, 'Adam');
-		 * people[0] = 'Adam'; // don't do this!
-		 *
-		 * // get an element:
-		 * people.attr(0); // 'Adam'
-		 * people[0]; // 'Adam'
-		 *
-		 * // get all elements:
-		 * people.attr(); // ['Adam', 'Bill']
-		 *
-		 * // extend the array:
-		 * people.attr(4, 'Charlie');
-		 * people.attr(); // ['Adam', 'Bill', undefined, undefined, 'Charlie']
-		 *
-		 * // merge the elements:
-		 * people.attr(['Alice', 'Bob', 'Eve']);
-		 * people.attr(); // ['Alice', 'Bob', 'Eve', undefined, 'Charlie']
-		 * @codeend
-		 *
-		 * ## Listening to changes
-		 *
-		 * As with `can.Map`s, the real power of observable arrays comes from being able to
-		 * react to changes in the member elements of the array. Lists emit five types of events:
-		 * - the _change_ event fires on every change to a List.
-		 * - the _set_ event is fired when an element is set.
-		 * - the _add_ event is fired when an element is added to the List.
-		 * - the _remove_ event is fired when an element is removed from the List.
-		 * - the _length_ event is fired when the length of the List changes.
-		 *
-		 * This example presents a brief concrete survey of the times these events are fired:
-		 *
-		 * @codestart
-		 * var list = new can.List(['Alice', 'Bob', 'Eve']);
-		 *
-		 * list.bind('change', function() { console.log('An element changed.'); });
-		 * list.bind('set', function() { console.log('An element was set.'); });
-		 * list.bind('add', function() { console.log('An element was added.'); });
-		 * list.bind('remove', function() { console.log('An element was removed.'); });
-		 * list.bind('length', function() { console.log('The length of the list changed.'); });
-		 *
-		 * list.attr(0, 'Alexis'); // 'An element changed.'
-		 *                         // 'An element was set.'
-		 *
-		 * list.attr(3, 'Xerxes'); // 'An element changed.'
-		 *                         // 'An element was added.'
-		 *                         // 'The length of the list was changed.'
-		 *
-		 * list.attr(['Adam', 'Bill']); // 'An element changed.'
-		 *                              // 'An element was set.'
-		 *                              // 'An element was changed.'
-		 *                              // 'An element was set.'
-		 *
-		 * list.pop(); // 'An element changed.'
-		 *             // 'An element was removed.'
-		 *             // 'The length of the list was changed.'
-		 * @codeend
-		 *
-		 * More information about binding to these events can be found under [can.List.attr attr].
+		 * ## Use
+		 * 
+		 * 
 		 */
-			list = Map(
+	},
 	/**
 	 * @prototype
 	 */
@@ -301,67 +260,70 @@ steal("can/util","can/map", function(can, Map){
 		/**
 		 * @description Get or set elements in a List.
 		 * @function can.List.prototype.attr attr
+		 * 
 		 * @signature `list.attr()`
 		 * 
-		 * Gets a collection of all the elements in this `can.List`.
+		 * Gets an array of all the elements in this `can.List`.
 		 * 
-		 * @return {Array} array with all the elements in this List.
+		 * @return {Array} An array with all the elements in this List.
 		 * 
 		 * @signature `list.attr(index)`
 		 * 
-		 * Reads a element from this `can.List`.
+		 * Reads an element from this `can.List`.
 		 * 
-		 * @param {Number} index the element to read
-		 * @return {*} the value at _index_.
-		 *
+		 * @param {Number} index The element to read.
+		 * @return {*} The value at _index_.
+		 * 
 		 * @signature `list.attr(index, value)`
 		 * 
 		 * Assigns _value_ to the index _index_ on this `can.List`, expanding the list if necessary.
 		 * 
-		 * @param {Number} index the element to set
-		 * @param {*} the value to assign at _index_
-		 * @return {can.List} this List, for chaining
+		 * @param {Number} index The element to set.
+		 * @param {*} value The value to assign at _index_.
+		 * @return {can.List} This list, for chaining.
 		 * 
 		 * @signature `list.attr(elements[, replaceCompletely])`
 		 * 
 		 * Merges the members of _elements_ into this List, replacing each from the beginning in order. If
 		 * _elements_ is longer than the current List, the current List will be expanded. If _elements_
 		 * is shorter than the current List, the extra existing members are not affected (unless
-		 * _replaceCompletely_ is `true`). To remove elements without replacing them, use `[can.List.prototype.removeAttr removeAttr]`.
+		 * _replaceCompletely_ is `true`). To remove elements without replacing them, use `[can.Map::removeAttr removeAttr]`.
 		 * 
-		 * @param {Array} elements an array of elements to merge in
-		 *
+		 * @param {Array} elements An array of elements to merge in.
+		 * 
 		 * @param {bool} [replaceCompletely=false] whether to completely replace the elements of List
 		 * If _replaceCompletely_ is `true` and _elements_ is shorter than the List, the existing
 		 * extra members of the List will be removed.
-		 *
-		 * @return {can.List} this List, for chaining
+		 * 
+		 * @return {can.List} This list, for chaining.
 		 * 
 		 * @body
+		 * 
+		 * 
+		 * ## Use
+		 * 
 		 * `attr` gets or sets elements on the `can.List` it's called on. Here's a tour through
 		 * how all of its forms work:
-		 *
-		 * @codestart
-		 * var people = new can.List(['Alex', 'Bill']);
 		 * 
-		 * // set an element:
-		 * people.attr(0, 'Adam');
-		 * 
-		 * // get an element:
-		 * people.attr(0); // 'Adam'
-		 * people[0]; // 'Adam'
-		 *
-		 * // get all elements:
-		 * people.attr(); // ['Adam', 'Bill']
-		 *
-		 * // extend the array:
-		 * people.attr(4, 'Charlie');
-		 * people.attr(); // ['Adam', 'Bill', undefined, undefined, 'Charlie']
-		 *
-		 * // merge the elements:
-		 * people.attr(['Alice', 'Bob', 'Eve']);
-		 * people.attr(); // ['Alice', 'Bob', 'Eve', undefined, 'Charlie']
-		 * @codeend
+		 *     var people = new can.List(['Alex', 'Bill']);
+		 *     
+		 *     // set an element:
+		 *     people.attr(0, 'Adam');
+		 *     
+		 *     // get an element:
+		 *     people.attr(0); // 'Adam'
+		 *     people[0]; // 'Adam'
+		 *     
+		 *     // get all elements:
+		 *     people.attr(); // ['Adam', 'Bill']
+		 *     
+		 *     // extend the array:
+		 *     people.attr(4, 'Charlie');
+		 *     people.attr(); // ['Adam', 'Bill', undefined, undefined, 'Charlie']
+		 *     
+		 *     // merge the elements:
+		 *     people.attr(['Alice', 'Bob', 'Eve']);
+		 *     people.attr(); // ['Alice', 'Bob', 'Eve', undefined, 'Charlie']
 		 * 
 		 * ## Deep properties
 		 * 
@@ -377,28 +339,29 @@ steal("can/util","can/map", function(can, Map){
 		 * // get a property:
 		 * people.attr('0.name');  // 'Alice'
 		 * people[0].attr('name'); // 'Alice'
-		 *
+		 * 
 		 * // get all properties:
 		 * people.attr(); // [{name: 'Alice'}, {name: 'Bob'}]
 		 * @codeend
-		 *
+		 * 
 		 * The discussion of deep properties under `[can.Map.prototype.attr]` may also
 		 * be enlightening.
-		 *
+		 * 
 		 * ## Events
-		 *
+		 * 
 		 * `can.List`s emit five types of events in response to changes. They are:
+		 * 
 		 * - the _change_ event fires on every change to a List.
 		 * - the _set_ event is fired when an element is set.
 		 * - the _add_ event is fired when an element is added to the List.
 		 * - the _remove_ event is fired when an element is removed from the List.
 		 * - the _length_ event is fired when the length of the List changes.
-		 *
-		 * * ## The _change_ event
 		 * 
+		 * ### The _change_ event
+		 *  
 		 * The first event that is fired is the _change_ event. The _change_ event is useful
 		 * if you want to react to all changes on an List.
-		 *
+		 * 
 		 * @codestart
 		 * var list = new can.List([]);
 		 * list.bind('change', function(ev, index, how, newVal, oldVal) {
@@ -407,7 +370,7 @@ steal("can/util","can/map", function(can, Map){
 		 * @codeend
 		 * 
 		 * The parameters of the event handler for the _change_ event are:
-		 *
+		 * 
 		 * - _ev_ The event object.
 		 * - _index_ Where the change took place.
 		 * - _how_ Whether elements were added, removed, or set.
@@ -434,8 +397,8 @@ steal("can/util","can/map", function(can, Map){
 		 *                                // [object Object], 1, set, Bob, Bill
 		 * list.removeAttr(1);            // [object Object], 1, remove, undefined, Bob
 		 * @codeend
-		 *
-		 * ## The _set_ event
+		 * 
+		 * ### The _set_ event
 		 * 
 		 * _set_ events are fired when an element at an index that already exists in the List is
 		 * modified. Actions can cause _set_ events to fire never also cause _length_ events
@@ -443,11 +406,11 @@ steal("can/util","can/map", function(can, Map){
 		 * may cause unrelated sets of events to fire after being batched).
 		 * 
 		 * The parameters of the event handler for the _set_ event are:
-		 *
+		 * 
 		 * - _ev_ The event object.
 		 * - _newVal_ The new value of the element.
 		 * - _index_ where the set took place.
-		 *
+		 * 
 		 * Here is a concrete tour through the _set_ event handler's arguments:
 		 * 
 		 * @codestart
@@ -463,20 +426,20 @@ steal("can/util","can/map", function(can, Map){
 		 *                                // Bob, 1
 		 * list.removeAttr(1);            
 		 * @codeend
-		 *
-		 * ## The _add_ event
+		 * 
+		 * ### The _add_ event
 		 * 
 		 * _add_ events are fired when elements are added or inserted
 		 * into the List.
 		 * 
 		 * The parameters of the event handler for the _add_ event are:
-		 *
+		 * 
 		 * - _ev_ The event object.
 		 * - _newElements_ The new elements.
 		 * If more than one element is added, _newElements_ will be an array.
 		 * Otherwise, it is simply the new element itself.
 		 * - _index_ Where the add or insert took place.
-		 *
+		 * 
 		 * Here is a concrete tour through the _add_ event handler's arguments:
 		 * 
 		 * @codestart
@@ -492,19 +455,19 @@ steal("can/util","can/map", function(can, Map){
 		 *                                
 		 * list.removeAttr(1);            
 		 * @codeend
-		 *
-		 * ## The _remove_ event
+		 * 
+		 * ### The _remove_ event
 		 * 
 		 * _remove_ events are fired when elements are removed from the list.
 		 * 
 		 * The parameters of the event handler for the _remove_ event are:
-		 *
+		 * 
 		 * - _ev_ The event object.
 		 * - _removedElements_ The removed elements.
 		 * If more than one element was removed, _removedElements_ will be an array.
 		 * Otherwise, it is simply the element itself.
 		 * - _index_ Where the removal took place.
-		 *
+		 * 
 		 * Here is a concrete tour through the _remove_ event handler's arguments:
 		 * 
 		 * @codestart
@@ -520,15 +483,15 @@ steal("can/util","can/map", function(can, Map){
 		 *                                
 		 * list.removeAttr(1);            // Bob, 1
 		 * @codeend
-		 *
-		 * ## The _length_ event
+		 * 
+		 * ### The _length_ event
 		 * 
 		 * _length_ events are fired whenever the list changes.
 		 * 
 		 * The parameters of the event handler for the _length_ event are:
-		 *
+		 * 
 		 * - _ev_ The event object.
-		 *- _length_ The current length of the list.
+		 * - _length_ The current length of the list.
 		 * If events were batched when the _length_ event was triggered, _length_
 		 * will have the length of the list when `stopBatch` was called. Because
 		 * of this, you may recieve multiple _length_ events with the same
@@ -595,7 +558,8 @@ steal("can/util","can/map", function(can, Map){
 				can.makeArray(args);
 		};
 	// Create `push`, `pop`, `shift`, and `unshift`
-	can.each({
+	can.each(
+	{
 		/**
 		 * @function can.List.prototype.push push
 		 * @description Add elements to the end of a list.
