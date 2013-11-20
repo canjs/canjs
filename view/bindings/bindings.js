@@ -1,7 +1,4 @@
 steal("can/util","can/view/mustache", "can/control", function(can){
-	
-	
-	
 	/**
 	 * @function can.view.bindings.can-value can-value
 	 * @parent can.view.bindings
