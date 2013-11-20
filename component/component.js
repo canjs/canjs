@@ -26,7 +26,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 						var self = this;
 						this.on(this.scope,"change",function(){
 							self.on();
-							self.on(this.scope,"change",arguments.callee);
+							self.on(self.scope,"change",arguments.callee);
 						});
 						return res;
 					}
