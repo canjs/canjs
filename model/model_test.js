@@ -1279,21 +1279,16 @@ test("create deferred does not resolve to the same instance", function(){
 
 });
 
-test("Model#update doesn't replace attributes with default values", function(){
+test("Model#save should not replace attributes with default values", function(){
+	
+	can.fixture("POST /person.json", function(request, response){
+		
+		return {createdAt: "now"};
+	});
+	
 	
 	var Person = can.Model("Person",{
-		update : function(id, attrs, success, error){
-			return can.ajax({
-				url : "/people/"+id,
-				data : attrs,
-				type : 'post',
-				dataType : "json",
-				fixture: function(){
-					return {createdAt: "now"}
-				},
-				success : success
-			})
-		},
+		update: 'POST /person.json',
 		defaults: {
 			name: 'Example name'
 		}
@@ -1306,7 +1301,7 @@ test("Model#update doesn't replace attributes with default values", function(){
 	
 	personD.then(function(person){
 		start();
-		equal(person.name, "Justin", "Model name is correct after update");
+		equal(person.name, "Justin", "Model name attribute value is preserved after save");
 		
 	});
 })
