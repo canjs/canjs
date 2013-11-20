@@ -775,6 +775,34 @@ test("defined view models (#563)", function(){
 	var frag  = template({})
 	
 	equal(frag.childNodes[0].innerHTML, "<h1>visible</h1>")
+});
+
+test("scope not rebound correctly (#550)", function(){
+	
+	var nameChanges = 0;
+	
+	can.Component.extend({
+		tag: "scope-rebinder",
+		events: {
+			"{name} change" : function(){
+				nameChanges++;
+			}
+		}
+	});
+	
+	var template = can.view.mustache("<scope-rebinder></scope-rebinder>");
+	
+	var frag = template();
+	var scope = can.scope( can.$(frag.childNodes[0]) );
+	
+	var n1 = can.compute(),
+		n2 = can.compute()
+	
+	scope.attr("name", n1 );
+	n1("updated");
+	scope.attr("name", n2);
+	n2("updated");
+	equal(nameChanges, 2)
 })
 
 	
