@@ -1279,7 +1279,7 @@ test("create deferred does not resolve to the same instance", function(){
 
 });
 
-test("Model#save should not replace attributes with default values", function(){
+test("Model#save should not replace attributes with their default values", function(){
 	
 	can.fixture("POST /person.json", function(request, response){
 		
@@ -1287,7 +1287,7 @@ test("Model#save should not replace attributes with default values", function(){
 	});
 	
 	
-	var Person = can.Model("Person",{
+	var Person = can.Model.extend({
 		update: 'POST /person.json',
 		defaults: {
 			name: 'Example name'
