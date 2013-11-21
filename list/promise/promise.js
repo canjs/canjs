@@ -21,10 +21,17 @@ steal("can/list", function(list){
 		}
 		return result;
 	}
-	can.List.prototype.isResolved = function(){
-		return this.attr("state") == "resolved"
-	}
-	can.each(["then","done"], function(name){
+	can.each({
+		isResolved: "resolved",
+		isPending: "pending",
+		isRejected: "rejected"
+	}, function(value, method){
+		can.List.prototype[method] = function(){
+			return this.attr("state") == value
+		}
+	})
+	
+	can.each(["then","done","always"], function(name){
 		can.List.prototype[name] = function(){
 			return this._deferred[name].apply(this._deferred, arguments);
 		}

@@ -4,6 +4,7 @@
 <select can-value="type">
 	<option value="fun">Fun</option>
 	<option value="educational">Educational</option>
+	<option value="other">Other</option>
 </select>
 <table>
   <thead>
@@ -33,7 +34,7 @@
 <div id="app"></div>
 <script>
 	
-steal("can","can/util/fixture","can/list/deferred", function(){
+steal("can","can/util/fixture","can/list/promise", function(){
 	
 	can.fixture("GET /sites", function(request){
 		if(request.data.type == "fun"){

@@ -4,7 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="../../lib/qunit/qunit.css"/>
 </head>
 <body>
-<h1 id="qunit-header">can.List.deferred Test Suite</h1>
+<h1 id="qunit-header">can.List.promise Test Suite</h1>
 
 <h2 id="qunit-banner"></h2>
 
@@ -17,7 +17,7 @@
 <script type="text/javascript" src="../../lib/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
-	steal("can/list/deferred","can/compute").then("can/test", "can/list/deferred/deferred_test.js", function() {
+	steal("can/list/promise","can/compute").then("can/test", "can/list/promise/promise_test.js", function() {
 		QUnit.start();
 	});
 </script>
