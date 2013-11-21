@@ -56,14 +56,13 @@ steal("can","can/util/fixture","can/list/deferred", function(){
 	
 	can.Component.extend({
 		tag: "site-app",
-		scope: function(){
-			return {
-				type: "fun",
-				items: new Site.List(),
-				updateItems: function(){
-					this.attr("items").replace( Site.findAll({type: this.attr("type")}) )
-				}
+		scope: {
+			type: "fun",
+			items: new Site.List(),
+			updateItems: function(){
+				this.attr("items").replace( Site.findAll({type: this.attr("type")}) )
 			}
+			
 		},
 		events: {
 			inserted: "updateItems",
