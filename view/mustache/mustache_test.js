@@ -2498,6 +2498,31 @@ test("no memory leaks with #each (#545)", function(){
 	
 })
 
-
+test("each directly within live html section", function(){
+	
+	var tmp = can.view.mustache(
+		"<ul>{{#if showing}}"+
+			"{{#each items}}<li>item</li>{{/items}}"+
+		"{{/if}}</ul>")
+	
+	var items = new can.List([1,2,3]),
+		showing = can.compute(true)
+	var frag = tmp({
+		showing: showing,
+		items: items
+	})
+	
+	showing(false);
+	
+	// this would break because things had not been unbound
+	items.pop();
+	
+	showing(true);
+	
+	items.push("a")
+	
+	equal( frag.childNodes[0].getElementsByTagName("li").length, 3, "there are 3 elements");
+	
+})
 
 })();
