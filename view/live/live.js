@@ -21,12 +21,12 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 		var teardown = function(){
 			unbind(data)
 			can.unbind.call(el,'removed', teardown);
+			return true
 		},
 			data = {
+				// returns true if no parent
 				teardownCheck: function(parent){
-					if(!parent){
-						teardown();
-					}
+					return parent ? false : teardown();
 				}
 			}
 
@@ -84,7 +84,13 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 			var nodesMap = [],
 				// called when an item is added
 				add = function(ev, items, index){
-
+					// check that the placeholder textNode still has a parent.
+					// it's possible someone removed the contents of
+					// this element without removing the parent
+					if(data.teardownCheck(text.parentNode)){
+						return
+					}
+					
 					// Collect new html and mappings
 					var frag = document.createDocumentFragment(),
 						newMappings = [];
@@ -112,7 +118,17 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 					});
 					[].splice.apply(nodesMap, [index, 0].concat(newMappings));
 				},
-				remove = function(ev, items, index){
+				// Remove can be called during teardown or when items are 
+				// removed from the element.
+				remove = function(ev, items, index, duringTeardown){
+					
+					// If this is because an element was removed, we should
+					// check to make sure the live elements are still in the page.
+					// If we did this during a teardown, it would cause an infinite loop.
+					if(!duringTeardown && data.teardownCheck(text.parentNode)){
+						return
+					}
+					
 					var removedMappings = nodesMap.splice(index, items.length),
 						itemsToRemove = [];
 
@@ -136,7 +152,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 				// array
 				list && list.unbind && list.unbind("add", add).unbind("remove", remove);
 				// use remove to clean stuff up for us
-				remove({},{length: nodesMap.length},0);
+				remove({},{length: nodesMap.length},0, true);
 			}
 
 			updateList = function(ev, newList, oldList){
@@ -152,11 +168,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 
 			// Setup binding and teardown to add and remove events
 			var data = setup(parentNode, function(){
-				if(text.parentNode){
-					can.isFunction(compute) && compute.bind("change",updateList)
-				} else {
-					data.teardownCheck()
-				}
+				can.isFunction(compute) && compute.bind("change",updateList)
 			},function(){
 				can.isFunction(compute) && compute.unbind("change",updateList)
 				teardownList()
