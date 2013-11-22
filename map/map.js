@@ -229,7 +229,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 			this._setupComputes();
 			var teardownMapping = obj && addToMap(obj, this);
 			/**
-			 * @property {*} DEFAULT-ATTR
+			 * @property {*} can.Map.prototype.DEFAULT-ATTR
 			 * 
 			 * @description Specify a default property and value.
 			 * 
@@ -270,7 +270,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 			delete this._init;
 		},
 		/**
-		 * @property {can.compute} COMPUTE-ATTR
+		 * @property {can.compute} can.Map.prototype.COMPUTE-ATTR
 		 * 
 		 * @description Specify an attribute that is computed from other attributes.
 		 * 
