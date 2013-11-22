@@ -14,11 +14,24 @@
 			"type": "core",
 			"isDefault": true
 		},
-		"can/observe": {
-			"name": "can.Map, can.List, can.compute",
+		"can/map": {
+			"name": "can.Map",
 			"description": "Observables and key-value bindings",
 			"type": "core",
 			"isDefault": true
+		},
+		"can/list": {
+			"name": "can.List",
+			"description": "Observables lists",
+			"type": "core",
+			"isDefault": true
+		},
+		"can/observe": {
+			"name": "can.Observe",
+			"description": "Observables and key-value bindings",
+			"type": "core",
+			"isDefault": true,
+			"hidden": true
 		},
 		"can/compute": {
 			"name": "can.compute",
@@ -55,11 +68,6 @@
 			"type": "core",
 			"isDefault": true
 		},
-		"can/route/pushstate": {
-			"name": "can.route.pushstate",
-			"description": "can.route with pushstate",
-			"type": "plugin"
-		},
 		"can/control/route": {
 			"name": "can.Control.route",
 			"description": "Declare routes in your Control",
@@ -71,6 +79,11 @@
 			"description": "Live-binding Handlebars and Mustache views",
 			"type": "core",
 			"isDefault": true
+		},
+		"can/route/pushstate": {
+			"name": "can.route.pushstate",
+			"description": "can.route with pushstate",
+			"type": "plugin"
 		},
 		"can/model/queue": {
 			"name": "can.Model.Queue",
