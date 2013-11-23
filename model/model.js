@@ -14,8 +14,10 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		def.then(function(){
 			var args = can.makeArray( arguments ),
 			    success = true;
+			   	
 			try {
-				args[0] = model[func](args[0]);
+				// first try the parseModel / parseModel's funtion
+				args[0] = func.call(model, args[0]);
 			} catch(e) {
 				success = false;
 				d.rejectWith(d, [e].concat(args));
@@ -207,7 +209,14 @@ steal('can/util','can/map', 'can/list',function( can ) {
 				}
 			}
 		}
-		
+	var parsers = {
+		parseModel: function(prop){
+			return function(attributes){
+				return prop ? can.getObject( prop||"data", attributes ) : attributes;
+			}
+		}
+	};
+	parsers.parseModels = parsers.parseModel;
 		
 	// This object describes how to make an ajax request for each ajax method.  
 	// The available properties are:
@@ -849,7 +858,16 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		 * Configures 
 		 * 
 		 */
-		setup : function(base){
+		setup : function(base, fullName, staticProps, protoProps){
+			// align args, this should happen in can.Construct
+			if(fullName !== "string"){
+				protoProps = staticProps;
+				staticProps = fullName;
+			}
+			if( !protoProps ) {
+				protoProps = staticProps
+			}
+			
 			// create store here if someone wants to use model without inheriting from it
 			this.store = {};
 			can.Map.setup.apply(this, arguments);
@@ -941,11 +959,29 @@ steal('can/util','can/map', 'can/list',function( can ) {
 					})
 				}
 			});
+			
+			
+			
 			can.each(initializers, function(makeInitializer, name){
+				var parseName = "parse"+can.capitalize(name);
 				if( typeof self[name] === "string" ) {
-					can.Construct._overwrite( self, base, name, makeInitializer( self[name] ) )
+					
+					can.Construct._overwrite( self, base, parseName, parsers[parseName]( self[name] ) );
+					
+					can.Construct._overwrite( self, base, name, makeInitializer( self[name] ) );
+				}
+				else if(!protoProps || !protoProps[name] ) {
+					can.Construct._overwrite( self, base, parseName, parsers[parseName]() )
 				}
 			})
+			can.each(parsers, function( makeParser, name ){
+				// check if they did super or can.Model.prototype.
+				if( typeof self[name] === "string" ) {
+					
+					can.Construct._overwrite( self, base, name, makeParser( self[name] ) );
+				}
+			});
+			
 			if(self.fullName == "can.Model" || !self.fullName){
 				self.fullName = "Model"+(++modelNum);
 			}
@@ -1525,14 +1561,18 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		 *     Todo.findOne({id: 5})
 		 */
 		makeFindOne: "model",
-		makeCreate: "model",
-		makeUpdate: "model"
+		makeCreate: null, 
+		makeUpdate: null,
 	}, function( method, name ) {
 		can.Model[name] = function( oldMethod ) {
 			return function() {
 				var args = can.makeArray(arguments),
 					oldArgs = can.isFunction( args[1] ) ? args.splice( 0, 1 ) : args.splice( 0, 2 ),
-					def = pipe( oldMethod.apply( this, oldArgs ), this, method );
+					def = pipe( oldMethod.apply( this, oldArgs ), this, 
+						// if we must call a model type method call it
+						method ? this[method] : 
+							// otherwise, first try parseModel, then .model
+							this.parseModel || this.model );
 					def.then( args[0], args[1] );
 				// return the original promise
 				return def;

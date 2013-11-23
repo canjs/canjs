@@ -1288,11 +1288,10 @@ test("Model#save should not replace attributes with their default values", funct
 	
 	
 	var Person = can.Model.extend({
-		update: 'POST /person.json',
-		defaults: {
-			name: 'Example name'
-		}
-	},{});
+		update: 'POST /person.json'
+	},{
+		name: 'Example name'
+	});
 	
 	var person = new Person({id:5, name: 'Justin'}),
 		personD = person.save();
