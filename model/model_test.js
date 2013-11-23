@@ -1279,7 +1279,7 @@ test("create deferred does not resolve to the same instance", function(){
 
 });
 
-test("Model#save should not replace attributes with their default values", function(){
+test("Model#save should not replace attributes with their default values (#560)", function(){
 	
 	can.fixture("POST /person.json", function(request, response){
 		
@@ -1303,7 +1303,113 @@ test("Model#save should not replace attributes with their default values", funct
 		equal(person.name, "Justin", "Model name attribute value is preserved after save");
 		
 	});
-})
+});
+
+test(".parseModel as function on create and update (#560)", function() {
+	var MyModel = can.Model.extend({
+		create: 'POST /todo',
+		update: 'PUT /todo',
+		parseModel: function(data) {
+            return data.item;
+        }
+	}, {
+		aDefault: "foo"
+	}),
+		id = 0,
+    	updateTime;
+
+	can.fixture('POST /todo', function(original, respondWith, settings) {
+		id++;
+        return {
+            item: can.extend(original.data, {
+                id: id
+            })
+        };
+    });
+    can.fixture('PUT /todo', function(original, respondWith, settings) {
+    	updateTime = new Date().getTime();
+        return {
+            item: {
+            	updatedAt: updateTime
+            }
+        };
+    });
+
+	stop();
+    MyModel.bind('created', function(ev, created) {
+    	start();
+    	deepEqual(created.attr(), {id: 1, name: 'Dishes', aDefault: "bar"}, '.model works for create');
+    }).bind('updated', function(ev, updated) {
+    	start();
+    	deepEqual(updated.attr(), {id: 1, name: 'Laundry', updatedAt: updateTime}, '.model works for update');
+    });
+
+    var instance = new MyModel({
+    	name: 'Dishes',
+    	aDefault: "bar"
+    }),
+    saveD = instance.save();
+
+    stop();
+    saveD.then(function() {
+    	instance.attr('name', 'Laundry')
+    	instance.removeAttr("aDefault")
+    	instance.save();
+    })
+
+});
+
+test(".parseModel as string on create and update (#560)", function() {
+	var MyModel = can.Model.extend({
+		create: 'POST /todo',
+		update: 'PUT /todo',
+		parseModel:"item"
+	}, {
+		aDefault: "foo"
+	}),
+		id = 0,
+    	updateTime;
+
+	can.fixture('POST /todo', function(original, respondWith, settings) {
+		id++;
+        return {
+            item: can.extend(original.data, {
+                id: id
+            })
+        };
+    });
+    can.fixture('PUT /todo', function(original, respondWith, settings) {
+    	updateTime = new Date().getTime();
+        return {
+            item: {
+            	updatedAt: updateTime
+            }
+        };
+    });
+
+	stop();
+    MyModel.bind('created', function(ev, created) {
+    	start();
+    	deepEqual(created.attr(), {id: 1, name: 'Dishes', aDefault: "bar"}, '.model works for create');
+    }).bind('updated', function(ev, updated) {
+    	start();
+    	deepEqual(updated.attr(), {id: 1, name: 'Laundry', updatedAt: updateTime}, '.model works for update');
+    });
+
+    var instance = new MyModel({
+    	name: 'Dishes',
+    	aDefault: "bar"
+    }),
+    saveD = instance.save();
+
+    stop();
+    saveD.then(function() {
+    	instance.attr('name', 'Laundry')
+    	instance.removeAttr("aDefault")
+    	instance.save();
+    })
+
+});
 
 
 })();

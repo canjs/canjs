@@ -16,7 +16,6 @@ steal('can/util','can/map', 'can/list',function( can ) {
 			    success = true;
 			   	
 			try {
-				// first try the parseModel / parseModel's funtion
 				args[0] = func.call(model, args[0]);
 			} catch(e) {
 				success = false;
@@ -970,14 +969,15 @@ steal('can/util','can/map', 'can/list',function( can ) {
 					
 					can.Construct._overwrite( self, base, name, makeInitializer( self[name] ) );
 				}
-				else if(!protoProps || !protoProps[name] ) {
+				// if there was no prototype, or no .models and no .parseModel
+				else if(!protoProps || ( !protoProps[name] && !protoProps[parseName])   ) {
+					// create a parseModel
 					can.Construct._overwrite( self, base, parseName, parsers[parseName]() )
 				}
 			})
 			can.each(parsers, function( makeParser, name ){
-				// check if they did super or can.Model.prototype.
+				// if parseModel is a string.
 				if( typeof self[name] === "string" ) {
-					
 					can.Construct._overwrite( self, base, name, makeParser( self[name] ) );
 				}
 			});
