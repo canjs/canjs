@@ -1277,6 +1277,33 @@ test("create deferred does not resolve to the same instance", function(){
 		t.unbind("name",handler)
 	})
 
+});
+
+test("Model#save should not replace attributes with their default values", function(){
+	
+	can.fixture("POST /person.json", function(request, response){
+		
+		return {createdAt: "now"};
+	});
+	
+	
+	var Person = can.Model.extend({
+		update: 'POST /person.json',
+		defaults: {
+			name: 'Example name'
+		}
+	},{});
+	
+	var person = new Person({id:5, name: 'Justin'}),
+		personD = person.save();
+	
+	stop();
+	
+	personD.then(function(person){
+		start();
+		equal(person.name, "Justin", "Model name attribute value is preserved after save");
+		
+	});
 })
 
 
