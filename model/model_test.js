@@ -1422,7 +1422,11 @@ test("parseModels and findAll", function(){
 	var MyModel = can.Model.extend({
 		findAll: "/mymodels",
 		parseModels: function(raw, xhr){
-			ok(xhr, "xhr object provided");
+			
+			// only check this if jQuery because its deferreds can resolve with multiple args
+			window.jQuery && ok(xhr, "xhr object provided");
+			
+			
 			equal(array, raw, "got passed raw data")
 			return {
 				data: raw,
