@@ -1411,5 +1411,58 @@ test(".parseModel as string on create and update (#560)", function() {
 
 });
 
+test("parseModels and findAll", function(){
+	
+	var array = [{id: 1, name: "first"}];
+	
+	can.fixture("/mymodels", function(){
+		return array
+	})
+	
+	var MyModel = can.Model.extend({
+		findAll: "/mymodels",
+		parseModels: function(raw, xhr){
+			ok(xhr, "xhr object provided");
+			equal(array, raw, "got passed raw data")
+			return {
+				data: raw,
+				count: 1000
+			}
+		}
+	},{});
+	
+	stop();
+	
+	MyModel.findAll({}, function( models ) {
+		equal( models.count , 1000 )
+		start();
+	})
+	
+});
+
+test("parseModels and parseModel and findAll", function(){
+	
+
+	can.fixture("/mymodels", function(){
+		return {myModels: [{myModel: {id: 1, name: "first"}}]}
+	})
+	
+	var MyModel = can.Model.extend({
+		findAll: "/mymodels",
+		parseModels: "myModels",
+		parseModel: "myModel"
+	},{});
+	
+	stop();
+	
+	MyModel.findAll({}, function( models ) {
+		deepEqual( models.attr(), [{id: 1, name: "first"}] , "correct models returned" )
+		start();
+	})
+	
+	
+})
+
+
 
 })();
