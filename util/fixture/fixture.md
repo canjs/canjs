@@ -44,12 +44,12 @@ Configures multiple ajax traps.
 
 @param {Object.<url,can.fixture.types.requestHandler|String>} fixtures
 
-An mapping of templated urls to redirect urls 
+An mapping of templated urls to redirect urls
 or [can.fixture.types.requestHandler request handler functions].
 
     can.fixture({
       "/tasks": "/fixtures/tasks.json",
-      "DESTROY /tasks/{id}": function(){
+      "DELETE /tasks/{id}": function(){
       	return {};
       }
     })
