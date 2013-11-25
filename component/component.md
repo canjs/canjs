@@ -20,10 +20,10 @@ component's [can.Component::scope scope].
 
 @param {String} ATTR-VALUE Specifies the value of a property passed to
 the component instance's [can.Component::scope scope]. By default `ATTR-VALUE`
-values are looked up in the can.Mustache scope. If the string value
-of the `ATTR-VALUE` is desired, this can be specified like: 
+values are looked up in the [can.view.Scope can.Mustache scope]. If the string value
+of the `ATTR-NAME` is desired, this can be specified like: 
 
-    ATTR-VALUE: "@"
+    ATTR-NAME: "@"
     
 @body
 

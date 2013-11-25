@@ -1,5 +1,7 @@
 steal('can/util','can/construct','can/map','can/list','can/view','can/compute',function(can){
 	
+	
+	
 	var isObserve = function(obj) {
 		return obj instanceof can.Map || (obj && obj.__get);
 	},
@@ -28,30 +30,40 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 		}
 	
 
-	
-	var Scope = can.Construct.extend({
+	/**
+	 * @add can.view.Scope
+	 */
+	var Scope = can.Construct.extend(
+		
+	/**
+	 * @static
+	 */	
+	{
 		// reads properties from a parent.  A much more complex version of getObject.
 		/**
-		 * @param {can.Map|can.compute} parent A parent observe to read properties from
-		 * @param {Array<String>} reads An array of properties to read
-		 * @param {can.view.Scope.ReadOptions}
-		 */
-		//
-		/**
-		 * @typedef {{}} can.view.Scope.ReadOptions
+		 * @function can.view.Scope.read read
+		 * @parent can.view.Scope.static
 		 * 
-		 * @option {function(can.compute|can.Map,Number)} [foundObservable(observe, readIndex)] Is called when the first observable is found.
+		 * @signature `Scope.read(parent, reads, options)`
 		 * 
-		 * @option {function(can.compute|can.Map,Number)} [earlyExit(observe, readIndex)] Is called if a value is not found.
+		 * Read properties from an object.
 		 * 
-		 * @option {Boolean} [isArgument] If true, and the last value is a function or compute, returns that function instead of calling it.
+		 * @param {*} parent A parent object to read properties from.
+		 * @param {Array<String>} reads An array of properties to read.
+		 * @param {can.view.Scope.readOptions} options Configures
+		 * how to read properties and values and register callbacks
 		 * 
-		 * @option {Array} args An array of arguments to pass to observable prototype methods. 
+		 * @return {{value: *, parent: *}} Returns an object that
+		 * provides the value and parent object.
 		 * 
-		 * @option {Boolean} [returnObserveMethods] If true, returns methods found on an observable.
+		 * @option {*} value The value found by reading `reads` properties.  If 
+		 * no value was found, value will be undefined.
 		 * 
-		 * @option {Boolean} [proxyMethods=true] Set to false to return just the function, preventing returning a function that
-		 * always calls the original function with this as the parent. 
+		 * @option {*} parent The most immediate parent object of the value specified by `key`.
+		 * 
+		 * @body
+		 *  
+		 * 
 		 */
 		read: function(parent, reads, options){
 			options = options || {};
@@ -128,40 +140,125 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			}
 			return {value: cur, parent: prev};
 		}
-	},{
-		init: function(data, parent){
-			this._data = data;
+	},
+	/**
+	 * @prototype
+	 */
+	{
+		init: function(context, parent){
+			this._context = context;
 			this._parent = parent;
 		},
-		attr: function(attr){
-			return this.read(attr,{isArgument: true, returnObserveMethods:true, proxyMethods: false}).value
-
+		/**
+		 * @function can.view.Scope.prototype.attr
+		 * 
+		 * Reads a value from the current context or parent contexts.
+		 * 
+		 * @param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a 
+		 * property name that includes a dot. 
+		 * 
+		 * @return {*} The found value or undefined if no value is found.
+		 * 
+		 * @body
+		 * 
+		 * ## Use
+		 * 
+		 * `scope.attr(key)` looks up a value in the current scope's 
+		 * context, if a value is not found, parent scope's context
+		 * will be explored.
+		 * 
+		 *     var list = [{name: "Justin"},{name: "Brian"}],
+		 *     	   justin = list[0];
+		 *     	
+		 *     var curScope = new can.view.Scope(list).add(justin);
+		 *     
+		 *     curScope.attr("name") //-> "Justin"
+		 *     curScope.attr("length") //-> 2
+		 */
+		attr: function(key){
+			return this.read(key,{isArgument: true, returnObserveMethods:true, proxyMethods: false}).value
 		},
-		add: function(data){
-			if(data !== this._data){
-				return new this.constructor( data, this );
+		/**
+		 * @function can.view.Scope.prototype.add
+		 * 
+		 * Creates a new scope with its parent set as the current scope.
+		 * 
+		 * @param {*} context The context of the new scope object. 
+		 * 
+		 * @return {can.view.Scope}  A scope object.
+		 * 
+		 * @body
+		 * 
+		 * ## Use
+		 * 
+		 * `scope.add(context)` creates a new scope object that
+		 * first looks up values in context and then in the 
+		 * parent `scope` object.
+		 * 
+		 *     var list = [{name: "Justin"},{name: "Brian"}],
+		 *     	   justin = list[0];
+		 *     	
+		 *     var curScope = new can.view.Scope(list).add(justin);
+		 *     
+		 *     curScope.attr("name") //-> "Justin"
+		 *     curScope.attr("length") //-> 2
+		 */
+		add: function(context){
+			if(context !== this._context){
+				return new this.constructor( context, this );
 			} else {
 				return this;
 			}
 		},
 		/**
-		 * @function an.view.Scope.prototype.computeData
+		 * @function can.view.Scope.prototype.computeData
 		 * 
-		 * Returns an object that has a compute that represents reading this path. When the 
-		 * compute is called, it caches the read data so that future reads are faster and
-		 * sets data on that object so can.Mustache can make some decisions. The compute
-		 * is writable too.
+		 * @description Provides a compute that represents a 
+		 * key's value and other information about where the value was found.
 		 * 
-		 * @param {can.Mustache.key} attr A dot seperated path.  Use `"\."` if you have a property name that includes a dot. 
-		 * @param {can.view.Scope.ReadOptions} [options] that configure how this gets read.
+		 *
+		 * @param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a 
+		 * property name that includes a dot. 
 		 * 
-		 * @return {}
+		 * @param {can.view.Scope.readOptions} [options] Options that configure how the `key` gets read.
 		 * 
-		 * @option {can.compute} compute
-		 * @option {can.view.Scope} scope
-		 * @option {*} initialData
+		 * @return {{}} An object with the following values:
+		 * 
+		 * @option {can.compute} compute A compute that returns the 
+		 * value of `key` looked up in the scope's context or parent context. This compute can
+		 * also be written to, which will set the observable attribute or compute value at the 
+		 * location represented by the key.
+		 * 
+		 * @option {can.view.Scope} scope The scope the key was found within. The key might have
+		 * been found in a parent scope.
+		 * 
+		 * @option {*} initialData The initial value at the key's location.
+		 * 
+		 * @body
+		 *  
+		 * ## Use
+		 * 
+		 * `scope.computeData(key, options)` is used heavily by [can.Mustache] to get the value of 
+		 * a [can.Mustache.key key] value in a template. Configure how it reads values in the
+		 * scope and what values it returns with the [can.view.Scope.readOptions options] argument.
+		 * 
+		 *     var context = new Map({
+		 *       name: {first: "Curtis"}  
+		 *     })
+		 *     var scope = new can.view.Scope(context)
+		 *     var computeData = scope.computeData("name.first");
+		 * 
+		 *     computeData.scope === scope //-> true
+		 *     computeData.initialValue    //-> "Curtis"
+		 *     computeData.compute()       //-> "Curtis"
+		 * 
+		 * The `compute` value is writable.  For example:
+		 * 
+		 *     computeData.compute("Andy")
+		 *     context.attr("name.first") //-> "Andy"
+		 * 
 		 */
-		computeData: function(attr, options ){
+		computeData: function(key, options ){
 			options = options || {args: []};
 			var self = this,
 				rootObserve,
@@ -181,7 +278,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 								return Scope.read(rootObserve, rootReads,  options).value
 							}
 							// otherwise, go get the value
-							var data = self.read(attr, options);
+							var data = self.read(key, options);
 							rootObserve = data.rootObserve;
 							rootReads = data.reads;
 							computeData.scope = data.scope;
@@ -194,24 +291,24 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			
 		},
 		/**
-		 * @function can.view.Scope.prototype.read
+		 * @hide
+		 * @function can.view.Scope.prototype.read read
 		 * 
 		 * Read a key value from the scope and provide useful information
 		 * about what was found along the way.
 		 * 
-		 * 
 		 * @param {can.Mustache.key} attr A dot seperated path.  Use `"\."` if you have a property name that includes a dot. 
-		 * @param {can.view.Scope.ReadOptions} options that configure how this gets read.
+		 * @param {can.view.Scope.readOptions} options that configure how this gets read.
 		 * 
-		 * @return {} 
-		 * 
-		 * @option {*} value the found value
+		 * @return {{}} 
 		 * 
 		 * @option {Object} parent the value's immediate parent
 		 * 
 		 * @option {can.Map|can.compute} rootObserve the first observable to read from.
 		 * 
 		 * @option {Array<String>} reads An array of properties that can be used to read from the rootObserve to get the value.
+		 * 
+		 * @option {*} value the found value
 		 */
 		read : function(attr, options){
 			
@@ -219,9 +316,9 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			if( attr.substr(0,3) === "../" ) {
 				return this._parent.read( attr.substr(3), options )
 			} else if(attr == ".."){
-				return {value: this._parent._data}
+				return {value: this._parent._context}
 			} else if(attr == "." || attr == "this"){
-				return {value: this._data};
+				return {value: this._context};
 			}
 			
 			// Split the name up.
@@ -267,7 +364,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			while(scope){
 				
 				// get the context
-				context = scope._data;
+				context = scope._context;
 
 				if (context != null) {
 					

@@ -35,20 +35,23 @@
 
                 steal.config(config);
             }).then("can/util/fixture", "can/component",
-                "can/construct", "can/observe", "can/compute",
-                "can/model", "can/view", "can/view/ejs",
-                "can/control", "can/route", "can/route/pushstate",
+                "can/construct", "can/map", "can/list", "can/observe",
+                "can/compute", "can/model", "can/view",
+                "can/view/ejs", "can/control", "can/route",
                 "can/control/route", "can/view/mustache",
-                "can/model/queue", "can/construct/super",
-                "can/construct/proxy", "can/map/delegate",
-                "can/map/setter", "can/map/attributes",
-                "can/map/validations", "can/map/backup",
-                "can/map/list", "can/map/sort", "can/util/object",
-                "can/util/fixture", "can/view/bindings",
-                "can/view/live", "can/view/scope", "can/util/string")
+                "can/route/pushstate", "can/model/queue",
+                "can/construct/super", "can/construct/proxy",
+                "can/map/delegate", "can/map/setter",
+                "can/map/attributes", "can/map/validations",
+                "can/map/backup", "can/map/list", "can/map/sort",
+                "can/util/object", "can/util/fixture",
+                "can/view/bindings", "can/view/live",
+                "can/view/scope", "can/util/string")
                 .then("can/test").then(
                 "can/component/component_test.js")
                 .then("can/construct/construct_test.js")
+                .then("can/map/map_test.js")
+                .then("can/list/list_test.js")
                 .then("can/observe/observe_test.js")
                 .then("can/compute/compute_test.js")
                 .then("can/model/model_test.js")
@@ -56,9 +59,9 @@
                 .then("can/view/ejs/ejs_test.js")
                 .then("can/control/control_test.js")
                 .then("can/route/route_test.js")
-                .then("can/route/pushstate/pushstate_test.js")
                 .then("can/control/route/route_test.js")
                 .then("can/view/mustache/mustache_test.js")
+                .then("can/route/pushstate/pushstate_test.js")
                 .then("can/model/queue/queue_test.js")
                 .then("can/construct/super/super_test.js")
                 .then("can/construct/proxy/proxy_test.js")
@@ -75,10 +78,10 @@
                 .then("can/view/live/live_test.js")
                 .then("can/view/scope/scope_test.js")
                 .then("can/util/string/string_test.js", function() {
-                steal.dev.log = function() {};
-                steal.dev.warn = function() {};
-                QUnit.start();
-            });
+                    steal.dev.log = function() {};
+                    steal.dev.warn = function() {};
+                    QUnit.start();
+                });
         </script>
     </body>
 

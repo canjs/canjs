@@ -137,7 +137,7 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			handler = function(ev){
 				var attr = el.getAttribute(attributeName),
 					scopeData = data.scope.read(attr,{returnObserveMethods: true, isArgument: true});
-				return scopeData.value.call(scopeData.parent,data.scope._data, can.$(this), ev )
+				return scopeData.value.call(scopeData.parent,data.scope._context, can.$(this), ev )
 			};
 		
 		if(special[event]){

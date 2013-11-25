@@ -102,4 +102,12 @@ test('Getting attribute that is a can.compute should return the compute and not 
 	equal(map.attr('time'), compute, '.attr() call of time is compute');
 })
 
+test('_cid add to original object', function() {
+	var map = new can.Map(),
+		obj = {'name': 'thecountofzero'};
+
+	map.attr('myObj', obj);
+	ok(!obj._cid, '_cid not added to original object');
+})
+
 })();

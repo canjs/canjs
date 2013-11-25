@@ -26,7 +26,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 						var self = this;
 						this.on(this.scope,"change",function(){
 							self.on();
-							self.on(this.scope,"change",arguments.callee);
+							self.on(self.scope,"change",arguments.callee);
 						});
 						return res;
 					}
@@ -41,9 +41,17 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				}) 
 				this.attributeScopeMappings = attributeScopeMappings;
 				
-				// setup inheritance right away
+				// If scope is an object,
 				if(! this.prototype.scope || typeof this.prototype.scope === "object" ){
+					// use that object as the prototype of an extened Map constructor function.
+					// A new instance of that Map constructor function will be created and
+					// set as this.scope.
 					this.Map = can.Map.extend( this.prototype.scope||{} );
+				} 
+				// If scope is a can.Map constructor function, 
+				else if(this.prototype.scope.prototype instanceof can.Map) {
+					// just use that.
+					this.Map = this.prototype.scope;
 				}
 				
 				
@@ -78,7 +86,9 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				component = this,
 				twoWayBindings = {},
 				// what scope property is currently updating
-				scopePropertyUpdating;
+				scopePropertyUpdating,
+				// the object added to the scope
+				componentScope;
 			
 			// scope prototype properties marked with an "@" are added here
 			can.each(this.constructor.attributeScopeMappings,function(val, prop){
@@ -127,18 +137,19 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				
 			})
 			
-			var componentScope
-			// save the scope
+			
+			
 			if(this.constructor.Map){
 				componentScope = new this.constructor.Map(initalScopeData);
 			} else if(this.scope instanceof can.Map) {
 				componentScope = this.scope;
 			} else if(can.isFunction(this.scope)){
+
 				var scopeResult = this.scope(initalScopeData, hookupOptions.scope, el);
 				// if the function returns a can.Map, use that as the scope
 				if(scopeResult instanceof can.Map){
 					componentScope = scopeResult
-				} else if(typeof scopeResult == "function" && typeof scopeResult.extend == "function"){
+				} else if( scopeResult.prototype instanceof can.Map ){
 					componentScope = new scopeResult(initalScopeData);
 				} else {
 					componentScope = new ( can.Map.extend(scopeResult) )(initalScopeData);

@@ -754,7 +754,56 @@ test("component does not respect can.compute passed via attributes (#540)", func
 	
 });
 
+test("defined view models (#563)", function(){
+	
+	var HelloWorldModel = can.Map.extend({
+		visible: true,
+		toggle: function(){
+			this.attr("visible", !this.attr("visible"))
+		}
+	});
+	
+	can.Component.extend({
+		tag: "my-helloworld",
+		template: "<h1>{{#if visible}}visible{{else}}invisible{{/if}}</h1>",
+		scope: HelloWorldModel
+	});
+	
+	var template = can.view.mustache("<my-helloworld></my-helloworld>");
+	
+	
+	var frag  = template({})
+	
+	equal(frag.childNodes[0].innerHTML, "<h1>visible</h1>")
+});
 
+test("scope not rebound correctly (#550)", function(){
+	
+	var nameChanges = 0;
+	
+	can.Component.extend({
+		tag: "scope-rebinder",
+		events: {
+			"{name} change" : function(){
+				nameChanges++;
+			}
+		}
+	});
+	
+	var template = can.view.mustache("<scope-rebinder></scope-rebinder>");
+	
+	var frag = template();
+	var scope = can.scope( can.$(frag.childNodes[0]) );
+	
+	var n1 = can.compute(),
+		n2 = can.compute()
+	
+	scope.attr("name", n1 );
+	n1("updated");
+	scope.attr("name", n2);
+	n2("updated");
+	equal(nameChanges, 2)
+})
 
 	
 })()

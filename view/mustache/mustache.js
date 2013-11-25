@@ -67,10 +67,10 @@ function( can ){
 		// used to make sure .fn and .inverse are always called with a Scope like object
 		makeConvertToScopes = function(orignal, scope, options){
 			return function(updatedScope, updatedOptions){
-				if(updatedScope != null && !(updatedScope instanceof  can.view.Scope)){
+				if(updatedScope !== undefined && !(updatedScope instanceof  can.view.Scope)){
 					updatedScope = scope.add(updatedScope)	
 				}
-				if(updatedOptions != null && !(updatedOptions instanceof  OptionsScope)){
+				if(updatedOptions !== undefined && !(updatedOptions instanceof  OptionsScope)){
 					updatedOptions = options.add(updatedOptions)
 				}
 				return orignal(updatedScope, updatedOptions || options)
@@ -1420,7 +1420,7 @@ function( can ){
 						
 						// Add the reference to the list in the contexts.
 						for (i = 0; i < name.length; i++) {
-							result.push(helperOptions.fn(name[i]|| '') );
+							result.push( helperOptions.fn(name[i]) );
 							
 							// Ensure that live update works on observable lists
 							isObserveList && name.attr(''+i);
@@ -1441,7 +1441,7 @@ function( can ){
 					// This can cause issues if you are trying to
 					// eval on the length but this is the more
 					// common case.
-					return '' + (name !== undefined ? name : '');
+					return '' + (name != undefined ? name : '');
 					break;
 			}
 		}
