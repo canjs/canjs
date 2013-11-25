@@ -1893,13 +1893,13 @@ function( can ){
 			if(expr.isComputed || isObserveLike(expr) && typeof expr.attr('length') !== 'undefined'){
 				return can.view.lists && can.view.lists(expr, function(item, key) {
 					// Create a compute that listens to whenever the index of the item in our list changes.
-					var indexCompute = can.compute(function() {
+					var index = function() {
 						var exprResolved = Mustache.resolve(expr),
 							fromIndex    = key < (exprResolved).attr('length') ? key : undefined;
 
 						return (exprResolved).indexOf(item, fromIndex);
-					});
-					return options.fn( options.scope.add({"@index": indexCompute}).add(item) );
+					};
+					return options.fn( options.scope.add({"@index": index}).add(item) );
 				});
 			}
 			expr = Mustache.resolve(expr);
