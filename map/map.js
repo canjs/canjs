@@ -66,9 +66,10 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 				madeMap[cid] = {
 					obj: obj,
 					instance: instance,
-					added: hasCid
+					added: !hasCid
 				}
 			}
+			return teardown;
 		};
 		teardownMap = function(){
 			for(var cid in madeMap){
