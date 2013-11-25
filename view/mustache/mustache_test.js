@@ -2539,7 +2539,16 @@ test("mustache loops with 0 (#568)", function(){
 	
 })
 
+test('@index is correctly calculated when there are identical elements in the array', function(){
+	var data = new can.List(['foo', 'bar', 'baz', 'qux', 'foo']),
+		tmp  = can.view.mustache('{{#each data}}{{@index}} {{/each}}')
 
+	var div = document.createElement('div')
+	
+	can.append( can.$('#qunit-test-area'), div );
+	can.append( can.$(div), tmp({data : data}) );
 
+	equal(div.innerHTML, '0 1 2 3 4 ');
+})
 
 })();
