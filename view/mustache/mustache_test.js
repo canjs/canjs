@@ -2523,6 +2523,23 @@ test("each directly within live html section", function(){
 	
 	equal( frag.childNodes[0].getElementsByTagName("li").length, 3, "there are 3 elements");
 	
+});
+
+test("mustache loops with 0 (#568)", function(){
+	
+	var tmp = can.view.mustache("<ul>{{#array}}<li>{{.}}</li>{{/array}}");
+	
+	var data = {array:[0, null]};
+	
+	var frag = tmp(data)
+	
+	
+	equal(frag.childNodes[0].getElementsByTagName("li")[0].innerHTML, "0")
+	equal(frag.childNodes[0].getElementsByTagName("li")[1].innerHTML, "")
+	
 })
+
+
+
 
 })();
