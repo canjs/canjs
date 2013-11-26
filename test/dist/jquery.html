@@ -3,7 +3,7 @@
 <html>
     
     <head>
-        <title>jQuery Test Suite</title>
+        <title>jQuery (1.x) Test Suite</title>
         <base href="../../" />
         <!--[if IE]>
             <script type="text/javascript">
@@ -13,18 +13,18 @@
                         'base')[0];
                     var loc = window.location.toString();
                     var location = loc.substring(0, loc.lastIndexOf(
-                        '/') + 1);
+                            '/') + 1);
                     baseTag.href = location + baseTag.href;
                 })();
             </script>
         <![endif]-->
-        <link rel="stylesheet" type="text/css" href="lib/qunit/qunit.css" />
-        <script type="text/javascript" src="../../lib/html5shiv.js"></script>
+        <link rel="stylesheet" type="text/css" href="//code.jquery.com/qunit/qunit-1.12.0.css" />
+        <script type="text/javascript" src="lib/html5shiv.js"></script>
     </head>
     
     <body>
         
-<h1 id="qunit-header">jQuery Test Suite</h1>
+<h1 id="qunit-header">jQuery (1.x) Test Suite</h1>
 
         
 <h2 id="qunit-banner"></h2>
@@ -35,11 +35,11 @@
 
         <ol id="qunit-tests"></ol>
         <div id="qunit-test-area"></div>
-        <script type="text/javascript" src="lib/qunit/qunit.js"></script>
+        <script type="text/javascript" src="//code.jquery.com/qunit/qunit-1.12.0.js"></script>
         <script type="text/javascript">
             QUnit.config.autostart = false;
         </script>
-        <script type="text/javascript" src="lib/jquery.1.9.1.js"></script>
+        <script type="text/javascript" src="lib/jquery.1.10.2.js"></script>
         <script type="text/javascript" src="dist/can.jquery.js"></script>
         <script type="text/javascript" src="test/test.js"></script>
         <script type="text/javascript" src="dist/can.ejs.js"></script>

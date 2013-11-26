@@ -23,7 +23,8 @@
     "grunt-contrib-uglify": "~0.2.1",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-shell": "~0.5.0",
-    "grunt-release-steps": "~0.3.7"
+    "grunt-release-steps": "~0.3.7",
+    "bower": "~1.2.7"
   },
   "scripts": {
     "test": "grunt test"
