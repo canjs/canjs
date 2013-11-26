@@ -225,7 +225,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 			var parent = elements.getParentNode(el, parentNode);
 
 			// setup listening right away so we don't have to re-calculate value
-			var data  = listen( el.parentNode !== parent ? el.parentNode : parent, compute, function(ev, newVal, oldVal){
+			var data  = listen( parent, compute, function(ev, newVal, oldVal){
 				// Sometimes this is 'unknown' in IE and will throw an exception if it is
 				if ( typeof node.nodeValue != 'unknown' ) {
 					node.nodeValue = ""+newVal;
