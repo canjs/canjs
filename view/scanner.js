@@ -192,10 +192,12 @@ Scanner.hookupTag = function(hookupOptions){
 		
 		
 		// if this was an element like <foo-bar> that doesn't have a component, just render its content
-		var res = tagCallback ? tagCallback(el, hookupOptions) : scope,
-			scope = hookupOptions.scope;
-
-		if(res){
+		var scope = hookupOptions.scope,
+			res = tagCallback ? tagCallback(el, hookupOptions) : scope;
+			
+		// If the tagCallback gave us something to render with, and there is content within that element
+		// render it!
+		if(res && hookupOptions.subtemplate){
 			
 			if(scope !== res){
 				scope = scope.add(res)
