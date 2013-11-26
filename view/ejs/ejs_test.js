@@ -1764,7 +1764,8 @@ test("_bindings removed when element removed", function() {
 	
 	div.appendChild(frag);
 	
-	$(div).empty();
+	can.remove( can.$(div.childNodes)  )
+	
 	stop()
 	setTimeout(function(){
 		start()
