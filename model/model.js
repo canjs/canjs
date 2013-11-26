@@ -857,6 +857,56 @@ steal('can/util','can/map', 'can/list',function( can ) {
 			if(!can.Model){
 				return;
 			}
+			/**
+			 * @property {can.Model.List} can.Model.static.List List
+			 * @parent can.Model.static
+			 * 
+			 * @description Specifies the type of List that [can.Model.findAll findAll]
+			 * should return.
+			 * 
+			 * @option {can.Model.List} A can.Model's List property is the
+			 * type of [can.List List] returned 
+			 * from [can.Model.findAll findAll]. For example:
+			 * 
+			 *     Task = can.Model.extend({
+			 *       findAll: "/tasks"
+			 *     },{})
+			 *     
+			 *     Task.findAll({}, function(tasks){
+			 *       tasks instanceof Task.List //-> true
+			 *     })
+			 * 
+			 * Overwrite a Model's `List` property to add custom 
+			 * behavior to the lists provided to `findAll` like:
+			 * 
+			 *     Task = can.Model.extend({
+			 *       findAll: "/tasks"
+			 *     },{})
+			 *     Task.List = Task.List.extend({
+			 *       completed: function(){
+			 *         var count = 0;
+			 *         this.each(function(task){
+			 *           if( task.attr("completed") ) count++;
+			 *         })
+			 *         return count;
+			 *       }
+			 *     })
+			 *     
+			 *     Task.findAll({}, function(tasks){
+			 *       tasks.completed() //-> 3
+			 *     })
+			 * 
+			 * When [can.Model] is extended,
+			 * [can.Model.List] is extended and set as the extended Model's
+			 * `List` property. The extended list's [can.List.Map Map] property
+			 * is set to the extended Model.  For example:
+			 * 
+			 *     Task = can.Model.extend({
+			 *       findAll: "/tasks"
+			 *     },{})
+			 *     Task.List.Map //-> Task
+			 * 
+			 */
 			this.List = ML({Map: this},{});
 			var self = this,
 				clean = can.proxy(this._clean, self);
@@ -1538,83 +1588,6 @@ steal('can/util','can/map', 'can/list',function( can ) {
   
   // Model lists are just like `Map.List` except that when their items are 
   // destroyed, it automatically gets removed from the list.
-  /**
-   * @constructor can.Model.List
-   * @inherits can.List
-   * @parent canjs
-   * @download can/model
-   * @test can/model/qunit.html
-   *
-   * Works exactly like [can.List] and has all of the same properties,
-   * events, and functions as an observable list. The only difference is that 
-   * when an item from the list is destroyed, it will automatically get removed
-   * from the list.
-   *
-   * ## Creating a new Model List
-   *
-   * To create a new model list, just use `new {model_name}.List(ARRAY)` like:
-   *
-   *     var todo1 = new Todo( { name: "Do the dishes" } ),
-   *         todo2 = new Todo( { name: "Wash floors" } )
-   *     var todos = new Todo.List( [todo1, todo2] );
-   *
-   * ### Model Lists in `can.Model`
-   * [can.Model.findAll can.Model.findAll] or [can.Model.models] will
-   * almost always be used to return a `can.Model.List` object, even though it
-   * is possible to create new lists like below:
-   *
-   *     var todos = Todo.models([
-   *         new Todo( { name: "Do the dishes" } ),
-   *         new Todo( { name: "Wash floors" } )
-   *     ])
-   *     
-   *     todos.constructor // -> can.Model.List
-   *
-   *     // the most correct way to get a can.Model.List
-   *     Todo.findAll({}, function(todos) {
-   *         todos.constructor // -> can.Model.List
-   *     })
-   *
-   * ### Extending `can.Model.List`
-   *
-   * Creating custom `can.Model.Lists` allows you to extend lists with helper
-   * functions for a list of a specific type. So, if you wanted to be able to
-   * see how many todos were completed and remaining something could be written
-   * like:
-   *
-   *     Todo.List = can.Model.List({
-   *         completed: function() {
-   *             var completed = 0;
-   *             this.each(function(i, todo) {
-   *                 completed += todo.attr('complete') ? 1 : 0
-   *             })
-   *             return completed;
-   *         },
-   *         remaining: function() {
-   *             return this.attr('length') - this.completed();
-   *         }
-   *     })
-   *
-   *     Todo.findAll({}, function(todos) {
-   *         todos.completed() // -> 0
-   *         todos.remaining() // -> 2
-   *     });
-   *
-   * ## Removing models from model list
-   *
-   * The advantage that `can.Model.List` has over a traditional `can.List`
-   * is that when you destroy a model, if it is in that list, it will automatically
-   * be removed from the list. 
-   *
-   *     // Listen for when something is removed from the todos list.
-   *     todos.bind("remove", function( ev, oldVals, indx ) {
-   *         console.log(oldVals[indx].attr("name") + " removed")
-   *     })
-   *
-   *     todo1.destroy(); // console shows "Do the dishes removed"
-   *
-   *
-   */
 	var ML = can.Model.List = can.List({
 		setup: function(params){
 			if( can.isPlainObject(params) && ! can.isArray(params) ){

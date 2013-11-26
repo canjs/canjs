@@ -1,14 +1,13 @@
-@typedef {{fn:function,inverse:function,hash:Object}} can.Mustache.helperOptions helperOptions
+@typedef {{fn:can.Mustache.sectionRenderer,inverse:can.Mustache.sectionRenderer,hash:Object}} can.Mustache.helperOptions helperOptions
 @parent can.Mustache.types 
 
 @description The options argument passed to a [can.Mustache.helper helper function].
 
-@option {function(*)} [fn(context)] Provided if a 
+@option {can.Mustache.sectionRenderer} [fn] Provided if a 
 [can.Mustache.helpers.sectionHelper section helper] is called.  Call `fn` to
 render the BLOCK with the specified `context`.
 
-
-@option {function(*)} [inverse(context)] Provided if a 
+@option {can.Mustache.sectionRenderer} [inverse] Provided if a 
 [can.Mustache.helpers.sectionHelper section helper] is called 
 with [can.Mustache.helpers.else {{else}}].  Call `inverse` to
 render the INVERSE with the specified `context`.
@@ -24,19 +23,40 @@ arguments listed as `name=value` pairs for the helper.
 		position: "top"
 	}
 
-@option {Array} contexts An array containing the context lookup stack for the current helper.
+@option {*} context The current context the mustache helper is called within.
 
-	{{#section}}
-		{{#someObj}}
-			{{#panels}}
-				{{helper}}
-			{{/panels}}
-		{{/someObj}}
-	{{/section}}
+    
+    
+    var temp = can.view.mustache(
+      "{{#person.name}}{{helper}}{{/person.name}}");
+    
+    var data = {person: {name: {first: "Justin"}}};
+    
+    can.Mustache.registerHelper("helper", function(options){
+    
+      options.context === data.person //-> true
+      
+    })
+    
+    
+    temp(data);
+    
+    
 
-	options.contexts = [
-		<root_scope>,
-		<context_lookup>.section,
-		<context_lookup>.someObj,
-		panel
-	]
+@option {can.view.Scope} scope An object that represents the current context and all parent 
+contexts.  It can be used to look up [can.Mustache.key key] values in the current scope.
+
+    var temp = can.view.mustache(
+      "{{#person.name}}{{helper}}{{/person.name}}");
+    
+    var data = {person: {name: {first: "Justin"}}};
+    
+    can.Mustache.registerHelper("helper", function(options){
+    
+      options.scope.attr("first")   //-> "Justin"
+      options.scope.attr("person")  //-> data.person
+      
+    })
+    
+    
+    temp(data);

@@ -123,5 +123,30 @@
 		
 	})
 	
+	test("two bindings on one element call back the correct method", function(){
+		expect(2)
+		var template = can.view.mustache("<input can-blur='first' can-click='second'/>");
+		
+		var callingFirst = false,
+			callingSecond = false;
+		
+		var frag = template({
+			first: function(){
+				ok(callingFirst, "called first")
+			},
+			second: function(){
+				ok(callingSecond, "called second")
+			}
+		});
+		var input = frag.childNodes[0];
+		
+		callingFirst = true;
+		can.trigger( input, {type: "blur"})
+		
+		callingFirst = false;
+		callingSecond = true;
+		can.trigger( input, {type: "click"})
+	})
+	
 	
 })()

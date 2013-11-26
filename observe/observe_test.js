@@ -1285,8 +1285,14 @@ test("compute bound to observe",function(){
 	equal(bindCount, 1);
 
 	name.unbind("change",handler);
+	
+	stop()
+	setTimeout(function(){
+		start();
+		equal(bindCount, 0);
+	},100)
 
-	equal(bindCount, 0);
+	
 });
 
 test("binding to a compute on an observe before reading",function(){
@@ -1328,11 +1334,19 @@ test("compute bound to input value",function(){
 
 	input.value = "Justin Meyer";
 
+	
 	value.unbind("change", handler);
+	
+	// we have to wait until the temporary bind is turned off
+	// so that the cached value is no longer used
+	stop()
+	setTimeout(function(){
+		input.value = "Brian Moschel";
 
-	input.value = "Brian Moschel";
-
-	equal(value(),"Brian Moschel");
+		equal(value(),"Brian Moschel");
+		start()
+	},50)
+	
 
 })
 

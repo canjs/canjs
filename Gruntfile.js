@@ -11,7 +11,6 @@ var getAmdifyMap = function (baseName) {
 }
 
 module.exports = function (grunt) {
-
 	var _ = grunt.util._;
 	var baseName = path.basename(__dirname) + '/';
 	var builderJSON = grunt.file.readJSON('builder.json');
@@ -22,19 +21,28 @@ module.exports = function (grunt) {
 		url: pkg.homepage
 	});
 
+	grunt.registerTask('publish', 'Publish a a release (patch, minor, major).', function () {
+		var type = this.args[0];
+
+		if (['patch', 'minor', 'major'].indexOf(type) === -1) {
+			throw new Error(type + ' is not a valid release version bump (patch, minor, major)');
+		}
+
+		grunt.task.run(['release:bump:' + type, 'changelog', 'shell:updateChangelog',
+			'release:add:commit:push:tag:pushTags']);
+	});
+
 	grunt.initConfig({
 		pkg: pkg,
 		testify: {
 			libs: {
 				template: 'test/templates/__configuration__.html.ejs',
 				builder: builderJSON,
-				//root: '../',
 				out: 'test/',
 				transform: {
 					options: function () {
 						this.steal.map = (this.steal && this.steal.map) || {};
 						this.steal.map['*'] = this.steal.map['*'] || {};
-						//this.steal.map['*']['can/'] = '';
 						return this;
 					}
 				}
@@ -148,10 +156,9 @@ module.exports = function (grunt) {
 			}
 		},
 		changelog: {
-			log: {
+			options: {
 				repo: 'canjs',
 				user: 'bitovi',
-				milestone: 3,
 				version: pkg.version
 			}
 		},
@@ -233,7 +240,18 @@ module.exports = function (grunt) {
 					}
 				]
 			}
-		}
+		},
+		shell: {
+			updateChangelog: {
+				command: 'git add changelog.md && git commit -m "Updating changelog." && git push origin'
+			}
+		},
+		release: {
+			options: {
+				tagName: 'v<%= version %>'
+			}
+		},
+		publish: {}
 	});
 
 	grunt.loadNpmTasks('grunt-string-replace');
@@ -241,12 +259,12 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-release-steps');
+	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
 
-	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify']);
+	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify', 'string-replace:version']);
 	grunt.registerTask('test', ['connect', 'build', 'testify', 'qunit']);
 	grunt.registerTask('default', ['build']);
 
-	// TODO possibly use grunt-release
-	grunt.registerTask('release', ['build', 'string-replace', 'test']);
 };

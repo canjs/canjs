@@ -146,7 +146,7 @@ steal('can/util', function (can) {
 		 */
 		hyphenate: function(str) {
 			return convertBadValues(str).replace(strCamelMatch, function(str, offset) {
-				return str[0] + '-' + str[1].toLowerCase();
+				return str.charAt(0) + '-' + str.charAt(1).toLowerCase();
 			});
 		},
 

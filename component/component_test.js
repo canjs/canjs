@@ -319,6 +319,7 @@ test("treecombo", function(){
 		can.trigger(optionsLis[0],"click");
 		
 		equal(optionsLis[0].className, "active", "toggling something not selected adds active");
+		
 		ok(optionsLis[0].getElementsByTagName('input')[0].checked, "toggling something not selected checks checkbox");
 		equal( can.scope(treecombo,"selected").length, 1 , "there is one selected item")
 		equal( can.scope(treecombo,"selected.0"), itemsList.attr("0") , "the midwest is in selected")
@@ -370,7 +371,7 @@ test("deferred grid",function(){
 			init: function(){
 				this.update()
 			},
-			"{deferreddata} change": "update",
+			"{scope} deferreddata": "update",
 			update: function(){
 				var deferred = this.scope.attr('deferreddata'),
 					scope = this.scope,
@@ -393,7 +394,7 @@ test("deferred grid",function(){
 	
 	var SimulatedScope = can.Map.extend({
 		set: 0,
-		deferredData: can.compute(function(){
+		deferredData: function(){
 			var deferred = new can.Deferred();
 			var set = this.attr('set');
 			if(set == 0 ){
@@ -406,7 +407,7 @@ test("deferred grid",function(){
 				},100)
 			}
 			return deferred;
-		})
+		}
 	})
 	var scope = new SimulatedScope();
 	
@@ -426,7 +427,9 @@ test("deferred grid",function(){
 	var gridScope = can.scope("#qunit-test-area grid")
 	equal( gridScope.attr("waiting"), true, "waiting is true")
 	stop();
+	
 	gridScope.bind("waiting", function(){
+		
 		gridScope.unbind("waiting", arguments.callee)
 		setTimeout(function(){
 			var tds = can.$("#qunit-test-area td")
@@ -441,10 +444,7 @@ test("deferred grid",function(){
 					},10)
 					
 				}
-			})
-			
-			
-			
+			});
 			scope.attr("set",1);
 			
 		},10)
@@ -488,17 +488,17 @@ test("page-count",function(){
 	
 	can.Component.extend({
 		tag: "page-count",
-		template: 'Page <span>{{page}}</span> of <span>{{count}}</span>.'
+		template: 'Page <span>{{page}}</span>.'
 	})
 	
 	
 	var paginator = new Paginate({limit: 20, offset: 0, count: 100})
 	
-	var template = can.view.mustache("<page-count page='paginator.page' count='paginator.pageCount'></page-count>");
+	var template = can.view.mustache("<page-count page='paginator.page'></page-count>");
 
-	can.append(can.$("#qunit-test-area"), template({
+	can.append(can.$("#qunit-test-area"), template(new can.Map({
 		paginator: paginator
-	}));
+	})));
 	
 	var spans = can.$("#qunit-test-area span")
 	equal(spans[0].innerHTML,"1")
@@ -557,6 +557,7 @@ test("self closing content tags", function(){
 })
 
 test("setting passed variables - two way binding", function(){
+	
 	can.Component({
 	    tag: "my-toggler",
 	    template: "{{#if visible}}<content/>{{/if}}",
@@ -691,6 +692,118 @@ test("content in a list", function(){
 	equal( lis[0].innerHTML, "one", "first li has correct content")
 	equal( lis[1].innerHTML, "two", "second li has correct content")
 	
+});
+
+test("don't update computes unnecessarily", function(){
+	var sourceAge = 30,
+		timesComputeIsCalled = 0;
+	var age = can.compute(function(newVal){
+		timesComputeIsCalled++;
+		if(timesComputeIsCalled === 1){
+			ok(true, "reading initial value to set as years")
+		} else if(timesComputeIsCalled === 2){
+			equal(newVal, 31, "updating value to 31")
+		} else if(timesComputeIsCalled === 3){
+			ok(true, "called back another time after set to get the value")
+		} else {
+			ok(false,"You've called the callback "+timesComputeIsCalled+" times")
+		}
+		
+		
+		if(arguments.length){
+			sourceAge = newVal;
+		} else {
+			return sourceAge;
+		}
+	})
+	
+	can.Component.extend({
+		tag: "age-er"
+	})
+	
+	var template = can.view.mustache("<age-er years='age'></age-er>")
+	
+	
+	var frag = template({
+		age: age
+	})
+	
+	
+	age(31)
+	
+});
+
+
+test("component does not respect can.compute passed via attributes (#540)", function(){
+	
+	var data = {
+		compute: can.compute(30)
+	}
+	
+	can.Component.extend({
+		tag: "my-component",
+		template: "<span>{{blocks}}</span>"
+	})
+	
+	var template = can.view.mustache("<my-component blocks='compute'></my-component>");
+	
+	var frag  = template(data)
+	
+	equal(frag.childNodes[0].childNodes[0].innerHTML, "30")
+	
+	
+});
+
+test("defined view models (#563)", function(){
+	
+	var HelloWorldModel = can.Map.extend({
+		visible: true,
+		toggle: function(){
+			this.attr("visible", !this.attr("visible"))
+		}
+	});
+	
+	can.Component.extend({
+		tag: "my-helloworld",
+		template: "<h1>{{#if visible}}visible{{else}}invisible{{/if}}</h1>",
+		scope: HelloWorldModel
+	});
+	
+	var template = can.view.mustache("<my-helloworld></my-helloworld>");
+	
+	
+	var frag  = template({})
+	
+	equal(frag.childNodes[0].innerHTML, "<h1>visible</h1>")
+});
+
+test("scope not rebound correctly (#550)", function(){
+	
+	var nameChanges = 0;
+	
+	can.Component.extend({
+		tag: "scope-rebinder",
+		events: {
+			"{name} change" : function(){
+				nameChanges++;
+			}
+		}
+	});
+	
+	var template = can.view.mustache("<scope-rebinder></scope-rebinder>");
+	
+	var frag = template();
+	var scope = can.scope( can.$(frag.childNodes[0]) );
+	
+	var n1 = can.compute(),
+		n2 = can.compute()
+	
+	scope.attr("name", n1 );
+	n1("updated");
+	scope.attr("name", n2);
+	n2("updated");
+	equal(nameChanges, 2)
 })
+
 	
 })()

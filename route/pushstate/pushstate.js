@@ -93,7 +93,7 @@ steal('can/util', 'can/route', function(can) {
                 if( window.location.host == linksHost ) {
                     var curParams = can.route.deparam(node.pathname+node.search);
                     // if a route matches
-                    if(curParams.route) {
+                    if(curParams.hasOwnProperty('route')) {
                     	// make it possible to have a link with a hash
                     	includeHash = true;
                     	// update the data

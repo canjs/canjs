@@ -1,6 +1,8 @@
 (function(){
 	
-	test("basics",function(){
+	module("can/view/scope")
+	
+/*	test("basics",function(){
 		
 		var items = { people: [{name: "Justin"},[{name: "Brian"}]], count: 1000 }; 
 		
@@ -20,9 +22,11 @@
 		equal(countInfo.value,1000);
 		equal(countInfo.parent, items);
 		
-	});
+	});*/
 	
-	test("adding items",function(){
+	/*
+	 * REMOVE
+	 test("adding items",function(){
 		expect(1);
 		
 		var base = new can.view.Scope({}),
@@ -35,9 +39,9 @@
 		
 		cur.attr("items",[1])
 		
-	})
+	})(*/
 	
-	test("current context",function(){
+/*	test("current context",function(){
 		var base = new can.view.Scope({}),
 			cur = base.add("foo")
 			
@@ -48,7 +52,7 @@
 		equal( cur.get("this").value, "foo", "this returns value");
 		
 		equal( cur.attr("this"), "foo", "this returns value");
-	})
+	})*/
 	
 	/*test("highest scope observe is parent observe",function(){
 		var parent = new can.Map({name: "Justin"})
@@ -63,15 +67,15 @@
 		equal(data.value, undefined, "no value")
 	})*/
 	
-	test("computes on scope",function(){
+/*	test("computes on scope",function(){
 		var base = new can.view.Scope({}),
 			cur = base.add(can.compute({name: {first: "justin"}}));
 			
 		var data = cur.get("name.first");
 		equal(data.value, "justin", "computes on path will be evaluted")
-	})
+	})*/
 	
-	test("functions on an observe get called with this correctly", function(){
+/*	test("functions on an observe get called with this correctly", function(){
 		
 		var Person = can.Map.extend({
 			fullName: function(){
@@ -88,15 +92,15 @@
 		equal(data.value, Person.prototype.fullName, "got the raw function");
 		equal(data.parent, me, "parent provided")
 		
-	})
+	})*/
 	
-	test("can.view.Scope.prototype.compute", function(){
+	test("can.view.Scope.prototype.computeData", function(){
 		
 		var map = new can.Map()
 		
 		var base = new can.view.Scope( map )
 		
-		var age = base.compute("age")
+		var age = base.computeData("age").compute
 		
 		equal(age(), undefined, "age is not set")
 		
@@ -126,7 +130,7 @@
 		
 	});
 	
-	test("use highest default observe in stack", function(){
+/*	test("use highest default observe in stack", function(){
 		var bottom = new can.Map({
 			name: "bottom"
 		});
@@ -140,7 +144,7 @@
 		var fooInfo = cur.get("foo");
 		ok(fooInfo.parent ===  top, "we pick the current if we have no leads");
 		
-	})
+	})*/
 	
 	test("use highest default observe in stack unless you've found your way in something that does exist", function(){
 		var bottom = new can.Map({
@@ -155,13 +159,14 @@
 		
 		var cur = new can.view.Scope( bottom ).add(middle).add(top);
 			
-		var lastNameInfo = cur.get("name.last");
+		var lastNameInfo = cur.read("name.last",{});
 		
 		
-		ok(lastNameInfo.parent ===  middle.attr('name'), "pick the default observe with the highest depth");
+		ok(lastNameInfo.rootObserve ===  middle, "pick the default observe with the highest depth");
+		deepEqual(lastNameInfo.reads, ["name","last"], "pick the default observe with the highest depth");
 	})
 
-	test("use observe like objects, e.g. can.route, within scope properly", function() {
+/*	test("use observe like objects, e.g. can.route, within scope properly", function() {
 		var expected = "video"
 		var cur = new can.view.Scope({}).add(can.route);
 		can.route.attr('type', expected);
@@ -169,6 +174,158 @@
 
 		equal(type.value, expected);
 		equal(type.parent, can.route);
+	})*/
+	
+	test("nested properties with compute", function(){
+		var me = new can.Map({
+			name: {first: "Justin"}
+		})
+		
+		var cur = new can.view.Scope(me);
+		
+
+		var compute = cur.computeData("name.first").compute
+		
+		
+		
+		var changes = 0;
+		compute.bind("change", function(ev, newVal, oldVal){
+			if(changes === 0){
+				equal(oldVal, "Justin");
+				equal(newVal, "Brian")
+			} else if(changes === 1 ){
+				equal(oldVal, "Brian");
+				equal(newVal, undefined)
+			} else if(changes === 2 ){
+				equal(oldVal, undefined);
+				equal(newVal, "Payal")
+			} else if(changes === 3 ){
+				equal(oldVal, "Payal");
+				equal(newVal, "Curtis")
+			}
+			changes++;
+		})
+		
+		equal(compute(), "Justin");
+		
+		me.attr("name.first","Brian");
+		
+		me.removeAttr("name");
+		
+		me.attr("name",{
+			first: "Payal"
+		});
+		
+		me.attr("name", new can.Map({first: "Curtis"}))
+		
+	});
+	
+	test("function at the end", function(){
+		var compute = new can.view.Scope({
+			me: {info: function(){
+				return "Justin"
+			}}
+		}).computeData("me.info").compute;
+		
+		equal(compute(), "Justin");
+		
+		var fn = function(){
+				return this.name
+			}
+		
+		var compute2 = new can.view.Scope({
+			me: {info: fn, name: "Hank"}
+		}).computeData("me.info", {isArgument: true, args: []}).compute;
+		
+		equal(compute2()(), "Hank");
+		
+	});
+	
+	test("binds to the right scope only", function(){
+		var baseMap = new can.Map({
+			me: {name: {first:"Justin"}}
+		})
+		
+		var base = new can.view.Scope(baseMap);
+		var topMap = new can.Map({
+			me: {name: {}}
+		});
+		var scope = base.add(topMap);
+		
+		var compute = scope.computeData("me.name.first").compute;
+		
+		
+		compute.bind("change", function(ev, newVal, oldVal){
+			equal(oldVal, "Justin");
+			equal(newVal, "Brian")
+		});
+		equal( compute(), "Justin");
+		
+		// this should do nothing
+		topMap.attr("me.name.first","Payal")
+		
+		baseMap.attr("me.name.first","Brian")
+	});
+	
+	test("Scope read returnObserveMethods=true", function(){
+		var MapConstruct = can.Map.extend({
+			foo: function(arg){
+				equal(this, data.map, "correct this")
+				equal(arg, true, "correct arg")
+			}
+		})
+		var data = {
+			map : new MapConstruct()
+		}
+		var res = can.view.Scope.read(data,["map","foo"],{returnObserveMethods: true, isArgument: true});
+		res.value(true)
+	})
+	
+	test("rooted observable is able to update correctly", function(){
+		var baseMap = new can.Map({
+			name: {first: "Justin"}
+		});
+		
+		var scope = new can.view.Scope(baseMap);
+		
+		
+		var compute = scope.computeData("name.first").compute;
+		
+		equal( compute(), "Justin" );
+		
+		baseMap.attr("name",new can.Map({first: "Brian"}))
+		
+		equal( compute(), "Brian" );
+	});
+	
+	test("computeData reading an object with a compute", function(){
+		var sourceAge = 21;
+		var age = can.compute(function(newVal){
+			if(newVal){
+				sourceAge = newVal
+			} else {
+				return sourceAge;
+			}
+		})
+		
+		var scope = new can.view.Scope({
+			
+			person:{
+				age: age
+			}
+			
+		})
+		
+		var computeData = scope.computeData("person.age");
+		
+		var value = computeData.compute();
+		equal(value,21, "correct value");
+		
+		
+		computeData.compute(31);
+		
+		equal(age(),31,"age updated");
+		
 	})
 	
 	

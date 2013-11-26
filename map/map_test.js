@@ -92,5 +92,22 @@ test("cyclical objects (#521)", function(){
 	
 })
 
+test('Getting attribute that is a can.compute should return the compute and not the value of the compute (#530)', function() {
+	var compute = can.compute('before');
+	var map = new can.Map({
+		time: compute
+	});
+
+	equal(map.time, compute, 'dot notation call of time is compute');
+	equal(map.attr('time'), compute, '.attr() call of time is compute');
+})
+
+test('_cid add to original object', function() {
+	var map = new can.Map(),
+		obj = {'name': 'thecountofzero'};
+
+	map.attr('myObj', obj);
+	ok(!obj._cid, '_cid not added to original object');
+})
 
 })();

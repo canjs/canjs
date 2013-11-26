@@ -46,6 +46,10 @@
                     "test/construct/construct_test": ["can/construct",
                             "test/test/test"
                     ],
+                    "test/map/map_test": ["can/map", "test/test/test"],
+                    "test/list/list_test": ["can/list",
+                            "test/test/test"
+                    ],
                     "test/observe/observe_test": ["can/observe",
                             "test/test/test"
                     ],
@@ -67,23 +71,14 @@
                     "test/route/route_test": ["can/route",
                             "test/test/test"
                     ],
-                    "test/route/pushstate/pushstate_test": [
-                            "can/route/pushstate", "test/test/test"
-                    ],
                     "test/control/route/route_test": [
                             "can/control/route", "test/test/test"
-                    ],
-                    "test/util/string/string_test": [
-                            "can/util/string", "test/test/test"
                     ],
                     "test/view/mustache/mustache_test": [
                             "can/view/mustache", "test/test/test"
                     ],
-                    "test/view/bindings/bindings_test": [
-                            "can/view/bindings", "test/test/test"
-                    ],
-                    "test/view/scope/scope_test": ["can/view/scope",
-                            "test/test/test"
+                    "test/route/pushstate/pushstate_test": [
+                            "can/route/pushstate", "test/test/test"
                     ],
                     "test/model/queue/queue_test": ["can/model/queue",
                             "test/test/test"
@@ -112,6 +107,9 @@
                     "test/map/list/list_test": ["can/map/list",
                             "test/test/test"
                     ],
+                    "test/map/sort/sort_test": ["can/map/sort",
+                            "test/test/test"
+                    ],
                     "test/control/plugin/plugin_test": [
                             "can/control/plugin", "test/test/test"
                     ],
@@ -123,6 +121,18 @@
                     ],
                     "test/util/fixture/fixture_test": [
                             "can/util/fixture", "test/test/test"
+                    ],
+                    "test/view/bindings/bindings_test": [
+                            "can/view/bindings", "test/test/test"
+                    ],
+                    "test/view/live/live_test": ["can/view/live",
+                            "test/test/test"
+                    ],
+                    "test/view/scope/scope_test": ["can/view/scope",
+                            "test/test/test"
+                    ],
+                    "test/util/string/string_test": [
+                            "can/util/string", "test/test/test"
                     ]
                 }
             });
@@ -130,18 +140,16 @@
             require(["can/util/fixture", "test/test/test",
                     "test/component/component_test",
                     "test/construct/construct_test",
+                    "test/map/map_test", "test/list/list_test",
                     "test/observe/observe_test",
                     "test/compute/compute_test",
                     "test/model/model_test", "test/view/view_test",
                     "test/view/ejs/ejs_test",
                     "test/control/control_test",
                     "test/route/route_test",
-                    "test/route/pushstate/pushstate_test",
                     "test/control/route/route_test",
-                    "test/util/string/string_test",
                     "test/view/mustache/mustache_test",
-                    "test/view/bindings/bindings_test",
-                    "test/view/scope/scope_test",
+                    "test/route/pushstate/pushstate_test",
                     "test/model/queue/queue_test",
                     "test/construct/super/super_test",
                     "test/construct/proxy/proxy_test",
@@ -151,10 +159,15 @@
                     "test/map/validations/validations_test",
                     "test/map/backup/backup_test",
                     "test/map/list/list_test",
+                    "test/map/sort/sort_test",
                     "test/control/plugin/plugin_test",
                     "test/view/modifiers/modifiers_test",
                     "test/util/object/object_test",
-                    "test/util/fixture/fixture_test"
+                    "test/util/fixture/fixture_test",
+                    "test/view/bindings/bindings_test",
+                    "test/view/live/live_test",
+                    "test/view/scope/scope_test",
+                    "test/util/string/string_test"
             ], function() {
                 QUnit.start();
             });

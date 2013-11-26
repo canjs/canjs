@@ -1,4 +1,9 @@
 steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted","can/util/event.js",function($, can) {
+	var isBindableElement = function(node){
+		//console.log((node.nodeName && (node.nodeType == 1 || node.nodeType == 9) || node === window))
+		return (node.nodeName && (node.nodeType == 1 || node.nodeType == 9) || node == window);
+	};
+
 	// _jQuery node list._
 	$.extend( can, $, {
 		trigger: function( obj, event, args ) {
@@ -37,7 +42,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			// If we can bind to it...
 			if(this.bind && this.bind !== can.bind){
 				this.bind(ev, cb)
-			} else if(this.nodeName && this.nodeType == 1 || this === window) {
+			} else if(isBindableElement(this)) {
 				$.event.add(this, ev, cb);
 			} else {
 				// Make it bind-able...
@@ -49,7 +54,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			// If we can bind to it...
 			if(this.unbind && this.unbind !== can.unbind){
 				this.unbind(ev, cb)
-			} else if(this.nodeName && this.nodeType == 1 || this === window) {
+			} else if(isBindableElement(this)) {
 				$.event.remove(this, ev, cb);
 			} else {
 				// Make it bind-able...
@@ -61,7 +66,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			if(this.delegate) {
 				this.delegate(selector, ev , cb)
 			}
-			 else if(this.nodeName && this.nodeType == 1 || this === window) {
+			 else if(isBindableElement(this)) {
 				$(this).delegate(selector, ev, cb)
 			} else {
 				// make it bind-able ...
@@ -72,7 +77,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			if(this.undelegate) {
 				this.undelegate(selector, ev , cb)
 			}
-			 else if(this.nodeName && this.nodeType == 1 || this === window) {
+			 else if(isBindableElement(this)) {
 				$(this).undelegate(selector, ev, cb)
 			} else {
 				// make it bind-able ...
@@ -114,24 +119,43 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 		oldClean(elems);
 	};
 	
-	var oldDomManip = $.fn.domManip;
+	var oldDomManip = $.fn.domManip,
+		cbIndex;
 	
-	$.fn.domManip = function(){
-		var args = can.makeArray(arguments),
-			isNew$ = $.fn.jquery >= "2.0.0",
-			cbIndex = isNew$ ? 1 : 2,
-			callback = args[cbIndex];
+	// feature detect which domManip we are using
+	$.fn.domManip = function(args, cb1, cb2){
+		for(var i = 1; i< arguments.length; i++){
+			if(typeof arguments[i] === "function"){
+				cbIndex = i;
+				break;
+			}
+		}
+		return oldDomManip.apply(this, arguments)
+	}
+	$(document.createElement("div")).append(document.createElement("div"))
+	
+	$.fn.domManip = (cbIndex == 2 ? 
+		function(args, table, callback){
+			return oldDomManip.call(this,args,table, function(elem){
+				if(elem.nodeType === 11){
+					var elems = can.makeArray(elem.childNodes);
+				}
+				var ret = callback.apply(this, arguments);
+				can.inserted(elems ? elems : [elem]);
+				return ret;
+			})
+		} :
+		function(args, callback){
+			return oldDomManip.call(this,args,function(elem){
+				if(elem.nodeType === 11){
+					var elems = can.makeArray(elem.childNodes);
+				}
+				var ret = callback.apply(this, arguments);
+				can.inserted(elems ? elems : [elem]);
+				return ret;
+			})
+		})
 
-		args[cbIndex] = function(elem) {
-			var isFragment = elem.nodeType === Node.DOCUMENT_FRAGMENT_NODE,
-				targets = isFragment ? can.makeArray(elem.childNodes) : [elem],
-				ret = callback.apply(this, arguments);
-			can.inserted(targets);
-			return ret;
-		};
-
-		return oldDomManip.apply(this, args);
-	};
 
 	$.event.special.inserted = {};
 	$.event.special.removed = {};

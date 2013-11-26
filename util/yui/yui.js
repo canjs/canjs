@@ -58,11 +58,11 @@ steal('can/util/can.js', 'yui', 'can/util/event.js',
 		return Y.Array(arr);
 	};
 	can.isArray = Y.Lang.isArray;
-	can.inArray = function (item, arr) {
+	can.inArray = function (item, arr, fromIndex) {
 		if (!arr) {
 			return -1;
 		}
-		return Y.Array.indexOf(arr, item);
+		return Y.Array.indexOf(arr, item, fromIndex);
 	};
 
 	can.map = function (arr, fn) {
@@ -422,7 +422,7 @@ steal('can/util/can.js', 'yui', 'can/util/event.js',
 				// // fireEvent. /me sighs. http://gist.github.com/315318
 				// throw("janktastic");
 				// }
-				n.fireEvent(ev);
+				n.fireEvent(ev, a);
 			} catch (er) {
 				// a lame duck to work with. we're probably a 'custom event'
 				var evdata = can.extend({

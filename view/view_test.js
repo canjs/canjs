@@ -710,10 +710,10 @@
 		var withId = can.view.mustache('test-485', template);
 		var withoutId = can.view.mustache(template);
 
-		ok(withoutId({ message: 'Without id'}) instanceof DocumentFragment,
+		ok(withoutId({ message: 'Without id'}).nodeType == 11,
 			'View without id returned document fragment');
 
-		ok(withId({ message: 'With id'}) instanceof DocumentFragment,
+		ok(withId({ message: 'With id'}).nodeType == 11,
 			'View with id returned document fragment');
 	});
 	
@@ -743,6 +743,35 @@
 		t();
 		ok(true)
 	})
+	
+	test("content within non-component tags gets rendered with context", function(){
+		var tmp = can.view.mustache("<div><unique-element-name>{{name}}</unique-element-name></div>")
+		
+		
+		var frag = tmp({
+			name: "Josh M"
+		});
+		
+		equal(frag.childNodes[0].childNodes[0].innerHTML, "Josh M", "correctly retrieved scope data")
+		
+	});
+	
+	test("empty non-component tags", function(){
+		
+
+		
+		var tmp = can.view.mustache("<div><unique-element-name></unique-element-name></div>");
+		
+		
+		var frag = tmp()
+		
+		ok(true, "no error")
+		
+	})
+	
+	
+	
+	
 	
 	
 })();

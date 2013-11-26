@@ -99,11 +99,11 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 	can.isArray = function(arr) {
 		return typeOf(arr) === 'array'
 	};
-	can.inArray = function(item,arr) {
+	can.inArray = function(item,arr,fromIndex) {
 		if(!arr) {
 			return -1;
 		}
-		return Array.prototype.indexOf.call(arr, item);
+		return Array.prototype.indexOf.call(arr, item, fromIndex);
 	}
 	can.map = function(arr, fn){
 		return Array.from(arr||[]).map(fn);

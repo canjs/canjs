@@ -122,6 +122,18 @@
 		equal(div.className, "foo  active end");
 	})
 
+	test("specialAttribute with new line", function(){
+
+		var div = document.createElement('div');
+
+		var style = can.compute('style="width: 50px;\nheight:50px;"');
+
+		can.view.live.specialAttribute(div, "style", style);
+
+		equal(div.style.height, "50px");
+		equal(div.style.width, "50px");
+	})
+
 
 	test("list", function(){
 
