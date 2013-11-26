@@ -201,7 +201,7 @@
 	},
 	"configurations": {
 		"jquery": {
-			"description": "jQuery (1.x)",
+			"description": "jQuery",
 			"isDefault": true,
 			"library": "lib/jquery.1.10.2.js",
 			"steal": {
@@ -215,7 +215,7 @@
 		},
 		"jquery-2": {
 			"description": "jQuery (2.x)",
-			"isDefault": true,
+			"hidden": true,
 			"library": "lib/jquery.2.0.3.js",
 			"steal": {
 				"map": {
