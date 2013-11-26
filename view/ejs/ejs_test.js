@@ -1747,4 +1747,32 @@ test("outputting array of attributes", function() {
 	equal(div.children[0].getAttribute('data-test2'), 'value2', 'second value');
 	equal(div.children[0].getAttribute('data-test3'), 'value3', 'third value');
 });
+
+
+test("_bindings removed when element removed", function() {
+	var template = can.view.ejs('<div id="game"><% if(game.attr("league")) { %><%= game.attr("name") %><% } %></div>'),
+		game = new can.Map({
+	        "name": "Fantasy Baseball",
+	        "league": "Malamonsters"
+	    });
+    
+    var frag = template({
+    	game: game
+    });
+    
+	var div = document.createElement('div');
+	
+	div.appendChild(frag);
+	
+	$(div).empty();
+	stop()
+	setTimeout(function(){
+		start()
+		equal(game._bindings, 0, 'No bindings left');
+	},50)
+	
+});
+
+
+
 })();
