@@ -5,8 +5,8 @@
     <head>
         <title>Zepto Test Suite</title>
         <base href="../.." />
-        <link rel="stylesheet" type="text/css" href="bower_components/qunit/qunit/qunit.css" />
-        <script type="text/javascript" src="../../lib/html5shiv.js"></script>
+        <link rel="stylesheet" type="text/css" href="//code.jquery.com/qunit/qunit-1.12.0.css" />
+        <script type="text/javascript" src="lib/html5shiv.js"></script>
     </head>
     
     <body>
@@ -23,113 +23,115 @@
         <ol id="qunit-tests"></ol>
         <div id="qunit-test-area"></div>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js"></script>
-        <script type="text/javascript" src="bower_components/qunit/qunit/qunit.js"></script>
+        <script type="text/javascript" src="//code.jquery.com/qunit/qunit-1.12.0.js"></script>
         <script type="text/javascript">
             QUnit.config.autostart = false;
 
             require.config({
-                "paths": {
-                    "can": "dist/amd/can",
-                    "test": "./",
-                    "zepto": "bower_components/zepto/zepto"
-                },
-                "map": {
-                    "*": {
-                        "can/util/library": "can/util/zepto"
-                    }
-                },
-                "shim": {
-                    "test/test/test": ["can"],
-                    "test/component/component_test": ["can/component",
+                    "paths": {
+                        "can": "dist/amd/can",
+                        "test": "./",
+                        "zepto": "bower_components/zepto/zepto"
+                    },
+                    "map": {
+                        "*": {
+                            "can/util/library": "can/util/zepto"
+                        }
+                    },
+                    "shim": {
+                        "test/test/test": ["can"],
+                        "test/component/component_test": [
+                            "can/component", "test/test/test"
+                        ],
+                        "test/construct/construct_test": [
+                            "can/construct", "test/test/test"
+                        ],
+                        "test/map/map_test": ["can/map",
                             "test/test/test"
-                    ],
-                    "test/construct/construct_test": ["can/construct",
+                        ],
+                        "test/list/list_test": ["can/list",
                             "test/test/test"
-                    ],
-                    "test/map/map_test": ["can/map", "test/test/test"],
-                    "test/list/list_test": ["can/list",
+                        ],
+                        "test/observe/observe_test": ["can/observe",
                             "test/test/test"
-                    ],
-                    "test/observe/observe_test": ["can/observe",
+                        ],
+                        "test/compute/compute_test": ["can/compute",
                             "test/test/test"
-                    ],
-                    "test/compute/compute_test": ["can/compute",
+                        ],
+                        "test/model/model_test": ["can/model",
                             "test/test/test"
-                    ],
-                    "test/model/model_test": ["can/model",
+                        ],
+                        "test/view/view_test": ["can/view",
                             "test/test/test"
-                    ],
-                    "test/view/view_test": ["can/view",
+                        ],
+                        "test/view/ejs/ejs_test": ["can/view/ejs",
                             "test/test/test"
-                    ],
-                    "test/view/ejs/ejs_test": ["can/view/ejs",
+                        ],
+                        "test/control/control_test": ["can/control",
                             "test/test/test"
-                    ],
-                    "test/control/control_test": ["can/control",
+                        ],
+                        "test/route/route_test": ["can/route",
                             "test/test/test"
-                    ],
-                    "test/route/route_test": ["can/route",
-                            "test/test/test"
-                    ],
-                    "test/control/route/route_test": [
+                        ],
+                        "test/control/route/route_test": [
                             "can/control/route", "test/test/test"
-                    ],
-                    "test/view/mustache/mustache_test": [
+                        ],
+                        "test/view/mustache/mustache_test": [
                             "can/view/mustache", "test/test/test"
-                    ],
-                    "test/route/pushstate/pushstate_test": [
+                        ],
+                        "test/route/pushstate/pushstate_test": [
                             "can/route/pushstate", "test/test/test"
-                    ],
-                    "test/model/queue/queue_test": ["can/model/queue",
-                            "test/test/test"
-                    ],
-                    "test/construct/super/super_test": [
+                        ],
+                        "test/model/queue/queue_test": [
+                            "can/model/queue", "test/test/test"
+                        ],
+                        "test/construct/super/super_test": [
                             "can/construct/super", "test/test/test"
-                    ],
-                    "test/construct/proxy/proxy_test": [
+                        ],
+                        "test/construct/proxy/proxy_test": [
                             "can/construct/proxy", "test/test/test"
-                    ],
-                    "test/map/delegate/delegate_test": [
+                        ],
+                        "test/map/delegate/delegate_test": [
                             "can/map/delegate", "test/test/test"
-                    ],
-                    "test/map/setter/setter_test": ["can/map/setter",
-                            "test/test/test"
-                    ],
-                    "test/map/attributes/attributes_test": [
+                        ],
+                        "test/map/setter/setter_test": [
+                            "can/map/setter", "test/test/test"
+                        ],
+                        "test/map/attributes/attributes_test": [
                             "can/map/attributes", "test/test/test"
-                    ],
-                    "test/map/validations/validations_test": [
+                        ],
+                        "test/map/validations/validations_test": [
                             "can/map/validations", "test/test/test"
-                    ],
-                    "test/map/backup/backup_test": ["can/map/backup",
+                        ],
+                        "test/map/backup/backup_test": [
+                            "can/map/backup", "test/test/test"
+                        ],
+                        "test/map/list/list_test": ["can/map/list",
                             "test/test/test"
-                    ],
-                    "test/map/list/list_test": ["can/map/list",
+                        ],
+                        "test/map/sort/sort_test": ["can/map/sort",
                             "test/test/test"
-                    ],
-                    "test/map/sort/sort_test": ["can/map/sort",
-                            "test/test/test"
-                    ],
-                    "test/util/object/object_test": [
+                        ],
+                        "test/util/object/object_test": [
                             "can/util/object", "test/test/test"
-                    ],
-                    "test/util/fixture/fixture_test": [
+                        ],
+                        "test/util/fixture/fixture_test": [
                             "can/util/fixture", "test/test/test"
-                    ],
-                    "test/view/bindings/bindings_test": [
+                        ],
+                        "test/view/bindings/bindings_test": [
                             "can/view/bindings", "test/test/test"
-                    ],
-                    "test/view/live/live_test": ["can/view/live",
+                        ],
+                        "test/view/live/live_test": ["can/view/live",
                             "test/test/test"
-                    ],
-                    "test/view/scope/scope_test": ["can/view/scope",
-                            "test/test/test"
-                    ],
-                    "test/util/string/string_test": [
+                        ],
+                        "test/view/scope/scope_test": [
+                            "can/view/scope", "test/test/test"
+                        ],
+                        "test/util/string/string_test": [
                             "can/util/string", "test/test/test"
-                    ]
-                }
-            });
+                        ]
+                    }
+                });
 
             require(["can/util/fixture", "test/test/test",
                     "test/component/component_test",
@@ -160,9 +162,9 @@
                     "test/view/live/live_test",
                     "test/view/scope/scope_test",
                     "test/util/string/string_test"
-            ], function() {
-                QUnit.start();
-            });
+                ], function() {
+                    QUnit.start();
+                });
         </script>
     </body>
 

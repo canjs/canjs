@@ -175,6 +175,7 @@ module.exports = function (grunt) {
 				options: {
 					urls: [
 						'http://localhost:8000/test/jquery.html',
+						'http://localhost:8000/test/jquery-2.html',
 						'http://localhost:8000/test/dojo.html',
 						//'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/mootools.html',
@@ -187,6 +188,7 @@ module.exports = function (grunt) {
 					urls: [
 						'http://localhost:8000/test/dist/dojo.html',
 						'http://localhost:8000/test/dist/jquery.html',
+						'http://localhost:8000/test/dist/jquery-2.html',
 						//'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/dist/mootools.html',
 						'http://localhost:8000/test/dist/yui.html'
@@ -198,6 +200,7 @@ module.exports = function (grunt) {
 					urls: [
 						// TODO AMD & DOJO 'http://localhost:8000/test/amd/dojo.html',
 						'http://localhost:8000/test/amd/jquery.html',
+						'http://localhost:8000/test/amd/jquery-2.html',
 						//'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/amd/mootools.html',
 						'http://localhost:8000/test/amd/yui.html'
