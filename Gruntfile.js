@@ -206,6 +206,33 @@ module.exports = function (grunt) {
 						'http://localhost:8000/test/amd/yui.html'
 					]
 				}
+			},
+			individuals: {
+				options: {
+					urls: [
+						'http://localhost:8000/component/test.html',
+						'http://localhost:8000/compute/test.html',
+						'http://localhost:8000/construct/test.html',
+						'http://localhost:8000/construct/proxy/test.html',
+						'http://localhost:8000/construct/super/test.html',
+						'http://localhost:8000/control/test.html',
+						'http://localhost:8000/map/test.html',
+						'http://localhost:8000/map/attributes/test.html',
+						'http://localhost:8000/map/backup/test.html',
+						// 'http://localhost:8000/map/delegate/test.html',
+						'http://localhost:8000/map/list/test.html',
+						'http://localhost:8000/map/setter/test.html',
+						'http://localhost:8000/map/sort/test.html',
+						'http://localhost:8000/map/validations/test.html',
+						'http://localhost:8000/model/test.html',
+						'http://localhost:8000/observe/test.html',
+						// 'http://localhost:8000/route/test.html',
+						'http://localhost:8000/route/pushstate/test.html',
+						'http://localhost:8000/view/test.html',
+						'http://localhost:8000/view/ejs/test.html',
+						'http://localhost:8000/view/mustache/test.html'
+					]
+				}
 			}
 		},
 		uglify: {
