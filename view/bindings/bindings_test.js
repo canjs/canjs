@@ -43,7 +43,7 @@
 		
 		var template = can.view.mustache("<input can-value='age'/>")
 		
-		var map = new can.Map({age: "30"})
+		var map = new can.Map()
 		
 		var frag = template( map )
 		
@@ -52,7 +52,11 @@
 		ta.appendChild(frag);
 		
 		var input = ta.getElementsByTagName("input")[0];
-		equal(input.value, "30", "input value set correctly")
+		equal(input.value, "", "input value set correctly if key does not exist in map");
+
+		map.attr("age", "30");
+
+		equal(input.value, "30", "input value set correctly");
 		
 		map.attr("age","31");
 		
