@@ -346,7 +346,7 @@ can.Map.prototype.__convert = function(prop, value){
  *
  *		contact.serialize('birthday') //-> 'YYYY-MM-DD'
  */
-can.Map.prototype.serialize = function(attrName, stack) {
+can.Map.prototype.serialize = can.Map.List.prototype.serialize = function(attrName, stack) {
 	var where = {},
 		Class = this.constructor,
 		attrs = {};
