@@ -162,7 +162,8 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 		},
 		"{value} change": "set",
 		set: function(){
-			this.element[0].value = this.options.value()
+			var val = this.options.value();
+			this.element[0].value = (typeof val === 'undefined' ? '' : val);
 		},
 		"change": function(){
 			this.options.value(this.element[0].value)
