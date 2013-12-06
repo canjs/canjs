@@ -196,6 +196,7 @@
 			"<select can-value='color' multiple>"+
 				"<option value='red'>Red</option>"+
 				"<option value='green'>Green</option>"+
+				"<option value='ultraviolet'>Ultraviolet</option>"+
 			"</select>");
 		
 		var map = new can.Map({color: "red"})
@@ -222,16 +223,27 @@
 
 		equal(map.attr("color"), "green", "not yet updated from input");
 		can.trigger(inputs[0], "change")
-		equal(""+[map.attr("color.0"), map.attr("color.1")], ""+["red", "green"], "updated from input");
+		equal(map.attr("color"), "red;green", "updated from input");
 		
 		map.removeAttr("color");
+		equal(inputs[0].value, '', "attribute removed from map");
+
 		can.each(document.getElementsByTagName('option'), function(opt) { 
 			if(opt.value==='green') {
 				opt.selected = 'selected';
 			}
 		});
 		can.trigger(inputs[0], "change")
-		equal(map.attr("color.0"), "green", "updated from input");
+		equal(map.attr("color"), "green", "updated from input");
+
+		map.attr("color", "red;green");
+		can.each(document.getElementsByTagName('option'), function(opt) { 
+			if(opt.value === 'green' || opt.value === 'red') {
+				ok(opt.selected, 'option selected from map');
+			} else {
+				ok(!opt.selected, 'option not selected, bc not in map');
+			}
+		});
 	})
 	
 })()

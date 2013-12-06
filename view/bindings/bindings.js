@@ -215,33 +215,28 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			this.set();
 		},
 
-		_set: function(newVal){
-			var selectedItem = this.element.find("option[value='" + newVal + "']");
-			
-			if(selectedItem.length && !selectedItem.is(':selected')) {
-				selectedItem.attr('selected', 'selected');
-			}
-		},
-
 		set: function() {
 			var newVal = this.options.value(), self = this;
 
-			//unset every option
-			this.element.find('option').removeAttr('selected');
+			if(typeof newVal === 'string') {
+				//when given a string, try to extract all the options from it
+				newVal = newVal.split(';');
+			} else {
+				//when given something else, try to make it an array and deal with it
+				newVal = can.makeArray(newVal);
+			}
 
-			//reselect the newly selected options
-			can.each(can.makeArray(newVal), function(id){
-				self._set(id);
-			});
+			//jQuery.val is required here, which will break compatibility with other libs
+			can.$(this.element).val(newVal);
 		},
 
 		get: function(){
-			var arr = this.element.find('option:selected')
+			var arr = can.$('option:selected', this.element)
 				.map(function(){
 					return this.value;
 				});
 
-			return can.makeArray(arr);
+			return can.makeArray(arr).join(';');
 		},
 
 		'change': function() {
