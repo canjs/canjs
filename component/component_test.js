@@ -805,5 +805,33 @@ test("scope not rebound correctly (#550)", function(){
 	equal(nameChanges, 2)
 })
 
+
+test("content extension stack overflow error", function(){
+
+    can.Component({
+        tag: 'more-extended-feature',
+        template: '<extended-feature>even more</extended-feature>'
+        //template: '<div>here is more</div>'
+    })
+
+    can.Component({
+        tag: 'extended-feature',
+        template: '<some-feature>extended <content></content></some-feature>'
+            //<content></content>
+        //template: '<div>extended: <content></content></div>'
+    })
+
+    can.Component({
+        tag: 'some-feature',
+        template: 'content <content></content>'
+    })
+
+    // currently causes Maximum call stack size exceeded
+    var template = can.view.mustache("<more-extended-feature></more-extended-feature>");
+    var frag = template();
+
+    equal(frag.childNodes[0].childNodes[0].childNodes[0].innerHTML, 'content extended even more')
+
+})
 	
 })()
