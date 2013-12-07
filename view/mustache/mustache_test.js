@@ -2551,4 +2551,34 @@ test('@index is correctly calculated when there are identical elements in the ar
 	equal(div.innerHTML, '0 1 2 3 4 ');
 })
 
+test('Rendering keys of an object with #each and @key in a Component', function() {
+	var template = can.view.mustache("<ul>{{#each obj}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
+
+	can.Component.extend({
+		tag: 'keyscomp',
+		template: template,
+			scope: {
+			obj: {
+				foo: 'string',
+				bar: 1,
+				baz: false
+			}
+		}
+	});
+
+	var script = document.createElement('script');
+	script.id = "keys-component";
+	script.type = "text/mustache";
+	script.innerHTML = "<keyscomp></keyscomp>";
+
+	can.append( can.$('#qunit-test-area'), script );
+	var lis = can.view('keys-component', {}).childNodes[0].getElementsByTagName('li');
+
+	equal(lis.length, 3, "three lis");
+	equal(lis[0].innerHTML, 'foo string', "first key value pair rendered");
+	equal(lis[1].innerHTML, 'bar 1', "second key value pair rendered");
+	equal(lis[2].innerHTML, 'baz false', "third key value pair rendered");
+});
+
+
 })();

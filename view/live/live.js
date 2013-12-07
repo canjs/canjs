@@ -161,6 +161,10 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 				list = newList || [];
 				// list might be a plain array
 				list.bind && list.bind("add", add).bind("remove", remove);
+				if(list.bind && !list.attr("length")) {
+					add({}, list.attr(), '');
+					return;
+				}
 				add({}, list, 0);
 			}
 			insertElementsAfter([el],text);
