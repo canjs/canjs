@@ -805,5 +805,33 @@ test("scope not rebound correctly (#550)", function(){
 	equal(nameChanges, 2)
 })
 
-	
+test("inserted event fires more than once", function(){
+
+    var inited = 0,
+        inserted = 0
+
+    can.Component({
+        tag: 'my-inserted',
+
+        scope: {
+            init: function(){
+                inited++
+                console.log('scope init')
+            }
+        },
+        events: {
+            'inserted': function() {
+                inserted++
+                console.log('inserted')
+            }
+        }
+    });
+
+    $('body').append(can.view.mustache("<my-inserted></my-inserted>"));
+
+    equal(inited, 1)
+    equal(inserted, 1)
+})
+
+
 })()
