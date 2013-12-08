@@ -483,7 +483,7 @@ Scanner.prototype = {
 				default:
 					// Track the current tag
 					if(lastToken === '<'){
-						tagName = token.split(/\s/)[0];
+						tagName = token.split(/\s|!--/)[0];
 						var isClosingTag = false;
 						
 						if( tagName.indexOf("/") === 0 ) {
