@@ -10,9 +10,6 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "qunit": "~1.12.0",
-    "jquery": "~2.0.3",
-    "jquery-legacy": "jquery#1.10",
-    "zepto": "~1.0.0"
+    "qunit": "~1.12.0"
   }
 }
