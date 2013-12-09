@@ -2568,7 +2568,21 @@ test("if helper within className (#592)", function(){
 	var frag = tmp(data);
 	
 	equal( frag.childNodes[0].className,"fails animate-ready" )
-	
+})
+
+test('html comments must not break mustache scanner', function(){
+	can.each([
+		'text<!-- comment -->',
+		'text<!-- comment-->',
+		'text<!--comment -->',
+		'text<!--comment-->'
+	], function(content) {
+		var div = document.createElement('div');
+
+		can.append( can.$('#qunit-test-area'), div );
+		can.append( can.$(div), can.view.mustache(content)() );
+		equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
+	});	
 })
 
 })();
