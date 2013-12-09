@@ -2551,4 +2551,19 @@ test('@index is correctly calculated when there are identical elements in the ar
 	equal(div.innerHTML, '0 1 2 3 4 ');
 })
 
+test('html comments must not break mustache scanner', function(){
+	can.each([
+		'text<!-- comment -->',
+		'text<!-- comment-->',
+		'text<!--comment -->',
+		'text<!--comment-->'
+	], function(content) {
+		var div = document.createElement('div');
+
+		can.append( can.$('#qunit-test-area'), div );
+		can.append( can.$(div), can.view.mustache(content)() );
+		equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
+	});	
+})
+
 })();
