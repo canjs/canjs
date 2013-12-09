@@ -54,7 +54,11 @@ var pendingHookups = [],
 		return (typeof txt == 'string' || typeof txt == 'number') ?
 			can.esc( txt ) :
 			contentText(txt, tag);
-	};
+	},
+	// A flag to indicate if .txt was called within a live section within an element like the {{name}}
+	// within `<div {{#person}}{{name}}{{/person}}/>`.
+	withinTemplatedSectionWithinAnElement = false,
+	emptyHandler = function(){};
 
 
 var current;
@@ -132,19 +136,59 @@ can.extend(can.view, {
 	 *
 	 */
 	txt: function(escape, tagName, status, self, func){
-		var listTeardown = can.view.setupLists(),
-			emptyHandler = function(){},
-			unbind = function(){
-				compute.unbind("change",emptyHandler)
-			};
-
-		var compute = can.compute(func, self, false);
-		// bind to get and temporarily cache the value
-		compute.bind("change",emptyHandler);
-		// call the "wrapping" function and get the binding information
+		// the temporary tag needed for any live setup
 		var tag = (elements.tagMap[tagName] || "span"),
-			listData = listTeardown(),
+			// should live-binding be setup
+			setupLiveBinding = false,
+			// the compute's value
+			value;
+		
+		
+		// Are we currently within a live section within an element like the {{name}}
+		// within `<div {{#person}}{{name}}{{/person}}/>`.
+		if( withinTemplatedSectionWithinAnElement ) {
+			value = func.call(self);
+		} else {
+			
+			// If this magic tag is within an attribute or an html element,
+			// set the flag to true so we avoid trying to live bind
+			// anything that func might be setup.
+			// TODO: the scanner should be able to set this up.
+			if(typeof status === "string" || status === 1){
+				withinTemplatedSectionWithinAnElement = true;
+			}
+			
+			// Sets up a listener so we know any can.view.lists called 
+			// when func is called
+			var listTeardown = can.view.setupLists(),
+				// 
+				unbind = function(){
+					compute.unbind("change",emptyHandler)
+				};
+			// Create a compute that calls func and looks for dependencies.
+			// By passing `false`, this compute can not be a dependency of other 
+			// computes.  This is because live-bits are nested, but 
+			// handle their own updating. For example:
+			//     {{#if items.length}}{{#items}}{{.}}{{/items}}{{/if}}
+			// We do not want `{{#if items.length}}` changing the DOM if
+			// `{{#items}}` text changes.
+			var compute = can.compute(func, self, false);
+			
+			// Bind to get and temporarily cache the value of the compute.
+			compute.bind("change",emptyHandler);
+			
+			// Call the "wrapping" function and get the binding information
+			var	listData = listTeardown();
+			
+			// Get the value of the compute
 			value = compute();
+			
+			// Let people know we are no longer within an element.
+			withinTemplatedSectionWithinAnElement = false;
+			
+			// If we should setup live-binding.
+			setupLiveBinding = compute.hasDependencies;
+		}
 		
 		if(listData){
 			return "<" +tag+can.view.hook(function(el, parentNode){
@@ -153,8 +197,8 @@ can.extend(can.view, {
 		}
 
 		// If we had no observes just return the value returned by func.
-		if(!compute.hasDependencies || typeof value === "function"){
-			unbind();
+		if(!setupLiveBinding || typeof value === "function"){
+			unbind && unbind();
 			return (  (escape || typeof status === 'string') && escape !== 2  ? contentEscape : contentText)(value, status === 0 && tag);
 		}
 
@@ -190,6 +234,7 @@ can.extend(can.view, {
 				live.attributes(el, compute, compute());
 				unbind();
 			});
+			
 			return compute();
 		} else if( escape === 2 ) { // In a special attribute like src or style
 			
