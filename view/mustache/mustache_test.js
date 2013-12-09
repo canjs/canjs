@@ -2551,6 +2551,25 @@ test('@index is correctly calculated when there are identical elements in the ar
 	equal(div.innerHTML, '0 1 2 3 4 ');
 })
 
+test("if helper within className (#592)", function(){
+	
+	var tmp = can.view.mustache('<div class="fails {{#state}}animate-{{.}}{{/state}}"></div>');
+	var data = new can.Map({
+		state: "ready"
+	})
+	var frag = tmp(data);
+	
+	equal( frag.childNodes[0].className,"fails animate-ready" )
+	
+	var tmp = can.view.mustache('<div class="fails {{#if state}}animate-{{state}}{{/if}}"></div>');
+	var data = new can.Map({
+		state: "ready"
+	})
+	var frag = tmp(data);
+	
+	equal( frag.childNodes[0].className,"fails animate-ready" )
+})
+
 test('html comments must not break mustache scanner', function(){
 	can.each([
 		'text<!-- comment -->',
