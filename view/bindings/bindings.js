@@ -154,7 +154,7 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 		init: function(){
 			if(this.element[0].nodeName.toUpperCase() === "SELECT"){
 				// need to wait until end of turn ...
-				setTimeout($.proxy(this.set,this),1)
+				setTimeout(can.proxy(this.set,this),1)
 			} else {
 				this.set()
 			}
