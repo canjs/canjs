@@ -57,7 +57,7 @@ var pendingHookups = [],
 	};
 
 
-var current;
+var current, lastHookups;
 
 can.extend(can.view, {
 	live: live,

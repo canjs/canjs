@@ -51,7 +51,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 		// Breaks up a string like foo='bar' into ["foo","'bar'""]
 		getAttributeParts = function(newVal){
 			return (newVal|| "").replace(/['"]/g, '').split('=')
-		}
+		},
 		// #### insertElementsAfter
 		// Appends elements after the last item in oldElements.
 		insertElementsAfter = function(oldElements, newFrag){

@@ -206,7 +206,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 					return model;
 				}
 			}
-		}
+		},
 		
 		
 	// This object describes how to make an ajax request for each ajax method.  
@@ -833,7 +833,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 				// Return the ajax method with `data` and the `type` provided.
 				return ajax(str || this[ajaxMethod.url || "_url"], data, ajaxMethod.type || "get")
 			}
-		}
+		};
 
 
 	
