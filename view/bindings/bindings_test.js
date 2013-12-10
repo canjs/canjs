@@ -152,5 +152,24 @@
 		can.trigger( input, {type: "click"})
 	})
 	
+	asyncTest("can-value select remove from DOM", function(){
+		expect(1);
+
+		var template = can.view.mustache(
+			"<select can-value='color'>"+
+				"<option value='red'>Red</option>"+
+				"<option value='green'>Green</option>"+
+			"</select>"),
+			frag = template(),
+			ta = document.getElementById("qunit-test-area");
+
+		ta.appendChild(frag);
+		can.remove(can.$("select", ta));
+
+		setTimeout(function() {
+			start();
+			ok(true, 'Nothing should break if we just add and then remove the select');
+		}, 10);
+	})
 	
 })()
