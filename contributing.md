@@ -98,9 +98,11 @@ Once the documentation is finished rendering, all the HTML files will be located
 
 ## Running Tests Locally
 
-Its important that all tests pass before sending a pull request. TravisCI will determine if your commits pass the tests, but while your developing you can run the QUnit tests locally.
+Its important that all tests pass before sending a pull request. TravisCI will determine if your commits pass the tests, but while your developing you can run the QUnit tests locally. To run tests locally you need [NodeJS](http://nodejs.org/) installed and run
 
-Open `~/can/test/test.html` in a web browser to run the tests locally.  Each module has its own tests too, you can run them by opening the `test.html` in each folder.
+> npm install
+
+Then open `~/can/test/test.html` in a web browser to run all tests for all libraries.  Each module has its own tests too, you can run them by opening the `test.html` in each folder.
 
 CanJS supports the following browsers:
 

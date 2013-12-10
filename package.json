@@ -27,7 +27,8 @@
     "bower": "~1.2.7"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "install": "node_modules/bower/bin/bower install"
   },
   "demos": [
     "http://canjs.us/#examples",
