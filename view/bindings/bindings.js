@@ -162,10 +162,16 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 		},
 		"{value} change": "set",
 		set: function(){
+			//this may happen in some edgecases, esp. with selects that are not in DOM after the timeout has fired
+			if(!this.element) return;
+
 			var val = this.options.value();
 			this.element[0].value = (typeof val === 'undefined' ? '' : val);
 		},
 		"change": function(){
+			//this may happen in some edgecases, esp. with selects that are not in DOM after the timeout has fired
+			if(!this.element) return;
+			
 			this.options.value(this.element[0].value)
 		}
 	})
