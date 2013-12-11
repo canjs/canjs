@@ -2297,7 +2297,7 @@ test("can.Mustache.safeString", function() {
     templateUnescape = can.view.mustache('{{{link "' + text + '" "' + url + '"}}}');
   can.Mustache.registerHelper('link', function(text, url) {
     var link = '<a href="' + url + '">' + text + '</a>';
-    return new can.Mustache.safeString(link);
+    return can.Mustache.safeString(link);
   });
 
   var div = document.createElement('div');

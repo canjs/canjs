@@ -1668,7 +1668,7 @@ function( can ){
    *   url  = can.esc(url);
    *
    *   var result = '&lt;a href="' + url + '"&gt;' + text + '&lt;/a&gt;';
-   *   return new can.Mustache.safeString(result);
+   *   return can.Mustache.safeString(result);
    * });
    * @codeend
    *
@@ -1683,7 +1683,7 @@ function( can ){
    * &lt;div&gt;&lt;a href="http://google.com"&gt;Google&lt;/a&gt;&lt;/div&gt;
    * @codeend
    *
-   * As an anchor tag whereas if we would have just returned the result rather than a new
+   * As an anchor tag whereas if we would have just returned the result rather than a
    * `can.Mustache.safeString` our template would have rendered a div with the escaped anchor tag.
    *
    */
