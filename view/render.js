@@ -61,7 +61,7 @@ var pendingHookups = [],
 	emptyHandler = function(){};
 
 
-var current;
+var current, lastHookups;
 
 can.extend(can.view, {
 	live: live,

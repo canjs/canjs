@@ -70,7 +70,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 				}
 			}
 			return teardown;
-		};
+		},
 		teardownMap = function(){
 			for(var cid in madeMap){
 				if(madeMap[cid].added) {
@@ -81,7 +81,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		},
 		getMapFromObject = function(obj){
 			return madeMap && madeMap[obj._cid] && madeMap[obj._cid].instance
-		}
+		};
 	/**
 	 * @add can.Map
 	 */

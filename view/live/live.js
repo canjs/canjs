@@ -51,7 +51,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 		// Breaks up a string like foo='bar' into ["foo","'bar'""]
 		getAttributeParts = function(newVal){
 			return (newVal|| "").replace(/['"]/g, '').split('=')
-		}
+		},
 		// #### insertElementsAfter
 		// Appends elements after the last item in oldElements.
 		insertElementsAfter = function(oldElements, newFrag){
@@ -147,7 +147,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 				text = document.createTextNode(""),
 				list;
 
-			teardownList = function(){
+			var teardownList = function(){
 				// there might be no list right away, and the list might be a plain
 				// array
 				list && list.unbind && list.unbind("add", add).unbind("remove", remove);
@@ -155,7 +155,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 				remove({},{length: nodesMap.length},0, true);
 			}
 
-			updateList = function(ev, newList, oldList){
+			var updateList = function(ev, newList, oldList){
 				teardownList();
 				// make an empty list if the compute returns null or undefined
 				list = newList || [];
