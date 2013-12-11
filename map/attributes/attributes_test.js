@@ -693,4 +693,45 @@ test("Convert can.Model using .model and .models (#293)", 5, function() {
 	equal(link.attr('levelsCompleted.1.index'), 1, 'Data ran through Level.models');
 });
 
+test('Maximum call stack size exceeded with global models (#476)', function() {
+	stop();
+
+	window.Character = can.Model.extend({
+		attributes: {
+			game: 'Game.model'
+		}
+	}, {});
+
+	window.Game = can.Model.extend({
+		attributes: {
+			characters: 'Character.models'
+		},
+		findOne: function() {
+			var dfd = can.Deferred();
+			setTimeout(function() {
+				dfd.resolve({
+					"id": "LOZ",
+					"name": "The Legend of Zelda",
+					"characters": [{
+						"id": "1",
+						"name": "Link",
+						"game": {
+							"id": "LOZ"
+						}
+					}]
+				});
+			}, 100);
+			return dfd;
+		}
+	}, {});
+
+	window.Game.findOne({id: 'LOZ'}).then(function(g) {
+		ok(g.serialize(), 'No error serializing the object');
+		start();
+	});
+
+	delete window.Game;
+	delete window.Character;
+});
+
 })();
