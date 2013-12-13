@@ -25,8 +25,7 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 		buildFragment : function(elems, context){
 			var oldFragment = $.buildFragment,
 				ret;
-
-			elems = [elems];
+			elems = can.isArray(elems) ? elems : [elems];
 			// Set context per 1.8 logic
 			context = context || document;
 			context = !context.nodeType && context[0] || context;

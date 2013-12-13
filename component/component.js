@@ -1,14 +1,25 @@
 steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindings",function(can){
 	
 	var ignoreAttributesRegExp = /dataViewId|class|id/i
+	// check if frag contains only text nodes with whitespace
+	var emptyFrag = function(frag){
+		var children = (frag && frag.childNodes) || [];
+		for(var i = 0; i < children.length; i++){
+			if(children[i].nodeType !== 3 || can.trim(children[i].nodeValue) !== ''){
+				return false;
+			}
+		}
+		return true;
+	}
+
 	/**
 	 * @add can.Component
 	 */
-	var Component = can.Component = can.Construct.extend(
+	 var Component = can.Component = can.Construct.extend(
 	/**
 	 * @static
 	 */
-	{
+	 {
 		setup: function(){
 			can.Construct.setup.apply( this, arguments );
 			
@@ -80,16 +91,16 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 		/**
 		 * @prototype
 		 */
-		setup: function(el, hookupOptions){
+		 setup: function(el, hookupOptions){
 			// Setup values passed to component
 			var initalScopeData = {},
-				component = this,
-				twoWayBindings = {},
+			component = this,
+			twoWayBindings = {},
 				// what scope property is currently updating
 				scopePropertyUpdating,
 				// the object added to the scope
 				componentScope;
-			
+				
 			// scope prototype properties marked with an "@" are added here
 			can.each(this.constructor.attributeScopeMappings,function(val, prop){
 				initalScopeData[prop] = el.getAttribute(can.hyphenate(val));
@@ -100,7 +111,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 			can.each(can.makeArray(el.attributes), function(node, index){
 				
 				var name = can.camelize(node.nodeName.toLowerCase()),
-					value = node.value;
+				value = node.value;
 				// ignore attributes already in ScopeMappings
 				if(component.constructor.attributeScopeMappings[name] || ignoreAttributesRegExp.test(name)){
 					return;
@@ -109,7 +120,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				// Cross-bind the value in the scope to this 
 				// component's scope
 				var computeData = hookupOptions.scope.computeData(value, {args: []}),
-					compute = computeData.compute;
+				compute = computeData.compute;
 				
 				// bind on this, check it's value, if it has dependencies
 				var handler = function(ev, newVal){
@@ -136,16 +147,16 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				}
 				
 			})
-			
-			
-			
-			if(this.constructor.Map){
-				componentScope = new this.constructor.Map(initalScopeData);
-			} else if(this.scope instanceof can.Map) {
-				componentScope = this.scope;
-			} else if(can.isFunction(this.scope)){
 
-				var scopeResult = this.scope(initalScopeData, hookupOptions.scope, el);
+
+
+if(this.constructor.Map){
+	componentScope = new this.constructor.Map(initalScopeData);
+} else if(this.scope instanceof can.Map) {
+	componentScope = this.scope;
+} else if(can.isFunction(this.scope)){
+
+	var scopeResult = this.scope(initalScopeData, hookupOptions.scope, el);
 				// if the function returns a can.Map, use that as the scope
 				if(scopeResult instanceof can.Map){
 					componentScope = scopeResult
@@ -184,34 +195,80 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				// setup helpers to callback with `this` as the component
 				helpers = {};
 
-			can.each(this.helpers || {}, function(val, prop){
-				if(can.isFunction(val)) {
-					helpers[prop] = function(){
-						return val.apply(componentScope, arguments)
+				can.each(this.helpers || {}, function(val, prop){
+					if(can.isFunction(val)) {
+						helpers[prop] = function(){
+							return val.apply(componentScope, arguments)
+						}
 					}
-				}
-			});
-			
+				});
+				
 			// create a control to listen to events
 			this._control = new this.constructor.Control(el, {scope: this.scope});
 			
 			// if this component has a template (that we've already converted to a renderer)
 			if( this.constructor.renderer ) {
+				var selectors = [];
 				// add content to tags
 				if(!helpers._tags){
 					helpers._tags = {};
 				}
-				
+								
 				// we need be alerted to when a <content> element is rendered so we can put the original contents of the widget in its place
 				helpers._tags.content = function(el, rendererOptions){
-					// first check if there was content within the custom tag
-					// otherwise, render what was within <content>, the default code
-					var subtemplate = hookupOptions.subtemplate || rendererOptions.subtemplate
-					if(subtemplate) {
-						var frag = can.view.frag( subtemplate(rendererOptions.scope, rendererOptions.options.add(helpers) ) );
-						can.insertBefore(el.parentNode, frag, el);
-						can.remove( can.$(el) );
+					var hookupSubtemplate, frag, $el, children, select;
+					// render hookup template
+
+					if(hookupOptions.subtemplate){
+						hookupSubtemplate = can.view.frag(
+							hookupOptions.subtemplate(rendererOptions.scope, rendererOptions.options.add(helpers)) 
+						);
 					}
+
+										
+					$el = can.$(el);
+					select = el.getAttribute('select');
+					// if there is a hookup template and a content tag has a select attribute
+					if(select && hookupSubtemplate){
+											
+						children = hookupSubtemplate.querySelectorAll(select);
+						selectors.push(select);
+						// if there selector returned any elements use it
+												
+						if(children.length){
+							frag = can.buildFragment(can.makeArray(children));
+						// if selector didn't return any elements, use original content contents
+						} else if(rendererOptions.subtemplate) {
+							frag = can.view.frag(
+										rendererOptions.subtemplate(rendererOptions.scope, rendererOptions.options.add(helpers))
+									);
+						}
+					} else {
+						if(hookupSubtemplate){
+							if(selectors.length){
+								children = hookupSubtemplate.querySelectorAll(selectors.join());
+								for(var i = 0; i < children.length; i++){
+									hookupSubtemplate.removeChild(children[i]);
+								}
+							}
+						}
+											
+						if(!emptyFrag(hookupSubtemplate) || !rendererOptions.subtemplate){
+							frag = hookupSubtemplate;
+						} else {
+							frag = can.view.frag(
+									rendererOptions.subtemplate(rendererOptions.scope, rendererOptions.options.add(helpers))
+									);
+						}
+					}
+
+					if(frag){
+						can.insertBefore(el.parentNode, frag, el);
+					} else {
+						can.insertBefore(el.parentNode, document.createComment('select:' + select), el)
+					}
+										
+					can.remove( can.$(el) );
 				}
 				// render the component's template
 				var frag = this.constructor.renderer( renderedScope, helpers);
@@ -222,26 +279,26 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 			can.appendChild(el, frag);
 		}
 	})
-	
-	if(window.$ && $.fn){
-		$.fn.scope = function(attr){
-			if( attr ) {
-				return this.data("scope").attr(attr)
-			} else {
-				return this.data("scope")
-			}
-		}
-	}
-	
-	
-	can.scope = function(el, attr){
-		var el = can.$(el);
-		if( attr ){
-			return can.data(el,"scope").attr(attr)
+
+if(window.$ && $.fn){
+	$.fn.scope = function(attr){
+		if( attr ) {
+			return this.data("scope").attr(attr)
 		} else {
-			return can.data(el, "scope")
+			return this.data("scope")
 		}
 	}
-	
-	return Component;
+}
+
+
+can.scope = function(el, attr){
+	var el = can.$(el);
+	if( attr ){
+		return can.data(el,"scope").attr(attr)
+	} else {
+		return can.data(el, "scope")
+	}
+}
+
+return Component;
 })

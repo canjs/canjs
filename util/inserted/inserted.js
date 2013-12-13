@@ -29,24 +29,28 @@ steal('can/util/can.js',function (can) {
 		}
 	}
 	
-	
-	can.appendChild = function(el, child){
-		if(child.nodeType === 11){
-			var children = can.makeArray(child.childNodes);
-		} else {
-			var children = [child]
-		}
-		el.appendChild(child);
-		can.inserted(children)
-	}
-	can.insertBefore = function(el, child, ref){
-		if(child.nodeType === 11){
-			var children = can.makeArray(child.childNodes);
-		} else {
-			var children = [child];
-		}
-		el.insertBefore(child, ref);
-		can.inserted(children)
-	}
+	can.each(["appendChild","insertBefore"], function(name, i){
+		can[name] = function(el,child,ref){
+			if(child.nodeType === 11){
+				var children = can.makeArray(child.childNodes);
+			} else {
+				var children = [child]
+			}
+			var innerHtml = el.innerHTML,
+				frag      = can.buildFragment(children);
+
+			if(innerHtml && innerHtml.indexOf('<!--select:') !== -1){
+				var childNodes = el.childNodes;
+				for(var i = 0; i < childNodes.length; i++){
+					if(childNodes[i].nodeType === 8 && childNodes[i].nodeValue.substring(0,7) === 'select:'){
+						el.insertBefore(can.buildFragment(can.makeArray(frag.querySelectorAll(childNodes[i].nodeValue.substring(7)))), childNodes[i])
+					}
+				}
+			}
+
+			el[name](frag, ref);
+			can.inserted(children);
+		};
+	});
 	
 });
