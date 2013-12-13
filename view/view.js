@@ -7,6 +7,15 @@ steal("can/util", function( can ) {
 		makeArray = can.makeArray,
 		// Used for hookup `id`s.
 		hookupId = 1,
+		makeRenderer = function(textRenderer) {
+			var renderer = function() {
+				return $view.frag(renderer.render.apply(this, arguments));
+			}
+			renderer.render = function() {
+				return textRenderer.apply(textRenderer, arguments);
+			}
+			return renderer;
+		},
 	/**
 	 * @add can.view
 	 */
@@ -30,7 +39,7 @@ steal("can/util", function( can ) {
 			deferred = can.Deferred();
 
 		if(isFunction(result))  {
-			return result;
+			return makeRenderer(result);
 		}
 
 		if(can.isDeferred(result)){
@@ -41,7 +50,7 @@ steal("can/util", function( can ) {
 			});
 			return deferred;
 		}
-		
+
 		// Convert it into a dom frag.
 		return pipe(result);
 	};
@@ -658,15 +667,7 @@ steal("can/util", function( can ) {
 			
 			$view[info.suffix] = function(id, text){
 				if(!text) {
-					// Return a nameless renderer
-					var renderer = function() {
-						return $view.frag(renderer.render.apply(this, arguments));
-					}
-					renderer.render = function() {
-						var renderer = info.renderer(null, id);
-						return renderer.apply(renderer, arguments);
-					}
-					return renderer;
+					return makeRenderer(info.renderer(null, id));
 				}
 
 				return $view.preload(id, info.renderer(id, text));

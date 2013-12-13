@@ -61,7 +61,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 					if(typeof this.prototype.template == "function"){
 						var temp = this.prototype.template
 						this.renderer = function(){
-							return can.view.frag(temp.apply(null, arguments))
+							return temp.apply(null, arguments);
 						}
 					} else {
 						this.renderer =can.view.mustache( this.prototype.template );

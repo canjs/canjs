@@ -1638,7 +1638,7 @@ test("2 way binding helpers", function(){
 test("can pass in partials",function() {
 	var hello = can.view(can.test.path('view/mustache/test/hello.mustache'));
 	var fancyName = can.view(can.test.path('view/mustache/test/fancy_name.mustache'));
-	var result = hello({
+	var result = hello.render({
 		name: "World"
 	},{
 		partials: {
@@ -1652,7 +1652,7 @@ test("can pass in partials",function() {
 
 test("can pass in helpers",function() {
 	var helpers = can.view(can.test.path('view/mustache/test/helper.mustache'));
-	var result = helpers({
+	var result = helpers.render({
 		name: "world"
 	},{
 		helpers: {
