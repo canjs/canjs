@@ -234,6 +234,9 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			var arr = can.$('option:selected', this.element)
 				.map(function(){
 					return this.value;
+				}).filter(function() {
+					//filter out the value "", as it's returned when nothing is actually selected
+					return this && this.length;
 				});
 
 			return can.makeArray(arr).join(';');
