@@ -1,4 +1,4 @@
-steal('can/util/can.js',function (can) {
+steal('can/util/can.js', 'can/util/array/each.js', function (can) {
 	// Given a list of elements, check if they are in the dom, if they 
 	// are in the dom, trigger inserted on them.
 	can.inserted = function(elems){
@@ -52,5 +52,5 @@ steal('can/util/can.js',function (can) {
 			can.inserted(children);
 		};
 	});
-	
+
 });

@@ -15,11 +15,11 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 	/**
 	 * @add can.Component
 	 */
-	 var Component = can.Component = can.Construct.extend(
+	var Component = can.Component = can.Construct.extend(
 	/**
 	 * @static
 	 */
-	 {
+	{
 		setup: function(){
 			can.Construct.setup.apply( this, arguments );
 			
@@ -91,16 +91,16 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 		/**
 		 * @prototype
 		 */
-		 setup: function(el, hookupOptions){
+		setup: function(el, hookupOptions){
 			// Setup values passed to component
 			var initalScopeData = {},
-			component = this,
-			twoWayBindings = {},
+			  component = this,
+			  twoWayBindings = {},
 				// what scope property is currently updating
 				scopePropertyUpdating,
 				// the object added to the scope
 				componentScope;
-				
+			
 			// scope prototype properties marked with an "@" are added here
 			can.each(this.constructor.attributeScopeMappings,function(val, prop){
 				initalScopeData[prop] = el.getAttribute(can.hyphenate(val));
@@ -111,7 +111,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 			can.each(can.makeArray(el.attributes), function(node, index){
 				
 				var name = can.camelize(node.nodeName.toLowerCase()),
-				value = node.value;
+				  value = node.value;
 				// ignore attributes already in ScopeMappings
 				if(component.constructor.attributeScopeMappings[name] || ignoreAttributesRegExp.test(name)){
 					return;
@@ -120,7 +120,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				// Cross-bind the value in the scope to this 
 				// component's scope
 				var computeData = hookupOptions.scope.computeData(value, {args: []}),
-				compute = computeData.compute;
+				  compute = computeData.compute;
 				
 				// bind on this, check it's value, if it has dependencies
 				var handler = function(ev, newVal){
@@ -150,13 +150,13 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 
 
 
-if(this.constructor.Map){
-	componentScope = new this.constructor.Map(initalScopeData);
-} else if(this.scope instanceof can.Map) {
-	componentScope = this.scope;
-} else if(can.isFunction(this.scope)){
+		if(this.constructor.Map){
+			componentScope = new this.constructor.Map(initalScopeData);
+		} else if(this.scope instanceof can.Map) {
+			componentScope = this.scope;
+		} else if(can.isFunction(this.scope)){
 
-	var scopeResult = this.scope(initalScopeData, hookupOptions.scope, el);
+		var scopeResult = this.scope(initalScopeData, hookupOptions.scope, el);
 				// if the function returns a can.Map, use that as the scope
 				if(scopeResult instanceof can.Map){
 					componentScope = scopeResult
@@ -195,13 +195,13 @@ if(this.constructor.Map){
 				// setup helpers to callback with `this` as the component
 				helpers = {};
 
-				can.each(this.helpers || {}, function(val, prop){
-					if(can.isFunction(val)) {
-						helpers[prop] = function(){
-							return val.apply(componentScope, arguments)
-						}
+			can.each(this.helpers || {}, function(val, prop){
+				if(can.isFunction(val)) {
+					helpers[prop] = function(){
+						return val.apply(componentScope, arguments)
 					}
-				});
+				}
+			});
 				
 			// create a control to listen to events
 			this._control = new this.constructor.Control(el, {scope: this.scope});
@@ -280,25 +280,25 @@ if(this.constructor.Map){
 		}
 	})
 
-if(window.$ && $.fn){
-	$.fn.scope = function(attr){
-		if( attr ) {
-			return this.data("scope").attr(attr)
-		} else {
-			return this.data("scope")
+	if(window.$ && $.fn){
+		$.fn.scope = function(attr){
+			if( attr ) {
+				return this.data("scope").attr(attr)
+			} else {
+				return this.data("scope")
+			}
 		}
 	}
-}
 
 
-can.scope = function(el, attr){
-	var el = can.$(el);
-	if( attr ){
-		return can.data(el,"scope").attr(attr)
-	} else {
-		return can.data(el, "scope")
+	can.scope = function(el, attr){
+		var el = can.$(el);
+		if( attr ){
+			return can.data(el,"scope").attr(attr)
+		} else {
+			return can.data(el, "scope")
+		}
 	}
-}
 
-return Component;
-})
+	return Component;
+});

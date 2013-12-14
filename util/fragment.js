@@ -49,12 +49,10 @@ steal('can/util/can.js',function(can){
 		}
 	
 	can.buildFragment = function(html, nodes){
-		
 		var parts = can.isArray(html) ? html : fragment(html),
 			frag = document.createDocumentFragment();
-			//console.log(parts)
+
 		can.each(parts, function(part){
-			
 			frag.appendChild(part);
 		})
 		return frag;
