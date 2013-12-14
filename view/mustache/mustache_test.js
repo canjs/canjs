@@ -2585,4 +2585,13 @@ test('html comments must not break mustache scanner', function(){
 	});	
 })
 
+test("{{each}} does not error with undefined list (#602)", function() {
+	var renderer = can.view.mustache('<div>{{#each data}}{{name}}{{/each}}</div>');
+
+	equal(renderer.render({}), '<div></div>', 'Empty text rendered');
+	equal(renderer.render({ data: false }), '<div></div>', 'Empty text rendered');
+	equal(renderer.render({ data: null }), '<div></div>', 'Empty text rendered');
+	equal(renderer.render({ data: [ { name: 'David' }] }), '<div>David</div>', 'Expected name rendered');
+});
+
 })();

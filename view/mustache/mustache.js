@@ -1890,6 +1890,10 @@ function( can ){
 		 *     </ul>
 		 */
 		'each': function(expr, options) {
+			if(!expr) {
+				return;
+			}
+
 			if(expr.isComputed || isObserveLike(expr) && typeof expr.attr('length') !== 'undefined'){
 				return can.view.lists && can.view.lists(expr, function(item, key) {
 					// Create a compute that listens to whenever the index of the item in our list changes.
