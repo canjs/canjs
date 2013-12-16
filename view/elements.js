@@ -118,6 +118,20 @@ steal(function(){
 				return '';
 			}
 			return "" + text;
+		},
+		after: function(oldElements, newFrag){
+			var last = oldElements[oldElements.length - 1];
+					
+			// Insert it in the `document` or `documentFragment`
+			if( last.nextSibling ){
+				can.insertBefore(last.parentNode, newFrag, last.nextSibling)
+			} else {
+				can.appendChild(last.parentNode, newFrag);
+			}
+		},
+		replace: function(oldElements,newFrag){
+			elements.after(oldElements,newFrag);
+			can.remove( can.$(oldElements) );
 		}
 	};
 	

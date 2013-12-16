@@ -1,4 +1,4 @@
-steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
+steal('can/util', 'can/view/elements.js','can/view','can/view/live/node_lists',
 	function(can, elements,view,nodeLists){
 	// ## live.js
 	// 
@@ -77,6 +77,11 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 		 * @param {Object} parentNode
 		 */
 		list: function(el, compute, func, context, parentNode){
+			
+			// A nodeList of all elements this live-list manages.
+			// This is here so that if this live list is within another section
+			// that section is able to remove the items in this list.
+			var masterNodeList = [el];
 			// A mapping of the index to an array
 			// of elements that represent the item.
 			// Each array is registered so child or parent
@@ -84,27 +89,28 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 			var nodesMap = [],
 				// called when an item is added
 				add = function(ev, items, index){
-					// check that the placeholder textNode still has a parent.
-					// it's possible someone removed the contents of
-					// this element without removing the parent
-					if(data.teardownCheck(text.parentNode)){
-						return
-					}
-					
+
 					// Collect new html and mappings
 					var frag = document.createDocumentFragment(),
 						newMappings = [];
 					can.each(items, function(item, key){
+						
 						var itemHTML = func.call(context, item, (key + index)),
-							itemFrag = can.view.frag(itemHTML, parentNode);
+							itemFrag = can.view.fragment(itemHTML);
 
-						newMappings.push(can.makeArray(itemFrag.childNodes));
-						frag.appendChild(itemFrag);
+						
+
+						newMappings.push( 
+							// create a nodeList for the element of this list whose parent is the masternodeList
+							nodeLists.register( can.makeArray(itemFrag.childNodes), undefined, masterNodeList ) 
+						);
+						
+						frag.appendChild( can.view.hookup(itemFrag)  );
 					})
 
 					// Inserting at the end of the list
 					if(!nodesMap[index]){
-						insertElementsAfter(
+						elements.after(
 							index == 0 ?
 								[text] :
 								nodesMap[index-1], frag)
@@ -112,10 +118,6 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 						var el = nodesMap[index][0];
 						can.insertBefore(el.parentNode, frag, el);
 					}
-					// register each item
-					can.each(newMappings,function(nodeList){
-						nodeLists.register(nodeList)
-					});
 					[].splice.apply(nodesMap, [index, 0].concat(newMappings));
 				},
 				// Remove can be called during teardown or when items are 
@@ -163,8 +165,10 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 				list.bind && list.bind("add", add).bind("remove", remove);
 				add({}, list, 0);
 			}
-			insertElementsAfter([el],text);
-			can.remove( can.$(el) );
+			
+			
+
+			
 
 			// Setup binding and teardown to add and remove events
 			var data = setup(parentNode, function(){
@@ -172,16 +176,23 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 			},function(){
 				can.isFunction(compute) && compute.unbind("change",updateList)
 				teardownList()
-			})
-
+			});
+			
+			// register to set masterNodeList as a child of any parent
+			nodeLists.register(masterNodeList, data.teardownCheck)
+			// replace it with a text node to keep the position
+			elements.replace(masterNodeList,text);
+			nodeLists.replace(masterNodeList, [text])
+			
+			// run the list setup
 			updateList({},can.isFunction(compute) ? compute() : compute)
 			
 
 		},
 		html: function(el, compute, parentNode){
 			var parentNode = elements.getParentNode(el, parentNode),
-
 				data = listen(parentNode, compute, function(ev, newVal, oldVal){
+					// TODO: remove teardownCheck in 2.1
 					var attached = nodes[0].parentNode;
 					// update the nodes in the DOM with the new rendered value
 					if( attached ) {
@@ -190,34 +201,20 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 					data.teardownCheck(nodes[0].parentNode);
 				});
 
-			var nodes,
+			var nodes = [el],
 				makeAndPut = function(val){
-					// create the fragment, but don't hook it up
-					// we need to insert it into the document first
-					var frag = can.view.frag(val, parentNode),
-						// keep a reference to each node
-						newNodes = can.makeArray(frag.childNodes);
-					// Insert it in the `document` or `documentFragment`
-					insertElementsAfter(nodes || [el], frag)
-					// nodes hasn't been set yet
-					if( !nodes ) {
-						can.remove( can.$(el) );
-						nodes = newNodes;
-						// set the teardown nodeList
-						data.nodeList = nodes;
-						nodeLists.register(nodes);
-					} else {
-						// Update node Array's to point to new nodes
-						// and then remove the old nodes.
-						// It has to be in this order for Mootools
-						// and IE because somehow, after an element
-						// is removed from the DOM, it loses its
-						// expando values.
-						var nodesToRemove = can.makeArray(nodes);
-						nodeLists.replace(nodes,newNodes);
-						can.remove( can.$(nodesToRemove) );
-					}
+					var frag = can.view.fragment( val, parentNode ),
+						oldNodes = can.makeArray(nodes);
+					
+					// We need to mark each node as belonging to the node list.
+					nodeLists.replace( nodes, frag.childNodes )
+					
+					frag = can.view.hookup( frag, parentNode )
+					
+					elements.replace(oldNodes, frag)
 				};
+				// register the span so nodeLists knows the parentNodeList
+				nodeLists.register(nodes, data.teardownCheck)
 				makeAndPut(compute(), [el]);
 
 		},
@@ -230,19 +227,21 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 				if ( typeof node.nodeValue != 'unknown' ) {
 					node.nodeValue = ""+newVal;
 				}
+				// TODO: remove in 2.1
 				data.teardownCheck(node.parentNode);
 			});
 
-			var node = document.createTextNode(compute());
+			var node = document.createTextNode(compute()),
+				nodeList = [el];
 
 			if ( el.parentNode !== parent ) {
 				parent = el.parentNode;
-				parent.insertBefore(node, el);
-				parent.removeChild(el);
-			} else {
-				parent.insertBefore(node, el);
-				parent.removeChild(el);
-			}
+			} 
+			nodeLists.register(nodeList, data.teardownCheck);
+			parent.insertBefore(node, el);
+			parent.removeChild(el);
+			
+			nodeLists.replace(nodeList, [node])
 		},
 		attributes: function(el, compute, currentValue){
 			var setAttrs = function(newVal){
