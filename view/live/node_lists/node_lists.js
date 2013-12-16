@@ -83,10 +83,9 @@ steal('can/util',"can/view/elements.js",function(can){
 			
 			// indicate the new nodes belong to this list
 			can.each(newNodes, function(node){
-				console.log("replace",id(node))
 				nodeMap[id(node)] = oldNodeList;
 			});
-			
+
 			
 			var oldListLength = oldNodeList.length,
 				firstNode = oldNodeList[0];
@@ -136,7 +135,6 @@ steal('can/util',"can/view/elements.js",function(can){
 					throw "does not work"
 				}
 				var nodeId = id(nodeList[0]);
-				console.log(nodeId)
 				parent =  nodeMap[nodeId];
 				
 			}

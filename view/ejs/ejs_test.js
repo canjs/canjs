@@ -1057,7 +1057,7 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 
 	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
 
-	/*ok(div.getElementsByTagName('label')[0], "label exists")
+	ok(div.getElementsByTagName('label')[0], "label exists")
 
 	items[0].attr("html","<p>hi</p>");
 
@@ -1068,7 +1068,7 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 		html: "<p>hola</p>"
 	});
 
-	equal(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")*/
+	equal(div.getElementsByTagName('p').length, 2, "label has 2 paragraphs")
 
 	can.remove( can.$(div.firstChild) )
 

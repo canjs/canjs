@@ -217,7 +217,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/live/node_lists',
 			data.nodeList = nodes;
 			// register the span so nodeLists knows the parentNodeList
 			nodeLists.register(nodes, data.teardownCheck)
-			makeAndPut(compute(), [el]);
+			makeAndPut(compute());
 
 		},
 		replace: function(el, val){
