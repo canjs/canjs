@@ -1901,7 +1901,7 @@ function( can ){
 						var exprResolved = Mustache.resolve(expr),
 							fromIndex    = key < (exprResolved).attr('length') ? key : undefined,
 							index 		 = (exprResolved).indexOf(item, fromIndex);
-						steal.dev.log(item,index);
+						console.log(item,index);
 						return index === -1 ? 0 : index;
 					};
 					return options.fn( options.scope.add({"@index": index}).add(item) );
