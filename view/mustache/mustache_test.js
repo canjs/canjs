@@ -2669,5 +2669,21 @@ test("directly nested live sections unbind without needing the element to be rem
 	stop()
 })
 
+test("direct live section", function(){
+	var template = can.view.mustache("{{#if visible}}<label/>{{/if}}");
+	
+	var data = new can.Map({
+		visible: true
+	})
+	
+	var div = document.createElement("div");
+	div.appendChild( template(data));
+	
+	equal(div.getElementsByTagName("label").length, 1, "there are 1 items")
+	
+	data.attr("visible", false)
+	equal(div.getElementsByTagName("label").length, 0, "there are 0 items")
+	
+})
 
 })();

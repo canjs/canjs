@@ -200,10 +200,10 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/live/node_lists',
 					}
 					data.teardownCheck(nodes[0].parentNode);
 				});
-
+			
 			var nodes = [el],
 				makeAndPut = function(val){
-					var frag = can.view.fragment( val, parentNode ),
+					var frag = can.view.fragment( val ),
 						oldNodes = can.makeArray(nodes);
 					
 					// We need to mark each node as belonging to the node list.
@@ -213,10 +213,23 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/live/node_lists',
 					
 					elements.replace(oldNodes, frag)
 				};
-				// register the span so nodeLists knows the parentNodeList
-				nodeLists.register(nodes, data.teardownCheck)
-				makeAndPut(compute(), [el]);
+			
+			data.nodeList = nodes;
+			// register the span so nodeLists knows the parentNodeList
+			nodeLists.register(nodes, data.teardownCheck)
+			makeAndPut(compute(), [el]);
 
+		},
+		replace: function(el, val){
+			var nodes = [el]
+			nodeLists.register(nodes);
+			var frag = can.view.fragment( val ),
+				oldNodes = [el]
+					
+			// We need to mark each node as belonging to the node list.
+			nodeLists.replace( nodes, frag.childNodes )
+			frag = can.view.hookup( frag, el.parentNode );
+			elements.replace(oldNodes, frag);
 		},
 		text: function(el, compute, parentNode){
 			var parent = elements.getParentNode(el, parentNode);

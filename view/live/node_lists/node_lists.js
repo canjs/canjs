@@ -74,12 +74,16 @@ steal('can/util',"can/view/elements.js",function(can){
 			})
 			oldNodeList.childNodeLists = [];
 			
-			
+			// remove old node pointers to this list
+			can.each(oldNodeList, function(node){
+				delete nodeMap[id(node)];
+			});
 			
 			var newNodes = can.makeArray(newNodes);
 			
 			// indicate the new nodes belong to this list
 			can.each(newNodes, function(node){
+				console.log("replace",id(node))
 				nodeMap[id(node)] = oldNodeList;
 			});
 			
@@ -132,6 +136,7 @@ steal('can/util',"can/view/elements.js",function(can){
 					throw "does not work"
 				}
 				var nodeId = id(nodeList[0]);
+				console.log(nodeId)
 				parent =  nodeMap[nodeId];
 				
 			}
@@ -141,17 +146,20 @@ steal('can/util',"can/view/elements.js",function(can){
 		},
 		// removes node in all parent nodes and unregisters all childNodes
 		unregister: function(nodeList){
-			
-			// unregister all childNodeLists
-			delete nodeList.parentNodeList;
-			can.each(nodeList, function(node){
-				var nodeId = id(node);
-				delete nodeMap[nodeId]
-			});
-			nodeList.unregistered && nodeList.unregistered();
-			can.each( nodeList.childNodeLists, function(nodeList){
-				nodeLists.unregister(nodeList)
-			})
+			if(!nodeList.isUnregistered) {
+				nodeList.isUnregistered = true;
+				// unregister all childNodeLists
+				delete nodeList.parentNodeList;
+				can.each(nodeList, function(node){
+					var nodeId = id(node);
+					delete nodeMap[nodeId]
+				});
+				// this can unbind which will call itself
+				nodeList.unregistered && nodeList.unregistered();
+				can.each( nodeList.childNodeLists, function(nodeList){
+					nodeLists.unregister(nodeList)
+				});
+			}
 		},
 		nodeMap: nodeMap,
 	}

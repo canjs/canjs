@@ -206,11 +206,10 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				helpers._tags.content = function(el, rendererOptions){
 					// first check if there was content within the custom tag
 					// otherwise, render what was within <content>, the default code
-					var subtemplate = hookupOptions.subtemplate || rendererOptions.subtemplate
-					if(subtemplate) {
-						var frag = can.view.frag( subtemplate(rendererOptions.scope, rendererOptions.options.add(helpers) ) );
-						can.insertBefore(el.parentNode, frag, el);
-						can.remove( can.$(el) );
+					var subtemplate = hookupOptions.subtemplate || rendererOptions.subtemplate;
+					
+					if(subtemplate) {						
+						can.view.live.replace( el, subtemplate(rendererOptions.scope, rendererOptions.options.add(helpers) )  );
 					}
 				}
 				// render the component's template
