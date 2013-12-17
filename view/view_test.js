@@ -277,7 +277,7 @@
 		div.appendChild(frag);
 		can.append( can.$("#qunit-test-area"), div)
 		equal(div.outerHTML.match(/__!!__/g), null, 'No __!!__ contained in HTML content')
-		can.view.live.nodeLists.unregister(domainList);
+		can.view.nodeLists.unregister(domainList);
 
 		//equal(can.$('#test-dropdown')[0].outerHTML, can.$('#test-dropdown2')[0].outerHTML, 'Live bound select and non-live bound select the same');
 

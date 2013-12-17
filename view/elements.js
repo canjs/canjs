@@ -1,10 +1,11 @@
 
 steal(function(){
 	/**
-	 * @typedef {{}} can/view/elements.js
+	 * @property {Object} can.view.elements
+	 * @parent can.view
 	 * 
 	 * Provides helper methods for and information about the behavior
-	 * of DOM elements.
+	 * of DOM elements.  
 	 */
 	var elements = {
 		tagToContentPropMap: {
@@ -12,17 +13,24 @@ steal(function(){
 			textarea: "value"
 		},
 		/**
-		 * @property {Object.<String,(String|Boolean)>} attrMap a mapping of
+		 * @property {Object.<String,(String|Boolean|function)>} can.view.elements.attrMap 
+		 * @parent can.view.elements
+		 * 
+		 * 
+		 * A mapping of
 		 * special attributes to their JS property. For example:
 		 * 
 		 *     "class" : "className"
 		 * 
-		 * means call element.className. And: 
+		 * means get or set `element.className`. And: 
 		 * 
 		 *      "checked" : true
 		 * 
-		 * means call `element.checked = true`
+		 * means set `element.checked = true`.
 		 *     
+		 * 
+		 * If the attribute name is not found, it's assumed to use
+		 * `element.getAttribute` and `element.setAttribute`.
 		 */
 		attrMap: {
 			"class" : "className",
@@ -46,6 +54,15 @@ steal(function(){
 		// elements whos default value we should set
 		defaultValue : ["input","textarea"],
 		// a map of parent element to child elements
+		/**
+		 * @property {Object.<String,String>} can.view.elements.tagMap 
+		 * @parent can.view.elements
+		 * 
+		 * A mapping of parent node names to child node names that can be inserted within
+		 * the parent node name.  For example: `table: "tbody"` means that
+		 * if you want a placeholder element within a `table`, a `tbody` will be
+		 * created.
+		 */
 		tagMap : {
 			"": "span", 
 			table: "tbody", 
@@ -66,11 +83,11 @@ steal(function(){
 			th:"tr",
 			li: "ul"
 		},
-		
+		// Used to determine the parentNode if el is directly within a documentFragment
 		getParentNode: function(el, defaultParentNode){
 			return defaultParentNode && el.parentNode.nodeType === 11 ? defaultParentNode : el.parentNode;
 		},
-		// set an attribute on an element
+		// Set an attribute on an element
 		setAttr: function (el, attrName, val) {
 			var tagName = el.nodeName.toString().toLowerCase(),
 				prop = elements.attrMap[attrName];
@@ -89,14 +106,14 @@ steal(function(){
 				el.setAttribute(attrName, val);
 			}
 		},
-		// gets the value of an attribute
+		// Gets the value of an attribute.
 		getAttr: function(el, attrName){
 			// Default to a blank string for IE7/8
 			return (elements.attrMap[attrName] && el[elements.attrMap[attrName]] ?
 				el[elements.attrMap[attrName]]:
 				el.getAttribute(attrName)) || '';
 		},
-		// removes the attribute
+		// Removes the attribute.
 		removeAttr: function(el, attrName){
 			var setter = elements.attrMap[attrName];
 			if(typeof prop === "function"){
@@ -109,6 +126,7 @@ steal(function(){
 				el.removeAttribute(attrName);
 			}
 		},
+		// Gets a "pretty" value for something
 		contentText: function(text){
 			if ( typeof text == 'string' ) {
 				return text;
@@ -119,6 +137,15 @@ steal(function(){
 			}
 			return "" + text;
 		},
+		/**
+		 * @function can.view.elements.after 
+		 * @parent can.view.elements
+		 * 
+		 * Inserts newFrag after oldElements.
+		 * 
+		 * @param {Array.<HTMLElement>} oldElements
+		 * @param {DocumentFragment} newFrag
+		 */
 		after: function(oldElements, newFrag){
 			var last = oldElements[oldElements.length - 1];
 					
@@ -129,12 +156,21 @@ steal(function(){
 				can.appendChild(last.parentNode, newFrag);
 			}
 		},
+		/**
+		 * @function can.view.elements.replace 
+		 * @parent can.view.elements
+		 * 
+		 * Replaces `oldElements` with `newFrag`
+		 * 
+		 * @param {Array.<HTMLElement>} oldElements
+		 * @param {DocumentFragment} newFrag
+		 */
 		replace: function(oldElements,newFrag){
 			elements.after(oldElements,newFrag);
 			can.remove( can.$(oldElements) );
 		}
 	};
-	
+	// TODO: this doesn't seem to be doing anything
 	// feature detect if setAttribute works with styles
 	(function(){
 		// feature detect if 

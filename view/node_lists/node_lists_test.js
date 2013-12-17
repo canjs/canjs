@@ -32,7 +32,7 @@ steal("can/view/live/node_lists","can/view/elements.js",function(nodeLists, elem
 		
 		
 		
-		nodeLists.replace( everything, div.childNodes );
+		nodeLists.update( everything, div.childNodes );
 		
 		
 		
@@ -51,11 +51,11 @@ steal("can/view/live/node_lists","can/view/elements.js",function(nodeLists, elem
 		];
 		
 		elements.replace(toBeLabels,toFrag( labels ));
-		nodeLists.replace(toBeLabels,labels);
+		nodeLists.update(toBeLabels,labels);
 		
 		div.innerHTML = "<form></form>"
 		
-		nodeLists.replace(everything, can.makeArray( div.childNodes ))
+		nodeLists.update(everything, can.makeArray( div.childNodes ))
 		
 	})
 	

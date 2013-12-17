@@ -209,7 +209,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 					var subtemplate = hookupOptions.subtemplate || rendererOptions.subtemplate;
 					
 					if(subtemplate) {						
-						can.view.live.replace( el, subtemplate(rendererOptions.scope, rendererOptions.options.add(helpers) )  );
+						can.view.live.replace( [el], subtemplate(rendererOptions.scope, rendererOptions.options.add(helpers) )  );
 					}
 				}
 				// render the component's template
