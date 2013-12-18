@@ -2336,7 +2336,7 @@ test("can.Mustache.safeString", function() {
 });
 
 test("changing the list works with each", function(){
-	var template = can.view.mustache("<ul>{{#each list}}<li>{{name}}</li>{{/each}}</ul>");
+	var template = can.view.mustache("<ul>{{#each list}}<li>.</li>{{/each}}</ul>");
 	
 	var map = new can.Map({
 		list: ["foo"]
@@ -2684,6 +2684,34 @@ test("direct live section", function(){
 	data.attr("visible", false)
 	equal(div.getElementsByTagName("label").length, 0, "there are 0 items")
 	
-})
+});
+
+test('Rendering keys of an object with #each and @key in a Component', function() {
+	
+	var template = can.view.mustache("<ul>"+
+        "{{#each data}}"+
+        "<li>{{@key}} : {{.}}</li>"+
+        "{{/data}}"+
+    "</ul>")
+	
+	var map = new can.Map({
+		data: {
+		    some: 'test',
+		    things: false,
+		    other: 'things'
+		}
+	})
+	
+	var frag = template(map);
+	
+	var lis = frag.childNodes[0].getElementsByTagName("li");
+	equal(lis.length, 3, "there are 3 properties of map's data property")
+	
+	equal("some : test", lis[0].innerHTML)
+	
+	
+});
+
+
 
 })();
