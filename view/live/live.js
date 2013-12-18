@@ -17,12 +17,21 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 	// 
 	// Calls bind right away, but will call unbind
 	// if the element is "destroyed" (removed from the DOM).
+	var setupCount = 0;
 	var setup = function(el, bind, unbind){
-		var teardown = function(){
-			unbind(data)
-			can.unbind.call(el,'removed', teardown);
-			return true
-		},
+		// Removing an element can call teardown which
+		// unregister the nodeList which calls teardown
+		var tornDown = false,
+			teardown = function(){
+				if(!tornDown) {
+					tornDown = true;
+					unbind(data)
+					can.unbind.call(el,'removed', teardown);
+					
+				}
+				
+				return true
+			},
 			data = {
 				// returns true if no parent
 				teardownCheck: function(parent){
