@@ -778,9 +778,9 @@ test("defined view models (#563)", function(){
 });
 
 test("scope not rebound correctly (#550)", function(){
-	
+
 	var nameChanges = 0;
-	
+
 	can.Component.extend({
 		tag: "scope-rebinder",
 		events: {
@@ -789,15 +789,15 @@ test("scope not rebound correctly (#550)", function(){
 			}
 		}
 	});
-	
+
 	var template = can.view.mustache("<scope-rebinder></scope-rebinder>");
-	
+
 	var frag = template();
 	var scope = can.scope( can.$(frag.childNodes[0]) );
-	
+
 	var n1 = can.compute(),
 		n2 = can.compute()
-	
+
 	scope.attr("name", n1 );
 	n1("updated");
 	scope.attr("name", n2);
@@ -805,5 +805,46 @@ test("scope not rebound correctly (#550)", function(){
 	equal(nameChanges, 2)
 })
 
-	
+test("inserted event fires twice if component inside live binding block", function(){
+
+    var inited = 0,
+        inserted = 0;
+
+    can.Component({
+        tag: 'child-tag',
+
+        scope: {
+            init: function(){
+                inited++
+            }
+        },
+        events: {
+            'inserted': function() {
+                inserted++
+            }
+        }
+    });
+
+    can.Component({
+        tag: 'parent-tag',
+
+        template: '{{#shown}}<child-tag></child-tag>{{/shown}}',
+
+        scope: {
+            shown: false
+        },
+        events: {
+            'inserted': function() {
+                this.scope.attr('shown', true)
+            }
+        }
+    });
+
+    $('body').append(can.view.mustache("<parent-tag></parent-tag>")({}));
+
+
+    equal(inited, 1)
+    equal(inserted, 1)
+})
+
 })()
