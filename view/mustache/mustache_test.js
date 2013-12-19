@@ -2720,4 +2720,20 @@ test("{{each}} does not error with undefined list (#602)", function() {
 	equal(renderer.render({ data: [ { name: 'David' }] }), '<div>David</div>', 'Expected name rendered');
 });
 
+test('{{#each}} helper works reliably with nested sections (#604)', function() {
+	var renderer = can.view.mustache('{{#if first}}<ul>{{#each list}}<li>{{name}}</li>{{/each}}</ul>' +
+		'{{else}}<ul>{{#each list2}}<li>{{name}}</li>{{/each}}</ul>{{/if}}');
+	var data = new can.Map({
+		first: true,
+		list: [ { name: "Something" }, { name: "Else" } ],
+		list2: [ { name: "Foo" }, { name: "Bar" } ]
+	});
+	var div = document.createElement('div');
+
+	div.appendChild(renderer(data));
+	equal(div.innerHTML, '<ul><li>Something</li><li>Else</li></ul>', 'Expected HTML with first set');
+	data.attr('first', false);
+	equal(div.innerHTML, '<ul><li>Foo</li><li>Bar</li></ul>', 'Expected HTML with first false set');
+});
+
 })();
