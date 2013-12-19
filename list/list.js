@@ -79,11 +79,18 @@ steal("can/util","can/map", function(can, Map){
 			this.length = 0;
 			can.cid(this, ".map")
 			this._init = 1;
+			instances = instances || [];
+			
+			
 			if( can.isDeferred(instances) ) {
 				this.replace(instances)
 			} else {
+				var teardownMapping = instances.length && can.Map.helpers.addToMap(instances, this);
 				this.push.apply(this, can.makeArray(instances || []));
 			}
+			
+			teardownMapping && teardownMapping();
+			
 			// this change needs to be ignored
 			this.bind('change',can.proxy(this._changes,this));
 			can.simpleExtend(this, options);
