@@ -840,7 +840,8 @@ test("inserted event fires twice if component inside live binding block", functi
         }
     });
 
-    $('body').append(can.view.mustache("<parent-tag></parent-tag>")({}));
+	var frag = can.view.mustache("<parent-tag></parent-tag>")({})
+    $('body').append( frag );
 
 
     equal(inited, 1)
