@@ -191,6 +191,7 @@ can.extend(can.view, {
 		}
 		
 		if(listData){
+			unbind && unbind();
 			return "<" +tag+can.view.hook(function(el, parentNode){
 				live.list(el, listData.list, listData.renderer, self, parentNode);
 			})+"></" +tag+">";

@@ -1189,12 +1189,15 @@ test("nested live bindings", function(){
 	]);
 
 	var div = document.createElement('div');
-	div.appendChild(can.view(can.test.path("view/mustache/test/nested_live_bindings.mustache"), { items: items }));
+	
+	var template = can.view.mustache('<form>{{#items}}{{^is_done}}<div id="{{title}}"></div>{{/is_done}}{{/items}}</form>')
+	
+	div.appendChild(template({ items: items }));
+	
 
 	items.push({title: 1, is_done: false, id: 1});
 	// this will throw an error unless Mustache protects against
 	// nested objects
-
 	items[0].attr('is_done',true);
 });
 
@@ -1494,28 +1497,43 @@ test("Interpolated values when iterating through an Observe.List should still re
 	var renderer = can.view.mustache('{{ #todos }}{{ name }}{{ /todos }}'),
 		renderer2 = can.view.mustache('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),
 		todos = [ {id: 1, name: 'Dishes'}, {id: 2, name: 'Forks'} ],
-		data = {
+		liveData = {
 			todos: new can.List(todos)
 		},
-		arr = {
+		plainData = {
 			todos: todos
 		},
 		div = document.createElement('div');
 
-	div.appendChild(renderer2(arr));
+	div.appendChild(renderer2(plainData));
+
 	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'Array item rendered with DOM container');
 	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'Array item rendered with DOM container');
+	
+	
+	
+	
 	div.innerHTML = '';
-	div.appendChild(renderer2(data));
+	div.appendChild(renderer2(liveData));
+	
+	
 	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'List item rendered with DOM container');
 	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'List item rendered with DOM container');
+	
 	div.innerHTML = '';
-	div.appendChild(renderer(arr));
+	
+	
+	div.appendChild(renderer(plainData));
 	equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
+	
+	
 	div.innerHTML = '';
-	div.appendChild(renderer(data));
+	
+	
+	div.appendChild(renderer(liveData));
 	equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
-	data.todos.push({ id: 3, name: 'Knives' });
+	
+	liveData.todos.push({ id: 3, name: 'Knives' });
 	equal(div.innerHTML, "DishesForksKnives", 'New list item rendered without DOM container');
 });
 
@@ -2318,7 +2336,7 @@ test("can.Mustache.safeString", function() {
 });
 
 test("changing the list works with each", function(){
-	var template = can.view.mustache("<ul>{{#each list}}<li>{{name}}</li>{{/each}}</ul>");
+	var template = can.view.mustache("<ul>{{#each list}}<li>.</li>{{/each}}</ul>");
 	
 	var map = new can.Map({
 		list: ["foo"]
@@ -2584,5 +2602,116 @@ test('html comments must not break mustache scanner', function(){
 		equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
 	});	
 })
+
+
+test("directly nested subitems and each (#605)", function(){
+	
+	var template = can.view.mustache("<div>" +
+				
+				"{{#item}}" +
+					"<p>This is the item:</p>" +
+					"{{#each subitems}}" +
+						"<label>" + "item" + "</label>" +
+					"{{/each}}" +
+				"{{/item}}" +
+			"</div>")
+	
+	var data = new can.Map({
+		item: {
+			subitems: ['first']
+		}
+	})
+	
+	
+	var frag = template(data),
+		div = frag.childNodes[0],
+		labels = div.getElementsByTagName("label");
+	
+	equal(labels.length, 1, "initially one label");
+	
+	data.attr('item.subitems').push('second');
+	
+	equal(labels.length, 2, "after pushing two label");
+	
+	data.removeAttr('item');
+	
+	equal(labels.length, 0, "after removing item no label");
+	
+});
+
+test("directly nested live sections unbind without needing the element to be removed", function(){
+	var template = can.view.mustache(
+			"<div>" +
+				"{{#items}}" +
+				    "<p>first</p>"+
+					"{{#visible}}<label>foo</label>{{/visible}}" +
+					"<p>second</p>"+
+				"{{/items}}" +
+			"</div>");
+			
+	var data = new can.Map({
+		items: [
+			{visible: true}
+		]
+	});
+	
+	data.attr("items.0").unbind = function(eventType){
+		can.Map.prototype.unbind.apply(this, arguments);
+		if( eventType === "visible" ){
+			start();
+			ok(true, "unbound visible")
+		}
+	}
+	var frag = template(data);
+	
+	data.attr("items",[{visible: true}]);
+
+	stop()
+})
+
+test("direct live section", function(){
+	var template = can.view.mustache("{{#if visible}}<label/>{{/if}}");
+	
+	var data = new can.Map({
+		visible: true
+	})
+	
+	var div = document.createElement("div");
+	div.appendChild( template(data));
+	
+	equal(div.getElementsByTagName("label").length, 1, "there are 1 items")
+	
+	data.attr("visible", false)
+	equal(div.getElementsByTagName("label").length, 0, "there are 0 items")
+	
+});
+
+test('Rendering keys of an object with #each and @key in a Component', function() {
+	
+	var template = can.view.mustache("<ul>"+
+        "{{#each data}}"+
+        "<li>{{@key}} : {{.}}</li>"+
+        "{{/data}}"+
+    "</ul>")
+	
+	var map = new can.Map({
+		data: {
+		    some: 'test',
+		    things: false,
+		    other: 'things'
+		}
+	})
+	
+	var frag = template(map);
+	
+	var lis = frag.childNodes[0].getElementsByTagName("li");
+	equal(lis.length, 3, "there are 3 properties of map's data property")
+	
+	equal("some : test", lis[0].innerHTML)
+	
+	
+});
+
+
 
 })();

@@ -1890,7 +1890,16 @@ function( can ){
 		 *     </ul>
 		 */
 		'each': function(expr, options) {
-			if(expr.isComputed || isObserveLike(expr) && typeof expr.attr('length') !== 'undefined'){
+			// Check if this is a list or a compute that resolves to a list, and setup
+			// the incremental live-binding 
+			
+			
+			// First, see what we are dealing with.  It's ok to read the compute
+			// because can.view.text is only temporarily binding to what is going on here.
+			// Calling can.view.lists prevents anything from listening on that compute.
+			var resolved = Mustache.resolve(expr);
+			
+			if(resolved instanceof can.List){
 				return can.view.lists && can.view.lists(expr, function(item, key) {
 					// Create a compute that listens to whenever the index of the item in our list changes.
 					var index = function() {
@@ -1902,7 +1911,7 @@ function( can ){
 					return options.fn( options.scope.add({"@index": index}).add(item) );
 				});
 			}
-			expr = Mustache.resolve(expr);
+			expr = resolved;
 			
 			if (!!expr && isArrayLike(expr)) {
 				var result = [];
