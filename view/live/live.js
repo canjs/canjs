@@ -63,7 +63,8 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 			} else {
 				can.appendChild(last.parentNode, newFrag);
 			}
-		};
+		},
+			splice = [].splice;
 
 
 	var live = {
@@ -82,6 +83,8 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 			// Each array is registered so child or parent
 			// live structures can update the elements
 			var nodesMap = [],
+				// A mapping of items to their indicies'
+				indexMap = [],
 				// called when an item is added
 				add = function(ev, items, index){
 					// check that the placeholder textNode still has a parent.
@@ -93,13 +96,17 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 					
 					// Collect new html and mappings
 					var frag = document.createDocumentFragment(),
-						newMappings = [];
+						newMappings = [],
+						newIndicies = [];
 					can.each(items, function(item, key){
-						var itemHTML = func.call(context, item, (key + index)),
+						
+						var itemIndex = can.compute(key + index),
+							itemHTML = func.call(context, item, itemIndex),
 							itemFrag = can.view.frag(itemHTML, parentNode);
 
 						newMappings.push(can.makeArray(itemFrag.childNodes));
 						frag.appendChild(itemFrag);
+						newIndicies.push(itemIndex)
 					})
 
 					// Inserting at the end of the list
@@ -116,7 +123,16 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 					can.each(newMappings,function(nodeList){
 						nodeLists.register(nodeList)
 					});
-					[].splice.apply(nodesMap, [index, 0].concat(newMappings));
+					
+					
+					splice.apply(nodesMap, [index, 0].concat(newMappings));
+					
+					// update indecies after insert point
+					splice.apply(indexMap, [index, 0].concat(newIndicies));
+					for(var i = index+newIndicies.length, len = indexMap.length; i < len; i++){
+						indexMap[i](i)
+					}
+					
 				},
 				// Remove can be called during teardown or when items are 
 				// removed from the element.
@@ -141,6 +157,12 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 						nodeLists.unregister(nodeList);
 
 					});
+					// update indecies after remove point
+					indexMap.splice(index, items.length)
+					for(var i = index, len = indexMap.length; i < len; i++){
+						indexMap[i](i)
+					}
+					
 					can.remove( can.$(itemsToRemove) );
 				},
 				parentNode = elements.getParentNode(el, parentNode),

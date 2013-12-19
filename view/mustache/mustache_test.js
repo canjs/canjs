@@ -2583,6 +2583,22 @@ test('html comments must not break mustache scanner', function(){
 		can.append( can.$(div), can.view.mustache(content)() );
 		equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
 	});	
-})
+});
+
+test("Rendering live bound indicies with #each, @index and a simple can.List when remove first item (#613)", function() {
+    var list = new can.List(['a', 'b', 'c']);
+    var template = can.view.mustache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
+
+    var lis = template({list: list}).childNodes[0].getElementsByTagName('li');
+
+    // remove first item
+    list.shift();
+    equal(lis.length, 2, "two lis");
+
+    equal(lis[0].innerHTML, '0 b', "second item now the 1st item");
+    equal(lis[1].innerHTML, '1 c', "third item now the 2nd item");
+});
+
+
 
 })();
