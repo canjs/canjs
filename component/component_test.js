@@ -842,7 +842,7 @@ test("inserted event fires twice if component inside live binding block", functi
             }
         },
         events: {
-            'inserted': function() {
+            ' inserted': function() {
                 inserted++
             }
         }
@@ -857,14 +857,15 @@ test("inserted event fires twice if component inside live binding block", functi
             shown: false
         },
         events: {
-            'inserted': function() {
+            ' inserted': function() {
                 this.scope.attr('shown', true)
             }
         }
     });
 
 	var frag = can.view.mustache("<parent-tag></parent-tag>")({})
-    $('body').append( frag );
+    
+    can.append( can.$("#qunit-test-area") , frag );
 
 
     equal(inited, 1)
