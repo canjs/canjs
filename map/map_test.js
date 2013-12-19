@@ -110,4 +110,18 @@ test('_cid add to original object', function() {
 	ok(!obj._cid, '_cid not added to original object');
 })
 
+test("can.each used with maps", function(){
+	can.each(new can.Map({foo: "bar"}),function(val, attr){
+		
+		if(attr === "foo"){
+			equal(val, "bar")
+		} else {
+			ok(false, "no properties other should be called "+attr)
+		}
+		
+		
+	})
+})
+
+
 })();
