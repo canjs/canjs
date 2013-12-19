@@ -1904,9 +1904,10 @@ function( can ){
 					// Create a compute that listens to whenever the index of the item in our list changes.
 					var index = function() {
 						var exprResolved = Mustache.resolve(expr),
-							fromIndex    = key < (exprResolved).attr('length') ? key : undefined;
-
-						return (exprResolved).indexOf(item, fromIndex);
+							fromIndex    = key < (exprResolved).attr('length') ? key : undefined,
+							index 		 = (exprResolved).indexOf(item, fromIndex);
+						console.log(item,index);
+						return index === -1 ? 0 : index;
 					};
 					return options.fn( options.scope.add({"@index": index}).add(item) );
 				});

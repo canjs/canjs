@@ -2428,6 +2428,20 @@ test("Rendering live bound indicies with #each, @index and a simple can.List", f
 	equal(lis[2].innerHTML, '2 e', "fifth item now the 3rd item");
 });
 
+test("Rendering live bound indicies with #each, @index and a simple can.List when remove first item", function() {
+	var list = new can.List(['a', 'b', 'c']);
+	var template = can.view.mustache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
+
+	var lis = template({list: list}).childNodes[0].getElementsByTagName('li');
+
+	// remove first item
+	list.shift();
+	equal(lis.length, 2, "two lis");
+
+	equal(lis[0].innerHTML, '0 b', "second item now the 1st item");
+	equal(lis[1].innerHTML, '1 c', "third item now the 2nd item");
+});
+
 test('Rendering keys of an object with #each and @key', function() {
 	delete can.Mustache._helpers['foo'];
 	var template = can.view.mustache("<ul>{{#each obj}}<li>{{@key}} {{.}}</li>{{/each}}</ul>");
