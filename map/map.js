@@ -50,27 +50,6 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		// A map that temporarily houses a reference 
 		// to maps that have already been made for a plain ole JS object
 		madeMap = null,
-		addToMap = function(obj, instance){
-			var teardown = false;
-			if(!madeMap){
-				teardown = true;
-				madeMap = {}
-			}
-			// record if it has a Cid before we add one
-			var hasCid = obj._cid;
-			var cid = can.cid(obj);
-			
-			// only update if there already isn't one
-			if( !madeMap[cid] ){
-			
-				madeMap[cid] = {
-					obj: obj,
-					instance: instance,
-					added: !hasCid
-				}
-			}
-			return teardown;
-		},
 		teardownMap = function(){
 			for(var cid in madeMap){
 				if(madeMap[cid].added) {
@@ -82,6 +61,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		getMapFromObject = function(obj){
 			return madeMap && madeMap[obj._cid] && madeMap[obj._cid].instance
 		};
+		
 	/**
 	 * @add can.Map
 	 */
@@ -99,9 +79,13 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 				if(!this.defaults){
 					this.defaults = {};
 				}
+				// a list of the compute properties
+				this._computes = [];
 				for(var prop in this.prototype){
 					if(typeof this.prototype[prop] !== "function"){
 						this.defaults[prop] = this.prototype[prop];
+					} else if(this.prototype[prop].isComputed) {
+						this._computes.push(prop)	
 					}
 				}
 			}
@@ -111,6 +95,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 			}
 	
 		},
+		_computes: [],
 		// keep so it can be overwritten
 		bind: can.bindAndSetup,
 		on: can.bindAndSetup,
@@ -118,6 +103,28 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		off: can.unbindAndTeardown,
 		id: "id",
 		helpers: {
+			addToMap: function(obj, instance){
+				var teardown;
+				if(!madeMap){
+					teardown = teardownMap;
+					madeMap = {}
+				}
+				// record if it has a Cid before we add one
+				var hasCid = obj._cid;
+				var cid = can.cid(obj);
+				
+				// only update if there already isn't one
+				if( !madeMap[cid] ){
+				
+					madeMap[cid] = {
+						obj: obj,
+						instance: instance,
+						added: !hasCid
+					}
+				}
+				return teardown;
+			},
+			
 			canMakeObserve : function( obj ) {
 				return obj && !can.isDeferred(obj) && (can.isArray(obj) || can.isPlainObject( obj ) || ( obj instanceof can.Map ));
 			},
@@ -228,7 +235,7 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 			// Sets all `attrs`.
 			this._init = 1;
 			this._setupComputes();
-			var teardownMapping = obj && addToMap(obj, this);
+			var teardownMapping = obj && can.Map.helpers.addToMap(obj, this);
 			/**
 			 * @property {*} can.Map.prototype.DEFAULT-ATTR
 			 * 
@@ -263,9 +270,9 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 			 */
 			var data = can.extend( can.extend(true,{},this.constructor.defaults || {}), obj )
 			this.attr(data);
-			if(teardownMapping){
-				teardownMap()
-			}
+			
+			teardownMapping && teardownMapping()
+			
 			this.bind('change',can.proxy(this._changes,this));
 			
 			delete this._init;
@@ -358,17 +365,15 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		 * Getter/Setter computes.
 		 */
 		_setupComputes: function(){
-			var prototype = this.constructor.prototype;
-			this._computedBindings = {}
-			for(var prop in prototype){
-				if(prototype[prop] && prototype[prop].isComputed){
-					this[prop] = prototype[prop].clone(this);
-					this._computedBindings[prop] = {
-						count: 0
-					}
+			var computes = this.constructor._computes;
+			this._computedBindings = {};
+			for(var i = 0, len = computes.length, prop; i< len; i++) {
+				prop = computes[i];
+				this[prop] = this[prop].clone(this);
+				this._computedBindings[prop] = {
+					count: 0
 				}
 			}
-			
 		},
 		_bindsetup: makeBindSetup(),
 		_bindteardown: function(){

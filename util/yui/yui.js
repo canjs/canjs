@@ -109,7 +109,7 @@ steal('can/util/can.js', 'yui', 'can/util/event.js',
 		} else if (selector instanceof Y.NodeList) {
 			return prepareNodeList(selector);
 		} else if (typeof selector === "object" && !can.isArray(selector) && typeof selector.nodeType === "undefined" && !selector.getDOMNode) {
-			return selector;
+			return new Y.NodeList(selector);
 		} else {
 			return prepareNodeList(Y.all(selector));
 		}
@@ -277,6 +277,7 @@ steal('can/util/can.js', 'yui', 'can/util/event.js',
 						var eventName = ev + ":" + selector,
 							handlers = events[eventName],
 							handler = handlers[cb.__bindingsIds];
+						
 						handler.detach();
 						delete handlers[cb.__bindingsIds];
 						if (can.isEmptyObject(handlers)) {
