@@ -6,6 +6,10 @@ module("can/route",{
 	}
 })
 
+if (!("onhashchange" in window)) {
+	return;
+}
+
 test("deparam", function(){
 	can.route.routes = {};
 	can.route(":page",{
