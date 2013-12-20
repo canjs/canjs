@@ -194,7 +194,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 				makeAndPut = function(val){
 					// create the fragment, but don't hook it up
 					// we need to insert it into the document first
-					var frag = can.view.frag(val, parentNode),
+					var frag = can.view.frag(""+val, parentNode),
 						// keep a reference to each node
 						newNodes = can.makeArray(frag.childNodes);
 					// Insert it in the `document` or `documentFragment`

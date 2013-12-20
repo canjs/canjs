@@ -2583,6 +2583,28 @@ test('html comments must not break mustache scanner', function(){
 		can.append( can.$(div), can.view.mustache(content)() );
 		equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
 	});	
-})
+});
+
+
+test("can.Mustache.safestring works on live binding (#606)", function(){
+	
+	var num = can.compute(1)
+	
+	can.Mustache.registerHelper("safeHelper", function(){
+		
+		return can.Mustache.safeString(
+			"<p>"+num()+"</p>"
+		)
+		
+	});
+	
+	var template = can.view.mustache("<div>{{safeHelper}}</div>")
+	
+	var frag = template();
+	equal(frag.childNodes[0].childNodes[0].nodeName.toLowerCase(),"p" , "got a p element");
+	
+});
+
+
 
 })();
