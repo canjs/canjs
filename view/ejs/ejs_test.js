@@ -1763,8 +1763,8 @@ test("_bindings removed when element removed", function() {
 	var div = document.createElement('div');
 	
 	div.appendChild(frag);
-	
-	can.remove( can.$(div.childNodes)  )
+
+	can.remove( can.$(div)  )
 	
 	stop()
 	setTimeout(function(){

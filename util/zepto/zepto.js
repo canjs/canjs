@@ -203,13 +203,12 @@ function (can) {
 
 	$.fn.remove = function () {
 		this.each(function () {
+			if( this.getElementsByTagName ){
+				$.cleanData( [this].concat( can.makeArray(this.getElementsByTagName('*')) )  );
+			}
+
 			if (this.parentNode != null) {
 				// might be a text node
-				
-				if( this.getElementsByTagName ){
-					$.cleanData( [this].concat( can.makeArray(this.getElementsByTagName('*')) )  );
-				} 
-				
 				this.parentNode.removeChild(this);
 			}
 		});
