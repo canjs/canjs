@@ -84,6 +84,11 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 	
 			}
 			return this;
+		},
+		proxy: function(fn, context){
+			return function(){
+				return fn.apply(context, arguments)
+			}
 		}
 	});
 

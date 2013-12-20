@@ -117,4 +117,25 @@ test("backup restore nested observables", function() {
 	equal(observe.attr('nested').attr('test'), 'property', 'Nested object got restored');
 });
 
+test("backup removes properties that were added (#607)", function(){
+	
+	var map = new can.Map({});
+	
+	map.backup();
+	
+	map.attr("foo","bar")
+	
+	ok( map.isDirty(), "the map with an additional property is dirty");
+	
+	map.restore();
+	
+	ok(! map.attr("foo"), "there is no foo property")
+	
+	
+	
+	
+})
+
+
+
 })();

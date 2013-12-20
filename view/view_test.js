@@ -18,65 +18,6 @@
 		}
 	});
 
-	test("registerNode, unregisterNode, and replace work", function(){
-
-		var nodeLists = can.view.live.nodeLists;
-
-		// Reset the registered nodes
-		for (var key in nodeLists.nodeMap) {
-			if (nodeLists.hasOwnProperty(key)) {
-				delete nodeLists.nodeMap[key];
-			}
-		}
-		for (var key in nodeLists.nodeListMap) {
-			if (nodeLists.hasOwnProperty(key)) {
-				delete nodeLists.nodeListMap[key];
-			}
-		}
-
-		var ids = function(arr){
-			return can.map(arr, function(item){
-				return item.id
-			})
-		},
-			two = {id: 2},
-			listOne = [{id: 1},two,{id: 3}];
-
-		nodeLists.register(listOne);
-		var listTwo = [two];
-
-		nodeLists.register(listTwo);
-
-		var newLabel = {id: 4}
-		nodeLists.replace(listTwo, [newLabel])
-
-		deepEqual( ids(listOne), [1,4,3], "replaced" )
-		deepEqual( ids(listTwo), [4] );
-
-		nodeLists.replace(listTwo,[{id: 5},{id: 6}]);
-
-		deepEqual( ids(listOne), [1,5,6,3], "replaced" );
-
-		deepEqual( ids(listTwo), [5,6], "replaced" );
-
-		nodeLists.replace(listTwo,[{id: 7}])
-
-		deepEqual( ids(listOne), [1,7,3], "replaced" );
-
-		deepEqual( ids(listTwo), [7], "replaced" );
-
-		nodeLists.replace( listOne, [{id: 8}])
-
-		deepEqual( ids(listOne), [8], "replaced" );
-		deepEqual( ids(listTwo), [7], "replaced" );
-
-		nodeLists.unregister(listOne);
-		nodeLists.unregister(listTwo);
-
-		// TODO flaky tests. Fail in PhantomJS on Travis CI
-		// deepEqual(nodeLists.nodeMap, {} );
-		// deepEqual(nodeLists.nodeListMap ,{} )
-	});
 
 	test("helpers work", function(){
 		var expected = '<h3>helloworld</h3><div>foo</div>';
@@ -336,7 +277,7 @@
 		div.appendChild(frag);
 		can.append( can.$("#qunit-test-area"), div)
 		equal(div.outerHTML.match(/__!!__/g), null, 'No __!!__ contained in HTML content')
-		can.view.live.nodeLists.unregister(domainList);
+		can.view.nodeLists.unregister(domainList);
 
 		//equal(can.$('#test-dropdown')[0].outerHTML, can.$('#test-dropdown2')[0].outerHTML, 'Live bound select and non-live bound select the same');
 
