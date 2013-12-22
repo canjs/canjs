@@ -696,15 +696,19 @@ test("Convert can.Model using .model and .models (#293)", 5, function() {
 test('Maximum call stack size exceeded with global models (#476)', function() {
 	stop();
 
-	window.Character = can.Model.extend({
+	var Character = can.Model.extend({
 		attributes: {
-			game: 'Game.model'
+			game: function(){
+				return Game.model.apply(Game, arguments)
+			}
 		}
 	}, {});
 
 	window.Game = can.Model.extend({
 		attributes: {
-			characters: 'Character.models'
+			characters: function(){
+				return Character.models.apply(Character, arguments)
+			}
 		},
 		findOne: function() {
 			var dfd = can.Deferred();
@@ -730,8 +734,9 @@ test('Maximum call stack size exceeded with global models (#476)', function() {
 		start();
 	});
 
-	delete window.Game;
-	delete window.Character;
+	
+
+	
 });
 
 })();
