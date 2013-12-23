@@ -773,8 +773,8 @@ test("defined view models (#563)", function(){
 	
 	
 	var frag  = template({})
-	
-	equal(frag.childNodes[0].innerHTML, "<h1>visible</h1>")
+
+	equal(frag.childNodes[0].childNodes[0].innerHTML, "visible")
 });
 
 test("scope not rebound correctly (#550)", function(){

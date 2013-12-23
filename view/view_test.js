@@ -660,6 +660,14 @@
 	
 	
 	test("create a template before the custom element works with slash and colon", function(){
+		
+		// all custom elements must be registered for IE to work
+		if(window.html5){
+			html5.elements += " ignore-this"
+			html5.shivDocument();
+		}
+		
+		
 		can.view.mustache("theid","<unique-name></unique-name><can:something></can:something><ignore-this>content</ignore-this>");
 		
 		can.view.Scanner.tag("unique-name",function(el, hookupOptions){
@@ -679,13 +687,24 @@
 	
 	
 	test("loaded live element test", function(){
-		
+		// all custom elements must be registered for IE to work
+		if(window.html5){
+			html5.elements += " my-el"
+			html5.shivDocument();
+		}
 		var t = can.view.mustache("<div><my-el {{#if foo}}checked{{/if}} class='{{bar}}' >inner</my-el></div>")
 		t();
 		ok(true)
 	})
 	
 	test("content within non-component tags gets rendered with context", function(){
+		// all custom elements must be registered for IE to work
+		if(window.html5){
+			html5.elements += " unique-element-name"
+			html5.shivDocument();
+		}
+		
+		
 		var tmp = can.view.mustache("<div><unique-element-name>{{name}}</unique-element-name></div>")
 		
 		
@@ -698,7 +717,11 @@
 	});
 	
 	test("empty non-component tags", function(){
-		
+		// all custom elements must be registered for IE to work
+		if(window.html5){
+			html5.elements += " unique-element-name"
+			html5.shivDocument();
+		}
 
 		
 		var tmp = can.view.mustache("<div><unique-element-name></unique-element-name></div>");

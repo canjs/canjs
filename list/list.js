@@ -4,6 +4,13 @@ steal("can/util","can/map", function(can, Map){
 	
 	// Helpers for `observable` lists.
 	var splice = [].splice,
+		// test if splice works correctly
+		spliceRemovesProps = (function(){
+			// IE's splice doesn't remove properties
+			var obj = {0: "a", length: 1};
+			splice.call(obj, 0,1);
+			return !obj[0];
+		})(),
 	/**
 	 * @add can.List
 	 */
@@ -253,6 +260,13 @@ steal("can/util","can/map", function(can, Map){
 				howMany = args[1] = this.length - index;
 			}
 			var removed = splice.apply(this, args);
+			
+			if(!spliceRemovesProps) {
+				for(var i = this.length; i < removed.length+this.length; i++){
+					delete this[i]
+				}
+			}
+			
 			can.batch.start();
 			if ( howMany > 0 ) {
 				this._triggerChange(""+index, "remove", undefined, removed);
@@ -1022,7 +1036,6 @@ steal("can/util","can/map", function(can, Map){
 			return this;
 		}
 	});
-
 	can.List = Map.List = list;
 	return can.List;
 })
