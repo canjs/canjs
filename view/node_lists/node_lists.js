@@ -233,7 +233,7 @@ steal('can/util',"can/view/elements.js",function(can){
 				});
 			}
 		},
-		nodeMap: nodeMap,
+		nodeMap: nodeMap
 	}
 	return nodeLists;
 
