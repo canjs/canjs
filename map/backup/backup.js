@@ -1,10 +1,12 @@
 //allows you to backup and restore a map instance
 steal('can/util', 'can/map', 'can/util/object', function (can) {
-	var flatProps = function (a) {
+	var flatProps = function (a, cur) {
 		var obj = {};
 		for (var prop in a) {
 			if (typeof a[prop] !== 'object' || a[prop] === null || a[prop] instanceof Date) {
 				obj[prop] = a[prop]
+			} else {
+				obj[prop] = cur.attr(prop)
 			}
 		}
 		return obj;
@@ -193,10 +195,12 @@ steal('can/util', 'can/map', 'can/util/object', function (can) {
 		 * _change_, _add_, and _set_) as if the values of the properties had been set using `[can.Map.prototype.attr attr]`.
 		 */
 		restore : function (restoreAssociations) {
-			var props = restoreAssociations ? this._backupStore : flatProps(this._backupStore)
+			var props = restoreAssociations ? 
+				this._backupStore : 
+				flatProps(this._backupStore, this)
 
 			if (this.isDirty(restoreAssociations)) {
-				this._attrs(props);
+				this._attrs(props, true);
 			}
 
 			return this;

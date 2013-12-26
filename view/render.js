@@ -191,6 +191,7 @@ can.extend(can.view, {
 		}
 		
 		if(listData){
+			unbind && unbind();
 			return "<" +tag+can.view.hook(function(el, parentNode){
 				live.list(el, listData.list, listData.renderer, self, parentNode);
 			})+"></" +tag+">";
@@ -212,7 +213,8 @@ can.extend(can.view, {
 		if ( status === 0 && !contentProp ) {
 			// Return an element tag with a hookup in place of the content
 			return "<" +tag+can.view.hook(
-			escape ? 
+			// if value is an object, it's likely something returned by .safeString
+			escape && typeof value != "object" ? 
 				// If we are escaping, replace the parentNode with 
 				// a text node who's value is `func`'s return value.
 				function(el, parentNode){

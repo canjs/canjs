@@ -1037,13 +1037,10 @@ test("reset on a live bound input", function(){
 
 test("A non-escaping live magic tag within a control structure and no leaks", function(){
 
-	var nodeLists = can.view.live.nodeLists;
+	var nodeLists = can.view.nodeLists;
 
 	for(var prop in nodeLists.nodeMap){
 		delete nodeLists.nodeMap[prop]
-	}
-	for(var prop in nodeLists.nodeListMap){
-		delete nodeLists.nodeListMap[prop]
 	}
 
 	var text = "<div><% items.each(function(ob) { %>" +
@@ -1053,7 +1050,9 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 			{html: "<label>Hello World</label>"}
 		]),
 		compiled = new can.EJS({text: text}).render({items: items}),
-		div = can.$('#qunit-test-area')[0]
+		div = can.$('#qunit-test-area')[0];
+		
+		
 	div.innerHTML = ""
 
 	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
@@ -1073,8 +1072,9 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 
 	can.remove( can.$(div.firstChild) )
 
+
+
 	deepEqual(nodeLists.nodeMap, {} );
-	deepEqual(nodeLists.nodeListMap ,{} )
 });
 
 
@@ -1763,8 +1763,8 @@ test("_bindings removed when element removed", function() {
 	var div = document.createElement('div');
 	
 	div.appendChild(frag);
-	
-	can.remove( can.$(div.childNodes)  )
+
+	can.remove( can.$(div)  )
 	
 	stop()
 	setTimeout(function(){
