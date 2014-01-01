@@ -1,4 +1,4 @@
-steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted","can/util/event.js",function($, can) {
+steal('jquery', 'can/util/can.js', 'can/util/attr','can/util/array/each.js', "can/util/inserted","can/util/event.js",function($, can, attr) {
 	var isBindableElement = function(node){
 		//console.log((node.nodeName && (node.nodeType == 1 || node.nodeType == 9) || node === window))
 		return (node.nodeName && (node.nodeType == 1 || node.nodeType == 9) || node == window);
@@ -89,7 +89,8 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 			return function(){
 				return fn.apply(context, arguments)
 			}
-		}
+		},
+		attr: attr
 	});
 
 	// Wrap binding functions.
@@ -160,8 +161,62 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 				return ret;
 			})
 		})
+	
+	if(!can.attr.MutationObserver) {
+		// handle via calls to attr
+		var oldAttr = $.attr;
+		$.attr = function(el, attrName){
+			if(arguments.length >= 3) {
+				var oldValue = oldAttr.call(this, el, attrName);
+			}
+			var res = oldAttr.apply(this, arguments);
+			if(arguments.length >= 3) {
+				var newValue = oldAttr.call(this, el, attrName);
+			}
+			if(newValue != oldValue) {
+				can.attr.trigger(el, attrName,oldValue);
+			}
+			return res;
+		}
+		var oldRemove = $.removeAttr;
+		$.removeAttr = function(el, attrName){
+			var oldValue = oldAttr.call(this, el, attrName);
+			var res = oldRemove.apply(this, arguments);
+			if(oldValue != null) {
+				can.attr.trigger(el, attrName,oldValue);
+			}
+			return res;
+		}
+		$.event.special.attributes = {};
+	} else {
+		// setup a special events
+		$.event.special.attributes = {
+			setup: function(){
+				if( MutationObserver ) {
+					var self = this;
+					var observer = new MutationObserver(function(mutations){
+						mutations.forEach(function(mutation){
+							var copy = can.simpleExtend({}, mutation)
+							can.trigger(self, copy, [])
+						})
+						
+					});
+					observer.observe(this,{attributes: true, attributeOldValue: true} )
+					$(this).data("canAttributesObserver", observer)
+				}
+				
+			},
+			teardown: function(){
+				if( MutationObserver ) {
+					$(this).data("canAttributesObserver").disconnect();
+					$(this).removeData("canAttributesObserver")
+				}
+			}
+		}
+	}
+	
 
-
+	
 	$.event.special.inserted = {};
 	$.event.special.removed = {};
 
