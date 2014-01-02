@@ -327,6 +327,14 @@
 		equal(age(),31,"age updated");
 		
 	})
+
+	test("Can read static properties on constructors", function() {
+		can.Map.extend("can.Foo", { static_prop : "baz" }, { proto_prop : "thud" });
+		var data = new can.Foo({ own_prop : "quux" }),
+				scope = new can.view.Scope(data);
+
+		equal(scope.computeData("constructor.static_prop").compute(), "baz", "static prop");
+	})
 	
 	
 })()

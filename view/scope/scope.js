@@ -91,6 +91,8 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 						// call that method
 						if(options.returnObserveMethods){
 							cur = cur[reads[i]]
+						} else if (reads[i] === "constructor" && prev instanceof can.Construct) {
+							cur = prev[ reads[i] ];
 						} else {
 							cur = prev[ reads[i] ].apply(prev, options.args ||[])
 						}
