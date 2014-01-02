@@ -328,7 +328,7 @@
 		
 	})
 
-	test("Can read static properties on constructors", function() {
+	test("Can read static properties on constructors (#634)", function() {
 		can.Map.extend("can.Foo", { static_prop : "baz" }, { proto_prop : "thud" });
 		var data = new can.Foo({ own_prop : "quux" }),
 				scope = new can.view.Scope(data);
