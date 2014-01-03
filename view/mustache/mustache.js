@@ -1899,8 +1899,10 @@ function( can ){
 			// Calling can.view.lists prevents anything from listening on that compute.
 			var resolved = Mustache.resolve(expr);
 			
-			if(resolved instanceof can.List){
-				return can.view.lists && can.view.lists(expr, function(item, index) {
+			// When resolved === undefined, the property hasn't been defined yet
+			// Assume it is intended to be a list
+			if(can.view.lists && (resolved instanceof can.List || (expr && expr.isComputed && resolved === undefined))){
+				return can.view.lists(expr, function(item, index) {
 					return options.fn( options.scope.add({"@index": index}).add(item) );
 				});
 			}

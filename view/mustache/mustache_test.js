@@ -2773,4 +2773,39 @@ test('{{#each}} helper works reliably with nested sections (#604)', function() {
 	equal(div.innerHTML, '<ul><li>Foo</li><li>Bar</li></ul>', 'Expected HTML with first false set');
 });
 
+test("{{#each}} handles an undefined list changing to a defined list (#629)", function() {
+	var renderer = can.view.mustache('    {{description}}: \
+    <ul> \
+    {{#each list}} \
+        <li>{{name}}</li> \
+    {{/each}} \
+    </ul>');
+
+	var div = document.createElement('div'),
+			data1 = new can.Map({
+	        description: 'Each without list'
+	    }),
+	    data2 = new can.Map({
+        description: 'Each with empty list',
+        list: []
+	    });
+
+	div.appendChild(renderer(data1));
+	div.appendChild(renderer(data2));
+
+	equal(div.getElementsByTagName('ul')[0].getElementsByTagName('li').length, 0);
+	equal(div.getElementsByTagName('ul')[1].getElementsByTagName('li').length, 0);
+
+	stop();
+	setTimeout(function() {
+		start();
+    data1.attr('list', [{name: 'first'}]);
+    data2.attr('list', [{name: 'first'}]);
+		equal(div.getElementsByTagName('ul')[0].getElementsByTagName('li').length, 1);
+		equal(div.getElementsByTagName('ul')[1].getElementsByTagName('li').length, 1);
+		equal(div.getElementsByTagName('ul')[0].getElementsByTagName('li')[0].innerHTML, 'first');
+		equal(div.getElementsByTagName('ul')[1].getElementsByTagName('li')[0].innerHTML, 'first');
+	}, 250);
+});
+
 })();
