@@ -1,11 +1,10 @@
 steal("can/util/can.js",function(can){
 
-	var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
-		setImmediate = window.setImmediate || function(cb){
+	var setImmediate = window.setImmediate || function(cb){
 			return setTimeout(cb,0)
 		},
 	attr = {
-		MutationObserver: MutationObserver,
+		MutationObserver: window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver,
 		
 		/**
 		 * @property {Object.<String,(String|Boolean|function)>} can.view.attr.map 
@@ -53,7 +52,7 @@ steal("can/util/can.js",function(can){
 		defaultValue : ["input","textarea"],
 		// Set an attribute on an element
 		set: function (el, attrName, val) {
-			if(! MutationObserver ) {
+			if(! attr.MutationObserver ) {
 				var oldValue = attr.get(el, attrName);
 			}
 			
@@ -75,19 +74,23 @@ steal("can/util/can.js",function(can){
 				el.setAttribute(attrName, val);
 				newValue = val;
 			}
-			if(! MutationObserver && newValue !== oldValue) {
+			if(! attr.MutationObserver && newValue !== oldValue) {
 				attr.trigger(el, attrName, oldValue)
 			}
 		},
 		trigger: function(el, attrName, oldValue){
-			return setImmediate(function(){
-				can.trigger(el, {
-					type: "attributes",
-					attributeName: attrName,
-					target: el,
-					oldValue: oldValue
-				}, []);
-			})
+			// only trigger if someone has bound
+			if( can.data(can.$(el), "canHasAttributesBindings" ) ){
+				return setImmediate(function(){
+					can.trigger(el, {
+						type: "attributes",
+						attributeName: attrName,
+						target: el,
+						oldValue: oldValue,
+						bubbles: false
+					}, []);
+				})
+			}
 		},
 		// Gets the value of an attribute.
 		get: function(el, attrName){
@@ -98,7 +101,7 @@ steal("can/util/can.js",function(can){
 		},
 		// Removes the attribute.
 		remove: function(el, attrName){
-			if(! MutationObserver ) {
+			if(! attr.MutationObserver ) {
 				var oldValue = attr.get(el, attrName);
 			}
 			
@@ -113,7 +116,7 @@ steal("can/util/can.js",function(can){
 			} else {
 				el.removeAttribute(attrName);
 			}
-			if (! MutationObserver && oldValue != null) {
+			if (! attr.MutationObserver && oldValue != null) {
 				attr.trigger(el, attrName, oldValue)
 			}
 			

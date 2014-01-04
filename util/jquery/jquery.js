@@ -180,37 +180,41 @@ steal('jquery', 'can/util/can.js', 'can/util/attr','can/util/array/each.js', "ca
 		}
 		var oldRemove = $.removeAttr;
 		$.removeAttr = function(el, attrName){
-			var oldValue = oldAttr.call(this, el, attrName);
-			var res = oldRemove.apply(this, arguments);
+			var oldValue = oldAttr.call(this, el, attrName),
+				res = oldRemove.apply(this, arguments);
+				
 			if(oldValue != null) {
 				can.attr.trigger(el, attrName,oldValue);
 			}
 			return res;
 		}
-		$.event.special.attributes = {};
+		$.event.special.attributes = {
+			setup: function(){
+				can.data(can.$(this), "canHasAttributesBindings", true)
+			},
+			teardown: function(){
+				$.cleanData( this, "canHasAttributesBindings")
+			}
+		};
 	} else {
 		// setup a special events
 		$.event.special.attributes = {
 			setup: function(){
-				if( MutationObserver ) {
-					var self = this;
-					var observer = new MutationObserver(function(mutations){
-						mutations.forEach(function(mutation){
-							var copy = can.simpleExtend({}, mutation)
-							can.trigger(self, copy, [])
-						})
-						
-					});
-					observer.observe(this,{attributes: true, attributeOldValue: true} )
-					$(this).data("canAttributesObserver", observer)
-				}
-				
+				var self = this;
+				var observer = new MutationObserver(function(mutations){
+					mutations.forEach(function(mutation){
+						var copy = can.simpleExtend({}, mutation)
+						can.trigger(self, copy, [])
+					})
+					
+				});
+				observer.observe(this,{attributes: true, attributeOldValue: true} )
+				can.data(can.$(this),"canAttributesObserver", observer)
 			},
 			teardown: function(){
-				if( MutationObserver ) {
-					$(this).data("canAttributesObserver").disconnect();
-					$(this).removeData("canAttributesObserver")
-				}
+				can.data(can.$(this),"canAttributesObserver").disconnect();
+				$.cleanData(this,"canAttributesObserver")
+				
 			}
 		}
 	}
