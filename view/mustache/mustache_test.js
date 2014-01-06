@@ -2792,4 +2792,44 @@ test('can.compute should live bind when the value is changed to a Construct (#63
 	}, 10);
 });
 
+test("@index in partials loaded from script templates", function(){
+	
+	
+	// add template as script
+	
+	var script = document.createElement("script");
+	script.type= "text/mustache";
+	script.id = "itempartial";
+	script.text = "<label></label>"
+	
+	document.body.appendChild(script)
+	
+	//can.view.mustache("itempartial","<label></label>")
+	
+	
+	var itemsTemplate = can.view.mustache(
+		"<div>"+
+			"{{#each items}}"+
+			"{{>itempartial}}"+
+			"{{/each}}"+
+		"</div>")
+	
+	var items = new can.List([{},{}])
+	
+	var frag = itemsTemplate({
+		items: items
+	}),
+		div = frag.childNodes[0],
+		labels = div.getElementsByTagName("label");
+	
+	equal(labels.length, 2, "two labels")
+	
+	items.shift();
+	
+	
+	equal(labels.length, 1, "first label removed")
+})
+
+
+
 })();
