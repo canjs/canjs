@@ -119,10 +119,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					return {value: undefined, parent: prev};
 				}
 			}
-			// if we don't have a value, exit early.
-			if( cur === undefined ){
-				options.earlyExit && options.earlyExit(prev, i - 1)
-			}
+			
 			// handle an ending function
 			if(typeof cur === "function"){
 				if( options.isArgument ) {
@@ -132,15 +129,13 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				} else {
 					
 					cur.isComputed && !foundObs && options.foundObservable && options.foundObservable(cur, i)
-					
-					
 					cur = cur.call(prev);
-					if( cur === undefined ){
-						options.earlyExit && options.earlyExit(prev, i - 1)
-					}
-					
 				}
 				
+			}
+			// if we don't have a value, exit early.
+			if( cur === undefined ){
+				options.earlyExit && options.earlyExit(prev, i - 1)
 			}
 			return {value: cur, parent: prev};
 		}
