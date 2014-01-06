@@ -134,7 +134,11 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					cur.isComputed && !foundObs && options.foundObservable && options.foundObservable(cur, i)
 					
 					
-					cur = cur.call(prev)
+					cur = cur.call(prev);
+					if( cur === undefined ){
+						options.earlyExit && options.earlyExit(prev, i - 1)
+					}
+					
 				}
 				
 			}

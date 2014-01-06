@@ -293,6 +293,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 		html: function(el, compute, parentNode){
 			var parentNode = elements.getParentNode(el, parentNode),
 				data = listen(parentNode, compute, function(ev, newVal, oldVal){
+					console.log("updated", newVal, oldVal)
 					// TODO: remove teardownCheck in 2.1
 					var attached = nodes[0].parentNode;
 					// update the nodes in the DOM with the new rendered value
