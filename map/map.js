@@ -178,7 +178,12 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 					val[how]() :
 					// Otherwise return the value.
 					val;
+
+					can.__reading && can.__reading(map, name);
 				});
+
+				can.__reading && can.__reading(map, '__keys');
+
 				return where;
 			},
 			makeBindSetup: makeBindSetup
