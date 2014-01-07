@@ -2773,4 +2773,23 @@ test('{{#each}} helper works reliably with nested sections (#604)', function() {
 	equal(div.innerHTML, '<ul><li>Foo</li><li>Bar</li></ul>', 'Expected HTML with first false set');
 });
 
+test('can.compute should live bind when the value is changed to a Construct (#638)', function() {
+	var renderer = can.view.mustache('<p>{{#counter}} Clicked <span>{{count}}</span> times {{/counter}}</p>'),
+			div = document.createElement('div'),
+			// can.compute(null) will pass
+			counter = can.compute(),
+			data = { counter: counter };
+
+	div.appendChild(renderer(data));
+
+	equal(div.getElementsByTagName('span').length, 0);
+	stop();
+	setTimeout(function() {
+		start();
+		counter({ count: 1 });
+		equal(div.getElementsByTagName('span').length, 1);
+		equal(div.getElementsByTagName('span')[0].innerHTML, '1');
+	}, 10);
+});
+
 })();
