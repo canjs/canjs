@@ -124,4 +124,28 @@ test("can.each used with maps", function(){
 })
 
 
+test("can.Map serialize triggers reading (#626)", function(){
+	var old = can.__reading;
+
+	var attributesRead = [];
+	var readingTriggeredForKeys = false;
+
+	can.__reading = function(object, attribute) {
+		if (attribute === "__keys"){
+			readingTriggeredForKeys = true;
+		} else {
+			attributesRead.push(attribute);
+		}
+        }
+
+	var testMap = new can.Map({ cats: "meow", dogs: "bark" });
+
+	testMap.serialize();
+
+	ok(attributesRead.indexOf("cats") !== -1 && attributesRead.indexOf("dogs") !== -1, "map serialization triggered __reading on all attributes");
+	ok(readingTriggeredForKeys, "map serialization triggered __reading for __keys");
+
+	can.__reading = old;
+})
+
 })();

@@ -326,7 +326,30 @@
 		
 		equal(age(),31,"age updated");
 		
+	});
+	
+	
+	test("computeData with initial empty compute (#638)", function(){
+		expect(2)
+		var compute = can.compute();
+		
+		var scope = new can.view.Scope({
+			compute: compute
+		})
+		
+		var computeData = scope.computeData("compute");
+		
+		equal( computeData.compute(), undefined);
+		
+		computeData.compute.bind("change", function(ev, newVal){
+			equal(newVal, "compute value")
+		})
+		
+		
+		compute("compute value")
+		
 	})
+	
 	
 	
 })()

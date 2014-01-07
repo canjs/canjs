@@ -2808,4 +2808,61 @@ test("{{#each}} handles an undefined list changing to a defined list (#629)", fu
 	}, 250);
 });
 
+test('can.compute should live bind when the value is changed to a Construct (#638)', function() {
+	var renderer = can.view.mustache('<p>{{#counter}} Clicked <span>{{count}}</span> times {{/counter}}</p>'),
+			div = document.createElement('div'),
+			// can.compute(null) will pass
+			counter = can.compute(),
+			data = { counter: counter };
+
+	div.appendChild(renderer(data));
+
+	equal(div.getElementsByTagName('span').length, 0);
+	stop();
+	setTimeout(function() {
+		start();
+		counter({ count: 1 });
+		equal(div.getElementsByTagName('span').length, 1);
+		equal(div.getElementsByTagName('span')[0].innerHTML, '1');
+	}, 10);
+});
+
+test("@index in partials loaded from script templates", function(){
+	
+	
+	// add template as script
+	
+	var script = document.createElement("script");
+	script.type= "text/mustache";
+	script.id = "itempartial";
+	script.text = "<label></label>"
+	
+	document.body.appendChild(script)
+	
+	//can.view.mustache("itempartial","<label></label>")
+	
+	
+	var itemsTemplate = can.view.mustache(
+		"<div>"+
+			"{{#each items}}"+
+			"{{>itempartial}}"+
+			"{{/each}}"+
+		"</div>")
+	
+	var items = new can.List([{},{}])
+	
+	var frag = itemsTemplate({
+		items: items
+	}),
+		div = frag.childNodes[0],
+		labels = div.getElementsByTagName("label");
+	
+	equal(labels.length, 2, "two labels")
+	
+	items.shift();
+	
+	
+	equal(labels.length, 1, "first label removed")
+})
+
 })();
