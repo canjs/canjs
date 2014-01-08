@@ -19,10 +19,10 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 		escapeDotReg = /\\\./g,
 		getNames = function(attr){
 			var names = [], last = 0;
-			attr.replace(escapeReg, function($0, $1, index) {
-				if (!$1) {
+			attr.replace(escapeReg, function(first, second, index) {
+				if (!second) {
 					names.push(attr.slice(last, index).replace(escapeDotReg,'.'));
-					last = index + $0.length;
+					last = index + first.length;
 				}
 			});
 			names.push(attr.slice(last).replace(escapeDotReg,'.'));
