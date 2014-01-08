@@ -48,10 +48,14 @@ steal('can/util', 'can/route', function(can) {
 		        // To detect when someone calls push/replaceState, we need to wrap each method.
 		        can.each(['pushState','replaceState'],function(method) {
 		            originalMethods[method] = window.history[method];
-		            window.history[method] = function(state) {
-		                var result = originalMethods[method].apply(window.history, arguments);
-		                can.route.setState();
-		                return result;
+		            window.history[method] = function(state, title, url) {
+		                // avoid doubled history states (with pushState)
+		                var absolute = url.indexOf("http") == 0;
+		                var searchHash = window.location.search + window.location.hash;
+		                if ( (!absolute && url != window.location.pathname+searchHash) || (absolute && url != window.location.href+searchHash) ) {
+		                    originalMethods[method].apply(window.history, arguments);
+		                    can.route.setState();
+		                }
 		            };
 		        });
 		        
