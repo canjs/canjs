@@ -290,7 +290,7 @@ steal('can/util','can/map', 'can/util/string/deparam', function(can) {
 			var root = can.route._call("root");
 	        if(root.lastIndexOf("/") == root.length - 1 &&
 	        	url.indexOf("/") === 0) {
-	        	url = url.substr(1);
+	        	url = url.substr(root.length);
 	        }
 			
 			// See if the url matches any routes by testing it against the `route.test` `RegExp`.
