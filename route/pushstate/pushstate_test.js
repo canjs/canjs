@@ -520,6 +520,21 @@ if(window.history && history.pushState) {
 		});
 	})
 
+	test("exclude actual root from deparam (#644)", function() {
+		var oldRoot = can.route.bindings.pushstate.root;
+		
+		can.route.bindings.pushstate.root = "/app/";
+		can.route(":section/");
+		can.route.ready();
+		
+		deepEqual( can.route.deparam("/app/test/"), {
+			section: "test",
+			route  : ":section/"
+		});
+		
+		// Reset for future tests
+		can.route.bindings.pushstate.root = oldRoot;
+	});
 }
 
 })();
