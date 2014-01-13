@@ -2773,6 +2773,76 @@ test('{{#each}} helper works reliably with nested sections (#604)', function() {
 	equal(div.innerHTML, '<ul><li>Foo</li><li>Bar</li></ul>', 'Expected HTML with first false set');
 });
 
+test('Constructor static properties are accessible (#634)', function() {
+	can.Map.extend("can.Foo", { static_prop : "baz" }, { proto_prop : "thud" });
+	var template = '\
+				Straight access: <br/> \
+					<span>{{own_prop}}</span><br/> \
+					<span>{{constructor.static_prop}}</span><br/> \
+					<span>{{constructor.proto_prop}}</span><br/> \
+					<span>{{proto_prop}}</span><br/> \
+				Helper argument: <br/> \
+					<span>{{print_prop own_prop}}</span><br/> \
+					<span>{{print_prop constructor.static_prop}}</span><br/> \
+					<span>{{print_prop constructor.proto_prop}}</span><br/> \
+					<span>{{print_prop proto_prop}}</span><br/> \
+				Helper hash argument: <br/> \
+					<span>{{print_hash prop=own_prop}}</span><br/> \
+					<span>{{print_hash prop=constructor.static_prop}}</span><br/> \
+					<span>{{print_hash prop=constructor.proto_prop}}</span><br/> \
+					<span>{{print_hash prop=proto_prop}}</span><br/>',
+			renderer = can.view.mustache(template),
+			data = new can.Foo({ own_prop : "quux" }),
+			div = document.createElement('div');
+
+	div.appendChild(renderer(data, {
+		print_prop: function() {
+      return can.map(
+       can.makeArray(arguments).slice(0, arguments.length - 1)
+          , function(arg) {
+              while(arg && arg.isComputed) {
+                  arg = arg();
+              }
+              return arg;
+          }
+      ).join(" ");
+		},
+		print_hash: function() {
+      var ret = [];
+      can.each(
+          arguments[arguments.length - 1].hash
+          , function(arg, key) {
+              while(arg && arg.isComputed) {
+                  arg = arg();
+              }
+              ret.push([key, arg].join("="));
+          }
+      );
+      return ret.join(" ");
+		}
+	}));
+	var spans = div.getElementsByTagName('span'),
+			i = 0;
+
+	// Straight access
+	equal(spans[i++].innerHTML, 'quux', 'Expected "quux"');
+	equal(spans[i++].innerHTML, 'baz', 'Expected "baz"');
+	equal(spans[i++].innerHTML, '', 'Expected ""');
+	equal(spans[i++].innerHTML, 'thud', 'Expected "thud"');
+
+	// Helper argument
+	equal(spans[i++].innerHTML, 'quux', 'Expected "quux"');
+	equal(spans[i++].innerHTML, 'baz', 'Expected "baz"');
+	equal(spans[i++].innerHTML, '', 'Expected ""');
+	equal(spans[i++].innerHTML, 'thud', 'Expected "thud"');
+
+	// Helper hash argument
+	equal(spans[i++].innerHTML, 'prop=quux', 'Expected "prop=quux"');
+	equal(spans[i++].innerHTML, 'prop=baz', 'Expected "prop=baz"');
+	equal(spans[i++].innerHTML, 'prop=', 'Expected "prop="');
+	equal(spans[i++].innerHTML, 'prop=thud', 'Expected "prop=thud"');
+});
+
 test("{{#each}} handles an undefined list changing to a defined list (#629)", function() {
 	var renderer = can.view.mustache('    {{description}}: \
     <ul> \
