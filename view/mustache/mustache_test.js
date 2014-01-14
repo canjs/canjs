@@ -513,7 +513,7 @@ test("multi line elements", function(){
 test("escapedContent", function(){
 	var text = "<span>{{ tags }}</span><label>&amp;</label><strong>{{ number }}</strong><input value='{{ quotes }}'/>";
 	var compiled = new can.Mustache({text: text}).render({tags: "foo < bar < car > zar > poo",
-							quotes : "I use 'quote' fingers \"a lot\"",
+							quotes : "I use 'quote' fingers & &amp;ersands \"a lot\"",
 							number : 123}) ;
 
 	var div = document.createElement('div');
@@ -521,7 +521,7 @@ test("escapedContent", function(){
 
 	equal(div.getElementsByTagName('span')[0].firstChild.nodeValue, "foo < bar < car > zar > poo" );
 	equal(div.getElementsByTagName('strong')[0].firstChild.nodeValue, 123 );
-	equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"" );
+	equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers & &amp;ersands \"a lot\"", "attributes are always safe, and strings are kept as-is without additional escaping");
 	equal(div.getElementsByTagName('label')[0].innerHTML, "&amp;" );
 })
 

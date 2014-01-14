@@ -631,14 +631,19 @@ Scanner.prototype = {
 						} else {
 							// If we have `<%== a(function(){ %>` then we want
 							// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-							buff.push(insert_cmd, "can.view.txt(\n" + escaped + ",\n'"+tagName+"',\n" + status() +",\nthis,\nfunction(){ " + (this.text.escape || '') + "return ", content, 
-								// If we have a block.
-								bracketCount ? 
-								// Start with startTxt `"var _v1ew = [];"`.
-								startTxt : 
-								// If not, add `doubleParent` to close push and text.
-								"}));\n"
-								);
+							buff.push(insert_cmd, "can.view.txt(\n" +
+									  (typeof status() === "string" || escaped) + ",\n'" +
+									  tagName + "',\n" +
+									  status() +",\n" +
+									  "this,\nfunction(){ " +
+									  (this.text.escape || '') +
+									  "return ", content,
+									  // If we have a block.
+									  bracketCount ?
+									  // Start with startTxt `"var _v1ew = [];"`.
+									  startTxt :
+									  // If not, add `doubleParent` to close push and text.
+									  "}));\n");
 						}
 						
 						if (rescan && rescan.after && rescan.after.length) {
