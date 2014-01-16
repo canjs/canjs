@@ -9,6 +9,9 @@
 
 @signature `new can.view.Scope(context, [parent])`
 
+@release 2.0.1
+
+
 @param {*} context A value that represents the 
 current context. This is often an object or observable and is the first
 place 
