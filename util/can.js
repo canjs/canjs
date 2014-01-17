@@ -17,7 +17,7 @@ steal(function(){
 		} else{
 			return object._cid = (name ||"" ) + (++cid)
 		}
-	}
+	};
 	can.VERSION = '@EDGE';
 	
 	can.simpleExtend = function(d, s){
@@ -25,7 +25,7 @@ steal(function(){
 			d[prop] = s[prop]
 		}
 		return d;
-	}
+	};
 	
 	return can;
 });
