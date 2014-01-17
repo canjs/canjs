@@ -225,9 +225,8 @@ test("Mustache falsey", function() {
 		expected: "Don't do it, Andy!",
 		data: { name: 'Andy' }
 	};
-
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
+	equal(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("Handlebars helpers", function() {

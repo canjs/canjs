@@ -1,20 +1,19 @@
 (function() {
 
-	var Scanner = can.view.Scanner;
 
 	module("can/view",{
 		setup: function(){
-			this.scannerAttributes = Scanner.attributes;
-			this.scannerRegExpAttributes = Scanner.regExpAttributes;
-			this.scannerTags = Scanner.tags;
-			Scanner.attributes = {};
-			Scanner.regExpAttributes = {};
-			Scanner.tags = can.extend({}, Scanner.tags);
+			this.scannerAttributes = can.view.attr.attributes;
+			this.scannerRegExpAttributes = can.view.attr.regExpAttributes;
+			this.scannerTags = can.view.tag.tags;
+			can.view.attr.attributes = {};
+			can.view.attr.regExpAttributes = {};
+			can.view.tag.tags = can.extend({}, can.view.tag.tags);
 		},
 		teardown: function(){
-			Scanner.attributes = this.scannerAttributes;
-			Scanner.regExpAttributes = this.scannerRegExpAttributes;
-			Scanner.tags = this.scannerTags;
+			can.view.attr.attributes = this.scannerAttributes;
+			can.view.attr.regExpAttributes = this.scannerRegExpAttributes;
+			can.view.tag.tags = this.scannerTags;
 		}
 	});
 
@@ -377,11 +376,11 @@
 
 	test("basic scanner custom tags", function(){
 
-		can.view.Scanner.tag("panel",function(el, options){
+		can.view.tag("panel",function(el, tagData){
 
-			ok(options.options.attr('helpers.myhelper')(), "got a helper")
-			equal( options.scope.attr('foo'),"bar", "got scope and can read from it" );
-			equal( options.subtemplate( options.scope.add({message: "hi"}), options.options ), "<p>sub says hi</p>"  )
+			ok(tagData.options.attr('helpers.myhelper')(), "got a helper")
+			equal( tagData.scope.attr('foo'),"bar", "got scope and can read from it" );
+			equal( tagData.subtemplate( tagData.scope.add({message: "hi"}), tagData.options ), "<p>sub says hi</p>"  )
 
 		})
 
@@ -395,10 +394,10 @@
 	});
 
 	test("custom tags without subtemplate", function(){
-		can.view.Scanner.tag("empty-tag",function(el, options){
+		can.view.tag("empty-tag",function(el, tagData){
 
 
-			ok( !options.subtemplate, "There is no subtemplate"  )
+			ok( !tagData.subtemplate, "There is no subtemplate"  )
 
 		})
 
@@ -417,8 +416,8 @@
 
 		document.body.appendChild(panel)
 
-		can.view.Scanner.tag("tabs",function(el, hookupOptions){
-			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, hookupOptions.options ) );
+		can.view.tag("tabs",function(el, tagData){
+			var frag = can.view.frag( tagData.subtemplate(tagData.scope, tagData.options ) );
 
 
 			var div = document.createElement("div");
@@ -431,9 +430,9 @@
 
 		})
 
-		can.view.Scanner.tag("panel",function( el, hookupOptions ) {
-			ok( hookupOptions.scope, "got scope");
-			return hookupOptions.scope;
+		can.view.tag("panel",function( el, tagData ) {
+			ok( tagData.scope, "got scope");
+			return tagData.scope;
 
 		})
 
@@ -458,14 +457,14 @@
 
 	test("sub hookup passes helpers", function(){
 
-		can.view.Scanner.tag("tabs",function(el, hookupOptions){
+		can.view.tag("tabs",function( el, tagData ){
 
-			var optionsScope = hookupOptions.options.add({
+			var optionsScope = tagData.options.add({
 					tabsHelper: function(){
 						return "TabsHelper"
 					}
 			});
-			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, optionsScope) );
+			var frag = can.view.frag( tagData.subtemplate(tagData.scope, optionsScope) );
 			var div = document.createElement("div");
 			div.appendChild(frag);
 			var panels = div.getElementsByTagName("panel");
@@ -476,9 +475,9 @@
 
 		});
 
-		can.view.Scanner.tag("panel",function( el, hookupOptions ) {
-			ok( hookupOptions.scope, "got scope");
-			return hookupOptions.scope;
+		can.view.tag("panel",function( el, tagData ) {
+			ok( tagData.scope, "got scope");
+			return tagData.scope;
 
 		})
 
@@ -506,16 +505,16 @@
 	test("attribute matching",function(){
 		var item = 0;
 
-		can.view.Scanner.attribute("on-click",function(data, el){
+		can.view.attr("on-click",function(el, attrData){
 
 			ok(true, "attribute called");
-			equal(data.attr,"on-click","attr is on click")
+			equal(attrData.attrName,"on-click","attr is on click")
 			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
-			var cur = data.scope.attr(".");
+			var cur = attrData.scope.attr(".");
 			equal(foodTypes[item],cur, "can get the current scope");
 			var attr = el.getAttribute("on-click");
 
-			equal( data.scope.attr(attr), doSomething, "can call a parent's function" )
+			equal( attrData.scope.attr(attr), doSomething, "can call a parent's function" )
 
 			item++;
 		});
@@ -543,18 +542,18 @@
 	test("regex attribute matching",function(){
 		var item = 0;
 
-		can.view.Scanner.attribute(/on-[\w\.]+/,function(data, el){
+		can.view.attr(/on-[\w\.]+/,function( el, attrData ){
 
 			ok(true, "attribute called");
-			equal(data.attr,"on-click","attr is on click")
+			equal(attrData.attrName,"on-click","attr is on click")
 			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
-			var cur = data.scope.attr(".");
+			var cur = attrData.scope.attr(".");
 
 			equal(foodTypes[item],cur, "can get the current scope");
 
 			var attr = el.getAttribute("on-click");
 
-			equal( data.scope.attr(attr), doSomething, "can call a parent's function" )
+			equal( attrData.scope.attr(attr), doSomething, "can call a parent's function" )
 
 			item++;
 		})
@@ -670,11 +669,11 @@
 		
 		can.view.mustache("theid","<unique-name></unique-name><can:something></can:something><ignore-this>content</ignore-this>");
 		
-		can.view.Scanner.tag("unique-name",function(el, hookupOptions){
+		can.view.tag("unique-name",function(el, tagData){
 			ok(true, "unique-name called!")
 		});
 		
-		can.view.Scanner.tag("can:something",function(el, hookupOptions){
+		can.view.tag("can:something",function(el, tagData){
 			ok(true, "can:something called!")
 		});
 		

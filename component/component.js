@@ -70,7 +70,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				
 				
 				
-				can.view.Scanner.tag(this.prototype.tag,function(el, options){
+				can.view.tag(this.prototype.tag,function(el, options){
 					new self(el, options)
 				});
 			}

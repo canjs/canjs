@@ -326,7 +326,7 @@
 		
 		equal(age(),31,"age updated");
 		
-	})
+	});
 	
 	
 })()

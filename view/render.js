@@ -87,16 +87,6 @@ can.extend(can.view, {
 			return data;
 		}
 	},
-	pending: function(data) {
-		// TODO, make this only run for the right tagName
-		var hooks = can.view.getHooks();
-		return can.view.hook(function(el){
-			can.each(hooks, function(fn){
-				fn(el);
-			});
-			can.view.Scanner.hookupAttributes(data, el);
-		});
-	},
 	getHooks: function(){
 		var hooks = pendingHookups.slice(0);
 		lastHookups = hooks;
@@ -136,6 +126,8 @@ can.extend(can.view, {
 	 *
 	 */
 	txt: function(escape, tagName, status, self, func){
+		
+		
 		// the temporary tag needed for any live setup
 		var tag = (elements.tagMap[tagName] || "span"),
 			// should live-binding be setup
@@ -182,7 +174,7 @@ can.extend(can.view, {
 			
 			// Get the value of the compute
 			value = compute();
-			
+			console.log(escape, value)
 			// Let people know we are no longer within an element.
 			withinTemplatedSectionWithinAnElement = false;
 			

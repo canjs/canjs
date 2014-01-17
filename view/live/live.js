@@ -412,8 +412,9 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 					attrName = newAttrName;
 				}
 			}
-
+			console.log("binding attributes")
 			listen(el, compute, function(ev, newVal){
+				console.log("setting attributes")
 				setAttrs(newVal)
 			})
 			// current value has been set
