@@ -1838,40 +1838,42 @@ test("Helpers always have priority (#258)", function() {
 	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
-if(typeof steal !== 'undefined') {
-	test("avoid global helpers",function() {
-		stop();
-		steal('view/mustache/test/noglobals.mustache', function(noglobals) {
-			var div = document.createElement('div'),
-				div2 = document.createElement('div');
-			var person = new can.Map({
-				name: "Brian"
-			});
-			var result = noglobals({
-				person: person
-			},{
-				sometext: function(name){
-					return "Mr. "+name()
-				}
-			});
-			var result2 = noglobals({
-				person: person
-			},{
-				sometext: function(name){
-					return name()+" rules"
-				}
-			});
-			div.appendChild(result);
-			div2.appendChild(result2);
 
-			person.attr("name", "Ajax")
-
-			equal(div.innerHTML,"Mr. Ajax");
-			equal(div2.innerHTML,"Ajax rules");
-			start();
-		});
+test("avoid global helpers",function() {
+	var noglobals = can.view.mustache("{{sometext person.name}}");
+	
+	var div = document.createElement('div'),
+		div2 = document.createElement('div');
+		
+	var person = new can.Map({
+		name: "Brian"
 	});
-}
+	var result = noglobals({
+		person: person
+	},{
+		sometext: function(name){
+			return "Mr. "+name()
+		}
+	});
+	
+	var result2 = noglobals({
+		person: person
+	},{
+		sometext: function(name){
+			return name()+" rules"
+		}
+	});
+	
+	div.appendChild(result);
+	div2.appendChild(result2);
+
+	person.attr("name", "Ajax")
+
+	equal(div.innerHTML,"Mr. Ajax");
+	equal(div2.innerHTML,"Ajax rules");
+});
+
+
 
 test("Each does not redraw items",function(){
 
@@ -2240,6 +2242,7 @@ test("empty lists update", 2, function() {
 	div.appendChild(frag);
 
 	equal(div.children[0].innerHTML, 'something', 'initial list content set');
+	console.log("changing")
 	map.attr('list', ['one', 'two']);
 	equal(div.children[0].innerHTML, 'onetwo', 'updated list content set');
 });

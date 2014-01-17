@@ -126,8 +126,6 @@ can.extend(can.view, {
 	 *
 	 */
 	txt: function(escape, tagName, status, self, func){
-		
-		
 		// the temporary tag needed for any live setup
 		var tag = (elements.tagMap[tagName] || "span"),
 			// should live-binding be setup
@@ -174,7 +172,7 @@ can.extend(can.view, {
 			
 			// Get the value of the compute
 			value = compute();
-			console.log(escape, value)
+			
 			// Let people know we are no longer within an element.
 			withinTemplatedSectionWithinAnElement = false;
 			

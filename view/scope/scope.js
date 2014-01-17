@@ -176,7 +176,13 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 		 *     curScope.attr("length") //-> 2
 		 */
 		attr: function(key){
-			return this.read(key,{isArgument: true, returnObserveMethods:true, proxyMethods: false}).value
+			// reads for whatever called before attr.  It's possible
+			// that this.read clears them.  We want to restore them.
+			var previousReads = can.__clearReading && can.__clearReading(),
+				res = this.read(key,{isArgument: true, returnObserveMethods:true, proxyMethods: false}).value;
+			can.__setReading && can.__setReading(previousReads);
+				
+			return res;
 		},
 		/**
 		 * @function can.view.Scope.prototype.add
@@ -411,7 +417,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			// If there was a likely observe.
 			if( defaultObserve ) {
 				// Restore reading for previous compute
-				can.__setReading && can.__setReading(defaultComputeReadings)
+				can.__setReading && can.__setReading(defaultComputeReadings);
 				return {
 					scope: defaultScope,
 					rootObserve: defaultObserve,

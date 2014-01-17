@@ -1327,81 +1327,87 @@ function( can ){
 	 * @param {String|Object} name	The string (or sometimes object) to pass to the given helper method.
 	 */
 	Mustache.txt = function(scopeAndOptions, mode, name) {
+		console.log("txt",name)
+		// here we are going to cache the lookup values so future calls are much faster
 		
-		var savedArgs = arguments;
 		
-		return function(){
-			console.log(mode,name)
-			var scope = scopeAndOptions.scope,
-				options = scopeAndOptions.options,
-				args = [],
-				helperOptions = {
-					fn: function() {},
-					inverse: function() {}
-				},
-				hash,
-				context = scope.attr("."),
-				getHelper = true,
-				value = name; 
-			
-			// convert lookup values to actual values in name, arguments, and hash
-			for(var i =3; i < savedArgs.length;i++){
-				var arg = savedArgs[i];
-				if(mode && can.isArray( arg )){
-					// merge into options
-					helperOptions = can.extend.apply(can, [helperOptions].concat(arg))
-				} else if(arg && arg[HASH]){
-					hash = arg[HASH];
-					// get values on hash
-					for(var prop in hash){
-						if(isLookup(hash[prop]) ){
-							hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions)
-						}
+		var scope = scopeAndOptions.scope,
+			options = scopeAndOptions.options,
+			args = [],
+			helperOptions = {
+				fn: function() {},
+				inverse: function() {}
+			},
+			hash,
+			context = scope.attr("."),
+			getHelper = true,
+			helper; 
+		
+		// convert lookup values to actual values in name, arguments, and hash
+		for(var i =3; i < arguments.length;i++){
+			var arg = arguments[i];
+			if(mode && can.isArray( arg )){
+				// merge into options
+				helperOptions = can.extend.apply(can, [helperOptions].concat(arg))
+			} else if(arg && arg[HASH]){
+				hash = arg[HASH];
+				// get values on hash
+				for(var prop in hash){
+					if(isLookup(hash[prop]) ){
+						hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions)
 					}
-				} else if(arg && isLookup(arg)){
-					args.push( Mustache.get(arg.get, scopeAndOptions, false, true) );
-				} else {
-					args.push(arg)
 				}
+			} else if(arg && isLookup(arg)){
+				args.push( Mustache.get(arg.get, scopeAndOptions, false, true) );
+			} else {
+				args.push(arg)
 			}
+		}
+		
+		if( isLookup(name) ){
+			var get = name.get;
+			name = Mustache.get(name.get, scopeAndOptions, args.length , false);
 			
-			if( isLookup(value) ){
-				var get = value.get;
-				value = Mustache.get(value.get, scopeAndOptions, args.length , false);
-				
-				// Base whether or not we will get a helper on whether or not the original
-				// name.get and Mustache.get resolve to the same thing. Saves us from running
-				// into issues like {{text}} / {text: 'with'}
-				getHelper = (get === value);
-			}	
-				
-			// overwrite fn and inverse to always convert to scopes
-			helperOptions.fn = makeConvertToScopes(helperOptions.fn, scope, options);
-			helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options)
-	
-			// Check for a registered helper or a helper-like function.
-			if (helper = ( getHelper && (typeof value === "string" && Mustache.getHelper(value,options)  )|| (can.isFunction(value) && !value.isComputed && { fn: value }))) {
-				// Add additional data to be used by helper functions
-				
-				can.extend(helperOptions,{
-					context: context,
-					scope: scope,
-					contexts: scope,
-					hash: hash
-				})
-	
-				args.push(helperOptions)
-				// Call the helper.
+			// Base whether or not we will get a helper on whether or not the original
+			// name.get and Mustache.get resolve to the same thing. Saves us from running
+			// into issues like {{text}} / {text: 'with'}
+			getHelper = (get === name);
+		}	
+		
+		// overwrite fn and inverse to always convert to scopes
+		helperOptions.fn = makeConvertToScopes(helperOptions.fn, scope, options);
+		helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options)
+		
+		// Check for a registered helper or a helper-like function.
+		if (helper = ( getHelper && (typeof name === "string" && Mustache.getHelper(name,options)  )|| (can.isFunction(name) && !name.isComputed && { fn: name }))) {
+			// Add additional data to be used by helper functions
+			
+			can.extend(helperOptions,{
+				context: context,
+				scope: scope,
+				contexts: scope,
+				hash: hash
+			})
+
+			args.push(helperOptions)
+			// Call the helper.
+			return function(){
 				return helper.fn.apply(context, args) || '';
 			}
-	
 			
-			if( can.isFunction(value)  ){
-				if ( value.isComputed ) {
-					value = value();
-				} 
+		}
+		
+		
+		
+		return function(){
+			
+			var value;
+			if( can.isFunction(name) &&  name.isComputed ){
+				value = name();
+			} else {
+				value = name;
 			}
-	
+			console.log("reading value", value)
 			// An array of arguments to check for truthyness when evaluating sections.
 			var validArgs = args.length ? args : [value],
 				// Whether the arguments meet the condition of the section.
