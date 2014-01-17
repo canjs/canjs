@@ -2242,7 +2242,7 @@ test("empty lists update", 2, function() {
 	div.appendChild(frag);
 
 	equal(div.children[0].innerHTML, 'something', 'initial list content set');
-	console.log("changing")
+
 	map.attr('list', ['one', 'two']);
 	equal(div.children[0].innerHTML, 'onetwo', 'updated list content set');
 });

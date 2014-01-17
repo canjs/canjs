@@ -15,11 +15,9 @@ steal('can/util', 'can/util/bind', 'can/util/batch',function(can, bind) {
 				});
 			};
 			can.__clearReading = function(){
-				console.log("__clearReading", observed.slice(0))
 				return observed.splice(0, observed.length);
 			}
 			can.__setReading = function(o){
-				console.log("__restoringReading", o);
 				[].splice.apply(observed, [0, observed.length].concat(o))
 			}
 			return old;

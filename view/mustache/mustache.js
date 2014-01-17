@@ -1327,10 +1327,8 @@ function( can ){
 	 * @param {String|Object} name	The string (or sometimes object) to pass to the given helper method.
 	 */
 	Mustache.txt = function(scopeAndOptions, mode, name) {
-		console.log("txt",name)
+
 		// here we are going to cache the lookup values so future calls are much faster
-		
-		
 		var scope = scopeAndOptions.scope,
 			options = scopeAndOptions.options,
 			args = [],
@@ -1407,7 +1405,6 @@ function( can ){
 			} else {
 				value = name;
 			}
-			console.log("reading value", value)
 			// An array of arguments to check for truthyness when evaluating sections.
 			var validArgs = args.length ? args : [value],
 				// Whether the arguments meet the condition of the section.

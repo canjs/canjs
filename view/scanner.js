@@ -616,7 +616,6 @@ Scanner.prototype = {
 			out = {
 				out: (this.text.outStart||"") + template + " "+finishTxt+(this.text.outEnd || "")
 			};
-		console.log(template)
 		
 		// Use `eval` instead of creating a function, because it is easier to debug.
 		myEval.call(out, 'this.fn = (function('+this.text.argNames+'){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
