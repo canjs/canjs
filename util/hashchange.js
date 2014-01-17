@@ -1,4 +1,4 @@
-steal('can/util/library', function(can) {
+steal(function() {
 	// This is a workaround for libraries that don't natively listen to the window hashchange event
 	!function() {
 		var addEvent = function (el, ev, fn) {

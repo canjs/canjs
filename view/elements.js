@@ -1,4 +1,4 @@
-steal('can/view', function(can){
+steal("can/view", function( can ) {
 	/**
 	 * @property {Object} can.view.elements
 	 * @parent can.view
@@ -184,4 +184,4 @@ steal('can/view', function(can){
 	
 	
 	return elements;
-})
+});
