@@ -76,7 +76,7 @@
 					}
 				});
 			
-			for(var i =0; i < 1; i++) {
+			for(var i =0; i < 100; i++) {
 				boxes.push( new Box({ number: i }) );
 			}
 			
@@ -94,7 +94,7 @@
 	            		boxes[n].tick();
 	            	}
 	            	
-	            	if(count < 3) {
+	            	if(count < 0) {
 	            		setTimeout(arguments.callee, 0);
 	            	} else {
 	            		count = 0;

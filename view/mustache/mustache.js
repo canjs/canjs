@@ -1346,19 +1346,19 @@ function( can ){
 			var arg = arguments[i];
 			if(mode && can.isArray( arg )){
 				// merge into options
-				helperOptions = can.extend.apply(can, [helperOptions].concat(arg))
+				helperOptions = can.extend.apply(can, [helperOptions].concat(arg));
 			} else if(arg && arg[HASH]){
 				hash = arg[HASH];
 				// get values on hash
 				for(var prop in hash){
 					if(isLookup(hash[prop]) ){
-						hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions)
+						hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions);
 					}
 				}
 			} else if(arg && isLookup(arg)){
 				args.push( Mustache.get(arg.get, scopeAndOptions, false, true) );
 			} else {
-				args.push(arg)
+				args.push(arg);
 			}
 		}
 		
@@ -1374,7 +1374,7 @@ function( can ){
 		
 		// overwrite fn and inverse to always convert to scopes
 		helperOptions.fn = makeConvertToScopes(helperOptions.fn, scope, options);
-		helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options)
+		helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options);
 		
 		// Check for a registered helper or a helper-like function.
 		if (helper = ( getHelper && (typeof name === "string" && Mustache.getHelper(name,options)  )|| (can.isFunction(name) && !name.isComputed && { fn: name }))) {
@@ -1385,13 +1385,13 @@ function( can ){
 				scope: scope,
 				contexts: scope,
 				hash: hash
-			})
+			});
 
-			args.push(helperOptions)
+			args.push(helperOptions);
 			// Call the helper.
 			return function(){
 				return helper.fn.apply(context, args) || '';
-			}
+			};
 			
 		}
 		

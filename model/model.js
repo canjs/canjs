@@ -40,7 +40,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		getId = function( inst ) {
 			// Instead of using attr, use __get for performance.
 			// Need to set reading
-			can.__reading && can.__reading(inst, inst.constructor.id)
+			can.__reading(inst, inst.constructor.id)
 			return inst.__get(inst.constructor.id);
 		},
 		// Ajax `options` generator function
