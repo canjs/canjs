@@ -508,7 +508,7 @@
 		can.view.attr("on-click",function(el, attrData){
 
 			ok(true, "attribute called");
-			equal(attrData.attrName,"on-click","attr is on click")
+			equal(attrData.attributeName,"on-click","attr is on click")
 			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
 			var cur = attrData.scope.attr(".");
 			equal(foodTypes[item],cur, "can get the current scope");
@@ -545,7 +545,7 @@
 		can.view.attr(/on-[\w\.]+/,function( el, attrData ){
 
 			ok(true, "attribute called");
-			equal(attrData.attrName,"on-click","attr is on click")
+			equal(attrData.attributeName,"on-click","attr is on click")
 			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
 			var cur = attrData.scope.attr(".");
 
@@ -584,7 +584,7 @@
 
 		var context = new can.Map({foo: "bar"});
 		var frag = template(context,{
-			_tags: {
+			tags: {
 				content: function(el, options){
 					equal(el.nodeName.toLowerCase() ,"content", "got an element");
 					equal(options.scope.attr('.'), "bar", "got the context of content");
@@ -615,7 +615,7 @@
 
 		var context = new can.Map({foo: "bar"});
 		var frag = template(context,{
-			_tags: {
+			tags: {
 				content: function(el, options){
 					equal(el.parentNode.nodeName.toLowerCase() ,"tbody", "got an element in a tbody");
 					equal(options.scope.attr('.'),context, "got the context of content");

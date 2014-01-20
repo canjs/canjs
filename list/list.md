@@ -3,6 +3,7 @@
 @download can/map
 @test can/map/qunit.html
 @parent canjs
+@release 2.0
 
 Use for observable array-like objects.
 

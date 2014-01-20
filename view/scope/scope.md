@@ -1,7 +1,7 @@
 @constructor can.view.Scope
 @inherits can.Construct
 @parent can.view.static
-@test can/map/test.html
+@test can/view/scope/test.html
 @plugin can/view/scope
 @group can.view.Scope.types types
 

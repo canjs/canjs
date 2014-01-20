@@ -383,10 +383,12 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 			})
 		},
 		_changes: function(ev, attr, how,newVal, oldVal){
+			// when a change happens, forward the event
 			can.batch.trigger(this, {type:attr, batchNum: ev.batchNum}, [newVal,oldVal]);
 		},
 		_triggerChange: function(attr, how,newVal, oldVal){
-			can.batch.trigger(this,"change",can.makeArray(arguments))
+			can.batch.trigger(this,"change",can.makeArray(arguments));
+			
 		},
 		// no live binding iterator
 		_each: function(callback){

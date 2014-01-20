@@ -626,12 +626,12 @@ Scanner.prototype = {
 
 
 // can.view.attr
-var VIEWATTR = can.view.attr = function(attrName, attrHandler){
-	if(typeof attrName == "string"){
-		VIEWATTR.attributes[attrName] = attrHandler;
+var VIEWATTR = can.view.attr = function(attributeName, attrHandler){
+	if(typeof attributeName == "string"){
+		VIEWATTR.attributes[attributeName] = attrHandler;
 	} else {
-		VIEWATTR.regExpAttributes[attrName] = {
-			match: attrName,
+		VIEWATTR.regExpAttributes[attributeName] = {
+			match: attributeName,
 			handler: attrHandler
 		};
 	}
@@ -672,7 +672,7 @@ can.view.pending = function(viewData){
 		if(viewData.tagName) {
 			
 			var tagName= viewData.tagName,
-				helperTagCallback = viewData.options.read('helpers._tags.'+tagName,{isArgument: true, proxyMethods: false}).value,
+				helperTagCallback = viewData.options.read('tags.'+tagName,{isArgument: true, proxyMethods: false}).value,
 				tagCallback = helperTagCallback || VIEWTAG.tags[tagName];
 				
 			// If this was an element like <foo-bar> that doesn't have a component, just render its content
@@ -692,13 +692,13 @@ can.view.pending = function(viewData){
 			
 		}
 
-		can.each(viewData && viewData.attrs || [], function(attrName){
-			viewData.attrName = attrName;
-			if(VIEWATTR.attributes[attrName]) {
-				VIEWATTR.attributes[attrName](el, viewData);
+		can.each(viewData && viewData.attrs || [], function(attributeName){
+			viewData.attributeName = attributeName;
+			if(VIEWATTR.attributes[attributeName]) {
+				VIEWATTR.attributes[attributeName](el, viewData);
 			} else {
 				can.each(VIEWATTR.regExpAttributes,function(attrMatcher){
-					if(attrMatcher.match.test(attrName)){
+					if(attrMatcher.match.test(attributeName)){
 						attrMatcher.handler(el, viewData)
 					}
 				})

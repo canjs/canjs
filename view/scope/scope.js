@@ -297,6 +297,25 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			
 		},
 		/**
+		 * @function can.view.Scope.prototype.compute
+		 * 
+		 * @description Provides a get-set compute that represents a 
+		 * key's value.
+		 * 
+		 * @signature `scope.compute( key, [options] )`
+		 * @release 2.1
+		 * 
+		 * @param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a 
+		 * property name that includes a dot. 
+		 * 
+		 * @param {can.view.Scope.readOptions} [options] Options that configure how the `key` gets read.
+		 * 
+		 * @return {can.compute} A compute that can get or set `key`.
+		 */
+		compute: function(key, options){
+			return this.computeData(key,options).compute;
+		},
+		/**
 		 * @hide
 		 * @function can.view.Scope.prototype.read read
 		 * 

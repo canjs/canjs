@@ -132,7 +132,7 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 	 */
 	can.view.attr(/can-[\w\.]+/,function( el, data ){
 		
-		var attributeName = data.attrName,
+		var attributeName = data.attributeName,
 			event = attributeName.substr("can-".length),
 			handler = function(ev){
 				var attr = el.getAttribute(attributeName),

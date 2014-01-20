@@ -70,7 +70,7 @@ function( can ){
 				if(updatedScope !== undefined && !(updatedScope instanceof  can.view.Scope)){
 					updatedScope = scope.add(updatedScope)	
 				}
-				if(updatedOptions !== undefined && !(updatedOptions instanceof  OptionsScope)){
+				if(updatedOptions !== undefined && !(updatedOptions instanceof  can.view.Options)){
 					updatedOptions = options.add(updatedOptions)
 				}
 				return orignal(updatedScope, updatedOptions || options)
@@ -137,8 +137,8 @@ function( can ){
 		if(!(data instanceof can.view.Scope)){
 			data = new can.view.Scope(data || {});
 		}
-		if( ! (options instanceof OptionsScope) ){
-			options = new OptionsScope(options || {})
+		if( ! (options instanceof can.view.Options) ){
+			options = new can.view.Options(options || {})
 		}
 		options = options || {};
 		
@@ -693,7 +693,7 @@ function( can ){
 								content: "",
 								startTxt: false,
 								startOnlyTxt: false,
-								end: false,
+								end: false
 							};
 
 						// Trim the content so we don't have any trailing whitespace.
@@ -1573,9 +1573,9 @@ function( can ){
 	 * @static
 	 */
 	
-	var OptionsScope = can.view.Scope.extend({
+	can.view.Options = can.view.Scope.extend({
 		init: function(data, parent){
-			if(!data.helpers && !data.partials){
+			if(!data.helpers && !data.partials && !data.tags){
 				data = {
 					helpers: data
 				}
