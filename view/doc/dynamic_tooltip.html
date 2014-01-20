@@ -44,11 +44,7 @@
 </div>
 <script>DEMO_HTML = document.getElementById("demo").innerHTML</script>
 <script>
-	steal("can/view/mustache","can/view/bindings").then(/*"jqueryui",*/function(){
-		
-		$.fn.tooltip = function(options){
-			console.log("tooltip updated", options)
-		}
+	steal("can/view/mustache","can/view/bindings").then("jqueryui",function(){
 		
 		can.view.attr("tooltip", function( el, attrData ) {
 			// A helper that updates or sets up the tooltip

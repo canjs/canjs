@@ -318,7 +318,7 @@ function (can, attr) {
 				var el = can.$(this),
 					cur = can.data( el, "canHasAttributesBindings") || 0 ;
 				if( cur <= 0 ) {
-					can.cleanData(el, "canHasAttributesBindings")
+					can.data(el, "canHasAttributesBindings", 0)
 				} else {
 					can.data( el, "canHasAttributesBindings", cur - 1  )
 				}

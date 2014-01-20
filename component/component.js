@@ -174,6 +174,17 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 					componentScope.unbind(prop, handlers[prop])
 				})
 			})
+			// setup attributes bindings
+			if( !can.isEmptyObject(this.constructor.attributeScopeMappings) ) {
+				
+				can.bind.call(el,"attributes", function(ev){
+					var camelized = can.camelize(ev.attributeName)
+					if(component.constructor.attributeScopeMappings[camelized]) {
+						componentScope.attr(camelized, el.getAttribute( ev.attributeName )  )
+					}
+				})
+				
+			}
 			
 			this.scope = componentScope;
 			can.data(can.$(el),"scope", this.scope)

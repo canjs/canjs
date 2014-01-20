@@ -76,7 +76,6 @@
 		
 		var div = document.createElement("div")
 		
-		
 		$(div).bind("attributes", function(ev){
 			equal( ev.attributeName, "foo", "attribute name is correct" );
 			equal( ev.target, div, "target")
