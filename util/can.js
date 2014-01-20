@@ -1,4 +1,5 @@
 steal(function () {
+	/* global GLOBALCAN */
 	var can = window.can || {};
 	if (typeof GLOBALCAN === 'undefined' || GLOBALCAN !== false) {
 		window.can = can;
@@ -12,20 +13,20 @@ steal(function () {
 
 	var cid = 0;
 	can.cid = function (object, name) {
-		if (object._cid) {
-			return object._cid
-		} else {
-			return object._cid = (name || "" ) + (++cid)
+		if (!object._cid) {
+			cid++;
+			object._cid = (name || '') + cid;
 		}
-	}
+		return object._cid;
+	};
 	can.VERSION = '@EDGE';
 
 	can.simpleExtend = function (d, s) {
 		for (var prop in s) {
-			d[prop] = s[prop]
+			d[prop] = s[prop];
 		}
 		return d;
-	}
+	};
 
 	//!dev-remove-start
 	can.dev = {
@@ -46,7 +47,7 @@ steal(function () {
 				} else if (window.console && console.log) {
 					this._logger("log", Array.prototype.slice.call(arguments));
 				} else if (window.opera && window.opera.postError) {
-					opera.postError("steal.js WARNING: " + out);
+					window.opera.postError("steal.js WARNING: " + out);
 				}
 			}
 		},
@@ -63,20 +64,19 @@ steal(function () {
 				if (window.console && console.log) {
 					Array.prototype.unshift.call(arguments, 'Info:');
 					this._logger("log", Array.prototype.slice.call(arguments));
-				}
-				else if (window.opera && window.opera.postError) {
-					opera.postError("steal.js INFO: " + out);
+				} else if (window.opera && window.opera.postError) {
+					window.opera.postError("steal.js INFO: " + out);
 				}
 			}
 		},
 		_logger: function (type, arr) {
 			if (console.log.apply) {
-				console[type].apply(console, arr)
+				console[type].apply(console, arr);
 			} else {
-				console[type](arr)
+				console[type](arr);
 			}
 		}
-	}
+	};
 	//!dev-remove-end
 
 	return can;

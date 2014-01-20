@@ -1,3 +1,4 @@
+/*global __dirname */
 var path = require('path');
 // Returns mappings for AMDify
 var getAmdifyMap = function (baseName) {
@@ -8,7 +9,7 @@ var getAmdifyMap = function (baseName) {
 	amdifyMap['can/can'] = 'can';
 
 	return amdifyMap;
-}
+};
 
 module.exports = function (grunt) {
 	var _ = grunt.util._;
@@ -69,7 +70,7 @@ module.exports = function (grunt) {
 					options: function (config) {
 						return {
 							dist: 'can.' + config
-						}
+						};
 					}
 				}
 			},
@@ -282,20 +283,39 @@ module.exports = function (grunt) {
 				tagName: 'v<%= version %>'
 			}
 		},
-		publish: {}
+		publish: {},
+		jshint: {
+			options: {
+				jshintrc: true
+			},
+			lib: [
+				'component/**/*.js', 'compute/**/*.js', 'construct/**/*.js', 'control/**/*.js', 'list/**/*.js',
+				'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js',
+				'!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js'
+			]
+		},
+		jsbeautifier: {
+			files: '<%= jshint.lib %>',
+			options: {
+				config: ".jsbeautifyrc"
+			}
+		}
 	});
 
-	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-string-replace');
 	grunt.loadNpmTasks('grunt-release-steps');
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
+	grunt.loadNpmTasks('grunt-jsbeautifier');
 
+	grunt.registerTask('quality', [ 'jsbeautifier', 'jshint']);
 	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify', 'string-replace:version']);
-	grunt.registerTask('test', ['connect', 'build', 'testify', 'qunit']);
+	grunt.registerTask('test', ['jshint', 'connect', 'build', 'testify', 'qunit']);
 	grunt.registerTask('default', ['build']);
 
 };
