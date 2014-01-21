@@ -909,7 +909,7 @@ test("Scope as Map constructors should follow '@' default values (#657)", functi
 	var frag = can.view.mustache('<panel title="Libraries">Content</panel>')({ title: "hello" });
   can.append( can.$("#qunit-test-area") , frag );
 
-  equal($("panel").scope().attr("title"), "Libraries");
+  equal(can.scope(can.$("panel")[0]).attr("title"), "Libraries");
 });
 
 })()
