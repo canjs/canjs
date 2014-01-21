@@ -10,7 +10,7 @@ steal('can/util/can.js',function (can) {
 		for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
 			if( !inDocument ) {
 				if( elem.getElementsByTagName ){
-					if( can.has( can.$(document) , elem ).length ) {
+					if( can.has( can.$(document.body) , elem ).length ) {
 						inDocument = true;
 					} else {
 						return;
