@@ -32,13 +32,22 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 					}
 				},this.prototype.events));
 				
-				var attributeScopeMappings = {};
+				var attributeScopeMappings = {},
+					scope = this.prototype.scope,
+					applyAttributeScopeMappings = function(scope) {
+						can.each(scope, function(val, prop){
+							if(val === "@") {
+								attributeScopeMappings[prop] = prop;
+							}
+						})
+					};
 				// go through scope and get attribute ones
-				can.each(this.prototype.scope, function(val, prop){
-					if(val === "@") {
-						attributeScopeMappings[prop] = prop;
-					}
-				}) 
+				applyAttributeScopeMappings(scope);
+				// also go through the defaults to grab attribute mappings
+				// if this is going through a can.Map constructor
+				if (typeof scope === "function" && scope.defaults && new scope() instanceof can.Map) {
+					applyAttributeScopeMappings(scope.defaults);
+				} 
 				this.attributeScopeMappings = attributeScopeMappings;
 				
 				// If scope is an object,
