@@ -45,25 +45,14 @@ steal('can/util', 'can/route', function(can) {
                 can.delegate.call(can.$(document.documentElement),'a', 'click', anchorClickFix);
                 
                 // popstate only fires on back/forward.
-		        // To detect when someone calls push/replaceState, we need to wrap each method.
-		        can.each(['pushState','replaceState'],function(method) {
-		            originalMethods[method] = window.history[method];
-		            window.history[method] = function(state) {
-		                var result = originalMethods[method].apply(window.history, arguments);
-		                can.route.setState();
-		                return result;
-		            };
-		        });
-		        
+		        // To detect when someone calls push/replaceState, we need to wrap each method. Not really needed, as listeners for click are existing
+
 		        // Bind to popstate for back/forward
 		        can.bind.call(window, 'popstate', can.route.setState);
             },
 	        unbind: function(){
         		can.undelegate.call(can.$(document.documentElement),'click', 'a', anchorClickFix);
         	
-            	can.each(['pushState','replaceState'],function(method) {
-		            window.history[method] = originalMethods[method];
-		        });
             	can.unbind.call(window, 'popstate', can.route.setState);
             },
 	        matchingPartOfURL: function(){
@@ -98,6 +87,7 @@ steal('can/util', 'can/route', function(can) {
                     	includeHash = true;
                     	// update the data
                     	window.history.pushState(null, null, node.href);
+                    	can.route.setState();
                     	// test if you can preventDefault
                     	// our tests can't call .click() b/c this
                     	// freezes phantom
