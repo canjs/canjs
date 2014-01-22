@@ -1,9 +1,11 @@
 @constructor can.List
 @inherits can.Map
-@download can/map
-@test can/map/qunit.html
+@download can/list
+@test can/list/test.html
 @parent canjs
 @release 2.0
+@group can.List.plugins plugins
+
 
 Use for observable array-like objects.
 

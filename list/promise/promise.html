@@ -1,19 +1,24 @@
 <script type="text/javascript" src="../../lib/steal/steal.js"></script>
+<div id="demo">
+<div id="app"></div>
+
 <script type="text/mustache" id="app-template">
+
 <site-app>	
-<select can-value="type">
-	<option value="fun">Fun</option>
-	<option value="educational">Educational</option>
-	<option value="other">Other</option>
-</select>
-<table>
-  <thead>
-    <tr>
+  <select can-value="type">
+    <option value="fun">Fun</option>
+    <option value="educational">Educational</option>
+    <option value="other">Other</option>
+  </select>
+  
+  <table>
+    <thead>
+      <tr>
       <td>Name</td><td>URL</td>
-    </tr>
-  </thead>
-  <tbody>
-  	{{#if items.isResolved}}
+      </tr>
+    </thead>
+    <tbody>
+    {{#if items.isResolved}}
       {{#if items.length}}
         {{#each items}}
         <tr>
@@ -24,14 +29,17 @@
         <tr><td>No items</td></tr>
       {{/if}}
     {{else}}
-       <tr><td>Loading</td></tr>
+      <tr><td>Loading</td></tr>
     {{/if}}
-  </tbody>
-</table>
+    </tbody>
+  </table>
 </site-app>	
-	
+
 </script>
-<div id="app"></div>
+</div>
+
+
+<script>DEMO_HTML = document.getElementById("demo").innerHTML</script>
 <script>
 	
 steal("can","can/util/fixture","can/list/promise", function(){
