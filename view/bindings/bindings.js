@@ -196,9 +196,7 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 				this.element[0].checked = ( value == trueValue )
 			} else {
 				var checked = this.options.value() === this.element[0].value;
-				// IE7 bugs sometimes if defaultChecked isn't set first
-				this.element[0].defaultChecked = checked;
-				this.element[0].checked = checked;
+				can.view.elements.setAttr(this.element[0], 'checked', checked);
 			}
 			
 			

@@ -37,7 +37,7 @@ steal(function(){
 			"value": "value",
 			"innerText" : "innerText",
 			"textContent" : "textContent",
-			"checked": true,
+			"checked": "checked",
 			"disabled": true,
 			"readonly": true,
 			"required": true,
@@ -94,6 +94,12 @@ steal(function(){
 			// if this is a special property
 			if(typeof prop === "function"){
 				prop(el, val)
+			} else if(prop === "checked") {
+				// IE7 bugs sometimes if defaultChecked isn't set first
+				if( can.inArray(tagName, elements.defaultValue) >= 0 ) {
+					el.defaultChecked = val;
+				}
+				el[prop] = val;
 			} else if(prop === true) {
 				el[attrName]  = true;
 			} else if (prop) {
