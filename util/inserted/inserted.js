@@ -6,11 +6,13 @@ steal('can/util/can.js',function (can) {
 		elems = can.makeArray(elems);
 		var inDocument = false,
 			checked = false,
+			// Not all browsers implement document.contains (Android)
+			doc = can.$(document.contains ? document : document.body),
 			children;
 		for ( var i = 0, elem; (elem = elems[i]) !== undefined; i++ ) {
 			if( !inDocument ) {
 				if( elem.getElementsByTagName ){
-					if( can.has( can.$(document.body) , elem ).length ) {
+					if( can.has( doc , elem ).length ) {
 						inDocument = true;
 					} else {
 						return;
