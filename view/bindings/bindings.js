@@ -59,7 +59,7 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 	 * @demo can/view/bindings/select.html
 	 * 
 	 */
-	can.view.Scanner.attribute("can-value", function(data, el){
+	can.view.attr("can-value", function( el, data ){
 		
 		var attr = el.getAttribute("can-value"),
 			value = data.scope.computeData(attr,{args:[]}).compute;
@@ -133,10 +133,10 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 	 * @demo can/view/bindings/can-event.html
 	 * 
 	 */
-	can.view.Scanner.attribute(/can-[\w\.]+/,function(data, el){
+	can.view.attr(/can-[\w\.]+/,function( el, data ){
 		
-		var attributeName = data.attr,
-			event = data.attr.substr("can-".length),
+		var attributeName = data.attributeName,
+			event = attributeName.substr("can-".length),
 			handler = function(ev){
 				var attr = el.getAttribute(attributeName),
 					scopeData = data.scope.read(attr,{returnObserveMethods: true, isArgument: true});

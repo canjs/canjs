@@ -105,7 +105,8 @@ test("basic tabs",function(){
 		template: "{{#if active}}<content></content>{{/if}}",
 		tag:"panel",
 		scope: {
-			active: false
+			active: false,
+			title: "@"
 		},
 		events: {
 			" inserted": function(){
@@ -122,7 +123,7 @@ test("basic tabs",function(){
 	
 	
 	
-	var template = can.view.mustache("<tabs>{{#each foodTypes}}<panel title='title'>{{content}}</panel>{{/each}}</tabs>")
+	var template = can.view.mustache("<tabs>{{#each foodTypes}}<panel title='{{title}}'>{{content}}</panel>{{/each}}</tabs>")
 	
 	var foodTypes= new can.List([
 		{title: "Fruits", content: "oranges, apples"},
@@ -869,7 +870,9 @@ test("inserted event fires twice if component inside live binding block", functi
 
 
     equal(inited, 1)
-    equal(inserted, 1)
+    equal(inserted, 1);
+    
+    
 });
 
 test("checkboxes with can-value bind properly (#628)", function() {
@@ -911,5 +914,43 @@ test("Scope as Map constructors should follow '@' default values (#657)", functi
 
   equal(can.scope(can.$("panel")[0]).attr("title"), "Libraries");
 });
+
+test("@ keeps properties live now", function(){
+	
+	can.Component.extend({
+		tag: "attr-fun",
+		template: "<h1>{{fullName}}</h1>",
+		scope: {
+			firstName: "@",
+			lastName: "@",
+			fullName: function(){
+				return this.attr("firstName")+" "+this.attr("lastName")
+			}
+		}
+	});
+	
+	var frag = can.view.mustache("<attr-fun first-name='Justin' last-name='Meyer'></attr-fun>")();
+	
+	var attrFun = frag.childNodes[0];
+	
+	can.$("#qunit-test-area")[0].appendChild( attrFun );
+	
+	
+	equal(attrFun.childNodes[0].innerHTML, "Justin Meyer");
+	
+	can.attr.set(attrFun,"first-name", "Brian")
+	
+	stop();
+	
+	setTimeout(function(){
+		equal(attrFun.childNodes[0].innerHTML, "Brian Meyer");
+		can.remove( can.$(attrFun) );
+		start()
+	},100)
+	
+})
+
+
+
 
 })()

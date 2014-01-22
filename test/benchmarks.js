@@ -7,13 +7,14 @@ steal("steal","benchmark", function(steal){
 	})
 	
 	var benchmarks =  {
-		add: function(name, setup, benchmark){
+		add: function(name, setup, benchmark, teardown){
 			if(!benchmark){
 				benchmark = setup;
 				setup = undefined
 			}
 			suite.add(name, benchmark, {
-				setup: setup
+				setup: setup,
+				teardown: teardown
 			});
 			return this;
 		},
