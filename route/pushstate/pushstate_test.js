@@ -516,11 +516,16 @@ if(window.history && history.pushState) {
 						}
 						// if routed
 						timeout = setTimeout( function() {
-							deepEqual( can.extend({},win.can.route.attr()), link["test"+testIndex+"_expect"] );
-							// go back to test route
-							win.history.pushState(null,null, tests[testIndex]);
-							nextLink();
-						},1500);
+							if (win && win.can && win.can.route) {
+								deepEqual( can.extend({},win.can.route.attr()), link["test"+testIndex+"_expect"] );
+								// go back to test route
+								win.history.pushState(null,null, tests[testIndex]);
+								nextLink();
+							}
+							else {
+								setTimeout(arguments.callee, 250);
+							}
+						},250);
 						win.can.trigger(link.element, "click");
 					} else {
 						nextTest();
