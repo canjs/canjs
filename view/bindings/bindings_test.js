@@ -171,5 +171,24 @@
 			ok(true, 'Nothing should break if we just add and then remove the select');
 		}, 10);
 	})
+
+	test("checkboxes with can-value bind properly (#628)", function() {
+		var data = new can.Map({ completed: true }),
+			frag = can.view.mustache('<input type="checkbox" can-value="completed"/>')(data);
+	  can.append( can.$("#qunit-test-area") , frag );
+		
+		var input = can.$("#qunit-test-area")[0].getElementsByTagName('input')[0];
+		equal(input.checked, data.attr('completed'), 'checkbox value bound (via attr check)');
+		data.attr('completed', false);
+		equal(input.checked, data.attr('completed'), 'checkbox value bound (via attr uncheck)');
+		input.checked = true;
+		can.trigger(input, 'change');
+		equal(input.checked, true, 'checkbox value bound (via check)');
+		equal(data.attr('completed'), true, 'checkbox value bound (via check)');
+		input.checked = false;
+		can.trigger(input, 'change');
+		equal(input.checked, false, 'checkbox value bound (via uncheck)');
+		equal(data.attr('completed'), false, 'checkbox value bound (via uncheck)');
+	});
 	
 })()
