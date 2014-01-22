@@ -1,0 +1,23 @@
+<html>
+    <head>
+		<link rel="stylesheet" type="text/css" href="../../bower_components/qunit/qunit/qunit.css"/>
+    </head>
+    <body>
+
+        <h1 id="qunit-header">Control.View Test Suite</h1>
+    	<h2 id="qunit-banner"></h2>
+    	<div id="qunit-testrunner-toolbar"></div>
+    	<h2 id="qunit-userAgent"></h2>
+		<div id="test-content"></div>
+        <ol id="qunit-tests"></ol>
+		<div id="qunit-test-area"></div>
+		<script type="text/javascript" src="../../lib/steal/steal.js"></script>
+		<script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
+		<script type="text/javascript">
+			QUnit.config.autostart = false;
+			steal("can/control/view").then("can/control/view/test/view_test.js", function() {
+				QUnit.start();
+			});
+		</script>
+    </body>
+</html>

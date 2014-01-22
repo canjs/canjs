@@ -813,7 +813,7 @@ test("property name only attributes", function(){
 	obs.attr('val',true);
 
 	ok(input.checked, "checked")
-	div.removeChild(input)
+	//div.removeChild(input)
 });
 
 test("nested properties", function(){
@@ -1037,13 +1037,10 @@ test("reset on a live bound input", function(){
 
 test("A non-escaping live magic tag within a control structure and no leaks", function(){
 
-	var nodeLists = can.view.live.nodeLists;
+	var nodeLists = can.view.nodeLists;
 
 	for(var prop in nodeLists.nodeMap){
 		delete nodeLists.nodeMap[prop]
-	}
-	for(var prop in nodeLists.nodeListMap){
-		delete nodeLists.nodeListMap[prop]
 	}
 
 	var text = "<div><% items.each(function(ob) { %>" +
@@ -1053,7 +1050,9 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 			{html: "<label>Hello World</label>"}
 		]),
 		compiled = new can.EJS({text: text}).render({items: items}),
-		div = can.$('#qunit-test-area')[0]
+		div = can.$('#qunit-test-area')[0];
+		
+		
 	div.innerHTML = ""
 
 	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
@@ -1073,8 +1072,9 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 
 	can.remove( can.$(div.firstChild) )
 
+
+
 	deepEqual(nodeLists.nodeMap, {} );
-	deepEqual(nodeLists.nodeListMap ,{} )
 });
 
 
@@ -1747,4 +1747,33 @@ test("outputting array of attributes", function() {
 	equal(div.children[0].getAttribute('data-test2'), 'value2', 'second value');
 	equal(div.children[0].getAttribute('data-test3'), 'value3', 'third value');
 });
+
+
+test("_bindings removed when element removed", function() {
+	var template = can.view.ejs('<div id="game"><% if(game.attr("league")) { %><%= game.attr("name") %><% } %></div>'),
+		game = new can.Map({
+	        "name": "Fantasy Baseball",
+	        "league": "Malamonsters"
+	    });
+    
+    var frag = template({
+    	game: game
+    });
+    
+	var div = document.createElement('div');
+	
+	div.appendChild(frag);
+
+	can.remove( can.$(div)  )
+	
+	stop()
+	setTimeout(function(){
+		start()
+		equal(game._bindings, 0, 'No bindings left');
+	},50)
+	
+});
+
+
+
 })();

@@ -1,4 +1,4 @@
-steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted","can/util/event.js",function($, can) {
+steal('jquery', 'can/util/can.js', 'can/util/attr','can/util/array/each.js', "can/util/inserted","can/util/event.js",function($, can, attr) {
 	var isBindableElement = function(node){
 		//console.log((node.nodeName && (node.nodeType == 1 || node.nodeType == 9) || node === window))
 		return (node.nodeName && (node.nodeType == 1 || node.nodeType == 9) || node == window);
@@ -84,7 +84,13 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 	
 			}
 			return this;
-		}
+		},
+		proxy: function(fn, context){
+			return function(){
+				return fn.apply(context, arguments)
+			}
+		},
+		attr: attr
 	});
 
 	// Wrap binding functions.
@@ -119,25 +125,102 @@ steal('jquery', 'can/util/can.js', 'can/util/array/each.js', "can/util/inserted"
 		oldClean(elems);
 	};
 	
-	var oldDomManip = $.fn.domManip;
+	var oldDomManip = $.fn.domManip,
+		cbIndex;
 	
-	$.fn.domManip = function(){
-		var args = can.makeArray(arguments),
-			isNew$ = $.fn.jquery >= "2.0.0",
-			cbIndex = isNew$ ? 1 : 2,
-			callback = args[cbIndex];
-
-		args[cbIndex] = function(elem) {
-			var isFragment = elem.nodeType === 11, //Node.DOCUMENT_FRAGMENT_NODE,
-				targets = isFragment ? can.makeArray(elem.childNodes) : [elem],
-				ret = callback.apply(this, arguments);
-			can.inserted(targets);
-			return ret;
+	// feature detect which domManip we are using
+	$.fn.domManip = function(args, cb1, cb2){
+		for(var i = 1; i< arguments.length; i++){
+			if(typeof arguments[i] === "function"){
+				cbIndex = i;
+				break;
+			}
+		}
+		return oldDomManip.apply(this, arguments)
+	}
+	$(document.createElement("div")).append(document.createElement("div"))
+	
+	$.fn.domManip = (cbIndex == 2 ? 
+		function(args, table, callback){
+			return oldDomManip.call(this,args,table, function(elem){
+				if(elem.nodeType === 11){
+					var elems = can.makeArray(elem.childNodes);
+				}
+				var ret = callback.apply(this, arguments);
+				can.inserted(elems ? elems : [elem]);
+				return ret;
+			})
+		} :
+		function(args, callback){
+			return oldDomManip.call(this,args,function(elem){
+				if(elem.nodeType === 11){
+					var elems = can.makeArray(elem.childNodes);
+				}
+				var ret = callback.apply(this, arguments);
+				can.inserted(elems ? elems : [elem]);
+				return ret;
+			})
+		})
+	
+	if(!can.attr.MutationObserver) {
+		// handle via calls to attr
+		var oldAttr = $.attr;
+		$.attr = function(el, attrName){
+			if(arguments.length >= 3) {
+				var oldValue = oldAttr.call(this, el, attrName);
+			}
+			var res = oldAttr.apply(this, arguments);
+			if(arguments.length >= 3) {
+				var newValue = oldAttr.call(this, el, attrName);
+			}
+			if(newValue != oldValue) {
+				can.attr.trigger(el, attrName,oldValue);
+			}
+			return res;
+		}
+		var oldRemove = $.removeAttr;
+		$.removeAttr = function(el, attrName){
+			var oldValue = oldAttr.call(this, el, attrName),
+				res = oldRemove.apply(this, arguments);
+				
+			if(oldValue != null) {
+				can.attr.trigger(el, attrName,oldValue);
+			}
+			return res;
+		}
+		$.event.special.attributes = {
+			setup: function(){
+				can.data(can.$(this), "canHasAttributesBindings", true)
+			},
+			teardown: function(){
+				$.cleanData( this, "canHasAttributesBindings")
+			}
 		};
+	} else {
+		// setup a special events
+		$.event.special.attributes = {
+			setup: function(){
+				var self = this;
+				var observer = new MutationObserver(function(mutations){
+					mutations.forEach(function(mutation){
+						var copy = can.simpleExtend({}, mutation)
+						can.trigger(self, copy, [])
+					})
+					
+				});
+				observer.observe(this,{attributes: true, attributeOldValue: true} )
+				can.data(can.$(this),"canAttributesObserver", observer)
+			},
+			teardown: function(){
+				can.data(can.$(this),"canAttributesObserver").disconnect();
+				$.removeData(this,"canAttributesObserver")
+				
+			}
+		}
+	}
+	
 
-		return oldDomManip.apply(this, args);
-	};
-
+	
 	$.event.special.inserted = {};
 	$.event.special.removed = {};
 

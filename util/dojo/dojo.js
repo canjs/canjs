@@ -1,5 +1,5 @@
-steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'can/util/array/each.js',
-'can/util/object/isplain', 'can/util/deferred.js', '../hashchange.js', "can/util/inserted",function(can) {
+steal('can/util/can.js',  'can/util/attr', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'can/util/array/each.js',
+'can/util/object/isplain', 'can/util/deferred.js', '../hashchange.js', "can/util/inserted",function(can, attr) {
 	define("plugd/trigger", ["dojo"], function( dojo ) {
 
 		var d = dojo,
@@ -198,8 +198,8 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 		return array;
 	};
 	can.isArray = dojo.isArray;
-	can.inArray = function( item, arr ) {
-		return dojo.indexOf(arr, item);
+	can.inArray = function( item, arr, from ) {
+		return dojo.indexOf(arr, item, from);
 	};
 	can.map = function( arr, fn ) {
 		return dojo.map(can.makeArray(arr || []), fn);
@@ -523,6 +523,10 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 			delete data[id];
 		}
 	};
+	can.cleanData = function(elem, prop){
+		var id = elem[exp];
+		delete data[id][prop];
+	}
 
 	can.data = function( wrapped, name, value ) {
 		return value === undefined ? wrapped.length == 0 ? undefined : getData(wrapped[0], name) : wrapped.forEach(function( node ) {
@@ -615,6 +619,74 @@ steal('can/util/can.js', 'dojo', 'can/util/event.js', 'can/util/fragment.js', 'c
 			return d;
 		}
 	});
+	
+	
+	can.attr = attr;
+	delete attr.MutationObserver;
+
+	var oldOn = dojo.NodeList.prototype.on
+
+	dojo.NodeList.prototype.on = function(event){
+		
+		if(event == "attributes") {
+			this.forEach(function(node){
+				var el = can.$(node);
+				can.data( el, "canHasAttributesBindings", ( can.data( el, "canHasAttributesBindings") || 0 ) + 1  )
+			})
+		}
+		var handles = oldOn.apply(this, arguments);
+		
+		if(event == "attributes") {
+			var self = this;
+			
+			can.each(handles, function(handle, i){
+				var oldRemove = handle.remove;
+				handle.remove = function(){
+					var el = can.$(self[i]),
+						cur = can.data( el, "canHasAttributesBindings") || 0 ;
+					if( cur <= 0 ) {
+						can.cleanData(self[i], "canHasAttributesBindings")
+					} else {
+						can.data( el, "canHasAttributesBindings", cur - 1  )
+					}
+					return oldRemove.call(this, arguments);
+				}
+			})
+		}
+		return handles;
+		
+	}
+
+
+	var oldSetAttr = dojo.setAttr;
+	dojo.setAttr = function(node, name, value){
+		var oldValue = dojo.getAttr(node,  name);
+		
+		var res = oldSetAttr.apply(this, arguments);
+		
+		
+		var newValue = dojo.getAttr(node, name);
+		
+		if(newValue != oldValue) {
+			can.attr.trigger(node, name,oldValue);
+		}
+		return res;
+	}
+
+	var oldRemoveAttr = dojo.removeAttr;
+	
+	dojo.removeAttr = function(node, name){
+		var oldValue = dojo.getAttr(node, name),
+			res = oldRemoveAttr.apply(this, arguments);
+			
+		if(oldValue != null) {
+			can.attr.trigger(node, name,oldValue);
+		}
+		return res;
+	}
+	
+            
+
 
 	return can;
 });

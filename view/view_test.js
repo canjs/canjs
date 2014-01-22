@@ -1,82 +1,22 @@
 (function() {
 
-	var Scanner = can.view.Scanner;
 
 	module("can/view",{
 		setup: function(){
-			this.scannerAttributes = Scanner.attributes;
-			this.scannerRegExpAttributes = Scanner.regExpAttributes;
-			this.scannerTags = Scanner.tags;
-			Scanner.attributes = {};
-			Scanner.regExpAttributes = {};
-			Scanner.tags = can.extend({}, Scanner.tags);
+			this.scannerAttributes = can.view.attr.attributes;
+			this.scannerRegExpAttributes = can.view.attr.regExpAttributes;
+			this.scannerTags = can.view.tag.tags;
+			can.view.attr.attributes = {};
+			can.view.attr.regExpAttributes = {};
+			can.view.tag.tags = can.extend({}, can.view.tag.tags);
 		},
 		teardown: function(){
-			Scanner.attributes = this.scannerAttributes;
-			Scanner.regExpAttributes = this.scannerRegExpAttributes;
-			Scanner.tags = this.scannerTags;
+			can.view.attr.attributes = this.scannerAttributes;
+			can.view.attr.regExpAttributes = this.scannerRegExpAttributes;
+			can.view.tag.tags = this.scannerTags;
 		}
 	});
 
-	test("registerNode, unregisterNode, and replace work", function(){
-
-		var nodeLists = can.view.live.nodeLists;
-
-		// Reset the registered nodes
-		for (var key in nodeLists.nodeMap) {
-			if (nodeLists.hasOwnProperty(key)) {
-				delete nodeLists.nodeMap[key];
-			}
-		}
-		for (var key in nodeLists.nodeListMap) {
-			if (nodeLists.hasOwnProperty(key)) {
-				delete nodeLists.nodeListMap[key];
-			}
-		}
-
-		var ids = function(arr){
-			return can.map(arr, function(item){
-				return item.id
-			})
-		},
-			two = {id: 2},
-			listOne = [{id: 1},two,{id: 3}];
-
-		nodeLists.register(listOne);
-		var listTwo = [two];
-
-		nodeLists.register(listTwo);
-
-		var newLabel = {id: 4}
-		nodeLists.replace(listTwo, [newLabel])
-
-		deepEqual( ids(listOne), [1,4,3], "replaced" )
-		deepEqual( ids(listTwo), [4] );
-
-		nodeLists.replace(listTwo,[{id: 5},{id: 6}]);
-
-		deepEqual( ids(listOne), [1,5,6,3], "replaced" );
-
-		deepEqual( ids(listTwo), [5,6], "replaced" );
-
-		nodeLists.replace(listTwo,[{id: 7}])
-
-		deepEqual( ids(listOne), [1,7,3], "replaced" );
-
-		deepEqual( ids(listTwo), [7], "replaced" );
-
-		nodeLists.replace( listOne, [{id: 8}])
-
-		deepEqual( ids(listOne), [8], "replaced" );
-		deepEqual( ids(listTwo), [7], "replaced" );
-
-		nodeLists.unregister(listOne);
-		nodeLists.unregister(listTwo);
-
-		// TODO flaky tests. Fail in PhantomJS on Travis CI
-		// deepEqual(nodeLists.nodeMap, {} );
-		// deepEqual(nodeLists.nodeListMap ,{} )
-	});
 
 	test("helpers work", function(){
 		var expected = '<h3>helloworld</h3><div>foo</div>';
@@ -336,7 +276,7 @@
 		div.appendChild(frag);
 		can.append( can.$("#qunit-test-area"), div)
 		equal(div.outerHTML.match(/__!!__/g), null, 'No __!!__ contained in HTML content')
-		can.view.live.nodeLists.unregister(domainList);
+		can.view.nodeLists.unregister(domainList);
 
 		//equal(can.$('#test-dropdown')[0].outerHTML, can.$('#test-dropdown2')[0].outerHTML, 'Live bound select and non-live bound select the same');
 
@@ -436,11 +376,11 @@
 
 	test("basic scanner custom tags", function(){
 
-		can.view.Scanner.tag("panel",function(el, options){
+		can.view.tag("panel",function(el, tagData){
 
-			ok(options.options.attr('helpers.myhelper')(), "got a helper")
-			equal( options.scope.attr('foo'),"bar", "got scope and can read from it" );
-			equal( options.subtemplate( options.scope.add({message: "hi"}), options.options ), "<p>sub says hi</p>"  )
+			ok(tagData.options.attr('helpers.myhelper')(), "got a helper")
+			equal( tagData.scope.attr('foo'),"bar", "got scope and can read from it" );
+			equal( tagData.subtemplate( tagData.scope.add({message: "hi"}), tagData.options ), "<p>sub says hi</p>"  )
 
 		})
 
@@ -454,10 +394,10 @@
 	});
 
 	test("custom tags without subtemplate", function(){
-		can.view.Scanner.tag("empty-tag",function(el, options){
+		can.view.tag("empty-tag",function(el, tagData){
 
 
-			ok( !options.subtemplate, "There is no subtemplate"  )
+			ok( !tagData.subtemplate, "There is no subtemplate"  )
 
 		})
 
@@ -476,8 +416,8 @@
 
 		document.body.appendChild(panel)
 
-		can.view.Scanner.tag("tabs",function(el, hookupOptions){
-			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, hookupOptions.options ) );
+		can.view.tag("tabs",function(el, tagData){
+			var frag = can.view.frag( tagData.subtemplate(tagData.scope, tagData.options ) );
 
 
 			var div = document.createElement("div");
@@ -490,9 +430,9 @@
 
 		})
 
-		can.view.Scanner.tag("panel",function( el, hookupOptions ) {
-			ok( hookupOptions.scope, "got scope");
-			return hookupOptions.scope;
+		can.view.tag("panel",function( el, tagData ) {
+			ok( tagData.scope, "got scope");
+			return tagData.scope;
 
 		})
 
@@ -517,14 +457,14 @@
 
 	test("sub hookup passes helpers", function(){
 
-		can.view.Scanner.tag("tabs",function(el, hookupOptions){
+		can.view.tag("tabs",function( el, tagData ){
 
-			var optionsScope = hookupOptions.options.add({
+			var optionsScope = tagData.options.add({
 					tabsHelper: function(){
 						return "TabsHelper"
 					}
 			});
-			var frag = can.view.frag( hookupOptions.subtemplate(hookupOptions.scope, optionsScope) );
+			var frag = can.view.frag( tagData.subtemplate(tagData.scope, optionsScope) );
 			var div = document.createElement("div");
 			div.appendChild(frag);
 			var panels = div.getElementsByTagName("panel");
@@ -535,9 +475,9 @@
 
 		});
 
-		can.view.Scanner.tag("panel",function( el, hookupOptions ) {
-			ok( hookupOptions.scope, "got scope");
-			return hookupOptions.scope;
+		can.view.tag("panel",function( el, tagData ) {
+			ok( tagData.scope, "got scope");
+			return tagData.scope;
 
 		})
 
@@ -565,16 +505,16 @@
 	test("attribute matching",function(){
 		var item = 0;
 
-		can.view.Scanner.attribute("on-click",function(data, el){
+		can.view.attr("on-click",function(el, attrData){
 
 			ok(true, "attribute called");
-			equal(data.attr,"on-click","attr is on click")
+			equal(attrData.attributeName,"on-click","attr is on click")
 			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
-			var cur = data.scope.attr(".");
+			var cur = attrData.scope.attr(".");
 			equal(foodTypes[item],cur, "can get the current scope");
 			var attr = el.getAttribute("on-click");
 
-			equal( data.scope.attr(attr), doSomething, "can call a parent's function" )
+			equal( attrData.scope.attr(attr), doSomething, "can call a parent's function" )
 
 			item++;
 		});
@@ -602,18 +542,18 @@
 	test("regex attribute matching",function(){
 		var item = 0;
 
-		can.view.Scanner.attribute(/on-[\w\.]+/,function(data, el){
+		can.view.attr(/on-[\w\.]+/,function( el, attrData ){
 
 			ok(true, "attribute called");
-			equal(data.attr,"on-click","attr is on click")
+			equal(attrData.attributeName,"on-click","attr is on click")
 			equal(el.nodeName.toLowerCase(), "p", "got a paragraph");
-			var cur = data.scope.attr(".");
+			var cur = attrData.scope.attr(".");
 
 			equal(foodTypes[item],cur, "can get the current scope");
 
 			var attr = el.getAttribute("on-click");
 
-			equal( data.scope.attr(attr), doSomething, "can call a parent's function" )
+			equal( attrData.scope.attr(attr), doSomething, "can call a parent's function" )
 
 			item++;
 		})
@@ -644,7 +584,7 @@
 
 		var context = new can.Map({foo: "bar"});
 		var frag = template(context,{
-			_tags: {
+			tags: {
 				content: function(el, options){
 					equal(el.nodeName.toLowerCase() ,"content", "got an element");
 					equal(options.scope.attr('.'), "bar", "got the context of content");
@@ -675,7 +615,7 @@
 
 		var context = new can.Map({foo: "bar"});
 		var frag = template(context,{
-			_tags: {
+			tags: {
 				content: function(el, options){
 					equal(el.parentNode.nodeName.toLowerCase() ,"tbody", "got an element in a tbody");
 					equal(options.scope.attr('.'),context, "got the context of content");
@@ -719,13 +659,21 @@
 	
 	
 	test("create a template before the custom element works with slash and colon", function(){
+		
+		// all custom elements must be registered for IE to work
+		if(window.html5){
+			html5.elements += " ignore-this"
+			html5.shivDocument();
+		}
+		
+		
 		can.view.mustache("theid","<unique-name></unique-name><can:something></can:something><ignore-this>content</ignore-this>");
 		
-		can.view.Scanner.tag("unique-name",function(el, hookupOptions){
+		can.view.tag("unique-name",function(el, tagData){
 			ok(true, "unique-name called!")
 		});
 		
-		can.view.Scanner.tag("can:something",function(el, hookupOptions){
+		can.view.tag("can:something",function(el, tagData){
 			ok(true, "can:something called!")
 		});
 		
@@ -738,11 +686,61 @@
 	
 	
 	test("loaded live element test", function(){
-		
+		// all custom elements must be registered for IE to work
+		if(window.html5){
+			html5.elements += " my-el"
+			html5.shivDocument();
+		}
 		var t = can.view.mustache("<div><my-el {{#if foo}}checked{{/if}} class='{{bar}}' >inner</my-el></div>")
 		t();
 		ok(true)
 	})
 	
+	test("content within non-component tags gets rendered with context", function(){
+		// all custom elements must be registered for IE to work
+		if(window.html5){
+			html5.elements += " unique-element-name"
+			html5.shivDocument();
+		}
+		
+		
+		var tmp = can.view.mustache("<div><unique-element-name>{{name}}</unique-element-name></div>")
+		
+		
+		var frag = tmp({
+			name: "Josh M"
+		});
+		
+		equal(frag.childNodes[0].childNodes[0].innerHTML, "Josh M", "correctly retrieved scope data")
+		
+	});
+	
+	test("empty non-component tags", function(){
+		// all custom elements must be registered for IE to work
+		if(window.html5){
+			html5.elements += " unique-element-name"
+			html5.shivDocument();
+		}
+
+		
+		var tmp = can.view.mustache("<div><unique-element-name></unique-element-name></div>");
+		
+		
+		var frag = tmp()
+		
+		ok(true, "no error")
+		
+	})
+	
+	if (window.require) {
+		if (window.require.config && window.require.toUrl) {
+			test("template files relative to requirejs baseUrl (#647)", function() {
+				var oldBaseUrl = requirejs.s.contexts._.config.baseUrl;
+				require.config({ baseUrl:"/view/test/" });
+				ok( can.isFunction( can.view("template") ) );
+				require.config({ baseUrl:oldBaseUrl });
+			});
+		}
+	}
 	
 })();

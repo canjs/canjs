@@ -218,7 +218,38 @@
 		
 		var spans = div.getElementsByTagName('span')
 		equal(spans.length, 3, "there are 3 spans");
+	});
+	
+	test("text binding is memory safe (#666)", function(){
+		
+		// clear nodeMap because other tests setup live binding but never
+		// insert their elements the binding is never torn down
+		
+		can.view.nodeLists.nodeMap = {};
+		
+		var div = document.createElement('div'),
+			span = document.createElement('span'),
+			el = can.$(div),
+			text = can.compute(function(){
+				return "foo"
+			})
+
+		div.appendChild(span)
+		
+		can.$("#qunit-test-area")[0].appendChild(div);
+		
+		can.view.live.text(span,text, div)
+		
+		can.remove(el)
+		stop()
+		setTimeout(function(){
+			ok(can.isEmptyObject( can.view.nodeLists.nodeMap), "nothing in nodeMap");
+			start();
+		},100)
+		
 	})
+	
+	
 	
 
 })();

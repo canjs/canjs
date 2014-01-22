@@ -4,7 +4,7 @@
     
     <head>
         <title>jQuery Test Suite</title>
-        <link rel="stylesheet" type="text/css" href="../lib/qunit/qunit.css" />
+        <link rel="stylesheet" type="text/css" href="../bower_components/qunit/qunit/qunit.css" />
         <script type="text/javascript" src="../lib/html5shiv.js"></script>
     </head>
     
@@ -19,7 +19,7 @@
         <ol id="qunit-tests"></ol>
         <div id="qunit-test-area"></div>
         <script type="text/javascript" src="../lib/steal/steal.js"></script>
-        <script type="text/javascript" src="../lib/qunit/qunit.js"></script>
+        <script type="text/javascript" src="../bower_components/qunit/qunit/qunit.js"></script>
         <script type="text/javascript">
             QUnit.config.autostart = false;
 
@@ -28,28 +28,31 @@
                     "map": {
                         "*": {
                             "can/util/util.js": "can/util/jquery/jquery.js",
-                            "jquery/jquery.js": "can/lib/jquery.1.9.1.js"
+                            "jquery/jquery.js": "can/lib/jquery.1.10.2.js"
                         }
                     }
                 };
 
                 steal.config(config);
             }).then("can/util/fixture", "can/component",
-                "can/construct", "can/observe", "can/compute",
-                "can/model", "can/view", "can/view/ejs",
-                "can/control", "can/route", "can/route/pushstate",
+                "can/construct", "can/map", "can/list", "can/observe",
+                "can/compute", "can/model", "can/view",
+                "can/view/ejs", "can/control", "can/route",
                 "can/control/route", "can/view/mustache",
-                "can/model/queue", "can/construct/super",
-                "can/construct/proxy", "can/map/delegate",
-                "can/map/setter", "can/map/attributes",
-                "can/map/validations", "can/map/backup",
-                "can/map/list", "can/map/sort", "can/control/plugin",
-                "can/view/modifiers", "can/util/object",
-                "can/util/fixture", "can/view/bindings",
-                "can/view/live", "can/view/scope", "can/util/string")
+                "can/route/pushstate", "can/model/queue",
+                "can/construct/super", "can/construct/proxy",
+                "can/map/delegate", "can/map/setter",
+                "can/map/attributes", "can/map/validations",
+                "can/map/backup", "can/map/list", "can/map/sort",
+                "can/control/plugin", "can/view/modifiers",
+                "can/util/object", "can/util/fixture",
+                "can/view/bindings", "can/view/live",
+                "can/view/scope", "can/util/string", "can/util/attr")
                 .then("can/test").then(
                 "can/component/component_test.js")
                 .then("can/construct/construct_test.js")
+                .then("can/map/map_test.js")
+                .then("can/list/list_test.js")
                 .then("can/observe/observe_test.js")
                 .then("can/compute/compute_test.js")
                 .then("can/model/model_test.js")
@@ -57,9 +60,9 @@
                 .then("can/view/ejs/ejs_test.js")
                 .then("can/control/control_test.js")
                 .then("can/route/route_test.js")
-                .then("can/route/pushstate/pushstate_test.js")
                 .then("can/control/route/route_test.js")
                 .then("can/view/mustache/mustache_test.js")
+                .then("can/route/pushstate/pushstate_test.js")
                 .then("can/model/queue/queue_test.js")
                 .then("can/construct/super/super_test.js")
                 .then("can/construct/proxy/proxy_test.js")
@@ -77,7 +80,8 @@
                 .then("can/view/bindings/bindings_test.js")
                 .then("can/view/live/live_test.js")
                 .then("can/view/scope/scope_test.js")
-                .then("can/util/string/string_test.js", function() {
+                .then("can/util/string/string_test.js")
+                .then("can/util/attr/attr_test.js", function() {
                 steal.dev.log = function() {};
                 steal.dev.warn = function() {};
                 QUnit.start();

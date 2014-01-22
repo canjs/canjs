@@ -17,8 +17,8 @@ test("modifier with a deferred", function(){
 		foo.resolve({
 			foo: "FOO"
 		});
-		start();
 		equal(can.$("#qunit-test-area").html(), "FOO", "worked!");
+		start();
 	},100);
 
 });

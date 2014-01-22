@@ -32,13 +32,22 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 					}
 				},this.prototype.events));
 				
-				var attributeScopeMappings = {};
+				var attributeScopeMappings = {},
+					scope = this.prototype.scope,
+					applyAttributeScopeMappings = function(scope) {
+						can.each(scope, function(val, prop){
+							if(val === "@") {
+								attributeScopeMappings[prop] = prop;
+							}
+						})
+					};
 				// go through scope and get attribute ones
-				can.each(this.prototype.scope, function(val, prop){
-					if(val === "@") {
-						attributeScopeMappings[prop] = prop;
-					}
-				}) 
+				applyAttributeScopeMappings(scope);
+				// also go through the defaults to grab attribute mappings
+				// if this is going through a can.Map constructor
+				if (typeof scope === "function" && scope.defaults && new scope() instanceof can.Map) {
+					applyAttributeScopeMappings(scope.defaults);
+				} 
 				this.attributeScopeMappings = attributeScopeMappings;
 				
 				// If scope is an object,
@@ -70,7 +79,7 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 				
 				
 				
-				can.view.Scanner.tag(this.prototype.tag,function(el, options){
+				can.view.tag(this.prototype.tag,function(el, options){
 					new self(el, options)
 				});
 			}
@@ -174,6 +183,17 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 					componentScope.unbind(prop, handlers[prop])
 				})
 			})
+			// setup attributes bindings
+			if( !can.isEmptyObject(this.constructor.attributeScopeMappings) ) {
+				
+				can.bind.call(el,"attributes", function(ev){
+					var camelized = can.camelize(ev.attributeName)
+					if(component.constructor.attributeScopeMappings[camelized]) {
+						componentScope.attr(camelized, el.getAttribute( ev.attributeName )  )
+					}
+				})
+				
+			}
 			
 			this.scope = componentScope;
 			can.data(can.$(el),"scope", this.scope)
@@ -182,11 +202,11 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 			var renderedScope = hookupOptions.scope.add( this.scope ),
 			
 				// setup helpers to callback with `this` as the component
-				helpers = {};
+				options = {helpers: {}};
 
 			can.each(this.helpers || {}, function(val, prop){
 				if(can.isFunction(val)) {
-					helpers[prop] = function(){
+					options.helpers[prop] = function(){
 						return val.apply(componentScope, arguments)
 					}
 				}
@@ -195,29 +215,50 @@ steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindi
 			// create a control to listen to events
 			this._control = new this.constructor.Control(el, {scope: this.scope});
 			
+			
+			var self = this;
+			
 			// if this component has a template (that we've already converted to a renderer)
 			if( this.constructor.renderer ) {
 				// add content to tags
-				if(!helpers._tags){
-					helpers._tags = {};
+				if(!options.tags){
+					options.tags = {};
 				}
 				
 				// we need be alerted to when a <content> element is rendered so we can put the original contents of the widget in its place
-				helpers._tags.content = function(el, rendererOptions){
+				options.tags.content = function(el, rendererOptions){
 					// first check if there was content within the custom tag
 					// otherwise, render what was within <content>, the default code
-					var subtemplate = hookupOptions.subtemplate || rendererOptions.subtemplate
-					if(subtemplate) {
-						var frag = can.view.frag( subtemplate(rendererOptions.scope, rendererOptions.options.add(helpers) ) );
-						can.insertBefore(el.parentNode, frag, el);
-						can.remove( can.$(el) );
+					var subtemplate = hookupOptions.subtemplate || rendererOptions.subtemplate;
+					
+					if(subtemplate) {	
+						
+						
+						// rendererOptions.options is a scope of helpers where `<content>` was found, so
+						// the right helpers should already be available.
+						// However, _tags.content is going to point to this current content callback.  We need to 
+						// remove that so it will walk up the chain
+						
+						delete options.tags.content;
+						
+						can.view.live.replace( [el], subtemplate(
+							// This is the context of where `<content>` was found
+							// which will have the the component's context
+							rendererOptions.scope, 
+							
+							
+							
+							rendererOptions.options )  );
+						
+						// restore the content tag so it could potentially be used again (as in lists)
+						options.tags.content = arguments.callee;
 					}
 				}
 				// render the component's template
-				var frag = this.constructor.renderer( renderedScope, helpers);
+				var frag = this.constructor.renderer( renderedScope, hookupOptions.options.add(options) );
 			} else {
 				// otherwise render the contents between the 
-				var frag = can.view.frag( hookupOptions.subtemplate ? hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(helpers)) : "");
+				var frag = can.view.frag( hookupOptions.subtemplate ? hookupOptions.subtemplate(renderedScope, hookupOptions.options.add(options)) : "");
 			}
 			can.appendChild(el, frag);
 		}

@@ -2,6 +2,8 @@
 @download can/component
 @test can/component/test.html
 @parent canjs
+@release 2.0
+
 
 @description Create widgets that use a template, a view-model 
 and custom tags.

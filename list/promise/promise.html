@@ -1,0 +1,91 @@
+<script type="text/javascript" src="../../lib/steal/steal.js"></script>
+<div id="demo">
+<div id="app"></div>
+
+<script type="text/mustache" id="app-template">
+
+<site-app>	
+  <select can-value="type">
+    <option value="fun">Fun</option>
+    <option value="educational">Educational</option>
+    <option value="other">Other</option>
+  </select>
+  
+  <table>
+    <thead>
+      <tr>
+      <td>Name</td><td>URL</td>
+      </tr>
+    </thead>
+    <tbody>
+    {{#if items.isResolved}}
+      {{#if items.length}}
+        {{#each items}}
+        <tr>
+          <td>{{name}}</td> <td>{{url}}</td>
+        </tr>
+        {{/each}}
+      {{else}}
+        <tr><td>No items</td></tr>
+      {{/if}}
+    {{else}}
+      <tr><td>Loading</td></tr>
+    {{/if}}
+    </tbody>
+  </table>
+</site-app>	
+
+</script>
+</div>
+
+
+<script>DEMO_HTML = document.getElementById("demo").innerHTML</script>
+<script>
+	
+steal("can","can/util/fixture","can/list/promise", function(){
+	
+	can.fixture("GET /sites", function(request){
+		if(request.data.type == "fun"){
+			return [
+				{ name: "Reddit", url: "reddit.com"  },
+				{ name: "Spill", url: "spill.com"}
+			]
+		} else if(request.data.type == "educational") {
+			return [
+				{ name: "MDN", url: "mdn.com"  }
+			]
+		} else {
+			return []
+		}
+	})
+	
+	Site = can.Model({
+		findAll: "GET /sites"
+	},{})
+	
+	can.Component.extend({
+		tag: "site-app",
+		scope: {
+			type: "fun",
+			items: new Site.List(),
+			updateItems: function(){
+				this.attr("items").replace( Site.findAll({type: this.attr("type")}) )
+			}
+			
+		},
+		events: {
+			inserted: "updateItems",
+			"{scope} type": "updateItems",
+			updateItems: function(){
+				this.scope.updateItems();
+			}
+		}
+	})
+	
+	$("#app").html(  can.view("app-template",{}))
+	
+})
+	
+	
+	
+</script>

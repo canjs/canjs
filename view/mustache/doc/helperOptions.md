@@ -60,3 +60,22 @@ contexts.  It can be used to look up [can.Mustache.key key] values in the curren
     
     
     temp(data);
+
+@option {can.view.Options} options An object that represents the local mustache helpers.  It can be used to look 
+up [can.Mustache.key key] values
+
+    var temp = can.view.mustache(
+      "{{#person.name}}{{helper}}{{/person.name}}");
+    
+    var data = {person: {name: {first: "Justin"}}};
+    
+    can.Mustache.registerHelper("helper", function(options){
+    
+      options.options.attr("helpers.specialHelper")   //-> function(){ ... }
+      
+    })
+    
+    
+    temp(data, {
+      specialHelper: function(){ ... }
+    });

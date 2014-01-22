@@ -1,7 +1,7 @@
 {
   "name": "CanJS",
   "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
-  "version": "2.0.2",
+  "version": "2.1.0-pre",
   "author": {
     "name": "Bitovi",
     "email": "contact@bitovi.com",
@@ -23,10 +23,12 @@
     "grunt-contrib-uglify": "~0.2.1",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-shell": "~0.5.0",
-    "grunt-release-steps": "~0.3.7"
+    "grunt-release-steps": "~0.3.7",
+    "bower": "~1.2.7"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "install": "node node_modules/bower/bin/bower install"
   },
   "demos": [
     "http://canjs.us/#examples",

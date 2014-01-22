@@ -41,7 +41,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		getId = function( inst ) {
 			// Instead of using attr, use __get for performance.
 			// Need to set reading
-			can.__reading && can.__reading(inst, inst.constructor.id)
+			can.__reading(inst, inst.constructor.id)
 			return inst.__get(inst.constructor.id);
 		},
 		// Ajax `options` generator function
@@ -209,19 +209,17 @@ steal('can/util','can/map', 'can/list',function( can ) {
 					return model;
 				}
 			}
-		}
-
-	/** 
-	 * @static
-	 */
-	//
-	var parserMaker = function(prop){
-		return function(attributes){
-			return prop ? can.getObject( prop||"data", attributes ) : attributes;
-		}
-	};
-	var parsers = {
-		
+		},
+		/** 
+		 * @static
+		 */
+		//
+		parserMaker = function(prop){
+			return function(attributes){
+				return prop ? can.getObject( prop||"data", attributes ) : attributes;
+			}
+		};
+		parsers = {
 		/**
 		 * @function can.Model.parseModel parseModel
 		 * @parent can.Model.static
@@ -229,6 +227,8 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		 * create a [can.Model] instance.
 		 * 
 		 * @signature `can.Model.parseModel( data, xhr )`
+		 * @release 2.1
+		 * 
 		 * 
 		 * @param {Object} data The data to convert to a can.Model instance.
 		 * @param {XMLHTTPRequest} xhr The XMLHTTPRequest object used to make the request.
@@ -293,6 +293,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		 * @parent can.Model.static
 		 * @description Convert raw xhr data into an array or object that can be used to
 		 * create a [can.Model.List].
+		 * @release 2.1
 		 * 
 		 * @signature `can.Model.parseModels(data, xhr)`
 		 * 
@@ -997,7 +998,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 				// Return the ajax method with `data` and the `type` provided.
 				return ajax(str || this[ajaxMethod.url || "_url"], data, ajaxMethod.type || "get")
 			}
-		}
+		};
 
 
 	

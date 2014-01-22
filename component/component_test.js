@@ -105,7 +105,8 @@ test("basic tabs",function(){
 		template: "{{#if active}}<content></content>{{/if}}",
 		tag:"panel",
 		scope: {
-			active: false
+			active: false,
+			title: "@"
 		},
 		events: {
 			" inserted": function(){
@@ -122,7 +123,7 @@ test("basic tabs",function(){
 	
 	
 	
-	var template = can.view.mustache("<tabs>{{#each foodTypes}}<panel title='title'>{{content}}</panel>{{/each}}</tabs>")
+	var template = can.view.mustache("<tabs>{{#each foodTypes}}<panel title='{{title}}'>{{content}}</panel>{{/each}}</tabs>")
 	
 	var foodTypes= new can.List([
 		{title: "Fruits", content: "oranges, apples"},
@@ -773,14 +774,14 @@ test("defined view models (#563)", function(){
 	
 	
 	var frag  = template({})
-	
-	equal(frag.childNodes[0].innerHTML, "<h1>visible</h1>")
+
+	equal(frag.childNodes[0].childNodes[0].innerHTML, "visible")
 });
 
 test("scope not rebound correctly (#550)", function(){
-	
+
 	var nameChanges = 0;
-	
+
 	can.Component.extend({
 		tag: "scope-rebinder",
 		events: {
@@ -789,15 +790,15 @@ test("scope not rebound correctly (#550)", function(){
 			}
 		}
 	});
-	
+
 	var template = can.view.mustache("<scope-rebinder></scope-rebinder>");
-	
+
 	var frag = template();
 	var scope = can.scope( can.$(frag.childNodes[0]) );
-	
+
 	var n1 = can.compute(),
 		n2 = can.compute()
-	
+
 	scope.attr("name", n1 );
 	n1("updated");
 	scope.attr("name", n2);
@@ -805,5 +806,151 @@ test("scope not rebound correctly (#550)", function(){
 	equal(nameChanges, 2)
 })
 
+test("content extension stack overflow error", function(){
+
+    can.Component({
+        tag: 'outer-tag',
+        template: '<inner-tag>inner-tag CONTENT <content/></inner-tag>'
+    })
+
+    can.Component({
+        tag: 'inner-tag',
+        template: 'inner-tag TEMPLATE <content/>'
+    })
+
+    // currently causes Maximum call stack size exceeded
+    var template = can.view.mustache("<outer-tag>outer-tag CONTENT</outer-tag>");
+    
+    // RESULT = <outer-tag><inner-tag>inner-tag TEMPLATE inner-tag CONTENT outer-tag CONTENT</inner-tag></outer-tag>
+    
+    var frag = template();
+
+    equal(frag.childNodes[0].childNodes[0].innerHTML, 'inner-tag TEMPLATE inner-tag CONTENT outer-tag CONTENT')
+
+})
 	
+test("inserted event fires twice if component inside live binding block", function(){
+
+    var inited = 0,
+        inserted = 0;
+
+    can.Component({
+        tag: 'child-tag',
+
+        scope: {
+            init: function(){
+                inited++
+            }
+        },
+        events: {
+            ' inserted': function() {
+                inserted++
+            }
+        }
+    });
+
+    can.Component({
+        tag: 'parent-tag',
+
+        template: '{{#shown}}<child-tag></child-tag>{{/shown}}',
+
+        scope: {
+            shown: false
+        },
+        events: {
+            ' inserted': function() {
+                this.scope.attr('shown', true)
+            }
+        }
+    });
+
+	var frag = can.view.mustache("<parent-tag></parent-tag>")({})
+    
+    can.append( can.$("#qunit-test-area") , frag );
+
+
+    equal(inited, 1)
+    equal(inserted, 1);
+    
+    
+});
+
+test("checkboxes with can-value bind properly (#628)", function() {
+	can.Component({
+		tag: 'checkbox-value',
+		template: '<input type="checkbox" can-value="completed"/>'
+	});
+
+	var data = new can.Map({ completed: true }),
+		frag = can.view.mustache("<checkbox-value></checkbox-value>")(data);
+  can.append( can.$("#qunit-test-area") , frag );
+	
+	var input = can.$("#qunit-test-area")[0].getElementsByTagName('input')[0];
+	equal(input.checked, data.attr('completed'), 'checkbox value bound (via attr check)');
+	data.attr('completed', false);
+	equal(input.checked, data.attr('completed'), 'checkbox value bound (via attr uncheck)');
+	input.checked = true;
+	can.trigger(input, 'change');
+	equal(input.checked, true, 'checkbox value bound (via check)');
+	equal(data.attr('completed'), true, 'checkbox value bound (via check)');
+	input.checked = false;
+	can.trigger(input, 'change');
+	equal(input.checked, false, 'checkbox value bound (via uncheck)');
+	equal(data.attr('completed'), false, 'checkbox value bound (via uncheck)');
+});
+
+test("Scope as Map constructors should follow '@' default values (#657)", function() {
+	var PanelViewModel = can.Map.extend({
+		title: "@"
+	});
+
+	can.Component.extend({
+		tag: "panel",
+		scope: PanelViewModel
+	})
+
+	var frag = can.view.mustache('<panel title="Libraries">Content</panel>')({ title: "hello" });
+  can.append( can.$("#qunit-test-area") , frag );
+
+  equal(can.scope(can.$("panel")[0]).attr("title"), "Libraries");
+});
+
+test("@ keeps properties live now", function(){
+	
+	can.Component.extend({
+		tag: "attr-fun",
+		template: "<h1>{{fullName}}</h1>",
+		scope: {
+			firstName: "@",
+			lastName: "@",
+			fullName: function(){
+				return this.attr("firstName")+" "+this.attr("lastName")
+			}
+		}
+	});
+	
+	var frag = can.view.mustache("<attr-fun first-name='Justin' last-name='Meyer'></attr-fun>")();
+	
+	var attrFun = frag.childNodes[0];
+	
+	can.$("#qunit-test-area")[0].appendChild( attrFun );
+	
+	
+	equal(attrFun.childNodes[0].innerHTML, "Justin Meyer");
+	
+	can.attr.set(attrFun,"first-name", "Brian")
+	
+	stop();
+	
+	setTimeout(function(){
+		equal(attrFun.childNodes[0].innerHTML, "Brian Meyer");
+		can.remove( can.$(attrFun) );
+		start()
+	},100)
+	
+})
+
+
+
+
 })()

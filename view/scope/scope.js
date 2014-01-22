@@ -19,10 +19,10 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 		escapeDotReg = /\\\./g,
 		getNames = function(attr){
 			var names = [], last = 0;
-			attr.replace(escapeReg, function($0, $1, index) {
-				if (!$1) {
+			attr.replace(escapeReg, function(first, second, index) {
+				if (!second) {
 					names.push(attr.slice(last, index).replace(escapeDotReg,'.'));
-					last = index + $0.length;
+					last = index + first.length;
 				}
 			});
 			names.push(attr.slice(last).replace(escapeDotReg,'.'));
@@ -91,6 +91,8 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 						// call that method
 						if(options.returnObserveMethods){
 							cur = cur[reads[i]]
+						} else if (reads[i] === "constructor" && prev instanceof can.Construct) {
+							cur = prev[ reads[i] ];
 						} else {
 							cur = prev[ reads[i] ].apply(prev, options.args ||[])
 						}
@@ -119,10 +121,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					return {value: undefined, parent: prev};
 				}
 			}
-			// if we don't have a value, exit early.
-			if( cur === undefined ){
-				options.earlyExit && options.earlyExit(prev, i - 1)
-			}
+			
 			// handle an ending function
 			if(typeof cur === "function"){
 				if( options.isArgument ) {
@@ -132,11 +131,13 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				} else {
 					
 					cur.isComputed && !foundObs && options.foundObservable && options.foundObservable(cur, i)
-					
-					
-					cur = cur.call(prev)
+					cur = cur.call(prev);
 				}
 				
+			}
+			// if we don't have a value, exit early.
+			if( cur === undefined ){
+				options.earlyExit && options.earlyExit(prev, i - 1)
 			}
 			return {value: cur, parent: prev};
 		}
@@ -176,7 +177,13 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 		 *     curScope.attr("length") //-> 2
 		 */
 		attr: function(key){
-			return this.read(key,{isArgument: true, returnObserveMethods:true, proxyMethods: false}).value
+			// reads for whatever called before attr.  It's possible
+			// that this.read clears them.  We want to restore them.
+			var previousReads = can.__clearReading && can.__clearReading(),
+				res = this.read(key,{isArgument: true, returnObserveMethods:true, proxyMethods: false}).value;
+			can.__setReading && can.__setReading(previousReads);
+				
+			return res;
 		},
 		/**
 		 * @function can.view.Scope.prototype.add
@@ -289,6 +296,25 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				};
 			return computeData
 			
+		},
+		/**
+		 * @function can.view.Scope.prototype.compute
+		 * 
+		 * @description Provides a get-set compute that represents a 
+		 * key's value.
+		 * 
+		 * @signature `scope.compute( key, [options] )`
+		 * @release 2.1
+		 * 
+		 * @param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a 
+		 * property name that includes a dot. 
+		 * 
+		 * @param {can.view.Scope.readOptions} [options] Options that configure how the `key` gets read.
+		 * 
+		 * @return {can.compute} A compute that can get or set `key`.
+		 */
+		compute: function(key, options){
+			return this.computeData(key,options).compute;
 		},
 		/**
 		 * @hide
@@ -411,7 +437,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			// If there was a likely observe.
 			if( defaultObserve ) {
 				// Restore reading for previous compute
-				can.__setReading && can.__setReading(defaultComputeReadings)
+				can.__setReading && can.__setReading(defaultComputeReadings);
 				return {
 					scope: defaultScope,
 					rootObserve: defaultObserve,
