@@ -872,30 +872,6 @@ test("inserted event fires twice if component inside live binding block", functi
     equal(inserted, 1)
 });
 
-test("checkboxes with can-value bind properly (#628)", function() {
-	can.Component({
-		tag: 'checkbox-value',
-		template: '<input type="checkbox" can-value="completed"/>'
-	});
-
-	var data = new can.Map({ completed: true }),
-		frag = can.view.mustache("<checkbox-value></checkbox-value>")(data);
-  can.append( can.$("#qunit-test-area") , frag );
-	
-	var input = can.$("#qunit-test-area")[0].getElementsByTagName('input')[0];
-	equal(input.checked, data.attr('completed'), 'checkbox value bound (via attr check)');
-	data.attr('completed', false);
-	equal(input.checked, data.attr('completed'), 'checkbox value bound (via attr uncheck)');
-	input.checked = true;
-	can.trigger(input, 'change');
-	equal(input.checked, true, 'checkbox value bound (via check)');
-	equal(data.attr('completed'), true, 'checkbox value bound (via check)');
-	input.checked = false;
-	can.trigger(input, 'change');
-	equal(input.checked, false, 'checkbox value bound (via uncheck)');
-	equal(data.attr('completed'), false, 'checkbox value bound (via uncheck)');
-});
-
 test("Scope as Map constructors should follow '@' default values (#657)", function() {
 	var PanelViewModel = can.Map.extend({
 		title: "@"
