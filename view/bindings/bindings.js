@@ -193,10 +193,9 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 					trueValue = this.options.trueValue() || true,
 					falseValue = this.options.falseValue() || false;
 					
-				this.element[0].checked = ( value == trueValue )
+				can.view.elements.setAttr(this.element[0], 'checked', ( value == trueValue ));
 			} else {
-				var checked = this.options.value() === this.element[0].value;
-				can.view.elements.setAttr(this.element[0], 'checked', checked);
+				can.view.elements.setAttr(this.element[0], 'checked', this.options.value() === this.element[0].value);
 			}
 			
 			
