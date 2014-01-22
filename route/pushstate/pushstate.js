@@ -91,18 +91,24 @@ steal('can/util', 'can/route', function(can) {
                 var linksHost = node.host || window.location.host;
                 // if link is within the same domain
                 if( window.location.host == linksHost ) {
-                    var curParams = can.route.deparam(node.pathname+node.search);
-                    // if a route matches
-                    if(curParams.hasOwnProperty('route')) {
-                    	// make it possible to have a link with a hash
-                    	includeHash = true;
-                    	// update the data
-                    	window.history.pushState(null, null, node.href);
-                    	// test if you can preventDefault
-                    	// our tests can't call .click() b/c this
-                    	// freezes phantom
-                    	e.preventDefault && e.preventDefault();
-                	}
+                    // if link is a descendant of `root`
+                    var root = can.route._call("root");
+                    if (node.pathname.indexOf(root) == 0) {
+                    	// remove `root` from url
+                    	var url = (node.pathname+node.search).substr(root.length);
+                        var curParams = can.route.deparam(url);
+                        // if a route matches
+                        if(curParams.hasOwnProperty('route')) {
+                        	// make it possible to have a link with a hash
+                        	includeHash = true;
+                        	// update the data
+                        	window.history.pushState(null, null, node.href);
+                        	// test if you can preventDefault
+                        	// our tests can't call .click() b/c this
+                        	// freezes phantom
+                        	e.preventDefault && e.preventDefault();
+                    	}
+                    }
                 }
         	}
 		},
