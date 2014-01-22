@@ -23,7 +23,7 @@ steal('can/util', 'can/model', 'can/map/backup', function(can){
 
 			var def          = new can.Deferred,
 				self         = this,
-				attrs        = this.attr(),
+				attrs        = this.serialize(),
 				queue        = this._requestQueue,
 				changedAttrs = this._changedAttrs,
 				reqFn, index;

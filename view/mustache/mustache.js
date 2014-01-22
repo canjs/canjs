@@ -67,10 +67,10 @@ function( can ){
 		// used to make sure .fn and .inverse are always called with a Scope like object
 		makeConvertToScopes = function(orignal, scope, options){
 			return function(updatedScope, updatedOptions){
-				if(updatedScope != null && !(updatedScope instanceof  can.view.Scope)){
+				if(updatedScope !== undefined && !(updatedScope instanceof  can.view.Scope)){
 					updatedScope = scope.add(updatedScope)	
 				}
-				if(updatedOptions != null && !(updatedOptions instanceof  OptionsScope)){
+				if(updatedOptions !== undefined && !(updatedOptions instanceof  can.view.Options)){
 					updatedOptions = options.add(updatedOptions)
 				}
 				return orignal(updatedScope, updatedOptions || options)
@@ -137,8 +137,8 @@ function( can ){
 		if(!(data instanceof can.view.Scope)){
 			data = new can.view.Scope(data || {});
 		}
-		if( ! (options instanceof OptionsScope) ){
-			options = new OptionsScope(options || {})
+		if( ! (options instanceof can.view.Options) ){
+			options = new can.view.Options(options || {})
 		}
 		options = options || {};
 		
@@ -689,7 +689,12 @@ function( can ){
 					name: /^.*$/,
 					fn: function(content, cmd) {
 						var mode = false,
-							result = [];
+							result = {
+								content: "",
+								startTxt: false,
+								startOnlyTxt: false,
+								end: false
+							};
 
 						// Trim the content so we don't have any trailing whitespace.
 						content = can.trim(content);
@@ -1165,9 +1170,13 @@ function( can ){
 								 */
 								case '^':
 									if(cmd.specialAttribute) {
-										result.push(cmd.insert + 'can.view.onlytxt(this,function(){ return ');
+										result.startOnlyTxt = true;
+										//result.push(cmd.insert + 'can.view.onlytxt(this,function(){ return ');
 									} else {
-										result.push(cmd.insert + 'can.view.txt(0,\'' + cmd.tagName + '\',' + cmd.status + ',this,function(){ return ');
+										result.startTxt = true;
+										// sections should never be escaped
+										result.escaped = 0;
+										//result.push(cmd.insert + 'can.view.txt(0,\'' + cmd.tagName + '\',' + cmd.status + ',this,function(){ return ');
 									}
 									break;
 								// Close the prior section.
@@ -1184,7 +1193,10 @@ function( can ){
 								 * possible to simply write `{{/}}` to end a block.
 								 */
 								case '/':
-									return { raw: 'return ___v1ew.join("");}}])}));' };
+									result.end = true;
+									result.content += 'return ___v1ew.join("");}}])';
+									return result;
+									//return { raw: }));' };
 									break;
 							}
 							
@@ -1201,7 +1213,8 @@ function( can ){
 								arg, split, m;
 							
 							// Start the content render block.
-							result.push('can.Mustache.txt(\n'+CONTEXT_OBJ+',\n' + (mode ? '"'+mode+'"' : 'null') + ',');
+							result.content += 'can.Mustache.txt(\n'+CONTEXT_OBJ+',\n' + (mode ? '"'+mode+'"' : 'null') + ','
+							
 							
 							// Parse the helper arguments.
 							// This needs uses this method instead of a split(/\s/) so that 
@@ -1231,20 +1244,20 @@ function( can ){
 								i++;
 							});
 
-							result.push(args.join(","));
+							result.content += args.join(",");
 							if( hashes.length ) {
-								result.push(",{"+HASH+":{"+hashes.join(",")+"}}")
+								result.content += ",{"+HASH+":{"+hashes.join(",")+"}}"
 							}
 							
 						
 						}
 						
 						// Create an option object for sections of code.
-						mode && mode != 'else' && result.push(',[\n\n');
+						mode && mode != 'else' && ( result.content += ',[\n\n');
 						switch (mode) {
 							// Truthy section
 							case '#':
-								result.push('{fn:function(' + ARG_NAMES + '){var ___v1ew = [];');
+								result.content += ('{fn:function(' + ARG_NAMES + '){var ___v1ew = [];');
 								break;
 							// If/else section
 							// Falsey section
@@ -1272,21 +1285,24 @@ function( can ){
 							 * 
 							 */
 							case 'else':
-								result.push('return ___v1ew.join("");}},\n{inverse:function(' + ARG_NAMES + '){\nvar ___v1ew = [];');
+								result.content += 'return ___v1ew.join("");}},\n{inverse:function(' + ARG_NAMES + '){\nvar ___v1ew = [];';
 								break;
 							case '^':
-								result.push('{inverse:function(' + ARG_NAMES + '){\nvar ___v1ew = [];');
+								result.content +=  '{inverse:function(' + ARG_NAMES + '){\nvar ___v1ew = [];';
 								break;
 							
 							// Not a section, no mode
 							default:
-								result.push(')');
+								result.content += (')');
 								break;
 						}
 						
-						// Return a raw result if there was a section, otherwise return the default string.
-						result = result.join('');
-						return mode ? { raw: result } : result;
+						if(!mode){
+							result.startTxt = true;
+							result.end = true;
+						}
+						
+						return result;
 					}
 				}
 			]
@@ -1311,6 +1327,8 @@ function( can ){
 	 * @param {String|Object} name	The string (or sometimes object) to pass to the given helper method.
 	 */
 	Mustache.txt = function(scopeAndOptions, mode, name) {
+
+		// here we are going to cache the lookup values so future calls are much faster
 		var scope = scopeAndOptions.scope,
 			options = scopeAndOptions.options,
 			args = [],
@@ -1320,26 +1338,27 @@ function( can ){
 			},
 			hash,
 			context = scope.attr("."),
-			getHelper = true; 
+			getHelper = true,
+			helper; 
 		
 		// convert lookup values to actual values in name, arguments, and hash
 		for(var i =3; i < arguments.length;i++){
-			var arg = arguments[i]
+			var arg = arguments[i];
 			if(mode && can.isArray( arg )){
 				// merge into options
-				helperOptions = can.extend.apply(can, [helperOptions].concat(arg))
+				helperOptions = can.extend.apply(can, [helperOptions].concat(arg));
 			} else if(arg && arg[HASH]){
 				hash = arg[HASH];
 				// get values on hash
 				for(var prop in hash){
 					if(isLookup(hash[prop]) ){
-						hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions)
+						hash[prop] = Mustache.get(hash[prop].get, scopeAndOptions);
 					}
 				}
 			} else if(arg && isLookup(arg)){
 				args.push( Mustache.get(arg.get, scopeAndOptions, false, true) );
 			} else {
-				args.push(arg)
+				args.push(arg);
 			}
 		}
 		
@@ -1352,11 +1371,11 @@ function( can ){
 			// into issues like {{text}} / {text: 'with'}
 			getHelper = (get === name);
 		}	
-			
+		
 		// overwrite fn and inverse to always convert to scopes
 		helperOptions.fn = makeConvertToScopes(helperOptions.fn, scope, options);
-		helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options)
-
+		helperOptions.inverse = makeConvertToScopes(helperOptions.inverse, scope, options);
+		
 		// Check for a registered helper or a helper-like function.
 		if (helper = ( getHelper && (typeof name === "string" && Mustache.getHelper(name,options)  )|| (can.isFunction(name) && !name.isComputed && { fn: name }))) {
 			// Add additional data to be used by helper functions
@@ -1366,87 +1385,94 @@ function( can ){
 				scope: scope,
 				contexts: scope,
 				hash: hash
-			})
+			});
 
-			args.push(helperOptions)
+			args.push(helperOptions);
 			// Call the helper.
-			return helper.fn.apply(context, args) || '';
+			return function(){
+				return helper.fn.apply(context, args) || '';
+			};
+			
 		}
-
 		
-		if( can.isFunction(name)  ){
-			if ( name.isComputed ) {
-				name = name();
-			} 
-		}
-
-		// An array of arguments to check for truthyness when evaluating sections.
-		var validArgs = args.length ? args : [name],
-			// Whether the arguments meet the condition of the section.
-			valid = true,
-			result = [],
-			i, helper, argIsObserve, arg;
-		// Validate the arguments based on the section mode.
-		if (mode) {
-			for (i = 0; i < validArgs.length; i++) {
-				arg          = validArgs[i];
-				argIsObserve = typeof arg !== 'undefined' && isObserveLike(arg);
-				// Array-like objects are falsey if their length = 0.
-				if (isArrayLike(arg)) {
-					// Use .attr to trigger binding on empty lists returned from function
-					if(mode == '#'){
-						valid = valid && !!(argIsObserve ? arg.attr('length') : arg.length);
-					} else if(mode == '^'){
-						valid = valid && !(argIsObserve ? arg.attr('length') : arg.length);
-					}
-				}
-				// Otherwise just check if it is truthy or not.
-				else {
-					valid = mode == '#' ? valid && !!arg
-						: mode == '^' ? valid && !arg
-						: valid;
-				}
+		
+		
+		return function(){
+			
+			var value;
+			if( can.isFunction(name) &&  name.isComputed ){
+				value = name();
+			} else {
+				value = name;
 			}
-		}
-		
-		// Otherwise interpolate like normal.
-		if (valid) {
-			switch (mode) {
-				// Truthy section.
-				case '#':
-					// Iterate over arrays
-					if (isArrayLike(name)) {
-						var isObserveList = isObserveLike(name);
-						
-						// Add the reference to the list in the contexts.
-						for (i = 0; i < name.length; i++) {
-							result.push(helperOptions.fn(name[i]|| '') );
-							
-							// Ensure that live update works on observable lists
-							isObserveList && name.attr(''+i);
+			// An array of arguments to check for truthyness when evaluating sections.
+			var validArgs = args.length ? args : [value],
+				// Whether the arguments meet the condition of the section.
+				valid = true,
+				result = [],
+				i, helper, argIsObserve, arg;
+			// Validate the arguments based on the section mode.
+			if (mode) {
+				for (i = 0; i < validArgs.length; i++) {
+					arg          = validArgs[i];
+					argIsObserve = typeof arg !== 'undefined' && isObserveLike(arg);
+					// Array-like objects are falsey if their length = 0.
+					if (isArrayLike(arg)) {
+						// Use .attr to trigger binding on empty lists returned from function
+						if(mode == '#'){
+							valid = valid && !!(argIsObserve ? arg.attr('length') : arg.length);
+						} else if(mode == '^'){
+							valid = valid && !(argIsObserve ? arg.attr('length') : arg.length);
 						}
-						return result.join('');
 					}
-					// Normal case.
+					// Otherwise just check if it is truthy or not.
 					else {
-						return helperOptions.fn(name || {}) || '';
+						valid = mode == '#' ? valid && !!arg
+							: mode == '^' ? valid && !arg
+							: valid;
 					}
-					break;
-				// Falsey section.
-				case '^':
-					return helperOptions.inverse(name || {}) || '';
-					break;
-				default:
-					// Add + '' to convert things like numbers to strings.
-					// This can cause issues if you are trying to
-					// eval on the length but this is the more
-					// common case.
-					return '' + (name !== undefined ? name : '');
-					break;
+				}
 			}
+			
+			// Otherwise interpolate like normal.
+			if (valid) {
+				switch (mode) {
+					// Truthy section.
+					case '#':
+						// Iterate over arrays
+						if (isArrayLike(value)) {
+							var isObserveList = isObserveLike(value);
+							
+							// Add the reference to the list in the contexts.
+							for (i = 0; i < value.length; i++) {
+								result.push( helperOptions.fn(value[i]) );
+								
+								// Ensure that live update works on observable lists
+								isObserveList && value.attr(''+i);
+							}
+							return result.join('');
+						}
+						// Normal case.
+						else {
+							return helperOptions.fn(value || {}) || '';
+						}
+						break;
+					// Falsey section.
+					case '^':
+						return helperOptions.inverse(value || {}) || '';
+						break;
+					default:
+						// Add + '' to convert things like numbers to strings.
+						// This can cause issues if you are trying to
+						// eval on the length but this is the more
+						// common case.
+						return '' + (value != undefined ? value : '');
+						break;
+				}
+			}
+			
+			return '';
 		}
-		
-		return '';
 	};
 	
 	/**
@@ -1547,9 +1573,9 @@ function( can ){
 	 * @static
 	 */
 	
-	var OptionsScope = can.view.Scope.extend({
+	can.view.Options = can.view.Scope.extend({
 		init: function(data, parent){
-			if(!data.helpers && !data.partials){
+			if(!data.helpers && !data.partials && !data.tags){
 				data = {
 					helpers: data
 				}
@@ -1620,7 +1646,7 @@ function( can ){
 	 * @parent can.Mustache.static
 	 * @signature `Mustache.render(partial, context)`
 	 * @param {Object} partial
-	 * @param {Object} context
+	 * @param {can.view.Scope} scope
 	 *
 	 * @body
 	 * `Mustache.render` is a helper method that calls
@@ -1637,16 +1663,26 @@ function( can ){
 	 *
 	 * 		context[partial] === "movember.mustache"
 	 */
-	Mustache.render = function(partial, context, options){
-		// Make sure the partial being passed in
-		// isn't a variable like { partial: "foo.mustache" }
-		if(!can.view.cached[partial] && context.attr('partial')){
-			partial = context.attr('partial');
+	Mustache.render = function(partial, scope, options){
+		// TOOD: clean up the following
+		// If there is a "partial" property and there is not
+		// an already-cached partial, we use the value of the 
+		// property to look up the partial
+		
+		// if this partial is not cached ...
+		if( !can.view.cached[partial] ) {
+			// we don't want to bind to changes so clear and restore reading
+			var reads = can.__clearReading && can.__clearReading()
+			if( scope.attr('partial') ) {
+				partial = scope.attr('partial');
+			}
+			can.__setReading && can.__setReading(reads);
 		}
 
+
 		// Call into `can.view.render` passing the
-		// partial and context.
-		return can.view.render(partial, context/*, options*/);
+		// partial and scope.
+		return can.view.render(partial, scope/*, options*/);
 	};
 
 	/**
@@ -1668,7 +1704,7 @@ function( can ){
    *   url  = can.esc(url);
    *
    *   var result = '&lt;a href="' + url + '"&gt;' + text + '&lt;/a&gt;';
-   *   return new can.Mustache.safeString(result);
+   *   return can.Mustache.safeString(result);
    * });
    * @codeend
    *
@@ -1683,7 +1719,7 @@ function( can ){
    * &lt;div&gt;&lt;a href="http://google.com"&gt;Google&lt;/a&gt;&lt;/div&gt;
    * @codeend
    *
-   * As an anchor tag whereas if we would have just returned the result rather than a new
+   * As an anchor tag whereas if we would have just returned the result rather than a
    * `can.Mustache.safeString` our template would have rendered a div with the escaped anchor tag.
    *
    */
@@ -1890,17 +1926,23 @@ function( can ){
 		 *     </ul>
 		 */
 		'each': function(expr, options) {
-			if(expr.isComputed || isObserveLike(expr) && typeof expr.attr('length') !== 'undefined'){
-				return can.view.lists && can.view.lists(expr, function(item, key) {
-					// Create a compute that listens to whenever the index of the item in our list changes.
-					var indexCompute = can.compute(function() {
-						var exprResolved = Mustache.resolve(expr);
-						return (exprResolved).indexOf(item);
-					});
-					return options.fn( options.scope.add({"@index": indexCompute}).add(item) );
+			// Check if this is a list or a compute that resolves to a list, and setup
+			// the incremental live-binding 
+			
+			
+			// First, see what we are dealing with.  It's ok to read the compute
+			// because can.view.text is only temporarily binding to what is going on here.
+			// Calling can.view.lists prevents anything from listening on that compute.
+			var resolved = Mustache.resolve(expr);
+			
+			// When resolved === undefined, the property hasn't been defined yet
+			// Assume it is intended to be a list
+			if(can.view.lists && (resolved instanceof can.List || (expr && expr.isComputed && resolved === undefined))){
+				return can.view.lists(expr, function(item, index) {
+					return options.fn( options.scope.add({"@index": index}).add(item) );
 				});
 			}
-			expr = Mustache.resolve(expr);
+			expr = resolved;
 			
 			if (!!expr && isArrayLike(expr)) {
 				var result = [];

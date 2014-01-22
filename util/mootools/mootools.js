@@ -1,5 +1,5 @@
-steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js', 'can/util/deferred.js',
-'can/util/array/each.js', 'can/util/object/isplain', "can/util/inserted",function(can) {
+steal('can/util/can.js',  'can/util/attr', 'mootools', 'can/util/event.js','can/util/fragment.js', 'can/util/deferred.js',
+'can/util/array/each.js', 'can/util/object/isplain', "can/util/inserted",function(can, attr) {
 	// mootools.js
 	// ---------
 	// _MooTools node list._
@@ -99,11 +99,11 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 	can.isArray = function(arr) {
 		return typeOf(arr) === 'array'
 	};
-	can.inArray = function(item,arr) {
+	can.inArray = function(item,arr,fromIndex) {
 		if(!arr) {
 			return -1;
 		}
-		return Array.prototype.indexOf.call(arr, item);
+		return Array.prototype.indexOf.call(arr, item, fromIndex);
 	}
 	can.map = function(arr, fn){
 		return Array.from(arr||[]).map(fn);
@@ -349,7 +349,8 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 
 	// Destroyed method.
 	var destroy = Element.prototype.destroy,
-		grab = Element.prototype.grab;
+		grab = Element.prototype.grab,
+		oldSet = Element.prototype.set;
 	Element.implement({
 		destroy : function(){
 			can.trigger(this,"removed",[],false)
@@ -369,7 +370,24 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 			var ret = grab.apply(this,arguments);
 			can.inserted( elems );
 			return ret;
-		}
+		},
+		set : function(attrName, value){
+			var isAttributeOrProp = can.inArray( attrName, ["events","html","load","morph","send","tag","tween"])  == -1;
+			
+			if( isAttributeOrProp ) {
+				var oldValue = this.get(attrName);
+			}
+			
+			var res = oldSet.apply(this, arguments);
+			
+			if( isAttributeOrProp ) {
+				var newValue = this.get(attrName);
+			}
+			if(newValue != oldValue) {
+				can.attr.trigger(this, attrName,oldValue);
+			}
+			return res;
+		}.overloadSetter()
 	});
 	can.get = function(wrapped, index){
 		return wrapped[index];
@@ -387,5 +405,60 @@ steal('can/util/can.js', 'mootools', 'can/util/event.js','can/util/fragment.js',
 		}
 	}
 	Element.NativeEvents["hashchange"] = 2;
+	
+	
+	// Setup attributes events
+	
+	can.attr = attr;
+	
+	// turn off mutation events for zepto
+	delete attr.MutationObserver;
+	
+	/*var oldAttr = $.fn.attr;
+	$.fn.attr = function(attrName, value){
+		var isString = typeof attrName == "string";
+		if(value !== undefined && isString) {
+			var oldValue = oldAttr.call(this, attrName);
+		}
+		var res = oldAttr.apply(this, arguments);
+		if(value !== undefined && isString) {
+			var newValue = oldAttr.call(this, attrName);
+		}
+		if(newValue != oldValue) {
+			can.attr.trigger(this[0], attrName,oldValue);
+		}
+		return res;
+	}
+	var oldRemove = $.fn.removeAttr;
+	$.fn.removeAttr = function(attrName){
+		var oldValue = oldAttr.call(this, attrName),
+			res = oldRemove.apply(this, arguments);
+			
+		if(oldValue != null) {
+			can.attr.trigger(el, attrName,oldValue);
+		}
+		return res;
+	}*/
+	
+	Element.Events.attributes = {
+		onAdd: function(){
+			var el = can.$(this);
+			can.data( el, "canHasAttributesBindings", ( can.data( el, "canHasAttributesBindings") || 0 ) + 1  )
+		},
+		onRemove: function(){
+			var el = can.$(this),
+				cur = can.data( el, "canHasAttributesBindings") || 0 ;
+			if( cur <= 0 ) {
+				can.cleanData(el, "canHasAttributesBindings")
+			} else {
+				can.data( el, "canHasAttributesBindings", cur - 1  )
+			}
+		}
+	}
+
+	
+
+	
+	
 	return can;
 });

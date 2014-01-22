@@ -175,6 +175,7 @@ module.exports = function (grunt) {
 				options: {
 					urls: [
 						'http://localhost:8000/test/jquery.html',
+						'http://localhost:8000/test/jquery-2.html',
 						'http://localhost:8000/test/dojo.html',
 						//'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/mootools.html',
@@ -187,6 +188,7 @@ module.exports = function (grunt) {
 					urls: [
 						'http://localhost:8000/test/dist/dojo.html',
 						'http://localhost:8000/test/dist/jquery.html',
+						'http://localhost:8000/test/dist/jquery-2.html',
 						//'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/dist/mootools.html',
 						'http://localhost:8000/test/dist/yui.html'
@@ -198,9 +200,37 @@ module.exports = function (grunt) {
 					urls: [
 						// TODO AMD & DOJO 'http://localhost:8000/test/amd/dojo.html',
 						'http://localhost:8000/test/amd/jquery.html',
+						'http://localhost:8000/test/amd/jquery-2.html',
 						//'http://localhost:8000/can/test/zepto.html',
 						'http://localhost:8000/test/amd/mootools.html',
 						'http://localhost:8000/test/amd/yui.html'
+					]
+				}
+			},
+			individuals: {
+				options: {
+					urls: [
+						'http://localhost:8000/component/test.html',
+						'http://localhost:8000/compute/test.html',
+						'http://localhost:8000/construct/test.html',
+						'http://localhost:8000/construct/proxy/test.html',
+						'http://localhost:8000/construct/super/test.html',
+						'http://localhost:8000/control/test.html',
+						'http://localhost:8000/map/test.html',
+						'http://localhost:8000/map/attributes/test.html',
+						'http://localhost:8000/map/backup/test.html',
+						// 'http://localhost:8000/map/delegate/test.html',
+						'http://localhost:8000/map/list/test.html',
+						'http://localhost:8000/map/setter/test.html',
+						'http://localhost:8000/map/sort/test.html',
+						'http://localhost:8000/map/validations/test.html',
+						'http://localhost:8000/model/test.html',
+						'http://localhost:8000/observe/test.html',
+						// 'http://localhost:8000/route/test.html',
+						'http://localhost:8000/route/pushstate/test.html',
+						'http://localhost:8000/view/test.html',
+						'http://localhost:8000/view/ejs/test.html',
+						'http://localhost:8000/view/mustache/test.html'
 					]
 				}
 			}

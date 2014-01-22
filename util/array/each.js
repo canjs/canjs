@@ -11,7 +11,14 @@ steal('can/util/can.js',function (can) {
 						break;
 					}
 				}
-			} else if(elements.hasOwnProperty) {
+			} 
+			else if(elements.hasOwnProperty) {
+				if(can.Map && elements instanceof can.Map) {
+					can.__reading && can.__reading(elements, '__keys');
+					elements = elements.__get()
+				}
+				
+				
 				for (key in elements) {
 					if(elements.hasOwnProperty(key)) {
 						if (callback.call(context || elements[key], elements[key], key, elements) === false) {

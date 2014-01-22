@@ -175,6 +175,30 @@ test("id will be set correctly, although update data is serialized before create
 	stop();
 
 
+});
+
+test("queue uses serialize (#611)", function(){
+	
+	can.fixture("POST /mymodel", function(request){
+		equal(request.data.foo,"bar");
+		start();
+	})
+	
+	var MyModel = can.Model.extend({
+		create: "/mymodel"
+	},{
+		serialize: function(){
+			return {
+				foo:"bar"
+			}
+		}
+	});
+	
+	stop();
+	new MyModel().save();
+	
 })
+
+
 
 })();

@@ -432,9 +432,8 @@ steal("can/util", function( can ) {
 			else {
 				// get is called async but in 
 				// ff will be async so we need to temporarily reset
-				if(can.__reading){
-					var reading = can.__reading;
-					can.__reading = null;
+				if(can.__clearReading){
+					var reading = can.__clearReading();
 				}
 				
 				// No deferreds! Render this bad boy.
@@ -444,8 +443,8 @@ steal("can/util", function( can ) {
 					// Get the `view` type
 					deferred = get(view, async);
 					
-				if(can.Map && can.__reading){
-					can.__reading = reading;
+				if(reading){
+					can.__setReading(reading);
 				}
 				
 				// If we are `async`...
@@ -559,13 +558,18 @@ steal("can/util", function( can ) {
 			// Convert to a unique and valid id.
 			id = $view.toId(url);
 	
-			// If an absolute path, use `steal` to get it.
-			// You should only be using `//` if you are using `steal`.
+			// If an absolute path, use `steal`/`require` to get it.
+			// You should only be using `//` if you are using an AMD loader like `steal` or `require` (not almond).
 			if ( url.match(/^\/\//) ) {
-				var sub = url.substr(2);
-				url = ! window.steal ? 
-					sub :
-					steal.config().root.mapJoin(""+steal.id(sub));
+				url = url.substr(2);
+				url = !window.steal ? 
+					url :  
+					steal.config().root.mapJoin(""+steal.id(url));
+			}
+			
+			// Localize for `require` (not almond)
+			if (window.require) {
+				if (require.toUrl) url = require.toUrl(url);
 			}
 	
 			// Set the template engine type.

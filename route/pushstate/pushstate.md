@@ -16,15 +16,14 @@ of the [hash](https://developer.mozilla.org/en-US/docs/Web/API/URLUtils.hash).
 
 ## Use
 
-The pushstate plugin uses the same API as [can.route] with only one additional 
-property - [can.route.pushstate.root].  `can.route.pushstate.root` specifies the part of that pathname that
+The pushstate plugin uses the same API as [can.route] with only one additional
+property - [can.route.bindings.pushstate.root].  `can.route.bindings.pushstate.root` specifies the part of that pathname that
 should not change. For example, if we only want to have pathnames within `app.com/contacts/`,
 we can specify a root like:
 
-    can.route.pushstate.root = "/contacts/"
+    can.route.bindings.pushstate.root = "/contacts/"
     can.route(":page\\.html");
     can.route.url({page: "list"}) //-> "/contacts/list.html"
 
-Now, all routes will start with "/contacts/". The default [can.root.route] 
-is "/". 
-
+Now, all routes will start with "/contacts/". The default [can.root.route]
+is "/".

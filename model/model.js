@@ -40,7 +40,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 		getId = function( inst ) {
 			// Instead of using attr, use __get for performance.
 			// Need to set reading
-			can.__reading && can.__reading(inst, inst.constructor.id)
+			can.__reading(inst, inst.constructor.id)
 			return inst.__get(inst.constructor.id);
 		},
 		// Ajax `options` generator function
@@ -206,7 +206,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 					return model;
 				}
 			}
-		}
+		},
 		
 		
 	// This object describes how to make an ajax request for each ajax method.  
@@ -833,7 +833,7 @@ steal('can/util','can/map', 'can/list',function( can ) {
 				// Return the ajax method with `data` and the `type` provided.
 				return ajax(str || this[ajaxMethod.url || "_url"], data, ajaxMethod.type || "get")
 			}
-		}
+		};
 
 
 	

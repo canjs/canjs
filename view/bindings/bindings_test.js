@@ -43,7 +43,7 @@
 		
 		var template = can.view.mustache("<input can-value='age'/>")
 		
-		var map = new can.Map({age: "30"})
+		var map = new can.Map()
 		
 		var frag = template( map )
 		
@@ -52,7 +52,11 @@
 		ta.appendChild(frag);
 		
 		var input = ta.getElementsByTagName("input")[0];
-		equal(input.value, "30", "input value set correctly")
+		equal(input.value, "", "input value set correctly if key does not exist in map");
+
+		map.attr("age", "30");
+
+		equal(input.value, "30", "input value set correctly");
 		
 		map.attr("age","31");
 		
@@ -148,5 +152,24 @@
 		can.trigger( input, {type: "click"})
 	})
 	
+	asyncTest("can-value select remove from DOM", function(){
+		expect(1);
+
+		var template = can.view.mustache(
+			"<select can-value='color'>"+
+				"<option value='red'>Red</option>"+
+				"<option value='green'>Green</option>"+
+			"</select>"),
+			frag = template(),
+			ta = document.getElementById("qunit-test-area");
+
+		ta.appendChild(frag);
+		can.remove(can.$("select", ta));
+
+		setTimeout(function() {
+			start();
+			ok(true, 'Nothing should break if we just add and then remove the select');
+		}, 10);
+	})
 	
 })()
