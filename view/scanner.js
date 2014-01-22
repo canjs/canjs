@@ -136,80 +136,6 @@ can.view.Scanner = Scanner = function( options ) {
 	this.tokenReg = new RegExp("(" + this.tokenReg.slice(0).concat(["<", ">", '"', "'"]).join("|") + ")","g");
 };
 
-Scanner.attributes = {};
-Scanner.regExpAttributes = {};
-
-Scanner.attribute = function(attribute, callback){
-	if(typeof attribute == "string"){
-		Scanner.attributes[attribute] = callback;
-	} else {
-		Scanner.regExpAttributes[attribute] = {
-			match: attribute,
-			callback: callback
-		};
-	}
-	
-}
-Scanner.hookupAttributes = function(options, el){
-	can.each(options && options.attrs || [], function(attr){
-		options.attr = attr;
-		if(Scanner.attributes[attr]) {
-			Scanner.attributes[attr](options,el);
-		} else {
-			can.each(Scanner.regExpAttributes,function(attrMatcher){
-				if(attrMatcher.match.test(attr)){
-					attrMatcher.callback(options, el)
-				}
-			})
-		}
-		
-	})
-}
-Scanner.tag = function( tagName, callback){
-	// if we have html5shive ... re-generate
-	if(window.html5){
-		html5.elements += " "+tagName
-		html5.shivDocument();
-	}
-	
-	Scanner.tags[tagName.toLowerCase()] = callback;
-}
-Scanner.tags = {};
-// This is called when there is a special tag
-Scanner.hookupTag = function(hookupOptions){
-	// we need to call any live hookups
-	// so get that and return the hook
-	// a better system will always be called with the same stuff
-	var hooks = can.view.getHooks();
-	return can.view.hook(function(el){
-		can.each(hooks, function(fn){
-			fn(el);
-		});
-		
-		var helperTags = hookupOptions.options.read('helpers._tags',{}).value,
-			tagName= hookupOptions.tagName,
-			tagCallback = ( helperTags && helperTags[tagName] ) || Scanner.tags[tagName]
-		
-		
-		// if this was an element like <foo-bar> that doesn't have a component, just render its content
-		var scope = hookupOptions.scope,
-			res = tagCallback ? tagCallback(el, hookupOptions) : scope;
-			
-		// If the tagCallback gave us something to render with, and there is content within that element
-		// render it!
-		if(res && hookupOptions.subtemplate){
-			
-			if(scope !== res){
-				scope = scope.add(res)
-			}
-			var frag = can.view.frag( hookupOptions.subtemplate(scope, hookupOptions.options) );
-			can.appendChild(el, frag);
-		}
-		can.view.Scanner.hookupAttributes(hookupOptions, el);
-	});
-	
-}
-
 /**
  * Extend can.View to add scanner support.
  */
@@ -379,7 +305,7 @@ Scanner.prototype = {
 						// Put the start of the end
 						buff.push(put_cmd, 
 								 '"', clean(content), '"', 
-								 ",can.view.Scanner.hookupTag({tagName:'"+tagName+"',"+(attrs)+"scope: "+(this.text.scope || "this")+this.text.options)
+								 ",can.view.pending({tagName:'"+tagName+"',"+(attrs)+"scope: "+(this.text.scope || "this")+this.text.options)
 						
 						
 						
@@ -439,10 +365,10 @@ Scanner.prototype = {
 							// Otherwise we are creating a quote.
 							// TODO: does this handle `\`?
 							var attr = getAttrName();
-							if(Scanner.attributes[attr]){
+							if(VIEWATTR.attributes[attr]){
 								specialStates.attributeHookups.push(attr);
 							} else {
-								can.each(Scanner.regExpAttributes,function(attrMatcher){
+								can.each(VIEWATTR.regExpAttributes,function(attrMatcher){
 									if( attrMatcher.match.test(attr) ) {
 										specialStates.attributeHookups.push(attr);
 									}
@@ -483,7 +409,10 @@ Scanner.prototype = {
 				default:
 					// Track the current tag
 					if(lastToken === '<'){
-						tagName = token.split(/\s|!--/)[0];
+						
+						tagName = token.substr(0,3) === "!--" ?
+							"!--" : token.split(/\s/)[0];
+							
 						var isClosingTag = false;
 						
 						if( tagName.indexOf("/") === 0 ) {
@@ -522,7 +451,7 @@ Scanner.prototype = {
 								
 							} 
 								
-							if(tagName !== "!--" && ( Scanner.tags[tagName]  || automaticCustomElementCharacters.test(tagName) )){
+							if(tagName !== "!--" && ( VIEWTAG.tags[tagName]  || automaticCustomElementCharacters.test(tagName) )){
 								// if the content tag is inside something it doesn't belong ...
 								if(tagName === "content" && elements.tagMap[top(tagNames)]){
 									// convert it to an element that will work
@@ -620,16 +549,34 @@ Scanner.prototype = {
 						}
 						
 						// Handle special cases
-						if (typeof content == 'object') {
-							if (content.raw) {
-								buff.push(content.raw);
+						if (typeof content == 'object') { 
+							
+							if(content.startTxt && content.end && specialAttribute) {
+								
+								buff.push(insert_cmd, content.content, '());');
+								
+							} else {
+								
+								if(content.startTxt) {
+									buff.push(insert_cmd, "can.view.txt(\n" + (content.escaped != undefined ? content.escaped : escaped) + ",\n'"+tagName+"',\n" + status() +",\nthis,\n");
+								} else if (content.startOnlyTxt){
+									buff.push(insert_cmd, 'can.view.onlytxt(this,\n');
+								}
+								buff.push(content.content)
+								if(content.end){
+									buff.push('));')
+								}
+								
 							}
+		
 						} else if (specialAttribute) {
+							
 							buff.push(insert_cmd, content, ');');
+							
 						} else {
 							// If we have `<%== a(function(){ %>` then we want
 							// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-							buff.push(insert_cmd, "can.view.txt(\n" + escaped + ",\n'"+tagName+"',\n" + status() +",\nthis,\nfunction(){ " + (this.text.escape || '') + "return ", content, 
+							buff.push(insert_cmd, "can.view.txt(\n" + escaped + ",\n'"+tagName+"',\n" + status() +",\nthis,\nfunction(){ return ", content, 
 								// If we have a block.
 								bracketCount ? 
 								// Start with startTxt `"var _v1ew = [];"`.
@@ -669,6 +616,7 @@ Scanner.prototype = {
 			out = {
 				out: (this.text.outStart||"") + template + " "+finishTxt+(this.text.outEnd || "")
 			};
+		
 		// Use `eval` instead of creating a function, because it is easier to debug.
 		myEval.call(out, 'this.fn = (function('+this.text.argNames+'){' + out.out + '});\r\n//@ sourceURL=' + name + ".js");
 
@@ -676,8 +624,96 @@ Scanner.prototype = {
 	}
 };
 
-can.view.Scanner.tag("content",function(el, options){
-	return options.scope;
+
+// can.view.attr
+var VIEWATTR = can.view.attr = function(attributeName, attrHandler){
+	if(typeof attributeName == "string"){
+		VIEWATTR.attributes[attributeName] = attrHandler;
+	} else {
+		VIEWATTR.regExpAttributes[attributeName] = {
+			match: attributeName,
+			handler: attrHandler
+		};
+	}
+};
+
+
+VIEWATTR.attributes = {};
+VIEWATTR.regExpAttributes = {};
+
+// called to hookup matched attributes on an element
+var hookupAttributes = function(attrData, el){
+	
+};
+
+
+
+var VIEWTAG = can.view.tag = function( tagName, tagHandler){
+	// if we have html5shive ... re-generate
+	if(window.html5){
+		html5.elements += " "+tagName
+		html5.shivDocument();
+	}
+	
+	VIEWTAG.tags[tagName.toLowerCase()] = tagHandler;
+}
+VIEWTAG.tags = {};
+// This is called when there is a special tag
+can.view.pending = function(viewData){
+	// we need to call any live hookups
+	// so get that and return the hook
+	// a better system will always be called with the same stuff
+	var hooks = can.view.getHooks();
+	return can.view.hook(function(el){
+		can.each(hooks, function(fn){
+			fn(el);
+		});
+		
+		if(viewData.tagName) {
+			
+			var tagName= viewData.tagName,
+				helperTagCallback = viewData.options.read('tags.'+tagName,{isArgument: true, proxyMethods: false}).value,
+				tagCallback = helperTagCallback || VIEWTAG.tags[tagName];
+				
+			// If this was an element like <foo-bar> that doesn't have a component, just render its content
+			var scope = viewData.scope,
+				res = tagCallback ? tagCallback(el, viewData) : scope;
+				
+			// If the tagCallback gave us something to render with, and there is content within that element
+			// render it!
+			if(res && viewData.subtemplate){
+				
+				if(scope !== res){
+					scope = scope.add(res)
+				}
+				var frag = can.view.frag( viewData.subtemplate(scope, viewData.options) );
+				can.appendChild(el, frag);
+			}
+			
+		}
+
+		can.each(viewData && viewData.attrs || [], function(attributeName){
+			viewData.attributeName = attributeName;
+			if(VIEWATTR.attributes[attributeName]) {
+				VIEWATTR.attributes[attributeName](el, viewData);
+			} else {
+				can.each(VIEWATTR.regExpAttributes,function(attrMatcher){
+					if(attrMatcher.match.test(attributeName)){
+						attrMatcher.handler(el, viewData)
+					}
+				})
+			}
+		});
+		
+	});
+	
+};
+
+
+
+
+can.view.tag("content",function(el, tagData){
+	return tagData.scope;
 })
 
 return Scanner;

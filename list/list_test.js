@@ -159,5 +159,18 @@ test("Array accessor methods", 11, function() {
 	});
 });
 
+test("splice removes items in IE (#562)", function(){
+	
+	var l = new can.List(['a' ])
+	
+	l.splice(0,1);
+	
+	
+	ok(!l.attr(0), "all props are removed")
+	
+	
+	
+})
+
 
 })();

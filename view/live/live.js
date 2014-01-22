@@ -1,4 +1,4 @@
-steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
+steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 	function(can, elements,view,nodeLists){
 	// ## live.js
 	// 
@@ -17,12 +17,21 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 	// 
 	// Calls bind right away, but will call unbind
 	// if the element is "destroyed" (removed from the DOM).
+	var setupCount = 0;
 	var setup = function(el, bind, unbind){
-		var teardown = function(){
-			unbind(data)
-			can.unbind.call(el,'removed', teardown);
-			return true
-		},
+		// Removing an element can call teardown which
+		// unregister the nodeList which calls teardown
+		var tornDown = false,
+			teardown = function(){
+				if(!tornDown) {
+					tornDown = true;
+					unbind(data)
+					can.unbind.call(el,'removed', teardown);
+					
+				}
+				
+				return true
+			},
 			data = {
 				// returns true if no parent
 				teardownCheck: function(parent){
@@ -52,74 +61,140 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 		getAttributeParts = function(newVal){
 			return (newVal|| "").replace(/['"]/g, '').split('=')
 		},
-		// #### insertElementsAfter
-		// Appends elements after the last item in oldElements.
-		insertElementsAfter = function(oldElements, newFrag){
-			var last = oldElements[oldElements.length - 1];
-					
-			// Insert it in the `document` or `documentFragment`
-			if( last.nextSibling ){
-				can.insertBefore(last.parentNode, newFrag, last.nextSibling)
-			} else {
-				can.appendChild(last.parentNode, newFrag);
-			}
-		};
+			splice = [].splice;
 
-
+	/**
+	 * @property {Object} can.view.live
+	 * @parent can.view.static
+	 * @release 2.0.4
+	 * 
+	 * Setup live-binding to a compute manually.
+	 * 
+	 * @body
+	 * 
+	 * ## Use
+	 * 
+	 * `can.view.live` is an object with utlitiy methods for setting up 
+	 * live-binding.  For example, to make an `<h2>`
+	 * 
+	 *  
+	 * 
+	 */
 	var live = {
-		nodeLists : nodeLists,
 		/**
-		 * Used 
-		 * @param {Object} el
-		 * @param {can.compute} list a compute that returns a number or a list 
-		 * @param {Object} func
-		 * @param {Object} context
-		 * @param {Object} parentNode
+		 * @function can.view.live.list
+		 * @parent can.view.live
+		 * @release 2.0.4
+		 * 
+		 * Live binds a compute's [can.List] incrementally.  
+		 * 
+		 *  
+		 * @param {HTMLElement} el An html element to replace with the live-section.
+		 * 
+		 * @param {can.compute|can.List} list A [can.List] or [can.compute] whose value is a [can.List].
+		 * 
+		 * @param {function(this:*,*,index):String} render(index, index) A function that when called with 
+		 * the incremental item to render and the index of the item in the list. 
+		 * 
+		 * @param {Object} context The `this` the `render` function will be called with.
+		 * 
+		 * @param {HTMLElement} [parentNode] An overwritable parentNode if `el`'s parent is
+		 * a documentFragment.
+		 * 
+		 * ## Use
+		 * 
+		 * `can.view.live.list` is used to setup incremental live-binding.
+		 * 
+		 *     // a compute that change's it's list
+		 *     var todos = can.compute(function(){
+		 *       return new Todo.List({page: can.route.attr("page")})
+		 *     })
+		 * 
+		 *     var placeholder = document.createTextNode(" ")
+		 *     $("ul#todos").append(placeholder)
+		 * 
+		 * 
+		 * 
+		 *     can.view.live.list(
+		 *       placeholder, 
+		 *       todos, 
+		 *       function(todo, index){
+		 *         return "<li>"+todo.attr("name")+"</li>"
+		 *       })
+		 * 
 		 */
-		list: function(el, compute, func, context, parentNode){
-			// A mapping of the index to an array
-			// of elements that represent the item.
-			// Each array is registered so child or parent
-			// live structures can update the elements
-			var nodesMap = [],
-				// called when an item is added
+		list: function(el, compute, render, context, parentNode){
+			
+			
+			// A nodeList of all elements this live-list manages.
+			// This is here so that if this live list is within another section
+			// that section is able to remove the items in this list.
+			var masterNodeList = [el],
+				// A mapping of the index of an item to an array
+				// of elements that represent the item.
+				// Each array is registered so child or parent
+				// live structures can update the elements.
+				itemIndexToNodeListsMap = [],
+				// A mapping of items to their indicies'
+				indexMap = [],
+				
+				// Called when items are added to the list.
 				add = function(ev, items, index){
-					// check that the placeholder textNode still has a parent.
-					// it's possible someone removed the contents of
-					// this element without removing the parent
-					if(data.teardownCheck(text.parentNode)){
-						return
-					}
-					
+
 					// Collect new html and mappings
 					var frag = document.createDocumentFragment(),
-						newMappings = [];
+						newNodeLists = [],
+						newIndicies = [];
+						
+					// For each new item,
 					can.each(items, function(item, key){
-						var itemHTML = func.call(context, item, (key + index)),
-							itemFrag = can.view.frag(itemHTML, parentNode);
+						
+						var itemIndex = can.compute(key + index),
+							// get its string content
+							itemHTML = render.call(context, item, itemIndex),
+							// and convert it into elements.
+							itemFrag = can.view.fragment(itemHTML)
 
-						newMappings.push(can.makeArray(itemFrag.childNodes));
-						frag.appendChild(itemFrag);
+						
+						// Add those elements to the mappings.
+						newNodeLists.push( 
+							// Register those nodes with nodeLists.
+							nodeLists.register( can.makeArray(itemFrag.childNodes), undefined, masterNodeList ) 
+						);
+						
+						// Hookup the fragment (which sets up child live-bindings) and
+						// add it to the collection of all added elements.
+						frag.appendChild( can.view.hookup(itemFrag)  );
+						newIndicies.push(itemIndex)
 					})
 
-					// Inserting at the end of the list
-					if(!nodesMap[index]){
-						insertElementsAfter(
+					// Check if we are adding items at the end
+					if( !itemIndexToNodeListsMap[index] ) {
+						
+						elements.after(
+							// If we are adding items to an empty list
 							index == 0 ?
+								// add those items after the placeholder text element.
 								[text] :
-								nodesMap[index-1], frag)
+								// otherwise, add them after the last element in the previous index.
+								itemIndexToNodeListsMap[index-1], frag)
 					} else {
-						var el = nodesMap[index][0];
+						// Add elements before the next index's first element.
+						var el = itemIndexToNodeListsMap[index][0];
 						can.insertBefore(el.parentNode, frag, el);
 					}
-					// register each item
-					can.each(newMappings,function(nodeList){
-						nodeLists.register(nodeList)
-					});
-					[].splice.apply(nodesMap, [index, 0].concat(newMappings));
+					
+					splice.apply(itemIndexToNodeListsMap, [index, 0].concat(newNodeLists));
+					
+					// update indices after insert point
+					splice.apply(indexMap, [index, 0].concat(newIndicies));
+					for(var i = index+newIndicies.length, len = indexMap.length; i < len; i++){
+						indexMap[i](i)
+					}
+					
 				},
-				// Remove can be called during teardown or when items are 
-				// removed from the element.
+				
+				// Called when items are removed or when the bindings are torn down.
 				remove = function(ev, items, index, duringTeardown){
 					
 					// If this is because an element was removed, we should
@@ -129,59 +204,99 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 						return
 					}
 					
-					var removedMappings = nodesMap.splice(index, items.length),
+					var removedMappings = itemIndexToNodeListsMap.splice(index, items.length),
 						itemsToRemove = [];
 
 					can.each(removedMappings,function(nodeList){
 						// add items that we will remove all at once
 						[].push.apply(itemsToRemove, nodeList)
 						// Update any parent lists to remove these items
-						nodeLists.replace(nodeList,[]);
+						nodeLists.update(nodeList,[]);
 						// unregister the list
 						nodeLists.unregister(nodeList);
 
 					});
+					// update indices after remove point
+					indexMap.splice(index, items.length)
+					for(var i = index, len = indexMap.length; i < len; i++){
+						indexMap[i](i)
+					}
+					
 					can.remove( can.$(itemsToRemove) );
 				},
 				parentNode = elements.getParentNode(el, parentNode),
 				text = document.createTextNode(""),
-				list;
+				// The current list.
+				list,
 
-			var teardownList = function(){
-				// there might be no list right away, and the list might be a plain
-				// array
-				list && list.unbind && list.unbind("add", add).unbind("remove", remove);
-				// use remove to clean stuff up for us
-				remove({},{length: nodesMap.length},0, true);
-			}
-
-			var updateList = function(ev, newList, oldList){
-				teardownList();
-				// make an empty list if the compute returns null or undefined
-				list = newList || [];
-				// list might be a plain array
-				list.bind && list.bind("add", add).bind("remove", remove);
-				add({}, list, 0);
-			}
-			insertElementsAfter([el],text);
-			can.remove( can.$(el) );
-
+				// Called when the list is replaced with a new list or the binding is torn-down.
+				teardownList = function(){
+					// there might be no list right away, and the list might be a plain
+					// array
+					list && list.unbind && list.unbind("add", add).unbind("remove", remove);
+					// use remove to clean stuff up for us
+					remove({},{length: itemIndexToNodeListsMap.length},0, true);
+				},
+				// Called when the list is replaced or setup.
+				updateList = function(ev, newList, oldList){
+					teardownList();
+					// make an empty list if the compute returns null or undefined
+					list = newList || [];
+					// list might be a plain array
+					list.bind && list.bind("add", add).bind("remove", remove);
+					add({}, list, 0);
+				}
+			
+			
 			// Setup binding and teardown to add and remove events
 			var data = setup(parentNode, function(){
 				can.isFunction(compute) && compute.bind("change",updateList)
 			},function(){
 				can.isFunction(compute) && compute.unbind("change",updateList)
 				teardownList()
-			})
-
+			});
+			
+			live.replace(masterNodeList, text, data.teardownCheck)
+			
+			// run the list setup
 			updateList({},can.isFunction(compute) ? compute() : compute)
 			
 
 		},
+		/**
+		 * @function can.view.live.html
+		 * @parent can.view.live
+		 * @release 2.0.4
+		 * 
+		 * Live binds a compute's value to a collection of elements.
+		 * 
+		 *  
+		 * @param {HTMLElement} el An html element to replace with the live-section.
+		 * 
+		 * @param {can.compute} compute A [can.compute] whose value is HTML.
+		 * 
+		 * @param {HTMLElement} [parentNode] An overwritable parentNode if `el`'s parent is
+		 * a documentFragment.
+		 * 
+		 * ## Use
+		 * 
+		 * `can.view.live.html` is used to setup incremental live-binding.
+		 * 
+		 *     // a compute that change's it's list
+		 *     var greeting = can.compute(function(){
+		 *       return "Welcome <i>"+me.attr("name")+"</i>"
+		 *     });
+		 * 
+		 *     var placeholder = document.createTextNode(" ");
+		 *     $("#greeting").append(placeholder);
+		 *     
+		 *     can.view.live.html( placeholder,  greeting );
+		 * 
+		 */
 		html: function(el, compute, parentNode){
 			var parentNode = elements.getParentNode(el, parentNode),
-
 				data = listen(parentNode, compute, function(ev, newVal, oldVal){
+					// TODO: remove teardownCheck in 2.1
 					var attached = nodes[0].parentNode;
 					// update the nodes in the DOM with the new rendered value
 					if( attached ) {
@@ -189,38 +304,73 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 					}
 					data.teardownCheck(nodes[0].parentNode);
 				});
-
-			var nodes,
+			
+			var nodes = [el],
 				makeAndPut = function(val){
-					// create the fragment, but don't hook it up
-					// we need to insert it into the document first
-					var frag = can.view.frag(val, parentNode),
-						// keep a reference to each node
-						newNodes = can.makeArray(frag.childNodes);
-					// Insert it in the `document` or `documentFragment`
-					insertElementsAfter(nodes || [el], frag)
-					// nodes hasn't been set yet
-					if( !nodes ) {
-						can.remove( can.$(el) );
-						nodes = newNodes;
-						// set the teardown nodeList
-						data.nodeList = nodes;
-						nodeLists.register(nodes);
-					} else {
-						// Update node Array's to point to new nodes
-						// and then remove the old nodes.
-						// It has to be in this order for Mootools
-						// and IE because somehow, after an element
-						// is removed from the DOM, it loses its
-						// expando values.
-						var nodesToRemove = can.makeArray(nodes);
-						nodeLists.replace(nodes,newNodes);
-						can.remove( can.$(nodesToRemove) );
-					}
+					var frag = can.view.fragment( ""+val ),
+						oldNodes = can.makeArray(nodes);
+					
+					// We need to mark each node as belonging to the node list.
+					nodeLists.update( nodes, frag.childNodes )
+					
+					frag = can.view.hookup( frag, parentNode )
+					
+					elements.replace(oldNodes, frag)
 				};
-				makeAndPut(compute(), [el]);
+			
+			data.nodeList = nodes;
+			// register the span so nodeLists knows the parentNodeList
+			nodeLists.register(nodes, data.teardownCheck)
+			makeAndPut(compute());
 
 		},
+		/**
+		 * @function can.view.live.replace
+		 * @parent can.view.live
+		 * @release 2.0.4
+		 * 
+		 * Replaces one element with some content while keeping [can.view.live.nodeLists nodeLists] data
+		 * correct.
+		 * 
+		 * @param {Array.<HTMLElement>} nodes An array of elements.  There should typically be one element.
+		 * @param {String|HTMLElement|DocumentFragment} val The content that should replace 
+		 * `nodes`.  If a string is passed, it will be [can.view.hookup hookedup].
+		 * 
+		 * @param {function} [teardown] A callback if these elements are torn down.
+		 */
+		replace: function(nodes, val, teardown){
+			var oldNodes = nodes.slice(0),
+				frag;
+				
+			nodeLists.register(nodes, teardown);
+			if(typeof val === "string") {
+				frag = can.view.fragment( val )
+			} else if(val.nodeType !== 11){
+				frag = document.createDocumentFragment();
+				frag.appendChild(val)
+			} else {
+				frag = val;
+			}
+	
+			// We need to mark each node as belonging to the node list.
+			nodeLists.update( nodes, frag.childNodes )
+			
+			if(typeof val === "string"){
+				// if it was a string, check for hookups
+				frag = can.view.hookup( frag, nodes[0].parentNode );
+			}
+			elements.replace(oldNodes, frag);
+			
+			return nodes;
+		},
+		/**
+		 * @function can.view.live.text
+		 * @parent can.view.live
+		 * @release 2.0.4
+		 * 
+		 * Replaces one element with some content while keeping [can.view.live.nodeLists nodeLists] data
+		 * correct.
+		 */
 		text: function(el, compute, parentNode){
 			var parent = elements.getParentNode(el, parentNode);
 
@@ -230,19 +380,15 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 				if ( typeof node.nodeValue != 'unknown' ) {
 					node.nodeValue = ""+newVal;
 				}
+				// TODO: remove in 2.1
 				data.teardownCheck(node.parentNode);
-			});
-
-			var node = document.createTextNode(compute());
-
-			if ( el.parentNode !== parent ) {
-				parent = el.parentNode;
-				parent.insertBefore(node, el);
-				parent.removeChild(el);
-			} else {
-				parent.insertBefore(node, el);
-				parent.removeChild(el);
-			}
+			}),
+				// The text node that will be updated
+				node = document.createTextNode( compute() );
+			
+			// Replace the placeholder with the live node and do the nodeLists thing.
+			// Add that node to nodeList so we can remove it when the parent element is removed from the page
+			data.nodeList = live.replace([el], node,  data.teardownCheck  );
 		},
 		attributes: function(el, compute, currentValue){
 			var setAttrs = function(newVal){
@@ -259,7 +405,6 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 					attrName = newAttrName;
 				}
 			}
-
 			listen(el, compute, function(ev, newVal){
 				setAttrs(newVal)
 			})
@@ -353,6 +498,8 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists.js',
 		return /^["'].*["']$/.test(val) ? val.substr(1, val.length-2) : val
 	}
 	can.view.live = live;
+	can.view.nodeLists = nodeLists;
+	can.view.elements = elements;
 	return live;
 
 })

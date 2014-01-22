@@ -3,6 +3,37 @@
 @parent guides 5
 -->
 
+__2.0.4__ ( Dec 23 2013 )
+
+- change: [2.0.4 test fixes](https://github.com/bitovi/canjs/pull/625)
+- change: [Makes live safeStrings work](https://github.com/bitovi/canjs/pull/624)
+- change: [Working @index in mustache templates](https://github.com/bitovi/canjs/pull/620)
+- change: [Fixes nested components and `&lt;content&gt;` tags.](https://github.com/bitovi/canjs/pull/619)
+- change: [Fixes a problem with double inserted events](https://github.com/bitovi/canjs/pull/618)
+- change: [benchmark.js and minor performance improvements](https://github.com/bitovi/canjs/pull/616)
+- change: [Node lists rewrite](https://github.com/bitovi/canjs/pull/615)
+- change: [temporary fixed mustache index calculation with simple can.List when remove first item of list](https://github.com/bitovi/canjs/pull/613)
+- change: [Serialization](https://github.com/bitovi/canjs/pull/611)
+- change: [can.Component ATTR value is undefined when passing a function as a scope](https://github.com/bitovi/canjs/issues/609)
+- change: [restore will not remove properties that were added since the last backup](https://github.com/bitovi/canjs/pull/607)
+- change: [can.Mustache.safestring does not work with computed properties](https://github.com/bitovi/canjs/issues/606)
+- change: [Items pushed on lists don&#39;t get removed from the DOM in some cases](https://github.com/bitovi/canjs/issues/605)
+- change: [Functions globally defined when it shouldn&#39;t be](https://github.com/bitovi/canjs/pull/604)
+- change: [undefined list passed to {{#each}}](https://github.com/bitovi/canjs/pull/602)
+- change: [Added test for inserted event bug (live binding block)](https://github.com/bitovi/canjs/pull/601)
+- change: [Support Offline Testing](https://github.com/bitovi/canjs/pull/600)
+- change: [When using certain html-comments, can.view.Scanner does not recognize them correctly](https://github.com/bitovi/canjs/pull/598)
+- change: [teardownMap slows perfomance drastically](https://github.com/bitovi/canjs/issues/595)
+- change: [test for component content extension stack overflow bug](https://github.com/bitovi/canjs/pull/594)
+- change: [Split element classnames fails with {{#if}}](https://github.com/bitovi/canjs/pull/592)
+- change: [fixed an error that is caused by the timeout firing after the element has been removed from the DOM](https://github.com/bitovi/canjs/pull/591)
+- change: [Please add trailing slash support for can.route.pushstate](https://github.com/bitovi/canjs/issues/588)
+- change: [Overwrite can.Map.List.prototype.serialize to avoid infinite loops](https://github.com/bitovi/canjs/pull/585)
+- change: [Iterating over component data not as expected](https://github.com/bitovi/canjs/issues/583)
+- change: [can-value shows &quot;undefined&quot; if bound to undefined value](https://github.com/bitovi/canjs/pull/580)
+- change: [Maximum Call Stack Exceeded When Destroying a nested model](https://github.com/bitovi/canjs/pull/476)
+- change: [Individual test pages should run in CI as well](https://github.com/bitovi/canjs/pull/446)
+
 __2.0.3__ ( Nov 26 2013 )
 
 - change: [fixes #577](https://github.com/bitovi/canjs/pull/578)

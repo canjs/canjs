@@ -1,5 +1,6 @@
 @constructor can.Mustache
 @parent canjs
+@release 1.1
 @group can.Mustache.pages 0 Pages
 @group can.Mustache.types 1 Types
 @group can.Mustache.tags 2 Basic Tags

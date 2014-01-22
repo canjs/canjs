@@ -87,16 +87,6 @@ can.extend(can.view, {
 			return data;
 		}
 	},
-	pending: function(data) {
-		// TODO, make this only run for the right tagName
-		var hooks = can.view.getHooks();
-		return can.view.hook(function(el){
-			can.each(hooks, function(fn){
-				fn(el);
-			});
-			can.view.Scanner.hookupAttributes(data, el);
-		});
-	},
 	getHooks: function(){
 		var hooks = pendingHookups.slice(0);
 		lastHookups = hooks;
@@ -191,6 +181,7 @@ can.extend(can.view, {
 		}
 		
 		if(listData){
+			unbind && unbind();
 			return "<" +tag+can.view.hook(function(el, parentNode){
 				live.list(el, listData.list, listData.renderer, self, parentNode);
 			})+"></" +tag+">";
@@ -212,7 +203,8 @@ can.extend(can.view, {
 		if ( status === 0 && !contentProp ) {
 			// Return an element tag with a hookup in place of the content
 			return "<" +tag+can.view.hook(
-			escape ? 
+			// if value is an object, it's likely something returned by .safeString
+			escape && typeof value != "object" ? 
 				// If we are escaping, replace the parentNode with 
 				// a text node who's value is `func`'s return value.
 				function(el, parentNode){

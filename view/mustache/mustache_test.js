@@ -225,9 +225,8 @@ test("Mustache falsey", function() {
 		expected: "Don't do it, Andy!",
 		data: { name: 'Andy' }
 	};
-
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
+	equal(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("Handlebars helpers", function() {
@@ -1189,12 +1188,15 @@ test("nested live bindings", function(){
 	]);
 
 	var div = document.createElement('div');
-	div.appendChild(can.view(can.test.path("view/mustache/test/nested_live_bindings.mustache"), { items: items }));
+	
+	var template = can.view.mustache('<form>{{#items}}{{^is_done}}<div id="{{title}}"></div>{{/is_done}}{{/items}}</form>')
+	
+	div.appendChild(template({ items: items }));
+	
 
 	items.push({title: 1, is_done: false, id: 1});
 	// this will throw an error unless Mustache protects against
 	// nested objects
-
 	items[0].attr('is_done',true);
 });
 
@@ -1494,28 +1496,43 @@ test("Interpolated values when iterating through an Observe.List should still re
 	var renderer = can.view.mustache('{{ #todos }}{{ name }}{{ /todos }}'),
 		renderer2 = can.view.mustache('{{ #todos }}<span>{{ name }}</span>{{ /todos }}'),
 		todos = [ {id: 1, name: 'Dishes'}, {id: 2, name: 'Forks'} ],
-		data = {
+		liveData = {
 			todos: new can.List(todos)
 		},
-		arr = {
+		plainData = {
 			todos: todos
 		},
 		div = document.createElement('div');
 
-	div.appendChild(renderer2(arr));
+	div.appendChild(renderer2(plainData));
+
 	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'Array item rendered with DOM container');
 	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'Array item rendered with DOM container');
+	
+	
+	
+	
 	div.innerHTML = '';
-	div.appendChild(renderer2(data));
+	div.appendChild(renderer2(liveData));
+	
+	
 	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'List item rendered with DOM container');
 	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'List item rendered with DOM container');
+	
 	div.innerHTML = '';
-	div.appendChild(renderer(arr));
+	
+	
+	div.appendChild(renderer(plainData));
 	equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
+	
+	
 	div.innerHTML = '';
-	div.appendChild(renderer(data));
+	
+	
+	div.appendChild(renderer(liveData));
 	equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
-	data.todos.push({ id: 3, name: 'Knives' });
+	
+	liveData.todos.push({ id: 3, name: 'Knives' });
 	equal(div.innerHTML, "DishesForksKnives", 'New list item rendered without DOM container');
 });
 
@@ -1821,40 +1838,42 @@ test("Helpers always have priority (#258)", function() {
 	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
-if(typeof steal !== 'undefined') {
-	test("avoid global helpers",function() {
-		stop();
-		steal('view/mustache/test/noglobals.mustache', function(noglobals) {
-			var div = document.createElement('div'),
-				div2 = document.createElement('div');
-			var person = new can.Map({
-				name: "Brian"
-			});
-			var result = noglobals({
-				person: person
-			},{
-				sometext: function(name){
-					return "Mr. "+name()
-				}
-			});
-			var result2 = noglobals({
-				person: person
-			},{
-				sometext: function(name){
-					return name()+" rules"
-				}
-			});
-			div.appendChild(result);
-			div2.appendChild(result2);
 
-			person.attr("name", "Ajax")
-
-			equal(div.innerHTML,"Mr. Ajax");
-			equal(div2.innerHTML,"Ajax rules");
-			start();
-		});
+test("avoid global helpers",function() {
+	var noglobals = can.view.mustache("{{sometext person.name}}");
+	
+	var div = document.createElement('div'),
+		div2 = document.createElement('div');
+		
+	var person = new can.Map({
+		name: "Brian"
 	});
-}
+	var result = noglobals({
+		person: person
+	},{
+		sometext: function(name){
+			return "Mr. "+name()
+		}
+	});
+	
+	var result2 = noglobals({
+		person: person
+	},{
+		sometext: function(name){
+			return name()+" rules"
+		}
+	});
+	
+	div.appendChild(result);
+	div2.appendChild(result2);
+
+	person.attr("name", "Ajax")
+
+	equal(div.innerHTML,"Mr. Ajax");
+	equal(div2.innerHTML,"Ajax rules");
+});
+
+
 
 test("Each does not redraw items",function(){
 
@@ -2223,6 +2242,7 @@ test("empty lists update", 2, function() {
 	div.appendChild(frag);
 
 	equal(div.children[0].innerHTML, 'something', 'initial list content set');
+
 	map.attr('list', ['one', 'two']);
 	equal(div.children[0].innerHTML, 'onetwo', 'updated list content set');
 });
@@ -2318,7 +2338,7 @@ test("can.Mustache.safeString", function() {
 });
 
 test("changing the list works with each", function(){
-	var template = can.view.mustache("<ul>{{#each list}}<li>{{name}}</li>{{/each}}</ul>");
+	var template = can.view.mustache("<ul>{{#each list}}<li>.</li>{{/each}}</ul>");
 	
 	var map = new can.Map({
 		list: ["foo"]
@@ -2583,6 +2603,338 @@ test('html comments must not break mustache scanner', function(){
 		can.append( can.$(div), can.view.mustache(content)() );
 		equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
 	});	
+});
+
+test("Rendering live bound indicies with #each, @index and a simple can.List when remove first item (#613)", function() {
+    var list = new can.List(['a', 'b', 'c']);
+    var template = can.view.mustache("<ul>{{#each list}}<li>{{@index}} {{.}}</li>{{/each}}</ul>");
+
+    var lis = template({list: list}).childNodes[0].getElementsByTagName('li');
+
+    // remove first item
+    list.shift();
+    equal(lis.length, 2, "two lis");
+
+    equal(lis[0].innerHTML, '0 b', "second item now the 1st item");
+    equal(lis[1].innerHTML, '1 c', "third item now the 2nd item");
+});
+
+
+
+test("can.Mustache.safestring works on live binding (#606)", function(){
+	
+	var num = can.compute(1)
+	
+	can.Mustache.registerHelper("safeHelper", function(){
+		
+		return can.Mustache.safeString(
+			"<p>"+num()+"</p>"
+		)
+		
+	});
+	
+	var template = can.view.mustache("<div>{{safeHelper}}</div>")
+	
+	var frag = template();
+	equal(frag.childNodes[0].childNodes[0].nodeName.toLowerCase(),"p" , "got a p element");
+	
+});
+
+
+
+test("directly nested subitems and each (#605)", function(){
+	
+	var template = can.view.mustache("<div>" +
+				
+				"{{#item}}" +
+					"<p>This is the item:</p>" +
+					"{{#each subitems}}" +
+						"<label>" + "item" + "</label>" +
+					"{{/each}}" +
+				"{{/item}}" +
+			"</div>")
+	
+	var data = new can.Map({
+		item: {
+			subitems: ['first']
+		}
+	})
+	
+	
+	var frag = template(data),
+		div = frag.childNodes[0],
+		labels = div.getElementsByTagName("label");
+	
+	equal(labels.length, 1, "initially one label");
+	
+	data.attr('item.subitems').push('second');
+	
+	equal(labels.length, 2, "after pushing two label");
+	
+	data.removeAttr('item');
+	
+	equal(labels.length, 0, "after removing item no label");
+	
+});
+
+test("directly nested live sections unbind without needing the element to be removed", function(){
+	var template = can.view.mustache(
+			"<div>" +
+				"{{#items}}" +
+				    "<p>first</p>"+
+					"{{#visible}}<label>foo</label>{{/visible}}" +
+					"<p>second</p>"+
+				"{{/items}}" +
+			"</div>");
+			
+	var data = new can.Map({
+		items: [
+			{visible: true}
+		]
+	});
+	
+	data.attr("items.0").unbind = function(eventType){
+		can.Map.prototype.unbind.apply(this, arguments);
+		if( eventType === "visible" ){
+			start();
+			ok(true, "unbound visible")
+		}
+	}
+	var frag = template(data);
+	
+	data.attr("items",[{visible: true}]);
+
+	stop()
+})
+
+test("direct live section", function(){
+	var template = can.view.mustache("{{#if visible}}<label/>{{/if}}");
+	
+	var data = new can.Map({
+		visible: true
+	})
+	
+	var div = document.createElement("div");
+	div.appendChild( template(data));
+	
+	equal(div.getElementsByTagName("label").length, 1, "there are 1 items")
+	
+	data.attr("visible", false)
+	equal(div.getElementsByTagName("label").length, 0, "there are 0 items")
+	
+});
+
+test('Rendering keys of an object with #each and @key in a Component', function() {
+	
+	var template = can.view.mustache("<ul>"+
+        "{{#each data}}"+
+        "<li>{{@key}} : {{.}}</li>"+
+        "{{/data}}"+
+    "</ul>")
+	
+	var map = new can.Map({
+		data: {
+		    some: 'test',
+		    things: false,
+		    other: 'things'
+		}
+	})
+	
+	var frag = template(map);
+	
+	var lis = frag.childNodes[0].getElementsByTagName("li");
+	equal(lis.length, 3, "there are 3 properties of map's data property")
+	
+	equal("some : test", lis[0].innerHTML)
+	
+	
+});
+
+test("{{each}} does not error with undefined list (#602)", function() {
+	var renderer = can.view.mustache('<div>{{#each data}}{{name}}{{/each}}</div>');
+
+	equal(renderer.render({}), '<div></div>', 'Empty text rendered');
+	equal(renderer.render({ data: false }), '<div></div>', 'Empty text rendered');
+	equal(renderer.render({ data: null }), '<div></div>', 'Empty text rendered');
+	equal(renderer.render({ data: [ { name: 'David' }] }), '<div>David</div>', 'Expected name rendered');
+});
+
+test('{{#each}} helper works reliably with nested sections (#604)', function() {
+	var renderer = can.view.mustache('{{#if first}}<ul>{{#each list}}<li>{{name}}</li>{{/each}}</ul>' +
+		'{{else}}<ul>{{#each list2}}<li>{{name}}</li>{{/each}}</ul>{{/if}}');
+	var data = new can.Map({
+		first: true,
+		list: [ { name: "Something" }, { name: "Else" } ],
+		list2: [ { name: "Foo" }, { name: "Bar" } ]
+	});
+	var div = document.createElement('div');
+
+	div.appendChild(renderer(data));
+	equal(div.innerHTML, '<ul><li>Something</li><li>Else</li></ul>', 'Expected HTML with first set');
+	data.attr('first', false);
+	equal(div.innerHTML, '<ul><li>Foo</li><li>Bar</li></ul>', 'Expected HTML with first false set');
+});
+
+test('Constructor static properties are accessible (#634)', function() {
+	can.Map.extend("can.Foo", { static_prop : "baz" }, { proto_prop : "thud" });
+	var template = '\
+				Straight access: <br/> \
+					<span>{{own_prop}}</span><br/> \
+					<span>{{constructor.static_prop}}</span><br/> \
+					<span>{{constructor.proto_prop}}</span><br/> \
+					<span>{{proto_prop}}</span><br/> \
+				Helper argument: <br/> \
+					<span>{{print_prop own_prop}}</span><br/> \
+					<span>{{print_prop constructor.static_prop}}</span><br/> \
+					<span>{{print_prop constructor.proto_prop}}</span><br/> \
+					<span>{{print_prop proto_prop}}</span><br/> \
+				Helper hash argument: <br/> \
+					<span>{{print_hash prop=own_prop}}</span><br/> \
+					<span>{{print_hash prop=constructor.static_prop}}</span><br/> \
+					<span>{{print_hash prop=constructor.proto_prop}}</span><br/> \
+					<span>{{print_hash prop=proto_prop}}</span><br/>',
+			renderer = can.view.mustache(template),
+			data = new can.Foo({ own_prop : "quux" }),
+			div = document.createElement('div');
+
+	div.appendChild(renderer(data, {
+		print_prop: function() {
+      return can.map(
+       can.makeArray(arguments).slice(0, arguments.length - 1)
+          , function(arg) {
+              while(arg && arg.isComputed) {
+                  arg = arg();
+              }
+              return arg;
+          }
+      ).join(" ");
+		},
+		print_hash: function() {
+      var ret = [];
+      can.each(
+          arguments[arguments.length - 1].hash
+          , function(arg, key) {
+              while(arg && arg.isComputed) {
+                  arg = arg();
+              }
+              ret.push([key, arg].join("="));
+          }
+      );
+      return ret.join(" ");
+		}
+	}));
+	var spans = div.getElementsByTagName('span'),
+			i = 0;
+
+	// Straight access
+	equal(spans[i++].innerHTML, 'quux', 'Expected "quux"');
+	equal(spans[i++].innerHTML, 'baz', 'Expected "baz"');
+	equal(spans[i++].innerHTML, '', 'Expected ""');
+	equal(spans[i++].innerHTML, 'thud', 'Expected "thud"');
+
+	// Helper argument
+	equal(spans[i++].innerHTML, 'quux', 'Expected "quux"');
+	equal(spans[i++].innerHTML, 'baz', 'Expected "baz"');
+	equal(spans[i++].innerHTML, '', 'Expected ""');
+	equal(spans[i++].innerHTML, 'thud', 'Expected "thud"');
+
+	// Helper hash argument
+	equal(spans[i++].innerHTML, 'prop=quux', 'Expected "prop=quux"');
+	equal(spans[i++].innerHTML, 'prop=baz', 'Expected "prop=baz"');
+	equal(spans[i++].innerHTML, 'prop=', 'Expected "prop="');
+	equal(spans[i++].innerHTML, 'prop=thud', 'Expected "prop=thud"');
+});
+
+test("{{#each}} handles an undefined list changing to a defined list (#629)", function() {
+	var renderer = can.view.mustache('    {{description}}: \
+    <ul> \
+    {{#each list}} \
+        <li>{{name}}</li> \
+    {{/each}} \
+    </ul>');
+
+	var div = document.createElement('div'),
+			data1 = new can.Map({
+	        description: 'Each without list'
+	    }),
+	    data2 = new can.Map({
+        description: 'Each with empty list',
+        list: []
+	    });
+
+	div.appendChild(renderer(data1));
+	div.appendChild(renderer(data2));
+
+	equal(div.getElementsByTagName('ul')[0].getElementsByTagName('li').length, 0);
+	equal(div.getElementsByTagName('ul')[1].getElementsByTagName('li').length, 0);
+
+	stop();
+	setTimeout(function() {
+		start();
+    data1.attr('list', [{name: 'first'}]);
+    data2.attr('list', [{name: 'first'}]);
+		equal(div.getElementsByTagName('ul')[0].getElementsByTagName('li').length, 1);
+		equal(div.getElementsByTagName('ul')[1].getElementsByTagName('li').length, 1);
+		equal(div.getElementsByTagName('ul')[0].getElementsByTagName('li')[0].innerHTML, 'first');
+		equal(div.getElementsByTagName('ul')[1].getElementsByTagName('li')[0].innerHTML, 'first');
+	}, 250);
+});
+
+test('can.compute should live bind when the value is changed to a Construct (#638)', function() {
+	var renderer = can.view.mustache('<p>{{#counter}} Clicked <span>{{count}}</span> times {{/counter}}</p>'),
+			div = document.createElement('div'),
+			// can.compute(null) will pass
+			counter = can.compute(),
+			data = { counter: counter };
+
+	div.appendChild(renderer(data));
+
+	equal(div.getElementsByTagName('span').length, 0);
+	stop();
+	setTimeout(function() {
+		start();
+		counter({ count: 1 });
+		equal(div.getElementsByTagName('span').length, 1);
+		equal(div.getElementsByTagName('span')[0].innerHTML, '1');
+	}, 10);
+});
+
+test("@index in partials loaded from script templates", function(){
+	
+	
+	// add template as script
+	
+	var script = document.createElement("script");
+	script.type= "text/mustache";
+	script.id = "itempartial";
+	script.text = "<label></label>"
+	
+	document.body.appendChild(script)
+	
+	//can.view.mustache("itempartial","<label></label>")
+	
+	
+	var itemsTemplate = can.view.mustache(
+		"<div>"+
+			"{{#each items}}"+
+			"{{>itempartial}}"+
+			"{{/each}}"+
+		"</div>")
+	
+	var items = new can.List([{},{}])
+	
+	var frag = itemsTemplate({
+		items: items
+	}),
+		div = frag.childNodes[0],
+		labels = div.getElementsByTagName("label");
+	
+	equal(labels.length, 2, "two labels")
+	
+	items.shift();
+	
+	
+	equal(labels.length, 1, "first label removed")
 })
 
 })();

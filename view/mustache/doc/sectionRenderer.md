@@ -10,8 +10,8 @@ section.  If anything else is provided, it is used to create a new scope object
 with the current scope as it's parent.  If nothing is provided, the current
 scope is used to render the section.
 
-@param {*|can.view.Scope} [helpers] Specifies the helpers the section is rendered 
-with.  If a [can.view.Scope] is provided, that scope is used to render the
+@param {*|can.view.Options} [helpers] Specifies the helpers the section is rendered 
+with.  If a [can.view.Options] is provided, that scope is used to render the
 section.  If anything else is provided, it is used to create a new scope object
 with the current helper scope as it's parent.  If nothing is provided, the current
 helper scope is used to render the section.
