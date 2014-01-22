@@ -2773,4 +2773,16 @@ test('{{#each}} helper works reliably with nested sections (#604)', function() {
 	equal(div.innerHTML, '<ul><li>Foo</li><li>Bar</li></ul>', 'Expected HTML with first false set');
 });
 
+test("Block bodies are properly escaped inside attributes", function() {
+	var html = "<div title='{{#test}}{{.}}{{{.}}}{{/test}}'></div>",
+		div = document.createElement("div"),
+		title = "Alpha&Beta";
+
+	div.appendChild(can.view.mustache(html)(new can.Map({
+		test: title
+	})));
+
+	equal(div.getElementsByTagName("div")[0].title, title+title);
+});
+
 })();
