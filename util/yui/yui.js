@@ -12,10 +12,10 @@
 //
 //	var url = "http://yui.yahooapis.com/combo?3.7.3/build/" + yuilibs.join("&3.7.3/build/")
 
-steal('can/util/can.js', 'yui', 'can/util/event.js', 
+steal('can/util/can.js', "can/util/attr",'yui', 'can/util/event.js', 
 	"can/util/fragment.js", 'can/util/array/each.js', 
 	'can/util/object/isplain', 'can/util/deferred.js', 
-	'../hashchange.js', "can/util/inserted",function (can) {
+	'../hashchange.js', "can/util/inserted",function (can, attr) {
 
 	// lets overwrite 
 	YUI.add('can-modifications', function (Y, NAME) {
@@ -37,6 +37,32 @@ steal('can/util/can.js', 'yui', 'can/util/event.js',
 			
 			return ret;
 		}
+		
+		var oldOn = Y.Node.prototype.on;
+		Y.Node.prototype.on = function(type, fn){
+			if(type === "attributes") {
+				// YUI changes where the extra data comes from
+				var el = can.$(this);
+				can.data( el, "canHasAttributesBindings", ( can.data( el, "canHasAttributesBindings") || 0 ) + 1  );
+				
+				var handle =  oldOn.apply(this, arguments),
+					oldDetach = handle.detach;
+				handle.detach = function(){
+					var cur = can.data( el, "canHasAttributesBindings") || 0 ;
+					if( cur <= 0 ) {
+						can.cleanData(el, "canHasAttributesBindings")
+					} else {
+						can.data( el, "canHasAttributesBindings", cur - 1  )
+					}
+					return oldDetach.apply(this, arguments);
+				}
+				return handle;
+			} else {
+				return oldOn.apply(this, arguments);
+			}
+		}
+
+		
 	},'3.7.3', {"requires": ["node-base"]})
 
 	// ---------
@@ -375,8 +401,18 @@ steal('can/util/can.js', 'yui', 'can/util/event.js',
 	Y.mix(Y.Node.DOM_EVENTS, {
 		removed: true,
 		inserted: true,
+		attributes: true,
+		// foo is here for testing
 		foo: true
 	});
+	
+	Y.Env.evt.plugins.attributes = {
+			// forces YUI not to change this event signature
+			on: function(){
+				var args = can.makeArray(arguments);
+				return Y.Event._attach(args,{facade: false})
+			}
+		}
 
 	can.delegate = function (selector, ev, cb) {
 		if (this.on || this.nodeType) {
@@ -455,6 +491,11 @@ steal('can/util/can.js', 'yui', 'can/util/event.js',
 				}
 			}
 		};
+
+	// setup attributes event
+	can.attr = attr;
+	delete attr.MutationObserver;
+
 
 	return can;
 });

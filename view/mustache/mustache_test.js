@@ -225,9 +225,8 @@ test("Mustache falsey", function() {
 		expected: "Don't do it, Andy!",
 		data: { name: 'Andy' }
 	};
-
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
+	equal(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("Handlebars helpers", function() {
@@ -1656,7 +1655,7 @@ test("2 way binding helpers", function(){
 test("can pass in partials",function() {
 	var hello = can.view(can.test.path('view/mustache/test/hello.mustache'));
 	var fancyName = can.view(can.test.path('view/mustache/test/fancy_name.mustache'));
-	var result = hello({
+	var result = hello.render({
 		name: "World"
 	},{
 		partials: {
@@ -1670,7 +1669,7 @@ test("can pass in partials",function() {
 
 test("can pass in helpers",function() {
 	var helpers = can.view(can.test.path('view/mustache/test/helper.mustache'));
-	var result = helpers({
+	var result = helpers.render({
 		name: "world"
 	},{
 		helpers: {
@@ -1839,40 +1838,42 @@ test("Helpers always have priority (#258)", function() {
 	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
-if(typeof steal !== 'undefined') {
-	test("avoid global helpers",function() {
-		stop();
-		steal('view/mustache/test/noglobals.mustache', function(noglobals) {
-			var div = document.createElement('div'),
-				div2 = document.createElement('div');
-			var person = new can.Map({
-				name: "Brian"
-			});
-			var result = noglobals({
-				person: person
-			},{
-				sometext: function(name){
-					return "Mr. "+name()
-				}
-			});
-			var result2 = noglobals({
-				person: person
-			},{
-				sometext: function(name){
-					return name()+" rules"
-				}
-			});
-			div.appendChild(result);
-			div2.appendChild(result2);
 
-			person.attr("name", "Ajax")
-
-			equal(div.innerHTML,"Mr. Ajax");
-			equal(div2.innerHTML,"Ajax rules");
-			start();
-		});
+test("avoid global helpers",function() {
+	var noglobals = can.view.mustache("{{sometext person.name}}");
+	
+	var div = document.createElement('div'),
+		div2 = document.createElement('div');
+		
+	var person = new can.Map({
+		name: "Brian"
 	});
-}
+	var result = noglobals({
+		person: person
+	},{
+		sometext: function(name){
+			return "Mr. "+name()
+		}
+	});
+	
+	var result2 = noglobals({
+		person: person
+	},{
+		sometext: function(name){
+			return name()+" rules"
+		}
+	});
+	
+	div.appendChild(result);
+	div2.appendChild(result2);
+
+	person.attr("name", "Ajax")
+
+	equal(div.innerHTML,"Mr. Ajax");
+	equal(div2.innerHTML,"Ajax rules");
+});
+
+
 
 test("Each does not redraw items",function(){
 
@@ -2241,6 +2242,7 @@ test("empty lists update", 2, function() {
 	div.appendChild(frag);
 
 	equal(div.children[0].innerHTML, 'something', 'initial list content set');
+
 	map.attr('list', ['one', 'two']);
 	equal(div.children[0].innerHTML, 'onetwo', 'updated list content set');
 });

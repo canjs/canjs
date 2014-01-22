@@ -177,7 +177,13 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 		 *     curScope.attr("length") //-> 2
 		 */
 		attr: function(key){
-			return this.read(key,{isArgument: true, returnObserveMethods:true, proxyMethods: false}).value
+			// reads for whatever called before attr.  It's possible
+			// that this.read clears them.  We want to restore them.
+			var previousReads = can.__clearReading && can.__clearReading(),
+				res = this.read(key,{isArgument: true, returnObserveMethods:true, proxyMethods: false}).value;
+			can.__setReading && can.__setReading(previousReads);
+				
+			return res;
 		},
 		/**
 		 * @function can.view.Scope.prototype.add
@@ -290,6 +296,25 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				};
 			return computeData
 			
+		},
+		/**
+		 * @function can.view.Scope.prototype.compute
+		 * 
+		 * @description Provides a get-set compute that represents a 
+		 * key's value.
+		 * 
+		 * @signature `scope.compute( key, [options] )`
+		 * @release 2.1
+		 * 
+		 * @param {can.Mustache.key} key A dot seperated path.  Use `"\."` if you have a 
+		 * property name that includes a dot. 
+		 * 
+		 * @param {can.view.Scope.readOptions} [options] Options that configure how the `key` gets read.
+		 * 
+		 * @return {can.compute} A compute that can get or set `key`.
+		 */
+		compute: function(key, options){
+			return this.computeData(key,options).compute;
 		},
 		/**
 		 * @hide
@@ -412,7 +437,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 			// If there was a likely observe.
 			if( defaultObserve ) {
 				// Restore reading for previous compute
-				can.__setReading && can.__setReading(defaultComputeReadings)
+				can.__setReading && can.__setReading(defaultComputeReadings);
 				return {
 					scope: defaultScope,
 					rootObserve: defaultObserve,

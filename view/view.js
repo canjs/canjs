@@ -7,6 +7,15 @@ steal("can/util", function( can ) {
 		makeArray = can.makeArray,
 		// Used for hookup `id`s.
 		hookupId = 1,
+		makeRenderer = function(textRenderer) {
+			var renderer = function() {
+				return $view.frag(renderer.render.apply(this, arguments));
+			}
+			renderer.render = function() {
+				return textRenderer.apply(textRenderer, arguments);
+			}
+			return renderer;
+		},
 	/**
 	 * @add can.view
 	 */
@@ -30,7 +39,7 @@ steal("can/util", function( can ) {
 			deferred = can.Deferred();
 
 		if(isFunction(result))  {
-			return result;
+			return makeRenderer(result);
 		}
 
 		if(can.isDeferred(result)){
@@ -41,7 +50,7 @@ steal("can/util", function( can ) {
 			});
 			return deferred;
 		}
-		
+
 		// Convert it into a dom frag.
 		return pipe(result);
 	};
@@ -432,9 +441,8 @@ steal("can/util", function( can ) {
 			else {
 				// get is called async but in 
 				// ff will be async so we need to temporarily reset
-				if(can.__reading){
-					var reading = can.__reading;
-					can.__reading = null;
+				if(can.__clearReading){
+					var reading = can.__clearReading();
 				}
 				
 				// No deferreds! Render this bad boy.
@@ -444,8 +452,8 @@ steal("can/util", function( can ) {
 					// Get the `view` type
 					deferred = get(view, async);
 					
-				if(can.Map && can.__reading){
-					can.__reading = reading;
+				if(reading){
+					can.__setReading(reading);
 				}
 				
 				// If we are `async`...
@@ -663,15 +671,7 @@ steal("can/util", function( can ) {
 			
 			$view[info.suffix] = function(id, text){
 				if(!text) {
-					// Return a nameless renderer
-					var renderer = function() {
-						return $view.frag(renderer.render.apply(this, arguments));
-					}
-					renderer.render = function() {
-						var renderer = info.renderer(null, id);
-						return renderer.apply(renderer, arguments);
-					}
-					return renderer;
+					return makeRenderer(info.renderer(null, id));
 				}
 
 				return $view.preload(id, info.renderer(id, text));
