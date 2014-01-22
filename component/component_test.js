@@ -896,4 +896,20 @@ test("checkboxes with can-value bind properly (#628)", function() {
 	equal(data.attr('completed'), false, 'checkbox value bound (via uncheck)');
 });
 
+test("Scope as Map constructors should follow '@' default values (#657)", function() {
+	var PanelViewModel = can.Map.extend({
+		title: "@"
+	});
+
+	can.Component.extend({
+		tag: "panel",
+		scope: PanelViewModel
+	})
+
+	var frag = can.view.mustache('<panel title="Libraries">Content</panel>')({ title: "hello" });
+  can.append( can.$("#qunit-test-area") , frag );
+
+  equal(can.scope(can.$("panel")[0]).attr("title"), "Libraries");
+});
+
 })()
