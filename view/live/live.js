@@ -382,15 +382,10 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 				node = document.createTextNode( compute() );
 			
 			// Replace the placeholder with the live node and do the nodeLists thing.
-			live.replace([el], node,  data.teardownCheck  );
+			// Add that node to nodeList so we can remove it when the parent element is removed from the page
+			data.nodeList = live.replace([el], node,  data.teardownCheck  );
 		},
-		/**
-		 * @function can.view.live.text
-		 * @parent can.view.live
-		 * 
-		 * Replaces one element with some content while keeping [can.view.live.nodeLists nodeLists] data
-		 * correct.
-		 */
+
 		attributes: function(el, compute, currentValue){
 			var setAttrs = function(newVal){
 				var parts = getAttributeParts(newVal),
