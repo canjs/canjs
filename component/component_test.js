@@ -888,4 +888,32 @@ test("Scope as Map constructors should follow '@' default values (#657)", functi
   equal(can.scope(can.$("panel")[0]).attr("title"), "Libraries");
 });
 
+test("Component can-click method should be not called while component's init", function() {
+
+    var called = false
+
+    can.Component.extend({
+        tag: "child-tag"
+    })
+
+    can.Component.extend({
+        tag: "parent-tag",
+        template: '<child-tag can-click="method"></child-tag>',
+        scope: {
+            method: function(){
+                called = true
+            }
+        }
+    })
+
+    var frag = can.view.mustache('<parent-tag></parent-tag>')();
+
+    equal(called, false);
+});
+
+
 })()
+
+
+
+
