@@ -1,4 +1,4 @@
-(function() {
+steal("can/model", "can/view/mustache", "can/test", function() {
 
 module("can/view/mustache, rendering",{
 	setup : function(){
@@ -353,12 +353,12 @@ test("No arguments passed to helper with list", function() {
 
 test("Partials and observes", function() {
 	var div = document.createElement('div');
-	
+
 	var template = can.view.mustache("table","<table><thead><tr>{{#data}}{{{>"+
 		can.test.path('view/mustache/test/partial.mustache')
 		+"}}}{{/data}}</tr></thead></table>")
-	
-	
+
+
 	var dom = can.view("table", {
 		data : new can.Map({
 			list: ["hi","there"]
@@ -1189,11 +1189,11 @@ test("nested live bindings", function(){
 	]);
 
 	var div = document.createElement('div');
-	
+
 	var template = can.view.mustache('<form>{{#items}}{{^is_done}}<div id="{{title}}"></div>{{/is_done}}{{/items}}</form>')
-	
+
 	div.appendChild(template({ items: items }));
-	
+
 
 	items.push({title: 1, is_done: false, id: 1});
 	// this will throw an error unless Mustache protects against
@@ -1509,30 +1509,30 @@ test("Interpolated values when iterating through an Observe.List should still re
 
 	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'Array item rendered with DOM container');
 	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'Array item rendered with DOM container');
-	
-	
-	
-	
+
+
+
+
 	div.innerHTML = '';
 	div.appendChild(renderer2(liveData));
-	
-	
+
+
 	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'List item rendered with DOM container');
 	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'List item rendered with DOM container');
-	
+
 	div.innerHTML = '';
-	
-	
+
+
 	div.appendChild(renderer(plainData));
 	equal(div.innerHTML, "DishesForks", 'Array item rendered without DOM container');
-	
-	
+
+
 	div.innerHTML = '';
-	
-	
+
+
 	div.appendChild(renderer(liveData));
 	equal(div.innerHTML, "DishesForks", 'List item rendered without DOM container');
-	
+
 	liveData.todos.push({ id: 3, name: 'Knives' });
 	equal(div.innerHTML, "DishesForksKnives", 'New list item rendered without DOM container');
 });
@@ -1589,7 +1589,7 @@ test("2 way binding helpers", function(){
 
 	var div = document.createElement('div'),
 		u = new can.Map({name: "Justin"});
-		
+
 	div.appendChild(renderer({
 		user: u
 	}));
@@ -1604,9 +1604,9 @@ test("2 way binding helpers", function(){
 
 	input.value = "Austin";
 	input.onchange();
-	
+
 	equal(u.attr('name'), "Austin", "Name changed by input field" );
-	
+
 	val.teardown();
 
 
@@ -1949,11 +1949,11 @@ test("each works within another branch", function(){
 });
 
 test("a compute gets passed to a plugin",function(){
-	
+
 	can.Mustache.registerHelper('iamhungryforcomputes', function(value){
 		ok(value.isComputed,"value is a compute")
 	    return function(el){
-	        
+
 	    }
 	});
 
@@ -1961,7 +1961,7 @@ test("a compute gets passed to a plugin",function(){
 
 	var div = document.createElement('div'),
 		u = new can.Map({name: "Justin"});
-		
+
 	div.appendChild(renderer({
 		userName: u.compute("name")
 	}));
@@ -2023,8 +2023,8 @@ test("Helpers can be passed . or this for the active context", function() {
 });
 
 test("helpers only called once (#477)", function(){
-	
-	var bar = [], 
+
+	var bar = [],
 		baz = [],
 		callCount = 0;
     Mustache.registerHelper("foo", function(text) {
@@ -2032,31 +2032,31 @@ test("helpers only called once (#477)", function(){
     	equal(callCount, 1, "call count is only ever one")
         return "result";
     });
-    
+
     var obs = new can.Map({
         quux : false
     });
-    
+
     var template = can.view.mustache("Foo text is: {{#if quux}}{{foo 'bar'}}{{/if}}");
-    
+
     var frag = template(obs);
     obs.attr("quux", true);
-	
-	
+
+
 });
 
 test("helpers between tags (#469)", function(){
-	
+
 	can.Mustache.registerHelper("items",function(){
 	  return function(li){
 	  	equal(li.nodeName.toLowerCase(), "li","right node name")
 	  }
 	});
-	
+
 	var template = can.view.mustache("<ul>{{items}}</ul>");
 	var frag = template();
-	
-	
+
+
 })
 
 
@@ -2066,16 +2066,16 @@ test("hiding image srcs (#157)", function(){
 			image: null
 		}),
 		url = "http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png";
-	
+
 	var frag = template(data),
 		img = frag.childNodes[0];
-	
+
 	equal( img.src, "", "there is no src");
-	
+
 	data.attr("image",url)
 	notEqual(img.src, "", 'Image should have src')
 	equal( img.src, url, "images src is correct" );
-	
+
 	/*var renderer = can.view.mustache('<img {{#image}}src="{{.}}"{{/image}} alt="An image" />{{image}}'),
 		url = 'http://farm8.staticflickr.com/7102/6999583228_99302b91ac_n.jpg',
 		data = new can.Map({
@@ -2096,19 +2096,19 @@ test("hiding image srcs (#157)", function(){
 });
 
 test("backtracks in mustache (#163)", function(){
-	
+
 	var template = can.view.mustache(
 		"{{#grid.rows}}"+
 			"{{#grid.cols}}"+
     			"<div>{{columnData ../. .}}</div>"+
   			"{{/grid.cols}}"+
 		"{{/grid.rows}}");
-	
+
 	var grid = new can.Map({
 		rows: [{first: "Justin",last: "Meyer"},{first: "Brian",last: "Moschel"}],
 		cols: [{prop: "first"},{prop: "last"}]
 	})
-	
+
 	var frag = template({
 		grid: grid
 	},{
@@ -2116,22 +2116,22 @@ test("backtracks in mustache (#163)", function(){
 			return row.attr(col.attr("prop"))
 		}
 	});
-	
+
 	var divs = frag.childNodes;
 	equal(divs.length, 4, "there are 4 divs");
-	
+
 	var vals = can.map(divs, function(div){
 		return div.innerHTML
 	});
-	
+
 	deepEqual(vals,["Justin","Meyer","Brian","Moschel"],"div values are the same");
-	
+
 })
 
 test("support null and undefined as an argument", function(){
-	
+
 	var template = can.view.mustache("{{aHelper null undefined}}")
-	
+
 	template({},{
 		aHelper: function(arg1, arg2){
 			ok(arg1 === null);
@@ -2170,16 +2170,16 @@ test("hiding image srcs (#494)", function(){
 			image: ""
 		}),
 		url = "http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png";
-	
+
 	var str = template.render(data);
-	
+
 	ok( str.indexOf('__!!__') == -1, "no __!!___ "+str)
-	
+
 	var frag = template(data),
 		img = frag.childNodes[0];
-	
+
 	equal( img.src, "", "there is no src");
-	
+
 	data.attr("image",url);
 	notEqual(img.src, "", 'Image should have src');
 	equal( img.src, url, "images src is correct" );
@@ -2193,25 +2193,25 @@ test("hiding image srcs with complex content (#494)", function(){
 			loc: "scripts/static/img/canjs_logo_yellow_small"
 		},
 		url = "http://canjs.us/scripts/static/img/canjs_logo_yellow_small.png";
-	
+
 	var str = template.render(data);
-	
+
 	ok( str.indexOf('__!!__') == -1, "no __!!__")
-	
+
 	var frag = template(data),
 		img = frag.childNodes[0];
-	
+
 	equal( img.src, "", "there is no src");
-	
+
 	data.attr("image",imgData);
 	notEqual(img.src, "", 'Image should have src');
 	equal( img.src, url, "images src is correct" );
 });
 
 test("style property is live-bindable in IE (#494)", 4, function(){
-	
+
 	var template = can.view.mustache('<div style="width: {{width}}px; background-color: {{color}};">hi</div>')
-	
+
 	var dims = new can.Map({
 		width: 5,
 		color: 'red'
@@ -2221,7 +2221,7 @@ test("style property is live-bindable in IE (#494)", 4, function(){
 
 	equal(div.style.width, "5px");
 	equal(div.style.backgroundColor, "red");
-	
+
 	dims.attr("width", 10);
 	dims.attr('color', 'blue');
 
@@ -2295,17 +2295,17 @@ test("outputting array of attributes", function() {
 
 test("incremental updating of #each within an if", function(){
 	var template = can.view.mustache('{{#if items.length}}<ul>{{#each items}}<li/>{{/each}}</ul>{{/if}}');
-		
+
 	var items = new can.List([{},{}]);
 	var div = document.createElement('div');
 	div.appendChild(template({items: items}));
 
 	var ul = div.getElementsByTagName('ul')[0]
 	ul.setAttribute("original","yup");
-	
+
 	items.push({});
 	ok(ul === div.getElementsByTagName('ul')[0], "ul is still the same")
-	
+
 });
 
 test("can.Mustache.safeString", function() {
@@ -2337,45 +2337,45 @@ test("can.Mustache.safeString", function() {
 
 test("changing the list works with each", function(){
 	var template = can.view.mustache("<ul>{{#each list}}<li>.</li>{{/each}}</ul>");
-	
+
 	var map = new can.Map({
 		list: ["foo"]
 	});
-	
+
 	var lis = template(map).childNodes[0].getElementsByTagName('li');
-	
+
 	equal(lis.length, 1, "one li")
-	
-	
+
+
 	map.attr("list", new can.List(["bar","car"]) );
-	
+
 	equal(lis.length, 2, "two lis")
-	
+
 });
 
 test("nested properties binding (#525)", function(){
 	var template = can.view.mustache("<label>{{name.first}}</label>");
-	
+
 	var me = new can.Map()
-	
+
 	var label = template(me).childNodes[0];
 	me.attr("name",{
 		first: "Justin"
 	});
 	equal(label.innerHTML, "Justin", "set name object");
-	
+
 	me.attr("name",{
 		first: "Brian"
 	});
 	equal(label.innerHTML, "Brian", "merged name object");
-	
+
 	me.removeAttr("name");
 	me.attr({name:{
 		first: "Payal"
 	}});
-	
+
 	equal(label.innerHTML, "Payal", "works after parent removed");
-	
+
 })
 
 test("Rendering indicies of an array with @index", function() {
@@ -2490,7 +2490,7 @@ test('Make sure data passed into template does not call helper by mistake', func
 
 test("no memory leaks with #each (#545)", function(){
 	var tmp = can.view.mustache( "<ul>{{#each children}}<li></li>{{/each}}</ul>");
-	
+
 	var data = new can.Map({
 		children: [
 			{name: 'A1'},
@@ -2499,62 +2499,62 @@ test("no memory leaks with #each (#545)", function(){
 		]
 	});
 	var div = document.createElement('div')
-	
+
 	can.append( can.$('#qunit-test-area'), div );
 	can.append( can.$(div), tmp(data) );
-	
+
 	stop();
 	setTimeout(function(){
-	
+
 		can.remove(can.$(div));
-		
+
 		equal(data._bindings, 0, "there are no bindings")
-		
+
 		start()
 	},50)
 
-	
+
 })
 
 test("each directly within live html section", function(){
-	
+
 	var tmp = can.view.mustache(
 		"<ul>{{#if showing}}"+
 			"{{#each items}}<li>item</li>{{/items}}"+
 		"{{/if}}</ul>")
-	
+
 	var items = new can.List([1,2,3]),
 		showing = can.compute(true)
 	var frag = tmp({
 		showing: showing,
 		items: items
 	})
-	
+
 	showing(false);
-	
+
 	// this would break because things had not been unbound
 	items.pop();
-	
+
 	showing(true);
-	
+
 	items.push("a")
-	
+
 	equal( frag.childNodes[0].getElementsByTagName("li").length, 3, "there are 3 elements");
-	
+
 });
 
 test("mustache loops with 0 (#568)", function(){
-	
+
 	var tmp = can.view.mustache("<ul>{{#array}}<li>{{.}}</li>{{/array}}");
-	
+
 	var data = {array:[0, null]};
-	
+
 	var frag = tmp(data)
-	
-	
+
+
 	equal(frag.childNodes[0].getElementsByTagName("li")[0].innerHTML, "0")
 	equal(frag.childNodes[0].getElementsByTagName("li")[1].innerHTML, "")
-	
+
 })
 
 test('@index is correctly calculated when there are identical elements in the array', function(){
@@ -2562,7 +2562,7 @@ test('@index is correctly calculated when there are identical elements in the ar
 		tmp  = can.view.mustache('{{#each data}}{{@index}} {{/each}}')
 
 	var div = document.createElement('div')
-	
+
 	can.append( can.$('#qunit-test-area'), div );
 	can.append( can.$(div), tmp({data : data}) );
 
@@ -2570,21 +2570,21 @@ test('@index is correctly calculated when there are identical elements in the ar
 })
 
 test("if helper within className (#592)", function(){
-	
+
 	var tmp = can.view.mustache('<div class="fails {{#state}}animate-{{.}}{{/state}}"></div>');
 	var data = new can.Map({
 		state: "ready"
 	})
 	var frag = tmp(data);
-	
+
 	equal( frag.childNodes[0].className,"fails animate-ready" )
-	
+
 	var tmp = can.view.mustache('<div class="fails {{#if state}}animate-{{state}}{{/if}}"></div>');
 	var data = new can.Map({
 		state: "ready"
 	})
 	var frag = tmp(data);
-	
+
 	equal( frag.childNodes[0].className,"fails animate-ready" )
 })
 
@@ -2600,7 +2600,7 @@ test('html comments must not break mustache scanner', function(){
 		can.append( can.$('#qunit-test-area'), div );
 		can.append( can.$(div), can.view.mustache(content)() );
 		equal(div.innerHTML, content, 'Content did not change: "' + content + '"');
-	});	
+	});
 });
 
 test("Rendering live bound indicies with #each, @index and a simple can.List when remove first item (#613)", function() {
@@ -2620,30 +2620,30 @@ test("Rendering live bound indicies with #each, @index and a simple can.List whe
 
 
 test("can.Mustache.safestring works on live binding (#606)", function(){
-	
+
 	var num = can.compute(1)
-	
+
 	can.Mustache.registerHelper("safeHelper", function(){
-		
+
 		return can.Mustache.safeString(
 			"<p>"+num()+"</p>"
 		)
-		
+
 	});
-	
+
 	var template = can.view.mustache("<div>{{safeHelper}}</div>")
-	
+
 	var frag = template();
 	equal(frag.childNodes[0].childNodes[0].nodeName.toLowerCase(),"p" , "got a p element");
-	
+
 });
 
 
 
 test("directly nested subitems and each (#605)", function(){
-	
+
 	var template = can.view.mustache("<div>" +
-				
+
 				"{{#item}}" +
 					"<p>This is the item:</p>" +
 					"{{#each subitems}}" +
@@ -2651,28 +2651,28 @@ test("directly nested subitems and each (#605)", function(){
 					"{{/each}}" +
 				"{{/item}}" +
 			"</div>")
-	
+
 	var data = new can.Map({
 		item: {
 			subitems: ['first']
 		}
 	})
-	
-	
+
+
 	var frag = template(data),
 		div = frag.childNodes[0],
 		labels = div.getElementsByTagName("label");
-	
+
 	equal(labels.length, 1, "initially one label");
-	
+
 	data.attr('item.subitems').push('second');
-	
+
 	equal(labels.length, 2, "after pushing two label");
-	
+
 	data.removeAttr('item');
-	
+
 	equal(labels.length, 0, "after removing item no label");
-	
+
 });
 
 test("directly nested live sections unbind without needing the element to be removed", function(){
@@ -2684,13 +2684,13 @@ test("directly nested live sections unbind without needing the element to be rem
 					"<p>second</p>"+
 				"{{/items}}" +
 			"</div>");
-			
+
 	var data = new can.Map({
 		items: [
 			{visible: true}
 		]
 	});
-	
+
 	data.attr("items.0").unbind = function(eventType){
 		can.Map.prototype.unbind.apply(this, arguments);
 		if( eventType === "visible" ){
@@ -2699,7 +2699,7 @@ test("directly nested live sections unbind without needing the element to be rem
 		}
 	}
 	var frag = template(data);
-	
+
 	data.attr("items",[{visible: true}]);
 
 	stop()
@@ -2707,29 +2707,29 @@ test("directly nested live sections unbind without needing the element to be rem
 
 test("direct live section", function(){
 	var template = can.view.mustache("{{#if visible}}<label/>{{/if}}");
-	
+
 	var data = new can.Map({
 		visible: true
 	})
-	
+
 	var div = document.createElement("div");
 	div.appendChild( template(data));
-	
+
 	equal(div.getElementsByTagName("label").length, 1, "there are 1 items")
-	
+
 	data.attr("visible", false)
 	equal(div.getElementsByTagName("label").length, 0, "there are 0 items")
-	
+
 });
 
 test('Rendering keys of an object with #each and @key in a Component', function() {
-	
+
 	var template = can.view.mustache("<ul>"+
         "{{#each data}}"+
         "<li>{{@key}} : {{.}}</li>"+
         "{{/data}}"+
     "</ul>")
-	
+
 	var map = new can.Map({
 		data: {
 		    some: 'test',
@@ -2737,15 +2737,15 @@ test('Rendering keys of an object with #each and @key in a Component', function(
 		    other: 'things'
 		}
 	})
-	
+
 	var frag = template(map);
-	
+
 	var lis = frag.childNodes[0].getElementsByTagName("li");
 	equal(lis.length, 3, "there are 3 properties of map's data property")
-	
+
 	equal("some : test", lis[0].innerHTML)
-	
-	
+
+
 });
 
 test("{{each}} does not error with undefined list (#602)", function() {
@@ -2898,41 +2898,41 @@ test('can.compute should live bind when the value is changed to a Construct (#63
 });
 
 test("@index in partials loaded from script templates", function(){
-	
-	
+
+
 	// add template as script
-	
+
 	var script = document.createElement("script");
 	script.type= "text/mustache";
 	script.id = "itempartial";
 	script.text = "<label></label>"
-	
+
 	document.body.appendChild(script)
-	
+
 	//can.view.mustache("itempartial","<label></label>")
-	
-	
+
+
 	var itemsTemplate = can.view.mustache(
 		"<div>"+
 			"{{#each items}}"+
 			"{{>itempartial}}"+
 			"{{/each}}"+
 		"</div>")
-	
+
 	var items = new can.List([{},{}])
-	
+
 	var frag = itemsTemplate({
 		items: items
 	}),
 		div = frag.childNodes[0],
 		labels = div.getElementsByTagName("label");
-	
+
 	equal(labels.length, 2, "two labels")
-	
+
 	items.shift();
-	
-	
+
+
 	equal(labels.length, 1, "first label removed")
 })
 
-})();
+});

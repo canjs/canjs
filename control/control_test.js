@@ -1,4 +1,4 @@
-(function () {
+steal("can/control", function () {
     module("can/control");
     var isOpera = /Opera/.test(navigator.userAgent),
         isDojo = (typeof dojo !== "undefined");
@@ -42,7 +42,7 @@
             equal(clickCount, 2, "click called twice");
 
             things.destroy();
-            
+
             can.trigger(can.$('#things span'), 'click');
 
             new Things("#things", {foo:foo});
@@ -348,7 +348,7 @@
 
 		var Control = can.Control({
 			destroy: function() {
-				ok(true);	
+				ok(true);
 				can.Control.prototype.destroy.call(this);
 			}
 		}),
@@ -358,4 +358,4 @@
 		c.destroy();
 		c.destroy();
 	});
-})();
+});

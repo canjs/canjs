@@ -1,4 +1,4 @@
-(function() {
+steal("can/model", "can/view/ejs", "can/test", function() {
 
 module("can/view/ejs, rendering",{
 	setup : function(){
@@ -11,15 +11,15 @@ module("can/view/ejs, rendering",{
 				}
 			}
 		}
-		
+
 		this.squareBrackets = "<ul><% this.animals.each(function(animal){%>" +
-					   "<li><%= animal %></li>" + 
+					   "<li><%= animal %></li>" +
 				  "<%});%></ul>"
 		this.squareBracketsNoThis = "<ul><% animals.each(function(animal){%>" +
-					   "<li><%= animal %></li>" + 
+					   "<li><%= animal %></li>" +
 				  "<%});%></ul>"
 		this.angleBracketsNoThis  = "<ul><% animals.each(function(animal){%>" +
-					   "<li><%= animal %></li>" + 
+					   "<li><%= animal %></li>" +
 				  "<%});%></ul>";
 
 	}
@@ -47,7 +47,7 @@ test("default carrot", function(){
 test("render with double angle", function(){
 	var text = "<%% replace_me %>"+
 			  "<ul><% animals.each(function(animal){%>" +
-				   "<li><%= animal %></li>" + 
+				   "<li><%= animal %></li>" +
 			  "<%});%></ul>";
 	var compiled = new can.EJS({text: text}).render({animals: this.animals}) ;
 	equal(compiled, "<% replace_me %><ul><li>sloth</li><li>bear</li><li>monkey</li></ul>", "works")
@@ -56,7 +56,7 @@ test("render with double angle", function(){
 test("comments", function(){
 	var text = "<%# replace_me %>"+
 			  "<ul><% animals.each(function(animal){%>" +
-				   "<li><%= animal %></li>" + 
+				   "<li><%= animal %></li>" +
 			  "<%});%></ul>";
 	var compiled = new can.EJS({text: text}).render({animals: this.animals}) ;
 	equal(compiled,"<ul><li>sloth</li><li>bear</li><li>monkey</li></ul>" )
@@ -65,7 +65,7 @@ test("comments", function(){
 test("multi line", function(){
 	var text = "a \n b \n c",
 		result = new can.EJS({text: text}).render({}) ;
-		
+
 	equal(result, text)
 })
 
@@ -81,10 +81,10 @@ test("escapedContent", function(){
 	var compiled = new can.EJS({text: text}).render({tags: "foo < bar < car > zar > poo",
 							quotes : "I use 'quote' fingers \"a lot\"",
 							number : 123}) ;
-	
+
 	var div = document.createElement('div');
 	div.innerHTML = compiled;
-	
+
 	equal(div.getElementsByTagName('span')[0].firstChild.nodeValue, "foo < bar < car > zar > poo" );
 	equal(div.getElementsByTagName('strong')[0].firstChild.nodeValue, 123 );
 	equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"" );
@@ -95,7 +95,7 @@ test("unescapedContent", function(){
 	var text = "<span><%== tags %></span><div><%= tags %></div><input value='<%== quotes %>'/>";
 	var compiled = new can.EJS({text: text}).render({tags: "<strong>foo</strong><strong>bar</strong>",
 							quotes : "I use 'quote' fingers \"a lot\""}) ;
-	
+
 	var div = document.createElement('div');
 	div.innerHTML = compiled;
 
@@ -109,10 +109,10 @@ test("returning blocks", function(){
 	var somethingHelper = function(cb){
 		return cb([1,2,3,4])
 	}
-	
+
 	var res = can.view.
 		render(can.test.path("view/ejs/test/test_template.ejs"),{
-			something: somethingHelper, 
+			something: somethingHelper,
 			items: ['a','b']
 		});
 	// make sure expected values are in res
@@ -123,13 +123,13 @@ test("returning blocks", function(){
 test("easy hookup", function(){
 	var div = document.createElement('div');
 	div.appendChild(can.view(can.test.path("view/ejs/test/easyhookup.ejs"),{text: "yes"}))
-	
+
 	ok( div.getElementsByTagName('div')[0].className.indexOf("yes") != -1, "has yes" )
 });
 
 test('multiple function hookups in a tag', function(){
 
-	var text =	"<span <%= (el)-> can.data(can.$(el),'foo','bar') %>" + 
+	var text =	"<span <%= (el)-> can.data(can.$(el),'foo','bar') %>" +
 		" <%= (el)-> can.data(can.$(el),'baz','qux') %>>lorem ipsum</span>",
 		compiled = new can.EJS({ text: text }).render(),
 		div = document.createElement('div');
@@ -147,18 +147,18 @@ test("helpers", function() {
 	{
 		return 'Simple';
 	}
-	
+
 	can.EJS.Helpers.prototype.elementHelper = function()
 	{
 		return function(el) {
 			el.innerHTML = 'Simple';
 		}
 	}
-	
+
 	var text = "<div><%= simpleHelper() %></div>";
 	var compiled = new can.EJS({text: text}).render() ;
 	equal(compiled, "<div>Simple</div>");
-	
+
 	text = "<div id=\"hookup\" <%= elementHelper() %>></div>";
 	compiled = new can.EJS({text: text}).render() ;
 	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
@@ -166,7 +166,7 @@ test("helpers", function() {
 });
 
 test('list helper', function(){
-	
+
 	var text = "<% list(todos, function(todo){ %><div><%= todo.name %></div><% }) %>";
 	var	todos = new can.List([
 			{id: 1, name: 'Dishes'}
@@ -176,10 +176,10 @@ test('list helper', function(){
 
 		div.appendChild(can.view.frag(compiled))
 		equal(div.getElementsByTagName('div').length, 1, '1 item in list')
-		
+
 		todos.push({id: 2, name: 'Laundry'})
 		equal(div.getElementsByTagName('div').length, 2, '2 items in list')
-		
+
 		todos.splice(0, 2);
 		equal(div.getElementsByTagName('div').length, 0, '0 items in list')
 
@@ -195,23 +195,23 @@ test("attribute single unescaped, html single unescaped", function(){
 		name : 'dishes'
 	})
 	var compiled = new can.EJS({text: text}).render({task:  task}) ;
-	
+
 	var div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled))
-	
+
 
 	equal(div.getElementsByTagName('div')[0].innerHTML,"dishes", "html correctly dishes")
 	equal(div.getElementsByTagName('div')[0].className,"", "class empty")
-	
-	
+
+
 	task.attr('name','lawn')
-	
+
 	equal(div.getElementsByTagName('div')[0].innerHTML,"lawn", "html correctly lawn")
 	equal(div.getElementsByTagName('div')[0].className,"", "class empty")
-	
+
 	task.attr('completed', true);
-	
+
 	equal(div.getElementsByTagName('div')[0].className,"complete", "class changed to complete")
 });
 
@@ -220,7 +220,7 @@ test("event binding / triggering on things other than options", 1, function(){
 	var qta = document.getElementById('qunit-test-area');
 	qta.innerHTML = "";
 	qta.appendChild(frag);
-	
+
 	// destroyed events should not bubble
 	can.bind.call(qta.getElementsByTagName("li")[0], 'foo', function(event) {
 		ok(true,"li called :)");
@@ -254,35 +254,35 @@ test("select live binding", function() {
 });
 
 test("block live binding", function(){
-	
+
 	var text = "<div><% if( obs.attr('sex') == 'male' ){ %>"+
 			"<span>Mr.</span>"+
 		"<% } else { %>"+
 		  "<label>Ms.</label>"+
 		"<% } %>"+
 		"</div>"
-	
-	
+
+
 	var obs = new can.Map({
 		sex : 'male'
 	})
-	
+
 	var compiled = new can.EJS({text: text}).render({obs: obs});
-	
+
 	var div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled))
-	
+
 	// We have to test using nodeName and innerHTML (and not outerHTML) because IE 8 and under treats
 	// user-defined properties on nodes as attributes.
 	equal(div.getElementsByTagName('div')[0].firstChild.nodeName.toUpperCase(), "SPAN","initial span tag");
 	equal(div.getElementsByTagName('div')[0].firstChild.innerHTML, "Mr.","initial span content");
-	
+
 	obs.attr('sex','female')
-	
+
 	equal(div.getElementsByTagName('div')[0].firstChild.nodeName.toUpperCase(), "LABEL","updated label tag");
 	equal(div.getElementsByTagName('div')[0].firstChild.innerHTML, "Ms.","updated label content");
-	
+
 })
 
 test("hookups in tables", function(){
@@ -292,27 +292,27 @@ test("hookups in tables", function(){
 		  "<tr><td>Ms.</td></tr>"+
 		"<% } %>"+
 		"</tbody></table>"
-		
+
 	var obs = new can.Map({
 		sex : 'male'
 	})
-	
+
 	var compiled = new can.EJS({text: text}).render({obs: obs});
-	
+
 	var div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled));
-	
+
 	// We have to test using nodeName and innerHTML (and not outerHTML) because IE 8 and under treats
 	// user-defined properties on nodes as attributes.
 	equal(div.getElementsByTagName('tbody')[0].firstChild.firstChild.nodeName, "TD","initial tag");
-	equal(div.getElementsByTagName('tbody')[0].firstChild.firstChild.innerHTML.replace(/(\r|\n)+/g, ""), 
+	equal(div.getElementsByTagName('tbody')[0].firstChild.firstChild.innerHTML.replace(/(\r|\n)+/g, ""),
 		"Mr.","initial content");
-	
+
 	obs.attr('sex','female')
-	
+
 	equal(div.getElementsByTagName('tbody')[0].firstChild.firstChild.nodeName, "TD","updated tag");
-	equal(div.getElementsByTagName('tbody')[0].firstChild.firstChild.innerHTML.replace(/(\r|\n)+/g, ""), 
+	equal(div.getElementsByTagName('tbody')[0].firstChild.firstChild.innerHTML.replace(/(\r|\n)+/g, ""),
 		"Ms.","updated content");
 })
 
@@ -353,7 +353,7 @@ test('multiple hookups in a single attribute', function() {
 	var div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled));
-	
+
 	var innerDiv = div.childNodes[0];
 
 	equal(getAttr(innerDiv, 'class'), "1a2b3", 'initial render');
@@ -361,14 +361,14 @@ test('multiple hookups in a single attribute', function() {
 	obs.attr('bar', '4');
 
 	equal(getAttr(innerDiv, 'class'), "1a4b3", 'initial render');
-	
+
 	obs.attr('bar', '5');
 
 	equal(getAttr(innerDiv, 'class'), "1a5b3", 'initial render');
 });
 
 test('adding and removing multiple html content within a single element', function(){
-	
+
 	var text =	'<div><%== obs.attr("a") %><%== obs.attr("b") %><%== obs.attr("c") %></div>',
 
 	obs = new can.Map({
@@ -378,7 +378,7 @@ test('adding and removing multiple html content within a single element', functi
 	});
 
 	compiled = new can.EJS({ text: text }).render({ obs: obs })
-	
+
 	var div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled));
@@ -390,17 +390,17 @@ test('adding and removing multiple html content within a single element', functi
 
 	equal(div.firstChild.nodeName.toUpperCase(), 'DIV', 'updated render node name');
 	equal(div.firstChild.innerHTML, '', 'updated render text')
-	
+
 	obs.attr({c: 'c'});
-	
+
 	equal(div.firstChild.nodeName.toUpperCase(), 'DIV', 'updated render node name');
 	equal(div.firstChild.innerHTML, 'c', 'updated render text')
 });
 
 test('live binding and removeAttr', function(){
 
-	var text = '<% if(obs.attr("show")) { %>' + 
-			'<p <%== obs.attr("attributes") %> class="<%= obs.attr("className")%>"><span><%= obs.attr("message") %></span></p>' + 
+	var text = '<% if(obs.attr("show")) { %>' +
+			'<p <%== obs.attr("attributes") %> class="<%= obs.attr("className")%>"><span><%= obs.attr("message") %></span></p>' +
 		'<% } %>',
 
 		obs = new can.Map({
@@ -453,7 +453,7 @@ test('live binding and removeAttr', function(){
 	equal(div.innerHTML, '', 'value in block statement is undefined');
 
 	obs.attr('show', true);
-	
+
 	var p = div.getElementsByTagName('p')[0],
 		span = p.getElementsByTagName('span')[0];
 
@@ -533,7 +533,7 @@ test('html comments', function(){
 })
 
 test("hookup and live binding", function(){
-	
+
 	var text = "<div class='<%= task.attr('completed') ? 'complete' : '' %>' <%= (el)-> can.data(can.$(el),'task',task) %>>" +
 		"<%== task.attr('name') %>" +
 		"</div>",
@@ -544,21 +544,21 @@ test("hookup and live binding", function(){
 		}),
 		compiled = new can.EJS({ text: text }).render({ task: task }),
 		div = document.createElement('div');
-	
+
 	div.appendChild(can.view.frag(compiled))
 	var child = div.getElementsByTagName('div')[0];
 	ok( child.className.indexOf("complete") == -1, "is incomplete" )
 	ok( !!can.data(can.$(child), 'task'), "has data" )
 	equal(child.innerHTML, "My Name", "has name")
-	
+
 	task.attr({
 		completed: true,
 		name: 'New Name'
 	});
-	
+
 	ok( child.className.indexOf("complete") != -1, "is complete" )
 	equal(child.innerHTML, "New Name", "has new name")
-	
+
 })
 
 
@@ -602,7 +602,7 @@ test("unescape bindings change", function(){
 		})
 		return num;
 	};
-	
+
 	var text =	'<div><%== completed() %></div>',
 
 
@@ -610,22 +610,22 @@ test("unescape bindings change", function(){
 
 	var div = document.createElement('div');
 	div.appendChild(can.view.frag(compiled));
-	
+
 	var child = div.getElementsByTagName('div')[0];
 	equal(child.innerHTML, "2", "at first there are 2 true bindings");
 	var item = new can.Map({complete: true, id: "THIS ONE"})
 	l.push(item);
-	
+
 	equal(child.innerHTML, "3", "now there are 3 complete");
-	
+
 	item.attr('complete',false);
-	
+
 	equal(child.innerHTML, "2", "now there are 2 complete");
-	
+
 	l.pop();
-	
+
 	item.attr('complete',true);
-	
+
 	equal(child.innerHTML, "2", "there are still 2 complete");
 });
 
@@ -646,7 +646,7 @@ test("escape bindings change", function(){
 		})
 		return num;
 	};
-	
+
 	var text =	'<div><%= completed() %></div>',
 
 
@@ -654,16 +654,16 @@ test("escape bindings change", function(){
 
 	var div = document.createElement('div');
 	div.appendChild(can.view.frag(compiled));
-	
+
 	var child = div.getElementsByTagName('div')[0];
 	equal(child.innerHTML, "2", "at first there are 2 true bindings");
 	var item = new can.Map({complete: true})
 	l.push(item);
-	
+
 	equal(child.innerHTML, "3", "now there are 3 complete");
-	
+
 	item.attr('complete',false);
-	
+
 	equal(child.innerHTML, "2", "now there are 2 complete");
 });
 
@@ -684,7 +684,7 @@ test("tag bindings change", function(){
 		})
 		return "items='"+num+"'";
 	};
-	
+
 	var text =	'<div <%= completed() %>></div>',
 
 
@@ -692,16 +692,16 @@ test("tag bindings change", function(){
 
 	var div = document.createElement('div');
 	div.appendChild(can.view.frag(compiled));
-	
+
 	var child = div.getElementsByTagName('div')[0];
 	equal(child.getAttribute("items"), "2", "at first there are 2 true bindings");
 	var item = new can.Map({complete: true})
 	l.push(item);
-	
+
 	equal(child.getAttribute("items"), "3", "now there are 3 complete");
-	
+
 	item.attr('complete',false);
-	
+
 	equal(child.getAttribute("items"), "2", "now there are 2 complete");
 })
 
@@ -721,7 +721,7 @@ test("attribute value bindings change", function(){
 		})
 		return num;
 	};
-	
+
 	var text =	'<div items="<%= completed() %>"></div>',
 
 
@@ -729,33 +729,33 @@ test("attribute value bindings change", function(){
 
 	var div = document.createElement('div');
 	div.appendChild(can.view.frag(compiled));
-	
+
 	var child = div.getElementsByTagName('div')[0];
 	equal(child.getAttribute("items"), "2", "at first there are 2 true bindings");
 	var item = new can.Map({complete: true})
 	l.push(item);
-	
+
 	equal(child.getAttribute("items"), "3", "now there are 3 complete");
-	
+
 	item.attr('complete',false);
-	
+
 	equal(child.getAttribute("items"), "2", "now there are 2 complete");
 })
 
 test("in tag toggling", function(){
 		var text = "<div <%== obs.attr('val') %>></div>"
-	
-	
+
+
 	var obs = new can.Map({
 		val : 'foo="bar"'
 	})
-	
+
 	var compiled = new can.EJS({text: text}).render({obs: obs});
-	
+
 	var div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled));
-	
+
 	obs.attr('val',"bar='foo'");
 	obs.attr('val','foo="bar"')
 	var d2 = div.getElementsByTagName('div')[0];
@@ -776,33 +776,33 @@ test("parent is right with bock", function(){
 	}),
 
 	compiled = new can.EJS({ text: text }).render({ obs: obs });
-	
+
 	var div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled));
 	var ul = div.getElementsByTagName('ul')[0];
 	var li = div.getElementsByTagName('li')[0];
-	
+
 	ok(ul, "we have a ul");
 	ok(li, "we have a li")
-	
+
 });
 
 test("property name only attributes", function(){
-	
+
 	var text = "<input type='checkbox' <%== obs.attr('val') ? 'checked' : '' %>/>"
-	
-	
+
+
 	var obs = new can.Map({
 		val : true
 	})
-	
+
 	var compiled = new can.EJS({text: text}).render({obs: obs});
-	
+
 	var div = document.getElementById('qunit-test-area');
 
 	div.appendChild(can.view.frag(compiled));
-	
+
 	var input = div.getElementsByTagName('input')[0];
 	can.trigger(input, 'click');
 	obs.attr('val',false)
@@ -817,20 +817,20 @@ test("property name only attributes", function(){
 });
 
 test("nested properties", function(){
-	
+
 	var text = "<div><%= obs.attr('name.first')%></div>"
-	
-	
+
+
 	var obs = new can.Map({
 		name : {first : "Justin"}
 	})
-	
+
 	var compiled = new can.EJS({text: text}).render({obs: obs});
-	
+
 	var div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled));
-	
+
 	var div = div.getElementsByTagName('div')[0];
 
 	equal(div.innerHTML, "Justin")
@@ -838,11 +838,11 @@ test("nested properties", function(){
 	obs.attr('name.first',"Brian")
 
 	equal(div.innerHTML, "Brian")
-	
+
 });
 
 test("tags without chidren or ending with /> do not change the state", function(){
-	
+
 	var text = "<table><tr><td/><%== obs.attr('content') %></tr></div>"
 	var obs = new can.Map({
 		content: "<td>Justin</td>"
@@ -850,7 +850,7 @@ test("tags without chidren or ending with /> do not change the state", function(
 	var compiled = new can.EJS({text: text}).render({obs: obs});
 	var div = document.createElement('div');
 	var html = can.view.frag(compiled);
-	
+
 	div.appendChild(html)
 
 	equal( div.getElementsByTagName('span').length, 0, "there are no spans");
@@ -865,10 +865,10 @@ test("nested live bindings", function() {
 	var items  = new can.List([
 		{title: 0, is_done: false, id: 0}
 	]);
-	
+
 	var div = document.createElement('div');
 	div.appendChild(can.view(can.test.path("view/ejs/test/nested_live_bindings.ejs"),{items: items}))
-	
+
 	items.push({title: 1, is_done: false, id: 1});
 	// this will throw an error unless EJS protects against
 	// nested objects
@@ -880,9 +880,9 @@ test("nested live bindings", function() {
 // will eventually remove themselves if at least one change happens
 // before things are removed.
 // It is currently commented out because
-// 
+//
 /*test("memory safe without parentElement of blocks", function(){
-	
+
 })*/
 
 test("trailing text", function(){
@@ -893,15 +893,15 @@ test("trailing text", function(){
 })
 
 test("recursive views", function(){
-	
+
 	var data = new can.List([
 			{label:'branch1', children:[{id:2, label:'branch2'}]}
 		])
-	
+
 	var div = document.createElement('div');
 	div.appendChild( can.view(can.test.path('view/ejs/test/recursive.ejs'),  {items: data}));
 	ok(/class="leaf"|class=leaf/.test(div.innerHTML), "we have a leaf")
-	
+
 })
 
 test("indirectly recursive views", function() {
@@ -913,12 +913,12 @@ test("indirectly recursive views", function() {
 		]}
 	]);
 	can.view.cache = false;
-	var div = document.createElement('div');	
+	var div = document.createElement('div');
 	div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
 	document.getElementById('qunit-test-area').appendChild(div);
 	var el = can.$('#qunit-test-area ul > li > ol > li > ul > li > ol > li')[0];
 	ok(!!el && can.trim(el.innerHTML) === "1", "Uncached indirectly recursive EJS working.");
-	
+
 	can.view.cache = true;
 	div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
 	el = can.$('#qunit-test-area ul + ul > li > ol > li > ul > li > ol > li')[0];
@@ -929,7 +929,7 @@ test("indirectly recursive views", function() {
 
 test("recursive views of previously stolen files shouldn't fail", function() {
 	// Using preload to bypass steal dependency (necessary for "grunt test")
-	can.view.preload("view_ejs_test_indirect1_ejs", can.EJS({text: 
+	can.view.preload("view_ejs_test_indirect1_ejs", can.EJS({text:
 		"<ul>"+
 		"<% unordered.each(function(item) { %>"+
 			"<li>"+
@@ -942,7 +942,7 @@ test("recursive views of previously stolen files shouldn't fail", function() {
 		"<% }) %>"+
 		"</ul>"
 	}));
-	can.view.preload("view_ejs_test_indirect2_ejs", can.EJS({text: 
+	can.view.preload("view_ejs_test_indirect2_ejs", can.EJS({text:
 		"<ol>"+
 		"<% ordered.each(function(item) { %>"+
 			"<li>"+
@@ -955,7 +955,7 @@ test("recursive views of previously stolen files shouldn't fail", function() {
 		"<% }) %>"+
 		"</ol>"
 	}));
-	
+
 	var unordered = new can.Map.List([
 		{ ol: [
 			{ ul: [
@@ -964,12 +964,12 @@ test("recursive views of previously stolen files shouldn't fail", function() {
 		]}
 	]);
 	can.view.cache = false;
-	var div = document.createElement('div');	
+	var div = document.createElement('div');
 	div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
 	document.getElementById('qunit-test-area').appendChild(div);
 	var el = can.$('#qunit-test-area ul > li > ol > li > ul > li > ol > li')[0];
 	ok(!!el && can.trim(el.innerHTML) === "1", "Uncached indirectly recursive EJS working.");
-	
+
 	can.view.cache = true;
 	div.appendChild(can.view(can.test.path('view/ejs/test/indirect1.ejs'), {unordered: unordered}));
 	el = can.$('#qunit-test-area ul + ul > li > ol > li > ul > li > ol > li')[0];
@@ -988,14 +988,14 @@ test("live binding select", function(){
 		]),
 		compiled = new can.EJS({text: text}).render({items: items}),
 		div = document.createElement('div');
-		
+
 		div.appendChild(can.view.frag(compiled))
 		equal(div.getElementsByTagName('option').length, 3, '3 items in list')
 
-		var option = div.getElementsByTagName('option')[0] 
+		var option = div.getElementsByTagName('option')[0]
 		equal(option.value, ""+items[0].id,
 			   'value attr set');
-			  
+
 		equal(option.textContent || option.text, items[0].title,
 			   'content of option');
 
@@ -1005,19 +1005,19 @@ test("live binding select", function(){
 
 test("live binding textarea", function(){
 	can.view.ejs("textarea-test","<textarea>Before<%= obs.attr('middle') %>After</textarea>");
-	
+
 	var obs = new can.Map({middle: "yes"}),
 		div = document.createElement('div');
-	
+
 	var node = can.view("textarea-test", {obs: obs});
 	div.appendChild(node);
 	var textarea = div.firstChild
-	
+
 	equal(textarea.value, "BeforeyesAfter");
-	
+
 	obs.attr("middle","Middle")
 	equal(textarea.value, "BeforeMiddleAfter")
-	
+
 })
 
 test("reset on a live bound input", function(){
@@ -1028,7 +1028,7 @@ test("reset on a live bound input", function(){
 		compiled = new can.EJS({text: text}).render({person: person}),
 		form = document.createElement('form'),
 		input;
-		
+
 		form.appendChild(can.view.frag(compiled))
 		input = form.getElementsByTagName('input')[0];
 		form.reset();
@@ -1051,8 +1051,8 @@ test("A non-escaping live magic tag within a control structure and no leaks", fu
 		]),
 		compiled = new can.EJS({text: text}).render({items: items}),
 		div = can.$('#qunit-test-area')[0];
-		
-		
+
+
 	div.innerHTML = ""
 
 	can.append( can.$('#qunit-test-area'), can.view.frag(compiled));
@@ -1096,22 +1096,22 @@ test("attribute unquoting", function() {
 });
 
 test("empty element hooks work correctly",function(){
-	
+
 	var text = '<div <%= function(e){ e.innerHTML = "1 Will show"; } %>></div>'+
 		'<div <%= function(e){ e.innerHTML = "2 Will not show"; } %>></div>'+
 		'3 Will not show';
-	
+
 	var compiled = new can.EJS({text: text}).render(),
 		div = document.createElement('div');
 
 	div.appendChild(can.view.frag(compiled));
 
 	equal(div.childNodes.length, 3, "all three elements present")
-	
+
 });
 
 test("live binding with parent dependent tags but without parent tag present in template",function(){
-	
+
 	var text = ['<tbody>',
 				'<% if( person.attr("first") ){ %>',
 				'<tr><td><%= person.first %></td></tr>',
@@ -1124,7 +1124,7 @@ test("live binding with parent dependent tags but without parent tag present in 
 
 	var compiled = new can.EJS({text: text.join("\n")}).render({person: person});
 	var table = document.createElement('table');
-	
+
 	table.appendChild(can.view.frag(compiled));
 
 	equal(table.getElementsByTagName('tr')[0].firstChild.nodeName.toUpperCase(), "TD");
@@ -1140,9 +1140,9 @@ test("live binding with parent dependent tags but without parent tag present in 
 	person.removeAttr('last');
 
 	equal(table.getElementsByTagName('tr').length, 0);
-	
+
 	person.attr('first',"Justin");
-	
+
 	equal(table.getElementsByTagName('tr')[0].firstChild.nodeName.toUpperCase(), "TD");
 	equal(table.getElementsByTagName('tr')[0].firstChild.innerHTML, "Justin");
 })
@@ -1154,10 +1154,10 @@ test("spaces between attribute name and value", function(){
 			test : 'testing'
 		}),
 		div = document.createElement('div');
-	
+
 	div.appendChild(can.view.frag(compiled));
 	var input = div.getElementsByTagName('input')[0];
-	
+
 	equal(input.value, 'testing');
 	equal(input.type,"text")
 })
@@ -1169,7 +1169,7 @@ test("live binding with computes", function() {
 			compute: compute
 		}),
 		div = document.createElement('div');
-		
+
 	div.appendChild(can.view.frag(compiled));
 
 	var span = div.getElementsByTagName('span');
@@ -1189,10 +1189,10 @@ test("live binding with computes", function() {
 
 test("testing for clean tables", function() {
 	var games = new can.List();
-  games.push({name: 'The Legend of Zelda', rating: 10});  
-  games.push({name: 'The Adventures of Link', rating: 9});  
+  games.push({name: 'The Legend of Zelda', rating: 10});
+  games.push({name: 'The Adventures of Link', rating: 9});
   games.push({name: 'Dragon Warrior', rating: 9});
-  games.push({name: 'A Dude Named Daffl', rating: 8.5});  
+  games.push({name: 'A Dude Named Daffl', rating: 8.5});
 
 	var res = can.view.render(can.test.path("view/ejs/test/table_test.ejs"),{
 		games: games
@@ -1238,19 +1238,19 @@ test("inserting live-binding partials assume the correct parent tag", function()
 test("Observe with array attributes", function() {
 	var renderer = can.view.ejs('observe-array', '<ul><% can.each(todos, function(todo, i) { %><li><%= todos.attr(""+i) %></li><% }) %></ul><div><%= this.attr("message") %></div>');
 	var div = document.createElement('div');
-	var data = new can.Map({ 
+	var data = new can.Map({
 	    todos: [ 'Line #1', 'Line #2', 'Line #3' ],
 	    message: 'Hello',
-	    count: 2   
+	    count: 2
 	});
 	div.appendChild(can.view('observe-array', data));
-	
+
 	equal(div.getElementsByTagName('li')[1].innerHTML, 'Line #2', 'Check initial array');
 	equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello', 'Check initial message');
-	
+
 	data.attr('todos.1', 'Line #2 changed');
 	data.attr('message', 'Hello again');
-	
+
 	equal(div.getElementsByTagName('li')[1].innerHTML, 'Line #2 changed', 'Check updated array');
 	equal(div.getElementsByTagName('div')[0].innerHTML, 'Hello again', 'Check updated message');
 });
@@ -1331,14 +1331,14 @@ test("Interpolated values when iterating through an Observe.List should still re
 	var renderer = can.view.ejs('issue-153-no-dom', '<% can.each(todos, function(todo) { %><span><%= todo.attr("name") %></span><% }) %>'),
 		renderer2 = can.view.ejs('issue-153-dom', '<% can.each(todos, function(todo) { %><%= todo.attr("name") %><% }) %>'),
 		todos = [ new can.Map({id: 1, name: 'Dishes'}), new can.Map({id: 2, name: 'Forks'}) ],
-		data = { 
+		data = {
 			todos: new can.List(todos)
 		},
 		arr = {
 			todos: todos
 		},
 		div = document.createElement('div');
-		
+
 	div.appendChild(can.view('issue-153-no-dom', arr));
 	equal(div.getElementsByTagName('span')[0].innerHTML, "Dishes", 'Array item rendered with DOM container');
 	equal(div.getElementsByTagName('span')[1].innerHTML, "Forks", 'Array item rendered with DOM container');
@@ -1543,37 +1543,37 @@ test("JS blocks within EJS tags shouldn't require isolation", function(){
 	var isolatedBlocks = can.view.ejs(
 			"<% if (true) { %>" +
 				"<% if (true) {%>" +
-					"hi" + 
+					"hi" +
 				"<% } %>" +
 			"<% } %>"),
 		sharedBlocks = can.view.ejs(
 			"<% if (true) { %>" +
 				"<% if (true) { %>" +
-					"hi" + 
+					"hi" +
 				"<% }" +
 			"} %>");
 		complexIsolatedBlocks = can.view.ejs(
 			"<% if (true) { %><% if (1) { %>" +
 				"<% if ({ dumb: 'literal' }) { %>" +
-					"<% list(items, function(item) { %>" + 
+					"<% list(items, function(item) { %>" +
 						"<%== item %>" +
 						"<%== something(function(items){ %><%== items.length %><% }) %>" +
-					"<% }) %>" + 
+					"<% }) %>" +
 				"<% } %>" +
 			"<% } %><% } %>");
 		complexSharedBlocks = can.view.ejs(
 			"<% if (true) { if (1) { %>" +
 				"<% if ({ dumb: 'literal' }) { %>" +
-					"<% list(items, function(item) { %>" + 
+					"<% list(items, function(item) { %>" +
 						"<%== item %>" +
 						"<%== something(function(items){ %><%== items.length %><% }) %>" +
-					"<% }) %>" + 
+					"<% }) %>" +
 				"<% }" +
 			"} } %>"),
 		iteratedSharedBlocks = can.view.ejs(
 			"<% for (var i = 0; i < items.length; i++) { %>" +
 				"<% if (this.items) { if (1) { %>" +
-					"hi" + 
+					"hi" +
 				"<% } } else { %>" +
 					"nope" +
 			"<% } } %>"),
@@ -1755,25 +1755,25 @@ test("_bindings removed when element removed", function() {
 	        "name": "Fantasy Baseball",
 	        "league": "Malamonsters"
 	    });
-    
+
     var frag = template({
     	game: game
     });
-    
+
 	var div = document.createElement('div');
-	
+
 	div.appendChild(frag);
 
 	can.remove( can.$(div)  )
-	
+
 	stop()
 	setTimeout(function(){
 		start()
 		equal(game._bindings, 0, 'No bindings left');
 	},50)
-	
+
 });
 
 
 
-})();
+});

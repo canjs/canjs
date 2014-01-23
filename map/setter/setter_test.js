@@ -1,9 +1,9 @@
-(function() {
+steal("can/map/setter", "can/test", function() {
 
 module("can/map/setter");
 
 test("setter testing works", function(){
-	
+
 	var Contact = can.Map({
 		setBirthday : function(raw){
 			if(typeof raw == 'number'){
@@ -13,18 +13,18 @@ test("setter testing works", function(){
 			}
 		}
 	});
-	
+
 	var date = new Date(),
 		contact = new Contact({birthday: date.getTime()});
-	
+
 	// set via constructor
 	equal(contact.birthday.getTime(), date.getTime(), "set as birthday")
-	
+
 	// set via attr method
 	date = new Date();
 	contact.attr('birthday', date.getTime())
 	equal(contact.birthday.getTime(), date.getTime(), "set via attr")
-	
+
 	// set via attr method w/ multiple attrs
 	date = new Date();
 	contact.attr({ birthday: date.getTime() })
@@ -46,7 +46,7 @@ test("error binding", 1, function(){
 		equal(error, "no name", "error message provided")
 	})
 	school.attr("name","");
-	
+
 });
 
 test("asyncronous setting", function(){
@@ -68,4 +68,4 @@ test("asyncronous setting", function(){
 })
 
 
-})();
+});

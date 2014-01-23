@@ -1,4 +1,4 @@
-(function() {
+steal("can/map/validations", "can/test", function() {
 
 module("can/map/validations",{
 	setup : function(){
@@ -11,50 +11,50 @@ test("observe can validate, events, callbacks", 7,function(){
 	Person.validate("age", {message : "it's a date type"},function(val){
 		return ! ( this.date instanceof Date )
 	})
-	
-	
+
+
 	var task = new Person({age: "bad"}),
 		errors = task.errors()
-		
-	
+
+
 	ok(errors, "There are errors");
 	equal(errors.age.length, 1, "there is one error");
 	equal(errors.age[0], "it's a date type", "error message is right");
-	
+
 	task.bind("error", function(ev, attr, errs){
 		ok(this === task, "we get task back by binding");
-		
+
 		ok(errs, "There are errors");
 		equal(errs.age.length, 1, "there is one error");
 		equal(errs.age[0], "it's a date type", "error message is right");
 	})
-	
+
 	task.attr("age","blah");
 
 	task.unbind("error");
-	
+
 	task.attr("age", "blaher");
-	
+
 })
 
 test("validatesFormatOf", function(){
 	Person.validateFormatOf("thing",/\d-\d/)
-	
+
 	ok(!new Person({thing: "1-2"}).errors(),"no errors");
-	
+
 	var errors = new Person({thing: "foobar"}).errors();
-	
+
 	ok(errors, "there are errors")
 	equal(errors.thing.length,1,"one error on thing");
-	
+
 	equal(errors.thing[0],"is invalid","basic message");
-	
+
 	Person.validateFormatOf("otherThing",/\d/,{message: "not a digit"})
-	
+
 	var errors2 = new Person({thing: "1-2", otherThing: "a"}).errors();
-	
+
 	equal(errors2.otherThing[0],"not a digit", "can supply a custom message")
-	
+
 	ok(!new Person({thing: "1-2", otherThing: null}).errors(),"can handle null")
 	ok(!new Person({thing: "1-2"}).errors(),"can handle undefiend")
 });
@@ -72,9 +72,9 @@ test("validatesInclusionOf", function(){
 	equal(errors.thing[0],"is not a valid option (perhaps out of range)","basic message");
 
 	Person.validateInclusionOf("otherThing", ["yes", "no", "maybe"],{message: "not a valid option"});
-	
+
 	var errors2 = new Person({thing: "yes", otherThing: "maybe not"}).errors();
-	
+
 	equal(errors2.otherThing[0],"not a valid option", "can supply a custom message");
 });
 
@@ -84,7 +84,7 @@ test("validatesLengthOf", function(){
 	Person.validateLengthOf("thing", 2, 5);
 
 	ok(!new Person({thing: "yes",nullValue: null}).errors(),"no errors");
-	
+
 	var errors = new Person({thing: "foobar"}).errors();
 
 	ok(errors, "there are errors");
@@ -111,19 +111,19 @@ test("validatesPresenceOf", function(){
 			this.validatePresenceOf("dueDate")
 		}
 	},{});
-	
+
     //test for undefined
 	var task = new Task(),
 		errors = task.errors();
-	
+
 	ok(errors)
 	ok(errors.dueDate)
 	equal(errors.dueDate[0], "can't be empty" , "right message");
-	
+
     //test for null
 	task = new Task({dueDate: null});
     errors = task.errors();
-	
+
 	ok(errors)
 	ok(errors.dueDate)
 	equal(errors.dueDate[0], "can't be empty" , "right message");
@@ -131,7 +131,7 @@ test("validatesPresenceOf", function(){
     //test for ""
 	task = new Task({dueDate: ""});
     errors = task.errors();
-	
+
 	ok(errors)
 	ok(errors.dueDate)
 	equal(errors.dueDate[0], "can't be empty" , "right message");
@@ -139,18 +139,18 @@ test("validatesPresenceOf", function(){
 	//Affirmative test
 	task = new Task({dueDate : "yes"});
 	errors = task.errors();;
-	
+
 	ok(!errors, "no errors "+typeof errors);
-	
+
 	can.Map.extend("Task",{
 		init : function(){
 			this.validatePresenceOf("dueDate",{message : "You must have a dueDate"})
 		}
 	},{});
-	
+
 	task = new Task({dueDate : "yes"});
 	errors = task.errors();;
-	
+
 	ok(!errors, "no errors "+typeof errors);
 })
 
@@ -222,46 +222,46 @@ test("validatesRangeOf", function(){
 
 test("validatesNumericalityOf", function(){
 	Person.validatesNumericalityOf(["foo"]);
-	
+
 	var errors = new Person({foo: 0}).errors();
 	ok(!errors, "no errors");
-	
+
 	var errors = new Person({foo: 1}).errors();
 	ok(!errors, "no errors");
-	
+
 	var errors = new Person({foo: 1.5}).errors();
 	ok(!errors, "no errors");
-	
+
 	var errors = new Person({foo: -1.5}).errors();
 	ok(!errors, "no errors");
-	
+
 	var errors = new Person({foo: "1"}).errors();
 	ok(!errors, "no errors");
-	
+
 	var errors = new Person({foo: "1.5"}).errors();
 	ok(!errors, "no errors");
-	
+
 	var errors = new Person({foo: ".5"}).errors();
 	ok(!errors, "no errors");
-	
+
 	var errors = new Person({foo: "-1.5"}).errors();
 	ok(!errors, "no errors");
-	
+
 	var errors = new Person({foo: " "}).errors();
 	equal(errors.foo.length,1,"one error on foo");
-	
+
 	var errors = new Person({foo: "1f"}).errors();
 	equal(errors.foo.length,1,"one error on foo");
-	
+
 	var errors = new Person({foo: "f1"}).errors();
 	equal(errors.foo.length,1,"one error on foo");
-	
+
 	var errors = new Person({foo: "1.5.5"}).errors();
 	equal(errors.foo.length,1,"one error on foo");
-	
+
 	var errors = new Person({foo: "\t\t"}).errors();
 	equal(errors.foo.length,1,"one error on foo");
-	
+
 	var errors = new Person({foo: "\n\r"}).errors();
 	equal(errors.foo.length,1,"one error on foo");
 });
@@ -289,4 +289,4 @@ test("Validate with compute (#410)", function() {
 	task.attr('age', 'still bad');
 });
 
-})();
+});

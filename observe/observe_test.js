@@ -1,9 +1,9 @@
-(function(undefined) {
+steal('can/util', "can/observe", 'can/map', 'can/list', "can/test", function() {
 
 module('can/observe map+list')
 
 test("Basic Map",9,function(){
-	
+
 	var state = new can.Map({
 		category : 5,
 		productType : 4,
@@ -13,9 +13,9 @@ test("Basic Map",9,function(){
 		  price : []
 		}
 	});
-	
+
 	var added;
-	
+
 	state.bind("change", function(ev, attr, how, val, old){
 		equal(attr, "properties.brand.0", "correct change name")
 		equal(how, "add")
@@ -51,8 +51,8 @@ test("list attr changes length", function(){
 test("list splice", function(){
 	var l = new can.List([0,1,2,3]),
 		first = true;
-  
-	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
+
+	l.bind('change', function( ev, attr, how, newVals, oldVals ) {
 		equal(attr, "1")
 		// where comes from the attr ...
 		//equal(where, 1)
@@ -63,11 +63,11 @@ test("list splice", function(){
 			deepEqual( newVals, ["a","b"] , "got the right newVals")
 			equal( how, "add", "adding items" )
 		}
-	
+
 		first = false;
 	})
-	
-	l.splice(1,2, "a", "b"); 
+
+	l.splice(1,2, "a", "b");
 	deepEqual(l.serialize(), [0,"a","b", 3], "serialized")
 });
 
@@ -75,16 +75,16 @@ test("list splice", function(){
 
 test("list pop", function(){
 	var l = new can.List([0,1,2,3]);
-  
-	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
+
+	l.bind('change', function( ev, attr, how, newVals, oldVals ) {
 		equal(attr, "3")
-		
+
 		equal( how, "remove" )
 		equal( newVals, undefined )
 		deepEqual( oldVals, [3] )
 	})
-	
-	l.pop(); 
+
+	l.pop();
 	deepEqual(l.serialize(), [0,1,2])
 })
 
@@ -99,21 +99,21 @@ test("changing an object unbinds", function(){
 		}
 	}),
 	count = 0;
-	
+
 	var  brand = state.attr("properties.brand");
-	
+
 	state.bind("change", function(ev, attr, how, val, old){
 		equal(attr,"properties.brand");
-		
+
 		equal(count, 0, "count called once");
 		count++;
 		equal(how, "set")
 		equal(val[0], "hi")
 	});
 	state.attr("properties.brand",["hi"]);
-	
+
 	brand.push(1,2,3);
-	
+
 });
 
 test("replacing with an object that object becomes observable",function(){
@@ -124,11 +124,11 @@ test("replacing with an object that object becomes observable",function(){
 		  price : []
 		}
 	});
-	
+
 	ok(state.attr("properties").bind, "has bind function");
-	
+
 	state.attr("properties",{});
-	
+
 	ok(state.attr("properties").bind, "has bind function");
 });
 
@@ -177,7 +177,7 @@ test("remove attr", function(){
 		  price : []
 		}
 	});
-	
+
 	state.bind("change", function(ev, attr, how, newVal, old){
 		equal(attr, "properties");
 		equal(how, "remove")
@@ -187,7 +187,7 @@ test("remove attr", function(){
 		  price : []
 		} );
 	})
-	
+
 	state.removeAttr("properties");
 	equal(undefined,  state.attr("properties") );
 });
@@ -198,13 +198,13 @@ test("remove nested attr", function(){
 			nested: true
 		}
 	});
-	
+
 	state.bind("change", function(ev, attr, how, newVal, old){
 		equal(attr, "properties.nested");
 		equal(how, "remove")
 		deepEqual(old , true);
 	})
-	
+
 	state.removeAttr("properties.nested");
 	equal(undefined,  state.attr("properties.nested") );
 });
@@ -213,13 +213,13 @@ test("remove item in nested array", function(){
 	var state = new can.Map({
 		array : ["a", "b"]
 	});
-	
+
 	state.bind("change", function(ev, attr, how, newVal, old){
 		equal(attr, "array.1");
 		equal(how, "remove")
 		deepEqual(old, ["b"]);
 	})
-	
+
 	state.removeAttr("array.1");
 	// In IE7/8, the length changes but the object isn't guaranteed to be removed from the array
 	// equal(undefined,  state.attr("array.1") );
@@ -232,26 +232,26 @@ test("remove nested property in item of array", function(){
 			nested: true
 		}]
 	});
-	
+
 	state.bind("change", function(ev, attr, how, newVal, old){
 		equal(attr, "array.0.nested");
 		equal(how, "remove")
 		deepEqual(old, true);
 	})
-	
+
 	state.removeAttr("array.0.nested");
 	equal(undefined,  state.attr("array.0.nested") );
 });
 
 test("remove nested property in item of array map", function(){
 	var state = new can.List([{nested: true}]);
-	
+
 	state.bind("change", function(ev, attr, how, newVal, old){
 		equal(attr, "0.nested");
 		equal(how, "remove")
 		deepEqual(old, true);
 	})
-	
+
 	state.removeAttr("0.nested");
 	equal(undefined,  state.attr("0.nested") );
 });
@@ -263,46 +263,46 @@ test("attr with an object", function(){
 		  brand: []
 		}
 	});
-	
+
 	state.bind("change", function(ev, attr, how, newVal){
 		equal(attr, "properties.foo", "foo has changed")
 		equal(newVal, "bad")
 	})
-	
+
 	state.attr({
 		properties : {
 		  foo: "bar",
 		  brand: []
 		}
 	})
-	
+
 	state.attr({
 		properties : {
 		  foo: "bad",
 		  brand: []
 		}
 	});
-	
+
 	state.unbind("change");
-	
+
 	state.bind("change", function(ev, attr, how, newVal){
 		equal(attr, "properties.brand.0")
 		equal(how,"add")
 		deepEqual(newVal, ["bad"])
 	});
-	
+
 	state.attr({
 		properties : {
 		  foo: "bad",
 		  brand: ["bad"]
 		}
 	});
-	
+
 });
 
 test("empty get", function(){
 	var state = new can.Map({});
-	
+
 	equal(state.attr('foo.bar'), undefined)
 });
 
@@ -314,11 +314,11 @@ test("attr deep array ", function(){
 		thing = {
 			arr: arr
 		};
-	
+
 	state.attr({
 		thing: thing
 	}, true);
-	
+
 	ok(thing.arr === arr, "thing unmolested");
 });
 
@@ -331,11 +331,11 @@ test('attr semi-serialize', function(){
 			foo : {bar: 'car'},
 			arr: [1,2,3, {four: '5'}]
 		};
-	
+
 	var res = new can.Map(first).attr();
 	deepEqual(res,compare, "test")
 })
-	
+
 test("attr sends events after it is done", function(){
 	var state = new can.Map({foo: 1, bar: 2})
 	state.bind('change', function(){
@@ -355,7 +355,7 @@ test("pop unbinds", function(){
 	var l = new can.List([{foo: 'bar'}]);
 	var o = l.attr(0),
 		count = 0;
-		
+
 	l.bind('change', function(ev, attr, how, newVal, oldVal){
 		count++;
 		if(count == 1){
@@ -367,11 +367,11 @@ test("pop unbinds", function(){
 		} else {
 			ok(false, "change handler called too many times")
 		}
-		
+
 	})
-	
+
 	equal( o.attr('foo') , 'bar');
-	
+
 	o.attr('foo','car')
 	l.pop();
 	o.attr('foo','bad')
@@ -392,11 +392,11 @@ test("splice unbinds", function(){
 		} else {
 			ok(false, "called too many times")
 		}
-		
+
 	})
-	
+
 	equal( o.attr('foo') , 'bar');
-	
+
 	o.attr('foo','car')
 	l.splice(0,1);
 	o.attr('foo','bad')
@@ -405,21 +405,21 @@ test("splice unbinds", function(){
 
 test("always gets right attr even after moving array items", function(){
 	var l = new can.List([{foo: 'bar'}]);
-	
+
 	// get the first item
 	var o = l.attr(0);
 	// add a new item
 	l.unshift("A new Value")
-	
+
 	// listen to change
 	l.bind('change', function(ev, attr, how){
 		equal(attr, "1.foo")
 	})
-	
+
 	// this should have bubbled right
 	o.attr('foo','led you')
 })
- 
+
 test("recursive observers do not cause stack overflow", function() {
 	expect(0);
 
@@ -550,19 +550,19 @@ test("bind on deep properties",function(){
 		equal(newVal,"Justin");
 		equal(oldVal,"Brian")
 	});
-	
+
 	ob.attr('name.first',"Justin")
-	
+
 });
 
 test("startBatch and stopBatch and changed event", 5, function(){
-	
+
 	var ob = new can.Map({name: {first: "Brian"}, age: 29}),
 		bothSet = false,
 		changeCallCount = 0,
 		changedCalled = false;
-	
-	
+
+
 	ob.bind("change", function(){
 		ok(bothSet, "both properties are set before the changed event was called")
 		ok(!changedCalled, "changed not called yet")
@@ -571,7 +571,7 @@ test("startBatch and stopBatch and changed event", 5, function(){
 	// The following tests how changed events should fire
 	/*ob.bind("changed", function(ev, attrs){
 		equal(changeCallCount, 2, "two change events")
-		
+
 		equal(attrs.length, 2, "changed events include bubbling change events");
 		changedCalled = true;
 	})*/
@@ -579,7 +579,7 @@ test("startBatch and stopBatch and changed event", 5, function(){
 	can.batch.start(function(){
 		ok(true, "batch callback called")
 	});
-	
+
 	ob.attr('name.first','Justin')
 	setTimeout(function(){
 		ob.attr('age',30);
@@ -587,21 +587,21 @@ test("startBatch and stopBatch and changed event", 5, function(){
 		can.batch.stop();
 		start();
 	},1)
-	
-	
-	
+
+
+
 });
 
 test("startBatch callback", 4, function(){
-	
+
 	var ob = new can.Map({
 			game: {
 				name: "Legend of Zelda"
-			}, 
+			},
 			hearts: 15
 		}),
 		callbackCalled = false;
-	
+
 	ob.bind("change", function(){
 		equal(callbackCalled, false, 'startBatch callback not called yet');
 	});
@@ -610,7 +610,7 @@ test("startBatch callback", 4, function(){
 		ok(true, "startBatch callback called");
 		callbackCalled = true;
 	});
-	
+
 	ob.attr('hearts', 16);
 	equal(callbackCalled, false, 'startBatch callback not called yet');
 	can.batch.stop();
@@ -756,21 +756,21 @@ test("triggering a event while in a batch (#291)", function(){
 	expect(0);
 
 	// normally a change event will not be triggered just
-	// by changing properties. 
+	// by changing properties.
 	// however, model does this in  destroyed
 	// so a "change","destroyed" event bubbles.
 	// this test errors if things are broken
 	stop();
 	var map = new can.Map();
-	
+
 	can.batch.start();
 	can.trigger(map, "change","random")
-	
+
 	setTimeout(function(){
 		can.batch.stop();
 		start()
 	},10);
-	
+
 });
 
 test("dot separated keys (#257, #296)", function() {
@@ -796,22 +796,22 @@ test("dot separated keys (#257, #296)", function() {
 });
 
 test("cycle binding",function(){
-	
+
 	var first = new can.Map(),
 		second= new can.Map();
-		
+
 	first.attr('second',second);
-	
+
 	second.attr('first',second);
-	
+
 	var handler = function(){}
-	
+
 	first.bind('change',handler);
-	
+
 	ok(first._bindings,"has bindings")
-	
+
 	first.unbind('change',handler);
-	
+
 	ok(!first._bindings,"bindings removed");
 });
 
@@ -849,53 +849,53 @@ test("removing list items containing computes", function(){
 module('can/observe compute')
 
 test("Basic Compute",function(){
-	
+
 	var o = new can.Map({first: "Justin", last: "Meyer"});
 	var prop = can.compute(function(){
 		return o.attr("first") + " " +o.attr("last")
 	})
-	
+
 	equal(prop(), "Justin Meyer");
 	var handler =  function(ev, newVal, oldVal){
 		equal(newVal, "Brian Meyer")
-		equal(oldVal, "Justin Meyer")	
+		equal(oldVal, "Justin Meyer")
 	}
 	prop.bind("change", handler);
-	
+
 	o.attr("first","Brian");
-	
+
 	prop.unbind("change", handler)
 	o.attr("first","Brian");
 });
 
 
 test("compute on prototype", function(){
-	
+
 	var Person = can.Map({
 		fullName: function(){
 			return this.attr("first") + " " +this.attr("last")
 		}
 	})
-	
+
 	var me = new Person({
 		first : "Justin",
 		last : "Meyer"
 	});
 	var fullName = can.compute( me.fullName, me );
-	
+
 	equal(fullName(), "Justin Meyer");
-	
+
 	var called = 0;
-	
+
 	fullName.bind("change", function( ev, newVal, oldVal ) {
 		called++;
 		equal(called, 1, "called only once");
 		equal(newVal, "Justin Shah");
 		equal(oldVal, "Justin Meyer")
 	});
-	
+
 	me.attr('last',"Shah")
-	
+
 	// to make this work, we'd have to look for a computed function and bind to it's change ...
 	// maybe bind can just work this way?
 })
@@ -905,7 +905,7 @@ test("setter compute", function(){
 	var project = new can.Map({
 		progress: 0.5
 	});
-	
+
 	// a setter compute that converts 50 to .5 and vice versa
 	var computed = can.compute(function(val){
 		if(val) {
@@ -914,19 +914,19 @@ test("setter compute", function(){
 			return parseInt( project.attr('progress') * 100 );
 		}
 	});
-	
+
 	equal(computed(), 50, "the value is right");
 	computed(25);
 	equal(project.attr('progress'), 0.25);
 	equal(computed(),25 );
-	
+
 	computed.bind("change", function(ev, newVal, oldVal){
 		equal(newVal, 75);
 		equal(oldVal, 25)
 	})
-	
+
 	computed(75);
-	
+
 })
 
 test("compute a compute", function() {
@@ -1001,9 +1001,9 @@ test("empty compute", function(){
 		ok(oldVal === undefined, "was undefined")
 		ok(newVal === 0, "now zero")
 	})
-	
+
 	c(0);
-	
+
 });
 
 test("only one update on a batchTransaction",function(){
@@ -1015,12 +1015,12 @@ test("only one update on a batchTransaction",function(){
 	can.compute.binder(func, window, function(newVal, oldVal){
 		callbacks++;
 	});
-	
+
 	person.attr({
 		first: "Brian",
 		last: "Moschel"
 	});
-	
+
 	equal(callbacks,1,"only one callback")
 })
 
@@ -1034,24 +1034,24 @@ test("only one update on a start and end transaction",function(){
 	can.compute.binder(func, window, function(newVal, oldVal){
 		callbacks++;
 	});
-	
+
 	can.batch.start();
-	
+
 	person.attr('first',"Brian");
 	stop();
 	setTimeout(function(){
 		person.attr('last',"Moschel");
 		age(12)
-		
+
 		can.batch.stop();
-		
+
 		equal(callbacks,1,"only one callback")
-		
+
 		start();
 	})
 
-	
-	
+
+
 })
 
 test("Compute emits change events when an embbedded observe has properties added or removed", 4, function() {
@@ -1076,7 +1076,7 @@ test("Compute emits change events when an embbedded observe has properties added
 });
 
 test("compute only updates once when a list's contents are replaced",function(){
-	
+
 	var list = new can.List([{name: "Justin"}]),
 		computedCount = 0;
 
@@ -1088,7 +1088,7 @@ test("compute only updates once when a list's contents are replaced",function(){
 	})
 	equal(0,computedCount, "computes are not called until their value is read")
 	compute.bind("change", function(ev, newVal, oldVal){
-	
+
 	})
 
 	equal(1,computedCount, "binding computes to store the value");
@@ -1135,8 +1135,8 @@ test("compute of computes", function(){
 	searchText.bind("change", function(ev, newVal){
 		equal(newVal,"food", "food set");
 	})
-	
-	
+
+
 	searchQuery("food")
 })
 
@@ -1285,14 +1285,14 @@ test("compute bound to observe",function(){
 	equal(bindCount, 1);
 
 	name.unbind("change",handler);
-	
+
 	stop()
 	setTimeout(function(){
 		start();
 		equal(bindCount, 0);
 	},100)
 
-	
+
 });
 
 test("binding to a compute on an observe before reading",function(){
@@ -1300,7 +1300,7 @@ test("binding to a compute on an observe before reading",function(){
 
 	var name = can.compute(me,"name")
 
-	
+
 	var handler = function(ev, newVal, oldVal){
 		equal(newVal, "Justin Meyer");
 		equal(oldVal, "Justin")
@@ -1334,9 +1334,9 @@ test("compute bound to input value",function(){
 
 	input.value = "Justin Meyer";
 
-	
+
 	value.unbind("change", handler);
-	
+
 	// we have to wait until the temporary bind is turned off
 	// so that the cached value is no longer used
 	stop()
@@ -1346,7 +1346,7 @@ test("compute bound to input value",function(){
 		equal(value(),"Brian Moschel");
 		start()
 	},50)
-	
+
 
 })
 
@@ -1363,54 +1363,54 @@ test("compute on the prototype", function(){
 			} else {
 				return this.attr('first')+" "+this.attr('last')
 			}
-			
+
 		})
 	});
-	
+
 	var me = new Person();
-	
+
 	var fn = me.attr({
 		first: "Justin",
 		last: "Meyer"
 	}).attr("fullName");
-	
+
 	equal(fn, "Justin Meyer", "can read attr")
-	
+
 	me.attr("fullName","Brian Moschel");
-	
+
 	equal(me.attr("first"),"Brian","set first name");
 	equal(me.attr("last"),"Moschel","set last name")
-	
+
 	var handler = function(ev, newVal, oldVal){
 		ok(newVal,"Brian M")
 	}
 	me.bind("fullName", handler);
-	
+
 	me.attr("last","M")
-	
+
 	me.unbind("fullName", handler);
-	
+
 	me.attr("first","B");
-	
+
 });
 
 test("join is computable (#519)", function(){
 	expect(2)
 	var l = new can.List(["a","b"]);
-	
+
 	var joined = can.compute(function(){
 		return l.join(",")
 	})
-	
+
 	joined.bind("change", function(ev, newVal, oldVal){
 		equal( oldVal, "a,b" );
 		equal( newVal, "a,b,c" );
 	})
-	
+
 	l.push("c")
-	
-	
+
+
 })
 
 
-})();
+});

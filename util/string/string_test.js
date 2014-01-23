@@ -1,4 +1,4 @@
-(function () {
+steal(function () {
 
 	module("can/util/string")
 
@@ -305,4 +305,4 @@
 
 	})
 
-})();
+});

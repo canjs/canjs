@@ -1,4 +1,4 @@
-(function() {
+steal("can/construct/super", function() {
 
 module("can/construct/super");
 
@@ -11,7 +11,7 @@ test("prototype super", function(){
 			return this.arg + num
 		}
 	})
-	
+
 	var B = A({
 		init : function(arg){
 			this._super(arg +2)
@@ -20,7 +20,7 @@ test("prototype super", function(){
 			return this._super(arg+1)
 		}
 	})
-	
+
 	var b = new B(1);
 	equal(b.arg, 4)
 	equal(b.add(2), 7)
@@ -32,15 +32,15 @@ test("static super", function(){
 			return num;
 		}
 	},{});
-	
+
 	var Second = First({
 		raise: function(num){
 			return this._super(num)*num;
 		}
 	},{});
-	
+
 	equal(Second.raise(2), 4)
-	
+
 });
 
 test("findAll super", function(){
@@ -52,14 +52,14 @@ test("findAll super", function(){
 		},
 		shortName : 'parent'
 	},{});
-	
+
 	var Child = Parent({
 		findAll: function(){
 			return this._super();
 		},
 		shortName : 'child'
 	},{});
-	
+
 	stop();
 	expect(1);
 	Child.findAll({});
@@ -70,7 +70,7 @@ test("findAll super", function(){
 test("Super in derived when parent doesn't have init", function(){
 	can.Construct("Parent",{
 	});
-	
+
 	Parent("Derived",{
 		init : function(){
 			this._super();
@@ -85,4 +85,4 @@ test("Super in derived when parent doesn't have init", function(){
 	}
 })*/
 
-})();
+});

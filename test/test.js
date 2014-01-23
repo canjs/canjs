@@ -1,4 +1,4 @@
-(function() {
+steal('can/util', function() {
 	can.test = {
 		fixture: function (path) {
 			if (typeof steal !== 'undefined') {
@@ -19,4 +19,4 @@
 			return path;
 		}
 	}
-})();
+});

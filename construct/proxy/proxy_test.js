@@ -1,4 +1,4 @@
-(function() {
+steal("can/construct/proxy", "can/control", function() {
 	var isSteal = typeof steal !== 'undefined';
 
 	module("can/construct/proxy");
@@ -60,4 +60,4 @@
 		})
 	}
 
-})();
+});

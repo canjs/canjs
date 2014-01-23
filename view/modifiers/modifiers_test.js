@@ -1,4 +1,4 @@
-(function() {
+steal("can/map", "can/view/ejs", "can/view/modifiers", "can/test", function() {
 
 // this only applied to jQuery libs
 if(!window.jQuery){
@@ -10,7 +10,7 @@ module("can/view/modifiers");
 test("modifier with a deferred", function(){
 	can.$("#qunit-test-area").html("");
 	stop();
-	
+
 	var foo = can.Deferred();
 	can.$("#qunit-test-area").html(can.test.path("view/test/deferred.ejs"), foo );
 	setTimeout(function(){
@@ -66,4 +66,4 @@ test("hookups don't break script execution (issue #130)", function(){
 	can.$("#qunit-test-area").html("");
 });
 
-})();
+});

@@ -1,4 +1,4 @@
-(function() {
+steal("can/model",'can/map/attributes', "can/test", "can/util/fixture", function() {
 module("can/model", {
 	setup: function() {
 
@@ -73,10 +73,10 @@ test("findAll rejects non-array (#384)", function() {
 asyncTest("findAll deferred reject", function() {
 	// This test is automatically paused
 
-	function rejectDeferred(df) { 
+	function rejectDeferred(df) {
 		setTimeout(function() { df.reject(); }, 100);
 	}
-	function resolveDeferred(df) { 
+	function resolveDeferred(df) {
 		setTimeout(function() { df.resolve(); }, 100);
 	}
 
@@ -94,23 +94,23 @@ asyncTest("findAll deferred reject", function() {
 	var people_reject 	= Person.findAll({ resolve : false});
 	var people_resolve 	= Person.findAll({ resolve : true});
 
-	setTimeout(function() {  
-        people_reject.done(function() { 
+	setTimeout(function() {
+        people_reject.done(function() {
 			ok(false, "This deferred should be rejected");
 		});
-		people_reject.fail(function() { 
+		people_reject.fail(function() {
 			ok(true, "The deferred is rejected");
 		});
 
-		people_resolve.done(function() { 
+		people_resolve.done(function() {
 			ok(true, "This deferred is resolved");
 		});
-		people_resolve.fail(function() { 
+		people_resolve.fail(function() {
 			ok(false, "The deferred should be resolved");
 		});
 
-        // continue the test  
-        start();  
+        // continue the test
+        start();
     }, 200);
 });
 
@@ -183,7 +183,7 @@ test("findOne deferred", function(){
 });
 
 test("save deferred", function(){
-	
+
 	can.Model("Person",{
 		create : function(attrs, success, error){
 			return can.ajax({
@@ -198,21 +198,21 @@ test("save deferred", function(){
 			})
 		}
 	},{});
-	
+
 	var person = new Person({name: "Justin"}),
 		personD = person.save();
-	
+
 	stop();
 	personD.then(function(person){
 		start()
 		equal(person.id, 5, "we got an id")
-		
+
 	});
-	
+
 });
 
 test("update deferred", function(){
-	
+
 	can.Model("Person",{
 		update : function(id, attrs, success, error){
 			return can.ajax({
@@ -227,21 +227,21 @@ test("update deferred", function(){
 			})
 		}
 	},{});
-	
+
 	var person = new Person({name: "Justin", id:5}),
 		personD = person.save();
-	
+
 	stop();
 	personD.then(function(person){
 		start()
 		equal(person.thing, "er", "we got updated")
-		
+
 	});
-	
+
 });
 
 test("destroy deferred", function(){
-	
+
 	can.Model("Person",{
 		destroy : function(id, success, error){
 			return can.ajax({
@@ -255,15 +255,15 @@ test("destroy deferred", function(){
 			})
 		}
 	},{});
-	
+
 	var person = new Person({name: "Justin", id:5}),
 		personD = person.destroy();
-	
+
 	stop();
 	personD.then(function(person){
 		start()
 		equal(person.thing, "er", "we got destroyed")
-		
+
 	});
 });
 
@@ -307,28 +307,28 @@ test(".models with custom id", function() {
 
 /*
 test("async setters", function(){
-	
-	
+
+
 	can.Model("Test.AsyncModel",{
 		setName : function(newVal, success, error){
-			
-			
+
+
 			setTimeout(function(){
 				success(newVal)
 			}, 100)
 		}
 	});
-	
+
 	var model = new Test.AsyncModel({
 		name : "justin"
 	});
 	equal(model.name, "justin","property set right away")
-	
+
 	//makes model think it is no longer new
 	model.id = 1;
-	
+
 	var count = 0;
-	
+
 	model.bind('name', function(ev, newName){
 		equal(newName, "Brian",'new name');
 		equal(++count, 1, "called once");
@@ -343,14 +343,14 @@ test("async setters", function(){
 test("binding", 2,function(){
 	can.Model('Person')
 	var inst = new Person({foo: "bar"});
-	
+
 	inst.bind("foo", function(ev, val){
-		ok(true,"updated")	
+		ok(true,"updated")
 		equal(val, "baz", "values match")
 	});
-	
+
 	inst.attr("foo","baz");
-	
+
 });
 
 
@@ -368,26 +368,26 @@ test("auto methods",function(){
 	School.findAll({type:"schools"}, function(schools){
 		ok(schools,"findAll Got some data back");
 		equal(schools[0].constructor.shortName,"School","there are schools")
-		
+
 		School.findOne({id : "4"}, function(school){
 			ok(school,"findOne Got some data back");
 			equal(school.constructor.shortName,"School","a single school");
-			
-			
+
+
 			new School({name: "Highland"}).save(function(school){
-				
+
 				equal(school.name,"Highland","create gets the right name")
-				
+
 				school.attr({name: "LHS"}).save( function(){
 					start();
 					equal(school.name,"LHS","create gets the right name")
-					
+
 					can.fixture.on = true;
 				})
 			})
-			
+
 		})
-		
+
 	})
 })
 
@@ -449,31 +449,31 @@ test("Model events" , function(){
 			return def;
 		}
 	},{});
-	
+
 	stop();
 	Test.Event.bind('created',function(ev, passedItem){
-		
+
 		ok(this === Test.Event, "got model")
 		ok(passedItem === item, "got instance")
 		equal(++order, 1, "order");
 		passedItem.save();
-		
+
 	}).bind('updated', function(ev, passedItem){
 		equal(++order, 2, "order");
 		ok(this === Test.Event, "got model")
 		ok(passedItem === item, "got instance")
-		
+
 		passedItem.destroy();
-		
+
 	}).bind('destroyed', function(ev, passedItem){
 		equal(++order, 3, "order");
 		ok(this === Test.Event, "got model")
 		ok(passedItem === item, "got instance")
-		
+
 		start();
-		
+
 	})
-	
+
 	var item = new Test.Event();
 	item.bind("created",function(){
 		ok(true, "created")
@@ -483,7 +483,7 @@ test("Model events" , function(){
 		ok(true, "destroyed")
 	})
 	item.save();
-	
+
 });
 
 
@@ -495,7 +495,7 @@ test("removeAttr test", function(){
 	var person = new Person({foo: "bar"})
 	equal(person.foo, "bar", "property set");
 	person.removeAttr('foo')
-	
+
 	equal(person.foo, undefined, "property removed");
 	var attrs = person.attr()
 	equal(attrs.foo, undefined, "attrs removed");
@@ -507,10 +507,10 @@ test("save error args", function(){
 	var Foo = can.Model.extend('Testin.Models.Foo',{
 		create : "/testinmodelsfoos.json"
 	},{
-		
+
 	})
 	var st = '{type: "unauthorized"}';
-	
+
 	can.fixture("/testinmodelsfoos.json", function(request, response){
 		response(401,st)
 	});
@@ -523,13 +523,13 @@ test("save error args", function(){
 		ok(jQXHR.getResponseHeader,"jQXHR object")
 		start()
 	})
-	
-	
-	
+
+
+
 });
 
 test("object definitions", function(){
-	
+
 	can.Model('ObjectDef',{
 		findAll : {
 			url : "/test/place",
@@ -540,16 +540,16 @@ test("object definitions", function(){
 			timeout : 1000
 		},
 		create : {
-			
+
 		},
 		update : {
-			
+
 		},
 		destroy : {
-			
+
 		}
 	},{})
-	
+
 	can.fixture("GET /objectdef/{id}", function(original){
 		equal(original.timeout,1000,"timeout set");
 		return {yes: true}
@@ -578,7 +578,7 @@ test("object definitions", function(){
 	ObjectDef.findAll({ start: 0, count: 10 }, function(data){
 		start();
 		equal(data[0].myflag, undefined, 'my flag is undefined')
-	}); 
+	});
 })
 
 
@@ -587,45 +587,45 @@ test('aborting create update and destroy', function(){
 	stop();
 	var delay = can.fixture.delay;
 	can.fixture.delay = 1000;
-	
+
 	can.fixture("POST /abort", function(){
 		ok(false, "we should not be calling the fixture");
 		return {};
 	})
-	
+
 	can.Model('Abortion',{
 		create : "POST /abort",
 		update : "POST /abort",
 		destroy: "POST /abort"
 	},{});
-	
+
 	var deferred = new Abortion({name: "foo"}).save(function(){
 		ok(false, "success create");
 		start();
 	}, function(){
 		ok(true, "create error called");
-		
-		
+
+
 		deferred = new Abortion({name: "foo",id: 5})
 			.save(function(){
 				ok(false,"save called")
 				start();
 			},function(){
 				ok(true, "error called in update")
-				
+
 				deferred = new Abortion({name: "foo",id: 5}).destroy(function(){},
 					function(){
 						ok(true,"destroy error called")
 						can.fixture.delay = delay;
 						start();
 					})
-				
+
 				setTimeout(function(){
 					deferred.abort();
 				},10)
-				
+
 			})
-		
+
 		setTimeout(function(){
 			deferred.abort();
 		},10)
@@ -633,14 +633,14 @@ test('aborting create update and destroy', function(){
 	setTimeout(function(){
 		deferred.abort();
 	},10)
-	
-	
+
+
 });
 
 test("store binding", function(){
-	
+
 	can.Model("Storage");
-	
+
 	var s = new Storage({
 		id: 1,
 		thing : {foo: "bar"}
@@ -648,24 +648,24 @@ test("store binding", function(){
 	ok(!Storage.store[1],"not stored");
 	var func = function(){};
 	s.bind("foo",func)	;
-	
+
 	ok(Storage.store[1], "stored");
-	
+
 	s.unbind("foo", func);
-	
+
 	ok(!Storage.store[1],"not stored");
-	
+
 	var s2 = new Storage({});
-	
+
 	s2.bind("foo",func)	;
-	
+
 	s2.attr('id',5)
-	
+
 	ok(Storage.store[5], "stored");
-	
+
 	s2.unbind("foo", func);
 	ok(!Storage.store[5],"not stored");
-	
+
 })
 
 test("store ajax binding", function(){
@@ -673,7 +673,7 @@ test("store ajax binding", function(){
 		findAll : "/guys",
 		findOne : "/guy/{id}"
 	},{});
-	
+
 	can.fixture("GET /guys", function(){
 		return [{id: 1}]
 	})
@@ -683,7 +683,7 @@ test("store ajax binding", function(){
 	stop();
 	can.when( Guy.findOne({id: 1}),
 		Guy.findAll()).then(function(guyRes, guysRes2){
-		
+
 		equal(guyRes.id,1, "got a guy id 1 back");
 		equal(guysRes2[0].id, 1, "got guys w/ id 1 back")
 		ok(guyRes === guysRes2[0], "guys are the same");
@@ -693,10 +693,10 @@ test("store ajax binding", function(){
 			for(var id in Guy.store){
 				ok(false, "there should be nothing in the store")
 			}
-		},1)  	
-		
+		},1)
+
 	});
-	
+
 })
 
 test("store instance updates", function(){
@@ -705,14 +705,14 @@ test("store instance updates", function(){
         findAll : 'GET /guys'
     },{});
     updateCount = 0;
-    
+
     can.fixture("GET /guys", function(){
 	    	var guys = [{id: 1, updateCount: updateCount, nested: {count: updateCount}}];
 	    	updateCount++;
         return guys;
     });
     stop();
-    
+
     Guy.findAll({}, function(guys){
     		start();
         guys[0].bind('updated', function(){});
@@ -735,7 +735,7 @@ test("store instance update removed fields", function(){
         findAll : 'GET /guys'
     },{});
     remove = false;
-    
+
     can.fixture("GET /guys", function(){
     	var guys = [{id: 1, name: 'mikey', age: 35, likes: ['soccer', 'fantasy baseball', 'js', 'zelda'], dislikes: ['backbone', 'errors']}];
     	if(remove) {
@@ -760,7 +760,7 @@ test("store instance update removed fields", function(){
     	equal(Guy.store[1].likes.length, 0, 'no likes')
     	equal(Guy.store[1].dislikes, undefined, 'dislikes removed')
     })
-	
+
 })
 /**/
 
@@ -768,7 +768,7 @@ test("templated destroy", function(){
 	var MyModel = can.Model.extend({
 		destroy : "/destroyplace/{id}"
 	},{});
-	
+
 	can.fixture("/destroyplace/{id}", function(original){
 		ok(true,"fixture called");
 		equal(original.url, "/destroyplace/5", "urls match")
@@ -847,9 +847,9 @@ test("extended templated destroy", function(){
 });
 
 test("overwrite makeFindAll", function(){
-	
+
 	var store = {};
-	
+
 	var LocalModel = can.Model.extend({
 		makeFindOne : function(findOne){
 			return function(params, success, error){
@@ -858,7 +858,7 @@ test("overwrite makeFindAll", function(){
 				def.then(success, error)
 				// make the ajax request right away
 				var findOneDeferred = findOne(params);
-				
+
 				if(data){
 					var instance=  this.model(data);
 					findOneDeferred.then(function(data){
@@ -885,10 +885,10 @@ test("overwrite makeFindAll", function(){
 			store[this[this.constructor.id]] = this.serialize();
 		}
 	});
-	
-	
+
+
 	can.fixture("/food/{id}", function(settings){
-		
+
 		return count == 0 ? {
 			id: settings.data.id,
 			name : "hot dog"
@@ -911,7 +911,7 @@ test("overwrite makeFindAll", function(){
 			equal(this.name, "ice water");
 			start();
 		})
-		
+
 		Food.findOne({id: 1}, function(food2){
 			count = 2;
 			ok(food2 === food, "same instances")
@@ -969,11 +969,11 @@ test("destroying a model impact the right list", function() {
 
 	equal( people.length, 2, "Initial Person.List has length of 2")
 	equal( orgs.length, 2, "Initial Organisation.List has length of 2");
-	
+
 	orgs[0].destroy();
-	
+
 	equal( people.length, 2, "After destroying orgs[0] Person.List has length of 2");
-	
+
 	equal( orgs.length, 1, "After destroying orgs[0] Organisation.List has length of 1")
 
 });
@@ -988,25 +988,25 @@ test("uses attr with isNew", function(){
 			ok(true, "used attr")
 		}
 	}
-	
+
 	var m = new can.Model({id: 4});
-	
+
 	m.isNew();
-	
+
 	can.__reading = old;
 });
 
 test("extends defaults by calling base method", function(){
-	
+
 	var M1 = can.Model.extend({
 		defaults: {foo: "bar"}
 	},{});
-	
+
 	var M2 = M1({});
-	
+
 	equal(M2.defaults.foo,"bar")
-	
-	
+
+
 });
 
 test(".models updates existing list if passed", 4, function() {
@@ -1149,27 +1149,27 @@ test(".model on create and update (#301)", function() {
 test("List params uses findAll",function(){
 	stop()
 	can.fixture("/things",function(request){
-		
+
 		equal(request.data.param,"value","params passed")
-		
+
 		return [{
 			id: 1,
 			name: "Thing One"
 		}];
 	})
-	
+
 	var Model = can.Model.extend({
 		findAll: "/things"
 	},{});
-	
+
 	var items = new Model.List({param: "value"});
-	
+
 	items.bind("add",function(ev, items, index){
 		equal(items[0].name, "Thing One", "items added");
 		start()
 	})
-	
-	
+
+
 })
 
 test("Creating nested models adds them to the store (#357)", function(){
@@ -1236,20 +1236,20 @@ test("string configurable model and models functions (#128)", function(){
 		model: "foo",
 		models: "bar"
 	},{});
-	
-	
+
+
 	var strangers = StrangeProp.models({
 		bar: [
 			{foo: {id: 1, name: "one"}},
 			{foo: {id: 2, name: "two"}}
 		]
 	})
-	
+
 	deepEqual( strangers.attr(),[
 		{id: 1, name: "one"},
 		{id: 2, name: "two"}
 	])
-	
+
 });
 
 
@@ -1262,22 +1262,22 @@ test("create deferred does not resolve to the same instance", function(){
 	  }
 	},{});
 	var handler = function(){}
-	
-	
+
+
 	var t = new Todo({name: "Justin"})
 	t.bind("name",handler)
 	var def = t.save();
 	stop();
-	
+
 	def.then(function(todo){
 		ok(todo === t, "same instance");
 		start();
 		ok( Todo.store[5] === t,  "instance put in store");
-		
+
 		t.unbind("name",handler)
 	})
 
 })
 
 
-})();
+});

@@ -1,4 +1,4 @@
-(function() {
+steal("can/map/attributes", "can/model", "can/util/fixture", "can/test", function() {
 
 module("can/map/attributes");
 
@@ -64,7 +64,7 @@ var makeClasses= function(){
 	});
 	can.Map("AttrTest.Loan");
 	can.Map("AttrTest.Issue");
-	
+
 	AttrTest.Person.model = function(data){
 		return new this(data);
 	}
@@ -84,7 +84,7 @@ var makeClasses= function(){
 			person : "AttrTest.Person.model",
 			loans : "AttrTest.Loan.models",
 			issues : "AttrTest.Issue.models"
-		}			
+		}
 	},
 	{});
 }
@@ -100,7 +100,7 @@ test("default converters", function(){
 
 test("basic observe associations", function(){
 	makeClasses();
-	
+
 	var c = new AttrTest.Customer({
 		person : {
 			id: 1,
@@ -118,18 +118,18 @@ test("basic observe associations", function(){
 			}
 		]
 	});
-	
+
 	equal(c.person.name, "Justin", "association present");
-	
+
 	equal(c.person.constructor, AttrTest.Person, "belongs to association typed");
-	
+
 	equal(c.issues.length, 0);
-	
+
 	equal(c.loans.length, 2);
-	
+
 	equal(c.loans[0].constructor, AttrTest.Loan);
-	
-	
+
+
 });
 
 test("single seralize w/ attr name", function(){
@@ -144,13 +144,13 @@ test("single seralize w/ attr name", function(){
 			}
 		}
 	},{});
-	
+
 	var time = new Date();
 	var b = new Breakfast({
 		time: time,
 		name: 'eggs'
 	});
-	
+
 	equal(b.serialize('time'), time.getTime());
 	ok(b.serialize())
 });
@@ -164,11 +164,11 @@ test("defaults", function(){
 			rupees: 0
 		}
 	},{});
-	
+
 	var link = new Zelda({
 		rupees: 255
 	});
-	
+
 	equal(link.attr('sword'), 'Wooden Sword');
 	equal(link.attr('rupees'), 255);
 });
@@ -348,12 +348,12 @@ test("Nested converters called twice (#174)", function(){
 						}
 				}
 		}, {});
-		
+
 		Thing = can.Model({
 				attributes: {
 						otherThing: 'OtherThing.model'
 				},
-				
+
 				findOne : 'GET /things/{id}'
 		}, {});
 	var t = new Thing({
@@ -406,7 +406,7 @@ test("Nested converters called with merged data", function(){
 })
 
 test("Recursive attributes", function() {
-		
+
 		var Player = can.Model({
 				attributes: {
 						team: 'Team.model'
@@ -415,7 +415,7 @@ test("Recursive attributes", function() {
 				destroy: "DELETE /players/{id}"
 		}, {
 		});
-		
+
 		var Team = can.Model({
 				attributes: {
 						players: 'Player.models'
@@ -424,7 +424,7 @@ test("Recursive attributes", function() {
 				destroy: "DELETE /teams/{id}"
 		}, {
 		});
-		
+
 		var PLAYERS = [
 		{
 			"id": 1,
@@ -505,8 +505,8 @@ test("Recursive attributes", function() {
 			}
 		}
 	]
-		
-	can.fixture('GET /players', function() { 
+
+	can.fixture('GET /players', function() {
 		return PLAYERS;
 	});
 	can.fixture('DELETE /players/{id}', function(req) {
@@ -521,7 +521,7 @@ test("Recursive attributes", function() {
 		}
 		return false;
 	});
-	
+
 	stop();
 	can.when(Player.findAll()).then(function(players) {
 		equal(players.length, 3, 'Players loaded');
@@ -547,7 +547,7 @@ test("store instances (#457)", function() {
         },
         findOne: "GET /games/{id}"
     }, {});
-    
+
     var Player = can.Model.extend({
         attributes: {
             games: "games"
@@ -558,9 +558,9 @@ test("store instances (#457)", function() {
             }
         }
     }, {});
-    
+
     can.Model._reqs++;
-    
+
     var game = Game.model({
         "id": "1",
         "name": "Fantasy Baseball",
@@ -579,9 +579,9 @@ test("store instances (#457)", function() {
             }
         ]
     });
-    
+
     var mismatchFound = false;
-    
+
     game.attr('players').each(function(p) {
         p.attr('games').each(function(g) {
             if(game.attr('id') === g.attr('id') && game._cid !== g._cid) {
@@ -590,7 +590,7 @@ test("store instances (#457)", function() {
         });
     });
     equal(mismatchFound, false, "Model instances match");
-    
+
 	can.Model._reqs--;
 });
 
@@ -734,9 +734,9 @@ test('Maximum call stack size exceeded with global models (#476)', function() {
 		start();
 	});
 
-	
 
-	
+
+
 });
 
-})();
+});

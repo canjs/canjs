@@ -17,8 +17,7 @@
 <script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
-	steal("can/view/bindings",
-			"can/map").then("can/test", "can/view/bindings/bindings_test.js", function() {
+	steal("can/view/bindings/bindings_test.js", function() {
 		QUnit.start();
 	});
 </script>

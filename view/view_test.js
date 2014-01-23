@@ -1,4 +1,4 @@
-(function() {
+steal("can/view", "can/view/ejs", "can/view/mustache", "can/observe", "can/test", "can/util/fixture", function() {
 
 	var Scanner = can.view.Scanner;
 
@@ -657,35 +657,35 @@
 		ok(withId({ message: 'With id'}).nodeType == 11,
 			'View with id returned document fragment');
 	});
-	
-	
+
+
 	test("create a template before the custom element works with slash and colon", function(){
-		
+
 		// all custom elements must be registered for IE to work
 		if(window.html5){
 			html5.elements += " ignore-this"
 			html5.shivDocument();
 		}
-		
-		
+
+
 		can.view.mustache("theid","<unique-name></unique-name><can:something></can:something><ignore-this>content</ignore-this>");
-		
+
 		can.view.Scanner.tag("unique-name",function(el, hookupOptions){
 			ok(true, "unique-name called!")
 		});
-		
+
 		can.view.Scanner.tag("can:something",function(el, hookupOptions){
 			ok(true, "can:something called!")
 		});
-		
-		
-		
+
+
+
 		can.view("theid",{})
-		
-		
+
+
 	})
-	
-	
+
+
 	test("loaded live element test", function(){
 		// all custom elements must be registered for IE to work
 		if(window.html5){
@@ -696,26 +696,26 @@
 		t();
 		ok(true)
 	})
-	
+
 	test("content within non-component tags gets rendered with context", function(){
 		// all custom elements must be registered for IE to work
 		if(window.html5){
 			html5.elements += " unique-element-name"
 			html5.shivDocument();
 		}
-		
-		
+
+
 		var tmp = can.view.mustache("<div><unique-element-name>{{name}}</unique-element-name></div>")
-		
-		
+
+
 		var frag = tmp({
 			name: "Josh M"
 		});
-		
+
 		equal(frag.childNodes[0].childNodes[0].innerHTML, "Josh M", "correctly retrieved scope data")
-		
+
 	});
-	
+
 	test("empty non-component tags", function(){
 		// all custom elements must be registered for IE to work
 		if(window.html5){
@@ -723,16 +723,16 @@
 			html5.shivDocument();
 		}
 
-		
+
 		var tmp = can.view.mustache("<div><unique-element-name></unique-element-name></div>");
-		
-		
+
+
 		var frag = tmp()
-		
+
 		ok(true, "no error")
-		
+
 	})
-	
+
 	if (window.require) {
 		if (window.require.config && window.require.toUrl) {
 			test("template files relative to requirejs baseUrl (#647)", function() {
@@ -743,5 +743,5 @@
 			});
 		}
 	}
-	
-})();
+
+});

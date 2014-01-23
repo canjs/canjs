@@ -1,4 +1,4 @@
-(function() {
+steal("can/route", "can/test", function() {
 module("can/route",{
 	setup: function(){
 		can.route._teardown();
@@ -34,7 +34,7 @@ test("deparam", function(){
 		where: "there",
 		route: ":page"
 	});
-    
+
     can.route.routes = {};
     can.route(":page/:index",{
         page: "index",
@@ -57,8 +57,8 @@ test("deparam of invalid url", function(){
         var2: 'default2',
         var3: 'default3'
     });
-    
-    // This path does not match the above route, and since the hash is not 
+
+    // This path does not match the above route, and since the hash is not
     // a &key=value list there should not be data.
     obj = can.route.deparam("pages//");
 	deepEqual(obj, {});
@@ -76,8 +76,8 @@ test("deparam of invalid url", function(){
 
 test("deparam of url with non-generated hash (manual override)", function(){
 	can.route.routes = {};
-    
-	// This won't be set like this by route, but it could easily happen via a 
+
+	// This won't be set like this by route, but it could easily happen via a
 	// user manually changing the URL or when porting a prior URL structure.
 	obj = can.route.deparam("page=foo&bar=baz&where=there");
 	deepEqual(obj, {
@@ -112,7 +112,7 @@ test("param", function(){
 	equal(res, "")
 
     can.route.routes = {};
-    
+
     res = can.route.param({page: "foo", bar: "baz", where: "there"});
 	equal(res, "&page=foo&bar=baz&where=there")
 
@@ -122,11 +122,11 @@ test("param", function(){
 
 test("symmetry", function(){
 	can.route.routes = {};
-	
+
 	var obj = {page: "=&[]", nestedArray : ["a"], nested : {a :"b"}  }
-	
+
 	var res = can.route.param(obj)
-	
+
 	var o2 = can.route.deparam(res)
 	deepEqual(o2, obj)
 })
@@ -155,7 +155,7 @@ test("light param", function(){
 
 test('param doesnt add defaults to params', function(){
 	can.route.routes = {};
-	
+
 	can.route("pages/:p1",{
         p2: "foo"
 	})
@@ -164,15 +164,15 @@ test('param doesnt add defaults to params', function(){
 })
 
 test("param-deparam", function(){
-    
+
 	can.route(":page/:type",{
 		page: "index",
         type: "foo"
 	})
 
-    var data = {page: "can.Control", 
-				type: "document", 
-				bar: "baz", 
+    var data = {page: "can.Control",
+				type: "document",
+				bar: "baz",
 				where: "there"};
     var res = can.route.param(data);
     var obj = can.route.deparam(res);
@@ -184,7 +184,7 @@ test("param-deparam", function(){
     obj = can.route.deparam(res);
 	delete obj.route;
 	deepEqual(data, obj)
-	
+
 	data = {page: " a ", type: " / "};
     res = can.route.param(data);
     obj = can.route.deparam(res);
@@ -198,7 +198,7 @@ test("param-deparam", function(){
 	deepEqual(data, obj)
 
     can.route.routes = {};
-    
+
     data = {page: "foo", bar: "baz", where: "there"};
     res = can.route.param(data);
     obj = can.route.deparam(res);
@@ -210,7 +210,7 @@ test("deparam-param", function(){
 	can.route(":foo/:bar",{foo: 1, bar: 2});
 	var res = can.route.param({foo: 1, bar: 2});
 	equal(res,"/","empty slash")
-	
+
 	var deparamed = can.route.deparam("/")
 	deepEqual(deparamed, {foo: 1, bar: 2, route: ":foo/:bar"})
 })
@@ -266,9 +266,9 @@ test("param with route defined", function(){
 	can.route.routes = {};
 	can.route("holler")
 	can.route("foo");
-	
+
 	var res = can.route.param({foo: "abc",route: "foo"});
-	
+
 	equal(res, "foo&foo=abc")
 })
 
@@ -276,10 +276,10 @@ test("route endings", function(){
 	can.route.routes = {};
 	can.route("foo",{foo: true});
 	can.route("food",{food: true})
-	
+
 	var res = can.route.deparam("food")
 	ok(res.food, "we get food back")
-	
+
 });
 
 test("strange characters", function(){
@@ -292,7 +292,7 @@ test("strange characters", function(){
 });
 
 test("empty default is matched even if last", function(){
-	
+
 	can.route.routes = {};
 	can.route(":who");
 	can.route("",{foo: "bar"})
@@ -308,7 +308,7 @@ test("order matched", function(){
 	can.route.routes = {};
 	can.route(":foo");
 	can.route(":bar")
-	
+
 	var obj = can.route.deparam("abc");
 	deepEqual(obj, {
 		foo : "abc",
@@ -324,7 +324,7 @@ test("param order matching", function(){
 	can.route("something/:bar");
 	var res = can.route.param({bar: "foo"});
 	equal(res, "", "picks the shortest, best match");
-	
+
 	// picks the first that matches everything ...
 	can.route.routes = {};
 
@@ -332,16 +332,16 @@ test("param order matching", function(){
 		recipe: "recipe1",
 		task: "task3"
 	});
-	  
+
 	can.route(":recipe/:task",{
 		recipe: "recipe1",
 		task: "task3"
 	});
-	
+
 	res = can.route.param({recipe: "recipe1", task: "task3"});
-	
+
 	equal(res, "", "picks the first match of everything");
-	
+
 	res = can.route.param({recipe: "recipe1", task: "task2"});
 	equal(res,"/task2")
 });
@@ -349,7 +349,7 @@ test("param order matching", function(){
 test("dashes in routes", function(){
 	can.route.routes = {};
 	can.route(":foo-:bar");
-	
+
 	var obj = can.route.deparam("abc-def");
 	deepEqual(obj, {
 		foo : "abc",
@@ -469,7 +469,7 @@ if(typeof steal !== 'undefined') {
 
 
 test("escaping periods", function(){
-	
+
 	can.route.routes = {};
 	can.route(":page\\.html",{
 		page: "index"
@@ -480,9 +480,9 @@ test("escaping periods", function(){
 		page : "can.Control",
 		route: ":page\\.html"
 	});
-	
+
 	equal( can.route.param({page: "can.Control"}), "can.Control.html");
-	
+
 })
 
 if(typeof require === 'undefined') {
@@ -551,4 +551,4 @@ test("on/off binding", function() {
 })
 
 
-})();
+});

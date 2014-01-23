@@ -1,4 +1,4 @@
-(function(){
+steal(function(){
 
 module("can/util/fixture");
 
@@ -453,4 +453,4 @@ test("store creates sequential ids",function(){
 
 
 
-})();
+});

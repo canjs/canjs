@@ -1,4 +1,4 @@
-(function(undefined) {
+steal("can/util", "can/list", "can/test", function() {
 
 module('can/list')
 
@@ -13,8 +13,8 @@ test("list attr changes length", function(){
 test("list splice", function(){
 	var l = new can.List([0,1,2,3]),
 		first = true;
-  
-	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
+
+	l.bind('change', function( ev, attr, how, newVals, oldVals ) {
 		equal(attr, "1")
 		// where comes from the attr ...
 		//equal(where, 1)
@@ -25,11 +25,11 @@ test("list splice", function(){
 			deepEqual( newVals, ["a","b"] , "got the right newVals")
 			equal( how, "add", "adding items" )
 		}
-	
+
 		first = false;
 	})
-	
-	l.splice(1,2, "a", "b"); 
+
+	l.splice(1,2, "a", "b");
 	deepEqual(l.serialize(), [0,"a","b", 3], "serialized")
 });
 
@@ -37,16 +37,16 @@ test("list splice", function(){
 
 test("list pop", function(){
 	var l = new can.List([0,1,2,3]);
-  
-	l.bind('change', function( ev, attr, how, newVals, oldVals ) { 
+
+	l.bind('change', function( ev, attr, how, newVals, oldVals ) {
 		equal(attr, "3")
-		
+
 		equal( how, "remove" )
 		equal( newVals, undefined )
 		deepEqual( oldVals, [3] )
 	})
-	
-	l.pop(); 
+
+	l.pop();
 	deepEqual(l.serialize(), [0,1,2])
 })
 
@@ -54,13 +54,13 @@ test("list pop", function(){
 
 test("remove nested property in item of array map", function(){
 	var state = new can.List([{nested: true}]);
-	
+
 	state.bind("change", function(ev, attr, how, newVal, old){
 		equal(attr, "0.nested");
 		equal(how, "remove")
 		deepEqual(old, true);
 	})
-	
+
 	state.removeAttr("0.nested");
 	equal(undefined,  state.attr("0.nested") );
 });
@@ -81,11 +81,11 @@ test("pop unbinds", function(){
 		} else {
 			ok(false, "called too many times")
 		}
-		
+
 	})
-	
+
 	equal( o.attr('foo') , 'bar');
-	
+
 	o.attr('foo','car')
 	l.pop();
 	o.attr('foo','bad')
@@ -106,11 +106,11 @@ test("splice unbinds", function(){
 		} else {
 			ok(false, "called too many times")
 		}
-		
+
 	})
-	
+
 	equal( o.attr('foo') , 'bar');
-	
+
 	o.attr('foo','car')
 	l.splice(0,1);
 	o.attr('foo','bad')
@@ -119,21 +119,21 @@ test("splice unbinds", function(){
 
 test("always gets right attr even after moving array items", function(){
 	var l = new can.List([{foo: 'bar'}]);
-	
+
 	// get the first item
 	var o = l.attr(0);
 	// add a new item
 	l.unshift("A new Value")
-	
+
 	// listen to change
 	l.bind('change', function(ev, attr, how){
 		equal(attr, "1.foo")
 	})
-	
+
 	// this should have bubbled right
 	o.attr('foo','led you')
 });
- 
+
 
 
 test("Array accessor methods", 11, function() {
@@ -160,17 +160,17 @@ test("Array accessor methods", 11, function() {
 });
 
 test("splice removes items in IE (#562)", function(){
-	
+
 	var l = new can.List(['a' ])
-	
+
 	l.splice(0,1);
-	
-	
+
+
 	ok(!l.attr(0), "all props are removed")
-	
-	
-	
+
+
+
 })
 
 
-})();
+});

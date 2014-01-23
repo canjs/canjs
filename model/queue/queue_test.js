@@ -1,4 +1,4 @@
-(function() {
+steal('can/util','can/model', 'can/model/queue', 'can/util/fixture','can/map/attributes', "can/test", function() {
 module("can/model/queue", {
 	setup: function() {
 
@@ -22,10 +22,10 @@ test("queued requests will not overwrite attrs", function(){
 			})
 		}
 	},{});
-	
+
 	var person  = new Person({name: "Justin"}),
 		personD = person.save();
-	
+
 	person.attr('name', 'Brian')
 
 	stop();
@@ -33,7 +33,7 @@ test("queued requests will not overwrite attrs", function(){
 		start()
 		equal(person.name, "Brian", "attrs were not overwritten with the data from the server");
 		can.fixture.delay = delay;
-		
+
 	});
 })
 
@@ -178,12 +178,12 @@ test("id will be set correctly, although update data is serialized before create
 });
 
 test("queue uses serialize (#611)", function(){
-	
+
 	can.fixture("POST /mymodel", function(request){
 		equal(request.data.foo,"bar");
 		start();
 	})
-	
+
 	var MyModel = can.Model.extend({
 		create: "/mymodel"
 	},{
@@ -193,12 +193,12 @@ test("queue uses serialize (#611)", function(){
 			}
 		}
 	});
-	
+
 	stop();
 	new MyModel().save();
-	
+
 })
 
 
 
-})();
+});

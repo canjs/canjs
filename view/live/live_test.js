@@ -1,4 +1,4 @@
-(function(){
+steal("can/view/live", "can/observe", "can/test", function(){
 
 	module("can/view/live");
 
@@ -8,7 +8,7 @@
 			span = document.createElement('span');
 
 		div.appendChild(span)
-		
+
 		var items = new can.List(['one','two']);
 
 		var html = can.compute(function(){
@@ -17,7 +17,7 @@
 				html += "<label>"+item+"</label>"
 			})
 			return html;
-		}) 
+		})
 
 		can.view.live.html(span,html, div)
 
@@ -38,7 +38,7 @@
 			span = document.createElement('span');
 
 		div.appendChild(span)
-		
+
 		var items = new can.List(['one','two']);
 
 		var text = can.compute(function(){
@@ -47,7 +47,7 @@
 				html += "<label>"+item+"</label>"
 			})
 			return html;
-		}) 
+		})
 
 		can.view.live.text(span,text, div)
 
@@ -61,7 +61,7 @@
 	test("attributes",function(){
 
 		var div = document.createElement('div');
-		
+
 		var items = new can.List(['class','foo']);
 
 		var text = can.compute(function(){
@@ -70,7 +70,7 @@
 				html += items.attr(0)+"='"+items.attr(1)+"'"
 			}
 			return html;
-		}) 
+		})
 
 		can.view.live.attributes(div,text)
 
@@ -158,8 +158,8 @@
 		equal(div.getElementsByTagName('span')[2].innerHTML, "turtle", "turtle added");
 
 	});
-	
-	
+
+
 	test("list with a compute", function(){
 		var div = document.createElement('div'),
 			map = new can.Map({animals: ['bear',"turtle"]}),
@@ -185,19 +185,19 @@
 		equal(div.getElementsByTagName('label')[0].myexpando, "EXPANDO-ED", "same expando");
 
 		equal(div.getElementsByTagName('span')[2].innerHTML, "turtle", "turtle added");
-		
+
 		map.attr("animals", new can.List(['sloth', 'bear',"turtle"]) );
-		
+
 		var spans = div.getElementsByTagName('span')
 		equal(spans.length, 3, "there are 3 spans");
-		
-		
+
+
 		ok(!div.getElementsByTagName('label')[0].myexpando, "no expando");
-		
-		
+
+
 	});
-	
-	
+
+
 	test("list with a compute that returns a list", function(){
 		var div = document.createElement('div'),
 			template = function(num){
@@ -213,20 +213,20 @@
 		can.view.live.list(el, compute, template,{});
 
 		equal(div.getElementsByTagName('label').length, 2, "There are 2 labels")
-		
+
 		compute([0,1,2])
-		
+
 		var spans = div.getElementsByTagName('span')
 		equal(spans.length, 3, "there are 3 spans");
 	});
-	
+
 	test("text binding is memory safe (#666)", function(){
-		
+
 		// clear nodeMap because other tests setup live binding but never
 		// insert their elements the binding is never torn down
-		
+
 		can.view.nodeLists.nodeMap = {};
-		
+
 		var div = document.createElement('div'),
 			span = document.createElement('span'),
 			el = can.$(div),
@@ -235,21 +235,21 @@
 			})
 
 		div.appendChild(span)
-		
+
 		can.$("#qunit-test-area")[0].appendChild(div);
-		
+
 		can.view.live.text(span,text, div)
-		
+
 		can.remove(el)
 		stop()
 		setTimeout(function(){
 			ok(can.isEmptyObject( can.view.nodeLists.nodeMap), "nothing in nodeMap");
 			start();
 		},100)
-		
-	})
-	
-	
-	
 
-})();
+	})
+
+
+
+
+});

@@ -1,4 +1,4 @@
-(function(undefined) {
+steal('can/construct', function() {
 	module("can/construct",{
 		setup : function(){
 			var Animal = this.Animal = can.Construct({
@@ -162,4 +162,4 @@
 		});
 		new Foo().dude(true);
 	});
-})();
+});

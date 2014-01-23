@@ -13,12 +13,12 @@
                         'base')[0];
                     var loc = window.location.toString();
                     var location = loc.substring(0, loc.lastIndexOf(
-                        '/') + 1);
+                            '/') + 1);
                     baseTag.href = location + baseTag.href;
                 })();
             </script>
         <![endif]-->
-        <link rel="stylesheet" type="text/css" href="../bower_components/qunit/qunit/qunit.css" />
+        <link rel="stylesheet" type="text/css" href="bower_components/qunit/qunit/qunit.css" />
         <script type="text/javascript" src="lib/html5shiv.js"></script>
     </head>
     
@@ -35,13 +35,12 @@
 
         <ol id="qunit-tests"></ol>
         <div id="qunit-test-area"></div>
-        <script type="text/javascript" src="../bower_components/qunit/qunit/qunit.js"></script>
+        <script type="text/javascript" src="bower_components/qunit/qunit/qunit.js"></script>
         <script type="text/javascript">
             QUnit.config.autostart = false;
         </script>
         <script type="text/javascript" src="lib/yui-3.7.3.js"></script>
         <script type="text/javascript" src="dist/can.yui.js"></script>
-        <script type="text/javascript" src="test/test.js"></script>
         <script type="text/javascript" src="dist/can.ejs.js"></script>
         <script type="text/javascript" src="dist/can.route.pushstate.js"></script>
         <script type="text/javascript" src="dist/can.model.queue.js"></script>
@@ -56,36 +55,7 @@
         <script type="text/javascript" src="dist/can.list.sort.js"></script>
         <script type="text/javascript" src="dist/can.object.js"></script>
         <script type="text/javascript" src="dist/can.fixture.js"></script>
-        <script type="text/javascript" src="component/component_test.js"></script>
-        <script type="text/javascript" src="construct/construct_test.js"></script>
-        <script type="text/javascript" src="map/map_test.js"></script>
-        <script type="text/javascript" src="list/list_test.js"></script>
-        <script type="text/javascript" src="observe/observe_test.js"></script>
-        <script type="text/javascript" src="compute/compute_test.js"></script>
-        <script type="text/javascript" src="model/model_test.js"></script>
-        <script type="text/javascript" src="view/view_test.js"></script>
-        <script type="text/javascript" src="view/ejs/ejs_test.js"></script>
-        <script type="text/javascript" src="control/control_test.js"></script>
-        <script type="text/javascript" src="route/route_test.js"></script>
-        <script type="text/javascript" src="control/route/route_test.js"></script>
-        <script type="text/javascript" src="view/mustache/mustache_test.js"></script>
-        <script type="text/javascript" src="route/pushstate/pushstate_test.js"></script>
-        <script type="text/javascript" src="model/queue/queue_test.js"></script>
-        <script type="text/javascript" src="construct/super/super_test.js"></script>
-        <script type="text/javascript" src="construct/proxy/proxy_test.js"></script>
-        <script type="text/javascript" src="map/delegate/delegate_test.js"></script>
-        <script type="text/javascript" src="map/setter/setter_test.js"></script>
-        <script type="text/javascript" src="map/attributes/attributes_test.js"></script>
-        <script type="text/javascript" src="map/validations/validations_test.js"></script>
-        <script type="text/javascript" src="map/backup/backup_test.js"></script>
-        <script type="text/javascript" src="map/list/list_test.js"></script>
-        <script type="text/javascript" src="map/sort/sort_test.js"></script>
-        <script type="text/javascript" src="util/object/object_test.js"></script>
-        <script type="text/javascript" src="util/fixture/fixture_test.js"></script>
-        <script type="text/javascript" src="view/bindings/bindings_test.js"></script>
-        <script type="text/javascript" src="view/live/live_test.js"></script>
-        <script type="text/javascript" src="view/scope/scope_test.js"></script>
-        <script type="text/javascript" src="util/string/string_test.js"></script>
+        <script type="text/javascript" src="test/pluginified/pluginified.js"></script>
         <script type="text/javascript">
             QUnit.start();
         </script>

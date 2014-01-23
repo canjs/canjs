@@ -1,44 +1,44 @@
-(function(){
+steal(function(){
 
 module("can/util/object");
 
 test("same", function(){
-	
-	
+
+
 	ok( can.Object.same({type: "FOLDER"},{type: "FOLDER", count: 5}, {
 		count: null
 	}), "count ignored" );
-	
+
 	ok(can.Object.same({type: "folder"},{type: "FOLDER"}, {
 		type: "i"
 	}), "folder case ignored" );
 })
 
 test("subsets", function(){
-	
+
 	var res1 = can.Object.subsets({parentId: 5, type: "files"},
 		[{parentId: 6}, {type: "folders"}, {type: "files"}]);
-		
+
 	deepEqual(res1,[{type: "files"}])
-	
+
 	var res2 = can.Object.subsets({parentId: 5, type: "files"},
 		[{}, {type: "folders"}, {type: "files"}]);
-		
+
 	deepEqual(res2,[{},{type: "files"}]);
-	
+
 	var res3 = can.Object.subsets({parentId: 5, type: "folders"},
 		[{parentId: 5},{type: "files"}]);
-		
+
 	deepEqual(res3,[{parentId: 5}])
 });
 
 test("subset compare", function(){
 	ok( can.Object.subset(
 		{type: "FOLDER"},
-		{type: "FOLDER"}), 
-		
+		{type: "FOLDER"}),
+
 		"equal sets" );
-	
+
 	ok( can.Object.subset(
 		{type: "FOLDER", parentId: 5},
 		{type: "FOLDER"}),
@@ -101,4 +101,4 @@ test("searchText", function(){
 });
 
 
-})();
+});

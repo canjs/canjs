@@ -1,4 +1,4 @@
-(function() {
+steal("can/control/plugin", function() {
 	module("can/control/plugin")
 
 	test("pluginName", function () {
@@ -96,4 +96,4 @@
 		ok(control, 'Got a control from pluginName');
 		equal(control.constructor.pluginName, 'otherTest', 'Got correct control');
 	});
-})();
+});

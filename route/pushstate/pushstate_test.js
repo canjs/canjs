@@ -1,8 +1,8 @@
-(function(){
+steal('can/route/pushstate', "can/test", function(){
 
 /*var orgTest = window.test;
 var test = function(name, fn){
-	
+
 	orgTest(name, function(){
 		console.log(name+"\n");
 		return fn.apply(this, arguments)
@@ -10,7 +10,7 @@ var test = function(name, fn){
 }*/
 
 if(window.history && history.pushState) {
-	
+
 	var originalPath = location.pathname;
 	module("can/route/pushstate",{
 		setup: function(){
@@ -18,7 +18,7 @@ if(window.history && history.pushState) {
 			can.route.defaultBinding = "pushstate";
 		},
 		teardown: function() {
-			
+
 		}
 	});
 
@@ -46,7 +46,7 @@ if(window.history && history.pushState) {
 			where: "there",
 			route: ":page"
 		});
-	    
+
 	    can.route.routes = {};
 	    can.route(":page/:index",{
 	        page: "index",
@@ -69,8 +69,8 @@ if(window.history && history.pushState) {
 	        var2: 'default2',
 	        var3: 'default3'
 	    });
-	    
-	    // This path does not match the above route, and since the hash is not 
+
+	    // This path does not match the above route, and since the hash is not
 	    // a &key=value list there should not be data.
 	    obj = can.route.deparam("pages//");
 		deepEqual(obj, {});
@@ -88,8 +88,8 @@ if(window.history && history.pushState) {
 
 	test("deparam of url with non-generated hash (manual override)", function(){
 		can.route.routes = {};
-	    
-		// This won't be set like this by route, but it could easily happen via a 
+
+		// This won't be set like this by route, but it could easily happen via a
 		// user manually changing the URL or when porting a prior URL structure.
 		obj = can.route.deparam("?page=foo&bar=baz&where=there");
 		deepEqual(obj, {
@@ -124,7 +124,7 @@ if(window.history && history.pushState) {
 		equal(res, "")
 
 	    can.route.routes = {};
-	    
+
 	    res = can.route.param({page: "foo", bar: "baz", where: "there"});
 		equal(res, "?page=foo&bar=baz&where=there")
 
@@ -134,11 +134,11 @@ if(window.history && history.pushState) {
 
 	test("symmetry", function(){
 		can.route.routes = {};
-		
+
 		var obj = {page: "=&[]", nestedArray : ["a"], nested : {a :"b"}  }
-		
+
 		var res = can.route.param(obj)
-		
+
 		var o2 = can.route.deparam(res)
 		deepEqual(o2, obj)
 	})
@@ -167,7 +167,7 @@ if(window.history && history.pushState) {
 
 	test('param doesnt add defaults to params', function(){
 		can.route.routes = {};
-		
+
 		can.route("pages/:p1",{
 	        p2: "foo"
 		})
@@ -176,15 +176,15 @@ if(window.history && history.pushState) {
 	})
 
 	test("param-deparam", function(){
-	    
+
 		can.route(":page/:type",{
 			page: "index",
 	        type: "foo"
 		})
 
-	    var data = {page: "can.Control", 
-					type: "document", 
-					bar: "baz", 
+	    var data = {page: "can.Control",
+					type: "document",
+					bar: "baz",
 					where: "there"};
 	    var res = can.route.param(data);
 	    var obj = can.route.deparam(res);
@@ -196,7 +196,7 @@ if(window.history && history.pushState) {
 	    obj = can.route.deparam(res);
 		delete obj.route;
 		deepEqual(data, obj)
-		
+
 		data = {page: " a ", type: " / "};
 	    res = can.route.param(data);
 	    obj = can.route.deparam(res);
@@ -210,7 +210,7 @@ if(window.history && history.pushState) {
 		deepEqual(data, obj)
 
 	    can.route.routes = {};
-	    
+
 	    data = {page: "foo", bar: "baz", where: "there"};
 	    res = can.route.param(data);
 	    obj = can.route.deparam(res);
@@ -222,7 +222,7 @@ if(window.history && history.pushState) {
 		can.route(":foo/:bar",{foo: 1, bar: 2});
 		var res = can.route.param({foo: 1, bar: 2});
 		equal(res,"/","empty slash")
-		
+
 		// you really should deparam with root ..
 		var deparamed = can.route.deparam("//")
 		deepEqual(deparamed, {foo: 1, bar: 2, route: ":foo/:bar"})
@@ -279,9 +279,9 @@ if(window.history && history.pushState) {
 		can.route.routes = {};
 		can.route("holler")
 		can.route("foo");
-		
+
 		var res = can.route.param({foo: "abc",route: "foo"});
-		
+
 		equal(res, "foo?foo=abc")
 	})
 
@@ -289,10 +289,10 @@ if(window.history && history.pushState) {
 		can.route.routes = {};
 		can.route("foo",{foo: true});
 		can.route("food",{food: true})
-		
+
 		var res = can.route.deparam("food")
 		ok(res.food, "we get food back")
-		
+
 	});
 
 	test("strange characters", function(){
@@ -311,34 +311,34 @@ if(window.history && history.pushState) {
 				iCanRoute.ready()
 				iCanRoute("/:type/:id");
 				iCanRoute.attr({type: "bar", id: "5"});
-				
-		
+
+
 				setTimeout(function(){
 					var after = loc.pathname;
 					equal(after,"/bar/5", "path is "+after);
 					start();
-		
+
 					can.remove(can.$(iframe))
-		
+
 				},100);
 			}
 			var iframe = document.createElement('iframe');
 			iframe.src = can.test.path("route/pushstate/testing.html");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
 		});
-		
+
 		test("sticky enough routes", function(){
 			stop();
 			window.routeTestReady = function(iCanRoute, loc, history){
 				iCanRoute("/active");
 				iCanRoute("");
 				history.pushState(null,null,"/active");
-		
+
 				setTimeout(function(){
 					var after = loc.pathname;
 					equal(after,"/active");
 					start();
-		
+
 					can.remove(can.$(iframe))
 				},30);
 			}
@@ -346,18 +346,18 @@ if(window.history && history.pushState) {
 			iframe.src = can.test.path("route/pushstate/testing.html?2");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
 		});
-		
+
 		test("unsticky routes", function(){
-			
+
 			stop();
 			window.routeTestReady = function(iCanRoute, loc, iframeHistory){
 				// check if we can even test this
 				iframeHistory.pushState(null,null,"/bar/"+encodeURIComponent("\/"));
 				setTimeout(function(){
-					
+
 					if( "/bar/"+encodeURIComponent("\/") === loc.pathname ){
-						runTest();	
-						
+						runTest();
+
 					} else if(loc.pathname.indexOf("/bar/") >=0 ){
 						//  encoding doesn't actually work
 						ok(true,"can't test!");
@@ -372,17 +372,17 @@ if(window.history && history.pushState) {
 					iCanRoute("/:type");
 					iCanRoute("/:type/:id");
 					iCanRoute.attr({type: "bar"});
-					
+
 					setTimeout(function(){
 						var after = loc.pathname;
 						equal(after,"/bar","only type is set");
 						iCanRoute.attr({type: "bar", id: "\/"});
-						
+
 						// check for 1 second
 						var time = new Date()
 						setTimeout(function(){
 							var after = loc.pathname;
-							
+
 							if(after == "/bar/"+encodeURIComponent("\/")){
 								equal(after,"/bar/"+encodeURIComponent("\/"),"should go to type/id");
 								can.remove(can.$(iframe))
@@ -393,14 +393,14 @@ if(window.history && history.pushState) {
 							} else {
 								setTimeout(arguments.callee, 30)
 							}
-							
+
 						},30)
-						
+
 					},30)
 				}
-				
-		
-		
+
+
+
 			}
 			var iframe = document.createElement('iframe');
 			iframe.src = can.test.path("route/pushstate/testing.html?1");
@@ -408,42 +408,42 @@ if(window.history && history.pushState) {
 		});
 
 		test("clicked hashes work (#259)", function(){
-			
+
 			stop();
 			window.routeTestReady = function(iCanRoute, loc, hist, win) {
-				
+
 				iCanRoute(win.location.pathname,{
 					page: "index"
 				})
-				
+
 				iCanRoute(":type/:id");
 				iCanRoute.ready();
-				
+
 				window.win = win;
 				var link = win.document.createElement("a");
 				link.href="/articles/17#references";
 				link.innerHTML = "Click Me"
-				
+
 				win.document.body.appendChild(link);
-				
+
 				win.can.trigger(win.can.$(link), "click")
-				
+
 				//link.click()
-				
+
 				setTimeout(function(){
-					
+
 					deepEqual(can.extend({},iCanRoute.attr()),{
 						type: "articles",
 						id: "17",
 						route: ":type/:id"
 					},"articles are right")
-					
+
 					equal( win.location.hash, "#references", "includes hash");
-					
+
 					start();
-		
+
 					can.remove(can.$(iframe))
-		
+
 				},100);
 			}
 			var iframe = document.createElement('iframe');
@@ -454,17 +454,17 @@ if(window.history && history.pushState) {
 		test("routed links must descend from pushstate root (#652)", function() {
 			stop();
 			var runs=0, testIndex=-1, linkIndex,timeout,iframe;
-			
+
 			iframe = document.createElement("iframe");
 			iframe.src = can.test.path("route/pushstate/testing.html");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
-			
+
 			window.routeTestReady = function(iCanRoute, loc, hist, win) {
 				var tests = [
 					"/app/",
 					"/app/something/"
 				];
-				
+
 				var links = [
 					{
 						element:		addLink("/app/something/test/"),
@@ -482,10 +482,10 @@ if(window.history && history.pushState) {
 						test1_expect:	{}
 					}
 				];
-				
+
 				win.can.route(":section/");
 				win.can.route(":section/:sub/");
-				
+
 				// if called after a redirect (non-route)
 				if (++runs > 1) {
 					// go back to test route
@@ -493,14 +493,14 @@ if(window.history && history.pushState) {
 					nextLink();
 				}
 				else nextTest();
-				
+
 				function addLink(href) {
 					var link = win.document.createElement("a");
 					link.href = href;
 					win.document.body.appendChild(link);
 					return win.can.$(link);
 				}
-				
+
 				function nextLink() {
 					if (++linkIndex < links.length) {
 						var link = links[linkIndex];
@@ -526,7 +526,7 @@ if(window.history && history.pushState) {
 						nextTest();
 					}
 				}
-				
+
 				function nextTest() {
 					if (++testIndex < tests.length) {
 						win.can.route.bindings.pushstate.root = tests[testIndex];
@@ -544,7 +544,7 @@ if(window.history && history.pushState) {
 	}
 
 	test("empty default is matched even if last", function(){
-		
+
 		can.route.routes = {};
 		can.route(":who");
 		can.route("",{foo: "bar"})
@@ -560,7 +560,7 @@ if(window.history && history.pushState) {
 		can.route.routes = {};
 		can.route(":foo");
 		can.route(":bar")
-		
+
 		var obj = can.route.deparam("abc");
 		deepEqual(obj, {
 			foo : "abc",
@@ -576,7 +576,7 @@ if(window.history && history.pushState) {
 		can.route("something/:bar");
 		var res = can.route.param({bar: "foo"});
 		equal(res, "", "picks the shortest, best match");
-		
+
 		// picks the first that matches everything ...
 		can.route.routes = {};
 
@@ -584,16 +584,16 @@ if(window.history && history.pushState) {
 			recipe: "recipe1",
 			task: "task3"
 		});
-		  
+
 		can.route(":recipe/:task",{
 			recipe: "recipe1",
 			task: "task3"
 		});
-		
+
 		res = can.route.param({recipe: "recipe1", task: "task3"});
-		
+
 		equal(res, "", "picks the first match of everything");
-		
+
 		res = can.route.param({recipe: "recipe1", task: "task2"});
 		equal(res,"/task2")
 	})
@@ -601,7 +601,7 @@ if(window.history && history.pushState) {
 	test("dashes in routes", function(){
 		can.route.routes = {};
 		can.route(":foo-:bar");
-		
+
 		var obj = can.route.deparam("abc-def");
 		deepEqual(obj, {
 			foo : "abc",
@@ -612,4 +612,4 @@ if(window.history && history.pushState) {
 
 }
 
-})();
+});

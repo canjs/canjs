@@ -1,5 +1,5 @@
-(function() {
-	
+steal("can/map/backup", "can/model", "can/test", function() {
+
 module("can/map/backup",{
 	setup : function(){
 		can.Map.extend("Recipe")
@@ -9,36 +9,36 @@ module("can/map/backup",{
 test("backing up", function(){
 	var recipe = new Recipe({name: "cheese"});
 	ok(!recipe.isDirty(), "not backedup, but clean")
-	
+
 	recipe.backup();
 	ok(!recipe.isDirty(), "backedup, but clean");
-	
+
 	recipe.attr('name', 'blah')
-	
+
 	ok(recipe.isDirty(), "dirty");
-	
+
 	recipe.restore();
-	
+
 	ok(!recipe.isDirty(), "restored, clean");
-	
+
 	equal(recipe.name, "cheese" ,"name back");
-	
+
 });
 
 test("backup / restore with associations", function(){
 	can.Map("Instruction");
 	can.Map("Cookbook");
-	
+
 	can.Map("Recipe",{
 		attributes : {
 			instructions : "Instruction.models",
 			cookbook: "Cookbook.model"
 		}
 	},{});
-	
-	
 
-	
+
+
+
 	var recipe = new Recipe({
 		name: "cheese burger",
 		instructions : [
@@ -53,52 +53,52 @@ test("backup / restore with associations", function(){
 			title : "Justin's Grillin Times"
 		}
 	});
-	
+
 	//test basic is dirty
-	
+
 	ok(!recipe.isDirty(), "not backedup, but clean")
-	
+
 	recipe.backup();
 	ok(!recipe.isDirty(), "backedup, but clean");
-	
+
 	recipe.attr('name', 'blah')
-	
+
 	ok(recipe.isDirty(), "dirty");
-	
+
 	recipe.restore();
-	
+
 	ok(!recipe.isDirty(), "restored, clean");
-	
+
 	equal(recipe.name, "cheese burger" ,"name back");
-	
+
 	// test belongs too
-	
+
 	ok(!recipe.cookbook.isDirty(), "cookbook not backedup, but clean");
-	
+
 	recipe.cookbook.backup();
-	
+
 	recipe.cookbook.attr("title","Brian's Burgers");
-	
+
 	ok(!recipe.isDirty(), "recipe itself is clean");
-	
+
 	ok(recipe.isDirty(true), "recipe is dirty if checking associations");
-	
+
 	recipe.cookbook.restore()
-	
+
 	ok(!recipe.isDirty(true), "recipe is now clean with checking associations");
-	
+
 	equal(recipe.cookbook.title, "Justin's Grillin Times" ,"cookbook title back");
-	
+
 	//try belongs to recursive restore
-	
+
 	recipe.cookbook.attr("title","Brian's Burgers");
 	recipe.restore();
 	ok(recipe.isDirty(true), "recipe is dirty if checking associations, after a restore");
-	
+
 	recipe.restore(true);
 	ok(!recipe.isDirty(true), "cleaned all of recipe and its associations");
-	
-	
+
+
 });
 
 test("backup restore nested observables", function() {
@@ -118,24 +118,24 @@ test("backup restore nested observables", function() {
 });
 
 test("backup removes properties that were added (#607)", function(){
-	
+
 	var map = new can.Map({});
-	
+
 	map.backup();
-	
+
 	map.attr("foo","bar")
-	
+
 	ok( map.isDirty(), "the map with an additional property is dirty");
-	
+
 	map.restore();
-	
+
 	ok(! map.attr("foo"), "there is no foo property")
-	
-	
-	
-	
+
+
+
+
 })
 
 
 
-})();
+});

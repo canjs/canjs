@@ -1,24 +1,24 @@
-(function(undefined) {
+steal("can/map", "can/compute", "can/test", function(undefined) {
 
 module('can/map')
 
 test("Basic Map",4,function(){
-	
+
 	var state = new can.Map({
 		category : 5,
 		productType : 4
 	});
-	
+
 	var added;
-	
+
 	state.bind("change", function(ev, attr, how, val, old){
 		equal(attr, "category", "correct change name")
 		equal(how, "set")
 		equal(val,6, "correct")
 		equal(old,5, "correct")
 	});
-	
-	
+
+
 
 	state.attr("category",6);
 
@@ -31,20 +31,20 @@ test("Nested Map", 5, function(){
 	var me = new can.Map({
 		name : {first: "Justin", last: "Meyer"}
 	});
-	
+
 	ok(me.attr("name") instanceof can.Map);
-	
+
 	me.bind("change", function(ev, attr, how, val, old){
 		equal(attr, "name.first", "correct change name")
 		equal(how, "set")
 		equal(val,"Brian", "correct")
 		equal(old,"Justin", "correct")
 	})
-	
+
 	me.attr("name.first","Brian");
-	
+
 	me.unbind("change")
-	
+
 })
 
 test("remove attr", function(){
@@ -57,7 +57,7 @@ test("remove attr", function(){
 });
 
 test("nested event handlers are not run by changing the parent property (#280)", function(){
-	
+
 	var person = new can.Map({
 		name: {first: "Justin"}
 	})
@@ -68,28 +68,28 @@ test("nested event handlers are not run by changing the parent property (#280)",
 	person.bind("name", function(){
 		ok(true, "name event triggered")
 	})
-	
+
 	person.attr("name",{first: "Hank"});
-	
+
 });
 
 test("cyclical objects (#521)", function(){
-	
+
 	var foo = {};
 	foo.foo = foo;
-	
+
 	var fooed = new can.Map(foo);
-	
+
 	ok(true, "did not cause infinate recursion");
-	
+
 	ok(  fooed.attr('foo') === fooed, "map points to itself")
-	
+
 	var me = {name: "Justin"}
 	var references = {husband: me, friend: me}
 	var ref = new can.Map(references)
-	
+
 	ok( ref.attr('husband') === ref.attr('friend'),  "multiple properties point to the same thing")
-	
+
 })
 
 test('Getting attribute that is a can.compute should return the compute and not the value of the compute (#530)', function() {
@@ -112,14 +112,14 @@ test('_cid add to original object', function() {
 
 test("can.each used with maps", function(){
 	can.each(new can.Map({foo: "bar"}),function(val, attr){
-		
+
 		if(attr === "foo"){
 			equal(val, "bar")
 		} else {
 			ok(false, "no properties other should be called "+attr)
 		}
-		
-		
+
+
 	})
 })
 
@@ -148,4 +148,4 @@ test("can.Map serialize triggers reading (#626)", function(){
 	can.__reading = old;
 })
 
-})();
+});

@@ -17,8 +17,7 @@
 <script type="text/javascript" src="../bower_components/qunit/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
-	steal("can/compute")
-		.then("can/test", "can/compute/compute_test.js", function() {
+	steal("can/compute/compute_test.js", function() {
 		QUnit.start();
 	});
 </script>
