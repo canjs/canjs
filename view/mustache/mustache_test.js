@@ -513,7 +513,7 @@ test("multi line elements", function(){
 test("escapedContent", function(){
 	var text = "<span>{{ tags }}</span><label>&amp;</label><strong>{{ number }}</strong><input value='{{ quotes }}'/>";
 	var compiled = new can.Mustache({text: text}).render({tags: "foo < bar < car > zar > poo",
-							quotes : "I use 'quote' fingers \"a lot\"",
+							quotes : "I use 'quote' fingers & &amp;ersands \"a lot\"",
 							number : 123}) ;
 
 	var div = document.createElement('div');
@@ -521,12 +521,12 @@ test("escapedContent", function(){
 
 	equal(div.getElementsByTagName('span')[0].firstChild.nodeValue, "foo < bar < car > zar > poo" );
 	equal(div.getElementsByTagName('strong')[0].firstChild.nodeValue, 123 );
-	equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"" );
+	equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers & &amp;ersands \"a lot\"", "attributes are always safe, and strings are kept as-is without additional escaping");
 	equal(div.getElementsByTagName('label')[0].innerHTML, "&amp;" );
 })
 
 test("unescapedContent", function(){
-	var text = "<span>{{{ tags }}}</span><div>{{{ tags }}}</div><input value='{{ quotes }}'/>";
+	var text = "<span>{{{ tags }}}</span><div>{{{ tags }}}</div><input value='{{{ quotes }}}'/>";
 	var compiled = new can.Mustache({text: text}).render({tags: "<strong>foo</strong><strong>bar</strong>",
 							quotes : "I use 'quote' fingers \"a lot\""}) ;
 
@@ -2773,6 +2773,18 @@ test('{{#each}} helper works reliably with nested sections (#604)', function() {
 	equal(div.innerHTML, '<ul><li>Foo</li><li>Bar</li></ul>', 'Expected HTML with first false set');
 });
 
+test("Block bodies are properly escaped inside attributes", function() {
+	var html = "<div title='{{#test}}{{.}}{{{.}}}{{/test}}'></div>",
+		div = document.createElement("div"),
+		title = "Alpha&Beta";
+
+	div.appendChild(can.view.mustache(html)(new can.Map({
+		test: title
+	})));
+
+	equal(div.getElementsByTagName("div")[0].title, title+title);
+});
+
 test('Constructor static properties are accessible (#634)', function() {
 	can.Map.extend("can.Foo", { static_prop : "baz" }, { proto_prop : "thud" });
 	var template = '\
@@ -2934,5 +2946,22 @@ test("@index in partials loaded from script templates", function(){
 
 	equal(labels.length, 1, "first label removed")
 })
+
+//!dev-remove-start
+if(can.dev) {
+	test("Logging: Custom tag does not have a registered handler", function() {
+		var oldlog = can.dev.warn;
+
+		can.dev.warn = function(text) {
+			equal(text, 'can/view/scanner.js: No custom element found for my-tag',
+				'Got expected message logged.')
+		}
+
+		can.view.mustache('<my-tag></my-tag>')();
+
+		can.dev.warn = oldlog;
+	});
+}
+//!dev-remove-end
 
 });

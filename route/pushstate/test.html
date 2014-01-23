@@ -16,7 +16,7 @@
 	    <script type='text/javascript'>
 	    	QUnit.config.autostart = false;
 			steal('can/route/pushstate/pushstate_test.js', function() {
-				QUnit.start();
+				can.dev.logLevel = 3; QUnit.start();
 			});
 	    </script>
     </body>

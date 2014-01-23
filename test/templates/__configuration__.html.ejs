@@ -18,15 +18,12 @@
 	<script type="text/javascript">
 		QUnit.config.autostart = false;
 
-		steal(function() {
-			var config = window.CONFIGURATION = <%- JSON.stringify(configuration.steal) %>;
+        steal(function() {
+            var config = window.CONFIGURATION = <%- JSON.stringify(configuration.steal) %>;
 
-			steal.config(config);
-		});
-
-        steal("<%- tests.join('", "') %>", function() {
-			steal.dev.log = function() {};
-			steal.dev.warn = function() {};
+            steal.config(config);
+        }, "<%- tests.join('", "') %>", function() {
+			can.dev.logLevel = 3;
 			QUnit.start();
 		});
 	</script>

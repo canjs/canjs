@@ -200,7 +200,9 @@ can.extend(can.view, {
 		// If we had no observes just return the value returned by func.
 		if(!setupLiveBinding || typeof value === "function"){
 			unbind && unbind();
-			return (  (escape || typeof status === 'string') && escape !== 2  ? contentEscape : contentText)(value, status === 0 && tag);
+			return ((escape === 2 || !escape) ?
+					contentText :
+					contentEscape)(value, status === 0 && tag);
 		}
 
 

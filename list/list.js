@@ -44,7 +44,7 @@ steal("can/util","can/map", function(can, Map){
 		 * 
 		 *     User.List = can.List.extend({
 		 *       Map: User
-		 *     });
+		 *     }, {});
 		 * 
 		 *     var list = new User.List();
 		 *     list.push({first: "Justin", last: "Meyer"});
