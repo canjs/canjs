@@ -64,6 +64,13 @@ steal("can/util/can.js",function(can){
 				newValue = prop(el, val)
 			} else if(prop === true) {
 				newValue = el[attrName]  = true;
+				
+				if( attrName === "checked" && el.type === "radio" ) {
+					if( can.inArray(tagName, attr.defaultValue) >= 0 ) {
+						el.defaultChecked = true;
+					}
+				}
+				
 			} else if (prop) {
 				// set the value as true / false
 				newValue = el[prop] = val;
@@ -120,7 +127,19 @@ steal("can/util/can.js",function(can){
 				attr.trigger(el, attrName, oldValue)
 			}
 			
-		}
+		},
+		has: (function(){
+			
+			var el = document.createElement('div');
+			return el.hasAttribute ? 
+				function(el, name) {
+					return el.hasAttribute(name) ;
+				} :
+				function( el, name ) {
+					return el.getAttribute(name) !== null;
+				};
+			
+		})()
 	};
 	
 	return attr;
