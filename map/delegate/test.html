@@ -20,7 +20,7 @@
 	steal( "can/map")
 		.then("can/map/delegate")
 		.then("can/test", "can/map/delegate/delegate_test.js", function() {
-		QUnit.start();
+		can.dev.logLevel = 3; QUnit.start();
 	});
 </script>
 </body>
