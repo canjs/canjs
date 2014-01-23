@@ -888,4 +888,35 @@ test("Scope as Map constructors should follow '@' default values (#657)", functi
   equal(can.scope(can.$("panel")[0]).attr("title"), "Libraries");
 });
 
+test("id, class, and dataViewId should be ignored (#694)", function() {
+	can.Component.extend({
+		tag: "stay-classy",
+		scope: {
+			notid: "foo",
+			notclass: 5,
+			notdataviewid: {}
+		}
+	});
+
+	var data = {
+		idFromData: "id-success",
+		classFromData: "class-success",
+		dviFromData: "dvi-success"
+	};
+	var frag = can.view.mustache(
+		"<stay-classy id='an-id' notid='idFromData'"+
+			" class='a-class' notclass='classFromData'"+
+			" notdataviewid='dviFromData'></stay-classy>")(data);
+	can.append(can.$("#qunit-test-area"), frag);
+
+	var scope = can.scope(can.$("stay-classy")[0]);
+
+	equal(scope.attr("id"), undefined);
+	equal(scope.attr("notid"), "id-success");
+	equal(scope.attr("class"), undefined);
+	equal(scope.attr("notclass"), "class-success");
+	equal(scope.attr("dataViewId"), undefined);
+	equal(scope.attr("notdataviewid"), "dvi-success");
+});
+
 })()
