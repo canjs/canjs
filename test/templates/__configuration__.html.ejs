@@ -22,8 +22,9 @@
 			var config = window.CONFIGURATION = <%- JSON.stringify(configuration.steal) %>;
 
 			steal.config(config);
-		}).then("can/util/fixture", "<%- modules.join('", "') %>")
-		.then("can/test").then("<%- tests.join('")\n.then("') %>", function() {
+		});
+
+        steal("<%- tests.join('", "') %>", function() {
 			steal.dev.log = function() {};
 			steal.dev.warn = function() {};
 			QUnit.start();
