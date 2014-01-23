@@ -455,11 +455,7 @@ if(window.history && history.pushState) {
 			var tests = [
 					// ["root", "link href", { route: "result" }]
 					["/app/", "/app/something/test/", {section:"something", sub:"test", route:":section/:sub/"}],
-					["/app/", "/app/test/", {section:"test", route:":section/"}],
-					["/app/", "/test/", {}],
-					["/app/something/", "/app/something/test/", {section:"test", route:":section/"}],
-					["/app/something/", "/app/test/", {}],
-					["/app/something/", "/test/", {}]
+					["/app/", "/test/", {}]
 				],
 				iframe,
 				test;
@@ -474,6 +470,9 @@ if(window.history && history.pushState) {
 				// Add link
 				var link = win.document.createElement("a");
 				link.href = link.innerHTML = test[1];
+				link.onclick = function() {
+					win.location = this.href;
+				};
 				win.document.body.appendChild(link);
 
 				// Listen for page change
@@ -492,10 +491,6 @@ if(window.history && history.pushState) {
 					runTest();
 				});
 
-				// Click the link
-				win.can.$(link).one('click', function(ev) {
-					win.location = this.href;
-				});
 				win.can.trigger( win.can.$(link), 'click' );
 			};
 
@@ -503,13 +498,13 @@ if(window.history && history.pushState) {
 				test = tests.pop();
 				if (test) {
 					stop();
-					can.remove(can.$(iframe));
+					iframe && can.remove(can.$(iframe));
 					iframe = document.createElement("iframe");
 					can.$("#qunit-test-area")[0].appendChild(iframe);
 					iframe.src = can.test.path("route/pushstate/testing.html");
 				}
 				else {
-					can.remove(can.$(iframe));
+					iframe && can.remove(can.$(iframe));
 				}
 			};
 
