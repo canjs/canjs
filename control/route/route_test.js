@@ -1,7 +1,5 @@
 (function () {
 
-steal("can/route/pushstate", function() {
-
 module("can/control/route",{
 	setup : function(){
 		stop();
@@ -120,7 +118,5 @@ test("be friendly to '/'-prefixed routes for pushstate (#612)", 1, function(){
 	can.$("#qunit-test-area")[0].appendChild(iframe);
 	stop();
 })
-
-});
 
 })();
