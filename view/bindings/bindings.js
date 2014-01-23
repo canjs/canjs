@@ -1,9 +1,6 @@
 steal("can/util","can/view/mustache", "can/control", function(can){
 	
-	// IE < 8 doesn't support .hasAttribute, so feature detect it.
-	var hasAttribute = function(el, name) {
-		return el.hasAttribute ? el.hasAttribute(name) : el.getAttribute(name) !== null;
-	};
+	
 	
 	/**
 	 * @function can.view.bindings.can-value can-value
@@ -59,19 +56,19 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 	 * @demo can/view/bindings/select.html
 	 * 
 	 */
-	can.view.Scanner.attribute("can-value", function(data, el){
+	can.view.attr("can-value", function( el, data ){
 		
 		var attr = el.getAttribute("can-value"),
 			value = data.scope.computeData(attr,{args:[]}).compute;
 		
 		if(el.nodeName.toLowerCase() === "input"){
 			if(el.type === "checkbox") {
-				if( hasAttribute(el, "can-true-value") ) {
+				if( can.attr.has(el, "can-true-value") ) {
 					var trueValue = data.scope.compute( el.getAttribute("can-true-value") )
 				} else {
 					var trueValue = can.compute(true)
 				}
-				if( hasAttribute(el, "can-false-value") ) {
+				if( can.attr.has(el, "can-false-value") ) {
 					var falseValue = data.scope.compute( el.getAttribute("can-false-value") )
 				} else {
 					var falseValue = can.compute(false)
@@ -133,10 +130,10 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 	 * @demo can/view/bindings/can-event.html
 	 * 
 	 */
-	can.view.Scanner.attribute(/can-[\w\.]+/,function(data, el){
+	can.view.attr(/can-[\w\.]+/,function( el, data ){
 		
-		var attributeName = data.attr,
-			event = data.attr.substr("can-".length),
+		var attributeName = data.attributeName,
+			event = attributeName.substr("can-".length),
 			handler = function(ev){
 				var attr = el.getAttribute(attributeName),
 					scopeData = data.scope.read(attr,{returnObserveMethods: true, isArgument: true});
@@ -195,7 +192,11 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 					
 				this.element[0].checked = ( value == trueValue );
 			} else {
-				can.view.elements.setAttr(this.element[0], 'checked', this.options.value() === this.element[0].value);
+				var setOrRemove = this.options.value() === this.element[0].value ?
+					"set" : "remove";
+				
+				can.attr[ setOrRemove ](this.element[0], 'checked', true);
+					
 			}
 			
 			

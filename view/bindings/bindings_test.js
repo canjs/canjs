@@ -81,7 +81,7 @@
 		
 		var map = new can.Map({color: "red"})
 		
-		var frag = template( map )
+		var frag = template( map );
 		
 		
 		var ta = document.getElementById("qunit-test-area");

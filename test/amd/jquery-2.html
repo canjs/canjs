@@ -5,7 +5,7 @@
     <head>
         <title>jQuery (2.x) Test Suite</title>
         <base href="../.." />
-        <link rel="stylesheet" type="text/css" href="//code.jquery.com/qunit/qunit-1.12.0.css" />
+        <link rel="stylesheet" type="text/css" href="bower_components/qunit/qunit/qunit.css" />
         <script type="text/javascript" src="lib/html5shiv.js"></script>
     </head>
     
@@ -23,7 +23,7 @@
         <ol id="qunit-tests"></ol>
         <div id="qunit-test-area"></div>
         <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js"></script>
-        <script type="text/javascript" src="../bower_components/qunit/qunit/qunit.js"></script>
+        <script type="text/javascript" src="bower_components/qunit/qunit/qunit.js"></script>
         <script type="text/javascript">
             QUnit.config.autostart = false;
 
@@ -127,6 +127,9 @@
                     ],
                     "test/util/string/string_test": [
                             "can/util/string", "test/test/test"
+                    ],
+                    "test/util/attr/attr_test": ["can/util/attr",
+                            "test/test/test"
                     ]
                 }
             });
@@ -159,7 +162,8 @@
                     "test/view/bindings/bindings_test",
                     "test/view/live/live_test",
                     "test/view/scope/scope_test",
-                    "test/util/string/string_test"
+                    "test/util/string/string_test",
+                    "test/util/attr/attr_test"
             ], function() {
                 QUnit.start();
             });

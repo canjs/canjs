@@ -46,7 +46,7 @@
                 "can/map/backup", "can/map/list", "can/map/sort",
                 "can/util/object", "can/util/fixture",
                 "can/view/bindings", "can/view/live",
-                "can/view/scope", "can/util/string")
+                "can/view/scope", "can/util/string", "can/util/attr")
                 .then("can/test").then(
                 "can/component/component_test.js")
                 .then("can/construct/construct_test.js")
@@ -77,9 +77,9 @@
                 .then("can/view/bindings/bindings_test.js")
                 .then("can/view/live/live_test.js")
                 .then("can/view/scope/scope_test.js")
-                .then("can/util/string/string_test.js", function() {
-                steal.dev.log = function() {};
-                steal.dev.warn = function() {};
+                .then("can/util/string/string_test.js")
+                .then("can/util/attr/attr_test.js", function() {
+                can.dev.logLevel = 3;
                 QUnit.start();
             });
         </script>

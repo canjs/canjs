@@ -1,5 +1,6 @@
 @function can.compute
 @parent canjs
+@release 1.1
 
 @description Create an observable value.
 

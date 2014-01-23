@@ -1,13 +1,16 @@
 @constructor can.view.Scope
 @inherits can.Construct
 @parent can.view.static
-@test can/map/test.html
+@test can/view/scope/test.html
 @plugin can/view/scope
 @group can.view.Scope.types types
 
 @description Create a lookup node for [can.Mustache.key keys].
 
 @signature `new can.view.Scope(context, [parent])`
+
+@release 2.0.1
+
 
 @param {*} context A value that represents the 
 current context. This is often an object or observable and is the first

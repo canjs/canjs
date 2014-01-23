@@ -3,7 +3,7 @@
 <head>
 	<title><%= configuration.description %> Test Suite</title>
 	<base href="<%= root %>" />
-	<link rel="stylesheet" type="text/css" href="//code.jquery.com/qunit/qunit-1.12.0.css"/>
+	<link rel="stylesheet" type="text/css" href="bower_components/qunit/qunit/qunit.css"/>
     <script type="text/javascript" src="lib/html5shiv.js"></script>
 </head>
 <body>
@@ -17,7 +17,7 @@
 <div id="qunit-test-area"></div>
 
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js"></script>
-<script type="text/javascript" src="../bower_components/qunit/qunit/qunit.js"></script>
+<script type="text/javascript" src="bower_components/qunit/qunit/qunit.js"></script>
 <script type="text/javascript">
 	QUnit.config.autostart = false;
 	<%  function moduleName(file) { return file.substring(0, file.lastIndexOf('.')); }

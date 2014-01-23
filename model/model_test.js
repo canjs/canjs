@@ -1277,7 +1277,196 @@ test("create deferred does not resolve to the same instance", function(){
 		t.unbind("name",handler)
 	})
 
+});
+
+test("Model#save should not replace attributes with their default values (#560)", function(){
+	
+	can.fixture("POST /person.json", function(request, response){
+		
+		return {createdAt: "now"};
+	});
+	
+	
+	var Person = can.Model.extend({
+		update: 'POST /person.json'
+	},{
+		name: 'Example name'
+	});
+	
+	var person = new Person({id:5, name: 'Justin'}),
+		personD = person.save();
+	
+	stop();
+	
+	personD.then(function(person){
+		start();
+		equal(person.name, "Justin", "Model name attribute value is preserved after save");
+		
+	});
+});
+
+test(".parseModel as function on create and update (#560)", function() {
+	var MyModel = can.Model.extend({
+		create: 'POST /todo',
+		update: 'PUT /todo',
+		parseModel: function(data) {
+            return data.item;
+        }
+	}, {
+		aDefault: "foo"
+	}),
+		id = 0,
+    	updateTime;
+
+	can.fixture('POST /todo', function(original, respondWith, settings) {
+		id++;
+        return {
+            item: can.extend(original.data, {
+                id: id
+            })
+        };
+    });
+    can.fixture('PUT /todo', function(original, respondWith, settings) {
+    	updateTime = new Date().getTime();
+        return {
+            item: {
+            	updatedAt: updateTime
+            }
+        };
+    });
+
+	stop();
+    MyModel.bind('created', function(ev, created) {
+    	start();
+    	deepEqual(created.attr(), {id: 1, name: 'Dishes', aDefault: "bar"}, '.model works for create');
+    }).bind('updated', function(ev, updated) {
+    	start();
+    	deepEqual(updated.attr(), {id: 1, name: 'Laundry', updatedAt: updateTime}, '.model works for update');
+    });
+
+    var instance = new MyModel({
+    	name: 'Dishes',
+    	aDefault: "bar"
+    }),
+    saveD = instance.save();
+
+    stop();
+    saveD.then(function() {
+    	instance.attr('name', 'Laundry')
+    	instance.removeAttr("aDefault")
+    	instance.save();
+    })
+
+});
+
+test(".parseModel as string on create and update (#560)", function() {
+	var MyModel = can.Model.extend({
+		create: 'POST /todo',
+		update: 'PUT /todo',
+		parseModel:"item"
+	}, {
+		aDefault: "foo"
+	}),
+		id = 0,
+    	updateTime;
+
+	can.fixture('POST /todo', function(original, respondWith, settings) {
+		id++;
+        return {
+            item: can.extend(original.data, {
+                id: id
+            })
+        };
+    });
+    can.fixture('PUT /todo', function(original, respondWith, settings) {
+    	updateTime = new Date().getTime();
+        return {
+            item: {
+            	updatedAt: updateTime
+            }
+        };
+    });
+
+	stop();
+    MyModel.bind('created', function(ev, created) {
+    	start();
+    	deepEqual(created.attr(), {id: 1, name: 'Dishes', aDefault: "bar"}, '.model works for create');
+    }).bind('updated', function(ev, updated) {
+    	start();
+    	deepEqual(updated.attr(), {id: 1, name: 'Laundry', updatedAt: updateTime}, '.model works for update');
+    });
+
+    var instance = new MyModel({
+    	name: 'Dishes',
+    	aDefault: "bar"
+    }),
+    saveD = instance.save();
+
+    stop();
+    saveD.then(function() {
+    	instance.attr('name', 'Laundry')
+    	instance.removeAttr("aDefault")
+    	instance.save();
+    })
+
+});
+
+test("parseModels and findAll", function(){
+	
+	var array = [{id: 1, name: "first"}];
+	
+	can.fixture("/mymodels", function(){
+		return array
+	})
+	
+	var MyModel = can.Model.extend({
+		findAll: "/mymodels",
+		parseModels: function(raw, xhr){
+			
+			// only check this if jQuery because its deferreds can resolve with multiple args
+			window.jQuery && ok(xhr, "xhr object provided");
+			
+			
+			equal(array, raw, "got passed raw data")
+			return {
+				data: raw,
+				count: 1000
+			}
+		}
+	},{});
+	
+	stop();
+	
+	MyModel.findAll({}, function( models ) {
+		equal( models.count , 1000 )
+		start();
+	})
+	
+});
+
+test("parseModels and parseModel and findAll", function(){
+	
+
+	can.fixture("/mymodels", function(){
+		return {myModels: [{myModel: {id: 1, name: "first"}}]}
+	})
+	
+	var MyModel = can.Model.extend({
+		findAll: "/mymodels",
+		parseModels: "myModels",
+		parseModel: "myModel"
+	},{});
+	
+	stop();
+	
+	MyModel.findAll({}, function( models ) {
+		deepEqual( models.attr(), [{id: 1, name: "first"}] , "correct models returned" )
+		start();
+	})
+	
+	
 })
+
 
 
 })();
