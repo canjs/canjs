@@ -470,9 +470,9 @@ if(window.history && history.pushState) {
 				// Add link
 				var link = win.document.createElement("a");
 				link.href = link.innerHTML = test[1];
-				link.onclick = function() {
+				win.can.bind.call(link, 'click', function() {
 					win.location = this.href;
-				};
+				});
 				win.document.body.appendChild(link);
 
 				// Listen for page change
