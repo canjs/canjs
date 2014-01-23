@@ -184,7 +184,9 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			
 			this.options.value(this.element[0].value)
 		}
-	}), Checked = can.Control.extend({
+	}), 
+	
+	Checked = can.Control.extend({
 		init: function(){
 			this.isCheckebox = (this.element[0].type.toLowerCase() == "checkbox");
 			this.check()
@@ -216,41 +218,69 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			}
 			
 		}
-	}), Multiselect = Value.extend({
+	}), 
+	
+	Multiselect = Value.extend({
 		init: function() {
 			this.set();
+			this.delimiter = ";"
 		},
 
 		set: function() {
-			var newVal = this.options.value(), self = this;
+			
+			var newVal = this.options.value(), 
+				self = this;
 
 			if(typeof newVal === 'string') {
 				//when given a string, try to extract all the options from it
-				newVal = newVal.split(';');
-			} else {
+				newVal = newVal.split(this.delimiter);
+				this.isString = true;
+			} else if(newVal) {
 				//when given something else, try to make it an array and deal with it
 				newVal = can.makeArray(newVal);
 			}
 
 			//jQuery.val is required here, which will break compatibility with other libs
-			can.$(this.element).val(newVal);
+			var isSelected = {};
+			can.each(newVal, function(val){
+				isSelected[val] = true;
+			})
+			
+			can.each(this.element[0].childNodes, function(option){
+				if(option.value) {
+					option.selected = !!isSelected[option.value]
+				}
+				
+			})
+
 		},
 
 		get: function(){
-			var arr = can.$('option:selected', this.element)
-				.map(function(){
-					return this.value;
-				}).filter(function() {
-					//filter out the value "", as it's returned when nothing is actually selected
-					return this && this.length;
-				});
+			var values = [],
+				children = this.element[0].childNodes;
+			
+			can.each(children, function(child){
+				if(child.selected && child.value) {
+					values.push(child.value)
+				}
+			})
 
-			return can.makeArray(arr).join(';');
+			return values;
 		},
 
 		'change': function() {
-			this.options.value(this.get());
+			var value = this.get(),
+				currentValue = this.options.value();
+				
+			if(this.isString || typeof currentValue == "string") {
+				this.isString = true;
+				this.options.value( value.join(this.delimiter) )
+			} else {
+				this.options.value(value);
+			}
+			
+			
 		}
-	})
+	});
 	
 })

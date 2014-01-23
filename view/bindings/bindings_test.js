@@ -233,9 +233,9 @@
 		equal(map.attr("color"), "red", "not yet updated from input");
 		can.trigger(inputs[0], "change")
 		equal(map.attr("color"), "green", "updated from input");
-	})
+	});
 
-	test("can-value select multiple", function(){
+	test("can-value select multiple with values seperated by a ;", function(){
 		var template = can.view.mustache(
 			"<select can-value='color' multiple>"+
 				"<option value='red'>Red</option>"+
@@ -251,19 +251,17 @@
 		var ta = document.getElementById("qunit-test-area");
 		ta.appendChild(frag);
 		
-		var inputs = ta.getElementsByTagName("select");
+		var inputs = ta.getElementsByTagName("select"),
+			options = inputs[0].getElementsByTagName('option');
 		
 		
 		equal(inputs[0].value, 'red', "default value set");
 		
 		map.attr("color", "green");
 		equal(inputs[0].value, 'green', "alternate value set");
+		
+		options[0].selected = true;
 				
-		can.each(document.getElementsByTagName('option'), function(opt) { 
-			if(opt.value==='red') {
-				opt.selected = 'selected';
-			}
-		});
 
 		equal(map.attr("color"), "green", "not yet updated from input");
 		can.trigger(inputs[0], "change")
@@ -272,22 +270,66 @@
 		map.removeAttr("color");
 		equal(inputs[0].value, '', "attribute removed from map");
 
-		can.each(document.getElementsByTagName('option'), function(opt) { 
-			if(opt.value==='green') {
-				opt.selected = 'selected';
-			}
-		});
+		options[1].selected = true;
 		can.trigger(inputs[0], "change")
 		equal(map.attr("color"), "green", "updated from input");
 
 		map.attr("color", "red;green");
-		can.each(document.getElementsByTagName('option'), function(opt) { 
-			if(opt.value === 'green' || opt.value === 'red') {
-				ok(opt.selected, 'option selected from map');
-			} else {
-				ok(!opt.selected, 'option not selected, bc not in map');
-			}
-		});
+		
+
+		ok(options[0].selected, 'red option selected from map');
+		ok(options[1].selected, 'green option selected from map');
+		ok(!options[2].selected, 'ultraviolet option NOT selected from map');
+		
+		can.remove(can.$(inputs) );
 	});
+	
+	test("can-value select multiple with values cross bound to an array", function(){
+		var template = can.view.mustache(
+			"<select can-value='colors' multiple>"+
+				"<option value='red'>Red</option>"+
+				"<option value='green'>Green</option>"+
+				"<option value='ultraviolet'>Ultraviolet</option>"+
+			"</select>");
+		
+		var map = new can.Map({})
+		
+		var frag = template( map )
+		
+		
+		var ta = document.getElementById("qunit-test-area");
+		ta.appendChild(frag);
+		
+		var select = ta.getElementsByTagName("select")[0],
+			options = select.getElementsByTagName('option');
+		
+		// Test updating the DOM changes observable values
+		options[0].selected = true;
+		can.trigger(select, "change")
+		
+		
+		deepEqual(map.attr("colors").attr(), ["red"], "A can.List property is set even if none existed");
+		
+		options[1].selected = true;
+		can.trigger(select, "change")
+		
+		deepEqual(map.attr("colors").attr(), ["red","green"], "Adds items to the list");
+		
+		options[0].selected = false;
+		can.trigger(select, "change")
+		
+		deepEqual(map.attr("colors").attr(), ["green"], "Removes items from the list");
+		
+		// Test changing observable values changes the DOM
+		
+		map.attr("colors").push("ultraviolet")
+		options[0].selected = false;
+		options[1].selected = true;
+		options[2].selected = true;
+		
+		can.remove(can.$(select) );
+	});
+	
+	
 	
 })()
