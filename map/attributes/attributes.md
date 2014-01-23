@@ -23,7 +23,7 @@ to the types this class uses.
 this class uses.
 
 Together, the functions in _convert_ and _serialize_ make up the type definitions for the class.
-The attributes plugin comes with three useful predefined types: `'date'`, `'number'`, and `'boolean'`.
+The attributes plugin comes with three useful predefined types: `'date'`, `'number'`, and `'boolean'`. A wildcard `'*'` can also be used to cover all attributes not enumerated already.
 
 Here is a quick example of an Observe-based class using the attributes plugin to convert and normalize
 its data, and then to serialize the instance:
@@ -32,7 +32,8 @@ its data, and then to serialize the instance:
     Bio = can.Map.extend({
         attributes: {
         birthday: 'date',
-        weight: 'number'
+        weight: 'number',
+        '*': number
     }
     // Bio only uses built-in types, so no
     // need to specify serialize or convert.
@@ -40,11 +41,12 @@ its data, and then to serialize the instance:
 
     var alice = new Bio({
         birthday: Date.parse('1985-04-01'), // 481161600000
-        weight: '120'
+        weight: '120',
+        height: '66'
     });
 
-    alice.attr();      // { birthday: Date(481161600000), weight: 120 }
-    alice.serialize(); // { birthday: 481161600000, weight: 120 }
+    alice.attr();      // { birthday: Date(481161600000), weight: 120, height: 66 }
+    alice.serialize(); // { birthday: 481161600000, weight: 120, height: 66 }
 
 
 ### Demo
@@ -69,7 +71,8 @@ This example builds on the previous one to demonstrate these reference types.
     Bio = can.Map.extend({
         attributes: {
         birthday: 'date',
-        weight: 'number'
+        weight: 'number',
+        '*': number
     }
     // Contact only uses built-in types, so you don't have
     // to specify serialize or convert.
@@ -86,7 +89,8 @@ This example builds on the previous one to demonstrate these reference types.
         last: 'Liddell',
         bio: {
             birthday: Date.parse('1985-04-01'), // 481161600000
-            weight: 120
+            weight: 120,
+        	height: '66'
         }
     });
 

@@ -5,35 +5,49 @@ module("can/map/attributes");
 test("literal converters and serializes", function(){
 	can.Map("Task1",{
 		attributes: {
-			createdAt: "date"
+			createdAt: "date",
+			"*": "wild"
 		},
 		convert: {
 			date: function(d){
 				var months = ["jan", "feb", "mar"]
 				return months[d.getMonth()]
+			},
+			wild: function(raw) {
+				return '>>' + raw;
 			}
 		},
 		serialize: {
 			date: function(d){
 				var months = {"jan":0, "feb":1, "mar":2}
 				return months[d]
+			},
+			wild: function(val) {
+				return val.replace('>>', '');
 			}
 		}
 	},{});
 	can.Map("Task2",{
 		attributes: {
-			createdAt: "date"
+			createdAt: "date",
+			"*": "wild"
 		},
 		convert: {
 			date: function(d){
 				var months = ["apr", "may", "jun"]
 				return months[d.getMonth()]
+			},
+			wild: function(raw) {
+				return '||' + raw;
 			}
 		},
 		serialize: {
 			date: function(d){
 				var months = {"apr":0, "may":1, "jun":2}
 				return months[d]
+			},
+			wild: function(val) {
+				return val.replace('||', '');
 			}
 		}
 	},{});
@@ -49,7 +63,9 @@ test("literal converters and serializes", function(){
 		name:"Task2"
 	});
 	equal(task1.createdAt, "feb", "Task1 model convert");
+	equal(task1.name, ">>Task1", "Task1.name model convert");
 	equal(task2.createdAt, "jun", "Task2 model convert");
+	equal(task2.name, "||Task2", "Task1.name model convert");
 	equal(task1.serialize().createdAt, 1, "Task1 model serialize");
 	equal(task2.serialize().createdAt, 2, "Task2 model serialize");
 	equal(task1.serialize().name, "Task1", "Task1 model default serialized");
@@ -64,6 +80,7 @@ var makeClasses= function(){
 	});
 	can.Map("AttrTest.Loan");
 	can.Map("AttrTest.Issue");
+	can.Map("AttrTest.WildCard");
 	
 	AttrTest.Person.model = function(data){
 		return new this(data);
@@ -78,12 +95,16 @@ var makeClasses= function(){
 			return new AttrTest.Issue(l)
 		});
 	}
+	AttrTest.WildCard.model = function(data){
+		return new this(data);
+	}
 	can.Map("AttrTest.Customer",
 	{
 		attributes : {
 			person : "AttrTest.Person.model",
 			loans : "AttrTest.Loan.models",
-			issues : "AttrTest.Issue.models"
+			issues : "AttrTest.Issue.models",
+			"*" : "AttrTest.WildCard.model"
 		}			
 	},
 	{});
@@ -116,12 +137,28 @@ test("basic observe associations", function(){
 				amount : 19999,
 				id: 3
 			}
-		]
+		],
+		other: {
+			id: 1,
+			name: "Brian"
+		},
+		another: {
+			id: 1,
+			name: "Ryan"
+		}
 	});
 	
 	equal(c.person.name, "Justin", "association present");
 	
 	equal(c.person.constructor, AttrTest.Person, "belongs to association typed");
+
+	equal(c.other.name, "Brian", "wild card association present");
+
+	equal(c.other.constructor, AttrTest.WildCard, "belongs to association typed(*)");
+
+	equal(c.another.name, "Ryan", "wild card association present");
+
+	equal(c.another.constructor, AttrTest.WildCard, "belongs to association typed(*)");
 	
 	equal(c.issues.length, 0);
 	
