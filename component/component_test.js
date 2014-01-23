@@ -888,4 +888,44 @@ test("Scope as Map constructors should follow '@' default values (#657)", functi
   equal(can.scope(can.$("panel")[0]).attr("title"), "Libraries");
 });
 
+test("Compute on scope is called more times then needed if event template exits", function() {
+
+    var called = 0
+
+    can.Component({
+        tag: 'test-comp',
+
+        scope: {
+            init: function(){
+                console.log('test-comp init')
+            },
+
+            comp: can.compute(function(){
+                var attr1 = this.attr('attr1'),
+                    attr2 = this.attr('attr2')
+                called++
+                console.log('comp attr1 attr2', attr1, attr2)
+                return null
+            })
+        },
+
+        events: {
+            '{scope} comp': function(){
+
+            }
+        }
+    })
+
+    var frag = can.view.mustache('<test-comp></test-comp>')({});
+    can.append( can.$('body') , frag );
+
+    //first time compute comp should be called on init
+
+    //second time after update of attr1 value
+    $('test-comp').scope().attr('attr1', 1)
+
+    equal(called, 2);
+});
+
+
 })()
