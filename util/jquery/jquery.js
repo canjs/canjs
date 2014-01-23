@@ -193,7 +193,7 @@ steal('jquery', 'can/util/can.js', 'can/util/attr','can/util/array/each.js', "ca
 				can.data(can.$(this), "canHasAttributesBindings", true)
 			},
 			teardown: function(){
-				$.cleanData( this, "canHasAttributesBindings")
+				$.removeData( this, "canHasAttributesBindings")
 			}
 		};
 	} else {
@@ -201,7 +201,7 @@ steal('jquery', 'can/util/can.js', 'can/util/attr','can/util/array/each.js', "ca
 		$.event.special.attributes = {
 			setup: function(){
 				var self = this;
-				var observer = new MutationObserver(function(mutations){
+				var observer = new can.attr.MutationObserver(function(mutations){
 					mutations.forEach(function(mutation){
 						var copy = can.simpleExtend({}, mutation)
 						can.trigger(self, copy, [])
