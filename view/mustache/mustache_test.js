@@ -2767,12 +2767,27 @@ test('{{#each}} helper works reliably with nested sections (#604)', function() {
 		list: [ { name: "Something" }, { name: "Else" } ],
 		list2: [ { name: "Foo" }, { name: "Bar" } ]
 	});
-	var div = document.createElement('div');
+	var div = document.createElement('div'),
+		lis = div.getElementsByTagName("li");
 
 	div.appendChild(renderer(data));
-	equal(div.innerHTML, '<ul><li>Something</li><li>Else</li></ul>', 'Expected HTML with first set');
+	
+	deepEqual(
+		can.map(lis, function(li){
+			return li.innerHTML
+		}),
+		["Something","Else"],
+		'Expected HTML with first set');
+		
 	data.attr('first', false);
-	equal(div.innerHTML, '<ul><li>Foo</li><li>Bar</li></ul>', 'Expected HTML with first false set');
+	
+	deepEqual(
+		can.map(lis, function(li){
+			return li.innerHTML
+		}),
+		["Foo","Bar"],
+		'Expected HTML with first false set');
+		
 });
 
 test('Constructor static properties are accessible (#634)', function() {
