@@ -645,9 +645,12 @@ steal('can/util','can/util/bind','can/construct', 'can/util/batch',function(can,
 		},
 		// Reads a property from the `object`.
 		_get: function( attr ) {
-			var value = typeof attr === 'string' && !!~attr.indexOf('.') && this.__get(attr);
-			if(value) {
-				return value;
+			var value;
+			if( typeof attr === 'string' && !!~attr.indexOf('.') ) {
+				value = this.__get(attr);
+				if( value !== undefined ) {
+					return value;
+				}
 			}
 
 			// break up the attr (`"foo.bar"`) into `["foo","bar"]`
