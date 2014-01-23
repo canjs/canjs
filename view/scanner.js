@@ -483,7 +483,7 @@ Scanner.prototype = {
 						// We are ending a block.
 						if (bracketCount == 1) {
 
-							// We are starting on.
+							// We are starting on. 
 							buff.push(insert_cmd, "can.view.txt(0,'"+getTag(tagName,tokens, i)+"'," + status() + ",this,function(){", startTxt, content);
 
 							endStack.push({
