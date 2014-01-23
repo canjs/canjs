@@ -452,98 +452,64 @@ if(window.history && history.pushState) {
 		});
 
 		test("routed links must descend from pushstate root (#652)", function() {
-			stop();
-			var runs=0, testIndex=-1, linkIndex,timeout,iframe;
-			
-			iframe = document.createElement("iframe");
-			iframe.src = can.test.path("route/pushstate/testing.html");
-			can.$("#qunit-test-area")[0].appendChild(iframe);
-			
+			var tests = [
+					// ["root", "link href", { route: "result" }]
+					["/app/", "/app/something/test/", {section:"something", sub:"test", route:":section/:sub/"}],
+					["/app/", "/test/", {}]
+				],
+				iframe,
+				test;
+
 			window.routeTestReady = function(iCanRoute, loc, hist, win) {
-				var tests = [
-					"/app/",
-					"/app/something/"
-				];
-				
-				var links = [
-					{
-						element:		addLink("/app/something/test/"),
-						test0_expect:	{section:"something", sub:"test", route:":section/:sub/"},
-						test1_expect:	{section:"test", route:":section/"}
-					},
-					{
-						element:		addLink("/app/test/"),
-						test0_expect:	{section:"test", route:":section/"},
-						test1_expect:	{}
-					},
-					{
-						element:		addLink("/test/"),
-						test0_expect:	{},
-						test1_expect:	{}
-					}
-				];
-				
+				// Setup route
 				win.can.route(":section/");
 				win.can.route(":section/:sub/");
-				
-				// if called after a redirect (non-route)
-				if (++runs > 1) {
-					// go back to test route
-					win.history.pushState(null,null, tests[testIndex]);
-					nextLink();
+				win.can.route.bindings.pushstate.root = test[0];
+				win.can.route.ready();
+
+				// Add link
+				var link = win.document.createElement("a");
+				link.href = link.innerHTML = test[1];
+				win.can.bind.call(link, 'click', function() {
+					win.location = this.href;
+				});
+				win.document.body.appendChild(link);
+
+				// Listen for page change
+				iframe.onload = function() {
+					start();
+					deepEqual( {}, can.extend({}, test[2]) );
+					runTest();
+				};
+
+				// Listen for route change
+				var change;
+				win.can.route.bind("change", change = function() {
+					start();
+					win.can.route.unbind("change", change);
+					deepEqual( can.extend({}, win.can.route.attr()), can.extend({}, test[2]) );
+					runTest();
+				});
+
+				win.can.trigger( win.can.$(link), 'click' );
+			};
+
+			function runTest() {
+				test = tests.pop();
+				if (test) {
+					stop();
+					iframe && can.remove(can.$(iframe));
+					iframe = document.createElement("iframe");
+					can.$("#qunit-test-area")[0].appendChild(iframe);
+					iframe.src = can.test.path("route/pushstate/testing.html");
 				}
-				else nextTest();
-				
-				function addLink(href) {
-					var link = win.document.createElement("a");
-					link.href = href;
-					win.document.body.appendChild(link);
-					return win.can.$(link);
+				else {
+					iframe && can.remove(can.$(iframe));
 				}
-				
-				function nextLink() {
-					if (++linkIndex < links.length) {
-						var link = links[linkIndex];
-						// if not routed (page change) .. non-jquery needs this
-						iframe.onload = function() {
-							this.onload = null;
-							clearTimeout(timeout);
-							// there is no route
-							deepEqual( {}, link["test"+testIndex+"_expect"] );
-							// go back to original url
-							win.location.href = iframe.getAttribute("src");
-							// window.routeTestReady gets called again
-						}
-						// if routed
-						timeout = setTimeout( function() {
-							if (win && win.can && win.can.route) {
-								deepEqual( can.extend({},win.can.route.attr()), link["test"+testIndex+"_expect"] );
-								// go back to test route
-								win.history.pushState(null,null, tests[testIndex]);
-								nextLink();
-							}
-							else {
-								setTimeout(arguments.callee, 250);
-							}
-						},250);
-						win.can.trigger(link.element, "click");
-					} else {
-						nextTest();
-					}
-				}
-				
-				function nextTest() {
-					if (++testIndex < tests.length) {
-						win.can.route.bindings.pushstate.root = tests[testIndex];
-						win.can.route.ready();
-						linkIndex = -1;
-						nextLink();
-					} else {
-						can.remove( can.$(iframe) );
-						start();
-					}
-				}
-			}
+			};
+
+			runTest();
+
 		});
 
 	}
