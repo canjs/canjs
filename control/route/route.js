@@ -1,20 +1,23 @@
 steal('can/util','can/route','can/control', function(can){
-	
-	// ## control/route.js  
+
+	// ## control/route.js
 	// _Controller route integration._
-	
+
 	can.Control.processors.route = function( el, event, selector, funcName, controller ) {
 		selector = selector || "";
 		if ( !can.route.routes[selector] ) {
+			if (selector[0] == '/') {
+				selector = selector.substring(1);
+			};
 			can.route( selector );
 		}
 		var batchNum,
 			check = function( ev, attr, how ) {
-				if ( can.route.attr('route') === ( selector ) && 
+				if ( can.route.attr('route') === ( selector ) &&
 					( ev.batchNum === undefined || ev.batchNum !== batchNum ) ) {
-					
+
 					batchNum = ev.batchNum;
-					
+
 					var d = can.route.attr();
 					delete d.route;
 					if ( can.isFunction( controller[ funcName ] )) {
@@ -22,7 +25,7 @@ steal('can/util','can/route','can/control', function(can){
 					} else {
 						controller[controller[funcName]](d);
 					}
-					
+
 				}
 			};
 		can.route.bind( 'change', check );

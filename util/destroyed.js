@@ -1,7 +1,7 @@
 /**
  * @add can.event.special
  */
-steal('jquery', 'can/util').then(function($, can) {
+steal('jquery', 'can/util', function($, can) {
 	/**
 	 * @property {Event} destroyed
 	 * @parent specialevents

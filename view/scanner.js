@@ -193,7 +193,13 @@ Scanner.hookupTag = function(hookupOptions){
 		// If this was an element like <foo-bar> that doesn't have a component, just render its content
 		var scope = hookupOptions.scope,
 			res = tagCallback ? tagCallback(el, hookupOptions) : scope;
-			
+
+		//!dev-remove-start
+		if(!tagCallback) {
+			can.dev.warn('can/view/scanner.js: No custom element found for ' + tagName);
+		}
+		//!dev-remove-end
+
 		// If the tagCallback gave us something to render with, and there is content within that element
 		// render it!
 		if(res && hookupOptions.subtemplate){
@@ -556,7 +562,7 @@ Scanner.prototype = {
 						// We are ending a block.
 						if (bracketCount == 1) {
 
-							// We are starting on.
+							// We are starting on. 
 							buff.push(insert_cmd, "can.view.txt(0,'"+getTag(tagName,tokens, i)+"'," + status() + ",this,function(){", startTxt, content);
 
 							endStack.push({
@@ -631,14 +637,19 @@ Scanner.prototype = {
 						} else {
 							// If we have `<%== a(function(){ %>` then we want
 							// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-							buff.push(insert_cmd, "can.view.txt(\n" + escaped + ",\n'"+tagName+"',\n" + status() +",\nthis,\nfunction(){ " + (this.text.escape || '') + "return ", content, 
-								// If we have a block.
-								bracketCount ? 
-								// Start with startTxt `"var _v1ew = [];"`.
-								startTxt : 
-								// If not, add `doubleParent` to close push and text.
-								"}));\n"
-								);
+							buff.push(insert_cmd, "can.view.txt(\n" +
+									  (typeof status() === "string" || escaped) + ",\n'" +
+									  tagName + "',\n" +
+									  status() +",\n" +
+									  "this,\nfunction(){ " +
+									  (this.text.escape || '') +
+									  "return ", content,
+									  // If we have a block.
+									  bracketCount ?
+									  // Start with startTxt `"var _v1ew = [];"`.
+									  startTxt :
+									  // If not, add `doubleParent` to close push and text.
+									  "}));\n");
 						}
 						
 						if (rescan && rescan.after && rescan.after.length) {
