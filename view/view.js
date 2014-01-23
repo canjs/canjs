@@ -514,7 +514,7 @@ steal("can/util", function( can ) {
 			if ( ! text.length ) {
 
 				//!dev-remove-start
-				can.dev.log("There is no template or an empty template at " + url);
+				can.dev.log("can/view/view.js: There is no template or an empty template at " + url);
 				//!dev-remove-end
 
 				throw "can.view: No template or empty template:" + url;
