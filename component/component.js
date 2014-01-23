@@ -1,6 +1,6 @@
 steal("can/util","can/control","can/observe","can/view/mustache","can/view/bindings",function(can){
 	
-	var ignoreAttributesRegExp = /dataViewId|class|id/i
+	var ignoreAttributesRegExp = /^(dataViewId|class|id)$/i
 	/**
 	 * @add can.Component
 	 */
