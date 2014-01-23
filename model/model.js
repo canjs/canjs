@@ -158,11 +158,11 @@ steal('can/util','can/map', 'can/list',function( can ) {
 						throw new Error('Could not get any raw data while converting using .models');
 					}
 		
-					//!steal-remove-start
+					//!dev-remove-start
 					if ( ! raw.length ) {
-						steal.dev.warn("model.js models has no data.")
+						can.dev.warn("model.js models has no data.")
 					}
-					//!steal-remove-end
+					//!dev-remove-end
 		
 					if(res.length) {
 						res.splice(0);
@@ -1577,9 +1577,10 @@ steal('can/util','can/map', 'can/list',function( can ) {
 			// to remove items on destroyed from Model Lists.
 			// but there should be a better way.
 			can.trigger(this,"change",funcName)
-			//!steal-remove-start
-			steal.dev.log("Model.js - "+ constructor.shortName+" "+ funcName);
-			//!steal-remove-end
+
+			//!dev-remove-start
+			can.dev.log("Model.js - "+ constructor.shortName+" "+ funcName);
+			//!dev-remove-end
 
 			// Call event on the instance's Class
 			can.trigger(constructor,funcName, this);
