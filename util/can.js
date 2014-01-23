@@ -43,7 +43,7 @@ steal(function () {
 		warn: function (out) {
 			var ll = this.logLevel;
 			if (ll < 2) {
-				Array.prototype.unshift.call(arguments, 'CanJS WARN:');
+				Array.prototype.unshift.call(arguments, 'WARN:');
 				if (window.console && console.warn) {
 					this._logger("warn", Array.prototype.slice.call(arguments));
 				} else if (window.console && console.log) {
@@ -64,7 +64,7 @@ steal(function () {
 			var ll = this.logLevel;
 			if (ll < 1) {
 				if (window.console && console.log) {
-					Array.prototype.unshift.call(arguments, 'CanJS info:');
+					Array.prototype.unshift.call(arguments, 'Info:');
 					this._logger("log", Array.prototype.slice.call(arguments));
 				}
 				else if (window.opera && window.opera.postError) {

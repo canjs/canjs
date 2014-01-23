@@ -340,7 +340,7 @@ steal("can/util/string", function(can) {
 
 				//!dev-remove-start
 				if(current[shortName]){
-					can.dev.warn("class.js There's already something called "+fullName)
+					can.dev.warn("can/construct/construct.js: There's already something called "+fullName)
 				}
 				//!dev-remove-end
 				

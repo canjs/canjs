@@ -419,6 +419,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 		attributeReplace: /__!!__/g,
 		attribute: function(el, attributeName, compute){
 			listen(el, compute, function(ev, newVal){
+				console.log(newVal)
 				elements.setAttr( el, attributeName, hook.render() );
 			})
 
@@ -474,7 +475,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 
 			// Insert the value in parts.
 			goodParts.splice(1,0,compute());
-
+			console.log("first", goodParts.join(""))
 			// Set the attribute.
 			elements.setAttr(el, attributeName, goodParts.join("") );
 

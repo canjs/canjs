@@ -131,7 +131,7 @@ steal('can/util','can/construct', function( can ) {
 		 * The processor is what does the binding/subscribing.
 		 */
 		_action: function( methodName, options ) {
-			
+
 			// If we don't have options (a `control` instance), we'll run this 
 			// later.  
 			paramReplacer.lastIndex = 0;
@@ -140,6 +140,9 @@ steal('can/util','can/construct', function( can ) {
 				// value from the options or the window
 				var convertedName = options ? can.sub(methodName, this._lookup(options)) : methodName;
 				if(!convertedName) {
+					//!dev-remove-start
+					can.dev.log('can/control/control.js: No property found for handling ' + methodName);
+					//!dev-remove-end
 					return null;
 				}
 				// If a `{}` template resolves to an object, `convertedName` will be
@@ -806,7 +809,7 @@ steal('can/util','can/construct', function( can ) {
 			//Control already destroyed
 			if(this.element === null) {
 				//!dev-remove-start
-				can.dev.warn("Control.js - Control already destroyed");
+				can.dev.warn("can/control/control.js: Control already destroyed");
 				//!dev-remove-end
 				return;
 			}

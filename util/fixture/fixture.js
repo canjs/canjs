@@ -1,4 +1,7 @@
 steal('can/util','can/util/string','can/util/object', function (can) {
+	if(!can.Object) {
+		throw new Error('can.fixture depends on can.Object. Please include it before can.fixture.');
+	}
 
 	// Get the URL from old Steal root, new Steal config or can.fixture.rootUrl
 	var getUrl = function(url) {
@@ -27,7 +30,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			},
 			log = function () {
 				//!dev-remove-start
-				can.dev.log('fixture INFO: ' + Array.prototype.slice.call(arguments).join(' '));
+				can.dev.log('can/fixture/fixture.js: ' + Array.prototype.slice.call(arguments).join(' '));
 				//!dev-remove-end
 			}
 

@@ -558,7 +558,8 @@ Scanner.prototype = {
 							} else {
 								
 								if(content.startTxt) {
-									buff.push(insert_cmd, "can.view.txt(\n" + (content.escaped != undefined ? content.escaped : escaped) + ",\n'"+tagName+"',\n" + status() +",\nthis,\n");
+									buff.push(insert_cmd, "can.view.txt(\n" + 
+									(typeof status() === "string" || (content.escaped != undefined ? content.escaped : escaped) )+ ",\n'"+tagName+"',\n" + status() +",\nthis,\n");
 								} else if (content.startOnlyTxt){
 									buff.push(insert_cmd, 'can.view.onlytxt(this,\n');
 								}
@@ -576,7 +577,11 @@ Scanner.prototype = {
 						} else {
 							// If we have `<%== a(function(){ %>` then we want
 							// `can.EJS.text(0,this, function(){ return a(function(){ var _v1ew = [];`.
-							buff.push(insert_cmd, "can.view.txt(\n" + escaped + ",\n'"+tagName+"',\n" + status() +",\nthis,\nfunction(){ return ", content, 
+
+							buff.push(insert_cmd, "can.view.txt(\n" +  (typeof status() === "string" || escaped) + 
+								",\n'"+tagName+"',\n" + status() +",\nthis,\nfunction(){ "+ 
+								(this.text.escape || '') +
+								"return ", content, 
 								// If we have a block.
 								bracketCount ? 
 								// Start with startTxt `"var _v1ew = [];"`.
@@ -584,6 +589,21 @@ Scanner.prototype = {
 								// If not, add `doubleParent` to close push and text.
 								"}));\n"
 								);
+
+							/*buff.push(insert_cmd, "can.view.txt(\n" +
+									  + ",\n'" +
+									  tagName + "',\n" +
+									  status() +",\n" +
+									  "this,\nfunction(){ " +
+									  (this.text.escape || '') +
+									  "return ", content,
+									  // If we have a block.
+									  bracketCount ?
+									  // Start with startTxt `"var _v1ew = [];"`.
+									  startTxt :
+									  // If not, add `doubleParent` to close push and text.
+									  "}));\n");*/
+
 						}
 						
 						if (rescan && rescan.after && rescan.after.length) {
@@ -678,7 +698,13 @@ can.view.pending = function(viewData){
 			// If this was an element like <foo-bar> that doesn't have a component, just render its content
 			var scope = viewData.scope,
 				res = tagCallback ? tagCallback(el, viewData) : scope;
-				
+			
+			//!dev-remove-start
+			if(!tagCallback) {
+				can.dev.warn('can/view/scanner.js: No custom element found for ' + tagName);
+			}
+			//!dev-remove-end
+			
 			// If the tagCallback gave us something to render with, and there is content within that element
 			// render it!
 			if(res && viewData.subtemplate){

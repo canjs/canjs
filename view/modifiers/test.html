@@ -22,7 +22,7 @@
 			root: '../../'
 		});
 	}, "can/map", "can/view/ejs", "can/view/modifiers").then("can/test", "can/view/modifiers/modifiers_test.js", function() {
-		QUnit.start();
+		can.dev.logLevel = 3; QUnit.start();
 	});
 </script>
 </body>

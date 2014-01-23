@@ -19,7 +19,7 @@
 	QUnit.config.autostart = false;
 	steal("can/view/bindings",
 			"can/map").then("can/test", "can/view/bindings/bindings_test.js", function() {
-		QUnit.start();
+		can.dev.logLevel = 3; QUnit.start();
 	});
 </script>
 </body>
