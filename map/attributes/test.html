@@ -18,7 +18,7 @@
 <script type="text/javascript">
 	QUnit.config.autostart = false;
 	steal("can/map/attributes", "can/model", "can/util/fixture").then("can/test", "can/map/attributes/attributes_test.js", function() {
-		QUnit.start();
+		can.dev.logLevel = 3; QUnit.start();
 	});
 </script>
 </body>
