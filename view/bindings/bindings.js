@@ -87,6 +87,13 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 				return;
 			}
 		}
+
+		if(el.nodeName.toLowerCase() === "select" && el.multiple) {
+			new Multiselect(el, {
+				value: value
+			});
+			return;
+		}
 		
 		new Value(el,{value: value})
 	});
@@ -177,9 +184,7 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			
 			this.options.value(this.element[0].value)
 		}
-	})
-	
-	var Checked = can.Control.extend({
+	}), Checked = can.Control.extend({
 		init: function(){
 			this.isCheckebox = (this.element[0].type.toLowerCase() == "checkbox");
 			this.check()
@@ -211,6 +216,41 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			}
 			
 		}
-	});
+	}), Multiselect = Value.extend({
+		init: function() {
+			this.set();
+		},
+
+		set: function() {
+			var newVal = this.options.value(), self = this;
+
+			if(typeof newVal === 'string') {
+				//when given a string, try to extract all the options from it
+				newVal = newVal.split(';');
+			} else {
+				//when given something else, try to make it an array and deal with it
+				newVal = can.makeArray(newVal);
+			}
+
+			//jQuery.val is required here, which will break compatibility with other libs
+			can.$(this.element).val(newVal);
+		},
+
+		get: function(){
+			var arr = can.$('option:selected', this.element)
+				.map(function(){
+					return this.value;
+				}).filter(function() {
+					//filter out the value "", as it's returned when nothing is actually selected
+					return this && this.length;
+				});
+
+			return can.makeArray(arr).join(';');
+		},
+
+		'change': function() {
+			this.options.value(this.get());
+		}
+	})
 	
 })
