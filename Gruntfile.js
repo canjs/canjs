@@ -83,6 +83,7 @@ module.exports = function (grunt) {
 		builder: {
 			options: {
 				url: 'http://canjs.com',
+				dev: true,
 				pluginify: {
 					ignore: [ /\/lib\//, /util\/dojo-(.*?).js/ ]
 				},

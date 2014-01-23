@@ -20,7 +20,7 @@
 	steal("can/route")
 		.then("can/test")
 		.then("can/route/route_test.js", function() {
-		QUnit.start();
+		can.dev.logLevel = 3; QUnit.start();
 	});
 </script>
 </body>
