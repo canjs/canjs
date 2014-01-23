@@ -26,7 +26,9 @@
     "grunt-release-steps": "~0.3.7",
     "bower": "~1.2.7",
     "grunt-contrib-jshint": "~0.8.0",
-    "grunt-jsbeautifier": "~0.2.6"
+    "grunt-jsbeautifier": "~0.2.6",
+    "grunt-docco": "~0.3.2",
+    "grunt-plato": "~0.2.1"
   },
   "scripts": {
     "test": "grunt test",

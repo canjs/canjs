@@ -165,11 +165,8 @@
 			};
 		// make sure rand can be everything we need
 		setTimeout(function timer() {
-			var res = rand([
-				1,
-				2,
-				3
-			]);
+			var res = rand([1, 2, 3]);
+
 			if (res.length === 0) {
 				zero = true;
 			} else if (res.length === 3) {

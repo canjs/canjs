@@ -299,7 +299,43 @@ module.exports = function (grunt) {
 			options: {
 				config: ".jsbeautifyrc"
 			}
-		}
+		},
+		docco: {
+			dev: {
+				src: [
+					'component/**/*.js', 'compute/**/*.js', 'construct/**/*.js', 'control/**/*.js', 'list/**/*.js',
+					'map/**/*.js', 'model/**/*.js', 'observe/**/*.js','route/**/*.js', 'util/**/*.js','view/**/*.js',
+					'!util/dojo/dojo-1.8.1.js', '!util/dojo/nodelist-traverse.js','!**/*_test.js'
+				],
+				options: {
+					output: 'docco/'
+				}
+			}
+		},
+		plato: {
+			src : {
+				options : {
+					jshint : grunt.file.readJSON('.jshintrc'),
+					title : "CanJS Source",
+					exclude : /bower_components\|dist\|docs\|guides\|lib\|node_modules\|src\|examples\|dojo\-\|demos/
+				},
+				files: {
+					'plato/src': '<%= docco.dev.src %>',
+				}
+			},
+			tests : {
+				options : {
+					jshint : grunt.file.readJSON('.jshintrc'),
+					title : "CanJS Tests",
+					exclude : /node_modules/
+				},
+				files: {
+					'plato/tests': '**/*_test.js',
+				}
+			}
+
+		},
+
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-connect');
@@ -312,6 +348,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-shell');
 	grunt.loadNpmTasks('bitovi-tools');
 	grunt.loadNpmTasks('grunt-jsbeautifier');
+	grunt.loadNpmTasks('grunt-docco');
+	grunt.loadNpmTasks('grunt-plato');
 
 	grunt.registerTask('quality', [ 'jsbeautifier', 'jshint']);
 	grunt.registerTask('build', ['clean:build', 'builder', 'amdify', 'stealify', 'uglify', 'string-replace:version']);

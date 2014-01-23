@@ -14,11 +14,11 @@ steal('can/util', 'can/construct', function (can, Construct) {
 			}
 			// keep a reference to us in self
 			self = this;
-			
+
 			//!dev-remove-start
-			for( var i =0; i< funcs.length;i++ ) {
-				if(typeof funcs[i] == "string" && !isFunction(this[funcs[i]])){
-					throw ("class.js "+( this.fullName || this.Class.fullName)+" does not have a "+funcs[i]+"method!");
+			for (var i = 0; i < funcs.length; i++) {
+				if (typeof funcs[i] === "string" && !isFunction(this[funcs[i]])) {
+					throw ("class.js " + (this.fullName || this.Class.fullName) + " does not have a " + funcs[i] + "method!");
 				}
 			}
 			//!dev-remove-end

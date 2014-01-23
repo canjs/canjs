@@ -44,10 +44,12 @@
 			scope: {
 				panels: [],
 				addPanel: function (panel) {
-					if (this.attr('panels').length === 0) {
+					if (this.attr('panels')
+						.length === 0) {
 						this.makeActive(panel);
 					}
-					this.attr('panels').push(panel);
+					this.attr('panels')
+						.push(panel);
 				},
 				removePanel: function (panel) {
 					var panels = this.attr('panels');
@@ -64,9 +66,10 @@
 				},
 				makeActive: function (panel) {
 					this.attr('active', panel);
-					this.attr('panels').each(function (panel) {
-						panel.attr('active', false);
-					});
+					this.attr('panels')
+						.each(function (panel) {
+							panel.attr('active', false);
+						});
 					panel.attr('active', true);
 				},
 				isActive: function (panel) {
@@ -77,36 +80,39 @@
 		can.Component.extend({
 			template: '{{#if active}}<content></content>{{/if}}',
 			tag: 'panel',
-			scope: { active: false },
+			scope: {
+				active: false
+			},
 			events: {
 				' inserted': function () {
-					can.scope(this.element[0].parentNode).addPanel(this.scope);
+					can.scope(this.element[0].parentNode)
+						.addPanel(this.scope);
 				},
 				' removed': function () {
 					if (!can.scope(this.element[0].parentNode)) {
 						console.log('bruke');
 					}
-					can.scope(this.element[0].parentNode).removePanel(this.scope);
+					can.scope(this.element[0].parentNode)
+						.removePanel(this.scope);
 				}
 			}
 		});
 		var template = can.view.mustache('<tabs>{{#each foodTypes}}<panel title=\'title\'>{{content}}</panel>{{/each}}</tabs>');
-		var foodTypes = new can.List([
-			{
-				title: 'Fruits',
-				content: 'oranges, apples'
-			},
-			{
-				title: 'Breads',
-				content: 'pasta, cereal'
-			},
-			{
-				title: 'Sweets',
-				content: 'ice cream, candy'
-			}
-		]);
-		can.append(can.$('#qunit-test-area'), template({ foodTypes: foodTypes }));
-		var testArea = can.$('#qunit-test-area')[0], lis = testArea.getElementsByTagName('li');
+		var foodTypes = new can.List([{
+			title: 'Fruits',
+			content: 'oranges, apples'
+		}, {
+			title: 'Breads',
+			content: 'pasta, cereal'
+		}, {
+			title: 'Sweets',
+			content: 'ice cream, candy'
+		}]);
+		can.append(can.$('#qunit-test-area'), template({
+			foodTypes: foodTypes
+		}));
+		var testArea = can.$('#qunit-test-area')[0],
+			lis = testArea.getElementsByTagName('li');
 		equal(lis.length, 3, 'three lis added');
 		foodTypes.each(function (type, i) {
 			equal(lis[i].innerHTML, type.attr('title'), 'li ' + i + ' has the right content');
@@ -119,7 +125,8 @@
 		foodTypes.each(function (type, i) {
 			equal(lis[i].innerHTML, type.attr('title'), 'li ' + i + ' has the right content');
 		});
-		equal(testArea.getElementsByTagName('panel').length, 4, 'panel added');
+		equal(testArea.getElementsByTagName('panel')
+			.length, 4, 'panel added');
 		foodTypes.shift();
 		equal(lis.length, 3, 'removed li after shifting a foodType');
 		foodTypes.each(function (type, i) {
@@ -155,17 +162,21 @@
 				},
 				showChildren: function (item, el, ev) {
 					ev.stopPropagation();
-					this.attr('breadcrumb').push(item);
+					this.attr('breadcrumb')
+						.push(item);
 				},
 				emptyBreadcrumb: function () {
-					this.attr('breadcrumb').attr([], true);
+					this.attr('breadcrumb')
+						.attr([], true);
 				},
 				updateBreadcrumb: function (item) {
-					var breadcrumb = this.attr('breadcrumb'), index = breadcrumb.indexOf(item);
+					var breadcrumb = this.attr('breadcrumb'),
+						index = breadcrumb.indexOf(item);
 					breadcrumb.splice(index + 1, breadcrumb.length - index - 1);
 				},
 				toggle: function (item) {
-					var selected = this.attr('selected'), index = selected.indexOf(item);
+					var selected = this.attr('selected'),
+						index = selected.indexOf(item);
 					if (index === -1) {
 						selected.push(item);
 					} else {
@@ -175,7 +186,8 @@
 			},
 			helpers: {
 				isSelected: function (options) {
-					if (this.attr('selected').indexOf(options.context) > -1) {
+					if (this.attr('selected')
+						.indexOf(options.context) > -1) {
 						return options.fn();
 					} else {
 						return options.inverse();
@@ -186,97 +198,75 @@
 		var template = can.view.mustache('<div><treecombo items=\'locations\' title=\'Locations\'></treecombo></div>');
 		var base = new can.Map({});
 		can.append(can.$('#qunit-test-area'), template(base));
-		var items = [
-			{
-				id: 1,
-				title: 'Midwest',
-				children: [
-					{
-						id: 5,
-						title: 'Illinois',
-						children: [
-							{
-								id: 23423,
-								title: 'Chicago'
-							},
-							{
-								id: 4563,
-								title: 'Springfield'
-							},
-							{
-								id: 4564,
-								title: 'Naperville'
-							}
-						]
-					},
-					{
-						id: 6,
-						title: 'Wisconsin',
-						children: [
-							{
-								id: 232423,
-								title: 'Milwaulkee'
-							},
-							{
-								id: 45463,
-								title: 'Green Bay'
-							},
-							{
-								id: 45464,
-								title: 'Madison'
-							}
-						]
-					}
-				]
-			},
-			{
-				id: 2,
-				title: 'East Coast',
-				children: [
-					{
-						id: 25,
-						title: 'New York',
-						children: [
-							{
-								id: 3413,
-								title: 'New York'
-							},
-							{
-								id: 4613,
-								title: 'Rochester'
-							},
-							{
-								id: 4516,
-								title: 'Syracuse'
-							}
-						]
-					},
-					{
-						id: 6,
-						title: 'Pennsylvania',
-						children: [
-							{
-								id: 2362423,
-								title: 'Philadelphia'
-							},
-							{
-								id: 454663,
-								title: 'Harrisburg'
-							},
-							{
-								id: 454664,
-								title: 'Scranton'
-							}
-						]
-					}
-				]
-			}
-		];
+		var items = [{
+			id: 1,
+			title: 'Midwest',
+			children: [{
+				id: 5,
+				title: 'Illinois',
+				children: [{
+					id: 23423,
+					title: 'Chicago'
+				}, {
+					id: 4563,
+					title: 'Springfield'
+				}, {
+					id: 4564,
+					title: 'Naperville'
+				}]
+			}, {
+				id: 6,
+				title: 'Wisconsin',
+				children: [{
+					id: 232423,
+					title: 'Milwaulkee'
+				}, {
+					id: 45463,
+					title: 'Green Bay'
+				}, {
+					id: 45464,
+					title: 'Madison'
+				}]
+			}]
+		}, {
+			id: 2,
+			title: 'East Coast',
+			children: [{
+				id: 25,
+				title: 'New York',
+				children: [{
+					id: 3413,
+					title: 'New York'
+				}, {
+					id: 4613,
+					title: 'Rochester'
+				}, {
+					id: 4516,
+					title: 'Syracuse'
+				}]
+			}, {
+				id: 6,
+				title: 'Pennsylvania',
+				children: [{
+					id: 2362423,
+					title: 'Philadelphia'
+				}, {
+					id: 454663,
+					title: 'Harrisburg'
+				}, {
+					id: 454664,
+					title: 'Scranton'
+				}]
+			}]
+		}];
 		stop();
 		setTimeout(function () {
 			base.attr('locations', items);
 			var itemsList = base.attr('locations');
-			var treecombo = can.$('#qunit-test-area treecombo')[0], breadcrumb = can.$('#qunit-test-area .breadcrumb')[0], breadcrumbLIs = breadcrumb.getElementsByTagName('li'), options = can.$('#qunit-test-area .options')[0];
+			var treecombo = can.$('#qunit-test-area treecombo')[0],
+				breadcrumb = can.$('#qunit-test-area .breadcrumb')[0],
+				breadcrumbLIs = breadcrumb.getElementsByTagName('li'),
+				options = can.$('#qunit-test-area .options')[0];
 			var optionsLis = options.getElementsByTagName('li');
 			equal(breadcrumbLIs.length, 1, 'Only the default title is shown');
 			equal(breadcrumbLIs[0].innerHTML, 'Locations', 'The correct title from the attribute is shown');
@@ -284,9 +274,11 @@
 			can.trigger(optionsLis[0], 'click');
 			equal(optionsLis[0].className, 'active', 'toggling something not selected adds active');
 			ok(optionsLis[0].getElementsByTagName('input')[0].checked, 'toggling something not selected checks checkbox');
-			equal(can.scope(treecombo, 'selected').length, 1, 'there is one selected item');
+			equal(can.scope(treecombo, 'selected')
+				.length, 1, 'there is one selected item');
 			equal(can.scope(treecombo, 'selected.0'), itemsList.attr('0'), 'the midwest is in selected');
-			can.scope(treecombo, 'selected').pop();
+			can.scope(treecombo, 'selected')
+				.pop();
 			equal(optionsLis[0].className, '', 'toggling something not selected adds active');
 			can.trigger(optionsLis[0].getElementsByTagName('button')[0], 'click');
 			equal(breadcrumbLIs.length, 2, 'Only the default title is shown');
@@ -294,7 +286,8 @@
 			ok(/Illinois/.test(optionsLis[0].innerHTML), 'A child of the top breadcrumb is displayed');
 			can.trigger(optionsLis[0].getElementsByTagName('button')[0], 'click');
 			ok(/Chicago/.test(optionsLis[0].innerHTML), 'A child of the top breadcrumb is displayed');
-			ok(!optionsLis[0].getElementsByTagName('button').length, 'no show children button');
+			ok(!optionsLis[0].getElementsByTagName('button')
+				.length, 'no show children button');
 			can.trigger(breadcrumbLIs[1], 'click');
 			equal(breadcrumbLIs[1].innerHTML, 'Midwest', 'The breadcrumb has an item in it');
 			ok(/Illinois/.test(optionsLis[0].innerHTML), 'A child of the top breadcrumb is displayed');
@@ -318,14 +311,17 @@
 				},
 				'{scope} deferreddata': 'update',
 				update: function () {
-					var deferred = this.scope.attr('deferreddata'), scope = this.scope;
+					var deferred = this.scope.attr('deferreddata'),
+						scope = this.scope;
 					if (can.isDeferred(deferred)) {
 						this.scope.attr('waiting', true);
 						deferred.then(function (items) {
-							scope.attr('items').attr(items, true);
+							scope.attr('items')
+								.attr(items, true);
 						});
 					} else {
-						scope.attr('items').attr(deferred, true);
+						scope.attr('items')
+							.attr(deferred, true);
 					}
 				},
 				'{items} change': function () {
@@ -340,21 +336,17 @@
 				var set = this.attr('set');
 				if (set === 0) {
 					setTimeout(function () {
-						deferred.resolve([
-							{
-								first: 'Justin',
-								last: 'Meyer'
-							}
-						]);
+						deferred.resolve([{
+							first: 'Justin',
+							last: 'Meyer'
+						}]);
 					}, 100);
 				} else if (set === 1) {
 					setTimeout(function () {
-						deferred.resolve([
-							{
-								first: 'Brian',
-								last: 'Moschel'
-							}
-						]);
+						deferred.resolve([{
+							first: 'Brian',
+							last: 'Moschel'
+						}]);
 					}, 100);
 				}
 				return deferred;
@@ -362,7 +354,9 @@
 		});
 		var scope = new SimulatedScope();
 		var template = can.view.mustache('<grid deferreddata=\'scope.deferredData\'>' + '{{#each items}}' + '<tr>' + '<td width=\'40%\'>{{first}}</td>' + '<td width=\'70%\'>{{last}}</td>' + '</tr>' + '{{/each}}' + '</grid>');
-		can.append(can.$('#qunit-test-area'), template({ scope: scope }));
+		can.append(can.$('#qunit-test-area'), template({
+			scope: scope
+		}));
 		var gridScope = can.scope('#qunit-test-area grid');
 		equal(gridScope.attr('waiting'), true, 'waiting is true');
 		stop();
@@ -394,9 +388,12 @@
 			count: 100
 		});
 		var template = can.view.mustache('<next-prev paginate=\'paginator\'></next-prev>');
-		var frag = template({ paginator: paginator });
+		var frag = template({
+			paginator: paginator
+		});
 		can.append(can.$('#qunit-test-area'), frag);
-		var prev = can.$('#qunit-test-area .prev')[0], next = can.$('#qunit-test-area .next')[0];
+		var prev = can.$('#qunit-test-area .prev')[0],
+			next = can.$('#qunit-test-area .next')[0];
 		ok(!/enabled/.test(prev.className), 'prev is not enabled');
 		ok(/enabled/.test(next.className), 'next is  enabled');
 		can.trigger(next, 'click');
@@ -413,7 +410,9 @@
 			count: 100
 		});
 		var template = can.view.mustache('<page-count page=\'paginator.page\'></page-count>');
-		can.append(can.$('#qunit-test-area'), template(new can.Map({ paginator: paginator })));
+		can.append(can.$('#qunit-test-area'), template(new can.Map({
+			paginator: paginator
+		})));
 		var spans = can.$('#qunit-test-area span');
 		equal(spans[0].innerHTML, '1');
 		paginator.next();
@@ -444,11 +443,16 @@
 		can.Component({
 			'tag': 'my-greeting',
 			template: '<h1><content/></h1>',
-			scope: { title: 'can.Component' }
+			scope: {
+				title: 'can.Component'
+			}
 		});
 		var template = can.view.mustache('<my-greeting><span>{{site}} - {{title}}</span></my-greeting>');
-		can.append(can.$('#qunit-test-area'), template({ site: 'CanJS' }));
-		equal(can.$('#qunit-test-area span').length, 1, 'there is an h1');
+		can.append(can.$('#qunit-test-area'), template({
+			site: 'CanJS'
+		}));
+		equal(can.$('#qunit-test-area span')
+			.length, 1, 'there is an h1');
 	});
 	test('setting passed variables - two way binding', function () {
 		can.Component({
@@ -475,7 +479,8 @@
 		});
 		var template = can.view.mustache('<my-app>' + '{{^visible}}<button can-click="show">show</button>{{/visible}}' + '<my-toggler visible="visible">' + 'content' + '<button can-click="hide">hide</button>' + '</my-toggler>' + '</my-app>');
 		can.append(can.$('#qunit-test-area'), template({}));
-		var testArea = can.$('#qunit-test-area')[0], buttons = testArea.getElementsByTagName('button');
+		var testArea = can.$('#qunit-test-area')[0],
+			buttons = testArea.getElementsByTagName('button');
 		equal(buttons.length, 1, 'there is one button');
 		equal(buttons[0].innerHTML, 'hide', 'the button\'s text is hide');
 		can.trigger(buttons[0], 'click');
@@ -490,7 +495,9 @@
 		can.Component({
 			tag: 'my-text',
 			template: '<p>{{valueHelper}}</p>',
-			scope: { value: '@' },
+			scope: {
+				value: '@'
+			},
 			helpers: {
 				valueHelper: function () {
 					return this.attr('value');
@@ -499,14 +506,17 @@
 		});
 		var template = can.view.mustache('<my-text value="value1"></my-text><my-text value="value2"></my-text>');
 		can.append(can.$('#qunit-test-area'), template({}));
-		var testArea = can.$('#qunit-test-area')[0], myTexts = testArea.getElementsByTagName('my-text');
+		var testArea = can.$('#qunit-test-area')[0],
+			myTexts = testArea.getElementsByTagName('my-text');
 		equal(myTexts[0].children[0].innerHTML, 'value1');
 		equal(myTexts[1].children[0].innerHTML, 'value2');
 	});
 	test('access hypenated attributes via camelCase or hypenated', function () {
 		can.Component({
 			tag: 'hyphen',
-			scope: { 'camelCase': '@' },
+			scope: {
+				'camelCase': '@'
+			},
 			template: '<p>{{valueHelper}}</p>',
 			helpers: {
 				valueHelper: function () {
@@ -516,17 +526,21 @@
 		});
 		var template = can.view.mustache('<hyphen camel-case="value1"></hyphen>');
 		can.append(can.$('#qunit-test-area'), template({}));
-		var testArea = can.$('#qunit-test-area')[0], hyphen = testArea.getElementsByTagName('hyphen');
+		var testArea = can.$('#qunit-test-area')[0],
+			hyphen = testArea.getElementsByTagName('hyphen');
 		equal(hyphen[0].children[0].innerHTML, 'value1');
 	});
 	test('a map as scope', function () {
-		var me = new can.Map({ name: 'Justin' });
+		var me = new can.Map({
+			name: 'Justin'
+		});
 		can.Component.extend({
 			tag: 'my-scope',
 			scope: me
 		});
 		var template = can.view.mustache('<my-scope>{{name}}</my-scope>');
-		equal(template().childNodes[0].innerHTML, 'Justin');
+		equal(template()
+			.childNodes[0].innerHTML, 'Justin');
 	});
 	test('content in a list', function () {
 		var template = can.view.mustache('<my-list>{{name}}</my-list>');
@@ -534,18 +548,21 @@
 			tag: 'my-list',
 			template: '{{#each items}}<li><content/></li>{{/each}}',
 			scope: {
-				items: new can.List([
-					{ name: 'one' },
-					{ name: 'two' }
-				])
+				items: new can.List([{
+					name: 'one'
+				}, {
+					name: 'two'
+				}])
 			}
 		});
-		var lis = template().childNodes[0].getElementsByTagName('li');
+		var lis = template()
+			.childNodes[0].getElementsByTagName('li');
 		equal(lis[0].innerHTML, 'one', 'first li has correct content');
 		equal(lis[1].innerHTML, 'two', 'second li has correct content');
 	});
 	test('don\'t update computes unnecessarily', function () {
-		var sourceAge = 30, timesComputeIsCalled = 0;
+		var sourceAge = 30,
+			timesComputeIsCalled = 0;
 		var age = can.compute(function (newVal) {
 			timesComputeIsCalled++;
 			if (timesComputeIsCalled === 1) {
@@ -563,13 +580,19 @@
 				return sourceAge;
 			}
 		});
-		can.Component.extend({ tag: 'age-er' });
+		can.Component.extend({
+			tag: 'age-er'
+		});
 		var template = can.view.mustache('<age-er years=\'age\'></age-er>');
-		template({ age: age });
+		template({
+			age: age
+		});
 		age(31);
 	});
 	test('component does not respect can.compute passed via attributes (#540)', function () {
-		var data = { compute: can.compute(30) };
+		var data = {
+			compute: can.compute(30)
+		};
 		can.Component.extend({
 			tag: 'my-component',
 			template: '<span>{{blocks}}</span>'
@@ -607,7 +630,8 @@
 		var template = can.view.mustache('<scope-rebinder></scope-rebinder>');
 		var frag = template();
 		var scope = can.scope(can.$(frag.childNodes[0]));
-		var n1 = can.compute(), n2 = can.compute();
+		var n1 = can.compute(),
+			n2 = can.compute();
 		scope.attr('name', n1);
 		n1('updated');
 		scope.attr('name', n2);
@@ -628,7 +652,8 @@
 		equal(frag.childNodes[0].childNodes[0].innerHTML, 'inner-tag TEMPLATE inner-tag CONTENT outer-tag CONTENT');
 	});
 	test('inserted event fires twice if component inside live binding block', function () {
-		var inited = 0, inserted = 0;
+		var inited = 0,
+			inserted = 0;
 		can.Component({
 			tag: 'child-tag',
 			scope: {
@@ -645,7 +670,9 @@
 		can.Component({
 			tag: 'parent-tag',
 			template: '{{#shown}}<child-tag></child-tag>{{/shown}}',
-			scope: { shown: false },
+			scope: {
+				shown: false
+			},
 			events: {
 				' inserted': function () {
 					this.scope.attr('shown', true);
@@ -658,14 +685,19 @@
 		equal(inserted, 1);
 	});
 	test('Scope as Map constructors should follow \'@\' default values (#657)', function () {
-		var PanelViewModel = can.Map.extend({ title: '@' });
+		var PanelViewModel = can.Map.extend({
+			title: '@'
+		});
 		can.Component.extend({
 			tag: 'panel',
 			scope: PanelViewModel
 		});
-		var frag = can.view.mustache('<panel title="Libraries">Content</panel>')({ title: 'hello' });
+		var frag = can.view.mustache('<panel title="Libraries">Content</panel>')({
+			title: 'hello'
+		});
 		can.append(can.$('#qunit-test-area'), frag);
-		equal(can.scope(can.$('panel')[0]).attr('title'), 'Libraries');
+		equal(can.scope(can.$('panel')[0])
+			.attr('title'), 'Libraries');
 	});
 	test('id, class, and dataViewId should be ignored (#694)', function () {
 		can.Component.extend({
