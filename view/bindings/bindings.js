@@ -1,6 +1,9 @@
 steal("can/util","can/view/mustache", "can/control", function(can){
 	
-	
+	// IE < 8 doesn't support .hasAttribute, so feature detect it.
+	var hasAttribute = function(el, name) {
+		return el.hasAttribute ? el.hasAttribute(name) : el.getAttribute(name) !== null;
+	};
 	
 	/**
 	 * @function can.view.bindings.can-value can-value
@@ -63,12 +66,12 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 		
 		if(el.nodeName.toLowerCase() === "input"){
 			if(el.type === "checkbox") {
-				if( el.hasAttribute("can-true-value") ) {
+				if( hasAttribute(el, "can-true-value") ) {
 					var trueValue = data.scope.compute( el.getAttribute("can-true-value") )
 				} else {
 					var trueValue = can.compute(true)
 				}
-				if( el.hasAttribute("can-false-value") ) {
+				if( hasAttribute(el, "can-false-value") ) {
 					var falseValue = data.scope.compute( el.getAttribute("can-false-value") )
 				} else {
 					var falseValue = can.compute(false)
@@ -192,11 +195,10 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 					
 				this.element[0].checked = ( value == trueValue )
 			} else {
-				if(this.options.value() === this.element[0].value){
-					this.element[0].checked = true //.prop("checked", true)
-				} else {
-					this.element[0].checked = false //.prop("checked", false)
-				}
+				var checked = this.options.value() === this.element[0].value;
+				// IE7 bugs sometimes if defaultChecked isn't set first
+				this.element[0].defaultChecked = checked;
+				this.element[0].checked = checked;
 			}
 			
 			

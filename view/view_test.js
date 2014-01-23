@@ -733,9 +733,15 @@
 		
 	})
 	
-	
-	
-	
-	
+	if (window.require) {
+		if (window.require.config && window.require.toUrl) {
+			test("template files relative to requirejs baseUrl (#647)", function() {
+				var oldBaseUrl = requirejs.s.contexts._.config.baseUrl;
+				require.config({ baseUrl:"/view/test/" });
+				ok( can.isFunction( can.view("template") ) );
+				require.config({ baseUrl:oldBaseUrl });
+			});
+		}
+	}
 	
 })();

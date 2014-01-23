@@ -2785,4 +2785,166 @@ test("Block bodies are properly escaped inside attributes", function() {
 	equal(div.getElementsByTagName("div")[0].title, title+title);
 });
 
+test('Constructor static properties are accessible (#634)', function() {
+	can.Map.extend("can.Foo", { static_prop : "baz" }, { proto_prop : "thud" });
+	var template = '\
+				Straight access: <br/> \
+					<span>{{own_prop}}</span><br/> \
+					<span>{{constructor.static_prop}}</span><br/> \
+					<span>{{constructor.proto_prop}}</span><br/> \
+					<span>{{proto_prop}}</span><br/> \
+				Helper argument: <br/> \
+					<span>{{print_prop own_prop}}</span><br/> \
+					<span>{{print_prop constructor.static_prop}}</span><br/> \
+					<span>{{print_prop constructor.proto_prop}}</span><br/> \
+					<span>{{print_prop proto_prop}}</span><br/> \
+				Helper hash argument: <br/> \
+					<span>{{print_hash prop=own_prop}}</span><br/> \
+					<span>{{print_hash prop=constructor.static_prop}}</span><br/> \
+					<span>{{print_hash prop=constructor.proto_prop}}</span><br/> \
+					<span>{{print_hash prop=proto_prop}}</span><br/>',
+			renderer = can.view.mustache(template),
+			data = new can.Foo({ own_prop : "quux" }),
+			div = document.createElement('div');
+
+	div.appendChild(renderer(data, {
+		print_prop: function() {
+      return can.map(
+       can.makeArray(arguments).slice(0, arguments.length - 1)
+          , function(arg) {
+              while(arg && arg.isComputed) {
+                  arg = arg();
+              }
+              return arg;
+          }
+      ).join(" ");
+		},
+		print_hash: function() {
+      var ret = [];
+      can.each(
+          arguments[arguments.length - 1].hash
+          , function(arg, key) {
+              while(arg && arg.isComputed) {
+                  arg = arg();
+              }
+              ret.push([key, arg].join("="));
+          }
+      );
+      return ret.join(" ");
+		}
+	}));
+	var spans = div.getElementsByTagName('span'),
+			i = 0;
+
+	// Straight access
+	equal(spans[i++].innerHTML, 'quux', 'Expected "quux"');
+	equal(spans[i++].innerHTML, 'baz', 'Expected "baz"');
+	equal(spans[i++].innerHTML, '', 'Expected ""');
+	equal(spans[i++].innerHTML, 'thud', 'Expected "thud"');
+
+	// Helper argument
+	equal(spans[i++].innerHTML, 'quux', 'Expected "quux"');
+	equal(spans[i++].innerHTML, 'baz', 'Expected "baz"');
+	equal(spans[i++].innerHTML, '', 'Expected ""');
+	equal(spans[i++].innerHTML, 'thud', 'Expected "thud"');
+
+	// Helper hash argument
+	equal(spans[i++].innerHTML, 'prop=quux', 'Expected "prop=quux"');
+	equal(spans[i++].innerHTML, 'prop=baz', 'Expected "prop=baz"');
+	equal(spans[i++].innerHTML, 'prop=', 'Expected "prop="');
+	equal(spans[i++].innerHTML, 'prop=thud', 'Expected "prop=thud"');
+});
+
+test("{{#each}} handles an undefined list changing to a defined list (#629)", function() {
+	var renderer = can.view.mustache('    {{description}}: \
+    <ul> \
+    {{#each list}} \
+        <li>{{name}}</li> \
+    {{/each}} \
+    </ul>');
+
+	var div = document.createElement('div'),
+			data1 = new can.Map({
+	        description: 'Each without list'
+	    }),
+	    data2 = new can.Map({
+        description: 'Each with empty list',
+        list: []
+	    });
+
+	div.appendChild(renderer(data1));
+	div.appendChild(renderer(data2));
+
+	equal(div.getElementsByTagName('ul')[0].getElementsByTagName('li').length, 0);
+	equal(div.getElementsByTagName('ul')[1].getElementsByTagName('li').length, 0);
+
+	stop();
+	setTimeout(function() {
+		start();
+    data1.attr('list', [{name: 'first'}]);
+    data2.attr('list', [{name: 'first'}]);
+		equal(div.getElementsByTagName('ul')[0].getElementsByTagName('li').length, 1);
+		equal(div.getElementsByTagName('ul')[1].getElementsByTagName('li').length, 1);
+		equal(div.getElementsByTagName('ul')[0].getElementsByTagName('li')[0].innerHTML, 'first');
+		equal(div.getElementsByTagName('ul')[1].getElementsByTagName('li')[0].innerHTML, 'first');
+	}, 250);
+});
+
+test('can.compute should live bind when the value is changed to a Construct (#638)', function() {
+	var renderer = can.view.mustache('<p>{{#counter}} Clicked <span>{{count}}</span> times {{/counter}}</p>'),
+			div = document.createElement('div'),
+			// can.compute(null) will pass
+			counter = can.compute(),
+			data = { counter: counter };
+
+	div.appendChild(renderer(data));
+
+	equal(div.getElementsByTagName('span').length, 0);
+	stop();
+	setTimeout(function() {
+		start();
+		counter({ count: 1 });
+		equal(div.getElementsByTagName('span').length, 1);
+		equal(div.getElementsByTagName('span')[0].innerHTML, '1');
+	}, 10);
+});
+
+test("@index in partials loaded from script templates", function(){
+	
+	
+	// add template as script
+	
+	var script = document.createElement("script");
+	script.type= "text/mustache";
+	script.id = "itempartial";
+	script.text = "<label></label>"
+	
+	document.body.appendChild(script)
+	
+	//can.view.mustache("itempartial","<label></label>")
+	
+	
+	var itemsTemplate = can.view.mustache(
+		"<div>"+
+			"{{#each items}}"+
+			"{{>itempartial}}"+
+			"{{/each}}"+
+		"</div>")
+	
+	var items = new can.List([{},{}])
+	
+	var frag = itemsTemplate({
+		items: items
+	}),
+		div = frag.childNodes[0],
+		labels = div.getElementsByTagName("label");
+	
+	equal(labels.length, 2, "two labels")
+	
+	items.shift();
+	
+	
+	equal(labels.length, 1, "first label removed")
+})
+
 })();

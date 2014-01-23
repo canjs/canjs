@@ -559,13 +559,18 @@ steal("can/util", function( can ) {
 			// Convert to a unique and valid id.
 			id = $view.toId(url);
 	
-			// If an absolute path, use `steal` to get it.
-			// You should only be using `//` if you are using `steal`.
+			// If an absolute path, use `steal`/`require` to get it.
+			// You should only be using `//` if you are using an AMD loader like `steal` or `require` (not almond).
 			if ( url.match(/^\/\//) ) {
-				var sub = url.substr(2);
-				url = ! window.steal ? 
-					sub :
-					steal.config().root.mapJoin(""+steal.id(sub));
+				url = url.substr(2);
+				url = !window.steal ? 
+					url :  
+					steal.config().root.mapJoin(""+steal.id(url));
+			}
+			
+			// Localize for `require` (not almond)
+			if (window.require) {
+				if (require.toUrl) url = require.toUrl(url);
 			}
 	
 			// Set the template engine type.

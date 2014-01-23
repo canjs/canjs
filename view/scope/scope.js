@@ -19,10 +19,10 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 		escapeDotReg = /\\\./g,
 		getNames = function(attr){
 			var names = [], last = 0;
-			attr.replace(escapeReg, function($0, $1, index) {
-				if (!$1) {
+			attr.replace(escapeReg, function(first, second, index) {
+				if (!second) {
 					names.push(attr.slice(last, index).replace(escapeDotReg,'.'));
-					last = index + $0.length;
+					last = index + first.length;
 				}
 			});
 			names.push(attr.slice(last).replace(escapeDotReg,'.'));
@@ -91,6 +91,8 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 						// call that method
 						if(options.returnObserveMethods){
 							cur = cur[reads[i]]
+						} else if (reads[i] === "constructor" && prev instanceof can.Construct) {
+							cur = prev[ reads[i] ];
 						} else {
 							cur = prev[ reads[i] ].apply(prev, options.args ||[])
 						}
@@ -119,10 +121,7 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 					return {value: undefined, parent: prev};
 				}
 			}
-			// if we don't have a value, exit early.
-			if( cur === undefined ){
-				options.earlyExit && options.earlyExit(prev, i - 1)
-			}
+			
 			// handle an ending function
 			if(typeof cur === "function"){
 				if( options.isArgument ) {
@@ -132,11 +131,13 @@ steal('can/util','can/construct','can/map','can/list','can/view','can/compute',f
 				} else {
 					
 					cur.isComputed && !foundObs && options.foundObservable && options.foundObservable(cur, i)
-					
-					
-					cur = cur.call(prev)
+					cur = cur.call(prev);
 				}
 				
+			}
+			// if we don't have a value, exit early.
+			if( cur === undefined ){
+				options.earlyExit && options.earlyExit(prev, i - 1)
 			}
 			return {value: cur, parent: prev};
 		}
