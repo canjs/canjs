@@ -24,8 +24,7 @@
 			steal.config(config);
 		}).then("can/util/fixture", "<%- modules.join('", "') %>")
 		.then("can/test").then("<%- tests.join('")\n.then("') %>", function() {
-			steal.dev.log = function() {};
-			steal.dev.warn = function() {};
+            can.dev.logLevel = 3;
 			QUnit.start();
 		});
 	</script>

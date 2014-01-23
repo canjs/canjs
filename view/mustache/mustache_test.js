@@ -2935,4 +2935,21 @@ test("@index in partials loaded from script templates", function(){
 	equal(labels.length, 1, "first label removed")
 })
 
+//!dev-remove-start
+if(can.dev) {
+	test("Logging: Custom tag does not have a registered handler", function() {
+		var oldlog = can.dev.warn;
+
+		can.dev.warn = function(text) {
+			equal(text, 'can/view/scanner.js: No custom element found for my-tag',
+				'Got expected message logged.')
+		}
+
+		can.view.mustache('<my-tag></my-tag>')();
+
+		can.dev.warn = oldlog;
+	});
+}
+//!dev-remove-end
+
 })();
