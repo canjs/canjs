@@ -94,7 +94,7 @@ test("escapedContent", function(){
 test("unescapedContent", function(){
 	var text = "<span><%== tags %></span><div><%= tags %></div><input value='<%== quotes %>'/>";
 	var compiled = new can.EJS({text: text}).render({tags: "<strong>foo</strong><strong>bar</strong>",
-							quotes : "I use 'quote' fingers \"a lot\""}) ;
+							quotes : "I use 'quote' fingers & &amp;ersands \"a lot\""}) ;
 	
 	var div = document.createElement('div');
 	div.innerHTML = compiled;
@@ -102,7 +102,7 @@ test("unescapedContent", function(){
 	equal(div.getElementsByTagName('span')[0].firstChild.nodeType, 1 );
 	equal(div.getElementsByTagName('div')[0].firstChild.nodeValue.toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
 	equal(div.getElementsByTagName('span')[0].innerHTML.toLowerCase(), "<strong>foo</strong><strong>bar</strong>" );
-	equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"", "escapped no matter what" );
+	equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers & &amp;ersands \"a lot\"", "attributes are always safe, and strings are kept as-is without additional escaping" );
 });
 
 test("returning blocks", function(){
