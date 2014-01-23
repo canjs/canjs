@@ -21,7 +21,7 @@ QUnit.config.autostart = false;
             'can/util',
             'can/control'
     ).then('can/control/modifier/modifier_test.js', function(){
-    	QUnit.start();
+    	can.dev.logLevel = 3; QUnit.start();
     })
 </script>
 </body>

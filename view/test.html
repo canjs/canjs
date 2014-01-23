@@ -21,7 +21,7 @@
 			"can/view/ejs",
 			"can/view/mustache",
 			"can/observe").then("can/test").then("can/util/fixture", "can/view/view_test.js", function() {
-		QUnit.start();
+		can.dev.logLevel = 3; QUnit.start();
 	});
 </script>
 </body>
