@@ -194,25 +194,23 @@ function (can) {
 
 
 	// Make destroyed and empty work.
+	var $_empty = $.fn.empty;
 	$.fn.empty = function () {
-		return this.each(function () {
+		this.each(function () {
 			$.cleanData(this.getElementsByTagName('*'))
 			this.innerHTML = ''
-		})
+		});
+		return $_empty.call(this);
 	}
 
+	var $_remove = $.fn.remove;
 	$.fn.remove = function () {
 		this.each(function () {
 			if( this.getElementsByTagName ){
 				$.cleanData( [this].concat( can.makeArray(this.getElementsByTagName('*')) )  );
 			}
-
-			if (this.parentNode != null) {
-				// might be a text node
-				this.parentNode.removeChild(this);
-			}
 		});
-		return this;
+		return $_remove.call(this);
 	}
 
 

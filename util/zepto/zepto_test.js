@@ -1,10 +1,30 @@
 can = {};
-steal('can/util/zepto','funcunit/qunit', 'can/util/destroyed.js',function(){
+steal('zepto', function($) {
+	var empty = $.fn.empty;
+	$.fn.empty = function() {
+		this.each(function() {
+			this.__empty = this.__empty || 0;
+			this.__empty++;
+		});
+		return empty.call(this);
+		return this;
+	};
+
+	var remove = $.fn.remove;
+	$.fn.remove = function() {
+		this.each(function() {
+			this.__remove = this.__remove || 0;
+			this.__remove++;
+		});
+		return remove.call(this);
+	};
+}).then('can/util/zepto', 'can/util/destroyed.js',function($, can){
 	
 module("zepto-fill")
 
-test("deferred", function(){
-	var d = $.ajax({
+// Zepto 1.0 doesn't have deferreds
+test("deferred", 1, function(){
+	var d = can.ajax({
 		url: 'thing.json',
 		async: false,
 		dataType : 'text'
@@ -12,16 +32,27 @@ test("deferred", function(){
 	d.done(function(text){
 		ok(true,"called")
 	})
-	
 })
 
-test("destroyed",1, function(){
-	$("#qunit-test-area").append("<div id='foo'>foo</div>")
-	$('#foo').bind('destroyed', function(){
+test("removed",1, function(){
+	can.$("#qunit-test-area").append("<div id='foo'>foo</div>")
+	can.$('#foo').bind('removed', function(){
 		ok(true, "called")
 	})
 	
-	$('#foo').remove()
+	can.$('#foo').remove()
 })
+
+test("$.fn.remove/empty is extended, not replaced (#651)", function() {
+	can.$("#qunit-test-area").append("<div id='zepto-remove'>foo</div>");
+	
+	var foo = can.$('#zepto-remove').remove();
+	equal(foo[0].__remove, 1);
+	equal(!!foo[0].parentNode, false);
+
+	can.$("#qunit-test-area").empty();
+	equal(can.$("#qunit-test-area")[0].innerHTML, '');
+	equal(can.$("#qunit-test-area")[0].__empty, 1);
+});
 
 })
