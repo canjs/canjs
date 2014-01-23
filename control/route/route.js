@@ -7,7 +7,7 @@ steal('can/util','can/route','can/control', function(can){
 		selector = selector || "";
 		if ( !can.route.routes[selector] ) {
 			if (selector[0] == '/') {
-			    selector = selector.substring(1);
+				selector = selector.substring(1);
 			};
 			can.route( selector );
 		}
