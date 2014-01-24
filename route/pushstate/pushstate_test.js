@@ -535,7 +535,7 @@ if(window.history && history.pushState) {
 				// Add link
 				var link = win.document.createElement("a");
 				link.href = link.innerHTML = test[1];
-				win.can.$(link).on('click', function(ev) {
+				win.can.bind.call(link, 'click', function(ev) {
 					var el = this;
 					setTimeout(function() {
 						if (!ev.isDefaultPrevented()) {
@@ -570,7 +570,7 @@ if(window.history && history.pushState) {
 			};
 
 			function runTest() {
-				test = tests.pop();
+				test = tests.splice(0,1)[0];
 				if (test) {
 					stop();
 					iframe && can.remove(can.$(iframe));
