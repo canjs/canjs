@@ -1,0 +1,28 @@
+<div id='out'></div>
+<script src="../../lib/steal/steal.js"></script>
+<script>
+steal("can/view/bindings",function(){
+		
+var template = can.view.mustache(
+  "<p>Colors: <select can-value='colors' multiple>"+
+     "<option value='green'>Green</option>"+
+     "<option value='red'>Red</option>"+
+     "<option value='blue'>Blue</option>"+
+  "</select></p>"+
+  "<p>You selected {{selection colors}}.</p>")
+		
+var colors = new can.List();
+
+var frag = template({
+	colors: colors
+},{
+	selection: function(list){
+		return list.attr("length") ? list.join(", ") : "nothing"
+	}
+})
+
+$("#out").html( frag );
+
+})
+</script>
+

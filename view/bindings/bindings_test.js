@@ -330,6 +330,55 @@
 		can.remove(can.$(select) );
 	});
 	
-	
+	test("can-value multiple select with a can.List", function(){
+		
+		var template = can.view.mustache(
+			"<select can-value='colors' multiple>"+
+				"<option value='red'>Red</option>"+
+				"<option value='green'>Green</option>"+
+				"<option value='ultraviolet'>Ultraviolet</option>"+
+			"</select>");
+		
+		var list = new can.List()
+		
+		var frag = template({
+			colors: list
+		})
+		
+		
+		var ta = document.getElementById("qunit-test-area");
+		ta.appendChild(frag);
+		
+		var select = ta.getElementsByTagName("select")[0],
+			options = select.getElementsByTagName('option');
+		
+		// Test updating the DOM changes observable values
+		options[0].selected = true;
+		can.trigger(select, "change")
+		
+		
+		deepEqual(list.attr(), ["red"], "A can.List property is set even if none existed");
+		
+		options[1].selected = true;
+		can.trigger(select, "change")
+		
+		deepEqual(list.attr(), ["red","green"], "Adds items to the list");
+		
+		options[0].selected = false;
+		can.trigger(select, "change")
+		
+		deepEqual(list.attr(), ["green"], "Removes items from the list");
+		
+		// Test changing observable values changes the DOM
+		
+		list.push("ultraviolet")
+		options[0].selected = false;
+		options[1].selected = true;
+		options[2].selected = true;
+		
+		can.remove(can.$(select) );
+		
+		
+	})
 	
 })()

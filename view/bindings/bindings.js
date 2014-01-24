@@ -17,6 +17,10 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 	 * 
 	 * @param {can.Mustache.key} key A named value in the current scope.
 	 * 
+	 * @signature `<input type=text can-value=KEY/>`
+	 * 
+	 * @param {can.Mustache.key} key A named value in the current scope.
+	 * 
 	 * @body
 	 * 
 	 * ## Use
@@ -55,6 +59,61 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 	 * 
 	 * @demo can/view/bindings/select.html
 	 * 
+	 * ## select multiple
+	 * 
+	 * Select elements with the multiple attribute (`<select multiple can-value="KEY"/>`)
+	 * have a specified behavior if the value of KEY is Array like, a String, or 
+	 * undefined.
+	 * 
+	 * ### Cross binding to Arrays
+	 * 
+	 * `<select>` tags with a multiple attribute cross bind
+	 * a [can.Map] property, [can.compute] or [can.List]
+	 * in sync with the selected items of the `<select>` element.
+	 * 
+	 * For example, the following template:
+	 * 
+	 *     <select multiple can-value="colors">
+	 *       <option value='red'>Red</option>
+	 *       <option value='green'>Green</option>
+	 *       <option value='yellow'>Yellow</option>
+	 *     </select>
+	 * 
+	 * Could be rendered with one of the following:
+	 * 
+	 *     // A can.Map property
+	 *     new Map({colors: []})
+	 * 
+	 *     // A compute
+	 *     { colors: can.compute([]) }
+	 * 
+	 *     // A can.List
+	 *     { colors: new can.List() }
+	 *     
+	 * @demo can/view/bindings/select_multiple.html
+	 * 
+	 * ### Cross binding Strings
+	 * 
+	 * If the [can.Map] property or [can.compute] value is a 
+	 * string like:
+	 * 
+	 *     new can.Map({color: "red;green"});
+	 *     { colors: can.compute("red;green") }
+	 * 
+	 * The string will be split by `";"`. The items in the split
+	 * string are used as values to match against `<option>` tag values.
+	 * 
+	 * @demo can/view/bindings/select_multiple_string.html
+	 * 
+	 * ### Cross binding undefined 
+	 * 
+	 * If the value starts off as undefined, it is assumed to be a
+	 * [can.Map] property that will be set to a can.List or [can.compute]
+	 * that will be set to an array.
+	 * 
+	 * @demo can/view/bindings/select_multiple_undefined.html
+	 * 
+	 * 
 	 */
 	can.view.attr("can-value", function( el, data ){
 		
@@ -65,21 +124,17 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			if(el.type === "checkbox") {
 				if( can.attr.has(el, "can-true-value") ) {
 					var trueValue = data.scope.compute( el.getAttribute("can-true-value") )
-				} else {
-					var trueValue = can.compute(true)
-				}
+				} 
 				if( can.attr.has(el, "can-false-value") ) {
 					var falseValue = data.scope.compute( el.getAttribute("can-false-value") )
-				} else {
-					var falseValue = can.compute(false)
-				}
-			}
+				} 
+			} 
 			
 			if(el.type === "checkbox" || el.type === "radio") {
 				new Checked(el,{
 					value: value,
-					trueValue: trueValue,
-					falseValue: falseValue
+					trueValue: trueValue || can.compute(true),
+					falseValue: falseValue || can.compute(false)
 				});
 				return;
 			}
@@ -223,8 +278,8 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 	
 	Multiselect = Value.extend({
 		init: function() {
-			this.set();
 			this.delimiter = ";"
+			this.set();
 		},
 
 		set: function() {
@@ -276,6 +331,8 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 			if(this.isString || typeof currentValue == "string") {
 				this.isString = true;
 				this.options.value( value.join(this.delimiter) )
+			} else if(currentValue instanceof can.List){
+				currentValue.attr(value, true)
 			} else {
 				this.options.value(value);
 			}
