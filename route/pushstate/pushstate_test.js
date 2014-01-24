@@ -544,7 +544,7 @@ if(window.history && history.pushState) {
 				win.can.bind.call(link, 'click', function(ev) {
 					var el = this;
 					setTimeout(function() {
-						if (!ev.isDefaultPrevented()) {
+						if (ev.defaultPrevented === false || (ev.isDefaultPrevented && !ev.isDefaultPrevented())) {
 							win.location = el.href;
 						}
 					}, 0);
