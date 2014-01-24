@@ -136,7 +136,7 @@ test("can.Map serialize triggers reading (#626)", function(){
 		} else {
 			attributesRead.push(attribute);
 		}
-        }
+		}
 
 	var testMap = new can.Map({ cats: "meow", dogs: "bark" });
 
@@ -147,5 +147,29 @@ test("can.Map serialize triggers reading (#626)", function(){
 
 	can.__reading = old;
 })
+
+test("Test top level attributes", 7, function() {
+	var test = new can.Map({
+		'my.enable': false,
+		'my.item': true,
+		'my.count': 0,
+		'my.newCount': 1,
+		'my': {
+			'value': true,
+			'nested': {
+				'value': 100
+			}
+		}
+	});
+
+	equal( test.attr('my.value'), true, 'correct' );
+	equal( test.attr('my.nested.value'), 100, 'correct' );
+	ok( test.attr("my.nested") instanceof can.Map );
+
+	equal( test.attr('my.enable'), false, 'falsey (false) value accessed correctly' );
+	equal( test.attr('my.item'), true, 'truthey (true) value accessed correctly' );
+	equal( test.attr('my.count'), 0, 'falsey (0) value accessed correctly' );
+	equal( test.attr('my.newCount'), 1, 'falsey (1) value accessed correctly' );
+});
 
 })();

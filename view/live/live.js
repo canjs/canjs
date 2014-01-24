@@ -66,6 +66,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 	/**
 	 * @property {Object} can.view.live
 	 * @parent can.view.static
+	 * @release 2.0.4
 	 * 
 	 * Setup live-binding to a compute manually.
 	 * 
@@ -83,6 +84,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 		/**
 		 * @function can.view.live.list
 		 * @parent can.view.live
+		 * @release 2.0.4
 		 * 
 		 * Live binds a compute's [can.List] incrementally.  
 		 * 
@@ -264,6 +266,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 		/**
 		 * @function can.view.live.html
 		 * @parent can.view.live
+		 * @release 2.0.4
 		 * 
 		 * Live binds a compute's value to a collection of elements.
 		 * 
@@ -324,6 +327,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 		/**
 		 * @function can.view.live.replace
 		 * @parent can.view.live
+		 * @release 2.0.4
 		 * 
 		 * Replaces one element with some content while keeping [can.view.live.nodeLists nodeLists] data
 		 * correct.
@@ -362,6 +366,7 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 		/**
 		 * @function can.view.live.text
 		 * @parent can.view.live
+		 * @release 2.0.4
 		 * 
 		 * Replaces one element with some content while keeping [can.view.live.nodeLists nodeLists] data
 		 * correct.
@@ -385,7 +390,6 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 			// Add that node to nodeList so we can remove it when the parent element is removed from the page
 			data.nodeList = live.replace([el], node,  data.teardownCheck  );
 		},
-
 		attributes: function(el, compute, currentValue){
 			var setAttrs = function(newVal){
 				var parts = getAttributeParts(newVal),
@@ -401,7 +405,6 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 					attrName = newAttrName;
 				}
 			}
-
 			listen(el, compute, function(ev, newVal){
 				setAttrs(newVal)
 			})
@@ -471,7 +474,6 @@ steal('can/util', 'can/view/elements.js','can/view','can/view/node_lists',
 
 			// Insert the value in parts.
 			goodParts.splice(1,0,compute());
-
 			// Set the attribute.
 			elements.setAttr(el, attributeName, goodParts.join("") );
 

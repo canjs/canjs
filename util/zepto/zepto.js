@@ -1,6 +1,6 @@
-steal('can/util/can.js', 'zepto', 'can/util/object/isplain', 'can/util/event.js',
+steal('can/util/can.js',  'can/util/attr','zepto', 'can/util/object/isplain', 'can/util/event.js',
 'can/util/fragment.js', 'can/util/deferred.js', 'can/util/array/each.js', 'can/util/inserted',
-function (can) {
+function (can, attr) {
 	var $ = Zepto;
 
 	// data.js
@@ -52,7 +52,7 @@ function (can) {
 	// Extend what you can out of Zepto.
 	$.extend(can, Zepto);
 	can.each = oldEach;
-
+	can.attr = attr;
 	var arrHas = function (obj, name) {
 		return obj[0] && obj[0][name] || obj[name]
 	}
@@ -194,25 +194,23 @@ function (can) {
 
 
 	// Make destroyed and empty work.
+	var $_empty = $.fn.empty;
 	$.fn.empty = function () {
-		return this.each(function () {
+		this.each(function () {
 			$.cleanData(this.getElementsByTagName('*'))
 			this.innerHTML = ''
-		})
+		});
+		return $_empty.call(this);
 	}
 
+	var $_remove = $.fn.remove;
 	$.fn.remove = function () {
 		this.each(function () {
 			if( this.getElementsByTagName ){
 				$.cleanData( [this].concat( can.makeArray(this.getElementsByTagName('*')) )  );
 			}
-
-			if (this.parentNode != null) {
-				// might be a text node
-				this.parentNode.removeChild(this);
-			}
 		});
-		return this;
+		return $_remove.call(this);
 	}
 
 
@@ -267,6 +265,67 @@ function (can) {
 			return ret;
 		}
 	})
+	
+	// Setup attributes events
+	
+	// turn off mutation events for zepto
+	delete attr.MutationObserver;
+	
+	var oldAttr = $.fn.attr;
+	$.fn.attr = function(attrName, value){
+		var isString = typeof attrName == "string";
+		if(value !== undefined && isString) {
+			var oldValue = oldAttr.call(this, attrName);
+		}
+		var res = oldAttr.apply(this, arguments);
+		if(value !== undefined && isString) {
+			var newValue = oldAttr.call(this, attrName);
+		}
+		if(newValue != oldValue) {
+			can.attr.trigger(this[0], attrName,oldValue);
+		}
+		return res;
+	}
+	var oldRemove = $.fn.removeAttr;
+	$.fn.removeAttr = function(attrName){
+		var oldValue = oldAttr.call(this, attrName),
+			res = oldRemove.apply(this, arguments);
+			
+		if(oldValue != null) {
+			can.attr.trigger(el, attrName,oldValue);
+		}
+		return res;
+	}
+	
+	var oldBind = $.fn.bind,
+		oldUnbind = $.fn.unbind;
+		
+	$.fn.bind = function(event){
+		if(event == "attributes") {
+			this.each(function(){
+				var el = can.$(this);
+				can.data( el, "canHasAttributesBindings", ( can.data( el, "canHasAttributesBindings") || 0 ) + 1  )
+			})
+		}
+		return oldBind.apply(this, arguments)
+	}
+	
+	$.fn.unbind = function(event){
+		if(event == "attributes") {
+			this.each(function(){
+				var el = can.$(this),
+					cur = can.data( el, "canHasAttributesBindings") || 0 ;
+				if( cur <= 0 ) {
+					can.data(el, "canHasAttributesBindings", 0)
+				} else {
+					can.data( el, "canHasAttributesBindings", cur - 1  )
+				}
+			})
+		}
+		return oldUnbind.apply(this, arguments)
+	}
+	
+	
 
 
 	return can;

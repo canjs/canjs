@@ -432,9 +432,8 @@ steal("can/util", function( can ) {
 			else {
 				// get is called async but in 
 				// ff will be async so we need to temporarily reset
-				if(can.__reading){
-					var reading = can.__reading;
-					can.__reading = null;
+				if(can.__clearReading){
+					var reading = can.__clearReading();
 				}
 				
 				// No deferreds! Render this bad boy.
@@ -444,8 +443,8 @@ steal("can/util", function( can ) {
 					// Get the `view` type
 					deferred = get(view, async);
 					
-				if(can.Map && can.__reading){
-					can.__reading = reading;
+				if(reading){
+					can.__setReading(reading);
 				}
 				
 				// If we are `async`...
@@ -512,9 +511,11 @@ steal("can/util", function( can ) {
 	// Makes sure there's a template, if not, have `steal` provide a warning.
 	var	checkText = function( text, url ) {
 			if ( ! text.length ) {
-				//!steal-remove-start
-				steal.dev.log("There is no template or an empty template at " + url);
-				//!steal-remove-end
+
+				//!dev-remove-start
+				can.dev.log("can/view/view.js: There is no template or an empty template at " + url);
+				//!dev-remove-end
+
 				throw "can.view: No template or empty template:" + url;
 			}
 		},
@@ -628,7 +629,7 @@ steal("can/util", function( can ) {
 			return can.isArray(resolved) && resolved[1] === 'success' ? resolved[0] : resolved
 		};
 
-	//!steal-pluginify-remove-start
+	//!dev-remove-start
 	if ( window.steal ) {
 		steal.type("view js", function( options, success, error ) {
 			var type = $view.types["." + options.type],
@@ -643,13 +644,13 @@ steal("can/util", function( can ) {
 			success();
 		})
 	}
-	//!steal-pluginify-remove-end
+	//!dev-remove-end
 
 	can.extend($view, {
 		register: function( info ) {
 			this.types["." + info.suffix] = info;
 
-			//!steal-pluginify-remove-start
+			//!dev-remove-start
 			if ( window.steal ) {
 				steal.type(info.suffix + " view js", function( options, success, error ) {
 					var type = $view.types["." + options.type],
@@ -659,7 +660,7 @@ steal("can/util", function( can ) {
 					success();
 				})
 			};
-			//!steal-pluginify-remove-end
+			//!dev-remove-end
 			
 			$view[info.suffix] = function(id, text){
 				if(!text) {

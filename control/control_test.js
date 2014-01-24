@@ -358,4 +358,37 @@
 		c.destroy();
 		c.destroy();
 	});
+
+	//!dev-remove-start
+	if(can.dev) {
+		test("Control is logging information in dev mode", function() {
+			expect(2);
+
+			var oldlog = can.dev.log;
+			var oldwarn = can.dev.warn;
+
+			can.dev.log = function(text) {
+				equal(text, 'can/control/control.js: No property found for handling {dummy} change',
+					'Text logged as expected');
+			}
+
+			var Control = can.Control({
+				'{dummy} change': function() {}
+			});
+
+			var instance = new Control(document.createElement('div'));
+
+			can.dev.warn = function(text) {
+				equal(text, 'can/control/control.js: Control already destroyed');
+			}
+
+			instance.destroy();
+			instance.destroy();
+
+			can.dev.warn = oldwarn;
+			can.dev.log = oldlog;
+		});
+	}
+	//!dev-remove-end
+
 })();

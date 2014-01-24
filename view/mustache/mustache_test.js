@@ -225,9 +225,8 @@ test("Mustache falsey", function() {
 		expected: "Don't do it, Andy!",
 		data: { name: 'Andy' }
 	};
-
 	var expected = t.expected.replace(/&quot;/g, '&#34;').replace(/\r\n/g, '\n');
-	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
+	equal(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
 test("Handlebars helpers", function() {
@@ -513,7 +512,7 @@ test("multi line elements", function(){
 test("escapedContent", function(){
 	var text = "<span>{{ tags }}</span><label>&amp;</label><strong>{{ number }}</strong><input value='{{ quotes }}'/>";
 	var compiled = new can.Mustache({text: text}).render({tags: "foo < bar < car > zar > poo",
-							quotes : "I use 'quote' fingers \"a lot\"",
+							quotes : "I use 'quote' fingers & &amp;ersands \"a lot\"",
 							number : 123}) ;
 
 	var div = document.createElement('div');
@@ -521,12 +520,12 @@ test("escapedContent", function(){
 
 	equal(div.getElementsByTagName('span')[0].firstChild.nodeValue, "foo < bar < car > zar > poo" );
 	equal(div.getElementsByTagName('strong')[0].firstChild.nodeValue, 123 );
-	equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers \"a lot\"" );
+	equal(div.getElementsByTagName('input')[0].value, "I use 'quote' fingers & &amp;ersands \"a lot\"", "attributes are always safe, and strings are kept as-is without additional escaping");
 	equal(div.getElementsByTagName('label')[0].innerHTML, "&amp;" );
 })
 
 test("unescapedContent", function(){
-	var text = "<span>{{{ tags }}}</span><div>{{{ tags }}}</div><input value='{{ quotes }}'/>";
+	var text = "<span>{{{ tags }}}</span><div>{{{ tags }}}</div><input value='{{{ quotes }}}'/>";
 	var compiled = new can.Mustache({text: text}).render({tags: "<strong>foo</strong><strong>bar</strong>",
 							quotes : "I use 'quote' fingers \"a lot\""}) ;
 
@@ -1839,40 +1838,42 @@ test("Helpers always have priority (#258)", function() {
 	deepEqual(new can.Mustache({ text: t.template }).render(t.data), expected);
 });
 
-if(typeof steal !== 'undefined') {
-	test("avoid global helpers",function() {
-		stop();
-		steal('view/mustache/test/noglobals.mustache', function(noglobals) {
-			var div = document.createElement('div'),
-				div2 = document.createElement('div');
-			var person = new can.Map({
-				name: "Brian"
-			});
-			var result = noglobals({
-				person: person
-			},{
-				sometext: function(name){
-					return "Mr. "+name()
-				}
-			});
-			var result2 = noglobals({
-				person: person
-			},{
-				sometext: function(name){
-					return name()+" rules"
-				}
-			});
-			div.appendChild(result);
-			div2.appendChild(result2);
 
-			person.attr("name", "Ajax")
-
-			equal(div.innerHTML,"Mr. Ajax");
-			equal(div2.innerHTML,"Ajax rules");
-			start();
-		});
+test("avoid global helpers",function() {
+	var noglobals = can.view.mustache("{{sometext person.name}}");
+	
+	var div = document.createElement('div'),
+		div2 = document.createElement('div');
+		
+	var person = new can.Map({
+		name: "Brian"
 	});
-}
+	var result = noglobals({
+		person: person
+	},{
+		sometext: function(name){
+			return "Mr. "+name()
+		}
+	});
+	
+	var result2 = noglobals({
+		person: person
+	},{
+		sometext: function(name){
+			return name()+" rules"
+		}
+	});
+	
+	div.appendChild(result);
+	div2.appendChild(result2);
+
+	person.attr("name", "Ajax")
+
+	equal(div.innerHTML,"Mr. Ajax");
+	equal(div2.innerHTML,"Ajax rules");
+});
+
+
 
 test("Each does not redraw items",function(){
 
@@ -2241,6 +2242,7 @@ test("empty lists update", 2, function() {
 	div.appendChild(frag);
 
 	equal(div.children[0].innerHTML, 'something', 'initial list content set');
+
 	map.attr('list', ['one', 'two']);
 	equal(div.children[0].innerHTML, 'onetwo', 'updated list content set');
 });
@@ -2765,12 +2767,39 @@ test('{{#each}} helper works reliably with nested sections (#604)', function() {
 		list: [ { name: "Something" }, { name: "Else" } ],
 		list2: [ { name: "Foo" }, { name: "Bar" } ]
 	});
-	var div = document.createElement('div');
+	var div = document.createElement('div'),
+		lis = div.getElementsByTagName("li");
 
 	div.appendChild(renderer(data));
-	equal(div.innerHTML, '<ul><li>Something</li><li>Else</li></ul>', 'Expected HTML with first set');
+	
+	deepEqual(
+		can.map(lis, function(li){
+			return li.innerHTML
+		}),
+		["Something","Else"],
+		'Expected HTML with first set');
+		
 	data.attr('first', false);
-	equal(div.innerHTML, '<ul><li>Foo</li><li>Bar</li></ul>', 'Expected HTML with first false set');
+	
+	deepEqual(
+		can.map(lis, function(li){
+			return li.innerHTML
+		}),
+		["Foo","Bar"],
+		'Expected HTML with first false set');
+		
+});
+
+test("Block bodies are properly escaped inside attributes", function() {
+	var html = "<div title='{{#test}}{{.}}{{{.}}}{{/test}}'></div>",
+		div = document.createElement("div"),
+		title = "Alpha&Beta";
+
+	div.appendChild(can.view.mustache(html)(new can.Map({
+		test: title
+	})));
+
+	equal(div.getElementsByTagName("div")[0].title, title+title);
 });
 
 test('Constructor static properties are accessible (#634)', function() {
@@ -2934,5 +2963,22 @@ test("@index in partials loaded from script templates", function(){
 	
 	equal(labels.length, 1, "first label removed")
 })
+
+//!dev-remove-start
+if(can.dev) {
+	test("Logging: Custom tag does not have a registered handler", function() {
+		var oldlog = can.dev.warn;
+
+		can.dev.warn = function(text) {
+			equal(text, 'can/view/scanner.js: No custom element found for my-tag',
+				'Got expected message logged.')
+		}
+
+		can.view.mustache('<my-tag></my-tag>')();
+
+		can.dev.warn = oldlog;
+	});
+}
+//!dev-remove-end
 
 })();

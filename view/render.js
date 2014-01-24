@@ -87,16 +87,6 @@ can.extend(can.view, {
 			return data;
 		}
 	},
-	pending: function(data) {
-		// TODO, make this only run for the right tagName
-		var hooks = can.view.getHooks();
-		return can.view.hook(function(el){
-			can.each(hooks, function(fn){
-				fn(el);
-			});
-			can.view.Scanner.hookupAttributes(data, el);
-		});
-	},
 	getHooks: function(){
 		var hooks = pendingHookups.slice(0);
 		lastHookups = hooks;
@@ -200,7 +190,9 @@ can.extend(can.view, {
 		// If we had no observes just return the value returned by func.
 		if(!setupLiveBinding || typeof value === "function"){
 			unbind && unbind();
-			return (  (escape || typeof status === 'string') && escape !== 2  ? contentEscape : contentText)(value, status === 0 && tag);
+			return ((withinTemplatedSectionWithinAnElement || escape === 2 || !escape) ?
+					contentText :
+					contentEscape)(value, status === 0 && tag);
 		}
 
 
