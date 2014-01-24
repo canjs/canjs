@@ -569,7 +569,7 @@ if(window.history && history.pushState) {
 					teardown();
 				}, 3000);
 
-				win.can.trigger( win.can.$(link), 'click' );
+				link.click();
 			};
 
 			function runTest() {
