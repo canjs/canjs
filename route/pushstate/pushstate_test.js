@@ -520,10 +520,16 @@ if(window.history && history.pushState) {
 				var change,
 					timeout,
 					teardown = function() {
-						start();
-						iframe && (iframe.onload = null);
+						if (iframe) {
+							iframe.onload = null;
+						}
 						win.can && win.can.route && win.can.route.unbind("change", change);
 						clearTimeout(timeout);
+						setTimeout(function() {
+							can.remove(can.$(iframe));
+							start();
+							runTest();
+						}, 0);
 					};
 
 				// Setup route
@@ -549,21 +555,18 @@ if(window.history && history.pushState) {
 				iframe.onload = function() {
 					deepEqual( {}, can.extend({}, test[2]), 'page change' );
 					teardown();
-					runTest();
 				};
 
 				// Listen for route change
 				win.can.route.bind("change", change = function() {
 					deepEqual( can.extend({}, win.can.route.attr()), can.extend({}, test[2]), 'route change' );
 					teardown();
-					runTest();
 				});
 
 				// Fallback
 				timeout = setTimeout(function() {
 					ok(false, 'timed out');
 					teardown();
-					runTest();
 				}, 3000);
 
 				win.can.trigger( win.can.$(link), 'click' );
@@ -573,14 +576,9 @@ if(window.history && history.pushState) {
 				test = tests.splice(0,1)[0];
 				if (test) {
 					stop();
-					iframe && can.remove(can.$(iframe));
 					iframe = document.createElement("iframe");
 					can.$("#qunit-test-area")[0].appendChild(iframe);
 					iframe.src = can.test.path("route/pushstate/testing.html");
-				}
-				else {
-					iframe && can.remove(can.$(iframe));
-					window.routeTestReady = null;
 				}
 			};
 
