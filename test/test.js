@@ -1,11 +1,14 @@
 steal('can/util', function() {
+	var viewCheck = /(\.mustache|\.ejs|extensionless)$/;
+
 	can.test = {
 		fixture: function (path) {
 			if (typeof steal !== 'undefined') {
 				return steal.config('root').toString() + '/' + path;
 			}
-			if(typeof requirejs !== 'undefined') {
-				return requirejs.s.contexts._.config.baseUrl + path;
+
+			if (window.require && require.toUrl && !viewCheck.test(path)) {
+				return require.toUrl(path);
 			}
 			return path;
 		},
@@ -13,8 +16,9 @@ steal('can/util', function() {
 			if (typeof steal !== 'undefined') {
 				return ""+steal.idToUri(steal.id("can/"+path).toString())  ;
 			}
-			if(typeof requirejs !== 'undefined') {
-				return requirejs.s.contexts._.config.baseUrl + path;
+
+			if (window.require && require.toUrl && !viewCheck.test(path)) {
+				return require.toUrl(path);
 			}
 			return path;
 		}

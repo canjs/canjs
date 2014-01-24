@@ -5,8 +5,8 @@ module("can/util/fixture");
 test("static fixtures", function(){
 	stop();
 
-	can.fixture("GET something", "//util/fixture/fixtures/test.json");
-	can.fixture("POST something", "//util/fixture/fixtures/test.json");
+	can.fixture("GET something", can.test.path("util/fixture/fixtures/test.json"));
+	can.fixture("POST something", can.test.path("util/fixture/fixtures/test.json"));
 
 	can.ajax({
 		url : 'something',
@@ -28,7 +28,7 @@ test("static fixtures", function(){
 test("templated static fixtures", function() {
 	stop();
 
-	can.fixture("GET some/{id}", "//util/fixture/fixtures/stuff.{id}.json");
+	can.fixture("GET some/{id}", can.test.path("util/fixture/fixtures/stuff.{id}.json"));
 
 	can.ajax({
 		url : 'some/3',
@@ -58,14 +58,14 @@ test("dynamic fixtures",function(){
 test("fixture function", 3, function(){
 	stop();
 	var url = can.test.path("util/fixture/fixtures/foo.json");
-	can.fixture(url,"//util/fixture/fixtures/foobar.json" );
+	can.fixture(url, can.test.path("util/fixture/fixtures/foobar.json"));
 
 	can.ajax({
 		url : url,
 		dataType : 'json'
 	}).done(function(data){
 		equal(data.sweet,"ner","url passed works");
-		can.fixture(url,"//util/fixture/fixtures/test.json" );
+		can.fixture(url, can.test.path("util/fixture/fixtures/test.json"));
 
 		can.ajax({
 			url : url,

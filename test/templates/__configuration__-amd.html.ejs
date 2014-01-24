@@ -2,9 +2,8 @@
 <html>
 <head>
 	<title><%= configuration.description %> Test Suite</title>
-	<base href="<%= root %>" />
-	<link rel="stylesheet" type="text/css" href="bower_components/qunit/qunit/qunit.css"/>
-    <script type="text/javascript" src="lib/html5shiv.js"></script>
+	<link rel="stylesheet" type="text/css" href="../../bower_components/qunit/qunit/qunit.css"/>
+    <script type="text/javascript" src="../../lib/html5shiv.js"></script>
 </head>
 <body>
 <h1 id="qunit-header"><%= configuration.description %> Test Suite</h1>
@@ -16,41 +15,34 @@
 <ol id="qunit-tests"></ol>
 <div id="qunit-test-area"></div>
 
-<script type="text/javascript" src="bower_components/requirejs/require.js"></script>
-<script type="text/javascript" src="bower_components/qunit/qunit/qunit.js"></script>
+<script type="text/javascript" src="../../bower_components/requirejs/require.js"></script>
+<script type="text/javascript" src="../../bower_components/qunit/qunit/qunit.js"></script>
 <script type="text/javascript">
+    <%
+        var moduleName = function(file) { return file.substring(0, file.lastIndexOf('.')); }
+        var configName = configuration.description.split(' ')[0].toLowerCase();
+        var config = {
+            baseUrl: root,
+            paths : {
+              can: "dist/amd/can"
+             },
+            map : {
+                '*' : {
+                    "can/util/library" : "can/util/" + configName
+                }
+            },
+            shim: {
+                "test/pluginified/latest": ['can/util/fixture'].concat(modules)
+            }
+        };
+
+        config.paths[configName] = moduleName(configuration.library);
+    %>
+
 	QUnit.config.autostart = false;
-	<%  function moduleName(file) { return file.substring(0, file.lastIndexOf('.')); }
-		function testShims(tests) {
-			var results = {
-				'test/test/test': ['can']
-			};
-			tests.forEach(function(test) {
-				var mod = moduleName(test);
-				var dependency = mod.substring(0, mod.lastIndexOf('/'));
-				results[mod.replace('can/', 'test/')] = [dependency, 'test/test/test'];
-			});
-			return results;
-		}
-		var configName = configuration.description.split(' ')[0].toLowerCase();
-		var requireConfig = {
-			paths : {
-				can: 'dist/amd/can',
-				test: './'
-			},
-			map : {
-				'*' : {
-					"can/util/library" : "can/util/" + configName
-				}
-			},
-			shim: testShims(tests)
-		};
+	require.config(<%- JSON.stringify(config) %>);
 
-		requireConfig.paths[configName] = moduleName(configuration.library);
-	%>
-	require.config(<%- JSON.stringify(requireConfig) %>);
-
-	require(<%- JSON.stringify(['can/util/fixture'].concat(_.keys(testShims(tests)))) %>, function() {
+	require(["test/pluginified/latest"], function() {
 		QUnit.start();
 	});
 </script>

@@ -1,4 +1,4 @@
-steal("can/map/validations", "can/test", function() {
+steal("can/map/validations", "can/compute", "can/test", function() {
 
 module("can/map/validations",{
 	setup : function(){

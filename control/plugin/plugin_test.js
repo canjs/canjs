@@ -1,4 +1,8 @@
 steal("can/control/plugin", function() {
+	if(!window.jQuery) {
+		return;
+	}
+
 	module("can/control/plugin")
 
 	test("pluginName", function () {
