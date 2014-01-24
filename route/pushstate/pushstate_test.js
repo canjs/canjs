@@ -501,7 +501,7 @@ if(window.history && history.pushState) {
 				win.can.route.ready();
 				nextStateTest();
 			}
-			
+
 			var iframe = document.createElement("iframe");
 			iframe.src = can.test.path("route/pushstate/testing.html");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
@@ -511,7 +511,7 @@ if(window.history && history.pushState) {
 			var tests = [
 					// ["root", "link href", { route: "result" }]
 					["/app/", "/app/something/test/", {section:"something", sub:"test", route:":section/:sub/"}],
-					["/app/", "/route/pushstate/testing.html", {}]
+					["/app/", "/route/pushstate/", {}]
 				],
 				iframe,
 				test;
@@ -535,27 +535,33 @@ if(window.history && history.pushState) {
 				// Add link
 				var link = win.document.createElement("a");
 				link.href = link.innerHTML = test[1];
-				win.can.bind.call(link, 'click', function() {
-					win.location = this.href;
+				win.can.$(link).on('click', function(ev) {
+					var el = this;
+					setTimeout(function() {
+						if (!ev.isDefaultPrevented()) {
+							win.location = el.href;
+						}
+					}, 0);
 				});
 				win.document.body.appendChild(link);
 
 				// Listen for page change
 				iframe.onload = function() {
+					deepEqual( {}, can.extend({}, test[2]), 'page change' );
 					teardown();
-					deepEqual( {}, can.extend({}, test[2]) );
 					runTest();
 				};
 
 				// Listen for route change
 				win.can.route.bind("change", change = function() {
+					deepEqual( can.extend({}, win.can.route.attr()), can.extend({}, test[2]), 'route change' );
 					teardown();
-					deepEqual( can.extend({}, win.can.route.attr()), can.extend({}, test[2]) );
 					runTest();
 				});
 
 				// Fallback
 				timeout = setTimeout(function() {
+					ok(false, 'timed out');
 					teardown();
 					runTest();
 				}, 3000);
