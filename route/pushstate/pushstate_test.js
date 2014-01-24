@@ -501,6 +501,7 @@ if(window.history && history.pushState) {
 				win.can.route.ready();
 				nextStateTest();
 			}
+			
 			var iframe = document.createElement("iframe");
 			iframe.src = can.test.path("route/pushstate/testing.html");
 			can.$("#qunit-test-area")[0].appendChild(iframe);
@@ -555,7 +556,6 @@ if(window.history && history.pushState) {
 
 				// Fallback
 				timeout = setTimeout(function() {
-					console.log('fail', test);
 					teardown();
 					runTest();
 				}, 3000);
