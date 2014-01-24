@@ -542,12 +542,12 @@ if(window.history && history.pushState) {
 				var link = win.document.createElement("a");
 				link.href = link.innerHTML = test[1];
 				win.can.bind.call(link, 'click', function(ev) {
-					var el = this;
+					var href = this.href;
 					setTimeout(function() {
-						if (ev.defaultPrevented === false || (ev.isDefaultPrevented && !ev.isDefaultPrevented())) {
-							win.location = el.href;
+						if (win.MooTools || ev.defaultPrevented === false || (ev.isDefaultPrevented && !ev.isDefaultPrevented())) {
+							win.location = href;
 						}
-					}, 0);
+					}, 100);
 				});
 				win.document.body.appendChild(link);
 
