@@ -15,103 +15,23 @@ steal("can/util","can/view/mustache", "can/control", function(can){
 	 * 
 	 *     <input type='text' can-value='first.name'/>
 	 * 
-	 * @param {can.Mustache.key} key A named value in the current scope.
-	 * 
-	 * @signature `<input type=text can-value=KEY/>`
-	 * 
-	 * @param {can.Mustache.key} key A named value in the current scope.
+	 * @param {can.Mustache.key} key A named value in the current scope. This reference
+	 * a [can.Map] property or a [can.compute].
 	 * 
 	 * @body
 	 * 
 	 * ## Use
 	 * 
-	 * Add a `can-value="KEY"` attribute to an input or select element and
+	 * Add a `can-value="KEY"` attribute to an input, textarea or select element and
 	 * the element's value will be cross-bound to an observable value specified by `KEY`.
 	 * 
+	 * 
+	 * @demo can/view/bindings/input-text.html
+	 * 
 	 * Depending on the element and the element's type, `can-value` takes on 
-	 * different behaviors.  If an input element has a type
-	 * not listed here, the behavior is the same as the `text` type.
-	 * 
-	 * ## input type=text
-	 * 
-	 * Cross binds the input's string text value with the observable value.
-	 * 
-	 * @demo can/view/bindings/hyperloop.html
-	 * 
-	 * ## input type=checkbox
-	 * 
-	 * Cross binds the checked property to a true or false value. An alternative
-	 * true and false value can be specified by setting `can-true-value` and
-	 * `can-false-value` attributes.
-	 * 
-	 * @demo can/view/bindings/input-checkbox.html
-	 * 
-	 * ## input type='radio'
-	 * 
-	 * If the radio element is checked, sets the observable specified by `can-value` to match the value of 
-	 * `value` attribute.  
-	 * 
-	 * @demo can/view/bindings/input-radio.html
-	 * 
-	 * ## select
-	 * 
-	 * Cross binds the selected option value with an observable value.
-	 * 
-	 * @demo can/view/bindings/select.html
-	 * 
-	 * ## select multiple
-	 * 
-	 * Select elements with the multiple attribute (`<select multiple can-value="KEY"/>`)
-	 * have a specified behavior if the value of KEY is Array like, a String, or 
-	 * undefined.
-	 * 
-	 * ### Cross binding to Arrays
-	 * 
-	 * `<select>` tags with a multiple attribute cross bind
-	 * a [can.Map] property, [can.compute] or [can.List]
-	 * in sync with the selected items of the `<select>` element.
-	 * 
-	 * For example, the following template:
-	 * 
-	 *     <select multiple can-value="colors">
-	 *       <option value='red'>Red</option>
-	 *       <option value='green'>Green</option>
-	 *       <option value='yellow'>Yellow</option>
-	 *     </select>
-	 * 
-	 * Could be rendered with one of the following:
-	 * 
-	 *     // A can.Map property
-	 *     new Map({colors: []})
-	 * 
-	 *     // A compute
-	 *     { colors: can.compute([]) }
-	 * 
-	 *     // A can.List
-	 *     { colors: new can.List() }
-	 *     
-	 * @demo can/view/bindings/select_multiple.html
-	 * 
-	 * ### Cross binding Strings
-	 * 
-	 * If the [can.Map] property or [can.compute] value is a 
-	 * string like:
-	 * 
-	 *     new can.Map({color: "red;green"});
-	 *     { colors: can.compute("red;green") }
-	 * 
-	 * The string will be split by `";"`. The items in the split
-	 * string are used as values to match against `<option>` tag values.
-	 * 
-	 * @demo can/view/bindings/select_multiple_string.html
-	 * 
-	 * ### Cross binding undefined 
-	 * 
-	 * If the value starts off as undefined, it is assumed to be a
-	 * [can.Map] property that will be set to a can.List or [can.compute]
-	 * that will be set to an array.
-	 * 
-	 * @demo can/view/bindings/select_multiple_undefined.html
+	 * different behaviors. This page documents the default behavior that happens
+	 * on text input and textarea elements. Checkout the other can-value
+	 * pages for behavior for specific elements.
 	 * 
 	 * 
 	 */
