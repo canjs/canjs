@@ -295,7 +295,7 @@ steal('can/util/can.js',  'can/util/attr', 'mootools', 'can/util/event.js','can/
 		if(selector === window){
 			return window;
 		}
-		return $$(selector)
+		return $$(selector && selector.nodeName ? [selector] : selector)
 	}
 
 	// Add `document` fragment support.
