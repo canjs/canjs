@@ -429,12 +429,12 @@ steal('can/util', 'can/util/string', 'can/util/object', function (can) {
 		 *
 		 */
 		store: function (types, count, make, filter) {
-
+			/*jshint eqeqeq:false */
 			var items = [], // TODO: change this to a hash
 				currentId = 0,
 				findOne = function (id) {
 					for (var i = 0; i < items.length; i++) {
-						if (id === items[i].id) {
+						if (id == items[i].id) {
 							return items[i];
 						}
 					}
