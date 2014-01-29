@@ -228,7 +228,7 @@
 			res = can.route.param(data);
 			obj = can.route.deparam(res);
 			delete obj.route;
-			deepEqual(data, obj)
+			deepEqual(data, obj);
 
 			data = {
 				page: " a ",
@@ -245,10 +245,11 @@
 				bar: "baz",
 				where: "there"
 			};
-			res = can.route.param(data);
+			// adding the / should not be necessary.  can.route.deparam removes / if the root starts with /
+			res = "/"+can.route.param(data);
 			obj = can.route.deparam(res);
 			delete obj.route;
-			deepEqual(data, obj)
+			deepEqual(data, obj);
 
 			can.route.routes = {};
 
