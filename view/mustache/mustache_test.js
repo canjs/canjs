@@ -2277,6 +2277,9 @@ test("live bound attributes with no '='", function() {
 	div.appendChild(frag);
 	data.attr('selected', true);
 	equal(div.children[0].checked, true, 'hyphenated attribute value');
+	
+	data.attr("selected", false)
+	equal(div.children[0].checked, false, 'hyphenated attribute value');
 });
 
 test("outputting array of attributes", function() {
