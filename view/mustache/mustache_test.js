@@ -2266,6 +2266,19 @@ test("attributes in truthy section", function() {
 	equal(div2.children[0].getAttribute('data-test'), 'test value', 'whitespace in attribute value');
 });
 
+test("live bound attributes with no '='", function() {
+	var template = can.view.mustache('<input type="radio" {{#selected}}checked{{/selected}}>');
+	var data = new can.Map({
+		selected: false
+	});
+	var frag = template(data);
+	var div = document.createElement('div');
+
+	div.appendChild(frag);
+	data.attr('selected', true);
+	equal(div.children[0].checked, true, 'hyphenated attribute value');
+});
+
 test("outputting array of attributes", function() {
 	var template = can.view.mustache('<p {{#attribute}}{{name}}="{{value}}"{{/attribute}}></p>');
 	var data = {
