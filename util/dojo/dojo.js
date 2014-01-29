@@ -471,7 +471,7 @@ steal('can/util/can.js',  'can/util/attr', 'dojo', 'can/util/event.js', 'can/uti
 		if ( typeof selector === "string" ) {
 			return dojo.query(selector)
 		} else {
-			return new dojo.NodeList(selector);
+			return new dojo.NodeList(selector && selector.nodeName ? [selector] : selector);
 		}
 	}
 
