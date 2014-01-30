@@ -1,18 +1,21 @@
-steal('can/util','can/util/string','can/util/object', function (can) {
-	if(!can.Object) {
+steal('can/util', 'can/util/string', 'can/util/object', function (can) {
+	if (!can.Object) {
 		throw new Error('can.fixture depends on can.Object. Please include it before can.fixture.');
 	}
 
 	// Get the URL from old Steal root, new Steal config or can.fixture.rootUrl
-	var getUrl = function(url) {
-		if(typeof steal !== 'undefined') {
-			if(can.isFunction(steal.config)) {
-				return steal.config().root.mapJoin(url).toString();
+	var getUrl = function (url) {
+		if (typeof steal !== 'undefined') {
+			if (can.isFunction(steal.config)) {
+				return steal.config()
+					.root.mapJoin(url)
+					.toString();
 			}
-			return steal.root.join(url).toString();
+			return steal.root.join(url)
+				.toString();
 		}
 		return (can.fixture.rootUrl || '') + url;
-	}
+	};
 
 	var updateSettings = function (settings, originalOptions) {
 			if (!can.fixture.on) {
@@ -20,19 +23,12 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			}
 
 			//simple wrapper for logging
-			var _logger = function(type, arr){
-				if(console.log.apply){
-					Function.prototype.call.apply(console[type], [console].concat(arr));
-					// console[type].apply(console, arr)
-				} else {
-					console[type](arr)
-				}
-			},
-			log = function () {
+			var log = function () {
 				//!dev-remove-start
-				can.dev.log('can/fixture/fixture.js: ' + Array.prototype.slice.call(arguments).join(' '));
+				can.dev.log('can/fixture/fixture.js: ' + Array.prototype.slice.call(arguments)
+					.join(' '));
 				//!dev-remove-end
-			}
+			};
 
 			// We always need the type which can also be called method, default to GET
 			settings.type = settings.type || settings.method || 'GET';
@@ -54,7 +50,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			}
 
 			// if a string, we just point to the right url
-			if (typeof settings.fixture == "string") {
+			if (typeof settings.fixture === "string") {
 				var url = settings.fixture;
 
 				if (/^\/\//.test(url)) {
@@ -62,7 +58,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					url = getUrl(settings.fixture.substr(2));
 				}
 
-				if(data) {
+				if (data) {
 					// Template static fixture URLs
 					url = can.sub(url, data);
 				}
@@ -81,8 +77,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 						throw "fixtures.js Error " + error + " " + message;
 					};
 				}
-			}
-			else {
+			} else {
 				//!dev-remove-start
 				log("using a dynamic fixture for " + settings.type + " " + settings.url);
 				//!dev-remove-end
@@ -90,40 +85,42 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				//it's a function ... add the fixture datatype so our fixture transport handles it
 				// TODO: make everything go here for timing and other fun stuff
 				// add to settings data from fixture ...
-				settings.dataTypes && settings.dataTypes.splice(0, 0, "fixture");
+				if (settings.dataTypes) {
+					settings.dataTypes.splice(0, 0, "fixture");
+				}
 
 				if (data && originalOptions) {
-					can.extend(originalOptions.data, data)
+					can.extend(originalOptions.data, data);
 				}
 			}
 		},
-		// A helper function that takes what's called with response
-		// and moves some common args around to make it easier to call
-		extractResponse = function(status, statusText, responses, headers) {
+	// A helper function that takes what's called with response
+	// and moves some common args around to make it easier to call
+		extractResponse = function (status, statusText, responses, headers) {
 			// if we get response(RESPONSES, HEADERS)
-			if(typeof status != "number"){
+			if (typeof status !== "number") {
 				headers = statusText;
 				responses = status;
-				statusText = "success"
+				statusText = "success";
 				status = 200;
 			}
 			// if we get response(200, RESPONSES, HEADERS)
-			if(typeof statusText != "string"){
+			if (typeof statusText !== "string") {
 				headers = responses;
 				responses = statusText;
 				statusText = "success";
 			}
-			if ( status >= 400 && status <= 599 ) {
-				this.dataType = "text"
+			if (status >= 400 && status <= 599) {
+				this.dataType = "text";
 			}
 			return [status, statusText, extractResponses(this, responses), headers];
 		},
-		// If we get data instead of responses,
-		// make sure we provide a response type that matches the first datatype (typically json)
-		extractResponses = function(settings, responses){
+	// If we get data instead of responses,
+	// make sure we provide a response type that matches the first datatype (typically json)
+		extractResponses = function (settings, responses) {
 			var next = settings.dataTypes ? settings.dataTypes[0] : (settings.dataType || 'json');
 			if (!responses || !responses[next]) {
-				var tmp = {}
+				var tmp = {};
 				tmp[next] = responses;
 				responses = tmp;
 			}
@@ -149,14 +146,14 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					// we'll immediately wait the delay time for all fixtures
 					timeout = setTimeout(function () {
 						// if the user wants to call success on their own, we allow it ...
-						var success = function() {
-							if(stopped === false) {
-								callback.apply(null, extractResponse.apply(s, arguments) );
-							}
-						},
+						var success = function () {
+								if (stopped === false) {
+									callback.apply(null, extractResponse.apply(s, arguments));
+								}
+							},
 						// get the result form the fixture
-						result = s.fixture(original, success, headers, s);
-						if(result !== undefined) {
+							result = s.fixture(original, success, headers, s);
+						if (result !== undefined) {
 							// make sure the result has the right dataType
 							callback(200, "success", extractResponses(s, result), {});
 						}
@@ -164,7 +161,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				},
 				abort: function () {
 					stopped = true;
-					clearTimeout(timeout)
+					clearTimeout(timeout);
 				}
 			};
 		});
@@ -177,8 +174,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					stopped = false;
 
 				//TODO this should work with response
-				d.getResponseHeader = function () {
-				}
+				d.getResponseHeader = function () {};
 
 				// call success and fail
 				d.then(settings.success, settings.fail);
@@ -187,26 +183,26 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				d.abort = function () {
 					clearTimeout(timeout);
 					stopped = true;
-					d.reject(d)
-				}
+					d.reject(d);
+				};
 				// set a timeout that simulates making a request ....
 				timeout = setTimeout(function () {
 					// if the user wants to call success on their own, we allow it ...
-					var success = function() {
-						var response = extractResponse.apply(settings, arguments),
-							status = response[0];
+					var success = function () {
+							var response = extractResponse.apply(settings, arguments),
+								status = response[0];
 
-						if ( (status >= 200 && status < 300 || status === 304) && stopped === false) {
-							d.resolve(response[2][settings.dataType])
-						} else {
-							// TODO probably resolve better
-							d.reject(d, 'error', response[1]);
-						}
-					},
+							if ((status >= 200 && status < 300 || status === 304) && stopped === false) {
+								d.resolve(response[2][settings.dataType]);
+							} else {
+								// TODO probably resolve better
+								d.reject(d, 'error', response[1]);
+							}
+						},
 					// get the result form the fixture
-					result = settings.fixture(settings, success, settings.headers, settings);
-					if(result !== undefined) {
-						d.resolve(result)
+						result = settings.fixture(settings, success, settings.headers, settings);
+					if (result !== undefined) {
+						d.resolve(result);
 					}
 				}, can.fixture.delay);
 
@@ -214,12 +210,11 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			} else {
 				return AJAX(settings);
 			}
-		}
+		};
 	}
 
-	var typeTest = /^(script|json|text|jsonp)$/,
 	// a list of 'overwrite' settings object
-		overwrites = [],
+	var overwrites = [],
 	// returns the index of an overwrite function
 		find = function (settings, exact) {
 			for (var i = 0; i < overwrites.length; i++) {
@@ -234,11 +229,11 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			var index = find(settings);
 			if (index > -1) {
 				settings.fixture = overwrites[index].fixture;
-				return $fixture._getData(overwrites[index].url, settings.url)
+				return $fixture._getData(overwrites[index].url, settings.url);
 			}
 
 		},
-		// Makes an attempt to guess where the id is at in the url and returns it.
+	// Makes an attempt to guess where the id is at in the url and returns it.
 		getId = function (settings) {
 			var id = settings.data.id;
 
@@ -262,81 +257,84 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 
 			if (id === undefined) {
 				id = settings.url.replace(/\/(\w+)(\/|$|\.)/g, function (all, num) {
-					if (num != 'update') {
+					if (num !== 'update') {
 						id = num;
 					}
-				})
+				});
 			}
 
 			if (id === undefined) { // if still not set, guess a random number
-				id = Math.round(Math.random() * 1000)
+				id = Math.round(Math.random() * 1000);
 			}
 
 			return id;
 		};
 
-
 	var $fixture = can.fixture = function (settings, fixture) {
 		// if we provide a fixture ...
 		if (fixture !== undefined) {
-			if (typeof settings == 'string') {
+			if (typeof settings === 'string') {
 				// handle url strings
 				var matches = settings.match(/(GET|POST|PUT|DELETE) (.+)/i);
 				if (!matches) {
 					settings = {
-						url : settings
+						url: settings
 					};
 				} else {
 					settings = {
-						url : matches[2],
-						type : matches[1]
+						url: matches[2],
+						type: matches[1]
 					};
 				}
 
 			}
 
 			//handle removing.  An exact match if fixture was provided, otherwise, anything similar
-			var index = find(settings, !!fixture);
+			var index = find(settings, !! fixture);
 			if (index > -1) {
-				overwrites.splice(index, 1)
+				overwrites.splice(index, 1);
 			}
 			if (fixture == null) {
-				return
+				return;
 			}
 			settings.fixture = fixture;
-			overwrites.push(settings)
+			overwrites.push(settings);
 		} else {
-			can.each(settings, function(fixture, url){
+			can.each(settings, function (fixture, url) {
 				$fixture(url, fixture);
-			})
+			});
 		}
 	};
 	var replacer = can.replacer;
 
 	can.extend(can.fixture, {
 		// given ajax settings, find an overwrite
-		_similar : function (settings, overwrite, exact) {
+		_similar: function (settings, overwrite, exact) {
 			if (exact) {
-				return can.Object.same(settings, overwrite, {fixture : null})
+				return can.Object.same(settings, overwrite, {
+					fixture: null
+				});
 			} else {
-				return can.Object.subset(settings, overwrite, can.fixture._compare)
+				return can.Object.subset(settings, overwrite, can.fixture._compare);
 			}
 		},
-		_compare : {
-			url : function (a, b) {
-				return !!$fixture._getData(b, a)
+		_compare: {
+			url: function (a, b) {
+				return !!$fixture._getData(b, a);
 			},
-			fixture : null,
-			type : "i"
+			fixture: null,
+			type: "i"
 		},
 		// gets data from a url like "/todo/{id}" given "todo/5"
-		_getData : function (fixtureUrl, url) {
+		_getData: function (fixtureUrl, url) {
 			var order = [],
-				fixtureUrlAdjusted = fixtureUrl.replace('.', '\\.').replace('?', '\\?'),
+				fixtureUrlAdjusted = fixtureUrl.replace('.', '\\.')
+					.replace('?', '\\?'),
 				res = new RegExp(fixtureUrlAdjusted.replace(replacer, function (whole, part) {
-					order.push(part)
-					return "([^\/]+)"
-				}) + "$").exec(url),
+					order.push(part);
+					return "([^\/]+)";
+				}) + "$")
+					.exec(url),
 				data = {};
 
 			if (!res) {
@@ -344,8 +342,8 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 			}
 			res.shift();
 			can.each(order, function (name) {
-				data[name] = res.shift()
-			})
+				data[name] = res.shift();
+			});
 			return data;
 		},
 		/**
@@ -431,7 +429,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		 *
 		 */
 		store: function (types, count, make, filter) {
-
+			/*jshint eqeqeq:false */
 			var items = [], // TODO: change this to a hash
 				currentId = 0,
 				findOne = function (id) {
@@ -444,7 +442,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				methods = {};
 
 			if (typeof types === "string") {
-				types = [types + "s", types ]
+				types = [types + "s", types];
 			} else if (!can.isArray(types)) {
 				filter = make;
 				make = count;
@@ -501,29 +499,30 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				 *
 				 */
 				findAll: function (request) {
-					request =  request || {}
+					request = request || {};
 					//copy array of items
 					var retArr = items.slice(0);
 					request.data = request.data || {};
 					//sort using order
 					//order looks like ["age ASC","gender DESC"]
-					can.each((request.data.order || []).slice(0).reverse(), function (name) {
+					can.each((request.data.order || [])
+						.slice(0)
+						.reverse(), function (name) {
 						var split = name.split(" ");
 						retArr = retArr.sort(function (a, b) {
 							if (split[1].toUpperCase() !== "ASC") {
 								if (a[split[0]] < b[split[0]]) {
 									return 1;
-								} else if (a[split[0]] == b[split[0]]) {
-									return 0
+								} else if (a[split[0]] === b[split[0]]) {
+									return 0;
 								} else {
 									return -1;
 								}
-							}
-							else {
+							} else {
 								if (a[split[0]] < b[split[0]]) {
 									return -1;
-								} else if (a[split[0]] == b[split[0]]) {
-									return 0
+								} else if (a[split[0]] === b[split[0]]) {
+									return 0;
 								} else {
 									return 1;
 								}
@@ -532,13 +531,14 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					});
 
 					//group is just like a sort
-					can.each((request.data.group || []).slice(0).reverse(), function (name) {
+					can.each((request.data.group || [])
+						.slice(0)
+						.reverse(), function (name) {
 						var split = name.split(" ");
 						retArr = retArr.sort(function (a, b) {
 							return a[split[0]] > b[split[0]];
 						});
 					});
-
 
 					var offset = parseInt(request.data.offset, 10) || 0,
 						limit = parseInt(request.data.limit, 10) || (items.length - offset),
@@ -548,9 +548,9 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					for (var param in request.data) {
 						i = 0;
 						if (request.data[param] !== undefined && // don't do this if the value of the param is null (ignore it)
-							(param.indexOf("Id") != -1 || param.indexOf("_id") != -1)) {
+							(param.indexOf("Id") !== -1 || param.indexOf("_id") !== -1)) {
 							while (i < retArr.length) {
-								if (request.data[param] != retArr[i][param]) {
+								if (request.data[param] !== retArr[i][param]) {
 									retArr.splice(i, 1);
 								} else {
 									i++;
@@ -572,10 +572,10 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 
 					//return data spliced with limit and offset
 					return {
-						"count" : retArr.length,
-						"limit" : request.data.limit,
-						"offset" : request.data.offset,
-						"data" : retArr.slice(offset, offset + limit)
+						"count": retArr.length,
+						"limit": request.data.limit,
+						"offset": request.data.offset,
+						"data": retArr.slice(offset, offset + limit)
 					};
 				},
 				/**
@@ -597,7 +597,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				 *     });
 				 *
 				 */
-				findOne : function (request, response) {
+				findOne: function (request, response) {
 					var item = findOne(getId(request));
 					response(item ? item : undefined);
 				},
@@ -620,15 +620,15 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				 *       headers.location // "todos/5"
 				 *     });
 				 */
-				update: function (request,response) {
+				update: function (request, response) {
 					var id = getId(request);
 
 					// TODO: make it work with non-linear ids ..
 					can.extend(findOne(id), request.data);
 					response({
-						id : getId(request)
+						id: getId(request)
 					}, {
-						location : request.url || "/" + getId(request)
+						location: request.url || "/" + getId(request)
 					});
 				},
 				/**
@@ -652,7 +652,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				destroy: function (request) {
 					var id = getId(request);
 					for (var i = 0; i < items.length; i++) {
-						if (items[i].id == id) {
+						if (items[i].id === id) {
 							items.splice(i, 1);
 							break;
 						}
@@ -691,14 +691,14 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 
 					items.push(item);
 					response({
-						id : item.id
+						id: item.id
 					}, {
-						location : settings.url + "/" + item.id
-					})
+						location: settings.url + "/" + item.id
+					});
 				}
 			});
 
-			var reset = function(){
+			var reset = function () {
 				items = [];
 				for (var i = 0; i < (count); i++) {
 					//call back provided make
@@ -707,22 +707,21 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 					if (!item.id) {
 						item.id = i;
 					}
-					currentId = Math.max(item.id+1, currentId+1) || items.length;
+					currentId = Math.max(item.id + 1, currentId + 1) || items.length;
 					items.push(item);
 				}
-				if(can.isArray(types)) {
+				if (can.isArray(types)) {
 					can.fixture["~" + types[0]] = items;
 					can.fixture["-" + types[0]] = methods.findAll;
 					can.fixture["-" + types[1]] = methods.findOne;
-					can.fixture["-" + types[1]+"Update"] = methods.update;
-					can.fixture["-" + types[1]+"Destroy"] = methods.destroy;
-					can.fixture["-" + types[1]+"Create"] = methods.create;
+					can.fixture["-" + types[1] + "Update"] = methods.update;
+					can.fixture["-" + types[1] + "Destroy"] = methods.destroy;
+					can.fixture["-" + types[1] + "Create"] = methods.create;
 				}
 
-			}
-			reset()
+			};
+			reset();
 			// if we have types given add them to can.fixture
-
 
 			return can.extend({
 				getId: getId,
@@ -745,8 +744,8 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				 * }, function(){});
 				 * @codeend
 				 */
-				find: function(settings){
-					return findOne( getId(settings) );
+				find: function (settings) {
+					return findOne(getId(settings));
 				},
 				/**
 				 * @description Reset the fixture store.
@@ -817,19 +816,19 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		 *     // pick between 2 and 3 items at random
 		 *     rand(["j","m","v","c"],2,3)
 		 */
-		rand : function (arr, min, max) {
-			if (typeof arr == 'number') {
-				if (typeof min == 'number') {
+		rand: function randomize(arr, min, max) {
+			if (typeof arr === 'number') {
+				if (typeof min === 'number') {
 					return arr + Math.floor(Math.random() * (min - arr));
 				} else {
 					return Math.floor(Math.random() * arr);
 				}
 
 			}
-			var rand = arguments.callee;
+			var rand = randomize;
 			// get a random set
 			if (min === undefined) {
-				return rand(arr, rand(arr.length + 1))
+				return rand(arr, rand(arr.length + 1));
 			}
 			// get a random selection of arr
 			var res = [];
@@ -839,9 +838,9 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 				max = min;
 			}
 			//random max
-			max = min + Math.round(rand(max - min))
+			max = min + Math.round(rand(max - min));
 			for (var i = 0; i < max; i++) {
-				res.push(arr.splice(rand(arr.length), 1)[0])
+				res.push(arr.splice(rand(arr.length), 1)[0]);
 			}
 			return res;
 		},
@@ -876,24 +875,24 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		 * @param {Object} [xhr] properties that you want to overwrite
 		 * @return {Object} an object that looks like a successful XHR object.
 		 */
-		xhr : function (xhr) {
+		xhr: function (xhr) {
 			return can.extend({}, {
-				abort : can.noop,
-				getAllResponseHeaders : function () {
+				abort: can.noop,
+				getAllResponseHeaders: function () {
 					return "";
 				},
-				getResponseHeader : function () {
+				getResponseHeader: function () {
 					return "";
 				},
-				open : can.noop,
-				overrideMimeType : can.noop,
-				readyState : 4,
-				responseText : "",
-				responseXML : null,
-				send : can.noop,
-				setRequestHeader : can.noop,
-				status : 200,
-				statusText : "OK"
+				open: can.noop,
+				overrideMimeType: can.noop,
+				readyState: 4,
+				responseText: "",
+				responseXML: null,
+				send: can.noop,
+				setRequestHeader: can.noop,
+				status: 200,
+				statusText: "OK"
 			}, xhr);
 		},
 		/**
@@ -907,7 +906,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		 *       can.fixture.on = true;
 		 *     })
 		 */
-		on : true
+		on: true
 	});
 	/**
 	 * @property {Number} can.fixture.delay delay
@@ -939,7 +938,7 @@ steal('can/util','can/util/string','can/util/object', function (can) {
 		if (typeof settings.fixture === "string" && can.fixture[settings.fixture]) {
 			settings.fixture = can.fixture[settings.fixture];
 		}
-		if (typeof settings.fixture == "function") {
+		if (typeof settings.fixture === "function") {
 			setTimeout(function () {
 				if (settings.success) {
 					settings.success.apply(null, settings.fixture(settings, "success"));

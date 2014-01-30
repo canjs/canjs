@@ -1,54 +1,54 @@
 {
-	"predef" : [
+	"globals": {
 
-		// Bitovi Tools
-		"steal",
-		"can",
+		"steal": true,
+		"can": true,
 
-		// Supported Libs
-		"jQuery",
-		"$",
-		"$$",
-		"DOJO",
-		"YUI",
-		"Zepto",
 
-		// QUnit API
-		// http://docs.jquery.com/QUnit#API_documentation
-		"QUnit",
-		"test",
-		"asyncTest",
-		"expect",
-		"module",
-		"ok",
-		"equal",
-		"notEqual",
-		"deepEqual",
-		"notDeepEqual",
-		"strictEqual",
-		"notStrictEqual",
-		"raises",
-		"start",
-		"stop",
+		"Zepto": true,
 
-		// Node.js and CommonJS keywords
-		"define",
-		"require",
-		"__dirname"
 
-	],
+		"QUnit": true,
+		"test": true,
+		"asyncTest": true,
+		"expect": true,
+		"module": true,
+		"ok": true,
+		"equal": true,
+		"notEqual": true,
+		"deepEqual": true,
+		"notDeepEqual": true,
+		"strictEqual": true,
+		"notStrictEqual": true,
+		"raises": true,
+		"start": true,
+		"stop": true
+	},
 
-	"browser": true,
+
 	"curly": true,
-	"eqnull": true,
 	"eqeqeq": true,
-	"expr": true,
+	"freeze": true,
+	"indent": 2,
 	"latedef": true,
 	"noarg": true,
-	"smarttabs": true,
 	"undef": true,
-	"boss": true,
-	"evil": true
+	"unused": "vars",
+	"trailing": true,
+	"maxdepth": 4,
+	"boss" : true,
 
+	"eqnull": true,
+	"evil": true,
+	"loopfunc": true,
+	"smarttabs": true,
+	"maxerr" : 200,
 
+	"jquery": true,
+	"dojo": true,
+	"mootools": true,
+	"yui": true,
+	"browser": true,
+	"phantom": true,
+	"rhino": true
 }

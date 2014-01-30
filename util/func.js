@@ -660,8 +660,8 @@ function(s) for the success or failure state of both asynchronous and synchronou
 */
 //
 /*
-* @prototype
-*/
+ * @prototype
+ */
 //
 /**
 @description Add callbacks to a Deferred.
@@ -870,7 +870,6 @@ function(s) for the success or failure state of both asynchronous and synchronou
     can.sub("foo {bar}", {bar: "far"}) //-> "foo far"
 */
 //
-
 /**
 @function can.underscore
 @parent can.util
@@ -887,7 +886,7 @@ function(s) for the success or failure state of both asynchronous and synchronou
 
     can.underscore("OneTwo") //-> "one_two"
     can.underscore("OneTwo threeFour") //-> "one_two three_four"
-*/ 
+*/
 //
 /**
 @function can.esc
@@ -920,58 +919,58 @@ Gets an object from a string.  It can also modify objects on the 'object path' b
     Foo = {Bar: {Zar: {"Ted"}}}
     can.getObject("Foo.Bar.Zar") //-> "Ted"
 */
-var a = function() {};
+//
 /**
  * @typedef {{}} can.NodeList NodeList
  * @inherits From-Your-Base-Library
- *  
- * A "NodeList" is __Library Specific__ implementation of 
+ *
+ * A "NodeList" is __Library Specific__ implementation of
  * an array of DOM elements. [can.$] returns a "NodeList"
  * and [can.Control::element] is a "NodeList".
- * 
- * The following details the "NodeList" object used 
+ *
+ * The following details the "NodeList" object used
  * by each library.
- * 
+ *
  * ## jQuery `jQuery( HTMLElement )`
- * 
+ *
  * A [http://api.jquery.com/jQuery/ jQuery-wrapped] list of elements.
- * 
+ *
  *     nodeList.text("Hello World")
- * 
+ *
  * ## Zepto `Zepto( HTMLElement )`
- * 
+ *
  * A Zepto-wrapped list of elements.
- * 
+ *
  *     nodeList.text("Hello World")
- * 
+ *
  * ## Dojo `new dojo.NodeList( HTMLElement )`
- * 
+ *
  * Dojo's [http://dojotoolkit.org/reference-guide/1.9/dojo/NodeList.html dojo.NodeList] constructor function.
- * 
+ *
  *     nodeList.text("Hello World")
- * 
- * 
+ *
+ *
  * ## Mootools `$$( HTMLElement )`
- * 
+ *
  * The Mootools [Elements object](http://mootools.net/docs/core/Element/Element#Elements).
- * 
+ *
  *     nodeList.empty().appendText("Hello World")
- * 
+ *
  * ## YUI
- * 
+ *
  * YUI's [NodeList](http://yuilibrary.com/yui/docs/node/).
- * 
+ *
  *     nodeList.set('text',"Hello World")
  */
 //
 /**
  * @typedef {String} CSSSelectorString
- * 
+ *
  * A [http://www.w3.org/TR/CSS2/selector.html CSS Selector] in a string like: `"#content .title"`.
  */
 //
 /**
  * @typedef {String} HttpMethod
- * 
+ *
  * One of: `GET`, `POST`, `PUT`, or `DELETE`.
  */
